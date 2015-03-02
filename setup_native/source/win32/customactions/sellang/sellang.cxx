@@ -33,6 +33,7 @@
 
 #include <sal/macros.h>
 #include <systools/win32/uwinapi.h>
+#include <algorithm>
 
 #include "spellchecker_selection.hxx"
 
@@ -184,7 +185,7 @@ static BOOL
 present_in_ui_langs(const char *lang)
 {
     for (int i = 0; i < num_ui_langs; i++)
-        if (memcmp (ui_langs[i], lang, ( strlen(ui_langs[i]) >= strlen(lang) ) ? strlen(lang) : strlen(ui_langs[i]) ) == 0)
+        if (memcmp (ui_langs[i], lang, std::min(strlen(ui_langs[i]), strlen(lang))) == 0)
             return TRUE;
     return FALSE;
 }
