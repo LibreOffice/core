@@ -1211,17 +1211,19 @@ bool ServerFont::GetGlyphBitmap8( sal_GlyphId aGlyphId, RawBitmap& rRawBitmap ) 
     unsigned char* pDest = rRawBitmap.mpBits.get();
     if( !bEmbedded )
     {
-        for( int y = rRawBitmap.mnHeight, x; --y >= 0 ; )
+        unsigned int x;
+        for( int y = rRawBitmap.mnHeight; --y >= 0 ; )
         {
             for( x = 0; x < rBitmapFT.width; ++x )
                 *(pDest++) = *(pSrc++);
-            for(; x < int(rRawBitmap.mnScanlineSize); ++x )
+            for(; x < rRawBitmap.mnScanlineSize; ++x )
                 *(pDest++) = 0;
         }
     }
     else
     {
-        for( int y = rRawBitmap.mnHeight, x; --y >= 0 ; )
+        unsigned int x;
+        for( int y = rRawBitmap.mnHeight; --y >= 0 ; )
         {
             unsigned char nSrc = 0;
             for( x = 0; x < rBitmapFT.width; ++x, nSrc+=nSrc )
@@ -1230,7 +1232,7 @@ bool ServerFont::GetGlyphBitmap8( sal_GlyphId aGlyphId, RawBitmap& rRawBitmap ) 
                     nSrc = *(pSrc++);
                 *(pDest++) = (0x7F - nSrc) >> 8;
             }
-            for(; x < int(rRawBitmap.mnScanlineSize); ++x )
+            for(; x < rRawBitmap.mnScanlineSize; ++x )
                 *(pDest++) = 0;
         }
     }
