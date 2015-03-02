@@ -54,16 +54,6 @@ $(eval $(call gb_Library_use_externals,vclplug_svp,\
 	icuuc \
 ))
 
-$(eval $(call gb_Library_add_exception_objects,vclplug_svp,\
-    vcl/headless/svpgdi \
-    vcl/headless/svpinst \
-    vcl/headless/svpdata \
-))
-
-$(eval $(call gb_Library_use_static_libraries,vclplug_svp,\
-    headless \
-))
-
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Library_add_libs,vclplug_svp,\
 	-lm \

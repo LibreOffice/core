@@ -36,7 +36,7 @@
 class SvpSalInstance;
 class SvpSalGraphics;
 
-class SvpSalFrame : public SalFrame
+class VCL_DLLPUBLIC SvpSalFrame : public SalFrame
 {
     SvpSalInstance*                     m_pInstance;
     SvpSalFrame*                        m_pParent;       // pointer to parent frame

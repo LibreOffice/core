@@ -35,7 +35,7 @@
 
 class ServerFont;
 
-class SvpSalGraphics : public SalGraphics
+class VCL_DLLPUBLIC SvpSalGraphics : public SalGraphics
 {
     basebmp::BitmapDeviceSharedPtr       m_aDevice;
     basebmp::BitmapDeviceSharedPtr       m_aOrigDevice;

@@ -49,7 +49,6 @@ $(eval $(call gb_Module_add_targets,vcl,\
     Library_vclplug_svp \
     Library_vclplug_gen \
     Library_desktop_detector \
-    StaticLibrary_headless \
     StaticLibrary_glxtest \
     Package_fontunxppds \
     Package_fontunxpsprint \

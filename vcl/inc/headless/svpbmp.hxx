@@ -29,7 +29,7 @@
 
 #define SVP_DEFAULT_BITMAP_FORMAT basebmp::FORMAT_THIRTYTWO_BIT_TC_MASK_BGRX
 
-class SvpSalBitmap : public SalBitmap
+class VCL_DLLPUBLIC SvpSalBitmap : public SalBitmap
 {
     basebmp::BitmapDeviceSharedPtr     m_aBitmap;
 public:
