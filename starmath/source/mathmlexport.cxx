@@ -401,9 +401,7 @@ OUString SAL_CALL SmXMLExport_getImplementationName() throw()
 uno::Sequence< OUString > SAL_CALL SmXMLExport_getSupportedServiceNames()
         throw()
 {
-    const OUString aServiceName( EXPORT_SVC_NAME );
-    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
-    return aSeq;
+    return uno::Sequence<OUString>{ EXPORT_SVC_NAME };
 }
 
 uno::Reference< uno::XInterface > SAL_CALL SmXMLExport_createInstance(
@@ -424,9 +422,7 @@ OUString SAL_CALL SmXMLExportMetaOOO_getImplementationName() throw()
 uno::Sequence< OUString > SAL_CALL SmXMLExportMetaOOO_getSupportedServiceNames()
     throw()
 {
-    const OUString aServiceName( EXPORT_SVC_NAME );
-    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
-    return aSeq;
+    return uno::Sequence<OUString>{ EXPORT_SVC_NAME };
 }
 
 uno::Reference< uno::XInterface > SAL_CALL SmXMLExportMetaOOO_createInstance(
@@ -444,9 +440,7 @@ OUString SAL_CALL SmXMLExportMeta_getImplementationName() throw()
 uno::Sequence< OUString > SAL_CALL SmXMLExportMeta_getSupportedServiceNames()
 throw()
 {
-    const OUString aServiceName( EXPORT_SVC_NAME );
-    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
-    return aSeq;
+    return uno::Sequence<OUString>{ EXPORT_SVC_NAME };
 }
 
 uno::Reference< uno::XInterface > SAL_CALL SmXMLExportMeta_createInstance(
@@ -464,9 +458,7 @@ OUString SAL_CALL SmXMLExportSettingsOOO_getImplementationName() throw()
 uno::Sequence< OUString > SAL_CALL SmXMLExportSettingsOOO_getSupportedServiceNames()
 throw()
 {
-    const OUString aServiceName( EXPORT_SVC_NAME );
-    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
-    return aSeq;
+    return uno::Sequence<OUString>{ EXPORT_SVC_NAME };
 }
 
 uno::Reference< uno::XInterface > SAL_CALL SmXMLExportSettingsOOO_createInstance(
@@ -484,9 +476,7 @@ OUString SAL_CALL SmXMLExportSettings_getImplementationName() throw()
 uno::Sequence< OUString > SAL_CALL SmXMLExportSettings_getSupportedServiceNames()
 throw()
 {
-    const OUString aServiceName( EXPORT_SVC_NAME );
-    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
-    return aSeq;
+    return uno::Sequence<OUString>{ EXPORT_SVC_NAME };
 }
 
 uno::Reference< uno::XInterface > SAL_CALL SmXMLExportSettings_createInstance(
@@ -504,9 +494,7 @@ OUString SAL_CALL SmXMLExportContent_getImplementationName() throw()
 uno::Sequence< OUString > SAL_CALL SmXMLExportContent_getSupportedServiceNames()
         throw()
 {
-    const OUString aServiceName( EXPORT_SVC_NAME );
-    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
-    return aSeq;
+    return uno::Sequence<OUString>{ EXPORT_SVC_NAME };
 }
 
 uno::Reference< uno::XInterface > SAL_CALL SmXMLExportContent_createInstance(
