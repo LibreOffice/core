@@ -113,10 +113,6 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_gtk3,\
     vcl/unx/gtk3/window/gtk3hudawareness \
 ))
 
-$(eval $(call gb_Library_use_static_libraries,vclplug_gtk3,\
-    headless \
-))
-
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Library_add_libs,vclplug_gtk3,\
 	-lm \
