@@ -648,7 +648,8 @@ writeAppProperties( XmlFilterBase& rSelf, Reference< XDocumentProperties > xProp
     writeElement( pAppProps, XML_Slides,                "slides" );
     writeElement( pAppProps, XML_Notes,                 "notes" );
 #endif  /* def OOXTODO */
-    writeElement( pAppProps, XML_TotalTime,             xProperties->getEditingDuration() );
+    // EditingDuration is in seconds, TotalTime is in minutes.
+    writeElement( pAppProps, XML_TotalTime,             xProperties->getEditingDuration() / 60 );
 #ifdef OOXTODO
     writeElement( pAppProps, XML_HiddenSlides,          "hidden slides" );
     writeElement( pAppProps, XML_MMClips,               "mm clips" );
