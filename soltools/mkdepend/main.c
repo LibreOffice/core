@@ -717,7 +717,8 @@ void convert_slashes(char *path)
 char* append_slash(char *path)
 {
     char *new_string;
-    if ((path[strlen(path) - 1] == '/') || (path[strlen(path) - 1] == '\\')) {
+    const char cLastChar = path[strlen(path) - 1];
+    if (cLastChar == '/' || cLastChar == '\\') {
         new_string = path;
     } else {
         new_string = (char*)malloc(sizeof(char) * (strlen(path) + 2));
