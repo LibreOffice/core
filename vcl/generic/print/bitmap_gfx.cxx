@@ -33,8 +33,9 @@ const sal_uInt32 nBufferSize = 16384;
  *
  */
 
-PrinterBmp::~PrinterBmp ()
-{ /* dont need this, but C50 does */ }
+PrinterBmp::~PrinterBmp()
+{
+}
 
 /* virtual base class */
 
@@ -48,8 +49,9 @@ public:
     virtual         ~ByteEncoder () = 0;
 };
 
-ByteEncoder::~ByteEncoder ()
-{ /* dont need this, but the C50 does */ }
+ByteEncoder::~ByteEncoder()
+{
+}
 
 /* HexEncoder */
 

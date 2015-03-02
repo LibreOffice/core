@@ -1267,7 +1267,6 @@ void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
     SwParaPortion *pPara = rLine.GetInfo().GetParaPortion();
     rLine.SetUnclipped( false );
 
-    // That was too complicated for the C30: aString( GetTxt() );
     const OUString &rString = GetTxtNode()->GetTxt();
     const sal_Int32 nStrLen = rString.getLength();
 
