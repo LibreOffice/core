@@ -422,11 +422,10 @@ uno::Sequence< OUString > SmModel::getSupportedServiceNames_Static(void)
 {
     SolarMutexGuard aGuard;
 
-    uno::Sequence< OUString > aRet(2);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.document.OfficeDocument";
-    pArray[1] = "com.sun.star.formula.FormulaProperties";
-    return aRet;
+    return uno::Sequence<OUString>{
+        "com.sun.star.document.OfficeDocument",
+        "com.sun.star.formula.FormulaProperties"
+    };
 }
 
 void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* pValues)

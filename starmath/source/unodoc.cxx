@@ -36,9 +36,7 @@ OUString SAL_CALL SmDocument_getImplementationName() throw()
 
 uno::Sequence< OUString > SAL_CALL SmDocument_getSupportedServiceNames() throw()
 {
-    uno::Sequence< OUString > aSeq( 1 );
-    aSeq[0] = "com.sun.star.formula.FormulaProperties";
-    return aSeq;
+    return uno::Sequence<OUString>{ "com.sun.star.formula.FormulaProperties" };
 }
 
 uno::Reference< uno::XInterface > SAL_CALL SmDocument_createInstance(
