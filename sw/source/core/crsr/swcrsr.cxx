@@ -1366,12 +1366,23 @@ bool SwCursor::SelectWordWT( SwViewShell* pViewShell, sal_Int16 nWordType, const
         }
         else
         {
-            const sal_Int32 nPtPos = GetPoint()->nContent.GetIndex();
+            sal_Int32 nPtPos = GetPoint()->nContent.GetIndex();
             Boundary aBndry( g_pBreakIt->GetBreakIter()->getWordBoundary(
                                 pTxtNd->GetTxt(), nPtPos,
                                 g_pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos ) ),
                                 nWordType,
                                 bForward ));
+
+            if (pViewShell->isTiledRendering() && aBndry.startPos == aBndry.endPos && nPtPos > 0)
+            {
+                // nPtPos is the end of the paragraph, select the last word then.
+                --nPtPos;
+                aBndry = Boundary( g_pBreakIt->GetBreakIter()->getWordBoundary(
+                                    pTxtNd->GetTxt(), nPtPos,
+                                    g_pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos ) ),
+                                    nWordType,
+                                    bForward ));
+            }
 
             if( aBndry.startPos != aBndry.endPos )
             {
