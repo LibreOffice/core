@@ -801,7 +801,7 @@ bool ScDBCollection::AnonDBs::operator== (const AnonDBs& r) const
 }
 
 ScDBCollection::ScDBCollection(ScDocument* pDocument) :
-    pDoc(pDocument), nEntryIndex(SC_START_INDEX_DB_COLL), maNamedDBs(*this, *pDocument) {}
+    pDoc(pDocument), nEntryIndex(1), maNamedDBs(*this, *pDocument) {}
 
 ScDBCollection::ScDBCollection(const ScDBCollection& r) :
     pDoc(r.pDoc), nEntryIndex(r.nEntryIndex), maNamedDBs(r.maNamedDBs), maAnonDBs(r.maAnonDBs) {}

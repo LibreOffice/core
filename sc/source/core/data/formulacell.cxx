@@ -3568,8 +3568,7 @@ void ScFormulaCell::CompileDBFormula( sc::CompileFormulaContext& rCxt )
 {
     for( FormulaToken* p = pCode->First(); p; p = pCode->Next() )
     {
-        if ( p->GetOpCode() == ocDBArea
-            || (p->GetOpCode() == ocName && p->GetIndex() >= SC_START_INDEX_DB_COLL) )
+        if ( p->GetOpCode() == ocDBArea )
         {
             bCompile = true;
             CompileTokenArray(rCxt);

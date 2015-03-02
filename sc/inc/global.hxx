@@ -71,10 +71,6 @@ const sal_Unicode CHAR_ZWNBSP   = 0x2060;
 
 const SCSIZE MAXSUBTOTAL        = 3;
 
-#define SC_START_INDEX_DB_COLL 50000
-                                        // Above this threshold are indices
-                                        // for data base areas
-
 #define SC_USE_PS_POINTS    1       /**< use PostScript points (72ppi) instead of old TeX points (72.27ppi) */
 
 #define PIXEL_PER_INCH      96.0
