@@ -85,20 +85,14 @@ namespace
             m_pSvpGlyphPeer = new SvpGlyphPeer();
             m_pSvpGlyphCache = new SvpGlyphCache( *m_pSvpGlyphPeer );
         }
-        void release()
-        {
-            delete m_pSvpGlyphCache;
-            delete m_pSvpGlyphPeer;
-            m_pSvpGlyphCache = NULL;
-            m_pSvpGlyphPeer = NULL;
-        }
         SvpGlyphCache& getGlyphCache()
         {
             return *m_pSvpGlyphCache;
         }
         ~GlyphCacheHolder()
         {
-            release();
+            delete m_pSvpGlyphCache;
+            delete m_pSvpGlyphPeer;
         }
     };
 
