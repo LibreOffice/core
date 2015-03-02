@@ -2092,8 +2092,11 @@ void GtkSalFrame::GetWorkArea( Rectangle& rRect )
 #if !GTK_CHECK_VERSION(3,0,0)
     rRect = GetGtkSalData()->GetGtkDisplay()->getWMAdaptor()->getWorkArea( 0 );
 #else
-    g_warning ("no get work area");
-    rRect = Rectangle( 0, 0, 1024, 768 );
+    GdkScreen  *pScreen = gtk_window_get_screen(GTK_WINDOW(m_pWindow));
+    gint nMonitor = gdk_screen_get_monitor_at_window(pScreen, widget_get_window(m_pWindow));
+    GdkRectangle aRect;
+    gdk_screen_get_monitor_workarea(pScreen, nMonitor, &aRect);
+    rRect = Rectangle(aRect.x, aRect.y, aRect.width, aRect.height);
 #endif
 }
 
