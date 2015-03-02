@@ -1191,7 +1191,7 @@ static IMPL_RTL_STRCODE* IMPL_RTL_STRINGNAME( ImplNewCopy )( IMPL_RTL_STRINGDATA
 /* String-Class functions                                                  */
 /* ======================================================================= */
 
-#define IMPL_RTL_AQUIRE( pThis )                                \
+#define IMPL_RTL_ACQUIRE( pThis )                               \
 {                                                               \
     if (!SAL_STRING_IS_STATIC (pThis))                          \
         osl_atomic_increment( &((pThis)->refCount) );  \
@@ -1202,7 +1202,7 @@ static IMPL_RTL_STRCODE* IMPL_RTL_STRINGNAME( ImplNewCopy )( IMPL_RTL_STRINGDATA
 void SAL_CALL IMPL_RTL_STRINGNAME( acquire )( IMPL_RTL_STRINGDATA* pThis )
     SAL_THROW_EXTERN_C()
 {
-    IMPL_RTL_AQUIRE( pThis );
+    IMPL_RTL_ACQUIRE( pThis );
 }
 
 /* ----------------------------------------------------------------------- */
@@ -1451,7 +1451,7 @@ void SAL_CALL IMPL_RTL_STRINGNAME( assign )( IMPL_RTL_STRINGDATA** ppThis,
 {
     assert(ppThis);
     /* must be done at first, if pStr == *ppThis */
-    IMPL_RTL_AQUIRE( pStr );
+    IMPL_RTL_ACQUIRE( pStr );
 
     if ( *ppThis )
         IMPL_RTL_STRINGNAME( release )( *ppThis );
@@ -1491,12 +1491,12 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newConcat )( IMPL_RTL_STRINGDATA** ppThis,
     if ( !pRight || !pRight->length )
     {
         *ppThis = pLeft;
-        IMPL_RTL_AQUIRE( pLeft );
+        IMPL_RTL_ACQUIRE( pLeft );
     }
     else if ( !pLeft || !pLeft->length )
     {
         *ppThis = pRight;
-        IMPL_RTL_AQUIRE( pRight );
+        IMPL_RTL_ACQUIRE( pRight );
     }
     else
     {
@@ -1670,7 +1670,7 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newReplace )( IMPL_RTL_STRINGDATA** ppThis,
     if ( !bChanged )
     {
         *ppThis = pStr;
-        IMPL_RTL_AQUIRE( pStr );
+        IMPL_RTL_ACQUIRE( pStr );
     }
 
     RTL_LOG_STRING_NEW( *ppThis );
@@ -1728,7 +1728,7 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newToAsciiLowerCase )( IMPL_RTL_STRINGDATA** 
     if ( !bChanged )
     {
         *ppThis = pStr;
-        IMPL_RTL_AQUIRE( pStr );
+        IMPL_RTL_ACQUIRE( pStr );
     }
 
     RTL_LOG_STRING_NEW( *ppThis );
@@ -1786,7 +1786,7 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newToAsciiUpperCase )( IMPL_RTL_STRINGDATA** 
     if ( !bChanged )
     {
         *ppThis = pStr;
-        IMPL_RTL_AQUIRE( pStr );
+        IMPL_RTL_ACQUIRE( pStr );
     }
 
     RTL_LOG_STRING_NEW( *ppThis );
@@ -1822,7 +1822,7 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newTrim )( IMPL_RTL_STRINGDATA** ppThis,
     if ( !nPreSpaces && !nPostSpaces )
     {
         *ppThis = pStr;
-        IMPL_RTL_AQUIRE( pStr );
+        IMPL_RTL_ACQUIRE( pStr );
     }
     else
     {

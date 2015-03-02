@@ -893,7 +893,7 @@ void SAL_CALL rtl_uString_intern( rtl_uString ** newStr,
     assert(str);
     if (SAL_STRING_IS_INTERN(str))
     {
-        IMPL_RTL_AQUIRE( str );
+        IMPL_RTL_ACQUIRE( str );
         *newStr = str;
     }
     else
