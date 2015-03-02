@@ -33,8 +33,6 @@
 #include <svl/zformat.hxx>
 #include <svl/itemprop.hxx>
 
-#include <registerservices.hxx>
-
 using namespace com::sun::star;
 
 #define PROPERTYNAME_FMTSTR     "FormatString"
@@ -113,11 +111,6 @@ SvNumberFormatterServiceObj::SvNumberFormatterServiceObj()
 
 SvNumberFormatterServiceObj::~SvNumberFormatterServiceObj()
 {
-}
-
-com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL SvNumberFormatterServiceObj_CreateInstance( SAL_UNUSED_PARAMETER const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& )
-{
-    return ::com::sun::star::uno::Reference < ::com::sun::star::uno::XInterface >( ( ::cppu::OWeakObject* ) new SvNumberFormatterServiceObj );
 }
 
 // XNumberFormatter
@@ -1098,5 +1091,15 @@ uno::Sequence<OUString> SAL_CALL SvNumberFormatSettingsObj::getSupportedServiceN
     pArray[0] = "com.sun.star.util.NumberFormatSettings";
     return aRet;
 }
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_uno_util_numbers_SvNumberFormatterServiceObject_get_implementation(::com::sun::star::uno::XComponentContext*,
+                                                                                ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new SvNumberFormatterServiceObj());
+}
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
