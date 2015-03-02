@@ -1614,7 +1614,7 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
                 pDestNd = rPos.nNode.GetNode().GetTxtNode();
             }
 
-            if( pDestNd && pEnd->nContent.GetIndex() )
+            if (pDestNd && pEnd->nContent.GetIndex())
             {
                 // move the content into the new node
                 SwIndex aIdx( pEndSrcNd, 0 );
@@ -1622,7 +1622,7 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
                                 pEnd->nContent.GetIndex());
             }
 
-            if( bCopyCollFmt )
+            if (pDestNd && bCopyCollFmt)
             {
                 SwDoc* const pInsDoc = pDestNd->GetDoc();
                 ::sw::UndoGuard const ug(pInsDoc->GetIDocumentUndoRedo());
