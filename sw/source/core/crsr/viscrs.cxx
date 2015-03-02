@@ -352,12 +352,12 @@ void SwSelPaintRects::Show()
                 SwRect aEndRect;
                 FillStartEnd(aStartRect, aEndRect);
 
-                if (aStartRect.Height())
+                if (aStartRect.HasArea())
                 {
                     OString sRect = aStartRect.SVRect().toString();
                     GetShell()->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION_START, sRect.getStr());
                 }
-                if (aEndRect.Height())
+                if (aEndRect.HasArea())
                 {
                     OString sRect = aEndRect.SVRect().toString();
                     GetShell()->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION_END, sRect.getStr());
@@ -755,7 +755,7 @@ void SwShellTableCrsr::FillRects()
                 if (bStart)
                 {
                     bStart = false;
-                    m_aStart = SwRect(pFrm->Frm().Left(), pFrm->Frm().Top(), 0, pFrm->Frm().Height());
+                    m_aStart = SwRect(pFrm->Frm().Left(), pFrm->Frm().Top(), 1, pFrm->Frm().Height());
                 }
             }
 
@@ -764,7 +764,7 @@ void SwShellTableCrsr::FillRects()
         }
     }
     if (pEndFrm)
-        m_aEnd = SwRect(pEndFrm->Frm().Right(), pEndFrm->Frm().Top(), 0, pEndFrm->Frm().Height());
+        m_aEnd = SwRect(pEndFrm->Frm().Right(), pEndFrm->Frm().Top(), 1, pEndFrm->Frm().Height());
     aReg.Invert();
     insert( begin(), aReg.begin(), aReg.end() );
 }
