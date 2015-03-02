@@ -265,51 +265,45 @@ void TableBorderHdl::CreateB2dIAObject()
 {
     GetRidOfIAObject();
 
-    if(pHdlList && pHdlList->GetView() && !pHdlList->GetView()->areMarkHandlesHidden())
+    if (pHdlList && pHdlList->GetView() && !pHdlList->GetView()->areMarkHandlesHidden())
     {
         SdrMarkView* pView = pHdlList->GetView();
         SdrPageView* pPageView = pView->GetSdrPageView();
 
-        if(pPageView)
+        if (!pPageView)
+            return;
+
+        for(sal_uInt32 nWindow = 0; nWindow < pPageView->PageWindowCount(); nWindow++)
         {
-            for(sal_uInt32 nWindow = 0; nWindow < pPageView->PageWindowCount(); nWindow++)
+            const SdrPageWindow& rPageWindow = *pPageView->GetPageWindow(nWindow);
+
+            if (rPageWindow.GetPaintWindow().OutputToWindow())
             {
-                const SdrPageWindow& rPageWindow = *pPageView->GetPageWindow(nWindow);
+                rtl::Reference<sdr::overlay::OverlayManager> xManager = rPageWindow.GetOverlayManager();
 
-                if(rPageWindow.GetPaintWindow().OutputToWindow())
+                if (xManager.is())
                 {
-                    rtl::Reference< ::sdr::overlay::OverlayManager > xManager = rPageWindow.GetOverlayManager();
-                    if (xManager.is())
-                    {
-                        const basegfx::B2DRange aRange(vcl::unotools::b2DRectangleFromRectangle(maRectangle));
-                        const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
-                        const Color aHilightColor(aSvtOptionsDrawinglayer.getHilightColor());
-                        const double fTransparence(aSvtOptionsDrawinglayer.GetTransparentSelectionPercent() * 0.01);
+                    const basegfx::B2DRange aRange(vcl::unotools::b2DRectangleFromRectangle(maRectangle));
+                    const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
+                    const Color aHilightColor(aSvtOptionsDrawinglayer.getHilightColor());
+                    const double fTransparence(aSvtOptionsDrawinglayer.GetTransparentSelectionPercent() * 0.01);
+                    // make animation dependent from text edit active, because for tables
+                    // this handle is also used when text edit *is* active for it. This
+                    // interferes too much concerning repaint stuff (at least as long as
+                    // text edit is not yet on the overlay)
+                    const bool bAnimate = getAnimate();
 
-                        sdr::overlay::OverlayObject* pOverlayObject = new sdr::overlay::OverlayRectangle(
-                            aRange.getMinimum(),
-                            aRange.getMaximum(),
-                            aHilightColor,
-                            fTransparence,
-                            6.0,
-                            0.0,
-                            0.0,
-                            500,
-                            // make animation dependent from text edit active, because for tables
-                            // this handle is also used when text edit *is* active for it. This
-                            // interferes too much concerning repaint stuff (at least as long as
-                            // text edit is not yet on the overlay)
-                            getAnimate());
-
-                        xManager->add(*pOverlayObject);
-                        maOverlayGroup.append(*pOverlayObject);
-                    }
+                    sdr::overlay::OverlayObject* pOverlayObject =
+                        new sdr::overlay::OverlayRectangle(aRange.getMinimum(), aRange.getMaximum(),
+                                                           aHilightColor, fTransparence,
+                                                           6.0, 0.0, 0.0, 500, bAnimate);
+                    xManager->add(*pOverlayObject);
+                    maOverlayGroup.append(*pOverlayObject);
                 }
             }
         }
     }
 }
-
 
 
 } // end of namespace table
