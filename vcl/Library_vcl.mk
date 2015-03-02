@@ -573,7 +573,14 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
 		, \
         vcl/null/printerinfomanager \
     ) \
+    $(vcl_headless_code) \
+    $(vcl_headless_freetype_code) \
 ))
+
+$(eval $(call gb_Library_use_libraries,vcl,\
+	basebmp \
+))
+
 $(eval $(call gb_Library_use_externals,vcl,\
 	cups \
 	dbus \
@@ -590,12 +597,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/unx/generic/printer/ppdparser \
     vcl/null/printerinfomanager \
     vcl/headless/headlessinst \
-	$(vcl_headless_code) \
-	$(vcl_headless_freetype_code) \
-))
-
-$(eval $(call gb_Library_use_libraries,vcl,\
-	basebmp \
 ))
 
 $(eval $(call gb_Library_use_externals,vcl,\
@@ -616,8 +617,8 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/unx/generic/printer/ppdparser \
     vcl/null/printerinfomanager \
     vcl/android/androidinst \
-	$(vcl_headless_code) \
-	$(vcl_headless_freetype_code) \
+    $(vcl_headless_code) \
+    $(vcl_headless_freetype_code) \
 ))
 
 $(eval $(call gb_Library_use_static_libraries,vcl,\

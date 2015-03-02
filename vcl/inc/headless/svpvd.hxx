@@ -26,7 +26,7 @@
 
 class SvpSalGraphics;
 
-class SvpSalVirtualDevice : public SalVirtualDevice
+class VCL_DLLPUBLIC SvpSalVirtualDevice : public SalVirtualDevice
 {
     sal_uInt16                          m_nBitCount;
     basebmp::BitmapDeviceSharedPtr      m_aDevice;

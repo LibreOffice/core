@@ -57,7 +57,7 @@ public:
 class SvpSalFrame;
 class GenPspGraphics;
 
-class SvpSalInstance : public SalGenericInstance
+class VCL_DLLPUBLIC SvpSalInstance : public SalGenericInstance
 {
     timeval                 m_aTimeout;
     sal_uLong               m_nTimeoutMS;
@@ -171,9 +171,9 @@ public:
     // -- as the rest of vcl always uses bit depths, it is perhaps simplest
     // to let us simply change the mapping of bitcount to format (which was
     // previously unchangeable).
-    SAL_DLLPUBLIC_EXPORT void setBitCountFormatMapping( sal_uInt16 nBitCount, ::basebmp::Format aFormat );
+    void setBitCountFormatMapping( sal_uInt16 nBitCount, ::basebmp::Format aFormat );
 
-    SAL_DLLPUBLIC_EXPORT ::basebmp::Format getFormatForBitCount( sal_uInt16 );
+    ::basebmp::Format getFormatForBitCount( sal_uInt16 );
 };
 
 #endif // INCLUDED_VCL_INC_HEADLESS_SVPINST_HXX
