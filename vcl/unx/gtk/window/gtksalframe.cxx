@@ -1964,8 +1964,7 @@ void GtkSalFrame::AllocateFrame()
                                                basebmp::FORMAT_THIRTYTWO_BIT_TC_MASK_BGRX, cairo_stride);
         m_aFrame->setDamageTracker(
             basebmp::IBitmapDeviceDamageTrackerSharedPtr(new DamageTracker(*this)) );
-        fprintf( stderr, "allocated m_aFrame size of %dx%d \n",
-                 (int)maGeometry.nWidth, (int)maGeometry.nHeight );
+        SAL_INFO("vcl.gtk3", "allocated m_aFrame size of " << maGeometry.nWidth << " x " << maGeometry.nHeight);
 
 #if OSL_DEBUG_LEVEL > 0 // set background to orange
         m_aFrame->clear( basebmp::Color( 255, 127, 0 ) );
