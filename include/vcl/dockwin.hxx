@@ -147,11 +147,7 @@ public:
     bool            IsInPopupMode() const;
 
     void            TitleButtonClick( sal_uInt16 nButton );
-    void            Pin();
-    void            Roll();
-    void            PopupModeEnd();
     void            Resizing( Size& rSize );
-    bool            Close();
     void            Tracking( const TrackingEvent& rTEvt );
     long            Notify( NotifyEvent& rNEvt );
 
@@ -310,10 +306,6 @@ public:
     virtual bool    PrepareToggleFloatingMode();
     virtual void    ToggleFloatingMode();
 
-    void            TitleButtonClick( sal_uInt16 nButton );
-    void            Pin();
-    void            Roll();
-    void            PopupModeEnd();
     virtual void    Resizing( Size& rSize );
     virtual bool    Close();
     virtual void    Tracking( const TrackingEvent& rTEvt ) SAL_OVERRIDE;

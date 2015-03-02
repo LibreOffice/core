@@ -3895,20 +3895,4 @@ Any Window::GetSystemDataAny() const
 
 } /* namespace vcl */
 
-bool ImplDoTiledRendering()
-{
-#if !HAVE_FEATURE_DESKTOP && !defined(ANDROID)
-    // We do tiled rendering only for iOS at the moment, actually, but
-    // let's see what happens if we assume it for Android, too.
-    // (That comment doesn't match what the code does, does it?)
-    return true;
-#else
-    // We need some way to know globally if this process will use
-    // tiled rendering or not. Or should this be a per-window setting?
-    // Or what?
-    return false;
-#endif
-}
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

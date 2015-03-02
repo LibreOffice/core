@@ -118,8 +118,6 @@ IMPL_LINK( RTSDialog, ActivatePage, TabControl*, pTabCtrl )
     {
         if (sPage == "paper")
             m_pPaperPage->update();
-        else if (sPage == "device")
-            m_pDevicePage->update();
     }
 
     return 0;
@@ -356,10 +354,6 @@ RTSDevicePage::RTSDevicePage( RTSDialog* pParent )
 }
 
 RTSDevicePage::~RTSDevicePage()
-{
-}
-
-void RTSDevicePage::update()
 {
 }
 

@@ -118,7 +118,6 @@ std::ostream &operator <<(std::ostream& s, ImplLayoutArgs &rArgs);
 // helper functions often used with ImplLayoutArgs
 bool IsDiacritic( sal_UCS4 );
 int GetVerticalFlags( sal_UCS4 );
-sal_UCS4 GetVerticalChar( sal_UCS4 );
 
 // all positions/widths are in font units
 // one exception: drawposition is in pixel units
@@ -175,7 +174,7 @@ public:
     virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const = 0;
     virtual DeviceCoordinate GetTextWidth() const { return FillDXArray( NULL ); }
     virtual void    GetCaretPositions( int nArraySize, long* pCaretXArray ) const = 0;
-    bool            IsKashidaPosValid ( int /*nCharPos*/ ) const { return true; } // i60594
+    virtual bool    IsKashidaPosValid ( int /*nCharPos*/ ) const { return true; } // i60594
 
     // methods using glyph indexing
     virtual int     GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIdAry, Point& rPos, int&,
@@ -193,7 +192,7 @@ public:
     virtual void    MoveGlyph( int nStart, long nNewXPos ) = 0;
     virtual void    DropGlyph( int nStart ) = 0;
     virtual void    Simplify( bool bIsBase ) = 0;
-    void            DisableGlyphInjection( bool /*bDisable*/ ) {}
+    virtual void    DisableGlyphInjection( bool /*bDisable*/ ) {}
 
 protected:
     // used by layout engines

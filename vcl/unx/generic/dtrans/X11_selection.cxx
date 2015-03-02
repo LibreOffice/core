@@ -3471,10 +3471,6 @@ void SelectionManager::setCursor( sal_Int32 cursor, ::Window aDropWindow, Time )
     }
 }
 
-void SelectionManager::setImage( sal_Int32, ::Window, Time )
-{
-}
-
 void SelectionManager::transferablesFlavorsChanged()
 {
     osl::MutexGuard aGuard(m_aMutex);

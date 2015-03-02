@@ -298,7 +298,6 @@ public:
     void            LicenseWarning (const Point& rPoint, const sal_Unicode* pStr,
                                     sal_Int16 nLen, const sal_Int32* pDeltaArray);
 
-    void            OnEndPage ();
     void            OnEndJob ();
     void            writeResources( osl::File* pFile, std::list< OString >& rSuppliedFonts );
     PrintFontManager& GetFontMgr () { return mrFontMgr; }

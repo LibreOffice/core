@@ -124,13 +124,13 @@ public:
     virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const;
     virtual sal_Int32 GetTextBreak(DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra, int nFactor) const SAL_OVERRIDE;
     virtual void    GetCaretPositions( int nArraySize, long* pCaretXArray ) const;
-    virtual bool    IsKashidaPosValid ( int nCharPos ) const;
+    virtual bool    IsKashidaPosValid ( int nCharPos ) const SAL_OVERRIDE;
 
     // for glyph+font+script fallback
     virtual void    MoveGlyph( int nStart, long nNewXPos );
     virtual void    DropGlyph( int nStart );
     virtual void    Simplify( bool bIsBase );
-    virtual void    DisableGlyphInjection( bool bDisable ) { mbDisableGlyphInjection = bDisable; }
+    virtual void    DisableGlyphInjection( bool bDisable ) SAL_OVERRIDE { mbDisableGlyphInjection = bDisable; }
 
 protected:
     virtual         ~UniscribeLayout();

@@ -469,14 +469,6 @@ void PrintDialog::NUpTabPage::initFromMultiPageSetup( const vcl::PrinterControll
     }
 }
 
-void PrintDialog::NUpTabPage::readFromSettings()
-{
-}
-
-void PrintDialog::NUpTabPage::storeToSettings()
-{
-}
-
 PrintDialog::JobTabPage::JobTabPage( VclBuilder* pUIBuilder )
     : maCollateImg( VclResId( SV_PRINT_COLLATE_IMG ) )
     , maNoCollateImg( VclResId( SV_PRINT_NOCOLLATE_IMG ) )
@@ -726,7 +718,6 @@ PrintDialog::~PrintDialog()
 void PrintDialog::readFromSettings()
 {
     maJobPage.readFromSettings();
-    maNUpPage.readFromSettings();
     maOptionsPage.readFromSettings();
 
     // read last selected tab page; if it exists, activate it
@@ -761,7 +752,6 @@ void PrintDialog::readFromSettings()
 void PrintDialog::storeToSettings()
 {
     maJobPage.storeToSettings();
-    maNUpPage.storeToSettings();
     maOptionsPage.storeToSettings();
 
     // store last selected printer

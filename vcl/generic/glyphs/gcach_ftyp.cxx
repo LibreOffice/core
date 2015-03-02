@@ -894,13 +894,7 @@ sal_GlyphId ServerFont::FixupGlyphIndex( sal_GlyphId aGlyphId, sal_UCS4 aChar ) 
         GlyphSubstitution::const_iterator it = maGlyphSubstitution.find( aGlyphId );
         if( it == maGlyphSubstitution.end() )
         {
-            sal_GlyphId nTemp = GetVerticalChar( aChar );
-            if( nTemp ) // is substitution possible
-                nTemp = GetRawGlyphIndex( nTemp );
-            if( nTemp ) // substitute manually if sensible
-                aGlyphId = nTemp | (GF_GSUB | GF_ROTL);
-            else
-                nGlyphFlags |= GetVerticalFlags( aChar );
+            nGlyphFlags |= GetVerticalFlags( aChar );
         }
         else
         {

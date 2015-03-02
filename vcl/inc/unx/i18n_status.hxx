@@ -89,10 +89,6 @@ public:
 
     // External Control:
 
-    /** Return true if the status window can be toggled on and off externally.
-     */
-    bool canToggleStatusWindow() const;
-
     /** Toggle the status window on or off.
 
         This only works if canToggleStatusWindow returns true (otherwise, any

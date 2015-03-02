@@ -115,9 +115,8 @@ void DragSourceContext::setCursor( sal_Int32 cursorId ) throw(std::exception)
     m_rManager.setCursor( cursorId, m_aDropWindow, m_nTimestamp );
 }
 
-void DragSourceContext::setImage( sal_Int32 imageId ) throw(std::exception)
+void DragSourceContext::setImage( sal_Int32 ) throw(std::exception)
 {
-    m_rManager.setImage( imageId, m_aDropWindow, m_nTimestamp );
 }
 
 void DragSourceContext::transferablesFlavorsChanged() throw(std::exception)

@@ -462,7 +462,6 @@ namespace x11 {
         // for XDragSourceContext
         sal_Int32 getCurrentCursor() { return m_aCurrentCursor;}
         void setCursor( sal_Int32 cursor, ::Window aDropXLIB_Window, Time aTimestamp );
-        void setImage( sal_Int32 image, ::Window aDropXLIB_Window, Time aTimestamp );
         void transferablesFlavorsChanged();
 
         void shutdown() throw();

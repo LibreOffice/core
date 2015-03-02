@@ -254,13 +254,7 @@ bool X11SalGraphics::GetDitherPixmap( SalColor nSalColor )
                                    8,               // bitmap_pad
                                    0 );             // (default) bytes_per_line
 
-    if ( GetDisplay()->GetProperties() & PROPERTY_BUG_Tile )
-    {
-        if (hBrush_)
-            XFreePixmap (GetXDisplay(), hBrush_);
-        hBrush_ = limitXCreatePixmap( GetXDisplay(), GetDrawable(), 8, 8, 8 );
-    }
-    else if( !hBrush_ )
+    if( !hBrush_ )
         hBrush_ = limitXCreatePixmap( GetXDisplay(), GetDrawable(), 8, 8, 8 );
 
     // put the ximage to the pixmap

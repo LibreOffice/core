@@ -24,7 +24,6 @@ class VCL_DLLPUBLIC DebugEventInjector : Timer {
   vcl::Window *ChooseWindow();
   void InjectTextEvent();
   void InjectMenuEvent();
-  void InjectMouseEvent();
   void InjectEvent();
   void InjectKeyNavEdit();
   virtual void Timeout() SAL_OVERRIDE;

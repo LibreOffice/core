@@ -167,7 +167,6 @@ public:
     virtual void    StateChanged( StateChangedType nType ) SAL_OVERRIDE;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
     virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    void            UserDraw( const UserDrawEvent& rUDEvt );
 
     void            Toggle();
 

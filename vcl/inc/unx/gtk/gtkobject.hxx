@@ -53,7 +53,7 @@ public:
     virtual void                    SetPosSize( long nX, long nY, long nWidth, long nHeight ) SAL_OVERRIDE;
     virtual void                    Show( bool bVisible ) SAL_OVERRIDE;
 
-    virtual void                                    SetForwardKey( bool bEnable ) SAL_OVERRIDE;
+    virtual void                    SetForwardKey( bool bEnable ) SAL_OVERRIDE;
 
     virtual const SystemEnvData*    GetSystemData() const SAL_OVERRIDE;
 };

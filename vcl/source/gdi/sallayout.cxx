@@ -214,11 +214,6 @@ int GetVerticalFlags( sal_UCS4 nChar )
     return GF_NONE; // not rotated as default
 }
 
-sal_UCS4 GetVerticalChar( sal_UCS4 )
-{
-    return 0; // #i14788# input method is responsible vertical char changes
-}
-
 sal_UCS4 GetMirroredChar( sal_UCS4 nChar )
 {
     nChar = u_charMirror( nChar );

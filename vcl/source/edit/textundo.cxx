@@ -119,8 +119,6 @@ void TextUndoManager::UndoRedoEnd()
         GetView()->ImpSetSelection( aNewSel );
     }
 
-    mpTextEngine->UpdateSelections();
-
     mpTextEngine->FormatAndUpdate( GetView() );
 }
 

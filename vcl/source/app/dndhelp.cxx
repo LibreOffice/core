@@ -37,30 +37,6 @@ void vcl::unohelper::DragAndDropClient::dragDropEnd( const ::com::sun::star::dat
 {
 }
 
-void vcl::unohelper::DragAndDropClient::dragEnter( const ::com::sun::star::datatransfer::dnd::DragSourceDragEvent& /*dsde*/ )
-    throw (::com::sun::star::uno::RuntimeException,
-           std::exception)
-{
-}
-
-void vcl::unohelper::DragAndDropClient::dragExit( const ::com::sun::star::datatransfer::dnd::DragSourceEvent& /*dse*/ )
-    throw (::com::sun::star::uno::RuntimeException,
-           std::exception)
-{
-}
-
-void vcl::unohelper::DragAndDropClient::dragOver( const ::com::sun::star::datatransfer::dnd::DragSourceDragEvent& /*dsde*/ )
-    throw (::com::sun::star::uno::RuntimeException,
-           std::exception)
-{
-}
-
-void vcl::unohelper::DragAndDropClient::dropActionChanged( const ::com::sun::star::datatransfer::dnd::DragSourceDragEvent& /*dsde*/ )
-    throw (::com::sun::star::uno::RuntimeException,
-           std::exception)
-{
-}
-
 void vcl::unohelper::DragAndDropClient::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEvent& /*dtde*/ )
     throw (::com::sun::star::uno::RuntimeException,
            std::exception)
@@ -80,12 +56,6 @@ void vcl::unohelper::DragAndDropClient::dragExit( const ::com::sun::star::datatr
 }
 
 void vcl::unohelper::DragAndDropClient::dragOver( const ::com::sun::star::datatransfer::dnd::DropTargetDragEvent& /*dtde*/ )
-    throw (::com::sun::star::uno::RuntimeException,
-           std::exception)
-{
-}
-
-void vcl::unohelper::DragAndDropClient::dropActionChanged( const ::com::sun::star::datatransfer::dnd::DropTargetDragEvent& /*dtde*/ )
     throw (::com::sun::star::uno::RuntimeException,
            std::exception)
 {
@@ -133,28 +103,20 @@ void vcl::unohelper::DragAndDropWrapper::dragDropEnd( const ::com::sun::star::da
         mpClient->dragDropEnd( rDSDE );
 }
 
-void vcl::unohelper::DragAndDropWrapper::dragEnter( const ::com::sun::star::datatransfer::dnd::DragSourceDragEvent& dsde ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void vcl::unohelper::DragAndDropWrapper::dragEnter( const ::com::sun::star::datatransfer::dnd::DragSourceDragEvent& ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    if ( mpClient )
-        mpClient->dragEnter( dsde );
 }
 
-void vcl::unohelper::DragAndDropWrapper::dragExit( const ::com::sun::star::datatransfer::dnd::DragSourceEvent& dse ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void vcl::unohelper::DragAndDropWrapper::dragExit( const ::com::sun::star::datatransfer::dnd::DragSourceEvent& ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    if ( mpClient )
-        mpClient->dragExit( dse );
 }
 
-void vcl::unohelper::DragAndDropWrapper::dragOver( const ::com::sun::star::datatransfer::dnd::DragSourceDragEvent& dsde ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void vcl::unohelper::DragAndDropWrapper::dragOver( const ::com::sun::star::datatransfer::dnd::DragSourceDragEvent& ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    if ( mpClient )
-        mpClient->dragOver( dsde );
 }
 
-void vcl::unohelper::DragAndDropWrapper::dropActionChanged( const ::com::sun::star::datatransfer::dnd::DragSourceDragEvent& dsde ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void vcl::unohelper::DragAndDropWrapper::dropActionChanged( const ::com::sun::star::datatransfer::dnd::DragSourceDragEvent& ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    if ( mpClient )
-        mpClient->dropActionChanged( dsde );
 }
 
 // ::com::sun::star::datatransfer::dnd::XDropTargetListener
@@ -182,10 +144,8 @@ void vcl::unohelper::DragAndDropWrapper::dragOver( const ::com::sun::star::datat
         mpClient->dragOver( rDTDE );
 }
 
-void vcl::unohelper::DragAndDropWrapper::dropActionChanged( const ::com::sun::star::datatransfer::dnd::DropTargetDragEvent& rDTDE ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void vcl::unohelper::DragAndDropWrapper::dropActionChanged( const ::com::sun::star::datatransfer::dnd::DropTargetDragEvent& ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    if ( mpClient )
-        mpClient->dropActionChanged( rDTDE );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
