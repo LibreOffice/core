@@ -1191,10 +1191,14 @@ static IMPL_RTL_STRCODE* IMPL_RTL_STRINGNAME( ImplNewCopy )( IMPL_RTL_STRINGDATA
 /* String-Class functions                                                  */
 /* ======================================================================= */
 
-#define IMPL_RTL_ACQUIRE( pThis )                               \
-{                                                               \
-    if (!SAL_STRING_IS_STATIC (pThis))                          \
-        osl_atomic_increment( &((pThis)->refCount) );  \
+namespace {
+
+void IMPL_RTL_ACQUIRE(IMPL_RTL_STRINGDATA * pThis)
+{
+    if (!SAL_STRING_IS_STATIC (pThis))
+        osl_atomic_increment( &((pThis)->refCount) );
+}
+
 }
 
 /* ----------------------------------------------------------------------- */
