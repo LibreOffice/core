@@ -41,29 +41,6 @@ using namespace                 ::com::sun::star;
 using namespace sca::analysis;
 using namespace std;
 
-extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL analysis_component_getFactory(
-    const sal_Char* pImplName, void* pServiceManager, void* /*pRegistryKey*/ )
-{
-    void* pRet = 0;
-
-    if( pServiceManager && OUString::createFromAscii( pImplName ) == AnalysisAddIn::getImplementationName_Static() )
-    {
-        uno::Reference< lang::XSingleServiceFactory >  xFactory( cppu::createOneInstanceFactory(
-                reinterpret_cast< lang::XMultiServiceFactory* >( pServiceManager ),
-                AnalysisAddIn::getImplementationName_Static(),
-                AnalysisAddIn_CreateInstance,
-                AnalysisAddIn::getSupportedServiceNames_Static() ) );
-
-        if( xFactory.is() )
-        {
-            xFactory->acquire();
-            pRet = xFactory.get();
-        }
-    }
-
-    return pRet;
-}
-
 ResMgr& AnalysisAddIn::GetResMgr( void ) throw( uno::RuntimeException )
 {
     if( !pResMgr )
@@ -221,12 +198,6 @@ uno::Sequence< OUString > AnalysisAddIn::getSupportedServiceNames_Static()
     pArray[0] = ADDIN_SERVICE;
     pArray[1] = MY_SERVICE;
     return aRet;
-}
-
-uno::Reference< uno::XInterface > SAL_CALL AnalysisAddIn_CreateInstance(
-        const uno::Reference< lang::XMultiServiceFactory >& xServiceFact )
-{
-    return (cppu::OWeakObject*) new AnalysisAddIn( comphelper::getComponentContext(xServiceFact) );
 }
 
 // XServiceName
@@ -1160,5 +1131,14 @@ double SAL_CALL AnalysisAddIn::getConvert( double f, const OUString& aFU, const 
     double fRet = pCDL->Convert( f, aFU, aTU );
     RETURN_FINITE( fRet );
 }
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_sheet_addin_AnalysisImpl_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                                         ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new AnalysisAddIn(context));
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
