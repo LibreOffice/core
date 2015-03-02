@@ -43,7 +43,7 @@ bool LiteralToBoolConversion::VisitImplicitCastExpr(
         return true;
     }
     Expr const * sub = expr->getSubExpr()->IgnoreParenCasts();
-    Expr const * expr2;
+    Expr const * expr2 = expr;
     for (;;) {
         BinaryOperator const * op = dyn_cast<BinaryOperator>(sub);
         if (op == nullptr || op->getOpcode() != BO_Comma) {
