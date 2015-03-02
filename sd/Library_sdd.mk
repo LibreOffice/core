@@ -34,7 +34,6 @@ $(eval $(call gb_Library_use_libraries,sdd,\
 $(eval $(call gb_Library_set_componentfile,sdd,sd/util/sdd))
 
 $(eval $(call gb_Library_add_exception_objects,sdd,\
-    sd/source/ui/unoidl/detreg \
     sd/source/ui/unoidl/sddetect \
 ))
 
