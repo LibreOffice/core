@@ -19,7 +19,7 @@
             <value>vnd.sun.star.script:LibreLogo|LibreLogo.py$goforward?language=Python&amp;location=share</value>
           </prop>
           <prop oor:name="Title" oor:type="xs:string">
-            <value xml:lang="en-US">Forward</value>
+            <value xml:lang="en-US">FORWARD 10</value>
           </prop>
           <prop oor:name="Target" oor:type="xs:string">
             <value>_self</value>
@@ -33,7 +33,7 @@
             <value>vnd.sun.star.script:LibreLogo|LibreLogo.py$gobackward?language=Python&amp;location=share</value>
           </prop>
           <prop oor:name="Title" oor:type="xs:string">
-            <value xml:lang="en-US">Back</value>
+            <value xml:lang="en-US">BACK 10</value>
           </prop>
           <prop oor:name="Target" oor:type="xs:string">
             <value>_self</value>
@@ -47,7 +47,7 @@
             <value>vnd.sun.star.script:LibreLogo|LibreLogo.py$left?language=Python&amp;location=share</value>
           </prop>
           <prop oor:name="Title" oor:type="xs:string">
-            <value xml:lang="en-US">Left</value>
+            <value xml:lang="en-US">LEFT 15°</value>
           </prop>
           <prop oor:name="Target" oor:type="xs:string">
             <value>_self</value>
@@ -61,7 +61,7 @@
             <value>vnd.sun.star.script:LibreLogo|LibreLogo.py$right?language=Python&amp;location=share</value>
           </prop>
           <prop oor:name="Title" oor:type="xs:string">
-            <value xml:lang="en-US">Right</value>
+            <value xml:lang="en-US">RIGHT 15°</value>
           </prop>
           <prop oor:name="Target" oor:type="xs:string">
             <value>_self</value>
@@ -89,7 +89,7 @@
             <value>vnd.sun.star.script:LibreLogo|LibreLogo.py$stop?language=Python&amp;location=share</value>
           </prop>
           <prop oor:name="Title" oor:type="xs:string">
-            <value xml:lang="en-US">Stop</value>
+            <value xml:lang="en-US">STOP</value>
           </prop>
           <prop oor:name="Target" oor:type="xs:string">
             <value>_self</value>
@@ -103,7 +103,7 @@
             <value>vnd.sun.star.script:LibreLogo|LibreLogo.py$home?language=Python&amp;location=share</value>
           </prop>
           <prop oor:name="Title" oor:type="xs:string">
-            <value xml:lang="en-US">Home</value>
+            <value xml:lang="en-US">HOME</value>
           </prop>
           <prop oor:name="Target" oor:type="xs:string">
             <value>_self</value>
@@ -117,7 +117,7 @@
             <value>vnd.sun.star.script:LibreLogo|LibreLogo.py$clearscreen?language=Python&amp;location=share</value>
           </prop>
           <prop oor:name="Title" oor:type="xs:string">
-            <value xml:lang="en-US">Clear screen</value>
+            <value xml:lang="en-US">CLEARSCREEN</value>
           </prop>
           <prop oor:name="Target" oor:type="xs:string">
             <value>_self</value>
