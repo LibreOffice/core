@@ -181,8 +181,8 @@ class SwXShape : public SwXShapeBaseClass,
 
         @author OD
     */
-    ::com::sun::star::drawing::HomogenMatrix3 _ConvertTransformationToLayoutDir(
-                ::com::sun::star::drawing::HomogenMatrix3 _aMatrixInHoriL2R );
+    css::drawing::HomogenMatrix3 _ConvertTransformationToLayoutDir(
+                const css::drawing::HomogenMatrix3& rMatrixInHoriL2R );
 
     /** method to adjust the positioning properties
 

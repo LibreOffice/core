@@ -1035,7 +1035,7 @@ public:
     SwStyleProperties_Impl(const SfxItemPropertyMap& rMap);
     ~SwStyleProperties_Impl();
 
-    bool    SetProperty(const OUString& rName, uno::Any aVal);
+    bool    SetProperty(const OUString& rName, const uno::Any& rVal);
     bool    GetProperty(const OUString& rName, uno::Any*& rpAny);
     bool    ClearProperty( const OUString& rPropertyName );
     void    ClearAllProperties( );
@@ -1063,7 +1063,7 @@ SwStyleProperties_Impl::~SwStyleProperties_Impl()
     delete[] pAnyArr;
 }
 
-bool SwStyleProperties_Impl::SetProperty(const OUString& rName, uno::Any aVal)
+bool SwStyleProperties_Impl::SetProperty(const OUString& rName, const uno::Any& rVal)
 {
     sal_uInt16 nPos = 0;
     bool bRet = false;
@@ -1073,7 +1073,7 @@ bool SwStyleProperties_Impl::SetProperty(const OUString& rName, uno::Any aVal)
         if(rName == aIt->sName)
         {
             delete pAnyArr[nPos];
-            pAnyArr[nPos] = new uno::Any ( aVal );
+            pAnyArr[nPos] = new uno::Any(rVal);
             bRet = true;
             break;
         }

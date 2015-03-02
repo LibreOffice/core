@@ -3680,15 +3680,15 @@ void SwLayoutFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
 }
 
 static drawinglayer::primitive2d::Primitive2DSequence lcl_CreateDashedIndicatorPrimitive(
-        basegfx::B2DPoint aStart, basegfx::B2DPoint aEnd,
+        const basegfx::B2DPoint& rStart, const basegfx::B2DPoint& rEnd,
         basegfx::BColor aColor )
 {
     drawinglayer::primitive2d::Primitive2DSequence aSeq( 1 );
 
     std::vector< double > aStrokePattern;
     basegfx::B2DPolygon aLinePolygon;
-    aLinePolygon.append( aStart );
-    aLinePolygon.append( aEnd );
+    aLinePolygon.append(rStart);
+    aLinePolygon.append(rEnd);
 
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
     if ( rSettings.GetHighContrastMode( ) )

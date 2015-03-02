@@ -296,7 +296,7 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
                     bool bRule = false );
 
     void    InsertByWord( const OUString & );
-    void    InsertPageBreak(const OUString *pPageDesc = 0, ::boost::optional<sal_uInt16> pPgNum = boost::none );
+    void    InsertPageBreak(const OUString *pPageDesc = 0, const ::boost::optional<sal_uInt16>& rPgNum = boost::none);
     void    InsertLineBreak();
     void    InsertColumnBreak();
     void    InsertFootnote(const OUString &, bool bEndNote = false, bool bEdit = true );

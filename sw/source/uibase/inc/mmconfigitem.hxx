@@ -82,7 +82,7 @@ public:
 
     void                SetCurrentConnection(
                             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource>          xSource,
-                            SharedConnection                                                                xConnection,
+                            const SharedConnection&                                                         rConnection,
                             ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier>    xColumnsSupplier,
                             const SwDBData& rDBData);
 

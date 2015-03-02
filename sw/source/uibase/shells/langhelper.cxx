@@ -231,7 +231,7 @@ namespace SwLangHelper
         SetLanguage( rWrtSh, 0 , ESelection(), rLangText, bIsForSelection, rCoreSet );
     }
 
-    void SetLanguage( SwWrtShell &rWrtSh, OutlinerView* pOLV, ESelection aSelection, const OUString &rLangText, bool bIsForSelection, SfxItemSet &rCoreSet )
+    void SetLanguage( SwWrtShell &rWrtSh, OutlinerView* pOLV, const ESelection& rSelection, const OUString &rLangText, bool bIsForSelection, SfxItemSet &rCoreSet )
     {
         const LanguageType nLang = SvtLanguageTable::GetLanguageType( rLangText );
         if (nLang != LANGUAGE_DONTKNOW)
@@ -262,7 +262,7 @@ namespace SwLangHelper
                     if (pEditEngine)
                     {
                         rCoreSet.Put( SvxLanguageItem( nLang, nLangWhichId ));
-                        pEditEngine->QuickSetAttribs( rCoreSet, aSelection);
+                        pEditEngine->QuickSetAttribs(rCoreSet, rSelection);
                     }
                     else
                     {
@@ -313,7 +313,7 @@ namespace SwLangHelper
         SetLanguage_None( rWrtSh,0,ESelection(),bIsForSelection,rCoreSet );
     }
 
-    void SetLanguage_None( SwWrtShell &rWrtSh, OutlinerView* pOLV, ESelection aSelection, bool bIsForSelection, SfxItemSet &rCoreSet )
+    void SetLanguage_None( SwWrtShell &rWrtSh, OutlinerView* pOLV, const ESelection& rSelection, bool bIsForSelection, SfxItemSet &rCoreSet )
     {
         // EditEngine IDs
         const sal_uInt16 aLangWhichId_EE[3] =
@@ -343,7 +343,7 @@ namespace SwLangHelper
             {
                 for (size_t i = 0; i < SAL_N_ELEMENTS(aLangWhichId_EE); ++i)
                     rCoreSet.Put( SvxLanguageItem( LANGUAGE_NONE, aLangWhichId_EE[i] ));
-                pEditEngine->QuickSetAttribs( rCoreSet, aSelection);
+                pEditEngine->QuickSetAttribs(rCoreSet, rSelection);
             }
             else
             {
@@ -373,10 +373,10 @@ namespace SwLangHelper
         ResetLanguages( rWrtSh, 0 , ESelection(), bIsForSelection );
     }
 
-    void ResetLanguages( SwWrtShell &rWrtSh, OutlinerView* pOLV, ESelection aSelection, bool bIsForSelection )
+    void ResetLanguages( SwWrtShell &rWrtSh, OutlinerView* pOLV, const ESelection& rSelection, bool bIsForSelection )
     {
         (void) bIsForSelection;
-        (void) aSelection;
+        (void) rSelection;
 
         // reset language for current selection.
         // The selection should already have been expanded to the whole paragraph or
@@ -558,17 +558,17 @@ namespace SwLangHelper
         return aText;
     }
 
-    OUString GetTextForLanguageGuessing( EditEngine* rEditEngine, ESelection aDocSelection )
+    OUString GetTextForLanguageGuessing(EditEngine* rEditEngine, const ESelection& rDocSelection)
     {
         // string for guessing language
         OUString aText;
 
         // get the full text of the paragraph that the end of selection is in
-        aText = rEditEngine->GetText(aDocSelection.nEndPos);
+        aText = rEditEngine->GetText(rDocSelection.nEndPos);
         if (!aText.isEmpty())
         {
             sal_Int32 nStt = 0;
-            sal_Int32 nEnd = aDocSelection.nEndPos;
+            sal_Int32 nEnd = rDocSelection.nEndPos;
             // at most 100 chars to the left...
             nStt = nEnd > 100 ? nEnd - 100 : 0;
             // ... and 100 to the right of the cursor position

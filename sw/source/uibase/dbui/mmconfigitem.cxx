@@ -827,12 +827,12 @@ void SwMailMergeConfigItem::SetCountrySettings(bool bSet, const OUString& rCount
 
 void SwMailMergeConfigItem::SetCurrentConnection(
         Reference< XDataSource>       xSource,
-        SharedConnection              xConnection,
+        const SharedConnection&       rConnection,
         Reference< XColumnsSupplier>  xColumnsSupplier,
         const SwDBData& rDBData)
 {
         m_pImpl->xSource            = xSource         ;
-        m_pImpl->xConnection        = xConnection     ;
+        m_pImpl->xConnection        = rConnection     ;
         m_pImpl->xColumnsSupplier   = xColumnsSupplier;
         m_pImpl->aDBData = rDBData;
         m_pImpl->xResultSet         = 0;

@@ -60,9 +60,9 @@ using namespace drawinglayer::attribute;
 
 namespace
 {
-    static basegfx::BColor lcl_GetFillColor( basegfx::BColor aLineColor )
+    static basegfx::BColor lcl_GetFillColor(const basegfx::BColor& rLineColor)
     {
-        basegfx::BColor aHslLine = basegfx::tools::rgb2hsl( aLineColor );
+        basegfx::BColor aHslLine = basegfx::tools::rgb2hsl(rLineColor);
         double nLuminance = aHslLine.getZ() * 2.5;
         if ( nLuminance == 0 )
             nLuminance = 0.5;
@@ -72,9 +72,9 @@ namespace
         return basegfx::tools::hsl2rgb( aHslLine );
     }
 
-    static basegfx::BColor lcl_GetLighterGradientColor( basegfx::BColor aDarkColor )
+    static basegfx::BColor lcl_GetLighterGradientColor(const basegfx::BColor& rDarkColor)
     {
-        basegfx::BColor aHslDark = basegfx::tools::rgb2hsl( aDarkColor );
+        basegfx::BColor aHslDark = basegfx::tools::rgb2hsl(rDarkColor);
         double nLuminance = aHslDark.getZ() * 255 + 20;
         aHslDark.setZ( nLuminance / 255.0 );
         return basegfx::tools::hsl2rgb( aHslDark );

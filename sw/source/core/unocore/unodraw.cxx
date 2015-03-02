@@ -2550,9 +2550,9 @@ awt::Point SwXShape::_ConvertPositionToHoriL2R( const awt::Point _aObjPos,
     #i31698#
 */
 drawing::HomogenMatrix3 SwXShape::_ConvertTransformationToLayoutDir(
-                                    drawing::HomogenMatrix3 _aMatrixInHoriL2R )
+                                    const drawing::HomogenMatrix3& rMatrixInHoriL2R )
 {
-    drawing::HomogenMatrix3 aMatrix( _aMatrixInHoriL2R );
+    drawing::HomogenMatrix3 aMatrix(rMatrixInHoriL2R);
 
     // #i44334#, #i44681# - direct manipulation of the
     // tranformation structure isn't valid, if it contains rotation.
