@@ -167,41 +167,6 @@ ScaFuncRes::ScaFuncRes( ResId& rResId, ResMgr& rResMgr, sal_uInt16 nIndex, OUStr
     FreeResource();
 }
 
-// entry points for service registration / instantiation
-uno::Reference< uno::XInterface > SAL_CALL ScaPricingAddIn_CreateInstance(
-        const uno::Reference< lang::XMultiServiceFactory >& )
-{
-    return (cppu::OWeakObject*) new ScaPricingAddIn();
-}
-
-extern "C" {
-
-SAL_DLLPUBLIC_EXPORT void * SAL_CALL pricing_component_getFactory(
-    const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
-{
-    void* pRet = 0;
-
-    if ( pServiceManager &&
-            OUString::createFromAscii( pImplName ) == ScaPricingAddIn::getImplementationName_Static() )
-    {
-        uno::Reference< lang::XSingleServiceFactory > xFactory( cppu::createOneInstanceFactory(
-                reinterpret_cast< lang::XMultiServiceFactory* >( pServiceManager ),
-                ScaPricingAddIn::getImplementationName_Static(),
-                ScaPricingAddIn_CreateInstance,
-                ScaPricingAddIn::getSupportedServiceNames_Static() ) );
-
-        if (xFactory.is())
-        {
-            xFactory->acquire();
-            pRet = xFactory.get();
-        }
-    }
-
-    return pRet;
-}
-
-}   // extern C
-
 //  "normal" service implementation
 ScaPricingAddIn::ScaPricingAddIn() :
     pDefLocales( NULL ),
@@ -658,6 +623,15 @@ double SAL_CALL ScaPricingAddIn::getOptProbInMoney( double spot, double vol,
 
     RETURN_FINITE( fRet );
 }
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_sheet_addin_PricingFunctionsImpl_get_implementation(::com::sun::star::uno::XComponentContext*,
+                                                                 ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new ScaPricingAddIn());
+}
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
