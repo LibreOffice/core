@@ -60,7 +60,7 @@ void OPredicateCompiler::dispose()
 {
     Clean();
     m_orgColumns        = NULL;
-m_xIndexes.clear();
+    m_xIndexes.clear();
 }
 
 void OPredicateCompiler::start(OSQLParseNode* pSQLParseNode)

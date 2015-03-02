@@ -157,6 +157,7 @@ SvxAsianLayoutPage::~SvxAsianLayoutPage()
 void SvxAsianLayoutPage::dispose()
 {
     delete pImpl;
+    pImpl = NULL;
     SfxTabPage::dispose();
 }
 

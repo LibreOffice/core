@@ -491,8 +491,13 @@ OrganizeDialog::~OrganizeDialog()
 
 void OrganizeDialog::dispose()
 {
-    for ( sal_uInt16 i = 0; i < m_pTabCtrl->GetPageCount(); i++ )
-        delete m_pTabCtrl->GetTabPage( m_pTabCtrl->GetPageId( i ) );
+    if (m_pTabCtrl)
+    {
+        for ( sal_uInt16 i = 0; i < m_pTabCtrl->GetPageCount(); i++ )
+            delete m_pTabCtrl->GetTabPage( m_pTabCtrl->GetPageId( i ) );
+        m_pTabCtrl = NULL;
+    }
+
     TabDialog::dispose();
 };
 

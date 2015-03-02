@@ -487,7 +487,9 @@ SchAttribTabDlg::~SchAttribTabDlg()
 void SchAttribTabDlg::dispose()
 {
     delete m_pSymbolShapeProperties;
+    m_pSymbolShapeProperties = NULL;
     delete m_pAutoSymbolGraphic;
+    m_pAutoSymbolGraphic = NULL;
     SfxTabDialog::dispose();
 }
 

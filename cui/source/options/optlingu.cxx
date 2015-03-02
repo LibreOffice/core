@@ -1127,8 +1127,8 @@ SvxLinguTabPage::~SvxLinguTabPage()
 
 void SvxLinguTabPage::dispose()
 {
-    if (pLinguData)
-        delete pLinguData;
+    delete pLinguData;
+    pLinguData = NULL;
     SfxTabPage::dispose();
 }
 
@@ -1904,9 +1904,9 @@ SvxEditModulesDlg::~SvxEditModulesDlg()
 void SvxEditModulesDlg::dispose()
 {
     delete pDefaultLinguData;
+    pDefaultLinguData = NULL;
     ModalDialog::dispose();
 }
-
 
 SvTreeListEntry* SvxEditModulesDlg::CreateEntry( OUString& rTxt, sal_uInt16 nCol )
 {

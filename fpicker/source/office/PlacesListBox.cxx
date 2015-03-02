@@ -94,8 +94,11 @@ PlacesListBox::~PlacesListBox( )
 void PlacesListBox::dispose()
 {
     delete mpImpl;
+    mpImpl = NULL;
     delete mpAddBtn;
+    mpAddBtn = NULL;
     delete mpDelBtn;
+    mpDelBtn = NULL;
     Control::dispose();
 }
 

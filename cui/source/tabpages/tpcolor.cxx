@@ -403,10 +403,9 @@ SvxColorTabPage::~SvxColorTabPage()
 void SvxColorTabPage::dispose()
 {
     delete pShadow;
+    pShadow = NULL;
     SfxTabPage::dispose();
 }
-
-
 
 void SvxColorTabPage::ImpColorCountChanged()
 {

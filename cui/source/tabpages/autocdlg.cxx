@@ -474,11 +474,16 @@ OfaSwAutoFmtOptionsPage::~OfaSwAutoFmtOptionsPage()
 
 void OfaSwAutoFmtOptionsPage::dispose()
 {
-    delete static_cast<ImpUserData*>(m_pCheckLB->GetUserData( REPLACE_BULLETS ));
-    delete static_cast<ImpUserData*>(m_pCheckLB->GetUserData( APPLY_NUMBERING ));
-    delete static_cast<ImpUserData*>(m_pCheckLB->GetUserData( MERGE_SINGLE_LINE_PARA ));
-    delete pCheckButtonData;
-    delete m_pCheckLB;
+    if (m_pCheckLB)
+    {
+        delete static_cast<ImpUserData*>(m_pCheckLB->GetUserData( REPLACE_BULLETS ));
+        delete static_cast<ImpUserData*>(m_pCheckLB->GetUserData( APPLY_NUMBERING ));
+        delete static_cast<ImpUserData*>(m_pCheckLB->GetUserData( MERGE_SINGLE_LINE_PARA ));
+        delete pCheckButtonData;
+        pCheckButtonData = NULL;
+        delete m_pCheckLB;
+        m_pCheckLB = NULL;
+    }
     SfxTabPage::dispose();
 }
 
@@ -912,7 +917,9 @@ void OfaAutocorrReplacePage::dispose()
     aChangesTable.clear();
 
     delete pCompareClass;
+    pCompareClass = NULL;
     delete pCharClass;
+    pCharClass = NULL;
     SfxTabPage::dispose();
 }
 
@@ -1841,7 +1848,9 @@ OfaQuoteTabPage::~OfaQuoteTabPage()
 void OfaQuoteTabPage::dispose()
 {
     delete pCheckButtonData;
+    pCheckButtonData = NULL;
     delete m_pSwCheckLB;
+    m_pSwCheckLB = NULL;
     SfxTabPage::dispose();
 }
 

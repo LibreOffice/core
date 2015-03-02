@@ -225,7 +225,9 @@ SvxSingleNumPickTabPage::~SvxSingleNumPickTabPage()
 void SvxSingleNumPickTabPage::dispose()
 {
     delete pActNum;
+    pActNum = NULL;
     delete pSaveNum;
+    pSaveNum = NULL;
     SfxTabPage::dispose();
 }
 
@@ -392,7 +394,9 @@ SvxBulletPickTabPage::~SvxBulletPickTabPage()
 void SvxBulletPickTabPage::dispose()
 {
     delete pActNum;
+    pActNum = NULL;
     delete pSaveNum;
+    pSaveNum = NULL;
     SfxTabPage::dispose();
 }
 
@@ -595,7 +599,9 @@ SvxNumPickTabPage::~SvxNumPickTabPage()
 void SvxNumPickTabPage::dispose()
 {
     delete pActNum;
+    pActNum = NULL;
     delete pSaveNum;
+    pSaveNum = NULL;
     SfxTabPage::dispose();
 }
 
@@ -842,7 +848,9 @@ SvxBitmapPickTabPage::~SvxBitmapPickTabPage()
 void SvxBitmapPickTabPage::dispose()
 {
     delete pActNum;
+    pActNum = NULL;
     delete pSaveNum;
+    pSaveNum = NULL;
     SfxTabPage::dispose();
 }
 
@@ -1154,9 +1162,15 @@ SvxNumOptionsTabPage::~SvxNumOptionsTabPage()
 
 void SvxNumOptionsTabPage::dispose()
 {
-    delete m_pBitmapMB->GetPopupMenu()->GetPopupMenu(m_nGalleryId);
+    if (m_pBitmapMB)
+    {
+        delete m_pBitmapMB->GetPopupMenu()->GetPopupMenu(m_nGalleryId);
+        m_pBitmapMB = NULL;
+    }
     delete pActNum;
+    pActNum = NULL;
     delete pSaveNum;
+    pSaveNum = NULL;
     SfxTabPage::dispose();
 }
 
@@ -2719,9 +2733,12 @@ SvxNumPositionTabPage::~SvxNumPositionTabPage()
 void SvxNumPositionTabPage::dispose()
 {
     delete pActNum;
+    pActNum = NULL;
     delete pSaveNum;
+    pSaveNum = NULL;
     SfxTabPage::dispose();
 }
+
 /*-------------------------------------------------------*/
 
 #if OSL_DEBUG_LEVEL > 1

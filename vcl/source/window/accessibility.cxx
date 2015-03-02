@@ -136,6 +136,8 @@ namespace vcl {
             return pChild->GetAccessible();
     }
     */
+    if ( !mpWindowImpl )
+        return css::uno::Reference< css::accessibility::XAccessible >();
     if ( !mpWindowImpl->mxAccessible.is() && bCreate )
         mpWindowImpl->mxAccessible = CreateAccessible();
 

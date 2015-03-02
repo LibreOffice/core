@@ -251,18 +251,18 @@ SpellDialog::~SpellDialog()
 
 void SpellDialog::dispose()
 {
-    // save possibly modified user-dictionaries
-    Reference< XSearchableDictionaryList >  xDicList( SvxGetDictionaryList() );
-    if (xDicList.is())
+    if (pImpl)
     {
-        SaveDictionaries( xDicList );
-    }
+        // save possibly modified user-dictionaries
+        Reference< XSearchableDictionaryList >  xDicList( SvxGetDictionaryList() );
+        if (xDicList.is())
+            SaveDictionaries( xDicList );
 
-    delete pImpl;
+        delete pImpl;
+        pImpl = NULL;
+    }
     SfxModelessDialog::dispose();
 }
-
-
 
 void SpellDialog::Init_Impl()
 {

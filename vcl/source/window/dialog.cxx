@@ -347,8 +347,8 @@ void Dialog::ImplInitDialogData()
     mbOldSaveBack           = false;
     mbInClose               = false;
     mbModalMode             = false;
-    mpContentArea.disposeAndClear();
-    mpActionArea.disposeAndClear();
+    mpContentArea.clear();
+    mpActionArea.clear();
     mnMousePositioned       = 0;
     mpDialogImpl            = new DialogImpl;
 }
@@ -551,8 +551,8 @@ void Dialog::dispose()
 {
     delete mpDialogImpl;
     mpDialogImpl = NULL;
-    mpActionArea.disposeAndClear();
-    mpContentArea.disposeAndClear();
+    mpActionArea.clear();
+    mpContentArea.clear();
     SystemWindow::dispose();
 }
 

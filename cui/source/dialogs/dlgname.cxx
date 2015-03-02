@@ -144,6 +144,7 @@ SvxMessDialog::~SvxMessDialog()
 void SvxMessDialog::dispose()
 {
     delete pImage;
+    pImage = NULL;
     ModalDialog::dispose();
 }
 

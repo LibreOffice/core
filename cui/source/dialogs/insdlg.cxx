@@ -401,10 +401,9 @@ SvInsertPlugInDialog::~SvInsertPlugInDialog()
 void SvInsertPlugInDialog::dispose()
 {
     delete m_pURL;
+    m_pURL = NULL;
     InsertObjectDialog_Impl::dispose();
 }
-
-
 
 static void Plugin_ImplFillCommandSequence( const OUString& aCommands, uno::Sequence< beans::PropertyValue >& aCommandSequence )
 {

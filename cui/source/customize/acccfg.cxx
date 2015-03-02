@@ -828,6 +828,8 @@ void SfxAcceleratorConfigPage::dispose()
     m_pKeyBox->Clear();
 
     delete m_pFileDlg;
+    m_pFileDlg = NULL;
+
     SfxTabPage::dispose();
 }
 

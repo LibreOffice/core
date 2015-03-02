@@ -2233,9 +2233,13 @@ void SvxMenuConfigPage::dispose()
 
         delete pData;
     }
+    m_pSaveInListBox->Clear();
 
     delete m_pSelectorDlg;
+    m_pSelectorDlg = NULL;
     delete m_pContentsListBox;
+    m_pContentsListBox = NULL;
+
     SvxConfigPage::dispose();
 }
 
@@ -2925,14 +2929,14 @@ void SvxToolbarConfigPage::dispose()
 
         delete pData;
     }
+    m_pSaveInListBox->Clear();
 
-    if ( m_pSelectorDlg != NULL )
-    {
-        delete m_pSelectorDlg;
-    }
-
+    delete m_pSelectorDlg;
+    m_pSelectorDlg = NULL;
 
     delete m_pContentsListBox;
+    m_pContentsListBox = NULL;
+
     SvxConfigPage::dispose();
 }
 
@@ -4531,6 +4535,8 @@ SvxToolbarEntriesListBox::~SvxToolbarEntriesListBox()
 void SvxToolbarEntriesListBox::dispose()
 {
     delete m_pButtonData;
+    m_pButtonData = NULL;
+
     SvxMenuEntriesListBox::dispose();
 }
 
@@ -4920,20 +4926,23 @@ SvxIconSelectorDialog::~SvxIconSelectorDialog()
 
 void SvxIconSelectorDialog::dispose()
 {
-    sal_uInt16 nCount = pTbSymbol->GetItemCount();
-
-    for (sal_uInt16 n = 0; n < nCount; ++n )
+    if (pTbSymbol)
     {
-        sal_uInt16 nId = pTbSymbol->GetItemId(n);
+        sal_uInt16 nCount = pTbSymbol->GetItemCount();
 
-        uno::XInterface* xi = static_cast< uno::XInterface* >(
-            pTbSymbol->GetItemData( nId ) );
-
-        if ( xi != NULL )
+        for (sal_uInt16 n = 0; n < nCount; ++n )
         {
+            sal_uInt16 nId = pTbSymbol->GetItemId(n);
+
+            uno::XInterface* xi = static_cast< uno::XInterface* >(
+                pTbSymbol->GetItemData( nId ) );
+
+            if ( xi != NULL )
             xi->release();
         }
+        pTbSymbol = NULL;
     }
+
     ModalDialog::dispose();
 }
 

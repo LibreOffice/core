@@ -128,10 +128,9 @@ SvxBitmapTabPage::~SvxBitmapTabPage()
 void SvxBitmapTabPage::dispose()
 {
     delete m_pBitmapCtl;
+    m_pBitmapCtl = NULL;
     SvxTabPage::dispose();
 }
-
-
 
 void SvxBitmapTabPage::Construct()
 {

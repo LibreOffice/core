@@ -781,7 +781,6 @@ void BrowseBox::RemoveColumn( sal_uInt16 nItemId )
 
 void BrowseBox::RemoveColumns()
 {
-
     size_t nOldCount = pCols->size();
 
     // remove all columns

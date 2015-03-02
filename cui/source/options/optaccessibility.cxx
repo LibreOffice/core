@@ -64,6 +64,7 @@ SvxAccessibilityOptionsTabPage::~SvxAccessibilityOptionsTabPage()
 void SvxAccessibilityOptionsTabPage::dispose()
 {
     delete m_pImpl;
+    m_pImpl = NULL;
     SfxTabPage::dispose();
 }
 

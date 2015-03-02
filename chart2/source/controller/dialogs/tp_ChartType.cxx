@@ -780,11 +780,17 @@ void ChartTypeTabPage::dispose()
 
     //delete all resource helper
     delete m_pDim3DLookResourceGroup;
+    m_pDim3DLookResourceGroup = NULL;
     delete m_pStackingResourceGroup;
+    m_pStackingResourceGroup = NULL;
     delete m_pSplineResourceGroup;
+    m_pSplineResourceGroup = NULL;
     delete m_pGeometryResourceGroup;
+    m_pGeometryResourceGroup = NULL;
     delete m_pSortByXValuesResourceGroup;
+    m_pSortByXValuesResourceGroup = NULL;
     delete m_pGL3DResourceGroup;
+    m_pGL3DResourceGroup = NULL;
     svt::OWizardPage::dispose();
 }
 

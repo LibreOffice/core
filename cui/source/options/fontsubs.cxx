@@ -144,8 +144,11 @@ SvxFontSubstTabPage::~SvxFontSubstTabPage()
 void SvxFontSubstTabPage::dispose()
 {
     delete pCheckButtonData;
+    pCheckButtonData = NULL;
     delete pConfig;
+    pConfig = NULL;
     delete m_pCheckLB;
+    m_pCheckLB = NULL;
     SfxTabPage::dispose();
 }
 

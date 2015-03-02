@@ -374,6 +374,8 @@ void SvxPageDescPage::dispose()
     if(mbDelPrinter)
     {
         delete mpDefPrinter;
+        mpDefPrinter = NULL;
+        mbDelPrinter = false;
     }
     SfxTabPage::dispose();
 }

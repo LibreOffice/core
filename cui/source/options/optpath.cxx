@@ -252,14 +252,17 @@ SvxPathTabPage::~SvxPathTabPage()
 
 void SvxPathTabPage::dispose()
 {
-    for ( sal_uInt16 i = 0; i < pPathBox->GetEntryCount(); ++i )
-        delete static_cast<PathUserData_Impl*>(pPathBox->GetEntry(i)->GetUserData());
-    delete pPathBox;
+    if ( pPathBox )
+    {
+        for ( sal_uInt16 i = 0; i < pPathBox->GetEntryCount(); ++i )
+            delete static_cast<PathUserData_Impl*>(pPathBox->GetEntry(i)->GetUserData());
+        delete pPathBox;
+        pPathBox = NULL;
+    }
     delete pImpl;
+    pImpl = NULL;
     SfxTabPage::dispose();
 }
-
-
 
 SfxTabPage* SvxPathTabPage::Create( vcl::Window* pParent,
                                     const SfxItemSet* rAttrSet )

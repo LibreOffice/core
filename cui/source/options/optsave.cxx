@@ -205,10 +205,9 @@ SfxSaveTabPage::~SfxSaveTabPage()
 void SvxSaveTabPage::dispose()
 {
     delete pImpl;
+    pImpl = NULL;
     SfxTabPage::dispose();
 }
-
-
 
 SfxTabPage* SfxSaveTabPage::Create( vcl::Window* pParent,
                                     const SfxItemSet* rAttrSet )

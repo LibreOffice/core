@@ -956,9 +956,10 @@ DbGridControl::~DbGridControl()
 
 void DbGridControl::dispose()
 {
-    RemoveColumns();
-
+    if (!IsDisposed())
     {
+        RemoveColumns();
+
         m_bWantDestruction = true;
         osl::MutexGuard aGuard(m_aDestructionSafety);
         if (m_pFieldListeners)
@@ -984,7 +985,9 @@ void DbGridControl::dispose()
     m_xRowSetListener.clear();
 
     delete m_pDataCursor;
+    m_pDataCursor = NULL;
     delete m_pSeekCursor;
+    m_pSeekCursor = NULL;
 
     m_aBar.disposeAndClear();
 

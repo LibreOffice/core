@@ -289,7 +289,9 @@ SvxNumberFormatTabPage::~SvxNumberFormatTabPage()
 void SvxNumberFormatTabPage::dispose()
 {
     delete pNumFmtShell;
+    pNumFmtShell = NULL;
     delete pNumItem;
+    pNumItem = NULL;
     SfxTabPage::dispose();
 }
 

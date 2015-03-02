@@ -70,6 +70,7 @@ SvxSearchFormatDialog::~SvxSearchFormatDialog()
 void SvxSearchFormatDialog::dispose()
 {
     delete m_pFontList;
+    m_pFontList = NULL;
     SfxTabDialog::dispose();
 }
 

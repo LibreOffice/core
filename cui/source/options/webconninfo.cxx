@@ -148,9 +148,9 @@ WebConnectionInfoDialog::~WebConnectionInfoDialog()
 void WebConnectionInfoDialog::dispose()
 {
     delete m_pPasswordsLB;
+    m_pPasswordsLB = NULL;
     ModalDialog::dispose();
 }
-
 
 IMPL_LINK( WebConnectionInfoDialog, HeaderBarClickedHdl, SvSimpleTable*, pTable )
 {

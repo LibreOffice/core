@@ -141,7 +141,7 @@ void FmGridHeader::dispose()
 {
     delete m_pImpl;
     m_pImpl = NULL;
-    FmGridHeader::dispose();
+    svt::EditBrowserHeader::dispose();
 }
 
 sal_uInt16 FmGridHeader::GetModelColumnPos(sal_uInt16 nId) const

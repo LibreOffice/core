@@ -167,12 +167,14 @@ CheckBox::~CheckBox()
 void CheckBox::dispose()
 {
     delete pCheckButton;
+    pCheckButton = NULL;
 
     // delete user data
     SvTreeListEntry* pEntry = First();
     while ( pEntry )
     {
-        delete static_cast<LibUserData*>(pEntry->GetUserData());
+        delete static_cast<LibUserData*>( pEntry->GetUserData() );
+        pEntry->SetUserData( NULL );
         pEntry = Next( pEntry );
     }
     SvTabListBox::dispose();
@@ -487,11 +489,15 @@ LibPage::~LibPage()
 
 void LibPage::dispose()
 {
-    sal_uInt16 nCount = m_pBasicsBox->GetEntryCount();
-    for ( sal_uInt16 i = 0; i < nCount; ++i )
+    if (m_pBasicsBox)
     {
-        DocumentEntry* pEntry = static_cast<DocumentEntry*>(m_pBasicsBox->GetEntryData( i ));
-        delete pEntry;
+        sal_uInt16 nCount = m_pBasicsBox->GetEntryCount();
+        for ( sal_uInt16 i = 0; i < nCount; ++i )
+        {
+            DocumentEntry* pEntry = static_cast<DocumentEntry*>(m_pBasicsBox->GetEntryData( i ));
+            delete pEntry;
+        }
+        m_pBasicsBox = NULL;
     }
     TabPage::dispose();
 }

@@ -1417,6 +1417,7 @@ void DialogWindowLayout::dispose()
     {
         Remove(pPropertyBrowser);
         delete pPropertyBrowser;
+        pPropertyBrowser = 0;
     }
     Layout::dispose();
 }

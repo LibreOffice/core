@@ -119,16 +119,15 @@ HeaderBar::~HeaderBar()
 
 void HeaderBar::dispose()
 {
-    // Alle Items loeschen
-    for ( size_t i = 0, n = mpItemList->size(); i < n; ++i ) {
-        delete (*mpItemList)[ i ];
+    if (mpItemList)
+    {
+        for ( size_t i = 0, n = mpItemList->size(); i < n; ++i )
+            delete (*mpItemList)[ i ];
+        delete mpItemList;
+        mpItemList = NULL;
     }
-    mpItemList->clear();
-    delete mpItemList;
     Window::dispose();
 }
-
-
 
 void HeaderBar::ImplInitSettings( bool bFont,
                                   bool bForeground, bool bBackground )

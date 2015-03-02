@@ -170,13 +170,12 @@ void FmSearchDialog::dispose()
 
     SaveParams();
 
-    if (m_pConfig)
-    {
-        delete m_pConfig;
-        m_pConfig = NULL;
-    }
+    delete m_pConfig;
+    m_pConfig = NULL;
 
     delete m_pSearchEngine;
+    m_pSearchEngine = NULL;
+
     ModalDialog::dispose();
 }
 

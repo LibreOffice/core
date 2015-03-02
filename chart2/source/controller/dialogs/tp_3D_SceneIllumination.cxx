@@ -300,6 +300,7 @@ ThreeD_SceneIllumination_TabPage::~ThreeD_SceneIllumination_TabPage()
 void ThreeD_SceneIllumination_TabPage::dispose()
 {
     delete[] m_pLightSourceInfoList;
+    m_pLightSourceInfoList = NULL;
     TabPage::dispose();
 }
 

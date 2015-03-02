@@ -61,6 +61,7 @@ ChartTypeDialog::~ChartTypeDialog()
 void ChartTypeDialog::dispose()
 {
     delete m_pChartTypeTabPage;
+    m_pChartTypeTabPage = NULL;
     ModalDialog::dispose();
 }
 

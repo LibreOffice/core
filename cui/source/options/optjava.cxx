@@ -208,8 +208,11 @@ SvxJavaOptionsPage::~SvxJavaOptionsPage()
 void SvxJavaOptionsPage::dispose()
 {
     delete m_pJavaList;
+    m_pJavaList = NULL;
     delete m_pParamDlg;
+    m_pParamDlg = NULL;
     delete m_pPathDlg;
+    m_pPathDlg = NULL;
     ClearJavaInfo();
 #if HAVE_FEATURE_JAVA
     std::vector< JavaInfo* >::iterator pIter;
@@ -218,6 +221,7 @@ void SvxJavaOptionsPage::dispose()
         JavaInfo* pInfo = *pIter;
         jfw_freeJavaInfo( pInfo );
     }
+    m_aAddedInfos.clear();
 
     jfw_unlock();
 #endif
@@ -944,13 +948,15 @@ SvxJavaClassPathDlg::~SvxJavaClassPathDlg()
 
 void SvxJavaClassPathDlg::dispose()
 {
-    sal_Int32 i, nCount = m_pPathList->GetEntryCount();
-    for ( i = 0; i < nCount; ++i )
-        delete static_cast< OUString* >( m_pPathList->GetEntryData(i) );
+    if (m_pPathList)
+    {
+        sal_Int32 i, nCount = m_pPathList->GetEntryCount();
+        for ( i = 0; i < nCount; ++i )
+            delete static_cast< OUString* >( m_pPathList->GetEntryData(i) );
+        m_pPathList = NULL;
+    }
     ModalDialog::dispose();
 }
-
-
 
 IMPL_LINK_NOARG(SvxJavaClassPathDlg, AddArchiveHdl_Impl)
 {

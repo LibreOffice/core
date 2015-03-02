@@ -201,8 +201,11 @@ void MediaWindowImpl::dispose()
     mpMediaWindow = NULL;
 
     delete mpEmptyBmpEx;
+    mpEmptyBmpEx = NULL;
     delete mpAudioBmpEx;
+    mpAudioBmpEx = NULL;
     delete mpMediaWindowControl;
+    mpMediaWindowControl = NULL;
     Control::dispose();
 }
 

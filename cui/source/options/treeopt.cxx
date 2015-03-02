@@ -558,7 +558,7 @@ OfaTreeOptionsDialog::~OfaTreeOptionsDialog()
 void OfaTreeOptionsDialog::dispose()
 {
     pCurrentPageEntry = NULL;
-    SvTreeListEntry* pEntry = pTreeLB->First();
+    SvTreeListEntry* pEntry = pTreeLB ? pTreeLB->First() : NULL;
     // first children
     while(pEntry)
     {
@@ -596,7 +596,7 @@ void OfaTreeOptionsDialog::dispose()
     }
 
     // and parents
-    pEntry = pTreeLB->First();
+    pEntry = pTreeLB ? pTreeLB->First() : NULL;
     while(pEntry)
     {
         if(!pTreeLB->GetParent(pEntry))
@@ -609,7 +609,9 @@ void OfaTreeOptionsDialog::dispose()
         pEntry = pTreeLB->Next(pEntry);
     }
     delete pColorPageItemSet;
+    pColorPageItemSet = NULL;
     deleteGroupNames();
+    pTreeLB = NULL;
     SfxModalDialog::dispose();
 }
 

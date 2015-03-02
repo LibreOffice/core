@@ -909,6 +909,7 @@ RecoveryDialog::~RecoveryDialog()
 void RecoveryDialog::dispose()
 {
     delete m_pFileListLB;
+    m_pFileListLB = NULL;
     Dialog::dispose();
 }
 

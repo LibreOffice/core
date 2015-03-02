@@ -89,11 +89,16 @@ SvxDefaultColorOptPage::~SvxDefaultColorOptPage()
 void SvxDefaultColorOptPage::dispose()
 {
     // save changes
-    pChartOptions->SetDefaultColors( pColorConfig->GetColorList() );
-    pChartOptions->Commit();
+    if (pChartOptions)
+    {
+        pChartOptions->SetDefaultColors( pColorConfig->GetColorList() );
+        pChartOptions->Commit();
 
-    delete pColorConfig;
-    delete pChartOptions;
+        delete pColorConfig;
+        pColorConfig = NULL;
+        delete pChartOptions;
+        pChartOptions = NULL;
+    }
     SfxTabPage::dispose();
 }
 

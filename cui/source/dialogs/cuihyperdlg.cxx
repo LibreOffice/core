@@ -167,6 +167,8 @@ void SvxHpLinkDlg::dispose()
     aViewOpt.Delete();
 
     delete mpItemSet;
+    mpItemSet = NULL;
+
     IconChoiceDialog::dispose();
 }
 

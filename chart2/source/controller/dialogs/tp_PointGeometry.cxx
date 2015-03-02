@@ -45,6 +45,7 @@ SchLayoutTabPage::~SchLayoutTabPage()
 void SchLayoutTabPage::dispose()
 {
     delete m_pGeometryResources;
+    m_pGeometryResources = NULL;
     SfxTabPage::dispose();
 }
 

@@ -115,6 +115,8 @@ void SvxHyperlinkTabPageBase::dispose()
     maTimer.Stop();
 
     delete mpMarkWnd;
+    mpMarkWnd = NULL;
+
     IconChoicePage::dispose();
 }
 

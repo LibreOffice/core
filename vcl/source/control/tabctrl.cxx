@@ -206,9 +206,9 @@ void TabControl::dispose()
     // delete TabCtrl data
     if ( mpTabCtrlData )
     {
-        if( mpTabCtrlData->mpListBox )
-            delete mpTabCtrlData->mpListBox;
+        delete mpTabCtrlData->mpListBox;
         delete mpTabCtrlData;
+        mpTabCtrlData = NULL;
     }
     Control::dispose();
 }

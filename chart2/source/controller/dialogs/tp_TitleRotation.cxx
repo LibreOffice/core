@@ -63,6 +63,7 @@ SchAlignmentTabPage::~SchAlignmentTabPage()
 void SchAlignmentTabPage::dispose()
 {
     delete m_pOrientHlp;
+    m_pOrientHlp = NULL;
     SfxTabPage::dispose();
 }
 

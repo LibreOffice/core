@@ -136,9 +136,13 @@ void SmEditWindow::dispose()
     // must be done before EditView (and thus EditEngine) is no longer
     // available for those classes.
     if (pAccessible)
+    {
         pAccessible->ClearWin();    // make Accessible defunctional
+        pAccessible = NULL;
+        xAccessible.clear();
+    }
     // Note: memory for pAccessible will be freed when the reference
-    // xAccessible is released.
+    // xAccessible is released. FIXME: horribly redundant lifecycle ! ...
 
     if (pEditView)
     {
@@ -157,6 +161,7 @@ void SmEditWindow::dispose()
     pVScrollBar = NULL;
     delete pScrollBox;
     pScrollBox = NULL;
+
     vcl::Window::dispose();
 }
 

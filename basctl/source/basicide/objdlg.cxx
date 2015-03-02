@@ -74,7 +74,8 @@ ObjectCatalog::~ObjectCatalog()
 
 void ObjectCatalog::dispose()
 {
-    GetParent()->GetSystemWindow()->GetTaskPaneList()->RemoveWindow(this);
+    if (!IsDisposed())
+        GetParent()->GetSystemWindow()->GetTaskPaneList()->RemoveWindow(this);
     aTitle.disposeAndClear();
     aTree.disposeAndClear();
     DockingWindow::dispose();

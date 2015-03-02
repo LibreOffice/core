@@ -256,6 +256,7 @@ AlignmentTabPage::~AlignmentTabPage()
 void AlignmentTabPage::dispose()
 {
     delete m_pOrientHlp;
+    m_pOrientHlp = NULL;
     SfxTabPage::dispose();
 }
 

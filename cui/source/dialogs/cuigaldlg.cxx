@@ -767,10 +767,10 @@ void TPGalleryThemeProperties::dispose()
     for ( size_t i = 0, n = aFilterEntryList.size(); i < n; ++i ) {
         delete aFilterEntryList[ i ];
     }
+    aFilterEntryList.clear();
+
     SfxTabPage::dispose();
 }
-
-
 
 SfxTabPage* TPGalleryThemeProperties::Create( vcl::Window* pParent, const SfxItemSet* rSet )
 {

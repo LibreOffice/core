@@ -165,7 +165,9 @@ OfaMSFilterTabPage2::~OfaMSFilterTabPage2()
 void OfaMSFilterTabPage2::dispose()
 {
     delete pCheckButtonData;
+    pCheckButtonData = NULL;
     delete m_pCheckLB;
+    m_pCheckLB = NULL;
     SfxTabPage::dispose();
 }
 

@@ -217,7 +217,8 @@ void TreeListBox::dispose()
     SvTreeListEntry* pEntry = First();
     while ( pEntry )
     {
-        delete static_cast<Entry*>(pEntry->GetUserData());
+        delete static_cast<Entry*>( pEntry->GetUserData() );
+        pEntry->SetUserData( NULL );
         pEntry = Next( pEntry );
     }
     SvTreeListBox::dispose();

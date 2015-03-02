@@ -1077,23 +1077,29 @@ SvxColorOptionsTabPage::~SvxColorOptionsTabPage()
 
 void SvxColorOptionsTabPage::dispose()
 {
-    //when the dialog is cancelled but the color scheme ListBox has been changed these
-    //changes need to be undone
-    if(!bFillItemSetCalled && m_pColorSchemeLB->IsValueChangedFromSaved())
+    if (pColorConfig)
     {
-        OUString sOldScheme =  m_pColorSchemeLB->GetEntry(m_pColorSchemeLB->GetSavedValue());
-        if(!sOldScheme.isEmpty())
+        //when the dialog is cancelled but the color scheme ListBox has been changed these
+        //changes need to be undone
+        if(!bFillItemSetCalled && m_pColorSchemeLB->IsValueChangedFromSaved())
         {
-            pColorConfig->SetCurrentSchemeName(sOldScheme);
-            pExtColorConfig->SetCurrentSchemeName(sOldScheme);
+            OUString sOldScheme =  m_pColorSchemeLB->GetEntry(m_pColorSchemeLB->GetSavedValue());
+            if(!sOldScheme.isEmpty())
+            {
+                pColorConfig->SetCurrentSchemeName(sOldScheme);
+                pExtColorConfig->SetCurrentSchemeName(sOldScheme);
+            }
         }
+        pColorConfig->ClearModified();
+        pColorConfig->EnableBroadcast();
+        delete pColorConfig;
+        pColorConfig = NULL;
+
+        pExtColorConfig->ClearModified();
+        pExtColorConfig->EnableBroadcast();
+        delete pExtColorConfig;
+        pExtColorConfig = NULL;
     }
-    pColorConfig->ClearModified();
-    pColorConfig->EnableBroadcast();
-    delete pColorConfig;
-    pExtColorConfig->ClearModified();
-    pExtColorConfig->EnableBroadcast();
-    delete pExtColorConfig;
     SfxTabPage::dispose();
 }
 

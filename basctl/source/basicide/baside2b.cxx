@@ -1683,7 +1683,8 @@ void WatchWindow::dispose()
     aRemoveWatchButton.disposeAndClear();
     aHeaderBar.disposeAndClear();
     aTreeListBox.disposeAndClear();
-    GetSystemWindow()->GetTaskPaneList()->RemoveWindow( this );
+    if (!IsDisposed())
+        GetSystemWindow()->GetTaskPaneList()->RemoveWindow( this );
     DockingWindow::dispose();
 }
 
@@ -1928,7 +1929,8 @@ StackWindow::~StackWindow()
 
 void StackWindow::dispose()
 {
-    GetSystemWindow()->GetTaskPaneList()->RemoveWindow( this );
+    if (!IsDisposed())
+        GetSystemWindow()->GetTaskPaneList()->RemoveWindow( this );
     aTreeListBox.disposeAndClear();
     DockingWindow::dispose();
 }
@@ -2177,6 +2179,7 @@ void WatchTreeListBox::dispose()
     while ( pEntry )
     {
         delete static_cast<WatchItem*>(pEntry->GetUserData());
+        pEntry->SetUserData(NULL);
         pEntry = Next( pEntry );
     }
     SvHeaderTabListBox::dispose();
@@ -2861,6 +2864,7 @@ CodeCompleteWindow::~CodeCompleteWindow()
 void CodeCompleteWindow::dispose()
 {
     delete pListBox;
+    pListBox = NULL;
     vcl::Window::dispose();
 }
 

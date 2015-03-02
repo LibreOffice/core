@@ -236,11 +236,14 @@ SvxLineTabPage::~SvxLineTabPage()
 void SvxLineTabPage::dispose()
 {
     // Symbols on a line (e.g. StarCharts), dtor new!
+    if (m_pSymbolMB)
+    {
+        delete m_pSymbolMB->GetPopupMenu()->GetPopupMenu( MN_GALLERY );
 
-    delete m_pSymbolMB->GetPopupMenu()->GetPopupMenu( MN_GALLERY );
-
-    if(pSymbolList)
-        delete m_pSymbolMB->GetPopupMenu()->GetPopupMenu( MN_SYMBOLS );
+        if(pSymbolList)
+            delete m_pSymbolMB->GetPopupMenu()->GetPopupMenu( MN_SYMBOLS );
+        m_pSymbolMB = NULL;
+    }
 
     for ( size_t i = 0, n = aGrfBrushItems.size(); i < n; ++i )
     {
@@ -248,6 +251,8 @@ void SvxLineTabPage::dispose()
         delete pInfo->pBrushItem;
         delete pInfo;
     }
+    aGrfBrushItems.clear();
+
     SvxTabPage::dispose();
 }
 

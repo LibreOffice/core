@@ -149,9 +149,14 @@ void SmToolBoxWindow::dispose()
     {
         ToolBox *pBox = vToolBoxCategories[i];
         delete pBox;
+        vToolBoxCategories[i] = 0;
     }
+    pToolBoxCmd = 0;
     for (i = 0;  i < NUM_TBX_CATEGORIES + 1;  ++i)
+    {
         delete aImageLists[i];
+        aImageLists[i] = 0;
+    }
     SfxFloatingWindow::dispose();
 }
 

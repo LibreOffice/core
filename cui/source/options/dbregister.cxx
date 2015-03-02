@@ -171,6 +171,7 @@ void DbRegistrationOptionsPage::dispose()
     for ( sal_uInt16 i = 0; i < pPathBox->GetEntryCount(); ++i )
         delete static_cast< DatabaseRegistration* >( pPathBox->GetEntry(i)->GetUserData() );
     delete pPathBox;
+    pPathBox = NULL;
     SfxTabPage::dispose();
 }
 

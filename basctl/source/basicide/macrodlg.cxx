@@ -118,7 +118,10 @@ MacroChooser::~MacroChooser()
 void MacroChooser::dispose()
 {
     if ( bForceStoreBasic )
+    {
         SfxGetpApp()->SaveBasicAndDialogContainer();
+        bForceStoreBasic = false;
+    }
     SfxModalDialog::dispose();
 }
 

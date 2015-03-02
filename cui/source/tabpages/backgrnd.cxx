@@ -237,9 +237,9 @@ BackgroundPreviewImpl::~BackgroundPreviewImpl()
 void BackgroundPreviewImpl::dispose()
 {
     delete pBitmap;
+    pBitmap = NULL;
     vcl::Window::dispose();
 }
-
 
 void BackgroundPreviewImpl::NotifyChange( const Color& rColor )
 {
@@ -434,9 +434,15 @@ SvxBackgroundTabPage::~SvxBackgroundTabPage()
 
 void SvxBackgroundTabPage::dispose()
 {
-    delete pPageImpl->pLoadIdle;
-    delete pPageImpl;
+    if (pPageImpl)
+    {
+        delete pPageImpl->pLoadIdle;
+        delete pPageImpl;
+        pPageImpl = NULL;
+    }
+
     delete pImportDlg;
+    pImportDlg = NULL;
 
     if( pTableBck_Impl)
     {
@@ -444,6 +450,7 @@ void SvxBackgroundTabPage::dispose()
         delete pTableBck_Impl->pRowBrush;
         delete pTableBck_Impl->pTableBrush;
         delete pTableBck_Impl;
+        pTableBck_Impl = NULL;
     }
 
     if(pParaBck_Impl)
@@ -451,6 +458,7 @@ void SvxBackgroundTabPage::dispose()
         delete pParaBck_Impl->pParaBrush;
         delete pParaBck_Impl->pCharBrush;
         delete pParaBck_Impl;
+        pParaBck_Impl = NULL;
     }
     SvxTabPage::dispose();
 }

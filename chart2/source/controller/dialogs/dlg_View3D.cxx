@@ -72,8 +72,11 @@ View3DDialog::~View3DDialog()
 void View3DDialog::dispose()
 {
     delete m_pGeometry;
+    m_pGeometry = NULL;
     delete m_pAppearance;
+    m_pAppearance = NULL;
     delete m_pIllumination;
+    m_pIllumination = NULL;
 
     m_nLastPageId = m_pTabControl->GetCurPageId();
     TabDialog::dispose();
