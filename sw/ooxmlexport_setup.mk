@@ -33,6 +33,9 @@ define sw_ooxmlexport_components
 	drawinglayer/drawinglayer \
 	embeddedobj/util/embobj \
 	filter/source/config/cache/filterconfig1 \
+	filter/source/odfflatxml/odfflatxml \
+	filter/source/xmlfilterdetect/xmlfd \
+	filter/source/xmlfilteradaptor/xmlfa \
 	forms/util/frm \
 	framework/util/fwk \
 	i18npool/util/i18npool \

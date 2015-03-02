@@ -700,6 +700,13 @@ DECLARE_OOXMLEXPORT_TEST(testFD083057, "fdo83057.docx")
     assertXPath(pXmlDoc, "//mc:AlternateContent//w:sdt", 0);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf89774, "tdf89774.fodt")
+{
+    if (xmlDocPtr pXmlDoc = parseExport("docProps/app.xml"))
+        // This was 65, as unit was seconds instead of minutes.
+        assertXPathContent(pXmlDoc, "/extended-properties:Properties/extended-properties:TotalTime", "1");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
