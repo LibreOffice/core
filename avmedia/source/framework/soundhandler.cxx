@@ -142,30 +142,6 @@ OUString SoundHandler::impl_getStaticImplementationName()
     return IMPLEMENTATIONNAME_SOUNDHANDLER;
 }
 
-css::uno::Reference< css::uno::XInterface > SAL_CALL SoundHandler::impl_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager ) throw( css::uno::Exception )
-{
-    /* create new instance of service */
-    SoundHandler* pClass = new SoundHandler( xServiceManager );
-    /* hold it alive by increasing his ref count!!! */
-    css::uno::Reference< css::uno::XInterface > xService( static_cast< ::cppu::OWeakObject* >(pClass), css::uno::UNO_QUERY );
-    /* initialize new service instance ... he can use his own refcount ... we hold it! */
-    pClass->impl_initService();
-    /* return new created service as reference */
-    return xService;
-}
-
-css::uno::Reference< css::lang::XSingleServiceFactory > SoundHandler::impl_createFactory( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager )
-{
-    css::uno::Reference< css::lang::XSingleServiceFactory > xReturn ( cppu::createSingleFactory (
-       xServiceManager,
-        SoundHandler::impl_getStaticImplementationName(),
-        SoundHandler::impl_createInstance,
-        SoundHandler::impl_getStaticSupportedServiceNames()
-        )
-    );
-    return xReturn;
-}
-
 void SAL_CALL SoundHandler::impl_initService()
 {
 }
@@ -379,27 +355,17 @@ IMPL_LINK_NOARG(SoundHandler, implts_PlayerNotify)
 
 } // namespace framework
 
-extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL avmedia_component_getFactory(const sal_Char* pImplementationName, void* pServiceManager, void* /*pRegistryKey*/ )
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_framework_SoundHandler_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                                            ::com::sun::star::uno::Sequence<css::uno::Any> const &)
 {
-    void* pReturn = NULL;
-    if  (pServiceManager !=  NULL )
-    {
-        /* Define variables which are used in following macros. */
-        css::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > xFactory;
-        css::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceManager;
-            xServiceManager = reinterpret_cast< ::com::sun::star::lang::XMultiServiceFactory* >( pServiceManager )  ;
-
-        if ( avmedia::SoundHandler::impl_getStaticImplementationName().equals( OUString::createFromAscii( pImplementationName ) ) )
-            xFactory = avmedia::SoundHandler::impl_createFactory( xServiceManager );
-
-        if ( xFactory.is() )
-        {
-            xFactory->acquire();
-            pReturn = xFactory.get();
-        }
-    }
-    /* Return with result of this operation. */
-    return pReturn;
+    css::uno::Reference< css::lang::XMultiServiceFactory> xSM(context->getServiceManager(), css::uno::UNO_QUERY_THROW);
+    avmedia::SoundHandler* pClass = new avmedia::SoundHandler( xSM );
+    pClass->impl_initService();
+    return cppu::acquire( pClass );
 }
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
