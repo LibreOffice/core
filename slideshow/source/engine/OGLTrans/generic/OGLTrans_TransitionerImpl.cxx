@@ -957,6 +957,31 @@ namespace
     }
 }
 
+namespace {
+
+void buildMipmaps(
+    GLint internalFormat, GLsizei width, GLsizei height, GLenum format,
+    GLenum type, const void * data)
+{
+    if (GLEW_ARB_framebuffer_object) {
+        glTexImage2D(
+            GL_TEXTURE_2D, 0, internalFormat, width, height, 0, format, type,
+            data);
+        glGenerateMipmap(GL_TEXTURE_2D);
+    } else {
+        glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
+        glTexImage2D(
+            GL_TEXTURE_2D, 0, internalFormat, width, height, 0, format, type,
+            data);
+        glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_FALSE);
+    }
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(
+        GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+}
+
+}
+
 void OGLTransitionerImpl::impl_createTexture(
                      bool useMipmap,
                      uno::Sequence<sal_Int8>& data,
@@ -970,17 +995,12 @@ void OGLTransitionerImpl::impl_createTexture(
             maSlideBitmapLayout.ColorSpace->convertToIntegerColorSpace(
                 data,
                 getOGLColorSpace()));
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH //TODO: 10.9 gluBuild2DMipmaps
-        gluBuild2DMipmaps(GL_TEXTURE_2D,
-                          4,
+        buildMipmaps(     4,
                           maSlideSize.Width,
                           maSlideSize.Height,
                           GL_RGBA,
                           GL_UNSIGNED_BYTE,
                           &tempBytes[0]);
-        SAL_WNODEPRECATED_DECLARATIONS_POP
-        glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_LINEAR); //TRILINEAR FILTERING
 
         //anistropic filtering (to make texturing not suck when looking at polygons from oblique angles)
         GLfloat largest_supported_anisotropy;
@@ -992,11 +1012,7 @@ void OGLTransitionerImpl::impl_createTexture(
             glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
             glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
         } else {
-            SAL_WNODEPRECATED_DECLARATIONS_PUSH //TODO: 10.9 gluBuild2DMipmaps
-            gluBuild2DMipmaps( GL_TEXTURE_2D, pFormat->nInternalFormat, maSlideSize.Width, maSlideSize.Height, pFormat->eFormat, pFormat->eType, &data[0] );
-            SAL_WNODEPRECATED_DECLARATIONS_POP
-            glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
-            glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR ); //TRILINEAR FILTERING
+            buildMipmaps( pFormat->nInternalFormat, maSlideSize.Width, maSlideSize.Height, pFormat->eFormat, pFormat->eType, &data[0] );
 
             //anistropic filtering (to make texturing not suck when looking at polygons from oblique angles)
             GLfloat largest_supported_anisotropy;
