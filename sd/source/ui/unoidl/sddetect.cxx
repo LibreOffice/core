@@ -41,7 +41,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using utl::MediaDescriptor;
 
-SdFilterDetect::SdFilterDetect( const Reference < XMultiServiceFactory >&  )
+SdFilterDetect::SdFilterDetect()
 {
 }
 
@@ -135,7 +135,7 @@ OUString SAL_CALL SdFilterDetect::detect( Sequence< beans::PropertyValue >& lDes
 // XServiceInfo
 OUString SAL_CALL SdFilterDetect::getImplementationName() throw( RuntimeException, std::exception )
 {
-    return impl_getStaticImplementationName();
+    return OUString( "com.sun.star.comp.draw.FormatDetector" );
 }
 
 // XServiceInfo
@@ -147,28 +147,17 @@ sal_Bool SAL_CALL SdFilterDetect::supportsService( const OUString& sServiceName 
 // XServiceInfo
 Sequence< OUString > SAL_CALL SdFilterDetect::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
-    return impl_getStaticSupportedServiceNames();
-}
-
-// Helper for XServiceInfo
-Sequence< OUString > SdFilterDetect::impl_getStaticSupportedServiceNames()
-{
     Sequence< OUString > seqServiceNames( 1 );
     seqServiceNames.getArray() [0] = "com.sun.star.frame.ExtendedTypeDetection"  ;
     return seqServiceNames ;
 }
 
-// Helper for XServiceInfo
-OUString SdFilterDetect::impl_getStaticImplementationName()
-{
-    return OUString( "com.sun.star.comp.draw.FormatDetector" );
-}
 
-// Helper for registry
-Reference< XInterface > SAL_CALL SdFilterDetect::impl_createInstance( const Reference< XMultiServiceFactory >& xServiceManager ) throw( Exception )
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_draw_FormatDetector_get_implementation(::com::sun::star::uno::XComponentContext*,
+                                                         ::com::sun::star::uno::Sequence<css::uno::Any>)
 {
-    return static_cast< cppu::OWeakObject * >(
-        new SdFilterDetect( xServiceManager ) );
+    return cppu::acquire(new SdFilterDetect());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
