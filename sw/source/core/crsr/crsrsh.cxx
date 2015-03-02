@@ -1417,11 +1417,11 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, bool bIdleEnd )
     // If the current cursor is in a table and point/mark in different boxes,
     // then the table mode is active (also if it is already active: m_pTblCrsr)
     SwPaM* pTstCrsr = getShellCrsr( true );
-    if( pTstCrsr->HasMark() && !m_pBlockCrsr &&
+    if( ( pTstCrsr->HasMark() || eFlags & SwCrsrShell::SELECTCELL ) && !m_pBlockCrsr &&
         mpDoc->IsIdxInTbl( pTstCrsr->GetPoint()->nNode ) &&
           ( m_pTblCrsr ||
             pTstCrsr->GetNode( true ).StartOfSectionNode() !=
-            pTstCrsr->GetNode( false ).StartOfSectionNode() ) && !mbSelectAll)
+            pTstCrsr->GetNode( false ).StartOfSectionNode() || eFlags & SwCrsrShell::SELECTCELL ) && !mbSelectAll)
     {
         SwShellCrsr* pITmpCrsr = getShellCrsr( true );
         Point aTmpPt( pITmpCrsr->GetPtPos() );

@@ -81,6 +81,11 @@ bool SwCrsrShell::SelectWord( const Point* pPt )
     return m_pCurCrsr->SelectWord( this, pPt );
 }
 
+void SwCrsrShell::SelectCell()
+{
+    UpdateCrsr(SwCrsrShell::SELECTCELL);
+}
+
 bool SwCrsrShell::ExpandToSentenceBorders()
 {
     return m_pCurCrsr->ExpandToSentenceBorders();

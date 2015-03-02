@@ -3414,7 +3414,13 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                             rSh.LeaveAddMode();
                         }
                         else
-                            rSh.SelWrd( &aDocPos );
+                        {
+                            if (!rSh.SelWrd(&aDocPos) && rSh.isTiledRendering())
+                                // Double click did not select any word: try to
+                                // select the current cell in case we are in a
+                                // table.
+                                rSh.SelectCell();
+                        }
                         g_bHoldSelection = true;
                         return;
                     }
