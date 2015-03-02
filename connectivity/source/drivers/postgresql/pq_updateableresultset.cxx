@@ -537,12 +537,6 @@ void UpdateableResultSet::updateNumericObject( sal_Int32 /* columnIndex */, cons
 }
 
 
-::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData > UpdateableResultSet::getMetaData(  )
-    throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
-{
-    return m_meta;
-}
-
 Sequence< Type > UpdateableResultSet::getStaticTypes( bool updateable )
     throw( com::sun::star::uno::RuntimeException )
 {

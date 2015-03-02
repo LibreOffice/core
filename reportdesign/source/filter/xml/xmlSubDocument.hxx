@@ -29,7 +29,6 @@ namespace rptxml
     class OXMLCell;
     class OXMLSubDocument : public OXMLReportElementBase, public IMasterDetailFieds
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent>   m_xComponent;
         ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent>   m_xFake;
         ::std::vector< OUString> m_aMasterFields;
         ::std::vector< OUString> m_aDetailFields;

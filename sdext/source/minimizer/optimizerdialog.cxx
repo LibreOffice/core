@@ -210,7 +210,6 @@ OptimizerDialog::OptimizerDialog( const Reference< XComponentContext > &rxContex
     ConfigurationAccess( rxContext, NULL ),
     mnCurrentStep( 0 ),
     mnTabIndex( 0 ),
-    mxContext( rxContext ),
     mxFrame( rxFrame ),
     mxItemListener( new ItemListener( *this ) ),
     mxActionListener( new ActionListener( *this ) ),

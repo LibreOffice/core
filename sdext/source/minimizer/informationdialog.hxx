@@ -55,7 +55,6 @@ public :
 
 private :
 
-    css::uno::Reference< css::uno::XComponentContext > mxContext;
     css::uno::Reference< css::frame::XFrame >         mxFrame;
     css::uno::Reference< css::io::XStream >           mxTempFile;
 
@@ -72,7 +71,6 @@ private :
 public :
 
     css::uno::Reference< css::frame::XFrame>& GetFrame() { return mxFrame; };
-    const css::uno::Reference< css::uno::XComponentContext >& GetComponentContext() { return mxContext; };
 };
 
 class OKActionListener : public ::cppu::WeakImplHelper1< css::awt::XActionListener >

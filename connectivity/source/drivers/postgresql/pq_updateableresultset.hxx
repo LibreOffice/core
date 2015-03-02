@@ -70,7 +70,6 @@ class UpdateableResultSet :
     OUString m_table;
     com::sun::star::uno::Sequence< OUString > m_primaryKey;
     UpdateableFieldVector m_updateableField;
-    com::sun::star::uno::Reference< com::sun::star::sdbc::XResultSetMetaData > m_meta;
     bool  m_insertRow;
 
 protected:
@@ -164,10 +163,7 @@ public: // XRowUpdate
     virtual void SAL_CALL updateObject( sal_Int32 columnIndex, const ::com::sun::star::uno::Any& x ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL updateNumericObject( sal_Int32 columnIndex, const ::com::sun::star::uno::Any& x, sal_Int32 scale ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-public: // XResultSetMetaDataSupplier
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData > SAL_CALL getMetaData(  )
-        throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
+public:
 
     static com::sun::star::uno::Sequence< com::sun::star::uno::Type > getStaticTypes( bool updateable )
         throw( com::sun::star::uno::RuntimeException );
