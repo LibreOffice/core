@@ -964,7 +964,7 @@ Any ORowSetValue::makeAny() const
                 break;
             default:
                 SAL_WARN( "connectivity.commontools","ORowSetValue::makeAny(): UNSPUPPORTED TYPE!");
-                rValue = getAny();
+                rValue = makeAny();
                 break;
         }
     }
@@ -1049,7 +1049,7 @@ OUString ORowSetValue::getString( ) const
                 break;
             default:
                 {
-                    Any aValue = getAny();
+                    Any aValue = makeAny();
                     aValue >>= aRet;
                     break;
                 }
@@ -1120,7 +1120,7 @@ bool ORowSetValue::getBool()    const
                 break;
             default:
                 {
-                    Any aValue = getAny();
+                    Any aValue = makeAny();
                     aValue >>= bRet;
                     break;
                 }
@@ -1191,7 +1191,7 @@ sal_Int8 ORowSetValue::getInt8()    const
                 break;
             default:
                 {
-                    Any aValue = getAny();
+                    Any aValue = makeAny();
                     aValue >>= nRet;
                     break;
                 }
@@ -1262,7 +1262,7 @@ sal_uInt8 ORowSetValue::getUInt8()    const
                 break;
             default:
                 {
-                    Any aValue = getAny();
+                    Any aValue = makeAny();
                     aValue >>= nRet;
                     break;
                 }
@@ -1334,7 +1334,7 @@ sal_Int16 ORowSetValue::getInt16()  const
                 break;
             default:
                 {
-                    Any aValue = getAny();
+                    Any aValue = makeAny();
                     aValue >>= nRet;
                     break;
                 }
@@ -1405,7 +1405,7 @@ sal_uInt16 ORowSetValue::getUInt16()  const
                 break;
             default:
                 {
-                    Any aValue = getAny();
+                    Any aValue = makeAny();
                     aValue >>= nRet;
                     break;
                 }
@@ -1478,7 +1478,7 @@ sal_Int32 ORowSetValue::getInt32()  const
                 break;
             default:
                 {
-                    Any aValue = getAny();
+                    Any aValue = makeAny();
                     aValue >>= nRet;
                     break;
                 }
@@ -1551,7 +1551,7 @@ sal_uInt32 ORowSetValue::getUInt32()  const
                 break;
             default:
                 {
-                    Any aValue = getAny();
+                    Any aValue = makeAny();
                     aValue >>= nRet;
                     break;
                 }
@@ -1624,7 +1624,7 @@ sal_Int64 ORowSetValue::getLong()   const
                 break;
             default:
                 {
-                    Any aValue = getAny();
+                    Any aValue = makeAny();
                     aValue >>= nRet;
                     break;
                 }
@@ -1697,7 +1697,7 @@ sal_uInt64 ORowSetValue::getULong()   const
                 break;
             default:
                 {
-                    Any aValue = getAny();
+                    Any aValue = makeAny();
                     aValue >>= nRet;
                     break;
                 }
@@ -1774,7 +1774,7 @@ float ORowSetValue::getFloat()  const
                 break;
             default:
                 {
-                    Any aValue = getAny();
+                    Any aValue = makeAny();
                     aValue >>= nRet;
                     break;
                 }
@@ -1850,7 +1850,7 @@ double ORowSetValue::getDouble()    const
                 break;
             default:
                 {
-                    Any aValue = getAny();
+                    Any aValue = makeAny();
                     aValue >>= nRet;
                     break;
                 }
@@ -1921,7 +1921,7 @@ Sequence<sal_Int8>  ORowSetValue::getSequence() const
                 break;
             default:
                 {
-                    Any aValue = getAny();
+                    Any aValue = makeAny();
                     aValue >>= aSeq;
                     break;
                 }
@@ -2024,7 +2024,7 @@ Sequence<sal_Int8>  ORowSetValue::getSequence() const
                 break;
             default:
                 {
-                    Any aAnyValue = getAny();
+                    Any aAnyValue = makeAny();
                     aAnyValue >>= aValue;
                     break;
                 }
@@ -2076,7 +2076,7 @@ Sequence<sal_Int8>  ORowSetValue::getSequence() const
                 break;
             default:
                 {
-                    Any aAnyValue = getAny();
+                    Any aAnyValue = makeAny();
                     aAnyValue >>= aValue;
                     break;
                 }
