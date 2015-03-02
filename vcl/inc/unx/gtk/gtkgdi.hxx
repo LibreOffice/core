@@ -26,11 +26,10 @@
 #include <gdk/gdkkeysyms.h>
 #include <postx.h>
 
-#include <unx/salgdi.h>
-
 #if GTK_CHECK_VERSION(3,0,0)
 
 #include <headless/svpgdi.hxx>
+#include "textrender.hxx"
 
 class GtkSalFrame;
 class GtkSalGraphics : public SvpSalGraphics
@@ -57,6 +56,10 @@ public:
     void updateSettings( AllSettings& rSettings );
     static void refreshFontconfig( GtkSettings *pSettings );
     static void signalSettingsNotify( GObject*, GParamSpec *pSpec, gpointer );
+
+    cairo_t* getCairoContext();
+    void clipRegion(cairo_t* cr);
+
 private:
     GtkWidget       *mpWindow;
     static GtkStyleContext *mpButtonStyle;
@@ -113,6 +116,7 @@ private:
 };
 
 #else
+#include <unx/salgdi.h>
 
 class GdkX11Pixmap;
 class GtkSalGraphics : public X11SalGraphics

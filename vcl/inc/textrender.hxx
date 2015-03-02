@@ -24,7 +24,7 @@
 #include <vcl/salgtype.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/metric.hxx>
-
+#include <basebmp/bitmapdevice.hxx>
 #include "salgdi.hxx"
 #include "salglyphid.hxx"
 #include "fontsubset.hxx"
@@ -41,6 +41,8 @@ class TextRenderImpl
 {
 public:
     virtual ~TextRenderImpl() {}
+
+    virtual void setDevice(basebmp::BitmapDeviceSharedPtr& /*rDevice*/) {}
 
     virtual void                    SetTextColor( SalColor nSalColor ) = 0;
     virtual sal_uInt16              SetFont( FontSelectPattern*, int nFallbackLevel ) = 0;
