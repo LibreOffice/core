@@ -213,25 +213,21 @@ void ImplDockFloatWin::Resize()
 void ImplDockFloatWin::TitleButtonClick( sal_uInt16 nButton )
 {
     FloatingWindow::TitleButtonClick( nButton );
-    mpDockWin->TitleButtonClick( nButton );
 }
 
 void ImplDockFloatWin::Pin()
 {
     FloatingWindow::Pin();
-    mpDockWin->Pin();
 }
 
 void ImplDockFloatWin::Roll()
 {
     FloatingWindow::Roll();
-    mpDockWin->Roll();
 }
 
 void ImplDockFloatWin::PopupModeEnd()
 {
     FloatingWindow::PopupModeEnd();
-    mpDockWin->PopupModeEnd();
 }
 
 void ImplDockFloatWin::Resizing( Size& rSize )
@@ -701,22 +697,6 @@ bool DockingWindow::Close()
 }
 
 void DockingWindow::ToggleFloatingMode()
-{
-}
-
-void DockingWindow::TitleButtonClick( sal_uInt16 )
-{
-}
-
-void DockingWindow::Pin()
-{
-}
-
-void DockingWindow::Roll()
-{
-}
-
-void DockingWindow::PopupModeEnd()
 {
 }
 

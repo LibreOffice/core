@@ -146,7 +146,6 @@ class VCLPLUG_GEN_PUBLIC X11SalFrame : public SalFrame, public X11WindowProvider
     long            HandleFocusEvent    ( XFocusChangeEvent *pEvent );
     long            HandleExposeEvent   ( XEvent            *pEvent );
     long            HandleSizeEvent     ( XConfigureEvent   *pEvent );
-    long            HandleColormapEvent ( XColormapEvent    *pEvent );
     long            HandleMapUnmapEvent ( XEvent            *pEvent );
     long            HandleStateEvent    ( XPropertyEvent    *pEvent );
     long            HandleReparentEvent ( XReparentEvent    *pEvent );

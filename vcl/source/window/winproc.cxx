@@ -1997,11 +1997,6 @@ inline bool ImplHandleSalMouseButtonUp( vcl::Window* pWindow, SalMouseEvent* pEv
                                  ImplGetMouseButtonMode( pEvent ) );
 }
 
-static bool ImplHandleSalMouseActivate( vcl::Window* /*pWindow*/, SalMouseActivateEvent* /*pEvent*/ )
-{
-    return false;
-}
-
 static bool ImplHandleMenuEvent( vcl::Window* pWindow, SalMenuEvent* pEvent, sal_uInt16 nEvent )
 {
     // Find SystemWindow and its Menubar and let it dispatch the command
@@ -2343,7 +2338,7 @@ bool ImplWindowFrameProc( vcl::Window* pWindow, SalFrame* /*pFrame*/,
         }
         break;
         case SALEVENT_MOUSEACTIVATE:
-            nRet = ImplHandleSalMouseActivate( pWindow, (SalMouseActivateEvent*)pEvent );
+            nRet = false;
             break;
         case SALEVENT_KEYINPUT:
             {

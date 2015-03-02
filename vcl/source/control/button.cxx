@@ -907,14 +907,7 @@ void PushButton::ImplDrawPushButtonContent( OutputDevice* pDev, sal_uLong nDrawF
         }
     }
 
-    UserDrawEvent aUDEvt( this, aInRect, 0 );
-    UserDraw( aUDEvt );
-
     pDev->Pop();  // restore clipregion
-}
-
-void PushButton::UserDraw( const UserDrawEvent& )
-{
 }
 
 void PushButton::ImplDrawPushButton( bool bLayout )

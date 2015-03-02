@@ -114,8 +114,6 @@ public:
     RTSDevicePage( RTSDialog* );
     virtual ~RTSDevicePage();
 
-    void update();
-
     sal_uLong getLevel();
     sal_uLong getPDFDevice();
     sal_uLong getDepth();

@@ -289,8 +289,6 @@ public:
     virtual void        Deactivate() SAL_OVERRIDE;
     void                Highlight();
     virtual void        Select();
-    void                Customize( const ToolBoxCustomizeEvent& rCEvt );
-    void                UserDraw( const UserDrawEvent& rUDEvt );
 
     virtual void        MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void        MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;

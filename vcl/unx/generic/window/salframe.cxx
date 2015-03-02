@@ -1922,13 +1922,6 @@ void X11SalFrame::SetPosSize( const Rectangle &rPosSize )
     if( values.width != (int)maGeometry.nWidth || values.height != (int)maGeometry.nHeight )
         bSized = true;
 
-    if( ! ( nStyle_ & ( SAL_FRAME_STYLE_PLUG | SAL_FRAME_STYLE_FLOAT ) )
-        && !(pDisplay_->GetProperties() & PROPERTY_SUPPORT_WM_ClientPos) )
-    {
-        values.x    -= maGeometry.nLeftDecoration;
-        values.y    -= maGeometry.nTopDecoration;
-    }
-
     // do net set WMNormalHints for ..
     if(
         // child windows
@@ -2494,8 +2487,6 @@ void X11SalFrame::SetInputContext( SalInputContext* pContext )
         if (mpInputContext->UseContext())
         {
               mpInputContext->ExtendEventMask( GetShellWindow() );
-              if (pContext->mnOptions & SAL_INPUTCONTEXT_CHANGELANGUAGE)
-                mpInputContext->SetLanguage(pContext->meLanguage);
             if (mbInputFocus)
                 mpInputContext->SetICFocus( this );
         }
@@ -2765,45 +2756,11 @@ static Bool compressWheelEvents( Display*, XEvent* event, XPointer p )
 long X11SalFrame::HandleMouseEvent( XEvent *pEvent )
 {
     SalMouseEvent       aMouseEvt = {0, 0, 0, 0, 0};
-    sal_uInt16              nEvent = 0;
+    sal_uInt16          nEvent = 0;
     bool                bClosePopups = false;
 
     if( nVisibleFloats && pEvent->type == EnterNotify )
         return 0;
-
-    // Solaris X86: clicking the right button on a two-button mouse
-    // generates a button2 event not a button3 event
-    if (pDisplay_->GetProperties() & PROPERTY_SUPPORT_3ButtonMouse )
-    {
-        switch (pEvent->type)
-        {
-            case EnterNotify:
-            case LeaveNotify:
-                if ( pEvent->xcrossing.state & Button2Mask )
-                {
-                    pEvent->xcrossing.state &= ~Button2Mask;
-                    pEvent->xcrossing.state |=  Button3Mask;
-                }
-                break;
-
-            case MotionNotify:
-                if ( pEvent->xmotion.state & Button2Mask )
-                {
-                    pEvent->xmotion.state &= ~Button2Mask;
-                    pEvent->xmotion.state |=  Button3Mask;
-                }
-                break;
-
-            default:
-                if ( Button2 == pEvent->xbutton.button )
-                {
-                    pEvent->xbutton.state &= ~Button2Mask;
-                    pEvent->xbutton.state |=  Button3Mask;
-                    pEvent->xbutton.button =  Button3;
-                }
-                break;
-        }
-    }
 
     if( LeaveNotify == pEvent->type || EnterNotify == pEvent->type )
     {
@@ -3788,10 +3745,8 @@ long X11SalFrame::HandleReparentEvent( XReparentEvent *pEvent )
     ::Window        hWM_Parent;
     ::Window        hRoot, *Children, hDummy;
     unsigned int    nChildren;
-    bool            bNone = pDisplay_->GetProperties()
-                            & PROPERTY_SUPPORT_WM_Parent_Pixmap_None;
-    bool            bAccessParentWindow = ! (pDisplay_->GetProperties()
-                            & PROPERTY_FEATURE_TrustedSolaris);
+    bool            bNone = false;
+    bool            bAccessParentWindow = true;
 
     static const char* pDisableStackingCheck = getenv( "SAL_DISABLE_STACKING_CHECK" );
 
@@ -3973,11 +3928,6 @@ long X11SalFrame::HandleReparentEvent( XReparentEvent *pEvent )
     GetGenericData()->ErrorTrapPop();
 
     return 1;
-}
-
-long X11SalFrame::HandleColormapEvent( XColormapEvent* )
-{
-    return 0;
 }
 
 long X11SalFrame::HandleStateEvent( XPropertyEvent *pEvent )
@@ -4240,7 +4190,7 @@ long X11SalFrame::Dispatch( XEvent *pEvent )
                 break;
 
             case ColormapNotify:
-                nRet = HandleColormapEvent( &pEvent->xcolormap );
+                nRet = 0;
                 break;
 
             case PropertyNotify:

@@ -440,11 +440,6 @@ GC X11SalGraphicsImpl::SelectBrush()
         }
         else
         {
-            // Bug in Sun Solaris 2.5.1, XFillPolygon doesn't always reflect
-            // changes of the tile. PROPERTY_BUG_Tile doesn't fix this !
-            if (mrParent.GetDisplay()->GetProperties() & PROPERTY_BUG_FillPolygon_Tile)
-                XSetFillStyle ( pDisplay, mpBrushGC, FillSolid );
-
             XSetFillStyle ( pDisplay, mpBrushGC, FillTiled );
             XSetTile      ( pDisplay, mpBrushGC, mrParent.hBrush_ );
         }
@@ -574,57 +569,20 @@ void X11SalGraphicsImpl::copyBits( const SalTwoRect& rPosAry,
                                            !mrParent.bVirDev_ &&
                                            pSrcGraphics->bWindow_ );
 
-        GC pCopyGC;
+        GC pCopyGC = GetCopyGC();
 
-        if( mbXORMode
-            && !pSrcGraphics->bVirDev_
-            && (mrParent.GetDisplay()->GetProperties() & PROPERTY_BUG_XCopyArea_GXxor) )
-        {
-            Pixmap hPixmap = limitXCreatePixmap( mrParent.GetXDisplay(),
-                                            pSrcGraphics->GetDrawable(),        // source
-                                            rPosAry.mnSrcWidth, rPosAry.mnSrcHeight,
-                                            pSrcGraphics->GetBitCount() );
+        if( bNeedGraphicsExposures )
+            XSetGraphicsExposures( mrParent.GetXDisplay(),
+                                   pCopyGC,
+                                   True );
 
-            pCopyGC = mrParent.GetDisplay()->GetCopyGC( mrParent.m_nXScreen );
-
-            if( bNeedGraphicsExposures )
-                XSetGraphicsExposures( mrParent.GetXDisplay(),
-                                       pCopyGC,
-                                       True );
-
-            XCopyArea( mrParent.GetXDisplay(),
-                       pSrcGraphics->GetDrawable(),     // source
-                       hPixmap,                         // destination
-                       pCopyGC,                         // no clipping
-                       rPosAry.mnSrcX,     rPosAry.mnSrcY,
-                       rPosAry.mnSrcWidth, rPosAry.mnSrcHeight,
-                       0,                   0 );            // destination
-            XCopyArea( mrParent.GetXDisplay(),
-                       hPixmap,                             // source
-                       mrParent.GetDrawable(),                       // destination
-                       GetInvertGC(),       // destination clipping
-                       0,                   0,              // source
-                       rPosAry.mnSrcWidth, rPosAry.mnSrcHeight,
-                       rPosAry.mnDestX,    rPosAry.mnDestY );
-            XFreePixmap( mrParent.GetXDisplay(), hPixmap );
-        }
-        else
-        {
-            pCopyGC = GetCopyGC();
-
-            if( bNeedGraphicsExposures )
-                XSetGraphicsExposures( mrParent.GetXDisplay(),
-                                       pCopyGC,
-                                       True );
-
-            XCopyArea( mrParent.GetXDisplay(),
-                       pSrcGraphics->GetDrawable(),     // source
-                       mrParent.GetDrawable(),                   // destination
-                       pCopyGC,                         // destination clipping
-                       rPosAry.mnSrcX,     rPosAry.mnSrcY,
-                       rPosAry.mnSrcWidth, rPosAry.mnSrcHeight,
-                       rPosAry.mnDestX,    rPosAry.mnDestY );
-        }
+        XCopyArea( mrParent.GetXDisplay(),
+                   pSrcGraphics->GetDrawable(),     // source
+                   mrParent.GetDrawable(),                   // destination
+                   pCopyGC,                         // destination clipping
+                   rPosAry.mnSrcX,     rPosAry.mnSrcY,
+                   rPosAry.mnSrcWidth, rPosAry.mnSrcHeight,
+                   rPosAry.mnDestX,    rPosAry.mnDestY );
 
         if( bNeedGraphicsExposures )
         {
@@ -1277,16 +1235,8 @@ void X11SalGraphicsImpl::drawLine( long nX1, long nY1, long nX2, long nY2 )
 {
     if( mnPenColor != SALCOLOR_NONE )
     {
-        if ( mrParent.GetDisplay()->GetProperties() & PROPERTY_BUG_DrawLine )
-        {
-            GC aGC = SelectPen();
-            XDrawPoint (mrParent.GetXDisplay(), mrParent.GetDrawable(), aGC, (int)nX1, (int)nY1);
-            XDrawPoint (mrParent.GetXDisplay(), mrParent.GetDrawable(), aGC, (int)nX2, (int)nY2);
-            XDrawLine  (mrParent.GetXDisplay(), mrParent.GetDrawable(), aGC, nX1, nY1, nX2, nY2 );
-        }
-        else
-            XDrawLine( mrParent.GetXDisplay(), mrParent.GetDrawable(),SelectPen(),
-                       nX1, nY1, nX2, nY2 );
+        XDrawLine( mrParent.GetXDisplay(), mrParent.GetDrawable(),SelectPen(),
+                   nX1, nY1, nX2, nY2 );
     }
 }
 

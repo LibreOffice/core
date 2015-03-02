@@ -73,8 +73,6 @@ public:
     void Map( SalFrame *pFrame );
     void Unmap( SalFrame* pFrame );
 
-    void SetLanguage(LanguageType aInputLanguage);
-
     SalI18N_InputContext( SalFrame *aFrame );
     ~SalI18N_InputContext();
 

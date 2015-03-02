@@ -42,13 +42,8 @@ namespace {
     /// Decouple SalFrame lifetime from damagetracker lifetime
     struct DamageTracker : public basebmp::IBitmapDeviceDamageTracker
     {
-        DamageTracker( SvpSalFrame& rFrame ) : m_rFrame( rFrame ) {}
         virtual ~DamageTracker() {}
-        virtual void damaged( const basegfx::B2IBox& rDamageRect ) const SAL_OVERRIDE
-        {
-            m_rFrame.damaged( rDamageRect );
-        }
-        SvpSalFrame& m_rFrame;
+        virtual void damaged( const basegfx::B2IBox& ) const SAL_OVERRIDE {}
     };
 }
 
@@ -62,7 +57,7 @@ void SvpSalFrame::enableDamageTracker( bool bOn )
             m_aFrame->setDamageTracker( basebmp::IBitmapDeviceDamageTrackerSharedPtr() );
         else
             m_aFrame->setDamageTracker(
-                basebmp::IBitmapDeviceDamageTrackerSharedPtr( new DamageTracker( *this ) ) );
+                basebmp::IBitmapDeviceDamageTrackerSharedPtr( new DamageTracker ) );
     }
     m_bDamageTracking = bOn;
 }
@@ -299,7 +294,7 @@ void SvpSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_u
         m_aFrame = createBitmapDevice( aFrameSize, m_bTopDown, m_nScanlineFormat, nStride );
         if (m_bDamageTracking)
             m_aFrame->setDamageTracker(
-                basebmp::IBitmapDeviceDamageTrackerSharedPtr( new DamageTracker( *this ) ) );
+                basebmp::IBitmapDeviceDamageTrackerSharedPtr( new DamageTracker ) );
         // update device in existing graphics
         for( std::list< SvpSalGraphics* >::iterator it = m_aGraphics.begin();
              it != m_aGraphics.end(); ++it )

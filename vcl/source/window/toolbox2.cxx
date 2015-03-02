@@ -454,14 +454,6 @@ void ToolBox::Select()
         pWrapper->GetFloatingWindow()->EndPopupMode();
 }
 
-void ToolBox::Customize( const ToolBoxCustomizeEvent& )
-{
-}
-
-void ToolBox::UserDraw( const UserDrawEvent& )
-{
-}
-
 void ToolBox::InsertItem( const ResId& rResId, sal_uInt16 nPos )
 {
     sal_uLong nObjMask;

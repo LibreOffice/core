@@ -2211,8 +2211,6 @@ void SalDisplay::PrintInfo() const
                 << KeyStr( nMod1KeySym_ ) << " (0x" << sal::static_int_cast< unsigned int >(nMod1KeySym_) << ")");
         if( XExtendedMaxRequestSize(pDisp_) * 4 )
             SAL_INFO( "vcl", "\tXMaxRequestSize   \t" << XMaxRequestSize(pDisp_) * 4 << " " << XExtendedMaxRequestSize(pDisp_) * 4 << " [bytes]");
-        if( GetProperties() != PROPERTY_DEFAULT )
-            SAL_INFO( "vcl", "\tProperties        \t0x" << std::hex << GetProperties() << "\n");
         SAL_INFO( "vcl", "\tWMName            \t" << getWMAdaptor()->getWindowManagerName() );
     }
     SAL_INFO( "vcl", "Screen" );

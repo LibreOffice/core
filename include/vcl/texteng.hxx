@@ -192,8 +192,6 @@ protected:
 
     void                ImpPaint( OutputDevice* pOut, const Point& rStartPos, Rectangle const* pPaintArea, TextSelection const* pPaintRange = 0, TextSelection const* pSelection = 0 );
 
-    void                UpdateSelections();
-
     bool                IsFormatted() const { return mbFormatted; }
 
     sal_uInt16          GetCharPos( sal_uLong nPara, sal_uInt16 nLine, long nDocPosX, bool bSmart = false );

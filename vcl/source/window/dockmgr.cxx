@@ -263,19 +263,16 @@ void ImplDockFloatWin2::TitleButtonClick( sal_uInt16 nButton )
 void ImplDockFloatWin2::Pin()
 {
     FloatingWindow::Pin();
-    mpDockWin->Pin();
 }
 
 void ImplDockFloatWin2::Roll()
 {
     FloatingWindow::Roll();
-    mpDockWin->Roll();
 }
 
 void ImplDockFloatWin2::PopupModeEnd()
 {
     FloatingWindow::PopupModeEnd();
-    mpDockWin->PopupModeEnd();
 }
 
 void ImplDockFloatWin2::Resizing( Size& rSize )
@@ -286,7 +283,7 @@ void ImplDockFloatWin2::Resizing( Size& rSize )
 
 bool ImplDockFloatWin2::Close()
 {
-    return mpDockWin->Close();
+    return true;
 }
 
 DockingManager::DockingManager()
@@ -1038,12 +1035,6 @@ bool ImplDockingWindowWrapper::PrepareToggleFloatingMode()
     return bFloating;
 }
 
-bool ImplDockingWindowWrapper::Close()
-{
-    // TODO: send event
-    return true;
-}
-
 void ImplDockingWindowWrapper::ToggleFloatingMode()
 {
     // notify dockingwindow/toolbox
@@ -1073,21 +1064,6 @@ void ImplDockingWindowWrapper::TitleButtonClick( sal_uInt16 nType )
     {
         SetFloatingMode( !IsFloatingMode() );
     }
-}
-
-void ImplDockingWindowWrapper::Pin()
-{
-    // TODO: send event
-}
-
-void ImplDockingWindowWrapper::Roll()
-{
-    // TODO: send event
-}
-
-void ImplDockingWindowWrapper::PopupModeEnd()
-{
-    // TODO: send event
 }
 
 void ImplDockingWindowWrapper::Resizing( Size& rSize )
