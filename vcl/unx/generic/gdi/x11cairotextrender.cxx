@@ -52,7 +52,7 @@ GlyphCache& X11CairoTextRender::getPlatformGlyphCache()
     return X11GlyphCache::GetInstance();
 }
 
-cairo_surface_t* X11CairoTextRender::getCairoSurface()
+cairo_t* X11CairoTextRender::getCairoContext()
 {
     // find a XRenderPictFormat compatible with the Drawable
     XRenderPictFormat* pVisualFormat = mrParent.GetXRenderFormat();
@@ -73,7 +73,12 @@ cairo_surface_t* X11CairoTextRender::getCairoSurface()
             mrParent.GetVisual().visual, SAL_MAX_INT16, SAL_MAX_INT16);
     }
 
-    return surface;
+    if (!surface)
+        return NULL;
+
+    cairo_t *cr = cairo_create(surface);
+    cairo_surface_destroy(surface);
+    return cr;
 }
 
 void X11CairoTextRender::getSurfaceOffset( double& nDX, double& nDY )
