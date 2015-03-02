@@ -19,7 +19,8 @@
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
     prefix="pricing" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.sheet.addin.PricingFunctionsImpl">
+  <implementation name="com.sun.star.sheet.addin.PricingFunctionsImpl"
+      constructor="com_sun_star_sheet_addin_PricingFunctionsImpl_get_implementation">
     <service name="com.sun.star.sheet.AddIn"/>
     <service name="com.sun.star.sheet.addin.PricingFunctions"/>
   </implementation>
