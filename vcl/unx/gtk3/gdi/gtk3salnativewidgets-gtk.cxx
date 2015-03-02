@@ -1576,6 +1576,20 @@ static void print_update_area (GdkWindow *window, const char *msg)
     print_cairo_region (gdk_window_get_update_area (window), msg);
 }
 
+void GtkSalGraphics::setDevice(basebmp::BitmapDeviceSharedPtr& rDevice)
+{
+    SvpSalGraphics::setDevice(rDevice);
+    bool bCairoCompatibleSurface = rDevice->getScanlineFormat() == basebmp::FORMAT_THIRTYTWO_BIT_TC_MASK_BGRX;
+    if (bCairoCompatibleSurface != m_bCairoCompatibleSurface)
+    {
+        if (bCairoCompatibleSurface)
+            m_xTextRenderImpl.reset(new GtkCairoTextRender(*this));
+        else
+            m_xTextRenderImpl.reset(new SvpTextRender(*this));
+        m_bCairoCompatibleSurface = bCairoCompatibleSurface;
+    }
+}
+
 void GtkSalGraphics::copyArea( long nDestX, long nDestY,
                                long nSrcX, long nSrcY,
                                long nSrcWidth, long nSrcHeight,

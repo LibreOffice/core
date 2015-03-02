@@ -35,12 +35,14 @@ class GtkSalFrame;
 class GtkSalGraphics : public SvpSalGraphics
 {
     GtkSalFrame *mpFrame;
+    bool m_bCairoCompatibleSurface;
 public:
     GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow );
-    virtual void copyArea( long nDestX, long nDestY,
-                           long nSrcX, long nSrcY,
-                           long nSrcWidth, long nSrcHeight,
-                           sal_uInt16 /*nFlags*/ ) SAL_OVERRIDE;
+    virtual void        setDevice(basebmp::BitmapDeviceSharedPtr& rDevice) SAL_OVERRIDE;
+    virtual void        copyArea( long nDestX, long nDestY,
+                                  long nSrcX, long nSrcY,
+                                  long nSrcWidth, long nSrcHeight,
+                                  sal_uInt16 /*nFlags*/ ) SAL_OVERRIDE;
     virtual bool        drawNativeControl( ControlType nType, ControlPart nPart,
                                                const Rectangle& rControlRegion,
                                                ControlState nState, const ImplControlValue& aValue,
