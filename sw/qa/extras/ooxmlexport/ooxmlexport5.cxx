@@ -734,6 +734,13 @@ DECLARE_OOXMLEXPORT_TEST(testImageNoborder, "image-noborder.docx")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(0), getProperty<table::BorderLine2>(getShape(1), "TopBorder").LineWidth);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf89774, "tdf89774.fodt")
+{
+    if (xmlDocPtr pXmlDoc = parseExport("docProps/app.xml"))
+        // This was 65, as unit was seconds instead of minutes.
+        assertXPathContent(pXmlDoc, "/extended-properties:Properties/extended-properties:TotalTime", "1");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
