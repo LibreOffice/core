@@ -487,4 +487,9 @@ void SvpTextRender::setDevice( basebmp::BitmapDeviceSharedPtr& rDevice )
     }
 }
 
+GlyphCache& SvpSalGraphics::getPlatformGlyphCache()
+{
+    return SvpGlyphCache::GetInstance();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
