@@ -253,13 +253,12 @@ bool ORTFReader::CreateTable(int nToken)
     aTableName = aTableName.getToken(0,' ');
     aTableName = ::dbtools::createUniqueName(m_xTables, aTableName);
 
-    int nTmpToken2 = nToken;
     OUString aColumnName;
 
     FontDescriptor aFont = VCLUnoHelper::CreateFontDescriptor(Application::GetSettings().GetStyleSettings().GetAppFont());
     do
     {
-        switch(nTmpToken2)
+        switch(nToken)
         {
             case RTF_UNKNOWNCONTROL:
             case RTF_UNKNOWNDATA:
@@ -303,7 +302,7 @@ bool ORTFReader::CreateTable(int nToken)
                 break;
         }
     }
-    while((nTmpToken2 = GetNextToken()) != RTF_TROWD && eState != SVPAR_ERROR && eState != SVPAR_ACCEPTED);
+    while( GetNextToken() != RTF_TROWD && eState != SVPAR_ERROR && eState != SVPAR_ACCEPTED );
 
     bool bOk = !m_vDestVector.empty();
     if(bOk)

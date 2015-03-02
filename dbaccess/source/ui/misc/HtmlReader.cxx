@@ -412,7 +412,6 @@ bool OHTMLReader::CreateTable(int nToken)
     aTempName = aTempName.getToken(0,' ');
     aTempName = ::dbtools::createUniqueName(m_xTables, aTempName);
 
-    int nTmpToken2 = nToken;
     bool bCaption = false;
     bool bTableHeader = false;
     OUString aColumnName;
@@ -423,7 +422,7 @@ bool OHTMLReader::CreateTable(int nToken)
     sal_Int32 nTextColor = 0;
     do
     {
-        switch(nTmpToken2)
+        switch(nToken)
         {
             case HTML_TEXTTOKEN:
             case HTML_SINGLECHAR:
@@ -492,7 +491,7 @@ bool OHTMLReader::CreateTable(int nToken)
                 break;
         }
     }
-    while((nTmpToken2 = GetNextToken()) != HTML_TABLEROW_OFF);
+    while( GetNextToken() != HTML_TABLEROW_OFF );
 
     if ( !m_sCurrent.isEmpty() )
         aColumnName = m_sCurrent;
