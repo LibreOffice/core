@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a2ca52d_35e4103a",
+        "filename": "unotools/source/misc/mediadescriptor.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 454,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-03-02T08:47:48Z",
+      "side": 1,
+      "message": "DECODE_WITH_CHARSET is problematic here, as it can lead to the display of semantically different URIs (\"http://example.com/foo%2Fbar\" would be displayed as \"http://example.com/foo/bar\").  DECODE_TO_IURI is the better choice.",
+      "revId": "f2908b58cd5833b0f589d90ed58851ffd001f706",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
