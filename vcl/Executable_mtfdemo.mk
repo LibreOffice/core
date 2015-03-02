@@ -47,7 +47,6 @@ $(eval $(call gb_Executable_add_libs,mtfdemo,\
 	-ldl \
 	-lpthread \
     -lGL \
-    -lGLU \
     -lX11 \
 ))
 

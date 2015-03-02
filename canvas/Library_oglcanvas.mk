@@ -62,7 +62,6 @@ $(eval $(call gb_Library_use_system_win32_libs,oglcanvas,\
 else
 $(eval $(call gb_Library_add_libs,oglcanvas,\
     -lGL \
-    -lGLU \
     -lX11 \
 ))
 endif

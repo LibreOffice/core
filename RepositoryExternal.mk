@@ -265,6 +265,7 @@ define gb_LinkTarget__use_glew
 $(call gb_LinkTarget_use_package,$(1),glew)
 $(call gb_LinkTarget_set_include,$(1),\
 	-I$(call gb_UnpackedTarball_get_dir,glew/include) \
+	-DGLEW_NO_GLU \
 	$$(INCLUDE) \
 )
 

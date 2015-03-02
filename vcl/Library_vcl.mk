@@ -707,7 +707,6 @@ $(eval $(call gb_Library_add_libs,vcl,\
 	-ldl \
 	-lpthread \
     -lGL \
-    -lGLU \
     -lX11 \
 ))
 

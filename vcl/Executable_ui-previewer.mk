@@ -40,7 +40,6 @@ $(eval $(call gb_Executable_add_libs,ui-previewer,\
 	-ldl \
 	-lpthread \
     -lGL \
-    -lGLU \
     -lX11 \
 ))
 

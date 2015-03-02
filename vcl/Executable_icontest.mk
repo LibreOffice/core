@@ -31,7 +31,6 @@ $(eval $(call gb_Executable_add_libs,icontest,\
 	-ldl \
 	-lpthread \
     -lGL \
-    -lGLU \
     -lX11 \
 ))
 

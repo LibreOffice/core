@@ -105,7 +105,6 @@ $(eval $(call gb_Library_add_libs,sofficeapp,\
 	-ldl \
 	-lpthread \
     -lGL \
-    -lGLU \
     -lX11 \
 ))
 endif

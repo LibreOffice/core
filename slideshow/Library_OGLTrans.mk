@@ -76,7 +76,6 @@ $(eval $(call gb_Library_add_exception_objects,OGLTrans,\
 
 $(eval $(call gb_Library_add_libs,OGLTrans,\
 	-lGL \
-	-lGLU \
 	-lX11 \
 ))
 endif

@@ -48,7 +48,6 @@ $(eval $(call gb_Executable_add_libs,vcldemo,\
 	-ldl \
 	-lpthread \
     -lGL \
-    -lGLU \
     -lX11 \
 ))
 

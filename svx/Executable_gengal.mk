@@ -72,7 +72,6 @@ $(eval $(call gb_Executable_add_libs,gengal,\
 	-ldl \
 	-lpthread \
     -lGL \
-    -lGLU \
     -lX11 \
 ))
 

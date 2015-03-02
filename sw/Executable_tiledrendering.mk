@@ -49,7 +49,6 @@ $(eval $(call gb_Executable_add_libs,tiledrendering,\
 	-ldl \
 	-lpthread \
     -lGL \
-    -lGLU \
     -lX11 \
 ))
 

@@ -1257,7 +1257,7 @@ void OpenGLContext::reset()
         glXMakeCurrent(m_aGLWin.dpy, None, NULL);
         if( glGetError() != GL_NO_ERROR )
         {
-            SAL_WARN("vcl.opengl", "glError: " << reinterpret_cast<char const *>(gluErrorString(glGetError())));
+            SAL_WARN("vcl.opengl", "glError: " << glGetError());
         }
         glXDestroyContext(m_aGLWin.dpy, m_aGLWin.ctx);
 
