@@ -1186,9 +1186,9 @@ AbstractTakeProgress * AbstractDialogFactory_Impl::CreateTakeProgressDialog( vcl
 
 VclAbstractDialog*
 AbstractDialogFactory_Impl::CreateScriptErrorDialog(
-    vcl::Window* pParent, ::com::sun::star::uno::Any aException )
+    vcl::Window* pParent, const ::com::sun::star::uno::Any& rException)
 {
-    return new SvxScriptErrorDialog( pParent, aException );
+    return new SvxScriptErrorDialog(pParent, rException);
 }
 
 AbstractScriptSelectorDialog*

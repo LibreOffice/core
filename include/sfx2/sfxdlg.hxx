@@ -151,7 +151,7 @@ public:
         ) = 0;
 
     virtual VclAbstractDialog* CreateScriptErrorDialog(
-        vcl::Window* pParent, com::sun::star::uno::Any aException ) = 0;
+        vcl::Window* pParent, const css::uno::Any& rException ) = 0;
 
     virtual VclAbstractDialog*  CreateOptionsDialog(
         vcl::Window* pParent, const OUString& rExtensionId, const OUString& rApplicationContext ) = 0;

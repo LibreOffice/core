@@ -5034,7 +5034,7 @@ SectionPropertyMap * DomainMapper_Impl::GetSectionContext()
     return pSectionContext;
 }
 
-void DomainMapper_Impl::deferCharacterProperty( sal_Int32 id, com::sun::star::uno::Any value )
+void DomainMapper_Impl::deferCharacterProperty(sal_Int32 id, const css::uno::Any& value)
 {
     deferredCharacterProperties[ id ] = value;
 }

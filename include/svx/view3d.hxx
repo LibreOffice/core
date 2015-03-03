@@ -106,7 +106,7 @@ public:
     bool ImpCloneAll3DObjectsToDestScene(E3dScene* pSrcScene, E3dScene* pDstScene, Point aOffset);
 
     bool IsConvertTo3DObjPossible() const;
-    void ConvertMarkedObjTo3D(bool bExtrude=true, basegfx::B2DPoint aPnt1 = basegfx::B2DPoint(0.0, 0.0), basegfx::B2DPoint aPnt2 = basegfx::B2DPoint(0.0, 1.0));
+    void ConvertMarkedObjTo3D(bool bExtrude=true, const basegfx::B2DPoint& rPnt1 = basegfx::B2DPoint(0.0, 0.0), const basegfx::B2DPoint& rPnt2 = basegfx::B2DPoint(0.0, 1.0));
 
     // Means to create all Extrudes in a certain depth order.
     void DoDepthArrange(E3dScene* pScene, double fDepth);

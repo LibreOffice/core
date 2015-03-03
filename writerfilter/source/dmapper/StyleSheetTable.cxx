@@ -192,9 +192,9 @@ beans::PropertyValue StyleSheetEntry::GetInteropGrabBag()
     return aRet;
 }
 
-void StyleSheetEntry::AppendInteropGrabBag(beans::PropertyValue aValue)
+void StyleSheetEntry::AppendInteropGrabBag(const beans::PropertyValue& rValue)
 {
-    m_aInteropGrabBag.push_back(aValue);
+    m_aInteropGrabBag.push_back(rValue);
 }
 
 void lcl_mergeProps( PropertyMapPtr pToFill,  PropertyMapPtr pToAdd, TblStyleType nStyleId )
@@ -875,23 +875,24 @@ class PropValVector : public _PropValVector
 public:
     PropValVector(){}
 
-    void    Insert( beans::PropertyValue aVal );
+    void Insert(const beans::PropertyValue& rVal);
     uno::Sequence< uno::Any > getValues();
     uno::Sequence< OUString > getNames();
 };
-void    PropValVector::Insert( beans::PropertyValue aVal )
+
+void PropValVector::Insert(const beans::PropertyValue& rVal)
 {
     _PropValVector::iterator aIt = begin();
     while(aIt != end())
     {
-        if(aIt->Name > aVal.Name)
+        if(aIt->Name > rVal.Name)
         {
-            insert( aIt, aVal );
+            insert( aIt, rVal );
             return;
         }
         ++aIt;
     }
-    push_back( aVal );
+    push_back(rVal);
 }
 uno::Sequence< uno::Any > PropValVector::getValues()
 {

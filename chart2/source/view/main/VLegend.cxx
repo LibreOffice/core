@@ -681,17 +681,17 @@ chart2::RelativePosition lcl_getDefaultPosition( LegendPosition ePos, const awt:
 awt::Point lcl_calculatePositionAndRemainingSpace(
     awt::Rectangle & rRemainingSpace,
     const awt::Size & rPageSize,
-    chart2::RelativePosition aRelPos,
+    const chart2::RelativePosition& rRelPos,
     LegendPosition ePos,
     const awt::Size& aLegendSize )
 {
     // calculate position
     awt::Point aResult(
-        static_cast< sal_Int32 >( aRelPos.Primary * rPageSize.Width ),
-        static_cast< sal_Int32 >( aRelPos.Secondary * rPageSize.Height ));
+        static_cast< sal_Int32 >( rRelPos.Primary * rPageSize.Width ),
+        static_cast< sal_Int32 >( rRelPos.Secondary * rPageSize.Height ));
 
     aResult = RelativePositionHelper::getUpperLeftCornerOfAnchoredObject(
-        aResult, aLegendSize, aRelPos.Anchor );
+        aResult, aLegendSize, rRelPos.Anchor );
 
     // adapt rRemainingSpace if LegendPosition is not CUSTOM
     // #i109336# Improve auto positioning in chart

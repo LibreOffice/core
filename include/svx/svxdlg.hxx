@@ -449,7 +449,7 @@ public:
         ) SAL_OVERRIDE = 0;
 
     virtual VclAbstractDialog* CreateScriptErrorDialog(
-            vcl::Window* pParent, com::sun::star::uno::Any aException) SAL_OVERRIDE = 0;
+            vcl::Window* pParent, const css::uno::Any& rException) SAL_OVERRIDE = 0;
 
     virtual VclAbstractDialog*  CreateSvxMacroAssignDlg(
                 vcl::Window* _pParent,

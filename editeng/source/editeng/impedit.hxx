@@ -764,14 +764,14 @@ public:
     bool                IsFormatting() const { return bIsFormatting; }
 
     void            SetText(const OUString& rText);
-    EditPaM         DeleteSelected( EditSelection aEditSelection);
+    EditPaM         DeleteSelected(const EditSelection& rEditSelection);
     EditPaM         InsertText( const EditSelection& rCurEditSelection, sal_Unicode c, bool bOverwrite, bool bIsUserInput = false );
     EditPaM         InsertText(const EditSelection& aCurEditSelection, const OUString& rStr);
     EditPaM         AutoCorrect( const EditSelection& rCurEditSelection, sal_Unicode c, bool bOverwrite, vcl::Window* pFrameWin = NULL );
     EditPaM         DeleteLeftOrRight( const EditSelection& rEditSelection, sal_uInt8 nMode, sal_uInt8 nDelMode = DELMODE_SIMPLE );
-    EditPaM         InsertParaBreak( EditSelection aEditSelection );
+    EditPaM         InsertParaBreak(const EditSelection& rEditSelection);
     EditPaM         InsertLineBreak(const EditSelection& aEditSelection);
-    EditPaM         InsertTab( EditSelection aEditSelection );
+    EditPaM         InsertTab(const EditSelection& rEditSelection);
     EditPaM         InsertField(const EditSelection& rCurSel, const SvxFieldItem& rFld);
     bool        UpdateFields();
 

@@ -278,7 +278,7 @@ void OpenGLRender::prepareToRender()
     m_fZStep = 0;
 }
 
-int OpenGLRender::MoveModelf(PosVecf3 trans, PosVecf3 angle, PosVecf3 scale)
+int OpenGLRender::MoveModelf(const PosVecf3& trans, const PosVecf3& angle, const PosVecf3& scale)
 {
     glm::mat4 aTranslationMatrix = glm::translate(glm::vec3(trans.x, trans.y, trans.z));
     glm::mat4 aScaleMatrix = glm::scale(glm::vec3(scale.x, scale.y, scale.z));

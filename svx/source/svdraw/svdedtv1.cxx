@@ -1445,18 +1445,18 @@ SfxItemSet SdrEditView::GetGeoAttrFromMarked() const
     return aRetSet;
 }
 
-Point ImpGetPoint(Rectangle aRect, RECT_POINT eRP)
+Point ImpGetPoint(const Rectangle& rRect, RECT_POINT eRP)
 {
     switch(eRP) {
-        case RP_LT: return aRect.TopLeft();
-        case RP_MT: return aRect.TopCenter();
-        case RP_RT: return aRect.TopRight();
-        case RP_LM: return aRect.LeftCenter();
-        case RP_MM: return aRect.Center();
-        case RP_RM: return aRect.RightCenter();
-        case RP_LB: return aRect.BottomLeft();
-        case RP_MB: return aRect.BottomCenter();
-        case RP_RB: return aRect.BottomRight();
+        case RP_LT: return rRect.TopLeft();
+        case RP_MT: return rRect.TopCenter();
+        case RP_RT: return rRect.TopRight();
+        case RP_LM: return rRect.LeftCenter();
+        case RP_MM: return rRect.Center();
+        case RP_RM: return rRect.RightCenter();
+        case RP_LB: return rRect.BottomLeft();
+        case RP_MB: return rRect.BottomCenter();
+        case RP_RB: return rRect.BottomRight();
     }
     return Point(); // Should not happen!
 }

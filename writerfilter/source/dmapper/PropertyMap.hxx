@@ -174,7 +174,7 @@ public:
 #ifdef DEBUG_WRITERFILTER
     void dumpXml( const TagLogger::Pointer_t pLogger ) const;
 #endif
-    static com::sun::star::table::ShadowFormat getShadowFromBorder(com::sun::star::table::BorderLine2 aBorder);
+    static com::sun::star::table::ShadowFormat getShadowFromBorder(const css::table::BorderLine2& rBorder);
 
 };
 typedef std::shared_ptr<PropertyMap>  PropertyMapPtr;

@@ -91,7 +91,12 @@ public:
     /**
      * @descr   Set drawing object rotate.
      */
-    void    SetRotate(double degree, XFPoint aRotatePoint=XFPoint(0,0));
+    void SetRotate(double degree, const XFPoint& rRotatePoint=XFPoint(0,0))
+    {
+        m_nFlag |= XFDRAWOBJECT_FLAG_ROTATE;
+        m_fRotate = degree*2*PI/360;
+        m_aRotatePoint = rRotatePoint;
+    }
 
     /**
      * @descr   Set drawing object scale.
@@ -128,13 +133,6 @@ protected:
 inline void XFDrawObject::SetTextStyleName(const OUString& style)
 {
     m_strTextStyle = style;
-}
-
-inline void XFDrawObject::SetRotate(double degree, XFPoint aRotatePoint)
-{
-    m_nFlag |= XFDRAWOBJECT_FLAG_ROTATE;
-    m_fRotate = degree*2*PI/360;
-    m_aRotatePoint = aRotatePoint;
 }
 
 inline void XFDrawObject::SetScale(double cx, double cy)

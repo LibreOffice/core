@@ -1133,7 +1133,7 @@ void GL3DBarChart::contextDestroyed()
     mbValidContext = false;
 }
 
-float GL3DBarChart::addScreenTextShape(OUString &nStr, glm::vec2 aLeftOrRightTop, float nTextHeight, bool bLeftTopFlag,
+float GL3DBarChart::addScreenTextShape(OUString &nStr, const glm::vec2& rLeftOrRightTop, float nTextHeight, bool bLeftTopFlag,
                                             const glm::vec4& rColor, const glm::vec3& rPos, sal_uInt32 nEvent)
 {
     maScreenTextShapes.push_back(new opengl3D::ScreenText(mpRenderer.get(), *mpTextCache, nStr, rColor, nEvent));
@@ -1141,9 +1141,9 @@ float GL3DBarChart::addScreenTextShape(OUString &nStr, glm::vec2 aLeftOrRightTop
     float nRectWidth = (float)rTextCache.maSize.Width() / (float)rTextCache.maSize.Height() * nTextHeight / 2.0f;
     opengl3D::ScreenText* pScreenText = static_cast<opengl3D::ScreenText*>(&maScreenTextShapes.back());
     if (bLeftTopFlag)
-        pScreenText->setPosition(aLeftOrRightTop, glm::vec2(aLeftOrRightTop.x + nRectWidth, aLeftOrRightTop.y - nTextHeight), rPos);
+        pScreenText->setPosition(rLeftOrRightTop, glm::vec2(rLeftOrRightTop.x + nRectWidth, rLeftOrRightTop.y - nTextHeight), rPos);
     else
-        pScreenText->setPosition(glm::vec2(aLeftOrRightTop.x - nRectWidth, aLeftOrRightTop.y), glm::vec2(aLeftOrRightTop.x, aLeftOrRightTop.y - nTextHeight), rPos);
+        pScreenText->setPosition(glm::vec2(rLeftOrRightTop.x - nRectWidth, rLeftOrRightTop.y), glm::vec2(rLeftOrRightTop.x, rLeftOrRightTop.y - nTextHeight), rPos);
     return nRectWidth;
 }
 

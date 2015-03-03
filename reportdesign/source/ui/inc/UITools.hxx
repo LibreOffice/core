@@ -116,17 +116,17 @@ namespace rptui
             );
 
     /** notifySystemWindow adds or remove the given window _pToRegister at the Systemwindow found when search _pWindow.
-        @param  _pWindow
+        @param  pWindow
             The window which is used to search for the SystemWindow.
-        @param  _pToRegister
+        @param  pToRegister
             The window which should be added or removed on the TaskPaneList.
-        @param  _rMemFunc
+        @param  rMemFunc
             The member function which should be called at the SystemWindow when found.
             Possible values are:
             ::comphelper::mem_fun(&TaskPaneList::AddWindow)
             ::comphelper::mem_fun(&TaskPaneList::RemoveWindow)
     */
-    void notifySystemWindow(::vcl::Window* _pWindow, ::vcl::Window* _pToRegister, ::comphelper::mem_fun1_t<TaskPaneList, ::vcl::Window*> _rMemFunc);
+    void notifySystemWindow(::vcl::Window* pWindow, ::vcl::Window* pToRegister, const ::comphelper::mem_fun1_t<TaskPaneList, ::vcl::Window*>& rMemFunc);
 
 
     const sal_Int16 ISOVER_IGNORE_CUSTOMSHAPES = 1;

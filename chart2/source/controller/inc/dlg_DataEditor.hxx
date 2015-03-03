@@ -102,9 +102,9 @@ private:
 
         @note this code is taken from dbaccess/source/ui/inc/UITools.hxx
     */
-    void notifySystemWindow( vcl::Window* pWindow,
-                             vcl::Window* pToRegister,
-                             ::comphelper::mem_fun1_t< TaskPaneList, vcl::Window* > rMemFunc );
+    void notifySystemWindow(vcl::Window* pWindow,
+                            vcl::Window* pToRegister,
+                            const ::comphelper::mem_fun1_t<TaskPaneList, vcl::Window*>& rMemFunc);
 };
 
 } // namespace chart

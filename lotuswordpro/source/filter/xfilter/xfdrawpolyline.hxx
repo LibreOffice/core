@@ -69,9 +69,17 @@ public:
     XFDrawPolyline();
 
 public:
-    void    AddPoint(double x, double y);
+    void AddPoint(double x, double y)
+    {
+        assert(x>=0&&y>=0);
+        m_aPoints.push_back( XFPoint(x,y) );
+    }
 
-    void    AddPoint(XFPoint pt);
+    void AddPoint(const XFPoint& pt)
+    {
+        assert(pt.GetX()>=0&&pt.GetY()>=0);
+        m_aPoints.push_back(pt);
+    }
 
     XFRect  CalcViewBox();
 
@@ -80,18 +88,6 @@ public:
 protected:
     std::vector<XFPoint>    m_aPoints;
 };
-
-inline void XFDrawPolyline::AddPoint(double x, double y)
-{
-    assert(x>=0&&y>=0);
-    m_aPoints.push_back( XFPoint(x,y) );
-}
-
-inline void XFDrawPolyline::AddPoint(XFPoint pt)
-{
-    assert(pt.GetX()>=0&&pt.GetY()>=0);
-    m_aPoints.push_back(pt);
-}
 
 #endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

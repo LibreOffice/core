@@ -112,9 +112,9 @@ public:
     /// Create drop-down control from w:sdt's w:dropDownList.
     void createDropDownControl();
     /// Create date control from w:sdt's w:date.
-    void createDateControl(OUString& rContentText, css::beans::PropertyValue aCharFormat);
+    void createDateControl(OUString& rContentText, const css::beans::PropertyValue& rCharFormat);
 
-    void appendToInteropGrabBag(com::sun::star::beans::PropertyValue rValue);
+    void appendToInteropGrabBag(const com::sun::star::beans::PropertyValue& rValue);
     com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> getInteropGrabBagAndClear();
     bool isInteropGrabBagEmpty();
     bool containedInInteropGrabBag(const OUString& rValueName);

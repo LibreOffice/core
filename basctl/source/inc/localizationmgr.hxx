@@ -52,7 +52,7 @@ class LocalizationMgr
         MOVE_RESOURCES,
         COPY_RESOURCES
     };
-    static sal_Int32 implHandleControlResourceProperties( ::com::sun::star::uno::Any aControlAny,
+    static sal_Int32 implHandleControlResourceProperties(const css::uno::Any& rControlAny,
             const OUString& aDialogName, const OUString& aCtrlName,
             ::com::sun::star::uno::Reference< ::com::sun::star::resource::XStringResourceManager >
             xStringResourceManager, ::com::sun::star::uno::Reference< ::com::sun::star::resource::
@@ -88,22 +88,22 @@ public:
     void handleRemoveLocales( const ::com::sun::star::uno::Sequence
         < ::com::sun::star::lang::Locale >& aLocaleSeq );
 
-    void handleSetDefaultLocale( ::com::sun::star::lang::Locale aLocale );
+    void handleSetDefaultLocale(const css::lang::Locale& rLocale);
 
-    void handleSetCurrentLocale( ::com::sun::star::lang::Locale aLocale );
+    void handleSetCurrentLocale(const css::lang::Locale& rLocale);
 
     void handleBasicStarted( void );
 
     void handleBasicStopped( void );
 
-    static void setControlResourceIDsForNewEditorObject( DlgEditor* pEditor,
-        ::com::sun::star::uno::Any aControlAny, const OUString& aCtrlName );
+    static void setControlResourceIDsForNewEditorObject(DlgEditor* pEditor,
+        const css::uno::Any& rControlAny, const OUString& aCtrlName);
 
-    static void renameControlResourceIDsForEditorObject( DlgEditor* pEditor,
-        ::com::sun::star::uno::Any aControlAny, const OUString& aNewCtrlName );
+    static void renameControlResourceIDsForEditorObject(DlgEditor* pEditor,
+        const css::uno::Any& rControlAny, const OUString& aNewCtrlName);
 
-    static void deleteControlResourceIDsForDeletedEditorObject( DlgEditor* pEditor,
-        ::com::sun::star::uno::Any aControlAny, const OUString& aCtrlName );
+    static void deleteControlResourceIDsForDeletedEditorObject(DlgEditor* pEditor,
+        const css::uno::Any& rControlAny, const OUString& aCtrlName);
 
     static void setStringResourceAtDialog( const ScriptDocument& rDocument, const OUString& aLibName, const OUString& aDlgName,
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > xDialogModel );
@@ -128,7 +128,7 @@ public:
         ::com::sun::star::uno::Reference< ::com::sun::star::resource::XStringResourceManager > xStringResourceManager );
 
     static void copyResourcesForPastedEditorObject( DlgEditor* pEditor,
-        ::com::sun::star::uno::Any aControlAny, const OUString& aCtrlName,
+        const css::uno::Any& rControlAny, const OUString& aCtrlName,
         ::com::sun::star::uno::Reference< ::com::sun::star::resource::
         XStringResourceResolver > xSourceStringResolver );
 

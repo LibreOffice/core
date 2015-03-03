@@ -90,7 +90,7 @@ void SdtHelper::createDropDownControl()
     m_aDropDownItems.clear();
 }
 
-void SdtHelper::createDateControl(OUString& rContentText, beans::PropertyValue aCharFormat)
+void SdtHelper::createDateControl(OUString& rContentText, const beans::PropertyValue& rCharFormat)
 {
     uno::Reference<awt::XControlModel> xControlModel;
     try
@@ -138,7 +138,7 @@ void SdtHelper::createDateControl(OUString& rContentText, beans::PropertyValue a
     aGrabBag["OriginalContent"] <<= rContentText;
     aGrabBag["DateFormat"] <<= sDateFormat;
     aGrabBag["Locale"] <<= m_sLocale.makeStringAndClear();
-    aGrabBag["CharFormat"] <<= aCharFormat.Value;
+    aGrabBag["CharFormat"] <<= rCharFormat.Value;
     // merge in properties like ooxml:CT_SdtPr_alias and friends.
     aGrabBag.update(comphelper::SequenceAsHashMap(comphelper::containerToSequence(m_aGrabBag)));
     // and empty the property list, so they won't end up on the next sdt as well
@@ -170,13 +170,7 @@ void SdtHelper::createControlShape(awt::Size aSize, uno::Reference<awt::XControl
     m_bHasElements = true;
 }
 
-
-
-
-
-
-
-void SdtHelper::appendToInteropGrabBag(com::sun::star::beans::PropertyValue rValue)
+void SdtHelper::appendToInteropGrabBag(const com::sun::star::beans::PropertyValue& rValue)
 {
     m_aGrabBag.push_back(rValue);
 }

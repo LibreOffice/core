@@ -68,7 +68,7 @@ public:
     std::vector<css::beans::PropertyValue> aLsdExceptions; ///< List of lsdException attribute lists
     bool           bAutoRedefine; ///< Writer calls this auto-update.
 
-    void AppendInteropGrabBag(css::beans::PropertyValue aValue);
+    void AppendInteropGrabBag(const css::beans::PropertyValue& rValue);
     css::beans::PropertyValue GetInteropGrabBag(); ///< Used for table styles, has a name.
     css::beans::PropertyValues GetInteropGrabBagSeq(); ///< Used for existing styles, just a list of properties.
 

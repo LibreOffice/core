@@ -188,14 +188,14 @@ OUString implCreatePureResourceId
 // anyway only one language should exist when calling this method then,
 // either the first one for mode SET_IDS or the last one for mode RESET_IDS
 sal_Int32 LocalizationMgr::implHandleControlResourceProperties
-    ( Any aControlAny, const OUString& aDialogName, const OUString& aCtrlName,
+    (const Any& rControlAny, const OUString& aDialogName, const OUString& aCtrlName,
         Reference< XStringResourceManager > xStringResourceManager,
         Reference< XStringResourceResolver > xSourceStringResolver, HandleResourceMode eMode )
 {
     sal_Int32 nChangedCount = 0;
 
     Reference< XPropertySet > xPropertySet;
-    aControlAny >>= xPropertySet;
+    rControlAny >>= xPropertySet;
     if( xPropertySet.is() && xStringResourceManager.is())
     {
         Sequence< Locale > aLocaleSeq = xStringResourceManager->getLocales();
@@ -736,13 +736,13 @@ void LocalizationMgr::handleRemoveLocales( const Sequence< Locale >& aLocaleSeq 
     (void)bConsistant;
 }
 
-void LocalizationMgr::handleSetDefaultLocale( Locale aLocale )
+void LocalizationMgr::handleSetDefaultLocale(const Locale& rLocale)
 {
     if( m_xStringResourceManager.is() )
     {
         try
         {
-            m_xStringResourceManager->setDefaultLocale( aLocale );
+            m_xStringResourceManager->setDefaultLocale(rLocale);
         }
         catch(const IllegalArgumentException&)
         {
@@ -755,13 +755,13 @@ void LocalizationMgr::handleSetDefaultLocale( Locale aLocale )
     }
 }
 
-void LocalizationMgr::handleSetCurrentLocale( ::com::sun::star::lang::Locale aLocale )
+void LocalizationMgr::handleSetCurrentLocale(const css::lang::Locale& rLocale)
 {
     if( m_xStringResourceManager.is() )
     {
         try
         {
-            m_xStringResourceManager->setCurrentLocale( aLocale, false );
+            m_xStringResourceManager->setCurrentLocale(rLocale, false);
         }
         catch(const IllegalArgumentException&)
         {
@@ -815,7 +815,7 @@ DialogWindow* FindDialogWindowForEditor( DlgEditor* pEditor )
 
 
 void LocalizationMgr::setControlResourceIDsForNewEditorObject( DlgEditor* pEditor,
-    Any aControlAny, const OUString& aCtrlName )
+    const Any& rControlAny, const OUString& aCtrlName )
 {
     // Get library for DlgEditor
     DialogWindow* pDlgWin = FindDialogWindowForEditor( pEditor );
@@ -837,7 +837,7 @@ void LocalizationMgr::setControlResourceIDsForNewEditorObject( DlgEditor* pEdito
     OUString aDialogName = pDlgWin->GetName();
     Reference< XStringResourceResolver > xDummyStringResolver;
     sal_Int32 nChangedCount = implHandleControlResourceProperties
-        ( aControlAny, aDialogName, aCtrlName, xStringResourceManager,
+        ( rControlAny, aDialogName, aCtrlName, xStringResourceManager,
           xDummyStringResolver, SET_IDS );
 
     if( nChangedCount )
@@ -845,7 +845,7 @@ void LocalizationMgr::setControlResourceIDsForNewEditorObject( DlgEditor* pEdito
 }
 
 void LocalizationMgr::renameControlResourceIDsForEditorObject( DlgEditor* pEditor,
-    ::com::sun::star::uno::Any aControlAny, const OUString& aNewCtrlName )
+    const css::uno::Any& rControlAny, const OUString& aNewCtrlName )
 {
     // Get library for DlgEditor
     DialogWindow* pDlgWin = FindDialogWindowForEditor( pEditor );
@@ -867,13 +867,13 @@ void LocalizationMgr::renameControlResourceIDsForEditorObject( DlgEditor* pEdito
     OUString aDialogName = pDlgWin->GetName();
     Reference< XStringResourceResolver > xDummyStringResolver;
     implHandleControlResourceProperties
-        ( aControlAny, aDialogName, aNewCtrlName, xStringResourceManager,
+        ( rControlAny, aDialogName, aNewCtrlName, xStringResourceManager,
           xDummyStringResolver, RENAME_CONTROL_IDS );
 }
 
 
 void LocalizationMgr::deleteControlResourceIDsForDeletedEditorObject( DlgEditor* pEditor,
-    Any aControlAny, const OUString& aCtrlName )
+    const Any& rControlAny, const OUString& aCtrlName )
 {
     // Get library for DlgEditor
     DialogWindow* pDlgWin = FindDialogWindowForEditor( pEditor );
@@ -891,7 +891,7 @@ void LocalizationMgr::deleteControlResourceIDsForDeletedEditorObject( DlgEditor*
     OUString aDialogName = pDlgWin->GetName();
     Reference< XStringResourceResolver > xDummyStringResolver;
     sal_Int32 nChangedCount = implHandleControlResourceProperties
-        ( aControlAny, aDialogName, aCtrlName, xStringResourceManager,
+        ( rControlAny, aDialogName, aCtrlName, xStringResourceManager,
           xDummyStringResolver, REMOVE_IDS_FROM_RESOURCE );
 
     if( nChangedCount )
@@ -1047,7 +1047,7 @@ void LocalizationMgr::setResourceIDsForDialog( Reference< container::XNameContai
 }
 
 void LocalizationMgr::copyResourcesForPastedEditorObject( DlgEditor* pEditor,
-    Any aControlAny, const OUString& aCtrlName,
+    const Any& rControlAny, const OUString& aCtrlName,
     Reference< XStringResourceResolver > xSourceStringResolver )
 {
     // Get library for DlgEditor
@@ -1069,7 +1069,7 @@ void LocalizationMgr::copyResourcesForPastedEditorObject( DlgEditor* pEditor,
 
     OUString aDialogName = pDlgWin->GetName();
     implHandleControlResourceProperties
-        ( aControlAny, aDialogName, aCtrlName, xStringResourceManager,
+        ( rControlAny, aDialogName, aCtrlName, xStringResourceManager,
           xSourceStringResolver, MOVE_RESOURCES );
 }
 

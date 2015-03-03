@@ -202,7 +202,7 @@ bool DataEditor::ApplyChangesToModel()
 // TaskPaneList::AddWindow or TaskPaneList::RemoveWindow
 void DataEditor::notifySystemWindow(
     vcl::Window* pWindow, vcl::Window* pToRegister,
-    ::comphelper::mem_fun1_t< TaskPaneList, vcl::Window* > rMemFunc )
+    const ::comphelper::mem_fun1_t<TaskPaneList, vcl::Window*>& rMemFunc )
 {
     OSL_ENSURE( pWindow, "Window must not be null!" );
     if( !pWindow )

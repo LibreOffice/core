@@ -833,7 +833,7 @@ void E3dView::ImpCreate3DObject(E3dScene* pScene, SdrObject* pObj, bool bExtrude
     }
 }
 
-void E3dView::ConvertMarkedObjTo3D(bool bExtrude, basegfx::B2DPoint aPnt1, basegfx::B2DPoint aPnt2)
+void E3dView::ConvertMarkedObjTo3D(bool bExtrude, const basegfx::B2DPoint& rPnt1, const basegfx::B2DPoint& rPnt2)
 {
     if(AreObjectsMarked())
     {
@@ -867,11 +867,11 @@ void E3dView::ConvertMarkedObjTo3D(bool bExtrude, basegfx::B2DPoint aPnt1, baseg
         if(!bExtrude)
         {
             // Create transformation for the polygons rotating body
-            if(aPnt1 != aPnt2)
+            if (rPnt1 != rPnt2)
             {
                 // Rotation around control point #1 with set angle
                 // for 3D coordinates
-                basegfx::B2DPoint aDiff(aPnt1 - aPnt2);
+                basegfx::B2DPoint aDiff(rPnt1 - rPnt2);
                 fRot3D = atan2(aDiff.getY(), aDiff.getX()) - F_PI2;
 
                 if(basegfx::fTools::equalZero(fabs(fRot3D)))
@@ -879,15 +879,15 @@ void E3dView::ConvertMarkedObjTo3D(bool bExtrude, basegfx::B2DPoint aPnt1, baseg
 
                 if(fRot3D != 0.0)
                 {
-                    aLatheMat = basegfx::tools::createRotateAroundPoint(aPnt2, -fRot3D)
+                    aLatheMat = basegfx::tools::createRotateAroundPoint(rPnt2, -fRot3D)
                         * aLatheMat;
                 }
             }
 
-            if(aPnt2.getX() != 0.0)
+            if (rPnt2.getX() != 0.0)
             {
                 // Translation to Y=0 - axis
-                aLatheMat.translate(-aPnt2.getX(), 0.0);
+                aLatheMat.translate(-rPnt2.getX(), 0.0);
             }
             else
             {

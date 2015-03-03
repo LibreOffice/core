@@ -110,8 +110,8 @@ public:
     SAL_DLLPRIVATE bool        hasAfterEffect() const { return mbHasAfterEffect; }
     SAL_DLLPRIVATE void            setHasAfterEffect( bool bHasAfterEffect ) { mbHasAfterEffect = bHasAfterEffect; }
 
-    SAL_DLLPRIVATE ::com::sun::star::uno::Any  getDimColor() const { return maDimColor; }
-    SAL_DLLPRIVATE void                        setDimColor( ::com::sun::star::uno::Any aDimColor ) { maDimColor = aDimColor; }
+    SAL_DLLPRIVATE css::uno::Any   getDimColor() const { return maDimColor; }
+    SAL_DLLPRIVATE void            setDimColor( const css::uno::Any& rDimColor ) { maDimColor = rDimColor; }
 
     SAL_DLLPRIVATE bool            IsAfterEffectOnNext() const { return mbAfterEffectOnNextEffect; }
     SAL_DLLPRIVATE void            setAfterEffectOnNext( bool bOnNextEffect ) { mbAfterEffectOnNextEffect = bOnNextEffect; }

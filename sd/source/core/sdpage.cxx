@@ -2070,7 +2070,7 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
     }
 }
 
-SdrObject* convertPresentationObjectImpl( SdPage& rPage, SdrObject* pSourceObj, PresObjKind& eObjKind, bool bVertical, Rectangle aRect )
+SdrObject* convertPresentationObjectImpl(SdPage& rPage, SdrObject* pSourceObj, PresObjKind& eObjKind, bool bVertical, const Rectangle& rRect)
 {
     SdDrawDocument* pModel = static_cast< SdDrawDocument* >( rPage.GetModel() );
     DBG_ASSERT( pModel, "sd::convertPresentationObjectImpl(), no model on page!" );
@@ -2083,7 +2083,7 @@ SdrObject* convertPresentationObjectImpl( SdPage& rPage, SdrObject* pSourceObj, 
     SdrObject* pNewObj = pSourceObj;
     if((eObjKind == PRESOBJ_OUTLINE) && (pSourceObj->GetObjIdentifier() == OBJ_TEXT) )
     {
-        pNewObj = rPage.CreatePresObj(PRESOBJ_OUTLINE, bVertical, aRect);
+        pNewObj = rPage.CreatePresObj(PRESOBJ_OUTLINE, bVertical, rRect);
 
         // Set text of the subtitle into PRESOBJ_OUTLINE
         OutlinerParaObject* pOutlParaObj = pSourceObj->GetOutlinerParaObject();
@@ -2141,7 +2141,7 @@ SdrObject* convertPresentationObjectImpl( SdPage& rPage, SdrObject* pSourceObj, 
     else if((eObjKind == PRESOBJ_TEXT) && (pSourceObj->GetObjIdentifier() == OBJ_OUTLINETEXT) )
     {
         // is there an outline shape we can use to replace empty subtitle shape?
-        pNewObj = rPage.CreatePresObj(PRESOBJ_TEXT, bVertical, aRect);
+        pNewObj = rPage.CreatePresObj(PRESOBJ_TEXT, bVertical, rRect);
 
         // Set text of the outline object into PRESOBJ_TITLE
         OutlinerParaObject* pOutlParaObj = pSourceObj->GetOutlinerParaObject();
@@ -2206,27 +2206,27 @@ SdrObject* convertPresentationObjectImpl( SdPage& rPage, SdrObject* pSourceObj, 
         looking for an existing presentation shape
     @param  bVertical
         If true, the shape is created vertical if bInit is true
-    @param  aRect
+    @param  rRect
         The rectangle that should be used to transform the shape
     @param  bInit
         If true the shape is created if not found
     @returns
         A presentation shape that was either found or created with the given parameters
 */
-SdrObject* SdPage::InsertAutoLayoutShape( SdrObject* pObj, PresObjKind eObjKind, bool bVertical, Rectangle aRect, bool bInit )
+SdrObject* SdPage::InsertAutoLayoutShape(SdrObject* pObj, PresObjKind eObjKind, bool bVertical, const Rectangle& rRect, bool bInit)
 {
     ::svl::IUndoManager* pUndoManager = static_cast<SdDrawDocument*>(pModel)->GetUndoManager();
     const bool bUndo = pUndoManager && pUndoManager->IsInListAction() && IsInserted();
 
     if (!pObj && bInit)
     {
-        pObj = CreatePresObj(eObjKind, bVertical, aRect);
+        pObj = CreatePresObj(eObjKind, bVertical, rRect);
     }
     else if ( pObj && (pObj->GetUserCall() || bInit) )
     {
         // convert object if shape type does not match kind (f.e. converting outline text to subtitle text)
         if( bInit )
-            pObj = convertPresentationObjectImpl( *this, pObj, eObjKind, bVertical, aRect );
+            pObj = convertPresentationObjectImpl(*this, pObj, eObjKind, bVertical, rRect);
 
         if( bUndo )
         {
@@ -2235,7 +2235,7 @@ SdrObject* SdPage::InsertAutoLayoutShape( SdrObject* pObj, PresObjKind eObjKind,
             pUndoManager->AddUndoAction( new UndoObjectUserCall( *pObj ) );
         }
 
-            ( /*(SdrGrafObj*)*/ pObj)->AdjustToMaxRect( aRect );
+            ( /*(SdrGrafObj*)*/ pObj)->AdjustToMaxRect(rRect);
 
         pObj->SetUserCall(this);
 
@@ -2258,11 +2258,11 @@ SdrObject* SdPage::InsertAutoLayoutShape( SdrObject* pObj, PresObjKind eObjKind,
                 {
                     // switch off AutoGrowHeight, set new MinHeight
                     SfxItemSet aTempAttr( static_cast<SdDrawDocument*>(pModel)->GetPool() );
-                    SdrMetricItem aMinHeight( makeSdrTextMinFrameHeightItem(aRect.GetSize().Height()) );
+                    SdrMetricItem aMinHeight( makeSdrTextMinFrameHeightItem(rRect.GetSize().Height()) );
                     aTempAttr.Put( aMinHeight );
                     aTempAttr.Put( makeSdrTextAutoGrowHeightItem(false) );
                     pTextObject->SetMergedItemSet(aTempAttr);
-                    pTextObject->SetLogicRect(aRect);
+                    pTextObject->SetLogicRect(rRect);
 
                     // switch on AutoGrowHeight
                     SfxItemSet aAttr( static_cast<SdDrawDocument*>(pModel)->GetPool() );
@@ -2275,11 +2275,11 @@ SdrObject* SdPage::InsertAutoLayoutShape( SdrObject* pObj, PresObjKind eObjKind,
                 {
                     // switch off AutoGrowWidth , set new MinWidth
                     SfxItemSet aTempAttr( static_cast<SdDrawDocument*>(pModel)->GetPool() );
-                    SdrMetricItem aMinWidth( makeSdrTextMinFrameWidthItem(aRect.GetSize().Width()) );
+                    SdrMetricItem aMinWidth( makeSdrTextMinFrameWidthItem(rRect.GetSize().Width()) );
                     aTempAttr.Put( aMinWidth );
                     aTempAttr.Put( makeSdrTextAutoGrowWidthItem(false) );
                     pTextObject->SetMergedItemSet(aTempAttr);
-                    pTextObject->SetLogicRect(aRect);
+                    pTextObject->SetLogicRect(rRect);
 
                     // switch on AutoGrowWidth
                     SfxItemSet aAttr( static_cast<SdDrawDocument*>(pModel)->GetPool() );
@@ -2316,7 +2316,7 @@ SdrObject* SdPage::InsertAutoLayoutShape( SdrObject* pObj, PresObjKind eObjKind,
     }
 
     if ( pObj && (pObj->GetUserCall() || bInit) && ( pObj->IsEmptyPresObj() || !pObj->ISA(SdrGrafObj) ) )
-        pObj->AdjustToMaxRect( aRect );
+        pObj->AdjustToMaxRect(rRect);
 
     return pObj;
 }

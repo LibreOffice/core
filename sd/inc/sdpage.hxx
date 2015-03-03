@@ -200,7 +200,7 @@ public:
     void            SetAutoLayout(AutoLayout eLayout, bool bInit=false, bool bCreate=false);
     AutoLayout      GetAutoLayout() const { return meAutoLayout; }
     void            CreateTitleAndLayout(bool bInit=false, bool bCreate=false);
-    SdrObject*      InsertAutoLayoutShape(SdrObject* pObj, PresObjKind eObjKind, bool bVertical, Rectangle aRect, bool bInit );
+    SdrObject*      InsertAutoLayoutShape(SdrObject* pObj, PresObjKind eObjKind, bool bVertical, const Rectangle& rRect, bool bInit);
 
     virtual void       NbcInsertObject(SdrObject* pObj, size_t nPos=SAL_MAX_SIZE,
                                        const SdrInsertReason* pReason=NULL) SAL_OVERRIDE;

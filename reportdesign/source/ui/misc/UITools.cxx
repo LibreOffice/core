@@ -831,14 +831,13 @@ void applyCharacterSettings( const uno::Reference< report::XReportControlFormat 
     }
 }
 
-
-void notifySystemWindow(vcl::Window* _pWindow, vcl::Window* _pToRegister, ::comphelper::mem_fun1_t<TaskPaneList,vcl::Window*> _rMemFunc)
+void notifySystemWindow(vcl::Window* _pWindow, vcl::Window* _pToRegister, const ::comphelper::mem_fun1_t<TaskPaneList,vcl::Window*>& rMemFunc)
 {
     OSL_ENSURE(_pWindow,"Window can not be null!");
     SystemWindow* pSystemWindow = _pWindow ? _pWindow->GetSystemWindow() : NULL;
     if ( pSystemWindow )
     {
-        _rMemFunc( pSystemWindow->GetTaskPaneList(), _pToRegister );
+        rMemFunc( pSystemWindow->GetTaskPaneList(), _pToRegister );
     }
 }
 

@@ -166,7 +166,7 @@ private:
             bool bYError);
 
     void exportAxes( );
-    void exportAxis( AxisIdPair aAxisIdPair );
+    void exportAxis(const AxisIdPair& rAxisIdPair);
     void _exportAxis(
         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xAxisProp,
         const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xAxisTitle,
@@ -174,7 +174,7 @@ private:
         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xMinorGrid,
         sal_Int32 nAxisType,
         const char* sAxisPos,
-        AxisIdPair aAxisIdPair );
+        const AxisIdPair& rAxisIdPair );
     void exportAxesId( sal_Int32 nAttachedAxis );
     void exportView3D();
     bool isDeep3dChart();

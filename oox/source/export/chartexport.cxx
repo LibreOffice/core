@@ -2096,7 +2096,7 @@ void ChartExport::exportAxes( )
     }
 }
 
-void ChartExport::exportAxis( AxisIdPair aAxisIdPair )
+void ChartExport::exportAxis(const AxisIdPair& rAxisIdPair)
 {
     // get some properties from document first
     bool bHasXAxisTitle = false,
@@ -2145,7 +2145,7 @@ void ChartExport::exportAxis( AxisIdPair aAxisIdPair )
     sal_Int32 nAxisType = XML_catAx;
     const char* sAxPos = NULL;
 
-    switch( aAxisIdPair.nAxisType )
+    switch( rAxisIdPair.nAxisType )
     {
         case AXIS_PRIMARY_X:
         {
@@ -2226,7 +2226,7 @@ void ChartExport::exportAxis( AxisIdPair aAxisIdPair )
         }
     }
 
-    _exportAxis( xAxisProp, xAxisTitle, xMajorGrid, xMinorGrid, nAxisType, sAxPos, aAxisIdPair );
+    _exportAxis(xAxisProp, xAxisTitle, xMajorGrid, xMinorGrid, nAxisType, sAxPos, rAxisIdPair);
 }
 
 void ChartExport::_exportAxis(
@@ -2236,13 +2236,13 @@ void ChartExport::_exportAxis(
     const Reference< XPropertySet >& xMinorGrid,
     sal_Int32 nAxisType,
     const char* sAxisPos,
-    AxisIdPair aAxisIdPair )
+    const AxisIdPair& rAxisIdPair )
 {
     FSHelperPtr pFS = GetFS();
     pFS->startElement( FSNS( XML_c, nAxisType ),
             FSEND );
     pFS->singleElement( FSNS( XML_c, XML_axId ),
-            XML_val, I32S( aAxisIdPair.nAxisId ),
+            XML_val, I32S( rAxisIdPair.nAxisId ),
             FSEND );
 
     pFS->startElement( FSNS( XML_c, XML_scaling ),
@@ -2414,7 +2414,7 @@ void ChartExport::_exportAxis(
     exportShapeProps( xAxisProp );
 
     pFS->singleElement( FSNS( XML_c, XML_crossAx ),
-            XML_val, I32S( aAxisIdPair.nCrossAx ),
+            XML_val, I32S( rAxisIdPair.nCrossAx ),
             FSEND );
 
     // crosses & crossesAt

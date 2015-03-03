@@ -962,7 +962,7 @@ RowPropertyValuesSeq_t DomainMapperTableHandler::endTableGetRowProperties()
 
 // Apply paragraph property to each paragraph within a cell.
 static void lcl_ApplyCellParaProps(uno::Reference<table::XCell> const& xCell,
-        uno::Any aBottomMargin)
+        const uno::Any& rBottomMargin)
 {
     uno::Reference<container::XEnumerationAccess> xEnumerationAccess(xCell, uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xEnumeration = xEnumerationAccess->createEnumeration();
@@ -973,7 +973,7 @@ static void lcl_ApplyCellParaProps(uno::Reference<table::XCell> const& xCell,
         // Don't apply in case direct formatting is already present.
         // TODO: probably paragraph style has priority over table style here.
         if (xPropertyState.is() && xPropertyState->getPropertyState("ParaBottomMargin") == beans::PropertyState_DEFAULT_VALUE)
-            xParagraph->setPropertyValue("ParaBottomMargin", aBottomMargin);
+            xParagraph->setPropertyValue("ParaBottomMargin", rBottomMargin);
     }
 }
 

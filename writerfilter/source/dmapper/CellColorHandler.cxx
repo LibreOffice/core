@@ -284,14 +284,14 @@ TablePropertyMapPtr  CellColorHandler::getProperties()
     return pPropertyMap;
 }
 
-void CellColorHandler::createGrabBag(const OUString& aName, uno::Any aAny)
+void CellColorHandler::createGrabBag(const OUString& aName, const uno::Any& rAny)
 {
     if (m_aInteropGrabBagName.isEmpty())
         return;
 
     beans::PropertyValue aValue;
     aValue.Name = aName;
-    aValue.Value = aAny;
+    aValue.Value = rAny;
     m_aInteropGrabBag.push_back(aValue);
 }
 

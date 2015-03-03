@@ -1723,11 +1723,12 @@ void OpenGL3DRenderer::RenderExtrude3DObject()
 
 void OpenGL3DRenderer::CreateScreenTextTexture(
         const boost::shared_array<sal_uInt8> &bitmapBuf,
-        ::Size maSizePixels, const glm::vec2& vTopLeft,
-        const glm::vec2& vBottomRight, glm::vec3 vPos, glm::vec4 vScreenTextColor, sal_uInt32 nUniqueId)
+        const ::Size& rSizePixels, const glm::vec2& vTopLeft,
+        const glm::vec2& vBottomRight, const glm::vec3& vPos,
+        const glm::vec4& vScreenTextColor, sal_uInt32 nUniqueId)
 {
-    long bmpWidth = maSizePixels.Width();
-    long bmpHeight = maSizePixels.Height();
+    long bmpWidth = rSizePixels.Width();
+    long bmpHeight = rSizePixels.Height();
 
     TextInfo aTextInfo;
     aTextInfo.id = getColorAsVector(nUniqueId);
@@ -1772,13 +1773,13 @@ void OpenGL3DRenderer::CreateScreenTextTexture(
 }
 
 void OpenGL3DRenderer::CreateTextTextureSingle(const boost::shared_array<sal_uInt8> &bitmapBuf,
-                           ::Size maSizePixels,
-                           glm::vec3 vTopLeft,glm::vec3 vTopRight,
-                           glm::vec3 vBottomRight, glm::vec3 vBottomLeft,
+                           const ::Size& rSizePixels,
+                           const glm::vec3& vTopLeft, const glm::vec3& vTopRight,
+                           const glm::vec3& vBottomRight, const glm::vec3& vBottomLeft,
                            sal_uInt32 nUniqueId)
 {
-    long bmpWidth = maSizePixels.Width();
-    long bmpHeight = maSizePixels.Height();
+    long bmpWidth = rSizePixels.Width();
+    long bmpHeight = rSizePixels.Height();
 
     TextInfo aTextInfo;
     aTextInfo.id = getColorAsVector(nUniqueId);
@@ -1817,13 +1818,13 @@ void OpenGL3DRenderer::CreateTextTextureSingle(const boost::shared_array<sal_uIn
 }
 
 void OpenGL3DRenderer::CreateTextTextureBatch(const boost::shared_array<sal_uInt8> &bitmapBuf,
-                   ::Size maSizePixels,
-                   glm::vec3 vTopLeft,glm::vec3 vTopRight,
-                   glm::vec3 vBottomRight, glm::vec3 vBottomLeft,
+                   const ::Size& rSizePixels,
+                   const glm::vec3& vTopLeft, const glm::vec3& vTopRight,
+                   const glm::vec3& vBottomRight, const glm::vec3& vBottomLeft,
                    sal_uInt32 nUniqueId)
 {
-    long bmpWidth = maSizePixels.Width();
-    long bmpHeight = maSizePixels.Height();
+    long bmpWidth = rSizePixels.Width();
+    long bmpHeight = rSizePixels.Height();
     glm::vec4 id = getColorAsVector(nUniqueId);
     m_TextInfoBatch.idList.push_back(id);
     m_TextInfoBatch.vertexList.push_back(glm::vec3(vBottomRight.x, vBottomRight.y, vBottomRight.z));
@@ -1885,18 +1886,18 @@ void OpenGL3DRenderer::CreateTextTextureBatch(const boost::shared_array<sal_uInt
 }
 
 void OpenGL3DRenderer::CreateTextTexture(const boost::shared_array<sal_uInt8> &bitmapBuf,
-                                         ::Size maSizePixels,
+                                         const ::Size& rSizePixels,
                                          const glm::vec3& vTopLeft, const glm::vec3& vTopRight,
                                          const glm::vec3& vBottomRight, const glm::vec3& vBottomLeft,
                                          sal_uInt32 nUniqueId)
 {
     if (maResources.mbTexBatchSupport)
     {
-        CreateTextTextureBatch(bitmapBuf, maSizePixels, vTopLeft, vTopRight, vBottomRight, vBottomLeft, nUniqueId);
+        CreateTextTextureBatch(bitmapBuf, rSizePixels, vTopLeft, vTopRight, vBottomRight, vBottomLeft, nUniqueId);
     }
     else
     {
-        CreateTextTextureSingle(bitmapBuf, maSizePixels, vTopLeft, vTopRight, vBottomRight, vBottomLeft, nUniqueId);
+        CreateTextTextureSingle(bitmapBuf, rSizePixels, vTopLeft, vTopRight, vBottomRight, vBottomLeft, nUniqueId);
     }
 }
 

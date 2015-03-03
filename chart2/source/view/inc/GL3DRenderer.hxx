@@ -194,13 +194,14 @@ public:
     void SetSize(const Size& rSize);
     void SetCameraInfo(const glm::vec3& pos, const glm::vec3& direction, const glm::vec3& up);
     void CreateTextTexture(const boost::shared_array<sal_uInt8> &bitmapBuf,
-                           ::Size maSizePixels,
+                           const ::Size& rSizePixels,
                            const glm::vec3& vTopLeft, const glm::vec3& vTopRight,
                            const glm::vec3& vBottomRight, const glm::vec3& vBottomLeft,
                            sal_uInt32 nUniqueId);
     void CreateScreenTextTexture(const boost::shared_array<sal_uInt8> &bitmapBuf,
-                                 ::Size maSizePixels, const glm::vec2& vTopLeft,
-                                 const glm::vec2& vBottomRight, glm::vec3 vPos, glm::vec4 vScreenTextColor, sal_uInt32 nUniqueId);
+                                 const ::Size& rSizePixels, const glm::vec2& vTopLeft,
+                                 const glm::vec2& vBottomRight, const glm::vec3& vPos, const glm::vec4& vScreenTextColor,
+                                 sal_uInt32 nUniqueId);
     void ProcessUnrenderedShape(bool bNewScene);
 
     void SetPickingMode(bool bPickingMode);
@@ -274,14 +275,14 @@ private:
     void RenderTextShapeBatch();
     void ReleaseTextShapesBatch();
     void CreateTextTextureSingle(const boost::shared_array<sal_uInt8> &bitmapBuf,
-                           ::Size maSizePixels,
-                           glm::vec3 vTopLeft,glm::vec3 vTopRight,
-                           glm::vec3 vBottomRight, glm::vec3 vBottomLeft,
+                           const ::Size& rSizePixels,
+                           const glm::vec3& vTopLeft, const glm::vec3& vTopRight,
+                           const glm::vec3& vBottomRight, const glm::vec3& vBottomLeft,
                            sal_uInt32 nUniqueId);
     void CreateTextTextureBatch(const boost::shared_array<sal_uInt8> &bitmapBuf,
-                       ::Size maSizePixels,
-                       glm::vec3 vTopLeft,glm::vec3 vTopRight,
-                       glm::vec3 vBottomRight, glm::vec3 vBottomLeft,
+                       const ::Size& rSizePixels,
+                       const glm::vec3& vTopLeft, const glm::vec3& vTopRight,
+                       const glm::vec3& vBottomRight, const glm::vec3& vBottomLeft,
                        sal_uInt32 nUniqueId);
     void SetHighLightBar(BatchBarInfo &barInfo);
     void DisableHighLightBar(BatchBarInfo &barInfo);

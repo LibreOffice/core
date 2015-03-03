@@ -704,16 +704,16 @@ void PowerPointExport::WriteAnimateValues( FSHelperPtr pFS, const Reference< XAn
     pFS->endElementNS( XML_p, XML_tavLst );
 }
 
-void PowerPointExport::WriteAnimateTo( FSHelperPtr pFS, Any aValue, const OUString& rAttributeName )
+void PowerPointExport::WriteAnimateTo( FSHelperPtr pFS, const Any& rValue, const OUString& rAttributeName )
 {
-    if( !aValue.hasValue() )
+    if( !rValue.hasValue() )
         return;
 
     DBG(printf("to attribute name: %s\n", USS( rAttributeName )));
 
     pFS->startElementNS( XML_p, XML_to, FSEND );
 
-    WriteAnimationProperty( pFS, AnimationExporter::convertAnimateValue( aValue, rAttributeName ) );
+    WriteAnimationProperty(pFS, AnimationExporter::convertAnimateValue(rValue, rAttributeName));
 
     pFS->endElementNS( XML_p, XML_to );
 }
@@ -743,11 +743,11 @@ void PowerPointExport::WriteAnimationAttributeName( FSHelperPtr pFS, const OUStr
     pFS->endElementNS( XML_p, XML_attrNameLst );
 }
 
-void PowerPointExport::WriteAnimationTarget( FSHelperPtr pFS, Any aTarget )
+void PowerPointExport::WriteAnimationTarget( FSHelperPtr pFS, const Any& rTarget )
 {
     sal_Int32 nBegin = -1, nEnd = -1;
     bool bParagraphTarget;
-    Reference< XShape > rXShape = AnimationExporter::getTargetElementShape( aTarget, nBegin, nEnd, bParagraphTarget );
+    Reference< XShape > rXShape = AnimationExporter::getTargetElementShape( rTarget, nBegin, nEnd, bParagraphTarget );
 
     if( rXShape.is() ) {
     pFS->startElementNS( XML_p, XML_tgtEl, FSEND );

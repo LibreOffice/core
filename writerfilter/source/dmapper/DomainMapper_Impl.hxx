@@ -768,7 +768,7 @@ public:
      on another one that comes in the same CONTEXT_CHARACTER). The property will be processed
      again in DomainMapper::processDeferredCharacterProperties().
     */
-    void deferCharacterProperty( sal_Int32 id, com::sun::star::uno::Any value );
+    void deferCharacterProperty(sal_Int32 id, const css::uno::Any& value);
     /**
      Processes properties deferred using deferCharacterProperty(). To be called whenever the top
      CONTEXT_CHARACTER is going to be used (e.g. by appendText()).

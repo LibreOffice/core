@@ -187,7 +187,7 @@ private:
     void startIntrinsicAnimations();
 
     /// Add Polygons to the member maPolygons
-    void addPolygons(PolyPolygonVector aPolygons);
+    void addPolygons(const PolyPolygonVector& rPolygons);
 
     // Types
     // =====
@@ -874,12 +874,12 @@ void SlideImpl::drawPolygons() const
         mpPaintOverlay->drawPolygons();
 }
 
-void SlideImpl::addPolygons(PolyPolygonVector aPolygons)
+void SlideImpl::addPolygons(const PolyPolygonVector& rPolygons)
 {
-    if(!aPolygons.empty())
+    if(!rPolygons.empty())
     {
-        for( PolyPolygonVector::iterator aIter=aPolygons.begin(),
-                 aEnd=aPolygons.end();
+        for( PolyPolygonVector::const_iterator aIter = rPolygons.begin(),
+                 aEnd = rPolygons.end();
              aIter!=aEnd;
              ++aIter )
         {

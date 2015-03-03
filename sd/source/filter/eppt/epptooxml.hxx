@@ -100,7 +100,7 @@ protected:
     virtual ::oox::ole::VbaProject* implCreateVbaProject() const SAL_OVERRIDE;
     bool WriteNotesMaster();
 
-    void WriteAnimateTo( ::sax_fastparser::FSHelperPtr pFS, const ::com::sun::star::uno::Any aValue, const OUString& rAttributeName );
+    void WriteAnimateTo( ::sax_fastparser::FSHelperPtr pFS, const css::uno::Any& rValue, const OUString& rAttributeName );
     void WriteAnimateValues( ::sax_fastparser::FSHelperPtr pFS, const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimate >& rXAnimate );
     void WriteAnimationCondition( ::sax_fastparser::FSHelperPtr pFS, ::com::sun::star::uno::Any& rAny, bool bWriteEvent, bool bMainSeqChild );
     void WriteAnimationCondition( ::sax_fastparser::FSHelperPtr pFS, const char* pDelay, const char* pEvent, double fDelay, bool bHasFDelay );
@@ -113,7 +113,7 @@ protected:
     void WriteAnimationNodeEffect( ::sax_fastparser::FSHelperPtr pFS, const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& rXNode, sal_Int32 nXmlNodeType, bool bMainSeqChild );
     void WriteAnimationNodeCommonPropsStart( ::sax_fastparser::FSHelperPtr pFS, const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& rXNode, bool bSingle, bool bMainSeqChild );
     void WriteAnimationProperty( ::sax_fastparser::FSHelperPtr pFS, const ::com::sun::star::uno::Any& rAny );
-    void WriteAnimationTarget( ::sax_fastparser::FSHelperPtr pFS, ::com::sun::star::uno::Any aTarget );
+    void WriteAnimationTarget( ::sax_fastparser::FSHelperPtr pFS, const css::uno::Any& rTarget );
     bool WriteComments( sal_uInt32 nPageNum );
     void ImplWriteBackground( ::sax_fastparser::FSHelperPtr pFS, ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > aXBackgroundPropSet );
     void WriteTransition( ::sax_fastparser::FSHelperPtr pFS );

@@ -70,7 +70,7 @@ namespace pcr
                                                     bool
                                                 >
     {
-        bool operator() (::com::sun::star::beans::Property _rLhs, ::com::sun::star::beans::Property _rRhs) const
+        bool operator() (const css::beans::Property& _rLhs, const css::beans::Property& _rRhs) const
         {
             return _rLhs.Name < _rRhs.Name;
         }
@@ -83,7 +83,7 @@ namespace pcr
                                                     bool
                                                 >
     {
-        bool operator() (::com::sun::star::uno::Type _rLhs, ::com::sun::star::uno::Type _rRhs) const
+        bool operator() (const css::uno::Type& _rLhs, const css::uno::Type& _rRhs) const
         {
             return _rLhs.getTypeName() < _rRhs.getTypeName();
         }

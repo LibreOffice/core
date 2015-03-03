@@ -261,9 +261,9 @@ void ImpEditEngine::InitDoc(bool bKeepParaAttribs)
         aEditDoc.GetObject( 0 )->CreateWrongList();
 }
 
-EditPaM ImpEditEngine::DeleteSelected( EditSelection aSel )
+EditPaM ImpEditEngine::DeleteSelected(const EditSelection& rSel)
 {
-    EditPaM aPaM ( ImpDeleteSelection( aSel ) );
+    EditPaM aPaM (ImpDeleteSelection(rSel));
     return aPaM;
 }
 
@@ -2881,9 +2881,9 @@ EditPaM ImpEditEngine::ImpFastInsertParagraph( sal_Int32 nPara )
     return EditPaM( pNode, 0 );
 }
 
-EditPaM ImpEditEngine::InsertParaBreak( EditSelection aCurSel )
+EditPaM ImpEditEngine::InsertParaBreak(const EditSelection& rCurSel)
 {
-    EditPaM aPaM( ImpInsertParaBreak( aCurSel ) );
+    EditPaM aPaM(ImpInsertParaBreak(rCurSel));
     if ( aStatus.DoAutoIndenting() )
     {
         sal_Int32 nPara = aEditDoc.GetPos( aPaM.GetNode() );
@@ -2904,9 +2904,9 @@ EditPaM ImpEditEngine::InsertParaBreak( EditSelection aCurSel )
     return aPaM;
 }
 
-EditPaM ImpEditEngine::InsertTab( EditSelection aCurSel )
+EditPaM ImpEditEngine::InsertTab(const EditSelection& rCurSel)
 {
-    EditPaM aPaM( ImpInsertFeature( aCurSel, SfxVoidItem( EE_FEATURE_TAB ) ) );
+    EditPaM aPaM( ImpInsertFeature(rCurSel, SfxVoidItem(EE_FEATURE_TAB )));
     return aPaM;
 }
 

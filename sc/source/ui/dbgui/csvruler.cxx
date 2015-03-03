@@ -32,7 +32,7 @@ using namespace com::sun::star::uno;
 #define SEP_PATH            "Office.Calc/Dialogs/CSVImport"
 #define FIXED_WIDTH_LIST    "FixedWidthList"
 
-static void load_FixedWidthList(ScCsvSplits &aSplits)
+static void load_FixedWidthList(ScCsvSplits &rSplits)
 {
     OUString sSplits;
     OUString sFixedWidthLists;
@@ -49,7 +49,7 @@ static void load_FixedWidthList(ScCsvSplits &aSplits)
 
     if( pProperties[0].hasValue() )
     {
-        aSplits.Clear();
+        rSplits.Clear();
         pProperties[0] >>= sFixedWidthLists;
 
         sSplits = sFixedWidthLists;
@@ -57,17 +57,17 @@ static void load_FixedWidthList(ScCsvSplits &aSplits)
         // String ends with a semi-colon so there is no 'int' after the last one.
         sal_Int32 n = comphelper::string::getTokenCount(sSplits, ';') - 1;
         for (sal_Int32 i = 0; i < n; ++i)
-            aSplits.Insert( sSplits.getToken(i, ';').toInt32() );
+            rSplits.Insert( sSplits.getToken(i, ';').toInt32() );
     }
 }
-static void save_FixedWidthList(ScCsvSplits aSplits)
+static void save_FixedWidthList(const ScCsvSplits& rSplits)
 {
     OUStringBuffer sSplits;
     // Create a semi-colon separated string to save the splits
-    sal_uInt32 n = aSplits.Count();
+    sal_uInt32 n = rSplits.Count();
     for (sal_uInt32 i = 0; i < n; ++i)
     {
-        sSplits.append( OUString::number( aSplits[i] ) );
+        sSplits.append(OUString::number(rSplits[i]));
         sSplits.append(";");
     }
 

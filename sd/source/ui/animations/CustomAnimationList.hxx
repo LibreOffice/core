@@ -63,7 +63,7 @@ public:
     EffectSequence getSelection() const;
 
     // events
-    void onSelectionChanged( ::com::sun::star::uno::Any aSelection );
+    void onSelectionChanged(const css::uno::Any& rSelection);
 
     // overrides
     virtual void    SelectHdl() SAL_OVERRIDE;

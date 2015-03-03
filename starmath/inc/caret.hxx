@@ -61,13 +61,13 @@ public:
     long GetTop() const {return _top;}
     long GetLeft() const {return _left;}
     long GetHeight() const {return _height;}
-    long SquaredDistanceX(SmCaretLine line) const{
+    long SquaredDistanceX(const SmCaretLine& line) const{
         return (GetLeft() - line.GetLeft()) * (GetLeft() - line.GetLeft());
     }
     long SquaredDistanceX(Point pos) const{
         return (GetLeft() - pos.X()) * (GetLeft() - pos.X());
     }
-    long SquaredDistanceY(SmCaretLine line) const{
+    long SquaredDistanceY(const SmCaretLine& line) const{
         long d = GetTop() - line.GetTop();
         if(d < 0)
             d = (d * -1) - GetHeight();

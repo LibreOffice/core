@@ -40,7 +40,7 @@ public:
     void      setTemplate(const char* aTemplate);
     const OUString& getTemplate();
 
-    void      autoReplaceRange(const OUString& aVariable, ScRange aRange);
+    void      autoReplaceRange(const OUString& aVariable, const ScRange& rRange);
     void      autoReplaceAddress(const OUString& aVariable, ScAddress aAddress);
 
     void      applyRange(const OUString& aVariable, const ScRange& aRange, bool b3D = true);

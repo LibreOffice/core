@@ -226,7 +226,7 @@ ScVbaShapes::createShape( const OUString& service ) throw (css::uno::RuntimeExce
 }
 
 uno::Any
-ScVbaShapes::AddRectangle( sal_Int32 startX, sal_Int32 startY, sal_Int32 nLineWidth, sal_Int32 nLineHeight, uno::Any aRange ) throw (css::uno::RuntimeException)
+ScVbaShapes::AddRectangle(sal_Int32 startX, sal_Int32 startY, sal_Int32 nLineWidth, sal_Int32 nLineHeight, const uno::Any& rRange) throw (css::uno::RuntimeException)
 {
     OUString sCreateShapeName( "com.sun.star.drawing.RectangleShape" );
     sal_Int32 nXPos = Millimeter::getInHundredthsOfOneMillimeter( startX );
@@ -253,12 +253,12 @@ ScVbaShapes::AddRectangle( sal_Int32 startX, sal_Int32 startY, sal_Int32 nLineWi
     xShape->setSize( size );
 
     ScVbaShape *pScVbaShape = new ScVbaShape( getParent(), mxContext, xShape, m_xShapes, m_xModel, ScVbaShape::getType( xShape ) );
-    pScVbaShape->setRange( aRange );
+    pScVbaShape->setRange(rRange);
     return uno::makeAny( uno::Reference< msforms::XShape > ( pScVbaShape ) );
 }
 
 uno::Any
-ScVbaShapes::AddEllipse( sal_Int32 startX, sal_Int32 startY, sal_Int32 nLineWidth, sal_Int32 nLineHeight, uno::Any aRange ) throw (css::uno::RuntimeException)
+ScVbaShapes::AddEllipse(sal_Int32 startX, sal_Int32 startY, sal_Int32 nLineWidth, sal_Int32 nLineHeight, const uno::Any& rRange) throw (css::uno::RuntimeException)
 {
     OUString sCreateShapeName( "com.sun.star.drawing.EllipseShape" );
     sal_Int32 nXPos = Millimeter::getInHundredthsOfOneMillimeter( startX );
@@ -297,7 +297,7 @@ ScVbaShapes::AddEllipse( sal_Int32 startX, sal_Int32 startY, sal_Int32 nLineWidt
     xShape->setSize(size);
 
     ScVbaShape *pScVbaShape = new ScVbaShape( getParent(), mxContext, xShape, m_xShapes, m_xModel, ScVbaShape::getType( xShape ) );
-    pScVbaShape->setRange( aRange );
+    pScVbaShape->setRange(rRange);
     return uno::makeAny( uno::Reference< msforms::XShape > ( pScVbaShape ) );
 }
 

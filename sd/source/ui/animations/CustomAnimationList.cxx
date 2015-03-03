@@ -756,15 +756,15 @@ void selectShape( SvTreeListBox* pTreeList, Reference< XShape > xShape )
     }
 }
 
-void CustomAnimationList::onSelectionChanged( Any aSelection )
+void CustomAnimationList::onSelectionChanged(const Any& rSelection)
 {
     try
     {
         SelectAll(false);
 
-        if( aSelection.hasValue() )
+        if (rSelection.hasValue())
         {
-            Reference< XIndexAccess > xShapes( aSelection, UNO_QUERY );
+            Reference< XIndexAccess > xShapes(rSelection, UNO_QUERY);
             if( xShapes.is() )
             {
                 sal_Int32 nCount = xShapes->getCount();
@@ -778,7 +778,7 @@ void CustomAnimationList::onSelectionChanged( Any aSelection )
             }
             else
             {
-                Reference< XShape > xShape( aSelection, UNO_QUERY );
+                Reference< XShape > xShape(rSelection, UNO_QUERY);
                 if( xShape.is() )
                     selectShape( this, xShape );
             }

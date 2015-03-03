@@ -45,9 +45,9 @@ const OUString& FormulaTemplate::getTemplate()
     return mTemplate;
 }
 
-void FormulaTemplate::autoReplaceRange(const OUString& aVariable, ScRange aRange)
+void FormulaTemplate::autoReplaceRange(const OUString& aVariable, const ScRange& rRange)
 {
-    mRangeReplacementMap.insert ( std::pair<OUString, ScRange>(aVariable, aRange) );
+    mRangeReplacementMap.insert ( std::pair<OUString, ScRange>(aVariable, rRange) );
 }
 
 void FormulaTemplate::autoReplaceAddress(const OUString& aVariable, ScAddress aAddress)
