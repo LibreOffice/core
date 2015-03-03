@@ -83,6 +83,7 @@
 #include <vcl/svapp.hxx>
 
 #include <config_orcus.h>
+#include <svtools/grfmgr.hxx>
 
 const char PROP_TYPES[] = "Types";
 const char PROP_NAME[] = "Name";
@@ -272,6 +273,12 @@ void LoadEnv::initializeLoading(const OUString&                                 
     utl::MediaDescriptor::iterator pIt = m_lMediaDescriptor.find(utl::MediaDescriptor::PROP_FILENAME());
     if (pIt != m_lMediaDescriptor.end())
         m_lMediaDescriptor.erase(pIt);
+
+    // skip all images for text only document conversion
+    OUString aFilterOptions;
+    m_lMediaDescriptor[utl::MediaDescriptor::PROP_FILTEROPTIONS()] >>= aFilterOptions;
+    if (aFilterOptions == "SkipImages")
+        GraphicObject::SetSkipImages(true);
 
     // patch the MediaDescriptor, so it fulfil the outside requirements
     // Means especially items like e.g. UI InteractionHandler, Status Indicator,

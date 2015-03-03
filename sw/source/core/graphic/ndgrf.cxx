@@ -452,6 +452,9 @@ Size SwGrfNode::GetTwipSize() const
 
 bool SwGrfNode::ImportGraphic( SvStream& rStrm )
 {
+    if (GraphicObject::IsSkipImages())
+        return false;
+
     Graphic aGraphic;
     const OUString aURL(maGrfObj.GetUserData());
 
