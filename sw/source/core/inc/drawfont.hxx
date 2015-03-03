@@ -31,7 +31,10 @@ class Point;
 class SwWrongList;
 class Size;
 class SwFont;
-namespace vcl { class Font; }
+namespace vcl {
+    class Font;
+    class TextLayoutCache;
+}
 class SwUnderlineFont;
 
 // encapsulates information for drawing text
@@ -42,6 +45,7 @@ class SwDrawTextInfo
     SwViewShell const * pSh;
     const SwScriptInfo* pScriptInfo;
     Point m_aPos;
+    vcl::TextLayoutCache const* m_pCachedVclData;
     OUString m_aText;
     const SwWrongList* pWrong;
     const SwWrongList* pGrammarCheck;
@@ -104,7 +108,9 @@ public:
 
     SwDrawTextInfo( SwViewShell const *pS, OutputDevice &rO, const SwScriptInfo* pSI,
                     const OUString &rSt, sal_Int32 nI, sal_Int32 nL,
-                    sal_uInt16 nW = 0, bool bB = false )
+                    sal_uInt16 nW = 0, bool bB = false,
+                    vcl::TextLayoutCache const*const pCachedVclData = nullptr)
+        : m_pCachedVclData(pCachedVclData)
     {
         pFrm = NULL;
         pSh = pS;
@@ -198,6 +204,11 @@ public:
         OSL_ENSURE( m_bHyph, "DrawTextInfo: Undefined Hyph Position" );
 #endif
         return pHyphPos;
+    }
+
+    vcl::TextLayoutCache const* GetVclCache() const
+    {
+        return m_pCachedVclData;
     }
 
     const OUString &GetText() const
@@ -416,6 +427,7 @@ public:
     void SetText( const OUString &rNew )
     {
         m_aText = rNew;
+        m_pCachedVclData = nullptr; // would any case benefit from save/restore?
     }
 
     void SetWrong( const SwWrongList* pNew )
