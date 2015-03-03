@@ -131,7 +131,7 @@ void dumpMoveProtectAsAttribute(bool bMoveProtect, xmlTextWriterPtr xmlWriter);
 void dumpNameAsAttribute(const OUString& sName, xmlTextWriterPtr xmlWriter);
 void dumpSizeProtectAsAttribute(bool bSizeProtect, xmlTextWriterPtr xmlWriter);
 void dumpHomogenMatrixLine3(com::sun::star::drawing::HomogenMatrixLine3 aLine, xmlTextWriterPtr xmlWriter);
-void dumpTransformationAsElement(com::sun::star::drawing::HomogenMatrix3 aTransformation, xmlTextWriterPtr xmlWriter);
+void dumpTransformationAsElement(com::sun::star::drawing::HomogenMatrix3 const & aTransformation, xmlTextWriterPtr xmlWriter);
 void dumpNavigationOrderAsAttribute(sal_Int32 aNavigationOrder, xmlTextWriterPtr xmlWriter);
 void dumpHyperlinkAsAttribute(const OUString& sHyperlink, xmlTextWriterPtr xmlWriter);
 void dumpInteropGrabBagAsElement(const uno::Sequence< beans::PropertyValue>& aInteropGrabBag, xmlTextWriterPtr xmlWriter);
@@ -1031,7 +1031,7 @@ void dumpHomogenMatrixLine3(drawing::HomogenMatrixLine3 aHomogenMatrixLine3, xml
     xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("column3"), "%f", aHomogenMatrixLine3.Column3);
 }
 
-void dumpTransformationAsElement(drawing::HomogenMatrix3 aTransformation, xmlTextWriterPtr xmlWriter)
+void dumpTransformationAsElement(drawing::HomogenMatrix3 const & aTransformation, xmlTextWriterPtr xmlWriter)
 {
     xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Transformation" ));
     {

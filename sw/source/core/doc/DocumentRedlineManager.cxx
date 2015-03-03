@@ -119,7 +119,7 @@ using namespace com::sun::star;
 
 namespace
 {
-    static inline bool IsPrevPos( const SwPosition rPos1, const SwPosition rPos2 )
+    static inline bool IsPrevPos( const SwPosition & rPos1, const SwPosition & rPos2 )
     {
         const SwCntntNode* pCNd;
         return 0 == rPos2.nContent.GetIndex() &&

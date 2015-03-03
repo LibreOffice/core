@@ -47,7 +47,10 @@ bool PassStuffByRef::VisitFunctionDecl(const FunctionDecl * functionDecl) {
     }
     // only warn on the definition/prototype of the function,
     // not on the function implementation
-    if (functionDecl->isThisDeclarationADefinition() && functionDecl->getPreviousDecl() != nullptr) {
+    if ((functionDecl->isThisDeclarationADefinition()
+         && functionDecl->getPreviousDecl() != nullptr)
+        || functionDecl->isDeleted())
+    {
         return true;
     }
     // only consider base declarations, not overriden ones, or we warn on methods that
@@ -95,7 +98,7 @@ bool PassStuffByRef::VisitLambdaExpr(const LambdaExpr * expr) {
 }
 
 bool PassStuffByRef::isFat(QualType type, std::string * name) {
-    if (!type->isClassType()) {
+    if (!type->isRecordType()) {
         return false;
     }
     *name = type.getUnqualifiedType().getCanonicalType().getAsString();

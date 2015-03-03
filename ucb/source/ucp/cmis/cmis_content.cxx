@@ -169,7 +169,7 @@ namespace
         return aValue;
     }
 
-    libcmis::PropertyPtr lcl_unoToCmisProperty( document::CmisProperty prop )
+    libcmis::PropertyPtr lcl_unoToCmisProperty( document::CmisProperty const & prop )
     {
         libcmis::PropertyTypePtr propertyType( new libcmis::PropertyType( ) );
 
