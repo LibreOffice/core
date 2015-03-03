@@ -284,12 +284,6 @@ protected:
     using Window::GetDropTarget;
     virtual SvTreeListEntry* GetDropTarget( const Point& );
 
-    // Put View-specific data into the Dragserver
-    // Is called at the SourceView (in BeginDrag Handler)
-    void WriteDragServerInfo( const Point&, SvLBoxDDInfo* );
-    // Is called at the TargetView (in Drop Handler)
-    void ReadDragServerInfo( const Point&,SvLBoxDDInfo* );
-
     // Invalidate children on enable/disable
     virtual void StateChanged( StateChangedType eType ) SAL_OVERRIDE;
 
@@ -312,8 +306,6 @@ protected:
     virtual void InitViewData( SvViewDataEntry*, SvTreeListEntry* pEntry ) SAL_OVERRIDE;
     // Calls InitViewData for all Items
     void            RecalcViewData();
-    // Callback of RecalcViewData
-    void    ViewDataInitialized( SvTreeListEntry* );
 
     // Handler and methods for Drag - finished handler. This link can be set
     // to the TransferDataContainer. The AddBox/RemoveBox methods must be
@@ -466,7 +458,6 @@ public:
 
     SvTreeListBox*         GetSourceView() const;
 
-    void    NotifyRemoving( SvTreeListEntry* );
     virtual SvTreeListEntry* CloneEntry( SvTreeListEntry* pSource );
     virtual SvTreeListEntry* CreateEntry() const; // To create new Entries
 
@@ -559,18 +550,11 @@ protected:
 
     virtual void InitEntry(SvTreeListEntry*, const OUString&, const Image&, const Image&, SvLBoxButtonKind);
 
-    void    NotifyBeginScroll();
     virtual void    NotifyEndScroll();
-    // nLines == 0 => horizontal Scrolling
-    void            NotifyScrolling( long nLines );
     virtual void    NotifyScrolled();
     void            SetScrolledHdl( const Link& rLink ) { aScrolledHdl = rLink; }
     const Link&     GetScrolledHdl() const { return aScrolledHdl; }
     long            GetXOffset() const { return GetMapMode().GetOrigin().X(); }
-
-    // Is called _before_ Areas in the Control are invalidated.
-    // This can be used to hide Elements which are painted from outside into the Control
-    void    NotifyInvalidating();
 
     virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
 
@@ -748,7 +732,6 @@ public:
                         SvTreeListEntry* pEntry2, sal_uLong nPos ) SAL_OVERRIDE;
 
     void            EndSelection();
-    void            RepaintScrollBars() const;
     ScrollBar*      GetVScroll();
     ScrollBar*      GetHScroll();
     void            EnableAsyncDrag( bool b );

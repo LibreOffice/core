@@ -311,7 +311,7 @@ class SvxIconChoiceCtrl_Impl
                         }
     void                DocRectChanged() { aDocRectChangedIdle.Start(); }
     void                VisRectChanged() { aVisRectChangedIdle.Start(); }
-    void                SetOrigin( const Point&, bool bDoNotUpdateWallpaper = false );
+    void                SetOrigin( const Point& );
 
                         DECL_LINK(TextEditEndedHdl, void *);
 

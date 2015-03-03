@@ -57,7 +57,6 @@ public:
     void        SetAutoDetectSystemHC(bool bSet);
 
     bool        IsModified() const;
-    void        Commit();
 
     //SfxListener:
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;

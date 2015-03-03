@@ -109,7 +109,7 @@ IMPL_LINK( ScrollableWindow, EndScrollHdl, ScrollBar *, pScroll )
 {
     // notify the start of scrolling, if not already scrolling
     if ( !bScrolling )
-        StartScroll(), bScrolling = true;
+        bScrolling = true;
 
     // get the delta in logic coordinates
     Size aDelta( PixelToLogic( Size( aHScroll.GetDelta(), aVScroll.GetDelta() ) ) );
@@ -125,7 +125,6 @@ IMPL_LINK( ScrollableWindow, EndScrollHdl, ScrollBar *, pScroll )
 
     // notify the end of scrolling
     bScrolling = false;
-    EndScroll( aDelta.Width(), aDelta.Height() );
     return 0;
 }
 
@@ -135,7 +134,7 @@ IMPL_LINK( ScrollableWindow, ScrollHdl, ScrollBar *, pScroll )
 {
     // notify the start of scrolling, if not already scrolling
     if ( !bScrolling )
-        StartScroll(), bScrolling = true;
+        bScrolling = true;
 
     if ( bHandleDragging )
     {
@@ -276,18 +275,6 @@ void ScrollableWindow::Resize()
 
 
 
-void ScrollableWindow::StartScroll()
-{
-}
-
-
-
-void ScrollableWindow::EndScroll( long, long )
-{
-}
-
-
-
 void ScrollableWindow::SetMapMode( const MapMode& rNewMapMode )
 {
     MapMode aMap( rNewMapMode );
@@ -316,9 +303,6 @@ void ScrollableWindow::SetTotalSize( const Size& rNewSize )
 
 void ScrollableWindow::Scroll( long nDeltaX, long nDeltaY, sal_uInt16 )
 {
-    if ( !bScrolling )
-        StartScroll();
-
     // get the delta in pixel
     Size aDeltaPix( LogicToPixel( Size(nDeltaX, nDeltaY) ) );
     Size aOutPixSz( GetOutputSizePixel() );
@@ -381,7 +365,6 @@ void ScrollableWindow::Scroll( long nDeltaX, long nDeltaY, sal_uInt16 )
 
     if ( !bScrolling )
     {
-        EndScroll( nDeltaX, nDeltaY );
         if ( nDeltaX )
             aHScroll.SetThumbPos( -aPixOffset.X() );
         if ( nDeltaY )

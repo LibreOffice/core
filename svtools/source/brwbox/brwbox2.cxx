@@ -706,12 +706,6 @@ void BrowseBox::Paint( const Rectangle& rRect )
 
 
 
-void BrowseBox::PaintRow( OutputDevice&, const Rectangle& )
-{
-}
-
-
-
 void BrowseBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags )
 {
     bool bDrawSelection = (nFlags & WINDOW_DRAW_NOSELECTION) == 0;
@@ -911,7 +905,6 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const Rectangle& _rRect, bool
         // prepare auto-highlight
         Rectangle aRowRect( Point( _rRect.TopLeft().X(), aPos.Y() ),
                 Size( _rRect.GetSize().Width(), nDataRowHeigt ) );
-        PaintRow( _rOut, aRowRect );
 
         bool bRowSelected   =   _bDrawSelections
                             &&  !bHideSelect
@@ -1701,12 +1694,6 @@ void BrowseBox::MouseButtonDown( const BrowserMouseEvent& rEvt )
                 Select();
         }
     }
-}
-
-
-
-void BrowseBox::MouseMove( const BrowserMouseEvent& )
-{
 }
 
 

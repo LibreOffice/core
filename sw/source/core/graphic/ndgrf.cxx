@@ -989,31 +989,6 @@ IMPL_LINK( SwGrfNode, SwapGraphic, GraphicObject*, pGrfObj )
     return reinterpret_cast<sal_IntPtr>(pRet);
 }
 
-/// delete all QuickDraw-Bitmaps in the specified document
-void DelAllGrfCacheEntries( SwDoc* pDoc )
-{
-    if( pDoc )
-    {
-        // delete all Graphic-Links with this name from cache
-        const sfx2::LinkManager& rLnkMgr = pDoc->getIDocumentLinksAdministration().GetLinkManager();
-        const ::sfx2::SvBaseLinks& rLnks = rLnkMgr.GetLinks();
-        OUString sFileNm;
-        for( size_t n = rLnks.size(); n; )
-        {
-            SwGrfNode* pGrfNd;
-
-            ::sfx2::SvBaseLink* pLnk = &(*rLnks[ --n ]);
-            if( pLnk && OBJECT_CLIENT_GRF == pLnk->GetObjType() &&
-                rLnkMgr.GetDisplayNames( pLnk, 0, &sFileNm ) &&
-                pLnk->ISA( SwBaseLink ) && 0 != ( pGrfNd =
-                static_cast<SwBaseLink*>(pLnk)->GetCntntNode()->GetGrfNode()) )
-            {
-                pGrfNd->ReleaseGraphicFromCache();
-            }
-        }
-    }
-}
-
 /// returns the Graphic-Attr-Structure filled with our graphic attributes
 GraphicAttr& SwGrfNode::GetGraphicAttr( GraphicAttr& rGA,
                                         const SwFrm* pFrm ) const

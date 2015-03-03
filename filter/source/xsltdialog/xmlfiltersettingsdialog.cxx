@@ -1421,7 +1421,6 @@ bool SvxPathControl::Notify(NotifyEvent& rNEvt)
 
 XMLFilterListBox::XMLFilterListBox(Window* pParent, SvxPathControl* pPathControl)
     : SvTabListBox(pParent, WB_SORT | WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP)
-    , mbFirstPaint(true)
     , m_pHeaderBar(pPathControl->getHeaderBar())
 {
     Size aBoxSize( pParent->GetOutputSizePixel() );
@@ -1452,12 +1451,6 @@ XMLFilterListBox::XMLFilterListBox(Window* pParent, SvxPathControl* pPathControl
 
 void XMLFilterListBox::Paint( const Rectangle& rRect )
 {
-    if( mbFirstPaint )
-    {
-        mbFirstPaint = false;
-        RepaintScrollBars();
-    }
-
     SvTabListBox::Paint( rRect );
 }
 

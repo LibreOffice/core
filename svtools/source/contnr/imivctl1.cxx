@@ -251,11 +251,6 @@ IMPL_LINK( SvxIconChoiceCtrl_Impl, ScrollLeftRightHdl, ScrollBar*, pScrollBar )
 
 IMPL_LINK_NOARG(SvxIconChoiceCtrl_Impl, EndScrollHdl)
 {
-    if( pView->HasBackground() && !pView->GetBackground().IsScrollable() &&
-        bEndScrollInvalidate )
-    {
-        pView->Invalidate(INVALIDATE_NOCHILDREN);
-    }
     return 0;
 }
 
@@ -424,7 +419,7 @@ void SvxIconChoiceCtrl_Impl::EntrySelected( SvxIconChoiceCtrlEntry* pEntry, bool
     {
         if( pEntry == pCursor )
             ShowCursor( false );
-        if( pView->IsTracking() && (bSelect || !pView->HasBackground()) ) // always synchronous when tracking
+        if( pView->IsTracking() ) // always synchronous when tracking
             PaintEntry( pEntry );
         else if( bSyncPaint ) // synchronous & with a virtual OutDev!
             PaintEntryVirtOutDev( pEntry );
@@ -855,8 +850,7 @@ bool SvxIconChoiceCtrl_Impl::MouseButtonDown( const MouseEvent& rMEvt)
             if( bEntryEditingEnabled && pEntry &&
                 pEntry->IsSelected())
             {
-                if( pView->EditingEntry( pEntry ))
-                    EditEntry( pEntry );
+                EditEntry( pEntry );
             }
         }
         else if( eSelectionMode == SINGLE_SELECTION )
@@ -1272,7 +1266,6 @@ void SvxIconChoiceCtrl_Impl::PositionScrollBars( long nRealWidth, long nRealHeig
 
 void SvxIconChoiceCtrl_Impl::AdjustScrollBars( bool )
 {
-    Rectangle aOldOutRect( GetOutputRect() );
     long nVirtHeight = aVirtOutputSize.Height();
     long nVirtWidth = aVirtOutputSize.Width();
 
@@ -1396,14 +1389,6 @@ void SvxIconChoiceCtrl_Impl::AdjustScrollBars( bool )
         nRealHeight++; // because lower border is clipped
     aOutputSize.Height() = nRealHeight;
 
-    Rectangle aNewOutRect( GetOutputRect() );
-    if( aNewOutRect != aOldOutRect && pView->HasBackground() )
-    {
-        Wallpaper aPaper( pView->GetBackground() );
-        aPaper.SetRect( aNewOutRect );
-        pView->SetBackground( aPaper );
-    }
-
     if( (nResult & (0x0001|0x0002)) == (0x0001|0x0002) )
         aScrBarBox.Show();
     else
@@ -1430,13 +1415,6 @@ void SvxIconChoiceCtrl_Impl::Resize()
             Application::PostUserEvent( LINK( this, SvxIconChoiceCtrl_Impl, UserEventHdl),
                 EVENTID_ADJUST_SCROLLBARS);
 
-    if( pView->HasBackground() && !pView->GetBackground().IsScrollable() )
-    {
-        Rectangle aRect( GetOutputRect());
-        Wallpaper aPaper( pView->GetBackground() );
-        aPaper.SetRect( aRect );
-        pView->SetBackground( aPaper );
-    }
     VisRectChanged();
 }
 
@@ -1601,15 +1579,10 @@ void SvxIconChoiceCtrl_Impl::PaintEmphasis(
     {
         if ( !bSelected || bCursored )
         {
-            if( !pView->HasFontFillColor() )
-                pOut->SetFillColor( pOut->GetBackground().GetColor() );
-            else
-            {
-                const Color& rFillColor = pView->GetFont().GetFillColor();
-                pOut->SetFillColor( rFillColor );
-                if( rFillColor != aTransparent )
-                    bSolidTextRect = true;
-            }
+            const Color& rFillColor = pView->GetFont().GetFillColor();
+            pOut->SetFillColor( rFillColor );
+            if( rFillColor != aTransparent )
+                bSolidTextRect = true;
         }
     }
 
@@ -1787,13 +1760,10 @@ void SvxIconChoiceCtrl_Impl::PaintEntry( SvxIconChoiceCtrlEntry* pEntry, const P
 
         // font fill colors that are attributed "hard" need corresponding "hard"
         // attributed highlight colors
-        if( pView->HasFontFillColor() )
-        {
-            if( (nWinBits & WB_NOHIDESELECTION) || pView->HasFocus() )
-                aNewFont.SetFillColor( rSettings.GetHighlightColor() );
-            else
-                aNewFont.SetFillColor( rSettings.GetDeactiveColor() );
-        }
+        if( (nWinBits & WB_NOHIDESELECTION) || pView->HasFocus() )
+            aNewFont.SetFillColor( rSettings.GetHighlightColor() );
+        else
+            aNewFont.SetFillColor( rSettings.GetDeactiveColor() );
 
         Color aWinCol = rSettings.GetWindowTextColor();
         if ( !bActiveSelection && rSettings.GetFaceColor().IsBright() == aWinCol.IsBright() )
@@ -2441,13 +2411,6 @@ void SvxIconChoiceCtrl_Impl::MakeVisible( const Rectangle& rRect, bool bScrBar,
     SetOrigin( aOrigin );
 
     bool bScrollable = pView->GetBackground().IsScrollable();
-    if( pView->HasBackground() && !bScrollable )
-    {
-        Rectangle aRect( GetOutputRect());
-        Wallpaper aPaper( pView->GetBackground() );
-        aPaper.SetRect( aRect );
-        pView->SetBackground( aPaper );
-    }
 
     if( bScrollable && GetUpdateMode() )
     {
@@ -2922,8 +2885,7 @@ IMPL_LINK_NOARG(SvxIconChoiceCtrl_Impl, EditTimeoutHdl)
     if( bEntryEditingEnabled && pEntry &&
         pEntry->IsSelected())
     {
-        if( pView->EditingEntry( pEntry ))
-            EditEntry( pEntry );
+        EditEntry( pEntry );
     }
     return 0;
 }
@@ -3204,8 +3166,7 @@ IMPL_LINK_NOARG(SvxIconChoiceCtrl_Impl, TextEditEndedHdl)
     else
         aText = pEdit->GetSavedValue();
 
-    if( pView->EditedEntry( pCurEditedEntry, aText, pEdit->EditingCanceled() ) )
-        InvalidateEntry( pCurEditedEntry );
+    InvalidateEntry( pCurEditedEntry );
     if( !GetSelectionCount() )
         SelectEntry( pCurEditedEntry, true );
 
@@ -3294,13 +3255,7 @@ IcnViewEdit_Impl::IcnViewEdit_Impl( SvtIconChoiceCtrl* pParent, const Point& rPo
     vcl::Font aFont( pParent->GetPointFont() );
     aFont.SetTransparent( false );
     SetControlFont( aFont );
-    if( !pParent->HasFontFillColor() )
-    {
-        Color aColor( pParent->GetBackground().GetColor() );
-        SetControlBackground( aColor );
-    }
-    else
-        SetControlBackground( aFont.GetFillColor() );
+    SetControlBackground( aFont.GetFillColor() );
     SetControlForeground( aFont.GetColor() );
     SetPosPixel( rPos );
     SetSizePixel( CalcAdjustedSize(rSize) );
@@ -3422,14 +3377,11 @@ void SvxIconChoiceCtrl_Impl::InitSettings()
 {
     const StyleSettings& rStyleSettings = pView->GetSettings().GetStyleSettings();
 
-    if( !pView->HasFont() )
-    {
-        // unit (from settings) is Point
-        vcl::Font aFont( rStyleSettings.GetFieldFont() );
-        aFont.SetColor( rStyleSettings.GetWindowTextColor() );
-        pView->SetPointFont( aFont );
-        SetDefaultTextSize();
-    }
+    // unit (from settings) is Point
+    vcl::Font aFont( rStyleSettings.GetFieldFont() );
+    aFont.SetColor( rStyleSettings.GetWindowTextColor() );
+    pView->SetPointFont( aFont );
+    SetDefaultTextSize();
 
     pView->SetTextColor( rStyleSettings.GetFieldTextColor() );
     pView->SetTextFillColor();
@@ -3783,22 +3735,11 @@ IMPL_LINK_NOARG(SvxIconChoiceCtrl_Impl, CallSelectHdlHdl)
     return 0;
 }
 
-void SvxIconChoiceCtrl_Impl::SetOrigin( const Point& rPos, bool bDoNotUpdateWallpaper )
+void SvxIconChoiceCtrl_Impl::SetOrigin( const Point& rPos )
 {
     MapMode aMapMode( pView->GetMapMode() );
     aMapMode.SetOrigin( rPos );
     pView->SetMapMode( aMapMode );
-    if( !bDoNotUpdateWallpaper )
-    {
-        bool bScrollable = pView->GetBackground().IsScrollable();
-        if( pView->HasBackground() && !bScrollable )
-        {
-            Rectangle aRect( GetOutputRect());
-            Wallpaper aPaper( pView->GetBackground() );
-            aPaper.SetRect( aRect );
-            pView->SetBackground( aPaper );
-        }
-    }
 }
 
 void SvxIconChoiceCtrl_Impl::CallEventListeners( sal_uLong nEvent, void* pData )

@@ -79,9 +79,6 @@ bool SvxAccessibilityOptionsTabPage::FillItemSet( SfxItemSet* )
     m_pImpl->m_aConfig.SetSelectionInReadonly( m_pTextSelectionInReadonly->IsChecked());
     m_pImpl->m_aConfig.SetAutoDetectSystemHC( m_pAutoDetectHC->IsChecked());
 
-    if(m_pImpl->m_aConfig.IsModified())
-        m_pImpl->m_aConfig.Commit();
-
     AllSettings aAllSettings = Application::GetSettings();
     MiscSettings aMiscSettings = aAllSettings.GetMiscSettings();
 #ifndef UNX

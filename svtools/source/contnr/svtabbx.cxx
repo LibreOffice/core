@@ -530,7 +530,6 @@ void SvHeaderTabListBox::Paint( const Rectangle& rRect )
     if ( m_bFirstPaint )
     {
         m_bFirstPaint = false;
-        RepaintScrollBars();
     }
     SvTabListBox::Paint( rRect );
 }

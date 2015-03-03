@@ -59,7 +59,6 @@ class HeaderBar;
 class XMLFilterListBox : public SvTabListBox
 {
 private:
-    bool        mbFirstPaint;
     HeaderBar*  m_pHeaderBar;
 
     DECL_LINK( TabBoxScrollHdl_Impl, SvTabListBox* );

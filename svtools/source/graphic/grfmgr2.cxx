@@ -80,11 +80,6 @@ void GraphicManager::SetCacheTimeout( sal_uLong nTimeoutSeconds )
     mpCache->SetCacheTimeout( nTimeoutSeconds );
 }
 
-void GraphicManager::ReleaseFromCache( const GraphicObject& /*rObj*/ )
-{
-    // !!!
-}
-
 bool GraphicManager::IsInCache( OutputDevice* pOut, const Point& rPt,
                                     const Size& rSz, const GraphicObject& rObj,
                                     const GraphicAttr& rAttr ) const

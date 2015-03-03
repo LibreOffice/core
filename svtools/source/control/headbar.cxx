@@ -642,18 +642,6 @@ void HeaderBar::ImplDrawItem( OutputDevice* pDev,
             }
         }
     }
-
-    // all UserDraw if required
-    if ( nBits & HIB_USERDRAW )
-    {
-        vcl::Region aRegion( aRect );
-        if ( pRect )
-            aRegion.Intersect( *pRect );
-        pDev->SetClipRegion( aRegion );
-        UserDrawEvent aODEvt( pDev, aRect, pItem->mnId );
-        UserDraw( aODEvt );
-        pDev->SetClipRegion();
-    }
 }
 
 
@@ -1201,12 +1189,6 @@ void HeaderBar::DataChanged( const DataChangedEvent& rDCEvt )
         ImplInitSettings( true, true, true );
         Invalidate();
     }
-}
-
-
-
-void HeaderBar::UserDraw( const UserDrawEvent& )
-{
 }
 
 

@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_IMAP_HXX
 #define INCLUDED_SVTOOLS_IMAP_HXX
 
+#include <svtools/imapobj.hxx>
 #include <svtools/svtdllapi.h>
 #include <tools/stream.hxx>
 #include <vector>
@@ -107,7 +108,7 @@ public:
     void                ClearImageMap();
 
     // returns the current version number
-    sal_uInt16          GetVersion() const;
+    static sal_uInt16   GetVersion() { return IMAGE_MAP_VERSION; }
 
     const OUString&     GetName() const { return aName; }
     void                SetName( const OUString& rName ) { aName = rName; }
