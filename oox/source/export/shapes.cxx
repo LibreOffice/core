@@ -1004,7 +1004,9 @@ void ShapeExport::WriteTable( Reference< XShape > rXShape  )
 
                     WriteTextBox( xCell, XML_a );
 
-                    mpFS->singleElementNS( XML_a, XML_tcPr, FSEND );
+                    Reference< XPropertySet > xCellPropSet(xCell, UNO_QUERY_THROW);
+                    WriteTableCellProperties(xCellPropSet);
+
                     mpFS->endElementNS( XML_a, XML_tc );
                 }
             }
@@ -1017,6 +1019,17 @@ void ShapeExport::WriteTable( Reference< XShape > rXShape  )
 
     mpFS->endElementNS( XML_a, XML_graphicData );
     mpFS->endElementNS( XML_a, XML_graphic );
+}
+
+void ShapeExport::WriteTableCellProperties(Reference< XPropertySet> xCellPropSet)
+{
+    mpFS->startElementNS( XML_a, XML_tcPr, FSEND );
+    // Write background fill for table cell.
+    DrawingML::WriteFill(xCellPropSet);
+    // TODO
+    // tcW : Table cell width
+    // tcBorders : Table cell border values.
+    mpFS->endElementNS( XML_a, XML_tcPr );
 }
 
 ShapeExport& ShapeExport::WriteTableShape( Reference< XShape > xShape )
