@@ -173,11 +173,6 @@ SfxItemPropertySet::~SfxItemPropertySet()
 {
 }
 
-bool SfxItemPropertySet::FillItem(SfxItemSet&, sal_uInt16, bool) const
-{
-    return false;
-}
-
 void SfxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry& rEntry,
             const SfxItemSet& rSet, Any& rAny ) const
                         throw(RuntimeException)
@@ -195,12 +190,7 @@ void SfxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry& rEn
     else
     {
         SfxItemSet aSet(*rSet.GetPool(), rEntry.nWID, rEntry.nWID);
-        if(FillItem(aSet, rEntry.nWID, true))
-        {
-            const SfxPoolItem& rItem = aSet.Get(rEntry.nWID);
-            rItem.QueryValue( rAny, rEntry.nMemberId );
-        }
-        else if(0 == (rEntry.nFlags & PropertyAttribute::MAYBEVOID))
+        if(0 == (rEntry.nFlags & PropertyAttribute::MAYBEVOID))
             throw RuntimeException(
                     "Property not found in ItemSet but not MAYBEVOID?", 0);
     }
@@ -251,11 +241,6 @@ void SfxItemPropertySet::setPropertyValue( const SfxItemPropertySimpleEntry& rEn
     if(eState < SfxItemState::DEFAULT)
     {
         SfxItemSet aSet(*rSet.GetPool(), rEntry.nWID, rEntry.nWID);
-        if(FillItem(aSet, rEntry.nWID, false))
-        {
-            const SfxPoolItem &rItem = aSet.Get(rEntry.nWID);
-            pNewItem.reset(rItem.Clone());
-        }
     }
     if(!pNewItem && pItem)
     {

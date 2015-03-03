@@ -70,16 +70,6 @@ void SvNumberFormatsSupplierObj::SetNumberFormatter(SvNumberFormatter* pNew)
     pImpl->pFormatter = pNew;
 }
 
-void SvNumberFormatsSupplierObj::NumberFormatDeleted(sal_uInt32)
-{
-    // Base implementation; does nothing
-}
-
-void SvNumberFormatsSupplierObj::SettingsChanged()
-{
-    // Base implementation; does nothing
-}
-
 // XNumberFormatsSupplier
 
 uno::Reference<beans::XPropertySet> SAL_CALL SvNumberFormatsSupplierObj::getNumberFormatSettings()
