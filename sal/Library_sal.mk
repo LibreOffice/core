@@ -213,10 +213,6 @@ else # $(OS) == WNT
 ))
 # .ENDIF
 
-$(eval $(call gb_Library_add_defs,sal,\
-	-D_WIN32_WINNT=0x0502 \
-))
-
 $(eval $(call gb_Library_add_exception_objects,sal,\
 	sal/osl/w32/file \
 	sal/osl/w32/file_dirvol \
