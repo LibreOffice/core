@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a2ca52d_1506b420",
+        "filename": "sw/source/core/edit/edsect.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-03-03T22:34:47Z",
+      "side": 1,
+      "message": "does this create a copy of the vector?  iirc you need to write \"auto \u0026\" to get a reference.\n\n(of course C++11 has added new ways to shoot yourself in the foot)",
+      "revId": "923380a434d1ad57d0516563d5148fb83581a2bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a2ca52d_75092831",
+        "filename": "sw/source/core/tox/tox.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 464,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-03-03T22:34:47Z",
+      "side": 1,
+      "message": "the old code checked pDoc - what if it is null?",
+      "revId": "923380a434d1ad57d0516563d5148fb83581a2bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a2ca52d_3503b011",
+        "filename": "sw/source/core/undo/rolbck.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 523,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-03-03T22:34:47Z",
+      "side": 1,
+      "message": "\"auto\u0026\" here too",
+      "revId": "923380a434d1ad57d0516563d5148fb83581a2bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a2ca52d_d825d1ae",
+        "filename": "sw/source/core/undo/rolbck.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 879,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-03-03T22:34:47Z",
+      "side": 1,
+      "message": "this condition is inverted",
+      "revId": "923380a434d1ad57d0516563d5148fb83581a2bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a2ca52d_381ac56f",
+        "filename": "sw/source/core/undo/unattr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-03-03T22:34:47Z",
+      "side": 1,
+      "message": "you need to initialize \"found\" variable because in this branch it is not assigned a value",
+      "revId": "923380a434d1ad57d0516563d5148fb83581a2bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a2ca52d_5813015d",
+        "filename": "sw/source/core/undo/unfmco.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-03-03T22:34:47Z",
+      "side": 1,
+      "message": "auto\u0026",
+      "revId": "923380a434d1ad57d0516563d5148fb83581a2bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a2ca52d_78103d4f",
+        "filename": "sw/source/core/undo/untbl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 921,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-03-03T22:34:47Z",
+      "side": 1,
+      "message": "please dont add C-style casts, use static_cast instead",
+      "revId": "923380a434d1ad57d0516563d5148fb83581a2bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a2ca52d_181d8966",
+        "filename": "sw/source/uibase/app/docstyle.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1644,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-03-03T22:34:47Z",
+      "side": 1,
+      "message": "use \"++it\" , it is faster than \"it++\"",
+      "revId": "923380a434d1ad57d0516563d5148fb83581a2bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
