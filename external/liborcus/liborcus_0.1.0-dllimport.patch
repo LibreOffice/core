@@ -18,7 +18,7 @@
  #else
    #if __GNUC__ >= 4
 -    #define ORCUS_DLLPUBLIC __attribute__ ((visibility ("default")))
-+    #define ORCUS_DLLPUBLIC
++    #define ORCUS_DLLPUBLIC __attribute__ ((visibility ("hidden")))
      #define ORCUS_DLLLOCAL  __attribute__ ((visibility ("hidden")))
    #else
      #define ORCUS_DLLPUBLIC
