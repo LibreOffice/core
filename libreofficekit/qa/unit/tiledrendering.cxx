@@ -21,14 +21,27 @@
 #include <vcl/salbtype.hxx>
 #include <vcl/bmpacc.hxx>
 #include <vcl/pngwrite.hxx>
+#include <osl/file.hxx>
+#include <rtl/bootstrap.hxx>
 
 #define LOK_USE_UNSTABLE_API
 #include <LibreOfficeKit/LibreOfficeKitInit.h>
 #include <LibreOfficeKit/LibreOfficeKit.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 using namespace ::boost;
 using namespace ::lok;
 using namespace ::std;
+
+OUString getFileURLFromSystemPath(OUString const & path)
+{
+    OUString url;
+    osl::FileBase::RC e = osl::FileBase::getFileURLFromSystemPath(path, url);
+    CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, e);
+    if (!url.endsWith("/"))
+        url += "/";
+    return url;
+}
 
 // We specifically don't use the usual BootStrapFixture, as LOK does
 // all it's own setup and bootstrapping, and should be useable in a
@@ -51,7 +64,9 @@ public:
     void testDocumentLoadFail( Office* pOffice );
     void testDocumentTypes( Office* pOffice );
     void testImpressSlideNames( Office* pOffice );
+#if 0
     void testOverlay( Office* pOffice );
+#endif
 
     CPPUNIT_TEST_SUITE(TiledRenderingTest);
     CPPUNIT_TEST(runAllTests);
@@ -60,6 +75,16 @@ public:
 
 void TiledRenderingTest::runAllTests()
 {
+    // set UserInstallation to user profile dir in test/user-template
+    const char* pWorkdirRoot = getenv("WORKDIR_FOR_BUILD");
+    OUString aWorkdirRootPath = OUString::createFromAscii(pWorkdirRoot);
+    OUString aWorkdirRootURL = getFileURLFromSystemPath(aWorkdirRootPath);
+    OUString sUserInstallURL = aWorkdirRootURL + "/unittest";
+    rtl::Bootstrap::set(OUString("UserInstallation"), sUserInstallURL);
+
+    // No restart in desktop.
+    setenv("LOK_TEST", "1", true);
+
     scoped_ptr< Office > pOffice( lok_cpp_init(
                                       m_sLOPath.c_str() ) );
     CPPUNIT_ASSERT( pOffice.get() );
@@ -67,7 +92,9 @@ void TiledRenderingTest::runAllTests()
     testDocumentLoadFail( pOffice.get() );
     testDocumentTypes( pOffice.get() );
     testImpressSlideNames( pOffice.get() );
+#if 0
     testOverlay( pOffice.get() );
+#endif
 }
 
 void TiledRenderingTest::testDocumentLoadFail( Office* pOffice )
@@ -84,21 +111,7 @@ void TiledRenderingTest::testDocumentLoadFail( Office* pOffice )
 // Our dumped .png files end up in
 // workdir/CppunitTest/libreofficekit_tiledrendering.test.core
 
-static void dumpRGBABitmap( const OUString& rPath, const unsigned char* pBuffer,
-                            const int nWidth, const int nHeight )
-{
-    Bitmap aBitmap( Size( nWidth, nHeight ), 32 );
-    Bitmap::ScopedWriteAccess pWriteAccess( aBitmap );
-    memcpy( pWriteAccess->GetBuffer(), pBuffer, 4*nWidth*nHeight );
-
-    BitmapEx aBitmapEx( aBitmap );
-    vcl::PNGWriter aWriter( aBitmapEx );
-    SvFileStream sOutput( rPath, StreamMode::WRITE );
-    aWriter.Write( sOutput );
-    sOutput.Close();
-}
-
-LibreOfficeKitDocumentType getDocumentType( Office* pOffice, const string& rPath )
+int getDocumentType( Office* pOffice, const string& rPath )
 {
     scoped_ptr< Document> pDocument( pOffice->documentLoad( rPath.c_str() ) );
     CPPUNIT_ASSERT( pDocument.get() );
@@ -147,7 +160,22 @@ void TiledRenderingTest::testImpressSlideNames( Office* pOffice )
     // have a localised version of "Slide 3".
 }
 
-void TiledRenderingTest::testOverlay( Office* pOffice )
+#if 0
+static void dumpRGBABitmap( const OUString& rPath, const unsigned char* pBuffer,
+                            const int nWidth, const int nHeight )
+{
+    Bitmap aBitmap( Size( nWidth, nHeight ), 32 );
+    Bitmap::ScopedWriteAccess pWriteAccess( aBitmap );
+    memcpy( pWriteAccess->GetBuffer(), pBuffer, 4*nWidth*nHeight );
+
+    BitmapEx aBitmapEx( aBitmap );
+    vcl::PNGWriter aWriter( aBitmapEx );
+    SvFileStream sOutput( rPath, StreamMode::WRITE );
+    aWriter.Write( sOutput );
+    sOutput.Close();
+}
+
+void TiledRenderingTest::testOverlay( Office* /*pOffice*/ )
 {
     const string sDocPath = m_sSrcRoot + "/odk/examples/java/DocumentHandling/test/test1.odt";
     const string sLockFile = m_sSrcRoot + "/odk/examples/java/DocumentHandling/test/.~lock.test1.odt#";
@@ -227,6 +255,7 @@ void TiledRenderingTest::testOverlay( Office* pOffice )
         }
     }
 }
+#endif
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TiledRenderingTest);
 
