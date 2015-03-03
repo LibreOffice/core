@@ -830,7 +830,7 @@ ScFormulaCell::ScFormulaCell( const ScFormulaCell& rCell, ScDocument& rDoc, cons
                 OpCode eOpCode = pToken->GetOpCode();
                 if (eOpCode == ocName)
                     adjustRangeName(pToken, rDoc, rCell.pDocument, aPos, rCell.aPos);
-                else if (eOpCode == ocDBArea)
+                else if (eOpCode == ocDBArea || eOpCode == ocTableRef)
                     adjustDBRange(pToken, rDoc, rCell.pDocument);
             }
         }
@@ -3568,7 +3568,8 @@ void ScFormulaCell::CompileDBFormula( sc::CompileFormulaContext& rCxt )
 {
     for( FormulaToken* p = pCode->First(); p; p = pCode->Next() )
     {
-        if ( p->GetOpCode() == ocDBArea )
+        OpCode eOp = p->GetOpCode();
+        if ( eOp == ocDBArea || eOp == ocTableRef )
         {
             bCompile = true;
             CompileTokenArray(rCxt);

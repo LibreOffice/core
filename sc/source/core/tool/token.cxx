@@ -1044,6 +1044,8 @@ bool ScTokenArray::AddFormulaToken(
                             AddRangeName(aTokenData.Index, aTokenData.Global);
                         else if (eOpCode == ocDBArea)
                             AddDBRange(aTokenData.Index);
+                        else if (eOpCode == ocTableRef)
+                            /* TODO: AddTableRef(aTokenData.Index) */ ;
                         else
                             bError = true;
                     }
@@ -4008,6 +4010,7 @@ void appendTokenByType( sc::TokenStringContext& rCxt, OUStringBuffer& rBuf, cons
                 }
                 break;
                 case ocDBArea:
+                case ocTableRef:
                 {
                     NameType::const_iterator it = rCxt.maNamedDBs.find(nIndex);
                     if (it != rCxt.maNamedDBs.end())

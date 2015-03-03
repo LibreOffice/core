@@ -685,7 +685,8 @@ bool ScValidationData::GetSelectionFromFormula(
     formula::FormulaToken* t = NULL;
     if (pArr->GetLen() == 1 && (t = pArr->GetNextReferenceOrName()) != NULL)
     {
-        if (t->GetOpCode() == ocDBArea)
+        OpCode eOpCode = t->GetOpCode();
+        if (eOpCode == ocDBArea || eOpCode == ocTableRef)
         {
             if (const ScDBData* pDBData = pDocument->GetDBCollection()->getNamedDBs().findByIndex(t->GetIndex()))
             {
@@ -693,7 +694,7 @@ bool ScValidationData::GetSelectionFromFormula(
                 bRef = true;
             }
         }
-        else if (t->GetOpCode() == ocName)
+        else if (eOpCode == ocName)
         {
             ScRangeData* pName = pDocument->GetRangeName()->findByIndex( t->GetIndex() );
             if (pName && pName->IsReference(aRange))

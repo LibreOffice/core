@@ -2962,7 +2962,8 @@ bool ScCompiler::IsDBRange( const OUString& rName )
 {
     if (rName == "[]")
     {
-        if (maRawToken.GetOpCode() == ocDBArea)
+        OpCode eOp = maRawToken.GetOpCode();
+        if (eOp == ocDBArea || eOp == ocTableRef)
         {
             // In OOXML, a database range is named Table1[], Table2[] etc.
             // Skip the [] part if the previous token is a valid db range.
@@ -4289,6 +4290,7 @@ void ScCompiler::CreateStringFromIndex(OUStringBuffer& rBuffer,FormulaToken* _pT
         }
         break;
         case ocDBArea:
+        case ocTableRef:
         {
             const ScDBData* pDBData = pDoc->GetDBCollection()->getNamedDBs().findByIndex(_pTokenP->GetIndex());
             if (pDBData)

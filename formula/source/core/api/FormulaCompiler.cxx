@@ -359,6 +359,7 @@ uno::Sequence< sheet::FormulaOpCodeMapEntry > FormulaCompiler::OpCodeMap::create
             { FormulaMapGroupSpecialOffset::SPACES            , ocSpaces }         ,
             { FormulaMapGroupSpecialOffset::MAT_REF           , ocMatRef }         ,
             { FormulaMapGroupSpecialOffset::DB_AREA           , ocDBArea }         ,
+            /* TODO: { FormulaMapGroupSpecialOffset::TABLE_REF         , ocTableRef }       , */
             { FormulaMapGroupSpecialOffset::MACRO             , ocMacro }          ,
             { FormulaMapGroupSpecialOffset::COL_ROW_NAME      , ocColRowName }
         };
@@ -1109,6 +1110,10 @@ bool FormulaCompiler::GetToken()
     {
         return HandleDbData();
     }
+    else if( mpToken->GetOpCode() == ocTableRef )
+    {
+        /* TODO: return HandleTableRef() */ ;
+    }
     return true;
 }
 
@@ -1123,9 +1128,9 @@ void FormulaCompiler::Factor()
 
     OpCode eOp = mpToken->GetOpCode();
     if( eOp == ocPush || eOp == ocColRowNameAuto || eOp == ocMatRef ||
-            eOp == ocDBArea
+            eOp == ocDBArea || eOp == ocTableRef
             || (!mbJumpCommandReorder && ((eOp == ocName) || (eOp == ocDBArea)
-            || (eOp == ocColRowName) || (eOp == ocBad)))
+            || (eOp == ocTableRef) || (eOp == ocColRowName) || (eOp == ocBad)))
         )
     {
         PutCode( mpToken );

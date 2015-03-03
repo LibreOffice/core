@@ -867,6 +867,7 @@ void ScColumn::PreprocessDBDataUpdate(
     aOps.insert(ocBad);
     aOps.insert(ocColRowName);
     aOps.insert(ocDBArea);
+    aOps.insert(ocTableRef);
     RecompileByOpcodeHandler aFunc(pDocument, aOps, rEndListenCxt, rCompileCxt);
     std::for_each(aGroups.begin(), aGroups.end(), aFunc);
 }

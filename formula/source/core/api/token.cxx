@@ -79,6 +79,7 @@ bool FormulaToken::IsFunction() const
 {
     return (eOp != ocPush && eOp != ocBad && eOp != ocColRowName &&
             eOp != ocColRowNameAuto && eOp != ocName && eOp != ocDBArea &&
+            eOp != ocTableRef &&
            (GetByte() != 0                                                  // x parameters
         || (SC_OPCODE_START_NO_PAR <= eOp && eOp < SC_OPCODE_STOP_NO_PAR)   // no parameter
         || (ocIf == eOp || ocIfError == eOp || ocIfNA == eOp || ocChoose == eOp ) // @ jump commands
@@ -388,6 +389,8 @@ bool FormulaTokenArray::AddFormulaToken(
                 sal_Int32 nValue = rToken.Data.get<sal_Int32>();
                 if ( eOpCode == ocDBArea )
                     AddToken( formula::FormulaIndexToken( eOpCode, static_cast<sal_uInt16>(nValue) ) );
+                else if ( eOpCode == ocTableRef )
+                    /* TODO: implementation */ ;
                 else if ( eOpCode == ocSpaces )
                     AddToken( formula::FormulaByteToken( ocSpaces, static_cast<sal_uInt8>(nValue) ) );
                 else
