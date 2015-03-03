@@ -165,7 +165,7 @@ public:
     virtual void RegisterMetadatableAndCreateID(Metadatable& i_xObject) = 0;
 
     /** try to register an ODF element at a given XML ID, or update its
-        registation to a different XML ID.
+        registration to a different XML ID.
 
         <p>
         If the given new metadata reference is not already occupied in the

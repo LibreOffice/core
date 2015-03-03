@@ -91,7 +91,7 @@ private:
                     the right values every time. Using of any deep detection service
                     can be enabled/disabled. And last but not least: If the results
                     wont be really clear (because a flat detected type has no deep
-                    detection service), a "sugested" type name will be returned as "rLastChance".
+                    detection service), a "suggested" type name will be returned as "rLastChance".
                     It can be used after e.g. all well known deep detection services
                     was used without getting any result. Then this "last-chance-type"
                     should be returned. Of course using of it can fail too ... but it's a try :-)
@@ -153,7 +153,7 @@ private:
                     detect service (threadsafe!).
 
         @descr      It creates the right uno service, prepare the
-                    needed MediaDescriptor, call ths right interfaces,
+                    needed MediaDescriptor, call the right interfaces,
                     and return the results.
 
         @attention  The results (means type and corresponding filter)

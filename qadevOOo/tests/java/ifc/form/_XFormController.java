@@ -99,7 +99,7 @@ public class _XFormController extends MultiMethodTest {
     }
 
     /**
-    * Removes the litener added before, then switches focus between two windows.
+    * Removes the listener added before, then switches focus between two windows.
     *
     * Has <b> OK </b> status if no listener methods were called. <p>
     */

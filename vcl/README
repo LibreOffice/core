@@ -55,7 +55,7 @@ unx/
 How the platform abstraction works
 
 	+ InitVCL calls 'CreateSalInstance'
-		+ ths is implemented by the compiled-in platform backend
+		+ this is implemented by the compiled-in platform backend
 		+ it stores various bits of global state in the
 		  'SalData' (inc/saldatabasic.hxx) structure but:
 	+ the SalInstance vtable is the primary outward facing gateway

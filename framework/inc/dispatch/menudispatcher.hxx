@@ -77,7 +77,7 @@ class MenuDispatcher   :        public  ::cppu::WeakImplHelper2<
 
         /*-****************************************************************************************************
             @short      standard ctor
-            @descr      These initialize a new instance of ths class with needed information for work.
+            @descr      This initializes a new instance of the class with needed information for work.
 
             @seealso    using at owner
 
