@@ -123,7 +123,7 @@ class INetURLHistory_Impl: private boost::noncopyable
     */
     void initialize (void);
 
-    sal_uInt16 capacity (void) const
+    static sal_uInt16 capacity()
     {
         return (sal_uInt16)(INETHIST_SIZE_LIMIT);
     }

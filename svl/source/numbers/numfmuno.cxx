@@ -536,7 +536,6 @@ void SAL_CALL SvNumberFormatsObj::removeByKey( sal_Int32 nKey ) throw(uno::Runti
     if (pFormatter)
     {
         pFormatter->DeleteEntry(nKey);
-        rSupplier.NumberFormatDeleted(nKey); // Notification for the Document
     }
 }
 
@@ -994,8 +993,6 @@ void SAL_CALL SvNumberFormatSettingsObj::setPropertyValue( const OUString& aProp
         }
         else
             throw beans::UnknownPropertyException();
-
-        rSupplier.SettingsChanged();
     }
     else
         throw uno::RuntimeException();
