@@ -2027,14 +2027,14 @@ AC_ARG_WITH(visual-studio,
 ,)
 
 AC_ARG_WITH(windows-sdk,
-    AS_HELP_STRING([--with-windows-sdk=<6.0(A)/7.0(A)/7.1(A)/8.0(A)>],
+    AS_HELP_STRING([--with-windows-sdk=<7.1(A)/8.0(A)/8.1(A)>],
         [Specify which Windows SDK, or "Windows Kit", version to use
          in case the one that came with the selected Visual Studio
          is not what you want for some reason. Note that not all compiler/SDK
          combinations are supported. The intent is that this option should not
          be needed.])
     [
-                          Usage:     --with-windows-sdk=6.0(A)/7.0(A)/7.1(A)/8.0(A)>
+                          Usage:     --with-windows-sdk=7.1(A)/8.0(A)/8.1(A)>
     ],
 ,)
 
@@ -5088,7 +5088,7 @@ find_winsdk_version()
 
     # Why we look for them in this particular order I don't know. But OTOH I
     case "$1" in
-    6.0*|7.*)
+    7.*)
         reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/v${1}/InstallationFolder"
         if test -n "$regvalue"; then
             winsdktest=$regvalue
