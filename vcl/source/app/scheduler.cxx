@@ -53,12 +53,7 @@ ImplSchedulerData *ImplSchedulerData::GetMostImportantTask( bool bTimer )
             // the priority of the most urgent, the priority of most urgent is increased and
             // the current is the new most urgent. So starving is impossible.
             if ( p->mpScheduler->GetPriority() < pMostUrgent->mpScheduler->GetPriority() )
-            {
-                pMostUrgent->mpScheduler->SetSchedulingPriority( pMostUrgent->mpScheduler->GetPriority());
                 pMostUrgent = p;
-            }
-            else
-                p->mpScheduler->SetSchedulingPriority( p->mpScheduler->GetPriority());
         }
     }
 

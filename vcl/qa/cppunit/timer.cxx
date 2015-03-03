@@ -93,7 +93,7 @@ public:
         Start();
         mrBool = false;
     }
-    virtual void DoIdle() SAL_OVERRIDE
+    virtual void Invoke() SAL_OVERRIDE
     {
         mrBool = true;
         Application::EndYield();
@@ -104,7 +104,7 @@ void TimerTest::testIdle()
 {
     bool bTriggered = false;
     IdleBool aTest( bTriggered );
-    Idle::ProcessAllIdleHandlers();
+    Scheduler::ProcessTaskScheduling(false);
     CPPUNIT_ASSERT_MESSAGE("watchdog triggered", bTriggered);
 }
 
@@ -121,7 +121,7 @@ public:
         Start();
         mrBool = false;
     }
-    virtual void Timeout() SAL_OVERRIDE
+    virtual void Invoke() SAL_OVERRIDE
     {
         mrBool = true;
         Application::EndYield();
@@ -156,7 +156,7 @@ public:
         Start();
         mrCount = 0;
     }
-    virtual void Timeout() SAL_OVERRIDE
+    virtual void Invoke() SAL_OVERRIDE
     {
         mrCount++;
     }
@@ -181,7 +181,7 @@ public:
         SetTimeout( nMS );
         Start();
     }
-    virtual void Timeout() SAL_OVERRIDE
+    virtual void Invoke() SAL_OVERRIDE
     {
         for (int i = 0; i < 100; i++)
             Application::Yield();
@@ -211,7 +211,7 @@ public:
         Start();
         mbSlow = false;
     }
-    virtual void Timeout() SAL_OVERRIDE
+    virtual void Invoke() SAL_OVERRIDE
     {
         TimeValue aWait;
         aWait.Seconds = 1;
