@@ -9979,7 +9979,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
     };
      // -=*# Resource for function SHEET #*=-
-    Resource SC_OPCODE_TABLE
+    Resource SC_OPCODE_SHEET
     {
         String 1 // Description
         {
@@ -10051,7 +10051,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
     };
      // -=*# Resource for function SHEETS #*=-
-    Resource SC_OPCODE_TABLES
+    Resource SC_OPCODE_SHEETS
     {
         String 1 // Description
         {

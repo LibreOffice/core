@@ -221,10 +221,10 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_PMT { Text = "PMT" ; };
     String SC_OPCODE_COLUMNS { Text = "COLUMNS" ; };
     String SC_OPCODE_ROWS { Text = "ROWS" ; };
-    String SC_OPCODE_TABLES { Text = "SHEETS" ; };
+    String SC_OPCODE_SHEETS { Text = "SHEETS" ; };
     String SC_OPCODE_COLUMN { Text = "COLUMN" ; };
     String SC_OPCODE_ROW { Text = "ROW" ; };
-    String SC_OPCODE_TABLE { Text = "SHEET" ; };
+    String SC_OPCODE_SHEET { Text = "SHEET" ; };
     String SC_OPCODE_RRI { Text = "RRI" ; };
     String SC_OPCODE_FV { Text = "FV" ; };
     String SC_OPCODE_NPER { Text = "NPER" ; };
@@ -630,10 +630,10 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML
     String SC_OPCODE_PMT { Text = "PMT" ; };
     String SC_OPCODE_COLUMNS { Text = "COLUMNS" ; };
     String SC_OPCODE_ROWS { Text = "ROWS" ; };
-    String SC_OPCODE_TABLES { Text = "_xlfn.SHEETS" ; };
+    String SC_OPCODE_SHEETS { Text = "_xlfn.SHEETS" ; };
     String SC_OPCODE_COLUMN { Text = "COLUMN" ; };
     String SC_OPCODE_ROW { Text = "ROW" ; };
-    String SC_OPCODE_TABLE { Text = "_xlfn.SHEET" ; };
+    String SC_OPCODE_SHEET { Text = "_xlfn.SHEET" ; };
     String SC_OPCODE_RRI { Text = "_xlfn.RRI" ; };
     String SC_OPCODE_FV { Text = "FV" ; };
     String SC_OPCODE_NPER { Text = "NPER" ; };
@@ -1041,10 +1041,10 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_PMT { Text = "PMT" ; };
     String SC_OPCODE_COLUMNS { Text = "COLUMNS" ; };
     String SC_OPCODE_ROWS { Text = "ROWS" ; };
-    String SC_OPCODE_TABLES { Text = "SHEETS" ; };
+    String SC_OPCODE_SHEETS { Text = "SHEETS" ; };
     String SC_OPCODE_COLUMN { Text = "COLUMN" ; };
     String SC_OPCODE_ROW { Text = "ROW" ; };
-    String SC_OPCODE_TABLE { Text = "SHEET" ; };
+    String SC_OPCODE_SHEET { Text = "SHEET" ; };
     String SC_OPCODE_RRI { Text = "ZGZ" ; };
     String SC_OPCODE_FV { Text = "FV" ; };
     String SC_OPCODE_NPER { Text = "NPER" ; };
@@ -1973,7 +1973,7 @@ Resource RID_STRLIST_FUNCTION_NAMES
     {
         Text [ en-US ] = "ROWS" ;
     };
-    String SC_OPCODE_TABLES
+    String SC_OPCODE_SHEETS
     {
         Text [ en-US ] = "SHEETS" ;
     };
@@ -1985,7 +1985,7 @@ Resource RID_STRLIST_FUNCTION_NAMES
     {
         Text [ en-US ] = "ROW" ;
     };
-    String SC_OPCODE_TABLE
+    String SC_OPCODE_SHEET
     {
         Text [ en-US ] = "SHEET" ;
     };

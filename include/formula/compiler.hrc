@@ -371,8 +371,8 @@
 #define SC_OPCODE_STYLE             368
 #define SC_OPCODE_DDE               369
 #define SC_OPCODE_BASE              370
-#define SC_OPCODE_TABLE             371
-#define SC_OPCODE_TABLES            372
+#define SC_OPCODE_SHEET             371
+#define SC_OPCODE_SHEETS            372
 #define SC_OPCODE_MIN_A             373
 #define SC_OPCODE_MAX_A             374
 #define SC_OPCODE_AVERAGE_A         375

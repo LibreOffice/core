@@ -526,7 +526,7 @@ static const struct
     { ocNoName, FT_NOP }, // 151
     { ocNoName, FT_NOP }, // 152
     { ocNoName, FT_NOP }, // 153
-    { ocTable, FT_FuncFix1 },
+    { ocSheet, FT_FuncFix1 },
     { ocNoName, FT_NOP }, // 155 - opcodes do not represent any function.
     { ocNoName, FT_NOP }, // 156
     { ocIndex,  FT_FuncFix4 },

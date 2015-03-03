@@ -119,7 +119,7 @@ static bool lcl_HasRelRef( ScDocument* pDoc, ScTokenArray* pFormula, sal_uInt16 
                     {
                         case ocRow:     // ROW() returns own row index
                         case ocColumn:  // COLUMN() returns own column index
-                        case ocTable:   // SHEET() returns own sheet index
+                        case ocSheet:   // SHEET() returns own sheet index
                         case ocCell:    // CELL() may return own cell address
                             return true;
                         default:
