@@ -68,10 +68,10 @@ public:
 
 class SW_DLLPUBLIC SwFmtHoriOrient: public SfxPoolItem
 {
-    SwTwips         nXPos;              ///< Contains *always* the current RelPos.
-    sal_Int16       eOrient;
-    sal_Int16       eRelation;
-    bool            bPosToggle : 1; ///< Flip position on even pages.
+    SwTwips         m_nXPos;              ///< Contains *always* the current RelPos.
+    sal_Int16       m_eOrient;
+    sal_Int16       m_eRelation;
+    bool            m_bPosToggle : 1; ///< Flip position on even pages.
 public:
     TYPEINFO_OVERRIDE();
     SwFmtHoriOrient( SwTwips nX = 0, sal_Int16 eHori = com::sun::star::text::HoriOrientation::NONE,
@@ -89,16 +89,16 @@ public:
     virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
     virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) SAL_OVERRIDE;
 
-    sal_Int16 GetHoriOrient() const { return eOrient; }
-    sal_Int16 GetRelationOrient() const { return eRelation; }
-    void SetHoriOrient( sal_Int16 eNew ) { eOrient = eNew; }
-    void SetRelationOrient( sal_Int16 eNew ) { eRelation = eNew; }
+    sal_Int16 GetHoriOrient() const { return m_eOrient; }
+    sal_Int16 GetRelationOrient() const { return m_eRelation; }
+    void SetHoriOrient( sal_Int16 eNew ) { m_eOrient = eNew; }
+    void SetRelationOrient( sal_Int16 eNew ) { m_eRelation = eNew; }
 
-    SwTwips GetPos() const { return nXPos; }
-    void    SetPos( SwTwips nNew ) { nXPos = nNew; }
+    SwTwips GetPos() const { return m_nXPos; }
+    void    SetPos( SwTwips nNew ) { m_nXPos = nNew; }
 
-    bool IsPosToggle() const { return bPosToggle; }
-    void SetPosToggle( bool bNew ) { bPosToggle = bNew; }
+    bool IsPosToggle() const { return m_bPosToggle; }
+    void SetPosToggle( bool bNew ) { m_bPosToggle = bNew; }
 
     void dumpAsXml(struct _xmlTextWriter* pWriter) const SAL_OVERRIDE;
 };
@@ -112,10 +112,10 @@ inline SwFmtVertOrient &SwFmtVertOrient::operator=( const SwFmtVertOrient &rCpy 
 }
 inline SwFmtHoriOrient &SwFmtHoriOrient::operator=( const SwFmtHoriOrient &rCpy )
 {
-    nXPos = rCpy.GetPos();
-    eOrient = rCpy.GetHoriOrient();
-    eRelation = rCpy.GetRelationOrient();
-    bPosToggle = rCpy.IsPosToggle();
+    m_nXPos = rCpy.GetPos();
+    m_eOrient = rCpy.GetHoriOrient();
+    m_eRelation = rCpy.GetRelationOrient();
+    m_bPosToggle = rCpy.IsPosToggle();
     return *this;
 }
 

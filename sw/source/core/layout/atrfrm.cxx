@@ -1430,24 +1430,24 @@ void SwFmtVertOrient::dumpAsXml(xmlTextWriterPtr pWriter) const
 SwFmtHoriOrient::SwFmtHoriOrient( SwTwips nX, sal_Int16 eHori,
                               sal_Int16 eRel, bool bPos )
     : SfxPoolItem( RES_HORI_ORIENT ),
-    nXPos( nX ),
-    eOrient( eHori ),
-    eRelation( eRel ),
-    bPosToggle( bPos )
+    m_nXPos( nX ),
+    m_eOrient( eHori ),
+    m_eRelation( eRel ),
+    m_bPosToggle( bPos )
 {}
 
 bool SwFmtHoriOrient::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
-    return ( nXPos == static_cast<const SwFmtHoriOrient&>(rAttr).nXPos &&
-             eOrient == static_cast<const SwFmtHoriOrient&>(rAttr).eOrient &&
-             eRelation == static_cast<const SwFmtHoriOrient&>(rAttr).eRelation &&
-             bPosToggle == static_cast<const SwFmtHoriOrient&>(rAttr).bPosToggle );
+    return ( m_nXPos == static_cast<const SwFmtHoriOrient&>(rAttr).m_nXPos &&
+             m_eOrient == static_cast<const SwFmtHoriOrient&>(rAttr).m_eOrient &&
+             m_eRelation == static_cast<const SwFmtHoriOrient&>(rAttr).m_eRelation &&
+             m_bPosToggle == static_cast<const SwFmtHoriOrient&>(rAttr).m_bPosToggle );
 }
 
 SfxPoolItem*  SwFmtHoriOrient::Clone( SfxItemPool* ) const
 {
-    return new SwFmtHoriOrient( nXPos, eOrient, eRelation, bPosToggle );
+    return new SwFmtHoriOrient( m_nXPos, m_eOrient, m_eRelation, m_bPosToggle );
 }
 
 bool SwFmtHoriOrient::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
@@ -1459,11 +1459,11 @@ bool SwFmtHoriOrient::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     {
         case MID_HORIORIENT_ORIENT:
         {
-            rVal <<= (sal_Int16)eOrient;
+            rVal <<= (sal_Int16)m_eOrient;
         }
         break;
         case MID_HORIORIENT_RELATION:
-            rVal <<= (sal_Int16)eRelation;
+            rVal <<= (sal_Int16)m_eRelation;
         break;
         case MID_HORIORIENT_POSITION:
                 rVal <<= (sal_Int32)convertTwipToMm100(GetPos());
@@ -1489,12 +1489,12 @@ bool SwFmtHoriOrient::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         {
             sal_Int16 nVal = text::HoriOrientation::NONE;
             rVal >>= nVal;
-            eOrient = nVal;
+            m_eOrient = nVal;
         }
         break;
         case MID_HORIORIENT_RELATION:
         {
-            eRelation = lcl_IntToRelation(rVal);
+            m_eRelation = lcl_IntToRelation(rVal);
         }
         break;
         case MID_HORIORIENT_POSITION:
@@ -1521,10 +1521,10 @@ void SwFmtHoriOrient::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("swFmtHoriOrient"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nXPos"), BAD_CAST(OString::number(nXPos).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("eOrient"), BAD_CAST(OString::number(eOrient).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("eRelation"), BAD_CAST(OString::number(eRelation).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("bPosToggle"), BAD_CAST(OString::boolean(bPosToggle).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nXPos"), BAD_CAST(OString::number(m_nXPos).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("eOrient"), BAD_CAST(OString::number(m_eOrient).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("eRelation"), BAD_CAST(OString::number(m_eRelation).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("bPosToggle"), BAD_CAST(OString::boolean(m_bPosToggle).getStr()));
     xmlTextWriterEndElement(pWriter);
 }
 
