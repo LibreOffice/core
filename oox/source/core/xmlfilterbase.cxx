@@ -695,6 +695,13 @@ writeAppProperties( XmlFilterBase& rSelf, Reference< XDocumentProperties > xProp
 static void
 writeCustomProperties( XmlFilterBase& rSelf, Reference< XDocumentProperties > xProperties )
 {
+    uno::Reference<beans::XPropertyAccess> xUserDefinedProperties( xProperties->getUserDefinedProperties(), uno::UNO_QUERY );
+    Sequence< PropertyValue > aprop( xUserDefinedProperties->getPropertyValues() );
+    sal_Int32 nbCustomProperties = aprop.getLength();
+    // tdf#89791 : if no custom properties, no need to add docProps/custom.x
+    if (!nbCustomProperties)
+        return;
+
     rSelf.addRelation(
             "http://schemas.openxmlformats.org/officeDocument/2006/relationships/custom-properties",
             "docProps/custom.xml" );
@@ -706,9 +713,7 @@ writeCustomProperties( XmlFilterBase& rSelf, Reference< XDocumentProperties > xP
             FSNS( XML_xmlns, XML_vt ),  "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes",
             FSEND );
 
-    uno::Reference<beans::XPropertyAccess> xUserDefinedProperties( xProperties->getUserDefinedProperties(), uno::UNO_QUERY );
-    Sequence< PropertyValue > aprop( xUserDefinedProperties->getPropertyValues() );
-    for ( sal_Int32 n = 0; n < aprop.getLength(); ++n )
+    for ( sal_Int32 n = 0; n < nbCustomProperties; ++n )
     {
         if ( !aprop[n].Name.isEmpty() )
         {
