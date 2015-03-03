@@ -4047,10 +4047,10 @@ StackVar ScInterpreter::Interpret()
                 case ocPMT              : ScPMT();                      break;
                 case ocColumns          : ScColumns();                  break;
                 case ocRows             : ScRows();                     break;
-                case ocSheets           : ScTables();                   break;
+                case ocSheets           : ScSheets();                   break;
                 case ocColumn           : ScColumn();                   break;
                 case ocRow              : ScRow();                      break;
-                case ocSheet            : ScTable();                    break;
+                case ocSheet            : ScSheet();                    break;
                 case ocRRI              : ScRRI();                      break;
                 case ocFV               : ScFV();                       break;
                 case ocNper             : ScNper();                     break;

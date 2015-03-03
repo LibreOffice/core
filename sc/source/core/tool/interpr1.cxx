@@ -3797,7 +3797,7 @@ void ScInterpreter::ScRows()
     PushDouble((double)nVal);
 }
 
-void ScInterpreter::ScTables()
+void ScInterpreter::ScSheets()
 {
     sal_uInt8 nParamCount = GetByte();
     sal_uLong nVal;
@@ -4013,7 +4013,7 @@ void ScInterpreter::ScRow()
     }
 }
 
-void ScInterpreter::ScTable()
+void ScInterpreter::ScSheet()
 {
     sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 0, 1 ) )
