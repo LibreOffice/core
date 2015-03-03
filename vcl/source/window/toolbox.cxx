@@ -146,7 +146,7 @@ int ToolBox::ImplGetDragWidth( ToolBox* pThis )
 {
     #define TB_DRAGWIDTH 8  // the default width of the grip
 
-    int width = TB_DRAGWIDTH;
+    int nWidth = TB_DRAGWIDTH;
     if( pThis->IsNativeControlSupported( CTRL_TOOLBAR, PART_ENTIRE_CONTROL ) )
     {
 
@@ -158,10 +158,14 @@ int ToolBox::ImplGetDragWidth( ToolBox* pThis )
         if ( pThis->GetNativeControlRegion(CTRL_TOOLBAR, pThis->mbHorz ? PART_THUMB_VERT : PART_THUMB_HORZ,
                 aArea, ControlState::NONE, aControlValue, OUString(), aBound, aContent) )
         {
-            width = pThis->mbHorz ? aContent.GetWidth() : aContent.GetHeight();
+            nWidth = pThis->mbHorz ? aContent.GetWidth() : aContent.GetHeight();
         }
     }
-    return width;
+
+    // increase the hit area of the drag handle according to DPI scale factor
+    nWidth *= pThis->GetDPIScaleFactor();
+
+    return nWidth;
 }
 
 ButtonType determineButtonType( ImplToolItem* pItem, ButtonType defaultType )
