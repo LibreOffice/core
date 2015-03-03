@@ -33,10 +33,7 @@ class ImplTabSizer;
 class TabBarEdit;
 
 struct ImplTabBarItem;
-typedef ::std::vector< ImplTabBarItem* > ImplTabBarList;
-
-
-
+typedef std::vector<ImplTabBarItem*> ImplTabBarList;
 
 /*
 
@@ -342,20 +339,22 @@ private:
     sal_uInt16      mnDropPos;
     sal_uInt16      mnSwitchId;
     sal_uInt16      mnEditId;
-    bool            mbFormat;
-    bool            mbFirstFormat;
-    bool            mbSizeFormat;
-    bool            mbAutoMaxWidth;
-    bool            mbInSwitching;
-    bool            mbAutoEditMode;
-    bool            mbEditCanceled;
-    bool            mbDropPos;
-    bool            mbInSelect;
-    bool            mbSelColor;
-    bool            mbSelTextColor;
-    bool            mbMirrored;
-    bool            mbHasInsertTab; // if true, the tab bar has an extra tab at the end.
-    bool            mbScrollAlwaysEnabled;
+
+    bool            mbFormat : 1;
+    bool            mbFirstFormat : 1;
+    bool            mbSizeFormat : 1;
+    bool            mbAutoMaxWidth : 1;
+    bool            mbInSwitching : 1;
+    bool            mbAutoEditMode : 1;
+    bool            mbEditCanceled : 1;
+    bool            mbDropPos : 1;
+    bool            mbInSelect : 1;
+    bool            mbSelColor : 1;
+    bool            mbSelTextColor : 1;
+    bool            mbMirrored : 1;
+    bool            mbHasInsertTab : 1; // if true, the tab bar has an extra tab at the end.
+    bool            mbScrollAlwaysEnabled : 1;
+
     Link            maSelectHdl;
     Link            maSplitHdl;
     Link            maScrollAreaContextHdl;
@@ -378,7 +377,8 @@ private:
     SVT_DLLPRIVATE void            ImplPrePaint();
     SVT_DLLPRIVATE ImplTabBarItem* ImplGetLastTabBarItem( sal_uInt16 nItemCount );
     SVT_DLLPRIVATE Rectangle       ImplGetInsertTabRect(ImplTabBarItem* pItem) const;
-                    DECL_DLLPRIVATE_LINK( ImplClickHdl, ImplTabButton* );
+
+    DECL_DLLPRIVATE_LINK( ImplClickHdl, ImplTabButton* );
 
     ImplTabBarItem* seek( size_t i );
     ImplTabBarItem* prev();
@@ -499,14 +499,10 @@ public:
 
     long            GetSplitSize() const { return mnSplitSize; }
 
-    void            SetHelpText( const OUString& rText )
-                        { Window::SetHelpText( rText ); }
-    OUString        GetHelpText() const
-                        { return Window::GetHelpText(); };
-    void            SetHelpId( const OString& rId )
-                        { Window::SetHelpId( rId ); }
-    const OString& GetHelpId() const
-                        { return Window::GetHelpId(); }
+    using Window::SetHelpText;
+    using Window::GetHelpText;
+    using Window::SetHelpId;
+    using Window::GetHelpId;
 
     void            SetStyle( WinBits nStyle );
     WinBits         GetStyle() const { return mnWinStyle; }
@@ -520,7 +516,7 @@ public:
     void            SetScrollAreaContextHdl( const Link& rLink ) { maScrollAreaContextHdl = rLink; }
 
     // accessibility
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
+    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_SVTOOLS_TABBAR_HXX
