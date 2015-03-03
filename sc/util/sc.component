@@ -19,73 +19,95 @@
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
     prefix="sc" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.Calc.FilterOptionsDialog">
+    <implementation name="com.sun.star.comp.Calc.FilterOptionsDialog"
+        constructor="com_sun_star_comp_Calc_FilterOptionsDialog_get_implementation">
     <service name="com.sun.star.ui.dialogs.FilterOptionsDialog"/>
   </implementation>
   <implementation name="com.sun.star.comp.Calc.SpreadsheetDocument">
     <service name="com.sun.star.sheet.SpreadsheetDocument"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Calc.XMLContentExporter">
+  <implementation name="com.sun.star.comp.Calc.XMLContentExporter"
+      constructor="com_sun_star_comp_Calc_XMLContentExporter_get_implementation">
     <service name="com.sun.star.comp.Calc.XMLContentExporter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Calc.XMLExporter">
+  <implementation name="com.sun.star.comp.Calc.XMLExporter"
+      constructor="com_sun_star_comp_Calc_XMLExporter_get_implementation">
     <service name="com.sun.star.comp.Calc.XMLExporter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Calc.XMLMetaExporter">
+  <implementation name="com.sun.star.comp.Calc.XMLMetaExporter"
+      constructor="com_sun_star_comp_Calc_XMLMetaExporter_get_implementation">
     <service name="com.sun.star.comp.Calc.XMLMetaExporter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Calc.XMLOasisContentExporter">
+  <implementation name="com.sun.star.comp.Calc.XMLOasisContentExporter"
+      constructor="com_sun_star_comp_Calc_XMLOasisContentExporter_get_implementation">
     <service name="com.sun.star.comp.Calc.XMLOasisContentExporter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Calc.XMLOasisContentImporter">
+  <implementation name="com.sun.star.comp.Calc.XMLOasisContentImporter"
+      constructor="com_sun_star_comp_Calc_XMLOasisContentImporter_get_implementation">
     <service name="com.sun.star.comp.Calc.XMLOasisContentImporter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Calc.XMLOasisExporter">
+  <implementation name="com.sun.star.comp.Calc.XMLOasisExporter"
+      constructor="com_sun_star_comp_Calc_XMLOasisExporter_get_implementation">
     <service name="com.sun.star.comp.Calc.XMLOasisExporter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Calc.XMLOasisImporter">
+  <implementation name="com.sun.star.comp.Calc.XMLOasisImporter"
+      constructor="com_sun_star_comp_Calc_XMLOasisImporter_get_implementation">
     <service name="com.sun.star.comp.Calc.XMLOasisImporter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Calc.XMLOasisMetaExporter">
+  <implementation name="com.sun.star.comp.Calc.XMLOasisMetaExporter"
+      constructor="com_sun_star_comp_Calc_XMLOasisMetaExporter_get_implementation">
     <service name="com.sun.star.comp.Calc.XMLOasisMetaExporter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Calc.XMLOasisMetaImporter">
+  <implementation name="com.sun.star.comp.Calc.XMLOasisMetaImporter"
+      constructor="com_sun_star_comp_Calc_XMLOasisMetaImporter_get_implementation">
     <service name="com.sun.star.comp.Calc.XMLOasisMetaImporter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Calc.XMLOasisSettingsExporter">
+  <implementation name="com.sun.star.comp.Calc.XMLOasisSettingsExporter"
+      constructor="com_sun_star_comp_Calc_XMLOasisSettingsExporter_get_implementation">
     <service name="com.sun.star.comp.Calc.XMLOasisSettingsExporter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Calc.XMLOasisSettingsImporter">
+  <implementation name="com.sun.star.comp.Calc.XMLOasisSettingsImporter"
+      constructor="com_sun_star_comp_Calc_XMLOasisSettingsImporter_get_implementation">
     <service name="com.sun.star.comp.Calc.XMLOasisSettingsImporter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Calc.XMLOasisStylesExporter">
+  <implementation name="com.sun.star.comp.Calc.XMLOasisStylesExporter"
+      constructor="com_sun_star_comp_Calc_XMLOasisStylesExporter_get_implementation">
     <service name="com.sun.star.comp.Calc.XMLOasisStylesExporter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Calc.XMLOasisStylesImporter">
+  <implementation name="com.sun.star.comp.Calc.XMLOasisStylesImporter"
+      constructor="com_sun_star_comp_Calc_XMLOasisStylesImporter_get_implementation">
     <service name="com.sun.star.comp.Calc.XMLOasisStylesImporter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Calc.XMLSettingsExporter">
+  <implementation name="com.sun.star.comp.Calc.XMLSettingsExporter"
+      constructor="com_sun_star_comp_Calc_XMLSettingsExporter_get_implementation">
     <service name="com.sun.star.comp.Calc.XMLSettingsExporter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Calc.XMLStylesExporter">
+  <implementation name="com.sun.star.comp.Calc.XMLStylesExporter"
+      constructor="com_sun_star_comp_Calc_XMLStylesExporter_get_implementation">
     <service name="com.sun.star.comp.Calc.XMLStylesExporter"/>
   </implementation>
-  <implementation name="stardiv.StarCalc.ScAutoFormatsObj">
+  <implementation name="stardiv.StarCalc.ScAutoFormatsObj"
+      constructor="stardiv_StarCalc_ScAutoFormatsObj_get_implementation">
     <service name="com.sun.star.sheet.TableAutoFormats"/>
   </implementation>
-  <implementation name="stardiv.StarCalc.ScFunctionAccess">
+  <implementation name="stardiv.StarCalc.ScFunctionAccess"
+      constructor="stardiv_StarCalc_ScFunctionAccess_get_implementation">
     <service name="com.sun.star.sheet.FunctionAccess"/>
   </implementation>
-  <implementation name="stardiv.StarCalc.ScFunctionListObj">
+  <implementation name="stardiv.StarCalc.ScFunctionListObj"
+      constructor="stardiv_StarCalc_ScFunctionListObj_get_implementation">
     <service name="com.sun.star.sheet.FunctionDescriptions"/>
   </implementation>
-  <implementation name="stardiv.StarCalc.ScRecentFunctionsObj">
+  <implementation name="stardiv.StarCalc.ScRecentFunctionsObj"
+      constructor="stardiv_StarCalc_ScRecentFunctionsObj_get_implementation">
     <service name="com.sun.star.sheet.RecentFunctions"/>
   </implementation>
-  <implementation name="stardiv.StarCalc.ScSpreadsheetSettings">
+  <implementation name="stardiv.StarCalc.ScSpreadsheetSettings"
+      constructor="stardiv_StarCalc_ScSpreadsheetSettings_get_implementation">
     <service name="com.sun.star.sheet.GlobalSheetSettings"/>
   </implementation>
-  <implementation name="org.apache.openoffice.comp.sc.sidebar.ScPanelFactory">
+  <implementation name="org.apache.openoffice.comp.sc.sidebar.ScPanelFactory"
+      constructor="org_apache_openoffice_comp_sc_sidebar_ScPanelFactory_get_implementation">
     <service name="com.sun.star.ui.UIElementFactory"/>
   </implementation>
 </component>
