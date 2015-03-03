@@ -1743,7 +1743,11 @@ void ScOutputData::DrawStrings( bool bPixelToLogic )
                                 // If even at half the size the font still isn't rendered smaller,
                                 // fall back to normal clipping (showing ### for numbers).
                                 if ( nNewSize <= nAvailable )
+                                {
+                                    // Reset relevant parameters.
                                     aAreaParam.mbLeftClip = aAreaParam.mbRightClip = false;
+                                    aAreaParam.mnLeftClipLength = aAreaParam.mnRightClipLength = 0;
+                                }
 
                                 pOldPattern = NULL;
                             }
