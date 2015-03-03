@@ -55,12 +55,18 @@ public class TextSelectionHandle extends ImageView implements View.OnTouchListen
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.TextSelectionHandle);
         int handleType = a.getInt(R.styleable.TextSelectionHandle_handleType, 0x01);
 
-        if (handleType == 0x01) {
-            mHandleType = HandleType.START;
-        } else if (handleType == 0x02) {
-            mHandleType = HandleType.MIDDLE;
-        } else if (handleType == 0x03) {
-            mHandleType = HandleType.END;
+        switch (handleType) {
+            case 1:
+                mHandleType = HandleType.START;
+                break;
+            case 2:
+                mHandleType = HandleType.MIDDLE;
+                break;
+            case 3:
+                mHandleType = HandleType.END;
+                break;
+            default:
+                throw new RuntimeException("Unknown text handle id");
         }
 
         mIsRTL = false;
