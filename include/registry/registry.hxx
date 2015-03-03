@@ -30,7 +30,7 @@ extern "C" {
 
 /** specifies a collection of function pointers which represents the complete registry C-API.
 
-    This funtions pointers are used by the C++ wrapper to call the C-API.
+    These function pointers are used by the C++ wrapper to call the C-API.
 */
 struct Registry_Api
 {
@@ -67,10 +67,7 @@ struct Registry_Api
     RegError    (REGISTRY_CALLTYPE *getStringListValue) (RegKeyHandle, rtl_uString*, sal_Char***, sal_uInt32*);
     RegError    (REGISTRY_CALLTYPE *getUnicodeListValue)(RegKeyHandle, rtl_uString*, sal_Unicode***, sal_uInt32*);
     RegError    (REGISTRY_CALLTYPE *freeValueList)      (RegValueType, RegValue, sal_uInt32);
-    RegError    (REGISTRY_CALLTYPE *createLink)         (RegKeyHandle, rtl_uString*, rtl_uString*);
-    RegError    (REGISTRY_CALLTYPE *deleteLink)         (RegKeyHandle, rtl_uString*);
     RegError    (REGISTRY_CALLTYPE *getKeyType)         (RegKeyHandle, rtl_uString*, RegKeyType*);
-    RegError    (REGISTRY_CALLTYPE *getLinkTarget)      (RegKeyHandle, rtl_uString*, rtl_uString**);
     RegError    (REGISTRY_CALLTYPE *getResolvedKeyName) (RegKeyHandle, rtl_uString*, sal_Bool, rtl_uString**);
     RegError    (REGISTRY_CALLTYPE *getKeyNames)        (RegKeyHandle, rtl_uString*, rtl_uString***, sal_uInt32*);
     RegError    (REGISTRY_CALLTYPE *freeKeyNames)       (rtl_uString**, sal_uInt32);
@@ -1085,19 +1082,19 @@ inline RegError RegistryKey::getUnicodeListValue(const rtl::OUString& keyName,
             return REG_INVALID_KEY;
     }
 
-inline RegError RegistryKey::createLink(const rtl::OUString& linkName,
-                                           const rtl::OUString& linkTarget)
+inline RegError RegistryKey::createLink(const rtl::OUString& ,
+                                        const rtl::OUString& )
     {
         if (m_registry.isValid())
-            return m_registry.m_pApi->createLink(m_hImpl, linkName.pData, linkTarget.pData);
+            return REG_INVALID_LINK; // links are no longer supported
         else
             return REG_INVALID_KEY;
     }
 
-inline RegError RegistryKey::deleteLink(const rtl::OUString& linkName)
+inline RegError RegistryKey::deleteLink(const rtl::OUString& )
     {
         if (m_registry.isValid())
-            return m_registry.m_pApi->deleteLink(m_hImpl, linkName.pData);
+            return REG_INVALID_LINK; // links are no longer supported
         else
             return REG_INVALID_KEY;
     }
@@ -1111,15 +1108,12 @@ inline RegError RegistryKey::getKeyType(const rtl::OUString& keyName,
             return REG_INVALID_KEY;
     }
 
-inline RegError RegistryKey::getLinkTarget(const rtl::OUString& linkName,
-                                               rtl::OUString& rLinkTarget) const
+inline RegError RegistryKey::getLinkTarget(const rtl::OUString& ,
+                                                 rtl::OUString& ) const
     {
         if (m_registry.isValid())
-        {
-            return m_registry.m_pApi->getLinkTarget(m_hImpl,
-                                                    linkName.pData,
-                                                    &rLinkTarget.pData);
-        } else
+            return REG_INVALID_LINK; // links are no longer supported
+        else
             return REG_INVALID_KEY;
     }
 
