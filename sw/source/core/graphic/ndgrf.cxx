@@ -748,7 +748,7 @@ void SwGrfNode::ReleaseLink()
 
         // #i15508# added extra processing after getting rid of the link. Use whatever is
         // known from the formally linked graphic to get to a state as close to a directly
-        // unlinked insterted graphic as possible. Goal is to have a valid GfxLink at the
+        // unlinked inserted graphic as possible. Goal is to have a valid GfxLink at the
         // ImplGraphic (see there) that holds temporary data to the original data and type
         // information about the original data. Only when this is given will
         // SvXMLGraphicHelper::ImplInsertGraphicURL which is used at export use that type

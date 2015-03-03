@@ -641,7 +641,7 @@ bool ScConditionEntry::operator== ( const ScConditionEntry& r ) const
 void ScConditionEntry::Interpret( const ScAddress& rPos )
 {
     // Create formula cells
-    // Note: New Broadcaster (Note cells) may be insterted into the document!
+    // Note: New Broadcaster (Note cells) may be inserted into the document!
     if ( ( pFormula1 && !pFCell1 ) || ( pFormula2 && !pFCell2 ) )
         MakeCells( rPos );
 

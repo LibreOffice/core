@@ -2911,7 +2911,7 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdMasterPagesAccess::insertNewByIn
         SdPage* pPage = mpModel->mpDoc->GetSdPage( (sal_uInt16)0, PK_STANDARD );
         SdPage* pRefNotesPage = mpModel->mpDoc->GetSdPage( (sal_uInt16)0, PK_NOTES);
 
-        // create and instert new draw masterpage
+        // create and insert new draw masterpage
         SdPage* pMPage = mpModel->mpDoc->AllocSdPage(true);
         pMPage->SetSize( pPage->GetSize() );
         pMPage->SetBorder( pPage->GetLftBorder(),
@@ -2928,7 +2928,7 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdMasterPagesAccess::insertNewByIn
 
         xDrawPage = uno::Reference< drawing::XDrawPage >::query( pMPage->getUnoPage() );
 
-        // create and instert new notes masterpage
+        // create and insert new notes masterpage
         SdPage* pMNotesPage = mpModel->mpDoc->AllocSdPage(true);
         pMNotesPage->SetSize( pRefNotesPage->GetSize() );
         pMNotesPage->SetPageKind(PK_NOTES);

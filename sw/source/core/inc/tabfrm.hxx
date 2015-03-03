@@ -88,7 +88,7 @@ class SwTabFrm: public SwLayoutFrm, public SwFlowFrm
 
     /**
      * Split() splits the Frm at the specified position: a Follow is
-     * created and constructed and insterted directly after this.
+     * created and constructed and inserted directly after this.
      * Join() gets the Follow's content and destroys it.
      */
     bool Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowKeep );

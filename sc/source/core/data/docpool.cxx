@@ -427,11 +427,11 @@ void ScDocumentPool::InitVersionMaps()
     pVersionMap2 = new sal_uInt16 [ nMap2Count ];
     for ( i=0, j=nMap2Start; i < nMap2New; i++, j++ )
         pVersionMap2[i] = j;
-    // Two entries insterted ...
+    // Two entries inserted ...
     for ( i=nMap2New, j=nMap2Start+nMap2New+2; i < nMap2Count; i++, j++ )
         pVersionMap2[i] = j;
 
-    // Third Map: ATTR_INDENT from 350 insterted
+    // Third Map: ATTR_INDENT from 350 inserted
 
     const sal_uInt16 nMap3Start = 100;  // ATTR_STARTINDEX
     const sal_uInt16 nMap3End   = 160;  // ATTR_ENDINDEX
