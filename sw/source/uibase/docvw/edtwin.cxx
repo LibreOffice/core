@@ -2817,7 +2817,6 @@ void SwEditWin::MoveCursor( SwWrtShell &rSh, const Point& rDocPos,
 void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
 {
     SwWrtShell &rSh = m_rView.GetWrtShell();
-    bool bTiledRendering = rSh.isTiledRendering();
     const SwField *pCrsrFld = rSh.CrsrInsideInputFld() ? rSh.GetCurFld( true ) : NULL;
 
     // We have to check if a context menu is shown and we have an UI
@@ -2834,7 +2833,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
 
     MouseEvent rMEvt(_rMEvt);
 
-    if (!bTiledRendering && m_rView.GetPostItMgr()->IsHit(rMEvt.GetPosPixel()))
+    if (m_rView.GetPostItMgr()->IsHit(rMEvt.GetPosPixel()))
         return;
 
     m_rView.GetPostItMgr()->SetActiveSidebarWin(0);
@@ -2853,11 +2852,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
     m_bWasShdwCrsr = 0 != m_pShadCrsr;
     delete m_pShadCrsr, m_pShadCrsr = 0;
 
-    Point aDocPos;
-    if (bTiledRendering)
-        aDocPos = rMEvt.GetPosPixel();
-    else
-        aDocPos = PixelToLogic( rMEvt.GetPosPixel() );
+    const Point aDocPos( PixelToLogic( rMEvt.GetPosPixel() ) );
 
     // How many clicks do we need to select a fly frame?
     FrameControlType eControl;
@@ -2979,7 +2974,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
     SET_CURR_SHELL( &rSh );
 
     SdrView *pSdrView = rSh.GetDrawView();
-    if ( pSdrView && !bTiledRendering)
+    if ( pSdrView )
     {
         if (pSdrView->MouseButtonDown( rMEvt, this ) )
         {
@@ -3028,7 +3023,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
             m_rView.InvalidateRulerPos();
             SfxBindings& rBind = m_rView.GetViewFrame()->GetBindings();
             rBind.Update();
-            if ( !bTiledRendering && RulerColumnDrag( rMEvt,
+            if ( RulerColumnDrag( rMEvt,
                     (SwTab::COL_VERT == nMouseTabCol || SwTab::ROW_HORI == nMouseTabCol)) )
             {
                 m_rView.SetTabColFromDoc( false );
@@ -3052,7 +3047,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
         SfxBindings& rBind = m_rView.GetViewFrame()->GetBindings();
         rBind.Update();
 
-        if ( !bTiledRendering && RulerMarginDrag( rMEvt,
+        if ( RulerMarginDrag( rMEvt,
                         rSh.IsVerticalModeAtNdAndPos( *pNodeAtPos, aDocPos ) ) )
         {
             m_rView.SetNumRuleNodeFromDoc( NULL );
@@ -3108,7 +3103,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                         return;
                     }
                 }
-                if ( !bTiledRendering && EnterDrawMode( rMEvt, aDocPos ) )
+                if ( EnterDrawMode( rMEvt, aDocPos ) )
                 {
                     g_bNoInterrupt = false;
                     return;
@@ -3183,7 +3178,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                     SwEditWin::m_nDDStartPosX = aDocPos.X();
 
                     // hit an URL in DrawText object?
-                    if (bExecHyperlinks && pSdrView && !bTiledRendering)
+                    if (bExecHyperlinks && pSdrView)
                     {
                         SdrViewEvent aVEvt;
                         pSdrView->PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
@@ -3756,7 +3751,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
         }
     }
 
-    if (bCallBase && !bTiledRendering)
+    if (bCallBase)
         Window::MouseButtonDown(rMEvt);
 }
 
@@ -6250,13 +6245,32 @@ void SwEditWin::LogicMouseButtonDown(const MouseEvent& rMouseEvent)
 {
     // When we're not doing tiled rendering, then positions must be passed as pixels.
     assert(m_rView.GetWrtShell().isTiledRendering());
+
+    bool bMap = IsMapModeEnabled();
+    EnableMapMode(false);
+    Point aPoint = GetPointerPosPixel();
+    SetLastMousePos(rMouseEvent.GetPosPixel());
+
     MouseButtonDown(rMouseEvent);
+
+    SetPointerPosPixel(aPoint);
+    EnableMapMode(bMap);
 }
 
 void SwEditWin::LogicMouseButtonUp(const MouseEvent& rMouseEvent)
 {
+    // When we're not doing tiled rendering, then positions must be passed as pixels.
     assert(m_rView.GetWrtShell().isTiledRendering());
+
+    bool bMap = IsMapModeEnabled();
+    EnableMapMode(false);
+    Point aPoint = GetPointerPosPixel();
+    SetLastMousePos(rMouseEvent.GetPosPixel());
+
     MouseButtonUp(rMouseEvent);
+
+    SetPointerPosPixel(aPoint);
+    EnableMapMode(bMap);
 }
 
 void SwEditWin::SetCursorLogicPosition(const Point& rPosition, bool bPoint, bool bClearMark)
