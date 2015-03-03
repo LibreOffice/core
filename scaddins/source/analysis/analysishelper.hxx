@@ -168,7 +168,7 @@ struct FuncDataBase
 };
 
 
-class FuncData
+class SAL_DLLPRIVATE FuncData
 {
 private:
     OUString         aIntName;
