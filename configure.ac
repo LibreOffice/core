@@ -5096,7 +5096,7 @@ find_winsdk_version()
             return
         fi
         ;;
-    8.1)
+    8.1|8.1A)
         reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Windows Kits/Installed Roots/KitsRoot81"
         if test -n "$regvalue"; then
             winsdktest=$regvalue
@@ -5104,7 +5104,7 @@ find_winsdk_version()
             return
         fi
         ;;
-    8.*)
+    8.0|8.0A)
         reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Windows Kits/Installed Roots/KitsRoot"
         if test -n "$regvalue"; then
             winsdktest=$regvalue
