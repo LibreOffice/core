@@ -173,14 +173,6 @@ ScAutoFormatsObj::~ScAutoFormatsObj()
 
 // stuff for exService_...
 
-uno::Reference<uno::XInterface> SAL_CALL ScAutoFormatsObj_CreateInstance(
-                        const uno::Reference<lang::XMultiServiceFactory>& )
-{
-    SolarMutexGuard aGuard;
-    ScDLL::Init();
-    return (::cppu::OWeakObject*) new ScAutoFormatsObj;
-}
-
 OUString ScAutoFormatsObj::getImplementationName_Static()
 {
     return OUString( "stardiv.StarCalc.ScAutoFormatsObj" );
@@ -836,5 +828,17 @@ uno::Any SAL_CALL ScAutoFormatFieldObj::getPropertyValue( const OUString& aPrope
 }
 
 SC_IMPL_DUMMY_PROPERTY_LISTENER( ScAutoFormatFieldObj )
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+stardiv_StarCalc_ScAutoFormatsObj_get_implementation(::com::sun::star::uno::XComponentContext*,
+                                                     ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    SolarMutexGuard aGuard;
+    ScDLL::Init();
+    return cppu::acquire(new ScAutoFormatsObj());
+}
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -33,11 +33,6 @@ namespace com { namespace sun { namespace star { namespace io {
     class XInputStream;
 } } } }
 
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
-    ScFilterOptionsObj_CreateInstance(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::lang::XMultiServiceFactory >& );
-
 class ScFilterOptionsObj : public ::cppu::WeakImplHelper5<
                             ::com::sun::star::beans::XPropertyAccess,
                             ::com::sun::star::ui::dialogs::XExecutableDialog,

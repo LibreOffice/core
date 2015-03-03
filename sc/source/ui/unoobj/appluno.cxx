@@ -104,189 +104,13 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL sc_component_getFactory(
     uno::Reference<lang::XSingleServiceFactory> xFactory;
     OUString aImpl(OUString::createFromAscii(pImplName));
 
-    if ( aImpl == ScSpreadsheetSettings::getImplementationName_Static() )
-    {
-        xFactory.set(cppu::createOneInstanceFactory(
-                reinterpret_cast<lang::XMultiServiceFactory*>(pServiceManager),
-                ScSpreadsheetSettings::getImplementationName_Static(),
-                ScSpreadsheetSettings_CreateInstance,
-                ScSpreadsheetSettings::getSupportedServiceNames_Static() ));
-    }
-    else if ( aImpl == ScRecentFunctionsObj::getImplementationName_Static() )
-    {
-        xFactory.set(cppu::createOneInstanceFactory(
-                reinterpret_cast<lang::XMultiServiceFactory*>(pServiceManager),
-                ScRecentFunctionsObj::getImplementationName_Static(),
-                ScRecentFunctionsObj_CreateInstance,
-                ScRecentFunctionsObj::getSupportedServiceNames_Static() ));
-    }
-    else if ( aImpl == ScFunctionListObj::getImplementationName_Static() )
-    {
-        xFactory.set(cppu::createOneInstanceFactory(
-                reinterpret_cast<lang::XMultiServiceFactory*>(pServiceManager),
-                ScFunctionListObj::getImplementationName_Static(),
-                ScFunctionListObj_CreateInstance,
-                ScFunctionListObj::getSupportedServiceNames_Static() ));
-    }
-    else if ( aImpl == ScAutoFormatsObj::getImplementationName_Static() )
-    {
-        xFactory.set(cppu::createOneInstanceFactory(
-                reinterpret_cast<lang::XMultiServiceFactory*>(pServiceManager),
-                ScAutoFormatsObj::getImplementationName_Static(),
-                ScAutoFormatsObj_CreateInstance,
-                ScAutoFormatsObj::getSupportedServiceNames_Static() ));
-    }
-    else if ( aImpl == ScFunctionAccess::getImplementationName_Static() )
-    {
-        xFactory.set(cppu::createOneInstanceFactory(
-                reinterpret_cast<lang::XMultiServiceFactory*>(pServiceManager),
-                ScFunctionAccess::getImplementationName_Static(),
-                ScFunctionAccess_CreateInstance,
-                ScFunctionAccess::getSupportedServiceNames_Static() ));
-    }
-    else if ( aImpl == ScFilterOptionsObj::getImplementationName_Static() )
-    {
-        xFactory.set(cppu::createSingleFactory(
-                reinterpret_cast<lang::XMultiServiceFactory*>(pServiceManager),
-                ScFilterOptionsObj::getImplementationName_Static(),
-                ScFilterOptionsObj_CreateInstance,
-                ScFilterOptionsObj::getSupportedServiceNames_Static() ));
-    }
-    else if ( aImpl == ScXMLImport_getImplementationName() )
-    {
-        xFactory.set(cppu::createSingleFactory(
-                reinterpret_cast<lang::XMultiServiceFactory*>(pServiceManager),
-                ScXMLImport_getImplementationName(),
-                ScXMLImport_createInstance,
-                ScXMLImport_getSupportedServiceNames() ));
-    }
-    else if ( aImpl == ScXMLImport_Meta_getImplementationName() )
-    {
-        xFactory.set(cppu::createSingleFactory(
-                reinterpret_cast<lang::XMultiServiceFactory*>(pServiceManager),
-                ScXMLImport_Meta_getImplementationName(),
-                ScXMLImport_Meta_createInstance,
-                ScXMLImport_Meta_getSupportedServiceNames() ));
-    }
-    else if ( aImpl == ScXMLImport_Styles_getImplementationName() )
-    {
-        xFactory.set(cppu::createSingleFactory(
-                reinterpret_cast<lang::XMultiServiceFactory*>(pServiceManager),
-                ScXMLImport_Styles_getImplementationName(),
-                ScXMLImport_Styles_createInstance,
-                ScXMLImport_Styles_getSupportedServiceNames() ));
-    }
-    else if ( aImpl == ScXMLImport_Content_getImplementationName() )
-    {
-        xFactory.set(cppu::createSingleFactory(
-                reinterpret_cast<lang::XMultiServiceFactory*>(pServiceManager),
-                ScXMLImport_Content_getImplementationName(),
-                ScXMLImport_Content_createInstance,
-                ScXMLImport_Content_getSupportedServiceNames() ));
-    }
-    else if ( aImpl == ScXMLImport_Settings_getImplementationName() )
-    {
-        xFactory.set(cppu::createSingleFactory(
-                reinterpret_cast<lang::XMultiServiceFactory*>(pServiceManager),
-                ScXMLImport_Settings_getImplementationName(),
-                ScXMLImport_Settings_createInstance,
-                ScXMLImport_Settings_getSupportedServiceNames() ));
-    }
-    else if ( aImpl == ScXMLOOoExport_getImplementationName() )
-    {
-        xFactory = cppu::createSingleFactory(
-                reinterpret_cast<lang::XMultiServiceFactory*>(pServiceManager),
-                ScXMLOOoExport_getImplementationName(),
-                ScXMLOOoExport_createInstance,
-                ScXMLOOoExport_getSupportedServiceNames() );
-    }
-    else if ( aImpl == ScXMLOOoExport_Meta_getImplementationName() )
-    {
-        xFactory = cppu::createSingleFactory(
-                reinterpret_cast<lang::XMultiServiceFactory*>(pServiceManager),
-                ScXMLOOoExport_Meta_getImplementationName(),
-                ScXMLOOoExport_Meta_createInstance,
-                ScXMLOOoExport_Meta_getSupportedServiceNames() );
-    }
-    else if ( aImpl == ScXMLOOoExport_Styles_getImplementationName() )
-    {
-        xFactory = cppu::createSingleFactory(
-                reinterpret_cast<lang::XMultiServiceFactory*>(pServiceManager),
-                ScXMLOOoExport_Styles_getImplementationName(),
-                ScXMLOOoExport_Styles_createInstance,
-                ScXMLOOoExport_Styles_getSupportedServiceNames() );
-    }
-    else if ( aImpl == ScXMLOOoExport_Content_getImplementationName() )
-    {
-        xFactory = cppu::createSingleFactory(
-                reinterpret_cast<lang::XMultiServiceFactory*>(pServiceManager),
-                ScXMLOOoExport_Content_getImplementationName(),
-                ScXMLOOoExport_Content_createInstance,
-                ScXMLOOoExport_Content_getSupportedServiceNames() );
-    }
-    else if ( aImpl == ScXMLOOoExport_Settings_getImplementationName() )
-    {
-        xFactory = cppu::createSingleFactory(
-                reinterpret_cast<lang::XMultiServiceFactory*>(pServiceManager),
-                ScXMLOOoExport_Settings_getImplementationName(),
-                ScXMLOOoExport_Settings_createInstance,
-                ScXMLOOoExport_Settings_getSupportedServiceNames() );
-    }
-    else if ( aImpl == ScXMLOasisExport_getImplementationName() )
-    {
-        xFactory = cppu::createSingleFactory(
-                reinterpret_cast<lang::XMultiServiceFactory*>(pServiceManager),
-                ScXMLOasisExport_getImplementationName(),
-                ScXMLOasisExport_createInstance,
-                ScXMLOasisExport_getSupportedServiceNames() );
-    }
-    else if ( aImpl == ScXMLOasisExport_Meta_getImplementationName() )
-    {
-        xFactory = cppu::createSingleFactory(
-                reinterpret_cast<lang::XMultiServiceFactory*>(pServiceManager),
-                ScXMLOasisExport_Meta_getImplementationName(),
-                ScXMLOasisExport_Meta_createInstance,
-                ScXMLOasisExport_Meta_getSupportedServiceNames() );
-    }
-    else if ( aImpl == ScXMLOasisExport_Styles_getImplementationName() )
-    {
-        xFactory = cppu::createSingleFactory(
-                reinterpret_cast<lang::XMultiServiceFactory*>(pServiceManager),
-                ScXMLOasisExport_Styles_getImplementationName(),
-                ScXMLOasisExport_Styles_createInstance,
-                ScXMLOasisExport_Styles_getSupportedServiceNames() );
-    }
-    else if ( aImpl == ScXMLOasisExport_Content_getImplementationName() )
-    {
-        xFactory = cppu::createSingleFactory(
-                reinterpret_cast<lang::XMultiServiceFactory*>(pServiceManager),
-                ScXMLOasisExport_Content_getImplementationName(),
-                ScXMLOasisExport_Content_createInstance,
-                ScXMLOasisExport_Content_getSupportedServiceNames() );
-    }
-    else if ( aImpl == ScXMLOasisExport_Settings_getImplementationName() )
-    {
-        xFactory = cppu::createSingleFactory(
-                reinterpret_cast<lang::XMultiServiceFactory*>(pServiceManager),
-                ScXMLOasisExport_Settings_getImplementationName(),
-                ScXMLOasisExport_Settings_createInstance,
-                ScXMLOasisExport_Settings_getSupportedServiceNames() );
-    }
-    else if ( aImpl == ScDocument_getImplementationName() )
+    if ( aImpl == ScDocument_getImplementationName() )
     {
         xFactory.set(sfx2::createSfxModelFactory(
                 reinterpret_cast<lang::XMultiServiceFactory*>(pServiceManager),
                 ScDocument_getImplementationName(),
                 ScDocument_createInstance,
                 ScDocument_getSupportedServiceNames() ));
-    }
-    else if ( aImpl == ::sc::sidebar::ScPanelFactory::getImplementationName() )
-    {
-        xFactory = ::cppu::createSingleFactory(
-            reinterpret_cast<lang::XMultiServiceFactory*>(pServiceManager),
-            ::sc::sidebar::ScPanelFactory::getImplementationName(),
-            ::sc::sidebar::ScPanelFactory::createInstance,
-            ::sc::sidebar::ScPanelFactory::getSupportedServiceNames() );
     }
 
     void* pRet = NULL;
@@ -307,27 +131,6 @@ ScSpreadsheetSettings::ScSpreadsheetSettings() :
 
 ScSpreadsheetSettings::~ScSpreadsheetSettings()
 {
-}
-
-uno::Reference<uno::XInterface> SAL_CALL ScSpreadsheetSettings_CreateInstance(
-                        const uno::Reference<lang::XMultiServiceFactory>& /* rSMgr */ )
-{
-    SolarMutexGuard aGuard;
-    ScDLL::Init();
-    return (cppu::OWeakObject*)new ScSpreadsheetSettings();
-}
-
-OUString ScSpreadsheetSettings::getImplementationName_Static()
-{
-    return OUString( "stardiv.StarCalc.ScSpreadsheetSettings" );
-}
-
-uno::Sequence<OUString> ScSpreadsheetSettings::getSupportedServiceNames_Static()
-{
-    uno::Sequence<OUString> aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = SCSPREADSHEETSETTINGS_SERVICE;
-    return aRet;
 }
 
 bool ScSpreadsheetSettings::getPropertyBool(const OUString& aPropertyName) throw (css::uno::RuntimeException)
@@ -596,14 +399,6 @@ ScRecentFunctionsObj::~ScRecentFunctionsObj()
 
 // stuff for exService_...
 
-uno::Reference<uno::XInterface> SAL_CALL ScRecentFunctionsObj_CreateInstance(
-                        const uno::Reference<lang::XMultiServiceFactory>& /* rSMgr */ )
-{
-    SolarMutexGuard aGuard;
-    ScDLL::Init();
-    return (cppu::OWeakObject*)new ScRecentFunctionsObj();
-}
-
 OUString ScRecentFunctionsObj::getImplementationName_Static()
 {
     return OUString( "stardiv.StarCalc.ScRecentFunctionsObj" );
@@ -671,14 +466,6 @@ ScFunctionListObj::~ScFunctionListObj()
 }
 
 // stuff for exService_...
-
-uno::Reference<uno::XInterface> SAL_CALL ScFunctionListObj_CreateInstance(
-                        const uno::Reference<lang::XMultiServiceFactory>& /* rSMgr */ )
-{
-    SolarMutexGuard aGuard;
-    ScDLL::Init();
-    return (cppu::OWeakObject*)new ScFunctionListObj();
-}
 
 OUString ScFunctionListObj::getImplementationName_Static()
 {
@@ -904,5 +691,33 @@ sal_Bool SAL_CALL ScFunctionListObj::hasByName( const OUString& aName )
     }
     return false;
 }
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+stardiv_StarCalc_ScSpreadsheetSettings_get_implementation(::com::sun::star::uno::XComponentContext*,
+                                                          ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    SolarMutexGuard aGuard;
+    ScDLL::Init();
+    return cppu::acquire(new ScSpreadsheetSettings());
+}
+
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+stardiv_StarCalc_ScRecentFunctionsObj_get_implementation(::com::sun::star::uno::XComponentContext*,
+                                                         ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new ScRecentFunctionsObj());
+}
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+stardiv_StarCalc_ScFunctionListObj_get_implementation(::com::sun::star::uno::XComponentContext*,
+                                                      ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new ScFunctionListObj());
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
