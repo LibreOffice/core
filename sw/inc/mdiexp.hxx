@@ -53,10 +53,6 @@ void EnableCmdInterface(bool bEnable = true);
 
 void RepaintPagePreview( SwViewShell* pVwSh, const SwRect& rRect );
 
-// ndgrf.cxx
-// Delete all QuickDraw-bitmaps of the specific Document.
-void DelAllGrfCacheEntries( SwDoc* pDoc );
-
 // Read ChgMode for tables from configuration.
 TblChgMode GetTblChgDefaultMode();
 

@@ -259,7 +259,6 @@ class SVT_DLLPUBLIC SvListView
     void                ActionInserted( SvTreeListEntry* pEntry );
     void                ActionInsertedTree( SvTreeListEntry* pEntry );
     void                ActionRemoving( SvTreeListEntry* pEntry );
-    void                ActionRemoved( SvTreeListEntry* pEntry );
     void                ActionClear();
 
 protected:

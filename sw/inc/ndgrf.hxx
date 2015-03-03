@@ -131,7 +131,6 @@ public:
     void SetGraphic(const Graphic& rGraphic, const OUString& rLink);
 
     /// wrappers for non-const calls at GraphicObject
-    void ReleaseGraphicFromCache() { maGrfObj.ReleaseFromCache(); }
     void StartGraphicAnimation(OutputDevice* pOut, const Point& rPt, const Size& rSz, long nExtraData = 0, const GraphicAttr* pAttr = NULL, sal_uLong nFlags = GRFMGR_DRAW_STANDARD, OutputDevice* pFirstFrameOutDev = NULL) { maGrfObj.StartAnimation(pOut, rPt, rSz, nExtraData, pAttr, nFlags, pFirstFrameOutDev); }
     void StopGraphicAnimation(OutputDevice* pOut = NULL, long nExtraData = 0) { maGrfObj.StopAnimation(pOut, nExtraData); }
 

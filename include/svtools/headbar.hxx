@@ -297,7 +297,6 @@ public:
     virtual void        StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
     virtual void        DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
-    void                UserDraw( const UserDrawEvent& rUDEvt );
     void                StartDrag();
     void                Drag();
     virtual void        EndDrag();

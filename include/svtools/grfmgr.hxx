@@ -350,7 +350,6 @@ public:
                                 const GraphicAttr* pAttr = NULL,
                                 sal_uLong nFlags = GRFMGR_DRAW_STANDARD
                             ) const;
-    void                    ReleaseFromCache();
 
     const Graphic&          GetGraphic() const;
     void                    SetGraphic( const Graphic& rGraphic, const GraphicObject* pCopyObj = 0);
@@ -618,8 +617,6 @@ public:
                         );
 
     void                SetCacheTimeout( sal_uLong nTimeoutSeconds );
-
-    void                ReleaseFromCache( const GraphicObject& rObj );
 
     bool                IsInCache(
                             OutputDevice* pOut,

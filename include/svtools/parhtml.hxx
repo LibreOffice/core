@@ -168,7 +168,6 @@ public:
     bool IsNewDoc() const       { return bNewDoc; }
     bool IsInHeader() const     { return bIsInHeader; }
     bool IsInBody() const       { return bIsInBody; }
-    bool IsValidSyntax() const  { return true; }
     bool IsReadListing() const  { return bReadListing; }
     bool IsReadXMP() const      { return bReadXMP; }
     bool IsReadPRE() const      { return bReadPRE; }

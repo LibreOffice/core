@@ -325,7 +325,6 @@ public:
     bool RequestHelp( const HelpEvent& rHEvt );
     void                EndSelection();
     bool IsNodeButton( const Point& rPosPixel, SvTreeListEntry* pEntry ) const;
-    void                RepaintScrollBars();
     void EnableAsyncDrag( bool b ) { bAsyncBeginDrag = b; }
     void SetUpdateMode( bool bMode );
     bool GetUpdateMode() const { return bUpdateMode; }

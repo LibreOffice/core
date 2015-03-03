@@ -66,17 +66,6 @@ IMapObject::IMapObject( const OUString& rURL, const OUString& rAltText, const OU
 }
 
 
-/******************************************************************************
-|*
-|* release internal memory
-|*
-\******************************************************************************/
-
-sal_uInt16 IMapObject::GetVersion() const
-{
-    return IMAP_OBJ_VERSION;
-}
-
 void IMapObject::Write( SvStream& rOStm, const OUString& rBaseURL ) const
 {
     const rtl_TextEncoding  eEncoding = osl_getThreadTextEncoding();
@@ -750,18 +739,6 @@ bool ImageMap::operator==( const ImageMap& rImageMap )
 bool ImageMap::operator!=( const ImageMap& rImageMap )
 {
     return !( *this == rImageMap );
-}
-
-
-/******************************************************************************
-|*
-|* release internal memory
-|*
-\******************************************************************************/
-
-sal_uInt16 ImageMap::GetVersion() const
-{
-    return IMAGE_MAP_VERSION;
 }
 
 

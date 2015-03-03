@@ -69,9 +69,6 @@ public:
     virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
     virtual void    DataChanged( const DataChangedEvent& rDEvt ) SAL_OVERRIDE;
 
-    void            StartScroll();
-    void            EndScroll( long nDeltaX, long nDeltaY );
-
     using OutputDevice::SetMapMode;
     virtual void    SetMapMode( const MapMode& rNewMapMode ) SAL_OVERRIDE;
     MapMode GetMapMode() const;

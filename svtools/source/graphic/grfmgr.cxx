@@ -509,12 +509,6 @@ bool GraphicObject::IsCached( OutputDevice* pOut, const Point& rPt, const Size& 
     return bRet;
 }
 
-void GraphicObject::ReleaseFromCache()
-{
-
-    mpMgr->ReleaseFromCache( *this );
-}
-
 bool GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
                           const GraphicAttr* pAttr, sal_uLong nFlags )
 {

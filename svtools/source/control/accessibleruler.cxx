@@ -118,11 +118,6 @@ awt::Size SAL_CALL SvtRulerAccessible::getSize() throw( RuntimeException, std::e
     return AWTSize( GetBoundingBox().GetSize() );
 }
 
-bool SAL_CALL SvtRulerAccessible::isShowing() throw( RuntimeException )
-{
-    return true;
-}
-
 bool SAL_CALL SvtRulerAccessible::isVisible() throw( RuntimeException )
 {
     ::osl::MutexGuard           aGuard( m_aMutex );
@@ -216,8 +211,7 @@ uno::Reference< XAccessibleStateSet > SAL_CALL SvtRulerAccessible::getAccessible
     {
         pStateSetHelper->AddState( AccessibleStateType::ENABLED );
 
-        if( isShowing() )
-            pStateSetHelper->AddState( AccessibleStateType::SHOWING );
+        pStateSetHelper->AddState( AccessibleStateType::SHOWING );
 
         if( isVisible() )
             pStateSetHelper->AddState( AccessibleStateType::VISIBLE );

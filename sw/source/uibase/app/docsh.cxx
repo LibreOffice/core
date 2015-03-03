@@ -1096,7 +1096,6 @@ void SwDocShell::SetView(SwView* pVw)
 
 void SwDocShell::PrepareReload()
 {
-    ::DelAllGrfCacheEntries( mpDoc );
 }
 
 // #i59688#

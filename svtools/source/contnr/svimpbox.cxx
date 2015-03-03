@@ -359,7 +359,6 @@ void SvImpLBox::CursorDown()
     if( pNextFirstToDraw )
     {
         nFlags &= (~F_FILLING);
-        pView->NotifyScrolling( -1 );
         ShowCursor( false );
         pView->Update();
         pStartEntry = pNextFirstToDraw;
@@ -381,7 +380,6 @@ void SvImpLBox::CursorUp()
     {
         nFlags &= (~F_FILLING);
         long nEntryHeight = pView->GetEntryHeight();
-        pView->NotifyScrolling( 1 );
         ShowCursor( false );
         pView->Update();
         pStartEntry = pPrevFirstToDraw;
@@ -422,7 +420,6 @@ void SvImpLBox::PageDown( sal_uInt16 nDelta )
     else
     {
         long nScroll = nRealDelta * (-1);
-        pView->NotifyScrolling( nScroll );
         Rectangle aArea( GetVisibleArea() );
         nScroll = pView->GetEntryHeight() * static_cast<long>(nRealDelta);
         nScroll = -nScroll;
@@ -461,7 +458,6 @@ void SvImpLBox::PageUp( sal_uInt16 nDelta )
     else
     {
         long nEntryHeight = pView->GetEntryHeight();
-        pView->NotifyScrolling( (long)nRealDelta );
         Rectangle aArea( GetVisibleArea() );
         pView->Update();
         pView->Scroll( 0, nEntryHeight*nRealDelta, aArea, SCROLL_NOCHILDREN );
@@ -749,7 +745,6 @@ void SvImpLBox::KeyLeftRight( long nDelta )
         pView->Update();
     BeginScroll();
     nFlags &= (~F_FILLING);
-    pView->NotifyScrolling( 0 ); // 0 == horizontal scrolling
     ShowCursor( false );
 
     // neuen Origin berechnen
@@ -966,7 +961,6 @@ void SvImpLBox::Paint( const Rectangle& rRect )
     if( !(nFlags & F_PAINTED) )
     {
         nFlags |= F_PAINTED;
-        RepaintScrollBars();
     }
     nFlags &= (~F_IN_PAINT);
 }
@@ -3111,7 +3105,6 @@ void SvImpLBox::BeginScroll()
 {
     if( !(nFlags & F_IN_SCROLLING))
     {
-        pView->NotifyBeginScroll();
         nFlags |= F_IN_SCROLLING;
     }
 }
@@ -3250,10 +3243,6 @@ void SvImpLBox::EndSelection()
 {
     DestroyAnchor();
     nFlags &=  ~F_START_EDITTIMER;
-}
-
-void SvImpLBox::RepaintScrollBars()
-{
 }
 
 void SvImpLBox::SetUpdateMode( bool bMode )

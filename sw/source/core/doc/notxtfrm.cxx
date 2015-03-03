@@ -540,7 +540,6 @@ bool SwNoTxtFrm::GetCrsrOfst(SwPosition* pPos, Point& ,
 }
 
 #define CLEARCACHE( pNd ) {\
-    (pNd)->ReleaseGraphicFromCache();\
     SwFlyFrm* pFly = FindFlyFrm();\
     if( pFly && pFly->GetFmt()->GetSurround().IsContour() )\
     {\

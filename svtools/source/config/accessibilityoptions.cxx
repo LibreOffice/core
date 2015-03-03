@@ -619,12 +619,6 @@ bool SvtAccessibilityOptions::IsModified() const
 {
     return sm_pSingleImplConfig->IsModified();
 }
-void SvtAccessibilityOptions::Commit()
-{
-    //sm_pSingleImplConfig->Commit();
-}
-
-
 
 bool SvtAccessibilityOptions::GetAutoDetectSystemHC() const
 {
