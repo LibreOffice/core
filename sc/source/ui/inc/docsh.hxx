@@ -176,8 +176,6 @@ public:
                     ScDocShell( const sal_uInt64 i_nSfxCreationFlags = SFXMODEL_EMBEDDED_OBJECT );
                     virtual ~ScDocShell();
 
-    using SotObject::GetInterface;
-
 #if ENABLE_TELEPATHY
     SAL_DLLPRIVATE ScCollaboration* GetCollaboration();
 #endif

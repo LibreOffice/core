@@ -585,10 +585,10 @@ sal_Int32 StgFATStrm::GetPage( short nOff, bool bMake, sal_uInt16 *pnMasterAlloc
 {
     OSL_ENSURE( nOff >= 0, "The offset may not be negative!" );
     if( pnMasterAlloc ) *pnMasterAlloc = 0;
-    if( nOff < rIo.aHdr.GetFAT1Size() )
+    if( nOff < StgHeader::GetFAT1Size() )
         return rIo.aHdr.GetFATPage( nOff );
     sal_Int32 nMaxPage = nSize >> 2;
-    nOff = nOff - rIo.aHdr.GetFAT1Size();
+    nOff = nOff - StgHeader::GetFAT1Size();
     // Anzahl der Masterpages, durch die wir iterieren muessen
     sal_uInt16 nMasterCount =  ( nPageSize >> 2 ) - 1;
     sal_uInt16 nBlocks = nOff / nMasterCount;
@@ -664,11 +664,11 @@ bool StgFATStrm::SetPage( short nOff, sal_Int32 nNewPage )
     m_aPagesCache.clear();
 
     bool bRes = true;
-    if( nOff < rIo.aHdr.GetFAT1Size() )
+    if( nOff < StgHeader::GetFAT1Size() )
         rIo.aHdr.SetFATPage( nOff, nNewPage );
     else
     {
-        nOff = nOff - rIo.aHdr.GetFAT1Size();
+        nOff = nOff - StgHeader::GetFAT1Size();
         // Anzahl der Masterpages, durch die wir iterieren muessen
         sal_uInt16 nMasterCount =  ( nPageSize >> 2 ) - 1;
         sal_uInt16 nBlocks = nOff / nMasterCount;

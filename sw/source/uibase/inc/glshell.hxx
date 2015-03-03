@@ -26,8 +26,6 @@ class SwGlosDocShell : public SwDocShell
     OUString          aShortName;
     OUString          aGroupName;
 
-    using SotObject::GetInterface;
-
 protected:
     virtual bool Save() SAL_OVERRIDE;
 
@@ -59,8 +57,6 @@ class SwWebGlosDocShell : public SwWebDocShell
     OUString          aLongName;
     OUString          aShortName;
     OUString          aGroupName;
-
-    using SotObject::GetInterface;
 
 protected:
     virtual bool Save() SAL_OVERRIDE;
