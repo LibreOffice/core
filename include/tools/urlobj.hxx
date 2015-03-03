@@ -1046,7 +1046,7 @@ public:
     OUString CutExtension(DecodeMechanism eMechanism = DECODE_TO_IURI,
                            rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8);
 
-    bool IsCaseSensitive() const;
+    static bool IsCaseSensitive() { return true; }
 
 
 private:
