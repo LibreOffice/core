@@ -612,25 +612,6 @@ RegError REGISTRY_CALLTYPE freeValueList(RegValueType valueType,
 }
 
 
-//  createLink
-
-RegError REGISTRY_CALLTYPE createLink(
-    SAL_UNUSED_PARAMETER RegKeyHandle, SAL_UNUSED_PARAMETER rtl_uString*,
-    SAL_UNUSED_PARAMETER rtl_uString*)
-{
-    return REG_INVALID_LINK; // links are no longer supported
-}
-
-
-//  deleteLink
-
-RegError REGISTRY_CALLTYPE deleteLink(
-    SAL_UNUSED_PARAMETER RegKeyHandle, SAL_UNUSED_PARAMETER rtl_uString*)
-{
-    return REG_INVALID_LINK; // links are no longer supported
-}
-
-
 //  getKeyType
 
 RegError REGISTRY_CALLTYPE getKeyType(RegKeyHandle hKey,
@@ -645,16 +626,6 @@ RegError REGISTRY_CALLTYPE getKeyType(RegKeyHandle hKey,
         return REG_INVALID_KEY;
 
     return pKey->getKeyType(keyName, pKeyType);
-}
-
-
-//  getLinkTarget
-
-RegError REGISTRY_CALLTYPE getLinkTarget(
-    SAL_UNUSED_PARAMETER RegKeyHandle, SAL_UNUSED_PARAMETER rtl_uString*,
-    SAL_UNUSED_PARAMETER rtl_uString**)
-{
-    return REG_INVALID_LINK; // links are no longer supported
 }
 
 
