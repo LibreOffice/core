@@ -105,7 +105,6 @@ public:
     virtual SfxDocumentInfoDialog*  CreateDocumentInfoDialog( ::vcl::Window *pParent,
                                                               const SfxItemSet &rSet ) SAL_OVERRIDE;
 
-    using SotObject::GetInterface;
     using SfxObjectShell::GetVisArea;
     using SfxShell::GetViewShell;
 

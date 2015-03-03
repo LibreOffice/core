@@ -46,8 +46,6 @@ private:
 public:
     SFX_DECL_OBJECTFACTORY();
 
-    using SotObject::GetInterface;
-
     GraphicDocShell (
         SfxObjectCreateMode eMode = SFX_CREATE_MODE_EMBEDDED,
         bool bSdDataObj=false,

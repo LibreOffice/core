@@ -150,7 +150,6 @@ protected:
     virtual void                DoFlushDocInfo() SAL_OVERRIDE;
 
 public:
-    using SotObject::GetInterface;
 
     /// but we implement this ourselves.
     SFX_DECL_INTERFACE(SW_DOCSHELL)

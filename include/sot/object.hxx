@@ -115,9 +115,6 @@ public:
     virtual const SotFactory * GetSvFactory() const;
     virtual void *             Cast( const SotFactory * );
 
-                        // only for the macros in So3 not to get out of hand
-    IUnknown *          GetInterface( const SvGlobalName & );
-
     bool                Owner() const { return bOwner; }
 
     sal_uInt16          GetOwnerLockCount() const { return nOwnerLockCount; }

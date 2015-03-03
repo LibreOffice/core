@@ -62,17 +62,6 @@ SotObject::~SotObject()
     SotFactory::DecSvObjectCount( this );
 }
 
-/*************************************************************************
-|*    SotObject::GetInterface()
-|*
-|*    Beschreibung: Um so3 zu helfen
-*************************************************************************/
-IUnknown * SotObject::GetInterface( const SvGlobalName & )
-{
-    return NULL;
-}
-
-
 void SotObject::OwnerLock
 (
     bool bLock      /* true, lock. false, unlock. */

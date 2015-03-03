@@ -220,8 +220,6 @@ public:
     void                        Stamp_SetPrintCancelState(bool bState);
     bool                        Stamp_GetPrintCancelState() const;
 
-    using SotObject::GetInterface;
-
     static OUString CreateShellID( const SfxObjectShell* pShell );
 
     // Document-Shell Iterator
