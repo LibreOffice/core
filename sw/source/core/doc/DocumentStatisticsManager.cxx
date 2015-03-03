@@ -72,7 +72,8 @@ namespace sw
 DocumentStatisticsManager::DocumentStatisticsManager( SwDoc& i_rSwdoc ) : m_rDoc( i_rSwdoc ),
                                                                           mpDocStat( new SwDocStat )
 {
-    maStatsUpdateTimer.SetTimeout( 100 );
+    maStatsUpdateTimer.SetTimeout( 1 );
+    maStatsUpdateTimer.SetPriority( SchedulerPriority::LOWEST );
     maStatsUpdateTimer.SetTimeoutHdl( LINK( this, DocumentStatisticsManager, DoIdleStatsUpdate ) );
 }
 
