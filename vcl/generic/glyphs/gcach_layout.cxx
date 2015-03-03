@@ -349,6 +349,41 @@ struct HbScriptRun
 
 typedef std::vector<HbScriptRun> HbScriptRuns;
 
+namespace vcl {
+    struct Run
+    {
+        int32_t nStart;
+        int32_t nEnd;
+        UScriptCode nCode;
+        Run(int32_t nStart_, int32_t nEnd_, UScriptCode nCode_)
+            : nStart(nStart_), nEnd(nEnd_), nCode(nCode_)
+        {}
+    };
+
+    class TextLayoutCache
+    {
+    public:
+        std::vector<vcl::Run> runs;
+        TextLayoutCache(OUString const& rString, sal_Int32 const nEnd)
+        {
+            vcl::ScriptRun aScriptRun(
+                reinterpret_cast<const UChar *>(rString.getStr()),
+                nEnd);
+            while (aScriptRun.next())
+            {
+                runs.push_back(Run(aScriptRun.getScriptStart(),
+                    aScriptRun.getScriptEnd(), aScriptRun.getScriptCode()));
+            }
+        }
+    };
+}
+
+std::shared_ptr<vcl::TextLayoutCache> ServerFontLayout::CreateTextLayoutCache(
+        OUString const& rString) const
+{
+    return std::make_shared<vcl::TextLayoutCache>(rString, rString.getLength());
+}
+
 bool HbLayoutEngine::Layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
 {
     ServerFont& rFont = rLayout.GetServerFont();
@@ -370,7 +405,18 @@ bool HbLayoutEngine::Layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
 
     rLayout.Reserve(nGlyphCapacity);
 
-    vcl::ScriptRun aScriptRun(reinterpret_cast<const UChar *>(rArgs.mpStr), rArgs.mnEndCharPos);
+    std::unique_ptr<vcl::TextLayoutCache> pNewScriptRun;
+    vcl::TextLayoutCache const* pTextLayout;
+    if (rArgs.m_pTextLayoutCache)
+    {
+        pTextLayout = rArgs.m_pTextLayoutCache; // use cache!
+    }
+    else
+    {
+        pNewScriptRun.reset(new vcl::TextLayoutCache(
+            reinterpret_cast<const UChar *>(rArgs.mpStr), rArgs.mnEndCharPos));
+        pTextLayout = pNewScriptRun.get();
+    }
 
     Point aCurrPos(0, 0);
     while (true)
@@ -383,29 +429,31 @@ bool HbLayoutEngine::Layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
         // Find script subruns.
         int nCurrentPos = nBidiMinRunPos;
         HbScriptRuns aScriptSubRuns;
-        while (aScriptRun.next())
+        size_t k = 0;
+        for (; k < pTextLayout->runs.size(); ++k)
         {
-            if (aScriptRun.getScriptStart() <= nCurrentPos && aScriptRun.getScriptEnd() > nCurrentPos)
+            vcl::Run const& rRun(pTextLayout->runs[k]);
+            if (rRun.nStart <= nCurrentPos && nCurrentPos < rRun.nEnd)
+            {
                 break;
+            }
         }
 
         while (nCurrentPos < nBidiEndRunPos)
         {
             int32_t nMinRunPos = nCurrentPos;
-            int32_t nEndRunPos = std::min(aScriptRun.getScriptEnd(), nBidiEndRunPos);
-            HbScriptRun aRun(nMinRunPos, nEndRunPos, aScriptRun.getScriptCode());
+            int32_t nEndRunPos = std::min(pTextLayout->runs[k].nEnd, nBidiEndRunPos);
+            HbScriptRun aRun(nMinRunPos, nEndRunPos, pTextLayout->runs[k].nCode);
             aScriptSubRuns.push_back(aRun);
 
             nCurrentPos = nEndRunPos;
-            aScriptRun.next();
+            ++k;
         }
 
         // RTL subruns should be reversed to ensure that final glyph order is
         // correct.
         if (bRightToLeft)
             std::reverse(aScriptSubRuns.begin(), aScriptSubRuns.end());
-
-        aScriptRun.reset();
 
         for (HbScriptRuns::iterator it = aScriptSubRuns.begin(); it != aScriptSubRuns.end(); ++it)
         {

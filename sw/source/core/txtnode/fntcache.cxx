@@ -1973,7 +1973,8 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
         else
         {
             aTxtSize.Width() = rInf.GetOut().GetTextWidth( rInf.GetText(),
-                                                           rInf.GetIdx(), nLn );
+                                                           rInf.GetIdx(), nLn,
+                                                           rInf.GetVclCache());
             rInf.SetKanaDiff( 0 );
         }
 
@@ -2430,12 +2431,12 @@ sal_Int32 SwFont::GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth )
             sal_Int32 nHyphPos = *rInf.GetHyphPos();
             nTxtBreak = rInf.GetOut().GetTextBreak( *pTmpText, nTextWidth,
                              static_cast<sal_Unicode>('-'), nHyphPos,
-                             nTmpIdx, nTmpLen, nKern );
+                             nTmpIdx, nTmpLen, nKern, rInf.GetVclCache());
             *rInf.GetHyphPos() = (nHyphPos == -1) ? COMPLETE_STRING : nHyphPos;
         }
         else
             nTxtBreak = rInf.GetOut().GetTextBreak( *pTmpText, nTextWidth,
-                                                    nTmpIdx, nTmpLen, nKern );
+                             nTmpIdx, nTmpLen, nKern, rInf.GetVclCache());
 
         if ( bTextReplaced && nTxtBreak != -1 )
         {

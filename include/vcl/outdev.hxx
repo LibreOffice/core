@@ -140,6 +140,7 @@ namespace vcl
     class ExtOutDevData;
     class ITextLayout;
     struct FontCapabilities;
+    class TextLayoutCache;
 }
 
 // OutputDevice-Types
@@ -1066,7 +1067,8 @@ public:
 
         See also GetTextBoundRect() for more explanation + code examples.
     */
-    long                        GetTextWidth( const OUString& rStr, sal_Int32 nIndex = 0, sal_Int32 nLen = -1 ) const;
+    long                        GetTextWidth( const OUString& rStr, sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
+                                  vcl::TextLayoutCache const* = nullptr) const;
 
     /** Height where any character of the current font fits; in logic coordinates.
 
@@ -1081,7 +1083,8 @@ public:
                                                sal_Int32 nLen = -1,
                                                int flags = 0);
     long                        GetTextArray( const OUString& rStr, long* pDXAry = NULL,
-                                              sal_Int32 nIndex = 0, sal_Int32 nLen = -1 ) const;
+                                              sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
+                                              vcl::TextLayoutCache const* = nullptr) const;
 
     bool                        GetCaretPositions( const OUString&, long* pCaretXArray,
                                               sal_Int32 nIndex, sal_Int32 nLen,
@@ -1092,11 +1095,14 @@ public:
                                                  sal_Int32 nIndex = 0, sal_Int32 nLen = -1);
     sal_Int32                   GetTextBreak( const OUString& rStr, long nTextWidth,
                                               sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
-                                              long nCharExtra = 0 ) const;
+                                              long nCharExtra = 0,
+                                              vcl::TextLayoutCache const* = nullptr) const;
     sal_Int32                   GetTextBreak( const OUString& rStr, long nTextWidth,
                                               sal_Unicode nExtraChar, sal_Int32& rExtraCharPos,
                                               sal_Int32 nIndex, sal_Int32 nLen,
-                                              long nCharExtra = 0 ) const;
+                                              long nCharExtra = 0,
+                                              vcl::TextLayoutCache const* = nullptr) const;
+    std::shared_ptr<vcl::TextLayoutCache> CreateTextLayoutCache(OUString const&) const;
 
 private:
     SAL_DLLPRIVATE void         ImplInitTextColor();
@@ -1247,9 +1253,11 @@ public:
     virtual bool                HasMirroredGraphics() const;
     SAL_DLLPRIVATE SalLayout*   ImplLayout( const OUString&, sal_Int32 nIndex, sal_Int32 nLen,
                                             const Point& rLogicPos = Point(0,0), long nLogicWidth=0,
-                                            const long* pLogicDXArray=NULL, int flags=0 ) const;
+                                            const long* pLogicDXArray=NULL, int flags=0,
+                                            vcl::TextLayoutCache const* = nullptr) const;
     SAL_DLLPRIVATE ImplLayoutArgs ImplPrepareLayoutArgs( OUString&, const sal_Int32 nIndex, const sal_Int32 nLen,
-                                                         DeviceCoordinate nPixelWidth, const DeviceCoordinate* pPixelDXArray, int flags = 0 ) const;
+                                                         DeviceCoordinate nPixelWidth, const DeviceCoordinate* pPixelDXArray, int flags = 0,
+                vcl::TextLayoutCache const* = nullptr) const;
     SAL_DLLPRIVATE SalLayout*   ImplGlyphFallbackLayout( SalLayout*, ImplLayoutArgs& ) const;
     // tells whether this output device is RTL in an LTR UI or LTR in a RTL UI
     SAL_DLLPRIVATE SalLayout*   getFallbackFont(ImplFontEntry &rFallbackFont,

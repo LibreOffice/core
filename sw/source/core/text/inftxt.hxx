@@ -158,6 +158,11 @@ protected:
     OutputDevice* m_pOut;
     OutputDevice* m_pRef;
 
+    // performance hack - this is only used by SwTxtFormatInfo but
+    // because it's not even possible to dynamic_cast these things
+    // currently it has to be stored here
+    std::shared_ptr<vcl::TextLayoutCache> m_pCachedVclData;
+
     SwFont *m_pFnt;
     SwUnderlineFont *m_pUnderFnt; // Font for underlining
     SwTxtFrm *m_pFrm;
@@ -295,18 +300,21 @@ public:
     SwPosSize GetTxtSize() const;
     void GetTxtSize( const SwScriptInfo* pSI, const sal_Int32 nIdx,
                       const sal_Int32 nLen, const sal_uInt16 nComp,
-                      sal_uInt16& nMinSize, sal_uInt16& nMaxSizeDiff ) const;
+                      sal_uInt16& nMinSize, sal_uInt16& nMaxSizeDiff,
+                      vcl::TextLayoutCache const* = nullptr) const;
     inline SwPosSize GetTxtSize( const SwScriptInfo* pSI, const sal_Int32 nIdx,
                                  const sal_Int32 nLen, const sal_uInt16 nComp ) const;
     inline SwPosSize GetTxtSize( const OUString &rTxt ) const;
 
     sal_Int32 GetTxtBreak( const long nLineWidth,
                                            const sal_Int32 nMaxLen,
-                                           const sal_uInt16 nComp ) const;
+                                           const sal_uInt16 nComp,
+                           vcl::TextLayoutCache const* = nullptr) const;
     sal_Int32 GetTxtBreak( const long nLineWidth,
                                            const sal_Int32 nMaxLen,
                                            const sal_uInt16 nComp,
-                                           sal_Int32& rExtraCharPos ) const;
+                                           sal_Int32& rExtraCharPos,
+                           vcl::TextLayoutCache const* = nullptr) const;
 
     sal_uInt16 GetAscent() const;
 
@@ -370,6 +378,15 @@ public:
     inline sal_uInt16 GetKanaComp() const
         { return ( m_pKanaComp && m_nKanaIdx < m_pKanaComp->size() )
                    ? (*m_pKanaComp)[m_nKanaIdx] : 0; }
+
+    std::shared_ptr<vcl::TextLayoutCache> GetCachedVclData() const
+    {
+        return m_pCachedVclData;
+    }
+    void SetCachedVclData(std::shared_ptr<vcl::TextLayoutCache> const& pCachedVclData)
+    {
+        m_pCachedVclData = pCachedVclData;
+    }
 
 #ifdef DBG_UTIL
     bool IsOptDbg() const;
@@ -725,6 +742,7 @@ public:
 
     inline void SetTabOverflow( bool bOverflow ) { bTabOverflow = bOverflow; }
     inline bool IsTabOverflow() { return bTabOverflow; }
+
 };
 
 /**
@@ -737,6 +755,7 @@ public:
 class SwTxtSlot
 {
     OUString aTxt;
+    std::shared_ptr<vcl::TextLayoutCache> m_pOldCachedVclData;
     const OUString *pOldTxt;
     const SwWrongList* pOldSmartTagList;
     const SwWrongList* pOldGrammarCheckList;
