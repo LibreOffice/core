@@ -336,7 +336,7 @@ void INetURLHistory::NormalizeUrl_Impl (INetURLObject &rUrl)
     switch (rUrl.GetProtocol())
     {
         case INET_PROT_FILE:
-            if (!rUrl.IsCaseSensitive())
+            if (!INetURLObject::IsCaseSensitive())
             {
                 OUString aPath (rUrl.GetURLPath(INetURLObject::NO_DECODE).toAsciiLowerCase());
                 rUrl.SetURLPath (aPath, INetURLObject::NOT_CANONIC);

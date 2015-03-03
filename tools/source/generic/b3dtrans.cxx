@@ -326,9 +326,6 @@ void B3dTransformationSet::CalcViewport()
     maScale.setX((maSetBound.GetWidth() - 1L) / 2.0);
     maScale.setY((maSetBound.GetHeight() - 1L) / -2.0);
     maScale.setZ(ZBUFFER_DEPTH_RANGE / 2.0);
-
-    // React to change of viewport
-    PostSetViewport();
 }
 
 void B3dTransformationSet::SetRatio(double fNew)
@@ -388,10 +385,6 @@ void B3dTransformationSet::SetViewportRectangle(Rectangle& rRect, Rectangle& rVi
         mbObjectToDeviceValid = false;
         mbWorldToViewValid = false;
     }
-}
-
-void B3dTransformationSet::PostSetViewport()
-{
 }
 
 // direct access to various transformations
