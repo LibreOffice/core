@@ -42,6 +42,7 @@ namespace {
 
 const sal_uInt16 ADDNEWPAGE_AREAWIDTH = 10;
 const sal_uInt16 INSERT_TAB_WIDTH = 32;
+const sal_uInt16 BUTTON_MARGIN = 6;
 
 } // anonymous namespace
 
@@ -1442,8 +1443,12 @@ void TabBar::Resize()
     // adapt font height?
     ImplInitSettings( true, false );
 
-    long nX = mbMirrored ? (aNewSize.Width()-nHeight) : 0;
+    long nButtonMargin = BUTTON_MARGIN * GetDPIScaleFactor();
+
+    long nX = mbMirrored ? (aNewSize.Width() - nHeight - nButtonMargin) : nButtonMargin;
     long nXDiff = mbMirrored ? -nHeight : nHeight;
+
+    nButtonWidth += nButtonMargin;
 
     Size aBtnSize( nHeight, nHeight );
     if ( mpFirstBtn )
@@ -1470,6 +1475,8 @@ void TabBar::Resize()
         nX += nXDiff;
         nButtonWidth += nHeight;
     }
+
+    nButtonWidth += nButtonMargin;
 
     // store size
     maWinSize = aNewSize;
