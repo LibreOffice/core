@@ -43,30 +43,6 @@ using ::rtl::OUString;
 
 namespace sc { namespace sidebar {
 
-#define IMPLEMENTATION_NAME "org.apache.openoffice.comp.sc.sidebar.ScPanelFactory"
-#define SERVICE_NAME "com.sun.star.ui.UIElementFactory"
-
-::rtl::OUString SAL_CALL ScPanelFactory::getImplementationName (void)
-{
-    return OUString(IMPLEMENTATION_NAME);
-}
-
-css::uno::Reference<css::uno::XInterface> SAL_CALL ScPanelFactory::createInstance(
-    const uno::Reference<lang::XMultiServiceFactory>& )
-{
-    ::rtl::Reference<ScPanelFactory> pPanelFactory (new ScPanelFactory());
-    css::uno::Reference<css::uno::XInterface> xService (static_cast<XWeak*>(pPanelFactory.get()), css::uno::UNO_QUERY);
-    return xService;
-}
-
-css::uno::Sequence<OUString> SAL_CALL ScPanelFactory::getSupportedServiceNames (void)
-{
-    css::uno::Sequence<OUString> aServiceNames (1);
-    aServiceNames[0] = SERVICE_NAME;
-    return aServiceNames;
-
-}
-
 ScPanelFactory::ScPanelFactory (void)
     : PanelFactoryInterfaceBase(m_aMutex)
 {
@@ -169,5 +145,15 @@ Reference<ui::XUIElement> SAL_CALL ScPanelFactory::createUIElement (
 }
 
 } } // end of namespace sc::sidebar
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+org_apache_openoffice_comp_sc_sidebar_ScPanelFactory_get_implementation(::com::sun::star::uno::XComponentContext*,
+                                                                        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new sc::sidebar::ScPanelFactory());
+}
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
