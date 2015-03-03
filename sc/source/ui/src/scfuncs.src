@@ -8442,7 +8442,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         ExtraData =
         {
-            0;
+            1;
             ID_FUNCTION_GRP_STATISTIC;
             U2S( HID_FUNC_FVERT );
             3;  0;  0;  0;

@@ -2572,7 +2572,6 @@ void Test::testFunctionLists()
         "F.INV",
         "F.INV.RT",
         "F.TEST",
-        "FDIST",
         "FINV",
         "FISHER",
         "FISHERINV",
