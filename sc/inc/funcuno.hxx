@@ -29,11 +29,6 @@
 class ScDocument;
 class ScDocOptions;
 
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
-    ScFunctionAccess_CreateInstance(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::lang::XMultiServiceFactory >& );
-
 class ScTempDocCache
 {
 private:

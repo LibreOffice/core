@@ -122,14 +122,6 @@ uno::Sequence< OUString > SAL_CALL ScXMLImport_getSupportedServiceNames() throw(
     return uno::Sequence< OUString > ( &aServiceName, 1 );
 }
 
-uno::Reference< uno::XInterface > SAL_CALL ScXMLImport_createInstance(
-    const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception )
-{
-    // #110680#
-    // return (cppu::OWeakObject*)new ScXMLImport(IMPORT_ALL);
-    return (cppu::OWeakObject*)new ScXMLImport( comphelper::getComponentContext(rSMgr), ScXMLImport_getImplementationName(), SvXMLImportFlags::ALL );
-}
-
 OUString SAL_CALL ScXMLImport_Meta_getImplementationName() throw()
 {
     return OUString( "com.sun.star.comp.Calc.XMLOasisMetaImporter" );
@@ -139,14 +131,6 @@ uno::Sequence< OUString > SAL_CALL ScXMLImport_Meta_getSupportedServiceNames() t
 {
     const OUString aServiceName( ScXMLImport_Meta_getImplementationName() );
     return uno::Sequence< OUString > ( &aServiceName, 1 );
-}
-
-uno::Reference< uno::XInterface > SAL_CALL ScXMLImport_Meta_createInstance(
-    const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception )
-{
-    // #110680#
-    // return (cppu::OWeakObject*)new ScXMLImport(IMPORT_META);
-    return (cppu::OWeakObject*)new ScXMLImport( comphelper::getComponentContext(rSMgr), ScXMLImport_Meta_getImplementationName(), SvXMLImportFlags::META );
 }
 
 OUString SAL_CALL ScXMLImport_Styles_getImplementationName() throw()
@@ -160,14 +144,6 @@ uno::Sequence< OUString > SAL_CALL ScXMLImport_Styles_getSupportedServiceNames()
     return uno::Sequence< OUString > ( &aServiceName, 1 );
 }
 
-uno::Reference< uno::XInterface > SAL_CALL ScXMLImport_Styles_createInstance(
-    const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception )
-{
-    // #110680#
-    // return (cppu::OWeakObject*)new ScXMLImport(SvXMLImportFlagsSTYLES|SvXMLImportFlags::AUTOSTYLES|SvXMLImportFlags::MASTERSTYLES|SvXMLImportFlags::FONTDECLS);
-    return (cppu::OWeakObject*)new ScXMLImport( comphelper::getComponentContext(rSMgr), ScXMLImport_Styles_getImplementationName(), SvXMLImportFlags::STYLES|SvXMLImportFlags::AUTOSTYLES|SvXMLImportFlags::MASTERSTYLES|SvXMLImportFlags::FONTDECLS);
-}
-
 OUString SAL_CALL ScXMLImport_Content_getImplementationName() throw()
 {
     return OUString( "com.sun.star.comp.Calc.XMLOasisContentImporter" );
@@ -179,31 +155,9 @@ uno::Sequence< OUString > SAL_CALL ScXMLImport_Content_getSupportedServiceNames(
     return uno::Sequence< OUString > ( &aServiceName, 1 );
 }
 
-uno::Reference< uno::XInterface > SAL_CALL ScXMLImport_Content_createInstance(
-    const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception )
-{
-    // #110680#
-    // return (cppu::OWeakObject*)new ScXMLImport(SvXMLImportFlags::META|SvXMLImportFlags::STYLES|SvXMLImportFlags::MASTERSTYLES|SvXMLImportFlags::AUTOSTYLES|SvXMLImportFlags::CONTENT|SvXMLImportFlags::SCRIPTS|SvXMLImportFlags::SETTINGS|SvXMLImportFlags::FONTDECLS);
-    return (cppu::OWeakObject*)new ScXMLImport( comphelper::getComponentContext(rSMgr), ScXMLImport_Content_getImplementationName(), SvXMLImportFlags::AUTOSTYLES|SvXMLImportFlags::CONTENT|SvXMLImportFlags::SCRIPTS|SvXMLImportFlags::FONTDECLS);
-}
-
 OUString SAL_CALL ScXMLImport_Settings_getImplementationName() throw()
 {
     return OUString( "com.sun.star.comp.Calc.XMLOasisSettingsImporter" );
-}
-
-uno::Sequence< OUString > SAL_CALL ScXMLImport_Settings_getSupportedServiceNames() throw()
-{
-    const OUString aServiceName( ScXMLImport_Settings_getImplementationName() );
-    return uno::Sequence< OUString > ( &aServiceName, 1 );
-}
-
-uno::Reference< uno::XInterface > SAL_CALL ScXMLImport_Settings_createInstance(
-    const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception )
-{
-    // #110680#
-    // return (cppu::OWeakObject*)new ScXMLImport(SvXMLImportFlags::SETTINGS);
-    return (cppu::OWeakObject*)new ScXMLImport( comphelper::getComponentContext(rSMgr), ScXMLImport_Settings_getImplementationName(), SvXMLImportFlags::SETTINGS );
 }
 
 const SvXMLTokenMap& ScXMLImport::GetTableRowCellAttrTokenMap()
@@ -3439,5 +3393,57 @@ ScMyImpDetectiveOpArray* ScXMLImport::GetDetectiveOpArray()
         pDetectiveOpArray = new ScMyImpDetectiveOpArray();
     return pDetectiveOpArray;
 }
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_Calc_XMLOasisImporter_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                                           ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    const OUString sImplName = ScXMLImport_getImplementationName();
+    return cppu::acquire(new ScXMLImport(context, sImplName, SvXMLImportFlags::ALL));
+}
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_Calc_XMLOasisMetaImporter_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                                               ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    const OUString sImplName = ScXMLImport_Meta_getImplementationName();
+    return cppu::acquire(new ScXMLImport(context, sImplName, SvXMLImportFlags::META));
+}
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_Calc_XMLOasisContentImporter_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                                                  ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new ScXMLImport(context, ScXMLImport_Content_getImplementationName(),
+                                                    SvXMLImportFlags::AUTOSTYLES |
+                                                    SvXMLImportFlags::CONTENT |
+                                                    SvXMLImportFlags::SCRIPTS |
+                                                    SvXMLImportFlags::FONTDECLS));
+}
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_Calc_XMLOasisStylesImporter_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                                                 ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new ScXMLImport(context, ScXMLImport_Styles_getImplementationName(),
+                                                    SvXMLImportFlags::STYLES |
+                                                    SvXMLImportFlags::AUTOSTYLES |
+                                                    SvXMLImportFlags::MASTERSTYLES |
+                                                    SvXMLImportFlags::FONTDECLS));
+}
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_Calc_XMLOasisSettingsImporter_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                                                   ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new ScXMLImport(context, ScXMLImport_Settings_getImplementationName(), SvXMLImportFlags::SETTINGS));
+}
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

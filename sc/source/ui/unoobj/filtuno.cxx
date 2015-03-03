@@ -113,14 +113,6 @@ ScFilterOptionsObj::~ScFilterOptionsObj()
 
 // stuff for exService_...
 
-uno::Reference<uno::XInterface> SAL_CALL ScFilterOptionsObj_CreateInstance(
-                        const uno::Reference<lang::XMultiServiceFactory>& )
-{
-    SolarMutexGuard aGuard;
-    ScDLL::Init();
-    return (::cppu::OWeakObject*) new ScFilterOptionsObj;
-}
-
 OUString ScFilterOptionsObj::getImplementationName_Static()
 {
     return OUString( SCFILTEROPTIONSOBJ_IMPLNAME );
@@ -332,5 +324,16 @@ void SAL_CALL ScFilterOptionsObj::setSourceDocument( const uno::Reference<lang::
 {
     bExport = true;
 }
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_Calc_FilterOptionsDialog_get_implementation(::com::sun::star::uno::XComponentContext*,
+                                                              ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    SolarMutexGuard aGuard;
+    ScDLL::Init();
+    return cppu::acquire(new ScFilterOptionsObj());
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
