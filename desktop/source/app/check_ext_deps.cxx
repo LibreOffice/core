@@ -422,8 +422,10 @@ void Desktop::SynchronizeExtensionRepositories()
         deployment::ExtensionManager::get(context)->reinstallDeployedExtensions(
             true, "user", Reference<task::XAbortChannel>(), silent);
 #if !HAVE_FEATURE_MACOSX_SANDBOX
-        task::OfficeRestartManager::get(context)->requestRestart(
-            silent->getInteractionHandler());
+        // getenv is a hack to detect if we're running in a LOK unit test
+        if (!getenv("LOK_TEST"))
+            task::OfficeRestartManager::get(context)->requestRestart(
+                silent->getInteractionHandler());
 #endif
     } else {
         // reinstallDeployedExtensions above already calls syncRepositories
