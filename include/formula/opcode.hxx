@@ -54,6 +54,7 @@ enum OpCode : sal_uInt16
         ocSkip              = SC_OPCODE_SKIP,
     // Access commands
         ocDBArea            = SC_OPCODE_DB_AREA,
+        ocTableRef          = SC_OPCODE_TABLE_REF,
         ocMacro             = SC_OPCODE_MACRO,
         ocColRowName        = SC_OPCODE_COL_ROW_NAME,
         ocColRowNameAuto    = SC_OPCODE_COL_ROW_NAME_AUTO,
