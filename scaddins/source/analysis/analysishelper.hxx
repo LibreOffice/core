@@ -39,6 +39,9 @@
 
 
 class ResMgr;
+
+namespace sca { namespace analysis {
+
 class SortedIndividualInt32List;
 class ScaAnyConverter;
 
@@ -168,7 +171,7 @@ struct FuncDataBase
 };
 
 
-class SAL_DLLPRIVATE FuncData
+class FuncData
 {
 private:
     OUString         aIntName;
@@ -448,8 +451,6 @@ enum ConvertDataClass
 
 class ConvertDataList;
 
-namespace analysis {
-
 class ConvertData
 {
 protected:
@@ -484,10 +485,6 @@ public:
     inline ConvertDataClass Class( void ) const;
     inline bool         IsPrefixSupport( void ) const;
 };
-
-} // namespace analysis
-
-using namespace ::analysis;
 
 class ConvertDataLinear : public ConvertData
 {
@@ -883,7 +880,7 @@ public:
                                 throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 };
 
-
+} }
 
 #endif
 

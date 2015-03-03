@@ -38,6 +38,7 @@
 #define MY_IMPLNAME                 "com.sun.star.sheet.addin.AnalysisImpl"
 
 using namespace                 ::com::sun::star;
+using namespace sca::analysis;
 using namespace std;
 
 extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL analysis_component_getFactory(

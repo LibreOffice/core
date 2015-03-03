@@ -21,6 +21,7 @@
 #include "analysishelper.hxx"
 #include <rtl/math.hxx>
 
+using namespace sca::analysis;
 
 double SAL_CALL AnalysisAddIn::getAmordegrc( const css::uno::Reference< css::beans::XPropertySet >& xOpt,
     double fCost, sal_Int32 nDate, sal_Int32 nFirstPer, double fRestVal,

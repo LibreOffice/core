@@ -30,6 +30,7 @@
 #include "analysis.hrc"
 
 using namespace                 ::com::sun::star;
+using namespace sca::analysis;
 
 #define UNIQUE              false   // function name does not exist in Calc
 #define DOUBLE              true    // function name exists in Calc
@@ -148,6 +149,7 @@ const FuncDataBase pFuncDatas[] =
 };
 #undef FUNCDATA
 
+namespace sca { namespace analysis {
 
 sal_uInt16 DaysInMonth( sal_uInt16 nMonth, sal_uInt16 nYear )
 {
@@ -2964,7 +2966,6 @@ sal_Int32 ScaAnyConverter::getInt32(
     return nResult;
 }
 
-
-
+} }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

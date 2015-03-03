@@ -35,9 +35,10 @@
 #include "analysisdefs.hxx"
 #include "analysishelper.hxx"
 
-
-class FuncDataList;
-class ConvertDataList;
+namespace sca { namespace analysis {
+    class FuncDataList;
+    class ConvertDataList;
+} }
 class ResMgr;
 
 
@@ -54,12 +55,12 @@ class AnalysisAddIn : public cppu::WeakImplHelper5<
 private:
     css::lang::Locale           aFuncLoc;
     css::lang::Locale*          pDefLocales;
-    FuncDataList*               pFD;
+    sca::analysis::FuncDataList* pFD;
     double*                     pFactDoubles;
-    ConvertDataList*            pCDL;
+    sca::analysis::ConvertDataList* pCDL;
     ResMgr*                     pResMgr;
 
-    ScaAnyConverter             aAnyConv;
+    sca::analysis::ScaAnyConverter aAnyConv;
 
     ResMgr&                     GetResMgr( void ) throw( css::uno::RuntimeException );
     OUString                      GetDisplFuncStr( sal_uInt16 nFuncNum ) throw( css::uno::RuntimeException );
