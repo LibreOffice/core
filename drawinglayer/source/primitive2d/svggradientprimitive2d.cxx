@@ -475,7 +475,7 @@ namespace drawinglayer
                         // can only happen when SpreadMethod is Spread_reflect or Spread_repeat,
                         // else the start and end pads are already created and fPos == aUnitRange.getMaxX().
                         // Its possible to express the repeated linear gradient by adding the
-                        // transformed central run. Crete it this way
+                        // transformed central run. Create it this way
                         Primitive2DSequence aTargetColorEntries(Primitive2DVectorToPrimitive2DSequence(aTargetColor));
                         Primitive2DSequence aTargetOpacityEntries(Primitive2DVectorToPrimitive2DSequence(aTargetOpacity));
                         aTargetColor.clear();

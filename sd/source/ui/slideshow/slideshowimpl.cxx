@@ -3037,7 +3037,7 @@ void SAL_CALL SlideshowImpl::gotoNextSlide(  ) throw (RuntimeException, std::exc
     else
     {
         // if this is a show, ignore user inputs and
-        // start 20ms timer to reenable inputs to fiter
+        // start 20ms timer to reenable inputs to filter
         // buffered inputs during slide transition
         if( meAnimationMode == ANIMATIONMODE_SHOW )
         {

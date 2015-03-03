@@ -371,7 +371,7 @@ SvXMLMetaExport::startElement(const OUString & i_rName,
 {
 
     if (m_level == 0) {
-        // namepace decls: default ones have been written at the root element
+        // namespace decls: default ones have been written at the root element
         // non-default ones must be preserved here
         const sal_Int16 nCount = i_xAttribs->getLength();
         for (sal_Int16 i = 0; i < nCount; ++i) {

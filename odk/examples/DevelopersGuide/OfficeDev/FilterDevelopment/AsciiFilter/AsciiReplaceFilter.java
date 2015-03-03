@@ -60,7 +60,7 @@ import com.sun.star.document.XFilter;
                 User can decide at runtime which functionality really should
                 be used by selecting it in an extra filter property dialog.
 
-                So we show how a filter works fro iport/export, use or create
+                So we show how a filter works for import/export, use or create
                 streams and how a filter can offer properties for filtering
                 which can be edit by the user.
  ************************************************************************-*/

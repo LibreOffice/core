@@ -295,7 +295,7 @@ int open_c(const char *cpPath, int oflag, int mode)
         // A new file was created. Check if it is outside the sandbox.
         // (In that case it must be one the user selected as export or
         // save destination in a file dialog, otherwise we wouldn't
-        // have been able to crete it.) Create and store a security
+        // have been able to create it.) Create and store a security
         // scoped bookmark for it so that we can access the file in
         // the future, too. (For the "Recent Files" functionality.)
         const char *sandbox = [NSHomeDirectory() UTF8String];

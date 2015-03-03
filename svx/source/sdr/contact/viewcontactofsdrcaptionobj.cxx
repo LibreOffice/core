@@ -137,7 +137,7 @@ namespace sdr
                     aSet.Put(XFillTransparenceItem(nShadowTransparence));
                 }
 
-                // crete FillAttribute from modified ItemSet
+                // create FillAttribute from modified ItemSet
                 const drawinglayer::attribute::SdrFillAttribute aFill(
                     drawinglayer::primitive2d::createNewSdrFillAttribute(aSet));
                 drawinglayer::primitive2d::Primitive2DReference xSpecialShadow;

@@ -553,7 +553,7 @@ class DataContainer
 };
 
 /*-************************************************************************************************************
-    @short          capsulate configuration access for fiter configuration
+    @short          capsulate configuration access for filter configuration
     @descr          We use the ConfigItem mechanism to read/write values from/to configuration.
                     This implementation could be used to handle standard AND additional filter configurations in the same way.
                     We set a data container pointer for filling or reading ... this class use it temp.
