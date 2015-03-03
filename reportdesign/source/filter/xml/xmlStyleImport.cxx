@@ -87,12 +87,9 @@ OControlStyleContext::OControlStyleContext( ORptFilter& rImport,
     sal_Int32 Element, const Reference< XFastAttributeList >& xAttrList,
     SvXMLStylesContext& rStyles, sal_uInt16 nFamily, bool bDefaultStyle )
 :   XMLPropStyleContext( rImport, Element, xAttrList, rStyles, nFamily, bDefaultStyle ),
-    sNumberFormat(OUString("NumberFormat")),
     pStyles(&rStyles),
     m_nNumberFormat(-1),
-    m_rImport(rImport),
-    bConditionalFormatCreated(false),
-    bParentSet(false)
+    m_rImport(rImport)
 {
 }
 
