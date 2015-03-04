@@ -3482,12 +3482,10 @@ gboolean GtkSalFrame::signalDraw( GtkWidget*, cairo_t *cr, gpointer frame )
     // clip region, and just pushing (with renderArea) smaller pieces
     // is faster ...
     cairo_rectangle_list_t *rects = cairo_copy_clip_rectangle_list (cr);
-    fprintf( stderr, "paint %d regions\n", rects->num_rectangles);
+    SAL_INFO("vcl.gtk3", "paint " << rects->num_rectangles << " regions");
     for (int i = 0; i < rects->num_rectangles; i++) {
         cairo_rectangle_t rect = rects->rectangles[i];
-        fprintf( stderr, "\t%d -> %g,%g %gx%g\n", i,
-                 rect.x, rect.y, rect.width, rect.height );
-
+        SAL_INFO("vcl.gtk3", "\t" << i << " -> " << rect.x << "," << rect.y << " " << rect.width << "x" << rect.height);
         struct SalPaintEvent aEvent( rect.x, rect.y, rect.width, rect.height );
         aEvent.mbImmediateUpdate = true;
         pThis->CallCallback( SALEVENT_PAINT, &aEvent );
