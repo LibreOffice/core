@@ -337,6 +337,7 @@ void ScInputHandler::UpdateRange( sal_uInt16 nIndex, const ScRange& rNew )
         ScRangeFindData* pData = pRangeFindList->GetObject( nIndex );
         sal_Int32 nOldStart = pData->nSelStart;
         sal_Int32 nOldEnd = pData->nSelEnd;
+        ColorData nNewColor = pRangeFindList->FindColor( rNew, nIndex );
 
         ScRange aJustified = rNew;
         aJustified.Justify(); // Always display Ref in the Formula the right way
@@ -344,11 +345,14 @@ void ScInputHandler::UpdateRange( sal_uInt16 nIndex, const ScRange& rNew )
         const ScAddress::Details aAddrDetails( pDoc, aCursorPos );
         OUString aNewStr(aJustified.Format(pData->nFlags, pDoc, aAddrDetails));
         ESelection aOldSel( 0, nOldStart, 0, nOldEnd );
+        SfxItemSet aSet( pEngine->GetEmptyItemSet() );
 
         DataChanging();
 
         lcl_Replace( pTopView, aNewStr, aOldSel );
         lcl_Replace( pTableView, aNewStr, aOldSel );
+        aSet.Put( SvxColorItem( Color( nNewColor ), EE_CHAR_COLOR ) );
+        pEngine->QuickSetAttribs( aSet, aOldSel );
 
         bInRangeUpdate = true;
         DataChanged();
@@ -358,6 +362,7 @@ void ScInputHandler::UpdateRange( sal_uInt16 nIndex, const ScRange& rNew )
 
         pData->aRef = rNew;
         pData->nSelEnd = pData->nSelEnd + nDiff;
+        pData->nColorData = nNewColor;
 
         sal_uInt16 nCount = (sal_uInt16) pRangeFindList->Count();
         for (sal_uInt16 i=nIndex+1; i<nCount; i++)
@@ -366,6 +371,9 @@ void ScInputHandler::UpdateRange( sal_uInt16 nIndex, const ScRange& rNew )
             pNext->nSelStart = pNext->nSelStart + nDiff;
             pNext->nSelEnd   = pNext->nSelEnd   + nDiff;
         }
+
+        EditView* pActiveView = pTopView ? pTopView : pTableView;
+        pActiveView->ShowCursor( false, true );
     }
     else
     {

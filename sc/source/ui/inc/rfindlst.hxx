@@ -41,6 +41,7 @@ class ScRangeFindList
     std::vector<ScRangeFindData> maEntries;
     OUString    aDocName;
     bool        bHidden;
+    sal_uInt16  nIndexColor;
 
 public:
             ScRangeFindList(const OUString& rName);
@@ -56,6 +57,7 @@ public:
     bool            IsHidden() const            { return bHidden; }
 
     static ColorData GetColorName(const size_t nIndex);
+    ColorData FindColor(const ScRange& rRef, const size_t nIndex);
 };
 
 #endif
