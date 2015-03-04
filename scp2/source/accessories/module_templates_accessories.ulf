@@ -65,7 +65,7 @@ en-US = "Installs Portuguese support in %PRODUCTNAME %PRODUCTVERSION"
 en-US = "Portuguese (Brazil)"
 
 [STR_DESC_MODULE_LANGPACK_PT_BR]
-en-US = "Installs Portuguese support in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs Portuguese (Brazil) support in %PRODUCTNAME %PRODUCTVERSION"
 
 [STR_NAME_MODULE_LANGPACK_JA]
 en-US = "Japanese"
