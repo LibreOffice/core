@@ -309,7 +309,7 @@ namespace sdr
 
         void AttributeProperties::SetModel(SdrModel* pOldModel, SdrModel* pNewModel)
         {
-            if(pOldModel != pNewModel && pNewModel && !pNewModel->IsLoading())
+            if(pOldModel != pNewModel && pNewModel)
             {
                 // For a living model move the items from one pool to the other
                 if(pOldModel)
@@ -466,7 +466,7 @@ namespace sdr
                 }
 
                 // each object gets the default Style if there is none set yet.
-                if(!GetStyleSheet() && pNewModel && !pNewModel->IsLoading())
+                if(!GetStyleSheet() && pNewModel)
                 {
                     GetObjectItemSet(); // #118414 force ItemSet to allow style to be set
                     SetStyleSheet(pNewModel->GetDefaultStyleSheet(), true);

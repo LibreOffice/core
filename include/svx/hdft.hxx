@@ -62,6 +62,8 @@ public:
     void            EnableDynamicSpacing();
 
 protected:
+    static const sal_uInt16 pRanges[];
+
     virtual void    ActivatePage( const SfxItemSet& rSet ) SAL_OVERRIDE;
     virtual int     DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
 
@@ -111,7 +113,8 @@ class SVX_DLLPUBLIC SvxHeaderPage : public SvxHFPage
 {
 public:
     static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rSet );
-    static const sal_uInt16*      GetRanges();
+    // returns the Which values to the range
+    static const sal_uInt16*      GetRanges() { return pRanges; }
 
 private:
     SvxHeaderPage( vcl::Window* pParent, const SfxItemSet& rSet );
@@ -123,7 +126,7 @@ class SVX_DLLPUBLIC SvxFooterPage : public SvxHFPage
 {
 public:
     static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rSet );
-    static const sal_uInt16*      GetRanges();
+    static const sal_uInt16*      GetRanges() { return pRanges; }
 
 private:
     SVX_DLLPRIVATE SvxFooterPage(   vcl::Window* pParent, const SfxItemSet& rSet );

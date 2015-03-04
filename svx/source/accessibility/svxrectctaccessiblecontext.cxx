@@ -234,11 +234,6 @@ awt::Size SAL_CALL SvxRectCtlAccessibleContext::getSize() throw( RuntimeExceptio
     return AWTSize( GetBoundingBox().GetSize() );
 }
 
-bool SAL_CALL SvxRectCtlAccessibleContext::isShowing() throw( RuntimeException )
-{
-    return true;
-}
-
 bool SAL_CALL SvxRectCtlAccessibleContext::isVisible() throw( RuntimeException )
 {
     ::osl::MutexGuard           aGuard( m_aMutex );
@@ -387,8 +382,7 @@ Reference< XAccessibleStateSet > SAL_CALL SvxRectCtlAccessibleContext::getAccess
             pStateSetHelper->AddState( AccessibleStateType::FOCUSED );
         pStateSetHelper->AddState( AccessibleStateType::OPAQUE );
 
-        if( isShowing() )
-            pStateSetHelper->AddState( AccessibleStateType::SHOWING );
+        pStateSetHelper->AddState( AccessibleStateType::SHOWING );
 
         if( isVisible() )
             pStateSetHelper->AddState( AccessibleStateType::VISIBLE );

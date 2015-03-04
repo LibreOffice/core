@@ -86,12 +86,6 @@ protected:
     // never be called directly
     ViewContact();
 
-    // Methods to react on start getting viewed or stop getting
-    // viewed. This info is derived from the count of members of
-    // registered ViewObjectContacts. Default does nothing.
-    void StartGettingViewed();
-    void StopGettingViewed();
-
 public:
     // basic destructor with needed cleanups
     virtual ~ViewContact();
