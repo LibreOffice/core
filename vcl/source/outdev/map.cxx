@@ -329,18 +329,6 @@ static void ImplCalcMapResolution( const MapMode& rMapMode,
     rMapRes.mnMapScDenomX = aTempX.GetDenominator();
     rMapRes.mnMapScNumY   = aTempY.GetNumerator();
     rMapRes.mnMapScDenomY = aTempY.GetDenominator();
-
-    // hack: 0/n approximately 1/max
-    if ( !rMapRes.mnMapScNumX )
-    {
-        rMapRes.mnMapScNumX = 1;
-        rMapRes.mnMapScDenomX = LONG_MAX;
-    }
-    if ( !rMapRes.mnMapScNumY )
-    {
-        rMapRes.mnMapScNumY = 1;
-        rMapRes.mnMapScDenomY = LONG_MAX;
-    }
 }
 
 inline void ImplCalcMapResolution( const MapMode& rMapMode,
