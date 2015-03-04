@@ -297,8 +297,6 @@ public:
     virtual ~SdrModel();
     void ClearModel(bool bCalledFromDestructor);
 
-    // Whether the model is being streamed in at the moment
-    bool IsLoading() const                  { return false /*BFS01 bLoading */; }
     // Override this to enable the Swap/LoadOnDemand of graphics.
     // If rbDeleteAfterUse is set to sal_True the SvStream instance from
     // the caller will be disposed after use.

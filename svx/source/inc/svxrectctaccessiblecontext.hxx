@@ -105,9 +105,6 @@ public:
         getSize() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     bool SAL_CALL
-        isShowing() throw( ::com::sun::star::uno::RuntimeException );
-
-    bool SAL_CALL
         isVisible() throw( ::com::sun::star::uno::RuntimeException );
 
     virtual void SAL_CALL

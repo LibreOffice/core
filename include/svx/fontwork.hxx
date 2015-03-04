@@ -174,7 +174,6 @@ class SVX_DLLPUBLIC SvxFontWorkDialog : public SfxDockingWindow
     virtual ~SvxFontWorkDialog();
 
     void SetColorList(const XColorListRef &pTable);
-    void SetActive(bool bActivate = true);
 };
 
 #endif // INCLUDED_SVX_FONTWORK_HXX

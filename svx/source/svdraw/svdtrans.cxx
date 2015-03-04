@@ -860,7 +860,7 @@ void SdrFormatter::TakeStr(long nVal, OUString& rStr) const
         // decimal separator necessary
         sal_Int32 nCount(nC - aStr.getLength());
 
-        if(nCount >= 0 && rLoc.isNumLeadingZero())
+        if(nCount >= 0 && LocaleDataWrapper::isNumLeadingZero())
             nCount++;
 
         for(sal_Int32  i=0; i<nCount; i++)

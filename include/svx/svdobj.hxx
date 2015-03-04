@@ -209,11 +209,9 @@ public:
     sal_uInt32 GetInventor() const { return nInventor;}
     sal_uInt16 GetId() const { return nIdentifier;}
 
-    bool HasMacro (const SdrObject* pObj) const;
     SdrObject* CheckMacroHit (const SdrObjMacroHitRec& rRec, const SdrObject* pObj) const;
     Pointer GetMacroPointer (const SdrObjMacroHitRec& rRec, const SdrObject* pObj) const;
     void PaintMacro (OutputDevice& rOut, const Rectangle& rDirtyRect, const SdrObjMacroHitRec& rRec, const SdrObject* pObj) const;
-    bool DoMacro (const SdrObjMacroHitRec& rRec, SdrObject* pObj);
     OUString GetMacroPopupComment(const SdrObjMacroHitRec& rRec, const SdrObject* pObj) const;
 };
 
@@ -382,7 +380,6 @@ public:
     void SetGridOffset( const Point& rGridOffset ){ aGridOffset = rGridOffset; }
 protected:
     void ImpDeleteUserData();
-    SdrObjUserData* ImpGetMacroUserData() const;
     Rectangle ImpDragCalcRect(const SdrDragStat& rDrag) const;
 
     // for GetDragComment

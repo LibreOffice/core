@@ -483,9 +483,6 @@ public:
     virtual bool MouseButtonUp(const MouseEvent& /*rMEvt*/, vcl::Window* /*pWin*/) { return false; }
     virtual bool MouseMove(const MouseEvent& /*rMEvt*/, vcl::Window* /*pWin*/) { return false; }
     virtual bool Command(const CommandEvent& /*rCEvt*/, vcl::Window* /*pWin*/) { return false; }
-    bool Cut(sal_uIntPtr /*nFormat*/=SDR_ANYFORMAT) { return false; }
-    bool Yank(sal_uIntPtr /*nFormat*/=SDR_ANYFORMAT) { return false; }
-    bool Paste(vcl::Window* /*pWin*/=NULL, sal_uIntPtr /*nFormat*/=SDR_ANYFORMAT) { return false; }
 
     /* new interface src537 */
     bool GetAttributes(SfxItemSet& rTargetSet, bool bOnlyHardAttr=false) const;

@@ -404,7 +404,6 @@ namespace svxform
         using Window::Update;
         using                       SfxDockingWindow::StateChanged;
 
-        void                        Update( FmFormShell* pFormShell );
         void                        StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                                   const SfxPoolItem* pState ) SAL_OVERRIDE;
     };

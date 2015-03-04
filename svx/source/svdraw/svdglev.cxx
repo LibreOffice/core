@@ -31,14 +31,9 @@
 
 
 
-void SdrGlueEditView::ImpClearVars()
-{
-}
-
 SdrGlueEditView::SdrGlueEditView(SdrModel* pModel1, OutputDevice* pOut):
     SdrPolyEditView(pModel1,pOut)
 {
-    ImpClearVars();
 }
 
 SdrGlueEditView::~SdrGlueEditView()

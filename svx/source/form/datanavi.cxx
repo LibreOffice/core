@@ -2150,22 +2150,8 @@ namespace svxform
     }
 
 
-    void DataNavigator::Update( FmFormShell* /*pFormShell*/ )
+    void DataNavigator::StateChanged( sal_uInt16 , SfxItemState , const SfxPoolItem*  )
     {
-    }
-
-    void DataNavigator::StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
-    {
-        if ( !pState  || SID_FM_DATANAVIGATOR_CONTROL != nSID )
-            return;
-
-        if ( eState >= SfxItemState::DEFAULT )
-        {
-            FmFormShell* pShell = PTR_CAST( FmFormShell, static_cast<const SfxObjectItem*>(pState)->GetShell() );
-            Update( pShell );
-        }
-        else
-            Update( NULL );
     }
 
 
@@ -2177,7 +2163,6 @@ namespace svxform
 
     bool DataNavigator::Close()
     {
-        Update( NULL );
         return SfxDockingWindow::Close();
     }
 

@@ -179,11 +179,6 @@ SdrObjUserData::~SdrObjUserData() {}
 
 
 
-bool SdrObjUserData::HasMacro(const SdrObject* /*pObj*/) const
-{
-    return false;
-}
-
 SdrObject* SdrObjUserData::CheckMacroHit(const SdrObjMacroHitRec& rRec, const SdrObject* pObj) const
 {
     if(pObj)
@@ -221,11 +216,6 @@ void SdrObjUserData::PaintMacro(OutputDevice& rOut, const Rectangle& /*rDirtyRec
     }
 
     rOut.SetRasterOp(eRop);
-}
-
-bool SdrObjUserData::DoMacro(const SdrObjMacroHitRec& /*rRec*/, SdrObject* /*pObj*/)
-{
-    return false;
 }
 
 OUString SdrObjUserData::GetMacroPopupComment(const SdrObjMacroHitRec& /*rRec*/, const SdrObject* /*pObj*/) const
@@ -1883,33 +1873,13 @@ void SdrObject::BurnInStyleSheetAttributes()
     GetProperties().ForceStyleToHardAttributes();
 }
 
-SdrObjUserData* SdrObject::ImpGetMacroUserData() const
-{
-    SdrObjUserData* pData=NULL;
-    sal_uInt16 nCount=GetUserDataCount();
-    for (sal_uInt16 nNum=nCount; nNum>0 && pData==NULL;) {
-        nNum--;
-        pData=GetUserData(nNum);
-        if (!pData->HasMacro(this)) pData=NULL;
-    }
-    return pData;
-}
-
 bool SdrObject::HasMacro() const
 {
-    SdrObjUserData* pData=ImpGetMacroUserData();
-    return pData && pData->HasMacro(this);
+    return false;
 }
 
 SdrObject* SdrObject::CheckMacroHit(const SdrObjMacroHitRec& rRec) const
 {
-    SdrObjUserData* pData = ImpGetMacroUserData();
-
-    if(pData)
-    {
-        return pData->CheckMacroHit(rRec, this);
-    }
-
     if(rRec.pPageView)
     {
         return SdrObjectPrimitiveHit(*this, rRec.aPos, rRec.nTol, *rRec.pPageView, rRec.pVisiLayer, false);
@@ -1918,57 +1888,36 @@ SdrObject* SdrObject::CheckMacroHit(const SdrObjMacroHitRec& rRec) const
     return 0;
 }
 
-Pointer SdrObject::GetMacroPointer(const SdrObjMacroHitRec& rRec) const
+Pointer SdrObject::GetMacroPointer(const SdrObjMacroHitRec&) const
 {
-    SdrObjUserData* pData=ImpGetMacroUserData();
-    if (pData!=NULL) {
-        return pData->GetMacroPointer(rRec,this);
-    }
     return Pointer(POINTER_REFHAND);
 }
 
-void SdrObject::PaintMacro(OutputDevice& rOut, const Rectangle& rDirtyRect, const SdrObjMacroHitRec& rRec) const
+void SdrObject::PaintMacro(OutputDevice& rOut, const Rectangle& , const SdrObjMacroHitRec& ) const
 {
-    SdrObjUserData* pData=ImpGetMacroUserData();
+    const RasterOp eRop(rOut.GetRasterOp());
+    const basegfx::B2DPolyPolygon aPolyPolygon(TakeXorPoly());
+    const sal_uInt32 nCount(aPolyPolygon.count());
 
-    if(pData)
+    rOut.SetLineColor(COL_BLACK);
+    rOut.SetFillColor();
+    rOut.SetRasterOp(ROP_INVERT);
+
+    for(sal_uInt32 a(0); a < nCount; a++)
     {
-        pData->PaintMacro(rOut,rDirtyRect,rRec,this);
+        rOut.DrawPolyLine(aPolyPolygon.getB2DPolygon(a));
     }
-    else
-    {
-        const RasterOp eRop(rOut.GetRasterOp());
-        const basegfx::B2DPolyPolygon aPolyPolygon(TakeXorPoly());
-        const sal_uInt32 nCount(aPolyPolygon.count());
 
-        rOut.SetLineColor(COL_BLACK);
-        rOut.SetFillColor();
-        rOut.SetRasterOp(ROP_INVERT);
-
-        for(sal_uInt32 a(0); a < nCount; a++)
-        {
-            rOut.DrawPolyLine(aPolyPolygon.getB2DPolygon(a));
-        }
-
-        rOut.SetRasterOp(eRop);
-    }
+    rOut.SetRasterOp(eRop);
 }
 
-bool SdrObject::DoMacro(const SdrObjMacroHitRec& rRec)
+bool SdrObject::DoMacro(const SdrObjMacroHitRec&)
 {
-    SdrObjUserData* pData=ImpGetMacroUserData();
-    if (pData!=NULL) {
-        return pData->DoMacro(rRec,this);
-    }
     return false;
 }
 
-OUString SdrObject::GetMacroPopupComment(const SdrObjMacroHitRec& rRec) const
+OUString SdrObject::GetMacroPopupComment(const SdrObjMacroHitRec&) const
 {
-    SdrObjUserData* pData=ImpGetMacroUserData();
-    if (pData!=NULL) {
-        return pData->GetMacroPopupComment(rRec,this);
-    }
     return OUString();
 }
 
