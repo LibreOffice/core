@@ -7291,6 +7291,10 @@ else
             if ! test "$DOXYGEN_NUMVERSION" -ge "10804" ; then
                 AC_MSG_ERROR([found doxygen is too old; need at least version 1.8.4 or specify --without-doxygen])
             fi
+            AC_PATH_PROG([DOT], [dot])
+            if test -z "$DOT"; then
+                AC_MSG_ERROR([dot program not found in \$PATH; install it (normally in the graphviz package), or disable doxygen via --without-doxygen])
+            fi
         fi
     fi
 fi
