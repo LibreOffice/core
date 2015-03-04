@@ -28,7 +28,7 @@ using namespace ooo::vba;
 
 using namespace ooo::vba::office::MsoAnimationType;
 
-ScVbaAssistant::ScVbaAssistant( const uno::Reference< XHelperInterface > xParent, const uno::Reference< uno::XComponentContext > xContext ): ScVbaAssistantImpl_BASE( xParent, xContext ),
+ScVbaAssistant::ScVbaAssistant( const uno::Reference< XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext ): ScVbaAssistantImpl_BASE(rParent, rContext),
 m_sName( "Clippit" )
 {
     m_bIsVisible = false;

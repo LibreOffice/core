@@ -271,16 +271,16 @@ void ClientBox::selectEntry( const long nPos )
     guard.clear();
 }
 
-void ClientBox::DrawRow( const Rectangle& rRect, const TClientBoxEntry pEntry )
+void ClientBox::DrawRow( const Rectangle& rRect, const TClientBoxEntry& rEntry )
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
-    if ( pEntry->m_bActive )
+    if ( rEntry->m_bActive )
         SetTextColor( rStyleSettings.GetHighlightTextColor() );
     else
         SetTextColor( rStyleSettings.GetFieldTextColor() );
 
-    if ( pEntry->m_bActive )
+    if ( rEntry->m_bActive )
     {
         SetLineColor();
         SetFillColor( rStyleSettings.GetHighlightColor() );
@@ -311,25 +311,25 @@ void ClientBox::DrawRow( const Rectangle& rRect, const TClientBoxEntry pEntry )
     long nMaxTitleWidth = rRect.GetWidth() - ICON_OFFSET;
     nMaxTitleWidth -= ( 2 * SMALL_ICON_SIZE ) + ( 4 * SPACE_BETWEEN );
 
-    long aTitleWidth = GetTextWidth( pEntry->m_pClientInfo->mName ) + (aTextHeight / 3);
+    long aTitleWidth = GetTextWidth( rEntry->m_pClientInfo->mName ) + (aTextHeight / 3);
 
     aPos = rRect.TopLeft() + Point( ICON_OFFSET, TOP_OFFSET );
 
     if ( aTitleWidth > nMaxTitleWidth )
     {
         aTitleWidth = nMaxTitleWidth - (aTextHeight / 3);
-        OUString aShortTitle = GetEllipsisString( pEntry->m_pClientInfo->mName,
+        OUString aShortTitle = GetEllipsisString( rEntry->m_pClientInfo->mName,
                                                   aTitleWidth );
         DrawText( aPos, aShortTitle );
         aTitleWidth += (aTextHeight / 3);
     }
     else
-        DrawText( aPos, pEntry->m_pClientInfo->mName );
+        DrawText( aPos, rEntry->m_pClientInfo->mName );
 
     SetFont( aStdFont );
 
     aPos.Y() += aTextHeight;
-    if ( pEntry->m_bActive )
+    if ( rEntry->m_bActive )
     {
       OUString sPinText(SD_RESSTR(STR_ENTER_PIN));
       DrawText( m_sPinTextRect,
@@ -635,18 +635,18 @@ long ClientBox::addEntry( ::boost::shared_ptr<ClientInfo> pClientInfo )
 {
     long         nPos = 0;
 
-    TClientBoxEntry pEntry( new ClientBoxEntry( pClientInfo ) );
+    TClientBoxEntry xEntry( new ClientBoxEntry( pClientInfo ) );
 
     ::osl::ClearableMutexGuard guard(m_entriesMutex);
     if ( m_vEntries.empty() )
     {
-        m_vEntries.push_back( pEntry );
+        m_vEntries.push_back( xEntry );
     }
     else
     {
-//         if ( !FindEntryPos( pEntry, 0, m_vEntries.size()-1, nPos ) )
+//         if ( !FindEntryPos( xEntry, 0, m_vEntries.size()-1, nPos ) )
 //         {
-            m_vEntries.insert( m_vEntries.begin()+nPos, pEntry );
+            m_vEntries.insert( m_vEntries.begin()+nPos, xEntry );
 //         }
 //         else if ( !m_bInCheckMode )
 //         {

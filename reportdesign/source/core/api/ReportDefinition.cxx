@@ -2298,7 +2298,7 @@ class OStylesHelper:
 protected:
     virtual ~OStylesHelper(){}
 public:
-    OStylesHelper(const uno::Type _aType = cppu::UnoType<container::XElementAccess>::get());
+    OStylesHelper(const uno::Type& rType = cppu::UnoType<container::XElementAccess>::get());
 
     // XNameContainer
     virtual void SAL_CALL insertByName( const OUString& aName, const uno::Any& aElement ) throw(lang::IllegalArgumentException, container::ElementExistException,lang::WrappedTargetException, uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -2320,9 +2320,9 @@ public:
     virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) throw(uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-OStylesHelper::OStylesHelper(const uno::Type _aType)
-: cppu::BaseMutex()
-,m_aType(_aType)
+OStylesHelper::OStylesHelper(const uno::Type& rType)
+    : cppu::BaseMutex()
+    , m_aType(rType)
 {
 }
 ;

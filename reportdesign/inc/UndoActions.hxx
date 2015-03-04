@@ -187,7 +187,7 @@ namespace rptui
     public:
         OUndoContainerAction(SdrModel& rMod
                             ,Action _eAction
-                            ,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer > _xContainer
+                            ,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >& rContainer
                             ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& xElem
                             ,sal_uInt16 _nCommentId);
         virtual ~OUndoContainerAction();

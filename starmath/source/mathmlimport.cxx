@@ -396,9 +396,9 @@ sal_uLong SmXMLImportWrapper::ReadThroughComponent(
 
 
 SmXMLImport::SmXMLImport(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
+    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rContext,
     OUString const & implementationName, SvXMLImportFlags nImportFlags)
-:   SvXMLImport( xContext, implementationName, nImportFlags ),
+:   SvXMLImport(rContext, implementationName, nImportFlags),
     pPresLayoutElemTokenMap(0),
     pPresLayoutAttrTokenMap(0),
     pFencedAttrTokenMap(0),

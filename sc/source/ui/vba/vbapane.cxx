@@ -29,10 +29,10 @@ using namespace ooo::vba;
 ScVbaPane::ScVbaPane(
         const css::uno::Reference< ov::XHelperInterface >& xParent,
         const uno::Reference< uno::XComponentContext >& xContext,
-        const uno::Reference< frame::XModel >& xModel,
-        const uno::Reference< sheet::XViewPane > xViewPane ) throw (uno::RuntimeException) :
-    m_xModel( xModel, uno::UNO_SET_THROW ),
-    m_xViewPane( xViewPane, uno::UNO_SET_THROW ),
+        const uno::Reference< frame::XModel >& rModel,
+        const uno::Reference< sheet::XViewPane >& rViewPane ) throw (uno::RuntimeException) :
+    m_xModel(rModel, uno::UNO_SET_THROW),
+    m_xViewPane(rViewPane, uno::UNO_SET_THROW),
     m_xParent(xParent),
     m_xContext(xContext)
 {

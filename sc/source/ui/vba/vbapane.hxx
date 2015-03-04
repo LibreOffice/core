@@ -30,10 +30,10 @@ class ScVbaPane : public ScVbaPane_BASE
 {
 public:
     ScVbaPane(
-        const css::uno::Reference< ov::XHelperInterface >& xParent,
-        const css::uno::Reference< css::uno::XComponentContext >& xContext,
-        const css::uno::Reference< css::frame::XModel >& xModel,
-        const css::uno::Reference< css::sheet::XViewPane > xViewPane ) throw (css::uno::RuntimeException);
+        const css::uno::Reference< ov::XHelperInterface >& rParent,
+        const css::uno::Reference< css::uno::XComponentContext >& rContext,
+        const css::uno::Reference< css::frame::XModel >& rModel,
+        const css::uno::Reference< css::sheet::XViewPane >& rViewPane ) throw (css::uno::RuntimeException);
 
     css::uno::Reference< css::sheet::XViewPane > getViewPane() const { return m_xViewPane; }
 

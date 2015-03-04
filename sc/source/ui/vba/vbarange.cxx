@@ -213,10 +213,10 @@ static double lcl_Round2DecPlaces( double nVal )
     return nVal;
 }
 
-static uno::Any lcl_makeRange( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Any aAny, bool bIsRows, bool bIsColumns )
+static uno::Any lcl_makeRange( const uno::Reference< XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, const uno::Any& rAny, bool bIsRows, bool bIsColumns )
 {
-    uno::Reference< table::XCellRange > xCellRange( aAny, uno::UNO_QUERY_THROW );
-    return uno::makeAny( uno::Reference< excel::XRange >( new ScVbaRange( xParent, xContext, xCellRange, bIsRows, bIsColumns ) ) );
+    uno::Reference< table::XCellRange > xCellRange(rAny, uno::UNO_QUERY_THROW);
+    return uno::makeAny( uno::Reference< excel::XRange >( new ScVbaRange( rParent, rContext, xCellRange, bIsRows, bIsColumns ) ) );
 }
 
 static uno::Reference< excel::XRange > lcl_makeXRangeFromSheetCellRanges( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< sheet::XSheetCellRanges >& xLocSheetCellRanges, ScDocShell* pDoc )
@@ -1102,9 +1102,9 @@ public:
         if ( !m_xCellRange.is() )
             throw uno::RuntimeException();
     }
-    RangeHelper( const uno::Any aCellRange ) throw (uno::RuntimeException)
+    RangeHelper( const uno::Any& rCellRange ) throw (uno::RuntimeException)
     {
-        m_xCellRange.set( aCellRange, uno::UNO_QUERY_THROW );
+        m_xCellRange.set(rCellRange, uno::UNO_QUERY_THROW);
     }
     uno::Reference< sheet::XSheetCellRange > getSheetCellRange() throw (uno::RuntimeException)
     {

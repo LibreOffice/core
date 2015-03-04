@@ -21,7 +21,7 @@ private:
     css::uno::Reference< ov::XCommandBar > m_xCommandBar;
 
 public:
-    ScVbaMenuBar( const css::uno::Reference< ov::XHelperInterface > xParent, const css::uno::Reference< css::uno::XComponentContext > xContext, const css::uno::Reference< ov::XCommandBar >& xCommandBar ) throw( css::uno::RuntimeException );
+    ScVbaMenuBar( const css::uno::Reference< ov::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< ov::XCommandBar >& rCommandBar ) throw( css::uno::RuntimeException );
 
     virtual css::uno::Any SAL_CALL Menus( const css::uno::Any& aIndex ) throw (css::script::BasicErrorException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 

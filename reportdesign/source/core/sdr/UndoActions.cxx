@@ -105,12 +105,12 @@ void OCommentUndoAction::Redo()
 
 OUndoContainerAction::OUndoContainerAction(SdrModel& _rMod
                                              ,Action _eAction
-                                             ,const uno::Reference< container::XIndexContainer > _xContainer
+                                             ,const uno::Reference< container::XIndexContainer >& rContainer
                                              ,const Reference< XInterface > & xElem
                                              ,sal_uInt16 _nCommentId)
                       :OCommentUndoAction(_rMod,_nCommentId)
                       ,m_xElement(xElem)
-                      ,m_xContainer(_xContainer)
+                      ,m_xContainer(rContainer)
                          ,m_eAction( _eAction )
 {
     // normalize
