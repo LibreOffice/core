@@ -211,17 +211,34 @@ public:
 /** Special token to remember details of ocTableRef "structured references". */
 class ScTableRefToken : public formula::FormulaToken
 {
-    sal_uInt16                  mnIndex;    ///< index into table / database range collection
-
-    ScTableRefToken(); // disabled
 public:
-    ScTableRefToken( sal_uInt16 nIndex );
+
+    enum Item
+    {
+        ALL      = 0,
+        HEADERS  = 1,
+        DATA     = 2,
+        TOTALS   = 4,
+        THIS_ROW = 8
+    };
+
+    ScTableRefToken( sal_uInt16 nIndex, Item eItem );
     ScTableRefToken( const ScTableRefToken& r );
     virtual ~ScTableRefToken();
 
     virtual sal_uInt16          GetIndex() const SAL_OVERRIDE;
     virtual bool                operator==( const formula::FormulaToken& rToken ) const SAL_OVERRIDE;
     virtual FormulaToken*       Clone() const SAL_OVERRIDE { return new ScTableRefToken(*this); }
+
+            Item                GetItem() const;
+
+private:
+
+    sal_uInt16                  mnIndex;    ///< index into table / database range collection
+    Item                        meItem;
+
+    ScTableRefToken(); // disabled
+
 };
 
 // Only created from within the interpreter, no conversion from ScRawToken,

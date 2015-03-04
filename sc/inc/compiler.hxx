@@ -26,6 +26,7 @@
 #include "scdllapi.h"
 #include "global.hxx"
 #include "refdata.hxx"
+#include "token.hxx"
 #include <formula/token.hxx>
 #include <formula/grammar.hxx>
 #include <unotools/charclass.hxx>
@@ -137,7 +138,8 @@ public:
             sal_uInt16  nIndex;
         } name;
         struct {
-            sal_uInt16      nIndex;
+            sal_uInt16              nIndex;
+            ScTableRefToken::Item   eItem;
         } table;
         struct {
             rtl_uString* mpData;

@@ -329,7 +329,7 @@ FormulaToken* ScRawToken::CreateToken() const
             return new ScMatrixToken( pMat );
         case svIndex :
             if (eOp == ocTableRef)
-                return new ScTableRefToken( table.nIndex);
+                return new ScTableRefToken( table.nIndex, table.eItem);
             else
                 return new FormulaIndexToken( eOp, name.nIndex, name.bGlobal);
         case svExternalSingleRef:
@@ -828,15 +828,17 @@ bool ScExternalNameToken::operator==( const FormulaToken& r ) const
     return maName.getData() == r.GetString().getData();
 }
 
-ScTableRefToken::ScTableRefToken( sal_uInt16 nIndex ) :
+ScTableRefToken::ScTableRefToken( sal_uInt16 nIndex, ScTableRefToken::Item eItem ) :
     FormulaToken( svIndex, ocTableRef),
-    mnIndex(nIndex)
+    mnIndex(nIndex),
+    meItem(eItem)
 {
 }
 
 ScTableRefToken::ScTableRefToken( const ScTableRefToken& r ) :
     FormulaToken(r),
-    mnIndex(r.mnIndex)
+    mnIndex(r.mnIndex),
+    meItem(r.meItem)
 {
 }
 
@@ -847,12 +849,24 @@ sal_uInt16 ScTableRefToken::GetIndex() const
     return mnIndex;
 }
 
+ScTableRefToken::Item ScTableRefToken::GetItem() const
+{
+    return meItem;
+}
+
 bool ScTableRefToken::operator==( const FormulaToken& r ) const
 {
     if ( !FormulaToken::operator==(r) )
         return false;
 
     if (mnIndex != r.GetIndex())
+        return false;
+
+    const ScTableRefToken* p = dynamic_cast<const ScTableRefToken*>(&r);
+    if (!p)
+        return false;
+
+    if (meItem != p->GetItem())
         return false;
 
     return true;
