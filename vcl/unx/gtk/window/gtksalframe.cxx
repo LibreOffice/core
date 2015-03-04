@@ -3401,9 +3401,7 @@ void GtkSalFrame::damaged (const basegfx::B2IBox& rDamageRect)
 }
 
 #if GTK_CHECK_VERSION(3,0,0)
-// FIXME: This is incredibly lame ... but so is cairo's insistence on -exactly-
-// its own stride - neither more nor less - particularly not more aligned
-// we like 8byte aligned, it likes 4 - most odd.
+// blit our backing basebmp buffer to the target cairo context cr
 void GtkSalFrame::renderArea( cairo_t *cr, cairo_rectangle_t *area )
 {
     cairo_save( cr );
