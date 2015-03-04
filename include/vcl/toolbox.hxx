@@ -493,15 +493,10 @@ public:
     bool                IsCustomize() { return mbCustomize; }
     bool                IsInCustomizeMode() const { return mbCustomizeMode; }
 
-    void                SetHelpText( const OUString& rText )
-                            { DockingWindow::SetHelpText( rText ); }
-    const OUString&     GetHelpText() const
-                            { return DockingWindow::GetHelpText(); }
-
-    void                SetHelpId( const OString& rId )
-                            { DockingWindow::SetHelpId( rId ); }
-    const OString&      GetHelpId() const
-                            { return DockingWindow::GetHelpId(); }
+    using DockingWindow::SetHelpText;
+    using DockingWindow::GetHelpText;
+    using DockingWindow::SetHelpId;
+    using DockingWindow::GetHelpId;
 
     void                SetClickHdl( const Link& rLink ) { maClickHdl = rLink; }
     const Link&         GetClickHdl() const { return maClickHdl; }
