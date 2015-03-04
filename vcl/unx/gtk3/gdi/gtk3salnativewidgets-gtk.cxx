@@ -910,18 +910,13 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
         return false;
     }
 
-    cairo_rectangle_int_t translatedRegion = { (int) rControlRegion.Left() - 1, (int) rControlRegion.Top() - 1,
-                                               (int) rControlRegion.GetWidth() + 2, (int) rControlRegion.GetHeight() + 2 };
-
     cairo_t *cr = getCairoContext();
-    cairo_translate(cr, translatedRegion.x, translatedRegion.y);
+    cairo_translate(cr, rControlRegion.Left(), rControlRegion.Top());
 
     gtk_style_context_save(context);
     gtk_style_context_set_state(context, flags);
     if (styleClass)
         gtk_style_context_add_class(context, styleClass);
-
-    cairo_translate(cr, 1, 1);
 
     switch(renderType)
     {
