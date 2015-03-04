@@ -220,6 +220,7 @@ public class InvalidationHandler {
         } else if (payload.equals("false")) {
             mTextSelection.hideHandle(TextSelectionHandle.HandleType.MIDDLE);
             mTextCursorLayer.hideCursor();
+            LibreOfficeMainActivity.mAppContext.hideSoftKeyboard();
         }
     }
 
