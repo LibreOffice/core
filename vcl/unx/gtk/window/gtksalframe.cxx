@@ -3247,6 +3247,12 @@ gboolean GtkSalFrame::signalScroll( GtkWidget*, GdkEvent* pEvent, gpointer frame
     GtkSalFrame* pThis = (GtkSalFrame*)frame;
     GdkEventScroll* pSEvent = reinterpret_cast<GdkEventScroll*>(pEvent);
 
+#if GTK_CHECK_VERSION(3,0,0)
+    //TODO: do something less feeble here
+    if (pSEvent->direction == GDK_SCROLL_SMOOTH)
+        return false;
+#endif
+
     static sal_uLong        nLines = 0;
     if( ! nLines )
     {
