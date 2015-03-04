@@ -1045,7 +1045,7 @@ bool ScTokenArray::AddFormulaToken(
                         else if (eOpCode == ocDBArea)
                             AddDBRange(aTokenData.Index);
                         else if (eOpCode == ocTableRef)
-                            /* TODO: AddTableRef(aTokenData.Index) */ ;
+                            bError = true;  /* TODO: implementation */
                         else
                             bError = true;
                     }

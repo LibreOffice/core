@@ -390,7 +390,7 @@ bool FormulaTokenArray::AddFormulaToken(
                 if ( eOpCode == ocDBArea )
                     AddToken( formula::FormulaIndexToken( eOpCode, static_cast<sal_uInt16>(nValue) ) );
                 else if ( eOpCode == ocTableRef )
-                    /* TODO: implementation */ ;
+                    bError = true;  /* TODO: implementation */
                 else if ( eOpCode == ocSpaces )
                     AddToken( formula::FormulaByteToken( ocSpaces, static_cast<sal_uInt8>(nValue) ) );
                 else
