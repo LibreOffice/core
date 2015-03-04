@@ -1555,27 +1555,6 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
     gtk_widget_path_free(path);
 }
 
-static void print_cairo_region (cairo_region_t *region, const char *msg)
-{
-    if (!region) {
-        fprintf (stderr, "%s - NULL\n", msg);
-        return;
-    }
-    int numrect = cairo_region_num_rectangles (region);
-    fprintf (stderr, "%s - %d rects\n", msg, numrect);
-    for (int i = 0; i < numrect; i++) {
-        cairo_rectangle_int_t rect;
-        cairo_region_get_rectangle (region, i, &rect);
-        fprintf( stderr, "\t%d -> %d,%d %dx%d\n", i,
-                 rect.x, rect.y, rect.width, rect.height );
-    }
-}
-
-static void print_update_area (GdkWindow *window, const char *msg)
-{
-    print_cairo_region (gdk_window_get_update_area (window), msg);
-}
-
 void GtkSalGraphics::setDevice(basebmp::BitmapDeviceSharedPtr& rDevice)
 {
     SvpSalGraphics::setDevice(rDevice);
@@ -1595,56 +1574,36 @@ void GtkSalGraphics::copyArea( long nDestX, long nDestY,
                                long nSrcWidth, long nSrcHeight,
                                sal_uInt16 nFlags )
 {
-#ifndef DISABLE_CLEVER_COPYAREA
     mpFrame->pushIgnoreDamage();
     SvpSalGraphics::copyArea( nDestX, nDestY, nSrcX, nSrcY, nSrcWidth, nSrcHeight, nFlags );
     mpFrame->popIgnoreDamage();
+
     cairo_rectangle_int_t rect = { (int)nSrcX, (int)nSrcY, (int)nSrcWidth, (int)nSrcHeight };
     cairo_region_t *region = cairo_region_create_rectangle( &rect );
 
-    print_update_area( gtk_widget_get_window( mpFrame->getWindow() ), "before copy area" );
-
-//    print_cairo_region( mpFrame->m_pRegion, "extremely odd SalFrame: shape combine region! - ");
-
-    g_warning( "FIXME: copy area delta: %d %d needs clip intersect\n",
-               (int)(nDestX - nSrcX), (int)(nDestY - nSrcY) );
-
-    // get clip region and translate it in the opposite direction & intersect ...
-    cairo_region_t *clip_region;
-
-    RectangleVector rects;
-    m_aClipRegion.GetRegionRectangles(rects);
-    if (rects.empty())
+    if (!m_aClipRegion.IsEmpty())
     {
-        basegfx::B2IVector aSize = GetSize();
-        cairo_rectangle_int_t aCairoSize = { 0, 0, aSize.getX(), aSize.getY() };
-        clip_region = cairo_region_create_rectangle( &aCairoSize );
-    }
-    else
-    {
-        clip_region = cairo_region_create();
-        for (RectangleVector::iterator i(rects.begin()); i != rects.end(); ++i)
+        // get clip region and translate it in the opposite direction & intersect ...
+        cairo_region_t *clip_region = cairo_region_create();
+
+        RectangleVector aRectangles;
+        m_aClipRegion.GetRegionRectangles(aRectangles);
+        for (RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); ++aRectIter)
         {
-            cairo_rectangle_int_t aRect = { (int)i->Left(), (int)i->Top(),
-                                            (int)i->GetWidth(), (int)i->GetHeight() };
+            cairo_rectangle_int_t aRect = { (int)aRectIter->Left(), (int)aRectIter->Top(),
+                                            (int)aRectIter->GetWidth(), (int)aRectIter->GetHeight() };
             cairo_region_union_rectangle( clip_region, &aRect );
         }
+
+        cairo_region_translate( clip_region, - (nDestX - nSrcX), - (nDestY - nSrcY) );
+        cairo_region_intersect( region, clip_region );
+        cairo_region_destroy( clip_region );
     }
-    print_cairo_region( clip_region, "pristine clip region" );
-    cairo_region_translate( clip_region, - (nDestX - nSrcX), - (nDestY - nSrcY) );
-    print_cairo_region( clip_region, "translated clip region" );
-    cairo_region_intersect( region, clip_region );
-    print_cairo_region( region, "reduced copy area region" );
 
     // FIXME: this will queue (duplicate) gtk+ re-rendering for the exposed area, c'est la vie
     gdk_window_move_region( gtk_widget_get_window( mpFrame->getWindow() ),
                             region, nDestX - nSrcX, nDestY - nSrcY );
-    print_update_area( gtk_widget_get_window( mpFrame->getWindow() ), "after copy area" );
-    cairo_region_destroy( clip_region );
     cairo_region_destroy( region );
-#else
-    SvpSalGraphics::copyArea( nDestX, nDestY, nSrcX, nSrcY, nSrcWidth, nSrcHeight, nFlags );
-#endif
 }
 
 cairo_t* GtkSalGraphics::getCairoContext()
