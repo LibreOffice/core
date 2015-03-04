@@ -341,6 +341,7 @@ public:
 
 #if GTK_CHECK_VERSION(3,0,0)
     // only for gtk3 ...
+    cairo_t* getCairoContext();
     void pushIgnoreDamage();
     void popIgnoreDamage();
     bool isDuringRender();

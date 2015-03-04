@@ -1586,18 +1586,7 @@ void GtkSalGraphics::copyArea( long nDestX, long nDestY,
 
 cairo_t* GtkSalGraphics::getCairoContext()
 {
-    basebmp::RawMemorySharedArray data = mpFrame->m_aFrame->getBuffer();
-    basegfx::B2IVector size = mpFrame->m_aFrame->getSize();
-    sal_Int32 nStride = mpFrame->m_aFrame->getScanlineStride();
-    cairo_surface_t *target =
-        cairo_image_surface_create_for_data(data.get(),
-                                        CAIRO_FORMAT_RGB24,
-                                        size.getX(), size.getY(),
-                                        nStride);
-    cairo_t* cr = cairo_create(target);
-    cairo_surface_destroy(target);
-    return cr;
-//    return gdk_cairo_create(gtk_widget_get_window(mpFrame->getWindow()));
+    return mpFrame->getCairoContext();
 }
 
 void GtkSalGraphics::clipRegion(cairo_t* cr)

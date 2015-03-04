@@ -3334,6 +3334,24 @@ gboolean GtkSalFrame::signalCrossing( GtkWidget*, GdkEventCrossing* pEvent, gpoi
 }
 
 #if GTK_CHECK_VERSION(3,0,0)
+
+cairo_t* GtkSalFrame::getCairoContext()
+{
+    basebmp::RawMemorySharedArray data = m_aFrame->getBuffer();
+    basegfx::B2IVector size = m_aFrame->getSize();
+    sal_Int32 nStride = m_aFrame->getScanlineStride();
+    assert(cairo_format_stride_for_width(CAIRO_FORMAT_RGB24, size.getX()) == nStride);
+    cairo_surface_t *target =
+        cairo_image_surface_create_for_data(data.get(),
+                                        CAIRO_FORMAT_RGB24,
+                                        size.getX(), size.getY(),
+                                        nStride);
+    cairo_t* cr = cairo_create(target);
+    cairo_surface_destroy(target);
+    return cr;
+//    return gdk_cairo_create(gtk_widget_get_window(mpFrame->getWindow()));
+}
+
 void GtkSalFrame::pushIgnoreDamage()
 {
     m_nDuringRender++;
@@ -3393,7 +3411,6 @@ void GtkSalFrame::renderArea( cairo_t *cr, cairo_rectangle_t *area )
 
     basebmp::RawMemorySharedArray data = m_aFrame->getBuffer();
     basegfx::B2IVector size = m_aFrame->getSize();
-    sal_Int32 nStride = m_aFrame->getScanlineStride();
 
     long ax = area->x;
     long ay = area->y;
@@ -3422,28 +3439,12 @@ void GtkSalFrame::renderArea( cairo_t *cr, cairo_rectangle_t *area )
 
     cairo_save( cr );
 
-    unsigned char *src = data.get();
-    assert(cairo_format_stride_for_width(CAIRO_FORMAT_RGB24, size.getX()) == nStride);
-    cairo_surface_t *pSurface =
-        cairo_image_surface_create_for_data(src,
-                                            CAIRO_FORMAT_RGB24,
-                                            size.getX(), size.getY(),
-                                            nStride);
-    /*
-        int cairo_stride = cairo_format_stride_for_width(CAIRO_FORMAT_RGB24, size.getX());
-        g_warning( "Fixed cairo status %d %d strides: %d vs %d, mask %d\n",
-               (int) cairo_status( cr ),
-               (int) cairo_surface_status( pSurface ),
-               (int) nStride,
-               (int) cairo_stride,
-               (int) (cairo_stride & (sizeof (uint32_t)-1)) );
-    */
+    cairo_surface_t *pSurface = cairo_get_target(getCairoContext());
 
     cairo_set_operator( cr, CAIRO_OPERATOR_OVER );
     cairo_set_source_surface( cr, pSurface, 0, 0 );
     cairo_rectangle( cr, ax, ay, awidth, aheight );
     cairo_fill( cr );
-    cairo_surface_destroy( pSurface );
     cairo_restore( cr );
 
     // Render red rectangles to show what was re-rendered ...

@@ -58,6 +58,7 @@ public:
     static void signalSettingsNotify( GObject*, GParamSpec *pSpec, gpointer );
 
     cairo_t* getCairoContext();
+
     void clipRegion(cairo_t* cr);
 
 private:
