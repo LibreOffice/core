@@ -246,7 +246,7 @@ static void lok_docview_init( LOKDocView* pDocView )
     pDocView->fZoom = 1;
     pDocView->m_bEdit = FALSE;
     memset(&pDocView->m_aVisibleCursor, 0, sizeof(pDocView->m_aVisibleCursor));
-    pDocView->m_bCursorVisible = FALSE;
+    pDocView->m_bCursorOverlayVisible = FALSE;
     pDocView->m_nLastButtonPressTime = 0;
     pDocView->m_nLastButtonReleaseTime = 0;
     pDocView->m_pTextSelectionRectangles = NULL;
@@ -304,10 +304,10 @@ static gboolean lcl_handleTimeout(gpointer pData)
 
     if (pDocView->m_bEdit)
     {
-        if (pDocView->m_bCursorVisible)
-            pDocView->m_bCursorVisible = FALSE;
+        if (pDocView->m_bCursorOverlayVisible)
+            pDocView->m_bCursorOverlayVisible = FALSE;
         else
-            pDocView->m_bCursorVisible = TRUE;
+            pDocView->m_bCursorOverlayVisible = TRUE;
         gtk_widget_queue_draw(GTK_WIDGET(pDocView->pEventBox));
     }
 
@@ -355,7 +355,7 @@ static gboolean renderOverlay(GtkWidget* pWidget, GdkEventExpose* pEvent, gpoint
     (void)pEvent;
     pCairo = gdk_cairo_create(gtk_widget_get_window(pWidget));
 
-    if (pDocView->m_bCursorVisible && !lcl_isEmptyRectangle(&pDocView->m_aVisibleCursor))
+    if (pDocView->m_bCursorOverlayVisible && !lcl_isEmptyRectangle(&pDocView->m_aVisibleCursor))
     {
         if (pDocView->m_aVisibleCursor.width == 0)
             // Set a minimal width if it would be 0.
@@ -629,7 +629,7 @@ static gboolean lok_docview_callback(gpointer pData)
     case LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
     {
         pCallback->m_pDocView->m_aVisibleCursor = lcl_payloadToRectangle(pCallback->m_pPayload);
-        pCallback->m_pDocView->m_bCursorVisible = TRUE;
+        pCallback->m_pDocView->m_bCursorOverlayVisible = TRUE;
         gtk_widget_queue_draw(GTK_WIDGET(pCallback->m_pDocView->pEventBox));
     }
     break;
