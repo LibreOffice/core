@@ -972,24 +972,14 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
 void GtkSalGraphics::renderAreaToPix( cairo_surface_t *source,
                                       cairo_rectangle_int_t *region)
 {
-    if( !mpFrame->m_aFrame.get() )
-        return;
-
-    long ax = region->x;
-    long ay = region->y;
-    basegfx::B2IVector size = mpFrame->m_aFrame->getSize();
-    long awidth = MIN (region->width, size.getX() - ax);
-    long aheight = MIN (region->height, size.getY() - ay);
-
     cairo_t *cr = getCairoContext();
-
-    cairo_set_source_surface( cr, source, ax, ay );
-    cairo_rectangle( cr, ax, ay, awidth, aheight );
-    cairo_fill( cr );
+    cairo_set_source_surface(cr, source, region->x, region->y);
+    cairo_rectangle(cr, region->x, region->y, region->width, region->height);
+    cairo_fill(cr);
     cairo_destroy(cr);
 
-    if ( !mpFrame->isDuringRender() )
-        gtk_widget_queue_draw_area( mpFrame->getWindow(), ax, ay, awidth, aheight );
+    if (!mpFrame->isDuringRender())
+        gtk_widget_queue_draw_area(mpFrame->getWindow(), region->x, region->y, region->width, region->height);
 }
 
 bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion, ControlState,
