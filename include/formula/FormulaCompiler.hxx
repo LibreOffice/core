@@ -282,6 +282,7 @@ protected:
     virtual bool HandleRange();
     virtual bool HandleColRowName();
     virtual bool HandleDbData();
+    virtual bool HandleTableRef();
 
     virtual void CreateStringFromExternal(OUStringBuffer& rBuffer, FormulaToken* pTokenP) const;
     virtual void CreateStringFromSingleRef(OUStringBuffer& rBuffer,FormulaToken* pTokenP) const;

@@ -4601,6 +4601,25 @@ bool ScCompiler::HandleDbData()
     return true;
 }
 
+bool ScCompiler::HandleTableRef()
+{
+    ScDBData* pDBData = pDoc->GetDBCollection()->getNamedDBs().findByIndex(mpToken->GetIndex());
+    if ( !pDBData )
+        SetError(errNoName);
+    else if (mbJumpCommandReorder)
+    {
+        /* TODO: handle it */
+#if 0
+        ScTokenArray* pNew = new ScTokenArray();
+        pNew->AddDoubleReference( aRefData );
+        PushTokenArray( pNew, true );
+        pNew->Reset();
+        return GetToken();
+#endif
+    }
+    return true;
+}
+
 FormulaTokenRef ScCompiler::ExtendRangeReference( FormulaToken & rTok1, FormulaToken & rTok2, bool bReuseDoubleRef )
 {
     return extendRangeReference( rTok1, rTok2, aPos,bReuseDoubleRef );

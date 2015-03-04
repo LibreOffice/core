@@ -1112,7 +1112,7 @@ bool FormulaCompiler::GetToken()
     }
     else if( mpToken->GetOpCode() == ocTableRef )
     {
-        /* TODO: return HandleTableRef() */ ;
+        return HandleTableRef();
     }
     return true;
 }
@@ -2100,6 +2100,11 @@ bool FormulaCompiler::HandleColRowName()
 }
 
 bool FormulaCompiler::HandleDbData()
+{
+    return true;
+}
+
+bool FormulaCompiler::HandleTableRef()
 {
     return true;
 }

@@ -453,6 +453,7 @@ private:
     virtual bool HandleRange() SAL_OVERRIDE;
     virtual bool HandleColRowName() SAL_OVERRIDE;
     virtual bool HandleDbData() SAL_OVERRIDE;
+    virtual bool HandleTableRef() SAL_OVERRIDE;
 
     virtual formula::FormulaTokenRef ExtendRangeReference( formula::FormulaToken & rTok1, formula::FormulaToken & rTok2, bool bReuseDoubleRef ) SAL_OVERRIDE;
     virtual void CreateStringFromExternal(OUStringBuffer& rBuffer, formula::FormulaToken* pTokenP) const SAL_OVERRIDE;
