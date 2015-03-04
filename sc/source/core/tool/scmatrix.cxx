@@ -2510,7 +2510,7 @@ void ScMatrix::MergeDoubleArray( std::vector<double>& rArray, Op eOp ) const
     pImpl->MergeDoubleArray(rArray, eOp);
 }
 
-namespace {
+namespace matop {
 
 struct AddOp
 {
@@ -2592,20 +2592,64 @@ public:
     }
 };
 
+struct NegOp
+{
+private:
+    svl::SharedString maString;
+
+public:
+
+    explicit NegOp(svl::SharedString aString):
+        maString(aString)
+    {
+    }
+
+    double operator()(double nVal) const
+    {
+        return -nVal;
+    }
+
+    double operator()(bool bVal) const
+    {
+        return -(double)bVal;
+    }
+
+    svl::SharedString operator()(const svl::SharedString&) const
+    {
+        return maString;
+    }
+
+    svl::SharedString operator()(char) const
+    {
+        return maString;
+    }
+
+    bool useFunctionForEmpty() const
+    {
+        return true;
+    }
+};
+
 }
 
 void ScMatrix::SubAddOp(bool bSub, double fVal, svl::SharedString aString, ScMatrix& rMat)
 {
     if(bSub)
     {
-        SubOp aOp(fVal, aString);
+        matop::SubOp aOp(fVal, aString);
         pImpl->ApplyOperation(aOp, *rMat.pImpl);
     }
     else
     {
-        AddOp aOp(fVal, aString);
+        matop::AddOp aOp(fVal, aString);
         pImpl->ApplyOperation(aOp, *rMat.pImpl);
     }
+}
+
+void ScMatrix::NegOp(svl::SharedString aString, ScMatrix& rMat)
+{
+    matop::NegOp aOp(aString);
+    pImpl->ApplyOperation(aOp, *rMat.pImpl);
 }
 
 ScMatrix& ScMatrix::operator+= ( const ScMatrix& r )

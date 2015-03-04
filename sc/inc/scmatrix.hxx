@@ -388,6 +388,7 @@ public:
     void MergeDoubleArray( std::vector<double>& rArray, Op eOp ) const;
 
     void SubAddOp(bool bSub, double fVal, svl::SharedString aString, ScMatrix& rMat);
+    void NegOp(svl::SharedString aString, ScMatrix& rMat);
 
     ScMatrix& operator+= ( const ScMatrix& r );
 

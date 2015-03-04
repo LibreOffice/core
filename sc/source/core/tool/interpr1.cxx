@@ -1500,17 +1500,8 @@ void ScInterpreter::ScNeg()
                     PushIllegalArgument();
                 else
                 {
-                    for (SCSIZE i = 0; i < nC; ++i)
-                    {
-                        for (SCSIZE j = 0; j < nR; ++j)
-                        {
-                            if ( pMat->IsValueOrEmpty(i,j) )
-                                pResMat->PutDouble( -pMat->GetDouble(i,j), i, j );
-                            else
-                                pResMat->PutString(
-                                    mrStrPool.intern(ScGlobal::GetRscString(STR_NO_VALUE)), i, j);
-                        }
-                    }
+                    svl::SharedString aString = mrStrPool.intern(ScGlobal::GetRscString(STR_NO_VALUE));
+                    pMat->NegOp(aString, *pResMat);
                     PushMatrix( pResMat );
                 }
             }
