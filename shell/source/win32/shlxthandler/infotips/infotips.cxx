@@ -289,7 +289,7 @@ HRESULT STDMETHODCALLTYPE CInfoTip::GetInfoTip(DWORD /*dwFlags*/, wchar_t** ppws
 
         ZeroMemory(pMem, len);
 
-        msg.copy(pMem,msg.length());
+        wcscpy_s(pMem, msg.length(), msg.c_str());
 
         *ppwszTip = pMem;
         lpMalloc->Release();
