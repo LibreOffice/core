@@ -162,15 +162,12 @@ SwViewShell::SwViewShell( SwDoc& rDocument, vcl::Window *pWindow,
     mbShowHeaderSeparator( false ),
     mbShowFooterSeparator( false ),
     mbHeaderFooterEdit( false ),
-    mbTiledRendering(false),
     mpTargetPaintWindow(0), // #i74769#
     mpBufferedOut(0), // #i74769#
     mpDoc( &rDocument ),
     mnStartAction( 0 ),
     mnLockPaint( 0 ),
     mbSelectAll(false),
-    mpLibreOfficeKitCallback(0),
-    mpLibreOfficeKitData(0),
     mbInLibreOfficeKitCallback(false),
     mpPrePostOutDev(0), // #i72754#
     maPrePostMapMode()
@@ -241,15 +238,12 @@ SwViewShell::SwViewShell( SwViewShell& rShell, vcl::Window *pWindow,
     mbShowHeaderSeparator( false ),
     mbShowFooterSeparator( false ),
     mbHeaderFooterEdit( false ),
-    mbTiledRendering(false),
     mpTargetPaintWindow(0), // #i74769#
     mpBufferedOut(0), // #i74769#
     mpDoc( rShell.GetDoc() ),
     mnStartAction( 0 ),
     mnLockPaint( 0 ),
     mbSelectAll(false),
-    mpLibreOfficeKitCallback(0),
-    mpLibreOfficeKitData(0),
     mbInLibreOfficeKitCallback(false),
     mpPrePostOutDev(0), // #i72754#
     maPrePostMapMode()

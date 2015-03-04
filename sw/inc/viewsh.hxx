@@ -158,7 +158,6 @@ class SW_DLLPUBLIC SwViewShell : public sw::Ring<SwViewShell>
 
     // boolean, indicating that class in constructor.
     bool mbInConstructor:1;
-    bool mbTiledRendering:1; ///< Set if we are doing the tiled rendering (using PaintTile()).
 
     SdrPaintWindow*         mpTargetPaintWindow;
     OutputDevice*           mpBufferedOut;
@@ -195,8 +194,6 @@ protected:
     sal_uInt16 mnLockPaint;   ///< != 0 if Paint is locked.
     bool      mbSelectAll; ///< Special select all mode: whole document selected, even if doc starts with table.
 
-    LibreOfficeKitCallback mpLibreOfficeKitCallback;
-    void* mpLibreOfficeKitData;
     bool mbInLibreOfficeKitCallback;
 
 public:

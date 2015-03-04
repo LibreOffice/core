@@ -119,8 +119,7 @@ void SwViewShell::ToggleHeaderFooterEdit()
 
 void SwViewShell::registerLibreOfficeKitCallback(LibreOfficeKitCallback pCallback, void* pData)
 {
-    mpLibreOfficeKitCallback = pCallback;
-    mpLibreOfficeKitData = pData;
+    getIDocumentDrawModelAccess()->GetDrawModel()->registerLibreOfficeKitCallback(pCallback, pData);
 }
 
 void SwViewShell::libreOfficeKitCallback(int nType, const char* pPayload) const
@@ -128,18 +127,17 @@ void SwViewShell::libreOfficeKitCallback(int nType, const char* pPayload) const
     if (mbInLibreOfficeKitCallback)
         return;
 
-    if (mpLibreOfficeKitCallback)
-        mpLibreOfficeKitCallback(nType, pPayload, mpLibreOfficeKitData);
+    getIDocumentDrawModelAccess()->GetDrawModel()->libreOfficeKitCallback(nType, pPayload);
 }
 
 void SwViewShell::setTiledRendering(bool bTiledRendering)
 {
-    mbTiledRendering = bTiledRendering;
+    getIDocumentDrawModelAccess()->GetDrawModel()->setTiledRendering(bTiledRendering);
 }
 
 bool SwViewShell::isTiledRendering() const
 {
-    return mbTiledRendering;
+    return getIDocumentDrawModelAccess()->GetDrawModel()->isTiledRendering();
 }
 
 static void
@@ -182,7 +180,7 @@ void SwViewShell::DLPrePaint2(const vcl::Region& rRegion)
             MakeDrawView();
 
         // Prefer window; if tot available, get mpOut (e.g. printer)
-        mpPrePostOutDev = (GetWin() && !mbTiledRendering)? GetWin(): GetOut();
+        mpPrePostOutDev = (GetWin() && !isTiledRendering())? GetWin(): GetOut();
 
         // #i74769# use SdrPaintWindow now direct
         mpTargetPaintWindow = Imp()->GetDrawView()->BeginDrawLayers(mpPrePostOutDev, rRegion);
@@ -403,7 +401,7 @@ void SwViewShell::ImplEndAction( const bool bIdleEnd )
 
                         if ( bPaintsFromSystem )
                             PaintDesktop( aRect );
-                        if (!mpLibreOfficeKitCallback)
+                        if (!isTiledRendering())
                             pCurrentLayout->Paint( aRect );
                         else
                             pCurrentLayout->GetCurrShell()->InvalidateWindows(aRect.SVRect());
@@ -1773,11 +1771,10 @@ void SwViewShell::PaintTile(VirtualDevice &rDevice, int contextWidth, int contex
 {
     // SwViewShell's output device setup
     // TODO clean up SwViewShell's approach to output devices (the many of
-    // them - mpBufferedOut, mpOut, mpWin, ..., and get rid of
-    // mbTiledRendering)
+    // them - mpBufferedOut, mpOut, mpWin, ...)
     OutputDevice *pSaveOut = mpOut;
-    bool bTiledRendering = mbTiledRendering;
-    mbTiledRendering = true;
+    bool bTiledRendering = isTiledRendering();
+    setTiledRendering(true);
     mbInLibreOfficeKitCallback = true;
     mpOut = &rDevice;
 
@@ -1827,7 +1824,7 @@ void SwViewShell::PaintTile(VirtualDevice &rDevice, int contextWidth, int contex
     // SwViewShell's output device tear down
     mpOut = pSaveOut;
     mbInLibreOfficeKitCallback = false;
-    mbTiledRendering = bTiledRendering;
+    setTiledRendering(bTiledRendering);
 }
 
 #if !HAVE_FEATURE_DESKTOP
