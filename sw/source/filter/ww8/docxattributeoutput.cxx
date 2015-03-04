@@ -925,10 +925,9 @@ void DocxAttributeOutput::EndParagraphProperties(const SfxItemSet& rParagraphMar
     // to the DOCX when the function 'WriteCollectedRunProperties' gets called.
     // So we need to store the current status of these lists, so that we can revert back to them when
     // we are done exporting the redline attributes.
-    ::sax_fastparser::FastAttributeList *pFontsAttrList_Original           = m_pFontsAttrList;
+    std::unique_ptr<sax_fastparser::FastAttributeList> pFontsAttrList_Original(m_pFontsAttrList.release());
     ::sax_fastparser::FastAttributeList *pEastAsianLayoutAttrList_Original = m_pEastAsianLayoutAttrList;
     ::sax_fastparser::FastAttributeList *pCharLangAttrList_Original        = m_pCharLangAttrList;
-    m_pFontsAttrList           = NULL;
     m_pEastAsianLayoutAttrList = NULL;
     m_pCharLangAttrList        = NULL;
 
@@ -938,7 +937,7 @@ void DocxAttributeOutput::EndParagraphProperties(const SfxItemSet& rParagraphMar
     WriteCollectedRunProperties();
 
     // Revert back the original values that were stored in 'm_pFontsAttrList', 'm_pEastAsianLayoutAttrList', 'm_pCharLangAttrList'
-    m_pFontsAttrList           = pFontsAttrList_Original;
+    m_pFontsAttrList.reset(pFontsAttrList_Original.release());
     m_pEastAsianLayoutAttrList = pEastAsianLayoutAttrList_Original;
     m_pCharLangAttrList        = pCharLangAttrList_Original;
 
@@ -1643,7 +1642,7 @@ void DocxAttributeOutput::StartRunProperties()
 
 void DocxAttributeOutput::InitCollectedRunProperties()
 {
-    m_pFontsAttrList = NULL;
+    m_pFontsAttrList = 0;
     m_pEastAsianLayoutAttrList = NULL;
     m_pCharLangAttrList = NULL;
 
@@ -1882,9 +1881,7 @@ void DocxAttributeOutput::WriteCollectedRunProperties()
     // Write all differed properties
     if ( m_pFontsAttrList )
     {
-        XFastAttributeListRef xAttrList( m_pFontsAttrList );
-        m_pFontsAttrList = NULL;
-
+        XFastAttributeListRef xAttrList( m_pFontsAttrList.release() );
         m_pSerializer->singleElementNS( XML_w, XML_rFonts, xAttrList );
     }
 
@@ -2345,10 +2342,9 @@ void DocxAttributeOutput::Redline( const SwRedlineData* pRedlineData)
                     // to the DOCX when the function 'WriteCollectedRunProperties' gets called.
                     // So we need to store the current status of these lists, so that we can revert back to them when
                     // we are done exporting the redline attributes.
-                    ::sax_fastparser::FastAttributeList *pFontsAttrList_Original           = m_pFontsAttrList;
+                    std::unique_ptr<sax_fastparser::FastAttributeList> pFontsAttrList_Original(m_pFontsAttrList.release());
                     ::sax_fastparser::FastAttributeList *pEastAsianLayoutAttrList_Original = m_pEastAsianLayoutAttrList;
                     ::sax_fastparser::FastAttributeList *pCharLangAttrList_Original        = m_pCharLangAttrList;
-                    m_pFontsAttrList           = NULL;
                     m_pEastAsianLayoutAttrList = NULL;
                     m_pCharLangAttrList        = NULL;
 
@@ -2359,7 +2355,7 @@ void DocxAttributeOutput::Redline( const SwRedlineData* pRedlineData)
                     WriteCollectedRunProperties();
 
                     // Revert back the original values that were stored in 'm_pFontsAttrList', 'm_pEastAsianLayoutAttrList', 'm_pCharLangAttrList'
-                    m_pFontsAttrList           = pFontsAttrList_Original;
+                    m_pFontsAttrList.reset(pFontsAttrList_Original.release());
                     m_pEastAsianLayoutAttrList = pEastAsianLayoutAttrList_Original;
                     m_pCharLangAttrList        = pCharLangAttrList_Original;
 
@@ -8294,7 +8290,6 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
     : m_rExport( rExport ),
       m_pSerializer( pSerializer ),
       m_rDrawingML( *pDrawingML ),
-      m_pFontsAttrList( NULL ),
       m_pEastAsianLayoutAttrList( NULL ),
       m_pCharLangAttrList( NULL ),
       m_pSectionSpacingAttrList( NULL ),
@@ -8369,7 +8364,6 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
 
 DocxAttributeOutput::~DocxAttributeOutput()
 {
-    delete m_pFontsAttrList, m_pFontsAttrList = NULL;
     delete m_pEastAsianLayoutAttrList, m_pEastAsianLayoutAttrList = NULL;
     delete m_pCharLangAttrList, m_pCharLangAttrList = NULL;
     delete m_pSectionSpacingAttrList, m_pSectionSpacingAttrList = NULL;
@@ -8466,6 +8460,27 @@ void DocxAttributeOutput::AddToAttrList( ::sax_fastparser::FastAttributeList* &p
     va_end( args );
 }
 
+void DocxAttributeOutput::AddToAttrList( std::unique_ptr<sax_fastparser::FastAttributeList>& pAttrList, sal_Int32 nAttrName, const sal_Char* sAttrValue )
+{
+    AddToAttrList( pAttrList, 1, nAttrName, sAttrValue );
+}
+
+void DocxAttributeOutput::AddToAttrList( std::unique_ptr<sax_fastparser::FastAttributeList>& pAttrList, sal_Int32 nAttrs, ... )
+{
+    if( !pAttrList )
+        pAttrList.reset(m_pSerializer->createAttrList());
+
+    va_list args;
+    va_start( args, nAttrs );
+    for( sal_Int32 i = 0; i<nAttrs; i++)
+    {
+        sal_Int32 nName = va_arg( args, sal_Int32 );
+        const char* pValue = va_arg( args, const char* );
+        if( pValue )
+            pAttrList->add( nName, pValue );
+    }
+    va_end( args );
+}
 void DocxAttributeOutput::SetStartedParaSdt(bool bStartedParaSdt)
 {
     m_bStartedParaSdt = bStartedParaSdt;

@@ -20,6 +20,8 @@
 #ifndef INCLUDED_SW_SOURCE_FILTER_WW8_DOCXATTRIBUTEOUTPUT_HXX
 #define INCLUDED_SW_SOURCE_FILTER_WW8_DOCXATTRIBUTEOUTPUT_HXX
 
+#include <memory>
+
 #include "attributeoutputbase.hxx"
 #include "fields.hxx"
 #include "IMark.hxx"
@@ -717,8 +719,11 @@ private:
 
     void AddToAttrList( ::sax_fastparser::FastAttributeList* &pAttrList, sal_Int32 nAttrName, const sal_Char* sAttrValue );
     void AddToAttrList( ::sax_fastparser::FastAttributeList* &pAttrList, sal_Int32 nArgs, ... );
+    void AddToAttrList( std::unique_ptr<sax_fastparser::FastAttributeList>& pAttrList, sal_Int32 nAttrName, const sal_Char* sAttrValue );
+    void AddToAttrList( std::unique_ptr<sax_fastparser::FastAttributeList>& pAttrList, sal_Int32 nArgs, ... );
 
-    ::sax_fastparser::FastAttributeList *m_pFontsAttrList, *m_pEastAsianLayoutAttrList;
+    std::unique_ptr<sax_fastparser::FastAttributeList> m_pFontsAttrList;
+    ::sax_fastparser::FastAttributeList *m_pEastAsianLayoutAttrList;
     ::sax_fastparser::FastAttributeList *m_pCharLangAttrList;
     ::sax_fastparser::FastAttributeList *m_pSectionSpacingAttrList;
     ::sax_fastparser::FastAttributeList *m_pParagraphSpacingAttrList;
