@@ -819,6 +819,7 @@ oslHostAddr SAL_CALL osl_createHostAddrByName(rtl_uString *strHostname)
 
     if (__osl_attemptSocketDialupImpl())
     {
+#if _WIN32_WINNT < _WIN32_WINNT_VISTA
         struct hostent *he;
         rtl_String     *Hostname= NULL;
 
@@ -830,6 +831,34 @@ oslHostAddr SAL_CALL osl_createHostAddrByName(rtl_uString *strHostname)
 
         rtl_string_release (Hostname);
         return __osl_hostentToHostAddr (he);
+#else
+        PADDRINFOW pAddrInfo = nullptr;
+        int ret = GetAddrInfoW(
+                    strHostname->buffer, nullptr, nullptr, & pAddrInfo);
+        if (0 == ret)
+        {
+            oslHostAddr pRet = nullptr;
+            for (PADDRINFOW pIter = pAddrInfo; pIter; pIter = pIter->ai_next)
+            {
+                if (AF_INET == pIter->ai_family)
+                {
+                    pRet = static_cast<oslHostAddr>(
+                        rtl_allocateZeroMemory(sizeof(struct oslHostAddrImpl)));
+                    rtl_uString_newFromStr(&pRet->pHostName, pIter->ai_canonname);
+                    pRet->pSockAddr = __osl_createSocketAddr();
+                    memcpy(& pRet->pSockAddr->m_sockaddr,
+                           pIter->ai_addr, pIter->ai_addrlen);
+                    break; // ignore other results
+                }
+            }
+            FreeAddrInfoW(pAddrInfo);
+            return pRet;
+        }
+        else
+        {
+            SAL_INFO("sal.osl", "GetAddrInfoW failed: " << WSAGetLastError());
+        }
+#endif // _WIN32_WINNT
     }
     return ((oslHostAddr)NULL);
 }
@@ -851,11 +880,34 @@ oslHostAddr SAL_CALL osl_createHostAddrByAddr(const oslSocketAddr pAddr)
 
         if (__osl_attemptSocketDialupImpl())
         {
+#if _WIN32_WINNT < _WIN32_WINNT_VISTA
             struct hostent *he;
             he= gethostbyaddr ((const sal_Char *)&(sin->sin_addr),
                                sizeof (sin->sin_addr),
                                sin->sin_family);
             return __osl_hostentToHostAddr (he);
+#else
+            WCHAR buf[NI_MAXHOST];
+            int ret = GetNameInfoW(
+                        & pAddr->m_sockaddr, sizeof(struct sockaddr),
+                        buf, NI_MAXHOST,
+                        nullptr, 0, 0);
+            if (0 == ret)
+            {
+                oslHostAddr pRet = static_cast<oslHostAddr>(
+                        rtl_allocateZeroMemory(sizeof(struct oslHostAddrImpl)));
+                rtl_uString_newFromStr(&pRet->pHostName,
+                        reinterpret_cast<sal_Unicode*>(&buf));
+                pRet->pSockAddr = __osl_createSocketAddr();
+                memcpy(& pRet->pSockAddr->m_sockaddr,
+                       & pAddr->m_sockaddr, sizeof(struct sockaddr));
+                return pRet;
+            }
+            else
+            {
+                SAL_INFO("sal.osl", "GetNameInfoW failed: " << WSAGetLastError());
+            }
+#endif // _WIN32_WINNT
         }
     }
 
@@ -1093,8 +1145,6 @@ oslSocketResult SAL_CALL osl_getDottedInetAddrOfSocketAddr (
     oslSocketAddr   pAddr,
     rtl_uString   **strDottedInetAddr)
 {
-    sal_Char           *pDotted;
-
     if (pAddr == NULL)
         return osl_Socket_Error;
 
@@ -1102,10 +1152,24 @@ oslSocketResult SAL_CALL osl_getDottedInetAddrOfSocketAddr (
     if (pSystemInetAddr->sin_family != FAMILY_TO_NATIVE(osl_Socket_FamilyInet))
         return osl_Socket_Error;
 
-    pDotted = inet_ntoa (pSystemInetAddr->sin_addr);
+    *strDottedInetAddr = 0;
+#if _WIN32_WINNT < _WIN32_WINNT_VISTA
+    sal_Char * pDotted = inet_ntoa (pSystemInetAddr->sin_addr);
     rtl_string2UString(
         strDottedInetAddr, pDotted, strlen (pDotted),
         RTL_TEXTENCODING_UTF8, OUSTRING_TO_OSTRING_CVTFLAGS);
+#else
+    WCHAR buf[16]; // 16 for IPV4, 46 for IPV6
+    PCWSTR ret = InetNtopW(
+            AF_INET, & pSystemInetAddr->sin_addr,
+            buf, SAL_N_ELEMENTS(buf));
+    if (nullptr == ret)
+    {
+        SAL_INFO("sal.osl", "InetNtopW failed: " << WSAGetLastError());
+        return osl_Socket_Error;
+    }
+    rtl_uString_newFromStr(strDottedInetAddr, ret);
+#endif // _WIN32_WINNT
     OSL_ASSERT(*strDottedInetAddr != 0);
 
     return osl_Socket_Ok;
