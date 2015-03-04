@@ -109,6 +109,9 @@ SystemWindow::~SystemWindow()
     maLayoutIdle.Stop();
     delete mpImplData;
     mpImplData = NULL;
+    // Hack to make sure code called from base ~Window does not interpret this
+    // as a SystemWindow (which it no longer is by then):
+    mpWindowImpl->mbSysWin = false;
 }
 
 bool SystemWindow::Notify( NotifyEvent& rNEvt )
