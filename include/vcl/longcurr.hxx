@@ -60,14 +60,14 @@ public:
     void                    SetCurrencySymbol( const OUString& rStr );
     OUString                GetCurrencySymbol() const;
 
-    void                    SetMin( BigInt nNewMin );
+    void                    SetMin(const BigInt& rNewMin);
     BigInt                  GetMin() const { return mnMin; }
-    void                    SetMax( BigInt nNewMax );
+    void                    SetMax(const BigInt& rNewMax);
     BigInt                  GetMax() const { return mnMax; }
 
     void                    SetDecimalDigits( sal_uInt16 nDigits );
     sal_uInt16                  GetDecimalDigits() const { return mnDecimalDigits;}
-    void                    SetValue( BigInt nNewValue );
+    void                    SetValue(const BigInt& rNewValue);
     void                    SetUserValue( BigInt nNewValue );
     BigInt                  GetValue() const;
     bool                IsEmptyValue() const { return GetField()->GetText().isEmpty(); }
@@ -81,7 +81,7 @@ public:
 
 class VCL_DLLPUBLIC LongCurrencyField : public SpinField, public LongCurrencyFormatter
 {
-    friend void ImplNewLongCurrencyFieldValue( LongCurrencyField*, BigInt );
+    friend void ImplNewLongCurrencyFieldValue(LongCurrencyField*, const BigInt&);
 
 private:
     BigInt          mnSpinSize;
@@ -101,11 +101,11 @@ public:
     void            First() SAL_OVERRIDE;
     void            Last() SAL_OVERRIDE;
 
-    void            SetFirst( BigInt nNewFirst ) { mnFirst = nNewFirst; }
+    void            SetFirst(const BigInt& rNewFirst ) { mnFirst = rNewFirst; }
     BigInt          GetFirst() const { return mnFirst; }
-    void            SetLast( BigInt nNewLast ) { mnLast = nNewLast; }
+    void            SetLast(const BigInt& rNewLast ) { mnLast = rNewLast; }
     BigInt          GetLast() const { return mnLast; }
-    void            SetSpinSize( BigInt nNewSize ) { mnSpinSize = nNewSize; }
+    void            SetSpinSize(const BigInt& rNewSize) { mnSpinSize = rNewSize; }
     BigInt          GetSpinSize() const { return mnSpinSize; }
 };
 

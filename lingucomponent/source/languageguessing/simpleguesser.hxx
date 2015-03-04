@@ -83,13 +83,13 @@ public:
      * Mark a language enabled
      * @param string lang the language to enable (build like language-COUNTRY-encoding)
      */
-    void EnableLanguage(string lang);
+    void EnableLanguage(const string& lang);
 
     /**
      * Mark a language disabled
      * @param string lang the language to disable (build like language-COUNTRY-encoding)
      */
-    void DisableLanguage(string lang);
+    void DisableLanguage(const string& lang);
 
     /**
      * Load a new DB of fingerprints
@@ -107,7 +107,7 @@ protected:
     vector<Guess> GetManagedLanguages(const char mask);
 
     //Like getManagedLanguages, this function enable or disable a language and it depends of the mask
-    void XableLanguage(string lang, char mask);
+    void XableLanguage(const string& lang, char mask);
 };
 
 #endif

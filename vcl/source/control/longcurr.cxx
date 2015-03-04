@@ -330,9 +330,9 @@ OUString LongCurrencyFormatter::GetCurrencySymbol() const
     return !maCurrencySymbol.isEmpty() ? maCurrencySymbol : GetLocaleDataWrapper().getCurrSymbol();
 }
 
-void LongCurrencyFormatter::SetValue( BigInt nNewValue )
+void LongCurrencyFormatter::SetValue(const BigInt& rNewValue)
 {
-    SetUserValue( nNewValue );
+    SetUserValue(rNewValue);
     mnFieldValue = mnLastValue;
     SetEmptyFieldValueData( false );
 }
@@ -407,15 +407,15 @@ void LongCurrencyFormatter::ReformatAll()
     Reformat();
 }
 
-void LongCurrencyFormatter::SetMin( BigInt nNewMin )
+void LongCurrencyFormatter::SetMin(const BigInt& rNewMin)
 {
-    mnMin = nNewMin;
+    mnMin = rNewMin;
     ReformatAll();
 }
 
-void LongCurrencyFormatter::SetMax( BigInt nNewMax )
+void LongCurrencyFormatter::SetMax(const BigInt& rNewMax)
 {
-    mnMax = nNewMax;
+    mnMax = rNewMax;
     ReformatAll();
 }
 
@@ -435,7 +435,7 @@ void LongCurrencyFormatter::SetDecimalDigits( sal_uInt16 nDigits )
 }
 
 
-void ImplNewLongCurrencyFieldValue( LongCurrencyField* pField, BigInt nNewValue )
+void ImplNewLongCurrencyFieldValue(LongCurrencyField* pField, const BigInt& rNewValue)
 {
     Selection aSelect = pField->GetSelection();
     aSelect.Justify();
@@ -443,7 +443,7 @@ void ImplNewLongCurrencyFieldValue( LongCurrencyField* pField, BigInt nNewValue 
     bool bLastSelected = aSelect.Max() == aText.getLength();
 
     BigInt nOldLastValue  = pField->mnLastValue;
-    pField->SetUserValue( nNewValue );
+    pField->SetUserValue(rNewValue);
     pField->mnLastValue  = nOldLastValue;
 
     if ( bLastSelected )

@@ -1543,9 +1543,9 @@ SimpleResMgr::~SimpleResMgr()
     delete m_pResImpl;
 }
 
-SimpleResMgr* SimpleResMgr::Create( const sal_Char* pPrefixName, LanguageTag aLocale )
+SimpleResMgr* SimpleResMgr::Create(const sal_Char* pPrefixName, const LanguageTag& rLocale)
 {
-    return new SimpleResMgr( pPrefixName, aLocale );
+    return new SimpleResMgr(pPrefixName, rLocale);
 }
 
 bool SimpleResMgr::IsAvailable( RESOURCE_TYPE _resourceType, sal_uInt32 _resourceId )

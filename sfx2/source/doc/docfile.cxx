@@ -3525,7 +3525,7 @@ OUString SfxMedium::CreateTempCopyWithExt( const OUString& aURL )
     return aResult;
 }
 
-bool SfxMedium::CallApproveHandler( const uno::Reference< task::XInteractionHandler >& xHandler, uno::Any aRequest, bool bAllowAbort )
+bool SfxMedium::CallApproveHandler(const uno::Reference< task::XInteractionHandler >& xHandler, const uno::Any& rRequest, bool bAllowAbort)
 {
     bool bResult = false;
 
@@ -3544,7 +3544,7 @@ bool SfxMedium::CallApproveHandler( const uno::Reference< task::XInteractionHand
                 aContinuations[ 1 ] = pAbort.get();
             }
 
-            xHandler->handle(::framework::InteractionRequest::CreateRequest (aRequest,aContinuations));
+            xHandler->handle(::framework::InteractionRequest::CreateRequest(rRequest, aContinuations));
             bResult = pApprove->wasSelected();
         }
         catch( const Exception& )

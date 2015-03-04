@@ -48,7 +48,7 @@ class CAutoStyleTag : public ITag
         virtual ::std::wstring const getTagAttribute( ::std::wstring  const & /*attrname*/ ){ return ::std::wstring() ; };
 
         void setStyle( ::std::wstring const & Style );
-        void setLocale( LocaleSet_t Locale );
+        void setLocale(const LocaleSet_t& Locale);
         void clearStyleLocalePair( void );
         inline StyleLocalePair_t getStyleLocalePair() const{ return m_CurrentStyleLocalePair; };
         inline bool isFull() const

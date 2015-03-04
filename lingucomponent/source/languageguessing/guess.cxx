@@ -109,10 +109,7 @@ Guess::~Guess()
 {
 }
 
-
-
-
-bool Guess::operator==(string lang)
+bool Guess::operator==(const string& lang)
 {
     string toString;
     toString += GetLanguage();

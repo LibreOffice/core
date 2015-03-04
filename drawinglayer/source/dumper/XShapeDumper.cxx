@@ -34,9 +34,9 @@ namespace {
 // FUNCTION DECLARATIONS
 
 // auxiliary functions
-void dumpGradientProperty(com::sun::star::awt::Gradient aGradient, xmlTextWriterPtr xmlWriter);
-void dumpPolyPolygonBezierCoords(com::sun::star::drawing::PolyPolygonBezierCoords aPolyPolygonBezierCoords, xmlTextWriterPtr xmlWriter);
-void dumpPointSequenceSequence(const com::sun::star::drawing::PointSequenceSequence& aPointSequenceSequence, uno::Sequence<uno::Sequence<drawing::PolygonFlags> >*, xmlTextWriterPtr xmlWriter);
+void dumpGradientProperty(const css::awt::Gradient& rGradient, xmlTextWriterPtr xmlWriter);
+void dumpPolyPolygonBezierCoords(const css::drawing::PolyPolygonBezierCoords& rPolyPolygonBezierCoords, xmlTextWriterPtr xmlWriter);
+void dumpPointSequenceSequence(const com::sun::star::drawing::PointSequenceSequence& rPointSequenceSequence, const uno::Sequence<uno::Sequence<drawing::PolygonFlags> >*, xmlTextWriterPtr xmlWriter);
 void dumpPropertyValueAsElement(const beans::PropertyValue& rPropertyValue, xmlTextWriterPtr xmlWriter);
 
 // FillProperties.idl
@@ -44,10 +44,10 @@ void dumpFillStyleAsAttribute(com::sun::star::drawing::FillStyle eFillStyle, xml
 void dumpFillColorAsAttribute(sal_Int32 aColor, xmlTextWriterPtr xmlWriter);
 void dumpFillTransparenceAsAttribute(sal_Int32 aTransparence, xmlTextWriterPtr xmlWriter);
 void dumpFillTransparenceGradientNameAsAttribute(const OUString& sTranspGradName, xmlTextWriterPtr xmlWriter);
-void dumpFillTransparenceGradientAsElement(com::sun::star::awt::Gradient aTranspGrad, xmlTextWriterPtr xmlWriter);
+void dumpFillTransparenceGradientAsElement(const css::awt::Gradient& rTranspGrad, xmlTextWriterPtr xmlWriter);
 void dumpFillGradientNameAsAttribute(const OUString& sGradName, xmlTextWriterPtr xmlWriter);
-void dumpFillGradientAsElement(com::sun::star::awt::Gradient aGradient, xmlTextWriterPtr xmlWriter);
-void dumpFillHatchAsElement(com::sun::star::drawing::Hatch aHatch, xmlTextWriterPtr xmlWriter);
+void dumpFillGradientAsElement(const css::awt::Gradient& rGradient, xmlTextWriterPtr xmlWriter);
+void dumpFillHatchAsElement(const css::drawing::Hatch& rHatch, xmlTextWriterPtr xmlWriter);
 void dumpFillBackgroundAsAttribute(bool bBackground, xmlTextWriterPtr xmlWriter);
 void dumpFillBitmapAsElement(com::sun::star::uno::Reference<com::sun::star::awt::XBitmap> xBitmap, xmlTextWriterPtr xmlWriter);
 void dumpFillBitmapURLAsAttribute(const OUString& sBitmapURL, xmlTextWriterPtr xmlWriter);
@@ -65,7 +65,7 @@ void dumpFillBitmapTileAsAttribute(bool bBitmapTile, xmlTextWriterPtr xmlWriter)
 
 // LineProperties.idl
 void dumpLineStyleAsAttribute(com::sun::star::drawing::LineStyle eLineStyle, xmlTextWriterPtr xmlWriter);
-void dumpLineDashAsElement(com::sun::star::drawing::LineDash aLineDash, xmlTextWriterPtr xmlWriter);
+void dumpLineDashAsElement(const css::drawing::LineDash& rLineDash, xmlTextWriterPtr xmlWriter);
 void dumpLineDashNameAsAttribute(const OUString& sLineDashName, xmlTextWriterPtr xmlWriter);
 void dumpLineColorAsAttribute(sal_Int32 aLineColor, xmlTextWriterPtr xmlWriter);
 void dumpLineTransparenceAsAttribute(sal_Int32 aLineTransparence, xmlTextWriterPtr xmlWriter);
@@ -73,8 +73,8 @@ void dumpLineWidthAsAttribute(sal_Int32 aLineWidth, xmlTextWriterPtr xmlWriter);
 void dumpLineJointAsAttribute(com::sun::star::drawing::LineJoint eLineJoint, xmlTextWriterPtr xmlWriter);
 void dumpLineStartNameAsAttribute(const OUString& sLineStartName, xmlTextWriterPtr xmlWriter);
 void dumpLineEndNameAsAttribute(const OUString& sLineEndName, xmlTextWriterPtr xmlWriter);
-void dumpLineStartAsElement(com::sun::star::drawing::PolyPolygonBezierCoords aLineStart, xmlTextWriterPtr xmlWriter);
-void dumpLineEndAsElement(com::sun::star::drawing::PolyPolygonBezierCoords aLineEnd, xmlTextWriterPtr xmlWriter);
+void dumpLineStartAsElement(const css::drawing::PolyPolygonBezierCoords& rLineStart, xmlTextWriterPtr xmlWriter);
+void dumpLineEndAsElement(const css::drawing::PolyPolygonBezierCoords& rLineEnd, xmlTextWriterPtr xmlWriter);
 void dumpLineStartCenterAsAttribute(bool bLineStartCenter, xmlTextWriterPtr xmlWriter);
 void dumpLineStartWidthAsAttribute(sal_Int32 aLineStartWidth, xmlTextWriterPtr xmlWriter);
 void dumpLineEndCenterAsAttribute(bool bLineEndCenter, xmlTextWriterPtr xmlWriter);
@@ -82,8 +82,8 @@ void dumpLineEndWidthAsAttribute(sal_Int32 aLineEndWidth, xmlTextWriterPtr xmlWr
 
 // PolyPolygonDescriptor.idl
 void dumpPolygonKindAsAttribute(com::sun::star::drawing::PolygonKind ePolygonKind, xmlTextWriterPtr xmlWriter);
-void dumpPolyPolygonAsElement(const com::sun::star::drawing::PointSequenceSequence& aPolyPolygon, xmlTextWriterPtr xmlWriter);
-void dumpGeometryAsElement(const com::sun::star::drawing::PointSequenceSequence& aGeometry, xmlTextWriterPtr xmlWriter);
+void dumpPolyPolygonAsElement(const com::sun::star::drawing::PointSequenceSequence& rPolyPolygon, xmlTextWriterPtr xmlWriter);
+void dumpGeometryAsElement(const com::sun::star::drawing::PointSequenceSequence& rGeometry, xmlTextWriterPtr xmlWriter);
 
 // CharacterProperties.idl
 void dumpCharHeightAsAttribute(float fHeight, xmlTextWriterPtr xmlWriter);
@@ -130,8 +130,8 @@ void dumpPrintableAsAttribute(bool bPrintable, xmlTextWriterPtr xmlWriter);
 void dumpMoveProtectAsAttribute(bool bMoveProtect, xmlTextWriterPtr xmlWriter);
 void dumpNameAsAttribute(const OUString& sName, xmlTextWriterPtr xmlWriter);
 void dumpSizeProtectAsAttribute(bool bSizeProtect, xmlTextWriterPtr xmlWriter);
-void dumpHomogenMatrixLine3(com::sun::star::drawing::HomogenMatrixLine3 aLine, xmlTextWriterPtr xmlWriter);
-void dumpTransformationAsElement(com::sun::star::drawing::HomogenMatrix3 const & aTransformation, xmlTextWriterPtr xmlWriter);
+void dumpHomogenMatrixLine3(const css::drawing::HomogenMatrixLine3& rLine, xmlTextWriterPtr xmlWriter);
+void dumpTransformationAsElement(const css::drawing::HomogenMatrix3& rTransformation, xmlTextWriterPtr xmlWriter);
 void dumpNavigationOrderAsAttribute(sal_Int32 aNavigationOrder, xmlTextWriterPtr xmlWriter);
 void dumpHyperlinkAsAttribute(const OUString& sHyperlink, xmlTextWriterPtr xmlWriter);
 void dumpInteropGrabBagAsElement(const uno::Sequence< beans::PropertyValue>& aInteropGrabBag, xmlTextWriterPtr xmlWriter);
@@ -218,9 +218,9 @@ void dumpFillTransparenceGradientNameAsAttribute(const OUString& sTranspGradName
 }
 
 //because there's more awt::Gradient properties to dump
-void dumpGradientProperty(awt::Gradient aGradient, xmlTextWriterPtr xmlWriter)
+void dumpGradientProperty(const awt::Gradient& rGradient, xmlTextWriterPtr xmlWriter)
 {
-    switch(aGradient.Style)   //enum GradientStyle
+    switch (rGradient.Style)   //enum GradientStyle
     {
         case awt::GradientStyle_LINEAR:
             xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("style"), "%s", "LINEAR");
@@ -243,21 +243,21 @@ void dumpGradientProperty(awt::Gradient aGradient, xmlTextWriterPtr xmlWriter)
         default:
             break;
     }
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("startColor"), "%06x", (unsigned int) aGradient.StartColor);
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("endColor"), "%06x", (unsigned int) aGradient.EndColor);
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("angle"), "%" SAL_PRIdINT32, (sal_Int32) aGradient.Angle);
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("border"), "%" SAL_PRIdINT32, (sal_Int32) aGradient.Border);
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("xOffset"), "%" SAL_PRIdINT32, (sal_Int32) aGradient.XOffset);
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("yOffset"), "%" SAL_PRIdINT32, (sal_Int32) aGradient.YOffset);
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("startIntensity"), "%" SAL_PRIdINT32, (sal_Int32) aGradient.StartIntensity);
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("endIntensity"), "%" SAL_PRIdINT32, (sal_Int32) aGradient.EndIntensity);
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("stepCount"), "%" SAL_PRIdINT32, (sal_Int32) aGradient.StepCount);
+    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("startColor"), "%06x", (unsigned int) rGradient.StartColor);
+    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("endColor"), "%06x", (unsigned int) rGradient.EndColor);
+    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("angle"), "%" SAL_PRIdINT32, (sal_Int32) rGradient.Angle);
+    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("border"), "%" SAL_PRIdINT32, (sal_Int32) rGradient.Border);
+    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("xOffset"), "%" SAL_PRIdINT32, (sal_Int32) rGradient.XOffset);
+    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("yOffset"), "%" SAL_PRIdINT32, (sal_Int32) rGradient.YOffset);
+    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("startIntensity"), "%" SAL_PRIdINT32, (sal_Int32) rGradient.StartIntensity);
+    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("endIntensity"), "%" SAL_PRIdINT32, (sal_Int32) rGradient.EndIntensity);
+    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("stepCount"), "%" SAL_PRIdINT32, (sal_Int32) rGradient.StepCount);
 }
 
-void dumpFillTransparenceGradientAsElement(awt::Gradient aTranspGrad, xmlTextWriterPtr xmlWriter)
+void dumpFillTransparenceGradientAsElement(const awt::Gradient& rTranspGrad, xmlTextWriterPtr xmlWriter)
 {
     xmlTextWriterStartElement(xmlWriter, BAD_CAST( "FillTransparenceGradient" ));
-    dumpGradientProperty(aTranspGrad, xmlWriter);
+    dumpGradientProperty(rTranspGrad, xmlWriter);
     xmlTextWriterEndElement( xmlWriter );
 }
 
@@ -267,17 +267,17 @@ void dumpFillGradientNameAsAttribute(const OUString& sGradName, xmlTextWriterPtr
         OUStringToOString(sGradName, RTL_TEXTENCODING_UTF8).getStr());
 }
 
-void dumpFillGradientAsElement(awt::Gradient aGradient, xmlTextWriterPtr xmlWriter)
+void dumpFillGradientAsElement(const awt::Gradient& rGradient, xmlTextWriterPtr xmlWriter)
 {
     xmlTextWriterStartElement(xmlWriter, BAD_CAST( "FillGradient" ));
-    dumpGradientProperty(aGradient, xmlWriter);
+    dumpGradientProperty(rGradient, xmlWriter);
     xmlTextWriterEndElement( xmlWriter );
 }
 
-void dumpFillHatchAsElement(drawing::Hatch aHatch, xmlTextWriterPtr xmlWriter)
+void dumpFillHatchAsElement(const drawing::Hatch& rHatch, xmlTextWriterPtr xmlWriter)
 {
     xmlTextWriterStartElement(xmlWriter, BAD_CAST( "FillHatch" ));
-    switch(aHatch.Style)
+    switch (rHatch.Style)
     {
         case drawing::HatchStyle_SINGLE:
             xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("style"), "%s", "SINGLE");
@@ -291,9 +291,9 @@ void dumpFillHatchAsElement(drawing::Hatch aHatch, xmlTextWriterPtr xmlWriter)
         default:
             break;
     }
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("color"), "%06x", (unsigned int) aHatch.Color);
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("distance"), "%" SAL_PRIdINT32, (sal_Int32) aHatch.Distance);
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("angle"), "%" SAL_PRIdINT32, (sal_Int32) aHatch.Angle);
+    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("color"), "%06x", (unsigned int) rHatch.Color);
+    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("distance"), "%" SAL_PRIdINT32, (sal_Int32) rHatch.Distance);
+    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("angle"), "%" SAL_PRIdINT32, (sal_Int32) rHatch.Angle);
     xmlTextWriterEndElement( xmlWriter );
 }
 
@@ -453,10 +453,10 @@ void dumpLineStyleAsAttribute(drawing::LineStyle eLineStyle, xmlTextWriterPtr xm
     }
 }
 
-void dumpLineDashAsElement(drawing::LineDash aLineDash, xmlTextWriterPtr xmlWriter)
+void dumpLineDashAsElement(const drawing::LineDash& rLineDash, xmlTextWriterPtr xmlWriter)
 {
     xmlTextWriterStartElement(xmlWriter, BAD_CAST( "LineDash" ));
-    switch(aLineDash.Style)
+    switch (rLineDash.Style)
     {
         case drawing::DashStyle_RECT:
             xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("style"), "%s", "RECT");
@@ -473,11 +473,11 @@ void dumpLineDashAsElement(drawing::LineDash aLineDash, xmlTextWriterPtr xmlWrit
         default:
             break;
     }
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("dots"), "%" SAL_PRIdINT32, (sal_Int32) aLineDash.Dots);
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("dotLen"), "%" SAL_PRIdINT32, (sal_Int32) aLineDash.DotLen);
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("dashes"), "%" SAL_PRIdINT32, (sal_Int32) aLineDash.Dashes);
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("dashLen"), "%" SAL_PRIdINT32, (sal_Int32) aLineDash.DashLen);
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("distance"), "%" SAL_PRIdINT32, (sal_Int32) aLineDash.Distance);
+    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("dots"), "%" SAL_PRIdINT32, (sal_Int32) rLineDash.Dots);
+    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("dotLen"), "%" SAL_PRIdINT32, (sal_Int32) rLineDash.DotLen);
+    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("dashes"), "%" SAL_PRIdINT32, (sal_Int32) rLineDash.Dashes);
+    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("dashLen"), "%" SAL_PRIdINT32, (sal_Int32) rLineDash.DashLen);
+    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("distance"), "%" SAL_PRIdINT32, (sal_Int32) rLineDash.Distance);
     xmlTextWriterEndElement( xmlWriter );
 }
 
@@ -538,22 +538,22 @@ void dumpLineEndNameAsAttribute(const OUString& sLineEndName, xmlTextWriterPtr x
     OUStringToOString(sLineEndName, RTL_TEXTENCODING_UTF8).getStr());
 }
 
-void dumpPolyPolygonBezierCoords(drawing::PolyPolygonBezierCoords aPolyPolygonBezierCoords, xmlTextWriterPtr xmlWriter)
+void dumpPolyPolygonBezierCoords(const drawing::PolyPolygonBezierCoords& rPolyPolygonBezierCoords, xmlTextWriterPtr xmlWriter)
 {
-    dumpPointSequenceSequence(aPolyPolygonBezierCoords.Coordinates, &aPolyPolygonBezierCoords.Flags, xmlWriter);
+    dumpPointSequenceSequence(rPolyPolygonBezierCoords.Coordinates, &rPolyPolygonBezierCoords.Flags, xmlWriter);
 }
 
-void dumpLineStartAsElement(drawing::PolyPolygonBezierCoords aLineStart, xmlTextWriterPtr xmlWriter)
+void dumpLineStartAsElement(const drawing::PolyPolygonBezierCoords& rLineStart, xmlTextWriterPtr xmlWriter)
 {
     xmlTextWriterStartElement(xmlWriter, BAD_CAST( "LineStart" ));
-    dumpPolyPolygonBezierCoords(aLineStart, xmlWriter);
+    dumpPolyPolygonBezierCoords(rLineStart, xmlWriter);
     xmlTextWriterEndElement( xmlWriter );
 }
 
-void dumpLineEndAsElement(drawing::PolyPolygonBezierCoords aLineEnd, xmlTextWriterPtr xmlWriter)
+void dumpLineEndAsElement(const drawing::PolyPolygonBezierCoords& rLineEnd, xmlTextWriterPtr xmlWriter)
 {
     xmlTextWriterStartElement(xmlWriter, BAD_CAST( "LineEnd" ));
-    dumpPolyPolygonBezierCoords(aLineEnd, xmlWriter);
+    dumpPolyPolygonBezierCoords(rLineEnd, xmlWriter);
     xmlTextWriterEndElement( xmlWriter );
 }
 
@@ -623,7 +623,7 @@ void dumpPolygonKindAsAttribute(drawing::PolygonKind ePolygonKind, xmlTextWriter
     }
 }
 
-void dumpPointSequenceSequence(const drawing::PointSequenceSequence& aPointSequenceSequence, uno::Sequence<uno::Sequence< drawing::PolygonFlags > >* pFlags, xmlTextWriterPtr xmlWriter)
+void dumpPointSequenceSequence(const drawing::PointSequenceSequence& aPointSequenceSequence, const uno::Sequence<uno::Sequence< drawing::PolygonFlags > >* pFlags, xmlTextWriterPtr xmlWriter)
 {
     // LibreOffice proudly presents - The Sequenception
     uno::Sequence<uno::Sequence< awt::Point > > pointSequenceSequence = aPointSequenceSequence;
@@ -673,10 +673,10 @@ void dumpPointSequenceSequence(const drawing::PointSequenceSequence& aPointSeque
     }
 }
 
-void dumpPolyPolygonAsElement(const drawing::PointSequenceSequence& aPolyPolygon, xmlTextWriterPtr xmlWriter)
+void dumpPolyPolygonAsElement(const drawing::PointSequenceSequence& rPolyPolygon, xmlTextWriterPtr xmlWriter)
 {
     xmlTextWriterStartElement(xmlWriter, BAD_CAST( "PolyPolygon" ));
-    dumpPointSequenceSequence(aPolyPolygon, NULL, xmlWriter);
+    dumpPointSequenceSequence(rPolyPolygon, NULL, xmlWriter);
     xmlTextWriterEndElement( xmlWriter );
 }
 
@@ -1024,25 +1024,25 @@ void dumpSizeProtectAsAttribute(bool bSizeProtect, xmlTextWriterPtr xmlWriter)
         xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("sizeProtect"), "%s", "false");
 }
 
-void dumpHomogenMatrixLine3(drawing::HomogenMatrixLine3 aHomogenMatrixLine3, xmlTextWriterPtr xmlWriter)
+void dumpHomogenMatrixLine3(const drawing::HomogenMatrixLine3& rHomogenMatrixLine3, xmlTextWriterPtr xmlWriter)
 {
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("column1"), "%f", aHomogenMatrixLine3.Column1);
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("column2"), "%f", aHomogenMatrixLine3.Column2);
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("column3"), "%f", aHomogenMatrixLine3.Column3);
+    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("column1"), "%f", rHomogenMatrixLine3.Column1);
+    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("column2"), "%f", rHomogenMatrixLine3.Column2);
+    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("column3"), "%f", rHomogenMatrixLine3.Column3);
 }
 
-void dumpTransformationAsElement(drawing::HomogenMatrix3 const & aTransformation, xmlTextWriterPtr xmlWriter)
+void dumpTransformationAsElement(const drawing::HomogenMatrix3& rTransformation, xmlTextWriterPtr xmlWriter)
 {
     xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Transformation" ));
     {
     xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Line1" ));
-    dumpHomogenMatrixLine3(aTransformation.Line1, xmlWriter);
+    dumpHomogenMatrixLine3(rTransformation.Line1, xmlWriter);
     xmlTextWriterEndElement( xmlWriter );
     xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Line2" ));
-    dumpHomogenMatrixLine3(aTransformation.Line2, xmlWriter);
+    dumpHomogenMatrixLine3(rTransformation.Line2, xmlWriter);
     xmlTextWriterEndElement( xmlWriter );
     xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Line3" ));
-    dumpHomogenMatrixLine3(aTransformation.Line3, xmlWriter);
+    dumpHomogenMatrixLine3(rTransformation.Line3, xmlWriter);
     xmlTextWriterEndElement( xmlWriter );
     }
     xmlTextWriterEndElement( xmlWriter );

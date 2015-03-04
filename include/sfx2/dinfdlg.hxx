@@ -118,7 +118,7 @@ public:
 
     ::com::sun::star::util::DateTime
                 getCreationDate() const { return m_CreationDate; }
-    void        setCreationDate(::com::sun::star::util::DateTime i_val) {
+    void        setCreationDate(const css::util::DateTime& i_val) {
                     m_CreationDate = i_val;
                 }
     OUString getModifiedBy() const { return m_ModifiedBy; }
@@ -126,14 +126,14 @@ public:
 
     ::com::sun::star::util::DateTime
                 getModificationDate() const { return m_ModificationDate; }
-    void        setModificationDate(::com::sun::star::util::DateTime i_val) {
+    void        setModificationDate(const css::util::DateTime& i_val) {
                     m_ModificationDate = i_val;
                 }
     OUString getPrintedBy() const { return m_PrintedBy; }
     void        setPrintedBy(const OUString& i_val) { m_PrintedBy = i_val; }
     ::com::sun::star::util::DateTime
                 getPrintDate() const { return m_PrintDate; }
-    void        setPrintDate(::com::sun::star::util::DateTime i_val) {
+    void        setPrintDate(const css::util::DateTime& i_val) {
                     m_PrintDate = i_val;
                 }
     sal_Int16   getEditingCycles() const { return m_EditingCycles; }

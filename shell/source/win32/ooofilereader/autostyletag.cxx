@@ -77,7 +77,7 @@ void CAutoStyleTag::setStyle( ::std::wstring const & Style )
     m_CurrentStyleLocalePair.first = Style;
 }
 
-void CAutoStyleTag::setLocale( LocaleSet_t Locale )
+void CAutoStyleTag::setLocale(const LocaleSet_t& Locale)
 {
     m_CurrentStyleLocalePair.second = Locale;
 }

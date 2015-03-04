@@ -253,7 +253,7 @@ namespace framework
             void    implts_setVisibleState( bool bShow );
             void    implts_updateUIElementsVisibleState( bool bShow );
             void    implts_setCurrentUIVisibility( bool bShow );
-            void    implts_notifyListeners( short nEvent, ::com::sun::star::uno::Any aInfoParam );
+            void    implts_notifyListeners(short nEvent, const css::uno::Any& rInfoParam);
 
             DECL_LINK( OptionsChanged, void* );
             DECL_LINK( SettingsChanged, void* );

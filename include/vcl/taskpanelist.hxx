@@ -40,7 +40,7 @@ public:
 
     void AddWindow( vcl::Window *pWindow );
     void RemoveWindow( vcl::Window *pWindow );
-    bool HandleKeyEvent( KeyEvent aKeyEvent );
+    bool HandleKeyEvent(const KeyEvent& rKeyEvent);
 };
 
 #endif

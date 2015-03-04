@@ -168,10 +168,10 @@ void B3dTransformationSet::PostSetObjectTrans()
     maInvObjectTrans.invert();
 }
 
-void B3dTransformationSet::SetOrientation( basegfx::B3DPoint aVRP, basegfx::B3DVector aVPN, basegfx::B3DVector aVUP)
+void B3dTransformationSet::SetOrientation(const basegfx::B3DPoint& rVRP, const basegfx::B3DVector& rVPN, const basegfx::B3DVector& rVUP)
 {
     maOrientation.identity();
-    Orientation(maOrientation, aVRP, aVPN, aVUP);
+    Orientation(maOrientation, rVRP, rVPN, rVUP);
 
     mbInvTransObjectToEyeValid = false;
     mbObjectToDeviceValid = false;

@@ -517,7 +517,7 @@ HRESULT STDMETHODCALLTYPE CThumbviewer::GetCurFile(LPOLESTR __RPC_FAR*)
 { return E_NOTIMPL; }
 
 
-Gdiplus::Rect CThumbviewer::CalcScaledAspectRatio(Gdiplus::Rect src, Gdiplus::Rect dest)
+Gdiplus::Rect CThumbviewer::CalcScaledAspectRatio(const Gdiplus::Rect& src, const Gdiplus::Rect& dest)
 {
     Gdiplus::Rect result;
     if (src.Width >= src.Height)

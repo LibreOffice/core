@@ -530,7 +530,7 @@ private:
     void                ParaAttribsToCharAttribs( ContentNode* pNode );
     void                GetCharAttribs( sal_Int32 nPara, std::vector<EECharAttrib>& rLst ) const;
 
-    EditTextObject*     CreateTextObject( EditSelection aSelection, SfxItemPool*, bool bAllowBigObjects = false, sal_Int32 nBigObjStart = 0 );
+    EditTextObject*     CreateTextObject(EditSelection aSelection, SfxItemPool*, bool bAllowBigObjects = false, sal_Int32 nBigObjStart = 0);
     EditSelection       InsertTextObject( const EditTextObject&, EditPaM aPaM );
     EditSelection       InsertText( ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& rxDataObj, const OUString& rBaseURL, const EditPaM& rPaM, bool bUseSpecial );
 
@@ -619,9 +619,9 @@ private:
     EditPaM             ReadBin( SvStream& rInput, EditSelection aSel );
     sal_uInt32          WriteText( SvStream& rOutput, EditSelection aSel );
     sal_uInt32          WriteRTF( SvStream& rOutput, EditSelection aSel );
-    sal_uInt32          WriteXML( SvStream& rOutput, EditSelection aSel );
+    sal_uInt32          WriteXML(SvStream& rOutput, const EditSelection& rSel);
     sal_uInt32          WriteHTML( SvStream& rOutput, EditSelection aSel );
-    sal_uInt32 WriteBin( SvStream& rOutput, EditSelection aSel, bool bStoreUnicode = false );
+    sal_uInt32          WriteBin(SvStream& rOutput, const EditSelection& rSel, bool bStoreUnicode = false);
 
     void                WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput, sal_Int32 nPara, sal_Int32 nPos,
                         std::vector<SvxFontItem*>& rFontTable, SvxColorList& rColorList );
@@ -775,11 +775,11 @@ public:
     EditPaM         InsertField(const EditSelection& rCurSel, const SvxFieldItem& rFld);
     bool        UpdateFields();
 
-    EditPaM         Read( SvStream& rInput, const OUString& rBaseURL, EETextFormat eFormat, EditSelection aSel, SvKeyValueIterator* pHTTPHeaderAttrs = NULL );
-    void            Write( SvStream& rOutput, EETextFormat eFormat, EditSelection aSel );
+    EditPaM         Read(SvStream& rInput, const OUString& rBaseURL, EETextFormat eFormat, const EditSelection& rSel, SvKeyValueIterator* pHTTPHeaderAttrs = NULL);
+    void            Write(SvStream& rOutput, EETextFormat eFormat, const EditSelection& rSel);
 
     EditTextObject* CreateTextObject();
-    EditTextObject* CreateTextObject( EditSelection aSel );
+    EditTextObject* CreateTextObject(const EditSelection& rSel);
     void            SetText( const EditTextObject& rTextObject );
     EditSelection   InsertText( const EditTextObject& rTextObject, EditSelection aSel );
 

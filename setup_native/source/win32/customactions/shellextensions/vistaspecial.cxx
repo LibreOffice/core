@@ -63,7 +63,6 @@ static inline void OutputDebugStringFormat( LPCSTR, ... )
 }
 #endif
 
-
 static std::_tstring GetMsiProperty( MSIHANDLE handle, const std::_tstring& sProperty )
 {
     std::_tstring result;
@@ -82,14 +81,14 @@ static std::_tstring GetMsiProperty( MSIHANDLE handle, const std::_tstring& sPro
     return result;
 }
 
-static BOOL RemoveCompleteDirectory( std::_tstring sPath )
+static BOOL RemoveCompleteDirectory(const std::_tstring& rPath)
 {
     bool bDirectoryRemoved = true;
 
-    std::_tstring sPattern = sPath + TEXT("\\") + TEXT("*.*");
+    std::_tstring sPattern = rPath + TEXT("\\") + TEXT("*.*");
     WIN32_FIND_DATA aFindData;
 
-    // Finding all content in sPath
+    // Finding all content in rPath
 
     HANDLE hFindContent = FindFirstFile( sPattern.c_str(), &aFindData );
 
@@ -106,7 +105,7 @@ static BOOL RemoveCompleteDirectory( std::_tstring sPath )
             if (( strcmp(sFileName.c_str(),sCurrentDir.c_str()) != 0 ) &&
                 ( strcmp(sFileName.c_str(),sParentDir.c_str()) != 0 ))
             {
-                std::_tstring sCompleteFileName = sPath + TEXT("\\") + sFileName;
+                std::_tstring sCompleteFileName = rPath + TEXT("\\") + sFileName;
 
                 if ( aFindData.dwFileAttributes == FILE_ATTRIBUTE_DIRECTORY )
                 {
@@ -129,7 +128,7 @@ static BOOL RemoveCompleteDirectory( std::_tstring sPath )
         // -> first removing content -> closing handle -> remove empty directory
 
 
-        if( !( RemoveDirectory(sPath.c_str()) ) )
+        if( !( RemoveDirectory(rPath.c_str()) ) )
         {
             bDirectoryRemoved = false;
         }
@@ -137,8 +136,6 @@ static BOOL RemoveCompleteDirectory( std::_tstring sPath )
 
     return bDirectoryRemoved;
 }
-
-
 
 extern "C" UINT __stdcall RenamePrgFolder( MSIHANDLE handle )
 {

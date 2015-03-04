@@ -98,7 +98,7 @@ SfxLibrary* SfxDialogLibraryContainer::implCreateLibraryLink
     return pRet;
 }
 
-Any SAL_CALL SfxDialogLibraryContainer::createEmptyLibraryElement( void )
+Any SAL_CALL SfxDialogLibraryContainer::createEmptyLibraryElement()
 {
     Reference< XInputStreamProvider > xISP;
     Any aRetAny;
@@ -106,9 +106,9 @@ Any SAL_CALL SfxDialogLibraryContainer::createEmptyLibraryElement( void )
     return aRetAny;
 }
 
-bool SAL_CALL SfxDialogLibraryContainer::isLibraryElementValid( Any aElement ) const
+bool SAL_CALL SfxDialogLibraryContainer::isLibraryElementValid(const Any& rElement) const
 {
-    return SfxDialogLibrary::containsValidDialog( aElement );
+    return SfxDialogLibrary::containsValidDialog(rElement);
 }
 
 bool writeOasis2OOoLibraryElement(
@@ -575,9 +575,9 @@ bool SfxDialogLibrary::containsValidDialog( const ::com::sun::star::uno::Any& aE
     return xISP.is();
 }
 
-bool SAL_CALL SfxDialogLibrary::isLibraryElementValid( ::com::sun::star::uno::Any aElement ) const
+bool SAL_CALL SfxDialogLibrary::isLibraryElementValid(const css::uno::Any& rElement) const
 {
-    return SfxDialogLibrary::containsValidDialog( aElement );
+    return SfxDialogLibrary::containsValidDialog(rElement);
 }
 
 }

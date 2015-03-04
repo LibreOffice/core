@@ -124,17 +124,17 @@ namespace connectivity
 
         /** substitutes a given placeholder in the given message with the given value
         */
-        void    lcl_substitutePlaceholder( OUString& _rMessage, const sal_Char* _pPlaceholder, ParamValue _rParamValue )
+        void lcl_substitutePlaceholder(OUString& _rMessage, const sal_Char* _pPlaceholder, const ParamValue& rParamValue)
         {
             size_t nPlaceholderLen( strlen( _pPlaceholder ) );
             sal_Int32 nIndex = _rMessage.indexOfAsciiL( _pPlaceholder, nPlaceholderLen );
 
             bool bHasPlaceholder = ( nIndex != -1 );
-            bool bWantsPlaceholder = _rParamValue.is();
+            bool bWantsPlaceholder = rParamValue.is();
             OSL_ENSURE( bHasPlaceholder == bWantsPlaceholder, "lcl_substitutePlaceholder: placeholder where none is expected, or no placeholder where one is needed!" );
 
             if ( bHasPlaceholder && bWantsPlaceholder )
-                _rMessage = _rMessage.replaceAt( nIndex, nPlaceholderLen, *_rParamValue );
+                _rMessage = _rMessage.replaceAt( nIndex, nPlaceholderLen, *rParamValue );
         }
 
 
