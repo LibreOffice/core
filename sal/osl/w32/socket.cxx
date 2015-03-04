@@ -585,7 +585,7 @@ oslSocketAddr SAL_CALL osl_createInetBroadcastAddr (
     if (strDottedAddr && strDottedAddr->length)
     {
 // the Win32 SDK 8.1 deprecates inet_addr()
-#ifdef _WIN32_WINNT_WINBLUE
+#if _WIN32_WINNT >= _WIN32_WINNT_VISTA
         IN_ADDR addr;
         INT ret = InetPtonW(AF_INET, strDottedAddr->buffer, & addr);
         if (1 == ret)
@@ -648,7 +648,7 @@ oslSocketAddr SAL_CALL osl_createInetSocketAddr (
     sal_uInt32 Addr;
 
 // the Win32 SDK 8.1 deprecates inet_addr()
-#ifdef _WIN32_WINNT_WINBLUE
+#if _WIN32_WINNT >= _WIN32_WINNT_VISTA
     IN_ADDR addr;
     INT ret = InetPtonW(AF_INET, strDottedAddr->buffer, & addr);
     Addr = ret == 1 ? addr.S_un.S_addr : OSL_INADDR_NONE;

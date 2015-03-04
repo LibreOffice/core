@@ -123,7 +123,7 @@ void DiscoveryService::setupSockets()
     struct ip_mreq multicastRequest;
 
 // the Win32 SDK 8.1 deprecates inet_addr()
-#ifdef _WIN32_WINNT_WINBLUE
+#if _WIN32_WINNT >= _WIN32_WINNT_VISTA
     IN_ADDR addr;
     OUString const saddr("239.0.0.1");
     INT ret = InetPtonW(AF_INET, saddr.getStr(), & addr);
