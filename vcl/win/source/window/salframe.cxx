@@ -70,7 +70,10 @@
 #include <sallayout.hxx>
 
 #define COMPILE_MULTIMON_STUBS
+#pragma warning(push)
+#pragma warning(disable:4996)
 #include <multimon.h>
+#pragma warning(pop)
 #include <vector>
 #ifdef __MINGW32__
 #include <algorithm>
