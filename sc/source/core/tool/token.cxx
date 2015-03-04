@@ -328,7 +328,10 @@ FormulaToken* ScRawToken::CreateToken() const
             IF_NOT_OPCODE_ERROR( ocPush, ScMatrixToken);
             return new ScMatrixToken( pMat );
         case svIndex :
-            return new FormulaIndexToken( eOp, name.nIndex, name.bGlobal);
+            if (eOp == ocTableRef)
+                return new ScTableRefToken( table.nIndex);
+            else
+                return new FormulaIndexToken( eOp, name.nIndex, name.bGlobal);
         case svExternalSingleRef:
             {
                 OUString aTabName(extref.cTabName);

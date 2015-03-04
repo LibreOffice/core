@@ -137,6 +137,9 @@ public:
             sal_uInt16  nIndex;
         } name;
         struct {
+            sal_uInt16      nIndex;
+        } table;
+        struct {
             rtl_uString* mpData;
             rtl_uString* mpDataIgnoreCase;
         } sharedstring;
