@@ -25,7 +25,6 @@ $(eval $(call gb_StaticLibrary_add_defs,shlxthandler_common_x64,\
 	-DUNICODE \
 	-DWIN32_LEAN_AND_MEAN \
 	-D_UNICODE \
-	-D_WIN32_IE=0x700 \
 	-D_WIN32_WINNT=0x0502 \
 ))
 

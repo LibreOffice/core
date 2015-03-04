@@ -19,7 +19,6 @@ $(eval $(call gb_Library_add_defs,ooofilt,\
 	-DUNICODE \
 	-DWIN32_LEAN_AND_MEAN \
 	-D_UNICODE \
-	-D_WIN32_IE=0x700 \
 	-D_WIN32_WINNT=0x0502 \
 	-UNOMINMAX \
 ))

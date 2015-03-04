@@ -26,7 +26,6 @@ $(eval $(call gb_Library_add_defs,ooofilt_x64,\
 	-DWIN32_LEAN_AND_MEAN \
 	-D_UNICODE \
 	-UNOMINMAX \
-	-D_WIN32_IE=0x700 \
 	-D_WIN32_WINNT=0x0502 \
 ))
 

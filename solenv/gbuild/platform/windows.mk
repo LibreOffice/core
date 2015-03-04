@@ -20,6 +20,9 @@ gb_Helper_LIBRARY_PATH_VAR := PATH
 
 gb_MKTEMP := mktemp --tmpdir=$(gb_TMPDIR) gbuild.XXXXXX
 
+# currently _WIN32_IE is defined to a higher version than would be derived
+# in sdkddkver.h from _WIN32_WINNT=0x0502 but if _WIN32_WINNT >= 0x0600
+# the derived value is sufficient
 gb_OSDEFS := \
 	-DWINVER=0x0502 \
 	-D_WIN32_IE=0x0700 \
