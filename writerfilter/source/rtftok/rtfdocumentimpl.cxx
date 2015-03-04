@@ -3457,9 +3457,6 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         lcl_putNestedAttribute(m_aStates.top().aSectionSprms, NS_ooxml::LN_EG_SectPrContents_pgSz, NS_ooxml::LN_CT_PageSz_orient, pValue);
     }
     break;
-    case RTF_FACINGP:
-        m_aSettingsTableSprms.set(NS_ooxml::LN_CT_Settings_evenAndOddHeaders, std::make_shared<RTFValue>(1));
-        break;
     case RTF_SHPBXPAGE:
         m_aStates.top().aShape.nHoriOrientRelation = text::RelOrientation::PAGE_FRAME;
         m_aStates.top().aShape.nHoriOrientRelationToken = NS_ooxml::LN_Value_wordprocessingDrawing_ST_RelFromH_page;
@@ -4878,6 +4875,9 @@ RTFError RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int n
         break;
     case RTF_SAAUTO:
         lcl_putNestedAttribute(m_aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PPrBase_spacing, NS_ooxml::LN_CT_Spacing_afterAutospacing, pBoolValue, RTFOverwrite::YES);
+        break;
+    case RTF_FACINGP:
+        m_aSettingsTableSprms.set(NS_ooxml::LN_CT_Settings_evenAndOddHeaders, pBoolValue);
         break;
     default:
     {
