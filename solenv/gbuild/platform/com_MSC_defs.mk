@@ -40,10 +40,14 @@ ifneq ($(origin CXX),default)
 gb_CXX := $(CXX)
 endif
 
+# _SCL_SECURE_NO_WARNINGS avoids deprecation warnings for STL algorithms
+# like std::copy, std::transform (when MSVC_USE_DEBUG_RUNTIME is enabled)
+
 gb_COMPILERDEFS := \
 	-D_CRT_NON_CONFORMING_SWPRINTFS \
 	-D_CRT_NONSTDC_NO_DEPRECATE \
 	-D_CRT_SECURE_NO_DEPRECATE \
+	-D_SCL_SECURE_NO_WARNINGS \
 	-D_MT \
 	-D_DLL \
 	-DCPPU_ENV=$(gb_CPPU_ENV) \
@@ -63,8 +67,8 @@ gb_RCFLAGS :=
 
 gb_AFLAGS := $(AFLAGS)
 
-# Do we really need to disable to many warnings? It seems to me that
-# many of these warnings are for custructs that we have been actively
+# Do we really need to disable this many warnings? It seems to me that
+# many of these warnings are for constructs that we have been actively
 # cleaning away from the code, to avoid warnings when building with
 # gcc or Clang and -Wall -Werror.
 
@@ -129,9 +133,6 @@ gb_AFLAGS := $(AFLAGS)
 # C4913: user defined binary operator ',' exists but no overload could
 #    convert all operands, default built-in binary operator ',' used
 
-# C4996: 'function': was declared deprecated
-#   Also generated for C++ library functions that "may be unsafe"
-
 gb_CFLAGS := \
 	-Gd \
 	-GR \
@@ -184,11 +185,6 @@ gb_CXXFLAGS := \
 	-wd4913 \
 	-Zc:wchar_t- \
 
-ifneq ($(MSVC_USE_DEBUG_RUNTIME),)
-gb_CXXFLAGS += \
-	-wd4996 \
-
-endif
 
 ifneq ($(ENABLE_LTO),)
 
