@@ -1300,12 +1300,18 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     }
     aInfo.m_eWidth = WIDTH_ULTRA_CONDENSED;
 
+#if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "font name BEFORE system match: \"%s\"\n", aFamily.getStr() );
+#endif
+
     // match font to e.g. resolve "Sans"
     psp::PrintFontManager::get().matchFont( aInfo, rSettings.GetUILanguageTag().getLocale() );
+
+#if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "font match %s, name AFTER: \"%s\"\n",
                   aInfo.m_nID != 0 ? "succeeded" : "failed",
                   OUStringToOString( aInfo.m_aFamilyName, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
+#endif
 
     int nPointHeight = 0;
     /*sal_Int32 nDispDPIY = GetDisplay()->GetResolution().B();
