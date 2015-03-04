@@ -208,10 +208,6 @@ void VbaProject::prepareImport()
 {
 }
 
-void VbaProject::finalizeImport()
-{
-}
-
 // private --------------------------------------------------------------------
 
 Reference< XLibraryContainer > VbaProject::getLibraryContainer( sal_Int32 nPropId )
@@ -508,8 +504,6 @@ void VbaProject::importModulesAndForms( StorageBase& rVbaPrjStrg, const GraphicH
 
     // attach macros to registered objects
     attachMacros();
-    // virtual call, derived classes may do some more processing
-    finalizeImport();
 }
 
 void VbaProject::attachMacros()

@@ -406,8 +406,6 @@ public:
 
 protected:
     virtual void        importControlData( BinaryInputStream& rInStrm ) = 0;
-    void                importCommonExtraData( BinaryInputStream& rInStrm );
-    void                importCommonTrailingData( BinaryInputStream& rInStrm );
 
 private:
     /** Returns the data part identifier according to the model version. */

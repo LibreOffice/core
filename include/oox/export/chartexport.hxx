@@ -130,7 +130,6 @@ private:
     void exportBubbleChart( com::sun::star::uno::Reference< com::sun::star::chart2::XChartType > xChartType );
     void exportDoughnutChart( com::sun::star::uno::Reference< com::sun::star::chart2::XChartType > xChartType );
     void exportLineChart( com::sun::star::uno::Reference< com::sun::star::chart2::XChartType > xChartType );
-    void exportOfPieChart( com::sun::star::uno::Reference< com::sun::star::chart2::XChartType > xChartType );
     void exportPieChart( com::sun::star::uno::Reference< com::sun::star::chart2::XChartType > xChartType );
     void exportRadarChart( com::sun::star::uno::Reference< com::sun::star::chart2::XChartType > xChartType );
     void exportScatterChart( com::sun::star::uno::Reference< com::sun::star::chart2::XChartType > xChartType );
