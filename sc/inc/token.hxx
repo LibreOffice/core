@@ -208,6 +208,22 @@ public:
     virtual FormulaToken*       Clone() const SAL_OVERRIDE { return new ScExternalNameToken(*this); }
 };
 
+/** Special token to remember details of ocTableRef "structured references". */
+class ScTableRefToken : public formula::FormulaToken
+{
+    sal_uInt16                  mnIndex;    ///< index into table / database range collection
+
+    ScTableRefToken(); // disabled
+public:
+    ScTableRefToken( sal_uInt16 nIndex );
+    ScTableRefToken( const ScTableRefToken& r );
+    virtual ~ScTableRefToken();
+
+    virtual sal_uInt16          GetIndex() const SAL_OVERRIDE;
+    virtual bool                operator==( const formula::FormulaToken& rToken ) const SAL_OVERRIDE;
+    virtual FormulaToken*       Clone() const SAL_OVERRIDE { return new ScTableRefToken(*this); }
+};
+
 // Only created from within the interpreter, no conversion from ScRawToken,
 // never added to ScTokenArray!
 class ScJumpMatrixToken : public formula::FormulaToken

@@ -825,6 +825,36 @@ bool ScExternalNameToken::operator==( const FormulaToken& r ) const
     return maName.getData() == r.GetString().getData();
 }
 
+ScTableRefToken::ScTableRefToken( sal_uInt16 nIndex ) :
+    FormulaToken( svIndex, ocTableRef),
+    mnIndex(nIndex)
+{
+}
+
+ScTableRefToken::ScTableRefToken( const ScTableRefToken& r ) :
+    FormulaToken(r),
+    mnIndex(r.mnIndex)
+{
+}
+
+ScTableRefToken::~ScTableRefToken() {}
+
+sal_uInt16 ScTableRefToken::GetIndex() const
+{
+    return mnIndex;
+}
+
+bool ScTableRefToken::operator==( const FormulaToken& r ) const
+{
+    if ( !FormulaToken::operator==(r) )
+        return false;
+
+    if (mnIndex != r.GetIndex())
+        return false;
+
+    return true;
+}
+
 ScJumpMatrix* ScJumpMatrixToken::GetJumpMatrix() const  { return pJumpMatrix; }
 bool ScJumpMatrixToken::operator==( const FormulaToken& r ) const
 {
