@@ -93,10 +93,16 @@ void SwVisCrsr::Show()
         if( m_pCrsrShell->VisArea().IsOver( m_pCrsrShell->m_aCharRect ) || m_pCrsrShell->isTiledRendering() )
             _SetPosAndShow();
     }
+
+    if (m_pCrsrShell->isTiledRendering())
+        m_pCrsrShell->libreOfficeKitCallback(LOK_CALLBACK_CURSOR_VISIBLE, OString::boolean(true).getStr());
 }
 
 void SwVisCrsr::Hide()
 {
+    if (m_pCrsrShell->isTiledRendering())
+        m_pCrsrShell->libreOfficeKitCallback(LOK_CALLBACK_CURSOR_VISIBLE, OString::boolean(false).getStr());
+
     if( m_bIsVisible )
     {
         m_bIsVisible = false;

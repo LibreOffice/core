@@ -46,6 +46,8 @@ struct _LOKDocView
     GdkRectangle m_aVisibleCursor;
     /// Cursor overlay is visible or hidden (for blinking).
     gboolean m_bCursorOverlayVisible;
+    /// Cursor is visible or hidden (e.g. for graphic selection).
+    gboolean m_bCursorVisible;
     /// Time of the last button press.
     guint32 m_nLastButtonPressTime;
     /// Time of the last button release.

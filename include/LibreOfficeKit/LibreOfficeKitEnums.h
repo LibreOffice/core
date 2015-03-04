@@ -78,7 +78,16 @@ typedef enum
      * LOK_CALLBACK_TEXT_SELECTION one. Rectangle format is the same as
      * LOK_CALLBACK_INVALIDATE_TILES.
      */
-    LOK_CALLBACK_TEXT_SELECTION_END
+    LOK_CALLBACK_TEXT_SELECTION_END,
+    /**
+     * The blinking text cursor is now visible or not.
+     *
+     * Clients should assume that this is false initially and are expected to
+     * show a blinking cursor at the rectangle described by
+     * LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR once it becomes true. Payload is
+     * either the "true" or the "false" string.
+     */
+    LOK_CALLBACK_CURSOR_VISIBLE
 }
 LibreOfficeKitCallbackType;
 

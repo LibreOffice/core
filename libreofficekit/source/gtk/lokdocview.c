@@ -247,6 +247,7 @@ static void lok_docview_init( LOKDocView* pDocView )
     pDocView->m_bEdit = FALSE;
     memset(&pDocView->m_aVisibleCursor, 0, sizeof(pDocView->m_aVisibleCursor));
     pDocView->m_bCursorOverlayVisible = FALSE;
+    pDocView->m_bCursorVisible = FALSE;
     pDocView->m_nLastButtonPressTime = 0;
     pDocView->m_nLastButtonReleaseTime = 0;
     pDocView->m_pTextSelectionRectangles = NULL;
@@ -355,7 +356,7 @@ static gboolean renderOverlay(GtkWidget* pWidget, GdkEventExpose* pEvent, gpoint
     (void)pEvent;
     pCairo = gdk_cairo_create(gtk_widget_get_window(pWidget));
 
-    if (pDocView->m_bCursorOverlayVisible && !lcl_isEmptyRectangle(&pDocView->m_aVisibleCursor))
+    if (pDocView->m_bCursorVisible && pDocView->m_bCursorOverlayVisible && !lcl_isEmptyRectangle(&pDocView->m_aVisibleCursor))
     {
         if (pDocView->m_aVisibleCursor.width == 0)
             // Set a minimal width if it would be 0.
@@ -371,7 +372,7 @@ static gboolean renderOverlay(GtkWidget* pWidget, GdkEventExpose* pEvent, gpoint
 
     }
 
-    if (!lcl_isEmptyRectangle(&pDocView->m_aVisibleCursor) && !pDocView->m_pTextSelectionRectangles)
+    if (pDocView->m_bCursorVisible && !lcl_isEmptyRectangle(&pDocView->m_aVisibleCursor) && !pDocView->m_pTextSelectionRectangles)
     {
         // Have a cursor, but no selection: we need the middle handle.
         if (!pDocView->m_pHandleMiddle)
@@ -603,6 +604,8 @@ static const gchar* lcl_LibreOfficeKitCallbackTypeToString(int nType)
         return "LOK_CALLBACK_TEXT_SELECTION_START";
     case LOK_CALLBACK_TEXT_SELECTION_END:
         return "LOK_CALLBACK_TEXT_SELECTION_END";
+    case LOK_CALLBACK_CURSOR_VISIBLE:
+        return "LOK_CALLBACK_CURSOR_VISIBLE";
     }
     return 0;
 }
@@ -662,6 +665,11 @@ static gboolean lok_docview_callback(gpointer pData)
     case LOK_CALLBACK_TEXT_SELECTION_END:
     {
         pCallback->m_pDocView->m_aTextSelectionEnd = lcl_payloadToRectangle(pCallback->m_pPayload);
+    }
+    break;
+    case LOK_CALLBACK_CURSOR_VISIBLE:
+    {
+        pCallback->m_pDocView->m_bCursorVisible = strcmp(pCallback->m_pPayload, "true") == 0;
     }
     break;
     default:
