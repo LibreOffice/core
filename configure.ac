@@ -9567,13 +9567,7 @@ the  Windows SDK are installed.])
 
     if test -z "$WINDOWS_SDK_HOME"; then
         AC_MSG_RESULT([no, hoping the necessary headers and libraries will be found anyway!?])
-    elif echo $WINDOWS_SDK_HOME | grep "v6.0" >/dev/null 2>/dev/null; then
-        WINDOWS_SDK_VERSION=60
-        AC_MSG_RESULT([found Windows SDK 6.0 ($WINDOWS_SDK_HOME)])
-    elif echo $WINDOWS_SDK_HOME | grep "v6.1" >/dev/null 2>/dev/null; then
-        WINDOWS_SDK_VERSION=61
-        AC_MSG_RESULT([found Windows SDK 6.1 ($WINDOWS_SDK_HOME)])
-    elif echo $WINDOWS_SDK_HOME | grep "v7" >/dev/null 2>/dev/null; then
+    elif echo $WINDOWS_SDK_HOME | grep "v7.1" >/dev/null 2>/dev/null; then
         WINDOWS_SDK_VERSION=70
         AC_MSG_RESULT([found Windows SDK 7 ($WINDOWS_SDK_HOME)])
     elif echo $WINDOWS_SDK_HOME | grep "8.0" >/dev/null 2>/dev/null; then
@@ -9582,9 +9576,9 @@ the  Windows SDK are installed.])
         dnl compatibility warning if not explicitly choosing the 80 SDK:
         if test -z "$with_windows_sdk"; then
             AC_MSG_WARN([If a build should run on Windows XP,])
-            AC_MSG_WARN([use --with-windows-sdk=7.1A (requires VS 2012 Update 1 or newer)])
+            AC_MSG_WARN([use --with-windows-sdk=7.1A])
             add_warning "If a build should run on Windows XP,"
-            add_warning "use --with-windows-sdk=7.1A (requires VS 2012 Update 1 or newer)"
+            add_warning "use --with-windows-sdk=7.1A"
         fi
     elif echo $WINDOWS_SDK_HOME | grep "8.1" >/dev/null 2>/dev/null; then
         WINDOWS_SDK_VERSION=81
