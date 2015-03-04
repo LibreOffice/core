@@ -1001,6 +1001,11 @@ void WinSalInstance::AddToRecentDocumentList(const OUString& rFileUrl, const OUS
                         OUString sApplicationID("TheDocumentFoundation.LibreOffice.");
                         sApplicationID += sApplicationName;
 
+#if _WIN32_WINNT < _WIN32_WINNT_WIN7
+// just define Windows 7 only constant locally...
+#define SHARD_APPIDINFO  0x00000004
+#endif
+
                         typedef struct {
                             IShellItem *psi;
                             PCWSTR     pszAppID;

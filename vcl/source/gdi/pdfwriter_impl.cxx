@@ -85,6 +85,10 @@
 
 #ifdef _WIN32
 // WinCrypt headers for PDF signing
+// Note: this uses Windows 7 APIs and requires the relevant data types;
+// the functions that don't exist in WinXP must be looked up at runtime!
+#undef _WIN32_WINNT
+#define _WIN32_WINNT _WIN32_WINNT_WIN7
 #include <prewin.h>
 #include <wincrypt.h>
 #include <postwin.h>
