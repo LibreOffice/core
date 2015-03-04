@@ -973,26 +973,18 @@ void GtkSalGraphics::renderAreaToPix( cairo_surface_t *source,
     if( !mpFrame->m_aFrame.get() )
         return;
 
-    basebmp::RawMemorySharedArray data = mpFrame->m_aFrame->getBuffer();
-    basegfx::B2IVector size = mpFrame->m_aFrame->getSize();
-    sal_Int32 nStride = mpFrame->m_aFrame->getScanlineStride();
     long ax = region->x;
     long ay = region->y;
+    basegfx::B2IVector size = mpFrame->m_aFrame->getSize();
     long awidth = MIN (region->width, size.getX() - ax);
     long aheight = MIN (region->height, size.getY() - ay);
 
-    cairo_surface_t *target =
-        cairo_image_surface_create_for_data(data.get(),
-                                        CAIRO_FORMAT_RGB24,
-                                        size.getX(), size.getY(),
-                                        nStride);
-    cairo_t *cr = cairo_create(target);
+    cairo_t *cr = getCairoContext();
 
     cairo_set_source_surface( cr, source, ax, ay );
     cairo_rectangle( cr, ax, ay, awidth, aheight );
     cairo_fill( cr );
     cairo_destroy(cr);
-    cairo_surface_destroy(target);
 
     if ( !mpFrame->isDuringRender() )
         gtk_widget_queue_draw_area( mpFrame->getWindow(), ax, ay, awidth, aheight );
