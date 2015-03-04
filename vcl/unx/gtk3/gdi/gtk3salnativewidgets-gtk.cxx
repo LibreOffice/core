@@ -566,6 +566,8 @@ void GtkSalGraphics::PaintOneSpinButton( GtkStyleContext *context,
     gtk_style_context_set_state(context, stateFlags);
     gtk_style_context_add_class(context, GTK_STYLE_CLASS_BUTTON);
 
+    gtk_style_context_get_padding(context, GTK_STATE_FLAG_NORMAL, &padding);
+
     gtk_render_background(context, cr,
                           (buttonRect.Left() - aAreaRect.Left()), (buttonRect.Top() - aAreaRect.Top()),
                           buttonRect.GetWidth(), buttonRect.GetHeight() );
