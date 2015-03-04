@@ -162,7 +162,7 @@ class FFDataWriterHelper
         m_pSerializer->endElementNS( XML_w, XML_ffData );
     }
 public:
-    FFDataWriterHelper( const ::sax_fastparser::FSHelperPtr pSerializer ) : m_pSerializer( pSerializer ){}
+    FFDataWriterHelper( const ::sax_fastparser::FSHelperPtr& rSerializer ) : m_pSerializer( rSerializer ){}
     void WriteFormCheckbox( const OUString& rName, const OUString& rDefault, bool bChecked )
     {
        writeCommonStart( rName );

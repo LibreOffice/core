@@ -2783,7 +2783,7 @@ void touch_lo_selection_end_move_impl(const void *documentHandle,
 
 #endif
 
-void SwEditWin::MoveCursor( SwWrtShell &rSh, const Point aDocPos,
+void SwEditWin::MoveCursor( SwWrtShell &rSh, const Point& rDocPos,
                             const bool bOnlyText, bool bLockView )
 {
     const bool bTmpNoInterrupt = bNoInterrupt;
@@ -2800,7 +2800,7 @@ void SwEditWin::MoveCursor( SwWrtShell &rSh, const Point aDocPos,
         // only temporary generate move context because otherwise
         // the query to the content form doesn't work!!!
         SwMvContext aMvContext( &rSh );
-        nTmpSetCrsr = rSh.SetCursor(&aDocPos, bOnlyText);
+        nTmpSetCrsr = rSh.SetCursor(&rDocPos, bOnlyText);
         bValidCrsrPos = !(CRSR_POSCHG & nTmpSetCrsr);
     }
 

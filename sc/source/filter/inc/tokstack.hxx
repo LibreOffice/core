@@ -192,7 +192,7 @@ private:
 public:
     TokenPool( svl::SharedStringPool& rSPool );
                                     ~TokenPool();
-        inline TokenPool&           operator <<( const TokenId nId );
+        inline TokenPool&           operator <<( const TokenId& rId );
         inline TokenPool&           operator <<( const DefTokenId eId );
         inline TokenPool&           operator <<( TokenStack& rStack );
         void                        operator >>( TokenId& rId );
@@ -217,11 +217,11 @@ public:
         const TokenId               StoreExtRef( sal_uInt16 nFileId, const OUString& rTabName, const ScComplexRefData& rRef );
 
         inline const TokenId        LastId( void ) const;
-        inline const ScTokenArray*  operator []( const TokenId nId );
+        inline const ScTokenArray*  operator []( const TokenId& rId );
         void                        Reset( void );
-        inline E_TYPE               GetType( const TokenId& nId ) const;
-        bool                        IsSingleOp( const TokenId& nId, const DefTokenId eId ) const;
-        const OUString*             GetExternal( const TokenId& nId ) const;
+        inline E_TYPE               GetType( const TokenId& rId ) const;
+        bool                        IsSingleOp( const TokenId& rId, const DefTokenId eId ) const;
+        const OUString*             GetExternal( const TokenId& rId ) const;
         ScMatrix*                   GetMatrix( unsigned int n ) const;
 };
 
@@ -236,7 +236,7 @@ class TokenStack
     public:
                                     TokenStack( sal_uInt16 nNewSize = 1024 );
                                     ~TokenStack();
-        inline TokenStack&          operator <<( const TokenId nNewId );
+        inline TokenStack&          operator <<( const TokenId& rNewId );
         inline void                 operator >>( TokenId &rId );
 
         inline void                 Reset( void );
@@ -263,12 +263,12 @@ inline const TokenId TokenStack::Get( void )
     return nRet;
 }
 
-inline TokenStack &TokenStack::operator <<( const TokenId nNewId )
+inline TokenStack &TokenStack::operator <<( const TokenId& rNewId )
 {// Element on Stack
     OSL_ENSURE( nPos < nSize, "*TokenStack::<<(): Stack overflow" );
     if( nPos < nSize )
     {
-        pStack[ nPos ] = nNewId;
+        pStack[ nPos ] = rNewId;
         nPos++;
     }
 
@@ -291,19 +291,19 @@ inline void TokenStack::Reset( void )
     nPos = 0;
 }
 
-inline TokenPool& TokenPool::operator <<( const TokenId nId )
+inline TokenPool& TokenPool::operator <<( const TokenId& rId )
 {
-    // POST: nId's are stored consecutively in Pool under a new Id;
+    // POST: rId's are stored consecutively in Pool under a new Id;
     //       finalize with >> or Store()
-    // nId -> ( sal_uInt16 ) nId - 1;
-    OSL_ENSURE( ( sal_uInt16 ) nId < nScTokenOff,
+    // rId -> ( sal_uInt16 ) rId - 1;
+    OSL_ENSURE( ( sal_uInt16 ) rId < nScTokenOff,
         "-TokenPool::operator <<: TokenId in DefToken-Range!" );
 
     if( nP_IdAkt >= nP_Id )
 		if (!GrowId())
             return *this;
 
-    pP_Id[ nP_IdAkt ] = ( ( sal_uInt16 ) nId ) - 1;
+    pP_Id[ nP_IdAkt ] = ( ( sal_uInt16 ) rId ) - 1;
     nP_IdAkt++;
 
     return *this;
@@ -360,16 +360,16 @@ inline const TokenId TokenPool::LastId( void ) const
     return static_cast<TokenId>(nElementAkt); // correct, as Ausgabe with Offset 1!
 }
 
-const inline ScTokenArray* TokenPool::operator []( const TokenId nId )
+const inline ScTokenArray* TokenPool::operator []( const TokenId& rId )
 {
     pScToken->Clear();
 
-    if( nId )
-    {//...only if nId > 0!
+    if( rId )
+    {//...only if rId > 0!
 #ifdef DBG_UTIL
         m_nRek = 0;
 #endif
-        GetElement( ( sal_uInt16 ) nId - 1 );
+        GetElement( ( sal_uInt16 ) rId - 1 );
     }
 
     return pScToken;

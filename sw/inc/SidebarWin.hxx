@@ -171,7 +171,7 @@ class SwSidebarWin : public vcl::Window
         DECL_LINK( WindowEventListener, VclSimpleEvent* );
         inline bool IsMouseOverSidebarWin() const { return mbMouseOver; }
 
-        void SetLanguage(const SvxLanguageItem aNewItem);
+        void SetLanguage(const SvxLanguageItem& rNewItem);
 
         void ChangeSidebarItem( SwSidebarItem& rSidebarItem );
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;

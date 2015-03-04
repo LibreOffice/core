@@ -195,7 +195,7 @@ public:
 
     bool                InsertExtName(
                             sal_uInt16& rnExtSheet, sal_uInt16& rnExtName, const OUString& rUrl,
-                            const OUString& rName, const ScExternalRefCache::TokenArrayRef pArray );
+                            const OUString& rName, const ScExternalRefCache::TokenArrayRef& rArray );
 
     /** Writes the entire Link table. */
     virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;

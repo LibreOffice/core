@@ -44,7 +44,7 @@ PageMarginControl::PageMarginControl(
     const SvxLongLRSpaceItem& aPageLRMargin,
     const SvxLongULSpaceItem& aPageULMargin,
     const bool bMirrored,
-    const Size aPageSize,
+    const Size& rPageSize,
     const bool bLandscape,
     const FieldUnit eFUnit,
     const SfxMapUnit eUnit )
@@ -111,7 +111,7 @@ PageMarginControl::PageMarginControl(
     maBottomMarginEdit.SetModifyHdl( aLinkUL );
     SetMetricValue( maBottomMarginEdit, mnPageBottomMargin, meUnit );
 
-    SetMetricFieldMaxValues( aPageSize );
+    SetMetricFieldMaxValues(rPageSize);
 
     if ( mbMirrored )
     {
@@ -138,15 +138,15 @@ PageMarginControl::~PageMarginControl(void)
     StoreUserCustomValues();
 }
 
-void PageMarginControl::SetMetricFieldMaxValues( const Size aPageSize )
+void PageMarginControl::SetMetricFieldMaxValues(const Size& rPageSize)
 {
     const long nML = maLeftMarginEdit.Denormalize( maLeftMarginEdit.GetValue(FUNIT_TWIP) );
     const long nMR = maRightMarginEdit.Denormalize( maRightMarginEdit.GetValue(FUNIT_TWIP) );
     const long nMT = maTopMarginEdit.Denormalize(maTopMarginEdit.GetValue(FUNIT_TWIP) );
     const long nMB = maBottomMarginEdit.Denormalize( maBottomMarginEdit.GetValue(FUNIT_TWIP) );
 
-    const long nPH  = LogicToLogic( aPageSize.Height(), (MapUnit)meUnit, MAP_TWIP );
-    const long nPW  = LogicToLogic( aPageSize.Width(),  (MapUnit)meUnit, MAP_TWIP );
+    const long nPH  = LogicToLogic( rPageSize.Height(), (MapUnit)meUnit, MAP_TWIP );
+    const long nPW  = LogicToLogic( rPageSize.Width(),  (MapUnit)meUnit, MAP_TWIP );
 
     // Left
     long nMax = nPW - nMR - MINBODY;

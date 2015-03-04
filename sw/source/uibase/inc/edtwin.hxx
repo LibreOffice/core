@@ -180,7 +180,7 @@ friend void     PageNumNotify(  SwViewShell* pVwSh,
 
     using OutputDevice::GetTextColor;
 
-    void            MoveCursor( SwWrtShell &rSh, const Point aDocPos,
+    void            MoveCursor( SwWrtShell &rSh, const Point& rDocPos,
                                 const bool bOnlyText, bool bLockView );
 
 protected:

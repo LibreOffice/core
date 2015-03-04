@@ -651,7 +651,7 @@ void XclExpNumberCell::WriteContents( XclExpStream& rStrm )
 IMPL_FIXEDMEMPOOL_NEWDEL( XclExpBooleanCell )
 
 XclExpBooleanCell::XclExpBooleanCell(
-        const XclExpRoot rRoot, const XclAddress& rXclPos,
+        const XclExpRoot& rRoot, const XclAddress& rXclPos,
         const ScPatternAttr* pPattern, sal_uInt32 nForcedXFId, bool bValue ) :
     // #i41210# always use latin script for boolean cells
     XclExpSingleCellBase( rRoot, EXC_ID3_BOOLERR, 2, rXclPos, pPattern, ApiScriptType::LATIN, nForcedXFId ),

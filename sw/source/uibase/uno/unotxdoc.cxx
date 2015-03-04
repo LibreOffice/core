@@ -2885,7 +2885,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
 
 SfxViewShell * SwXTextDocument::GuessViewShell(
     /* out */ bool &rbIsSwSrcView,
-    const uno::Reference< css::frame::XController > xController )
+    const uno::Reference< css::frame::XController >& rController )
 {
     // #130810# SfxViewShell::Current() / SfxViewShell::GetObjectShell()
     // must not be used (see comment from MBA)
@@ -2906,9 +2906,9 @@ SfxViewShell * SwXTextDocument::GuessViewShell(
         pSwSrcView = dynamic_cast< SwSrcView * >(pView);
         if (!pSwPagePreview)
             pSwPagePreview = dynamic_cast< SwPagePreview * >(pView);
-        if (xController.is())
+        if (rController.is())
         {
-            if (pView && pView->GetController() == xController)
+            if (pView && pView->GetController() == rController)
                 break;
         }
         else if (pSwView || pSwSrcView)

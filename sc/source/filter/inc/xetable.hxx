@@ -384,7 +384,7 @@ class XclExpBooleanCell : public XclExpSingleCellBase
     DECL_FIXEDMEMPOOL_NEWDEL( XclExpBooleanCell )
 
 public:
-    explicit            XclExpBooleanCell( const XclExpRoot rRoot, const XclAddress& rXclPos,
+    explicit            XclExpBooleanCell( const XclExpRoot& rRoot, const XclAddress& rXclPos,
                             const ScPatternAttr* pPattern, sal_uInt32 nForcedXFId,
                             bool bValue );
 

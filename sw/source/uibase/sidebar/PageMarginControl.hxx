@@ -56,7 +56,7 @@ public:
         const SvxLongLRSpaceItem& aPageLRMargin,
         const SvxLongULSpaceItem& aPageULMargin,
         const bool bMirrored,
-        const Size aPageSize,
+        const Size& rPageSize,
         const bool bLandscape,
         const FieldUnit eFUnit,
         const SfxMapUnit eUnit );
@@ -103,7 +103,7 @@ private:
     DECL_LINK( ModifyLRMarginHdl, MetricField* );
     DECL_LINK( ModifyULMarginHdl, MetricField* );
 
-    void SetMetricFieldMaxValues( const Size aPageSize );
+    void SetMetricFieldMaxValues(const Size& rPageSize);
 
     bool GetUserCustomValues();
     void StoreUserCustomValues();

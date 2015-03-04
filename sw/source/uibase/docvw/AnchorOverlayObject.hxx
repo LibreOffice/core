@@ -120,7 +120,7 @@ class AnchorOverlayObject: public sdr::overlay::OverlayObjectWithBasePosition
                              const basegfx::B2DPoint& rFifthPos,
                              const basegfx::B2DPoint& rSixthPos,
                              const basegfx::B2DPoint& rSeventhPos,
-                             const Color aBaseColor,
+                             const Color& rBaseColor,
                              const bool bShadowedEffect,
                              const bool bLineSolid );
         virtual ~AnchorOverlayObject();

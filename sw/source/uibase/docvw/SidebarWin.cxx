@@ -914,7 +914,7 @@ void SwSidebarWin::SetReadonly(bool bSet)
     GetOutlinerView()->SetReadOnly(bSet);
 }
 
-void SwSidebarWin::SetLanguage(const SvxLanguageItem aNewItem)
+void SwSidebarWin::SetLanguage(const SvxLanguageItem& rNewItem)
 {
     Link pLink = Engine()->GetModifyHdl();
     Engine()->SetModifyHdl( Link() );
@@ -923,7 +923,7 @@ void SwSidebarWin::SetLanguage(const SvxLanguageItem aNewItem)
     ESelection aNewSelection( 0, 0, Engine()->GetParagraphCount()-1, EE_TEXTPOS_ALL );
     GetOutlinerView()->SetSelection( aNewSelection );
     SfxItemSet aEditAttr(GetOutlinerView()->GetAttribs());
-    aEditAttr.Put(aNewItem);
+    aEditAttr.Put(rNewItem);
     GetOutlinerView()->SetAttribs( aEditAttr );
 
     GetOutlinerView()->SetSelection(aOld);

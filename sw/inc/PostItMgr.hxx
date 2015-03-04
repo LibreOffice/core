@@ -164,7 +164,7 @@ class SwPostItMgr: public SfxListener
         void            AutoScroll(const sw::sidebarwindows::SwSidebarWin* pPostIt,const unsigned long aPage );
         bool            ScrollbarHit(const unsigned long aPage,const Point &aPoint);
         bool            LayoutByPage( std::list<sw::sidebarwindows::SwSidebarWin*> &aVisiblePostItList,
-                                      const Rectangle aBorder,
+                                      const Rectangle& rBorder,
                                       long lNeededHeight);
         void            CheckForRemovedPostIts();
             bool                ArrowEnabled(sal_uInt16 aDirection,unsigned long aPage) const;

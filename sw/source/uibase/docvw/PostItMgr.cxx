@@ -977,7 +977,7 @@ Color SwPostItMgr::GetArrowColor(sal_uInt16 aDirection,unsigned long aPage) cons
     }
 }
 
-bool SwPostItMgr::LayoutByPage(std::list<SwSidebarWin*> &aVisiblePostItList,const Rectangle aBorder, long lNeededHeight)
+bool SwPostItMgr::LayoutByPage(std::list<SwSidebarWin*> &aVisiblePostItList, const Rectangle& rBorder, long lNeededHeight)
 {
     /*** General layout idea:***/
     //  - if we have space left, we always move the current one up,
@@ -986,10 +986,10 @@ bool SwPostItMgr::LayoutByPage(std::list<SwSidebarWin*> &aVisiblePostItList,cons
     //  - then the real layout starts
 
     //rBorder is the page rect
-    const Rectangle rBorder         = mpEditWin->LogicToPixel( aBorder);
-    long            lTopBorder      = rBorder.Top() + 5;
-    long            lBottomBorder   = rBorder.Bottom() - 5;
-    const long      lVisibleHeight  = lBottomBorder - lTopBorder; //rBorder.GetHeight() ;
+    const Rectangle aBorder         = mpEditWin->LogicToPixel(rBorder);
+    long            lTopBorder      = aBorder.Top() + 5;
+    long            lBottomBorder   = aBorder.Bottom() - 5;
+    const long      lVisibleHeight  = lBottomBorder - lTopBorder; //aBorder.GetHeight() ;
     const size_t    nPostItListSize = aVisiblePostItList.size();
     long            lTranslatePos   = 0;
     bool            bScrollbars     = false;

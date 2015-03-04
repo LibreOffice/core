@@ -284,10 +284,10 @@ AnchorOverlayObject::AnchorOverlayObject( const basegfx::B2DPoint& rBasePos,
                                           const basegfx::B2DPoint& rFifthPos,
                                           const basegfx::B2DPoint& rSixthPos,
                                           const basegfx::B2DPoint& rSeventhPos,
-                                          const Color aBaseColor,
+                                          const Color& rBaseColor,
                                           const bool bShadowedEffect,
                                           const bool bLineSolid)
-    : OverlayObjectWithBasePosition( rBasePos, aBaseColor )
+    : OverlayObjectWithBasePosition(rBasePos, rBaseColor)
     , maSecondPosition(rSecondPos)
     , maThirdPosition(rThirdPos)
     , maFourthPosition(rFourthPos)

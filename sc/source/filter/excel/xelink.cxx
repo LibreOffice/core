@@ -102,7 +102,7 @@ class XclExpExtName : public XclExpExtNameBase
 {
 public:
     explicit            XclExpExtName( const XclExpRoot& rRoot, const XclExpSupbook& rSupbook, const OUString& rName,
-                                       const ScExternalRefCache::TokenArrayRef pArray );
+                                       const ScExternalRefCache::TokenArrayRef& rArray );
 
 private:
     /** Writes additional record contents. */
@@ -130,7 +130,7 @@ public:
         @return  The 1-based (Excel-like) list index of the DDE link. */
     sal_uInt16          InsertDde( const OUString& rApplic, const OUString& rTopic, const OUString& rItem );
 
-    sal_uInt16          InsertExtName( const XclExpSupbook& rSupbook, const OUString& rName, const ScExternalRefCache::TokenArrayRef pArray );
+    sal_uInt16          InsertExtName( const XclExpSupbook& rSupbook, const OUString& rName, const ScExternalRefCache::TokenArrayRef& rArray );
 
     /** Writes the EXTERNNAME record list. */
     virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;
@@ -321,7 +321,7 @@ public:
         @return  The 1-based EXTERNNAME record index; or 0, if the record list is full. */
     sal_uInt16          InsertDde( const OUString& rItem );
 
-    sal_uInt16          InsertExtName( const OUString& rName, const ScExternalRefCache::TokenArrayRef pArray );
+    sal_uInt16          InsertExtName( const OUString& rName, const ScExternalRefCache::TokenArrayRef& rArray );
 
     /** Get the type of record. */
     XclSupbookType      GetType() const;
@@ -422,7 +422,7 @@ public:
 
     bool                InsertExtName(
                             sal_uInt16& rnSupbook, sal_uInt16& rnExtName, const OUString& rUrl,
-                            const OUString& rName, const ScExternalRefCache::TokenArrayRef pArray );
+                            const OUString& rName, const ScExternalRefCache::TokenArrayRef& rArray );
 
     XclExpXti           GetXti( sal_uInt16 nFileId, const OUString& rTabName, sal_uInt16 nXclTabSpan,
                                 XclExpRefLogEntry* pRefLogEntry = NULL );
@@ -514,7 +514,7 @@ public:
 
     virtual bool        InsertExtName(
                             sal_uInt16& rnExtSheet, sal_uInt16& rnExtName, const OUString& rUrl,
-                            const OUString& rName, const ScExternalRefCache::TokenArrayRef pArray ) = 0;
+                            const OUString& rName, const ScExternalRefCache::TokenArrayRef& rArray ) = 0;
 
     /** Derived classes write the entire link table to the passed stream. */
     virtual void        Save( XclExpStream& rStrm ) = 0;
@@ -562,7 +562,7 @@ public:
 
     virtual bool        InsertExtName(
                             sal_uInt16& rnExtSheet, sal_uInt16& rnExtName, const OUString& rUrl,
-                            const OUString& rName, const ScExternalRefCache::TokenArrayRef pArray ) SAL_OVERRIDE;
+                            const OUString& rName, const ScExternalRefCache::TokenArrayRef& rArray ) SAL_OVERRIDE;
 
     virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;
 
@@ -631,7 +631,7 @@ public:
 
     virtual bool        InsertExtName(
                             sal_uInt16& rnExtSheet, sal_uInt16& rnExtName, const OUString& rUrl,
-                            const OUString& rName, const ScExternalRefCache::TokenArrayRef pArray ) SAL_OVERRIDE;
+                            const OUString& rName, const ScExternalRefCache::TokenArrayRef& rArray ) SAL_OVERRIDE;
 
     virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;
 
@@ -950,10 +950,10 @@ void XclExpExtNameDde::WriteAddData( XclExpStream& rStrm )
 }
 
 XclExpExtName::XclExpExtName( const XclExpRoot& rRoot, const XclExpSupbook& rSupbook,
-        const OUString& rName, const ScExternalRefCache::TokenArrayRef pArray ) :
+        const OUString& rName, const ScExternalRefCache::TokenArrayRef& rArray ) :
     XclExpExtNameBase( rRoot, rName ),
     mrSupbook(rSupbook),
-    mpArray(pArray->Clone())
+    mpArray(rArray->Clone())
 {
 }
 
@@ -1087,10 +1087,10 @@ sal_uInt16 XclExpExtNameBuffer::InsertDde(
 }
 
 sal_uInt16 XclExpExtNameBuffer::InsertExtName( const XclExpSupbook& rSupbook,
-        const OUString& rName, const ScExternalRefCache::TokenArrayRef pArray )
+        const OUString& rName, const ScExternalRefCache::TokenArrayRef& rArray )
 {
     sal_uInt16 nIndex = GetIndex( rName );
-    return nIndex ? nIndex : AppendNew( new XclExpExtName( GetRoot(), rSupbook, rName, pArray ) );
+    return nIndex ? nIndex : AppendNew( new XclExpExtName( GetRoot(), rSupbook, rName, rArray ) );
 }
 
 void XclExpExtNameBuffer::Save( XclExpStream& rStrm )
@@ -1616,9 +1616,9 @@ sal_uInt16 XclExpSupbook::InsertDde( const OUString& rItem )
     return GetExtNameBuffer().InsertDde( maUrl, maDdeTopic, rItem );
 }
 
-sal_uInt16 XclExpSupbook::InsertExtName( const OUString& rName, const ScExternalRefCache::TokenArrayRef pArray )
+sal_uInt16 XclExpSupbook::InsertExtName( const OUString& rName, const ScExternalRefCache::TokenArrayRef& rArray )
 {
-    return GetExtNameBuffer().InsertExtName(*this, rName, pArray);
+    return GetExtNameBuffer().InsertExtName(*this, rName, rArray);
 }
 
 XclSupbookType XclExpSupbook::GetType() const
@@ -1980,7 +1980,7 @@ bool XclExpSupbookBuffer::InsertDde(
 
 bool XclExpSupbookBuffer::InsertExtName(
         sal_uInt16& rnSupbook, sal_uInt16& rnExtName, const OUString& rUrl,
-        const OUString& rName, const ScExternalRefCache::TokenArrayRef pArray )
+        const OUString& rName, const ScExternalRefCache::TokenArrayRef& rArray )
 {
     XclExpSupbookRef xSupbook;
     if (!GetSupbookUrl(xSupbook, rnSupbook, rUrl))
@@ -1988,7 +1988,7 @@ bool XclExpSupbookBuffer::InsertExtName(
         xSupbook.reset( new XclExpSupbook(GetRoot(), rUrl) );
         rnSupbook = Append(xSupbook);
     }
-    rnExtName = xSupbook->InsertExtName(rName, pArray);
+    rnExtName = xSupbook->InsertExtName(rName, rArray);
     return rnExtName > 0;
 }
 
@@ -2232,7 +2232,7 @@ bool XclExpLinkManagerImpl5::InsertDde(
 
 bool XclExpLinkManagerImpl5::InsertExtName(
         sal_uInt16& /*rnExtSheet*/, sal_uInt16& /*rnExtName*/, const OUString& /*rUrl*/,
-        const OUString& /*rName*/, const ScExternalRefCache::TokenArrayRef /*pArray*/ )
+        const OUString& /*rName*/, const ScExternalRefCache::TokenArrayRef& /*rArray*/ )
 {
     // not implemented
     return false;
@@ -2442,10 +2442,10 @@ bool XclExpLinkManagerImpl8::InsertDde(
 }
 
 bool XclExpLinkManagerImpl8::InsertExtName( sal_uInt16& rnExtSheet, sal_uInt16& rnExtName,
-        const OUString& rName, const OUString& rUrl, const ScExternalRefCache::TokenArrayRef pArray )
+        const OUString& rName, const OUString& rUrl, const ScExternalRefCache::TokenArrayRef& rArray )
 {
     sal_uInt16 nSupbook;
-    if( maSBBuffer.InsertExtName( nSupbook, rnExtName, rUrl, rName, pArray ) )
+    if( maSBBuffer.InsertExtName( nSupbook, rnExtName, rUrl, rName, rArray ) )
     {
         rnExtSheet = InsertXti( XclExpXti( nSupbook, EXC_TAB_EXTERNAL, EXC_TAB_EXTERNAL ) );
         return true;
@@ -2590,9 +2590,9 @@ bool XclExpLinkManager::InsertDde(
 
 bool XclExpLinkManager::InsertExtName(
     sal_uInt16& rnExtSheet, sal_uInt16& rnExtName, const OUString& rName, const OUString& rUrl,
-    const ScExternalRefCache::TokenArrayRef pArray )
+    const ScExternalRefCache::TokenArrayRef& rArray )
 {
-    return mxImpl->InsertExtName( rnExtSheet, rnExtName, rUrl, rName, pArray );
+    return mxImpl->InsertExtName(rnExtSheet, rnExtName, rUrl, rName, rArray);
 }
 
 void XclExpLinkManager::Save( XclExpStream& rStrm )
