@@ -1555,20 +1555,6 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
     gtk_widget_path_free(path);
 }
 
-void GtkSalGraphics::setDevice(basebmp::BitmapDeviceSharedPtr& rDevice)
-{
-    SvpSalGraphics::setDevice(rDevice);
-    bool bCairoCompatibleSurface = rDevice->getScanlineFormat() == basebmp::FORMAT_THIRTYTWO_BIT_TC_MASK_BGRX;
-    if (bCairoCompatibleSurface != m_bCairoCompatibleSurface)
-    {
-        if (bCairoCompatibleSurface)
-            m_xTextRenderImpl.reset(new GtkCairoTextRender(*this));
-        else
-            m_xTextRenderImpl.reset(new SvpTextRender(*this));
-        m_bCairoCompatibleSurface = bCairoCompatibleSurface;
-    }
-}
-
 void GtkSalGraphics::copyArea( long nDestX, long nDestY,
                                long nSrcX, long nSrcY,
                                long nSrcWidth, long nSrcHeight,

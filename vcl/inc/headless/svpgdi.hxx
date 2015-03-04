@@ -55,7 +55,7 @@ protected:
 
 public:
     GlyphCache& getPlatformGlyphCache();
-    virtual void setDevice(basebmp::BitmapDeviceSharedPtr& rDevice);
+    void setDevice(basebmp::BitmapDeviceSharedPtr& rDevice);
     void BlendTextColor(const basebmp::Color &rTextColor, const basebmp::BitmapDeviceSharedPtr &rAlphaMask,
                         const basegfx::B2IPoint &rDstPoint);
 

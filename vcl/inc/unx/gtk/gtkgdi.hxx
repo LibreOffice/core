@@ -35,10 +35,8 @@ class GtkSalFrame;
 class GtkSalGraphics : public SvpSalGraphics
 {
     GtkSalFrame *mpFrame;
-    bool m_bCairoCompatibleSurface;
 public:
     GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow );
-    virtual void        setDevice(basebmp::BitmapDeviceSharedPtr& rDevice) SAL_OVERRIDE;
     virtual void        copyArea( long nDestX, long nDestY,
                                   long nSrcX, long nSrcY,
                                   long nSrcWidth, long nSrcHeight,
