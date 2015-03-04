@@ -2859,7 +2859,7 @@ void ToolBox::ImplDrawSpin( bool bUpperIn, bool bLowerIn )
                         bUpperIn, bLowerIn, bTmpUpper, bTmpLower, !mbHorz );
 }
 
-void ToolBox::ImplDrawSeparator( sal_uInt16 nPos, Rectangle rRect )
+void ToolBox::ImplDrawSeparator(sal_uInt16 nPos, const Rectangle& rRect)
 {
     bool bNativeOk = false;
     ImplToolItem* pItem = &mpData->m_aItems[nPos];

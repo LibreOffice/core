@@ -96,8 +96,8 @@ public:
 private:
     void broadcast_changed(
             sal_Char const * const i_asciiAttributeName,
-            ::com::sun::star::uno::Any i_oldValue,
-            ::com::sun::star::uno::Any i_newValue,
+            const css::uno::Any& i_oldValue,
+            const css::uno::Any& i_newValue,
             ::comphelper::ComponentGuard& i_Guard
         );
 

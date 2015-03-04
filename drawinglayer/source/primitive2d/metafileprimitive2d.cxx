@@ -597,7 +597,7 @@ namespace
         const std::vector< basegfx::B2DPoint >& rPositions,
         TargetHolder& rTarget,
         PropertyHolder& rProperties,
-        basegfx::BColor aBColor)
+        const basegfx::BColor& rBColor)
     {
         if(!rPositions.empty())
         {
@@ -606,7 +606,7 @@ namespace
                 rTarget.append(
                     new drawinglayer::primitive2d::PointArrayPrimitive2D(
                         rPositions,
-                        aBColor));
+                        rBColor));
             }
             else
             {
@@ -620,7 +620,7 @@ namespace
                 rTarget.append(
                     new drawinglayer::primitive2d::PointArrayPrimitive2D(
                         aPositions,
-                        aBColor));
+                        rBColor));
             }
         }
     }

@@ -143,13 +143,13 @@ public:
         @param constValue specifies the value of the field. The value is only interesting
                           for enum values or constants.
      */
-    inline void setFieldData( sal_uInt16                index,
+    inline void setFieldData( sal_uInt16              index,
                               const rtl::OUString&    name,
                               const rtl::OUString&    typeName,
                               const rtl::OUString&    doku,
                               const rtl::OUString&    fileName,
-                              RTFieldAccess             access,
-                              RTConstValue              constValue = RTConstValue());
+                              RTFieldAccess           access,
+                              const RTConstValue&     constValue = RTConstValue());
 
     /** sets the data for a method.
 
@@ -270,13 +270,13 @@ inline RegistryTypeWriter& RegistryTypeWriter::operator == (const RegistryTypeWr
     return *this;
 }
 
-inline void RegistryTypeWriter::setFieldData( sal_uInt16                index,
+inline void RegistryTypeWriter::setFieldData( sal_uInt16              index,
                                               const rtl::OUString&    name,
                                               const rtl::OUString&    typeName,
                                               const rtl::OUString&    doku,
                                               const rtl::OUString&    fileName,
-                                              RTFieldAccess             access,
-                                              RTConstValue              constValue)
+                                              RTFieldAccess           access,
+                                              const RTConstValue&     constValue)
 {
     m_pApi->setFieldData(m_hImpl, index, name.pData, typeName.pData, doku.pData, fileName.pData, access, constValue.m_type, constValue.m_value);
 }

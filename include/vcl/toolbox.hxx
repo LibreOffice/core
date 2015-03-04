@@ -206,7 +206,7 @@ private:
     SAL_DLLPRIVATE sal_uInt16          ImplCalcBreaks( long nWidth, long* pMaxLineWidth, bool bCalcHorz );
     SAL_DLLPRIVATE void            ImplFormat( bool bResize = false );
     SAL_DLLPRIVATE void            ImplDrawSpin( bool bUpperIn, bool bLowerIn );
-    SAL_DLLPRIVATE void            ImplDrawSeparator( sal_uInt16 nPos, Rectangle rRect );
+    SAL_DLLPRIVATE void            ImplDrawSeparator(sal_uInt16 nPos, const Rectangle& rRect);
     SAL_DLLPRIVATE void            ImplDrawItem( sal_uInt16 nPos, sal_uInt16 nHighlight = 0, bool bPaint = false, bool bLayout = false );
     using Window::ImplInvalidate;
     SAL_DLLPRIVATE void            ImplInvalidate( bool bNewCalc = false, bool bFullPaint = false );

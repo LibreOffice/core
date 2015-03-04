@@ -43,7 +43,7 @@ public:
         @param TagName
         the name of the tag that will be retrieved.
     */
-    bool hasTag(std::wstring TagName) const;
+    bool hasTag(const std::wstring& TagName) const;
 
 
     /** Get a specific tag content, compound tags will be returned as comma separated list.
@@ -51,7 +51,7 @@ public:
         @param TagName
         the name of the tag that will be retrieved.
     */
-    std::wstring getTagData( const std::wstring& TagName);
+    std::wstring getTagData(const std::wstring& TagName);
 
     /** check if the a tag has the specific attribute.
 
@@ -60,7 +60,7 @@ public:
         @param AttributeName
         the name of the attribute.
     */
-    bool hasTagAttribute( const std::wstring TagName,  std::wstring AttributeName);
+    bool hasTagAttribute(const std::wstring& TagName,  const std::wstring& AttributeName);
 
     /** Get a specific attribute content.
 
@@ -69,7 +69,7 @@ public:
         @param AttributeName
         the name of the attribute.
     */
-    std::wstring getTagAttribute( const std::wstring TagName,  std::wstring AttributeName);
+    std::wstring getTagAttribute(const std::wstring& TagName,  const std::wstring& AttributeName);
 
     /** Get the default language of the whole document.
     */

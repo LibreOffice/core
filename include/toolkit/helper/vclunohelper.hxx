@@ -110,7 +110,7 @@ public:
     static FontItalic                               ConvertFontSlant( css::awt::FontSlant );
 
     // Rectangle
-    static bool                                 IsZero( ::com::sun::star::awt::Rectangle rRect );
+    static bool                                     IsZero(const css::awt::Rectangle& rRect);
 
     static ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer>  CreateControlContainer( vcl::Window* pWindow );
 

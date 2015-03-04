@@ -98,7 +98,7 @@ public:
             /* [out] */ LPOLESTR __RPC_FAR *ppszFileName);
 
 private:
-    Gdiplus::Rect CalcScaledAspectRatio(Gdiplus::Rect src, Gdiplus::Rect dest);
+    Gdiplus::Rect CalcScaledAspectRatio(const Gdiplus::Rect& src, const Gdiplus::Rect& dest);
 
 private:
     long         ref_count_;

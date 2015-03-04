@@ -69,7 +69,7 @@ private:
     std::map< std::string, libcmis::PropertyPtr > m_pObjectProps;
 
     bool isFolder( const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >& xEnv );
-    void setCmisProperty( std::string sName, std::string sValue,
+    void setCmisProperty(const std::string& rName, const std::string& rValue,
             const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >& xEnv );
 
     com::sun::star::uno::Any getBadArgExcept();

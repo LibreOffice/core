@@ -86,7 +86,7 @@ namespace basegfx
 
         // build orientation matrix
         void orientation(
-            B3DPoint aVRP = B3DPoint(0.0,0.0,1.0),
+            const B3DPoint& rVRP = B3DPoint(0.0,0.0,1.0),
             B3DVector aVPN = B3DVector(0.0,0.0,1.0),
             B3DVector aVUV = B3DVector(0.0,1.0,0.0));
 

@@ -337,14 +337,14 @@ namespace basegfx
         mpImpl->doMulMatrix(aOrthoMat);
     }
 
-    void B3DHomMatrix::orientation(B3DPoint aVRP, B3DVector aVPN, B3DVector aVUV)
+    void B3DHomMatrix::orientation(const B3DPoint& rVRP, B3DVector aVPN, B3DVector aVUV)
     {
         Impl3DHomMatrix aOrientationMat;
 
         // translate -VRP
-        aOrientationMat.set(0, 3, -aVRP.getX());
-        aOrientationMat.set(1, 3, -aVRP.getY());
-        aOrientationMat.set(2, 3, -aVRP.getZ());
+        aOrientationMat.set(0, 3, -rVRP.getX());
+        aOrientationMat.set(1, 3, -rVRP.getY());
+        aOrientationMat.set(2, 3, -rVRP.getZ());
 
         // build rotation
         aVUV.normalize();

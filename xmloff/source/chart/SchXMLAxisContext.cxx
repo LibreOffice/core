@@ -122,16 +122,16 @@ SchXMLAxisContext::SchXMLAxisContext( SchXMLImportHelper& rImpHelper,
 SchXMLAxisContext::~SchXMLAxisContext()
 {}
 
-static Reference< chart::XAxis > lcl_getChartAxis( SchXMLAxis aCurrentAxis, const Reference< chart::XDiagram > xDiagram )
+static Reference< chart::XAxis > lcl_getChartAxis(const SchXMLAxis& rCurrentAxis, const Reference< chart::XDiagram > xDiagram )
 {
     Reference< chart::XAxis > xAxis;
     Reference< chart::XAxisSupplier > xAxisSuppl( xDiagram, uno::UNO_QUERY );
     if( !xAxisSuppl.is() )
         return xAxis;
-    if( aCurrentAxis.nAxisIndex == 0 )
-        xAxis = xAxisSuppl->getAxis(aCurrentAxis.eDimension);
+    if( rCurrentAxis.nAxisIndex == 0 )
+        xAxis = xAxisSuppl->getAxis(rCurrentAxis.eDimension);
     else
-        xAxis = xAxisSuppl->getSecondaryAxis(aCurrentAxis.eDimension);
+        xAxis = xAxisSuppl->getSecondaryAxis(rCurrentAxis.eDimension);
     return xAxis;
 }
 

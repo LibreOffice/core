@@ -440,7 +440,7 @@ vcl::Font VCLUnoHelper::CreateFont( const ::com::sun::star::uno::Reference< ::co
     return aFM;
 }
 
-bool VCLUnoHelper::IsZero( ::com::sun::star::awt::Rectangle rRect )
+bool VCLUnoHelper::IsZero(const css::awt::Rectangle& rRect)
 {
     return ( !rRect.X && !rRect.Y && !rRect.Width && !rRect.Height );
 }

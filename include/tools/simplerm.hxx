@@ -51,7 +51,7 @@ public:
     virtual                 ~SimpleResMgr();
 
     static SimpleResMgr*    Create( const sal_Char* pPrefixName,
-                                    LanguageTag aLocale = LanguageTag( LANGUAGE_SYSTEM) );// only in VCL
+                                    const LanguageTag& rLocale = LanguageTag( LANGUAGE_SYSTEM) );// only in VCL
 
     bool                    IsValid() const { return m_pResImpl != NULL; }
 

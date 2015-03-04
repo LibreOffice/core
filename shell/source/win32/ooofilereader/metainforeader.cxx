@@ -132,7 +132,7 @@ CMetaInfoReader::~CMetaInfoReader( void )
     @param TagName
     the name of the tag that will be retrieve.
 */
-bool CMetaInfoReader::hasTag( std::wstring TagName ) const
+bool CMetaInfoReader::hasTag(const std::wstring& TagName) const
 {
     return ( m_AllMetaInfo.find(TagName) != m_AllMetaInfo.end());
 }
@@ -157,7 +157,7 @@ std::wstring CMetaInfoReader::getTagData( const std::wstring& TagName)
     @param AttributeName
     the name of the attribute.
 */
-bool CMetaInfoReader::hasTagAttribute( const std::wstring TagName,  std::wstring AttributeName)
+bool CMetaInfoReader::hasTagAttribute(const std::wstring& TagName,  const std::wstring& AttributeName)
 {
     return ( m_AllMetaInfo[TagName].second.find( AttributeName) != m_AllMetaInfo[TagName].second.end() );
 }
@@ -169,9 +169,9 @@ bool CMetaInfoReader::hasTagAttribute( const std::wstring TagName,  std::wstring
     @param AttributeName
     the name of the attribute.
 */
-std::wstring CMetaInfoReader::getTagAttribute( const std::wstring TagName,  std::wstring AttributeName)
+std::wstring CMetaInfoReader::getTagAttribute(const std::wstring& TagName,  const std::wstring& AttributeName)
 {
-    if ( hasTagAttribute( TagName, AttributeName ) )
+    if (hasTagAttribute(TagName, AttributeName))
         return  m_AllMetaInfo[ TagName ].second[AttributeName];
     else
         return EMPTY_STRING;
@@ -181,7 +181,7 @@ std::wstring CMetaInfoReader::getTagAttribute( const std::wstring TagName,  std:
 */
 const LocaleSet_t EN_US_LOCALE( ::std::make_pair( ::std::wstring( L"en" ),  ::std::wstring( L"US" )));
 
-bool isValidLocale ( ::std::wstring Locale )
+bool isValidLocale(const ::std::wstring& Locale)
 {
     return ( Locale.length() == 5 );
 }

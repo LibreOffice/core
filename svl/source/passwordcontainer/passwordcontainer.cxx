@@ -47,7 +47,7 @@ using namespace com::sun::star::task;
 using namespace com::sun::star::ucb;
 
 
-static OUString createIndex( vector< OUString > lines )
+static OUString createIndex(const vector< OUString >& lines)
 {
     OString aResult;
 
@@ -490,9 +490,7 @@ vector< OUString > PasswordContainer::DecodePasswords( const OUString& aLine, co
     throw RuntimeException("Can't decode!" );
 }
 
-
-
-OUString PasswordContainer::EncodePasswords( vector< OUString > lines, const OUString& aMasterPasswd ) throw(RuntimeException)
+OUString PasswordContainer::EncodePasswords(const vector< OUString >& lines, const OUString& aMasterPasswd ) throw(RuntimeException)
 {
     if( !aMasterPasswd.isEmpty() )
     {
@@ -568,7 +566,6 @@ OUString PasswordContainer::EncodePasswords( vector< OUString > lines, const OUS
     OSL_FAIL( "Problem with encoding\n" );
     throw RuntimeException("Can't encode!" );
 }
-
 
 void PasswordContainer::UpdateVector( const OUString& aURL, list< NamePassRecord >& toUpdate, NamePassRecord& aRecord, bool writeFile ) throw(RuntimeException)
 {

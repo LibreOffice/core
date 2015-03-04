@@ -168,9 +168,9 @@ Any SAL_CALL SfxScriptLibraryContainer::createEmptyLibraryElement( void )
     return aRetAny;
 }
 
-bool SAL_CALL SfxScriptLibraryContainer::isLibraryElementValid( Any aElement ) const
+bool SAL_CALL SfxScriptLibraryContainer::isLibraryElementValid(const Any& rElement) const
 {
-    return SfxScriptLibrary::containsValidModule( aElement );
+    return SfxScriptLibrary::containsValidModule(rElement);
 }
 
 void SAL_CALL SfxScriptLibraryContainer::writeLibraryElement( const Reference < XNameContainer >& xLib,
@@ -1268,16 +1268,16 @@ void SfxScriptLibrary::storeResourcesToStorage( const ::com::sun::star::uno::Ref
     (void)xStorage;
 }
 
-bool SfxScriptLibrary::containsValidModule( const Any& aElement )
+bool SfxScriptLibrary::containsValidModule(const Any& rElement)
 {
     OUString sModuleText;
-    aElement >>= sModuleText;
+    rElement >>= sModuleText;
     return ( !sModuleText.isEmpty() );
 }
 
-bool SAL_CALL SfxScriptLibrary::isLibraryElementValid( ::com::sun::star::uno::Any aElement ) const
+bool SAL_CALL SfxScriptLibrary::isLibraryElementValid(const css::uno::Any& rElement) const
 {
-    return SfxScriptLibrary::containsValidModule( aElement );
+    return SfxScriptLibrary::containsValidModule(rElement);
 }
 
 IMPLEMENT_FORWARD_XINTERFACE2( SfxScriptLibrary, SfxLibrary, SfxScriptLibrary_BASE );

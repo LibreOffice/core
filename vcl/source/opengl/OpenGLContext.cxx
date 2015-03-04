@@ -180,7 +180,7 @@ static LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM l
     }
 }
 
-int InitTempWindow(HWND *hwnd, int width, int height, PIXELFORMATDESCRIPTOR inPfd, GLWindow glWin)
+int InitTempWindow(HWND *hwnd, int width, int height, const PIXELFORMATDESCRIPTOR& inPfd, GLWindow glWin)
 {
     PIXELFORMATDESCRIPTOR  pfd = inPfd;
     int  pfmt;
@@ -260,7 +260,7 @@ bool WGLisExtensionSupported(const char *extension)
     }
 }
 
-bool InitMultisample(PIXELFORMATDESCRIPTOR pfd, int& rPixelFormat,
+bool InitMultisample(const PIXELFORMATDESCRIPTOR& pfd, int& rPixelFormat,
         bool bUseDoubleBufferedRendering, bool bRequestVirtualDevice)
 {
     HWND hWnd = NULL;

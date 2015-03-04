@@ -106,7 +106,7 @@ namespace cppcanvas
                 eDy  = dy;
             }
 
-            void Set (XForm f)
+            void Set (const XForm& f)
             {
                 eM11 = f.eM11;
                 eM12 = f.eM12;
@@ -126,7 +126,7 @@ namespace cppcanvas
                 eDy *= eDx*m12  + eDy*m22 + dy;
             }
 
-            void Multiply (XForm f)
+            void Multiply (const XForm& f)
             {
                 eM11 = eM11*f.eM11 + eM12*f.eM21;
                 eM12 = eM11*f.eM12 + eM12*f.eM22;

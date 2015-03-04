@@ -2628,7 +2628,7 @@ throw (uno::RuntimeException, std::exception)
     m_aListenerContainer.removeInterface( cppu::UnoType<frame::XLayoutManagerListener>::get(), xListener );
 }
 
-void LayoutManager::implts_notifyListeners( short nEvent, uno::Any aInfoParam )
+void LayoutManager::implts_notifyListeners(short nEvent, const uno::Any& rInfoParam)
 {
     lang::EventObject                  aSource( static_cast< ::cppu::OWeakObject*>(this) );
     ::cppu::OInterfaceContainerHelper* pContainer = m_aListenerContainer.getContainer( cppu::UnoType<frame::XLayoutManagerListener>::get());
@@ -2639,7 +2639,7 @@ void LayoutManager::implts_notifyListeners( short nEvent, uno::Any aInfoParam )
         {
             try
             {
-                static_cast<frame::XLayoutManagerListener*>(pIterator.next())->layoutEvent( aSource, nEvent, aInfoParam );
+                static_cast<frame::XLayoutManagerListener*>(pIterator.next())->layoutEvent(aSource, nEvent, rInfoParam);
             }
             catch( const uno::RuntimeException& )
             {

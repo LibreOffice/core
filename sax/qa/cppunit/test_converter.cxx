@@ -154,7 +154,7 @@ void ConverterTest::testDuration()
 }
 
 
-static bool eqDateTime(util::DateTime a, util::DateTime b) {
+static bool eqDateTime(const util::DateTime& a, const util::DateTime& b) {
     return a.Year == b.Year && a.Month == b.Month && a.Day == b.Day
         && a.Hours == b.Hours && a.Minutes == b.Minutes
         && a.Seconds == b.Seconds
