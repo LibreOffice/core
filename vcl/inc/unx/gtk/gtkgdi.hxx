@@ -78,7 +78,6 @@ private:
     static GtkStyleContext *mpComboboxStyle;
     static GtkStyleContext *mpListboxStyle;
 
-    void queue_draw_area(cairo_rectangle_int_t *region);
     void getStyleContext( GtkStyleContext** style, GtkWidget* widget );
     Rectangle NWGetScrollButtonRect( ControlPart nPart, Rectangle aAreaRect );
     Rectangle NWGetSpinButtonRect( ControlPart nPart, Rectangle aAreaRect);

@@ -963,15 +963,9 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
     }
 
     cairo_destroy(cr); // unref
-    queue_draw_area(&translatedRegion);
+    mpFrame->damaged(basegfx::B2IBox(rControlRegion.Left(), rControlRegion.Top(), rControlRegion.Right(), rControlRegion.Bottom()));
 
     return true;
-}
-
-void GtkSalGraphics::queue_draw_area(cairo_rectangle_int_t *region)
-{
-    if (!mpFrame->isDuringRender())
-        gtk_widget_queue_draw_area(mpFrame->getWindow(), region->x, region->y, region->width, region->height);
 }
 
 bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion, ControlState,
