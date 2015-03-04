@@ -24,6 +24,7 @@
 #include "interpre.hxx"
 #include "mtvelements.hxx"
 #include "compare.hxx"
+#include "math.hxx"
 
 #include <boost/noncopyable.hpp>
 #include <svl/zforlist.hxx>
@@ -35,6 +36,7 @@
 
 #include <vector>
 #include <limits>
+#include <type_traits>
 
 #include <mdds/multi_type_matrix.hpp>
 #include <mdds/multi_type_vector_types.hpp>
@@ -1893,12 +1895,12 @@ struct return_type<char>
 
 }
 
-template<typename T, typename U>
+template<typename T, typename U, typename return_type>
 struct wrapped_iterator
 {
     typedef ::std::bidirectional_iterator_tag iterator_category;
     typedef typename T::const_iterator::value_type old_value_type;
-    typedef typename Op::return_type<old_value_type>::type value_type;
+    typedef return_type value_type;
     typedef value_type* pointer;
     typedef value_type& reference;
     typedef typename T::const_iterator::difference_type difference_type;
@@ -1973,7 +1975,7 @@ public:
     }
 };
 
-template<typename T, typename U>
+template<typename T, typename U, typename return_type>
 struct MatrixIteratorWrapper
 {
 private:
@@ -1988,14 +1990,14 @@ public:
     {
     }
 
-    wrapped_iterator<T, U> begin()
+    wrapped_iterator<T, U, return_type> begin()
     {
-        return wrapped_iterator<T, U>(m_itBegin, maOp);
+        return wrapped_iterator<T, U, return_type>(m_itBegin, maOp);
     }
 
-    wrapped_iterator<T, U> end()
+    wrapped_iterator<T, U, return_type> end()
     {
-        return wrapped_iterator<T, U>(m_itEnd, maOp);
+        return wrapped_iterator<T, U, return_type>(m_itEnd, maOp);
     }
 };
 
@@ -2025,7 +2027,7 @@ public:
 
                 block_type::const_iterator it = block_type::begin(*node.data);
                 block_type::const_iterator itEnd = block_type::end(*node.data);
-                MatrixIteratorWrapper<block_type, T> aFunc(it, itEnd, maOp);
+                MatrixIteratorWrapper<block_type, T, typename T::number_value_type> aFunc(it, itEnd, maOp);
                 pos = mrMat.set(pos,aFunc.begin(), aFunc.end());
                 ++pos.first;
             }
@@ -2037,7 +2039,7 @@ public:
                 block_type::const_iterator it = block_type::begin(*node.data);
                 block_type::const_iterator itEnd = block_type::end(*node.data);
 
-                MatrixIteratorWrapper<block_type, T> aFunc(it, itEnd, maOp);
+                MatrixIteratorWrapper<block_type, T, typename T::number_value_type> aFunc(it, itEnd, maOp);
                 pos = mrMat.set(pos, aFunc.begin(), aFunc.end());
                 ++pos.first;
             }
@@ -2049,7 +2051,7 @@ public:
                 block_type::const_iterator it = block_type::begin(*node.data);
                 block_type::const_iterator itEnd = block_type::end(*node.data);
 
-                MatrixIteratorWrapper<block_type, T> aFunc(it, itEnd, maOp);
+                MatrixIteratorWrapper<block_type, T, typename T::string_value_type> aFunc(it, itEnd, maOp);
                 pos = mrMat.set(pos, aFunc.begin(), aFunc.end());
                 ++pos.first;
             }
@@ -2059,7 +2061,7 @@ public:
                 if (maOp.useFunctionForEmpty())
                 {
                     std::vector<char> aVec(node.size);
-                    MatrixIteratorWrapper<std::vector<char>, T> aFunc(aVec.begin(), aVec.end(), maOp);
+                    MatrixIteratorWrapper<std::vector<char>, T, typename T::empty_value_type> aFunc(aVec.begin(), aVec.end(), maOp);
                     pos = mrMat.set(pos, aFunc.begin(), aFunc.end());
                     ++pos.first;
                 }
@@ -2510,70 +2512,64 @@ void ScMatrix::MergeDoubleArray( std::vector<double>& rArray, Op eOp ) const
     pImpl->MergeDoubleArray(rArray, eOp);
 }
 
-namespace {
+namespace matop {
 
-struct AddOp
+/**
+ * COp struct is used in MatOp class to provide (through template specialization)
+ * different actions for empty entries in a matrix.
+ */
+template <typename T, typename S>
+struct COp {};
+
+template <typename T>
+struct COp<T, svl::SharedString>
 {
-private:
-    double mnVal;
-    svl::SharedString maString;
-
-public:
-
-    AddOp(double nVal, svl::SharedString aString):
-        mnVal(nVal),
-        maString(aString)
+    svl::SharedString operator()(char, T /*aOp*/, const svl::SharedString& aString) const
     {
-    }
-
-    double operator()(double nVal) const
-    {
-        return nVal + mnVal;
-    }
-
-    double operator()(bool bVal) const
-    {
-        return mnVal + (double)bVal;
-    }
-
-    svl::SharedString operator()(const svl::SharedString&) const
-    {
-        return maString;
-    }
-
-    svl::SharedString operator()(char) const
-    {
-        return maString;
-    }
-
-    bool useFunctionForEmpty() const
-    {
-        return true;
+        return aString;
     }
 };
 
-struct SubOp
+template <typename T>
+struct COp<T, double>
+{
+    double operator()(char, T aOp, const svl::SharedString& /*aString*/) const
+    {
+        return aOp(double{}, double{});
+    }
+};
+
+template<typename TOp, typename TEmptyRes=svl::SharedString, typename TRet=double>
+struct MatOp
 {
 private:
-    double mnVal;
+    TOp maOp;
     svl::SharedString maString;
+    double mfVal;
+    bool mbUseForEmpty;
+    COp<TOp, TEmptyRes> maCOp;
 
 public:
 
-    SubOp(double nVal, svl::SharedString aString):
-        mnVal(nVal),
-        maString(aString)
+    typedef TEmptyRes empty_value_type;
+    typedef TRet number_value_type;
+    typedef svl::SharedString string_value_type;
+
+    MatOp(TOp op, svl::SharedString aString, double fVal=0.0, bool bUseForEmpty=true):
+        maOp(op),
+        maString(aString),
+        mfVal(fVal),
+        mbUseForEmpty(bUseForEmpty)
+    { }
+
+    TRet operator()(double fVal) const
     {
+        return maOp(fVal, mfVal);
     }
 
-    double operator()(double nVal) const
+    TRet operator()(bool bVal) const
     {
-        return mnVal - nVal;
-    }
-
-    double operator()(bool bVal) const
-    {
-        return mnVal - (double)bVal;
+        return maOp((double)bVal, mfVal);
     }
 
     svl::SharedString operator()(const svl::SharedString&) const
@@ -2581,29 +2577,91 @@ public:
         return maString;
     }
 
-    svl::SharedString operator()(char) const
+    TEmptyRes operator()(char) const
     {
-        return maString;
+        return maCOp(char{}, maOp, maString);
     }
 
     bool useFunctionForEmpty() const
     {
-        return true;
+        return mbUseForEmpty;
     }
 };
 
 }
 
-void ScMatrix::SubAddOp(bool bSub, double fVal, svl::SharedString aString, ScMatrix& rMat)
+void ScMatrix::NotOp(svl::SharedString aString, ScMatrix& rMat)
 {
-    if(bSub)
+    auto not_ = [&](double a, double){return double(a == 0.0);};
+    matop::MatOp<decltype(not_), double> aOp(not_, aString);
+    pImpl->ApplyOperation(aOp, *rMat.pImpl);
+}
+
+void ScMatrix::NegOp(svl::SharedString aString, ScMatrix& rMat)
+{
+    auto neg_ = [&](double a, double){return -a;};
+    matop::MatOp<decltype(neg_), double> aOp(neg_, aString);
+    pImpl->ApplyOperation(aOp, *rMat.pImpl);
+}
+
+void ScMatrix::AddOp(svl::SharedString aString, double fVal, ScMatrix& rMat)
+{
+    auto add_ = [&](double a, double b){return a + b;};
+    matop::MatOp<decltype(add_)> aOp(add_, aString, fVal);
+    pImpl->ApplyOperation(aOp, *rMat.pImpl);
+}
+
+void ScMatrix::SubOp(bool bFlag, svl::SharedString aString, double fVal, ScMatrix& rMat)
+{
+    if (bFlag)
     {
-        SubOp aOp(fVal, aString);
+        auto sub_ = [&](double a, double b){return b - a;};
+        matop::MatOp<decltype(sub_)> aOp(sub_, aString, fVal);
         pImpl->ApplyOperation(aOp, *rMat.pImpl);
     }
     else
     {
-        AddOp aOp(fVal, aString);
+        auto sub_ = [&](double a, double b){return a - b;};
+        matop::MatOp<decltype(sub_)> aOp(sub_, aString, fVal);
+        pImpl->ApplyOperation(aOp, *rMat.pImpl);
+    }
+}
+
+void ScMatrix::MulOp(svl::SharedString aString, double fVal, ScMatrix& rMat)
+{
+    auto mul_ = [&](double a, double b){return a * b;};
+    matop::MatOp<decltype(mul_)> aOp(mul_, aString, fVal);
+    pImpl->ApplyOperation(aOp, *rMat.pImpl);
+}
+
+void ScMatrix::DivOp(bool bFlag, svl::SharedString aString, double fVal, ScMatrix& rMat)
+{
+    if (bFlag)
+    {
+        auto div_ = [&](double a, double b){return sc::div(b, a);};
+        matop::MatOp<decltype(div_), svl::SharedString> aOp(div_, aString, fVal);
+        pImpl->ApplyOperation(aOp, *rMat.pImpl);
+    }
+    else
+    {
+        auto div_ = [&](double a, double b){return sc::div(a, b);};
+        matop::MatOp<decltype(div_), svl::SharedString> aOp(div_, aString, fVal);
+        pImpl->ApplyOperation(aOp, *rMat.pImpl);
+    }
+}
+
+void ScMatrix::PowOp(bool bFlag, svl::SharedString aString, double fVal, ScMatrix& rMat)
+{
+    if (bFlag)
+    {
+        auto pow_ = [&](double a, double b){return pow(b, a);};
+        matop::MatOp<decltype(pow_)> aOp(pow_, aString, fVal);
+        pImpl->ApplyOperation(aOp, *rMat.pImpl);
+    }
+    else
+    {
+        auto pow_ = [&](double a, double b){return pow(a, b);};
+        matop::MatOp<decltype(pow_)> aOp(pow_, aString, fVal);
         pImpl->ApplyOperation(aOp, *rMat.pImpl);
     }
 }
