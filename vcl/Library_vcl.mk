@@ -724,18 +724,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
 ))
 endif
 
-ifeq ($(OS),SOLARIS)
-ifeq ($(CPUNAME),SPARC64)
-$(eval $(call gb_Library_add_ldflags,vcl,\
-    -R/usr/sfw/lib/64 \
-))
-else
-$(eval $(call gb_Library_add_ldflags,vcl,\
-    -R/usr/sfw/lib \
-))
-endif
-endif
-
 # Runtime dependency for unit-tests
 $(eval $(call gb_Library_use_restarget,vcl,vcl))
 
