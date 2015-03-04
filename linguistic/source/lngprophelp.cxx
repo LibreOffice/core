@@ -525,12 +525,6 @@ void PropertyHelper_Spell::SetTmpPropVals( const PropertyValues &rPropVals )
     }
 }
 
-sal_Int16 PropertyHelper_Spell::GetDefaultNumberOfSuggestions() const
-{
-    return 16;
-}
-
-
 static const char *aHP[] =
 {
     UPN_HYPH_MIN_LEADING,

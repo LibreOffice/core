@@ -227,7 +227,7 @@ public:
         propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& rEvt )
             throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    sal_Int16   GetDefaultNumberOfSuggestions() const;
+    static sal_Int16 GetDefaultNumberOfSuggestions() { return 16; }
 
     sal_Int16   GetMaxNumberOfSuggestions() const   { return nResMaxNumberOfSuggestions; }
     bool        IsSpellUpperCase() const            { return bResIsSpellUpperCase; }
