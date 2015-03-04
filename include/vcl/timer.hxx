@@ -44,7 +44,7 @@ public:
     void            SetTimeoutHdl( const Link& rLink ) { maTimeoutHdl = rLink; }
     const Link&     GetTimeoutHdl() const { return maTimeoutHdl; }
     virtual void    Invoke() SAL_OVERRIDE;
-    virtual void    Timeout() { Invoke(); }
+    void    Timeout() { Invoke(); }
     Timer&          operator=( const Timer& rTimer );
     void            Start() SAL_OVERRIDE;
 };
