@@ -83,7 +83,7 @@ public:
     static void ImplDeInitScheduler();
 
     /// Process all pending idle tasks ahead of time in priority order.
-    static void CallbackTaskScheduling();
+    static void CallbackTaskScheduling( bool ignore );
     static void ProcessTaskScheduling( bool bTimer );
 };
 

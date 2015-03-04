@@ -90,8 +90,9 @@ void Scheduler::ImplDeInitScheduler()
     }
 }
 
-void Scheduler::CallbackTaskScheduling()
+void Scheduler::CallbackTaskScheduling(bool ignore)
 {
+    (void)ignore;
     Scheduler::ProcessTaskScheduling( true );
 }
 
