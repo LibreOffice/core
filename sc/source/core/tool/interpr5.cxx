@@ -1284,20 +1284,13 @@ void ScInterpreter::CalculateAddSub(bool _bSub)
         if (pResMat)
         {
             svl::SharedString aString = mrStrPool.intern(ScGlobal::GetRscString(STR_NO_VALUE));
-            if (bFlag || !_bSub )
+            if (_bSub)
             {
-                if (_bSub)
-                {
-                    pMat->SubAddOp(true, fVal, aString, *pResMat);
-                }
-                else
-                {
-                    pMat->SubAddOp(false, fVal, aString, *pResMat);
-                }
+                pMat->SubOp(bFlag, aString, fVal, *pResMat);
             }
             else
             {
-                pMat->SubAddOp(false, -fVal, aString, *pResMat);
+                pMat->AddOp(aString, fVal, *pResMat);
             }
             PushMatrix(pResMat);
         }
@@ -1476,12 +1469,8 @@ void ScInterpreter::ScMul()
         ScMatrixRef pResMat = GetNewMat(nC, nR);
         if (pResMat)
         {
-            SCSIZE nCount = nC * nR;
-            for ( SCSIZE i = 0; i < nCount; i++ )
-                if (pMat->IsValue(i))
-                    pResMat->PutDouble(pMat->GetDouble(i)*fVal, i);
-                else
-                    pResMat->PutString(mrStrPool.intern(ScGlobal::GetRscString(STR_NO_VALUE)), i);
+            svl::SharedString aString = mrStrPool.intern(ScGlobal::GetRscString(STR_NO_VALUE));
+            pMat->MulOp(aString, fVal, *pResMat);
             PushMatrix(pResMat);
         }
         else
@@ -1554,21 +1543,8 @@ void ScInterpreter::ScDiv()
         ScMatrixRef pResMat = GetNewMat(nC, nR);
         if (pResMat)
         {
-            SCSIZE nCount = nC * nR;
-            if (bFlag)
-            {   for ( SCSIZE i = 0; i < nCount; i++ )
-                    if (pMat->IsValue(i))
-                        pResMat->PutDouble( div( fVal, pMat->GetDouble(i)), i);
-                    else
-                        pResMat->PutString(mrStrPool.intern(ScGlobal::GetRscString(STR_NO_VALUE)), i);
-            }
-            else
-            {   for ( SCSIZE i = 0; i < nCount; i++ )
-                    if (pMat->IsValue(i))
-                        pResMat->PutDouble( div( pMat->GetDouble(i), fVal), i);
-                    else
-                        pResMat->PutString(mrStrPool.intern(ScGlobal::GetRscString(STR_NO_VALUE)), i);
-            }
+            svl::SharedString aString = mrStrPool.intern(ScGlobal::GetRscString(STR_NO_VALUE));
+            pMat->DivOp(bFlag, aString, fVal, *pResMat);
             PushMatrix(pResMat);
         }
         else
@@ -1633,21 +1609,8 @@ void ScInterpreter::ScPow()
         ScMatrixRef pResMat = GetNewMat(nC, nR);
         if (pResMat)
         {
-            SCSIZE nCount = nC * nR;
-            if (bFlag)
-            {   for ( SCSIZE i = 0; i < nCount; i++ )
-                    if (pMat->IsValue(i))
-                        pResMat->PutDouble(pow(fVal,pMat->GetDouble(i)), i);
-                    else
-                        pResMat->PutString(mrStrPool.intern(ScGlobal::GetRscString(STR_NO_VALUE)), i);
-            }
-            else
-            {   for ( SCSIZE i = 0; i < nCount; i++ )
-                    if (pMat->IsValue(i))
-                        pResMat->PutDouble(pow(pMat->GetDouble(i),fVal), i);
-                    else
-                        pResMat->PutString(mrStrPool.intern(ScGlobal::GetRscString(STR_NO_VALUE)), i);
-            }
+            svl::SharedString aString = mrStrPool.intern(ScGlobal::GetRscString(STR_NO_VALUE));
+            pMat->PowOp(bFlag, aString, fVal, *pResMat);
             PushMatrix(pResMat);
         }
         else
