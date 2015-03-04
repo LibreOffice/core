@@ -506,7 +506,7 @@ RTFSymbol aRTFControlWords[] =
     {"f", CONTROL_VALUE, RTF_F},
     {"faauto", CONTROL_FLAG, RTF_FAAUTO},
     {"facenter", CONTROL_FLAG, RTF_FACENTER},
-    {"facingp", CONTROL_FLAG, RTF_FACINGP},
+    {"facingp", CONTROL_TOGGLE, RTF_FACINGP},
     {"factoidname", CONTROL_DESTINATION, RTF_FACTOIDNAME},
     {"fafixed", CONTROL_FLAG, RTF_FAFIXED},
     {"fahang", CONTROL_FLAG, RTF_FAHANG},

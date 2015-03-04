@@ -2265,6 +2265,14 @@ DECLARE_RTFIMPORT_TEST(testFdo49893, "fdo49893.rtf")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(1296)), xShape->getSize().Width);
 }
 
+DECLARE_RTFIMPORT_TEST(testFdo49893_2, "fdo49893-2.rtf")
+{
+    // Ensure that header text exists on each page (especially on secnd page)
+    CPPUNIT_ASSERT_EQUAL(OUString("HEADER"),  parseDump("/root/page[1]/header/txt/text()"));
+    CPPUNIT_ASSERT_EQUAL(OUString("HEADER"),  parseDump("/root/page[2]/header/txt/text()"));
+    CPPUNIT_ASSERT_EQUAL(OUString("HEADER"),  parseDump("/root/page[3]/header/txt/text()"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
