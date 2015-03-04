@@ -35,7 +35,7 @@ public class TextCursorView extends View {
     private Paint mCursorPaint = new Paint();
     private Paint mSelectionPaint = new Paint();
 
-    private boolean mCursorVisible = true;
+    private boolean mCursorVisible;
 
     public TextCursorView(Context context) {
         super(context);
@@ -57,6 +57,10 @@ public class TextCursorView extends View {
             postDelayed(cursorAnimation, 500);
 
             mCursorPaint.setColor(Color.BLACK);
+            mCursorPaint.setAlpha(0);
+
+            mCursorVisible = false;
+
             mSelectionPaint.setColor(Color.BLUE);
             mSelectionPaint.setAlpha(50);
 
