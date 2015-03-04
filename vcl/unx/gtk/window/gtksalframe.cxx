@@ -3444,7 +3444,7 @@ gboolean GtkSalFrame::signalDraw( GtkWidget*, cairo_t *cr, gpointer frame )
 
     // FIXME: we quite probably want to stop re-rendering of pieces
     // that we know are just damaged by us and hence already re-rendered
-    pThis->m_nDuringRender++;
+    pThis->pushIgnoreDamage();
 
     // FIXME: we need to profile whether re-rendering the entire
     // clip region, and just pushing (with renderArea) smaller pieces
@@ -3460,7 +3460,7 @@ gboolean GtkSalFrame::signalDraw( GtkWidget*, cairo_t *cr, gpointer frame )
         pThis->renderArea( cr, &rect );
     }
 
-    pThis->m_nDuringRender--;
+    pThis->popIgnoreDamage();
 
     cairo_surface_flush(cairo_get_target(cr));
 
