@@ -44,7 +44,7 @@ public class TextCursorLayer extends Layer {
 
         LOKitShell.getMainHandler().post(new Runnable() {
             public void run() {
-                mCursorView.repositionWithViewport(context.viewport.left, context.viewport.top, context.zoomFactor);
+                mCursorView.repositionWithViewport(mViewLeft, mViewTop, mViewZoom);
             }
         });
     }
@@ -52,8 +52,6 @@ public class TextCursorLayer extends Layer {
     public void showCursor() {
         LOKitShell.getMainHandler().post(new Runnable() {
             public void run() {
-                mCursorView.setVisibility(View.VISIBLE);
-
                 mViewLeft = 0.0f;
                 mViewTop = 0.0f;
                 mViewZoom = 0.0f;
@@ -61,6 +59,7 @@ public class TextCursorLayer extends Layer {
                 if (layerView != null) {
                     layerView.addLayer(TextCursorLayer.this);
                 }
+                mCursorView.showCursor();
             }
         });
     }
@@ -68,7 +67,7 @@ public class TextCursorLayer extends Layer {
     public void hideCursor() {
         LOKitShell.getMainHandler().post(new Runnable() {
             public void run() {
-                mCursorView.setVisibility(View.GONE);
+                mCursorView.hideCursor();
             }
         });
     }

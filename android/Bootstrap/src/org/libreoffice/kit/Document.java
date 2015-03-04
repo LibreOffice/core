@@ -39,6 +39,7 @@ public class Document {
     public static final int CALLBACK_TEXT_SELECTION = 2;
     public static final int CALLBACK_TEXT_SELECTION_START = 3;
     public static final int CALLBACK_TEXT_SELECTION_END = 4;
+    public static final int CALLBACK_CURSOR_VISIBLE = 5;
 
     /**
      * Text selection types

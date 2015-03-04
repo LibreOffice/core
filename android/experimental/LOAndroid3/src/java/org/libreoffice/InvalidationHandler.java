@@ -50,6 +50,9 @@ public class InvalidationHandler {
             case Document.CALLBACK_TEXT_SELECTION_END:
                 invalidateSelectionEnd(payload);
                 break;
+            case Document.CALLBACK_CURSOR_VISIBLE:
+                cursorVisibility(payload);
+                break;
         }
     }
 
@@ -203,6 +206,20 @@ public class InvalidationHandler {
             mState = OverlayState.SELECTION;
             List<RectF> rects = convertPayloadToRectangles(payload);
             mTextCursorLayer.changeSelections(rects);
+        }
+    }
+
+    /**
+     * Handles the cursor visibility message
+     * @param payload
+     */
+    private void cursorVisibility(String payload) {
+        if (payload.equals("true")) {
+            mTextSelection.showHandle(TextSelectionHandle.HandleType.MIDDLE);
+            mTextCursorLayer.showCursor();
+        } else if (payload.equals("false")) {
+            mTextSelection.hideHandle(TextSelectionHandle.HandleType.MIDDLE);
+            mTextCursorLayer.hideCursor();
         }
     }
 

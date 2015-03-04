@@ -35,6 +35,8 @@ public class TextCursorView extends View {
     private Paint mCursorPaint = new Paint();
     private Paint mSelectionPaint = new Paint();
 
+    private boolean mCursorVisible = true;
+
     public TextCursorView(Context context) {
         super(context);
         initialize();
@@ -55,7 +57,6 @@ public class TextCursorView extends View {
             postDelayed(cursorAnimation, 500);
 
             mCursorPaint.setColor(Color.BLACK);
-            mCursorPaint.setAlpha(0);
             mSelectionPaint.setColor(Color.BLUE);
             mSelectionPaint.setAlpha(50);
 
@@ -114,9 +115,23 @@ public class TextCursorView extends View {
 
     private Runnable cursorAnimation = new Runnable() {
         public void run() {
-            mCursorPaint.setAlpha(mCursorPaint.getAlpha() == 0 ? 0xFF : 0);
-            invalidate();
+            if (mCursorVisible) {
+                mCursorPaint.setAlpha(mCursorPaint.getAlpha() == 0 ? 0xFF : 0);
+                invalidate();
+            }
             postDelayed(cursorAnimation, 500);
         }
     };
+
+    public void showCursor() {
+        mCursorVisible = true;
+        mCursorPaint.setAlpha(0xFF);
+        invalidate();
+    }
+
+    public void hideCursor() {
+        mCursorVisible = false;
+        mCursorPaint.setAlpha(0);
+        invalidate();
+    }
 }
