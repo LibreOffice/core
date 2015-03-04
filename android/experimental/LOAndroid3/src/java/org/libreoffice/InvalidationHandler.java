@@ -41,13 +41,13 @@ public class InvalidationHandler {
             case Document.CALLBACK_INVALIDATE_VISIBLE_CURSOR:
                 invalidateCursor(payload);
                 break;
-            case Document.CALLBACK_INVALIDATE_TEXT_SELECTION:
+            case Document.CALLBACK_TEXT_SELECTION:
                 invalidateSelection(payload);
                 break;
-            case Document.CALLBACK_INVALIDATE_TEXT_SELECTION_START:
+            case Document.CALLBACK_TEXT_SELECTION_START:
                 invalidateSelectionStart(payload);
                 break;
-            case Document.CALLBACK_INVALIDATE_TEXT_SELECTION_END:
+            case Document.CALLBACK_TEXT_SELECTION_END:
                 invalidateSelectionEnd(payload);
                 break;
         }
