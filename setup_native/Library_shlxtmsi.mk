@@ -13,7 +13,6 @@ $(eval $(call gb_Library_use_external,shlxtmsi,boost_headers))
 
 $(eval $(call gb_Library_add_defs,shlxtmsi,\
 	-U_DLL \
-	-D_WIN32_WINNT=0x0502 \
 ))
 
 $(eval $(call gb_Library_add_cxxflags,shlxtmsi,\

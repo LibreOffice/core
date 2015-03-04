@@ -20,7 +20,6 @@ $(eval $(call gb_Library_add_defs,propertyhdl,\
 	-DWIN32_LEAN_AND_MEAN \
 	-D_UNICODE \
 	-UNOMINMAX \
-	-D_WIN32_WINNT=0x0502 \
 ))
 
 $(eval $(call gb_Library_use_externals,propertyhdl,\

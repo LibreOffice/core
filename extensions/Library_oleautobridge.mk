@@ -24,10 +24,6 @@ $(eval $(call gb_Library_add_ldflags,oleautobridge,\
 	-LIBPATH:$(ATL_LIB) \
 ))
 
-$(eval $(call gb_Library_add_defs,oleautobridge,\
-	-D_WIN32_WINNT=0x0502 \
-))
-
 $(eval $(call gb_Library_use_external,oleautobridge,boost_headers))
 
 $(eval $(call gb_Library_use_libraries,oleautobridge,\

@@ -70,10 +70,6 @@ $(eval $(call gb_Library_use_externals,cairocanvas,\
 
 ifeq ($(OS),WNT)
 
-$(eval $(call gb_Library_add_defs,cairocanvas,\
-	-D_WIN32_WINNT=0x0502 \
-))
-
 $(eval $(call gb_Library_add_exception_objects,cairocanvas,\
 	canvas/source/cairo/cairo_win32_cairo \
 ))

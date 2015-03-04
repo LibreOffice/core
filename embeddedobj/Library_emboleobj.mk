@@ -17,10 +17,6 @@ $(eval $(call gb_Library_set_include,emboleobj,\
 	$$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_add_defs,emboleobj,\
-	-D_WIN32_WINNT=0x0502 \
-))
-
 $(eval $(call gb_Library_use_external,emboleobj,boost_headers))
 
 $(eval $(call gb_Library_use_sdk_api,emboleobj))

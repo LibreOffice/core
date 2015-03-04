@@ -44,10 +44,6 @@ $(eval $(call gb_Library_use_libraries,deploymentgui,\
 
 ifeq ($(OS),WNT)
 
-$(eval $(call gb_Library_add_defs,deploymentgui,\
-    -D_WIN32_WINNT=0x0502 \
-))
-
 $(eval $(call gb_Library_use_system_win32_libs,deploymentgui,\
     ole32 \
 ))
