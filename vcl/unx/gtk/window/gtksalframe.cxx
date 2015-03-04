@@ -3495,6 +3495,8 @@ gboolean GtkSalFrame::signalDraw( GtkWidget*, cairo_t *cr, gpointer frame )
 
     pThis->m_nDuringRender--;
 
+    cairo_surface_flush(cairo_get_target(cr));
+
     return FALSE;
 }
 #endif // GTK_CHECK_VERSION(3,0,0)
