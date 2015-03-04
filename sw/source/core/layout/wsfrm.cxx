@@ -435,13 +435,9 @@ void SwFrm::InvalidatePage( const SwPageFrm *pPage ) const
         }
         pRoot->SetIdleFlags();
 
-        const SwTxtFrm *pTxtFrm = dynamic_cast< const SwTxtFrm * >(this);
-        if (pTxtFrm)
-        {
-            const SwTxtNode *pTxtNode = pTxtFrm->GetTxtNode();
-            if (pTxtNode && pTxtNode->IsGrammarCheckDirty())
-                pRoot->SetNeedGrammarCheck( true );
-        }
+        const SwTxtNode *pTxtNode = dynamic_cast< const SwTxtNode * >(GetDep());
+        if (pTxtNode && pTxtNode->IsGrammarCheckDirty())
+            pRoot->SetNeedGrammarCheck( true );
     }
 }
 
