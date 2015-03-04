@@ -912,9 +912,9 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
 
     cairo_rectangle_int_t translatedRegion = { (int) rControlRegion.Left() - 1, (int) rControlRegion.Top() - 1,
                                                (int) rControlRegion.GetWidth() + 2, (int) rControlRegion.GetHeight() + 2 };
-    cairo_surface_t* surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32,
-                                                          translatedRegion.width, translatedRegion.height);
-    cairo_t *cr = cairo_create(surface);
+
+    cairo_t *cr = getCairoContext();
+    cairo_translate(cr, translatedRegion.x, translatedRegion.y);
 
     gtk_style_context_save(context);
     gtk_style_context_set_state(context, flags);
@@ -963,21 +963,13 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
     }
 
     cairo_destroy(cr); // unref
-    renderAreaToPix(surface, &translatedRegion);
-    cairo_surface_destroy(surface); // unref
+    queue_draw_area(&translatedRegion);
 
     return true;
 }
 
-void GtkSalGraphics::renderAreaToPix( cairo_surface_t *source,
-                                      cairo_rectangle_int_t *region)
+void GtkSalGraphics::queue_draw_area(cairo_rectangle_int_t *region)
 {
-    cairo_t *cr = getCairoContext();
-    cairo_set_source_surface(cr, source, region->x, region->y);
-    cairo_rectangle(cr, region->x, region->y, region->width, region->height);
-    cairo_fill(cr);
-    cairo_destroy(cr);
-
     if (!mpFrame->isDuringRender())
         gtk_widget_queue_draw_area(mpFrame->getWindow(), region->x, region->y, region->width, region->height);
 }
