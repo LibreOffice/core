@@ -285,12 +285,9 @@ comphelper::DocPasswordVerifierResult PasswordVerifier::verifyPassword( const OU
     return rEncryptionData.hasElements() ? comphelper::DocPasswordVerifierResult_OK : comphelper::DocPasswordVerifierResult_WRONG_PASSWORD;
 }
 
-comphelper::DocPasswordVerifierResult PasswordVerifier::verifyEncryptionData( const Sequence<NamedValue>& rEncryptionData )
+comphelper::DocPasswordVerifierResult PasswordVerifier::verifyEncryptionData( const Sequence<NamedValue>&  )
 {
-    comphelper::DocPasswordVerifierResult aResult = comphelper::DocPasswordVerifierResult_WRONG_PASSWORD;
-    if (DocumentDecryption::checkEncryptionData(rEncryptionData))
-        aResult = comphelper::DocPasswordVerifierResult_OK;
-    return aResult;
+    return comphelper::DocPasswordVerifierResult_WRONG_PASSWORD;
 }
 
 } // namespace

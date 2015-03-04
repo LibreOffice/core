@@ -44,7 +44,6 @@ protected:
     virtual bool        implReadRecordHeader( BinaryInputStream& rBaseStrm, sal_Int64& ornRecId, sal_Int64& ornRecSize ) SAL_OVERRIDE;
     virtual void        implWriteExtHeader() SAL_OVERRIDE;
     virtual void        implDumpRecordBody() SAL_OVERRIDE;
-    void                implDumpClientAnchor();
 
 private:
     sal_uInt32          dumpDffSimpleColor( const String& rName );

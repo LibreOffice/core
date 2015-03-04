@@ -1089,7 +1089,6 @@ void ChartExport::exportPlotArea( )
                     }
                 case chart::TYPEID_OFPIE:
                     {
-                        exportOfPieChart( xChartType );
                         break;
                     }
                 case chart::TYPEID_DOUGHNUT:
@@ -1442,11 +1441,6 @@ void ChartExport::exportLineChart( Reference< chart2::XChartType > xChartType )
     exportAxesId( nAttachedAxis );
 
     pFS->endElement( FSNS( XML_c, nTypeId ) );
-}
-
-void ChartExport::exportOfPieChart( Reference< chart2::XChartType > /*xChartType*/ )
-{
-    // TODO:
 }
 
 void ChartExport::exportPieChart( Reference< chart2::XChartType > xChartType )

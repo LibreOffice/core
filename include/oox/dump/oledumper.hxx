@@ -115,14 +115,13 @@ private:
     sal_uInt16          dumpPropertyContents( sal_Int32 nPropId );
     void                dumpPropertyValue( sal_Int32 nPropId, sal_uInt16 nBaseType );
     void                dumpPropertyVector( sal_Int32 nPropId, sal_uInt16 nBaseType );
-    void                dumpPropertyArray( sal_Int32 nPropId, sal_uInt16 nBaseType );
 
     sal_uInt16          dumpPropertyType();
     void                dumpBlob( sal_Int32 nPropId, const String& rName );
-    OUString     dumpString8( const String& rName );
-    OUString     dumpCharArray8( const String& rName, sal_Int32 nLen );
-    OUString     dumpString16( const String& rName );
-    OUString     dumpCharArray16( const String& rName, sal_Int32 nLen );
+    OUString            dumpString8( const String& rName );
+    OUString            dumpCharArray8( const String& rName, sal_Int32 nLen );
+    OUString            dumpString16( const String& rName );
+    OUString            dumpCharArray16( const String& rName, sal_Int32 nLen );
     bool                dumpTypedProperty( const String& rName, sal_uInt16 nExpectedType );
     void                dumpHlinks( sal_Int32 nSize );
 

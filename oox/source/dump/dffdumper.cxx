@@ -96,7 +96,6 @@ void DffStreamObject::implDumpRecordBody()
         break;
 
         case DFF_ID_CLIENTANCHOR:
-            implDumpClientAnchor();
         break;
 
         case DFF_ID_DG:
@@ -147,10 +146,6 @@ void DffStreamObject::implDumpRecordBody()
             dumpDffSimpleColor( "3d-color" );
         break;
     }
-}
-
-void DffStreamObject::implDumpClientAnchor()
-{
 }
 
 sal_uInt32 DffStreamObject::dumpDffSimpleColor( const String& rName )

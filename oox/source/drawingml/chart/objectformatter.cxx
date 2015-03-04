@@ -655,11 +655,6 @@ public:
                             ObjectFormatterData& rData,
                             const AutoFormatEntry* pAutoFormatEntry );
 
-    /** Converts effect formatting to the passed property set. */
-    void                convertFormatting(
-                            ShapePropertyMap& rPropMap,
-                            const ModelRef< Shape >& rxShapeProp,
-                            sal_Int32 nSeriesIdx ) const;
 };
 
 class TextFormatter : public DetailFormatterBase
@@ -902,10 +897,6 @@ EffectFormatter::EffectFormatter( ObjectFormatterData& rData, const AutoFormatEn
     DetailFormatterBase( rData, pAutoFormatEntry )
 {
 }
-//TODO :
-void EffectFormatter::convertFormatting( ShapePropertyMap& /*rPropMap*/, const ModelRef< Shape >& /*rxShapeProp*/, sal_Int32 /*nSeriesIdx*/ ) const
-{
-}
 
 namespace {
 
@@ -972,7 +963,6 @@ void ObjectTypeFormatter::convertFrameFormatting( PropertySet& rPropSet, const M
     maLineFormatter.convertFormatting( aPropMap, rxShapeProp, nSeriesIdx );
     if( mrEntry.mbIsFrame )
         maFillFormatter.convertFormatting( aPropMap, rxShapeProp, pPicOptions, nSeriesIdx );
-    maEffectFormatter.convertFormatting( aPropMap, rxShapeProp, nSeriesIdx );
     rPropSet.setProperties( aPropMap );
 }
 
@@ -997,7 +987,6 @@ void ObjectTypeFormatter::convertAutomaticFill( PropertySet& rPropSet, sal_Int32
     ShapePropertyMap aPropMap( mrModelObjHelper, *mrEntry.mpPropInfo );
     ModelRef< Shape > xShapeProp;
     maFillFormatter.convertFormatting( aPropMap, xShapeProp, 0, nSeriesIdx );
-    maEffectFormatter.convertFormatting( aPropMap, xShapeProp, nSeriesIdx );
     rPropSet.setProperties( aPropMap );
 }
 

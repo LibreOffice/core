@@ -686,14 +686,6 @@ void ComCtlModelBase::convertProperties( PropertyMap& rPropMap, const ControlCon
     ControlModelBase::convertProperties( rPropMap, rConv );
 }
 
-void ComCtlModelBase::importCommonExtraData( BinaryInputStream& /*rInStrm*/ )
-{
-}
-
-void ComCtlModelBase::importCommonTrailingData( BinaryInputStream& /*rInStrm*/ )
-{
-}
-
 sal_uInt32 ComCtlModelBase::getDataPartId() const
 {
     switch( mnVersion )
@@ -736,11 +728,7 @@ bool ComCtlModelBase::importCommonPart( BinaryInputStream& rInStrm, sal_uInt32 n
     {
         rInStrm.skip( 4 );
         mnFlags = rInStrm.readuInt32();
-        // implementations may read less than the exact amount of data
-        importCommonExtraData( rInStrm );
         rInStrm.seek( nEndPos );
-        // implementations must read the exact amount of data, stream must point to its end afterwards
-        importCommonTrailingData( rInStrm );
         return !rInStrm.isEof();
     }
     return false;

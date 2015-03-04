@@ -194,11 +194,6 @@ DocumentDecryption::DocumentDecryption(oox::ole::OleStorage& rOleStorage, Refere
     mCryptoType(UNKNOWN)
 {}
 
-bool DocumentDecryption::checkEncryptionData(const Sequence<NamedValue>& /*rEncryptionData*/)
-{
-    return false;
-}
-
 bool DocumentDecryption::generateEncryptionKey(const OUString& rPassword)
 {
     if (mEngine.get())
