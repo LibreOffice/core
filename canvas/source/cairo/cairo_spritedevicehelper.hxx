@@ -52,8 +52,6 @@ namespace cairocanvas
         void disposing();
 
         // XWindowGraphicDevice
-        ::sal_Int32 createBuffers( ::sal_Int32 nBuffers );
-        void        destroyBuffers(  );
         bool  showBuffer( bool, bool );
         bool  switchBuffer( bool, bool bUpdateAll );
 

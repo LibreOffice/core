@@ -231,16 +231,6 @@ namespace vclcanvas
         // BitmapCanvasHelper functionality
         // ================================
 
-        void copyRect( const ::com::sun::star::rendering::XCanvas*          rCanvas,
-                       const ::com::sun::star::uno::Reference<
-                               ::com::sun::star::rendering::XBitmapCanvas >&    sourceCanvas,
-                       const ::com::sun::star::geometry::RealRectangle2D&   sourceRect,
-                       const ::com::sun::star::rendering::ViewState&        sourceViewState,
-                       const ::com::sun::star::rendering::RenderState&      sourceRenderState,
-                       const ::com::sun::star::geometry::RealRectangle2D&   destRect,
-                       const ::com::sun::star::rendering::ViewState&        destViewState,
-                       const ::com::sun::star::rendering::RenderState&      destRenderState );
-
         ::com::sun::star::geometry::IntegerSize2D getSize();
 
         ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmapCanvas > queryBitmapCanvas();
@@ -292,11 +282,6 @@ namespace vclcanvas
         int setupOutDevState( const ::com::sun::star::rendering::ViewState&     viewState,
                               const ::com::sun::star::rendering::RenderState&   renderState,
                               ColorType                                         eColorType ) const;
-
-        /** Called from XCanvas base classes, to notify that content
-            is _about_ to change
-        */
-        void modifying() {}
 
         bool hasAlpha() const { return mbHaveAlpha; }
 

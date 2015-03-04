@@ -55,16 +55,6 @@ namespace oglcanvas
         // BitmapCanvasHelper functionality
         // ================================
 
-        void copyRect( const ::com::sun::star::rendering::XCanvas*          rCanvas,
-                       const ::com::sun::star::uno::Reference<
-                            ::com::sun::star::rendering::XBitmapCanvas >&   sourceCanvas,
-                       const ::com::sun::star::geometry::RealRectangle2D&   sourceRect,
-                       const ::com::sun::star::rendering::ViewState&        sourceViewState,
-                       const ::com::sun::star::rendering::RenderState&      sourceRenderState,
-                       const ::com::sun::star::geometry::RealRectangle2D&   destRect,
-                       const ::com::sun::star::rendering::ViewState&        destViewState,
-                       const ::com::sun::star::rendering::RenderState&      destRenderState );
-
         ::com::sun::star::geometry::IntegerSize2D getSize() { return maSize; }
 
         ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmapCanvas > queryBitmapCanvas();
@@ -77,21 +67,11 @@ namespace oglcanvas
             getData( ::com::sun::star::rendering::IntegerBitmapLayout&      bitmapLayout,
                      const ::com::sun::star::geometry::IntegerRectangle2D&  rect );
 
-        void setData( const ::com::sun::star::uno::Sequence< sal_Int8 >&        data,
-                      const ::com::sun::star::rendering::IntegerBitmapLayout&   bitmapLayout,
-                      const ::com::sun::star::geometry::IntegerRectangle2D&     rect );
-
-        void setPixel( const ::com::sun::star::uno::Sequence< sal_Int8 >&       color,
-                       const ::com::sun::star::rendering::IntegerBitmapLayout&  bitmapLayout,
-                       const ::com::sun::star::geometry::IntegerPoint2D&        pos );
-
         ::com::sun::star::uno::Sequence< sal_Int8 >
             getPixel( ::com::sun::star::rendering::IntegerBitmapLayout& bitmapLayout,
                       const ::com::sun::star::geometry::IntegerPoint2D& pos );
 
         ::com::sun::star::rendering::IntegerBitmapLayout getMemoryLayout();
-
-        bool hasAlpha() const;
 
     private:
         ::com::sun::star::geometry::IntegerSize2D maSize;

@@ -149,11 +149,6 @@ namespace vclcanvas
         return uno::Reference< rendering::XVolatileBitmap >();
     }
 
-    bool DeviceHelper::hasFullScreenMode()
-    {
-        return false;
-    }
-
     bool DeviceHelper::enterFullScreenMode( bool bEnter )
     {
         (void)bEnter;

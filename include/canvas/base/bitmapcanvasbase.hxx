@@ -77,9 +77,7 @@ namespace canvas
 
         virtual sal_Bool SAL_CALL hasAlpha(  ) throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
         {
-            typename BaseType::MutexType aGuard( BaseType::m_aMutex );
-
-            return BaseType::maCanvasHelper.hasAlpha();
+            return sal_True;
         }
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmap > SAL_CALL getScaledBitmap( const ::com::sun::star::geometry::RealSize2D& newSize,
@@ -120,16 +118,6 @@ namespace canvas
             typename BaseType::BaseType::MutexType aGuard( BaseType::m_aMutex );
 
             BaseType::BaseType::mbSurfaceDirty = true;
-            BaseType::BaseType::maCanvasHelper.modifying();
-
-            BaseType::BaseType::maCanvasHelper.copyRect( this,
-                                               sourceCanvas,
-                                               sourceRect,
-                                               sourceViewState,
-                                               sourceRenderState,
-                                               destRect,
-                                               destViewState,
-                                               destRenderState );
         }
     };
 }

@@ -49,7 +49,6 @@ namespace vclcanvas
         void disposing();
 
         ::sal_Int32 createBuffers( ::sal_Int32 nBuffers );
-        void        destroyBuffers(  );
         bool  showBuffer( bool bWindowVisible, bool bUpdateAll );
         bool  switchBuffer( bool bWindowVisible, bool bUpdateAll );
 

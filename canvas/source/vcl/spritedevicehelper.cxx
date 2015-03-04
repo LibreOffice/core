@@ -68,12 +68,6 @@ namespace vclcanvas
         return 1;
     }
 
-    void SpriteDeviceHelper::destroyBuffers()
-    {
-        // TODO(F3): implement XBufferStrategy interface. For now, we
-        // _always_ will have exactly one backbuffer
-    }
-
     bool SpriteDeviceHelper::showBuffer( bool, bool )
     {
         OSL_FAIL("Not supposed to be called, handled by SpriteCanvas");

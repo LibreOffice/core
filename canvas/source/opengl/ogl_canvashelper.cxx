@@ -972,10 +972,6 @@ namespace oglcanvas
                 mpDevice->getDeviceColorSpace()->convertToARGB(renderState.DeviceColor)[0];
     }
 
-    void CanvasHelper::flush() const
-    {
-    }
-
     bool CanvasHelper::renderRecordedActions() const
     {
         std::vector<Action>::const_iterator aCurr(mpRecordedActions->begin());

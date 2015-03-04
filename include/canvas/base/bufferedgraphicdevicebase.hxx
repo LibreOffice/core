@@ -105,16 +105,11 @@ namespace canvas
         {
             tools::verifyRange( nBuffers, (sal_Int32)1 );
 
-            MutexType aGuard( BaseType::m_aMutex );
-
-            return BaseType::maDeviceHelper.createBuffers( nBuffers );
+            return 1;
         }
 
         virtual void SAL_CALL destroyBuffers(  ) throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
         {
-            MutexType aGuard( BaseType::m_aMutex );
-
-            BaseType::maDeviceHelper.destroyBuffers();
         }
 
         virtual sal_Bool SAL_CALL showBuffer( sal_Bool bUpdateAll )

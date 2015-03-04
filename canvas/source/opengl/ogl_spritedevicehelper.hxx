@@ -72,11 +72,6 @@ namespace oglcanvas
             const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice >&  rDevice,
             const ::com::sun::star::geometry::IntegerSize2D&                                        size );
 
-        bool hasFullScreenMode(  );
-        bool enterFullScreenMode( bool bEnter );
-
-        ::sal_Int32 createBuffers( ::sal_Int32 nBuffers );
-        void        destroyBuffers(  );
         bool  showBuffer( bool bIsVisible, bool bUpdateAll );
         bool  switchBuffer( bool bIsVisible, bool bUpdateAll );
 

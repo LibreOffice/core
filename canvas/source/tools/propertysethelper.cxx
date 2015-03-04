@@ -143,12 +143,6 @@ namespace canvas
             throwUnknown( aPropertyName );
     }
 
-    void PropertySetHelper::removePropertyChangeListener( const OUString&                                  /*aPropertyName*/,
-                                                          const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/ )
-    {
-        // ignore request, no listener added in the first place
-    }
-
     void PropertySetHelper::addVetoableChangeListener( const OUString&                                  aPropertyName,
                                                        const uno::Reference< beans::XVetoableChangeListener >& /*xListener*/ )
     {
@@ -158,11 +152,6 @@ namespace canvas
             throwUnknown( aPropertyName );
     }
 
-    void PropertySetHelper::removeVetoableChangeListener( const OUString&                                  /*aPropertyName*/,
-                                                          const uno::Reference< beans::XVetoableChangeListener >& /*xListener*/ )
-    {
-        // ignore request, no listener added in the first place
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

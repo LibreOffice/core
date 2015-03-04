@@ -55,7 +55,7 @@ namespace canvas
                                                      rect );
         }
 
-        virtual void SAL_CALL setData( const ::com::sun::star::uno::Sequence< sal_Int8 >&      data,
+        virtual void SAL_CALL setData( const ::com::sun::star::uno::Sequence< sal_Int8 >&,
                                        const ::com::sun::star::rendering::IntegerBitmapLayout& bitmapLayout,
                                        const ::com::sun::star::geometry::IntegerRectangle2D&   rect ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
@@ -67,12 +67,9 @@ namespace canvas
             typename Base::MutexType aGuard( Base::m_aMutex );
 
             Base::mbSurfaceDirty = true;
-            Base::maCanvasHelper.modifying();
-
-            Base::maCanvasHelper.setData( data, bitmapLayout, rect );
         }
 
-        virtual void SAL_CALL setPixel( const ::com::sun::star::uno::Sequence< sal_Int8 >&      color,
+        virtual void SAL_CALL setPixel( const ::com::sun::star::uno::Sequence< sal_Int8 >&,
                                         const ::com::sun::star::rendering::IntegerBitmapLayout& bitmapLayout,
                                         const ::com::sun::star::geometry::IntegerPoint2D&       pos ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
@@ -84,9 +81,6 @@ namespace canvas
             typename Base::MutexType aGuard( Base::m_aMutex );
 
             Base::mbSurfaceDirty = true;
-            Base::maCanvasHelper.modifying();
-
-            Base::maCanvasHelper.setPixel( color, bitmapLayout, pos );
         }
 
         virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getPixel( ::com::sun::star::rendering::IntegerBitmapLayout& bitmapLayout,
