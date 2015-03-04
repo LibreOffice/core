@@ -3414,7 +3414,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                                 // Double click did not select any word: try to
                                 // select the current cell in case we are in a
                                 // table.
-                                rSh.SelectCell();
+                                rSh.SelTblBox();
                         }
                         g_bHoldSelection = true;
                         return;

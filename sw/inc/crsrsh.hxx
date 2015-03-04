@@ -157,8 +157,7 @@ public:
         SCROLLWIN   = (1 << 1),     ///< scroll window
         CHKRANGE    = (1 << 2),     ///< check overlapping PaMs
         NOCALRECT   = (1 << 3),     ///< don't recalculate CharRect
-        READONLY    = (1 << 4),     ///< make visible in spite of Readonly
-        SELECTCELL  = (1 << 5)      ///< Create table cursor even if we don't span over multiple cells.
+        READONLY    = (1 << 4)      ///< make visible in spite of Readonly
     };
 
 private:
@@ -730,8 +729,6 @@ public:
     bool GoStartSentence();
     bool GoEndSentence();
     bool SelectWord( const Point* pPt = 0 );
-    /// Creates table cursor even if we don't span over multiple cells.
-    void SelectCell();
     bool ExpandToSentenceBorders();
 
     // get position from current cursor
