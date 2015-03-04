@@ -128,8 +128,10 @@ public:
 
     inline sal_uInt16 GetPos(const SwFmt *p) const
         { return SwVectorModifyBase<Value>::GetPos( static_cast<Value>( const_cast<SwFmt*>( p ) ) ); }
-    inline bool Contains(const SwFmt *p) const
-        { return SwVectorModifyBase<Value>::Contains( static_cast<Value>( const_cast<SwFmt*>( p ) ) ); }
+    inline bool Contains(const SwFmt *p) const {
+        Value p2 = dynamic_cast<Value>(const_cast<SwFmt*>(p));
+        return p2 != nullptr && SwVectorModifyBase<Value>::Contains(p2);
+    }
 };
 
 class SwGrfFmtColls : public SwFmtsModifyBase<SwGrfFmtColl*>
