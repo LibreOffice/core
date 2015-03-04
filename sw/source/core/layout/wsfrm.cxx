@@ -212,7 +212,7 @@ void SwTxtFrm::CheckDirection( bool bVert )
 {
     const SwViewShell *pSh = getRootFrm()->GetCurrShell();
     const bool bBrowseMode = pSh && pSh->GetViewOptions()->getBrowseMode();
-    CheckDir( GetTxtNode()->GetSwAttrSet().GetFrmDir().GetValue(), bVert,
+    CheckDir( GetNode()->GetSwAttrSet().GetFrmDir().GetValue(), bVert,
               true, bBrowseMode );
 }
 
