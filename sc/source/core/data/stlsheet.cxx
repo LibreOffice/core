@@ -225,11 +225,18 @@ SfxItemSet& ScStyleSheet::GetItemSet()
     {
         if ( !pSet->Count() )
         {
-            ScDocument* pDoc = static_cast<ScStyleSheetPool&>(GetPool()).GetDocument();
-            if ( pDoc )
-            {
-                sal_uLong nNumFmt = pDoc->GetFormatTable()->GetStandardFormat( css::util::NumberFormat::CURRENCY,ScGlobal::eLnge );
-                pSet->Put( SfxUInt32Item( ATTR_VALUE_FORMAT, nNumFmt ) );
+            // Hack to work around that when this code is called from
+            // ~ScStyleSheetPool -> ~SfxStyleSheetPool, GetPool() is no longer
+            // an ScStyleSheetPool:
+            ScStyleSheetPool * pool = dynamic_cast<ScStyleSheetPool *>(
+                &GetPool());
+            if (pool != nullptr) {
+                ScDocument* pDoc = pool->GetDocument();
+                if ( pDoc )
+                {
+                    sal_uLong nNumFmt = pDoc->GetFormatTable()->GetStandardFormat( css::util::NumberFormat::CURRENCY,ScGlobal::eLnge );
+                    pSet->Put( SfxUInt32Item( ATTR_VALUE_FORMAT, nNumFmt ) );
+                }
             }
         }
     }
