@@ -61,11 +61,9 @@ typedef struct _tagOFNA {
    LPEDITMENU   lpEditInfo;
    LPCSTR       lpstrPrompt;
 #endif
-#if (_WIN32_WINNT >= 0x0500)
    void *       pvReserved;
    DWORD        dwReserved;
    DWORD        FlagsEx;
-#endif // (_WIN32_WINNT >= 0x0500)
 } _OPENFILENAMEA, *_LPOPENFILENAMEA;
 
 typedef struct _tagOFNW {
@@ -89,11 +87,9 @@ typedef struct _tagOFNW {
    LPARAM       lCustData;
    LPOFNHOOKPROC lpfnHook;
    LPCWSTR      lpTemplateName;
-#if (_WIN32_WINNT >= 0x0500)
    void *       pvReserved;
    DWORD        dwReserved;
    DWORD        FlagsEx;
-#endif // (_WIN32_WINNT >= 0x0500)
 } _OPENFILENAMEW, *_LPOPENFILENAMEW;
 
 #ifdef UNICODE
