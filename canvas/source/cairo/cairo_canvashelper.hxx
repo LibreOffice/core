@@ -87,10 +87,6 @@ namespace cairocanvas
         // XCanvas (only providing, not implementing the
         // interface. Also note subtle method parameter differences)
         void clear();
-        void drawPoint( const ::com::sun::star::rendering::XCanvas*     pCanvas,
-                        const ::com::sun::star::geometry::RealPoint2D&  aPoint,
-                        const ::com::sun::star::rendering::ViewState&   viewState,
-                        const ::com::sun::star::rendering::RenderState& renderState );
         void drawLine( const ::com::sun::star::rendering::XCanvas*      pCanvas,
                        const ::com::sun::star::geometry::RealPoint2D&   aStartPoint,
                        const ::com::sun::star::geometry::RealPoint2D&   aEndPoint,
@@ -213,16 +209,6 @@ namespace cairocanvas
         // BitmapCanvasHelper functionality
         // ================================
 
-        void copyRect( const ::com::sun::star::rendering::XCanvas*          pCanvas,
-                       const ::com::sun::star::uno::Reference<
-                               ::com::sun::star::rendering::XBitmapCanvas >&    sourceCanvas,
-                       const ::com::sun::star::geometry::RealRectangle2D&   sourceRect,
-                       const ::com::sun::star::rendering::ViewState&        sourceViewState,
-                       const ::com::sun::star::rendering::RenderState&      sourceRenderState,
-                       const ::com::sun::star::geometry::RealRectangle2D&   destRect,
-                       const ::com::sun::star::rendering::ViewState&        destViewState,
-                       const ::com::sun::star::rendering::RenderState&      destRenderState );
-
         ::com::sun::star::geometry::IntegerSize2D getSize();
 
         ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmap >
@@ -233,24 +219,11 @@ namespace cairocanvas
             getData( ::com::sun::star::rendering::IntegerBitmapLayout&      bitmapLayout,
                      const ::com::sun::star::geometry::IntegerRectangle2D&  rect );
 
-        void setData( const ::com::sun::star::uno::Sequence< sal_Int8 >&         data,
-                      const ::com::sun::star::rendering::IntegerBitmapLayout&    bitmapLayout,
-                      const ::com::sun::star::geometry::IntegerRectangle2D&      rect );
-
-        void setPixel( const ::com::sun::star::uno::Sequence< sal_Int8 >&        color,
-                       const ::com::sun::star::rendering::IntegerBitmapLayout&   bitmapLayout,
-                       const ::com::sun::star::geometry::IntegerPoint2D&         pos );
-
         ::com::sun::star::uno::Sequence< sal_Int8 >
             getPixel( ::com::sun::star::rendering::IntegerBitmapLayout& bitmapLayout,
                       const ::com::sun::star::geometry::IntegerPoint2D& pos );
 
         ::com::sun::star::rendering::IntegerBitmapLayout getMemoryLayout();
-
-        /** Called from XCanvas base classes, to notify that content
-            is _about_ to change
-        */
-        void modifying() {}
 
         bool hasAlpha() const { return mbHaveAlpha; }
 

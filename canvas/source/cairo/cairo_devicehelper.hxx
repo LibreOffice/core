@@ -77,8 +77,6 @@ namespace cairocanvas
         ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XVolatileBitmap > createVolatileAlphaBitmap(
             const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice >&  rDevice,
             const ::com::sun::star::geometry::IntegerSize2D&                                        size );
-        bool hasFullScreenMode(  );
-        bool enterFullScreenMode( bool bEnter );
 
         ::com::sun::star::uno::Any isAccelerated() const;
         ::com::sun::star::uno::Any getDeviceHandle() const;

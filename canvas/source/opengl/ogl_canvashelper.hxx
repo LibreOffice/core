@@ -181,14 +181,6 @@ namespace oglcanvas
         ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice >
             getDevice() { return css::uno::Reference< css::rendering::XGraphicDevice >(mpDevice); }
 
-        // Flush drawing queue to screen
-        void                    flush() const;
-
-        /** Called from XCanvas base classes, to notify that content
-            is _about_ to change
-        */
-        void modifying() {}
-
         /** Write out recorded actions
          */
         bool renderRecordedActions() const;
