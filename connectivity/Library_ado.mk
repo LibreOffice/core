@@ -36,12 +36,6 @@ $(eval $(call gb_Library_use_system_win32_libs,ado,\
 	uuid \
 ))
 
-ifneq (,$(filter $(WINDOWS_SDK_VERSION),80 81))
-$(eval $(call gb_Library_add_defs,ado,\
-	-DNTDDI_VERSION=0x0601 \
-))
-endif
-
 $(eval $(call gb_Library_use_libraries,ado,\
 	cppu \
 	cppuhelper \

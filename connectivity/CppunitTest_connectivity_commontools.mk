@@ -29,12 +29,6 @@ $(eval $(call gb_CppunitTest_add_cxxflags,connectivity_commontools,\
 endif
 endif
 
-ifeq ($(WINDOWS_SDK_VERSION),80)
-$(eval $(call gb_CppunitTest_add_defs,connectivity_commontools,\
-	-DNTDDI_VERSION=0x0601 \
-))
-endif
-
 # In mergedlibs mode we have multiply-defined symbols, which Visual Studio
 # does not like. There is no good solution, so just force it.
 ifeq ($(COM),MSC)
