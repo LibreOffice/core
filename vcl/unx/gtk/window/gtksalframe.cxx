@@ -3406,45 +3406,14 @@ void GtkSalFrame::damaged (const basegfx::B2IBox& rDamageRect)
 // we like 8byte aligned, it likes 4 - most odd.
 void GtkSalFrame::renderArea( cairo_t *cr, cairo_rectangle_t *area )
 {
-    if( !m_aFrame.get() )
-        return;
-
-    basebmp::RawMemorySharedArray data = m_aFrame->getBuffer();
-    basegfx::B2IVector size = m_aFrame->getSize();
-
-    long ax = area->x;
-    long ay = area->y;
-    long awidth = area->width;
-    long aheight = area->height;
-
-    // Sanity check bounds - we get some odd things here.
-    if( ax >= size.getX() )
-        ax = size.getX() - 1;
-    if( ay >= size.getY() )
-        ay = size.getY() - 1;
-    if( ax < 0 )
-    {
-        ax = 0;
-        awidth += ax;
-    }
-    if( ay < 0 )
-    {
-        ay = 0;
-        aheight += ay;
-    }
-    if( ax + awidth > size.getX() )
-        awidth = size.getX() - ax;
-    if( ay + aheight > size.getY() )
-        aheight = size.getY() - ay;
-
     cairo_save( cr );
 
     cairo_surface_t *pSurface = cairo_get_target(getCairoContext());
-
     cairo_set_operator( cr, CAIRO_OPERATOR_OVER );
     cairo_set_source_surface( cr, pSurface, 0, 0 );
-    cairo_rectangle( cr, ax, ay, awidth, aheight );
+    cairo_rectangle( cr, area->x, area->y, area->width, area->height );
     cairo_fill( cr );
+
     cairo_restore( cr );
 
     // Render red rectangles to show what was re-rendered ...
@@ -3453,7 +3422,7 @@ void GtkSalFrame::renderArea( cairo_t *cr, cairo_rectangle_t *area )
         cairo_save( cr );
         cairo_set_line_width( cr, 1.0 );
         cairo_set_source_rgb( cr, 1.0, 0, 0 );
-        cairo_rectangle( cr, ax + 1.0, ay + 1.0, awidth - 2.0, aheight - 2.0 );
+        cairo_rectangle( cr, area->x + 1.0, area->y + 1.0, area->width - 2.0, area->height - 2.0 );
         cairo_stroke( cr );
         cairo_restore( cr );
     }
