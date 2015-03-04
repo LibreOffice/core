@@ -358,7 +358,7 @@ namespace rptui
         impl_conditionCountChanged();
     }
 
-    void ConditionalFormattingDialog::applyCommand( size_t _nCondIndex, sal_uInt16 _nCommandId, const ::Color _aColor )
+    void ConditionalFormattingDialog::applyCommand(size_t _nCondIndex, sal_uInt16 _nCommandId, const ::Color& rColor)
     {
         OSL_PRECOND( _nCommandId, "ConditionalFormattingDialog::applyCommand: illegal command id!" );
         try
@@ -374,7 +374,7 @@ namespace rptui
             aArgs[1].Value <<= VCLUnoHelper::GetInterface(this);
 
             aArgs[2].Name = PROPERTY_FONTCOLOR;
-            aArgs[2].Value <<= (sal_uInt32)_aColor.GetColor();
+            aArgs[2].Value <<= (sal_uInt32)rColor.GetColor();
 
             // we use this way to create undo actions
             m_rController.executeUnChecked(_nCommandId,aArgs);

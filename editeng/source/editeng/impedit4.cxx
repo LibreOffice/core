@@ -86,21 +86,21 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::linguistic2;
 
 
-EditPaM ImpEditEngine::Read( SvStream& rInput, const OUString& rBaseURL, EETextFormat eFormat, EditSelection aSel, SvKeyValueIterator* pHTTPHeaderAttrs )
+EditPaM ImpEditEngine::Read(SvStream& rInput, const OUString& rBaseURL, EETextFormat eFormat, const EditSelection& rSel, SvKeyValueIterator* pHTTPHeaderAttrs)
 {
     bool _bUpdate = GetUpdateMode();
     SetUpdateMode( false );
     EditPaM aPaM;
     if ( eFormat == EE_FORMAT_TEXT )
-        aPaM = ReadText( rInput, aSel );
+        aPaM = ReadText( rInput, rSel );
     else if ( eFormat == EE_FORMAT_RTF )
-        aPaM = ReadRTF( rInput, aSel );
+        aPaM = ReadRTF( rInput, rSel );
     else if ( eFormat == EE_FORMAT_XML )
-        aPaM = ReadXML( rInput, aSel );
+        aPaM = ReadXML( rInput, rSel );
     else if ( eFormat == EE_FORMAT_HTML )
-        aPaM = ReadHTML( rInput, rBaseURL, aSel, pHTTPHeaderAttrs );
+        aPaM = ReadHTML( rInput, rBaseURL, rSel, pHTTPHeaderAttrs );
     else if ( eFormat == EE_FORMAT_BIN)
-        aPaM = ReadBin( rInput, aSel );
+        aPaM = ReadBin( rInput, rSel );
     else
     {
         OSL_FAIL( "Read: Unknown Format" );
@@ -199,7 +199,7 @@ EditPaM ImpEditEngine::ReadBin( SvStream& rInput, EditSelection aSel )
     return aLastPaM;
 }
 
-void ImpEditEngine::Write( SvStream& rOutput, EETextFormat eFormat, EditSelection aSel )
+void ImpEditEngine::Write(SvStream& rOutput, EETextFormat eFormat, const EditSelection& rSel)
 {
     if ( !rOutput.IsWritable() )
         rOutput.SetError( SVSTREAM_WRITE_ERROR );
@@ -207,15 +207,15 @@ void ImpEditEngine::Write( SvStream& rOutput, EETextFormat eFormat, EditSelectio
     if ( !rOutput.GetError() )
     {
         if ( eFormat == EE_FORMAT_TEXT )
-            WriteText( rOutput, aSel );
+            WriteText( rOutput, rSel );
         else if ( eFormat == EE_FORMAT_RTF )
-            WriteRTF( rOutput, aSel );
+            WriteRTF( rOutput, rSel );
         else if ( eFormat == EE_FORMAT_XML )
-            WriteXML( rOutput, aSel );
+            WriteXML( rOutput, rSel );
         else if ( eFormat == EE_FORMAT_HTML )
-            WriteHTML( rOutput, aSel );
+            WriteHTML( rOutput, rSel );
         else if ( eFormat == EE_FORMAT_BIN)
-            WriteBin( rOutput, aSel );
+            WriteBin( rOutput, rSel );
         else
         {
             OSL_FAIL( "Write: Unknown Format" );
@@ -290,17 +290,17 @@ static void lcl_FindValidAttribs( ItemList& rLst, ContentNode* pNode, sal_Int32 
     }
 }
 
-sal_uInt32 ImpEditEngine::WriteBin( SvStream& rOutput, EditSelection aSel, bool bStoreUnicodeStrings )
+sal_uInt32 ImpEditEngine::WriteBin(SvStream& rOutput, const EditSelection& rSel, bool bStoreUnicodeStrings)
 {
-    std::unique_ptr<EditTextObject> xObj(CreateTextObject(aSel, NULL));
+    std::unique_ptr<EditTextObject> xObj(CreateTextObject(rSel, NULL));
     xObj->mpImpl->StoreUnicodeStrings(bStoreUnicodeStrings);
     xObj->Store(rOutput);
     return 0;
 }
 
-sal_uInt32 ImpEditEngine::WriteXML( SvStream& rOutput, EditSelection aSel )
+sal_uInt32 ImpEditEngine::WriteXML(SvStream& rOutput, const EditSelection& rSel)
 {
-    ESelection aESel = CreateESel( aSel );
+    ESelection aESel = CreateESel(rSel);
 
     SvxWriteXML( *GetEditEnginePtr(), rOutput, aESel );
 
@@ -1013,9 +1013,9 @@ EditTextObject* ImpEditEngine::CreateTextObject()
     return CreateTextObject( aCompleteSelection );
 }
 
-EditTextObject* ImpEditEngine::CreateTextObject( EditSelection aSel )
+EditTextObject* ImpEditEngine::CreateTextObject(const EditSelection& rSel)
 {
-    return CreateTextObject( aSel, GetEditTextObjectPool(), aStatus.AllowBigObjects(), nBigTextObjectStart );
+    return CreateTextObject(rSel, GetEditTextObjectPool(), aStatus.AllowBigObjects(), nBigTextObjectStart);
 }
 
 EditTextObject* ImpEditEngine::CreateTextObject( EditSelection aSel, SfxItemPool* pPool, bool bAllowBigObjects, sal_Int32 nBigObjectStart )

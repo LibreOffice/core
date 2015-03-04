@@ -291,7 +291,7 @@ bool createUrlRecord(
     ::std::vector< OUString > DecodePasswords( const OUString& aLine, const OUString& aMasterPassword )
                                                         throw(::com::sun::star::uno::RuntimeException);
 
-    OUString EncodePasswords( ::std::vector< OUString > lines, const OUString& aMasterPassword )
+    OUString EncodePasswords(const std::vector< OUString >& lines, const OUString& aMasterPassword )
                                                         throw(::com::sun::star::uno::RuntimeException);
 
 public:

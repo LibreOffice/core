@@ -193,7 +193,7 @@ vector<Guess> SimpleGuesser::GetAllManagedLanguages()
     return GetManagedLanguages( sal::static_int_cast< char >( 0xFF ));
 }
 
-void SimpleGuesser::XableLanguage(string lang, char mask)
+void SimpleGuesser::XableLanguage(const string& lang, char mask)
 {
     textcat_t *tables = (textcat_t*)h;
 
@@ -207,12 +207,12 @@ void SimpleGuesser::XableLanguage(string lang, char mask)
     }
 }
 
-void SimpleGuesser::EnableLanguage(string lang)
+void SimpleGuesser::EnableLanguage(const string& lang)
 {
     XableLanguage(lang,  sal::static_int_cast< char >( 0xF0 ));
 }
 
-void SimpleGuesser::DisableLanguage(string lang)
+void SimpleGuesser::DisableLanguage(const string& lang)
 {
     XableLanguage(lang,  sal::static_int_cast< char >( 0x0F ));
 }

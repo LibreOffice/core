@@ -40,8 +40,8 @@ class SfxScriptLibraryContainer : public SfxLibraryContainer, public OldBasicPas
     virtual SfxLibrary* SAL_CALL implCreateLibraryLink
         ( const OUString& aName, const OUString& aLibInfoFileURL,
           const OUString& StorageURL, bool ReadOnly ) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Any SAL_CALL createEmptyLibraryElement( void ) SAL_OVERRIDE;
-    virtual bool SAL_CALL isLibraryElementValid( ::com::sun::star::uno::Any aElement ) const SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Any SAL_CALL createEmptyLibraryElement() SAL_OVERRIDE;
+    virtual bool SAL_CALL isLibraryElementValid(const css::uno::Any& rElement) const SAL_OVERRIDE;
     virtual void SAL_CALL writeLibraryElement
     (
         const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer>& xLibrary,
@@ -176,7 +176,7 @@ public:
     static bool containsValidModule( const ::com::sun::star::uno::Any& _rElement );
 
 protected:
-    virtual bool SAL_CALL isLibraryElementValid( ::com::sun::star::uno::Any aElement ) const SAL_OVERRIDE;
+    virtual bool SAL_CALL isLibraryElementValid(const css::uno::Any& rElement) const SAL_OVERRIDE;
 };
 
 

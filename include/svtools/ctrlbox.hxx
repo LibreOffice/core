@@ -311,11 +311,11 @@ public:
 
     using ListBox::InsertEntry;
     /** Insert a listbox entry with all widths in Twips. */
-    void            InsertEntry( BorderWidthImpl aWidthImpl,
+    void            InsertEntry(const BorderWidthImpl& rWidthImpl,
                         sal_uInt16 nStyle, long nMinWidth = 0,
                         ColorFunc pColor1Fn = &sameColor,
                         ColorFunc pColor2Fn = &sameColor,
-                        ColorDistFunc pColorDistFn = &sameDistColor );
+                        ColorDistFunc pColorDistFn = &sameDistColor);
 
     using ListBox::GetEntryPos;
     sal_Int32  GetEntryPos( sal_uInt16 nStyle = com::sun::star::table::BorderLineStyle::SOLID ) const;

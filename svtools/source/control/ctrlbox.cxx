@@ -780,11 +780,11 @@ void LineListBox::SelectEntry( sal_uInt16 nStyle, bool bSelect )
 }
 
 void LineListBox::InsertEntry(
-    BorderWidthImpl aWidthImpl, sal_uInt16 nStyle, long nMinWidth,
+    const BorderWidthImpl& rWidthImpl, sal_uInt16 nStyle, long nMinWidth,
     ColorFunc pColor1Fn, ColorFunc pColor2Fn, ColorDistFunc pColorDistFn )
 {
     ImpLineListData* pData = new ImpLineListData(
-        aWidthImpl, nStyle, nMinWidth, pColor1Fn, pColor2Fn, pColorDistFn);
+        rWidthImpl, nStyle, nMinWidth, pColor1Fn, pColor2Fn, pColorDistFn);
     pLineList->push_back( pData );
 }
 

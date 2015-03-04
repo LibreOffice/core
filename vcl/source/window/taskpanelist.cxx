@@ -150,7 +150,7 @@ bool TaskPaneList::IsInList( vcl::Window *pWindow )
         return false;
 }
 
-bool TaskPaneList::HandleKeyEvent( KeyEvent aKeyEvent )
+bool TaskPaneList::HandleKeyEvent(const KeyEvent& rKeyEvent)
 {
 
     // F6 cycles through everything and works always
@@ -162,7 +162,7 @@ bool TaskPaneList::HandleKeyEvent( KeyEvent aKeyEvent )
 
     // Since the design of Ctrl-Tab looks to be inconsistent ( non-modal dialogs are not reachable
     // and the shortcut conflicts with tab-control shortcut ), it is no more supported
-    vcl::KeyCode aKeyCode = aKeyEvent.GetKeyCode();
+    vcl::KeyCode aKeyCode = rKeyEvent.GetKeyCode();
     bool bForward = !aKeyCode.IsShift();
     if( aKeyCode.GetCode() == KEY_F6 && ! aKeyCode.IsMod2() ) // F6
     {

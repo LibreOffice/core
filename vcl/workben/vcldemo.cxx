@@ -199,7 +199,7 @@ public:
         }
     }
 
-    void drawBackground(OutputDevice &rDev, Rectangle r)
+    void drawBackground(OutputDevice &rDev, const Rectangle& r)
     {
         rDev.Erase();
         Gradient aGradient;
@@ -627,7 +627,7 @@ public:
 
         // Simulate Page Borders rendering - which ultimately should
         // be done with a shader / gradient
-        void SimulateBorderStretch(OutputDevice &rDev, Rectangle r)
+        void SimulateBorderStretch(OutputDevice &rDev, const Rectangle& r)
         {
             static BitmapEx aPageShadowMask("sw/res/page-shadow-mask.png");
 
@@ -760,7 +760,7 @@ public:
             RENDER_AS_ALPHA_OUTDEV
         };
 
-        void SizeAndRender(OutputDevice &rDev, Rectangle r, RenderType eType,
+        void SizeAndRender(OutputDevice &rDev, const Rectangle& r, RenderType eType,
                            const RenderContext &rCtx)
         {
             VirtualDevice *pNested;

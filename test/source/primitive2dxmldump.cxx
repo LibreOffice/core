@@ -34,9 +34,9 @@ namespace
 
 const size_t constMaxActionType = 513;
 
-OUString convertColorToString(basegfx::BColor aColor)
+OUString convertColorToString(const basegfx::BColor& rColor)
 {
-    OUString aRGBString = Color(aColor).AsRGBHexString();
+    OUString aRGBString = Color(rColor).AsRGBHexString();
     return "#" + aRGBString;
 }
 

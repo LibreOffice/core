@@ -263,7 +263,7 @@ namespace /* private */
 
     /** Approving/Unapproving the Shell Extension, it's important under Windows
         NT/2000/XP, see MSDN: Creating Shell Extension Handlers */
-    HRESULT ApproveShellExtension(CLSID clsid, const std::wstring& Description)
+    HRESULT ApproveShellExtension(const CLSID& clsid, const std::wstring& Description)
     {
         bool bRet = SetRegistryKey(
             HKEY_LOCAL_MACHINE,
@@ -274,7 +274,7 @@ namespace /* private */
         return bRet ? S_OK : E_FAIL;
     }
 
-    HRESULT UnapproveShellExtension(CLSID Clsid)
+    HRESULT UnapproveShellExtension(const CLSID& Clsid)
     {
         HKEY hkey;
 

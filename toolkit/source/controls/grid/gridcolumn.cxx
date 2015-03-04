@@ -76,7 +76,7 @@ namespace toolkit
     }
 
 
-    void GridColumn::broadcast_changed( sal_Char const * const i_asciiAttributeName, Any i_oldValue, Any i_newValue,
+    void GridColumn::broadcast_changed( sal_Char const * const i_asciiAttributeName, const Any& i_oldValue, const Any& i_newValue,
         ::comphelper::ComponentGuard& i_Guard )
     {
         Reference< XInterface > const xSource( static_cast< ::cppu::OWeakObject* >( this ) );

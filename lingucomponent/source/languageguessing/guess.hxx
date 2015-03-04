@@ -52,7 +52,7 @@ class Guess{
         string GetCountry() { return country_str;}
         string GetEncoding() { return encoding_str;}
 
-        bool operator==(string lang);
+        bool operator==(const string& lang);
 
     protected:
         string language_str;

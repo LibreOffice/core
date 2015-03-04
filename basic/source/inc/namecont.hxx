@@ -294,7 +294,7 @@ protected:
         ( const OUString& aName, const OUString& aLibInfoFileURL,
           const OUString& StorageURL, bool ReadOnly ) = 0;
     virtual ::com::sun::star::uno::Any SAL_CALL createEmptyLibraryElement( void ) = 0;
-    virtual bool SAL_CALL isLibraryElementValid( ::com::sun::star::uno::Any aElement ) const = 0;
+    virtual bool SAL_CALL isLibraryElementValid(const css::uno::Any& rElement) const = 0;
     virtual void SAL_CALL writeLibraryElement
     (
         const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer>& xLibrary,
@@ -715,7 +715,7 @@ public:
 protected:
     virtual bool isLoadedStorable();
 
-    virtual bool SAL_CALL isLibraryElementValid( ::com::sun::star::uno::Any aElement ) const = 0;
+    virtual bool SAL_CALL isLibraryElementValid(const css::uno::Any& rElement) const = 0;
 };
 
 

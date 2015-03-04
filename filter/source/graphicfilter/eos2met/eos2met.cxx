@@ -211,7 +211,7 @@ private:
     void METLine(const tools::PolyPolygon & rPolyPolygon);
     void METLineAtCurPos(Point aPt);
     void METBox(bool bFill, bool bBoundary,
-                Rectangle aRect, sal_uInt32 nHAxis, sal_uInt32 nVAxis);
+                const Rectangle& rRect, sal_uInt32 nHAxis, sal_uInt32 nVAxis);
     void METFullArc(Point aCenter, double fMultiplier);
     void METPartialArcAtCurPos(Point aCenter, double fMultiplier,
                                double fStartAngle, double fSweepAngle);
@@ -1319,7 +1319,6 @@ void METWriter::METLine(const tools::PolyPolygon & rPolyPolygon)
     }
 }
 
-
 void METWriter::METLineAtCurPos(Point aPt)
 {
     WillWriteOrder(10);
@@ -1327,9 +1326,8 @@ void METWriter::METLineAtCurPos(Point aPt)
     WritePoint(aPt);
 }
 
-
 void METWriter::METBox(bool bFill, bool bBoundary,
-                       Rectangle aRect, sal_uInt32 nHAxis, sal_uInt32 nVAxis)
+                       const Rectangle& rRect, sal_uInt32 nHAxis, sal_uInt32 nVAxis)
 {
     sal_uInt8 nFlags=0;
     if (bFill)     nFlags|=0x40;
@@ -1337,11 +1335,10 @@ void METWriter::METBox(bool bFill, bool bBoundary,
 
     WillWriteOrder(28);
     pMET->WriteUChar( 0xc0 ).WriteUChar( 26 ).WriteUChar( nFlags ).WriteUChar( 0 );
-    WritePoint(aRect.BottomLeft());
-    WritePoint(aRect.TopRight());
+    WritePoint(rRect.BottomLeft());
+    WritePoint(rRect.TopRight());
     pMET->WriteUInt32( nHAxis ).WriteUInt32( nVAxis );
 }
-
 
 void METWriter::METFullArc(Point aCenter, double fMultiplier)
 {
@@ -1350,7 +1347,6 @@ void METWriter::METFullArc(Point aCenter, double fMultiplier)
     WritePoint(aCenter);
     pMET->WriteInt32( fMultiplier*65536.0+0.5 );
 }
-
 
 void METWriter::METPartialArcAtCurPos(Point aCenter, double fMultiplier,
                                       double fStartAngle, double fSweepAngle)

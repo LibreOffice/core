@@ -67,7 +67,7 @@ using namespace std;
 
 namespace
 {
-    util::DateTime lcl_boostToUnoTime( boost::posix_time::ptime boostTime )
+    util::DateTime lcl_boostToUnoTime(const boost::posix_time::ptime& boostTime)
     {
         util::DateTime unoTime;
         unoTime.Year = boostTime.date().year();
@@ -169,7 +169,7 @@ namespace
         return aValue;
     }
 
-    libcmis::PropertyPtr lcl_unoToCmisProperty( document::CmisProperty const & prop )
+    libcmis::PropertyPtr lcl_unoToCmisProperty(const document::CmisProperty& prop )
     {
         libcmis::PropertyTypePtr propertyType( new libcmis::PropertyType( ) );
 
@@ -1997,24 +1997,24 @@ namespace cmis
         return results;
     }
 
-    void Content::setCmisProperty( std::string sName, std::string sValue, const uno::Reference< ucb::XCommandEnvironment >& xEnv )
+    void Content::setCmisProperty(const std::string& rName, const std::string& rValue, const uno::Reference< ucb::XCommandEnvironment >& xEnv )
     {
         if ( getObjectType( xEnv ).get( ) )
         {
-            map< string, libcmis::PropertyPtr >::iterator propIt = m_pObjectProps.find( sName );
+            map< string, libcmis::PropertyPtr >::iterator propIt = m_pObjectProps.find(rName);
             vector< string > values;
-            values.push_back( sValue );
+            values.push_back(rValue);
 
             if ( propIt == m_pObjectProps.end( ) && getObjectType( xEnv ).get( ) )
             {
                 map< string, libcmis::PropertyTypePtr > propsTypes = getObjectType( xEnv )->getPropertiesTypes( );
-                map< string, libcmis::PropertyTypePtr >::iterator typeIt = propsTypes.find( sName );
+                map< string, libcmis::PropertyTypePtr >::iterator typeIt = propsTypes.find(rName);
 
                 if ( typeIt != propsTypes.end( ) )
                 {
                     libcmis::PropertyTypePtr propType = typeIt->second;
                     libcmis::PropertyPtr property( new libcmis::Property( propType, values ) );
-                    m_pObjectProps.insert( pair< string, libcmis::PropertyPtr >( sName, property ) );
+                    m_pObjectProps.insert(pair< string, libcmis::PropertyPtr >(rName, property));
                 }
             }
             else if ( propIt != m_pObjectProps.end( ) )
