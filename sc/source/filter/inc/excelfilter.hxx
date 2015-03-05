@@ -58,9 +58,6 @@ private:
     WorkbookGlobals*    mpBookGlob;
 };
 
-css::uno::Reference< css::uno::XInterface > SAL_CALL ExcelFilter_create(
-    css::uno::Reference< css::uno::XComponentContext > const & context);
-
 OUString SAL_CALL ExcelFilter_getImplementationName();
 
 css::uno::Sequence< OUString > SAL_CALL ExcelFilter_getSupportedServiceNames();
