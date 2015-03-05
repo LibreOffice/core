@@ -191,7 +191,7 @@ OUString UnitsImpl::extractUnitStringFromFormat(const OUString& rFormatString) {
 }
 
 
-OUString UnitsImpl::extractUnitStringForCell(ScAddress& rAddress, ScDocument* pDoc) {
+OUString UnitsImpl::extractUnitStringForCell(const ScAddress& rAddress, ScDocument* pDoc) {
     sal_uInt32 nFormat = pDoc->GetNumberFormat(rAddress);
     const SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
     const SvNumberformat* pFormat = pFormatter->GetEntry( nFormat );
