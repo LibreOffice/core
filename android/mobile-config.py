@@ -94,6 +94,11 @@ if __name__ == '__main__':
         for value in prop.findall("value"):
             value.text = "false"
 
+    # Disable follow link with Ctrl+Click, use Click only for mobile app.
+    for prop in root.findall('%(component-schema)s[@%(name)s="Common"]/component/group[@%(name)s="Security"]/group[@%(name)s="Scripting"]/prop[@%(name)s="HyperlinksWithCtrlClick"]' % nsDict):
+        for value in prop.findall("value"):
+            value.text = "false"
+
     # Disable Impress View -> Slide Pane
     for prop in root.findall('%(component-data)s[@%(name)s="Impress"]/node[@%(name)s="MultiPaneGUI"]/node[@%(name)s="SlideSorterBar"]/node[@%(name)s="Visible"]/prop[@%(name)s="ImpressView"]' % nsDict):
         for value in prop.findall("value"):
