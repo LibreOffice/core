@@ -723,7 +723,7 @@ private:
     void AddToAttrList( std::unique_ptr<sax_fastparser::FastAttributeList>& pAttrList, sal_Int32 nArgs, ... );
 
     std::unique_ptr<sax_fastparser::FastAttributeList> m_pFontsAttrList;
-    ::sax_fastparser::FastAttributeList *m_pEastAsianLayoutAttrList;
+    std::unique_ptr<sax_fastparser::FastAttributeList> m_pEastAsianLayoutAttrList;
     ::sax_fastparser::FastAttributeList *m_pCharLangAttrList;
     ::sax_fastparser::FastAttributeList *m_pSectionSpacingAttrList;
     ::sax_fastparser::FastAttributeList *m_pParagraphSpacingAttrList;

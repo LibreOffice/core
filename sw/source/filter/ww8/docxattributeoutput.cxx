@@ -926,9 +926,8 @@ void DocxAttributeOutput::EndParagraphProperties(const SfxItemSet& rParagraphMar
     // So we need to store the current status of these lists, so that we can revert back to them when
     // we are done exporting the redline attributes.
     std::unique_ptr<sax_fastparser::FastAttributeList> pFontsAttrList_Original(m_pFontsAttrList.release());
-    ::sax_fastparser::FastAttributeList *pEastAsianLayoutAttrList_Original = m_pEastAsianLayoutAttrList;
+    std::unique_ptr<sax_fastparser::FastAttributeList> pEastAsianLayoutAttrList_Original(m_pEastAsianLayoutAttrList.release());
     ::sax_fastparser::FastAttributeList *pCharLangAttrList_Original        = m_pCharLangAttrList;
-    m_pEastAsianLayoutAttrList = NULL;
     m_pCharLangAttrList        = NULL;
 
     lcl_writeParagraphMarkerProperties(*this, rParagraphMarkerProperties);
@@ -938,7 +937,7 @@ void DocxAttributeOutput::EndParagraphProperties(const SfxItemSet& rParagraphMar
 
     // Revert back the original values that were stored in 'm_pFontsAttrList', 'm_pEastAsianLayoutAttrList', 'm_pCharLangAttrList'
     m_pFontsAttrList.reset(pFontsAttrList_Original.release());
-    m_pEastAsianLayoutAttrList = pEastAsianLayoutAttrList_Original;
+    m_pEastAsianLayoutAttrList.reset(pEastAsianLayoutAttrList_Original.release());
     m_pCharLangAttrList        = pCharLangAttrList_Original;
 
     if ( pRedlineParagraphMarkerDeleted )
@@ -1643,7 +1642,7 @@ void DocxAttributeOutput::StartRunProperties()
 void DocxAttributeOutput::InitCollectedRunProperties()
 {
     m_pFontsAttrList = 0;
-    m_pEastAsianLayoutAttrList = NULL;
+    m_pEastAsianLayoutAttrList = 0;
     m_pCharLangAttrList = NULL;
 
     // Write the elements in the spec order
@@ -1895,9 +1894,7 @@ void DocxAttributeOutput::WriteCollectedRunProperties()
 
     if ( m_pEastAsianLayoutAttrList )
     {
-        XFastAttributeListRef xAttrList( m_pEastAsianLayoutAttrList );
-        m_pEastAsianLayoutAttrList = NULL;
-
+        XFastAttributeListRef xAttrList( m_pEastAsianLayoutAttrList.release() );
         m_pSerializer->singleElementNS( XML_w, XML_eastAsianLayout, xAttrList );
     }
 
@@ -2343,9 +2340,8 @@ void DocxAttributeOutput::Redline( const SwRedlineData* pRedlineData)
                     // So we need to store the current status of these lists, so that we can revert back to them when
                     // we are done exporting the redline attributes.
                     std::unique_ptr<sax_fastparser::FastAttributeList> pFontsAttrList_Original(m_pFontsAttrList.release());
-                    ::sax_fastparser::FastAttributeList *pEastAsianLayoutAttrList_Original = m_pEastAsianLayoutAttrList;
+                    std::unique_ptr<sax_fastparser::FastAttributeList> pEastAsianLayoutAttrList_Original(m_pEastAsianLayoutAttrList.release());
                     ::sax_fastparser::FastAttributeList *pCharLangAttrList_Original        = m_pCharLangAttrList;
-                    m_pEastAsianLayoutAttrList = NULL;
                     m_pCharLangAttrList        = NULL;
 
                     // Output the redline item set
@@ -2356,7 +2352,7 @@ void DocxAttributeOutput::Redline( const SwRedlineData* pRedlineData)
 
                     // Revert back the original values that were stored in 'm_pFontsAttrList', 'm_pEastAsianLayoutAttrList', 'm_pCharLangAttrList'
                     m_pFontsAttrList.reset(pFontsAttrList_Original.release());
-                    m_pEastAsianLayoutAttrList = pEastAsianLayoutAttrList_Original;
+                    m_pEastAsianLayoutAttrList.reset(pEastAsianLayoutAttrList_Original.release());
                     m_pCharLangAttrList        = pCharLangAttrList_Original;
 
                     m_pSerializer->endElementNS( XML_w, XML_rPr );
@@ -8290,7 +8286,6 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
     : m_rExport( rExport ),
       m_pSerializer( pSerializer ),
       m_rDrawingML( *pDrawingML ),
-      m_pEastAsianLayoutAttrList( NULL ),
       m_pCharLangAttrList( NULL ),
       m_pSectionSpacingAttrList( NULL ),
       m_pParagraphSpacingAttrList( NULL ),
@@ -8364,7 +8359,6 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
 
 DocxAttributeOutput::~DocxAttributeOutput()
 {
-    delete m_pEastAsianLayoutAttrList, m_pEastAsianLayoutAttrList = NULL;
     delete m_pCharLangAttrList, m_pCharLangAttrList = NULL;
     delete m_pSectionSpacingAttrList, m_pSectionSpacingAttrList = NULL;
     delete m_pParagraphSpacingAttrList, m_pParagraphSpacingAttrList = NULL;
