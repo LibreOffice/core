@@ -1121,7 +1121,7 @@ void SAL_CALL DocumentHolder::queryClosing( const lang::EventObject& aSource, sa
         throw (util::CloseVetoException, uno::RuntimeException, std::exception)
 {
     if ( m_xComponent.is() && m_xComponent == aSource.Source && !m_bAllowClosing )
-        throw util::CloseVetoException();
+        throw util::CloseVetoException("To close an embedded document, close the document holder (document definition), not the document itself.", static_cast< ::cppu::OWeakObject*>(this));
 }
 
 
