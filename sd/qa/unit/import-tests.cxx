@@ -130,6 +130,7 @@ public:
     CPPUNIT_TEST(testBnc862510_6);
     CPPUNIT_TEST(testBnc862510_7);
     CPPUNIT_TEST(testPDFImport);
+    CPPUNIT_TEST(testPDFImportSkipImages);
     CPPUNIT_TEST(testBnc910045);
 
     CPPUNIT_TEST_SUITE_END();
