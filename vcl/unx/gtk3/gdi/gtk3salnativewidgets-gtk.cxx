@@ -26,7 +26,6 @@ GtkStyleContext* GtkSalGraphics::mpToolbarStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpToolButtonStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpCheckButtonStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpMenuBarStyle = NULL;
-GtkStyleContext* GtkSalGraphics::mpMenuBarItemStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpMenuStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpMenuItemStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpSpinStyle = NULL;
@@ -1498,16 +1497,6 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
     /* Menu bar */
     getStyleContext(&mpMenuBarStyle, gtk_menu_bar_new());
     gtk_style_context_add_class(mpMenuBarStyle, GTK_STYLE_CLASS_MENU);
-
-    /* Menu items in a menu bar */
-    path = gtk_widget_path_new();
-    gtk_widget_path_append_type(path, GTK_TYPE_MENU_BAR);
-    gtk_widget_path_append_type(path, GTK_TYPE_MENU_ITEM);
-    gtk_widget_path_iter_add_class(path, 0, GTK_STYLE_CLASS_MENUBAR);
-    gtk_widget_path_iter_add_class(path, 1, GTK_STYLE_CLASS_MENUITEM);
-    mpMenuBarItemStyle = gtk_style_context_new();
-    gtk_style_context_set_path(mpMenuBarItemStyle, path);
-    gtk_widget_path_free(path);
 
     /* Spinbutton */
     getStyleContext(&mpSpinStyle, gtk_spin_button_new(NULL, 0, 0));

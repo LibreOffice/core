@@ -71,7 +71,6 @@ private:
     static GtkStyleContext *mpToolButtonStyle;
     static GtkStyleContext *mpCheckButtonStyle;
     static GtkStyleContext *mpMenuBarStyle;
-    static GtkStyleContext *mpMenuBarItemStyle;
     static GtkStyleContext *mpMenuStyle;
     static GtkStyleContext *mpMenuItemStyle;
     static GtkStyleContext *mpSpinStyle;
