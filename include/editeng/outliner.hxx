@@ -719,8 +719,6 @@ public:
     void            SetBackgroundColor( const Color& rColor );
     Color           GetBackgroundColor() const;
 
-    sal_Int16       GetMinDepth() const { return -1; }
-
     void            SetMaxDepth( sal_Int16 nDepth, bool bCheckParas = false );
     sal_Int16       GetMaxDepth() const { return nMaxDepth; }
 

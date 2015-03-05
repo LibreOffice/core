@@ -380,15 +380,6 @@ void ImpEditEngine::FormatDoc()
         ParaPortion* pParaPortion = GetParaPortions()[nPara];
         if ( pParaPortion->MustRepaint() || ( pParaPortion->IsInvalid() && pParaPortion->IsVisible() ) )
         {
-            if ( pParaPortion->IsInvalid() )
-            {
-                bool bChangedByDerivedClass = GetEditEnginePtr()->FormattingParagraph( nPara );
-                if ( bChangedByDerivedClass )
-                {
-                    pParaPortion->GetTextPortions().Reset();
-                    pParaPortion->MarkSelectionInvalid( 0, pParaPortion->GetNode()->Len() );
-                }
-            }
             // No formatting should be necessary for MustRepaint()!
             if ( ( pParaPortion->MustRepaint() && !pParaPortion->IsInvalid() )
                     || CreateLines( nPara, nY ) )

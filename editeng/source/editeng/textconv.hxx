@@ -56,7 +56,6 @@ class TextConvWrapper : public editeng::HangulHanjaConversion
 
     // from EditSpellWrapper copied and modified
     void        ConvStart_impl( SvxSpellArea eSpell );   // former SpellStart
-    void        ConvEnd_impl();                          // former SpellEnd
     bool        ConvContinue_impl();                     // former SpellContinue
 
     void        SelectNewUnit_impl( const sal_Int32 nUnitStart,

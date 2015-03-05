@@ -536,9 +536,6 @@ public:
      */
     virtual bool Paste() = 0;
 
-    bool IsWrongSpelledWordAtPos( sal_Int32, sal_Int32 ) { return false; };
-    bool IsShapeParaFocusable( ) { return true; };
-    bool BreakParaWrongList(sal_Int32, sal_Int32&, sal_Int32&, sal_Int32){ return false; };
 };
 
 #endif
