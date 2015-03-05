@@ -19,10 +19,12 @@
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
     prefix="scd" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.calc.FormatDetector">
+  <implementation name="com.sun.star.comp.calc.FormatDetector"
+      constructor="com_sun_star_comp_calc_FormatDetector_get_implementation">
     <service name="com.sun.star.frame.ExtendedTypeDetection"/>
   </implementation>
-  <implementation name="com.sun.star.comp.calc.ExcelBiffFormatDetector">
+  <implementation name="com.sun.star.comp.calc.ExcelBiffFormatDetector"
+      constructor="com_sun_star_comp_calc_ExcelBiffFormatDetector_get_implementation">
     <service name="com.sun.star.frame.ExtendedTypeDetection"/>
   </implementation>
 </component>
