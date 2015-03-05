@@ -33,7 +33,6 @@ $(eval $(call gb_Library_use_libraries,scd,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,scd,\
-	sc/source/ui/unoobj/detreg \
 	sc/source/ui/unoobj/scdetect \
 	sc/source/ui/unoobj/exceldetect \
 ))
