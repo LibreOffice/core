@@ -193,11 +193,6 @@ public:
                 const SalBitmap& rSourceBitmap,
                 const SalBitmap& rAlphaBitmap ) = 0;
 
-    /** Render 32-bits bitmap with alpha channel */
-    virtual bool drawAlphaBitmap(
-                const SalTwoRect&,
-                const SalBitmap& rBitmap ) = 0;
-
     /** draw transformed bitmap (maybe with alpha) where Null, X, Y define the coordinate system */
     virtual bool drawTransformedBitmap(
                 const basegfx::B2DPoint& rNull,
