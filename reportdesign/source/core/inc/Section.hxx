@@ -228,9 +228,6 @@ namespace reportdesign
         static OSection* getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxComponent );
         static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
 
-        static void lcl_copySection(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSource
-                                         ,::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xDest);
-
         void notifyElementAdded(const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape);
         void notifyElementRemoved(const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape);
     };

@@ -1962,48 +1962,6 @@ bool lcl_MouseIsOverWin( const Point& rScreenPosPixel, vcl::Window* pWin )
 
 } // anonymous namespace
 
-void ScTabView::SnapSplitPos( Point& rScreenPosPixel )
-{
-    bool bOverWin = false;
-    sal_uInt16 i;
-    for (i=0; i<4; i++)
-        if (lcl_MouseIsOverWin(rScreenPosPixel,pGridWin[i]))
-            bOverWin = true;
-
-    if (!bOverWin)
-        return;
-
-    //  don't snap to cells if the scale will be modified afterwards
-    if ( GetZoomType() != SVX_ZOOM_PERCENT )
-        return;
-
-    ScSplitPos ePos = SC_SPLIT_BOTTOMLEFT;
-    if ( aViewData.GetVSplitMode() != SC_SPLIT_NONE )
-        ePos = SC_SPLIT_TOPLEFT;
-
-    vcl::Window* pWin = pGridWin[ePos];
-    if (!pWin)
-    {
-        OSL_FAIL("Window NULL");
-        return;
-    }
-
-    Point aMouse = pWin->NormalizedScreenToOutputPixel( rScreenPosPixel );
-    SCsCOL nPosX;
-    SCsROW nPosY;
-    //  bNextIfLarge=FALSE: nicht auf naechste Zelle, wenn ausserhalb des Fensters
-    aViewData.GetPosFromPixel( aMouse.X(), aMouse.Y(), ePos, nPosX, nPosY, true, false, false );
-    bool bLeft;
-    bool bTop;
-    aViewData.GetMouseQuadrant( aMouse, ePos, nPosX, nPosY, bLeft, bTop );
-    if (!bLeft)
-        ++nPosX;
-    if (!bTop)
-        ++nPosY;
-    aMouse = aViewData.GetScrPos( static_cast<SCCOL>(nPosX), static_cast<SCROW>(nPosY), ePos, true );
-    rScreenPosPixel = pWin->OutputToNormalizedScreenPixel( aMouse );
-}
-
 void ScTabView::FreezeSplitters( bool bFreeze )
 {
     ScSplitMode eOldH = aViewData.GetHSplitMode();

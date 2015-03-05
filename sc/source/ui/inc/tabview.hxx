@@ -496,7 +496,6 @@ public:
 
     Point           GetMousePosPixel();
 
-    void            SnapSplitPos( Point& rScreenPosPixel );
     void            FreezeSplitters( bool bFreeze );
     void            RemoveSplit();
     void            SplitAtCursor();

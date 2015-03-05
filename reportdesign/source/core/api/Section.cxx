@@ -516,25 +516,6 @@ void SAL_CALL OSection::removeVetoableChangeListener( const OUString& PropertyNa
     SectionPropertySet::removeVetoableChangeListener( PropertyName, aListener );
 }
 
-void OSection::lcl_copySection(const uno::Reference< report::XSection>& _xSource,uno::Reference< report::XSection>& _xDest)
-{
-    if ( _xSource.is() )
-    {
-        ::comphelper::copyProperties(_xSource.get(),_xDest.get());
-        sal_Int32 nCount = _xSource->getCount();
-        for(sal_Int32 i = 0;i != nCount;++i)
-        {
-            uno::Reference<util::XCloneable> xClone(_xSource->getByIndex(i),uno::UNO_QUERY);
-            OSL_ENSURE(xClone.is(),"No XCloneable interface found!");
-            if ( xClone.is() )
-            {
-                uno::Reference< drawing::XShape> xShape(xClone->createClone(),uno::UNO_QUERY);
-                _xDest->add(xShape);
-            }
-        }
-    }
-}
-
 void SAL_CALL OSection::add( const uno::Reference< drawing::XShape >& xShape ) throw (uno::RuntimeException, std::exception)
 {
     {

@@ -250,10 +250,6 @@ public:
                                         const SalBitmap& rSourceBitmap,
                                         const SalBitmap& rAlphaBitmap ) SAL_OVERRIDE;
 
-    bool                            drawAlphaBitmap(
-                                        const SalTwoRect&,
-                                        const SalBitmap& rBitmap );
-
     virtual bool                    drawTransformedBitmap(
                                         const basegfx::B2DPoint& rNull,
                                         const basegfx::B2DPoint& rX,
