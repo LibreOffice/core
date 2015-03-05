@@ -1140,6 +1140,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     gtk_widget_path_append_type( pCPath, GTK_TYPE_TEXT_VIEW );
     gtk_widget_path_iter_add_class( pCPath, -1, GTK_STYLE_CLASS_VIEW );
     gtk_style_context_set_path( pCStyle, pCPath );
+    gtk_style_context_set_parent(pCStyle, gtk_widget_get_style_context(mpWindow));
     gtk_widget_path_free( pCPath );
     GdkRGBA field_background_color;
     gtk_style_context_get_background_color(pCStyle, GTK_STATE_FLAG_NORMAL, &field_background_color);
@@ -1434,6 +1435,7 @@ void GtkSalGraphics::getStyleContext(GtkStyleContext** style, GtkWidget* widget)
 {
     *style = gtk_widget_get_style_context(widget);
     g_object_ref(*style);
+    gtk_style_context_set_parent(*style, gtk_widget_get_style_context(mpWindow));
     gtk_widget_destroy(widget);
 }
 
@@ -1444,10 +1446,8 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
 {
     m_xTextRenderImpl.reset(new GtkCairoTextRender(*this));
 
-    if(style_loaded)
+    if (style_loaded)
         return;
-
-    GtkWidgetPath* path;
 
     style_loaded = true;
     gtk_init(NULL, NULL);
@@ -1464,14 +1464,15 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
     getStyleContext(&mpToolButtonStyle, gtk_button_new());
 
     /* Create a widget path for our toolbutton widget */
-    path = gtk_widget_path_new();
+    GtkWidgetPath* path = gtk_widget_path_new();
     gtk_widget_path_append_type(path, GTK_TYPE_TOOLBAR);
     gtk_widget_path_append_type(path, GTK_TYPE_TOOL_BUTTON);
     gtk_widget_path_append_type(path, GTK_TYPE_BUTTON);
     gtk_widget_path_iter_add_class (path, 0, GTK_STYLE_CLASS_PRIMARY_TOOLBAR);
-    gtk_widget_path_iter_add_class (path, 0, GTK_STYLE_CLASS_TOOLBAR);
+    gtk_widget_path_iter_add_class (path, 1, GTK_STYLE_CLASS_TOOLBAR);
     gtk_widget_path_iter_add_class (path, 2, GTK_STYLE_CLASS_BUTTON);
     gtk_style_context_set_path(mpToolButtonStyle, path);
+    gtk_style_context_set_parent(mpToolButtonStyle, gtk_widget_get_style_context(mpWindow));
     gtk_widget_path_free (path);
 
     getStyleContext(&mpVScrollbarStyle, gtk_scrollbar_new(GTK_ORIENTATION_VERTICAL, NULL));
@@ -1492,6 +1493,7 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
     gtk_widget_path_iter_add_class(path, 1, GTK_STYLE_CLASS_MENUITEM);
     mpMenuItemStyle = gtk_style_context_new();
     gtk_style_context_set_path(mpMenuItemStyle, path);
+    gtk_style_context_set_parent(mpMenuItemStyle, mpMenuStyle);
     gtk_widget_path_free(path);
 
     /* Menu bar */
@@ -1504,6 +1506,7 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
     /* Combobox */
     mpComboboxStyle = gtk_style_context_new();
     PrepareComboboxStyle(mpComboboxStyle, true);
+    gtk_style_context_set_parent(mpComboboxStyle, gtk_widget_get_style_context(mpWindow));
 
     /* Listbox */
     mpListboxStyle = gtk_style_context_new();
@@ -1512,6 +1515,7 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
     gtk_widget_path_append_type(path, GTK_TYPE_BUTTON);
     gtk_widget_path_iter_add_class(path, 1, GTK_STYLE_CLASS_BUTTON);
     gtk_style_context_set_path(mpListboxStyle, path);
+    gtk_style_context_set_parent(mpListboxStyle, gtk_widget_get_style_context(mpWindow));
     gtk_widget_path_free(path);
 }
 
