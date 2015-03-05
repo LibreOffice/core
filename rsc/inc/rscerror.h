@@ -91,7 +91,7 @@ class ERRTYPE
 public:
     ERRTYPE()                { nError = ERR_OK; }
     ERRTYPE( sal_uInt32 nErr )   { nError = nErr; }
-    ERRTYPE( const ERRTYPE & rErr ) { nError = rErr.nError; }
+    ERRTYPE( const ERRTYPE & ) = default;
     ERRTYPE& operator = ( const ERRTYPE & rError );
     operator sal_uInt32() const { return nError; }
     bool IsError() const     { return nError <= ERR_ERROREND; }
