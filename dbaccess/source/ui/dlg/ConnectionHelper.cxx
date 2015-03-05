@@ -127,6 +127,7 @@ namespace dbaui
 
         m_pFT_Connection->Show();
         m_pConnectionURL->Show();
+        m_pConnectionURL->Resize();
         m_pConnectionURL->ShowPrefix( ::dbaccess::DST_JDBC == m_pCollection->determineType(m_eType) );
 
         bool bEnableBrowseButton = m_pCollection->supportsBrowsing( m_eType );

@@ -67,6 +67,21 @@ void OConnectionURLEdit::SetText(const OUString& _rStr)
     SetText(_rStr, aNoSelection);
 }
 
+void OConnectionURLEdit::Resize()
+{
+    if (GetSubEdit())
+    {
+        Size aMySize = GetSizePixel();
+        sal_Int32 nTextWidth = 0;
+        if ( m_pForcedPrefix && m_bShowPrefix)
+        {
+            nTextWidth = m_pForcedPrefix->GetTextWidth(m_pForcedPrefix->GetText()) + 2;
+            m_pForcedPrefix->SetPosSizePixel(Point(0, -2), Size(nTextWidth, aMySize.Height()));
+        }
+        GetSubEdit()->SetPosSizePixel(Point(nTextWidth, -2), Size(aMySize.Width() - nTextWidth - 4, aMySize.Height()));
+    }
+}
+
 void OConnectionURLEdit::SetText(const OUString& _rStr, const Selection& /*_rNewSelection*/)
 {
     // create new sub controls, if necessary

@@ -49,6 +49,7 @@ public:
     virtual void    SetText(const OUString& _rStr) SAL_OVERRIDE;
     virtual void    SetText(const OUString& _rStr, const Selection& _rNewSelection) SAL_OVERRIDE;
     virtual OUString  GetText() const SAL_OVERRIDE;
+    virtual void Resize() SAL_OVERRIDE;
 
     /** Showsthe Prefix
         @param  _bShowPrefix
