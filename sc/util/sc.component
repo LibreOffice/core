@@ -23,7 +23,8 @@
         constructor="com_sun_star_comp_Calc_FilterOptionsDialog_get_implementation">
     <service name="com.sun.star.ui.dialogs.FilterOptionsDialog"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Calc.SpreadsheetDocument">
+  <implementation name="com.sun.star.comp.Calc.SpreadsheetDocument"
+      constructor="com_sun_star_comp_Calc_SpreadsheetDocument_get_implementation">
     <service name="com.sun.star.sheet.SpreadsheetDocument"/>
   </implementation>
   <implementation name="com.sun.star.comp.Calc.XMLContentExporter"

@@ -85,6 +85,8 @@ static const SfxItemPropertyMapEntry* lcl_GetSettingsPropertyMap()
     return aSettingsPropertyMap_Impl;
 }
 
+// the following implement XServiceInfo
+
 #define SCFUNCTIONLISTOBJ_SERVICE       "com.sun.star.sheet.FunctionDescriptions"
 #define SCRECENTFUNCTIONSOBJ_SERVICE    "com.sun.star.sheet.RecentFunctions"
 #define SCSPREADSHEETSETTINGS_SERVICE   "com.sun.star.sheet.GlobalSheetSettings"
@@ -93,36 +95,6 @@ SC_SIMPLE_SERVICE_INFO( ScFunctionListObj, "ScFunctionListObj", SCFUNCTIONLISTOB
 SC_SIMPLE_SERVICE_INFO( ScRecentFunctionsObj, "ScRecentFunctionsObj", SCRECENTFUNCTIONSOBJ_SERVICE )
 SC_SIMPLE_SERVICE_INFO( ScSpreadsheetSettings, "ScSpreadsheetSettings", SCSPREADSHEETSETTINGS_SERVICE )
 
-extern "C" {
-
-SAL_DLLPUBLIC_EXPORT void * SAL_CALL sc_component_getFactory(
-    const sal_Char * pImplName, void * pServiceManager, void * /* pRegistryKey */ )
-{
-    if (!pServiceManager)
-        return NULL;
-
-    uno::Reference<lang::XSingleServiceFactory> xFactory;
-    OUString aImpl(OUString::createFromAscii(pImplName));
-
-    if ( aImpl == ScDocument_getImplementationName() )
-    {
-        xFactory.set(sfx2::createSfxModelFactory(
-                reinterpret_cast<lang::XMultiServiceFactory*>(pServiceManager),
-                ScDocument_getImplementationName(),
-                ScDocument_createInstance,
-                ScDocument_getSupportedServiceNames() ));
-    }
-
-    void* pRet = NULL;
-    if (xFactory.is())
-    {
-        xFactory->acquire();
-        pRet = xFactory.get();
-    }
-    return pRet;
-}
-
-}   // extern C
 
 ScSpreadsheetSettings::ScSpreadsheetSettings() :
     aPropSet( lcl_GetSettingsPropertyMap() )
