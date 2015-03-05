@@ -950,12 +950,6 @@ bool X11SalGraphicsImpl::drawAlphaBitmap( const SalTwoRect& rTR,
     return true;
 }
 
-bool X11SalGraphicsImpl::drawAlphaBitmap( const SalTwoRect& /*rTR*/,
-    const SalBitmap& /*rBitmap*/ )
-{
-    return false;
-}
-
 bool X11SalGraphicsImpl::drawTransformedBitmap(
     const basegfx::B2DPoint& rNull,
     const basegfx::B2DPoint& rX,
