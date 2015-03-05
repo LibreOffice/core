@@ -399,12 +399,6 @@ static sal_Int16 lcl_AnyToINT16(const uno::Any& rAny)
 
 OUString SmModel::getImplementationName(void) throw( uno::RuntimeException, std::exception )
 {
-    return getImplementationName_Static();
-}
-
-
-OUString SmModel::getImplementationName_Static()
-{
     return OUString("com.sun.star.comp.math.FormulaDocument");
 }
 
@@ -415,13 +409,6 @@ sal_Bool SmModel::supportsService(const OUString& rServiceName) throw( uno::Runt
 
 uno::Sequence< OUString > SmModel::getSupportedServiceNames(void) throw( uno::RuntimeException, std::exception )
 {
-    return getSupportedServiceNames_Static();
-}
-
-uno::Sequence< OUString > SmModel::getSupportedServiceNames_Static(void)
-{
-    SolarMutexGuard aGuard;
-
     return uno::Sequence<OUString>{
         "com.sun.star.document.OfficeDocument",
         "com.sun.star.formula.FormulaProperties"

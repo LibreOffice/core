@@ -96,9 +96,6 @@ public:
     // oox::FormulaImportBase
     virtual void readFormulaOoxml( oox::formulaimport::XmlStream& stream ) SAL_OVERRIDE;
     virtual Size getFormulaSize() const SAL_OVERRIDE;
-
-    static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static();
-    static OUString getImplementationName_Static();
 };
 
 
