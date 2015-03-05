@@ -36,9 +36,6 @@ public:
 
     static com::sun::star::uno::Sequence<OUString> impl_getStaticSupportedServiceNames();
     static OUString impl_getStaticImplementationName();
-    static com::sun::star::uno::Reference< com::sun::star::uno::XInterface >
-        impl_createInstance( const com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext>& xContext )
-            throw (com::sun::star::uno::Exception);
 };
 
 #endif
