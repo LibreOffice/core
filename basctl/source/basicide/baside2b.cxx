@@ -508,7 +508,8 @@ void EditorWindow::KeyInput( const KeyEvent& rKEvt )
 #endif
     bool const bWasModified = pEditEngine->IsModified();
     // see if there is an accelerator to be processed first
-    bool bDone = SfxViewShell::Current()->KeyInput( rKEvt );
+    SfxViewShell *pVS( SfxViewShell::Current());
+    bool bDone = pVS && pVS->KeyInput( rKEvt );
 
     if( pCodeCompleteWnd->IsVisible() && CodeCompleteOptions::IsCodeCompleteOn() )
     {
