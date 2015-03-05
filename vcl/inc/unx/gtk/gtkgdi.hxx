@@ -77,7 +77,7 @@ private:
     static GtkStyleContext *mpComboboxStyle;
     static GtkStyleContext *mpListboxStyle;
 
-    void getStyleContext( GtkStyleContext** style, GtkWidget* widget );
+    void getStyleContext(GtkStyleContext** style, GtkWidget* widget);
     Rectangle NWGetScrollButtonRect( ControlPart nPart, Rectangle aAreaRect );
     Rectangle NWGetSpinButtonRect( ControlPart nPart, Rectangle aAreaRect);
     Rectangle NWGetComboBoxButtonRect( ControlType nType, ControlPart nPart, Rectangle aAreaRect );
