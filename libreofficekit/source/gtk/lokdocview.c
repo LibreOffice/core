@@ -253,6 +253,7 @@ static void lok_docview_init( LOKDocView* pDocView )
     pDocView->m_pTextSelectionRectangles = NULL;
     memset(&pDocView->m_aTextSelectionStart, 0, sizeof(pDocView->m_aTextSelectionStart));
     memset(&pDocView->m_aTextSelectionEnd, 0, sizeof(pDocView->m_aTextSelectionEnd));
+    memset(&pDocView->m_aGraphicSelection, 0, sizeof(pDocView->m_aGraphicSelection));
 
     // Start/middle/end handle.
     pDocView->m_pHandleStart = NULL;
@@ -418,6 +419,10 @@ static gboolean renderOverlay(GtkWidget* pWidget, GdkEventExpose* pEvent, gpoint
                              pDocView->m_pHandleEnd, &pDocView->m_aHandleEndRect,
                              pDocView->fZoom);
         }
+    }
+
+    if (!lcl_isEmptyRectangle(&pDocView->m_aGraphicSelection))
+    {
     }
 
     cairo_destroy(pCairo);
@@ -606,6 +611,8 @@ static const gchar* lcl_LibreOfficeKitCallbackTypeToString(int nType)
         return "LOK_CALLBACK_TEXT_SELECTION_END";
     case LOK_CALLBACK_CURSOR_VISIBLE:
         return "LOK_CALLBACK_CURSOR_VISIBLE";
+    case LOK_CALLBACK_GRAPHIC_SELECTION:
+        return "LOK_CALLBACK_GRAPHIC_SELECTION";
     }
     return 0;
 }
@@ -670,6 +677,15 @@ static gboolean lok_docview_callback(gpointer pData)
     case LOK_CALLBACK_CURSOR_VISIBLE:
     {
         pCallback->m_pDocView->m_bCursorVisible = strcmp(pCallback->m_pPayload, "true") == 0;
+    }
+    break;
+    case LOK_CALLBACK_GRAPHIC_SELECTION:
+    {
+        if (strcmp(pCallback->m_pPayload, "EMPTY") != 0)
+            pCallback->m_pDocView->m_aGraphicSelection = lcl_payloadToRectangle(pCallback->m_pPayload);
+        else
+            memset(&pCallback->m_pDocView->m_aGraphicSelection, 0, sizeof(pCallback->m_pDocView->m_aGraphicSelection));
+        gtk_widget_queue_draw(GTK_WIDGET(pCallback->m_pDocView->pEventBox));
     }
     break;
     default:
