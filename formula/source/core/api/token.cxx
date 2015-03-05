@@ -910,7 +910,7 @@ FormulaToken* FormulaTokenArray::AddStringXML( const OUString& rStr )
 
 void FormulaTokenArray::AddRecalcMode( ScRecalcMode nBits )
 {
-    //! Reihenfolge ist wichtig
+    //! Order is important.
     if ( nBits & RECALCMODE_ALWAYS )
         SetExclusiveRecalcModeAlways();
     else if ( !IsRecalcModeAlways() )
@@ -928,8 +928,8 @@ bool FormulaTokenArray::HasMatrixDoubleRefOps()
 {
     if ( pRPN && nRPN )
     {
-        // RPN-Interpreter Simulation
-        // als Ergebnis jeder Funktion wird einfach ein Double angenommen
+        // RPN-Interpreter simulation.
+        // Simply assumes a double as return value of each function.
         boost::scoped_array<FormulaToken*> pStack(new FormulaToken* [nRPN]);
         FormulaToken* pResult = new FormulaDoubleToken( 0.0 );
         short sp = 0;
