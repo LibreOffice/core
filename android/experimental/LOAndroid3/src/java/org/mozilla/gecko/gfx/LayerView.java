@@ -112,7 +112,7 @@ public class LayerView extends FrameLayout {
 
         createGLThread();
 
-        setOnTouchListener(new OnSlideSwipeListener(getContext()));
+        setOnTouchListener(new OnSlideSwipeListener(getContext(), mLayerClient));
     }
 
     public void show() {
