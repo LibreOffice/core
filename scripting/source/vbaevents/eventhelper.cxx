@@ -1080,17 +1080,28 @@ namespace ooevtdescgen
         return OUString( "ooo.vba.VBAToOOEventDesc"  );
     }
 
-    uno::Reference< XInterface > SAL_CALL create(
-        Reference< XComponentContext > const & xContext )
-    {
-        return static_cast< lang::XTypeProvider * >( new VBAToOOEventDescGen( xContext ) );
-    }
-
     Sequence< OUString > SAL_CALL getSupportedServiceNames()
     {
         const OUString strName( ::ooevtdescgen::getImplementationName() );
         return Sequence< OUString >( &strName, 1 );
     }
 }
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+ooo_vba_EventListener_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                         ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new EventListener(context));
+}
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+ooo_vba_VBAToOOEventDesc_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                            ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new VBAToOOEventDescGen(context));
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
