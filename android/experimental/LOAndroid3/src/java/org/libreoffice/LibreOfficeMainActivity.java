@@ -144,19 +144,6 @@ public class LibreOfficeMainActivity extends LOAbout {
         LayerView layerView = (LayerView) findViewById(R.id.layer_view);
         mLayerClient.setView(layerView);
         layerView.setInputConnectionHandler(new LOKitInputConnectionHandler());
-        layerView.setOnTouchListener(new OnSlideSwipeListener(this) {
-            @Override
-            public void onSwipeRight() {
-                Log.d(LOGTAG, "onSwipeRight");
-                LOKitShell.sendSwipeRightEvent();
-            }
-
-            @Override
-            public void onSwipeLeft() {
-                Log.d(LOGTAG, "onSwipeLeft");
-                LOKitShell.sendSwipeLeftEvent();
-            }
-        });
         mLayerClient.notifyReady();
     }
 

@@ -1,4 +1,4 @@
-package org.libreoffice;
+package org.mozilla.gecko;
 
 import android.content.Context;
 import android.view.GestureDetector;
@@ -6,8 +6,13 @@ import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.util.Log;
+
+import org.libreoffice.LOKitShell;
+
 
 public class OnSlideSwipeListener implements OnTouchListener {
+    private static String LOGTAG = OnSlideSwipeListener.class.getName();
 
     private final GestureDetector mGestureDetector;
 
@@ -48,9 +53,13 @@ public class OnSlideSwipeListener implements OnTouchListener {
     }
 
     public void onSwipeRight() {
+        Log.d(LOGTAG, "onSwipeRight");
+        LOKitShell.sendSwipeRightEvent();
     }
 
     public void onSwipeLeft() {
+        Log.d(LOGTAG, "onSwipeLeft");
+        LOKitShell.sendSwipeLeftEvent();
     }
 
     @Override
