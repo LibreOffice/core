@@ -1941,27 +1941,6 @@ Point ScTabView::GetMousePosPixel()
     return aPos;
 }
 
-namespace
-{
-
-bool lcl_MouseIsOverWin( const Point& rScreenPosPixel, vcl::Window* pWin )
-{
-    if (pWin)
-    {
-        //  SPLIT_HANDLE_SIZE draufaddieren, damit das Einrasten genau
-        //  auf dem Splitter nicht aussetzt
-
-        Point aRel = pWin->NormalizedScreenToOutputPixel( rScreenPosPixel );
-        Size aWinSize = pWin->GetOutputSizePixel();
-        if ( aRel.X() >= 0 && aRel.X() < aWinSize.Width() + SPLIT_HANDLE_SIZE &&
-                aRel.Y() >= 0 && aRel.Y() < aWinSize.Height() + SPLIT_HANDLE_SIZE )
-            return true;
-    }
-    return false;
-}
-
-} // anonymous namespace
-
 void ScTabView::FreezeSplitters( bool bFreeze )
 {
     ScSplitMode eOldH = aViewData.GetHSplitMode();
