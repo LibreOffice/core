@@ -4645,19 +4645,38 @@ bool ScCompiler::HandleDbData()
 
 bool ScCompiler::HandleTableRef()
 {
-    ScDBData* pDBData = pDoc->GetDBCollection()->getNamedDBs().findByIndex(mpToken->GetIndex());
+    ScTableRefToken* pTR = dynamic_cast<ScTableRefToken*>(mpToken.get());
+    if (!pTR)
+    {
+        SetError(errUnknownToken);
+        return true;
+    }
+
+    ScDBData* pDBData = pDoc->GetDBCollection()->getNamedDBs().findByIndex( pTR->GetIndex());
     if ( !pDBData )
         SetError(errNoName);
     else if (mbJumpCommandReorder)
     {
-        /* TODO: handle it */
-#if 0
+        ScRange aRange;
+        pDBData->GetArea(aRange);
+        aRange.aEnd.SetTab(aRange.aStart.Tab());
         ScTokenArray* pNew = new ScTokenArray();
-        pNew->AddDoubleReference( aRefData );
+        ScTableRefToken::Item eItem = pTR->GetItem();
+        if (eItem == ScTableRefToken::ALL)
+        {
+            ScComplexRefData aRefData;
+            aRefData.InitFlags();
+            aRefData.SetRange(aRange, aPos);
+            pNew->AddDoubleReference( aRefData );
+        }
+        else
+        {
+            /* TODO: implement all other cases. */
+            SetError(errUnknownToken);
+        }
         PushTokenArray( pNew, true );
         pNew->Reset();
         return GetToken();
-#endif
     }
     return true;
 }
