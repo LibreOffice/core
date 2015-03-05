@@ -20,6 +20,8 @@
 #include <svdata.hxx>
 #include <tools/time.hxx>
 #include <vcl/scheduler.hxx>
+#include <vcl/timer.hxx>
+#include <saltimer.hxx>
 
 void ImplSchedulerData::Invoke()
 {
@@ -70,6 +72,10 @@ void Scheduler::ImplDeInitScheduler()
 {
     ImplSVData*     pSVData = ImplGetSVData();
     ImplSchedulerData*  pSchedulerData = pSVData->mpFirstSchedulerData;
+    if (pSVData->mpSalTimer)
+    {
+        pSVData->mpSalTimer->Stop();
+    }
 
     if ( pSchedulerData )
     {
@@ -87,7 +93,11 @@ void Scheduler::ImplDeInitScheduler()
         while ( pSchedulerData );
 
         pSVData->mpFirstSchedulerData   = NULL;
+        pSVData->mnTimerPeriod      = 0;
     }
+
+    delete pSVData->mpSalTimer;
+    pSVData->mpSalTimer = 0;
 }
 
 void Scheduler::CallbackTaskScheduling(bool ignore)
@@ -102,19 +112,26 @@ void Scheduler::ProcessTaskScheduling( bool bTimer )
     ImplSchedulerData* pSchedulerData = NULL;
     ImplSchedulerData* pPrevSchedulerData = NULL;
     ImplSVData*        pSVData = ImplGetSVData();
+    sal_uLong          nTime = tools::Time::GetSystemTicks();
+    sal_uLong          nMinPeriod = ((sal_uLong)0xFFFFFFFF);
     pSVData->mnTimerUpdate++;
 
     if ((pSchedulerData = ImplSchedulerData::GetMostImportantTask(bTimer)))
     {
-        pSchedulerData->mnUpdateTime = tools::Time::GetSystemTicks();
+        pSchedulerData->mnUpdateTime = nTime;
         pSchedulerData->Invoke();
     }
 
     pSchedulerData = pSVData->mpFirstSchedulerData;
     while ( pSchedulerData )
     {
+        if( pSchedulerData->mbInScheduler )
+        {
+            pPrevSchedulerData = pSchedulerData;
+            pSchedulerData = pSchedulerData->mpNext;
+        }
         // Should Task be released from scheduling?
-        if ( pSchedulerData->mbDelete )
+        else if ( pSchedulerData->mbDelete )
         {
             if ( pPrevSchedulerData )
                 pPrevSchedulerData->mpNext = pSchedulerData->mpNext;
@@ -128,13 +145,29 @@ void Scheduler::ProcessTaskScheduling( bool bTimer )
         }
         else
         {
-            if( !pSchedulerData->mbInScheduler )
-                pSchedulerData->mnUpdateStack = 0;
+            pSchedulerData->mnUpdateStack = 0;
+            nMinPeriod = pSchedulerData->mpScheduler->UpdateMinPeriod( nMinPeriod, nTime );
             pPrevSchedulerData = pSchedulerData;
             pSchedulerData = pSchedulerData->mpNext;
         }
     }
+
+    // delete clock if no more timers available
+    if ( !pSVData->mpFirstSchedulerData )
+    {
+        if ( pSVData->mpSalTimer )
+            pSVData->mpSalTimer->Stop();
+        pSVData->mnTimerPeriod = ((sal_uLong)0xFFFFFFFF);
+    }
+    else
+        Timer::ImplStartTimer( pSVData, nMinPeriod );
     pSVData->mnTimerUpdate--;
+}
+
+sal_uLong Scheduler::UpdateMinPeriod( sal_uLong nMinPeriod, sal_uLong nTime )
+{
+    (void)nTime;
+    return nMinPeriod;
 }
 
 void Scheduler::SetPriority( SchedulerPriority ePriority )

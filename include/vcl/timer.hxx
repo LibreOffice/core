@@ -32,6 +32,7 @@ protected:
 
     void SetDeletionFlags() SAL_OVERRIDE;
     bool ReadyForSchedule( bool bTimer ) SAL_OVERRIDE;
+    sal_uLong UpdateMinPeriod( sal_uLong nMinPeriod, sal_uLong nTime ) SAL_OVERRIDE;
 
 public:
     Timer();
@@ -44,9 +45,10 @@ public:
     void            SetTimeoutHdl( const Link& rLink ) { maTimeoutHdl = rLink; }
     const Link&     GetTimeoutHdl() const { return maTimeoutHdl; }
     virtual void    Invoke() SAL_OVERRIDE;
-    void    Timeout() { Invoke(); }
+    void            Timeout() { Invoke(); }
     Timer&          operator=( const Timer& rTimer );
     void            Start() SAL_OVERRIDE;
+    static void     ImplStartTimer( ImplSVData* pSVData, sal_uLong nMS );
 };
 
 /// An auto-timer is a multi-shot timer re-emitting itself at

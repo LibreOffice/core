@@ -26,7 +26,7 @@
 
 #define MAX_TIMER_PERIOD    ((sal_uLong)0xFFFFFFFF)
 
-static void ImplStartTimer( ImplSVData* pSVData, sal_uLong nMS )
+void Timer::ImplStartTimer( ImplSVData* pSVData, sal_uLong nMS )
 {
     if ( !nMS )
         nMS = 1;
@@ -53,6 +53,33 @@ bool Timer::ReadyForSchedule( bool bTimer )
 {
     (void)bTimer;
     return (mpSchedulerData->mnUpdateTime + mnTimeout) <= tools::Time::GetSystemTicks();
+}
+
+sal_uLong Timer::UpdateMinPeriod( sal_uLong nMinPeriod, sal_uLong nTime )
+{
+    sal_uLong nNewTime = tools::Time::GetSystemTicks();
+    sal_uLong nDeltaTime;
+    //determine smallest time slot
+    if( mpSchedulerData->mnUpdateTime == nTime )
+    {
+       nDeltaTime = mnTimeout;
+       if( nDeltaTime < nMinPeriod )
+           nMinPeriod = nDeltaTime;
+    }
+    else
+    {
+        nDeltaTime = mpSchedulerData->mnUpdateTime + mnTimeout;
+        if( nDeltaTime < nNewTime )
+            nMinPeriod = 1;
+        else
+        {
+            nDeltaTime -= nNewTime;
+            if( nDeltaTime < nMinPeriod )
+                nMinPeriod = nDeltaTime;
+        }
+    }
+
+    return nMinPeriod;
 }
 
 Timer::Timer() : Scheduler()
@@ -86,7 +113,7 @@ void Timer::Start()
         pSVData->mpSalTimer->SetCallback( CallbackTaskScheduling );
     }
     if ( mnTimeout < pSVData->mnTimerPeriod )
-        ImplStartTimer( pSVData, mnTimeout );
+        Timer::ImplStartTimer( pSVData, mnTimeout );
 }
 
 void Timer::SetTimeout( sal_uLong nNewTimeout )
@@ -97,7 +124,7 @@ void Timer::SetTimeout( sal_uLong nNewTimeout )
     {
         ImplSVData* pSVData = ImplGetSVData();
         if ( !pSVData->mnTimerUpdate && (mnTimeout < pSVData->mnTimerPeriod) )
-            ImplStartTimer( pSVData, mnTimeout );
+            Timer::ImplStartTimer( pSVData, mnTimeout );
     }
 }
 
