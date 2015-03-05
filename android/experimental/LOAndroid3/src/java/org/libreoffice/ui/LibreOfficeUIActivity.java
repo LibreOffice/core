@@ -9,38 +9,18 @@
 
 package org.libreoffice.ui;
 
-import org.libreoffice.LibreOfficeMainActivity;
-import org.libreoffice.R;
-import org.libreoffice.LOAbout;
-import org.libreoffice.storage.DocumentProviderFactory;
-import org.libreoffice.storage.IDocumentProvider;
-import org.libreoffice.storage.IFile;
-import org.libreoffice.storage.local.LocalDocumentsProvider;
-
-import java.io.File;
-import java.io.FileFilter;
-import java.io.FilenameFilter;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.prefs.Preferences;
-
-import android.graphics.drawable.BitmapDrawable;
-import android.net.Uri;
-import android.graphics.Shader.TileMode;
-
 import android.app.ActionBar;
-import android.app.ActionBar.OnNavigationListener;
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.DataSetObserver;
+import android.graphics.Shader;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
@@ -51,9 +31,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
-import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
@@ -62,15 +42,27 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.libreoffice.LOAbout;
+import org.libreoffice.LibreOfficeMainActivity;
+import org.libreoffice.R;
+import org.libreoffice.storage.DocumentProviderFactory;
+import org.libreoffice.storage.IDocumentProvider;
+import org.libreoffice.storage.IFile;
+
+import java.io.File;
+import java.io.FileFilter;
+import java.io.FilenameFilter;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 
 public class LibreOfficeUIActivity extends Activity implements ActionBar.OnNavigationListener {
-    private String tag = "file_manager";
+    private String LOGTAG = LibreOfficeUIActivity.class.getSimpleName();
     private SharedPreferences prefs;
     private int filterMode = FileUtilities.ALL;
     private int viewMode;
@@ -117,14 +109,11 @@ public class LibreOfficeUIActivity extends Activity implements ActionBar.OnNavig
         switchToDocumentProvider(documentProviderFactory.getDefaultProvider());
     }
 
-    public void createUI(){
+    public void createUI() {
+
         ActionBar actionBar = getActionBar();
-        actionBar.setDisplayShowTitleEnabled(false);//This should show current directory if anything
-        /*actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-          SpinnerAdapter mSpinnerAdapter = ArrayAdapter.createFromResource(this, R.array.file_view_modes,
-          android.R.layout.simple_spinner_dropdown_item);
-          actionBar.setListNavigationCallbacks(mSpinnerAdapter, this);
-          */
+        actionBar.setDisplayShowTitleEnabled(false); //This should show current directory if anything
+
         //make the navigation spinner
         Context context = actionBar.getThemedContext();
         ArrayAdapter<CharSequence> list = ArrayAdapter.createFromResource(context, R.array.file_view_modes, android.R.layout.simple_spinner_item);
@@ -135,11 +124,11 @@ public class LibreOfficeUIActivity extends Activity implements ActionBar.OnNavig
 
         //make striped actionbar
         BitmapDrawable bg = (BitmapDrawable)getResources().getDrawable(R.drawable.bg_striped);
-        bg.setTileModeXY(TileMode.REPEAT, TileMode.REPEAT);
+        bg.setTileModeXY(Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
         actionBar.setBackgroundDrawable(bg);
 
         BitmapDrawable bgSplit = (BitmapDrawable)getResources().getDrawable(R.drawable.bg_striped_split_img);
-        bgSplit.setTileModeXY(TileMode.REPEAT, TileMode.REPEAT);
+        bgSplit.setTileModeXY(Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
         actionBar.setSplitBackgroundDrawable(bgSplit);
 
         if( viewMode == GRID_VIEW){
@@ -249,7 +238,7 @@ public class LibreOfficeUIActivity extends Activity implements ActionBar.OnNavig
                                     Toast.LENGTH_SHORT).show();
                         }
                     });
-                    Log.e(tag, e.getMessage(), e.getCause());
+                    Log.e(LOGTAG, e.getMessage(), e.getCause());
                 }
                 return null;
             }
@@ -285,7 +274,7 @@ public class LibreOfficeUIActivity extends Activity implements ActionBar.OnNavig
                                     Toast.LENGTH_SHORT).show();
                         }
                     });
-                    Log.e(tag, e.getMessage(), e.getCause());
+                    Log.e(LOGTAG, e.getMessage(), e.getCause());
                 }
                 return null;
             }
@@ -315,7 +304,7 @@ public class LibreOfficeUIActivity extends Activity implements ActionBar.OnNavig
                                     Toast.LENGTH_SHORT).show();
                         }
                     });
-                    Log.e(tag, e.getMessage(), e.getCause());
+                    Log.e(LOGTAG, e.getMessage(), e.getCause());
                     return null;
                 }
             }
@@ -377,7 +366,7 @@ public class LibreOfficeUIActivity extends Activity implements ActionBar.OnNavig
                                     Toast.LENGTH_SHORT).show();
                         }
                     });
-                    Log.e(tag, e.getMessage(), e.getCause());
+                    Log.e(LOGTAG, e.getMessage(), e.getCause());
                     return null;
                 }
             }
@@ -487,10 +476,6 @@ public class LibreOfficeUIActivity extends Activity implements ActionBar.OnNavig
         sortMode = Integer.valueOf( defaultPrefs.getString( SORT_MODE_KEY , "-1") );
     }
 
-    public void editPreferences(MenuItem item){
-        startActivity( new Intent( this , PreferenceEditor.class) );
-    }
-
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         // TODO Auto-generated method stub
@@ -499,9 +484,9 @@ public class LibreOfficeUIActivity extends Activity implements ActionBar.OnNavig
         outState.putInt( FILTER_MODE_KEY , filterMode );
         outState.putInt( EXPLORER_VIEW_TYPE_KEY , viewMode );
 
-        Log.d(tag, currentDirectory.toString() + Integer.toString(filterMode ) + Integer.toString(viewMode) );
+        Log.d(LOGTAG, currentDirectory.toString() + Integer.toString(filterMode ) + Integer.toString(viewMode) );
         //prefs.edit().putInt(EXPLORER_VIEW_TYPE, viewType).commit();
-        Log.d(tag, "savedInstanceSate");
+        Log.d(LOGTAG, "savedInstanceSate");
     }
 
     @Override
@@ -520,21 +505,21 @@ public class LibreOfficeUIActivity extends Activity implements ActionBar.OnNavig
         filterMode = savedInstanceState.getInt( FILTER_MODE_KEY , FileUtilities.ALL ) ;
         viewMode = savedInstanceState.getInt( EXPLORER_VIEW_TYPE_KEY , GRID_VIEW );
         //openDirectory( currentDirectory );
-        Log.d(tag, "onRestoreInstanceState");
-        Log.d(tag, currentDirectory.toString() + Integer.toString(filterMode ) + Integer.toString(viewMode) );
+        Log.d(LOGTAG, "onRestoreInstanceState");
+        Log.d(LOGTAG, currentDirectory.toString() + Integer.toString(filterMode ) + Integer.toString(viewMode) );
     }
 
     @Override
     protected void onPause() {
         //prefs.edit().putInt(EXPLORER_VIEW_TYPE, viewType).commit();
         super.onPause();
-        Log.d(tag, "onPause");
+        Log.d(LOGTAG, "onPause");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d(tag, "onResume");
+        Log.d(LOGTAG, "onResume");
         readPreferences();// intent values take precedence over prefs?
         Intent i = this.getIntent();
         if( i.hasExtra( CURRENT_DIRECTORY_KEY ) ){
@@ -544,39 +529,35 @@ public class LibreOfficeUIActivity extends Activity implements ActionBar.OnNavig
             } catch (URISyntaxException e) {
                 currentDirectory = documentProvider.getRootDirectory();
             }
-            Log.d(tag, CURRENT_DIRECTORY_KEY);
+            Log.d(LOGTAG, CURRENT_DIRECTORY_KEY);
         }
         if( i.hasExtra( FILTER_MODE_KEY ) ){
             filterMode = i.getIntExtra( FILTER_MODE_KEY, FileUtilities.ALL);
-            Log.d(tag, FILTER_MODE_KEY);
+            Log.d(LOGTAG, FILTER_MODE_KEY);
         }
         if( i.hasExtra( EXPLORER_VIEW_TYPE_KEY ) ){
             viewMode = i.getIntExtra( EXPLORER_VIEW_TYPE_KEY, GRID_VIEW);
-            Log.d(tag, EXPLORER_VIEW_TYPE_KEY);
+            Log.d(LOGTAG, EXPLORER_VIEW_TYPE_KEY);
         }
         createUI();
     }
 
     @Override
     protected void onStart() {
-        // TODO Auto-generated method stub
         super.onStart();
-        Log.d(tag, "onStart");
+        Log.d(LOGTAG, "onStart");
     }
 
     @Override
     protected void onStop() {
-        // TODO Auto-generated method stub
         super.onStop();
-        Log.d(tag, "onStop");
+        Log.d(LOGTAG, "onStop");
     }
 
     @Override
     protected void onDestroy() {
-        // TODO Auto-generated method stub
         super.onDestroy();
-
-        Log.d(tag, "onDestroy");
+        Log.d(LOGTAG, "onDestroy");
     }
 
     public boolean onNavigationItemSelected(int itemPosition, long itemId) {
@@ -606,17 +587,14 @@ public class LibreOfficeUIActivity extends Activity implements ActionBar.OnNavig
         }
 
         public Object getItem(int arg0) {
-            // TODO Auto-generated method stub
             return null;
         }
 
         public long getItemId(int arg0) {
-            // TODO Auto-generated method stub
             return 0;
         }
 
         public int getItemViewType(int arg0) {
-            // TODO Auto-generated method stub
             return 0;
         }
 
@@ -709,37 +687,30 @@ public class LibreOfficeUIActivity extends Activity implements ActionBar.OnNavig
         }
 
         public int getViewTypeCount() {
-            // TODO Auto-generated method stub
             return 1;
         }
 
         public boolean hasStableIds() {
-            // TODO Auto-generated method stub
             return false;
         }
 
         public boolean isEmpty() {
-            // TODO Auto-generated method stub
             return false;
         }
 
         public void registerDataSetObserver(DataSetObserver arg0) {
-            // TODO Auto-generated method stub
 
         }
 
         public void unregisterDataSetObserver(DataSetObserver arg0) {
-            // TODO Auto-generated method stub
 
         }
 
         public boolean areAllItemsEnabled() {
-            // TODO Auto-generated method stub
             return false;
         }
 
         public boolean isEnabled(int position) {
-            // TODO Auto-generated method stub
             return false;
         }
 
