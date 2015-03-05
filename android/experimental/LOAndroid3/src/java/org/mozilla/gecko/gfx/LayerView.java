@@ -28,6 +28,7 @@ import android.widget.FrameLayout;
 import org.libreoffice.LibreOfficeMainActivity;
 import org.libreoffice.R;
 import org.mozilla.gecko.OnInterceptTouchListener;
+import org.mozilla.gecko.OnSlideSwipeListener;
 
 /**
  * A view rendered by the layer compositor.
@@ -110,347 +111,349 @@ public class LayerView extends FrameLayout {
         setFocusableInTouchMode(true);
 
         createGLThread();
+
+        setOnTouchListener(new OnSlideSwipeListener(getContext()));
     }
 
     public void show() {
-        // Fix this if TextureView support is turned back on above
-        mSurfaceView.setVisibility(View.VISIBLE);
+            // Fix this if TextureView support is turned back on above
+            mSurfaceView.setVisibility(View.VISIBLE);
     }
 
     public void hide() {
-        // Fix this if TextureView support is turned back on above
-        mSurfaceView.setVisibility(View.INVISIBLE);
+            // Fix this if TextureView support is turned back on above
+            mSurfaceView.setVisibility(View.INVISIBLE);
     }
 
     public void destroy() {
-        if (mLayerClient != null) {
-            mLayerClient.destroy();
-        }
-        if (mRenderer != null) {
-            mRenderer.destroy();
-        }
+            if (mLayerClient != null) {
+                    mLayerClient.destroy();
+            }
+            if (mRenderer != null) {
+                    mRenderer.destroy();
+            }
     }
 
     public void setTouchIntercepter(final OnInterceptTouchListener touchIntercepter) {
-        // this gets run on the gecko thread, but for thread safety we want the assignment
-        // on the UI thread.
-        post(new Runnable() {
-            public void run() {
-                mTouchIntercepter = touchIntercepter;
-            }
-        });
+            // this gets run on the gecko thread, but for thread safety we want the assignment
+            // on the UI thread.
+            post(new Runnable() {
+                    public void run() {
+                            mTouchIntercepter = touchIntercepter;
+                    }
+            });
     }
 
     public void setInputConnectionHandler(InputConnectionHandler inputConnectionHandler) {
-        mInputConnectionHandler = inputConnectionHandler;
+            mInputConnectionHandler = inputConnectionHandler;
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
-            requestFocus();
-        }
+            if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
+                    requestFocus();
+            }
 
-        if (mTouchIntercepter != null && mTouchIntercepter.onInterceptTouchEvent(this, event)) {
-            return true;
-        }
-        if (mPanZoomController != null && mPanZoomController.onTouchEvent(event)) {
-            return true;
-        }
-        if (mTouchIntercepter != null && mTouchIntercepter.onTouch(this, event)) {
-            return true;
-        }
-        return false;
+            if (mTouchIntercepter != null && mTouchIntercepter.onInterceptTouchEvent(this, event)) {
+                    return true;
+            }
+            if (mPanZoomController != null && mPanZoomController.onTouchEvent(event)) {
+                    return true;
+            }
+            if (mTouchIntercepter != null && mTouchIntercepter.onTouch(this, event)) {
+                    return true;
+            }
+            return false;
     }
 
     @Override
     public boolean onHoverEvent(MotionEvent event) {
-        if (mTouchIntercepter != null && mTouchIntercepter.onTouch(this, event)) {
-            return true;
-        }
-        return false;
+            if (mTouchIntercepter != null && mTouchIntercepter.onTouch(this, event)) {
+                    return true;
+            }
+            return false;
     }
 
     @Override
     public boolean onGenericMotionEvent(MotionEvent event) {
-        if (mPanZoomController != null && mPanZoomController.onMotionEvent(event)) {
-            return true;
-        }
-        return false;
+            if (mPanZoomController != null && mPanZoomController.onMotionEvent(event)) {
+                    return true;
+            }
+            return false;
     }
 
     public GeckoLayerClient getLayerClient() { return mLayerClient; }
     public PanZoomController getPanZoomController() { return mPanZoomController; }
 
     public void setViewportSize(IntSize size) {
-        mLayerClient.setViewportSize(new FloatSize(size));
+            mLayerClient.setViewportSize(new FloatSize(size));
     }
 
     public ImmutableViewportMetrics getViewportMetrics() {
-        return mLayerClient.getViewportMetrics();
+            return mLayerClient.getViewportMetrics();
     }
 
     @Override
     public InputConnection onCreateInputConnection(EditorInfo outAttrs) {
-        if (mInputConnectionHandler != null)
-            return mInputConnectionHandler.onCreateInputConnection(outAttrs);
-        return null;
+            if (mInputConnectionHandler != null)
+                    return mInputConnectionHandler.onCreateInputConnection(outAttrs);
+            return null;
     }
 
     @Override
     public boolean onKeyPreIme(int keyCode, KeyEvent event) {
-        if (mInputConnectionHandler != null)
-            return mInputConnectionHandler.onKeyPreIme(keyCode, event);
-        return false;
+            if (mInputConnectionHandler != null)
+                    return mInputConnectionHandler.onKeyPreIme(keyCode, event);
+            return false;
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (mInputConnectionHandler != null)
-            return mInputConnectionHandler.onKeyDown(keyCode, event);
-        return false;
+            if (mInputConnectionHandler != null)
+                    return mInputConnectionHandler.onKeyDown(keyCode, event);
+            return false;
     }
 
     @Override
     public boolean onKeyLongPress(int keyCode, KeyEvent event) {
-        if (mInputConnectionHandler != null)
-            return mInputConnectionHandler.onKeyLongPress(keyCode, event);
-        return false;
+            if (mInputConnectionHandler != null)
+                    return mInputConnectionHandler.onKeyLongPress(keyCode, event);
+            return false;
     }
 
     @Override
     public boolean onKeyMultiple(int keyCode, int repeatCount, KeyEvent event) {
-        if (mInputConnectionHandler != null)
-            return mInputConnectionHandler.onKeyMultiple(keyCode, repeatCount, event);
-        return false;
+            if (mInputConnectionHandler != null)
+                    return mInputConnectionHandler.onKeyMultiple(keyCode, repeatCount, event);
+            return false;
     }
 
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
-        if (mInputConnectionHandler != null)
-            return mInputConnectionHandler.onKeyUp(keyCode, event);
-        return false;
+            if (mInputConnectionHandler != null)
+                    return mInputConnectionHandler.onKeyUp(keyCode, event);
+            return false;
     }
 
     public boolean isIMEEnabled() {
-        /*if (mInputConnectionHandler != null) {
-            return mInputConnectionHandler.isIMEEnabled();
-        }*/
-        return false;
+            /*if (mInputConnectionHandler != null) {
+              return mInputConnectionHandler.isIMEEnabled();
+              }*/
+            return false;
     }
 
     public void requestRender() {
-        if (mListener != null) {
-            mListener.renderRequested();
-        }
+            if (mListener != null) {
+                    mListener.renderRequested();
+            }
     }
 
     public void addLayer(Layer layer) {
-        mRenderer.addLayer(layer);
+            mRenderer.addLayer(layer);
     }
 
     public void removeLayer(Layer layer) {
-        mRenderer.removeLayer(layer);
+            mRenderer.removeLayer(layer);
     }
 
     public int getMaxTextureSize() {
-        return mRenderer.getMaxTextureSize();
+            return mRenderer.getMaxTextureSize();
     }
 
     public void setLayerRenderer(LayerRenderer renderer) {
-        mRenderer = renderer;
+            mRenderer = renderer;
     }
 
     public LayerRenderer getLayerRenderer() {
-        return mRenderer;
+            return mRenderer;
     }
 
     /* paintState must be a PAINT_xxx constant. The state will only be changed
      * if paintState represents a state that occurs after the current state. */
     public void setPaintState(int paintState) {
-        if (paintState > mPaintState) {
-            Log.d(LOGTAG, "LayerView paint state set to " + paintState);
-            mPaintState = paintState;
-        }
+            if (paintState > mPaintState) {
+                    Log.d(LOGTAG, "LayerView paint state set to " + paintState);
+                    mPaintState = paintState;
+            }
     }
 
     public int getPaintState() {
-        return mPaintState;
+            return mPaintState;
     }
 
     public LayerRenderer getRenderer() {
-        return mRenderer;
+            return mRenderer;
     }
 
     public void setListener(Listener listener) {
-        mListener = listener;
+            mListener = listener;
     }
 
     Listener getListener() {
-        return mListener;
+            return mListener;
     }
 
     public GLController getGLController() {
-        return mGLController;
+            return mGLController;
     }
 
     public Bitmap getDrawable(String name) {
-        Context context = getContext();
-        Resources resources = context.getResources();
-        String packageName = resources.getResourcePackageName(R.id.dummy_id_for_package_name_resolution);
-        int resourceID = resources.getIdentifier(name, "drawable", packageName);
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inScaled = false;
-        return BitmapFactory.decodeResource(context.getResources(), resourceID, options);
+            Context context = getContext();
+            Resources resources = context.getResources();
+            String packageName = resources.getResourcePackageName(R.id.dummy_id_for_package_name_resolution);
+            int resourceID = resources.getIdentifier(name, "drawable", packageName);
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inScaled = false;
+            return BitmapFactory.decodeResource(context.getResources(), resourceID, options);
     }
 
     Bitmap getBackgroundPattern() {
-        return getDrawable("background");
+            return getDrawable("background");
     }
 
     Bitmap getShadowPattern() {
-        return getDrawable("shadow");
+            return getDrawable("shadow");
     }
 
     private void onSizeChanged(int width, int height) {
-        mGLController.surfaceChanged(width, height);
+            mGLController.surfaceChanged(width, height);
 
-        mLayerClient.setViewportSize(new FloatSize(width, height));
+            mLayerClient.setViewportSize(new FloatSize(width, height));
 
-        if (mListener != null) {
-            mListener.surfaceChanged(width, height);
-        }
+            if (mListener != null) {
+                    mListener.surfaceChanged(width, height);
+            }
     }
 
     private void onDestroyed() {
-        mGLController.surfaceDestroyed();
+            mGLController.surfaceDestroyed();
 
-        if (mListener != null) {
-            mListener.compositionPauseRequested();
-        }
+            if (mListener != null) {
+                    mListener.compositionPauseRequested();
+            }
     }
 
     public Object getNativeWindow() {
-        if (mSurfaceView != null)
-            return mSurfaceView.getHolder();
+            if (mSurfaceView != null)
+                    return mSurfaceView.getHolder();
 
-        return mTextureView.getSurfaceTexture();
+            return mTextureView.getSurfaceTexture();
     }
 
     /** This function is invoked by Gecko (compositor thread) via JNI; be careful when modifying signature. */
     public static GLController registerCxxCompositor() {
-        try {
-            LayerView layerView = LibreOfficeMainActivity.mAppContext.getLayerClient().getView();
-            layerView.mListener.compositorCreated();
-            return layerView.getGLController();
-        } catch (Exception e) {
-            Log.e(LOGTAG, "Error registering compositor!", e);
-            return null;
-        }
+            try {
+                    LayerView layerView = LibreOfficeMainActivity.mAppContext.getLayerClient().getView();
+                    layerView.mListener.compositorCreated();
+                    return layerView.getGLController();
+            } catch (Exception e) {
+                    Log.e(LOGTAG, "Error registering compositor!", e);
+                    return null;
+            }
     }
 
     public interface Listener {
-        void compositorCreated();
-        void renderRequested();
-        void compositionPauseRequested();
-        void compositionResumeRequested(int width, int height);
-        void surfaceChanged(int width, int height);
+            void compositorCreated();
+            void renderRequested();
+            void compositionPauseRequested();
+            void compositionResumeRequested(int width, int height);
+            void surfaceChanged(int width, int height);
     }
 
     private class SurfaceListener implements SurfaceHolder.Callback {
-        public void surfaceChanged(SurfaceHolder holder, int format, int width,
-                                                int height) {
-            onSizeChanged(width, height);
-        }
-
-        public void surfaceCreated(SurfaceHolder holder) {
-            if (mRenderControllerThread != null) {
-                mRenderControllerThread.surfaceCreated();
+            public void surfaceChanged(SurfaceHolder holder, int format, int width,
+                            int height) {
+                    onSizeChanged(width, height);
             }
-        }
 
-        public void surfaceDestroyed(SurfaceHolder holder) {
-            onDestroyed();
-        }
+            public void surfaceCreated(SurfaceHolder holder) {
+                    if (mRenderControllerThread != null) {
+                            mRenderControllerThread.surfaceCreated();
+                    }
+            }
+
+            public void surfaceDestroyed(SurfaceHolder holder) {
+                    onDestroyed();
+            }
     }
 
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-        super.onLayout(changed, left, top, right, bottom);
-        if (changed) {
-            setViewportSize(new IntSize(right - left, bottom - top));
-        }
+            super.onLayout(changed, left, top, right, bottom);
+            if (changed) {
+                    setViewportSize(new IntSize(right - left, bottom - top));
+            }
     }
 
     private class SurfaceTextureListener implements TextureView.SurfaceTextureListener {
-        public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
-            // We don't do this for surfaceCreated above because it is always followed by a surfaceChanged,
-            // but that is not the case here.
-            if (mRenderControllerThread != null) {
-                mRenderControllerThread.surfaceCreated();
+            public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
+                    // We don't do this for surfaceCreated above because it is always followed by a surfaceChanged,
+                    // but that is not the case here.
+                    if (mRenderControllerThread != null) {
+                            mRenderControllerThread.surfaceCreated();
+                    }
+                    onSizeChanged(width, height);
             }
-            onSizeChanged(width, height);
-        }
 
-        public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
-            onDestroyed();
-            return true; // allow Android to call release() on the SurfaceTexture, we are done drawing to it
-        }
+            public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
+                    onDestroyed();
+                    return true; // allow Android to call release() on the SurfaceTexture, we are done drawing to it
+            }
 
-        public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
-            onSizeChanged(width, height);
-        }
+            public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
+                    onSizeChanged(width, height);
+            }
 
-        public void onSurfaceTextureUpdated(SurfaceTexture surface) {
-        }
+            public void onSurfaceTextureUpdated(SurfaceTexture surface) {
+            }
     }
 
     private RenderControllerThread mRenderControllerThread;
 
     public synchronized void createGLThread() {
-        if (mRenderControllerThread != null) {
-            throw new LayerViewException ("createGLThread() called with a GL thread already in place!");
-        }
+            if (mRenderControllerThread != null) {
+                    throw new LayerViewException ("createGLThread() called with a GL thread already in place!");
+            }
 
-        Log.e(LOGTAG, "### Creating GL thread!");
-        mRenderControllerThread = new RenderControllerThread(mGLController);
-        mRenderControllerThread.start();
-        setListener(mRenderControllerThread);
-        notifyAll();
+            Log.e(LOGTAG, "### Creating GL thread!");
+            mRenderControllerThread = new RenderControllerThread(mGLController);
+            mRenderControllerThread.start();
+            setListener(mRenderControllerThread);
+            notifyAll();
     }
 
     public synchronized Thread destroyGLThread() {
-        // Wait for the GL thread to be started.
-        Log.e(LOGTAG, "### Waiting for GL thread to be created...");
-        while (mRenderControllerThread == null) {
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+            // Wait for the GL thread to be started.
+            Log.e(LOGTAG, "### Waiting for GL thread to be created...");
+            while (mRenderControllerThread == null) {
+                    try {
+                            wait();
+                    } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                    }
             }
-        }
 
-        Log.e(LOGTAG, "### Destroying GL thread!");
-        Thread thread = mRenderControllerThread;
-        mRenderControllerThread.shutdown();
-        setListener(null);
-        mRenderControllerThread = null;
-        return thread;
+            Log.e(LOGTAG, "### Destroying GL thread!");
+            Thread thread = mRenderControllerThread;
+            mRenderControllerThread.shutdown();
+            setListener(null);
+            mRenderControllerThread = null;
+            return thread;
     }
 
     public static class LayerViewException extends RuntimeException {
-        public static final long serialVersionUID = 1L;
+            public static final long serialVersionUID = 1L;
 
-        LayerViewException(String e) {
-            super(e);
-        }
+            LayerViewException(String e) {
+                    super(e);
+            }
     }
 
     public void setFullScreen(boolean fullScreen) {
-        mFullScreen = fullScreen;
+            mFullScreen = fullScreen;
     }
 
     public boolean isFullScreen() {
-        return mFullScreen;
+            return mFullScreen;
     }
 }
