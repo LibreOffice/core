@@ -168,6 +168,8 @@ void ScRawToken::SetOpCode( OpCode e )
         case ocArrayColSep:
         case ocArrayOpen:
         case ocArrayClose:
+        case ocTableRefOpen:
+        case ocTableRefClose:
             eType = svSep;
             break;
         default:
