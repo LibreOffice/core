@@ -60,6 +60,7 @@ protected:
     friend struct ImplSchedulerData;
     virtual void SetDeletionFlags();
     virtual bool ReadyForSchedule( bool bTimer ) { return !bTimer; }
+    virtual sal_uLong UpdateMinPeriod( sal_uLong nMinPeriod, sal_uLong nTime );
 
 public:
     Scheduler();
@@ -79,7 +80,7 @@ public:
 
     bool            IsActive() const { return mbActive; }
 
-    Scheduler&          operator=( const Scheduler& Scheduler );
+    Scheduler&          operator=( const Scheduler& rScheduler );
     static void ImplDeInitScheduler();
 
     /// Process all pending idle tasks ahead of time in priority order.
