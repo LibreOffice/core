@@ -72,7 +72,7 @@ AquaSalVirtualDevice::AquaSalVirtualDevice( AquaSalGraphics* pGraphic, long &nDX
         if (nDY == 0)
             nDY = 1;
         mxLayer = CGLayerCreateWithContext( pData->rCGContext, CGSizeMake( nDX, nDY), NULL );
-        // Interogate the context as to its real size
+        // Interrogate the context as to its real size
         if (mxLayer)
         {
             const CGSize aSize = CGLayerGetSize( mxLayer );
