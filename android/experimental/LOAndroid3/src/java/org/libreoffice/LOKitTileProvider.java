@@ -10,6 +10,7 @@ import org.libreoffice.kit.DirectBufferAllocator;
 import org.libreoffice.kit.Document;
 import org.libreoffice.kit.LibreOfficeKit;
 import org.libreoffice.kit.Office;
+import org.libreoffice.R;
 
 import org.mozilla.gecko.TextSelection;
 import org.mozilla.gecko.TextSelectionHandle;
@@ -18,6 +19,7 @@ import org.mozilla.gecko.gfx.CairoImage;
 import org.mozilla.gecko.gfx.GeckoLayerClient;
 import org.mozilla.gecko.gfx.IntSize;
 import org.mozilla.gecko.gfx.LayerView;
+
 
 import java.nio.ByteBuffer;
 
@@ -147,19 +149,22 @@ public class LOKitTileProvider implements TileProvider, Document.MessageCallback
     }
 
     @Override
+    public int getPartsCount() {
+        return mDocument.getParts();
+    }
+
+    @Override
     public void onSwipeLeft() {
-        Log.d(LOGTAG, "onSwipeLeft received");
-        if (mDocument.getDocumentType() == Document.DOCTYPE_PRESENTATION
-                && getCurrentPartNumber() < mDocument.getParts()-1) {
+        if (mDocument.getDocumentType() == Document.DOCTYPE_PRESENTATION &&
+                getCurrentPartNumber() < getPartsCount()-1) {
             LOKitShell.sendChangePartEvent(getCurrentPartNumber()+1);
         }
     }
 
     @Override
     public void onSwipeRight() {
-        Log.d(LOGTAG, "onSwipeRight received");
-        if (mDocument.getDocumentType() == Document.DOCTYPE_PRESENTATION
-                && getCurrentPartNumber() > 0) {
+        if (mDocument.getDocumentType() == Document.DOCTYPE_PRESENTATION &&
+                getCurrentPartNumber() > 0) {
             LOKitShell.sendChangePartEvent(getCurrentPartNumber()-1);
         }
     }

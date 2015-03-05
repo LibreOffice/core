@@ -129,6 +129,11 @@ public class MockTileProvider implements TileProvider {
     }
 
     @Override
+    public int getPartsCount() {
+        return 0;
+    }
+
+    @Override
     public void onSwipeLeft() {
     }
 

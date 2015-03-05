@@ -43,6 +43,11 @@ public interface TileProvider {
      */
     int getCurrentPartNumber();
 
+    /**
+     * Get the total number of parts.
+     */
+    int getPartsCount();
+
     Bitmap thumbnail(int size);
 
     /**
