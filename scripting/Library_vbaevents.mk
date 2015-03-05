@@ -38,7 +38,6 @@ $(eval $(call gb_Library_use_libraries,vbaevents,\
 
 $(eval $(call gb_Library_add_exception_objects,vbaevents,\
 	scripting/source/vbaevents/eventhelper \
-	scripting/source/vbaevents/service \
 ))
 
 # vim: set noet sw=4 ts=4:
