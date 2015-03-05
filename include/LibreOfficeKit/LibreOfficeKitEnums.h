@@ -43,7 +43,8 @@ typedef enum
      * longer valid.
      *
      * Rectangle format: "width, height, x, y", where all numbers are document
-     * coordinates, in twips.
+     * coordinates, in twips. When all tiles are supposed to be dropped, the
+     * format is the "EMPTY" string.
      */
     LOK_CALLBACK_INVALIDATE_TILES,
     /**
@@ -87,7 +88,13 @@ typedef enum
      * LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR once it becomes true. Payload is
      * either the "true" or the "false" string.
      */
-    LOK_CALLBACK_CURSOR_VISIBLE
+    LOK_CALLBACK_CURSOR_VISIBLE,
+    /**
+     * The size and/or the position of the graphic selection changed.
+     *
+     * Rectangle format is the same as LOK_CALLBACK_INVALIDATE_TILES.
+     */
+    LOK_CALLBACK_GRAPHIC_SELECTION
 }
 LibreOfficeKitCallbackType;
 

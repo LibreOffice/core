@@ -51,6 +51,7 @@
 #include <svx/svdograf.hxx>
 
 #include <editeng/editdata.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 using namespace com::sun::star;
 
@@ -701,6 +702,16 @@ void SdrMarkView::SetMarkHandles()
         if (bFrmHdl)
         {
             Rectangle aRect(GetMarkedObjRect());
+
+            if (GetModel()->isTiledRendering())
+            {
+                OString sRectangle;
+                if (aRect.IsEmpty())
+                    sRectangle = "EMPTY";
+                else
+                    sRectangle = aRect.toString();
+                GetModel()->libreOfficeKitCallback(LOK_CALLBACK_GRAPHIC_SELECTION, sRectangle.getStr());
+            }
 
             if(!aRect.IsEmpty())
             { // otherwise nothing is found
