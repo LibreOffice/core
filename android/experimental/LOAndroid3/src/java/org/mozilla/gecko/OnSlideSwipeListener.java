@@ -9,15 +9,19 @@ import android.view.View.OnTouchListener;
 import android.util.Log;
 
 import org.libreoffice.LOKitShell;
+import org.mozilla.gecko.gfx.GeckoLayerClient;
+import org.mozilla.gecko.gfx.ImmutableViewportMetrics;
 
 
 public class OnSlideSwipeListener implements OnTouchListener {
     private static String LOGTAG = OnSlideSwipeListener.class.getName();
 
     private final GestureDetector mGestureDetector;
+    private GeckoLayerClient mLayerClient;
 
-    public OnSlideSwipeListener(Context ctx){
+    public OnSlideSwipeListener(Context ctx, GeckoLayerClient client){
         mGestureDetector = new GestureDetector(ctx, new GestureListener());
+        mLayerClient = client;
     }
 
     private final class GestureListener extends SimpleOnGestureListener {
@@ -32,6 +36,16 @@ public class OnSlideSwipeListener implements OnTouchListener {
 
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velX, float velY) {
+            // Check if the page is already zoomed-in.
+            // Disable swiping gesture if that's the case.
+            ImmutableViewportMetrics viewportMetrics = mLayerClient.getViewportMetrics();
+            if (viewportMetrics.viewportRectLeft > viewportMetrics.pageRectLeft ||
+                    viewportMetrics.viewportRectRight < viewportMetrics.pageRectRight) {
+                return false;
+            }
+
+            // Otherwise, the page is smaller than viewport, perform swipe
+            // gesture.
             try {
                 float diffY = e2.getY() - e1.getY();
                 float diffX = e2.getX() - e1.getX();
