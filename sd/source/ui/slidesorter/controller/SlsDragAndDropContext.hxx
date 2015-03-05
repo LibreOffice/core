@@ -62,7 +62,7 @@ public:
 
     void SetTargetSlideSorter (
         SlideSorter* pSlideSorter = NULL,
-        const Point aMousePosition = Point(0,0),
+        const Point& rMousePosition = Point(0,0),
         const InsertionIndicatorHandler::Mode eMode = InsertionIndicatorHandler::UnknownMode,
         const bool bIsOverSourceView = false);
 

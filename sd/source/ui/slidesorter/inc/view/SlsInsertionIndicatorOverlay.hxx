@@ -92,14 +92,14 @@ private:
     void SetPositionAndSize (const Rectangle& rBoundingBox);
     Point PaintRepresentatives (
         OutputDevice& rContent,
-        const Size aPreviewSize,
+        const Size& rPreviewSize,
         const sal_Int32 nOffset,
         const ::std::vector<controller::TransferableData::Representative>& rPages) const;
     void PaintPageCount (
         OutputDevice& rDevice,
         const sal_Int32 nSelectionCount,
-        const Size aPreviewSize,
-        const Point aFirstPageOffset) const;
+        const Size& rPreviewSize,
+        const Point& rFirstPageOffset) const;
     /** Setup the insertion indicator by creating the icon.  It consists of
         scaled down previews of some of the selected pages.
     */

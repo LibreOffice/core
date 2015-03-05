@@ -671,10 +671,10 @@ Reference< XPropertySet > CopyTableWizard::impl_ensureDataAccessDescriptor_throw
 namespace
 {
     bool lcl_hasNonEmptyStringValue_throw( const Reference< XPropertySet >& _rxDescriptor,
-        const Reference< XPropertySetInfo > _rxPSI, const OUString& _rPropertyName )
+        const Reference< XPropertySetInfo >& rxPSI, const OUString& _rPropertyName )
     {
         OUString sValue;
-        if ( _rxPSI->hasPropertyByName( _rPropertyName ) )
+        if ( rxPSI->hasPropertyByName( _rPropertyName ) )
         {
             OSL_VERIFY( _rxDescriptor->getPropertyValue( _rPropertyName ) >>= sValue );
         }

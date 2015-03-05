@@ -291,7 +291,7 @@ bool SwPagePreviewLayout::ReInit()
     @note _nProposedStartPageNum, _onStartPageNum are absolute
 */
 bool SwPagePreviewLayout::Prepare( const sal_uInt16 _nProposedStartPageNum,
-                                   const Point      _aProposedStartPos,
+                                   const Point&      rProposedStartPos,
                                    const Size&      _rPxWinSize,
                                    sal_uInt16&      _onStartPageNum,
                                    Rectangle&       _orDocPreviewPaintRect,
@@ -314,9 +314,9 @@ bool SwPagePreviewLayout::Prepare( const sal_uInt16 _nProposedStartPageNum,
             return false;
 
         bool bStartPosRangeValid =
-                _aProposedStartPos.X() >= 0 && _aProposedStartPos.Y() >= 0 &&
-                _aProposedStartPos.X() <= maPreviewDocRect.Right() &&
-                _aProposedStartPos.Y() <= maPreviewDocRect.Bottom();
+                rProposedStartPos.X() >= 0 && rProposedStartPos.Y() >= 0 &&
+                rProposedStartPos.X() <= maPreviewDocRect.Right() &&
+                rProposedStartPos.Y() <= maPreviewDocRect.Bottom();
         OSL_ENSURE( bStartPosRangeValid,
                 "proposed start position out of range - no prepare of preview paint");
         if ( !bStartPosRangeValid )
@@ -328,7 +328,7 @@ bool SwPagePreviewLayout::Prepare( const sal_uInt16 _nProposedStartPageNum,
             return false;
 
         bool bStartInfoValid = _nProposedStartPageNum > 0 ||
-                               _aProposedStartPos != Point(0,0);
+                               rProposedStartPos != Point(0,0);
         if ( !bStartInfoValid )
             nProposedStartPageNum = 1;
     }
@@ -383,9 +383,9 @@ bool SwPagePreviewLayout::Prepare( const sal_uInt16 _nProposedStartPageNum,
         // determine column and row of proposed start position.
         // Note: paint starts at point (0,0)
         const sal_uInt16 nColOfProposed =
-                static_cast<sal_uInt16>(_aProposedStartPos.X() / mnColWidth) + 1;
+                static_cast<sal_uInt16>(rProposedStartPos.X() / mnColWidth) + 1;
         const sal_uInt16 nRowOfProposed =
-                static_cast<sal_uInt16>(_aProposedStartPos.Y() / mnRowHeight) + 1;
+                static_cast<sal_uInt16>(rProposedStartPos.Y() / mnRowHeight) + 1;
         // determine start page == page at proposed start position
         // OD 19.02.2003 #107369# - leaving left-top-corner blank is
         // controlled by <mbBookPreview>.
@@ -413,11 +413,11 @@ bool SwPagePreviewLayout::Prepare( const sal_uInt16 _nProposedStartPageNum,
         mnPaintStartRow = nRowOfProposed;
         // page offset
         maPaintStartPageOffset.X() =
-                (_aProposedStartPos.X() % mnColWidth) - mnXFree;
+                (rProposedStartPos.X() % mnColWidth) - mnXFree;
         maPaintStartPageOffset.Y() =
-                (_aProposedStartPos.Y() % mnRowHeight) - mnYFree;
+                (rProposedStartPos.Y() % mnRowHeight) - mnYFree;
         // virtual preview document offset.
-        maPaintPreviewDocOffset = _aProposedStartPos;
+        maPaintPreviewDocOffset = rProposedStartPos;
     }
 
     // determine additional paint offset, if preview layout fits into window.
@@ -897,7 +897,7 @@ bool SwPagePreviewLayout::CalcStartValuesForSelectedPageMove(
 struct PreviewPosInsidePagePred
 {
     const Point mnPreviewPos;
-    PreviewPosInsidePagePred( const Point _nPreviewPos ) : mnPreviewPos( _nPreviewPos ) {};
+    PreviewPosInsidePagePred( const Point& rPreviewPos ) : mnPreviewPos( rPreviewPos ) {};
     bool operator() ( const PreviewPage* _pPreviewPage )
     {
         if ( _pPreviewPage->bVisible )
@@ -909,7 +909,7 @@ struct PreviewPosInsidePagePred
     }
 };
 
-bool SwPagePreviewLayout::IsPreviewPosInDocPreviewPage( const Point  _aPreviewPos,
+bool SwPagePreviewLayout::IsPreviewPosInDocPreviewPage( const Point&  rPreviewPos,
                                                     Point&       _orDocPos,
                                                     bool&        _obPosInEmptyPage,
                                                     sal_uInt16&  _onPageNum ) const
@@ -922,7 +922,7 @@ bool SwPagePreviewLayout::IsPreviewPosInDocPreviewPage( const Point  _aPreviewPo
 
     std::vector<PreviewPage*>::const_iterator aFoundPreviewPageIter =
             std::find_if( maPreviewPages.begin(), maPreviewPages.end(),
-                          PreviewPosInsidePagePred( _aPreviewPos ) );
+                          PreviewPosInsidePagePred( rPreviewPos ) );
 
     if ( aFoundPreviewPageIter != maPreviewPages.end() )
     {
@@ -932,7 +932,7 @@ bool SwPagePreviewLayout::IsPreviewPosInDocPreviewPage( const Point  _aPreviewPo
         if ( !_obPosInEmptyPage )
         {
             // given preview position inside a normal page
-            _orDocPos = _aPreviewPos -
+            _orDocPos = rPreviewPos -
                         (*aFoundPreviewPageIter)->aPreviewWinPos +
                         (*aFoundPreviewPageIter)->aLogicPos;
             return true;
@@ -986,7 +986,7 @@ SwTwips SwPagePreviewLayout::GetWinPagesScrollAmount(
 
     OD 12.12.2002 #103492#
 */
-bool SwPagePreviewLayout::Paint( const Rectangle  _aOutRect ) const
+bool SwPagePreviewLayout::Paint(const Rectangle& rOutRect) const
 {
     // check environment and parameters
     {
@@ -1027,7 +1027,7 @@ bool SwPagePreviewLayout::Paint( const Rectangle  _aOutRect ) const
 
     // paint preview background
     {
-        SwRegionRects aPreviewBackgrdRegion( _aOutRect );
+        SwRegionRects aPreviewBackgrdRegion(rOutRect);
         // calculate preview background rectangles
         for ( std::vector<PreviewPage*>::const_iterator aPageIter = maPreviewPages.begin();
               aPageIter != maPreviewPages.end();
@@ -1044,7 +1044,7 @@ bool SwPagePreviewLayout::Paint( const Rectangle  _aOutRect ) const
     }
 
     // prepare data for paint of pages
-    const Rectangle aPxOutRect( pOutputDev->LogicToPixel( _aOutRect ) );
+    const Rectangle aPxOutRect( pOutputDev->LogicToPixel(rOutRect) );
 
     MapMode aMapMode( pOutputDev->GetMapMode() );
     MapMode aSavedMapMode = aMapMode;
@@ -1150,7 +1150,7 @@ bool SwPagePreviewLayout::Paint( const Rectangle  _aOutRect ) const
 
     OD 18.12.2002 #103492#
 */
-void SwPagePreviewLayout::Repaint( const Rectangle _aInvalidCoreRect ) const
+void SwPagePreviewLayout::Repaint( const Rectangle& rInvalidCoreRect ) const
 {
     // check environment and parameters
     {
@@ -1183,9 +1183,9 @@ void SwPagePreviewLayout::Repaint( const Rectangle _aInvalidCoreRect ) const
             continue;
 
         Rectangle aPageRect( (*aPageIter)->aLogicPos, (*aPageIter)->aPageSize );
-        if ( _aInvalidCoreRect.IsOver( aPageRect ) )
+        if ( rInvalidCoreRect.IsOver( aPageRect ) )
         {
-            aPageRect.Intersection( _aInvalidCoreRect );
+            aPageRect.Intersection(rInvalidCoreRect);
             Rectangle aInvalidPreviewRect = aPageRect;
             aInvalidPreviewRect.SetPos( aInvalidPreviewRect.TopLeft() -
                                       (*aPageIter)->aLogicPos +

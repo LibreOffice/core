@@ -145,7 +145,7 @@ public:
     void Erase( PropertyIds eId);
 
     //Imports properties from pMap, overwriting those with the same PropertyIds as the current map
-    void InsertProps(const std::shared_ptr<PropertyMap> pMap);
+    void InsertProps(const std::shared_ptr<PropertyMap>& rMap);
 
     //Returns a copy of the property if it exists, .first is its PropertyIds and .second is its Value (type css::uno::Any)
     boost::optional<Property> getProperty( PropertyIds eId ) const;

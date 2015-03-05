@@ -352,21 +352,19 @@ void PropertyMap::dumpXml( const TagLogger::Pointer_t pLogger ) const
 }
 #endif
 
-void PropertyMap::InsertProps(const PropertyMapPtr pMap)
+void PropertyMap::InsertProps(const PropertyMapPtr& rMap)
 {
-    if(pMap)
+    if (rMap)
     {
-        MapIterator pEnd = pMap->m_vMap.end();
-        for ( MapIterator iter = pMap->m_vMap.begin(); iter!=pEnd; ++iter )
+        MapIterator pEnd = rMap->m_vMap.end();
+        for ( MapIterator iter = rMap->m_vMap.begin(); iter!=pEnd; ++iter )
             m_vMap[iter->first] = iter->second;
 
-        insertTableProperties(pMap.get());
+        insertTableProperties(rMap.get());
 
         Invalidate();
     }
 }
-
-
 
 void PropertyMap::insertTableProperties( const PropertyMap* )
 {

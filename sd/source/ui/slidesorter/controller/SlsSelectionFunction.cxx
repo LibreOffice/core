@@ -701,7 +701,7 @@ void SelectionFunction::SwitchToNormalMode (void)
             new NormalModeHandler(mrSlideSorter, *this)));
 }
 
-void SelectionFunction::SwitchToDragAndDropMode (const Point aMousePosition)
+void SelectionFunction::SwitchToDragAndDropMode (const Point& rMousePosition)
 {
     if (mpModeHandler->GetMode() != DragAndDropMode)
     {
@@ -712,23 +712,23 @@ void SelectionFunction::SwitchToDragAndDropMode (const Point aMousePosition)
         // Delayed initialization, only after mpModeHanler is set, otherwise DND initialization
         // could already trigger DND events, which would recursively trigger this code again,
         // and without mpModeHandler set it would again try to set a new handler.
-        handler->Initialize(aMousePosition, mpWindow);
+        handler->Initialize(rMousePosition, mpWindow);
 #else
         SwitchMode(::boost::shared_ptr<ModeHandler>(
-            new DragAndDropModeHandler(mrSlideSorter, *this, aMousePosition, mpWindow)));
+            new DragAndDropModeHandler(mrSlideSorter, *this, rMousePosition, mpWindow)));
 #endif
     }
 }
 
 void SelectionFunction::SwitchToMultiSelectionMode (
-    const Point aMousePosition,
+    const Point& rMousePosition,
     const sal_uInt32 nEventCode)
 {
     if (mpModeHandler->GetMode() != MultiSelectionMode)
 #ifndef MACOSX
     {
         ::boost::shared_ptr<MultiSelectionModeHandler> handler(
-            new MultiSelectionModeHandler(mrSlideSorter, *this, aMousePosition));
+            new MultiSelectionModeHandler(mrSlideSorter, *this, rMousePosition));
         SwitchMode(handler);
         // Delayed initialization, only after mpModeHanler is set, the handle ctor
         // is non-trivial, so it could possibly recurse just like the DND handler above.
@@ -736,7 +736,7 @@ void SelectionFunction::SwitchToMultiSelectionMode (
     }
 #else
         SwitchMode(::boost::shared_ptr<ModeHandler>(
-            new MultiSelectionModeHandler(mrSlideSorter, *this, aMousePosition, nEventCode)));
+            new MultiSelectionModeHandler(mrSlideSorter, *this, rMousePosition, nEventCode)));
 #endif
 }
 

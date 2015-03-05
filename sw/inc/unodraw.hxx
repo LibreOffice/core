@@ -54,8 +54,8 @@ public:
     SwFmDrawPage( SdrPage* pPage );
     virtual ~SwFmDrawPage() throw ();
 
-    const SdrMarkList&  PreGroup(const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes > & xShapes);
-    void                PreUnGroup(const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapeGroup >   xShapeGroup);
+    const SdrMarkList&  PreGroup(const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rShapes);
+    void                PreUnGroup(const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapeGroup >& rShapeGroup);
 
     SdrView*            GetDrawView() {return mpView;}
     SdrPageView*        GetPageView();
@@ -173,8 +173,8 @@ class SwXShape : public SwXShapeBaseClass,
         @author OD
     */
     ::com::sun::star::awt::Point _ConvertPositionToHoriL2R(
-                                    const ::com::sun::star::awt::Point _aObjPos,
-                                    const ::com::sun::star::awt::Size _aObjSize );
+                                    const css::awt::Point& rObjPos,
+                                    const css::awt::Size& rObjSize );
 
     /** method to convert the transformation of the drawing object to the layout
         direction, the drawing object is in
@@ -193,7 +193,7 @@ class SwXShape : public SwXShapeBaseClass,
         has to be given in the layout direction the shape is in and relative to
         its position alignment areas.
     */
-    void _AdjustPositionProperties( const ::com::sun::star::awt::Point _aPosition );
+    void _AdjustPositionProperties(const css::awt::Point& rPosition);
 
     /** method to convert start or end position of the drawing object to the
         Writer specific position, which is the attribute position in layout direction

@@ -228,7 +228,7 @@ public:
     // Fill a not empty cell
     void Set( HTMLTableCnts *pCnts, sal_uInt16 nRSpan, sal_uInt16 nCSpan,
               sal_Int16 eVertOri, SvxBrushItem *pBGBrush,
-              ::boost::shared_ptr<SvxBoxItem> const pBoxItem,
+              ::boost::shared_ptr<SvxBoxItem> const& rBoxItem,
               bool bHasNumFmt, sal_uInt32 nNumFmt,
               bool bHasValue, double nValue, bool bNoWrap, bool bCovered );
 
@@ -548,7 +548,7 @@ public:
     void InsertCell( HTMLTableCnts *pCnts, sal_uInt16 nRowSpan, sal_uInt16 nColSpan,
                      sal_uInt16 nWidth, bool bRelWidth, sal_uInt16 nHeight,
                      sal_Int16 eVertOri, SvxBrushItem *pBGBrush,
-                     boost::shared_ptr<SvxBoxItem> const pBoxItem,
+                     boost::shared_ptr<SvxBoxItem> const& rBoxItem,
                      bool bHasNumFmt, sal_uInt32 nNumFmt,
                      bool bHasValue, double nValue, bool bNoWrap );
 
@@ -704,7 +704,7 @@ HTMLTableCell::~HTMLTableCell()
 
 void HTMLTableCell::Set( HTMLTableCnts *pCnts, sal_uInt16 nRSpan, sal_uInt16 nCSpan,
                          sal_Int16 eVert, SvxBrushItem *pBrush,
-                         ::boost::shared_ptr<SvxBoxItem> const pBoxItem,
+                         ::boost::shared_ptr<SvxBoxItem> const& rBoxItem,
                          bool bHasNF, sal_uInt32 nNF, bool bHasV, double nVal,
                          bool bNWrap, bool bCovered )
 {
@@ -714,7 +714,7 @@ void HTMLTableCell::Set( HTMLTableCnts *pCnts, sal_uInt16 nRSpan, sal_uInt16 nCS
     bProtected = false;
     eVertOri = eVert;
     pBGBrush = pBrush;
-    m_pBoxItem = pBoxItem;
+    m_pBoxItem = rBoxItem;
 
     bHasNumFmt = bHasNF;
     bHasValue = bHasV;
@@ -2060,7 +2060,7 @@ void HTMLTable::InsertCell( HTMLTableCnts *pCnts,
                             sal_uInt16 nRowSpan, sal_uInt16 nColSpan,
                             sal_uInt16 nCellWidth, bool bRelWidth, sal_uInt16 nCellHeight,
                             sal_Int16 eVertOrient, SvxBrushItem *pBGBrushItem,
-                            boost::shared_ptr<SvxBoxItem> const pBoxItem,
+                            boost::shared_ptr<SvxBoxItem> const& rBoxItem,
                             bool bHasNumFmt, sal_uInt32 nNumFmt,
                             bool bHasValue, double nValue, bool bNoWrap )
 {
@@ -2139,7 +2139,7 @@ void HTMLTable::InsertCell( HTMLTableCnts *pCnts,
         {
             const bool bCovered = i != nColSpan || j != nRowSpan;
             GetCell( nRowsReq-j, nColsReq-i )
-                ->Set( pCnts, j, i, eVertOrient, pBGBrushItem, pBoxItem,
+                ->Set( pCnts, j, i, eVertOrient, pBGBrushItem, rBoxItem,
                        bHasNumFmt, nNumFmt, bHasValue, nValue, bNoWrap, bCovered );
         }
     }

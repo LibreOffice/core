@@ -36,8 +36,8 @@ namespace {
     public:
         VisibleAreaScroller (
             SlideSorter& rSlideSorter,
-            const Point aStart,
-            const Point aEnd);
+            const Point& rStart,
+            const Point& rEnd);
         void operator() (const double nValue);
     private:
         SlideSorter& mrSlideSorter;
@@ -221,11 +221,11 @@ const static sal_Int32 gnMaxScrollDistance = 300;
 
 VisibleAreaScroller::VisibleAreaScroller (
     SlideSorter& rSlideSorter,
-    const Point aStart,
-    const Point aEnd)
+    const Point& rStart,
+    const Point& rEnd)
     : mrSlideSorter(rSlideSorter),
-      maStart(aStart),
-      maEnd(aEnd),
+      maStart(rStart),
+      maEnd(rEnd),
       maAccelerationFunction(
           controller::AnimationParametricFunction(
               controller::AnimationBezierFunction (0.1,0.6)))
@@ -233,19 +233,19 @@ VisibleAreaScroller::VisibleAreaScroller (
     // When the distance to scroll is larger than a threshold then first
     // jump to within this distance of the final value and start the
     // animation from there.
-    if (std::abs(aStart.X()-aEnd.X()) > gnMaxScrollDistance)
+    if (std::abs(rStart.X()-rEnd.X()) > gnMaxScrollDistance)
     {
-        if (aStart.X() < aEnd.X())
-            maStart.X() = aEnd.X()-gnMaxScrollDistance;
+        if (rStart.X() < rEnd.X())
+            maStart.X() = rEnd.X()-gnMaxScrollDistance;
         else
-            maStart.X() = aEnd.X()+gnMaxScrollDistance;
+            maStart.X() = rEnd.X()+gnMaxScrollDistance;
     }
-    if (std::abs(aStart.Y()-aEnd.Y()) > gnMaxScrollDistance)
+    if (std::abs(rStart.Y()-rEnd.Y()) > gnMaxScrollDistance)
     {
-        if (aStart.Y() < aEnd.Y())
-            maStart.Y() = aEnd.Y()-gnMaxScrollDistance;
+        if (rStart.Y() < rEnd.Y())
+            maStart.Y() = rEnd.Y()-gnMaxScrollDistance;
         else
-            maStart.Y() = aEnd.Y()+gnMaxScrollDistance;
+            maStart.Y() = rEnd.Y()+gnMaxScrollDistance;
     }
 }
 

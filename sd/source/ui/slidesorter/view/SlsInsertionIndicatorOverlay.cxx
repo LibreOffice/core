@@ -152,7 +152,7 @@ void InsertionIndicatorOverlay::Create (
 
 Point InsertionIndicatorOverlay::PaintRepresentatives (
     OutputDevice& rContent,
-    const Size aPreviewSize,
+    const Size& rPreviewSize,
     const sal_Int32 nOffset,
     const ::std::vector<controller::TransferableData::Representative>& rRepresentatives) const
 {
@@ -187,7 +187,7 @@ Point InsertionIndicatorOverlay::PaintRepresentatives (
 
         // Paint the preview.
         Bitmap aPreview (rRepresentatives[nIndex].maBitmap);
-        aPreview.Scale(aPreviewSize, BMP_SCALE_BESTQUALITY);
+        aPreview.Scale(rPreviewSize, BMP_SCALE_BESTQUALITY);
         rContent.DrawBitmapEx(aPageOffset, aPreview);
 
         // When the page is marked as excluded from the slide show then
@@ -195,14 +195,14 @@ Point InsertionIndicatorOverlay::PaintRepresentatives (
         if (rRepresentatives[nIndex].mbIsExcluded)
         {
             const vcl::Region aSavedClipRegion (rContent.GetClipRegion());
-            rContent.IntersectClipRegion(Rectangle(aPageOffset, aPreviewSize));
+            rContent.IntersectClipRegion(Rectangle(aPageOffset, rPreviewSize));
             // Paint bitmap tiled over the preview to mark it as excluded.
             const sal_Int32 nIconWidth (aExclusionOverlay.GetSizePixel().Width());
             const sal_Int32 nIconHeight (aExclusionOverlay.GetSizePixel().Height());
             if (nIconWidth>0 && nIconHeight>0)
             {
-                for (sal_Int32 nX=0; nX<aPreviewSize.Width(); nX+=nIconWidth)
-                    for (sal_Int32 nY=0; nY<aPreviewSize.Height(); nY+=nIconHeight)
+                for (sal_Int32 nX=0; nX<rPreviewSize.Width(); nX+=nIconWidth)
+                    for (sal_Int32 nY=0; nY<rPreviewSize.Height(); nY+=nIconHeight)
                         rContent.DrawBitmapEx(Point(nX,nY)+aPageOffset, aExclusionOverlay);
             }
             rContent.SetClipRegion(aSavedClipRegion);
@@ -212,8 +212,8 @@ Point InsertionIndicatorOverlay::PaintRepresentatives (
         Rectangle aBox (
             aPageOffset.X(),
             aPageOffset.Y(),
-            aPageOffset.X()+aPreviewSize.Width()-1,
-            aPageOffset.Y()+aPreviewSize.Height()-1);
+            aPageOffset.X()+rPreviewSize.Width()-1,
+            aPageOffset.Y()+rPreviewSize.Height()-1);
         rContent.SetFillColor(COL_BLACK);
         rContent.SetLineColor();
         rContent.DrawTransparent(
@@ -239,8 +239,8 @@ Point InsertionIndicatorOverlay::PaintRepresentatives (
 void InsertionIndicatorOverlay::PaintPageCount (
     OutputDevice& rDevice,
     const sal_Int32 nSelectionCount,
-    const Size aPreviewSize,
-    const Point aFirstPageOffset) const
+    const Size& rPreviewSize,
+    const Point& rFirstPageOffset) const
 {
     // Paint the number of slides.
     ::boost::shared_ptr<view::Theme> pTheme (mrSlideSorter.GetTheme());
@@ -257,11 +257,11 @@ void InsertionIndicatorOverlay::PaintPageCount (
         Point aTextOffset (aTextBox.TopLeft());
         Size aTextSize (aTextBox.GetSize());
         // Place text inside the first page preview.
-        Point aTextLocation(aFirstPageOffset);
+        Point aTextLocation(rFirstPageOffset);
         // Center the text.
         aTextLocation += Point(
-            (aPreviewSize.Width()-aTextBox.GetWidth())/2,
-            (aPreviewSize.Height()-aTextBox.GetHeight())/2);
+            (rPreviewSize.Width()-aTextBox.GetWidth())/2,
+            (rPreviewSize.Height()-aTextBox.GetHeight())/2);
         aTextBox = Rectangle(aTextLocation, aTextSize);
 
         // Paint background, border and text.

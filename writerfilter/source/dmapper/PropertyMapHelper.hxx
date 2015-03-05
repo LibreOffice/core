@@ -28,7 +28,7 @@ namespace writerfilter
 namespace dmapper
 {
 
-void lcl_DumpTableColumnSeparators(const TagLogger::Pointer_t pLogger,
+void lcl_DumpTableColumnSeparators(const TagLogger::Pointer_t& rLogger,
         const css::uno::Any & rTableColumnSeparators);
 #ifdef DEBUG_WRITERFILTER
 void lcl_DumpPropertyValues(const TagLogger::Pointer_t pLogger,

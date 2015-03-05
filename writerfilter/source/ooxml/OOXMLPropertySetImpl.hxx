@@ -153,8 +153,8 @@ public:
 
 struct OOXMLPropertySetImplCompare
 {
-    bool operator()(const OOXMLProperty::Pointer_t x,
-                    const OOXMLProperty::Pointer_t y) const;
+    bool operator()(const OOXMLProperty::Pointer_t& x,
+                    const OOXMLProperty::Pointer_t& y) const;
 };
 
 class OOXMLPropertySetImpl : public OOXMLPropertySet

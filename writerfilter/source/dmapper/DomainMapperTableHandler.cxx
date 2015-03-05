@@ -84,18 +84,18 @@ void DomainMapperTableHandler::startTable(unsigned int nRows,
 
 
 
-PropertyMapPtr lcl_SearchParentStyleSheetAndMergeProperties(const StyleSheetEntryPtr pStyleSheet, StyleSheetTablePtr pStyleSheetTable)
+PropertyMapPtr lcl_SearchParentStyleSheetAndMergeProperties(const StyleSheetEntryPtr& rStyleSheet, StyleSheetTablePtr pStyleSheetTable)
 {
     PropertyMapPtr pRet;
 
-    if (!pStyleSheet)
+    if (!rStyleSheet)
         return pRet;
 
-    if(!pStyleSheet->sBaseStyleIdentifier.isEmpty())
+    if(!rStyleSheet->sBaseStyleIdentifier.isEmpty())
     {
-        const StyleSheetEntryPtr pParentStyleSheet = pStyleSheetTable->FindStyleSheetByISTD( pStyleSheet->sBaseStyleIdentifier );
+        const StyleSheetEntryPtr pParentStyleSheet = pStyleSheetTable->FindStyleSheetByISTD(rStyleSheet->sBaseStyleIdentifier);
         //a loop in the style hierarchy, bail out
-        if (pParentStyleSheet == pStyleSheet)
+        if (pParentStyleSheet == rStyleSheet)
             return pRet;
 
         pRet = lcl_SearchParentStyleSheetAndMergeProperties( pParentStyleSheet, pStyleSheetTable );
@@ -107,7 +107,7 @@ PropertyMapPtr lcl_SearchParentStyleSheetAndMergeProperties(const StyleSheetEntr
 
     if (pRet)
     {
-        pRet->InsertProps(pStyleSheet->pProperties);
+        pRet->InsertProps(rStyleSheet->pProperties);
     }
 
     return pRet;

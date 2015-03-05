@@ -394,7 +394,7 @@ static void lcl_CheckSuffixAndDelete(OUString & rString)
 
 typedef boost::tuple<sal_uInt16, sal_uInt16, const ::std::vector<OUString>& (*)() > NameArrayIndexTuple_t;
 
-static sal_uInt16 lcl_AccumulateIndexCount( sal_uInt16 nSum, NameArrayIndexTuple_t const tuple ){
+static sal_uInt16 lcl_AccumulateIndexCount( sal_uInt16 nSum, const NameArrayIndexTuple_t& tuple ){
     // Return running sum + (index end) - (index start)
     return nSum + boost::get<1>( tuple ) - boost::get<0>( tuple );
 }

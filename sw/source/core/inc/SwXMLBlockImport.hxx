@@ -44,7 +44,7 @@ protected:
 
 public:
     SwXMLBlockListImport(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rContext,
         SwXMLTextBlocks &rBlocks );
 
     SwXMLTextBlocks& getBlockList ( void )
@@ -70,7 +70,7 @@ public:
     bool bTextOnly;
     OUString &m_rText;
     SwXMLTextBlockImport(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rContext,
         SwXMLTextBlocks &rBlocks, OUString &rNewText, bool bNewTextOnly );
 
     SwXMLTextBlocks& getBlockList ( void )

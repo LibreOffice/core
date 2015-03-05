@@ -97,10 +97,10 @@ class PluginSlideChange: public SlideChangeBase
     uno::Reference<presentation::XTransition> mxTransition;
     UnoViewSharedPtr mpView;
 
-    TransitionViewPair( uno::Reference<presentation::XTransition> xTransition, const UnoViewSharedPtr pView )
+    TransitionViewPair( uno::Reference<presentation::XTransition> xTransition, const UnoViewSharedPtr& rView )
     {
         mxTransition = xTransition;
-        mpView = pView;
+        mpView = rView;
     }
 
     ~TransitionViewPair()

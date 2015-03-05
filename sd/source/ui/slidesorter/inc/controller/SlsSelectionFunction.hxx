@@ -96,8 +96,8 @@ public:
         ButtonMode
     };
     void SwitchToNormalMode (void);
-    void SwitchToDragAndDropMode(const Point aMousePosition);
-    void SwitchToMultiSelectionMode (const Point aMousePosition, const sal_uInt32 nEventCode);
+    void SwitchToDragAndDropMode(const Point& rMousePosition);
+    void SwitchToMultiSelectionMode (const Point& rMousePosition, const sal_uInt32 nEventCode);
 
     void ResetShiftKeySelectionAnchor (void);
     /** Special case handling for when the context menu is hidden.  This

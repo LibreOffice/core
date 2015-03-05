@@ -81,7 +81,7 @@ const sal_uInt32 HTML_FRMOPTS_IMG_CONTROL_CSS1 =
     HTML_FRMOPT_S_SPACE;
 
 static void lcl_html_outEvents( SvStream& rStrm,
-                         const uno::Reference< form::XFormComponent > rFormComp,
+                         const uno::Reference< form::XFormComponent >& rFormComp,
                          bool bCfgStarBasic,
                          rtl_TextEncoding eDestEnc,
                          OUString *pNonConvertableChars )

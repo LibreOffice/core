@@ -163,8 +163,8 @@ private:
     // Table
     virtual void lcl_entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref) SAL_OVERRIDE;
 
-    void handleUnderlineType(const Id nId, const ::std::shared_ptr<PropertyMap> pContext);
-    void handleParaJustification(const sal_Int32 nIntValue, const ::std::shared_ptr<PropertyMap> pContext, const bool bExchangeLeftRight);
+    void handleUnderlineType(const Id nId, const ::std::shared_ptr<PropertyMap>& rContext);
+    void handleParaJustification(const sal_Int32 nIntValue, const ::std::shared_ptr<PropertyMap>& rContext, const bool bExchangeLeftRight);
     bool getColorFromId(const Id, sal_Int32 &nColor);
     sal_Int16 getEmphasisValue(const sal_Int32 nIntValue);
     OUString getBracketStringFromEnum(const sal_Int32 nIntValue, const bool bIsPrefix = true);

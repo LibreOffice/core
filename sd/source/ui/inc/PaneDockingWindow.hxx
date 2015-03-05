@@ -56,7 +56,7 @@ public:
     virtual void MouseButtonDown (const MouseEvent& rEvent) SAL_OVERRIDE;
     /** When docked the given range is passed to the parent SplitWindow.
     */
-    void SetValidSizeRange (const Range aValidSizeRange);
+    void SetValidSizeRange (const Range& rValidSizeRange);
 
     enum Orientation { HorizontalOrientation, VerticalOrientation, UnknownOrientation };
     /** When the PaneDockingWindow is docked and managed by a split window

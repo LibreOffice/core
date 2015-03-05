@@ -257,9 +257,9 @@ const SdrMarkList&  SwFmDrawPage::PreGroup(const uno::Reference< drawing::XShape
     return rMarkList;
 }
 
-void SwFmDrawPage::PreUnGroup(const uno::Reference< drawing::XShapeGroup >  xShapeGroup)
+void SwFmDrawPage::PreUnGroup(const uno::Reference< drawing::XShapeGroup >&  rShapeGroup)
 {
-    uno::Reference< drawing::XShape >  xShape( xShapeGroup, uno::UNO_QUERY);
+    uno::Reference< drawing::XShape >  xShape( rShapeGroup, uno::UNO_QUERY);
     _SelectObjectInView( xShape, GetPageView() );
 }
 
@@ -818,7 +818,7 @@ uno::Reference< drawing::XShapeGroup >  SwXDrawPage::group(const uno::Reference<
     return xRet;
 }
 
-void SwXDrawPage::ungroup(const uno::Reference< drawing::XShapeGroup > & xShapeGroup) throw( uno::RuntimeException, std::exception )
+void SwXDrawPage::ungroup(const uno::Reference< drawing::XShapeGroup > & rShapeGroup) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     if(!pDoc)
@@ -828,7 +828,7 @@ void SwXDrawPage::ungroup(const uno::Reference< drawing::XShapeGroup > & xShapeG
         SwFmDrawPage* pPage = GetSvxPage();
         if(pPage) //TODO: can this be Null?
         {
-            pPage->PreUnGroup(xShapeGroup);
+            pPage->PreUnGroup(rShapeGroup);
             UnoActionContext aContext(pDoc);
             pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
 
@@ -2508,10 +2508,10 @@ awt::Point SwXShape::_GetAttrPosition()
     the layout direction horizontal left-to-right.
     #i31698#
 */
-awt::Point SwXShape::_ConvertPositionToHoriL2R( const awt::Point _aObjPos,
-                                                const awt::Size _aObjSize )
+awt::Point SwXShape::_ConvertPositionToHoriL2R( const awt::Point& rObjPos,
+                                                const awt::Size& rObjSize )
 {
-    awt::Point aObjPosInHoriL2R( _aObjPos );
+    awt::Point aObjPosInHoriL2R( rObjPos );
 
     SwFrmFmt* pFrmFmt = GetFrmFmt();
     if ( pFrmFmt )
@@ -2526,13 +2526,13 @@ awt::Point SwXShape::_ConvertPositionToHoriL2R( const awt::Point _aObjPos,
             break;
             case SwFrmFmt::HORI_R2L:
             {
-                aObjPosInHoriL2R.X = -_aObjPos.X - _aObjSize.Width;
+                aObjPosInHoriL2R.X = -rObjPos.X - rObjSize.Width;
             }
             break;
             case SwFrmFmt::VERT_R2L:
             {
-                aObjPosInHoriL2R.X = -_aObjPos.Y - _aObjSize.Width;
-                aObjPosInHoriL2R.Y = _aObjPos.X;
+                aObjPosInHoriL2R.X = -rObjPos.Y - rObjSize.Width;
+                aObjPosInHoriL2R.Y = rObjPos.X;
             }
             break;
             default:
@@ -2613,7 +2613,7 @@ drawing::HomogenMatrix3 SwXShape::_ConvertTransformationToLayoutDir(
 /** method to adjust the positioning properties
     #i31698#
 */
-void SwXShape::_AdjustPositionProperties( const awt::Point _aPosition )
+void SwXShape::_AdjustPositionProperties( const awt::Point& rPosition )
 {
     // handle x-position
     // #i35007# - no handling of x-position, if drawing
@@ -2632,7 +2632,7 @@ void SwXShape::_AdjustPositionProperties( const awt::Point _aPosition )
         sal_Int32 dCurrX = 0;
         aHoriPos >>= dCurrX;
         // change x-position attribute, if needed
-        if ( dCurrX != _aPosition.X )
+        if ( dCurrX != rPosition.X )
         {
             // adjust x-position orientation to text::HoriOrientation::NONE, if needed
             // Note: has to be done before setting x-position attribute
@@ -2649,7 +2649,7 @@ void SwXShape::_AdjustPositionProperties( const awt::Point _aPosition )
                 }
             }
             // set x-position attribute
-            aHoriPos <<= _aPosition.X;
+            aHoriPos <<= rPosition.X;
             setPropertyValue( aHoriPosPropStr, aHoriPos );
         }
     }
@@ -2662,7 +2662,7 @@ void SwXShape::_AdjustPositionProperties( const awt::Point _aPosition )
         sal_Int32 dCurrY = 0;
         aVertPos >>= dCurrY;
         // change y-position attribute, if needed
-        if ( dCurrY != _aPosition.Y )
+        if ( dCurrY != rPosition.Y )
         {
             // adjust y-position orientation to text::VertOrientation::NONE, if needed
             // Note: has to be done before setting y-position attribute
@@ -2679,7 +2679,7 @@ void SwXShape::_AdjustPositionProperties( const awt::Point _aPosition )
                 }
             }
             // set y-position attribute
-            aVertPos <<= _aPosition.Y;
+            aVertPos <<= rPosition.Y;
             setPropertyValue( aVertPosPropStr, aVertPos );
         }
     }

@@ -131,7 +131,7 @@ namespace dbaui
         void BeginChildMove( OTableWindow* pTabWin, const Point& rMousePos );
         void BeginChildSizing( OTableWindow* pTabWin, const Pointer& rPointer );
 
-        void NotifyTitleClicked( OTableWindow* pTabWin, const Point rMousePos );
+        void NotifyTitleClicked( OTableWindow* pTabWin, const Point& rMousePos );
 
         virtual void AddTabWin(const OUString& _rComposedName, const OUString& rWinName, bool bNewTable = false);
         virtual void RemoveTabWin( OTableWindow* pTabWin );

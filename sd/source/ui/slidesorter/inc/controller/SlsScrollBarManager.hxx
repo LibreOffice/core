@@ -125,7 +125,7 @@ public:
     /** Update the vertical and horizontal scroll bars so that the visible
         area has the given top and left values.
     */
-    void SetTopLeft (const Point aNewTopLeft);
+    void SetTopLeft (const Point& rNewTopLeft);
 
     /** Return the width of the vertical scroll bar, which--when
         shown--should be fixed in contrast to its height.

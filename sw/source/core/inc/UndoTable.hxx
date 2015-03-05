@@ -171,7 +171,7 @@ class SwUndoTblNdsChg : public SwUndo, private boost::noncopyable
         sal_uLong index;    ///< Index of this box.
         bool      hasMoved; ///< Has this box been moved already.
         _BoxMove(sal_uLong idx, bool moved=false) : index(idx), hasMoved(moved) {};
-        bool operator<(const _BoxMove other) const { return index < other.index; };
+        bool operator<(const _BoxMove& other) const { return index < other.index; };
     };
     std::unique_ptr< std::set<_BoxMove> > pNewSttNds;
     std::unique_ptr< SwUndoSaveSections > pDelSects;

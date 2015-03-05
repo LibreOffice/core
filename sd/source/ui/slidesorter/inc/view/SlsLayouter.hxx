@@ -214,9 +214,9 @@ public:
         const bool bIsAtRunEnd,
         const bool bIsExtraSpaceNeeded);
     void SetGeometricalPosition(
-        const Point aLocation,
-        const Point aLeadingOffset,
-        const Point aTrailingOffset);
+        const Point& rLocation,
+        const Point& rLeadingOffset,
+        const Point& rTrailingOffset);
 
     sal_Int32 GetRow (void) const { return mnRow; }
     sal_Int32 GetColumn (void) const { return mnColumn; }

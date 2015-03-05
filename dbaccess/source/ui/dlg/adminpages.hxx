@@ -123,9 +123,9 @@ namespace dbaui
             @param  _rxORB
                 The service factory.
         */
-        void SetServiceFactory(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > _rxORB)
+        void SetServiceFactory(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxORB)
         {
-            m_xORB = _rxORB;
+            m_xORB = rxORB;
         }
 
         /** opens a dialog filled with all data sources available for this type and

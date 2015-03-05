@@ -403,9 +403,9 @@ SvXMLImportContext *SwXMLImport::CreateContext(
 }
 
 SwXMLImport::SwXMLImport(
-    const uno::Reference< uno::XComponentContext > xContext,
+    const uno::Reference< uno::XComponentContext >& rContext,
     OUString const & implementationName, SvXMLImportFlags nImportFlags)
-:   SvXMLImport( xContext, implementationName, nImportFlags ),
+:   SvXMLImport( rContext, implementationName, nImportFlags ),
     pSttNdIdx( 0 ),
     pTableItemMapper( 0 ),
     pDocElemTokenMap( 0 ),

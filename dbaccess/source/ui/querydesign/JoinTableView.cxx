@@ -614,7 +614,7 @@ void OJoinTableView::BeginChildMove( OTableWindow* pTabWin, const Point& rMouseP
     StartTracking();
 }
 
-void OJoinTableView::NotifyTitleClicked( OTableWindow* pTabWin, const Point rMousePos )
+void OJoinTableView::NotifyTitleClicked( OTableWindow* pTabWin, const Point& rMousePos )
 {
     DeselectConn(GetSelectedConn());
     BeginChildMove(pTabWin, rMousePos);

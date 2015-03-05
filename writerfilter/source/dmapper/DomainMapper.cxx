@@ -1089,7 +1089,7 @@ sal_Int32 lcl_getCurrentNumberingProperty(
 }
 
 // In rtl-paragraphs the meaning of left/right are to be exchanged
-static bool ExchangeLeftRight( const PropertyMapPtr rContext, DomainMapper_Impl* m_pImpl )
+static bool ExchangeLeftRight(const PropertyMapPtr& rContext, DomainMapper_Impl* m_pImpl)
 {
     bool bExchangeLeftRight = false;
     boost::optional<PropertyMap::Property> aPropPara = rContext->getProperty(PROP_WRITING_MODE);
@@ -1118,9 +1118,9 @@ static bool ExchangeLeftRight( const PropertyMapPtr rContext, DomainMapper_Impl*
 }
 
 /// Check if the style or its parent has a list id, recursively.
-static sal_Int32 lcl_getListId(const StyleSheetEntryPtr pEntry, const StyleSheetTablePtr pStyleTable)
+static sal_Int32 lcl_getListId(const StyleSheetEntryPtr& rEntry, const StyleSheetTablePtr& rStyleTable)
 {
-    const StyleSheetPropertyMap* pEntryProperties = dynamic_cast<const StyleSheetPropertyMap*>(pEntry->pProperties.get());
+    const StyleSheetPropertyMap* pEntryProperties = dynamic_cast<const StyleSheetPropertyMap*>(rEntry->pProperties.get());
     if (!pEntryProperties)
         return -1;
 
@@ -1130,15 +1130,15 @@ static sal_Int32 lcl_getListId(const StyleSheetEntryPtr pEntry, const StyleSheet
         return nListId;
 
     // The style has no parent.
-    if (pEntry->sBaseStyleIdentifier.isEmpty())
+    if (rEntry->sBaseStyleIdentifier.isEmpty())
         return -1;
 
-    const StyleSheetEntryPtr pParent = pStyleTable->FindStyleSheetByISTD(pEntry->sBaseStyleIdentifier);
+    const StyleSheetEntryPtr pParent = rStyleTable->FindStyleSheetByISTD(rEntry->sBaseStyleIdentifier);
     // No such parent style or loop in the style hierarchy.
-    if (!pParent || pParent == pEntry)
+    if (!pParent || pParent == rEntry)
         return -1;
 
-    return lcl_getListId(pParent, pStyleTable);
+    return lcl_getListId(pParent, rStyleTable);
 }
 
 void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
@@ -3171,7 +3171,7 @@ void DomainMapper::lcl_info(const std::string & /*info_*/)
 {
 }
 
-void DomainMapper::handleUnderlineType(const Id nId, const ::std::shared_ptr<PropertyMap> pContext)
+void DomainMapper::handleUnderlineType(const Id nId, const ::std::shared_ptr<PropertyMap>& rContext)
 {
     sal_Int16 nUnderline = awt::FontUnderline::NONE;
 
@@ -3181,7 +3181,7 @@ void DomainMapper::handleUnderlineType(const Id nId, const ::std::shared_ptr<Pro
         nUnderline = awt::FontUnderline::NONE;
         break;
     case NS_ooxml::LN_Value_ST_Underline_words:
-        pContext->Insert(PROP_CHAR_WORD_MODE, uno::makeAny(true));
+        rContext->Insert(PROP_CHAR_WORD_MODE, uno::makeAny(true));
         // fall-through intended
     case NS_ooxml::LN_Value_ST_Underline_single:
         nUnderline = awt::FontUnderline::SINGLE;
@@ -3232,10 +3232,10 @@ void DomainMapper::handleUnderlineType(const Id nId, const ::std::shared_ptr<Pro
         nUnderline = awt::FontUnderline::DOUBLEWAVE;
         break;
     }
-    pContext->Insert(PROP_CHAR_UNDERLINE, uno::makeAny(nUnderline));
+    rContext->Insert(PROP_CHAR_UNDERLINE, uno::makeAny(nUnderline));
 }
 
-void DomainMapper::handleParaJustification(const sal_Int32 nIntValue, const ::std::shared_ptr<PropertyMap> pContext, const bool bExchangeLeftRight)
+void DomainMapper::handleParaJustification(const sal_Int32 nIntValue, const ::std::shared_ptr<PropertyMap>& rContext, const bool bExchangeLeftRight)
 {
     sal_Int16 nAdjust = 0;
     sal_Int16 nLastLineAdjust = 0;
@@ -3264,8 +3264,8 @@ void DomainMapper::handleParaJustification(const sal_Int32 nIntValue, const ::st
         nAdjust = static_cast< sal_Int16 > (bExchangeLeftRight ? style::ParagraphAdjust_RIGHT : style::ParagraphAdjust_LEFT);
         break;
     }
-    pContext->Insert( PROP_PARA_ADJUST, uno::makeAny( nAdjust ) );
-    pContext->Insert( PROP_PARA_LAST_LINE_ADJUST, uno::makeAny( nLastLineAdjust ) );
+    rContext->Insert( PROP_PARA_ADJUST, uno::makeAny( nAdjust ) );
+    rContext->Insert( PROP_PARA_LAST_LINE_ADJUST, uno::makeAny( nLastLineAdjust ) );
     m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "jc", aStringValue);
 }
 

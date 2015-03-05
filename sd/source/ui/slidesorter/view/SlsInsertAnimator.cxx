@@ -38,8 +38,8 @@ class PageObjectRun;
 class AnimatorAccess
 {
 public:
-    virtual void AddRun (const ::boost::shared_ptr<PageObjectRun> pRun) = 0;
-    virtual void RemoveRun (const ::boost::shared_ptr<PageObjectRun> pRun) = 0;
+    virtual void AddRun (const ::boost::shared_ptr<PageObjectRun>& rRun) = 0;
+    virtual void RemoveRun (const ::boost::shared_ptr<PageObjectRun>& rRun) = 0;
     virtual model::SlideSorterModel& GetModel (void) const = 0;
     virtual view::SlideSorterView& GetView (void) const = 0;
     virtual ::boost::shared_ptr<controller::Animator> GetAnimator (void) = 0;
@@ -122,8 +122,8 @@ public:
         const InsertPosition& rInsertPosition,
         const controller::Animator::AnimationMode eAnimationMode);
 
-    virtual void AddRun (const ::boost::shared_ptr<PageObjectRun> pRun) SAL_OVERRIDE;
-    virtual void RemoveRun (const ::boost::shared_ptr<PageObjectRun> pRun) SAL_OVERRIDE;
+    virtual void AddRun (const ::boost::shared_ptr<PageObjectRun>& rRun) SAL_OVERRIDE;
+    virtual void RemoveRun (const ::boost::shared_ptr<PageObjectRun>& rRun) SAL_OVERRIDE;
 
     virtual model::SlideSorterModel& GetModel (void) const SAL_OVERRIDE { return mrModel; }
     virtual view::SlideSorterView& GetView (void) const SAL_OVERRIDE { return mrView; }
@@ -264,36 +264,36 @@ InsertAnimator::Implementation::RunContainer::const_iterator
             nRunIndex));
 }
 
-void InsertAnimator::Implementation::AddRun (const ::boost::shared_ptr<PageObjectRun> pRun)
+void InsertAnimator::Implementation::AddRun (const ::boost::shared_ptr<PageObjectRun>& rRun)
 {
-    if (pRun)
+    if (rRun)
     {
-        maRuns.insert(pRun);
+        maRuns.insert(rRun);
     }
     else
     {
-        OSL_ASSERT(pRun);
+        OSL_ASSERT(rRun);
     }
 }
 
-void InsertAnimator::Implementation::RemoveRun (const ::boost::shared_ptr<PageObjectRun> pRun)
+void InsertAnimator::Implementation::RemoveRun (const ::boost::shared_ptr<PageObjectRun>& rRun)
 {
-    if (pRun)
+    if (rRun)
     {
         // Do not remove runs that show the space for the insertion indicator.
-        if (pRun->mnLocalInsertIndex == -1)
+        if (rRun->mnLocalInsertIndex == -1)
         {
-            InsertAnimator::Implementation::RunContainer::const_iterator iRun (FindRun(pRun->mnRunIndex));
+            InsertAnimator::Implementation::RunContainer::const_iterator iRun (FindRun(rRun->mnRunIndex));
             if (iRun != maRuns.end())
             {
-                OSL_ASSERT(*iRun == pRun);
+                OSL_ASSERT(*iRun == rRun);
                 maRuns.erase(iRun);
             }
         }
     }
     else
     {
-        OSL_ASSERT(pRun);
+        OSL_ASSERT(rRun);
     }
 }
 

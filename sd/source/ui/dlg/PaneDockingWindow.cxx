@@ -95,7 +95,7 @@ void PaneDockingWindow::MouseButtonDown (const MouseEvent& rEvent)
     SfxDockingWindow::MouseButtonDown(rEvent);
 }
 
-void PaneDockingWindow::SetValidSizeRange (const Range aValidSizeRange)
+void PaneDockingWindow::SetValidSizeRange (const Range& rValidSizeRange)
 {
     SplitWindow* pSplitWindow = dynamic_cast<SplitWindow*>(GetParent());
     if (pSplitWindow != NULL)
@@ -111,8 +111,8 @@ void PaneDockingWindow::SetValidSizeRange (const Range aValidSizeRange)
         pSplitWindow->SetItemSizeRange(
             nSetId,
             Range(
-                aValidSizeRange.Min() + nCompensation,
-                aValidSizeRange.Max() + nCompensation));
+                rValidSizeRange.Min() + nCompensation,
+                rValidSizeRange.Max() + nCompensation));
     }
 }
 

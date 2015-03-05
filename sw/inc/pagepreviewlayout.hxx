@@ -328,7 +328,7 @@ public:
         @return boolean, indicating, if prepare of preview paint was successful.
     */
     bool Prepare( const sal_uInt16 _nProposedStartPageNum,
-                  const Point      _aProposedStartPos,
+                  const Point&      rProposedStartPos,
                   const Size&      _rPxWinSize,
                   sal_uInt16&      _onStartPageNum,
                   Rectangle&       _orDocPreviewPaintRect,
@@ -362,7 +362,7 @@ public:
 
         @return boolean, indicating, if paint of preview was performed
     */
-    bool Paint( const Rectangle _aOutRect ) const;
+    bool Paint( const Rectangle& rOutRect ) const;
 
     /** repaint pages on page preview
 
@@ -371,7 +371,7 @@ public:
 
         @author OD
     */
-    void Repaint( const Rectangle _aInvalidCoreRect ) const;
+    void Repaint(const Rectangle& rInvalidCoreRect) const;
 
     /** paint to mark new selected page
 
@@ -466,7 +466,7 @@ public:
         @return boolean - indicating, that given preview position lays inside
         a shown document preview page, not an empty page.
     */
-    bool IsPreviewPosInDocPreviewPage( const Point  _aPreviewPos,
+    bool IsPreviewPosInDocPreviewPage( const Point& rPreviewPos,
                                    Point&       _orDocPos,
                                    bool&        _obPosInEmptyPage,
                                    sal_uInt16&  _onPageNum ) const;

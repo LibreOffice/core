@@ -28,7 +28,7 @@ namespace dmapper
 
 using namespace ::com::sun::star;
 
-void lcl_DumpTableColumnSeparators(const TagLogger::Pointer_t pLogger, const uno::Any & rTableColumnSeparators)
+void lcl_DumpTableColumnSeparators(const TagLogger::Pointer_t& pLogger, const uno::Any & rTableColumnSeparators)
 {
     (void) pLogger;
     (void) rTableColumnSeparators;

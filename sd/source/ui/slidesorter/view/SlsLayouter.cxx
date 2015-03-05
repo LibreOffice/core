@@ -1249,13 +1249,13 @@ void InsertPosition::SetLogicalPosition (
 }
 
 void InsertPosition::SetGeometricalPosition(
-    const Point aLocation,
-    const Point aLeadingOffset,
-    const Point aTrailingOffset)
+    const Point& rLocation,
+    const Point& rLeadingOffset,
+    const Point& rTrailingOffset)
 {
-    maLocation = aLocation;
-    maLeadingOffset = aLeadingOffset;
-    maTrailingOffset = aTrailingOffset;
+    maLocation = rLocation;
+    maLeadingOffset = rLeadingOffset;
+    maTrailingOffset = rTrailingOffset;
 }
 
 } } } // end of namespace ::sd::slidesorter::namespace

@@ -180,7 +180,7 @@ class IDocumentMarkAccess
             [in] an iterator pointing to the Mark to be deleted.
         */
         virtual ::boost::shared_ptr<ILazyDeleter>
-            deleteMark(const IDocumentMarkAccess::const_iterator_t ppMark) =0;
+            deleteMark(const IDocumentMarkAccess::const_iterator_t& ppMark) =0;
 
         /** Deletes a mark.
 

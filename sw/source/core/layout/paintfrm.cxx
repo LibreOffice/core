@@ -470,8 +470,8 @@ SwSavePaintStatics::~SwSavePaintStatics()
  *              0       if A and B can't be merged
 **/
 static sal_uInt8 lcl_TryMergeLines(
-    pair<double, double> const mergeA,
-    pair<double, double> const mergeB,
+    pair<double, double> const& mergeA,
+    pair<double, double> const& mergeB,
     SwPaintProperties& properties)
 {
     double const fMergeGap(properties.nSPixelSzW + properties.nSHalfPixelSzW); // NOT static!
@@ -6338,7 +6338,7 @@ static void lcl_paintBitmapExToRect(OutputDevice *pOut, const Point& aPoint, con
     }
 }
 
-/*static*/ void SwPageFrm::PaintNotesSidebarArrows(const Point &aMiddleFirst, const Point &aMiddleSecond, SwViewShell* _pViewShell, const Color aColorUp, const Color aColorDown)
+/*static*/ void SwPageFrm::PaintNotesSidebarArrows(const Point &aMiddleFirst, const Point &aMiddleSecond, SwViewShell* _pViewShell, const Color& rColorUp, const Color& rColorDown)
 {
     Polygon aTriangleUp(3);
     Polygon aTriangleDown(3);
@@ -6351,9 +6351,9 @@ static void lcl_paintBitmapExToRect(OutputDevice *pOut, const Point& aPoint, con
     aTriangleDown.SetPoint(aMiddleSecond + Point(_pViewShell->GetOut()->PixelToLogic(Size(+3,0)).Width(),_pViewShell->GetOut()->PixelToLogic(Size(0,-3)).Height()),1);
     aTriangleDown.SetPoint(aMiddleSecond + Point(0,_pViewShell->GetOut()->PixelToLogic(Size(0,3)).Height()),2);
 
-    _pViewShell->GetOut()->SetFillColor(aColorUp);
+    _pViewShell->GetOut()->SetFillColor(rColorUp);
     _pViewShell->GetOut()->DrawPolygon(aTriangleUp);
-    _pViewShell->GetOut()->SetFillColor(aColorDown);
+    _pViewShell->GetOut()->SetFillColor(rColorDown);
     _pViewShell->GetOut()->DrawPolygon(aTriangleDown);
 }
 

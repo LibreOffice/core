@@ -108,7 +108,7 @@ class BackgroundPainter
       public ::boost::noncopyable
 {
 public:
-    BackgroundPainter (const Color aBackgroundColor) : maBackgroundColor(aBackgroundColor) {}
+    BackgroundPainter (const Color& rBackgroundColor) : maBackgroundColor(rBackgroundColor) {}
     virtual ~BackgroundPainter (void) {}
 
     virtual void Paint (OutputDevice& rDevice, const Rectangle& rRepaintArea) SAL_OVERRIDE
@@ -120,7 +120,7 @@ public:
 
     virtual void SetLayerInvalidator (const SharedILayerInvalidator&) SAL_OVERRIDE {}
 
-    void SetColor (const Color aColor) { maBackgroundColor = aColor; }
+    void SetColor (const Color& rColor) { maBackgroundColor = rColor; }
 
 private:
     Color maBackgroundColor;

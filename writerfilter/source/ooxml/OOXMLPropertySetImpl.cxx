@@ -391,8 +391,8 @@ OOXMLValue * OOXMLInputStreamValue::clone() const
   struct OOXMLPropertySetImplCompare
  */
 
-bool OOXMLPropertySetImplCompare::operator()(const OOXMLProperty::Pointer_t x,
-                                             const OOXMLProperty::Pointer_t y) const
+bool OOXMLPropertySetImplCompare::operator()(const OOXMLProperty::Pointer_t& x,
+                                             const OOXMLProperty::Pointer_t& y) const
 {
     bool bResult = false;
 

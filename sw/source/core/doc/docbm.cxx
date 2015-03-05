@@ -847,7 +847,7 @@ namespace sw { namespace mark
     };
 
     ::boost::shared_ptr<IDocumentMarkAccess::ILazyDeleter>
-        MarkManager::deleteMark(const const_iterator_t ppMark)
+        MarkManager::deleteMark(const const_iterator_t& ppMark)
     {
         ::boost::shared_ptr<ILazyDeleter> ret;
         if (ppMark == m_vAllMarks.end()) return ret;

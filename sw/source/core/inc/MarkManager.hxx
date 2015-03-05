@@ -59,7 +59,7 @@ namespace sw {
 
             // deleters
             virtual ::boost::shared_ptr<ILazyDeleter>
-                deleteMark(const const_iterator_t ppMark) SAL_OVERRIDE;
+                deleteMark(const const_iterator_t& ppMark) SAL_OVERRIDE;
             virtual void deleteMark(const ::sw::mark::IMark* const pMark) SAL_OVERRIDE;
             virtual void clearAllMarks() SAL_OVERRIDE;
 

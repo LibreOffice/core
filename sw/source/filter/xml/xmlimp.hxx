@@ -108,7 +108,7 @@ protected:
 
 public:
     SwXMLImport(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rContext,
         OUString const & implementationName, SvXMLImportFlags nImportFlags);
 
     virtual ~SwXMLImport() throw();

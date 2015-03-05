@@ -111,7 +111,7 @@ void DragAndDropContext::UpdatePosition (
 
 void DragAndDropContext::SetTargetSlideSorter (
     SlideSorter* pSlideSorter,
-    const Point aMousePosition,
+    const Point& rMousePosition,
     const InsertionIndicatorHandler::Mode eMode,
     const bool bIsOverSourceView)
 {
@@ -129,7 +129,7 @@ void DragAndDropContext::SetTargetSlideSorter (
         mpTargetSlideSorter->GetController().GetInsertionIndicatorHandler()->Start(
             bIsOverSourceView);
         mpTargetSlideSorter->GetController().GetInsertionIndicatorHandler()->UpdatePosition(
-            aMousePosition,
+            rMousePosition,
             eMode);
 
     }
