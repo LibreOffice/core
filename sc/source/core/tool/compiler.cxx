@@ -3847,6 +3847,23 @@ ScTokenArray* ScCompiler::CompileString( const OUString& rFormula )
                 if (bUseFunctionStack && nFunction)
                     --nFunction;
             }
+            case ocTableRefOpen:
+            {
+                // Don't count following item separator as parameter separator.
+                if (bUseFunctionStack)
+                {
+                    ++nFunction;
+                    pFunctionStack[ nFunction ].eOp = eOp;
+                    pFunctionStack[ nFunction ].nSep = 0;
+                }
+            }
+            break;
+            case ocTableRefClose:
+            {
+                if (bUseFunctionStack && nFunction)
+                    --nFunction;
+            }
+            break;
             default:
             break;
         }
