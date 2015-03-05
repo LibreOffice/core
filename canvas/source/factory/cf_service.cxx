@@ -226,12 +226,6 @@ CanvasFactory::~CanvasFactory()
 }
 
 
-Reference<XInterface> create( Reference<XComponentContext> const & xContext )
-{
-    return static_cast< ::cppu::OWeakObject * >(
-        new CanvasFactory( xContext ) );
-}
-
 // XServiceInfo
 OUString CanvasFactory::getImplementationName() throw (RuntimeException, std::exception)
 {
@@ -503,30 +497,15 @@ Reference<XInterface> CanvasFactory::createInstanceWithArguments(
         name, args, m_xContext );
 }
 
-const ::cppu::ImplementationEntry s_entries [] = {
-    {
-        create,
-        getImplName,
-        getSuppServices,
-        ::cppu::createSingleComponentFactory,
-        0, 0
-    },
-    { 0, 0, 0, 0, 0, 0 }
-};
-
 } // anon namespace
 
-extern "C" {
 
-SAL_DLLPUBLIC_EXPORT void * SAL_CALL canvasfactory_component_getFactory(
-    sal_Char const * pImplName,
-    void * pServiceManager,
-    void * pRegistryKey )
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_rendering_CanvasFactory_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                                             ::com::sun::star::uno::Sequence<css::uno::Any> const &)
 {
-    return ::cppu::component_getFactoryHelper(
-        pImplName, pServiceManager, pRegistryKey, s_entries );
+    return cppu::acquire(new CanvasFactory(context));
 }
 
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
