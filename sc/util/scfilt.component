@@ -19,11 +19,13 @@
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
     prefix="scfilt" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.oox.xls.ExcelFilter">
+  <implementation name="com.sun.star.comp.oox.xls.ExcelFilter"
+      constructor="com_sun_star_comp_oox_xls_ExcelFilter_get_implementation">
     <service name="com.sun.star.document.ImportFilter"/>
     <service name="com.sun.star.document.ExportFilter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.oox.xls.FormulaParser">
+  <implementation name="com.sun.star.comp.oox.xls.FormulaParser"
+      constructor="com_sun_star_comp_oox_xls_FormulaParser_get_implementation">
     <service name="com.sun.star.sheet.FilterFormulaParser"/>
   </implementation>
 </component>
