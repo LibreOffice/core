@@ -85,20 +85,20 @@ class COMPHELPER_DLLPUBLIC SequenceAsHashMap : public SequenceAsHashMapBase
 
 
         /** @short  fill this map from the given
-                    any, which of course must contain
+                    Any, which of course must contain
                     a suitable sequence of element types
                     "css.beans.PropertyValue" or "css.beans.NamedValue".
 
             @attention  If the given Any is an empty one
-                        (if its set to VOID), no exception
+                        (if it's set to VOID), no exception
                         is thrown. In such case this instance will
                         be created as an empty one too!
 
             @param  aSource
                     contains the new items for this map.
 
-            @throw  An com::sun::star::lang::IllegalArgumentException
-                    is thrown, if the given any does not contain a suitable sequence ...
+            @throw  A com::sun::star::lang::IllegalArgumentException
+                    is thrown, if the given Any does not contain a suitable sequence ...
                     but not if it's a VOID Any!
          */
         void operator<<(const ::com::sun::star::uno::Any& aSource);
@@ -112,8 +112,8 @@ class COMPHELPER_DLLPUBLIC SequenceAsHashMap : public SequenceAsHashMapBase
             @param  lSource
                     contains the new items for this map.
 
-            @throw  An com::sun::star::lang::IllegalArgumentException
-                    is thrown, if the given any sequence
+            @throw  A com::sun::star::lang::IllegalArgumentException
+                    is thrown, if the given Any sequence
                     uses wrong types for its items. VOID Any will be ignored!
          */
         void operator<<(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& lSource);
@@ -159,7 +159,7 @@ class COMPHELPER_DLLPUBLIC SequenceAsHashMap : public SequenceAsHashMapBase
                     Any, which can be
                     used in const environments only.
 
-            @descr  Its made const to prevent using of the
+            @descr  It's made const to prevent using of the
                     return value directly as an in/out parameter!
                     usage: myMethod(stlDequeAdapter.getAsAnyList());
 
@@ -177,7 +177,7 @@ class COMPHELPER_DLLPUBLIC SequenceAsHashMap : public SequenceAsHashMapBase
                     NamedValue sequence, which can be
                     used in const environments only.
 
-            @descr  Its made const to prevent using of the
+            @descr  It's made const to prevent using of the
                     return value directly as an in/out parameter!
                     usage: myMethod(stlDequeAdapter.getAsNamedValueList());
 
@@ -191,7 +191,7 @@ class COMPHELPER_DLLPUBLIC SequenceAsHashMap : public SequenceAsHashMapBase
                     PropertyValue sequence, which can be
                     used in const environments only.
 
-            @descr  Its made const to prevent using of the
+            @descr  It's made const to prevent using of the
                     return value directly as an in/out parameter!
                     usage: myMethod(stlDequeAdapter.getAsPropertyValueList());
 
@@ -206,9 +206,9 @@ class COMPHELPER_DLLPUBLIC SequenceAsHashMap : public SequenceAsHashMapBase
                     specified default value otherwise.
 
             @descr  If a value should be extracted only in case
-                    the requsted property exists really (without creating
+                    the requested property exists really (without creating
                     of new items as it the index operator of a
-                    has_map does!) this method can be used.
+                    hash map does!) this method can be used.
 
             @param  sKey
                     key name of the item.
@@ -244,7 +244,7 @@ class COMPHELPER_DLLPUBLIC SequenceAsHashMap : public SequenceAsHashMapBase
                     does not already exist.
 
             @descr  To check if the property already exists only
-                    her name is used for compare. Its value isn't
+                    its name is used for compare. Its value isn't
                     checked!
 
             @param  sKey
