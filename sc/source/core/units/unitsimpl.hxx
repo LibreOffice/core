@@ -66,7 +66,7 @@ public:
 private:
     UtUnit getOutputUnitsForOpCode(std::stack< UtUnit >& rUnitStack, const OpCode& rOpCode);
     OUString extractUnitStringFromFormat(const OUString& rFormatString);
-    OUString extractUnitStringForCell(ScAddress& rAddress, ScDocument* pDoc);
+    OUString extractUnitStringForCell(const ScAddress& rAddress, ScDocument* pDoc);
     UtUnit getUnitForRef(formula::FormulaToken* pToken,
                          const ScAddress& rFormulaAddress,
                          ScDocument* pDoc);
