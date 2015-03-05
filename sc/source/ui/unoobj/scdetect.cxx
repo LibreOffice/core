@@ -340,10 +340,12 @@ OUString ScFilterDetect::impl_getStaticImplementationName()
     return OUString("com.sun.star.comp.calc.FormatDetector");
 }
 
-uno::Reference<uno::XInterface> ScFilterDetect::impl_createInstance(
-    const uno::Reference<uno::XComponentContext>& xContext ) throw (uno::Exception)
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_calc_FormatDetector_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                                         ::com::sun::star::uno::Sequence<css::uno::Any> const &)
 {
-    return static_cast<cppu::OWeakObject*>(new ScFilterDetect(xContext));
+    return cppu::acquire(new ScFilterDetect(context));
 }
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
