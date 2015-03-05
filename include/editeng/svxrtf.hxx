@@ -240,11 +240,7 @@ class EDITENG_DLLPUBLIC SvxRTFParser : public SvRTFParser
         RTF_CharTypeDef eType, SfxItemSet& rSet, SfxPoolItem& rItem );
 
 protected:
-    void EnterEnvironment();
-    void LeaveEnvironment();
-    void ResetPard();
     virtual void InsertPara() = 0;
-
 
     OUString& DelCharAtEnd( OUString& rStr, const sal_Unicode cDel );
 
@@ -341,7 +337,6 @@ public:
     // get RTF default ItemSets. Must be used by pard/plain tokens or in
     // reset of Style-Items
     const SfxItemSet& GetRTFDefaults();
-    bool UncompressableStackEntry(const SvxRTFItemStackType &rSet) const;
 };
 
 // The stack for the attributes:

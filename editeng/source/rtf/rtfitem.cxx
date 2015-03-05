@@ -222,7 +222,6 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
         {
         case RTF_PARD:
             RTFPardPlain( true, &pSet );
-            ResetPard();
             nStyleNo = 0;
             bPardTokenRead = true;
             break;

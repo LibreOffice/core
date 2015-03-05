@@ -2462,12 +2462,6 @@ void EditEngine::ParagraphConnected( sal_Int32 /*nLeftParagraph*/, sal_Int32 /*n
 {
 }
 
-bool EditEngine::FormattingParagraph( sal_Int32 )
-{
-    // return true, if the Attribute was changed ...
-    return false;
-}
-
 void EditEngine::ParaAttribsChanged( sal_Int32 /* nParagraph */ )
 {
 }

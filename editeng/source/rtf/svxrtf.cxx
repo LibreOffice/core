@@ -85,18 +85,6 @@ SvxRTFParser::SvxRTFParser( SfxItemPool& rPool, SvStream& rIn,
     pDfltColor = new Color;
 }
 
-void SvxRTFParser::EnterEnvironment()
-{
-}
-
-void SvxRTFParser::LeaveEnvironment()
-{
-}
-
-void SvxRTFParser::ResetPard()
-{
-}
-
 SvxRTFParser::~SvxRTFParser()
 {
     if( !aColorTbl.empty() )
@@ -224,13 +212,11 @@ INSINGLECHAR:
     case '{':
         if (bNewGroup)          // Nesting!
             _GetAttrSet();
-        EnterEnvironment();
         bNewGroup = true;
         break;
     case '}':
         if( !bNewGroup )        // Empty Group ??
             AttrGroupEnd();
-        LeaveEnvironment();
         bNewGroup = false;
         break;
     case RTF_INFO:
@@ -1230,11 +1216,6 @@ void SvxRTFItemStackType::MoveFullNode(const SvxNodeIdx &rOldNode,
     }
 }
 
-bool SvxRTFParser::UncompressableStackEntry(const SvxRTFItemStackType &) const
-{
-    return false;
-}
-
 void SvxRTFItemStackType::Compress( const SvxRTFParser& rParser )
 {
     ENSURE_OR_RETURN_VOID(pChildList, "Compress: no ChildList" );
@@ -1269,9 +1250,6 @@ void SvxRTFItemStackType::Compress( const SvxRTFParser& rParser )
                     pTmp->Compress( rParser );
             return;
         }
-
-        if (rParser.UncompressableStackEntry(*pTmp))
-            return;
 
         if( n )
         {
