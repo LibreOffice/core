@@ -155,12 +155,6 @@ bool ImplTabButton::PreNotify(NotifyEvent& rNotifyEvent)
     return PushButton::PreNotify(rNotifyEvent);
 }
 
-
-
-
-// - ImplTabSizer -
-
-
 class ImplTabSizer : public vcl::Window
 {
 public:
@@ -179,8 +173,6 @@ private:
     long            mnStartWidth;
 };
 
-
-
 ImplTabSizer::ImplTabSizer( TabBar* pParent, WinBits nWinStyle )
     : Window( pParent, nWinStyle & WB_3DLOOK )
     , mnStartWidth(0)
@@ -189,8 +181,6 @@ ImplTabSizer::ImplTabSizer( TabBar* pParent, WinBits nWinStyle )
     SetPointer(Pointer(POINTER_HSIZEBAR));
     SetSizePixel(Size(7 * nScaleFactor, 0));
 }
-
-
 
 void ImplTabSizer::ImplTrack( const Point& rScreenPos )
 {
@@ -202,8 +192,6 @@ void ImplTabSizer::ImplTrack( const Point& rScreenPos )
     pParent->Split();
     pParent->Update();
 }
-
-
 
 void ImplTabSizer::MouseButtonDown( const MouseEvent& rMEvt )
 {
@@ -221,8 +209,6 @@ void ImplTabSizer::MouseButtonDown( const MouseEvent& rMEvt )
     }
 }
 
-
-
 void ImplTabSizer::Tracking( const TrackingEvent& rTEvt )
 {
     if ( rTEvt.IsTrackingEnded() )
@@ -235,23 +221,11 @@ void ImplTabSizer::Tracking( const TrackingEvent& rTEvt )
         ImplTrack( OutputToScreenPixel( rTEvt.GetMouseEvent().GetPosPixel() ) );
 }
 
-
-
 void ImplTabSizer::Paint( const Rectangle& )
 {
-    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-    DecorationView  aDecoView( this );
-    long            nOffX = 0;
-    Size            aOutputSize = GetOutputSizePixel();
-
-    if ( !(rStyleSettings.GetOptions() & STYLE_OPTION_MONO) )
-    {
-        SetLineColor( rStyleSettings.GetDarkShadowColor() );
-        DrawLine( Point( 0, 0 ), Point( 0, aOutputSize.Height()-1 ) );
-        nOffX++;
-        aOutputSize.Width()--;
-    }
-    aDecoView.DrawButton( Rectangle( Point( nOffX, 0 ), aOutputSize ), BUTTON_DRAW_NOLIGHTBORDER );
+    DecorationView aDecoView(this);
+    Rectangle aOutputRect(Point(0, 0), GetOutputSizePixel());
+    aDecoView.DrawHandle(aOutputRect, true);
 }
 
 
