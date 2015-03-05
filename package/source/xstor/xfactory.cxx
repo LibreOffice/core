@@ -77,12 +77,6 @@ OUString SAL_CALL OStorageFactory::impl_staticGetImplementationName()
     return OUString("com.sun.star.comp.embed.StorageFactory");
 }
 
-uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::impl_staticCreateSelfInstance(
-            const uno::Reference< lang::XMultiServiceFactory >& xServiceManager )
-{
-    return uno::Reference< uno::XInterface >( *new OStorageFactory( comphelper::getComponentContext(xServiceManager) ) );
-}
-
 uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstance()
     throw ( uno::Exception,
             uno::RuntimeException, std::exception )
@@ -301,5 +295,14 @@ uno::Sequence< OUString > SAL_CALL OStorageFactory::getSupportedServiceNames()
 {
     return impl_staticGetSupportedServiceNames();
 }
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_embed_StorageFactory_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                                                    ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new OStorageFactory(context));
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
