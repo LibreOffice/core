@@ -353,12 +353,48 @@ ScCompiler::Convention::Convention( FormulaGrammar::AddressConvention eConv )
 /* \ */     // FREE
 /* ] */     t[93] = SC_COMPILER_C_ODF_RBRACKET;
     }
+    else if (FormulaGrammar::CONV_OOO == meConv)
+    {
+/* [ */     t[91] = SC_COMPILER_C_CHAR;
+/* \ */     // FREE
+/* ] */     t[93] = SC_COMPILER_C_CHAR;
+    }
+    else if (FormulaGrammar::CONV_XL_OOX == meConv)
+    {
+#if 1
+            /* TODO: currently SC_COMPILER_C_CHAR doesn't work as long as the
+             * table references aren't implemented. */
+/* [ */     t[91] = SC_COMPILER_C_CHAR_IDENT;
+/* \ */     // FREE
+/* ] */     t[93] = SC_COMPILER_C_IDENT;
+#else
+            /* TODO: check if SC_COMPILER_C_CHAR_IDENT and SC_COMPILER_C_IDENT
+             * were only added to be able to import table structured
+             * reference of a whole table. If so, then remove here. */
+/* [ */     t[91] = SC_COMPILER_C_CHAR | SC_COMPILER_C_CHAR_IDENT;
+/* \ */     // FREE
+/* ] */     t[93] = SC_COMPILER_C_CHAR | SC_COMPILER_C_IDENT;
+#endif
+    }
+    else if (FormulaGrammar::CONV_XL_A1 == meConv)
+    {
+/* [ */     t[91] = SC_COMPILER_C_CHAR;
+/* \ */     // FREE
+/* ] */     t[93] = SC_COMPILER_C_CHAR;
+    }
+    else if( FormulaGrammar::CONV_XL_R1C1 == meConv )
+    {
+/* [ */     t[91] = SC_COMPILER_C_IDENT;
+/* \ */     // FREE
+/* ] */     t[93] = SC_COMPILER_C_IDENT;
+    }
     else
     {
 /* [ */     // FREE
 /* \ */     // FREE
 /* ] */     // FREE
     }
+
 /* ^ */     t[94] = SC_COMPILER_C_CHAR | SC_COMPILER_C_WORD_SEP | SC_COMPILER_C_VALUE_SEP;
 /* _ */     t[95] = SC_COMPILER_C_CHAR_WORD | SC_COMPILER_C_WORD | SC_COMPILER_C_CHAR_IDENT | SC_COMPILER_C_IDENT | SC_COMPILER_C_CHAR_NAME | SC_COMPILER_C_NAME;
 /* ` */     // FREE
@@ -408,17 +444,6 @@ ScCompiler::Convention::Convention( FormulaGrammar::AddressConvention eConv )
 /* | */     t[124]|=   SC_COMPILER_C_WORD;
 /* } */     t[125]|=   SC_COMPILER_C_WORD;
 /* ~ */     t[126]|=   SC_COMPILER_C_WORD;
-
-        if( FormulaGrammar::CONV_XL_R1C1 == meConv )
-        {
-/* [ */     t[91] |= SC_COMPILER_C_IDENT;
-/* ] */     t[93] |= SC_COMPILER_C_IDENT;
-        }
-        if( FormulaGrammar::CONV_XL_OOX == meConv )
-        {
-/* [ */     t[91] |= SC_COMPILER_C_CHAR_IDENT;
-/* ] */     t[93] |= SC_COMPILER_C_IDENT;
-        }
     }
 }
 
