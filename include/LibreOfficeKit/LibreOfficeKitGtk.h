@@ -81,6 +81,8 @@ struct _LOKDocView
     /// If we are in the middle of a drag of the text selection end handle.
     gboolean m_bInDragEndHandle;
     ///@}
+
+    cairo_surface_t* m_pGraphicHandle;
 };
 
 struct _LOKDocViewClass

@@ -266,6 +266,8 @@ static void lok_docview_init( LOKDocView* pDocView )
     memset(&pDocView->m_aHandleEndRect, 0, sizeof(pDocView->m_aHandleEndRect));
     pDocView->m_bInDragEndHandle = FALSE;
 
+    pDocView->m_pGraphicHandle = NULL;
+
     gtk_signal_connect( GTK_OBJECT(pDocView), "destroy",
                         GTK_SIGNAL_FUNC(lcl_onDestroy), NULL );
     g_signal_connect_after(pDocView->pEventBox, "expose-event",
@@ -348,6 +350,67 @@ static void lcl_renderHandle(cairo_t* pCairo, GdkRectangle* pCursor, cairo_surfa
     }
 }
 
+/// Renders pHandle around a pSelection rectangle on pCairo.
+static void lcl_renderGraphicHandle(cairo_t* pCairo, GdkRectangle* pSelection, cairo_surface_t* pHandle, float fZoom)
+{
+    int nHandleWidth, nHandleHeight;
+    GdkRectangle aSelection;
+    int i;
+
+    nHandleWidth = cairo_image_surface_get_width(pHandle);
+    nHandleHeight = cairo_image_surface_get_height(pHandle);
+
+    aSelection.x = twipToPixel(pSelection->x) * fZoom;
+    aSelection.y = twipToPixel(pSelection->y) * fZoom;
+    aSelection.width = twipToPixel(pSelection->width) * fZoom;
+    aSelection.height = twipToPixel(pSelection->height) * fZoom;
+
+    for (i = 0; i < 8; ++i)
+    {
+        int x = aSelection.x, y = aSelection.y;
+        cairo_save(pCairo);
+
+        switch (i)
+        {
+        case 0: // top-left
+            break;
+        case 1: // top-middle
+            x += aSelection.width / 2;
+            break;
+        case 2: // top-right
+            x += aSelection.width;
+            break;
+        case 3: // middle-left
+            y += aSelection.height / 2;
+            break;
+        case 4: // middle-right
+            x += aSelection.width;
+            y += aSelection.height / 2;
+            break;
+        case 5: // bottom-left
+            y += aSelection.height;
+            break;
+        case 6: // bottom-middle
+            x += aSelection.width / 2;
+            y += aSelection.height;
+            break;
+        case 7: // bottom-right
+            x += aSelection.width;
+            y += aSelection.height;
+            break;
+        }
+
+        // Center the handle.
+        x -= nHandleWidth / 2;
+        y -= nHandleHeight / 2;
+
+        cairo_translate(pCairo, x, y);
+        cairo_set_source_surface(pCairo, pHandle, 0, 0);
+        cairo_paint(pCairo);
+        cairo_restore(pCairo);
+    }
+}
+
 static gboolean renderOverlay(GtkWidget* pWidget, GdkEventExpose* pEvent, gpointer pData)
 {
 #if GTK_CHECK_VERSION(2,14,0) // we need gtk_widget_get_window()
@@ -423,6 +486,9 @@ static gboolean renderOverlay(GtkWidget* pWidget, GdkEventExpose* pEvent, gpoint
 
     if (!lcl_isEmptyRectangle(&pDocView->m_aGraphicSelection))
     {
+        if (!pDocView->m_pGraphicHandle)
+            pDocView->m_pGraphicHandle = cairo_image_surface_create_from_png(CURSOR_HANDLE_DIR "handle_graphic.png");
+        lcl_renderGraphicHandle(pCairo, &pDocView->m_aGraphicSelection, pDocView->m_pGraphicHandle, pDocView->fZoom);
     }
 
     cairo_destroy(pCairo);
