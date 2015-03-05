@@ -1519,7 +1519,31 @@ void TabBar::Resize()
     ImplEnableControls();
 }
 
-
+bool TabBar::PreNotify( NotifyEvent& rNEvt )
+{
+    if (rNEvt.GetType() == MouseNotifyEvent::COMMAND)
+    {
+        if (rNEvt.GetCommandEvent()->GetCommand() == COMMAND_WHEEL)
+        {
+            const CommandWheelData* pData = rNEvt.GetCommandEvent()->GetWheelData();
+            sal_uInt16 nNewPos = mnFirstPos;
+            if (pData->GetNotchDelta() > 0)
+            {
+                if (mnFirstPos)
+                    nNewPos = mnFirstPos - 1;
+            }
+            else if (pData->GetNotchDelta() < 0)
+            {
+                sal_uInt16 nCount = GetPageCount();
+                if (mnFirstPos <  nCount)
+                    nNewPos = mnFirstPos + 1;
+            }
+            if (nNewPos != mnFirstPos)
+                SetFirstPageId(GetPageId(nNewPos));
+        }
+    }
+    return Window::PreNotify( rNEvt );
+}
 
 void TabBar::RequestHelp( const HelpEvent& rHEvt )
 {
