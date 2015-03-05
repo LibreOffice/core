@@ -127,27 +127,34 @@ uno::Sequence< OUString > SAL_CALL SEInitializer_NssImpl_getSupportedServiceName
     return aRet;
 }
 
-uno::Reference< uno::XInterface > SAL_CALL SEInitializer_NssImpl_createInstance( const uno::Reference< lang::XMultiServiceFactory > & rxMSF)
-    throw( uno::Exception )
-{
-    return (cppu::OWeakObject*) new SEInitializer_NssImpl(comphelper::getComponentContext(rxMSF));
-}
-
 /* XServiceInfo */
 OUString SAL_CALL SEInitializer_NssImpl::getImplementationName(  )
     throw (uno::RuntimeException, std::exception)
 {
     return SEInitializer_NssImpl_getImplementationName();
 }
+
 sal_Bool SAL_CALL SEInitializer_NssImpl::supportsService( const OUString& rServiceName )
     throw (uno::RuntimeException, std::exception)
 {
     return cppu::supportsService( this, rServiceName );
 }
+
 uno::Sequence< OUString > SAL_CALL SEInitializer_NssImpl::getSupportedServiceNames(  )
     throw (uno::RuntimeException, std::exception)
 {
     return SEInitializer_NssImpl_getSupportedServiceNames();
 }
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_xml_security_bridge_xmlsec_SEInializer_NssImpl_get_implementation(
+        ::com::sun::star::uno::XComponentContext* context,
+        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new SEInitializer_NssImpl(context));
+}
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

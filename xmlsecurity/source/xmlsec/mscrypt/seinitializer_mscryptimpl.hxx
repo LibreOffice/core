@@ -88,10 +88,6 @@ sal_Bool SAL_CALL SEInitializer_MSCryptImpl_supportsService( const OUString& Ser
 com::sun::star::uno::Sequence< OUString > SAL_CALL SEInitializer_MSCryptImpl_getSupportedServiceNames(  )
     throw ( com::sun::star::uno::RuntimeException );
 
-com::sun::star::uno::Reference< com::sun::star::uno::XInterface >
-SAL_CALL SEInitializer_MSCryptImpl_createInstance( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > & rSMgr)
-    throw ( com::sun::star::uno::Exception );
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

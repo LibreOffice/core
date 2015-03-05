@@ -204,15 +204,6 @@ OUString SecurityEnvironment_MSCryptImpl :: impl_getImplementationName() throw( 
     return OUString("com.sun.star.xml.security.bridge.xmlsec.SecurityEnvironment_MSCryptImpl") ;
 }
 
-//Helper for registry
-Reference< XInterface > SAL_CALL SecurityEnvironment_MSCryptImpl :: impl_createInstance( const Reference< XMultiServiceFactory >& aServiceManager ) throw( RuntimeException ) {
-    return Reference< XInterface >( *new SecurityEnvironment_MSCryptImpl( aServiceManager ) ) ;
-}
-
-Reference< XSingleServiceFactory > SecurityEnvironment_MSCryptImpl :: impl_createFactory( const Reference< XMultiServiceFactory >& aServiceManager ) {
-    return ::cppu::createSingleFactory( aServiceManager , impl_getImplementationName() , impl_createInstance , impl_getSupportedServiceNames() ) ;
-}
-
 /* XUnoTunnel */
 sal_Int64 SAL_CALL SecurityEnvironment_MSCryptImpl :: getSomething( const Sequence< sal_Int8 >& aIdentifier )
     throw( RuntimeException )
@@ -1174,5 +1165,16 @@ void SecurityEnvironment_MSCryptImpl :: destroyKeysManager(xmlSecKeysMngrPtr pKe
         xmlSecKeysMngrDestroy( pKeysMngr ) ;
     }
 }
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_xml_security_bridge_xmlsec_SecurityEnvironment_MSCryptImpl_get_implementation(
+        ::com::sun::star::uno::XComponentContext* context,
+        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new MSOLEObjectSystemCreator(xSM));
+}
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

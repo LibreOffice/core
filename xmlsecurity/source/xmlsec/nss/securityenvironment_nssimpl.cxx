@@ -175,15 +175,6 @@ OUString SecurityEnvironment_NssImpl :: impl_getImplementationName() throw( Runt
     return OUString("com.sun.star.xml.security.bridge.xmlsec.SecurityEnvironment_NssImpl") ;
 }
 
-//Helper for registry
-Reference< XInterface > SAL_CALL SecurityEnvironment_NssImpl :: impl_createInstance( const Reference< XMultiServiceFactory >& ) throw( RuntimeException ) {
-    return Reference< XInterface >( *new SecurityEnvironment_NssImpl ) ;
-}
-
-Reference< XSingleServiceFactory > SecurityEnvironment_NssImpl :: impl_createFactory( const Reference< XMultiServiceFactory >& aServiceManager ) {
-    return ::cppu::createSingleFactory( aServiceManager , impl_getImplementationName() , impl_createInstance , impl_getSupportedServiceNames() ) ;
-}
-
 /* XUnoTunnel */
 sal_Int64 SAL_CALL SecurityEnvironment_NssImpl :: getSomething( const Sequence< sal_Int8 >& aIdentifier )
     throw( RuntimeException, std::exception )
@@ -966,5 +957,14 @@ void SecurityEnvironment_NssImpl::destroyKeysManager(xmlSecKeysMngrPtr pKeysMngr
         xmlSecKeysMngrDestroy( pKeysMngr ) ;
     }
 }
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_xml_security_bridge_xmlsec_SecurityEnvironment_NssImpl_get_implementation(
+        ::com::sun::star::uno::XComponentContext*,
+        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new SecurityEnvironment_NssImpl());
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

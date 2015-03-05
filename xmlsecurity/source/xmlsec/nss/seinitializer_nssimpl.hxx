@@ -66,10 +66,6 @@ OUString SEInitializer_NssImpl_getImplementationName()
 com::sun::star::uno::Sequence< OUString > SAL_CALL SEInitializer_NssImpl_getSupportedServiceNames(  )
     throw ( ::com::sun::star::uno::RuntimeException );
 
-com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-SAL_CALL SEInitializer_NssImpl_createInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rxMSF)
-    throw ( ::com::sun::star::uno::Exception );
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
