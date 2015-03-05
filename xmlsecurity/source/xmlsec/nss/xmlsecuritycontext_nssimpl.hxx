@@ -89,11 +89,6 @@ class XMLSecurityContext_NssImpl : public ::cppu::WeakImplHelper2<
 
         static OUString impl_getImplementationName() throw( ::com::sun::star::uno::RuntimeException ) ;
 
-        //Helper for registry
-        static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL impl_createInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& aServiceManager ) throw( ::com::sun::star::uno::RuntimeException ) ;
-
-        static ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > impl_createFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& aServiceManager ) ;
-
         /*
          * Because of the issue of multi-securityenvironment, so the keyManager method is not useful any longer.
          *
