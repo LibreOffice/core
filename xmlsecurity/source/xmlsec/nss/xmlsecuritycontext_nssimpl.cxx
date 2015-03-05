@@ -155,16 +155,12 @@ OUString XMLSecurityContext_NssImpl :: impl_getImplementationName() throw( Runti
     return OUString("com.sun.star.xml.security.bridge.xmlsec.XMLSecurityContext_NssImpl") ;
 }
 
-//Helper for registry
-Reference< XInterface > SAL_CALL XMLSecurityContext_NssImpl :: impl_createInstance( const Reference< XMultiServiceFactory >& ) throw( RuntimeException ) {
-    return Reference< XInterface >( *new XMLSecurityContext_NssImpl ) ;
-}
-
-Reference< XSingleServiceFactory > XMLSecurityContext_NssImpl :: impl_createFactory( const Reference< XMultiServiceFactory >& aServiceManager ) {
-    //Reference< XSingleServiceFactory > xFactory ;
-    //xFactory = ::cppu::createSingleFactory( aServiceManager , impl_getImplementationName , impl_createInstance , impl_getSupportedServiceNames ) ;
-    //return xFactory ;
-    return ::cppu::createSingleFactory( aServiceManager , impl_getImplementationName() , impl_createInstance , impl_getSupportedServiceNames() ) ;
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_xml_security_bridge_xmlsec_XMLSecurityContext_NssImpl_get_implementation(
+    ::com::sun::star::uno::XComponentContext*,
+    ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new XMLSecurityContext_NssImpl());
 }
 
 

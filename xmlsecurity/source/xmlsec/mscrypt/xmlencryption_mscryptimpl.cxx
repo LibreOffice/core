@@ -352,16 +352,15 @@ OUString XMLEncryption_MSCryptImpl :: impl_getImplementationName() throw( Runtim
     return OUString("com.sun.star.xml.security.bridge.xmlsec.XMLEncryption_MSCryptImpl") ;
 }
 
-//Helper for registry
-Reference< XInterface > SAL_CALL XMLEncryption_MSCryptImpl :: impl_createInstance( const Reference< XMultiServiceFactory >& aServiceManager ) throw( RuntimeException ) {
-    return Reference< XInterface >( *new XMLEncryption_MSCryptImpl( aServiceManager ) ) ;
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_xml_security_bridge_xmlsec_XMLEncryption_MSCryptImpl_get_implementation(
+        ::com::sun::star::uno::XComponentContext* context,
+        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    uno::Reference< lang::XMultiServiceFactory> xSM(context->getServiceManager(), uno::UNO_QUERY_THROW);
+    return cppu::acquire(new XMLEncryption_MSCryptImpl(xSM));
 }
 
-Reference< XSingleServiceFactory > XMLEncryption_MSCryptImpl :: impl_createFactory( const Reference< XMultiServiceFactory >& aServiceManager ) {
-    //Reference< XSingleServiceFactory > xFactory ;
-    //xFactory = ::cppu::createSingleFactory( aServiceManager , impl_getImplementationName , impl_createInstance , impl_getSupportedServiceNames ) ;
-    //return xFactory ;
-    return ::cppu::createSingleFactory( aServiceManager , impl_getImplementationName() , impl_createInstance , impl_getSupportedServiceNames() ) ;
-}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

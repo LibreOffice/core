@@ -1072,28 +1072,33 @@ cssu::Sequence< OUString > SAL_CALL XMLDocumentWrapper_XmlSecImpl_getSupportedSe
     return aRet;
 }
 
-cssu::Reference< cssu::XInterface > SAL_CALL XMLDocumentWrapper_XmlSecImpl_createInstance(
-    const cssu::Reference< cssu::XComponentContext > &)
-    throw( cssu::Exception )
-{
-    return (cppu::OWeakObject*) new XMLDocumentWrapper_XmlSecImpl( );
-}
-
 /* XServiceInfo */
 OUString SAL_CALL XMLDocumentWrapper_XmlSecImpl::getImplementationName(  )
     throw (cssu::RuntimeException, std::exception)
 {
     return XMLDocumentWrapper_XmlSecImpl_getImplementationName();
 }
+
 sal_Bool SAL_CALL XMLDocumentWrapper_XmlSecImpl::supportsService( const OUString& rServiceName )
     throw (cssu::RuntimeException, std::exception)
 {
     return cppu::supportsService( this, rServiceName );
 }
+
 cssu::Sequence< OUString > SAL_CALL XMLDocumentWrapper_XmlSecImpl::getSupportedServiceNames(  )
     throw (cssu::RuntimeException, std::exception)
 {
     return XMLDocumentWrapper_XmlSecImpl_getSupportedServiceNames();
 }
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_xml_security_bridge_xmlsec_XMLDocumentWrapper_XmlSecImpl_get_implementation(
+        ::com::sun::star::uno::XComponentContext*,
+        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new XMLDocumentWrapper_XmlSecImpl());
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
