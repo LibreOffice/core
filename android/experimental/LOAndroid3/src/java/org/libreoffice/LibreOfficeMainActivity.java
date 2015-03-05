@@ -30,7 +30,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LibreOfficeMainActivity extends LOAbout {
+public class LibreOfficeMainActivity extends Activity {
 
     private static final String LOGTAG = "LibreOfficeMainActivity";
     private static final String DEFAULT_DOC_PATH = "/assets/example.odt";
@@ -51,9 +51,9 @@ public class LibreOfficeMainActivity extends LOAbout {
     private TextSelection mTextSelection;
     private TextCursorLayer mTextCursorLayer;
     private File mTempFile = null;
-
+    private LOAbout mAbout;
     public LibreOfficeMainActivity() {
-        super(/*newActivity=*/false);
+        mAbout = new LOAbout(this, false);
     }
 
     public static GeckoLayerClient getLayerClient() {
@@ -72,7 +72,7 @@ public class LibreOfficeMainActivity extends LOAbout {
         int id = item.getItemId();
         switch (id) {
             case R.id.action_about:
-                showAbout();
+                mAbout.showAbout();
                 return true;
             case R.id.action_parts:
                 mDrawerLayout.openDrawer(mDrawerList);

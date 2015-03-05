@@ -69,7 +69,7 @@ import android.widget.Toast;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-public class LibreOfficeUIActivity extends LOAbout implements ActionBar.OnNavigationListener {
+public class LibreOfficeUIActivity extends Activity implements ActionBar.OnNavigationListener {
     private String tag = "file_manager";
     private SharedPreferences prefs;
     private int filterMode = FileUtilities.ALL;
@@ -98,15 +98,15 @@ public class LibreOfficeUIActivity extends LOAbout implements ActionBar.OnNaviga
     GridView gv;
     ListView lv;
 
+    private final LOAbout mAbout;
+
     public LibreOfficeUIActivity() {
-        super(/*newActivity=*/true);
+        mAbout = new LOAbout(this, true);
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
-        Log.d(tag, "onCreate - tweaked - meeks !");
 
         // initialize document provider factory
         DocumentProviderFactory.initialize(this);
@@ -440,7 +440,7 @@ public class LibreOfficeUIActivity extends LOAbout implements ActionBar.OnNaviga
                 sortFiles(item);
                 break;
             case R.id.action_about:
-                showAbout();
+                mAbout.showAbout();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

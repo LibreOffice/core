@@ -12,33 +12,34 @@ import android.widget.TextView;
 
 import java.io.File;
 
-public abstract class LOAbout extends Activity {
+public class LOAbout {
 
     private static final String DEFAULT_DOC_PATH = "/assets/example.odt";
+    private final Activity mActivity;
 
     private boolean mNewActivity;
 
-    public LOAbout(boolean newActivity) {
-        super();
+    public LOAbout(Activity activity, boolean newActivity) {
+        mActivity = activity;
         mNewActivity = newActivity;
     }
 
     private void loadFromAbout(String input) {
         if (mNewActivity) {
             Intent i = new Intent(Intent.ACTION_VIEW, Uri.fromFile(new File(input)));
-            String packageName = getApplicationContext().getPackageName();
+            String packageName = mActivity.getApplicationContext().getPackageName();
             ComponentName componentName = new ComponentName(packageName, LibreOfficeMainActivity.class.getName());
             i.setComponent(componentName);
-            startActivity(i);
+            mActivity.startActivity(i);
         } else {
             LOKitShell.sendCloseEvent();
             LOKitShell.sendLoadEvent(input);
         }
     }
 
-    protected void showAbout() {
+    public void showAbout() {
         // Inflate the about message contents
-        View messageView = getLayoutInflater().inflate(R.layout.about, null, false);
+        View messageView = mActivity.getLayoutInflater().inflate(R.layout.about, null, false);
 
         // When linking text, force to always use default color. This works
         // around a pressed color state bug.
@@ -51,7 +52,7 @@ public abstract class LOAbout extends Activity {
         TextView vendorView = (TextView)messageView.findViewById(R.id.about_vendor);
         try
         {
-            String versionName = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+            String versionName = mActivity.getPackageManager().getPackageInfo(mActivity.getPackageName(), 0).versionName;
             String[] tokens = versionName.split("/");
             if (tokens.length == 3)
             {
@@ -72,8 +73,7 @@ public abstract class LOAbout extends Activity {
             vendorView.setText("");
         }
 
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
         builder.setIcon(R.drawable.lo_icon);
         builder.setTitle(R.string.app_name);
         builder.setView(messageView);
