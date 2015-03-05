@@ -2231,10 +2231,10 @@ const uno::Sequence<sal_Int8>& ScTabViewObj::getUnoTunnelId()
     return theScTabViewObjUnoTunnelId::get().getSeq();
 }
 
-ScTabViewObj* ScTabViewObj::getImplementation( const uno::Reference<uno::XInterface> xObj )
+ScTabViewObj* ScTabViewObj::getImplementation(const uno::Reference<uno::XInterface>& rObj)
 {
     ScTabViewObj* pRet = NULL;
-    uno::Reference<lang::XUnoTunnel> xUT( xObj, uno::UNO_QUERY );
+    uno::Reference<lang::XUnoTunnel> xUT(rObj, uno::UNO_QUERY);
     if (xUT.is())
         pRet = reinterpret_cast<ScTabViewObj*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething(getUnoTunnelId())));
     return pRet;

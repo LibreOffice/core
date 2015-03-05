@@ -135,7 +135,7 @@ std::string StackVarEnumToString(StackVar const e)
 }
 
 #ifdef SAL_DETAIL_ENABLE_LOG_INFO
-std::string linenumberify(const std::string s)
+std::string linenumberify(const std::string& s)
 {
     std::stringstream ss;
     int linenumber = 1;

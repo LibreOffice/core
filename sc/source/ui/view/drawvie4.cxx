@@ -164,9 +164,9 @@ void getRangeFromDataSource( uno::Reference< chart2::data::XDataSource > xDataSo
     }
 }
 
-void getRangeFromErrorBar(const uno::Reference< chart2::XChartDocument > xChartDoc, std::vector<OUString>& rRangeRep)
+void getRangeFromErrorBar(const uno::Reference< chart2::XChartDocument >& rChartDoc, std::vector<OUString>& rRangeRep)
 {
-    uno::Reference <chart2::XDiagram > xDiagram = xChartDoc->getFirstDiagram();
+    uno::Reference <chart2::XDiagram > xDiagram = rChartDoc->getFirstDiagram();
     if(!xDiagram.is())
         return;
 
