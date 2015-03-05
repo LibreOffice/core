@@ -56,6 +56,7 @@ inline bool lcl_IsReference( OpCode eOp, StackVar eType )
         || (eOp == ocColRowNameAuto && eType == svDoubleRef)
         || (eOp == ocColRowName && eType == svSingleRef)
         || (eOp == ocMatRef && eType == svSingleRef)
+        || (eOp == ocTableRef && (eType == svSingleRef || eType == svDoubleRef))
         ;
 }
 
