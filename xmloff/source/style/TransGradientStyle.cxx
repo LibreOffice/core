@@ -115,9 +115,9 @@ bool XMLTransGradientStyleImport::importXML(
     { XML_NAMESPACE_DRAW, XML_END, XML_TOK_GRADIENT_END,
         (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_end) },
     { XML_NAMESPACE_DRAW, XML_GRADIENT_ANGLE, XML_TOK_GRADIENT_ANGLE,
-        (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_gradient_angle) },
+        (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_angle) },
     { XML_NAMESPACE_DRAW, XML_GRADIENT_BORDER, XML_TOK_GRADIENT_BORDER,
-        (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_gradient_border) },
+        (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_border) },
     XML_TOKEN_MAP_END
 };
 
@@ -257,9 +257,9 @@ bool XMLTransGradientStyleImport::importXML(
     { XML_NAMESPACE_DRAW, XML_END, XML_TOK_GRADIENT_END,
         (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_end) },
     { XML_NAMESPACE_DRAW, XML_GRADIENT_ANGLE, XML_TOK_GRADIENT_ANGLE,
-        (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_gradient_angle) },
+        (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_angle) },
     { XML_NAMESPACE_DRAW, XML_GRADIENT_BORDER, XML_TOK_GRADIENT_BORDER,
-        (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_gradient_border) },
+        (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_border) },
     XML_TOKEN_MAP_END
 };
 

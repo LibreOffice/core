@@ -88,7 +88,7 @@ bool XMLHatchStyleImport::importXML(
         { XML_NAMESPACE_DRAW, XML_COLOR, XML_TOK_HATCH_COLOR,
             (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_color) },
         { XML_NAMESPACE_DRAW, XML_HATCH_DISTANCE, XML_TOK_HATCH_DISTANCE,
-            (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_hatch_distance) },
+            (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_distance) },
         { XML_NAMESPACE_DRAW, XML_ROTATION, XML_TOK_HATCH_ROTATION,
             (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_rotation) },
         XML_TOKEN_MAP_END
@@ -189,7 +189,7 @@ bool XMLHatchStyleImport::importXML(
         { XML_NAMESPACE_DRAW, XML_COLOR, XML_TOK_HATCH_COLOR,
             (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_color) },
         { XML_NAMESPACE_DRAW, XML_HATCH_DISTANCE, XML_TOK_HATCH_DISTANCE,
-            (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_hatch_distance) },
+            (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_distance) },
         { XML_NAMESPACE_DRAW, XML_ROTATION, XML_TOK_HATCH_ROTATION,
             (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_rotation) },
         XML_TOKEN_MAP_END
