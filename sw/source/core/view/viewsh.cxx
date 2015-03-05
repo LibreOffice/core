@@ -1141,11 +1141,17 @@ void SwViewShell::VisPortChgd( const SwRect &rRect)
         }
     }
 
-    Point aPt( VisArea().Pos() );
-    aPt.X() = -aPt.X(); aPt.Y() = -aPt.Y();
-    MapMode aMapMode( GetWin()->GetMapMode() );
-    aMapMode.SetOrigin( aPt );
-    GetWin()->SetMapMode( aMapMode );
+    // When tiled rendering, the map mode of the window is disabled, avoid
+    // enabling it here.
+    if (!isTiledRendering())
+    {
+        Point aPt( VisArea().Pos() );
+        aPt.X() = -aPt.X(); aPt.Y() = -aPt.Y();
+        MapMode aMapMode( GetWin()->GetMapMode() );
+        aMapMode.SetOrigin( aPt );
+        GetWin()->SetMapMode( aMapMode );
+    }
+
     if ( HasDrawView() )
     {
         Imp()->GetDrawView()->VisAreaChanged( GetWin() );

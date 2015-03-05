@@ -6246,15 +6246,12 @@ void SwEditWin::LogicMouseButtonDown(const MouseEvent& rMouseEvent)
     // When we're not doing tiled rendering, then positions must be passed as pixels.
     assert(m_rView.GetWrtShell().isTiledRendering());
 
-    bool bMap = IsMapModeEnabled();
-    EnableMapMode(false);
     Point aPoint = GetPointerPosPixel();
     SetLastMousePos(rMouseEvent.GetPosPixel());
 
     MouseButtonDown(rMouseEvent);
 
     SetPointerPosPixel(aPoint);
-    EnableMapMode(bMap);
 }
 
 void SwEditWin::LogicMouseButtonUp(const MouseEvent& rMouseEvent)
@@ -6262,15 +6259,12 @@ void SwEditWin::LogicMouseButtonUp(const MouseEvent& rMouseEvent)
     // When we're not doing tiled rendering, then positions must be passed as pixels.
     assert(m_rView.GetWrtShell().isTiledRendering());
 
-    bool bMap = IsMapModeEnabled();
-    EnableMapMode(false);
     Point aPoint = GetPointerPosPixel();
     SetLastMousePos(rMouseEvent.GetPosPixel());
 
     MouseButtonUp(rMouseEvent);
 
     SetPointerPosPixel(aPoint);
-    EnableMapMode(bMap);
 }
 
 void SwEditWin::SetCursorLogicPosition(const Point& rPosition, bool bPoint, bool bClearMark)

@@ -3166,6 +3166,11 @@ void SwXTextDocument::initializeForTiledRendering()
     if (!pView)
         return;
     pView->SetViewLayout(nColumns, bBookMode, true);
+
+    // Disable map mode, so that it's possible to send mouse event coordinates
+    // directly in twips.
+    SwEditWin& rEditWin = pDocShell->GetView()->GetEditWin();
+    rEditWin.EnableMapMode(false);
 }
 
 void SwXTextDocument::registerCallback(LibreOfficeKitCallback pCallback, void* pData)
