@@ -111,11 +111,6 @@ OUString OOXMLFormulaParser_getImplementationName()
     return OUString( "com.sun.star.comp.oox.xls.FormulaParser");
 }
 
-Reference< XInterface > OOXMLFormulaParser_create( const Reference< XComponentContext >& )
-{
-    return static_cast< ::cppu::OWeakObject* >( new OOXMLFormulaParser );
-}
-
 OOXMLFormulaParser::OOXMLFormulaParser()
 {
 }
@@ -179,5 +174,15 @@ OUString SAL_CALL OOXMLFormulaParser::printFormula(
 
 } // namespace xls
 } // namespace oox
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_oox_xls_FormulaParser_get_implementation(::com::sun::star::uno::XComponentContext*,
+                                                           ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new oox::xls::OOXMLFormulaParser());
+}
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
