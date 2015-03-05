@@ -346,7 +346,7 @@ inline void ImplYield( bool i_bWait, bool i_bAllEvents )
     //while ( pSVData->mbNotAllTimerCalled )
     //    Timer::ImplTimerCallbackProc();
 
-    //Process all idles
+    //Process all Tasks
     Scheduler::ProcessTaskScheduling(false);
 
     pSVData->maAppData.mnDispatchLevel++;
@@ -367,6 +367,7 @@ inline void ImplYield( bool i_bWait, bool i_bAllEvents )
     // e.g. on OS X; need to trigger timer checks manually
     if( pSVData->maAppData.mbNoYield )
     {
+        //Process all timers
         Scheduler::ProcessTaskScheduling(true);
     }
 
