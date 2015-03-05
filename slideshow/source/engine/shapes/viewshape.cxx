@@ -856,7 +856,7 @@ namespace slideshow
             // Hack, force use of Sprites in case of ogl canvas
             const uno::Reference< rendering::XCanvas > xCanvas( mpViewLayer->getCanvas()->getUNOCanvas() );
             const uno::Reference< lang::XServiceInfo >  xServiceInfo(xCanvas ,uno::UNO_QUERY);
-            if(xServiceInfo.is()&&  xServiceInfo->getImplementationName() == "com.sun.star.comp.rendering.SpriteCanvas.OGL"
+            if((xServiceInfo.is()&&  xServiceInfo->getImplementationName() == "com.sun.star.comp.rendering.SpriteCanvas.OGL")
                || isBackgroundDetached() )
             {
                 return renderSprite( mpViewLayer,
