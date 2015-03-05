@@ -20,8 +20,9 @@
 #ifndef INCLUDED_O3TL_LAZY_UPDATE_HXX
 #define INCLUDED_O3TL_LAZY_UPDATE_HXX
 
-#include <sal/types.h>
-#include <boost/function.hpp>
+#include <sal/config.h>
+
+#include <utility>
 
 namespace o3tl
 {
@@ -35,7 +36,7 @@ namespace o3tl
 
         @example
         <pre>
-LazyUpdate<InType,OutType,LAZYUPDATE_DIRECT_TAG> myValue;
+LazyUpdate<InType,OutType,decltype(F)> myValue(F);
 *myValue = newInput;
 myValue->updateInput( this, that, those );
 
@@ -47,208 +48,47 @@ output( myValue.getOutValue() );
         </pre>
         if the compiler does not recognize the const context.
      */
-    template< typename InputType, typename OutputType, typename Tag > class LazyUpdate;
+    template<typename In, typename Out, typename Func> class LazyUpdate {
+    public:
+        LazyUpdate(Func const & func): func_(func), input_(), dirty_(true) {}
 
-    /// LazyUpdate specialization takes boost::function argument
-    struct LAZYUPDATE_FUNCTOR_TAG       {};
-    /// LazyUpdate specialization takes OutputType (*FunctionType)( InputType const& ) argument
-    struct LAZYUPDATE_FUNCTION_TAG      {};
-    /// LazyUpdate specialization can directly convert, OutputType ctor must take InputType argument
-    struct LAZYUPDATE_DIRECT_TAG  {};
+        template<typename T> void setInValue(T && in) {
+            dirty_ = true;
+            input_ = std::forward(in);
+        }
 
-    namespace detail
-    {
-        /// @internal
-        template< typename InputType, typename OutputType, typename Functor > class LazyUpdateImpl : private Functor
-        {
-        public:
-            typedef OutputType output_type;
-            typedef InputType  input_type;
+        In const & getInValue() const { return input_; }
 
-            LazyUpdateImpl() :
-                m_aInput()
-            {}
+        Out const & getOutValue() const { return update(); }
 
-            template< typename ParamType > explicit LazyUpdateImpl( ParamType const& rParm ) :
-                Functor(rParm),
-                m_aInput()
-            {}
+        In & operator *() {
+            dirty_ = true;
+            return input_;
+        }
 
-            enum UnaryConstructorTag{ UNARY_CONSTRUCTOR_TAG };
-            LazyUpdateImpl( const input_type& rInput, UnaryConstructorTag ) :
-                m_aInput(rInput)
-            {}
+        In * operator ->() {
+            dirty_ = true;
+            return &input_;
+        }
 
-            template< typename ParamType > LazyUpdateImpl( ParamType const&  rParm,
-                                                           const input_type& rInput ) :
-                Functor(rParm),
-                m_aInput(rInput)
-            {}
+        Out const & operator *() const { return update();  }
 
-            // default copy ctor/assignment operator are ok
-            // LazyUpdate( const LazyUpdate& );
-            // LazyUpdate& operator=( const LazyUpdate& );
+        Out const * operator ->() const { return &update(); }
 
-            void               setInValue( input_type const& rIn ) { Functor::m_bCacheDirty = true; m_aInput = rIn; }
-            input_type const&  getInValue()  const                 { return m_aInput; }
-            output_type const& getOutValue() const                 { return this->implUpdateValue(m_aInput); }
-
-            input_type& operator*()  { Functor::m_bCacheDirty = true; return m_aInput;  }
-            input_type* operator->() { Functor::m_bCacheDirty = true; return &m_aInput; }
-
-            output_type const& operator*() const  { return this->implUpdateValue(m_aInput);  }
-            output_type const* operator->() const { return &(this->implUpdateValue(m_aInput)); }
-
-        private:
-            input_type m_aInput;
-        };
-
-        template< typename InputType, typename OutputType > struct DefaultFunctor
-        {
-        protected:
-            typedef OutputType output_type;
-            typedef InputType  input_type;
-
-            DefaultFunctor() :
-                m_aOutput(),
-                m_bCacheDirty(true)
-            {}
-
-            OutputType const& implUpdateValue( input_type const& rIn ) const
-            {
-                if( m_bCacheDirty )
-                {
-                    m_aOutput = output_type( rIn );
-                    m_bCacheDirty = false;
-                }
-
-                return m_aOutput;
+    private:
+        Out const & update() const {
+            if (dirty_) {
+                output_ = func_(input_);
+                dirty_ = false;
             }
+            return output_;
+        }
 
-            mutable output_type m_aOutput;
-            mutable bool        m_bCacheDirty; // when true, m_aOutput needs update
-        };
-
-        template< typename InputType, typename OutputType, typename FunctionType > struct FunctionPointer
-        {
-        protected:
-            typedef OutputType   output_type;
-            typedef InputType    input_type;
-            typedef FunctionType function_type;
-
-            FunctionPointer() :
-                m_pFunc(),
-                m_aOutput(),
-                m_bCacheDirty(true)
-
-            {}
-
-            explicit FunctionPointer( function_type const& pFunc ) :
-                m_pFunc(pFunc),
-                m_aOutput(),
-                m_bCacheDirty(true)
-
-            {}
-
-            output_type const& implUpdateValue( input_type const& rIn ) const
-            {
-                if( m_bCacheDirty )
-                {
-                    m_aOutput = m_pFunc( rIn );
-                    m_bCacheDirty = false;
-                }
-
-                return m_aOutput;
-            }
-
-            function_type       m_pFunc;
-            mutable output_type m_aOutput;
-            mutable bool        m_bCacheDirty; // when true, m_aOutput needs update
-        };
-    }
-
-    // partial specializations for the three LAZYUPDATE_* tags
-    template< typename InputType, typename OutputType > class LazyUpdate<InputType,
-                                                                         OutputType,
-                                                                         LAZYUPDATE_DIRECT_TAG> :
-        public detail::LazyUpdateImpl<InputType,
-                                      OutputType,
-                                      detail::DefaultFunctor<InputType, OutputType> >
-    {
-    public:
-        LazyUpdate() {}
-        explicit LazyUpdate( InputType const& rIn ) :
-            detail::LazyUpdateImpl<InputType,
-                                   OutputType,
-                                   detail::DefaultFunctor<InputType, OutputType> >(
-                                       rIn,
-                                       detail::LazyUpdateImpl<
-                                            InputType,
-                                            OutputType,
-                                            detail::DefaultFunctor<InputType, OutputType> >::UNARY_CONSTRUCTOR_TAG )
-        {}
+        Func const func_;
+        In input_;
+        mutable Out output_;
+        mutable bool dirty_;
     };
-
-    template< typename InputType, typename OutputType > class LazyUpdate<InputType,
-                                                                         OutputType,
-                                                                         LAZYUPDATE_FUNCTION_TAG> :
-        public detail::LazyUpdateImpl<InputType,
-                                      OutputType,
-                                      detail::FunctionPointer<
-                                          InputType,
-                                          OutputType,
-                                          OutputType (*)( InputType const& ) > >
-    {
-    public:
-        explicit LazyUpdate( OutputType (*pFunc)( InputType const& ) ) :
-            detail::LazyUpdateImpl<InputType,
-                                   OutputType,
-                                   detail::FunctionPointer<
-                                       InputType,
-                                       OutputType,
-                                       OutputType (*)( InputType const& )> >(pFunc)
-        {}
-        LazyUpdate( OutputType (*pFunc)( InputType const& ),
-                    InputType const& rIn ) :
-            detail::LazyUpdateImpl<InputType,
-                                   OutputType,
-                                   detail::FunctionPointer<
-                                       InputType,
-                                       OutputType,
-                                       OutputType (*)( InputType const& )> >(pFunc,rIn)
-        {}
-    };
-
-    template< typename InputType, typename OutputType > class LazyUpdate<InputType,
-                                                                         OutputType,
-                                                                         LAZYUPDATE_FUNCTOR_TAG> :
-        public detail::LazyUpdateImpl<InputType,
-                                      OutputType,
-                                      detail::FunctionPointer<
-                                          InputType,
-                                          OutputType,
-                                          boost::function1<OutputType,InputType> > >
-    {
-    public:
-        explicit LazyUpdate( boost::function1<OutputType,InputType> const& rFunc ) :
-            detail::LazyUpdateImpl<InputType,
-                                   OutputType,
-                                   detail::FunctionPointer<
-                                       InputType,
-                                       OutputType,
-                                       boost::function1<OutputType,InputType> > >(rFunc)
-        {}
-        LazyUpdate( boost::function1<OutputType,InputType> const& rFunc,
-                    InputType const& rIn ) :
-            detail::LazyUpdateImpl<InputType,
-                                   OutputType,
-                                   detail::FunctionPointer<
-                                       InputType,
-                                       OutputType,
-                                       boost::function1<OutputType,InputType> > >(rFunc,rIn)
-        {}
-    };
-
 }
 
 #endif

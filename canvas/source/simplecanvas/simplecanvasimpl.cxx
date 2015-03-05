@@ -46,7 +46,7 @@ using namespace canvas;
 
 namespace
 {
-    inline uno::Sequence< double > color2Sequence( sal_Int32 const& nColor      )
+    inline uno::Sequence< double > color2Sequence( sal_Int32 nColor )
     {
         // TODO(F3): Color management
         uno::Sequence< double > aRes( 4 );
@@ -84,13 +84,13 @@ namespace
     {
         o3tl::LazyUpdate<sal_Int32,
                          uno::Sequence<double>,
-                         o3tl::LAZYUPDATE_FUNCTION_TAG >              m_aPenColor;
+                         decltype(&color2Sequence)>                   m_aPenColor;
         o3tl::LazyUpdate<sal_Int32,
                          uno::Sequence<double>,
-                         o3tl::LAZYUPDATE_FUNCTION_TAG >              m_aFillColor;
+                         decltype(&color2Sequence)>                   m_aFillColor;
         o3tl::LazyUpdate<geometry::RealRectangle2D,
                          uno::Reference< rendering::XPolyPolygon2D >,
-                         o3tl::LAZYUPDATE_FUNCTOR_TAG >               m_aRectClip;
+                         boost::function1<uno::Reference<rendering::XPolyPolygon2D>, geometry::RealRectangle2D> > m_aRectClip;
         geometry::AffineMatrix2D                                      m_aTransformation;
 
         explicit SimpleRenderState( uno::Reference<rendering::XGraphicDevice> const& xDevice ) :
@@ -367,7 +367,7 @@ namespace
         typedef o3tl::LazyUpdate<
             rendering::FontRequest,
             uno::Reference< rendering::XCanvasFont >,
-            o3tl::LAZYUPDATE_FUNCTOR_TAG > SimpleFont;
+            boost::function1<uno::Reference<rendering::XCanvasFont>, rendering::FontRequest> > SimpleFont;
 
         uno::Reference<rendering::XCanvas> mxCanvas;
         SimpleFont                         maFont;
