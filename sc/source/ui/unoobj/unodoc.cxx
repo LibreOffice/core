@@ -43,13 +43,17 @@ uno::Sequence< OUString > SAL_CALL ScDocument_getSupportedServiceNames() throw()
     return aSeq;
 }
 
-uno::Reference< uno::XInterface > SAL_CALL ScDocument_createInstance(
-                const uno::Reference< lang::XMultiServiceFactory > & /* rSMgr */, const sal_uInt64 _nCreationFlags ) throw( uno::Exception, std::exception )
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_Calc_SpreadsheetDocument_get_implementation(::com::sun::star::uno::XComponentContext*,
+                                                              ::com::sun::star::uno::Sequence<css::uno::Any> const &)
 {
     SolarMutexGuard aGuard;
     ScDLL::Init();
-    SfxObjectShell* pShell = new ScDocShell( _nCreationFlags );
-    return uno::Reference< uno::XInterface >( pShell->GetModel() );
+    SfxObjectShell* pShell = new ScDocShell( SFX_CREATE_MODE_STANDARD );
+    uno::Reference< uno::XInterface > model( pShell->GetModel() );
+    model->acquire();
+    return model.get();
 }
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
