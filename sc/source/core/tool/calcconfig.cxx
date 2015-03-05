@@ -53,6 +53,7 @@ void ScCalcConfig::setOpenCLConfigToDefault()
     maOpenCLSubsetOpCodes.insert(ocExp);
     maOpenCLSubsetOpCodes.insert(ocLn);
     maOpenCLSubsetOpCodes.insert(ocSqrt);
+    maOpenCLSubsetOpCodes.insert(ocStdNormDist);
     maOpenCLSubsetOpCodes.insert(ocSNormInv);
     maOpenCLSubsetOpCodes.insert(ocRound);
     maOpenCLSubsetOpCodes.insert(ocPower);
@@ -63,7 +64,12 @@ void ScCalcConfig::setOpenCLConfigToDefault()
     maOpenCLSubsetOpCodes.insert(ocProduct);
     maOpenCLSubsetOpCodes.insert(ocAverage);
     maOpenCLSubsetOpCodes.insert(ocCount);
+    maOpenCLSubsetOpCodes.insert(ocVar);
     maOpenCLSubsetOpCodes.insert(ocNormDist);
+    maOpenCLSubsetOpCodes.insert(ocCorrel);
+    maOpenCLSubsetOpCodes.insert(ocCovar);
+    maOpenCLSubsetOpCodes.insert(ocPearson);
+    maOpenCLSubsetOpCodes.insert(ocSlope);
     maOpenCLSubsetOpCodes.insert(ocSumIfs);
 }
 
