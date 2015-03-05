@@ -76,10 +76,7 @@ class XMLSignature_NssImpl : public ::cppu::WeakImplHelper2<
 
         //Helper for registry
         static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL impl_createInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& aServiceManager ) throw( ::com::sun::star::uno::RuntimeException ) ;
-
-        static ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > impl_createFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& aServiceManager ) ;
-} ;
-
+};
 #endif // INCLUDED_XMLSECURITY_SOURCE_XMLSEC_NSS_XMLSIGNATURE_NSSIMPL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

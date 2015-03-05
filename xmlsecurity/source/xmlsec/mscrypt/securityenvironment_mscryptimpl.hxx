@@ -141,14 +141,6 @@ class SecurityEnvironment_MSCryptImpl : public ::cppu::WeakImplHelper3<
 
         static OUString impl_getImplementationName() throw( ::com::sun::star::uno::RuntimeException ) ;
 
-        //Helper for registry
-        static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL impl_createInstance(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& aServiceManager )
-            throw( ::com::sun::star::uno::RuntimeException ) ;
-
-        static ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > impl_createFactory(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& aServiceManager ) ;
-
         //Methods from XUnoTunnel
         virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier )
             throw (::com::sun::star::uno::RuntimeException);

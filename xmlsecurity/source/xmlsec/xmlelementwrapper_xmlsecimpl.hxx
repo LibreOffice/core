@@ -97,12 +97,6 @@ OUString XMLElementWrapper_XmlSecImpl_getImplementationName()
 com::sun::star::uno::Sequence< OUString > SAL_CALL XMLElementWrapper_XmlSecImpl_getSupportedServiceNames(  )
     throw ( com::sun::star::uno::RuntimeException );
 
-com::sun::star::uno::Reference< com::sun::star::uno::XInterface >
-SAL_CALL XMLElementWrapper_XmlSecImpl_createInstance(
-    const com::sun::star::uno::Reference<
-        com::sun::star::uno::XComponentContext > &)
-    throw ( com::sun::star::uno::Exception );
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

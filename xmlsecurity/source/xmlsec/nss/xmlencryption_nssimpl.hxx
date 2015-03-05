@@ -74,11 +74,6 @@ class XMLEncryption_NssImpl : public ::cppu::WeakImplHelper2<
         static ::com::sun::star::uno::Sequence< OUString > impl_getSupportedServiceNames() ;
 
         static OUString impl_getImplementationName() throw( ::com::sun::star::uno::RuntimeException ) ;
-
-        //Helper for registry
-        static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL impl_createInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& aServiceManager ) throw( ::com::sun::star::uno::RuntimeException ) ;
-
-        static ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > impl_createFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& aServiceManager ) ;
 } ;
 
 #endif // INCLUDED_XMLSECURITY_SOURCE_XMLSEC_NSS_XMLENCRYPTION_NSSIMPL_HXX

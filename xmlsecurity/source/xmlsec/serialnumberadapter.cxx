@@ -74,13 +74,6 @@ private:
 
 }
 
-css::uno::Reference< css::uno::XInterface >
-xml_security::serial_number_adapter::create(
-    css::uno::Reference< css::uno::XComponentContext > const &)
-{
-    return static_cast< cppu::OWeakObject * >(new Service);
-}
-
 OUString xml_security::serial_number_adapter::implementationName()
     throw (css::uno::RuntimeException)
 {
@@ -95,5 +88,14 @@ xml_security::serial_number_adapter::serviceNames()
     s[0] = "com.sun.star.security.SerialNumberAdapter";
     return s;
 }
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_security_SerialNumberAdapter_get_implementation(::com::sun::star::uno::XComponentContext*,
+                                                                  ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new Service());
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

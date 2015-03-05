@@ -64,11 +64,9 @@ $(eval $(call gb_Library_add_exception_objects,xsec_xmlsec,\
 	xmlsecurity/source/xmlsec/xmldocumentwrapper_xmlsecimpl \
 	xmlsecurity/source/xmlsec/xmlelementwrapper_xmlsecimpl \
 	xmlsecurity/source/xmlsec/xmlstreamio \
-	xmlsecurity/source/xmlsec/xsec_xmlsec \
 	xmlsecurity/source/xmlsec/nss/ciphercontext \
 	xmlsecurity/source/xmlsec/nss/digestcontext \
 	xmlsecurity/source/xmlsec/nss/nssinitializer \
-	xmlsecurity/source/xmlsec/nss/xsec_nss \
 ))
 
 ifeq ($(OS)-$(COM),WNT-MSC)
@@ -96,7 +94,6 @@ $(eval $(call gb_Library_add_exception_objects,xsec_xmlsec,\
 	xmlsecurity/source/xmlsec/mscrypt/xmlencryption_mscryptimpl \
 	xmlsecurity/source/xmlsec/mscrypt/xmlsecuritycontext_mscryptimpl \
 	xmlsecurity/source/xmlsec/mscrypt/xmlsignature_mscryptimpl \
-	xmlsecurity/source/xmlsec/mscrypt/xsec_mscrypt \
 ))
 
 else

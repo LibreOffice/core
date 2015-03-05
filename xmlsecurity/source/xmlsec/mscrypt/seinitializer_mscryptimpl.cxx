@@ -162,12 +162,6 @@ cssu::Sequence< OUString > SAL_CALL SEInitializer_MSCryptImpl_getSupportedServic
     return aRet;
 }
 
-cssu::Reference< cssu::XInterface > SAL_CALL SEInitializer_MSCryptImpl_createInstance( const cssu::Reference< cssl::XMultiServiceFactory > & rSMgr)
-    throw( cssu::Exception )
-{
-    return (cppu::OWeakObject*) new SEInitializer_MSCryptImpl( comphelper::getComponentContext(rSMgr) );
-}
-
 /* XServiceInfo */
 OUString SAL_CALL SEInitializer_MSCryptImpl::getImplementationName()
     throw (cssu::RuntimeException)
@@ -186,5 +180,15 @@ cssu::Sequence< OUString > SAL_CALL SEInitializer_MSCryptImpl::getSupportedServi
 {
     return SEInitializer_MSCryptImpl_getSupportedServiceNames();
 }
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_xml_security_bridge_xmlsec_SEInializer_MSCryptImpl_get_implementation(
+        ::com::sun::star::uno::XComponentContext* context,
+        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new SEInitializer_MSCryptImpl(context));
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

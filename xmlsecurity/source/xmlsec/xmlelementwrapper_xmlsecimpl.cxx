@@ -86,14 +86,6 @@ cssu::Sequence< OUString > SAL_CALL XMLElementWrapper_XmlSecImpl_getSupportedSer
     return aRet;
 }
 
-cssu::Reference< cssu::XInterface > SAL_CALL
-    XMLElementWrapper_XmlSecImpl_createInstance(
-        const cssu::Reference< cssu::XComponentContext > &)
-    throw( cssu::Exception )
-{
-    return (cppu::OWeakObject*) new XMLElementWrapper_XmlSecImpl(NULL);
-}
-
 /* XServiceInfo */
 OUString SAL_CALL XMLElementWrapper_XmlSecImpl::getImplementationName(  )
     throw (cssu::RuntimeException, std::exception)
@@ -136,6 +128,15 @@ void XMLElementWrapper_XmlSecImpl::setNativeElement(const xmlNodePtr pNode)
  ******************************************************************************/
 {
     m_pElement = pNode;
+}
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_xml_security_bridge_xmlsec_XMLElementWrapper_XmlSecImpl_get_implementation(
+        ::com::sun::star::uno::XComponentContext*,
+        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new XMLElementWrapper_XmlSecImpl(NULL));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

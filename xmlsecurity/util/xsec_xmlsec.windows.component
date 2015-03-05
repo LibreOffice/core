@@ -19,31 +19,40 @@
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
     prefix="xsec_xmlsec" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.security.SerialNumberAdapter">
+  <implementation name="com.sun.star.comp.security.SerialNumberAdapter"
+      constructor="com_sun_star_comp_security_SerialNumberAdapter_get_implementation">>
     <service name="com.sun.star.security.SerialNumberAdapter"/>
   </implementation>
-  <implementation name="com.sun.star.xml.security.bridge.xmlsec.NSSInitializer_NssImpl">
+  <implementation name="com.sun.star.xml.security.bridge.xmlsec.NSSInitializer_NssImpl"
+      constructor="com_sun_star_xml_security_bridge_xmlsec_NSSInitializer_NssImpl_get_implementation">
     <service name="com.sun.star.xml.crypto.NSSInitializer"/>
   </implementation>
-  <implementation name="com.sun.star.xml.security.bridge.xmlsec.SEInitializer_MSCryptImpl">
+  <implementation name="com.sun.star.xml.security.bridge.xmlsec.SEInitializer_MSCryptImpl"
+      constructor="com_sun_star_xml_security_bridge_xmlsec_SEInializer_MSCryptImpl_get_implementation">
     <service name="com.sun.star.xml.crypto.SEInitializer"/>
   </implementation>
-  <implementation name="com.sun.star.xml.security.bridge.xmlsec.SecurityEnvironment_MSCryptImpl">
+  <implementation name="com.sun.star.xml.security.bridge.xmlsec.SecurityEnvironment_MSCryptImpl"
+      constructor="com_sun_star_xml_security_bridge_xmlsec_SecurityEnvironment_MSCryptImpl_get_implementation">
     <service name="com.sun.star.xml.crypto.SecurityEnvironment"/>
   </implementation>
-  <implementation name="com.sun.star.xml.security.bridge.xmlsec.XMLDocumentWrapper_XmlSecImpl">
+  <implementation name="com.sun.star.xml.security.bridge.xmlsec.XMLDocumentWrapper_XmlSecImpl"
+      constructor="com_sun_star_xml_security_bridge_xmlsec_XMLDocumentWrapper_XmlSecImpl_get_implementation">
     <service name="com.sun.star.xml.wrapper.XMLDocumentWrapper"/>
   </implementation>
-  <implementation name="com.sun.star.xml.security.bridge.xmlsec.XMLElementWrapper_XmlSecImpl">
+  <implementation name="com.sun.star.xml.security.bridge.xmlsec.XMLElementWrapper_XmlSecImpl"
+      constructor="com_sun_star_xml_security_bridge_xmlsec_XMLElementWrapper_XmlSecImpl_get_implementation">
     <service name="com.sun.star.xml.wrapper.XMLElementWrapper"/>
   </implementation>
-  <implementation name="com.sun.star.xml.security.bridge.xmlsec.XMLEncryption_MSCryptImpl">
+  <implementation name="com.sun.star.xml.security.bridge.xmlsec.XMLEncryption_MSCryptImpl"
+      constructor="com_sun_star_xml_security_bridge_xmlsec_XMLEncryption_MSCryptImpl_get_implementation">
     <service name="com.sun.star.xml.crypto.XMLEncryption"/>
   </implementation>
-  <implementation name="com.sun.star.xml.security.bridge.xmlsec.XMLSecurityContext_MSCryptImpl">
+  <implementation name="com.sun.star.xml.security.bridge.xmlsec.XMLSecurityContext_MSCryptImpl"
+      constructor="com_sun_star_xml_security_bridge_xmlsec_XMLSecurityContext_MSCryptImpl_get_implementation">
     <service name="com.sun.star.xml.crypto.XMLSecurityContext"/>
   </implementation>
-  <implementation name="com.sun.star.xml.security.bridge.xmlsec.XMLSignature_MSCryptImpl">
+  <implementation name="com.sun.star.xml.security.bridge.xmlsec.XMLSignature_MSCryptImpl"
+      constructor="com_sun_star_xml_security_bridge_xmlsec_XMLSignature_MSCryptImpl_get_implementation">
     <service name="com.sun.star.xml.crypto.XMLSignature"/>
   </implementation>
 </component>

@@ -465,7 +465,6 @@ css::uno::Reference< css::xml::crypto::XCipherContext > SAL_CALL ONSSInitializer
 OUString ONSSInitializer_getImplementationName ()
     throw (cssu::RuntimeException)
 {
-
     return OUString ( IMPLEMENTATION_NAME );
 }
 
@@ -476,12 +475,6 @@ cssu::Sequence< OUString > SAL_CALL ONSSInitializer_getSupportedServiceNames(  )
     OUString* pArray = aRet.getArray();
     pArray[0] = NSS_SERVICE_NAME;
     return aRet;
-}
-
-cssu::Reference< cssu::XInterface > SAL_CALL ONSSInitializer_createInstance( const cssu::Reference< cssl::XMultiServiceFactory > & rSMgr)
-    throw( cssu::Exception )
-{
-    return (cppu::OWeakObject*) new ONSSInitializer( comphelper::getComponentContext(rSMgr) );
 }
 
 /* XServiceInfo */
@@ -502,5 +495,15 @@ cssu::Sequence< OUString > SAL_CALL ONSSInitializer::getSupportedServiceNames(  
 {
     return ONSSInitializer_getSupportedServiceNames();
 }
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_xml_security_bridge_xmlsec_NSSInitializer_NssImpl_get_implementation(
+        ::com::sun::star::uno::XComponentContext* context,
+        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new ONSSInitializer(context));
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
