@@ -1366,17 +1366,17 @@ void SAL_CALL BluetoothServer::run()
 //    ULONGLONG aData4 = 0x800000805F9B34FB;
 //    memcpy( uuid.Data4, &aData4, sizeof(uuid.Data4) );
 
-    WSAQUERYSET aRecord;
+    WSAQUERYSETW aRecord;
     memset( &aRecord, 0, sizeof(aRecord));
     aRecord.dwSize = sizeof(aRecord);
-    aRecord.lpszServiceInstanceName = (char *)"LibreOffice Impress Remote Control";
-    aRecord.lpszComment = (char *)"Remote control of presentations over bluetooth.";
+    aRecord.lpszServiceInstanceName = L"LibreOffice Impress Remote Control";
+    aRecord.lpszComment = L"Remote control of presentations over bluetooth.";
     aRecord.lpServiceClassId = (LPGUID) &SerialPortServiceClass_UUID;
     aRecord.dwNameSpace = NS_BTH;
     aRecord.dwNumberOfCsAddrs = 1;
     aRecord.lpcsaBuffer = &aAddrInfo;
 
-    if ( WSASetService( &aRecord, RNRSERVICE_REGISTER, 0 ) == SOCKET_ERROR )
+    if (WSASetServiceW( &aRecord, RNRSERVICE_REGISTER, 0 ) == SOCKET_ERROR)
     {
         closesocket( aSocket );
         WSACleanup();
