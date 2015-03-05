@@ -40,6 +40,8 @@ enum OpCode : sal_uInt16
     // Parentheses and separators
         ocOpen              = SC_OPCODE_OPEN,
         ocClose             = SC_OPCODE_CLOSE,
+        ocTableRefOpen      = SC_OPCODE_TABLE_REF_OPEN,
+        ocTableRefClose     = SC_OPCODE_TABLE_REF_CLOSE,
         ocSep               = SC_OPCODE_SEP,
         ocArrayOpen         = SC_OPCODE_ARRAY_OPEN,
         ocArrayClose        = SC_OPCODE_ARRAY_CLOSE,

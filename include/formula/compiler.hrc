@@ -51,153 +51,155 @@
 #define SC_OPCODE_ARRAY_CLOSE        25
 #define SC_OPCODE_ARRAY_ROW_SEP      26
 #define SC_OPCODE_ARRAY_COL_SEP      27     /* some convs use sep != col_sep */
-#define SC_OPCODE_STOP_DIV           28
-#define SC_OPCODE_SKIP               29     /* used to skip raw tokens during string compilation */
+#define SC_OPCODE_TABLE_REF_OPEN     28
+#define SC_OPCODE_TABLE_REF_CLOSE    29
+#define SC_OPCODE_STOP_DIV           30
+#define SC_OPCODE_SKIP               31     /* used to skip raw tokens during string compilation */
 
 /*** error constants #... ***/
-#define SC_OPCODE_START_ERRORS       30
-#define SC_OPCODE_ERROR_NULL         30
-#define SC_OPCODE_ERROR_DIVZERO      31
-#define SC_OPCODE_ERROR_VALUE        32
-#define SC_OPCODE_ERROR_REF          33
-#define SC_OPCODE_ERROR_NAME         34
-#define SC_OPCODE_ERROR_NUM          35
-#define SC_OPCODE_ERROR_NA           36
-#define SC_OPCODE_STOP_ERRORS        37
+#define SC_OPCODE_START_ERRORS       40
+#define SC_OPCODE_ERROR_NULL         40
+#define SC_OPCODE_ERROR_DIVZERO      41
+#define SC_OPCODE_ERROR_VALUE        42
+#define SC_OPCODE_ERROR_REF          43
+#define SC_OPCODE_ERROR_NAME         44
+#define SC_OPCODE_ERROR_NUM          45
+#define SC_OPCODE_ERROR_NA           46
+#define SC_OPCODE_STOP_ERRORS        47
 
 /*** Binary operators ***/
-#define SC_OPCODE_START_BIN_OP       40
-#define SC_OPCODE_ADD                40
-#define SC_OPCODE_SUB                41
-#define SC_OPCODE_MUL                42
-#define SC_OPCODE_DIV                43
-#define SC_OPCODE_AMPERSAND          44
-#define SC_OPCODE_POW                45
-#define SC_OPCODE_EQUAL              46
-#define SC_OPCODE_NOT_EQUAL          47
-#define SC_OPCODE_LESS               48
-#define SC_OPCODE_GREATER            49
-#define SC_OPCODE_LESS_EQUAL         50
-#define SC_OPCODE_GREATER_EQUAL      51
-#define SC_OPCODE_AND                52
-#define SC_OPCODE_OR                 53
-#define SC_OPCODE_INTERSECT          54
-#define SC_OPCODE_UNION              55
-#define SC_OPCODE_RANGE              56
-#define SC_OPCODE_STOP_BIN_OP        57
+#define SC_OPCODE_START_BIN_OP       50
+#define SC_OPCODE_ADD                50
+#define SC_OPCODE_SUB                51
+#define SC_OPCODE_MUL                52
+#define SC_OPCODE_DIV                53
+#define SC_OPCODE_AMPERSAND          54
+#define SC_OPCODE_POW                55
+#define SC_OPCODE_EQUAL              56
+#define SC_OPCODE_NOT_EQUAL          57
+#define SC_OPCODE_LESS               58
+#define SC_OPCODE_GREATER            59
+#define SC_OPCODE_LESS_EQUAL         60
+#define SC_OPCODE_GREATER_EQUAL      61
+#define SC_OPCODE_AND                62
+#define SC_OPCODE_OR                 63
+#define SC_OPCODE_INTERSECT          64
+#define SC_OPCODE_UNION              65
+#define SC_OPCODE_RANGE              66
+#define SC_OPCODE_STOP_BIN_OP        67
 
 /* NOTE: binary and unary operators must be in sequence for compiler! */
 
 /*** Unary operators ***/
-#define SC_OPCODE_START_UN_OP        60
-#define SC_OPCODE_NOT                60
-#define SC_OPCODE_NEG                61
-#define SC_OPCODE_NEG_SUB            62
-#define SC_OPCODE_STOP_UN_OP         63
+#define SC_OPCODE_START_UN_OP        70
+#define SC_OPCODE_NOT                70
+#define SC_OPCODE_NEG                71
+#define SC_OPCODE_NEG_SUB            72
+#define SC_OPCODE_STOP_UN_OP         73
 
-#define SC_OPCODE_START_FUNCTION     65
+#define SC_OPCODE_START_FUNCTION     75
 
 /*** Functions without parameters ***/
-#define SC_OPCODE_START_NO_PAR       65
-#define SC_OPCODE_PI                 65
-#define SC_OPCODE_RANDOM             66
-#define SC_OPCODE_TRUE               67
-#define SC_OPCODE_FALSE              68
-#define SC_OPCODE_GET_ACT_DATE       69
-#define SC_OPCODE_GET_ACT_TIME       70
-#define SC_OPCODE_NO_VALUE           71
-#define SC_OPCODE_CURRENT            72
-#define SC_OPCODE_STOP_NO_PAR        73
+#define SC_OPCODE_START_NO_PAR       75
+#define SC_OPCODE_PI                 75
+#define SC_OPCODE_RANDOM             76
+#define SC_OPCODE_TRUE               77
+#define SC_OPCODE_FALSE              78
+#define SC_OPCODE_GET_ACT_DATE       79
+#define SC_OPCODE_GET_ACT_TIME       80
+#define SC_OPCODE_NO_VALUE           81
+#define SC_OPCODE_CURRENT            82
+#define SC_OPCODE_STOP_NO_PAR        83
 
 /*** Functions with one parameter ***/
-#define SC_OPCODE_START_1_PAR        80
-#define SC_OPCODE_DEG                80     /* trigonometric */
-#define SC_OPCODE_RAD                81
-#define SC_OPCODE_SIN                82
-#define SC_OPCODE_COS                83
-#define SC_OPCODE_TAN                84
-#define SC_OPCODE_COT                85
-#define SC_OPCODE_ARC_SIN            86
-#define SC_OPCODE_ARC_COS            87
-#define SC_OPCODE_ARC_TAN            88
-#define SC_OPCODE_ARC_COT            89
-#define SC_OPCODE_SIN_HYP            90
-#define SC_OPCODE_COS_HYP            91
-#define SC_OPCODE_TAN_HYP            92
-#define SC_OPCODE_COT_HYP            93
-#define SC_OPCODE_ARC_SIN_HYP        94     /* transcendent */
-#define SC_OPCODE_ARC_COS_HYP        95
-#define SC_OPCODE_ARC_TAN_HYP        96
-#define SC_OPCODE_ARC_COT_HYP        97
-#define SC_OPCODE_COSECANT           98
-#define SC_OPCODE_SECANT             99
-#define SC_OPCODE_COSECANT_HYP      100
-#define SC_OPCODE_SECANT_HYP        101
-#define SC_OPCODE_EXP               102
-#define SC_OPCODE_LN                103
-#define SC_OPCODE_SQRT              104
-#define SC_OPCODE_FACT              105
-#define SC_OPCODE_GET_YEAR          106     /* date and time */
-#define SC_OPCODE_GET_MONTH         107
-#define SC_OPCODE_GET_DAY           108
-#define SC_OPCODE_GET_HOUR          109
-#define SC_OPCODE_GET_MIN           110
-#define SC_OPCODE_GET_SEC           111
-#define SC_OPCODE_PLUS_MINUS        112     /* miscellaneous */
-#define SC_OPCODE_ABS               113
-#define SC_OPCODE_INT               114
-#define SC_OPCODE_PHI               115
-#define SC_OPCODE_GAUSS             116
-#define SC_OPCODE_IS_EMPTY          117     /* obtain type */
-#define SC_OPCODE_IS_STRING         118
-#define SC_OPCODE_IS_NON_STRING     119
-#define SC_OPCODE_IS_LOGICAL        120
-#define SC_OPCODE_TYPE              121
-#define SC_OPCODE_IS_REF            122
-#define SC_OPCODE_IS_VALUE          123
-#define SC_OPCODE_IS_FORMULA        124
-#define SC_OPCODE_IS_NV             125
-#define SC_OPCODE_IS_ERR            126
-#define SC_OPCODE_IS_ERROR          127
-#define SC_OPCODE_IS_EVEN           128
-#define SC_OPCODE_IS_ODD            129
-#define SC_OPCODE_N                 130
-#define SC_OPCODE_GET_DATE_VALUE    131     /* string functions */
-#define SC_OPCODE_GET_TIME_VALUE    132
-#define SC_OPCODE_CODE              133
-#define SC_OPCODE_TRIM              134
-#define SC_OPCODE_UPPER             135
-#define SC_OPCODE_PROPER            136
-#define SC_OPCODE_LOWER             137
-#define SC_OPCODE_LEN               138
-#define SC_OPCODE_T                 139     /* miscellaneous, part 21 */
-#define SC_OPCODE_VALUE             140
-#define SC_OPCODE_CLEAN             141
-#define SC_OPCODE_CHAR              142
-#define SC_OPCODE_LOG10             143
-#define SC_OPCODE_EVEN              144
-#define SC_OPCODE_ODD               145
-#define SC_OPCODE_STD_NORM_DIST     146
-#define SC_OPCODE_FISHER            147
-#define SC_OPCODE_FISHER_INV        148
-#define SC_OPCODE_S_NORM_INV        149
-#define SC_OPCODE_GAMMA_LN          150
-#define SC_OPCODE_ERROR_TYPE        151
-#define SC_OPCODE_FORMULA           153
-#define SC_OPCODE_ARABIC            154
-#define SC_OPCODE_INFO              155
-#define SC_OPCODE_BAHTTEXT          156
-#define SC_OPCODE_JIS               157
-#define SC_OPCODE_ASC               158
-#define SC_OPCODE_UNICODE           159
-#define SC_OPCODE_UNICHAR           160
-#define SC_OPCODE_GAMMA             161
-#define SC_OPCODE_GAMMA_LN_MS       162
-#define SC_OPCODE_ERF_MS            163
-#define SC_OPCODE_ERFC_MS           164
-#define SC_OPCODE_ERROR_TYPE_ODF    165
-#define SC_OPCODE_ENCODEURL         166
-#define SC_OPCODE_STOP_1_PAR        167
+#define SC_OPCODE_START_1_PAR        90
+#define SC_OPCODE_DEG                90     /* trigonometric */
+#define SC_OPCODE_RAD                91
+#define SC_OPCODE_SIN                92
+#define SC_OPCODE_COS                93
+#define SC_OPCODE_TAN                94
+#define SC_OPCODE_COT                95
+#define SC_OPCODE_ARC_SIN            96
+#define SC_OPCODE_ARC_COS            97
+#define SC_OPCODE_ARC_TAN            98
+#define SC_OPCODE_ARC_COT            99
+#define SC_OPCODE_SIN_HYP           100
+#define SC_OPCODE_COS_HYP           101
+#define SC_OPCODE_TAN_HYP           102
+#define SC_OPCODE_COT_HYP           103
+#define SC_OPCODE_ARC_SIN_HYP       104     /* transcendent */
+#define SC_OPCODE_ARC_COS_HYP       105
+#define SC_OPCODE_ARC_TAN_HYP       106
+#define SC_OPCODE_ARC_COT_HYP       107
+#define SC_OPCODE_COSECANT          108
+#define SC_OPCODE_SECANT            109
+#define SC_OPCODE_COSECANT_HYP      110
+#define SC_OPCODE_SECANT_HYP        111
+#define SC_OPCODE_EXP               112
+#define SC_OPCODE_LN                113
+#define SC_OPCODE_SQRT              114
+#define SC_OPCODE_FACT              115
+#define SC_OPCODE_GET_YEAR          116     /* date and time */
+#define SC_OPCODE_GET_MONTH         117
+#define SC_OPCODE_GET_DAY           118
+#define SC_OPCODE_GET_HOUR          119
+#define SC_OPCODE_GET_MIN           120
+#define SC_OPCODE_GET_SEC           121
+#define SC_OPCODE_PLUS_MINUS        122     /* miscellaneous */
+#define SC_OPCODE_ABS               123
+#define SC_OPCODE_INT               124
+#define SC_OPCODE_PHI               125
+#define SC_OPCODE_GAUSS             126
+#define SC_OPCODE_IS_EMPTY          127     /* obtain type */
+#define SC_OPCODE_IS_STRING         128
+#define SC_OPCODE_IS_NON_STRING     129
+#define SC_OPCODE_IS_LOGICAL        130
+#define SC_OPCODE_TYPE              131
+#define SC_OPCODE_IS_REF            132
+#define SC_OPCODE_IS_VALUE          133
+#define SC_OPCODE_IS_FORMULA        134
+#define SC_OPCODE_IS_NV             135
+#define SC_OPCODE_IS_ERR            136
+#define SC_OPCODE_IS_ERROR          137
+#define SC_OPCODE_IS_EVEN           138
+#define SC_OPCODE_IS_ODD            139
+#define SC_OPCODE_N                 140
+#define SC_OPCODE_GET_DATE_VALUE    141     /* string functions */
+#define SC_OPCODE_GET_TIME_VALUE    142
+#define SC_OPCODE_CODE              143
+#define SC_OPCODE_TRIM              144
+#define SC_OPCODE_UPPER             145
+#define SC_OPCODE_PROPER            146
+#define SC_OPCODE_LOWER             147
+#define SC_OPCODE_LEN               148
+#define SC_OPCODE_T                 149     /* miscellaneous, part 21 */
+#define SC_OPCODE_VALUE             150
+#define SC_OPCODE_CLEAN             151
+#define SC_OPCODE_CHAR              152
+#define SC_OPCODE_LOG10             153
+#define SC_OPCODE_EVEN              154
+#define SC_OPCODE_ODD               155
+#define SC_OPCODE_STD_NORM_DIST     156
+#define SC_OPCODE_FISHER            157
+#define SC_OPCODE_FISHER_INV        158
+#define SC_OPCODE_S_NORM_INV        159
+#define SC_OPCODE_GAMMA_LN          160
+#define SC_OPCODE_ERROR_TYPE        161
+#define SC_OPCODE_FORMULA           163
+#define SC_OPCODE_ARABIC            164
+#define SC_OPCODE_INFO              165
+#define SC_OPCODE_BAHTTEXT          166
+#define SC_OPCODE_JIS               167
+#define SC_OPCODE_ASC               168
+#define SC_OPCODE_UNICODE           169
+#define SC_OPCODE_UNICHAR           170
+#define SC_OPCODE_GAMMA             171
+#define SC_OPCODE_GAMMA_LN_MS       172
+#define SC_OPCODE_ERF_MS            173
+#define SC_OPCODE_ERFC_MS           174
+#define SC_OPCODE_ERROR_TYPE_ODF    175
+#define SC_OPCODE_ENCODEURL         176
+#define SC_OPCODE_STOP_1_PAR        177
 
 /*** Functions with more than one parameters ***/
 #define SC_OPCODE_START_2_PAR       201

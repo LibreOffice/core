@@ -439,6 +439,8 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML
     String SC_OPCODE_CHOOSE { Text = "CHOOSE" ; };
     String SC_OPCODE_OPEN { Text = "(" ; };
     String SC_OPCODE_CLOSE { Text = ")" ; };
+    String SC_OPCODE_TABLE_REF_OPEN { Text = "[" ; };
+    String SC_OPCODE_TABLE_REF_CLOSE { Text = "]" ; };
     String SC_OPCODE_ARRAY_OPEN { Text = "{" ; };
     String SC_OPCODE_ARRAY_CLOSE { Text = "}" ; };
     String SC_OPCODE_ARRAY_ROW_SEP { Text = ";" ; };
@@ -850,6 +852,8 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_CHOOSE { Text = "CHOOSE" ; };
     String SC_OPCODE_OPEN { Text = "(" ; };
     String SC_OPCODE_CLOSE { Text = ")" ; };
+    String SC_OPCODE_TABLE_REF_OPEN { Text = "[" ; };
+    String SC_OPCODE_TABLE_REF_CLOSE { Text = "]" ; };
     String SC_OPCODE_ARRAY_OPEN { Text = "{" ; };
     String SC_OPCODE_ARRAY_CLOSE { Text = "}" ; };
     String SC_OPCODE_ARRAY_ROW_SEP { Text = "|" ; };
@@ -1270,6 +1274,8 @@ Resource RID_STRLIST_FUNCTION_NAMES
     };
     String SC_OPCODE_OPEN { Text = "(" ; };
     String SC_OPCODE_CLOSE { Text = ")" ; };
+    String SC_OPCODE_TABLE_REF_OPEN { Text = "[" ; };
+    String SC_OPCODE_TABLE_REF_CLOSE { Text = "]" ; };
     String SC_OPCODE_ARRAY_OPEN { Text = "{" ; };
     String SC_OPCODE_ARRAY_CLOSE { Text = "}" ; };
     String SC_OPCODE_ARRAY_ROW_SEP { Text = "|" ; };
