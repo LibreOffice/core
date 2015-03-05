@@ -218,7 +218,6 @@ $(eval $(call gb_Library_add_exception_objects,scfilt,\
 	sc/source/filter/oox/worksheetfragment \
 	sc/source/filter/oox/worksheethelper \
 	sc/source/filter/oox/worksheetsettings \
-	sc/source/filter/services \
 ))
 
 ifeq ($(ENABLE_ORCUS),TRUE)

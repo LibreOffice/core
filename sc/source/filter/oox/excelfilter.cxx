@@ -55,12 +55,6 @@ Sequence< OUString > ExcelFilter_getSupportedServiceNames()
     return aSeq;
 }
 
-Reference< XInterface > ExcelFilter_create(
-        const Reference< XComponentContext >& rxContext )
-{
-    return static_cast< ::cppu::OWeakObject* >( new ExcelFilter( rxContext ) );
-}
-
 ExcelFilter::ExcelFilter( const Reference< XComponentContext >& rxContext ) throw( RuntimeException ) :
     XmlFilterBase( rxContext ),
     mpBookGlob( 0 )
@@ -201,5 +195,14 @@ OUString ExcelFilter::implGetImplementationName() const
 
 } // namespace xls
 } // namespace oox
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_oox_xls_ExcelFilter_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                                         ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new oox::xls::ExcelFilter(context));
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
