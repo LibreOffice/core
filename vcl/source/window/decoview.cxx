@@ -822,7 +822,11 @@ void ImplDrawFrame( OutputDevice *const pDev, Rectangle& rRect,
     }
 }
 
-}
+} // end anonymous namespace
+
+DecorationView::DecorationView(OutputDevice* pOutDev) :
+    mpOutDev(pOutDev)
+{}
 
 void DecorationView::DrawSymbol( const Rectangle& rRect, SymbolType eType,
                                  const Color& rColor, sal_uInt16 nStyle )
@@ -1079,6 +1083,47 @@ void DecorationView::DrawSeparator( const Point& rStart, const Point& rStop, boo
         mpOutDev->DrawLine( aStart, aStop );
     }
     mpOutDev->Pop();
+}
+
+void DecorationView::DrawHandle(const Rectangle& rRect, bool bVertical)
+{
+    const StyleSettings& rStyleSettings = mpOutDev->GetSettings().GetStyleSettings();
+
+    Size aOutputSize = rRect.GetSize();
+
+    mpOutDev->SetLineColor(rStyleSettings.GetDarkShadowColor());
+    mpOutDev->SetFillColor(rStyleSettings.GetDarkShadowColor());
+
+    sal_Int32 nNumberOfPoints = 3;
+
+    long nHalfWidth = aOutputSize.Width() / 2.0f;
+    long nHalfHeight = aOutputSize.Height() / 2.0f;
+
+    float fDistance = bVertical ? aOutputSize.Height() : aOutputSize.Width();
+    fDistance /= (nNumberOfPoints + 1);
+
+    long nRadius = bVertical ? aOutputSize.Width() : aOutputSize.Height();
+    nRadius /= (nNumberOfPoints + 2);
+
+    for (long i = 1; i <= nNumberOfPoints; i++)
+    {
+        Rectangle aLocation;
+        if (bVertical)
+        {
+            aLocation = Rectangle(nHalfWidth - nRadius,
+                                  std::round(fDistance * i) - nRadius,
+                                  nHalfWidth + nRadius,
+                                  std::round(fDistance * i) + nRadius);
+        }
+        else
+        {
+            aLocation = Rectangle(std::round(fDistance * i) - nRadius,
+                                  nHalfHeight - nRadius,
+                                  std::round(fDistance * i) + nRadius,
+                                  nHalfHeight + nRadius);
+        }
+        mpOutDev->DrawEllipse(aLocation);
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -73,8 +73,7 @@ private:
     OutputDevice*       mpOutDev;
 
 public:
-                        DecorationView( OutputDevice* pOutDev )
-                            { mpOutDev = pOutDev; }
+    DecorationView(OutputDevice* pOutDev);
 
     void                DrawSymbol( const Rectangle& rRect, SymbolType eType,
                                     const Color& rColor, sal_uInt16 nStyle = 0 );
@@ -86,6 +85,7 @@ public:
     Rectangle           DrawFrame( const Rectangle& rRect, sal_uInt16 nStyle = FRAME_DRAW_OUT );
     Rectangle           DrawButton( const Rectangle& rRect, sal_uInt16 nStyle );
     void                DrawSeparator( const Point& rStart, const Point& rStop, bool bVertical = true );
+    void                DrawHandle(const Rectangle& rRectangle, bool bVertical = true);
 };
 
 #endif // INCLUDED_VCL_DECOVIEW_HXX
