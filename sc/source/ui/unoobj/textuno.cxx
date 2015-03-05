@@ -165,10 +165,10 @@ const uno::Sequence<sal_Int8>& ScHeaderFooterContentObj::getUnoTunnelId()
 }
 
 rtl::Reference<ScHeaderFooterContentObj> ScHeaderFooterContentObj::getImplementation(
-                                const uno::Reference<sheet::XHeaderFooterContent> xObj )
+                                const uno::Reference<sheet::XHeaderFooterContent>& rObj)
 {
     rtl::Reference<ScHeaderFooterContentObj> pRet;
-    uno::Reference<lang::XUnoTunnel> xUT( xObj, uno::UNO_QUERY );
+    uno::Reference<lang::XUnoTunnel> xUT(rObj, uno::UNO_QUERY);
     if (xUT.is())
         pRet = reinterpret_cast<ScHeaderFooterContentObj*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething(getUnoTunnelId())));
     return pRet;
@@ -647,10 +647,10 @@ const uno::Sequence<sal_Int8>& ScCellTextCursor::getUnoTunnelId()
     return theScCellTextCursorUnoTunnelId::get().getSeq();
 }
 
-ScCellTextCursor* ScCellTextCursor::getImplementation( const uno::Reference<uno::XInterface> xObj )
+ScCellTextCursor* ScCellTextCursor::getImplementation(const uno::Reference<uno::XInterface>& rObj)
 {
     ScCellTextCursor* pRet = NULL;
-    uno::Reference<lang::XUnoTunnel> xUT( xObj, uno::UNO_QUERY );
+    uno::Reference<lang::XUnoTunnel> xUT(rObj, uno::UNO_QUERY);
     if (xUT.is())
         pRet = reinterpret_cast<ScCellTextCursor*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething(getUnoTunnelId())));
     return pRet;
@@ -742,10 +742,10 @@ const uno::Sequence<sal_Int8>& ScHeaderFooterTextCursor::getUnoTunnelId()
 }
 
 ScHeaderFooterTextCursor* ScHeaderFooterTextCursor::getImplementation(
-                                const uno::Reference<uno::XInterface> xObj )
+                                const uno::Reference<uno::XInterface>& rObj)
 {
     ScHeaderFooterTextCursor* pRet = NULL;
-    uno::Reference<lang::XUnoTunnel> xUT( xObj, uno::UNO_QUERY );
+    uno::Reference<lang::XUnoTunnel> xUT(rObj, uno::UNO_QUERY);
     if (xUT.is())
         pRet = reinterpret_cast<ScHeaderFooterTextCursor*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething(getUnoTunnelId())));
     return pRet;
@@ -835,10 +835,10 @@ const uno::Sequence<sal_Int8>& ScDrawTextCursor::getUnoTunnelId()
     return theScDrawTextCursorUnoTunnelId::get().getSeq();
 }
 
-ScDrawTextCursor* ScDrawTextCursor::getImplementation( const uno::Reference<uno::XInterface> xObj )
+ScDrawTextCursor* ScDrawTextCursor::getImplementation(const uno::Reference<uno::XInterface>& rObj)
 {
     ScDrawTextCursor* pRet = NULL;
-    uno::Reference<lang::XUnoTunnel> xUT( xObj, uno::UNO_QUERY );
+    uno::Reference<lang::XUnoTunnel> xUT(rObj, uno::UNO_QUERY);
     if (xUT.is())
         pRet = reinterpret_cast<ScDrawTextCursor*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething(getUnoTunnelId())));
     return pRet;

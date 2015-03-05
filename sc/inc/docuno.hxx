@@ -310,8 +310,7 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     static const com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId();
-    static ScModelObj* getImplementation( const com::sun::star::uno::Reference<
-                                    com::sun::star::uno::XInterface> xObj );
+    static ScModelObj* getImplementation(const css::uno::Reference<css::uno::XInterface>& rObj);
 
                             /// XTypeProvider
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes()

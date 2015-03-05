@@ -1009,11 +1009,10 @@ const uno::Sequence<sal_Int8>& ScStyleObj::getUnoTunnelId()
     return theScStyleObjUnoTunnelId::get().getSeq();
 }
 
-ScStyleObj* ScStyleObj::getImplementation(
-                        const uno::Reference<uno::XInterface> xObj )
+ScStyleObj* ScStyleObj::getImplementation(const uno::Reference<uno::XInterface>& rObj)
 {
     ScStyleObj* pRet = NULL;
-    uno::Reference<lang::XUnoTunnel> xUT( xObj, uno::UNO_QUERY );
+    uno::Reference<lang::XUnoTunnel> xUT(rObj, uno::UNO_QUERY);
     if (xUT.is())
         pRet = reinterpret_cast<ScStyleObj*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething(getUnoTunnelId())));
     return pRet;

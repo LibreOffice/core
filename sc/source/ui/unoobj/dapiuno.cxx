@@ -352,11 +352,11 @@ Reference<XDataPilotDescriptor> SAL_CALL ScDataPilotTablesObj::createDataPilotDe
     return NULL;
 }
 
-static bool lcl_IsDuplicated( const Reference<XPropertySet> xDimProps )
+static bool lcl_IsDuplicated(const Reference<XPropertySet>& rDimProps)
 {
     try
     {
-        Any aAny = xDimProps->getPropertyValue( OUString( SC_UNO_DP_ORIGINAL ) );
+        Any aAny = rDimProps->getPropertyValue( OUString( SC_UNO_DP_ORIGINAL ) );
         Reference< XNamed > xOriginal( aAny, UNO_QUERY );
         return xOriginal.is();
     }
@@ -366,11 +366,11 @@ static bool lcl_IsDuplicated( const Reference<XPropertySet> xDimProps )
     return false;
 }
 
-static OUString lcl_GetOriginalName( const Reference< XNamed > xDim )
+static OUString lcl_GetOriginalName(const Reference< XNamed >& rDim)
 {
     Reference< XNamed > xOriginal;
 
-    Reference< XPropertySet > xDimProps( xDim, UNO_QUERY );
+    Reference< XPropertySet > xDimProps(rDim, UNO_QUERY);
     if ( xDimProps.is() )
     {
         try
@@ -384,7 +384,7 @@ static OUString lcl_GetOriginalName( const Reference< XNamed > xDim )
     }
 
     if ( !xOriginal.is() )
-        xOriginal = xDim;
+        xOriginal = rDim;
 
     return xOriginal->getName();
 }
@@ -1073,11 +1073,10 @@ const Sequence<sal_Int8>& ScDataPilotDescriptorBase::getUnoTunnelId()
     return theScDataPilotDescriptorBaseUnoTunnelId::get().getSeq();
 }
 
-ScDataPilotDescriptorBase* ScDataPilotDescriptorBase::getImplementation(
-                                const Reference<XDataPilotDescriptor> xObj )
+ScDataPilotDescriptorBase* ScDataPilotDescriptorBase::getImplementation(const Reference<XDataPilotDescriptor>& rObj )
 {
     ScDataPilotDescriptorBase* pRet = NULL;
-    Reference<lang::XUnoTunnel> xUT( xObj, UNO_QUERY );
+    Reference<lang::XUnoTunnel> xUT(rObj, UNO_QUERY);
     if (xUT.is())
         pRet = reinterpret_cast<ScDataPilotDescriptorBase*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething(getUnoTunnelId())));
     return pRet;

@@ -249,18 +249,15 @@ void CellAppearancePropertyPanel::DataChanged(
     (void)rEvent;
 }
 
-void CellAppearancePropertyPanel::HandleContextChange(
-    const ::sfx2::sidebar::EnumContext aContext)
+void CellAppearancePropertyPanel::HandleContextChange(const ::sfx2::sidebar::EnumContext& rContext)
 {
-    if(maContext == aContext)
+    if (maContext == rContext)
     {
         // Nothing to do.
         return;
     }
 
-    maContext = aContext;
-
-    // todo
+    maContext = rContext;
 }
 
 void CellAppearancePropertyPanel::NotifyItemUpdate(

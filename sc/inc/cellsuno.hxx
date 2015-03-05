@@ -492,8 +492,7 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     static const com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId();
-    static ScCellRangesBase* getImplementation( const com::sun::star::uno::Reference<
-                                    com::sun::star::uno::XInterface> xObj );
+    static ScCellRangesBase* getImplementation(const css::uno::Reference<css::uno::XInterface>& rObj);
 
                             // XTypeProvider
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes()
@@ -1259,8 +1258,7 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     static const com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId();
-    static ScTableSheetObj* getImplementation( const com::sun::star::uno::Reference<
-                                    com::sun::star::uno::XInterface> xObj );
+    static ScTableSheetObj* getImplementation(const css::uno::Reference< com::sun::star::uno::XInterface>& rObj);
 
                             // XTypeProvider
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes()

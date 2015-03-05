@@ -195,8 +195,7 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     static const com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId();
-    static ScSubTotalDescriptorBase* getImplementation( const com::sun::star::uno::Reference<
-                                    com::sun::star::sheet::XSubTotalDescriptor> xObj );
+    static ScSubTotalDescriptorBase* getImplementation(const css::uno::Reference<css::sheet::XSubTotalDescriptor>& rObj);
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()

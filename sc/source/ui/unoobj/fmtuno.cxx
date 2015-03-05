@@ -490,11 +490,10 @@ const uno::Sequence<sal_Int8>& ScTableConditionalFormat::getUnoTunnelId()
     return theScTableConditionalFormatUnoTunnelId::get().getSeq();
 }
 
-ScTableConditionalFormat* ScTableConditionalFormat::getImplementation(
-                                const uno::Reference<sheet::XSheetConditionalEntries> xObj )
+ScTableConditionalFormat* ScTableConditionalFormat::getImplementation(const uno::Reference<sheet::XSheetConditionalEntries>& rObj)
 {
     ScTableConditionalFormat* pRet = NULL;
-    uno::Reference<lang::XUnoTunnel> xUT( xObj, uno::UNO_QUERY );
+    uno::Reference<lang::XUnoTunnel> xUT(rObj, uno::UNO_QUERY);
     if (xUT.is())
         pRet = reinterpret_cast<ScTableConditionalFormat*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething(getUnoTunnelId())));
     return pRet;
@@ -1016,11 +1015,10 @@ const uno::Sequence<sal_Int8>& ScTableValidationObj::getUnoTunnelId()
     return theScTableValidationObjUnoTunnelId::get().getSeq();
 }
 
-ScTableValidationObj* ScTableValidationObj::getImplementation(
-                                const uno::Reference<beans::XPropertySet> xObj )
+ScTableValidationObj* ScTableValidationObj::getImplementation(const uno::Reference<beans::XPropertySet>& rObj)
 {
     ScTableValidationObj* pRet = NULL;
-    uno::Reference<lang::XUnoTunnel> xUT( xObj, uno::UNO_QUERY );
+    uno::Reference<lang::XUnoTunnel> xUT(rObj, uno::UNO_QUERY);
     if (xUT.is())
         pRet = reinterpret_cast<ScTableValidationObj*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething(getUnoTunnelId())));
     return pRet;

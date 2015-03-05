@@ -31,7 +31,7 @@ class SFX2_DLLPUBLIC IContextChangeReceiver
 public:
     virtual ~IContextChangeReceiver ();
 
-    virtual void HandleContextChange (const EnumContext aContext) = 0;
+    virtual void HandleContextChange (const EnumContext& rContext) = 0;
 };
 
 } } // end of namespace ::sd::sidebar

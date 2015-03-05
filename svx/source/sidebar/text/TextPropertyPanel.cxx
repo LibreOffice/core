@@ -119,12 +119,12 @@ TextPropertyPanel::~TextPropertyPanel (void)
 }
 
 void TextPropertyPanel::HandleContextChange (
-    const ::sfx2::sidebar::EnumContext aContext)
+    const ::sfx2::sidebar::EnumContext& rContext)
 {
-    if (maContext == aContext)
+    if (maContext == rContext)
         return;
 
-    maContext = aContext;
+    maContext = rContext;
     mpToolBoxIncDec->Show(maContext.GetApplication_DI() != sfx2::sidebar::EnumContext::Application_Calc);
 
     bool bWriterText = false;

@@ -4140,10 +4140,10 @@ const uno::Sequence<sal_Int8>& ScCellRangesBase::getUnoTunnelId()
     return theScCellRangesBaseUnoTunnelId::get().getSeq();
 }
 
-ScCellRangesBase* ScCellRangesBase::getImplementation( const uno::Reference<uno::XInterface> xObj )
+ScCellRangesBase* ScCellRangesBase::getImplementation(const uno::Reference<uno::XInterface>& rObj)
 {
     ScCellRangesBase* pRet = NULL;
-    uno::Reference<lang::XUnoTunnel> xUT( xObj, uno::UNO_QUERY );
+    uno::Reference<lang::XUnoTunnel> xUT(rObj, uno::UNO_QUERY);
     if (xUT.is())
         pRet = reinterpret_cast<ScCellRangesBase*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething(getUnoTunnelId())));
     return pRet;
@@ -8658,10 +8658,10 @@ const uno::Sequence<sal_Int8>& ScTableSheetObj::getUnoTunnelId()
     return theScTableSheetObjUnoTunnelId::get().getSeq();
 }
 
-ScTableSheetObj* ScTableSheetObj::getImplementation( const uno::Reference<uno::XInterface> xObj )
+ScTableSheetObj* ScTableSheetObj::getImplementation(const uno::Reference<uno::XInterface>& rObj)
 {
     ScTableSheetObj* pRet = NULL;
-    uno::Reference<lang::XUnoTunnel> xUT( xObj, uno::UNO_QUERY );
+    uno::Reference<lang::XUnoTunnel> xUT(rObj, uno::UNO_QUERY);
     if (xUT.is())
         pRet = reinterpret_cast<ScTableSheetObj*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething(getUnoTunnelId())));
     return pRet;

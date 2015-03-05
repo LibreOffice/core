@@ -791,11 +791,10 @@ const uno::Sequence<sal_Int8>& ScSubTotalDescriptorBase::getUnoTunnelId()
     return theScSubTotalDescriptorBaseUnoTunnelId::get().getSeq();
 }
 
-ScSubTotalDescriptorBase* ScSubTotalDescriptorBase::getImplementation(
-                                const uno::Reference<sheet::XSubTotalDescriptor> xObj )
+ScSubTotalDescriptorBase* ScSubTotalDescriptorBase::getImplementation(const uno::Reference<sheet::XSubTotalDescriptor>& rObj)
 {
     ScSubTotalDescriptorBase* pRet = NULL;
-    uno::Reference<lang::XUnoTunnel> xUT( xObj, uno::UNO_QUERY );
+    uno::Reference<lang::XUnoTunnel> xUT(rObj, uno::UNO_QUERY);
     if (xUT.is())
         pRet = reinterpret_cast<ScSubTotalDescriptorBase*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething(getUnoTunnelId())));
     return pRet;

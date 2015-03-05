@@ -433,11 +433,10 @@ const uno::Sequence<sal_Int8>& ScAutoFormatObj::getUnoTunnelId()
     return theScAutoFormatObjUnoTunnelId::get().getSeq();
 }
 
-ScAutoFormatObj* ScAutoFormatObj::getImplementation(
-                        const uno::Reference<uno::XInterface> xObj )
+ScAutoFormatObj* ScAutoFormatObj::getImplementation(const uno::Reference<uno::XInterface>& rObj)
 {
     ScAutoFormatObj* pRet = NULL;
-    uno::Reference<lang::XUnoTunnel> xUT( xObj, uno::UNO_QUERY );
+    uno::Reference<lang::XUnoTunnel> xUT(rObj, uno::UNO_QUERY);
     if (xUT.is())
         pRet = reinterpret_cast<ScAutoFormatObj*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething(getUnoTunnelId())));
     return pRet;

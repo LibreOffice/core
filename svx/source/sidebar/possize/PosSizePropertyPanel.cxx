@@ -244,15 +244,15 @@ void PosSizePropertyPanel::DataChanged(
 }
 
 void PosSizePropertyPanel::HandleContextChange(
-    const ::sfx2::sidebar::EnumContext aContext)
+    const ::sfx2::sidebar::EnumContext& rContext)
 {
-    if(maContext == aContext)
+    if (maContext == rContext)
     {
         // Nothing to do.
         return;
     }
 
-    maContext = aContext;
+    maContext = rContext;
 
     sal_Int32 nLayoutMode (0);
     switch (maContext.GetCombinedContext_DI())

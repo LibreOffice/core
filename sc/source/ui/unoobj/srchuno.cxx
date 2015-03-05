@@ -231,11 +231,10 @@ const uno::Sequence<sal_Int8>& ScCellSearchObj::getUnoTunnelId()
     return theScCellSearchObjUnoTunnelId::get().getSeq();
 }
 
-ScCellSearchObj* ScCellSearchObj::getImplementation(
-                                const uno::Reference<util::XSearchDescriptor> xObj )
+ScCellSearchObj* ScCellSearchObj::getImplementation(const uno::Reference<util::XSearchDescriptor>& rObj)
 {
     ScCellSearchObj* pRet = NULL;
-    uno::Reference<lang::XUnoTunnel> xUT( xObj, uno::UNO_QUERY );
+    uno::Reference<lang::XUnoTunnel> xUT(rObj, uno::UNO_QUERY);
     if (xUT.is())
         pRet = reinterpret_cast<ScCellSearchObj*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething(getUnoTunnelId())));
     return pRet;

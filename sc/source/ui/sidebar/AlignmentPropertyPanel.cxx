@@ -229,17 +229,15 @@ void AlignmentPropertyPanel::DataChanged(
 }
 
 void AlignmentPropertyPanel::HandleContextChange(
-    const ::sfx2::sidebar::EnumContext aContext)
+    const ::sfx2::sidebar::EnumContext& rContext)
 {
-    if(maContext == aContext)
+    if (maContext == rContext)
     {
         // Nothing to do.
         return;
     }
 
-    maContext = aContext;
-
-    // todo
+    maContext = rContext;
 }
 
 void AlignmentPropertyPanel::NotifyItemUpdate(

@@ -224,8 +224,7 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     static const ::com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId();
-    static ScAutoFormatObj* getImplementation( const ::com::sun::star::uno::Reference<
-                                    ::com::sun::star::uno::XInterface> xObj );
+    static ScAutoFormatObj* getImplementation(const css::uno::Reference<css::uno::XInterface>& rObj);
 };
 
 class ScAutoFormatFieldObj : public ::cppu::WeakImplHelper2<

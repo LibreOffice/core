@@ -94,8 +94,7 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     static const com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId();
-    static rtl::Reference<ScHeaderFooterContentObj> getImplementation( const com::sun::star::uno::Reference<
-                                    com::sun::star::sheet::XHeaderFooterContent> xObj );
+    static rtl::Reference<ScHeaderFooterContentObj> getImplementation(const css::uno::Reference<css::sheet::XHeaderFooterContent>& rObj);
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
@@ -264,8 +263,7 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     static const com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId();
-    static ScCellTextCursor* getImplementation( const com::sun::star::uno::Reference<
-                                    com::sun::star::uno::XInterface> xObj );
+    static ScCellTextCursor* getImplementation(const css::uno::Reference< css::uno::XInterface>& rObj);
 };
 
 class ScHeaderFooterTextCursor : public SvxUnoTextCursor
@@ -292,8 +290,7 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     static const com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId();
-    static ScHeaderFooterTextCursor* getImplementation( const com::sun::star::uno::Reference<
-                                    com::sun::star::uno::XInterface> xObj );
+    static ScHeaderFooterTextCursor* getImplementation(const css::uno::Reference<css::uno::XInterface>& rObj);
 };
 
 class ScDrawTextCursor : public SvxUnoTextCursor
@@ -322,8 +319,7 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     static const com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId();
-    static ScDrawTextCursor* getImplementation( const com::sun::star::uno::Reference<
-                                    com::sun::star::uno::XInterface> xObj );
+    static ScDrawTextCursor* getImplementation(const css::uno::Reference<css::uno::XInterface>& rObj);
 };
 
 // ScAnnotationTextCursor isn't needed anymore - SvxUnoTextCursor is used instead

@@ -130,8 +130,7 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     static const com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId();
-    static ScTableConditionalFormat* getImplementation( const com::sun::star::uno::Reference<
-                                    com::sun::star::sheet::XSheetConditionalEntries> xObj );
+    static ScTableConditionalFormat* getImplementation(const css::uno::Reference<css::sheet::XSheetConditionalEntries>& rObj);
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
@@ -309,8 +308,7 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     static const com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId();
-    static ScTableValidationObj* getImplementation( const com::sun::star::uno::Reference<
-                                    com::sun::star::beans::XPropertySet> xObj );
+    static ScTableValidationObj* getImplementation(const css::uno::Reference<css::beans::XPropertySet>& rObj);
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()

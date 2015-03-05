@@ -62,7 +62,7 @@ public:
 
 
     virtual void HandleContextChange (
-        const ::sfx2::sidebar::EnumContext aContext) SAL_OVERRIDE;
+        const ::sfx2::sidebar::EnumContext& rContext) SAL_OVERRIDE;
 
 
     virtual void NotifyItemUpdate(

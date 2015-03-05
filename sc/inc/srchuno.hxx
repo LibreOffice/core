@@ -102,8 +102,7 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     static const com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId();
-    static ScCellSearchObj* getImplementation( const com::sun::star::uno::Reference<
-                                    com::sun::star::util::XSearchDescriptor> xObj );
+    static ScCellSearchObj* getImplementation(const css::uno::Reference<css::util::XSearchDescriptor>& rObj);
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()

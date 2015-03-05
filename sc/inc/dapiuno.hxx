@@ -257,8 +257,7 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     static const com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId();
-    SC_DLLPUBLIC static ScDataPilotDescriptorBase* getImplementation( const com::sun::star::uno::Reference<
-                                    com::sun::star::sheet::XDataPilotDescriptor> xObj );
+    SC_DLLPUBLIC static ScDataPilotDescriptorBase* getImplementation(const css::uno::Reference<css::sheet::XDataPilotDescriptor>& rObj);
 
                             // XTypeProvider (override in ScDataPilotTableObj)
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes()
