@@ -91,9 +91,6 @@ private:
     ParserImplRef       mxParserImpl;       /// Implementation of import parser.
 };
 
-css::uno::Reference< css::uno::XInterface > SAL_CALL OOXMLFormulaParser_create(
-    css::uno::Reference< css::uno::XComponentContext > const & context);
-
 OUString SAL_CALL OOXMLFormulaParser_getImplementationName();
 
 css::uno::Sequence< OUString > SAL_CALL OOXMLFormulaParser_getSupportedServiceNames();
