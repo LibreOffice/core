@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a29b11f_b45ca0ee",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2015-03-05T07:44:32Z",
+      "side": 1,
+      "message": "refacturings-\u003e refactorings",
+      "revId": "0a2980303404143e0ee733b205d599b0e36ba24d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
