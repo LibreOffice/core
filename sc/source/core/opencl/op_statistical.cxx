@@ -2703,7 +2703,7 @@ void OpSlope::GenSlidingWindowFunction(std::stringstream &ss,
         ss << "            fSumSqrDeltaX += (argX-fMeanX) * (argX-fMeanX);\n";
         ss << "        }\n";
         ss << "        if(fSumSqrDeltaX == 0.0)\n";
-        ss << "            return NAN;\n";
+        ss << "            return CreateDoubleError(errDivisionByZero);\n";
         ss << "        else\n";
         ss << "        {\n";
         ss << "            return fSumDeltaXDeltaY*pow(fSumSqrDeltaX,-1.0);\n";
