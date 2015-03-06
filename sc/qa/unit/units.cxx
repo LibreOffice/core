@@ -45,6 +45,7 @@ public:
     void testUnitFromFormatStringExtraction();
     void testUnitValueStringSplitting();
 
+    void testUnitFromHeaderExtraction();
 
     CPPUNIT_TEST_SUITE(UnitsTest);
 
@@ -53,6 +54,7 @@ public:
 
     CPPUNIT_TEST(testUnitFromFormatStringExtraction);
     CPPUNIT_TEST(testUnitValueStringSplitting);
+    CPPUNIT_TEST(testUnitFromHeaderExtraction);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -253,6 +255,22 @@ void UnitsTest::testUnitValueStringSplitting() {
     CPPUNIT_ASSERT(mpUnitsImpl->splitUnitsFromInputString(sMultipleTokens, sValue, sUnit));
     CPPUNIT_ASSERT(sValue == "40E-4");
     CPPUNIT_ASSERT(sUnit == "kg");
+}
+
+void UnitsTest::testUnitFromHeaderExtraction() {
+    UtUnit aUnit;
+
+    OUString sEmpty = "";
+    CPPUNIT_ASSERT(!mpUnitsImpl->extractUnitFromHeaderString(sEmpty, aUnit));
+
+    OUString sSimple = "bla bla [cm/s]";
+    CPPUNIT_ASSERT(mpUnitsImpl->extractUnitFromHeaderString(sSimple, aUnit));
+    // We need to test in Units (rather than testing Unit::getString()) as
+    // any given unit can have multiple string representations (and utunits defaults to
+    // representing e.g. cm as (I think) "0.01m").
+    UtUnit aTestUnit;
+    CPPUNIT_ASSERT(UtUnit::createUnit("cm/s", aTestUnit, mpUnitsImpl->mpUnitSystem));
+    CPPUNIT_ASSERT(aUnit == aTestUnit);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(UnitsTest);
