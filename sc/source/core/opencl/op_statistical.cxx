@@ -194,7 +194,7 @@ void OpVar::GenSlidingWindowFunction(std::stringstream &ss,
         }
     }
     ss << "    if (fCount <= 1.0)\n";
-    ss << "        return DBL_MAX;\n";
+    ss << "        return CreateDoubleError(errDivisionByZero);\n";
     ss << "    else\n";
     ss << "        return vSum * pow(fCount - 1.0,-1.0);\n";
     ss << "}\n";
