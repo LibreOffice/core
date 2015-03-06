@@ -301,15 +301,44 @@ UtUnit UnitsImpl::getUnitForRef(FormulaToken* pToken, const ScAddress& rFormulaA
     // Addresses can/will be relative to the formula, for extracting
     // units however we will need to get the absolute address (i.e.
     // by adding the current address to the relative formula address).
-    ScAddress aInputAddress = pRef->toAbs( rFormulaAddress );
+    const ScAddress aInputAddress = pRef->toAbs( rFormulaAddress );
 
     OUString sUnitString = extractUnitStringForCell(aInputAddress, pDoc);
 
     UtUnit aUnit;
-    if (!UtUnit::createUnit(sUnitString, aUnit, mpUnitSystem)) {
-        SAL_INFO("sc.units", "no unit obtained for token at cell " << aInputAddress.GetColRowString());
+    if (sUnitString.getLength() > 0 &&
+        UtUnit::createUnit(sUnitString, aUnit, mpUnitSystem)) {
+        return aUnit;
     }
 
+    // Scan UPwards from the current cell to find a header. This is since we could potentially
+    // have two different sets of data sharing a column, hence finding the closest header is necessary.
+    ScAddress aAddress = aInputAddress;
+    while (aAddress.Row() > 1) {
+        aAddress.IncRow(-1);
+
+        // We specifically test for string cells as intervening data cells could have
+        // differently defined units of their own. (However as these intervening cells
+        // will have the unit stored in the number format it would be ignored when
+        // checking the cell's string anyway.)
+        if (pDoc->GetCellType(aAddress) == CELLTYPE_STRING &&
+            extractUnitFromHeaderString(pDoc->GetString(aAddress), aUnit)) {
+            // TODO: one potential problem is that we could have a text only "united" data cell
+            // (where the unit wasn't automatically extracted due to being entered via
+            // a different spreadsheet program).
+            // We could solve that maybe by trying the unit extraction for such cells first?
+            // (I.e if(extractUnitStringForCell(...)) -> do the splitUnitsFrom... dance.
+            //
+            // TODO: and what if there are multiple units in the header (for whatever reason?)?
+            // We can probably just warn the user that we'll be giving them garbage in that case?
+            return aUnit;
+        }
+    }
+
+    SAL_INFO("sc.units", "no unit obtained for token at cell " << aInputAddress.GetColRowString());
+
+    // We return the dimensionless unit 1 if we don't find any other data suggesting a unit.
+    UtUnit::createUnit("", aUnit, mpUnitSystem);
     return aUnit;
 }
 
