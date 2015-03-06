@@ -86,8 +86,7 @@ Timer::Timer() : Scheduler()
 {
     mnTimeout = 1;
     mbAuto = false;
-    miPriority= static_cast<sal_Int32>(SchedulerPriority::HIGHEST);
-    meDefaultPriority = SchedulerPriority::HIGHEST;
+    mePriority = SchedulerPriority::HIGHEST;
 }
 
 Timer::Timer( const Timer& rTimer ) : Scheduler(rTimer)
