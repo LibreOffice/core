@@ -220,7 +220,6 @@ private:
     uno::Reference< drawing::XDrawPagesSupplier >       mxDrawPagesSupplier;
     uno::Reference< animations::XAnimationNode >        mxRootNode;
 
-    LayerManagerSharedPtr                               mpLayerManager;
     boost::shared_ptr<ShapeManagerImpl>                 mpShapeManager;
     boost::shared_ptr<SubsettableShapeManager>          mpSubsettableShapeManager;
 
@@ -349,13 +348,8 @@ SlideImpl::SlideImpl( const uno::Reference< drawing::XDrawPage >&           xDra
     mxDrawPage( xDrawPage ),
     mxDrawPagesSupplier( xDrawPages ),
     mxRootNode( xRootNode ),
-    mpLayerManager( new LayerManager(
-                        rViewContainer,
-                        getSlideRect(),
-                        bDisableAnimationZOrder) ),
     mpShapeManager( new ShapeManagerImpl(
                         rEventMultiplexer,
-                        mpLayerManager,
                         rCursorManager,
                         rShapeListenerMap,
                         rShapeCursorMap)),
@@ -414,11 +408,6 @@ SlideImpl::~SlideImpl()
     {
         maContext.mrScreenUpdater.removeViewUpdate(mpShapeManager);
         mpShapeManager->dispose();
-
-        // TODO(Q3): Make sure LayerManager (and thus Shapes) dies
-        // first, because SlideShowContext has SubsettableShapeManager
-        // as reference member.
-        mpLayerManager.reset();
     }
 }
 
@@ -437,7 +426,7 @@ bool SlideImpl::show( bool bSlideBackgoundPainted )
     if( mbActive )
         return true; // already active
 
-    if( !mpShapeManager || !mpLayerManager )
+    if( !mpShapeManager)
         return false; // disposed
 
 
@@ -642,15 +631,10 @@ void SlideImpl::viewAdded( const UnoViewSharedPtr& rView )
     maSlideBitmaps.push_back(
         std::make_pair( rView,
                         VectorOfSlideBitmaps(SlideAnimationState_NUM_ENTRIES) ));
-
-    if( mpLayerManager )
-        mpLayerManager->viewAdded( rView );
 }
 
 void SlideImpl::viewRemoved( const UnoViewSharedPtr& rView )
 {
-    if( mpLayerManager )
-        mpLayerManager->viewRemoved( rView );
 
     const VectorOfVectorOfSlideBitmaps::iterator aEnd( maSlideBitmaps.end() );
     maSlideBitmaps.erase(
@@ -670,16 +654,13 @@ void SlideImpl::viewChanged( const UnoViewSharedPtr& rView )
 {
     // nothing to do for the Slide - getCurrentSlideBitmap() lazily
     // handles bitmap resizes
-    if( mbActive && mpLayerManager )
-        mpLayerManager->viewChanged(rView);
 }
 
 void SlideImpl::viewsChanged()
 {
     // nothing to do for the Slide - getCurrentSlideBitmap() lazily
     // handles bitmap resizes
-    if( mbActive && mpLayerManager )
-        mpLayerManager->viewsChanged();
+    if( mbActive);
 }
 
 bool SlideImpl::requestCursor( sal_Int16 nCursorShape )
@@ -708,8 +689,6 @@ SlideBitmapSharedPtr SlideImpl::createCurrentSlideBitmap( const UnoViewSharedPtr
 {
     ENSURE_OR_THROW( rView && rView->getCanvas(),
                       "SlideImpl::createCurrentSlideBitmap(): Invalid view" );
-    ENSURE_OR_THROW( mpLayerManager,
-                      "SlideImpl::createCurrentSlideBitmap(): Invalid layer manager" );
     ENSURE_OR_THROW( mbShowLoaded,
                       "SlideImpl::createCurrentSlideBitmap(): No show loaded" );
 
@@ -738,7 +717,6 @@ SlideBitmapSharedPtr SlideImpl::createCurrentSlideBitmap( const UnoViewSharedPtr
 
     // output all shapes to bitmap
     initSlideBackground( pBitmapCanvas, rBmpSize );
-    mpLayerManager->renderTo( pBitmapCanvas );
 
     return SlideBitmapSharedPtr( new SlideBitmap( pBitmap ) );
 }
@@ -782,8 +760,6 @@ bool SlideImpl::implPrefetchShow()
 
     ENSURE_OR_RETURN_FALSE( mxDrawPage.is(),
                        "SlideImpl::implPrefetchShow(): Invalid draw page" );
-    ENSURE_OR_RETURN_FALSE( mpLayerManager,
-                       "SlideImpl::implPrefetchShow(): Invalid layer manager" );
 
     // fetch desired page content
     // ==========================
@@ -961,7 +937,7 @@ bool SlideImpl::applyInitialShapeAttributes(
 
         if( xShape.is() )
         {
-            ShapeSharedPtr pShape( mpLayerManager->lookupShape( xShape ) );
+            ShapeSharedPtr pShape( /*mpLayerManager->lookupShape( xShape )*/ );
 
             if( !pShape )
             {
@@ -1040,8 +1016,6 @@ bool SlideImpl::loadShapes()
 
     ENSURE_OR_RETURN_FALSE( mxDrawPage.is(),
                        "SlideImpl::loadShapes(): Invalid draw page" );
-    ENSURE_OR_RETURN_FALSE( mpLayerManager,
-                       "SlideImpl::loadShapes(): Invalid layer manager" );
 
     // fetch desired page content
     // ==========================
@@ -1075,15 +1049,15 @@ bool SlideImpl::loadShapes()
                                                 0, /* shape num starts at 0 */
                                                 true );
 
-                mpLayerManager->addShape(
-                    aMPShapesFunctor.importBackgroundShape() );
+               /* mpLayerManager->addShape(
+                    aMPShapesFunctor.importBackgroundShape() );*/
 
                 while( !aMPShapesFunctor.isImportDone() )
                 {
                     ShapeSharedPtr const& rShape(
                         aMPShapesFunctor.importShape() );
                     if( rShape )
-                        mpLayerManager->addShape( rShape );
+                       /* mpLayerManager->addShape( rShape );*/;
                 }
                 addPolygons(aMPShapesFunctor.getPolygons());
 
@@ -1128,7 +1102,7 @@ bool SlideImpl::loadShapes()
             ShapeSharedPtr const& rShape(
                 aShapesFunctor.importShape() );
             if( rShape )
-                mpLayerManager->addShape( rShape );
+                /*mpLayerManager->addShape( rShape );*/;
         }
         addPolygons(aShapesFunctor.getPolygons());
     }

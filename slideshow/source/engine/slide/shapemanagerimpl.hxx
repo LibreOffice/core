@@ -65,7 +65,6 @@ public:
         registeres its event handlers.
     */
     ShapeManagerImpl( EventMultiplexer&            rMultiplexer,
-                      LayerManagerSharedPtr const& rLayerManager,
                       CursorManager&               rCursorManager,
                       const ShapeEventListenerMap& rGlobalListenersMap,
                       const ShapeCursorMap&        rGlobalCursorMap );
@@ -184,7 +183,6 @@ private:
         std::vector<IntrinsicAnimationEventHandlerSharedPtr> > ImplIntrinsicAnimationEventHandlers;
 
     EventMultiplexer&                   mrMultiplexer;
-    LayerManagerSharedPtr               mpLayerManager;
     CursorManager&                      mrCursorManager;
     const ShapeEventListenerMap&        mrGlobalListenersMap;
     const ShapeCursorMap&               mrGlobalCursorMap;

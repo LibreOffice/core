@@ -37,12 +37,10 @@ namespace slideshow {
 namespace internal {
 
 ShapeManagerImpl::ShapeManagerImpl( EventMultiplexer&            rMultiplexer,
-                                    LayerManagerSharedPtr const& rLayerManager,
                                     CursorManager&               rCursorManager,
                                     const ShapeEventListenerMap& rGlobalListenersMap,
                                     const ShapeCursorMap&        rGlobalCursorMap ):
     mrMultiplexer(rMultiplexer),
-    mpLayerManager(rLayerManager),
     mrCursorManager(rCursorManager),
     mrGlobalListenersMap(rGlobalListenersMap),
     mrGlobalCursorMap(rGlobalCursorMap),
@@ -88,8 +86,8 @@ void ShapeManagerImpl::activate( bool bSlideBackgoundPainted )
                                         o3tl::select2nd<ShapeCursorMap::value_type>(),
                                         _1 )));
 
-        if( mpLayerManager )
-            mpLayerManager->activate( bSlideBackgoundPainted );
+      /*  if( mpLayerManager )
+            mpLayerManager->activate( bSlideBackgoundPainted );*/
     }
 }
 
@@ -98,9 +96,6 @@ void ShapeManagerImpl::deactivate()
     if( mbEnabled )
     {
         mbEnabled = false;
-
-        if( mpLayerManager )
-            mpLayerManager->deactivate();
 
         maShapeListenerMap.clear();
         maShapeCursorMap.clear();
@@ -119,7 +114,6 @@ void ShapeManagerImpl::dispose()
     maHyperlinkShapes.clear();
     maShapeCursorMap.clear();
     maShapeListenerMap.clear();
-    mpLayerManager.reset();
 }
 
 bool ShapeManagerImpl::handleMousePressed( awt::MouseEvent const& )
@@ -250,9 +244,8 @@ bool ShapeManagerImpl::handleMouseMoved( const awt::MouseEvent& e )
 
 bool ShapeManagerImpl::update()
 {
-    if( mbEnabled && mpLayerManager )
-        return mpLayerManager->update();
-
+    //if( mbEnabled)
+       // return mpLayerManager->update();
     return false;
 }
 
@@ -264,34 +257,39 @@ bool ShapeManagerImpl::update( ViewSharedPtr const& /*rView*/ )
 
 bool ShapeManagerImpl::needsUpdate() const
 {
-    if( mbEnabled && mpLayerManager )
-        return mpLayerManager->isUpdatePending();
+    //if( mbEnabled )
+       // return mpLayerManager->isUpdatePending();
 
     return false;
 }
 
 void ShapeManagerImpl::enterAnimationMode( const AnimatableShapeSharedPtr& rShape )
 {
-    if( mbEnabled && mpLayerManager )
-        mpLayerManager->enterAnimationMode(rShape);
+    if( mbEnabled)
+    {
+        ENSURE_OR_THROW( rShape, "ShapeManagerImpl::enterAnimationMode(): invalid Shape" );
+        rShape->enterAnimationMode();
+    }
 }
 
 void ShapeManagerImpl::leaveAnimationMode( const AnimatableShapeSharedPtr& rShape )
 {
-    if( mbEnabled && mpLayerManager )
-        mpLayerManager->leaveAnimationMode(rShape);
+    if( mbEnabled){
+        ENSURE_OR_THROW( rShape, "ShapeManagerImpl::leaveAnimationMode(): invalid Shape" );
+        rShape->leaveAnimationMode();
+    }
 }
 
 void ShapeManagerImpl::notifyShapeUpdate( const ShapeSharedPtr& rShape )
 {
-    if( mbEnabled && mpLayerManager )
-        mpLayerManager->notifyShapeUpdate(rShape);
+   // if( mbEnabled )
+       // mpLayerManager->notifyShapeUpdate(rShape);
 }
 
 ShapeSharedPtr ShapeManagerImpl::lookupShape( uno::Reference< drawing::XShape > const & xShape ) const
 {
-    if( mpLayerManager )
-        return mpLayerManager->lookupShape(xShape);
+   /* if( mpLayerManager )
+        return mpLayerManager->lookupShape(xShape);*/
 
     return ShapeSharedPtr();
 }
@@ -309,17 +307,46 @@ void ShapeManagerImpl::removeHyperlinkArea( const HyperlinkAreaSharedPtr& rArea 
 AttributableShapeSharedPtr ShapeManagerImpl::getSubsetShape( const AttributableShapeSharedPtr& rOrigShape,
                                                              const DocTreeNode&                rTreeNode )
 {
-    if( mpLayerManager )
-        return mpLayerManager->getSubsetShape(rOrigShape,rTreeNode);
+    AttributableShapeSharedPtr pSubset;
 
-    return AttributableShapeSharedPtr();
+    // shape already added?
+    if( rOrigShape->createSubset( pSubset,
+                                  rTreeNode ) )
+    {
+        OSL_ENSURE( pSubset, "ShapeManagerImpl::getSubsetShape(): failed to create subset" );
+
+        // don't add to shape hash, we're dupes to the
+        // original XShape anyway - all subset shapes return
+        // the same XShape as the original one.
+
+        // add shape to corresponding layer
+        implAddShape( pSubset );
+
+        // update original shape, it now shows less content
+        // (the subset is removed from its displayed
+        // output). Subset shape is updated within
+        // implAddShape().
+        if( rOrigShape->isVisible() )
+            notifyShapeUpdate( rOrigShape );
+    }
+
+    return pSubset;
 }
 
 void ShapeManagerImpl::revokeSubset( const AttributableShapeSharedPtr& rOrigShape,
                                      const AttributableShapeSharedPtr& rSubsetShape )
 {
-    if( mpLayerManager )
-        mpLayerManager->revokeSubset(rOrigShape,rSubsetShape);
+    if( rOrigShape->revokeSubset( rSubsetShape ) )
+    {
+        OSL_ASSERT( maAllShapes.find(rSubsetShape) != maAllShapes.end() );
+
+        implRemoveShape( rSubsetShape );
+
+        // update original shape, it now shows more content
+        // (the subset is added back to its displayed output)
+        if( rOrigShape->isVisible() )
+            notifyShapeUpdate( rOrigShape );
+    }
 }
 
 bool ShapeManagerImpl::listenerAdded(
