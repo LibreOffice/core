@@ -22,7 +22,6 @@
 #include <saltimer.hxx>
 #include <svdata.hxx>
 #include <salinst.hxx>
-#include <vcl/scheduler.hxx>
 
 #define MAX_TIMER_PERIOD    ((sal_uLong)0xFFFFFFFF)
 
@@ -122,7 +121,7 @@ void Timer::SetTimeout( sal_uLong nNewTimeout )
     if ( mbActive )
     {
         ImplSVData* pSVData = ImplGetSVData();
-        if ( !pSVData->mnTimerUpdate && (mnTimeout < pSVData->mnTimerPeriod) )
+        if ( !pSVData->mnUpdateStack && (mnTimeout < pSVData->mnTimerPeriod) )
             Timer::ImplStartTimer( pSVData, mnTimeout );
     }
 }

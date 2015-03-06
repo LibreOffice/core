@@ -40,10 +40,10 @@ public:
 
     /// Make it possible to associate a callback with this timer handler
     /// of course, you can also sub-class and override 'Invoke'
-    void            SetTimeout( sal_uLong nTimeoutMs );
-    sal_uLong       GetTimeout() const { return mnTimeout; }
     void            SetTimeoutHdl( const Link& rLink ) { maTimeoutHdl = rLink; }
     const Link&     GetTimeoutHdl() const { return maTimeoutHdl; }
+    void            SetTimeout( sal_uLong nTimeoutMs );
+    sal_uLong       GetTimeout() const { return mnTimeout; }
     virtual void    Invoke() SAL_OVERRIDE;
     void            Timeout() { Invoke(); }
     Timer&          operator=( const Timer& rTimer );
