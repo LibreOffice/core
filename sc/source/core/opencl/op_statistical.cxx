@@ -2659,7 +2659,7 @@ void OpSlope::GenSlidingWindowFunction(std::stringstream &ss,
         ss << "    }\n";
 
         ss << "    if (fCount < 1.0)\n";
-        ss << "        return NAN;\n";
+        ss << "        return CreateDoubleError(errNoValue);\n";
         ss << "    else\n";
         ss << "    {\n";
         ss << "        fMeanX = fSumX * pow(fCount,-1.0);\n";
