@@ -102,7 +102,7 @@ OUString ImpGetString( const SbxValues* p )
         case SbxERROR:
             // Here the String "Error n" is generated
             aRes = SbxRes( STRING_ERRORMSG );
-            aRes += OUString( p->nUShort ); break;
+            aRes += OUString::number(p->nUShort); break;
         case SbxDATE:
             ImpPutDate( &aTmp, p->nDouble ); break;
 
