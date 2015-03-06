@@ -220,8 +220,6 @@ public class LOKitThread extends Thread {
 
     private void changeHandlePosition(TextSelectionHandle.HandleType handleType, PointF documentCoordinate) {
         if (handleType == TextSelectionHandle.HandleType.MIDDLE) {
-            LibreOfficeMainActivity.mAppContext.showSoftKeyboard();
-            mInvalidationHandler.setOverlayState(InvalidationHandler.OverlayState.CURSOR);
             mTileProvider.mouseButtonDown(documentCoordinate, 1);
             mTileProvider.mouseButtonUp(documentCoordinate, 1);
         } else if (handleType == TextSelectionHandle.HandleType.START) {
@@ -263,19 +261,15 @@ public class LOKitThread extends Thread {
             return;
         }
         if (touchType.equals("LongPress")) {
-            mInvalidationHandler.setOverlayState(InvalidationHandler.OverlayState.SELECTION);
+            mInvalidationHandler.changeStateTo(InvalidationHandler.OverlayState.TRANSITION_TO_SELECTION);
             mTileProvider.mouseButtonDown(documentCoordinate, 1);
             mTileProvider.mouseButtonUp(documentCoordinate, 1);
             mTileProvider.mouseButtonDown(documentCoordinate, 2);
             mTileProvider.mouseButtonUp(documentCoordinate, 2);
         } else { // "SingleTap"
-            LibreOfficeMainActivity.mAppContext.showSoftKeyboard();
-            mInvalidationHandler.setOverlayState(InvalidationHandler.OverlayState.CURSOR);
+            mInvalidationHandler.changeStateTo(InvalidationHandler.OverlayState.TRANSITION_TO_CURSOR);
             mTileProvider.mouseButtonDown(documentCoordinate, 1);
             mTileProvider.mouseButtonUp(documentCoordinate, 1);
-            if (mInvalidationHandler.getOverlayState() == InvalidationHandler.OverlayState.SELECTION) {
-                mTileProvider.setTextSelectionReset();
-            }
         }
     }
 

@@ -18,8 +18,9 @@ public class InvalidationHandler implements Document.MessageCallback {
     private static String LOGTAG = InvalidationHandler.class.getSimpleName();
 
     private TileProvider mTileProvider;
-    private TextCursorLayer mTextCursorLayer;
-    private TextSelection mTextSelection;
+    private final TextCursorLayer mTextCursorLayer;
+    private final TextSelection mTextSelection;
+
     private OverlayState mState;
 
     public InvalidationHandler(LibreOfficeMainActivity mainActivity) {
@@ -52,13 +53,13 @@ public class InvalidationHandler implements Document.MessageCallback {
                 invalidateCursor(payload);
                 break;
             case Document.CALLBACK_TEXT_SELECTION:
-                invalidateSelection(payload);
+                textSelection(payload);
                 break;
             case Document.CALLBACK_TEXT_SELECTION_START:
-                invalidateSelectionStart(payload);
+                textSelectionStart(payload);
                 break;
             case Document.CALLBACK_TEXT_SELECTION_END:
-                invalidateSelectionEnd(payload);
+                textSelectionEnd(payload);
                 break;
             case Document.CALLBACK_CURSOR_VISIBLE:
                 cursorVisibility(payload);
@@ -75,14 +76,6 @@ public class InvalidationHandler implements Document.MessageCallback {
         }
     }
 
-    public OverlayState getOverlayState() {
-        return mState;
-    }
-
-    public void setOverlayState(OverlayState state) {
-        this.mState = state;
-    }
-
     /**
      * Parses the payload text with rectangle coordinates and converts to rectangle in pixel coordinates
      *
@@ -90,7 +83,7 @@ public class InvalidationHandler implements Document.MessageCallback {
      * @return rectangle in pixel coordinates
      */
     private RectF convertPayloadToRectangle(String payload) {
-        String payloadWithoutWhitespace = payload.replaceAll("\\s",""); // remove all whitespace from the string
+        String payloadWithoutWhitespace = payload.replaceAll("\\s", ""); // remove all whitespace from the string
 
         if (payloadWithoutWhitespace.isEmpty() || payloadWithoutWhitespace.equals("EMPTY")) {
             return null;
@@ -157,72 +150,57 @@ public class InvalidationHandler implements Document.MessageCallback {
      *
      * @param payload
      */
-    private void invalidateCursor(String payload) {
+    private synchronized void invalidateCursor(String payload) {
         RectF cursorRectangle = convertPayloadToRectangle(payload);
         if (cursorRectangle != null) {
-            if (mState == OverlayState.CURSOR) {
-                mTextSelection.positionHandle(TextSelectionHandle.HandleType.MIDDLE, cursorRectangle);
-                mTextSelection.showHandle(TextSelectionHandle.HandleType.MIDDLE);
-                mTextSelection.hideHandle(TextSelectionHandle.HandleType.START);
-                mTextSelection.hideHandle(TextSelectionHandle.HandleType.END);
-            }
+            mTextSelection.positionHandle(TextSelectionHandle.HandleType.MIDDLE, cursorRectangle);
             mTextCursorLayer.positionCursor(cursorRectangle);
-            mTextCursorLayer.showCursor();
+
+            if (mState == OverlayState.TRANSITION_TO_CURSOR) {
+                changeStateTo(OverlayState.CURSOR);
+            };
         }
     }
 
     /**
-     * Handles the selection start invalidation message
+     * Handles the text selection start message
      *
      * @param payload
      */
-    private void invalidateSelectionStart(String payload) {
-        if (mState == OverlayState.NONE) {
-            return;
-        }
-        RectF selectionRectangle = convertPayloadToRectangle(payload);
-        if (selectionRectangle != null) {
-            mTextSelection.positionHandle(TextSelectionHandle.HandleType.START, selectionRectangle);
-            mTextSelection.showHandle(TextSelectionHandle.HandleType.START);
-            mTextSelection.hideHandle(TextSelectionHandle.HandleType.MIDDLE);
-            mState = OverlayState.SELECTION;
+    private synchronized void textSelectionStart(String payload) {
+        RectF selectionRect = convertPayloadToRectangle(payload);
+        if (selectionRect != null) {
+            mTextSelection.positionHandle(TextSelectionHandle.HandleType.START, selectionRect);
         }
     }
 
     /**
-     * Handles the selection end invalidation message
+     * Handles the text selection end message
      *
      * @param payload
      */
-    private void invalidateSelectionEnd(String payload) {
-        if (mState == OverlayState.NONE) {
-            return;
-        }
+    private synchronized void textSelectionEnd(String payload) {
         RectF selectionRect = convertPayloadToRectangle(payload);
         if (selectionRect != null) {
             mTextSelection.positionHandle(TextSelectionHandle.HandleType.END, selectionRect);
-            mTextSelection.showHandle(TextSelectionHandle.HandleType.END);
-            mTextSelection.hideHandle(TextSelectionHandle.HandleType.MIDDLE);
-            mState = OverlayState.SELECTION;
         }
     }
 
     /**
-     * Handles the selection invalidation message
+     * Handles the text selection message
      *
      * @param payload
      */
-    private void invalidateSelection(String payload) {
-        if (mState == OverlayState.NONE) {
-            return;
-        }
-        if (payload.isEmpty()) {
-            mState = OverlayState.CURSOR;
-            mTextSelection.hideHandle(TextSelectionHandle.HandleType.START);
-            mTextSelection.hideHandle(TextSelectionHandle.HandleType.END);
+    private synchronized void textSelection(String payload) {
+        if (payload.isEmpty() || payload.equals("EMPTY")) {
+            if (mState == OverlayState.SELECTION) {
+                changeStateTo(OverlayState.TRANSITION_TO_CURSOR);
+            }
             mTextCursorLayer.changeSelections(Collections.EMPTY_LIST);
         } else {
-            mState = OverlayState.SELECTION;
+            if (mState == OverlayState.TRANSITION_TO_SELECTION) {
+                changeStateTo(OverlayState.SELECTION);
+            }
             List<RectF> rects = convertPayloadToRectangles(payload);
             mTextCursorLayer.changeSelections(rects);
         }
@@ -230,22 +208,110 @@ public class InvalidationHandler implements Document.MessageCallback {
 
     /**
      * Handles the cursor visibility message
+     *
      * @param payload
      */
-    private void cursorVisibility(String payload) {
+    private synchronized void cursorVisibility(String payload) {
         if (payload.equals("true")) {
-            mTextSelection.showHandle(TextSelectionHandle.HandleType.MIDDLE);
             mTextCursorLayer.showCursor();
         } else if (payload.equals("false")) {
-            mTextSelection.hideHandle(TextSelectionHandle.HandleType.MIDDLE);
             mTextCursorLayer.hideCursor();
-            LibreOfficeMainActivity.mAppContext.hideSoftKeyboard();
         }
+    }
+
+    public synchronized void changeStateTo(OverlayState next) {
+        changeState(mState, next);
+    }
+
+    private synchronized void changeState(OverlayState previous, OverlayState next) {
+        if (isInvalidTransition(previous, next)) {
+            return;
+        }
+
+        Log.i(LOGTAG, "State change: " + previous.name() + " -> " + next.name());
+
+        mState = next;
+
+        switch (next) {
+            case CURSOR:
+                handleCursorState(previous);
+                break;
+            case TRANSITION_TO_CURSOR:
+                handleTransitionToCursorState(previous);
+                break;
+            case SELECTION:
+                handleSelectionState(previous);
+                break;
+            case TRANSITION_TO_SELECTION:
+                handleTransitionToSelectionState(previous);
+                break;
+            case NONE:
+                handleNoneState(previous);
+                break;
+        }
+    }
+
+    private void handleNoneState(OverlayState previous) {
+        if (previous == OverlayState.NONE) {
+            return;
+        }
+        // Just hide everything
+        if (mTileProvider != null) {
+            mTileProvider.setTextSelectionReset();
+        }
+        mTextSelection.hideHandle(TextSelectionHandle.HandleType.START);
+        mTextSelection.hideHandle(TextSelectionHandle.HandleType.END);
+        mTextSelection.hideHandle(TextSelectionHandle.HandleType.MIDDLE);
+        mTextCursorLayer.hideSelections();
+        mTextCursorLayer.hideCursor();
+        LibreOfficeMainActivity.mAppContext.hideSoftKeyboard();
+    }
+
+    private void handleTransitionToSelectionState(OverlayState previous) {
+        if (previous == OverlayState.CURSOR) {
+            mTextSelection.hideHandle(TextSelectionHandle.HandleType.MIDDLE);
+        }
+    }
+
+    private void handleSelectionState(OverlayState previous) {
+        if (previous == OverlayState.TRANSITION_TO_SELECTION) {
+            mTextSelection.showHandle(TextSelectionHandle.HandleType.START);
+            mTextSelection.showHandle(TextSelectionHandle.HandleType.END);
+            mTextCursorLayer.showSelections();
+        }
+    }
+
+    private void handleCursorState(OverlayState previous) {
+        if (previous == OverlayState.CURSOR) {
+            LibreOfficeMainActivity.mAppContext.showSoftKeyboard();
+        } else if (previous == OverlayState.TRANSITION_TO_CURSOR) {
+            LibreOfficeMainActivity.mAppContext.showSoftKeyboard();
+            mTextSelection.showHandle(TextSelectionHandle.HandleType.MIDDLE);
+            mTextCursorLayer.showCursor();
+        }
+    }
+
+    private void handleTransitionToCursorState(OverlayState previous) {
+        if (previous == OverlayState.SELECTION) {
+            if (mTileProvider != null) {
+                mTileProvider.setTextSelectionReset();
+            }
+            mTextSelection.hideHandle(TextSelectionHandle.HandleType.START);
+            mTextSelection.hideHandle(TextSelectionHandle.HandleType.END);
+            mTextCursorLayer.hideSelections();
+        }
+    }
+
+    private boolean isInvalidTransition(OverlayState previous, OverlayState next) {
+        return (previous == OverlayState.CURSOR && next == OverlayState.TRANSITION_TO_CURSOR)
+            || (previous == OverlayState.SELECTION && next == OverlayState.TRANSITION_TO_SELECTION);
     }
 
     public enum OverlayState {
         NONE,
         CURSOR,
-        SELECTION
+        TRANSITION_TO_CURSOR,
+        SELECTION,
+        TRANSITION_TO_SELECTION
     }
 }
