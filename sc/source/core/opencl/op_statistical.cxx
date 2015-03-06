@@ -4765,8 +4765,9 @@ void OpNormsinv:: GenSlidingWindowFunction
     ss <<"}\n";
     ss << "z = q < 0.0 ? (-1)*z : z;\n";
     ss <<"}\n";
-    ss <<"double tmp = z;\n";
-    ss <<"return tmp;\n";
+    ss <<"if (isnan(z))\n";
+    ss <<"    return CreateDoubleError(errNoValue);\n";
+    ss <<"return z;\n";
     ss <<"}\n";
 }
 void OpMedian::GenSlidingWindowFunction(
