@@ -325,6 +325,12 @@ public:
     /// @see OutputDevice::LogicInvalidate().
     void LogicInvalidate(const ::vcl::Region* pRegion) SAL_OVERRIDE;
 
+    /// Same as MouseButtonDown(), but coordinates are in logic unit.
+    void LogicMouseButtonDown(const MouseEvent& rMouseEvent);
+
+    /// Same as MouseButtonUp(), but coordinates are in logic unit.
+    void LogicMouseButtonUp(const MouseEvent& rMouseEvent);
+
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
 
     void            FakeButtonUp();

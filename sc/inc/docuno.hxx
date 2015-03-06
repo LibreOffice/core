@@ -367,7 +367,7 @@ public:
     virtual sal_Int32 SAL_CALL getFormulaCellNumberLimit()
                                 throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    // @see vcl::ITiledRenderable::paintTile().
+    /// @see vcl::ITiledRenderable::paintTile().
     virtual void paintTile( VirtualDevice& rDevice,
                             int nOutputWidth,
                             int nOutputHeight,
@@ -376,20 +376,23 @@ public:
                             long nTileWidth,
                             long nTileHeight ) SAL_OVERRIDE;
 
-    // @see vcl::ITiledRenderable::getDocumentSize().
+    /// @see vcl::ITiledRenderable::getDocumentSize().
     virtual Size getDocumentSize() SAL_OVERRIDE;
 
-    // @see vcl::ITiledRenderable::setPart().
+    /// @see vcl::ITiledRenderable::setPart().
     virtual void setPart(int nPart) SAL_OVERRIDE;
 
-    // @see vcl::ITiledRenderable::getPart().
+    /// @see vcl::ITiledRenderable::getPart().
     virtual int getPart() SAL_OVERRIDE;
 
-    // @see vcl::ITiledRenderable::getParts().
+    /// @see vcl::ITiledRenderable::getParts().
     virtual int getParts() SAL_OVERRIDE;
 
-    // @see vcl::ITiledRenderable::registerCallback().
+    /// @see vcl::ITiledRenderable::registerCallback().
     virtual void registerCallback(LibreOfficeKitCallback pCallback, void* pData) SAL_OVERRIDE;
+
+    /// @see vcl::ITiledRenderable::postMouseEvent().
+    virtual void postMouseEvent(int nType, int nX, int nY, int nCount) SAL_OVERRIDE;
 
     /// @see vcl::ITiledRenderable::initializeForTiledRendering().
     virtual void initializeForTiledRendering() SAL_OVERRIDE;

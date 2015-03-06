@@ -27,6 +27,7 @@
 #include <svx/svxids.hrc>
 #include <svx/unoshape.hxx>
 
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Office/Calc.hxx>
 #include <svl/numuno.hxx>
@@ -516,6 +517,35 @@ void ScModelObj::registerCallback(LibreOfficeKitCallback pCallback, void* pData)
 {
     SolarMutexGuard aGuard;
     pDocShell->GetDocument().GetDrawLayer()->registerLibreOfficeKitCallback(pCallback, pData);
+}
+
+void ScModelObj::postMouseEvent(int nType, int nX, int nY, int nCount)
+{
+    SolarMutexGuard aGuard;
+
+    // There seems to be no clear way of getting the grid window for this
+    // particular document, hence we need to hope we get the right window.
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    ScGridWindow* pGridWindow = pViewData->GetActiveWin();
+
+    if (!pGridWindow)
+        return;
+
+    // Calc operates in pixels...
+    MouseEvent aEvent(Point(nX / TWIPS_PER_PIXEL, nY / TWIPS_PER_PIXEL), nCount, MouseEventModifiers::SIMPLECLICK, MOUSE_LEFT);
+
+    switch (nType)
+    {
+    case LOK_MOUSEEVENT_MOUSEBUTTONDOWN:
+        pGridWindow->LogicMouseButtonDown(aEvent);
+        break;
+    case LOK_MOUSEEVENT_MOUSEBUTTONUP:
+        pGridWindow->LogicMouseButtonUp(aEvent);
+        break;
+    default:
+        assert(false);
+        break;
+    }
 }
 
 void ScModelObj::initializeForTiledRendering()
