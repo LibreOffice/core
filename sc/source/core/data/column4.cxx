@@ -516,7 +516,7 @@ void ScColumn::CloneFormulaCell(
             xGroup->compileCode(*pDocument, aPos, pDocument->GetGrammar());
             for (size_t i = 0; i < nLen; ++i, aPos.IncRow())
             {
-                ScFormulaCell* pCell = new ScFormulaCell(pDocument, aPos, xGroup);
+                ScFormulaCell* pCell = new ScFormulaCell(pDocument, aPos, xGroup, pDocument->GetGrammar(), rSrc.GetMatrixFlag());
                 if (i == 0)
                 {
                     xGroup->mpTopCell = pCell;
