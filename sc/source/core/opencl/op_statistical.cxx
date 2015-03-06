@@ -7048,7 +7048,7 @@ void OpCovar::GenSlidingWindowFunction(std::stringstream& ss,
                 ss << "    }\n";
             }
             ss << "    if(cnt < 1) {\n";
-            ss << "        return -DBL_MAX;\n";
+            ss << "        return CreateDoubleError(errNoValue);\n";
             ss << "    }\n";
             ss << "    else {\n";
             ss << "        vMean0 = vSum0 / cnt;\n";
