@@ -52,8 +52,8 @@ public class TextSelectionHandle extends ImageView implements View.OnTouchListen
         super(context, attrs);
         setOnTouchListener(this);
 
-        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.TextSelectionHandle);
-        int handleType = a.getInt(R.styleable.TextSelectionHandle_handleType, 0x01);
+        TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.TextSelectionHandle);
+        int handleType = array.getInt(R.styleable.TextSelectionHandle_handleType, 0x01);
 
         switch (handleType) {
             case 1:
