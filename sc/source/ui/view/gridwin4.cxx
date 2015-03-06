@@ -382,6 +382,16 @@ void ScGridWindow::Paint( const Rectangle& rRect )
 
 void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMode eMode )
 {
+    ScDocShell* pDocSh = pViewData->GetDocShell();
+    ScDocument& rDoc = pDocSh->GetDocument();
+
+    // let's ignore the normal Draw() attempts when doing the tiled rendering,
+    // all the rendering should go through PaintTile() in that case.
+    // TODO revisit if we can actually turn this into an assert(), and clean
+    // up the callers
+    if (rDoc.GetDrawLayer()->isTiledRendering())
+        return;
+
     ScModule* pScMod = SC_MOD();
     bool bTextWysiwyg = pScMod->GetInputOptions().GetTextWysiwyg();
 
@@ -418,10 +428,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
 
     ++nPaintCount;                  // merken, dass gemalt wird (wichtig beim Invertieren)
 
-    ScDocShell* pDocSh = pViewData->GetDocShell();
-    ScDocument& rDoc = pDocSh->GetDocument();
     SCTAB nTab = pViewData->GetTabNo();
-
     rDoc.ExtendHidden( nX1, nY1, nX2, nY2, nTab );
 
     Point aScrPos = pViewData->GetScrPos( nX1, nY1, eWhich );
@@ -619,9 +626,11 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         aDrawingRectLogic = PixelToLogic(aDrawingRectPixel, aDrawMode);
     }
 
-    OutputDevice* pContentDev = this;       // device for document content, used by overlay manager
+    OutputDevice* pContentDev = &rDevice;   // device for document content, used by overlay manager
     SdrPaintWindow* pTargetPaintWindow = 0; // #i74769# work with SdrPaintWindow directly
+    bool bIsTiledRendering = rDoc.GetDrawLayer()->isTiledRendering();
 
+    if (!bIsTiledRendering)
     {
         // init redraw
         ScTabViewShell* pTabViewShell = pViewData->GetViewShell();
@@ -832,6 +841,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         }
     }
 
+    if (!bIsTiledRendering)
     {
         // end redraw
         ScTabViewShell* pTabViewShell = pViewData->GetViewShell();
@@ -858,25 +868,24 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
     if ( bEditMode && (pViewData->GetRefTabNo() == pViewData->GetTabNo()) )
     {
         //! use pContentDev for EditView?
-        SetMapMode(MAP_PIXEL);
+        rDevice.SetMapMode(MAP_PIXEL);
         SCCOL nCol1 = pViewData->GetEditStartCol();
         SCROW nRow1 = pViewData->GetEditStartRow();
         SCCOL nCol2 = pViewData->GetEditEndCol();
         SCROW nRow2 = pViewData->GetEditEndRow();
-        SetLineColor();
-        SetFillColor( pEditView->GetBackgroundColor() );
+        rDevice.SetLineColor();
+        rDevice.SetFillColor(pEditView->GetBackgroundColor());
         Point aStart = pViewData->GetScrPos( nCol1, nRow1, eWhich );
         Point aEnd = pViewData->GetScrPos( nCol2+1, nRow2+1, eWhich );
 
         long nLayoutSign = bLayoutRTL ? -1 : 1;
         aEnd.X() -= 2 * nLayoutSign;        // don't overwrite grid
         aEnd.Y() -= 2;
-        DrawRect( Rectangle( aStart,aEnd ) );
+        rDevice.DrawRect(Rectangle(aStart, aEnd));
 
-        SetMapMode(pViewData->GetLogicMode());
-        pEditView->Paint( PixelToLogic( Rectangle( Point( nScrX, nScrY ),
-                            Size( aOutputData.GetScrW(), aOutputData.GetScrH() ) ) ) );
-        SetMapMode(MAP_PIXEL);
+        rDevice.SetMapMode(pViewData->GetLogicMode());
+        pEditView->Paint(PixelToLogic(Rectangle(Point(nScrX, nScrY), Size(aOutputData.GetScrW(), aOutputData.GetScrH()))), &rDevice);
+        rDevice.SetMapMode(MAP_PIXEL);
     }
 
     if (pViewData->HasEditView(eWhich))
@@ -936,74 +945,9 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
     ScTableInfo aTabInfo;
     pDoc->FillInfo(aTabInfo, nCol1, nRow1, nCol2, nRow2, nTab, fPPTX, fPPTY, false, false, NULL);
 
-    ScOutputData aOutData(
-        &rDevice, OUTTYPE_WINDOW, aTabInfo, pDoc, nTab, -fTilePosXPixel, -fTilePosYPixel, nCol1, nRow1, nCol2, nRow2, fPPTX, fPPTY);
+    ScOutputData aOutputData(&rDevice, OUTTYPE_WINDOW, aTabInfo, pDoc, nTab, -fTilePosXPixel, -fTilePosYPixel, nCol1, nRow1, nCol2, nRow2, fPPTX, fPPTY);
 
-    const svtools::ColorConfig& rColorCfg = SC_MOD()->GetColorConfig();
-    Color aGridColor = rColorCfg.GetColorValue(svtools::CALCGRID, false).nColor;
-    if (aGridColor.GetColor() == COL_TRANSPARENT)
-    {
-        //  use view options' grid color only if color config has "automatic" color
-        const ScViewOptions& rOpts = pViewData->GetOptions();
-        aGridColor = rOpts.GetGridColor();
-    }
-    aOutData.SetGridColor(aGridColor);
-
-    aOutData.DrawClear();
-    aOutData.DrawDocumentBackground();
-    aOutData.DrawBackground();
-    aOutData.DrawGrid(true, false);
-
-    aOutData.DrawShadow();
-    aOutData.DrawFrame();
-
-    // Set scaling to map mode only for text rendering, to get texts to scale
-    // correctly.
-    MapMode aOldMapMode = rDevice.GetMapMode();
-    MapMode aNewMapMode = aOldMapMode;
-    aNewMapMode.SetScaleX(aFracX);
-    aNewMapMode.SetScaleY(aFracY);
-    rDevice.SetMapMode(aNewMapMode);
-
-    aOutData.DrawStrings(true);
-
-    // Edit texts need 1/100mm map mode to be rendered correctly.
-    aNewMapMode.SetMapUnit(MAP_100TH_MM);
-    rDevice.SetMapMode(aNewMapMode);
-    aOutData.DrawEdit(true);
-
-    rDevice.SetMapMode(aOldMapMode);
-
-    EditView*   pEditView = NULL;
-    {
-        SCCOL nEditCol;
-        SCROW nEditRow;
-        pViewData->GetEditView( eWhich, pEditView, nEditCol, nEditRow );
-    }
-    //  InPlace Edit-View
-    // moved after EndDrawLayers() to get it outside the overlay buffer and
-    // on top of everything
-    if (pEditView)
-    {
-        //! use pContentDev for EditView?
-        rDevice.SetMapMode(MAP_PIXEL);
-        SCCOL nEditCol1 = pViewData->GetEditStartCol();
-        SCROW nEditRow1 = pViewData->GetEditStartRow();
-        SCCOL nEditCol2 = pViewData->GetEditEndCol();
-        SCROW nEditRow2 = pViewData->GetEditEndRow();
-        rDevice.SetLineColor();
-        rDevice.SetFillColor( pEditView->GetBackgroundColor() );
-        Point aStart = pViewData->GetScrPos( nEditCol1, nEditRow1, eWhich );
-        Point aEnd = pViewData->GetScrPos( nEditCol2+1, nEditRow2+1, eWhich );
-        aEnd.X() -= 2;        // don't overwrite grid
-        aEnd.Y() -= 2;
-        rDevice.DrawRect( Rectangle( aStart,aEnd ) );
-
-        rDevice.SetMapMode(pViewData->GetLogicMode());
-        pEditView->Paint( PixelToLogic( Rectangle( Point( fTilePosXPixel, fTilePosYPixel ),
-                            Size( aOutData.GetScrW(), aOutData.GetScrH() ) ) ), &rDevice );
-        rDevice.SetMapMode(MAP_PIXEL);
-    }
+    DrawContent(rDevice, aTabInfo, aOutputData, true, SC_UPDATE_ALL);
 }
 
 void ScGridWindow::LogicInvalidate(const ::vcl::Region* pRegion)
