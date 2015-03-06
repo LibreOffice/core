@@ -168,31 +168,31 @@ Menu RID_SVXMNU_ZOOM
         {
             Identifier = ZOOM_50 ;
             HelpId = HID_MNU_ZOOM_50 ;
-            Text = "50%" ;
+            Text [ en-US ] = "50%" ;
         };
         MenuItem
         {
             Identifier = ZOOM_75 ;
             HelpId = HID_MNU_ZOOM_75 ;
-            text = "75%" ;
+            Text [ en-US ] = "75%" ;
         };
         MenuItem
         {
             Identifier = ZOOM_100 ;
             HelpId = HID_MNU_ZOOM_100 ;
-            Text = "100%" ;
+            Text [ en-US ] = "100%" ;
         };
         MenuItem
         {
             Identifier = ZOOM_150 ;
             HelpId = HID_MNU_ZOOM_150 ;
-            Text = "150%" ;
+            Text [ en-US ] = "150%" ;
         };
         MenuItem
         {
             Identifier = ZOOM_200 ;
             HelpId = HID_MNU_ZOOM_200 ;
-            Text = "200%" ;
+            Text [ en-US ] = "200%" ;
         };
     };
 };
