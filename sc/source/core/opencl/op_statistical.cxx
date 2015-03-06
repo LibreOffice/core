@@ -3323,6 +3323,8 @@ void OpPearson::GenSlidingWindowFunction(
     ss << "       }\n";
     ss << "      double tmp = ( fSumDeltaXDeltaY / ";
     ss << "sqrt( fSumX * fSumY));\n\t";
+    ss << "      if (isnan(tmp))\n";
+    ss << "          return CreateDoubleError(errNoValue);\n";
     ss << "      return tmp;\n";
     ss << "}\n";
 }
