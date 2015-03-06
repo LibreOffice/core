@@ -28,7 +28,6 @@ void ImplSchedulerData::Invoke()
     if (mbDelete || mbInScheduler )
         return;
 
-    mpScheduler->SetSchedulingPriority(static_cast<sal_Int32>(mpScheduler->GetDefaultPriority()));
     mpScheduler->SetDeletionFlags();
 
     // invoke it
@@ -172,12 +171,7 @@ sal_uLong Scheduler::UpdateMinPeriod( sal_uLong nMinPeriod, sal_uLong nTime )
 
 void Scheduler::SetPriority( SchedulerPriority ePriority )
 {
-    meDefaultPriority = ePriority;
-}
-
-void Scheduler::SetSchedulingPriority( sal_Int32 iPriority )
-{
-    miPriority = iPriority;
+    mePriority = ePriority;
 }
 
 void Scheduler::Start()
@@ -226,8 +220,7 @@ Scheduler& Scheduler::operator=( const Scheduler& rScheduler )
         Stop();
 
     mbActive          = false;
-    miPriority        = rScheduler.miPriority;
-    meDefaultPriority = rScheduler.meDefaultPriority;
+    mePriority = rScheduler.mePriority;
 
     if ( rScheduler.IsActive() )
         Start();
@@ -237,16 +230,14 @@ Scheduler& Scheduler::operator=( const Scheduler& rScheduler )
 
 Scheduler::Scheduler():
     mpSchedulerData(NULL),
-    miPriority(static_cast<sal_Int32>(SchedulerPriority::HIGH)),
-    meDefaultPriority(SchedulerPriority::HIGH),
+    mePriority(SchedulerPriority::HIGH),
     mbActive(false)
 {
 }
 
 Scheduler::Scheduler( const Scheduler& rScheduler ):
     mpSchedulerData(NULL),
-    miPriority(rScheduler.miPriority),
-    meDefaultPriority(rScheduler.meDefaultPriority),
+    mePriority(rScheduler.mePriority),
     mbActive(false)
 {
     if ( rScheduler.IsActive() )

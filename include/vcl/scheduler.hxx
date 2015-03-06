@@ -27,11 +27,11 @@ class Scheduler;
 struct ImplSchedulerData
 {
     ImplSchedulerData*  mpNext;      // Pointer to the next element in list
-    Scheduler*          mpScheduler;      // Pointer to VCL Idle instance
-    bool                mbDelete;    // Destroy this idle?
-    bool                mbInScheduler;    // Idle handler currently processed?
+    Scheduler*          mpScheduler;      // Pointer to VCL Scheduler instance
+    bool                mbDelete;    // Destroy this scheduler?
+    bool                mbInScheduler;    // Scheduler currently processed?
     sal_uLong           mnUpdateTime;   // Last Update Time
-    sal_uLong           mnUpdateStack;  // Update Stack on stack
+    sal_uLong           mnUpdateStack;  // Update Stack
 
     void Invoke();
 
@@ -52,9 +52,8 @@ enum class SchedulerPriority {
 class VCL_DLLPUBLIC Scheduler
 {
 protected:
-    ImplSchedulerData*  mpSchedulerData;    // Pointer to element in idle list
-    sal_Int32           miPriority;         // Idle priority ( maybe divergent to default)
-    SchedulerPriority   meDefaultPriority;  // Default idle priority
+    ImplSchedulerData*  mpSchedulerData;    // Pointer to element in scheduler list
+    SchedulerPriority   mePriority;         // Scheduler priority
     bool                mbActive;           // Currently in the scheduler
 
     friend struct ImplSchedulerData;
@@ -68,11 +67,9 @@ public:
     virtual ~Scheduler();
 
     void SetPriority( SchedulerPriority ePriority );
-    void SetSchedulingPriority( sal_Int32 iPriority );
-    sal_Int32    GetPriority() const { return miPriority; }
-    SchedulerPriority GetDefaultPriority() const { return meDefaultPriority; }
+    SchedulerPriority GetPriority() const { return mePriority; }
 
-    // Call idle handler
+    // Call handler
     virtual void    Invoke() = 0;
 
     virtual void    Start();
@@ -83,8 +80,9 @@ public:
     Scheduler&          operator=( const Scheduler& rScheduler );
     static void ImplDeInitScheduler();
 
-    /// Process all pending idle tasks ahead of time in priority order.
+    // Process one pending Timer with highhest priority
     static void CallbackTaskScheduling( bool ignore );
+    /// Process one pending task ahead of time with highhest priority.
     static void ProcessTaskScheduling( bool bTimer );
 };
 
