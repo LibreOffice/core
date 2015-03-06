@@ -937,7 +937,7 @@ bool SlideImpl::applyInitialShapeAttributes(
 
         if( xShape.is() )
         {
-            ShapeSharedPtr pShape( /*mpLayerManager->lookupShape( xShape )*/ );
+            ShapeSharedPtr pShape( mpShapeManager->lookupShape( xShape) );
 
             if( !pShape )
             {

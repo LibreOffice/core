@@ -40,6 +40,9 @@ ShapeManagerImpl::ShapeManagerImpl( EventMultiplexer&            rMultiplexer,
                                     CursorManager&               rCursorManager,
                                     const ShapeEventListenerMap& rGlobalListenersMap,
                                     const ShapeCursorMap&        rGlobalCursorMap ):
+    maXShapeHash( 101 ),
+    maAllShapes(),
+    maUpdateShapes(),
     mrMultiplexer(rMultiplexer),
     mrCursorManager(rCursorManager),
     mrGlobalListenersMap(rGlobalListenersMap),
@@ -288,10 +291,14 @@ void ShapeManagerImpl::notifyShapeUpdate( const ShapeSharedPtr& rShape )
 
 ShapeSharedPtr ShapeManagerImpl::lookupShape( uno::Reference< drawing::XShape > const & xShape ) const
 {
-   /* if( mpLayerManager )
-        return mpLayerManager->lookupShape(xShape);*/
+    ENSURE_OR_THROW( xShape.is(), "LayerManager::lookupShape(): invalid Shape" );
 
-    return ShapeSharedPtr();
+    const XShapeHash::const_iterator aIter( maXShapeHash.find( xShape ));
+    if( aIter == maXShapeHash.end() )
+       return ShapeSharedPtr(); // not found
+
+    // found, return data part of entry pair.
+    return aIter->second;
 }
 
 void ShapeManagerImpl::addHyperlinkArea( const HyperlinkAreaSharedPtr& rArea )
@@ -373,6 +380,54 @@ bool ShapeManagerImpl::listenerAdded(
     }
 
     return true;
+}
+
+void ShapeManagerImpl::implAddShape( const ShapeSharedPtr& rShape )
+{
+    ENSURE_OR_THROW( rShape, "ShapeManagerImpl::implAddShape(): invalid Shape" );
+
+    LayerShapeMap::value_type aValue (rShape, LayerWeakPtr());
+
+    OSL_ASSERT( maAllShapes.find(rShape) == maAllShapes.end() ); // shape must not be added already
+
+    maAllShapes.insert(aValue);
+
+    // update shape, it's just added and not yet painted
+    if( rShape->isVisible() )
+        notifyShapeUpdate( rShape );
+}
+
+void ShapeManagerImpl::implRemoveShape( const ShapeSharedPtr& rShape )
+{
+    ENSURE_OR_THROW( rShape, "ShapeManagerImpl::implRemoveShape(): invalid Shape" );
+
+    const LayerShapeMap::iterator aShapeEntry( maAllShapes.find(rShape) );
+
+    if( aShapeEntry == maAllShapes.end() )
+        return;
+
+    const bool bShapeUpdateNotified = maUpdateShapes.erase( rShape ) != 0;
+
+    // Enter shape area to the update area, but only if shape
+    // is visible and not in sprite mode (otherwise, updating
+    // the area doesn't do actual harm, but costs time)
+    // Actually, also add it if it was listed in
+    // maUpdateShapes (might have just gone invisible).
+    if( bShapeUpdateNotified ||
+        (rShape->isVisible() &&
+         !rShape->isBackgroundDetached()) )
+    {
+        LayerSharedPtr pLayer = aShapeEntry->second.lock();
+        if( pLayer )
+        {
+            // store area early, once the shape is removed from
+            // the layers, it no longer has any view references
+            pLayer->addUpdateRange( rShape->getUpdateArea() );
+        }
+    }
+
+    rShape->clearAllViewLayers();
+    maAllShapes.erase( aShapeEntry );
 }
 
 bool ShapeManagerImpl::listenerRemoved(

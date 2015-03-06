@@ -88,8 +88,20 @@ public:
 
     virtual void dispose() SAL_OVERRIDE;
 
+    virtual ShapeSharedPtr lookupShape(
+        ::com::sun::star::uno::Reference<
+           ::com::sun::star::drawing::XShape > const & xShape ) const SAL_OVERRIDE;
+
 private:
 
+    class ShapeComparator
+    {
+    public:
+        bool operator() (const ShapeSharedPtr& rpS1, const ShapeSharedPtr& rpS2 ) const
+        {
+            return Shape::lessThanShape::compare(rpS1.get(), rpS2.get());
+        }
+    };
     // MouseEventHandler interface
 
 
@@ -121,9 +133,7 @@ private:
     virtual void enterAnimationMode( const AnimatableShapeSharedPtr& rShape ) SAL_OVERRIDE;
     virtual void leaveAnimationMode( const AnimatableShapeSharedPtr& rShape ) SAL_OVERRIDE;
     virtual void notifyShapeUpdate( const ShapeSharedPtr& rShape ) SAL_OVERRIDE;
-    virtual ShapeSharedPtr lookupShape(
-        ::com::sun::star::uno::Reference<
-           ::com::sun::star::drawing::XShape > const & xShape ) const SAL_OVERRIDE;
+
     virtual void addHyperlinkArea( const boost::shared_ptr<HyperlinkArea>& rArea ) SAL_OVERRIDE;
     virtual void removeHyperlinkArea( const boost::shared_ptr<HyperlinkArea>& rArea ) SAL_OVERRIDE;
 
@@ -166,10 +176,19 @@ private:
                                    ::com::sun::star::drawing::XShape>&   xShape,
                                 sal_Int16                                nCursor );
 
+    /** Common stuff when adding a shape
+     */
+    void          implAddShape( const ShapeSharedPtr& rShape );
+
+    /** Common stuff when removing a shape
+     */
+    void          implRemoveShape( const ShapeSharedPtr& rShape );
+
 
     OUString checkForHyperlink( ::basegfx::B2DPoint const& hitPos )const;
 
 
+    typedef ::std::set< ShapeSharedPtr > ShapeUpdateSet;
     typedef std::map<ShapeSharedPtr,
                      boost::shared_ptr< ::cppu::OInterfaceContainerHelper >,
                      Shape::lessThanShape>        ShapeToListenersMap;
@@ -177,10 +196,39 @@ private:
                        Shape::lessThanShape>      ShapeToCursorMap;
     typedef std::set<HyperlinkAreaSharedPtr,
                      HyperlinkArea::lessThanArea> AreaSet;
+    typedef ::std::map< ShapeSharedPtr, LayerWeakPtr, ShapeComparator > LayerShapeMap;
+    typedef std::unordered_map<
+        ::com::sun::star::uno::Reference<
+            ::com::sun::star::drawing::XShape >,
+        ShapeSharedPtr,
+        hash< ::com::sun::star::uno::Reference<
+              ::com::sun::star::drawing::XShape > > > XShapeHash;
 
     typedef ThreadUnsafeListenerContainer<
         IntrinsicAnimationEventHandlerSharedPtr,
         std::vector<IntrinsicAnimationEventHandlerSharedPtr> > ImplIntrinsicAnimationEventHandlers;
+
+    /** Contains all shapes with their XShape reference as the key
+     */
+    XShapeHash               maXShapeHash;
+
+    /** Set of shapes this ShapeManager own
+
+        Contains the same set of shapes as XShapeHash, but is
+        sorted in z order, for painting and layer
+        association. Set entries are enriched with two flags
+        for buffering animation enable/disable changes, and
+        shape update requests.
+    */
+    LayerShapeMap            maAllShapes;
+
+    /** Set of shapes that have requested an update
+
+        When a shape is member of this set, its maShapes entry
+        has bNeedsUpdate set to true. We maintain this
+        redundant information for faster update processing.
+     */
+    ShapeUpdateSet           maUpdateShapes;
 
     EventMultiplexer&                   mrMultiplexer;
     CursorManager&                      mrCursorManager;
