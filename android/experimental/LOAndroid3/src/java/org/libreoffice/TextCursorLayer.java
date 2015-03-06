@@ -80,6 +80,26 @@ public class TextCursorLayer extends Layer {
         });
     }
 
+    public void showSelections() {
+        LOKitShell.getMainHandler().post(new Runnable() {
+            public void run() {
+                LayerView layerView = LOKitShell.getLayerView();
+                if (layerView != null) {
+                    layerView.addLayer(TextCursorLayer.this);
+                }
+                mCursorView.showSelections();
+            }
+        });
+    }
+
+    public void hideSelections() {
+        LOKitShell.getMainHandler().post(new Runnable() {
+            public void run() {
+                mCursorView.hideSelections();
+            }
+        });
+    }
+
     public void changeSelections(final List<RectF> selections) {
         LOKitShell.getMainHandler().post(new Runnable() {
             public void run() {

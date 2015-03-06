@@ -36,6 +36,7 @@ public class TextCursorView extends View {
     private Paint mSelectionPaint = new Paint();
 
     private boolean mCursorVisible;
+    private boolean mSelectionsVisible;
 
     public TextCursorView(Context context) {
         super(context);
@@ -57,13 +58,14 @@ public class TextCursorView extends View {
             postDelayed(cursorAnimation, 500);
 
             mCursorPaint.setColor(Color.BLACK);
-            mCursorPaint.setAlpha(0);
+            mCursorPaint.setAlpha(0xFF);
 
             mCursorVisible = false;
 
             mSelectionPaint.setColor(Color.BLUE);
             mSelectionPaint.setAlpha(50);
 
+            mSelectionsVisible = false;
             mInitialized = true;
         }
     }
@@ -110,10 +112,13 @@ public class TextCursorView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        canvas.drawRect(mCursorScaledPosition, mCursorPaint);
-
-        for (RectF selection : mScaledSelections) {
-            canvas.drawRect(selection, mSelectionPaint);
+        if (mCursorVisible) {
+            canvas.drawRect(mCursorScaledPosition, mCursorPaint);
+        }
+        if (mSelectionsVisible) {
+            for (RectF selection : mScaledSelections) {
+                canvas.drawRect(selection, mSelectionPaint);
+            }
         }
     }
 
@@ -129,13 +134,21 @@ public class TextCursorView extends View {
 
     public void showCursor() {
         mCursorVisible = true;
-        mCursorPaint.setAlpha(0xFF);
         invalidate();
     }
 
     public void hideCursor() {
         mCursorVisible = false;
-        mCursorPaint.setAlpha(0);
+        invalidate();
+    }
+
+    public void showSelections() {
+        mSelectionsVisible = true;
+        invalidate();
+    }
+
+    public void hideSelections() {
+        mSelectionsVisible = false;
         invalidate();
     }
 }
