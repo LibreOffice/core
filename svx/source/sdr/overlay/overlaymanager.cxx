@@ -115,9 +115,10 @@ namespace sdr
             return mfDiscreteOne;
         }
 
-        OverlayManager::OverlayManager(OutputDevice& rOutputDevice)
+        OverlayManager::OverlayManager(OutputDevice& rOutputDevice, const SdrModel* pModel)
         :   Scheduler(),
             mrOutputDevice(rOutputDevice),
+            mpModel(pModel),
             maOverlayObjects(),
             maStripeColorA(Color(COL_BLACK)),
             maStripeColorB(Color(COL_WHITE)),
@@ -140,9 +141,9 @@ namespace sdr
             }
         }
 
-        rtl::Reference<OverlayManager> OverlayManager::create(OutputDevice& rOutputDevice)
+        rtl::Reference<OverlayManager> OverlayManager::create(OutputDevice& rOutputDevice, const SdrModel* pModel)
         {
-            return rtl::Reference<OverlayManager>(new OverlayManager(rOutputDevice));
+            return rtl::Reference<OverlayManager>(new OverlayManager(rOutputDevice, pModel));
         }
 
         const drawinglayer::geometry::ViewInformation2D OverlayManager::getCurrentViewInformation2D() const
