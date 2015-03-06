@@ -1823,7 +1823,7 @@ public:
     SC_DLLPUBLIC void               SetChangeViewSettings(const ScChangeViewSettings& rNew);
 
     rtl::Reference<SvxForbiddenCharactersTable> GetForbiddenCharacters();
-    void            SetForbiddenCharacters( const rtl::Reference<SvxForbiddenCharactersTable> xNew );
+    void            SetForbiddenCharacters(const rtl::Reference<SvxForbiddenCharactersTable>& rNew);
 
     sal_uInt8           GetAsianCompression() const;        // CharacterCompressionType values
     bool            IsValidAsianCompression() const;

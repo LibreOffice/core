@@ -123,7 +123,7 @@ class ExtBoxWithBtns_Impl : public ExtensionBox_Impl
     ExtMgrDialog   *m_pParent;
 
     void            SetButtonPos( const Rectangle& rRect );
-    void            SetButtonStatus( const TEntry_Impl pEntry );
+    void            SetButtonStatus( const TEntry_Impl& rEntry );
     bool            HandleTabKey( bool bReverse );
     MENU_COMMAND    ShowPopupMenu( const Point &rPos, const long nPos );
 
@@ -255,12 +255,12 @@ void ExtBoxWithBtns_Impl::SetButtonPos( const Rectangle& rRect )
 }
 
 
-void ExtBoxWithBtns_Impl::SetButtonStatus( const TEntry_Impl pEntry )
+void ExtBoxWithBtns_Impl::SetButtonStatus(const TEntry_Impl& rEntry)
 {
     bool bShowOptionBtn = true;
 
-    pEntry->m_bHasButtons = false;
-    if ( ( pEntry->m_eState == REGISTERED ) || ( pEntry->m_eState == NOT_AVAILABLE ) )
+    rEntry->m_bHasButtons = false;
+    if ( ( rEntry->m_eState == REGISTERED ) || ( rEntry->m_eState == NOT_AVAILABLE ) )
     {
         m_pEnableBtn->SetText( DialogHelper::getResourceString( RID_CTX_ITEM_DISABLE ) );
         m_pEnableBtn->SetHelpId( HID_EXTENSION_MANAGER_LISTBOX_DISABLE );
@@ -272,30 +272,30 @@ void ExtBoxWithBtns_Impl::SetButtonStatus( const TEntry_Impl pEntry )
         bShowOptionBtn = false;
     }
 
-    if ( ( !pEntry->m_bUser || ( pEntry->m_eState == NOT_AVAILABLE ) || pEntry->m_bMissingDeps )
-         && !pEntry->m_bMissingLic )
+    if ( ( !rEntry->m_bUser || ( rEntry->m_eState == NOT_AVAILABLE ) || rEntry->m_bMissingDeps )
+         && !rEntry->m_bMissingLic )
         m_pEnableBtn->Hide();
     else
     {
-        m_pEnableBtn->Enable( !pEntry->m_bLocked );
+        m_pEnableBtn->Enable( !rEntry->m_bLocked );
         m_pEnableBtn->Show();
-        pEntry->m_bHasButtons = true;
+        rEntry->m_bHasButtons = true;
     }
 
-    if ( pEntry->m_bHasOptions && bShowOptionBtn )
+    if ( rEntry->m_bHasOptions && bShowOptionBtn )
     {
-        m_pOptionsBtn->Enable( pEntry->m_bHasOptions );
+        m_pOptionsBtn->Enable( rEntry->m_bHasOptions );
         m_pOptionsBtn->Show();
-        pEntry->m_bHasButtons = true;
+        rEntry->m_bHasButtons = true;
     }
     else
         m_pOptionsBtn->Hide();
 
-    if ( pEntry->m_bUser || pEntry->m_bShared )
+    if ( rEntry->m_bUser || rEntry->m_bShared )
     {
-        m_pRemoveBtn->Enable( !pEntry->m_bLocked );
+        m_pRemoveBtn->Enable( !rEntry->m_bLocked );
         m_pRemoveBtn->Show();
-        pEntry->m_bHasButtons = true;
+        rEntry->m_bHasButtons = true;
     }
     else
         m_pRemoveBtn->Hide();

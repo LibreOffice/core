@@ -29,8 +29,8 @@
 using namespace com::sun::star;
 using namespace ooo::vba;
 
-ScVbaCommandBar::ScVbaCommandBar( const uno::Reference< ov::XHelperInterface > xParent,
-                                  const uno::Reference< uno::XComponentContext > xContext,
+ScVbaCommandBar::ScVbaCommandBar( const uno::Reference< ov::XHelperInterface >& xParent,
+                                  const uno::Reference< uno::XComponentContext >& xContext,
                                   VbaCommandBarHelperRef pHelper,
                                   const uno::Reference< container::XIndexAccess >& xBarSettings,
                                   const OUString& sResourceUrl, bool bIsMenu ) throw( uno::RuntimeException )
@@ -195,8 +195,8 @@ ScVbaCommandBar::getServiceNames()
 
 
 VbaDummyCommandBar::VbaDummyCommandBar(
-        const uno::Reference< ov::XHelperInterface > xParent,
-        const uno::Reference< uno::XComponentContext > xContext,
+        const uno::Reference< ov::XHelperInterface >& xParent,
+        const uno::Reference< uno::XComponentContext >& xContext,
         const OUString& rName, sal_Int32 nType ) throw( uno::RuntimeException ) :
     CommandBar_BASE( xParent, xContext ),
     maName( rName ),

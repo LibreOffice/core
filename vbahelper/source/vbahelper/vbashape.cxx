@@ -113,7 +113,7 @@ ScVbaShape::removeShapesListener() throw( uno::RuntimeException )
 }
 
 sal_Int32
-ScVbaShape::getType( const css::uno::Reference< drawing::XShape > xShape ) throw (uno::RuntimeException)
+ScVbaShape::getType( const css::uno::Reference< drawing::XShape >& xShape ) throw (uno::RuntimeException)
 {
     OUString sShapeType;
     uno::Reference< drawing::XShapeDescriptor > xShapeDescriptor( xShape, uno::UNO_QUERY_THROW );

@@ -1013,8 +1013,8 @@ void SAL_CALL DummyGroup2D::setSize( const awt::Size& )
 }
 
 DummyGraphic2D::DummyGraphic2D(const drawing::Position3D& rPos, const drawing::Direction3D& rSize,
-        const uno::Reference< graphic::XGraphic > xGraphic ):
-    mxGraphic(xGraphic)
+        const uno::Reference< graphic::XGraphic >& rGraphic ):
+    mxGraphic(rGraphic)
 {
     setPosition(Position3DToAWTPoint(rPos));
     setSize(Direction3DToAWTSize(rSize));

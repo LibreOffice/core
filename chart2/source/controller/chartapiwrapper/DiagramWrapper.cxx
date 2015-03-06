@@ -486,10 +486,10 @@ struct StaticDiagramWrapperPropertyArray : public rtl::StaticAggregate< Sequence
 {
 };
 
-bool lcl_isXYChart( const Reference< chart2::XDiagram > xDiagram )
+bool lcl_isXYChart( const Reference< chart2::XDiagram >& rDiagram )
 {
     bool bRet = false;
-    Reference< chart2::XChartType > xChartType( ::chart::DiagramHelper::getChartTypeByIndex( xDiagram, 0 ) );
+    Reference< chart2::XChartType > xChartType( ::chart::DiagramHelper::getChartTypeByIndex( rDiagram, 0 ) );
     if( xChartType.is() )
     {
         OUString aChartType( xChartType->getChartType() );

@@ -83,7 +83,7 @@ public:
      */
     void setChartDispatch(
         const ::com::sun::star::uno::Reference<
-            ::com::sun::star::frame::XDispatch > xChartDispatch,
+            ::com::sun::star::frame::XDispatch >& rChartDispatch,
         const ::std::set< OUString > & rChartCommands );
 
     /** Returns the dispatch that is able to do the command given in rURL, if

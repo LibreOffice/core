@@ -40,7 +40,7 @@ MsoColorIndices::getColorIndex( sal_Int32 nIndex )
     };
     return COLORINDICES[nIndex];
 }
-ScVbaColorFormat::ScVbaColorFormat( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< XHelperInterface > xInternalParent, const uno::Reference< drawing::XShape > xShape, const sal_Int16 nColorFormatType ) : ScVbaColorFormat_BASE( xParent, xContext ), m_xInternalParent( xInternalParent ), m_xShape( xShape ), m_nColorFormatType( nColorFormatType )
+ScVbaColorFormat::ScVbaColorFormat( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< XHelperInterface >& xInternalParent, const uno::Reference< drawing::XShape >& xShape, const sal_Int16 nColorFormatType ) : ScVbaColorFormat_BASE( xParent, xContext ), m_xInternalParent( xInternalParent ), m_xShape( xShape ), m_nColorFormatType( nColorFormatType )
 {
     m_xPropertySet.set( xShape, uno::UNO_QUERY_THROW );
     m_nFillFormatBackColor = 0;

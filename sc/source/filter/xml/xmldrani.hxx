@@ -317,9 +317,9 @@ public:
 
     virtual void EndElement() SAL_OVERRIDE;
 
-    void AddSubTotalColumn(const com::sun::star::sheet::SubTotalColumn aSubTotalColumn)
+    void AddSubTotalColumn(const com::sun::star::sheet::SubTotalColumn& rSubTotalColumn)
     { aSubTotalRule.aSubTotalColumns.realloc(aSubTotalRule.aSubTotalColumns.getLength() + 1);
-    aSubTotalRule.aSubTotalColumns[aSubTotalRule.aSubTotalColumns.getLength() - 1] = aSubTotalColumn; }
+    aSubTotalRule.aSubTotalColumns[aSubTotalRule.aSubTotalColumns.getLength() - 1] = rSubTotalColumn; }
 };
 
 class ScXMLSubTotalFieldContext : public SvXMLImportContext

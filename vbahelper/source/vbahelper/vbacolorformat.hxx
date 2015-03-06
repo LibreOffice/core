@@ -103,7 +103,7 @@ protected:
     virtual OUString getServiceImplName() SAL_OVERRIDE;
     virtual css::uno::Sequence<OUString> getServiceNames() SAL_OVERRIDE;
 public:
-    ScVbaColorFormat( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< ov::XHelperInterface > xInternalParent, const css::uno::Reference< css::drawing::XShape > xShape, const sal_Int16 nColorFormatType );
+    ScVbaColorFormat( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< ov::XHelperInterface >& xInternalParent, const css::uno::Reference< css::drawing::XShape >& xShape, const sal_Int16 nColorFormatType );
 
     // Attributes
     virtual sal_Int32 SAL_CALL getRGB() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;

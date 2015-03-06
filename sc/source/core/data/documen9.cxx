@@ -643,9 +643,9 @@ rtl::Reference<SvxForbiddenCharactersTable> ScDocument::GetForbiddenCharacters()
     return xForbiddenCharacters;
 }
 
-void ScDocument::SetForbiddenCharacters( const rtl::Reference<SvxForbiddenCharactersTable> xNew )
+void ScDocument::SetForbiddenCharacters(const rtl::Reference<SvxForbiddenCharactersTable>& rNew)
 {
-    xForbiddenCharacters = xNew;
+    xForbiddenCharacters = rNew;
     if ( pEditEngine )
         pEditEngine->SetForbiddenCharsTable( xForbiddenCharacters );
     if ( pDrawLayer )

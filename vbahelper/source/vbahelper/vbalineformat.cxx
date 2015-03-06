@@ -28,7 +28,7 @@
 using namespace ooo::vba;
 using namespace com::sun::star;
 
-ScVbaLineFormat::ScVbaLineFormat( const uno::Reference< ov::XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< drawing::XShape > xShape ) : ScVbaLineFormat_BASE( xParent, xContext ), m_xShape( xShape )
+ScVbaLineFormat::ScVbaLineFormat( const uno::Reference< ov::XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< drawing::XShape >& xShape ) : ScVbaLineFormat_BASE( xParent, xContext ), m_xShape( xShape )
 {
     m_xPropertySet.set( xShape, uno::UNO_QUERY_THROW );
     m_nLineDashStyle = office::MsoLineDashStyle::msoLineSolid;

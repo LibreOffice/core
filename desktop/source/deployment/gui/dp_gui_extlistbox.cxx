@@ -113,15 +113,15 @@ Entry_Impl::~Entry_Impl()
 {}
 
 
-sal_Int32 Entry_Impl::CompareTo( const CollatorWrapper *pCollator, const TEntry_Impl pEntry ) const
+sal_Int32 Entry_Impl::CompareTo( const CollatorWrapper *pCollator, const TEntry_Impl& rEntry ) const
 {
-    sal_Int32 eCompare = pCollator->compareString( m_sTitle, pEntry->m_sTitle );
+    sal_Int32 eCompare = pCollator->compareString( m_sTitle, rEntry->m_sTitle );
     if ( eCompare == 0 )
     {
-        eCompare = m_sVersion.compareTo( pEntry->m_sVersion );
+        eCompare = m_sVersion.compareTo( rEntry->m_sVersion );
         if ( eCompare == 0 )
         {
-            sal_Int32 nCompare = m_xPackage->getRepositoryName().compareTo( pEntry->m_xPackage->getRepositoryName() );
+            sal_Int32 nCompare = m_xPackage->getRepositoryName().compareTo( rEntry->m_xPackage->getRepositoryName() );
             if ( nCompare < 0 )
                 eCompare = -1;
             else if ( nCompare > 0 )
@@ -492,20 +492,20 @@ void ExtensionBox_Impl::selectEntry( const long nPos )
 }
 
 
-void ExtensionBox_Impl::DrawRow( const Rectangle& rRect, const TEntry_Impl pEntry )
+void ExtensionBox_Impl::DrawRow( const Rectangle& rRect, const TEntry_Impl& rEntry )
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
-    if ( pEntry->m_bActive )
+    if ( rEntry->m_bActive )
         SetTextColor( rStyleSettings.GetHighlightTextColor() );
-    else if ( ( pEntry->m_eState != REGISTERED ) && ( pEntry->m_eState != NOT_AVAILABLE ) )
+    else if ( ( rEntry->m_eState != REGISTERED ) && ( rEntry->m_eState != NOT_AVAILABLE ) )
         SetTextColor( rStyleSettings.GetDisableColor() );
     else if ( IsControlForeground() )
         SetTextColor( GetControlForeground() );
     else
         SetTextColor( rStyleSettings.GetFieldTextColor() );
 
-    if ( pEntry->m_bActive )
+    if ( rEntry->m_bActive )
     {
         SetLineColor();
         SetFillColor( rStyleSettings.GetHighlightColor() );
@@ -526,10 +526,10 @@ void ExtensionBox_Impl::DrawRow( const Rectangle& rRect, const TEntry_Impl pEntr
     Point aPos( rRect.TopLeft() );
     aPos += Point( TOP_OFFSET, TOP_OFFSET );
     Image aImage;
-    if ( ! pEntry->m_aIcon )
+    if ( ! rEntry->m_aIcon )
         aImage = m_aDefaultImage;
     else
-        aImage = pEntry->m_aIcon;
+        aImage = rEntry->m_aIcon;
     Size aImageSize = aImage.GetSizePixel();
     if ( ( aImageSize.Width() <= ICON_WIDTH ) && ( aImageSize.Height() <= ICON_HEIGHT ) )
         DrawImage( Point( aPos.X()+((ICON_WIDTH-aImageSize.Width())/2), aPos.Y()+((ICON_HEIGHT-aImageSize.Height())/2) ), aImage );
@@ -544,45 +544,45 @@ void ExtensionBox_Impl::DrawRow( const Rectangle& rRect, const TEntry_Impl pEntr
     long aTextHeight = GetTextHeight();
 
     // Init publisher link here
-    if ( !pEntry->m_pPublisher && !pEntry->m_sPublisher.isEmpty() )
+    if ( !rEntry->m_pPublisher && !rEntry->m_sPublisher.isEmpty() )
     {
-        pEntry->m_pPublisher = new FixedHyperlink( this );
-        pEntry->m_pPublisher->SetBackground();
-        pEntry->m_pPublisher->SetPaintTransparent( true );
-        pEntry->m_pPublisher->SetURL( pEntry->m_sPublisherURL );
-        pEntry->m_pPublisher->SetText( pEntry->m_sPublisher );
-        Size aSize = FixedText::CalcMinimumTextSize( pEntry->m_pPublisher );
-        pEntry->m_pPublisher->SetSizePixel( aSize );
+        rEntry->m_pPublisher = new FixedHyperlink( this );
+        rEntry->m_pPublisher->SetBackground();
+        rEntry->m_pPublisher->SetPaintTransparent( true );
+        rEntry->m_pPublisher->SetURL( rEntry->m_sPublisherURL );
+        rEntry->m_pPublisher->SetText( rEntry->m_sPublisher );
+        Size aSize = FixedText::CalcMinimumTextSize( rEntry->m_pPublisher );
+        rEntry->m_pPublisher->SetSizePixel( aSize );
 
         if ( m_aClickHdl.IsSet() )
-            pEntry->m_pPublisher->SetClickHdl( m_aClickHdl );
+            rEntry->m_pPublisher->SetClickHdl( m_aClickHdl );
     }
 
     // Get max title width
     long nMaxTitleWidth = rRect.GetWidth() - ICON_OFFSET;
     nMaxTitleWidth -= ( 2 * SMALL_ICON_SIZE ) + ( 4 * SPACE_BETWEEN );
-    if ( pEntry->m_pPublisher )
+    if ( rEntry->m_pPublisher )
     {
-        nMaxTitleWidth -= pEntry->m_pPublisher->GetSizePixel().Width() + (2*SPACE_BETWEEN);
+        nMaxTitleWidth -= rEntry->m_pPublisher->GetSizePixel().Width() + (2*SPACE_BETWEEN);
     }
 
-    long aVersionWidth = GetTextWidth( pEntry->m_sVersion );
-    long aTitleWidth = GetTextWidth( pEntry->m_sTitle ) + (aTextHeight / 3);
+    long aVersionWidth = GetTextWidth( rEntry->m_sVersion );
+    long aTitleWidth = GetTextWidth( rEntry->m_sTitle ) + (aTextHeight / 3);
 
     aPos = rRect.TopLeft() + Point( ICON_OFFSET, TOP_OFFSET );
 
     if ( aTitleWidth > nMaxTitleWidth - aVersionWidth )
     {
         aTitleWidth = nMaxTitleWidth - aVersionWidth - (aTextHeight / 3);
-        OUString aShortTitle = GetEllipsisString( pEntry->m_sTitle, aTitleWidth );
+        OUString aShortTitle = GetEllipsisString( rEntry->m_sTitle, aTitleWidth );
         DrawText( aPos, aShortTitle );
         aTitleWidth += (aTextHeight / 3);
     }
     else
-        DrawText( aPos, pEntry->m_sTitle );
+        DrawText( aPos, rEntry->m_sTitle );
 
     SetFont( aStdFont );
-    DrawText( Point( aPos.X() + aTitleWidth, aPos.Y() ), pEntry->m_sVersion );
+    DrawText( Point( aPos.X() + aTitleWidth, aPos.Y() ), rEntry->m_sVersion );
 
     long nIconHeight = TOP_OFFSET + SMALL_ICON_SIZE;
     long nTitleHeight = TOP_OFFSET + GetTextHeight();
@@ -593,22 +593,22 @@ void ExtensionBox_Impl::DrawRow( const Rectangle& rRect, const TEntry_Impl pEntr
 
     // draw description
     OUString sDescription;
-    if ( !pEntry->m_sErrorText.isEmpty() )
+    if ( !rEntry->m_sErrorText.isEmpty() )
     {
-        if ( pEntry->m_bActive )
-            sDescription = pEntry->m_sErrorText + "\n" + pEntry->m_sDescription;
+        if ( rEntry->m_bActive )
+            sDescription = rEntry->m_sErrorText + "\n" + rEntry->m_sDescription;
         else
-            sDescription = pEntry->m_sErrorText;
+            sDescription = rEntry->m_sErrorText;
     }
     else
-        sDescription = pEntry->m_sDescription;
+        sDescription = rEntry->m_sDescription;
 
     aPos.Y() += aTextHeight;
-    if ( pEntry->m_bActive )
+    if ( rEntry->m_bActive )
     {
         long nExtraHeight = 0;
 
-        if ( pEntry->m_bHasButtons )
+        if ( rEntry->m_bHasButtons )
             nExtraHeight = m_nExtraHeight;
 
         DrawText( Rectangle( aPos.X(), aPos.Y(), rRect.Right(), rRect.Bottom() - nExtraHeight ),
@@ -625,23 +625,23 @@ void ExtensionBox_Impl::DrawRow( const Rectangle& rRect, const TEntry_Impl pEntr
     }
 
     // Draw publisher link
-    if ( pEntry->m_pPublisher )
+    if ( rEntry->m_pPublisher )
     {
-        pEntry->m_pPublisher->Show();
+        rEntry->m_pPublisher->Show();
         aPos = rRect.TopLeft() + Point( ICON_OFFSET + nMaxTitleWidth + (2*SPACE_BETWEEN), TOP_OFFSET );
-        pEntry->m_pPublisher->SetPosPixel( aPos );
+        rEntry->m_pPublisher->SetPosPixel( aPos );
     }
 
     // Draw status icons
-    if ( !pEntry->m_bUser )
+    if ( !rEntry->m_bUser )
     {
         aPos = rRect.TopRight() + Point( -(RIGHT_ICON_OFFSET + SMALL_ICON_SIZE), TOP_OFFSET );
-        if ( pEntry->m_bLocked )
+        if ( rEntry->m_bLocked )
             DrawImage( aPos, Size( SMALL_ICON_SIZE, SMALL_ICON_SIZE ), m_aLockedImage );
         else
             DrawImage( aPos, Size( SMALL_ICON_SIZE, SMALL_ICON_SIZE ), m_aSharedImage );
     }
-    if ( ( pEntry->m_eState == AMBIGUOUS ) || pEntry->m_bMissingDeps || pEntry->m_bMissingLic )
+    if ( ( rEntry->m_eState == AMBIGUOUS ) || rEntry->m_bMissingDeps || rEntry->m_bMissingLic )
     {
         aPos = rRect.TopRight() + Point( -(RIGHT_ICON_OFFSET + SPACE_BETWEEN + 2*SMALL_ICON_SIZE), TOP_OFFSET );
         DrawImage( aPos, Size( SMALL_ICON_SIZE, SMALL_ICON_SIZE ), m_aWarningImage );
@@ -916,7 +916,7 @@ bool ExtensionBox_Impl::Notify( NotifyEvent& rNEvt )
 }
 
 
-bool ExtensionBox_Impl::FindEntryPos( const TEntry_Impl pEntry, const long nStart,
+bool ExtensionBox_Impl::FindEntryPos( const TEntry_Impl& rEntry, const long nStart,
                                       const long nEnd, long &nPos )
 {
     nPos = nStart;
@@ -927,13 +927,13 @@ bool ExtensionBox_Impl::FindEntryPos( const TEntry_Impl pEntry, const long nStar
 
     if ( nStart == nEnd )
     {
-        eCompare = pEntry->CompareTo( m_pCollator, m_vEntries[ nStart ] );
+        eCompare = rEntry->CompareTo( m_pCollator, m_vEntries[ nStart ] );
         if ( eCompare < 0 )
             return false;
         else if ( eCompare == 0 )
         {
             //Workaround. See i86963.
-            if (pEntry->m_xPackage != m_vEntries[nStart]->m_xPackage)
+            if (rEntry->m_xPackage != m_vEntries[nStart]->m_xPackage)
                 return false;
 
             if ( m_bInCheckMode )
@@ -948,16 +948,16 @@ bool ExtensionBox_Impl::FindEntryPos( const TEntry_Impl pEntry, const long nStar
     }
 
     const long nMid = nStart + ( ( nEnd - nStart ) / 2 );
-    eCompare = pEntry->CompareTo( m_pCollator, m_vEntries[ nMid ] );
+    eCompare = rEntry->CompareTo( m_pCollator, m_vEntries[ nMid ] );
 
     if ( eCompare < 0 )
-        return FindEntryPos( pEntry, nStart, nMid-1, nPos );
+        return FindEntryPos( rEntry, nStart, nMid-1, nPos );
     else if ( eCompare > 0 )
-        return FindEntryPos( pEntry, nMid+1, nEnd, nPos );
+        return FindEntryPos( rEntry, nMid+1, nEnd, nPos );
     else
     {
         //Workaround.See i86963.
-        if (pEntry->m_xPackage != m_vEntries[nMid]->m_xPackage)
+        if (rEntry->m_xPackage != m_vEntries[nMid]->m_xPackage)
             return false;
 
         if ( m_bInCheckMode )

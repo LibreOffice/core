@@ -106,8 +106,8 @@ struct ScMyMoveRanges
     ScBigRange aSourceRange;
     ScBigRange aTargetRange;
 
-    ScMyMoveRanges(const ScBigRange& aSource, const ScBigRange aTarget) :
-            aSourceRange(aSource), aTargetRange(aTarget) {}
+    ScMyMoveRanges(const ScBigRange& rSource, const ScBigRange& rTarget) :
+            aSourceRange(rSource), aTargetRange(rTarget) {}
 };
 
 typedef std::list<sal_uInt32> ScMyDependencies;

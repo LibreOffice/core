@@ -191,14 +191,14 @@ ScMyMergedRangesContainer::~ScMyMergedRangesContainer()
 {
 }
 
-void ScMyMergedRangesContainer::AddRange(const table::CellRangeAddress aMergedRange)
+void ScMyMergedRangesContainer::AddRange(const table::CellRangeAddress& rMergedRange)
 {
-    sal_Int32 nStartRow(aMergedRange.StartRow);
-    sal_Int32 nEndRow(aMergedRange.EndRow);
+    sal_Int32 nStartRow(rMergedRange.StartRow);
+    sal_Int32 nEndRow(rMergedRange.EndRow);
 
     ScMyMergedRange aRange;
     aRange.bIsFirst = true;
-    aRange.aCellRange = aMergedRange;
+    aRange.aCellRange = rMergedRange;
     aRange.aCellRange.EndRow = nStartRow;
     aRange.nRows = nEndRow - nStartRow + 1;
     aRangeList.push_back( aRange );

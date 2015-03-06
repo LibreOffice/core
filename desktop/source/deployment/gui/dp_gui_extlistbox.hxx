@@ -86,7 +86,7 @@ struct Entry_Impl
                 const PackageState eState, const bool bReadOnly );
    ~Entry_Impl();
 
-    sal_Int32     CompareTo( const CollatorWrapper *pCollator, const TEntry_Impl pEntry ) const;
+    sal_Int32     CompareTo( const CollatorWrapper *pCollator, const TEntry_Impl& rEntry ) const;
     void          checkDependencies();
 };
 
@@ -164,10 +164,10 @@ class ExtensionBox_Impl : public ::svt::IExtensionListBox
     void            CalcActiveHeight( const long nPos );
     long            GetTotalHeight() const;
     void            SetupScrollBar();
-    void            DrawRow( const Rectangle& rRect, const TEntry_Impl pEntry );
+    void            DrawRow( const Rectangle& rRect, const TEntry_Impl& rEntry );
     bool            HandleTabKey( bool bReverse );
     bool            HandleCursorKey( sal_uInt16 nKeyCode );
-    bool            FindEntryPos( const TEntry_Impl pEntry, long nStart, long nEnd, long &nFound );
+    bool            FindEntryPos( const TEntry_Impl& rEntry, long nStart, long nEnd, long &nFound );
     void            DeleteRemoved();
 
 

@@ -190,7 +190,7 @@ public:
             const ::com::sun::star::uno::Any& i_rNewValue,
             const ::com::sun::star::uno::Any& i_rOldValue,
                   bool i_bVetoable,
-            const NotifierAccess
+            const NotifierAccess&
         );
 
 private:

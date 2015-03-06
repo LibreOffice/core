@@ -956,18 +956,18 @@ void ScFormatRangeStyles::GetFormatRanges(const sal_Int32 nStartColumn, const sa
     pRowFormatRanges->Sort();
 }
 
-void ScFormatRangeStyles::AddRangeStyleName(const table::CellRangeAddress aCellRangeAddress,
+void ScFormatRangeStyles::AddRangeStyleName(const table::CellRangeAddress& rCellRangeAddress,
     const sal_Int32 nStringIndex, const bool bIsAutoStyle, const sal_Int32 nValidationIndex,
     const sal_Int32 nNumberFormat)
 {
     ScMyFormatRange aFormatRange;
-    aFormatRange.aRangeAddress = aCellRangeAddress;
+    aFormatRange.aRangeAddress = rCellRangeAddress;
     aFormatRange.nStyleNameIndex = nStringIndex;
     aFormatRange.nValidationIndex = nValidationIndex;
     aFormatRange.nNumberFormat = nNumberFormat;
     aFormatRange.bIsAutoStyle = bIsAutoStyle;
-    OSL_ENSURE(static_cast<size_t>(aCellRangeAddress.Sheet) < aTables.size(), "wrong table");
-    ScMyFormatRangeAddresses* pFormatRanges(aTables[aCellRangeAddress.Sheet]);
+    OSL_ENSURE(static_cast<size_t>(rCellRangeAddress.Sheet) < aTables.size(), "wrong table");
+    ScMyFormatRangeAddresses* pFormatRanges(aTables[rCellRangeAddress.Sheet]);
     pFormatRanges->push_back(aFormatRange);
 }
 

@@ -51,7 +51,7 @@ protected:
     //css::awt::Point calculateTopLeftMargin( css::uno::Reference< ov::XHelperInterface > xDocument );
 
 public:
-    ScVbaShapes( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess > xShapes, const css::uno::Reference< css::frame::XModel >& xModel );
+    ScVbaShapes( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xShapes, const css::uno::Reference< css::frame::XModel >& xModel );
     static void setDefaultShapeProperties( css::uno::Reference< css::drawing::XShape > xShape ) throw (css::uno::RuntimeException);
     static void setShape_NameProperty( css::uno::Reference< css::drawing::XShape > xShape, const OUString& sName );
     //XEnumerationAccess

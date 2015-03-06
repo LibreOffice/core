@@ -139,7 +139,7 @@ protected:
 public:
                                 ScMyMergedRangesContainer();
     virtual                     ~ScMyMergedRangesContainer();
-    void                        AddRange(const com::sun::star::table::CellRangeAddress aMergedRange);
+    void                        AddRange(const com::sun::star::table::CellRangeAddress& rMergedRange);
 
                                 using ScMyIteratorBase::UpdateAddress;
     virtual void                SetCellData( ScMyCell& rMyCell ) SAL_OVERRIDE;

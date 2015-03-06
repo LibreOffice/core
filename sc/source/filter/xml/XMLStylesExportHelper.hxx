@@ -204,7 +204,7 @@ public:
         bool& bIsAutoStyle, sal_Int32& nValidationIndex, sal_Int32& nNumberFormat, const sal_Int32 nRemoveBeforeRow);
     void GetFormatRanges(const sal_Int32 nStartColumn, const sal_Int32 nEndColumn, const sal_Int32 nRow,
                     const sal_Int32 nTable, ScRowFormatRanges* pFormatRanges);
-    void AddRangeStyleName(const com::sun::star::table::CellRangeAddress aCellRangeAddress, const sal_Int32 nStringIndex,
+    void AddRangeStyleName(const com::sun::star::table::CellRangeAddress& rCellRangeAddress, const sal_Int32 nStringIndex,
                     const bool bIsAutoStyle, const sal_Int32 nValidationIndex, const sal_Int32 nNumberFormat);
     OUString* GetStyleNameByIndex(const sal_Int32 nIndex, const bool bIsAutoStyle);
     void Sort();

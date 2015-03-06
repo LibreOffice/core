@@ -47,7 +47,7 @@ namespace chart
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
-void lcl_getPositionAndSizeFromItemSet( const SfxItemSet& rItemSet, awt::Rectangle& rPosAndSize, const awt::Size aOriginalSize )
+void lcl_getPositionAndSizeFromItemSet( const SfxItemSet& rItemSet, awt::Rectangle& rPosAndSize, const awt::Size& rOriginalSize )
 {
     long nPosX(0);
     long nPosY(0);
@@ -75,32 +75,32 @@ void lcl_getPositionAndSizeFromItemSet( const SfxItemSet& rItemSet, awt::Rectang
         case RP_LT:
             break;
         case RP_MT:
-            nPosX += ( aOriginalSize.Width - nSizX ) / 2;
+            nPosX += ( rOriginalSize.Width - nSizX ) / 2;
             break;
         case RP_RT:
-            nPosX += aOriginalSize.Width - nSizX;
+            nPosX += rOriginalSize.Width - nSizX;
             break;
         case RP_LM:
-            nPosY += ( aOriginalSize.Height - nSizY ) / 2;
+            nPosY += ( rOriginalSize.Height - nSizY ) / 2;
             break;
         case RP_MM:
-            nPosX += ( aOriginalSize.Width  - nSizX ) / 2;
-            nPosY += ( aOriginalSize.Height - nSizY ) / 2;
+            nPosX += ( rOriginalSize.Width  - nSizX ) / 2;
+            nPosY += ( rOriginalSize.Height - nSizY ) / 2;
             break;
         case RP_RM:
-            nPosX += aOriginalSize.Width - nSizX;
-            nPosY += ( aOriginalSize.Height - nSizY ) / 2;
+            nPosX += rOriginalSize.Width - nSizX;
+            nPosY += ( rOriginalSize.Height - nSizY ) / 2;
             break;
         case RP_LB:
-            nPosY += aOriginalSize.Height - nSizY;
+            nPosY += rOriginalSize.Height - nSizY;
             break;
         case RP_MB:
-            nPosX += ( aOriginalSize.Width - nSizX ) / 2;
-            nPosY += aOriginalSize.Height - nSizY;
+            nPosX += ( rOriginalSize.Width - nSizX ) / 2;
+            nPosY += rOriginalSize.Height - nSizY;
             break;
         case RP_RB:
-            nPosX += aOriginalSize.Width - nSizX;
-            nPosY += aOriginalSize.Height - nSizY;
+            nPosX += rOriginalSize.Width - nSizX;
+            nPosY += rOriginalSize.Height - nSizY;
             break;
         default:
             break;

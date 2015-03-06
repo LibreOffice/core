@@ -1409,7 +1409,7 @@ bool ODocumentDefinition::saveAs()
 
 namespace
 {
-    void    lcl_putLoadArgs( ::comphelper::NamedValueCollection& _io_rArgs, const optional_bool _bSuppressMacros, const optional_bool _bReadOnly )
+    void    lcl_putLoadArgs( ::comphelper::NamedValueCollection& _io_rArgs, const optional_bool& _bSuppressMacros, const optional_bool& _bReadOnly )
     {
         if ( !!_bSuppressMacros )
         {
@@ -2111,7 +2111,7 @@ void SAL_CALL ODocumentDefinition::disposing( const lang::EventObject& /*Source*
 }
 
 void ODocumentDefinition::firePropertyChange( sal_Int32 i_nHandle, const Any& i_rNewValue, const Any& i_rOldValue,
-        bool i_bVetoable, const NotifierAccess )
+        bool i_bVetoable, const NotifierAccess& )
 {
     fire( &i_nHandle, &i_rNewValue, &i_rOldValue, 1, i_bVetoable );
 }

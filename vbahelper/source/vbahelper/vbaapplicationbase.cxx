@@ -95,7 +95,7 @@ public:
         return (sal_Int32) nResult;
     }
 
-    void Start( const ::rtl::Reference< VbaApplicationBase > xBase, const OUString& aFunction, double nFrom, double nTo )
+    void Start( const ::rtl::Reference< VbaApplicationBase >& xBase, const OUString& aFunction, double nFrom, double nTo )
     {
         if ( !xBase.is() || aFunction.isEmpty() )
             throw uno::RuntimeException( "Unexpected arguments!" );

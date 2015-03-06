@@ -137,19 +137,19 @@ lcl_checkRangeDimensions(
 static bool
 lcl_checkRangeDimensions(
     const ScAddress& rPos,
-    const deque<formula::FormulaToken*>::const_iterator aBegin,
-    const deque<formula::FormulaToken*>::const_iterator aEnd,
+    const deque<formula::FormulaToken*>::const_iterator& rBegin,
+    const deque<formula::FormulaToken*>::const_iterator& rEnd,
     bool& bCol, bool& bRow, bool& bTab)
 {
-    deque<formula::FormulaToken*>::const_iterator aCur(aBegin);
+    deque<formula::FormulaToken*>::const_iterator aCur(rBegin);
     ++aCur;
-    const SingleDoubleRefProvider aRef(**aBegin);
+    const SingleDoubleRefProvider aRef(**rBegin);
     bool bOk(false);
     {
         const SingleDoubleRefProvider aRefCur(**aCur);
         bOk = lcl_checkRangeDimensions(rPos, aRef, aRefCur, bCol, bRow, bTab);
     }
-    while (bOk && aCur != aEnd)
+    while (bOk && aCur != rEnd)
     {
         const SingleDoubleRefProvider aRefCur(**aCur);
         bool bColTmp(false);
@@ -160,7 +160,7 @@ lcl_checkRangeDimensions(
         ++aCur;
     }
 
-    if (bOk && aCur == aEnd)
+    if (bOk && aCur == rEnd)
     {
         return true;
     }

@@ -142,7 +142,7 @@ public:
     will be handled and in the second case a VersionException will be handled.
     */
 
-    ProgressCmdEnv( const uno::Reference< uno::XComponentContext > rContext,
+    ProgressCmdEnv( const uno::Reference< uno::XComponentContext >& rContext,
                     DialogHelper* pDialogHelper,
                     const OUString& rTitle )
         : m_xContext( rContext )

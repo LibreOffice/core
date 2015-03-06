@@ -39,7 +39,7 @@ private:
     bool        m_bIsMenu;
 
 public:
-    ScVbaCommandBar( const css::uno::Reference< ov::XHelperInterface > xParent, const css::uno::Reference< css::uno::XComponentContext > xContext, VbaCommandBarHelperRef pHelper, const css::uno::Reference< css::container::XIndexAccess >& xBarSettings, const OUString& sResourceUrl, bool bIsMenu ) throw( css::uno::RuntimeException );
+    ScVbaCommandBar( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, VbaCommandBarHelperRef pHelper, const css::uno::Reference< css::container::XIndexAccess >& xBarSettings, const OUString& sResourceUrl, bool bIsMenu ) throw( css::uno::RuntimeException );
 
     bool IsMenu() const { return m_bIsMenu; }
 
@@ -67,8 +67,8 @@ class VbaDummyCommandBar : public CommandBar_BASE
 {
 public:
     VbaDummyCommandBar(
-            const css::uno::Reference< ov::XHelperInterface > xParent,
-            const css::uno::Reference< css::uno::XComponentContext > xContext,
+            const css::uno::Reference< ov::XHelperInterface >& xParent,
+            const css::uno::Reference< css::uno::XComponentContext >& xContext,
             const OUString& rName,
             sal_Int32 nType ) throw( css::uno::RuntimeException );
 

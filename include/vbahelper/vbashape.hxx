@@ -56,7 +56,7 @@ public:
     css::uno::Any getRange() { return m_aRange; };
     void setRange( css::uno::Any aRange ) { m_aRange = aRange; };
 
-    static sal_Int32 getType( const css::uno::Reference< css::drawing::XShape > xShape ) throw (css::uno::RuntimeException);
+    static sal_Int32 getType( const css::uno::Reference< css::drawing::XShape >& rShape ) throw (css::uno::RuntimeException);
 
     // Attributes
     virtual OUString SAL_CALL getName() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;

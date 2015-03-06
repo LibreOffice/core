@@ -1978,9 +1978,9 @@ SvXMLImportContext *ScXMLImport::CreateContext( sal_uInt16 nPrefix,
 }
 
 ScXMLImport::ScXMLImport(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
+    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rContext,
     OUString const & implementationName, SvXMLImportFlags nImportFlag)
-:   SvXMLImport( xContext, implementationName, nImportFlag ),
+:   SvXMLImport( rContext, implementationName, nImportFlag ),
     pDoc( NULL ),
     pChangeTrackingImportHelper(NULL),
     pStylesImportHelper(NULL),

@@ -285,7 +285,7 @@ class DummyGraphic2D : public DummyXShape
 {
 public:
     DummyGraphic2D(const css::drawing::Position3D& rPosition, const css::drawing::Direction3D& rSize,
-            const css::uno::Reference< css::graphic::XGraphic > xGraphic );
+            const css::uno::Reference< css::graphic::XGraphic >& rGraphic );
 
 private:
     css::uno::Reference< css::graphic::XGraphic > mxGraphic;
