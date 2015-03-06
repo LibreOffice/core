@@ -3178,11 +3178,10 @@ PPTExtParaProv::PPTExtParaProv( SdrPowerPointImport& rMan, SvStream& rSt, const 
     DffRecordHeader aContentDataHd;
 
     const DffRecordHeader* pListHd = rMan.aDocRecManager.GetRecordHeader( PPT_PST_List, SEEK_FROM_BEGINNING );
-    while( pListHd )
-    {
+    if( pListHd )
         pListHd->SeekToContent( rSt );
-        if ( !rMan.SeekToContentOfProgTag( 9, rSt, *pListHd, aContentDataHd ) )
-            break;
+    if ( pListHd && rMan.SeekToContentOfProgTag( 9, rSt, *pListHd, aContentDataHd ) )
+    {
         while ( ( rSt.GetError() == 0 ) && ( rSt.Tell() < aContentDataHd.GetRecEndFilePos() ) )
         {
             ReadDffRecordHeader( rSt, aHd );
@@ -3257,13 +3256,10 @@ PPTExtParaProv::PPTExtParaProv( SdrPowerPointImport& rMan, SvStream& rSt, const 
             }
             aHd.SeekToEndOfRecord( rSt );
         }
-        break;
     }
 
-    while( pHd )
+    if ( pHd && rMan.SeekToContentOfProgTag( 9, rSt, *pHd, aContentDataHd ) )
     {   // get the extended paragraph styles on mainmaster ( graphical bullets, num ruling ... )
-        if ( !rMan.SeekToContentOfProgTag( 9, rSt, *pHd, aContentDataHd ) )
-            break;
         while ( ( rSt.GetError() == 0 ) && ( rSt.Tell() < aContentDataHd.GetRecEndFilePos() ) )
         {
             ReadDffRecordHeader( rSt, aHd );
@@ -3308,7 +3304,6 @@ PPTExtParaProv::PPTExtParaProv( SdrPowerPointImport& rMan, SvStream& rSt, const 
             }
             aHd.SeekToEndOfRecord( rSt );
         }
-        break;
     }
     rSt.Seek( nOldPos );
 }
