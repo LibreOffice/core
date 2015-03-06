@@ -28,10 +28,12 @@
 #include <vcl/virdev.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/button.hxx>
+#include <vcl/toolbox.hxx>
 #include <vcl/pngwrite.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/salbtype.hxx>
 #include <vcl/bmpacc.hxx>
+#include <vcl/help.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <vcldemo-debug.hxx>
@@ -1434,14 +1436,17 @@ public:
 
 class DemoWidgets : public WorkWindow
 {
-    VclBox *mpBox;
+    VclBox     *mpBox;
+    ToolBox    *mpToolbox;
+    PushButton *mpButton;
 public:
     DemoWidgets() :
-        WorkWindow(NULL, WB_STDWORK)
+        WorkWindow(NULL, WB_STDWORK),
+        mpBox(new VclVBox(this, false, 3)),
+        mpToolbox(new ToolBox(mpBox)),
+        mpButton(new PushButton(mpBox))
     {
         SetText("VCL widget demo");
-
-        mpBox = new VclVBox(this, false, 3);
 
         Wallpaper aWallpaper(BitmapEx("sfx2/res/startcenter-logo.png"));
         aWallpaper.SetStyle(WALLPAPER_BOTTOMRIGHT);
@@ -1450,10 +1455,27 @@ public:
         mpBox->SetBackground(aWallpaper);
         mpBox->Show();
 
+        Help::EnableQuickHelp();
+        Help::EnableBalloonHelp();
+        Help::EnableExtHelp();
+        mpToolbox->SetHelpText("Help text");
+        mpToolbox->InsertItem(0, "Toolbar item");
+        mpToolbox->SetQuickHelpText(0, "This is a tooltip popup");
+        mpToolbox->SetHelpText(0, "This is a longer help text popup");
+        mpToolbox->InsertSeparator();
+        mpToolbox->Show();
+
+        mpButton->SetText("Click me; go on");
+        mpToolbox->SetQuickHelpText("button help text");
+        mpButton->Show();
+
         Show();
     }
     virtual ~DemoWidgets()
     {
+        delete mpButton;
+        delete mpToolbox;
+        delete mpBox;
     }
     virtual void Paint(const Rectangle&) SAL_OVERRIDE
     {
