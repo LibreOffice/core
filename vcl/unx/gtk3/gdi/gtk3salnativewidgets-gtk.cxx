@@ -1536,8 +1536,10 @@ void GtkSalGraphics::copyArea( long nDestX, long nDestY,
                                long nSrcWidth, long nSrcHeight,
                                sal_uInt16 nFlags )
 {
-    mpFrame->pushIgnoreDamage();
+#if 1
     SvpSalGraphics::copyArea( nDestX, nDestY, nSrcX, nSrcY, nSrcWidth, nSrcHeight, nFlags );
+#else
+    mpFrame->pushIgnoreDamage();
     mpFrame->popIgnoreDamage();
 
     cairo_rectangle_int_t rect = { (int)nSrcX, (int)nSrcY, (int)nSrcWidth, (int)nSrcHeight };
@@ -1566,6 +1568,7 @@ void GtkSalGraphics::copyArea( long nDestX, long nDestY,
     gdk_window_move_region( gtk_widget_get_window( mpFrame->getWindow() ),
                             region, nDestX - nSrcX, nDestY - nSrcY );
     cairo_region_destroy( region );
+#endif
 }
 
 cairo_t* GtkSalGraphics::getCairoContext()
