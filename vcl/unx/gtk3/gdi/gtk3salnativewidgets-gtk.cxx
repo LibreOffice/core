@@ -910,6 +910,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
     }
 
     cairo_t *cr = getCairoContext();
+    clipRegion(cr);
     cairo_translate(cr, rControlRegion.Left(), rControlRegion.Top());
 
     gtk_style_context_save(context);
@@ -956,6 +957,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
         break;
     }
 
+    cairo_surface_flush(cairo_get_target(cr));
     cairo_destroy(cr); // unref
     mpFrame->damaged(basegfx::B2IBox(rControlRegion.Left(), rControlRegion.Top(), rControlRegion.Right(), rControlRegion.Bottom()));
 
