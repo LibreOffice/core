@@ -56,7 +56,7 @@ public:
     void StopRefreshTimer();
 
     SC_DLLPUBLIC virtual void SetRefreshDelay( sal_uLong nSeconds );
-    SC_DLLPUBLIC virtual void Timeout() SAL_OVERRIDE;
+    SC_DLLPUBLIC virtual void Invoke() SAL_OVERRIDE;
 
 private:
     void Start();

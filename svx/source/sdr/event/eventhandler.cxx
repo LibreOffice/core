@@ -133,7 +133,7 @@ namespace sdr
         }
 
         // The timer when it is triggered; from class Timer
-        void TimerEventHandler::Timeout()
+        void TimerEventHandler::Invoke()
         {
             ExecuteEvents();
         }

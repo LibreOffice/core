@@ -72,7 +72,7 @@ public:
 
     void            Update();
 
-    virtual void    Timeout() SAL_OVERRIDE;
+    virtual void    Invoke() SAL_OVERRIDE;
 
     void            ClearGroups();
 };

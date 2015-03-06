@@ -33,7 +33,7 @@ class Receiver : Timer
 public:
     Receiver( Transmitter *aTransmitter );
     virtual ~Receiver();
-    virtual void Timeout() SAL_OVERRIDE;
+    virtual void Invoke() SAL_OVERRIDE;
     void pushCommand( const std::vector<OString> &rCommand );
     void executeCommand( const std::vector<OString> &aCommand );
 

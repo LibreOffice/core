@@ -114,7 +114,7 @@ void ScRefreshTimer::SetRefreshDelay( sal_uLong nSeconds )
         Start();
 }
 
-void ScRefreshTimer::Timeout()
+void ScRefreshTimer::Invoke()
 {
     if ( ppControl && *ppControl && (*ppControl)->IsRefreshAllowed() )
     {

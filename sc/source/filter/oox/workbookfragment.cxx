@@ -289,7 +289,7 @@ public:
         aSegments.push_back( ISegmentProgressBarRef( new ProgressWrapper( xProgress ) ) );
         return aSegments.back();
     }
-    virtual void Timeout() SAL_OVERRIDE
+    virtual void Invoke() SAL_OVERRIDE
     {
         for( size_t i = 0; i < aSegments.size(); i++)
             static_cast< ProgressWrapper *>( aSegments[ i ].get() )->UpdateBar();

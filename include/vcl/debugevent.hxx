@@ -27,7 +27,7 @@ class VCL_DLLPUBLIC DebugEventInjector : Timer {
   void InjectMouseEvent();
   void InjectEvent();
   void InjectKeyNavEdit();
-  virtual void Timeout() SAL_OVERRIDE;
+  virtual void Invoke() SAL_OVERRIDE;
 
   public:
      static DebugEventInjector *getCreate();

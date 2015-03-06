@@ -776,7 +776,7 @@ class AutoReloadTimer_Impl : public Timer
 public:
     AutoReloadTimer_Impl( const OUString& rURL, sal_uInt32 nTime,
                           SfxObjectShell* pSh );
-    virtual void Timeout() SAL_OVERRIDE;
+    virtual void Invoke() SAL_OVERRIDE;
 };
 
 class SFX2_DLLPUBLIC SfxObjectShellItem: public SfxPoolItem

@@ -65,7 +65,7 @@ namespace
     public:
         explicit ImpTimedRefDev(scoped_timed_RefDev& rOwnerofMe);
         virtual ~ImpTimedRefDev();
-        virtual void Timeout() SAL_OVERRIDE;
+        virtual void Invoke() SAL_OVERRIDE;
 
         VirtualDevice& acquireVirtualDevice();
         void releaseVirtualDevice();
@@ -87,7 +87,7 @@ namespace
         delete mpVirDev;
     }
 
-    void ImpTimedRefDev::Timeout()
+    void ImpTimedRefDev::Invoke()
     {
         // for obvious reasons, do not call anything after this
         mrOwnerOfMe.reset();

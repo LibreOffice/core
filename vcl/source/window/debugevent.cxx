@@ -257,7 +257,7 @@ void DebugEventInjector::InjectKeyNavEdit()
     ImplWindowFrameProc( pWindow, NULL, SALEVENT_KEYUP, &aKeyEvent );
 }
 
-void DebugEventInjector::Timeout()
+void DebugEventInjector::Invoke()
 {
     InjectEvent();
     mnEventsLeft--;

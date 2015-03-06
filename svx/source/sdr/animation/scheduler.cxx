@@ -159,7 +159,7 @@ namespace sdr
             Stop();
         }
 
-        void Scheduler::Timeout()
+        void Scheduler::Invoke()
         {
             // stop timer and add time
             Stop();

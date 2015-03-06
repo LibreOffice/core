@@ -29,7 +29,7 @@
 
 #include "vcl/svapp.hxx"
 #include "vcl/window.hxx"
-#include "vcl/timer.hxx"
+#include "vcl/idle.hxx"
 #include "vcl/svmain.hxx"
 #include "vcl/opengl/OpenGLContext.hxx"
 
@@ -79,7 +79,7 @@ class AquaDelayedSettingsChanged : public Idle
     {
     }
 
-    virtual void Timeout() SAL_OVERRIDE
+    virtual void Invoke() SAL_OVERRIDE
     {
         SalData* pSalData = GetSalData();
         if( ! pSalData->maFrames.empty() )
@@ -103,7 +103,7 @@ void AquaSalInstance::delayedSettingsChanged( bool bInvalidate )
 {
     osl::Guard< comphelper::SolarMutex > aGuard( *mpSalYieldMutex );
     AquaDelayedSettingsChanged* pIdle = new AquaDelayedSettingsChanged( bInvalidate );
-    pIdle->SetPriority( MEDIUM );
+    pIdle->SetPriority( SchedulerPriority::MEDIUM );
     pIdle->Start();
 }
 

@@ -54,7 +54,7 @@ public:
     virtual void setLazyInvalidate(ViewObjectContact& rVOC) SAL_OVERRIDE;
 
     // From baseclass Timer, the timeout call triggered by the LazyInvalidate mechanism
-    virtual void Timeout() SAL_OVERRIDE;
+    virtual void Invoke() SAL_OVERRIDE;
 
     // get primitive visualization
     drawinglayer::primitive2d::Primitive2DSequence createPrimitive2DSequenceForPage(const DisplayInfo& rDisplayInfo);
@@ -91,7 +91,7 @@ PagePrimitiveExtractor::PagePrimitiveExtractor(
 PagePrimitiveExtractor::~PagePrimitiveExtractor()
 {
     // execute missing LazyInvalidates and stop timer
-    Timeout();
+    Invoke();
 }
 
 void PagePrimitiveExtractor::setLazyInvalidate(ViewObjectContact& /*rVOC*/)
@@ -102,7 +102,7 @@ void PagePrimitiveExtractor::setLazyInvalidate(ViewObjectContact& /*rVOC*/)
 }
 
 // From baseclass Timer, the timeout call triggered by the LazyInvalidate mechanism
-void PagePrimitiveExtractor::Timeout()
+void PagePrimitiveExtractor::Invoke()
 {
     // stop the timer
     Stop();

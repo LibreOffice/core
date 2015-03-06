@@ -66,7 +66,7 @@ namespace sdr
             virtual void PrepareProcessDisplay() SAL_OVERRIDE;
 
             // From baseclass Timer, the timeout call triggered by te LazyInvalidate mechanism
-            virtual void Timeout() SAL_OVERRIDE;
+            virtual void Invoke() SAL_OVERRIDE;
 
             // Process the whole displaying
             virtual void ProcessDisplay(DisplayInfo& rDisplayInfo) SAL_OVERRIDE;

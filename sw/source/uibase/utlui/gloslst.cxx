@@ -338,7 +338,7 @@ void SwGlossaryList::Update()
     }
 }
 
-void SwGlossaryList::Timeout()
+void SwGlossaryList::Invoke()
 {
     // Only update automatically if a SwView has the focus.
     if(::GetActiveView())

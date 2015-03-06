@@ -1910,7 +1910,7 @@ class ExitTimer : public Timer
         SetTimeout(500);
         Start();
     }
-    virtual void Timeout() SAL_OVERRIDE
+    virtual void Invoke() SAL_OVERRIDE
     {
         exit(42);
     }

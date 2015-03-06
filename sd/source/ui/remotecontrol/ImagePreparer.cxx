@@ -62,7 +62,7 @@ ImagePreparer::~ImagePreparer()
     Stop();
 }
 
-void ImagePreparer::Timeout()
+void ImagePreparer::Invoke()
 {
     sal_uInt32 aSlides = xController->getSlideCount();
     SAL_INFO( "sdremote", "ImagePreparer " << xController->isRunning() <<

@@ -136,7 +136,7 @@ public:
     }
 
     // from parent Timer
-    virtual void Timeout()
+    virtual void Invoke()
     {
         ::osl::MutexGuard aGuard(m_aMutex);
         EntryMap::iterator aIter(maEntries.begin());

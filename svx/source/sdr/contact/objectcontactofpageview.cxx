@@ -66,7 +66,7 @@ namespace sdr
         ObjectContactOfPageView::~ObjectContactOfPageView()
         {
             // execute missing LazyInvalidates and stop timer
-            Timeout();
+            Invoke();
         }
 
         // LazyInvalidate request. Take action.
@@ -87,13 +87,13 @@ namespace sdr
                 if(bInvalidateDuringPaint)
                 {
                     // there are still non-triggered LazyInvalidate events, trigger these
-                    Timeout();
+                    Invoke();
                 }
             }
         }
 
         // From baseclass Timer, the timeout call triggered by the LazyInvalidate mechanism
-        void ObjectContactOfPageView::Timeout()
+        void ObjectContactOfPageView::Invoke()
         {
             // stop the timer
             Stop();

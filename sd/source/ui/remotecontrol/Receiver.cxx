@@ -52,7 +52,7 @@ void Receiver::pushCommand( const std::vector<OString> &rCommand )
     Start();
 }
 
-void Receiver::Timeout()
+void Receiver::Invoke()
 {
     if( maExecQueue.size() )
     {

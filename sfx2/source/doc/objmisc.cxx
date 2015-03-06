@@ -1433,7 +1433,7 @@ AutoReloadTimer_Impl::AutoReloadTimer_Impl(
 
 
 
-void AutoReloadTimer_Impl::Timeout()
+void AutoReloadTimer_Impl::Invoke()
 {
     SfxViewFrame *pFrame = SfxViewFrame::GetFirst( pObjSh );
 

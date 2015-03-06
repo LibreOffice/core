@@ -51,7 +51,7 @@ namespace
         void free(VirtualDevice& rDevice);
 
         // Timer virtuals
-        virtual void Timeout() SAL_OVERRIDE;
+        virtual void Invoke() SAL_OVERRIDE;
     };
 
     VDevBuffer::VDevBuffer()
@@ -191,7 +191,7 @@ namespace
         Start();
     }
 
-    void VDevBuffer::Timeout()
+    void VDevBuffer::Invoke()
     {
         ::osl::MutexGuard aGuard(m_aMutex);
 
