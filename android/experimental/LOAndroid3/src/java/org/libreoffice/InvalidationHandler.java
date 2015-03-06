@@ -14,9 +14,10 @@ import java.util.List;
 /**
  * Parses (interprets) and handles invalidation messages from LibreOffice.
  */
-public class InvalidationHandler {
+public class InvalidationHandler implements Document.MessageCallback {
     private static String LOGTAG = InvalidationHandler.class.getSimpleName();
 
+    private TileProvider mTileProvider;
     private TextCursorLayer mTextCursorLayer;
     private TextSelection mTextSelection;
     private OverlayState mState;
@@ -24,16 +25,25 @@ public class InvalidationHandler {
     public InvalidationHandler(LibreOfficeMainActivity mainActivity) {
         mTextCursorLayer = mainActivity.getTextCursorLayer();
         mTextSelection = mainActivity.getTextSelection();
+        mTileProvider = null;
         mState = OverlayState.NONE;
     }
 
+    public void setTileProvider(TileProvider tileProvider) {
+        mTileProvider = tileProvider;
+    }
+
     /**
-     * Processes invalidation message
+     * Processes callback message
      *
      * @param messageID - ID of the message
      * @param payload   - additional invalidation message payload
      */
-    public void processMessage(int messageID, String payload) {
+    @Override
+    public void messageRetrieved(int messageID, String payload) {
+        if (!LOKitShell.isEditingEnabled()) {
+            return;
+        }
         switch (messageID) {
             case Document.CALLBACK_INVALIDATE_TILES:
                 invalidateTiles(payload);
@@ -52,6 +62,15 @@ public class InvalidationHandler {
                 break;
             case Document.CALLBACK_CURSOR_VISIBLE:
                 cursorVisibility(payload);
+                break;
+            case Document.CALLBACK_HYPERLINK_CLICKED:
+                if (!payload.startsWith("http://") && !payload.startsWith("https://")) {
+                    payload = "http://" + payload;
+                }
+
+                Intent urlIntent = new Intent(Intent.ACTION_VIEW);
+                urlIntent.setData(Uri.parse(payload));
+                LibreOfficeMainActivity.mAppContext.startActivity(urlIntent);
                 break;
         }
     }

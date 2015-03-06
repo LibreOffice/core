@@ -28,7 +28,7 @@ import java.nio.ByteBuffer;
 /**
  * LOKit implementation of TileProvider.
  */
-public class LOKitTileProvider implements TileProvider, Document.MessageCallback {
+public class LOKitTileProvider implements TileProvider {
     private static final String LOGTAG = LOKitTileProvider.class.getSimpleName();
     private static int TILE_SIZE = 256;
     private final GeckoLayerClient mLayerClient;
@@ -43,13 +43,13 @@ public class LOKitTileProvider implements TileProvider, Document.MessageCallback
     private float mWidthTwip;
     private float mHeightTwip;
 
-    private InvalidationHandler mInvalidationHandler;
+    private Document.MessageCallback mMessageCallback;
 
     private long objectCreationTime = System.currentTimeMillis();
 
-    public LOKitTileProvider(GeckoLayerClient layerClient, InvalidationHandler invalidationHandler, String input) {
+    public LOKitTileProvider(GeckoLayerClient layerClient, Document.MessageCallback messageCallback, String input) {
         mLayerClient = layerClient;
-        mInvalidationHandler = invalidationHandler;
+        mMessageCallback = messageCallback;
         mDPI = (float) LOKitShell.getDpi();
         mTileWidth = pixelToTwip(TILE_SIZE, mDPI);
         mTileHeight = pixelToTwip(TILE_SIZE, mDPI);
@@ -89,7 +89,7 @@ public class LOKitTileProvider implements TileProvider, Document.MessageCallback
     }
 
     public void postLoad() {
-        mDocument.setMessageCallback(this);
+        mDocument.setMessageCallback(mMessageCallback);
 
         int parts = mDocument.getParts();
         Log.i(LOGTAG, "Document parts: " + parts);
@@ -406,32 +406,6 @@ public class LOKitTileProvider implements TileProvider, Document.MessageCallback
             return 0;
 
         return mDocument.getPart();
-    }
-
-    /**
-     * Process the retrieved messages from LOK
-     */
-    @Override
-    public void messageRetrieved(int messageID, String payload) {
-        /**
-         * Handles messages that do not require entering editing mode.
-         */
-        switch (messageID) {
-            case Document.CALLBACK_HYPERLINK_CLICKED:
-                if (!payload.startsWith("http://") &&
-                        !payload.startsWith("https://"))
-                    payload = "http://" + payload;
-
-                Intent url_intent = new Intent(Intent.ACTION_VIEW);
-                url_intent.setData(Uri.parse(payload));
-                LibreOfficeMainActivity.mAppContext.startActivity(url_intent);
-                return;
-        }
-
-        if (!LOKitShell.isEditingEnabled()) {
-            return;
-        }
-        mInvalidationHandler.processMessage(messageID, payload);
     }
 }
 

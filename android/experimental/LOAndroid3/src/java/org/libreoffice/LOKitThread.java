@@ -159,6 +159,7 @@ public class LOKitThread extends Thread {
 
         mInvalidationHandler = new InvalidationHandler(LibreOfficeMainActivity.mAppContext);
         mTileProvider = TileProviderFactory.create(mLayerClient, mInvalidationHandler, filename);
+        mInvalidationHandler.setTileProvider(mTileProvider);
 
         if (mTileProvider.isReady()) {
             LOKitShell.showProgressSpinner();
