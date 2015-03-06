@@ -387,7 +387,6 @@ void DeInitVCL()
 
     if ( pSVData->maAppData.mpIdleMgr )
         delete pSVData->maAppData.mpIdleMgr;
-    //Timer::ImplDeInitTimer();
     Scheduler::ImplDeInitScheduler();
 
     if ( pSVData->maWinData.mpMsgBoxImgList )

@@ -342,10 +342,6 @@ inline void ImplYield( bool i_bWait, bool i_bAllEvents )
 {
     ImplSVData* pSVData = ImplGetSVData();
 
-    // run timers that have timed out
-    //while ( pSVData->mbNotAllTimerCalled )
-    //    Timer::ImplTimerCallbackProc();
-
     //Process all Tasks
     Scheduler::ProcessTaskScheduling(false);
 
