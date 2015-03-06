@@ -349,6 +349,7 @@ SlideImpl::SlideImpl( const uno::Reference< drawing::XDrawPage >&           xDra
     mxDrawPagesSupplier( xDrawPages ),
     mxRootNode( xRootNode ),
     mpShapeManager( new ShapeManagerImpl(
+                        rViewContainer,
                         rEventMultiplexer,
                         rCursorManager,
                         rShapeListenerMap,
@@ -631,11 +632,12 @@ void SlideImpl::viewAdded( const UnoViewSharedPtr& rView )
     maSlideBitmaps.push_back(
         std::make_pair( rView,
                         VectorOfSlideBitmaps(SlideAnimationState_NUM_ENTRIES) ));
+    mpShapeManager->viewAdded(rView);
 }
 
 void SlideImpl::viewRemoved( const UnoViewSharedPtr& rView )
 {
-
+    mpShapeManager->viewRemoved(rView);
     const VectorOfVectorOfSlideBitmaps::iterator aEnd( maSlideBitmaps.end() );
     maSlideBitmaps.erase(
         std::remove_if( maSlideBitmaps.begin(),
@@ -654,13 +656,14 @@ void SlideImpl::viewChanged( const UnoViewSharedPtr& rView )
 {
     // nothing to do for the Slide - getCurrentSlideBitmap() lazily
     // handles bitmap resizes
+    mpShapeManager->viewChanged(rView);
 }
 
 void SlideImpl::viewsChanged()
 {
     // nothing to do for the Slide - getCurrentSlideBitmap() lazily
     // handles bitmap resizes
-    if( mbActive);
+    mpShapeManager->viewsChanged();
 }
 
 bool SlideImpl::requestCursor( sal_Int16 nCursorShape )

@@ -36,13 +36,15 @@ using namespace com::sun::star;
 namespace slideshow {
 namespace internal {
 
-ShapeManagerImpl::ShapeManagerImpl( EventMultiplexer&            rMultiplexer,
+ShapeManagerImpl::ShapeManagerImpl( const UnoViewContainer&      rViews,
+                                    EventMultiplexer&            rMultiplexer,
                                     CursorManager&               rCursorManager,
                                     const ShapeEventListenerMap& rGlobalListenersMap,
                                     const ShapeCursorMap&        rGlobalCursorMap ):
     maXShapeHash( 101 ),
     maAllShapes(),
     maUpdateShapes(),
+    mrViews(rViews),
     mrMultiplexer(rMultiplexer),
     mrCursorManager(rCursorManager),
     mrGlobalListenersMap(rGlobalListenersMap),
@@ -52,6 +54,31 @@ ShapeManagerImpl::ShapeManagerImpl( EventMultiplexer&            rMultiplexer,
     maHyperlinkShapes(),
     mbEnabled(false)
 {
+}
+
+template<typename LayerFunc,
+         typename ShapeFunc> void ShapeManagerImpl::manageViews(
+             LayerFunc layerFunc,
+             ShapeFunc shapeFunc )
+{
+    LayerSharedPtr                      pCurrLayer;
+    ViewLayerSharedPtr                  pCurrViewLayer;
+    LayerShapeMap::const_iterator       aIter( maAllShapes.begin() );
+    const LayerShapeMap::const_iterator aEnd ( maAllShapes.end() );
+    while( aIter != aEnd )
+    {
+        LayerSharedPtr pLayer = aIter->second.lock();
+        if( pLayer && pLayer != pCurrLayer )
+        {
+            pCurrLayer = pLayer;
+            pCurrViewLayer = layerFunc(pCurrLayer);
+        }
+
+        if( pCurrViewLayer )
+            shapeFunc(aIter->first,pCurrViewLayer);
+
+        ++aIter;
+    }
 }
 
 void ShapeManagerImpl::activate( bool bSlideBackgoundPainted )
@@ -243,6 +270,75 @@ bool ShapeManagerImpl::handleMouseMoved( const awt::MouseEvent& e )
 
     return false; // we don't /eat/ this event. Lower prio
                   // handler should see it, too.
+}
+
+void ShapeManagerImpl::viewAdded( const UnoViewSharedPtr& rView )
+{
+    // view must be member of mrViews container
+    OSL_ASSERT( std::find(mrViews.begin(),
+                          mrViews.end(),
+                          rView) != mrViews.end() );
+
+    // init view content
+    rView->clearAll();
+
+    // add View to all registered shapes
+    manageViews(
+        boost::bind(&Layer::addView,
+                    _1,
+                    boost::cref(rView)),
+        // repaint on view add
+        boost::bind(&Shape::addViewLayer,
+                    _1,
+                    _2,
+                    true) );
+}
+
+void ShapeManagerImpl::viewRemoved( const UnoViewSharedPtr& rView )
+{
+    // view must not be member of mrViews container anymore
+    OSL_ASSERT( std::find(mrViews.begin(),
+                          mrViews.end(),
+                          rView) == mrViews.end() );
+
+    // remove View from all registered shapes
+    manageViews(
+        boost::bind(&Layer::removeView,
+                    _1,
+                    boost::cref(rView)),
+        boost::bind(&Shape::removeViewLayer,
+                    _1,
+                    _2) );
+}
+
+void ShapeManagerImpl::viewChanged( const UnoViewSharedPtr& rView )
+{
+    (void)rView;
+
+    // view must be member of mrViews container
+    OSL_ASSERT( std::find(mrViews.begin(),
+                          mrViews.end(),
+                          rView) != mrViews.end() );
+
+    // TODO(P2): selectively update only changed view
+    viewsChanged();
+}
+
+void ShapeManagerImpl::viewsChanged()
+{
+
+    // clear view area
+    ::std::for_each( mrViews.begin(),
+                     mrViews.end(),
+                     ::boost::mem_fn(&View::clearAll) );
+
+    // TODO(F3): resize and repaint all layers
+
+    // render all shapes
+    std::for_each( maAllShapes.begin(),
+                   maAllShapes.end(),
+                   boost::bind(&Shape::render,
+                       boost::bind( ::o3tl::select1st<LayerShapeMap::value_type>(), _1)) );
 }
 
 bool ShapeManagerImpl::update()

@@ -64,7 +64,8 @@ public:
         The slideshow-global event source, where this class
         registeres its event handlers.
     */
-    ShapeManagerImpl( EventMultiplexer&            rMultiplexer,
+    ShapeManagerImpl( const UnoViewContainer&      rViews,
+                      EventMultiplexer&            rMultiplexer,
                       CursorManager&               rCursorManager,
                       const ShapeEventListenerMap& rGlobalListenersMap,
                       const ShapeCursorMap&        rGlobalCursorMap );
@@ -96,6 +97,12 @@ public:
     virtual ShapeSharedPtr lookupShape(
         ::com::sun::star::uno::Reference<
            ::com::sun::star::drawing::XShape > const & xShape ) const SAL_OVERRIDE;
+    /// Notify new view added to UnoViewContainer
+    void viewAdded( const UnoViewSharedPtr& rView );
+    /// Notify view removed from UnoViewContainer
+    void viewRemoved( const UnoViewSharedPtr& rView );
+    void viewChanged( const UnoViewSharedPtr& rView );
+    void viewsChanged();
 
 private:
 
@@ -131,6 +138,16 @@ private:
     virtual bool update( ViewSharedPtr const& rView ) SAL_OVERRIDE;
     virtual bool needsUpdate() const SAL_OVERRIDE;
 
+
+    /** Add or remove views
+
+        Sharing duplicate code from viewAdded and viewRemoved
+        method. The only point of variation at those places
+        are removal vs. adding.
+     */
+    template<typename LayerFunc,
+             typename ShapeFunc> void manageViews( LayerFunc layerFunc,
+                                                   ShapeFunc shapeFunc );
 
     // ShapeManager interface
 
@@ -189,7 +206,6 @@ private:
      */
     void          implRemoveShape( const ShapeSharedPtr& rShape );
 
-
     OUString checkForHyperlink( ::basegfx::B2DPoint const& hitPos )const;
 
 
@@ -235,6 +251,8 @@ private:
      */
     ShapeUpdateSet           maUpdateShapes;
 
+    /// Registered views
+    const UnoViewContainer&             mrViews;
     EventMultiplexer&                   mrMultiplexer;
     CursorManager&                      mrCursorManager;
     const ShapeEventListenerMap&        mrGlobalListenersMap;
