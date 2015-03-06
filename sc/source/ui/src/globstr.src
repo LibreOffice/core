@@ -587,7 +587,7 @@ Resource RID_GLOBSTR
     };
     String STR_ROWCOL_SELCOUNT
     {
-        Text [ en-US ] = "Selected $1 rows, $2 columns";
+        Text [ en-US ] = "$1 rows, $2 columns selected";
     };
     String STR_COLUMN
     {
