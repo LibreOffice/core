@@ -42,7 +42,10 @@ bool VectorRefArray::isValid() const
 }
 
 SingleVectorRefToken::SingleVectorRefToken( const VectorRefArray& rArray, size_t nReqLength, size_t nArrayLength ) :
-    FormulaToken(svSingleVectorRef, ocPush), maArray(rArray), mnRequestedLength(nReqLength), mnArrayLength(nArrayLength) {}
+    FormulaToken(svSingleVectorRef, ocPush), maArray(rArray), mnRequestedLength(nReqLength), mnArrayLength(nArrayLength)
+{
+    SAL_INFO("formula.core", "Created SingleVectorRefToken nReqLength=" << nReqLength << " nArrayLength=" << nArrayLength);
+}
 
 FormulaToken* SingleVectorRefToken::Clone() const
 {
@@ -64,7 +67,10 @@ DoubleVectorRefToken::DoubleVectorRefToken(
     size_t nRefRowSize, bool bStartFixed, bool bEndFixed ) :
     FormulaToken(svDoubleVectorRef, ocPush),
     maArrays(rArrays), mnRequestedLength(nReqLength), mnArrayLength(nArrayLength),
-    mnRefRowSize(nRefRowSize), mbStartFixed(bStartFixed), mbEndFixed(bEndFixed) {}
+    mnRefRowSize(nRefRowSize), mbStartFixed(bStartFixed), mbEndFixed(bEndFixed)
+{
+    SAL_INFO("formula.core", "Created DoubleVectorRefToken nReqLength=" << nReqLength << " nArrayLength=" << nArrayLength);
+}
 
 FormulaToken* DoubleVectorRefToken::Clone() const
 {
