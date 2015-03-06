@@ -3905,6 +3905,8 @@ uno::Any SAL_CALL SwAccessibleParagraph::getExtendedAttributes()
         strHeading += OUString::number(nHeadingLevel, 10);
     strHeading += ";";
 
+    strHeading += strHeading.copy(8); // tdf#84102: expose the same attribute with the name "level"
+
     Ret <<= strHeading;
 
     return Ret;
