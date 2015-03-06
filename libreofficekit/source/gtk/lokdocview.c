@@ -247,7 +247,7 @@ static void lok_docview_init( LOKDocView* pDocView )
     pDocView->m_bEdit = FALSE;
     memset(&pDocView->m_aVisibleCursor, 0, sizeof(pDocView->m_aVisibleCursor));
     pDocView->m_bCursorOverlayVisible = FALSE;
-    pDocView->m_bCursorVisible = FALSE;
+    pDocView->m_bCursorVisible = TRUE;
     pDocView->m_nLastButtonPressTime = 0;
     pDocView->m_nLastButtonReleaseTime = 0;
     pDocView->m_pTextSelectionRectangles = NULL;

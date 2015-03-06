@@ -83,9 +83,9 @@ typedef enum
     /**
      * The blinking text cursor is now visible or not.
      *
-     * Clients should assume that this is false initially and are expected to
-     * show a blinking cursor at the rectangle described by
-     * LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR once it becomes true. Payload is
+     * Clients should assume that this is true initially and are expected to
+     * hide the blinking cursor at the rectangle described by
+     * LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR once it becomes false. Payload is
      * either the "true" or the "false" string.
      */
     LOK_CALLBACK_CURSOR_VISIBLE,

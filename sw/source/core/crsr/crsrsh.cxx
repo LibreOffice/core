@@ -62,6 +62,7 @@
 #include <globals.hrc>
 #include <comcore.hrc>
 #include <IDocumentLayoutAccess.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #if defined(IOS)
 #include <touch/touch.h>
@@ -2119,10 +2120,10 @@ void SwCrsrShell::ShowCrsr()
     {
         m_bSVCrsrVis = true;
         m_pCurCrsr->SetShowTxtInputFldOverlay( true );
-#if defined(IOS)
-        // This was dummied out both for Android and for TiledLibreOffice (iOS) anyway
-        // touch_ui_show_keyboard();
-#endif
+
+        if (isTiledRendering())
+            libreOfficeKitCallback(LOK_CALLBACK_CURSOR_VISIBLE, OString::boolean(true).getStr());
+
         UpdateCrsr();
     }
 }
@@ -2136,10 +2137,9 @@ void SwCrsrShell::HideCrsr()
         SET_CURR_SHELL( this );
         m_pCurCrsr->SetShowTxtInputFldOverlay( false );
         m_pVisCrsr->Hide();
-#if defined(IOS)
-        // This was dummied out both for Android and for TiledLibreOffice (iOS) anyway
-        // touch_ui_hide_keyboard();
-#endif
+
+        if (isTiledRendering())
+            libreOfficeKitCallback(LOK_CALLBACK_CURSOR_VISIBLE, OString::boolean(false).getStr());
     }
 }
 
