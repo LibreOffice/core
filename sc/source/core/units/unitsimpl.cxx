@@ -254,7 +254,37 @@ bool UnitsImpl::extractUnitFromHeaderString(const OUString& rString, UtUnit& aUn
     }
 
     // 2. We try to check for any free-standing units by splitting the string and testing each split
-    // TODO: do this.
+    const sal_Int32 nTokenCount = comphelper::string::getTokenCount(rString, ' ');
+    // There's an inherent limit to how well we can cope with various spacing issues here without
+    // a ton of computational complexity.
+    // E.g. by parsing in this way we might end up with unmatched parentheses which udunits won't like.
+    // for now operators have to be completely freestanding i.e. "cm / kg" or completely within a valid unit string e.g. "cm/kg"
+    const OUString sOperators = "/*"; // valid
+    OUString sCurrent = "";
+    for (sal_Int32 nToken = 0; nToken < nTokenCount; nToken++) {
+        OUString sToken = rString.getToken(nToken, ' ');
+        UtUnit aTestUnit;
+        if (UtUnit::createUnit(sToken, aTestUnit, mpUnitSystem) ||
+            // Only test for a separator character if we have already got something in our string, as
+            // some of the operators could be used as separators from description to unit
+            // (e.g. "a description / kg").
+            ((sCurrent.getLength() > 0) && (sToken.getLength() == 1) && (sOperators.indexOf(sToken[0]) != -1))) {
+                // we're repeatedly testing the string hence using an OUStringBuffer isn't of much use since there's
+                // no simple/efficient way of repeatedly getting a testable OUString from the buffer.
+                sCurrent += sToken;
+        } else if (sCurrent.getLength() > 0) {
+            // If we have units, followed by text, followed by units, we should still flag an error since
+            // that's ambiguous (unless the desired units are enclose in [] in which case we've
+            // already extracted these desired units in step 1 above.
+            break;
+        }
+    }
+
+    // We test the length to make sure we don't return the dimensionless unit 1 if we haven't found any units
+    // in the header.
+    if (sCurrent.getLength() && UtUnit::createUnit(sCurrent, aUnit, mpUnitSystem)) {
+        return true;
+    }
 
     // 3. Give up
     aUnit = UtUnit(); // assign invalid
