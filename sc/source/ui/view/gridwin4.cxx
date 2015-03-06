@@ -927,22 +927,18 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
 
     // FIXME the painting works using a mixture of drawing with coordinates in
     // pixels and in logic coordinates; it should be cleaned up to use logic
-    // coords only.
+    // coords only, and avoid all the SetMapMode()'s.
+    // Similarly to Writer, we should set the mapmode once on the rDevice, and
+    // not care about any zoom settings.
 
-    // TODO : zooming isn't perfect.  Find out why.
-    double nOutWTwips = static_cast<double>(nOutputWidth) / PIXEL_PER_TWIPS;
-    double nOutHTwips = static_cast<double>(nOutputHeight) / PIXEL_PER_TWIPS;
-
-    nOutWTwips /= nTileWidth;
-    nOutHTwips /= nTileHeight;
-    Fraction aFracX(nOutWTwips);
-    Fraction aFracY(nOutHTwips);
+    Fraction aFracX(long(nOutputWidth * TWIPS_PER_PIXEL), nTileWidth);
+    Fraction aFracY(long(nOutputHeight * TWIPS_PER_PIXEL), nTileHeight);
 
     pViewData->SetZoom(aFracX, aFracY, true);
     pViewData->RefreshZoom();
 
-    double fTilePosXPixel = static_cast<double>(nTilePosX) * PIXEL_PER_TWIPS * static_cast<double>(aFracX);
-    double fTilePosYPixel = static_cast<double>(nTilePosY) * PIXEL_PER_TWIPS * static_cast<double>(aFracY);
+    double fTilePosXPixel = static_cast<double>(nTilePosX) * nOutputWidth / nTileWidth;
+    double fTilePosYPixel = static_cast<double>(nTilePosY) * nOutputHeight / nTileHeight;
 
     SCTAB nTab = pViewData->GetTabNo();
     ScDocument* pDoc = pViewData->GetDocument();
@@ -957,7 +953,9 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
     ScTableInfo aTabInfo;
     pDoc->FillInfo(aTabInfo, nCol1, nRow1, nCol2, nRow2, nTab, fPPTX, fPPTY, false, false, NULL);
 
-    ScOutputData aOutputData(&rDevice, OUTTYPE_WINDOW, aTabInfo, pDoc, nTab, -fTilePosXPixel, -fTilePosYPixel, nCol1, nRow1, nCol2, nRow2, fPPTX, fPPTY);
+    ScOutputData aOutputData(&rDevice, OUTTYPE_WINDOW, aTabInfo, pDoc, nTab,
+            -fTilePosXPixel, -fTilePosYPixel, nCol1, nRow1, nCol2, nRow2,
+            fPPTX, fPPTY);
 
     DrawContent(rDevice, aTabInfo, aOutputData, true, SC_UPDATE_ALL);
 }
