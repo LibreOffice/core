@@ -19,6 +19,7 @@
 
 #include <svx/sdr/overlay/overlayobjectlist.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
+#include <svx/svdmodel.hxx>
 #include <vcl/outdev.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <tools/gen.hxx>
@@ -72,8 +73,13 @@ namespace sdr
                 {
                     if(0.0 == fLogicTolerance)
                     {
-                        const Size aSizeLogic(pManager->getOutputDevice().PixelToLogic(
+                        Size aSizeLogic(pManager->getOutputDevice().PixelToLogic(
                             Size(DEFAULT_VALUE_FOR_HITTEST_PIXEL, DEFAULT_VALUE_FOR_HITTEST_PIXEL)));
+
+                        // When tiled rendering, we always work in twips, use the non-pixel default.
+                        if (pManager->getModel()->isTiledRendering())
+                            aSizeLogic = Size(DEFAULT_VALUE_FOR_HITTEST_TWIP, DEFAULT_VALUE_FOR_HITTEST_TWIP);
+
                         fLogicTolerance = aSizeLogic.Width();
                     }
 
