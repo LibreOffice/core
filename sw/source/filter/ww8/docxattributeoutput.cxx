@@ -927,8 +927,7 @@ void DocxAttributeOutput::EndParagraphProperties(const SfxItemSet& rParagraphMar
     // we are done exporting the redline attributes.
     std::unique_ptr<sax_fastparser::FastAttributeList> pFontsAttrList_Original(m_pFontsAttrList.release());
     std::unique_ptr<sax_fastparser::FastAttributeList> pEastAsianLayoutAttrList_Original(m_pEastAsianLayoutAttrList.release());
-    ::sax_fastparser::FastAttributeList *pCharLangAttrList_Original        = m_pCharLangAttrList;
-    m_pCharLangAttrList        = NULL;
+    std::unique_ptr<sax_fastparser::FastAttributeList> pCharLangAttrList_Original(m_pCharLangAttrList.release());
 
     lcl_writeParagraphMarkerProperties(*this, rParagraphMarkerProperties);
 
@@ -938,7 +937,7 @@ void DocxAttributeOutput::EndParagraphProperties(const SfxItemSet& rParagraphMar
     // Revert back the original values that were stored in 'm_pFontsAttrList', 'm_pEastAsianLayoutAttrList', 'm_pCharLangAttrList'
     m_pFontsAttrList.reset(pFontsAttrList_Original.release());
     m_pEastAsianLayoutAttrList.reset(pEastAsianLayoutAttrList_Original.release());
-    m_pCharLangAttrList        = pCharLangAttrList_Original;
+    m_pCharLangAttrList.reset(pCharLangAttrList_Original.release());
 
     if ( pRedlineParagraphMarkerDeleted )
     {
@@ -1643,7 +1642,7 @@ void DocxAttributeOutput::InitCollectedRunProperties()
 {
     m_pFontsAttrList = 0;
     m_pEastAsianLayoutAttrList = 0;
-    m_pCharLangAttrList = NULL;
+    m_pCharLangAttrList = 0;
 
     // Write the elements in the spec order
     static const sal_Int32 aOrder[] =
@@ -1900,9 +1899,7 @@ void DocxAttributeOutput::WriteCollectedRunProperties()
 
     if ( m_pCharLangAttrList )
     {
-        XFastAttributeListRef xAttrList( m_pCharLangAttrList );
-        m_pCharLangAttrList = NULL;
-
+        XFastAttributeListRef xAttrList( m_pCharLangAttrList.release() );
         m_pSerializer->singleElementNS( XML_w, XML_lang, xAttrList );
     }
 
@@ -2341,8 +2338,7 @@ void DocxAttributeOutput::Redline( const SwRedlineData* pRedlineData)
                     // we are done exporting the redline attributes.
                     std::unique_ptr<sax_fastparser::FastAttributeList> pFontsAttrList_Original(m_pFontsAttrList.release());
                     std::unique_ptr<sax_fastparser::FastAttributeList> pEastAsianLayoutAttrList_Original(m_pEastAsianLayoutAttrList.release());
-                    ::sax_fastparser::FastAttributeList *pCharLangAttrList_Original        = m_pCharLangAttrList;
-                    m_pCharLangAttrList        = NULL;
+                    std::unique_ptr<sax_fastparser::FastAttributeList> pCharLangAttrList_Original(m_pCharLangAttrList.release());
 
                     // Output the redline item set
                     m_rExport.OutputItemSet( *pChangesSet, false, true, i18n::ScriptType::LATIN, m_rExport.mbExportModeRTF );
@@ -2353,7 +2349,7 @@ void DocxAttributeOutput::Redline( const SwRedlineData* pRedlineData)
                     // Revert back the original values that were stored in 'm_pFontsAttrList', 'm_pEastAsianLayoutAttrList', 'm_pCharLangAttrList'
                     m_pFontsAttrList.reset(pFontsAttrList_Original.release());
                     m_pEastAsianLayoutAttrList.reset(pEastAsianLayoutAttrList_Original.release());
-                    m_pCharLangAttrList        = pCharLangAttrList_Original;
+                    m_pCharLangAttrList.reset(pCharLangAttrList_Original.release());
 
                     m_pSerializer->endElementNS( XML_w, XML_rPr );
 
@@ -8286,7 +8282,6 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
     : m_rExport( rExport ),
       m_pSerializer( pSerializer ),
       m_rDrawingML( *pDrawingML ),
-      m_pCharLangAttrList( NULL ),
       m_pSectionSpacingAttrList( NULL ),
       m_pParagraphSpacingAttrList( NULL ),
       m_pHyperlinkAttrList( NULL ),
@@ -8359,7 +8354,6 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
 
 DocxAttributeOutput::~DocxAttributeOutput()
 {
-    delete m_pCharLangAttrList, m_pCharLangAttrList = NULL;
     delete m_pSectionSpacingAttrList, m_pSectionSpacingAttrList = NULL;
     delete m_pParagraphSpacingAttrList, m_pParagraphSpacingAttrList = NULL;
     delete m_pHyperlinkAttrList, m_pHyperlinkAttrList = NULL;
