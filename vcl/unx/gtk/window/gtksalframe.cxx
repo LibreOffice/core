@@ -364,8 +364,6 @@ GetAlternateKeyCode( const sal_uInt16 nKeyCode )
 }
 
 #if GTK_CHECK_VERSION(3,0,0)
-static int debugQueuePureRedraw = 0;
-static bool debugRedboxRedraws = false;
 
 namespace {
 /// Decouple SalFrame lifetime from damagetracker lifetime
@@ -408,15 +406,8 @@ void GtkSalFrame::doKeyCallback( guint state,
     // shift-zero forces a re-draw and event is swallowed
     if (keyval == GDK_0)
     {
-        debugQueuePureRedraw += 2;
-        fprintf( stderr, "force re-draw %d\n", debugQueuePureRedraw );
+        fprintf( stderr, "force re-draw\n");
         gtk_widget_queue_draw (m_pWindow);
-        return;
-    }
-    if (keyval == GDK_9)
-    {
-        debugRedboxRedraws = !debugRedboxRedraws;
-        fprintf( stderr, "set redboxing to %d\n", debugRedboxRedraws );
         return;
     }
 #endif
@@ -3397,58 +3388,18 @@ void GtkSalFrame::damaged (const basegfx::B2IBox& rDamageRect)
 }
 
 // blit our backing basebmp buffer to the target cairo context cr
-void GtkSalFrame::renderArea( cairo_t *cr, cairo_rectangle_t *area )
-{
-    cairo_save( cr );
-
-    cairo_surface_t *pSurface = cairo_get_target(getCairoContext());
-    cairo_set_operator( cr, CAIRO_OPERATOR_OVER );
-    cairo_set_source_surface( cr, pSurface, 0, 0 );
-    SAL_INFO("vcl.gtk3", "rendering" << area->x << "," << area->y << " " << area->width << "x" << area->height);
-    cairo_rectangle( cr, area->x, area->y, area->width, area->height );
-    cairo_fill( cr );
-
-    cairo_restore( cr );
-
-    // Render red rectangles to show what was re-rendered ...
-    if (debugRedboxRedraws)
-    {
-        cairo_save( cr );
-        cairo_set_line_width( cr, 1.0 );
-        cairo_set_source_rgb( cr, 1.0, 0, 0 );
-        cairo_rectangle( cr, area->x + 1.0, area->y + 1.0, area->width - 2.0, area->height - 2.0 );
-        cairo_stroke( cr );
-        cairo_restore( cr );
-    }
-}
-
 gboolean GtkSalFrame::signalDraw( GtkWidget*, cairo_t *cr, gpointer frame )
 {
     GtkSalFrame* pThis = (GtkSalFrame*)frame;
 
-    double x1 = 0.0, y1 = 0.0, x2 = 0.0, y2 = 0.0;
-    cairo_clip_extents (cr, &x1, &y1, &x2, &y2);
+    cairo_save(cr);
 
-    if (debugQueuePureRedraw > 0)
-    {
-        debugQueuePureRedraw--;
-        fprintf (stderr, "skip signalDraw for debug %d\n", debugQueuePureRedraw);
-        cairo_rectangle_t rect = { x1, y1, x2 - x1, y2 - y1 };
-        pThis->renderArea( cr, &rect );
-        return FALSE;
-    }
+    cairo_surface_t *pSurface = cairo_get_target(pThis->getCairoContext());
+    cairo_set_operator( cr, CAIRO_OPERATOR_OVER );
+    cairo_set_source_surface(cr, pSurface, 0, 0);
+    cairo_paint(cr);
 
-    // FIXME: we need to profile whether re-rendering the entire
-    // clip region, and just pushing (with renderArea) smaller pieces
-    // is faster ...
-    cairo_rectangle_list_t *rects = cairo_copy_clip_rectangle_list (cr);
-    SAL_INFO("vcl.gtk3", "paint " << rects->num_rectangles << " regions");
-    for (int i = 0; i < rects->num_rectangles; i++) {
-        cairo_rectangle_t rect = rects->rectangles[i];
-        SAL_INFO("vcl.gtk3", "\t" << i << " -> " << rect.x << "," << rect.y << " " << rect.width << "x" << rect.height);
-        pThis->renderArea( cr, &rect );
-    }
-    cairo_rectangle_list_destroy(rects);
+    cairo_restore(cr);
 
     cairo_surface_flush(cairo_get_target(cr));
 

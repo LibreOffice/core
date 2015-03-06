@@ -345,7 +345,6 @@ public:
 #if GTK_CHECK_VERSION(3,0,0)
     // only for gtk3 ...
     cairo_t* getCairoContext();
-    void renderArea( cairo_t *cr, cairo_rectangle_t *src );
     void damaged (const basegfx::B2IBox& rDamageRect);
 #endif
     virtual ~GtkSalFrame();
