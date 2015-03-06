@@ -131,12 +131,12 @@ struct SfxChildWin_Impl
     {}
 };
 
-enum SfxChildIdentifier
+enum class SfxChildIdentifier
 {
-    SFX_CHILDWIN_STATBAR,
-    SFX_CHILDWIN_OBJECTBAR,
-    SFX_CHILDWIN_DOCKINGWINDOW,
-    SFX_CHILDWIN_SPLITWINDOW
+    STATBAR,
+    OBJECTBAR,
+    DOCKINGWINDOW,
+    SPLITWINDOW
 };
 
 enum SfxDockingConfig

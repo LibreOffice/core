@@ -1693,7 +1693,7 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
     vcl::Window *pWin=0;
     SfxChildWin_Impl *pCW = 0;
 
-    if ( eChild == SFX_CHILDWIN_OBJECTBAR )
+    if ( eChild == SfxChildIdentifier::OBJECTBAR )
         return;
 
     // configure direct childwindow
@@ -1718,9 +1718,9 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
 
     if ( pDockWin )
     {
-        if ( eChild == SFX_CHILDWIN_DOCKINGWINDOW || pDockWin->GetAlignment() == SFX_ALIGN_NOALIGNMENT )
+        if ( eChild == SfxChildIdentifier::DOCKINGWINDOW || pDockWin->GetAlignment() == SFX_ALIGN_NOALIGNMENT )
         {
-            if ( eChild == SFX_CHILDWIN_SPLITWINDOW && eConfig == SFX_TOGGLEFLOATMODE)
+            if ( eChild == SfxChildIdentifier::SPLITWINDOW && eConfig == SFX_TOGGLEFLOATMODE)
             {
                 // DockingWindow was dragged out of a SplitWindow
                 pCW->pCli = RegisterChild_Impl(*pDockWin, pDockWin->GetAlignment(), pCW->pWin->CanGetFocus());
@@ -1878,7 +1878,7 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
             if ( pCli && pDockWin )
             {
                 eAlign = pDockWin->GetAlignment();
-                if ( eChild == SFX_CHILDWIN_DOCKINGWINDOW || eAlign == SFX_ALIGN_NOALIGNMENT)
+                if ( eChild == SfxChildIdentifier::DOCKINGWINDOW || eAlign == SFX_ALIGN_NOALIGNMENT)
                 {
                     // configuration inside the SplitWindow, no change for the SplitWindows' configuration
                     pCli->bResize = true;

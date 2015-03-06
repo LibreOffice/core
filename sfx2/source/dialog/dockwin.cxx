@@ -556,9 +556,9 @@ void SfxDockingWindow::ToggleFloatingMode()
     SfxChildAlignment eLastAlign = GetAlignment();
 
     SfxWorkWindow *pWorkWin = pBindings->GetWorkWindow_Impl();
-    SfxChildIdentifier eIdent = SFX_CHILDWIN_DOCKINGWINDOW;
+    SfxChildIdentifier eIdent = SfxChildIdentifier::DOCKINGWINDOW;
     if ( pImp->bSplitable )
-        eIdent = SFX_CHILDWIN_SPLITWINDOW;
+        eIdent = SfxChildIdentifier::SPLITWINDOW;
 
     if (IsFloatingMode())
     {
@@ -633,9 +633,9 @@ void SfxDockingWindow::StartDocking()
 {
     if ( !pImp->bConstructed || !pMgr )
         return;
-    SfxChildIdentifier eIdent = SFX_CHILDWIN_DOCKINGWINDOW;
+    SfxChildIdentifier eIdent = SfxChildIdentifier::DOCKINGWINDOW;
     if ( pImp->bSplitable )
-        eIdent = SFX_CHILDWIN_SPLITWINDOW;
+        eIdent = SfxChildIdentifier::SPLITWINDOW;
     SfxWorkWindow *pWorkWin = pBindings->GetWorkWindow_Impl();
     pWorkWin->ConfigChild_Impl( eIdent, SFX_SETDOCKINGRECTS, pMgr->GetType() );
     pImp->SetDockAlignment(GetAlignment());
@@ -1861,9 +1861,9 @@ void SfxDockingWindow::SetItemSize_Impl( const Size& rSize )
     pImp->aSplitSize = rSize;
 
     SfxWorkWindow *pWorkWin = pBindings->GetWorkWindow_Impl();
-    SfxChildIdentifier eIdent = SFX_CHILDWIN_DOCKINGWINDOW;
+    SfxChildIdentifier eIdent = SfxChildIdentifier::DOCKINGWINDOW;
     if ( pImp->bSplitable )
-        eIdent = SFX_CHILDWIN_SPLITWINDOW;
+        eIdent = SfxChildIdentifier::SPLITWINDOW;
     pWorkWin->ConfigChild_Impl( eIdent, SFX_ALIGNDOCKINGWINDOW, pMgr->GetType() );
 }
 
@@ -1926,9 +1926,9 @@ IMPL_LINK_NOARG(SfxDockingWindow, TimerHdl)
         if( !GetFloatingWindow()->IsRollUp() )
             SetFloatingSize( GetOutputSizePixel() );
         pImp->aWinState = GetFloatingWindow()->GetWindowState();
-        SfxChildIdentifier eIdent = SFX_CHILDWIN_DOCKINGWINDOW;
+        SfxChildIdentifier eIdent = SfxChildIdentifier::DOCKINGWINDOW;
         if ( pImp->bSplitable )
-            eIdent = SFX_CHILDWIN_SPLITWINDOW;
+            eIdent = SfxChildIdentifier::SPLITWINDOW;
         SfxWorkWindow *pWorkWin = pBindings->GetWorkWindow_Impl();
         pWorkWin->ConfigChild_Impl( eIdent, SFX_ALIGNDOCKINGWINDOW, pMgr->GetType() );
     }
