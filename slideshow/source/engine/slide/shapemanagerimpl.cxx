@@ -397,6 +397,23 @@ void ShapeManagerImpl::implAddShape( const ShapeSharedPtr& rShape )
         notifyShapeUpdate( rShape );
 }
 
+void ShapeManagerImpl::addShape( const ShapeSharedPtr& rShape )
+{
+    ENSURE_OR_THROW( rShape, "ShapeManagerImpl::addShape(): invalid Shape" );
+
+    // add shape to XShape hash map
+    if( !maXShapeHash.insert(
+            XShapeHash::value_type( rShape->getXShape(),
+                                    rShape) ).second )
+    {
+        // entry already present, nothing to do
+        return;
+    }
+
+    // add shape to appropriate layer
+    implAddShape( rShape );
+}
+
 void ShapeManagerImpl::implRemoveShape( const ShapeSharedPtr& rShape )
 {
     ENSURE_OR_THROW( rShape, "ShapeManagerImpl::implRemoveShape(): invalid Shape" );

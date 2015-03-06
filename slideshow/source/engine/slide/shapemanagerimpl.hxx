@@ -68,6 +68,11 @@ public:
                       CursorManager&               rCursorManager,
                       const ShapeEventListenerMap& rGlobalListenersMap,
                       const ShapeCursorMap&        rGlobalCursorMap );
+    /** Add the shape to this object
+
+        This method adds a shape to the page.
+     */
+    void addShape( const ShapeSharedPtr& rShape );
 
     /** Enables event listening.
 

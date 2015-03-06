@@ -1049,15 +1049,15 @@ bool SlideImpl::loadShapes()
                                                 0, /* shape num starts at 0 */
                                                 true );
 
-               /* mpLayerManager->addShape(
-                    aMPShapesFunctor.importBackgroundShape() );*/
+                mpShapeManager->addShape(
+                    aMPShapesFunctor.importBackgroundShape() );
 
                 while( !aMPShapesFunctor.isImportDone() )
                 {
                     ShapeSharedPtr const& rShape(
                         aMPShapesFunctor.importShape() );
                     if( rShape )
-                       /* mpLayerManager->addShape( rShape );*/;
+                        mpShapeManager->addShape( rShape );;
                 }
                 addPolygons(aMPShapesFunctor.getPolygons());
 
@@ -1102,7 +1102,7 @@ bool SlideImpl::loadShapes()
             ShapeSharedPtr const& rShape(
                 aShapesFunctor.importShape() );
             if( rShape )
-                /*mpLayerManager->addShape( rShape );*/;
+                mpShapeManager->addShape( rShape );;
         }
         addPolygons(aShapesFunctor.getPolygons());
     }
