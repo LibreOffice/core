@@ -30,9 +30,9 @@ protected:
     sal_uLong       mnTimeout;
     bool            mbAuto;
 
-    void SetDeletionFlags() SAL_OVERRIDE;
-    bool ReadyForSchedule( bool bTimer ) SAL_OVERRIDE;
-    sal_uLong UpdateMinPeriod( sal_uLong nMinPeriod, sal_uLong nTime ) SAL_OVERRIDE;
+    virtual void SetDeletionFlags() SAL_OVERRIDE;
+    virtual bool ReadyForSchedule( bool bTimer ) SAL_OVERRIDE;
+    virtual sal_uLong UpdateMinPeriod( sal_uLong nMinPeriod, sal_uLong nTime ) SAL_OVERRIDE;
 
 public:
     Timer();
@@ -47,7 +47,7 @@ public:
     virtual void    Invoke() SAL_OVERRIDE;
     void            Timeout() { Invoke(); }
     Timer&          operator=( const Timer& rTimer );
-    void            Start() SAL_OVERRIDE;
+    virtual void            Start() SAL_OVERRIDE;
     static void     ImplStartTimer( ImplSVData* pSVData, sal_uLong nMS );
 };
 
