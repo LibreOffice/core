@@ -57,9 +57,7 @@ public:
 
     SC_DLLPUBLIC virtual void SetRefreshDelay( sal_uLong nSeconds );
     SC_DLLPUBLIC virtual void Invoke() SAL_OVERRIDE;
-
-private:
-    void Start();
+    virtual void Start() SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_SC_INC_REFRESHTIMER_HXX
