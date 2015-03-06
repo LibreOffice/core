@@ -28,6 +28,7 @@ import android.widget.FrameLayout;
 import org.libreoffice.LibreOfficeMainActivity;
 import org.libreoffice.R;
 import org.mozilla.gecko.OnInterceptTouchListener;
+import org.mozilla.gecko.OnSlideSwipeListener;
 
 /**
  * A view rendered by the layer compositor.
@@ -110,6 +111,7 @@ public class LayerView extends FrameLayout {
         setFocusableInTouchMode(true);
 
         createGLThread();
+        setOnTouchListener(new OnSlideSwipeListener(getContext(), mLayerClient));
     }
 
     public void show() {
