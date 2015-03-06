@@ -198,6 +198,8 @@ private:
                                    ::com::sun::star::drawing::XShape>&   xShape,
                                 sal_Int16                                nCursor );
 
+    bool updateSprites();
+
     /** Common stuff when adding a shape
      */
     void          implAddShape( const ShapeSharedPtr& rShape );

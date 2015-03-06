@@ -343,8 +343,7 @@ void ShapeManagerImpl::viewsChanged()
 
 bool ShapeManagerImpl::update()
 {
-    //if( mbEnabled)
-       // return mpLayerManager->update();
+    updateSprites();
     return false;
 }
 
@@ -381,8 +380,36 @@ void ShapeManagerImpl::leaveAnimationMode( const AnimatableShapeSharedPtr& rShap
 
 void ShapeManagerImpl::notifyShapeUpdate( const ShapeSharedPtr& rShape )
 {
-   // if( mbEnabled )
-       // mpLayerManager->notifyShapeUpdate(rShape);
+    if( rShape->isVisible() || rShape->isBackgroundDetached() )
+          maUpdateShapes.insert( rShape );
+}
+
+bool ShapeManagerImpl::updateSprites()
+{
+    bool bRet(true);
+
+    // send update() calls to every shape in the
+    // maUpdateShapes set, which is _animated_ (i.e. a
+    // sprite).
+    const ShapeUpdateSet::const_iterator aEnd=maUpdateShapes.end();
+    ShapeUpdateSet::const_iterator       aCurrShape=maUpdateShapes.begin();
+    while( aCurrShape != aEnd )
+    {
+        if( (*aCurrShape)->isBackgroundDetached() )
+        {
+            // can update shape directly, without
+            // affecting layer content (shape is
+            // currently displayed in a sprite)
+            if( !(*aCurrShape)->update() )
+                bRet = false; // delay error exit
+        }
+
+        ++aCurrShape;
+    }
+
+    maUpdateShapes.clear();
+
+    return bRet;
 }
 
 ShapeSharedPtr ShapeManagerImpl::lookupShape( uno::Reference< drawing::XShape > const & xShape ) const
