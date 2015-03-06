@@ -23,11 +23,14 @@
 #include <vcl/timer.hxx>
 #include <saltimer.hxx>
 
+#define MAX_TIMER_PERIOD    ((sal_uLong)0xFFFFFFFF)
+
 void ImplSchedulerData::Invoke()
 {
     if (mbDelete || mbInScheduler )
         return;
 
+    // prepare Scheduler Object for deletion after handling
     mpScheduler->SetDeletionFlags();
 
     // invoke it
@@ -41,20 +44,20 @@ ImplSchedulerData *ImplSchedulerData::GetMostImportantTask( bool bTimer )
     ImplSVData*     pSVData = ImplGetSVData();
     ImplSchedulerData *pMostUrgent = NULL;
 
-    for ( ImplSchedulerData *p = pSVData->mpFirstSchedulerData; p; p = p->mpNext )
+    for ( ImplSchedulerData *pSchedulerData = pSVData->mpFirstSchedulerData; pSchedulerData; pSchedulerData = pSchedulerData->mpNext )
     {
-        if ( !p->mpScheduler || p->mbDelete || p->mnUpdateStack >= pSVData->mnTimerUpdate || !p->mpScheduler->ReadyForSchedule( bTimer ) )
+        if ( !pSchedulerData->mpScheduler || pSchedulerData->mbDelete || pSchedulerData->mnUpdateStack >= pSVData->mnUpdateStack
+            || !pSchedulerData->mpScheduler->ReadyForSchedule( bTimer ) )
             continue;
         if (!pMostUrgent)
-            pMostUrgent = p;
+            pMostUrgent = pSchedulerData;
         else
         {
             // Find the highest priority.
-            // If the priority of the current idle is higher (numerical value is lower) than
-            // the priority of the most urgent, the priority of most urgent is increased and
-            // the current is the new most urgent. So starving is impossible.
-            if ( p->mpScheduler->GetPriority() < pMostUrgent->mpScheduler->GetPriority() )
-                pMostUrgent = p;
+            // If the priority of the current task is higher (numerical value is lower) than
+            // the priority of the most urgent, the current task gets the new most urgent.
+            if ( pSchedulerData->mpScheduler->GetPriority() < pMostUrgent->mpScheduler->GetPriority() )
+                pMostUrgent = pSchedulerData;
         }
     }
 
@@ -101,6 +104,7 @@ void Scheduler::ImplDeInitScheduler()
 
 void Scheduler::CallbackTaskScheduling(bool ignore)
 {
+    // this function is for the saltimer callback
     (void)ignore;
     Scheduler::ProcessTaskScheduling( true );
 }
@@ -108,12 +112,13 @@ void Scheduler::CallbackTaskScheduling(bool ignore)
 void Scheduler::ProcessTaskScheduling( bool bTimer )
 {
     // process all pending Tasks
+    // if bTimer True, only handle timer
     ImplSchedulerData* pSchedulerData = NULL;
     ImplSchedulerData* pPrevSchedulerData = NULL;
     ImplSVData*        pSVData = ImplGetSVData();
     sal_uLong          nTime = tools::Time::GetSystemTicks();
-    sal_uLong          nMinPeriod = ((sal_uLong)0xFFFFFFFF);
-    pSVData->mnTimerUpdate++;
+    sal_uLong          nMinPeriod = MAX_TIMER_PERIOD;
+    pSVData->mnUpdateStack++;
 
     if ((pSchedulerData = ImplSchedulerData::GetMostImportantTask(bTimer)))
     {
@@ -156,15 +161,17 @@ void Scheduler::ProcessTaskScheduling( bool bTimer )
     {
         if ( pSVData->mpSalTimer )
             pSVData->mpSalTimer->Stop();
-        pSVData->mnTimerPeriod = ((sal_uLong)0xFFFFFFFF);
+        pSVData->mnTimerPeriod = MAX_TIMER_PERIOD;
     }
     else
         Timer::ImplStartTimer( pSVData, nMinPeriod );
-    pSVData->mnTimerUpdate--;
+    pSVData->mnUpdateStack--;
 }
 
 sal_uLong Scheduler::UpdateMinPeriod( sal_uLong nMinPeriod, sal_uLong nTime )
 {
+    // this period is only usefull for timer
+    // so in this implementation it' only a pass through
     (void)nTime;
     return nMinPeriod;
 }
@@ -182,7 +189,7 @@ void Scheduler::Start()
     ImplSVData* pSVData = ImplGetSVData();
     if ( !mpSchedulerData )
     {
-        // insert Idle
+        // insert Scheduler
         mpSchedulerData                = new ImplSchedulerData;
         mpSchedulerData->mpScheduler   = this;
         mpSchedulerData->mbInScheduler = false;
@@ -203,7 +210,7 @@ void Scheduler::Start()
     }
     mpSchedulerData->mbDelete      = false;
     mpSchedulerData->mnUpdateTime  = tools::Time::GetSystemTicks();
-    mpSchedulerData->mnUpdateStack = pSVData->mnTimerUpdate;
+    mpSchedulerData->mnUpdateStack = pSVData->mnUpdateStack;
 }
 
 void Scheduler::Stop()
