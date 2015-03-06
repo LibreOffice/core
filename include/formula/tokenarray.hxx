@@ -115,6 +115,10 @@ protected:
 
     /// Also used by the compiler. The token MUST had been allocated with new!
     FormulaToken*           Add( FormulaToken* );
+    /** Also used by the compiler. The token MUST had been allocated with new!
+        @param nOffset negative offset of token, 0==last, 1==previous, ...
+     */
+    FormulaToken*           ReplaceToken( sal_uInt16 nOffset, FormulaToken* );
     inline  void            SetCombinedBitsRecalcMode( ScRecalcMode nBits )
                                 { nMode |= (nBits & ~RECALCMODE_EMASK); }
     inline  ScRecalcMode    GetCombinedBitsRecalcMode() const

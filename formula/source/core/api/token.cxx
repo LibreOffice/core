@@ -849,6 +849,24 @@ FormulaToken* FormulaTokenArray::MergeArray( )
     return NULL;
 }
 
+FormulaToken* FormulaTokenArray::ReplaceToken( sal_uInt16 nOffset, FormulaToken* t )
+{
+    if (nOffset < nLen)
+    {
+        CheckToken(*t);
+        sal_uInt16 nPos = nLen - nOffset - 1;
+        t->IncRef();
+        pCode[nPos]->DecRef();
+        pCode[nPos] = t;
+        return t;
+    }
+    else
+    {
+        t->Delete();
+        return NULL;
+    }
+}
+
 FormulaToken* FormulaTokenArray::Add( FormulaToken* t )
 {
     if( !pCode )
