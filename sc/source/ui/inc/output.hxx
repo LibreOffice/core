@@ -147,6 +147,7 @@ private:
     RowInfo* pRowInfo;          // Info block
     SCSIZE nArrCount;           // occupied lines in info block
     ScDocument* mpDoc;          // Document
+public:
     SCTAB nTab;                 // sheet
     long nScrX;                 // Output Startpos. (Pixel)
     long nScrY;
@@ -157,6 +158,7 @@ private:
     SCROW nY1;                  //  ( incl. hidden )
     SCCOL nX2;
     SCROW nY2;
+private:
     SCCOL nVisX1;               // Start-/End coordinates
     SCROW nVisY1;               //  ( visible range )
     SCCOL nVisX2;

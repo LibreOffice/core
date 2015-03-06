@@ -357,11 +357,14 @@ public:
 
     ::com::sun::star::sheet::DataPilotFieldOrientation GetDPFieldOrientation( SCCOL nCol, SCROW nRow ) const;
 
-    void DrawButtons( SCCOL nX1, SCCOL nX2, ScTableInfo& rTabInfo, OutputDevice* pContentDev);
+    void DrawButtons(SCCOL nX1, SCCOL nX2, const ScTableInfo& rTabInfo, OutputDevice* pContentDev);
 
     using Window::Draw;
     void            Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
                           ScUpdateMode eMode = SC_UPDATE_ALL );
+
+    /// Draw content of the gridwindow; shared between the desktop and the tiled rendering.
+    void DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableInfo, ScOutputData& aOutputData, bool bLogicText, ScUpdateMode eMode);
 
     void            CreateAnchorHandle(SdrHdlList& rHdl, const ScAddress& rAddress);
 

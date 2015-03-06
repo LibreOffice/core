@@ -427,7 +427,6 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
     Point aScrPos = pViewData->GetScrPos( nX1, nY1, eWhich );
     long nMirrorWidth = GetSizePixel().Width();
     bool bLayoutRTL = rDoc.IsLayoutRTL( nTab );
-    long nLayoutSign = bLayoutRTL ? -1 : 1;
     if ( bLayoutRTL )
     {
         long nEndPixel = pViewData->GetScrPos( nX2+1, maVisibleRange.mnRow1, eWhich ).X();
@@ -463,14 +462,12 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
     double nPPTY = pViewData->GetPPTY();
 
     const ScViewOptions& rOpts = pViewData->GetOptions();
-    bool bFormulaMode = rOpts.GetOption( VOPT_FORMULAS );
-    bool bMarkClipped = rOpts.GetOption( VOPT_CLIPMARKS );
 
         // Datenblock
 
     ScTableInfo aTabInfo;
     rDoc.FillInfo( aTabInfo, nX1, nY1, nX2, nY2, nTab,
-                                        nPPTX, nPPTY, false, bFormulaMode,
+                                        nPPTX, nPPTY, false, rOpts.GetOption(VOPT_FORMULAS),
                                         &pViewData->GetMarkData() );
 
     Fraction aZoomX = pViewData->GetZoomX();
@@ -505,6 +502,37 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
         bLogicText = true;                      // use logic MapMode
     }
 
+    DrawContent(*this, aTabInfo, aOutputData, bLogicText, eMode);
+
+    //  Wenn waehrend des Paint etwas invertiert wurde (Selektion geaendert aus Basic-Macro),
+    //  ist das jetzt durcheinandergekommen und es muss neu gemalt werden
+
+    OSL_ENSURE(nPaintCount, "nPaintCount falsch");
+    --nPaintCount;
+    if (!nPaintCount)
+        CheckNeedsRepaint();
+
+    // Flag drawn formula cells "unchanged".
+    rDoc.ResetChanged(ScRange(nX1, nY1, nTab, nX2, nY2, nTab));
+    rDoc.ClearFormulaContext();
+}
+
+void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableInfo, ScOutputData& aOutputData,
+        bool bLogicText, ScUpdateMode eMode)
+{
+    ScModule* pScMod = SC_MOD();
+    ScDocShell* pDocSh = pViewData->GetDocShell();
+    ScDocument& rDoc = pDocSh->GetDocument();
+    const ScViewOptions& rOpts = pViewData->GetOptions();
+
+    SCTAB nTab = aOutputData.nTab;
+    SCCOL nX1 = aOutputData.nX1;
+    SCROW nY1 = aOutputData.nY1;
+    SCCOL nX2 = aOutputData.nX2;
+    SCROW nY2 = aOutputData.nY2;
+    long nScrX = aOutputData.nScrX;
+    long nScrY = aOutputData.nScrY;
+
     const svtools::ColorConfig& rColorCfg = pScMod->GetColorConfig();
     Color aGridColor( rColorCfg.GetColorValue( svtools::CALCGRID, false ).nColor );
     if ( aGridColor.GetColor() == COL_TRANSPARENT )
@@ -516,9 +544,9 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
     aOutputData.SetSyntaxMode       ( pViewData->IsSyntaxMode() );
     aOutputData.SetGridColor        ( aGridColor );
     aOutputData.SetShowNullValues   ( rOpts.GetOption( VOPT_NULLVALS ) );
-    aOutputData.SetShowFormulas     ( bFormulaMode );
+    aOutputData.SetShowFormulas     ( rOpts.GetOption( VOPT_FORMULAS ) );
     aOutputData.SetShowSpellErrors  ( rDoc.GetDocOptions().IsAutoSpell() );
-    aOutputData.SetMarkClipped      ( bMarkClipped );
+    aOutputData.SetMarkClipped      ( rOpts.GetOption( VOPT_CLIPMARKS ) );
 
     aOutputData.SetUseStyleColor( true );       // always set in table view
 
@@ -562,6 +590,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
     // define drawing layer map mode and paint rectangle
     const MapMode aDrawMode = GetDrawMapMode();
     Rectangle aDrawingRectLogic;
+    bool bLayoutRTL = rDoc.IsLayoutRTL( nTab );
 
     {
         // get drawing pixel rect
@@ -704,13 +733,13 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
 
     pContentDev->SetMapMode(pViewData->GetLogicMode(eWhich));
     if ( bLogicText )
-        aOutputData.DrawStrings(true);      // in logic MapMode if bTextWysiwyg is set
+        aOutputData.DrawStrings(true);      // in logic MapMode if bLogicText is set
     aOutputData.DrawEdit(true);
     pContentDev->SetMapMode(MAP_PIXEL);
 
         // Autofilter- und Pivot-Buttons
 
-    DrawButtons( nX1, nX2, aTabInfo, pContentDev );          // Pixel
+    DrawButtons(nX1, nX2, rTableInfo, pContentDev);          // Pixel
 
         // Notiz-Anzeiger
 
@@ -838,6 +867,8 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
         SetFillColor( pEditView->GetBackgroundColor() );
         Point aStart = pViewData->GetScrPos( nCol1, nRow1, eWhich );
         Point aEnd = pViewData->GetScrPos( nCol2+1, nRow2+1, eWhich );
+
+        long nLayoutSign = bLayoutRTL ? -1 : 1;
         aEnd.X() -= 2 * nLayoutSign;        // don't overwrite grid
         aEnd.Y() -= 2;
         DrawRect( Rectangle( aStart,aEnd ) );
@@ -861,18 +892,6 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
 
     if ( pNoteMarker )
         pNoteMarker->Draw();        // ueber den Cursor, im Drawing-MapMode
-
-    //  Wenn waehrend des Paint etwas invertiert wurde (Selektion geaendert aus Basic-Macro),
-    //  ist das jetzt durcheinandergekommen und es muss neu gemalt werden
-
-    OSL_ENSURE(nPaintCount, "nPaintCount falsch");
-    --nPaintCount;
-    if (!nPaintCount)
-        CheckNeedsRepaint();
-
-    // Flag drawn formula cells "unchanged".
-    rDoc.ResetChanged(ScRange(nX1,nY1,nTab,nX2,nY2,nTab));
-    rDoc.ClearFormulaContext();
 }
 
 void ScGridWindow::PaintTile( VirtualDevice& rDevice,
@@ -1219,7 +1238,7 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
     }
 }
 
-void ScGridWindow::DrawButtons( SCCOL nX1, SCCOL nX2, ScTableInfo& rTabInfo, OutputDevice* pContentDev)
+void ScGridWindow::DrawButtons(SCCOL nX1, SCCOL nX2, const ScTableInfo& rTabInfo, OutputDevice* pContentDev)
 {
     aComboButton.SetOutputDevice( pContentDev );
 
