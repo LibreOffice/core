@@ -3924,11 +3924,13 @@ ScTokenArray* ScCompiler::CompileString( const OUString& rFormula )
         FormulaToken* pNewToken = static_cast<ScTokenArray*>(pArr)->Add( maRawToken.CreateToken());
         if (!pNewToken)
         {
-            SetError(errCodeOverflow); break;
+            SetError(errCodeOverflow);
+            break;
         }
-        else if (eLastOp == ocRange && pNewToken->GetOpCode() == ocPush &&
-                pNewToken->GetType() == svSingleRef)
+        else if (eLastOp == ocRange && pNewToken->GetOpCode() == ocPush && pNewToken->GetType() == svSingleRef)
+        {
             static_cast<ScTokenArray*>(pArr)->MergeRangeReference( aPos);
+        }
         eLastOp = maRawToken.GetOpCode();
         if ( bAutoCorrect )
             aCorrectedFormula += aCorrectedSymbol;
