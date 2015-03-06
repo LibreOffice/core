@@ -3448,6 +3448,7 @@ gboolean GtkSalFrame::signalDraw( GtkWidget*, cairo_t *cr, gpointer frame )
         SAL_INFO("vcl.gtk3", "\t" << i << " -> " << rect.x << "," << rect.y << " " << rect.width << "x" << rect.height);
         pThis->renderArea( cr, &rect );
     }
+    cairo_rectangle_list_destroy(rects);
 
     cairo_surface_flush(cairo_get_target(cr));
 
