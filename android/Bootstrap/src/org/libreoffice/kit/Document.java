@@ -40,6 +40,8 @@ public class Document {
     public static final int CALLBACK_TEXT_SELECTION_START = 3;
     public static final int CALLBACK_TEXT_SELECTION_END = 4;
     public static final int CALLBACK_CURSOR_VISIBLE = 5;
+    // LOK_CALLBACK_GRAPHIC_SELECTION = 6
+    public static final int CALLBACK_HYPERLINK_CLICKED = 7;
 
     /**
      * Text selection types

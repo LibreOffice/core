@@ -94,7 +94,13 @@ typedef enum
      *
      * Rectangle format is the same as LOK_CALLBACK_INVALIDATE_TILES.
      */
-    LOK_CALLBACK_GRAPHIC_SELECTION
+    LOK_CALLBACK_GRAPHIC_SELECTION,
+
+    /**
+     * User clicked on an hyperlink that should be handled by other
+     * applications accordingly.
+     */
+    LOK_CALLBACK_HYPERLINK_CLICKED
 }
 LibreOfficeKitCallbackType;
 

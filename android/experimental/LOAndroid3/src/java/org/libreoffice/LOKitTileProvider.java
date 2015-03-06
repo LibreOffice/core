@@ -5,6 +5,8 @@ import android.graphics.PointF;
 import android.graphics.RectF;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.net.Uri;
+import android.content.Intent;
 
 import org.libreoffice.kit.DirectBufferAllocator;
 import org.libreoffice.kit.Document;
@@ -411,10 +413,24 @@ public class LOKitTileProvider implements TileProvider, Document.MessageCallback
      */
     @Override
     public void messageRetrieved(int messageID, String payload) {
+        /**
+         * Handles messages that do not require entering editing mode.
+         */
+        switch (messageID) {
+            case Document.CALLBACK_HYPERLINK_CLICKED:
+                if (!payload.startsWith("http://") &&
+                        !payload.startsWith("https://"))
+                    payload = "http://" + payload;
+
+                Intent url_intent = new Intent(Intent.ACTION_VIEW);
+                url_intent.setData(Uri.parse(payload));
+                LibreOfficeMainActivity.mAppContext.startActivity(url_intent);
+                return;
+        }
+
         if (!LOKitShell.isEditingEnabled()) {
             return;
         }
-
         mInvalidationHandler.processMessage(messageID, payload);
     }
 }
