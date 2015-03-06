@@ -531,6 +531,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
     ScDocShell* pDocSh = pViewData->GetDocShell();
     ScDocument& rDoc = pDocSh->GetDocument();
     const ScViewOptions& rOpts = pViewData->GetOptions();
+    bool bIsTiledRendering = rDoc.GetDrawLayer()->isTiledRendering();
 
     SCTAB nTab = aOutputData.nTab;
     SCCOL nX1 = aOutputData.nX1;
@@ -595,7 +596,15 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
     }
 
     // define drawing layer map mode and paint rectangle
-    const MapMode aDrawMode = GetDrawMapMode();
+    MapMode aDrawMode = GetDrawMapMode();
+    if (bIsTiledRendering)
+    {
+        // FIXME this shouldn't be necessary once we change this to work in the
+        // logic coordinates instead of in pixels (and get rid of all the
+        // SetMapMode()'s)
+        aDrawMode = pViewData->GetLogicMode(eWhich);
+        aDrawMode.SetOrigin(PixelToLogic(Point(nScrX, nScrY), aDrawMode));
+    }
     Rectangle aDrawingRectLogic;
     bool bLayoutRTL = rDoc.IsLayoutRTL( nTab );
 
@@ -628,7 +637,6 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
 
     OutputDevice* pContentDev = &rDevice;   // device for document content, used by overlay manager
     SdrPaintWindow* pTargetPaintWindow = 0; // #i74769# work with SdrPaintWindow directly
-    bool bIsTiledRendering = rDoc.GetDrawLayer()->isTiledRendering();
 
     if (!bIsTiledRendering)
     {
@@ -894,10 +902,10 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         flushOverlayManager();
 
         // set MapMode for text edit
-        SetMapMode(pViewData->GetLogicMode());
+        rDevice.SetMapMode(pViewData->GetLogicMode());
     }
     else
-        SetMapMode(aDrawMode);
+        rDevice.SetMapMode(aDrawMode);
 
     if ( pNoteMarker )
         pNoteMarker->Draw();        // ueber den Cursor, im Drawing-MapMode
@@ -916,6 +924,10 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
     // Tile geometry is independent of the zoom level, but the output size is
     // dependent of the zoom level.  Determine the correct zoom level before
     // we start.
+
+    // FIXME the painting works using a mixture of drawing with coordinates in
+    // pixels and in logic coordinates; it should be cleaned up to use logic
+    // coords only.
 
     // TODO : zooming isn't perfect.  Find out why.
     double nOutWTwips = static_cast<double>(nOutputWidth) / PIXEL_PER_TWIPS;

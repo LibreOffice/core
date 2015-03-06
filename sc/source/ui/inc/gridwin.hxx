@@ -377,6 +377,7 @@ public:
     bool            ShowNoteMarker( SCsCOL nPosX, SCsROW nPosY, bool bKeyboard );
     void            HideNoteMarker();
 
+    /// MapMode for the drawinglayer objects.
     MapMode         GetDrawMapMode( bool bForce = false );
 
     void            ContinueDrag();
