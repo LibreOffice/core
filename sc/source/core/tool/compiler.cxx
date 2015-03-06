@@ -3931,6 +3931,17 @@ ScTokenArray* ScCompiler::CompileString( const OUString& rFormula )
         {
             static_cast<ScTokenArray*>(pArr)->MergeRangeReference( aPos);
         }
+        else if (eLastOp == ocDBArea && pNewToken->GetOpCode() == ocTableRefOpen)
+        {
+            sal_uInt16 nIdx = pArr->GetLen() - 1;
+            const FormulaToken* pPrev = pArr->PeekPrev( nIdx);
+            if (pPrev && pPrev->GetOpCode() == ocDBArea)
+            {
+                // pPrev may be dead hereafter.
+                static_cast<ScTokenArray*>(pArr)->ReplaceToken( 1,
+                        new ScTableRefToken( pPrev->GetIndex(), ScTableRefToken::ALL));
+            }
+        }
         eLastOp = maRawToken.GetOpCode();
         if ( bAutoCorrect )
             aCorrectedFormula += aCorrectedSymbol;
@@ -4664,12 +4675,19 @@ bool ScCompiler::HandleTableRef()
         aRange.aEnd.SetTab(aRange.aStart.Tab());
         ScTokenArray* pNew = new ScTokenArray();
         ScTableRefToken::Item eItem = pTR->GetItem();
+        bool bGotToken = false;
         if (eItem == ScTableRefToken::ALL)
         {
             ScComplexRefData aRefData;
             aRefData.InitFlags();
             aRefData.SetRange(aRange, aPos);
             pNew->AddDoubleReference( aRefData );
+            // Optional [] (or [#All]) may follow.
+            if ((bGotToken = GetToken()) && mpToken->GetOpCode() == ocTableRefOpen)
+            {
+                if ((bGotToken = GetToken()) && mpToken->GetOpCode() == ocTableRefClose)
+                    bGotToken = false;  // get next token below
+            }
         }
         else
         {
@@ -4678,7 +4696,7 @@ bool ScCompiler::HandleTableRef()
         }
         PushTokenArray( pNew, true );
         pNew->Reset();
-        return GetToken();
+        return bGotToken ? true : GetToken();
     }
     return true;
 }
