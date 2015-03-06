@@ -37,10 +37,6 @@ class GtkSalGraphics : public SvpSalGraphics
     GtkSalFrame *mpFrame;
 public:
     GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow );
-    virtual void        copyArea( long nDestX, long nDestY,
-                                  long nSrcX, long nSrcY,
-                                  long nSrcWidth, long nSrcHeight,
-                                  sal_uInt16 /*nFlags*/ ) SAL_OVERRIDE;
     virtual bool        drawNativeControl( ControlType nType, ControlPart nPart,
                                                const Rectangle& rControlRegion,
                                                ControlState nState, const ImplControlValue& aValue,

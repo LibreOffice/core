@@ -498,7 +498,6 @@ GtkSalFrame::GtkSalFrame( SalFrame* pParent, sal_uLong nStyle )
     : m_nXScreen( getDisplay()->GetDefaultXScreen() )
 {
     getDisplay()->registerFrame( this );
-    m_nDuringRender     = 0;
     m_bDefaultPos       = true;
     m_bDefaultSize      = ( (nStyle & SAL_FRAME_STYLE_SIZEABLE) && ! pParent );
     m_bWindowIsGtkPlug  = false;
@@ -1500,7 +1499,10 @@ SalGraphics* GtkSalFrame::AcquireGraphics()
 #if GTK_CHECK_VERSION(3,0,0)
                     m_aGraphics[i].pGraphics = new GtkSalGraphics( this, m_pWindow );
                     if( !m_aFrame.get() )
+                    {
                         AllocateFrame();
+                        TriggerPaintEvent();
+                    }
                     m_aGraphics[i].pGraphics->setDevice( m_aFrame );
 #else // common case:
                     m_aGraphics[i].pGraphics = new GtkSalGraphics( this, m_pWindow, m_nXScreen );
@@ -1866,6 +1868,7 @@ void GtkSalFrame::Show( bool bVisible, bool bNoActivate )
             Flush();
         }
         CallCallback( SALEVENT_RESIZE, NULL );
+        TriggerPaintEvent();
     }
 }
 
@@ -2073,6 +2076,9 @@ void GtkSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_u
         CallCallback( SALEVENT_MOVE, NULL );
     else if( bMoved && bSized )
         CallCallback( SALEVENT_MOVERESIZE, NULL );
+
+    if (bSized)
+        TriggerPaintEvent();
 }
 
 void GtkSalFrame::GetClientSize( long& rWidth, long& rHeight )
@@ -2129,7 +2135,6 @@ void GtkSalFrame::SetWindowState( const SalFrameState* pState )
         maGeometry.nWidth   = pState->mnMaximizedWidth;
         maGeometry.nHeight  = pState->mnMaximizedHeight;
         updateScreenNumber();
-        AllocateFrame();
 
         m_nState = GdkWindowState( m_nState | GDK_WINDOW_STATE_MAXIMIZED );
         m_aRestorePosSize = Rectangle( Point( pState->mnX, pState->mnY ),
@@ -2176,6 +2181,7 @@ void GtkSalFrame::SetWindowState( const SalFrameState* pState )
         else
             gtk_window_deiconify( GTK_WINDOW(m_pWindow) );
     }
+    TriggerPaintEvent();
 }
 
 bool GtkSalFrame::GetWindowState( SalFrameState* pState )
@@ -3355,47 +3361,32 @@ cairo_t* GtkSalFrame::getCairoContext()
     cairo_t* cr = cairo_create(target);
     cairo_surface_destroy(target);
     return cr;
-//    return gdk_cairo_create(gtk_widget_get_window(mpFrame->getWindow()));
 }
-
-void GtkSalFrame::pushIgnoreDamage()
-{
-    m_nDuringRender++;
-}
-
-void GtkSalFrame::popIgnoreDamage()
-{
-    m_nDuringRender--;
-}
-
-bool GtkSalFrame::isDuringRender()
-{
-    return m_nDuringRender;
-}
-
-#endif
 
 void GtkSalFrame::damaged (const basegfx::B2IBox& rDamageRect)
 {
-#if !GTK_CHECK_VERSION(3,0,0)
-    (void)rDamageRect;
-#else
-    if ( isDuringRender() )
-        return;
 #if OSL_DEBUG_LEVEL > 1
     long long area = rDamageRect.getWidth() * rDamageRect.getHeight();
     if( area > 32 * 1024 )
     {
         fprintf( stderr, "bitmap damaged  %d %d (%dx%d) area %lld widget\n",
-                 (int) rDamageRect.getMinX(),
-                 (int) rDamageRect.getMinY(),
-                 (int) rDamageRect.getWidth(),
+                  (int) rDamageRect.getMinX(),
+                  (int) rDamageRect.getMinY(),
+                  (int) rDamageRect.getWidth(),
                  (int) rDamageRect.getHeight(),
                  area );
     }
+
+#if FRAME_BY_FRAME_DEBUG
+    static int frame;
+    OString tmp("/tmp/frame" + OString::number(frame++) + ".png");
+    cairo_surface_write_to_png(cairo_get_target(getCairoContext()), tmp.getStr());
 #endif
+
+#endif
+
     /* FIXME: this is a dirty hack, to render buttons correctly, we
-     * should of course remove the -100 and + 200, but the whole area
+     * should of course remove the -1 and +2, but the whole area
      * won't be rendered then.
      */
     gtk_widget_queue_draw_area( m_pWindow,
@@ -3403,10 +3394,8 @@ void GtkSalFrame::damaged (const basegfx::B2IBox& rDamageRect)
                                 rDamageRect.getMinY() - 1,
                                 rDamageRect.getWidth() + 2,
                                 rDamageRect.getHeight() + 2 );
-#endif
 }
 
-#if GTK_CHECK_VERSION(3,0,0)
 // blit our backing basebmp buffer to the target cairo context cr
 void GtkSalFrame::renderArea( cairo_t *cr, cairo_rectangle_t *area )
 {
@@ -3415,6 +3404,7 @@ void GtkSalFrame::renderArea( cairo_t *cr, cairo_rectangle_t *area )
     cairo_surface_t *pSurface = cairo_get_target(getCairoContext());
     cairo_set_operator( cr, CAIRO_OPERATOR_OVER );
     cairo_set_source_surface( cr, pSurface, 0, 0 );
+    SAL_INFO("vcl.gtk3", "rendering" << area->x << "," << area->y << " " << area->width << "x" << area->height);
     cairo_rectangle( cr, area->x, area->y, area->width, area->height );
     cairo_fill( cr );
 
@@ -3448,10 +3438,6 @@ gboolean GtkSalFrame::signalDraw( GtkWidget*, cairo_t *cr, gpointer frame )
         return FALSE;
     }
 
-    // FIXME: we quite probably want to stop re-rendering of pieces
-    // that we know are just damaged by us and hence already re-rendered
-    pThis->pushIgnoreDamage();
-
     // FIXME: we need to profile whether re-rendering the entire
     // clip region, and just pushing (with renderArea) smaller pieces
     // is faster ...
@@ -3460,20 +3446,14 @@ gboolean GtkSalFrame::signalDraw( GtkWidget*, cairo_t *cr, gpointer frame )
     for (int i = 0; i < rects->num_rectangles; i++) {
         cairo_rectangle_t rect = rects->rectangles[i];
         SAL_INFO("vcl.gtk3", "\t" << i << " -> " << rect.x << "," << rect.y << " " << rect.width << "x" << rect.height);
-        struct SalPaintEvent aEvent( rect.x, rect.y, rect.width, rect.height );
-        aEvent.mbImmediateUpdate = true;
-        pThis->CallCallback( SALEVENT_PAINT, &aEvent );
         pThis->renderArea( cr, &rect );
     }
-
-    pThis->popIgnoreDamage();
 
     cairo_surface_flush(cairo_get_target(cr));
 
     return FALSE;
 }
-#endif // GTK_CHECK_VERSION(3,0,0)
-
+#else
 gboolean GtkSalFrame::signalExpose( GtkWidget*, GdkEventExpose* pEvent, gpointer frame )
 {
     GtkSalFrame* pThis = (GtkSalFrame*)frame;
@@ -3483,6 +3463,30 @@ gboolean GtkSalFrame::signalExpose( GtkWidget*, GdkEventExpose* pEvent, gpointer
     pThis->CallCallback( SALEVENT_PAINT, &aEvent );
 
     return false;
+}
+
+#endif // GTK_CHECK_VERSION(3,0,0)
+
+void GtkSalFrame::TriggerPaintEvent()
+{
+    //Under gtk2 we can basically paint directly into the XWindow and on
+    //additional "expose-event" events we can re-render the missing pieces
+    //
+    //Under gtk3 we have to keep our own buffer up to date and flush it into
+    //the given cairo context on "draw". So we emit a paint event on
+    //opportune resize trigger events to initially fill our backbuffer and then
+    //keep it up to date with our direct paints and tell gtk those regions
+    //have changed and then blit them into the provided cairo context when
+    //we get the "draw"
+    //
+    //The other alternative was to always paint everything on "draw", but
+    //that duplicates the amount of drawing and is hideously slow
+#if GTK_CHECK_VERSION(3,0,0)
+    SAL_INFO("vcl.gtk3", "force painting" << 0 << "," << 0 << " " << maGeometry.nWidth << "x" << maGeometry.nHeight);
+    SalPaintEvent aPaintEvt(0, 0, maGeometry.nWidth, maGeometry.nHeight, true);
+    CallCallback(SALEVENT_PAINT, &aPaintEvt);
+    gtk_widget_queue_draw(m_pWindow);
+#endif
 }
 
 gboolean GtkSalFrame::signalFocus( GtkWidget*, GdkEventFocus* pEvent, gpointer frame )
@@ -3588,6 +3592,7 @@ gboolean GtkSalFrame::signalMap( GtkWidget *pWidget, GdkEvent*, gpointer frame )
 #endif
 
     pThis->CallCallback( SALEVENT_RESIZE, NULL );
+    pThis->TriggerPaintEvent();
 
     return false;
 }
@@ -3682,6 +3687,8 @@ gboolean GtkSalFrame::signalConfigure( GtkWidget*, GdkEventConfigure* pEvent, gp
     else if( bSized )
         pThis->CallCallback( SALEVENT_RESIZE, NULL );
 
+    if (bSized)
+        pThis->TriggerPaintEvent();
     return false;
 }
 
@@ -3855,7 +3862,10 @@ gboolean GtkSalFrame::signalState( GtkWidget*, GdkEvent* pEvent, gpointer frame 
 {
     GtkSalFrame* pThis = (GtkSalFrame*)frame;
     if( (pThis->m_nState & GDK_WINDOW_STATE_ICONIFIED) != (pEvent->window_state.new_window_state & GDK_WINDOW_STATE_ICONIFIED ) )
+    {
         pThis->getDisplay()->SendInternalEvent( pThis, NULL, SALEVENT_RESIZE );
+        pThis->TriggerPaintEvent();
+    }
 
     if(   (pEvent->window_state.new_window_state & GDK_WINDOW_STATE_MAXIMIZED) &&
         ! (pThis->m_nState & GDK_WINDOW_STATE_MAXIMIZED) )

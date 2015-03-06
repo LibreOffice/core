@@ -174,7 +174,6 @@ class GtkSalFrame : public SalFrame, public X11WindowProvider
 
     SalX11Screen                    m_nXScreen;
     GtkWidget*                      m_pWindow;
-    int                             m_nDuringRender;
     GdkWindow*                      m_pForeignParent;
     GdkNativeWindow                 m_aForeignParentWindow;
     GdkWindow*                      m_pForeignTopLevel;
@@ -237,8 +236,11 @@ class GtkSalFrame : public SalFrame, public X11WindowProvider
     // signals
     static gboolean     signalButton( GtkWidget*, GdkEventButton*, gpointer );
     static void         signalStyleSet( GtkWidget*, GtkStyle* pPrevious, gpointer );
+#if GTK_CHECK_VERSION(3,0,0)
     static gboolean     signalDraw( GtkWidget*, cairo_t *cr, gpointer );
+#else
     static gboolean     signalExpose( GtkWidget*, GdkEventExpose*, gpointer );
+#endif
     static gboolean     signalFocus( GtkWidget*, GdkEventFocus*, gpointer );
     static gboolean     signalMap( GtkWidget*, GdkEvent*, gpointer );
     static gboolean     signalUnmap( GtkWidget*, GdkEvent*, gpointer );
@@ -300,6 +302,7 @@ class GtkSalFrame : public SalFrame, public X11WindowProvider
     void askForXEmbedFocus( sal_Int32 nTimecode );
 
     void AllocateFrame();
+    void TriggerPaintEvent();
 
     void updateWMClass();
     void SetScreen( unsigned int nNewScreen, int eType, Rectangle *pSize = NULL );
@@ -342,10 +345,8 @@ public:
 #if GTK_CHECK_VERSION(3,0,0)
     // only for gtk3 ...
     cairo_t* getCairoContext();
-    void pushIgnoreDamage();
-    void popIgnoreDamage();
-    bool isDuringRender();
     void renderArea( cairo_t *cr, cairo_rectangle_t *src );
+    void damaged (const basegfx::B2IBox& rDamageRect);
 #endif
     virtual ~GtkSalFrame();
 
@@ -445,8 +446,6 @@ public:
     virtual void                EndSetClipRegion() SAL_OVERRIDE;
 
     static GtkSalFrame         *getFromWindow( GtkWindow *pWindow );
-
-    void                        damaged (const basegfx::B2IBox& rDamageRect);
 
     virtual Window              GetX11Window() SAL_OVERRIDE;
 };

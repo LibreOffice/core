@@ -1546,46 +1546,6 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
     gtk_widget_path_free(path);
 }
 
-void GtkSalGraphics::copyArea( long nDestX, long nDestY,
-                               long nSrcX, long nSrcY,
-                               long nSrcWidth, long nSrcHeight,
-                               sal_uInt16 nFlags )
-{
-#if 1
-    SvpSalGraphics::copyArea( nDestX, nDestY, nSrcX, nSrcY, nSrcWidth, nSrcHeight, nFlags );
-#else
-    mpFrame->pushIgnoreDamage();
-    mpFrame->popIgnoreDamage();
-
-    cairo_rectangle_int_t rect = { (int)nSrcX, (int)nSrcY, (int)nSrcWidth, (int)nSrcHeight };
-    cairo_region_t *region = cairo_region_create_rectangle( &rect );
-
-    if (!m_aClipRegion.IsEmpty())
-    {
-        // get clip region and translate it in the opposite direction & intersect ...
-        cairo_region_t *clip_region = cairo_region_create();
-
-        RectangleVector aRectangles;
-        m_aClipRegion.GetRegionRectangles(aRectangles);
-        for (RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); ++aRectIter)
-        {
-            cairo_rectangle_int_t aRect = { (int)aRectIter->Left(), (int)aRectIter->Top(),
-                                            (int)aRectIter->GetWidth(), (int)aRectIter->GetHeight() };
-            cairo_region_union_rectangle( clip_region, &aRect );
-        }
-
-        cairo_region_translate( clip_region, - (nDestX - nSrcX), - (nDestY - nSrcY) );
-        cairo_region_intersect( region, clip_region );
-        cairo_region_destroy( clip_region );
-    }
-
-    // FIXME: this will queue (duplicate) gtk+ re-rendering for the exposed area, c'est la vie
-    gdk_window_move_region( gtk_widget_get_window( mpFrame->getWindow() ),
-                            region, nDestX - nSrcX, nDestY - nSrcY );
-    cairo_region_destroy( region );
-#endif
-}
-
 cairo_t* GtkSalGraphics::getCairoContext()
 {
     return mpFrame->getCairoContext();
