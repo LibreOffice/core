@@ -93,11 +93,10 @@ OUString getExtensionFolder(OUString const &  parentFolder,
                 StrTitle::createCursor (tempFolder, ::ucbhelper::INCLUDE_FOLDERS_ONLY ) );
 
     OUString title;
-    while (xResultSet->next())
+    if (xResultSet->next())
     {
         title = Reference<sdbc::XRow>(
             xResultSet, UNO_QUERY_THROW )->getString(1 /* Title */ ) ;
-        break;
     }
     return title;
 }
