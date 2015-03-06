@@ -262,6 +262,7 @@ void UnitsTest::testUnitFromHeaderExtraction() {
 
     OUString sEmpty = "";
     CPPUNIT_ASSERT(!mpUnitsImpl->extractUnitFromHeaderString(sEmpty, aUnit));
+    CPPUNIT_ASSERT(aUnit == UtUnit());
 
     OUString sSimple = "bla bla [cm/s]";
     CPPUNIT_ASSERT(mpUnitsImpl->extractUnitFromHeaderString(sSimple, aUnit));
@@ -271,6 +272,32 @@ void UnitsTest::testUnitFromHeaderExtraction() {
     UtUnit aTestUnit;
     CPPUNIT_ASSERT(UtUnit::createUnit("cm/s", aTestUnit, mpUnitsImpl->mpUnitSystem));
     CPPUNIT_ASSERT(aUnit == aTestUnit);
+
+    OUString sFreeStanding = "bla bla kg/h";
+    CPPUNIT_ASSERT(mpUnitsImpl->extractUnitFromHeaderString(sFreeStanding, aUnit));
+    CPPUNIT_ASSERT(UtUnit::createUnit("kg/h", aTestUnit, mpUnitsImpl->mpUnitSystem));
+    CPPUNIT_ASSERT(aUnit == aTestUnit);
+
+    OUString sFreeStandingWithSpaces = "bla bla m / s";
+    CPPUNIT_ASSERT(mpUnitsImpl->extractUnitFromHeaderString(sFreeStandingWithSpaces, aUnit));
+    CPPUNIT_ASSERT(UtUnit::createUnit("m/s", aTestUnit, mpUnitsImpl->mpUnitSystem));
+    CPPUNIT_ASSERT(aUnit == aTestUnit);
+
+    OUString sOperatorSeparated = "bla bla / t/s";
+    CPPUNIT_ASSERT(mpUnitsImpl->extractUnitFromHeaderString(sOperatorSeparated, aUnit));
+    CPPUNIT_ASSERT(UtUnit::createUnit("t/s", aTestUnit, mpUnitsImpl->mpUnitSystem));
+    CPPUNIT_ASSERT(aUnit == aTestUnit);
+
+    OUString sRoundBrackets = "bla bla (t/h)";
+    CPPUNIT_ASSERT(mpUnitsImpl->extractUnitFromHeaderString(sRoundBrackets, aUnit));
+    CPPUNIT_ASSERT(UtUnit::createUnit("t/h", aTestUnit, mpUnitsImpl->mpUnitSystem));
+    CPPUNIT_ASSERT(aUnit == aTestUnit);
+
+    // This becomes more of a nightmare to support, so let's not bother for now.
+    // OUString sFreeStandingMixedSpaces = "bla bla m /s* kg";
+    // CPPUNIT_ASSERT(mpUnitsImpl->extractUnitFromHeaderString(sFreeStanding, aUnit));
+    // CPPUNIT_ASSERT(UtUnit::createUnit("m/s", aTestUnit, mpUnitsImpl->mpUnitSystem));
+    // CPPUNIT_ASSERT(aUnit == aTestUnit);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(UnitsTest);
