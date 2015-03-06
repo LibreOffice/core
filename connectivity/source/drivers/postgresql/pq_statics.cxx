@@ -584,6 +584,11 @@ Statics & getStatics()
                 { "date",  css::sdbc::DataType::DATE },
                 { "time",  css::sdbc::DataType::TIME },
                 { "timestamp",  css::sdbc::DataType::TIMESTAMP },
+                { "date",  css::sdbc::DataType::DATE },
+                { "time",  css::sdbc::DataType::TIME },
+                { "timestamp",  css::sdbc::DataType::TIMESTAMP },
+                { "interval",  css::sdbc::DataType::VARCHAR },
+                { "interval minute",  css::sdbc::DataType::VARCHAR },
 
 //                 { "_bool" , css::sdbc::DataType::ARRAY },
 //                 { "_bytea", css::sdbc::DataType::ARRAY },
