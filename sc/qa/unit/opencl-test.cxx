@@ -535,11 +535,11 @@ private:
     // Test env variables and methods
     ScDocShellRef xDocSh;
     ScDocShellRef xDocShRes;
-    bool initTestEnv(const OUString fileName, sal_Int32 nFormat,
+    bool initTestEnv(const OUString& fileName, sal_Int32 nFormat,
               bool bReadWrite);
 };
 
-bool ScOpenCLTest::initTestEnv(const OUString fileName, sal_Int32 nFormat,
+bool ScOpenCLTest::initTestEnv(const OUString& fileName, sal_Int32 nFormat,
     bool bReadWrite)
 {
     if(!detectOpenCLDevice())
