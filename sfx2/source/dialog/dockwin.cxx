@@ -616,7 +616,7 @@ void SfxDockingWindow::ToggleFloatingMode()
     pImp->SetDockAlignment(GetAlignment());
 
     // Dock or undock SfxChildWindow correctly.
-    pWorkWin->ConfigChild_Impl( eIdent, SFX_TOGGLEFLOATMODE, pMgr->GetType() );
+    pWorkWin->ConfigChild_Impl( eIdent, SfxDockingConfig::TOGGLEFLOATMODE, pMgr->GetType() );
 }
 
 
@@ -637,7 +637,7 @@ void SfxDockingWindow::StartDocking()
     if ( pImp->bSplitable )
         eIdent = SfxChildIdentifier::SPLITWINDOW;
     SfxWorkWindow *pWorkWin = pBindings->GetWorkWindow_Impl();
-    pWorkWin->ConfigChild_Impl( eIdent, SFX_SETDOCKINGRECTS, pMgr->GetType() );
+    pWorkWin->ConfigChild_Impl( eIdent, SfxDockingConfig::SETDOCKINGRECTS, pMgr->GetType() );
     pImp->SetDockAlignment(GetAlignment());
 
     if ( pImp->pSplitWin )
@@ -1864,7 +1864,7 @@ void SfxDockingWindow::SetItemSize_Impl( const Size& rSize )
     SfxChildIdentifier eIdent = SfxChildIdentifier::DOCKINGWINDOW;
     if ( pImp->bSplitable )
         eIdent = SfxChildIdentifier::SPLITWINDOW;
-    pWorkWin->ConfigChild_Impl( eIdent, SFX_ALIGNDOCKINGWINDOW, pMgr->GetType() );
+    pWorkWin->ConfigChild_Impl( eIdent, SfxDockingConfig::ALIGNDOCKINGWINDOW, pMgr->GetType() );
 }
 
 void SfxDockingWindow::Disappear_Impl()
@@ -1930,7 +1930,7 @@ IMPL_LINK_NOARG(SfxDockingWindow, TimerHdl)
         if ( pImp->bSplitable )
             eIdent = SfxChildIdentifier::SPLITWINDOW;
         SfxWorkWindow *pWorkWin = pBindings->GetWorkWindow_Impl();
-        pWorkWin->ConfigChild_Impl( eIdent, SFX_ALIGNDOCKINGWINDOW, pMgr->GetType() );
+        pWorkWin->ConfigChild_Impl( eIdent, SfxDockingConfig::ALIGNDOCKINGWINDOW, pMgr->GetType() );
     }
     return 0;
 }

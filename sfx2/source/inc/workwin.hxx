@@ -139,12 +139,12 @@ enum class SfxChildIdentifier
     SPLITWINDOW
 };
 
-enum SfxDockingConfig
+enum class SfxDockingConfig
 {
-    SFX_SETDOCKINGRECTS,
-    SFX_ALIGNDOCKINGWINDOW,
-    SFX_TOGGLEFLOATMODE,
-    SFX_MOVEDOCKINGWINDOW
+    SETDOCKINGRECTS,
+    ALIGNDOCKINGWINDOW,
+    TOGGLEFLOATMODE,
+    MOVEDOCKINGWINDOW
 };
 
 typedef std::vector<SfxChild_Impl*> SfxChildList_Impl;

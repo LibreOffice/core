@@ -1720,7 +1720,7 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
     {
         if ( eChild == SfxChildIdentifier::DOCKINGWINDOW || pDockWin->GetAlignment() == SFX_ALIGN_NOALIGNMENT )
         {
-            if ( eChild == SfxChildIdentifier::SPLITWINDOW && eConfig == SFX_TOGGLEFLOATMODE)
+            if ( eChild == SfxChildIdentifier::SPLITWINDOW && eConfig == SfxDockingConfig::TOGGLEFLOATMODE)
             {
                 // DockingWindow was dragged out of a SplitWindow
                 pCW->pCli = RegisterChild_Impl(*pDockWin, pDockWin->GetAlignment(), pCW->pWin->CanGetFocus());
@@ -1734,7 +1734,7 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
             SfxSplitWindow *pSplitWin = GetSplitWindow_Impl(pDockWin->GetAlignment());
 
             // configure DockingWindow inside a SplitWindow
-            if ( eConfig == SFX_TOGGLEFLOATMODE)
+            if ( eConfig == SfxDockingConfig::TOGGLEFLOATMODE)
             {
                 // DockingWindow was dragged into a SplitWindow
                 pCW->pCli = 0;
@@ -1773,7 +1773,7 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
 
     switch ( eConfig )
     {
-        case SFX_SETDOCKINGRECTS :
+        case SfxDockingConfig::SETDOCKINGRECTS :
         {
             if (nPos == USHRT_MAX || !pDockWin)
                 return;
@@ -1866,9 +1866,9 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
             break;
         }
 
-        case SFX_MOVEDOCKINGWINDOW :
-        case SFX_ALIGNDOCKINGWINDOW :
-        case SFX_TOGGLEFLOATMODE:
+        case SfxDockingConfig::MOVEDOCKINGWINDOW :
+        case SfxDockingConfig::ALIGNDOCKINGWINDOW :
+        case SfxDockingConfig::TOGGLEFLOATMODE:
         {
             if ( nPos == USHRT_MAX && !pCW )
                 return;
@@ -1904,7 +1904,7 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
                 SfxChildWindowFlags nFlags = pCW->aInfo.nFlags;
                 pCW->aInfo = pCW->pWin->GetInfo();
                 pCW->aInfo.nFlags |= nFlags;
-                if ( eConfig != SFX_MOVEDOCKINGWINDOW )
+                if ( eConfig != SfxDockingConfig::MOVEDOCKINGWINDOW )
                     SaveStatus_Impl( pCW->pWin, pCW->aInfo);
             }
 
