@@ -13,15 +13,23 @@
 
 #include "document.hxx"
 #include "refdata.hxx"
+#include "stringutil.hxx"
 #include "tokenarray.hxx"
 
+#include <comphelper/string.hxx>
 #include <osl/file.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/bootstrap.hxx>
 #include <svl/zformat.hxx>
 
+#include <com/sun/star/util/SearchFlags.hpp>
+#include <com/sun/star/util/SearchAlgorithms.hpp>
+#include <com/sun/star/util/SearchOptions.hpp>
+#include <com/sun/star/util/XTextSearch.hpp>
+
 #include <boost/scoped_array.hpp>
 
+using namespace com::sun::star;
 using namespace formula;
 using namespace sc;
 using namespace sc::units;
@@ -198,6 +206,59 @@ OUString UnitsImpl::extractUnitStringForCell(const ScAddress& rAddress, ScDocume
     const OUString& rFormatString = pFormat->GetFormatstring();
 
     return extractUnitStringFromFormat(rFormatString);
+}
+
+bool UnitsImpl::extractUnitFromHeaderString(const OUString& rString, UtUnit& aUnit) {
+    com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
+
+    uno::Reference<lang::XMultiServiceFactory> xFactory(xContext->getServiceManager(), uno::UNO_QUERY_THROW);
+
+    uno::Reference<util::XTextSearch> xSearch =
+        uno::Reference< util::XTextSearch >(
+            xFactory->createInstance(
+                "com.sun.star.util.TextSearch"), uno::UNO_QUERY_THROW);
+
+    util::SearchOptions aOptions;
+    aOptions.algorithmType = util::SearchAlgorithms_REGEXP ;
+    aOptions.searchFlag = util::SearchFlags::ALL_IGNORE_CASE;
+
+    // 1. We try to check for units contained within square brackets
+    // TODO: we should do a sanity check that there's only one such unit though (and fail if there are multiple).
+    //       Since otherwise there's no way for us to know which unit is the intended one, hence we need to get
+    //       the user to deconfuse us by correcting their header to only contain the intended unit.
+    aOptions.searchString = "\\[([^\\]]+)\\]"; // Grab the contents between [ and ].
+    xSearch->setOptions( aOptions );
+
+    util::SearchResult aResult;
+    sal_Int32 nStartPosition = rString.getLength();
+    while (nStartPosition) {
+        // Search from the back since units are more likely to be at the end of the header.
+        aResult = xSearch->searchBackward(rString, nStartPosition, 0);
+
+        // We have either 0 items (no match), or 2 (matched string + the group within)
+        if (aResult.subRegExpressions != 2) {
+            break;
+        } else {
+            // Confusingly (to me) when doing a backwards search we end up with: endOffset < startOffset.
+            // i.e. startOffset is the last character of the intended substring, endOffset the first character.
+            // We specifically grab the offsets for the first actual regex group, which are stored in [1], the indexes
+            // at [0] represent the whole matched string (i.e. including square brackets).
+            OUString sUnitString = rString.copy(aResult.endOffset[1], aResult.startOffset[1] - aResult.endOffset[1]);
+
+            if (UtUnit::createUnit(sUnitString, aUnit, mpUnitSystem)) {
+                return true;
+            }
+
+            nStartPosition = aResult.endOffset[0];
+        }
+    }
+
+    // 2. We try to check for any free-standing units by splitting the string and testing each split
+    // TODO: do this.
+
+    // 3. Give up
+    aUnit = UtUnit(); // assign invalid
+    return false;
 }
 
 UtUnit UnitsImpl::getUnitForRef(FormulaToken* pToken, const ScAddress& rFormulaAddress,
