@@ -381,6 +381,9 @@ public:
 
     void testColumnFindEditCells();
 
+    // tdf#80137
+    void testCopyPasteMatrixFormula();
+
     CPPUNIT_TEST_SUITE(Test);
 #if CALC_TEST_PERF
     CPPUNIT_TEST(testPerf);
@@ -553,6 +556,7 @@ public:
     CPPUNIT_TEST(testDeleteContents);
     CPPUNIT_TEST(testTransliterateText);
     CPPUNIT_TEST(testColumnFindEditCells);
+    CPPUNIT_TEST(testCopyPasteMatrixFormula);
     CPPUNIT_TEST_SUITE_END();
 
 private:

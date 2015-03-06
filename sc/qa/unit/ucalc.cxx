@@ -1,4 +1,3 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -5830,6 +5829,73 @@ void Test::testMixData()
 
     CPPUNIT_ASSERT_EQUAL( -3.0, m_pDoc->GetValue(ScAddress(1,0,0))); // 12 - 15
     CPPUNIT_ASSERT_EQUAL(-16.0, m_pDoc->GetValue(ScAddress(1,1,0))); //  0 - 16
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testCopyPasteMatrixFormula()
+{
+    m_pDoc->InsertTab(0, "hcv");
+
+    // Set Values to B1, C1, D1
+    m_pDoc->SetValue(ScAddress(1,0,0), 2.0);    // B1
+    m_pDoc->SetValue(ScAddress(2,0,0), 5.0);    // C1
+    m_pDoc->SetValue(ScAddress(3,0,0), 3.0);    // D1
+
+    // Set Values to B2, C2
+    m_pDoc->SetString(ScAddress(1,1,0), "B2");  // B2
+    //m_pDoc->SetString(ScAddress(2,1,0), "C2");  // C2
+    m_pDoc->SetString(ScAddress(3,1,0), "D2");  // D2
+
+    // Set Vallues to D3
+    //m_pDoc->SetValue(ScAddress(1,2,0), 9.0);    // B3
+    //m_pDoc->SetString(ScAddress(2,2,0), "C3");  // C3
+    m_pDoc->SetValue(ScAddress(3,2,0), 11.0);   // D3
+
+    // Insert matrix formula to A1
+    ScMarkData aMark;
+    aMark.SelectOneTable(0);
+    m_pDoc->InsertMatrixFormula(0, 0, 0, 0, aMark, "=COUNTIF(ISBLANK(B1:D1);TRUE())");
+    m_pDoc->CalcAll();
+    // A1 should containg 0
+    CPPUNIT_ASSERT_EQUAL( 0.0, m_pDoc->GetValue(ScAddress(0,0,0)) ); // A1
+
+    // Copy cell A1 to clipboard.
+    ScAddress aPos(0,0,0);  // A1
+    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    ScClipParam aParam(aPos, false);
+    m_pDoc->CopyToClip(aParam, &aClipDoc, &aMark);
+    // Formula string should be equal.
+    CPPUNIT_ASSERT_EQUAL(m_pDoc->GetString(aPos), aClipDoc.GetString(aPos));
+
+    // First try single range.
+    // Paste matrix formula to A2
+    pasteFromClip(m_pDoc, ScRange(0,1,0,0,1,0), &aClipDoc); // A2
+    // A2 Cell value should contain 1.0
+    CPPUNIT_ASSERT_EQUAL( 1.0, m_pDoc->GetValue(ScAddress(0,1,0)));
+
+    // Paste matrix formula to A3
+    pasteFromClip(m_pDoc, ScRange(0,2,0,0,2,0), &aClipDoc); // A3
+    // A3 Cell value should contain 2.0
+    CPPUNIT_ASSERT_EQUAL( 2.0, m_pDoc->GetValue(ScAddress(0,2,0)));
+
+    // Paste matrix formula to A4
+    pasteFromClip(m_pDoc, ScRange(0,3,0,0,3,0), &aClipDoc); // A4
+    // A4 Cell value should contain 3.0
+    CPPUNIT_ASSERT_EQUAL( 3.0, m_pDoc->GetValue(ScAddress(0,3,0)));
+
+    // Clear cell A2:A4
+    clearRange(m_pDoc, ScRange(0,1,0,0,3,0));
+
+    // Paste matrix formula to range A2:A4
+    pasteFromClip(m_pDoc, ScRange(0,1,0,0,3,0), &aClipDoc); // A2:A4
+
+    // A2 Cell value should contain 1.0
+    CPPUNIT_ASSERT_EQUAL( 1.0, m_pDoc->GetValue(ScAddress(0,1,0)));
+    // A3 Cell value should contain 2.0
+    CPPUNIT_ASSERT_EQUAL( 2.0, m_pDoc->GetValue(ScAddress(0,2,0)));
+    // A4 Cell value should contain 3.0
+    CPPUNIT_ASSERT_EQUAL( 3.0, m_pDoc->GetValue(ScAddress(0,3,0)));
 
     m_pDoc->DeleteTab(0);
 }
