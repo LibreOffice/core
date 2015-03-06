@@ -5,8 +5,6 @@ import android.graphics.PointF;
 import android.graphics.RectF;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.net.Uri;
-import android.content.Intent;
 
 import org.libreoffice.kit.DirectBufferAllocator;
 import org.libreoffice.kit.Document;

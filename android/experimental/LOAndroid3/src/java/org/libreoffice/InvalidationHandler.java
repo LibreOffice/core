@@ -1,6 +1,8 @@
 package org.libreoffice;
 
+import android.content.Intent;
 import android.graphics.RectF;
+import android.net.Uri;
 import android.util.Log;
 
 import org.libreoffice.kit.Document;
