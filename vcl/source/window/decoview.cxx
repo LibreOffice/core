@@ -28,6 +28,8 @@
                                  BUTTON_DRAW_CHECKED |          \
                                  BUTTON_DRAW_HIGHLIGHT)
 
+using namespace std;
+
 namespace {
 
 long AdjustRectToSquare( Rectangle &rRect )
@@ -1111,15 +1113,15 @@ void DecorationView::DrawHandle(const Rectangle& rRect, bool bVertical)
         if (bVertical)
         {
             aLocation = Rectangle(nHalfWidth - nRadius,
-                                  std::round(fDistance * i) - nRadius,
+                                  round(fDistance * i) - nRadius,
                                   nHalfWidth + nRadius,
-                                  std::round(fDistance * i) + nRadius);
+                                  round(fDistance * i) + nRadius);
         }
         else
         {
-            aLocation = Rectangle(std::round(fDistance * i) - nRadius,
+            aLocation = Rectangle(round(fDistance * i) - nRadius,
                                   nHalfHeight - nRadius,
-                                  std::round(fDistance * i) + nRadius,
+                                  round(fDistance * i) + nRadius,
                                   nHalfHeight + nRadius);
         }
         mpOutDev->DrawEllipse(aLocation);
