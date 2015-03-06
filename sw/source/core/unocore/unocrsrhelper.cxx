@@ -1105,12 +1105,10 @@ bool DocInsertStringSplitCR(
 {
     bool bOK = true;
 
-        const enum IDocumentContentOperations::InsertFlags nInsertFlags =
-            (bForceExpandHints)
-            ? static_cast<IDocumentContentOperations::InsertFlags>(
-                    IDocumentContentOperations::INS_FORCEHINTEXPAND |
-                    IDocumentContentOperations::INS_EMPTYEXPAND)
-            : IDocumentContentOperations::INS_EMPTYEXPAND;
+        const enum SwInsertFlags nInsertFlags =
+            bForceExpandHints
+            ? ( SwInsertFlags::FORCEHINTEXPAND | SwInsertFlags::EMPTYEXPAND)
+            : SwInsertFlags::EMPTYEXPAND;
 
     // grouping done in InsertString is intended for typing, not API calls
     ::sw::GroupUndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());

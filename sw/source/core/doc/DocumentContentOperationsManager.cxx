@@ -1669,7 +1669,7 @@ DocumentContentOperationsManager::CopyRange( SwPaM& rPam, SwPosition& rPos, cons
             pNode = pDoc->GetNodes().GoNext( &aPam.GetPoint()->nNode );
             pNode->MakeStartIndex( &aPam.GetPoint()->nContent );
             // move to desired position
-            pDoc->getIDocumentContentOperations().MoveRange( aPam, rPos, DOC_MOVEDEFAULT );
+            pDoc->getIDocumentContentOperations().MoveRange( aPam, rPos, SwMoveFlags::DEFAULT );
 
             pNode = aPam.GetCntntNode();
             *aPam.GetPoint() = rPos;      // Move the cursor for Undo
@@ -1900,11 +1900,11 @@ bool DocumentContentOperationsManager::MoveRange( SwPaM& rPaM, SwPosition& rPos,
 
     // Save the paragraph anchored Flys, so that they can be moved.
     _SaveFlyArr aSaveFlyArr;
-    _SaveFlyInRange( rPaM, rPos.nNode, aSaveFlyArr, 0 != ( DOC_MOVEALLFLYS & eMvFlags ) );
+    _SaveFlyInRange( rPaM, rPos.nNode, aSaveFlyArr, bool( SwMoveFlags::ALLFLYS & eMvFlags ) );
 
     // save redlines (if DOC_MOVEREDLINES is used)
     _SaveRedlines aSaveRedl;
-    if( DOC_MOVEREDLINES & eMvFlags && !m_rDoc.getIDocumentRedlineAccess().GetRedlineTbl().empty() )
+    if( SwMoveFlags::REDLINES & eMvFlags && !m_rDoc.getIDocumentRedlineAccess().GetRedlineTbl().empty() )
     {
         lcl_SaveRedlines( rPaM, aSaveRedl );
 
@@ -1929,7 +1929,7 @@ bool DocumentContentOperationsManager::MoveRange( SwPaM& rPaM, SwPosition& rPos,
     {
         m_rDoc.GetIDocumentUndoRedo().ClearRedo();
         pUndoMove = new SwUndoMove( rPaM, rPos );
-        pUndoMove->SetMoveRedlines( eMvFlags == DOC_MOVEREDLINES );
+        pUndoMove->SetMoveRedlines( eMvFlags == SwMoveFlags::REDLINES );
     }
     else
     {
@@ -2143,7 +2143,7 @@ bool DocumentContentOperationsManager::MoveNodeRange( SwNodeRange& rRange, SwNod
     SwFtnIdxs aTmpFntIdx;
 
     SwUndoMove* pUndo = 0;
-    if ((DOC_CREATEUNDOOBJ & eMvFlags ) && m_rDoc.GetIDocumentUndoRedo().DoesUndo())
+    if ((SwMoveFlags::CREATEUNDOOBJ & eMvFlags ) && m_rDoc.GetIDocumentUndoRedo().DoesUndo())
     {
         pUndo = new SwUndoMove( &m_rDoc, rRange, rPos );
     }
@@ -2155,7 +2155,7 @@ bool DocumentContentOperationsManager::MoveNodeRange( SwNodeRange& rRange, SwNod
 
     _SaveRedlines aSaveRedl;
     std::vector<SwRangeRedline*> aSavRedlInsPosArr;
-    if( DOC_MOVEREDLINES & eMvFlags && !m_rDoc.getIDocumentRedlineAccess().GetRedlineTbl().empty() )
+    if( SwMoveFlags::REDLINES & eMvFlags && !m_rDoc.getIDocumentRedlineAccess().GetRedlineTbl().empty() )
     {
         lcl_SaveRedlines( rRange, aSaveRedl );
 
@@ -2196,7 +2196,7 @@ bool DocumentContentOperationsManager::MoveNodeRange( SwNodeRange& rRange, SwNod
         pSaveInsPos = new SwNodeIndex( rRange.aStart, -1 );
 
     // move the Nodes
-    bool bNoDelFrms = 0 != (DOC_NO_DELFRMS & eMvFlags);
+    bool bNoDelFrms = bool(SwMoveFlags::NO_DELFRMS & eMvFlags);
     if( m_rDoc.GetNodes()._MoveNodes( rRange, m_rDoc.GetNodes(), rPos, !bNoDelFrms ) )
     {
         ++aIdx;     // again back to old position
@@ -2351,7 +2351,7 @@ bool DocumentContentOperationsManager::Overwrite( const SwPaM &rRg, const OUStri
             // start behind the characters (to fix the attributes!)
             if (nStart < pNode->GetTxt().getLength())
                 ++rIdx;
-            pNode->InsertText( OUString(c), rIdx, INS_EMPTYEXPAND );
+            pNode->InsertText( OUString(c), rIdx, SwInsertFlags::EMPTYEXPAND );
             if( nStart+1 < rIdx.GetIndex() )
             {
                 rIdx = nStart;
@@ -2393,7 +2393,7 @@ bool DocumentContentOperationsManager::Overwrite( const SwPaM &rRg, const OUStri
 }
 
 bool DocumentContentOperationsManager::InsertString( const SwPaM &rRg, const OUString &rStr,
-        const enum InsertFlags nInsertMode )
+        const SwInsertFlags nInsertMode )
 {
     // fetching DoesUndo is surprisingly expensive
     bool bDoesUndo = m_rDoc.GetIDocumentUndoRedo().DoesUndo();
@@ -2432,7 +2432,7 @@ bool DocumentContentOperationsManager::InsertString( const SwPaM &rRg, const OUS
         SwUndoInsert * pUndo = NULL;
 
         // don't group the start if hints at the start should be expanded
-        if (!(nInsertMode & IDocumentContentOperations::INS_FORCEHINTEXPAND))
+        if (!(nInsertMode & SwInsertFlags::FORCEHINTEXPAND))
         {
             SwUndo *const pLastUndo = m_rDoc.GetUndoManager().GetLastUndo();
             SwUndoInsert *const pUndoInsert(

@@ -906,7 +906,7 @@ bool SwTable::PrepareMerge( const SwPaM& rPam, SwSelBoxes& rBoxes,
                     else
                     {
                         pDoc->getIDocumentContentOperations().MoveNodeRange( aRg, rInsPosNd,
-                            IDocumentContentOperations::DOC_NO_DELFRMS );
+                            SwMoveFlags::NO_DELFRMS );
                     }
                 }
             }

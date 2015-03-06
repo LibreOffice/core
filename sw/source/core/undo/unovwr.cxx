@@ -78,7 +78,7 @@ SwUndoOverwrite::SwUndoOverwrite( SwDoc* pDoc, SwPosition& rPos,
     pTxtNd->SetIgnoreDontExpand( true );
 
     pTxtNd->InsertText( OUString(cIns), rPos.nContent,
-            IDocumentContentOperations::INS_EMPTYEXPAND );
+            SwInsertFlags::EMPTYEXPAND );
     aInsStr += OUString( cIns );
 
     if( !bInsChar )
@@ -155,7 +155,7 @@ bool SwUndoOverwrite::CanGrouping( SwDoc* pDoc, SwPosition& rPos,
     pDelTxtNd->SetIgnoreDontExpand( true );
 
     OUString const ins( pDelTxtNd->InsertText(OUString(cIns), rPos.nContent,
-            IDocumentContentOperations::INS_EMPTYEXPAND) );
+            SwInsertFlags::EMPTYEXPAND) );
     assert(ins.getLength() == 1); // check in SwDoc::Overwrite => cannot fail
     (void) ins;
     aInsStr += OUString( cIns );
@@ -282,7 +282,7 @@ void SwUndoOverwrite::RedoImpl(::sw::UndoRedoContext & rContext)
         // do it individually, to keep the attributes!
         OUString const ins(
                 pTxtNd->InsertText( OUString(aInsStr[n]), rIdx,
-                IDocumentContentOperations::INS_EMPTYEXPAND) );
+                SwInsertFlags::EMPTYEXPAND) );
         assert(ins.getLength() == 1); // cannot fail
         (void) ins;
         if( n < aDelStr.getLength() )

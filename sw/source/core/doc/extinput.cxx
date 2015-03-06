@@ -186,7 +186,7 @@ void SwExtTextInput::SetInputData( const CommandExtTextInputData& rData )
             }
 
             pTNd->InsertText( rNewStr, aIdx,
-                    IDocumentContentOperations::INS_EMPTYEXPAND );
+                    SwInsertFlags::EMPTYEXPAND );
             if( !HasMark() )
                 SetMark();
         }

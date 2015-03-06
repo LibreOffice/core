@@ -44,7 +44,7 @@ class SwUndoInsert: public SwUndo, private SwUndoSaveCntnt
     bool bIsAppend : 1;
     bool m_bWithRsid : 1;
 
-    const IDocumentContentOperations::InsertFlags m_nInsertFlags;
+    const SwInsertFlags m_nInsertFlags;
 
     friend class ::sw::DocumentContentOperationsManager;     // actually only DocumentContentOperationsManager::InsertString, because it uses CanGrouping
     bool CanGrouping( sal_Unicode cIns );
@@ -57,7 +57,7 @@ class SwUndoInsert: public SwUndo, private SwUndoSaveCntnt
 
 public:
     SwUndoInsert( const SwNodeIndex& rNode, sal_Int32 nCntnt, sal_Int32 nLen,
-                  const IDocumentContentOperations::InsertFlags nInsertFlags,
+                  const SwInsertFlags nInsertFlags,
                   bool bWDelim = true );
     SwUndoInsert( const SwNodeIndex& rNode );
     virtual ~SwUndoInsert();

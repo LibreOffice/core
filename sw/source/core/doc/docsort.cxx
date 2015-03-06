@@ -406,7 +406,7 @@ bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
 
         // Move Nodes
         getIDocumentContentOperations().MoveNodeRange( aRg, aStart,
-            IDocumentContentOperations::DOC_MOVEDEFAULT );
+            SwMoveFlags::DEFAULT );
 
         // Insert Move in Undo
         if(pUndoSort)
@@ -733,7 +733,7 @@ void MoveCell(SwDoc* pDoc, const SwTableBox* pSource, const SwTableBox* pTar,
     // Insert the Source
     SwNodeIndex aIns( *pTar->GetSttNd()->EndOfSectionNode() );
     pDoc->getIDocumentContentOperations().MoveNodeRange( aRg, aIns,
-        IDocumentContentOperations::DOC_MOVEDEFAULT );
+        SwMoveFlags::DEFAULT );
 
     // If first Node is empty -> delete it
     if(bDelFirst)

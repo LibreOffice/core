@@ -1999,7 +1999,7 @@ bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, bool bIsOutlMv )
         nMoved = rPam.End()->nNode.GetIndex() - rPam.Start()->nNode.GetIndex() + 1;
     }
 
-    getIDocumentContentOperations().MoveNodeRange( aMvRg, aIdx, IDocumentContentOperations::DOC_MOVEREDLINES );
+    getIDocumentContentOperations().MoveNodeRange( aMvRg, aIdx, SwMoveFlags::REDLINES );
 
     if( pUndo )
     {

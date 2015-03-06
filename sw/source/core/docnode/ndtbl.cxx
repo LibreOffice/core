@@ -1515,7 +1515,7 @@ static void lcl_DelBox( SwTableBox* pBox, _DelTabPara* pDelPara )
                 SwIndex aCntIdx( pDelPara->pLastNd,
                         pDelPara->pLastNd->GetTxt().getLength());
                 pDelPara->pLastNd->InsertText( OUString(pDelPara->cCh), aCntIdx,
-                    IDocumentContentOperations::INS_EMPTYEXPAND );
+                    SwInsertFlags::EMPTYEXPAND );
                 if( pDelPara->pUndo )
                     pDelPara->pUndo->AddBoxPos( *pDoc, nNdIdx, aDelRg.aEnd.GetIndex(),
                                                 aCntIdx.GetIndex() );

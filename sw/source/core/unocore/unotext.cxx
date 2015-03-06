@@ -408,12 +408,10 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
     }
     const bool bForceExpandHints(CheckForOwnMemberMeta(aPam, bAbsorb));
 
-    const enum IDocumentContentOperations::InsertFlags nInsertFlags =
-        (bForceExpandHints)
-        ? static_cast<IDocumentContentOperations::InsertFlags>(
-                IDocumentContentOperations::INS_FORCEHINTEXPAND |
-                IDocumentContentOperations::INS_EMPTYEXPAND)
-        : IDocumentContentOperations::INS_EMPTYEXPAND;
+    const enum SwInsertFlags nInsertFlags =
+        bForceExpandHints
+        ? ( SwInsertFlags::FORCEHINTEXPAND | SwInsertFlags::EMPTYEXPAND)
+        : SwInsertFlags::EMPTYEXPAND;
 
     SwPaM aTmp(*aPam.Start());
     if (bAbsorb && aPam.HasMark())

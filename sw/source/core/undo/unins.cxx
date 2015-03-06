@@ -108,7 +108,7 @@ void SwUndoInsert::Init(const SwNodeIndex & rNd)
 // #111827#
 SwUndoInsert::SwUndoInsert( const SwNodeIndex& rNd, sal_Int32 nCnt,
             sal_Int32 nL,
-            const IDocumentContentOperations::InsertFlags nInsertFlags,
+            const SwInsertFlags nInsertFlags,
             bool bWDelim )
     : SwUndo(UNDO_TYPING), pTxt( 0 ), pRedlData( 0 ),
         nNode( rNd.GetIndex() ), nCntnt(nCnt), nLen(nL),
@@ -125,7 +125,7 @@ SwUndoInsert::SwUndoInsert( const SwNodeIndex& rNd )
         pRedlData( 0 ), nNode( rNd.GetIndex() ), nCntnt(0), nLen(1),
         bIsWordDelim( false ), bIsAppend( true )
     , m_bWithRsid(false)
-    , m_nInsertFlags(IDocumentContentOperations::INS_EMPTYEXPAND)
+    , m_nInsertFlags(SwInsertFlags::EMPTYEXPAND)
 {
     Init(rNd);
 }

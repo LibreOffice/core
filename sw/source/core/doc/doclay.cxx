@@ -404,7 +404,7 @@ SwFlyFrmFmt* SwDoc::MakeFlyAndMove( const SwPaM& rPam, const SfxItemSet& rSet,
                         GetNodes().MakeTxtNode( aRg.aStart,
                                     (SwTxtFmtColl*)GetDfltTxtFmtColl() );
 
-                    getIDocumentContentOperations().MoveNodeRange( aRg, aPos.nNode, IDocumentContentOperations::DOC_MOVEDEFAULT );
+                    getIDocumentContentOperations().MoveNodeRange( aRg, aPos.nNode, SwMoveFlags::DEFAULT );
                 }
                 else
                 {

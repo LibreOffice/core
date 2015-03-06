@@ -246,16 +246,15 @@ public:
     ///             of the node, the longest prefix that fits is inserted
     /// @return the prefix of rStr that was actually inserted
     OUString InsertText( const OUString & rStr, const SwIndex & rIdx,
-                     const enum IDocumentContentOperations::InsertFlags nMode
-                         = IDocumentContentOperations::INS_DEFAULT );
+                     const enum SwInsertFlags nMode
+                         = SwInsertFlags::DEFAULT );
 
     /** delete text content
         ATTENTION: must not be called with a range that overlaps the start of
                    an attribute with both extent and dummy char
      */
     void EraseText ( const SwIndex &rIdx, const sal_Int32 nCount = SAL_MAX_INT32,
-                     const enum IDocumentContentOperations::InsertFlags nMode
-                         = IDocumentContentOperations::INS_DEFAULT );
+                     const enum SwInsertFlags nMode = SwInsertFlags::DEFAULT );
 
     /** delete all attributes.
         If neither pSet nor nWhich is given, delete all attributes (except

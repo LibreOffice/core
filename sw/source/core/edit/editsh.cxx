@@ -87,12 +87,10 @@ void SwEditShell::Insert2(const OUString &rStr, const bool bForceExpandHints )
 {
     StartAllAction();
     {
-        const enum IDocumentContentOperations::InsertFlags nInsertFlags =
+        const enum SwInsertFlags nInsertFlags =
             (bForceExpandHints)
-            ? static_cast<IDocumentContentOperations::InsertFlags>(
-                    IDocumentContentOperations::INS_FORCEHINTEXPAND |
-                    IDocumentContentOperations::INS_EMPTYEXPAND)
-            : IDocumentContentOperations::INS_EMPTYEXPAND;
+            ? (SwInsertFlags::FORCEHINTEXPAND | SwInsertFlags::EMPTYEXPAND)
+            : SwInsertFlags::EMPTYEXPAND;
 
         for(SwPaM& rCurrentCrsr : getShellCrsr( true )->GetRingContainer())
         {

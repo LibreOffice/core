@@ -140,7 +140,7 @@ void SwUndoSort::UndoImpl(::sw::UndoRedoContext & rContext)
             SwNodeIndex aIdx( rDoc.GetNodes(), nSttNode + i );
             SwNodeRange aRg( *aIdxList[i], 0, *aIdxList[i], 1 );
             rDoc.getIDocumentContentOperations().MoveNodeRange(aRg, aIdx,
-                IDocumentContentOperations::DOC_MOVEDEFAULT);
+                SwMoveFlags::DEFAULT);
         }
         // delete indices
         for(SwUndoSortList::const_iterator it = aIdxList.begin(); it != aIdxList.end(); ++it)
@@ -215,7 +215,7 @@ void SwUndoSort::RedoImpl(::sw::UndoRedoContext & rContext)
             SwNodeIndex aIdx( rDoc.GetNodes(), nSttNode + i);
             SwNodeRange aRg( *aIdxList[i], 0, *aIdxList[i], 1 );
             rDoc.getIDocumentContentOperations().MoveNodeRange(aRg, aIdx,
-                IDocumentContentOperations::DOC_MOVEDEFAULT);
+                SwMoveFlags::DEFAULT);
         }
         // delete indices
         for(SwUndoSortList::const_iterator it = aIdxList.begin(); it != aIdxList.end(); ++it)

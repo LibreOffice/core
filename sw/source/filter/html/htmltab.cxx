@@ -5350,7 +5350,7 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
                     SwNodeIndex aDstIdx( *pNd, bTop ? 0 : 1 );
 
                     pDoc->getIDocumentContentOperations().MoveNodeRange( aSrcRg, aDstIdx,
-                        IDocumentContentOperations::DOC_MOVEDEFAULT );
+                        SwMoveFlags::DEFAULT );
 
                     // Wenn die Caption vor der Tabelle eingefuegt wurde muss
                     // eine an der Tabelle gestzte Seitenvorlage noch in den

@@ -42,28 +42,37 @@ class SwFmtFld;
 namespace utl { class TransliterationWrapper; }
 namespace svt { class EmbeddedObjectRef; }
 
+enum class SwMoveFlags
+{
+    DEFAULT       = 0x00,
+    ALLFLYS       = 0x01,
+    CREATEUNDOOBJ = 0x02,
+    REDLINES      = 0x04,
+    NO_DELFRMS    = 0x08
+};
+namespace o3tl
+{
+    template<> struct typed_flags<SwMoveFlags> : is_typed_flags<SwMoveFlags, 0x0f> {};
+}
+
+// constants for inserting text
+enum class SwInsertFlags
+{
+    DEFAULT         = 0x00, // no extras
+    EMPTYEXPAND     = 0x01, // expand empty hints at insert position
+    NOHINTEXPAND    = 0x02, // do not expand any hints at insert pos
+    FORCEHINTEXPAND = 0x04 // expand all hints at insert position
+};
+namespace o3tl
+{
+    template<> struct typed_flags<SwInsertFlags> : is_typed_flags<SwInsertFlags, 0x07> {};
+}
+
 /** Text operation/manipulation interface
 */
 class IDocumentContentOperations
 {
 public:
-    enum SwMoveFlags
-    {
-        DOC_MOVEDEFAULT = 0x00,
-        DOC_MOVEALLFLYS = 0x01,
-        DOC_CREATEUNDOOBJ = 0x02,
-        DOC_MOVEREDLINES = 0x04,
-        DOC_NO_DELFRMS = 0x08
-    };
-
-    // constants for inserting text
-    enum InsertFlags
-    {   INS_DEFAULT         = 0x00 // no extras
-    ,   INS_EMPTYEXPAND     = 0x01 // expand empty hints at insert position
-    ,   INS_NOHINTEXPAND    = 0x02 // do not expand any hints at insert pos
-    ,   INS_FORCEHINTEXPAND = 0x04 // expand all hints at insert position
-    };
-
 public:
     /** Copy a selected content range to a position
 
@@ -129,7 +138,7 @@ public:
     /** Insert string into existing text node at position rRg.Point().
      */
     virtual bool InsertString(const SwPaM &rRg, const OUString&,
-              const enum InsertFlags nInsertMode = INS_EMPTYEXPAND ) = 0;
+              const enum SwInsertFlags nInsertMode = SwInsertFlags::EMPTYEXPAND ) = 0;
 
     /** change text to Upper/Lower/Hiragana/Katagana/...
      */

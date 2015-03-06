@@ -1052,7 +1052,7 @@ void SwWW8ImplReader::InsertTagField( const sal_uInt16 nId, const OUString& rTag
     {
         aName += rTagText;      // als Txt taggen
         rDoc.getIDocumentContentOperations().InsertString(*pPaM, aName,
-                IDocumentContentOperations::INS_NOHINTEXPAND);
+                SwInsertFlags::NOHINTEXPAND);
     }
     else
     {                                                   // normal tagggen

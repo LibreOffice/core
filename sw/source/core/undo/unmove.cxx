@@ -199,7 +199,7 @@ void SwUndoMove::UndoImpl(::sw::UndoRedoContext & rContext)
             aRg.aEnd = nDestEndNode;
             aIdx = nInsPosNode;
             bool bSuccess = pDoc->getIDocumentContentOperations().MoveNodeRange( aRg, aIdx,
-                    IDocumentContentOperations::DOC_MOVEDEFAULT );
+                    SwMoveFlags::DEFAULT );
             if (!bSuccess)
                 break;
         }
@@ -225,8 +225,8 @@ void SwUndoMove::UndoImpl(::sw::UndoRedoContext & rContext)
 
             // first delete all attributes at InsertPos
             const bool bSuccess = pDoc->getIDocumentContentOperations().MoveRange( aPam, aPos, (bMoveRedlines)
-                        ? IDocumentContentOperations::DOC_MOVEREDLINES
-                        : IDocumentContentOperations::DOC_MOVEDEFAULT );
+                        ? SwMoveFlags::REDLINES
+                        : SwMoveFlags::DEFAULT );
             if (!bSuccess)
                 break;
 
@@ -289,8 +289,8 @@ void SwUndoMove::RedoImpl(::sw::UndoRedoContext & rContext)
         // only a move with SwRange
         SwNodeRange aRg( rNds, nSttNode, rNds, nEndNode );
         rDoc.getIDocumentContentOperations().MoveNodeRange( aRg, aIdx, (bMoveRedlines)
-                ? IDocumentContentOperations::DOC_MOVEREDLINES
-                : IDocumentContentOperations::DOC_MOVEDEFAULT );
+                ? SwMoveFlags::REDLINES
+                : SwMoveFlags::DEFAULT );
     }
     else
     {
@@ -307,7 +307,7 @@ void SwUndoMove::RedoImpl(::sw::UndoRedoContext & rContext)
 
         aIdx--;
         rDoc.getIDocumentContentOperations().MoveRange( aPam, aMvPos,
-            IDocumentContentOperations::DOC_MOVEDEFAULT );
+            SwMoveFlags::DEFAULT );
 
         if( nSttNode != nEndNode && bJoinTxt )
         {

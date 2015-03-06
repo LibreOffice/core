@@ -1797,10 +1797,7 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
                 aNumStr += SvxNumberType( rDescs[i-1]->GetNumType() ).GetNumStr( nBeg+nCount );
         }
     }
-    pNd->InsertText( aNumStr, aPos,
-           static_cast<IDocumentContentOperations::InsertFlags>(
-               IDocumentContentOperations::INS_EMPTYEXPAND |
-               IDocumentContentOperations::INS_FORCEHINTEXPAND) );
+    pNd->InsertText( aNumStr, aPos, SwInsertFlags::EMPTYEXPAND | SwInsertFlags::FORCEHINTEXPAND );
     if(pPageNoCharFmt)
     {
         SwFmtCharFmt aCharFmt( pPageNoCharFmt );

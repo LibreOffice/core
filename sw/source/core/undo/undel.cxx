@@ -803,7 +803,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
             if( pTxtNd )
             {
                 OUString const ins( pTxtNd->InsertText(*pEndStr, aPos.nContent,
-                        IDocumentContentOperations::INS_NOHINTEXPAND) );
+                        SwInsertFlags::NOHINTEXPAND) );
                 assert(ins.getLength() == pEndStr->getLength()); // must succeed
                 (void) ins;
                 // METADATA: restore
@@ -898,7 +898,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
                 //  -> in StartNode is still the rest of the Join => delete
                 aPos.nContent.Assign( pTxtNd, nSttCntnt );
                 OUString const ins( pTxtNd->InsertText(*pSttStr, aPos.nContent,
-                        IDocumentContentOperations::INS_NOHINTEXPAND) );
+                        SwInsertFlags::NOHINTEXPAND) );
                 assert(ins.getLength() == pSttStr->getLength()); // must succeed
                 (void) ins;
                 // METADATA: restore

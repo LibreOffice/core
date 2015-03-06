@@ -1698,7 +1698,7 @@ void SwTxtNode::CopyText( SwTxtNode *const pDest,
     //              ueber die InsertMethode den Text einfuegen und nicht
     //              selbst direkt
     pDest->InsertText( m_Text.copy(nTxtStartIdx, nLen), rDestStart,
-                   IDocumentContentOperations::INS_EMPTYEXPAND );
+                   SwInsertFlags::EMPTYEXPAND );
 
     // um reale Groesse Updaten !
     nLen = pDest->m_Text.getLength() - oldLen;
@@ -1903,7 +1903,7 @@ void SwTxtNode::CopyText( SwTxtNode *const pDest,
 }
 
 OUString SwTxtNode::InsertText( const OUString & rStr, const SwIndex & rIdx,
-        const IDocumentContentOperations::InsertFlags nMode )
+        const SwInsertFlags nMode )
 {
     assert(rIdx <= m_Text.getLength()); // invalid index
 
@@ -1924,14 +1924,14 @@ OUString SwTxtNode::InsertText( const OUString & rStr, const SwIndex & rIdx,
     assert(nLen != 0);
 
     bool bOldExpFlg = IsIgnoreDontExpand();
-    if (nMode & IDocumentContentOperations::INS_FORCEHINTEXPAND)
+    if (nMode & SwInsertFlags::FORCEHINTEXPAND)
     {
         SetIgnoreDontExpand( true );
     }
 
     Update( rIdx, nLen ); // text content changed!
 
-    if (nMode & IDocumentContentOperations::INS_FORCEHINTEXPAND)
+    if (nMode & SwInsertFlags::FORCEHINTEXPAND)
     {
         SetIgnoreDontExpand( bOldExpFlg );
     }
@@ -1953,8 +1953,8 @@ OUString SwTxtNode::InsertText( const OUString & rStr, const SwIndex & rIdx,
 
             if( rIdx == *pEndIdx )
             {
-                if (  (nMode & IDocumentContentOperations::INS_NOHINTEXPAND) ||
-                    (!(nMode & IDocumentContentOperations::INS_FORCEHINTEXPAND)
+                if (  (nMode & SwInsertFlags::NOHINTEXPAND) ||
+                    (!(nMode & SwInsertFlags::FORCEHINTEXPAND)
                      && pHt->DontExpand()) )
                 {
                     // bei leeren Attributen auch Start veraendern
@@ -1973,7 +1973,7 @@ OUString SwTxtNode::InsertText( const OUString & rStr, const SwIndex & rIdx,
                     InsertHint( pHt, SetAttrMode::NOHINTADJUST );
                 }
                 // empty hints at insert position?
-                else if ( (nMode & IDocumentContentOperations::INS_EMPTYEXPAND)
+                else if ( (nMode & SwInsertFlags::EMPTYEXPAND)
                         && (*pEndIdx == pHt->GetStart()) )
                 {
                     pHt->GetStart() = pHt->GetStart() - nLen;
@@ -1991,7 +1991,7 @@ OUString SwTxtNode::InsertText( const OUString & rStr, const SwIndex & rIdx,
                     continue;
                 }
             }
-            if ( !(nMode & IDocumentContentOperations::INS_NOHINTEXPAND) &&
+            if ( !(nMode & SwInsertFlags::NOHINTEXPAND) &&
                  rIdx == nLen && pHt->GetStart() == rIdx.GetIndex() &&
                  !pHt->IsDontExpandStartAttr() )
             {
@@ -2388,7 +2388,7 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
 }
 
 void SwTxtNode::EraseText(const SwIndex &rIdx, const sal_Int32 nCount,
-        const IDocumentContentOperations::InsertFlags nMode )
+        const SwInsertFlags nMode )
 {
     assert(rIdx <= m_Text.getLength()); // invalid index
 
@@ -2447,7 +2447,7 @@ void SwTxtNode::EraseText(const SwIndex &rIdx, const sal_Int32 nCount,
         //    char deletes the hint
         if (   (*pHtEndIdx < nEndIdx)
             || ( (*pHtEndIdx == nEndIdx)     &&
-                 !(IDocumentContentOperations::INS_EMPTYEXPAND & nMode)  &&
+                 !(SwInsertFlags::EMPTYEXPAND & nMode)  &&
                  (  (RES_TXTATR_TOXMARK == nWhich)  ||
                     (RES_TXTATR_REFMARK == nWhich)  ||
                     (RES_TXTATR_CJK_RUBY == nWhich) ||
@@ -3289,7 +3289,7 @@ bool SwTxtNode::GetExpandTxt( SwTxtNode& rDestNd, const SwIndex* pDestIdx,
                                         aItem,
                                         aDestIdx.GetIndex(),
                                         aDestIdx.GetIndex() );
-                                OUString const ins( rDestNd.InsertText(sExpand, aDestIdx, IDocumentContentOperations::INS_EMPTYEXPAND));
+                                OUString const ins( rDestNd.InsertText(sExpand, aDestIdx, SwInsertFlags::EMPTYEXPAND));
                                 SAL_INFO_IF(ins.getLength() != sExpand.getLength(),
                                         "sw.core", "GetExpandTxt lossage");
                                 aDestIdx = nInsPos + nAttrStartIdx;

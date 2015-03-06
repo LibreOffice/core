@@ -2054,10 +2054,8 @@ void ChgTextToNum( SwTableBox& rBox, const OUString& rTxt, const Color* pCol,
                 pDoc->getIDocumentRedlineAccess().DeleteRedline(aTemp, true, USHRT_MAX);
             }
 
-            pTNd->EraseText( aIdx, n,
-                    IDocumentContentOperations::INS_EMPTYEXPAND );
-            pTNd->InsertText( rTxt, aIdx,
-                    IDocumentContentOperations::INS_EMPTYEXPAND );
+            pTNd->EraseText( aIdx, n, SwInsertFlags::EMPTYEXPAND );
+            pTNd->InsertText( rTxt, aIdx, SwInsertFlags::EMPTYEXPAND );
 
             if( pDoc->getIDocumentRedlineAccess().IsRedlineOn() )
             {
@@ -2101,10 +2099,8 @@ void ChgNumToText( SwTableBox& rBox, sal_uLong nFmt )
                 // Reset DontExpand-Flags before exchange, to retrigger expansion
                 pTNd->DontExpandFmt( aIdx, false, false );
                 aIdx = 0;
-                pTNd->EraseText( aIdx, SAL_MAX_INT32,
-                        IDocumentContentOperations::INS_EMPTYEXPAND );
-                pTNd->InsertText( sTmp, aIdx,
-                        IDocumentContentOperations::INS_EMPTYEXPAND );
+                pTNd->EraseText( aIdx, SAL_MAX_INT32, SwInsertFlags::EMPTYEXPAND );
+                pTNd->InsertText( sTmp, aIdx, SwInsertFlags::EMPTYEXPAND );
             }
         }
 

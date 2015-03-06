@@ -2094,9 +2094,9 @@ void SwUndoTblMerge::MoveBoxCntnt( SwDoc* pDoc, SwNodeRange& rRg, SwNodeIndex& r
     SwNodeIndex aTmp( rRg.aStart, -1 ), aTmp2( rPos, -1 );
     SwUndoMove* pUndo = new SwUndoMove( pDoc, rRg, rPos );
     ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
-    pDoc->getIDocumentContentOperations().MoveNodeRange( rRg, rPos, (pSaveTbl->IsNewModel()) ?
-        IDocumentContentOperations::DOC_NO_DELFRMS :
-        IDocumentContentOperations::DOC_MOVEDEFAULT );
+    pDoc->getIDocumentContentOperations().MoveNodeRange( rRg, rPos, pSaveTbl->IsNewModel() ?
+        SwMoveFlags::NO_DELFRMS :
+        SwMoveFlags::DEFAULT );
     ++aTmp;
     ++aTmp2;
     pUndo->SetDestRange( aTmp2, rPos, aTmp );
@@ -2249,7 +2249,7 @@ void SwUndoTblNumFmt::UndoImpl(::sw::UndoRedoContext & rContext)
         {
             pTxtNd->EraseText( aIdx );
             pTxtNd->InsertText( aStr, aIdx,
-                IDocumentContentOperations::INS_NOHINTEXPAND );
+                SwInsertFlags::NOHINTEXPAND );
         }
     }
 

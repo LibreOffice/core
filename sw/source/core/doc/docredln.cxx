@@ -1159,13 +1159,13 @@ void SwRangeRedline::MoveToSection()
             SwNodeIndex aNdIdx( *pTxtNd );
             SwPosition aPos( aNdIdx, SwIndex( pTxtNd ));
             if( pCSttNd && pCEndNd )
-                pDoc->getIDocumentContentOperations().MoveAndJoin( aPam, aPos, IDocumentContentOperations::DOC_MOVEDEFAULT );
+                pDoc->getIDocumentContentOperations().MoveAndJoin( aPam, aPos, SwMoveFlags::DEFAULT );
             else
             {
                 if( pCSttNd && !pCEndNd )
                     bDelLastPara = true;
                 pDoc->getIDocumentContentOperations().MoveRange( aPam, aPos,
-                    IDocumentContentOperations::DOC_MOVEDEFAULT );
+                    SwMoveFlags::DEFAULT );
             }
         }
         else
@@ -1175,7 +1175,7 @@ void SwRangeRedline::MoveToSection()
 
             SwPosition aPos( *pSttNd->EndOfSectionNode() );
             pDoc->getIDocumentContentOperations().MoveRange( aPam, aPos,
-                IDocumentContentOperations::DOC_MOVEDEFAULT );
+                SwMoveFlags::DEFAULT );
         }
         pCntntSect = new SwNodeIndex( *pSttNd );
 
@@ -1426,7 +1426,7 @@ void SwRangeRedline::MoveFromSection(size_t nMyPos)
             else
             {
                 pDoc->getIDocumentContentOperations().MoveRange( aPam, aPos,
-                    IDocumentContentOperations::DOC_MOVEALLFLYS );
+                    SwMoveFlags::ALLFLYS );
             }
 
             SetMark();

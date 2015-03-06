@@ -1357,7 +1357,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
             else
             {
                 pDoc->getIDocumentContentOperations().MoveNodeRange( aRg, rInsPosNd,
-                    IDocumentContentOperations::DOC_MOVEDEFAULT );
+                    SwMoveFlags::DEFAULT );
             }
             // where is now aInsPos ??
 

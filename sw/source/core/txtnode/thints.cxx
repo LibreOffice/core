@@ -1259,12 +1259,10 @@ bool SwTxtNode::InsertHint( SwTxtAttr * const pAttr, const SetAttrMode nMode )
             "EndIdx out of bounds!" );
 
     // translate from SetAttrMode to InsertMode (for hints with CH_TXTATR)
-    const enum IDocumentContentOperations::InsertFlags nInsertFlags =
+    const enum SwInsertFlags nInsertFlags =
         (nMode & SetAttrMode::FORCEHINTEXPAND)
-        ? static_cast<IDocumentContentOperations::InsertFlags>(
-                IDocumentContentOperations::INS_FORCEHINTEXPAND |
-                IDocumentContentOperations::INS_EMPTYEXPAND)
-        : IDocumentContentOperations::INS_EMPTYEXPAND;
+        ? (SwInsertFlags::FORCEHINTEXPAND | SwInsertFlags::EMPTYEXPAND)
+        : SwInsertFlags::EMPTYEXPAND;
 
     // need this after TryInsertHint, when pAttr may be deleted
     const sal_Int32 nStart( pAttr->GetStart() );

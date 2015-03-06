@@ -1093,14 +1093,13 @@ void SwDocTest::randomTest()
                 }
                 break;
             case 4: { // movement
-                IDocumentContentOperations::SwMoveFlags nFlags =
-                    (IDocumentContentOperations::SwMoveFlags)
-                        (getRand(1) ? // FIXME: puterb this more ?
-                         IDocumentContentOperations::DOC_MOVEDEFAULT :
-                         IDocumentContentOperations::DOC_MOVEALLFLYS |
-                         IDocumentContentOperations::DOC_CREATEUNDOOBJ |
-                         IDocumentContentOperations::DOC_MOVEREDLINES |
-                         IDocumentContentOperations::DOC_NO_DELFRMS);
+                SwMoveFlags nFlags =
+                         getRand(1) // FIXME: puterb this more ?
+                         ? SwMoveFlags::DEFAULT
+                         : SwMoveFlags::ALLFLYS |
+                           SwMoveFlags::CREATEUNDOOBJ |
+                           SwMoveFlags::REDLINES |
+                           SwMoveFlags::NO_DELFRMS;
                 SwPosition aTo(getRandomPosition(m_pDoc, i/10));
                 m_pDoc->getIDocumentContentOperations().MoveRange(aCrs, aTo, nFlags);
                 break;
