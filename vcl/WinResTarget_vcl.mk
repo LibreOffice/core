@@ -69,11 +69,9 @@ $(eval $(call gb_WinResTarget_add_dependencies,vcl/salsrc,\
     vcl/win/source/src/timemove.cur \
     vcl/win/source/src/ass.cur \
     vcl/win/source/src/dbezier.cur \
-    vcl/win/source/src/hsizebar.cur \
     vcl/win/source/src/timesize.cur \
     vcl/win/source/src/asse.cur \
     vcl/win/source/src/dcapt.cur \
-    vcl/win/source/src/hsplit.cur \
     vcl/win/source/src/vshear.cur \
     vcl/win/source/src/assw.cur \
     vcl/win/source/src/dcirccut.cur \
@@ -83,12 +81,10 @@ $(eval $(call gb_WinResTarget_add_dependencies,vcl/salsrc,\
     vcl/win/source/src/dconnect.cur \
     vcl/win/source/src/linkf.cur \
     vcl/win/source/src/pivotdel.cur \
-    vcl/win/source/src/vsizebar.cur \
     vcl/win/source/src/aswe.cur \
     vcl/win/source/src/dellipse.cur \
     vcl/win/source/src/magnify.cur \
     vcl/win/source/src/pivotfld.cur \
-    vcl/win/source/src/vsplit.cur \
     vcl/win/source/src/chain.cur \
     vcl/win/source/src/detectiv.cur \
     vcl/win/source/src/mirror.cur \

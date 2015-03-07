@@ -2086,10 +2086,10 @@ void WinSalFrame::SetPointer( PointerStyle ePointerStyle )
     { 0, IDC_SIZENESW, 0 },                         // POINTER_WINDOW_NESIZE
     { 0, IDC_SIZENESW, 0 },                         // POINTER_WINDOW_SWSIZE
     { 0, IDC_SIZENWSE, 0 },                         // POINTER_WINDOW_SESIZE
-    { 0, 0, SAL_RESID_POINTER_HSPLIT },             // POINTER_HSPLIT
-    { 0, 0, SAL_RESID_POINTER_VSPLIT },             // POINTER_VSPLIT
-    { 0, 0, SAL_RESID_POINTER_HSIZEBAR },           // POINTER_HSIZEBAR
-    { 0, 0, SAL_RESID_POINTER_VSIZEBAR },           // POINTER_VSIZEBAR
+    { 0, IDC_SIZEWE, 0 },                           // POINTER_HSPLIT
+    { 0, IDC_SIZENS, 0 },                           // POINTER_VSPLIT
+    { 0, IDC_SIZEWE, 0 },                           // POINTER_HSIZEBAR
+    { 0, IDC_SIZENS, 0 },                           // POINTER_VSIZEBAR
     { 0, IDC_HAND, 0 },                             // POINTER_HAND
     { 0, IDC_HAND, 0 },                             // POINTER_REFHAND
     { 0, IDC_PEN, 0 },                              // POINTER_PEN
