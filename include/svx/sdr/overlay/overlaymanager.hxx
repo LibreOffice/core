@@ -62,7 +62,7 @@ namespace sdr
 
         protected:
             // the OutputDevice to work on, set on construction and not to be changed
-            OutputDevice&                               rmOutputDevice;
+            OutputDevice&                               mrOutputDevice;
 
             // the vector of registered OverlayObjects
             OverlayObjectVector                         maOverlayObjects;
@@ -114,7 +114,7 @@ namespace sdr
             virtual void restoreBackground(const vcl::Region& rRegion) const;
 
             // get the OutputDevice
-            OutputDevice& getOutputDevice() const { return rmOutputDevice; }
+            OutputDevice& getOutputDevice() const { return mrOutputDevice; }
 
             // add and remove OverlayObjects
             void add(OverlayObject& rOverlayObject);
