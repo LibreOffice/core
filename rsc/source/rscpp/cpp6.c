@@ -584,7 +584,7 @@ DEFBUF* defendel(char* name, int delete)
     DEFBUF** prevp;
     char* np;
     int nhash;
-    int temp;
+    int temp=0;
     int size;
 
     for (nhash = 0, np = name; *np != EOS;)

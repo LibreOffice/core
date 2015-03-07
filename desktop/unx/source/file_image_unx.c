@@ -76,7 +76,7 @@ int file_image_pagein (file_image * image)
     long          s;
     size_t        k;
     // force touching of each page despite the optimizer
-    volatile char c = 0;
+    volatile char c =0;
 
     if (image == 0)
         return EINVAL;
