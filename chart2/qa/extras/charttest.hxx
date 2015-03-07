@@ -13,6 +13,7 @@
 #include <test/bootstrapfixture.hxx>
 #include <unotest/macros_test.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertysequence.hxx>
 
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
@@ -120,9 +121,9 @@ void ChartTest::load( const OUString& aDir, const OUString& aName )
 boost::shared_ptr<utl::TempFile> ChartTest::reload(const OUString& rFilterName)
 {
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aArgs(1);
-    aArgs[0].Name = "FilterName";
-    aArgs[0].Value <<= rFilterName;
+    auto aArgs(::comphelper::InitPropertySequence({
+        { "FilterName", makeAny(rFilterName) }
+    }));
     boost::shared_ptr<utl::TempFile> pTempFile = boost::make_shared<utl::TempFile>();
     pTempFile->EnableKillingFile();
     xStorable->storeToURL(pTempFile->GetURL(), aArgs);

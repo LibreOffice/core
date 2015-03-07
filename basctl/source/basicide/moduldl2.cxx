@@ -52,6 +52,7 @@
 #include <com/sun/star/util/VetoException.hpp>
 #include <com/sun/star/script/ModuleSizeExceededRequest.hpp>
 
+#include <comphelper/propertysequence.hxx>
 
 
 namespace basctl
@@ -1220,14 +1221,12 @@ void LibPage::ExportAsPackage( const OUString& aLibName )
         const OUString strFullPath = "FullPath" ;
         const OUString strBasicMediaType = "application/vnd.sun.star.basic-library" ;
 
-        Sequence<beans::PropertyValue> attribs( 2 );
-        beans::PropertyValue * pattribs = attribs.getArray();
-        pattribs[ 0 ].Name = strFullPath;
         OUString fullPath = aLibName;
         fullPath += "/" ;
-        pattribs[ 0 ].Value <<= fullPath;
-        pattribs[ 1 ].Name = strMediaType;
-        pattribs[ 1 ].Value <<= strBasicMediaType;
+        auto attribs(::comphelper::InitPropertySequence({
+            { strFullPath, makeAny(fullPath) },
+            { strMediaType, makeAny(strBasicMediaType) }
+        }));
         manifest.push_back( attribs );
 
         // write into pipe:

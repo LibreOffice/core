@@ -54,6 +54,7 @@
 
 #include <comphelper/documentinfo.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertysequence.hxx>
 
 #include <osl/file.hxx>
 #include <rtl/uri.hxx>
@@ -815,9 +816,9 @@ namespace basctl
         Sequence< PropertyValue > aArgs;
         if ( _rxStatusIndicator.is() )
         {
-            aArgs.realloc(1);
-            aArgs[0].Name = "StatusIndicator" ;
-            aArgs[0].Value <<= _rxStatusIndicator;
+            aArgs = ::comphelper::InitPropertySequence({
+                { "StatusIndicator", makeAny(_rxStatusIndicator) }
+            });
         }
 
         try
