@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a29b11f_979e4606",
+        "filename": "basctl/source/basicide/basicrenderable.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2015-03-07T18:58:14Z",
+      "side": 1,
+      "message": "Why keeping the realloc() if you will overwrite the value of aVals soon anyway?",
+      "revId": "1815b29282047d6d8ad77aa23ec3f4e2da6e70a6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
