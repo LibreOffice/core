@@ -353,6 +353,7 @@ void DrawViewShell::WriteFrameViewData()
     else
     {
         mpFrameView->SetSelectedPage( maTabControl.GetCurPageId() - 1 );
+        GetDoc()->SetCurrentPage(maTabControl.GetCurPageId() - 1);
     }
 
     mpFrameView->SetViewShEditMode(meEditMode, mePageKind);

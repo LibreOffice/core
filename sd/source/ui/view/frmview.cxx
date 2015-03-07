@@ -126,6 +126,7 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
         }
     }
 
+
     if (pFrameView)
     {
         // initialize FrameView with the FrameView of the DocShell
@@ -207,7 +208,7 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
         maVisArea = Rectangle( Point(), Size(0, 0) );
         mePageKind = PK_STANDARD;
         mePageKindOnLoad = PK_STANDARD;
-        mnSelectedPage = 0;
+        mnSelectedPage = pDrawDoc->GetCurrentPage();
         mnSelectedPageOnLoad = 0;
         meStandardEditMode = EM_PAGE;
         meNotesEditMode = EM_PAGE;
