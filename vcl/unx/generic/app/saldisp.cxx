@@ -841,10 +841,10 @@ OUString SalDisplay::GetKeyName( sal_uInt16 nKeyCode ) const
             nKeySym = XK_End;
             break;
         case KEY_PAGEUP:
-            nKeySym = XK_Prior;
+            nKeySym = XK_Page_Up;
             break;
         case KEY_PAGEDOWN:
-            nKeySym = XK_Next;
+            nKeySym = XK_Page_Down;
             break;
         case KEY_RETURN:
             nKeySym = XK_Return;
@@ -1039,10 +1039,10 @@ sal_uInt16 SalDisplay::GetKeyCode( KeySym keysym, char*pcPrintable ) const
             case XK_KP_Down:
                 nKey = KEY_DOWN;
                 break;
-            case XK_KP_Prior: // XK_KP_Page_Up
+            case XK_KP_Page_Up: // XK_KP_Page_Up
                 nKey = KEY_PAGEUP;
                 break;
-            case XK_KP_Next: // XK_KP_Page_Down
+            case XK_KP_Page_Down: // XK_KP_Page_Down
                 nKey = KEY_PAGEDOWN;
                 break;
             case XK_KP_End:
@@ -1182,10 +1182,10 @@ sal_uInt16 SalDisplay::GetKeyCode( KeySym keysym, char*pcPrintable ) const
             case XK_Down:
                 nKey = KEY_DOWN;
                 break;
-            case XK_Prior: // XK_Page_Up
+            case XK_Page_Up: // XK_Page_Up
                 nKey = KEY_PAGEUP;
                 break;
-            case XK_Next: // XK_Page_Down
+            case XK_Page_Down: // XK_Page_Down
                 nKey = KEY_PAGEDOWN;
                 break;
             case XK_End:
