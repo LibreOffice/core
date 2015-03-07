@@ -237,7 +237,7 @@ namespace
                 mnStartCol = 0;
                 while( nIdx && pC != pEnd )
                 {
-                    mnStartCol = mnStartCol + pC->mnColSpan;
+                    mnStartCol += pC->mnColSpan;
                     --nIdx;
                     ++pC;
                 }
@@ -426,8 +426,7 @@ namespace
                     if( nCurrStartCol < USHRT_MAX )
                     {
                         if( pFirstBox->mnColSpan > nFirstStartCol )
-                            nCurrStartCol = pFirstBox->mnColSpan - nFirstStartCol
-                                            + nCurrStartCol;
+                            nCurrStartCol += pFirstBox->mnColSpan - nFirstStartCol;
                     }
                     ++pFirstBox;
                 }
@@ -441,7 +440,7 @@ namespace
                 for( BoxStructure::size_type nBox = 0; nBox < nBoxCount; ++nBox )
                 {
                     BoxSpanInfo& rInfo = rBox[nBox];
-                    nCol = nCol + rInfo.mnColSpan;
+                    nCol += rInfo.mnColSpan;
                     if( rInfo.mbSelected || nCol > nCurrStartCol )
                     {
                         rInfo.mpCopy = pCurrBox->mpBox;
