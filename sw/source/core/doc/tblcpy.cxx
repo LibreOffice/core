@@ -111,8 +111,8 @@ namespace
     {
         if( !rBox.GetTabLines().empty() )
         {
-            SubTable::difference_type nSize = std::distance( pStartLn, pEndLn );
-            if( nSize < (sal_uInt16)rBox.GetTabLines().size() )
+            SubTable::size_type nSize = static_cast<SubTable::size_type>(std::distance( pStartLn, pEndLn ));
+            if( nSize < rBox.GetTabLines().size() )
             {
                 SubLine aSubLine;
                 SubLine::iterator pBox = pStartLn->begin();
@@ -128,11 +128,10 @@ namespace
                 do
                 {
                     rSubTable.insert( pEndLn, aSubLine );
-                } while( ++nSize < (sal_uInt16)rBox.GetTabLines().size() );
+                } while( ++nSize < rBox.GetTabLines().size() );
             }
-            for( sal_uInt16 nLine = 0; nLine < rBox.GetTabLines().size(); ++nLine )
-                pStartLn = insertSubLine( rSubTable, *rBox.GetTabLines()[nLine],
-                           pStartLn );
+            for( auto pLine : rBox.GetTabLines() )
+                pStartLn = insertSubLine( rSubTable, *pLine, pStartLn );
             OSL_ENSURE( pStartLn == pEndLn, "Sub line confusion" );
         }
         else
@@ -156,10 +155,9 @@ namespace
         SubTable::iterator pMax = pStartLn;
         ++pMax;
         SubTable::difference_type nMax = 1;
-        for( sal_uInt16 nBox = 0; nBox < rLine.GetTabBoxes().size(); ++nBox )
+        for( auto pBox : rLine.GetTabBoxes() )
         {
-            SubTable::iterator pTmp = insertSubBox( rSubTable,
-                *rLine.GetTabBoxes()[nBox], pStartLn, pMax );
+            SubTable::iterator pTmp = insertSubBox( rSubTable, *pBox, pStartLn, pMax );
             SubTable::difference_type nTmp = std::distance( pStartLn, pTmp );
             if( nTmp > nMax )
             {
@@ -175,10 +173,9 @@ namespace
         mnAddLine(0)
     {
         maCols.push_front(0);
-        const SwTableLines &rLines = rTable.GetTabLines();
         sal_uInt16 nCnt = 0;
-        for( sal_uInt16 nLine = 0; nLine < rLines.size(); ++nLine )
-            addLine( nCnt, rLines[nLine]->GetTabBoxes(), 0, rTable.IsNewModel() );
+        for( auto pLine : rTable.GetTabLines() )
+            addLine( nCnt, pLine->GetTabBoxes(), 0, rTable.IsNewModel() );
     }
 
     TableStructure::TableStructure( const SwTable& rTable,
@@ -192,7 +189,7 @@ namespace
             _FndLines &rFndLines = rFndBox.GetLines();
             maCols.push_front(0);
             const SwTableLine* pLine = rFndLines.front().GetLine();
-            sal_uInt16 nStartLn = rTable.GetTabLines().GetPos( pLine );
+            const sal_uInt16 nStartLn = rTable.GetTabLines().GetPos( pLine );
             sal_uInt16 nEndLn = nStartLn;
             if( rFndLines.size() > 1 )
             {
@@ -203,9 +200,9 @@ namespace
             {
                 const SwTableLines &rLines = rTable.GetTabLines();
                 if( bNoSelection &&
-                    (sal_uInt16)nMinSize > nEndLn - nStartLn + 1 )
+                    nMinSize > static_cast<LineStructure::size_type>(nEndLn - nStartLn + 1) )
                 {
-                    sal_uInt16 nNewEndLn = nStartLn + (sal_uInt16)nMinSize - 1;
+                    LineStructure::size_type nNewEndLn = nStartLn + nMinSize - 1;
                     if( nNewEndLn >= rLines.size() )
                     {
                         mnAddLine = nNewEndLn - rLines.size() + 1;
@@ -255,7 +252,7 @@ namespace
     {
         bool bComplex = false;
         if( !bNewModel )
-            for( sal_uInt16 nBox = 0; !bComplex && nBox < rBoxes.size(); ++nBox )
+            for( SwTableBoxes::size_type nBox = 0; !bComplex && nBox < rBoxes.size(); ++nBox )
                 bComplex = !rBoxes[nBox]->GetTabLines().empty();
         if( bComplex )
         {
@@ -264,8 +261,8 @@ namespace
             aSubTable.push_back( aSubLine );
             SubTable::iterator pStartLn = aSubTable.begin();
             SubTable::iterator pEndLn = aSubTable.end();
-            for( sal_uInt16 nBox = 0; nBox < rBoxes.size(); ++nBox )
-                insertSubBox( aSubTable, *rBoxes[nBox], pStartLn, pEndLn );
+            for( auto pBox : rBoxes )
+                insertSubBox( aSubTable, *pBox, pStartLn, pEndLn );
             SubTable::size_type nSize = aSubTable.size();
             if( nSize )
             {
@@ -299,8 +296,8 @@ namespace
             maLines[rLine].reserve( rBoxes.size() );
             ColumnStructure::iterator pCol = maCols.begin();
             BoxStructure::iterator pSel = maLines[rLine].end();
-            for( sal_uInt16 nBox = 0; nBox < rBoxes.size(); ++nBox )
-                addBox( rLine, pSelBoxes, rBoxes[nBox], nBorder, nCol,
+            for( auto pBox : rBoxes )
+                addBox( rLine, pSelBoxes, pBox, nBorder, nCol,
                         pCol, pSel, bSelected, false );
             ++rLine;
         }
@@ -329,7 +326,7 @@ namespace
         else
             aInfo.mbSelected = false;
         rnBorder += pBox->GetFrmFmt()->GetFrmSize().GetWidth();
-        sal_uInt16 nLeftCol = rnCol;
+        const sal_uInt16 nLeftCol = rnCol;
         while( rpCol != maCols.end() && *rpCol < rnBorder )
         {
             ++rnCol;
@@ -369,7 +366,7 @@ namespace
         if( mnAddLine )
         {
             const SwTableLines &rLines = rTable.GetTabLines();
-            sal_uInt16 nLineCount = rLines.size();
+            const sal_uInt16 nLineCount = rLines.size();
             if( nLineCount < mnAddLine )
                 mnAddLine = nLineCount;
             sal_uInt16 nLine = (sal_uInt16)maLines.size();
@@ -561,9 +558,8 @@ static void lcl_CpyBox( const SwTable& rCpyTbl, const SwTableBox* pCpyBox,
         }
 
         // If we still have FlyFrames hanging around, delete them too
-        for( sal_uInt16 n = 0; n < pDoc->GetSpzFrmFmts()->size(); ++n )
+        for( const auto pFly : *pDoc->GetSpzFrmFmts() )
         {
-            SwFrmFmt *const pFly = (*pDoc->GetSpzFrmFmts())[n];
             SwFmtAnchor const*const pAnchor = &pFly->GetAnchor();
             SwPosition const*const pAPos = pAnchor->GetCntntAnchor();
             if (pAPos &&
@@ -604,7 +600,7 @@ static void lcl_CpyBox( const SwTable& rCpyTbl, const SwTableBox* pCpyBox,
     SwTxtNode *const pTxtNd = aSavePos.GetNode().GetTxtNode();
     if( pTxtNd )
     {
-        sal_uInt16 nPoolId = pTxtNd->GetTxtColl()->GetPoolFmtId();
+        const sal_uInt16 nPoolId = pTxtNd->GetTxtColl()->GetPoolFmtId();
         if( bReplaceColl &&
             (( 1 < rDstTbl.GetTabLines().size() &&
                 pLine == rDstTbl.GetTabLines().front() )
@@ -757,11 +753,10 @@ bool SwTable::InsTable( const SwTable& rCpyTbl, const SwNodeIndex& rSttBox,
     bool bDelCntnt = true;
     const SwTableBox* pTmp;
 
-    for( sal_uInt16 nLines = 0; nLines < rCpyTbl.GetTabLines().size(); ++nLines )
+    for( auto pLine : rCpyTbl.GetTabLines() )
     {
         // Get the first from the CopyLine
-        const SwTableBox* pCpyBox = rCpyTbl.GetTabLines()[nLines]
-                                    ->GetTabBoxes().front();
+        const SwTableBox* pCpyBox = pLine->GetTabBoxes().front();
         while( !pCpyBox->GetTabLines().empty() )
             pCpyBox = pCpyBox->GetTabLines().front()->GetTabBoxes().front();
 
@@ -785,14 +780,14 @@ bool SwTable::InsTable( const SwTable& rCpyTbl, const SwNodeIndex& rSttBox,
         SwTableLine* pNxtLine = pMyBox->GetUpper();
         while( pNxtLine->GetUpper() )
             pNxtLine = pNxtLine->GetUpper()->GetUpper();
-        sal_uInt16 nPos = GetTabLines().GetPos( pNxtLine );
+        const SwTableLines::size_type nPos = GetTabLines().GetPos( pNxtLine ) + 1;
         // Is there a next?
-        if( nPos + 1 >= (sal_uInt16)GetTabLines().size() )
+        if( nPos >= GetTabLines().size() )
             bDelCntnt = false;      // there is none, all goes into the last Box
         else
         {
             // Find the next Box with content
-            pNxtLine = GetTabLines()[ nPos+1 ];
+            pNxtLine = GetTabLines()[ nPos ];
             pMyBox = pNxtLine->GetTabBoxes().front();
             while( !pMyBox->GetTabLines().empty() )
                 pMyBox = pMyBox->GetTabLines().front()->GetTabBoxes().front();
@@ -823,7 +818,6 @@ bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
 
     SwTableBox *pTmpBox, *pSttBox = (SwTableBox*)rSelBoxes[0];
 
-    sal_uInt16 nLn, nBx;
     _FndLine *pFLine, *pInsFLine = 0;
     _FndBox aFndBox( 0, 0 );
     // Find all Boxes/Lines
@@ -838,12 +832,12 @@ bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
     {
         _FndBox* pFndBox;
 
-        sal_uInt16 nFndCnt = aFndBox.GetLines().size();
+        const _FndLines::size_type nFndCnt = aFndBox.GetLines().size();
         if( !nFndCnt )
             return false;
 
         // Check if we have enough space for all Lines and Boxes
-        sal_uInt16 nTstLns = 0;
+        SwTableLines::size_type nTstLns = 0;
         pFLine = &aFndBox.GetLines().front();
         sal_uInt16 nSttLine = GetTabLines().GetPos( pFLine->GetLine() );
         // Do we have as many rows, actually?
@@ -859,15 +853,15 @@ bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
                 if( 1 < rSelBoxes.size() )
                     return false;
 
-                sal_uInt16 nNewLns = rCpyTbl.GetTabLines().size() -
+                const sal_uInt16 nNewLns = rCpyTbl.GetTabLines().size() -
                                 (GetTabLines().size() - nSttLine );
 
                 // See if the Box count is high enough for the Lines
                 SwTableLine* pLastLn = GetTabLines().back();
 
                 pSttBox = pFLine->GetBoxes()[0].GetBox();
-                sal_uInt16 nSttBox = pFLine->GetLine()->GetTabBoxes().GetPos( pSttBox );
-                for( sal_uInt16 n = rCpyTbl.GetTabLines().size() - nNewLns;
+                const SwTableBoxes::size_type nSttBox = pFLine->GetLine()->GetTabBoxes().GetPos( pSttBox );
+                for( SwTableLines::size_type n = rCpyTbl.GetTabLines().size() - nNewLns;
                         n < rCpyTbl.GetTabLines().size(); ++n )
                 {
                     SwTableLine* pCpyLn = rCpyTbl.GetTabLines()[ n ];
@@ -878,7 +872,7 @@ bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
                         return false;
 
                     // Test for nesting
-                    for( nBx = 0; nBx < pCpyLn->GetTabBoxes().size(); ++nBx )
+                    for( SwTableBoxes::size_type nBx = 0; nBx < pCpyLn->GetTabBoxes().size(); ++nBx )
                         if( !( pTmpBox = pLastLn->GetTabBoxes()[ nSttBox + nBx ])
                                     ->GetSttNd() )
                             return false;
@@ -905,13 +899,13 @@ bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
         else
             return false;       // not enough space for the rows
 
-        for( nLn = 0; nLn < nTstLns; ++nLn )
+        for( SwTableLines::size_type nLn = 0; nLn < nTstLns; ++nLn )
         {
             // We have enough rows, so check the Boxes per row
             pFLine = &aFndBox.GetLines()[ nLn % nFndCnt ];
             SwTableLine* pLine = pFLine->GetLine();
             pSttBox = pFLine->GetBoxes()[0].GetBox();
-            sal_uInt16 nSttBox = pLine->GetTabBoxes().GetPos( pSttBox );
+            const SwTableBoxes::size_type nSttBox = pLine->GetTabBoxes().GetPos( pSttBox );
             if( nLn >= nFndCnt )
             {
                 // We have more rows in the ClipBoard than we have selected
@@ -927,16 +921,14 @@ bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
             {
                 // We insert a new row into the FndBox
                 if( pLine->GetTabBoxes().size() < nSttBox ||
-                    sal::static_int_cast< sal_uInt16 >(
-                        pLine->GetTabBoxes().size() - nSttBox ) <
-                    pFLine->GetBoxes().size() )
+                    pLine->GetTabBoxes().size() - nSttBox < pFLine->GetBoxes().size() )
                 {
                     delete pInsFLine;
                     return false;
                 }
 
                 // Test for nesting
-                for( nBx = 0; nBx < pFLine->GetBoxes().size(); ++nBx )
+                for( _FndBoxes::size_type nBx = 0; nBx < pFLine->GetBoxes().size(); ++nBx )
                 {
                     if( !( pTmpBox = pLine->GetTabBoxes()[ nSttBox + nBx ])
                         ->GetSttNd() )
@@ -958,7 +950,7 @@ bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
                     return false;
 
                 // Test for nesting
-                for( nBx = 0; nBx < pCpyLn->GetTabBoxes().size(); ++nBx )
+                for( SwTableBoxes::size_type nBx = 0; nBx < pCpyLn->GetTabBoxes().size(); ++nBx )
                 {
                     if( !( pTmpBox = pLine->GetTabBoxes()[ nSttBox + nBx ])
                         ->GetSttNd() )
@@ -980,8 +972,8 @@ bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
                     return false;
 
                 // Test for nesting
-                for( nBx = 0; nBx < pFLine->GetBoxes().size(); ++nBx )
-                    if (!pFLine->GetBoxes()[nBx].GetBox()->GetSttNd())
+                for( auto &rBox : pFLine->GetBoxes() )
+                    if (!rBox.GetBox()->GetSttNd())
                         return false;
             }
         }
@@ -1012,12 +1004,12 @@ bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
         }
     }
     else
-        for( nLn = 0; nLn < aFndBox.GetLines().size(); ++nLn )
+        for( _FndLines::size_type nLn = 0; nLn < aFndBox.GetLines().size(); ++nLn )
         {
             pFLine = &aFndBox.GetLines()[ nLn ];
             SwTableLine* pCpyLn = rCpyTbl.GetTabLines()[
                                 nLn % rCpyTbl.GetTabLines().size() ];
-            for( nBx = 0; nBx < pFLine->GetBoxes().size(); ++nBx )
+            for( _FndBoxes::size_type nBx = 0; nBx < pFLine->GetBoxes().size(); ++nBx )
             {
                 // Copy the pCpyBox into pMyBox
                 lcl_CpyBox( rCpyTbl, pCpyLn->GetTabBoxes()[
