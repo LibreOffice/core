@@ -1302,8 +1302,9 @@ void HeaderBar::MoveItem( sal_uInt16 nItemId, sal_uInt16 nNewPos )
             if ( nNewPos < nPos )
                 nPos = nNewPos;
             it = mpItemList->begin();
-            ::std::advance( it, nPos );
+            ::std::advance( it, nNewPos );
             mpItemList->insert( it, pItem );
+            ImplUpdate( nPos, true);
         }
     }
 }
