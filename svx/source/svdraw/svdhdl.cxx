@@ -2165,40 +2165,40 @@ void SdrHdlList::AddHdl(SdrHdl* pHdl, bool bAtBegin)
 
 SdrHdl* SdrHdlList::IsHdlListHit(const Point& rPnt, bool bBack, bool bNext, SdrHdl* pHdl0) const
 {
-   SdrHdl* pRet=NULL;
-   const size_t nAnz=GetHdlCount();
-   size_t nNum=bBack ? 0 : nAnz;
-   while ((bBack ? nNum<nAnz : nNum>0) && pRet==NULL)
-   {
-       if (!bBack)
-           nNum--;
-       SdrHdl* pHdl=GetHdl(nNum);
-       if (bNext)
-       {
-           if (pHdl==pHdl0)
-               bNext=false;
-       }
-       else
-       {
-           if (pHdl->IsHdlHit(rPnt))
-               pRet=pHdl;
-       }
-       if (bBack)
-           nNum++;
-   }
-   return pRet;
+    SdrHdl* pRet=NULL;
+    const size_t nAnz=GetHdlCount();
+    size_t nNum=bBack ? 0 : nAnz;
+    while ((bBack ? nNum<nAnz : nNum>0) && pRet==NULL)
+    {
+        if (!bBack)
+            nNum--;
+        SdrHdl* pHdl=GetHdl(nNum);
+        if (bNext)
+        {
+            if (pHdl==pHdl0)
+                bNext=false;
+        }
+        else
+        {
+            if (pHdl->IsHdlHit(rPnt))
+                pRet=pHdl;
+        }
+        if (bBack)
+            nNum++;
+    }
+    return pRet;
 }
 
 SdrHdl* SdrHdlList::GetHdl(SdrHdlKind eKind1) const
 {
-   SdrHdl* pRet=NULL;
-   for (size_t i=0; i<GetHdlCount() && pRet==NULL; ++i)
-   {
-       SdrHdl* pHdl=GetHdl(i);
-       if (pHdl->GetKind()==eKind1)
-           pRet=pHdl;
-   }
-   return pRet;
+    SdrHdl* pRet=NULL;
+    for (size_t i=0; i<GetHdlCount() && pRet==NULL; ++i)
+    {
+        SdrHdl* pHdl=GetHdl(i);
+        if (pHdl->GetKind()==eKind1)
+            pRet=pHdl;
+    }
+    return pRet;
 }
 
 SdrCropHdl::SdrCropHdl(
