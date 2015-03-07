@@ -40,6 +40,7 @@
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/embeddedobjectcontainer.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <algorithm>
 #include <unordered_map>
@@ -492,11 +493,10 @@ bool EmbeddedObjectContainer::StoreEmbeddedObject(
             uno::Sequence < beans::PropertyValue > aSeq;
             if ( bCopy )
             {
-                uno::Sequence<beans::PropertyValue> aObjArgs(2);
-                aObjArgs[0].Name = "SourceShellID";
-                aObjArgs[0].Value <<= rSrcShellID;
-                aObjArgs[1].Name = "DestinationShellID";
-                aObjArgs[1].Value <<= rDestShellID;
+                auto aObjArgs(::comphelper::InitPropertySequence({
+                    { "SourceShellID", uno::makeAny(rSrcShellID) },
+                    { "DestinationShellID", uno::makeAny(rDestShellID) }
+                }));
                 xPersist->storeToEntry(pImpl->mxStorage, rName, aSeq, aObjArgs);
             }
             else

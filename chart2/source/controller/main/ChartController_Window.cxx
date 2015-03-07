@@ -55,6 +55,7 @@
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/util/XUpdatable.hpp>
 #include <comphelper/InlineContainer.hxx>
+#include <comphelper/propertysequence.hxx>
 
 #include <svtools/contextmenuhelper.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
@@ -253,15 +254,12 @@ void SAL_CALL ChartController::setPosSize(
         uno::Reference< beans::XPropertySet > xProp( m_xChartView, uno::UNO_QUERY );
         if( xProp.is() )
         {
-            uno::Sequence< beans::PropertyValue > aZoomFactors(4);
-            aZoomFactors[0].Name = "ScaleXNumerator";
-            aZoomFactors[0].Value = uno::makeAny( nScaleXNumerator );
-            aZoomFactors[1].Name = "ScaleXDenominator";
-            aZoomFactors[1].Value = uno::makeAny( nScaleXDenominator );
-            aZoomFactors[2].Name = "ScaleYNumerator";
-            aZoomFactors[2].Value = uno::makeAny( nScaleYNumerator );
-            aZoomFactors[3].Name = "ScaleYDenominator";
-            aZoomFactors[3].Value = uno::makeAny( nScaleYDenominator );
+            auto aZoomFactors(::comphelper::InitPropertySequence({
+                { "ScaleXNumerator", uno::makeAny( nScaleXNumerator ) },
+                { "ScaleXDenominator", uno::makeAny( nScaleXDenominator ) },
+                { "ScaleYNumerator", uno::makeAny( nScaleYNumerator ) },
+                { "ScaleYDenominator", uno::makeAny( nScaleYDenominator ) }
+            }));
             xProp->setPropertyValue( "ZoomFactors", uno::makeAny( aZoomFactors ));
         }
 
