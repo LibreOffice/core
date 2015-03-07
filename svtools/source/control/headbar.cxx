@@ -1300,10 +1300,8 @@ void HeaderBar::MoveItem( sal_uInt16 nItemId, sal_uInt16 nNewPos )
             ::std::advance( it, nPos );
             ImplHeadItem* pItem = *it;
             mpItemList->erase( it );
-            if ( nNewPos < nPos )
-                nPos = nNewPos;
             it = mpItemList->begin();
-            ::std::advance( it, nPos );
+            ::std::advance( it, nNewPos );
             mpItemList->insert( it, pItem );
         }
     }
