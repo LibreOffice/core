@@ -142,7 +142,7 @@ void ScDrawView::AddCustomHdl()
         if (ScDrawObjData *pAnchor = ScDrawLayer::GetObjDataTab(pObj, nTab))
         {
             if (ScTabView* pView = pViewData->GetView())
-                pView->CreateAnchorHandles(aHdl, pAnchor->maStart);
+                pView->CreateAnchorHandles(maHdlList, pAnchor->maStart);
         }
     }
 }

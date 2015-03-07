@@ -163,7 +163,7 @@ protected:
     const SdrDragStat& DragStat() const                { return getSdrDragView().aDragStat; }
     Point&             Ref1() const                    { return mrSdrDragView.aRef1; }
     Point&             Ref2() const                    { return mrSdrDragView.aRef2; }
-    const SdrHdlList&  GetHdlList() const              { return getSdrDragView().aHdl; }
+    const SdrHdlList&  GetHdlList() const              { return getSdrDragView().GetHdlList(); }
     void               AddUndo(SdrUndoAction* pUndo)   { getSdrDragView().AddUndo(pUndo); }
     bool               IsDragLimit()                   { return getSdrDragView().bDragLimit; }
     const Rectangle&   GetDragLimitRect()              { return getSdrDragView().aDragLimit; }

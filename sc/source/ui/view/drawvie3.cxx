@@ -69,8 +69,8 @@ void ScDrawView::SetPageAnchored()
             pViewData->GetDocShell()->SetDrawModified();
 
         // Remove the anchor object.
-        aHdl.RemoveAllByKind(HDL_ANCHOR);
-        aHdl.RemoveAllByKind(HDL_ANCHOR_TR);
+        maHdlList.RemoveAllByKind(HDL_ANCHOR);
+        maHdlList.RemoveAllByKind(HDL_ANCHOR_TR);
     }
 }
 
