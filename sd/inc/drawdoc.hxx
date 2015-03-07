@@ -175,6 +175,7 @@ private:
     LanguageType        meLanguage;
     LanguageType        meLanguageCJK;
     LanguageType        meLanguageCTL;
+    sal_uInt16          meCurrentPage;
     SvxNumType          mePageNumType;
     ::sd::DrawDocShellRef   mxAllocedDocShRef;   // => AllocModel()
     bool                mbAllocDocSh;       // => AllocModel()
@@ -231,6 +232,9 @@ public:
 
     SAL_DLLPRIVATE LanguageType        GetLanguage( const sal_uInt16 nId ) const;
     SAL_DLLPRIVATE void                SetLanguage( const LanguageType eLang, const sal_uInt16 nId );
+
+    SAL_DLLPRIVATE sal_uInt16          GetCurrentPage() const { return meCurrentPage; }
+    SAL_DLLPRIVATE void                SetCurrentPage(sal_uInt16 ePageNum) { meCurrentPage = ePageNum; }
 
     SAL_DLLPRIVATE SvxNumType          GetPageNumType() const SAL_OVERRIDE;
     SAL_DLLPRIVATE void                SetPageNumType(SvxNumType eType) { mePageNumType = eType; }

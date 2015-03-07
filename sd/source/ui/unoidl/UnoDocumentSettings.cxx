@@ -132,7 +132,7 @@ namespace sd
 enum SdDocumentSettingsPropertyHandles
 {
     HANDLE_PRINTDRAWING, HANDLE_PRINTNOTES, HANDLE_PRINTHANDOUT, HANDLE_PRINTOUTLINE, HANDLE_MEASUREUNIT, HANDLE_SCALE_NUM,
-    HANDLE_SCALE_DOM, HANDLE_TABSTOP, HANDLE_PRINTPAGENAME, HANDLE_PRINTDATE, HANDLE_PRINTTIME,
+    HANDLE_SCALE_DOM, HANDLE_TABSTOP, HANDLE_CURRENTPAGE, HANDLE_PRINTPAGENAME, HANDLE_PRINTDATE, HANDLE_PRINTTIME,
     HANDLE_PRINTHIDENPAGES, HANDLE_PRINTFITPAGE, HANDLE_PRINTTILEPAGE, HANDLE_PRINTBOOKLET, HANDLE_PRINTBOOKLETFRONT,
     HANDLE_PRINTBOOKLETBACK, HANDLE_PRINTQUALITY, HANDLE_COLORTABLEURL, HANDLE_DASHTABLEURL, HANDLE_LINEENDTABLEURL, HANDLE_HATCHTABLEURL,
     HANDLE_GRADIENTTABLEURL, HANDLE_BITMAPTABLEURL, HANDLE_FORBIDDENCHARS, HANDLE_APPLYUSERDATA, HANDLE_PAGENUMFMT,
@@ -169,6 +169,7 @@ enum SdDocumentSettingsPropertyHandles
         static PropertyMapEntry const aCommonSettingsInfoMap[] =
         {
             { OUString("DefaultTabStop"),        HANDLE_TABSTOP,             ::cppu::UnoType<sal_Int32>::get(),    0,  0 },
+            { OUString("CurrentPage"),           HANDLE_CURRENTPAGE,         ::cppu::UnoType<sal_Int16>::get(),    0,  0 },
             { OUString("PrinterName"),           HANDLE_PRINTERNAME,         ::cppu::UnoType<OUString>::get(),     0,  0 },
             { OUString("PrinterSetup"),          HANDLE_PRINTERJOB,          ::getCppuType((const uno::Sequence < sal_Int8 > *)0),  0, MID_PRINTER },
 
@@ -708,6 +709,19 @@ throw (UnknownPropertyException, PropertyVetoException,
                     }
                 }
                 break;
+
+            case HANDLE_CURRENTPAGE:
+                {
+                    sal_Int16 nValue = 0;
+                    if( (*pValues >>= nValue) && (nValue >= 0) )
+                    {
+                        pDoc->SetCurrentPage((sal_uInt16)nValue);
+                        bOk = true;
+                        bChanged = true;
+                    }
+                }
+                break;
+
             case HANDLE_PAGENUMFMT:
                 {
                     sal_Int32 nValue = 0;
@@ -1098,6 +1112,9 @@ throw (UnknownPropertyException, WrappedTargetException, RuntimeException, std::
                 break;
             case HANDLE_TABSTOP:
                 *pValue <<= (sal_Int32)pDoc->GetDefaultTabulator();
+                break;
+            case HANDLE_CURRENTPAGE:
+                *pValue <<= (sal_Int16)pDoc->GetCurrentPage();
                 break;
             case HANDLE_PAGENUMFMT:
                 *pValue <<= (sal_Int32)pDoc->GetPageNumType();
