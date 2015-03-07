@@ -26,6 +26,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svx/svxids.hrc>
 #include <svx/tbxcustomshapes.hxx>
+#include <comphelper/propertysequence.hxx>
 
 using namespace com::sun::star;
 
@@ -233,9 +234,9 @@ Reference< awt::XWindow > ShapeToolbarController::createPopupWindow() throw (uno
 
 void ShapeToolbarController::execute( sal_Int16 KeyModifier ) throw (uno::RuntimeException, std::exception)
 {
-    uno::Sequence< beans::PropertyValue > aArgs( 1 );
-    aArgs[0].Name = "KeyModifier";
-    aArgs[0].Value <<= KeyModifier;
+    auto aArgs(::comphelper::InitPropertySequence({
+        { "KeyModifier", uno::makeAny(KeyModifier) }
+    }));
     dispatchCommand( m_aCommandURL, aArgs );
 }
 

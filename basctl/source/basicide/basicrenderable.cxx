@@ -25,6 +25,8 @@
 #include <tools/multisel.hxx>
 #include <tools/resary.hxx>
 
+#include <comphelper/propertysequence.hxx>
+
 namespace basctl
 {
 
@@ -137,11 +139,12 @@ Sequence<beans::PropertyValue> SAL_CALL Renderable::getRenderer (
         Size aPageSize( pPrinter->PixelToLogic( pPrinter->GetPaperSizePixel(), MapMode( MAP_100TH_MM ) ) );
 
         aVals.realloc( 1 );
-        aVals[0].Name = "PageSize" ;
         awt::Size aSize;
         aSize.Width  = aPageSize.Width();
         aSize.Height = aPageSize.Height();
-        aVals[0].Value <<= aSize;
+        aVals = ::comphelper::InitPropertySequence({
+            { "PageSize", makeAny(aSize) }
+        });
     }
 
     appendPrintUIOptions( aVals );

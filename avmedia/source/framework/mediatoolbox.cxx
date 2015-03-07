@@ -26,6 +26,8 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/sfxsids.hrc>
 
+#include <comphelper/propertysequence.hxx>
+
 using namespace ::com::sun::star;
 
 namespace avmedia
@@ -146,13 +148,13 @@ void MediaToolBoxControl::implUpdateMediaControl()
 void MediaToolBoxControl::implExecuteMediaControl( const MediaItem& rItem )
 {
     MediaItem                               aExecItem( SID_AVMEDIA_TOOLBOX );
-    uno::Sequence< beans::PropertyValue >   aArgs( 1 );
     uno::Any                                aAny;
+    auto aArgs(::comphelper::InitPropertySequence({
+        { "AVMediaToolBox", makeAny(aAny) }
+    }));
 
     aExecItem.merge( rItem );
     aExecItem.QueryValue( aAny );
-    aArgs[ 0 ].Name = "AVMediaToolBox" ;
-    aArgs[ 0 ].Value = aAny;
 
     Dispatch( ".uno:AVMediaToolBox" , aArgs );
 }
