@@ -117,7 +117,7 @@ namespace sdr
 
         OverlayManager::OverlayManager(OutputDevice& rOutputDevice)
         :   Scheduler(),
-            rmOutputDevice(rOutputDevice),
+            mrOutputDevice(rOutputDevice),
             maOverlayObjects(),
             maStripeColorA(Color(COL_BLACK)),
             maStripeColorB(Color(COL_WHITE)),
