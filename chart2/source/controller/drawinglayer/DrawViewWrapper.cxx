@@ -166,7 +166,7 @@ SdrPageView* DrawViewWrapper::GetPageView() const
 
 void DrawViewWrapper::SetMarkHandles()
 {
-    if( m_pMarkHandleProvider && m_pMarkHandleProvider->getMarkHandles( aHdl ) )
+    if( m_pMarkHandleProvider && m_pMarkHandleProvider->getMarkHandles( maHdlList ) )
         return;
     else
         SdrView::SetMarkHandles();

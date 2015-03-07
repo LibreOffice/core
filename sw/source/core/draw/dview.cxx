@@ -239,7 +239,7 @@ void SwDrawView::AddCustomHdl()
     }
 
     // add anchor handle:
-    aHdl.AddHdl( new SwSdrHdl( aPos, ( pAnch->IsVertical() && !pAnch->IsVertLR() ) ||
+    maHdlList.AddHdl( new SwSdrHdl( aPos, ( pAnch->IsVertical() && !pAnch->IsVertLR() ) ||
                                      pAnch->IsRightToLeft() ) );
 }
 
@@ -745,9 +745,9 @@ const SwFrm* SwDrawView::CalcAnchor()
 
 void SwDrawView::ShowDragAnchor()
 {
-    SdrHdl* pHdl = aHdl.GetHdl(HDL_ANCHOR);
+    SdrHdl* pHdl = maHdlList.GetHdl(HDL_ANCHOR);
     if ( ! pHdl )
-        pHdl = aHdl.GetHdl(HDL_ANCHOR_TR);
+        pHdl = maHdlList.GetHdl(HDL_ANCHOR_TR);
 
     if(pHdl)
     {

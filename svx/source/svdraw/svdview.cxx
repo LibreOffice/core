@@ -1103,8 +1103,8 @@ Pointer SdrView::GetPreferredPointer(const Point& rMousePos, const OutputDevice*
             } break;
             case SDRDRAG_MIRROR: {
                 if (bCorner || bVertex || bMov) {
-                    SdrHdl* pH1=aHdl.GetHdl(HDL_REF1);
-                    SdrHdl* pH2=aHdl.GetHdl(HDL_REF2);
+                    SdrHdl* pH1=maHdlList.GetHdl(HDL_REF1);
+                    SdrHdl* pH2=maHdlList.GetHdl(HDL_REF2);
                     bool b90=false;
                     bool b45=false;
                     Point aDif;

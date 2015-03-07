@@ -674,7 +674,7 @@ bool SdrDragView::ImpBegInsObjPoint(bool bIdxZwang, sal_uInt32 nIdx, const Point
             UnmarkAllPoints();
             AdjustMarkHdl();
 
-            bRet = BegDragObj(rPnt, pOut, aHdl.GetHdl(mnInsPointNum), 0);
+            bRet = BegDragObj(rPnt, pOut, maHdlList.GetHdl(mnInsPointNum), 0);
 
             if (bRet)
             {

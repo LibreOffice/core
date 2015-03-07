@@ -1121,7 +1121,7 @@ bool View::isRecordingUndo() const
 
 void View::AddCustomHdl()
 {
-    maSmartTags.addCustomHandles( aHdl );
+    maSmartTags.addCustomHandles( maHdlList );
 }
 
 void View::updateHandles()

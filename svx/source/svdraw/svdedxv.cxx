@@ -440,7 +440,7 @@ OutlinerView* SdrObjEditView::ImpMakeOutlinerView(vcl::Window* pWin, bool /*bNoP
     // AutoViewSize only if not ContourFrame.
     if (!bContourFrame) nStat|=EV_CNTRL_AUTOSIZE;
     if (bTextFrame) {
-        sal_uInt16 nPixSiz=aHdl.GetHdlSize()*2+1;
+        sal_uInt16 nPixSiz=maHdlList.GetHdlSize()*2+1;
         nStat|=EV_CNTRL_INVONEMORE;
         pOutlView->SetInvalidateMore(nPixSiz);
     }
@@ -671,7 +671,7 @@ bool SdrObjEditView::SdrBeginTextEdit(
             aMinTextEditArea.Move(aPvOfs.X(),aPvOfs.Y());
             pTextEditCursorMerker=pWin->GetCursor();
 
-            aHdl.SetMoveOutside(true);
+            maHdlList.SetMoveOutside(true);
 
             // #i72757#
             // Since IsMarkHdlWhenTextEdit() is ignored, it is necessary
@@ -691,8 +691,8 @@ bool SdrObjEditView::SdrBeginTextEdit(
             if( i2 == nCount )
                 pTextEditOutliner->InsertView(pTextEditOutlinerView,0);
 
-            aHdl.SetMoveOutside(false);
-            aHdl.SetMoveOutside(true);
+            maHdlList.SetMoveOutside(false);
+            maHdlList.SetMoveOutside(true);
 
             // register all windows as OutlinerViews with the Outliner
             if(!bOnlyOneView)
@@ -798,7 +798,7 @@ bool SdrObjEditView::SdrBeginTextEdit(
     mxTextEditObj.reset(0);
     pTextEditPV=NULL;
     pTextEditWin=NULL;
-    aHdl.SetMoveOutside(false);
+    maHdlList.SetMoveOutside(false);
 
     return false;
 }
@@ -1024,7 +1024,7 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
         if (pTEWin!=NULL) {
             pTEWin->SetCursor(pTECursorMerker);
         }
-        aHdl.SetMoveOutside(false);
+        maHdlList.SetMoveOutside(false);
         if (eRet!=SDRENDTEXTEDIT_UNCHANGED)
         {
             GetMarkedObjectListWriteAccess().SetNameDirty();

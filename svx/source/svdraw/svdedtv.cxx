@@ -842,7 +842,7 @@ void SdrEditView::DeleteMarkedObj()
         // do something only once
         DeleteMarkedList(GetMarkedObjectList());
         GetMarkedObjectListWriteAccess().Clear();
-        aHdl.Clear();
+        maHdlList.Clear();
 
         while(aParents.size() && !GetMarkedObjectCount())
         {

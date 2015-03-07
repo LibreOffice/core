@@ -101,7 +101,7 @@ protected:
     Point                       aRef1;            // Persistent - Rotation center / axis of reflection
     Point                       aRef2;            // Persistent
     Point                       aLastCrookCenter; // Persistent
-    SdrHdlList                  aHdl;
+    SdrHdlList                  maHdlList;
     sdr::ViewSelection*         mpSdrViewSelection;
 
     Rectangle                   aMarkedObjRect;
@@ -140,7 +140,7 @@ private:
 protected:
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) SAL_OVERRIDE;
     virtual void ModelHasChanged() SAL_OVERRIDE; // Is called by the PaintView
-    virtual void SetMarkHandles();                                           // aHdl - fill (List of handles)
+    virtual void SetMarkHandles();                                           // maHdlList - fill (List of handles)
     void         SetMarkRects();                                             // Rects at the PageViews
     void         CheckMarked();                                              // Scan MarkList after Del and Lock Layer ...
     void         AddDragModeHdl(SdrDragMode eMode);
@@ -347,9 +347,9 @@ public:
 
     // Search for the number of the suitable handle. In case of empty search result,
     // SAL_MAX_SIZE is returned.
-    size_t GetHdlNum(SdrHdl* pHdl) const { return aHdl.GetHdlNum(pHdl); }
-    SdrHdl* GetHdl(size_t nHdlNum)  const { return aHdl.GetHdl(nHdlNum); }
-    const SdrHdlList& GetHdlList() const { return aHdl; }
+    size_t GetHdlNum(SdrHdl* pHdl) const { return maHdlList.GetHdlNum(pHdl); }
+    SdrHdl* GetHdl(size_t nHdlNum)  const { return maHdlList.GetHdl(nHdlNum); }
+    const SdrHdlList& GetHdlList() const { return maHdlList; }
 
     // Draw a selection frame for marking of points.
     // This routine will just be started in case that HasMarkablePoints() returns sal_True.

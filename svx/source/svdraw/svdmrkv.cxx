@@ -157,7 +157,7 @@ SdrMarkView::SdrMarkView(SdrModel* pModel1, OutputDevice* pOut)
     mpMarkObjOverlay(0L),
     mpMarkPointsOverlay(0L),
     mpMarkGluePointsOverlay(0L),
-    aHdl(this),
+    maHdlList(this),
     mpSdrViewSelection(new sdr::ViewSelection())
 {
     ImpClearVars();
@@ -605,7 +605,7 @@ bool SdrMarkView::ImpIsFrameHandles() const
 void SdrMarkView::SetMarkHandles()
 {
     // remember old focus handle values to search for it again
-    const SdrHdl* pSaveOldFocusHdl = aHdl.GetFocusHdl();
+    const SdrHdl* pSaveOldFocusHdl = maHdlList.GetFocusHdl();
     bool bSaveOldFocus(false);
     sal_uInt32 nSavePolyNum(0L), nSavePointNum(0L);
     SdrHdlKind eSaveKind(HDL_MOVE);
@@ -624,9 +624,9 @@ void SdrMarkView::SetMarkHandles()
     }
 
     // delete/clear all handles. This will always be done, even with areMarkHandlesHidden()
-    aHdl.Clear();
-    aHdl.SetRotateShear(eDragMode==SDRDRAG_ROTATE);
-    aHdl.SetDistortShear(eDragMode==SDRDRAG_SHEAR);
+    maHdlList.Clear();
+    maHdlList.SetRotateShear(eDragMode==SDRDRAG_ROTATE);
+    maHdlList.SetDistortShear(eDragMode==SDRDRAG_SHEAR);
     pMarkedObj=NULL;
     pMarkedPV=NULL;
 
@@ -706,12 +706,12 @@ void SdrMarkView::SetMarkHandles()
             { // otherwise nothing is found
                 if( bSingleTextObjMark )
                 {
-                    const size_t nSiz0=aHdl.GetHdlCount();
-                    pMarkedObj->AddToHdlList(aHdl);
-                    const size_t nSiz1=aHdl.GetHdlCount();
+                    const size_t nSiz0=maHdlList.GetHdlCount();
+                    pMarkedObj->AddToHdlList(maHdlList);
+                    const size_t nSiz1=maHdlList.GetHdlCount();
                     for (size_t i=nSiz0; i<nSiz1; ++i)
                     {
-                        SdrHdl* pHdl=aHdl.GetHdl(i);
+                        SdrHdl* pHdl=maHdlList.GetHdl(i);
                         pHdl->SetObj(pMarkedObj);
                         pHdl->SetPos( pHdl->GetPos() + aGridOff );
                         pHdl->SetPageView(pMarkedPV);
@@ -724,23 +724,23 @@ void SdrMarkView::SetMarkHandles()
                     bool bHgt0=aRect.Top()==aRect.Bottom();
                     if (bWdt0 && bHgt0)
                     {
-                        aHdl.AddHdl(new SdrHdl(aRect.TopLeft(),HDL_UPLFT));
+                        maHdlList.AddHdl(new SdrHdl(aRect.TopLeft(),HDL_UPLFT));
                     }
                     else if (!bStdDrag && (bWdt0 || bHgt0))
                     {
-                        aHdl.AddHdl(new SdrHdl(aRect.TopLeft()    ,HDL_UPLFT));
-                        aHdl.AddHdl(new SdrHdl(aRect.BottomRight(),HDL_LWRGT));
+                        maHdlList.AddHdl(new SdrHdl(aRect.TopLeft()    ,HDL_UPLFT));
+                        maHdlList.AddHdl(new SdrHdl(aRect.BottomRight(),HDL_LWRGT));
                     }
                     else
                     {
-                        if (!bWdt0 && !bHgt0) aHdl.AddHdl(new SdrHdl(aRect.TopLeft()     ,HDL_UPLFT));
-                        if (          !bHgt0) aHdl.AddHdl(new SdrHdl(aRect.TopCenter()   ,HDL_UPPER));
-                        if (!bWdt0 && !bHgt0) aHdl.AddHdl(new SdrHdl(aRect.TopRight()    ,HDL_UPRGT));
-                        if (!bWdt0          ) aHdl.AddHdl(new SdrHdl(aRect.LeftCenter()  ,HDL_LEFT ));
-                        if (!bWdt0          ) aHdl.AddHdl(new SdrHdl(aRect.RightCenter() ,HDL_RIGHT));
-                        if (!bWdt0 && !bHgt0) aHdl.AddHdl(new SdrHdl(aRect.BottomLeft()  ,HDL_LWLFT));
-                        if (          !bHgt0) aHdl.AddHdl(new SdrHdl(aRect.BottomCenter(),HDL_LOWER));
-                        if (!bWdt0 && !bHgt0) aHdl.AddHdl(new SdrHdl(aRect.BottomRight() ,HDL_LWRGT));
+                        if (!bWdt0 && !bHgt0) maHdlList.AddHdl(new SdrHdl(aRect.TopLeft()     ,HDL_UPLFT));
+                        if (          !bHgt0) maHdlList.AddHdl(new SdrHdl(aRect.TopCenter()   ,HDL_UPPER));
+                        if (!bWdt0 && !bHgt0) maHdlList.AddHdl(new SdrHdl(aRect.TopRight()    ,HDL_UPRGT));
+                        if (!bWdt0          ) maHdlList.AddHdl(new SdrHdl(aRect.LeftCenter()  ,HDL_LEFT ));
+                        if (!bWdt0          ) maHdlList.AddHdl(new SdrHdl(aRect.RightCenter() ,HDL_RIGHT));
+                        if (!bWdt0 && !bHgt0) maHdlList.AddHdl(new SdrHdl(aRect.BottomLeft()  ,HDL_LWLFT));
+                        if (          !bHgt0) maHdlList.AddHdl(new SdrHdl(aRect.BottomCenter(),HDL_LOWER));
+                        if (!bWdt0 && !bHgt0) maHdlList.AddHdl(new SdrHdl(aRect.BottomRight() ,HDL_LWRGT));
                     }
                 }
             }
@@ -756,7 +756,7 @@ void SdrMarkView::SetMarkHandles()
 
                 if(pSdrGrafObj)
                 {
-                    pSdrGrafObj->addCropHandles(aHdl);
+                    pSdrGrafObj->addCropHandles(maHdlList);
                     bDone = true;
                 }
             }
@@ -768,14 +768,14 @@ void SdrMarkView::SetMarkHandles()
                     const SdrMark* pM=GetSdrMarkByIndex(nMarkNum);
                     SdrObject* pObj=pM->GetMarkedSdrObj();
                     SdrPageView* pPV=pM->GetPageView();
-                    const size_t nSiz0=aHdl.GetHdlCount();
-                    pObj->AddToHdlList(aHdl);
-                    const size_t nSiz1=aHdl.GetHdlCount();
+                    const size_t nSiz0=maHdlList.GetHdlCount();
+                    pObj->AddToHdlList(maHdlList);
+                    const size_t nSiz1=maHdlList.GetHdlCount();
                     bool bPoly=pObj->IsPolyObj();
                     const SdrUShortCont* pMrkPnts=pM->GetMarkedPoints();
                     for (size_t i=nSiz0; i<nSiz1; ++i)
                     {
-                        SdrHdl* pHdl=aHdl.GetHdl(i);
+                        SdrHdl* pHdl=maHdlList.GetHdl(i);
                         pHdl->SetPos( pHdl->GetPos() + aGridOff );
                         pHdl->SetObj(pObj);
                         pHdl->SetPageView(pPV);
@@ -797,7 +797,7 @@ void SdrMarkView::SetMarkHandles()
                                         pPlusHdl->SetObj(pObj);
                                         pPlusHdl->SetPageView(pPV);
                                         pPlusHdl->SetPlusHdl(true);
-                                        aHdl.AddHdl(pPlusHdl);
+                                        maHdlList.AddHdl(pPlusHdl);
                                     }
                                 }
                             }
@@ -832,7 +832,7 @@ void SdrMarkView::SetMarkHandles()
                             pGlueHdl->SetObj(pObj);
                             pGlueHdl->SetPageView(pPV);
                             pGlueHdl->SetObjHdlNum(nId);
-                            aHdl.AddHdl(pGlueHdl);
+                            maHdlList.AddHdl(pGlueHdl);
                         }
                     }
                 }
@@ -843,7 +843,7 @@ void SdrMarkView::SetMarkHandles()
         AddDragModeHdl(eDragMode);
 
         // sort handles
-        aHdl.Sort();
+        maHdlList.Sort();
 
         // add custom handles (used by other apps, e.g. AnchorPos)
         AddCustomHdl();
@@ -851,9 +851,9 @@ void SdrMarkView::SetMarkHandles()
         // try to restore focus handle index from remembered values
         if(bSaveOldFocus)
         {
-            for(size_t a = 0; a < aHdl.GetHdlCount(); ++a)
+            for(size_t a = 0; a < maHdlList.GetHdlCount(); ++a)
             {
-                SdrHdl* pCandidate = aHdl.GetHdl(a);
+                SdrHdl* pCandidate = maHdlList.GetHdl(a);
 
                 if(pCandidate->GetObj()
                     && pCandidate->GetObj() == pSaveObj
@@ -861,7 +861,7 @@ void SdrMarkView::SetMarkHandles()
                     && pCandidate->GetPolyNum() == nSavePolyNum
                     && pCandidate->GetPointNum() == nSavePointNum)
                 {
-                    aHdl.SetFocusHdl(pCandidate);
+                    maHdlList.SetFocusHdl(pCandidate);
                     break;
                 }
             }
@@ -897,7 +897,7 @@ void SdrMarkView::AddDragModeHdl(SdrDragMode eMode)
             // add rotation center
             SdrHdl* pHdl = new SdrHdl(aRef1, HDL_REF1);
 
-            aHdl.AddHdl(pHdl);
+            maHdlList.AddHdl(pHdl);
 
             break;
         }
@@ -912,9 +912,9 @@ void SdrMarkView::AddDragModeHdl(SdrDragMode eMode)
             pHdl2->SetObjHdlNum(2); // for sorting
             pHdl3->SetObjHdlNum(3); // for sorting
 
-            aHdl.AddHdl(pHdl1); // line comes first, so it is the last in HitTest
-            aHdl.AddHdl(pHdl2);
-            aHdl.AddHdl(pHdl3);
+            maHdlList.AddHdl(pHdl1); // line comes first, so it is the last in HitTest
+            maHdlList.AddHdl(pHdl2);
+            maHdlList.AddHdl(pHdl3);
 
             break;
         }
@@ -976,9 +976,9 @@ void SdrMarkView::AddDragModeHdl(SdrDragMode eMode)
                 pColHdl2->SetColorChangeHdl(LINK(pGradHdl, SdrHdlGradient, ColorChangeHdl));
 
                 // insert them
-                aHdl.AddHdl(pColHdl1);
-                aHdl.AddHdl(pColHdl2);
-                aHdl.AddHdl(pGradHdl);
+                maHdlList.AddHdl(pColHdl1);
+                maHdlList.AddHdl(pColHdl2);
+                maHdlList.AddHdl(pGradHdl);
             }
             break;
         }
@@ -1018,9 +1018,9 @@ void SdrMarkView::AddDragModeHdl(SdrDragMode eMode)
                     pColHdl2->SetColorChangeHdl(LINK(pGradHdl, SdrHdlGradient, ColorChangeHdl));
 
                     // insert them
-                    aHdl.AddHdl(pColHdl1);
-                    aHdl.AddHdl(pColHdl2);
-                    aHdl.AddHdl(pGradHdl);
+                    maHdlList.AddHdl(pColHdl1);
+                    maHdlList.AddHdl(pColHdl2);
+                    maHdlList.AddHdl(pGradHdl);
                 }
             }
             break;
@@ -1037,7 +1037,7 @@ void SdrMarkView::AddDragModeHdl(SdrDragMode eMode)
 /** handle mouse over effects for handles */
 bool SdrMarkView::MouseMove(const MouseEvent& rMEvt, vcl::Window* pWin)
 {
-    if(aHdl.GetHdlCount())
+    if(maHdlList.GetHdlCount())
     {
         SdrHdl* pMouseOverHdl = 0;
         if( !rMEvt.IsLeaveWindow() && pWin )
@@ -1047,7 +1047,7 @@ bool SdrMarkView::MouseMove(const MouseEvent& rMEvt, vcl::Window* pWin)
         }
 
         // notify last mouse over handle that he lost the mouse
-        const size_t nHdlCount = aHdl.GetHdlCount();
+        const size_t nHdlCount = maHdlList.GetHdlCount();
 
         for(size_t nHdl = 0; nHdl < nHdlCount; ++nHdl)
         {
@@ -1167,7 +1167,7 @@ void SdrMarkView::SetRef1(const Point& rPt)
     if(eDragMode == SDRDRAG_ROTATE || eDragMode == SDRDRAG_MIRROR)
     {
         aRef1 = rPt;
-        SdrHdl* pH = aHdl.GetHdl(HDL_REF1);
+        SdrHdl* pH = maHdlList.GetHdl(HDL_REF1);
         if(pH)
             pH->SetPos(rPt);
     }
@@ -1178,7 +1178,7 @@ void SdrMarkView::SetRef2(const Point& rPt)
     if(eDragMode == SDRDRAG_MIRROR)
     {
         aRef2 = rPt;
-        SdrHdl* pH = aHdl.GetHdl(HDL_REF2);
+        SdrHdl* pH = maHdlList.GetHdl(HDL_REF2);
         if(pH)
             pH->SetPos(rPt);
     }
@@ -1312,7 +1312,7 @@ SdrHdl* SdrMarkView::PickHandle(const Point& rPnt, sal_uIntPtr nOptions, SdrHdl*
     bool bBack=(nOptions & SDRSEARCH_BACKWARD) !=0;
     bool bNext=(nOptions & SDRSEARCH_NEXT) !=0;
     Point aPt(rPnt);
-    return aHdl.IsHdlListHit(aPt,bBack,bNext,pHdl0);
+    return maHdlList.IsHdlListHit(aPt,bBack,bNext,pHdl0);
 }
 
 bool SdrMarkView::MarkObj(const Point& rPnt, short nTol, bool bToggle, bool bDeep)
@@ -1563,15 +1563,15 @@ bool SdrMarkView::IsObjMarked(SdrObject* pObj) const
 
 sal_uInt16 SdrMarkView::GetMarkHdlSizePixel() const
 {
-    return aHdl.GetHdlSize()*2+1;
+    return maHdlList.GetHdlSize()*2+1;
 }
 
 void SdrMarkView::SetMarkHdlSizePixel(sal_uInt16 nSiz)
 {
     if (nSiz<3) nSiz=3;
     nSiz/=2;
-    if (nSiz!=aHdl.GetHdlSize()) {
-        aHdl.SetHdlSize(nSiz);
+    if (nSiz!=maHdlList.GetHdlSize()) {
+        maHdlList.SetHdlSize(nSiz);
     }
 }
 
@@ -2064,7 +2064,7 @@ void SdrMarkView::MarkListHasChanged()
 
 void SdrMarkView::SetMoveOutside(bool bOn)
 {
-    aHdl.SetMoveOutside(bOn);
+    maHdlList.SetMoveOutside(bOn);
 }
 
 void SdrMarkView::SetDesignMode( bool _bOn )
