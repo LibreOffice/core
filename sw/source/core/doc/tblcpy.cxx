@@ -815,7 +815,7 @@ bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
 
     SwTblNumFmtMerge aTNFM( *pCpyDoc, *pDoc );
 
-    SwTableBox *pTmpBox, *pSttBox = (SwTableBox*)rSelBoxes[0];
+    SwTableBox *pSttBox = (SwTableBox*)rSelBoxes[0];
 
     _FndLine *pFLine, *pInsFLine = 0;
     _FndBox aFndBox( 0, 0 );
@@ -872,8 +872,7 @@ bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
 
                     // Test for nesting
                     for( SwTableBoxes::size_type nBx = 0; nBx < pCpyLn->GetTabBoxes().size(); ++nBx )
-                        if( !( pTmpBox = pLastLn->GetTabBoxes()[ nSttBox + nBx ])
-                                    ->GetSttNd() )
+                        if( !pLastLn->GetTabBoxes()[ nSttBox + nBx ]->GetSttNd() )
                             return false;
                 }
                 // We have enough space for the to-be-copied, so insert new
@@ -929,8 +928,8 @@ bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
                 // Test for nesting
                 for( _FndBoxes::size_type nBx = 0; nBx < pFLine->GetBoxes().size(); ++nBx )
                 {
-                    if( !( pTmpBox = pLine->GetTabBoxes()[ nSttBox + nBx ])
-                        ->GetSttNd() )
+                    SwTableBox *pTmpBox = pLine->GetTabBoxes()[ nSttBox + nBx ];
+                    if( !pTmpBox->GetSttNd() )
                     {
                         delete pInsFLine;
                         return false;
@@ -951,8 +950,8 @@ bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
                 // Test for nesting
                 for( SwTableBoxes::size_type nBx = 0; nBx < pCpyLn->GetTabBoxes().size(); ++nBx )
                 {
-                    if( !( pTmpBox = pLine->GetTabBoxes()[ nSttBox + nBx ])
-                        ->GetSttNd() )
+                    SwTableBox *pTmpBox = pLine->GetTabBoxes()[ nSttBox + nBx ];
+                    if( !pTmpBox->GetSttNd() )
                         return false;
                     // if Ok, insert the Box into the FndLine
                     if( nBx == pFLine->GetBoxes().size() )
