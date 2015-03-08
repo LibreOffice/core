@@ -49,7 +49,6 @@
 #include "xmltbli.hxx"
 #include "xmltexti.hxx"
 #include "XMLRedlineImportHelper.hxx"
-#include <xmloff/XMLFilterServiceNames.h>
 #include <SwAppletImpl.hxx>
 #include <ndole.hxx>
 #include <docsh.hxx>
@@ -60,6 +59,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svtools/embedhlp.hxx>
 #include <svl/urihelper.hxx>
+#include <xmloff/XMLFilterServiceNames.h>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

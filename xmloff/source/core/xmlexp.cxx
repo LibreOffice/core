@@ -24,6 +24,7 @@
 
 #include <officecfg/Office/Common.hxx>
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
+#include <xmloff/XMLFilterServiceNames.h>
 #include <osl/mutex.hxx>
 #include <tools/urlobj.hxx>
 #include <comphelper/genericpropertyset.hxx>
@@ -66,7 +67,6 @@
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <xmloff/XMLFilterServiceNames.h>
 #include <xmloff/XMLEmbeddedObjectExportFilter.hxx>
 #include "XMLBasicExportFilter.hxx"
 #include <cppuhelper/exc_hlp.hxx>

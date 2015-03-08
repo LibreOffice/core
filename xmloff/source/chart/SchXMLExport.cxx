@@ -3755,13 +3755,6 @@ OUString SAL_CALL SchXMLExport_getImplementationName() throw()
     return OUString(  "SchXMLExport.Compact"  );
 }
 
-Reference< uno::XInterface > SAL_CALL SchXMLExport_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
-{
-    // #110680#
-    // #103997# removed some flags from EXPORT_ALL
-    return (cppu::OWeakObject*)new SchXMLExport( comphelper::getComponentContext(rSMgr), SchXMLExport_getImplementationName(), SvXMLExportFlags::ALL ^ ( SvXMLExportFlags::SETTINGS | SvXMLExportFlags::MASTERSTYLES | SvXMLExportFlags::SCRIPTS ));
-}
-
 // Oasis format
 Sequence< OUString > SAL_CALL SchXMLExport_Oasis_getSupportedServiceNames() throw()
 {
@@ -3773,14 +3766,6 @@ Sequence< OUString > SAL_CALL SchXMLExport_Oasis_getSupportedServiceNames() thro
 OUString SAL_CALL SchXMLExport_Oasis_getImplementationName() throw()
 {
     return OUString(  "SchXMLExport.Oasis.Compact"  );
-}
-
-Reference< uno::XInterface > SAL_CALL SchXMLExport_Oasis_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
-{
-    // #103997# removed some flags from EXPORT_ALL
-    return (cppu::OWeakObject*)new SchXMLExport( comphelper::getComponentContext(rSMgr),
-        SchXMLExport_Oasis_getImplementationName(),
-        (SvXMLExportFlags::ALL ^ ( SvXMLExportFlags::SETTINGS | SvXMLExportFlags::MASTERSTYLES | SvXMLExportFlags::SCRIPTS )) | SvXMLExportFlags::OASIS );
 }
 
 // multiple storage version: one for content / styles / meta
@@ -3797,12 +3782,6 @@ OUString SAL_CALL SchXMLExport_Styles_getImplementationName() throw()
     return OUString(  "SchXMLExport.Styles" );
 }
 
-Reference< uno::XInterface > SAL_CALL SchXMLExport_Styles_createInstance(const Reference< lang::XMultiServiceFactory >& rSMgr) throw( uno::Exception )
-{
-    // #110680#
-    return (cppu::OWeakObject*)new SchXMLExport( comphelper::getComponentContext(rSMgr), SchXMLExport_Styles_getImplementationName(), SvXMLExportFlags::STYLES );
-}
-
 // Oasis format
 Sequence< OUString > SAL_CALL SchXMLExport_Oasis_Styles_getSupportedServiceNames() throw()
 {
@@ -3816,11 +3795,6 @@ OUString SAL_CALL SchXMLExport_Oasis_Styles_getImplementationName() throw()
     return OUString(  "SchXMLExport.Oasis.Styles" );
 }
 
-Reference< uno::XInterface > SAL_CALL SchXMLExport_Oasis_Styles_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
-{
-    return (cppu::OWeakObject*)new SchXMLExport( comphelper::getComponentContext(rSMgr), SchXMLExport_Oasis_Styles_getImplementationName(), SvXMLExportFlags::STYLES | SvXMLExportFlags::OASIS );
-}
-
 Sequence< OUString > SAL_CALL SchXMLExport_Content_getSupportedServiceNames() throw()
 {
     const OUString aServiceName(  "com.sun.star.comp.Chart.XMLContentExporter" );
@@ -3831,12 +3805,6 @@ Sequence< OUString > SAL_CALL SchXMLExport_Content_getSupportedServiceNames() th
 OUString SAL_CALL SchXMLExport_Content_getImplementationName() throw()
 {
     return OUString(  "SchXMLExport.Content" );
-}
-
-Reference< uno::XInterface > SAL_CALL SchXMLExport_Content_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
-{
-    // #110680#
-    return (cppu::OWeakObject*)new SchXMLExport( comphelper::getComponentContext(rSMgr), SchXMLExport_Content_getImplementationName(), SvXMLExportFlags::AUTOSTYLES | SvXMLExportFlags::CONTENT | SvXMLExportFlags::FONTDECLS );
 }
 
 // Oasis format
@@ -3852,11 +3820,6 @@ OUString SAL_CALL SchXMLExport_Oasis_Content_getImplementationName() throw()
     return OUString(  "SchXMLExport.Oasis.Content" );
 }
 
-Reference< uno::XInterface > SAL_CALL SchXMLExport_Oasis_Content_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
-{
-    return (cppu::OWeakObject*)new SchXMLExport( comphelper::getComponentContext(rSMgr), SchXMLExport_Oasis_Content_getImplementationName(), SvXMLExportFlags::AUTOSTYLES | SvXMLExportFlags::CONTENT | SvXMLExportFlags::FONTDECLS | SvXMLExportFlags::OASIS );
-}
-
 // Oasis format
 Sequence< OUString > SAL_CALL SchXMLExport_Oasis_Meta_getSupportedServiceNames() throw()
 {
@@ -3870,9 +3833,65 @@ OUString SAL_CALL SchXMLExport_Oasis_Meta_getImplementationName() throw()
     return OUString(  "SchXMLExport.Oasis.Meta" );
 }
 
-Reference< uno::XInterface > SAL_CALL SchXMLExport_Oasis_Meta_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+SchXMLExport_Compact_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
 {
-    return (cppu::OWeakObject*)new SchXMLExport( comphelper::getComponentContext(rSMgr), SchXMLExport_Oasis_Meta_getImplementationName(), SvXMLExportFlags::META | SvXMLExportFlags::OASIS  );
+    return cppu::acquire(new SchXMLExport( context, SchXMLExport_getImplementationName(),
+                                           SvXMLExportFlags::ALL ^ ( SvXMLExportFlags::SETTINGS     |
+                                                                     SvXMLExportFlags::MASTERSTYLES |
+                                                                     SvXMLExportFlags::SCRIPTS )));
+
 }
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+SchXMLExport_Content_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new SchXMLExport( context, SchXMLExport_Content_getImplementationName(),
+                                               SvXMLExportFlags::AUTOSTYLES   |
+                                               SvXMLExportFlags::CONTENT      |
+                                               SvXMLExportFlags::FONTDECLS ));
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+SchXMLExport_Oasis_Compact_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                           ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new SchXMLExport( context, SchXMLExport_Oasis_getImplementationName(),
+                                           (SvXMLExportFlags::ALL ^ ( SvXMLExportFlags::SETTINGS     |
+                                                                      SvXMLExportFlags::MASTERSTYLES |
+                                                                      SvXMLExportFlags::SCRIPTS )
+                                            ) | SvXMLExportFlags::OASIS));
+}
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+SchXMLExport_Oasis_Meta_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new SchXMLExport( context, SchXMLExport_Oasis_Meta_getImplementationName(),
+                                           SvXMLExportFlags::META | SvXMLExportFlags::OASIS ));
+}
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+SchXMLExport_Oasis_Styles_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new SchXMLExport( context, SchXMLExport_Oasis_Styles_getImplementationName(),
+                                           SvXMLExportFlags::STYLES | SvXMLExportFlags::OASIS));
+}
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+SchXMLExport_Styles_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new SchXMLExport( context, SchXMLExport_Styles_getImplementationName(),
+                                           SvXMLExportFlags::STYLES));
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -118,11 +118,13 @@ OUString SAL_CALL XMLAutoTextEventImport_getImplementationName() throw()
     return OUString( "com.sun.star.comp.Writer.XMLOasisAutotextEventsImporter" );
 }
 
-Reference< XInterface > SAL_CALL XMLAutoTextEventImport_createInstance(
-        const Reference< XMultiServiceFactory > & rSMgr)
-    throw( Exception )
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+XMLAutoTextEventImport_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                          ::com::sun::star::uno::Sequence<css::uno::Any> const &)
 {
-    return (cppu::OWeakObject*)new XMLAutoTextEventImport( comphelper::getComponentContext(rSMgr) );
+    return cppu::acquire(new XMLAutoTextEventImport(context));
 }
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

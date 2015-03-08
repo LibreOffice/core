@@ -87,12 +87,11 @@ OUString SAL_CALL XMLMetaImportComponent_getImplementationName() throw()
     return OUString( "XMLMetaImportComponent" );
 }
 
-uno::Reference< uno::XInterface > SAL_CALL XMLMetaImportComponent_createInstance(
-        const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
-    throw( uno::Exception )
-{
-    // #110680#
-    return (cppu::OWeakObject*)new XMLMetaImportComponent( comphelper::getComponentContext(rSMgr));
-}
 
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+XMLMetaImportComponenet_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new XMLMetaImportComponent(context));
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
