@@ -107,12 +107,12 @@ SmEditWindow::SmEditWindow( SmCmdBoxWindow &rMyCmdBoxWin ) :
     SetBackground( GetSettings().GetStyleSettings().GetWindowColor() );
 
     aModifyIdle.SetIdleHdl(LINK(this, SmEditWindow, ModifyTimerHdl));
-    aModifyIdle.SetPriority(VCL_IDLE_PRIORITY_LOWEST);
+    aModifyIdle.SetPriority(SchedulerPriority::LOWEST);
 
     if (!IsInlineEditEnabled())
     {
         aCursorMoveIdle.SetIdleHdl(LINK(this, SmEditWindow, CursorMoveTimerHdl));
-        aCursorMoveIdle.SetPriority(VCL_IDLE_PRIORITY_LOWEST);
+        aCursorMoveIdle.SetPriority(SchedulerPriority::LOWEST);
     }
 
     // if not called explicitly the this edit window within the
@@ -244,14 +244,14 @@ void SmEditWindow::DataChanged( const DataChangedEvent& )
     Resize();
 }
 
-IMPL_LINK( SmEditWindow, ModifyTimerHdl, Timer *, EMPTYARG /*pTimer*/ )
+IMPL_LINK( SmEditWindow, ModifyTimerHdl, Idle *, EMPTYARG /*pTimer*/ )
 {
     UpdateStatus();
     aModifyIdle.Stop();
     return 0;
 }
 
-IMPL_LINK(SmEditWindow, CursorMoveTimerHdl, Timer *, EMPTYARG /*pTimer*/)
+IMPL_LINK(SmEditWindow, CursorMoveTimerHdl, Idle *, EMPTYARG /*pTimer*/)
     // every once in a while check cursor position (selection) of edit
     // window and if it has changed (try to) set the formula-cursor
     // according to that.
@@ -731,7 +731,7 @@ void SmEditWindow::LoseFocus()
 bool SmEditWindow::IsAllSelected() const
 {
     bool bRes = false;
-    EditEngine *pEditEngine = (const_cast<SmEditWindow *>(this))->GetEditEngine();
+    EditEngine *pEditEngine = ((SmEditWindow *) this)->GetEditEngine();
     OSL_ENSURE( pEditView, "NULL pointer" );
     OSL_ENSURE( pEditEngine, "NULL pointer" );
     if (pEditEngine  &&  pEditView)
@@ -945,7 +945,7 @@ void SmEditWindow::SetSelection(const ESelection &rSel)
 
 bool SmEditWindow::IsEmpty() const
 {
-    EditEngine *pEditEngine = (const_cast<SmEditWindow *>(this))->GetEditEngine();
+    EditEngine *pEditEngine = ((SmEditWindow *) this)->GetEditEngine();
     bool bEmpty = ( pEditEngine && pEditEngine->GetTextLen() == 0 );
     return bEmpty;
 }
