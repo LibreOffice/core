@@ -307,7 +307,7 @@ enum TabBarAllowRenamingReturnCode {
 // - TabBar -
 
 struct TabBar_Impl;
-struct ImplTabBarItem;
+typedef std::vector<ImplTabBarItem*> ImplTabBarList;
 
 class SVT_DLLPUBLIC TabBar : public vcl::Window
 {
@@ -317,7 +317,6 @@ class SVT_DLLPUBLIC TabBar : public vcl::Window
 private:
     std::unique_ptr<TabBar_Impl> mpImpl;
 
-    ImplTabBarList* mpItemList;
     OUString        maEditText;
     Color           maSelColor;
     Color           maSelTextColor;
