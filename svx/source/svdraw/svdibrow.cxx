@@ -277,8 +277,8 @@ void _SdrItemBrowserControl::ImpCtor()
 
 void _SdrItemBrowserControl::Clear()
 {
-    sal_uIntPtr nAnz=aList.size();
-    for (sal_uIntPtr nNum=0; nNum<nAnz; nNum++) {
+    sal_uIntPtr nCount=aList.size();
+    for (sal_uIntPtr nNum=0; nNum<nCount; nNum++) {
         delete ImpGetEntry(nNum);
     }
     aList.clear();
@@ -466,9 +466,9 @@ void _SdrItemBrowserControl::ImpRestoreWhich()
 {
     if (nLastWhich!=0) {
         bool bFnd = false;
-        sal_uIntPtr nAnz=aList.size();
+        sal_uIntPtr nCount=aList.size();
         sal_uIntPtr nNum;
-        for (nNum=0; nNum<nAnz && !bFnd; nNum++) {
+        for (nNum=0; nNum<nCount && !bFnd; nNum++) {
             ImpItemListRow* pEntry=ImpGetEntry(nNum);
             if (!pEntry->bComment) {
                 sal_uInt16 nWh=pEntry->nWhichId;
@@ -837,10 +837,10 @@ bool IsItemIneffective(sal_uInt16 nWhich, const SfxItemSet* pSet, sal_uInt16& rI
                 if (eKind!=SDREDGE_ORTHOLINES && eKind!=SDREDGE_BEZIER) return true;
             }
             if (ImpGetItem(*pSet,SDRATTR_EDGELINEDELTAANZ,pItem)) {
-                sal_uInt16 nAnz=static_cast<const SdrEdgeLineDeltaAnzItem*>(pItem)->GetValue();
-                if (nAnz==0) return true;
-                if (nAnz==1 && nWhich>SDRATTR_EDGELINE1DELTA) return true;
-                if (nAnz==2 && nWhich>SDRATTR_EDGELINE2DELTA) return true;
+                sal_uInt16 nCount=static_cast<const SdrEdgeLineDeltaAnzItem*>(pItem)->GetValue();
+                if (nCount==0) return true;
+                if (nCount==1 && nWhich>SDRATTR_EDGELINE1DELTA) return true;
+                if (nCount==2 && nWhich>SDRATTR_EDGELINE2DELTA) return true;
             }
         } break;
 

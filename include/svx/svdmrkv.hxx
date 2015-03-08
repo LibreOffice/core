@@ -206,7 +206,7 @@ public:
     sal_uIntPtr GetMarkableObjCount() const;
 
     // Limit. Exceeding the limit causes an implicite switch to FrameHandles. default=50.
-    void SetFrameHandlesLimit(sal_uInt16 nAnz) { nFrameHandlesLimit=nAnz; }
+    void SetFrameHandlesLimit(sal_uInt16 nCount) { nFrameHandlesLimit=nCount; }
     sal_uInt16 GetFrameHandlesLimit() const { return nFrameHandlesLimit; }
 
     void SetEditMode(SdrViewEditMode eMode);

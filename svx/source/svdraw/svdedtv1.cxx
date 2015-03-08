@@ -72,8 +72,8 @@ void SdrEditView::SetMarkedObjRect(const Rectangle& rRect, bool bCopy)
 {
     DBG_ASSERT(!rRect.IsEmpty(),"SetMarkedObjRect() with an empty Rect does not make sense.");
     if (rRect.IsEmpty()) return;
-    const size_t nAnz=GetMarkedObjectCount();
-    if (nAnz==0) return;
+    const size_t nCount=GetMarkedObjectCount();
+    if (nCount==0) return;
     Rectangle aR0(GetMarkedObjRect());
     DBG_ASSERT(!aR0.IsEmpty(),"SetMarkedObjRect(): GetMarkedObjRect() is empty.");
     if (aR0.IsEmpty()) return;
@@ -97,7 +97,7 @@ void SdrEditView::SetMarkedObjRect(const Rectangle& rRect, bool bCopy)
     if (bCopy)
         CopyMarkedObj();
 
-    for (size_t nm=0; nm<nAnz; ++nm)
+    for (size_t nm=0; nm<nCount; ++nm)
     {
         SdrMark* pM=GetSdrMarkByIndex(nm);
         SdrObject* pO=pM->GetMarkedSdrObj();
@@ -1752,9 +1752,9 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
 bool SdrEditView::IsAlignPossible() const
 {  // at least two selected objects, at least one of them movable
     ForcePossibilities();
-    const size_t nAnz=GetMarkedObjectCount();
-    if (nAnz==0) return false;         // nothing selected!
-    if (nAnz==1) return bMoveAllowed;  // align single object to page
+    const size_t nCount=GetMarkedObjectCount();
+    if (nCount==0) return false;         // nothing selected!
+    if (nCount==1) return bMoveAllowed;  // align single object to page
     return bOneOrMoreMovable;          // otherwise: MarkCount>=2
 }
 

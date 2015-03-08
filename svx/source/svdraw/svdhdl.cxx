@@ -2166,9 +2166,9 @@ void SdrHdlList::AddHdl(SdrHdl* pHdl, bool bAtBegin)
 SdrHdl* SdrHdlList::IsHdlListHit(const Point& rPnt, bool bBack, bool bNext, SdrHdl* pHdl0) const
 {
     SdrHdl* pRet=NULL;
-    const size_t nAnz=GetHdlCount();
-    size_t nNum=bBack ? 0 : nAnz;
-    while ((bBack ? nNum<nAnz : nNum>0) && pRet==NULL)
+    const size_t nCount=GetHdlCount();
+    size_t nNum=bBack ? 0 : nCount;
+    while ((bBack ? nNum<nCount : nNum>0) && pRet==NULL)
     {
         if (!bBack)
             nNum--;

@@ -540,7 +540,7 @@ bool SdrObjEditView::SdrBeginTextEdit(
     bTextEditDontDelete=bDontDeleteOutliner && pGivenOutliner!=NULL;
     bTextEditOnlyOneView=bOnlyOneView;
     bTextEditNewObj=bIsNewObj;
-    const sal_uInt32 nWinAnz(PaintWindowCount());
+    const sal_uInt32 nWinCount(PaintWindowCount());
     sal_uInt32 i;
     bool bBrk(false);
     // break, when no object given
@@ -552,7 +552,7 @@ bool SdrObjEditView::SdrBeginTextEdit(
 
     if(!bBrk && !pWin)
     {
-        for(i = 0L; i < nWinAnz && !pWin; i++)
+        for(i = 0L; i < nWinCount && !pWin; i++)
         {
             SdrPaintWindow* pPaintWindow = GetPaintWindow(i);
 
@@ -697,7 +697,7 @@ bool SdrObjEditView::SdrBeginTextEdit(
             // register all windows as OutlinerViews with the Outliner
             if(!bOnlyOneView)
             {
-                for(i = 0L; i < nWinAnz; i++)
+                for(i = 0L; i < nWinCount; i++)
                 {
                     SdrPaintWindow* pPaintWindow = GetPaintWindow(i);
                     OutputDevice& rOutDev = pPaintWindow->GetOutputDevice();
@@ -1086,8 +1086,8 @@ OutlinerView* SdrObjEditView::ImpFindOutlinerView(vcl::Window* pWin) const
     if (pWin==NULL) return NULL;
     if (pTextEditOutliner==NULL) return NULL;
     OutlinerView* pNewView=NULL;
-    sal_uIntPtr nWinAnz=pTextEditOutliner->GetViewCount();
-    for (sal_uIntPtr i=0; i<nWinAnz && pNewView==NULL; i++) {
+    sal_uIntPtr nWinCount=pTextEditOutliner->GetViewCount();
+    for (sal_uIntPtr i=0; i<nWinCount && pNewView==NULL; i++) {
         OutlinerView* pView=pTextEditOutliner->GetView(i);
         if (pView->GetWindow()==pWin) pNewView=pView;
     }

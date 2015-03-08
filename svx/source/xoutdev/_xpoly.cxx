@@ -906,11 +906,11 @@ ImpXPolyPolygon::~ImpXPolyPolygon()
 
 bool ImpXPolyPolygon::operator==(const ImpXPolyPolygon& rImpXPolyPoly) const
 {
-    size_t nAnz = aXPolyList.size();
+    size_t nCount = aXPolyList.size();
     const XPolygonList& rCmpList = rImpXPolyPoly.aXPolyList;
-    if ( nAnz != rCmpList.size() ) return false;
+    if ( nCount != rCmpList.size() ) return false;
     bool bEq=true;
-    for ( size_t i = nAnz; i > 0 && bEq; )
+    for ( size_t i = nCount; i > 0 && bEq; )
     {
         i--;
         bEq = ( *aXPolyList[ i ] == *rCmpList[ i ] );

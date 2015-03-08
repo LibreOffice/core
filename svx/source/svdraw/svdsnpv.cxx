@@ -300,8 +300,8 @@ sal_uInt16 SdrSnapView::SnapPos(Point& rPnt, const SdrPageView* pPV) const
     if (bHlplVisible && bHlplSnap && !IsDragHelpLine())
     {
         const SdrHelpLineList& rHLL=pPV->GetHelpLines();
-        sal_uInt16 nAnz=rHLL.GetCount();
-        for (sal_uInt16 i=nAnz; i>0;) {
+        sal_uInt16 nCount=rHLL.GetCount();
+        for (sal_uInt16 i=nCount; i>0;) {
             i--;
             const SdrHelpLine& rHL=rHLL[i];
             const Point& rPos=rHL.GetPos();
@@ -360,8 +360,8 @@ sal_uInt16 SdrSnapView::SnapPos(Point& rPnt, const SdrPageView* pPV) const
             if (aRect.IsInside(rPnt)) {
                 if (bOPntSnap && nMaxPointSnapCount>0)
                 {
-                    sal_uInt32 nAnz(pO->GetSnapPointCount());
-                    for (sal_uInt32 i(0L); i < nAnz && nMaxPointSnapCount > 0L; i++)
+                    sal_uInt32 nCount(pO->GetSnapPointCount());
+                    for (sal_uInt32 i(0L); i < nCount && nMaxPointSnapCount > 0L; i++)
                     {
                         Point aP(pO->GetSnapPoint(i));
                         dx1=x-aP.X();

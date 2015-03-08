@@ -61,40 +61,40 @@ void ResizeRect(Rectangle& rRect, const Point& rRef, const Fraction& rxFact, con
 
 void ResizePoly(Polygon& rPoly, const Point& rRef, const Fraction& xFact, const Fraction& yFact)
 {
-    sal_uInt16 nAnz=rPoly.GetSize();
-    for (sal_uInt16 i=0; i<nAnz; i++) {
+    sal_uInt16 nCount=rPoly.GetSize();
+    for (sal_uInt16 i=0; i<nCount; i++) {
         ResizePoint(rPoly[i],rRef,xFact,yFact);
     }
 }
 
 void ResizeXPoly(XPolygon& rPoly, const Point& rRef, const Fraction& xFact, const Fraction& yFact)
 {
-    sal_uInt16 nAnz=rPoly.GetPointCount();
-    for (sal_uInt16 i=0; i<nAnz; i++) {
+    sal_uInt16 nCount=rPoly.GetPointCount();
+    for (sal_uInt16 i=0; i<nCount; i++) {
         ResizePoint(rPoly[i],rRef,xFact,yFact);
     }
 }
 
 void RotatePoly(Polygon& rPoly, const Point& rRef, double sn, double cs)
 {
-    sal_uInt16 nAnz=rPoly.GetSize();
-    for (sal_uInt16 i=0; i<nAnz; i++) {
+    sal_uInt16 nCount=rPoly.GetSize();
+    for (sal_uInt16 i=0; i<nCount; i++) {
         RotatePoint(rPoly[i],rRef,sn,cs);
     }
 }
 
 void RotateXPoly(XPolygon& rPoly, const Point& rRef, double sn, double cs)
 {
-    sal_uInt16 nAnz=rPoly.GetPointCount();
-    for (sal_uInt16 i=0; i<nAnz; i++) {
+    sal_uInt16 nCount=rPoly.GetPointCount();
+    for (sal_uInt16 i=0; i<nCount; i++) {
         RotatePoint(rPoly[i],rRef,sn,cs);
     }
 }
 
 void RotateXPoly(XPolyPolygon& rPoly, const Point& rRef, double sn, double cs)
 {
-    sal_uInt16 nAnz=rPoly.Count();
-    for (sal_uInt16 i=0; i<nAnz; i++) {
+    sal_uInt16 nCount=rPoly.Count();
+    for (sal_uInt16 i=0; i<nCount; i++) {
         RotateXPoly(rPoly[i],rRef,sn,cs);
     }
 }
@@ -135,32 +135,32 @@ void MirrorPoint(Point& rPnt, const Point& rRef1, const Point& rRef2)
 
 void MirrorPoly(Polygon& rPoly, const Point& rRef1, const Point& rRef2)
 {
-    sal_uInt16 nAnz=rPoly.GetSize();
-    for (sal_uInt16 i=0; i<nAnz; i++) {
+    sal_uInt16 nCount=rPoly.GetSize();
+    for (sal_uInt16 i=0; i<nCount; i++) {
         MirrorPoint(rPoly[i],rRef1,rRef2);
     }
 }
 
 void MirrorXPoly(XPolygon& rPoly, const Point& rRef1, const Point& rRef2)
 {
-    sal_uInt16 nAnz=rPoly.GetPointCount();
-    for (sal_uInt16 i=0; i<nAnz; i++) {
+    sal_uInt16 nCount=rPoly.GetPointCount();
+    for (sal_uInt16 i=0; i<nCount; i++) {
         MirrorPoint(rPoly[i],rRef1,rRef2);
     }
 }
 
 void ShearPoly(Polygon& rPoly, const Point& rRef, double tn, bool bVShear)
 {
-    sal_uInt16 nAnz=rPoly.GetSize();
-    for (sal_uInt16 i=0; i<nAnz; i++) {
+    sal_uInt16 nCount=rPoly.GetSize();
+    for (sal_uInt16 i=0; i<nCount; i++) {
         ShearPoint(rPoly[i],rRef,tn,bVShear);
     }
 }
 
 void ShearXPoly(XPolygon& rPoly, const Point& rRef, double tn, bool bVShear)
 {
-    sal_uInt16 nAnz=rPoly.GetPointCount();
-    for (sal_uInt16 i=0; i<nAnz; i++) {
+    sal_uInt16 nCount=rPoly.GetPointCount();
+    for (sal_uInt16 i=0; i<nCount; i++) {
         ShearPoint(rPoly[i],rRef,tn,bVShear);
     }
 }
@@ -858,12 +858,12 @@ void SdrFormatter::TakeStr(long nVal, OUString& rStr) const
     if(nC > 0 && aStr.getLength() <= nC )
     {
         // decimal separator necessary
-        sal_Int32 nAnz(nC - aStr.getLength());
+        sal_Int32 nCount(nC - aStr.getLength());
 
-        if(nAnz >= 0 && rLoc.isNumLeadingZero())
-            nAnz++;
+        if(nCount >= 0 && rLoc.isNumLeadingZero())
+            nCount++;
 
-        for(sal_Int32  i=0; i<nAnz; i++)
+        for(sal_Int32  i=0; i<nCount; i++)
             aStr.insert(0, aNullCode);
 
         // remove superfluous decimal points

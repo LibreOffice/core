@@ -1286,8 +1286,8 @@ SdrHdl* SdrObject::GetPlusHdl(const SdrHdl& /*rHdl*/, sal_uInt32 /*nPlNum*/) con
 
 void SdrObject::AddToHdlList(SdrHdlList& rHdlList) const
 {
-    sal_uInt32 nAnz=GetHdlCount();
-    for (sal_uInt32 i=0L; i<nAnz; i++) {
+    sal_uInt32 nCount=GetHdlCount();
+    for (sal_uInt32 i=0L; i<nCount; i++) {
         SdrHdl* pHdl=GetHdl(i);
         if (pHdl!=NULL) {
             rHdlList.AddHdl(pHdl);
@@ -1886,8 +1886,8 @@ void SdrObject::BurnInStyleSheetAttributes()
 SdrObjUserData* SdrObject::ImpGetMacroUserData() const
 {
     SdrObjUserData* pData=NULL;
-    sal_uInt16 nAnz=GetUserDataCount();
-    for (sal_uInt16 nNum=nAnz; nNum>0 && pData==NULL;) {
+    sal_uInt16 nCount=GetUserDataCount();
+    for (sal_uInt16 nNum=nCount; nNum>0 && pData==NULL;) {
         nNum--;
         pData=GetUserData(nNum);
         if (!pData->HasMacro(this)) pData=NULL;
@@ -2865,10 +2865,10 @@ void SdrObject::AppendUserData(SdrObjUserData* pData)
 
 void SdrObject::DeleteUserData(sal_uInt16 nNum)
 {
-    sal_uInt16 nAnz=GetUserDataCount();
-    if (nNum<nAnz) {
+    sal_uInt16 nCount=GetUserDataCount();
+    if (nNum<nCount) {
         pPlusData->pUserDataList->DeleteUserData(nNum);
-        if (nAnz==1)  {
+        if (nCount==1)  {
             delete pPlusData->pUserDataList;
             pPlusData->pUserDataList=NULL;
         }

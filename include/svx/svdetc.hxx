@@ -154,8 +154,8 @@ public:
     void SetActionCount( sal_uIntPtr _nActionCount );
     void SetInsertCount( sal_uIntPtr _nInsertCount );
 
-    bool ReportActions( sal_uIntPtr nAnzActions );
-    bool ReportInserts( sal_uIntPtr nAnzInserts );
+    bool ReportActions( sal_uIntPtr nActionCount );
+    bool ReportInserts( sal_uIntPtr nInsertCount );
 
     sal_uIntPtr GetSumActionCount() const { return nSumActionCount; };
     sal_uIntPtr GetSumCurAction() const { return nSumCurAction; };
@@ -168,7 +168,7 @@ public:
     sal_uIntPtr GetInsertCount() const { return nInsertCount; };
     sal_uIntPtr GetCurInsert() const { return nCurInsert; };
 
-    bool ReportRescales( sal_uIntPtr nAnzRescales );
+    bool ReportRescales( sal_uIntPtr nRescaleCount );
 };
 
 

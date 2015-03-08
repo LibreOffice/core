@@ -1189,14 +1189,14 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaMapModeAction& rAct)
 
 void ImpSdrGDIMetaFileImport::MapScaling()
 {
-    const size_t nAnz(maTmpList.size());
+    const size_t nCount(maTmpList.size());
     const MapMode& rMap = maVD.GetMapMode();
     Point aMapOrg( rMap.GetOrigin() );
     bool bMov2(aMapOrg.X() != 0 || aMapOrg.Y() != 0);
 
     if(bMov2)
     {
-        for(size_t i = mnMapScalingOfs; i < nAnz; i++)
+        for(size_t i = mnMapScalingOfs; i < nCount; i++)
         {
             SdrObject* pObj = maTmpList[i];
 
@@ -1204,7 +1204,7 @@ void ImpSdrGDIMetaFileImport::MapScaling()
         }
     }
 
-    mnMapScalingOfs = nAnz;
+    mnMapScalingOfs = nCount;
 }
 
 

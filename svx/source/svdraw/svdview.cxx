@@ -851,11 +851,11 @@ bool SdrView::DoMouseEvent(const SdrViewEvent& rVEvt)
                 bRet=MarkNextObj(aLogicPos,nHitTolLog,rVEvt.bMarkPrev);
             } else {
                 SortMarkedObjects();
-                const size_t nAnz0=GetMarkedObjectCount();
+                const size_t nCount0=GetMarkedObjectCount();
                 bRet=MarkObj(aLogicPos,nHitTolLog,rVEvt.bAddMark);
                 SortMarkedObjects();
-                const size_t nAnz1=GetMarkedObjectCount();
-                bUnmark=nAnz1<nAnz0;
+                const size_t nCount1=GetMarkedObjectCount();
+                bUnmark=nCount1<nCount0;
             }
             if (!bUnmark) {
                 BegDragObj(aLogicPos,NULL,(SdrHdl*)NULL,nMinMovLog);
