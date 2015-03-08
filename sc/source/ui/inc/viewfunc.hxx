@@ -370,6 +370,9 @@ private:
     void            MarkAndJumpToRanges(const ScRangeList& rRanges);
     void            CopyAutoSpellData( FillDir eDir, SCCOL nStartCol, SCROW nStartRow,
                                        SCCOL nEndCol, SCROW nEndRow, sal_uLong nCount );
+
+    void            NotifyUnitErrorInFormula( const ScAddress& rAddress, ScDocument* pDoc );
+    DECL_LINK( EditUnitErrorFormulaHandler, PushButton* );
 };
 
 #endif

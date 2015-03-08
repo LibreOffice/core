@@ -996,7 +996,14 @@
 #define STR_TITLE_AUTHOR        (STR_START + 442)
 #define STR_TITLE_DATE          (STR_START + 443)
 #define STR_UNKNOWN_USER_CONFLICT    (STR_START + 444)
-#define STR_END                 (STR_UNKNOWN_USER_CONFLICT)
+
+#define STR_UNITS_ERRORINCELL   (STR_START + 450)
+#define BT_UNITS_EDIT_CELL      (STR_START + 451)
+
+#define STR_UNITS_CONV_REQUIRED (STR_START + 455)
+#define BT_UNITS_CONV_THISCELL  (STR_START + 456)
+#define BT_UNITS_CONV_ALL       (STR_START + 457)
+#define STR_END                 (BT_UNITS_CONV_ALL)
 
 #define BMP_START               (STR_END)
 

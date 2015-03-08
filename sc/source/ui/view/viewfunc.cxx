@@ -31,6 +31,7 @@
 #include <editeng/scripttypeitem.hxx>
 #include <editeng/justifyitem.hxx>
 #include <sfx2/bindings.hxx>
+#include <sfx2/infobar.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <vcl/msgbox.hxx>
@@ -473,6 +474,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
             else
             {
                 SAL_INFO( "sc.units", "verification failed" );
+                NotifyUnitErrorInFormula( aPos, pDoc );
             }
 #endif
         } while ( bAgain );
@@ -2808,6 +2810,32 @@ void ScViewFunc::UpdateSelectionArea( const ScMarkData& rSel, ScPatternAttr* pAt
         PAINT_GRID, nExtFlags | SC_PF_TESTMERGE );
     ScTabViewShell* pTabViewShell = GetViewData().GetViewShell();
     pTabViewShell->AdjustBlockHeight(false, const_cast<ScMarkData*>(&rSel));
+}
+
+void ScViewFunc::NotifyUnitErrorInFormula( const ScAddress& rAddress, ScDocument* pDoc )
+{
+    SfxViewFrame* pViewFrame = GetViewData().GetViewShell()->GetFrame();
+
+    OUString sTitle = SC_RESSTR( STR_UNITS_ERRORINCELL );
+    sTitle = sTitle.replaceAll( "$1", rAddress.GetColRowString() );
+    OUString sCellAddress = rAddress.Format( SCA_BITS, pDoc );
+    SfxInfoBarWindow* pInfoBar = pViewFrame->AppendInfoBar( sCellAddress, sTitle );
+
+    assert( pInfoBar );
+    PushButton* pButtonGotoCell = new PushButton( &pViewFrame->GetWindow(), ScResId(BT_UNITS_EDIT_CELL) );
+    pButtonGotoCell->SetClickHdl( LINK( this, ScViewFunc, EditUnitErrorFormulaHandler ) );
+    pInfoBar->addButton( pButtonGotoCell);
+}
+
+IMPL_LINK( ScViewFunc, EditUnitErrorFormulaHandler, PushButton*, pButton )
+{
+    SfxInfoBarWindow* pInfoBar = dynamic_cast< SfxInfoBarWindow* >( pButton->GetParent() );
+    const OUString sCell = pInfoBar->getId();
+    ScAddress aAddress;
+    aAddress.Parse( sCell );
+
+    (void) aAddress; // TODO: implement
+    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
