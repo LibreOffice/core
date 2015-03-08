@@ -18,6 +18,18 @@ else
     headers="$1"
 fi
 
+# Split the headers into an array.
+IFS=' ' read -a aheaders <<< $headers
+hlen=${#aheaders[@]};
+if [ $hlen -gt 1 ]; then
+    . $root/bin/get_config_variables PARALLELISM
+    if [ -z "$PARALLELISM" ]; then
+        PARALLELISM=0 # Let xargs decide
+    fi
+    echo $headers | xargs -n 1 -P $PARALLELISM $0
+    exit $?
+fi
+
 for x in $headers; do
     header=$x
     echo updating `echo $header | sed -e s%$root/%%`
