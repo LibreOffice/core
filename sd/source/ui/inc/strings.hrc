@@ -161,12 +161,19 @@
 #define STR_TWAIN_NO_SOURCE_UNX             (RID_APP_START+262)
 #define STR_UNDO_DELETEPAGES                (RID_APP_START+265)
 #define STR_UNDO_INSERTPAGES                (RID_APP_START+266)
-//free (RID_APP_START+267)
+
+//allocated
+#define STR_SD_PAGE_COUNT                   (RID_APP_START+267)
+
 #define STR_ASK_DELETE_LAYER                (RID_APP_START+268)
 #define STR_UNDO_CHANGE_TITLE_AND_LAYOUT    (RID_APP_START+269)
 #define STR_WAV_FILE                        (RID_APP_START+270)
 #define STR_MIDI_FILE                       (RID_APP_START+271)
 #define STR_SD_PAGE                         (RID_APP_START+272)
+
+//allocated
+#define STR_SD_PAGE_COUNT_CUSTOM            (RID_APP_START+273)
+
 #define STR_ALL_FILES                       (RID_APP_START+274)
 #define STR_UNDO_INSERT_TEXTFRAME           (RID_APP_START+275)
 #define STR_ACTION_NOTPOSSIBLE              (RID_APP_START+278)
