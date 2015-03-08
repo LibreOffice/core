@@ -8,6 +8,7 @@
 #
 
 # Usage: update_pch.sh [precompiled_xxx.hxx]
+# Invoke: make cmd cmd="./bin/update_pch.sh [..]"
 
 root=`dirname $0`
 root=`cd $root/.. && pwd`
@@ -16,6 +17,17 @@ if test -z "$1"; then
     headers=`ls $root/*/inc/pch/precompiled_*.hxx`
 else
     headers="$1"
+fi
+
+# Split the headers into an array.
+IFS=' ' read -a aheaders <<< $headers
+hlen=${#aheaders[@]};
+if [ $hlen -gt 1 ]; then
+    if [ -z "$PARALLELISM" ]; then
+        PARALLELISM=0 # Let xargs decide
+    fi
+    echo $headers | xargs -n 1 -P $PARALLELISM $0
+    exit $?
 fi
 
 for x in $headers; do
