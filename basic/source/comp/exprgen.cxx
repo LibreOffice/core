@@ -229,7 +229,7 @@ void SbiExprList::Gen()
                     // For the present: trigger an error
                     pParser->Error( SbERR_NO_NAMED_ARGS );
 
-                    // Later, if Named Args at DECLARE is posible
+                    // Later, if Named Args at DECLARE is possible
                     //for( sal_uInt16 i = 1 ; i < nParAnz ; i++ )
                     //{
                     //  SbiSymDef* pDef = pPool->Get( i );

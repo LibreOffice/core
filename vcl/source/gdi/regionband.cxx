@@ -702,7 +702,7 @@ void RegionBand::Scale(double fScaleX, double fScaleY)
 
 void RegionBand::InsertBands(long nTop, long nBottom)
 {
-    // region empty? -> set rectagle as first entry!
+    // region empty? -> set rectangle as first entry!
     if ( !mpFirstBand )
     {
         // add band with boundaries of the rectangle

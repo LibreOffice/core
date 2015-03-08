@@ -234,7 +234,7 @@ const OUString& SbxVariable::GetName( SbxNameType t ) const
     }
     sal_Unicode cType = ' ';
     OUString aTmp( maName );
-    // short type? Then fetch it, posible this is 0.
+    // short type? Then fetch it, possible this is 0.
     SbxDataType et = GetType();
     if( t == SbxNAME_SHORT_TYPES )
     {
@@ -266,7 +266,7 @@ const OUString& SbxVariable::GetName( SbxNameType t ) const
         }
         aTmp += i->aName;
         cType = ' ';
-        // short type? Then fetch it, posible this is 0.
+        // short type? Then fetch it, possible this is 0.
         if( t == SbxNAME_SHORT_TYPES )
         {
             if( nt <= SbxSTRING )

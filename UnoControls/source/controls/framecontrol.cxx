@@ -212,7 +212,7 @@ sal_Bool SAL_CALL FrameControl::setGraphics( const Reference< XGraphics >& /*xDe
 
 Reference< XGraphics > SAL_CALL FrameControl::getGraphics() throw( RuntimeException, std::exception )
 {
-    // when its not posible to set graphics ! then its possible to return null
+    // when it's not possible to set graphics ! then it's possible to return null
     return Reference< XGraphics >();
 }
 

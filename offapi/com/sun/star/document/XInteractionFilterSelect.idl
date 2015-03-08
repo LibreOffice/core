@@ -48,7 +48,7 @@ published interface XInteractionFilterSelect : com::sun::star::task::XInteractio
     /** used by interaction to set selected filter
 
         <p>
-        This value must be save till another one will be set
+        This value must be saved till another one will be set
         and must be provided on getFilter() for interest users.
         </p>
      */

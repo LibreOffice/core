@@ -70,10 +70,10 @@
 
 /**
  * @brief
- *   SdwRectangle: Not like rectangle in SODC, rectagles in Word Pro are
+ *   SdwRectangle: Not like rectangle in SODC, rectangles in Word Pro are
  * defined by 4 points. So they can be any posture in the two-dimensional
  * coordinate system. The class is used to describ such rectangles.
- *   The foure corner points must be save in menber variable:m_nRectCorner
+ *   The four corner points must be saved in member variable:m_nRectCorner
  * one after another. We assume the input order(the same order in .lwp files)
  * is as below:
  *

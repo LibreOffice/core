@@ -2106,7 +2106,7 @@ void SbUnoObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                         Any aRetAny = xPropSet->getPropertyValue( pProp->GetName() );
                         // The use of getPropertyValue (instead of using the index) is
                         // suboptimal, but the refactoring to XInvocation is already pending
-                        // Otherwise it is posible to use FastPropertySet
+                        // Otherwise it is possible to use FastPropertySet
 
                         // take over the value from Uno to Sbx
                         unoToSbxValue( pVar, aRetAny );
@@ -2177,7 +2177,7 @@ void SbUnoObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                         xPropSet->setPropertyValue( pProp->GetName(), aAnyValue );
                         // The use of getPropertyValue (instead of using the index) is
                         // suboptimal, but the refactoring to XInvocation is already pending
-                        // Otherwise it is posible to use FastPropertySet
+                        // Otherwise it is possible to use FastPropertySet
                     }
                     catch( const Exception& )
                     {

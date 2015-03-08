@@ -90,7 +90,7 @@ class MzString
         const char*   c_str() const;
         operator  char*()         { return (char *)c_str(); }
 
-// If it is not posible to use the constructor with an initial
+// If it is not possible to use the constructor with an initial
 // allocation size, use the following member to set the size.
         bool      resize(int len);
 
