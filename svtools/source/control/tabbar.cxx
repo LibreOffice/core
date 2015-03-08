@@ -352,17 +352,23 @@ IMPL_LINK_NOARG(TabBarEdit, ImplEndTimerHdl)
 
 struct TabBar_Impl
 {
-    ImplTabSizer*                   mpSizer;
-    ::svt::AccessibleFactoryAccess  maAccessibleFactory;
+    std::unique_ptr<ImplTabSizer> mpSizer;
+    std::unique_ptr<ImplTabButton> mpFirstButton;
+    std::unique_ptr<ImplTabButton> mpPrevButton;
+    std::unique_ptr<ImplTabButton> mpNextButton;
+    std::unique_ptr<ImplTabButton> mpLastButton;
+    std::unique_ptr<TabBarEdit> mpEdit;
+
+    svt::AccessibleFactoryAccess  maAccessibleFactory;
 
     TabBar_Impl()
-        :mpSizer( NULL )
-    {
-    }
-    ~TabBar_Impl()
-    {
-        delete mpSizer;
-    }
+        : mpSizer()
+        , mpFirstButton()
+        , mpPrevButton()
+        , mpNextButton()
+        , mpLastButton()
+        , mpEdit()
+    {}
 };
 
 
@@ -373,13 +379,9 @@ const sal_uInt16 TabBar::INSERT_TAB_POS = ::std::numeric_limits<sal_uInt16>::max
 
 void TabBar::ImplInit( WinBits nWinStyle )
 {
+    mpImpl.reset(new TabBar_Impl);
+
     mpItemList      = new ImplTabBarList;
-    mpFirstBtn      = NULL;
-    mpPrevBtn       = NULL;
-    mpNextBtn       = NULL;
-    mpLastBtn       = NULL;
-    mpImpl          = new TabBar_Impl;
-    mpEdit          = NULL;
     mnMaxPageWidth  = 0;
     mnCurMaxWidth   = 0;
     mnOffX          = 0;
@@ -412,14 +414,14 @@ void TabBar::ImplInit( WinBits nWinStyle )
 
     ImplInitControls();
 
-    if(mpFirstBtn)
-        mpFirstBtn->SetAccessibleName(SVT_RESSTR(STR_TABBAR_PUSHBUTTON_MOVET0HOME));
-    if(mpPrevBtn)
-        mpPrevBtn->SetAccessibleName(SVT_RESSTR(STR_TABBAR_PUSHBUTTON_MOVELEFT));
-    if(mpNextBtn)
-        mpNextBtn->SetAccessibleName(SVT_RESSTR(STR_TABBAR_PUSHBUTTON_MOVERIGHT));
-    if(mpLastBtn)
-        mpLastBtn->SetAccessibleName(SVT_RESSTR(STR_TABBAR_PUSHBUTTON_MOVETOEND));
+    if (mpImpl->mpFirstButton)
+        mpImpl->mpFirstButton->SetAccessibleName(SVT_RESSTR(STR_TABBAR_PUSHBUTTON_MOVET0HOME));
+    if (mpImpl->mpPrevButton)
+        mpImpl->mpPrevButton->SetAccessibleName(SVT_RESSTR(STR_TABBAR_PUSHBUTTON_MOVELEFT));
+    if (mpImpl->mpNextButton)
+        mpImpl->mpNextButton->SetAccessibleName(SVT_RESSTR(STR_TABBAR_PUSHBUTTON_MOVERIGHT));
+    if (mpImpl->mpLastButton)
+        mpImpl->mpLastButton->SetAccessibleName(SVT_RESSTR(STR_TABBAR_PUSHBUTTON_MOVETOEND));
 
     SetSizePixel( Size( 100, CalcWindowSizePixel().Height() ) );
     ImplInitSettings( true, true );
@@ -439,17 +441,6 @@ TabBar::TabBar( vcl::Window* pParent, WinBits nWinStyle ) :
 TabBar::~TabBar()
 {
     EndEditMode( true );
-
-    // Controls loeschen
-    if ( mpPrevBtn )
-        delete mpPrevBtn;
-    if ( mpNextBtn )
-        delete mpNextBtn;
-    if ( mpFirstBtn )
-        delete mpFirstBtn;
-    if ( mpLastBtn )
-        delete mpLastBtn;
-    delete mpImpl;
 
     for ( size_t i = 0, n = mpItemList->size(); i < n; ++i ) {
         delete (*mpItemList)[ i ];
@@ -689,63 +680,65 @@ void TabBar::ImplInitControls()
 {
     if ( mnWinStyle & WB_SIZEABLE )
     {
-        if ( !mpImpl->mpSizer )
-            mpImpl->mpSizer = new ImplTabSizer( this, mnWinStyle & (WB_DRAG | WB_3DLOOK) );
+        if (!mpImpl->mpSizer)
+        {
+            mpImpl->mpSizer.reset(new ImplTabSizer( this, mnWinStyle & (WB_DRAG | WB_3DLOOK)));
+        }
         mpImpl->mpSizer->Show();
     }
     else
     {
-        DELETEZ( mpImpl->mpSizer );
+        mpImpl->mpSizer.reset();
     }
 
     Link aLink = LINK( this, TabBar, ImplClickHdl );
 
     if ( mnWinStyle & (WB_MINSCROLL | WB_SCROLL) )
     {
-        if ( !mpPrevBtn )
+        if (!mpImpl->mpPrevButton)
         {
-            mpPrevBtn = new ImplTabButton( this, WB_REPEAT );
-            mpPrevBtn->SetClickHdl( aLink );
+            mpImpl->mpPrevButton.reset(new ImplTabButton(this, WB_REPEAT));
+            mpImpl->mpPrevButton->SetClickHdl(aLink);
         }
-        mpPrevBtn->SetSymbol( mbMirrored ? SymbolType::NEXT : SymbolType::PREV );
-        mpPrevBtn->Show();
+        mpImpl->mpPrevButton->SetSymbol(mbMirrored ? SymbolType::NEXT : SymbolType::PREV);
+        mpImpl->mpPrevButton->Show();
 
-        if ( !mpNextBtn )
+        if (!mpImpl->mpNextButton)
         {
-            mpNextBtn = new ImplTabButton( this, WB_REPEAT );
-            mpNextBtn->SetClickHdl( aLink );
+            mpImpl->mpNextButton.reset(new ImplTabButton(this, WB_REPEAT));
+            mpImpl->mpNextButton->SetClickHdl(aLink);
         }
-        mpNextBtn->SetSymbol( mbMirrored ? SymbolType::PREV : SymbolType::NEXT );
-        mpNextBtn->Show();
+        mpImpl->mpNextButton->SetSymbol(mbMirrored ? SymbolType::PREV : SymbolType::NEXT);
+        mpImpl->mpNextButton->Show();
     }
     else
     {
-        DELETEZ( mpPrevBtn );
-        DELETEZ( mpNextBtn );
+        mpImpl->mpPrevButton.reset();
+        mpImpl->mpNextButton.reset();
     }
 
     if ( mnWinStyle & WB_SCROLL )
     {
-        if ( !mpFirstBtn )
+        if (!mpImpl->mpFirstButton)
         {
-            mpFirstBtn = new ImplTabButton( this );
-            mpFirstBtn->SetClickHdl( aLink );
+            mpImpl->mpFirstButton.reset(new ImplTabButton(this));
+            mpImpl->mpFirstButton->SetClickHdl(aLink);
         }
-        mpFirstBtn->SetSymbol( mbMirrored ? SymbolType::LAST : SymbolType::FIRST );
-        mpFirstBtn->Show();
+        mpImpl->mpFirstButton->SetSymbol(mbMirrored ? SymbolType::LAST : SymbolType::FIRST);
+        mpImpl->mpFirstButton->Show();
 
-        if ( !mpLastBtn )
+        if (!mpImpl->mpLastButton)
         {
-            mpLastBtn = new ImplTabButton( this );
-            mpLastBtn->SetClickHdl( aLink );
+            mpImpl->mpLastButton.reset(new ImplTabButton(this));
+            mpImpl->mpLastButton->SetClickHdl(aLink);
         }
-        mpLastBtn->SetSymbol( mbMirrored ? SymbolType::FIRST : SymbolType::LAST );
-        mpLastBtn->Show();
+        mpImpl->mpLastButton->SetSymbol(mbMirrored ? SymbolType::FIRST : SymbolType::LAST);
+        mpImpl->mpLastButton->Show();
     }
     else
     {
-        DELETEZ( mpFirstBtn );
-        DELETEZ( mpLastBtn );
+        mpImpl->mpFirstButton.reset();
+        mpImpl->mpLastButton.reset();
     }
 
     mbHasInsertTab  = (mnWinStyle & WB_INSERTTAB);
@@ -760,16 +753,16 @@ void TabBar::ImplEnableControls()
 
     // enable/disable buttons
     bool bEnableBtn = mbScrollAlwaysEnabled || mnFirstPos > 0;
-    if ( mpFirstBtn )
-        mpFirstBtn->Enable( bEnableBtn );
-    if ( mpPrevBtn )
-        mpPrevBtn->Enable( bEnableBtn );
+    if (mpImpl->mpFirstButton)
+        mpImpl->mpFirstButton->Enable(bEnableBtn);
+    if (mpImpl->mpPrevButton)
+        mpImpl->mpPrevButton->Enable(bEnableBtn);
 
     bEnableBtn = mbScrollAlwaysEnabled || mnFirstPos < ImplGetLastFirstPos();
-    if ( mpNextBtn )
-        mpNextBtn->Enable( bEnableBtn );
-    if ( mpLastBtn )
-        mpLastBtn->Enable( bEnableBtn );
+    if (mpImpl->mpNextButton)
+        mpImpl->mpNextButton->Enable(bEnableBtn);
+    if (mpImpl->mpLastButton)
+        mpImpl->mpLastButton->Enable(bEnableBtn);
 }
 
 void TabBar::SetScrollAlwaysEnabled(bool bScrollAlwaysEnabled)
@@ -808,22 +801,22 @@ IMPL_LINK( TabBar, ImplClickHdl, ImplTabButton*, pBtn )
 
     sal_uInt16 nNewPos = mnFirstPos;
 
-    if (pBtn == mpFirstBtn || (pBtn == mpPrevBtn && pBtn->isModKeyPressed()))
+    if (pBtn == mpImpl->mpFirstButton.get() || (pBtn == mpImpl->mpPrevButton.get() && pBtn->isModKeyPressed()))
     {
         nNewPos = 0;
     }
-    else if (pBtn == mpLastBtn || (pBtn == mpNextBtn && pBtn->isModKeyPressed()))
+    else if (pBtn == mpImpl->mpLastButton.get() || (pBtn == mpImpl->mpNextButton.get() && pBtn->isModKeyPressed()))
     {
         sal_uInt16 nCount = GetPageCount();
         if (nCount)
             nNewPos = nCount - 1;
     }
-    else if (pBtn == mpPrevBtn)
+    else if (pBtn == mpImpl->mpPrevButton.get())
     {
         if (mnFirstPos)
             nNewPos = mnFirstPos - 1;
     }
-    else if (pBtn == mpNextBtn)
+    else if (pBtn == mpImpl->mpNextButton.get())
     {
         sal_uInt16 nCount = GetPageCount();
         if (mnFirstPos <  nCount)
@@ -1418,27 +1411,27 @@ void TabBar::Resize()
     nButtonWidth += nButtonMargin;
 
     Size aBtnSize( nHeight, nHeight );
-    if ( mpFirstBtn )
+    if (mpImpl->mpFirstButton)
     {
-        mpFirstBtn->SetPosSizePixel( Point( nX, 0 ), aBtnSize );
+        mpImpl->mpFirstButton->SetPosSizePixel( Point( nX, 0 ), aBtnSize );
         nX += nXDiff;
         nButtonWidth += nHeight;
     }
-    if ( mpPrevBtn )
+    if (mpImpl->mpPrevButton)
     {
-        mpPrevBtn->SetPosSizePixel( Point( nX, 0 ), aBtnSize );
+        mpImpl->mpPrevButton->SetPosSizePixel( Point( nX, 0 ), aBtnSize );
         nX += nXDiff;
         nButtonWidth += nHeight;
     }
-    if ( mpNextBtn )
+    if (mpImpl->mpNextButton)
     {
-        mpNextBtn->SetPosSizePixel( Point( nX, 0 ), aBtnSize );
+        mpImpl->mpNextButton->SetPosSizePixel( Point( nX, 0 ), aBtnSize );
         nX += nXDiff;
         nButtonWidth += nHeight;
     }
-    if ( mpLastBtn )
+    if (mpImpl->mpLastButton)
     {
-        mpLastBtn->SetPosSizePixel( Point( nX, 0 ), aBtnSize );
+        mpImpl->mpLastButton->SetPosSizePixel( Point( nX, 0 ), aBtnSize );
         nX += nXDiff;
         nButtonWidth += nHeight;
     }
@@ -1604,12 +1597,18 @@ void TabBar::StateChanged( StateChangedType nType )
     else if ( nType == StateChangedType::MIRRORING )
     {
         // reacts on calls of EnableRTL, have to mirror all child controls
-        if( mpFirstBtn ) mpFirstBtn->EnableRTL( IsRTLEnabled() );
-        if( mpPrevBtn ) mpPrevBtn->EnableRTL( IsRTLEnabled() );
-        if( mpNextBtn ) mpNextBtn->EnableRTL( IsRTLEnabled() );
-        if( mpLastBtn ) mpLastBtn->EnableRTL( IsRTLEnabled() );
-        if( mpImpl->mpSizer ) mpImpl->mpSizer->EnableRTL( IsRTLEnabled() );
-        if( mpEdit ) mpEdit->EnableRTL( IsRTLEnabled() );
+        if (mpImpl->mpFirstButton)
+            mpImpl->mpFirstButton->EnableRTL(IsRTLEnabled());
+        if (mpImpl->mpPrevButton)
+            mpImpl->mpPrevButton->EnableRTL(IsRTLEnabled());
+        if (mpImpl->mpNextButton)
+            mpImpl->mpNextButton->EnableRTL(IsRTLEnabled());
+        if (mpImpl->mpLastButton)
+            mpImpl->mpLastButton->EnableRTL(IsRTLEnabled());
+        if (mpImpl->mpSizer)
+            mpImpl->mpSizer->EnableRTL(IsRTLEnabled());
+        if (mpImpl->mpEdit)
+            mpImpl->mpEdit->EnableRTL(IsRTLEnabled());
     }
 }
 
@@ -2271,7 +2270,7 @@ bool TabBar::IsPageSelected( sal_uInt16 nPageId ) const
 bool TabBar::StartEditMode( sal_uInt16 nPageId )
 {
     sal_uInt16 nPos = GetPagePos( nPageId );
-    if ( mpEdit || (nPos == PAGE_NOT_FOUND) || (mnLastOffX < 8) )
+    if (mpImpl->mpEdit || (nPos == PAGE_NOT_FOUND) || (mnLastOffX < 8))
         return false;
 
     mnEditId = nPageId;
@@ -2281,7 +2280,7 @@ bool TabBar::StartEditMode( sal_uInt16 nPageId )
         ImplFormat();
         Update();
 
-        mpEdit = new TabBarEdit( this, WB_CENTER );
+        mpImpl->mpEdit.reset(new TabBarEdit(this, WB_CENTER));
         Rectangle aRect = GetPageRect( mnEditId );
         long nX = aRect.Left();
         long nWidth = aRect.GetWidth();
@@ -2294,8 +2293,8 @@ bool TabBar::StartEditMode( sal_uInt16 nPageId )
             nX = aRect.Left();
             nWidth = aRect.GetWidth();
         }
-        mpEdit->SetText( GetPageText( mnEditId ) );
-        mpEdit->setPosSizePixel( nX, aRect.Top()+mnOffY+1, nWidth, aRect.GetHeight()-3 );
+        mpImpl->mpEdit->SetText(GetPageText(mnEditId));
+        mpImpl->mpEdit->setPosSizePixel(nX, aRect.Top() + mnOffY + 1, nWidth, aRect.GetHeight() - 3);
         vcl::Font aFont = GetPointFont();
         Color   aForegroundColor;
         Color   aBackgroundColor;
@@ -2318,12 +2317,12 @@ bool TabBar::StartEditMode( sal_uInt16 nPageId )
         }
         if ( GetPageBits( mnEditId ) & TPB_SPECIAL )
             aForegroundColor = Color( COL_LIGHTBLUE );
-        mpEdit->SetControlFont( aFont );
-        mpEdit->SetControlForeground( aForegroundColor );
-        mpEdit->SetControlBackground( aBackgroundColor );
-        mpEdit->GrabFocus();
-        mpEdit->SetSelection( Selection( 0, mpEdit->GetText().getLength() ) );
-        mpEdit->Show();
+        mpImpl->mpEdit->SetControlFont(aFont);
+        mpImpl->mpEdit->SetControlForeground(aForegroundColor);
+        mpImpl->mpEdit->SetControlBackground(aBackgroundColor);
+        mpImpl->mpEdit->GrabFocus();
+        mpImpl->mpEdit->SetSelection(Selection(0, mpImpl->mpEdit->GetText().getLength()));
+        mpImpl->mpEdit->Show();
         return true;
     }
     else
@@ -2333,17 +2332,20 @@ bool TabBar::StartEditMode( sal_uInt16 nPageId )
     }
 }
 
-
+bool TabBar::IsInEditMode() const
+{
+    return mpImpl->mpEdit.get() != NULL;
+}
 
 void TabBar::EndEditMode( bool bCancel )
 {
-    if ( mpEdit )
+    if (mpImpl->mpEdit)
     {
         // call hdl
         bool bEnd = true;
         mbEditCanceled = bCancel;
-        maEditText = mpEdit->GetText();
-        mpEdit->SetPostEvent();
+        maEditText = mpImpl->mpEdit->GetText();
+        mpImpl->mpEdit->SetPostEvent();
         if ( !bCancel )
         {
             TabBarAllowRenamingReturnCode nAllowRenaming = AllowRenaming();
@@ -2358,14 +2360,13 @@ void TabBar::EndEditMode( bool bCancel )
         // renaming not allowed, than reset edit data
         if ( !bEnd )
         {
-            mpEdit->ResetPostEvent();
-            mpEdit->GrabFocus();
+            mpImpl->mpEdit->ResetPostEvent();
+            mpImpl->mpEdit->GrabFocus();
         }
         else
         {
             // close edit and call end hdl
-            delete mpEdit;
-            mpEdit = NULL;
+            mpImpl->mpEdit.reset();
             EndRenaming();
             mnEditId = 0;
         }
