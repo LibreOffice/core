@@ -1195,25 +1195,18 @@ public:
 
     void drawPlusImage()
     {
-        SvtResId aPlusImageId(BMP_LIST_ADD);
-        Image aPlusImage(aPlusImageId);
+        const StyleSettings& rStyleSettings = mrParent.GetSettings().GetStyleSettings();
 
+        DecorationView aDecorationView(&mrParent);
         sal_Int32 aScaleFactor = mrParent.GetDPIScaleFactor();
-        if (aScaleFactor > 1)
-        {
-            BitmapEx aBitmap = aPlusImage.GetBitmapEx();
-            aBitmap.Scale(aScaleFactor, aScaleFactor, BMP_SCALE_FAST);
-            aPlusImage = Image(aBitmap);
-        }
+        Size aSize(12 * aScaleFactor, 12 * aScaleFactor);
 
-        // Center the image within the bounding rectangle.
-        Size aSize = aPlusImage.GetSizePixel();
         Point aPosition = maRect.TopLeft();
         long nXOffSet = (maRect.GetWidth() - aSize.Width()) / 2;
         long nYOffset = (maRect.GetHeight() - aSize.Height()) / 2;
         aPosition += Point(nXOffSet, nYOffset);
-        aPosition.X() += 1;
-        mrParent.DrawImage(aPosition, aPlusImage);
+
+        aDecorationView.DrawSymbol(Rectangle(aPosition, aSize), SymbolType::PLUS, rStyleSettings.GetDarkShadowColor());
     }
 
     void setRect(const Rectangle& rRect)
