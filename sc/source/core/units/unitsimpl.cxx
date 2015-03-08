@@ -314,7 +314,7 @@ UtUnit UnitsImpl::getUnitForRef(FormulaToken* pToken, const ScAddress& rFormulaA
     // Scan UPwards from the current cell to find a header. This is since we could potentially
     // have two different sets of data sharing a column, hence finding the closest header is necessary.
     ScAddress aAddress = aInputAddress;
-    while (aAddress.Row() > 1) {
+    while (aAddress.Row() > 0) {
         aAddress.IncRow(-1);
 
         // We specifically test for string cells as intervening data cells could have
