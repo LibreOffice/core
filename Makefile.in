@@ -45,6 +45,7 @@ $(BUILDDIR)/config_host.mk : $(wildcard \
 		$(SRCDIR)/android/experimental/LOAndroid3/AndroidManifest.xml.in \
 		$(BUILDDIR)/autogen.input \
 		$(BUILDDIR)/autogen.lastrun \
+		$(BUILDDIR)/autogen.sh \
 		)
 	sh -c $(SRCDIR)/autogen.sh
 

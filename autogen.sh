@@ -116,6 +116,9 @@ sub invalid_distro($$)
     closedir ($dirh);
 }
 
+# Avoid confusing "aclocal: error: non-option arguments are not accepted: '.../m4'." error message.
+die "\$src_path must not contain spaces, but it is '$src_path'." if ($src_path =~ / /);
+
 # Alloc $ACLOCAL to specify which aclocal to use
 $aclocal = $ENV{ACLOCAL} ? $ENV{ACLOCAL} : 'aclocal';
 
