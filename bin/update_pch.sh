@@ -18,6 +18,16 @@ else
     headers="$1"
 fi
 
+# Split the headers into an array.
+IFS=' ' read -a aheaders <<< $headers
+hlen=${#aheaders[@]};
+if [ $hlen -gt 1 ]; then
+    cpus=`cat /proc/cpuinfo | awk '/^processor/{print $3}' | tail -1`;
+    cpus=$(($cpus*2+3));
+    echo $headers | xargs -n 1 -P $cpus $0
+    exit $?
+fi
+
 for x in $headers; do
     header=$x
     echo updating `echo $header | sed -e s%$root/%%`
