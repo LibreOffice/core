@@ -585,6 +585,10 @@ Resource RID_GLOBSTR
     {
         Text [ en-US ] = "Sheet" ;
     };
+    String STR_TABLE_COUNT
+    {
+        Text [ en-US ] = "Sheet %1 of %2";
+    };
     String STR_ROWCOL_SELCOUNT
     {
         Text [ en-US ] = "Selected $1 rows, $2 columns";

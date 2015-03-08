@@ -167,6 +167,7 @@
 #define STR_WAV_FILE                        (RID_APP_START+270)
 #define STR_MIDI_FILE                       (RID_APP_START+271)
 #define STR_SD_PAGE                         (RID_APP_START+272)
+#define STR_SD_PAGE_COUNT                   (RID_APP_START+273)
 #define STR_ALL_FILES                       (RID_APP_START+274)
 #define STR_UNDO_INSERT_TEXTFRAME           (RID_APP_START+275)
 #define STR_ACTION_NOTPOSSIBLE              (RID_APP_START+278)

@@ -1314,7 +1314,7 @@ void OutlineViewShell::GetStatusBarState(SfxItemSet& rSet)
     // page view and layout
 
     sal_uInt16  nPageCount = GetDoc()->GetSdPageCount( PK_STANDARD );
-    OUString  aPageStr, aLayoutStr;
+    OUString aLayoutStr,aPageStr;
 
     ::sd::Window*   pWin        = GetActiveWindow();
     OutlinerView*   pActiveView = pOlView->GetViewByWindow( pWin );
@@ -1355,12 +1355,9 @@ void OutlineViewShell::GetStatusBarState(SfxItemSet& rSet)
 
         SdrPage* pPage = GetDoc()->GetSdPage( (sal_uInt16) nPos, PK_STANDARD );
 
-        aPageStr = SD_RESSTR(STR_SD_PAGE);
-        aPageStr += " ";
-        aPageStr += OUString::number( (sal_Int32)(nPos + 1) );   // sal_uLong -> sal_Int32
-        aPageStr += " / ";
-        aPageStr += OUString::number( nPageCount );
-
+        aPageStr = SD_RESSTR( STR_SD_PAGE_COUNT );
+        aPageStr = aPageStr.replaceFirst("%1", OUString::number( nPos + 1) );
+        aPageStr = aPageStr.replaceFirst("%2", OUString::number( nPageCount) );
         aLayoutStr = pPage->GetLayoutName();
         sal_Int32 nIndex = aLayoutStr.indexOf(SD_LT_SEPARATOR);
         if (nIndex != -1)
