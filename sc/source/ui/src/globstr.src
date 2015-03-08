@@ -2081,6 +2081,11 @@ Resource RID_GLOBSTR
     {
         Text [ en-US ] = "Convert Formula To Value";
     };
+
+    String STR_TABLE_COUNT
+    {
+        Text [ en-US ] = "Sheet %1 of %2";
+    };
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -834,13 +834,12 @@ void SlotManager::GetStatusBarState (SfxItemSet& rSet)
     sal_Int32 nPageCount;
     sal_Int32 nActivePageCount;
     sal_uInt16 nSelectedPages = mrSlideSorter.GetController().GetPageSelector().GetSelectedPageCount();
-    OUStringBuffer aPageStr;
+    OUString aPageStr;
     OUString aLayoutStr;
 
     //Set number of slides
     if (nSelectedPages > 0)
     {
-        aPageStr = SD_RESSTR(STR_SLIDE_SINGULAR);
         model::PageEnumeration aSelectedPages (
             model::PageEnumerationProvider::CreateSelectedPagesEnumeration(
                 mrSlideSorter.GetModel()));
@@ -852,13 +851,13 @@ void SlotManager::GetStatusBarState (SfxItemSet& rSet)
             nPageCount = mrSlideSorter.GetModel().GetPageCount();
             nActivePageCount = static_cast<sal_Int32>(mrSlideSorter.GetModel().GetDocument()->GetActiveSdPageCount());
 
-            aPageStr.append(" ").append(static_cast<sal_Int32>(nFirstPage), 10).append(" / ").append(nPageCount, 10);
-            if (nPageCount != nActivePageCount)
-            {
-                aPageStr.append(" (").append(nActivePageCount, 10).append(")");
-            }
+            aPageStr = (nPageCount == nActivePageCount) ? SD_RESSTR(STR_SD_PAGE_COUNT) : SD_RESSTR(STR_SD_PAGE_COUNT_CUSTOM);
+
+            aPageStr = aPageStr.replaceFirst("%1", OUString::number(nFirstPage));
+            aPageStr = aPageStr.replaceFirst("%2", OUString::number(nPageCount));
+            aPageStr = aPageStr.replaceFirst("%3", OUString::number(nActivePageCount));
         }
-      rSet.Put( SfxStringItem( SID_STATUS_PAGE, aPageStr.makeStringAndClear() ) );
+        rSet.Put( SfxStringItem( SID_STATUS_PAGE, aPageStr ) );
     }
 
     //Set layout
