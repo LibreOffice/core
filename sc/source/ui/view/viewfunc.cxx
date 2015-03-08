@@ -31,6 +31,7 @@
 #include <editeng/scripttypeitem.hxx>
 #include <editeng/justifyitem.hxx>
 #include <sfx2/bindings.hxx>
+#include <sfx2/dispatch.hxx>
 #include <sfx2/infobar.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
@@ -2816,6 +2817,14 @@ void ScViewFunc::NotifyUnitErrorInFormula( const ScAddress& rAddress, ScDocument
 {
     SfxViewFrame* pViewFrame = GetViewData().GetViewShell()->GetFrame();
 
+    // We use the cell address as the infobar id to allow us to easily get back to the
+    // erronous cell - this saves us having to store the cell address elsewhere which
+    // would be much more complicated (e.g. by using a hidden UI element, or extending
+    // the infobar itself, etc.)
+    // It's possible that the user will request to edit a given cell from the infobar
+    // after having carried out further edits on the document (whereby any tab changes/additions/removals
+    // could change the number of the tab, with a name change being much more rare), hence having
+    // all information (including tab name) could be useful.
     OUString sTitle = SC_RESSTR( STR_UNITS_ERRORINCELL );
     sTitle = sTitle.replaceAll( "$1", rAddress.GetColRowString() );
     OUString sCellAddress = rAddress.Format( SCA_BITS, pDoc );
@@ -2829,12 +2838,28 @@ void ScViewFunc::NotifyUnitErrorInFormula( const ScAddress& rAddress, ScDocument
 
 IMPL_LINK( ScViewFunc, EditUnitErrorFormulaHandler, PushButton*, pButton )
 {
-    SfxInfoBarWindow* pInfoBar = dynamic_cast< SfxInfoBarWindow* >( pButton->GetParent() );
-    const OUString sCell = pInfoBar->getId();
-    ScAddress aAddress;
-    aAddress.Parse( sCell );
 
-    (void) aAddress; // TODO: implement
+    OUString sAddress;
+    {
+        // keep pInfoBar within this scope only as we'll be deleting it just below (using RemoveInfoBar)
+        SfxInfoBarWindow* pInfoBar = dynamic_cast< SfxInfoBarWindow* >( pButton->GetParent() );
+        sAddress = pInfoBar->getId();
+    }
+    SfxViewFrame* pViewFrame = GetViewData().GetViewShell()->GetFrame();
+    pViewFrame->RemoveInfoBar( sAddress );
+
+    SfxStringItem aPosition( SID_CURRENTCELL, sAddress );
+    SfxBoolItem aUnmark( FN_PARAM_1, true ); // Removes existing selection if present.
+    GetViewData().GetDispatcher().Execute( SID_CURRENTCELL,
+                                           SfxCallMode::SYNCHRON | SfxCallMode::RECORD,
+                                           &aPosition, &aUnmark, 0L );
+
+    // The above only selects the cell, hence we now start editing it to allow the user to directly
+    // type their modifications (this also has the benefit of highlighting the input cells in the
+    // UI making it a bit easier to see where the data is coming from).
+    ScModule* pScMod = SC_MOD();
+    pScMod->SetInputMode( SC_INPUT_TABLE );
+
     return 0;
 }
 
