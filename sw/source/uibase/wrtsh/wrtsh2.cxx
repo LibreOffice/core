@@ -66,6 +66,8 @@
 #include <xmloff/odffields.hxx>
 #include <boost/scoped_ptr.hpp>
 
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+
 void SwWrtShell::Insert(SwField &rFld)
 {
     ResetCursorStack();
@@ -469,8 +471,16 @@ void LoadURL( SwViewShell& rVSh, const OUString& rURL, sal_uInt16 nFilter,
     if ( !rVSh.ISA(SwCrsrShell) )
         return;
 
+    // We are doing tiledRendering, let the client handles the URL loading.
+    if (rVSh.isTiledRendering()) {
+        rVSh.libreOfficeKitCallback(LOK_CALLBACK_HYPERLINK_CLICKED,
+                OUStringToOString(rURL, RTL_TEXTENCODING_UTF8).getStr());
+        return;
+    }
+
     //A CrsrShell is always a WrtShell
     SwWrtShell &rSh = static_cast<SwWrtShell&>(rVSh);
+
 
     SwDocShell* pDShell = rSh.GetView().GetDocShell();
     OSL_ENSURE( pDShell, "No DocShell?!");
