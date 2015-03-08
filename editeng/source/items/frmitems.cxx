@@ -3939,7 +3939,7 @@ const GraphicObject* SvxBrushItem::GetGraphicObject(OUString const & referer) co
 
             if( nRes != GRFILTER_OK )
             {
-                const_cast < SvxBrushItem*> (this)->bLoadAgain = false;
+                bLoadAgain = false;
             }
             else
             {
@@ -3950,7 +3950,7 @@ const GraphicObject* SvxBrushItem::GetGraphicObject(OUString const & referer) co
         }
         else
         {
-            const_cast < SvxBrushItem*> (this)->bLoadAgain = false;
+            bLoadAgain = false;
         }
     }
 
