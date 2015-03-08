@@ -74,7 +74,7 @@
 
 using namespace nsSwDocInfoSubType;
 
-extern bool bNoInterrupt;       // in mainwn.cxx
+extern bool g_bNoInterrupt;       // in swmodule.cxx
 
 static OUString lcl_BuildTitleWithRedline( const SwRangeRedline *pRedline )
 {
@@ -513,7 +513,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     }
 
                     SwViewShell::SetCareWin(pDlg->GetWindow());
-                    bNoInterrupt = true;
+                    g_bNoInterrupt = true;
 
                     if ( pDlg->Execute() == RET_OK )
                     {
@@ -526,7 +526,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
 
                     pDlg.reset();
                     SwViewShell::SetCareWin(NULL);
-                    bNoInterrupt = false;
+                    g_bNoInterrupt = false;
                     rSh.ClearMark();
                     GetView().AttrChangedNotify(GetShellPtr());
                 }

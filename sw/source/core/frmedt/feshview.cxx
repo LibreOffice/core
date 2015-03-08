@@ -115,13 +115,13 @@ static void lcl_GrabCursor( SwFEShell* pSh, SwFlyFrm* pOldSelFly)
     {
         // now call set macro if applicable
         pSh->GetFlyMacroLnk().Call( (void*)pFlyFmt );
-extern bool bNoInterrupt;       // in swapp.cxx
+extern bool g_bNoInterrupt;       // in swmodule.cxx
         // if a dialog was started inside a macro, then
         // MouseButtonUp arrives at macro and not to us. Therefore
         // flag is always set here and will never be switched to
         // respective Shell !!!!!!!
 
-        bNoInterrupt = false;
+        g_bNoInterrupt = false;
     }
     else if( !pFlyFmt || RES_DRAWFRMFMT == pFlyFmt->Which() )
     {
