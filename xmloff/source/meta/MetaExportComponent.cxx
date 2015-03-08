@@ -196,13 +196,6 @@ OUString SAL_CALL XMLMetaExportComponent_getImplementationName() throw()
     return OUString(  "XMLMetaExportComponent"  );
 }
 
-uno::Reference< uno::XInterface > SAL_CALL XMLMetaExportComponent_createInstance(
-        const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
-    throw( uno::Exception )
-{
-    return (cppu::OWeakObject*)new XMLMetaExportComponent( comphelper::getComponentContext(rSMgr), XMLMetaExportComponent_getImplementationName(), SvXMLExportFlags::META|SvXMLExportFlags::OASIS);
-}
-
 uno::Sequence< OUString > SAL_CALL XMLMetaExportOOO_getSupportedServiceNames()
     throw()
 {
@@ -217,11 +210,21 @@ OUString SAL_CALL XMLMetaExportOOO_getImplementationName() throw()
     return OUString(  "XMLMetaExportOOo"  );
 }
 
-uno::Reference< uno::XInterface > SAL_CALL XMLMetaExportOOO_createInstance(
-        const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
-    throw( uno::Exception )
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+XMLMetaExportComponent_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                          ::com::sun::star::uno::Sequence<css::uno::Any> const &)
 {
-    return (cppu::OWeakObject*)new XMLMetaExportComponent( comphelper::getComponentContext(rSMgr), XMLMetaExportOOO_getImplementationName(), SvXMLExportFlags::META);
+    return cppu::acquire(new XMLMetaExportComponent(context, XMLMetaExportComponent_getImplementationName(),
+                                                    SvXMLExportFlags::META |
+                                                    SvXMLExportFlags::OASIS));
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+XMLMetaExportOOO_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                    ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new XMLMetaExportComponent(context, XMLMetaExportOOO_getImplementationName(), SvXMLExportFlags::META));
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

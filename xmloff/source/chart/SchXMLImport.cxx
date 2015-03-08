@@ -678,12 +678,6 @@ OUString SAL_CALL SchXMLImport_getImplementationName() throw()
     return OUString(  "SchXMLImport"  );
 }
 
-Reference< uno::XInterface > SAL_CALL SchXMLImport_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
-{
-    // #110680#
-    return (cppu::OWeakObject*)new SchXMLImport( comphelper::getComponentContext(rSMgr), SchXMLImport_getImplementationName(), SvXMLImportFlags::ALL);
-}
-
 // multiple storage version: one for content / styles / meta
 
 Sequence< OUString > SAL_CALL SchXMLImport_Styles_getSupportedServiceNames() throw()
@@ -698,12 +692,6 @@ OUString SAL_CALL SchXMLImport_Styles_getImplementationName() throw()
     return OUString(  "SchXMLImport.Styles"  );
 }
 
-Reference< uno::XInterface > SAL_CALL SchXMLImport_Styles_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
-{
-    // #110680#
-    return (cppu::OWeakObject*)new SchXMLImport( comphelper::getComponentContext(rSMgr), SchXMLImport_Styles_getImplementationName(), SvXMLImportFlags::STYLES );
-}
-
 Sequence< OUString > SAL_CALL SchXMLImport_Content_getSupportedServiceNames() throw()
 {
     const OUString aServiceName(  "com.sun.star.comp.Chart.XMLOasisContentImporter"  );
@@ -714,12 +702,6 @@ Sequence< OUString > SAL_CALL SchXMLImport_Content_getSupportedServiceNames() th
 OUString SAL_CALL SchXMLImport_Content_getImplementationName() throw()
 {
     return OUString(  "SchXMLImport.Content"  );
-}
-
-Reference< uno::XInterface > SAL_CALL SchXMLImport_Content_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
-{
-    // #110680#
-    return (cppu::OWeakObject*)new SchXMLImport( comphelper::getComponentContext(rSMgr), SchXMLImport_Content_getImplementationName(), SvXMLImportFlags::CONTENT | SvXMLImportFlags::AUTOSTYLES | SvXMLImportFlags::FONTDECLS );
 }
 
 Sequence< OUString > SAL_CALL SchXMLImport_Meta_getSupportedServiceNames() throw()
@@ -734,10 +716,37 @@ OUString SAL_CALL SchXMLImport_Meta_getImplementationName() throw()
     return OUString(  "SchXMLImport.Meta"  );
 }
 
-Reference< uno::XInterface > SAL_CALL SchXMLImport_Meta_createInstance(const Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+SchXMLImport_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                ::com::sun::star::uno::Sequence<css::uno::Any> const &)
 {
-    // #110680#
-    return (cppu::OWeakObject*)new SchXMLImport( comphelper::getComponentContext(rSMgr), SchXMLImport_Meta_getImplementationName(), SvXMLImportFlags::META );
+    return cppu::acquire(new SchXMLImport( context, SchXMLImport_getImplementationName(),
+                                           SvXMLImportFlags::ALL));
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+SchXMLImport_Content_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new SchXMLImport( context, SchXMLImport_Content_getImplementationName(),
+                                                SvXMLImportFlags::CONTENT    |
+                                                SvXMLImportFlags::AUTOSTYLES |
+                                                SvXMLImportFlags::FONTDECLS));
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+SchXMLImport_Meta_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new SchXMLImport( context, SchXMLImport_Meta_getImplementationName(),
+                                                SvXMLImportFlags::META));
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+SchXMLImport_Styles_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                       ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new SchXMLImport( context, SchXMLImport_Styles_getImplementationName(),
+                                                SvXMLImportFlags::STYLES));
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

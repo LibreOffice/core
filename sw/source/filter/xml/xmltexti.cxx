@@ -49,7 +49,6 @@
 #include "xmltbli.hxx"
 #include "xmltexti.hxx"
 #include "XMLRedlineImportHelper.hxx"
-#include <xmloff/XMLFilterServiceNames.h>
 #include <SwAppletImpl.hxx>
 #include <ndole.hxx>
 #include <docsh.hxx>

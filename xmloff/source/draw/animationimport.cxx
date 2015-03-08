@@ -1429,9 +1429,10 @@ void AnimationNodeContext::postProcessRootNode( SvXMLImport& /*rImport*/, const 
 
 } // namespace xmloff
 
-Reference< XInterface > SAL_CALL AnimationsImport_createInstance(const Reference< XMultiServiceFactory > & rSMgr) throw( Exception )
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+AnimationsImport_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                    ::com::sun::star::uno::Sequence<css::uno::Any> const &)
 {
-    return (cppu::OWeakObject*)new xmloff::AnimationsImport( comphelper::getComponentContext(rSMgr) );
+    return cppu::acquire(new xmloff::AnimationsImport(context));
 }
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

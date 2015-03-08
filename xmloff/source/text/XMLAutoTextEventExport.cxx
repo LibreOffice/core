@@ -222,13 +222,6 @@ OUString SAL_CALL XMLAutoTextEventExport_getImplementationName() throw()
     return OUString( "com.sun.star.comp.Writer.XMLOasisAutotextEventsExporter"  );
 }
 
-Reference< XInterface > SAL_CALL XMLAutoTextEventExport_createInstance(
-        const Reference< XMultiServiceFactory > & rSMgr)
-    throw( Exception )
-{
-    return (cppu::OWeakObject*)new XMLAutoTextEventExport( comphelper::getComponentContext(rSMgr), XMLAutoTextEventExport_getImplementationName(), SvXMLExportFlags::ALL|SvXMLExportFlags::OASIS);
-}
-
 // methods to support the component registration
 
 Sequence< OUString > SAL_CALL XMLAutoTextEventExportOOO_getSupportedServiceNames()
@@ -244,11 +237,22 @@ OUString SAL_CALL XMLAutoTextEventExportOOO_getImplementationName() throw()
     return OUString( "com.sun.star.comp.Writer.XMLAutotextEventsExporter"  );
 }
 
-Reference< XInterface > SAL_CALL XMLAutoTextEventExportOOO_createInstance(
-        const Reference< XMultiServiceFactory > & rSMgr)
-    throw( Exception )
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_Writer_XMLOasisAutotextEventsExporter_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
 {
-    return (cppu::OWeakObject*)new XMLAutoTextEventExport( comphelper::getComponentContext(rSMgr), XMLAutoTextEventExportOOO_getImplementationName(), SvXMLExportFlags::ALL);
+    return cppu::acquire(new XMLAutoTextEventExport(context, XMLAutoTextEventExport_getImplementationName(),
+                                                    SvXMLExportFlags::ALL |
+                                                   SvXMLExportFlags::OASIS));
 }
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+sun_star_comp_Writer_XMLAutotextEventsExporter_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new XMLAutoTextEventExport(context, XMLAutoTextEventExportOOO_getImplementationName(), SvXMLExportFlags::ALL));
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

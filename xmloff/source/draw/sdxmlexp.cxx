@@ -2839,4 +2839,262 @@ XMLFontAutoStylePool* SdXMLExport::CreateFontAutoStylePool()
     return pPool;
 }
 
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+XMLDrawContentExportOOO_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new SdXMLExport( context, XMLDrawContentExportOOO_getImplementationName(), true,
+                                                SvXMLExportFlags::CONTENT    |
+                                                SvXMLExportFlags::AUTOSTYLES |
+                                                SvXMLExportFlags::FONTDECLS));
+}
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+XMLDrawContentExportOasis_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new SdXMLExport( context, XMLDrawContentExportOasis_getImplementationName(), true,
+                                                SvXMLExportFlags::OASIS      |
+                                                SvXMLExportFlags::AUTOSTYLES |
+                                                SvXMLExportFlags::CONTENT    |
+                                                SvXMLExportFlags::SCRIPTS    |
+                                                SvXMLExportFlags::FONTDECLS));
+}
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+XMLImpressExportOasis_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new SdXMLExport( context, XMLImpressExportOasis_getImplementationName(), false,
+                                               SvXMLExportFlags::OASIS        |
+                                               SvXMLExportFlags::META         |
+                                               SvXMLExportFlags::STYLES       |
+                                               SvXMLExportFlags::MASTERSTYLES |
+                                               SvXMLExportFlags::AUTOSTYLES   |
+                                               SvXMLExportFlags::CONTENT      |
+                                               SvXMLExportFlags::SCRIPTS      |
+                                               SvXMLExportFlags::SETTINGS     |
+                                               SvXMLExportFlags::FONTDECLS    |
+                                               SvXMLExportFlags::EMBEDDED));
+}
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+XMLImpressStylesExportOasis_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new SdXMLExport( context, XMLImpressStylesExportOasis_getImplementationName(), false,
+                                               SvXMLExportFlags::OASIS        |
+                                               SvXMLExportFlags::STYLES       |
+                                               SvXMLExportFlags::MASTERSTYLES |
+                                               SvXMLExportFlags::AUTOSTYLES   |
+                                               SvXMLExportFlags::FONTDECLS));
+}
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+XMLImpressContentExportOasis_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new SdXMLExport( context, XMLImpressContentExportOasis_getImplementationName(), false,
+                                               SvXMLExportFlags::OASIS        |
+                                               SvXMLExportFlags::AUTOSTYLES   |
+                                               SvXMLExportFlags::CONTENT      |
+                                               SvXMLExportFlags::SCRIPTS      |
+                                               SvXMLExportFlags::FONTDECLS));
+}
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+XMLImpressMetaExportOasis_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new SdXMLExport( context, XMLImpressMetaExportOasis_getImplementationName(), false,
+                                               SvXMLExportFlags::OASIS        |
+                                               SvXMLExportFlags::META));
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+XMLImpressSettingsExportOasis_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new SdXMLExport( context, XMLImpressSettingsExportOasis_getImplementationName(), false,
+                                               SvXMLExportFlags::OASIS        |
+                                               SvXMLExportFlags::SETTINGS));
+}
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+XMLImpressExportOOO_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                       ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new SdXMLExport( context, XMLImpressExportOOO_getImplementationName(), false,
+                                                SvXMLExportFlags::META         |
+                                                SvXMLExportFlags::STYLES       |
+                                                SvXMLExportFlags::MASTERSTYLES |
+                                                SvXMLExportFlags::AUTOSTYLES   |
+                                                SvXMLExportFlags::CONTENT      |
+                                                SvXMLExportFlags::SCRIPTS      |
+                                                SvXMLExportFlags::SETTINGS     |
+                                                SvXMLExportFlags::FONTDECLS    |
+                                                SvXMLExportFlags::EMBEDDED));
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+XMLImpressStylesExportOOO_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new SdXMLExport( context, XMLImpressStylesExportOOO_getImplementationName(), false,
+                                               SvXMLExportFlags::STYLES        |
+                                               SvXMLExportFlags::MASTERSTYLES  |
+                                               SvXMLExportFlags::AUTOSTYLES    |
+                                               SvXMLExportFlags::FONTDECLS));
+}
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+XMLImpressContentExportOOO_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new SdXMLExport( context, XMLImpressContentExportOOO_getImplementationName(), false,
+                                               SvXMLExportFlags::AUTOSTYLES    |
+                                               SvXMLExportFlags::CONTENT       |
+                                               SvXMLExportFlags::SCRIPTS       |
+                                               SvXMLExportFlags::FONTDECLS));
+}
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+XMLImpressMetaExportOOO_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new SdXMLExport( context, XMLImpressMetaExportOOO_getImplementationName(), false,
+                                               SvXMLExportFlags::META));
+}
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+XMLImpressSettingsExportOOO_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new SdXMLExport( context, XMLImpressSettingsExportOOO_getImplementationName(), false,
+                                               SvXMLExportFlags::META));
+}
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+XMLDrawExportOasis_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new SdXMLExport( context, XMLDrawExportOasis_getImplementationName(), false,
+                                               SvXMLExportFlags::OASIS        |
+                                               SvXMLExportFlags::META         |
+                                               SvXMLExportFlags::STYLES       |
+                                               SvXMLExportFlags::MASTERSTYLES |
+                                               SvXMLExportFlags::AUTOSTYLES   |
+                                               SvXMLExportFlags::CONTENT      |
+                                               SvXMLExportFlags::SCRIPTS      |
+                                               SvXMLExportFlags::SETTINGS     |
+                                               SvXMLExportFlags::FONTDECLS    |
+                                               SvXMLExportFlags::EMBEDDED));
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+XMLDrawStylesExportOasis_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new SdXMLExport( context, XMLDrawStylesExportOasis_getImplementationName(), true,
+                                               SvXMLExportFlags::OASIS         |
+                                               SvXMLExportFlags::STYLES        |
+                                               SvXMLExportFlags::MASTERSTYLES  |
+                                               SvXMLExportFlags::AUTOSTYLES    |
+                                               SvXMLExportFlags::FONTDECLS));
+}
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+XMLDrawMetaExportOasis_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new SdXMLExport( context, XMLDrawMetaExportOasis_getImplementationName(), true,
+                                               SvXMLExportFlags::OASIS         |
+                                               SvXMLExportFlags::META));
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+XMLDrawExportOOO_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                    ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new SdXMLExport( context, XMLDrawExportOOO_getImplementationName(), true,
+                                                SvXMLExportFlags::META         |
+                                                SvXMLExportFlags::STYLES       |
+                                                SvXMLExportFlags::MASTERSTYLES |
+                                                SvXMLExportFlags::AUTOSTYLES   |
+                                                SvXMLExportFlags::CONTENT      |
+                                                SvXMLExportFlags::SCRIPTS      |
+                                                SvXMLExportFlags::SETTINGS     |
+                                                SvXMLExportFlags::FONTDECLS    |
+                                                SvXMLExportFlags::EMBEDDED ));
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+XMLDrawStylesExportOOO_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                          ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new SdXMLExport( context, XMLDrawStylesExportOOO_getImplementationName(), true,
+                                               SvXMLExportFlags::STYLES        |
+                                               SvXMLExportFlags::MASTERSTYLES  |
+                                               SvXMLExportFlags::AUTOSTYLES    |
+                                               SvXMLExportFlags::FONTDECLS));
+}
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+XMLDrawMetaExportOOO_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new SdXMLExport( context, XMLDrawMetaExportOOO_getImplementationName(), true,
+                                               SvXMLExportFlags::META));
+}
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+XMLDrawingLayerExport_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new SdXMLExport( context, XMLDrawingLayerExport_getImplementationName(), true,
+                                                SvXMLExportFlags::OASIS       |
+                                                SvXMLExportFlags::STYLES      |
+                                                SvXMLExportFlags::AUTOSTYLES  |
+                                                SvXMLExportFlags::CONTENT     |
+                                                SvXMLExportFlags::FONTDECLS   |
+                                                SvXMLExportFlags::EMBEDDED ));
+}
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+XMLImpressClipboardExport_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new SdXMLExport( context, XMLImpressClipboardExport_getImplementationName(), false,
+                                                SvXMLExportFlags::OASIS       |
+                                                SvXMLExportFlags::STYLES      |
+                                                SvXMLExportFlags::AUTOSTYLES  |
+                                                SvXMLExportFlags::CONTENT     |
+                                                SvXMLExportFlags::FONTDECLS   |
+                                                SvXMLExportFlags::EMBEDDED));
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+XMLDrawSettingsExportOasis_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                              ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new SdXMLExport( context, XMLDrawSettingsExportOasis_getImplementationName(), true,
+                                                SvXMLExportFlags::OASIS      |
+                                                SvXMLExportFlags::SETTINGS));
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -251,36 +251,128 @@ SvXMLImportContext *SdXMLFlatDocContext_Impl::CreateChildContext(
     }
 }
 
-#define SERVICE(classname,servicename,implementationname,draw,flags)\
-uno::Sequence< OUString > SAL_CALL classname##_getSupportedServiceNames() throw()\
-{\
-    const OUString aServiceName(  servicename  );\
-    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );\
-    return aSeq;\
-}\
-OUString SAL_CALL classname##_getImplementationName() throw()\
-{\
-    return OUString(  implementationname  );\
-}\
-uno::Reference< uno::XInterface > SAL_CALL classname##_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )\
-{\
-    return (cppu::OWeakObject*)new SdXMLImport( comphelper::getComponentContext(rSMgr), implementationname, draw, flags ); \
+uno::Sequence< OUString > SAL_CALL XMLImpressImportOassis_getSupportedServiceNames() throw()
+{
+    const OUString aServiceName(  "com.sun.star.comp.Impress.XMLOasisImporter");
+    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
 }
 
-SERVICE( XMLImpressImportOasis, "com.sun.star.comp.Impress.XMLOasisImporter", "XMLImpressImportOasis", false, SvXMLImportFlags::ALL )
-SERVICE( XMLDrawImportOasis, "com.sun.star.comp.Draw.XMLOasisImporter", "XMLDrawImportOasis", true, SvXMLImportFlags::ALL )
+OUString SAL_CALL XMLImpressImportOasis_getImplementationName() throw()
+{
+    return OUString( "XMLImpressImportOasis" );
+}
 
-SERVICE( XMLImpressStylesImportOasis, "com.sun.star.comp.Impress.XMLOasisStylesImporter", "XMLImpressStylesImportOasis", false, SvXMLImportFlags::STYLES|SvXMLImportFlags::AUTOSTYLES|SvXMLImportFlags::MASTERSTYLES )
-SERVICE( XMLDrawStylesImportOasis, "com.sun.star.comp.Draw.XMLOasisStylesImporter", "XMLImpressStylesImportOasis", true, SvXMLImportFlags::STYLES|SvXMLImportFlags::AUTOSTYLES|SvXMLImportFlags::MASTERSTYLES )
 
-SERVICE( XMLImpressContentImportOasis, "com.sun.star.comp.Impress.XMLOasisContentImporter", "XMLImpressContentImportOasis", false, SvXMLImportFlags::AUTOSTYLES|SvXMLImportFlags::CONTENT|SvXMLImportFlags::SCRIPTS|SvXMLImportFlags::FONTDECLS )
-SERVICE( XMLDrawContentImportOasis, "com.sun.star.comp.Draw.XMLOasisContentImporter", "XMLImpressContentImportOasis", true, SvXMLImportFlags::AUTOSTYLES|SvXMLImportFlags::CONTENT|SvXMLImportFlags::SCRIPTS|SvXMLImportFlags::FONTDECLS )
+uno::Sequence< OUString > SAL_CALL XMLDrawImportOasis_getSupportedServiceNames() throw()
+{
+    const OUString aServiceName("com.sun.star.comp.Draw.XMLOasisImporter");
+    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
 
-SERVICE( XMLImpressMetaImportOasis, "com.sun.star.comp.Impress.XMLOasisMetaImporter", "XMLImpressMetaImportOasis", false, SvXMLImportFlags::META )
-SERVICE( XMLDrawMetaImportOasis, "com.sun.star.comp.Draw.XMLOasisMetaImporter", "XMLImpressMetaImportOasis", true, SvXMLImportFlags::META )
+OUString SAL_CALL XMLDrawImportOasis_getImplementationName() throw()
+{
+    return OUString( "XMLDrawImportOasis" );
+}
 
-SERVICE( XMLImpressSettingsImportOasis, "com.sun.star.comp.Impress.XMLOasisSettingsImporter", "XMLImpressSettingsImportOasis", false, SvXMLImportFlags::SETTINGS )
-SERVICE( XMLDrawSettingsImportOasis, "com.sun.star.comp.Draw.XMLOasisSettingsImporter", "XMLImpressSettingsImportOasis", true, SvXMLImportFlags::SETTINGS )
+
+uno::Sequence< OUString > SAL_CALL XMLImpressStylesImportOasis_getSupportedServiceNames() throw()
+{
+    const OUString aServiceName("com.sun.star.comp.Impress.XMLOasisStylesImporter");
+    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+OUString SAL_CALL XMLImpressStylesImportOasis_getImplementationName() throw()
+{
+    return OUString( "XMLImpressStylesImportOasis" );
+}
+
+
+uno::Sequence< OUString > SAL_CALL XMLDrawStylesImportOasis_getSupportedServiceNames() throw()
+{
+    const OUString aServiceName("com.sun.star.comp.Draw.XMLOasisStylesImporter");
+    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+OUString SAL_CALL XMLDrawStylesImportOasis_getImplementationName() throw()
+{
+    return OUString( "XMLImpressStylesImportOasis" );
+}
+
+
+uno::Sequence< OUString > SAL_CALL XMLImpressContentImportOasis_getSupportedServiceNames() throw()
+{
+    const OUString aServiceName("com.sun.star.comp.Impress.XMLOasisContentImporter");
+    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+OUString SAL_CALL XMLImpressContentImportOasis_getImplementationName() throw()
+{
+    return OUString( "XMLImpressContentImportOasis" );
+}
+
+
+uno::Sequence< OUString > SAL_CALL XMLDrawContentImportOasis_getSupportedServiceNames() throw()
+{
+    const OUString aServiceName("com.sun.star.comp.Draw.XMLOasisContentImporter");
+    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+OUString SAL_CALL XMLDrawContentImportOasis_getImplementationName() throw()
+{
+    return OUString( "XMLImpressContentImportOasis" );
+}
+
+uno::Sequence< OUString > SAL_CALL XMLImpressMetaImportOasis_getSupportedServiceNames() throw()
+{
+    const OUString aServiceName("com.sun.star.comp.Impress.XMLOasisMetaImporter");
+    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+OUString SAL_CALL XMLImpressMetaImportOasis_getImplementationName() throw()
+{
+    return OUString( "XMLImpressMetaImportOasis" );
+}
+
+
+uno::Sequence< OUString > SAL_CALL XMLDrawMetaImportOasis_getSupportedServiceNames() throw()
+{
+    const OUString aServiceName("com.sun.star.comp.Draw.XMLOasisMetaImporter");
+    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+OUString SAL_CALL XMLDrawMetaImportOasis_getImplementationName() throw()
+{
+    return OUString( "XMLImpressMetaImportOasis" );
+}
+
+
+uno::Sequence< OUString > SAL_CALL XMLImpressSettingsImportOasis_getSupportedServiceNames() throw()
+{
+    const OUString aServiceName("com.sun.star.comp.Impress.XMLOasisSettingsImporter");
+    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+OUString SAL_CALL XMLImpressSettingsImportOasis_getImplementationName() throw()
+{
+    return OUString( "XMLImpressSettingsImportOasis" );
+}
+
+
+uno::Sequence< OUString > SAL_CALL XMLDrawSettingsImportOasis_getSupportedServiceNames() throw()
+{
+    const OUString aServiceName("com.sun.star.comp.Draw.XMLOasisSettingsImporter");
+    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
 
 // #110680#
 SdXMLImport::SdXMLImport(
@@ -958,6 +1050,95 @@ void SdXMLImport::NotifyEmbeddedFontRead()
         if( xProps.is() )
             xProps->setPropertyValue("EmbedFonts", uno::makeAny( true ) );
     }
+}
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+XMLImpressImportOasis_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                         ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new SdXMLImport(context, "XMLImpressImportOasis", false, SvXMLImportFlags::ALL));
+}
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+XMLDrawImportOasis_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                      ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new SdXMLImport(context, "XMLDrawImportOasis", true, SvXMLImportFlags::ALL));
+}
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+XMLImpressStylesImportOasis_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                      ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new SdXMLImport(context, "XMLImpressStylesImportOasis", false,
+                                            SvXMLImportFlags::STYLES     |
+                                            SvXMLImportFlags::AUTOSTYLES |
+                                            SvXMLImportFlags::MASTERSTYLES));
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+XMLDrawStylesImportOasis_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                      ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new SdXMLImport(context, "XMLImpressStylesImportOasis", true,
+                                            SvXMLImportFlags::STYLES     |
+                                            SvXMLImportFlags::AUTOSTYLES |
+                                            SvXMLImportFlags::MASTERSTYLES));
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+XMLImpressContentImportOasis_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                      ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new SdXMLImport(context, "XMLImpressContentImportOasis", false,
+                                            SvXMLImportFlags::AUTOSTYLES |
+                                            SvXMLImportFlags::CONTENT    |
+                                            SvXMLImportFlags::SCRIPTS    |
+                                            SvXMLImportFlags::FONTDECLS));
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+XMLDrawContentImportOasis_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                      ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new SdXMLImport(context, "XMLImpressContentImportOasis", true,
+                                            SvXMLImportFlags::AUTOSTYLES |
+                                            SvXMLImportFlags::CONTENT    |
+                                            SvXMLImportFlags::SCRIPTS    |
+                                            SvXMLImportFlags::FONTDECLS));
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+XMLImpressMetaImportOasis_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                      ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new SdXMLImport(context, "XMLImpressMetaImportOasis", false, SvXMLImportFlags::META));
+}
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+XMLDrawMetaImportOasis_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                      ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new SdXMLImport(context, "XMLImpressMetaImportOasis", true, SvXMLImportFlags::META));
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+XMLImpressSettingsImportOasis_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                      ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new SdXMLImport(context, "XMLImpressSettingsImportOasis", false, SvXMLImportFlags::SETTINGS));
+}
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+XMLDrawSettingsImportOasis_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                      ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new SdXMLImport(context, "XMLImpressSettingsImportOasis", true, SvXMLImportFlags::SETTINGS));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

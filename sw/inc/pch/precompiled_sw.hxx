@@ -1134,7 +1134,6 @@
 #include <xmloff/DocumentSettingsContext.hxx>
 #include <xmloff/ProgressBarHelper.hxx>
 #include <xmloff/XMLBase64ImportContext.hxx>
-#include <xmloff/XMLFilterServiceNames.h>
 #include <xmloff/XMLFontAutoStylePool.hxx>
 #include <xmloff/XMLFontStylesContext.hxx>
 #include <xmloff/XMLGraphicsDefaultStyle.hxx>

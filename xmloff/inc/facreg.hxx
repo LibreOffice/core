@@ -202,9 +202,6 @@ css::uno::Reference<css::uno::XInterface> SAL_CALL XMLDrawSettingsExportOOO_crea
 // impress animation import
 OUString SAL_CALL AnimationsImport_getImplementationName() throw();
 css::uno::Sequence<OUString> SAL_CALL AnimationsImport_getSupportedServiceNames() throw();
-css::uno::Reference<css::uno::XInterface> SAL_CALL AnimationsImport_createInstance(
-    css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr)
-    throw (css::uno::Exception);
 
 // drawing layer export
 OUString SAL_CALL XMLDrawingLayerExport_getImplementationName() throw();
@@ -245,33 +242,22 @@ css::uno::Reference<css::uno::XInterface> SAL_CALL SchXMLImport_Content_createIn
 // chart oasis export
 OUString SAL_CALL SchXMLExport_Oasis_getImplementationName() throw();
 css::uno::Sequence<OUString> SAL_CALL SchXMLExport_Oasis_getSupportedServiceNames() throw();
-css::uno::Reference<css::uno::XInterface> SAL_CALL SchXMLExport_Oasis_createInstance(
-    css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr)
-    throw (css::uno::Exception);
+
 OUString SAL_CALL SchXMLExport_Oasis_Meta_getImplementationName() throw();
 css::uno::Sequence<OUString> SAL_CALL SchXMLExport_Oasis_Meta_getSupportedServiceNames() throw();
-css::uno::Reference<css::uno::XInterface> SAL_CALL SchXMLExport_Oasis_Meta_createInstance(
-    css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr)
-    throw (css::uno::Exception);
+
 OUString SAL_CALL SchXMLExport_Oasis_Styles_getImplementationName() throw();
 css::uno::Sequence<OUString> SAL_CALL SchXMLExport_Oasis_Styles_getSupportedServiceNames() throw();
-css::uno::Reference<css::uno::XInterface> SAL_CALL SchXMLExport_Oasis_Styles_createInstance(
-    css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr)
-    throw (css::uno::Exception);
+
 OUString SAL_CALL SchXMLExport_Oasis_Content_getImplementationName() throw();
 css::uno::Sequence<OUString> SAL_CALL SchXMLExport_Oasis_Content_getSupportedServiceNames() throw();
-css::uno::Reference<css::uno::XInterface> SAL_CALL SchXMLExport_Oasis_Content_createInstance(
-    css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr)
-    throw (css::uno::Exception);
 
 // chart OOo import
 
 // chart OOo export
 OUString SAL_CALL SchXMLExport_getImplementationName() throw();
 css::uno::Sequence<OUString> SAL_CALL SchXMLExport_getSupportedServiceNames() throw();
-css::uno::Reference<css::uno::XInterface> SAL_CALL SchXMLExport_createInstance(
-    css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr)
-    throw (css::uno::Exception);
+
 OUString SAL_CALL SchXMLExport_Styles_getImplementationName() throw();
 css::uno::Sequence<OUString> SAL_CALL SchXMLExport_Styles_getSupportedServiceNames() throw();
 css::uno::Reference<css::uno::XInterface> SAL_CALL SchXMLExport_Styles_createInstance(
@@ -279,72 +265,42 @@ css::uno::Reference<css::uno::XInterface> SAL_CALL SchXMLExport_Styles_createIns
     throw (css::uno::Exception);
 OUString SAL_CALL SchXMLExport_Content_getImplementationName() throw();
 css::uno::Sequence<OUString> SAL_CALL SchXMLExport_Content_getSupportedServiceNames() throw();
-css::uno::Reference<css::uno::XInterface> SAL_CALL SchXMLExport_Content_createInstance(
-    css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr)
-    throw (css::uno::Exception);
 
 // meta export
 OUString SAL_CALL XMLMetaExportComponent_getImplementationName() throw();
 css::uno::Sequence<OUString> SAL_CALL XMLMetaExportComponent_getSupportedServiceNames() throw();
-css::uno::Reference<css::uno::XInterface> SAL_CALL XMLMetaExportComponent_createInstance(
-    css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr)
-    throw (css::uno::Exception);
 
 // meta import
 OUString SAL_CALL XMLMetaImportComponent_getImplementationName() throw();
 css::uno::Sequence<OUString> SAL_CALL XMLMetaImportComponent_getSupportedServiceNames() throw();
-css::uno::Reference<css::uno::XInterface> SAL_CALL XMLMetaImportComponent_createInstance(
-    css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr)
-    throw (css::uno::Exception);
 
 // meta export OOo
 OUString SAL_CALL XMLMetaExportOOO_getImplementationName() throw();
 css::uno::Sequence<OUString> SAL_CALL XMLMetaExportOOO_getSupportedServiceNames() throw();
-css::uno::Reference<css::uno::XInterface> SAL_CALL XMLMetaExportOOO_createInstance(
-    css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr)
-    throw (css::uno::Exception);
 
 // writer autotext event export
 OUString SAL_CALL XMLAutoTextEventExport_getImplementationName() throw();
 css::uno::Sequence<OUString> SAL_CALL XMLAutoTextEventExport_getSupportedServiceNames() throw();
-css::uno::Reference<css::uno::XInterface> SAL_CALL XMLAutoTextEventExport_createInstance(
-    css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr)
-    throw (css::uno::Exception);
 
 // writer autotext event import
 OUString SAL_CALL XMLAutoTextEventImport_getImplementationName() throw();
 css::uno::Sequence<OUString> SAL_CALL XMLAutoTextEventImport_getSupportedServiceNames() throw();
-css::uno::Reference<css::uno::XInterface> SAL_CALL XMLAutoTextEventImport_createInstance(
-    css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr)
-    throw (css::uno::Exception);
 
 // writer autotext event export OOo
 OUString SAL_CALL XMLAutoTextEventExportOOO_getImplementationName() throw();
 css::uno::Sequence<OUString> SAL_CALL XMLAutoTextEventExportOOO_getSupportedServiceNames() throw();
-css::uno::Reference<css::uno::XInterface> SAL_CALL XMLAutoTextEventExportOOO_createInstance(
-    css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr)
-    throw (css::uno::Exception);
 
 // writer autotext event import OOo
 OUString SAL_CALL XMLAutoTextEventImportOOO_getImplementationName() throw();
 css::uno::Sequence<OUString> SAL_CALL XMLAutoTextEventImportOOO_getSupportedServiceNames() throw();
-css::uno::Reference<css::uno::XInterface> SAL_CALL XMLAutoTextEventImportOOO_createInstance(
-    css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr)
-    throw (css::uno::Exception);
 
 // Oasis2OOo transformer
 OUString SAL_CALL Oasis2OOoTransformer_getImplementationName() throw();
 css::uno::Sequence<OUString> SAL_CALL Oasis2OOoTransformer_getSupportedServiceNames() throw();
-css::uno::Reference<css::uno::XInterface> SAL_CALL Oasis2OOoTransformer_createInstance(
-    css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr)
-    throw (css::uno::Exception);
 
 // OOo2Oasis transformer
 OUString SAL_CALL OOo2OasisTransformer_getImplementationName() throw();
 css::uno::Sequence<OUString> SAL_CALL OOo2OasisTransformer_getSupportedServiceNames() throw();
-css::uno::Reference<css::uno::XInterface> SAL_CALL OOo2OasisTransformer_createInstance(
-    css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr)
-    throw (css::uno::Exception);
 
 #endif
 
