@@ -16,6 +16,24 @@
       "revId": "f2908b58cd5833b0f589d90ed58851ffd001f706",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a2ca52d_7574c8ce",
+        "filename": "unotools/source/misc/mediadescriptor.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 454,
+      "author": {
+        "id": 1000392
+      },
+      "writtenOn": "2015-03-08T06:21:42Z",
+      "side": 1,
+      "message": "Thank you for your review and sorry my miss operation.\nI think that DECODE_WITH_CHARSET is better than DECODE_TO_IURI.\nIf the file name is \"foo%2Fbar\", the return value of getUnpackedValueOrDefault() will probably be \"foo%252Fbar\". \nBecause the return value is url-encoded(percent-encoded).\nIf we use DECODE_TO_IURI, decoded result will be \"foo%252Fbar\". \nIf we use DECODE_WITH_CHARSET, decoded result will be \"foo%2Fbar\".",
+      "parentUuid": "5a2ca52d_35e4103a",
+      "revId": "f2908b58cd5833b0f589d90ed58851ffd001f706",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
