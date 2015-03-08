@@ -731,7 +731,7 @@ void SmEditWindow::LoseFocus()
 bool SmEditWindow::IsAllSelected() const
 {
     bool bRes = false;
-    EditEngine *pEditEngine = ((SmEditWindow *) this)->GetEditEngine();
+    EditEngine *pEditEngine = (const_cast<SmEditWindow *>(this))->GetEditEngine();
     OSL_ENSURE( pEditView, "NULL pointer" );
     OSL_ENSURE( pEditEngine, "NULL pointer" );
     if (pEditEngine  &&  pEditView)
@@ -945,7 +945,7 @@ void SmEditWindow::SetSelection(const ESelection &rSel)
 
 bool SmEditWindow::IsEmpty() const
 {
-    EditEngine *pEditEngine = ((SmEditWindow *) this)->GetEditEngine();
+    EditEngine *pEditEngine = (const_cast<SmEditWindow *>(this))->GetEditEngine();
     bool bEmpty = ( pEditEngine && pEditEngine->GetTextLen() == 0 );
     return bEmpty;
 }
