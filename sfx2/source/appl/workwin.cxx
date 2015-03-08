@@ -832,10 +832,10 @@ SvBorder SfxWorkWindow::Arrange_Impl()
             continue;
 
         // First, we assume that there is room for the window.
-        pCli->nVisible |= CHILD_FITS_IN;
+        pCli->nVisible |= SfxChildVisibility::FITS_IN;
 
         // Skip invisiable windows
-        if (pCli->nVisible != CHILD_VISIBLE)
+        if (pCli->nVisible != SfxChildVisibility::VISIBLE)
             continue;
 
         if ( pCli->bResize )
@@ -918,7 +918,7 @@ SvBorder SfxWorkWindow::Arrange_Impl()
         pCli->aSize = aSize;
         if( bAllowHiding && !RequestTopToolSpacePixel_Impl( aBorder ) )
         {
-            pCli->nVisible ^= CHILD_FITS_IN;
+            pCli->nVisible ^= SfxChildVisibility::FITS_IN;
             aBorder = aTemp;
         }
     }
@@ -1065,7 +1065,7 @@ void SfxWorkWindow::ShowChildren_Impl()
                 bVisible = !bInvisible || ( nFlags & SfxChildWindowFlags::NEVERHIDE );
             }
 
-            if ( CHILD_VISIBLE == (pCli->nVisible & CHILD_VISIBLE) && bVisible )
+            if ( SfxChildVisibility::VISIBLE == (pCli->nVisible & SfxChildVisibility::VISIBLE) && bVisible )
             {
                 sal_uInt16 nFlags = pCli->bSetFocus ? 0 : SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE;
                 switch ( pCli->pWin->GetType() )
@@ -1455,7 +1455,7 @@ void SfxWorkWindow::UpdateChildWindows_Impl()
                 if ( !bAllChildrenVisible )
                 {
                     if ( pCW->pCli )
-                        pCW->pCli->nVisible &= ~CHILD_ACTIVE;
+                        pCW->pCli->nVisible &= ~SfxChildVisibility::ACTIVE;
                 }
             }
             else if ( pChildWin )
@@ -1471,7 +1471,7 @@ void SfxWorkWindow::UpdateChildWindows_Impl()
                         {
                             // The window is a direct Child
                             if ( bAllChildrenVisible && ( (IsDockingAllowed() && bInternalDockingAllowed) || pCW->pCli->eAlign == SFX_ALIGN_NOALIGNMENT ) )
-                                pCW->pCli->nVisible |= CHILD_NOT_HIDDEN;
+                                pCW->pCli->nVisible |= SfxChildVisibility::NOT_HIDDEN;
                         }
                         else
                         {
@@ -1493,8 +1493,8 @@ void SfxWorkWindow::UpdateChildWindows_Impl()
             {
                 if ( pCW->pCli )
                 {
-                    if ( pCW->pCli->nVisible & CHILD_NOT_HIDDEN )
-                        pCW->pCli->nVisible ^= CHILD_NOT_HIDDEN;
+                    if ( pCW->pCli->nVisible & SfxChildVisibility::NOT_HIDDEN )
+                        pCW->pCli->nVisible ^= SfxChildVisibility::NOT_HIDDEN;
                 }
                 else
                     static_cast<SfxDockingWindow*>(pChildWin->GetWindow())->Disappear_Impl();
@@ -1533,7 +1533,7 @@ void SfxWorkWindow::CreateChildWin_Impl( SfxChildWin_Impl *pCW, bool bSetFocus )
             if ( aChildren[TbxMatch(nPos)] )// &&
             {
                 // ChildWindow replaces ObjectBar
-                aChildren[TbxMatch(nPos)]->nVisible ^= CHILD_NOT_HIDDEN;
+                aChildren[TbxMatch(nPos)]->nVisible ^= SfxChildVisibility::NOT_HIDDEN;
             }
         }
 
@@ -1547,9 +1547,9 @@ void SfxWorkWindow::CreateChildWin_Impl( SfxChildWin_Impl *pCW, bool bSetFocus )
             // The window is not docked or docked outside of one split windows
             // and must therefore be registered explicitly as a Child
             pCW->pCli = RegisterChild_Impl(*(pChildWin->GetWindow()), pChildWin->GetAlignment(), pChildWin->CanGetFocus());
-            pCW->pCli->nVisible = CHILD_VISIBLE;
+            pCW->pCli->nVisible = SfxChildVisibility::VISIBLE;
             if ( pChildWin->GetAlignment() != SFX_ALIGN_NOALIGNMENT && bIsFullScreen )
-                pCW->pCli->nVisible ^= CHILD_ACTIVE;
+                pCW->pCli->nVisible ^= SfxChildVisibility::ACTIVE;
             pCW->pCli->bSetFocus = bSetFocus;
         }
         else
@@ -1667,13 +1667,13 @@ void SfxWorkWindow::HidePopups_Impl(bool bHide, bool bParent, sal_uInt16 nId )
             SfxChild_Impl *pChild = FindChild_Impl(*pWin);
             if (bHide)
             {
-                pChild->nVisible &= ~CHILD_ACTIVE;
+                pChild->nVisible &= ~SfxChildVisibility::ACTIVE;
                 pCW->Hide();
             }
             else
             {
-                pChild->nVisible |= CHILD_ACTIVE;
-                if ( CHILD_VISIBLE == (pChild->nVisible & CHILD_VISIBLE) )
+                pChild->nVisible |= SfxChildVisibility::ACTIVE;
+                if ( SfxChildVisibility::VISIBLE == (pChild->nVisible & SfxChildVisibility::VISIBLE) )
                     pCW->Show( SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
             }
         }
@@ -1724,7 +1724,7 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
             {
                 // DockingWindow was dragged out of a SplitWindow
                 pCW->pCli = RegisterChild_Impl(*pDockWin, pDockWin->GetAlignment(), pCW->pWin->CanGetFocus());
-                pCW->pCli->nVisible = CHILD_VISIBLE;
+                pCW->pCli->nVisible = SfxChildVisibility::VISIBLE;
             }
 
             pWin = pDockWin;
@@ -1789,7 +1789,7 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
                 sal_uInt16 i=aSortedList[m];
                 SfxChild_Impl* pCli = aChildren[i];
 
-                if ( pCli && pCli->nVisible == CHILD_VISIBLE && pCli->pWin )
+                if ( pCli && pCli->nVisible == SfxChildVisibility::VISIBLE && pCli->pWin )
                 {
                     switch ( pCli->eAlign )
                     {
@@ -2266,7 +2266,7 @@ void SfxWorkWindow::ShowChildWindow_Impl(sal_uInt16 nId, bool bVisible, bool bSe
                 if ( pCW->pCli )
                 {
                     pCW->pCli->bSetFocus = bSetFocus;
-                    pCW->pCli->nVisible = CHILD_VISIBLE;
+                    pCW->pCli->nVisible = SfxChildVisibility::VISIBLE;
                     pChildWin->Show( bSetFocus && pChildWin->WantsFocus() ? 0 : SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
                 }
                 else
@@ -2277,7 +2277,7 @@ void SfxWorkWindow::ShowChildWindow_Impl(sal_uInt16 nId, bool bVisible, bool bSe
             {
                 if ( pCW->pCli )
                 {
-                    pCW->pCli->nVisible = CHILD_VISIBLE ^ CHILD_NOT_HIDDEN;
+                    pCW->pCli->nVisible = SfxChildVisibility::VISIBLE ^ SfxChildVisibility::NOT_HIDDEN;
                     pCW->pWin->Hide();
                 }
                 else
@@ -2515,7 +2515,7 @@ void SfxWorkWindow::MakeChildrenVisible_Impl( bool bVis )
         {
             SfxChild_Impl* pCli = aChildren[aSortedList[n]];
             if ( (pCli->eAlign == SFX_ALIGN_NOALIGNMENT) || (IsDockingAllowed() && bInternalDockingAllowed) )
-                pCli->nVisible |= CHILD_ACTIVE;
+                pCli->nVisible |= SfxChildVisibility::ACTIVE;
         }
     }
     else
@@ -2525,7 +2525,7 @@ void SfxWorkWindow::MakeChildrenVisible_Impl( bool bVis )
         for ( sal_uInt16 n=0; n<aSortedList.size(); ++n )
         {
             SfxChild_Impl* pCli = aChildren[aSortedList[n]];
-            pCli->nVisible &= ~CHILD_ACTIVE;
+            pCli->nVisible &= ~SfxChildVisibility::ACTIVE;
         }
     }
 }

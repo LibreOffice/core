@@ -245,6 +245,23 @@ inline typename o3tl::typed_flags<E>::Self operator |=(
     return lhs;
 }
 
+template<typename E>
+inline typename o3tl::typed_flags<E>::Self operator ^=(E & lhs, E rhs) {
+    assert(static_cast<typename o3tl::underlying_type<E>::type>(lhs) >= 0);
+    assert(static_cast<typename o3tl::underlying_type<E>::type>(rhs) >= 0);
+    lhs = lhs ^ rhs;
+    return lhs;
+}
+
+template<typename E>
+inline typename o3tl::typed_flags<E>::Self operator ^=(
+    E & lhs, typename o3tl::typed_flags<E>::Wrap rhs)
+{
+    assert(static_cast<typename o3tl::underlying_type<E>::type>(lhs) >= 0);
+    lhs = lhs ^ rhs;
+    return lhs;
+}
+
 #endif /* INCLUDED_O3TL_TYPED_FLAGS_SET_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

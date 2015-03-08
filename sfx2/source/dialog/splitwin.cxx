@@ -731,7 +731,7 @@ void SfxSplitWindow::InsertWindow_Impl( SfxDock_Impl* pDock,
             SetPinned_Impl( false );
             pEmptyWin->Actualize();
             OSL_TRACE( "SfxSplitWindow::InsertWindow_Impl - registering empty Splitwindow" );
-            pWorkWin->RegisterChild_Impl( *GetSplitWindow(), eAlign, true )->nVisible = CHILD_VISIBLE;
+            pWorkWin->RegisterChild_Impl( *GetSplitWindow(), eAlign, true )->nVisible = SfxChildVisibility::VISIBLE;
             pWorkWin->ArrangeChildren_Impl();
             if ( bFadeIn )
                 FadeIn();
@@ -751,7 +751,7 @@ void SfxSplitWindow::InsertWindow_Impl( SfxDock_Impl* pDock,
                 OSL_TRACE( "SfxSplitWindow::InsertWindow_Impl - registering real Splitwindow" );
             }
 #endif
-            pWorkWin->RegisterChild_Impl( *GetSplitWindow(), eAlign, true )->nVisible = CHILD_VISIBLE;
+            pWorkWin->RegisterChild_Impl( *GetSplitWindow(), eAlign, true )->nVisible = SfxChildVisibility::VISIBLE;
             pWorkWin->ArrangeChildren_Impl();
             if ( bFadeIn )
                 FadeIn();
@@ -1105,7 +1105,7 @@ void SfxSplitWindow::SetPinned_Impl( bool bOn )
             Hide();
             pEmptyWin->Actualize();
             OSL_TRACE( "SfxSplitWindow::SetPinned_Impl - registering empty Splitwindow" );
-            pWorkWin->RegisterChild_Impl( *pEmptyWin, eAlign, true )->nVisible = CHILD_VISIBLE;
+            pWorkWin->RegisterChild_Impl( *pEmptyWin, eAlign, true )->nVisible = SfxChildVisibility::VISIBLE;
         }
 
         Point aPos( GetPosPixel() );
@@ -1130,7 +1130,7 @@ void SfxSplitWindow::SetPinned_Impl( bool bOn )
             pWorkWin->ReleaseChild_Impl( *pEmptyWin );
             pEmptyWin->Hide();
             OSL_TRACE( "SfxSplitWindow::SetPinned_Impl - registering real Splitwindow" );
-            pWorkWin->RegisterChild_Impl( *this, eAlign, true )->nVisible = CHILD_VISIBLE;
+            pWorkWin->RegisterChild_Impl( *this, eAlign, true )->nVisible = SfxChildVisibility::VISIBLE;
         }
     }
 
@@ -1164,7 +1164,7 @@ void SfxSplitWindow::SetFadeIn_Impl( bool bOn )
             pWorkWin->ReleaseChild_Impl( *pEmptyWin );
             pEmptyWin->Hide();
             OSL_TRACE( "SfxSplitWindow::SetFadeIn_Impl - registering real Splitwindow" );
-            pWorkWin->RegisterChild_Impl( *this, eAlign, true )->nVisible = CHILD_VISIBLE;
+            pWorkWin->RegisterChild_Impl( *this, eAlign, true )->nVisible = SfxChildVisibility::VISIBLE;
             pWorkWin->ArrangeChildren_Impl();
             pWorkWin->ShowChildren_Impl();
         }
@@ -1181,7 +1181,7 @@ void SfxSplitWindow::SetFadeIn_Impl( bool bOn )
             Hide();
             pEmptyWin->Actualize();
             OSL_TRACE( "SfxSplitWindow::SetFadeIn_Impl - registering empty Splitwindow" );
-            pWorkWin->RegisterChild_Impl( *pEmptyWin, eAlign, true )->nVisible = CHILD_VISIBLE;
+            pWorkWin->RegisterChild_Impl( *pEmptyWin, eAlign, true )->nVisible = SfxChildVisibility::VISIBLE;
             pWorkWin->ArrangeChildren_Impl();
             pWorkWin->ShowChildren_Impl();
             pWorkWin->ArrangeAutoHideWindows( this );

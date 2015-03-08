@@ -31,6 +31,7 @@
 
 #include <rtl/ustring.hxx>
 #include <osl/mutex.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 #include <sfx2/sfx.hrc>
 #include <sfx2/childwin.hxx>
@@ -49,7 +50,7 @@ struct SfxObjectBar_Impl
     sal_uInt16        nMode; // special visibility flags
     sal_uInt16        nPos;
     sal_uInt16        nIndex;
-    bool          bDestroy;
+    bool              bDestroy;
     SfxInterface*     pIFace;
 
     SfxObjectBar_Impl() :
@@ -67,7 +68,7 @@ struct SfxObjectBar_Impl
 
 struct SfxStatBar_Impl
 {
-    sal_uInt16                  nId;
+    sal_uInt16              nId;
     bool                    bOn;
     bool                    bTemp;
 
@@ -79,19 +80,26 @@ struct SfxStatBar_Impl
 };
 
 
+enum class SfxChildVisibility
+{
+    NOT_VISIBLE  = 0,
+    ACTIVE       = 1,   // not disabled through HidePopups
+    NOT_HIDDEN   = 2,   // not disabled through HideChildWindow
+    FITS_IN      = 4,    // not too large for output size of the parent
+    VISIBLE      = 7,   // NOT_HIDDEN | ACTIVE | FITS_IN)
+};
+namespace o3tl
+{
+    template<> struct typed_flags<SfxChildVisibility> : is_typed_flags<SfxChildVisibility, 0x07> {};
+}
 
-#define CHILD_NOT_VISIBLE   0
-#define CHILD_ACTIVE       1    // not disabled through HidePopups
-#define CHILD_NOT_HIDDEN   2    // not disabled through HideChildWindow
-#define CHILD_FITS_IN      4    // not too large for output size of the parent
-#define CHILD_VISIBLE       (CHILD_NOT_HIDDEN | CHILD_ACTIVE | CHILD_FITS_IN)
 
 struct SfxChild_Impl
 {
-    vcl::Window*                         pWin;
+    vcl::Window*                     pWin;
     Size                            aSize;
     SfxChildAlignment               eAlign;
-    sal_uInt16                          nVisible;
+    SfxChildVisibility              nVisible;
     bool                            bResize;
     bool                            bCanGetFocus;
     bool                            bSetFocus;
@@ -101,20 +109,20 @@ struct SfxChild_Impl
         pWin(&rChild), aSize(rSize), eAlign(eAlignment), bResize(false),
         bCanGetFocus( false ), bSetFocus( false )
     {
-        nVisible = bIsVisible ? CHILD_VISIBLE : CHILD_NOT_VISIBLE;
+        nVisible = bIsVisible ? SfxChildVisibility::VISIBLE : SfxChildVisibility::NOT_VISIBLE;
     }
 };
 
 struct SfxChildWin_Impl
 {
-    sal_uInt16                         nSaveId;       // the ChildWindow-Id
-    sal_uInt16                         nInterfaceId;  // the current context
-    sal_uInt16                         nId;           // current Id
+    sal_uInt16                      nSaveId;       // the ChildWindow-Id
+    sal_uInt16                      nInterfaceId;  // the current context
+    sal_uInt16                      nId;           // current Id
     SfxChildWindow*                 pWin;
     bool                            bCreate;
     SfxChildWinInfo                 aInfo;
-    SfxChild_Impl*                 pCli;          // != 0 at direct Children
-    sal_uInt16                          nVisibility;
+    SfxChild_Impl*                  pCli;          // != 0 at direct Children
+    sal_uInt16                      nVisibility;
     bool                            bEnable;
     bool                            bDisabled;
 
