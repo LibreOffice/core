@@ -277,7 +277,7 @@ SAL_DLLPUBLIC_EXPORT GtkWidget* lok_docview_new( LibreOfficeKit* pOffice )
     return GTK_WIDGET( pDocView );
 }
 
-// We know that VirtualDevises use a DPI of 96.
+// We know that VirtualDevices use a DPI of 96.
 static const int g_nDPI = 96;
 
 /// Converts from document coordinates to screen pixels.
