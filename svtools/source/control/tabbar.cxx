@@ -86,12 +86,6 @@ struct ImplTabBarItem
     }
 };
 
-
-
-
-// - ImplTabButton -
-
-
 class ImplTabButton : public PushButton
 {
     bool mbModKey : 1;
@@ -228,14 +222,7 @@ void ImplTabSizer::Paint( const Rectangle& )
     aDecoView.DrawHandle(aOutputRect, true);
 }
 
-
-
 // Is not named Impl. as it may be both instantiated and derived from
-
-
-// - TabBarEdit -
-
-
 class TabBarEdit : public Edit
 {
 private:
@@ -257,15 +244,11 @@ public:
     virtual void    LoseFocus() SAL_OVERRIDE;
 };
 
-
-
 TabBarEdit::TabBarEdit( TabBar* pParent, WinBits nWinStyle ) :
     Edit( pParent, nWinStyle )
 {
     mbPostEvt = false;
 }
-
-
 
 bool TabBarEdit::PreNotify( NotifyEvent& rNEvt )
 {
@@ -298,8 +281,6 @@ bool TabBarEdit::PreNotify( NotifyEvent& rNEvt )
     return Edit::PreNotify( rNEvt );
 }
 
-
-
 void TabBarEdit::LoseFocus()
 {
     if ( !mbPostEvt )
@@ -310,8 +291,6 @@ void TabBarEdit::LoseFocus()
 
     Edit::LoseFocus();
 }
-
-
 
 IMPL_LINK( TabBarEdit, ImplEndEditHdl, void*, pCancel )
 {
@@ -332,8 +311,6 @@ IMPL_LINK( TabBarEdit, ImplEndEditHdl, void*, pCancel )
     return 0;
 }
 
-
-
 IMPL_LINK_NOARG(TabBarEdit, ImplEndTimerHdl)
 {
     if ( HasFocus() )
@@ -348,7 +325,6 @@ IMPL_LINK_NOARG(TabBarEdit, ImplEndTimerHdl)
 
     return 0;
 }
-
 
 struct TabBar_Impl
 {
@@ -387,7 +363,17 @@ struct TabBar_Impl
     }
 };
 
+TabBar::TabBar( vcl::Window* pParent, WinBits nWinStyle ) :
+    Window( pParent, (nWinStyle & WB_3DLOOK) | WB_CLIPCHILDREN )
+{
+    ImplInit( nWinStyle );
+    maCurrentItemList = 0;
+}
 
+TabBar::~TabBar()
+{
+    EndEditMode( true );
+}
 
 const sal_uInt16 TabBar::APPEND         = ::std::numeric_limits<sal_uInt16>::max();
 const sal_uInt16 TabBar::PAGE_NOT_FOUND = ::std::numeric_limits<sal_uInt16>::max();
@@ -442,23 +428,6 @@ void TabBar::ImplInit( WinBits nWinStyle )
     ImplInitSettings( true, true );
 }
 
-
-
-TabBar::TabBar( vcl::Window* pParent, WinBits nWinStyle ) :
-    Window( pParent, (nWinStyle & WB_3DLOOK) | WB_CLIPCHILDREN )
-{
-    ImplInit( nWinStyle );
-    maCurrentItemList = 0;
-}
-
-
-
-TabBar::~TabBar()
-{
-    EndEditMode( true );
-}
-
-
 ImplTabBarItem* TabBar::seek( size_t i )
 {
     if ( i < mpImpl->mpItemList.size() )
@@ -486,8 +455,6 @@ ImplTabBarItem* TabBar::next()
     }
     return NULL;
 }
-
-
 
 void TabBar::ImplInitSettings( bool bFont, bool bBackground )
 {
@@ -524,8 +491,6 @@ void TabBar::ImplInitSettings( bool bFont, bool bBackground )
     }
 }
 
-
-
 void TabBar::ImplGetColors( Color& rFaceColor, Color& rFaceTextColor,
                             Color& rSelectColor, Color& rSelectTextColor )
 {
@@ -557,8 +522,6 @@ void TabBar::ImplGetColors( Color& rFaceColor, Color& rFaceTextColor,
         swap(rFaceTextColor, rSelectTextColor);
     }
 }
-
-
 
 bool TabBar::ImplCalcWidth()
 {
@@ -616,8 +579,6 @@ bool TabBar::ImplCalcWidth()
     return bChanged;
 }
 
-
-
 void TabBar::ImplFormat()
 {
     ImplCalcWidth();
@@ -664,8 +625,6 @@ void TabBar::ImplFormat()
     ImplEnableControls();
 }
 
-
-
 sal_uInt16 TabBar::ImplGetLastFirstPos()
 {
     sal_uInt16 nCount = mpImpl->getItemSize();
@@ -684,8 +643,6 @@ sal_uInt16 TabBar::ImplGetLastFirstPos()
         nLastFirstPos++;
     return nLastFirstPos;
 }
-
-
 
 void TabBar::ImplInitControls()
 {
@@ -754,8 +711,6 @@ void TabBar::ImplInitControls()
 
     mbHasInsertTab  = (mnWinStyle & WB_INSERTTAB);
 }
-
-
 
 void TabBar::ImplEnableControls()
 {
@@ -844,8 +799,6 @@ IMPL_LINK( TabBar, ImplClickHdl, ImplTabButton*, pBtn )
     return 0;
 }
 
-
-
 void TabBar::MouseMove( const MouseEvent& rMEvt )
 {
     if ( rMEvt.IsLeaveWindow() )
@@ -853,8 +806,6 @@ void TabBar::MouseMove( const MouseEvent& rMEvt )
 
     Window::MouseMove( rMEvt );
 }
-
-
 
 void TabBar::MouseButtonDown( const MouseEvent& rMEvt )
 {
@@ -1058,8 +1009,6 @@ void TabBar::MouseButtonDown( const MouseEvent& rMEvt )
 
     Window::MouseButtonDown( rMEvt );
 }
-
-
 
 void TabBar::MouseButtonUp( const MouseEvent& rMEvt )
 {
@@ -1391,7 +1340,6 @@ void TabBar::Paint( const Rectangle& rect )
     }
 }
 
-
 void TabBar::Resize()
 {
     Size aNewSize = GetOutputSizePixel();
@@ -1581,8 +1529,6 @@ void TabBar::RequestHelp( const HelpEvent& rHEvt )
     Window::RequestHelp( rHEvt );
 }
 
-
-
 void TabBar::StateChanged( StateChangedType nType )
 {
     Window::StateChanged( nType );
@@ -1623,8 +1569,6 @@ void TabBar::StateChanged( StateChangedType nType )
     }
 }
 
-
-
 void TabBar::DataChanged( const DataChangedEvent& rDCEvt )
 {
     Window::DataChanged( rDCEvt );
@@ -1639,8 +1583,6 @@ void TabBar::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-
-
 void TabBar::ImplSelect()
 {
     Select();
@@ -1648,27 +1590,19 @@ void TabBar::ImplSelect()
     CallEventListeners( VCLEVENT_TABBAR_PAGESELECTED, reinterpret_cast<void*>(sal::static_int_cast<sal_IntPtr>(mnCurPageId)) );
 }
 
-
-
 void TabBar::Select()
 {
     maSelectHdl.Call( this );
 }
 
-
-
 void TabBar::DoubleClick()
 {
 }
-
-
 
 void TabBar::Split()
 {
     maSplitHdl.Call( this );
 }
-
-
 
 void TabBar::ImplActivatePage()
 {
@@ -1677,13 +1611,8 @@ void TabBar::ImplActivatePage()
     CallEventListeners( VCLEVENT_TABBAR_PAGEACTIVATED, reinterpret_cast<void*>(sal::static_int_cast<sal_IntPtr>(mnCurPageId)) );
 }
 
-
-
 void TabBar::ActivatePage()
-{
-}
-
-
+{}
 
 bool TabBar::ImplDeactivatePage()
 {
@@ -1769,41 +1698,29 @@ Rectangle TabBar::ImplGetInsertTabRect(ImplTabBarItem* pItem) const
     return Rectangle();
 }
 
-
-
 bool TabBar::DeactivatePage()
 {
     return true;
 }
-
-
 
 bool TabBar::StartRenaming()
 {
     return true;
 }
 
-
-
 TabBarAllowRenamingReturnCode TabBar::AllowRenaming()
 {
     return TABBAR_RENAMING_YES;
 }
 
-
-
 void TabBar::EndRenaming()
 {
 }
-
-
 
 void TabBar::Mirror()
 {
 
 }
-
-
 
 void TabBar::InsertPage( sal_uInt16 nPageId, const OUString& rText,
                          TabBarPageBits nBits, sal_uInt16 nPos )
@@ -1838,8 +1755,6 @@ void TabBar::InsertPage( sal_uInt16 nPageId, const OUString& rText,
     CallEventListeners( VCLEVENT_TABBAR_PAGEINSERTED, reinterpret_cast<void*>(sal::static_int_cast<sal_IntPtr>(nPageId)) );
 }
 
-
-
 Color TabBar::GetTabBgColor( sal_uInt16 nPageId ) const
 {
     sal_uInt16 nPos = GetPagePos( nPageId );
@@ -1872,8 +1787,6 @@ void TabBar::SetTabBgColor( sal_uInt16 nPageId, const Color& aTabBgColor )
     }
 }
 
-
-
 void TabBar::RemovePage( sal_uInt16 nPageId )
 {
     sal_uInt16 nPos = GetPagePos( nPageId );
@@ -1901,8 +1814,6 @@ void TabBar::RemovePage( sal_uInt16 nPageId )
         CallEventListeners( VCLEVENT_TABBAR_PAGEREMOVED, reinterpret_cast<void*>(sal::static_int_cast<sal_IntPtr>(nPageId)) );
     }
 }
-
-
 
 void TabBar::MovePage( sal_uInt16 nPageId, sal_uInt16 nNewPos )
 {
@@ -1940,8 +1851,6 @@ void TabBar::MovePage( sal_uInt16 nPageId, sal_uInt16 nNewPos )
     }
 }
 
-
-
 void TabBar::Clear()
 {
     // delete all items
@@ -1964,8 +1873,6 @@ void TabBar::Clear()
     CallEventListeners( VCLEVENT_TABBAR_PAGEREMOVED, reinterpret_cast<void*>(sal::static_int_cast<sal_IntPtr>(PAGE_NOT_FOUND)) );
 }
 
-
-
 bool TabBar::IsPageEnabled( sal_uInt16 nPageId ) const
 {
     sal_uInt16 nPos = GetPagePos( nPageId );
@@ -1975,8 +1882,6 @@ bool TabBar::IsPageEnabled( sal_uInt16 nPageId ) const
     else
         return false;
 }
-
-
 
 void TabBar::SetPageBits( sal_uInt16 nPageId, TabBarPageBits nBits )
 {
@@ -1997,8 +1902,6 @@ void TabBar::SetPageBits( sal_uInt16 nPageId, TabBarPageBits nBits )
     }
 }
 
-
-
 TabBarPageBits TabBar::GetPageBits( sal_uInt16 nPageId ) const
 {
     sal_uInt16 nPos = GetPagePos( nPageId );
@@ -2009,21 +1912,15 @@ TabBarPageBits TabBar::GetPageBits( sal_uInt16 nPageId ) const
         return sal_False;
 }
 
-
-
 sal_uInt16 TabBar::GetPageCount() const
 {
     return mpImpl->getItemSize();
 }
 
-
-
 sal_uInt16 TabBar::GetPageId( sal_uInt16 nPos ) const
 {
     return nPos < mpImpl->mpItemList.size() ? mpImpl->mpItemList[nPos]->mnId : 0;
 }
-
-
 
 sal_uInt16 TabBar::GetPagePos( sal_uInt16 nPageId ) const
 {
@@ -2035,8 +1932,6 @@ sal_uInt16 TabBar::GetPagePos( sal_uInt16 nPageId ) const
     }
     return PAGE_NOT_FOUND;
 }
-
-
 
 sal_uInt16 TabBar::GetPageId( const Point& rPos, bool bCheckInsTab ) const
 {
@@ -2057,8 +1952,6 @@ sal_uInt16 TabBar::GetPageId( const Point& rPos, bool bCheckInsTab ) const
     return 0;
 }
 
-
-
 Rectangle TabBar::GetPageRect( sal_uInt16 nPageId ) const
 {
     sal_uInt16 nPos = GetPagePos( nPageId );
@@ -2068,8 +1961,6 @@ Rectangle TabBar::GetPageRect( sal_uInt16 nPageId ) const
     else
         return Rectangle();
 }
-
-
 
 void TabBar::SetCurPageId( sal_uInt16 nPageId )
 {
@@ -2153,8 +2044,6 @@ void TabBar::SetCurPageId( sal_uInt16 nPageId )
     }
 }
 
-
-
 void TabBar::MakeVisible( sal_uInt16 nPageId )
 {
     if ( !IsReallyVisible() )
@@ -2201,8 +2090,6 @@ void TabBar::MakeVisible( sal_uInt16 nPageId )
     }
 }
 
-
-
 void TabBar::SetFirstPageId( sal_uInt16 nPageId )
 {
     sal_uInt16 nPos = GetPagePos( nPageId );
@@ -2235,8 +2122,6 @@ void TabBar::SetFirstPageId( sal_uInt16 nPageId )
     }
 }
 
-
-
 void TabBar::SelectPage( sal_uInt16 nPageId, bool bSelect )
 {
     sal_uInt16 nPos = GetPagePos( nPageId );
@@ -2256,8 +2141,6 @@ void TabBar::SelectPage( sal_uInt16 nPageId, bool bSelect )
     }
 }
 
-
-
 sal_uInt16 TabBar::GetSelectPageCount() const
 {
     sal_uInt16 nSelected = 0;
@@ -2271,8 +2154,6 @@ sal_uInt16 TabBar::GetSelectPageCount() const
     return nSelected;
 }
 
-
-
 bool TabBar::IsPageSelected( sal_uInt16 nPageId ) const
 {
     sal_uInt16 nPos = GetPagePos( nPageId );
@@ -2281,8 +2162,6 @@ bool TabBar::IsPageSelected( sal_uInt16 nPageId ) const
     else
         return false;
 }
-
-
 
 bool TabBar::StartEditMode( sal_uInt16 nPageId )
 {
@@ -2394,8 +2273,6 @@ void TabBar::EndEditMode( bool bCancel )
     }
 }
 
-
-
 void TabBar::SetMirrored(bool bMirrored)
 {
     if( mbMirrored != bMirrored )
@@ -2418,8 +2295,6 @@ bool TabBar::IsEffectiveRTL() const
     return IsMirrored() != Application::GetSettings().GetLayoutRTL();
 }
 
-
-
 void TabBar::SetMaxPageWidth( long nMaxWidth )
 {
     if ( mnMaxPageWidth != nMaxWidth )
@@ -2432,8 +2307,6 @@ void TabBar::SetMaxPageWidth( long nMaxWidth )
             Invalidate();
     }
 }
-
-
 
 void TabBar::SetPageText( sal_uInt16 nPageId, const OUString& rText )
 {
@@ -2451,8 +2324,6 @@ void TabBar::SetPageText( sal_uInt16 nPageId, const OUString& rText )
     }
 }
 
-
-
 OUString TabBar::GetPageText( sal_uInt16 nPageId ) const
 {
     sal_uInt16 nPos = GetPagePos( nPageId );
@@ -2460,8 +2331,6 @@ OUString TabBar::GetPageText( sal_uInt16 nPageId ) const
         return mpImpl->mpItemList[nPos]->maText;
     return OUString();
 }
-
-
 
 OUString TabBar::GetHelpText( sal_uInt16 nPageId ) const
 {
@@ -2481,8 +2350,6 @@ OUString TabBar::GetHelpText( sal_uInt16 nPageId ) const
     return OUString();
 }
 
-
-
 OString TabBar::GetHelpId( sal_uInt16 nPageId ) const
 {
     sal_uInt16 nPos = GetPagePos( nPageId );
@@ -2491,8 +2358,6 @@ OString TabBar::GetHelpId( sal_uInt16 nPageId ) const
         return mpImpl->mpItemList[nPos]->maHelpId;
     return aRet;
 }
-
-
 
 bool TabBar::StartDrag( const CommandEvent& rCEvt, vcl::Region& rRegion )
 {
@@ -2536,8 +2401,6 @@ bool TabBar::StartDrag( const CommandEvent& rCEvt, vcl::Region& rRegion )
 
     return true;
 }
-
-
 
 sal_uInt16 TabBar::ShowDropPos( const Point& rPos )
 {
@@ -2660,8 +2523,6 @@ sal_uInt16 TabBar::ShowDropPos( const Point& rPos )
     return mnDropPos;
 }
 
-
-
 void TabBar::HideDropPos()
 {
     if ( mbDropPos )
@@ -2699,8 +2560,6 @@ void TabBar::HideDropPos()
         mnDropPos = 0;
     }
 }
-
-
 
 bool TabBar::SwitchPage( const Point& rPos )
 {
@@ -2740,15 +2599,11 @@ bool TabBar::SwitchPage( const Point& rPos )
     return bSwitch;
 }
 
-
-
 void TabBar::EndSwitchPage()
 {
     mnSwitchTime    = 0;
     mnSwitchId      = 0;
 }
-
-
 
 void TabBar::SetStyle( WinBits nStyle )
 {
@@ -2758,8 +2613,6 @@ void TabBar::SetStyle( WinBits nStyle )
     if ( IsReallyVisible() && IsUpdateMode() )
         Resize();
 }
-
-
 
 Size TabBar::CalcWindowSizePixel() const
 {
@@ -2778,19 +2631,14 @@ Size TabBar::CalcWindowSizePixel() const
     return Size( nWidth, GetSettings().GetStyleSettings().GetScrollBarSize() );
 }
 
-
 Rectangle TabBar::GetPageArea() const
 {
     return Rectangle( Point( mnOffX, mnOffY ), Size( mnLastOffX-mnOffX+1, GetSizePixel().Height()-mnOffY ) );
 }
 
-
-
-::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > TabBar::CreateAccessible()
+css::uno::Reference<css::accessibility::XAccessible> TabBar::CreateAccessible()
 {
     return mpImpl->maAccessibleFactory.getFactory().createAccessibleTabBar( *this );
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
