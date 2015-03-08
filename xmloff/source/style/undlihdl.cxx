@@ -235,6 +235,8 @@ bool XMLUnderlineStylePropHdl::importXML( const OUString& rStrImpValue, uno::Any
             case awt::FontUnderline::WAVE:
                 if( awt::FontUnderline::BOLD == eUnderline )
                     eNewUnderline = awt::FontUnderline::BOLDWAVE;
+                if( awt::FontUnderline::DOUBLE == eUnderline )
+                    eNewUnderline = awt::FontUnderline::DOUBLEWAVE;
                 break;
             case awt::FontUnderline::SMALLWAVE:
                 // SMALLWAVE is not used
