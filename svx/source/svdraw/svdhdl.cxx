@@ -372,7 +372,7 @@ void SdrHdl::SetHdlList(SdrHdlList* pList)
 {
     if(pHdlList != pList)
     {
-        // rememver list
+        // remember list
         pHdlList = pList;
 
         // now its possible to create graphic representation

@@ -1790,7 +1790,7 @@ void SwViewShell::PaintTile(VirtualDevice &rDevice, int contextWidth, int contex
     aMapMode.SetOrigin(Point(-tilePosX, -tilePosY));
 
     // Scaling. Must convert from pixels to twips. We know
-    // that VirtualDevises use a DPI of 96.
+    // that VirtualDevices use a DPI of 96.
     Fraction scaleX = Fraction(contextWidth, 96) * Fraction(1440L) / Fraction(tileWidth);
     Fraction scaleY = Fraction(contextHeight, 96) * Fraction(1440L) / Fraction(tileHeight);
     aMapMode.SetScaleX(scaleX);
