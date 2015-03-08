@@ -25,16 +25,6 @@
 #include <vcl/window.hxx>
 #include <vector>
 
-class MouseEvent;
-class TrackingEvent;
-class DataChangedEvent;
-class ImplTabButton;
-class ImplTabSizer;
-class TabBarEdit;
-
-struct ImplTabBarItem;
-typedef std::vector<ImplTabBarItem*> ImplTabBarList;
-
 /*
 
 Allowed StylbeBits
@@ -306,6 +296,14 @@ enum TabBarAllowRenamingReturnCode {
 
 // - TabBar -
 
+class MouseEvent;
+class TrackingEvent;
+class DataChangedEvent;
+class ImplTabButton;
+class ImplTabSizer;
+class TabBarEdit;
+
+struct ImplTabBarItem;
 struct TabBar_Impl;
 typedef std::vector<ImplTabBarItem*> ImplTabBarList;
 
