@@ -922,13 +922,13 @@ void SdrPageView::LeaveAllGroup()
 
 sal_uInt16 SdrPageView::GetEnteredLevel() const
 {
-    sal_uInt16 nAnz=0;
+    sal_uInt16 nCount=0;
     SdrObject* pGrp=GetAktGroup();
     while (pGrp!=NULL) {
-        nAnz++;
+        nCount++;
         pGrp=pGrp->GetUpGroup();
     }
-    return nAnz;
+    return nCount;
 }
 
 void SdrPageView::CheckAktGroup()

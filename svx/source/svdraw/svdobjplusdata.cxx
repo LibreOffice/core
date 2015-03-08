@@ -34,10 +34,10 @@ SdrObjPlusData* SdrObjPlusData::Clone(SdrObject* pObj1) const
 {
     SdrObjPlusData* pNeuPlusData=new SdrObjPlusData;
     if (pUserDataList!=NULL) {
-        sal_uInt16 nAnz=pUserDataList->GetUserDataCount();
-        if (nAnz!=0) {
+        sal_uInt16 nCount=pUserDataList->GetUserDataCount();
+        if (nCount!=0) {
             pNeuPlusData->pUserDataList=new SdrObjUserDataList;
-            for (sal_uInt16 i=0; i<nAnz; i++) {
+            for (sal_uInt16 i=0; i<nCount; i++) {
                 SdrObjUserData* pNeuUserData=pUserDataList->GetUserData(i)->Clone(pObj1);
                 if (pNeuUserData!=NULL) {
                     pNeuPlusData->pUserDataList->AppendUserData(pNeuUserData);

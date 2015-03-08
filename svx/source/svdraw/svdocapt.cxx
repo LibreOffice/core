@@ -271,9 +271,9 @@ basegfx::B2DPolyPolygon SdrCaptionObj::TakeXorPoly() const
 
 sal_uInt32 SdrCaptionObj::GetHdlCount() const
 {
-    sal_uInt32 nAnz1(SdrRectObj::GetHdlCount());
+    sal_uInt32 nCount1(SdrRectObj::GetHdlCount());
     // Currently only dragging the tail's end is implemented.
-    return nAnz1 + 1L;
+    return nCount1 + 1L;
 }
 
 SdrHdl* SdrCaptionObj::GetHdl(sal_uInt32 nHdlNum) const

@@ -863,7 +863,7 @@ bool SdrAngleItem::GetPresentation(
     if(nValue)
     {
         sal_Unicode aUnicodeNull('0');
-        sal_Int32 nAnz(2);
+        sal_Int32 nCount(2);
 
         const IntlWrapper* pMyIntlWrapper = NULL;
         if(!pIntlWrapper)
@@ -871,9 +871,9 @@ bool SdrAngleItem::GetPresentation(
                 Application::GetSettings().GetLanguageTag() );
 
         if(pIntlWrapper->getLocaleData()->isNumLeadingZero())
-            nAnz++;
+            nCount++;
 
-        while(aText.getLength() < nAnz)
+        while(aText.getLength() < nCount)
             aText.insert(0, aUnicodeNull);
 
         sal_Int32 nLen = aText.getLength();

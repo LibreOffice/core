@@ -175,8 +175,8 @@ const SdrLayerAdmin& SdrLayerAdmin::operator=(const SdrLayerAdmin& rSrcLayerAdmi
     ClearLayer();
     pParent=rSrcLayerAdmin.pParent;
     sal_uInt16 i;
-    sal_uInt16 nAnz=rSrcLayerAdmin.GetLayerCount();
-    for (i=0; i<nAnz; i++) {
+    sal_uInt16 nCount=rSrcLayerAdmin.GetLayerCount();
+    for (i=0; i<nCount; i++) {
         aLayer.push_back(new SdrLayer(*rSrcLayerAdmin.GetLayer(i)));
     }
     return *this;
@@ -188,9 +188,9 @@ bool SdrLayerAdmin::operator==(const SdrLayerAdmin& rCmpLayerAdmin) const
         aLayer.size()!=rCmpLayerAdmin.aLayer.size())
         return false;
     bool bOk = true;
-    sal_uInt16 nAnz=GetLayerCount();
+    sal_uInt16 nCount=GetLayerCount();
     sal_uInt16 i=0;
-    while (bOk && i<nAnz) {
+    while (bOk && i<nCount) {
         bOk=*GetLayer(i)==*rCmpLayerAdmin.GetLayer(i);
         i++;
     }
@@ -201,9 +201,9 @@ void SdrLayerAdmin::SetModel(SdrModel* pNewModel)
 {
     if (pNewModel!=pModel) {
         pModel=pNewModel;
-        sal_uInt16 nAnz=GetLayerCount();
+        sal_uInt16 nCount=GetLayerCount();
         sal_uInt16 i;
-        for (i=0; i<nAnz; i++) {
+        for (i=0; i<nCount; i++) {
             GetLayer(i)->SetModel(pNewModel);
         }
     }

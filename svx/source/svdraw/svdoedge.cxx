@@ -781,16 +781,16 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const XPolygon& rTrack0, SdrObjConnection&
     if (bAuto2) rCon2.bAutoVertex=true;
     sal_uInt16 nBestAuto1=0;
     sal_uInt16 nBestAuto2=0;
-    sal_uInt16 nAnz1=bAuto1 ? 4 : 1;
-    sal_uInt16 nAnz2=bAuto2 ? 4 : 1;
-    for (sal_uInt16 nNum1=0; nNum1<nAnz1; nNum1++) {
+    sal_uInt16 nCount1=bAuto1 ? 4 : 1;
+    sal_uInt16 nCount2=bAuto2 ? 4 : 1;
+    for (sal_uInt16 nNum1=0; nNum1<nCount1; nNum1++) {
         if (bAuto1) rCon1.nConId=nNum1;
         if (bCon1 && rCon1.TakeGluePoint(aGP1,true)) {
             aPt1=aGP1.GetPos();
             nEsc1=aGP1.GetEscDir();
             if (nEsc1==SDRESC_SMART) nEsc1=ImpCalcEscAngle(rCon1.pObj,aPt1-rCon1.aObjOfs);
         }
-        for (sal_uInt16 nNum2=0; nNum2<nAnz2; nNum2++) {
+        for (sal_uInt16 nNum2=0; nNum2<nCount2; nNum2++) {
             if (bAuto2) rCon2.nConId=nNum2;
             if (bCon2 && rCon2.TakeGluePoint(aGP2,true)) {
                 aPt2=aGP2.GetPos();
@@ -2389,9 +2389,9 @@ sal_uInt32 SdrEdgeObj::GetSnapPointCount() const
 Point SdrEdgeObj::GetSnapPoint(sal_uInt32 i) const
 {
     ((SdrEdgeObj*)this)->ImpUndirtyEdgeTrack();
-    sal_uInt16 nAnz=pEdgeTrack->GetPointCount();
+    sal_uInt16 nCount=pEdgeTrack->GetPointCount();
     if (i==0) return (*pEdgeTrack)[0];
-    else return (*pEdgeTrack)[nAnz-1];
+    else return (*pEdgeTrack)[nCount-1];
 }
 
 bool SdrEdgeObj::IsPolyObj() const
@@ -2407,22 +2407,22 @@ sal_uInt32 SdrEdgeObj::GetPointCount() const
 Point SdrEdgeObj::GetPoint(sal_uInt32 i) const
 {
     ((SdrEdgeObj*)this)->ImpUndirtyEdgeTrack();
-    sal_uInt16 nAnz=pEdgeTrack->GetPointCount();
+    sal_uInt16 nCount=pEdgeTrack->GetPointCount();
     if (0L == i)
         return (*pEdgeTrack)[0];
     else
-        return (*pEdgeTrack)[nAnz-1];
+        return (*pEdgeTrack)[nCount-1];
 }
 
 void SdrEdgeObj::NbcSetPoint(const Point& rPnt, sal_uInt32 i)
 {
     // TODO: Need an implementation to connect differently.
     ImpUndirtyEdgeTrack();
-    sal_uInt16 nAnz=pEdgeTrack->GetPointCount();
+    sal_uInt16 nCount=pEdgeTrack->GetPointCount();
     if (0L == i)
         (*pEdgeTrack)[0]=rPnt;
     if (1L == i)
-        (*pEdgeTrack)[nAnz-1]=rPnt;
+        (*pEdgeTrack)[nCount-1]=rPnt;
     SetEdgeTrackDirty();
     SetRectsDirty();
 }

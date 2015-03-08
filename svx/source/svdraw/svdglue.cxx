@@ -267,8 +267,8 @@ bool SdrGluePoint::IsHit(const Point& rPnt, const OutputDevice& rOut, const SdrO
 
 void SdrGluePointList::Clear()
 {
-    sal_uInt16 nAnz=GetCount();
-    for (sal_uInt16 i=0; i<nAnz; i++) {
+    sal_uInt16 nCount=GetCount();
+    for (sal_uInt16 i=0; i<nCount; i++) {
         delete GetObject(i);
     }
     aList.clear();
@@ -277,8 +277,8 @@ void SdrGluePointList::Clear()
 void SdrGluePointList::operator=(const SdrGluePointList& rSrcList)
 {
     if (GetCount()!=0) Clear();
-    sal_uInt16 nAnz=rSrcList.GetCount();
-    for (sal_uInt16 i=0; i<nAnz; i++) {
+    sal_uInt16 nCount=rSrcList.GetCount();
+    for (sal_uInt16 i=0; i<nCount; i++) {
         Insert(rSrcList[i]);
     }
 }
@@ -289,17 +289,17 @@ sal_uInt16 SdrGluePointList::Insert(const SdrGluePoint& rGP)
 {
     SdrGluePoint* pGP=new SdrGluePoint(rGP);
     sal_uInt16 nId=pGP->GetId();
-    sal_uInt16 nAnz=GetCount();
-    sal_uInt16 nInsPos=nAnz;
-    sal_uInt16 nLastId=nAnz!=0 ? GetObject(nAnz-1)->GetId() : 0;
-    DBG_ASSERT(nLastId>=nAnz,"SdrGluePointList::Insert(): nLastId<nAnz");
-    bool bHole = nLastId>nAnz;
+    sal_uInt16 nCount=GetCount();
+    sal_uInt16 nInsPos=nCount;
+    sal_uInt16 nLastId=nCount!=0 ? GetObject(nCount-1)->GetId() : 0;
+    DBG_ASSERT(nLastId>=nCount,"SdrGluePointList::Insert(): nLastId<nCount");
+    bool bHole = nLastId>nCount;
     if (nId<=nLastId) {
         if (!bHole || nId==0) {
             nId=nLastId+1;
         } else {
             bool bBrk = false;
-            for (sal_uInt16 nNum=0; nNum<nAnz && !bBrk; nNum++) {
+            for (sal_uInt16 nNum=0; nNum<nCount && !bBrk; nNum++) {
                 const SdrGluePoint* pGP2=GetObject(nNum);
                 sal_uInt16 nTmpId=pGP2->GetId();
                 if (nTmpId==nId) {
@@ -320,8 +320,8 @@ sal_uInt16 SdrGluePointList::Insert(const SdrGluePoint& rGP)
 
 void SdrGluePointList::Invalidate(vcl::Window& rWin, const SdrObject* pObj) const
 {
-    sal_uInt16 nAnz=GetCount();
-    for (sal_uInt16 nNum=0; nNum<nAnz; nNum++) {
+    sal_uInt16 nCount=GetCount();
+    for (sal_uInt16 nNum=0; nNum<nCount; nNum++) {
         GetObject(nNum)->Invalidate(rWin,pObj);
     }
 }
@@ -330,9 +330,9 @@ sal_uInt16 SdrGluePointList::FindGluePoint(sal_uInt16 nId) const
 {
     // TODO: Implement a better search algorithm
     // List should be sorted at all times!
-    sal_uInt16 nAnz=GetCount();
+    sal_uInt16 nCount=GetCount();
     sal_uInt16 nRet=SDRGLUEPOINT_NOTFOUND;
-    for (sal_uInt16 nNum=0; nNum<nAnz && nRet==SDRGLUEPOINT_NOTFOUND; nNum++) {
+    for (sal_uInt16 nNum=0; nNum<nCount && nRet==SDRGLUEPOINT_NOTFOUND; nNum++) {
         const SdrGluePoint* pGP=GetObject(nNum);
         if (pGP->GetId()==nId) nRet=nNum;
     }
@@ -341,10 +341,10 @@ sal_uInt16 SdrGluePointList::FindGluePoint(sal_uInt16 nId) const
 
 sal_uInt16 SdrGluePointList::HitTest(const Point& rPnt, const OutputDevice& rOut, const SdrObject* pObj, bool bBack, bool bNext, sal_uInt16 nId0) const
 {
-    sal_uInt16 nAnz=GetCount();
+    sal_uInt16 nCount=GetCount();
     sal_uInt16 nRet=SDRGLUEPOINT_NOTFOUND;
-    sal_uInt16 nNum=bBack ? 0 : nAnz;
-    while ((bBack ? nNum<nAnz : nNum>0) && nRet==SDRGLUEPOINT_NOTFOUND) {
+    sal_uInt16 nNum=bBack ? 0 : nCount;
+    while ((bBack ? nNum<nCount : nNum>0) && nRet==SDRGLUEPOINT_NOTFOUND) {
         if (!bBack) nNum--;
         const SdrGluePoint* pGP=GetObject(nNum);
         if (bNext) {
@@ -359,16 +359,16 @@ sal_uInt16 SdrGluePointList::HitTest(const Point& rPnt, const OutputDevice& rOut
 
 void SdrGluePointList::SetReallyAbsolute(bool bOn, const SdrObject& rObj)
 {
-    sal_uInt16 nAnz=GetCount();
-    for (sal_uInt16 nNum=0; nNum<nAnz; nNum++) {
+    sal_uInt16 nCount=GetCount();
+    for (sal_uInt16 nNum=0; nNum<nCount; nNum++) {
         GetObject(nNum)->SetReallyAbsolute(bOn,rObj);
     }
 }
 
 void SdrGluePointList::Rotate(const Point& rRef, long nAngle, double sn, double cs, const SdrObject* pObj)
 {
-    sal_uInt16 nAnz=GetCount();
-    for (sal_uInt16 nNum=0; nNum<nAnz; nNum++) {
+    sal_uInt16 nCount=GetCount();
+    for (sal_uInt16 nNum=0; nNum<nCount; nNum++) {
         GetObject(nNum)->Rotate(rRef,nAngle,sn,cs,pObj);
     }
 }
@@ -382,16 +382,16 @@ void SdrGluePointList::Mirror(const Point& rRef1, const Point& rRef2, const SdrO
 
 void SdrGluePointList::Mirror(const Point& rRef1, const Point& rRef2, long nAngle, const SdrObject* pObj)
 {
-    sal_uInt16 nAnz=GetCount();
-    for (sal_uInt16 nNum=0; nNum<nAnz; nNum++) {
+    sal_uInt16 nCount=GetCount();
+    for (sal_uInt16 nNum=0; nNum<nCount; nNum++) {
         GetObject(nNum)->Mirror(rRef1,rRef2,nAngle,pObj);
     }
 }
 
 void SdrGluePointList::Shear(const Point& rRef, long nAngle, double tn, bool bVShear, const SdrObject* pObj)
 {
-    sal_uInt16 nAnz=GetCount();
-    for (sal_uInt16 nNum=0; nNum<nAnz; nNum++) {
+    sal_uInt16 nCount=GetCount();
+    for (sal_uInt16 nNum=0; nNum<nCount; nNum++) {
         GetObject(nNum)->Shear(rRef,nAngle,tn,bVShear,pObj);
     }
 }

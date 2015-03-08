@@ -254,10 +254,10 @@ void SdrMarkList::ImpForceSort()
     if(!mbSorted)
     {
         mbSorted = true;
-        size_t nAnz = maList.size();
+        size_t nCount = maList.size();
 
         // remove invalid
-        if(nAnz > 0 )
+        if(nCount > 0 )
         {
             for(std::vector<SdrMark*>::iterator it = maList.begin(); it != maList.end(); )
             {
@@ -270,10 +270,10 @@ void SdrMarkList::ImpForceSort()
                 else
                     ++it;
             }
-            nAnz = maList.size();
+            nCount = maList.size();
         }
 
-        if(nAnz > 1)
+        if(nCount > 1)
         {
             std::sort(maList.begin(), maList.end(), ImpSdrMarkListSorter);
 
@@ -373,9 +373,9 @@ size_t SdrMarkList::FindObject(const SdrObject* pObj) const
 void SdrMarkList::InsertEntry(const SdrMark& rMark, bool bChkSort)
 {
     SetNameDirty();
-    const size_t nAnz(maList.size());
+    const size_t nCount(maList.size());
 
-    if(!bChkSort || !mbSorted || nAnz == 0)
+    if(!bChkSort || !mbSorted || nCount == 0)
     {
         if(!bChkSort)
             mbSorted = false;
@@ -384,7 +384,7 @@ void SdrMarkList::InsertEntry(const SdrMark& rMark, bool bChkSort)
     }
     else
     {
-        SdrMark* pLast = GetMark(nAnz - 1);
+        SdrMark* pLast = GetMark(nCount - 1);
         const SdrObject* pLastObj = pLast->GetMarkedSdrObj();
         const SdrObject* pNeuObj = rMark.GetMarkedSdrObj();
 
@@ -459,7 +459,7 @@ void SdrMarkList::ReplaceMark(const SdrMark& rNewMark, size_t nNum)
 
 void SdrMarkList::Merge(const SdrMarkList& rSrcList, bool bReverse)
 {
-    const size_t nAnz(rSrcList.maList.size());
+    const size_t nCount(rSrcList.maList.size());
 
     if(rSrcList.mbSorted)
     {
@@ -469,7 +469,7 @@ void SdrMarkList::Merge(const SdrMarkList& rSrcList, bool bReverse)
 
     if(!bReverse)
     {
-        for(size_t i = 0; i < nAnz; ++i)
+        for(size_t i = 0; i < nCount; ++i)
         {
             SdrMark* pM = rSrcList.maList[i];
             InsertEntry(*pM);
@@ -477,7 +477,7 @@ void SdrMarkList::Merge(const SdrMarkList& rSrcList, bool bReverse)
     }
     else
     {
-        for(size_t i = nAnz; i > 0;)
+        for(size_t i = nCount; i > 0;)
         {
             --i;
             SdrMark* pM = rSrcList.maList[i];
@@ -534,9 +534,9 @@ bool SdrMarkList::InsertPageView(const SdrPageView& rPV)
 
 const OUString& SdrMarkList::GetMarkDescription() const
 {
-    const size_t nAnz(GetMarkCount());
+    const size_t nCount(GetMarkCount());
 
-    if(mbNameOk && 1L == nAnz)
+    if(mbNameOk && 1L == nCount)
     {
         // if it's a single selection, cache only text frame
         const SdrObject* pObj = GetMark(0)->GetMarkedSdrObj();
@@ -553,11 +553,11 @@ const OUString& SdrMarkList::GetMarkDescription() const
         SdrMark* pMark = GetMark(0);
         OUString aNam;
 
-        if(!nAnz)
+        if(!nCount)
         {
             const_cast<SdrMarkList*>(this)->maMarkName = ImpGetResStr(STR_ObjNameNoObj);
         }
-        else if(1L == nAnz)
+        else if(1L == nCount)
         {
             if(pMark->GetMarkedSdrObj())
             {
@@ -584,7 +584,7 @@ const OUString& SdrMarkList::GetMarkDescription() const
                 }
             }
 
-            aNam = OUString::number( nAnz ) + " " + aNam;
+            aNam = OUString::number( nCount ) + " " + aNam;
         }
 
         const_cast<SdrMarkList*>(this)->maMarkName = aNam;
@@ -607,16 +607,16 @@ const OUString& SdrMarkList::GetPointMarkDescription(bool bGlue) const
     {
         const SdrMark* pMark = GetMark(nMarkNum);
         const SdrUShortCont* pPts = bGlue ? pMark->GetMarkedGluePoints() : pMark->GetMarkedPoints();
-        const size_t nAnz(pPts ? pPts->size() : 0);
+        const size_t nCount(pPts ? pPts->size() : 0);
 
-        if(nAnz)
+        if(nCount)
         {
             if(n1stMarkNum == SAL_MAX_SIZE)
             {
                 n1stMarkNum = nMarkNum;
             }
 
-            nMarkPtAnz += nAnz;
+            nMarkPtAnz += nCount;
             nMarkPtObjAnz++;
         }
 

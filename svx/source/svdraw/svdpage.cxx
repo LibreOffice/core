@@ -136,9 +136,9 @@ void SdrObjList::CopyObjects(const SdrObjList& rSrcList)
     bObjOrdNumsDirty=false;
     bRectsDirty     =false;
     size_t nCloneErrCnt = 0;
-    const size_t nAnz = rSrcList.GetObjCount();
+    const size_t nCount = rSrcList.GetObjCount();
     SdrInsertReason aReason(SDRREASON_COPY);
-    for (size_t no=0; no<nAnz; ++no) {
+    for (size_t no=0; no<nCount; ++no) {
         SdrObject* pSO=rSrcList.GetObj(no);
 
         SdrObject* pDO = pSO->Clone();
@@ -161,7 +161,7 @@ void SdrObjList::CopyObjects(const SdrObjList& rSrcList)
     //    BOOL SdrExchangeView::Paste(const SdrModel& rMod,...)
     //    void SdrEditView::CopyMarked()
     if (nCloneErrCnt==0) {
-        for (size_t no=0; no<nAnz; ++no) {
+        for (size_t no=0; no<nCount; ++no) {
             const SdrObject* pSrcOb=rSrcList.GetObj(no);
             const SdrEdgeObj* pSrcEdge=PTR_CAST(SdrEdgeObj,pSrcOb);
             if (pSrcEdge!=NULL) {
@@ -262,8 +262,8 @@ void SdrObjList::SetPage(SdrPage* pNewPage)
 {
     if (pPage!=pNewPage) {
         pPage=pNewPage;
-        const size_t nAnz = GetObjCount();
-        for (size_t no=0; no<nAnz; ++no) {
+        const size_t nCount = GetObjCount();
+        for (size_t no=0; no<nCount; ++no) {
             SdrObject* pObj=GetObj(no);
             pObj->SetPage(pPage);
         }
@@ -279,8 +279,8 @@ void SdrObjList::SetModel(SdrModel* pNewModel)
 {
     if (pModel!=pNewModel) {
         pModel=pNewModel;
-        const size_t nAnz = GetObjCount();
-        for (size_t i=0; i<nAnz; ++i) {
+        const size_t nCount = GetObjCount();
+        for (size_t i=0; i<nCount; ++i) {
             SdrObject* pObj=GetObj(i);
             pObj->SetModel(pModel);
         }
@@ -289,8 +289,8 @@ void SdrObjList::SetModel(SdrModel* pNewModel)
 
 void SdrObjList::RecalcObjOrdNums()
 {
-    const size_t nAnz = GetObjCount();
-    for (size_t no=0; no<nAnz; ++no) {
+    const size_t nCount = GetObjCount();
+    for (size_t no=0; no<nCount; ++no) {
         SdrObject* pObj=GetObj(no);
         pObj->SetOrdNum(no);
     }
@@ -301,8 +301,8 @@ void SdrObjList::RecalcRects()
 {
     aOutRect=Rectangle();
     aSnapRect=aOutRect;
-    const size_t nAnz = GetObjCount();
-    for (size_t i=0; i<nAnz; ++i) {
+    const size_t nCount = GetObjCount();
+    for (size_t i=0; i<nCount; ++i) {
         SdrObject* pObj=GetObj(i);
         if (i==0) {
             aOutRect=pObj->GetCurrentBoundRect();
@@ -335,11 +335,11 @@ void SdrObjList::NbcInsertObject(SdrObject* pObj, size_t nPos, const SdrInsertRe
     DBG_ASSERT(pObj!=NULL,"SdrObjList::NbcInsertObject(NULL)");
     if (pObj!=NULL) {
         DBG_ASSERT(!pObj->IsInserted(),"ZObjekt already has the status Inserted.");
-        const size_t nAnz = GetObjCount();
-        if (nPos>nAnz) nPos=nAnz;
+        const size_t nCount = GetObjCount();
+        if (nPos>nCount) nPos=nCount;
         InsertObjectIntoContainer(*pObj,nPos);
 
-        if (nPos<nAnz) bObjOrdNumsDirty=true;
+        if (nPos<nCount) bObjOrdNumsDirty=true;
         pObj->SetOrdNum(nPos);
         pObj->SetObjList(this);
         pObj->SetPage(pPage);
@@ -406,7 +406,7 @@ SdrObject* SdrObjList::NbcRemoveObject(size_t nObjNum)
         return NULL;
     }
 
-    const size_t nAnz = GetObjCount();
+    const size_t nCount = GetObjCount();
     SdrObject* pObj=maList[nObjNum];
     RemoveObjectFromContainer(nObjNum);
 
@@ -420,7 +420,7 @@ SdrObject* SdrObjList::NbcRemoveObject(size_t nObjNum)
         pObj->SetObjList(NULL);
         pObj->SetPage(NULL);
         if (!bObjOrdNumsDirty) { // optimizing for the case that the last object has to be removed
-            if (nObjNum+1!=nAnz) {
+            if (nObjNum+1!=nCount) {
                 bObjOrdNumsDirty=true;
             }
         }
@@ -437,7 +437,7 @@ SdrObject* SdrObjList::RemoveObject(size_t nObjNum)
         return NULL;
     }
 
-    const size_t nAnz = GetObjCount();
+    const size_t nCount = GetObjCount();
     SdrObject* pObj=maList[nObjNum];
     RemoveObjectFromContainer(nObjNum);
 
@@ -461,7 +461,7 @@ SdrObject* SdrObjList::RemoveObject(size_t nObjNum)
         pObj->SetObjList(NULL);
         pObj->SetPage(NULL);
         if (!bObjOrdNumsDirty) { // optimization for the case that the last object is removed
-            if (nObjNum+1!=nAnz) {
+            if (nObjNum+1!=nCount) {
                 bObjOrdNumsDirty=true;
             }
         }
@@ -627,15 +627,15 @@ const Rectangle& SdrObjList::GetAllObjBoundRect() const
 
 void SdrObjList::NbcReformatAllTextObjects()
 {
-    size_t nAnz=GetObjCount();
+    size_t nCount=GetObjCount();
     size_t nNum=0;
 
-    while (nNum<nAnz)
+    while (nNum<nCount)
     {
         SdrObject* pObj = GetObj(nNum);
 
         pObj->NbcReformatText();
-        nAnz=GetObjCount();             // ReformatText may delete an object
+        nCount=GetObjCount();             // ReformatText may delete an object
         nNum++;
     }
 
@@ -705,9 +705,9 @@ bool SdrObjList::IsReadOnly() const
 
 size_t SdrObjList::CountAllObjects() const
 {
-    const size_t nAnz=GetObjCount();
-    size_t nCnt=nAnz;
-    for (size_t nNum=0; nNum<nAnz; nNum++) {
+    const size_t nCount=GetObjCount();
+    size_t nCnt=nCount;
+    for (size_t nNum=0; nNum<nCount; nNum++) {
         SdrObjList* pSubOL=GetObj(nNum)->GetSubList();
         if (pSubOL!=NULL) {
             nCnt+=pSubOL->CountAllObjects();
@@ -743,8 +743,8 @@ void SdrObjList::UnGroupObj( size_t nObjNum )
             size_t nInsertPos( pUngroupGroup->GetOrdNum() );
 
             SdrObject* pObj;
-            const size_t nAnz = pSrcLst->GetObjCount();
-            for( size_t i=0; i<nAnz; ++i )
+            const size_t nCount = pSrcLst->GetObjCount();
+            for( size_t i=0; i<nCount; ++i )
             {
                 pObj = pSrcLst->RemoveObject(0);
                 SdrInsertReason aReason(SDRREASON_VIEWCALL, pUngroupGroup);
@@ -1031,8 +1031,8 @@ void SdrObjList::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 void SdrPageGridFrameList::Clear()
 {
-    sal_uInt16 nAnz=GetCount();
-    for (sal_uInt16 i=0; i<nAnz; i++) {
+    sal_uInt16 nCount=GetCount();
+    for (sal_uInt16 i=0; i<nCount; i++) {
         delete GetObject(i);
     }
     aList.clear();

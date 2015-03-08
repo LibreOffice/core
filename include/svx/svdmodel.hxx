@@ -554,7 +554,7 @@ public:
 
     // The Undo management is only done if not NotifyUndoAction-Handler is set.
     // Default is 16. Minimal MaxUndoActionCount is 1!
-    void  SetMaxUndoActionCount(sal_uIntPtr nAnz);
+    void  SetMaxUndoActionCount(sal_uIntPtr nCount);
     sal_uIntPtr GetMaxUndoActionCount() const { return nMaxUndoCount; }
     void  ClearUndoBuffer();
 

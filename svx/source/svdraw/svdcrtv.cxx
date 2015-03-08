@@ -601,18 +601,18 @@ bool SdrCreateView::EndCreateObj(SdrCreateCmd eCmd)
 
     if (pAktCreate!=NULL)
     {
-        sal_uIntPtr nAnz=aDragStat.GetPointAnz();
+        sal_uIntPtr nCount=aDragStat.GetPointAnz();
 
-        if (nAnz<=1 && eCmd==SDRCREATE_FORCEEND)
+        if (nCount<=1 && eCmd==SDRCREATE_FORCEEND)
         {
             BrkCreateObj(); // objects with only a single point don't exist (at least today)
             return false; // sal_False = event not interpreted
         }
 
-        bool bPntsEq=nAnz>1;
+        bool bPntsEq=nCount>1;
         sal_uIntPtr i=1;
         Point aP0=aDragStat.GetPoint(0);
-        while (bPntsEq && i<nAnz) { bPntsEq=aP0==aDragStat.GetPoint(i); i++; }
+        while (bPntsEq && i<nCount) { bPntsEq=aP0==aDragStat.GetPoint(i); i++; }
 
         if (pAktCreate->EndCreate(aDragStat,eCmd))
         {
@@ -684,8 +684,8 @@ bool SdrCreateView::EndCreateObj(SdrCreateCmd eCmd)
         else
         { // more points
             if (eCmd==SDRCREATE_FORCEEND || // nothing there -- force ending
-                nAnz==0 ||                             // no existing points (should never happen)
-                (nAnz<=1 && !aDragStat.IsMinMoved())) { // MinMove not met
+                nCount==0 ||                             // no existing points (should never happen)
+                (nCount<=1 && !aDragStat.IsMinMoved())) { // MinMove not met
                 BrkCreateObj();
             }
             else

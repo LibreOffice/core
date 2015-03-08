@@ -50,7 +50,7 @@ bool SdrMarkView::HasMarkablePoints() const
 sal_uIntPtr SdrMarkView::GetMarkablePointCount() const
 {
     ForceUndirtyMrkPnt();
-    sal_uIntPtr nAnz=0;
+    sal_uIntPtr nCount=0;
     if (!ImpIsFrameHandles()) {
         const size_t nMarkAnz=GetMarkedObjectCount();
         if (nMarkAnz<=static_cast<size_t>(nFrameHandlesLimit)) {
@@ -58,12 +58,12 @@ sal_uIntPtr SdrMarkView::GetMarkablePointCount() const
                 const SdrMark* pM=GetSdrMarkByIndex(nMarkNum);
                 const SdrObject* pObj=pM->GetMarkedSdrObj();
                 if (pObj->IsPolyObj()) {
-                    nAnz+=pObj->GetPointCount();
+                    nCount+=pObj->GetPointCount();
                 }
             }
         }
     }
-    return nAnz;
+    return nCount;
 }
 
 bool SdrMarkView::HasMarkedPoints() const
@@ -86,18 +86,18 @@ bool SdrMarkView::HasMarkedPoints() const
 sal_uIntPtr SdrMarkView::GetMarkedPointCount() const
 {
     ForceUndirtyMrkPnt();
-    sal_uIntPtr nAnz=0;
+    sal_uIntPtr nCount=0;
     if (!ImpIsFrameHandles()) {
         size_t nMarkAnz=GetMarkedObjectCount();
         if (nMarkAnz<=static_cast<size_t>(nFrameHandlesLimit)) {
             for (size_t nMarkNum=0; nMarkNum<nMarkAnz; ++nMarkNum) {
                 const SdrMark* pM=GetSdrMarkByIndex(nMarkNum);
                 const SdrUShortCont* pPts=pM->GetMarkedPoints();
-                if (pPts!=NULL) nAnz+=pPts->size();
+                if (pPts!=NULL) nCount+=pPts->size();
             }
         }
     }
-    return nAnz;
+    return nCount;
 }
 
 bool SdrMarkView::IsPointMarkable(const SdrHdl& rHdl) const
@@ -153,8 +153,8 @@ bool SdrMarkView::ImpMarkPoint(SdrHdl* pHdl, SdrMark* pMark, bool bUnmark)
     {
         if (!bUnmark)
         {
-            sal_uInt32 nAnz(pObj->GetPlusHdlCount(*pHdl));
-            for (sal_uInt32 i=0; i<nAnz; i++)
+            sal_uInt32 nCount(pObj->GetPlusHdlCount(*pHdl));
+            for (sal_uInt32 i=0; i<nCount; i++)
             {
                 SdrHdl* pPlusHdl=pObj->GetPlusHdl(*pHdl,i);
                 if (pPlusHdl!=NULL)

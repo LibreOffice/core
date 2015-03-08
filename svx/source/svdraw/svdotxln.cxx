@@ -148,8 +148,8 @@ void SdrTextObj::SetTextLink(const OUString& rFileName, const OUString& rFilterN
 void SdrTextObj::ReleaseTextLink()
 {
     ImpLinkAbmeldung();
-    sal_uInt16 nAnz=GetUserDataCount();
-    for (sal_uInt16 nNum=nAnz; nNum>0;) {
+    sal_uInt16 nCount=GetUserDataCount();
+    for (sal_uInt16 nNum=nCount; nNum>0;) {
         nNum--;
         SdrObjUserData* pData=GetUserData(nNum);
         if (pData->GetInventor()==SdrInventor && pData->GetId()==SDRUSERDATA_OBJTEXTLINK) {
@@ -248,8 +248,8 @@ bool SdrTextObj::LoadText(const OUString& rFileName, const OUString& /*rFilterNa
 
 ImpSdrObjTextLinkUserData* SdrTextObj::GetLinkUserData() const
 {
-    sal_uInt16 nAnz=GetUserDataCount();
-    for (sal_uInt16 nNum=nAnz; nNum>0;) {
+    sal_uInt16 nCount=GetUserDataCount();
+    for (sal_uInt16 nNum=nCount; nNum>0;) {
         nNum--;
         SdrObjUserData * pData=GetUserData(nNum);
         if (pData->GetInventor() == SdrInventor
