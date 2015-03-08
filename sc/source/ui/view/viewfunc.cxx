@@ -2847,8 +2847,15 @@ void ScViewFunc::NotifyUnitErrorInFormula( const ScAddress& rAddress, ScDocument
 
 IMPL_LINK( ScViewFunc, EditUnitErrorFormulaHandler, PushButton*, pButton )
 {
-    SfxInfoBarWindow* pInfoBar = dynamic_cast< SfxInfoBarWindow* >( pButton->GetParent() );
-    const OUString sAddress = pInfoBar->getId();
+
+    OUString sAddress;
+    {
+        // keep pInfoBar within this scope only as we'll be deleting it just below (using RemoveInfoBar)
+        SfxInfoBarWindow* pInfoBar = dynamic_cast< SfxInfoBarWindow* >( pButton->GetParent() );
+        sAddress = pInfoBar->getId();
+    }
+    SfxViewFrame* pViewFrame = GetViewData().GetViewShell()->GetFrame();
+    pViewFrame->RemoveInfoBar( sAddress );
 
     SfxStringItem aPosition( SID_CURRENTCELL, sAddress );
     SfxBoolItem aUnmark( FN_PARAM_1, true ); // Removes existing selection if present.
