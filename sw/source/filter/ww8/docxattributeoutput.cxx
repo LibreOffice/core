@@ -3818,7 +3818,7 @@ void DocxAttributeOutput::OutputDefaultItem(const SfxPoolItem& rHt)
             {
                 const SvxBrushItem& rBrushItem = static_cast< const SvxBrushItem& >(rHt);
                 bMustWrite = (rBrushItem.GetColor() != COL_AUTO ||
-                              rBrushItem.GetShadingValue() != sal_uInt32(ShadingPattern::CLEAR) ||
+                              rBrushItem.GetShadingValue() != ShadingPattern::CLEAR ||
                               rBrushItem.GetGraphic() != NULL ||
                               rBrushItem.GetGraphicObject() != NULL);
             }
@@ -3886,7 +3886,7 @@ void DocxAttributeOutput::OutputDefaultItem(const SfxPoolItem& rHt)
             {
                 const SvxBrushItem& rBrushItem = static_cast< const SvxBrushItem& >(rHt);
                 bMustWrite = (rBrushItem.GetColor() != COL_AUTO ||
-                              rBrushItem.GetShadingValue() != sal_uInt32(ShadingPattern::CLEAR) ||
+                              rBrushItem.GetShadingValue() != ShadingPattern::CLEAR ||
                               rBrushItem.GetGraphic() != NULL ||
                               rBrushItem.GetGraphicObject() != NULL);
             }
@@ -6242,7 +6242,7 @@ void DocxAttributeOutput::CharAnimatedText( const SvxBlinkItem& rBlink )
 void DocxAttributeOutput::CharBackground( const SvxBrushItem& rBrush )
 {
     // Check if the brush shading pattern is 'PCT15'. If so - write it back to the DOCX
-    if (rBrush.GetShadingValue() == +ShadingPattern::PCT15)
+    if (rBrush.GetShadingValue() == ShadingPattern::PCT15)
     {
         m_pSerializer->singleElementNS( XML_w, XML_shd,
             FSNS( XML_w, XML_val ), MSWORD_CH_SHADING_VAL,

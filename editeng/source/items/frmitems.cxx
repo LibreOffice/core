@@ -3636,7 +3636,7 @@ bool SvxBrushItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 
         case MID_SHADING_VALUE:
         {
-            rVal <<= (sal_Int32)(nShadingValue);
+            rVal <<= nShadingValue;
         }
         break;
     }
@@ -3753,7 +3753,7 @@ bool SvxBrushItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 
         case MID_SHADING_VALUE:
         {
-            sal_uInt32 nVal = 0;
+            sal_Int32 nVal = 0;
             if (!(rVal >>= nVal))
                 return false;
 
@@ -4068,7 +4068,7 @@ void SvxBrushItem::SetGraphicFilter( const OUString& rNew )
     maStrFilter = rNew;
 }
 
-void SvxBrushItem::SetShadingValue( const sal_uInt32 nNew )
+void SvxBrushItem::SetShadingValue( const sal_Int32 nNew )
 {
     nShadingValue = nNew;
 }

@@ -104,13 +104,13 @@ public:
 
     void                PurgeMedium() const;
 
-    sal_uInt32              GetShadingValue() const     { return nShadingValue; }
+    sal_Int32               GetShadingValue() const     { return nShadingValue; }
     const Graphic*          GetGraphic(OUString const & referer = OUString()/*TODO*/) const;
     const GraphicObject*    GetGraphicObject(OUString const & referer = OUString()/*TODO*/) const;
     OUString                GetGraphicLink() const      { return maStrLink; }
     OUString                GetGraphicFilter() const    { return maStrFilter; }
 
-    void                SetShadingValue( const sal_uInt32 nNew );
+    void                SetShadingValue( const sal_Int32 nNew );
 
     //UUUU get graphic transparency in percent
     sal_Int8 getGraphicTransparency() const;
