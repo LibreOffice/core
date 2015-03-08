@@ -42,7 +42,7 @@ $(eval $(call gb_Executable_add_exception_objects,tiledrendering,\
     sw/qa/tiledrendering/tiledrendering \
 ))
 
-ifeq ($(OS),LINUX)
+ifeq ($(GUIBASE),unx)
 
 $(eval $(call gb_Executable_add_libs,tiledrendering,\
 	-lm \

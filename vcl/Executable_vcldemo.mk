@@ -42,7 +42,7 @@ $(eval $(call gb_Executable_use_static_libraries,vcldemo,\
     vclmain \
 ))
 
-ifeq ($(OS),LINUX)
+ifeq ($(GUIBASE),unx)
 $(eval $(call gb_Executable_add_libs,vcldemo,\
 	-lm \
 	-ldl \

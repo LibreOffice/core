@@ -705,7 +705,7 @@ $(eval $(call gb_Library_use_system_win32_libs,vcl,\
 $(eval $(call gb_Library_add_nativeres,vcl,vcl/salsrc))
 endif
 
-ifeq ($(OS),LINUX)
+ifeq ($(GUIBASE),unx)
 $(eval $(call gb_Library_add_libs,vcl,\
 	-lm \
 	-ldl \

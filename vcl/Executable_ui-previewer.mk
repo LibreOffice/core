@@ -34,7 +34,7 @@ $(eval $(call gb_Executable_add_exception_objects,ui-previewer,\
     vcl/source/uipreviewer/previewer \
 ))
 
-ifeq ($(OS),LINUX)
+ifeq ($(GUIBASE),unx)
 $(eval $(call gb_Executable_add_libs,ui-previewer,\
 	-lm \
 	-ldl \

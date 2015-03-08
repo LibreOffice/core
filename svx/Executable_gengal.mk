@@ -67,7 +67,7 @@ $(eval $(call gb_Executable_add_libs,gengal,\
 	-lpthread \
 ))
 else
-ifeq ($(OS),LINUX)
+ifeq ($(GUIBASE),unx)
 $(eval $(call gb_Executable_add_libs,gengal,\
 	-ldl \
 	-lpthread \
