@@ -309,10 +309,7 @@ Resource RID_GLOBSTR
     {
         Text [ en-US ] = "Edit Comment" ;
     };
-    String STR_UNDO_DEC_INDENT
-    {
-        Text [ en-US ] = "Decrease Indent" ;
-    };
+    String STR_UNDO_DEC_INDENT { Text [ en-US ] = "Decrease Indent" ; };
     String STR_UNDO_INC_INDENT
     {
         Text [ en-US ] = "Increase Indent" ;
@@ -2080,6 +2077,11 @@ Resource RID_GLOBSTR
     String STR_UNDO_FORMULA_TO_VALUE
     {
         Text [ en-US ] = "Convert Formula To Value";
+    };
+
+    String STR_TABLE_COUNT
+    {
+        Text [ en-US ] = "Sheet %1 of %2";
     };
 };
 

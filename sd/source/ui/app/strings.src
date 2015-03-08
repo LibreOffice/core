@@ -371,6 +371,17 @@ String STR_SD_PAGE
 {
     Text [ en-US ] = "Slide" ;
 };
+
+//allocated
+String STR_SD_PAGE_COUNT
+{
+    Text [ en-US ] = "Slide %1 of %2" ;
+};
+String STR_SD_PAGE_COUNT_CUSTOM
+{
+    Text [ en-US ] = "Slide %1 of %2 (%3)" ;
+};
+
 String STR_ALL_FILES
 {
     Text [ en-US ] = "All files" ;
