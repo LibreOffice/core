@@ -27,7 +27,7 @@
 #include "drawbase.hxx"
 #include "conform.hxx"
 
-extern bool bNoInterrupt;       // in mainwn.cxx
+extern bool g_bNoInterrupt;       // in swmodule.cxx
 
 ConstFormControl::ConstFormControl(SwWrtShell* pWrtShell, SwEditWin* pEditWin, SwView* pSwView) :
     SwDrawBase(pWrtShell, pEditWin, pSwView)
@@ -62,7 +62,7 @@ bool ConstFormControl::MouseButtonDown(const MouseEvent& rMEvt)
     if (rMEvt.IsLeft() && !m_pWin->IsDrawAction() &&
         (eHit == SDRHIT_UNMARKEDOBJECT || eHit == SDRHIT_NONE || m_pSh->IsDrawCreate()))
     {
-        bNoInterrupt = true;
+        g_bNoInterrupt = true;
         m_pWin->CaptureMouse();
 
         m_pWin->SetPointer(Pointer(POINTER_DRAW_RECT));

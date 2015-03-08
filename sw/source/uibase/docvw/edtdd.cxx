@@ -43,24 +43,24 @@ using namespace ::com::sun::star;
 
 // no include "dbgoutsw.hxx" here!!!!!!
 
-extern bool bNoInterrupt;
-extern bool bFrmDrag;
-extern bool bDDTimerStarted;
+extern bool g_bNoInterrupt;
+extern bool g_bFrmDrag;
+extern bool g_bDDTimerStarted;
 
-bool bExecuteDrag = false;
+bool g_bExecuteDrag = false;
 
 void SwEditWin::StartDDTimer()
 {
     m_aTimer.SetTimeoutHdl(LINK(this, SwEditWin, DDHandler));
     m_aTimer.SetTimeout(480);
     m_aTimer.Start();
-    bDDTimerStarted = true;
+    g_bDDTimerStarted = true;
 }
 
 void SwEditWin::StopDDTimer(SwWrtShell *pSh, const Point &rPt)
 {
     m_aTimer.Stop();
-    bDDTimerStarted = false;
+    g_bDDTimerStarted = false;
     if(!pSh->IsSelFrmMode())
         pSh->SetCursor(&rPt, false);
     m_aTimer.SetTimeoutHdl(LINK(this,SwEditWin, TimerHandler));
@@ -87,7 +87,7 @@ void SwEditWin::StartDrag( sal_Int8 /*nAction*/, const Point& rPosPixel )
         if ( !rSh.IsInSelect() && rSh.ChgCurrPam( aDocPos, true, true))
             //We are not selecting and aren't at a selection
             bStart = true;
-        else if ( !bFrmDrag && rSh.IsSelFrmMode() &&
+        else if ( !g_bFrmDrag && rSh.IsSelFrmMode() &&
                     rSh.IsInsideSelectedObj( aDocPos ) )
         {
             //We are not dragging internally and are not at an
@@ -95,7 +95,7 @@ void SwEditWin::StartDrag( sal_Int8 /*nAction*/, const Point& rPosPixel )
 
             bStart = true;
         }
-        else if( !bFrmDrag && m_rView.GetDocShell()->IsReadOnly() &&
+        else if( !g_bFrmDrag && m_rView.GetDocShell()->IsReadOnly() &&
                 OBJCNT_NONE != rSh.GetObjCntType( aDocPos, pObj ))
         {
             rSh.LockPaint();
@@ -116,8 +116,8 @@ void SwEditWin::StartDrag( sal_Int8 /*nAction*/, const Point& rPosPixel )
         {
             m_bMBPressed = false;
             ReleaseMouse();
-            bFrmDrag = false;
-            bExecuteDrag = true;
+            g_bFrmDrag = false;
+            g_bExecuteDrag = true;
             SwEditWin::m_nDDStartPosY = aDocPos.Y();
             SwEditWin::m_nDDStartPosX = aDocPos.X();
             m_aMovePos = aDocPos;
@@ -133,7 +133,7 @@ void SwEditWin::StartDrag( sal_Int8 /*nAction*/, const Point& rPosPixel )
 
 void SwEditWin::StartExecuteDrag()
 {
-    if( !bExecuteDrag || m_bIsInDrag )
+    if( !g_bExecuteDrag || m_bIsInDrag )
         return;
 
     m_bIsInDrag = true;
@@ -157,7 +157,7 @@ void SwEditWin::DropCleanup()
     SwWrtShell &rSh =  m_rView.GetWrtShell();
 
     // reset statuses
-    bNoInterrupt = false;
+    g_bNoInterrupt = false;
     if ( m_bOldIdleSet )
     {
         const_cast<SwViewOption*>(rSh.GetViewOptions())->SetIdle( m_bOldIdle );
@@ -477,16 +477,16 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
 
 IMPL_LINK_NOARG(SwEditWin, DDHandler)
 {
-    bDDTimerStarted = false;
+    g_bDDTimerStarted = false;
     m_aTimer.Stop();
     m_aTimer.SetTimeout(240);
     m_bMBPressed = false;
     ReleaseMouse();
-    bFrmDrag = false;
+    g_bFrmDrag = false;
 
     if ( m_rView.GetViewFrame() )
     {
-        bExecuteDrag = true;
+        g_bExecuteDrag = true;
         StartExecuteDrag();
     }
     return 0;

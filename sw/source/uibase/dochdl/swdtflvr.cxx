@@ -130,9 +130,9 @@
 #include <boost/scoped_array.hpp>
 #include <boost/scoped_ptr.hpp>
 
-extern bool bFrmDrag;
-extern bool bDDINetAttr;
-extern bool bExecuteDrag;
+extern bool g_bFrmDrag;
+extern bool g_bDDINetAttr;
+extern bool g_bExecuteDrag;
 
 #define OLESIZE 11905 - 2 * lMinBorder, 6 * MM50
 
@@ -457,7 +457,7 @@ bool SwTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
 
             Point aPos( SwEditWin::GetDDStartPosX(), SwEditWin::GetDDStartPosY());
 
-            bool bSelect = bExecuteDrag &&
+            bool bSelect = g_bExecuteDrag &&
                             pWrtShell->GetView().GetDocShell() &&
                             !pWrtShell->GetView().GetDocShell()->IsReadOnly();
             if( pWrtShell->GetContentAtPos( aPos, aCntntAtPos, bSelect ) )
@@ -2037,7 +2037,7 @@ void SwTransferable::SetSelInShell( SwWrtShell& rSh, bool bSelectFrm,
             {
                 rSh.HideCrsr();
                 rSh.EnterSelFrmMode( pPt );
-                bFrmDrag = true;
+                g_bFrmDrag = true;
             }
         }
     }
@@ -2048,7 +2048,7 @@ void SwTransferable::SetSelInShell( SwWrtShell& rSh, bool bSelectFrm,
             rSh.UnSelectFrm();
             rSh.LeaveSelFrmMode();
             rSh.GetView().GetEditWin().StopInsFrm();
-            bFrmDrag = false;
+            g_bFrmDrag = false;
         }
         else if( rSh.GetView().GetDrawFuncPtr() )
             rSh.GetView().GetEditWin().StopInsFrm();
@@ -3312,7 +3312,7 @@ bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
             {
                 rSh.HideCrsr();
                 rSh.EnterSelFrmMode( &rDragPt );
-                bFrmDrag = true;
+                g_bFrmDrag = true;
             }
 
             const int nSelection = rSh.GetSelectionType();
@@ -3334,7 +3334,7 @@ bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
                 rSh.LeaveSelFrmMode();
                 rSh.UnSelectFrm();
                 rSh.ShowCrsr();
-                bFrmDrag = false;
+                g_bFrmDrag = false;
             }
         }
     }
@@ -3441,7 +3441,7 @@ bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
         // is there an URL attribute at the insert point? Then replace that,
         // so simply put up a selection?
         rSh.DelINetAttrWithText();
-        bDDINetAttr = true;
+        g_bDDINetAttr = true;
     }
 
     if ( rSrcSh.IsSelFrmMode() )

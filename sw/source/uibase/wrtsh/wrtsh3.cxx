@@ -38,7 +38,7 @@
 
 using namespace ::com::sun::star;
 
-extern bool bNoInterrupt;       // in mainwn.cxx
+extern bool g_bNoInterrupt;       // in swmodule.cxx
 
 bool SwWrtShell::MoveBookMark( BookMarkMove eFuncId, const ::sw::mark::IMark* const pMark)
 {
@@ -121,10 +121,10 @@ void SwWrtShell::DrawSelChanged( )
 
     GetView().GetViewFrame()->GetBindings().Invalidate(aInval);
 
-    bool bOldVal = bNoInterrupt;
-    bNoInterrupt = true;    // Trick to run AttrChangedNotify by timer.
+    bool bOldVal = g_bNoInterrupt;
+    g_bNoInterrupt = true;    // Trick to run AttrChangedNotify by timer.
     GetView().AttrChangedNotify(this);
-    bNoInterrupt = bOldVal;
+    g_bNoInterrupt = bOldVal;
 }
 
 bool SwWrtShell::GotoMark( const OUString& rName )

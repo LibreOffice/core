@@ -85,7 +85,7 @@
 
 #include <paratr.hxx>
 
-extern bool bNoInterrupt;       // in mainwn.cxx
+extern bool g_bNoInterrupt;       // in swmodule.cxx
 
 using namespace ::com::sun::star;
 
@@ -1264,8 +1264,8 @@ void SwDocShell::_LoadStyles( SfxObjectShell& rSource, bool bPreserveCurrentDocu
             // rhbz#818557, fdo#58893: EndAllAction will call SelectShell(),
             // which pushes a bunch of SfxShells that are not cleared
             // (for unknown reasons) when closing the document, causing crash;
-            // setting bNoInterrupt appears to avoid the problem.
-            ::comphelper::FlagRestorationGuard g(bNoInterrupt, true);
+            // setting g_bNoInterrupt appears to avoid the problem.
+            ::comphelper::FlagRestorationGuard g(g_bNoInterrupt, true);
             mpWrtShell->StartAllAction();
             mpDoc->ReplaceStyles( *static_cast<SwDocShell&>(rSource).mpDoc );
             mpWrtShell->EndAllAction();

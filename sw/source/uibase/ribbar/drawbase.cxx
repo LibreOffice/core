@@ -39,7 +39,7 @@
 
 using namespace ::com::sun::star;
 
-extern bool bNoInterrupt;       // in mainwn.cxx
+extern bool g_bNoInterrupt;       // in swmodule.cxx
 
 SwDrawBase::SwDrawBase(SwWrtShell* pSwWrtShell, SwEditWin* pWindow, SwView* pSwView) :
     m_pView(pSwView),
@@ -88,7 +88,7 @@ bool SwDrawBase::MouseButtonDown(const MouseEvent& rMEvt)
     {
         if (IsCreateObj() && (eHit == SDRHIT_UNMARKEDOBJECT || eHit == SDRHIT_NONE || m_pSh->IsDrawCreate()))
         {
-            bNoInterrupt = true;
+            g_bNoInterrupt = true;
             m_pWin->CaptureMouse();
 
             m_aStartPos = m_pWin->PixelToLogic(rMEvt.GetPosPixel());
@@ -110,14 +110,14 @@ bool SwDrawBase::MouseButtonDown(const MouseEvent& rMEvt)
             if (eHit == SDRHIT_HANDLE && aVEvt.pHdl->GetKind() == HDL_BWGT)
             {
                 // Drag handle
-                bNoInterrupt = true;
+                g_bNoInterrupt = true;
                 bReturn = pSdrView->BegDragObj(m_aStartPos, (OutputDevice*) NULL, aVEvt.pHdl);
                 m_pWin->SetDrawAction(true);
             }
             else if (eHit == SDRHIT_MARKEDOBJECT && nEditMode == SID_BEZIER_INSERT)
             {
                 // Insert gluepoint
-                bNoInterrupt = true;
+                g_bNoInterrupt = true;
                 bReturn = pSdrView->BegInsObjPoint(m_aStartPos, rMEvt.IsMod1());
                 m_pWin->SetDrawAction(true);
             }
@@ -162,7 +162,7 @@ bool SwDrawBase::MouseButtonDown(const MouseEvent& rMEvt)
 
                     if (pHdl)
                     {
-                        bNoInterrupt = true;
+                        g_bNoInterrupt = true;
                         pSdrView->MarkPoint(*pHdl);
                     }
                 }
@@ -175,12 +175,12 @@ bool SwDrawBase::MouseButtonDown(const MouseEvent& rMEvt)
                     if (pSdrView->HasMarkablePoints())
                         pSdrView->UnmarkAllPoints();
 
-                    bNoInterrupt = false;
+                    g_bNoInterrupt = false;
                     // Use drag in edtwin
                     return false;
                 }
 
-                bNoInterrupt = true;
+                g_bNoInterrupt = true;
 
                 if (m_pSh->IsObjSelected())
                 {
@@ -444,7 +444,7 @@ void SwDrawBase::Deactivate()
     m_pWin->SetDrawAction(false);
 
     m_pWin->ReleaseMouse();
-    bNoInterrupt = false;
+    g_bNoInterrupt = false;
 
     if(m_pWin->GetApplyTemplate())
         m_pWin->SetApplyTemplate(SwApplyTemplate());

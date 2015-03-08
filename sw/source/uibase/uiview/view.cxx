@@ -117,7 +117,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::scanner;
 
-extern bool bNoInterrupt;       // in mainwn.cxx
+extern bool g_bNoInterrupt;       // in swmodule.cxx
 
 #define SWVIEWFLAGS ( SFX_VIEW_CAN_PRINT|               \
                       SFX_VIEW_HAS_PRINTOPTIONS)
@@ -476,16 +476,16 @@ IMPL_LINK_NOARG(SwView, AttrChangedNotify)
         GetEditWin().SetChainMode( false );
 
     //Opt: Not if PaintLocked. During unlock a notify will be once more triggered.
-    if( !m_pWrtShell->IsPaintLocked() && !bNoInterrupt &&
+    if( !m_pWrtShell->IsPaintLocked() && !g_bNoInterrupt &&
         GetDocShell()->IsReadOnly() )
         _CheckReadonlyState();
 
-    if( !m_pWrtShell->IsPaintLocked() && !bNoInterrupt )
+    if( !m_pWrtShell->IsPaintLocked() && !g_bNoInterrupt )
         _CheckReadonlySelection();
 
     if( !m_bAttrChgNotified )
     {
-        if ( m_pWrtShell->BasicActionPend() || bNoInterrupt ||
+        if ( m_pWrtShell->BasicActionPend() || g_bNoInterrupt ||
              GetDispatcher().IsLocked() ||               //do not confuse the SFX
              GetViewFrame()->GetBindings().IsInUpdate() )//do not confuse the SFX
         {
@@ -520,7 +520,7 @@ IMPL_LINK_NOARG(SwView, AttrChangedNotify)
 
 IMPL_LINK_NOARG(SwView, TimeoutHdl)
 {
-    if( m_pWrtShell->BasicActionPend() || bNoInterrupt )
+    if( m_pWrtShell->BasicActionPend() || g_bNoInterrupt )
     {
         m_aTimer.Start();
         return 0;
@@ -872,8 +872,8 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
 
     // In CTOR no shell changes may take place, which must be temporarily stored
     // with the timer. Otherwise, the SFX removes them from the stack!
-    bool bOld = bNoInterrupt;
-    bNoInterrupt = true;
+    bool bOld = g_bNoInterrupt;
+    g_bNoInterrupt = true;
 
     m_pHRuler->SetActive( true );
     m_pVRuler->SetActive( true );
@@ -980,7 +980,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
         m_pWrtShell->ResetModified();
     }
 
-    bNoInterrupt = bOld;
+    g_bNoInterrupt = bOld;
 
     // If a new GlobalDoc will be created, the navigator will also be generated.
     if( pDocSh->IsA(SwGlobalDocShell::StaticType()) &&
