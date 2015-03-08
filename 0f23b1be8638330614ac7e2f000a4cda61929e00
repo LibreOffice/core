@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a29b11f_7ac11180",
+        "filename": "xmloff/source/style/undlihdl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2015-03-08T20:52:11Z",
+      "side": 1,
+      "message": "I suggest \"else if\"",
+      "revId": "0f23b1be8638330614ac7e2f000a4cda61929e00",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
