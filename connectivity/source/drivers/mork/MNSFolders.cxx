@@ -66,25 +66,25 @@ namespace
     static const char* DefaultProductDir[NB_PRODUCTS][NB_CANDIDATES] =
     {
     #if defined(XP_WIN)
+        { "Thunderbird/", "Mozilla/Thunderbird/", NULL, NULL }
         { "Mozilla/SeaMonkey/", NULL, NULL, NULL },
         { "Mozilla/Firefox/", NULL, NULL, NULL },
-        { "Thunderbird/", "Mozilla/Thunderbird/", NULL, NULL }
     #elif defined(MACOSX)
+        { "../Thunderbird/", NULL, NULL, NULL }
         { "../Mozilla/SeaMonkey/", NULL, NULL, NULL },
         { "Firefox/", NULL, NULL, NULL },
-        { "../Thunderbird/", NULL, NULL, NULL }
     #else
+        { ".thunderbird/", ".mozilla-thunderbird/", ".mozilla/thunderbird/", ".icedove/" }
         { ".mozilla/seamonkey/", NULL, NULL, NULL },
         { ".mozilla/firefox/", NULL, NULL, NULL },
-        { ".thunderbird/", ".mozilla-thunderbird/", ".mozilla/thunderbird/", ".icedove/" }
     #endif
     };
 
     static const char* ProductRootEnvironmentVariable[NB_PRODUCTS] =
     {
+        "MOZILLA_THUNDERBIRD_PROFILE_ROOT",
         "MOZILLA_PROFILE_ROOT",
         "MOZILLA_FIREFOX_PROFILE_ROOT",
-        "MOZILLA_THUNDERBIRD_PROFILE_ROOT",
     };
 
 
