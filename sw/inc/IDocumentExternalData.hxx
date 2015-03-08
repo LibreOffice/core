@@ -24,11 +24,12 @@
 
 namespace sw
 {
-enum tExternalDataType { FIB, STTBF_ASSOC };
+
+enum class tExternalDataType { FIB, STTBF_ASSOC };
 
 struct ExternalDataTypeHash
 {
-    size_t operator()(tExternalDataType eType) const { return eType; }
+    size_t operator()(tExternalDataType eType) const { return static_cast<size_t>(eType); }
 };
 
 class ExternalData

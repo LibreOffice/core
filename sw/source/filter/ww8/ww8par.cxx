@@ -4882,12 +4882,12 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
 
     ::sw::tExternalDataPointer pExternalFibData(pFibData);
 
-    rDoc.getIDocumentExternalData().setExternalData(::sw::FIB, pExternalFibData);
+    rDoc.getIDocumentExternalData().setExternalData(::sw::tExternalDataType::FIB, pExternalFibData);
 
     ::sw::tExternalDataPointer pSttbfAsoc
           (new ::ww8::WW8Sttb<ww8::WW8Struct>(*pTableStream, pWwFib->fcSttbfAssoc, pWwFib->lcbSttbfAssoc));
 
-    rDoc.getIDocumentExternalData().setExternalData(::sw::STTBF_ASSOC, pSttbfAsoc);
+    rDoc.getIDocumentExternalData().setExternalData(::sw::tExternalDataType::STTBF_ASSOC, pSttbfAsoc);
 
     if (pWwFib->fWriteReservation || pWwFib->fReadOnlyRecommended)
     {
