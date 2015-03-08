@@ -16,7 +16,9 @@ $(eval $(call gb_ExternalPackage_add_file,udunits2,$(LIBO_LIB_FOLDER)/iudunits2.
 else ifeq ($(OS),MACOSX)
 $(eval $(call gb_ExternalPackage_add_file,udunits2,$(LIBO_LIB_FOLDER)/libudunits2.dylib,lib/.libs/libudunits2.dylib))
 else
-$(eval $(call gb_ExternalPackage_add_file,udunits2,$(LIBO_LIB_FOLDER)/libudunits2.so.0,lib/.libs/libudunits2.so.0.1.0))
+$(eval $(call gb_ExternalPackage_add_file,udunits2,$(LIBO_LIB_FOLDER)/libudunits2.so,lib/.libs/libudunits2.so))
+$(eval $(call gb_ExternalPackage_add_file,udunits2,$(LIBO_LIB_FOLDER)/libudunits2.so.0,lib/.libs/libudunits2.so.0))
+$(eval $(call gb_ExternalPackage_add_file,udunits2,$(LIBO_LIB_FOLDER)/libudunits2.so.0.1.0,lib/.libs/libudunits2.so.0.1.0))
 endif
 
 $(eval $(call gb_ExternalPackage_add_file,udunits2,$(LIBO_SHARE_FOLDER)/udunits2/udunits2.xml,lib/udunits2.xml))
