@@ -18,6 +18,18 @@ else
     headers="$1"
 fi
 
+# Split the headers into an array.
+IFS=' ' read -a aheaders <<< $headers
+hlen=${#aheaders[@]};
+if [ $hlen -gt 1 ]; then
+    cpus=$(grep "^ *export PARALLELISM=" config_host.mk | sed -e "s/[^=]*=//")
+    if [ -z "$cpus" ]; then
+        cpus=0 # Let xargs decide
+    fi
+    echo $headers | xargs -n 1 -P $cpus $0
+    exit $?
+fi
+
 for x in $headers; do
     header=$x
     echo updating `echo $header | sed -e s%$root/%%`
