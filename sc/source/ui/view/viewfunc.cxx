@@ -471,6 +471,15 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
             if ( pUnits->verifyFormula( pArr, aPos, pDoc ) )
             {
                 SAL_INFO( "sc.units", "verification successful" );
+
+                // If we have fixed a previously erronous cell we need to make sure we remove
+                // the associate warning infobar. It's simplest to simply call RemoveInfoBar
+                // with the hypothetical ID, and RemoveInfoBar deals with the remaning details.
+                // (The cell address is used as it's infobar id, see NotifyUnitErrorInFormula
+                // for further details.)
+                SfxViewFrame* pViewFrame = GetViewData().GetViewShell()->GetFrame();
+                OUString sAddress = aPos.Format( SCA_BITS, pDoc );
+                pViewFrame->RemoveInfoBar( sAddress );
             }
             else
             {
