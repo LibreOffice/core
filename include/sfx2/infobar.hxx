@@ -40,7 +40,7 @@ class SFX2_DLLPUBLIC SfxInfoBarContainerChild : public SfxChildWindow
 
 /** Class representing a single InfoBar to be added in a SfxInfoBarContainerWindow.
   */
-class SfxInfoBarWindow : public vcl::Window
+class SFX2_DLLPUBLIC SfxInfoBarWindow : public vcl::Window
 {
     private:
         OUString                           m_sId;
