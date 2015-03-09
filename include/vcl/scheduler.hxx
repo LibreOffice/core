@@ -41,8 +41,8 @@ struct ImplSchedulerData
 enum class SchedulerPriority {
     HIGHEST   = 0,
     HIGH      = 1,
-    REPAINT   = 2,
-    RESIZE    = 3,
+    RESIZE    = 2,
+    REPAINT   = 3,
     MEDIUM    = 3,
     LOW       = 4,
     LOWER     = 5,
