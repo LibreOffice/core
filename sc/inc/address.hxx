@@ -84,16 +84,6 @@ const SCROW SCROWS32K         = 32000;
 const SCCOL SCCOL_REPEAT_NONE = SCCOL_MAX;
 const SCROW SCROW_REPEAT_NONE = SCROW_MAX;
 
-// For future reference, place in code where more than 64k rows would need a
-// special handling:
-// #if SC_ROWLIMIT_MORE_THAN_64K
-// #error row limit 64k
-// #endif
-#if MAXROWCOUNT_DEFINE > 65536
-#define SC_ROWLIMIT_MORE_THAN_64K 1
-#else
-#define SC_ROWLIMIT_MORE_THAN_64K 0
-#endif
 const SCROW SCROWS64K = 65536;
 
 #define MAXROW_30   8191
