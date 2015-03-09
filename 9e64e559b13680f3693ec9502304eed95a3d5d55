@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a29b11f_9a0bcd7d",
+        "filename": "sd/source/ui/slidesorter/controller/SlsSlotManager.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 858,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-03-09T17:41:55Z",
+      "side": 1,
+      "message": "\"%3\" is only in the STR_SD_PAGE_COUNT_CUSTOM string, so needs only to replaced if nPageCount !\u003d nActivePageCount",
+      "revId": "9e64e559b13680f3693ec9502304eed95a3d5d55",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a29b11f_ba1009aa",
+        "filename": "sd/source/ui/view/drviewsa.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 708,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-03-09T17:41:55Z",
+      "side": 1,
+      "message": "Same here, \"%3\" is only in the STR_SD_PAGE_COUNT_CUSTOM string, so needs only to replaced if nPageCount !\u003d nActivePageCount",
+      "revId": "9e64e559b13680f3693ec9502304eed95a3d5d55",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
