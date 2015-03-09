@@ -558,7 +558,8 @@ void syncRepositories(
         }
     }
 #if !HAVE_FEATURE_MACOSX_SANDBOX
-    if (bModified)
+    // getenv is a hack to detect if we're running in a LOK unit test
+    if (bModified && !getenv("LOK_TEST"))
     {
         Reference<task::XRestartManager> restarter(task::OfficeRestartManager::get(comphelper::getProcessComponentContext()));
         if (restarter.is())

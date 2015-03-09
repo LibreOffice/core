@@ -63,8 +63,8 @@ public:
 
     void testDocumentLoadFail( Office* pOffice );
     void testDocumentTypes( Office* pOffice );
-    void testImpressSlideNames( Office* pOffice );
 #if 0
+    void testImpressSlideNames( Office* pOffice );
     void testOverlay( Office* pOffice );
 #endif
 
@@ -91,8 +91,8 @@ void TiledRenderingTest::runAllTests()
 
     testDocumentLoadFail( pOffice.get() );
     testDocumentTypes( pOffice.get() );
-    testImpressSlideNames( pOffice.get() );
 #if 0
+    testImpressSlideNames( pOffice.get() );
     testOverlay( pOffice.get() );
 #endif
 }
@@ -139,6 +139,7 @@ void TiledRenderingTest::testDocumentTypes( Office* pOffice )
     // TODO: do this for all supported document types
 }
 
+#if 0
 void TiledRenderingTest::testImpressSlideNames( Office* pOffice )
 {
     const string sDocPath = m_sSrcRoot + "/libreofficekit/qa/data/impress_slidenames.odp";
@@ -160,7 +161,6 @@ void TiledRenderingTest::testImpressSlideNames( Office* pOffice )
     // have a localised version of "Slide 3".
 }
 
-#if 0
 static void dumpRGBABitmap( const OUString& rPath, const unsigned char* pBuffer,
                             const int nWidth, const int nHeight )
 {
