@@ -1,6 +1,5 @@
 package org.libreoffice;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -8,6 +7,9 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -31,7 +33,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LibreOfficeMainActivity extends Activity {
+public class LibreOfficeMainActivity extends ActionBarActivity {
 
     private static final String LOGTAG = "LibreOfficeMainActivity";
     private static final String DEFAULT_DOC_PATH = "/assets/example.odt";
@@ -44,7 +46,6 @@ public class LibreOfficeMainActivity extends Activity {
     public Handler mMainHandler;
 
     private DrawerLayout mDrawerLayout;
-    private RelativeLayout mGeckoLayout;
     private ListView mDrawerList;
     private List<DocumentPartView> mDocumentPartView = new ArrayList<DocumentPartView>();
     private DocumentPartViewListAdapter mDocumentPartViewListAdapter;
@@ -53,6 +54,7 @@ public class LibreOfficeMainActivity extends Activity {
     private TextCursorLayer mTextCursorLayer;
     private File mTempFile = null;
     private LOAbout mAbout;
+
     public LibreOfficeMainActivity() {
         mAbout = new LOAbout(this, false);
     }
@@ -116,10 +118,19 @@ public class LibreOfficeMainActivity extends Activity {
 
         setContentView(R.layout.activity_main);
 
-        getActionBar().setDisplayHomeAsUpEnabled(false);
-        getActionBar().setHomeButtonEnabled(false);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.lo_icon);
 
-        mGeckoLayout = (RelativeLayout) findViewById(R.id.gecko_layout);
+        //getSupportActionBar().setHomeAsUpIndicator();
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         if (mDocumentPartViewListAdapter == null) {

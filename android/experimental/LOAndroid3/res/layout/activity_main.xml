@@ -6,26 +6,34 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="#fff"
-    tools:context=".MainActivity">
+    tools:context=".LibreOfficeMainActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <RelativeLayout
-            android:id="@+id/gecko_layout"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="1">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <org.mozilla.gecko.gfx.LayerView
-                android:id="@+id/layer_view"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"/>
+            <include layout="@layout/toolbar"/>
 
-            <include layout="@layout/text_selection_handles"/>
+            <RelativeLayout
+                android:id="@+id/gecko_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-        </RelativeLayout>
+                <org.mozilla.gecko.gfx.LayerView
+                    android:id="@+id/layer_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+
+                <include layout="@layout/text_selection_handles"/>
+
+            </RelativeLayout>
+        </LinearLayout>
 
         <RelativeLayout
             android:id="@+id/loadingPanel"
