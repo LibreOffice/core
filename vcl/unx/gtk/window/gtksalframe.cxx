@@ -382,6 +382,8 @@ struct DamageTracker : public basebmp::IBitmapDeviceDamageTracker
     GtkSalFrame& m_rFrame;
 };
 }
+
+static bool dumpframes = false;
 #endif
 
 void GtkSalFrame::doKeyCallback( guint state,
@@ -406,10 +408,23 @@ void GtkSalFrame::doKeyCallback( guint state,
     // shift-zero forces a re-draw and event is swallowed
     if (keyval == GDK_0)
     {
-        fprintf( stderr, "force re-draw\n");
+        fprintf( stderr, "force widget_queue_draw\n");
         gtk_widget_queue_draw (m_pWindow);
         return;
     }
+    else if (keyval == GDK_1)
+    {
+        fprintf( stderr, "force repaint all\n");
+        TriggerPaintEvent();
+        return;
+    }
+    else if (keyval == GDK_2)
+    {
+        dumpframes = !dumpframes;
+        fprintf(stderr, "toggle dump frames to %d\n", dumpframes);
+        return;
+    }
+
 #endif
 
     /*
@@ -3367,14 +3382,14 @@ void GtkSalFrame::damaged (const basegfx::B2IBox& rDamageRect)
                  (int) rDamageRect.getHeight(),
                  area );
     }
-
-#if FRAME_BY_FRAME_DEBUG
-    static int frame;
-    OString tmp("/tmp/frame" + OString::number(frame++) + ".png");
-    cairo_surface_write_to_png(cairo_get_target(getCairoContext()), tmp.getStr());
 #endif
 
-#endif
+    if (dumpframes)
+    {
+        static int frame;
+        OString tmp("/tmp/frame" + OString::number(frame++) + ".png");
+        cairo_surface_write_to_png(cairo_get_target(getCairoContext()), tmp.getStr());
+    }
 
     /* FIXME: this is a dirty hack, to render buttons correctly, we
      * should of course remove the -1 and +2, but the whole area
