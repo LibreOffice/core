@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a29b11f_7a927159",
+        "filename": "sd/inc/drawdoc.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-03-09T10:39:47Z",
+      "side": 1,
+      "message": "Nitpicking: \u0027e\u0027 in a variable name (e.g. meFoo) denotes enum data type. For integer variable, mnCurrentPage would be an appropriate name",
+      "revId": "3171efadcaabdfa26b653da4efa6db6baf1e3303",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
