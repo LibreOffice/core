@@ -166,7 +166,7 @@ public:
 
         @return  Added relation Id.
      */
-    OUString     addRelation( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > xOutputStream, const OUString& rType, const OUString& rTarget, bool bExternal = false );
+    OUString     addRelation( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& rOutputStream, const OUString& rType, const OUString& rTarget, bool bExternal = false );
 
     /** Returns a stack of used textfields, used by the pptx importer to replace links to slidepages with the real page name */
     TextFieldStack& getTextFieldStack() const;

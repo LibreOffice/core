@@ -106,7 +106,7 @@ namespace
 class CellTextProvider : public svx::ITextProvider
 {
 public:
-    explicit CellTextProvider(const sdr::table::CellRef xCell);
+    explicit CellTextProvider(const sdr::table::CellRef& rCell);
     virtual ~CellTextProvider();
 
 private:
@@ -117,8 +117,8 @@ private:
     const sdr::table::CellRef m_xCell;
 };
 
-CellTextProvider::CellTextProvider(const sdr::table::CellRef xCell)
-    : m_xCell(xCell)
+CellTextProvider::CellTextProvider(const sdr::table::CellRef& rCell)
+    : m_xCell(rCell)
 {
 }
 

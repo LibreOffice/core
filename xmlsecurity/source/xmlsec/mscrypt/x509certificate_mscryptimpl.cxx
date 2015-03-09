@@ -485,8 +485,8 @@ const Sequence< sal_Int8>& X509Certificate_MSCryptImpl :: getUnoTunnelId() {
 }
 
 /* XUnoTunnel extension */
-X509Certificate_MSCryptImpl* X509Certificate_MSCryptImpl :: getImplementation( const Reference< XInterface > xObj ) {
-    Reference< XUnoTunnel > xUT( xObj , UNO_QUERY ) ;
+X509Certificate_MSCryptImpl* X509Certificate_MSCryptImpl :: getImplementation( const Reference< XInterface >& rObj ) {
+    Reference< XUnoTunnel > xUT( rObj , UNO_QUERY ) ;
     if( xUT.is() ) {
         return ( X509Certificate_MSCryptImpl* )xUT->getSomething( getUnoTunnelId() ) ;
     } else

@@ -198,12 +198,12 @@ public:
                                     const com::sun::star::uno::Reference< com::sun::star::chart2::XDiagram > & xNewDiagram,
                                     bool bExportContent );
     void exportAxis( enum XMLTokenEnum eDimension, enum XMLTokenEnum eAxisName,
-                    const Reference< beans::XPropertySet > xAxisProps, const Reference< chart2::XAxis >& xChart2Axis,
+                    const Reference< beans::XPropertySet >& rAxisProps, const Reference< chart2::XAxis >& rChart2Axis,
                     const OUString& rCategoriesRanges,
                     bool bHasTitle, bool bHasMajorGrid, bool bHasMinorGrid, bool bExportContent );
-    void exportGrid( const Reference< beans::XPropertySet > xGridProperties, bool bMajor, bool bExportContent );
-    void exportDateScale( const Reference< beans::XPropertySet > xAxisProps );
-    void exportAxisTitle( const Reference< beans::XPropertySet > xTitleProps, bool bExportContent );
+    void exportGrid( const Reference< beans::XPropertySet >& rGridProperties, bool bMajor, bool bExportContent );
+    void exportDateScale( const Reference< beans::XPropertySet >& rAxisProps );
+    void exportAxisTitle( const Reference< beans::XPropertySet >& rTitleProps, bool bExportContent );
 
     void exportSeries(
         const com::sun::star::uno::Reference< com::sun::star::chart2::XDiagram > & xNewDiagram,
@@ -961,13 +961,13 @@ void lcl_exportNumberFormat( const OUString& rPropertyName, const Reference< bea
     return aResult;
 }
 
-bool lcl_exportDomainForThisSequence( const Reference< chart2::data::XDataSequence > xValues, OUString& rFirstRangeForThisDomainIndex, SvXMLExport& rExport )
+bool lcl_exportDomainForThisSequence( const Reference< chart2::data::XDataSequence >& rValues, OUString& rFirstRangeForThisDomainIndex, SvXMLExport& rExport )
 {
     bool bDomainExported = false;
-    if( xValues.is())
+    if( rValues.is())
     {
         Reference< chart2::XChartDocument > xNewDoc( rExport.GetModel(), uno::UNO_QUERY );
-        OUString aRange( lcl_ConvertRange( xValues->getSourceRangeRepresentation(), xNewDoc ) );
+        OUString aRange( lcl_ConvertRange( rValues->getSourceRangeRepresentation(), xNewDoc ) );
 
         //work around error in OOo 2.0 (problems with multiple series having a domain element)
         if( rFirstRangeForThisDomainIndex.isEmpty() || !aRange.equals(rFirstRangeForThisDomainIndex) )
@@ -2156,13 +2156,13 @@ namespace
     }
 }
 
-void SchXMLExportHelper_Impl::exportDateScale( const Reference< beans::XPropertySet > xAxisProps )
+void SchXMLExportHelper_Impl::exportDateScale( const Reference< beans::XPropertySet >& rAxisProps )
 {
-    if( !xAxisProps.is() )
+    if( !rAxisProps.is() )
         return;
 
     chart::TimeIncrement aIncrement;
-    if( (xAxisProps->getPropertyValue("TimeIncrement") >>= aIncrement) )
+    if( (rAxisProps->getPropertyValue("TimeIncrement") >>= aIncrement) )
     {
         sal_Int32 nTimeResolution = ::com::sun::star::chart::TimeUnit::DAY;
         if( aIncrement.TimeResolution >>= nTimeResolution )
@@ -2187,19 +2187,19 @@ void SchXMLExportHelper_Impl::exportDateScale( const Reference< beans::XProperty
     }
 }
 
-void SchXMLExportHelper_Impl::exportAxisTitle( const Reference< beans::XPropertySet > xTitleProps, bool bExportContent )
+void SchXMLExportHelper_Impl::exportAxisTitle( const Reference< beans::XPropertySet >& rTitleProps, bool bExportContent )
 {
-    if( !xTitleProps.is() )
+    if( !rTitleProps.is() )
         return;
-    std::vector< XMLPropertyState > aPropertyStates = mxExpPropMapper->Filter( xTitleProps );
+    std::vector< XMLPropertyState > aPropertyStates = mxExpPropMapper->Filter( rTitleProps );
     if( bExportContent )
     {
         OUString aText;
-        Any aAny( xTitleProps->getPropertyValue(
+        Any aAny( rTitleProps->getPropertyValue(
             OUString(  "String" )));
         aAny >>= aText;
 
-        Reference< drawing::XShape > xShape( xTitleProps, uno::UNO_QUERY );
+        Reference< drawing::XShape > xShape( rTitleProps, uno::UNO_QUERY );
         if( xShape.is())
             addPosition( xShape );
 
@@ -2216,11 +2216,11 @@ void SchXMLExportHelper_Impl::exportAxisTitle( const Reference< beans::XProperty
     aPropertyStates.clear();
 }
 
-void SchXMLExportHelper_Impl::exportGrid( const Reference< beans::XPropertySet > xGridProperties, bool bMajor, bool bExportContent )
+void SchXMLExportHelper_Impl::exportGrid( const Reference< beans::XPropertySet >& rGridProperties, bool bMajor, bool bExportContent )
 {
-    if( !xGridProperties.is() )
+    if( !rGridProperties.is() )
         return;
-    std::vector< XMLPropertyState > aPropertyStates = mxExpPropMapper->Filter( xGridProperties );
+    std::vector< XMLPropertyState > aPropertyStates = mxExpPropMapper->Filter( rGridProperties );
     if( bExportContent )
     {
         AddAutoStyleAttribute( aPropertyStates );
@@ -2238,17 +2238,17 @@ namespace
 {
 
 //returns true if a date scale needs to be exported
-bool lcl_exportAxisType( const Reference< chart2::XAxis > xChart2Axis, SvXMLExport& rExport)
+bool lcl_exportAxisType( const Reference< chart2::XAxis >& rChart2Axis, SvXMLExport& rExport)
 {
     bool bExportDateScale = false;
-    if( !xChart2Axis.is() )
+    if( !rChart2Axis.is() )
         return bExportDateScale;
 
     const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion( SvtSaveOptions().GetODFDefaultVersion() );
     if( nCurrentODFVersion <= SvtSaveOptions::ODFVER_012 )//do not export to ODF 1.2 or older
         return bExportDateScale;
 
-    chart2::ScaleData aScale( xChart2Axis->getScaleData() );
+    chart2::ScaleData aScale( rChart2Axis->getScaleData() );
     //#i25706#todo: change namespace for next ODF version
     sal_uInt16 nNameSpace = XML_NAMESPACE_CHART_EXT;
 
@@ -2306,8 +2306,8 @@ void disableLinkedNumberFormat(
 void SchXMLExportHelper_Impl::exportAxis(
     enum XMLTokenEnum eDimension,
     enum XMLTokenEnum eAxisName,
-    const Reference< beans::XPropertySet > xAxisProps,
-    const Reference< chart2::XAxis >& xChart2Axis,
+    const Reference< beans::XPropertySet >& rAxisProps,
+    const Reference< chart2::XAxis >& rChart2Axis,
     const OUString& rCategoriesRange,
     bool bHasTitle, bool bHasMajorGrid, bool bHasMinorGrid,
     bool bExportContent )
@@ -2316,10 +2316,10 @@ void SchXMLExportHelper_Impl::exportAxis(
     SvXMLElementExport* pAxis = NULL;
 
     // get property states for autostyles
-    if( xAxisProps.is() && mxExpPropMapper.is() )
+    if( rAxisProps.is() && mxExpPropMapper.is() )
     {
-        lcl_exportNumberFormat( "NumberFormat", xAxisProps, mrExport );
-        aPropertyStates = mxExpPropMapper->Filter( xAxisProps );
+        lcl_exportNumberFormat( "NumberFormat", rAxisProps, mrExport );
+        aPropertyStates = mxExpPropMapper->Filter( rAxisProps );
 
         if (!maSrcShellID.isEmpty() && !maDestShellID.isEmpty() && maSrcShellID != maDestShellID)
         {
@@ -2337,7 +2337,7 @@ void SchXMLExportHelper_Impl::exportAxis(
         mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_NAME, eAxisName );
         AddAutoStyleAttribute( aPropertyStates ); // write style name
         if( !rCategoriesRange.isEmpty() )
-            bExportDateScale = lcl_exportAxisType( xChart2Axis, mrExport );
+            bExportDateScale = lcl_exportAxisType( rChart2Axis, mrExport );
 
         // open axis element
         pAxis = new SvXMLElementExport( mrExport, XML_NAMESPACE_CHART, XML_AXIS, true, true );
@@ -2350,12 +2350,12 @@ void SchXMLExportHelper_Impl::exportAxis(
 
     //date scale
     if( bExportDateScale )
-        exportDateScale( xAxisProps );
+        exportDateScale( rAxisProps );
 
     Reference< beans::XPropertySet > xTitleProps;
     Reference< beans::XPropertySet > xMajorGridProps;
     Reference< beans::XPropertySet > xMinorGridProps;
-    Reference< chart::XAxis > xAxis( xAxisProps, uno::UNO_QUERY );
+    Reference< chart::XAxis > xAxis( rAxisProps, uno::UNO_QUERY );
     if( xAxis.is() )
     {
         xTitleProps = bHasTitle ? xAxis->getAxisTitle() : 0;

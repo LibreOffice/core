@@ -112,7 +112,7 @@ namespace xmloff
         m_pImpl->exportAutoStyles();
     }
 
-    void OFormLayerXMLExport::excludeFromExport( const Reference< XControlModel > _rxControl )
+    void OFormLayerXMLExport::excludeFromExport( const Reference< XControlModel >& _rxControl )
     {
         m_pImpl->excludeFromExport( _rxControl );
     }

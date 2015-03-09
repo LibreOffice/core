@@ -109,9 +109,9 @@ static const sal_uInt16 STARTID_CUSTOMIZE_POPUPMENU = 1000;
 class ImageOrientationListener : public svt::FrameStatusListener
 {
     public:
-        ImageOrientationListener( const Reference< XStatusListener > rReceiver,
-                                  const Reference< XComponentContext > rxContext,
-                                  const Reference< XFrame > rFrame );
+        ImageOrientationListener( const Reference< XStatusListener >& rReceiver,
+                                  const Reference< XComponentContext >& rxContext,
+                                  const Reference< XFrame >& rFrame );
         virtual ~ImageOrientationListener();
 
         virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
@@ -121,9 +121,9 @@ class ImageOrientationListener : public svt::FrameStatusListener
 };
 
 ImageOrientationListener::ImageOrientationListener(
-    const Reference< XStatusListener > rReceiver,
-    const Reference< XComponentContext > rxContext,
-    const Reference< XFrame > rFrame ) :
+    const Reference< XStatusListener >& rReceiver,
+    const Reference< XComponentContext >& rxContext,
+    const Reference< XFrame >& rFrame ) :
     FrameStatusListener( rxContext, rFrame ),
     m_xReceiver( rReceiver )
 {

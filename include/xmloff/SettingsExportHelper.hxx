@@ -77,10 +77,10 @@ class XMLOFF_DLLPUBLIC XMLSettingsExportHelper
                         const OUString& rName,
                         const bool bNameAccess) const;
     void exportNameAccess(
-        const com::sun::star::uno::Reference<com::sun::star::container::XNameAccess>& aNamed,
+        const com::sun::star::uno::Reference<com::sun::star::container::XNameAccess>& rNamed,
         const OUString& rName) const;
     void exportIndexAccess(
-        const com::sun::star::uno::Reference<com::sun::star::container::XIndexAccess> aIndexed,
+        const com::sun::star::uno::Reference<com::sun::star::container::XIndexAccess>& rIndexed,
         const OUString& rName) const;
 
     void exportSymbolDescriptors(

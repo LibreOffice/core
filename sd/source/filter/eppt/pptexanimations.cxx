@@ -1767,14 +1767,14 @@ Reference< XShape > AnimationExporter::getTargetElementShape( const Any& rAny, s
     return xShape;
 }
 
-void AnimationExporter::exportAnimateTargetElement( SvStream& rStrm, const Any aAny, const bool bCreate2b01Atom )
+void AnimationExporter::exportAnimateTargetElement( SvStream& rStrm, const Any& rAny, const bool bCreate2b01Atom )
 {
     sal_uInt32 nRefMode = 0;    // nRefMode == 2 -> Paragraph
     sal_Int32 begin = -1;
     sal_Int32 end = -1;
     bool bParagraphTarget;
 
-    Reference< XShape > xShape = getTargetElementShape( aAny, begin, end, bParagraphTarget );
+    Reference< XShape > xShape = getTargetElementShape(rAny, begin, end, bParagraphTarget);
 
     if( bParagraphTarget )
         nRefMode = 2;

@@ -103,23 +103,20 @@ namespace svx
     {
     }
 
-
     PropertyChangeNotifier::~PropertyChangeNotifier()
     {
     }
 
-
-    void PropertyChangeNotifier::registerProvider( const ShapeProperty _eProperty, const PPropertyValueProvider _pProvider )
+    void PropertyChangeNotifier::registerProvider(const ShapeProperty _eProperty, const PPropertyValueProvider& _rProvider)
     {
         ENSURE_OR_THROW( _eProperty != eInvalidShapeProperty, "Illegal ShapeProperty value!" );
-        ENSURE_OR_THROW( !!_pProvider, "NULL factory not allowed." );
+        ENSURE_OR_THROW( !!_rProvider, "NULL factory not allowed." );
 
         OSL_ENSURE( m_xData->m_aProviders.find( _eProperty ) == m_xData->m_aProviders.end(),
             "PropertyChangeNotifier::registerProvider: factory for this ID already present!" );
 
-        m_xData->m_aProviders[ _eProperty ] = _pProvider;
+        m_xData->m_aProviders[ _eProperty ] = _rProvider;
     }
-
 
     void PropertyChangeNotifier::notifyPropertyChange( const ShapeProperty _eProperty ) const
     {

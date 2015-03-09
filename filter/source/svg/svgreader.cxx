@@ -59,10 +59,10 @@ namespace
 /** visits all children of the specified type with the given functor
  */
 template<typename Func> void visitChildren(const Func& rFunc,
-                                           const uno::Reference<xml::dom::XElement> xElem,
+                                           const uno::Reference<xml::dom::XElement>& rElem,
                                            xml::dom::NodeType eChildType )
 {
-    uno::Reference<xml::dom::XNodeList> xChildren( xElem->getChildNodes() );
+    uno::Reference<xml::dom::XNodeList> xChildren( rElem->getChildNodes() );
     const sal_Int32 nNumNodes( xChildren->getLength() );
     for( sal_Int32 i=0; i<nNumNodes; ++i )
     {
@@ -78,22 +78,22 @@ template<typename Func> void visitChildren(const Func& rFunc,
     element's attributes, if any
  */
 template<typename Func> void visitElements(Func& rFunc,
-                                           const uno::Reference<xml::dom::XElement> xElem,
+                                           const uno::Reference<xml::dom::XElement>& rElem,
                                            SvgiVisitorCaller eCaller)
 {
-    if( xElem->hasAttributes() )
-        rFunc(xElem,xElem->getAttributes());
+    if( rElem->hasAttributes() )
+        rFunc(rElem, rElem->getAttributes());
     else
-        rFunc(xElem);
+        rFunc(rElem);
 
     // notify children processing
     rFunc.push();
 
     // recurse over children
-    if (eCaller == SHAPE_WRITER && xElem->getTagName() == "defs") {
+    if (eCaller == SHAPE_WRITER && rElem->getTagName() == "defs") {
         return;
     }
-    uno::Reference<xml::dom::XNodeList> xChildren( xElem->getChildNodes() );
+    uno::Reference<xml::dom::XNodeList> xChildren( rElem->getChildNodes() );
     const sal_Int32 nNumNodes( xChildren->getLength() );
     for( sal_Int32 i=0; i<nNumNodes; ++i )
     {
@@ -1173,11 +1173,11 @@ struct AnnotatingVisitor
 static void annotateStyles( StatePool&                                        rStatePool,
                             StateMap&                                         rStateMap,
                             const State&                                       rInitialState,
-                            const uno::Reference<xml::dom::XElement>          xElem,
+                            const uno::Reference<xml::dom::XElement>&         rElem,
                             const uno::Reference<xml::sax::XDocumentHandler>& xDocHdl )
 {
     AnnotatingVisitor aVisitor(rStatePool,rStateMap,rInitialState,xDocHdl);
-    visitElements(aVisitor, xElem, STYLE_ANNOTATOR);
+    visitElements(aVisitor, rElem, STYLE_ANNOTATOR);
 }
 
 struct ShapeWritingVisitor
@@ -1716,11 +1716,11 @@ struct ShapeWritingVisitor
 /// Write out shapes from DOM tree
 static void writeShapes( StatePool&                                        rStatePool,
                          StateMap&                                         rStateMap,
-                         const uno::Reference<xml::dom::XElement>          xElem,
+                         const uno::Reference<xml::dom::XElement>&         rElem,
                          const uno::Reference<xml::sax::XDocumentHandler>& xDocHdl )
 {
     ShapeWritingVisitor aVisitor(rStatePool,rStateMap,xDocHdl);
-    visitElements(aVisitor, xElem, SHAPE_WRITER);
+    visitElements(aVisitor, rElem, SHAPE_WRITER);
 }
 
 } // namespace
@@ -1832,11 +1832,11 @@ struct OfficeStylesWritingVisitor
 };
 
 static void writeOfficeStyles(  StateMap&                                         rStateMap,
-                                const uno::Reference<xml::dom::XElement>          xElem,
+                                const uno::Reference<xml::dom::XElement>&         rElem,
                                 const uno::Reference<xml::sax::XDocumentHandler>& xDocHdl )
 {
     OfficeStylesWritingVisitor aVisitor( rStateMap, xDocHdl );
-    visitElements( aVisitor, xElem, STYLE_WRITER );
+    visitElements( aVisitor, rElem, STYLE_WRITER );
 }
 
 #if OSL_DEBUG_LEVEL > 2

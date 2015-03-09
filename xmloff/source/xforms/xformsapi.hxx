@@ -47,7 +47,7 @@ com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> xforms_findX
 void xforms_setValue(
     com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>& xPropSet,
     const OUString& rName,
-    const com::sun::star::uno::Any rAny );
+    const com::sun::star::uno::Any& rAny );
 
 template<typename T>
 void xforms_setValue(

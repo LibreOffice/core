@@ -145,12 +145,12 @@ private:
 
 // #110680#
 SvxXMLXTableExportComponent::SvxXMLXTableExportComponent(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
+    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rContext,
     const OUString& rFileName,
     const uno::Reference<xml::sax::XDocumentHandler> & rHandler,
     const uno::Reference<container::XNameContainer >& xTable,
     uno::Reference<document::XGraphicObjectResolver >& xGrfResolver )
-:   SvXMLExport( xContext, "", rFileName, rHandler, NULL, FUNIT_100TH_MM),
+:   SvXMLExport(rContext, "", rFileName, rHandler, NULL, FUNIT_100TH_MM),
     mxTable( xTable )
 {
 

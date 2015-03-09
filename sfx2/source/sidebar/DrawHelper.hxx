@@ -36,8 +36,8 @@ class DrawHelper
 public:
     static void DrawBorder (
         OutputDevice& rDevice,
-        const Rectangle rBox,
-        const SvBorder aBorderSize,
+        const Rectangle& rBox,
+        const SvBorder& rBorderSize,
         const Paint& rHorizontalPaint,
         const Paint& rVerticalPaint);
     static void DrawHorizontalLine(

@@ -261,16 +261,16 @@ protected:
     } meInitMode;
 
     void implStoreLibrary( SfxLibrary* pLib,
-                            const OUString& aName,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
+                            const OUString& rName,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& rStorage );
 
     // New variant for library export
     void implStoreLibrary( SfxLibrary* pLib,
-                            const OUString& aName,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage,
-                            const OUString& aTargetURL,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess3 > xToUseSFI,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler );
+                            const OUString& rName,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& rStorage,
+                            const OUString& rTargetURL,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess3 >& rToUseSFI,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& rHandler );
 
     void implStoreLibraryIndexFile( SfxLibrary* pLib, const ::xmlscript::LibDescriptor& rLib,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
@@ -279,7 +279,7 @@ protected:
     void implStoreLibraryIndexFile( SfxLibrary* pLib, const ::xmlscript::LibDescriptor& rLib,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage,
                                     const OUString& aTargetURL,
-                                    const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess3 > xToUseSFI );
+                                    const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess3 >& rToUseSFI );
 
     bool implLoadLibraryIndexFile( SfxLibrary* pLib,
                                     ::xmlscript::LibDescriptor& rLib,
@@ -317,9 +317,9 @@ protected:
 
     // New variant for library export
     virtual bool implStorePasswordLibrary( SfxLibrary* pLib, const OUString& aName,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage,
+                        const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& rStorage,
                         const OUString& aTargetURL,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess3 > xToUseSFI, const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& Handler );
+                        const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess3 >& rToUseSFI, const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& Handler );
 
     virtual bool implLoadPasswordLibrary( SfxLibrary* pLib, const OUString& Name,
                                           bool bVerifyPasswordOnly=false )
@@ -734,7 +734,7 @@ class ScriptSubPackageIterator
 
     com::sun::star::uno::Reference< com::sun::star::deployment::XPackage >
         implDetectScriptPackage( const com::sun::star::uno::Reference
-            < com::sun::star::deployment::XPackage > xPackage, bool& rbPureDialogLib );
+            < com::sun::star::deployment::XPackage >& rPackage, bool& rbPureDialogLib );
 
 public:
     ScriptSubPackageIterator( com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > xMainPackage );

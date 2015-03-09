@@ -194,13 +194,13 @@ awt::Size lcl_createTextShapes(
     return aResult;
 }
 
-void lcl_collectColumnWidths( std::vector< sal_Int32 >& rColumnWidths, const sal_Int32 nNumberOfRows, const sal_Int32 nNumberOfColumns
-                             , const ::std::vector< Reference< drawing::XShape > > aTextShapes, sal_Int32 nSymbolPlusDistanceWidth )
+void lcl_collectColumnWidths( std::vector< sal_Int32 >& rColumnWidths, const sal_Int32 nNumberOfRows, const sal_Int32 nNumberOfColumns,
+                              const ::std::vector< Reference< drawing::XShape > >& rTextShapes, sal_Int32 nSymbolPlusDistanceWidth )
 {
     rColumnWidths.clear();
     sal_Int32 nRow = 0;
     sal_Int32 nColumn = 0;
-    sal_Int32 nNumberOfEntries = aTextShapes.size();
+    sal_Int32 nNumberOfEntries = rTextShapes.size();
     for( ; nRow < nNumberOfRows; ++nRow )
     {
         for( nColumn = 0; nColumn < nNumberOfColumns; ++nColumn )
@@ -208,7 +208,7 @@ void lcl_collectColumnWidths( std::vector< sal_Int32 >& rColumnWidths, const sal
             sal_Int32 nEntry = (nColumn + nRow * nNumberOfColumns);
             if( nEntry < nNumberOfEntries )
             {
-                awt::Size aTextSize( aTextShapes[ nEntry ]->getSize() );
+                awt::Size aTextSize( rTextShapes[ nEntry ]->getSize() );
                 sal_Int32 nWidth = nSymbolPlusDistanceWidth + aTextSize.Width;
                 if( nRow==0 )
                     rColumnWidths.push_back( nWidth );
@@ -219,15 +219,15 @@ void lcl_collectColumnWidths( std::vector< sal_Int32 >& rColumnWidths, const sal
     }
 }
 
-void lcl_collectRowHeighs( std::vector< sal_Int32 >& rRowHeights, const sal_Int32 nNumberOfRows, const sal_Int32 nNumberOfColumns
-                          , const ::std::vector< Reference< drawing::XShape > > aTextShapes )
+void lcl_collectRowHeighs( std::vector< sal_Int32 >& rRowHeights, const sal_Int32 nNumberOfRows, const sal_Int32 nNumberOfColumns,
+                           const ::std::vector< Reference< drawing::XShape > >& rTextShapes )
 {
     // calculate maximum height for each row
     // and collect column widths
     rRowHeights.clear();
     sal_Int32 nRow = 0;
     sal_Int32 nColumn = 0;
-    sal_Int32 nNumberOfEntries = aTextShapes.size();
+    sal_Int32 nNumberOfEntries = rTextShapes.size();
     for( ; nRow < nNumberOfRows; ++nRow )
     {
         sal_Int32 nCurrentRowHeight = 0;
@@ -236,7 +236,7 @@ void lcl_collectRowHeighs( std::vector< sal_Int32 >& rRowHeights, const sal_Int3
             sal_Int32 nEntry = (nColumn + nRow * nNumberOfColumns);
             if( nEntry < nNumberOfEntries )
             {
-                awt::Size aTextSize( aTextShapes[ nEntry ]->getSize() );
+                awt::Size aTextSize( rTextShapes[ nEntry ]->getSize() );
                 nCurrentRowHeight = ::std::max( nCurrentRowHeight, aTextSize.Height );
             }
         }

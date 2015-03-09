@@ -460,7 +460,7 @@ TextFieldStack& XmlFilterBase::getTextFieldStack() const
 
 namespace {
 
-OUString lclAddRelation( const Reference< XRelationshipAccess > xRelations, sal_Int32 nId, const OUString& rType, const OUString& rTarget, bool bExternal )
+OUString lclAddRelation( const Reference< XRelationshipAccess >& rRelations, sal_Int32 nId, const OUString& rType, const OUString& rTarget, bool bExternal )
 {
     OUString sId = OUStringBuffer().appendAscii( "rId" ).append( nId ).makeStringAndClear();
 
@@ -474,7 +474,7 @@ OUString lclAddRelation( const Reference< XRelationshipAccess > xRelations, sal_
         aEntry[2].First = "TargetMode";
         aEntry[2].Second = "External";
     }
-    xRelations->insertRelationshipByID( sId, aEntry, sal_True );
+    rRelations->insertRelationshipByID( sId, aEntry, sal_True );
 
     return sId;
 }
@@ -490,17 +490,17 @@ OUString XmlFilterBase::addRelation( const OUString& rType, const OUString& rTar
     return OUString();
 }
 
-OUString XmlFilterBase::addRelation( const Reference< XOutputStream > xOutputStream, const OUString& rType, const OUString& rTarget, bool bExternal )
+OUString XmlFilterBase::addRelation( const Reference< XOutputStream >& rOutputStream, const OUString& rType, const OUString& rTarget, bool bExternal )
 {
     sal_Int32 nId = 0;
 
-    PropertySet aPropSet( xOutputStream );
+    PropertySet aPropSet( rOutputStream );
     if( aPropSet.is() )
         aPropSet.getProperty( nId, PROP_RelId );
     else
         nId = mnRelId++;
 
-    Reference< XRelationshipAccess > xRelations( xOutputStream, UNO_QUERY );
+    Reference< XRelationshipAccess > xRelations( rOutputStream, UNO_QUERY );
     if( xRelations.is() )
         return lclAddRelation( xRelations, nId, rType, rTarget, bExternal );
 

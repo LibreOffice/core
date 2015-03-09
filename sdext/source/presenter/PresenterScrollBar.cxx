@@ -472,13 +472,13 @@ geometry::RealRectangle2D PresenterScrollBar::GetRectangle (const Area eArea) co
 }
 
 void PresenterScrollBar::Repaint (
-    const geometry::RealRectangle2D aBox,
+    const geometry::RealRectangle2D& rBox,
     const bool bAsynchronousUpdate)
 {
     if (mpPaintManager.get() != NULL)
         mpPaintManager->Invalidate(
             mxWindow,
-            PresenterGeometryHelper::ConvertRectangle(aBox),
+            PresenterGeometryHelper::ConvertRectangle(rBox),
             bAsynchronousUpdate);
 }
 

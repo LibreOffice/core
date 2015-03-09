@@ -588,7 +588,7 @@ bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib,
 bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, const OUString& aName,
                                                           const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage,
                                                           const OUString& aTargetURL,
-                                                          const Reference< XSimpleFileAccess3 > xToUseSFI,
+                                                          const Reference< XSimpleFileAccess3 >& rToUseSFI,
                                                           const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler )
 {
     bool bExport = !aTargetURL.isEmpty();
@@ -730,9 +730,9 @@ bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, cons
         try
         {
             Reference< XSimpleFileAccess3 > xSFI = mxSFI;
-            if( xToUseSFI.is() )
+            if( rToUseSFI.is() )
             {
-                xSFI = xToUseSFI;
+                xSFI = rToUseSFI;
             }
             OUString aLibDirPath;
             if( bExport )

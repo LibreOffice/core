@@ -148,8 +148,8 @@ namespace
     struct FrameRefHash
         : public unary_function<Reference<XTextFrame>, size_t>
     {
-        size_t operator()(const Reference<XTextFrame> xFrame) const
-            { return sal::static_int_cast<size_t>(reinterpret_cast<sal_uIntPtr>(xFrame.get())); }
+        size_t operator()(const Reference<XTextFrame>& rFrame) const
+            { return sal::static_int_cast<size_t>(reinterpret_cast<sal_uIntPtr>(rFrame.get())); }
     };
 
     static bool lcl_TextContentsUnfiltered(const Reference<XTextContent>&)
@@ -173,9 +173,9 @@ namespace
         public:
             typedef bool (*filter_t)(const Reference<XTextContent>&);
             BoundFrames(
-                const Reference<XEnumerationAccess> xEnumAccess,
+                const Reference<XEnumerationAccess>& rEnumAccess,
                 const filter_t& rFilter)
-                : m_xEnumAccess(xEnumAccess)
+                : m_xEnumAccess(rEnumAccess)
             {
                 Fill(rFilter);
             };
@@ -230,7 +230,7 @@ namespace xmloff
     class BoundFrameSets
     {
         public:
-            BoundFrameSets(const Reference<XInterface> xModel);
+            BoundFrameSets(const Reference<XInterface>& rModel);
             const BoundFrames* GetTexts() const
                 { return m_pTexts.get(); };
             const BoundFrames* GetGraphics() const
@@ -342,16 +342,16 @@ void BoundFrames::Fill(const filter_t& rFilter)
     }
 }
 
-BoundFrameSets::BoundFrameSets(const Reference<XInterface> xModel)
+BoundFrameSets::BoundFrameSets(const Reference<XInterface>& rModel)
     : m_pTexts(new BoundFrames())
     , m_pGraphics(new BoundFrames())
     , m_pEmbeddeds(new BoundFrames())
     , m_pShapes(new BoundFrames())
 {
-    const Reference<XTextFramesSupplier> xTFS(xModel, UNO_QUERY);
-    const Reference<XTextGraphicObjectsSupplier> xGOS(xModel, UNO_QUERY);
-    const Reference<XTextEmbeddedObjectsSupplier> xEOS(xModel, UNO_QUERY);
-    const Reference<XDrawPageSupplier> xDPS(xModel, UNO_QUERY);
+    const Reference<XTextFramesSupplier> xTFS(rModel, UNO_QUERY);
+    const Reference<XTextGraphicObjectsSupplier> xGOS(rModel, UNO_QUERY);
+    const Reference<XTextEmbeddedObjectsSupplier> xEOS(rModel, UNO_QUERY);
+    const Reference<XDrawPageSupplier> xDPS(rModel, UNO_QUERY);
     if(xTFS.is())
         m_pTexts.reset(new BoundFrames(
             Reference<XEnumerationAccess>(xTFS->getTextFrames(), UNO_QUERY),

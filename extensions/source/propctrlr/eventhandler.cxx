@@ -308,7 +308,7 @@ namespace pcr
                 ::std::insert_iterator< TypeBag >( _out_rTypes, _out_rTypes.begin() ) );
         }
 
-        bool operator ==( const ScriptEventDescriptor _lhs, const ScriptEventDescriptor _rhs )
+        bool operator ==( const ScriptEventDescriptor& _lhs, const ScriptEventDescriptor& _rhs )
         {
             return  (   ( _lhs.ListenerType         == _rhs.ListenerType        )
                     &&  ( _lhs.EventMethod          == _rhs.EventMethod         )

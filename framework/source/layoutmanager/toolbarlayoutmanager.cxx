@@ -1048,10 +1048,10 @@ void ToolbarLayoutManager::setParentWindow(
     }
 }
 
-void ToolbarLayoutManager::setDockingAreaOffsets( const ::Rectangle aOffsets )
+void ToolbarLayoutManager::setDockingAreaOffsets( const ::Rectangle& rOffsets )
 {
     SolarMutexGuard g;
-    m_aDockingAreaOffsets = aOffsets;
+    m_aDockingAreaOffsets = rOffsets;
     m_bLayoutDirty        = true;
 }
 

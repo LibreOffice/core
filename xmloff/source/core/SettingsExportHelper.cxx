@@ -396,21 +396,21 @@ void XMLSettingsExportHelper::exportNameAccess(
 }
 
 void XMLSettingsExportHelper::exportIndexAccess(
-                    const uno::Reference<container::XIndexAccess> aIndexed,
+                    const uno::Reference<container::XIndexAccess>& rIndexed,
                     const OUString& rName) const
 {
     DBG_ASSERT(!rName.isEmpty(), "no name");
-    DBG_ASSERT(aIndexed->getElementType().equals(getCppuType( (uno::Sequence<beans::PropertyValue> *)0 ) ),
+    DBG_ASSERT(rIndexed->getElementType().equals(getCppuType( (uno::Sequence<beans::PropertyValue> *)0 ) ),
                 "wrong IndexAccess" );
     OUString sEmpty;
-    if(aIndexed->hasElements())
+    if (rIndexed->hasElements())
     {
         m_rContext.AddAttribute( XML_NAME, rName );
         m_rContext.StartElement( XML_CONFIG_ITEM_MAP_INDEXED, true );
-        sal_Int32 nCount = aIndexed->getCount();
+        sal_Int32 nCount = rIndexed->getCount();
         for (sal_Int32 i = 0; i < nCount; i++)
         {
-            exportMapEntry(aIndexed->getByIndex(i), sEmpty, false);
+            exportMapEntry(rIndexed->getByIndex(i), sEmpty, false);
         }
         m_rContext.EndElement( true );
     }

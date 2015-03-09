@@ -26,8 +26,8 @@ namespace sfx2 { namespace sidebar {
 
 void DrawHelper::DrawBorder (
     OutputDevice& rDevice,
-    const Rectangle rBox,
-    const SvBorder aBorderSize,
+    const Rectangle& rBox,
+    const SvBorder& rBorderSize,
     const Paint& rHorizontalPaint,
     const Paint& rVerticalPaint)
 {
@@ -37,31 +37,31 @@ void DrawHelper::DrawBorder (
         rBox.Left(),
         rBox.Right(),
         rBox.Top(),
-        aBorderSize.Top(),
+        rBorderSize.Top(),
         rHorizontalPaint);
     // Draw bottom line.
     DrawHorizontalLine(
         rDevice,
-        rBox.Left()+aBorderSize.Left(),
+        rBox.Left()+rBorderSize.Left(),
         rBox.Right(),
-        rBox.Bottom()-aBorderSize.Bottom()+1,
-        aBorderSize.Bottom(),
+        rBox.Bottom()-rBorderSize.Bottom()+1,
+        rBorderSize.Bottom(),
         rHorizontalPaint);
     // Draw left line.
     DrawVerticalLine(
         rDevice,
-        rBox.Top()+aBorderSize.Top(),
+        rBox.Top()+rBorderSize.Top(),
         rBox.Bottom(),
         rBox.Left(),
-        aBorderSize.Left(),
+        rBorderSize.Left(),
         rVerticalPaint);
     // Draw right line.
     DrawVerticalLine(
         rDevice,
-        rBox.Top()+aBorderSize.Top(),
-        rBox.Bottom()-aBorderSize.Bottom(),
-        rBox.Right()-aBorderSize.Right()+1,
-        aBorderSize.Right(),
+        rBox.Top()+rBorderSize.Top(),
+        rBox.Bottom()-rBorderSize.Bottom(),
+        rBox.Right()-rBorderSize.Right()+1,
+        rBorderSize.Right(),
         rVerticalPaint);
 }
 

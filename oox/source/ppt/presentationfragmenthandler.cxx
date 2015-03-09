@@ -460,10 +460,10 @@ void PresentationFragmentHandler::finalizeImport()
 }
 
 bool PresentationFragmentHandler::importSlide( const FragmentHandlerRef& rxSlideFragmentHandler,
-        const SlidePersistPtr pSlidePersistPtr )
+        const SlidePersistPtr& rSlidePersistPtr )
 {
-    Reference< drawing::XDrawPage > xSlide( pSlidePersistPtr->getPage() );
-    SlidePersistPtr pMasterPersistPtr( pSlidePersistPtr->getMasterPersist() );
+    Reference< drawing::XDrawPage > xSlide( rSlidePersistPtr->getPage() );
+    SlidePersistPtr pMasterPersistPtr( rSlidePersistPtr->getMasterPersist() );
     if ( pMasterPersistPtr.get() )
     {
         // Setting "Layout" property adds extra title and outliner preset shapes to the master slide
@@ -491,16 +491,16 @@ bool PresentationFragmentHandler::importSlide( const FragmentHandlerRef& rxSlide
     Reference< XPropertySet > xPropertySet( xSlide, UNO_QUERY );
     if ( xPropertySet.is() )
     {
-        awt::Size& rPageSize( pSlidePersistPtr->isNotesPage() ? maNotesSize : maSlideSize );
+        awt::Size& rPageSize( rSlidePersistPtr->isNotesPage() ? maNotesSize : maSlideSize );
         xPropertySet->setPropertyValue( "Width", Any( rPageSize.Width ) );
         xPropertySet->setPropertyValue( "Height", Any( rPageSize.Height ) );
 
-        oox::ppt::HeaderFooter aHeaderFooter( pSlidePersistPtr->getHeaderFooter() );
-        if ( !pSlidePersistPtr->isMasterPage() )
+        oox::ppt::HeaderFooter aHeaderFooter( rSlidePersistPtr->getHeaderFooter() );
+        if ( !rSlidePersistPtr->isMasterPage() )
             aHeaderFooter.mbSlideNumber = aHeaderFooter.mbHeader = aHeaderFooter.mbFooter = aHeaderFooter.mbDateTime = false;
         try
         {
-            if ( pSlidePersistPtr->isNotesPage() )
+            if ( rSlidePersistPtr->isNotesPage() )
                 xPropertySet->setPropertyValue( "IsHeaderVisible", Any( aHeaderFooter.mbHeader ) );
             xPropertySet->setPropertyValue( "IsFooterVisible", Any( aHeaderFooter.mbFooter ) );
             xPropertySet->setPropertyValue( "IsDateTimeVisible", Any( aHeaderFooter.mbDateTime ) );
@@ -510,7 +510,7 @@ bool PresentationFragmentHandler::importSlide( const FragmentHandlerRef& rxSlide
         {
         }
     }
-    pSlidePersistPtr->setPath( rxSlideFragmentHandler->getFragmentPath() );
+    rSlidePersistPtr->setPath( rxSlideFragmentHandler->getFragmentPath() );
     return getFilter().importFragment( rxSlideFragmentHandler );
 }
 

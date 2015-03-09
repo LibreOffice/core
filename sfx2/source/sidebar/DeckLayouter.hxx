@@ -40,7 +40,7 @@ class Panel;
 namespace DeckLayouter
 {
     void LayoutDeck (
-        const Rectangle aContentArea,
+        const Rectangle& rContentArea,
         sal_Int32& rMinimalWidth,
         SharedPanelContainer& rPanels,
         vcl::Window& pDeckTitleBar,

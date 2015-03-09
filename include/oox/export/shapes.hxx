@@ -46,7 +46,7 @@ private:
     static int mnEmbeddeDocumentCounter;
     struct ShapeCheck
     {
-        bool operator()( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape> s1, const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape> s2 ) const
+        bool operator()( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape>& s1, const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape>& s2 ) const
         {
             return s1 == s2;
         }

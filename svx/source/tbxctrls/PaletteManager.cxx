@@ -213,7 +213,7 @@ void PaletteManager::PopupColorPicker(const OUString& aCommand)
     }
 }
 
-void PaletteManager::DispatchColorCommand(const OUString& aCommand, const Color aColor)
+void PaletteManager::DispatchColorCommand(const OUString& aCommand, const Color& rColor)
 {
     using namespace css::uno;
     using namespace css::frame;
@@ -229,7 +229,7 @@ void PaletteManager::DispatchColorCommand(const OUString& aCommand, const Color 
 
         Sequence<PropertyValue> aArgs(1);
         aArgs[0].Name = aObj.GetURLPath();
-        aArgs[0].Value = makeAny(sal_Int32(aColor.GetColor()));
+        aArgs[0].Value = makeAny(sal_Int32(rColor.GetColor()));
 
         URL aTargetURL;
         aTargetURL.Complete = aCommand;

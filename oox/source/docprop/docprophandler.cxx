@@ -38,15 +38,15 @@ namespace oox {
 namespace docprop {
 
 OOXMLDocPropHandler::OOXMLDocPropHandler( const uno::Reference< uno::XComponentContext >& xContext,
-                                          const uno::Reference< document::XDocumentProperties > xDocProp )
+                                          const uno::Reference< document::XDocumentProperties >& rDocProp )
     : m_xContext( xContext )
-    , m_xDocProp( xDocProp )
+    , m_xDocProp( rDocProp )
     , m_nState( 0 )
     , m_nBlock( 0 )
     , m_nType( 0 )
     , m_nInBlock( 0 )
 {
-    if ( !xContext.is() || !xDocProp.is() )
+    if ( !xContext.is() || !rDocProp.is() )
         throw uno::RuntimeException();
 }
 

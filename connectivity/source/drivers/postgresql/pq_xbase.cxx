@@ -61,7 +61,7 @@ namespace pq_sdbc_driver
 ReflectionBase::ReflectionBase(
     const OUString &implName,
     const ::com::sun::star::uno::Sequence< OUString > &supportedServices,
-    const ::rtl::Reference< RefCountedMutex > refMutex,
+    const ::rtl::Reference< RefCountedMutex >& refMutex,
     const ::com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection > &conn,
     ConnectionSettings *pSettings,
     cppu::IPropertyArrayHelper & props /* must survive this object !*/ )

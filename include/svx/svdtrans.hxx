@@ -88,15 +88,15 @@ double CrookSlantXPoint(Point& rPnt, Point* pC1, Point* pC2, const Point& rCente
                         const Point& rRad, double& rSin, double& rCos, bool bVert);
 double CrookStretchXPoint(Point& rPnt, Point* pC1, Point* pC2, const Point& rCenter,
                           const Point& rRad, double& rSin, double& rCos, bool bVert,
-                          const Rectangle rRefRect);
+                          const Rectangle& rRefRect);
 
 void CrookRotatePoly(XPolygon& rPoly, const Point& rCenter, const Point& rRad, bool bVert);
 void CrookSlantPoly(XPolygon& rPoly, const Point& rCenter, const Point& rRad, bool bVert);
-void CrookStretchPoly(XPolygon& rPoly, const Point& rCenter, const Point& rRad, bool bVert, const Rectangle rRefRect);
+void CrookStretchPoly(XPolygon& rPoly, const Point& rCenter, const Point& rRad, bool bVert, const Rectangle& rRefRect);
 
 void CrookRotatePoly(XPolyPolygon& rPoly, const Point& rCenter, const Point& rRad, bool bVert);
 void CrookSlantPoly(XPolyPolygon& rPoly, const Point& rCenter, const Point& rRad, bool bVert);
-void CrookStretchPoly(XPolyPolygon& rPoly, const Point& rCenter, const Point& rRad, bool bVert, const Rectangle rRefRect);
+void CrookStretchPoly(XPolyPolygon& rPoly, const Point& rCenter, const Point& rRad, bool bVert, const Rectangle& rRefRect);
 
 /**************************************************************************************************/
 /*  Inline                                                                                        */

@@ -63,7 +63,7 @@ typedef ::std::list<Subset> SubsetList;
 class SVX_DLLPUBLIC SubsetMap : private Resource
 {
 public:
-    SubsetMap( const FontCharMapPtr );
+    SubsetMap( const FontCharMapPtr& );
 
     const Subset*   GetSubsetByUnicode( sal_UCS4 ) const;
     const Subset*   GetNextSubset( bool bFirst ) const;
@@ -73,7 +73,7 @@ private:
     mutable SubsetList::const_iterator maSubsetIterator;
 
     SVX_DLLPRIVATE void            InitList();
-    SVX_DLLPRIVATE void            ApplyCharMap( const FontCharMapPtr );
+    SVX_DLLPRIVATE void            ApplyCharMap( const FontCharMapPtr& );
 };
 
 #endif

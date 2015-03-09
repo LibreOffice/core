@@ -47,7 +47,7 @@ private:
 
  public:
     TYPEINFO_OVERRIDE();
-    E3dLatheObj(E3dDefaultAttributes& rDefault, const basegfx::B2DPolyPolygon rPoly2D);
+    E3dLatheObj(E3dDefaultAttributes& rDefault, const basegfx::B2DPolyPolygon& rPoly2D);
     E3dLatheObj();
 
     // HorizontalSegments:

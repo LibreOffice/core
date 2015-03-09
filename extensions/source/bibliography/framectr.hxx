@@ -42,9 +42,9 @@ class BibStatusDispatch
 public:
     ::com::sun::star::util::URL                 aURL;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >    xListener;
-                        BibStatusDispatch( const ::com::sun::star::util::URL& rURL, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >  xRef )
+                        BibStatusDispatch( const ::com::sun::star::util::URL& rURL, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& rRef )
                             : aURL( rURL )
-                            , xListener( xRef )
+                            , xListener( rRef )
                         {}
 };
 

@@ -86,8 +86,8 @@ void SmartTagMgr::CreateBreakIterator() const
 /** Dispatches the recognize call to all installed smart tag recognizers
 */
 void SmartTagMgr::RecognizeString( const OUString& rText,
-                             const Reference< text::XTextMarkup > xMarkup,
-                             const Reference< frame::XController > xController,
+                             const Reference< text::XTextMarkup >& xMarkup,
+                             const Reference< frame::XController >& xController,
                              const lang::Locale& rLocale,
                              sal_uInt32 nStart, sal_uInt32 nLen ) const
 {
@@ -117,9 +117,9 @@ void SmartTagMgr::RecognizeString( const OUString& rText,
     }
 }
 
-void SmartTagMgr::RecognizeTextRange(const Reference< text::XTextRange> xRange,
-                             const Reference< text::XTextMarkup > xMarkup,
-                             const Reference< frame::XController > xController) const
+void SmartTagMgr::RecognizeTextRange(const Reference< text::XTextRange>& xRange,
+                             const Reference< text::XTextMarkup >& xMarkup,
+                             const Reference< frame::XController >& xController) const
 {
     for ( sal_uInt32 i = 0; i < maRecognizerList.size(); i++ )
     {

@@ -1400,9 +1400,9 @@ double lcl_GetExtent( const Style& rBorder, const Style& rSide, const Style& rOp
     return nCut;
 }
 
-basegfx::B2DPoint lcl_PointToB2DPoint( const Point aPoint )
+basegfx::B2DPoint lcl_PointToB2DPoint( const Point& rPoint )
 {
-    return basegfx::B2DPoint( aPoint.getX(), aPoint.getY() );
+    return basegfx::B2DPoint(rPoint.getX(), rPoint.getY());
 }
 
 drawinglayer::primitive2d::Primitive2DSequence CreateClippedBorderPrimitives (

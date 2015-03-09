@@ -227,7 +227,7 @@ namespace dbaui
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >    xListener;
 
             DispatchTarget() { }
-            DispatchTarget(const ::com::sun::star::util::URL& rURL, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >  xRef) : aURL(rURL), xListener(xRef) { }
+            DispatchTarget(const ::com::sun::star::util::URL& rURL, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& rRef) : aURL(rURL), xListener(rRef) { }
         };
 
         typedef std::map<sal_uInt16, FeatureState> StateCache;

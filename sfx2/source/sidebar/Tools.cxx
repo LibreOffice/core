@@ -91,35 +91,35 @@ Image Tools::GetImage (
     return Image();
 }
 
-css::awt::Gradient Tools::VclToAwtGradient (const Gradient aVclGradient)
+css::awt::Gradient Tools::VclToAwtGradient (const Gradient& rVclGradient)
 {
     css::awt::Gradient aAwtGradient (
-        awt::GradientStyle(aVclGradient.GetStyle()),
-        aVclGradient.GetStartColor().GetRGBColor(),
-        aVclGradient.GetEndColor().GetRGBColor(),
-        aVclGradient.GetAngle(),
-        aVclGradient.GetBorder(),
-        aVclGradient.GetOfsX(),
-        aVclGradient.GetOfsY(),
-        aVclGradient.GetStartIntensity(),
-        aVclGradient.GetEndIntensity(),
-        aVclGradient.GetSteps());
+        awt::GradientStyle(rVclGradient.GetStyle()),
+        rVclGradient.GetStartColor().GetRGBColor(),
+        rVclGradient.GetEndColor().GetRGBColor(),
+        rVclGradient.GetAngle(),
+        rVclGradient.GetBorder(),
+        rVclGradient.GetOfsX(),
+        rVclGradient.GetOfsY(),
+        rVclGradient.GetStartIntensity(),
+        rVclGradient.GetEndIntensity(),
+        rVclGradient.GetSteps());
     return aAwtGradient;
 }
 
-Gradient Tools::AwtToVclGradient (const css::awt::Gradient aAwtGradient)
+Gradient Tools::AwtToVclGradient (const css::awt::Gradient& rAwtGradient)
 {
     Gradient aVclGradient (
-        GradientStyle(aAwtGradient.Style),
-        aAwtGradient.StartColor,
-        aAwtGradient.EndColor);
-    aVclGradient.SetAngle(aAwtGradient.Angle);
-    aVclGradient.SetBorder(aAwtGradient.Border);
-    aVclGradient.SetOfsX(aAwtGradient.XOffset);
-    aVclGradient.SetOfsY(aAwtGradient.YOffset);
-    aVclGradient.SetStartIntensity(aAwtGradient.StartIntensity);
-    aVclGradient.SetEndIntensity(aAwtGradient.EndIntensity);
-    aVclGradient.SetSteps(aAwtGradient.StepCount);
+        GradientStyle(rAwtGradient.Style),
+        rAwtGradient.StartColor,
+        rAwtGradient.EndColor);
+    aVclGradient.SetAngle(rAwtGradient.Angle);
+    aVclGradient.SetBorder(rAwtGradient.Border);
+    aVclGradient.SetOfsX(rAwtGradient.XOffset);
+    aVclGradient.SetOfsY(rAwtGradient.YOffset);
+    aVclGradient.SetStartIntensity(rAwtGradient.StartIntensity);
+    aVclGradient.SetEndIntensity(rAwtGradient.EndIntensity);
+    aVclGradient.SetSteps(rAwtGradient.StepCount);
 
     return aVclGradient;
 }

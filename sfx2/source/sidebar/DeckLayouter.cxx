@@ -55,7 +55,7 @@ namespace {
         {}
     };
     Rectangle LayoutPanels (
-        const Rectangle aContentArea,
+        const Rectangle& rContentArea,
         sal_Int32& rMinimalWidth,
         ::std::vector<LayoutItem>& rLayoutItems,
         vcl::Window& rScrollClipWindow,
@@ -101,7 +101,7 @@ namespace {
         ++iterator_name)
 
 void DeckLayouter::LayoutDeck (
-    const Rectangle aContentArea,
+    const Rectangle& rContentArea,
     sal_Int32& rMinimalWidth,
     SharedPanelContainer& rPanels,
     vcl::Window& rDeckTitleBar,
@@ -110,9 +110,9 @@ void DeckLayouter::LayoutDeck (
     vcl::Window& rFiller,
     ScrollBar& rVerticalScrollBar)
 {
-    if (aContentArea.GetWidth()<=0 || aContentArea.GetHeight()<=0)
+    if (rContentArea.GetWidth()<=0 || rContentArea.GetHeight()<=0)
         return;
-    Rectangle aBox (PlaceDeckTitle(rDeckTitleBar, aContentArea));
+    Rectangle aBox (PlaceDeckTitle(rDeckTitleBar, rContentArea));
 
     if ( ! rPanels.empty())
     {
@@ -139,7 +139,7 @@ void DeckLayouter::LayoutDeck (
 namespace {
 
 Rectangle LayoutPanels (
-    const Rectangle aContentArea,
+    const Rectangle& rContentArea,
     sal_Int32& rMinimalWidth,
     ::std::vector<LayoutItem>& rLayoutItems,
     vcl::Window& rScrollClipWindow,
@@ -147,7 +147,7 @@ Rectangle LayoutPanels (
     ScrollBar& rVerticalScrollBar,
     const bool bShowVerticalScrollBar)
 {
-    Rectangle aBox (PlaceVerticalScrollBar(rVerticalScrollBar, aContentArea, bShowVerticalScrollBar));
+    Rectangle aBox (PlaceVerticalScrollBar(rVerticalScrollBar, rContentArea, bShowVerticalScrollBar));
 
     const sal_Int32 nWidth (aBox.GetWidth());
 
@@ -176,7 +176,7 @@ Rectangle LayoutPanels (
         // minimum height.
         // Show a vertical scrollbar.
         return LayoutPanels(
-            aContentArea,
+            rContentArea,
             rMinimalWidth,
             rLayoutItems,
             rScrollClipWindow,

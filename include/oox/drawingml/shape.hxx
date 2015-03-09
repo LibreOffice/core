@@ -114,7 +114,7 @@ public:
 
     void                            setRotation( sal_Int32 nRotation ) { mnRotation = nRotation; }
     void                            setFlip( bool bFlipH, bool bFlipV ) { mbFlipH = bFlipH; mbFlipV = bFlipV; }
-    void                            addChild( const ShapePtr pChildPtr ) { maChildren.push_back( pChildPtr ); }
+    void                            addChild( const ShapePtr& rChildPtr ) { maChildren.push_back( rChildPtr ); }
     std::vector< ShapePtr >&        getChildren() { return maChildren; }
 
     void                            setName( const OUString& rName ) { msName = rName; }

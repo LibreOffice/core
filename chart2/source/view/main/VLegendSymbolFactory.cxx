@@ -99,7 +99,7 @@ namespace chart
 
 Reference< drawing::XShape > VLegendSymbolFactory::createSymbol(
     const awt::Size& rEntryKeyAspectRatio,
-    const Reference< drawing::XShapes > xSymbolContainer,
+    const Reference< drawing::XShapes >& rSymbolContainer,
     LegendSymbolStyle eStyle,
     const Reference< lang::XMultiServiceFactory > & xShapeFactory,
     const Reference< beans::XPropertySet > & xLegendEntryProperties,
@@ -107,11 +107,11 @@ Reference< drawing::XShape > VLegendSymbolFactory::createSymbol(
 {
     Reference< drawing::XShape > xResult;
 
-    if( ! (xSymbolContainer.is() && xShapeFactory.is()))
+    if( ! (rSymbolContainer.is() && xShapeFactory.is()))
         return xResult;
 
     AbstractShapeFactory* pShapeFactory = AbstractShapeFactory::getOrCreateShapeFactory(xShapeFactory);
-    xResult.set( pShapeFactory->createGroup2D( xSymbolContainer ), uno::UNO_QUERY );
+    xResult.set( pShapeFactory->createGroup2D( rSymbolContainer ), uno::UNO_QUERY );
 
     Reference< drawing::XShapes > xResultGroup( xResult, uno::UNO_QUERY );
     if( ! xResultGroup.is())

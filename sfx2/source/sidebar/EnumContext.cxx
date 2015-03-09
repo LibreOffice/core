@@ -89,16 +89,16 @@ EnumContext::Application EnumContext::GetApplication_DI (void) const
      }
 }
 
-bool EnumContext::operator== (const EnumContext aOther)
+bool EnumContext::operator== (const EnumContext& rOther)
 {
-    return meApplication==aOther.meApplication
-        && meContext==aOther.meContext;
+    return meApplication==rOther.meApplication
+        && meContext==rOther.meContext;
 }
 
-bool EnumContext::operator!= (const EnumContext aOther)
+bool EnumContext::operator!= (const EnumContext& rOther)
 {
-    return meApplication!=aOther.meApplication
-        || meContext!=aOther.meContext;
+    return meApplication!=rOther.meApplication
+        || meContext!=rOther.meContext;
 }
 
 void EnumContext::AddEntry (const ::rtl::OUString& rsName, const Application eApplication)

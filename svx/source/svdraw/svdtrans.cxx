@@ -276,7 +276,7 @@ double CrookSlantXPoint(Point& rPnt, Point* pC1, Point* pC2, const Point& rCente
 
 double CrookStretchXPoint(Point& rPnt, Point* pC1, Point* pC2, const Point& rCenter,
                           const Point& rRad, double& rSin, double& rCos, bool bVert,
-                          const Rectangle rRefRect)
+                          const Rectangle& rRefRect)
 {
     long y0=rPnt.Y();
     CrookSlantXPoint(rPnt,pC1,pC2,rCenter,rRad,rSin,rCos,bVert);
@@ -340,7 +340,7 @@ void CrookSlantPoly(XPolygon& rPoly, const Point& rCenter, const Point& rRad, bo
     }
 }
 
-void CrookStretchPoly(XPolygon& rPoly, const Point& rCenter, const Point& rRad, bool bVert, const Rectangle rRefRect)
+void CrookStretchPoly(XPolygon& rPoly, const Point& rCenter, const Point& rRad, bool bVert, const Rectangle& rRefRect)
 {
     double nSin,nCos;
     sal_uInt16 nPointAnz=rPoly.GetPointCount();
@@ -381,7 +381,7 @@ void CrookSlantPoly(XPolyPolygon& rPoly, const Point& rCenter, const Point& rRad
     }
 }
 
-void CrookStretchPoly(XPolyPolygon& rPoly, const Point& rCenter, const Point& rRad, bool bVert, const Rectangle rRefRect)
+void CrookStretchPoly(XPolyPolygon& rPoly, const Point& rCenter, const Point& rRad, bool bVert, const Rectangle& rRefRect)
 {
     sal_uInt16 nPolyAnz=rPoly.Count();
     for (sal_uInt16 nPolyNum=0; nPolyNum<nPolyAnz; nPolyNum++) {

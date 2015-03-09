@@ -17,14 +17,14 @@ namespace oox { namespace ppt {
 
 ExtDrawingFragmentHandler::ExtDrawingFragmentHandler( XmlFilterBase& rFilter,
                                                         const OUString& rFragmentPath,
-        const oox::ppt::SlidePersistPtr pSlidePersistPtr,
+        const oox::ppt::SlidePersistPtr& rSlidePersistPtr,
         const oox::ppt::ShapeLocation   eShapeLocation,
         oox::drawingml::ShapePtr        pMasterShapePtr,
         oox::drawingml::ShapePtr        pGroupShapePtr,
         oox::drawingml::ShapePtr        pShapePtr)
     throw( )
     : FragmentHandler2( rFilter, rFragmentPath ),
-     mpSlidePersistPtr (pSlidePersistPtr ),
+     mpSlidePersistPtr (rSlidePersistPtr ),
      meShapeLocation( eShapeLocation ),
      mpMasterShapePtr( pMasterShapePtr ),
      mpGroupShapePtr( pGroupShapePtr ),

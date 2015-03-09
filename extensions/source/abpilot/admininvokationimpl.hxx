@@ -41,7 +41,7 @@ namespace abp
     public:
         OAdminDialogInvokation(
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > _xDataSource,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rDataSource,
             vcl::Window* _pMessageParent
         );
 

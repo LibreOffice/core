@@ -38,7 +38,7 @@ XFillExchangeData::XFillExchangeData() :
 {
 }
 
-XFillExchangeData::XFillExchangeData( const XFillAttrSetItem rXFillAttrSetItem ) :
+XFillExchangeData::XFillExchangeData( const XFillAttrSetItem& rXFillAttrSetItem ) :
     pXFillAttrSetItem( static_cast<XFillAttrSetItem*>( rXFillAttrSetItem.Clone( rXFillAttrSetItem.GetItemSet().GetPool() ) ) ),
     pPool( rXFillAttrSetItem.GetItemSet().GetPool() )
 {

@@ -345,11 +345,11 @@ class SvxXMLTextExportComponent : public SvXMLExport
 {
 public:
     SvxXMLTextExportComponent(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rContext,
         EditEngine* pEditEngine,
         const ESelection& rSel,
         const OUString& rFileName,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler > & xHandler );
+        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler >& rHandler );
 
     virtual ~SvxXMLTextExportComponent();
 
@@ -366,7 +366,7 @@ private:
 
 
 SvxXMLTextExportComponent::SvxXMLTextExportComponent(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
+    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
     EditEngine* pEditEngine,
     const ESelection& rSel,
     const OUString& rFileName,

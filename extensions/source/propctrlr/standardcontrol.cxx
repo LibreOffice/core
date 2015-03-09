@@ -387,7 +387,7 @@ namespace pcr
     }
 
 
-    void HyperlinkInput::impl_checkEndClick( const ::MouseEvent rMEvt )
+    void HyperlinkInput::impl_checkEndClick( const ::MouseEvent& rMEvt )
     {
         const MouseSettings& rMouseSettings( GetSettings().GetMouseSettings() );
         if  (   ( std::abs( rMEvt.GetPosPixel().X() - m_aMouseButtonDownPos.X() ) < rMouseSettings.GetStartDragWidth() )

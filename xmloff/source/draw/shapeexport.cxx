@@ -3221,7 +3221,7 @@ static void lcl_StoreGltfExternals(
 
 static void lcl_StoreGltfFallback(
     SvXMLExport& rExport,
-    const uno::Reference<beans::XPropertySet> xPropSet,
+    const uno::Reference<beans::XPropertySet>& rPropSet,
     const OUString& rURL )
 {
     OUString sUrlPath;
@@ -3251,7 +3251,7 @@ static void lcl_StoreGltfFallback(
                 xTarget->openStorageElement(sUrlPath.copy(0,sUrlPath.lastIndexOf("/")), embed::ElementModes::WRITE));
 
             /// Save the fallback image under the 'Models/Fallbacks/' folder
-            uno::Reference< graphic::XGraphic > xGraphic( xPropSet->getPropertyValue("FallbackGraphic"), uno::UNO_QUERY );
+            uno::Reference< graphic::XGraphic > xGraphic( rPropSet->getPropertyValue("FallbackGraphic"), uno::UNO_QUERY );
             if( xGraphic.is() )
             {
                 // Fallback storage

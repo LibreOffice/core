@@ -43,7 +43,7 @@ namespace VLegendSymbolFactory
         createSymbol(
             const ::com::sun::star::awt::Size& rEntryKeyAspectRatio,
             const ::com::sun::star::uno::Reference<
-                ::com::sun::star::drawing::XShapes > xSymbolContainer,
+                ::com::sun::star::drawing::XShapes >& rSymbolContainer,
             LegendSymbolStyle eStyle,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::lang::XMultiServiceFactory > & xShapeFactory,

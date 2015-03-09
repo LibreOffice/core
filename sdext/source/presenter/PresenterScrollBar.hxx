@@ -209,7 +209,7 @@ protected:
         const ::boost::function<void(double)>& rThumbMotionListener);
 
     void Repaint (
-        const css::geometry::RealRectangle2D aBox,
+        const css::geometry::RealRectangle2D& rBox,
         const bool bAsynchronous);
     void PaintBackground (
         const css::awt::Rectangle& rRepaintBox);

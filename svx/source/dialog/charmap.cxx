@@ -739,11 +739,11 @@ sal_Int32 SvxShowCharSet::getMaxCharCount() const
 // TODO: should be moved into Font Attributes stuff
 // we let it mature here though because it is currently the only use
 
-SubsetMap::SubsetMap( const FontCharMapPtr pFontCharMap )
+SubsetMap::SubsetMap( const FontCharMapPtr& rFontCharMap )
 :   Resource( SVX_RES(RID_SUBSETMAP) )
 {
     InitList();
-    ApplyCharMap( pFontCharMap );
+    ApplyCharMap(rFontCharMap);
     FreeResource();
 }
 
@@ -1571,9 +1571,9 @@ void SubsetMap::InitList()
     maSubsets = aAllSubsets;
 }
 
-void SubsetMap::ApplyCharMap( const FontCharMapPtr pFontCharMap )
+void SubsetMap::ApplyCharMap( const FontCharMapPtr& rFontCharMap )
 {
-    if( !pFontCharMap )
+    if( !rFontCharMap )
         return;
 
     // remove subsets that are not matched in any range
@@ -1584,7 +1584,7 @@ void SubsetMap::ApplyCharMap( const FontCharMapPtr pFontCharMap )
         sal_uInt32 cMin = rSubset.GetRangeMin();
         sal_uInt32 cMax = rSubset.GetRangeMax();
 
-        int nCount =  pFontCharMap->CountCharsInRange( cMin, cMax );
+        int nCount =  rFontCharMap->CountCharsInRange( cMin, cMax );
         if( nCount <= 0 )
             it = maSubsets.erase(it);
         else

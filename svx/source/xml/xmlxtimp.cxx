@@ -325,10 +325,10 @@ void SvxXMLTableImportContext::importBitmap( sal_uInt16 nPrfx, const OUString& r
 
 // #110680#
 SvxXMLXTableImport::SvxXMLXTableImport(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
+    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rContext,
     const uno::Reference< XNameContainer > & rTable,
     uno::Reference< XGraphicObjectResolver >& xGrfResolver )
-:   SvXMLImport(xContext, "", SvXMLImportFlags::NONE),
+:   SvXMLImport(rContext, "", SvXMLImportFlags::NONE),
     mrTable( rTable )
 {
     SetGraphicResolver( xGrfResolver );

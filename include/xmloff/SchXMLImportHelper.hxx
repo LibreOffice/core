@@ -94,9 +94,9 @@ public:
         SvXMLImport& rImport,
         sal_uInt16 nPrefix, const OUString& rLocalName,
         const com::sun::star::uno::Reference<
-            com::sun::star::frame::XModel > xChartModel,
+            com::sun::star::frame::XModel >& rChartModel,
         const com::sun::star::uno::Reference<
-            com::sun::star::xml::sax::XAttributeList >& xAttrList );
+            com::sun::star::xml::sax::XAttributeList >& rAttrList );
 
     /** set the auto-style context that will be used to retrieve auto-styles
         used inside the following <chart:chart> element to parse

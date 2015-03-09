@@ -86,7 +86,7 @@ class DateScaleContext : public SvXMLImportContext
 public:
     DateScaleContext( SvXMLImport& rImport,
                         sal_uInt16 nPrefix, const OUString& rLocalName,
-                        const Reference< beans::XPropertySet > xAxisProps );
+                        const Reference< beans::XPropertySet >& rAxisProps );
 
     virtual ~DateScaleContext();
     virtual void StartElement( const Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) SAL_OVERRIDE;
@@ -122,10 +122,10 @@ SchXMLAxisContext::SchXMLAxisContext( SchXMLImportHelper& rImpHelper,
 SchXMLAxisContext::~SchXMLAxisContext()
 {}
 
-static Reference< chart::XAxis > lcl_getChartAxis(const SchXMLAxis& rCurrentAxis, const Reference< chart::XDiagram > xDiagram )
+static Reference< chart::XAxis > lcl_getChartAxis(const SchXMLAxis& rCurrentAxis, const Reference< chart::XDiagram >& rDiagram )
 {
     Reference< chart::XAxis > xAxis;
-    Reference< chart::XAxisSupplier > xAxisSuppl( xDiagram, uno::UNO_QUERY );
+    Reference< chart::XAxisSupplier > xAxisSuppl( rDiagram, uno::UNO_QUERY );
     if( !xAxisSuppl.is() )
         return xAxis;
     if( rCurrentAxis.nAxisIndex == 0 )
@@ -713,12 +713,12 @@ void SchXMLAxisContext::EndElement()
 namespace
 {
 
-Reference< chart2::XAxis > lcl_getAxis( const Reference< chart2::XCoordinateSystem > xCooSys, sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex )
+Reference< chart2::XAxis > lcl_getAxis( const Reference< chart2::XCoordinateSystem >& rCooSys, sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex )
 {
     Reference< chart2::XAxis > xAxis;
     try
     {
-        xAxis = xCooSys->getAxisByDimension( nDimensionIndex, nAxisIndex );
+        xAxis = rCooSys->getAxisByDimension( nDimensionIndex, nAxisIndex );
     }
     catch( uno::Exception & )
     {
@@ -884,9 +884,9 @@ DateScaleContext::DateScaleContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
-    const Reference< beans::XPropertySet > xAxisProps ) :
+    const Reference< beans::XPropertySet >& rAxisProps ) :
         SvXMLImportContext( rImport, nPrefix, rLocalName ),
-        m_xAxisProps( xAxisProps )
+        m_xAxisProps( rAxisProps )
 {
 }
 

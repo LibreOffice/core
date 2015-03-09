@@ -46,11 +46,11 @@ namespace abp
     //= OAdminDialogInvokation
 
 
-    OAdminDialogInvokation::OAdminDialogInvokation(const Reference< XComponentContext >& _rxContext
-                    , const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > _xDataSource
+    OAdminDialogInvokation::OAdminDialogInvokation(const Reference< XComponentContext >& _rxContext,
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxDataSource
                     , vcl::Window* _pMessageParent)
         :m_xContext(_rxContext)
-        ,m_xDataSource(_xDataSource)
+        ,m_xDataSource(_rxDataSource)
         ,m_pMessageParent(_pMessageParent)
     {
         DBG_ASSERT(m_xContext.is(), "OAdminDialogInvokation::OAdminDialogInvokation: invalid service factory!");

@@ -70,7 +70,7 @@ class SfxScriptLibraryContainer : public SfxLibraryContainer, public OldBasicPas
     virtual bool implStorePasswordLibrary( SfxLibrary* pLib, const OUString& aName,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage,
                         const OUString& aTargetURL,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess3 > xToUseSFI, const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& Handler ) SAL_OVERRIDE;
+                        const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess3 >& rToUseSFI, const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& Handler ) SAL_OVERRIDE;
 
     virtual bool implLoadPasswordLibrary( SfxLibrary* pLib, const OUString& Name,
                                           bool bVerifyPasswordOnly=false )

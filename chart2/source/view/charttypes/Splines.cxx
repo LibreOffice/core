@@ -407,11 +407,11 @@ double lcl_SplineCalculation::GetInterpolatedValue( double x )
 // helper methods for B-spline
 
 // Create parameter t_0 to t_n using the centripetal method with a power of 0.5
-bool createParameterT(const tPointVecType aUniquePoints, double* t)
+bool createParameterT(const tPointVecType& rUniquePoints, double* t)
 {   // precondition: no adjacent identical points
     // postcondition: 0 = t_0 < t_1 < ... < t_n = 1
     bool bIsSuccessful = true;
-    const lcl_tSizeType n = aUniquePoints.size() - 1;
+    const lcl_tSizeType n = rUniquePoints.size() - 1;
     t[0]=0.0;
     double dx = 0.0;
     double dy = 0.0;
@@ -419,8 +419,8 @@ bool createParameterT(const tPointVecType aUniquePoints, double* t)
     double fDenominator = 0.0; // initialized for summing up
     for (lcl_tSizeType i=1; i<=n ; ++i)
     {   // 4th root(dx^2+dy^2)
-        dx = aUniquePoints[i].first - aUniquePoints[i-1].first;
-        dy = aUniquePoints[i].second - aUniquePoints[i-1].second;
+        dx = rUniquePoints[i].first - rUniquePoints[i-1].first;
+        dy = rUniquePoints[i].second - rUniquePoints[i-1].second;
         // scaling to avoid underflow or overflow
         fDiffMax = (fabs(dx)>fabs(dy)) ? fabs(dx) : fabs(dy);
         if (fDiffMax == 0.0)
@@ -446,8 +446,8 @@ bool createParameterT(const tPointVecType aUniquePoints, double* t)
             double fNumerator = 0.0;
             for (lcl_tSizeType i=1; i<=j ; ++i)
             {
-                dx = aUniquePoints[i].first - aUniquePoints[i-1].first;
-                dy = aUniquePoints[i].second - aUniquePoints[i-1].second;
+                dx = rUniquePoints[i].first - rUniquePoints[i-1].first;
+                dy = rUniquePoints[i].second - rUniquePoints[i-1].second;
                 fDiffMax = (fabs(dx)>fabs(dy)) ? fabs(dx) : fabs(dy);
                 // same as above, so should not be zero
                 dx /= fDiffMax;

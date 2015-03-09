@@ -105,15 +105,15 @@ public:
             sal_Int32 nStartIndex, sal_Int32 nEndIndex ) const;
 
     void CheckSpecialContext(
-            const ::std::vector< XMLPropertyState >& aProperties,
+            const ::std::vector< XMLPropertyState >& rProperties,
             const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::beans::XPropertySet > rPropSet,
+                    ::com::sun::star::beans::XPropertySet >& rPropSet,
             _ContextID_Index_Pair* pSpecialContextIds ) const;
 
     bool FillPropertySet(
-            const ::std::vector< XMLPropertyState >& aProperties,
+            const ::std::vector< XMLPropertyState >& rProperties,
             const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::beans::XPropertySet > rPropSet,
+                    ::com::sun::star::beans::XPropertySet >& rPropSet,
             _ContextID_Index_Pair* pSpecialContextIds = NULL ) const;
 
     void FillPropertySequence(

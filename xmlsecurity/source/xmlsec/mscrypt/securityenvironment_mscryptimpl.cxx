@@ -236,8 +236,8 @@ const Sequence< sal_Int8>& SecurityEnvironment_MSCryptImpl :: getUnoTunnelId() {
 }
 
 /* XUnoTunnel extension */
-SecurityEnvironment_MSCryptImpl* SecurityEnvironment_MSCryptImpl :: getImplementation( const Reference< XInterface > xObj ) {
-    Reference< XUnoTunnel > xUT( xObj , UNO_QUERY ) ;
+SecurityEnvironment_MSCryptImpl* SecurityEnvironment_MSCryptImpl :: getImplementation( const Reference< XInterface >& rObj ) {
+    Reference< XUnoTunnel > xUT( rObj , UNO_QUERY ) ;
     if( xUT.is() ) {
         return ( SecurityEnvironment_MSCryptImpl* )xUT->getSomething( getUnoTunnelId() ) ;
     } else

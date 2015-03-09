@@ -1365,7 +1365,7 @@ bool SfxLibraryContainer::implStorePasswordLibrary(
     const OUString& /*aName*/,
     const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& /*xStorage*/,
     const OUString& /*aTargetURL*/,
-    const Reference< XSimpleFileAccess3 > /*xToUseSFI*/,
+    const Reference< XSimpleFileAccess3 >& /*xToUseSFI*/,
     const uno::Reference< task::XInteractionHandler >&  )
 {
     return false;
@@ -1421,7 +1421,7 @@ void SfxLibraryContainer::implStoreLibrary( SfxLibrary* pLib,
                                             const OUString& aName,
                                             const uno::Reference< embed::XStorage >& xStorage,
                                             const OUString& aTargetURL,
-                                            Reference< XSimpleFileAccess3 > xToUseSFI,
+                                            const Reference< XSimpleFileAccess3 >& rToUseSFI,
                                             const Reference< XInteractionHandler >& xHandler )
 {
     bool bLink = pLib->mbLink;
@@ -1488,9 +1488,9 @@ void SfxLibraryContainer::implStoreLibrary( SfxLibrary* pLib,
         try
         {
             Reference< XSimpleFileAccess3 > xSFI = mxSFI;
-            if( xToUseSFI.is() )
+            if( rToUseSFI.is() )
             {
-                xSFI = xToUseSFI;
+                xSFI = rToUseSFI;
             }
             OUString aLibDirPath;
             if( bExport )
@@ -1577,7 +1577,7 @@ void SfxLibraryContainer::implStoreLibraryIndexFile( SfxLibrary* pLib,
                                                      const ::xmlscript::LibDescriptor& rLib,
                                                      const uno::Reference< embed::XStorage >& xStorage,
                                                      const OUString& aTargetURL,
-                                                     Reference< XSimpleFileAccess3 > xToUseSFI )
+                                                     const Reference< XSimpleFileAccess3 >& rToUseSFI )
 {
     // Create sax writer
     Reference< XWriter > xWriter = xml::sax::Writer::create(mxContext);
@@ -1622,9 +1622,9 @@ void SfxLibraryContainer::implStoreLibraryIndexFile( SfxLibrary* pLib,
         // Export?
         bool bExport = !aTargetURL.isEmpty();
         Reference< XSimpleFileAccess3 > xSFI = mxSFI;
-        if( xToUseSFI.is() )
+        if( rToUseSFI.is() )
         {
-            xSFI = xToUseSFI;
+            xSFI = rToUseSFI;
         }
         OUString aLibInfoPath;
         if( bExport )
@@ -3420,23 +3420,23 @@ Reference< deployment::XPackage > ScriptSubPackageIterator::getNextScriptSubPack
     return xScriptPackage;
 }
 
-Reference< deployment::XPackage > ScriptSubPackageIterator::implDetectScriptPackage ( const Reference< deployment::XPackage > xPackage,
+Reference< deployment::XPackage > ScriptSubPackageIterator::implDetectScriptPackage ( const Reference< deployment::XPackage >& rPackage,
                                                                                       bool& rbPureDialogLib )
 {
     Reference< deployment::XPackage > xScriptPackage;
 
-    if( xPackage.is() )
+    if( rPackage.is() )
     {
-        const Reference< deployment::XPackageTypeInfo > xPackageTypeInfo = xPackage->getPackageType();
+        const Reference< deployment::XPackageTypeInfo > xPackageTypeInfo = rPackage->getPackageType();
         OUString aMediaType = xPackageTypeInfo->getMediaType();
         if ( aMediaType == sBasicLibMediaType )
         {
-            xScriptPackage = xPackage;
+            xScriptPackage = rPackage;
         }
         else if ( aMediaType == sDialogLibMediaType )
         {
             rbPureDialogLib = true;
-            xScriptPackage = xPackage;
+            xScriptPackage = rPackage;
         }
     }
 

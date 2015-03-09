@@ -39,9 +39,9 @@ public:
         rRange = basegfx::B2DRange(aTopLeft, aBottomRight);
     }
 
-    static void ScaleRect(basegfx::B2DRange& rRange, const Fraction aUIScale)
+    static void ScaleRect(basegfx::B2DRange& rRange, const Fraction& rUIScale)
     {
-        const double fFactor(1.0 / double(aUIScale));
+        const double fFactor(1.0 / double(rUIScale));
         rRange = basegfx::B2DRange(rRange.getMinimum() * fFactor, rRange.getMaximum() * fFactor);
     }
 };

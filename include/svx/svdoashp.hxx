@@ -110,7 +110,7 @@ public:
     SVX_DLLPRIVATE void DragCreateObject( SdrDragStat& rDrag );
 
     SVX_DLLPRIVATE void DragResizeCustomShape( const Rectangle& rNewRect );
-    SVX_DLLPRIVATE void DragMoveCustomShapeHdl( const Point aDestination,
+    SVX_DLLPRIVATE void DragMoveCustomShapeHdl( const Point& rDestination,
             const sal_uInt16 nCustomShapeHdlNum, bool bMoveCalloutRectangle );
 
     // #i37011# centralize throw-away of render geometry

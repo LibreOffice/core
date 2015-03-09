@@ -749,7 +749,7 @@ namespace xmloff
         return m_pControlNumberStyles;
     }
 
-    void OFormLayerXMLExport_Impl::excludeFromExport( const Reference< XControlModel > _rxControl )
+    void OFormLayerXMLExport_Impl::excludeFromExport( const Reference< XControlModel >& _rxControl )
     {
         Reference< XPropertySet > xProps( _rxControl, UNO_QUERY );
         OSL_ENSURE( xProps.is(), "OFormLayerXMLExport_Impl::excludeFromExport: invalid control model!" );

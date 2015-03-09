@@ -56,7 +56,7 @@ TYPEINIT1(E3dLatheObj, E3dCompoundObject);
 
 // Constructor from 3D polygon, scale is the conversion factor for the coordinates
 
-E3dLatheObj::E3dLatheObj(E3dDefaultAttributes& rDefault, const basegfx::B2DPolyPolygon rPoly2D)
+E3dLatheObj::E3dLatheObj(E3dDefaultAttributes& rDefault, const basegfx::B2DPolyPolygon& rPoly2D)
 :   E3dCompoundObject(rDefault),
     maPolyPoly2D(rPoly2D)
 {

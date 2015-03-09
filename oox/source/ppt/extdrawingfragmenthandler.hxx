@@ -22,7 +22,7 @@ class ExtDrawingFragmentHandler : public ::oox::core::FragmentHandler2
 {
 public:
     ExtDrawingFragmentHandler( oox::core::XmlFilterBase& rFilter, const OUString& rFragmentPath,
-        const oox::ppt::SlidePersistPtr pSlidePersistPtr,
+        const oox::ppt::SlidePersistPtr& rSlidePersistPtr,
         const oox::ppt::ShapeLocation eShapeLocation,
         oox::drawingml::ShapePtr pMasterShapePtr,
         oox::drawingml::ShapePtr pGroupShapePtr,

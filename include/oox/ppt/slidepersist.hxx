@@ -74,16 +74,16 @@ public:
     void setLayoutPath( const OUString& rLayoutPath ) { maLayoutPath = rLayoutPath; }
     const OUString getLayoutPath() const { return maLayoutPath; }
 
-    void setTheme( const oox::drawingml::ThemePtr pThemePtr ){ mpThemePtr = pThemePtr; }
+    void setTheme( const oox::drawingml::ThemePtr& rThemePtr ){ mpThemePtr = rThemePtr; }
     oox::drawingml::ThemePtr getTheme() const { return mpThemePtr; }
 
-    void setClrScheme( const oox::drawingml::ClrSchemePtr pClrSchemePtr ){ mpClrSchemePtr = pClrSchemePtr; }
+    void setClrScheme( const oox::drawingml::ClrSchemePtr& rClrSchemePtr ){ mpClrSchemePtr = rClrSchemePtr; }
     oox::drawingml::ClrSchemePtr getClrScheme() const { return mpClrSchemePtr; }
 
     void setClrMap( const oox::drawingml::ClrMapPtr pClrMapPtr ){ mpClrMapPtr = pClrMapPtr; }
     oox::drawingml::ClrMapPtr getClrMap() const { return mpClrMapPtr; }
 
-    void setBackgroundProperties( const oox::drawingml::FillPropertiesPtr pFillPropertiesPtr ){ mpBackgroundPropertiesPtr = pFillPropertiesPtr; }
+    void setBackgroundProperties( const oox::drawingml::FillPropertiesPtr& rFillPropertiesPtr ){ mpBackgroundPropertiesPtr = rFillPropertiesPtr; }
     oox::drawingml::FillPropertiesPtr getBackgroundProperties() const { return mpBackgroundPropertiesPtr; }
     oox::drawingml::Color& getBackgroundColor() { return maBackgroundColor; }
 

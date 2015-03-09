@@ -118,8 +118,8 @@ namespace accessibility
     public:
         EditBrowseBoxTableCellAccess(
             const ::com::sun::star::uno::Reference< com::sun::star::accessibility::XAccessible >& _rxParent,
-            const ::com::sun::star::uno::Reference< com::sun::star::accessibility::XAccessible > _xControlAccessible,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& _xFocusWindow,
+            const ::com::sun::star::uno::Reference< com::sun::star::accessibility::XAccessible >& _rxControlAccessible,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& _rxFocusWindow,
             ::svt::IAccessibleTableProvider& _rBrowseBox,
             sal_Int32 _nRowPos,
             sal_uInt16 _nColPos

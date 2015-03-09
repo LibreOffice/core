@@ -165,7 +165,7 @@ namespace svx
 
         // fills the given structure with dispatchers for the given slots, for the given control
         void            fillFeatureDispatchers(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > _rxControl,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& _rxControl,
                             SfxSlotId* _pZeroTerminatedSlots,
                             ControlFeatures& _rDispatchers
                         );

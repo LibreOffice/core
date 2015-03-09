@@ -109,8 +109,8 @@ class SvxXMLXTextImportComponent : public SvXMLImport
 {
 public:
     SvxXMLXTextImportComponent(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
-        const uno::Reference< XText > & xText );
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rContext,
+        const uno::Reference< XText > & rText );
 
     virtual ~SvxXMLXTextImportComponent() throw ();
 
@@ -121,7 +121,7 @@ private:
 
 
 SvxXMLXTextImportComponent::SvxXMLXTextImportComponent(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
+    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
     const uno::Reference< XText > & xText )
 :   SvXMLImport(xContext, ""),
     mxText( xText )

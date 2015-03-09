@@ -43,8 +43,8 @@ public:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) SAL_OVERRIDE;
 
 protected:
-    bool importSlide( const ::oox::core::FragmentHandlerRef& rxSlideFragmentHandler,
-                        const oox::ppt::SlidePersistPtr pPersist );
+    bool importSlide( const ::oox::core::FragmentHandlerRef& rSlideFragmentHandler,
+                        const oox::ppt::SlidePersistPtr& rPersist );
 
 private:
 

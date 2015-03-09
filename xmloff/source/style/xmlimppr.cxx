@@ -366,7 +366,7 @@ void SvXMLImportPropertyMapper::FillPropertySequence(
 void SvXMLImportPropertyMapper::CheckSpecialContext(
             const ::std::vector< XMLPropertyState >& aProperties,
             const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::beans::XPropertySet > rPropSet,
+                    ::com::sun::star::beans::XPropertySet >& rPropSet,
             _ContextID_Index_Pair* pSpecialContextIds ) const
 {
     OSL_ENSURE( rPropSet.is(), "need an XPropertySet" );
@@ -411,7 +411,7 @@ void SvXMLImportPropertyMapper::CheckSpecialContext(
 
 bool SvXMLImportPropertyMapper::FillPropertySet(
             const vector< XMLPropertyState >& aProperties,
-            const Reference< XPropertySet > rPropSet,
+            const Reference< XPropertySet >& rPropSet,
             _ContextID_Index_Pair* pSpecialContextIds ) const
 {
     bool bSet = false;

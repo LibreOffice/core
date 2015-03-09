@@ -167,7 +167,7 @@ Reference<XPropertySet> xforms_findXFormsSubmission(
 
 void xforms_setValue( Reference<XPropertySet>& xPropertySet,
                    const OUString& rName,
-                   const Any rAny )
+                   const Any& rAny )
 {
     xPropertySet->setPropertyValue( rName, rAny );
 }

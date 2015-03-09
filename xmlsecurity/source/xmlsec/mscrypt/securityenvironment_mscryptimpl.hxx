@@ -154,7 +154,7 @@ class SecurityEnvironment_MSCryptImpl : public ::cppu::WeakImplHelper3<
             throw (::com::sun::star::uno::RuntimeException);
 
         static const ::com::sun::star::uno::Sequence< sal_Int8 >& getUnoTunnelId() ;
-        static SecurityEnvironment_MSCryptImpl* getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xObj ) ;
+        static SecurityEnvironment_MSCryptImpl* getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rObj ) ;
 
         //Native methods
         virtual HCRYPTPROV getCryptoProvider() throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) ;

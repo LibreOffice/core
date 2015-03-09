@@ -84,7 +84,7 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper3< ::com::sun::star::a
                      const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& xPersistentWindowState );
 
         void setParentWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& xParentWindow );
-        void setDockingAreaOffsets( const ::Rectangle aOffsets );
+        void setDockingAreaOffsets(const ::Rectangle& rOffsets);
 
         void resetDockingArea();
 

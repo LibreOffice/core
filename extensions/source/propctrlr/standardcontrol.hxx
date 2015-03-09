@@ -184,8 +184,8 @@ namespace pcr
         virtual void        Tracking( const TrackingEvent& rTEvt ) SAL_OVERRIDE;
 
     private:
-        void    impl_checkEndClick( const MouseEvent rMEvt );
-        bool    impl_textHitTest( const Point& _rWindowPos );
+        void    impl_checkEndClick( const MouseEvent& rMEvt );
+        bool    impl_textHitTest( const Point& rWindowPos );
     };
 
 

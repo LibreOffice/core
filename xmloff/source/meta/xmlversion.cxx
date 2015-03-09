@@ -40,11 +40,11 @@ const char XMLN_VERSIONSLIST[] = "VersionList.xml";
 
 // #110897#
 XMLVersionListExport::XMLVersionListExport(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
+    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rContext,
     const com::sun::star::uno::Sequence < com::sun::star::util::RevisionTag >& rVersions,
     const OUString &rFileName,
     Reference< XDocumentHandler > &rHandler )
-:   SvXMLExport( xContext, "", rFileName, util::MeasureUnit::CM, rHandler ),
+:   SvXMLExport( rContext, "", rFileName, util::MeasureUnit::CM, rHandler ),
     maVersions( rVersions )
 {
     _GetNamespaceMap().AddAtIndex( XML_NAMESPACE_DC_IDX, xmloff::token::GetXMLToken(xmloff::token::XML_NP_DC),
@@ -99,9 +99,9 @@ sal_uInt32 XMLVersionListExport::exportDoc( enum ::xmloff::token::XMLTokenEnum )
 }
 
 XMLVersionListImport::XMLVersionListImport(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
+    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rContext,
     com::sun::star::uno::Sequence < com::sun::star::util::RevisionTag >& rVersions )
-:   SvXMLImport(xContext, ""),
+:   SvXMLImport(rContext, ""),
     maVersions( rVersions )
 {
     GetNamespaceMap().AddAtIndex( XML_NAMESPACE_FRAMEWORK_IDX, xmloff::token::GetXMLToken(xmloff::token::XML_NP_VERSIONS_LIST),

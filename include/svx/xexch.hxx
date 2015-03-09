@@ -43,7 +43,7 @@ public:
                         TYPEINFO();
 
                         XFillExchangeData();
-                        XFillExchangeData(const XFillAttrSetItem rXFillAttrSetItem);
+                        XFillExchangeData(const XFillAttrSetItem& rXFillAttrSetItem);
                         virtual ~XFillExchangeData();
 
                         XFillExchangeData& operator=( const XFillExchangeData& rXFillExchangeData );

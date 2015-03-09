@@ -36,7 +36,7 @@ class SvxXMLXTableExportComponent : public SvXMLExport
 public:
     // #110680#
     SvxXMLXTableExportComponent(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
         const OUString& rFileName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler > & xHandler,
         const com::sun::star::uno::Reference< com::sun::star::container::XNameContainer > & xTable,

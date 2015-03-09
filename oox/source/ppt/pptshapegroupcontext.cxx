@@ -49,12 +49,12 @@ namespace oox { namespace ppt {
 
 PPTShapeGroupContext::PPTShapeGroupContext(
         ContextHandler2Helper& rParent,
-        const oox::ppt::SlidePersistPtr pSlidePersistPtr,
+        const oox::ppt::SlidePersistPtr& rSlidePersistPtr,
         const ShapeLocation eShapeLocation,
         oox::drawingml::ShapePtr pMasterShapePtr,
         oox::drawingml::ShapePtr pGroupShapePtr )
 : ShapeGroupContext( rParent, pMasterShapePtr, pGroupShapePtr )
-, mpSlidePersistPtr( pSlidePersistPtr )
+, mpSlidePersistPtr( rSlidePersistPtr )
 , meShapeLocation( eShapeLocation )
 , pGraphicShape( (PPTShape *)NULL )
 {

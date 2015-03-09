@@ -53,7 +53,7 @@ class OOXMLDocPropHandler : public ::cppu::WeakImplHelper1< ::com::sun::star::xm
     OUString m_aCustomPropertyName;
 
 public:
-    explicit            OOXMLDocPropHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext, const ::com::sun::star::uno::Reference< ::com::sun::star::document::XDocumentProperties > xDocProp );
+    explicit            OOXMLDocPropHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext, const ::com::sun::star::uno::Reference< ::com::sun::star::document::XDocumentProperties >& rDocProp );
 
     virtual             ~OOXMLDocPropHandler();
 

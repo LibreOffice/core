@@ -45,8 +45,8 @@ public:
         const ::rtl::OUString& rsURL,
         const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
-    static css::awt::Gradient VclToAwtGradient (const Gradient aGradient);
-    static Gradient AwtToVclGradient (const css::awt::Gradient aGradient);
+    static css::awt::Gradient VclToAwtGradient (const Gradient& rGradient);
+    static Gradient AwtToVclGradient (const css::awt::Gradient& rGradient);
 
     static css::util::URL GetURL (const ::rtl::OUString& rsCommand);
     static css::uno::Reference<css::frame::XDispatch> GetDispatch (

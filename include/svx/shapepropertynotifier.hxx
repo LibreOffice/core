@@ -115,7 +115,7 @@ namespace svx
 
         /** registers a IPropertyValueProvider
         */
-        void    registerProvider( const ShapeProperty _eProperty, const PPropertyValueProvider _pProvider );
+        void    registerProvider( const ShapeProperty _eProperty, const PPropertyValueProvider& _rProvider );
 
         /** notifies changes in the given property to all registered listeners
 

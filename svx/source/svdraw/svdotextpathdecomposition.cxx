@@ -261,7 +261,7 @@ namespace
             mxBreak = com::sun::star::i18n::BreakIterator::create(xContext);
         }
 
-        void HandlePair(const basegfx::B2DPolygon rPolygonCandidate, const ::std::vector< const impPathTextPortion* >& rTextPortions)
+        void HandlePair(const basegfx::B2DPolygon& rPolygonCandidate, const ::std::vector< const impPathTextPortion* >& rTextPortions)
         {
             // prepare polygon geometry, take into account as many parameters as possible
             basegfx::B2DPolygon aPolygonCandidate(rPolygonCandidate);

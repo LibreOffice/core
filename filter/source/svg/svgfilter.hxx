@@ -98,7 +98,7 @@ class SVGExport : public SvXMLExport
 
 public:
 
-    SVGExport( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
+    SVGExport( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rContext,
                 const Reference< XDocumentHandler >& rxHandler,
                 const Sequence< PropertyValue >& rFilterData );
 

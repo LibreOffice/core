@@ -78,7 +78,7 @@ class X509Certificate_MSCryptImpl : public ::cppu::WeakImplHelper2<
         virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw (com::sun::star::uno::RuntimeException);
 
         static const ::com::sun::star::uno::Sequence< sal_Int8 >& getUnoTunnelId() ;
-        static X509Certificate_MSCryptImpl* getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xObj ) ;
+        static X509Certificate_MSCryptImpl* getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rObj ) ;
 
         //Helper methods
         void setMswcryCert( const CERT_CONTEXT* cert ) ;

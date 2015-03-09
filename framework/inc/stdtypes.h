@@ -67,14 +67,14 @@ struct KeyEventHashCode
 
 struct KeyEventEqualsFunc
 {
-    bool operator()(const css::awt::KeyEvent aKey1,
-                    const css::awt::KeyEvent aKey2) const
+    bool operator()(const css::awt::KeyEvent& rKey1,
+                    const css::awt::KeyEvent& rKey2) const
     {
         return (
-                (aKey1.KeyCode   == aKey2.KeyCode  ) &&
-                //(aKey1.KeyChar   == aKey2.KeyChar  ) &&
-                //(aKey1.KeyFunc   == aKey2.KeyFunc  ) &&
-                (aKey1.Modifiers == aKey2.Modifiers)
+                (rKey1.KeyCode   == rKey2.KeyCode  ) &&
+                //(rKey1.KeyChar   == rKey2.KeyChar  ) &&
+                //(rKey1.KeyFunc   == rKey2.KeyFunc  ) &&
+                (rKey1.Modifiers == rKey2.Modifiers)
                );
     }
 };

@@ -152,14 +152,14 @@ public:
     */
 
     void RecognizeString( const OUString& rText,
-                    const com::sun::star::uno::Reference< com::sun::star::text::XTextMarkup > xMarkup,
-                    const com::sun::star::uno::Reference< com::sun::star::frame::XController > xController,
+                    const com::sun::star::uno::Reference< com::sun::star::text::XTextMarkup >& rMarkup,
+                    const com::sun::star::uno::Reference< com::sun::star::frame::XController >& rController,
                     const com::sun::star::lang::Locale& rLocale,
                     sal_uInt32 nStart, sal_uInt32 nLen ) const;
 
-    void RecognizeTextRange(const com::sun::star::uno::Reference< com::sun::star::text::XTextRange> xRange,
-                    const com::sun::star::uno::Reference< com::sun::star::text::XTextMarkup > xMarkup,
-                    const com::sun::star::uno::Reference< com::sun::star::frame::XController > xController) const;
+    void RecognizeTextRange(const com::sun::star::uno::Reference< com::sun::star::text::XTextRange>& rRange,
+                    const com::sun::star::uno::Reference< com::sun::star::text::XTextMarkup >& rMarkup,
+                    const com::sun::star::uno::Reference< com::sun::star::frame::XController >& rController) const;
 
     /** Returns all action references associated with a given list of smart tag types
 

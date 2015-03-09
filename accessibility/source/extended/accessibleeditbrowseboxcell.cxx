@@ -162,7 +162,7 @@ namespace accessibility
 
     // EditBrowseBoxTableCell
     EditBrowseBoxTableCellAccess::EditBrowseBoxTableCellAccess(
-            const Reference< XAccessible >& _rxParent, const Reference< XAccessible > _rxControlAccessible,
+            const Reference< XAccessible >& _rxParent, const Reference< XAccessible >& _rxControlAccessible,
             const Reference< XWindow >& _rxFocusWindow,
             IAccessibleTableProvider& _rBrowseBox, sal_Int32 _nRowPos, sal_uInt16 _nColPos )
         :EditBrowseBoxTableCellAccess_Base( m_aMutex )

@@ -93,14 +93,14 @@ sal_Size lcl_getFileSize(SvStream& _rStream)
 /**
     calculates the Julian date
 */
-void lcl_CalcJulDate(sal_Int32& _nJulianDate,sal_Int32& _nJulianTime,const com::sun::star::util::DateTime _aDateTime)
+void lcl_CalcJulDate(sal_Int32& _nJulianDate,sal_Int32& _nJulianTime, const com::sun::star::util::DateTime& rDateTime)
 {
-    com::sun::star::util::DateTime aDateTime = _aDateTime;
+    com::sun::star::util::DateTime aDateTime = rDateTime;
     // weird: months fix
     if (aDateTime.Month > 12)
     {
         aDateTime.Month--;
-        sal_uInt16 delta = _aDateTime.Month / 12;
+        sal_uInt16 delta = rDateTime.Month / 12;
         aDateTime.Year += delta;
         aDateTime.Month -= delta * 12;
         aDateTime.Month++;
@@ -128,7 +128,7 @@ void lcl_CalcJulDate(sal_Int32& _nJulianDate,sal_Int32& _nJulianTime,const com::
         _nJulianDate = (sal_Int32) ((365.25 * iy0) - 0.75)
             + (sal_Int32) (30.6001 * (im0 + 1) )
             + aDateTime.Day + 1720994;
-    } // if ( _aDateTime.Year <= 0 )
+    } // if ( rDateTime.Year <= 0 )
     else
     {
         _nJulianDate = static_cast<sal_Int32>( ((365.25 * iy0)

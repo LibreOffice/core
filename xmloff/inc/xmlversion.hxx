@@ -38,7 +38,7 @@ private:
     const com::sun::star::uno::Sequence < com::sun::star::util::RevisionTag >& maVersions;
 public:
     XMLVersionListExport(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rContext,
         const com::sun::star::uno::Sequence < com::sun::star::util::RevisionTag >& rVersions,
         const OUString &rFileName,
         com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler > &rHandler );
@@ -67,7 +67,7 @@ protected:
 public:
 
     XMLVersionListImport(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rContext,
         com::sun::star::uno::Sequence < com::sun::star::util::RevisionTag >& rVersions );
     virtual ~XMLVersionListImport() throw();
 

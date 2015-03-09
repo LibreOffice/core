@@ -90,7 +90,7 @@ class AnimationExporter
                         const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >* xParent,
                             const sal_uInt16 nContainerRecType, const sal_uInt16 nInstance, const sal_Int32 nGroupLevel, const bool bTakeBackInteractiveSequenceTiming,
                                 const sal_Int16 nFillDefault );
-    void exportAnimateTargetElement( SvStream& rStrm, const ::com::sun::star::uno::Any aAny, const bool bCreate2b01Atom );
+    void exportAnimateTargetElement( SvStream& rStrm, const ::com::sun::star::uno::Any& rAny, const bool bCreate2b01Atom );
     void exportAnimateKeyPoints( SvStream& rStrm, const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimate >& xAnimate );
     void exportAnimValue( SvStream& rStrm, const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode, const bool bExportAlways );
     void exportTransitionFilter( SvStream& rStrm, const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode );

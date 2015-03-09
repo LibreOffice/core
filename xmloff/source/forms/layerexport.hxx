@@ -298,7 +298,7 @@ namespace xmloff
             to the form layer exporter.<br/>
             Of course you have to do this before calling <member>exportForms</member></p>
         */
-        void excludeFromExport( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > _rxControl );
+        void excludeFromExport( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& _rxControl );
     };
 
 }   // namespace xmloff

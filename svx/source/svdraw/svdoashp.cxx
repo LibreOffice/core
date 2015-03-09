@@ -2073,7 +2073,7 @@ void SdrObjCustomShape::DragResizeCustomShape( const Rectangle& rNewRect )
     }
 }
 
-void SdrObjCustomShape::DragMoveCustomShapeHdl( const Point aDestination,
+void SdrObjCustomShape::DragMoveCustomShapeHdl( const Point& rDestination,
         const sal_uInt16 nCustomShapeHdlNum, bool bMoveCalloutRectangle )
 {
     std::vector< SdrCustomShapeInteraction > aInteractionHandles( GetInteractionHandles() );
@@ -2084,7 +2084,7 @@ void SdrObjCustomShape::DragMoveCustomShapeHdl( const Point aDestination,
         {
             try
             {
-                com::sun::star::awt::Point aPt( aDestination.X(), aDestination.Y() );
+                com::sun::star::awt::Point aPt( rDestination.X(), rDestination.Y() );
                 if ( aInteractionHandle.nMode & CUSTOMSHAPE_HANDLE_MOVE_SHAPE && bMoveCalloutRectangle )
                 {
                     sal_Int32 nXDiff = aPt.X - aInteractionHandle.aPosition.X;

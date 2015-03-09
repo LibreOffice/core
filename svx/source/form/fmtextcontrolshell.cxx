@@ -1260,8 +1260,8 @@ namespace svx
     }
 
 
-    void FmTextControlShell::fillFeatureDispatchers(  const Reference< XControl > _rxControl, SfxSlotId* _pZeroTerminatedSlots,
-            ControlFeatures& _rDispatchers )
+    void FmTextControlShell::fillFeatureDispatchers(const Reference< XControl >& _rxControl, SfxSlotId* _pZeroTerminatedSlots,
+            ControlFeatures& _rDispatchers)
     {
         Reference< XDispatchProvider > xProvider( _rxControl, UNO_QUERY );
         SfxApplication* pApplication = SfxGetpApp();
