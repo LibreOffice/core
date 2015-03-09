@@ -534,7 +534,7 @@ void ScModelObj::postMouseEvent(int nType, int nX, int nY, int nCount)
         return;
 
     // Calc operates in pixels...
-    MouseEvent aEvent(Point(nX / TWIPS_PER_PIXEL, nY / TWIPS_PER_PIXEL), nCount, MouseEventModifiers::SIMPLECLICK, MOUSE_LEFT);
+    MouseEvent aEvent(Point(nX * pViewData->GetPPTX(), nY * pViewData->GetPPTY()), nCount, MouseEventModifiers::SIMPLECLICK, MOUSE_LEFT);
 
     switch (nType)
     {
