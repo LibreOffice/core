@@ -96,19 +96,8 @@ const SCROW SCROW_REPEAT_NONE = SCROW_MAX;
 #endif
 const SCROW SCROWS64K = 65536;
 
-//  old stuff defines
 #define MAXROW_30   8191
 
-#ifdef SC_LIMIT_ROWS
-#undef MAXROWCOUNT_DEFINE
-#define MAXROWCOUNT_DEFINE 8192
-const SCROW W16MAXROWCOUNT = MAXROWCOUNT_DEFINE;
-const SCROW W16MAXROW = W16MAXROWCOUNT - 1;
-#define MAXROWCOUNT W16MAXROWCOUNT
-#define MAXROW      W16MAXROW
-#endif
-
-//  old stuff defines end
 SAL_WARN_UNUSED_RESULT inline bool ValidCol( SCCOL nCol )
 {
     return nCol >= static_cast<SCCOL>(0) && nCol <= MAXCOL;

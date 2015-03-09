@@ -2305,11 +2305,9 @@ void ScViewData::ReadUserData(const OUString& rData)
         sal_Unicode cTabSep = 0;
         if (comphelper::string::getTokenCount(aTabOpt, SC_OLD_TABSEP) >= 11)
             cTabSep = SC_OLD_TABSEP;
-#ifndef SC_LIMIT_ROWS
         else if (comphelper::string::getTokenCount(aTabOpt, SC_NEW_TABSEP) >= 11)
             cTabSep = SC_NEW_TABSEP;
         // '+' ist nur erlaubt, wenn wir mit Zeilen > 8192 umgehen koennen
-#endif
 
         if (cTabSep)
         {
