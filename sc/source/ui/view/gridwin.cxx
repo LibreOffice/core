@@ -441,8 +441,8 @@ ScGridWindow::ScGridWindow( vcl::Window* pParent, ScViewData* pData, ScSplitPos 
             pViewData( pData ),
             eWhich( eWhichPos ),
             pNoteMarker( NULL ),
-            pFilterBox( NULL ),
-            pFilterFloat( NULL ),
+            mpFilterBox(),
+            mpFilterFloat(),
             mpAutoFilterPopup(NULL),
             mpDPFieldPopup(NULL),
             mpFilterButton(NULL),
@@ -523,8 +523,6 @@ ScGridWindow::~ScGridWindow()
     // #114409#
     ImpDestroyOverlayObjects();
 
-    delete pFilterBox;
-    delete pFilterFloat;
     delete pNoteMarker;
 }
 
@@ -535,13 +533,12 @@ void ScGridWindow::ClickExtern()
         // #i81298# don't delete the filter box when called from its select handler
         // (possible through row header size update)
         // #i84277# when initializing the filter box, a Basic error can deactivate the view
-        if ( pFilterBox && ( pFilterBox->IsInSelect() || pFilterBox->IsInInit() ) )
+        if (mpFilterBox && (mpFilterBox->IsInSelect() || mpFilterBox->IsInInit()))
         {
             break;
         }
-
-        DELETEZ(pFilterBox);
-        DELETEZ(pFilterFloat);
+        mpFilterBox.reset();
+        mpFilterFloat.reset();
     }
     while (false);
 
@@ -554,8 +551,8 @@ void ScGridWindow::ClickExtern()
 
 IMPL_LINK_NOARG(ScGridWindow, PopupModeEndHdl)
 {
-    if (pFilterBox)
-        pFilterBox->SetCancelled();     // nicht mehr auswaehlen
+    if (mpFilterBox)
+        mpFilterBox->SetCancelled();     // nicht mehr auswaehlen
     GrabFocus();
     return 0;
 }
@@ -938,8 +935,8 @@ void ScGridWindow::LaunchDPFieldMenu( SCCOL nCol, SCROW nRow )
 
 void ScGridWindow::DoScenarioMenu( const ScRange& rScenRange )
 {
-    delete pFilterBox;
-    delete pFilterFloat;
+    mpFilterBox.reset();
+    mpFilterFloat.reset();
 
     SCCOL nCol = rScenRange.aEnd.Col();     // Zelle unterhalb des Buttons
     SCROW nRow = rScenRange.aStart.Row();
@@ -969,17 +966,19 @@ void ScGridWindow::DoScenarioMenu( const ScRange& rScenRange )
     //  Die ListBox direkt unter der schwarzen Linie auf dem Zellgitter
     //  (wenn die Linie verdeckt wird, sieht es komisch aus...)
 
-    pFilterFloat = new ScFilterFloatingWindow( this, WinBits(WB_BORDER) );      // nicht resizable etc.
-    pFilterFloat->SetPopupModeEndHdl( LINK( this, ScGridWindow, PopupModeEndHdl ) );
-    pFilterBox = new ScFilterListBox( pFilterFloat, this, nCol, nRow, SC_FILTERBOX_SCENARIO );
-    if ( bLayoutRTL )
-        pFilterBox->EnableMirroring();
+    mpFilterFloat.reset(new ScFilterFloatingWindow(this, WinBits(WB_BORDER)));
+    mpFilterFloat->SetPopupModeEndHdl( LINK( this, ScGridWindow, PopupModeEndHdl ) );
+    mpFilterBox.reset(new ScFilterListBox(mpFilterFloat.get(), this, nCol, nRow, SC_FILTERBOX_SCENARIO));
+    if (bLayoutRTL)
+        mpFilterBox->EnableMirroring();
 
     nSizeX += 1;
 
     {
-        vcl::Font aOldFont = GetFont(); SetFont( pFilterBox->GetFont() );
-        MapMode   aOldMode = GetMapMode(); SetMapMode( MAP_PIXEL );
+        vcl::Font aOldFont = GetFont();
+        SetFont(mpFilterBox->GetFont());
+        MapMode aOldMode = GetMapMode();
+        SetMapMode( MAP_PIXEL );
 
         nHeight  = GetTextHeight();
         nHeight *= SC_FILTERLISTBOX_LINES;
@@ -992,9 +991,9 @@ void ScGridWindow::DoScenarioMenu( const ScRange& rScenRange )
 
     //  ParentSize Abfrage fehlt
     Size aSize( nSizeX, nHeight );
-    pFilterBox->SetSizePixel( aSize );
-    pFilterBox->Show();                 // Show muss vor SetUpdateMode kommen !!!
-    pFilterBox->SetUpdateMode(false);
+    mpFilterBox->SetSizePixel( aSize );
+    mpFilterBox->Show();                 // Show muss vor SetUpdateMode kommen !!!
+    mpFilterBox->SetUpdateMode(false);
 
     //  SetOutputSizePixel/StartPopupMode erst unten, wenn die Groesse feststeht
 
@@ -1010,10 +1009,10 @@ void ScGridWindow::DoScenarioMenu( const ScRange& rScenRange )
         if (pDoc->HasScenarioRange( i, rScenRange ))
             if (pDoc->GetName( i, aTabName ))
             {
-                pFilterBox->InsertEntry( aTabName );
+                mpFilterBox->InsertEntry(aTabName);
                 if (pDoc->IsActiveScenario(i))
                     aCurrent = aTabName;
-                long nTextWidth = pFilterBox->GetTextWidth( aTabName );
+                long nTextWidth = mpFilterBox->GetTextWidth(aTabName);
                 if ( nTextWidth > nMaxText )
                     nMaxText = nTextWidth;
                 ++nEntryCount;
@@ -1029,8 +1028,8 @@ void ScGridWindow::DoScenarioMenu( const ScRange& rScenRange )
     {
         long nDiff = nMaxText - nSizeX;
         aSize = Size( nMaxText, nHeight );
-        pFilterBox->SetSizePixel( aSize );
-        pFilterFloat->SetOutputSizePixel( aSize );
+        mpFilterBox->SetSizePixel(aSize);
+        mpFilterFloat->SetOutputSizePixel(aSize);
 
         if ( !bLayoutRTL )
         {
@@ -1042,23 +1041,26 @@ void ScGridWindow::DoScenarioMenu( const ScRange& rScenRange )
         }
     }
 
-    pFilterFloat->SetOutputSizePixel( aSize );
-    pFilterFloat->StartPopupMode( aCellRect, FLOATWIN_POPUPMODE_DOWN|FLOATWIN_POPUPMODE_GRABFOCUS );
+    mpFilterFloat->SetOutputSizePixel( aSize );
+    mpFilterFloat->StartPopupMode( aCellRect, FLOATWIN_POPUPMODE_DOWN|FLOATWIN_POPUPMODE_GRABFOCUS );
 
-    pFilterBox->SetUpdateMode(true);
-    pFilterBox->GrabFocus();
+    mpFilterBox->SetUpdateMode(true);
+    mpFilterBox->GrabFocus();
 
     sal_Int32 nPos = LISTBOX_ENTRY_NOTFOUND;
     if (!aCurrent.isEmpty())
     {
-        nPos = pFilterBox->GetEntryPos(aCurrent);
+        nPos = mpFilterBox->GetEntryPos(aCurrent);
     }
-    if (LISTBOX_ENTRY_NOTFOUND == nPos && pFilterBox->GetEntryCount() > 0 )
+    if (LISTBOX_ENTRY_NOTFOUND == nPos && mpFilterBox->GetEntryCount() > 0 )
+    {
         nPos = 0;
+    }
     if (LISTBOX_ENTRY_NOTFOUND != nPos )
-        pFilterBox->SelectEntryPos(nPos);
-
-    pFilterBox->EndInit();
+    {
+        mpFilterBox->SelectEntryPos(nPos);
+    }
+    mpFilterBox->EndInit();
 
     // Szenario-Auswahl kommt aus MouseButtonDown:
     //  der naechste MouseMove auf die Filterbox ist wie ein ButtonDown
@@ -1069,8 +1071,8 @@ void ScGridWindow::DoScenarioMenu( const ScRange& rScenRange )
 
 void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow, bool bDataSelect )
 {
-    delete pFilterBox;
-    delete pFilterFloat;
+    mpFilterBox.reset();
+    mpFilterFloat.reset();
 
     sal_uInt16 i;
     ScDocument* pDoc = pViewData->GetDocument();
@@ -1090,19 +1092,21 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow, bool bDataSelec
     aPos.X() -= 1;
     aPos.Y() += nSizeY - 1;
 
-    pFilterFloat = new ScFilterFloatingWindow( this, WinBits(WB_BORDER) );      // nicht resizable etc.
-    pFilterFloat->SetPopupModeEndHdl( LINK( this, ScGridWindow, PopupModeEndHdl ) );
-    pFilterBox = new ScFilterListBox(
-        pFilterFloat, this, nCol, nRow, bDataSelect ? SC_FILTERBOX_DATASELECT : SC_FILTERBOX_FILTER );
+    mpFilterFloat.reset(new ScFilterFloatingWindow(this, WinBits(WB_BORDER)));
+    mpFilterFloat->SetPopupModeEndHdl(LINK( this, ScGridWindow, PopupModeEndHdl));
+    ScFilterBoxMode eFilterMode = bDataSelect ? SC_FILTERBOX_DATASELECT : SC_FILTERBOX_FILTER;
+    mpFilterBox.reset(new ScFilterListBox(mpFilterFloat.get(), this, nCol, nRow, eFilterMode));
     // Fix for bug fdo#44925
     if (Application::GetSettings().GetLayoutRTL() != bLayoutRTL)
-        pFilterBox->EnableMirroring();
+        mpFilterBox->EnableMirroring();
 
     nSizeX += 1;
 
     {
-        vcl::Font  aOldFont = GetFont(); SetFont( pFilterBox->GetFont() );
-        MapMode    aOldMode = GetMapMode(); SetMapMode( MAP_PIXEL );
+        vcl::Font aOldFont = GetFont();
+        SetFont(mpFilterBox->GetFont());
+        MapMode aOldMode = GetMapMode();
+        SetMapMode(MAP_PIXEL);
 
         nHeight  = GetTextHeight();
         nHeight *= SC_FILTERLISTBOX_LINES;
@@ -1126,7 +1130,7 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow, bool bDataSelec
     {
         //! wird der Titel ueberhaupt ausgewertet ???
         OUString aString = pDoc->GetString(nCol, nRow, nTab);
-        pFilterBox->SetText( aString );
+        mpFilterBox->SetText(aString);
 
         long nMaxText = 0;
 
@@ -1136,17 +1140,17 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow, bool bDataSelec
         for (i=0; i<nDefCount; i++)
         {
             OUString aEntry( static_cast<ScResId>(nDefIDs[i]) );
-            pFilterBox->InsertEntry( aEntry );
-            long nTextWidth = pFilterBox->GetTextWidth( aEntry );
+            mpFilterBox->InsertEntry(aEntry);
+            long nTextWidth = mpFilterBox->GetTextWidth(aEntry);
             if ( nTextWidth > nMaxText )
                 nMaxText = nTextWidth;
         }
-        pFilterBox->SetSeparatorPos( nDefCount - 1 );
+        mpFilterBox->SetSeparatorPos(nDefCount - 1);
 
         //  get list entries
         bool bHasDates = false;
         pDoc->GetFilterEntries( nCol, nRow, nTab, true, aStrings, bHasDates);
-        pFilterBox->SetListHasDates(bHasDates);
+        mpFilterBox->SetListHasDates(bHasDates);
 
         //  check widths of numerical entries (string entries are not included)
         //  so all numbers are completely visible
@@ -1155,7 +1159,7 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow, bool bDataSelec
         {
             if (!it->IsStrData())              // only numerical entries
             {
-                long nTextWidth = pFilterBox->GetTextWidth(it->GetString());
+                long nTextWidth = mpFilterBox->GetTextWidth(it->GetString());
                 if ( nTextWidth > nMaxText )
                     nMaxText = nTextWidth;
             }
@@ -1185,12 +1189,12 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow, bool bDataSelec
         if ( aPos.Y() + aSize.Height() > aParentSize.Height() )
             aPos.Y() = aParentSize.Height() - aSize.Height();
 
-        pFilterBox->SetSizePixel( aSize );
-        pFilterBox->Show();                 // Show muss vor SetUpdateMode kommen !!!
-        pFilterBox->SetUpdateMode(false);
+        mpFilterBox->SetSizePixel(aSize);
+        mpFilterBox->Show();                 // Show muss vor SetUpdateMode kommen !!!
+        mpFilterBox->SetUpdateMode(false);
 
-        pFilterFloat->SetOutputSizePixel( aSize );
-        pFilterFloat->StartPopupMode( aCellRect, FLOATWIN_POPUPMODE_DOWN|FLOATWIN_POPUPMODE_GRABFOCUS);
+        mpFilterFloat->SetOutputSizePixel(aSize);
+        mpFilterFloat->StartPopupMode(aCellRect, FLOATWIN_POPUPMODE_DOWN | FLOATWIN_POPUPMODE_GRABFOCUS);
 
         //  Listbox fuellen
         bool bWait = aStrings.size() > 100;
@@ -1200,12 +1204,12 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow, bool bDataSelec
 
         std::vector<ScTypedStrData>::const_iterator it = aStrings.begin(), itEnd = aStrings.end();
         for (; it != itEnd; ++it)
-            pFilterBox->InsertEntry(it->GetString());
+            mpFilterBox->InsertEntry(it->GetString());
 
         if (bWait)
             LeaveWait();
 
-        pFilterBox->SetUpdateMode(true);
+        mpFilterBox->SetUpdateMode(true);
     }
 
     sal_Int32 nSelPos = LISTBOX_ENTRY_NOTFOUND;
@@ -1236,7 +1240,7 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow, bool bDataSelec
                         {
                             if (!aQueryStr.isEmpty())
                             {
-                                nSelPos = pFilterBox->GetEntryPos(aQueryStr);
+                                nSelPos = mpFilterBox->GetEntryPos(aQueryStr);
                             }
                         }
                         else if ( rEntry.eOp == SC_TOPVAL && aQueryStr == "10" )
@@ -1296,30 +1300,30 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow, bool bDataSelec
     }
 
         //  neu (309): irgendwas muss immer selektiert sein:
-    if ( LISTBOX_ENTRY_NOTFOUND == nSelPos && pFilterBox->GetEntryCount() > 0 && !bDataSelect)
+    if (LISTBOX_ENTRY_NOTFOUND == nSelPos && mpFilterBox->GetEntryCount() > 0 && !bDataSelect)
         nSelPos = 0;
 
     //  keine leere Auswahl-Liste anzeigen:
 
     if ( bEmpty )
     {
-        DELETEZ(pFilterBox);                // war nix
-        DELETEZ(pFilterFloat);
+        mpFilterBox.reset();
+        mpFilterFloat.reset();
     }
     else
     {
-        pFilterBox->GrabFocus();
+        mpFilterBox->GrabFocus();
 
             //  Select erst nach GrabFocus, damit das Focus-Rechteck richtig landet
         if ( LISTBOX_ENTRY_NOTFOUND != nSelPos )
-            pFilterBox->SelectEntryPos( nSelPos );
+            mpFilterBox->SelectEntryPos(nSelPos);
         else
         {
             if (bDataSelect)
-                pFilterBox->SetNoSelection();
+                mpFilterBox->SetNoSelection();
         }
 
-        pFilterBox->EndInit();
+        mpFilterBox->EndInit();
 
         if (!bDataSelect)
         {
@@ -1334,20 +1338,20 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow, bool bDataSelec
 
 void ScGridWindow::FilterSelect( sal_uLong nSel )
 {
-    OUString aString = pFilterBox->GetEntry( static_cast< sal_Int32 >( nSel ) );
+    OUString aString = mpFilterBox->GetEntry(static_cast<sal_Int32>(nSel));
 
-    SCCOL nCol = pFilterBox->GetCol();
-    SCROW nRow = pFilterBox->GetRow();
-    switch ( pFilterBox->GetMode() )
+    SCCOL nCol = mpFilterBox->GetCol();
+    SCROW nRow = mpFilterBox->GetRow();
+    switch (mpFilterBox->GetMode())
     {
         case SC_FILTERBOX_DATASELECT:
-            ExecDataSelect( nCol, nRow, aString );
+            ExecDataSelect(nCol, nRow, aString);
             break;
         case SC_FILTERBOX_FILTER:
-            ExecFilter( nSel, nCol, nRow, aString, pFilterBox->HasDates() );
+            ExecFilter(nSel, nCol, nRow, aString, mpFilterBox->HasDates());
             break;
         case SC_FILTERBOX_SCENARIO:
-            pViewData->GetView()->UseScenario( aString );
+            pViewData->GetView()->UseScenario(aString);
             break;
         case SC_FILTERBOX_PAGEFIELD:
             // first entry is "all"
@@ -1355,8 +1359,8 @@ void ScGridWindow::FilterSelect( sal_uLong nSel )
             break;
     }
 
-    if (pFilterFloat)
-        pFilterFloat->EndPopupMode();
+    if (mpFilterFloat)
+        mpFilterFloat->EndPopupMode();
 
     GrabFocus();        // unter OS/2 stimmt der Focus sonst nicht
 }
@@ -2485,15 +2489,15 @@ void ScGridWindow::MouseMove( const MouseEvent& rMEvt )
         return;
     }
 
-    if (nMouseStatus == SC_GM_FILTER && pFilterBox)
+    if (nMouseStatus == SC_GM_FILTER && mpFilterBox)
     {
-        Point aRelPos = pFilterBox->ScreenToOutputPixel( OutputToScreenPixel( rMEvt.GetPosPixel() ) );
-        if ( Rectangle(Point(),pFilterBox->GetOutputSizePixel()).IsInside(aRelPos) )
+        Point aRelPos = mpFilterBox->ScreenToOutputPixel( OutputToScreenPixel( rMEvt.GetPosPixel() ) );
+        if ( Rectangle(Point(), mpFilterBox->GetOutputSizePixel()).IsInside(aRelPos) )
         {
             nButtonDown = 0;
             nMouseStatus = SC_GM_NONE;
             ReleaseMouse();
-            pFilterBox->MouseButtonDown( MouseEvent( aRelPos, 1, MouseEventModifiers::SIMPLECLICK, MOUSE_LEFT ) );
+            mpFilterBox->MouseButtonDown( MouseEvent( aRelPos, 1, MouseEventModifiers::SIMPLECLICK, MOUSE_LEFT ) );
             return;
         }
     }
@@ -2780,7 +2784,7 @@ void ScGridWindow::Tracking( const TrackingEvent& rTEvt )
 
 void ScGridWindow::StartDrag( sal_Int8 /* nAction */, const Point& rPosPixel )
 {
-    if ( pFilterBox || nPagebreakMouse )
+    if (mpFilterBox || nPagebreakMouse)
         return;
 
     HideNoteMarker();
