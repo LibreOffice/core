@@ -262,13 +262,13 @@ SbxArray* StringToByteArray(const OUString& rStr)
     sal_Int32 nArraySize = rStr.getLength() * 2;
     const sal_Unicode* pSrc = rStr.getStr();
     SbxDimArray* pArray = new SbxDimArray(SbxBYTE);
-#if !HAVE_FEATURE_SCRIPTING
-    bool bIncIndex = false;
-#else
-    bool bIncIndex = ( IsBaseIndexOne() && SbiRuntime::isVBAEnabled() );
-#endif
     if( nArraySize )
     {
+#if !HAVE_FEATURE_SCRIPTING
+        bool bIncIndex = false;
+#else
+        bool bIncIndex = ( IsBaseIndexOne() && SbiRuntime::isVBAEnabled() );
+#endif
         if( bIncIndex )
             pArray->AddDim32( 1, nArraySize );
         else
