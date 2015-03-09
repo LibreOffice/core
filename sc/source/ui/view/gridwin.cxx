@@ -429,13 +429,13 @@ ScGridWindow::ScGridWindow( vcl::Window* pParent, ScViewData* pData, ScSplitPos 
 :           Window( pParent, WB_CLIPCHILDREN | WB_DIALOGCONTROL ),
             DropTargetHelper( this ),
             DragSourceHelper( this ),
-            mpOOCursors( NULL ),
-            mpOOSelection( NULL ),
-            mpOOSelectionBorder( NULL ),
-            mpOOAutoFill( NULL ),
-            mpOODragRect( NULL ),
-            mpOOHeader( NULL ),
-            mpOOShrink( NULL ),
+            mpOOCursors(),
+            mpOOSelection(),
+            mpOOSelectionBorder(),
+            mpOOAutoFill(),
+            mpOODragRect(),
+            mpOOHeader(),
+            mpOOShrink(),
             mpAutoFillRect(static_cast<Rectangle*>(NULL)),
             pViewData( pData ),
             eWhich( eWhichPos ),
@@ -5679,12 +5679,12 @@ void ScGridWindow::UpdateAllOverlays()
 
 void ScGridWindow::DeleteCursorOverlay()
 {
-    DELETEZ( mpOOCursors );
+    mpOOCursors.reset();
 }
 
 void ScGridWindow::DeleteCopySourceOverlay()
 {
-    DELETEZ( mpOOSelectionBorder );
+    mpOOSelectionBorder.reset();
 }
 
 void ScGridWindow::UpdateCopySourceOverlay()
@@ -5711,7 +5711,7 @@ void ScGridWindow::UpdateCopySourceOverlay()
     SCTAB nCurTab = pViewData->GetCurPos().Tab();
 
     ScClipParam& rClipParam = pClipDoc->GetClipParam();
-    mpOOSelectionBorder = new ::sdr::overlay::OverlayObjectList;
+    mpOOSelectionBorder.reset(new sdr::overlay::OverlayObjectList);
     for ( size_t i = 0; i < rClipParam.maRanges.size(); ++i )
     {
         ScRange* p = rClipParam.maRanges[i];
@@ -5891,7 +5891,7 @@ void ScGridWindow::UpdateCursorOverlay()
                 false);
 
             xOverlayManager->add(*pOverlay);
-            mpOOCursors = new ::sdr::overlay::OverlayObjectList;
+            mpOOCursors.reset(new sdr::overlay::OverlayObjectList);
             mpOOCursors->append(*pOverlay);
         }
     }
@@ -5902,7 +5902,7 @@ void ScGridWindow::UpdateCursorOverlay()
 
 void ScGridWindow::DeleteSelectionOverlay()
 {
-    DELETEZ( mpOOSelection );
+    mpOOSelection.reset();
 }
 
 void ScGridWindow::UpdateSelectionOverlay()
@@ -5957,7 +5957,7 @@ void ScGridWindow::UpdateSelectionOverlay()
                 true);
 
             xOverlayManager->add(*pOverlay);
-            mpOOSelection = new ::sdr::overlay::OverlayObjectList;
+            mpOOSelection.reset(new sdr::overlay::OverlayObjectList);
             mpOOSelection->append(*pOverlay);
         }
     }
@@ -5968,7 +5968,7 @@ void ScGridWindow::UpdateSelectionOverlay()
 
 void ScGridWindow::DeleteAutoFillOverlay()
 {
-    DELETEZ( mpOOAutoFill );
+    mpOOAutoFill.reset();
     mpAutoFillRect.reset();
 }
 
@@ -6045,7 +6045,7 @@ void ScGridWindow::UpdateAutoFillOverlay()
                 false);
 
             xOverlayManager->add(*pOverlay);
-            mpOOAutoFill = new ::sdr::overlay::OverlayObjectList;
+            mpOOAutoFill.reset(new sdr::overlay::OverlayObjectList);
             mpOOAutoFill->append(*pOverlay);
         }
 
@@ -6056,7 +6056,7 @@ void ScGridWindow::UpdateAutoFillOverlay()
 
 void ScGridWindow::DeleteDragRectOverlay()
 {
-    DELETEZ( mpOODragRect );
+    mpOODragRect.reset();
 }
 
 void ScGridWindow::UpdateDragRectOverlay()
@@ -6173,7 +6173,7 @@ void ScGridWindow::UpdateDragRectOverlay()
                 false);
 
             xOverlayManager->add(*pOverlay);
-            mpOODragRect = new ::sdr::overlay::OverlayObjectList;
+            mpOODragRect.reset(new sdr::overlay::OverlayObjectList);
             mpOODragRect->append(*pOverlay);
         }
     }
@@ -6184,7 +6184,7 @@ void ScGridWindow::UpdateDragRectOverlay()
 
 void ScGridWindow::DeleteHeaderOverlay()
 {
-    DELETEZ( mpOOHeader );
+    mpOOHeader.reset();
 }
 
 void ScGridWindow::UpdateHeaderOverlay()
@@ -6219,7 +6219,7 @@ void ScGridWindow::UpdateHeaderOverlay()
                 false);
 
             xOverlayManager->add(*pOverlay);
-            mpOOHeader = new ::sdr::overlay::OverlayObjectList;
+            mpOOHeader.reset(new sdr::overlay::OverlayObjectList);
             mpOOHeader->append(*pOverlay);
         }
     }
@@ -6230,7 +6230,7 @@ void ScGridWindow::UpdateHeaderOverlay()
 
 void ScGridWindow::DeleteShrinkOverlay()
 {
-    DELETEZ( mpOOShrink );
+    mpOOShrink.reset();
 }
 
 void ScGridWindow::UpdateShrinkOverlay()
@@ -6286,7 +6286,7 @@ void ScGridWindow::UpdateShrinkOverlay()
                 false);
 
             xOverlayManager->add(*pOverlay);
-            mpOOShrink = new ::sdr::overlay::OverlayObjectList;
+            mpOOShrink.reset(new sdr::overlay::OverlayObjectList);
             mpOOShrink->append(*pOverlay);
         }
     }

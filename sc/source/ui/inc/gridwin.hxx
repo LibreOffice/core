@@ -96,13 +96,13 @@ class ScGridWindow : public vcl::Window, public DropTargetHelper, public DragSou
     };
 
     // #114409#
-    ::sdr::overlay::OverlayObjectList*              mpOOCursors;
-    ::sdr::overlay::OverlayObjectList*              mpOOSelection;
-    ::sdr::overlay::OverlayObjectList*              mpOOSelectionBorder;
-    ::sdr::overlay::OverlayObjectList*              mpOOAutoFill;
-    ::sdr::overlay::OverlayObjectList*              mpOODragRect;
-    ::sdr::overlay::OverlayObjectList*              mpOOHeader;
-    ::sdr::overlay::OverlayObjectList*              mpOOShrink;
+    std::unique_ptr<sdr::overlay::OverlayObjectList> mpOOCursors;
+    std::unique_ptr<sdr::overlay::OverlayObjectList> mpOOSelection;
+    std::unique_ptr<sdr::overlay::OverlayObjectList> mpOOSelectionBorder;
+    std::unique_ptr<sdr::overlay::OverlayObjectList> mpOOAutoFill;
+    std::unique_ptr<sdr::overlay::OverlayObjectList> mpOODragRect;
+    std::unique_ptr<sdr::overlay::OverlayObjectList> mpOOHeader;
+    std::unique_ptr<sdr::overlay::OverlayObjectList> mpOOShrink;
 
     std::unique_ptr<Rectangle> mpAutoFillRect;
 
