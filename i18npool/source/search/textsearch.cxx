@@ -232,25 +232,22 @@ SearchResult TextSearch::searchForward( const OUString& searchStr, sal_Int32 sta
     SearchResult sres;
 
     OUString in_str(searchStr);
-    sal_Int32 newStartPos = startPos;
-    sal_Int32 newEndPos = endPos;
 
     bUsePrimarySrchStr = true;
 
     if ( xTranslit.is() )
     {
         // apply normal transliteration (1<->1, 1<->0)
-        com::sun::star::uno::Sequence <sal_Int32> offset( in_str.getLength());
-        in_str = xTranslit->transliterate( searchStr, 0, in_str.getLength(), offset );
+        com::sun::star::uno::Sequence<sal_Int32> offset(endPos - startPos);
+        in_str = xTranslit->transliterate( searchStr, startPos, endPos - startPos, offset );
 
         // JP 20.6.2001: also the start and end positions must be corrected!
-        if( startPos )
-            newStartPos = FindPosInSeq_Impl( offset, startPos );
+        sal_Int32 const newStartPos =
+            (startPos == 0) ? 0 : FindPosInSeq_Impl( offset, startPos );
 
-        if( endPos < searchStr.getLength() )
-            newEndPos = FindPosInSeq_Impl( offset, endPos );
-        else
-            newEndPos = in_str.getLength();
+        sal_Int32 const newEndPos = (endPos < searchStr.getLength())
+            ? FindPosInSeq_Impl( offset, endPos )
+            : in_str.getLength();
 
         sres = (this->*fnForward)( in_str, newStartPos, newEndPos );
 
@@ -264,14 +261,14 @@ SearchResult TextSearch::searchForward( const OUString& searchStr, sal_Int32 sta
             for ( sal_Int32 k = 0; k < nGroups; k++ )
             {
                 const sal_Int32 nStart = sres.startOffset[k];
-                if (nStart > 0)
+                if (startPos > 0 || nStart > 0)
                     sres.startOffset[k] = (nStart < nOffsets ? offset[nStart] : (offset[nOffsets - 1] + 1));
                 // JP 20.6.2001: end is ever exclusive and then don't return
                 //               the position of the next character - return the
                 //               next position behind the last found character!
                 //               "a b c" find "b" must return 2,3 and not 2,4!!!
                 const sal_Int32 nStop = sres.endOffset[k];
-                if (nStop > 0)
+                if (startPos > 0 || nStop > 0)
                     sres.endOffset[k] = offset[(nStop <= nOffsets ? nStop : nOffsets) - 1] + 1;
             }
         }
