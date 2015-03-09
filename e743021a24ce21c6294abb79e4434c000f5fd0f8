@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a29b11f_5a7c5520",
+        "filename": "sc/inc/globstr.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 699,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-03-09T11:44:10Z",
+      "side": 1,
+      "message": "Please note the comment on SC_GLOBSTR_STR_COUNT, which is the overall count of strings. So actually you need to insert and define STR_TABLE_COUNT to 533 and increment the value of SC_GLOBSTR_STR_COUNT to 534.",
+      "revId": "e743021a24ce21c6294abb79e4434c000f5fd0f8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
