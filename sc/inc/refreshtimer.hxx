@@ -59,7 +59,7 @@ public:
     SC_DLLPUBLIC virtual void Invoke() SAL_OVERRIDE;
 
 private:
-    SC_DLLPUBLIC virtual void Start() SAL_OVERRIDE;
+    void Launch();
 };
 
 #endif // INCLUDED_SC_INC_REFRESHTIMER_HXX

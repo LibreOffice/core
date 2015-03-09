@@ -54,7 +54,7 @@ ScRefreshTimer::ScRefreshTimer() : ppControl(0)
 ScRefreshTimer::ScRefreshTimer( sal_uLong nSeconds ) : ppControl(0)
 {
     SetTimeout( nSeconds * 1000 );
-    Start();
+    Launch();
 }
 
 ScRefreshTimer::ScRefreshTimer( const ScRefreshTimer& r ) : AutoTimer( r ), ppControl(0)
@@ -111,7 +111,7 @@ void ScRefreshTimer::SetRefreshDelay( sal_uLong nSeconds )
         Stop();
     SetTimeout( nSeconds * 1000 );
     if ( !bActive && nSeconds )
-        Start();
+        Launch();
 }
 
 void ScRefreshTimer::Invoke()
@@ -124,11 +124,11 @@ void ScRefreshTimer::Invoke()
         // restart from now on, don't execute immediately again if timed out
         // a second time during refresh
         if ( IsActive() )
-            Start();
+            Launch();
     }
 }
 
-void ScRefreshTimer::Start()
+void ScRefreshTimer::Launch()
 {
     if ( GetTimeout() )
         AutoTimer::Start();
