@@ -40,7 +40,6 @@
 using ::std::vector;
 
 const sal_uInt16 ExcelToSc::nRowMask = 0x3FFF;
-const sal_uInt16 ExcelToSc::nLastInd = 399;
 
 void ImportExcel::Formula25()
 {
