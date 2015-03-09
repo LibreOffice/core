@@ -66,6 +66,9 @@ public class InvalidationHandler implements Document.MessageCallback {
             case Document.CALLBACK_CURSOR_VISIBLE:
                 cursorVisibility(payload);
                 break;
+            case Document.CALLBACK_GRAPHIC_SELECTION:
+                graphicSelection(payload);
+                break;
             case Document.CALLBACK_HYPERLINK_CLICKED:
                 if (!payload.startsWith("http://") && !payload.startsWith("https://")) {
                     payload = "http://" + payload;
@@ -218,6 +221,19 @@ public class InvalidationHandler implements Document.MessageCallback {
             mTextCursorLayer.showCursor();
         } else if (payload.equals("false")) {
             mTextCursorLayer.hideCursor();
+        }
+    }
+
+    /**
+     * Handles the graphic selection change message
+     * @param payload
+     */
+    private void graphicSelection(String payload) {
+        if (payload.isEmpty() || payload.equals("EMPTY")) {
+            mTextCursorLayer.changeSelections(Collections.EMPTY_LIST);
+        } else {
+            List<RectF> rects = convertPayloadToRectangles(payload);
+            mTextCursorLayer.changeSelections(rects);
         }
     }
 
