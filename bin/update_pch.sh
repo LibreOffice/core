@@ -22,8 +22,10 @@ fi
 IFS=' ' read -a aheaders <<< $headers
 hlen=${#aheaders[@]};
 if [ $hlen -gt 1 ]; then
-    cpus=`cat /proc/cpuinfo | awk '/^processor/{print $3}' | tail -1`;
-    cpus=$(($cpus*2+3));
+    cpus=$(grep "^ *export PARALLELISM=" config_host.mk | sed -e "s/[^=]*=//")
+    if [ -z "$cpus" ]; then
+        cpus=0 # Let xargs decide
+    fi
     echo $headers | xargs -n 1 -P $cpus $0
     exit $?
 fi
