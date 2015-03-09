@@ -634,7 +634,7 @@ void PowerPointExport::WriteTransition( FSHelperPtr pFS )
         nTransition = XML_zoom;
         pDirection = ( nDirection == 1) ? "in" : "out";
         break;
-        // coverity[dead_error_begin] - following conditions exist to avoid compiler warning
+        // coverity[dead_error_line] - following conditions exist to avoid compiler warning
         case PPT_TRANSITION_TYPE_NONE:
         default:
         nTransition = 0;
