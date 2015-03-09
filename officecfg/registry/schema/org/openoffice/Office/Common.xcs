@@ -866,6 +866,18 @@
         </info>
         <value>false</value>
       </prop>
+      <prop oor:name="AnimationsEnabled" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Defines if the user interface animations (like "walking ant"
+          animation when copying a cell in Calc) is enabled or disabled.
+          Disabling animations makes a lot of sense on remote connections
+          (VNC), where animations increase the (always limited) amount of
+          bandwidth needed.
+          </desc>
+          <label>Defines if the user interface animations are disabled.</label>
+        </info>
+        <value>true</value>
+      </prop>
     </group>
     <group oor:name="InternalMSExport">
       <info>

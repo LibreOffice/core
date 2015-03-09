@@ -27,6 +27,7 @@
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
+#include <officecfg/Office/Common.hxx>
 
 using ::sdr::overlay::OverlayObject;
 using ::sdr::overlay::OverlayManager;
@@ -38,7 +39,7 @@ ScOverlayDashedBorder::ScOverlayDashedBorder(const ::basegfx::B2DRange& rRange, 
     OverlayObject(rColor),
     mbToggle(true)
 {
-    mbAllowsAnimation = true;
+    mbAllowsAnimation = officecfg::Office::Common::VCL::AnimationsEnabled::get();
     maRange = rRange;
 }
 
