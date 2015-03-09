@@ -679,6 +679,8 @@ static const gchar* lcl_LibreOfficeKitCallbackTypeToString(int nType)
         return "LOK_CALLBACK_CURSOR_VISIBLE";
     case LOK_CALLBACK_GRAPHIC_SELECTION:
         return "LOK_CALLBACK_GRAPHIC_SELECTION";
+    case LOK_CALLBACK_HYPERLINK_CLICKED:
+        return "LOK_CALLBACK_HYPERLINK_CLICKED";
     }
     return 0;
 }
@@ -754,7 +756,14 @@ static gboolean lok_docview_callback(gpointer pData)
         gtk_widget_queue_draw(GTK_WIDGET(pCallback->m_pDocView->pEventBox));
     }
     break;
+    case LOK_CALLBACK_HYPERLINK_CLICKED:
+    {
+        GError* pError = NULL;
+        gtk_show_uri(NULL, pCallback->m_pPayload, GDK_CURRENT_TIME, &pError);
+    }
+    break;
     default:
+        g_assert(0);
         break;
     }
 
