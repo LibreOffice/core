@@ -42,8 +42,6 @@ class FragmentHandler;
 struct Relation;
 class Relations;
 
-
-
 class ContextHandler;
 typedef ::rtl::Reference< ContextHandler > ContextHandlerRef;
 
@@ -107,8 +105,6 @@ private:
 private:
     FragmentBaseDataRef mxBaseData;         ///< Base data of the fragment.
 };
-
-
 
 } // namespace core
 } // namespace oox

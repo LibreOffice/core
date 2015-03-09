@@ -68,8 +68,6 @@ struct TextField {
 };
 typedef std::vector< TextField > TextFieldStack;
 
-
-
 struct XmlFilterBaseImpl;
 
 class OOX_DLLPUBLIC XmlFilterBase : public FilterBase
@@ -255,11 +253,10 @@ private:
     ::std::unique_ptr< XmlFilterBaseImpl > mxImpl;
     sal_Int32 mnRelId;
     sal_Int32 mnMaxDocId;
+    bool mbMSO2007;
 };
 
 typedef ::rtl::Reference< XmlFilterBase > XmlFilterRef;
-
-
 
 } // namespace core
 } // namespace oox

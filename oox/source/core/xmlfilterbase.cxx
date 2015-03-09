@@ -780,7 +780,6 @@ writeCustomProperties( XmlFilterBase& rSelf, Reference< XDocumentProperties > xP
     pAppProps->endElement( XML_Properties );
 }
 
-
 XmlFilterBase& XmlFilterBase::exportDocumentProperties( Reference< XDocumentProperties > xProperties )
 {
     if( xProperties.is() )

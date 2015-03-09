@@ -28,8 +28,6 @@ namespace oox {
 namespace drawingml {
 namespace chart {
 
-
-
 template< typename ModelType >
 class ContextBase : public ::oox::core::ContextHandler2
 {
@@ -41,8 +39,6 @@ public:
 protected:
     ModelType&          mrModel;
 };
-
-
 
 template< typename ModelType >
 class FragmentBase : public ::oox::core::FragmentHandler2
@@ -56,8 +52,6 @@ protected:
     ModelType&          mrModel;
 };
 
-
-
 /** Help class for all contexts that have only the c:spPr child element.
  */
 class ShapePrWrapperContext : public ContextBase< Shape >
@@ -68,8 +62,6 @@ public:
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
 };
-
-
 
 struct LayoutModel;
 
@@ -83,8 +75,6 @@ public:
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
 };
-
-
 
 } // namespace chart
 } // namespace drawingml
