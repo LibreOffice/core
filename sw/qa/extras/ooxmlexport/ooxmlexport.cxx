@@ -667,6 +667,15 @@ DECLARE_OOXMLEXPORT_TEST(testTdf88583, "tdf88583.odt")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x00cc00), getProperty<sal_Int32>(getParagraph(1), "FillColor"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf89791, "tdf89791.docx")
+{
+    if (mbExported)
+    {
+        uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), maTempFile.GetURL());
+        CPPUNIT_ASSERT_EQUAL(false, bool(xNameAccess->hasByName("docProps/custom.xml")));
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
