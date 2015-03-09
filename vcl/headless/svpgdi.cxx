@@ -658,8 +658,7 @@ SalBitmap* SvpSalGraphics::getBitmap( long nX, long nY, long nWidth, long nHeigh
     basegfx::B2IBox aSrcRect( nX, nY, nX+nWidth, nY+nHeight );
     basegfx::B2IBox aDestRect( 0, 0, nWidth, nHeight );
 
-    SvpSalGraphics::ClipUndoHandle aUndo( this );
-    if (!isClippedSetup(aDestRect, aUndo) && aCopy)
+    if (aCopy)
         aCopy->drawBitmap( m_aOrigDevice, aSrcRect, aDestRect, basebmp::DrawMode_PAINT );
 
     SvpSalBitmap* pBitmap = new SvpSalBitmap();
