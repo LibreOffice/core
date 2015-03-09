@@ -56,24 +56,14 @@ ShapeManagerImpl::ShapeManagerImpl( const UnoViewContainer&      rViews,
 {
 }
 
-template<typename LayerFunc,
-         typename ShapeFunc> void ShapeManagerImpl::manageViews(
-             LayerFunc layerFunc,
+template<typename ShapeFunc> void ShapeManagerImpl::manageViews(
              ShapeFunc shapeFunc )
 {
-    LayerSharedPtr                      pCurrLayer;
     ViewLayerSharedPtr                  pCurrViewLayer;
     LayerShapeMap::const_iterator       aIter( maAllShapes.begin() );
     const LayerShapeMap::const_iterator aEnd ( maAllShapes.end() );
     while( aIter != aEnd )
     {
-        LayerSharedPtr pLayer = aIter->second.lock();
-        if( pLayer && pLayer != pCurrLayer )
-        {
-            pCurrLayer = pLayer;
-            pCurrViewLayer = layerFunc(pCurrLayer);
-        }
-
         if( pCurrViewLayer )
             shapeFunc(aIter->first,pCurrViewLayer);
 
@@ -283,12 +273,7 @@ void ShapeManagerImpl::viewAdded( const UnoViewSharedPtr& rView )
     rView->clearAll();
 
     // add View to all registered shapes
-    manageViews(
-        boost::bind(&Layer::addView,
-                    _1,
-                    boost::cref(rView)),
-        // repaint on view add
-        boost::bind(&Shape::addViewLayer,
+    manageViews(boost::bind(&Shape::addViewLayer,
                     _1,
                     _2,
                     true) );
@@ -302,11 +287,7 @@ void ShapeManagerImpl::viewRemoved( const UnoViewSharedPtr& rView )
                           rView) == mrViews.end() );
 
     // remove View from all registered shapes
-    manageViews(
-        boost::bind(&Layer::removeView,
-                    _1,
-                    boost::cref(rView)),
-        boost::bind(&Shape::removeViewLayer,
+    manageViews(boost::bind(&Shape::removeViewLayer,
                     _1,
                     _2) );
 }
@@ -331,8 +312,6 @@ void ShapeManagerImpl::viewsChanged()
     ::std::for_each( mrViews.begin(),
                      mrViews.end(),
                      ::boost::mem_fn(&View::clearAll) );
-
-    // TODO(F3): resize and repaint all layers
 
     // render all shapes
     std::for_each( maAllShapes.begin(),
@@ -545,27 +524,11 @@ void ShapeManagerImpl::implRemoveShape( const ShapeSharedPtr& rShape )
 
     if( aShapeEntry == maAllShapes.end() )
         return;
-
-    const bool bShapeUpdateNotified = maUpdateShapes.erase( rShape ) != 0;
-
     // Enter shape area to the update area, but only if shape
     // is visible and not in sprite mode (otherwise, updating
     // the area doesn't do actual harm, but costs time)
     // Actually, also add it if it was listed in
     // maUpdateShapes (might have just gone invisible).
-    if( bShapeUpdateNotified ||
-        (rShape->isVisible() &&
-         !rShape->isBackgroundDetached()) )
-    {
-        LayerSharedPtr pLayer = aShapeEntry->second.lock();
-        if( pLayer )
-        {
-            // store area early, once the shape is removed from
-            // the layers, it no longer has any view references
-            pLayer->addUpdateRange( rShape->getUpdateArea() );
-        }
-    }
-
     rShape->clearAllViewLayers();
     maAllShapes.erase( aShapeEntry );
 }

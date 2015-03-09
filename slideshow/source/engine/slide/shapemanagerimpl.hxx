@@ -145,9 +145,7 @@ private:
         method. The only point of variation at those places
         are removal vs. adding.
      */
-    template<typename LayerFunc,
-             typename ShapeFunc> void manageViews( LayerFunc layerFunc,
-                                                   ShapeFunc shapeFunc );
+    template<typename ShapeFunc> void manageViews(ShapeFunc shapeFunc );
 
     // ShapeManager interface
 
@@ -199,6 +197,7 @@ private:
                                 sal_Int16                                nCursor );
 
     bool updateSprites();
+
 
     /** Common stuff when adding a shape
      */
