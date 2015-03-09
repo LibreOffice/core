@@ -161,9 +161,9 @@ enum ScFilterBoxMode
     SC_FILTERBOX_PAGEFIELD
 };
 
-extern SfxViewShell* pScActiveViewShell;            // global.cxx
-extern sal_uInt16 nScClickMouseModifier;                // global.cxx
-extern sal_uInt16 nScFillModeMouseModifier;             // global.cxx
+extern SfxViewShell* pScActiveViewShell;    // global.cxx
+extern sal_uInt16 nScClickMouseModifier;    // global.cxx
+extern sal_uInt16 nScFillModeMouseModifier; // global.cxx
 
 struct ScGridWindow::MouseEventState
 {
@@ -281,17 +281,17 @@ bool ScFilterListBox::PreNotify( NotifyEvent& rNEvt )
     {
         KeyEvent aKeyEvt = *rNEvt.GetKeyEvent();
         vcl::KeyCode aCode = aKeyEvt.GetKeyCode();
-        if ( !aCode.GetModifier() )             // ohne alle Modifiers
+        if ( !aCode.GetModifier() ) // no modifiers
         {
             sal_uInt16 nKey = aCode.GetCode();
             if ( nKey == KEY_RETURN )
             {
-                SelectHdl();                    // auswaehlen
+                SelectHdl(); // select
                 nDone = true;
             }
             else if ( nKey == KEY_ESCAPE )
             {
-                pGridWin->ClickExtern();        // loescht die List-Box !!!
+                pGridWin->ClickExtern();  // clears the listbox
                 nDone = true;
             }
         }

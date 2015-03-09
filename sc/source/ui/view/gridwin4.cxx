@@ -373,12 +373,10 @@ void ScGridWindow::Paint( const Rectangle& rRect )
         ScViewData::AddPixelsWhile( nScrY, aPixRect.Bottom(), nY2, MAXROW, nPPTY, pDoc, nTab);
     }
 
-    Draw( nX1,nY1,nX2,nY2, SC_UPDATE_MARKS );           // nicht weiterzeichnen
+    Draw( nX1,nY1,nX2,nY2, SC_UPDATE_MARKS ); // don't continue with painting
 
     bIsInPaint = false;
 }
-
-//  Draw  ----------------------------------------------------------------
 
 void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMode eMode )
 {
@@ -401,13 +399,13 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
     PutInOrder( nX1, nX2 );
     PutInOrder( nY1, nY2 );
 
-    OSL_ENSURE( ValidCol(nX2) && ValidRow(nY2), "GridWin Draw Bereich zu gross" );
+    OSL_ENSURE( ValidCol(nX2) && ValidRow(nY2), "GridWin Draw area too big" );
 
     UpdateVisibleRange();
 
     if (nX2 < maVisibleRange.mnCol1 || nY2 < maVisibleRange.mnRow1)
         return;
-                    // unsichtbar
+    // invisible
     if (nX1 < maVisibleRange.mnCol1)
         nX1 = maVisibleRange.mnCol1;
     if (nY1 < maVisibleRange.mnRow1)
@@ -422,11 +420,11 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
         nY2 = maVisibleRange.mnRow2;
 
     if ( eMode != SC_UPDATE_MARKS && nX2 < maVisibleRange.mnCol2)
-        nX2 = maVisibleRange.mnCol2;                                // zum Weiterzeichnen
+        nX2 = maVisibleRange.mnCol2;  // zum Weiterzeichnen
 
-        //  ab hier kein return mehr
+    // point of no return
 
-    ++nPaintCount;                  // merken, dass gemalt wird (wichtig beim Invertieren)
+    ++nPaintCount; // mark that painting is in progress
 
     SCTAB nTab = pViewData->GetTabNo();
     rDoc.ExtendHidden( nX1, nY1, nX2, nY2, nTab );
@@ -460,7 +458,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
         SCROW nHdlY = aAutoMarkPos.Row();
         rDoc.ExtendMerge( nHdlX, nHdlY, nHdlX, nHdlY, nTab );
         bCurVis = ( nHdlX+1 >= nX1 && nHdlX <= nX2 && nHdlY+1 >= nY1 && nHdlY <= nY2 );
-        //  links und oben ist nicht betroffen
+        // left and top is unaffected
 
         //! AutoFill-Anfasser alleine (ohne Cursor) zeichnen ???
     }
@@ -470,7 +468,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
 
     const ScViewOptions& rOpts = pViewData->GetOptions();
 
-        // Datenblock
+    // data block
 
     ScTableInfo aTabInfo;
     rDoc.FillInfo( aTabInfo, nX1, nY1, nX2, nY2, nTab,
@@ -480,14 +478,14 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
     Fraction aZoomX = pViewData->GetZoomX();
     Fraction aZoomY = pViewData->GetZoomY();
     ScOutputData aOutputData( this, OUTTYPE_WINDOW, aTabInfo, &rDoc, nTab,
-                                nScrX, nScrY, nX1, nY1, nX2, nY2, nPPTX, nPPTY,
-                                &aZoomX, &aZoomY );
+                               nScrX, nScrY, nX1, nY1, nX2, nY2, nPPTX, nPPTY,
+                               &aZoomX, &aZoomY );
 
-    aOutputData.SetMirrorWidth( nMirrorWidth );         // needed for RTL
+    aOutputData.SetMirrorWidth( nMirrorWidth ); // needed for RTL
     aOutputData.SetSpellCheckContext(mpSpellCheckCxt.get());
 
     boost::scoped_ptr< VirtualDevice > xFmtVirtDev;
-    bool bLogicText = bTextWysiwyg;                     // call DrawStrings in logic MapMode?
+    bool bLogicText = bTextWysiwyg; // call DrawStrings in logic MapMode?
 
     if ( bTextWysiwyg )
     {
@@ -506,7 +504,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
         xFmtVirtDev->SetMapMode( MAP_100TH_MM );
         aOutputData.SetFmtDevice( xFmtVirtDev.get() );
 
-        bLogicText = true;                      // use logic MapMode
+        bLogicText = true; // use logic MapMode
     }
 
     DrawContent(*this, aTabInfo, aOutputData, bLogicText, eMode);

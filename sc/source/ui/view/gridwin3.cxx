@@ -64,8 +64,7 @@ bool ScGridWindow::DrawMouseButtonDown(const MouseEvent& rMEvt)
         }
     }
 
-    //  bei rechter Taste Draw-Aktion abbrechen
-
+    // cancel draw with right key
     ScDrawView* pDrView = pViewData->GetScDrawView();
     if ( pDrView && !rMEvt.IsLeft() && !bRet )
     {
@@ -97,7 +96,7 @@ bool ScGridWindow::DrawMouseButtonUp(const MouseEvent& rMEvt)
             }
 
             if ( !pView->IsPaintBrushLocked() )
-                pView->ResetBrushDocument();        // end paint brush mode if not locked
+                pView->ResetBrushDocument(); // end paint brush mode if not locked
         }
     }
 
@@ -144,7 +143,7 @@ bool ScGridWindow::DrawCommand(const CommandEvent& rCEvt)
         pDraw->SetWindow( this );
         sal_uInt8 nUsed = pDraw->Command( rCEvt );
         if( nUsed == SC_CMD_USED )
-            nButtonDown = 0;                    // MouseButtonUp wird verschluckt...
+            nButtonDown = 0;  // MouseButtonUp  wird verschluckt...
         if( nUsed || pDrView->IsAction() )
             return true;
     }
@@ -172,12 +171,12 @@ bool ScGridWindow::DrawKeyInput(const KeyEvent& rKEvt)
                     bLeaveDraw = true;
                     if ( !bOldMarked &&
                         rKEvt.GetKeyCode().GetCode() == KEY_DELETE )
-                        bUsed = false;                  // nichts geloescht
+                        bUsed = false; // nothing deleted
                     if(bOldMarked)
                         GetFocus();
                 }
             if (!bLeaveDraw)
-                UpdateStatusPosSize();      // for moving/resizing etc. by keyboard
+                UpdateStatusPosSize(); // for moving/resizing etc. by keyboard
             return bUsed;
         }
     }
@@ -220,13 +219,13 @@ void ScGridWindow::DrawRedraw( ScOutputData& rOutputData, ScUpdateMode eMode, sa
 
 void ScGridWindow::DrawSdrGrid( const Rectangle& rDrawingRect, OutputDevice* pContentDev )
 {
-    //  Draw-Gitterlinien
+    // Draw grid lines
 
     ScDrawView* pDrView = pViewData->GetView()->GetScDrawView();
     if ( pDrView && pDrView->IsGridVisible() )
     {
         SdrPageView* pPV = pDrView->GetSdrPageView();
-        OSL_ENSURE(pPV, "keine PageView");
+        OSL_ENSURE(pPV, "PageView not available");
         if (pPV)
         {
             pContentDev->SetLineColor(COL_GRAY);
@@ -280,14 +279,14 @@ MapMode ScGridWindow::GetDrawMapMode( bool bForce )
 
 void ScGridWindow::DrawAfterScroll()
 {
-    Update();       // immer, damit das Verhalten mit/ohne DrawingLayer gleich ist
+    Update(); // always, so the the behaviour with and without DrawingLayer is the same
 
     ScDrawView* pDrView = pViewData->GetView()->GetScDrawView();
     if (pDrView)
     {
         OutlinerView* pOlView = pDrView->GetTextEditOutlinerView();
         if (pOlView && pOlView->GetWindow() == this)
-            pOlView->ShowCursor(false);                 // ist beim Scrollen weggekommen
+            pOlView->ShowCursor(false); // was removed at scrolling
     }
 }
 
@@ -324,11 +323,11 @@ void ScGridWindow::UpdateStatusPosSize()
 {
     ScDrawView* pDrView = pViewData->GetView()->GetScDrawView();
     if (!pDrView)
-        return;         // shouldn't be called in that case
+        return; // shouldn't be called in that case
 
     SdrPageView* pPV = pDrView->GetSdrPageView();
     if (!pPV)
-        return;         // shouldn't be called in that case either
+        return; // shouldn't be called in that case either
 
     SfxItemSet aSet(pViewData->GetViewShell()->GetPool(), SID_ATTR_POSITION, SID_ATTR_SIZE);
 
@@ -338,7 +337,7 @@ void ScGridWindow::UpdateStatusPosSize()
     //  mouse position otherwise
 
     bool bActionItem = false;
-    if ( pDrView->IsAction() )              // action rectangle
+    if ( pDrView->IsAction() ) // action rectangle
     {
         Rectangle aRect;
         pDrView->TakeActionRect( aRect );
@@ -357,7 +356,7 @@ void ScGridWindow::UpdateStatusPosSize()
     }
     if ( !bActionItem )
     {
-        if ( pDrView->AreObjectsMarked() )      // selected objects
+        if ( pDrView->AreObjectsMarked() ) // selected objects
         {
             Rectangle aRect = pDrView->GetAllMarkedRect();
             // mouse position will have been adjusted for offset
@@ -369,7 +368,7 @@ void ScGridWindow::UpdateStatusPosSize()
             aSet.Put( SvxSizeItem( SID_ATTR_SIZE,
                     Size( aRect.Right() - aRect.Left(), aRect.Bottom() - aRect.Top() ) ) );
         }
-        else                                // mouse position
+        else // mouse position
         {
             Point aPos = PixelToLogic(aCurMousePos);
             pPV->LogicToPagePos(aPos);
