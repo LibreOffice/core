@@ -835,7 +835,6 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
         }
         break;
     case CTRL_MENU_POPUP:
-        /* FIXME: missing ENTIRE_CONTROL, as it doesn't seem to work */
         switch(nPart)
         {
         case PART_MENU_ITEM_CHECK_MARK:
@@ -856,6 +855,10 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
         case PART_MENU_SUBMENU_ARROW:
             context = mpMenuStyle;
             renderType = RENDER_ARROW;
+            break;
+        case PART_ENTIRE_CONTROL:
+            context = mpMenuStyle;
+            renderType = RENDER_BACKGROUND;
             break;
         }
         break;
@@ -1419,9 +1422,13 @@ bool GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
         ( (nPart == PART_DRAW_BACKGROUND_HORZ) || (nPart == PART_DRAW_BACKGROUND_VERT) ||
           (nPart == PART_ENTIRE_CONTROL) || (nPart == HAS_THREE_BUTTONS))) ||
        (nType == CTRL_MENU_POPUP &&
-        ((nPart == PART_MENU_ITEM_CHECK_MARK) || (nPart == PART_MENU_ITEM_RADIO_MARK) ||
-         (nPart == PART_MENU_SEPARATOR) || (nPart == PART_MENU_SUBMENU_ARROW))))
-        return true;
+        ( (nPart==PART_ENTIRE_CONTROL) ||
+          (nPart == PART_MENU_ITEM_CHECK_MARK) || (nPart == PART_MENU_ITEM_RADIO_MARK) ||
+          (nPart == PART_MENU_SEPARATOR) || (nPart == PART_MENU_SUBMENU_ARROW) ))
+      )
+    {
+      return true;
+    }
 
     printf( "Unhandled is native supported for Type: %d, Part %d\n",
             (int)nType, (int)nPart );
