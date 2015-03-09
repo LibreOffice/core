@@ -173,7 +173,7 @@ bool RenameModule (
             pWin->SetName( rNewName );
 
             // set new module in module window
-            pWin->SetSbModule( (SbModule*)pWin->GetBasic()->FindModule( rNewName ) );
+            pWin->SetSbModule( pWin->GetBasic()->FindModule( rNewName ) );
 
             // update tabwriter
             sal_uInt16 nId = pShell->GetWindowId( pWin );

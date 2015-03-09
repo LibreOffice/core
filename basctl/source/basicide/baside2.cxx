@@ -218,7 +218,7 @@ SbModuleRef ModulWindow::XModule()
             if ( pBasic )
             {
                 xBasic = pBasic;
-                xModule = (SbModule*)pBasic->FindModule( GetName() );
+                xModule = pBasic->FindModule( GetName() );
             }
         }
     }

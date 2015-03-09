@@ -522,7 +522,7 @@ void TabBar::Command( const CommandEvent& rCEvt )
                         Shell::WindowTableIt it = aWindowTable.find( GetCurPageId() );
                         if (it != aWindowTable.end() && dynamic_cast<ModulWindow*>(it->second))
                         {
-                            SbModule* pActiveModule = (SbModule*)pBasic->FindModule( it->second->GetName() );
+                            SbModule* pActiveModule = pBasic->FindModule( it->second->GetName() );
                             if( pActiveModule && ( pActiveModule->GetModuleType() == script::ModuleType::DOCUMENT ) )
                             {
                                 aPopup.EnableItem(SID_BASICIDE_DELETECURRENT, false);

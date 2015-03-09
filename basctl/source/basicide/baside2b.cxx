@@ -1811,7 +1811,7 @@ IMPL_LINK_NOARG_INLINE_START(WatchWindow, TreeListHdl)
 {
     SvTreeListEntry* pCurEntry = aTreeListBox.GetCurEntry();
     if ( pCurEntry && pCurEntry->GetUserData() )
-        aXEdit.SetText( ((WatchItem*)pCurEntry->GetUserData())->maName );
+        aXEdit.SetText( static_cast<WatchItem*>(pCurEntry->GetUserData())->maName );
 
     return 0;
 }
