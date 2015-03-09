@@ -20,6 +20,7 @@
 #include "oox/core/xmlfilterbase.hxx"
 
 #include <cstdio>
+#include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/embed/XRelationshipAccess.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
@@ -188,7 +189,8 @@ XmlFilterBase::XmlFilterBase( const Reference< XComponentContext >& rxContext ) 
     FilterBase( rxContext ),
     mxImpl( new XmlFilterBaseImpl( rxContext ) ),
     mnRelId( 1 ),
-    mnMaxDocId( 0 )
+    mnMaxDocId( 0 ),
+    mbMSO2007(false)
 {
 }
 
@@ -202,6 +204,35 @@ XmlFilterBase::~XmlFilterBase()
     // case it's member RelationsMap maRelationsMap will be destroyed, but maybe
     // still be used by ~FragmentHandler -> crash.
     mxImpl->maFastParser.setDocumentHandler( 0 );
+}
+
+namespace {
+
+bool is2007MSODocument(Reference<XDocumentProperties> xDocProps)
+{
+    if (!xDocProps->getGenerator().startsWithIgnoreAsciiCase("Microsoft"))
+        return false;
+
+    uno::Reference<beans::XPropertyAccess> xUserDefProps(xDocProps->getUserDefinedProperties(), uno::UNO_QUERY);
+    if (!xUserDefProps.is())
+        return false;
+
+    comphelper::SequenceAsHashMap aUserDefinedProperties(xUserDefProps->getPropertyValues());
+    comphelper::SequenceAsHashMap::iterator it = aUserDefinedProperties.find("AppVersion");
+    if (it == aUserDefinedProperties.end())
+        return false;
+
+    OUString aValue;
+    if (!(it->second >>= aValue))
+        return false;
+
+    if (!aValue.startsWithIgnoreAsciiCase("12."))
+        return false;
+
+    SAL_WARN("oox", "a MSO 2007 document");
+    return true;
+}
+
 }
 
 // ----------------------------------------------------------------------------
@@ -222,7 +253,9 @@ void XmlFilterBase::importDocumentProperties()
             xContext);
     Reference< XOOXMLDocumentPropertiesImporter > xImporter( xTemp, UNO_QUERY );
     Reference< XDocumentPropertiesSupplier > xPropSupplier( xModel, UNO_QUERY);
-    xImporter->importProperties( xDocumentStorage, xPropSupplier->getDocumentProperties() );
+    Reference< XDocumentProperties > xDocProps = xPropSupplier->getDocumentProperties();
+    xImporter->importProperties( xDocumentStorage, xDocProps );
+    mbMSO2007 = is2007MSODocument(xDocProps);
 }
 
 FastParser* XmlFilterBase::createParser() const
@@ -779,7 +812,10 @@ StorageRef XmlFilterBase::implCreateStorage( const Reference< XStream >& rxOutSt
     return StorageRef( new ZipStorage( getComponentContext(), rxOutStream ) );
 }
 
-// ============================================================================
+bool XmlFilterBase::isMSO2007Document() const
+{
+    return mbMSO2007;
+}
 
 } // namespace core
 } // namespace oox

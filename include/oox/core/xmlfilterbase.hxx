@@ -237,6 +237,8 @@ public:
 
     FastParser* createParser() const;
 
+    bool isMSO2007Document() const;
+
 protected:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
         implGetInputStream( utl::MediaDescriptor& rMediaDesc ) const;
@@ -256,6 +258,7 @@ private:
     ::std::auto_ptr< XmlFilterBaseImpl > mxImpl;
     sal_Int32 mnRelId;
     sal_Int32 mnMaxDocId;
+    bool mbMSO2007;
 };
 
 typedef ::rtl::Reference< XmlFilterBase > XmlFilterRef;
