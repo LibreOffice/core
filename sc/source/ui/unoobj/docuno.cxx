@@ -65,44 +65,46 @@
 #include <opencl/platforminfo.hxx>
 #endif
 
-#include "docuno.hxx"
 #include "cellsuno.hxx"
-#include "nameuno.hxx"
-#include "datauno.hxx"
-#include "miscuno.hxx"
-#include "notesuno.hxx"
-#include "styleuno.hxx"
-#include "linkuno.hxx"
-#include "servuno.hxx"
-#include "targuno.hxx"
+#include <columnspanset.hxx>
 #include "convuno.hxx"
-#include "optuno.hxx"
-#include "forbiuno.hxx"
-#include "docsh.hxx"
-#include "hints.hxx"
+#include "datauno.hxx"
 #include "docfunc.hxx"
-#include "postit.hxx"
 #include "dociter.hxx"
-#include "formulacell.hxx"
-#include "drwlayer.hxx"
-#include "rangeutl.hxx"
-#include "markdata.hxx"
 #include "docoptio.hxx"
-#include "unonames.hxx"
-#include "shapeuno.hxx"
-#include "viewuno.hxx"
-#include "tabvwsh.hxx"
-#include "printfun.hxx"
-#include "pfuncache.hxx"
-#include "scmod.hxx"
-#include "ViewSettingsSequenceDefines.hxx"
-#include "sheetevents.hxx"
-#include "sc.hrc"
-#include "scresid.hxx"
-#include "interpre.hxx"
+#include "docsh.hxx"
+#include "docuno.hxx"
+#include "drwlayer.hxx"
+#include "forbiuno.hxx"
+#include "formulacell.hxx"
 #include "formulagroup.hxx"
 #include "gridwin.hxx"
-#include <columnspanset.hxx>
+#include "hints.hxx"
+#include <inputopt.hxx>
+#include "interpre.hxx"
+#include "linkuno.hxx"
+#include "markdata.hxx"
+#include "miscuno.hxx"
+#include "nameuno.hxx"
+#include "notesuno.hxx"
+#include "optuno.hxx"
+#include "pfuncache.hxx"
+#include "postit.hxx"
+#include "printfun.hxx"
+#include "rangeutl.hxx"
+#include "scmod.hxx"
+#include "scresid.hxx"
+#include "servuno.hxx"
+#include "shapeuno.hxx"
+#include "sheetevents.hxx"
+#include "styleuno.hxx"
+#include "tabvwsh.hxx"
+#include "targuno.hxx"
+#include "unonames.hxx"
+#include "ViewSettingsSequenceDefines.hxx"
+#include "viewuno.hxx"
+
+#include "sc.hrc"
 
 using namespace com::sun::star;
 
@@ -520,6 +522,12 @@ void ScModelObj::initializeForTiledRendering()
 {
     SolarMutexGuard aGuard;
     pDocShell->GetDocument().GetDrawLayer()->setTiledRendering(true);
+
+    // show us the text exactly
+    ScInputOptions aInputOptions(SC_MOD()->GetInputOptions());
+    aInputOptions.SetTextWysiwyg(true);
+    SC_MOD()->SetInputOptions(aInputOptions);
+    pDocShell->CalcOutputFactor();
 }
 
 uno::Any SAL_CALL ScModelObj::queryInterface( const uno::Type& rType )
