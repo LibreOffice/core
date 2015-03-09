@@ -144,12 +144,12 @@ void StdTabControllerModel::ImplSetControlModels( UnoControlModelEntryList& rLis
     }
 }
 
-sal_uInt32 StdTabControllerModel::ImplGetControlPos( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >  xCtrl, const UnoControlModelEntryList& rList ) const
+sal_uInt32 StdTabControllerModel::ImplGetControlPos( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& rCtrl, const UnoControlModelEntryList& rList ) const
 {
     for ( size_t n = rList.size(); n; )
     {
         UnoControlModelEntry* pEntry = rList[ --n ];
-        if ( !pEntry->bGroup && ( *pEntry->pxControl == xCtrl ) )
+        if ( !pEntry->bGroup && ( *pEntry->pxControl == rCtrl ) )
             return n;
     }
     return CONTROLPOS_NOTFOUND;

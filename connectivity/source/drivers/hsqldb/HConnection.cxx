@@ -90,7 +90,7 @@ namespace connectivity { namespace hsqldb
         OConnectionWrapper::disposing();
     }
 
-    OHsqlConnection::OHsqlConnection( const Reference< XDriver > _rxDriver,
+    OHsqlConnection::OHsqlConnection( const Reference< XDriver >& _rxDriver,
         const Reference< XConnection >& _xConnection ,const Reference< XComponentContext >& _rxContext )
         :OHsqlConnection_BASE( m_aMutex )
         ,m_aFlushListeners( m_aMutex )

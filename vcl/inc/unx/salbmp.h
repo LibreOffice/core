@@ -132,7 +132,7 @@ public:
     virtual bool                Create(
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::rendering::XBitmapCanvas
-                                    > xBitmapCanvas,
+                                    >& rBitmapCanvas,
                                     Size& rSize,
                                     bool bMask = false
                                 ) SAL_OVERRIDE;

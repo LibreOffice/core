@@ -552,7 +552,7 @@ void OGLTransitionerImpl::impl_finishTransition()
         mpTransition->finish();
 }
 
-void OGLTransitionerImpl::setTransition( boost::shared_ptr<OGLTransitionImpl> const pTransition )
+void OGLTransitionerImpl::setTransition( boost::shared_ptr<OGLTransitionImpl> pTransition )
 {
     if ( mpTransition ) // already initialized
         return;

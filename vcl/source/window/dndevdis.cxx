@@ -442,7 +442,7 @@ sal_Int32 DNDEventDispatcher::fireDropEvent( vcl::Window *pWindow,
 // DNDEventDispatcher::fireDragGestureRecognized
 
 sal_Int32 DNDEventDispatcher::fireDragGestureEvent( vcl::Window *pWindow,
-    const Reference< XDragSource >& xSource, const Any event,
+    const Reference< XDragSource >& xSource, const Any& event,
     const Point& rOrigin, const sal_Int8 nDragAction
 )
     throw(::com::sun::star::uno::RuntimeException)

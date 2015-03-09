@@ -70,7 +70,7 @@ namespace dxcanvas
         void init( const ::com::sun::star::geometry::RealSize2D&    rSpriteSize,
                    const SpriteCanvasRef&                           rSpriteCanvas,
                    const IDXRenderModuleSharedPtr&                  rRenderModule,
-                   const DXSurfaceBitmapSharedPtr                   rBitmap,
+                   const DXSurfaceBitmapSharedPtr&                  rBitmap,
                    bool                                             bShowSpriteBounds );
 
         void disposing();

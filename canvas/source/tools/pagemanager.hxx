@@ -28,16 +28,12 @@
 
 namespace canvas
 {
-
-
     // PageManager
-
-
     class PageManager
     {
     public:
-        PageManager( const canvas::IRenderModuleSharedPtr pRenderModule ) :
-            mpRenderModule(pRenderModule)
+        PageManager(const canvas::IRenderModuleSharedPtr& rRenderModule)
+            : mpRenderModule(rRenderModule)
         {
         }
 

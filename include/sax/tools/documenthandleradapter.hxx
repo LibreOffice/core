@@ -205,7 +205,7 @@ namespace sax
         {
         }
         ExtendedDocumentHandlerAdapter(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XExtendedDocumentHandler > delegate) :
+                const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XExtendedDocumentHandler >& delegate) :
             m_handler(delegate)
         {
         }

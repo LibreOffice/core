@@ -47,7 +47,7 @@ public:
                                     SalGraphics* pGraphics ) = 0;
     virtual bool            Create( const SalBitmap& rSalBmp,
                                     sal_uInt16 nNewBitCount ) = 0;
-    virtual bool            Create( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmapCanvas > xBitmapCanvas,
+    virtual bool            Create( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmapCanvas >& rBitmapCanvas,
                                     Size& rSize,
                                     bool bMask = false ) = 0;
     virtual void            Destroy() = 0;

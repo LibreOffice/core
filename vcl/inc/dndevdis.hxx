@@ -63,7 +63,7 @@ class DNDEventDispatcher: public ::cppu::WeakImplHelper3<
         const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& xTransferable ) throw(::com::sun::star::uno::RuntimeException);
 
     sal_Int32 fireDragGestureEvent( vcl::Window *pWindow, const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragSource >& xSource,
-        const ::com::sun::star::uno::Any event, const Point& rOrigin, const sal_Int8 nDragAction )throw(::com::sun::star::uno::RuntimeException);
+        const ::com::sun::star::uno::Any& event, const Point& rOrigin, const sal_Int8 nDragAction )throw(::com::sun::star::uno::RuntimeException);
 
 public:
 

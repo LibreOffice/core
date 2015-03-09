@@ -735,12 +735,12 @@ bool X11SalBitmap::Create( const SalBitmap&, sal_uInt16 )
 }
 
 bool X11SalBitmap::Create(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmapCanvas > xBitmapCanvas,
+    const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmapCanvas >& rBitmapCanvas,
     Size& rSize,
     bool bMask
 ) {
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XFastPropertySet >
-        xFastPropertySet( xBitmapCanvas, ::com::sun::star::uno::UNO_QUERY );
+        xFastPropertySet( rBitmapCanvas, ::com::sun::star::uno::UNO_QUERY );
 
     if( xFastPropertySet.get() ) {
         sal_Int32 depth;

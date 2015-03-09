@@ -3095,15 +3095,15 @@ long SplitWindow::GetItemSize( sal_uInt16 nId, SplitWindowItemBits nBits ) const
         return 0;
 }
 
-void SplitWindow::SetItemSizeRange (sal_uInt16 nId, const Range aRange)
+void SplitWindow::SetItemSizeRange (sal_uInt16 nId, const Range& rRange)
 {
     sal_uInt16 nPos;
     ImplSplitSet* pSet = ImplFindItem(mpBaseSet, nId, nPos);
 
     if (pSet != NULL)
     {
-        pSet->mpItems[nPos].mnMinSize = aRange.Min();
-        pSet->mpItems[nPos].mnMaxSize = aRange.Max();
+        pSet->mpItems[nPos].mnMinSize = rRange.Min();
+        pSet->mpItems[nPos].mnMaxSize = rRange.Max();
     }
 }
 

@@ -349,7 +349,7 @@ namespace dbtools
         */
         bool    completeParameters(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxCompletionHandler,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > _rxConnection
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection
                 );
 
         /** asks the parameter listeners to fill in final values

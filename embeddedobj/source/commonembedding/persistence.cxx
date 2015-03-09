@@ -217,20 +217,20 @@ static uno::Reference< util::XCloseable > CreateDocument( const uno::Reference< 
 }
 
 
-static void SetDocToEmbedded( const uno::Reference< frame::XModel > xDocument, const OUString& aModuleName )
+static void SetDocToEmbedded( const uno::Reference< frame::XModel >& rDocument, const OUString& aModuleName )
 {
-    if ( xDocument.is() )
+    if (rDocument.is())
     {
         uno::Sequence< beans::PropertyValue > aSeq( 1 );
         aSeq[0].Name = "SetEmbedded";
         aSeq[0].Value <<= sal_True;
-        xDocument->attachResource( OUString(), aSeq );
+        rDocument->attachResource( OUString(), aSeq );
 
         if ( !aModuleName.isEmpty() )
         {
             try
             {
-                uno::Reference< frame::XModule > xModule( xDocument, uno::UNO_QUERY_THROW );
+                uno::Reference< frame::XModule > xModule( rDocument, uno::UNO_QUERY_THROW );
                 xModule->setIdentifier( aModuleName );
             }
             catch( const uno::Exception& )

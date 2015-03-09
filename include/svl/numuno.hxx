@@ -82,7 +82,7 @@ public:
 
     static const com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId();
     static SvNumberFormatsSupplierObj* getImplementation( const com::sun::star::uno::Reference<
-                                    com::sun::star::util::XNumberFormatsSupplier> xObj );
+                                    com::sun::star::util::XNumberFormatsSupplier>& rObj );
 
     ::comphelper::SharedMutex&  getSharedMutex() const;
 };

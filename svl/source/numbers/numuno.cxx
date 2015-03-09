@@ -125,10 +125,10 @@ const uno::Sequence<sal_Int8>& SvNumberFormatsSupplierObj::getUnoTunnelId()
 
 // static
 SvNumberFormatsSupplierObj* SvNumberFormatsSupplierObj::getImplementation(
-                                const uno::Reference<util::XNumberFormatsSupplier> xObj )
+                                const uno::Reference<util::XNumberFormatsSupplier>& rObj )
 {
     SvNumberFormatsSupplierObj* pRet = NULL;
-    uno::Reference<lang::XUnoTunnel> xUT( xObj, uno::UNO_QUERY );
+    uno::Reference<lang::XUnoTunnel> xUT(rObj, uno::UNO_QUERY);
     if (xUT.is())
         pRet = reinterpret_cast<SvNumberFormatsSupplierObj*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething( getUnoTunnelId() )));
     return pRet;

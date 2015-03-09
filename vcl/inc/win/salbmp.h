@@ -84,7 +84,7 @@ public:
     virtual bool                Create( const SalBitmap& rSalBmpImpl ) SAL_OVERRIDE;
     virtual bool                Create( const SalBitmap& rSalBmpImpl, SalGraphics* pGraphics ) SAL_OVERRIDE;
     virtual bool                Create( const SalBitmap& rSalBmpImpl, sal_uInt16 nNewBitCount ) SAL_OVERRIDE;
-    virtual bool                Create( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmapCanvas > xBitmapCanvas,
+    virtual bool                Create( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmapCanvas >& rBitmapCanvas,
                                            Size& rSize,
                                            bool bMask = false ) SAL_OVERRIDE;
 

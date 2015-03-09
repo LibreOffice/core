@@ -119,7 +119,7 @@ public:
 
     // is needed to generate a Move event via a Timer
     // when the mouse is outside the area
-    void                SetVisibleArea( const Rectangle rNewArea )
+    void                SetVisibleArea( const Rectangle& rNewArea )
                             { aArea = rNewArea; }
     const Rectangle&    GetVisibleArea() const { return aArea; }
 

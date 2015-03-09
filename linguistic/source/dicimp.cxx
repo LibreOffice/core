@@ -682,7 +682,7 @@ bool DictionaryNeo::isSorted()
     return bRes;
 }
 
-bool DictionaryNeo::addEntry_Impl(const uno::Reference< XDictionaryEntry > xDicEntry,
+bool DictionaryNeo::addEntry_Impl(const uno::Reference< XDictionaryEntry >& xDicEntry,
         bool bIsLoadEntries)
 {
     MutexGuard  aGuard( GetLinguMutex() );

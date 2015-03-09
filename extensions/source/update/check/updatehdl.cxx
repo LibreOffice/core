@@ -606,7 +606,7 @@ void UpdateHandler::updateState( UpdateState eState )
 }
 
 
-OUString UpdateHandler::loadString( const uno::Reference< resource::XResourceBundle > xBundle,
+OUString UpdateHandler::loadString( const uno::Reference< resource::XResourceBundle >& rBundle,
                                          sal_Int32 nResourceId ) const
 {
     OUString sString;
@@ -614,7 +614,7 @@ OUString UpdateHandler::loadString( const uno::Reference< resource::XResourceBun
 
     try
     {
-        OSL_VERIFY( xBundle->getByName( sKey ) >>= sString );
+        OSL_VERIFY( rBundle->getByName( sKey ) >>= sString );
     }
     catch( const uno::Exception& )
     {

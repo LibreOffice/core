@@ -161,11 +161,11 @@ public:
         upper and a lower bound (both are valid values themselves.)
         @param nId
             Id of the item for which the size limits are set.
-        @param aRange
+        @param rRange
             Values of -1 define missing bounds, thus setting a range (-1,-1)
             (the default) removes the size limitiation.
     */
-    void                SetItemSizeRange (sal_uInt16 nId, const Range aRange);
+    void                SetItemSizeRange (sal_uInt16 nId, const Range& rRange);
     /** Return the current size limits for the specified item.
     */
     long                GetItemSize( sal_uInt16 nId, SplitWindowItemBits nBits ) const;

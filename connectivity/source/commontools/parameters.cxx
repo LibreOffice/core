@@ -618,7 +618,7 @@ namespace dbtools
     }
 
 
-    bool ParameterManager::completeParameters( const Reference< XInteractionHandler >& _rxCompletionHandler, const Reference< XConnection > _rxConnection )
+    bool ParameterManager::completeParameters( const Reference< XInteractionHandler >& _rxCompletionHandler, const Reference< XConnection >& _rxConnection )
     {
         OSL_PRECOND( isAlive(), "ParameterManager::completeParameters: not initialized, or already disposed!" );
         OSL_ENSURE ( _rxCompletionHandler.is(), "ParameterManager::completeParameters: invalid interaction handler!" );

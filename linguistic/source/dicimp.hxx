@@ -76,7 +76,7 @@ class DictionaryNeo :
     bool                        isSorted();
 
     bool                    addEntry_Impl(const ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XDictionaryEntry > xDicEntry,
+        ::com::sun::star::linguistic2::XDictionaryEntry >& rDicEntry,
                                           bool bIsLoadEntries = false);
 
 public:

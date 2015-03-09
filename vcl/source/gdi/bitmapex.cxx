@@ -839,11 +839,11 @@ namespace
 {
     Bitmap impTransformBitmap(
         const Bitmap& rSource,
-        const Size aDestinationSize,
+        const Size& rDestinationSize,
         const basegfx::B2DHomMatrix& rTransform,
         bool bSmooth)
     {
-        Bitmap aDestination(aDestinationSize, 24);
+        Bitmap aDestination(rDestinationSize, 24);
         std::unique_ptr<BitmapWriteAccess> xWrite(aDestination.AcquireWriteAccess());
 
         if(xWrite)
