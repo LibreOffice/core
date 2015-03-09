@@ -56,22 +56,42 @@ class SfxHint;
     code gets polluted by pointer casts (see switerator.hxx).
  */
 
+class SwModify;
+class SwClient;
+class SwClientIter;
+namespace sw
+{
+    /// refactoring out the some of the more sane SwClient functionality
+    class SW_DLLPUBLIC WriterListener : ::boost::noncopyable
+    {
+        friend class ::SwModify;
+        friend class ::SwClient;
+        friend class ::SwClientIter;
+        private:
+            WriterListener* m_pLeft;
+            WriterListener* m_pRight; ///< double-linked list of other clients
+        protected:
+            WriterListener()
+                : m_pLeft(nullptr), m_pRight(nullptr)
+            {}
+            virtual ~WriterListener() {};
+            // callbacks received from SwModify (friend class - so these methods can be private)
+            // should be called only from SwModify the client is registered in
+            // mba: IMHO these methods should be pure virtual
+            virtual void Modify(const SfxPoolItem*, const SfxPoolItem*) {};
+            virtual void SwClientNotify( const SwModify&, const SfxHint&) {};
+        public:
+            bool IsLast() const { return !m_pLeft && !m_pRight; }
+   };
+}
 // SwClient
-
-class SW_DLLPUBLIC SwClient : ::boost::noncopyable
+class SW_DLLPUBLIC SwClient : ::sw::WriterListener
 {
     // avoids making the details of the linked list and the callback method public
     friend class SwModify;
     friend class SwClientIter;
 
-    SwClient *pLeft, *pRight;       ///< double-linked list of other clients
     SwModify *pRegisteredIn;        ///< event source
-
-    // callbacks received from SwModify (friend class - so these methods can be private)
-    // should be called only from SwModify the client is registered in
-    // mba: IMHO these methods should be pure virtual
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
-    virtual void SwClientNotify( const SwModify& rModify, const SfxHint& rHint );
 
 protected:
     // single argument ctors shall be explicit.
@@ -82,8 +102,9 @@ protected:
 
 public:
 
-    inline SwClient();
+    SwClient() : pRegisteredIn(nullptr) {}
     virtual ~SwClient();
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
 
     // in case an SwModify object is destroyed that itself is registered in another SwModify,
     // its SwClient objects can decide to get registered to the latter instead by calling this method
@@ -91,12 +112,11 @@ public:
 
     // controlled access to Modify method
     // mba: this is still considered a hack and it should be fixed; the name makes grep-ing easier
-    void ModifyNotification( const SfxPoolItem *pOldValue, const SfxPoolItem *pNewValue ) { Modify ( pOldValue, pNewValue ); }
+    void ModifyNotification( const SfxPoolItem *pOldValue, const SfxPoolItem *pNewValue ) { this->Modify ( pOldValue, pNewValue ); }
    void SwClientNotifyCall( const SwModify& rModify, const SfxHint& rHint ) { SwClientNotify( rModify, rHint ); }
 
     const SwModify* GetRegisteredIn() const { return pRegisteredIn; }
     SwModify* GetRegisteredIn() { return pRegisteredIn; }
-    bool IsLast() const { return !pLeft && !pRight; }
 
     // needed for class SwClientIter
     TYPEINFO();
@@ -105,16 +125,13 @@ public:
     virtual bool GetInfo( SfxPoolItem& ) const;
 };
 
-inline SwClient::SwClient() :
-    pLeft(0), pRight(0), pRegisteredIn(0)
-{}
 
 // SwModify
 
 // class has a doubly linked list for dependencies
 class SW_DLLPUBLIC SwModify: public SwClient
 {
-    SwClient* pRoot;                // the start of the linked list of clients
+    sw::WriterListener* pRoot;                // the start of the linked list of clients
     bool bModifyLocked : 1;         // don't broadcast changes now
     bool bLockClientList : 1;       // may be set when this instance notifies its clients
     bool bInDocDTOR : 1;            // workaround for problems when a lot of objects are destroyed
@@ -144,7 +161,7 @@ public:
 
     void Add(SwClient *pDepend);
     SwClient* Remove(SwClient *pDepend);
-    const SwClient* GetDepends() const  { return pRoot; }
+    const SwClient* GetDepends() const  { return static_cast<SwClient*>(pRoot); }
 
     // get information about attribute
     virtual bool GetInfo( SfxPoolItem& ) const SAL_OVERRIDE;

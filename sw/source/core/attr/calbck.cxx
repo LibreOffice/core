@@ -28,7 +28,7 @@ static SwClientIter* pClientIters = nullptr;
 TYPEINIT0( SwClient );
 
 SwClient::SwClient( SwModify* pToRegisterIn )
-    : pLeft( nullptr ), pRight( nullptr ), pRegisteredIn( nullptr )
+    : pRegisteredIn( nullptr )
 {
     if(pToRegisterIn)
         // connect to SwModify
@@ -61,10 +61,6 @@ void SwClient::CheckRegistration( const SfxPoolItem* pOld, const SfxPoolItem* )
 void SwClient::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue )
 {
     CheckRegistration( pOldValue, pNewValue );
-}
-
-void SwClient::SwClientNotify( const SwModify&, const SfxHint& )
-{
 }
 
 SwClient::~SwClient()
@@ -135,7 +131,7 @@ SwModify::~SwModify()
             // remove all clients that have not done themselves
             // mba: possibly a hotfix for forgotten base class calls?!
             while( pRoot )
-                pRoot->CheckRegistration( &aDyObject, &aDyObject );
+                static_cast<SwClient*>(pRoot)->CheckRegistration( &aDyObject, &aDyObject );
         }
     }
 }
@@ -225,17 +221,17 @@ void SwModify::Add( SwClient* pDepend )
         {
             // first client added
             pRoot = pDepend;
-            pRoot->pLeft = nullptr;
-            pRoot->pRight = nullptr;
+            pRoot->m_pLeft = nullptr;
+            pRoot->m_pRight = nullptr;
         }
         else
         {
             // append client
-            pDepend->pRight = pRoot->pRight;
-            pRoot->pRight = pDepend;
-            pDepend->pLeft = pRoot;
-            if( pDepend->pRight )
-                pDepend->pRight->pLeft = pDepend;
+            pDepend->m_pRight = pRoot->m_pRight;
+            pRoot->m_pRight = pDepend;
+            pDepend->m_pLeft = pRoot;
+            if( pDepend->m_pRight )
+                pDepend->m_pRight->m_pLeft = pDepend;
         }
 
         // connect client to me
@@ -252,15 +248,15 @@ SwClient* SwModify::Remove( SwClient* pDepend )
     {
         // SwClient is my listener
         // remove it from my list
-        SwClient* pR = pDepend->pRight;
-        SwClient* pL = pDepend->pLeft;
+        ::sw::WriterListener* pR = pDepend->m_pRight;
+        ::sw::WriterListener* pL = pDepend->m_pLeft;
         if( pRoot == pDepend )
             pRoot = pL ? pL : pR;
 
         if( pL )
-            pL->pRight = pR;
+            pL->m_pRight = pR;
         if( pR )
-            pR->pLeft = pL;
+            pR->m_pLeft = pL;
 
         // update ClientIters
         SwClientIter* pTmp = pClientIters;
@@ -270,13 +266,13 @@ SwClient* SwModify::Remove( SwClient* pDepend )
             {
                 // if object being removed is the current or next object in an
                 // iterator, advance this iterator
-                pTmp->pDelNext = pR;
+                pTmp->pDelNext = static_cast<SwClient*>(pR);
             }
             pTmp = pTmp->pNxtIter;
         }
 
-        pDepend->pLeft = nullptr;
-        pDepend->pRight = nullptr;
+        pDepend->m_pLeft = nullptr;
+        pDepend->m_pRight = nullptr;
     }
     else
     {
@@ -412,7 +408,7 @@ SwClient* SwClientIter::operator++()
 {
     if( pDelNext == pAct )
     {
-        pAct = pAct->pRight;
+        pAct = static_cast<SwClient*>(pAct->m_pRight);
         pDelNext = pAct;
     }
     else
@@ -425,8 +421,8 @@ SwClient* SwClientIter::GoStart()
     pAct = const_cast<SwClient*>(rRoot.GetDepends());
     if( pAct )
     {
-        while( pAct->pLeft )
-            pAct = pAct->pLeft;
+        while( pAct->m_pLeft )
+            pAct = static_cast<SwClient*>(pAct->m_pLeft);
     }
     pDelNext = pAct;
     return pAct;
@@ -439,8 +435,8 @@ SwClient* SwClientIter::GoEnd()
         pAct = const_cast<SwClient*>(rRoot.GetDepends());
     if( pAct )
     {
-        while( pAct->pRight )
-            pAct = pAct->pRight;
+        while( pAct->m_pRight )
+            pAct = static_cast<SwClient*>(pAct->m_pRight);
     }
     pDelNext = pAct;
     return pAct;
@@ -457,7 +453,7 @@ SwClient* SwClientIter::First( TypeId nType )
 
             if( pDelNext == pAct )
             {
-                pAct = pAct->pRight;
+                pAct = static_cast<SwClient*>(pAct->m_pRight);
                 pDelNext = pAct;
             }
             else
@@ -476,9 +472,9 @@ SwClient* SwClientIter::Last( TypeId nType )
                 break;
 
             if( pDelNext == pAct )
-                pAct = pAct->pLeft;
+                pAct = static_cast<SwClient*>(pAct->m_pLeft);
             else
-                pAct = pDelNext->pLeft;
+                pAct = static_cast<SwClient*>(pDelNext->m_pLeft);
             pDelNext = pAct;
         } while( pAct );
     return pAct;
@@ -489,7 +485,7 @@ SwClient* SwClientIter::Next()
     do {
         if( pDelNext == pAct )
         {
-            pAct = pAct->pRight;
+            pAct = static_cast<SwClient*>(pAct->m_pRight);
             pDelNext = pAct;
         }
         else
@@ -505,9 +501,9 @@ SwClient* SwClientIter::Previous()
 {
     do {
         if( pDelNext == pAct )
-            pAct = pAct->pLeft;
+            pAct = static_cast<SwClient*>(pAct->m_pLeft);
         else
-            pAct = pDelNext->pLeft;
+            pAct = static_cast<SwClient*>(pDelNext->m_pLeft);
         pDelNext = pAct;
 
         if( pAct && pAct->IsA( aSrchId ) )
