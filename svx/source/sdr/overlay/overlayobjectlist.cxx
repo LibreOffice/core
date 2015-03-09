@@ -88,7 +88,8 @@ namespace sdr
                         aViewInformation2D,
                         rLogicPosition,
                         fLogicTolerance,
-                        false);
+                        false,
+                        pManager->getModel()->isTiledRendering());
 
                     for(; aStart != maVector.end(); ++aStart)
                     {

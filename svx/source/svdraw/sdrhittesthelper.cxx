@@ -28,6 +28,7 @@
 #include <drawinglayer/processor2d/hittestprocessor2d.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
+#include <svx/svdmodel.hxx>
 
 
 // #i101872# new Object HitTest as View-tooling
@@ -76,7 +77,7 @@ SdrObject* SdrObjectPrimitiveHit(
                     const sdr::contact::ViewObjectContact& rVOC = rObject.GetViewContact().GetViewObjectContact(
                         rSdrPageView.GetPageWindow(0)->GetObjectContact());
 
-                    if(ViewObjectContactPrimitiveHit(rVOC, aHitPosition, fLogicTolerance, bTextOnly))
+                    if(ViewObjectContactPrimitiveHit(rObject, rVOC, aHitPosition, fLogicTolerance, bTextOnly))
                     {
                           pResult = const_cast< SdrObject* >(&rObject);
                     }
@@ -115,6 +116,7 @@ SdrObject* SdrObjListPrimitiveHit(
 
 
 bool ViewObjectContactPrimitiveHit(
+    const SdrObject& rObject,
     const sdr::contact::ViewObjectContact& rVOC,
     const basegfx::B2DPoint& rHitPosition,
     double fLogicHitTolerance,
@@ -145,7 +147,8 @@ bool ViewObjectContactPrimitiveHit(
                     rViewInformation2D,
                     rHitPosition,
                     fLogicHitTolerance,
-                    bTextOnly);
+                    bTextOnly,
+                    rObject.GetModel()->isTiledRendering());
 
                 // feed it with the primitives
                 aHitTestProcessor2D.process(rSequence);

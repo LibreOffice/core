@@ -42,14 +42,16 @@ namespace drawinglayer
         HitTestProcessor2D::HitTestProcessor2D(const geometry::ViewInformation2D& rViewInformation,
             const basegfx::B2DPoint& rLogicHitPosition,
             double fLogicHitTolerance,
-            bool bHitTextOnly)
+            bool bHitTextOnly,
+            bool bTiledRendering)
         :   BaseProcessor2D(rViewInformation),
             maDiscreteHitPosition(),
             mfDiscreteHitTolerance(0.0),
             mbHit(false),
             mbHitToleranceUsed(false),
             mbUseInvisiblePrimitiveContent(true),
-            mbHitTextOnly(bHitTextOnly)
+            mbHitTextOnly(bHitTextOnly),
+            mbTiledRendering(bTiledRendering)
         {
             // init hit tolerance
             mfDiscreteHitTolerance = fLogicHitTolerance;
@@ -483,7 +485,8 @@ namespace drawinglayer
                             const BitmapEx& rBitmapEx = rBitmapCandidate.getBitmapEx();
                             const Size& rSizePixel(rBitmapEx.GetSizePixel());
 
-                            if(rSizePixel.Width() && rSizePixel.Height())
+                            // When tiled rendering, don't bother with the pixel size of the candidate.
+                            if(rSizePixel.Width() && rSizePixel.Height() && !mbTiledRendering)
                             {
                                 basegfx::B2DHomMatrix aBackTransform(
                                     getViewInformation2D().getObjectToViewTransformation() *

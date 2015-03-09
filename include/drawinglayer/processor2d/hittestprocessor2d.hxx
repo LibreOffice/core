@@ -66,6 +66,9 @@ namespace drawinglayer
             /// flag to concentraze on text hits only
             bool                        mbHitTextOnly : 1;
 
+            /// If we are tiled rendering.
+            bool mbTiledRendering;
+
             /// tooling methods
             void processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate) SAL_OVERRIDE;
             bool checkHairlineHitWithTolerance(
@@ -81,7 +84,8 @@ namespace drawinglayer
                 const geometry::ViewInformation2D& rViewInformation,
                 const basegfx::B2DPoint& rLogicHitPosition,
                 double fLogicHitTolerance,
-                bool bHitTextOnly);
+                bool bHitTextOnly,
+                bool bTiledRendering);
             virtual ~HitTestProcessor2D();
 
             /// data write access
