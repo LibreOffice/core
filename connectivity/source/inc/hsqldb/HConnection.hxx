@@ -69,7 +69,7 @@ namespace connectivity
 
         public:
             OHsqlConnection(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver > _rxDriver,
+                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >& _rxDriver,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxContext
             );
