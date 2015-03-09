@@ -58,7 +58,7 @@ class COMPHELPER_DLLPUBLIC OFOPXMLHelper : public cppu::WeakImplHelper1 < com::s
     OFOPXMLHelper( sal_uInt16 nFormat ); // must not be created directly
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair > > GetParsingResult();
 
-    static COMPHELPER_DLLPRIVATE ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair > > SAL_CALL ReadSequence_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xInStream, const OUString& aStringID, sal_uInt16 nFormat, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext )
+    static COMPHELPER_DLLPRIVATE ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair > > SAL_CALL ReadSequence_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xInStream, const OUString& aStringID, sal_uInt16 nFormat, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rContext )
     throw( ::com::sun::star::uno::Exception );
 
 public:
@@ -73,7 +73,7 @@ public:
     ReadRelationsInfoSequence(
         const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xInStream,
         const OUString & aStreamName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext )
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rContext )
             throw( ::com::sun::star::uno::Exception );
 
     // returns sequence containing two entries of type sequence<StringPair>
@@ -86,7 +86,7 @@ public:
     SAL_CALL
     ReadContentTypeSequence(
         const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xInStream,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext )
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rContext )
             throw( ::com::sun::star::uno::Exception );
 
     // writes sequence of elements, where each element is described by sequence of tags,
@@ -96,7 +96,7 @@ public:
     void SAL_CALL WriteRelationsInfoSequence(
         const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& xOutStream,
         const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair > >& aSequence,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext )
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rContext )
             throw( ::com::sun::star::uno::Exception );
 
     // writes two entries of type sequence<StringPair>
@@ -109,7 +109,7 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& xOutStream,
         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair >& aDefaultsSequence,
         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair >& aOverridesSequence,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext )
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rContext )
             throw( ::com::sun::star::uno::Exception );
 
     // XDocumentHandler

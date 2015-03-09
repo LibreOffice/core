@@ -86,9 +86,9 @@ public:
 
     // two routines for accessing FAT pages
     // Assume that the data is a FAT page and get/put FAT data.
-    void  SetToPage   ( const rtl::Reference< StgPage > xPage, short nOff, sal_Int32 nVal );
-    inline sal_Int32 GetFromPage ( const rtl::Reference< StgPage > xPage, short nOff );
-    void  SetDirty    ( const rtl::Reference< StgPage > &xPage );
+    void  SetToPage   ( const rtl::Reference< StgPage >& rPage, short nOff, sal_Int32 nVal );
+    inline sal_Int32 GetFromPage ( const rtl::Reference< StgPage >& rPage, short nOff );
+    void  SetDirty    ( const rtl::Reference< StgPage > &rPage );
     bool  SetSize( sal_Int32 nPages );
     rtl::Reference< StgPage > Find( sal_Int32 );                 // find a cached page
     rtl::Reference< StgPage > Get( sal_Int32, bool );            // get a cached page
@@ -115,11 +115,11 @@ public:
     static bool IsPageGreater( const StgPage *pA, const StgPage *pB );
 };
 
-inline sal_Int32 StgCache::GetFromPage ( const rtl::Reference< StgPage > xPage, short nOff )
+inline sal_Int32 StgCache::GetFromPage ( const rtl::Reference< StgPage >& rPage, short nOff )
 {
-    if( ( nOff >= (short) ( xPage->GetSize() / sizeof( sal_Int32 ) ) ) || nOff < 0 )
+    if( ( nOff >= (short) ( rPage->GetSize() / sizeof( sal_Int32 ) ) ) || nOff < 0 )
         return -1;
-    sal_Int32 n = ((sal_Int32*) xPage->GetData() )[ nOff ];
+    sal_Int32 n = ((sal_Int32*) rPage->GetData() )[ nOff ];
 #ifdef OSL_BIGENDIAN
     return OSL_SWAPDWORD(n);
 #else

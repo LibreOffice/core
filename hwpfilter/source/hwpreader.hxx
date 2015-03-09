@@ -156,7 +156,7 @@ private:
 class HwpImportFilter : public WeakImplHelper4< XFilter, XImporter, XServiceInfo, XExtendedFilterDetection >
 {
 public:
-    HwpImportFilter( const Reference< XMultiServiceFactory > xFact );
+    HwpImportFilter(const Reference< XMultiServiceFactory >& rFact);
     virtual ~HwpImportFilter();
 
 public:
@@ -201,12 +201,12 @@ Sequence< OUString > HwpImportFilter::getSupportedServiceNames_Static() throw ()
     return aRet;
 }
 
-HwpImportFilter::HwpImportFilter( const Reference< XMultiServiceFactory > xFact )
+HwpImportFilter::HwpImportFilter(const Reference< XMultiServiceFactory >& rFact)
 {
     OUString sService( WRITER_IMPORTER_NAME );
     try {
         Reference< XDocumentHandler >
-            xHandler( xFact->createInstance( sService ), UNO_QUERY );
+            xHandler( rFact->createInstance( sService ), UNO_QUERY );
 
         HwpReader *p = new HwpReader;
         p->setDocumentHandler( xHandler );

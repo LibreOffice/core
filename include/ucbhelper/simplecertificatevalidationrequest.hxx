@@ -52,7 +52,7 @@ public:
       * @param pCertificate contaisn the server certificate.
       */
     SimpleCertificateValidationRequest( const sal_Int32 & lCertificateValidity,
-        const com::sun::star::uno::Reference<com::sun::star::security::XCertificate> pCertificate,
+        const com::sun::star::uno::Reference<com::sun::star::security::XCertificate>& certificate,
         const OUString & hostname );
 };
 

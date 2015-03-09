@@ -870,13 +870,13 @@ static const enum_convert pWidthNames[] =
     { "ultraexpanded", WIDTH_ULTRA_EXPANDED }
 };
 
-void FontSubstConfiguration::fillSubstVector( const com::sun::star::uno::Reference< XNameAccess > xFont,
+void FontSubstConfiguration::fillSubstVector( const com::sun::star::uno::Reference< XNameAccess >& rFont,
                                               const OUString& rType,
                                               std::vector< OUString >& rSubstVector ) const
 {
     try
     {
-        Any aAny = xFont->getByName( rType );
+        Any aAny = rFont->getByName( rType );
         if( aAny.getValueTypeClass() == TypeClass_STRING )
         {
             const OUString* pLine = (const OUString*)aAny.getValue();
@@ -919,13 +919,13 @@ void FontSubstConfiguration::fillSubstVector( const com::sun::star::uno::Referen
     }
 }
 
-FontWeight FontSubstConfiguration::getSubstWeight( const com::sun::star::uno::Reference< XNameAccess > xFont,
+FontWeight FontSubstConfiguration::getSubstWeight( const com::sun::star::uno::Reference< XNameAccess >& rFont,
                                                    const OUString& rType ) const
 {
     int weight = -1;
     try
     {
-        Any aAny = xFont->getByName( rType );
+        Any aAny = rFont->getByName( rType );
         if( aAny.getValueTypeClass() == TypeClass_STRING )
         {
             const OUString* pLine = (const OUString*)aAny.getValue();
@@ -951,13 +951,13 @@ FontWeight FontSubstConfiguration::getSubstWeight( const com::sun::star::uno::Re
     return (FontWeight)( weight >= 0 ? pWeightNames[weight].nEnum : WEIGHT_DONTKNOW );
 }
 
-FontWidth FontSubstConfiguration::getSubstWidth( const com::sun::star::uno::Reference< XNameAccess > xFont,
+FontWidth FontSubstConfiguration::getSubstWidth( const com::sun::star::uno::Reference< XNameAccess >& rFont,
                                                  const OUString& rType ) const
 {
     int width = -1;
     try
     {
-        Any aAny = xFont->getByName( rType );
+        Any aAny = rFont->getByName( rType );
         if( aAny.getValueTypeClass() == TypeClass_STRING )
         {
             const OUString* pLine = (const OUString*)aAny.getValue();
@@ -983,13 +983,13 @@ FontWidth FontSubstConfiguration::getSubstWidth( const com::sun::star::uno::Refe
     return (FontWidth)( width >= 0 ? pWidthNames[width].nEnum : WIDTH_DONTKNOW );
 }
 
-unsigned long FontSubstConfiguration::getSubstType( const com::sun::star::uno::Reference< XNameAccess > xFont,
+unsigned long FontSubstConfiguration::getSubstType( const com::sun::star::uno::Reference< XNameAccess >& rFont,
                                                     const OUString& rType ) const
 {
     unsigned long type = 0;
     try
     {
-        Any aAny = xFont->getByName( rType );
+        Any aAny = rFont->getByName( rType );
         if( aAny.getValueTypeClass() == TypeClass_STRING )
         {
             const OUString* pLine = (const OUString*)aAny.getValue();

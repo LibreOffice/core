@@ -157,14 +157,14 @@ private:
     typedef std::unordered_set< OUString, OUStringHash > UniqueSubstHash;
     mutable UniqueSubstHash maSubstHash;
 
-    void fillSubstVector( const com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > xFont,
+    void fillSubstVector( const com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >& rFont,
                           const OUString& rType,
                           std::vector< OUString >& rSubstVector ) const;
-    FontWeight getSubstWeight( const com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > xFont,
+    FontWeight getSubstWeight( const com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >& rFont,
                           const OUString& rType ) const;
-    FontWidth getSubstWidth( const com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > xFont,
+    FontWidth getSubstWidth( const com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >& rFont,
                              const OUString& rType ) const;
-    unsigned long getSubstType( const com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > xFont,
+    unsigned long getSubstType( const com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >& rFont,
                                 const OUString& rType ) const;
     void readLocaleSubst( const OUString& rBcp47 ) const;
 public:

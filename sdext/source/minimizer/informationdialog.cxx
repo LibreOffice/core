@@ -126,7 +126,7 @@ OUString InsertImage(
 }
 
 OUString InsertCheckBox( InformationDialog& rInformationDialog, const OUString& rControlName,
-    const Reference< XItemListener > xItemListener, const OUString& rLabel,
+    const Reference< XItemListener >& rItemListener, const OUString& rLabel,
         sal_Int32 nXPos, sal_Int32 nYPos, sal_Int32 nWidth, sal_Int32 nHeight, sal_Int16 nTabIndex )
 {
     OUString pNames[] = {
@@ -155,8 +155,8 @@ OUString InsertCheckBox( InformationDialog& rInformationDialog, const OUString& 
     Sequence< Any >             aValues( pValues, nCount );
 
     Reference< XCheckBox > xCheckBox( rInformationDialog.insertCheckBox( rControlName, aNames, aValues ) );
-    if ( xItemListener.is() )
-        xCheckBox->addItemListener( xItemListener );
+    if ( rItemListener.is() )
+        xCheckBox->addItemListener( rItemListener );
     return rControlName;
 }
 

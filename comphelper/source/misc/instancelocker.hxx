@@ -101,7 +101,7 @@ public:
     OLockListener(  const ::com::sun::star::uno::WeakReference< ::com::sun::star::lang::XComponent >& xWrapper,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xInstance,
                     sal_Int32 nMode,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XActionsApproval > xApproval );
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XActionsApproval >& rApproval );
 
     virtual ~OLockListener();
 

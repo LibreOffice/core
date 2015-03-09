@@ -81,7 +81,7 @@ struct WSInternalData_Impl
     sal_Int32 m_nStorageType;
 
     // the mutex reference MUST NOT be empty
-    WSInternalData_Impl( const SotMutexHolderRef rMutexRef, sal_Int32 nStorageType )
+    WSInternalData_Impl( const SotMutexHolderRef& rMutexRef, sal_Int32 nStorageType )
     : m_rSharedMutexRef( rMutexRef )
     , m_pTypeCollection( NULL )
     , m_aListenersContainer( rMutexRef->GetMutex() )

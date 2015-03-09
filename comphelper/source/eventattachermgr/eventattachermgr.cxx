@@ -92,7 +92,7 @@ class ImplEventAttacherManager
     sal_Int16                           nVersion;
 public:
     ImplEventAttacherManager( const Reference< XIntrospection > & rIntrospection,
-                              const Reference< XComponentContext > xContext );
+                              const Reference< XComponentContext >& rContext );
     virtual ~ImplEventAttacherManager();
 
     // Methods of XEventAttacherManager
@@ -358,21 +358,21 @@ Reference< XEventAttacherManager > createEventAttacherManager( const Reference< 
 
 
 ImplEventAttacherManager::ImplEventAttacherManager( const Reference< XIntrospection > & rIntrospection,
-                                                    const Reference< XComponentContext > xContext )
+                                                    const Reference< XComponentContext >& rContext )
     : aScriptListeners( aLock )
-    , mxContext( xContext )
+    , mxContext( rContext )
     , mxIntrospection( rIntrospection )
     , nVersion(0)
 {
-    if ( xContext.is() )
+    if ( rContext.is() )
     {
-        Reference< XInterface > xIFace( xContext->getServiceManager()->createInstanceWithContext(
-             OUString( "com.sun.star.script.EventAttacher" ), xContext)  );
+        Reference< XInterface > xIFace( rContext->getServiceManager()->createInstanceWithContext(
+             OUString( "com.sun.star.script.EventAttacher" ), rContext)  );
         if ( xIFace.is() )
         {
             xAttacher = Reference< XEventAttacher2 >::query( xIFace );
         }
-        xConverter = Converter::create(xContext);
+        xConverter = Converter::create(rContext);
     }
 
     Reference< XInitialization > xInit( xAttacher, UNO_QUERY );

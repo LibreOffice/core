@@ -205,12 +205,12 @@ bool KillFile( const OUString& aURL, const uno::Reference< uno::XComponentContex
     return bRet;
 }
 
-OUString GetNewTempFileURL( const uno::Reference< uno::XComponentContext > xContext )
+OUString GetNewTempFileURL( const uno::Reference< uno::XComponentContext >& rContext )
 {
     OUString aTempURL;
 
     uno::Reference < beans::XPropertySet > xTempFile(
-            io::TempFile::create(xContext),
+            io::TempFile::create(rContext),
             uno::UNO_QUERY_THROW );
 
     try {
@@ -230,10 +230,10 @@ OUString GetNewTempFileURL( const uno::Reference< uno::XComponentContext > xCont
     return aTempURL;
 }
 
-uno::Reference< io::XStream > CreateMemoryStream( const uno::Reference< uno::XComponentContext >& xContext )
+uno::Reference< io::XStream > CreateMemoryStream( const uno::Reference< uno::XComponentContext >& rContext )
 {
     return uno::Reference< io::XStream >(
-        xContext->getServiceManager()->createInstanceWithContext("com.sun.star.comp.MemoryStream", xContext),
+        rContext->getServiceManager()->createInstanceWithContext("com.sun.star.comp.MemoryStream", rContext),
         uno::UNO_QUERY_THROW);
 }
 
@@ -242,7 +242,7 @@ uno::Reference< io::XStream > CreateMemoryStream( const uno::Reference< uno::XCo
 OWriteStream_Impl::OWriteStream_Impl( OStorage_Impl* pParent,
                                       const uno::Reference< packages::XDataSinkEncrSupport >& xPackageStream,
                                       const uno::Reference< lang::XSingleServiceFactory >& xPackage,
-                                      const uno::Reference< uno::XComponentContext >& xContext,
+                                      const uno::Reference< uno::XComponentContext >& rContext,
                                       bool bForceEncrypted,
                                       sal_Int32 nStorageType,
                                       bool bDefaultCompress,
@@ -251,7 +251,7 @@ OWriteStream_Impl::OWriteStream_Impl( OStorage_Impl* pParent,
 , m_bHasDataToFlush( false )
 , m_bFlushed( false )
 , m_xPackageStream( xPackageStream )
-, m_xContext( xContext )
+, m_xContext( rContext )
 , m_pParent( pParent )
 , m_bForceEncrypted( bForceEncrypted )
 , m_bUseCommonEncryption( !bForceEncrypted && nStorageType == embed::StorageFormats::PACKAGE )

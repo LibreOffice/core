@@ -226,7 +226,7 @@ class UpdateInformationEnumeration : public ::cppu::WeakImplHelper1< container::
 {
 public:
     UpdateInformationEnumeration(const uno::Reference< xml::dom::XNodeList >& xNodeList,
-                                 const uno::Reference< UpdateInformationProvider > xUpdateInformationProvider) :
+                                 const uno::Reference< UpdateInformationProvider >& xUpdateInformationProvider) :
         m_xUpdateInformationProvider(xUpdateInformationProvider),
         m_xNodeList(xNodeList),
         m_nNodes(xNodeList.is() ? xNodeList->getLength() : 0),

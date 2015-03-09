@@ -151,7 +151,7 @@ void CContentReader::addChunk( LocaleSet_t const & Locale, Content_t const & Con
 /** get a style's locale field.
 */
 
-LocaleSet_t const & CContentReader::getLocale( const StyleName_t Style )
+LocaleSet_t const & CContentReader::getLocale( const StyleName_t& Style )
 {
     if ( m_StyleMap.empty() )
         return m_DefaultLocale;

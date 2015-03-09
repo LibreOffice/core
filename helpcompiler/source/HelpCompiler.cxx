@@ -519,7 +519,7 @@ namespace fs
         return nThreadTextEncoding;
     }
 
-    void create_directory(const fs::path indexDirName)
+    void create_directory(const fs::path& indexDirName)
     {
         HCDBG(
             std::cerr << "creating " <<

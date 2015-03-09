@@ -239,9 +239,9 @@ uno::Reference< uno::XInterface > SAL_CALL OInstanceLocker::Create(
 OLockListener::OLockListener( const uno::WeakReference< lang::XComponent >& xWrapper,
                     const uno::Reference< uno::XInterface >& xInstance,
                     sal_Int32 nMode,
-                    const uno::Reference< embed::XActionsApproval > xApproval )
+                    const uno::Reference< embed::XActionsApproval >& rApproval )
 : m_xInstance( xInstance )
-, m_xApproval( xApproval )
+, m_xApproval( rApproval )
 , m_xWrapper( xWrapper )
 , m_bDisposed( false )
 , m_bInitialized( false )

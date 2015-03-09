@@ -126,7 +126,7 @@ namespace fs
         void append(const std::string &in) { append(in.c_str()); }
     };
 
-    void create_directory(const fs::path indexDirName);
+    void create_directory(const fs::path& indexDirName);
     void copy(const fs::path &src, const fs::path &dest);
 }
 

@@ -37,31 +37,30 @@ using namespace ::com::sun::star;
 
 namespace comphelper {
 
-
-uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OFOPXMLHelper::ReadRelationsInfoSequence( const uno::Reference< io::XInputStream >& xInStream, const OUString & aStreamName, const uno::Reference< uno::XComponentContext > xContext )
+uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OFOPXMLHelper::ReadRelationsInfoSequence( const uno::Reference< io::XInputStream >& xInStream, const OUString & aStreamName, const uno::Reference< uno::XComponentContext >& rContext )
     throw( uno::Exception )
 {
     OUString aStringID = "_rels/";
     aStringID += aStreamName;
-    return ReadSequence_Impl( xInStream, aStringID, RELATIONINFO_FORMAT, xContext );
+    return ReadSequence_Impl( xInStream, aStringID, RELATIONINFO_FORMAT, rContext );
 }
 
 
-uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OFOPXMLHelper::ReadContentTypeSequence( const uno::Reference< io::XInputStream >& xInStream, const uno::Reference< uno::XComponentContext > xContext )
+uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OFOPXMLHelper::ReadContentTypeSequence( const uno::Reference< io::XInputStream >& xInStream, const uno::Reference< uno::XComponentContext >& rContext )
     throw( uno::Exception )
 {
     OUString aStringID = "[Content_Types].xml";
-    return ReadSequence_Impl( xInStream, aStringID, CONTENTTYPE_FORMAT, xContext );
+    return ReadSequence_Impl( xInStream, aStringID, CONTENTTYPE_FORMAT, rContext );
 }
 
 
-void SAL_CALL OFOPXMLHelper::WriteRelationsInfoSequence( const uno::Reference< io::XOutputStream >& xOutStream, const uno::Sequence< uno::Sequence< beans::StringPair > >& aSequence, const uno::Reference< uno::XComponentContext > xContext )
+void SAL_CALL OFOPXMLHelper::WriteRelationsInfoSequence( const uno::Reference< io::XOutputStream >& xOutStream, const uno::Sequence< uno::Sequence< beans::StringPair > >& aSequence, const uno::Reference< uno::XComponentContext >& rContext )
     throw( uno::Exception )
 {
     if ( !xOutStream.is() )
         throw uno::RuntimeException();
 
-    uno::Reference< xml::sax::XWriter > xWriter = xml::sax::Writer::create(xContext);
+    uno::Reference< xml::sax::XWriter > xWriter = xml::sax::Writer::create(rContext);
 
     xWriter->setOutputStream( xOutStream );
 
@@ -116,13 +115,13 @@ void SAL_CALL OFOPXMLHelper::WriteRelationsInfoSequence( const uno::Reference< i
 }
 
 
-void SAL_CALL OFOPXMLHelper::WriteContentSequence( const uno::Reference< io::XOutputStream >& xOutStream, const uno::Sequence< beans::StringPair >& aDefaultsSequence, const uno::Sequence< beans::StringPair >& aOverridesSequence, const uno::Reference< uno::XComponentContext > xContext )
+void SAL_CALL OFOPXMLHelper::WriteContentSequence( const uno::Reference< io::XOutputStream >& xOutStream, const uno::Sequence< beans::StringPair >& aDefaultsSequence, const uno::Sequence< beans::StringPair >& aOverridesSequence, const uno::Reference< uno::XComponentContext >& rContext )
     throw( uno::Exception )
 {
     if ( !xOutStream.is() )
         throw uno::RuntimeException();
 
-    uno::Reference< xml::sax::XWriter > xWriter = xml::sax::Writer::create(xContext);
+    uno::Reference< xml::sax::XWriter > xWriter = xml::sax::Writer::create(rContext);
 
     xWriter->setOutputStream( xOutStream );
 
@@ -176,16 +175,13 @@ void SAL_CALL OFOPXMLHelper::WriteContentSequence( const uno::Reference< io::XOu
 
 }
 
-
-
-
-uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OFOPXMLHelper::ReadSequence_Impl( const uno::Reference< io::XInputStream >& xInStream, const OUString& aStringID, sal_uInt16 nFormat, const uno::Reference< uno::XComponentContext > xContext )
+uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OFOPXMLHelper::ReadSequence_Impl( const uno::Reference< io::XInputStream >& xInStream, const OUString& aStringID, sal_uInt16 nFormat, const uno::Reference< uno::XComponentContext >& rContext )
     throw( uno::Exception )
 {
-    if ( !xContext.is() || !xInStream.is() || nFormat > FORMAT_MAX_ID )
+    if ( !rContext.is() || !xInStream.is() || nFormat > FORMAT_MAX_ID )
         throw uno::RuntimeException();
 
-    uno::Reference< xml::sax::XParser > xParser = xml::sax::Parser::create( xContext );
+    uno::Reference< xml::sax::XParser > xParser = xml::sax::Parser::create( rContext );
 
     OFOPXMLHelper* pHelper = new OFOPXMLHelper( nFormat );
     uno::Reference< xml::sax::XDocumentHandler > xHelper( static_cast< xml::sax::XDocumentHandler* >( pHelper ) );
@@ -198,7 +194,6 @@ uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OFOPXMLHelper::Read
 
     return pHelper->GetParsingResult();
 }
-
 
 OFOPXMLHelper::OFOPXMLHelper( sal_uInt16 nFormat )
 : m_nFormat( nFormat )

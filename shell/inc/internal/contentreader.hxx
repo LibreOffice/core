@@ -106,7 +106,7 @@ protected:
 
     /** get a style's locale field.
     */
-    LocaleSet_t const & getLocale( const StyleName_t Style );
+    LocaleSet_t const & getLocale( const StyleName_t& Style );
 
 private:
     std::stack<ITag*> m_TagBuilderStack;

@@ -57,15 +57,15 @@ rtl::Reference< StgPage > StgPage::Create( short nData, sal_Int32 nPage )
     return rtl::Reference< StgPage >( new StgPage( nData, nPage ) );
 }
 
-void StgCache::SetToPage ( const rtl::Reference< StgPage > xPage, short nOff, sal_Int32 nVal )
+void StgCache::SetToPage ( const rtl::Reference< StgPage >& rPage, short nOff, sal_Int32 nVal )
 {
-    if( ( nOff < (short) ( xPage->GetSize() / sizeof( sal_Int32 ) ) ) && nOff >= 0 )
+    if( ( nOff < (short) ( rPage->GetSize() / sizeof( sal_Int32 ) ) ) && nOff >= 0 )
     {
 #ifdef OSL_BIGENDIAN
         nVal = OSL_SWAPDWORD(nVal);
 #endif
-        ((sal_Int32*) xPage->GetData() )[ nOff ] = nVal;
-        SetDirty( xPage );
+        ((sal_Int32*) rPage->GetData() )[ nOff ] = nVal;
+        SetDirty( rPage );
     }
 }
 
@@ -272,10 +272,10 @@ void StgCache::SetStrm( UCBStorageStream* pStgStream )
     bMyStream = false;
 }
 
-void StgCache::SetDirty( const rtl::Reference< StgPage > &xPage )
+void StgCache::SetDirty( const rtl::Reference< StgPage > &rPage )
 {
     assert( IsWritable() );
-    maDirtyPages[ xPage->GetPage() ] = xPage;
+    maDirtyPages[ rPage->GetPage() ] = rPage;
 }
 
 // Open/close the disk file

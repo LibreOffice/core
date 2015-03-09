@@ -164,7 +164,7 @@ OUString InsertFixedText( OptimizerDialog& rOptimizerDialog, const OUString& rCo
 
 
 OUString InsertCheckBox( OptimizerDialog& rOptimizerDialog, const OUString& rControlName,
-    const Reference< XItemListener > xItemListener, const OUString& rLabel,
+    const Reference< XItemListener >& xItemListener, const OUString& rLabel,
         sal_Int32 nXPos, sal_Int32 nYPos, sal_Int32 nWidth, sal_Int32 nHeight, sal_Int16 nTabIndex )
 {
     OUString pNames[] = {
@@ -201,7 +201,7 @@ OUString InsertCheckBox( OptimizerDialog& rOptimizerDialog, const OUString& rCon
 
 
 OUString InsertFormattedField( OptimizerDialog& rOptimizerDialog, const OUString& rControlName,
-        const Reference< XTextListener > xTextListener, const Reference< XSpinListener > xSpinListener, sal_Int32 nXPos, sal_Int32 nYPos, sal_Int32 nWidth,
+        const Reference< XTextListener >& xTextListener, const Reference< XSpinListener >& xSpinListener, sal_Int32 nXPos, sal_Int32 nYPos, sal_Int32 nWidth,
             double fEffectiveMin, double fEffectiveMax, sal_Int16 nTabIndex )
 {
     OUString pNames[] = {
@@ -249,7 +249,7 @@ OUString InsertFormattedField( OptimizerDialog& rOptimizerDialog, const OUString
 
 
 OUString InsertComboBox( OptimizerDialog& rOptimizerDialog, const OUString& rControlName,
-    const Reference< XTextListener > xTextListener, const bool bEnabled, const Sequence< OUString >& rItemList,
+    const Reference< XTextListener >& rTextListener, const bool bEnabled, const Sequence< OUString >& rItemList,
         sal_Int32 nXPos, sal_Int32 nYPos, sal_Int32 nWidth, sal_Int32 nHeight, sal_Int16 nTabIndex )
 {
     OUString pNames[] = {
@@ -282,14 +282,14 @@ OUString InsertComboBox( OptimizerDialog& rOptimizerDialog, const OUString& rCon
     Sequence< Any >             aValues( pValues, nCount );
 
     Reference< XTextComponent > xTextComponent( rOptimizerDialog.insertComboBox( rControlName, aNames, aValues ), UNO_QUERY_THROW );
-    if ( xTextListener.is() )
-        xTextComponent->addTextListener( xTextListener );
+    if ( rTextListener.is() )
+        xTextComponent->addTextListener( rTextListener );
     return rControlName;
 }
 
 
 
-OUString InsertRadioButton( OptimizerDialog& rOptimizerDialog, const OUString& rControlName, const Reference< XItemListener > xItemListener,
+OUString InsertRadioButton( OptimizerDialog& rOptimizerDialog, const OUString& rControlName, const Reference< XItemListener >& rItemListener,
     const OUString& rLabel, sal_Int32 nXPos, sal_Int32 nYPos, sal_Int32 nWidth, sal_Int32 nHeight, bool bMultiLine, sal_Int16 nTabIndex )
 {
     OUString pNames[] = {
@@ -318,15 +318,15 @@ OUString InsertRadioButton( OptimizerDialog& rOptimizerDialog, const OUString& r
     Sequence< Any >             aValues( pValues, nCount );
 
     Reference< XRadioButton > xRadioButton( rOptimizerDialog.insertRadioButton( rControlName, aNames, aValues ) );
-    if ( xItemListener.is() )
-        xRadioButton->addItemListener( xItemListener );
+    if ( rItemListener.is() )
+        xRadioButton->addItemListener( rItemListener );
     return rControlName;
 }
 
 
 
 OUString InsertListBox( OptimizerDialog& rOptimizerDialog, const OUString& rControlName,
-    const Reference< XActionListener > xActionListener, const bool bEnabled, const Sequence< OUString >& rItemList,
+    const Reference< XActionListener >& rActionListener, const bool bEnabled, const Sequence< OUString >& rItemList,
         sal_Int32 nXPos, sal_Int32 nYPos, sal_Int32 nWidth, sal_Int32 nHeight, sal_Int16 nTabIndex )
 {
     OUString pNames[] = {
@@ -362,7 +362,7 @@ OUString InsertListBox( OptimizerDialog& rOptimizerDialog, const OUString& rCont
 
     Reference< XListBox > xListBox( rOptimizerDialog.insertListBox( rControlName, aNames, aValues ) );
     if ( xListBox.is() )
-        xListBox->addActionListener( xActionListener );
+        xListBox->addActionListener( rActionListener );
     return rControlName;
 }
 
