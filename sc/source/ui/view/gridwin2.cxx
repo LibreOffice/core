@@ -48,7 +48,6 @@
 
 #include <unordered_map>
 #include <vector>
-#include <boost/scoped_ptr.hpp>
 
 using namespace css;
 using namespace css::sheet;
@@ -209,8 +208,9 @@ void ScGridWindow::DoPushPivotButton( SCCOL nCol, SCROW nRow, const MouseEvent& 
             ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-            boost::scoped_ptr<AbstractScPivotFilterDlg> pDlg(pFact->CreateScPivotFilterDlg(
-                pViewData->GetViewShell()->GetDialogParent(), aArgSet, nSrcTab));
+            const std::unique_ptr<AbstractScPivotFilterDlg> pDlg(
+                pFact->CreateScPivotFilterDlg(
+                    pViewData->GetViewShell()->GetDialogParent(), aArgSet, nSrcTab));
             OSL_ENSURE(pDlg, "Dialog create fail!");
             if ( pDlg->Execute() == RET_OK )
             {

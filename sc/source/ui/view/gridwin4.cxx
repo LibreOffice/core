@@ -66,8 +66,6 @@
 #include <vcl/virdev.hxx>
 #include <svx/sdrpaintwindow.hxx>
 
-#include <boost/scoped_ptr.hpp>
-
 static void lcl_LimitRect( Rectangle& rRect, const Rectangle& rVisible )
 {
     if ( rRect.Top()    < rVisible.Top()-1 )    rRect.Top()    = rVisible.Top()-1;
@@ -484,7 +482,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
     aOutputData.SetMirrorWidth( nMirrorWidth ); // needed for RTL
     aOutputData.SetSpellCheckContext(mpSpellCheckCxt.get());
 
-    boost::scoped_ptr< VirtualDevice > xFmtVirtDev;
+    std::unique_ptr<VirtualDevice> xFmtVirtDev;
     bool bLogicText = bTextWysiwyg; // call DrawStrings in logic MapMode?
 
     if ( bTextWysiwyg )
@@ -1011,7 +1009,7 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
         }
 
         vcl::Font aFont;
-        boost::scoped_ptr<ScEditEngineDefaulter> pEditEng;
+        std::unique_ptr<ScEditEngineDefaulter> pEditEng;
         const ScPatternAttr& rDefPattern = static_cast<const ScPatternAttr&>(pDoc->GetPool()->GetDefaultItem(ATTR_PATTERN));
         if ( nPageScript == SCRIPTTYPE_LATIN )
         {
@@ -1203,7 +1201,7 @@ void ScGridWindow::DrawButtons(SCCOL nX1, SCCOL nX2, const ScTableInfo& rTabInfo
     SCSIZE nQuery;
     SCTAB           nTab = pViewData->GetTabNo();
     ScDBData*       pDBData = NULL;
-    boost::scoped_ptr<ScQueryParam> pQueryParam;
+    std::unique_ptr<ScQueryParam> pQueryParam;
 
     RowInfo*        pRowInfo = rTabInfo.mpRowInfo;
     sal_uInt16          nArrCount = rTabInfo.mnArrCount;

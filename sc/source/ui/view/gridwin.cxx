@@ -135,7 +135,6 @@
 #include <svx/sdr/overlay/overlayselection.hxx>
 
 #include <vector>
-#include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
 
 using namespace css;
@@ -443,9 +442,9 @@ ScGridWindow::ScGridWindow( vcl::Window* pParent, ScViewData* pData, ScSplitPos 
             pNoteMarker( NULL ),
             mpFilterBox(),
             mpFilterFloat(),
-            mpAutoFilterPopup(NULL),
-            mpDPFieldPopup(NULL),
-            mpFilterButton(NULL),
+            mpAutoFilterPopup(),
+            mpDPFieldPopup(),
+            mpFilterButton(),
             nCursorHideCount( 0 ),
             nButtonDown( 0 ),
             nMouseStatus( SC_GM_NONE ),
@@ -1264,7 +1263,7 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow, bool bDataSelec
             const ScValidationData* pData = pDoc->GetValidationEntry( nIndex );
             if (pData)
             {
-                boost::scoped_ptr<ScTypedStrData> pNew;
+                std::unique_ptr<ScTypedStrData> pNew;
                 OUString aDocStr = pDoc->GetString(nCol, nRow, nTab);
                 if ( pDoc->HasValueData( nCol, nRow, nTab ) )
                 {
@@ -5264,7 +5263,7 @@ bool ScGridWindow::GetEditUrl( const Point& rPos,
         aPaperSize.Width() = nThisColLogic;
     pEngine->SetPaperSize( aPaperSize );
 
-    boost::scoped_ptr<EditTextObject> pTextObj;
+    std::unique_ptr<EditTextObject> pTextObj;
     if (aCell.meType == CELLTYPE_EDIT)
     {
         if (aCell.mpEditText)
@@ -5507,7 +5506,7 @@ bool ScGridWindow::ContinueOnlineSpelling()
     while (pCell && nCol < mpSpellCheckCxt->maPos.mnCol)
         pCell = aIter.GetNext(nCol, nRow);
 
-    boost::scoped_ptr<ScTabEditEngine> pEngine;
+    std::unique_ptr<ScTabEditEngine> pEngine;
 
     // Check only up to 256 cells at a time.
     size_t nTotalCellCount = 0;

@@ -28,7 +28,6 @@
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
-#include <boost/scoped_ptr.hpp>
 #include <boost/ptr_container/ptr_map.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <vector>
@@ -105,7 +104,7 @@ class ScGridWindow : public vcl::Window, public DropTargetHelper, public DragSou
     ::sdr::overlay::OverlayObjectList*              mpOOHeader;
     ::sdr::overlay::OverlayObjectList*              mpOOShrink;
 
-    boost::scoped_ptr<Rectangle> mpAutoFillRect;
+    std::unique_ptr<Rectangle> mpAutoFillRect;
 
     struct MouseEventState;
 
@@ -128,7 +127,7 @@ class ScGridWindow : public vcl::Window, public DropTargetHelper, public DragSou
 
     VisibleRange maVisibleRange;
 
-    boost::scoped_ptr<sc::SpellCheckContext> mpSpellCheckCxt;
+    std::unique_ptr<sc::SpellCheckContext> mpSpellCheckCxt;
 
     ScViewData*             pViewData;
     ScSplitPos              eWhich;
@@ -139,9 +138,9 @@ class ScGridWindow : public vcl::Window, public DropTargetHelper, public DragSou
 
     std::unique_ptr<ScFilterListBox> mpFilterBox;
     std::unique_ptr<FloatingWindow> mpFilterFloat;
-    boost::scoped_ptr<ScCheckListMenuWindow> mpAutoFilterPopup;
-    boost::scoped_ptr<ScCheckListMenuWindow> mpDPFieldPopup;
-    boost::scoped_ptr<ScDPFieldButton>       mpFilterButton;
+    std::unique_ptr<ScCheckListMenuWindow> mpAutoFilterPopup;
+    std::unique_ptr<ScCheckListMenuWindow> mpDPFieldPopup;
+    std::unique_ptr<ScDPFieldButton> mpFilterButton;
 
     sal_uInt16              nCursorHideCount;
 
