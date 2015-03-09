@@ -113,8 +113,7 @@ static void addPreamble(OString& rShaderSource, const OString& rPreamble)
     {
         int nVersionStrEndPos = rShaderSource.indexOf('\n', nVersionStrStartPos);
 
-        // no way this should happen - if this is the case, then it's a syntax error
-        assert(nVersionStrEndPos != -1);
+        SAL_WARN_IF(nVersionStrEndPos == -1, "vcl.opengl", "syntax error in shader");
 
         if (nVersionStrEndPos == -1)
             nVersionStrEndPos = nVersionStrStartPos + 8;
