@@ -49,11 +49,16 @@ OUString getFileURLFromSystemPath(OUString const & path)
 class TiledRenderingTest : public ::CppUnit::TestFixture
 {
 public:
-    const string m_sSrcRoot = getenv( "SRC_ROOT" );
-    const string m_sInstDir = getenv( "INSTDIR" );
-    const string m_sLOPath = m_sInstDir + "/program";
+    const string m_sSrcRoot;
+    const string m_sInstDir;
+    const string m_sLOPath;
 
-    TiledRenderingTest() {}
+    TiledRenderingTest()
+        : m_sSrcRoot( getenv( "SRC_ROOT" ) )
+        , m_sInstDir( getenv( "INSTDIR" ) )
+        , m_sLOPath( m_sInstDir + "/program" )
+    {
+    }
 
     // Currently it isn't possible to do multiple startup/shutdown
     // cycle of LOK in a single process -- hence we run all our tests
