@@ -1445,27 +1445,30 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
             {
                 if( rMergeDescriptor.nMergeType != DBMGR_MERGE_PRINTER )
                 {
-                    assert( aTempFile.get());
-                    INetURLObject aTempFileURL( rMergeDescriptor.bSubjectIsFilename ? sSubject : aTempFile->GetURL());
-                    SfxMedium* pDstMed = new SfxMedium(
-                        aTempFileURL.GetMainURL( INetURLObject::NO_DECODE ),
-                        STREAM_STD_READWRITE );
-                    pDstMed->SetFilter( pStoreToFilter );
-                    if(pDstMed->GetItemSet())
+                    if( !bCancel )
                     {
-                        if(pStoreToFilterOptions )
-                            pDstMed->GetItemSet()->Put(SfxStringItem(SID_FILE_FILTEROPTIONS, *pStoreToFilterOptions));
-                        if(rMergeDescriptor.aSaveToFilterData.getLength())
-                            pDstMed->GetItemSet()->Put(SfxUsrAnyItem(SID_FILTER_DATA, makeAny(rMergeDescriptor.aSaveToFilterData)));
-                    }
+                        assert( aTempFile.get());
+                        INetURLObject aTempFileURL( rMergeDescriptor.bSubjectIsFilename ? sSubject : aTempFile->GetURL());
+                        SfxMedium* pDstMed = new SfxMedium(
+                            aTempFileURL.GetMainURL( INetURLObject::NO_DECODE ),
+                            STREAM_STD_READWRITE );
+                        pDstMed->SetFilter( pStoreToFilter );
+                        if(pDstMed->GetItemSet())
+                        {
+                            if(pStoreToFilterOptions )
+                                pDstMed->GetItemSet()->Put(SfxStringItem(SID_FILE_FILTEROPTIONS, *pStoreToFilterOptions));
+                            if(rMergeDescriptor.aSaveToFilterData.getLength())
+                                pDstMed->GetItemSet()->Put(SfxUsrAnyItem(SID_FILTER_DATA, makeAny(rMergeDescriptor.aSaveToFilterData)));
+                        }
 
-                    xTargetDocShell->DoSaveAs(*pDstMed);
-                    xTargetDocShell->DoSaveCompleted(pDstMed);
-                    if( xTargetDocShell->GetError() )
-                    {
-                        // error message ??
-                        ErrorHandler::HandleError( xTargetDocShell->GetError() );
-                        bNoError = sal_False;
+                        xTargetDocShell->DoSaveAs(*pDstMed);
+                        xTargetDocShell->DoSaveCompleted(pDstMed);
+                        if( xTargetDocShell->GetError() )
+                        {
+                            // error message ??
+                            ErrorHandler::HandleError( xTargetDocShell->GetError() );
+                            bNoError = sal_False;
+                        }
                     }
                 }
                 else if( pTargetView ) // must be available!
