@@ -28,8 +28,13 @@ extern "C"
     #ifdef  _AIX
     #  include <sys/ldr.h>
     #endif
-    #define TARGET_LIB        "lib" "sofficeapp" ".so"
-    #define TARGET_MERGED_LIB "lib" "mergedlo" ".so"
+    #ifdef __APPLE__
+        #define TARGET_LIB        "lib" "sofficeapp" ".dylib"
+        #define TARGET_MERGED_LIB "lib" "mergedlo" ".dylib"
+    #else
+        #define TARGET_LIB        "lib" "sofficeapp" ".so"
+        #define TARGET_MERGED_LIB "lib" "mergedlo" ".so"
+    #endif
     #define SEPERATOR         '/'
 
     void *_dlopen(const char *pFN)
