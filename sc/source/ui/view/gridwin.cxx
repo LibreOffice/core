@@ -138,9 +138,8 @@
 #include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
 
-using namespace com::sun::star;
-using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::uno::Any;
+using namespace css;
+using namespace css::uno;
 
 const sal_uInt8 SC_NESTEDBUTTON_NONE = 0;
 const sal_uInt8 SC_NESTEDBUTTON_DOWN = 1;
@@ -149,8 +148,8 @@ const sal_uInt8 SC_NESTEDBUTTON_UP   = 2;
 #define SC_AUTOFILTER_ALL       0
 #define SC_AUTOFILTER_TOP10     1
 #define SC_AUTOFILTER_CUSTOM    2
-#define        SC_AUTOFILTER_EMPTY     3
-#define        SC_AUTOFILTER_NOTEMPTY  4
+#define SC_AUTOFILTER_EMPTY     3
+#define SC_AUTOFILTER_NOTEMPTY  4
 
 //  Modi fuer die FilterListBox
 enum ScFilterBoxMode
@@ -169,13 +168,18 @@ struct ScGridWindow::MouseEventState
 {
     bool mbActivatePart;
 
-    MouseEventState() : mbActivatePart(false) {}
+    MouseEventState() :
+        mbActivatePart(false)
+    {}
 };
 
 #define SC_FILTERLISTBOX_LINES  12
 
-ScGridWindow::VisibleRange::VisibleRange() :
-    mnCol1(0), mnCol2(MAXCOL), mnRow1(0), mnRow2(MAXROW)
+ScGridWindow::VisibleRange::VisibleRange()
+    : mnCol1(0)
+    , mnCol2(MAXCOL)
+    , mnRow1(0)
+    , mnRow2(MAXROW)
 {
 }
 
@@ -2641,25 +2645,25 @@ void ScGridWindow::MouseMove( const MouseEvent& rMEvt )
         return;
 }
 
-static void lcl_InitMouseEvent( ::com::sun::star::awt::MouseEvent& rEvent, const MouseEvent& rEvt )
+static void lcl_InitMouseEvent(css::awt::MouseEvent& rEvent, const MouseEvent& rEvt)
 {
     rEvent.Modifiers = 0;
     if ( rEvt.IsShift() )
-        rEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::SHIFT;
+        rEvent.Modifiers |= css::awt::KeyModifier::SHIFT;
     if ( rEvt.IsMod1() )
-        rEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::MOD1;
+        rEvent.Modifiers |= css::awt::KeyModifier::MOD1;
     if ( rEvt.IsMod2() )
-        rEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::MOD2;
+        rEvent.Modifiers |= css::awt::KeyModifier::MOD2;
     if ( rEvt.IsMod3() )
-        rEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::MOD3;
+        rEvent.Modifiers |= css::awt::KeyModifier::MOD3;
 
     rEvent.Buttons = 0;
     if ( rEvt.IsLeft() )
-        rEvent.Buttons |= ::com::sun::star::awt::MouseButton::LEFT;
+        rEvent.Buttons |= css::awt::MouseButton::LEFT;
     if ( rEvt.IsRight() )
-        rEvent.Buttons |= ::com::sun::star::awt::MouseButton::RIGHT;
+        rEvent.Buttons |= css::awt::MouseButton::RIGHT;
     if ( rEvt.IsMiddle() )
-        rEvent.Buttons |= ::com::sun::star::awt::MouseButton::MIDDLE;
+        rEvent.Buttons |= css::awt::MouseButton::MIDDLE;
 
     rEvent.X = rEvt.GetPosPixel().X();
     rEvent.Y = rEvt.GetPosPixel().Y();

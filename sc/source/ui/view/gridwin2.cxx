@@ -50,17 +50,16 @@
 #include <vector>
 #include <boost/scoped_ptr.hpp>
 
-using namespace com::sun::star;
-using ::com::sun::star::sheet::DataPilotFieldOrientation;
-using ::std::vector;
-using ::std::unique_ptr;
+using namespace css;
+using namespace css::sheet;
+using css::sheet::DataPilotFieldOrientation;
+using std::vector;
+using std::unique_ptr;
 
 // STATIC DATA -----------------------------------------------------------
 
 DataPilotFieldOrientation ScGridWindow::GetDPFieldOrientation( SCCOL nCol, SCROW nRow ) const
 {
-    using namespace ::com::sun::star::sheet;
-
     ScDocument* pDoc = pViewData->GetDocument();
     SCTAB nTab = pViewData->GetTabNo();
     ScDPObject* pDPObj = pDoc->GetDPAtCursor(nCol, nRow, nTab);
@@ -83,7 +82,7 @@ DataPilotFieldOrientation ScGridWindow::GetDPFieldOrientation( SCCOL nCol, SCROW
         }
     }
 
-    nOrient = sheet::DataPilotFieldOrientation_HIDDEN;
+    nOrient = DataPilotFieldOrientation_HIDDEN;
 
     // Now, check for row/column field.
     long nField = pDPObj->GetHeaderDim(ScAddress(nCol, nRow, nTab), nOrient);
@@ -101,7 +100,7 @@ DataPilotFieldOrientation ScGridWindow::GetDPFieldOrientation( SCCOL nCol, SCROW
 // private method for mouse button handling
 bool ScGridWindow::DoPageFieldSelection( SCCOL nCol, SCROW nRow )
 {
-    if (GetDPFieldOrientation( nCol, nRow ) == sheet::DataPilotFieldOrientation_PAGE)
+    if (GetDPFieldOrientation( nCol, nRow ) == DataPilotFieldOrientation_PAGE)
     {
         LaunchPageFieldMenu( nCol, nRow );
         return true;
@@ -162,7 +161,7 @@ void ScGridWindow::DoPushPivotButton( SCCOL nCol, SCROW nRow, const MouseEvent& 
 
     if (pDPObj)
     {
-        sal_uInt16 nOrient = sheet::DataPilotFieldOrientation_HIDDEN;
+        sal_uInt16 nOrient = DataPilotFieldOrientation_HIDDEN;
         ScAddress aPos( nCol, nRow, nTab );
         ScAddress aDimPos = aPos;
         if (!bButton && bPopup && aDimPos.Col() > 0)
@@ -300,20 +299,20 @@ void ScGridWindow::DPTestMouse( const MouseEvent& rMEvt, bool bMove )
         else if ( bHasRange )
             switch (nOrient)
             {
-                case sheet::DataPilotFieldOrientation_COLUMN: ePointer = POINTER_PIVOT_COL; break;
-                case sheet::DataPilotFieldOrientation_ROW:    ePointer = POINTER_PIVOT_ROW; break;
-                case sheet::DataPilotFieldOrientation_PAGE:
-                case sheet::DataPilotFieldOrientation_DATA:   ePointer = POINTER_PIVOT_FIELD;   break;
+                case DataPilotFieldOrientation_COLUMN: ePointer = POINTER_PIVOT_COL; break;
+                case DataPilotFieldOrientation_ROW:    ePointer = POINTER_PIVOT_ROW; break;
+                case DataPilotFieldOrientation_PAGE:
+                case DataPilotFieldOrientation_DATA:   ePointer = POINTER_PIVOT_FIELD;   break;
             }
         SetPointer( ePointer );
     }
     else                // execute change
     {
         if (!bHasRange)
-            nOrient = sheet::DataPilotFieldOrientation_HIDDEN;
+            nOrient = DataPilotFieldOrientation_HIDDEN;
 
-        if ( bIsDataLayout && ( nOrient != sheet::DataPilotFieldOrientation_COLUMN &&
-                                nOrient != sheet::DataPilotFieldOrientation_ROW ) )
+        if ( bIsDataLayout && ( nOrient != DataPilotFieldOrientation_COLUMN &&
+                                nOrient != DataPilotFieldOrientation_ROW ) )
         {
             //  removing data layout is not allowed
             pViewData->GetView()->ErrorMessage(STR_PIVOT_MOVENOTALLOWED);
@@ -477,7 +476,7 @@ void ScGridWindow::DPLaunchFieldPopupMenu(
         mpDPFieldPopup->initMembers();
     }
 
-    if (pDim->GetOrientation() != sheet::DataPilotFieldOrientation_PAGE)
+    if (pDim->GetOrientation() != DataPilotFieldOrientation_PAGE)
     {
         vector<OUString> aUserSortNames;
         ScUserList* pUserList = ScGlobal::GetUserList();
