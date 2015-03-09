@@ -210,6 +210,7 @@ OUString SwView::GetPageStr(sal_uInt16 nPhyNum, sal_uInt16 nVirtNum, const OUStr
     aStr = aStr.replaceFirst("%1", OUString::number(nPhyNum));
     aStr = aStr.replaceFirst("%2", OUString::number(GetWrtShell().GetPageCnt()));
     aStr = aStr.replaceFirst("%3", extra);
+
     return aStr;
 }
 
