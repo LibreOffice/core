@@ -5405,8 +5405,7 @@ void DocxAttributeOutput::EndSection()
     // Write the section properties
     if ( m_pSectionSpacingAttrList )
     {
-        XFastAttributeListRef xAttrList( m_pSectionSpacingAttrList );
-        m_pSectionSpacingAttrList = NULL;
+        XFastAttributeListRef xAttrList( m_pSectionSpacingAttrList.release() );
 
         m_pSerializer->singleElementNS( XML_w, XML_pgMar, xAttrList );
     }
@@ -8282,7 +8281,6 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
     : m_rExport( rExport ),
       m_pSerializer( pSerializer ),
       m_rDrawingML( *pDrawingML ),
-      m_pSectionSpacingAttrList( NULL ),
       m_pParagraphSpacingAttrList( NULL ),
       m_pHyperlinkAttrList( NULL ),
       m_bEndCharSdt(false),
@@ -8354,7 +8352,6 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
 
 DocxAttributeOutput::~DocxAttributeOutput()
 {
-    delete m_pSectionSpacingAttrList, m_pSectionSpacingAttrList = NULL;
     delete m_pParagraphSpacingAttrList, m_pParagraphSpacingAttrList = NULL;
     delete m_pHyperlinkAttrList, m_pHyperlinkAttrList = NULL;
     delete m_pColorAttrList, m_pColorAttrList = NULL;
