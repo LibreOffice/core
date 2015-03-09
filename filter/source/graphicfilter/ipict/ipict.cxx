@@ -170,8 +170,6 @@ private:
     Fraction        aHRes;
     Fraction        aVRes;
 
-    bool Callback(sal_uInt16 nPercent);
-
     Point ReadPoint();
 
     Point ReadDeltaH(Point aBase);
@@ -358,11 +356,6 @@ void PictReader::SetLineColor( const Color& rColor )
 void PictReader::SetFillColor( const Color& rColor )
 {
     pVirDev->SetFillColor( rColor );
-}
-
-bool PictReader::Callback(sal_uInt16 /*nPercent*/)
-{
-    return false;
 }
 
 Point PictReader::ReadPoint()
@@ -1896,7 +1889,7 @@ void PictReader::ReadPict( SvStream & rStreamPict, GDIMetaFile & rGDIMetaFile )
 
     sal_uInt64 const nStartPos=pPict->Tell();
     sal_uInt64 const nRemaining = pPict->remainingSize();
-    Callback(0); nLastPercent=0;
+    nLastPercent=0;
 
     ReadHeader();
 
@@ -1909,7 +1902,6 @@ void PictReader::ReadPict( SvStream & rStreamPict, GDIMetaFile & rGDIMetaFile )
 
         nPercent = (nPos-nStartPos) * 100 / nRemaining;
         if (nLastPercent+4<=nPercent) {
-            if (Callback((sal_uInt16)nPercent)) break;
             nLastPercent=nPercent;
         }
 

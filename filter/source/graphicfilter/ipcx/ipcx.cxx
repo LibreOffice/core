@@ -43,10 +43,9 @@ private:
     sal_uInt16          nResX, nResY;       // resolution in pixel per inch oder 0,0
     sal_uInt16          nDestBitsPerPixel;  // bits per pixel in destination bitmap 1,4,8 or 24
     sal_uInt8*          pPalette;
-    bool            nStatus;            // from now on do not read status from stream ( SJ )
+    bool                nStatus;            // from now on do not read status from stream ( SJ )
 
 
-    bool            Callback( sal_uInt16 nPercent );
     void                ImplReadBody(BitmapWriteAccess * pAcc);
     void                ImplReadPalette( sal_uLong nCol );
     void                ImplReadHeader();
@@ -81,11 +80,6 @@ PCXReader::PCXReader(SvStream &rStream)
 PCXReader::~PCXReader()
 {
     delete[] pPalette;
-}
-
-bool PCXReader::Callback( sal_uInt16 /*nPercent*/ )
-{
-    return false;
 }
 
 bool PCXReader::ReadPCX(Graphic & rGraphic)
@@ -239,8 +233,6 @@ void PCXReader::ImplReadBody(BitmapWriteAccess * pAcc)
         if ( ny == 0 || nLastPercent + 4 <= nPercent )
         {
             nLastPercent = nPercent;
-            if ( Callback( (sal_uInt16)nPercent ) )
-                break;
         }
         for ( np = 0; np < nPlanes; np++)
         {

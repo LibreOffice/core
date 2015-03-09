@@ -168,13 +168,6 @@ void ImplEESdrWriter::ImplFlipBoundingBox( ImplEESdrObject& rObj, EscherProperty
                 rObj.GetShapeId() ) );                              \
 }
 
-//Map from twips to export units, generally twips as well, only excel and word
-//export is happening here, so native units are export units, leave as
-//placeholder if required in future
-void ImplEESdrWriter::MapRect(ImplEESdrObject& /* rObj */ )
-{
-}
-
 sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                                 EscherSolverContainer& rSolverContainer,
                                 ImplEESdrPageType ePageType, const bool bOOxmlExport )
@@ -472,7 +465,6 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
         {
             ::com::sun::star::awt::Rectangle aNewRect;
             aPropOpt.CreatePolygonProperties( rObj.mXPropSet, ESCHER_CREATEPOLYGON_LINE, false, aNewRect, NULL );
-            MapRect(rObj);
             //i27942: Poly/Lines/Bezier do not support text.
 
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
@@ -498,7 +490,6 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             ADD_SHAPE( ESCHER_ShpInst_NotPrimitive, 0xa00 );        // Flags: Connector | HasSpt
             ::com::sun::star::awt::Rectangle aNewRect;
             aPropOpt.CreatePolygonProperties( rObj.mXPropSet, ESCHER_CREATEPOLYGON_POLYPOLYGON, false, aNewRect, NULL );
-            MapRect(rObj);
             aPropOpt.CreateFillProperties( rObj.mXPropSet, true );
             rObj.SetAngle( 0 );
         }
@@ -510,7 +501,6 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             ADD_SHAPE( ESCHER_ShpInst_NotPrimitive, 0xa00 );        // Flags: Connector | HasSpt
             ::com::sun::star::awt::Rectangle aNewRect;
             aPropOpt.CreatePolygonProperties( rObj.mXPropSet, ESCHER_CREATEPOLYGON_POLYLINE, false, aNewRect, NULL );
-            MapRect(rObj);
             aPropOpt.CreateLineProperties( rObj.mXPropSet, false );
             rObj.SetAngle( 0 );
         }
@@ -522,7 +512,6 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             ADD_SHAPE( ESCHER_ShpInst_NotPrimitive, 0xa00 );        // Flags: Connector | HasSpt
             ::com::sun::star::awt::Rectangle aNewRect;
             aPropOpt.CreatePolygonProperties( rObj.mXPropSet, ESCHER_CREATEPOLYGON_POLYLINE, true, aNewRect, NULL );
-            MapRect(rObj);
             aPropOpt.CreateLineProperties( rObj.mXPropSet, false );
             rObj.SetAngle( 0 );
         }
@@ -537,7 +526,6 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             ADD_SHAPE( ESCHER_ShpInst_NotPrimitive, 0xa00 );        // Flags: Connector | HasSpt
             ::com::sun::star::awt::Rectangle aNewRect;
             aPropOpt.CreatePolygonProperties( rObj.mXPropSet, ESCHER_CREATEPOLYGON_POLYPOLYGON, true, aNewRect, NULL );
-            MapRect(rObj);
             aPropOpt.CreateFillProperties( rObj.mXPropSet, true );
             rObj.SetAngle( 0 );
         }

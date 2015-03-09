@@ -373,8 +373,6 @@ private:
 
     SvStream * pOrdFile;
 
-    bool Callback(sal_uInt16 nPercent);
-
     void AddPointsToPath(const Polygon & rPoly);
     void AddPointsToArea(const Polygon & rPoly);
     void CloseFigure();
@@ -432,11 +430,6 @@ public:
 };
 
 //=================== Methods of OS2METReader ==============================
-
-bool OS2METReader::Callback(sal_uInt16 /*nPercent*/)
-{
-    return false;
-}
 
 OS2METReader::OS2METReader()
     : ErrorCode(0)
@@ -2625,7 +2618,7 @@ void OS2METReader::ReadOS2MET( SvStream & rStreamOS2MET, GDIMetaFile & rGDIMetaF
     sal_uInt64 const nStartPos = pOS2MET->Tell();
     sal_uInt64 const nRemaining = pOS2MET->remainingSize();
 
-    Callback(0); nLastPercent=0;
+    nLastPercent=0;
 
     sal_uInt64 nPos = pOS2MET->Tell();
 
@@ -2633,7 +2626,6 @@ void OS2METReader::ReadOS2MET( SvStream & rStreamOS2MET, GDIMetaFile & rGDIMetaF
 
         nPercent = (nPos-nStartPos)*100 / nRemaining;
         if (nLastPercent+4<=nPercent) {
-            if (Callback((sal_uInt16)nPercent)) break;
             nLastPercent=nPercent;
         }
 
