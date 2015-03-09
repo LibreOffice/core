@@ -422,7 +422,7 @@ bool OHTMLReader::CreateTable(int nToken)
     sal_Int32 nTextColor = 0;
     do
     {
-        switch(nToken)
+        switch (nToken)
         {
             case HTML_TEXTTOKEN:
             case HTML_SINGLECHAR:
@@ -490,8 +490,9 @@ bool OHTMLReader::CreateTable(int nToken)
                 aFont.Strikeout = ::com::sun::star::awt::FontStrikeout::SINGLE;
                 break;
         }
+        nToken = GetNextToken();
     }
-    while( GetNextToken() != HTML_TABLEROW_OFF );
+    while (nToken != HTML_TABLEROW_OFF);
 
     if ( !m_sCurrent.isEmpty() )
         aColumnName = m_sCurrent;

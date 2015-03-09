@@ -258,7 +258,7 @@ bool ORTFReader::CreateTable(int nToken)
     FontDescriptor aFont = VCLUnoHelper::CreateFontDescriptor(Application::GetSettings().GetStyleSettings().GetAppFont());
     do
     {
-        switch(nToken)
+        switch (nToken)
         {
             case RTF_UNKNOWNCONTROL:
             case RTF_UNKNOWNDATA:
@@ -301,8 +301,9 @@ bool ORTFReader::CreateTable(int nToken)
                 aFont.Strikeout = ::com::sun::star::awt::FontStrikeout::SINGLE;
                 break;
         }
+        nToken = GetNextToken();
     }
-    while( GetNextToken() != RTF_TROWD && eState != SVPAR_ERROR && eState != SVPAR_ACCEPTED );
+    while(nToken != RTF_TROWD && eState != SVPAR_ERROR && eState != SVPAR_ACCEPTED);
 
     bool bOk = !m_vDestVector.empty();
     if(bOk)
