@@ -587,7 +587,7 @@ Resource RID_GLOBSTR
     };
     String STR_ROWCOL_SELCOUNT
     {
-        Text [ en-US ] = "$1 rows, $2 columns selected";
+        Text [ en-US ] = "Selected $1 rows, $2 columns";
     };
     String STR_COLUMN
     {
@@ -2080,6 +2080,11 @@ Resource RID_GLOBSTR
     String STR_UNDO_FORMULA_TO_VALUE
     {
         Text [ en-US ] = "Convert Formula To Value";
+    };
+
+    String STR_TABLE_COUNT
+    {
+        Text [ en-US ] = "Sheet %1 of %2";
     };
 };
 
