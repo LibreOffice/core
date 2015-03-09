@@ -29,7 +29,6 @@
 
     <org.libreoffice.TextCursorView android:id="@+id/text_cursor_view"
                                     android:layout_width="fill_parent"
-                                    android:layout_height="fill_parent"
-                                    android:visibility="gone"/>
+                                    android:layout_height="fill_parent"/>
 
 </merge>
