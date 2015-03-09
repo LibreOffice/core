@@ -234,6 +234,8 @@ public:
 
     FastParser* createParser() const;
 
+    bool isMSO2007Document() const;
+
 protected:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
         implGetInputStream( utl::MediaDescriptor& rMediaDesc ) const SAL_OVERRIDE;
