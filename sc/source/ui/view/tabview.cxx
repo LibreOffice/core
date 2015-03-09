@@ -162,8 +162,10 @@ void ScCornerButton::MouseButtonDown( const MouseEvent& rMEvt )
         pViewSh->SelectAll( bControl );
     }
 }
+namespace
+{
 
-static bool lcl_HasColOutline( const ScViewData& rViewData )
+bool lcl_HasColOutline( const ScViewData& rViewData )
 {
     const ScOutlineTable* pTable = rViewData.GetDocument()->GetOutlineTable(rViewData.GetTabNo());
     if (pTable)
@@ -175,7 +177,7 @@ static bool lcl_HasColOutline( const ScViewData& rViewData )
     return false;
 }
 
-static bool lcl_HasRowOutline( const ScViewData& rViewData )
+bool lcl_HasRowOutline( const ScViewData& rViewData )
 {
     const ScOutlineTable* pTable = rViewData.GetDocument()->GetOutlineTable(rViewData.GetTabNo());
     if (pTable)
@@ -186,6 +188,8 @@ static bool lcl_HasRowOutline( const ScViewData& rViewData )
     }
     return false;
 }
+
+} // anonymous namespace
 
 ScTabView::ScTabView( vcl::Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pViewShell ) :
     pFrameWin( pParent ),
