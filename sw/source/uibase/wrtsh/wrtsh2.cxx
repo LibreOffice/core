@@ -472,10 +472,8 @@ void LoadURL( SwViewShell& rVSh, const OUString& rURL, sal_uInt16 nFilter,
         return;
 
     // We are doing tiledRendering, let the client handles the URL loading.
-    if (rVSh.isTiledRendering())
-    {
-        rVSh.libreOfficeKitCallback(LOK_CALLBACK_HYPERLINK_CLICKED,
-                OUStringToOString(rURL, RTL_TEXTENCODING_UTF8).getStr());
+    if (rVSh.isTiledRendering()) {
+        rVSh.libreOfficeKitCallback(LOK_CALLBACK_HYPERLINK_CLICKED, rURL.toUtf8().getStr());
         return;
     }
 
