@@ -1051,7 +1051,7 @@ AC_ARG_ENABLE(runtime-optimizations,
          JVM JIT) that are known to interact badly with certain dynamic analysis
          tools (like -fsanitize=address or Valgrind).  By default, disabled iff
          CC contains "-fsanitize=*".  (For Valgrind, those runtime optimizations
-         are typcially disabled dynamically via RUNNING_ON_VALGRIND.)]))
+         are typically disabled dynamically via RUNNING_ON_VALGRIND.)]))
 
 AC_ARG_ENABLE(compiler-plugins,
     AS_HELP_STRING([--enable-compiler-plugins],
