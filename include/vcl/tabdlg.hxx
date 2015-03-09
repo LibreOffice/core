@@ -29,8 +29,8 @@ class TabControl;
 class VCL_DLLPUBLIC TabDialog : public Dialog
 {
 private:
-    FixedLine*          mpFixedLine;
-    vcl::Window*             mpViewWindow;
+    VclPtr<FixedLine>   mpFixedLine;
+    VclPtr<vcl::Window> mpViewWindow;
     WindowAlign         meViewAlign;
     bool                mbPosControls;
 

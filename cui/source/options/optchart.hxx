@@ -33,11 +33,11 @@ class SvxDefaultColorOptPage : public SfxTabPage
 {
 
 private:
-    ColorLB*                m_pLbChartColors;
-    ValueSet*               m_pValSetColorBox;
-    PushButton*             m_pPBDefault;
-    PushButton*             m_pPBAdd;
-    PushButton*             m_pPBRemove;
+    VclPtr<ColorLB>                m_pLbChartColors;
+    VclPtr<ValueSet>               m_pValSetColorBox;
+    VclPtr<PushButton>             m_pPBDefault;
+    VclPtr<PushButton>             m_pPBAdd;
+    VclPtr<PushButton>             m_pPBRemove;
 
     SvxChartOptions*        pChartOptions;
     SvxChartColorTableItem* pColorConfig;

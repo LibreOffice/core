@@ -47,24 +47,24 @@ public:
     virtual bool    Close() SAL_OVERRIDE;
 
 private:
-    ComboBox*           m_pEdName;
+    VclPtr<ComboBox>           m_pEdName;
 
-    VclFrame*           m_pAssignFrame;
-    formula::RefEdit*   m_pEdAssign;
-    formula::RefButton* m_pRbAssign;
+    VclPtr<VclFrame>           m_pAssignFrame;
+    VclPtr<formula::RefEdit>   m_pEdAssign;
+    VclPtr<formula::RefButton> m_pRbAssign;
 
-    VclContainer*       m_pOptions;
-    CheckBox*           m_pBtnHeader;
-    CheckBox*           m_pBtnDoSize;
-    CheckBox*           m_pBtnKeepFmt;
-    CheckBox*           m_pBtnStripData;
-    FixedText*          m_pFTSource;
-    FixedText*          m_pFTOperations;
+    VclPtr<VclContainer>       m_pOptions;
+    VclPtr<CheckBox>           m_pBtnHeader;
+    VclPtr<CheckBox>           m_pBtnDoSize;
+    VclPtr<CheckBox>           m_pBtnKeepFmt;
+    VclPtr<CheckBox>           m_pBtnStripData;
+    VclPtr<FixedText>          m_pFTSource;
+    VclPtr<FixedText>          m_pFTOperations;
 
-    OKButton*           m_pBtnOk;
-    CancelButton*       m_pBtnCancel;
-    PushButton*         m_pBtnAdd;
-    PushButton*         m_pBtnRemove;
+    VclPtr<OKButton>           m_pBtnOk;
+    VclPtr<CancelButton>       m_pBtnCancel;
+    VclPtr<PushButton>         m_pBtnAdd;
+    VclPtr<PushButton>         m_pBtnRemove;
 
     bool            bSaved;
 

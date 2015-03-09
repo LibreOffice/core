@@ -70,8 +70,8 @@ class BibBookContainer: public BibSplitWindow
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >              xTopPeerRef;
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >              xBottomPeerRef;
 
-        BibWindowContainer*     pTopWin;
-        BibWindowContainer*     pBottomWin;
+        VclPtr<BibWindowContainer>     pTopWin;
+        VclPtr<BibWindowContainer>     pBottomWin;
         HdlBibModul             pBibMod;
         Idle                    aIdle;
 

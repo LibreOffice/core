@@ -53,6 +53,17 @@ Layout::Layout (vcl::Window* pParent) :
     SetFont(aFont);
 }
 
+Layout::~Layout()
+{
+    dispose();
+}
+
+void Layout::dispose()
+{
+    pChild.clear();
+    Window::dispose();
+}
+
 // removes a docking window
 void Layout::Remove (DockingWindow* pWin)
 {

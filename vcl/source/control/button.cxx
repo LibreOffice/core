@@ -96,11 +96,12 @@ Button::Button( WindowType nType ) :
 Button::~Button()
 {
     dispose();
-    delete mpButtonData;
 }
 
 void Button::dispose()
 {
+    delete mpButtonData;
+    mpButtonData = NULL;
     Control::dispose();
 }
 
@@ -2147,20 +2148,20 @@ void RadioButton::group(RadioButton &rOther)
 
     if (!m_xGroup)
     {
-        m_xGroup.reset(new std::vector<RadioButton*>);
+        m_xGroup.reset(new std::vector<VclPtr<RadioButton> >);
         m_xGroup->push_back(this);
     }
 
-    std::vector<RadioButton*>::iterator aFind = std::find(m_xGroup->begin(), m_xGroup->end(), &rOther);
+    auto aFind = std::find(m_xGroup->begin(), m_xGroup->end(), VclPtr<RadioButton>(&rOther));
     if (aFind == m_xGroup->end())
     {
         m_xGroup->push_back(&rOther);
 
         if (rOther.m_xGroup)
         {
-            std::vector< RadioButton* > aOthers(rOther.GetRadioButtonGroup(false));
+            std::vector< VclPtr<RadioButton> > aOthers(rOther.GetRadioButtonGroup(false));
             //make all members of the group share the same button group
-            for (std::vector<RadioButton*>::iterator aI = aOthers.begin(), aEnd = aOthers.end(); aI != aEnd; ++aI)
+            for (auto aI = aOthers.begin(), aEnd = aOthers.end(); aI != aEnd; ++aI)
             {
                 aFind = std::find(m_xGroup->begin(), m_xGroup->end(), *aI);
                 if (aFind == m_xGroup->end())
@@ -2169,8 +2170,7 @@ void RadioButton::group(RadioButton &rOther)
         }
 
         //make all members of the group share the same button group
-        for (std::vector<RadioButton*>::iterator aI = m_xGroup->begin(), aEnd = m_xGroup->end();
-            aI != aEnd; ++aI)
+        for (auto aI = m_xGroup->begin(), aEnd = m_xGroup->end(); aI != aEnd; ++aI)
         {
             RadioButton* pButton = *aI;
             pButton->m_xGroup = m_xGroup;
@@ -2182,14 +2182,14 @@ void RadioButton::group(RadioButton &rOther)
         ImplUncheckAllOther();
 }
 
-std::vector< RadioButton* > RadioButton::GetRadioButtonGroup(bool bIncludeThis) const
+std::vector< VclPtr<RadioButton> > RadioButton::GetRadioButtonGroup(bool bIncludeThis) const
 {
     if (m_xGroup)
     {
         if (bIncludeThis)
             return *m_xGroup;
-        std::vector< RadioButton* > aGroup;
-        for (std::vector<RadioButton*>::iterator aI = m_xGroup->begin(), aEnd = m_xGroup->end(); aI != aEnd; ++aI)
+        std::vector< VclPtr<RadioButton> > aGroup;
+        for (auto aI = m_xGroup->begin(), aEnd = m_xGroup->end(); aI != aEnd; ++aI)
         {
             RadioButton *pRadioButton = *aI;
             if (pRadioButton == this)
@@ -2211,7 +2211,7 @@ std::vector< RadioButton* > RadioButton::GetRadioButtonGroup(bool bIncludeThis) 
         else
             break;
     }
-    std::vector< RadioButton* > aGroup;
+    std::vector< VclPtr<RadioButton> > aGroup;
     // insert radiobuttons up to next group
     do
     {
@@ -2230,9 +2230,9 @@ void RadioButton::ImplUncheckAllOther()
 {
     mpWindowImpl->mnStyle |= WB_TABSTOP;
 
-    std::vector<RadioButton*> aGroup(GetRadioButtonGroup(false));
+    std::vector<VclPtr<RadioButton> > aGroup(GetRadioButtonGroup(false));
     // iterate over radio button group and checked buttons
-    for (std::vector<RadioButton*>::iterator aI = aGroup.begin(), aEnd = aGroup.end(); aI != aEnd; ++aI)
+    for (auto aI = aGroup.begin(), aEnd = aGroup.end(); aI != aEnd; ++aI)
     {
         RadioButton *pWindow = *aI;
         if ( pWindow->IsChecked() )
@@ -2316,7 +2316,7 @@ void RadioButton::dispose()
 {
     if (m_xGroup)
     {
-        m_xGroup->erase(std::remove(m_xGroup->begin(), m_xGroup->end(), this),
+        m_xGroup->erase(std::remove(m_xGroup->begin(), m_xGroup->end(), VclPtr<RadioButton>(this)),
                         m_xGroup->end());
         m_xGroup.reset();
     }

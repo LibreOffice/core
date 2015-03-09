@@ -57,29 +57,30 @@ protected:
                               sal_uInt16        nWhich,
                               bool              bHeader );
     virtual     ~ScHFEditPage();
+    virtual void dispose() SAL_OVERRIDE;
 
 private:
-    ScEditWindow*    m_pWndLeft;
-    ScEditWindow*    m_pWndCenter;
-    ScEditWindow*    m_pWndRight;
-    FixedText*       m_pFtDefinedHF;
-    ListBox*         m_pLbDefined;
-    FixedText*       m_pFtCustomHF;
-    PushButton*      m_pBtnText;
-    ScExtIButton*    m_pBtnFile;
-    PushButton*      m_pBtnTable;
-    PushButton*      m_pBtnPage;
-    PushButton*      m_pBtnLastPage;
-    PushButton*      m_pBtnDate;
-    PushButton*      m_pBtnTime;
+    VclPtr<ScEditWindow>    m_pWndLeft;
+    VclPtr<ScEditWindow>    m_pWndCenter;
+    VclPtr<ScEditWindow>    m_pWndRight;
+    VclPtr<FixedText>       m_pFtDefinedHF;
+    VclPtr<ListBox>         m_pLbDefined;
+    VclPtr<FixedText>       m_pFtCustomHF;
+    VclPtr<PushButton>      m_pBtnText;
+    VclPtr<ScExtIButton>    m_pBtnFile;
+    VclPtr<PushButton>      m_pBtnTable;
+    VclPtr<PushButton>      m_pBtnPage;
+    VclPtr<PushButton>      m_pBtnLastPage;
+    VclPtr<PushButton>      m_pBtnDate;
+    VclPtr<PushButton>      m_pBtnTime;
 
-    FixedText*       m_pFtConfidential;
-    FixedText*       m_pFtPage;
-    FixedText*       m_pFtOfQuestion;
-    FixedText*       m_pFtOf;
-    FixedText*       m_pFtNone;
-    FixedText*       m_pFtCreatedBy;
-    FixedText*       m_pFtCustomized;
+    VclPtr<FixedText>       m_pFtConfidential;
+    VclPtr<FixedText>       m_pFtPage;
+    VclPtr<FixedText>       m_pFtOfQuestion;
+    VclPtr<FixedText>       m_pFtOf;
+    VclPtr<FixedText>       m_pFtNone;
+    VclPtr<FixedText>       m_pFtCreatedBy;
+    VclPtr<FixedText>       m_pFtCustomized;
 
     sal_uInt16       nWhich;
     OUString         aCmdArr[6];

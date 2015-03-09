@@ -556,7 +556,7 @@ namespace svxform
     class NavigatorFrame : public SfxDockingWindow, public SfxControllerItem
     {
     private:
-        ::svxform::NavigatorTree* m_pNavigatorTree;
+        VclPtr<::svxform::NavigatorTree> m_pNavigatorTree;
 
     protected:
         virtual void Resize() SAL_OVERRIDE;

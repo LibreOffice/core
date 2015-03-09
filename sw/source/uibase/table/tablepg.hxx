@@ -37,29 +37,29 @@ struct TColumn
 
 class SwFormatTablePage : public SfxTabPage
 {
-    Edit*           m_pNameED;
+    VclPtr<Edit>           m_pNameED;
     TextFilter      m_aTextFilter;
-    FixedText*      m_pWidthFT;
+    VclPtr<FixedText>      m_pWidthFT;
     PercentField m_aWidthMF;
-    CheckBox*       m_pRelWidthCB;
+    VclPtr<CheckBox>       m_pRelWidthCB;
 
-    RadioButton*    m_pFullBtn;
-    RadioButton*    m_pLeftBtn;
-    RadioButton*    m_pFromLeftBtn;
-    RadioButton*    m_pRightBtn;
-    RadioButton*    m_pCenterBtn;
-    RadioButton*    m_pFreeBtn;
+    VclPtr<RadioButton>    m_pFullBtn;
+    VclPtr<RadioButton>    m_pLeftBtn;
+    VclPtr<RadioButton>    m_pFromLeftBtn;
+    VclPtr<RadioButton>    m_pRightBtn;
+    VclPtr<RadioButton>    m_pCenterBtn;
+    VclPtr<RadioButton>    m_pFreeBtn;
 
-    FixedText*      m_pLeftFT;
+    VclPtr<FixedText>      m_pLeftFT;
     PercentField m_aLeftMF;
-    FixedText*      m_pRightFT;
+    VclPtr<FixedText>      m_pRightFT;
     PercentField m_aRightMF;
-    FixedText*      m_pTopFT;
-    MetricField*    m_pTopMF;
-    FixedText*      m_pBottomFT;
-    MetricField*    m_pBottomMF;
+    VclPtr<FixedText>      m_pTopFT;
+    VclPtr<MetricField>    m_pTopMF;
+    VclPtr<FixedText>      m_pBottomFT;
+    VclPtr<MetricField>    m_pBottomMF;
 
-    ListBox*        m_pTextDirectionLB;
+    VclPtr<ListBox>        m_pTextDirectionLB;
 
     SwTableRep*     pTblData;
     SwTwips         nSaveWidth;
@@ -81,6 +81,8 @@ class SwFormatTablePage : public SfxTabPage
 
 public:
     SwFormatTablePage( vcl::Window* pParent, const SfxItemSet& rSet );
+    virtual ~SwFormatTablePage();
+    virtual void dispose() SAL_OVERRIDE;
 
     static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet);
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -94,16 +96,16 @@ public:
 
 class SwTableColumnPage : public SfxTabPage
 {
-    CheckBox*       m_pModifyTableCB;
-    CheckBox*       m_pProportionalCB;
-    FixedText*      m_pSpaceFT;
-    MetricField*    m_pSpaceED;
-    PushButton*     m_pUpBtn;
-    PushButton*     m_pDownBtn;
+    VclPtr<CheckBox>       m_pModifyTableCB;
+    VclPtr<CheckBox>       m_pProportionalCB;
+    VclPtr<FixedText>      m_pSpaceFT;
+    VclPtr<MetricField>    m_pSpaceED;
+    VclPtr<PushButton>     m_pUpBtn;
+    VclPtr<PushButton>     m_pDownBtn;
 
     SwTableRep*     pTblData;
     PercentField  m_aFieldArr[MET_FIELDS];
-    FixedText*      m_pTextArr[MET_FIELDS];
+    VclPtr<FixedText>      m_pTextArr[MET_FIELDS];
     SwTwips         nTableWidth;
     SwTwips         nMinWidth;
     sal_uInt16          nNoOfCols;
@@ -131,6 +133,7 @@ class SwTableColumnPage : public SfxTabPage
 public:
     SwTableColumnPage( vcl::Window* pParent, const SfxItemSet& rSet );
     virtual ~SwTableColumnPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet);
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -142,27 +145,27 @@ public:
 
 class SwTextFlowPage : public SfxTabPage
 {
-    CheckBox*       m_pPgBrkCB;
+    VclPtr<CheckBox>       m_pPgBrkCB;
 
-    RadioButton*    m_pPgBrkRB;
-    RadioButton*    m_pColBrkRB;
+    VclPtr<RadioButton>    m_pPgBrkRB;
+    VclPtr<RadioButton>    m_pColBrkRB;
 
-    RadioButton*    m_pPgBrkBeforeRB;
-    RadioButton*    m_pPgBrkAfterRB;
+    VclPtr<RadioButton>    m_pPgBrkBeforeRB;
+    VclPtr<RadioButton>    m_pPgBrkAfterRB;
 
-    CheckBox*       m_pPageCollCB;
-    ListBox*        m_pPageCollLB;
-    FixedText*      m_pPageNoFT;
-    NumericField*   m_pPageNoNF;
-    CheckBox*       m_pSplitCB;
-    TriStateBox*    m_pSplitRowCB;
-    CheckBox*       m_pKeepCB;
-    CheckBox*       m_pHeadLineCB;
-    NumericField*   m_pRepeatHeaderNF;
-    VclContainer*   m_pRepeatHeaderCombo;
-    ListBox*        m_pTextDirectionLB;
+    VclPtr<CheckBox>       m_pPageCollCB;
+    VclPtr<ListBox>        m_pPageCollLB;
+    VclPtr<FixedText>      m_pPageNoFT;
+    VclPtr<NumericField>   m_pPageNoNF;
+    VclPtr<CheckBox>       m_pSplitCB;
+    VclPtr<TriStateBox>    m_pSplitRowCB;
+    VclPtr<CheckBox>       m_pKeepCB;
+    VclPtr<CheckBox>       m_pHeadLineCB;
+    VclPtr<NumericField>   m_pRepeatHeaderNF;
+    VclPtr<VclContainer>   m_pRepeatHeaderCombo;
+    VclPtr<ListBox>        m_pTextDirectionLB;
 
-    ListBox*        m_pVertOrientLB;
+    VclPtr<ListBox>        m_pVertOrientLB;
 
     SwWrtShell*     pShell;
 
@@ -178,9 +181,9 @@ class SwTextFlowPage : public SfxTabPage
     DECL_LINK( HeadLineCBClickHdl, void* p = 0 );
 
     SwTextFlowPage( vcl::Window* pParent, const SfxItemSet& rSet );
-    virtual ~SwTextFlowPage();
-
 public:
+    virtual ~SwTextFlowPage();
+    virtual void dispose() SAL_OVERRIDE;
     static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet);
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;

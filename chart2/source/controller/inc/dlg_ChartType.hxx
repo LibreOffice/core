@@ -41,7 +41,7 @@ public:
     virtual void dispose() SAL_OVERRIDE;
 
 private:
-    ChartTypeTabPage*   m_pChartTypeTabPage;
+    VclPtr<ChartTypeTabPage>   m_pChartTypeTabPage;
 
     ::com::sun::star::uno::Reference<
                        ::com::sun::star::frame::XModel >            m_xChartModel;

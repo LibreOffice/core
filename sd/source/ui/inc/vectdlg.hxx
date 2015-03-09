@@ -42,20 +42,20 @@ class DrawDocShell;
 class SdVectorizeDlg : public ModalDialog
 {
     ::sd::DrawDocShell *    mpDocSh;
-    NumericField*       m_pNmLayers;
-    MetricField*        m_pMtReduce;
-    FixedText*          m_pFtFillHoles;
-    MetricField*        m_pMtFillHoles;
-    CheckBox*           m_pCbFillHoles;
+    VclPtr<NumericField>       m_pNmLayers;
+    VclPtr<MetricField>        m_pMtReduce;
+    VclPtr<FixedText>          m_pFtFillHoles;
+    VclPtr<MetricField>        m_pMtFillHoles;
+    VclPtr<CheckBox>           m_pCbFillHoles;
 
-    GraphCtrl*          m_pBmpWin;
+    VclPtr<GraphCtrl>          m_pBmpWin;
 
-    GraphCtrl*          m_pMtfWin;
+    VclPtr<GraphCtrl>          m_pMtfWin;
 
-    ProgressBar*        m_pPrgs;
+    VclPtr<ProgressBar>        m_pPrgs;
 
-    OKButton*           m_pBtnOK;
-    PushButton*         m_pBtnPreview;
+    VclPtr<OKButton>           m_pBtnOK;
+    VclPtr<PushButton>         m_pBtnPreview;
 
     Bitmap              aBmp;
     Bitmap              aPreviewBmp;
@@ -82,6 +82,7 @@ public:
 
                         SdVectorizeDlg( vcl::Window* pParent, const Bitmap& rBmp, ::sd::DrawDocShell* pDocShell );
                         virtual ~SdVectorizeDlg();
+    virtual void        dispose() SAL_OVERRIDE;
 
     const GDIMetaFile&  GetGDIMetaFile() const { return aMtf; }
 };

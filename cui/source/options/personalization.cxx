@@ -92,6 +92,25 @@ SelectPersonaDialog::SelectPersonaDialog( vcl::Window *pParent )
     }
 }
 
+SelectPersonaDialog::~SelectPersonaDialog()
+{
+    dispose();
+}
+
+void SelectPersonaDialog::dispose()
+{
+    m_pEdit.clear();
+    m_pSearchButton.clear();
+    m_pProgressLabel.clear();
+    for (VclPtr<PushButton> vp : m_vResultList)
+        vp.clear();
+    for (VclPtr<PushButton> vp : m_vSearchSuggestions)
+        vp.clear();
+    m_pOkButton.clear();
+    m_pCancelButton.clear();
+    ModalDialog::dispose();
+}
+
 OUString SelectPersonaDialog::GetSelectedPersona() const
 {
     if( !m_aSelectedPersona.isEmpty( ) )
@@ -290,6 +309,26 @@ SvxPersonalizationTabPage::SvxPersonalizationTabPage( vcl::Window *pParent, cons
     LoadDefaultImages();
     LoadExtensionThemes();
 }
+
+SvxPersonalizationTabPage::~SvxPersonalizationTabPage()
+{
+    dispose();
+}
+
+void SvxPersonalizationTabPage::dispose()
+{
+    m_pNoPersona.clear();
+    m_pDefaultPersona.clear();
+    m_pOwnPersona.clear();
+    m_pSelectPersona.clear();
+    for (int i=0; i<3; ++i)
+        m_vDefaultPersonaImages[i].clear();
+    m_pExtensionPersonaPreview.clear();
+    m_pPersonaList.clear();
+    m_pExtensionLabel.clear();
+    SfxTabPage::dispose();
+}
+
 
 SfxTabPage* SvxPersonalizationTabPage::Create( vcl::Window *pParent, const SfxItemSet *rSet )
 {

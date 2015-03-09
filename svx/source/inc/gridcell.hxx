@@ -214,8 +214,8 @@ private:
 
 protected:
     DbGridColumn&               m_rColumn;
-    vcl::Window*                     m_pPainter;
-    vcl::Window*                     m_pWindow;
+    VclPtr<vcl::Window>         m_pPainter;
+    VclPtr<vcl::Window>         m_pWindow;
 
 protected:
     // attribute access
@@ -946,8 +946,8 @@ class FmXCheckBoxCell : public FmXDataCell,
 {
     ::cppu::OInterfaceContainerHelper   m_aItemListeners;
     ::cppu::OInterfaceContainerHelper   m_aActionListeners;
-    OUString                     m_aActionCommand;
-    CheckBox*                           m_pBox;
+    OUString                            m_aActionCommand;
+    VclPtr<CheckBox>                    m_pBox;
 
 protected:
     virtual ~FmXCheckBoxCell();
@@ -991,7 +991,7 @@ class FmXListBoxCell    :public FmXTextCell
 {
     ::cppu::OInterfaceContainerHelper   m_aItemListeners,
                                         m_aActionListeners;
-    ListBox*                            m_pBox;
+    VclPtr<ListBox>                     m_pBox;
 
 protected:
     virtual ~FmXListBoxCell();
@@ -1046,7 +1046,7 @@ class FmXComboBoxCell   :public FmXTextCell
 private:
     ::cppu::OInterfaceContainerHelper   m_aItemListeners,
                                         m_aActionListeners;
-    ComboBox*                           m_pComboBox;
+    VclPtr<ComboBox>                    m_pComboBox;
 
 protected:
     virtual ~FmXComboBoxCell();

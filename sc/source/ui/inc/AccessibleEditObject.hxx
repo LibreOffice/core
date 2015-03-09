@@ -188,7 +188,7 @@ public:
 private:
     accessibility::AccessibleTextHelper* mpTextHelper;
     EditView*      mpEditView;
-    vcl::Window*        mpWindow;
+    VclPtr<vcl::Window>        mpWindow;
     EditObjectType meObjectType;
     bool           mbHasFocus;
 

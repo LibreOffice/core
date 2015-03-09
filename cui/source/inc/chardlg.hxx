@@ -47,7 +47,7 @@ class FontList;
 class SvxCharBasePage : public SfxTabPage
 {
 protected:
-    SvxFontPrevWindow*  m_pPreviewWin;
+    VclPtr<SvxFontPrevWindow>  m_pPreviewWin;
 
     bool                m_bPreviewBackgroundToCharacter;
 
@@ -61,6 +61,9 @@ protected:
     inline SvxFont&     GetPreviewCTLFont();
 
 public:
+    virtual ~SvxCharBasePage();
+    virtual void dispose() SAL_OVERRIDE;
+
     using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;
 
@@ -77,38 +80,38 @@ class SvxCharNamePage : public SvxCharBasePage
 
 private:
     static const sal_uInt16 pNameRanges[];
-    VclContainer*       m_pWestFrame;
-    FixedText*          m_pWestFontNameFT;
-    FontNameBox*        m_pWestFontNameLB;
-    FixedText*          m_pWestFontStyleFT;
-    FontStyleBox*       m_pWestFontStyleLB;
-    FixedText*          m_pWestFontSizeFT;
-    FontSizeBox*        m_pWestFontSizeLB;
-    FixedText*          m_pWestFontLanguageFT;
-    SvxLanguageComboBox* m_pWestFontLanguageLB;
-    FixedText*          m_pWestFontTypeFT;
+    VclPtr<VclContainer>       m_pWestFrame;
+    VclPtr<FixedText>          m_pWestFontNameFT;
+    VclPtr<FontNameBox>        m_pWestFontNameLB;
+    VclPtr<FixedText>          m_pWestFontStyleFT;
+    VclPtr<FontStyleBox>       m_pWestFontStyleLB;
+    VclPtr<FixedText>          m_pWestFontSizeFT;
+    VclPtr<FontSizeBox>        m_pWestFontSizeLB;
+    VclPtr<FixedText>          m_pWestFontLanguageFT;
+    VclPtr<SvxLanguageComboBox> m_pWestFontLanguageLB;
+    VclPtr<FixedText>          m_pWestFontTypeFT;
 
-    VclContainer*       m_pEastFrame;
-    FixedText*          m_pEastFontNameFT;
-    FontNameBox*        m_pEastFontNameLB;
-    FixedText*          m_pEastFontStyleFT;
-    FontStyleBox*       m_pEastFontStyleLB;
-    FixedText*          m_pEastFontSizeFT;
-    FontSizeBox*        m_pEastFontSizeLB;
-    FixedText*          m_pEastFontLanguageFT;
-    SvxLanguageBox*     m_pEastFontLanguageLB;
-    FixedText*          m_pEastFontTypeFT;
+    VclPtr<VclContainer>       m_pEastFrame;
+    VclPtr<FixedText>          m_pEastFontNameFT;
+    VclPtr<FontNameBox>        m_pEastFontNameLB;
+    VclPtr<FixedText>          m_pEastFontStyleFT;
+    VclPtr<FontStyleBox>       m_pEastFontStyleLB;
+    VclPtr<FixedText>          m_pEastFontSizeFT;
+    VclPtr<FontSizeBox>        m_pEastFontSizeLB;
+    VclPtr<FixedText>          m_pEastFontLanguageFT;
+    VclPtr<SvxLanguageBox>     m_pEastFontLanguageLB;
+    VclPtr<FixedText>          m_pEastFontTypeFT;
 
-    VclContainer*       m_pCTLFrame;
-    FixedText*          m_pCTLFontNameFT;
-    FontNameBox*        m_pCTLFontNameLB;
-    FixedText*          m_pCTLFontStyleFT;
-    FontStyleBox*       m_pCTLFontStyleLB;
-    FixedText*          m_pCTLFontSizeFT;
-    FontSizeBox*        m_pCTLFontSizeLB;
-    FixedText*          m_pCTLFontLanguageFT;
-    SvxLanguageBox*     m_pCTLFontLanguageLB;
-    FixedText*          m_pCTLFontTypeFT;
+    VclPtr<VclContainer>       m_pCTLFrame;
+    VclPtr<FixedText>          m_pCTLFontNameFT;
+    VclPtr<FontNameBox>        m_pCTLFontNameLB;
+    VclPtr<FixedText>          m_pCTLFontStyleFT;
+    VclPtr<FontStyleBox>       m_pCTLFontStyleLB;
+    VclPtr<FixedText>          m_pCTLFontSizeFT;
+    VclPtr<FontSizeBox>        m_pCTLFontSizeLB;
+    VclPtr<FixedText>          m_pCTLFontLanguageFT;
+    VclPtr<SvxLanguageBox>     m_pCTLFontLanguageLB;
+    VclPtr<FixedText>          m_pCTLFontTypeFT;
 
     SvxCharNamePage_Impl*   m_pImpl;
 
@@ -175,37 +178,37 @@ class SvxCharEffectsPage : public SvxCharBasePage
 
 private:
     static const sal_uInt16 pEffectsRanges[];
-    FixedText*          m_pFontColorFT;
-    ColorListBox*       m_pFontColorLB;
+    VclPtr<FixedText>          m_pFontColorFT;
+    VclPtr<ColorListBox>       m_pFontColorLB;
 
-    FixedText*          m_pEffectsFT;
-    ListBox*            m_pEffectsLB;
+    VclPtr<FixedText>          m_pEffectsFT;
+    VclPtr<ListBox>            m_pEffectsLB;
 
-    FixedText*          m_pReliefFT;
-    ListBox*            m_pReliefLB;
+    VclPtr<FixedText>          m_pReliefFT;
+    VclPtr<ListBox>            m_pReliefLB;
 
-    TriStateBox*        m_pOutlineBtn;
-    TriStateBox*        m_pShadowBtn;
-    TriStateBox*        m_pBlinkingBtn;
-    TriStateBox*        m_pHiddenBtn;
+    VclPtr<TriStateBox>        m_pOutlineBtn;
+    VclPtr<TriStateBox>        m_pShadowBtn;
+    VclPtr<TriStateBox>        m_pBlinkingBtn;
+    VclPtr<TriStateBox>        m_pHiddenBtn;
 
-    ListBox*            m_pOverlineLB;
-    FixedText*          m_pOverlineColorFT;
-    ColorListBox*       m_pOverlineColorLB;
+    VclPtr<ListBox>            m_pOverlineLB;
+    VclPtr<FixedText>          m_pOverlineColorFT;
+    VclPtr<ColorListBox>       m_pOverlineColorLB;
 
-    ListBox*            m_pStrikeoutLB;
+    VclPtr<ListBox>            m_pStrikeoutLB;
 
-    ListBox*            m_pUnderlineLB;
-    FixedText*          m_pUnderlineColorFT;
-    ColorListBox*       m_pUnderlineColorLB;
+    VclPtr<ListBox>            m_pUnderlineLB;
+    VclPtr<FixedText>          m_pUnderlineColorFT;
+    VclPtr<ColorListBox>       m_pUnderlineColorLB;
 
-    CheckBox*           m_pIndividualWordsBtn;
+    VclPtr<CheckBox>           m_pIndividualWordsBtn;
 
-    FixedText*          m_pEmphasisFT;
-    ListBox*            m_pEmphasisLB;
+    VclPtr<FixedText>          m_pEmphasisFT;
+    VclPtr<ListBox>            m_pEmphasisLB;
 
-    FixedText*          m_pPositionFT;
-    ListBox*            m_pPositionLB;
+    VclPtr<FixedText>          m_pPositionFT;
+    VclPtr<ListBox>            m_pPositionLB;
 
     sal_uInt16          m_nHtmlMode;
 
@@ -226,8 +229,10 @@ private:
     DECL_LINK(          ColorBoxSelectHdl_Impl, ColorListBox* );
 
 public:
-    using SfxTabPage::DeactivatePage;
+    virtual ~SvxCharEffectsPage();
+    virtual void dispose() SAL_OVERRIDE;
 
+    using SfxTabPage::DeactivatePage;
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
 
 public:
@@ -252,30 +257,30 @@ class SvxCharPositionPage : public SvxCharBasePage
     static const sal_uInt16 pPositionRanges[];
 
 private:
-    RadioButton*        m_pHighPosBtn;
-    RadioButton*        m_pNormalPosBtn;
-    RadioButton*        m_pLowPosBtn;
-    FixedText*          m_pHighLowFT;
-    MetricField*        m_pHighLowMF;
-    CheckBox*           m_pHighLowRB;
-    FixedText*          m_pFontSizeFT;
-    MetricField*        m_pFontSizeMF;
+    VclPtr<RadioButton>        m_pHighPosBtn;
+    VclPtr<RadioButton>        m_pNormalPosBtn;
+    VclPtr<RadioButton>        m_pLowPosBtn;
+    VclPtr<FixedText>          m_pHighLowFT;
+    VclPtr<MetricField>        m_pHighLowMF;
+    VclPtr<CheckBox>           m_pHighLowRB;
+    VclPtr<FixedText>          m_pFontSizeFT;
+    VclPtr<MetricField>        m_pFontSizeMF;
 
-    VclContainer*       m_pRotationContainer;
+    VclPtr<VclContainer>       m_pRotationContainer;
 
-    FixedText*          m_pScalingFT;
-    FixedText*          m_pScalingAndRotationFT;
-    RadioButton*        m_p0degRB;
-    RadioButton*        m_p90degRB;
-    RadioButton*        m_p270degRB;
-    CheckBox*           m_pFitToLineCB;
+    VclPtr<FixedText>          m_pScalingFT;
+    VclPtr<FixedText>          m_pScalingAndRotationFT;
+    VclPtr<RadioButton>        m_p0degRB;
+    VclPtr<RadioButton>        m_p90degRB;
+    VclPtr<RadioButton>        m_p270degRB;
+    VclPtr<CheckBox>           m_pFitToLineCB;
 
-    MetricField*        m_pScaleWidthMF;
+    VclPtr<MetricField>        m_pScaleWidthMF;
 
-    ListBox*            m_pKerningLB;
-    FixedText*          m_pKerningFT;
-    MetricField*        m_pKerningMF;
-    CheckBox*           m_pPairKerningBtn;
+    VclPtr<ListBox>            m_pKerningLB;
+    VclPtr<FixedText>          m_pKerningFT;
+    VclPtr<MetricField>        m_pKerningMF;
+    VclPtr<CheckBox>           m_pPairKerningBtn;
 
     short               m_nSuperEsc;
     short               m_nSubEsc;
@@ -304,6 +309,9 @@ private:
     DECL_LINK(ScaleWidthModifyHdl_Impl, void *);
 
 public:
+    virtual ~SvxCharPositionPage();
+    virtual void dispose() SAL_OVERRIDE;
+
     using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;
 
@@ -328,10 +336,10 @@ class SvxCharTwoLinesPage : public SvxCharBasePage
 {
 private:
     static const sal_uInt16 pTwoLinesRanges[];
-    CheckBox*           m_pTwoLinesBtn;
-    VclContainer*       m_pEnclosingFrame;
-    ListBox*            m_pStartBracketLB;
-    ListBox*            m_pEndBracketLB;
+    VclPtr<CheckBox>           m_pTwoLinesBtn;
+    VclPtr<VclContainer>       m_pEnclosingFrame;
+    VclPtr<ListBox>            m_pStartBracketLB;
+    VclPtr<ListBox>            m_pEndBracketLB;
 
     sal_uInt16              m_nStartBracketPosition;
     sal_uInt16              m_nEndBracketPosition;
@@ -347,13 +355,15 @@ private:
     DECL_LINK(          CharacterMapHdl_Impl, ListBox* );
 
 public:
+    virtual ~SvxCharTwoLinesPage();
+    virtual void dispose() SAL_OVERRIDE;
+
     using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;
 
     virtual void        ActivatePage( const SfxItemSet& rSet ) SAL_OVERRIDE;
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
 
-public:
     static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rSet );
     static const sal_uInt16*  GetRanges() { return pTwoLinesRanges; }
 

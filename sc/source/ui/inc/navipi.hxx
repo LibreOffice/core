@@ -331,7 +331,7 @@ public:
     virtual void    Resizing( Size& rSize ) SAL_OVERRIDE;
 
 private:
-    ScNavigatorDlg* pNavigator;
+    VclPtr<ScNavigatorDlg> pNavigator;
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_NAVIPI_HXX

@@ -28,12 +28,13 @@ class ScHFPage : public SvxHFPage
 {
 public:
     virtual         ~ScHFPage();
+    virtual void    dispose() SAL_OVERRIDE;
 
     virtual void    Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual bool    FillItemSet( SfxItemSet* rOutSet ) SAL_OVERRIDE;
 
     void            SetPageStyle( const OUString& rName )    { aStrPageStyle = rName; }
-    void            SetStyleDlg ( const ScStyleDlg* pDlg ) { pStyleDlg = pDlg; }
+    void            SetStyleDlg ( ScStyleDlg* pDlg ) { pStyleDlg = pDlg; }
 
 protected:
                     ScHFPage( vcl::Window* pParent,
@@ -46,11 +47,11 @@ protected:
     virtual int     DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
 
 private:
-    PushButton*         m_pBtnEdit;
-    SfxItemSet          aDataSet;
-    OUString            aStrPageStyle;
-    sal_uInt16          nPageUsage;
-    const ScStyleDlg*   pStyleDlg;
+    VclPtr<PushButton>   m_pBtnEdit;
+    SfxItemSet           aDataSet;
+    OUString             aStrPageStyle;
+    sal_uInt16           nPageUsage;
+    VclPtr<ScStyleDlg>   pStyleDlg;
 
     DECL_LINK(BtnHdl, void *);
     DECL_LINK( HFEditHdl, void* );

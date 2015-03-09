@@ -30,27 +30,27 @@ class SwWrtShell;
 
 class SwEndNoteOptionPage : public SfxTabPage
 {
-    SwNumberingTypeListBox* m_pNumViewBox;
-    FixedText* m_pOffsetLbl;
-    NumericField* m_pOffsetFld;
-    ListBox* m_pNumCountBox;
-    Edit* m_pPrefixED;
-    Edit* m_pSuffixED;
-    FixedText* m_pPosFT;
-    RadioButton* m_pPosPageBox;
-    RadioButton* m_pPosChapterBox;
+    VclPtr<SwNumberingTypeListBox> m_pNumViewBox;
+    VclPtr<FixedText> m_pOffsetLbl;
+    VclPtr<NumericField> m_pOffsetFld;
+    VclPtr<ListBox> m_pNumCountBox;
+    VclPtr<Edit> m_pPrefixED;
+    VclPtr<Edit> m_pSuffixED;
+    VclPtr<FixedText> m_pPosFT;
+    VclPtr<RadioButton> m_pPosPageBox;
+    VclPtr<RadioButton> m_pPosChapterBox;
 
-    VclContainer *m_pStylesContainer;
+    VclPtr<VclContainer> m_pStylesContainer;
 
-    ListBox* m_pParaTemplBox;
-    FixedText* m_pPageTemplLbl;
-    ListBox* m_pPageTemplBox;
+    VclPtr<ListBox> m_pParaTemplBox;
+    VclPtr<FixedText> m_pPageTemplLbl;
+    VclPtr<ListBox> m_pPageTemplBox;
 
-    ListBox* m_pFtnCharAnchorTemplBox;
-    ListBox* m_pFtnCharTextTemplBox;
+    VclPtr<ListBox> m_pFtnCharAnchorTemplBox;
+    VclPtr<ListBox> m_pFtnCharTextTemplBox;
 
-    Edit* m_pContEdit;
-    Edit* m_pContFromEdit;
+    VclPtr<Edit> m_pContEdit;
+    VclPtr<Edit> m_pContFromEdit;
 
     OUString aNumDoc;
     OUString aNumPage;
@@ -70,6 +70,7 @@ public:
     SwEndNoteOptionPage( vcl::Window *pParent, bool bEndNote,
                          const SfxItemSet &rSet );
     virtual ~SwEndNoteOptionPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     static SfxTabPage *Create(vcl::Window *pParent, const SfxItemSet *rSet);
     virtual bool FillItemSet(SfxItemSet *rSet) SAL_OVERRIDE;

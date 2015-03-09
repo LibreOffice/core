@@ -209,6 +209,22 @@ SvxHFPage::~SvxHFPage()
 void SvxHFPage::dispose()
 {
     delete pBBSet;
+    m_pPageLbl.clear();
+    m_pTurnOnBox.clear();
+    m_pCntSharedBox.clear();
+    m_pCntSharedFirstBox.clear();
+    m_pLMLbl.clear();
+    m_pLMEdit.clear();
+    m_pRMLbl.clear();
+    m_pRMEdit.clear();
+    m_pDistFT.clear();
+    m_pDistEdit.clear();
+    m_pDynSpacingCB.clear();
+    m_pHeightFT.clear();
+    m_pHeightEdit.clear();
+    m_pHeightDynBtn.clear();
+    m_pBspWin.clear();
+    m_pBackgroundBtn.clear();
     SfxTabPage::dispose();
 }
 

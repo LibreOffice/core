@@ -78,20 +78,19 @@ public:
 
 class SwEnvPage : public SfxTabPage
 {
-    VclMultiLineEdit* m_pAddrEdit;
-    ListBox*      m_pDatabaseLB;
-    ListBox*      m_pTableLB;
-    ListBox*      m_pDBFieldLB;
-    PushButton*   m_pInsertBT;
-    CheckBox*     m_pSenderBox;
-    VclMultiLineEdit* m_pSenderEdit;
-    SwEnvPreview* m_pPreview;
+    VclPtr<VclMultiLineEdit> m_pAddrEdit;
+    VclPtr<ListBox>      m_pDatabaseLB;
+    VclPtr<ListBox>      m_pTableLB;
+    VclPtr<ListBox>      m_pDBFieldLB;
+    VclPtr<PushButton>   m_pInsertBT;
+    VclPtr<CheckBox>     m_pSenderBox;
+    VclPtr<VclMultiLineEdit> m_pSenderEdit;
+    VclPtr<SwEnvPreview> m_pPreview;
 
     SwWrtShell*   pSh;
     OUString      sActDBName;
 
      SwEnvPage(vcl::Window* pParent, const SfxItemSet& rSet);
-    virtual ~SwEnvPage();
 
     DECL_LINK( DatabaseHdl, ListBox * );
     DECL_LINK(FieldHdl, void *);
@@ -105,6 +104,8 @@ class SwEnvPage : public SfxTabPage
     using SfxTabPage::DeactivatePage;
 
 public:
+    virtual ~SwEnvPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     static SfxTabPage* Create(vcl::Window* pParent, const SfxItemSet* rSet);
 

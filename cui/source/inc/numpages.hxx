@@ -90,7 +90,7 @@ class SvxSingleNumPickTabPage : public SfxTabPage
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
 
-    SvxNumValueSet*         m_pExamplesVS;
+    VclPtr<SvxNumValueSet>         m_pExamplesVS;
     SvxNumSettingsArr_Impl  aNumSettingsArr;
     SvxNumRule*             pActNum;
     SvxNumRule*             pSaveNum;
@@ -130,7 +130,7 @@ class SvxBulletPickTabPage : public SfxTabPage
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
 
-    SvxNumValueSet*     m_pExamplesVS;
+    VclPtr<SvxNumValueSet>     m_pExamplesVS;
     SvxNumRule*         pActNum;
     SvxNumRule*         pSaveNum;
     sal_uInt16              nActNumLvl;
@@ -168,7 +168,7 @@ class SvxNumPickTabPage : public SfxTabPage
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
 
-    SvxNumValueSet*     m_pExamplesVS;
+    VclPtr<SvxNumValueSet>     m_pExamplesVS;
     OUString            sNumCharFmtName;
     OUString            sBulletCharFmtName;
 
@@ -213,8 +213,8 @@ class SvxBitmapPickTabPage : public SfxTabPage
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
 
-    FixedText*          m_pErrorText;
-    SvxBmpNumValueSet*  m_pExamplesVS;
+    VclPtr<FixedText>          m_pErrorText;
+    VclPtr<SvxBmpNumValueSet>  m_pExamplesVS;
 
     std::vector<OUString> aGrfNames;
     OUString            sNumCharFmtName;
@@ -255,44 +255,44 @@ class SvxNumOptionsTabPage : public SfxTabPage
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
 
-    ListBox*        m_pLevelLB;
+    VclPtr<ListBox>        m_pLevelLB;
 
-    ListBox*        m_pFmtLB;
+    VclPtr<ListBox>        m_pFmtLB;
 
-    FixedText*      m_pSeparatorFT;
-    FixedText*      m_pPrefixFT;
-    Edit*           m_pPrefixED;
-    FixedText*      m_pSuffixFT;
-    Edit*           m_pSuffixED;
-    FixedText*      m_pCharFmtFT;
-    ListBox*        m_pCharFmtLB;
-    FixedText*      m_pBulColorFT;
-    ColorListBox*   m_pBulColLB;
-    FixedText*      m_pBulRelSizeFT;
-    MetricField*    m_pBulRelSizeMF;
-    FixedText*      m_pAllLevelFT;
-    NumericField*   m_pAllLevelNF;
-    FixedText*      m_pStartFT;
-    NumericField*   m_pStartED;
-    FixedText*      m_pBulletFT;
-    PushButton*     m_pBulletPB;
-    FixedText*      m_pAlignFT;
-    ListBox*        m_pAlignLB;
-    FixedText*      m_pBitmapFT;
-    MenuButton*     m_pBitmapMB;
+    VclPtr<FixedText>      m_pSeparatorFT;
+    VclPtr<FixedText>      m_pPrefixFT;
+    VclPtr<Edit>           m_pPrefixED;
+    VclPtr<FixedText>      m_pSuffixFT;
+    VclPtr<Edit>           m_pSuffixED;
+    VclPtr<FixedText>      m_pCharFmtFT;
+    VclPtr<ListBox>        m_pCharFmtLB;
+    VclPtr<FixedText>      m_pBulColorFT;
+    VclPtr<ColorListBox>   m_pBulColLB;
+    VclPtr<FixedText>      m_pBulRelSizeFT;
+    VclPtr<MetricField>    m_pBulRelSizeMF;
+    VclPtr<FixedText>      m_pAllLevelFT;
+    VclPtr<NumericField>   m_pAllLevelNF;
+    VclPtr<FixedText>      m_pStartFT;
+    VclPtr<NumericField>   m_pStartED;
+    VclPtr<FixedText>      m_pBulletFT;
+    VclPtr<PushButton>     m_pBulletPB;
+    VclPtr<FixedText>      m_pAlignFT;
+    VclPtr<ListBox>        m_pAlignLB;
+    VclPtr<FixedText>      m_pBitmapFT;
+    VclPtr<MenuButton>     m_pBitmapMB;
     sal_uInt16      m_nGalleryId;
-    FixedText*      m_pWidthFT;
-    MetricField*    m_pWidthMF;
-    FixedText*      m_pHeightFT;
-    MetricField*    m_pHeightMF;
-    CheckBox*       m_pRatioCB;
-    FixedText*      m_pOrientFT;
-    ListBox*        m_pOrientLB;
+    VclPtr<FixedText>      m_pWidthFT;
+    VclPtr<MetricField>    m_pWidthMF;
+    VclPtr<FixedText>      m_pHeightFT;
+    VclPtr<MetricField>    m_pHeightMF;
+    VclPtr<CheckBox>       m_pRatioCB;
+    VclPtr<FixedText>      m_pOrientFT;
+    VclPtr<ListBox>        m_pOrientLB;
 
-    VclContainer*   m_pAllLevelsFrame;
-    CheckBox*       m_pSameLevelCB;
+    VclPtr<VclContainer>   m_pAllLevelsFrame;
+    VclPtr<CheckBox>       m_pSameLevelCB;
 
-    SvxNumberingPreview* m_pPreviewWIN;
+    VclPtr<SvxNumberingPreview> m_pPreviewWIN;
 
     OUString        m_sNumCharFmtName;
     OUString        m_sBulletCharFmtName;
@@ -390,36 +390,36 @@ class SvxNumPositionTabPage : public SfxTabPage
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
 
-    ListBox*            m_pLevelLB;
+    VclPtr<ListBox>            m_pLevelLB;
 
     // former set of controls shown for numbering rules containing list level
     // attributes in SvxNumberFormat::SvxNumPositionAndSpaceMode == LABEL_WIDTH_AND_POSITION
-    FixedText*          m_pDistBorderFT;
-    MetricField*        m_pDistBorderMF;
-    CheckBox*           m_pRelativeCB;
-    FixedText*          m_pIndentFT;
-    MetricField*        m_pIndentMF;
-    FixedText*          m_pDistNumFT;
-    MetricField*        m_pDistNumMF;
-    FixedText*          m_pAlignFT;
-    ListBox*            m_pAlignLB;
+    VclPtr<FixedText>          m_pDistBorderFT;
+    VclPtr<MetricField>        m_pDistBorderMF;
+    VclPtr<CheckBox>           m_pRelativeCB;
+    VclPtr<FixedText>          m_pIndentFT;
+    VclPtr<MetricField>        m_pIndentMF;
+    VclPtr<FixedText>          m_pDistNumFT;
+    VclPtr<MetricField>        m_pDistNumMF;
+    VclPtr<FixedText>          m_pAlignFT;
+    VclPtr<ListBox>            m_pAlignLB;
 
     // new set of controls shown for numbering rules containing list level
     // attributes in SvxNumberFormat::SvxNumPositionAndSpaceMode == LABEL_ALIGNMENT
-    FixedText*          m_pLabelFollowedByFT;
-    ListBox*            m_pLabelFollowedByLB;
-    FixedText*          m_pListtabFT;
-    MetricField*        m_pListtabMF;
-    FixedText*          m_pAlign2FT;
-    ListBox*            m_pAlign2LB;
-    FixedText*          m_pAlignedAtFT;
-    MetricField*        m_pAlignedAtMF;
-    FixedText*          m_pIndentAtFT;
-    MetricField*        m_pIndentAtMF;
+    VclPtr<FixedText>          m_pLabelFollowedByFT;
+    VclPtr<ListBox>            m_pLabelFollowedByLB;
+    VclPtr<FixedText>          m_pListtabFT;
+    VclPtr<MetricField>        m_pListtabMF;
+    VclPtr<FixedText>          m_pAlign2FT;
+    VclPtr<ListBox>            m_pAlign2LB;
+    VclPtr<FixedText>          m_pAlignedAtFT;
+    VclPtr<MetricField>        m_pAlignedAtMF;
+    VclPtr<FixedText>          m_pIndentAtFT;
+    VclPtr<MetricField>        m_pIndentAtMF;
 
-    PushButton*         m_pStandardPB;
+    VclPtr<PushButton>         m_pStandardPB;
 
-    SvxNumberingPreview* m_pPreviewWIN;
+    VclPtr<SvxNumberingPreview> m_pPreviewWIN;
 
     SvxNumRule*         pActNum;
     SvxNumRule*         pSaveNum;

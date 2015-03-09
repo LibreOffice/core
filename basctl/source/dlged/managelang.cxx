@@ -81,6 +81,10 @@ ManageLanguageDialog::~ManageLanguageDialog()
 void ManageLanguageDialog::dispose()
 {
     ClearLanguageBox();
+    m_pLanguageLB.clear();
+    m_pAddPB.clear();
+    m_pDeletePB.clear();
+    m_pMakeDefPB.clear();
     ModalDialog::dispose();
 }
 
@@ -251,6 +255,22 @@ SetDefaultLanguageDialog::SetDefaultLanguageDialog(vcl::Window* pParent, boost::
     }
 
     FillLanguageBox();
+}
+
+SetDefaultLanguageDialog::~SetDefaultLanguageDialog()
+{
+    dispose();
+}
+
+void SetDefaultLanguageDialog::dispose()
+{
+    m_pLanguageFT.clear();
+    m_pLanguageLB.clear();
+    m_pCheckLangFT.clear();
+    m_pCheckLangLB.clear();
+    m_pDefinedFT.clear();
+    m_pAddedFT.clear();
+    ModalDialog::dispose();
 }
 
 void SetDefaultLanguageDialog::FillLanguageBox()

@@ -85,6 +85,36 @@ SfxCommonPrintOptionsTabPage::SfxCommonPrintOptionsTabPage( vcl::Window* pParent
     m_pReduceBitmapsResolutionRB->SetToggleHdl( LINK( this, SfxCommonPrintOptionsTabPage, ToggleReduceBitmapsResolutionRBHdl ) );
 }
 
+SfxCommonPrintOptionsTabPage::~SfxCommonPrintOptionsTabPage()
+{
+    dispose();
+}
+
+void SfxCommonPrintOptionsTabPage::dispose()
+{
+    m_pPrinterOutputRB.clear();
+    m_pPrintFileOutputRB.clear();
+    m_pReduceTransparencyCB.clear();
+    m_pReduceTransparencyAutoRB.clear();
+    m_pReduceTransparencyNoneRB.clear();
+    m_pReduceGradientsCB.clear();
+    m_pReduceGradientsStripesRB.clear();
+    m_pReduceGradientsColorRB.clear();
+    m_pReduceGradientsStepCountNF.clear();
+    m_pReduceBitmapsCB.clear();
+    m_pReduceBitmapsOptimalRB.clear();
+    m_pReduceBitmapsNormalRB.clear();
+    m_pReduceBitmapsResolutionRB.clear();
+    m_pReduceBitmapsResolutionLB.clear();
+    m_pReduceBitmapsTransparencyCB.clear();
+    m_pConvertToGreyscalesCB.clear();
+    m_pPDFCB.clear();
+    m_pPaperSizeCB.clear();
+    m_pPaperOrientationCB.clear();
+    m_pTransparencyCB.clear();
+    SfxTabPage::dispose();
+}
+
 SfxTabPage* SfxCommonPrintOptionsTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
 {
     return( new SfxCommonPrintOptionsTabPage( pParent, *rAttrSet ) );

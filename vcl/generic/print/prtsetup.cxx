@@ -98,8 +98,11 @@ RTSDialog::~RTSDialog()
 
 void RTSDialog::dispose()
 {
-    delete m_pPaperPage;
-    delete m_pDevicePage;
+    m_pTabControl.clear();
+    m_pOKButton.clear();
+    m_pCancelButton.clear();
+    m_pPaperPage.clear();
+    m_pDevicePage.clear();
     TabDialog::dispose();
 }
 
@@ -189,6 +192,24 @@ RTSPaperPage::RTSPaperPage(RTSDialog* pParent)
     m_pSlotBox->SetEntryData( nPos, NULL );
 
     update();
+}
+
+RTSPaperPage::~RTSPaperPage()
+{
+    dispose();
+}
+
+void RTSPaperPage::dispose()
+{
+    m_pParent.clear();
+    m_pPaperText.clear();
+    m_pPaperBox.clear();
+    m_pOrientBox.clear();
+    m_pDuplexText.clear();
+    m_pDuplexBox.clear();
+    m_pSlotText.clear();
+    m_pSlotBox.clear();
+    TabPage::dispose();
 }
 
 void RTSPaperPage::update()
@@ -353,6 +374,23 @@ RTSDevicePage::RTSDevicePage( RTSDialog* pParent )
             }
         }
     }
+}
+
+RTSDevicePage::~RTSDevicePage()
+{
+    dispose();
+}
+
+void RTSDevicePage::dispose()
+{
+    m_pParent.clear();
+    m_pPPDKeyBox.clear();
+    m_pPPDValueBox.clear();
+    m_pCustomEdit.clear();
+    m_pLevelBox.clear();
+    m_pSpaceBox.clear();
+    m_pDepthBox.clear();
+    TabPage::dispose();
 }
 
 sal_uLong RTSDevicePage::getDepth()

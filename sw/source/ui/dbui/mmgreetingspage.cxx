@@ -292,6 +292,18 @@ SwMailMergeGreetingsPage::SwMailMergeGreetingsPage(SwMailMergeWizard* _pParent)
 
 SwMailMergeGreetingsPage::~SwMailMergeGreetingsPage()
 {
+    dispose();
+}
+
+void SwMailMergeGreetingsPage::dispose()
+{
+    m_pPreviewFI.clear();
+    m_pPreviewWIN.clear();
+    m_pAssignPB.clear();
+    m_pDocumentIndexFI.clear();
+    m_pPrevSetIB.clear();
+    m_pNextSetIB.clear();
+    svt::OWizardPage::dispose();
 }
 
 void SwMailMergeGreetingsPage::ActivatePage()
@@ -472,6 +484,15 @@ SwMailBodyDialog::SwMailBodyDialog(vcl::Window* pParent, SwMailMergeWizard* _pWi
 
 SwMailBodyDialog::~SwMailBodyDialog()
 {
+    dispose();
+}
+
+void SwMailBodyDialog::dispose()
+{
+    m_pBodyFT.clear();
+    m_pBodyMLE.clear();
+    m_pOK.clear();
+    SfxModalDialog::dispose();
 }
 
 IMPL_LINK(SwMailBodyDialog, ContainsHdl_Impl, CheckBox*, pBox)

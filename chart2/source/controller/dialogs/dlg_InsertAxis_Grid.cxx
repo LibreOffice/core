@@ -81,6 +81,23 @@ SchAxisDlg::SchAxisDlg(vcl::Window* pWindow,
     m_pCbSecondaryZ->Enable( rInput.aPossibilityList[5] );
 }
 
+SchAxisDlg::~SchAxisDlg()
+{
+    dispose();
+}
+
+void SchAxisDlg::dispose()
+{
+    m_pCbPrimaryX.clear();
+    m_pCbPrimaryY.clear();
+    m_pCbPrimaryZ.clear();
+    m_pCbSecondaryX.clear();
+    m_pCbSecondaryY.clear();
+    m_pCbSecondaryZ.clear();
+    ModalDialog::dispose();
+}
+
+
 void SchAxisDlg::getResult( InsertAxisOrGridDialogData& rOutput )
 {
     rOutput.aExistenceList[0]=m_pCbPrimaryX->IsChecked();

@@ -52,6 +52,16 @@ IconChoicePage::IconChoicePage( vcl::Window *pParent, const OString& rID,
 }
 
 
+IconChoicePage::~IconChoicePage()
+{
+    dispose();
+}
+
+void IconChoicePage::dispose()
+{
+    pDialog.clear();
+    TabPage::dispose();
+}
 
 /**********************************************************************
 |
@@ -246,7 +256,6 @@ void IconChoiceDialog::dispose()
             SvxIconChoiceCtrlEntry* pEntry = m_pIconCtrl->GetEntry ( i );
             delete static_cast<sal_uInt16*>(pEntry->GetUserData());
         }
-        m_pIconCtrl = NULL;
     }
 
     delete pRanges;
@@ -254,6 +263,13 @@ void IconChoiceDialog::dispose()
     delete pOutSet;
     pOutSet = NULL;
 
+    m_pIconCtrl.clear();
+    m_pOKBtn.clear();
+    m_pApplyBtn.clear();
+    m_pCancelBtn.clear();
+    m_pHelpBtn.clear();
+    m_pResetBtn.clear();
+    m_pTabContainer.clear();
     ModalDialog::dispose();
 }
 
@@ -540,7 +556,7 @@ bool IconChoiceDialog::DeActivatePageImpl ()
             for ( size_t i = 0, nCount = maPageList.size(); i < nCount; ++i )
             {
                 IconChoicePageData* pObj = maPageList[ i ];
-                if ( pObj->pPage != pPage )
+                if ( pObj->pPage.get() != pPage )
                     pObj->bRefresh = true;
                 else
                     pObj->bRefresh = false;

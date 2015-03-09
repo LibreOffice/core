@@ -83,17 +83,17 @@ public:
 
 class SwOutlineSettingsTabPage : public SfxTabPage
 {
-    ListBox*        m_pLevelLB;
+    VclPtr<ListBox>        m_pLevelLB;
 
-    ListBox*        m_pCollBox;
-    SwNumberingTypeListBox* m_pNumberBox;
-    ListBox*        m_pCharFmtLB;
-    FixedText*      m_pAllLevelFT;
-    NumericField*   m_pAllLevelNF;
-    Edit*           m_pPrefixED;
-    Edit*           m_pSuffixED;
-    NumericField*   m_pStartEdit;
-    NumberingPreview* m_pPreviewWIN;
+    VclPtr<ListBox>        m_pCollBox;
+    VclPtr<SwNumberingTypeListBox> m_pNumberBox;
+    VclPtr<ListBox>        m_pCharFmtLB;
+    VclPtr<FixedText>      m_pAllLevelFT;
+    VclPtr<NumericField>   m_pAllLevelNF;
+    VclPtr<Edit>           m_pPrefixED;
+    VclPtr<Edit>           m_pSuffixED;
+    VclPtr<NumericField>   m_pStartEdit;
+    VclPtr<NumberingPreview> m_pPreviewWIN;
 
     OUString            aNoFmtName;
     OUString            aSaveCollNames[MAXLEVEL];
@@ -122,6 +122,7 @@ class SwOutlineSettingsTabPage : public SfxTabPage
 public:
     SwOutlineSettingsTabPage(vcl::Window* pParent, const SfxItemSet& rSet);
     virtual ~SwOutlineSettingsTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     void SetWrtShell(SwWrtShell* pShell);
 

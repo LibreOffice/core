@@ -95,15 +95,14 @@ void OAppBorderWindow::dispose()
     if ( m_pPanel )
     {
         m_pPanel->Hide();
-        boost::scoped_ptr<vcl::Window> aTemp(m_pPanel);
-        m_pPanel = NULL;
     }
     if ( m_pDetailView )
     {
         m_pDetailView->Hide();
-        boost::scoped_ptr<vcl::Window> aTemp(m_pDetailView);
-        m_pDetailView = NULL;
     }
+    m_pPanel.clear();
+    m_pDetailView.clear();
+    m_pView.clear();
     vcl::Window::dispose();
 }
 
@@ -219,12 +218,7 @@ void OApplicationView::dispose()
         stopComponentListening(m_xObject);
         m_xObject.clear();
     }
-    if (m_pWin)
-    {
-        m_pWin->Hide();
-        boost::scoped_ptr<vcl::Window> aTemp(m_pWin);
-        m_pWin = NULL;
-    }
+    m_pWin.clear();
     ODataView::dispose();
 }
 

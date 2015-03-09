@@ -129,6 +129,19 @@ void SvxBitmapTabPage::dispose()
 {
     delete m_pBitmapCtl;
     m_pBitmapCtl = NULL;
+    m_pBxPixelEditor.clear();
+    m_pCtlPixel.clear();
+    m_pLbColor.clear();
+    m_pLbBackgroundColor.clear();
+    m_pLbBitmapsHidden.clear();
+    m_pLbBitmaps.clear();
+    m_pCtlPreview.clear();
+    m_pBtnAdd.clear();
+    m_pBtnModify.clear();
+    m_pBtnImport.clear();
+    m_pBtnDelete.clear();
+    m_pBtnLoad.clear();
+    m_pBtnSave.clear();
     SvxTabPage::dispose();
 }
 
@@ -974,7 +987,7 @@ void SvxBitmapTabPage::PointChanged( vcl::Window* pWindow, RECT_POINT )
 vcl::Window* SvxBitmapTabPage::GetParentLabeledBy( const vcl::Window* pLabeled ) const
 {
     if (pLabeled == m_pLbBitmaps)
-        return const_cast<FixedText*>(m_pLbBitmapsHidden);
+        return const_cast<FixedText*>(m_pLbBitmapsHidden.get());
     else
         return SvxTabPage::GetParentLabeledBy (pLabeled);
 }

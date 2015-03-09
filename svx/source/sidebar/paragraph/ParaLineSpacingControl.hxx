@@ -30,22 +30,24 @@ class ParaLineSpacingControl : public SfxPopupWindow
 {
 public:
     ParaLineSpacingControl(sal_uInt16 nId);
+    virtual ~ParaLineSpacingControl();
+    virtual void dispose() SAL_OVERRIDE;
 
 private:
     SfxMapUnit              meLNSpaceUnit;
 
-    Edit*                   mpActLineDistFld;
+    VclPtr<Edit>                   mpActLineDistFld;
 
-    PushButton*             mpSpacing1Button;
-    PushButton*             mpSpacing115Button;
-    PushButton*             mpSpacing15Button;
-    PushButton*             mpSpacing2Button;
+    VclPtr<PushButton>             mpSpacing1Button;
+    VclPtr<PushButton>             mpSpacing115Button;
+    VclPtr<PushButton>             mpSpacing15Button;
+    VclPtr<PushButton>             mpSpacing2Button;
 
-    ListBox*                mpLineDist;
+    VclPtr<ListBox>                mpLineDist;
 
-    FixedText*              mpLineDistLabel;
-    MetricField*            mpLineDistAtPercentBox;
-    MetricField*            mpLineDistAtMetricBox;
+    VclPtr<FixedText>              mpLineDistLabel;
+    VclPtr<MetricField>            mpLineDistAtPercentBox;
+    VclPtr<MetricField>            mpLineDistAtMetricBox;
 
 private:
     /// Setup the widgets with values from the document.

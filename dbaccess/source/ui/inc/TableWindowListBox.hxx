@@ -30,7 +30,7 @@ namespace dbaui
     struct OJoinExchangeData
     {
     public:
-        OTableWindowListBox*    pListBox;       // the ListBox inside the same (you can get the TabWin and the WinName out of it)
+        VclPtr<OTableWindowListBox>    pListBox;       // the ListBox inside the same (you can get the TabWin and the WinName out of it)
         SvTreeListEntry*            pEntry;         // the entry, which was dragged or to which was dropped on
 
         OJoinExchangeData(OTableWindowListBox* pBox);
@@ -56,7 +56,7 @@ namespace dbaui
         Timer                       m_aScrollTimer;
         Point                       m_aMousePos;
 
-        OTableWindow*               m_pTabWin;
+        VclPtr<OTableWindow>        m_pTabWin;
         ImplSVEvent *               m_nDropEvent;
         ImplSVEvent *               m_nUiEvent;
         OJoinDropData               m_aDropInfo;

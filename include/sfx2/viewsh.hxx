@@ -37,6 +37,7 @@
 #include <tools/errcode.hxx>
 #include <vcl/jobset.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <vcl/vclptr.hxx>
 
 class SfxBaseController;
 class Size;
@@ -140,7 +141,7 @@ friend class SfxPrinterController;
     struct SfxViewShell_Impl*   pImp;
     SfxViewFrame*               pFrame;
     SfxShell*                   pSubShell;
-    vcl::Window*                     pWindow;
+    VclPtr<vcl::Window>         pWindow;
     bool                        bNoNewWindow;
 
 protected:

@@ -67,7 +67,7 @@ void DemoMtfWin::Paint( const Rectangle& rRect )
 
 class DemoMtfApp : public Application
 {
-    DemoMtfWin *mpWin;
+    VclPtr<DemoMtfWin> mpWin;
     OUString maFileName;
 
     void showHelp()

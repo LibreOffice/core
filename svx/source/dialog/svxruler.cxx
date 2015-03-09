@@ -363,6 +363,7 @@ void SvxRuler::dispose()
 
     pBindings->LeaveRegistrations();
 
+    pEditWin.clear();
     Ruler::dispose();
 }
 

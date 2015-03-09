@@ -79,6 +79,22 @@ PlaceEditDialog::PlaceEditDialog(vcl::Window* pParent, const std::shared_ptr<Pla
     }
 }
 
+PlaceEditDialog::~PlaceEditDialog()
+{
+    dispose();
+}
+
+void PlaceEditDialog::dispose()
+{
+    m_pEDServerName.clear();
+    m_pLBServerType.clear();
+    m_pEDUsername.clear();
+    m_pBTOk.clear();
+    m_pBTCancel.clear();
+    m_pBTDelete.clear();
+    ModalDialog::dispose();
+}
+
 OUString PlaceEditDialog::GetServerUrl()
 {
     OUString sUrl;

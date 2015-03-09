@@ -66,21 +66,21 @@ private:
     OUString m_sImportRecentFile;
     OUString m_sExportRecentFile;
 
-    VclContainer* m_pExport;
-    FixedText*  m_pFTExportXSLTFile;
-    PushButton* m_pPBExportBrowse;
-    PushButton* m_pPBCurrentDocument;
-    FixedText*  m_pFTNameOfCurrentFile;
+    VclPtr<VclContainer> m_pExport;
+    VclPtr<FixedText>  m_pFTExportXSLTFile;
+    VclPtr<PushButton> m_pPBExportBrowse;
+    VclPtr<PushButton> m_pPBCurrentDocument;
+    VclPtr<FixedText>  m_pFTNameOfCurrentFile;
 
-    VclContainer* m_pImport;
-    FixedText*  m_pFTImportXSLTFile;
-    FixedText*  m_pFTImportTemplate;
-    FixedText*  m_pFTImportTemplateFile;
-    CheckBox*   m_pCBXDisplaySource;
-    PushButton* m_pPBImportBrowse;
-    PushButton* m_pPBRecentFile;
-    FixedText*  m_pFTNameOfRecentFile;
-    CloseButton* m_pPBClose;
+    VclPtr<VclContainer> m_pImport;
+    VclPtr<FixedText>  m_pFTImportXSLTFile;
+    VclPtr<FixedText>  m_pFTImportTemplate;
+    VclPtr<FixedText>  m_pFTImportTemplateFile;
+    VclPtr<CheckBox>   m_pCBXDisplaySource;
+    VclPtr<PushButton> m_pPBImportBrowse;
+    VclPtr<PushButton> m_pPBRecentFile;
+    VclPtr<FixedText>  m_pFTNameOfRecentFile;
+    VclPtr<CloseButton> m_pPBClose;
 
     filter_info_impl* m_pFilterInfo;
 

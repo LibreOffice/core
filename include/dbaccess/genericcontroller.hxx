@@ -59,6 +59,7 @@
 
 #include <boost/optional.hpp>
 #include <sfx2/userinputinterception.hxx>
+#include <vcl/vclptr.hxx>
 
 namespace dbtools
 {
@@ -212,7 +213,7 @@ namespace dbaui
 
         ::std::unique_ptr< OGenericUnoController_Data >
                                         m_pData;
-        ODataView*                      m_pView;                // our (VCL) "main window"
+        VclPtr<ODataView>               m_pView;                // our (VCL) "main window"
 
 #ifdef DBG_UTIL
         bool                            m_bDescribingSupportedFeatures;
@@ -407,8 +408,8 @@ namespace dbaui
     public:
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >  getORB() const { return m_xContext; }
         ODataView*  getView() const { return m_pView; }
-        void        setView( ODataView& i_rView ) { m_pView = &i_rView; }
-        void        clearView() { m_pView = NULL; }
+        void        setView( ODataView& i_rView );
+        void        clearView();
         // shows a error box if the SQLExceptionInfo is valid
         void showError(const ::dbtools::SQLExceptionInfo& _rInfo);
 

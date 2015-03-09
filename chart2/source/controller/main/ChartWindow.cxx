@@ -64,7 +64,7 @@ ChartWindow::ChartWindow( ChartController* pController, vcl::Window* pParent, Wi
     {
         m_pOpenGLWindow->Show();
         uno::Reference< chart2::X3DChartWindowProvider > x3DWindowProvider(pController->getModel(), uno::UNO_QUERY_THROW);
-        sal_uInt64 nWindowPtr = reinterpret_cast<sal_uInt64>(m_pOpenGLWindow);
+        sal_uInt64 nWindowPtr = reinterpret_cast<sal_uInt64>(m_pOpenGLWindow.get());
         x3DWindowProvider->setWindow(nWindowPtr);
         x3DWindowProvider->update();
     }
@@ -83,8 +83,7 @@ void ChartWindow::dispose()
         x3DWindowProvider->setWindow(0);
         x3DWindowProvider->update();
     }
-    delete m_pOpenGLWindow;
-    m_pOpenGLWindow = NULL;
+    m_pOpenGLWindow.clear();
     vcl::Window::dispose();
 }
 

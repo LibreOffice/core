@@ -315,13 +315,15 @@ public:
 class SvxMenuEntriesListBox : public SvTreeListBox
 {
 private:
-    SvxConfigPage*      pPage;
+    VclPtr<SvxConfigPage>      pPage;
 
 protected:
     bool                m_bIsInternalDrag;
 
 public:
     SvxMenuEntriesListBox(vcl::Window*, SvxConfigPage*);
+    virtual ~SvxMenuEntriesListBox();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt ) SAL_OVERRIDE;
 
@@ -358,30 +360,30 @@ protected:
 
     // the top section of the tab page where top level menus and toolbars
     //  are displayed in a listbox
-    VclFrame*                           m_pTopLevel;
-    FixedText*                          m_pTopLevelLabel;
-    ListBox*                            m_pTopLevelListBox;
-    PushButton*                         m_pNewTopLevelButton;
-    MenuButton*                         m_pModifyTopLevelButton;
+    VclPtr<VclFrame>                           m_pTopLevel;
+    VclPtr<FixedText>                          m_pTopLevelLabel;
+    VclPtr<ListBox>                            m_pTopLevelListBox;
+    VclPtr<PushButton>                         m_pNewTopLevelButton;
+    VclPtr<MenuButton>                         m_pModifyTopLevelButton;
 
     // the contents section where the contents of the selected
     // menu or toolbar are displayed
-    VclFrame*                           m_pContents;
-    FixedText*                          m_pContentsLabel;
-    VclContainer*                       m_pEntries;
-    SvTreeListBox*                      m_pContentsListBox;
+    VclPtr<VclFrame>                           m_pContents;
+    VclPtr<FixedText>                          m_pContentsLabel;
+    VclPtr<VclContainer>                       m_pEntries;
+    VclPtr<SvTreeListBox>                      m_pContentsListBox;
 
-    PushButton*                         m_pAddCommandsButton;
-    MenuButton*                         m_pModifyCommandButton;
+    VclPtr<PushButton>                         m_pAddCommandsButton;
+    VclPtr<MenuButton>                         m_pModifyCommandButton;
 
-    PushButton*                         m_pMoveUpButton;
-    PushButton*                         m_pMoveDownButton;
+    VclPtr<PushButton>                         m_pMoveUpButton;
+    VclPtr<PushButton>                         m_pMoveDownButton;
 
-    ListBox*                            m_pSaveInListBox;
+    VclPtr<ListBox>                            m_pSaveInListBox;
 
-    VclMultiLineEdit*                   m_pDescriptionField;
+    VclPtr<VclMultiLineEdit>                   m_pDescriptionField;
 
-    SvxScriptSelectorDialog*            m_pSelectorDlg;
+    VclPtr<SvxScriptSelectorDialog>            m_pSelectorDlg;
 
     /// the ResourceURL to select when opening the dialog
     OUString                            m_aURLToSelect;
@@ -409,7 +411,7 @@ protected:
                                         SvTreeListEntry* pTarget = NULL,
                                         bool bFront = false );
 
-    void            AddSubMenusToUI(    const OUString& rBaseTitle,
+    void                AddSubMenusToUI(    const OUString& rBaseTitle,
                                         SvxConfigEntry* pParentData );
 
     SvTreeListEntry*    InsertEntryIntoUI ( SvxConfigEntry* pNewEntryData,
@@ -421,6 +423,9 @@ protected:
     void            ReloadTopLevelListBox( SvxConfigEntry* pSelection = NULL );
 
 public:
+
+    virtual ~SvxConfigPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     static bool     CanConfig( const OUString& rModuleId );
 
@@ -495,11 +500,11 @@ public:
 
 class SvxMainMenuOrganizerDialog : public ModalDialog
 {
-    VclContainer*   m_pMenuBox;
-    Edit*           m_pMenuNameEdit;
-    SvTreeListBox*  m_pMenuListBox;
-    PushButton*     m_pMoveUpButton;
-    PushButton*     m_pMoveDownButton;
+    VclPtr<VclContainer>   m_pMenuBox;
+    VclPtr<Edit>           m_pMenuNameEdit;
+    VclPtr<SvTreeListBox>  m_pMenuListBox;
+    VclPtr<PushButton>     m_pMoveUpButton;
+    VclPtr<PushButton>     m_pMoveDownButton;
 
     SvxEntries*     mpEntries;
     SvTreeListEntry*    pNewMenuEntry;
@@ -515,6 +520,8 @@ public:
     SvxMainMenuOrganizerDialog (
         vcl::Window*, SvxEntries*,
         SvxConfigEntry*, bool bCreateMenu = false );
+    virtual ~SvxMainMenuOrganizerDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     SvxEntries*     GetEntries() { return mpEntries;}
     void            SetEntries( SvxEntries* );
@@ -526,7 +533,7 @@ class SvxToolbarEntriesListBox : public SvxMenuEntriesListBox
     Size            m_aCheckBoxImageSizePixel;
     Link            m_aChangedListener;
     SvLBoxButtonData*   m_pButtonData;
-    SvxConfigPage*  pPage;
+    VclPtr<SvxConfigPage>  pPage;
 
     void            ChangeVisibility( SvTreeListEntry* pEntry );
 
@@ -662,8 +669,8 @@ public:
 class SvxNewToolbarDialog : public ModalDialog
 {
 private:
-    Edit*           m_pEdtName;
-    OKButton*       m_pBtnOK;
+    VclPtr<Edit>           m_pEdtName;
+    VclPtr<OKButton>       m_pBtnOK;
 
     Link            aCheckNameHdl;
 
@@ -671,8 +678,10 @@ private:
 
 public:
     SvxNewToolbarDialog(vcl::Window* pWindow, const OUString& rName);
+    virtual ~SvxNewToolbarDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
-    ListBox*        m_pSaveInListBox;
+    VclPtr<ListBox>        m_pSaveInListBox;
 
     OUString GetName()
     {
@@ -702,10 +711,10 @@ struct SvxIconSelectorToolBoxItem
 class SvxIconSelectorDialog : public ModalDialog
 {
 private:
-    ToolBox*        pTbSymbol;
-    FixedText*      pFtNote;
-    PushButton*     pBtnImport;
-    PushButton*     pBtnDelete;
+    VclPtr<ToolBox>        pTbSymbol;
+    VclPtr<FixedText>      pFtNote;
+    VclPtr<PushButton>     pBtnImport;
+    VclPtr<PushButton>     pBtnDelete;
     Size            aTbSize;
     sal_uInt16      m_nNextId;
 
@@ -770,10 +779,12 @@ public:
 class SvxIconChangeDialog : public ModalDialog
 {
 private:
-    FixedImage*         pFImageInfo;
-    VclMultiLineEdit*   pLineEditDescription;
+    VclPtr<FixedImage>         pFImageInfo;
+    VclPtr<VclMultiLineEdit>   pLineEditDescription;
 public:
     SvxIconChangeDialog(vcl::Window *pWindow, const OUString& aMessage);
+    virtual ~SvxIconChangeDialog();
+    virtual void dispose() SAL_OVERRIDE;
 };
 #endif // INCLUDED_CUI_SOURCE_INC_CFG_HXX
 

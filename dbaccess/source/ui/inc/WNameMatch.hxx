@@ -50,16 +50,16 @@ namespace dbaui
     // Name matching for data appending
     class OWizNameMatching : public OWizardPage
     {
-        FixedText           *m_pTABLE_LEFT;
-        FixedText           *m_pTABLE_RIGHT;
-        OColumnTreeBox      *m_pCTRL_LEFT;    // left side
-        OColumnTreeBox      *m_pCTRL_RIGHT;   // right side
-        PushButton          *m_pColumn_up;
-        PushButton          *m_pColumn_down;
-        PushButton          *m_pColumn_up_right;
-        PushButton          *m_pColumn_down_right;
-        PushButton          *m_pAll;
-        PushButton          *m_pNone;
+        VclPtr<FixedText>           m_pTABLE_LEFT;
+        VclPtr<FixedText>           m_pTABLE_RIGHT;
+        VclPtr<OColumnTreeBox>      m_pCTRL_LEFT;    // left side
+        VclPtr<OColumnTreeBox>      m_pCTRL_RIGHT;   // right side
+        VclPtr<PushButton>          m_pColumn_up;
+        VclPtr<PushButton>          m_pColumn_down;
+        VclPtr<PushButton>          m_pColumn_up_right;
+        VclPtr<PushButton>          m_pColumn_down_right;
+        VclPtr<PushButton>          m_pAll;
+        VclPtr<PushButton>          m_pNone;
         OUString            m_sSourceText;
         OUString            m_sDestText;
         Image               m_aImgUp;
@@ -78,7 +78,8 @@ namespace dbaui
         virtual OUString        GetTitle() const SAL_OVERRIDE ;
 
         OWizNameMatching(vcl::Window* pParent);
-
+        virtual ~OWizNameMatching();
+        virtual void dispose() SAL_OVERRIDE;
     };
 }
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_WNAMEMATCH_HXX

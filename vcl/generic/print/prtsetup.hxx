@@ -45,13 +45,13 @@ class RTSDialog : public TabDialog
     ::psp::PrinterInfo      m_aJobData;
 
     // controls
-    TabControl*             m_pTabControl;
-    OKButton*               m_pOKButton;
-    CancelButton*           m_pCancelButton;
+    VclPtr<TabControl>      m_pTabControl;
+    VclPtr<OKButton>        m_pOKButton;
+    VclPtr<CancelButton>    m_pCancelButton;
 
     // pages
-    RTSPaperPage*           m_pPaperPage;
-    RTSDevicePage*          m_pDevicePage;
+    VclPtr<RTSPaperPage>    m_pPaperPage;
+    VclPtr<RTSDevicePage>   m_pDevicePage;
 
     // some resources
     OUString                m_aInvalidString;
@@ -71,22 +71,24 @@ public:
 
 class RTSPaperPage : public TabPage
 {
-    RTSDialog*          m_pParent;
+    VclPtr<RTSDialog>          m_pParent;
 
-    FixedText*          m_pPaperText;
-    ListBox*            m_pPaperBox;
+    VclPtr<FixedText>          m_pPaperText;
+    VclPtr<ListBox>            m_pPaperBox;
 
-    ListBox*            m_pOrientBox;
+    VclPtr<ListBox>            m_pOrientBox;
 
-    FixedText*          m_pDuplexText;
-    ListBox*            m_pDuplexBox;
+    VclPtr<FixedText>          m_pDuplexText;
+    VclPtr<ListBox>            m_pDuplexBox;
 
-    FixedText*          m_pSlotText;
-    ListBox*            m_pSlotBox;
+    VclPtr<FixedText>          m_pSlotText;
+    VclPtr<ListBox>            m_pSlotBox;
 
     DECL_LINK( SelectHdl, ListBox* );
 public:
     RTSPaperPage( RTSDialog* );
+    virtual ~RTSPaperPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     void update();
 
@@ -95,16 +97,16 @@ public:
 
 class RTSDevicePage : public TabPage
 {
-    RTSDialog*          m_pParent;
+    VclPtr<RTSDialog>          m_pParent;
 
-    ListBox*            m_pPPDKeyBox;
-    ListBox*            m_pPPDValueBox;
+    VclPtr<ListBox>            m_pPPDKeyBox;
+    VclPtr<ListBox>            m_pPPDValueBox;
     const psp::PPDValue* m_pCustomValue;
-    Edit*               m_pCustomEdit;
+    VclPtr<Edit>               m_pCustomEdit;
 
-    ListBox*            m_pLevelBox;
-    ListBox*            m_pSpaceBox;
-    ListBox*            m_pDepthBox;
+    VclPtr<ListBox>            m_pLevelBox;
+    VclPtr<ListBox>            m_pSpaceBox;
+    VclPtr<ListBox>            m_pDepthBox;
 
     void FillValueBox( const ::psp::PPDKey* );
 
@@ -112,6 +114,8 @@ class RTSDevicePage : public TabPage
     DECL_LINK( ModifyHdl, Edit* );
 public:
     RTSDevicePage( RTSDialog* );
+    virtual ~RTSDevicePage();
+    virtual void dispose() SAL_OVERRIDE;
 
     sal_uLong getLevel();
     sal_uLong getPDFDevice();

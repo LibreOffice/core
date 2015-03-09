@@ -106,7 +106,7 @@ void UnoDataBrowserView::Construct(const Reference< ::com::sun::star::awt::XCont
         m_pVclControl = NULL;
         getVclControl();
 
-        OSL_ENSURE(m_pVclControl != NULL, "UnoDataBrowserView::Construct : no real grid control !");
+        OSL_ENSURE(m_pVclControl != nullptr, "UnoDataBrowserView::Construct : no real grid control !");
     }
     catch(const Exception&)
     {
@@ -122,17 +122,10 @@ UnoDataBrowserView::~UnoDataBrowserView()
 
 void UnoDataBrowserView::dispose()
 {
-    {
-        boost::scoped_ptr<Splitter> aTemp(m_pSplitter);
-        m_pSplitter = NULL;
-    }
+    m_pSplitter.clear();
     setTreeView(NULL);
 
-    if ( m_pStatus )
-    {
-        delete m_pStatus;
-        m_pStatus = NULL;
-    }
+    m_pStatus.clear();
 
     try
     {
@@ -141,6 +134,8 @@ void UnoDataBrowserView::dispose()
     }
     catch(const Exception&)
     {}
+    m_pTreeView.clear();
+    m_pVclControl.clear();
     ODataView::dispose();
 }
 
@@ -162,13 +157,9 @@ void UnoDataBrowserView::setSplitter(Splitter* _pSplitter)
 
 void UnoDataBrowserView::setTreeView(DBTreeView* _pTreeView)
 {
-    if (m_pTreeView != _pTreeView)
+    if (m_pTreeView.get() != _pTreeView)
     {
-        if (m_pTreeView)
-        {
-            boost::scoped_ptr<vcl::Window> aTemp(m_pTreeView);
-            m_pTreeView = NULL;
-        }
+        m_pTreeView.clear();
         m_pTreeView = _pTreeView;
     }
 }

@@ -51,14 +51,14 @@ class ScDocument;
 class ScHighlightChgDlg : public ScAnyRefDlg
 {
 private:
-    CheckBox*               m_pHighlightBox;
-    SvxTPFilter*            m_pFilterCtr;
-    CheckBox*               m_pCbAccept;
-    CheckBox*               m_pCbReject;
-    OKButton*               m_pOkButton;
+    VclPtr<CheckBox>               m_pHighlightBox;
+    VclPtr<SvxTPFilter>            m_pFilterCtr;
+    VclPtr<CheckBox>               m_pCbAccept;
+    VclPtr<CheckBox>               m_pCbReject;
+    VclPtr<OKButton>               m_pOkButton;
 
-    formula::RefEdit*       m_pEdAssign;
-    formula::RefButton*     m_pRbAssign;
+    VclPtr<formula::RefEdit>       m_pEdAssign;
+    VclPtr<formula::RefButton>     m_pRbAssign;
 
     ScViewData*             pViewData;
     ScDocument*             pDoc;

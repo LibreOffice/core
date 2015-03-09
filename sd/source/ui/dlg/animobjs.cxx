@@ -224,8 +224,26 @@ void AnimationWindow::dispose()
     // delete the clones
     delete pMyDoc;
 
-    delete m_pCtlDisplay;
-
+    m_pCtlDisplay.clear();
+    m_pBtnFirst.clear();
+    m_pBtnReverse.clear();
+    m_pBtnStop.clear();
+    m_pBtnPlay.clear();
+    m_pBtnLast.clear();
+    m_pNumFldBitmap.clear();
+    m_pTimeField.clear();
+    m_pLbLoopCount.clear();
+    m_pBtnGetOneObject.clear();
+    m_pBtnGetAllObjects.clear();
+    m_pBtnRemoveBitmap.clear();
+    m_pBtnRemoveAll.clear();
+    m_pFiCount.clear();
+    m_pRbtGroup.clear();
+    m_pRbtBitmap.clear();
+    m_pFtAdjustment.clear();
+    m_pLbAdjustment.clear();
+    m_pBtnCreateGroup.clear();
+    pWin.clear();
     SfxDockingWindow::dispose();
 }
 

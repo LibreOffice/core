@@ -34,7 +34,7 @@ class _SdrItemBrowserControl: public BrowseBox
 friend class ImpItemEdit;
     std::vector<ImpItemListRow*> aList;
     long nAktPaintRow;
-    Edit* pEditControl;
+    VclPtr<Edit> pEditControl;
     OUString aWNamMerk;
     Link aEntryChangedHdl;
     Link aSetDirtyHdl;

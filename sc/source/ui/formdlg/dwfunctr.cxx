@@ -181,6 +181,7 @@ void ScFunctionDockWin::dispose()
     aDDFuncList.disposeAndClear();
     aInsertButton.disposeAndClear();
     aFiFuncDesc.disposeAndClear();
+    pAllFuncList.clear();
     SfxDockingWindow::dispose();
 }
 

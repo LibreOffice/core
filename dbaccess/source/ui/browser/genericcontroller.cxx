@@ -983,6 +983,16 @@ Reference< XConnection > OGenericUnoController::connect( const OUString& _rDataS
     return xConnection;
 }
 
+void OGenericUnoController::setView( ODataView& i_rView )
+{
+    m_pView = &i_rView;
+}
+
+void OGenericUnoController::clearView()
+{
+    m_pView = NULL;
+}
+
 void OGenericUnoController::showError(const SQLExceptionInfo& _rInfo)
 {
     ::dbaui::showError(_rInfo,getView(),getORB());

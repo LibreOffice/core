@@ -168,7 +168,10 @@ void ScAcceptChgDlg::dispose()
         pChanges->SetModifiedLink(aLink);
     }
 
-    delete m_pAcceptChgCtr;
+    m_pAcceptChgCtr.clear();
+    pTPFilter.clear();
+    pTPView.clear();
+    pTheView.clear();
     SfxModelessDialog::dispose();
 }
 

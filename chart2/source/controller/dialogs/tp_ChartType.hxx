@@ -78,9 +78,9 @@ protected:
     DECL_LINK( SelectSubTypeHdl, void* );
 
 protected:
-    FixedText*  m_pFT_ChooseType;
-    ListBox*    m_pMainTypeList;
-    ValueSet*   m_pSubTypeList;
+    VclPtr<FixedText>  m_pFT_ChooseType;
+    VclPtr<ListBox>    m_pMainTypeList;
+    VclPtr<ValueSet>   m_pSubTypeList;
 
     Dim3DLookResourceGroup*     m_pDim3DLookResourceGroup;
     StackingResourceGroup*      m_pStackingResourceGroup;

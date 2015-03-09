@@ -125,7 +125,7 @@ throw ( RuntimeException, std::exception )
 
     svt::ToolboxController::dispose();
 
-    m_pToolbar = 0;
+    m_pToolbar.clear();
     m_nID = 0;
 }
 

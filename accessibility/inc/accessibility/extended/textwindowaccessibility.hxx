@@ -99,7 +99,7 @@ public:
 
 private:
     ::Link m_aListener;
-    vcl::Window * m_pNotifier;
+    VclPtr<vcl::Window> m_pNotifier;
 };
 
 class ParagraphInfo

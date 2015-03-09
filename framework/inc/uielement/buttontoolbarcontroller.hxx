@@ -34,6 +34,7 @@
 
 #include <comphelper/broadcasthelper.hxx>
 #include <cppuhelper/weak.hxx>
+#include <vcl/vclptr.hxx>
 
 class ToolBox;
 
@@ -84,13 +85,13 @@ class ButtonToolbarController : public ::com::sun::star::frame::XStatusListener,
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > SAL_CALL createItemWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& Parent ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     private:
-        bool                                                                         m_bInitialized : 1,
+        bool                                                                             m_bInitialized : 1,
                                                                                          m_bDisposed : 1;
-        OUString                                                                    m_aCommandURL;
+        OUString                                                                         m_aCommandURL;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >              m_xFrame;
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >     m_xContext;
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer >      m_xURLTransformer;
-        ToolBox*                                                                         m_pToolbar;
+        VclPtr<ToolBox>                                                                  m_pToolbar;
 };
 
 }

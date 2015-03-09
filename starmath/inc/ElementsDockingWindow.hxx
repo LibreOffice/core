@@ -126,8 +126,8 @@ class SmElementsDockingWindow : public SfxDockingWindow
 {
     static const sal_uInt16 aCategories[];
 
-    SmElementsControl*  mpElementsControl;
-    ListBox*            mpElementListBox;
+    VclPtr<SmElementsControl>  mpElementsControl;
+    VclPtr<ListBox>            mpElementListBox;
 
     virtual void Resize() SAL_OVERRIDE;
     SmViewShell* GetView();

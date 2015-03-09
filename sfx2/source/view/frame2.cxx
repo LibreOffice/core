@@ -345,7 +345,7 @@ SystemWindow* SfxFrame::GetSystemWindow() const
 SystemWindow* SfxFrame::GetTopWindow_Impl() const
 {
     if ( pImp->pExternalContainerWindow->IsSystemWindow() )
-        return static_cast<SystemWindow*>( pImp->pExternalContainerWindow );
+        return static_cast<SystemWindow*>( pImp->pExternalContainerWindow.get() );
     else
         return NULL;
 }

@@ -51,8 +51,8 @@ namespace svt
     class RoadmapItem : public RoadmapTypes
     {
     private:
-        IDLabel*                mpID;
-        HyperLabel*             mpDescription;
+        VclPtr<IDLabel>         mpID;
+        VclPtr<HyperLabel>      mpDescription;
         const Size              m_aItemPlayground;
 
     public:

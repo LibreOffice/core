@@ -34,19 +34,19 @@ namespace dbaui
     class OCopyTable : public OWizardPage
     {
     protected:
-        Edit*              m_pEdTableName;
-        RadioButton*       m_pRB_DefData;
-        RadioButton*       m_pRB_Def;
-        RadioButton*       m_pRB_View;
-        RadioButton*       m_pRB_AppendData;
-        CheckBox*          m_pCB_UseHeaderLine;
-        CheckBox*          m_pCB_PrimaryColumn;
-        FixedText*         m_pFT_KeyName;
-        Edit*              m_pEdKeyName;
+        VclPtr<Edit>              m_pEdTableName;
+        VclPtr<RadioButton>       m_pRB_DefData;
+        VclPtr<RadioButton>       m_pRB_Def;
+        VclPtr<RadioButton>       m_pRB_View;
+        VclPtr<RadioButton>       m_pRB_AppendData;
+        VclPtr<CheckBox>          m_pCB_UseHeaderLine;
+        VclPtr<CheckBox>          m_pCB_PrimaryColumn;
+        VclPtr<FixedText>         m_pFT_KeyName;
+        VclPtr<Edit>              m_pEdKeyName;
         sal_Int16          m_nOldOperation;
 
-        OWizColumnSelect*  m_pPage2;
-        OWizNormalExtend*  m_pPage3;
+        VclPtr<OWizColumnSelect>  m_pPage2;
+        VclPtr<OWizNormalExtend>  m_pPage3;
 
         bool               m_bPKeyAllowed;
         bool               m_bUseHeaderAllowed;
@@ -65,6 +65,8 @@ namespace dbaui
         virtual OUString        GetTitle() const SAL_OVERRIDE ;
 
         OCopyTable( vcl::Window * pParent );
+        virtual ~OCopyTable();
+        virtual void dispose() SAL_OVERRIDE;
 
         bool IsOptionDefData() const { return m_pRB_DefData->IsChecked(); }
         bool IsOptionDef() const { return m_pRB_Def->IsChecked(); }

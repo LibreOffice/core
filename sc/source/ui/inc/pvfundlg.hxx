@@ -60,7 +60,8 @@ class ScDPFunctionDlg : public ModalDialog
 public:
     explicit            ScDPFunctionDlg( vcl::Window* pParent, const ScDPLabelDataVector& rLabelVec,
                             const ScDPLabelData& rLabelData, const ScPivotFuncData& rFuncData );
-
+    virtual ~ScDPFunctionDlg();
+    virtual void            dispose() SAL_OVERRIDE;
     sal_uInt16              GetFuncMask() const;
     ::com::sun::star::sheet::DataPilotFieldReference GetFieldRef() const;
 
@@ -77,14 +78,14 @@ private:
     DECL_LINK( DblClickHdl, void* );
 
 private:
-    ScDPFunctionListBox* mpLbFunc;
-    FixedText*           mpFtName;
-    ListBox*             mpLbType;
-    FixedText*           mpFtBaseField;
-    ListBox*             mpLbBaseField;
-    FixedText*           mpFtBaseItem;
-    ListBox*             mpLbBaseItem;
-    OKButton*            mpBtnOk;
+    VclPtr<ScDPFunctionListBox> mpLbFunc;
+    VclPtr<FixedText>           mpFtName;
+    VclPtr<ListBox>             mpLbType;
+    VclPtr<FixedText>           mpFtBaseField;
+    VclPtr<ListBox>             mpLbBaseField;
+    VclPtr<FixedText>           mpFtBaseItem;
+    VclPtr<ListBox>             mpLbBaseItem;
+    VclPtr<OKButton>            mpBtnOk;
 
     NameMapType          maBaseFieldNameMap; // cache for base field display -> original name.
     NameMapType          maBaseItemNameMap;  // cache for base item display -> original name.
@@ -101,8 +102,9 @@ public:
     explicit            ScDPSubtotalDlg( vcl::Window* pParent, ScDPObject& rDPObj,
                             const ScDPLabelData& rLabelData, const ScPivotFuncData& rFuncData,
                             const ScDPNameVec& rDataFields, bool bEnableLayout );
-
-    sal_uInt16              GetFuncMask() const;
+    virtual             ~ScDPSubtotalDlg();
+    virtual void        dispose() SAL_OVERRIDE;
+    sal_uInt16          GetFuncMask() const;
 
     void                FillLabelData( ScDPLabelData& rLabelData ) const;
 
@@ -114,14 +116,14 @@ private:
     DECL_LINK( ClickHdl, PushButton* );
 
 private:
-    RadioButton*         mpRbNone;
-    RadioButton*         mpRbAuto;
-    RadioButton*         mpRbUser;
-    ScDPFunctionListBox* mpLbFunc;
-    FixedText*           mpFtName;
-    CheckBox*            mpCbShowAll;
-    OKButton*            mpBtnOk;
-    PushButton*          mpBtnOptions;
+    VclPtr<RadioButton>         mpRbNone;
+    VclPtr<RadioButton>         mpRbAuto;
+    VclPtr<RadioButton>         mpRbUser;
+    VclPtr<ScDPFunctionListBox> mpLbFunc;
+    VclPtr<FixedText>           mpFtName;
+    VclPtr<CheckBox>            mpCbShowAll;
+    VclPtr<OKButton>            mpBtnOk;
+    VclPtr<PushButton>          mpBtnOptions;
 
     ScDPObject&          mrDPObj;            /// The DataPilot object (for member names).
     const ScDPNameVec&   mrDataFields;       /// The list of all data field names.
@@ -136,7 +138,8 @@ public:
     explicit            ScDPSubtotalOptDlg( vcl::Window* pParent, ScDPObject& rDPObj,
                             const ScDPLabelData& rLabelData, const ScDPNameVec& rDataFields,
                             bool bEnableLayout );
-
+    virtual              ~ScDPSubtotalOptDlg();
+    virtual void        dispose() SAL_OVERRIDE;
     void                FillLabelData( ScDPLabelData& rLabelData ) const;
 
 private:
@@ -153,25 +156,25 @@ private:
     DECL_LINK( SelectHdl, ListBox* );
 
 private:
-    ListBox*            m_pLbSortBy;
-    RadioButton*        m_pRbSortAsc;
-    RadioButton*        m_pRbSortDesc;
-    RadioButton*        m_pRbSortMan;
-    VclContainer*       m_pLayoutFrame;
-    ListBox*            m_pLbLayout;
-    CheckBox*           m_pCbLayoutEmpty;
-    CheckBox*           m_pCbRepeatItemLabels;
-    CheckBox*           m_pCbShow;
-    NumericField*       m_pNfShow;
-    FixedText*          m_pFtShow;
-    FixedText*          m_pFtShowFrom;
-    ListBox*            m_pLbShowFrom;
-    FixedText*          m_pFtShowUsing;
-    ListBox*            m_pLbShowUsing;
-    VclContainer*       m_pHideFrame;
-    SvxCheckListBox*    m_pLbHide;
-    FixedText*          m_pFtHierarchy;
-    ListBox*            m_pLbHierarchy;
+    VclPtr<ListBox>            m_pLbSortBy;
+    VclPtr<RadioButton>        m_pRbSortAsc;
+    VclPtr<RadioButton>        m_pRbSortDesc;
+    VclPtr<RadioButton>        m_pRbSortMan;
+    VclPtr<VclContainer>       m_pLayoutFrame;
+    VclPtr<ListBox>            m_pLbLayout;
+    VclPtr<CheckBox>           m_pCbLayoutEmpty;
+    VclPtr<CheckBox>           m_pCbRepeatItemLabels;
+    VclPtr<CheckBox>           m_pCbShow;
+    VclPtr<NumericField>       m_pNfShow;
+    VclPtr<FixedText>          m_pFtShow;
+    VclPtr<FixedText>          m_pFtShowFrom;
+    VclPtr<ListBox>            m_pLbShowFrom;
+    VclPtr<FixedText>          m_pFtShowUsing;
+    VclPtr<ListBox>            m_pLbShowUsing;
+    VclPtr<VclContainer>       m_pHideFrame;
+    VclPtr<SvxCheckListBox>    m_pLbHide;
+    VclPtr<FixedText>          m_pFtHierarchy;
+    VclPtr<ListBox>            m_pLbHierarchy;
 
     boost::scoped_ptr<ScDPListBoxWrapper> m_xLbLayoutWrp;      /// Wrapper for direct usage of API constants.
     boost::scoped_ptr<ScDPListBoxWrapper> m_xLbShowFromWrp;    /// Wrapper for direct usage of API constants.
@@ -187,7 +190,8 @@ class ScDPShowDetailDlg : public ModalDialog
 {
 public:
     explicit            ScDPShowDetailDlg( vcl::Window* pParent, ScDPObject& rDPObj, sal_uInt16 nOrient );
-
+    virtual             ~ScDPShowDetailDlg();
+    virtual void        dispose() SAL_OVERRIDE;
     virtual short       Execute() SAL_OVERRIDE;
 
     /**
@@ -201,8 +205,8 @@ private:
     DECL_LINK( DblClickHdl, ListBox* );
 
 private:
-    ListBox*            mpLbDims;
-    OKButton*           mpBtnOk;
+    VclPtr<ListBox>            mpLbDims;
+    VclPtr<OKButton>           mpBtnOk;
 
     typedef std::unordered_map<OUString, long, OUStringHash> DimNameIndexMap;
     DimNameIndexMap     maNameIndexMap;

@@ -33,10 +33,12 @@ class SchLegendPosTabPage : public SfxTabPage
 private:
 
     LegendPositionResources  m_aLegendPositionResources;
-    TextDirectionListBox*    m_pLbTextDirection;
+    VclPtr<TextDirectionListBox>    m_pLbTextDirection;
 
 public:
     SchLegendPosTabPage(vcl::Window* pParent, const SfxItemSet& rInAttrs);
+    virtual ~SchLegendPosTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     static SfxTabPage* Create(vcl::Window* pParent, const SfxItemSet* rInAttrs);
     virtual bool FillItemSet(SfxItemSet* rOutAttrs) SAL_OVERRIDE;

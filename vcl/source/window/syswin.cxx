@@ -120,6 +120,7 @@ void SystemWindow::dispose()
     mpWindowImpl->mbSysWin = false;
     disposeBuilder();
 
+    mpDialogParent.clear();
     Window::dispose();
 }
 

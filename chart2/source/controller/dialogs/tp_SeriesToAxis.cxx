@@ -63,6 +63,30 @@ SchOptionTabPage::SchOptionTabPage(vcl::Window* pWindow,const SfxItemSet& rInAtt
     m_pRbtAxis2->SetClickHdl( LINK( this, SchOptionTabPage, EnableHdl ));
 }
 
+SchOptionTabPage::~SchOptionTabPage()
+{
+    dispose();
+}
+
+void SchOptionTabPage::dispose()
+{
+    m_pGrpAxis.clear();
+    m_pRbtAxis1.clear();
+    m_pRbtAxis2.clear();
+    m_pGrpBar.clear();
+    m_pMTGap.clear();
+    m_pMTOverlap.clear();
+    m_pCBConnect.clear();
+    m_pCBAxisSideBySide.clear();
+    m_pGrpPlotOptions.clear();
+    m_pGridPlotOptions.clear();
+    m_pRB_DontPaint.clear();
+    m_pRB_AssumeZero.clear();
+    m_pRB_ContinueLine.clear();
+    m_pCBIncludeHiddenCells.clear();
+    SfxTabPage::dispose();
+}
+
 IMPL_LINK_NOARG(SchOptionTabPage, EnableHdl)
 {
     if( m_nAllSeriesAxisIndex == 0 )

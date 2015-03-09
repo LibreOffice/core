@@ -37,9 +37,9 @@
 class SVT_DLLPUBLIC GraphicExportOptionsDialog : public ModalDialog
 {
 private:
-    NumericField*    mpWidth;
-    NumericField*    mpHeight;
-    ComboBox*        mpResolution;
+    VclPtr<NumericField>    mpWidth;
+    VclPtr<NumericField>    mpHeight;
+    VclPtr<ComboBox>        mpResolution;
 
     Size        mSize100mm;
     double      mResolution;
@@ -62,7 +62,8 @@ private:
 
 public:
     GraphicExportOptionsDialog( vcl::Window* pWindow, const css::uno::Reference<css::lang::XComponent>& rxSourceDocument );
-
+    virtual ~GraphicExportOptionsDialog();
+    virtual void dispose() SAL_OVERRIDE;
     css::uno::Sequence<css::beans::PropertyValue> getFilterData();
 };
 

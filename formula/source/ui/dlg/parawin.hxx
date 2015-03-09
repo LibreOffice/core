@@ -56,31 +56,31 @@ private:
         vcl::Font        aFntBold;
         vcl::Font        aFntLight;
 
-        FixedText       *m_pFtEditDesc;
-        FixedText       *m_pFtArgName;
-        FixedText       *m_pFtArgDesc;
+        VclPtr<FixedText>       m_pFtEditDesc;
+        VclPtr<FixedText>       m_pFtArgName;
+        VclPtr<FixedText>       m_pFtArgDesc;
 
-        PushButton      *m_pBtnFx1;
-        FixedText       *m_pFtArg1;
-        ArgEdit         *m_pEdArg1;
-        RefButton       *m_pRefBtn1;
+        VclPtr<PushButton>      m_pBtnFx1;
+        VclPtr<FixedText>       m_pFtArg1;
+        VclPtr<ArgEdit>         m_pEdArg1;
+        VclPtr<RefButton>       m_pRefBtn1;
 
-        PushButton      *m_pBtnFx2;
-        FixedText       *m_pFtArg2;
-        ArgEdit         *m_pEdArg2;
-        RefButton       *m_pRefBtn2;
+        VclPtr<PushButton>      m_pBtnFx2;
+        VclPtr<FixedText>       m_pFtArg2;
+        VclPtr<ArgEdit>         m_pEdArg2;
+        VclPtr<RefButton>       m_pRefBtn2;
 
-        PushButton      *m_pBtnFx3;
-        FixedText       *m_pFtArg3;
-        ArgEdit         *m_pEdArg3;
-        RefButton       *m_pRefBtn3;
+        VclPtr<PushButton>      m_pBtnFx3;
+        VclPtr<FixedText>       m_pFtArg3;
+        VclPtr<ArgEdit>         m_pEdArg3;
+        VclPtr<RefButton>       m_pRefBtn3;
 
-        PushButton      *m_pBtnFx4;
-        FixedText       *m_pFtArg4;
-        ArgEdit         *m_pEdArg4;
-        RefButton       *m_pRefBtn4;
+        VclPtr<PushButton>      m_pBtnFx4;
+        VclPtr<FixedText>       m_pFtArg4;
+        VclPtr<ArgEdit>         m_pEdArg4;
+        VclPtr<RefButton>       m_pRefBtn4;
 
-        ScrollBar       *m_pSlider;
+        VclPtr<ScrollBar>       m_pSlider;
         OUString        m_sOptional;
         OUString        m_sRequired;
         bool        bRefMode;

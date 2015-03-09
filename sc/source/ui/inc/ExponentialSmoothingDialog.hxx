@@ -24,7 +24,7 @@
 class ScExponentialSmoothingDialog : public ScStatisticsInputOutputDialog
 {
 private:
-    NumericField* mpSmoothingFactor;
+    VclPtr<NumericField> mpSmoothingFactor;
 
 public:
     ScExponentialSmoothingDialog(
@@ -32,6 +32,7 @@ public:
         vcl::Window* pParent, ScViewData* pViewData );
 
     virtual ~ScExponentialSmoothingDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual bool Close() SAL_OVERRIDE;
 

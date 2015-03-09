@@ -28,8 +28,8 @@ class SwTableFUNC;
 
 class SwTableWidthDlg : public SvxStandardDialog
 {
-    NumericField*   m_pColNF;
-    MetricField*    m_pWidthMF;
+    VclPtr<NumericField>   m_pColNF;
+    VclPtr<MetricField>    m_pWidthMF;
     SwTableFUNC     &rFnc;
 
 protected:
@@ -38,6 +38,8 @@ protected:
 
 public:
     SwTableWidthDlg(vcl::Window *pParent, SwTableFUNC &rFnc );
+    virtual ~SwTableWidthDlg();
+    virtual void dispose() SAL_OVERRIDE;
 };
 
 #endif

@@ -30,9 +30,9 @@
 class SvxNameDialog : public ModalDialog
 {
 private:
-    FixedText*      pFtDescription;
-    Edit*           pEdtName;
-    OKButton*       pBtnOK;
+    VclPtr<FixedText>      pFtDescription;
+    VclPtr<Edit>           pEdtName;
+    VclPtr<OKButton>       pBtnOK;
 
     Link            aCheckNameHdl;
 
@@ -40,6 +40,8 @@ private:
 
 public:
     SvxNameDialog( vcl::Window* pWindow, const OUString& rName, const OUString& rDesc );
+    virtual ~SvxNameDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     void    GetName( OUString& rName ){rName = pEdtName->GetText();}
 
@@ -75,10 +77,10 @@ class SvxObjectNameDialog : public ModalDialog
 {
 private:
     // name
-    Edit*           pEdtName;
+    VclPtr<Edit>           pEdtName;
 
     // buttons
-    OKButton*       pBtnOK;
+    VclPtr<OKButton>       pBtnOK;
 
     // callback link for name uniqueness
     Link            aCheckNameHdl;
@@ -88,6 +90,8 @@ private:
 public:
     // constructor
     SvxObjectNameDialog(vcl::Window* pWindow, const OUString& rName);
+    virtual ~SvxObjectNameDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     // data access
     void GetName(OUString& rName) {rName = pEdtName->GetText(); }
@@ -110,15 +114,16 @@ class SvxObjectTitleDescDialog : public ModalDialog
 {
 private:
     // title
-    Edit*           pEdtTitle;
+    VclPtr<Edit>           pEdtTitle;
 
     // description
-    VclMultiLineEdit*  pEdtDescription;
+    VclPtr<VclMultiLineEdit>  pEdtDescription;
 
 public:
     // constructor
     SvxObjectTitleDescDialog(vcl::Window* pWindow, const OUString& rTitle, const OUString& rDesc);
-
+    virtual ~SvxObjectTitleDescDialog();
+    virtual void dispose() SAL_OVERRIDE;
     // data access
     void GetTitle(OUString& rTitle) {rTitle = pEdtTitle->GetText(); }
     void GetDescription(OUString& rDescription) {rDescription = pEdtDescription->GetText(); }
@@ -128,10 +133,10 @@ public:
 class SvxMessDialog : public ModalDialog
 {
 private:
-    FixedText*      pFtDescription;
-    PushButton*     pBtn1;
-    PushButton*     pBtn2;
-    FixedImage*     pFtImage;
+    VclPtr<FixedText>      pFtDescription;
+    VclPtr<PushButton>     pBtn1;
+    VclPtr<PushButton>     pBtn2;
+    VclPtr<FixedImage>     pFtImage;
     Image*          pImage;
 
     DECL_LINK(Button1Hdl, void *);

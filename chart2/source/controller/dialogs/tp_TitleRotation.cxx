@@ -64,6 +64,13 @@ void SchAlignmentTabPage::dispose()
 {
     delete m_pOrientHlp;
     m_pOrientHlp = NULL;
+    m_pCtrlDial.clear();
+    m_pFtRotate.clear();
+    m_pNfRotate.clear();
+    m_pCbStacked.clear();
+    m_pFtTextDirection.clear();
+    m_pLbTextDirection.clear();
+    m_pFtABCD.clear();
     SfxTabPage::dispose();
 }
 

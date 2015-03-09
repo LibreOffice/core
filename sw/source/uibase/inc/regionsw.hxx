@@ -61,41 +61,41 @@ typedef boost::ptr_set<SectRepr> SectReprArr;
 
 class SwEditRegionDlg : public SfxModalDialog
 {
-    Edit*           m_pCurName;
-    SvTreeListBox*  m_pTree;
+    VclPtr<Edit>           m_pCurName;
+    VclPtr<SvTreeListBox>  m_pTree;
 
-    TriStateBox*    m_pFileCB;
-    CheckBox*       m_pDDECB;
-    VclContainer*   m_pDDEFrame;
-    FixedText*      m_pFileNameFT;
-    FixedText*      m_pDDECommandFT;
-    Edit*           m_pFileNameED;
-    PushButton*     m_pFilePB;
-    FixedText*      m_pSubRegionFT;
-    ComboBox*       m_pSubRegionED;
+    VclPtr<TriStateBox>    m_pFileCB;
+    VclPtr<CheckBox>       m_pDDECB;
+    VclPtr<VclContainer>   m_pDDEFrame;
+    VclPtr<FixedText>      m_pFileNameFT;
+    VclPtr<FixedText>      m_pDDECommandFT;
+    VclPtr<Edit>           m_pFileNameED;
+    VclPtr<PushButton>     m_pFilePB;
+    VclPtr<FixedText>      m_pSubRegionFT;
+    VclPtr<ComboBox>       m_pSubRegionED;
     bool            m_bSubRegionsFilled;
 
-    TriStateBox*    m_pProtectCB;
-    CheckBox*       m_pPasswdCB;
-    PushButton*     m_pPasswdPB;
+    VclPtr<TriStateBox>    m_pProtectCB;
+    VclPtr<CheckBox>       m_pPasswdCB;
+    VclPtr<PushButton>     m_pPasswdPB;
 
-    TriStateBox*    m_pHideCB;
-    FixedText*      m_pConditionFT;
-    ConditionEdit*  m_pConditionED;
+    VclPtr<TriStateBox>    m_pHideCB;
+    VclPtr<FixedText>      m_pConditionFT;
+    VclPtr<ConditionEdit>  m_pConditionED;
 
     // #114856# edit in readonly sections
-    TriStateBox*    m_pEditInReadonlyCB;
+    VclPtr<TriStateBox>    m_pEditInReadonlyCB;
 
-    OKButton*       m_pOK;
-    PushButton*     m_pOptionsPB;
-    PushButton*     m_pDismiss;
+    VclPtr<OKButton>       m_pOK;
+    VclPtr<PushButton>     m_pOptionsPB;
+    VclPtr<PushButton>     m_pDismiss;
     ImageList       aImageIL;
 
     SwWrtShell&             rSh;
     SectReprArr             aSectReprArr;
     const SwSection*        pCurrSect;
     sfx2::DocumentInserter* m_pDocInserter;
-    vcl::Window*                 m_pOldDefDlgParent;
+    VclPtr<vcl::Window>     m_pOldDefDlgParent;
 
     bool            bDontCheckPasswd :1;
     bool            bWeb            :1;
@@ -140,27 +140,27 @@ public:
 // dialog "insert region"
 class SwInsertSectionTabPage : public SfxTabPage
 {
-    ComboBox*       m_pCurName;
+    VclPtr<ComboBox>       m_pCurName;
 
-    CheckBox*       m_pFileCB;
-    CheckBox*       m_pDDECB;
-    FixedText*      m_pDDECommandFT;
-    FixedText*      m_pFileNameFT;
-    Edit*           m_pFileNameED;
-    PushButton*     m_pFilePB;
-    FixedText*      m_pSubRegionFT;
-    ComboBox*       m_pSubRegionED;
+    VclPtr<CheckBox>       m_pFileCB;
+    VclPtr<CheckBox>       m_pDDECB;
+    VclPtr<FixedText>      m_pDDECommandFT;
+    VclPtr<FixedText>      m_pFileNameFT;
+    VclPtr<Edit>           m_pFileNameED;
+    VclPtr<PushButton>     m_pFilePB;
+    VclPtr<FixedText>      m_pSubRegionFT;
+    VclPtr<ComboBox>       m_pSubRegionED;
 
-    CheckBox*       m_pProtectCB;
-    CheckBox*       m_pPasswdCB;
-    PushButton*     m_pPasswdPB;
+    VclPtr<CheckBox>       m_pProtectCB;
+    VclPtr<CheckBox>       m_pPasswdCB;
+    VclPtr<PushButton>     m_pPasswdPB;
 
-    CheckBox*       m_pHideCB;
-    FixedText*      m_pConditionFT;
-    ConditionEdit*  m_pConditionED;
+    VclPtr<CheckBox>       m_pHideCB;
+    VclPtr<FixedText>      m_pConditionFT;
+    VclPtr<ConditionEdit>  m_pConditionED;
 
     // #114856# edit in readonly sections
-    CheckBox*       m_pEditInReadonlyCB;
+    VclPtr<CheckBox>       m_pEditInReadonlyCB;
 
     OUString        m_sFileName;
     OUString        m_sFilterName;
@@ -169,7 +169,7 @@ class SwInsertSectionTabPage : public SfxTabPage
     ::com::sun::star::uno::Sequence <sal_Int8 > m_aNewPasswd;
     SwWrtShell*             m_pWrtSh;
     sfx2::DocumentInserter* m_pDocInserter;
-    vcl::Window*                 m_pOldDefDlgParent;
+    VclPtr<vcl::Window>     m_pOldDefDlgParent;
 
     DECL_LINK( ChangeHideHdl, CheckBox * );
     // #114856# edit in readonly sections
@@ -198,31 +198,31 @@ public:
 
 class SwSectionFtnEndTabPage : public SfxTabPage
 {
-    CheckBox*        pFtnNtAtTextEndCB;
+    VclPtr<CheckBox>        pFtnNtAtTextEndCB;
 
-    CheckBox*        pFtnNtNumCB;
-    FixedText*       pFtnOffsetLbl;
-    NumericField*    pFtnOffsetFld;
+    VclPtr<CheckBox>        pFtnNtNumCB;
+    VclPtr<FixedText>       pFtnOffsetLbl;
+    VclPtr<NumericField>    pFtnOffsetFld;
 
-    CheckBox*        pFtnNtNumFmtCB;
-    FixedText*       pFtnPrefixFT;
-    Edit*            pFtnPrefixED;
-    SwNumberingTypeListBox*   pFtnNumViewBox;
-    FixedText*       pFtnSuffixFT;
-    Edit*            pFtnSuffixED;
+    VclPtr<CheckBox>        pFtnNtNumFmtCB;
+    VclPtr<FixedText>       pFtnPrefixFT;
+    VclPtr<Edit>            pFtnPrefixED;
+    VclPtr<SwNumberingTypeListBox> pFtnNumViewBox;
+    VclPtr<FixedText>       pFtnSuffixFT;
+    VclPtr<Edit>            pFtnSuffixED;
 
-    CheckBox*        pEndNtAtTextEndCB;
+    VclPtr<CheckBox>        pEndNtAtTextEndCB;
 
-    CheckBox*        pEndNtNumCB;
-    FixedText*       pEndOffsetLbl;
-    NumericField*    pEndOffsetFld;
+    VclPtr<CheckBox>        pEndNtNumCB;
+    VclPtr<FixedText>       pEndOffsetLbl;
+    VclPtr<NumericField>    pEndOffsetFld;
 
-    CheckBox*        pEndNtNumFmtCB;
-    FixedText*       pEndPrefixFT;
-    Edit*            pEndPrefixED;
-    SwNumberingTypeListBox*   pEndNumViewBox;
-    FixedText*       pEndSuffixFT;
-    Edit*            pEndSuffixED;
+    VclPtr<CheckBox>        pEndNtNumFmtCB;
+    VclPtr<FixedText>       pEndPrefixFT;
+    VclPtr<Edit>            pEndPrefixED;
+    VclPtr<SwNumberingTypeListBox> pEndNumViewBox;
+    VclPtr<FixedText>       pEndSuffixFT;
+    VclPtr<Edit>            pEndSuffixED;
 
     DECL_LINK( FootEndHdl, CheckBox * );
     void ResetState( bool bFtn, const SwFmtFtnEndAtTxtEnd& );
@@ -230,6 +230,7 @@ class SwSectionFtnEndTabPage : public SfxTabPage
 public:
     SwSectionFtnEndTabPage( vcl::Window *pParent, const SfxItemSet &rAttrSet );
     virtual ~SwSectionFtnEndTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual bool        FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* ) SAL_OVERRIDE;
@@ -240,14 +241,15 @@ public:
 
 class SwSectionIndentTabPage : public SfxTabPage
 {
-    MetricField*       m_pBeforeMF;
-    MetricField*       m_pAfterMF;
-    SvxParaPrevWindow* m_pPreviewWin;
+    VclPtr<MetricField>       m_pBeforeMF;
+    VclPtr<MetricField>       m_pAfterMF;
+    VclPtr<SvxParaPrevWindow> m_pPreviewWin;
 
     DECL_LINK(IndentModifyHdl, void *);
 public:
     SwSectionIndentTabPage( vcl::Window *pParent, const SfxItemSet &rAttrSet );
     virtual ~SwSectionIndentTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual bool        FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* ) SAL_OVERRIDE;

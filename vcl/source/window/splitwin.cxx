@@ -53,9 +53,9 @@ struct ImplSplitItem
     long                mnOldWidth;
     long                mnOldHeight;
     ImplSplitSet*       mpSet;
-    vcl::Window*             mpWindow;
-    vcl::Window*             mpOrgParent;
-    sal_uInt16              mnId;
+    VclPtr<vcl::Window> mpWindow;
+    VclPtr<vcl::Window> mpOrgParent;
+    sal_uInt16          mnId;
     SplitWindowItemBits mnBits;
     bool                mbFixed;
     bool                mbSubSize;

@@ -76,12 +76,12 @@ public:
 class ImpVclMEdit : public SfxListener
 {
 private:
-    VclMultiLineEdit*   pVclMultiLineEdit;
+    VclPtr<VclMultiLineEdit>   pVclMultiLineEdit;
 
-    TextWindow*         mpTextWindow;
-    ScrollBar*          mpHScrollBar;
-    ScrollBar*          mpVScrollBar;
-    ScrollBarBox*       mpScrollBox;
+    VclPtr<TextWindow>         mpTextWindow;
+    VclPtr<ScrollBar>          mpHScrollBar;
+    VclPtr<ScrollBar>          mpVScrollBar;
+    VclPtr<ScrollBarBox>       mpScrollBox;
 
     Point               maTextWindowOffset;
     sal_Int32           mnTextWidth;
@@ -161,9 +161,9 @@ ImpVclMEdit::ImpVclMEdit( VclMultiLineEdit* pEdt, WinBits nWinStyle )
 
 void ImpVclMEdit::ImpUpdateSrollBarVis( WinBits nWinStyle )
 {
-    const bool bHaveVScroll = (NULL != mpVScrollBar);
-    const bool bHaveHScroll = (NULL != mpHScrollBar);
-    const bool bHaveScrollBox = (NULL != mpScrollBox);
+    const bool bHaveVScroll = (nullptr != mpVScrollBar);
+    const bool bHaveHScroll = (nullptr != mpHScrollBar);
+    const bool bHaveScrollBox = (nullptr != mpScrollBox);
 
           bool bNeedVScroll = ( nWinStyle & WB_VSCROLL ) == WB_VSCROLL;
     const bool bNeedHScroll = ( nWinStyle & WB_HSCROLL ) == WB_HSCROLL;
@@ -184,7 +184,6 @@ void ImpVclMEdit::ImpUpdateSrollBarVis( WinBits nWinStyle )
     bool bScrollbarsChanged = false;
     if ( bHaveVScroll != bNeedVScroll )
     {
-        delete mpVScrollBar;
         mpVScrollBar = bNeedVScroll ? new ScrollBar( pVclMultiLineEdit, WB_VSCROLL|WB_DRAG ) : NULL;
 
         if ( bNeedVScroll )
@@ -198,7 +197,6 @@ void ImpVclMEdit::ImpUpdateSrollBarVis( WinBits nWinStyle )
 
     if ( bHaveHScroll != bNeedHScroll )
     {
-        delete mpHScrollBar;
         mpHScrollBar = bNeedHScroll ? new ScrollBar( pVclMultiLineEdit, WB_HSCROLL|WB_DRAG ) : NULL;
 
         if ( bNeedHScroll )
@@ -212,7 +210,6 @@ void ImpVclMEdit::ImpUpdateSrollBarVis( WinBits nWinStyle )
 
     if ( bHaveScrollBox != bNeedScrollBox )
     {
-        delete mpScrollBox;
         mpScrollBox = bNeedScrollBox ? new ScrollBarBox( pVclMultiLineEdit, WB_SIZEABLE ) : NULL;
 
         if ( bNeedScrollBox )
@@ -258,10 +255,6 @@ void ImpVclMEdit::InitFromStyle( WinBits nWinStyle )
 ImpVclMEdit::~ImpVclMEdit()
 {
     EndListening( *mpTextWindow->GetTextEngine() );
-    delete mpTextWindow;
-    delete mpHScrollBar;
-    delete mpVScrollBar;
-    delete mpScrollBox;
 }
 
 void ImpVclMEdit::ImpSetScrollBarRanges()

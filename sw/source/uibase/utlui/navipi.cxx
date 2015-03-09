@@ -867,12 +867,12 @@ void SwNavigationPI::dispose()
             (*pxObjectShell)->DoClose();
         delete pxObjectShell;
     }
-    delete pPopupWindow;
-    delete pFloatingWindow;
 
     if ( IsBound() )
         rBindings.Release(*this);
 
+    pPopupWindow.clear();
+    pFloatingWindow.clear();
     aContentToolBox.disposeAndClear();
     aGlobalToolBox.disposeAndClear();
     aContentTree.disposeAndClear();
@@ -894,7 +894,6 @@ IMPL_LINK_NOARG(SwNavigationPI, PopupModeEndHdl)
     {
         // Replace floating window with popup window and destroy
         // floating window instance.
-        delete pFloatingWindow;
         pFloatingWindow = pPopupWindow;
         pPopupWindow    = 0;
     }

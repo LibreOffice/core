@@ -42,11 +42,11 @@ class SvxPathTabPage;
 class SvxPathTabPage : public SfxTabPage
 {
 private:
-    SvSimpleTableContainer* m_pPathCtrl;
-    PushButton*         m_pStandardBtn;
-    PushButton*         m_pPathBtn;
+    VclPtr<SvSimpleTableContainer> m_pPathCtrl;
+    VclPtr<PushButton>         m_pStandardBtn;
+    VclPtr<PushButton>         m_pPathBtn;
 
-    ::svx::OptHeaderTabListBox* pPathBox;
+    VclPtr<::svx::OptHeaderTabListBox> pPathBox;
     OptPath_Impl*               pImpl;
 
     ::com::sun::star::uno::Reference< ::svt::DialogClosedListener > xDialogListener;

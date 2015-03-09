@@ -32,26 +32,26 @@ class SfxItemSet;
 class SvxJSearchOptionsPage : public SfxTabPage
 {
 private:
-    CheckBox*   m_pMatchCase;
-    CheckBox*   m_pMatchFullHalfWidth;
-    CheckBox*   m_pMatchHiraganaKatakana;
-    CheckBox*   m_pMatchContractions;
-    CheckBox*   m_pMatchMinusDashChoon;
-    CheckBox*   m_pMatchRepeatCharMarks;
-    CheckBox*   m_pMatchVariantFormKanji;
-    CheckBox*   m_pMatchOldKanaForms;
-    CheckBox*   m_pMatchDiziDuzu;
-    CheckBox*   m_pMatchBavaHafa;
-    CheckBox*   m_pMatchTsithichiDhizi;
-    CheckBox*   m_pMatchHyuiyuByuvyu;
-    CheckBox*   m_pMatchSesheZeje;
-    CheckBox*   m_pMatchIaiya;
-    CheckBox*   m_pMatchKiku;
-    CheckBox*   m_pMatchProlongedSoundMark;
+    VclPtr<CheckBox>   m_pMatchCase;
+    VclPtr<CheckBox>   m_pMatchFullHalfWidth;
+    VclPtr<CheckBox>   m_pMatchHiraganaKatakana;
+    VclPtr<CheckBox>   m_pMatchContractions;
+    VclPtr<CheckBox>   m_pMatchMinusDashChoon;
+    VclPtr<CheckBox>   m_pMatchRepeatCharMarks;
+    VclPtr<CheckBox>   m_pMatchVariantFormKanji;
+    VclPtr<CheckBox>   m_pMatchOldKanaForms;
+    VclPtr<CheckBox>   m_pMatchDiziDuzu;
+    VclPtr<CheckBox>   m_pMatchBavaHafa;
+    VclPtr<CheckBox>   m_pMatchTsithichiDhizi;
+    VclPtr<CheckBox>   m_pMatchHyuiyuByuvyu;
+    VclPtr<CheckBox>   m_pMatchSesheZeje;
+    VclPtr<CheckBox>   m_pMatchIaiya;
+    VclPtr<CheckBox>   m_pMatchKiku;
+    VclPtr<CheckBox>   m_pMatchProlongedSoundMark;
 
-    CheckBox*   m_pIgnorePunctuation;
-    CheckBox*   m_pIgnoreWhitespace;
-    CheckBox*   m_pIgnoreMiddleDot;
+    VclPtr<CheckBox>   m_pIgnorePunctuation;
+    VclPtr<CheckBox>   m_pIgnoreWhitespace;
+    VclPtr<CheckBox>   m_pIgnoreMiddleDot;
 
     sal_Int32       nTransliterationFlags;
     bool        bSaveOptions;
@@ -62,6 +62,8 @@ protected:
                         SvxJSearchOptionsPage( vcl::Window* pParent, const SfxItemSet& rSet );
 
 public:
+    virtual ~SvxJSearchOptionsPage();
+    virtual void dispose() SAL_OVERRIDE;
     static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rSet );
 
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;

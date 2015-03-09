@@ -42,6 +42,7 @@ public:
                                  ScDocument* pDocument,
                                  ScAddress aCursorPos );
                     virtual ~ScSolverDlg();
+    virtual void    dispose() SAL_OVERRIDE;
 
     virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc ) SAL_OVERRIDE;
     virtual bool    IsRefInputMode() const SAL_OVERRIDE;
@@ -49,18 +50,18 @@ public:
     virtual bool    Close() SAL_OVERRIDE;
 
 private:
-    FixedText*      m_pFtFormulaCell;
-    formula::RefEdit*   m_pEdFormulaCell;
-    formula::RefButton* m_pRBFormulaCell;
+    VclPtr<FixedText>      m_pFtFormulaCell;
+    VclPtr<formula::RefEdit>   m_pEdFormulaCell;
+    VclPtr<formula::RefButton> m_pRBFormulaCell;
 
-    Edit*           m_pEdTargetVal;
+    VclPtr<Edit>           m_pEdTargetVal;
 
-    FixedText*      m_pFtVariableCell;
-    formula::RefEdit*   m_pEdVariableCell;
-    formula::RefButton* m_pRBVariableCell;
+    VclPtr<FixedText>      m_pFtVariableCell;
+    VclPtr<formula::RefEdit>   m_pEdVariableCell;
+    VclPtr<formula::RefButton> m_pRBVariableCell;
 
-    OKButton*       m_pBtnOk;
-    CancelButton*   m_pBtnCancel;
+    VclPtr<OKButton>       m_pBtnOk;
+    VclPtr<CancelButton>   m_pBtnCancel;
 
     ScAddress       theFormulaCell;
     ScAddress       theVariableCell;
@@ -68,7 +69,7 @@ private:
 
     ScDocument*     pDoc;
     const SCTAB     nCurTab;
-    formula::RefEdit*       pEdActive;
+    VclPtr<formula::RefEdit>       pEdActive;
     bool            bDlgLostFocus;
     const OUString  errMsgInvalidVar;
     const OUString  errMsgInvalidForm;

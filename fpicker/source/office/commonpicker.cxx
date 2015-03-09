@@ -123,8 +123,7 @@ namespace svt
                 m_pDlg->EndDialog( RET_CANCEL );
         }
 
-        delete m_pDlg;
-        m_pDlg = NULL;
+        m_pDlg.clear();
         m_xWindow = NULL;
         m_xDialogParent = NULL;
     }
@@ -149,10 +148,7 @@ namespace svt
         {
             stopWindowListening();
 
-            if ( !bDialogDying )    // it's the parent which is dying -> delete the dialog
-                delete m_pDlg;
-
-            m_pDlg = NULL;
+            m_pDlg.clear();
             m_xWindow = NULL;
             m_xDialogParent = NULL;
         }
@@ -240,7 +236,7 @@ namespace svt
             }
         }
 
-        return NULL != m_pDlg;
+        return nullptr != m_pDlg;
     }
 
 

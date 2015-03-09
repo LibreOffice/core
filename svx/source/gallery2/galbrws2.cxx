@@ -110,10 +110,10 @@ class GalleryThemePopup : public ::cppu::WeakImplHelper1< css::frame::XStatusLis
 private:
     const GalleryTheme* mpTheme;
     sal_uIntPtr         mnObjectPos;
-    bool            mbPreview;
+    bool                mbPreview;
     PopupMenu           maPopupMenu;
     PopupMenu           maBackgroundPopup;
-    GalleryBrowser2*    mpBrowser;
+    VclPtr<GalleryBrowser2> mpBrowser;
 
     typedef std::map< int, CommandInfo > CommandInfoMap;
     CommandInfoMap   m_aCommandInfo;
@@ -481,9 +481,9 @@ void GalleryBrowser2::dispose()
 {
     maMiscOptions.RemoveListenerLink( LINK( this, GalleryBrowser2, MiscHdl ) );
 
-    delete mpPreview;
-    delete mpListView;
-    delete mpIconView;
+    mpPreview.clear();
+    mpListView.clear();
+    mpIconView.clear();
 
     if( mpCurTheme )
         mpGallery->ReleaseTheme( mpCurTheme, *this );
@@ -740,9 +740,9 @@ bool GalleryBrowser2::KeyInput( const KeyEvent& rKEvt, vcl::Window* pWindow )
 
 void GalleryBrowser2::SelectTheme( const OUString& rThemeName )
 {
-    delete mpIconView, mpIconView = NULL;
-    delete mpListView, mpListView = NULL;
-    delete mpPreview, mpPreview = NULL;
+    mpIconView.clear();
+    mpListView.clear();
+    mpPreview.clear();
 
     if( mpCurTheme )
         mpGallery->ReleaseTheme( mpCurTheme, *this );

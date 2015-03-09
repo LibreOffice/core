@@ -292,8 +292,8 @@ namespace
 
 class OExceptionChainDialog : public ModalDialog
 {
-    SvTreeListBox*    m_pExceptionList;
-    VclMultiLineEdit* m_pExceptionText;
+    VclPtr<SvTreeListBox>    m_pExceptionList;
+    VclPtr<VclMultiLineEdit> m_pExceptionText;
 
     OUString        m_sStatusLabel;
     OUString        m_sErrorCodeLabel;
@@ -302,6 +302,13 @@ class OExceptionChainDialog : public ModalDialog
 
 public:
     OExceptionChainDialog( vcl::Window* pParent, const ExceptionDisplayChain& _rExceptions );
+    virtual ~OExceptionChainDialog() { dispose(); }
+    virtual void dispose() SAL_OVERRIDE
+    {
+        m_pExceptionList.clear();
+        m_pExceptionText.clear();
+        ModalDialog::dispose();
+    }
 
 protected:
     DECL_LINK(OnExceptionSelected, void*);

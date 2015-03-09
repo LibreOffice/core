@@ -90,7 +90,7 @@ class ImplTBDragMgr
 {
 private:
     ImplTBList*     mpBoxList;
-    ToolBox*        mpDragBox;
+    VclPtr<ToolBox> mpDragBox;
     Point           maMouseOff;
     Rectangle       maRect;
     Rectangle       maStartRect;
@@ -1609,6 +1609,7 @@ void ToolBox::dispose()
             pSVData->maCtrlData.mpTBDragMgr = NULL;
         }
     }
+    mpFloatWin.clear();
     DockingWindow::dispose();
 }
 
@@ -2639,7 +2640,7 @@ IMPL_LINK_NOARG(ToolBox, ImplDropdownLongClickHdl)
 
         // do not reset data if the dropdown handler opened a floating window
         // see ImplFloatControl()
-        if( mpFloatWin == NULL )
+        if( !mpFloatWin )
         {
             // no floater was opened
             Deactivate();
@@ -2961,7 +2962,7 @@ void ToolBox::ImplDrawItem( sal_uInt16 nPos, sal_uInt16 nHighlight, bool bPaint,
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
     // no gradient background for items that have a popup open
-    bool bHasOpenPopup = (mpFloatWin != NULL) && (mnDownItemId==pItem->mnId);
+    bool bHasOpenPopup = mpFloatWin && (mnDownItemId==pItem->mnId);
 
     bool bHighContrastWhite = false;
     // check the face color as highcontrast indicator
@@ -3873,7 +3874,7 @@ void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
 
                         // do not reset data if the dropdown handler opened a floating window
                         // see ImplFloatControl()
-                        if( mpFloatWin == NULL )
+                        if( !mpFloatWin )
                         {
                             // no floater was opened
                             Deactivate();

@@ -36,7 +36,7 @@ class VCLXAccessibleHeaderBar : public VCLXAccessibleComponent
 {
 
 public:
-    HeaderBar*  m_pHeadBar;
+    VclPtr<HeaderBar>  m_pHeadBar;
     virtual ~VCLXAccessibleHeaderBar();
 
     virtual void ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) SAL_OVERRIDE;

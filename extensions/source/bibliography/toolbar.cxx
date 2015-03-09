@@ -31,6 +31,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/mnemonic.hxx>
 #include "bibbeam.hxx"
+#include "bibview.hxx"
 #include "toolbar.hrc"
 #include "bibresid.hxx"
 

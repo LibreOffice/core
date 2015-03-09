@@ -42,7 +42,7 @@ MediaPlayer::MediaPlayer( vcl::Window* _pParent, sal_uInt16 nId, SfxBindings* _p
 {
     pWindow = new MediaFloater( _pBindings, this, _pParent );
     eChildAlignment = SfxChildAlignment::NOALIGNMENT;
-    static_cast< MediaFloater* >( pWindow )->Initialize( pInfo );
+    static_cast< MediaFloater* >( pWindow.get() )->Initialize( pInfo );
 };
 
 

@@ -91,6 +91,22 @@ OCollectionView::OCollectionView( vcl::Window * pParent
     m_pPB_OK->SetClickHdl( LINK( this, OCollectionView, Save_Click ) );
 }
 
+OCollectionView::~OCollectionView()
+{
+    dispose();
+}
+
+void OCollectionView::dispose()
+{
+    m_pFTCurrentPath.clear();
+    m_pNewFolder.clear();
+    m_pUp.clear();
+    m_pView.clear();
+    m_pName.clear();
+    m_pPB_OK.clear();
+    ModalDialog::dispose();
+}
+
 IMPL_LINK_NOARG(OCollectionView, Save_Click)
 {
     OUString sName = m_pName->GetText();

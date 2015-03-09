@@ -39,21 +39,21 @@ class SwWrtShell;
 class SwLoadOptPage : public SfxTabPage
 {
 private:
-    RadioButton*     m_pAlwaysRB;
-    RadioButton*     m_pRequestRB;
-    RadioButton*     m_pNeverRB;
+    VclPtr<RadioButton>     m_pAlwaysRB;
+    VclPtr<RadioButton>     m_pRequestRB;
+    VclPtr<RadioButton>     m_pNeverRB;
 
-    CheckBox*        m_pAutoUpdateFields;
-    CheckBox*        m_pAutoUpdateCharts;
+    VclPtr<CheckBox>        m_pAutoUpdateFields;
+    VclPtr<CheckBox>        m_pAutoUpdateCharts;
 
-    ListBox*         m_pMetricLB;
-    FixedText*       m_pTabFT;
-    MetricField*     m_pTabMF;
-    CheckBox*        m_pUseSquaredPageMode;
-    CheckBox*        m_pUseCharUnit;
-    Edit*            m_pWordCountED;
-    CheckBox*        m_pShowStandardizedPageCount;
-    NumericField*    m_pStandardizedPageSizeNF;
+    VclPtr<ListBox>         m_pMetricLB;
+    VclPtr<FixedText>       m_pTabFT;
+    VclPtr<MetricField>     m_pTabMF;
+    VclPtr<CheckBox>        m_pUseSquaredPageMode;
+    VclPtr<CheckBox>        m_pUseCharUnit;
+    VclPtr<Edit>            m_pWordCountED;
+    VclPtr<CheckBox>        m_pShowStandardizedPageCount;
+    VclPtr<NumericField>    m_pStandardizedPageSizeNF;
 
     SwWrtShell*      m_pWrtShell;
     sal_uInt16       m_nLastTab;
@@ -64,6 +64,8 @@ private:
 
 public:
     SwLoadOptPage(vcl::Window* pParent, const SfxItemSet& rSet);
+    virtual ~SwLoadOptPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     static SfxTabPage*  Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet);
@@ -105,28 +107,28 @@ public:
 class SwCaptionOptPage : public SfxTabPage
 {
 private:
-    SvxCheckListBox*  m_pCheckLB;
-    ListBox*          m_pLbCaptionOrder;
-    SwCaptionPreview* m_pPreview;
+    VclPtr<SvxCheckListBox>  m_pCheckLB;
+    VclPtr<ListBox>          m_pLbCaptionOrder;
+    VclPtr<SwCaptionPreview> m_pPreview;
 
-    VclContainer*     m_pSettingsGroup;
-    CaptionComboBox*  m_pCategoryBox;
-    FixedText*        m_pFormatText;
-    ListBox*          m_pFormatBox;
+    VclPtr<VclContainer>     m_pSettingsGroup;
+    VclPtr<CaptionComboBox>  m_pCategoryBox;
+    VclPtr<FixedText>        m_pFormatText;
+    VclPtr<ListBox>          m_pFormatBox;
     //#i61007# order of captions
-    FixedText*        m_pNumberingSeparatorFT;
-    Edit*             m_pNumberingSeparatorED;
-    FixedText*        m_pTextText;
-    Edit*             m_pTextEdit;
-    ListBox*          m_pPosBox;
+    VclPtr<FixedText>        m_pNumberingSeparatorFT;
+    VclPtr<Edit>             m_pNumberingSeparatorED;
+    VclPtr<FixedText>        m_pTextText;
+    VclPtr<Edit>             m_pTextEdit;
+    VclPtr<ListBox>          m_pPosBox;
 
-    VclContainer*     m_pNumCapt;
-    ListBox*          m_pLbLevel;
-    Edit*             m_pEdDelim;
+    VclPtr<VclContainer>     m_pNumCapt;
+    VclPtr<ListBox>          m_pLbLevel;
+    VclPtr<Edit>             m_pEdDelim;
 
-    VclContainer*     m_pCategory;
-    ListBox*          m_pCharStyleLB;
-    CheckBox*         m_pApplyBorderCB;
+    VclPtr<VclContainer>     m_pCategory;
+    VclPtr<ListBox>          m_pCharStyleLB;
+    VclPtr<CheckBox>         m_pApplyBorderCB;
 
     OUString        m_sSWTable;
     OUString        m_sSWFrame;

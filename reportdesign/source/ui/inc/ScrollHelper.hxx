@@ -52,7 +52,7 @@ namespace rptui
         VclPtr<ScrollBar>           m_aVScroll;
         VclPtr<ScrollBarBox>        m_aCornerWin;       // window in the bottom right corner
         Size                        m_aTotalPixelSize;
-        ODesignView*                m_pParent;
+        VclPtr<ODesignView>         m_pParent;
         VclPtr<OReportWindow>       m_aReportWindow;
         ::rtl::Reference<comphelper::OPropertyChangeMultiplexer >
                                     m_pReportDefintionMultiPlexer; // listener for property changes

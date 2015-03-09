@@ -252,7 +252,7 @@ void ShapeController::executeDispatch_FormatLine()
     SolarMutexGuard aGuard;
     if ( m_pChartController )
     {
-        vcl::Window* pParent = dynamic_cast< vcl::Window* >( m_pChartController->m_pChartWindow );
+        vcl::Window* pParent = dynamic_cast< vcl::Window* >( m_pChartController->m_pChartWindow.get() );
         DrawModelWrapper* pDrawModelWrapper = m_pChartController->GetDrawModelWrapper();
         DrawViewWrapper* pDrawViewWrapper = m_pChartController->GetDrawViewWrapper();
         if ( pParent && pDrawModelWrapper && pDrawViewWrapper )
@@ -292,7 +292,7 @@ void ShapeController::executeDispatch_FormatArea()
     SolarMutexGuard aGuard;
     if ( m_pChartController )
     {
-        vcl::Window* pParent = dynamic_cast< vcl::Window* >( m_pChartController->m_pChartWindow );
+        vcl::Window* pParent = dynamic_cast< vcl::Window* >( m_pChartController->m_pChartWindow.get() );
         DrawModelWrapper* pDrawModelWrapper = m_pChartController->GetDrawModelWrapper();
         DrawViewWrapper* pDrawViewWrapper = m_pChartController->GetDrawViewWrapper();
         if ( pParent && pDrawModelWrapper && pDrawViewWrapper )
@@ -335,7 +335,7 @@ void ShapeController::executeDispatch_TextAttributes()
     SolarMutexGuard aGuard;
     if ( m_pChartController )
     {
-        vcl::Window* pParent = dynamic_cast< vcl::Window* >( m_pChartController->m_pChartWindow );
+        vcl::Window* pParent = dynamic_cast< vcl::Window* >( m_pChartController->m_pChartWindow.get() );
         DrawViewWrapper* pDrawViewWrapper = m_pChartController->GetDrawViewWrapper();
         if ( pParent && pDrawViewWrapper )
         {
@@ -372,7 +372,7 @@ void ShapeController::executeDispatch_TransformDialog()
     SolarMutexGuard aGuard;
     if ( m_pChartController )
     {
-        vcl::Window* pParent = dynamic_cast< vcl::Window* >( m_pChartController->m_pChartWindow );
+        vcl::Window* pParent = dynamic_cast< vcl::Window* >( m_pChartController->m_pChartWindow.get() );
         DrawViewWrapper* pDrawViewWrapper = m_pChartController->GetDrawViewWrapper();
         if ( pParent && pDrawViewWrapper )
         {
@@ -541,7 +541,7 @@ void ShapeController::executeDispatch_FontDialog()
     SolarMutexGuard aGuard;
     if ( m_pChartController )
     {
-        vcl::Window* pParent = dynamic_cast< vcl::Window* >( m_pChartController->m_pChartWindow );
+        vcl::Window* pParent = dynamic_cast< vcl::Window* >( m_pChartController->m_pChartWindow.get() );
         DrawModelWrapper* pDrawModelWrapper = m_pChartController->GetDrawModelWrapper();
         DrawViewWrapper* pDrawViewWrapper = m_pChartController->GetDrawViewWrapper();
         if ( pParent && pDrawModelWrapper && pDrawViewWrapper )
@@ -564,7 +564,7 @@ void ShapeController::executeDispatch_ParagraphDialog()
     SolarMutexGuard aGuard;
     if ( m_pChartController )
     {
-        vcl::Window* pParent = dynamic_cast< vcl::Window* >( m_pChartController->m_pChartWindow );
+        vcl::Window* pParent = dynamic_cast< vcl::Window* >( m_pChartController->m_pChartWindow.get() );
         DrawViewWrapper* pDrawViewWrapper = m_pChartController->GetDrawViewWrapper();
         if ( pParent && pDrawViewWrapper )
         {

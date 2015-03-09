@@ -30,12 +30,12 @@
 class SvxHyperlinkDocTp : public SvxHyperlinkTabPageBase
 {
 private:
-    SvxHyperURLBox      *m_pCbbPath;
-    PushButton          *m_pBtFileopen;
+    VclPtr<SvxHyperURLBox>      m_pCbbPath;
+    VclPtr<PushButton>          m_pBtFileopen;
 
-    Edit                *m_pEdTarget;
-    FixedText           *m_pFtFullURL;
-    PushButton          *m_pBtBrowse;
+    VclPtr<Edit>                m_pEdTarget;
+    VclPtr<FixedText>           m_pFtFullURL;
+    VclPtr<PushButton>          m_pBtBrowse;
 
     OUString            maStrURL;
 
@@ -67,6 +67,8 @@ protected:
 
 public:
     SvxHyperlinkDocTp ( vcl::Window *pParent, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet);
+    virtual ~SvxHyperlinkDocTp();
+    virtual void dispose() SAL_OVERRIDE;
 
     static  IconChoicePage* Create( vcl::Window* pWindow, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet );
 

@@ -49,32 +49,32 @@ public:
     void    SetCellShiftDisabled( int nDisable );
 
 private:
-    CheckBox*        mpBtnInsAll;
-    CheckBox*        mpBtnInsStrings;
-    CheckBox*        mpBtnInsNumbers;
-    CheckBox*        mpBtnInsDateTime;
-    CheckBox*        mpBtnInsFormulas;
-    CheckBox*        mpBtnInsNotes;
-    CheckBox*        mpBtnInsAttrs;
-    CheckBox*        mpBtnInsObjects;
+    VclPtr<CheckBox>        mpBtnInsAll;
+    VclPtr<CheckBox>        mpBtnInsStrings;
+    VclPtr<CheckBox>        mpBtnInsNumbers;
+    VclPtr<CheckBox>        mpBtnInsDateTime;
+    VclPtr<CheckBox>        mpBtnInsFormulas;
+    VclPtr<CheckBox>        mpBtnInsNotes;
+    VclPtr<CheckBox>        mpBtnInsAttrs;
+    VclPtr<CheckBox>        mpBtnInsObjects;
 
-    CheckBox*        mpBtnSkipEmptyCells;
-    CheckBox*        mpBtnTranspose;
-    CheckBox*        mpBtnLink;
+    VclPtr<CheckBox>        mpBtnSkipEmptyCells;
+    VclPtr<CheckBox>        mpBtnTranspose;
+    VclPtr<CheckBox>        mpBtnLink;
 
-    RadioButton*     mpRbNoOp;
-    RadioButton*     mpRbAdd;
-    RadioButton*     mpRbSub;
-    RadioButton*     mpRbMul;
-    RadioButton*     mpRbDiv;
+    VclPtr<RadioButton>     mpRbNoOp;
+    VclPtr<RadioButton>     mpRbAdd;
+    VclPtr<RadioButton>     mpRbSub;
+    VclPtr<RadioButton>     mpRbMul;
+    VclPtr<RadioButton>     mpRbDiv;
 
-    RadioButton*     mpRbMoveNone;
-    RadioButton*     mpRbMoveDown;
-    RadioButton*     mpRbMoveRight;
+    VclPtr<RadioButton>     mpRbMoveNone;
+    VclPtr<RadioButton>     mpRbMoveDown;
+    VclPtr<RadioButton>     mpRbMoveRight;
 
-    PushButton*      mpBtnShortCutPasteValuesOnly;
-    PushButton*      mpBtnShortCutPasteValuesFormats;
-    PushButton*      mpBtnShortCutPasteTranspose;
+    VclPtr<PushButton>      mpBtnShortCutPasteValuesOnly;
+    VclPtr<PushButton>      mpBtnShortCutPasteValuesFormats;
+    VclPtr<PushButton>      mpBtnShortCutPasteTranspose;
 
     bool              bOtherDoc;
     bool              bFillMode;

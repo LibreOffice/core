@@ -24,22 +24,22 @@ class SwPageDesc;
 class SwTitlePageDlg : public SfxModalDialog
 {
 private:
-    RadioButton* m_pUseExistingPagesRB;
-    NumericField* m_pPageCountNF;
+    VclPtr<RadioButton> m_pUseExistingPagesRB;
+    VclPtr<NumericField> m_pPageCountNF;
 
-    RadioButton* m_pDocumentStartRB;
-    RadioButton* m_pPageStartRB;
-    NumericField* m_pPageStartNF;
+    VclPtr<RadioButton> m_pDocumentStartRB;
+    VclPtr<RadioButton> m_pPageStartRB;
+    VclPtr<NumericField> m_pPageStartNF;
 
-    CheckBox* m_pRestartNumberingCB;
-    NumericField* m_pRestartNumberingNF;
-    CheckBox* m_pSetPageNumberCB;
-    NumericField* m_pSetPageNumberNF;
+    VclPtr<CheckBox> m_pRestartNumberingCB;
+    VclPtr<NumericField> m_pRestartNumberingNF;
+    VclPtr<CheckBox> m_pSetPageNumberCB;
+    VclPtr<NumericField> m_pSetPageNumberNF;
 
-    ListBox* m_pPagePropertiesLB;
-    PushButton* m_pPagePropertiesPB;
+    VclPtr<ListBox> m_pPagePropertiesLB;
+    VclPtr<PushButton> m_pPagePropertiesPB;
 
-    OKButton* m_pOkPB;
+    VclPtr<OKButton> m_pOkPB;
 
     SwWrtShell *mpSh;
 

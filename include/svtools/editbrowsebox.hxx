@@ -80,7 +80,7 @@ namespace svt
         friend class EditBrowseBox;
 
     protected:
-        Control*    pWindow;
+        VclPtr<Control>  pWindow;
         bool        bSuspended;     // <true> if the window is hidden and disabled
 
     public:
@@ -274,7 +274,7 @@ namespace svt
 
     class SVT_DLLPUBLIC CheckBoxControl : public Control
     {
-        CheckBox*   pBox;
+        VclPtr<CheckBox>   pBox;
         Rectangle   aFocusRect;
         Link        m_aClickLink,m_aModifyLink;
 
@@ -475,7 +475,7 @@ namespace svt
                                  aOldController;
 
         ImplSVEvent * nStartEvent, * nEndEvent, * nCellModifiedEvent;     // event ids
-        vcl::Window* m_pFocusWhileRequest;
+        VclPtr<vcl::Window> m_pFocusWhileRequest;
             // In ActivateCell, we grab the focus asynchronously, but if between requesting activation
             // and the asynchornous event the focus has changed, we won't grab it for ourself.
 
@@ -487,14 +487,14 @@ namespace svt
         mutable bool    bPaintStatus : 1;   // paint a status (image) in the handle column
         bool            bActiveBeforeTracking;
 
-        CheckBoxControl* pCheckBoxPaint;
+        VclPtr<CheckBoxControl> pCheckBoxPaint;
 
         sal_Int32   m_nBrowserFlags;
         ImageList   m_aStatusImages;
         ::std::unique_ptr< EditBrowseBoxImpl> m_aImpl;
 
     protected:
-        BrowserHeader*  pHeader;
+        VclPtr<BrowserHeader>  pHeader;
 
         bool isGetCellFocusPending() const { return nStartEvent != 0; }
         void cancelGetCellFocus() { if (nStartEvent) Application::RemoveUserEvent(nStartEvent); nStartEvent = 0; }

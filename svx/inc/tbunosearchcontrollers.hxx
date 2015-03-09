@@ -118,7 +118,7 @@ public:
 
 private:
 
-    FindTextFieldControl* m_pFindTextFieldControl;
+    VclPtr<FindTextFieldControl> m_pFindTextFieldControl;
 
     sal_uInt16 m_nDownSearchId; // item position of findbar
     sal_uInt16 m_nUpSearchId;   // item position of findbar
@@ -220,7 +220,7 @@ public:
     virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& rEvent ) throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 private:
-    CheckBox* m_pMatchCaseControl;
+    VclPtr<CheckBox> m_pMatchCaseControl;
 };
 
 class FindAllToolboxController   : public svt::ToolboxController,

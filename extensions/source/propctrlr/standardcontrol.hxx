@@ -374,9 +374,9 @@ namespace pcr
     class DropDownEditControl : public DropDownEditControl_Base
     {
     private:
-        OMultilineFloatingEdit*             m_pFloatingEdit;
+        VclPtr<OMultilineFloatingEdit>             m_pFloatingEdit;
         VclPtr<MultiLineEdit>               m_pImplEdit;
-        PushButton*                         m_pDropdownButton;
+        VclPtr<PushButton>                         m_pDropdownButton;
         MultiLineOperationMode              m_nOperationMode;
         bool                                m_bDropdown : 1;
 

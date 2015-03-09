@@ -175,7 +175,7 @@ SwHeaderFooterWin::~SwHeaderFooterWin( )
 void SwHeaderFooterWin::dispose()
 {
     delete m_pPopupMenu;
-    delete m_pLine;
+    m_pLine.clear();
     MenuButton::dispose();
 }
 

@@ -69,43 +69,43 @@ public:
     void            RefreshEditRow( size_t nOffset );
 
 private:
-    ListBox*         pLbConnect1;
-    ListBox*         pLbField1;
-    ListBox*         pLbCond1;
-    ComboBox*        pEdVal1;
+    VclPtr<ListBox>         pLbConnect1;
+    VclPtr<ListBox>         pLbField1;
+    VclPtr<ListBox>         pLbCond1;
+    VclPtr<ComboBox>        pEdVal1;
 
-    ListBox*         pLbConnect2;
-    ListBox*         pLbField2;
-    ListBox*         pLbCond2;
-    ComboBox*        pEdVal2;
+    VclPtr<ListBox>         pLbConnect2;
+    VclPtr<ListBox>         pLbField2;
+    VclPtr<ListBox>         pLbCond2;
+    VclPtr<ComboBox>        pEdVal2;
 
-    ListBox*         pLbConnect3;
-    ListBox*         pLbField3;
-    ListBox*         pLbCond3;
-    ComboBox*        pEdVal3;
+    VclPtr<ListBox>         pLbConnect3;
+    VclPtr<ListBox>         pLbField3;
+    VclPtr<ListBox>         pLbCond3;
+    VclPtr<ComboBox>        pEdVal3;
 
-    ListBox*         pLbConnect4;
-    ListBox*         pLbField4;
-    ListBox*         pLbCond4;
-    ComboBox*        pEdVal4;
+    VclPtr<ListBox>         pLbConnect4;
+    VclPtr<ListBox>         pLbField4;
+    VclPtr<ListBox>         pLbCond4;
+    VclPtr<ComboBox>        pEdVal4;
 
-    ScrollBar*       pScrollBar;
-    VclExpander*     pExpander;
+    VclPtr<ScrollBar>       pScrollBar;
+    VclPtr<VclExpander>     pExpander;
 
-    OKButton*        pBtnOk;
-    CancelButton*    pBtnCancel;
+    VclPtr<OKButton>        pBtnOk;
+    VclPtr<CancelButton>    pBtnCancel;
 
-    CheckBox*        pBtnCase;
-    CheckBox*        pBtnRegExp;
-    CheckBox*        pBtnHeader;
-    CheckBox*        pBtnUnique;
-    CheckBox*        pBtnCopyResult;
-    ListBox*         pLbCopyArea;
-    formula::RefEdit* pEdCopyArea;
-    formula::RefButton* pRbCopyArea;
-    CheckBox*        pBtnDestPers;
-    FixedText*       pFtDbAreaLabel;
-    FixedText*       pFtDbArea;
+    VclPtr<CheckBox>        pBtnCase;
+    VclPtr<CheckBox>        pBtnRegExp;
+    VclPtr<CheckBox>        pBtnHeader;
+    VclPtr<CheckBox>        pBtnUnique;
+    VclPtr<CheckBox>        pBtnCopyResult;
+    VclPtr<ListBox>         pLbCopyArea;
+    VclPtr<formula::RefEdit> pEdCopyArea;
+    VclPtr<formula::RefButton> pRbCopyArea;
+    VclPtr<CheckBox>        pBtnDestPers;
+    VclPtr<FixedText>       pFtDbAreaLabel;
+    VclPtr<FixedText>       pFtDbArea;
     const OUString aStrUndefined;
     const OUString aStrNone;
 
@@ -122,10 +122,10 @@ private:
     ScDocument*         pDoc;
     SCTAB               nSrcTab;
 
-    std::vector<ComboBox*> maValueEdArr;
-    std::vector<ListBox*>  maFieldLbArr;
-    std::vector<ListBox*>  maCondLbArr;
-    std::vector<ListBox*>  maConnLbArr;
+    std::vector<VclPtr<ComboBox>> maValueEdArr;
+    std::vector<VclPtr<ListBox>>  maFieldLbArr;
+    std::vector<VclPtr<ListBox>>  maCondLbArr;
+    std::vector<VclPtr<ListBox>>  maConnLbArr;
 
     std::deque<bool>   maHasDates;
     std::deque<bool>   maRefreshExceptQuery;
@@ -174,27 +174,27 @@ public:
     virtual bool    Close() SAL_OVERRIDE;
 
 private:
-    ListBox*         pLbFilterArea;
-    formula::RefEdit*   pEdFilterArea;
-    formula::RefButton* pRbFilterArea;
+    VclPtr<ListBox>         pLbFilterArea;
+    VclPtr<formula::RefEdit>   pEdFilterArea;
+    VclPtr<formula::RefButton> pRbFilterArea;
 
-    VclExpander*     pExpander;
-    CheckBox*        pBtnCase;
-    CheckBox*        pBtnRegExp;
-    CheckBox*        pBtnHeader;
-    CheckBox*        pBtnUnique;
-    CheckBox*        pBtnCopyResult;
-    ListBox*         pLbCopyArea;
-    formula::RefEdit* pEdCopyArea;
-    formula::RefButton* pRbCopyArea;
-    CheckBox*        pBtnDestPers;
-    FixedText*       pFtDbAreaLabel;
-    FixedText*       pFtDbArea;
+    VclPtr<VclExpander>     pExpander;
+    VclPtr<CheckBox>        pBtnCase;
+    VclPtr<CheckBox>        pBtnRegExp;
+    VclPtr<CheckBox>        pBtnHeader;
+    VclPtr<CheckBox>        pBtnUnique;
+    VclPtr<CheckBox>        pBtnCopyResult;
+    VclPtr<ListBox>         pLbCopyArea;
+    VclPtr<formula::RefEdit> pEdCopyArea;
+    VclPtr<formula::RefButton> pRbCopyArea;
+    VclPtr<CheckBox>        pBtnDestPers;
+    VclPtr<FixedText>       pFtDbAreaLabel;
+    VclPtr<FixedText>       pFtDbArea;
     const OUString aStrUndefined;
     const OUString aStrNoName;
 
-    OKButton*        pBtnOk;
-    CancelButton*    pBtnCancel;
+    VclPtr<OKButton>        pBtnOk;
+    VclPtr<CancelButton>    pBtnCancel;
 
     ScFilterOptionsMgr* pOptionsMgr;
 
@@ -204,7 +204,7 @@ private:
     ScViewData*         pViewData;
     ScDocument*         pDoc;
 
-    formula::RefEdit*   pRefInputEdit;
+    VclPtr<formula::RefEdit>   pRefInputEdit;
     bool                bRefInputMode;
 
     // Hack: RefInput control

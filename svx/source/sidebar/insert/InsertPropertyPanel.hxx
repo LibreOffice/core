@@ -45,8 +45,8 @@ public:
     virtual void dispose() SAL_OVERRIDE;
 
 private:
-    ToolBox*        mpStandardShapesToolBox;
-    ToolBox*        mpCustomShapesToolBox;
+    VclPtr<ToolBox>        mpStandardShapesToolBox;
+    VclPtr<ToolBox>        mpCustomShapesToolBox;
     const css::uno::Reference<css::frame::XFrame> mxFrame;
 
     DECL_LINK(WindowEventListener, VclSimpleEvent*);

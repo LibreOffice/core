@@ -31,10 +31,12 @@ namespace svx {
 
 class ExtrusionDepthDialog : public ModalDialog
 {
-    MetricField* m_pMtrDepth;
+    VclPtr<MetricField> m_pMtrDepth;
 
 public:
     ExtrusionDepthDialog( vcl::Window* pParent, double fDepth, FieldUnit eDefaultUnit );
+    virtual ~ExtrusionDepthDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     double getDepth() const;
 };

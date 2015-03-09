@@ -109,9 +109,9 @@ private:
     SvtMiscOptions      maMiscOptions;
     Gallery*            mpGallery;
     GalleryTheme*       mpCurTheme;
-    GalleryIconView*    mpIconView;
-    GalleryListView*    mpListView;
-    GalleryPreview*     mpPreview;
+    VclPtr<GalleryIconView>    mpIconView;
+    VclPtr<GalleryListView>    mpListView;
+    VclPtr<GalleryPreview> mpPreview;
     VclPtr<GalleryToolBox> maViewBox;
     VclPtr<FixedLine>   maSeparator;
     VclPtr<FixedText>   maInfoBar;

@@ -23,6 +23,13 @@ ScTpCompatOptions::ScTpCompatOptions(vcl::Window *pParent, const SfxItemSet &rCo
 
 ScTpCompatOptions::~ScTpCompatOptions()
 {
+    dispose();
+}
+
+void ScTpCompatOptions::dispose()
+{
+    m_pLbKeyBindings.clear();
+    SfxTabPage::dispose();
 }
 
 SfxTabPage* ScTpCompatOptions::Create(vcl::Window *pParent, const SfxItemSet *rCoreAttrs)

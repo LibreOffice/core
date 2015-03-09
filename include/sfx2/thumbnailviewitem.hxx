@@ -138,7 +138,7 @@ protected:
     Rectangle maDrawArea;
     Link maClickHdl;
     bool mbEditTitle;
-    VclMultiLineEdit* mpTitleED;
+    VclPtr<VclMultiLineEdit> mpTitleED;
     Rectangle maTextEditMaxArea;
 };
 

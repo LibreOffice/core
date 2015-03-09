@@ -22,6 +22,7 @@
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <vcl/vclptr.hxx>
 
 namespace vcl { class Window; }
 
@@ -36,7 +37,7 @@ namespace abp
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
                         m_xContext;
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > m_xDataSource;
-        vcl::Window*         m_pMessageParent;
+        VclPtr<vcl::Window>         m_pMessageParent;
 
     public:
         OAdminDialogInvokation(

@@ -56,28 +56,28 @@ class SvxGrfCropPage : public SfxTabPage
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
 
-    VclContainer*   m_pCropFrame;
-    RadioButton*    m_pZoomConstRB;
-    RadioButton*    m_pSizeConstRB;
-    MetricField*    m_pLeftMF;
-    MetricField*    m_pRightMF;
-    MetricField*    m_pTopMF;
-    MetricField*    m_pBottomMF;
+    VclPtr<VclContainer>   m_pCropFrame;
+    VclPtr<RadioButton>    m_pZoomConstRB;
+    VclPtr<RadioButton>    m_pSizeConstRB;
+    VclPtr<MetricField>    m_pLeftMF;
+    VclPtr<MetricField>    m_pRightMF;
+    VclPtr<MetricField>    m_pTopMF;
+    VclPtr<MetricField>    m_pBottomMF;
 
-    VclContainer*   m_pScaleFrame;
-    MetricField*    m_pWidthZoomMF;
-    MetricField*    m_pHeightZoomMF;
+    VclPtr<VclContainer>   m_pScaleFrame;
+    VclPtr<MetricField>    m_pWidthZoomMF;
+    VclPtr<MetricField>    m_pHeightZoomMF;
 
-    VclContainer*   m_pSizeFrame;
-    MetricField*    m_pWidthMF;
-    MetricField*    m_pHeightMF;
+    VclPtr<VclContainer>   m_pSizeFrame;
+    VclPtr<MetricField>    m_pWidthMF;
+    VclPtr<MetricField>    m_pHeightMF;
 
-    VclContainer*   m_pOrigSizeGrid;
-    FixedText*      m_pOrigSizeFT;
-    PushButton*     m_pOrigSizePB;
+    VclPtr<VclContainer>   m_pOrigSizeGrid;
+    VclPtr<FixedText>      m_pOrigSizeFT;
+    VclPtr<PushButton>     m_pOrigSizePB;
 
     // Example
-    SvxCropExample* m_pExampleWN;
+    VclPtr<SvxCropExample> m_pExampleWN;
 
 
     Timer           aTimer;
@@ -85,7 +85,7 @@ class SvxGrfCropPage : public SfxTabPage
     Size            aOrigSize;
     Size            aOrigPixelSize;
     Size            aPageSize;
-    const MetricField*  pLastCropField;
+    VclPtr<MetricField>  pLastCropField;
     long            nOldWidth;
     long            nOldHeight;
     bool            bReset;

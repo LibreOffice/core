@@ -906,7 +906,7 @@ SmCmdBoxWrapper::SmCmdBoxWrapper(vcl::Window *pParentWindow, sal_uInt16 nId,
 
     // make window docked to the bottom initially (after first start)
     eChildAlignment = SfxChildAlignment::BOTTOM;
-    static_cast<SfxDockingWindow *>(pWindow)->Initialize(pInfo);
+    static_cast<SfxDockingWindow *>(pWindow.get())->Initialize(pInfo);
 }
 
 

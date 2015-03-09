@@ -58,15 +58,15 @@ namespace dbaui
 
     class OAddTableDlg : public ModelessDialog
     {
-        RadioButton*        m_pCaseTables;
-        RadioButton*        m_pCaseQueries;
+        VclPtr<RadioButton>        m_pCaseTables;
+        VclPtr<RadioButton>        m_pCaseQueries;
 
-        OTableTreeListBox*  m_pTableList;
-        SvTreeListBox*      m_pQueryList;
+        VclPtr<OTableTreeListBox>  m_pTableList;
+        VclPtr<SvTreeListBox>      m_pQueryList;
         boost::scoped_ptr< TableObjectListFacade > m_xCurrentList;
 
-        PushButton*         m_pAddButton;
-        PushButton*         m_pCloseButton;
+        VclPtr<PushButton>         m_pAddButton;
+        VclPtr<PushButton>         m_pCloseButton;
 
         IAddTableDialogContext& m_rContext;
 

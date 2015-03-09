@@ -29,17 +29,17 @@ class SwMailMergeWizard;
 
 class SwMailMergeMergePage : public svt::OWizardPage
 {
-    FixedText*      m_pEditFI;
-    PushButton*     m_pEditPB;
+    VclPtr<FixedText>      m_pEditFI;
+    VclPtr<PushButton>     m_pEditPB;
 
-    ReturnActionEdit* m_pFindED;
-    PushButton*     m_pFindPB;
+    VclPtr<ReturnActionEdit> m_pFindED;
+    VclPtr<PushButton>     m_pFindPB;
 
-    CheckBox*       m_pWholeWordsCB;
-    CheckBox*       m_pBackwardsCB;
-    CheckBox*       m_pMatchCaseCB;
+    VclPtr<CheckBox>       m_pWholeWordsCB;
+    VclPtr<CheckBox>       m_pBackwardsCB;
+    VclPtr<CheckBox>       m_pMatchCaseCB;
 
-    SwMailMergeWizard*  m_pWizard;
+    VclPtr<SwMailMergeWizard>  m_pWizard;
 
     DECL_LINK(EditDocumentHdl_Impl, void *);
     DECL_LINK(FindHdl_Impl, void *);
@@ -47,6 +47,8 @@ class SwMailMergeMergePage : public svt::OWizardPage
 
 public:
     SwMailMergeMergePage( SwMailMergeWizard* _pParent);
+    virtual ~SwMailMergeMergePage();
+    virtual void dispose() SAL_OVERRIDE;
 
 };
 

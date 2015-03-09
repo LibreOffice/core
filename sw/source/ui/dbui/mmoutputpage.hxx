@@ -45,42 +45,42 @@ namespace com{ namespace sun{ namespace star{
 
 class SwMailMergeOutputPage : public svt::OWizardPage
 {
-    RadioButton*    m_pSaveStartDocRB;
-    RadioButton*    m_pSaveMergedDocRB;
-    RadioButton*    m_pPrintRB;
-    RadioButton*    m_pSendMailRB;
+    VclPtr<RadioButton>    m_pSaveStartDocRB;
+    VclPtr<RadioButton>    m_pSaveMergedDocRB;
+    VclPtr<RadioButton>    m_pPrintRB;
+    VclPtr<RadioButton>    m_pSendMailRB;
 
-    VclFrame*       m_pSeparator;
+    VclPtr<VclFrame>       m_pSeparator;
 
-    PushButton*     m_pSaveStartDocPB;
+    VclPtr<PushButton>     m_pSaveStartDocPB;
 
-    RadioButton*    m_pSaveAsOneRB;
-    RadioButton*    m_pSaveIndividualRB;
-    RadioButton*    m_pPrintAllRB; //has to be here for tab control reasons
-    RadioButton*    m_pSendAllRB;  //has to be here for tab control reasons
+    VclPtr<RadioButton>    m_pSaveAsOneRB;
+    VclPtr<RadioButton>    m_pSaveIndividualRB;
+    VclPtr<RadioButton>    m_pPrintAllRB; //has to be here for tab control reasons
+    VclPtr<RadioButton>    m_pSendAllRB;  //has to be here for tab control reasons
     //this group is used in save and print
-    RadioButton*    m_pFromRB;
-    NumericField*   m_pFromNF;
-    FixedText*      m_pToFT;
-    NumericField*   m_pToNF;
-    PushButton*     m_pSaveNowPB;
+    VclPtr<RadioButton>    m_pFromRB;
+    VclPtr<NumericField>   m_pFromNF;
+    VclPtr<FixedText>      m_pToFT;
+    VclPtr<NumericField>   m_pToNF;
+    VclPtr<PushButton>     m_pSaveNowPB;
 
-    FixedText*      m_pPrinterFT;
-    ListBox*        m_pPrinterLB;
-    PushButton*     m_pPrinterSettingsPB;
-    PushButton*     m_pPrintNowPB;
+    VclPtr<FixedText>      m_pPrinterFT;
+    VclPtr<ListBox>        m_pPrinterLB;
+    VclPtr<PushButton>     m_pPrinterSettingsPB;
+    VclPtr<PushButton>     m_pPrintNowPB;
 
-    FixedText*      m_pMailToFT;
-    ListBox*        m_pMailToLB;
-    PushButton*     m_pCopyToPB;
-    FixedText*      m_pSubjectFT;
-    Edit*           m_pSubjectED;
-    FixedText*      m_pSendAsFT;
-    ListBox*        m_pSendAsLB;
-    VclContainer*   m_pAttachmentGroup;
-    Edit*           m_pAttachmentED;
-    PushButton*     m_pSendAsPB;
-    PushButton*     m_pSendDocumentsPB;
+    VclPtr<FixedText>      m_pMailToFT;
+    VclPtr<ListBox>        m_pMailToLB;
+    VclPtr<PushButton>     m_pCopyToPB;
+    VclPtr<FixedText>      m_pSubjectFT;
+    VclPtr<Edit>           m_pSubjectED;
+    VclPtr<FixedText>      m_pSendAsFT;
+    VclPtr<ListBox>        m_pSendAsLB;
+    VclPtr<VclContainer>   m_pAttachmentGroup;
+    VclPtr<Edit>           m_pAttachmentED;
+    VclPtr<PushButton>     m_pSendAsPB;
+    VclPtr<PushButton>     m_pSendDocumentsPB;
 
     //some FixedLine labels
     OUString        m_sSaveStartST;
@@ -97,7 +97,7 @@ class SwMailMergeOutputPage : public svt::OWizardPage
 
     bool            m_bCancelSaving;
 
-    SwMailMergeWizard*  m_pWizard;
+    VclPtr<SwMailMergeWizard>  m_pWizard;
 
     //some dialog data
     Printer*        m_pTempPrinter;
@@ -147,17 +147,17 @@ struct SwSendMailDialog_Impl;
 class SwMailMergeConfigItem;
 class SwSendMailDialog : public ModelessDialog //SfxModalDialog
 {
-    FixedText               *m_pTransferStatus;
-    FixedText               *m_pPaused;
-    ProgressBar             *m_pProgressBar;
-    FixedText               *m_pErrorStatus;
+    VclPtr<FixedText>               m_pTransferStatus;
+    VclPtr<FixedText>               m_pPaused;
+    VclPtr<ProgressBar>             m_pProgressBar;
+    VclPtr<FixedText>               m_pErrorStatus;
 
-    SvSimpleTableContainer  *m_pContainer;
-    HeaderBar               *m_pStatusHB;
-    SvSimpleTable           *m_pStatus;
+    VclPtr<SvSimpleTableContainer>  m_pContainer;
+    VclPtr<HeaderBar>               m_pStatusHB;
+    VclPtr<SvSimpleTable>           m_pStatus;
 
-    PushButton              *m_pStop;
-    PushButton              *m_pClose;
+    VclPtr<PushButton>              m_pStop;
+    VclPtr<PushButton>              m_pClose;
 
     OUString                m_sContinue;
     OUString                m_sStop;

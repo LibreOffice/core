@@ -89,7 +89,7 @@ class SVX_DLLPUBLIC FmFormShell : public SfxShell
 
     class FormShellWaitObject
     {
-        vcl::Window* m_pWindow;
+        VclPtr<vcl::Window> m_pWindow;
     public:
         FormShellWaitObject(const FmFormShell* _pShell);
         ~FormShellWaitObject();

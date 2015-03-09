@@ -33,7 +33,7 @@ namespace vcl { class Window; }
 struct FltCallDialogParameter
 {
 
-    vcl::Window*     pWindow;
+    VclPtr<vcl::Window> pWindow;
     ResMgr*     pResMgr;
     FieldUnit   eFieldUnit;
     OUString    aFilterExt;

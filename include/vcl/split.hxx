@@ -28,7 +28,7 @@
 class VCL_DLLPUBLIC Splitter : public vcl::Window
 {
 private:
-    vcl::Window*        mpRefWin;
+    VclPtr<vcl::Window> mpRefWin;
     long                mnSplitPos;
     long                mnLastSplitPos;
     long                mnStartSplitPos;

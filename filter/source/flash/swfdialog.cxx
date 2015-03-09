@@ -184,7 +184,7 @@ Dialog* SWFDialog::createDialog( vcl::Window* pParent )
 void SWFDialog::executedDialog( sal_Int16 nExecutionResult )
 {
     if( nExecutionResult && m_pDialog )
-        maFilterData = static_cast< ImpSWFDialog* >( m_pDialog )->GetFilterData();
+        maFilterData = static_cast< ImpSWFDialog* >( m_pDialog.get() )->GetFilterData();
 
     destroyDialog();
 }

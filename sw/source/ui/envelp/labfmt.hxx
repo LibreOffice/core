@@ -69,20 +69,20 @@ public:
 
 class SwLabFmtPage : public SfxTabPage
 {
-    FixedText*    m_pMakeFI;
-    FixedText*    m_pTypeFI;
-    SwLabPreview* m_pPreview;
-    MetricField*  m_pHDistField;
-    MetricField*  m_pVDistField;
-    MetricField*  m_pWidthField;
-    MetricField*  m_pHeightField;
-    MetricField*  m_pLeftField;
-    MetricField*  m_pUpperField;
-    NumericField* m_pColsField;
-    NumericField* m_pRowsField;
-    MetricField*  m_pPWidthField;
-    MetricField*  m_pPHeightField;
-    PushButton*   m_pSavePB;
+    VclPtr<FixedText>    m_pMakeFI;
+    VclPtr<FixedText>    m_pTypeFI;
+    VclPtr<SwLabPreview> m_pPreview;
+    VclPtr<MetricField>  m_pHDistField;
+    VclPtr<MetricField>  m_pVDistField;
+    VclPtr<MetricField>  m_pWidthField;
+    VclPtr<MetricField>  m_pHeightField;
+    VclPtr<MetricField>  m_pLeftField;
+    VclPtr<MetricField>  m_pUpperField;
+    VclPtr<NumericField> m_pColsField;
+    VclPtr<NumericField> m_pRowsField;
+    VclPtr<MetricField>  m_pPWidthField;
+    VclPtr<MetricField>  m_pPHeightField;
+    VclPtr<PushButton>   m_pSavePB;
 
     Idle aPreviewIdle;
     bool  bModified;
@@ -90,7 +90,6 @@ class SwLabFmtPage : public SfxTabPage
     SwLabItem    aItem;
 
      SwLabFmtPage(vcl::Window* pParent, const SfxItemSet& rSet);
-    virtual ~SwLabFmtPage();
 
     DECL_LINK(ModifyHdl, void *);
     DECL_LINK(PreviewHdl, void *);
@@ -103,6 +102,8 @@ class SwLabFmtPage : public SfxTabPage
     using TabPage::DeactivatePage;
 
 public:
+    virtual ~SwLabFmtPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     static SfxTabPage* Create(vcl::Window* pParent, const SfxItemSet* rSet);
 
@@ -117,12 +118,12 @@ public:
 
 class SwSaveLabelDlg : public ModalDialog
 {
-    ComboBox*   m_pMakeCB;
-    Edit*       m_pTypeED;
-    OKButton*   m_pOKPB;
+    VclPtr<ComboBox>   m_pMakeCB;
+    VclPtr<Edit>       m_pTypeED;
+    VclPtr<OKButton>   m_pOKPB;
 
     bool        bSuccess;
-    SwLabFmtPage*   pLabPage;
+    VclPtr<SwLabFmtPage>   pLabPage;
     SwLabRec&       rLabRec;
 
     DECL_LINK(OkHdl, void *);
@@ -130,6 +131,8 @@ class SwSaveLabelDlg : public ModalDialog
 
 public:
     SwSaveLabelDlg(SwLabFmtPage* pParent, SwLabRec& rRec);
+    virtual ~SwSaveLabelDlg();
+    virtual void dispose() SAL_OVERRIDE;
 
     void SetLabel(const OUString& rMake, const OUString& rType)
     {

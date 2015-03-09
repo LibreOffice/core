@@ -71,10 +71,11 @@ protected:
 public:
     Graphic maGraphic;
     Bitmap *mpBitmap;
-    FixedBitmap *mpFixedBitmap;
+    VclPtr<FixedBitmap> mpFixedBitmap;
 
     MyWorkWindow( vcl::Window* pParent, WinBits nWinStyle );
-
+    virtual ~MyWorkWindow() { dispose(); }
+    virtual void dispose() SAL_OVERRIDE { mpFixedBitmap.clear(); WorkWindow::dispose(); }
     void LoadGraphic( const OUString& sImageFile );
 
     virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;

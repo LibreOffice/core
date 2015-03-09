@@ -43,7 +43,7 @@ private:
     Rectangle maPreviewRect;
     Point     maTopLeft, maBottomRight;
     Point     maMinTopLeft, maMaxBottomRight;
-    SaneDlg*  mpParentDialog;
+    VclPtr<SaneDlg>  mpParentDialog;
     DragDirection meDragDirection;
     bool      mbDragEnable;
     bool      mbDragDrawn;
@@ -60,6 +60,12 @@ public:
         , mbDragDrawn(false)
         , mbIsDragging(false)
     {
+    }
+    virtual ~ScanPreview() { dispose(); }
+    virtual void dispose() SAL_OVERRIDE
+    {
+        mpParentDialog.clear();
+        vcl::Window::dispose();
     }
     void Init(SaneDlg *pParent)
     {
@@ -245,6 +251,30 @@ SaneDlg::~SaneDlg()
 void SaneDlg::dispose()
 {
     mrSane.SetReloadOptionsHdl( maOldLink );
+    mpOKButton.clear();
+    mpCancelButton.clear();
+    mpDeviceInfoButton.clear();
+    mpPreviewButton.clear();
+    mpScanButton.clear();
+    mpButtonOption.clear();
+    mpOptionTitle.clear();
+    mpOptionDescTxt.clear();
+    mpVectorTxt.clear();
+    mpLeftField.clear();
+    mpTopField.clear();
+    mpRightField.clear();
+    mpBottomField.clear();
+    mpDeviceBox.clear();
+    mpReslBox.clear();
+    mpAdvancedBox.clear();
+    mpVectorBox.clear();
+    mpQuantumRangeBox.clear();
+    mpStringRangeBox.clear();
+    mpBoolCheckBox.clear();
+    mpStringEdit.clear();
+    mpNumericEdit.clear();
+    mpOptionBox.clear();
+    mpPreview.clear();
     ModalDialog::dispose();
 }
 

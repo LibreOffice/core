@@ -72,8 +72,8 @@ class SwNavigationPI : public vcl::Window,
     SwWrtShell          *pContentWrtShell;
     SwView              *pActContView;
     SwView              *pCreateView;
-    SfxPopupWindow      *pPopupWindow;
-    SfxPopupWindow      *pFloatingWindow;
+    VclPtr<SfxPopupWindow>      pPopupWindow;
+    VclPtr<SfxPopupWindow>      pFloatingWindow;
 
     SfxChildWindowContext* pContextWin;
 

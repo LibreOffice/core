@@ -42,7 +42,7 @@ class  PopupMenu;
 class VCL_DLLPUBLIC ToolBoxCustomizeEvent
 {
 private:
-    ToolBox*    mpTargetBox;
+    VclPtr<ToolBox> mpTargetBox;
     void*       mpData;
     sal_uInt16      mnIdFrom;
     sal_uInt16      mnPosTo;
@@ -131,7 +131,7 @@ private:
     Rectangle           maOutDockRect;
     Rectangle           maInDockRect;
     Rectangle           maPaintRect;
-    FloatingWindow*     mpFloatWin;
+    VclPtr<FloatingWindow>  mpFloatWin;
     sal_uInt16              mnKeyModifier;
     long                mnDX;
     long                mnDY;

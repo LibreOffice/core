@@ -194,8 +194,8 @@ IMPL_LINK( SwSendQueryBox_Impl, ModifyHdl, Edit*, pEdit)
 
 class SwCopyToDialog : public SfxModalDialog
 {
-    Edit* m_pCCED;
-    Edit* m_pBCCED;
+    VclPtr<Edit> m_pCCED;
+    VclPtr<Edit> m_pBCCED;
 
 public:
     SwCopyToDialog(vcl::Window* pParent)
@@ -204,6 +204,13 @@ public:
     {
         get(m_pCCED, "cc");
         get(m_pBCCED, "bcc");
+    }
+    virtual ~SwCopyToDialog() { dispose(); }
+    virtual void dispose() SAL_OVERRIDE
+    {
+        m_pCCED.clear();
+        m_pBCCED.clear();
+        SfxModalDialog::dispose();
     }
 
     OUString GetCC() {return m_pCCED->GetText();}
@@ -306,6 +313,37 @@ SwMailMergeOutputPage::~SwMailMergeOutputPage()
 void SwMailMergeOutputPage::dispose()
 {
     delete m_pTempPrinter;
+    m_pSaveStartDocRB.clear();
+    m_pSaveMergedDocRB.clear();
+    m_pPrintRB.clear();
+    m_pSendMailRB.clear();
+    m_pSeparator.clear();
+    m_pSaveStartDocPB.clear();
+    m_pSaveAsOneRB.clear();
+    m_pSaveIndividualRB.clear();
+    m_pPrintAllRB.clear();
+    m_pSendAllRB.clear();
+    m_pFromRB.clear();
+    m_pFromNF.clear();
+    m_pToFT.clear();
+    m_pToNF.clear();
+    m_pSaveNowPB.clear();
+    m_pPrinterFT.clear();
+    m_pPrinterLB.clear();
+    m_pPrinterSettingsPB.clear();
+    m_pPrintNowPB.clear();
+    m_pMailToFT.clear();
+    m_pMailToLB.clear();
+    m_pCopyToPB.clear();
+    m_pSubjectFT.clear();
+    m_pSubjectED.clear();
+    m_pSendAsFT.clear();
+    m_pSendAsLB.clear();
+    m_pAttachmentGroup.clear();
+    m_pAttachmentED.clear();
+    m_pSendAsPB.clear();
+    m_pSendDocumentsPB.clear();
+    m_pWizard.clear();
     svt::OWizardPage::dispose();
 }
 
@@ -485,7 +523,7 @@ IMPL_LINK(SwMailMergeOutputPage, OutputTypeHdl_Impl, RadioButton*, pButton)
             SendTypeHdl_Impl(m_pSendAsLB);
         }
     }
-    m_pFromRB->GetClickHdl().Call(m_pFromRB->IsChecked() ? m_pFromRB : 0);
+    m_pFromRB->GetClickHdl().Call(m_pFromRB->IsChecked() ? m_pFromRB.get() : 0);
 
     SetUpdateMode(false);
     return 0;

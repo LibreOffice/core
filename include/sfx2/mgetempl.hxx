@@ -36,23 +36,23 @@ class SfxStyleSheetBase;
 
 class SfxManageStyleSheetPage : public SfxTabPage
 {
-    VclMultiLineEdit* m_pNameRo;
-    Edit* m_pNameRw;
+    VclPtr<VclMultiLineEdit> m_pNameRo;
+    VclPtr<Edit>             m_pNameRw;
 
-    CheckBox* m_pAutoCB;
+    VclPtr<CheckBox>         m_pAutoCB;
 
-    FixedText* m_pFollowFt;
-    ListBox* m_pFollowLb;
-    PushButton* m_pEditStyleBtn;
+    VclPtr<FixedText>        m_pFollowFt;
+    VclPtr<ListBox>          m_pFollowLb;
+    VclPtr<PushButton>       m_pEditStyleBtn;
 
-    FixedText* m_pBaseFt;
-    ListBox* m_pBaseLb;
-    PushButton* m_pEditLinkStyleBtn;
+    VclPtr<FixedText>        m_pBaseFt;
+    VclPtr<ListBox>          m_pBaseLb;
+    VclPtr<PushButton>       m_pEditLinkStyleBtn;
 
-    FixedText* m_pFilterFt;
-    ListBox* m_pFilterLb;
+    VclPtr<FixedText>        m_pFilterFt;
+    VclPtr<ListBox>          m_pFilterLb;
 
-    FixedText *m_pDescFt;
+    VclPtr<FixedText>        m_pDescFt;
 
     SfxStyleSheetBase *pStyle;
     SfxStyleFamilies *pFamilies;

@@ -80,6 +80,18 @@ PrintDialog::PrintPreviewWindow::PrintPreviewWindow( vcl::Window* i_pParent )
     maVertDim->SetText( OUString( "2.0in" ) );
 }
 
+PrintDialog::PrintPreviewWindow::~PrintPreviewWindow()
+{
+    dispose();
+}
+
+void PrintDialog::PrintPreviewWindow::dispose()
+{
+    maHorzDim.clear();
+    maVertDim.clear();
+    Window::dispose();
+}
+
 const sal_Int32 PrintDialog::PrintPreviewWindow::PREVIEW_BITMAP_WIDTH = 1600;
 
 void PrintDialog::PrintPreviewWindow::DataChanged( const DataChangedEvent& i_rDCEvt )
@@ -248,13 +260,6 @@ void PrintDialog::PrintPreviewWindow::setPreview( const GDIMetaFile& i_rNewPrevi
     Resize();
     preparePreviewBitmap();
     Invalidate();
-}
-
-void PrintDialog::PrintPreviewWindow::dispose()
-{
-    maHorzDim.disposeAndClear();
-    maVertDim.disposeAndClear();
-    Window::dispose();
 }
 
 void PrintDialog::PrintPreviewWindow::preparePreviewBitmap()
@@ -717,6 +722,15 @@ PrintDialog::~PrintDialog()
 void PrintDialog::dispose()
 {
     delete mpCustomOptionsUIBuilder;
+    mpTabCtrl.clear();
+    mpPreviewWindow.clear();
+    mpPageEdit.clear();
+    mpNumPagesText.clear();
+    mpBackwardBtn.clear();
+    mpForwardBtn.clear();
+    mpOKButton.clear();
+    mpCancelButton.clear();
+    mpHelpButton.clear();
     ModalDialog::dispose();
 }
 
@@ -1212,7 +1226,7 @@ void PrintDialog::checkControlDependencies()
 
 void PrintDialog::checkOptionalControlDependencies()
 {
-    for( std::map< vcl::Window*, OUString >::iterator it = maControlToPropertyMap.begin();
+    for( auto it = maControlToPropertyMap.begin();
          it != maControlToPropertyMap.end(); ++it )
     {
         bool bShouldbeEnabled = maPController->isUIOptionEnabled( it->second );
@@ -1234,9 +1248,9 @@ void PrintDialog::checkOptionalControlDependencies()
             }
         }
 
-        if( bShouldbeEnabled && dynamic_cast<RadioButton*>(it->first) )
+        if( bShouldbeEnabled && dynamic_cast<RadioButton*>(it->first.get()) )
         {
-            std::map< vcl::Window*, sal_Int32 >::const_iterator r_it = maControlToNumValMap.find( it->first );
+            auto r_it = maControlToNumValMap.find( it->first );
             if( r_it != maControlToNumValMap.end() )
             {
                 bShouldbeEnabled = maPController->isUIChoiceEnabled( it->second, r_it->second );
@@ -1655,7 +1669,7 @@ IMPL_LINK_NOARG(PrintDialog, UIOptionsChanged)
 PropertyValue* PrintDialog::getValueForWindow( vcl::Window* i_pWindow ) const
 {
     PropertyValue* pVal = NULL;
-    std::map< vcl::Window*, OUString >::const_iterator it = maControlToPropertyMap.find( i_pWindow );
+    auto it = maControlToPropertyMap.find( i_pWindow );
     if( it != maControlToPropertyMap.end() )
     {
         pVal = maPController->getValue( it->second );
@@ -1671,10 +1685,10 @@ PropertyValue* PrintDialog::getValueForWindow( vcl::Window* i_pWindow ) const
 void PrintDialog::updateWindowFromProperty( const OUString& i_rProperty )
 {
     beans::PropertyValue* pValue = maPController->getValue( i_rProperty );
-    std::map< OUString, std::vector< vcl::Window* > >::const_iterator it = maPropertyToWindowMap.find( i_rProperty );
+    auto it = maPropertyToWindowMap.find( i_rProperty );
     if( pValue && it != maPropertyToWindowMap.end() )
     {
-        const std::vector< vcl::Window* >& rWindows( it->second );
+        const std::vector< VclPtr<vcl::Window> >& rWindows( it->second );
         if( ! rWindows.empty() )
         {
             bool bVal = false;
@@ -1682,7 +1696,7 @@ void PrintDialog::updateWindowFromProperty( const OUString& i_rProperty )
             if( pValue->Value >>= bVal )
             {
                 // we should have a CheckBox for this one
-                CheckBox* pBox = dynamic_cast< CheckBox* >( rWindows.front() );
+                CheckBox* pBox = dynamic_cast< CheckBox* >( rWindows.front().get() );
                 if( pBox )
                 {
                     pBox->Check( bVal );
@@ -1703,14 +1717,14 @@ void PrintDialog::updateWindowFromProperty( const OUString& i_rProperty )
             else if( pValue->Value >>= nVal )
             {
                 // this could be a ListBox or a RadioButtonGroup
-                ListBox* pList = dynamic_cast< ListBox* >( rWindows.front() );
+                ListBox* pList = dynamic_cast< ListBox* >( rWindows.front().get() );
                 if( pList )
                 {
                     pList->SelectEntryPos( static_cast< sal_uInt16 >(nVal) );
                 }
                 else if( nVal >= 0 && nVal < sal_Int32(rWindows.size() ) )
                 {
-                    RadioButton* pBtn = dynamic_cast< RadioButton* >( rWindows[nVal] );
+                    RadioButton* pBtn = dynamic_cast< RadioButton* >( rWindows[nVal].get() );
                     DBG_ASSERT( pBtn, "unexpected control for property" );
                     if( pBtn )
                         pBtn->Check();
@@ -1722,7 +1736,7 @@ void PrintDialog::updateWindowFromProperty( const OUString& i_rProperty )
 
 void PrintDialog::makeEnabled( vcl::Window* i_pWindow )
 {
-    std::map< vcl::Window*, OUString >::const_iterator it = maControlToPropertyMap.find( i_pWindow );
+    auto it = maControlToPropertyMap.find( i_pWindow );
     if( it != maControlToPropertyMap.end() )
     {
         OUString aDependency( maPController->makeEnabled( it->second ) );
@@ -1757,7 +1771,7 @@ IMPL_LINK( PrintDialog, UIOption_RadioHdl, RadioButton*, i_pBtn )
     if( i_pBtn->IsChecked() )
     {
         PropertyValue* pVal = getValueForWindow( i_pBtn );
-        std::map< vcl::Window*, sal_Int32 >::const_iterator it = maControlToNumValMap.find( i_pBtn );
+        auto it = maControlToNumValMap.find( i_pBtn );
         if( pVal && it != maControlToNumValMap.end() )
         {
             makeEnabled( i_pBtn );
@@ -1898,6 +1912,19 @@ PrintProgressDialog::PrintProgressDialog(vcl::Window* i_pParent, int i_nMax)
 
     mpButton->SetClickHdl( LINK( this, PrintProgressDialog, ClickHdl ) );
 
+}
+
+PrintProgressDialog::~PrintProgressDialog()
+{
+    dispose();
+}
+
+void PrintProgressDialog::dispose()
+{
+    mpText.clear();
+    mpProgress.clear();
+    mpButton.clear();
+    ModelessDialog::dispose();
 }
 
 IMPL_LINK( PrintProgressDialog, ClickHdl, Button*, pButton )

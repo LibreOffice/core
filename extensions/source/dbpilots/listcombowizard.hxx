@@ -108,10 +108,12 @@ namespace dbp
     class OContentTableSelection : public OLCPage
     {
     protected:
-        ListBox         *m_pSelectTable;
+        VclPtr<ListBox>         m_pSelectTable;
 
     public:
         OContentTableSelection( OListComboWizard* _pParent );
+        virtual ~OContentTableSelection();
+        virtual void dispose() SAL_OVERRIDE;
 
     protected:
         // TabPage overridables
@@ -133,13 +135,15 @@ namespace dbp
     class OContentFieldSelection : public OLCPage
     {
     protected:
-        ListBox         *m_pSelectTableField;
-        Edit            *m_pDisplayedField;
-        FixedText       *m_pInfo;
+        VclPtr<ListBox>         m_pSelectTableField;
+        VclPtr<Edit>            m_pDisplayedField;
+        VclPtr<FixedText>       m_pInfo;
 
 
     public:
         OContentFieldSelection( OListComboWizard* _pParent );
+        virtual ~OContentFieldSelection();
+        virtual void dispose() SAL_OVERRIDE;
 
     protected:
         DECL_LINK( OnFieldSelected, ListBox* );
@@ -160,12 +164,14 @@ namespace dbp
     class OLinkFieldsPage : public OLCPage
     {
     protected:
-        ComboBox        *m_pValueListField;
-        ComboBox        *m_pTableField;
+        VclPtr<ComboBox>        m_pValueListField;
+        VclPtr<ComboBox>        m_pTableField;
 
 
     public:
         OLinkFieldsPage( OListComboWizard* _pParent );
+        virtual ~OLinkFieldsPage();
+        virtual void dispose() SAL_OVERRIDE;
 
     protected:
         // TabPage overridables

@@ -35,6 +35,7 @@ class XMLFilterTabPageXSLT : public TabPage
 public:
     XMLFilterTabPageXSLT( vcl::Window* pParent);
     virtual ~XMLFilterTabPageXSLT();
+    virtual void dispose() SAL_OVERRIDE;
 
     bool FillInfo( filter_info_impl* pInfo );
     void SetInfo(const filter_info_impl* pInfo);
@@ -42,18 +43,18 @@ public:
     DECL_LINK( ClickBrowseHdl_Impl, PushButton * );
 
 
-    Edit*            m_pEDDocType;
+    VclPtr<Edit>            m_pEDDocType;
 
-    SvtURLBox*       m_pEDExportXSLT;
-    PushButton*      m_pPBExprotXSLT;
+    VclPtr<SvtURLBox>       m_pEDExportXSLT;
+    VclPtr<PushButton>      m_pPBExprotXSLT;
 
-    SvtURLBox*       m_pEDImportXSLT;
-    PushButton*      m_pPBImportXSLT;
+    VclPtr<SvtURLBox>       m_pEDImportXSLT;
+    VclPtr<PushButton>      m_pPBImportXSLT;
 
-    SvtURLBox*       m_pEDImportTemplate;
-    PushButton*      m_pPBImportTemplate;
+    VclPtr<SvtURLBox>       m_pEDImportTemplate;
+    VclPtr<PushButton>      m_pPBImportTemplate;
 
-    CheckBox*        m_pCBNeedsXSLT2;
+    VclPtr<CheckBox>        m_pCBNeedsXSLT2;
 
 private:
     void SetURL( SvtURLBox *rURLBox, const OUString& rURL );

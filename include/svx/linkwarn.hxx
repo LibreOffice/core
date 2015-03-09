@@ -27,7 +27,7 @@
 class SVX_DLLPUBLIC SvxLinkWarningDialog : public MessageDialog
 {
 private:
-    CheckBox* m_pWarningOnBox;
+    VclPtr<CheckBox> m_pWarningOnBox;
 
 public:
     SvxLinkWarningDialog(vcl::Window* pParent, const OUString& _rFileName);

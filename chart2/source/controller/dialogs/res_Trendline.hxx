@@ -46,29 +46,29 @@ public:
     void SetNbPoints( sal_Int32 nNbPoints );
 
 private:
-    RadioButton* m_pRB_Linear;
-    RadioButton* m_pRB_Logarithmic;
-    RadioButton* m_pRB_Exponential;
-    RadioButton* m_pRB_Power;
-    RadioButton* m_pRB_Polynomial;
-    RadioButton* m_pRB_MovingAverage;
+    VclPtr<RadioButton> m_pRB_Linear;
+    VclPtr<RadioButton> m_pRB_Logarithmic;
+    VclPtr<RadioButton> m_pRB_Exponential;
+    VclPtr<RadioButton> m_pRB_Power;
+    VclPtr<RadioButton> m_pRB_Polynomial;
+    VclPtr<RadioButton> m_pRB_MovingAverage;
 
-    FixedImage*  m_pFI_Linear;
-    FixedImage*  m_pFI_Logarithmic;
-    FixedImage*  m_pFI_Exponential;
-    FixedImage*  m_pFI_Power;
-    FixedImage*  m_pFI_Polynomial;
-    FixedImage*  m_pFI_MovingAverage;
+    VclPtr<FixedImage>  m_pFI_Linear;
+    VclPtr<FixedImage>  m_pFI_Logarithmic;
+    VclPtr<FixedImage>  m_pFI_Exponential;
+    VclPtr<FixedImage>  m_pFI_Power;
+    VclPtr<FixedImage>  m_pFI_Polynomial;
+    VclPtr<FixedImage>  m_pFI_MovingAverage;
 
-    NumericField* m_pNF_Degree;
-    NumericField* m_pNF_Period;
-    Edit*         m_pEE_Name;
-    FormattedField* m_pFmtFld_ExtrapolateForward;
-    FormattedField* m_pFmtFld_ExtrapolateBackward;
-    CheckBox*     m_pCB_SetIntercept;
-    FormattedField* m_pFmtFld_InterceptValue;
-    CheckBox*     m_pCB_ShowEquation;
-    CheckBox*     m_pCB_ShowCorrelationCoeff;
+    VclPtr<NumericField> m_pNF_Degree;
+    VclPtr<NumericField> m_pNF_Period;
+    VclPtr<Edit>         m_pEE_Name;
+    VclPtr<FormattedField> m_pFmtFld_ExtrapolateForward;
+    VclPtr<FormattedField> m_pFmtFld_ExtrapolateBackward;
+    VclPtr<CheckBox>     m_pCB_SetIntercept;
+    VclPtr<FormattedField> m_pFmtFld_InterceptValue;
+    VclPtr<CheckBox>     m_pCB_ShowEquation;
+    VclPtr<CheckBox>     m_pCB_ShowCorrelationCoeff;
 
     SvxChartRegress     m_eTrendLineType;
 

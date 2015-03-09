@@ -24,6 +24,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <comphelper/accessiblecomponenthelper.hxx>
 #include <cppuhelper/implbase3.hxx>
+#include <vcl/vclptr.hxx>
 
 namespace vcl { class Window; }
 class VCLExternalSolarLock;
@@ -56,7 +57,7 @@ class AccessibleDialogControlShape :    public AccessibleExtendedComponentHelper
 
 private:
     VCLExternalSolarLock*   m_pExternalLock;
-    DialogWindow*           m_pDialogWindow;
+    VclPtr<DialogWindow>    m_pDialogWindow;
     DlgEdObj*               m_pDlgEdObj;
     bool                    m_bFocused;
     bool                    m_bSelected;

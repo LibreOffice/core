@@ -260,6 +260,18 @@ void SfxManageStyleSheetPage::dispose()
     delete pFamilies;
     pItem = 0;
     pStyle = 0;
+    m_pNameRo.clear();
+    m_pNameRw.clear();
+    m_pAutoCB.clear();
+    m_pFollowFt.clear();
+    m_pFollowLb.clear();
+    m_pEditStyleBtn.clear();
+    m_pBaseFt.clear();
+    m_pBaseLb.clear();
+    m_pEditLinkStyleBtn.clear();
+    m_pFilterFt.clear();
+    m_pFilterLb.clear();
+    m_pDescFt.clear();
     SfxTabPage::dispose();
 }
 

@@ -41,6 +41,17 @@ SvxDistributeDialog::SvxDistributeDialog(vcl::Window* pParent,
     SetTabPage(mpPage);
 }
 
+SvxDistributeDialog::~SvxDistributeDialog()
+{
+    dispose();
+}
+
+void SvxDistributeDialog::dispose()
+{
+    mpPage.clear();
+    SfxSingleTabDialog::dispose();
+}
+
 /*************************************************************************
 |*
 |* Tabpage
@@ -67,6 +78,27 @@ SvxDistributePage::SvxDistributePage(vcl::Window* pWindow,
     get(m_pBtnVerDistance, "verdistance");
     get(m_pBtnVerBottom, "verbottom");
 }
+
+SvxDistributePage::~SvxDistributePage()
+{
+    dispose();
+}
+
+void SvxDistributePage::dispose()
+{
+    m_pBtnHorNone.clear();
+    m_pBtnHorLeft.clear();
+    m_pBtnHorCenter.clear();
+    m_pBtnHorDistance.clear();
+    m_pBtnHorRight.clear();
+    m_pBtnVerNone.clear();
+    m_pBtnVerTop.clear();
+    m_pBtnVerCenter.clear();
+    m_pBtnVerDistance.clear();
+    m_pBtnVerBottom.clear();
+    SvxTabPage::dispose();
+}
+
 
 /*************************************************************************
 |*

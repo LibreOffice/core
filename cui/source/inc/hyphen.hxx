@@ -42,14 +42,14 @@ protected:
 
 class SvxHyphenWordDialog : public SfxModalDialog
 {
-    HyphenEdit*         m_pWordEdit;
-    PushButton*         m_pLeftBtn;
-    PushButton*         m_pRightBtn;
-    PushButton*         m_pOkBtn;
-    PushButton*         m_pContBtn;
-    PushButton*         m_pDelBtn;
-    PushButton*         m_pHyphAll;
-    CloseButton*        m_pCloseBtn;
+    VclPtr<HyphenEdit>         m_pWordEdit;
+    VclPtr<PushButton>         m_pLeftBtn;
+    VclPtr<PushButton>         m_pRightBtn;
+    VclPtr<PushButton>         m_pOkBtn;
+    VclPtr<PushButton>         m_pContBtn;
+    VclPtr<PushButton>         m_pDelBtn;
+    VclPtr<PushButton>         m_pHyphAll;
+    VclPtr<CloseButton>        m_pCloseBtn;
     OUString            aLabel;
     SvxSpellWrapper*    pHyphWrapper;
     css::uno::Reference< css::linguistic2::XHyphenator >        xHyphenator;
@@ -85,6 +85,8 @@ public:
                          vcl::Window* pParent,
                          css::uno::Reference< css::linguistic2::XHyphenator >  &xHyphen,
                          SvxSpellWrapper* pWrapper );
+    virtual ~SvxHyphenWordDialog();
+    virtual void    dispose() SAL_OVERRIDE;
 
     void            SetWindowTitle( LanguageType nLang );
     void            SelLeft();

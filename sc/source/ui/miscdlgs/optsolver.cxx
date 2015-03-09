@@ -53,6 +53,18 @@ ScSolverProgressDialog::ScSolverProgressDialog(vcl::Window* pParent)
     get(m_pFtTime, "progress");
 }
 
+ScSolverProgressDialog::~ScSolverProgressDialog()
+{
+    dispose();
+}
+
+void ScSolverProgressDialog::dispose()
+{
+    m_pFtTime.clear();
+    ModelessDialog::dispose();
+}
+
+
 void ScSolverProgressDialog::HideTimeLimit()
 {
     m_pFtTime->Hide();
@@ -72,6 +84,17 @@ ScSolverNoSolutionDialog::ScSolverNoSolutionDialog( vcl::Window* pParent, const 
     m_pFtErrorText->SetText(rErrorText);
 }
 
+ScSolverNoSolutionDialog::~ScSolverNoSolutionDialog()
+{
+    dispose();
+}
+
+void ScSolverNoSolutionDialog::dispose()
+{
+    m_pFtErrorText.clear();
+    ModalDialog::dispose();
+}
+
 ScSolverSuccessDialog::ScSolverSuccessDialog( vcl::Window* pParent, const OUString& rSolution )
     : ModalDialog(pParent, "SolverSuccessDialog", "modules/scalc/ui/solversuccessdialog.ui")
 {
@@ -82,6 +105,19 @@ ScSolverSuccessDialog::ScSolverSuccessDialog( vcl::Window* pParent, const OUStri
     m_pBtnCancel->SetClickHdl(LINK(this, ScSolverSuccessDialog, ClickHdl));
     OUString aMessage = m_pFtResult->GetText() + " " + rSolution;
     m_pFtResult->SetText(aMessage);
+}
+
+ScSolverSuccessDialog::~ScSolverSuccessDialog()
+{
+    dispose();
+}
+
+void ScSolverSuccessDialog::dispose()
+{
+    m_pFtResult.clear();
+    m_pBtnOk.clear();
+    m_pBtnCancel.clear();
+    ModalDialog::dispose();
 }
 
 IMPL_LINK( ScSolverSuccessDialog, ClickHdl, PushButton*, pBtn )
@@ -267,6 +303,63 @@ ScOptSolverDlg::ScOptSolverDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Windo
 
 ScOptSolverDlg::~ScOptSolverDlg()
 {
+    dispose();
+}
+
+void ScOptSolverDlg::dispose()
+{
+    m_pFtObjectiveCell.clear();
+    m_pEdObjectiveCell.clear();
+    m_pRBObjectiveCell.clear();
+    m_pRbMax.clear();
+    m_pRbMin.clear();
+    m_pRbValue.clear();
+    m_pEdTargetValue.clear();
+    m_pRBTargetValue.clear();
+    m_pFtVariableCells.clear();
+    m_pEdVariableCells.clear();
+    m_pRBVariableCells.clear();
+    m_pFtCellRef.clear();
+    m_pEdLeft1.clear();
+    m_pRBLeft1.clear();
+    m_pFtOperator.clear();
+    m_pLbOp1.clear();
+    m_pFtConstraint.clear();
+    m_pEdRight1.clear();
+    m_pRBRight1.clear();
+    m_pBtnDel1.clear();
+    m_pEdLeft2.clear();
+    m_pRBLeft2.clear();
+    m_pLbOp2.clear();
+    m_pEdRight2.clear();
+    m_pRBRight2.clear();
+    m_pBtnDel2.clear();
+    m_pEdLeft3.clear();
+    m_pRBLeft3.clear();
+    m_pLbOp3.clear();
+    m_pEdRight3.clear();
+    m_pRBRight3.clear();
+    m_pBtnDel3.clear();
+    m_pEdLeft4.clear();
+    m_pRBLeft4.clear();
+    m_pLbOp4.clear();
+    m_pEdRight4.clear();
+    m_pRBRight4.clear();
+    m_pBtnDel4.clear();
+    m_pScrollBar.clear();
+    m_pBtnOpt.clear();
+    m_pBtnCancel.clear();
+    m_pBtnSolve.clear();
+    mpEdActive.clear();
+    for (auto p : mpLeftButton)
+        p.clear();
+    for (auto p : mpRightButton)
+        p.clear();
+    for (auto p : mpOperator)
+        p.clear();
+    for (auto p : mpDelButton)
+        p.clear();
+    ScAnyRefDlg::dispose();
 }
 
 void ScOptSolverDlg::Init(const ScAddress& rCursorPos)
@@ -506,7 +599,7 @@ void ScOptSolverDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 
 bool ScOptSolverDlg::IsRefInputMode() const
 {
-    return mpEdActive != NULL;
+    return mpEdActive != nullptr;
 }
 
 // Handler:

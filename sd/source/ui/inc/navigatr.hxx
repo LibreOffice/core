@@ -178,7 +178,7 @@ protected:
                                 const SfxPoolItem* pState ) SAL_OVERRIDE;
 
 private:
-    SdNavigatorWin* pNavigatorWin;
+    VclPtr<SdNavigatorWin> pNavigatorWin;
     const SdNavigatorWin::UpdateRequestFunctor maUpdateRequest;
 };
 
@@ -196,7 +196,7 @@ protected:
                                 const SfxPoolItem* pState ) SAL_OVERRIDE;
 
 private:
-    SdNavigatorWin* pNavigatorWin;
+    VclPtr<SdNavigatorWin> pNavigatorWin;
     const SdNavigatorWin::UpdateRequestFunctor maUpdateRequest;
 };
 

@@ -33,22 +33,22 @@ class SwWordCountFloatDlg : public SfxModelessDialog
     void showCJK(bool bShowCJK);
     void showStandardizedPages(bool bShowStandardizedPages);
 
-    FixedText* m_pCurrentWordFT;
-    FixedText* m_pCurrentCharacterFT;
-    FixedText* m_pCurrentCharacterExcludingSpacesFT;
-    FixedText* m_pCurrentCjkcharsFT;
-    FixedText* m_pCurrentStandardizedPagesFT;
+    VclPtr<FixedText> m_pCurrentWordFT;
+    VclPtr<FixedText> m_pCurrentCharacterFT;
+    VclPtr<FixedText> m_pCurrentCharacterExcludingSpacesFT;
+    VclPtr<FixedText> m_pCurrentCjkcharsFT;
+    VclPtr<FixedText> m_pCurrentStandardizedPagesFT;
 
-    FixedText* m_pDocWordFT;
-    FixedText* m_pDocCharacterFT;
-    FixedText* m_pDocCharacterExcludingSpacesFT;
-    FixedText* m_pDocCjkcharsFT;
-    FixedText* m_pDocStandardizedPagesFT;
+    VclPtr<FixedText> m_pDocWordFT;
+    VclPtr<FixedText> m_pDocCharacterFT;
+    VclPtr<FixedText> m_pDocCharacterExcludingSpacesFT;
+    VclPtr<FixedText> m_pDocCjkcharsFT;
+    VclPtr<FixedText> m_pDocStandardizedPagesFT;
 
-    FixedText* m_pCjkcharsLabelFT;
-    FixedText* m_pStandardizedPagesLabelFT;
+    VclPtr<FixedText> m_pCjkcharsLabelFT;
+    VclPtr<FixedText> m_pStandardizedPagesLabelFT;
 
-    CloseButton* m_pClosePB;
+    VclPtr<CloseButton> m_pClosePB;
 
     DECL_LINK( CloseHdl,     void* );
 public:

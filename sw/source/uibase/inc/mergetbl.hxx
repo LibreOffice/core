@@ -26,7 +26,7 @@
 
 class SwMergeTblDlg : public SvxStandardDialog
 {
-    RadioButton* m_pMergePrevRB;
+    VclPtr<RadioButton> m_pMergePrevRB;
 
     bool&        m_rMergePrev;
 protected:
@@ -34,6 +34,8 @@ protected:
 
 public:
     SwMergeTblDlg( vcl::Window *pParent, bool& rWithPrev );
+    virtual ~SwMergeTblDlg();
+    virtual void dispose() SAL_OVERRIDE;
 };
 
 #endif

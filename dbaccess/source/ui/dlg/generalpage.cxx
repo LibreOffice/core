@@ -74,6 +74,18 @@ namespace dbaui
         m_pDatasourceType->SetSelectHdl(LINK(this, OGeneralPage, OnDatasourceTypeSelected));
     }
 
+    OGeneralPage::~OGeneralPage()
+    {
+        dispose();
+    }
+
+    void OGeneralPage::dispose()
+    {
+        m_pSpecialMessage.clear();
+        m_pDatasourceType.clear();
+        OGenericAdministrationPage::dispose();
+    }
+
     namespace
     {
         struct DisplayedType
@@ -531,6 +543,24 @@ namespace dbaui
         m_pRB_OpenExistingDatabase->SetClickHdl( LINK( this, OGeneralPageWizard, OnSetupModeSelected ) );
         m_pLB_DocumentList->SetSelectHdl( LINK( this, OGeneralPageWizard, OnDocumentSelected ) );
         m_pPB_OpenDatabase->SetClickHdl( LINK( this, OGeneralPageWizard, OnOpenDocument ) );
+    }
+
+    OGeneralPageWizard::~OGeneralPageWizard()
+    {
+        dispose();
+    }
+
+    void OGeneralPageWizard::dispose()
+    {
+        m_pRB_CreateDatabase.clear();
+        m_pRB_OpenExistingDatabase.clear();
+        m_pRB_ConnectDatabase.clear();
+        m_pFT_EmbeddedDBLabel.clear();
+        m_pEmbeddedDBType.clear();
+        m_pFT_DocListLabel.clear();
+        m_pLB_DocumentList.clear();
+        m_pPB_OpenDatabase.clear();
+        OGeneralPage::dispose();
     }
 
     OGeneralPageWizard::CreationMode OGeneralPageWizard::GetDatabaseCreationMode() const

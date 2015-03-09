@@ -36,12 +36,12 @@ namespace sfx2 {
 class SearchDialog : public ModelessDialog
 {
 private:
-    ComboBox*           m_pSearchEdit;
-    CheckBox*           m_pWholeWordsBox;
-    CheckBox*           m_pMatchCaseBox;
-    CheckBox*           m_pWrapAroundBox;
-    CheckBox*           m_pBackwardsBox;
-    PushButton*         m_pFindBtn;
+    VclPtr<ComboBox>           m_pSearchEdit;
+    VclPtr<CheckBox>           m_pWholeWordsBox;
+    VclPtr<CheckBox>           m_pMatchCaseBox;
+    VclPtr<CheckBox>           m_pWrapAroundBox;
+    VclPtr<CheckBox>           m_pBackwardsBox;
+    VclPtr<PushButton>         m_pFindBtn;
 
     Link                m_aFindHdl;
     Link                m_aCloseHdl;

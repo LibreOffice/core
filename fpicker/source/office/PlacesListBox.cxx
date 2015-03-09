@@ -48,8 +48,8 @@ PlacesListBox_Impl::~PlacesListBox_Impl( )
 
 void PlacesListBox_Impl::dispose()
 {
-    delete mpHeaderBar;
-    mpParent = NULL;
+    mpHeaderBar.clear();
+    mpParent.clear();
     SvHeaderTabListBox::dispose();
 }
 
@@ -93,12 +93,10 @@ PlacesListBox::~PlacesListBox( )
 
 void PlacesListBox::dispose()
 {
-    delete mpImpl;
-    mpImpl = NULL;
-    delete mpAddBtn;
-    mpAddBtn = NULL;
-    delete mpDelBtn;
-    mpDelBtn = NULL;
+    mpImpl.clear();
+    mpAddBtn.clear();
+    mpDelBtn.clear();
+    mpDlg.clear();
     Control::dispose();
 }
 

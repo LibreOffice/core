@@ -58,8 +58,7 @@ void ChineseTranslation_UnoDialog::impl_DeleteDialog()
     {
         if(m_pDialog->IsInExecute())
             m_pDialog->EndDialog(RET_CANCEL);
-        delete m_pDialog;
-        m_pDialog = 0;
+        m_pDialog.clear();
     }
 }
 

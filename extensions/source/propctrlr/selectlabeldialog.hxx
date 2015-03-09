@@ -40,9 +40,9 @@ namespace pcr
             :public ModalDialog
             ,public PcrClient
     {
-        FixedText       *m_pMainDesc;
-        SvTreeListBox   *m_pControlTree;
-        CheckBox        *m_pNoAssignment;
+        VclPtr<FixedText>       m_pMainDesc;
+        VclPtr<SvTreeListBox>   m_pControlTree;
+        VclPtr<CheckBox>        m_pNoAssignment;
 
         ImageList       m_aModelImages;
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   m_xControlModel;

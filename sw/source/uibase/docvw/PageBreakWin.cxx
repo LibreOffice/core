@@ -56,12 +56,14 @@ namespace
     class SwBreakDashedLine : public SwDashedLine
     {
         private:
-            SwPageBreakWin* m_pWin;
+            VclPtr<SwPageBreakWin> m_pWin;
 
         public:
             SwBreakDashedLine( vcl::Window* pParent, Color& ( *pColorFn )(), SwPageBreakWin* pWin ) :
                 SwDashedLine( pParent, pColorFn ),
                 m_pWin( pWin ) {};
+            virtual ~SwBreakDashedLine() { dispose(); }
+            virtual void dispose() SAL_OVERRIDE { m_pWin.clear(); SwDashedLine::dispose(); }
 
             virtual void MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     };
@@ -124,13 +126,12 @@ void SwPageBreakWin::dispose()
     m_bDestroyed = true;
     m_aFadeTimer.Stop();
 
-    delete m_pLine;
-    m_pLine = NULL;
     delete m_pPopupMenu;
     m_pPopupMenu = NULL;
     delete m_pMousePt;
     m_pMousePt = NULL;
 
+    m_pLine.clear();
     MenuButton::dispose();
 }
 

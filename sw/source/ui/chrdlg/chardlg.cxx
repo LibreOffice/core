@@ -191,6 +191,16 @@ SwCharURLPage::~SwCharURLPage()
 void SwCharURLPage::dispose()
 {
     delete pINetItem;
+    m_pURLED.clear();
+    m_pTextFT.clear();
+    m_pTextED.clear();
+    m_pNameED.clear();
+    m_pTargetFrmLB.clear();
+    m_pURLPB.clear();
+    m_pEventPB.clear();
+    m_pVisitedLB.clear();
+    m_pNotVisitedLB.clear();
+    m_pCharStyleContainer.clear();
     SfxTabPage::dispose();
 }
 

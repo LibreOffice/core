@@ -29,6 +29,7 @@
 #include <cppuhelper/compbase3.hxx>
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
+#include <vcl/vclptr.hxx>
 
 namespace vcl { class Window; }
 
@@ -135,7 +136,7 @@ public:
 
 protected:
     ::com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId> mxPaneId;
-    vcl::Window* mpWindow;
+    VclPtr<vcl::Window> mpWindow;
     ::com::sun::star::uno::Reference<com::sun::star::awt::XWindow> mxWindow;
     ::com::sun::star::uno::Reference<com::sun::star::rendering::XCanvas> mxCanvas;
 

@@ -183,6 +183,16 @@ SvxCharBasePage::SvxCharBasePage(vcl::Window* pParent, const OString& rID, const
 {
 }
 
+SvxCharBasePage::~SvxCharBasePage()
+{
+    dispose();
+}
+
+void SvxCharBasePage::dispose()
+{
+    m_pPreviewWin.clear();
+    SfxTabPage::dispose();
+}
 
 
 void SvxCharBasePage::ActivatePage( const SfxItemSet& rSet )
@@ -376,6 +386,36 @@ void SvxCharNamePage::dispose()
 {
     delete m_pImpl;
     m_pImpl = NULL;
+    m_pWestFrame.clear();
+    m_pWestFontNameFT.clear();
+    m_pWestFontNameLB.clear();
+    m_pWestFontStyleFT.clear();
+    m_pWestFontStyleLB.clear();
+    m_pWestFontSizeFT.clear();
+    m_pWestFontSizeLB.clear();
+    m_pWestFontLanguageFT.clear();
+    m_pWestFontLanguageLB.clear();
+    m_pWestFontTypeFT.clear();
+    m_pEastFrame.clear();
+    m_pEastFontNameFT.clear();
+    m_pEastFontNameLB.clear();
+    m_pEastFontStyleFT.clear();
+    m_pEastFontStyleLB.clear();
+    m_pEastFontSizeFT.clear();
+    m_pEastFontSizeLB.clear();
+    m_pEastFontLanguageFT.clear();
+    m_pEastFontLanguageLB.clear();
+    m_pEastFontTypeFT.clear();
+    m_pCTLFrame.clear();
+    m_pCTLFontNameFT.clear();
+    m_pCTLFontNameLB.clear();
+    m_pCTLFontStyleFT.clear();
+    m_pCTLFontStyleLB.clear();
+    m_pCTLFontSizeFT.clear();
+    m_pCTLFontSizeLB.clear();
+    m_pCTLFontLanguageFT.clear();
+    m_pCTLFontLanguageLB.clear();
+    m_pCTLFontTypeFT.clear();
     SvxCharBasePage::dispose();
 }
 
@@ -1336,6 +1376,37 @@ SvxCharEffectsPage::SvxCharEffectsPage( vcl::Window* pParent, const SfxItemSet& 
     Initialize();
 }
 
+SvxCharEffectsPage::~SvxCharEffectsPage()
+{
+    dispose();
+}
+
+void SvxCharEffectsPage::dispose()
+{
+    m_pFontColorFT.clear();
+    m_pFontColorLB.clear();
+    m_pEffectsFT.clear();
+    m_pEffectsLB.clear();
+    m_pReliefFT.clear();
+    m_pReliefLB.clear();
+    m_pOutlineBtn.clear();
+    m_pShadowBtn.clear();
+    m_pBlinkingBtn.clear();
+    m_pHiddenBtn.clear();
+    m_pOverlineLB.clear();
+    m_pOverlineColorFT.clear();
+    m_pOverlineColorLB.clear();
+    m_pStrikeoutLB.clear();
+    m_pUnderlineLB.clear();
+    m_pUnderlineColorFT.clear();
+    m_pUnderlineColorLB.clear();
+    m_pIndividualWordsBtn.clear();
+    m_pEmphasisFT.clear();
+    m_pEmphasisLB.clear();
+    m_pPositionFT.clear();
+    m_pPositionLB.clear();
+    SvxCharBasePage::dispose();
+}
 
 
 void SvxCharEffectsPage::Initialize()
@@ -1636,7 +1707,7 @@ IMPL_LINK( SvxCharEffectsPage, SelectHdl_Impl, ListBox*, pBox )
         m_pOutlineBtn->Enable( bEnable );
         m_pShadowBtn->Enable( bEnable );
     }
-    else if ( m_pPositionLB != pBox )
+    else if ( m_pPositionLB.get() != pBox )
     {
         sal_Int32 nUPos = m_pUnderlineLB->GetSelectEntryPos(),
                nOPos = m_pOverlineLB->GetSelectEntryPos(),
@@ -2578,6 +2649,35 @@ SvxCharPositionPage::SvxCharPositionPage( vcl::Window* pParent, const SfxItemSet
     Initialize();
 }
 
+SvxCharPositionPage::~SvxCharPositionPage()
+{
+    dispose();
+}
+
+void SvxCharPositionPage::dispose()
+{
+    m_pHighPosBtn.clear();
+    m_pNormalPosBtn.clear();
+    m_pLowPosBtn.clear();
+    m_pHighLowFT.clear();
+    m_pHighLowMF.clear();
+    m_pHighLowRB.clear();
+    m_pFontSizeFT.clear();
+    m_pFontSizeMF.clear();
+    m_pRotationContainer.clear();
+    m_pScalingFT.clear();
+    m_pScalingAndRotationFT.clear();
+    m_p0degRB.clear();
+    m_p90degRB.clear();
+    m_p270degRB.clear();
+    m_pFitToLineCB.clear();
+    m_pScaleWidthMF.clear();
+    m_pKerningLB.clear();
+    m_pKerningFT.clear();
+    m_pKerningMF.clear();
+    m_pPairKerningBtn.clear();
+    SvxCharBasePage::dispose();
+}
 
 
 void SvxCharPositionPage::Initialize()
@@ -3306,6 +3406,20 @@ SvxCharTwoLinesPage::SvxCharTwoLinesPage(vcl::Window* pParent, const SfxItemSet&
     get(m_pPreviewWin, "preview");
 
     Initialize();
+}
+
+SvxCharTwoLinesPage::~SvxCharTwoLinesPage()
+{
+    dispose();
+}
+
+void SvxCharTwoLinesPage::dispose()
+{
+    m_pTwoLinesBtn.clear();
+    m_pEnclosingFrame.clear();
+    m_pStartBracketLB.clear();
+    m_pEndBracketLB.clear();
+    SvxCharBasePage::dispose();
 }
 
 void SvxCharTwoLinesPage::Initialize()

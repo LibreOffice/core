@@ -98,28 +98,28 @@ protected:
     virtual void    FillInfo( SfxChildWinInfo& ) const SAL_OVERRIDE;
 
 private:
-    SdDisplay*      m_pCtlDisplay;
-    PushButton*     m_pBtnFirst;
-    PushButton*     m_pBtnReverse;
-    PushButton*     m_pBtnStop;
-    PushButton*     m_pBtnPlay;
-    PushButton*     m_pBtnLast;
-    NumericField*   m_pNumFldBitmap;
-    TimeField*      m_pTimeField;
-    ListBox*        m_pLbLoopCount;
-    PushButton*     m_pBtnGetOneObject;
-    PushButton*     m_pBtnGetAllObjects;
-    PushButton*     m_pBtnRemoveBitmap;
-    PushButton*     m_pBtnRemoveAll;
-    FixedText*      m_pFiCount;
+    VclPtr<SdDisplay>      m_pCtlDisplay;
+    VclPtr<PushButton>     m_pBtnFirst;
+    VclPtr<PushButton>     m_pBtnReverse;
+    VclPtr<PushButton>     m_pBtnStop;
+    VclPtr<PushButton>     m_pBtnPlay;
+    VclPtr<PushButton>     m_pBtnLast;
+    VclPtr<NumericField>   m_pNumFldBitmap;
+    VclPtr<TimeField>      m_pTimeField;
+    VclPtr<ListBox>        m_pLbLoopCount;
+    VclPtr<PushButton>     m_pBtnGetOneObject;
+    VclPtr<PushButton>     m_pBtnGetAllObjects;
+    VclPtr<PushButton>     m_pBtnRemoveBitmap;
+    VclPtr<PushButton>     m_pBtnRemoveAll;
+    VclPtr<FixedText>      m_pFiCount;
 
-    RadioButton*    m_pRbtGroup;
-    RadioButton*    m_pRbtBitmap;
-    FixedText*      m_pFtAdjustment;
-    ListBox*        m_pLbAdjustment;
-    PushButton*     m_pBtnCreateGroup;
+    VclPtr<RadioButton>    m_pRbtGroup;
+    VclPtr<RadioButton>    m_pRbtBitmap;
+    VclPtr<FixedText>      m_pFtAdjustment;
+    VclPtr<ListBox>        m_pLbAdjustment;
+    VclPtr<PushButton>     m_pBtnCreateGroup;
 
-    vcl::Window*       pWin;
+    VclPtr<vcl::Window>    pWin;
     ::std::vector< ::std::pair<BitmapEx*, ::tools::Time*> > m_FrameList;
     static const size_t EMPTY_FRAMELIST;
     size_t          m_nCurrentFrame;
@@ -164,7 +164,7 @@ protected:
     virtual void StateChanged( sal_uInt16 nSId, SfxItemState eState,
         const SfxPoolItem* pState ) SAL_OVERRIDE;
 private:
-    AnimationWindow* pAnimationWin;
+    VclPtr<AnimationWindow> pAnimationWin;
 };
 
 } // end of namespace sd

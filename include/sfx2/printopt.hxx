@@ -41,32 +41,32 @@ class SFX2_DLLPUBLIC SfxCommonPrintOptionsTabPage : public SfxTabPage
 {
 private:
 
-    RadioButton*        m_pPrinterOutputRB;
-    RadioButton*        m_pPrintFileOutputRB;
+    VclPtr<RadioButton>        m_pPrinterOutputRB;
+    VclPtr<RadioButton>        m_pPrintFileOutputRB;
 
-    CheckBox*           m_pReduceTransparencyCB;
-    RadioButton*        m_pReduceTransparencyAutoRB;
-    RadioButton*        m_pReduceTransparencyNoneRB;
+    VclPtr<CheckBox>           m_pReduceTransparencyCB;
+    VclPtr<RadioButton>        m_pReduceTransparencyAutoRB;
+    VclPtr<RadioButton>        m_pReduceTransparencyNoneRB;
 
-    CheckBox*           m_pReduceGradientsCB;
-    RadioButton*        m_pReduceGradientsStripesRB;
-    RadioButton*        m_pReduceGradientsColorRB;
-    NumericField*       m_pReduceGradientsStepCountNF;
+    VclPtr<CheckBox>           m_pReduceGradientsCB;
+    VclPtr<RadioButton>        m_pReduceGradientsStripesRB;
+    VclPtr<RadioButton>        m_pReduceGradientsColorRB;
+    VclPtr<NumericField>       m_pReduceGradientsStepCountNF;
 
-    CheckBox*           m_pReduceBitmapsCB;
-    RadioButton*        m_pReduceBitmapsOptimalRB;
-    RadioButton*        m_pReduceBitmapsNormalRB;
-    RadioButton*        m_pReduceBitmapsResolutionRB;
-    ListBox*            m_pReduceBitmapsResolutionLB;
-    CheckBox*           m_pReduceBitmapsTransparencyCB;
+    VclPtr<CheckBox>           m_pReduceBitmapsCB;
+    VclPtr<RadioButton>        m_pReduceBitmapsOptimalRB;
+    VclPtr<RadioButton>        m_pReduceBitmapsNormalRB;
+    VclPtr<RadioButton>        m_pReduceBitmapsResolutionRB;
+    VclPtr<ListBox>            m_pReduceBitmapsResolutionLB;
+    VclPtr<CheckBox>           m_pReduceBitmapsTransparencyCB;
 
-    CheckBox*           m_pConvertToGreyscalesCB;
+    VclPtr<CheckBox>           m_pConvertToGreyscalesCB;
 
-    CheckBox*           m_pPDFCB;
+    VclPtr<CheckBox>           m_pPDFCB;
 
-    CheckBox*           m_pPaperSizeCB;
-    CheckBox*           m_pPaperOrientationCB;
-    CheckBox*           m_pTransparencyCB;
+    VclPtr<CheckBox>           m_pPaperSizeCB;
+    VclPtr<CheckBox>           m_pPaperOrientationCB;
+    VclPtr<CheckBox>           m_pTransparencyCB;
 
 private:
 
@@ -94,7 +94,8 @@ protected:
 public:
 
                         SfxCommonPrintOptionsTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
-
+    virtual             ~SfxCommonPrintOptionsTabPage();
+    virtual void        dispose() SAL_OVERRIDE;
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual vcl::Window*     GetParentLabeledBy( const vcl::Window* pLabel ) const SAL_OVERRIDE;

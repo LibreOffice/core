@@ -46,7 +46,7 @@ private:
     friend class CertificateViewerDetailsTP;
     friend class CertificateViewerCertPathTP;
 
-    TabControl*         mpTabCtrl;
+    VclPtr<TabControl>         mpTabCtrl;
     sal_uInt16          mnGeneralId;
     sal_uInt16          mnDetailsId;
     sal_uInt16          mnPathId;
@@ -65,10 +65,12 @@ public:
 class CertificateViewerTP : public TabPage
 {
 protected:
-    CertificateViewer*  mpDlg;
+    VclPtr<CertificateViewer>  mpDlg;
 public:
     CertificateViewerTP( vcl::Window* _pParent, const OString& rID,
         const OUString& rUIXMLDescription, CertificateViewer* _pDlg );
+    virtual ~CertificateViewerTP();
+    virtual void dispose() SAL_OVERRIDE;
     void SetTabDlg( CertificateViewer* _pTabDlg )
     {
         mpDlg = _pTabDlg;
@@ -78,16 +80,18 @@ public:
 class CertificateViewerGeneralTP : public CertificateViewerTP
 {
 private:
-    FixedImage*         m_pCertImg;
-    FixedText*          m_pHintNotTrustedFI;
-    FixedText*          m_pIssuedToFI;
-    FixedText*          m_pIssuedByFI;
-    FixedText*          m_pValidFromDateFI;
-    FixedText*          m_pValidToDateFI;
-    FixedImage*         m_pKeyImg;
-    FixedText*          m_pHintCorrespPrivKeyFI;
+    VclPtr<FixedImage>         m_pCertImg;
+    VclPtr<FixedText>          m_pHintNotTrustedFI;
+    VclPtr<FixedText>          m_pIssuedToFI;
+    VclPtr<FixedText>          m_pIssuedByFI;
+    VclPtr<FixedText>          m_pValidFromDateFI;
+    VclPtr<FixedText>          m_pValidToDateFI;
+    VclPtr<FixedImage>         m_pKeyImg;
+    VclPtr<FixedText>          m_pHintCorrespPrivKeyFI;
 public:
                         CertificateViewerGeneralTP( vcl::Window* pParent, CertificateViewer* _pDlg );
+    virtual             ~CertificateViewerGeneralTP();
+    virtual void        dispose() SAL_OVERRIDE;
 
     virtual void        ActivatePage() SAL_OVERRIDE;
 };
@@ -96,9 +100,9 @@ public:
 class CertificateViewerDetailsTP : public CertificateViewerTP
 {
 private:
-    SvSimpleTableContainer* m_pElementsLBContainer;
-    SvSimpleTable*          m_pElementsLB;
-    MultiLineEdit*          m_pValueDetails;
+    VclPtr<SvSimpleTableContainer> m_pElementsLBContainer;
+    VclPtr<SvSimpleTable>          m_pElementsLB;
+    VclPtr<MultiLineEdit>          m_pValueDetails;
     vcl::Font               m_aStdFont;
     vcl::Font               m_aFixedWidthFont;
 
@@ -118,11 +122,11 @@ public:
 class CertificateViewerCertPathTP : public CertificateViewerTP
 {
 private:
-    SvTreeListBox*      mpCertPathLB;
-    PushButton*         mpViewCertPB;
-    VclMultiLineEdit*   mpCertStatusML;
+    VclPtr<SvTreeListBox>      mpCertPathLB;
+    VclPtr<PushButton>         mpViewCertPB;
+    VclPtr<VclMultiLineEdit>   mpCertStatusML;
 
-    CertificateViewer*  mpParent;
+    VclPtr<CertificateViewer>  mpParent;
     bool                mbFirstActivateDone;
     Image               maCertImage;
     Image               maCertNotValidatedImage;
@@ -139,6 +143,7 @@ private:
 public:
                         CertificateViewerCertPathTP( vcl::Window* pParent, CertificateViewer* _pDlg );
     virtual             ~CertificateViewerCertPathTP();
+    virtual void        dispose() SAL_OVERRIDE;
 
     virtual void        ActivatePage() SAL_OVERRIDE;
 };

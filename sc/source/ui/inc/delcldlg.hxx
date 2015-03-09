@@ -29,13 +29,15 @@
 class ScDeleteCellDlg : public ModalDialog
 {
 private:
-    RadioButton* m_pBtnCellsUp;
-    RadioButton* m_pBtnCellsLeft;
-    RadioButton* m_pBtnDelRows;
-    RadioButton* m_pBtnDelCols;
+    VclPtr<RadioButton> m_pBtnCellsUp;
+    VclPtr<RadioButton> m_pBtnCellsLeft;
+    VclPtr<RadioButton> m_pBtnDelRows;
+    VclPtr<RadioButton> m_pBtnDelCols;
 
 public:
     ScDeleteCellDlg(vcl::Window* pParent, bool bDisallowCellMove = false);
+    virtual ~ScDeleteCellDlg();
+    virtual void dispose() SAL_OVERRIDE;
 
     DelCellCmd GetDelCellCmd() const;
 };

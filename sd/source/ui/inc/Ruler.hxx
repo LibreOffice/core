@@ -50,7 +50,7 @@ public:
     using ::Ruler::SetNullOffset;
 protected:
     ::sd::View* pSdView;
-    ::sd::Window* pSdWin;
+    VclPtr<::sd::Window> pSdWin;
     DrawViewShell* pDrViewShell;
     RulerCtrlItem* pCtrlItem;
     bool bHorz;

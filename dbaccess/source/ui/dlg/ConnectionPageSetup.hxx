@@ -39,13 +39,15 @@ namespace dbaui
         bool            m_bUserGrabFocus : 1;
     protected:
 
-        FixedText           *m_pHelpText;
-        FixedText           *m_pHeaderText;
+        VclPtr<FixedText>           m_pHelpText;
+        VclPtr<FixedText>           m_pHeaderText;
 
         // called when the test connection button was clicked
         DECL_LINK(OnEditModified,Edit*);
 
     public:
+        virtual ~OConnectionTabPageSetup();
+        virtual void dispose() SAL_OVERRIDE;
         static  OGenericAdministrationPage* CreateDbaseTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
         static  OGenericAdministrationPage* CreateMSAccessTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
         static  OGenericAdministrationPage* CreateADOTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );

@@ -124,33 +124,33 @@ class SpellDialog : public SfxModelessDialog
     friend class SentenceEditWindow_Impl;
 private:
 
-    FixedText*      m_pLanguageFT;
-    SvxLanguageBox* m_pLanguageLB;
+    VclPtr<FixedText>      m_pLanguageFT;
+    VclPtr<SvxLanguageBox> m_pLanguageLB;
 
-    FixedText*      m_pExplainFT;
-    FixedHyperlink* m_pExplainLink;
+    VclPtr<FixedText>      m_pExplainFT;
+    VclPtr<FixedHyperlink> m_pExplainLink;
 
-    FixedText*      m_pNotInDictFT;
-    SentenceEditWindow_Impl* m_pSentenceED;
+    VclPtr<FixedText>      m_pNotInDictFT;
+    VclPtr<SentenceEditWindow_Impl> m_pSentenceED;
 
-    FixedText*      m_pSuggestionFT;
-    ListBox*        m_pSuggestionLB;
+    VclPtr<FixedText>      m_pSuggestionFT;
+    VclPtr<ListBox>        m_pSuggestionLB;
 
-    PushButton*     m_pIgnorePB;
-    PushButton*     m_pIgnoreAllPB;
-    PushButton*     m_pIgnoreRulePB;
-    PushButton*     m_pAddToDictPB;
-    MenuButton*     m_pAddToDictMB;
+    VclPtr<PushButton>     m_pIgnorePB;
+    VclPtr<PushButton>     m_pIgnoreAllPB;
+    VclPtr<PushButton>     m_pIgnoreRulePB;
+    VclPtr<PushButton>     m_pAddToDictPB;
+    VclPtr<MenuButton>     m_pAddToDictMB;
 
-    PushButton*     m_pChangePB;
-    PushButton*     m_pChangeAllPB;
-    PushButton*     m_pAutoCorrPB;
+    VclPtr<PushButton>     m_pChangePB;
+    VclPtr<PushButton>     m_pChangeAllPB;
+    VclPtr<PushButton>     m_pAutoCorrPB;
 
-    CheckBox*       m_pCheckGrammarCB;
+    VclPtr<CheckBox>       m_pCheckGrammarCB;
 
-    PushButton*     m_pOptionsPB;
-    PushButton*     m_pUndoPB;
-    CloseButton*    m_pClosePB;
+    VclPtr<PushButton>     m_pOptionsPB;
+    VclPtr<PushButton>     m_pUndoPB;
+    VclPtr<CloseButton>    m_pClosePB;
 
     OUString        m_sResumeST;
     OUString        m_sIgnoreOnceST;

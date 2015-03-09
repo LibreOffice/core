@@ -47,7 +47,7 @@ class ImpLBSelEng : public FunctionSet
 {
     SvImpLBox*          pImp;
     SelectionEngine*    pSelEng;
-    SvTreeListBox*      pView;
+    VclPtr<SvTreeListBox>  pView;
 
 public:
     ImpLBSelEng( SvImpLBox* pImp, SelectionEngine* pSelEng,
@@ -86,7 +86,7 @@ class SvImpLBox
 friend class ImpLBSelEng;
 friend class SvTreeListBox;
 private:
-    SvTreeListBox*      pView;
+    VclPtr<SvTreeListBox>   pView;
     SvTreeList*     pTree;
     SvTreeListEntry*        pCursor;
     SvTreeListEntry*        pStartEntry;

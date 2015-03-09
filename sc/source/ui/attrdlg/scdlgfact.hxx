@@ -58,7 +58,7 @@ class ScTextImportOptionsDlg;
 class ScCondFormatManagerDlg;
 
 #define DECL_ABSTDLG_BASE(Class,DialogClass)        \
-    DialogClass*        pDlg;                       \
+    VclPtr<DialogClass> pDlg;                       \
 public:                                             \
                     Class( DialogClass* p)          \
                      : pDlg(p)                      \
@@ -67,7 +67,7 @@ public:                                             \
     virtual short   Execute() SAL_OVERRIDE ;
 
 #define DECL_ABSTDLG2_BASE(Class,DialogClass)        \
-    DialogClass*        pDlg;                       \
+    VclPtr<DialogClass> pDlg;                       \
 public:                                             \
                     Class( DialogClass* p)          \
                      : pDlg(p)                      \
@@ -79,7 +79,6 @@ public:                                             \
 #define IMPL_ABSTDLG_BASE(Class)                    \
 Class::~Class()                                     \
 {                                                   \
-    delete pDlg;                                    \
 }                                                   \
 short Class::Execute()                             \
 {                                                   \
@@ -89,7 +88,6 @@ short Class::Execute()                             \
 #define IMPL_ABSTDLG2_BASE(Class)                   \
 Class::~Class()                                     \
 {                                                   \
-    delete pDlg;                                    \
 }                                                   \
 void Class::StartExecuteModal( const Link& rEndDialogHdl ) \
 {                                                   \

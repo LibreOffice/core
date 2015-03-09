@@ -26,6 +26,7 @@
 
 #include <com/sun/star/uno/Any.h>
 #include "TypeInfo.hxx"
+#include <vcl/vclptr.hxx>
 
 namespace dbaui
 {
@@ -34,7 +35,7 @@ namespace dbaui
     class OTableDesignUndoAct : public OCommentUndoAction
     {
     protected:
-        OTableRowView* m_pTabDgnCtrl;
+        VclPtr<OTableRowView> m_pTabDgnCtrl;
 
         virtual void    Undo() SAL_OVERRIDE;
         virtual void    Redo() SAL_OVERRIDE;
@@ -48,7 +49,7 @@ namespace dbaui
     class OTableEditorUndoAct : public OTableDesignUndoAct
     {
     protected:
-        OTableEditorCtrl* pTabEdCtrl;
+        VclPtr<OTableEditorCtrl> pTabEdCtrl;
 
     public:
         TYPEINFO_OVERRIDE();
@@ -136,7 +137,7 @@ namespace dbaui
     protected:
         MultiSelection      m_aDelKeys,
                             m_aInsKeys;
-        OTableEditorCtrl* m_pEditorCtrl;
+        VclPtr<OTableEditorCtrl> m_pEditorCtrl;
 
         virtual void    Undo() SAL_OVERRIDE;
         virtual void    Redo() SAL_OVERRIDE;

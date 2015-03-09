@@ -349,8 +349,8 @@ void MenuBarWindow::KillActivePopup()
 {
     if ( pActivePopup )
     {
-        if( pActivePopup->pWindow != NULL )
-            if( static_cast<FloatingWindow *>(pActivePopup->pWindow)->IsInCleanUp() )
+        if( pActivePopup->pWindow )
+            if( static_cast<FloatingWindow *>(pActivePopup->pWindow.get())->IsInCleanUp() )
                 return; // kill it later
 
         if ( pActivePopup->bInCallback )
@@ -457,7 +457,7 @@ void MenuBarWindow::ChangeHighlightItem( sal_uInt16 n, bool bSelectEntry, bool b
         if( !bStayActive )
         {
             // #105406# avoid saving the focus when we already have the focus
-            bool bNoSaveFocus = (this == ImplGetSVData()->maWinData.mpFocusWin );
+            bool bNoSaveFocus = (this == ImplGetSVData()->maWinData.mpFocusWin.get() );
 
             if( nSaveFocusId )
             {

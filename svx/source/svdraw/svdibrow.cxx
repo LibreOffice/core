@@ -162,14 +162,15 @@ bool ImpItemListRow::operator==(const ImpItemListRow& rEntry) const
 
 class ImpItemEdit: public Edit
 {
-    _SdrItemBrowserControl*     pBrowse;
+    VclPtr<_SdrItemBrowserControl>     pBrowse;
 
 public:
     ImpItemEdit(vcl::Window* pParent, _SdrItemBrowserControl* pBrowse_, WinBits nBits=0)
     :   Edit(pParent, nBits),
         pBrowse(pBrowse_)
     {}
-
+    virtual ~ImpItemEdit() { dispose(); }
+    virtual void dispose() SAL_OVERRIDE { pBrowse.clear(); Edit::dispose(); }
     virtual void KeyInput(const KeyEvent& rEvt) SAL_OVERRIDE;
 };
 
@@ -217,7 +218,7 @@ _SdrItemBrowserControl::~_SdrItemBrowserControl()
 
 void _SdrItemBrowserControl::dispose()
 {
-    delete pEditControl;
+    pEditControl.clear();
 
     delete pAktChangeEntry;
 
@@ -529,10 +530,9 @@ bool _SdrItemBrowserControl::BegChangeEntry(sal_uIntPtr nPos)
 bool _SdrItemBrowserControl::EndChangeEntry()
 {
     bool bRet = false;
-    if (pEditControl!=NULL) {
+    if (pEditControl!=nullptr) {
         aEntryChangedHdl.Call(this);
-        delete pEditControl;
-        pEditControl=NULL;
+        pEditControl.clear();
         delete pAktChangeEntry;
         pAktChangeEntry=NULL;
         vcl::Window* pParent=GetParent();
@@ -545,9 +545,8 @@ bool _SdrItemBrowserControl::EndChangeEntry()
 
 void _SdrItemBrowserControl::BrkChangeEntry()
 {
-    if (pEditControl!=NULL) {
-        delete pEditControl;
-        pEditControl=NULL;
+    if (pEditControl!=nullptr) {
+        pEditControl.clear();
         delete pAktChangeEntry;
         pAktChangeEntry=NULL;
         vcl::Window* pParent=GetParent();

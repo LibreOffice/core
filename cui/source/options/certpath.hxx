@@ -19,10 +19,10 @@
 class CertPathDialog : public ModalDialog
 {
 private:
-    SvSimpleTableContainer* m_pCertPathListContainer;
-    svx::SvxRadioButtonListBox* m_pCertPathList;
-    PushButton* m_pAddBtn;
-    OKButton*   m_pOKBtn;
+    VclPtr<SvSimpleTableContainer> m_pCertPathListContainer;
+    VclPtr<svx::SvxRadioButtonListBox> m_pCertPathList;
+    VclPtr<PushButton> m_pAddBtn;
+    VclPtr<OKButton>   m_pOKBtn;
     OUString    m_sAddDialogText;
     OUString    m_sManual;
 

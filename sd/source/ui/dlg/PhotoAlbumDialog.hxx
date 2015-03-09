@@ -46,25 +46,27 @@ class SdPhotoAlbumDialog : public ModalDialog
 public:
     SdPhotoAlbumDialog(vcl::Window* pWindow, SdDrawDocument* pActDoc);
     virtual ~SdPhotoAlbumDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual short Execute() SAL_OVERRIDE;
 
 private:
     static OUString sDirUrl;
-    CancelButton*   pCancelBtn;
-    PushButton*     pCreateBtn;
+    VclPtr<CancelButton>   pCancelBtn;
+    VclPtr<PushButton>     pCreateBtn;
 
-    PushButton*     pAddBtn;
-    PushButton*     pUpBtn;
-    PushButton*     pDownBtn;
-    PushButton*     pRemoveBtn;
+    VclPtr<PushButton>     pAddBtn;
+    VclPtr<PushButton>     pUpBtn;
+    VclPtr<PushButton>     pDownBtn;
+    VclPtr<PushButton>     pRemoveBtn;
 
-    ListBox*        pImagesLst;
-    FixedImage*     pImg;
+    VclPtr<ListBox>        pImagesLst;
+    VclPtr<FixedImage>     pImg;
 
-    ListBox*    pInsTypeCombo;
-    CheckBox*   pASRCheck;
-    CheckBox*   pCapCheck;
+    VclPtr<ListBox>    pInsTypeCombo;
+    VclPtr<CheckBox>   pASRCheck;
+    VclPtr<CheckBox>   pCapCheck;
+
     SdDrawDocument* pDoc;
     GraphicFilter* mpGraphicFilter;
 

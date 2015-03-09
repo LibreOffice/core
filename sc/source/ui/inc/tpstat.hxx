@@ -28,19 +28,19 @@ class ScDocStatPage: public SfxTabPage
 {
 public:
     static SfxTabPage* Create( vcl::Window* pParent, const SfxItemSet* rSet );
+    virtual         ~ScDocStatPage();
+    virtual void    dispose() SAL_OVERRIDE;
 
 private:
             ScDocStatPage( vcl::Window *pParent, const SfxItemSet& rSet );
-            virtual ~ScDocStatPage();
-
 protected:
     virtual bool    FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void    Reset      ( const SfxItemSet* rSet ) SAL_OVERRIDE;
 
 private:
-    FixedText*       m_pFtTables;
-    FixedText*       m_pFtCells;
-    FixedText*       m_pFtPages;
+    VclPtr<FixedText>       m_pFtTables;
+    VclPtr<FixedText>       m_pFtCells;
+    VclPtr<FixedText>       m_pFtPages;
 };
 
 #endif

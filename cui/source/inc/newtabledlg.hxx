@@ -29,11 +29,13 @@
 class SvxNewTableDialog : public SvxAbstractNewTableDialog, public ModalDialog
 {
 private:
-    NumericField*       mpNumColumns;
-    NumericField*       mpNumRows;
+    VclPtr<NumericField>       mpNumColumns;
+    VclPtr<NumericField>       mpNumRows;
 
 public:
     SvxNewTableDialog( vcl::Window* pWindow );
+    virtual ~SvxNewTableDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual short Execute(void) SAL_OVERRIDE;
 

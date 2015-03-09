@@ -23,7 +23,7 @@
 #include <sfx2/basedlgs.hxx>
 
 #define DECL_ABSTDLG_BASE(Class,DialogClass)        \
-    DialogClass*        pDlg;                       \
+    VclPtr<DialogClass> pDlg;                       \
 public:                                             \
                     Class( DialogClass* p)          \
                      : pDlg(p)                      \
@@ -34,7 +34,6 @@ public:                                             \
 #define IMPL_ABSTDLG_BASE(Class)                    \
 Class::~Class()                                     \
 {                                                   \
-    delete pDlg;                                    \
 }                                                   \
 short Class::Execute()                             \
 {                                                   \

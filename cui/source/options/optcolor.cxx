@@ -174,7 +174,7 @@ class ColorConfigWindow_Impl
 {
 public:
     ColorConfigWindow_Impl(vcl::Window* pParent);
-    ~ColorConfigWindow_Impl() { dispose(); }
+    virtual ~ColorConfigWindow_Impl() { dispose(); }
     virtual void dispose() SAL_OVERRIDE;
 
 public:
@@ -193,8 +193,7 @@ private:
     class Chapter
     {
         // text
-        bool m_bOwnsWidget;
-        FixedText *m_pText;
+        VclPtr<FixedText> m_pText;
     public:
         Chapter(FixedText *pText, bool bShow);
         Chapter(vcl::Window *pGrid, unsigned nYPos, const OUString& sDisplayName);
@@ -235,11 +234,11 @@ private:
     private:
         bool m_bOwnsWidgets;
         // checkbox (CheckBox) or simple text (FixedText)
-        Control* m_pText;
+        VclPtr<Control> m_pText;
         // color list box
-        ColorListBox* m_pColorList;
+        VclPtr<ColorListBox> m_pColorList;
         // color preview box
-        vcl::Window* m_pPreview;
+        VclPtr<vcl::Window> m_pPreview;
         // default color
         Color m_aDefaultColor;
     private:
@@ -256,9 +255,9 @@ private:
 
 
 private:
-    VclGrid *m_pGrid;
-    ScrollBar *m_pVScroll;
-    HeaderBar *m_pHeaderHB;
+    VclPtr<VclGrid>   m_pGrid;
+    VclPtr<ScrollBar> m_pVScroll;
+    VclPtr<HeaderBar> m_pHeaderHB;
 
     // initialization
     void CreateEntries();
@@ -283,8 +282,7 @@ private:
 // eGroup: which group is this?
 // rResMgr: resource manager
 ColorConfigWindow_Impl::Chapter::Chapter(FixedText* pText, bool bShow)
-    : m_bOwnsWidget(false)
-    , m_pText(pText)
+    : m_pText(pText)
 {
     if (!bShow)
         Hide();
@@ -293,7 +291,6 @@ ColorConfigWindow_Impl::Chapter::Chapter(FixedText* pText, bool bShow)
 // ctor for extended groups
 ColorConfigWindow_Impl::Chapter::Chapter(vcl::Window *pGrid,
     unsigned nYPos, const OUString& rDisplayName)
-    : m_bOwnsWidget(true)
 {
     m_pText = new FixedText(pGrid, WB_LEFT|WB_VCENTER|WB_3DLOOK);
     m_pText->set_font_attribute("weight", "bold");
@@ -305,8 +302,6 @@ ColorConfigWindow_Impl::Chapter::Chapter(vcl::Window *pGrid,
 
 ColorConfigWindow_Impl::Chapter::~Chapter()
 {
-    if (m_bOwnsWidget)
-        delete m_pText;
 }
 
 void ColorConfigWindow_Impl::Chapter::Show(Wallpaper const& rBackWall)
@@ -373,9 +368,9 @@ ColorConfigWindow_Impl::Entry::~Entry()
 {
     if (m_bOwnsWidgets)
     {
-        delete m_pText;
-        delete m_pColorList;
-        delete m_pPreview;
+        m_pText.clear();
+        m_pColorList.clear();
+        m_pPreview.clear();
     }
 }
 
@@ -417,7 +412,7 @@ void ColorConfigWindow_Impl::Entry::SetLinks(
 {
     m_pColorList->SetSelectHdl(aColorLink);
     m_pColorList->SetGetFocusHdl(aGetFocusLink);
-    if (CheckBox* pCheckBox = dynamic_cast<CheckBox*>(m_pText))
+    if (CheckBox* pCheckBox = dynamic_cast<CheckBox*>(m_pText.get()))
     {
         pCheckBox->SetClickHdl(aCheckLink);
         pCheckBox->SetGetFocusHdl(aGetFocusLink);
@@ -440,7 +435,7 @@ void ColorConfigWindow_Impl::Entry::Update (
         m_pColorList->SelectEntry(aColor);
     }
     m_pPreview->SetBackground(Wallpaper(aColor));
-    if (CheckBox* pCheckBox = dynamic_cast<CheckBox*>(m_pText))
+    if (CheckBox* pCheckBox = dynamic_cast<CheckBox*>(m_pText.get()))
         pCheckBox->Check(rValue.bIsVisible);
 }
 
@@ -513,6 +508,9 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(vcl::Window* pParent)
 void ColorConfigWindow_Impl::dispose()
 {
     disposeBuilder();
+        m_pGrid.clear();
+        m_pVScroll.clear();
+        m_pHeaderHB.clear();
     VclContainer::dispose();
 }
 
@@ -827,10 +825,10 @@ void ColorConfigWindow_Impl::Command( const CommandEvent& rCEvt )
 
 class ColorConfigCtrl_Impl : public VclVBox
 {
-    HeaderBar*              m_pHeaderHB;
-    VclHBox*                m_pBody;
-    ColorConfigWindow_Impl* m_pScrollWindow;
-    ScrollBar*              m_pVScroll;
+    VclPtr<HeaderBar>              m_pHeaderHB;
+    VclPtr<VclHBox>                m_pBody;
+    VclPtr<ColorConfigWindow_Impl> m_pScrollWindow;
+    VclPtr<ScrollBar>              m_pVScroll;
 
     EditableColorConfig*            pColorConfig;
     EditableExtendedColorConfig*    pExtColorConfig;
@@ -920,15 +918,10 @@ ColorConfigCtrl_Impl::~ColorConfigCtrl_Impl()
 
 void ColorConfigCtrl_Impl::dispose()
 {
-    delete m_pVScroll;
-    m_pVScroll = NULL;
-    delete m_pScrollWindow;
-    m_pScrollWindow = NULL;
-    delete m_pBody;
-    m_pBody = NULL;
-    delete m_pHeaderHB;
-    m_pHeaderHB = NULL;
-
+    m_pVScroll.clear();
+    m_pScrollWindow.clear();
+    m_pBody.clear();
+    m_pHeaderHB.clear();
     VclVBox::dispose();
 }
 
@@ -1100,6 +1093,10 @@ void SvxColorOptionsTabPage::dispose()
         delete pExtColorConfig;
         pExtColorConfig = NULL;
     }
+    m_pColorSchemeLB.clear();
+    m_pSaveSchemePB.clear();
+    m_pDeleteSchemePB.clear();
+    m_pColorConfigCT.clear();
     SfxTabPage::dispose();
 }
 

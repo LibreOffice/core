@@ -344,8 +344,6 @@ IMPL_LINK( ScFormulaReferenceHelper, AccelSelectHdl, Accelerator *, pSelAccel )
     return long(true);
 }
 
-typedef std::vector<vcl::Window*> winvec;
-
 void ScFormulaReferenceHelper::RefInputDone( bool bForced )
 {
     if ( CanInputDone( bForced ) )
@@ -394,7 +392,7 @@ void ScFormulaReferenceHelper::RefInputDone( bool bForced )
             pRefBtn->SetStartImage();
 
         // All others: Show();
-        for (winvec::iterator aI = m_aHiddenWidgets.begin(); aI != m_aHiddenWidgets.end(); ++aI)
+        for (auto aI = m_aHiddenWidgets.begin(); aI != m_aHiddenWidgets.end(); ++aI)
         {
             vcl::Window *pWindow = *aI;
             pWindow->Show();
@@ -416,12 +414,12 @@ void ScFormulaReferenceHelper::RefInputDone( bool bForced )
     }
 }
 
-typedef std::set<vcl::Window*> winset;
+typedef std::set<VclPtr<vcl::Window> > winset;
 
 namespace
 {
     void hideUnless(vcl::Window *pTop, const winset& rVisibleWidgets,
-        winvec &rWasVisibleWidgets)
+        std::vector<VclPtr<vcl::Window> > &rWasVisibleWidgets)
     {
         for (vcl::Window* pChild = pTop->GetWindow(WINDOW_FIRSTCHILD); pChild;
             pChild = pChild->GetWindow(WINDOW_NEXT))
@@ -759,14 +757,14 @@ static void lcl_HideAllReferences()
 //  class ScRefHandler
 
 ScRefHandler::ScRefHandler( vcl::Window &rWindow, SfxBindings* pB, bool bBindRef ):
-        m_rWindow( rWindow ),
+        m_rWindow( &rWindow ),
         m_bInRefMode( false ),
         m_aHelper(this,pB),
         pMyBindings( pB ),
         pActiveWin(NULL)
 {
-    m_aHelper.SetWindow(&m_rWindow);
-    reverseUniqueHelpIdHack(m_rWindow);
+    m_aHelper.SetWindow(m_rWindow.get());
+    reverseUniqueHelpIdHack(*m_rWindow.get());
     aIdle.SetPriority(SchedulerPriority::LOWER);
     aIdle.SetIdleHdl(LINK( this, ScRefHandler, UpdateFocusHdl));
 
@@ -889,7 +887,7 @@ bool ScRefHandler::IsDocAllowed(SfxObjectShell* pDocSh) const   // pDocSh may be
 
 bool ScRefHandler::IsRefInputMode() const
 {
-    return m_rWindow.IsVisible(); // references can only be input to visible windows
+    return m_rWindow->IsVisible(); // references can only be input to visible windows
 }
 
 bool ScRefHandler::DoClose( sal_uInt16 nId )
@@ -951,7 +949,7 @@ void ScRefHandler::stateChanged(const StateChangedType nStateChange, const bool 
 
     if(nStateChange == StateChangedType::VISIBLE)
     {
-        if(m_rWindow.IsVisible())
+        if(m_rWindow->IsVisible())
         {
             ScFormulaReferenceHelper::enableInput( false );
             m_aHelper.EnableSpreadsheets();

@@ -52,11 +52,11 @@ namespace dbaui
     {
     protected:
         // the controls
-        ListBox*        m_pAllParams;
-        Edit*           m_pParam;
-        PushButton*     m_pTravelNext;
-        OKButton*       m_pOKBtn;
-        CancelButton*   m_pCancelBtn;
+        VclPtr<ListBox>        m_pAllParams;
+        VclPtr<Edit>           m_pParam;
+        VclPtr<PushButton>     m_pTravelNext;
+        VclPtr<OKButton>       m_pOKBtn;
+        VclPtr<CancelButton>   m_pCancelBtn;
 
         sal_Int32       m_nCurrentlySelected;
 

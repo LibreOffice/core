@@ -26,7 +26,7 @@ namespace dbaui
     class OTableWindow;
     class OTableWindowTitle : public FixedText
     {
-        OTableWindow* m_pTabWin;
+        VclPtr<OTableWindow> m_pTabWin;
 
     protected:
         virtual void Command(const CommandEvent& rEvt) SAL_OVERRIDE;

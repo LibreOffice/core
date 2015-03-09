@@ -376,7 +376,7 @@ namespace pcr
 
     PushButton& OBrowserLine::impl_ensureButton( bool _bPrimary )
     {
-        PushButton*& rpButton = _bPrimary ? m_pBrowseButton : m_pAdditionalBrowseButton;
+        VclPtr<PushButton>& rpButton = _bPrimary ? m_pBrowseButton : m_pAdditionalBrowseButton;
 
         if ( !rpButton )
         {
@@ -443,13 +443,12 @@ namespace pcr
 
     void OBrowserLine::implHideBrowseButton( bool _bPrimary, bool _bReLayout )
     {
-        PushButton*& rpButton = _bPrimary ? m_pBrowseButton : m_pAdditionalBrowseButton;
+        VclPtr<PushButton>& rpButton = _bPrimary ? m_pBrowseButton : m_pAdditionalBrowseButton;
 
         if ( rpButton )
         {
             rpButton->Hide();
-            delete rpButton;
-            rpButton = NULL;
+            rpButton.clear();
         }
 
         if ( _bReLayout )

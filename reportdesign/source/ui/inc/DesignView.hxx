@@ -64,11 +64,11 @@ namespace rptui
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>        m_xReportComponent;
         OReportController&                  m_rReportController;
         VclPtr<OScrollWindowHelper>         m_aScrollWindow;
-        vcl::Window*                        m_pTaskPane;
-        PropBrw*                            m_pPropWin;
-        OAddFieldWindow*                    m_pAddField;
+        VclPtr<vcl::Window>                 m_pTaskPane;
+        VclPtr<PropBrw>                     m_pPropWin;
+        VclPtr<OAddFieldWindow>             m_pAddField;
         OSectionView*                       m_pCurrentView;
-        ONavigator*                         m_pReportExplorer;
+        VclPtr<ONavigator>                  m_pReportExplorer;
         Idle                                m_aMarkIdle;
         Point                               m_aScrollOffset;
         DlgEdMode                           m_eMode;

@@ -225,7 +225,7 @@ private:
     typedef ::std::map< const SdrObject*, ::accessibility::AccessibleShape*, SdrObjectCompareLess > ShapesMapType;
     ShapesMapType mxShapes;
 
-    GraphCtrl*  mpControl;
+    VclPtr<GraphCtrl>  mpControl;
 
     SdrModel* mpModel;
     SdrPage* mpPage;

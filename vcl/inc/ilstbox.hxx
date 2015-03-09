@@ -87,7 +87,7 @@ struct ImplEntryType
 class ImplEntryList
 {
 private:
-    vcl::Window*         mpWindow;   ///< For getting the current locale when matching strings
+    VclPtr<vcl::Window> mpWindow;   ///< For getting the current locale when matching strings
     sal_Int32       mnLastSelected;
     sal_Int32       mnSelectionAnchor;
     sal_Int32       mnImages;
@@ -384,9 +384,9 @@ class ImplListBox : public Control
 {
 private:
     ImplListBoxWindowPtr maLBWindow;
-    ScrollBar*           mpHScrollBar;
-    ScrollBar*           mpVScrollBar;
-    ScrollBarBox*        mpScrollBarBox;
+    VclPtr<ScrollBar>    mpHScrollBar;
+    VclPtr<ScrollBar>    mpVScrollBar;
+    VclPtr<ScrollBarBox> mpScrollBarBox;
 
     /// bitfield
     bool mbVScroll : 1;     // VScroll an oder aus
@@ -511,7 +511,7 @@ public:
 class ImplListBoxFloatingWindow : public FloatingWindow
 {
 private:
-    ImplListBox*    mpImplLB;
+    VclPtr<ImplListBox> mpImplLB;
     Size            maPrefSz;
     sal_uInt16      mnDDLineCount;
     sal_Int32       mnPopupModeStartSaveSelection;
@@ -522,7 +522,8 @@ protected:
 
 public:
                     ImplListBoxFloatingWindow( vcl::Window* pParent );
-
+    virtual         ~ImplListBoxFloatingWindow();
+    virtual void    dispose() SAL_OVERRIDE;
     void            SetImplListBox( ImplListBox* pLB )  { mpImplLB = pLB; }
 
     void            SetPrefSize( const Size& rSz )      { maPrefSz = rSz; }

@@ -334,6 +334,40 @@ SvxBorderTabPage::SvxBorderTabPage(vcl::Window* pParent, const SfxItemSet& rCore
     m_pMergeAdjacentBordersCB->Hide();
 }
 
+SvxBorderTabPage::~SvxBorderTabPage()
+{
+    dispose();
+}
+
+void SvxBorderTabPage::dispose()
+{
+    m_pWndPresets.clear();
+    m_pUserDefFT.clear();
+    m_pFrameSel.clear();
+    m_pLbLineStyle.clear();
+    m_pLbLineColor.clear();
+    m_pLineWidthMF.clear();
+    m_pSpacingFrame.clear();
+    m_pLeftFT.clear();
+    m_pLeftMF.clear();
+    m_pRightFT.clear();
+    m_pRightMF.clear();
+    m_pTopFT.clear();
+    m_pTopMF.clear();
+    m_pBottomFT.clear();
+    m_pBottomMF.clear();
+    m_pSynchronizeCB.clear();
+    m_pShadowFrame.clear();
+    m_pWndShadows.clear();
+    m_pFtShadowSize.clear();
+    m_pEdShadowSize.clear();
+    m_pFtShadowColor.clear();
+    m_pLbShadowColor.clear();
+    m_pPropertiesFrame.clear();
+    m_pMergeWithNextCB.clear();
+    m_pMergeAdjacentBordersCB.clear();
+    SfxTabPage::dispose();
+}
 
 
 SfxTabPage* SvxBorderTabPage::Create( vcl::Window* pParent,

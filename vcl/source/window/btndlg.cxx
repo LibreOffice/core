@@ -30,10 +30,10 @@ typedef boost::ptr_vector<ImplBtnDlgItem>::const_iterator btn_const_iterator;
 struct ImplBtnDlgItem
 {
     sal_uInt16              mnId;
-    bool                mbOwnButton;
-    bool                mbDummyAlign;
-    long                mnSepSize;
-    PushButton*         mpPushButton;
+    bool                    mbOwnButton;
+    bool                    mbDummyAlign;
+    long                    mnSepSize;
+    VclPtr<PushButton>      mpPushButton;
 };
 
 void ButtonDialog::ImplInitButtonDialogData()
@@ -64,13 +64,7 @@ ButtonDialog::~ButtonDialog()
 
 void ButtonDialog::dispose()
 {
-    for ( btn_iterator it = maItemList.begin(); it != maItemList.end(); ++it)
-    {
-        if ( it->mpPushButton && it->mbOwnButton )
-            delete it->mpPushButton;
-    }
     maItemList.clear();
-
     Dialog::dispose();
 }
 
@@ -335,10 +329,7 @@ void ButtonDialog::RemoveButton( sal_uInt16 nId )
         if (it->mnId == nId)
         {
             it->mpPushButton->Hide();
-
-            if (it->mbOwnButton )
-                delete it->mpPushButton;
-
+            it->mpPushButton.clear();
             maItemList.erase(it);
             return;
         }
@@ -352,9 +343,6 @@ void ButtonDialog::Clear()
     for (btn_iterator it = maItemList.begin(); it != maItemList.end(); ++it)
     {
         it->mpPushButton->Hide();
-
-        if (it->mbOwnButton )
-            delete it->mpPushButton;
     }
 
     maItemList.clear();

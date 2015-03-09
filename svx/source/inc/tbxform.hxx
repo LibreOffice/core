@@ -104,7 +104,7 @@ public:
 
 class SvxFmTbxCtlRecTotal : public SfxToolBoxControl
 {
-    FixedText* pFixedText;
+    VclPtr<FixedText> pFixedText;
 
 public:
     SFX_DECL_TOOLBOX_CONTROL();

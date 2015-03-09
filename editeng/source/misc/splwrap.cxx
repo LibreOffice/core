@@ -39,9 +39,9 @@
 #include <editeng/editerr.hxx>
 #include <boost/scoped_ptr.hpp>
 
-#define WAIT_ON() if(pWin != NULL) { pWin->EnterWait(); }
+#define WAIT_ON() if(pWin != nullptr) { pWin->EnterWait(); }
 
-#define WAIT_OFF() if(pWin != NULL) { pWin->LeaveWait(); }
+#define WAIT_OFF() if(pWin != nullptr) { pWin->LeaveWait(); }
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

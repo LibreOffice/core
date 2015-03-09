@@ -34,12 +34,12 @@ namespace dbaui
     */
     class OCollectionView : public ModalDialog
     {
-        FixedText*      m_pFTCurrentPath;
-        PushButton*    m_pNewFolder;
-        PushButton*    m_pUp;
-        SvtFileView*    m_pView;
-        Edit*           m_pName;
-        PushButton*     m_pPB_OK;
+        VclPtr<FixedText>      m_pFTCurrentPath;
+        VclPtr<PushButton>     m_pNewFolder;
+        VclPtr<PushButton>     m_pUp;
+        VclPtr<SvtFileView>    m_pView;
+        VclPtr<Edit>           m_pName;
+        VclPtr<PushButton>     m_pPB_OK;
         ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent>                  m_xContent;
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >        m_xContext;
         bool        m_bCreateForm;
@@ -56,7 +56,8 @@ namespace dbaui
                         ,const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent>& _xContent
                         ,const OUString& _sDefaultName
                         ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext);
-
+        virtual ~OCollectionView();
+        virtual void dispose() SAL_OVERRIDE;
         ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent> getSelectedFolder() const { return m_xContent;}
         OUString getName() const;
     };

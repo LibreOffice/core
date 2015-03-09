@@ -442,7 +442,7 @@ void SfxStatusBarControl::StateChanged
 */
 
 {
-    DBG_ASSERT( pBar != 0, "setting state to dangling StatusBar" );
+    DBG_ASSERT( pBar != nullptr, "setting state to dangling StatusBar" );
 
     const SfxStringItem* pStr = PTR_CAST( SfxStringItem, pState );
     if ( eState == SfxItemState::DEFAULT && pStr )

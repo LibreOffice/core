@@ -45,10 +45,10 @@ namespace rptui
                             , public ::cppu::BaseMutex
                             , public ::comphelper::OPropertyChangeListener
     {
-        VclPtr<Ruler>           m_aHRuler;
-        ODesignView*            m_pView;
-        OScrollWindowHelper*    m_pParent;
-        VclPtr<OViewsWindow>    m_aViewsWindow;
+        VclPtr<Ruler>                  m_aHRuler;
+        VclPtr<ODesignView>            m_pView;
+        VclPtr<OScrollWindowHelper>    m_pParent;
+        VclPtr<OViewsWindow>           m_aViewsWindow;
         ::rtl::Reference< comphelper::OPropertyChangeMultiplexer>   m_pReportListener;
         ::std::unique_ptr<DlgEdFactory>
                                 m_pObjFac;

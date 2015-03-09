@@ -28,7 +28,7 @@ namespace dbaui
     class OQueryTabConnUndoAction : public OQueryDesignUndoAction
     {
     protected:
-        OQueryTableConnection*  m_pConnection;
+        VclPtr<OQueryTableConnection>  m_pConnection;
         bool                    m_bOwnerOfConn;
         // am I the only owner of the connection? (changes with every redo and undo)
 

@@ -41,7 +41,7 @@ private:
 public:
     explicit        TabPage( vcl::Window* pParent, WinBits nStyle = 0 );
     explicit        TabPage( vcl::Window *pParent, const OString& rID, const OUString& rUIXMLDescription );
-                   ~TabPage();
+    virtual         ~TabPage();
     virtual void    dispose() SAL_OVERRIDE;
 
     virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;

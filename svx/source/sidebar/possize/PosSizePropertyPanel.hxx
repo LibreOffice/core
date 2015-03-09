@@ -50,6 +50,9 @@ class PosSizePropertyPanel
     public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
 {
 public:
+    virtual ~PosSizePropertyPanel();
+    virtual void dispose() SAL_OVERRIDE;
+
     static PosSizePropertyPanel* Create(
         vcl::Window* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
@@ -72,28 +75,28 @@ public:
 
 private:
     //Position
-    FixedText*        mpFtPosX;
-    MetricField*      mpMtrPosX;
-    FixedText*        mpFtPosY;
-    MetricField*      mpMtrPosY;
+    VclPtr<FixedText>        mpFtPosX;
+    VclPtr<MetricField>      mpMtrPosX;
+    VclPtr<FixedText>        mpFtPosY;
+    VclPtr<MetricField>      mpMtrPosY;
 
     // size
-    FixedText*        mpFtWidth;
-    MetricField*      mpMtrWidth;
-    FixedText*        mpFtHeight;
-    MetricField*      mpMtrHeight;
-    CheckBox*         mpCbxScale;
+    VclPtr<FixedText>        mpFtWidth;
+    VclPtr<MetricField>      mpMtrWidth;
+    VclPtr<FixedText>        mpFtHeight;
+    VclPtr<MetricField>      mpMtrHeight;
+    VclPtr<CheckBox>         mpCbxScale;
 
     //rotation
-    FixedText*        mpFtAngle;
-    MetricBox*        mpMtrAngle;
+    VclPtr<FixedText>        mpFtAngle;
+    VclPtr<MetricBox>        mpMtrAngle;
 
     //rotation control
-    SidebarDialControl*  mpDial;
+    VclPtr<SidebarDialControl>  mpDial;
 
     //flip
-    FixedText*        mpFtFlip;
-    ToolBox*          mpFlipTbx;
+    VclPtr<FixedText>        mpFtFlip;
+    VclPtr<ToolBox>          mpFlipTbx;
 
     // Internal variables
     basegfx::B2DRange                       maRect;

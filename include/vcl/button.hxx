@@ -274,7 +274,7 @@ public:
 class VCL_DLLPUBLIC RadioButton : public Button
 {
 private:
-    std::shared_ptr< std::vector<RadioButton*> > m_xGroup;
+    std::shared_ptr< std::vector< VclPtr< RadioButton > > > m_xGroup;
     Rectangle       maStateRect;
     Rectangle       maMouseRect;
     Image           maImage;
@@ -389,7 +389,7 @@ public:
     on return contains the <code>RadioButton</code>s
     in the same group as this <code>RadioButton</code>.
     */
-    std::vector<RadioButton*> GetRadioButtonGroup(bool bIncludeThis = true) const;
+    std::vector<VclPtr<RadioButton> > GetRadioButtonGroup(bool bIncludeThis = true) const;
 
     virtual bool set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
 

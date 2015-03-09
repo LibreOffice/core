@@ -57,7 +57,7 @@ class SVX_DLLPUBLIC SvxRuler: public Ruler, public SfxListener
     std::unique_ptr<SvxColumnItem>      mxColumnItem;     // columns
     std::unique_ptr<SvxObjectItem>      mxObjectItem;     // object
 
-    vcl::Window*         pEditWin;
+    VclPtr<vcl::Window>         pEditWin;
 
     std::unique_ptr<SvxRuler_Impl> mxRulerImpl;
 

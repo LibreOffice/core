@@ -124,7 +124,7 @@ private:
     boost::ptr_vector<opengl3D::Renderable3DObject> maShapes;
 
     boost::scoped_ptr<opengl3D::OpenGL3DRenderer> mpRenderer;
-    OpenGLWindow* mpWindow;
+    VclPtr<OpenGLWindow> mpWindow;
 
     opengl3D::Camera* mpCamera;
     bool mbValidContext;

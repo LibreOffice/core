@@ -31,10 +31,10 @@ class SvxColorOptionsTabPage : public SfxTabPage
 {
     using SfxTabPage::DeactivatePage;
 
-    ListBox* m_pColorSchemeLB;
-    PushButton* m_pSaveSchemePB;
-    PushButton* m_pDeleteSchemePB;
-    ColorConfigCtrl_Impl* m_pColorConfigCT;
+    VclPtr<ListBox> m_pColorSchemeLB;
+    VclPtr<PushButton> m_pSaveSchemePB;
+    VclPtr<PushButton> m_pDeleteSchemePB;
+    VclPtr<ColorConfigCtrl_Impl> m_pColorConfigCT;
 
     bool bFillItemSetCalled;
 

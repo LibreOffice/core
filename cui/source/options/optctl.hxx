@@ -30,20 +30,22 @@ class SvxCTLOptionsPage : public SfxTabPage
 {
 private:
 
-    CheckBox*            m_pSequenceCheckingCB;
-    CheckBox*            m_pRestrictedCB;
-    CheckBox*            m_pTypeReplaceCB;
+    VclPtr<CheckBox>            m_pSequenceCheckingCB;
+    VclPtr<CheckBox>            m_pRestrictedCB;
+    VclPtr<CheckBox>            m_pTypeReplaceCB;
 
-    RadioButton*         m_pMovementLogicalRB;
-    RadioButton*         m_pMovementVisualRB;
+    VclPtr<RadioButton>         m_pMovementLogicalRB;
+    VclPtr<RadioButton>         m_pMovementVisualRB;
 
-    ListBox*             m_pNumeralsLB;
+    VclPtr<ListBox>             m_pNumeralsLB;
 
     DECL_LINK( SequenceCheckingCB_Hdl, void* );
 
     SvxCTLOptionsPage( vcl::Window* pParent, const SfxItemSet& rSet );
 
 public:
+    virtual ~SvxCTLOptionsPage();
+    virtual void dispose() SAL_OVERRIDE;
     static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;

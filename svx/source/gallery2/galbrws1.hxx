@@ -81,7 +81,7 @@ class GalleryBrowser1 : public Control, SfxListener
 private:
 
     VclPtr<GalleryButton>   maNewTheme;
-    GalleryThemeListBox*    mpThemes;
+    VclPtr<GalleryThemeListBox>  mpThemes;
     Gallery*                mpGallery;
     ExchangeData*           mpExchangeData;
     SfxItemSet*             mpThemePropsDlgItemSet;

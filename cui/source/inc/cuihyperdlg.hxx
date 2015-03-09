@@ -38,7 +38,7 @@ class SvxHpLinkDlg;
 class SvxHlinkCtrl : public SfxControllerItem
 {
 private :
-    SvxHpLinkDlg *pParent;
+    VclPtr<SvxHpLinkDlg> pParent;
 
     SfxStatusForwarder aRdOnlyForwarder;
 

@@ -162,6 +162,7 @@ void Splitter::dispose()
         TaskPaneList *pTList = pSysWin->GetTaskPaneList();
         pTList->RemoveWindow(this);
     }
+    mpRefWin.clear();
     Window::dispose();
 }
 

@@ -73,8 +73,8 @@ class VCL_DLLPUBLIC FloatingWindow : public SystemWindow
 {
     class   ImplData;
 private:
-    FloatingWindow* mpNextFloat;
-    vcl::Window*         mpFirstPopupModeWin;
+    VclPtr<FloatingWindow>  mpNextFloat;
+    VclPtr<vcl::Window>     mpFirstPopupModeWin;
     ImplData*       mpImplData;
     Rectangle       maFloatRect;
     ImplSVEvent *   mnPostId;

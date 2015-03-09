@@ -94,6 +94,8 @@ void OReportWindow::dispose()
         m_pReportListener->dispose();
     m_aHRuler.disposeAndClear();
     m_aViewsWindow.disposeAndClear();
+    m_pView.clear();
+    m_pParent.clear();
     vcl::Window::dispose();
 }
 

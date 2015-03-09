@@ -39,6 +39,17 @@ namespace dbaui
         m_pOK->SetClickHdl( LINK( this, TextConnectionSettingsDialog, OnOK ) );
     }
 
+    TextConnectionSettingsDialog::~TextConnectionSettingsDialog()
+    {
+        dispose();
+    }
+
+    void TextConnectionSettingsDialog::dispose()
+    {
+        m_pOK.clear();
+        ModalDialog::dispose();
+    }
+
     void TextConnectionSettingsDialog::bindItemStorages( SfxItemSet& _rSet, PropertyValues& _rValues )
     {
         _rValues[ PROPERTY_ID_HEADER_LINE ].reset( new SetItemPropertyStorage( _rSet, DSID_TEXTFILEHEADER ) );

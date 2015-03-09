@@ -61,35 +61,35 @@ class BackingWindow
     /** helper for drag&drop. */
     com::sun::star::uno::Reference< com::sun::star::datatransfer::dnd::XDropTargetListener > mxDropTargetListener;
 
-    PushButton*                     mpOpenButton;
-    PushButton*                     mpRecentButton;
-    MenuButton*                     mpTemplateButton;
+    VclPtr<PushButton>                     mpOpenButton;
+    VclPtr<PushButton>                     mpRecentButton;
+    VclPtr<MenuButton>                     mpTemplateButton;
 
-    FixedText*                      mpCreateLabel;
+    VclPtr<FixedText>                      mpCreateLabel;
 
-    PushButton*                     mpWriterAllButton;
-    PushButton*                     mpCalcAllButton;
-    PushButton*                     mpImpressAllButton;
-    PushButton*                     mpDrawAllButton;
-    PushButton*                     mpDBAllButton;
-    PushButton*                     mpMathAllButton;
+    VclPtr<PushButton>                     mpWriterAllButton;
+    VclPtr<PushButton>                     mpCalcAllButton;
+    VclPtr<PushButton>                     mpImpressAllButton;
+    VclPtr<PushButton>                     mpDrawAllButton;
+    VclPtr<PushButton>                     mpDBAllButton;
+    VclPtr<PushButton>                     mpMathAllButton;
 
-    PushButton*                     mpHelpButton;
-    PushButton*                     mpExtensionsButton;
+    VclPtr<PushButton>                     mpHelpButton;
+    VclPtr<PushButton>                     mpExtensionsButton;
 
-    VclBox*                         mpAllButtonsBox;
-    VclBox*                         mpButtonsBox;
-    VclBox*                         mpSmallButtonsBox;
-    VclBox*                         mpThinBox1;
-    VclBox*                         mpThinBox2;
-    VclBox*                         mpHelpBox;
-    VclBox*                         mpExtensionsBox;
+    VclPtr<VclBox>                         mpAllButtonsBox;
+    VclPtr<VclBox>                         mpButtonsBox;
+    VclPtr<VclBox>                         mpSmallButtonsBox;
+    VclPtr<VclBox>                         mpThinBox1;
+    VclPtr<VclBox>                         mpThinBox2;
+    VclPtr<VclBox>                         mpHelpBox;
+    VclPtr<VclBox>                         mpExtensionsBox;
 
-    RecentDocsView*                 mpAllRecentThumbnails;
-    TemplateDefaultView*              mpLocalView;
-    bool                            mbLocalViewInitialized;
+    VclPtr<RecentDocsView>                 mpAllRecentThumbnails;
+    VclPtr<TemplateDefaultView>            mpLocalView;
+    bool                                   mbLocalViewInitialized;
 
-    std::vector<vcl::Window*>            maDndWindows;
+    std::vector<VclPtr<vcl::Window> >      maDndWindows;
 
     Rectangle                       maStartCentButtons;
 

@@ -28,6 +28,18 @@ SvxNewTableDialog::SvxNewTableDialog( vcl::Window* pParent )
     get(mpNumColumns, "columns");
 }
 
+SvxNewTableDialog::~SvxNewTableDialog()
+{
+    dispose();
+}
+
+void SvxNewTableDialog::dispose()
+{
+    mpNumColumns.clear();
+    mpNumRows.clear();
+    ModalDialog::dispose();
+}
+
 short SvxNewTableDialog::Execute(void)
 {
     return ModalDialog::Execute();

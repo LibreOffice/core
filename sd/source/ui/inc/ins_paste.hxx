@@ -31,11 +31,13 @@
 class SD_DLLPUBLIC SdInsertPasteDlg : public ModalDialog
 {
 private:
-    RadioButton* m_pRbBefore;
-    RadioButton* m_pRbAfter;
+    VclPtr<RadioButton> m_pRbBefore;
+    VclPtr<RadioButton> m_pRbAfter;
 
 public:
     SdInsertPasteDlg( vcl::Window* pWindow );
+    virtual ~SdInsertPasteDlg();
+    virtual void dispose() SAL_OVERRIDE;
     bool IsInsertBefore() const;
 };
 

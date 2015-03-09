@@ -67,7 +67,7 @@ typedef std::vector<SvLBoxEntryPtr> SvLBoxEntryArr;
 
 class SW_DLLPUBLIC SwRedlineAcceptDlg
 {
-    vcl::Window*            pParentDlg;
+    VclPtr<vcl::Window>     pParentDlg;
     SwRedlineDataParentArr  aRedlineParents;
     SwRedlineDataChildArr   aRedlineChildren;
     SwRedlineDataParentSortArr aUsedSeqNo;
@@ -82,8 +82,8 @@ class SW_DLLPUBLIC SwRedlineAcceptDlg
     OUString                sFmtCollSet;
     OUString                sFilterAction;
     OUString                sAutoFormat;
-    SvxTPView*              pTPView;
-    SvxRedlinTable*         pTable; // PB 2006/02/02 #i48648 now SvHeaderTabListBox
+    VclPtr<SvxTPView>       pTPView;
+    VclPtr<SvxRedlinTable>  pTable; // PB 2006/02/02 #i48648 now SvHeaderTabListBox
     Link                    aOldSelectHdl;
     Link                    aOldDeselectHdl;
     bool                    bOnlyFormatedRedlines;

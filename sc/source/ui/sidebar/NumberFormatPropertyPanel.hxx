@@ -56,14 +56,16 @@ public:
 
     SfxBindings* GetBindings() { return mpBindings;}
 
+    virtual ~NumberFormatPropertyPanel();
+    virtual void dispose() SAL_OVERRIDE;
 private:
     //ui controls
-    ListBox*                                mpLbCategory;
-    ToolBox*                                mpTBCategory;
-    NumericField*                           mpEdDecimals;
-    NumericField*                           mpEdLeadZeroes;
-    CheckBox*                               mpBtnNegRed;
-    CheckBox*                               mpBtnThousand;
+    VclPtr<ListBox>                                mpLbCategory;
+    VclPtr<ToolBox>                                mpTBCategory;
+    VclPtr<NumericField>                           mpEdDecimals;
+    VclPtr<NumericField>                           mpEdLeadZeroes;
+    VclPtr<CheckBox>                               mpBtnNegRed;
+    VclPtr<CheckBox>                               mpBtnThousand;
 
     ::sfx2::sidebar::ControllerItem         maNumFormatControl;
     ::sfx2::sidebar::ControllerItem         maFormatControl;
@@ -83,7 +85,6 @@ private:
         vcl::Window* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings);
-    virtual ~NumberFormatPropertyPanel();
 
     void Initialize();
 };

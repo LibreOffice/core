@@ -29,21 +29,23 @@ class SvxDistributePage : public SvxTabPage
     SvxDistributeHorizontal     m_eDistributeHor;
     SvxDistributeVertical       m_eDistributeVer;
 
-    RadioButton*                m_pBtnHorNone;
-    RadioButton*                m_pBtnHorLeft;
-    RadioButton*                m_pBtnHorCenter;
-    RadioButton*                m_pBtnHorDistance;
-    RadioButton*                m_pBtnHorRight;
-    RadioButton*                m_pBtnVerNone;
-    RadioButton*                m_pBtnVerTop;
-    RadioButton*                m_pBtnVerCenter;
-    RadioButton*                m_pBtnVerDistance;
-    RadioButton*                m_pBtnVerBottom;
+    VclPtr<RadioButton>                m_pBtnHorNone;
+    VclPtr<RadioButton>                m_pBtnHorLeft;
+    VclPtr<RadioButton>                m_pBtnHorCenter;
+    VclPtr<RadioButton>                m_pBtnHorDistance;
+    VclPtr<RadioButton>                m_pBtnHorRight;
+    VclPtr<RadioButton>                m_pBtnVerNone;
+    VclPtr<RadioButton>                m_pBtnVerTop;
+    VclPtr<RadioButton>                m_pBtnVerCenter;
+    VclPtr<RadioButton>                m_pBtnVerDistance;
+    VclPtr<RadioButton>                m_pBtnVerBottom;
 
 public:
     SvxDistributePage(vcl::Window* pWindow, const SfxItemSet& rInAttrs,
         SvxDistributeHorizontal eHor = SvxDistributeHorizontalNone,
         SvxDistributeVertical eVer = SvxDistributeVerticalNone);
+    virtual ~SvxDistributePage();
+    virtual void dispose() SAL_OVERRIDE;
 
     static SfxTabPage* Create(vcl::Window*, const SfxItemSet&,
         SvxDistributeHorizontal eHor, SvxDistributeVertical eVer);
@@ -57,12 +59,14 @@ public:
 
 class SvxDistributeDialog : public SfxSingleTabDialog
 {
-    SvxDistributePage* mpPage;
+    VclPtr<SvxDistributePage> mpPage;
 
 public:
     SvxDistributeDialog(vcl::Window* pParent, const SfxItemSet& rAttr,
         SvxDistributeHorizontal eHor = SvxDistributeHorizontalNone,
         SvxDistributeVertical eVer = SvxDistributeVerticalNone);
+    virtual ~SvxDistributeDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     SvxDistributeHorizontal GetDistributeHor() const { return mpPage->GetDistributeHor(); }
     SvxDistributeVertical GetDistributeVer() const { return mpPage->GetDistributeVer(); }

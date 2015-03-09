@@ -46,6 +46,7 @@ public:
 
     explicit ScRetypePassDlg(vcl::Window* pParent);
     virtual ~ScRetypePassDlg();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual short Execute() SAL_OVERRIDE;
 
@@ -71,12 +72,12 @@ private:
     void DeleteSheets();
 
 private:
-    OKButton*       mpBtnOk;
-    FixedText*      mpTextDocStatus;
-    PushButton*     mpBtnRetypeDoc;
-    VclVBox*        mpSheetsBox;
+    VclPtr<OKButton>       mpBtnOk;
+    VclPtr<FixedText>      mpTextDocStatus;
+    VclPtr<PushButton>     mpBtnRetypeDoc;
+    VclPtr<VclVBox>        mpSheetsBox;
 
-    std::vector<VclHBox*> maSheets;
+    std::vector<VclPtr<VclHBox>> maSheets;
 
     OUString        maTextNotProtected;
     OUString        maTextNotPassProtected;
@@ -104,6 +105,7 @@ class ScRetypePassInputDlg : public ModalDialog
 public:
     explicit ScRetypePassInputDlg(vcl::Window* pParent, ScPassHashProtectable* pProtected);
     virtual ~ScRetypePassInputDlg();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual short Execute() SAL_OVERRIDE;
 
@@ -117,17 +119,17 @@ private:
     void CheckPasswordInput();
 
 private:
-    OKButton*       m_pBtnOk;
+    VclPtr<OKButton>       m_pBtnOk;
 
-    RadioButton*    m_pBtnRetypePassword;
+    VclPtr<RadioButton>    m_pBtnRetypePassword;
 
-    VclContainer*   m_pPasswordGrid;
-    Edit*           m_pPassword1Edit;
-    Edit*           m_pPassword2Edit;
+    VclPtr<VclContainer>   m_pPasswordGrid;
+    VclPtr<Edit>           m_pPassword1Edit;
+    VclPtr<Edit>           m_pPassword2Edit;
 
-    CheckBox*       m_pBtnMatchOldPass;
+    VclPtr<CheckBox>       m_pBtnMatchOldPass;
 
-    RadioButton*    m_pBtnRemovePassword;
+    VclPtr<RadioButton>    m_pBtnRemovePassword;
 
     DECL_LINK( OKHdl, void* );
     DECL_LINK( RadioBtnHdl, RadioButton* );

@@ -579,7 +579,21 @@ void UpdateDialog::dispose()
     {
         delete (*i);
     }
-    delete m_pUpdates;
+    m_pchecking.clear();
+    m_pthrobber.clear();
+    m_pUpdate.clear();
+    m_pContainer.clear();
+    m_pUpdates.clear();
+    m_pAll.clear();
+    m_pDescription.clear();
+    m_pPublisherLabel.clear();
+    m_pPublisherLink.clear();
+    m_pReleaseNotesLabel.clear();
+    m_pReleaseNotesLink.clear();
+    m_pDescriptions.clear();
+    m_pHelp.clear();
+    m_pOk.clear();
+    m_pClose.clear();
     ModalDialog::dispose();
 }
 

@@ -96,7 +96,7 @@ private:
     sal_Int32 mnFirstVisibleChild;
     sal_Int32 mnLastVisibleChild;
     bool mbListeningToDocument;
-    vcl::Window* mpWindow;
+    VclPtr<vcl::Window> mpWindow;
     sal_Int32 mnFocusedIndex;
     bool mbModelChangeLocked;
     ImplSVEvent * mnUpdateChildrenUserEventId;
@@ -221,7 +221,7 @@ Reference<XAccessible > SAL_CALL AccessibleSlideSorterView::getAccessibleParent 
     const SolarMutexGuard aSolarGuard;
     Reference<XAccessible> xParent;
 
-    if (mpContentWindow != NULL)
+    if (mpContentWindow != nullptr)
     {
         vcl::Window* pParent = mpContentWindow->GetAccessibleParentWindow();
         if (pParent != NULL)
@@ -302,7 +302,7 @@ Reference<XAccessibleStateSet > SAL_CALL
     pStateSet->AddState(AccessibleStateType::ACTIVE);
     pStateSet->AddState(AccessibleStateType::MULTI_SELECTABLE);
     pStateSet->AddState(AccessibleStateType::OPAQUE);
-    if (mpContentWindow!=NULL)
+    if (mpContentWindow!=nullptr)
     {
         if (mpContentWindow->IsVisible())
             pStateSet->AddState(AccessibleStateType::VISIBLE);
@@ -416,7 +416,7 @@ awt::Rectangle SAL_CALL AccessibleSlideSorterView::getBounds (void)
     const SolarMutexGuard aSolarGuard;
     awt::Rectangle aBBox;
 
-    if (mpContentWindow != NULL)
+    if (mpContentWindow != nullptr)
     {
         const Point aPosition (mpContentWindow->GetPosPixel());
         const Size aSize (mpContentWindow->GetOutputSizePixel());
@@ -436,7 +436,7 @@ awt::Point SAL_CALL AccessibleSlideSorterView::getLocation (void)
     ThrowIfDisposed();
     awt::Point aLocation;
 
-    if (mpContentWindow != NULL)
+    if (mpContentWindow != nullptr)
     {
         const Point aPosition (mpContentWindow->GetPosPixel());
         aLocation.X = aPosition.X();
@@ -478,7 +478,7 @@ awt::Size SAL_CALL AccessibleSlideSorterView::getSize (void)
     ThrowIfDisposed();
     awt::Size aSize;
 
-    if (mpContentWindow != NULL)
+    if (mpContentWindow != nullptr)
     {
         const Size aOutputSize (mpContentWindow->GetOutputSizePixel());
         aSize.Width = aOutputSize.Width();
@@ -813,7 +813,7 @@ void AccessibleSlideSorterView::Implementation::ConnectListeners (void)
         StartListening (*mrSlideSorter.GetViewShell());
     mbListeningToDocument = true;
 
-    if (mpWindow != NULL)
+    if (mpWindow != nullptr)
         mpWindow->AddEventListener(
             LINK(this,AccessibleSlideSorterView::Implementation,WindowEventListener));
 
@@ -834,7 +834,7 @@ void AccessibleSlideSorterView::Implementation::ReleaseListeners (void)
     mrSlideSorter.GetView().RemoveVisibilityChangeListener(
         LINK(this,AccessibleSlideSorterView::Implementation,VisibilityChangeListener));
 
-    if (mpWindow != NULL)
+    if (mpWindow != nullptr)
         mpWindow->RemoveEventListener(
             LINK(this,AccessibleSlideSorterView::Implementation,WindowEventListener));
 

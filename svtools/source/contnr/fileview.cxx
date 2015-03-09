@@ -168,7 +168,7 @@ private:
     Reference< XCommandEnvironment >    mxCmdEnv;
 
     ::osl::Mutex            maMutex;
-    HeaderBar*              mpHeaderBar;
+    VclPtr<HeaderBar>       mpHeaderBar;
     SvtFileView_Impl*       mpParent;
     Timer                   maResetQuickSearch;
     OUString                maQuickSearchText;
@@ -406,7 +406,7 @@ class SvtFileView_Impl  :public ::svt::IEnumerationResultHandler
                         ,public ITimeoutHandler
 {
 protected:
-    SvtFileView*                mpAntiImpl;
+    VclPtr<SvtFileView>         mpAntiImpl;
     Link                        m_aSelectHandler;
 
     ::rtl::Reference< ::svt::FileViewContentEnumerator >
@@ -424,7 +424,7 @@ public:
     ::std::vector< SortingData_Impl* >  maContent;
     ::osl::Mutex                        maMutex;
 
-    ViewTabListBox_Impl*    mpView;
+    VclPtr<ViewTabListBox_Impl>         mpView;
     NameTranslator_Impl*    mpNameTrans;
     sal_uInt16              mnSortColumn;
     bool                    mbAscending     : 1;
@@ -642,7 +642,7 @@ void ViewTabListBox_Impl::dispose()
 {
     maResetQuickSearch.Stop();
 
-    delete mpHeaderBar;
+    mpHeaderBar.clear();
     SvHeaderTabListBox::dispose();
 }
 
@@ -2332,6 +2332,17 @@ QueryDeleteDlg_Impl::QueryDeleteDlg_Impl(vcl::Window* pParent, const OUString& r
 
     // display specified texts
     set_secondary_text(get_secondary_text().replaceFirst("%s", rName));
+}
+
+QueryDeleteDlg_Impl::~QueryDeleteDlg_Impl()
+{
+    dispose();
+}
+
+void QueryDeleteDlg_Impl::dispose()
+{
+    m_pAllButton.clear();
+    MessageDialog::dispose();
 }
 
 }

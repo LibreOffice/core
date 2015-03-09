@@ -226,7 +226,8 @@ TabDialog::~TabDialog()
 
 void TabDialog::dispose()
 {
-    delete mpFixedLine;
+    mpFixedLine.clear();
+    mpViewWindow.clear();
     Dialog::dispose();
 }
 

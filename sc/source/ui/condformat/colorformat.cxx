@@ -123,6 +123,29 @@ ScDataBarSettingsDlg::ScDataBarSettingsDlg(vcl::Window* pWindow, const ScDataBar
     PosSelectHdl(NULL);
 }
 
+ScDataBarSettingsDlg::~ScDataBarSettingsDlg()
+{
+    dispose();
+}
+
+void ScDataBarSettingsDlg::dispose()
+{
+    mpBtnOk.clear();
+    mpBtnCancel.clear();
+    mpLbPos.clear();
+    mpLbNeg.clear();
+    mpLbAxisCol.clear();
+    mpLbTypeMin.clear();
+    mpLbTypeMax.clear();
+    mpLbAxisPos.clear();
+    mpEdMin.clear();
+    mpEdMax.clear();
+    mpLenMin.clear();
+    mpLenMax.clear();
+    mpCbOnlyBar.clear();
+    ModalDialog::dispose();
+}
+
 void ScDataBarSettingsDlg::Init()
 {
     SfxObjectShell*     pDocSh      = SfxObjectShell::Current();

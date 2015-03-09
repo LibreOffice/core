@@ -43,15 +43,17 @@ struct InsertAxisOrGridDialogData
 class SchAxisDlg : public ModalDialog
 {
 protected:
-    CheckBox* m_pCbPrimaryX;
-    CheckBox* m_pCbPrimaryY;
-    CheckBox* m_pCbPrimaryZ;
-    CheckBox* m_pCbSecondaryX;
-    CheckBox* m_pCbSecondaryY;
-    CheckBox* m_pCbSecondaryZ;
+    VclPtr<CheckBox> m_pCbPrimaryX;
+    VclPtr<CheckBox> m_pCbPrimaryY;
+    VclPtr<CheckBox> m_pCbPrimaryZ;
+    VclPtr<CheckBox> m_pCbSecondaryX;
+    VclPtr<CheckBox> m_pCbSecondaryY;
+    VclPtr<CheckBox> m_pCbSecondaryZ;
 
 public:
     SchAxisDlg(vcl::Window* pParent, const InsertAxisOrGridDialogData& rInput, bool bAxisDlg=true);
+    virtual ~SchAxisDlg();
+    virtual void dispose() SAL_OVERRIDE;
 
     void getResult( InsertAxisOrGridDialogData& rOutput );
 };

@@ -207,12 +207,7 @@ SvxJavaOptionsPage::~SvxJavaOptionsPage()
 
 void SvxJavaOptionsPage::dispose()
 {
-    delete m_pJavaList;
-    m_pJavaList = NULL;
-    delete m_pParamDlg;
-    m_pParamDlg = NULL;
-    delete m_pPathDlg;
-    m_pPathDlg = NULL;
+    m_pJavaList.clear();
     ClearJavaInfo();
 #if HAVE_FEATURE_JAVA
     std::vector< JavaInfo* >::iterator pIter;
@@ -225,6 +220,17 @@ void SvxJavaOptionsPage::dispose()
 
     jfw_unlock();
 #endif
+    m_pJavaEnableCB.clear();
+    m_pJavaBox.clear();
+    m_pJavaPathText.clear();
+    m_pAddBtn.clear();
+    m_pParameterBtn.clear();
+    m_pClassPathBtn.clear();
+    m_pExpertConfigBtn.clear();
+    m_pExperimentalCB.clear();
+    m_pMacroCB.clear();
+    m_pParamDlg.clear();
+    m_pPathDlg.clear();
     SfxTabPage::dispose();
 }
 
@@ -815,6 +821,19 @@ SvxJavaParameterDlg::SvxJavaParameterDlg( vcl::Window* pParent ) :
     EnableRemoveButton();
 }
 
+SvxJavaParameterDlg::~SvxJavaParameterDlg()
+{
+    dispose();
+}
+
+void SvxJavaParameterDlg::dispose()
+{
+    m_pParameterEdit.clear();
+    m_pAssignBtn.clear();
+    m_pAssignedList.clear();
+    m_pRemoveBtn.clear();
+    ModalDialog::dispose();
+}
 
 
 IMPL_LINK_NOARG(SvxJavaParameterDlg, ModifyHdl_Impl)
@@ -955,6 +974,10 @@ void SvxJavaClassPathDlg::dispose()
             delete static_cast< OUString* >( m_pPathList->GetEntryData(i) );
         m_pPathList = NULL;
     }
+    m_pPathList.clear();
+    m_pAddArchiveBtn.clear();
+    m_pAddPathBtn.clear();
+    m_pRemoveBtn.clear();
     ModalDialog::dispose();
 }
 

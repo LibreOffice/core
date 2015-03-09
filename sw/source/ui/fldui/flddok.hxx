@@ -32,20 +32,20 @@
 
 class SwFldDokPage : public SwFldPage
 {
-    ListBox*            m_pTypeLB;
-    VclContainer*       m_pSelection;
-    ListBox*            m_pSelectionLB;
-    FixedText*          m_pValueFT;
-    Edit*               m_pValueED;
-    FixedText*          m_pLevelFT;
-    NumericField*       m_pLevelED;
-    FixedText*          m_pDateFT;
-    FixedText*          m_pTimeFT;
-    NumericField*       m_pDateOffsetED;
-    VclContainer*       m_pFormat;
-    ListBox*            m_pFormatLB;
-    NumFormatListBox*   m_pNumFormatLB;
-    CheckBox*           m_pFixedCB;
+    VclPtr<ListBox>            m_pTypeLB;
+    VclPtr<VclContainer>       m_pSelection;
+    VclPtr<ListBox>            m_pSelectionLB;
+    VclPtr<FixedText>          m_pValueFT;
+    VclPtr<Edit>               m_pValueED;
+    VclPtr<FixedText>          m_pLevelFT;
+    VclPtr<NumericField>       m_pLevelED;
+    VclPtr<FixedText>          m_pDateFT;
+    VclPtr<FixedText>          m_pTimeFT;
+    VclPtr<NumericField>       m_pDateOffsetED;
+    VclPtr<VclContainer>       m_pFormat;
+    VclPtr<ListBox>            m_pFormatLB;
+    VclPtr<NumFormatListBox>   m_pNumFormatLB;
+    VclPtr<CheckBox>           m_pFixedCB;
 
     sal_Int32               nOldSel;
     sal_uLong               nOldFormat;
@@ -64,6 +64,7 @@ public:
                         SwFldDokPage(vcl::Window* pWindow, const SfxItemSet& rSet);
 
                         virtual ~SwFldDokPage();
+    virtual void        dispose() SAL_OVERRIDE;
 
     static SfxTabPage*  Create(vcl::Window* pParent, const SfxItemSet* rAttrSet);
 

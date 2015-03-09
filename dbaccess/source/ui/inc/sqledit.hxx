@@ -43,7 +43,7 @@ namespace dbaui
         Timer                   m_timerUndoActionCreation;
         Link                    m_lnkTextModifyHdl;
         OUString                m_strOrigText;      // is restored on undo
-        OQueryTextView*         m_pView;
+        VclPtr<OQueryTextView>         m_pView;
         bool                m_bAccelAction;     // is set on cut, copy, paste
         bool                m_bStopTimer;
         svtools::ColorConfig    m_ColorConfig;

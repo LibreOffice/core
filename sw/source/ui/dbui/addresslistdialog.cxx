@@ -277,7 +277,15 @@ void SwAddressListDialog::dispose()
         delete pUserData;
         pEntry = m_pListLB->Next( pEntry );
     }
-    delete m_pListLB;
+    m_pAddressPage.clear();
+    m_pListLB.clear();
+    m_pDescriptionFI.clear();
+    m_pLoadListPB.clear();
+    m_pCreateListPB.clear();
+    m_pFilterPB.clear();
+    m_pEditPB.clear();
+    m_pTablePB.clear();
+    m_pOK.clear();
     SfxModalDialog::dispose();
 }
 

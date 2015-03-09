@@ -104,27 +104,27 @@ namespace svx
     {
     private:
 
-        PushButton*         m_pFind;
-        PushButton*         m_pIgnore;
-        PushButton*         m_pIgnoreAll;
-        PushButton*         m_pReplace;
-        PushButton*         m_pReplaceAll;
-        PushButton*         m_pOptions;
-        SuggestionDisplay*  m_pSuggestions;
-        RadioButton*        m_pSimpleConversion;
-        RadioButton*        m_pHangulBracketed;
-        RadioButton*        m_pHanjaBracketed;
-        Edit*               m_pWordInput;
-        FixedText*          m_pOriginalWord;
-        RubyRadioButton*    m_pHanjaAbove;
-        RubyRadioButton*    m_pHanjaBelow;
-        RubyRadioButton*    m_pHangulAbove;
-        RubyRadioButton*    m_pHangulBelow;
-        CheckBox*           m_pHangulOnly;
-        CheckBox*           m_pHanjaOnly;
-        CheckBox*           m_pReplaceByChar;
+        VclPtr<PushButton>         m_pFind;
+        VclPtr<PushButton>         m_pIgnore;
+        VclPtr<PushButton>         m_pIgnoreAll;
+        VclPtr<PushButton>         m_pReplace;
+        VclPtr<PushButton>         m_pReplaceAll;
+        VclPtr<PushButton>         m_pOptions;
+        VclPtr<SuggestionDisplay>  m_pSuggestions;
+        VclPtr<RadioButton>        m_pSimpleConversion;
+        VclPtr<RadioButton>        m_pHangulBracketed;
+        VclPtr<RadioButton>        m_pHanjaBracketed;
+        VclPtr<Edit>               m_pWordInput;
+        VclPtr<FixedText>          m_pOriginalWord;
+        VclPtr<RubyRadioButton>    m_pHanjaAbove;
+        VclPtr<RubyRadioButton>    m_pHanjaBelow;
+        VclPtr<RubyRadioButton>    m_pHangulAbove;
+        VclPtr<RubyRadioButton>    m_pHangulBelow;
+        VclPtr<CheckBox>           m_pHangulOnly;
+        VclPtr<CheckBox>           m_pHanjaOnly;
+        VclPtr<CheckBox>           m_pReplaceByChar;
 
-        CheckBox*       m_pIgnoreNonPrimary;
+        VclPtr<CheckBox>       m_pIgnoreNonPrimary;
         /** are we working for a document? This is normally true, but in case
             the user uses the "find" functionality, we switch to working
             with what the user entered, which then does not have any relation to
@@ -138,6 +138,8 @@ namespace svx
         HangulHanjaConversionDialog(
                 vcl::Window* _pParent,
                 editeng::HangulHanjaConversion::ConversionDirection _ePrimaryDirection );
+        virtual ~HangulHanjaConversionDialog();
+        virtual void dispose() SAL_OVERRIDE;
 
     public:
         void    SetOptionsChangedHdl( const Link& _rHdl );
@@ -196,14 +198,14 @@ namespace svx
     class HangulHanjaOptionsDialog : public ModalDialog
     {
     private:
-        SvxCheckListBox*    m_pDictsLB;
-        CheckBox*           m_pIgnorepostCB;
-        CheckBox*           m_pShowrecentlyfirstCB;
-        CheckBox*           m_pAutoreplaceuniqueCB;
-        PushButton*         m_pNewPB;
-        PushButton*         m_pEditPB;
-        PushButton*         m_pDeletePB;
-        OKButton*           m_pOkPB;
+        VclPtr<SvxCheckListBox>    m_pDictsLB;
+        VclPtr<CheckBox>           m_pIgnorepostCB;
+        VclPtr<CheckBox>           m_pShowrecentlyfirstCB;
+        VclPtr<CheckBox>           m_pAutoreplaceuniqueCB;
+        VclPtr<PushButton>         m_pNewPB;
+        VclPtr<PushButton>         m_pEditPB;
+        VclPtr<PushButton>         m_pDeletePB;
+        VclPtr<OKButton>           m_pOkPB;
 
         SvLBoxButtonData*   m_pCheckButtonData;
 
@@ -232,8 +234,8 @@ namespace svx
     class HangulHanjaNewDictDialog : public ModalDialog
     {
     private:
-        Edit* m_pDictNameED;
-        OKButton* m_pOkBtn;
+        VclPtr<Edit> m_pDictNameED;
+        VclPtr<OKButton> m_pOkBtn;
 
         bool m_bEntered;
 
@@ -241,6 +243,8 @@ namespace svx
         DECL_LINK( ModifyHdl, void* );
     public:
         HangulHanjaNewDictDialog( vcl::Window* _pParent );
+        virtual ~HangulHanjaNewDictDialog();
+        virtual void dispose() SAL_OVERRIDE;
 
         bool GetName( OUString& _rRetName ) const;
     };
@@ -251,14 +255,16 @@ namespace svx
     class SuggestionEdit : public Edit
     {
     private:
-        SuggestionEdit*     m_pPrev;
-        SuggestionEdit*     m_pNext;
-        ScrollBar*          m_pScrollBar;
+        VclPtr<SuggestionEdit>     m_pPrev;
+        VclPtr<SuggestionEdit>     m_pNext;
+        VclPtr<ScrollBar>          m_pScrollBar;
 
         bool                ShouldScroll( bool _bUp ) const;
         void                DoJump( bool _bUp );
     public:
                             SuggestionEdit( vcl::Window* pParent, WinBits nBits );
+        virtual             ~SuggestionEdit();
+        virtual void        dispose() SAL_OVERRIDE;
         virtual bool        PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
         void init( ScrollBar* pScrollBar, SuggestionEdit* pPrev, SuggestionEdit* pNext);
     };
@@ -274,15 +280,15 @@ namespace svx
         OUString        m_aOriginal;
         SuggestionList* m_pSuggestions;
 
-        ListBox*        m_aBookLB;
-        ComboBox*       m_aOriginalLB;
-        SuggestionEdit* m_aEdit1;
-        SuggestionEdit* m_aEdit2;
-        SuggestionEdit* m_aEdit3;
-        SuggestionEdit* m_aEdit4;
-        ScrollBar*      m_aScrollSB;
-        PushButton*     m_aNewPB;
-        PushButton*     m_aDeletePB;
+        VclPtr<ListBox>        m_aBookLB;
+        VclPtr<ComboBox>       m_aOriginalLB;
+        VclPtr<SuggestionEdit> m_aEdit1;
+        VclPtr<SuggestionEdit> m_aEdit2;
+        VclPtr<SuggestionEdit> m_aEdit3;
+        VclPtr<SuggestionEdit> m_aEdit4;
+        VclPtr<ScrollBar>      m_aScrollSB;
+        VclPtr<PushButton>     m_aNewPB;
+        VclPtr<PushButton>     m_aDeletePB;
 
         sal_uInt16      m_nTopPos;
         bool            m_bModifiedSuggestions;

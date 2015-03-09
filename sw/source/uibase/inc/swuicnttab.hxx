@@ -61,8 +61,8 @@ struct SwIndexSections_Impl;
 
 class SwMultiTOXTabDialog : public SfxTabDialog
 {
-    vcl::Window*                 m_pExampleContainerWIN;
-    CheckBox*               m_pShowExampleCB;
+    VclPtr<vcl::Window>     m_pExampleContainerWIN;
+    VclPtr<CheckBox>        m_pShowExampleCB;
     SwTOXMgr*               pMgr;
     SwWrtShell&             rSh;
 
@@ -131,65 +131,65 @@ class IndexEntrySupplierWrapper;
 
 class SwTOXSelectTabPage : public SfxTabPage
 {
-    Edit*           m_pTitleED;
-    FixedText*      m_pTypeFT;
-    ListBox*        m_pTypeLB;
-    CheckBox*       m_pReadOnlyCB;
+    VclPtr<Edit>           m_pTitleED;
+    VclPtr<FixedText>      m_pTypeFT;
+    VclPtr<ListBox>        m_pTypeLB;
+    VclPtr<CheckBox>       m_pReadOnlyCB;
 
-    VclContainer*   m_pAreaFrame;
-    ListBox*        m_pAreaLB;
-    FixedText*      m_pLevelFT;   //content, user
-    NumericField*   m_pLevelNF;   //content, user
+    VclPtr<VclContainer>   m_pAreaFrame;
+    VclPtr<ListBox>        m_pAreaLB;
+    VclPtr<FixedText>      m_pLevelFT;   //content, user
+    VclPtr<NumericField>   m_pLevelNF;   //content, user
 
     //content
-    VclContainer*   m_pCreateFrame;  // content, user, illustration
-    CheckBox*       m_pFromHeadingsCB;
-    CheckBox*       m_pAddStylesCB;
-    PushButton*     m_pAddStylesPB;
+    VclPtr<VclContainer>   m_pCreateFrame;  // content, user, illustration
+    VclPtr<CheckBox>       m_pFromHeadingsCB;
+    VclPtr<CheckBox>       m_pAddStylesCB;
+    VclPtr<PushButton>     m_pAddStylesPB;
     //user
-    CheckBox*       m_pFromTablesCB;
-    CheckBox*       m_pFromFramesCB;
-    CheckBox*       m_pFromGraphicsCB;
-    CheckBox*       m_pFromOLECB;
-    CheckBox*       m_pLevelFromChapterCB;
+    VclPtr<CheckBox>       m_pFromTablesCB;
+    VclPtr<CheckBox>       m_pFromFramesCB;
+    VclPtr<CheckBox>       m_pFromGraphicsCB;
+    VclPtr<CheckBox>       m_pFromOLECB;
+    VclPtr<CheckBox>       m_pLevelFromChapterCB;
 
     //illustration + table
-    RadioButton*    m_pFromCaptionsRB;
-    RadioButton*    m_pFromObjectNamesRB;
+    VclPtr<RadioButton>    m_pFromCaptionsRB;
+    VclPtr<RadioButton>    m_pFromObjectNamesRB;
 
     //illustration and tables
-    FixedText*      m_pCaptionSequenceFT;
-    ListBox*        m_pCaptionSequenceLB;
-    FixedText*      m_pDisplayTypeFT;
-    ListBox*        m_pDisplayTypeLB;
+    VclPtr<FixedText>      m_pCaptionSequenceFT;
+    VclPtr<ListBox>        m_pCaptionSequenceLB;
+    VclPtr<FixedText>      m_pDisplayTypeFT;
+    VclPtr<ListBox>        m_pDisplayTypeLB;
 
     //all but illustration and table
-    CheckBox*       m_pTOXMarksCB;
+    VclPtr<CheckBox>       m_pTOXMarksCB;
 
     //index only
-    VclContainer*   m_pIdxOptionsFrame;
-    CheckBox*       m_pCollectSameCB;
-    CheckBox*       m_pUseFFCB;
-    CheckBox*       m_pUseDashCB;
-    CheckBox*       m_pCaseSensitiveCB;
-    CheckBox*       m_pInitialCapsCB;
-    CheckBox*       m_pKeyAsEntryCB;
-    CheckBox*       m_pFromFileCB;
-    MenuButton*     m_pAutoMarkPB;
+    VclPtr<VclContainer>   m_pIdxOptionsFrame;
+    VclPtr<CheckBox>       m_pCollectSameCB;
+    VclPtr<CheckBox>       m_pUseFFCB;
+    VclPtr<CheckBox>       m_pUseDashCB;
+    VclPtr<CheckBox>       m_pCaseSensitiveCB;
+    VclPtr<CheckBox>       m_pInitialCapsCB;
+    VclPtr<CheckBox>       m_pKeyAsEntryCB;
+    VclPtr<CheckBox>       m_pFromFileCB;
+    VclPtr<MenuButton>     m_pAutoMarkPB;
 
     // object only
     SwOLENames      aFromNames;
-    SvxCheckListBox* m_pFromObjCLB;
-    VclContainer*   m_pFromObjFrame;
+    VclPtr<SvxCheckListBox> m_pFromObjCLB;
+    VclPtr<VclContainer>   m_pFromObjFrame;
 
-    CheckBox*       m_pSequenceCB;
-    ListBox*        m_pBracketLB;
-    VclContainer*   m_pAuthorityFrame;
+    VclPtr<CheckBox>       m_pSequenceCB;
+    VclPtr<ListBox>        m_pBracketLB;
+    VclPtr<VclContainer>   m_pAuthorityFrame;
 
     //all
-    VclContainer*   m_pSortFrame;
-    SvxLanguageBox* m_pLanguageLB;
-    ListBox*        m_pSortAlgorithmLB;
+    VclPtr<VclContainer>   m_pSortFrame;
+    VclPtr<SvxLanguageBox> m_pLanguageLB;
+    VclPtr<ListBox>        m_pSortAlgorithmLB;
 
     IndexEntryResource* pIndexRes;
 
@@ -243,15 +243,15 @@ class SwTOXEntryTabPage;
 
 class SwTokenWindow : public VclHBox, public VclBuilderContainer
 {
-    typedef std::vector<Control*>::iterator ctrl_iterator;
-    typedef std::vector<Control*>::const_iterator ctrl_const_iterator;
-    typedef std::vector<Control*>::reverse_iterator ctrl_reverse_iterator;
-    typedef std::vector<Control*>::const_reverse_iterator ctrl_const_reverse_iterator;
+    typedef std::vector<VclPtr<Control> >::iterator ctrl_iterator;
+    typedef std::vector<VclPtr<Control> >::const_iterator ctrl_const_iterator;
+    typedef std::vector<VclPtr<Control> >::reverse_iterator ctrl_reverse_iterator;
+    typedef std::vector<VclPtr<Control> >::const_reverse_iterator ctrl_const_reverse_iterator;
 
-    Button* m_pLeftScrollWin;
-    vcl::Window* m_pCtrlParentWin;
-    Button* m_pRightScrollWin;
-    std::vector<Control*>   aControlList;
+    VclPtr<Button> m_pLeftScrollWin;
+    VclPtr<vcl::Window> m_pCtrlParentWin;
+    VclPtr<Button> m_pRightScrollWin;
+    std::vector<VclPtr<Control> >   aControlList;
     SwForm*         pForm;
     sal_uInt16      nLevel;
     bool            bValid;
@@ -259,14 +259,14 @@ class SwTokenWindow : public VclHBox, public VclBuilderContainer
     OUString        aButtonHelpTexts[TOKEN_END]; // QuickHelpText of the buttons
     OUString        sCharStyle;
     Link            aButtonSelectedHdl;
-    Control*        pActiveCtrl;
+    VclPtr<Control>        pActiveCtrl;
     Link            aModifyHdl;
     OUString        accessibleName;
     OUString        sAdditionalAccnameString1;
     OUString        sAdditionalAccnameString2;
     OUString        sAdditionalAccnameString3;
 
-    SwTOXEntryTabPage*  m_pParent;
+    VclPtr<SwTOXEntryTabPage>  m_pParent;
 
     DECL_LINK(EditResize, Edit*);
     DECL_LINK(NextItemHdl, SwTOXEdit* );
@@ -328,76 +328,79 @@ class SwTOXEntryTabPage;
 
 class SwIdxTreeListBox : public SvTreeListBox
 {
-    SwTOXEntryTabPage* pParent;
+    VclPtr<SwTOXEntryTabPage> pParent;
 
     virtual void    RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
 public:
     SwIdxTreeListBox(vcl::Window* pPar, WinBits nStyle);
+    virtual ~SwIdxTreeListBox();
+    virtual void dispose() SAL_OVERRIDE;
+
     void SetTabPage(SwTOXEntryTabPage* pPar) { pParent = pPar; }
 };
 
 class SwTOXEntryTabPage : public SfxTabPage
 {
-    FixedText*          m_pLevelFT;
-    SwIdxTreeListBox*   m_pLevelLB;
+    VclPtr<FixedText>          m_pLevelFT;
+    VclPtr<SwIdxTreeListBox>   m_pLevelLB;
 
-    SwTokenWindow*  m_pTokenWIN;
+    VclPtr<SwTokenWindow>  m_pTokenWIN;
 
-    PushButton*     m_pAllLevelsPB;
+    VclPtr<PushButton>     m_pAllLevelsPB;
 
-    PushButton*     m_pEntryNoPB;
-    PushButton*     m_pEntryPB;
-    PushButton*     m_pTabPB;
-    PushButton*     m_pChapterInfoPB;
-    PushButton*     m_pPageNoPB;
-    PushButton*     m_pHyperLinkPB;
+    VclPtr<PushButton>     m_pEntryNoPB;
+    VclPtr<PushButton>     m_pEntryPB;
+    VclPtr<PushButton>     m_pTabPB;
+    VclPtr<PushButton>     m_pChapterInfoPB;
+    VclPtr<PushButton>     m_pPageNoPB;
+    VclPtr<PushButton>     m_pHyperLinkPB;
 
-    ListBox*        m_pAuthFieldsLB;
-    PushButton*     m_pAuthInsertPB;
-    PushButton*     m_pAuthRemovePB;
+    VclPtr<ListBox>        m_pAuthFieldsLB;
+    VclPtr<PushButton>     m_pAuthInsertPB;
+    VclPtr<PushButton>     m_pAuthRemovePB;
 
-    ListBox*        m_pCharStyleLB;       // character style of the current token
-    PushButton*     m_pEditStylePB;
+    VclPtr<ListBox>        m_pCharStyleLB;       // character style of the current token
+    VclPtr<PushButton>     m_pEditStylePB;
 
-    FixedText*      m_pChapterEntryFT;
-    ListBox*        m_pChapterEntryLB;    // type of chapter info
+    VclPtr<FixedText>      m_pChapterEntryFT;
+    VclPtr<ListBox>        m_pChapterEntryLB;    // type of chapter info
 
-    FixedText*      m_pNumberFormatFT;
-    ListBox*        m_pNumberFormatLB;    //!< format for numbering (E#)
+    VclPtr<FixedText>      m_pNumberFormatFT;
+    VclPtr<ListBox>        m_pNumberFormatLB;    //!< format for numbering (E#)
 
-    FixedText*      m_pEntryOutlineLevelFT;    //!< Fixed text, for i53420
-    NumericField*   m_pEntryOutlineLevelNF;   //!< level to evaluate outline level to, for i53420
+    VclPtr<FixedText>      m_pEntryOutlineLevelFT;    //!< Fixed text, for i53420
+    VclPtr<NumericField>   m_pEntryOutlineLevelNF;   //!< level to evaluate outline level to, for i53420
 
-    FixedText*      m_pFillCharFT;
-    ComboBox*       m_pFillCharCB;        // fill char for tab stop
+    VclPtr<FixedText>      m_pFillCharFT;
+    VclPtr<ComboBox>       m_pFillCharCB;        // fill char for tab stop
 
-    FixedText*      m_pTabPosFT;
-    MetricField*    m_pTabPosMF;          // tab stop position
-    CheckBox*       m_pAutoRightCB;
+    VclPtr<FixedText>      m_pTabPosFT;
+    VclPtr<MetricField>    m_pTabPosMF;          // tab stop position
+    VclPtr<CheckBox>       m_pAutoRightCB;
 
-    VclContainer*   m_pFormatFrame;
-    FixedText*      m_pMainEntryStyleFT;
-    ListBox*        m_pMainEntryStyleLB;  // character style of main entries in indexes
-    CheckBox*       m_pAlphaDelimCB;
-    CheckBox*       m_pCommaSeparatedCB;
-    CheckBox*       m_pRelToStyleCB;      // position relative to the right margin of the para style
+    VclPtr<VclContainer>   m_pFormatFrame;
+    VclPtr<FixedText>      m_pMainEntryStyleFT;
+    VclPtr<ListBox>        m_pMainEntryStyleLB;  // character style of main entries in indexes
+    VclPtr<CheckBox>       m_pAlphaDelimCB;
+    VclPtr<CheckBox>       m_pCommaSeparatedCB;
+    VclPtr<CheckBox>       m_pRelToStyleCB;      // position relative to the right margin of the para style
 
-    VclContainer*   m_pSortingFrame;
-    RadioButton*    m_pSortDocPosRB;
-    RadioButton*    m_pSortContentRB;
+    VclPtr<VclContainer>   m_pSortingFrame;
+    VclPtr<RadioButton>    m_pSortDocPosRB;
+    VclPtr<RadioButton>    m_pSortContentRB;
 
-    VclContainer*   m_pSortKeyFrame;
-    ListBox*        m_pFirstKeyLB;
-    RadioButton*    m_pFirstSortUpRB;
-    RadioButton*    m_pFirstSortDownRB;
+    VclPtr<VclContainer>   m_pSortKeyFrame;
+    VclPtr<ListBox>        m_pFirstKeyLB;
+    VclPtr<RadioButton>    m_pFirstSortUpRB;
+    VclPtr<RadioButton>    m_pFirstSortDownRB;
 
-    ListBox*        m_pSecondKeyLB;
-    RadioButton*    m_pSecondSortUpRB;
-    RadioButton*    m_pSecondSortDownRB;
+    VclPtr<ListBox>        m_pSecondKeyLB;
+    VclPtr<RadioButton>    m_pSecondSortUpRB;
+    VclPtr<RadioButton>    m_pSecondSortDownRB;
 
-    ListBox*        m_pThirdKeyLB;
-    RadioButton*    m_pThirdSortUpRB;
-    RadioButton*    m_pThirdSortDownRB;
+    VclPtr<ListBox>        m_pThirdKeyLB;
+    VclPtr<RadioButton>    m_pThirdSortUpRB;
+    VclPtr<RadioButton>    m_pThirdSortDownRB;
 
     OUString        sDelimStr;
     OUString        sLevelStr;
@@ -437,6 +440,7 @@ class SwTOXEntryTabPage : public SfxTabPage
 public:
     SwTOXEntryTabPage(vcl::Window* pParent, const SfxItemSet& rAttrSet);
     virtual ~SwTOXEntryTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual bool        FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* ) SAL_OVERRIDE;
@@ -456,11 +460,11 @@ public:
 
 class SwTOXStylesTabPage : public SfxTabPage
 {
-    ListBox*        m_pLevelLB;
-    PushButton*     m_pAssignBT;
-    ListBox*        m_pParaLayLB;
-    PushButton*     m_pStdBT;
-    PushButton*     m_pEditStyleBT;
+    VclPtr<ListBox>        m_pLevelLB;
+    VclPtr<PushButton>     m_pAssignBT;
+    VclPtr<ListBox>        m_pParaLayLB;
+    VclPtr<PushButton>     m_pStdBT;
+    VclPtr<PushButton>     m_pEditStyleBT;
 
     SwForm*         m_pCurrentForm;
 

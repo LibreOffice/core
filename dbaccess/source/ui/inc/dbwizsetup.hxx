@@ -85,9 +85,9 @@ private:
     OUString                m_sRM_FinalText;
     INetURLObject           m_aDocURL;
     OUString                m_sWorkPath;
-    OGeneralPageWizard*     m_pGeneralPage;
-    OMySQLIntroPageSetup*   m_pMySQLIntroPage;
-    OFinalDBPageSetup*      m_pFinalPage;
+    VclPtr<OGeneralPageWizard>     m_pGeneralPage;
+    VclPtr<OMySQLIntroPageSetup>   m_pMySQLIntroPage;
+    VclPtr<OFinalDBPageSetup>      m_pFinalPage;
 
     ::dbaccess::ODsnTypeCollection*
                             m_pCollection;  /// the DSN type collection instance

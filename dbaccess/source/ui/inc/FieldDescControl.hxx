@@ -65,40 +65,40 @@ namespace dbaui
     class OFieldDescControl : public TabPage
     {
     private:
-        OTableDesignHelpBar*    pHelp;
-        vcl::Window*                 pLastFocusWindow;
-        vcl::Window*                 m_pActFocusWindow;
+        VclPtr<OTableDesignHelpBar>    pHelp;
+        VclPtr<vcl::Window>            pLastFocusWindow;
+        VclPtr<vcl::Window>            m_pActFocusWindow;
 
-        FixedText*              pDefaultText;
-        FixedText*              pRequiredText;
-        FixedText*              pAutoIncrementText;
-        FixedText*              pTextLenText;
-        FixedText*              pNumTypeText;
-        FixedText*              pLengthText;
-        FixedText*              pScaleText;
-        FixedText*              pFormatText;
-        FixedText*              pBoolDefaultText;
-        FixedText*              m_pColumnNameText;
-        FixedText*              m_pTypeText;
-        FixedText*              m_pAutoIncrementValueText;
+        VclPtr<FixedText>              pDefaultText;
+        VclPtr<FixedText>              pRequiredText;
+        VclPtr<FixedText>              pAutoIncrementText;
+        VclPtr<FixedText>              pTextLenText;
+        VclPtr<FixedText>              pNumTypeText;
+        VclPtr<FixedText>              pLengthText;
+        VclPtr<FixedText>              pScaleText;
+        VclPtr<FixedText>              pFormatText;
+        VclPtr<FixedText>              pBoolDefaultText;
+        VclPtr<FixedText>              m_pColumnNameText;
+        VclPtr<FixedText>              m_pTypeText;
+        VclPtr<FixedText>              m_pAutoIncrementValueText;
 
-        OPropListBoxCtrl*       pRequired;
-        OPropListBoxCtrl*       pNumType;
-        OPropListBoxCtrl*       pAutoIncrement;
-        OPropEditCtrl*          pDefault;
-        OPropNumericEditCtrl*   pTextLen;
-        OPropNumericEditCtrl*   pLength;
-        OPropNumericEditCtrl*   pScale;
-        OPropEditCtrl*          pFormatSample;
-        OPropListBoxCtrl*       pBoolDefault;
-        OPropColumnEditCtrl*    m_pColumnName;
-        OPropListBoxCtrl*       m_pType;
-        OPropEditCtrl*          m_pAutoIncrementValue;
+        VclPtr<OPropListBoxCtrl>       pRequired;
+        VclPtr<OPropListBoxCtrl>       pNumType;
+        VclPtr<OPropListBoxCtrl>       pAutoIncrement;
+        VclPtr<OPropEditCtrl>          pDefault;
+        VclPtr<OPropNumericEditCtrl>   pTextLen;
+        VclPtr<OPropNumericEditCtrl>   pLength;
+        VclPtr<OPropNumericEditCtrl>   pScale;
+        VclPtr<OPropEditCtrl>          pFormatSample;
+        VclPtr<OPropListBoxCtrl>       pBoolDefault;
+        VclPtr<OPropColumnEditCtrl>    m_pColumnName;
+        VclPtr<OPropListBoxCtrl>       m_pType;
+        VclPtr<OPropEditCtrl>          m_pAutoIncrementValue;
 
-        PushButton*             pFormat;
+        VclPtr<PushButton>             pFormat;
 
-        ScrollBar*              m_pVertScroll;
-        ScrollBar*              m_pHorzScroll;
+        VclPtr<ScrollBar>              m_pVertScroll;
+        VclPtr<ScrollBar>              m_pHorzScroll;
 
         TOTypeInfoSP            m_pPreviousType;
         short                   m_nPos;
@@ -126,7 +126,7 @@ namespace dbaui
         void                UpdateFormatSample(OFieldDescription* pFieldDescr);
         void                ArrangeAggregates();
 
-        void                SetPosSize( Control** ppControl, long nRow, sal_uInt16 nCol );
+        void                SetPosSize( VclPtr<Control>& rControl, long nRow, sal_uInt16 nCol );
 
         void                ScrollAggregate(Control* pText, Control* pInput, Control* pButton, long nDeltaX, long nDeltaY);
         void                ScrollAllAggregates();

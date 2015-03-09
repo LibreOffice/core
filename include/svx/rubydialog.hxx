@@ -44,10 +44,12 @@ class RubyPreview : public vcl::Window
 {
 protected:
     virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
-    SvxRubyDialog* m_pParentDlg;
+    VclPtr<SvxRubyDialog> m_pParentDlg;
 
 public:
     RubyPreview(vcl::Window *pParent);
+    virtual ~RubyPreview();
+    virtual void dispose() SAL_OVERRIDE;
     void setRubyDialog(SvxRubyDialog* pParentDlg)
     {
         m_pParentDlg = pParentDlg;
@@ -89,33 +91,33 @@ class SvxRubyDialog : public SfxModelessDialog
 {
     friend class RubyPreview;
 
-    FixedText*          m_pLeftFT;
-    FixedText*          m_pRightFT;
-    RubyEdit*           m_pLeft1ED;
-    RubyEdit*           m_pRight1ED;
-    RubyEdit*           m_pLeft2ED;
-    RubyEdit*           m_pRight2ED;
-    RubyEdit*           m_pLeft3ED;
-    RubyEdit*           m_pRight3ED;
-    RubyEdit*           m_pLeft4ED;
-    RubyEdit*           m_pRight4ED;
+    VclPtr<FixedText>          m_pLeftFT;
+    VclPtr<FixedText>          m_pRightFT;
+    VclPtr<RubyEdit>           m_pLeft1ED;
+    VclPtr<RubyEdit>           m_pRight1ED;
+    VclPtr<RubyEdit>           m_pLeft2ED;
+    VclPtr<RubyEdit>           m_pRight2ED;
+    VclPtr<RubyEdit>           m_pLeft3ED;
+    VclPtr<RubyEdit>           m_pRight3ED;
+    VclPtr<RubyEdit>           m_pLeft4ED;
+    VclPtr<RubyEdit>           m_pRight4ED;
 
-    RubyEdit*           aEditArr[8];
-    VclScrolledWindow*  m_pScrolledWindow;
-    ScrollBar*          m_pScrollSB;
+    VclPtr<RubyEdit>           aEditArr[8];
+    VclPtr<VclScrolledWindow>  m_pScrolledWindow;
+    VclPtr<ScrollBar>          m_pScrollSB;
 
-    ListBox*            m_pAdjustLB;
+    VclPtr<ListBox>            m_pAdjustLB;
 
-    ListBox*            m_pPositionLB;
+    VclPtr<ListBox>            m_pPositionLB;
 
-    FixedText*          m_pCharStyleFT;
-    ListBox*            m_pCharStyleLB;
-    PushButton*         m_pStylistPB;
+    VclPtr<FixedText>          m_pCharStyleFT;
+    VclPtr<ListBox>            m_pCharStyleLB;
+    VclPtr<PushButton>         m_pStylistPB;
 
-    RubyPreview*        m_pPreviewWin;
+    VclPtr<RubyPreview>        m_pPreviewWin;
 
-    PushButton*         m_pApplyPB;
-    PushButton*         m_pClosePB;
+    VclPtr<PushButton>         m_pApplyPB;
+    VclPtr<PushButton>         m_pClosePB;
 
     long                nLastPos;
     long                nCurrentEdit;

@@ -177,6 +177,25 @@ SmPrintOptionsTabPage::SmPrintOptionsTabPage(vcl::Window *pParent, const SfxItem
     Reset(&rOptions);
 }
 
+SmPrintOptionsTabPage::~SmPrintOptionsTabPage()
+{
+    dispose();
+}
+
+void SmPrintOptionsTabPage::dispose()
+{
+    m_pTitle.clear();
+    m_pText.clear();
+    m_pFrame.clear();
+    m_pSizeNormal.clear();
+    m_pSizeScaled.clear();
+    m_pSizeZoomed.clear();
+    m_pZoom.clear();
+    m_pNoRightSpaces.clear();
+    m_pSaveOnlyUsedSymbols.clear();
+    SfxTabPage::dispose();
+}
+
 
 bool SmPrintOptionsTabPage::FillItemSet(SfxItemSet* rSet)
 {
@@ -366,6 +385,21 @@ SmFontDialog::SmFontDialog(vcl::Window * pParent, OutputDevice *pFntListDevice, 
     }
 }
 
+SmFontDialog::~SmFontDialog()
+{
+    dispose();
+}
+
+void SmFontDialog::dispose()
+{
+    m_pFontBox.clear();
+    m_pAttrFrame.clear();
+    m_pBoldCheckBox.clear();
+    m_pItalicCheckBox.clear();
+    m_pShowFont.clear();
+    ModalDialog::dispose();
+}
+
 namespace
 {
     void getColors(vcl::Window &rRef, ColorData &rBgCol, ColorData &rTxtCol)
@@ -439,6 +473,23 @@ SmFontSizeDialog::SmFontSizeDialog(vcl::Window * pParent)
     get(m_pDefaultButton, "default");
 
     m_pDefaultButton->SetClickHdl(LINK(this, SmFontSizeDialog, DefaultButtonClickHdl));
+}
+
+SmFontSizeDialog::~SmFontSizeDialog()
+{
+    dispose();
+}
+
+void SmFontSizeDialog::dispose()
+{
+    m_pBaseSize.clear();
+    m_pTextSize.clear();
+    m_pIndexSize.clear();
+    m_pFunctionSize.clear();
+    m_pOperatorSize.clear();
+    m_pBorderSize.clear();
+    m_pDefaultButton.clear();
+    ModalDialog::dispose();
 }
 
 
@@ -536,6 +587,25 @@ SmFontTypeDialog::SmFontTypeDialog(vcl::Window * pParent, OutputDevice *pFntList
     m_pDefaultButton->SetClickHdl(LINK(this, SmFontTypeDialog, DefaultButtonClickHdl));
 
     m_pMenuButton->GetPopupMenu()->SetSelectHdl(LINK(this, SmFontTypeDialog, MenuSelectHdl));
+}
+
+SmFontTypeDialog::~SmFontTypeDialog()
+{
+    dispose();
+}
+
+void SmFontTypeDialog::dispose()
+{
+    m_pVariableFont.clear();
+    m_pFunctionFont.clear();
+    m_pNumberFont.clear();
+    m_pTextFont.clear();
+    m_pSerifFont.clear();
+    m_pSansFont.clear();
+    m_pFixedFont.clear();
+    m_pMenuButton.clear();
+    m_pDefaultButton.clear();
+    ModalDialog::dispose();
 }
 
 void SmFontTypeDialog::ReadFrom(const SmFormat &rFormat)
@@ -898,6 +968,19 @@ void SmDistanceDialog::dispose()
 {
     for (int i = 0; i < NOCATEGORIES; i++)
         DELETEZ(Categories[i]);
+    m_pFrame.clear();
+    m_pFixedText1.clear();
+    m_pMetricField1.clear();
+    m_pFixedText2.clear();
+    m_pMetricField2.clear();
+    m_pFixedText3.clear();
+    m_pMetricField3.clear();
+    m_pCheckBox1.clear();
+    m_pFixedText4.clear();
+    m_pMetricField4.clear();
+    m_pMenuButton.clear();
+    m_pDefaultButton.clear();
+    m_pBitmap.clear();
     ModalDialog::dispose();
 }
 
@@ -1001,6 +1084,19 @@ SmAlignDialog::SmAlignDialog(vcl::Window * pParent)
     m_pDefaultButton->SetClickHdl(LINK(this, SmAlignDialog, DefaultButtonClickHdl));
 }
 
+SmAlignDialog::~SmAlignDialog()
+{
+    dispose();
+}
+
+void SmAlignDialog::dispose()
+{
+    m_pLeft.clear();
+    m_pCenter.clear();
+    m_pRight.clear();
+    m_pDefaultButton.clear();
+    ModalDialog::dispose();
+}
 
 void SmAlignDialog::ReadFrom(const SmFormat &rFormat)
 {
@@ -1058,6 +1154,17 @@ SmShowSymbolSetWindow::SmShowSymbolSetWindow(vcl::Window *pParent, WinBits nStyl
     Color aTxtColor( nTxtCol );
     SetBackground( aWall );
     SetTextColor( aTxtColor );
+}
+
+SmShowSymbolSetWindow::~SmShowSymbolSetWindow()
+{
+    dispose();
+}
+
+void SmShowSymbolSetWindow::dispose()
+{
+    m_pVScrollBar.clear();
+    Control::dispose();
 }
 
 Point SmShowSymbolSetWindow::OffsetPoint(const Point &rPoint) const
@@ -1501,6 +1608,21 @@ SmSymbolDialog::SmSymbolDialog(vcl::Window *pParent, OutputDevice *pFntListDevic
     m_pGetBtn->SetClickHdl(LINK(this, SmSymbolDialog, GetClickHdl));
 }
 
+SmSymbolDialog::~SmSymbolDialog()
+{
+    dispose();
+}
+
+void SmSymbolDialog::dispose()
+{
+    m_pSymbolSets.clear();
+    m_pSymbolSetDisplay.clear();
+    m_pSymbolName.clear();
+    m_pSymbolDisplay.clear();
+    m_pGetBtn.clear();
+    m_pEditBtn.clear();
+    ModalDialog::dispose();
+}
 
 void SmSymbolDialog::InitColor_Impl()
 {
@@ -2055,6 +2177,25 @@ SmSymDefineDialog::~SmSymDefineDialog()
 
 void SmSymDefineDialog::dispose()
 {
+    pSubsetMap.reset();
+    pOrigSymbol.reset();
+    pOldSymbols.clear();
+    pOldSymbolSets.clear();
+    pCharsetDisplay.clear();
+    pSymbols.clear();
+    pSymbolSets.clear();
+    pFonts.clear();
+    pFontsSubsetLB.clear();
+    pStyles.clear();
+    pOldSymbolName.clear();
+    pOldSymbolDisplay.clear();
+    pOldSymbolSetName.clear();
+    pSymbolName.clear();
+    pSymbolDisplay.clear();
+    pSymbolSetName.clear();
+    pAddBtn.clear();
+    pChangeBtn.clear();
+    pDeleteBtn.clear();
     ModalDialog::dispose();
 }
 

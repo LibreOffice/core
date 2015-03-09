@@ -107,9 +107,8 @@ void OTableWindow::dispose()
     if (m_pListBox)
     {
         OSL_ENSURE(m_pListBox->GetEntryCount()==0,"Forgot to call EmptyListbox()!");
-        boost::scoped_ptr<vcl::Window> aTemp(m_pListBox);
-        m_pListBox = NULL;
     }
+    m_pListBox.clear();
     if ( m_pContainerListener.is() )
         m_pContainerListener->dispose();
 
@@ -280,7 +279,7 @@ bool OTableWindow::Init()
     if ( !m_pListBox )
     {
         m_pListBox = CreateListBox();
-        OSL_ENSURE( m_pListBox != NULL, "OTableWindow::Init() : CreateListBox returned NULL !" );
+        OSL_ENSURE( m_pListBox != nullptr, "OTableWindow::Init() : CreateListBox returned NULL !" );
         m_pListBox->SetSelectionMode( MULTIPLE_SELECTION );
     }
 

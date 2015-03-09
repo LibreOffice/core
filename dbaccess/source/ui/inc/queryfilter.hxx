@@ -67,19 +67,19 @@ namespace dbaui
                         ,public ::svxform::OParseContextClient
     {
     private:
-        ListBox*        m_pLB_WHEREFIELD1;
-        ListBox*        m_pLB_WHERECOMP1;
-        Edit*           m_pET_WHEREVALUE1;
+        VclPtr<ListBox>        m_pLB_WHEREFIELD1;
+        VclPtr<ListBox>        m_pLB_WHERECOMP1;
+        VclPtr<Edit>           m_pET_WHEREVALUE1;
 
-        ListBox*        m_pLB_WHERECOND2;
-        ListBox*        m_pLB_WHEREFIELD2;
-        ListBox*        m_pLB_WHERECOMP2;
-        Edit*           m_pET_WHEREVALUE2;
+        VclPtr<ListBox>        m_pLB_WHERECOND2;
+        VclPtr<ListBox>        m_pLB_WHEREFIELD2;
+        VclPtr<ListBox>        m_pLB_WHERECOMP2;
+        VclPtr<Edit>           m_pET_WHEREVALUE2;
 
-        ListBox*        m_pLB_WHERECOND3;
-        ListBox*        m_pLB_WHEREFIELD3;
-        ListBox*        m_pLB_WHERECOMP3;
-        Edit*           m_pET_WHEREVALUE3;
+        VclPtr<ListBox>        m_pLB_WHERECOND3;
+        VclPtr<ListBox>        m_pLB_WHEREFIELD3;
+        VclPtr<ListBox>        m_pLB_WHERECOMP3;
+        VclPtr<Edit>           m_pET_WHEREVALUE3;
 
         OUString        m_aSTR_COMPARE_OPERATORS;
 
@@ -112,6 +112,8 @@ namespace dbaui
                         const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer>& _rxComposer,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _rxCols
                     );
+        virtual ~DlgFilterCrit();
+        virtual void dispose() SAL_OVERRIDE;
 
         void            BuildWherePart();
 

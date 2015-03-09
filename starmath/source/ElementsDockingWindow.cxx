@@ -676,7 +676,8 @@ SmElementsDockingWindow::~SmElementsDockingWindow ()
 
 void SmElementsDockingWindow::dispose()
 {
-    delete mpElementsControl;
+    mpElementsControl.clear();
+    mpElementListBox.clear();
     SfxDockingWindow::dispose();
 }
 

@@ -32,7 +32,7 @@ namespace dbaui
                                public OJoinTableView,
                                public ::comphelper::OContainerListener
     {
-        OTableConnection* m_pExistingConnection; ///< is set when a connection was draged on an existing connection
+        VclPtr<OTableConnection> m_pExistingConnection; ///< is set when a connection was draged on an existing connection
         TTableConnectionData::value_type m_pCurrentlyTabConnData; ///< set when we creating a connection with more than one keycolumn
         ::rtl::Reference< comphelper::OContainerListenerAdapter> m_pContainerListener;
         bool m_bInRemove;

@@ -128,7 +128,7 @@ struct SvxConfigGroupBoxResource_Impl;
 class SfxConfigGroupListBox : public SvTreeListBox
 {
     SvxConfigGroupBoxResource_Impl* pImp;
-    SfxConfigFunctionListBox*  pFunctionListBox;
+    VclPtr<SfxConfigFunctionListBox>  pFunctionListBox;
     SfxGroupInfoArr_Impl            aArr;
 
     OUString m_sModuleLongName;

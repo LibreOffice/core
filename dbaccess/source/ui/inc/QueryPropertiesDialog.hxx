@@ -29,16 +29,17 @@ public:
 
     QueryPropertiesDialog(
         vcl::Window* pParent, const bool bDistinct, const sal_Int64 nLimit );
-
+    virtual ~QueryPropertiesDialog();
+    virtual void dispose() SAL_OVERRIDE;
     bool getDistinct() const;
     sal_Int64 getLimit() const;
 
 private:
 
-    RadioButton* m_pRB_Distinct;
-    RadioButton* m_pRB_NonDistinct;
+    VclPtr<RadioButton> m_pRB_Distinct;
+    VclPtr<RadioButton> m_pRB_NonDistinct;
 
-    LimitBox* m_pLB_Limit;
+    VclPtr<LimitBox> m_pLB_Limit;
 
 };
 

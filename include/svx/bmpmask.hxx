@@ -81,33 +81,33 @@ class SVX_DLLPUBLIC SvxBmpMask : public SfxDockingWindow
     friend class MaskData;
     friend class MaskSet;
 
-    ToolBox*            m_pTbxPipette;
-    ColorWindow*        m_pCtlPipette;
-    PushButton*         m_pBtnExec;
+    VclPtr<ToolBox>            m_pTbxPipette;
+    VclPtr<ColorWindow>        m_pCtlPipette;
+    VclPtr<PushButton>         m_pBtnExec;
 
-    CheckBox*           m_pCbx1;
-    MaskSet*            m_pQSet1;
-    MetricField*        m_pSp1;
-    ColorLB*            m_pLbColor1;
+    VclPtr<CheckBox>           m_pCbx1;
+    VclPtr<MaskSet>            m_pQSet1;
+    VclPtr<MetricField>        m_pSp1;
+    VclPtr<ColorLB>            m_pLbColor1;
 
-    CheckBox*           m_pCbx2;
-    MaskSet*            m_pQSet2;
-    MetricField*        m_pSp2;
-    ColorLB*            m_pLbColor2;
+    VclPtr<CheckBox>           m_pCbx2;
+    VclPtr<MaskSet>            m_pQSet2;
+    VclPtr<MetricField>        m_pSp2;
+    VclPtr<ColorLB>            m_pLbColor2;
 
-    CheckBox*           m_pCbx3;
-    MaskSet*            m_pQSet3;
-    MetricField*        m_pSp3;
-    ColorLB*            m_pLbColor3;
+    VclPtr<CheckBox>           m_pCbx3;
+    VclPtr<MaskSet>            m_pQSet3;
+    VclPtr<MetricField>        m_pSp3;
+    VclPtr<ColorLB>            m_pLbColor3;
 
-    CheckBox*           m_pCbx4;
-    MaskSet*            m_pQSet4;
-    MetricField*        m_pSp4;
-    ColorLB*            m_pLbColor4;
+    VclPtr<CheckBox>           m_pCbx4;
+    VclPtr<MaskSet>            m_pQSet4;
+    VclPtr<MetricField>        m_pSp4;
+    VclPtr<ColorLB>            m_pLbColor4;
 
     MaskData*           pData;
-    CheckBox*           m_pCbxTrans;
-    ColorLB*            m_pLbColorTrans;
+    VclPtr<CheckBox>           m_pCbxTrans;
+    VclPtr<ColorLB>            m_pLbColorTrans;
 
     XColorListRef       pColLst;
     Color               aPipetteColor;

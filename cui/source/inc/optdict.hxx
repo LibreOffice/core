@@ -50,10 +50,10 @@ namespace linguistic2{
 class SvxNewDictionaryDialog : public ModalDialog
 {
 private:
-    Edit*                pNameEdit;
-    SvxLanguageBox*      pLanguageLB;
-    CheckBox*            pExceptBtn;
-    OKButton*            pOKBtn;
+    VclPtr<Edit>                pNameEdit;
+    VclPtr<SvxLanguageBox>      pLanguageLB;
+    VclPtr<CheckBox>            pExceptBtn;
+    VclPtr<OKButton>            pOKBtn;
     ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XSpellChecker1 >     xSpell;
     ::com::sun::star::uno::Reference<
@@ -66,6 +66,8 @@ public:
     SvxNewDictionaryDialog( vcl::Window* pParent,
             ::com::sun::star::uno::Reference<
                 ::com::sun::star::linguistic2::XSpellChecker1 >  &xSpl );
+    virtual ~SvxNewDictionaryDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XDictionary >
@@ -100,16 +102,16 @@ class SvxEditDictionaryDialog : public ModalDialog
 {
 private:
 
-    ListBox*                 pAllDictsLB;
-    FixedText*               pLangFT;
-    SvxLanguageBox*          pLangLB;
+    VclPtr<ListBox>                 pAllDictsLB;
+    VclPtr<FixedText>               pLangFT;
+    VclPtr<SvxLanguageBox>          pLangLB;
 
-    SvxDictEdit*             pWordED;
-    FixedText*               pReplaceFT;
-    SvxDictEdit*             pReplaceED;
-    SvTabListBox*            pWordsLB;
-    PushButton*              pNewReplacePB;
-    PushButton*              pDeletePB;
+    VclPtr<SvxDictEdit>             pWordED;
+    VclPtr<FixedText>               pReplaceFT;
+    VclPtr<SvxDictEdit>             pReplaceED;
+    VclPtr<SvTabListBox>            pWordsLB;
+    VclPtr<PushButton>              pNewReplacePB;
+    VclPtr<PushButton>              pDeletePB;
 
     OUString                sModify;
     OUString                sNew;
@@ -152,6 +154,8 @@ public:
             const OUString& rName,
             ::com::sun::star::uno::Reference<
                 ::com::sun::star::linguistic2::XSpellChecker1> &xSpl );
+    virtual ~SvxEditDictionaryDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     sal_uInt16 GetSelectedDict() {return pAllDictsLB->GetSelectEntryPos();}
 };

@@ -115,12 +115,12 @@ struct GroupUserData
 // dialog for new block name
 class SwNewGlosNameDlg : public ModalDialog
 {
-    Edit*        m_pNewName;
-    TextFilter   m_aNoSpaceFilter;
-    Edit*        m_pNewShort;
-    OKButton*    m_pOk;
-    Edit*        m_pOldName;
-    Edit*        m_pOldShort;
+    VclPtr<Edit>        m_pNewName;
+    TextFilter          m_aNoSpaceFilter;
+    VclPtr<Edit>        m_pNewShort;
+    VclPtr<OKButton>    m_pOk;
+    VclPtr<Edit>        m_pOldName;
+    VclPtr<Edit>        m_pOldShort;
 
 protected:
     DECL_LINK( Modify, Edit * );
@@ -130,6 +130,8 @@ public:
     SwNewGlosNameDlg( vcl::Window* pParent,
                       const OUString& rOldName,
                       const OUString& rOldShort );
+    virtual ~SwNewGlosNameDlg();
+    virtual void dispose() SAL_OVERRIDE;
 
     OUString GetNewName()  const { return m_pNewName->GetText(); }
     OUString GetNewShort() const { return m_pNewShort->GetText(); }
@@ -154,6 +156,21 @@ SwNewGlosNameDlg::SwNewGlosNameDlg(vcl::Window* pParent,
     m_pNewShort->SetModifyHdl(LINK(this, SwNewGlosNameDlg, Modify ));
     m_pOk->SetClickHdl(LINK(this, SwNewGlosNameDlg, Rename ));
     m_pNewName->GrabFocus();
+}
+
+SwNewGlosNameDlg::~SwNewGlosNameDlg()
+{
+    dispose();
+}
+
+void SwNewGlosNameDlg::dispose()
+{
+    m_pNewName.clear();
+    m_pNewShort.clear();
+    m_pOk.clear();
+    m_pOldName.clear();
+    m_pOldShort.clear();
+    ModalDialog::dispose();
 }
 
 // query / set currently set group
@@ -239,6 +256,18 @@ void SwGlossaryDlg::dispose()
 {
     m_pCategoryBox->Clear();
     delete pExampleFrame;
+    m_pInsertTipCB.clear();
+    m_pNameED.clear();
+    m_pShortNameLbl.clear();
+    m_pShortNameEdit.clear();
+    m_pCategoryBox.clear();
+    m_pFileRelCB.clear();
+    m_pNetRelCB.clear();
+    m_pExampleWIN.clear();
+    m_pInsertBtn.clear();
+    m_pEditBtn.clear();
+    m_pBibBtn.clear();
+    m_pPathBtn.clear();
     SvxStandardDialog::dispose();
 }
 

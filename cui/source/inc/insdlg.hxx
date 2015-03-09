@@ -56,14 +56,14 @@ public:
 
 class SvInsertOleDlg : public InsertObjectDialog_Impl
 {
-    RadioButton* m_pRbNewObject;
-    RadioButton* m_pRbObjectFromfile;
-    VclFrame* m_pObjectTypeFrame;
-    ListBox* m_pLbObjecttype;
-    VclFrame* m_pFileFrame;
-    Edit* m_pEdFilepath;
-    PushButton* m_pBtnFilepath;
-    CheckBox* m_pCbFilelink;
+    VclPtr<RadioButton> m_pRbNewObject;
+    VclPtr<RadioButton> m_pRbObjectFromfile;
+    VclPtr<VclFrame> m_pObjectTypeFrame;
+    VclPtr<ListBox> m_pLbObjecttype;
+    VclPtr<VclFrame> m_pFileFrame;
+    VclPtr<Edit> m_pEdFilepath;
+    VclPtr<PushButton> m_pBtnFilepath;
+    VclPtr<CheckBox> m_pCbFilelink;
     const SvObjectServerList* m_pServers;
 
     ::com::sun::star::uno::Sequence< sal_Int8 > m_aIconMetaFile;
@@ -86,6 +86,8 @@ public:
     SvInsertOleDlg( vcl::Window* pParent,
         const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage,
         const SvObjectServerList* pServers = NULL );
+    virtual ~SvInsertOleDlg();
+    virtual void dispose() SAL_OVERRIDE;
     virtual short Execute() SAL_OVERRIDE;
 
     /// get replacement for the iconified embedded object and the mediatype of the replacement
@@ -95,9 +97,9 @@ public:
 class SvInsertPlugInDialog : public InsertObjectDialog_Impl
 {
 private:
-    Edit* m_pEdFileurl;
-    PushButton* m_pBtnFileurl;
-    VclMultiLineEdit* m_pEdPluginsOptions;
+    VclPtr<Edit> m_pEdFileurl;
+    VclPtr<PushButton> m_pBtnFileurl;
+    VclPtr<VclMultiLineEdit> m_pEdPluginsOptions;
     INetURLObject* m_pURL;
     OUString m_aCommands;
 
@@ -116,23 +118,23 @@ public:
 class SfxInsertFloatingFrameDialog : public InsertObjectDialog_Impl
 {
 private:
-    Edit* m_pEDName;
-    Edit* m_pEDURL;
-    PushButton* m_pBTOpen;
+    VclPtr<Edit> m_pEDName;
+    VclPtr<Edit> m_pEDURL;
+    VclPtr<PushButton> m_pBTOpen;
 
-    RadioButton* m_pRBScrollingOn;
-    RadioButton* m_pRBScrollingOff;
-    RadioButton* m_pRBScrollingAuto;
+    VclPtr<RadioButton> m_pRBScrollingOn;
+    VclPtr<RadioButton> m_pRBScrollingOff;
+    VclPtr<RadioButton> m_pRBScrollingAuto;
 
-    RadioButton* m_pRBFrameBorderOn;
-    RadioButton* m_pRBFrameBorderOff;
+    VclPtr<RadioButton> m_pRBFrameBorderOn;
+    VclPtr<RadioButton> m_pRBFrameBorderOff;
 
-    FixedText* m_pFTMarginWidth;
-    NumericField* m_pNMMarginWidth;
-    CheckBox* m_pCBMarginWidthDefault;
-    FixedText* m_pFTMarginHeight;
-    NumericField* m_pNMMarginHeight;
-    CheckBox* m_pCBMarginHeightDefault;
+    VclPtr<FixedText> m_pFTMarginWidth;
+    VclPtr<NumericField> m_pNMMarginWidth;
+    VclPtr<CheckBox> m_pCBMarginWidthDefault;
+    VclPtr<FixedText> m_pFTMarginHeight;
+    VclPtr<NumericField> m_pNMMarginHeight;
+    VclPtr<CheckBox> m_pCBMarginHeightDefault;
 
     DECL_STATIC_LINK(SfxInsertFloatingFrameDialog, OpenHdl, PushButton* );
     DECL_STATIC_LINK(SfxInsertFloatingFrameDialog, CheckHdl, CheckBox* );
@@ -144,6 +146,8 @@ public:
         const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage );
     SfxInsertFloatingFrameDialog( vcl::Window* pParent,
         const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >& xObj );
+    virtual ~SfxInsertFloatingFrameDialog();
+    virtual void dispose() SAL_OVERRIDE;
     virtual short Execute() SAL_OVERRIDE;
 };
 

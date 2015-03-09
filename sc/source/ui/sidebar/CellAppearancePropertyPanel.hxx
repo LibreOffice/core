@@ -69,14 +69,17 @@ public:
 
     SfxBindings* GetBindings() { return mpBindings;}
 
+    virtual ~CellAppearancePropertyPanel();
+    virtual void dispose() SAL_OVERRIDE;
+
 private:
     //ui controls
 
-    ToolBox*                                mpTBCellBorder;
-    ToolBox*                                mpTBLineStyle;
-    ToolBox*                                mpTBLineColor;
+    VclPtr<ToolBox>                                mpTBCellBorder;
+    VclPtr<ToolBox>                                mpTBLineStyle;
+    VclPtr<ToolBox>                                mpTBLineColor;
     ::boost::scoped_ptr< CellBorderUpdater > mpCellBorderUpdater;
-    CheckBox*                               mpCBXShowGrid;
+    VclPtr<CheckBox>                               mpCBXShowGrid;
 
     ::sfx2::sidebar::ControllerItem         maLineStyleControl;
     ::sfx2::sidebar::ControllerItem         maBorderOuterControl;
@@ -150,7 +153,6 @@ private:
         vcl::Window* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings);
-    virtual ~CellAppearancePropertyPanel();
 
     void Initialize();
     void SetStyleIcon();

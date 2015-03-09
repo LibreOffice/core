@@ -297,6 +297,19 @@ void SvxZoomDialog::dispose()
 {
     delete pOutSet;
     pOutSet = 0;
+    m_pOptimalBtn.clear();
+    m_pWholePageBtn.clear();
+    m_pPageWidthBtn.clear();
+    m_p100Btn.clear();
+    m_pUserBtn.clear();
+    m_pUserEdit.clear();
+    m_pViewFrame.clear();
+    m_pAutomaticBtn.clear();
+    m_pSingleBtn.clear();
+    m_pColumnsBtn.clear();
+    m_pColumnsEdit.clear();
+    m_pBookModeChk.clear();
+    m_pOKBtn.clear();
     SfxModalDialog::dispose();
 }
 

@@ -415,8 +415,7 @@ void SAL_CALL FindTextToolbarController::dispose() throw ( css::uno::RuntimeExce
     if (m_pFindTextFieldControl != nullptr) {
         SearchToolbarControllersManager::createControllersManager()
             .saveSearchHistory(m_pFindTextFieldControl);
-        delete m_pFindTextFieldControl;
-        m_pFindTextFieldControl = 0;
+        m_pFindTextFieldControl.disposeAndClear();
     }
 }
 
@@ -661,8 +660,7 @@ void SAL_CALL MatchCaseToolboxController::dispose() throw ( css::uno::RuntimeExc
 
     svt::ToolboxController::dispose();
 
-    delete m_pMatchCaseControl;
-    m_pMatchCaseControl = 0;
+    m_pMatchCaseControl.clear();
 }
 
 // XInitialization

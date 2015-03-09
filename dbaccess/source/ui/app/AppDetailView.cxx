@@ -374,6 +374,7 @@ void OTasksWindow::dispose()
     m_aDescription.disposeAndClear();
     m_aHelpText.disposeAndClear();
     m_aFL.disposeAndClear();
+    m_pDetailView.clear();
     vcl::Window::dispose();
 }
 
@@ -572,10 +573,10 @@ void OApplicationDetailView::dispose()
 {
     set(NULL,NULL);
     setSplitter(NULL);
-    m_pControlHelper = NULL;
     m_aHorzSplitter.disposeAndClear();
     m_aTasks.disposeAndClear();
     m_aContainer.disposeAndClear();
+    m_pControlHelper.clear();
     OSplitterView::dispose();
 }
 

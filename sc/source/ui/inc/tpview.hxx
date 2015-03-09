@@ -31,31 +31,31 @@ class ScViewOptions;
 
 class ScTpContentOptions : public SfxTabPage
 {
-    ListBox*         pGridLB;
-    FixedText*       pColorFT;
-    ColorListBox*    pColorLB;
-    CheckBox*        pBreakCB;
-    CheckBox*        pGuideLineCB;
+    VclPtr<ListBox>         pGridLB;
+    VclPtr<FixedText>       pColorFT;
+    VclPtr<ColorListBox>    pColorLB;
+    VclPtr<CheckBox>        pBreakCB;
+    VclPtr<CheckBox>        pGuideLineCB;
 
-    CheckBox*        pFormulaCB;
-    CheckBox*        pNilCB;
-    CheckBox*        pAnnotCB;
-    CheckBox*        pValueCB;
-    CheckBox*        pAnchorCB;
-    CheckBox*        pClipMarkCB;
-    CheckBox*        pRangeFindCB;
+    VclPtr<CheckBox>        pFormulaCB;
+    VclPtr<CheckBox>        pNilCB;
+    VclPtr<CheckBox>        pAnnotCB;
+    VclPtr<CheckBox>        pValueCB;
+    VclPtr<CheckBox>        pAnchorCB;
+    VclPtr<CheckBox>        pClipMarkCB;
+    VclPtr<CheckBox>        pRangeFindCB;
 
-    ListBox*         pObjGrfLB;
-    ListBox*         pDiagramLB;
-    ListBox*         pDrawLB;
+    VclPtr<ListBox>         pObjGrfLB;
+    VclPtr<ListBox>         pDiagramLB;
+    VclPtr<ListBox>         pDrawLB;
 
-    CheckBox*        pSyncZoomCB;
+    VclPtr<CheckBox>        pSyncZoomCB;
 
-    CheckBox*        pRowColHeaderCB;
-    CheckBox*        pHScrollCB;
-    CheckBox*        pVScrollCB;
-    CheckBox*        pTblRegCB;
-    CheckBox*        pOutlineCB;
+    VclPtr<CheckBox>        pRowColHeaderCB;
+    VclPtr<CheckBox>        pHScrollCB;
+    VclPtr<CheckBox>        pVScrollCB;
+    VclPtr<CheckBox>        pTblRegCB;
+    VclPtr<CheckBox>        pOutlineCB;
 
     ScViewOptions*  pLocalOptions;
 
@@ -84,23 +84,23 @@ public:
 class ScDocument;
 class ScTpLayoutOptions : public SfxTabPage
 {
-    ListBox*        m_pUnitLB;
-    MetricField*    m_pTabMF;
+    VclPtr<ListBox>        m_pUnitLB;
+    VclPtr<MetricField>    m_pTabMF;
 
-    RadioButton*    m_pAlwaysRB;
-    RadioButton*    m_pRequestRB;
-    RadioButton*    m_pNeverRB;
+    VclPtr<RadioButton>    m_pAlwaysRB;
+    VclPtr<RadioButton>    m_pRequestRB;
+    VclPtr<RadioButton>    m_pNeverRB;
 
-    CheckBox*       m_pAlignCB;
-    ListBox*        m_pAlignLB;
-    CheckBox*       m_pEditModeCB;
-    CheckBox*       m_pFormatCB;
-    CheckBox*       m_pExpRefCB;
-    CheckBox*       m_pSortRefUpdateCB;
-    CheckBox*       m_pMarkHdrCB;
-    CheckBox*       m_pTextFmtCB;
-    CheckBox*       m_pReplWarnCB;
-    CheckBox*       m_pLegacyCellSelectionCB;
+    VclPtr<CheckBox>       m_pAlignCB;
+    VclPtr<ListBox>        m_pAlignLB;
+    VclPtr<CheckBox>       m_pEditModeCB;
+    VclPtr<CheckBox>       m_pFormatCB;
+    VclPtr<CheckBox>       m_pExpRefCB;
+    VclPtr<CheckBox>       m_pSortRefUpdateCB;
+    VclPtr<CheckBox>       m_pMarkHdrCB;
+    VclPtr<CheckBox>       m_pTextFmtCB;
+    VclPtr<CheckBox>       m_pReplWarnCB;
+    VclPtr<CheckBox>       m_pLegacyCellSelectionCB;
 
     SvxStringArray  aUnitArr;
 
@@ -115,9 +115,9 @@ class ScTpLayoutOptions : public SfxTabPage
 
             ScTpLayoutOptions( vcl::Window*          pParent,
                              const SfxItemSet&  rArgSet );
-            virtual ~ScTpLayoutOptions();
-
 public:
+    virtual ~ScTpLayoutOptions();
+    virtual void        dispose() SAL_OVERRIDE;
     static  SfxTabPage* Create          ( vcl::Window*               pParent,
                                           const SfxItemSet*     rCoreSet );
     virtual bool        FillItemSet     ( SfxItemSet* rCoreSet ) SAL_OVERRIDE;

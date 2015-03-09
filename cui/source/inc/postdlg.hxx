@@ -88,17 +88,17 @@ public:
     }
 
 private:
-    FixedText*          m_pLastEditFT;
+    VclPtr<FixedText>          m_pLastEditFT;
 
-    VclMultiLineEdit*   m_pEditED;
+    VclPtr<VclMultiLineEdit>   m_pEditED;
 
-    VclContainer*       m_pInsertAuthor;
-    PushButton*         m_pAuthorBtn;
+    VclPtr<VclContainer>       m_pInsertAuthor;
+    VclPtr<PushButton>         m_pAuthorBtn;
 
-    OKButton*           m_pOKBtn;
+    VclPtr<OKButton>           m_pOKBtn;
 
-    PushButton*         m_pPrevBtn;
-    PushButton*         m_pNextBtn;
+    VclPtr<PushButton>         m_pPrevBtn;
+    VclPtr<PushButton>         m_pNextBtn;
 
     const SfxItemSet&   rSet;
     SfxItemSet*         pOutSet;

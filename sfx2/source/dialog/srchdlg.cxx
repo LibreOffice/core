@@ -69,6 +69,12 @@ void SearchDialog::dispose()
 {
     SaveConfig();
     m_aCloseHdl.Call( NULL );
+    m_pSearchEdit.clear();
+    m_pWholeWordsBox.clear();
+    m_pMatchCaseBox.clear();
+    m_pWrapAroundBox.clear();
+    m_pBackwardsBox.clear();
+    m_pFindBtn.clear();
     ModelessDialog::dispose();
 }
 

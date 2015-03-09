@@ -32,6 +32,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/cursor.hxx>
+#include <vcl/vclptr.hxx>
 #include <tools/fract.hxx>
 #include <vcl/idle.hxx>
 
@@ -222,7 +223,7 @@ private:
     LibreOfficeKitCallback mpLibreOfficeKitCallback;
     void* mpLibreOfficeKitData;
     EditEngine*         pEditEngine;
-    vcl::Window*             pOutWin;
+    VclPtr<vcl::Window> pOutWin;
     Pointer*            pPointer;
     DragAndDropInfo*    pDragAndDropInfo;
 

@@ -31,15 +31,15 @@
 
 struct PasswordToOpenModifyDialog_Impl
 {
-    PasswordToOpenModifyDialog *    m_pParent;
+    VclPtr<PasswordToOpenModifyDialog>    m_pParent;
 
-    Edit*                       m_pPasswdToOpenED;
-    Edit*                       m_pReenterPasswdToOpenED;
-    VclExpander*                m_pOptionsExpander;
-    OKButton*                   m_pOk;
-    CheckBox*                   m_pOpenReadonlyCB;
-    Edit*                       m_pPasswdToModifyED;
-    Edit*                       m_pReenterPasswdToModifyED;
+    VclPtr<Edit>                       m_pPasswdToOpenED;
+    VclPtr<Edit>                       m_pReenterPasswdToOpenED;
+    VclPtr<VclExpander>                m_pOptionsExpander;
+    VclPtr<OKButton>                   m_pOk;
+    VclPtr<CheckBox>                   m_pOpenReadonlyCB;
+    VclPtr<Edit>                       m_pPasswdToModifyED;
+    VclPtr<Edit>                       m_pReenterPasswdToModifyED;
 
     OUString                    m_aOneMismatch;
     OUString                    m_aTwoMismatch;

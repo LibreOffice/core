@@ -166,7 +166,7 @@ SvInplaceEdit2::~SvInplaceEdit2()
         Application::RemoveAccel( &aAccReturn );
         Application::RemoveAccel( &aAccEscape );
     }
-    delete pEdit;
+    pEdit.clear();
 }
 
 OUString SvInplaceEdit2::GetSavedValue() const

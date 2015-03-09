@@ -187,7 +187,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     Size                m_aDocSz;         // current document size
     Rectangle           m_aVisArea;       // visible region
 
-    SwEditWin           *m_pEditWin;
+    VclPtr<SwEditWin>    m_pEditWin;
     SwWrtShell          *m_pWrtShell;
 
     SfxShell            *m_pShell;        // current SubShell at the dispatcher
@@ -195,21 +195,21 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
 
     SwView_Impl         *m_pViewImpl;     // Impl-data for UNO + Basic
 
-    SwScrollbar         *m_pHScrollbar,   // MDI control elements
-                        *m_pVScrollbar;
+    VclPtr<SwScrollbar>  m_pHScrollbar,   // MDI control elements
+                         m_pVScrollbar;
 
     bool                m_bHScrollbarEnabled;
     bool                m_bVScrollbarEnabled;
 
-    ::vcl::Window       *m_pScrollFill;   // dummy window for filling the lower right edge
+    VclPtr<::vcl::Window> m_pScrollFill;   // dummy window for filling the lower right edge
                                         // when both scrollbars are active
 
-    SvxRuler            *m_pHRuler,
-                        *m_pVRuler;
-    ImageButton         *m_pTogglePageBtn;
+    VclPtr<SvxRuler>    m_pHRuler,
+                        m_pVRuler;
+    VclPtr<ImageButton> m_pTogglePageBtn;
 
-    SwHlpImageButton    *m_pPageUpBtn,
-                        *m_pPageDownBtn;
+    VclPtr<SwHlpImageButton> m_pPageUpBtn,
+                             m_pPageDownBtn;
 
     SwGlossaryHdl       *m_pGlosHdl;          // handle text block
     SwDrawBase          *m_pDrawActual;
@@ -221,7 +221,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     SwPostItMgr         *m_pPostItMgr;
 
     int                 m_nSelectionType;
-    FloatingWindow      *m_pFieldPopup;
+    VclPtr<FloatingWindow> m_pFieldPopup;
 
     static const int m_nMASTERENUMCOMMANDS = 6;
 

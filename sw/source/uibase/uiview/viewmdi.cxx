@@ -290,25 +290,25 @@ IMPL_LINK( SwView, WindowChildEventListener, VclSimpleEvent*, pEvent )
 int SwView::_CreateScrollbar( bool bHori )
 {
     vcl::Window *pMDI = &GetViewFrame()->GetWindow();
-    SwScrollbar** ppScrollbar = bHori ? &m_pHScrollbar : &m_pVScrollbar;
+    VclPtr<SwScrollbar>& ppScrollbar = bHori ? m_pHScrollbar : m_pVScrollbar;
 
-    assert(!*ppScrollbar); //check beforehand!
+    assert(!ppScrollbar.get()); //check beforehand!
 
-    *ppScrollbar = new SwScrollbar( pMDI, bHori );
+    ppScrollbar = new SwScrollbar( pMDI, bHori );
     UpdateScrollbars();
     if(bHori)
-        (*ppScrollbar)->SetScrollHdl( LINK( this, SwView, EndScrollHdl ));
+        ppScrollbar->SetScrollHdl( LINK( this, SwView, EndScrollHdl ));
     else
-        (*ppScrollbar)->SetScrollHdl( LINK( this, SwView, ScrollHdl ));
-    (*ppScrollbar)->SetEndScrollHdl( LINK( this, SwView, EndScrollHdl ));
+        ppScrollbar->SetScrollHdl( LINK( this, SwView, ScrollHdl ));
+    ppScrollbar->SetEndScrollHdl( LINK( this, SwView, EndScrollHdl ));
 
-    (*ppScrollbar)->EnableDrag( true );
+    ppScrollbar->EnableDrag( true );
 
     if(GetWindow())
         InvalidateBorder();
 
     if (!m_bShowAtResize)
-        (*ppScrollbar)->ExtendedShow();
+        ppScrollbar->ExtendedShow();
 
     return 1;
 }

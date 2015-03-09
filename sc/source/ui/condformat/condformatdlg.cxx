@@ -47,6 +47,17 @@ ScCondFormatList::ScCondFormatList(vcl::Window* pParent, WinBits nStyle)
     SetBackground(GetControlBackground());
 }
 
+ScCondFormatList::~ScCondFormatList()
+{
+    dispose();
+}
+
+void ScCondFormatList::dispose()
+{
+    mpDialogParent.clear();
+    Control::dispose();
+}
+
 void ScCondFormatList::init(ScDocument* pDoc, ScCondFormatDlg* pDialogParent,
         const ScConditionalFormat* pFormat, const ScRangeList& rRanges,
         const ScAddress& rPos, condformat::dialog::ScCondFormatDialogType eType)
@@ -436,7 +447,20 @@ ScCondFormatDlg::ScCondFormatDlg(vcl::Window* pParent, ScDocument* pDoc,
 
 ScCondFormatDlg::~ScCondFormatDlg()
 {
+    dispose();
+}
+
+void ScCondFormatDlg::dispose()
+{
     SC_MOD()->PopAnyRefDlg();
+    mpBtnAdd.clear();
+    mpBtnRemove.clear();
+    mpFtRange.clear();
+    mpEdRange.clear();
+    mpRbRange.clear();
+    mpCondFormList.clear();
+    mpLastEdit.clear();
+    ScAnyRefModalDlg::dispose();
 }
 
 void ScCondFormatDlg::SetActive()

@@ -43,6 +43,9 @@ class ParaPropertyPanel
       public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
 {
 public:
+    virtual ~ParaPropertyPanel();
+    virtual void dispose() SAL_OVERRIDE;
+
     static ParaPropertyPanel* Create (
         vcl::Window* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
@@ -66,18 +69,18 @@ public:
 private:
     // UI controls
     //Alignment
-    ToolBox*            mpTBxVertAlign;
+    VclPtr<ToolBox>            mpTBxVertAlign;
     //NumBullet&Backcolor
-    ToolBox*            mpTBxNumBullet;
-    ToolBox*            mpTBxBackColor;
+    VclPtr<ToolBox>            mpTBxNumBullet;
+    VclPtr<ToolBox>            mpTBxBackColor;
     //Paragraph spacing
-    SvxRelativeField*   mpTopDist;
-    SvxRelativeField*   mpBottomDist;
-    ToolBox*            mpTbxIndent_IncDec;
-    ToolBox*            mpTbxProDemote;
-    SvxRelativeField*   mpLeftIndent;
-    SvxRelativeField*   mpRightIndent;
-    SvxRelativeField*   mpFLineIndent;
+    VclPtr<SvxRelativeField>   mpTopDist;
+    VclPtr<SvxRelativeField>   mpBottomDist;
+    VclPtr<ToolBox>            mpTbxIndent_IncDec;
+    VclPtr<ToolBox>            mpTbxProDemote;
+    VclPtr<SvxRelativeField>   mpLeftIndent;
+    VclPtr<SvxRelativeField>   mpRightIndent;
+    VclPtr<SvxRelativeField>   mpFLineIndent;
 
     // Resources
     Image  maSpace3;

@@ -115,7 +115,7 @@ namespace dbaui
         VclPtr<FixedText>                   m_aDescription;
         VclPtr<FixedText>                   m_aHelpText;
         VclPtr<FixedLine>                   m_aFL;
-        OApplicationDetailView*             m_pDetailView;
+        VclPtr<OApplicationDetailView>      m_pDetailView;
 
         DECL_LINK( OnEntrySelectHdl,        SvTreeListBox* );
         void ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
@@ -149,7 +149,7 @@ namespace dbaui
         VclPtr<OTitleWindow>                m_aTasks;
         VclPtr<OTitleWindow>                m_aContainer;
         OAppBorderWindow&                   m_rBorderWin;       // my parent
-        OAppDetailPageHelper*               m_pControlHelper;
+        VclPtr<OAppDetailPageHelper>        m_pControlHelper;
         ::std::vector< TaskPaneData >       m_aTaskPaneData;
         MnemonicGenerator                   m_aExternalMnemonics;
 

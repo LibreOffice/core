@@ -93,6 +93,7 @@ void OStartMarker::dispose()
     m_aVRuler.disposeAndClear();
     m_aText.disposeAndClear();
     m_aImage.disposeAndClear();
+    m_pParent.clear();
     OColorListener::dispose();
 }
 

@@ -134,7 +134,7 @@ namespace {
 
         if ( _nExecutionResult )
             if ( m_pDialog )
-                static_cast< AddressBookSourceDialog* >( m_pDialog )->getFieldMapping( m_aAliases );
+                static_cast< AddressBookSourceDialog* >( m_pDialog.get() )->getFieldMapping( m_aAliases );
     }
 
     void SAL_CALL OAddressBookSourceDialogUno::initialize(const Sequence< Any >& rArguments) throw(Exception, RuntimeException, std::exception)

@@ -891,7 +891,7 @@ void ViewShell::Resize (void)
 {
     SetupRulers ();
 
-    if (mpParentWindow == NULL)
+    if (mpParentWindow == nullptr)
         return;
 
     // Make sure that the new size is not degenerate.

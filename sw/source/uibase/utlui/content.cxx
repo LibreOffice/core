@@ -91,6 +91,7 @@
 #include <unomid.h>
 
 #include "navmgr.hxx"
+#include "SidebarWin.hxx"
 #include <boost/scoped_ptr.hpp>
 
 #define CTYPE_CNT   0

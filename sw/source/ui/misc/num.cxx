@@ -169,6 +169,30 @@ SwNumPositionTabPage::~SwNumPositionTabPage()
 void SwNumPositionTabPage::dispose()
 {
     delete pActNum;
+    m_pLevelLB.clear();
+    m_pPositionFrame.clear();
+    m_pDistBorderFT.clear();
+    m_pDistBorderMF.clear();
+    m_pRelativeCB.clear();
+    m_pIndentFT.clear();
+    m_pIndentMF.clear();
+    m_pDistNumFT.clear();
+    m_pDistNumMF.clear();
+    m_pAlignFT.clear();
+    m_pAlignLB.clear();
+    m_pLabelFollowedByFT.clear();
+    m_pLabelFollowedByLB.clear();
+    m_pListtabFT.clear();
+    m_pListtabMF.clear();
+    m_pAlign2FT.clear();
+    m_pAlign2LB.clear();
+    m_pAlignedAtFT.clear();
+    m_pAlignedAtMF.clear();
+    m_pIndentAtFT.clear();
+    m_pIndentAtMF.clear();
+    m_pStandardPB.clear();
+    m_pPreviewWIN.clear();
+    pOutlineDlg.clear();
     SfxTabPage::dispose();
 }
 
@@ -181,9 +205,9 @@ void SwNumPositionTabPage::InitControls()
                                   USHRT_MAX != nActNumLvl;
 
     m_pDistBorderMF->Enable( !bLabelAlignmentPosAndSpaceModeActive &&
-                          ( bSingleSelection || bRelative || pOutlineDlg != 0 ) );
+                          ( bSingleSelection || bRelative || pOutlineDlg.get() != 0 ) );
     m_pDistBorderFT->Enable( !bLabelAlignmentPosAndSpaceModeActive &&
-                          ( bSingleSelection || bRelative || pOutlineDlg != 0 ) );
+                          ( bSingleSelection || bRelative || pOutlineDlg.get() != 0 ) );
 
     bool bSetDistEmpty = false;
     bool bSameDistBorderNum = !bLabelAlignmentPosAndSpaceModeActive;

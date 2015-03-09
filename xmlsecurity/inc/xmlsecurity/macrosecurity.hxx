@@ -47,9 +47,9 @@ private:
     friend class MacroSecurityLevelTP;
     friend class MacroSecurityTrustedSourcesTP;
 
-    TabControl*         m_pTabCtrl;
-    OKButton*           m_pOkBtn;
-    PushButton*         m_pResetBtn;
+    VclPtr<TabControl>         m_pTabCtrl;
+    VclPtr<OKButton>           m_pOkBtn;
+    VclPtr<PushButton>         m_pResetBtn;
 
     css::uno::Reference< css::uno::XComponentContext >  mxCtx;
     css::uno::Reference< css::xml::crypto::XSecurityEnvironment >  mxSecurityEnvironment;
@@ -58,8 +58,8 @@ private:
     sal_uInt16 m_nSecLevelId;
     sal_uInt16 m_nSecTrustId;
 
-    MacroSecurityTP*    mpLevelTP;
-    MacroSecurityTP*    mpTrustSrcTP;
+    VclPtr<MacroSecurityTP>    mpLevelTP;
+    VclPtr<MacroSecurityTP>    mpTrustSrcTP;
 
     DECL_LINK(          OkBtnHdl, void* );
 public:
@@ -78,10 +78,12 @@ public:
 class MacroSecurityTP : public TabPage
 {
 protected:
-    MacroSecurity*      mpDlg;
+    VclPtr<MacroSecurity>      mpDlg;
 public:
     MacroSecurityTP(vcl::Window* _pParent, const OString& rID,
         const OUString& rUIXMLDescription, MacroSecurity* _pDlg);
+    virtual ~MacroSecurityTP();
+    virtual void dispose() SAL_OVERRIDE;
 
     void SetTabDlg(MacroSecurity* pTabDlg)
     {
@@ -94,10 +96,10 @@ public:
 class MacroSecurityLevelTP : public MacroSecurityTP
 {
 private:
-    RadioButton* m_pVeryHighRB;
-    RadioButton* m_pHighRB;
-    RadioButton* m_pMediumRB;
-    RadioButton* m_pLowRB;
+    VclPtr<RadioButton> m_pVeryHighRB;
+    VclPtr<RadioButton> m_pHighRB;
+    VclPtr<RadioButton> m_pMediumRB;
+    VclPtr<RadioButton> m_pLowRB;
 
     sal_uInt16   mnCurLevel;
 
@@ -106,6 +108,8 @@ protected:
 
 public:
                         MacroSecurityLevelTP( vcl::Window* pParent, MacroSecurity* _pDlg );
+    virtual             ~MacroSecurityLevelTP();
+    virtual void        dispose() SAL_OVERRIDE;
 
     virtual void        ClosePage( void ) SAL_OVERRIDE;
 };
@@ -114,14 +118,14 @@ public:
 class MacroSecurityTrustedSourcesTP : public MacroSecurityTP
 {
 private:
-    FixedImage*         m_pTrustCertROFI;
-    SvSimpleTable*     m_pTrustCertLB;
-    PushButton*         m_pViewCertPB;
-    PushButton*         m_pRemoveCertPB;
-    FixedImage*         m_pTrustFileROFI;
-    ListBox*            m_pTrustFileLocLB;
-    PushButton*         m_pAddLocPB;
-    PushButton*         m_pRemoveLocPB;
+    VclPtr<FixedImage>         m_pTrustCertROFI;
+    VclPtr<SvSimpleTable>     m_pTrustCertLB;
+    VclPtr<PushButton>         m_pViewCertPB;
+    VclPtr<PushButton>         m_pRemoveCertPB;
+    VclPtr<FixedImage>         m_pTrustFileROFI;
+    VclPtr<ListBox>            m_pTrustFileLocLB;
+    VclPtr<PushButton>         m_pAddLocPB;
+    VclPtr<PushButton>         m_pRemoveLocPB;
 
     css::uno::Sequence< SvtSecurityOptions::Certificate > maTrustedAuthors;
 

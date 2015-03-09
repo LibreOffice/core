@@ -292,6 +292,30 @@ void SvxNumberFormatTabPage::dispose()
     pNumFmtShell = NULL;
     delete pNumItem;
     pNumItem = NULL;
+    m_pFtCategory.clear();
+    m_pLbCategory.clear();
+    m_pFtFormat.clear();
+    m_pLbCurrency.clear();
+    m_pLbFormat.clear();
+    m_pFtLanguage.clear();
+    m_pLbLanguage.clear();
+    m_pCbSourceFormat.clear();
+    m_pWndPreview.clear();
+    m_pFtOptions.clear();
+    m_pFtDecimals.clear();
+    m_pEdDecimals.clear();
+    m_pBtnNegRed.clear();
+    m_pFtLeadZeroes.clear();
+    m_pEdLeadZeroes.clear();
+    m_pBtnThousand.clear();
+    m_pFormatCodeFrame.clear();
+    m_pEdFormat.clear();
+    m_pIbAdd.clear();
+    m_pIbInfo.clear();
+    m_pIbRemove.clear();
+    m_pFtComment.clear();
+    m_pEdComment.clear();
+    pLastActivWindow.clear();
     SfxTabPage::dispose();
 }
 
@@ -1653,7 +1677,7 @@ bool SvxNumberFormatTabPage::PreNotify( NotifyEvent& rNEvt )
 {
     if(rNEvt.GetType()==MouseNotifyEvent::LOSEFOCUS)
     {
-        if ( rNEvt.GetWindow() == dynamic_cast< vcl::Window* >( m_pEdComment ) && !m_pEdComment->IsVisible() )
+        if ( rNEvt.GetWindow() == dynamic_cast< vcl::Window* >( m_pEdComment.get() ) && !m_pEdComment->IsVisible() )
         {
             pLastActivWindow = NULL;
         }

@@ -84,6 +84,9 @@ void ScTpSubTotalGroup::dispose()
             delete pData;
         }
     }
+    mpLbGroup.clear();
+    mpLbColumns.clear();
+    mpLbFunctions.clear();
     SfxTabPage::dispose();
 }
 
@@ -448,6 +451,21 @@ ScTpSubTotalOptions::ScTpSubTotalOptions( vcl::Window*               pParent,
 
 ScTpSubTotalOptions::~ScTpSubTotalOptions()
 {
+    dispose();
+}
+
+void ScTpSubTotalOptions::dispose()
+{
+    pBtnPagebreak.clear();
+    pBtnCase.clear();
+    pBtnSort.clear();
+    pFlSort.clear();
+    pBtnAscending.clear();
+    pBtnDescending.clear();
+    pBtnFormats.clear();
+    pBtnUserDef.clear();
+    pLbUserDef.clear();
+    SfxTabPage::dispose();
 }
 
 void ScTpSubTotalOptions::Init()

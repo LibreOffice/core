@@ -31,7 +31,7 @@ namespace svx {
 
 struct OrientationHelper_Impl
 {
-    typedef std::pair< vcl::Window*, TriState >  WindowPair;
+    typedef std::pair< VclPtr<vcl::Window>, TriState >  WindowPair;
     typedef std::vector< WindowPair >       WindowVec;
 
     DialControl&        mrCtrlDial;

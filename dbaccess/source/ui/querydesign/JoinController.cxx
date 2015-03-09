@@ -225,7 +225,7 @@ FeatureState OJoinController::GetState(sal_uInt16 _nId) const
         case ID_BROWSER_ADDTABLE:
             aReturn.bEnabled = ( getView() != NULL )
                             && const_cast< OJoinController* >( this )->getJoinView()->getTableView()->IsAddAllowed();
-            aReturn.bChecked = aReturn.bEnabled && m_pAddTableDialog != NULL && m_pAddTableDialog->IsVisible() ;
+            aReturn.bChecked = aReturn.bEnabled && m_pAddTableDialog != nullptr && m_pAddTableDialog->IsVisible() ;
             if ( aReturn.bEnabled )
                 aReturn.sTitle = OAddTableDlg::getDialogTitleForContext( impl_getDialogContext() );
             break;

@@ -45,22 +45,22 @@ public:
     };
 
 private:
-    Edit*                   m_pMacroNameEdit;
-    FixedText*              m_pMacroFromTxT;
-    FixedText*              m_pMacrosSaveInTxt;
-    TreeListBox*            m_pBasicBox;
-    FixedText*              m_pMacrosInTxt;
+    VclPtr<Edit>                   m_pMacroNameEdit;
+    VclPtr<FixedText>              m_pMacroFromTxT;
+    VclPtr<FixedText>              m_pMacrosSaveInTxt;
+    VclPtr<TreeListBox>            m_pBasicBox;
+    VclPtr<FixedText>              m_pMacrosInTxt;
     OUString                m_aMacrosInTxtBaseStr;
-    SvTreeListBox*          m_pMacroBox;
+    VclPtr<SvTreeListBox>          m_pMacroBox;
 
-    PushButton*             m_pRunButton;
-    CloseButton*            m_pCloseButton;
-    PushButton*             m_pAssignButton;
-    PushButton*             m_pEditButton;
-    PushButton*             m_pDelButton;
-    PushButton*             m_pOrganizeButton;
-    PushButton*             m_pNewLibButton;
-    PushButton*             m_pNewModButton;
+    VclPtr<PushButton>             m_pRunButton;
+    VclPtr<CloseButton>            m_pCloseButton;
+    VclPtr<PushButton>             m_pAssignButton;
+    VclPtr<PushButton>             m_pEditButton;
+    VclPtr<PushButton>             m_pDelButton;
+    VclPtr<PushButton>             m_pOrganizeButton;
+    VclPtr<PushButton>             m_pNewLibButton;
+    VclPtr<PushButton>             m_pNewModButton;
 
     bool                    bNewDelIsDel;
     bool                    bForceStoreBasic;

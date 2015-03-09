@@ -70,22 +70,22 @@ protected:
 
     SvxHFPage( vcl::Window* pParent, const SfxItemSet& rSet, sal_uInt16 nSetId );
 
-    FixedText*       m_pPageLbl;
-    CheckBox*        m_pTurnOnBox;
-    CheckBox*        m_pCntSharedBox;
-    CheckBox*        m_pCntSharedFirstBox;
-    FixedText*       m_pLMLbl;
-    MetricField*     m_pLMEdit;
-    FixedText*       m_pRMLbl;
-    MetricField*     m_pRMEdit;
-    FixedText*       m_pDistFT;
-    MetricField*     m_pDistEdit;
-    CheckBox*        m_pDynSpacingCB;
-    FixedText*       m_pHeightFT;
-    MetricField*     m_pHeightEdit;
-    CheckBox*        m_pHeightDynBtn;
-    SvxPageWindow*   m_pBspWin;
-    PushButton*      m_pBackgroundBtn;
+    VclPtr<FixedText>       m_pPageLbl;
+    VclPtr<CheckBox>        m_pTurnOnBox;
+    VclPtr<CheckBox>        m_pCntSharedBox;
+    VclPtr<CheckBox>        m_pCntSharedFirstBox;
+    VclPtr<FixedText>       m_pLMLbl;
+    VclPtr<MetricField>     m_pLMEdit;
+    VclPtr<FixedText>       m_pRMLbl;
+    VclPtr<MetricField>     m_pRMEdit;
+    VclPtr<FixedText>       m_pDistFT;
+    VclPtr<MetricField>     m_pDistEdit;
+    VclPtr<CheckBox>        m_pDynSpacingCB;
+    VclPtr<FixedText>       m_pHeightFT;
+    VclPtr<MetricField>     m_pHeightEdit;
+    VclPtr<CheckBox>        m_pHeightDynBtn;
+    VclPtr<SvxPageWindow>   m_pBspWin;
+    VclPtr<PushButton>      m_pBackgroundBtn;
 
     sal_uInt16       nId;
     SfxItemSet*      pBBSet;

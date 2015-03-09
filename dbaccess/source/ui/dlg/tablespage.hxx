@@ -36,8 +36,8 @@ namespace dbaui
             :public OGenericAdministrationPage
     {
     private:
-        VclContainer*           m_pTables;
-        OTableTreeListBox*      m_pTablesList;
+        VclPtr<VclContainer>           m_pTables;
+        VclPtr<OTableTreeListBox>      m_pTablesList;
 
         OUString         m_sCatalogSeparator;
         bool                m_bCatalogAtStart : 1;
@@ -46,7 +46,7 @@ namespace dbaui
                                 m_xCurrentConnection;   /// valid as long as the page is active
         ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCollator >
                                 m_xCollator;
-        OTableSubscriptionDialog* m_pTablesDlg;
+        VclPtr<OTableSubscriptionDialog> m_pTablesDlg;
 
     public:
         virtual bool            FillItemSet(SfxItemSet* _rCoreAttrs) SAL_OVERRIDE;

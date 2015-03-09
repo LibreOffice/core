@@ -48,14 +48,14 @@ namespace dbaui
 class OSaveAsDlgImpl
 {
 public:
-    FixedText*          m_pDescription;
-    FixedText*          m_pCatalogLbl;
-    OSQLNameComboBox*   m_pCatalog;
-    FixedText*          m_pSchemaLbl;
-    OSQLNameComboBox*   m_pSchema;
-    FixedText*          m_pLabel;
-    OSQLNameEdit*       m_pTitle;
-    OKButton*           m_pPB_OK;
+    VclPtr<FixedText>          m_pDescription;
+    VclPtr<FixedText>          m_pCatalogLbl;
+    VclPtr<OSQLNameComboBox>   m_pCatalog;
+    VclPtr<FixedText>          m_pSchemaLbl;
+    VclPtr<OSQLNameComboBox>   m_pSchema;
+    VclPtr<FixedText>          m_pLabel;
+    VclPtr<OSQLNameEdit>       m_pTitle;
+    VclPtr<OKButton>           m_pPB_OK;
     OUString            m_aQryLabel;
     OUString            m_sTblLabel;
     OUString            m_aName;

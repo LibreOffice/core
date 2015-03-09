@@ -59,9 +59,9 @@ class UserDrawEvent;
 
 class SFX2_DLLPUBLIC SfxStatusBarControl: public svt::StatusbarController
 {
-    sal_uInt16      nSlotId;
-    sal_uInt16      nId;
-    StatusBar*      pBar;
+    sal_uInt16         nSlotId;
+    sal_uInt16         nId;
+    VclPtr<StatusBar>  pBar;
 
 protected:
     // new controller API

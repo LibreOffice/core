@@ -51,46 +51,46 @@ class SwMailMergeDlg : public SvxStandardDialog
 {
     friend class SwXSelChgLstnr_Impl;
 
-    vcl::Window*         m_pBeamerWin;
+    VclPtr<vcl::Window>     m_pBeamerWin;
 
-    RadioButton*     m_pAllRB;
-    RadioButton*     m_pMarkedRB;
-    RadioButton*     m_pFromRB;
-    NumericField*    m_pFromNF;
-    NumericField*    m_pToNF;
+    VclPtr<RadioButton>     m_pAllRB;
+    VclPtr<RadioButton>     m_pMarkedRB;
+    VclPtr<RadioButton>     m_pFromRB;
+    VclPtr<NumericField>    m_pFromNF;
+    VclPtr<NumericField>    m_pToNF;
 
-    RadioButton*     m_pPrinterRB;
-    RadioButton*     m_pMailingRB;
-    RadioButton*     m_pFileRB;
+    VclPtr<RadioButton>     m_pPrinterRB;
+    VclPtr<RadioButton>     m_pMailingRB;
+    VclPtr<RadioButton>     m_pFileRB;
 
-    CheckBox*        m_pSingleJobsCB;
+    VclPtr<CheckBox>        m_pSingleJobsCB;
 
-    FixedText*       m_pSaveMergedDocumentFT;
-    RadioButton*     m_pSaveSingleDocRB;
-    RadioButton*     m_pSaveIndividualRB;
+    VclPtr<FixedText>       m_pSaveMergedDocumentFT;
+    VclPtr<RadioButton>     m_pSaveSingleDocRB;
+    VclPtr<RadioButton>     m_pSaveIndividualRB;
 
-    CheckBox*        m_pGenerateFromDataBaseCB;
+    VclPtr<CheckBox>        m_pGenerateFromDataBaseCB;
 
-    FixedText*       m_pColumnFT;
-    ListBox*         m_pColumnLB;
-    FixedText*       m_pPathFT;
-    Edit*            m_pPathED;
-    PushButton*      m_pPathPB;
-    FixedText*       m_pFilterFT;
-    ListBox*         m_pFilterLB;
+    VclPtr<FixedText>       m_pColumnFT;
+    VclPtr<ListBox>         m_pColumnLB;
+    VclPtr<FixedText>       m_pPathFT;
+    VclPtr<Edit>            m_pPathED;
+    VclPtr<PushButton>      m_pPathPB;
+    VclPtr<FixedText>       m_pFilterFT;
+    VclPtr<ListBox>         m_pFilterLB;
 
-    ListBox*         m_pAddressFldLB;
-    FixedText*       m_pSubjectFT;
-    Edit*            m_pSubjectED;
-    FixedText*       m_pFormatFT;
-    FixedText*       m_pAttachFT;
-    Edit*            m_pAttachED;
-    PushButton*      m_pAttachPB;
-    CheckBox*        m_pFormatHtmlCB;
-    CheckBox*        m_pFormatRtfCB;
-    CheckBox*        m_pFormatSwCB;
+    VclPtr<ListBox>         m_pAddressFldLB;
+    VclPtr<FixedText>       m_pSubjectFT;
+    VclPtr<Edit>            m_pSubjectED;
+    VclPtr<FixedText>       m_pFormatFT;
+    VclPtr<FixedText>       m_pAttachFT;
+    VclPtr<Edit>            m_pAttachED;
+    VclPtr<PushButton>      m_pAttachPB;
+    VclPtr<CheckBox>        m_pFormatHtmlCB;
+    VclPtr<CheckBox>        m_pFormatRtfCB;
+    VclPtr<CheckBox>        m_pFormatSwCB;
 
-    OKButton*        m_pOkBTN;
+    VclPtr<OKButton>        m_pOkBTN;
 
     SwMailMergeDlg_Impl* pImpl;
 
@@ -139,9 +139,11 @@ public:
 
 class SwMailMergeCreateFromDlg : public ModalDialog
 {
-    RadioButton* m_pThisDocRB;
+    VclPtr<RadioButton> m_pThisDocRB;
 public:
     SwMailMergeCreateFromDlg(vcl::Window* pParent);
+    virtual ~SwMailMergeCreateFromDlg();
+    virtual void dispose() SAL_OVERRIDE;
     bool IsThisDocument() const
     {
         return m_pThisDocRB->IsChecked();
@@ -150,9 +152,12 @@ public:
 
 class SwMailMergeFieldConnectionsDlg : public ModalDialog
 {
-    RadioButton* m_pUseExistingRB;
+    VclPtr<RadioButton> m_pUseExistingRB;
 public:
     SwMailMergeFieldConnectionsDlg(vcl::Window* pParent);
+    virtual ~SwMailMergeFieldConnectionsDlg();
+    virtual void dispose() SAL_OVERRIDE;
+
     bool IsUseExistingConnections() const
     {
         return m_pUseExistingRB->IsChecked();

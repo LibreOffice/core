@@ -29,13 +29,15 @@ class SvSimpleTable;
 class SVT_DLLPUBLIC SvSimpleTableContainer : public Control
 {
 private:
-    SvSimpleTable*     m_pTable;
+    VclPtr<SvSimpleTable>     m_pTable;
 
 protected:
     virtual bool PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
 public:
     SvSimpleTableContainer( vcl::Window* pParent, WinBits nBits = WB_BORDER );
+    virtual ~SvSimpleTableContainer();
+    virtual void dispose() SAL_OVERRIDE;
 
     void SetTable(SvSimpleTable* pTable);
 

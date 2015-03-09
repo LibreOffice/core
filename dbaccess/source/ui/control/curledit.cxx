@@ -45,8 +45,8 @@ OConnectionURLEdit::~OConnectionURLEdit()
 
 void OConnectionURLEdit::dispose()
 {
-    SetSubEdit(VclPtr<Edit>());
-    delete m_pForcedPrefix;
+    SetSubEdit(nullptr);
+    m_pForcedPrefix.clear();
     Edit::dispose();
 }
 
@@ -89,7 +89,7 @@ void OConnectionURLEdit::SetText(const OUString& _rStr, const Selection& /*_rNew
 {
     // create new sub controls, if necessary
     if (!GetSubEdit())
-        SetSubEdit(VclPtr<Edit>(new Edit(this, 0)));
+        SetSubEdit(new Edit(this, 0));
     if ( !m_pForcedPrefix )
     {
         m_pForcedPrefix = new FixedText(this, WB_VCENTER);

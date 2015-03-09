@@ -213,7 +213,7 @@ bool SwAccessibleChild::IsValid() const
 {
     return mpFrm != 0 ||
            mpDrawObj != 0 ||
-           mpWindow != 0;
+           mpWindow != nullptr;
 }
 
 bool SwAccessibleChild::IsVisibleChildrenOnly() const

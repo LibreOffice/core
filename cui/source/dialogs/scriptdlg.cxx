@@ -443,6 +443,17 @@ CuiInputDialog::CuiInputDialog(vcl::Window * pParent, sal_uInt16 nMode )
     }
 }
 
+CuiInputDialog::~CuiInputDialog()
+{
+    dispose();
+}
+
+void CuiInputDialog::dispose()
+{
+    m_pEdit.clear();
+    ModalDialog::dispose();
+}
+
 
 // ScriptOrgDialog ------------------------------------------------------------
 
@@ -500,6 +511,13 @@ void SvxScriptOrgDialog::dispose()
 {
     // clear the SelectHdl so that it isn't called during the dtor
     m_pScriptsBox->SetSelectHdl( Link() );
+    m_pScriptsBox.clear();
+    m_pRunButton.clear();
+    m_pCloseButton.clear();
+    m_pCreateButton.clear();
+    m_pEditButton.clear();
+    m_pRenameButton.clear();
+    m_pDelButton.clear();
     SfxModalDialog::dispose();
 };
 

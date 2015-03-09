@@ -2229,7 +2229,7 @@ void ScTabView::EnableRefInput(bool bFlag)
 
     // ab hier dynamisch angelegte
 
-    if(pTabControl!=NULL) pTabControl->EnableInput(bFlag,true);
+    if(pTabControl!=nullptr) pTabControl->EnableInput(bFlag,true);
 
     if(pGridWin[SC_SPLIT_BOTTOMLEFT]!=NULL)
         pGridWin[SC_SPLIT_BOTTOMLEFT]->EnableInput(bFlag,false);

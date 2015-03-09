@@ -33,6 +33,7 @@
 #include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
 #include <com/sun/star/frame/XDispatchProviderInterception.hpp>
 #include <cppuhelper/implbase1.hxx>
+#include <vcl/vclptr.hxx>
 
 namespace vcl { class Window; }
 
@@ -100,8 +101,8 @@ private:
 
         ::cppu::OInterfaceContainerHelper   m_aLoadListeners;
 
-        ::bib::BibView*             pBibView;
-        BibToolBar*                 pToolbar;
+        VclPtr<::bib::BibView>      pBibView;
+        VclPtr<BibToolBar>          pToolbar;
 
         OUString               sIdentifierMapping;
 protected:

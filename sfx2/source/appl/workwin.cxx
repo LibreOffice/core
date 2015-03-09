@@ -853,7 +853,7 @@ SvBorder SfxWorkWindow::Arrange_Impl()
             case SfxChildAlignment::LOWESTTOP:
                 aSize.Width() = aTmp.GetWidth();
                 if ( pCli->pWin->GetType() == WINDOW_SPLITWINDOW )
-                    aSize = static_cast<SplitWindow *>(pCli->pWin)->CalcLayoutSizePixel( aSize );
+                    aSize = static_cast<SplitWindow *>(pCli->pWin.get())->CalcLayoutSizePixel( aSize );
                 bAllowHiding = false;
                 aBorder.Top() += aSize.Height();
                 aPos = aTmp.TopLeft();
@@ -868,7 +868,7 @@ SvBorder SfxWorkWindow::Arrange_Impl()
             case SfxChildAlignment::HIGHESTBOTTOM:
                 aSize.Width() = aTmp.GetWidth();
                 if ( pCli->pWin->GetType() == WINDOW_SPLITWINDOW )
-                    aSize = static_cast<SplitWindow *>(pCli->pWin)->CalcLayoutSizePixel( aSize );
+                    aSize = static_cast<SplitWindow *>(pCli->pWin.get())->CalcLayoutSizePixel( aSize );
                 aBorder.Bottom() += aSize.Height();
                 aPos = aTmp.BottomLeft();
                 aPos.Y() -= (aSize.Height()-1);
@@ -883,7 +883,7 @@ SvBorder SfxWorkWindow::Arrange_Impl()
             case SfxChildAlignment::TOOLBOXLEFT:
                 aSize.Height() = aTmp.GetHeight();
                 if ( pCli->pWin->GetType() == WINDOW_SPLITWINDOW )
-                    aSize = static_cast<SplitWindow *>(pCli->pWin)->CalcLayoutSizePixel( aSize );
+                    aSize = static_cast<SplitWindow *>(pCli->pWin.get())->CalcLayoutSizePixel( aSize );
                 bAllowHiding = false;
                 aBorder.Left() += aSize.Width();
                 aPos = aTmp.TopLeft();
@@ -898,7 +898,7 @@ SvBorder SfxWorkWindow::Arrange_Impl()
             case SfxChildAlignment::TOOLBOXRIGHT:
                 aSize.Height() = aTmp.GetHeight();
                 if ( pCli->pWin->GetType() == WINDOW_SPLITWINDOW )
-                    aSize = static_cast<SplitWindow *>(pCli->pWin)->CalcLayoutSizePixel( aSize );
+                    aSize = static_cast<SplitWindow *>(pCli->pWin.get())->CalcLayoutSizePixel( aSize );
                 aBorder.Right() += aSize.Width();
                 aPos = aTmp.TopRight();
                 aPos.X() -= (aSize.Width()-1);
@@ -1071,10 +1071,10 @@ void SfxWorkWindow::ShowChildren_Impl()
                 switch ( pCli->pWin->GetType() )
                 {
                     case RSC_DOCKINGWINDOW :
-                        static_cast<DockingWindow*>(pCli->pWin)->Show( true, nFlags );
+                        static_cast<DockingWindow*>(pCli->pWin.get())->Show( true, nFlags );
                         break;
                     case RSC_SPLITWINDOW :
-                        static_cast<SplitWindow*>(pCli->pWin)->Show( true, nFlags );
+                        static_cast<SplitWindow*>(pCli->pWin.get())->Show( true, nFlags );
                         break;
                     default:
                         pCli->pWin->Show( true, nFlags );
@@ -1088,7 +1088,7 @@ void SfxWorkWindow::ShowChildren_Impl()
                 switch ( pCli->pWin->GetType() )
                 {
                     case RSC_DOCKINGWINDOW :
-                        static_cast<DockingWindow*>(pCli->pWin)->Hide();
+                        static_cast<DockingWindow*>(pCli->pWin.get())->Hide();
                         break;
                     default:
                         pCli->pWin->Hide();
@@ -1111,7 +1111,7 @@ void SfxWorkWindow::HideChildren_Impl()
             switch ( pChild->pWin->GetType() )
             {
                 case RSC_DOCKINGWINDOW :
-                    static_cast<DockingWindow*>(pChild->pWin)->Hide();
+                    static_cast<DockingWindow*>(pChild->pWin.get())->Hide();
                     break;
                 default:
                     pChild->pWin->Hide();

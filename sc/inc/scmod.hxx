@@ -112,8 +112,8 @@ class ScModule: public SfxModule, public SfxListener, utl::ConfigurationListener
     bool                mbIsInSharedDocLoading:1;
     bool                mbIsInSharedDocSaving:1;
 
-    std::map<sal_uInt16, std::list<vcl::Window*> > m_mapRefWindow;
-    std::stack<ScAnyRefModalDlg*> maAnyRefDlgStack;
+    std::map<sal_uInt16, std::list<VclPtr<vcl::Window> > > m_mapRefWindow;
+    std::stack<VclPtr<ScAnyRefModalDlg> > maAnyRefDlgStack;
 public:
                     SFX_DECL_INTERFACE(SCID_APP)
 

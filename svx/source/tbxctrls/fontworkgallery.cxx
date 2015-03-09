@@ -94,6 +94,17 @@ FontWorkGalleryDialog::FontWorkGalleryDialog( SdrView* pSdrView, vcl::Window* pP
     fillFavorites( GALLERY_THEME_FONTWORK );
 }
 
+FontWorkGalleryDialog::~FontWorkGalleryDialog()
+{
+    dispose();
+}
+
+void FontWorkGalleryDialog::dispose()
+{
+    mpCtlFavorites.clear();
+    mpOKButton.clear();
+    ModalDialog::dispose();
+}
 
 void FontWorkGalleryDialog::initFavorites(sal_uInt16 nThemeId)
 {
@@ -706,6 +717,17 @@ FontworkCharacterSpacingDialog::FontworkCharacterSpacingDialog( vcl::Window* pPa
 {
     get(m_pMtrScale, "entry");
     m_pMtrScale->SetValue( nScale );
+}
+
+FontworkCharacterSpacingDialog::~FontworkCharacterSpacingDialog()
+{
+    dispose();
+}
+
+void FontworkCharacterSpacingDialog::dispose()
+{
+    m_pMtrScale.clear();
+    ModalDialog::dispose();
 }
 
 sal_Int32 FontworkCharacterSpacingDialog::getScale() const

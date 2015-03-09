@@ -46,7 +46,7 @@ public:
                         CheckBox*           refBtnDestPers,
                         ListBox*            refLbCopyArea,
                         Edit*               refEdCopyArea,
-                        formula::RefButton*     refRbCopyArea,
+                        formula::RefButton* refRbCopyArea,
                         FixedText*          refFtDbAreaLabel,
                         FixedText*          refFtDbArea,
                         const OUString&       refStrUndefined );
@@ -57,17 +57,17 @@ private:
     ScViewData*     pViewData;
     ScDocument*     pDoc;
 
-    CheckBox*       pBtnCase;
-    CheckBox*       pBtnRegExp;
-    CheckBox*       pBtnHeader;
-    CheckBox*       pBtnUnique;
-    CheckBox*       pBtnCopyResult;
-    CheckBox*       pBtnDestPers;
-    ListBox*        pLbCopyArea;
-    Edit*           pEdCopyArea;
-    formula::RefButton* pRbCopyArea;
-    FixedText*      pFtDbAreaLabel;
-    FixedText*      pFtDbArea;
+    VclPtr<CheckBox>       pBtnCase;
+    VclPtr<CheckBox>       pBtnRegExp;
+    VclPtr<CheckBox>       pBtnHeader;
+    VclPtr<CheckBox>       pBtnUnique;
+    VclPtr<CheckBox>       pBtnCopyResult;
+    VclPtr<CheckBox>       pBtnDestPers;
+    VclPtr<ListBox>        pLbCopyArea;
+    VclPtr<Edit>           pEdCopyArea;
+    VclPtr<formula::RefButton> pRbCopyArea;
+    VclPtr<FixedText>      pFtDbAreaLabel;
+    VclPtr<FixedText>      pFtDbArea;
 
     const OUString&   rStrUndefined;
 

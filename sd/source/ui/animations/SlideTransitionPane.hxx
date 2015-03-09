@@ -105,19 +105,19 @@ private:
     SdDrawDocument *  mpDrawDoc;
     Size              maMinSize;
 
-    ListBox*      mpLB_SLIDE_TRANSITIONS;
-    FixedText*    mpFT_SPEED;
-    ListBox*      mpLB_SPEED;
-    FixedText*    mpFT_SOUND;
-    ListBox*      mpLB_SOUND;
-    CheckBox*     mpCB_LOOP_SOUND;
-    RadioButton*  mpRB_ADVANCE_ON_MOUSE;
-    RadioButton*  mpRB_ADVANCE_AUTO;
-    MetricField*  mpMF_ADVANCE_AUTO_AFTER;
-    PushButton*   mpPB_APPLY_TO_ALL;
-    PushButton*   mpPB_PLAY;
-    PushButton*   mpPB_SLIDE_SHOW;
-    CheckBox*     mpCB_AUTO_PREVIEW;
+    VclPtr<ListBox>      mpLB_SLIDE_TRANSITIONS;
+    VclPtr<FixedText>    mpFT_SPEED;
+    VclPtr<ListBox>      mpLB_SPEED;
+    VclPtr<FixedText>    mpFT_SOUND;
+    VclPtr<ListBox>      mpLB_SOUND;
+    VclPtr<CheckBox>     mpCB_LOOP_SOUND;
+    VclPtr<RadioButton>  mpRB_ADVANCE_ON_MOUSE;
+    VclPtr<RadioButton>  mpRB_ADVANCE_AUTO;
+    VclPtr<MetricField>  mpMF_ADVANCE_AUTO_AFTER;
+    VclPtr<PushButton>   mpPB_APPLY_TO_ALL;
+    VclPtr<PushButton>   mpPB_PLAY;
+    VclPtr<PushButton>   mpPB_SLIDE_SHOW;
+    VclPtr<CheckBox>     mpCB_AUTO_PREVIEW;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawView >             mxView;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >                  mxModel;

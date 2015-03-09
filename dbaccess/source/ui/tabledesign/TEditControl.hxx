@@ -46,11 +46,11 @@ namespace dbaui
         ::std::vector< ::boost::shared_ptr<OTableRow> > m_aUndoList;
         ::std::vector< ::boost::shared_ptr<OTableRow> >*    m_pRowList;
 
-        OSQLNameEdit*               pNameCell;
-        ::svt::ListBoxControl*      pTypeCell;
-        Edit*                       pHelpTextCell;
-        Edit*                       pDescrCell;
-        OTableFieldDescWin*         pDescrWin;          // properties of one column
+        VclPtr<OSQLNameEdit>               pNameCell;
+        VclPtr<::svt::ListBoxControl>      pTypeCell;
+        VclPtr<Edit>                       pHelpTextCell;
+        VclPtr<Edit>                       pDescrCell;
+        VclPtr<OTableFieldDescWin>         pDescrWin;          // properties of one column
 
          ::boost::shared_ptr<OTableRow> pActRow;
 
@@ -71,7 +71,7 @@ namespace dbaui
         {
         private:
             AutoTimer m_aInvalidateTimer;
-            OTableEditorCtrl* m_pOwner;
+            VclPtr<OTableEditorCtrl> m_pOwner;
 
         public:
             ClipboardInvalidator(sal_uLong nTimeout,OTableEditorCtrl*);

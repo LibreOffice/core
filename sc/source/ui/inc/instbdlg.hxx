@@ -58,19 +58,19 @@ public:
     SCTAB           GetTableCount() const { return nTableCount;}
 
 private:
-    RadioButton*            m_pBtnBefore;
-    RadioButton*            m_pBtnBehind;
-    RadioButton*            m_pBtnNew;
-    RadioButton*            m_pBtnFromFile;
-    FixedText*              m_pFtCount;
-    NumericField*           m_pNfCount;
-    FixedText*              m_pFtName;
-    Edit*                   m_pEdName;
-    ListBox*                m_pLbTables;
-    FixedText*              m_pFtPath;
-    PushButton*             m_pBtnBrowse;
-    CheckBox*               m_pBtnLink;
-    OKButton*               m_pBtnOk;
+    VclPtr<RadioButton>            m_pBtnBefore;
+    VclPtr<RadioButton>            m_pBtnBehind;
+    VclPtr<RadioButton>            m_pBtnNew;
+    VclPtr<RadioButton>            m_pBtnFromFile;
+    VclPtr<FixedText>              m_pFtCount;
+    VclPtr<NumericField>           m_pNfCount;
+    VclPtr<FixedText>              m_pFtName;
+    VclPtr<Edit>                   m_pEdName;
+    VclPtr<ListBox>                m_pLbTables;
+    VclPtr<FixedText>              m_pFtPath;
+    VclPtr<PushButton>             m_pBtnBrowse;
+    VclPtr<CheckBox>               m_pBtnLink;
+    VclPtr<OKButton>               m_pBtnOk;
 
     Timer                   aBrowseTimer;
     ScViewData&             rViewData;

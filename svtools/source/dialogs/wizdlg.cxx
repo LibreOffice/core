@@ -34,7 +34,7 @@
 struct ImplWizPageData
 {
     ImplWizPageData*    mpNext;
-    TabPage*            mpPage;
+    VclPtr<TabPage>     mpPage;
 };
 
 
@@ -42,7 +42,7 @@ struct ImplWizPageData
 struct ImplWizButtonData
 {
     ImplWizButtonData*  mpNext;
-    Button*             mpButton;
+    VclPtr<Button>      mpButton;
     long                mnOffset;
 };
 
@@ -378,6 +378,10 @@ void WizardDialog::dispose()
     while ( mpFirstPage )
         RemovePage( mpFirstPage->mpPage );
 
+    mpCurTabPage.clear();
+    mpPrevBtn.clear();
+    mpNextBtn.clear();
+    mpViewWindow.clear();
     ModalDialog::dispose();
 }
 

@@ -216,7 +216,7 @@ public:
 
     SmEditWindow& GetEditWindow()
     {
-        return static_cast<SmCmdBoxWindow *>(pWindow)->GetEditWindow();
+        return static_cast<SmCmdBoxWindow *>(pWindow.get())->GetEditWindow();
     }
 
 };

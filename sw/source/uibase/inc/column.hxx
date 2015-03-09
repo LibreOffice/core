@@ -42,10 +42,10 @@ class SwColumnPage;
 
 class SwColumnDlg : public SfxModalDialog
 {
-    ListBox*            m_pApplyToLB;
+    VclPtr<ListBox>            m_pApplyToLB;
 
     SwWrtShell&         rWrtShell;
-    SwColumnPage*       pTabPage;
+    VclPtr<SwColumnPage>       pTabPage;
     SfxItemSet*         pPageSet;
     SfxItemSet*         pSectionSet;
     SfxItemSet*         pSelectionSet;
@@ -89,39 +89,39 @@ public:
 // column dialog now as TabPage
 class SwColumnPage : public SfxTabPage
 {
-    NumericField*   m_pCLNrEdt;
-    ColumnValueSet* m_pDefaultVS;
-    CheckBox*       m_pBalanceColsCB;
+    VclPtr<NumericField>   m_pCLNrEdt;
+    VclPtr<ColumnValueSet> m_pDefaultVS;
+    VclPtr<CheckBox>       m_pBalanceColsCB;
 
-    PushButton*     m_pBtnBack;
-    FixedText*      m_pLbl1;
+    VclPtr<PushButton>     m_pBtnBack;
+    VclPtr<FixedText>      m_pLbl1;
     PercentField aEd1;
-    FixedText*      m_pLbl2;
+    VclPtr<FixedText>      m_pLbl2;
     PercentField aEd2;
-    FixedText*      m_pLbl3;
+    VclPtr<FixedText>      m_pLbl3;
     PercentField aEd3;
-    PushButton*     m_pBtnNext;
+    VclPtr<PushButton>     m_pBtnNext;
     PercentField aDistEd1;
     PercentField aDistEd2;
-    CheckBox*       m_pAutoWidthBox;
+    VclPtr<CheckBox>       m_pAutoWidthBox;
 
-    FixedText*      m_pLineTypeLbl;
-    LineListBox*    m_pLineTypeDLB;
-    FixedText*      m_pLineWidthLbl;
-    MetricField*    m_pLineWidthEdit;
-    FixedText*      m_pLineColorLbl;
-    ColorListBox*   m_pLineColorDLB;
-    FixedText*      m_pLineHeightLbl;
-    MetricField*    m_pLineHeightEdit;
-    FixedText*      m_pLinePosLbl;
-    ListBox*        m_pLinePosDLB;
+    VclPtr<FixedText>      m_pLineTypeLbl;
+    VclPtr<LineListBox>    m_pLineTypeDLB;
+    VclPtr<FixedText>      m_pLineWidthLbl;
+    VclPtr<MetricField>    m_pLineWidthEdit;
+    VclPtr<FixedText>      m_pLineColorLbl;
+    VclPtr<ColorListBox>   m_pLineColorDLB;
+    VclPtr<FixedText>      m_pLineHeightLbl;
+    VclPtr<MetricField>    m_pLineHeightEdit;
+    VclPtr<FixedText>      m_pLinePosLbl;
+    VclPtr<ListBox>        m_pLinePosDLB;
 
-    FixedText*      m_pTextDirectionFT;
-    ListBox*        m_pTextDirectionLB;
+    VclPtr<FixedText>      m_pTextDirectionFT;
+    VclPtr<ListBox>        m_pTextDirectionLB;
 
     // Example
-    SwColExample*   m_pPgeExampleWN;
-    SwColumnOnlyExample* m_pFrmExampleWN;
+    VclPtr<SwColExample>   m_pPgeExampleWN;
+    VclPtr<SwColumnOnlyExample> m_pFrmExampleWN;
 
     SwColMgr*       pColMgr;
 
@@ -132,7 +132,7 @@ class SwColumnPage : public SfxTabPage
     sal_uInt16          nMinWidth;
     PercentField*   pModifiedField;
 
-    std::map<MetricField*, PercentField*> m_aPercentFieldsMap;
+    std::map<VclPtr<MetricField>, PercentField*> m_aPercentFieldsMap;
 
     bool            bFormat;
     bool            bFrm;

@@ -67,36 +67,36 @@ public:
 
 private:
     // category
-    RadioButton*          m_pRbNone;
-    RadioButton*          m_pRbConst;
-    RadioButton*          m_pRbPercent;
-    RadioButton*          m_pRbFunction;
-    RadioButton*          m_pRbRange;
-    ListBox*              m_pLbFunction;
+    VclPtr<RadioButton>          m_pRbNone;
+    VclPtr<RadioButton>          m_pRbConst;
+    VclPtr<RadioButton>          m_pRbPercent;
+    VclPtr<RadioButton>          m_pRbFunction;
+    VclPtr<RadioButton>          m_pRbRange;
+    VclPtr<ListBox>              m_pLbFunction;
 
     // parameters
-    VclFrame*             m_pFlParameters;
-    VclBox*               m_pBxPositive;
-    MetricField*          m_pMfPositive;
-    Edit*                 m_pEdRangePositive;
-    PushButton*           m_pIbRangePositive;
-    VclBox*               m_pBxNegative;
-    MetricField*          m_pMfNegative;
-    Edit*                 m_pEdRangeNegative;
-    PushButton*           m_pIbRangeNegative;
-    CheckBox*             m_pCbSyncPosNeg;
+    VclPtr<VclFrame>             m_pFlParameters;
+    VclPtr<VclBox>               m_pBxPositive;
+    VclPtr<MetricField>          m_pMfPositive;
+    VclPtr<Edit>                 m_pEdRangePositive;
+    VclPtr<PushButton>           m_pIbRangePositive;
+    VclPtr<VclBox>               m_pBxNegative;
+    VclPtr<MetricField>          m_pMfNegative;
+    VclPtr<Edit>                 m_pEdRangeNegative;
+    VclPtr<PushButton>           m_pIbRangeNegative;
+    VclPtr<CheckBox>             m_pCbSyncPosNeg;
 
     // indicator
-    RadioButton*          m_pRbBoth;
-    RadioButton*          m_pRbPositive;
-    RadioButton*          m_pRbNegative;
-    FixedImage*           m_pFiBoth;
-    FixedImage*           m_pFiPositive;
-    FixedImage*           m_pFiNegative;
+    VclPtr<RadioButton>          m_pRbBoth;
+    VclPtr<RadioButton>          m_pRbPositive;
+    VclPtr<RadioButton>          m_pRbNegative;
+    VclPtr<FixedImage>           m_pFiBoth;
+    VclPtr<FixedImage>           m_pFiPositive;
+    VclPtr<FixedImage>           m_pFiNegative;
 
-    FixedText*           m_pUIStringPos;
-    FixedText*           m_pUIStringNeg;
-    FixedText*           m_pUIStringRbRange;
+    VclPtr<FixedText>           m_pUIStringPos;
+    VclPtr<FixedText>           m_pUIStringNeg;
+    VclPtr<FixedText>           m_pUIStringRbRange;
 
     SvxChartKindError    m_eErrorKind;
     SvxChartIndicate     m_eIndicate;
@@ -116,9 +116,9 @@ private:
     double               m_fPlusValue;
     double               m_fMinusValue;
 
-    Dialog *             m_pParentDialog;
+    VclPtr<Dialog>       m_pParentDialog;
     boost::scoped_ptr< RangeSelectionHelper >  m_apRangeSelectionHelper;
-    Edit *               m_pCurrentRangeChoosingField;
+    VclPtr<Edit>         m_pCurrentRangeChoosingField;
     bool                 m_bHasInternalDataProvider;
     bool                 m_bEnableDataTableDialog;
 

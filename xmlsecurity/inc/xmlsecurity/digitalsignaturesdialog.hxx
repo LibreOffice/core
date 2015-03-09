@@ -63,24 +63,24 @@ private:
     DocumentSignatureMode   meSignatureMode;
     css::uno::Sequence < css::uno::Sequence < css::beans::PropertyValue > > m_manifest;
 
-    FixedText*          m_pHintDocFT;
-    FixedText*          m_pHintBasicFT;
-    FixedText*          m_pHintPackageFT;
-    SvSimpleTable*      m_pSignaturesLB;
-    FixedImage*         m_pSigsValidImg;
-    FixedText*          m_pSigsValidFI;
-    FixedImage*         m_pSigsInvalidImg;
-    FixedText*          m_pSigsInvalidFI;
-    FixedImage*         m_pSigsNotvalidatedImg;
-    FixedText*          m_pSigsNotvalidatedFI;
-    FixedImage*         m_pSigsOldSignatureImg;
-    FixedText*          m_pSigsOldSignatureFI;
+    VclPtr<FixedText>          m_pHintDocFT;
+    VclPtr<FixedText>          m_pHintBasicFT;
+    VclPtr<FixedText>          m_pHintPackageFT;
+    VclPtr<SvSimpleTable>      m_pSignaturesLB;
+    VclPtr<FixedImage>         m_pSigsValidImg;
+    VclPtr<FixedText>          m_pSigsValidFI;
+    VclPtr<FixedImage>         m_pSigsInvalidImg;
+    VclPtr<FixedText>          m_pSigsInvalidFI;
+    VclPtr<FixedImage>         m_pSigsNotvalidatedImg;
+    VclPtr<FixedText>          m_pSigsNotvalidatedFI;
+    VclPtr<FixedImage>         m_pSigsOldSignatureImg;
+    VclPtr<FixedText>          m_pSigsOldSignatureFI;
 
-    PushButton*         m_pViewBtn;
-    PushButton*         m_pAddBtn;
-    PushButton*         m_pRemoveBtn;
+    VclPtr<PushButton>         m_pViewBtn;
+    VclPtr<PushButton>         m_pAddBtn;
+    VclPtr<PushButton>         m_pRemoveBtn;
 
-    CloseButton*        m_pCloseBtn;
+    VclPtr<CloseButton>        m_pCloseBtn;
 
     OUString m_sODFVersion;
     //Signals if the document contains already a document signature. This is only

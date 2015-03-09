@@ -152,8 +152,7 @@ GalleryBrowser1::~GalleryBrowser1()
 void GalleryBrowser1::dispose()
 {
     EndListening( *mpGallery );
-    delete mpThemes;
-    mpThemes = NULL;
+    mpThemes.clear();
     delete mpExchangeData;
     mpExchangeData = NULL;
     maNewTheme.disposeAndClear();

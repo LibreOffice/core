@@ -38,7 +38,7 @@ private:
     SfxPrintOptDlg_Impl*    pDlgImpl;
     SfxViewShell*           pViewSh;
     SfxItemSet*             pOptions;
-    SfxTabPage*             pPage;
+    VclPtr<SfxTabPage>      pPage;
 
 public:
                             SfxPrintOptionsDialog( vcl::Window *pParent,

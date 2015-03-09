@@ -65,7 +65,7 @@ namespace dbmm
         }
 
     private:
-        ProgressBar *m_pBar;
+        VclPtr<ProgressBar> m_pBar;
         sal_uInt32  m_nRange;
     };
 

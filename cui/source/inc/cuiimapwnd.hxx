@@ -33,11 +33,11 @@
 
 class URLDlg : public ModalDialog
 {
-    Edit*                m_pEdtURL;
-    ComboBox*            m_pCbbTargets;
-    Edit*                m_pEdtName;
-    Edit*                m_pEdtAlternativeText;
-    VclMultiLineEdit*       m_pEdtDescription;
+    VclPtr<Edit>                m_pEdtURL;
+    VclPtr<ComboBox>            m_pCbbTargets;
+    VclPtr<Edit>                m_pEdtName;
+    VclPtr<Edit>                m_pEdtAlternativeText;
+    VclPtr<VclMultiLineEdit>       m_pEdtDescription;
 
 public:
 
@@ -45,6 +45,8 @@ public:
                                 const OUString& rURL, const OUString& rAlternativeText, const OUString& rDescription,
                                 const OUString& rTarget, const OUString& rName,
                                 TargetList& rTargetList );
+    virtual             ~URLDlg();
+    virtual void        dispose() SAL_OVERRIDE;
 
     OUString            GetURL() const { return m_pEdtURL->GetText(); }
     OUString            GetAltText() const { return m_pEdtAlternativeText->GetText(); }

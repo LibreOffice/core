@@ -56,11 +56,11 @@ namespace pcr
         Point                   m_aLinePos;
         ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >
                                 m_xControl;
-        vcl::Window*            m_pControlWindow;
-        PushButton*             m_pBrowseButton;
-        PushButton*             m_pAdditionalBrowseButton;
+        VclPtr<vcl::Window>            m_pControlWindow;
+        VclPtr<PushButton>             m_pBrowseButton;
+        VclPtr<PushButton>             m_pAdditionalBrowseButton;
         IButtonClickListener*   m_pClickListener;
-        vcl::Window*            m_pTheParent;
+        VclPtr<vcl::Window>            m_pTheParent;
         sal_uInt16              m_nNameWidth;
         sal_uInt16              m_nEnableFlags;
         bool                    m_bIndentTitle;

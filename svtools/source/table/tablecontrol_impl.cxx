@@ -261,10 +261,6 @@ namespace svt { namespace table
 
     TableControl_Impl::~TableControl_Impl()
     {
-
-        DELETEZ( m_pVScroll );
-        DELETEZ( m_pHScroll );
-        DELETEZ( m_pScrollCorner );
         DELETEZ( m_pTableFunctionSet );
         DELETEZ( m_pSelEngine );
     }
@@ -632,20 +628,20 @@ namespace svt { namespace table
         }
 
 
-        bool lcl_updateScrollbar( vcl::Window& _rParent, ScrollBar*& _rpBar,
+        bool lcl_updateScrollbar( vcl::Window& _rParent, VclPtr<ScrollBar>& _rpBar,
             bool const i_needBar, long _nVisibleUnits,
             long _nPosition, long _nLineSize, long _nRange,
             bool _bHorizontal, const Link& _rScrollHandler )
         {
             // do we currently have the scrollbar?
-            bool bHaveBar = _rpBar != NULL;
+            bool bHaveBar = _rpBar != nullptr;
 
             // do we need to correct the scrollbar visibility?
             if ( bHaveBar && !i_needBar )
             {
                 if ( _rpBar->IsTracking() )
                     _rpBar->EndTracking();
-                DELETEZ( _rpBar );
+                _rpBar.clear();
             }
             else if ( !bHaveBar && i_needBar )
             {
@@ -1162,11 +1158,11 @@ namespace svt { namespace table
         }
 
         // the corner window connecting the two scrollbars in the lower right corner
-        bool bHaveScrollCorner = NULL != m_pScrollCorner;
-        bool bNeedScrollCorner = ( NULL != m_pHScroll ) && ( NULL != m_pVScroll );
+        bool bHaveScrollCorner = nullptr != m_pScrollCorner;
+        bool bNeedScrollCorner = ( nullptr != m_pHScroll ) && ( nullptr != m_pVScroll );
         if ( bHaveScrollCorner && !bNeedScrollCorner )
         {
-            DELETEZ( m_pScrollCorner );
+            m_pScrollCorner.clear();
         }
         else if ( !bHaveScrollCorner && bNeedScrollCorner )
         {
@@ -2111,7 +2107,7 @@ namespace svt { namespace table
             }
 
             // update the position at the vertical scrollbar
-            if ( m_pVScroll != NULL )
+            if ( m_pVScroll != nullptr )
                 m_pVScroll->SetThumbPos( m_nTopRow );
         }
 
@@ -2189,7 +2185,7 @@ namespace svt { namespace table
             }
 
             // update the position at the horizontal scrollbar
-            if ( m_pHScroll != NULL )
+            if ( m_pHScroll != nullptr )
                 m_pHScroll->SetThumbPos( m_nLeftColumn );
         }
 

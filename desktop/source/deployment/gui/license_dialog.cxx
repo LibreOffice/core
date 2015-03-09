@@ -77,14 +77,14 @@ protected:
 struct LicenseDialogImpl : public ModalDialog
 {
     cssu::Reference<cssu::XComponentContext> m_xComponentContext;
-    FixedText* m_pFtHead;
-    FixedImage* m_pArrow1;
-    FixedImage* m_pArrow2;
-    LicenseView* m_pLicense;
-    PushButton* m_pDown;
+    VclPtr<FixedText> m_pFtHead;
+    VclPtr<FixedImage> m_pArrow1;
+    VclPtr<FixedImage> m_pArrow2;
+    VclPtr<LicenseView> m_pLicense;
+    VclPtr<PushButton> m_pDown;
 
-    PushButton* m_pAcceptButton;
-    PushButton* m_pDeclineButton;
+    VclPtr<PushButton> m_pAcceptButton;
+    VclPtr<PushButton> m_pDeclineButton;
 
     DECL_LINK(PageDownHdl, void *);
     DECL_LINK(ScrolledHdl, void *);
@@ -99,10 +99,25 @@ struct LicenseDialogImpl : public ModalDialog
         css::uno::Reference< css::uno::XComponentContext > const & xContext,
         const OUString & sExtensionName,
         const OUString & sLicenseText);
+    virtual ~LicenseDialogImpl() { dispose(); }
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual void Activate() SAL_OVERRIDE;
 
 };
+
+void LicenseDialogImpl::dispose()
+{
+    m_pFtHead.clear();
+    m_pArrow1.clear();
+    m_pArrow2.clear();
+    m_pLicense.clear();
+    m_pDown.clear();
+    m_pAcceptButton.clear();
+    m_pDeclineButton.clear();
+    ModalDialog::dispose();
+}
+
 
 LicenseView::LicenseView( vcl::Window* pParent, WinBits nStyle )
     : MultiLineEdit( pParent, nStyle )

@@ -55,7 +55,7 @@ namespace svt
 
     struct RoadmapWizardImpl : public RoadmapWizardTypes
     {
-        ORoadmap*           pRoadmap;
+        VclPtr<ORoadmap>    pRoadmap;
         Paths               aPaths;
         PathId              nActivePath;
         StateDescriptions   aStateDescriptors;
@@ -67,11 +67,6 @@ namespace svt
             ,nActivePath( -1 )
             ,bActivePathIsDefinite( false )
         {
-        }
-
-        ~RoadmapWizardImpl()
-        {
-            delete pRoadmap;
         }
 
         /// returns the index of the current state in given path, or -1

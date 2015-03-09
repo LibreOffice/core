@@ -60,9 +60,9 @@ using namespace ::com::sun::star;
 
 class SwNumNamesDlg : public ModalDialog
 {
-    Edit*     m_pFormEdit;
-    ListBox*  m_pFormBox;
-    OKButton* m_pOKBtn;
+    VclPtr<Edit>     m_pFormEdit;
+    VclPtr<ListBox>  m_pFormBox;
+    VclPtr<OKButton> m_pOKBtn;
 
     DECL_LINK( ModifyHdl, Edit * );
     DECL_LINK( SelectHdl, ListBox * );
@@ -70,10 +70,26 @@ class SwNumNamesDlg : public ModalDialog
 
 public:
     SwNumNamesDlg(vcl::Window *pParent);
+    virtual ~SwNumNamesDlg();
+    virtual void dispose() SAL_OVERRIDE;
     void SetUserNames(const OUString *pList[]);
     OUString GetName() const { return m_pFormEdit->GetText(); }
     sal_Int32 GetCurEntryPos() const { return m_pFormBox->GetSelectEntryPos(); }
 };
+
+SwNumNamesDlg::~SwNumNamesDlg()
+{
+    dispose();
+}
+
+void SwNumNamesDlg::dispose()
+{
+    m_pFormEdit.clear();
+    m_pFormBox.clear();
+    m_pOKBtn.clear();
+    ModalDialog::dispose();
+}
+
 
 // remember selected entry
 IMPL_LINK_INLINE_START( SwNumNamesDlg, SelectHdl, ListBox *, pBox )
@@ -746,7 +762,24 @@ IMPL_LINK_NOARG(SwOutlineSettingsTabPage, CharFmtHdl)
 
 SwOutlineSettingsTabPage::~SwOutlineSettingsTabPage()
 {
+    dispose();
 }
+
+void SwOutlineSettingsTabPage::dispose()
+{
+    m_pLevelLB.clear();
+    m_pCollBox.clear();
+    m_pNumberBox.clear();
+    m_pCharFmtLB.clear();
+    m_pAllLevelFT.clear();
+    m_pAllLevelNF.clear();
+    m_pPrefixED.clear();
+    m_pSuffixED.clear();
+    m_pStartEdit.clear();
+    m_pPreviewWIN.clear();
+    SfxTabPage::dispose();
+}
+
 
 void SwOutlineSettingsTabPage::SetWrtShell(SwWrtShell* pShell)
 {

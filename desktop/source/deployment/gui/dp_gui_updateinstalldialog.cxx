@@ -244,6 +244,13 @@ UpdateInstallDialog::~UpdateInstallDialog()
 
 void UpdateInstallDialog::dispose()
 {
+    m_pFt_action.clear();
+    m_pStatusbar.clear();
+    m_pFt_extension_name.clear();
+    m_pMle_info.clear();
+    m_pHelp.clear();
+    m_pOk.clear();
+    m_pCancel.clear();
     ModalDialog::dispose();
 }
 

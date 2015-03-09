@@ -33,18 +33,20 @@ class PolarOptionsTabPage : public SfxTabPage
 
 public:
     PolarOptionsTabPage(vcl::Window* pParent, const SfxItemSet& rInAttrs );
+    virtual ~PolarOptionsTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     static SfxTabPage* Create(vcl::Window* pParent, const SfxItemSet* rInAttrs);
     virtual bool FillItemSet(SfxItemSet* rOutAttrs) SAL_OVERRIDE;
     virtual void Reset(const SfxItemSet* rInAttrs) SAL_OVERRIDE;
 
 private:
-    CheckBox*         m_pCB_Clockwise;
-    VclFrame*         m_pFL_StartingAngle;
-    svx::DialControl* m_pAngleDial;
-    NumericField*     m_pNF_StartingAngle;
-    VclFrame*         m_pFL_PlotOptions;
-    CheckBox*         m_pCB_IncludeHiddenCells;
+    VclPtr<CheckBox>         m_pCB_Clockwise;
+    VclPtr<VclFrame>         m_pFL_StartingAngle;
+    VclPtr<svx::DialControl> m_pAngleDial;
+    VclPtr<NumericField>     m_pNF_StartingAngle;
+    VclPtr<VclFrame>         m_pFL_PlotOptions;
+    VclPtr<CheckBox>         m_pCB_IncludeHiddenCells;
 };
 
 } //namespace chart

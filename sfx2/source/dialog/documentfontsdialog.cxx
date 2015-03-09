@@ -34,6 +34,17 @@ SfxDocumentFontsPage::SfxDocumentFontsPage( vcl::Window* parent, const SfxItemSe
     get( embedFontsCheckbox, "embedFonts" );
 }
 
+SfxDocumentFontsPage::~SfxDocumentFontsPage()
+{
+    dispose();
+}
+
+void SfxDocumentFontsPage::dispose()
+{
+    embedFontsCheckbox.clear();
+    SfxTabPage::dispose();
+}
+
 void SfxDocumentFontsPage::Reset( const SfxItemSet* )
 {
     bool bVal = false;

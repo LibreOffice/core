@@ -61,7 +61,7 @@ typedef ::std::vector< AddonToolbarItem > AddonToolbarItemContainer;
 
 struct ReferenceToolbarPathInfo
 {
-    ToolBox*           pToolbar;
+    VclPtr<ToolBox>    pToolbar;
     sal_uInt16         nPos;
     bool               bResult;
 };

@@ -31,6 +31,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/awt/XFocusListener.hpp>
 #include <com/sun/star/document/XEventListener.hpp>
+#include <vcl/vclptr.hxx>
 
 #include <memory>
 
@@ -297,7 +298,7 @@ private:
 
     sal_uInt32 mnClientId;
 
-    vcl::Window* mpContentWindow;
+    VclPtr<vcl::Window> mpContentWindow;
 
     /** Check whether or not the object has been disposed (or is in the
         state of being disposed).  If that is the case then

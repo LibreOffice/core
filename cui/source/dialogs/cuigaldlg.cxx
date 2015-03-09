@@ -215,6 +215,19 @@ SearchProgress::SearchProgress( vcl::Window* pParent, const INetURLObject& rStar
     m_pBtnCancel->SetClickHdl( LINK( this, SearchProgress, ClickCancelBtn ) );
 }
 
+SearchProgress::~SearchProgress()
+{
+    dispose();
+}
+
+void SearchProgress::dispose()
+{
+    m_pFtSearchDir.clear();
+    m_pFtSearchType.clear();
+    m_pBtnCancel.clear();
+    parent_.clear();
+    ModalDialog::dispose();
+}
 
 
 void SearchProgress::Terminate()
@@ -260,7 +273,7 @@ void SearchProgress::StartExecuteModal( const Link& rEndDialogHdl )
 {
     assert(!maSearchThread.is());
     maSearchThread = new SearchThread(
-        this, static_cast< TPGalleryThemeProperties * >(parent_), startUrl_);
+        this, static_cast< TPGalleryThemeProperties * >(parent_.get()), startUrl_);
     maSearchThread->launch();
     ModalDialog::StartExecuteModal( rEndDialogHdl );
 }
@@ -345,6 +358,19 @@ TakeProgress::TakeProgress(vcl::Window* pWindow)
     m_pBtnCancel->SetClickHdl( LINK( this, TakeProgress, ClickCancelBtn ) );
 }
 
+TakeProgress::~TakeProgress()
+{
+    dispose();
+}
+
+void TakeProgress::dispose()
+{
+    m_pFtTakeFile.clear();
+    m_pBtnCancel.clear();
+    window_.clear();
+    ModalDialog::dispose();
+}
+
 void TakeProgress::Terminate()
 {
     if (maTakeThread.is())
@@ -425,7 +451,7 @@ void TakeProgress::StartExecuteModal( const Link& rEndDialogHdl )
 {
     assert(!maTakeThread.is());
     maTakeThread = new TakeThread(
-        this, static_cast< TPGalleryThemeProperties * >(window_), maTakenList);
+        this, static_cast< TPGalleryThemeProperties * >(window_.get()), maTakenList);
     maTakeThread->launch();
     ModalDialog::StartExecuteModal( rEndDialogHdl );
 }
@@ -441,6 +467,18 @@ ActualizeProgress::ActualizeProgress(vcl::Window* pWindow, GalleryTheme* pThm)
     get(m_pFtActualizeFile, "file");
     get(m_pBtnCancel, "cancel");
     m_pBtnCancel->SetClickHdl( LINK( this, ActualizeProgress, ClickCancelBtn ) );
+}
+
+ActualizeProgress::~ActualizeProgress()
+{
+    dispose();
+}
+
+void ActualizeProgress::dispose()
+{
+    m_pFtActualizeFile.clear();
+    m_pBtnCancel.clear();
+    ModalDialog::dispose();
 }
 
 short ActualizeProgress::Execute()
@@ -511,6 +549,17 @@ TitleDialog::TitleDialog(vcl::Window* pParent, const OUString& rOldTitle)
     m_pEdit->GrabFocus();
 }
 
+TitleDialog::~TitleDialog()
+{
+    dispose();
+}
+
+void TitleDialog::dispose()
+{
+    m_pEdit.clear();
+    ModalDialog::dispose();
+}
+
 
 // - GalleryIdDialog -
 
@@ -532,7 +581,17 @@ GalleryIdDialog::GalleryIdDialog( vcl::Window* pParent, GalleryTheme* _pThm )
     m_pBtnOk->SetClickHdl( LINK( this, GalleryIdDialog, ClickOkHdl ) );
 }
 
+GalleryIdDialog::~GalleryIdDialog()
+{
+    dispose();
+}
 
+void GalleryIdDialog::dispose()
+{
+    m_pBtnOk.clear();
+    m_pLbResName.clear();
+    ModalDialog::dispose();
+}
 
 IMPL_LINK_NOARG(GalleryIdDialog, ClickOkHdl)
 {
@@ -614,6 +673,22 @@ TPGalleryThemeGeneral::TPGalleryThemeGeneral(vcl::Window* pParent, const SfxItem
     get(m_pFtMSShowPath, "location");
     get(m_pFtMSShowContent, "contents");
     get(m_pFtMSShowChangeDate, "modified");
+}
+
+TPGalleryThemeGeneral::~TPGalleryThemeGeneral()
+{
+    dispose();
+}
+
+void TPGalleryThemeGeneral::dispose()
+{
+    m_pFiMSImage.clear();
+    m_pEdtMSName.clear();
+    m_pFtMSShowType.clear();
+    m_pFtMSShowPath.clear();
+    m_pFtMSShowContent.clear();
+    m_pFtMSShowChangeDate.clear();
+    SfxTabPage::dispose();
 }
 
 void TPGalleryThemeGeneral::SetXChgData( ExchangeData* _pData )
@@ -769,6 +844,13 @@ void TPGalleryThemeProperties::dispose()
     }
     aFilterEntryList.clear();
 
+    m_pCbbFileType.clear();
+    m_pLbxFound.clear();
+    m_pBtnSearch.clear();
+    m_pBtnTake.clear();
+    m_pBtnTakeAll.clear();
+    m_pCbxPreview.clear();
+    m_pWndPreview.clear();
     SfxTabPage::dispose();
 }
 

@@ -63,4 +63,17 @@ MasterPasswordCreateDialog::MasterPasswordCreateDialog(vcl::Window* pParent, Res
     m_pEDMasterPasswordCrt->SetModifyHdl( LINK( this, MasterPasswordCreateDialog, EditHdl_Impl ) );
 }
 
+MasterPasswordCreateDialog::~MasterPasswordCreateDialog()
+{
+    dispose();
+}
+
+void MasterPasswordCreateDialog::dispose()
+{
+    m_pEDMasterPasswordCrt.clear();
+    m_pEDMasterPasswordRepeat.clear();
+    m_pOKBtn.clear();
+    ModalDialog::dispose();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

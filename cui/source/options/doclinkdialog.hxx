@@ -40,10 +40,10 @@ namespace svx
     class ODocumentLinkDialog : public ModalDialog
     {
     protected:
-        ::svt::OFileURLControl* m_pURL;
-        PushButton*             m_pBrowseFile;
-        Edit*                   m_pName;
-        OKButton*               m_pOK;
+        VclPtr<::svt::OFileURLControl> m_pURL;
+        VclPtr<PushButton>             m_pBrowseFile;
+        VclPtr<Edit>                   m_pName;
+        VclPtr<OKButton>               m_pOK;
 
         bool                m_bCreatingNew;
 
@@ -51,6 +51,8 @@ namespace svx
 
     public:
         ODocumentLinkDialog( vcl::Window* _pParent, bool _bCreateNew );
+        virtual ~ODocumentLinkDialog();
+        virtual void dispose() SAL_OVERRIDE;
 
         // name validation has to be done by an external instance
         // the validator link gets a pointer to a String, and should return 0 if the string is not

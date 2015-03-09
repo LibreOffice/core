@@ -57,6 +57,16 @@ ScRedlineOptionsTabPage::ScRedlineOptionsTabPage( vcl::Window* pParent,
 
 ScRedlineOptionsTabPage::~ScRedlineOptionsTabPage()
 {
+    dispose();
+}
+
+void ScRedlineOptionsTabPage::dispose()
+{
+    m_pContentColorLB.clear();
+    m_pRemoveColorLB.clear();
+    m_pInsertColorLB.clear();
+    m_pMoveColorLB.clear();
+    SfxTabPage::dispose();
 }
 
 SfxTabPage* ScRedlineOptionsTabPage::Create( vcl::Window* pParent, const SfxItemSet* rSet )

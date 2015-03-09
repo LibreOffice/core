@@ -27,10 +27,10 @@ class SwWrtShell;
 
 class SwSplitTblDlg : public SvxStandardDialog
 {
-    RadioButton*    mpCntntCopyRB;
-    RadioButton*    mpBoxAttrCopyWithParaRB ;
-    RadioButton*    mpBoxAttrCopyNoParaRB ;
-    RadioButton*    mpBorderCopyRB;
+    VclPtr<RadioButton>    mpCntntCopyRB;
+    VclPtr<RadioButton>    mpBoxAttrCopyWithParaRB ;
+    VclPtr<RadioButton>    mpBoxAttrCopyNoParaRB ;
+    VclPtr<RadioButton>    mpBorderCopyRB;
 
     SwWrtShell      &rShell;
     sal_uInt16          m_nSplit;
@@ -40,6 +40,8 @@ protected:
 
 public:
     SwSplitTblDlg( vcl::Window *pParent, SwWrtShell &rSh );
+    virtual ~SwSplitTblDlg();
+    virtual void dispose() SAL_OVERRIDE;
 
     sal_uInt16 GetSplitMode() const { return m_nSplit; }
 };

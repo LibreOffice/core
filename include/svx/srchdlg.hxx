@@ -89,7 +89,7 @@ enum SearchLabel
 class SvxSearchDialog;
 class SVX_DLLPUBLIC SvxSearchDialogWrapper : public SfxChildWindow
 {
-    SvxSearchDialog *dialog;
+    VclPtr<SvxSearchDialog> dialog;
 public:
     SvxSearchDialogWrapper( vcl::Window*pParent, sal_uInt16 nId,
                             SfxBindings* pBindings, SfxChildWinInfo* pInfo );
@@ -151,57 +151,57 @@ public:
     void SetSearchLabel(const OUString& rStr) { m_pSearchLabel->SetText(rStr); }
 
 private:
-    vcl::Window*         mpDocWin;
+    VclPtr<vcl::Window>         mpDocWin;
     bool            mbSuccess;
 
-    VclFrame*       m_pSearchFrame;
-    ComboBox*       m_pSearchLB;
-    ListBox*        m_pSearchTmplLB;
-    FixedText*      m_pSearchAttrText;
-    FixedText*      m_pSearchLabel;
+    VclPtr<VclFrame>       m_pSearchFrame;
+    VclPtr<ComboBox>       m_pSearchLB;
+    VclPtr<ListBox>        m_pSearchTmplLB;
+    VclPtr<FixedText>      m_pSearchAttrText;
+    VclPtr<FixedText>      m_pSearchLabel;
 
-    VclFrame*       m_pReplaceFrame;
-    ComboBox*       m_pReplaceLB;
-    ListBox*        m_pReplaceTmplLB;
-    FixedText*      m_pReplaceAttrText;
+    VclPtr<VclFrame>       m_pReplaceFrame;
+    VclPtr<ComboBox>       m_pReplaceLB;
+    VclPtr<ListBox>        m_pReplaceTmplLB;
+    VclPtr<FixedText>      m_pReplaceAttrText;
 
-    PushButton*     m_pSearchBtn;
-    PushButton*     m_pSearchAllBtn;
-    PushButton*     m_pReplaceBtn;
-    PushButton*     m_pReplaceAllBtn;
+    VclPtr<PushButton>    m_pSearchBtn;
+    VclPtr<PushButton>     m_pSearchAllBtn;
+    VclPtr<PushButton>     m_pReplaceBtn;
+    VclPtr<PushButton>     m_pReplaceAllBtn;
 
-    VclFrame*       m_pComponentFrame;
-    PushButton*     m_pSearchComponent1PB;
-    PushButton*     m_pSearchComponent2PB;
+    VclPtr<VclFrame>       m_pComponentFrame;
+    VclPtr<PushButton>     m_pSearchComponent1PB;
+    VclPtr<PushButton>     m_pSearchComponent2PB;
 
-    CheckBox*       m_pMatchCaseCB;
-    CheckBox*       m_pWordBtn;
+    VclPtr<CheckBox>       m_pMatchCaseCB;
+    VclPtr<CheckBox>       m_pWordBtn;
 
-    PushButton*     m_pCloseBtn;
-    CheckBox*       m_pIgnoreDiacritics;
-    CheckBox*       m_pIgnoreKashida;
-    CheckBox*       m_pSelectionBtn;
-    CheckBox*       m_pBackwardsBtn;
-    CheckBox*       m_pRegExpBtn;
-    CheckBox*       m_pSimilarityBox;
-    PushButton*     m_pSimilarityBtn;
-    CheckBox*       m_pLayoutBtn;
-    CheckBox*       m_pNotesBtn;
-    CheckBox*       m_pJapMatchFullHalfWidthCB;
-    CheckBox*       m_pJapOptionsCB;
-    PushButton*     m_pJapOptionsBtn;
+    VclPtr<PushButton>     m_pCloseBtn;
+    VclPtr<CheckBox>       m_pIgnoreDiacritics;
+    VclPtr<CheckBox>       m_pIgnoreKashida;
+    VclPtr<CheckBox>       m_pSelectionBtn;
+    VclPtr<CheckBox>       m_pBackwardsBtn;
+    VclPtr<CheckBox>       m_pRegExpBtn;
+    VclPtr<CheckBox>       m_pSimilarityBox;
+    VclPtr<PushButton>     m_pSimilarityBtn;
+    VclPtr<CheckBox>       m_pLayoutBtn;
+    VclPtr<CheckBox>       m_pNotesBtn;
+    VclPtr<CheckBox>       m_pJapMatchFullHalfWidthCB;
+    VclPtr<CheckBox>       m_pJapOptionsCB;
+    VclPtr<PushButton>     m_pJapOptionsBtn;
 
-    PushButton*     m_pAttributeBtn;
-    PushButton*     m_pFormatBtn;
-    PushButton*     m_pNoFormatBtn;
+    VclPtr<PushButton>     m_pAttributeBtn;
+    VclPtr<PushButton>     m_pFormatBtn;
+    VclPtr<PushButton>     m_pNoFormatBtn;
 
-    VclContainer*   m_pCalcGrid;
-    FixedText*      m_pCalcSearchInFT;
-    ListBox*        m_pCalcSearchInLB;
-    FixedText*      m_pCalcSearchDirFT;
-    RadioButton*    m_pRowsBtn;
-    RadioButton*    m_pColumnsBtn;
-    CheckBox*       m_pAllSheetsCB;
+    VclPtr<VclContainer>   m_pCalcGrid;
+    VclPtr<FixedText>      m_pCalcSearchInFT;
+    VclPtr<ListBox>        m_pCalcSearchInLB;
+    VclPtr<FixedText>      m_pCalcSearchDirFT;
+    VclPtr<RadioButton>    m_pRowsBtn;
+    VclPtr<RadioButton>    m_pColumnsBtn;
+    VclPtr<CheckBox>       m_pAllSheetsCB;
 
     SfxBindings&    rBindings;
     bool            bWriter;

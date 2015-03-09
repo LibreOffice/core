@@ -53,9 +53,9 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XExtensionManager > m_xExtensionManager;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xNameAccessNodes;
 
-    vcl::Window             *m_pParent;
-    ExtMgrDialog            *m_pExtMgrDialog;
-    UpdateRequiredDialog    *m_pUpdReqDialog;
+    VclPtr<vcl::Window>             m_pParent;
+    VclPtr<ExtMgrDialog>            m_pExtMgrDialog;
+    VclPtr<UpdateRequiredDialog>    m_pUpdReqDialog;
     ExtensionCmdQueue       *m_pExecuteCmdQueue;
 
     OUString          m_sGetExtensionsURL;

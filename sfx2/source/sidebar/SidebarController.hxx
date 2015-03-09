@@ -145,7 +145,7 @@ private:
     static SidebarControllerContainer maSidebarControllerContainer;
 
     ::boost::scoped_ptr<Deck> mpCurrentDeck;
-    SidebarDockingWindow* mpParentWindow;
+    VclPtr<SidebarDockingWindow> mpParentWindow;
     ::boost::scoped_ptr<TabBar> mpTabBar;
     css::uno::Reference<css::frame::XFrame> mxFrame;
     Context maCurrentContext;
@@ -177,7 +177,7 @@ private:
     FocusManager maFocusManager;
     css::uno::Reference<css::frame::XDispatch> mxReadOnlyModeDispatch;
     bool mbIsDocumentReadOnly;
-    SfxSplitWindow* mpSplitWindow;
+    VclPtr<SfxSplitWindow> mpSplitWindow;
     /** When the user moves the splitter then we remember the
         width at that time.
     */

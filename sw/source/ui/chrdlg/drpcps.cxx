@@ -62,7 +62,7 @@ const sal_uInt16 SwDropCapsPage::aPageRg[] = {
 
 class SwDropCapsPict : public Control
 {
-    SwDropCapsPage* mpPage;
+    VclPtr<SwDropCapsPage> mpPage;
     OUString        maText;
     OUString        maScriptText;
     Color           maBackColor;
@@ -210,6 +210,7 @@ void SwDropCapsPict::dispose()
 {
      if( mbDelPrinter )
          delete mpPrinter;
+     mpPage.clear();
      Control::dispose();
 }
 
@@ -575,6 +576,25 @@ SwDropCapsPage::SwDropCapsPage(vcl::Window *pParent, const SfxItemSet &rSet)
 
 SwDropCapsPage::~SwDropCapsPage()
 {
+    dispose();
+}
+
+void SwDropCapsPage::dispose()
+{
+    m_pDropCapsBox.clear();
+    m_pWholeWordCB.clear();
+    m_pSwitchText.clear();
+    m_pDropCapsField.clear();
+    m_pLinesText.clear();
+    m_pLinesField.clear();
+    m_pDistanceText.clear();
+    m_pDistanceField.clear();
+    m_pTextText.clear();
+    m_pTextEdit.clear();
+    m_pTemplateText.clear();
+    m_pTemplateBox.clear();
+    m_pPict.clear();
+    SfxTabPage::dispose();
 }
 
 int  SwDropCapsPage::DeactivatePage(SfxItemSet * _pSet)

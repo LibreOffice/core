@@ -57,13 +57,13 @@ private:
     DECL_LINK(implDeactivatePagekHdl, void *);
 
 private:
-    CustomAnimationPane* mpPane;
+    VclPtr<CustomAnimationPane> mpPane;
     const std::vector< ::com::sun::star::uno::Any >& mrTargets;
 
     double mfDuration;
     bool mbIsPreview;
 
-    TabControl* mpTabControl;
+    VclPtr<TabControl> mpTabControl;
 
     CustomAnimationCreateTabPage* mpTabPages[5];
     sal_uInt16 mnEntranceId, mnEmphasisId, mnExitId, mnMPathId, mnMiscId;

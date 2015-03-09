@@ -186,13 +186,13 @@ svt::ToolboxController* SAL_CALL SfxToolBoxControllerFactory( const Reference< X
 
 struct SfxToolBoxControl_Impl
 {
-    ToolBox*                pBox;
+    VclPtr<ToolBox>         pBox;
     bool                    bShowString;
     SfxTbxCtrlFactory*      pFact;
     sal_uInt16              nTbxId;
     sal_uInt16              nSlotId;
-    SfxPopupWindow*         mpFloatingWindow;
-    SfxPopupWindow*         mpPopupWindow;
+    VclPtr<SfxPopupWindow>  mpFloatingWindow;
+    VclPtr<SfxPopupWindow>  mpPopupWindow;
     Reference< XUIElement > mxUIElement;
 
     DECL_LINK( WindowEventListener, VclSimpleEvent* );
@@ -207,10 +207,9 @@ IMPL_LINK( SfxToolBoxControl_Impl, WindowEventListener, VclSimpleEvent*, pEvent 
     {
         vcl::Window* pWindow( static_cast<VclWindowEvent*>(pEvent)->GetWindow() );
         if (( pWindow == mpFloatingWindow ) &&
-            ( mpPopupWindow != 0 ))
+            ( mpPopupWindow != nullptr ))
         {
-            delete mpPopupWindow;
-            mpPopupWindow = 0;
+            mpPopupWindow.clear();
         }
     }
 
@@ -292,11 +291,8 @@ void SAL_CALL SfxToolBoxControl::dispose() throw (::com::sun::star::uno::Runtime
     pImpl->mxUIElement = 0;
 
     // Delete my popup windows
-    delete pImpl->mpFloatingWindow;
-    delete pImpl->mpPopupWindow;
-
-    pImpl->mpFloatingWindow = 0;
-    pImpl->mpPopupWindow = 0;
+    pImpl->mpFloatingWindow.clear();
+    pImpl->mpPopupWindow.clear();
 }
 
 
@@ -866,9 +862,9 @@ IMPL_LINK_NOARG(SfxToolBoxControl, PopupModeEndHdl)
     {
         // Replace floating window with popup window and destroy
         // floating window instance.
-        delete pImpl->mpFloatingWindow;
+        pImpl->mpFloatingWindow.clear();
         pImpl->mpFloatingWindow = pImpl->mpPopupWindow;
-        pImpl->mpPopupWindow    = 0;
+        pImpl->mpPopupWindow.clear();
         // We also need to know when the user tries to use the
         // floating window.
         pImpl->mpFloatingWindow->AddEventListener( LINK( pImpl, SfxToolBoxControl_Impl, WindowEventListener ));
@@ -877,7 +873,7 @@ IMPL_LINK_NOARG(SfxToolBoxControl, PopupModeEndHdl)
     {
         // Popup window has been closed by the user. No replacement, instance
         // will destroy itself.
-        pImpl->mpPopupWindow = 0;
+        pImpl->mpPopupWindow.clear();
     }
 
     return 1;
@@ -903,7 +899,7 @@ void SfxToolBoxControl::StateChanged
     const SfxPoolItem*  pState
 )
 {
-    DBG_ASSERT( pImpl->pBox != 0, "setting state to dangling ToolBox" );
+    DBG_ASSERT( pImpl->pBox != nullptr, "setting state to dangling ToolBox" );
 
     if ( GetId() >= SID_OBJECTMENU0 && GetId() <= SID_OBJECTMENU_LAST )
         return;

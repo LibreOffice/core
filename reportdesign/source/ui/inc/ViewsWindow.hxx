@@ -75,7 +75,7 @@ namespace rptui
 
     class OWindowPositionCorrector
     {
-        ::std::vector< ::std::pair<vcl::Window*,Point> > m_aChildren;
+        ::std::vector< ::std::pair<VclPtr<vcl::Window>,Point> > m_aChildren;
         long m_nDeltaX;
         long m_nDeltaY;
     public:
@@ -91,8 +91,8 @@ namespace rptui
         }
         ~OWindowPositionCorrector()
         {
-            ::std::vector< ::std::pair<vcl::Window*,Point> >::iterator aIter = m_aChildren.begin();
-            ::std::vector< ::std::pair<vcl::Window*,Point> >::iterator aEnd = m_aChildren.end();
+            auto aIter = m_aChildren.begin();
+            auto aEnd = m_aChildren.end();
             for (; aIter != aEnd; ++aIter)
             {
                 const Point aPos = aIter->first->GetPosPixel();
@@ -127,9 +127,9 @@ namespace rptui
     private:
         TSectionsMap                            m_aSections;
         svtools::ColorConfig                    m_aColorConfig;
-        OReportWindow*                          m_pParent;
-        OUString                         m_sShapeType;
-        bool                                m_bInUnmark;
+        VclPtr<OReportWindow>                   m_pParent;
+        OUString                                m_sShapeType;
+        bool                                    m_bInUnmark;
 
         void ImplInitSettings();
         /** returns the iterator at pos _nPos or the end()

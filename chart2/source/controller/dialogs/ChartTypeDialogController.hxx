@@ -281,8 +281,8 @@ private:
     DECL_LINK( ChangeLineCountHdl, void* );
 
 private:
-    FixedText*    m_pFT_NumberOfLines;
-    NumericField* m_pMF_NumberOfLines;
+    VclPtr<FixedText>    m_pFT_NumberOfLines;
+    VclPtr<NumericField> m_pMF_NumberOfLines;
 };
 
 class BubbleChartDialogController : public ChartTypeDialogController

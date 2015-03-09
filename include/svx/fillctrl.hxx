@@ -50,9 +50,9 @@ private:
     XFillHatchItem*     mpHatchItem;
     XFillBitmapItem*    mpBitmapItem;
 
-    FillControl*        mpFillControl;
-    SvxFillTypeBox*     mpFillTypeLB;
-    SvxFillAttrBox*     mpFillAttrLB;
+    VclPtr<FillControl>        mpFillControl;
+    VclPtr<SvxFillTypeBox>     mpFillTypeLB;
+    VclPtr<SvxFillAttrBox>     mpFillAttrLB;
 
     css::drawing::FillStyle          meLastXFS;
 
@@ -77,8 +77,8 @@ class FillControl : public vcl::Window
 private:
     friend class SvxFillToolBoxControl;
 
-    SvxFillTypeBox*     mpLbFillType;
-    SvxFillAttrBox*     mpLbFillAttr;
+    VclPtr<SvxFillTypeBox>     mpLbFillType;
+    VclPtr<SvxFillAttrBox>     mpLbFillAttr;
     Size                maLogicalFillSize;
     Size                maLogicalAttrSize;
 

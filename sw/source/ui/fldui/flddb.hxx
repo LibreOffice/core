@@ -32,20 +32,20 @@
 
 class SwFldDBPage : public SwFldPage
 {
-    ListBox*            m_pTypeLB;
-    SwDBTreeList*       m_pDatabaseTLB;
+    VclPtr<ListBox>            m_pTypeLB;
+    VclPtr<SwDBTreeList>       m_pDatabaseTLB;
 
-    PushButton*         m_pAddDBPB;
+    VclPtr<PushButton>         m_pAddDBPB;
 
-    VclContainer*       m_pCondition;
-    ConditionEdit*      m_pConditionED;
-    VclContainer*       m_pValue;
-    Edit*               m_pValueED;
-    RadioButton*        m_pDBFormatRB;
-    RadioButton*        m_pNewFormatRB;
-    NumFormatListBox*   m_pNumFormatLB;
-    ListBox*            m_pFormatLB;
-    VclContainer*       m_pFormat;
+    VclPtr<VclContainer>       m_pCondition;
+    VclPtr<ConditionEdit>      m_pConditionED;
+    VclPtr<VclContainer>       m_pValue;
+    VclPtr<Edit>               m_pValueED;
+    VclPtr<RadioButton>        m_pDBFormatRB;
+    VclPtr<RadioButton>        m_pNewFormatRB;
+    VclPtr<NumFormatListBox>   m_pNumFormatLB;
+    VclPtr<ListBox>            m_pFormatLB;
+    VclPtr<VclContainer>       m_pFormat;
 
     OUString            m_sOldDBName;
     OUString            m_sOldTableName;
@@ -71,6 +71,7 @@ public:
                         SwFldDBPage(vcl::Window* pParent, const SfxItemSet& rSet);
 
                         virtual ~SwFldDBPage();
+    virtual void        dispose() SAL_OVERRIDE;
 
     static SfxTabPage*  Create(vcl::Window* pParent, const SfxItemSet* rAttrSet);
 

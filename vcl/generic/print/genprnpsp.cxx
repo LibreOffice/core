@@ -91,16 +91,24 @@ namespace
     class QueryString : public ModalDialog
     {
     private:
-        OKButton*    m_pOKButton;
-        FixedText*   m_pFixedText;
-        Edit*        m_pEdit;
-        OUString&    m_rReturnValue;
+        VclPtr<OKButton>    m_pOKButton;
+        VclPtr<FixedText>   m_pFixedText;
+        VclPtr<Edit>        m_pEdit;
+        OUString&           m_rReturnValue;
 
         DECL_LINK( ClickBtnHdl, Button* );
 
     public:
         // parent window, Query text, initial value
         QueryString(vcl::Window*, OUString &, OUString &);
+        virtual ~QueryString() { dispose(); }
+        virtual void dispose() SAL_OVERRIDE
+        {
+            m_pOKButton.clear();
+            m_pFixedText.clear();
+            m_pEdit.clear();
+            ModalDialog::dispose();
+        }
     };
 
     /*

@@ -146,12 +146,12 @@ protected:
 
 private:
     // child window
-    DialogWindow* pChild;
+    VclPtr<DialogWindow> pChild;
     // dockable windows:
     // object catalog (owned by Shell)
     ObjectCatalog& rObjectCatalog;
     // property browser (created by this, deleted by toolkit)
-    PropBrw* pPropertyBrowser;
+    VclPtr<PropBrw> pPropertyBrowser;
 
 private:
     void AddPropertyBrowser ();

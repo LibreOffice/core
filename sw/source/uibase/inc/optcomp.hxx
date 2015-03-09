@@ -34,10 +34,10 @@ class SwCompatibilityOptPage : public SfxTabPage
 {
 private:
     // controls
-    VclFrame*               m_pMain;
-    ListBox*                m_pFormattingLB;
-    SvxCheckListBox*        m_pOptionsLB;
-    PushButton*             m_pDefaultPB;
+    VclPtr<VclFrame>               m_pMain;
+    VclPtr<ListBox>                m_pFormattingLB;
+    VclPtr<SvxCheckListBox>        m_pOptionsLB;
+    VclPtr<PushButton>             m_pDefaultPB;
     // config item
     SvtCompatibilityOptions m_aConfigItem;
     // text of the user entry

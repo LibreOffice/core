@@ -23,6 +23,7 @@
 #include <tools/errinf.hxx>
 #include <rtl/strbuf.hxx>
 #include <osl/diagnose.h>
+#include <vcl/window.hxx>
 
 class ErrorHandler;
 

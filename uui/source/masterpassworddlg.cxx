@@ -56,4 +56,16 @@ MasterPasswordDialog::MasterPasswordDialog
     m_pOKBtn->SetClickHdl( LINK( this, MasterPasswordDialog, OKHdl_Impl ) );
 };
 
+MasterPasswordDialog::~MasterPasswordDialog()
+{
+    dispose();
+}
+
+void MasterPasswordDialog::dispose()
+{
+    m_pEDMasterPassword.clear();
+    m_pOKBtn.clear();
+    ModalDialog::dispose();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

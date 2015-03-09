@@ -70,7 +70,10 @@ ScNamePasteDlg::~ScNamePasteDlg()
 
 void ScNamePasteDlg::dispose()
 {
-    delete mpTable;
+    m_pBtnPasteAll.clear();
+    m_pBtnPaste.clear();
+    m_pBtnClose.clear();
+    mpTable.clear();
     ModalDialog::dispose();
 }
 

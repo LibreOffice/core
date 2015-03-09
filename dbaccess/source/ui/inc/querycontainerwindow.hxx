@@ -42,8 +42,8 @@ namespace dbaui
     class OQueryContainerWindow : public ODataView
     {
         OQueryViewSwitch*   m_pViewSwitch;
-        OBeamer*            m_pBeamer;
-        Splitter*           m_pSplitter;
+        VclPtr<OBeamer>     m_pBeamer;
+        VclPtr<Splitter>    m_pSplitter;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame2 > m_xBeamer;
 
         DECL_LINK( SplitHdl, void* );

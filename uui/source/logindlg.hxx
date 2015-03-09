@@ -43,21 +43,21 @@
 
 class LoginDialog : public ModalDialog
 {
-    FixedText*      m_pErrorFT;
-    FixedText*      m_pErrorInfo;
-    FixedText*      m_pRequestInfo;
-    FixedText*      m_pPathFT;
-    Edit*           m_pPathED;
-    PushButton*     m_pPathBtn;
-    FixedText*      m_pNameFT;
-    Edit*           m_pNameED;
-    FixedText*      m_pPasswordFT;
-    Edit*           m_pPasswordED;
-    FixedText*      m_pAccountFT;
-    Edit*           m_pAccountED;
-    CheckBox*       m_pSavePasswdBtn;
-    CheckBox*       m_pUseSysCredsCB;
-    OKButton*       m_pOKBtn;
+    VclPtr<FixedText>      m_pErrorFT;
+    VclPtr<FixedText>      m_pErrorInfo;
+    VclPtr<FixedText>      m_pRequestInfo;
+    VclPtr<FixedText>      m_pPathFT;
+    VclPtr<Edit>           m_pPathED;
+    VclPtr<PushButton>     m_pPathBtn;
+    VclPtr<FixedText>      m_pNameFT;
+    VclPtr<Edit>           m_pNameED;
+    VclPtr<FixedText>      m_pPasswordFT;
+    VclPtr<Edit>           m_pPasswordED;
+    VclPtr<FixedText>      m_pAccountFT;
+    VclPtr<Edit>           m_pAccountED;
+    VclPtr<CheckBox>       m_pSavePasswdBtn;
+    VclPtr<CheckBox>       m_pUseSysCredsCB;
+    VclPtr<OKButton>       m_pOKBtn;
 
     void            HideControls_Impl( sal_uInt16 nFlags );
     void            EnableUseSysCredsControls_Impl( bool bUseSysCredsEnabled );
@@ -69,6 +69,8 @@ class LoginDialog : public ModalDialog
 public:
     LoginDialog(vcl::Window* pParent, sal_uInt16 nFlags,
         const OUString& rServer, const OUString &rRealm);
+    virtual ~LoginDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     OUString        GetPath() const                             { return m_pPathED->GetText(); }
     void            SetPath( const OUString& rNewPath )           { m_pPathED->SetText( rNewPath ); }

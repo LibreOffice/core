@@ -32,6 +32,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <tools/diagnose_ex.h>
+#include <dbaccess/dataview.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 

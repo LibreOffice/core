@@ -43,6 +43,7 @@ public:
                              double         fMax,
                              sal_uInt16     nPossDir );
             virtual ~ScFillSeriesDlg();
+    virtual void dispose() SAL_OVERRIDE;
 
     FillDir     GetFillDir() const          { return theFillDir; }
     FillCmd     GetFillCmd() const          { return theFillCmd; }
@@ -56,32 +57,32 @@ public:
     void SetEdStartValEnabled(bool bFlag = false);
 
 private:
-    FixedText* m_pFtStartVal;
-    Edit* m_pEdStartVal;
+    VclPtr<FixedText> m_pFtStartVal;
+    VclPtr<Edit> m_pEdStartVal;
     const OUString aStartStrVal;
 
-    FixedText* m_pFtEndVal;
-    Edit* m_pEdEndVal;
+    VclPtr<FixedText> m_pFtEndVal;
+    VclPtr<Edit> m_pEdEndVal;
 
-    FixedText* m_pFtIncrement;
-    Edit* m_pEdIncrement;
-    RadioButton* m_pBtnDown;
-    RadioButton* m_pBtnRight;
-    RadioButton* m_pBtnUp;
-    RadioButton* m_pBtnLeft;
+    VclPtr<FixedText> m_pFtIncrement;
+    VclPtr<Edit> m_pEdIncrement;
+    VclPtr<RadioButton> m_pBtnDown;
+    VclPtr<RadioButton> m_pBtnRight;
+    VclPtr<RadioButton> m_pBtnUp;
+    VclPtr<RadioButton> m_pBtnLeft;
 
-    RadioButton* m_pBtnArithmetic;
-    RadioButton* m_pBtnGeometric;
-    RadioButton* m_pBtnDate;
-    RadioButton* m_pBtnAutoFill;
+    VclPtr<RadioButton> m_pBtnArithmetic;
+    VclPtr<RadioButton> m_pBtnGeometric;
+    VclPtr<RadioButton> m_pBtnDate;
+    VclPtr<RadioButton> m_pBtnAutoFill;
 
-    FixedText* m_pFtTimeUnit;
-    RadioButton* m_pBtnDay;
-    RadioButton* m_pBtnDayOfWeek;
-    RadioButton* m_pBtnMonth;
-    RadioButton* m_pBtnYear;
+    VclPtr<FixedText> m_pFtTimeUnit;
+    VclPtr<RadioButton> m_pBtnDay;
+    VclPtr<RadioButton> m_pBtnDayOfWeek;
+    VclPtr<RadioButton> m_pBtnMonth;
+    VclPtr<RadioButton> m_pBtnYear;
 
-    OKButton* m_pBtnOk;
+    VclPtr<OKButton> m_pBtnOk;
 
     const OUString aErrMsgInvalidVal;
 

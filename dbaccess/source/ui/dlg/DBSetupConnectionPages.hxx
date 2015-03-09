@@ -42,9 +42,11 @@ namespace dbaui
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) SAL_OVERRIDE;
         static  OGenericAdministrationPage* CreateSpreadSheetTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
         OSpreadSheetConnectionPageSetup(vcl::Window* pParent, const SfxItemSet& _rCoreAttrs);
+        virtual ~OSpreadSheetConnectionPageSetup();
+        virtual void dispose() SAL_OVERRIDE;
 
     protected:
-        CheckBox *m_pPasswordrequired;
+        VclPtr<CheckBox> m_pPasswordrequired;
 
     protected:
         virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) SAL_OVERRIDE;
@@ -57,15 +59,14 @@ namespace dbaui
     class OTextConnectionPageSetup : public OConnectionTabPageSetup
     {
     public:
-        virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) SAL_OVERRIDE;
-           static   OGenericAdministrationPage* CreateTextTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
-        OTextConnectionPageSetup( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs );
-        OTextConnectionHelper*  m_pTextConnectionHelper;
-    private:
+        VclPtr<OTextConnectionHelper>  m_pTextConnectionHelper;
 
-    protected:
+        virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) SAL_OVERRIDE;
+        static   OGenericAdministrationPage* CreateTextTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
+        OTextConnectionPageSetup( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs );
         virtual ~OTextConnectionPageSetup();
         virtual void dispose() SAL_OVERRIDE;
+    protected:
         virtual bool prepareLeave() SAL_OVERRIDE;
         virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) SAL_OVERRIDE;
         virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
@@ -83,6 +84,8 @@ namespace dbaui
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) SAL_OVERRIDE;
         static  OGenericAdministrationPage* CreateLDAPTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
         OLDAPConnectionPageSetup( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs );
+        virtual ~OLDAPConnectionPageSetup();
+        virtual void dispose() SAL_OVERRIDE;
         virtual Link getControlModifiedLink() SAL_OVERRIDE { return LINK(this, OLDAPConnectionPageSetup, OnEditModified); }
 
     protected:
@@ -92,22 +95,22 @@ namespace dbaui
         DECL_LINK(OnEditModified,Edit*);
 
     private:
-        FixedText*          m_pFTHelpText;
-        FixedText*          m_pFTHostServer;
-        Edit*               m_pETHostServer;
-        FixedText*          m_pFTBaseDN;
-        Edit*               m_pETBaseDN;
-        FixedText*          m_pFTPortNumber;
-        NumericField*       m_pNFPortNumber;
-        FixedText*          m_pFTDefaultPortNumber;
-        CheckBox*           m_pCBUseSSL;
+        VclPtr<FixedText>          m_pFTHelpText;
+        VclPtr<FixedText>          m_pFTHostServer;
+        VclPtr<Edit>               m_pETHostServer;
+        VclPtr<FixedText>          m_pFTBaseDN;
+        VclPtr<Edit>               m_pETBaseDN;
+        VclPtr<FixedText>          m_pFTPortNumber;
+        VclPtr<NumericField>       m_pNFPortNumber;
+        VclPtr<FixedText>          m_pFTDefaultPortNumber;
+        VclPtr<CheckBox>           m_pCBUseSSL;
     };
 
     // MySQLNativeSetupPage
     class MySQLNativeSetupPage : public OGenericAdministrationPage
     {
     private:
-        FixedText           *m_pHelpText;
+        VclPtr<FixedText>          m_pHelpText;
         VclPtr<MySQLNativeSettings> m_aMySQLSettings;
 
     public:
@@ -141,6 +144,8 @@ namespace dbaui
                                         , sal_uInt16 _nHelpTextResId
                                         , sal_uInt16 _nHeaderTextResId
                                         , sal_uInt16 _nDriverClassId );
+        virtual ~OGeneralSpecialJDBCConnectionPageSetup();
+        virtual void dispose() SAL_OVERRIDE;
     static  OGenericAdministrationPage* CreateMySQLJDBCTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
     static  OGenericAdministrationPage* CreateOracleJDBCTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
 
@@ -153,19 +158,19 @@ namespace dbaui
 
         DECL_LINK(OnTestJavaClickHdl,PushButton*);
         DECL_LINK(OnEditModified,Edit*);
-        FixedText*          m_pHeaderText;
-        FixedText*          m_pFTHelpText;
-        FixedText*          m_pFTDatabasename;
-        Edit*               m_pETDatabasename;
-        FixedText*          m_pFTHostname;
-        Edit*               m_pETHostname;
-        FixedText*          m_pFTPortNumber;
-        FixedText*          m_pFTDefaultPortNumber;
-        NumericField*       m_pNFPortNumber;
+        VclPtr<FixedText>          m_pHeaderText;
+        VclPtr<FixedText>          m_pFTHelpText;
+        VclPtr<FixedText>          m_pFTDatabasename;
+        VclPtr<Edit>               m_pETDatabasename;
+        VclPtr<FixedText>          m_pFTHostname;
+        VclPtr<Edit>               m_pETHostname;
+        VclPtr<FixedText>          m_pFTPortNumber;
+        VclPtr<FixedText>          m_pFTDefaultPortNumber;
+        VclPtr<NumericField>       m_pNFPortNumber;
 
-        FixedText*          m_pFTDriverClass;
-        Edit*               m_pETDriverClass;
-        PushButton*         m_pPBTestJavaDriver;
+        VclPtr<FixedText>          m_pFTDriverClass;
+        VclPtr<Edit>               m_pETDriverClass;
+        VclPtr<PushButton>         m_pPBTestJavaDriver;
 
         OUString              m_sDefaultJdbcDriverName;
         sal_uInt16              m_nPortId;
@@ -176,6 +181,8 @@ namespace dbaui
     {
     public:
                 OJDBCConnectionPageSetup( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs );
+        virtual ~OJDBCConnectionPageSetup();
+        virtual void dispose() SAL_OVERRIDE;
         static  OGenericAdministrationPage* CreateJDBCTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
 
     protected:
@@ -188,9 +195,9 @@ namespace dbaui
 
         DECL_LINK(OnTestJavaClickHdl,PushButton*);
         DECL_LINK(OnEditModified,Edit*);
-        FixedText*          m_pFTDriverClass;
-        Edit*               m_pETDriverClass;
-        PushButton*         m_pPBTestJavaDriver;
+        VclPtr<FixedText>          m_pFTDriverClass;
+        VclPtr<Edit>               m_pETDriverClass;
+        VclPtr<PushButton>         m_pPBTestJavaDriver;
     };
 
     // OJDBCConnectionPageSetup
@@ -205,6 +212,8 @@ namespace dbaui
         };
 
         OMySQLIntroPageSetup( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs);
+        virtual ~OMySQLIntroPageSetup();
+        virtual void dispose() SAL_OVERRIDE;
 
         static OMySQLIntroPageSetup*    CreateMySQLIntroTabPage( vcl::Window* _pParent, const SfxItemSet& _rAttrSet );
         ConnectionType      getMySQLMode();
@@ -220,9 +229,9 @@ namespace dbaui
         virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
 
     private:
-        RadioButton         *m_pODBCDatabase;
-        RadioButton         *m_pJDBCDatabase;
-        RadioButton         *m_pNATIVEDatabase;
+        VclPtr<RadioButton>         m_pODBCDatabase;
+        VclPtr<RadioButton>         m_pJDBCDatabase;
+        VclPtr<RadioButton>         m_pNATIVEDatabase;
 
         DECL_LINK(OnSetupModeSelected, RadioButton*);
 
@@ -235,13 +244,15 @@ namespace dbaui
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) SAL_OVERRIDE;
         static  OGenericAdministrationPage* CreateAuthentificationTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
         OAuthentificationPageSetup(vcl::Window* pParent, const SfxItemSet& _rCoreAttrs);
+        virtual ~OAuthentificationPageSetup();
+        virtual void dispose() SAL_OVERRIDE;
 
     protected:
-        FixedText*  m_pFTHelpText;
-        FixedText*  m_pFTUserName;
-        Edit*       m_pETUserName;
-        CheckBox*   m_pCBPasswordRequired;
-        PushButton* m_pPBTestConnection;
+        VclPtr<FixedText>  m_pFTHelpText;
+        VclPtr<FixedText>  m_pFTUserName;
+        VclPtr<Edit>       m_pETUserName;
+        VclPtr<CheckBox>   m_pCBPasswordRequired;
+        VclPtr<PushButton> m_pPBTestConnection;
 
     protected:
         virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) SAL_OVERRIDE;
@@ -256,16 +267,18 @@ namespace dbaui
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) SAL_OVERRIDE;
            static   OGenericAdministrationPage* CreateFinalDBTabPageSetup( vcl::Window* pParent, const SfxItemSet& _rAttrSet);
 
-        FixedText*   m_pFTFinalHeader;
-        FixedText*   m_pFTFinalHelpText;
-        RadioButton* m_pRBRegisterDataSource;
-        RadioButton* m_pRBDontregisterDataSource;
-        FixedText*   m_pFTAdditionalSettings;
-        CheckBox*    m_pCBOpenAfterwards;
-        CheckBox*    m_pCBStartTableWizard;
-        FixedText*   m_pFTFinalText;
+        VclPtr<FixedText>   m_pFTFinalHeader;
+        VclPtr<FixedText>   m_pFTFinalHelpText;
+        VclPtr<RadioButton> m_pRBRegisterDataSource;
+        VclPtr<RadioButton> m_pRBDontregisterDataSource;
+        VclPtr<FixedText>   m_pFTAdditionalSettings;
+        VclPtr<CheckBox>    m_pCBOpenAfterwards;
+        VclPtr<CheckBox>    m_pCBStartTableWizard;
+        VclPtr<FixedText>   m_pFTFinalText;
 
         OFinalDBPageSetup(vcl::Window* pParent, const SfxItemSet& _rCoreAttrs);
+        virtual ~OFinalDBPageSetup();
+        virtual void dispose() SAL_OVERRIDE;
         bool IsDatabaseDocumentToBeRegistered();
         bool IsDatabaseDocumentToBeOpened();
         bool IsTableWizardToBeStarted();

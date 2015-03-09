@@ -58,9 +58,8 @@ void DBTreeView::dispose()
             m_pTreeListBox->GetModel()->RemoveView(m_pTreeListBox);
             m_pTreeListBox->DisconnectFromModel();
         }
-        boost::scoped_ptr<vcl::Window> aTemp(m_pTreeListBox);
-        m_pTreeListBox = NULL;
     }
+    m_pTreeListBox.clear();
     vcl::Window::dispose();
 }
 

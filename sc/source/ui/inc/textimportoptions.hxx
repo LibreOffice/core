@@ -31,7 +31,7 @@ class ScTextImportOptionsDlg : public ModalDialog
 public:
     ScTextImportOptionsDlg(vcl::Window* pParent);
     virtual ~ScTextImportOptionsDlg();
-
+    virtual void dispose() SAL_OVERRIDE;
     virtual short Execute() SAL_OVERRIDE;
 
     LanguageType getLanguageType() const;
@@ -41,14 +41,14 @@ private:
     void init();
 
 private:
-    OKButton*       m_pBtnOk;
+    VclPtr<OKButton>       m_pBtnOk;
 
-    RadioButton*    m_pRbAutomatic;
-    RadioButton*    m_pRbCustom;
+    VclPtr<RadioButton>    m_pRbAutomatic;
+    VclPtr<RadioButton>    m_pRbCustom;
 
-    SvxLanguageBox* m_pLbCustomLang;
+    VclPtr<SvxLanguageBox> m_pLbCustomLang;
 
-    CheckBox*       m_pBtnConvertDate;
+    VclPtr<CheckBox>       m_pBtnConvertDate;
 
     DECL_LINK(OKHdl, void *);
 

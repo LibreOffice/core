@@ -115,7 +115,7 @@ void ODBTypeWizDialogSetup::executedDialog(sal_Int16 _nExecutionResult)
 {
     if ( _nExecutionResult == RET_OK )
     {
-        const ODbTypeWizDialogSetup* pDialog = static_cast< ODbTypeWizDialogSetup* >( m_pDialog );
+        const ODbTypeWizDialogSetup* pDialog = static_cast< ODbTypeWizDialogSetup* >( m_pDialog.get() );
         m_bOpenDatabase = pDialog->IsDatabaseDocumentToBeOpened();
         m_bStartTableWizard = pDialog->IsTableWizardToBeStarted();
     }

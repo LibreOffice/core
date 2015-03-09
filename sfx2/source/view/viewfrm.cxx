@@ -1369,7 +1369,7 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                     SfxInfoBarWindow* pInfoBar = AppendInfoBar("readonly", SfxResId(STR_READONLY_DOCUMENT));
                     if (pInfoBar)
                     {
-                        PushButton* pBtn = new PushButton( &GetWindow(), SfxResId(BT_READONLY_EDIT));
+                        VclPtrInstance<PushButton> pBtn( &GetWindow(), SfxResId(BT_READONLY_EDIT));
                         pBtn->SetClickHdl(LINK(this, SfxViewFrame, SwitchReadOnlyHandler));
                         pInfoBar->addButton(pBtn);
                     }
@@ -1489,7 +1489,7 @@ SfxViewFrame::~SfxViewFrame()
         // The Bindings delete the Frame!
         KillDispatcher_Impl();
 
-    delete pImp->pWindow;
+    pImp->pWindow.clear();
 
     if ( GetFrame().GetCurrentViewFrame() == this )
         GetFrame().SetCurrentViewFrame_Impl( NULL );

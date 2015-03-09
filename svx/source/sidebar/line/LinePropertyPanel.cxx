@@ -192,6 +192,29 @@ LinePropertyPanel::LinePropertyPanel(
     Initialize();
 }
 
+LinePropertyPanel::~LinePropertyPanel()
+{
+    dispose();
+}
+
+void LinePropertyPanel::dispose()
+{
+    mpFTWidth.clear();
+    mpTBWidth.clear();
+    mpFTStyle.clear();
+    mpLBStyle.clear();
+    mpFTTrancparency.clear();
+    mpMFTransparent.clear();
+    mpFTArrow.clear();
+    mpLBStart.clear();
+    mpLBEnd.clear();
+    mpFTEdgeStyle.clear();
+    mpLBEdgeStyle.clear();
+    mpFTCapStyle.clear();
+    mpLBCapStyle.clear();
+    PanelLayout::dispose();
+}
+
 void LinePropertyPanel::Initialize()
 {
     mpIMGWidthIcon.reset(new Image[8]);

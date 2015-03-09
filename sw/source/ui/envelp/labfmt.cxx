@@ -353,7 +353,28 @@ SwLabFmtPage::SwLabFmtPage(vcl::Window* pParent, const SfxItemSet& rSet)
 
 SwLabFmtPage::~SwLabFmtPage()
 {
+    dispose();
 }
+
+void SwLabFmtPage::dispose()
+{
+    m_pMakeFI.clear();
+    m_pTypeFI.clear();
+    m_pPreview.clear();
+    m_pHDistField.clear();
+    m_pVDistField.clear();
+    m_pWidthField.clear();
+    m_pHeightField.clear();
+    m_pLeftField.clear();
+    m_pUpperField.clear();
+    m_pColsField.clear();
+    m_pRowsField.clear();
+    m_pPWidthField.clear();
+    m_pPHeightField.clear();
+    m_pSavePB.clear();
+    SfxTabPage::dispose();
+}
+
 
 // Modify-handler of MetricFields. start preview timer
 IMPL_LINK_NOARG_INLINE_START(SwLabFmtPage, ModifyHdl)
@@ -598,6 +619,20 @@ SwSaveLabelDlg::SwSaveLabelDlg(SwLabFmtPage* pParent, SwLabRec& rRec)
     {
         m_pMakeCB->InsertEntry(rMan[i]);
     }
+}
+
+SwSaveLabelDlg::~SwSaveLabelDlg()
+{
+    dispose();
+}
+
+void SwSaveLabelDlg::dispose()
+{
+    m_pMakeCB.clear();
+    m_pTypeED.clear();
+    m_pOKPB.clear();
+    pLabPage.clear();
+    ModalDialog::dispose();
 }
 
 IMPL_LINK_NOARG(SwSaveLabelDlg, OkHdl)

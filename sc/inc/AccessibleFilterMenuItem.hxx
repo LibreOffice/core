@@ -24,6 +24,7 @@
 #include <cppuhelper/implbase1.hxx>
 
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
+#include <vcl/vclptr.hxx>
 
 class ScMenuFloatingWindow;
 
@@ -104,7 +105,7 @@ private:
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleStateSet > mxStateSet;
 
-    ScMenuFloatingWindow* mpWindow;
+    VclPtr<ScMenuFloatingWindow> mpWindow;
     size_t mnMenuPos;
     bool mbEnabled;
 };

@@ -33,8 +33,8 @@ namespace dbaui
     class OTableBorderWindow : public vcl::Window
     {
         VclPtr<Splitter>                    m_aHorzSplitter;
-        OTableFieldDescWin*                 m_pFieldDescWin;
-        OTableEditorCtrl*                   m_pEditorCtrl;
+        VclPtr<OTableFieldDescWin>          m_pFieldDescWin;
+        VclPtr<OTableEditorCtrl>            m_pEditorCtrl;
 
         void ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
         void ArrangeChildren( long nSplitPos ,Rectangle& rRect);
@@ -63,7 +63,7 @@ namespace dbaui
         };
     private:
         ::com::sun::star::lang::Locale      m_aLocale;
-        OTableBorderWindow*                 m_pWin;
+        VclPtr<OTableBorderWindow>          m_pWin;
         OTableController&                   m_rController;
         ChildFocusState                     m_eChildFocus;
 

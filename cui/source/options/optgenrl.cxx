@@ -166,7 +166,7 @@ struct SvxGeneralTabPage::Row
     // which row is it?
     RowType eRow;
     // row label
-    FixedText* pLabel;
+    VclPtr<FixedText> pLabel;
     // first and last field in the row (last is exclusive)
     unsigned nFirstField, nLastField;
 
@@ -191,7 +191,7 @@ struct SvxGeneralTabPage::Field
     // which field is this? (in vFieldInfo[] above)
     unsigned iField;
     // edit box
-    Edit *pEdit;
+    VclPtr<Edit> pEdit;
 
 public:
     Field (Edit *pEdit_, unsigned iField_)
@@ -219,6 +219,16 @@ SvxGeneralTabPage::SvxGeneralTabPage(vcl::Window* pParent, const SfxItemSet& rCo
     SetLinks();
 }
 
+SvxGeneralTabPage::~SvxGeneralTabPage()
+{
+    dispose();
+}
+
+void SvxGeneralTabPage::dispose()
+{
+    m_pUseDataCB.clear();
+    SfxTabPage::dispose();
+}
 
 
 // Initializes the titles and the edit boxes,

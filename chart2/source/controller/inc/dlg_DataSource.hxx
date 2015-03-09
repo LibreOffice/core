@@ -68,11 +68,11 @@ protected:
     ::std::unique_ptr< DialogModel >                m_apDialogModel;
 
 private:
-    DataSourceTabControl* m_pTabControl;
-    OKButton*             m_pBtnOK;
+    VclPtr<DataSourceTabControl> m_pTabControl;
+    VclPtr<OKButton>             m_pBtnOK;
 
-    RangeChooserTabPage * m_pRangeChooserTabePage;
-    DataSourceTabPage *   m_pDataSourceTabPage;
+    VclPtr<RangeChooserTabPage> m_pRangeChooserTabePage;
+    VclPtr<DataSourceTabPage>   m_pDataSourceTabPage;
     bool                  m_bRangeChooserTabIsValid;
     bool                  m_bDataSourceTabIsValid;
 

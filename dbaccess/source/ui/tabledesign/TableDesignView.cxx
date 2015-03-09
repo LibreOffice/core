@@ -71,15 +71,8 @@ void OTableBorderWindow::dispose()
     //  ::dbaui::notifySystemWindow(this,m_pFieldDescWin,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
     m_pEditorCtrl->Hide();
     m_pFieldDescWin->Hide();
-
-    {
-        boost::scoped_ptr<vcl::Window> aTemp(m_pEditorCtrl);
-        m_pEditorCtrl = NULL;
-    }
-    {
-        boost::scoped_ptr<vcl::Window> aTemp(m_pFieldDescWin);
-        m_pFieldDescWin = NULL;
-    }
+    m_pEditorCtrl.clear();
+    m_pFieldDescWin.clear();
     m_aHorzSplitter.disposeAndClear();
     vcl::Window::dispose();
 }
@@ -202,11 +195,7 @@ OTableDesignView::~OTableDesignView()
 void OTableDesignView::dispose()
 {
     m_pWin->Hide();
-
-    {
-        boost::scoped_ptr<vcl::Window> aTemp(m_pWin);
-        m_pWin = NULL;
-    }
+    m_pWin.clear();
     ODataView::dispose();
 }
 

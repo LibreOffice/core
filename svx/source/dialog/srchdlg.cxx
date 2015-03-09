@@ -364,6 +364,48 @@ void SvxSearchDialog::dispose()
     delete pImpl;
     delete pSearchList;
     delete pReplaceList;
+    mpDocWin.clear();
+    m_pSearchFrame.clear();
+    m_pSearchLB.clear();
+    m_pSearchTmplLB.clear();
+    m_pSearchAttrText.clear();
+    m_pSearchLabel.clear();
+    m_pReplaceFrame.clear();
+    m_pReplaceLB.clear();
+    m_pReplaceTmplLB.clear();
+    m_pReplaceAttrText.clear();
+    m_pSearchBtn.clear();
+    m_pSearchAllBtn.clear();
+    m_pReplaceBtn.clear();
+    m_pReplaceAllBtn.clear();
+    m_pComponentFrame.clear();
+    m_pSearchComponent1PB.clear();
+    m_pSearchComponent2PB.clear();
+    m_pMatchCaseCB.clear();
+    m_pWordBtn.clear();
+    m_pCloseBtn.clear();
+    m_pIgnoreDiacritics.clear();
+    m_pIgnoreKashida.clear();
+    m_pSelectionBtn.clear();
+    m_pBackwardsBtn.clear();
+    m_pRegExpBtn.clear();
+    m_pSimilarityBox.clear();
+    m_pSimilarityBtn.clear();
+    m_pLayoutBtn.clear();
+    m_pNotesBtn.clear();
+    m_pJapMatchFullHalfWidthCB.clear();
+    m_pJapOptionsCB.clear();
+    m_pJapOptionsBtn.clear();
+    m_pAttributeBtn.clear();
+    m_pFormatBtn.clear();
+    m_pNoFormatBtn.clear();
+    m_pCalcGrid.clear();
+    m_pCalcSearchInFT.clear();
+    m_pCalcSearchInLB.clear();
+    m_pCalcSearchDirFT.clear();
+    m_pRowsBtn.clear();
+    m_pColumnsBtn.clear();
+    m_pAllSheetsCB.clear();
     SfxModelessDialog::dispose();
 }
 
@@ -2227,7 +2269,7 @@ SvxSearchDialogWrapper::SvxSearchDialogWrapper( vcl::Window* _pParent, sal_uInt1
     : SfxChildWindow( _pParent, nId )
     , dialog (new SvxSearchDialog (_pParent, this, *pBindings))
 {
-    pWindow = dialog;
+    pWindow = dialog.get();
     dialog->Initialize( pInfo );
 
     pBindings->Update( SID_SEARCH_ITEM );

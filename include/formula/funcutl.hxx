@@ -34,7 +34,7 @@ class FORMULA_DLLPUBLIC RefEdit : public Edit
 private:
     Idle                      aIdle;
     IControlReferenceHandler* pAnyRefDlg; // parent dialog
-    vcl::Window*                   pLabelWidget;
+    VclPtr<vcl::Window>       pLabelWidget;
 
     DECL_LINK( UpdateHdl, void* );
 
@@ -87,7 +87,7 @@ private:
     OUString                  aShrinkQuickHelp;
     OUString                  aExpandQuickHelp;
     IControlReferenceHandler* pAnyRefDlg;   // parent dialog
-    RefEdit*                  pRefEdit;     // zugeordnetes Edit-Control
+    VclPtr<RefEdit>                  pRefEdit;     // zugeordnetes Edit-Control
 
 protected:
     virtual void Click() SAL_OVERRIDE;
@@ -97,6 +97,8 @@ protected:
 
 public:
     RefButton(vcl::Window* _pParent, WinBits nStyle = 0);
+    virtual ~RefButton();
+    virtual void dispose() SAL_OVERRIDE;
     void SetReferences( IControlReferenceHandler* pDlg, RefEdit* pEdit );
     void SetStartImage();
     void SetEndImage();

@@ -62,7 +62,7 @@ PaneChildWindow::PaneChildWindow (
         pParentWindow,
         SD_RESSTR(nTitleBarResId));
     eChildAlignment = eAlignment;
-    static_cast<SfxDockingWindow*>(pWindow)->Initialize(pInfo);
+    static_cast<SfxDockingWindow*>(pWindow.get())->Initialize(pInfo);
     SetHideNotDelete(true);
 
     ViewShellBase* pBase = ViewShellBase::GetViewShellBase(pBindings->GetDispatcher()->GetFrame());
@@ -75,7 +75,7 @@ PaneChildWindow::PaneChildWindow (
 PaneChildWindow::~PaneChildWindow (void)
 {
     ViewShellBase* pBase = NULL;
-    PaneDockingWindow* pDockingWindow = dynamic_cast<PaneDockingWindow*>(pWindow);
+    PaneDockingWindow* pDockingWindow = dynamic_cast<PaneDockingWindow*>(pWindow.get());
     if (pDockingWindow != NULL)
         pBase = ViewShellBase::GetViewShellBase(
             pDockingWindow->GetBindings().GetDispatcher()->GetFrame());

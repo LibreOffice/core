@@ -41,7 +41,7 @@ SfxNavigatorWrapper::SfxNavigatorWrapper( vcl::Window* pParentWnd ,
     pWindow->SetHelpId ( HID_NAVIGATOR_WINDOW );
     pWindow->SetOutputSizePixel( Size( 270, 240 ) );
 
-    static_cast<SfxDockingWindow*>( pWindow )->Initialize( pInfo );
+    static_cast<SfxDockingWindow*>( pWindow.get() )->Initialize( pInfo );
     SetHideNotDelete( true );
 }
 

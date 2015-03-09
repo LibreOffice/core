@@ -78,8 +78,8 @@ public:
 struct TabEntry
 {
     sal_Int32           m_nIndex;
-    FwkTabPage*         m_pPage;
-    OUString     m_sPageURL;
+    VclPtr<FwkTabPage>  m_pPage;
+    OUString            m_sPageURL;
     css::uno::Reference< css::awt::XContainerWindowEventHandler > m_xEventHdl;
 
     TabEntry() :
@@ -87,8 +87,6 @@ struct TabEntry
 
     TabEntry( sal_Int32 nIndex, const OUString& sURL, const css::uno::Reference< css::awt::XContainerWindowEventHandler > & rEventHdl ) :
         m_nIndex( nIndex ), m_pPage( NULL ), m_sPageURL( sURL ), m_xEventHdl( rEventHdl ) {}
-
-    ~TabEntry() { delete m_pPage; }
 };
 
 typedef std::vector< TabEntry* > TabEntryList;

@@ -38,7 +38,7 @@ class VCL_DLLPUBLIC FixedText : public Control
 private:
     sal_Int32 m_nMaxWidthChars;
     sal_Int32 m_nMinWidthChars;
-    vcl::Window *m_pMnemonicWindow;
+    VclPtr<vcl::Window> m_pMnemonicWindow;
 
     using Control::ImplInitSettings;
     using Window::ImplInit;

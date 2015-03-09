@@ -37,10 +37,10 @@ class ImplWin;
 class VCL_DLLPUBLIC ListBox : public Control
 {
 private:
-    ImplListBox*                mpImplLB;
-    ImplListBoxFloatingWindow*  mpFloatWin;
-    ImplWin*                    mpImplWin;
-    ImplBtn*                    mpBtn;
+    VclPtr<ImplListBox>                mpImplLB;
+    VclPtr<ImplListBoxFloatingWindow>  mpFloatWin;
+    VclPtr<ImplWin>                    mpImplWin;
+    VclPtr<ImplBtn>                    mpBtn;
     sal_uInt16                  mnDDHeight;
     sal_Int32                   mnSaveValue;
     sal_Int32                   m_nMaxWidthChars;

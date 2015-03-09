@@ -33,8 +33,8 @@ namespace dbaui
     class OJoinDesignView : public ODataView
     {
     protected:
-        OScrollWindowHelper*    m_pScrollWindow;    // contains only the scrollbars
-        OJoinTableView*         m_pTableView;       // presents the upper window
+        VclPtr<OScrollWindowHelper>    m_pScrollWindow;    // contains only the scrollbars
+        VclPtr<OJoinTableView>         m_pTableView;       // presents the upper window
         OJoinController&        m_rController;
 
     public:

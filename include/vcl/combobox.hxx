@@ -36,9 +36,9 @@ class VCL_DLLPUBLIC ComboBox : public Edit
 {
 private:
     VclPtr<Edit>                mpSubEdit;
-    ImplListBox*                mpImplLB;
-    ImplBtn*                    mpBtn;
-    ImplListBoxFloatingWindow*  mpFloatWin;
+    VclPtr<ImplListBox>         mpImplLB;
+    VclPtr<ImplBtn>             mpBtn;
+    VclPtr<ImplListBoxFloatingWindow>  mpFloatWin;
     sal_uInt16                  mnDDHeight;
     sal_Unicode                 mcMultiSep;
     bool                        mbDDAutoSize        : 1;

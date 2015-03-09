@@ -37,13 +37,13 @@ class SvxColorWindow_Impl : public SfxPopupWindow
 
 private:
     const sal_uInt16    theSlotId;
-    SvxColorValueSet*   mpColorSet;
-    SvxColorValueSet*   mpRecentColorSet;
+    VclPtr<SvxColorValueSet>   mpColorSet;
+    VclPtr<SvxColorValueSet>   mpRecentColorSet;
 
-    ListBox*            mpPaletteListBox;
-    PushButton*         mpButtonAutoColor;
-    PushButton*         mpButtonPicker;
-    FixedLine*          mpAutomaticSeparator;
+    VclPtr<ListBox>     mpPaletteListBox;
+    VclPtr<PushButton>  mpButtonAutoColor;
+    VclPtr<PushButton>  mpButtonPicker;
+    VclPtr<FixedLine>   mpAutomaticSeparator;
     OUString            maCommand;
     Link                maSelectedLink;
 
@@ -67,6 +67,8 @@ public:
                          const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
                          const OUString& rWndTitle,
                          vcl::Window* pParentWindow);
+    virtual ~SvxColorWindow_Impl();
+    virtual void        dispose() SAL_OVERRIDE;
     void                StartSelection();
 
     virtual void        KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;

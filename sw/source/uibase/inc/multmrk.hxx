@@ -32,8 +32,8 @@ class SwTOXMgr;
 class SwMultiTOXMarkDlg : public SvxStandardDialog
 {
     DECL_LINK( SelectHdl, ListBox * );
-    FixedText*         m_pTextFT;
-    ListBox*           m_pTOXLB;
+    VclPtr<FixedText>         m_pTextFT;
+    VclPtr<ListBox>           m_pTOXLB;
 
     SwTOXMgr&          rMgr;
     sal_uInt16              nPos;
@@ -42,6 +42,7 @@ class SwMultiTOXMarkDlg : public SvxStandardDialog
 public:
     SwMultiTOXMarkDlg( vcl::Window* pParent, SwTOXMgr &rTOXMgr );
     virtual ~SwMultiTOXMarkDlg();
+    virtual void dispose() SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_SW_SOURCE_UIBASE_INC_MULTMRK_HXX

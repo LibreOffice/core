@@ -35,6 +35,7 @@
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/accessibletexthelper.hxx>
 #include <tools/gen.hxx>
+#include <vcl/vclptr.hxx>
 
 // forward
 
@@ -63,7 +64,7 @@ namespace accessibility
     {
     private:
         /** The treelistbox control */
-        SvtIconChoiceCtrl*                  m_pIconCtrl;
+        VclPtr<SvtIconChoiceCtrl>           m_pIconCtrl;
         sal_Int32                           m_nIndex;
 
     protected:

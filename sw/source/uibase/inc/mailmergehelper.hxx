@@ -142,7 +142,7 @@ class SW_DLLPUBLIC SwAuthenticator :
 {
     OUString m_aUserName;
     OUString m_aPassword;
-    vcl::Window*         m_pParentWindow;
+    VclPtr<vcl::Window>         m_pParentWindow;
 public:
     SwAuthenticator() : m_pParentWindow(0) {}
     SwAuthenticator(const OUString& username, const OUString& password, vcl::Window* pParent) :

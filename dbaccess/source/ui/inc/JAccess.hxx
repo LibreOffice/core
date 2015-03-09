@@ -21,6 +21,7 @@
 
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
 #include <cppuhelper/implbase1.hxx>
+#include <vcl/vclptr.hxx>
 
 namespace dbaui
 {
@@ -32,7 +33,7 @@ namespace dbaui
     */
     class OJoinDesignViewAccess     :   public VCLXAccessibleComponent, public OJoinDesignViewAccess_BASE
     {
-        OJoinTableView* m_pTableView; // the window which I should give accessibility to
+        VclPtr<OJoinTableView> m_pTableView; // the window which I should give accessibility to
 
     protected:
         /** isEditable returns the current editable state

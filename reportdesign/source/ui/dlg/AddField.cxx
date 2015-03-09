@@ -62,11 +62,12 @@ using namespace ::svx;
 
 class OAddFieldWindowListBox: public SvTreeListBox
 {
-    OAddFieldWindow*                    m_pTabWin;
+    VclPtr<OAddFieldWindow>                    m_pTabWin;
 
 public:
     OAddFieldWindowListBox( OAddFieldWindow* _pParent );
     virtual ~OAddFieldWindowListBox();
+    virtual void dispose() SAL_OVERRIDE;
 
     sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt ) SAL_OVERRIDE;
     sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt ) SAL_OVERRIDE;
@@ -113,8 +114,14 @@ OAddFieldWindowListBox::OAddFieldWindowListBox( OAddFieldWindow* _pParent )
 
 OAddFieldWindowListBox::~OAddFieldWindowListBox()
 {
+    dispose();
 }
 
+void OAddFieldWindowListBox::dispose()
+{
+    m_pTabWin.clear();
+    SvTreeListBox::dispose();
+}
 
 sal_Int8 OAddFieldWindowListBox::AcceptDrop( const AcceptDropEvent& /*rEvt*/ )
 {

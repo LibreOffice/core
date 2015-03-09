@@ -99,6 +99,11 @@ void SvxDefaultColorOptPage::dispose()
         delete pChartOptions;
         pChartOptions = NULL;
     }
+    m_pLbChartColors.clear();
+    m_pValSetColorBox.clear();
+    m_pPBDefault.clear();
+    m_pPBAdd.clear();
+    m_pPBRemove.clear();
     SfxTabPage::dispose();
 }
 

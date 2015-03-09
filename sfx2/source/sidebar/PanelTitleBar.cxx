@@ -51,11 +51,22 @@ PanelTitleBar::PanelTitleBar (
       msMoreOptionsCommand(),
       msAccessibleNamePrefix(SFX2_RESSTR(SFX_STR_SIDEBAR_ACCESSIBILITY_PANEL_PREFIX))
 {
-    OSL_ASSERT(mpPanel != NULL);
+    OSL_ASSERT(mpPanel != nullptr);
 
 #ifdef DEBUG
     SetText(OUString("PanelTitleBar"));
 #endif
+}
+
+PanelTitleBar::~PanelTitleBar()
+{
+    dispose();
+}
+
+void PanelTitleBar::dispose()
+{
+    mpPanel.clear();
+    TitleBar::dispose();
 }
 
 void PanelTitleBar::SetMoreOptionsCommand (
@@ -94,7 +105,7 @@ void PanelTitleBar::SetMoreOptionsCommand (
 
 Rectangle PanelTitleBar::GetTitleArea (const Rectangle& rTitleBarBox)
 {
-    if (mpPanel != NULL)
+    if (mpPanel != nullptr)
     {
         Image aImage (mpPanel->IsExpanded()
             ? Theme::GetImage(Theme::Image_Expand)
@@ -113,7 +124,7 @@ void PanelTitleBar::PaintDecoration (const Rectangle& rTitleBarBox)
 {
     (void)rTitleBarBox;
 
-    if (mpPanel != NULL)
+    if (mpPanel != nullptr)
     {
         Image aImage (mpPanel->IsExpanded()
             ? Theme::GetImage(Theme::Image_Collapse)
@@ -181,7 +192,7 @@ void PanelTitleBar::MouseButtonUp (const MouseEvent& rMouseEvent)
     {
         if (mbIsLeftButtonDown)
         {
-            if (mpPanel != NULL)
+            if (mpPanel != nullptr)
             {
                 mpPanel->SetExpanded( ! mpPanel->IsExpanded());
                 Invalidate();

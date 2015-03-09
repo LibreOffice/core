@@ -70,6 +70,20 @@ ODatasourceSelectDialog::ODatasourceSelectDialog(vcl::Window* _pParent, const St
     m_pDatasource->SetDoubleClickHdl(LINK(this,ODatasourceSelectDialog,ListDblClickHdl));
 }
 
+ODatasourceSelectDialog::~ODatasourceSelectDialog()
+{
+    dispose();
+}
+
+void ODatasourceSelectDialog::dispose()
+{
+    m_pDatasource.clear();
+    m_pOk.clear();
+    m_pCancel.clear();
+    ModalDialog::dispose();
+}
+
+
 IMPL_LINK( ODatasourceSelectDialog, ListDblClickHdl, ListBox *, pListBox )
 {
     if (pListBox->GetSelectEntryCount())

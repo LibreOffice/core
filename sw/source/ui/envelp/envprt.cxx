@@ -67,6 +67,23 @@ SwEnvPrtPage::SwEnvPrtPage(vcl::Window* pParent, const SfxItemSet& rSet)
     m_aIds[ENV_VER_RGHT] = m_pAlignBox->GetItemId("vertright");
 }
 
+SwEnvPrtPage::~SwEnvPrtPage()
+{
+    dispose();
+}
+
+void SwEnvPrtPage::dispose()
+{
+    m_pAlignBox.clear();
+    m_pTopButton.clear();
+    m_pBottomButton.clear();
+    m_pRightField.clear();
+    m_pDownField.clear();
+    m_pPrinterInfo.clear();
+    m_pPrtSetup.clear();
+    SfxTabPage::dispose();
+}
+
 IMPL_LINK_NOARG(SwEnvPrtPage, ClickHdl)
 {
     if (m_pBottomButton->IsChecked())

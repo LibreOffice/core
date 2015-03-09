@@ -1133,12 +1133,11 @@ public:
             }
         }
     }
-    std::vector<vcl::Window *> maInvalidates;
+    std::vector<VclPtr<vcl::Window> > maInvalidates;
     void addInvalidate(vcl::Window *pWindow) { maInvalidates.push_back(pWindow); };
     void removeInvalidate(vcl::Window *pWindow)
     {
-        std::vector<vcl::Window *>::iterator aIt;
-        for (aIt = maInvalidates.begin(); aIt != maInvalidates.end(); ++aIt)
+        for (auto aIt = maInvalidates.begin(); aIt != maInvalidates.end(); ++aIt)
         {
             if (*aIt == pWindow)
             {
@@ -1450,9 +1449,9 @@ public:
 
 class DemoWidgets : public WorkWindow
 {
-    VclBox     *mpBox;
-    ToolBox    *mpToolbox;
-    PushButton *mpButton;
+    VclPtr<VclBox> mpBox;
+    VclPtr<ToolBox> mpToolbox;
+    VclPtr<PushButton> mpButton;
 
 public:
     DemoWidgets() :
@@ -1481,6 +1480,14 @@ public:
         mpButton->Show();
 
         Show();
+    }
+    virtual ~DemoWidgets() { disposeOnce(); }
+    virtual void dispose() SAL_OVERRIDE
+    {
+        mpBox.disposeAndClear();
+        mpToolbox.disposeAndClear();
+        mpPushButton.disposeAndClear();
+        WorkWindow::dispose();
     }
     virtual void Paint(const Rectangle&) SAL_OVERRIDE
     {

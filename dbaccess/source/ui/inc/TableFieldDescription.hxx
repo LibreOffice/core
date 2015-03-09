@@ -25,6 +25,7 @@
 #include <rtl/ustring.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <rtl/ref.hxx>
+#include <vcl/vclptr.hxx>
 
 #include <salhelper/simplereferenceobject.hxx>
 
@@ -49,7 +50,7 @@ namespace dbaui
         OUString             m_aFieldAlias;  ///< column alias
         OUString             m_aFunctionName;///< contains the function name (only if m_eFunctionType != FKT_NONE)
 
-        vcl::Window*                     m_pTabWindow;
+        VclPtr<vcl::Window>         m_pTabWindow;
 
         sal_Int32                   m_eDataType;
         sal_Int32                   m_eFunctionType;

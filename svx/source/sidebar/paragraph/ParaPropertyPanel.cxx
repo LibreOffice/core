@@ -746,6 +746,26 @@ ParaPropertyPanel::ParaPropertyPanel(vcl::Window* pParent,
     m_aMetricCtl.RequestUpdate();
 }
 
+ParaPropertyPanel::~ParaPropertyPanel()
+{
+    dispose();
+}
+
+void ParaPropertyPanel::dispose()
+{
+    mpTBxVertAlign.clear();
+    mpTBxNumBullet.clear();
+    mpTBxBackColor.clear();
+    mpTopDist.clear();
+    mpBottomDist.clear();
+    mpTbxIndent_IncDec.clear();
+    mpTbxProDemote.clear();
+    mpLeftIndent.clear();
+    mpRightIndent.clear();
+    mpFLineIndent.clear();
+    PanelLayout::dispose();
+}
+
 } } // end of namespace svx::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

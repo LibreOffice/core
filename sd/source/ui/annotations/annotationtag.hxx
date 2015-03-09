@@ -85,7 +85,7 @@ private:
     const ::vcl::Font&                              mrFont;
     Size                                            maSize;
     ImplSVEvent *                                   mnClosePopupEvent;
-    vcl::Window*                                       mpListenWindow;
+    VclPtr<vcl::Window>                             mpListenWindow;
     Point                                           maMouseDownPos;
 };
 

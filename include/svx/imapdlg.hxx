@@ -82,14 +82,14 @@ class SVX_DLLPUBLIC SvxIMapDlg : public SfxModelessDialog // SfxFloatingWindow
     friend class IMapOwnData;
     friend class IMapWindow;
 
-    ToolBox             *m_pTbxIMapDlg1;
-    FixedText           *m_pFtURL;
-    SvtURLBox           *m_pURLBox;
-    FixedText           *m_pFtText;
-    Edit                *m_pEdtText;
-    FixedText           *m_pFtTarget;
-    ComboBox            *m_pCbbTarget;
-    StatusBar           *m_pStbStatus;
+    VclPtr<ToolBox>             m_pTbxIMapDlg1;
+    VclPtr<FixedText>           m_pFtURL;
+    VclPtr<SvtURLBox>           m_pURLBox;
+    VclPtr<FixedText>           m_pFtText;
+    VclPtr<Edit>                m_pEdtText;
+    VclPtr<FixedText>           m_pFtTarget;
+    VclPtr<ComboBox>            m_pCbbTarget;
+    VclPtr<StatusBar>           m_pStbStatus;
 
     sal_uInt16          mnApplyId;
     sal_uInt16          mnOpenId;
@@ -110,7 +110,7 @@ class SVX_DLLPUBLIC SvxIMapDlg : public SfxModelessDialog // SfxFloatingWindow
     sal_uInt16          mnPropertyId;
 
     Size                aLastSize;
-    IMapWindow*         pIMapWnd;
+    VclPtr<IMapWindow>         pIMapWnd;
     IMapOwnData*        pOwnData;
     void*               pCheckObj;
     SvxIMapDlgItem      aIMapItem;

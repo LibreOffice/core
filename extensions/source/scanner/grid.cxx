@@ -213,6 +213,20 @@ GridDialog::GridDialog(double* pXValues, double* pYValues, int nValues, vcl::Win
     m_pResetButton->SetClickHdl( LINK( this, GridDialog, ClickButtonHdl ) );
 }
 
+GridDialog::~GridDialog()
+{
+    dispose();
+}
+
+void GridDialog::dispose()
+{
+    m_pOKButton.clear();
+    m_pResetTypeBox.clear();
+    m_pResetButton.clear();
+    m_pGridWindow.clear();
+    ModalDialog::dispose();
+}
+
 GridWindow::~GridWindow()
 {
     dispose();

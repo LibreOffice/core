@@ -60,12 +60,12 @@ private:
     ::com::sun::star::uno::Reference<
                        ::com::sun::star::uno::XComponentContext>    m_xCC;
 
-    CheckBox*       m_pCbxShow;
+    VclPtr<CheckBox>       m_pCbxShow;
 
-    RadioButton*    m_pRbtLeft;
-    RadioButton*    m_pRbtRight;
-    RadioButton*    m_pRbtTop;
-    RadioButton*    m_pRbtBottom;
+    VclPtr<RadioButton>    m_pRbtLeft;
+    VclPtr<RadioButton>    m_pRbtRight;
+    VclPtr<RadioButton>    m_pRbtTop;
+    VclPtr<RadioButton>    m_pRbtBottom;
 
     Link            m_aChangeLink;
 };

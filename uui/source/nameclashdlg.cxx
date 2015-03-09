@@ -94,4 +94,19 @@ NameClashDialog::NameClashDialog( vcl::Window* pParent, ResMgr* pResMgr,
         m_pEDNewName->SetText( rClashingName );
 }
 
+NameClashDialog::~NameClashDialog()
+{
+    dispose();
+}
+
+void NameClashDialog::dispose()
+{
+    m_pFTMessage.clear();
+    m_pEDNewName.clear();
+    m_pBtnOverwrite.clear();
+    m_pBtnRename.clear();
+    m_pBtnCancel.clear();
+    ModalDialog::dispose();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

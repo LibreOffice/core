@@ -229,16 +229,19 @@ SvxMultiPathDialog::~SvxMultiPathDialog()
 
 void SvxMultiPathDialog::dispose()
 {
-    sal_uInt16 nPos = (sal_uInt16)m_pRadioLB->GetEntryCount();
-    while ( nPos-- )
+    if (m_pRadioLB)
     {
-        SvTreeListEntry* pEntry = m_pRadioLB->GetEntry( nPos );
-        delete static_cast<OUString*>(pEntry->GetUserData());
+        sal_uInt16 nPos = (sal_uInt16)m_pRadioLB->GetEntryCount();
+        while ( nPos-- )
+        {
+            SvTreeListEntry* pEntry = m_pRadioLB->GetEntry( nPos );
+            delete static_cast<OUString*>(pEntry->GetUserData());
+        }
     }
 
-    delete m_pRadioLB;
-    m_pRadioLB = NULL;
-
+    m_pRadioLB.clear();
+    m_pAddBtn.clear();
+    m_pDelBtn.clear();
     ModalDialog::dispose();
 }
 
@@ -254,8 +257,10 @@ void SvxPathSelectDialog::dispose()
         sal_uInt16 nPos = m_pPathLB->GetEntryCount();
         while ( nPos-- )
             delete static_cast<OUString*>(m_pPathLB->GetEntryData(nPos));
-        m_pPathLB = NULL;
     }
+    m_pPathLB.clear();
+    m_pAddBtn.clear();
+    m_pDelBtn.clear();
     ModalDialog::dispose();
 }
 

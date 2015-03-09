@@ -155,7 +155,7 @@ Dialog* SVGDialog::createDialog( vcl::Window* pParent )
 void SVGDialog::executedDialog( sal_Int16 nExecutionResult )
 {
     if( nExecutionResult && m_pDialog )
-        maFilterData = static_cast< ImpSVGDialog* >( m_pDialog )->GetFilterData();
+        maFilterData = static_cast< ImpSVGDialog* >( m_pDialog.get() )->GetFilterData();
 
     destroyDialog();
 }

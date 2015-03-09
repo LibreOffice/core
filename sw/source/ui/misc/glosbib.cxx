@@ -112,6 +112,18 @@ SwGlossaryGroupDlg::SwGlossaryGroupDlg(vcl::Window * pParent,
 
 SwGlossaryGroupDlg::~SwGlossaryGroupDlg()
 {
+    dispose();
+}
+
+void SwGlossaryGroupDlg::dispose()
+{
+    m_pNameED.clear();
+    m_pPathLB.clear();
+    m_pGroupTLB.clear();
+    m_pNewPB.clear();
+    m_pDelPB.clear();
+    m_pRenamePB.clear();
+    SvxStandardDialog::dispose();
 }
 
 void SwGlossaryGroupDlg::Apply()

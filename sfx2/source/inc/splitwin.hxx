@@ -31,9 +31,9 @@ class SfxEmptySplitWin_Impl;
 struct SfxDock_Impl
 {
     sal_uInt16        nType;
-    SfxDockingWindow* pWin;      // SplitWindow has this window
-    bool          bNewLine;
-    bool          bHide;     // SplitWindow had this window
+    VclPtr<SfxDockingWindow> pWin;      // SplitWindow has this window
+    bool              bNewLine;
+    bool              bHide;     // SplitWindow had this window
     long              nSize;
 };
 
@@ -49,8 +49,8 @@ private:
     SfxDockArr_Impl*    pDockArr;
     bool                bLocked;
     bool                bPinned;
-    SfxEmptySplitWin_Impl*  pEmptyWin;
-    SfxDockingWindow*   pActive;
+    VclPtr<SfxEmptySplitWin_Impl>  pEmptyWin;
+    VclPtr<SfxDockingWindow>       pActive;
 
     void                InsertWindow_Impl( SfxDock_Impl* pDockWin,
                             const Size& rSize,

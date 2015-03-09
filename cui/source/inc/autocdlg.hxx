@@ -43,8 +43,8 @@ namespace editeng { class SortedAutoCompleteStrings; }
 
 class OfaAutoCorrDlg : public SfxTabDialog
 {
-    VclContainer* m_pLanguageBox;
-    SvxLanguageBox*  m_pLanguageLB;
+    VclPtr<VclContainer> m_pLanguageBox;
+    VclPtr<SvxLanguageBox>  m_pLanguageLB;
 
     sal_uInt16 m_nReplacePageId;
     sal_uInt16 m_nExceptionsPageId;
@@ -53,6 +53,8 @@ class OfaAutoCorrDlg : public SfxTabDialog
 public:
 
     OfaAutoCorrDlg(vcl::Window* pParent, const SfxItemSet *pSet);
+    virtual ~OfaAutoCorrDlg();
+    virtual void dispose() SAL_OVERRIDE;
 
     void EnableLanguage(bool bEnable);
 };
@@ -94,7 +96,7 @@ class OfaAutocorrOptionsPage : public SfxTabPage
     using TabPage::ActivatePage;
 
 private:
-    SvxCheckListBox *m_pCheckLB;
+    VclPtr<SvxCheckListBox> m_pCheckLB;
 
     OUString m_sInput;
     OUString m_sDoubleCaps;
@@ -107,6 +109,8 @@ private:
 
 public:
     OfaAutocorrOptionsPage(vcl::Window* pParent, const SfxItemSet& rSet);
+    virtual ~OfaAutocorrOptionsPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     static SfxTabPage*  Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet);
@@ -123,8 +127,8 @@ class OfaSwAutoFmtOptionsPage : public SfxTabPage
 {
     using TabPage::ActivatePage;
 
-    OfaACorrCheckListBox*   m_pCheckLB;
-    PushButton*     m_pEditPB;
+    VclPtr<OfaACorrCheckListBox>   m_pCheckLB;
+    VclPtr<PushButton>     m_pEditPB;
 
     OUString        sDeleteEmptyPara;
     OUString        sUseReplaceTbl;
@@ -225,12 +229,12 @@ private:
 
         StringChangeTable aChangesTable;
 
-        CheckBox*       m_pTextOnlyCB;
-        AutoCorrEdit*   m_pShortED;
-        AutoCorrEdit*   m_pReplaceED;
-        SvTabListBox*   m_pReplaceTLB;
-        PushButton*     m_pNewReplacePB;
-        PushButton*     m_pDeleteReplacePB;
+        VclPtr<CheckBox>       m_pTextOnlyCB;
+        VclPtr<AutoCorrEdit>   m_pShortED;
+        VclPtr<AutoCorrEdit>   m_pReplaceED;
+        VclPtr<SvTabListBox>   m_pReplaceTLB;
+        VclPtr<PushButton>     m_pNewReplacePB;
+        VclPtr<PushButton>     m_pDeleteReplacePB;
 
         OUString        sModify;
         OUString        sNew;
@@ -291,17 +295,17 @@ class OfaAutocorrExceptPage : public SfxTabPage
     using TabPage::DeactivatePage;
 
 private:
-    AutoCorrEdit*   m_pAbbrevED;
-    ListBox*        m_pAbbrevLB;
-    PushButton*     m_pNewAbbrevPB;
-    PushButton*     m_pDelAbbrevPB;
-    CheckBox*       m_pAutoAbbrevCB;
+    VclPtr<AutoCorrEdit>   m_pAbbrevED;
+    VclPtr<ListBox>        m_pAbbrevLB;
+    VclPtr<PushButton>     m_pNewAbbrevPB;
+    VclPtr<PushButton>     m_pDelAbbrevPB;
+    VclPtr<CheckBox>       m_pAutoAbbrevCB;
 
-    AutoCorrEdit*   m_pDoubleCapsED;
-    ListBox*        m_pDoubleCapsLB;
-    PushButton*     m_pNewDoublePB;
-    PushButton*     m_pDelDoublePB;
-    CheckBox*       m_pAutoCapsCB;
+    VclPtr<AutoCorrEdit>   m_pDoubleCapsED;
+    VclPtr<ListBox>        m_pDoubleCapsLB;
+    VclPtr<PushButton>     m_pNewDoublePB;
+    VclPtr<PushButton>     m_pDelDoublePB;
+    VclPtr<CheckBox>       m_pAutoCapsCB;
 
     StringsTable    aStringsTable;
     CollatorWrapper* pCompareClass;
@@ -338,29 +342,29 @@ class OfaQuoteTabPage : public SfxTabPage
 
 private:
     /// For anything but writer
-    SvxCheckListBox* m_pCheckLB;
+    VclPtr<SvxCheckListBox> m_pCheckLB;
 
     /// Just for writer
-    OfaACorrCheckListBox*   m_pSwCheckLB;
+    VclPtr<OfaACorrCheckListBox>   m_pSwCheckLB;
 
     OUString        sNonBrkSpace;
     OUString        sOrdinal;
 
     SvLBoxButtonData*   pCheckButtonData;
 
-    CheckBox*   m_pSingleTypoCB;
-    PushButton* m_pSglStartQuotePB;
-    FixedText*  m_pSglStartExFT;
-    PushButton* m_pSglEndQuotePB;
-    FixedText*  m_pSglEndExFT;
-    PushButton* m_pSglStandardPB;
+    VclPtr<CheckBox>   m_pSingleTypoCB;
+    VclPtr<PushButton> m_pSglStartQuotePB;
+    VclPtr<FixedText>  m_pSglStartExFT;
+    VclPtr<PushButton> m_pSglEndQuotePB;
+    VclPtr<FixedText>  m_pSglEndExFT;
+    VclPtr<PushButton> m_pSglStandardPB;
 
-    CheckBox*   m_pDoubleTypoCB;
-    PushButton* m_pDblStartQuotePB;
-    FixedText*  m_pDblStartExFT;
-    PushButton* m_pDblEndQuotePB;
-    FixedText*  m_pDblEndExFT;
-    PushButton* m_pDblStandardPB;
+    VclPtr<CheckBox>   m_pDoubleTypoCB;
+    VclPtr<PushButton> m_pDblStartQuotePB;
+    VclPtr<FixedText>  m_pDblStartExFT;
+    VclPtr<PushButton> m_pDblEndQuotePB;
+    VclPtr<FixedText>  m_pDblEndExFT;
+    VclPtr<PushButton> m_pDblStandardPB;
 
     OUString    m_sStartQuoteDlg;
     OUString    m_sEndQuoteDlg;
@@ -401,31 +405,33 @@ class OfaAutoCompleteTabPage : public SfxTabPage
 public:
     class AutoCompleteMultiListBox : public MultiListBox
     {
-        OfaAutoCompleteTabPage* m_pPage;
+        VclPtr<OfaAutoCompleteTabPage> m_pPage;
     public:
         AutoCompleteMultiListBox(vcl::Window *pParent, WinBits nBits)
             : MultiListBox(pParent, nBits)
             , m_pPage(NULL)
         {
         }
+        virtual ~AutoCompleteMultiListBox();
+        virtual void dispose() SAL_OVERRIDE;
         void SetPage(OfaAutoCompleteTabPage *pPage) { m_pPage = pPage; }
         virtual bool PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
     };
 
 private:
     using TabPage::ActivatePage;
-    CheckBox*       m_pCBActiv; ///<Enable word completion
-    CheckBox*       m_pCBAppendSpace;///<Append space
-    CheckBox*       m_pCBAsTip; ///<Show as tip
+    VclPtr<CheckBox>       m_pCBActiv; ///<Enable word completion
+    VclPtr<CheckBox>       m_pCBAppendSpace;///<Append space
+    VclPtr<CheckBox>       m_pCBAsTip; ///<Show as tip
 
-    CheckBox*       m_pCBCollect;///<Collect words
-    CheckBox*       m_pCBRemoveList;///<...save the list for later use...
+    VclPtr<CheckBox>       m_pCBCollect;///<Collect words
+    VclPtr<CheckBox>       m_pCBRemoveList;///<...save the list for later use...
 
-    ListBox*        m_pDCBExpandKey;
-    NumericField*   m_pNFMinWordlen;
-    NumericField*   m_pNFMaxEntries;
-    AutoCompleteMultiListBox* m_pLBEntries;
-    PushButton*     m_pPBEntries;
+    VclPtr<ListBox>        m_pDCBExpandKey;
+    VclPtr<NumericField>   m_pNFMinWordlen;
+    VclPtr<NumericField>   m_pNFMaxEntries;
+    VclPtr<AutoCompleteMultiListBox> m_pLBEntries;
+    VclPtr<PushButton>     m_pPBEntries;
     editeng::SortedAutoCompleteStrings* m_pAutoCompleteList;
     sal_uInt16      m_nAutoCmpltListCnt;
 
@@ -434,6 +440,8 @@ private:
                         OfaAutoCompleteTabPage( vcl::Window* pParent,
                                                 const SfxItemSet& rSet );
 public:
+    virtual ~OfaAutoCompleteTabPage();
+    virtual void dispose() SAL_OVERRIDE;
     static SfxTabPage*  Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet);
 
@@ -458,9 +466,9 @@ class OfaSmartTagOptionsTabPage : public SfxTabPage
 private:
 
     // controls
-    CheckBox*               m_pMainCB;
-    SvxCheckListBox*        m_pSmartTagTypesLB;
-    PushButton*             m_pPropertiesPB;
+    VclPtr<CheckBox>               m_pMainCB;
+    VclPtr<SvxCheckListBox>        m_pSmartTagTypesLB;
+    VclPtr<PushButton>             m_pPropertiesPB;
 
     /// construction via Create()
     OfaSmartTagOptionsTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
@@ -498,6 +506,8 @@ private:
     DECL_LINK(SelectHdl, void *);
 
 public:
+    virtual ~OfaSmartTagOptionsTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet);
 

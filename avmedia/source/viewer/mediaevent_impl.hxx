@@ -26,6 +26,7 @@
 #include <com/sun/star/awt/XMouseListener.hpp>
 #include <com/sun/star/awt/XMouseMotionListener.hpp>
 #include <com/sun/star/awt/XFocusListener.hpp>
+#include <vcl/vclptr.hxx>
 
 namespace avmedia
 {
@@ -69,7 +70,7 @@ namespace avmedia
 
         private:
 
-            vcl::Window*                 mpNotifyWindow;
+            VclPtr<vcl::Window>     mpNotifyWindow;
             mutable ::osl::Mutex    maMutex;
         };
     }

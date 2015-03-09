@@ -38,11 +38,11 @@ protected:
 
 private:
 
-    PushButton*   mpBtnClose;
-    VclBox*      mpBox;
+    VclPtr<PushButton>   mpBtnClose;
+    VclPtr<VclBox>       mpBox;
 
-    vcl::Window *mpPreviewView;  // gets released when xWindows get destroyed (dont delete in constructor)
-    svtools::ODocumentInfoPreview *mpInfoView;
+    VclPtr<vcl::Window>  mpPreviewView;  // gets released when xWindows get destroyed (dont delete in constructor)
+    VclPtr<svtools::ODocumentInfoPreview> mpInfoView;
 
     ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame2 > m_xFrame;
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > xWindow;

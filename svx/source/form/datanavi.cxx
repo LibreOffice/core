@@ -148,6 +148,7 @@ namespace svxform
     void DataTreeListBox::dispose()
     {
         DeleteAndClear();
+        m_pXFormsPage.clear();
         SvTreeListBox::dispose();
     }
 
@@ -372,6 +373,19 @@ namespace svxform
         m_pItemList->SetStyle( m_pItemList->GetStyle() | nBits  );
         m_pItemList->Show();
         ItemSelectHdl( m_pItemList );
+    }
+
+    XFormsPage::~XFormsPage()
+    {
+        dispose();
+    }
+
+    void XFormsPage::dispose()
+    {
+        m_pToolBox.clear();
+        m_pItemList.clear();
+        m_pNaviWin.clear();
+        TabPage::dispose();
     }
 
     IMPL_LINK_NOARG(XFormsPage, TbxSelectHdl)
@@ -1418,16 +1432,10 @@ namespace svxform
         aAny <<= m_bShowDetails;
         aViewOpt.SetUserItem(CFGNAME_SHOWDETAILS,aAny);
 
-        delete m_pInstPage;
-        m_pInstPage = NULL;
-        delete m_pSubmissionPage;
-        m_pSubmissionPage = NULL;
-        delete m_pBindingPage;
-        m_pBindingPage = NULL;
+        m_pInstPage.clear();
+        m_pSubmissionPage.clear();
+        m_pBindingPage.clear();
 
-        sal_Int32 i, nCount = m_aPageList.size();
-        for ( i = 0; i < nCount; ++i )
-            delete m_aPageList[i];
         m_aPageList.clear();
 
         Reference< XFrameActionListener > xListener(
@@ -1436,6 +1444,10 @@ namespace svxform
         RemoveBroadcaster();
         m_xDataListener.clear();
         disposeBuilder();
+        m_pModelsBox.clear();
+        m_pModelBtn.clear();
+        m_pTabCtrl.clear();
+        m_pInstanceBtn.clear();
         vcl::Window::dispose();
     }
 
@@ -1712,7 +1724,7 @@ namespace svxform
                         }
                         else
                         {
-                            DELETEZ( m_pInstPage );
+                            m_pInstPage.clear();
                             bDoRemove = true;
                         }
 
@@ -2244,7 +2256,7 @@ namespace svxform
         pWindow = new DataNavigator( _pBindings, this, _pParent );
         eChildAlignment = SfxChildAlignment::RIGHT;
         pWindow->SetSizePixel( Size( 250, 400 ) );
-        static_cast<SfxDockingWindow*>(pWindow)->Initialize( _pInfo );
+        static_cast<SfxDockingWindow*>(pWindow.get())->Initialize( _pInfo );
     }
 
     AddDataItemDialog::AddDataItemDialog(vcl::Window* pParent, ItemNode* _pNode,
@@ -2316,6 +2328,26 @@ namespace svxform
             // remove binding, if it does not convey 'useful' information
             m_xUIHelper->removeBindingIfUseless( m_xBinding );
         }
+        m_pItemFrame.clear();
+        m_pNameFT.clear();
+        m_pNameED.clear();
+        m_pDefaultFT.clear();
+        m_pDefaultED.clear();
+        m_pDefaultBtn.clear();
+        m_pSettingsFrame.clear();
+        m_pDataTypeFT.clear();
+        m_pDataTypeLB.clear();
+        m_pRequiredCB.clear();
+        m_pRequiredBtn.clear();
+        m_pRelevantCB.clear();
+        m_pRelevantBtn.clear();
+        m_pConstraintCB.clear();
+        m_pConstraintBtn.clear();
+        m_pReadonlyCB.clear();
+        m_pReadonlyBtn.clear();
+        m_pCalculateCB.clear();
+        m_pCalculateBtn.clear();
+        m_pOKBtn.clear();
         ModalDialog::dispose();
     }
 
@@ -2785,6 +2817,19 @@ namespace svxform
         ResultHdl( &m_aResultIdle );
     }
 
+    AddConditionDialog::~AddConditionDialog()
+    {
+        dispose();
+    }
+
+    void AddConditionDialog::dispose()
+    {
+        m_pConditionED.clear();
+        m_pResultWin.clear();
+        m_pEditNamespacesBtn.clear();
+        m_pOKBtn.clear();
+        ModalDialog::dispose();
+    }
 
     IMPL_LINK_NOARG(AddConditionDialog, EditHdl)
     {
@@ -2903,7 +2948,12 @@ namespace svxform
 
     void NamespaceItemDialog::dispose()
     {
-        delete m_pNamespacesList;
+        m_pNamespacesList.clear();
+        m_pAddNamespaceBtn.clear();
+        m_pEditNamespaceBtn.clear();
+        m_pDeleteNamespaceBtn.clear();
+        m_pOKBtn.clear();
+        m_pConditionDlg.clear();
         ModalDialog::dispose();
     }
 
@@ -3045,6 +3095,19 @@ namespace svxform
         m_pOKBtn->SetClickHdl( LINK( this, ManageNamespaceDialog, OKHdl ) );
     }
 
+    ManageNamespaceDialog::~ManageNamespaceDialog()
+    {
+        dispose();
+    }
+
+    void ManageNamespaceDialog::dispose()
+    {
+        m_pOKBtn.clear();
+        m_pPrefixED.clear();
+        m_pUrlED.clear();
+        m_pConditionDlg.clear();
+        ModalDialog::dispose();
+    }
 
     IMPL_LINK_NOARG(ManageNamespaceDialog, OKHdl)
     {
@@ -3103,6 +3166,14 @@ namespace svxform
         // #i38991# if we have added a binding, we need to remove it as well.
         if( m_xCreatedBinding.is() && m_xUIHelper.is() )
             m_xUIHelper->removeBindingIfUseless( m_xCreatedBinding );
+        m_pNameED.clear();
+        m_pActionED.clear();
+        m_pMethodLB.clear();
+        m_pRefED.clear();
+        m_pRefBtn.clear();
+        m_pBindLB.clear();
+        m_pReplaceLB.clear();
+        m_pOKBtn.clear();
         ModalDialog::dispose();
     }
 
@@ -3304,6 +3375,18 @@ namespace svxform
             SetText(get<FixedText>("alttitle")->GetText());
     }
 
+    AddModelDialog::~AddModelDialog()
+    {
+        dispose();
+    }
+
+    void AddModelDialog::dispose()
+    {
+        m_pNameED.clear();
+        m_pModifyCB.clear();
+        ModalDialog::dispose();
+    }
+
     AddInstanceDialog::AddInstanceDialog(vcl::Window* pParent, bool _bEdit)
         : ModalDialog(pParent, "AddInstanceDialog" , "svx/ui/addinstancedialog.ui")
     {
@@ -3323,6 +3406,20 @@ namespace svxform
         m_sAllFilterName = ResId(STR_FILTERNAME_ALL, *ResMgr::CreateResMgr("fps_office")).toString();
     }
 
+    AddInstanceDialog::~AddInstanceDialog()
+    {
+        dispose();
+    }
+
+    void AddInstanceDialog::dispose()
+    {
+        m_pNameED.clear();
+        m_pURLFT.clear();
+        m_pURLED.clear();
+        m_pFilePickerBtn.clear();
+        m_pLinkInstanceCB.clear();
+        ModalDialog::dispose();
+    }
 
     IMPL_LINK_NOARG(AddInstanceDialog, FilePickerHdl)
     {

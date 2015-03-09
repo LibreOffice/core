@@ -74,22 +74,22 @@ private:
     void applyLightSourceToModel( sal_uInt32 nLightNumber );
     void applyLightSourcesToModel();
 
-    LightButton* m_pBtn_Light1;
-    LightButton* m_pBtn_Light2;
-    LightButton* m_pBtn_Light3;
-    LightButton* m_pBtn_Light4;
-    LightButton* m_pBtn_Light5;
-    LightButton* m_pBtn_Light6;
-    LightButton* m_pBtn_Light7;
-    LightButton* m_pBtn_Light8;
+    VclPtr<LightButton> m_pBtn_Light1;
+    VclPtr<LightButton> m_pBtn_Light2;
+    VclPtr<LightButton> m_pBtn_Light3;
+    VclPtr<LightButton> m_pBtn_Light4;
+    VclPtr<LightButton> m_pBtn_Light5;
+    VclPtr<LightButton> m_pBtn_Light6;
+    VclPtr<LightButton> m_pBtn_Light7;
+    VclPtr<LightButton> m_pBtn_Light8;
 
-    ColorLB*     m_pLB_LightSource;
-    PushButton*  m_pBtn_LightSource_Color;
+    VclPtr<ColorLB>     m_pLB_LightSource;
+    VclPtr<PushButton>  m_pBtn_LightSource_Color;
 
-    ColorLB*     m_pLB_AmbientLight;
-    PushButton*  m_pBtn_AmbientLight_Color;
+    VclPtr<ColorLB>     m_pLB_AmbientLight;
+    VclPtr<PushButton>  m_pBtn_AmbientLight_Color;
 
-    SvxLightCtl3D*   m_pCtl_Preview;
+    VclPtr<SvxLightCtl3D>   m_pCtl_Preview;
 
     LightSourceInfo* m_pLightSourceInfoList;
 

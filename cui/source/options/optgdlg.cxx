@@ -307,6 +307,27 @@ OfaMiscTabPage::OfaMiscTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     m_pToolTipsCB->SetClickHdl( aLink );
 }
 
+OfaMiscTabPage::~OfaMiscTabPage()
+{
+    dispose();
+}
+
+void OfaMiscTabPage::dispose()
+{
+    m_pToolTipsCB.clear();
+    m_pExtHelpCB.clear();
+    m_pFileDlgROImage.clear();
+    m_pFileDlgCB.clear();
+    m_pPrintDlgCB.clear();
+    m_pDocStatusCB.clear();
+    m_pSaveAlwaysCB.clear();
+    m_pYearFrame.clear();
+    m_pYearValueField.clear();
+    m_pToYearFT.clear();
+    m_pCollectUsageInfo.clear();
+    SfxTabPage::dispose();
+}
+
 SfxTabPage* OfaMiscTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
 {
     return new OfaMiscTabPage( pParent, *rAttrSet );
@@ -693,6 +714,23 @@ void OfaViewTabPage::dispose()
     pCanvasSettings = NULL;
     delete pAppearanceCfg;
     pAppearanceCfg = NULL;
+    m_pWindowSizeMF.clear();
+    m_pIconSizeLB.clear();
+    m_pIconStyleLB.clear();
+    m_pFontAntiAliasing.clear();
+    m_pAAPointLimitLabel.clear();
+    m_pAAPointLimit.clear();
+    m_pMenuIconsLB.clear();
+    m_pFontShowCB.clear();
+    m_pFontHistoryCB.clear();
+    m_pUseHardwareAccell.clear();
+    m_pUseAntiAliase.clear();
+    m_pUseOpenGL.clear();
+    m_pForceOpenGL.clear();
+    m_pMousePosLB.clear();
+    m_pMouseMiddleLB.clear();
+    m_pSelectionCB.clear();
+    m_pSelectionMF.clear();
     SfxTabPage::dispose();
 }
 
@@ -1217,6 +1255,22 @@ void OfaLanguagesTabPage::dispose()
 {
     delete pLangConfig;
     pLangConfig = NULL;
+    m_pUserInterfaceLB.clear();
+    m_pLocaleSettingFT.clear();
+    m_pLocaleSettingLB.clear();
+    m_pDecimalSeparatorCB.clear();
+    m_pCurrencyFT.clear();
+    m_pCurrencyLB.clear();
+    m_pDatePatternsFT.clear();
+    m_pDatePatternsED.clear();
+    m_pWesternLanguageLB.clear();
+    m_pWesternLanguageFT.clear();
+    m_pAsianLanguageLB.clear();
+    m_pComplexLanguageLB.clear();
+    m_pCurrentDocCB.clear();
+    m_pAsianSupportCB.clear();
+    m_pCTLSupportCB.clear();
+    m_pIgnoreLanguageChangeCB.clear();
     SfxTabPage::dispose();
 }
 

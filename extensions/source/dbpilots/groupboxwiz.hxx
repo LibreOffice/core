@@ -94,13 +94,15 @@ namespace dbp
     class ORadioSelectionPage : public OGBWPage
     {
     protected:
-        Edit            *m_pRadioName;
-        PushButton      *m_pMoveRight;
-        PushButton      *m_pMoveLeft;
-        ListBox         *m_pExistingRadios;
+        VclPtr<Edit>            m_pRadioName;
+        VclPtr<PushButton>      m_pMoveRight;
+        VclPtr<PushButton>      m_pMoveLeft;
+        VclPtr<ListBox>         m_pExistingRadios;
 
     public:
         ORadioSelectionPage( OControlWizard* _pParent );
+        virtual ~ORadioSelectionPage();
+        virtual void dispose() SAL_OVERRIDE;
 
     protected:
         // TabPage overridables
@@ -124,12 +126,14 @@ namespace dbp
     class ODefaultFieldSelectionPage : public OMaybeListSelectionPage
     {
     protected:
-        RadioButton     *m_pDefSelYes;
-        RadioButton     *m_pDefSelNo;
-        ListBox         *m_pDefSelection;
+        VclPtr<RadioButton>     m_pDefSelYes;
+        VclPtr<RadioButton>     m_pDefSelNo;
+        VclPtr<ListBox>         m_pDefSelection;
 
     public:
         ODefaultFieldSelectionPage( OControlWizard* _pParent );
+        virtual ~ODefaultFieldSelectionPage();
+        virtual void dispose() SAL_OVERRIDE;
 
     protected:
         // OWizardPage overridables
@@ -145,8 +149,8 @@ namespace dbp
     class OOptionValuesPage : public OGBWPage
     {
     protected:
-        Edit            *m_pValue;
-        ListBox         *m_pOptions;
+        VclPtr<Edit>            m_pValue;
+        VclPtr<ListBox>         m_pOptions;
 
         StringArray     m_aUncommittedValues;
         ::svt::WizardTypes::WizardState
@@ -154,6 +158,8 @@ namespace dbp
 
     public:
         OOptionValuesPage( OControlWizard* _pParent );
+        virtual ~OOptionValuesPage();
+        virtual void dispose() SAL_OVERRIDE;
 
     protected:
         // TabPage overridables
@@ -189,10 +195,12 @@ namespace dbp
     class OFinalizeGBWPage : public OGBWPage
     {
     protected:
-        Edit            *m_pName;
+        VclPtr<Edit>            m_pName;
 
     public:
         OFinalizeGBWPage( OControlWizard* _pParent );
+        virtual ~OFinalizeGBWPage();
+        virtual void dispose() SAL_OVERRIDE;
 
     protected:
         // TabPage overridables

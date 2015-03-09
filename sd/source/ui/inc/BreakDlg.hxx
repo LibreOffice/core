@@ -58,10 +58,10 @@ public:
     short Execute() SAL_OVERRIDE;
 
 private:
-    FixedText*      m_pFiObjInfo;
-    FixedText*      m_pFiActInfo;
-    FixedText*      m_pFiInsInfo;
-    CancelButton*   m_pBtnCancel;
+    VclPtr<FixedText>      m_pFiObjInfo;
+    VclPtr<FixedText>      m_pFiActInfo;
+    VclPtr<FixedText>      m_pFiInsInfo;
+    VclPtr<CancelButton>   m_pBtnCancel;
 
     DrawView*   pDrView;
 

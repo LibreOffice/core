@@ -107,7 +107,6 @@ IMPL_ABSTDLG_BASE(AbstractThesaurusDialog_Impl)
 
 AbstractSvxZoomDialog_Impl::~AbstractSvxZoomDialog_Impl()                                       \
 {
-    delete pDlg;
 }
 short AbstractSvxZoomDialog_Impl::Execute()
 {
@@ -154,7 +153,6 @@ IMPL_ABSTDLG_BASE(AbstractPasswordToOpenModifyDialog_Impl);
 // virtual
 VclAbstractDialog2_Impl::~VclAbstractDialog2_Impl()
 {
-    delete m_pDlg;
 }
 
 // virtual

@@ -87,6 +87,28 @@ SwFldVarPage::SwFldVarPage(vcl::Window* pParent, const SfxItemSet& rCoreSet )
 
 SwFldVarPage::~SwFldVarPage()
 {
+    dispose();
+}
+
+void SwFldVarPage::dispose()
+{
+    m_pTypeLB.clear();
+    m_pSelection.clear();
+    m_pSelectionLB.clear();
+    m_pNameFT.clear();
+    m_pNameED.clear();
+    m_pValueFT.clear();
+    m_pValueED.clear();
+    m_pFormat.clear();
+    m_pNumFormatLB.clear();
+    m_pFormatLB.clear();
+    m_pChapterFrame.clear();
+    m_pChapterLevelLB.clear();
+    m_pInvisibleCB.clear();
+    m_pSeparatorFT.clear();
+    m_pSeparatorED.clear();
+    m_pNewDelTBX.clear();
+    SwFldPage::dispose();
 }
 
 void SwFldVarPage::Reset(const SfxItemSet* )

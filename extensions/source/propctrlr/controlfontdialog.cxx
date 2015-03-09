@@ -169,7 +169,7 @@ namespace pcr
         OSL_ENSURE(m_pDialog, "OControlFontDialog::executedDialog: no dialog anymore?!!");
         if (m_pDialog && (sal_True == _nExecutionResult) && m_xControlModel.is())
         {
-            const SfxItemSet* pOutput = static_cast<ControlCharacterDialog*>(m_pDialog)->GetOutputItemSet();
+            const SfxItemSet* pOutput = static_cast<ControlCharacterDialog*>(m_pDialog.get())->GetOutputItemSet();
             if (pOutput)
                 ControlCharacterDialog::translateItemsToProperties( *pOutput, m_xControlModel );
         }

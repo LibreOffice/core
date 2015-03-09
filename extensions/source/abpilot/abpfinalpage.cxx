@@ -70,6 +70,12 @@ namespace abp
     void FinalPage::dispose()
     {
         delete m_pLocationController;
+        m_pLocation.clear();
+        m_pBrowse.clear();
+        m_pRegisterName.clear();
+        m_pNameLabel.clear();
+        m_pName.clear();
+        m_pDuplicateNameError.clear();
         AddressBookSourcePage::dispose();
     }
 

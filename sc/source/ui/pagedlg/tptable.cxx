@@ -125,6 +125,33 @@ void ScTablePage::ShowImage()
 
 ScTablePage::~ScTablePage()
 {
+    dispose();
+}
+
+void ScTablePage::dispose()
+{
+    m_pBtnTopDown.clear();
+    m_pBtnLeftRight.clear();
+    m_pBmpPageDir.clear();
+    m_pBtnPageNo.clear();
+    m_pEdPageNo.clear();
+    m_pBtnHeaders.clear();
+    m_pBtnGrid.clear();
+    m_pBtnNotes.clear();
+    m_pBtnObjects.clear();
+    m_pBtnCharts.clear();
+    m_pBtnDrawings.clear();
+    m_pBtnFormulas.clear();
+    m_pBtnNullVals.clear();
+    m_pLbScaleMode.clear();
+    m_pBxScaleAll.clear();
+    m_pEdScaleAll.clear();
+    m_pGrHeightWidth.clear();
+    m_pEdScalePageWidth.clear();
+    m_pEdScalePageHeight.clear();
+    m_pBxScalePageNum.clear();
+    m_pEdScalePageNum.clear();
+    SfxTabPage::dispose();
 }
 
 SfxTabPage* ScTablePage::Create( vcl::Window* pParent, const SfxItemSet* rCoreSet )

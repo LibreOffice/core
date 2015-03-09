@@ -20,10 +20,10 @@
   */
 class SwHeaderFooterWin : public MenuButton, public SwFrameControl
 {
-    OUString         m_sLabel;
+    OUString              m_sLabel;
     bool                  m_bIsHeader;
     PopupMenu*            m_pPopupMenu;
-    vcl::Window*               m_pLine;
+    VclPtr<vcl::Window>   m_pLine;
     bool                  m_bIsAppearing;
     int                   m_nFadeRate;
     Timer                 m_aFadeTimer;

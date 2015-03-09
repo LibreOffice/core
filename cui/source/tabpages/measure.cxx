@@ -148,6 +148,31 @@ SvxMeasurePage::SvxMeasurePage( vcl::Window* pWindow, const SfxItemSet& rInAttrs
     m_pLbUnit->SetSelectHdl( aLink );
 }
 
+SvxMeasurePage::~SvxMeasurePage()
+{
+    dispose();
+}
+
+void SvxMeasurePage::dispose()
+{
+    m_pMtrFldLineDist.clear();
+    m_pMtrFldHelplineOverhang.clear();
+    m_pMtrFldHelplineDist.clear();
+    m_pMtrFldHelpline1Len.clear();
+    m_pMtrFldHelpline2Len.clear();
+    m_pTsbBelowRefEdge.clear();
+    m_pMtrFldDecimalPlaces.clear();
+    m_pCtlPosition.clear();
+    m_pTsbAutoPosV.clear();
+    m_pTsbAutoPosH.clear();
+    m_pTsbShowUnit.clear();
+    m_pLbUnit.clear();
+    m_pTsbParallel.clear();
+    m_pFtAutomatic.clear();
+    m_pCtlPreview.clear();
+    SvxTabPage::dispose();
+}
+
 /*************************************************************************
 |*
 |* read the delivered Item-Set

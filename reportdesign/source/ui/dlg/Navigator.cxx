@@ -121,7 +121,7 @@ class NavigatorTree :   public ::cppu::BaseMutex
         uno::Reference< uno::XInterface >                           m_xContent;
         ::rtl::Reference< comphelper::OPropertyChangeMultiplexer>   m_pListener;
         ::rtl::Reference< comphelper::OContainerListenerAdapter>    m_pContainerListener;
-        NavigatorTree*                                              m_pTree;
+        VclPtr<NavigatorTree>                                       m_pTree;
     public:
         UserData(NavigatorTree* _pTree,const uno::Reference<uno::XInterface>& _xContent);
         virtual ~UserData();

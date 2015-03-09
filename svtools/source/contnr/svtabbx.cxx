@@ -503,7 +503,7 @@ namespace svt
 {
     struct SvHeaderTabListBoxImpl
     {
-        HeaderBar*              m_pHeaderBar;
+        VclPtr<HeaderBar>       m_pHeaderBar;
         AccessibleFactoryAccess m_aFactoryAccess;
 
         SvHeaderTabListBoxImpl() : m_pHeaderBar( NULL ) { }

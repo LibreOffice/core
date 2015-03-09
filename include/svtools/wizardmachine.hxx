@@ -155,15 +155,14 @@ namespace svt
         // So use the travelXXX methods if you need to travel
 
     protected:
-        OKButton*       m_pFinish;
-        CancelButton*   m_pCancel;
-        PushButton*     m_pNextPage;
-        PushButton*     m_pPrevPage;
-        HelpButton*     m_pHelp;
+        VclPtr<OKButton>       m_pFinish;
+        VclPtr<CancelButton>   m_pCancel;
+        VclPtr<PushButton>     m_pNextPage;
+        VclPtr<PushButton>     m_pPrevPage;
+        VclPtr<HelpButton>     m_pHelp;
 
     private:
-        WizardMachineImplData*
-                        m_pImpl;
+        WizardMachineImplData*  m_pImpl;
             // hold members in this structure to allow keeping compatible when members are added
 
         SVT_DLLPRIVATE void addButtons(vcl::Window* _pParent, sal_uInt32 _nButtonFlags);

@@ -30,10 +30,10 @@
 class SvxHyperlinkMailTp : public SvxHyperlinkTabPageBase
 {
 private:
-    SvxHyperURLBox      *m_pCbbReceiver;
-    PushButton          *m_pBtAdrBook;
-    FixedText           *m_pFtSubject;
-    Edit                *m_pEdSubject;
+    VclPtr<SvxHyperURLBox>      m_pCbbReceiver;
+    VclPtr<PushButton>          m_pBtAdrBook;
+    VclPtr<FixedText>           m_pFtSubject;
+    VclPtr<Edit>                m_pEdSubject;
 
     DECL_LINK (ClickAdrBookHdl_Impl  , void * ); ///< Button : Address book
     DECL_LINK (ModifiedReceiverHdl_Impl, void * ); ///< Combobox "receiver" modified
@@ -51,6 +51,8 @@ protected:
 
 public:
     SvxHyperlinkMailTp ( vcl::Window *pParent, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet);
+    virtual ~SvxHyperlinkMailTp();
+    virtual void dispose() SAL_OVERRIDE;
 
     static  IconChoicePage* Create( vcl::Window* pWindow, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet );
 

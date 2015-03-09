@@ -39,6 +39,8 @@ public:
                                   const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::beans::XPropertySet > & xSceneProperties,
                                   ControllerLockHelper & rControllerLockHelper );
+    virtual ~ThreeD_SceneGeometry_TabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     // has to be called in case the dialog was closed with OK
     void commitPendingChanges();
@@ -63,17 +65,17 @@ private:
     ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet > m_xSceneProperties;
 
-    CheckBox*        m_pCbxRightAngledAxes;
+    VclPtr<CheckBox>        m_pCbxRightAngledAxes;
 
-    MetricField*     m_pMFXRotation;
+    VclPtr<MetricField>     m_pMFXRotation;
 
-    MetricField*     m_pMFYRotation;
+    VclPtr<MetricField>     m_pMFYRotation;
 
-    FixedText*       m_pFtZRotation;
-    MetricField*     m_pMFZRotation;
+    VclPtr<FixedText>       m_pFtZRotation;
+    VclPtr<MetricField>     m_pMFZRotation;
 
-    CheckBox*        m_pCbxPerspective;
-    MetricField*     m_pMFPerspective;
+    VclPtr<CheckBox>        m_pCbxPerspective;
+    VclPtr<MetricField>     m_pMFPerspective;
 
     //to keep old values when switching to right angled axes
     sal_Int64       m_nXRotation;

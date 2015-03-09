@@ -784,7 +784,7 @@ public:
 struct SvLBoxDDInfo
 {
     Application*    pApp;
-    SvTreeListBox*         pSource;
+    VclPtr<SvTreeListBox>         pSource;
     SvTreeListEntry*    pDDStartEntry;
     // Relative position in the Entry at DragBeginn (IconView)
     long            nMouseRelX,nMouseRelY;
@@ -797,7 +797,7 @@ class SvInplaceEdit2
     Accelerator aAccReturn;
     Accelerator aAccEscape;
     Idle        aIdle;
-    Edit*       pEdit;
+    VclPtr<Edit>  pEdit;
     bool        bCanceled;
     bool        bAlreadyInCallBack;
 

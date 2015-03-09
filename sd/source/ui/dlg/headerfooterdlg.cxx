@@ -115,29 +115,29 @@ class HeaderFooterTabPage : public TabPage
 {
 private:
 
-    FixedText*   mpFTIncludeOn;
+    VclPtr<FixedText>   mpFTIncludeOn;
 
-    CheckBox*    mpCBHeader;
-    VclContainer* mpHeaderBox;
-    Edit*        mpTBHeader;
+    VclPtr<CheckBox>    mpCBHeader;
+    VclPtr<VclContainer> mpHeaderBox;
+    VclPtr<Edit>        mpTBHeader;
 
-    CheckBox*    mpCBDateTime;
-    RadioButton* mpRBDateTimeFixed;
-    RadioButton* mpRBDateTimeAutomatic;
-    Edit*        mpTBDateTimeFixed;
-    ListBox*     mpCBDateTimeFormat;
-    FixedText*   mpFTDateTimeLanguage;
-    SvxLanguageBox*  mpCBDateTimeLanguage;
+    VclPtr<CheckBox>    mpCBDateTime;
+    VclPtr<RadioButton> mpRBDateTimeFixed;
+    VclPtr<RadioButton> mpRBDateTimeAutomatic;
+    VclPtr<Edit>        mpTBDateTimeFixed;
+    VclPtr<ListBox>     mpCBDateTimeFormat;
+    VclPtr<FixedText>   mpFTDateTimeLanguage;
+    VclPtr<SvxLanguageBox>  mpCBDateTimeLanguage;
 
-    CheckBox*    mpCBFooter;
-    VclContainer* mpFooterBox;
-    Edit*        mpTBFooter;
+    VclPtr<CheckBox>    mpCBFooter;
+    VclPtr<VclContainer> mpFooterBox;
+    VclPtr<Edit>        mpTBFooter;
 
-    CheckBox*   mpCBSlideNumber;
+    VclPtr<CheckBox>   mpCBSlideNumber;
 
-    CheckBox*    mpCBNotOnTitle;
+    VclPtr<CheckBox>    mpCBNotOnTitle;
 
-    PresLayoutPreview*   mpCTPreview;
+    VclPtr<PresLayoutPreview>   mpCTPreview;
 
     SdDrawDocument*    mpDoc;
     LanguageType        meOldLanguage;
@@ -155,6 +155,7 @@ private:
 public:
     HeaderFooterTabPage( vcl::Window* pParent, SdDrawDocument* pDoc, SdPage* pActualPage, bool bHandoutMode );
     virtual ~HeaderFooterTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     void    init( const HeaderFooterSettings& rSettings, bool bNotOnTitle );
     void    getData( HeaderFooterSettings& rSettings, bool& rNotOnTitle );
@@ -245,8 +246,12 @@ HeaderFooterDialog::~HeaderFooterDialog()
 
 void HeaderFooterDialog::dispose()
 {
-    delete mpSlideTabPage;
-    delete mpNotesHandoutsTabPage;
+    mpSlideTabPage.clear();
+    mpNotesHandoutsTabPage.clear();
+    mpTabCtrl.clear();
+    maPBApplyToAll.clear();
+    maPBApply.clear();
+    maPBCancel.clear();
     TabDialog::dispose();
 }
 
@@ -457,6 +462,29 @@ HeaderFooterTabPage::HeaderFooterTabPage( vcl::Window* pWindow, SdDrawDocument* 
 
 HeaderFooterTabPage::~HeaderFooterTabPage()
 {
+    dispose();
+}
+
+void HeaderFooterTabPage::dispose()
+{
+    mpFTIncludeOn.clear();
+    mpCBHeader.clear();
+    mpHeaderBox.clear();
+    mpTBHeader.clear();
+    mpCBDateTime.clear();
+    mpRBDateTimeFixed.clear();
+    mpRBDateTimeAutomatic.clear();
+    mpTBDateTimeFixed.clear();
+    mpCBDateTimeFormat.clear();
+    mpFTDateTimeLanguage.clear();
+    mpCBDateTimeLanguage.clear();
+    mpCBFooter.clear();
+    mpFooterBox.clear();
+    mpTBFooter.clear();
+    mpCBSlideNumber.clear();
+    mpCBNotOnTitle.clear();
+    mpCTPreview.clear();
+    TabPage::dispose();
 }
 
 IMPL_LINK_NOARG(HeaderFooterTabPage, LanguageChangeHdl)

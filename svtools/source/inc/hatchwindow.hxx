@@ -31,7 +31,7 @@ class VCLXHatchWindow : public ::com::sun::star::embed::XHatchWindow,
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XHatchWindowController > m_xController;
     ::com::sun::star::awt::Size aHatchBorderSize;
-    SvResizeWindow* pHatchWindow;
+    VclPtr<SvResizeWindow> pHatchWindow;
 
 public:
     VCLXHatchWindow();

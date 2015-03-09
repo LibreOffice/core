@@ -60,6 +60,17 @@ SvxJSearchOptionsDialog::SvxJSearchOptionsDialog(vcl::Window *pParent,
     pPage->EnableSaveOptions(false);
 }
 
+SvxJSearchOptionsDialog::~SvxJSearchOptionsDialog()
+{
+    dispose();
+}
+
+void SvxJSearchOptionsDialog::dispose()
+{
+    pPage.clear();
+    SfxSingleTabDialog::dispose();
+}
+
 void SvxJSearchOptionsDialog::Activate()
 {
     pPage->SetTransliterationFlags( nInitialTlFlags );

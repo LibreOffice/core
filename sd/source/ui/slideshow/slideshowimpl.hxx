@@ -92,7 +92,7 @@ struct PresentationSettingsEx : public PresentationSettings
 {
     bool mbRehearseTimings;
     bool mbPreview;
-    vcl::Window* mpParentWindow;
+    VclPtr<vcl::Window> mpParentWindow;
     css::uno::Reference< css::drawing::XDrawPage > mxStartPage;
     css::uno::Reference< css::animations::XAnimationNode > mxAnimationNode;
 
@@ -332,9 +332,9 @@ private:
     SdDrawDocument* mpDoc;
 
     SfxItemSet*     mpNewAttr;
-    vcl::Window*       mpParentWindow;
-    ShowWindow*     mpShowWindow;
-    PushButton*     mpTimeButton;
+    VclPtr<vcl::Window>    mpParentWindow;
+    VclPtr<ShowWindow>     mpShowWindow;
+    VclPtr<PushButton>     mpTimeButton;
 
     boost::shared_ptr< AnimationSlideController > mpSlideController;
 
@@ -347,8 +347,8 @@ private:
     OUString        maCharBuffer;
     Pointer         maOldPointer;
     Pointer         maPencil;
-    std::vector< ::sd::Window* > maDrawModeWindows;
-    ::sd::Window*   mpOldActiveWindow;
+    std::vector< VclPtr<::sd::Window> > maDrawModeWindows;
+    VclPtr<::sd::Window>   mpOldActiveWindow;
     Link            maStarBASICGlobalErrorHdl;
     unsigned long   mnChildMask;
     bool            mbGridVisible;

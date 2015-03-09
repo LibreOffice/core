@@ -359,7 +359,7 @@ namespace {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        WizardShell* pWizardImpl = dynamic_cast< WizardShell* >( m_pDialog );
+        WizardShell* pWizardImpl = dynamic_cast< WizardShell* >( m_pDialog.get() );
         ENSURE_OR_RETURN_VOID( pWizardImpl, "Wizard::enableButtons: invalid dialog implementation!" );
 
         pWizardImpl->enableButtons( lcl_convertWizardButtonToWZB( i_WizardButton ), i_Enable );
@@ -371,7 +371,7 @@ namespace {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        WizardShell* pWizardImpl = dynamic_cast< WizardShell* >( m_pDialog );
+        WizardShell* pWizardImpl = dynamic_cast< WizardShell* >( m_pDialog.get() );
         ENSURE_OR_RETURN_VOID( pWizardImpl, "Wizard::setDefaultButton: invalid dialog implementation!" );
 
         pWizardImpl->defaultButton( lcl_convertWizardButtonToWZB( i_WizardButton ) );
@@ -383,7 +383,7 @@ namespace {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        WizardShell* pWizardImpl = dynamic_cast< WizardShell* >( m_pDialog );
+        WizardShell* pWizardImpl = dynamic_cast< WizardShell* >( m_pDialog.get() );
         ENSURE_OR_RETURN_FALSE( pWizardImpl, "Wizard::travelNext: invalid dialog implementation!" );
 
         return pWizardImpl->travelNext();
@@ -395,7 +395,7 @@ namespace {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        WizardShell* pWizardImpl = dynamic_cast< WizardShell* >( m_pDialog );
+        WizardShell* pWizardImpl = dynamic_cast< WizardShell* >( m_pDialog.get() );
         ENSURE_OR_RETURN_FALSE( pWizardImpl, "Wizard::travelPrevious: invalid dialog implementation!" );
 
         return pWizardImpl->travelPrevious();
@@ -407,7 +407,7 @@ namespace {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        WizardShell* pWizardImpl = dynamic_cast< WizardShell* >( m_pDialog );
+        WizardShell* pWizardImpl = dynamic_cast< WizardShell* >( m_pDialog.get() );
         ENSURE_OR_RETURN_VOID( pWizardImpl, "Wizard::enablePage: invalid dialog implementation!" );
 
         if ( !pWizardImpl->knowsPage( i_PageID ) )
@@ -425,7 +425,7 @@ namespace {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        WizardShell* pWizardImpl = dynamic_cast< WizardShell* >( m_pDialog );
+        WizardShell* pWizardImpl = dynamic_cast< WizardShell* >( m_pDialog.get() );
         ENSURE_OR_RETURN_VOID( pWizardImpl, "Wizard::updateTravelUI: invalid dialog implementation!" );
 
         pWizardImpl->updateTravelUI();
@@ -437,7 +437,7 @@ namespace {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        WizardShell* pWizardImpl = dynamic_cast< WizardShell* >( m_pDialog );
+        WizardShell* pWizardImpl = dynamic_cast< WizardShell* >( m_pDialog.get() );
         ENSURE_OR_RETURN_FALSE( pWizardImpl, "Wizard::advanceTo: invalid dialog implementation!" );
 
         return pWizardImpl->advanceTo( i_PageId );
@@ -449,7 +449,7 @@ namespace {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        WizardShell* pWizardImpl = dynamic_cast< WizardShell* >( m_pDialog );
+        WizardShell* pWizardImpl = dynamic_cast< WizardShell* >( m_pDialog.get() );
         ENSURE_OR_RETURN_FALSE( pWizardImpl, "Wizard::goBackTo: invalid dialog implementation!" );
 
         return pWizardImpl->goBackTo( i_PageId );
@@ -461,7 +461,7 @@ namespace {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        WizardShell* pWizardImpl = dynamic_cast< WizardShell* >( m_pDialog );
+        WizardShell* pWizardImpl = dynamic_cast< WizardShell* >( m_pDialog.get() );
         ENSURE_OR_RETURN( pWizardImpl, "Wizard::getCurrentPage: invalid dialog implementation!", Reference< XWizardPage >() );
 
         return pWizardImpl->getCurrentWizardPage();
@@ -476,7 +476,7 @@ namespace {
         if ( ( i_PathIndex < 0 ) || ( i_PathIndex >= m_aWizardSteps.getLength() ) )
             throw NoSuchElementException( OUString(), *this );
 
-        WizardShell* pWizardImpl = dynamic_cast< WizardShell* >( m_pDialog );
+        WizardShell* pWizardImpl = dynamic_cast< WizardShell* >( m_pDialog.get() );
         ENSURE_OR_RETURN_VOID( pWizardImpl, "Wizard::activatePath: invalid dialog implementation!" );
 
         pWizardImpl->activatePath( i_PathIndex, i_Final );

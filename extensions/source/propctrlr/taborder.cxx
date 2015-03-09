@@ -126,6 +126,11 @@ namespace pcr
         m_pLB_Controls->Hide();
         //  delete pLB_Controls;
         delete pImageList;
+        m_pLB_Controls.clear();
+        m_pPB_OK.clear();
+        m_pPB_MoveUp.clear();
+        m_pPB_MoveDown.clear();
+        m_pPB_AutoOrder.clear();
         ModalDialog::dispose();
     }
 

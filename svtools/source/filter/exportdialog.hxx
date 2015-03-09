@@ -53,49 +53,49 @@ private:
     const com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >&
         mxSourceDocument;
 
-    NumericField*       mpMfSizeX;
-    ListBox*            mpLbSizeX;
-    NumericField*       mpMfSizeY;
-    FixedText*          mpFtResolution;
-    NumericField*       mpNfResolution;
-    ListBox*            mpLbResolution;
+    VclPtr<NumericField>       mpMfSizeX;
+    VclPtr<ListBox>            mpLbSizeX;
+    VclPtr<NumericField>       mpMfSizeY;
+    VclPtr<FixedText>          mpFtResolution;
+    VclPtr<NumericField>       mpNfResolution;
+    VclPtr<ListBox>            mpLbResolution;
 
-    VclContainer*       mpColorDepth;
-    ListBox*            mpLbColorDepth;
+    VclPtr<VclContainer>       mpColorDepth;
+    VclPtr<ListBox>            mpLbColorDepth;
 
-    VclContainer*       mpJPGQuality;
-    VclContainer*       mpPNGCompression;
+    VclPtr<VclContainer>       mpJPGQuality;
+    VclPtr<VclContainer>       mpPNGCompression;
 
-    ScrollBar*          mpSbCompression;
-    NumericField*       mpNfCompression;
+    VclPtr<ScrollBar>          mpSbCompression;
+    VclPtr<NumericField>       mpNfCompression;
 
-    VclContainer*       mpMode;
-    CheckBox*           mpCbInterlaced;
+    VclPtr<VclContainer>       mpMode;
+    VclPtr<CheckBox>           mpCbInterlaced;
 
-    VclContainer*       mpBMPCompression;
-    CheckBox*           mpCbRLEEncoding;
+    VclPtr<VclContainer>       mpBMPCompression;
+    VclPtr<CheckBox>           mpCbRLEEncoding;
 
-    VclContainer*       mpDrawingObjects;
-    CheckBox*           mpCbSaveTransparency;
+    VclPtr<VclContainer>       mpDrawingObjects;
+    VclPtr<CheckBox>           mpCbSaveTransparency;
 
-    VclContainer*       mpEncoding;
-    RadioButton*        mpRbBinary;
-    RadioButton*        mpRbText;
+    VclPtr<VclContainer>       mpEncoding;
+    VclPtr<RadioButton>        mpRbBinary;
+    VclPtr<RadioButton>        mpRbText;
 
-    VclContainer*       mpEPSGrid;
-    CheckBox*           mpCbEPSPreviewTIFF;
-    CheckBox*           mpCbEPSPreviewEPSI;
-    RadioButton*        mpRbEPSLevel1;
-    RadioButton*        mpRbEPSLevel2;
-    RadioButton*        mpRbEPSColorFormat1;
-    RadioButton*        mpRbEPSColorFormat2;
-    RadioButton*        mpRbEPSCompressionLZW;
-    RadioButton*        mpRbEPSCompressionNone;
+    VclPtr<VclContainer>       mpEPSGrid;
+    VclPtr<CheckBox>           mpCbEPSPreviewTIFF;
+    VclPtr<CheckBox>           mpCbEPSPreviewEPSI;
+    VclPtr<RadioButton>        mpRbEPSLevel1;
+    VclPtr<RadioButton>        mpRbEPSLevel2;
+    VclPtr<RadioButton>        mpRbEPSColorFormat1;
+    VclPtr<RadioButton>        mpRbEPSColorFormat2;
+    VclPtr<RadioButton>        mpRbEPSCompressionLZW;
+    VclPtr<RadioButton>        mpRbEPSCompressionNone;
 
-    VclContainer*       mpInfo;
-    FixedText*          mpFtEstimatedSize;
+    VclPtr<VclContainer>       mpInfo;
+    VclPtr<FixedText>          mpFtEstimatedSize;
 
-    OKButton*           mpBtnOK;
+    VclPtr<OKButton>           mpBtnOK;
 
     OUString            msEstimatedSizePix1;
     OUString            msEstimatedSizePix2;

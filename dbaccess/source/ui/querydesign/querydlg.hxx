@@ -39,14 +39,14 @@ namespace dbaui
                         ,public IRelationControlInterface
     {
     protected:
-        FixedText*              m_pML_HelpText;
-        OKButton*               m_pPB_OK;
-        ListBox*                m_pLB_JoinType;
-        CheckBox*               m_pCBNatural;
+        VclPtr<FixedText>              m_pML_HelpText;
+        VclPtr<OKButton>               m_pPB_OK;
+        VclPtr<ListBox>                m_pLB_JoinType;
+        VclPtr<CheckBox>               m_pCBNatural;
 
         OTableListBoxControl*               m_pTableControl;
         OJoinTableView::OTableWindowMap*    m_pTableMap;
-        OQueryTableView*                    m_pTableView;
+        VclPtr<OQueryTableView>             m_pTableView;
 
         EJoinType                           eJoinType;
         TTableConnectionData::value_type    m_pConnData; // contains left and right table

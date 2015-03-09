@@ -108,10 +108,10 @@ namespace sw { namespace sidebar {
         SfxBindings* mpBindings;
 
         // toolboxes - on click open corresponding popup
-        ToolBox*                mpToolBoxOrientation;
-        ToolBox*                mpToolBoxMargin;
-        ToolBox*                mpToolBoxSize;
-        ToolBox*                mpToolBoxColumn;
+        VclPtr<ToolBox>                mpToolBoxOrientation;
+        VclPtr<ToolBox>                mpToolBoxMargin;
+        VclPtr<ToolBox>                mpToolBoxSize;
+        VclPtr<ToolBox>                mpToolBoxColumn;
 
         Image*                  maImgSize;
         Image*                  maImgSize_L;

@@ -51,14 +51,17 @@ struct TripleString
 
 class SwGlossDecideDlg : public ModalDialog
 {
-    OKButton* m_pOk;
-    ListBox*  m_pListLB;
+    VclPtr<OKButton> m_pOk;
+    VclPtr<ListBox>  m_pListLB;
 
     DECL_LINK(DoubleClickHdl, void*);
     DECL_LINK(SelectHdl, void*);
 
-    public:
-        SwGlossDecideDlg(vcl::Window* pParent);
+public:
+    SwGlossDecideDlg(vcl::Window* pParent);
+    virtual ~SwGlossDecideDlg();
+    virtual void dispose() SAL_OVERRIDE;
+
     ListBox&    GetListBox() {return *m_pListLB;}
 };
 
@@ -71,6 +74,18 @@ SwGlossDecideDlg::SwGlossDecideDlg(vcl::Window* pParent)
     m_pListLB->set_height_request(m_pListLB->GetTextHeight() * 10);
     m_pListLB->SetDoubleClickHdl(LINK(this, SwGlossDecideDlg, DoubleClickHdl));
     m_pListLB->SetSelectHdl(LINK(this, SwGlossDecideDlg, SelectHdl));
+}
+
+SwGlossDecideDlg::~SwGlossDecideDlg()
+{
+    dispose();
+}
+
+void SwGlossDecideDlg::dispose()
+{
+    m_pOk.clear();
+    m_pListLB.clear();
+    ModalDialog::dispose();
 }
 
 IMPL_LINK_NOARG(SwGlossDecideDlg, DoubleClickHdl)

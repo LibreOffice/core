@@ -92,6 +92,21 @@ SwMailMergeDocSelectPage::SwMailMergeDocSelectPage(SwMailMergeWizard* pParent)
 
 SwMailMergeDocSelectPage::~SwMailMergeDocSelectPage()
 {
+    dispose();
+}
+
+void SwMailMergeDocSelectPage::dispose()
+{
+    m_pCurrentDocRB.clear();
+    m_pNewDocRB.clear();
+    m_pLoadDocRB.clear();
+    m_pLoadTemplateRB.clear();
+    m_pRecentDocRB.clear();
+    m_pBrowseDocPB.clear();
+    m_pBrowseTemplatePB.clear();
+    m_pRecentDocLB.clear();
+    m_pWizard.clear();
+    svt::OWizardPage::dispose();
 }
 
 IMPL_LINK(SwMailMergeDocSelectPage, DocSelectHdl, RadioButton*, pButton)

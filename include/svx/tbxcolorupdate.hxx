@@ -24,6 +24,7 @@
 
 #include <tools/gen.hxx>
 #include <tools/color.hxx>
+#include <vcl/vclptr.hxx>
 
 class ToolBox;
 class VirtualDevice;
@@ -44,8 +45,8 @@ namespace svx
     {
     public:
                     ToolboxButtonColorUpdater( sal_uInt16   nSlotId,
-                                                sal_uInt16   nTbxBtnId,
-                                                ToolBox* ptrTbx);
+                                               sal_uInt16   nTbxBtnId,
+                                               ToolBox*     ptrTbx);
                     ~ToolboxButtonColorUpdater();
 
         void        Update( const Color& rColor );
@@ -53,7 +54,7 @@ namespace svx
     private:
         sal_uInt16      mnBtnId;
         sal_uInt16      mnSlotId;
-        ToolBox*    mpTbx;
+        VclPtr<ToolBox> mpTbx;
         Color       maCurColor;
         Rectangle   maUpdRect;
         Size        maBmpSize;

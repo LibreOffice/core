@@ -927,7 +927,7 @@ bool SlideShow::startPreview( const Reference< XDrawPage >& xDrawPage, const Ref
 
 OutputDevice* SlideShow::getShowWindow()
 {
-    return mxController.is() ? mxController->mpShowWindow : 0;
+    return mxController.is() ? mxController->mpShowWindow.get() : 0;
 }
 
 int SlideShow::getAnimationMode()

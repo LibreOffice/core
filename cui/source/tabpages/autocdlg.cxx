@@ -137,6 +137,18 @@ OfaAutoCorrDlg::OfaAutoCorrDlg(vcl::Window* pParent, const SfxItemSet* _pSet )
         SetCurPageId("smarttags");
 }
 
+OfaAutoCorrDlg::~OfaAutoCorrDlg()
+{
+    dispose();
+}
+
+void OfaAutoCorrDlg::dispose()
+{
+    m_pLanguageBox.clear();
+    m_pLanguageLB.clear();
+    SfxTabDialog::dispose();
+}
+
 void OfaAutoCorrDlg::EnableLanguage(bool bEnable)
 {
     m_pLanguageBox->Enable(bEnable);
@@ -190,6 +202,17 @@ OfaAutocorrOptionsPage::OfaAutocorrOptionsPage(vcl::Window* pParent, const SfxIt
     , m_sAccidentalCaps(CUI_RESSTR(RID_SVXSTR_CORRECT_ACCIDENTAL_CAPS_LOCK))
 {
     get(m_pCheckLB, "checklist");
+}
+
+OfaAutocorrOptionsPage::~OfaAutocorrOptionsPage()
+{
+    dispose();
+}
+
+void OfaAutocorrOptionsPage::dispose()
+{
+    m_pCheckLB.clear();
+    SfxTabPage::dispose();
 }
 
 SfxTabPage* OfaAutocorrOptionsPage::Create( vcl::Window* pParent,
@@ -282,13 +305,16 @@ struct ImpUserData
 
 class OfaAutoFmtPrcntSet : public ModalDialog
 {
-    MetricField* m_pPrcntMF;
+    VclPtr<MetricField> m_pPrcntMF;
 public:
     OfaAutoFmtPrcntSet(vcl::Window* pParent)
         : ModalDialog(pParent, "PercentDialog","cui/ui/percentdialog.ui")
     {
         get(m_pPrcntMF, "margin");
     }
+    virtual ~OfaAutoFmtPrcntSet() { dispose(); }
+    virtual void dispose() SAL_OVERRIDE { m_pPrcntMF.clear(); ModalDialog::dispose(); }
+
     MetricField& GetPrcntFld()
     {
         return *m_pPrcntMF;
@@ -481,9 +507,9 @@ void OfaSwAutoFmtOptionsPage::dispose()
         delete static_cast<ImpUserData*>(m_pCheckLB->GetUserData( MERGE_SINGLE_LINE_PARA ));
         delete pCheckButtonData;
         pCheckButtonData = NULL;
-        delete m_pCheckLB;
-        m_pCheckLB = NULL;
     }
+    m_pCheckLB.clear();
+    m_pEditPB.clear();
     SfxTabPage::dispose();
 }
 
@@ -920,6 +946,13 @@ void OfaAutocorrReplacePage::dispose()
     pCompareClass = NULL;
     delete pCharClass;
     pCharClass = NULL;
+
+    m_pTextOnlyCB.clear();
+    m_pShortED.clear();
+    m_pReplaceED.clear();
+    m_pReplaceTLB.clear();
+    m_pNewReplacePB.clear();
+    m_pDeleteReplacePB.clear();
     SfxTabPage::dispose();
 }
 
@@ -1426,6 +1459,16 @@ void OfaAutocorrExceptPage::dispose()
 {
     aStringsTable.clear();
     delete pCompareClass;
+    m_pAbbrevED.clear();
+    m_pAbbrevLB.clear();
+    m_pNewAbbrevPB.clear();
+    m_pDelAbbrevPB.clear();
+    m_pAutoAbbrevCB.clear();
+    m_pDoubleCapsED.clear();
+    m_pDoubleCapsLB.clear();
+    m_pNewDoublePB.clear();
+    m_pDelDoublePB.clear();
+    m_pAutoCapsCB.clear();
     SfxTabPage::dispose();
 }
 
@@ -1643,7 +1686,7 @@ void OfaAutocorrExceptPage::Reset( const SfxItemSet* )
 
 IMPL_LINK(OfaAutocorrExceptPage, NewDelHdl, void*, pBtn)
 {
-    if((pBtn == m_pNewAbbrevPB || pBtn == m_pAbbrevED )
+    if((pBtn == m_pNewAbbrevPB || pBtn == (PushButton*)m_pAbbrevED.get() )
         && !m_pAbbrevED->GetText().isEmpty())
     {
         m_pAbbrevLB->InsertEntry(m_pAbbrevED->GetText());
@@ -1654,7 +1697,7 @@ IMPL_LINK(OfaAutocorrExceptPage, NewDelHdl, void*, pBtn)
         m_pAbbrevLB->RemoveEntry(m_pAbbrevED->GetText());
         ModifyHdl(m_pAbbrevED);
     }
-    else if((pBtn == m_pNewDoublePB || pBtn == m_pDoubleCapsED )
+    else if((pBtn == m_pNewDoublePB || pBtn == (PushButton*)m_pDoubleCapsED.get() )
             && !m_pDoubleCapsED->GetText().isEmpty())
     {
         m_pDoubleCapsLB->InsertEntry(m_pDoubleCapsED->GetText());
@@ -1849,8 +1892,20 @@ void OfaQuoteTabPage::dispose()
 {
     delete pCheckButtonData;
     pCheckButtonData = NULL;
-    delete m_pSwCheckLB;
-    m_pSwCheckLB = NULL;
+    m_pSwCheckLB.clear();
+    m_pCheckLB.clear();
+    m_pSingleTypoCB.clear();
+    m_pSglStartQuotePB.clear();
+    m_pSglStartExFT.clear();
+    m_pSglEndQuotePB.clear();
+    m_pSglEndExFT.clear();
+    m_pSglStandardPB.clear();
+    m_pDoubleTypoCB.clear();
+    m_pDblStartQuotePB.clear();
+    m_pDblStartExFT.clear();
+    m_pDblEndQuotePB.clear();
+    m_pDblEndExFT.clear();
+    m_pDblStandardPB.clear();
     SfxTabPage::dispose();
 }
 
@@ -2174,6 +2229,26 @@ OfaAutoCompleteTabPage::OfaAutoCompleteTabPage(vcl::Window* pParent,
     m_pCBCollect->SetToggleHdl(LINK(this, OfaAutoCompleteTabPage, CheckHdl));
 }
 
+OfaAutoCompleteTabPage::~OfaAutoCompleteTabPage()
+{
+    dispose();
+}
+
+void OfaAutoCompleteTabPage::dispose()
+{
+    m_pCBActiv.clear();
+    m_pCBAppendSpace.clear();
+    m_pCBAsTip.clear();
+    m_pCBCollect.clear();
+    m_pCBRemoveList.clear();
+    m_pDCBExpandKey.clear();
+    m_pNFMinWordlen.clear();
+    m_pNFMaxEntries.clear();
+    m_pLBEntries.clear();
+    m_pPBEntries.clear();
+    SfxTabPage::dispose();
+}
+
 SfxTabPage* OfaAutoCompleteTabPage::Create( vcl::Window* pParent,
                                             const SfxItemSet* rSet)
 {
@@ -2347,6 +2422,17 @@ void OfaAutoCompleteTabPage::CopyToClipboard() const
     }
 }
 
+OfaAutoCompleteTabPage::AutoCompleteMultiListBox::~AutoCompleteMultiListBox()
+{
+    dispose();
+}
+
+void OfaAutoCompleteTabPage::AutoCompleteMultiListBox::dispose()
+{
+    m_pPage.clear();
+    MultiListBox::dispose();
+}
+
 bool OfaAutoCompleteTabPage::AutoCompleteMultiListBox::PreNotify(
             NotifyEvent& rNEvt )
 {
@@ -2406,6 +2492,19 @@ OfaSmartTagOptionsTabPage::OfaSmartTagOptionsTabPage( vcl::Window* pParent,
     m_pMainCB->SetToggleHdl(LINK(this, OfaSmartTagOptionsTabPage, CheckHdl));
     m_pPropertiesPB->SetClickHdl(LINK(this, OfaSmartTagOptionsTabPage, ClickHdl));
     m_pSmartTagTypesLB->SetSelectHdl(LINK(this, OfaSmartTagOptionsTabPage, SelectHdl));
+}
+
+OfaSmartTagOptionsTabPage::~OfaSmartTagOptionsTabPage()
+{
+    dispose();
+}
+
+void OfaSmartTagOptionsTabPage::dispose()
+{
+    m_pMainCB.clear();
+    m_pSmartTagTypesLB.clear();
+    m_pPropertiesPB.clear();
+    SfxTabPage::dispose();
 }
 
 SfxTabPage* OfaSmartTagOptionsTabPage::Create( vcl::Window* pParent, const SfxItemSet* rSet)

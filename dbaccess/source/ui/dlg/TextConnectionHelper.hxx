@@ -48,27 +48,29 @@ namespace dbaui
 
     public:
         OTextConnectionHelper( vcl::Window* pParent, const short _nAvailableSections );
+        virtual ~OTextConnectionHelper();
+        virtual void dispose() SAL_OVERRIDE;
 
     private:
-        FixedText        *m_pExtensionHeader;
-        RadioButton      *m_pAccessTextFiles;
-        RadioButton      *m_pAccessCSVFiles;
-        RadioButton      *m_pAccessOtherFiles;
-        Edit             *m_pOwnExtension;
-        FixedText        *m_pExtensionExample;
-        FixedText        *m_pFormatHeader;
-        FixedText        *m_pFieldSeparatorLabel;
-        ComboBox         *m_pFieldSeparator;
-        FixedText        *m_pTextSeparatorLabel;
-        ComboBox         *m_pTextSeparator;
-        FixedText        *m_pDecimalSeparatorLabel;
-        ComboBox         *m_pDecimalSeparator;
-        FixedText        *m_pThousandsSeparatorLabel;
-        ComboBox         *m_pThousandsSeparator;
-        CheckBox         *m_pRowHeader;
-        FixedText        *m_pCharSetHeader;
-        FixedText        *m_pCharSetLabel;
-        CharSetListBox   *m_pCharSet;
+        VclPtr<FixedText>        m_pExtensionHeader;
+        VclPtr<RadioButton>      m_pAccessTextFiles;
+        VclPtr<RadioButton>      m_pAccessCSVFiles;
+        VclPtr<RadioButton>      m_pAccessOtherFiles;
+        VclPtr<Edit>             m_pOwnExtension;
+        VclPtr<FixedText>        m_pExtensionExample;
+        VclPtr<FixedText>        m_pFormatHeader;
+        VclPtr<FixedText>        m_pFieldSeparatorLabel;
+        VclPtr<ComboBox>         m_pFieldSeparator;
+        VclPtr<FixedText>        m_pTextSeparatorLabel;
+        VclPtr<ComboBox>         m_pTextSeparator;
+        VclPtr<FixedText>        m_pDecimalSeparatorLabel;
+        VclPtr<ComboBox>         m_pDecimalSeparator;
+        VclPtr<FixedText>        m_pThousandsSeparatorLabel;
+        VclPtr<ComboBox>         m_pThousandsSeparator;
+        VclPtr<CheckBox>         m_pRowHeader;
+        VclPtr<FixedText>        m_pCharSetHeader;
+        VclPtr<FixedText>        m_pCharSetLabel;
+        VclPtr<CharSetListBox>   m_pCharSet;
         OUString    m_aFieldSeparatorList;
         OUString    m_aTextSeparatorList;
         OUString    m_aTextNone;

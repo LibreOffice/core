@@ -88,7 +88,7 @@ using namespace com::sun::star::accessibility;
 
 class RowSetEventListener : public ::cppu::WeakImplHelper1<XRowsChangeListener>
 {
-    DbGridControl* m_pControl;
+    VclPtr<DbGridControl> m_pControl;
 public:
     RowSetEventListener(DbGridControl* i_pControl) : m_pControl(i_pControl)
     {
@@ -250,10 +250,10 @@ bool CompareBookmark(const Any& aLeft, const Any& aRight)
 
 class FmXGridSourcePropListener : public ::comphelper::OPropertyChangeListener
 {
-    DbGridControl* m_pParent;
+    VclPtr<DbGridControl> m_pParent;
 
     // a DbGridControl has no mutex, so we use our own as the base class expects one
-    osl::Mutex      m_aMutex;
+    osl::Mutex          m_aMutex;
     sal_Int16           m_nSuspended;
 
 public:

@@ -53,21 +53,21 @@ public:
 class SdTPAction : public SfxTabPage
 {
 private:
-    ListBox*                m_pLbAction;
+    VclPtr<ListBox>                m_pLbAction;
 
-    FixedText*              m_pFtTree;                // jump destination controls
-    SdPageObjsTLB*          m_pLbTree;
-    SdPageObjsTLB*          m_pLbTreeDocument;
-    ListBox*                m_pLbOLEAction;
+    VclPtr<FixedText>              m_pFtTree;                // jump destination controls
+    VclPtr<SdPageObjsTLB>          m_pLbTree;
+    VclPtr<SdPageObjsTLB>          m_pLbTreeDocument;
+    VclPtr<ListBox>                m_pLbOLEAction;
 
-    VclFrame*               m_pFrame;
-    Edit*                   m_pEdtSound;
-    Edit*                   m_pEdtBookmark;
-    Edit*                   m_pEdtDocument;
-    Edit*                   m_pEdtProgram;
-    Edit*                   m_pEdtMacro;
-    PushButton*             m_pBtnSearch;
-    PushButton*             m_pBtnSeek;
+    VclPtr<VclFrame>               m_pFrame;
+    VclPtr<Edit>                   m_pEdtSound;
+    VclPtr<Edit>                   m_pEdtBookmark;
+    VclPtr<Edit>                   m_pEdtDocument;
+    VclPtr<Edit>                   m_pEdtProgram;
+    VclPtr<Edit>                   m_pEdtMacro;
+    VclPtr<PushButton>             m_pBtnSearch;
+    VclPtr<PushButton>             m_pBtnSeek;
 
     const SfxItemSet&       rOutAttrs;
     const ::sd::View*       mpView;
@@ -97,6 +97,7 @@ private:
 public:
             SdTPAction( vcl::Window* pParent, const SfxItemSet& rInAttrs );
             virtual ~SdTPAction();
+    virtual void dispose() SAL_OVERRIDE;
 
     static  SfxTabPage* Create( vcl::Window*, const SfxItemSet& );
 

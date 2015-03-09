@@ -57,6 +57,22 @@ SvxCTLOptionsPage::SvxCTLOptionsPage( vcl::Window* pParent, const SfxItemSet& rS
     m_pNumeralsLB->SetDropDownLineCount( m_pNumeralsLB->GetEntryCount() );
 }
 
+SvxCTLOptionsPage::~SvxCTLOptionsPage()
+{
+    dispose();
+}
+
+void SvxCTLOptionsPage::dispose()
+{
+    m_pSequenceCheckingCB.clear();
+    m_pRestrictedCB.clear();
+    m_pTypeReplaceCB.clear();
+    m_pMovementLogicalRB.clear();
+    m_pMovementVisualRB.clear();
+    m_pNumeralsLB.clear();
+    SfxTabPage::dispose();
+}
+
 SfxTabPage* SvxCTLOptionsPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
 {
     return new SvxCTLOptionsPage( pParent, *rAttrSet );

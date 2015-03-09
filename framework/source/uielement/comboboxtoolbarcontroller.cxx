@@ -171,11 +171,9 @@ throw ( RuntimeException, std::exception )
     SolarMutexGuard aSolarMutexGuard;
 
     m_pToolbar->SetItemWindow( m_nID, 0 );
-    delete m_pComboBox;
+    m_pComboBox.clear();
 
     ComplexToolbarController::dispose();
-
-    m_pComboBox = 0;
 }
 
 Sequence<PropertyValue> ComboboxToolbarController::getExecuteArgs(sal_Int16 KeyModifier) const

@@ -101,9 +101,6 @@ FuPoor::~FuPoor()
     aDragTimer.Stop();
     aScrollTimer.Stop();
     aDelayToScrollTimer.Stop ();
-
-    if (pDialog)
-        delete pDialog;
 }
 
 void FuPoor::Activate()
@@ -128,6 +125,11 @@ void FuPoor::Deactivate()
     }
 
     if (mpWindow) mpWindow->ReleaseMouse ();
+}
+
+void FuPoor::SetWindow(::sd::Window* pWin)
+{
+    mpWindow = pWin;
 }
 
 /**

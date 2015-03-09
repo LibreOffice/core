@@ -35,13 +35,13 @@ class SwEnvDlg;
 
 class SwEnvPrtPage : public SfxTabPage
 {
-    ToolBox*     m_pAlignBox;
-    RadioButton* m_pTopButton;
-    RadioButton* m_pBottomButton;
-    MetricField* m_pRightField;
-    MetricField* m_pDownField;
-    FixedText*   m_pPrinterInfo;
-    PushButton*  m_pPrtSetup;
+    VclPtr<ToolBox>     m_pAlignBox;
+    VclPtr<RadioButton> m_pTopButton;
+    VclPtr<RadioButton> m_pBottomButton;
+    VclPtr<MetricField> m_pRightField;
+    VclPtr<MetricField> m_pDownField;
+    VclPtr<FixedText>   m_pPrinterInfo;
+    VclPtr<PushButton>  m_pPrtSetup;
 
     sal_uInt16 m_aIds[ENV_VER_RGHT-ENV_HOR_LEFT+1];
 
@@ -59,6 +59,8 @@ class SwEnvPrtPage : public SfxTabPage
     using TabPage::DeactivatePage;
 
 public:
+    virtual ~SwEnvPrtPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     static SfxTabPage* Create(vcl::Window* pParent, const SfxItemSet* rSet);
 

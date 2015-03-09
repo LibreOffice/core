@@ -155,12 +155,10 @@ void SmEditWindow::dispose()
         delete pEditView;
         pEditView = NULL;
     }
-    delete pHScrollBar;
-    pHScrollBar = NULL;
-    delete pVScrollBar;
-    pVScrollBar = NULL;
-    delete pScrollBox;
-    pScrollBox = NULL;
+
+    pHScrollBar.clear();
+    pVScrollBar.clear();
+    pScrollBox.clear();
 
     vcl::Window::dispose();
 }

@@ -31,6 +31,17 @@ SvSimpleTableContainer::SvSimpleTableContainer(vcl::Window* pParent, WinBits nBi
 {
 }
 
+SvSimpleTableContainer::~SvSimpleTableContainer()
+{
+    dispose();
+}
+
+void SvSimpleTableContainer::dispose()
+{
+    m_pTable.clear();
+    Control::dispose();
+}
+
 extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvSimpleTableContainer(vcl::Window *pParent,
     VclBuilder::stringmap &)
 {

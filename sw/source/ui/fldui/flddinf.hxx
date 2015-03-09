@@ -36,12 +36,12 @@ namespace com{namespace sun{ namespace star{ namespace beans{
 
 class SwFldDokInfPage : public SwFldPage
 {
-    SvTreeListBox*      m_pTypeTLB;
-    VclContainer*       m_pSelection;
-    ListBox*            m_pSelectionLB;
-    VclContainer*       m_pFormat;
-    NumFormatListBox*   m_pFormatLB;
-    CheckBox*           m_pFixedCB;
+    VclPtr<SvTreeListBox>      m_pTypeTLB;
+    VclPtr<VclContainer>       m_pSelection;
+    VclPtr<ListBox>            m_pSelectionLB;
+    VclPtr<VclContainer>       m_pFormat;
+    VclPtr<NumFormatListBox>   m_pFormatLB;
+    VclPtr<CheckBox>           m_pFixedCB;
 
     SvTreeListEntry*        pSelEntry;
     com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > xCustomPropertySet;
@@ -62,6 +62,7 @@ public:
                         SwFldDokInfPage(vcl::Window* pWindow, const SfxItemSet& rSet);
 
                         virtual ~SwFldDokInfPage();
+    virtual void        dispose() SAL_OVERRIDE;
 
     static SfxTabPage*  Create(vcl::Window* pParent, const SfxItemSet* rAttrSet);
 

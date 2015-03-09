@@ -213,11 +213,9 @@ throw ( RuntimeException, std::exception )
     SolarMutexGuard aSolarMutexGuard;
 
     m_pToolbar->SetItemWindow( m_nID, 0 );
-    delete m_pSpinfieldControl;
+    m_pSpinfieldControl.clear();
 
     ComplexToolbarController::dispose();
-
-    m_pSpinfieldControl = 0;
 }
 
 Sequence<PropertyValue> SpinfieldToolbarController::getExecuteArgs(sal_Int16 KeyModifier) const

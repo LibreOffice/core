@@ -52,15 +52,15 @@ class SvxLinguData_Impl;
 
 class SvxEditModulesDlg : public ModalDialog
 {
-    SvxLanguageBox*     m_pLanguageLB;
+    VclPtr<SvxLanguageBox>     m_pLanguageLB;
 
-    SvxCheckListBox*    m_pModulesCLB;
-    PushButton*         m_pPrioUpPB;
-    PushButton*         m_pPrioDownPB;
-    PushButton*         m_pBackPB;
-    FixedHyperlink*     m_pMoreDictsLink;
+    VclPtr<SvxCheckListBox>    m_pModulesCLB;
+    VclPtr<PushButton>         m_pPrioUpPB;
+    VclPtr<PushButton>         m_pPrioDownPB;
+    VclPtr<PushButton>         m_pBackPB;
+    VclPtr<FixedHyperlink>     m_pMoreDictsLink;
 
-    CloseButton*        m_pClosePB;
+    VclPtr<CloseButton>        m_pClosePB;
 
     OUString            sSpell;
     OUString            sHyph;
@@ -94,17 +94,17 @@ public:
 class SvxLinguTabPage : public SfxTabPage
 {
 private:
-    FixedText*          m_pLinguModulesFT;
-    SvxCheckListBox*    m_pLinguModulesCLB;
-    PushButton*         m_pLinguModulesEditPB;
-    FixedText*          m_pLinguDicsFT;
-    SvxCheckListBox*    m_pLinguDicsCLB;
-    PushButton*         m_pLinguDicsNewPB;
-    PushButton*         m_pLinguDicsEditPB;
-    PushButton*         m_pLinguDicsDelPB;
-    SvxCheckListBox*    m_pLinguOptionsCLB;
-    PushButton*         m_pLinguOptionsEditPB;
-    FixedHyperlink*     m_pMoreDictsLink;
+    VclPtr<FixedText>          m_pLinguModulesFT;
+    VclPtr<SvxCheckListBox>    m_pLinguModulesCLB;
+    VclPtr<PushButton>         m_pLinguModulesEditPB;
+    VclPtr<FixedText>          m_pLinguDicsFT;
+    VclPtr<SvxCheckListBox>    m_pLinguDicsCLB;
+    VclPtr<PushButton>         m_pLinguDicsNewPB;
+    VclPtr<PushButton>         m_pLinguDicsEditPB;
+    VclPtr<PushButton>         m_pLinguDicsDelPB;
+    VclPtr<SvxCheckListBox>    m_pLinguOptionsCLB;
+    VclPtr<PushButton>         m_pLinguOptionsEditPB;
+    VclPtr<FixedHyperlink>     m_pMoreDictsLink;
 
     OUString            sCapitalWords;
     OUString            sWordsWithDigits;

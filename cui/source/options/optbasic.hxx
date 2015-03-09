@@ -27,17 +27,19 @@
 class SvxBasicIDEOptionsPage: public SfxTabPage
 {
 private:
-    CheckBox* pCodeCompleteChk;
-    CheckBox* pAutocloseProcChk;
-    CheckBox* pAutocloseParenChk;
-    CheckBox* pAutocloseQuotesChk;
-    CheckBox* pAutoCorrectChk;
-    CheckBox* pUseExtendedTypesChk;
+    VclPtr<CheckBox> pCodeCompleteChk;
+    VclPtr<CheckBox> pAutocloseProcChk;
+    VclPtr<CheckBox> pAutocloseParenChk;
+    VclPtr<CheckBox> pAutocloseQuotesChk;
+    VclPtr<CheckBox> pAutoCorrectChk;
+    VclPtr<CheckBox> pUseExtendedTypesChk;
 
     void LoadConfig();
 
 public:
     SvxBasicIDEOptionsPage( vcl::Window* pParent, const SfxItemSet& rSet );
+    virtual ~SvxBasicIDEOptionsPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     static SfxTabPage* Create( vcl::Window* pParent, const SfxItemSet* rSet );
     virtual bool FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;

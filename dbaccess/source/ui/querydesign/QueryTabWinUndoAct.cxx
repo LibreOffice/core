@@ -51,20 +51,18 @@ OQueryTabWinUndoAct::~OQueryTabWinUndoAct()
     if (m_bOwnerOfObjects)
     {
         // I should take care to delete the window if I am the only owner
-        OSL_ENSURE(m_pTabWin != NULL, "OQueryTabWinUndoAct::~OQueryTabWinUndoAct() : m_pTabWin sollte nicht NULL sein");
+        OSL_ENSURE(m_pTabWin != nullptr, "OQueryTabWinUndoAct::~OQueryTabWinUndoAct() : m_pTabWin sollte nicht NULL sein");
         OSL_ENSURE(!m_pTabWin->IsVisible(), "OQueryTabWinUndoAct::~OQueryTabWinUndoAct() : *m_pTabWin sollte nicht sichtbar sein");
 
         if ( m_pTabWin )
             m_pTabWin->clearListBox();
-        delete m_pTabWin;
 
         // and of course the corresponding connections
-        ::std::vector<OTableConnection*>::iterator aIter = m_vTableConnection.begin();
-        ::std::vector<OTableConnection*>::iterator aEnd = m_vTableConnection.end();
+        auto aIter = m_vTableConnection.begin();
+        auto aEnd = m_vTableConnection.end();
         for(;aIter != aEnd;++aIter)
         {
             m_pOwner->DeselectConn(*aIter);
-            delete (*aIter);
         }
         m_vTableConnection.clear();
     }

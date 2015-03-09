@@ -95,9 +95,11 @@ public:
 class CuiInputDialog : public ModalDialog
 {
 private:
-    Edit* m_pEdit;
+    VclPtr<Edit> m_pEdit;
 public:
     CuiInputDialog(vcl::Window * pParent, sal_uInt16 nMode);
+    virtual ~CuiInputDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     OUString GetObjectName() const { return m_pEdit->GetText(); }
     void SetObjectName(const OUString& rName)
@@ -132,14 +134,14 @@ public:
 class SvxScriptOrgDialog : public SfxModalDialog
 {
 protected:
-    SFTreeListBox*          m_pScriptsBox;
+    VclPtr<SFTreeListBox>          m_pScriptsBox;
 
-    PushButton*             m_pRunButton;
-    CloseButton*            m_pCloseButton;
-    PushButton*             m_pCreateButton;
-    PushButton*             m_pEditButton;
-    PushButton*             m_pRenameButton;
-    PushButton*             m_pDelButton;
+    VclPtr<PushButton>             m_pRunButton;
+    VclPtr<CloseButton>            m_pCloseButton;
+    VclPtr<PushButton>             m_pCreateButton;
+    VclPtr<PushButton>             m_pEditButton;
+    VclPtr<PushButton>             m_pRenameButton;
+    VclPtr<PushButton>             m_pDelButton;
 
     OUString         m_sLanguage;
     static Selection_hash   m_lastSelection;

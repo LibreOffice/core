@@ -242,7 +242,22 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( vcl::Window* pParent, SwDocShell& rDocSh,
 
 SwAsciiFilterDlg::~SwAsciiFilterDlg()
 {
+    dispose();
 }
+
+void SwAsciiFilterDlg::dispose()
+{
+    m_pCharSetLB.clear();
+    m_pFontFT.clear();
+    m_pFontLB.clear();
+    m_pLanguageFT.clear();
+    m_pLanguageLB.clear();
+    m_pCRLF_RB.clear();
+    m_pCR_RB.clear();
+    m_pLF_RB.clear();
+    SfxModalDialog::dispose();
+}
+
 
 void SwAsciiFilterDlg::FillOptions( SwAsciiOptions& rOptions )
 {

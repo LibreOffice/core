@@ -44,16 +44,16 @@ class _SfxMacroTabPage_Impl
 public:
     _SfxMacroTabPage_Impl();
 
-    OUString                        maStaticMacroLBLabel;
-    PushButton*                     pAssignPB;
-    PushButton*                     pDeletePB;
-    OUString                        sStrEvent;
-    OUString                        sAssignedMacro;
-    MacroEventListBox*              pEventLB;
-    VclFrame*                       pGroupFrame;
-    SfxConfigGroupListBox*          pGroupLB;
-    VclFrame*                       pMacroFrame;
-    SfxConfigFunctionListBox*       pMacroLB;
+    OUString                               maStaticMacroLBLabel;
+    VclPtr<PushButton>                     pAssignPB;
+    VclPtr<PushButton>                     pDeletePB;
+    OUString                               sStrEvent;
+    OUString                               sAssignedMacro;
+    VclPtr<MacroEventListBox>              pEventLB;
+    VclPtr<VclFrame>                       pGroupFrame;
+    VclPtr<SfxConfigGroupListBox>          pGroupLB;
+    VclPtr<VclFrame>                       pMacroFrame;
+    VclPtr<SfxConfigFunctionListBox>       pMacroLB;
 
     bool                            bReadOnly;
     Idle                            maFillGroupIdle;

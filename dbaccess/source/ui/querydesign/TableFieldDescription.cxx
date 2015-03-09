@@ -23,6 +23,7 @@
 #include <tools/debug.hxx>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <comphelper/namedvaluecollection.hxx>
+#include <vcl/window.hxx>
 
 #include <functional>
 

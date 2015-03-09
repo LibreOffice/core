@@ -26,6 +26,7 @@
 
 #include <uielement/complextoolbarcontroller.hxx>
 #include <vcl/spinfld.hxx>
+#include <vcl/vclptr.hxx>
 
 class ToolBox;
 
@@ -97,7 +98,7 @@ class SpinfieldToolbarController : public ISpinfieldListener,
         double            m_nMin;
         double            m_nValue;
         double            m_nStep;
-        SpinfieldControl* m_pSpinfieldControl;
+        VclPtr<SpinfieldControl> m_pSpinfieldControl;
         OUString     m_aOutFormat;
 };
 

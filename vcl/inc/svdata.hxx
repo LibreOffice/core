@@ -122,7 +122,7 @@ struct ImplSVAppData
     Help*                   mpHelp;                         // Application help
     PopupMenu*              mpActivePopupMenu;              // Actives Popup-Menu (in Execute)
     ImplIdleMgr*            mpIdleMgr;                      // Idle-Manager
-    ImplWheelWindow*        mpWheelWindow;                  // WheelWindow
+    VclPtr<ImplWheelWindow> mpWheelWindow;                  // WheelWindow
     ImplHotKey*             mpFirstHotKey;                  // HotKey-Verwaltung
     ImplEventHook*          mpFirstEventHook;               // Event-Hooks
     VclEventListeners2*     mpPostYieldListeners;           // post yield listeners
@@ -179,20 +179,20 @@ struct ImplSVGDIData
 
 struct ImplSVWinData
 {
-    vcl::Window*            mpFirstFrame;                   // First FrameWindow
-    vcl::Window*            mpDefDialogParent;              // Default Dialog Parent
-    WorkWindow*             mpAppWin;                       // Application-Window
-    vcl::Window*            mpFocusWin;                     // window, that has the focus
-    vcl::Window*            mpActiveApplicationFrame;       // the last active application frame, can be used as DefModalDialogParent if no focuswin set
-    vcl::Window*            mpCaptureWin;                   // window, that has the mouse capture
-    vcl::Window*            mpLastDeacWin;                  // Window, that need a deactivate (FloatingWindow-Handling)
-    FloatingWindow*         mpFirstFloat;                   // First FloatingWindow in PopupMode
-    Dialog*                 mpLastExecuteDlg;               // First Dialog that is in Execute
-    vcl::Window*            mpExtTextInputWin;              // Window, which is in ExtTextInput
-    vcl::Window*            mpTrackWin;                     // window, that is in tracking mode
+    VclPtr<vcl::Window>     mpFirstFrame;                   // First FrameWindow
+    VclPtr<vcl::Window>     mpDefDialogParent;              // Default Dialog Parent
+    VclPtr<WorkWindow>      mpAppWin;                       // Application-Window
+    VclPtr<vcl::Window>     mpFocusWin;                     // window, that has the focus
+    VclPtr<vcl::Window>     mpActiveApplicationFrame;       // the last active application frame, can be used as DefModalDialogParent if no focuswin set
+    VclPtr<vcl::Window>     mpCaptureWin;                   // window, that has the mouse capture
+    VclPtr<vcl::Window>     mpLastDeacWin;                  // Window, that need a deactivate (FloatingWindow-Handling)
+    VclPtr<FloatingWindow>  mpFirstFloat;                   // First FloatingWindow in PopupMode
+    VclPtr<Dialog>          mpLastExecuteDlg;               // First Dialog that is in Execute
+    VclPtr<vcl::Window>     mpExtTextInputWin;              // Window, which is in ExtTextInput
+    VclPtr<vcl::Window>     mpTrackWin;                     // window, that is in tracking mode
     AutoTimer*              mpTrackTimer;                   // tracking timer
     ImageList*              mpMsgBoxImgList;                // ImageList for MessageBox
-    vcl::Window*            mpAutoScrollWin;                // window, that is in AutoScrollMode mode
+    VclPtr<vcl::Window>     mpAutoScrollWin;                // window, that is in AutoScrollMode mode
     sal_uInt16              mnTrackFlags;                   // tracking flags
     sal_uInt16              mnAutoScrollFlags;              // auto scroll flags
     bool                    mbNoDeactivate;                 // true: do not execute Deactivate
@@ -239,7 +239,7 @@ struct ImplSVHelpData
     bool                    mbKeyboardHelp      : 1;        // tiphelp was activated by keyboard
     bool                    mbAutoHelpId        : 1;        // generate HelpIds
     bool                    mbRequestingHelp    : 1;        // In Window::RequestHelp
-    HelpTextWindow*         mpHelpWin;                      // HelpWindow
+    VclPtr<HelpTextWindow>  mpHelpWin;                      // HelpWindow
     sal_uLong               mnLastHelpHideTime;             // ticks of last show
 };
 
@@ -372,15 +372,10 @@ FieldUnitStringList* ImplGetCleanedFieldUnits();
 struct ImplDelData
 {
     ImplDelData*        mpNext;
-    const vcl::Window*  mpWindow;
+    VclPtr<vcl::Window> mpWindow;
     bool                mbDel;
 
-                        ImplDelData( const vcl::Window* pWindow = NULL ) :
-                             mpNext( NULL ),
-                             mpWindow( NULL ),
-                             mbDel( false )
-                                { if( pWindow ) AttachToWindow( pWindow ); }
-
+                        ImplDelData( vcl::Window* pWindow = NULL );
     virtual             ~ImplDelData();
 
     bool                IsDead() const
@@ -396,14 +391,14 @@ private:
 
 struct ImplFocusDelData : public ImplDelData
 {
-    vcl::Window*        mpFocusWin;
+    VclPtr<vcl::Window> mpFocusWin;
 };
 
 struct ImplSVEvent
 {
     void*               mpData;
     Link*               mpLink;
-    vcl::Window*        mpWindow;
+    VclPtr<vcl::Window> mpWindow;
     ImplDelData         maDelData;
     bool                mbCall;
 };

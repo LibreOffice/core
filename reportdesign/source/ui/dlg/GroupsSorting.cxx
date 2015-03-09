@@ -76,21 +76,37 @@ using namespace ::comphelper;
         }
     }
 
-typedef ::svt::EditBrowseBox OFieldExpressionControl_Base;
-typedef ::cppu::WeakImplHelper1< container::XContainerListener > TContainerListenerBase;
-class OFieldExpressionControl : public TContainerListenerBase
-                               ,public OFieldExpressionControl_Base
+/**
+  * Separated out from OFieldExpressionControl to prevent collision of ref-counted base classes
+  */
+class OFieldExpressionControl;
+class OFieldExpressionControlContainerListener : public ::cppu::WeakImplHelper1< container::XContainerListener >
+{
+    VclPtr<OFieldExpressionControl> mpParent;
+public:
+    OFieldExpressionControlContainerListener(OFieldExpressionControl* pParent) : mpParent(pParent) {}
+
+    // XEventListener
+    virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    // XContainerListener
+    virtual void SAL_CALL elementInserted(const ::com::sun::star::container::ContainerEvent& rEvent) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL elementReplaced(const ::com::sun::star::container::ContainerEvent& rEvent) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL elementRemoved(const ::com::sun::star::container::ContainerEvent& rEvent) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+};
+
+class OFieldExpressionControl : public ::svt::EditBrowseBox
 {
     ::osl::Mutex                    m_aMutex;
     ::std::vector<sal_Int32>        m_aGroupPositions;
     ::std::vector<ColumnInfo>       m_aColumnInfo;
-    ::svt::ComboBoxControl*         m_pComboCell;
+    VclPtr<::svt::ComboBoxControl>  m_pComboCell;
     sal_Int32                       m_nDataPos;
     sal_Int32                       m_nCurrentPos;
     ImplSVEvent *                   m_nPasteEvent;
     ImplSVEvent *                   m_nDeleteEvent;
-    OGroupsSortingDialog*           m_pParent;
+    VclPtr<OGroupsSortingDialog>    m_pParent;
     bool                            m_bIgnoreEvent;
+    OFieldExpressionControlContainerListener aContainerListener;
 
     bool SaveModified(bool _bAppend);
 
@@ -100,11 +116,11 @@ public:
     virtual void dispose() SAL_OVERRIDE;
 
     // XEventListener
-    virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    void disposing(const ::com::sun::star::lang::EventObject& Source) throw( ::com::sun::star::uno::RuntimeException, std::exception );
     // XContainerListener
-    virtual void SAL_CALL elementInserted(const ::com::sun::star::container::ContainerEvent& rEvent) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL elementReplaced(const ::com::sun::star::container::ContainerEvent& rEvent) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL elementRemoved(const ::com::sun::star::container::ContainerEvent& rEvent) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    void elementInserted(const ::com::sun::star::container::ContainerEvent& rEvent) throw(::com::sun::star::uno::RuntimeException, std::exception);
+    void elementReplaced(const ::com::sun::star::container::ContainerEvent& rEvent) throw(::com::sun::star::uno::RuntimeException, std::exception);
+    void elementRemoved(const ::com::sun::star::container::ContainerEvent& rEvent) throw(::com::sun::star::uno::RuntimeException, std::exception);
 
     virtual Size GetOptimalSize() const SAL_OVERRIDE;
 
@@ -129,7 +145,7 @@ public:
     void moveGroups(const uno::Sequence<uno::Any>& _aGroups,sal_Int32 _nRow,bool _bSelect = true);
 
     virtual bool CursorMoving(long nNewRow, sal_uInt16 nNewCol) SAL_OVERRIDE;
-    using OFieldExpressionControl_Base::GetRowCount;
+    using ::svt::EditBrowseBox::GetRowCount;
 protected:
     virtual bool IsTabAllowed(bool bForward) const SAL_OVERRIDE;
 
@@ -164,6 +180,20 @@ public:
 
 };
 
+
+void OFieldExpressionControlContainerListener::disposing(const ::com::sun::star::lang::EventObject& Source) throw( ::com::sun::star::uno::RuntimeException, std::exception )
+{ mpParent->disposing(Source); }
+
+void OFieldExpressionControlContainerListener::elementInserted(const ::com::sun::star::container::ContainerEvent& rEvent) throw(::com::sun::star::uno::RuntimeException, std::exception)
+{ mpParent->elementInserted(rEvent); }
+
+void OFieldExpressionControlContainerListener::elementReplaced(const ::com::sun::star::container::ContainerEvent& rEvent) throw(::com::sun::star::uno::RuntimeException, std::exception)
+{ mpParent->elementReplaced(rEvent); }
+
+void OFieldExpressionControlContainerListener::elementRemoved(const ::com::sun::star::container::ContainerEvent& rEvent) throw(::com::sun::star::uno::RuntimeException, std::exception)
+{ mpParent->elementRemoved(rEvent); }
+
+
 // class OFieldExpressionControl
 OFieldExpressionControl::OFieldExpressionControl(OGroupsSortingDialog* _pParentDialog, vcl::Window *_pParent)
     :EditBrowseBox( _pParent, EBBF_NONE, WB_TABSTOP | BROWSER_COLUMNSELECTION | BROWSER_MULTISELECTION | BROWSER_AUTOSIZE_LASTCOL |
@@ -176,6 +206,7 @@ OFieldExpressionControl::OFieldExpressionControl(OGroupsSortingDialog* _pParentD
     ,m_nDeleteEvent(0)
     ,m_pParent(_pParentDialog)
     ,m_bIgnoreEvent(false)
+    ,aContainerListener(this)
 {
     SetBorderStyle(WindowBorderStyle::MONO);
 }
@@ -189,9 +220,9 @@ OFieldExpressionControl::~OFieldExpressionControl()
 
 void OFieldExpressionControl::dispose()
 {
-    WeakImplHelper1::acquire();
+    aContainerListener.WeakImplHelper1::acquire();
     uno::Reference< report::XGroups > xGroups = m_pParent->getGroups();
-    xGroups->removeContainerListener(this);
+    xGroups->removeContainerListener(&aContainerListener);
 
     // delete events from queue
     if( m_nPasteEvent )
@@ -199,8 +230,9 @@ void OFieldExpressionControl::dispose()
     if( m_nDeleteEvent )
         Application::RemoveUserEvent( m_nDeleteEvent );
 
-    delete m_pComboCell;
-    OFieldExpressionControl_Base::dispose();
+    m_pComboCell.clear();
+    m_pParent.clear();
+    ::svt::EditBrowseBox::dispose();
 }
 
 uno::Sequence<uno::Any> OFieldExpressionControl::fillSelectedGroups()
@@ -377,7 +409,7 @@ void OFieldExpressionControl::lateInit()
         if( m_pParent->isReadOnly() )
             nMode |= BROWSER_HIDECURSOR;
         SetMode(nMode);
-        xGroups->addContainerListener(this);
+        xGroups->addContainerListener(&aContainerListener);
     }
     else
         // not the first call
@@ -983,11 +1015,20 @@ OGroupsSortingDialog::~OGroupsSortingDialog()
 
 void OGroupsSortingDialog::dispose()
 {
-    delete m_pFieldExpression;
     m_xColumns.clear();
     m_pReportListener->dispose();
     if ( m_pCurrentGroupListener.is() )
         m_pCurrentGroupListener->dispose();
+    m_pToolBox.clear();
+    m_pProperties.clear();
+    m_pOrderLst.clear();
+    m_pHeaderLst.clear();
+    m_pFooterLst.clear();
+    m_pGroupOnLst.clear();
+    m_pGroupIntervalEd.clear();
+    m_pKeepTogetherLst.clear();
+    m_pHelpWindow.clear();
+    m_pFieldExpression.clear();
     FloatingWindow::dispose();
 }
 

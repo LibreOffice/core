@@ -168,6 +168,28 @@ namespace dbaui
 #endif
     }
 
+    MySQLNativeSettings::~MySQLNativeSettings()
+    {
+        dispose();
+    }
+
+    void MySQLNativeSettings::dispose()
+    {
+        m_pDatabaseNameLabel.clear();
+        m_pDatabaseName.clear();
+        m_pHostPortRadio.clear();
+        m_pSocketRadio.clear();
+        m_pNamedPipeRadio.clear();
+        m_pHostNameLabel.clear();
+        m_pHostName.clear();
+        m_pPortLabel.clear();
+        m_pPort.clear();
+        m_pDefaultPort.clear();
+        m_pSocket.clear();
+        m_pNamedPipe.clear();
+        TabPage::dispose();
+    }
+
     void MySQLNativeSettings::fillControls( ::std::vector< ISaveValueWrapper* >& _rControlList )
     {
         _rControlList.push_back( new OSaveValueWrapper< Edit >( m_pDatabaseName ) );

@@ -121,37 +121,37 @@ OUString SdAbstractTabDialog_Impl::GetText() const
 
 void AbstractBulletDialog_Impl::SetCurPageId( sal_uInt16 nId )
 {
-    static_cast< ::sd::OutlineBulletDlg*>(pDlg)->SetCurPageId( nId );
+    static_cast< ::sd::OutlineBulletDlg*>(pDlg.get())->SetCurPageId( nId );
 }
 
 void AbstractBulletDialog_Impl::SetCurPageId( const OString& rName )
 {
-    static_cast< ::sd::OutlineBulletDlg*>(pDlg)->SetCurPageId( rName );
+    static_cast< ::sd::OutlineBulletDlg*>(pDlg.get())->SetCurPageId( rName );
 }
 
 const SfxItemSet* AbstractBulletDialog_Impl::GetOutputItemSet() const
 {
-    return static_cast< ::sd::OutlineBulletDlg*>(pDlg)->GetOutputItemSet();
+    return static_cast< ::sd::OutlineBulletDlg*>(pDlg.get())->GetOutputItemSet();
 }
 
 const sal_uInt16* AbstractBulletDialog_Impl::GetInputRanges(const SfxItemPool& pItem )
 {
-    return static_cast< ::sd::OutlineBulletDlg*>(pDlg)->GetInputRanges( pItem );
+    return static_cast< ::sd::OutlineBulletDlg*>(pDlg.get())->GetInputRanges( pItem );
 }
 
 void AbstractBulletDialog_Impl::SetInputSet( const SfxItemSet* pInSet )
 {
-     static_cast< ::sd::OutlineBulletDlg*>(pDlg)->SetInputSet( pInSet );
+     static_cast< ::sd::OutlineBulletDlg*>(pDlg.get())->SetInputSet( pInSet );
 }
 
 void AbstractBulletDialog_Impl::SetText( const OUString& rStr )
 {
-    static_cast< ::sd::OutlineBulletDlg*>(pDlg)->SetText( rStr );
+    static_cast< ::sd::OutlineBulletDlg*>(pDlg.get())->SetText( rStr );
 }
 
 OUString AbstractBulletDialog_Impl::GetText() const
 {
-    return static_cast< ::sd::OutlineBulletDlg*>(pDlg)->GetText();
+    return static_cast< ::sd::OutlineBulletDlg*>(pDlg.get())->GetText();
 }
 
 void SdPresLayoutTemplateDlg_Impl::SetCurPageId( sal_uInt16 nId )

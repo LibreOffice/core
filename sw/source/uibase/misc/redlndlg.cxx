@@ -69,7 +69,7 @@ SwRedlineAcceptChild::SwRedlineAcceptChild( vcl::Window* _pParent,
 {
     pWindow = new SwModelessRedlineAcceptDlg( pBindings, this, _pParent);
 
-    static_cast<SwModelessRedlineAcceptDlg *>(pWindow)->Initialize(pInfo);
+    static_cast<SwModelessRedlineAcceptDlg *>(pWindow.get())->Initialize(pInfo);
 }
 
 // newly initialise dialog after document switch

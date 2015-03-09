@@ -95,7 +95,7 @@ private:
     VclPtr<ToolBox>     maMuteToolBox;
     VclPtr<Slider>      maVolumeSlider;
     VclPtr<ToolBox>     maZoomToolBox;
-    ListBox*            mpZoomListBox;
+    VclPtr<ListBox>     mpZoomListBox;
     VclPtr<Edit>        maTimeEdit;
     Size                maMinSize;
     MediaControlStyle   meControlStyle;

@@ -551,6 +551,7 @@ void Dialog::dispose()
 {
     delete mpDialogImpl;
     mpDialogImpl = NULL;
+    mpPrevExecuteDlg.clear();
     mpActionArea.clear();
     mpContentArea.clear();
     SystemWindow::dispose();
@@ -1005,7 +1006,7 @@ void Dialog::SetModalInputMode( bool bModal )
                 pPrevModalDlg = pPrevModalDlg->mpPrevExecuteDlg;
 
             if( pPrevModalDlg &&
-            ( pPrevModalDlg == mpPrevExecuteDlg
+            ( pPrevModalDlg == mpPrevExecuteDlg.get()
                 || !pPrevModalDlg->IsWindowOrChild( this, true ) ) )
             {
                 mpPrevExecuteDlg->SetModalInputMode( false );

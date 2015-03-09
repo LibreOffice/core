@@ -66,10 +66,8 @@ OJoinDesignView::~OJoinDesignView()
 
 void OJoinDesignView::dispose()
 {
-    boost::scoped_ptr<vcl::Window> aT3(m_pScrollWindow);
-    m_pScrollWindow = NULL;
-    boost::scoped_ptr<vcl::Window> aT2(m_pTableView);
-    m_pTableView = NULL;
+    m_pScrollWindow.clear();
+    m_pTableView.clear();
     ODataView::dispose();
 }
 

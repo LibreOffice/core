@@ -191,6 +191,24 @@ SvInsertOleDlg::SvInsertOleDlg
     RadioHdl( NULL );
 }
 
+SvInsertOleDlg::~SvInsertOleDlg()
+{
+    dispose();
+}
+
+void SvInsertOleDlg::dispose()
+{
+    m_pRbNewObject.clear();
+    m_pRbObjectFromfile.clear();
+    m_pObjectTypeFrame.clear();
+    m_pLbObjecttype.clear();
+    m_pFileFrame.clear();
+    m_pEdFilepath.clear();
+    m_pBtnFilepath.clear();
+    m_pCbFilelink.clear();
+    InsertObjectDialog_Impl::dispose();
+}
+
 short SvInsertOleDlg::Execute()
 {
     short nRet = RET_OK;
@@ -402,6 +420,9 @@ void SvInsertPlugInDialog::dispose()
 {
     delete m_pURL;
     m_pURL = NULL;
+    m_pEdFileurl.clear();
+    m_pBtnFileurl.clear();
+    m_pEdPluginsOptions.clear();
     InsertObjectDialog_Impl::dispose();
 }
 
@@ -492,6 +513,30 @@ SfxInsertFloatingFrameDialog::SfxInsertFloatingFrameDialog( vcl::Window *pParent
     m_xObj = xObj;
 
     Init();
+}
+
+SfxInsertFloatingFrameDialog::~SfxInsertFloatingFrameDialog()
+{
+    dispose();
+}
+
+void SfxInsertFloatingFrameDialog::dispose()
+{
+    m_pEDName.clear();
+    m_pEDURL.clear();
+    m_pBTOpen.clear();
+    m_pRBScrollingOn.clear();
+    m_pRBScrollingOff.clear();
+    m_pRBScrollingAuto.clear();
+    m_pRBFrameBorderOn.clear();
+    m_pRBFrameBorderOff.clear();
+    m_pFTMarginWidth.clear();
+    m_pNMMarginWidth.clear();
+    m_pCBMarginWidthDefault.clear();
+    m_pFTMarginHeight.clear();
+    m_pNMMarginHeight.clear();
+    m_pCBMarginHeightDefault.clear();
+    InsertObjectDialog_Impl::dispose();
 }
 
 void SfxInsertFloatingFrameDialog::Init()

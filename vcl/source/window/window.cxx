@@ -33,6 +33,7 @@
 #include <vcl/syschild.hxx>
 #include <vcl/dockwin.hxx>
 #include <vcl/wall.hxx>
+#include <vcl/fixed.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/button.hxx>
 #include <vcl/taskpanelist.hxx>
@@ -176,9 +177,8 @@ void Window::dispose()
     // remove ownerdraw decorated windows from list in the top-most frame window
     if( (GetStyle() & WB_OWNERDRAWDECORATION) && mpWindowImpl->mbFrame )
     {
-        ::std::vector< vcl::Window* >& rList = ImplGetOwnerDrawList();
-        ::std::vector< vcl::Window* >::iterator p;
-        p = ::std::find( rList.begin(), rList.end(), this );
+        ::std::vector< VclPtr<vcl::Window> >& rList = ImplGetOwnerDrawList();
+        auto p = ::std::find( rList.begin(), rList.end(), VclPtr<vcl::Window>(this) );
         if( p != rList.end() )
             rList.erase( p );
     }
@@ -241,9 +241,9 @@ void Window::dispose()
     if ( pSVData->maHelpData.mpHelpWin && (pSVData->maHelpData.mpHelpWin->GetParent() == this) )
         ImplDestroyHelpWindow( true );
 
-    DBG_ASSERT( pSVData->maWinData.mpTrackWin != this,
+    DBG_ASSERT( pSVData->maWinData.mpTrackWin.get() != this,
                 "Window::~Window(): Window is in TrackingMode" );
-    DBG_ASSERT( pSVData->maWinData.mpCaptureWin != this,
+    DBG_ASSERT( pSVData->maWinData.mpCaptureWin.get() != this,
                 "Window::~Window(): Window has the mouse captured" );
 
     // due to old compatibility
@@ -390,9 +390,8 @@ void Window::dispose()
     remove_from_all_size_groups();
 
     // clear mnemonic labels
-    std::vector<FixedText*> aMnemonicLabels(list_mnemonic_labels());
-    for (std::vector<FixedText*>::iterator aI = aMnemonicLabels.begin();
-        aI != aMnemonicLabels.end(); ++aI)
+    std::vector<VclPtr<FixedText> > aMnemonicLabels(list_mnemonic_labels());
+    for (auto aI = aMnemonicLabels.begin(); aI != aMnemonicLabels.end(); ++aI)
     {
         remove_mnemonic_label(*aI);
     }
@@ -508,7 +507,7 @@ void Window::dispose()
     while ( pDelData )
     {
         pDelData->mbDel = true;
-        pDelData->mpWindow = NULL;  // #112873# pDel is not associated with a Window anymore
+        pDelData->mpWindow.clear();  // #112873# pDel is not associated with a Window anymore
         pDelData = pDelData->mpNext;
     }
 
@@ -523,8 +522,8 @@ void Window::dispose()
         {
             ImplWinData* pParentWinData = mpWindowImpl->mpRealParent->ImplGetWinData();
 
-            ::std::list< vcl::Window* >::iterator myPos = ::std::find( pParentWinData->maTopWindowChildren.begin(),
-                pParentWinData->maTopWindowChildren.end(), this );
+            auto myPos = ::std::find( pParentWinData->maTopWindowChildren.begin(),
+                pParentWinData->maTopWindowChildren.end(), VclPtr<vcl::Window>(this) );
             DBG_ASSERT( myPos != pParentWinData->maTopWindowChildren.end(), "Window::~Window: inconsistency in top window chain!" );
             if ( myPos != pParentWinData->maTopWindowChildren.end() )
                 pParentWinData->maTopWindowChildren.erase( myPos );
@@ -563,10 +562,10 @@ void Window::dispose()
         else
         {
             vcl::Window* pSysWin = pSVData->maWinData.mpFirstFrame;
-            while ( pSysWin->mpWindowImpl->mpFrameData->mpNextFrame != this )
+            while ( pSysWin->mpWindowImpl->mpFrameData->mpNextFrame.get() != this )
                 pSysWin = pSysWin->mpWindowImpl->mpFrameData->mpNextFrame;
 
-            assert (mpWindowImpl->mpFrameData->mpNextFrame != pSysWin);
+            assert (mpWindowImpl->mpFrameData->mpNextFrame.get() != pSysWin);
             pSysWin->mpWindowImpl->mpFrameData->mpNextFrame = mpWindowImpl->mpFrameData->mpNextFrame;
         }
         mpWindowImpl->mpFrame->SetCallback( NULL, NULL );
@@ -1005,7 +1004,7 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
         mpWindowImpl->mpOverlapWindow = this;
 
         // set frame data
-        assert (pSVData->maWinData.mpFirstFrame != this);
+        assert (pSVData->maWinData.mpFirstFrame.get() != this);
         mpWindowImpl->mpFrameData->mpNextFrame        = pSVData->maWinData.mpFirstFrame;
         pSVData->maWinData.mpFirstFrame = this;
         mpWindowImpl->mpFrameData->mpFirstOverlap     = NULL;
@@ -2508,7 +2507,7 @@ Size Window::GetSizePixel() const
     // #i43257# trigger pending resize handler to assure correct window sizes
     if( mpWindowImpl->mpFrameData->maResizeIdle.IsActive() )
     {
-        ImplDelData aDogtag( this );
+        ImplDelData aDogtag( const_cast<Window*>(this) );
         mpWindowImpl->mpFrameData->maResizeIdle.Stop();
         mpWindowImpl->mpFrameData->maResizeIdle.GetIdleHdl().Call( NULL );
         if( aDogtag.IsDead() )
@@ -2561,7 +2560,7 @@ void Window::Enable( bool bEnable, bool bChild )
     // window was disabled when the frame focus changed
     ImplSVData* pSVData = ImplGetSVData();
     if( bEnable &&
-        pSVData->maWinData.mpFocusWin == NULL &&
+        pSVData->maWinData.mpFocusWin == nullptr &&
         mpWindowImpl->mpFrameData->mbHasFocus &&
         mpWindowImpl->mpFrameData->mpFocusWin == this )
         pSVData->maWinData.mpFocusWin = this;
@@ -2644,7 +2643,7 @@ void Window::EnableInput( bool bEnable, bool bChild )
     // window was disabled when the frame focus changed
     ImplSVData* pSVData = ImplGetSVData();
     if( bEnable &&
-        pSVData->maWinData.mpFocusWin == NULL &&
+        pSVData->maWinData.mpFocusWin == nullptr &&
         mpWindowImpl->mpFrameData->mbHasFocus &&
         mpWindowImpl->mpFrameData->mpFocusWin == this )
         pSVData->maWinData.mpFocusWin = this;
@@ -2716,8 +2715,8 @@ void Window::EnableInput( bool bEnable, bool bChild, bool bSysWin,
         // the same for ownerdraw floating windows
         if( mpWindowImpl->mbFrame )
         {
-            ::std::vector< vcl::Window* >& rList = mpWindowImpl->mpFrameData->maOwnerDrawList;
-            ::std::vector< vcl::Window* >::iterator p = rList.begin();
+            ::std::vector< VclPtr<vcl::Window> >& rList = mpWindowImpl->mpFrameData->maOwnerDrawList;
+            auto p = rList.begin();
             while( p != rList.end() )
             {
                 // Is Window in the path from this window
@@ -3083,7 +3082,7 @@ Rectangle Window::ImplGetWindowExtentsRelative( vcl::Window *pRelativeWindow, bo
     if( pRelativeWindow )
     {
         // #106399# express coordinates relative to borderwindow
-        vcl::Window *pRelWin = (!bClientOnly && pRelativeWindow->mpWindowImpl->mpBorderWindow) ? pRelativeWindow->mpWindowImpl->mpBorderWindow : pRelativeWindow;
+        vcl::Window *pRelWin = (!bClientOnly && pRelativeWindow->mpWindowImpl->mpBorderWindow) ? pRelativeWindow->mpWindowImpl->mpBorderWindow.get() : pRelativeWindow;
         aPos = pRelWin->AbsoluteScreenToOutputPixel( aPos );
     }
     return Rectangle( aPos, aSize );
@@ -3636,7 +3635,7 @@ void Window::ImplIncModalCount()
         {
             pParent = pParent->GetParent();
         }
-        pFrameWindow = pParent ? pParent->mpWindowImpl->mpFrameWindow : NULL;
+        pFrameWindow = pParent ? pParent->mpWindowImpl->mpFrameWindow.get() : NULL;
     }
 }
 void Window::ImplDecModalCount()
@@ -3650,7 +3649,7 @@ void Window::ImplDecModalCount()
         {
             pParent = pParent->GetParent();
         }
-        pFrameWindow = pParent ? pParent->mpWindowImpl->mpFrameWindow : NULL;
+        pFrameWindow = pParent ? pParent->mpWindowImpl->mpFrameWindow.get() : NULL;
     }
 }
 

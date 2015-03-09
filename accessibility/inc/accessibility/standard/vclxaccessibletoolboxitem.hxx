@@ -30,6 +30,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase4.hxx>
 #include <comphelper/accessibletexthelper.hxx>
+#include <vcl/vclptr.hxx>
 
 class ToolBox;
 
@@ -46,13 +47,13 @@ class VCLXAccessibleToolBoxItem : public AccessibleTextHelper_BASE,
 {
 private:
     OUString                m_sOldName;
-    ToolBox*                m_pToolBox;
+    VclPtr<ToolBox>         m_pToolBox;
     VCLExternalSolarLock*   m_pExternalLock;
     sal_Int32               m_nIndexInParent;
     sal_Int16               m_nRole;
-    sal_uInt16                  m_nItemId;
-    bool                m_bHasFocus;
-    bool                m_bIsChecked;
+    sal_uInt16              m_nItemId;
+    bool                    m_bHasFocus;
+    bool                    m_bIsChecked;
     bool                    m_bIndeterminate;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >    m_xChild;
@@ -80,9 +81,9 @@ public:
     VCLXAccessibleToolBoxItem( ToolBox* _pToolBox, sal_Int32 _nPos );
 
     void                SetFocus( bool _bFocus );
-    inline bool     HasFocus() const { return m_bHasFocus; }
+    inline bool         HasFocus() const { return m_bHasFocus; }
     void                SetChecked( bool _bCheck );
-    inline bool     IsChecked() const { return m_bIsChecked; }
+    inline bool         IsChecked() const { return m_bIsChecked; }
     void                SetIndeterminate( bool _bIndeterminate );
     inline bool         IsIndeterminate() const { return m_bIndeterminate; }
     inline void         ReleaseToolBox() { m_pToolBox = NULL; }

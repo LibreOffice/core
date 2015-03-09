@@ -29,6 +29,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 
 #include <svtools/colrdlg.hxx>
+#include <vcl/window.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;

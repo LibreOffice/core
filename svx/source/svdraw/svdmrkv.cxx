@@ -2091,7 +2091,7 @@ void SdrMarkView::MarkListHasChanged()
     bMarkedObjRectDirty=true;
     bMarkedPointsRectsDirty=true;
 #ifdef DBG_UTIL
-    if (pItemBrowser!=NULL) pItemBrowser->SetDirty();
+    if (pItemBrowser!=nullptr) pItemBrowser->SetDirty();
 #endif
     bool bOneEdgeMarked=false;
     if (GetMarkedObjectCount()==1) {

@@ -33,8 +33,8 @@
 //sibling after that is going to fail hard
 class CandidateMgr
 {
-    std::vector<vcl::Window*> m_aCandidates;
-    std::set<vcl::Window*> m_aDeletedCandidates;
+    std::vector<VclPtr<vcl::Window> > m_aCandidates;
+    std::set<VclPtr<vcl::Window> > m_aDeletedCandidates;
     DECL_LINK(WindowEventListener, VclSimpleEvent*);
 public:
     void PaintTransparentChildren(vcl::Window & rWindow, Rectangle const& rPixelRect);
@@ -58,10 +58,9 @@ IMPL_LINK(CandidateMgr, WindowEventListener, VclSimpleEvent*, pEvent)
 
 CandidateMgr::~CandidateMgr()
 {
-    for (std::vector<vcl::Window*>::iterator aI = m_aCandidates.begin();
-         aI != m_aCandidates.end(); ++aI)
+    for (auto aI = m_aCandidates.begin(); aI != m_aCandidates.end(); ++aI)
     {
-        vcl::Window* pCandidate = *aI;
+        VclPtr<vcl::Window> pCandidate = *aI;
         if (m_aDeletedCandidates.find(pCandidate) != m_aDeletedCandidates.end())
             continue;
         pCandidate->RemoveEventListener(LINK(this, CandidateMgr, WindowEventListener));
@@ -97,8 +96,7 @@ void CandidateMgr::PaintTransparentChildren(vcl::Window & rWindow, Rectangle con
         pCandidate = pCandidate->GetWindow( WINDOW_NEXT );
     }
 
-    for (std::vector<vcl::Window*>::iterator aI = m_aCandidates.begin();
-         aI != m_aCandidates.end(); ++aI)
+    for (auto aI = m_aCandidates.begin(); aI != m_aCandidates.end(); ++aI)
     {
         pCandidate = *aI;
         if (m_aDeletedCandidates.find(pCandidate) != m_aDeletedCandidates.end())

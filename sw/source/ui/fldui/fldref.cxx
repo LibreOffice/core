@@ -107,6 +107,21 @@ SwFldRefPage::SwFldRefPage(vcl::Window* pParent, const SfxItemSet& rCoreSet )
 
 SwFldRefPage::~SwFldRefPage()
 {
+    dispose();
+}
+
+void SwFldRefPage::dispose()
+{
+    m_pTypeLB.clear();
+    m_pSelection.clear();
+    m_pSelectionLB.clear();
+    m_pSelectionToolTipLB.clear();
+    m_pFormat.clear();
+    m_pFormatLB.clear();
+    m_pNameFT.clear();
+    m_pNameED.clear();
+    m_pValueED.clear();
+    SwFldPage::dispose();
 }
 
 // #i83479#

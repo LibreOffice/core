@@ -81,29 +81,29 @@ class SvxPositionSizeTabPage : public SvxTabPage
 
 private:
     // position
-    VclFrame*            m_pFlPosition;
-    MetricField*         m_pMtrPosX;
-    MetricField*         m_pMtrPosY;
-    SvxRectCtl*          m_pCtlPos;
+    VclPtr<VclFrame>            m_pFlPosition;
+    VclPtr<MetricField>         m_pMtrPosX;
+    VclPtr<MetricField>         m_pMtrPosY;
+    VclPtr<SvxRectCtl>          m_pCtlPos;
 
     // size
-    VclFrame*            m_pFlSize;
-    FixedText*           m_pFtWidth;
-    MetricField*         m_pMtrWidth;
-    FixedText*           m_pFtHeight;
-    MetricField*         m_pMtrHeight;
-    CheckBox*            m_pCbxScale;
-    SvxRectCtl*          m_pCtlSize;
+    VclPtr<VclFrame>            m_pFlSize;
+    VclPtr<FixedText>           m_pFtWidth;
+    VclPtr<MetricField>         m_pMtrWidth;
+    VclPtr<FixedText>           m_pFtHeight;
+    VclPtr<MetricField>         m_pMtrHeight;
+    VclPtr<CheckBox>            m_pCbxScale;
+    VclPtr<SvxRectCtl>          m_pCtlSize;
 
     // protect
-    VclFrame*            m_pFlProtect;
-    TriStateBox*         m_pTsbPosProtect;
-    TriStateBox*         m_pTsbSizeProtect;
+    VclPtr<VclFrame>            m_pFlProtect;
+    VclPtr<TriStateBox>         m_pTsbPosProtect;
+    VclPtr<TriStateBox>         m_pTsbSizeProtect;
 
     // adjust
-    VclFrame*            m_pFlAdjust;
-    TriStateBox*         m_pTsbAutoGrowWidth;
-    TriStateBox*         m_pTsbAutoGrowHeight;
+    VclPtr<VclFrame>            m_pFlAdjust;
+    VclPtr<TriStateBox>         m_pTsbAutoGrowWidth;
+    VclPtr<TriStateBox>         m_pTsbAutoGrowHeight;
 
 private:
     const SfxItemSet&   mrOutAttrs;
@@ -146,6 +146,8 @@ private:
 
 public:
     SvxPositionSizeTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs  );
+    virtual ~SvxPositionSizeTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     static SfxTabPage* Create( vcl::Window*, const SfxItemSet* );
     static const sal_uInt16* GetRanges() {  return pPosSizeRanges; }
@@ -181,14 +183,14 @@ class SvxAngleTabPage : public SvxTabPage
     static const sal_uInt16 pAngleRanges[];
 
 private:
-    VclFrame*            m_pFlPosition;
-    MetricField*         m_pMtrPosX;
-    MetricField*         m_pMtrPosY;
-    SvxRectCtl*          m_pCtlRect;
+    VclPtr<VclFrame>            m_pFlPosition;
+    VclPtr<MetricField>         m_pMtrPosX;
+    VclPtr<MetricField>         m_pMtrPosY;
+    VclPtr<SvxRectCtl>          m_pCtlRect;
 
-    VclFrame*            m_pFlAngle;
-    NumericField*        m_pNfAngle;
-    svx::DialControl*    m_pCtlAngle;
+    VclPtr<VclFrame>            m_pFlAngle;
+    VclPtr<NumericField>        m_pNfAngle;
+    VclPtr<svx::DialControl>    m_pCtlAngle;
 
     const SfxItemSet&   rOutAttrs;
     const SdrView*      pView;
@@ -202,6 +204,8 @@ private:
 
 public:
          SvxAngleTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs  );
+    virtual ~SvxAngleTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     static SfxTabPage* Create( vcl::Window*, const SfxItemSet* );
     static const sal_uInt16*  GetRanges() { return pAngleRanges; }
@@ -230,10 +234,10 @@ class SvxSlantTabPage : public SvxTabPage
     static const sal_uInt16 pSlantRanges[];
 
 private:
-    VclFrame*            m_pFlRadius;
-    MetricField*         m_pMtrRadius;
-    VclFrame*            m_pFlAngle;
-    MetricField*         m_pMtrAngle;
+    VclPtr<VclFrame>            m_pFlRadius;
+    VclPtr<MetricField>         m_pMtrRadius;
+    VclPtr<VclFrame>            m_pFlAngle;
+    VclPtr<MetricField>         m_pMtrAngle;
 
     const SfxItemSet&   rOutAttrs;
 
@@ -247,6 +251,8 @@ private:
 
 public:
          SvxSlantTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs  );
+    virtual ~SvxSlantTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     static SfxTabPage* Create( vcl::Window*, const SfxItemSet* );
     static const sal_uInt16* GetRanges() {  return pSlantRanges; }

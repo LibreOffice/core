@@ -28,10 +28,10 @@
 
 class SvxSplitTableDlg : public SvxAbstractSplittTableDialog, public SvxStandardDialog
 {
-    NumericField* m_pCountEdit;
-    RadioButton*  m_pHorzBox;
-    RadioButton*  m_pVertBox;
-    CheckBox*     m_pPropCB;
+    VclPtr<NumericField> m_pCountEdit;
+    VclPtr<RadioButton>  m_pHorzBox;
+    VclPtr<RadioButton>  m_pVertBox;
+    VclPtr<CheckBox>     m_pPropCB;
 
     long                mnMaxVertical;
     long                mnMaxHorizontal;
@@ -40,6 +40,8 @@ protected:
 
 public:
     SvxSplitTableDlg(vcl::Window *pParent, bool bIsTableVertical, long nMaxVertical, long nMaxHorizontal );
+    virtual ~SvxSplitTableDlg();
+    virtual void dispose() SAL_OVERRIDE;
 
     DECL_LINK( ClickHdl, Button * );
 

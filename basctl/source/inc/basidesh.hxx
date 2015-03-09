@@ -56,7 +56,7 @@ class Shell :
     public DocumentEventListener
 {
 public:
-    typedef std::map<sal_uInt16, BaseWindow*> WindowTable;
+    typedef std::map<sal_uInt16, VclPtr<BaseWindow> > WindowTable;
     typedef WindowTable::const_iterator WindowTableIt;
 
 private:
@@ -64,9 +64,9 @@ private:
     friend class LocalizationMgr;
     friend bool implImportDialog( vcl::Window* pWin, const OUString& rCurPath, const ScriptDocument& rDocument, const OUString& aLibName ); // defined in baside3.cxx
 
-    WindowTable         aWindowTable;
+    WindowTable        aWindowTable;
     sal_uInt16          nCurKey;
-    BaseWindow*         pCurWin;
+    VclPtr<BaseWindow>         pCurWin;
     ScriptDocument      m_aCurDocument;
     OUString            m_aCurLibName;
     boost::shared_ptr<LocalizationMgr> m_pCurLocalizationMgr;
@@ -81,7 +81,7 @@ private:
     boost::scoped_ptr<ModulWindowLayout> pModulLayout;
     boost::scoped_ptr<DialogWindowLayout> pDialogLayout;
     // the active layout window
-    Layout* pLayout;
+    VclPtr<Layout> pLayout;
     // common object catalog window
     VclPtr<ObjectCatalog> aObjectCatalog;
 

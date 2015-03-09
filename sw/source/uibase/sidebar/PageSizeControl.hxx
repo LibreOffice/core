@@ -51,7 +51,7 @@ public:
     virtual void dispose() SAL_OVERRIDE;
 
 private:
-    ::svx::sidebar::ValueSetWithTextControl* mpSizeValueSet;
+    VclPtr<::svx::sidebar::ValueSetWithTextControl> mpSizeValueSet;
     VclPtr<PushButton> maMoreButton;
     // hidden metric field
     VclPtr<MetricField> maWidthHeightField;

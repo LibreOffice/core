@@ -33,30 +33,30 @@ class SwMailMergeWizard;
 class SwGreetingsHandler
 {
 protected:
-    CheckBox*           m_pGreetingLineCB;
+    VclPtr<CheckBox>           m_pGreetingLineCB;
 
-    CheckBox*           m_pPersonalizedCB;
+    VclPtr<CheckBox>           m_pPersonalizedCB;
 
-    FixedText*          m_pFemaleFT;
-    ListBox*            m_pFemaleLB;
-    PushButton*         m_pFemalePB;
+    VclPtr<FixedText>          m_pFemaleFT;
+    VclPtr<ListBox>            m_pFemaleLB;
+    VclPtr<PushButton>         m_pFemalePB;
 
-    FixedText*          m_pMaleFT;
-    ListBox*            m_pMaleLB;
-    PushButton*         m_pMalePB;
+    VclPtr<FixedText>          m_pMaleFT;
+    VclPtr<ListBox>            m_pMaleLB;
+    VclPtr<PushButton>         m_pMalePB;
 
-    FixedText*          m_pFemaleFI;
-    FixedText*          m_pFemaleColumnFT;
-    ListBox*            m_pFemaleColumnLB;
-    FixedText*          m_pFemaleFieldFT;
-    ComboBox*           m_pFemaleFieldCB;
+    VclPtr<FixedText>          m_pFemaleFI;
+    VclPtr<FixedText>          m_pFemaleColumnFT;
+    VclPtr<ListBox>            m_pFemaleColumnLB;
+    VclPtr<FixedText>          m_pFemaleFieldFT;
+    VclPtr<ComboBox>           m_pFemaleFieldCB;
 
-    FixedText*          m_pNeutralFT;
-    ComboBox*           m_pNeutralCB;
+    VclPtr<FixedText>          m_pNeutralFT;
+    VclPtr<ComboBox>           m_pNeutralCB;
 
     bool                m_bIsTabPage;
 
-    SwMailMergeWizard*  m_pWizard;
+    VclPtr<SwMailMergeWizard>  m_pWizard;
 
     ~SwGreetingsHandler() {}
 
@@ -70,12 +70,12 @@ protected:
 class SwMailMergeGreetingsPage : public svt::OWizardPage,
                                     public SwGreetingsHandler
 {
-    FixedText*          m_pPreviewFI;
-    SwAddressPreview*   m_pPreviewWIN;
-    PushButton*         m_pAssignPB;
-    FixedText*          m_pDocumentIndexFI;
-    PushButton*         m_pPrevSetIB;
-    PushButton*         m_pNextSetIB;
+    VclPtr<FixedText>          m_pPreviewFI;
+    VclPtr<SwAddressPreview>   m_pPreviewWIN;
+    VclPtr<PushButton>         m_pAssignPB;
+    VclPtr<FixedText>          m_pDocumentIndexFI;
+    VclPtr<PushButton>         m_pPrevSetIB;
+    VclPtr<PushButton>         m_pNextSetIB;
 
     OUString            m_sDocument;
 
@@ -90,21 +90,23 @@ class SwMailMergeGreetingsPage : public svt::OWizardPage,
 public:
         SwMailMergeGreetingsPage( SwMailMergeWizard* _pParent);
         virtual ~SwMailMergeGreetingsPage();
+    virtual void dispose() SAL_OVERRIDE;
 
 };
 
 class SwMailBodyDialog : public SfxModalDialog, public SwGreetingsHandler
 {
-    FixedText           *m_pBodyFT;
-    VclMultiLineEdit    *m_pBodyMLE;
+    VclPtr<FixedText>           m_pBodyFT;
+    VclPtr<VclMultiLineEdit>    m_pBodyMLE;
 
-    OKButton            *m_pOK;
+    VclPtr<OKButton>            m_pOK;
 
     DECL_LINK(ContainsHdl_Impl, CheckBox*);
     DECL_LINK(OKHdl, void *);
 public:
     SwMailBodyDialog(vcl::Window* pParent, SwMailMergeWizard* pWizard);
     virtual ~SwMailBodyDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     void            SetBody(const OUString& rBody ) {m_pBodyMLE->SetText(rBody);}
     OUString        GetBody() const {return m_pBodyMLE->GetText();}

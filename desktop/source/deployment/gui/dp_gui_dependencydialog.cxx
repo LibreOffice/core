@@ -50,4 +50,14 @@ DependencyDialog::DependencyDialog(
     }
 }
 
+DependencyDialog::~DependencyDialog()
+{
+    dispose();
+}
+
+void DependencyDialog::dispose()
+{
+    m_list.clear();
+    ModalDialog::dispose();
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

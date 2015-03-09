@@ -102,21 +102,15 @@ namespace dbaui
 
     void OCommonBehaviourTabPage::dispose()
     {
-        if(m_bDelete)
-        {
-            DELETEZ(m_pOptionsLabel);
-            DELETEZ(m_pOptions);
-
-            DELETEZ(m_pCharsetLabel);
-            DELETEZ(m_pCharset);
-
-            DELETEZ(m_pAutoIncrementLabel);
-            DELETEZ(m_pAutoIncrement);
-
-            DELETEZ(m_pAutoRetrievingEnabled);
-            DELETEZ(m_pAutoRetrievingLabel);
-            DELETEZ(m_pAutoRetrieving);
-        }
+        m_pOptionsLabel.clear();
+        m_pOptions.clear();
+        m_pCharsetLabel.clear();
+        m_pCharset.clear();
+        m_pAutoIncrementLabel.clear();
+        m_pAutoIncrement.clear();
+        m_pAutoRetrievingEnabled.clear();
+        m_pAutoRetrievingLabel.clear();
+        m_pAutoRetrieving.clear();
         OGenericAdministrationPage::dispose();
     }
 
@@ -199,6 +193,19 @@ namespace dbaui
         m_pShowDeleted->SetClickHdl(LINK(this, ODbaseDetailsPage, OnButtonClicked));
     }
 
+    ODbaseDetailsPage::~ODbaseDetailsPage()
+    {
+        dispose();
+    }
+
+    void ODbaseDetailsPage::dispose()
+    {
+        m_pShowDeleted.clear();
+        m_pFT_Message.clear();
+        m_pIndexes.clear();
+        OCommonBehaviourTabPage::dispose();
+    }
+
     SfxTabPage* ODriversSettings::CreateDbase( vcl::Window* pParent, const SfxItemSet* _rAttrSet )
     {
         return ( new ODbaseDetailsPage( pParent, *_rAttrSet ) );
@@ -274,6 +281,17 @@ namespace dbaui
         m_pUseCatalog->SetToggleHdl(getControlModifiedLink());
     }
 
+    OOdbcDetailsPage::~OOdbcDetailsPage()
+    {
+        dispose();
+    }
+
+    void OOdbcDetailsPage::dispose()
+    {
+        m_pUseCatalog.clear();
+        OCommonBehaviourTabPage::dispose();
+    }
+
     SfxTabPage* ODriversSettings::CreateODBC( vcl::Window* pParent, const SfxItemSet* _rAttrSet )
     {
         return ( new OOdbcDetailsPage( pParent, *_rAttrSet ) );
@@ -311,6 +329,22 @@ namespace dbaui
         get(m_pUseCatalog, "usecatalog");
         m_pUseCatalog->SetToggleHdl(getControlModifiedLink());
     }
+
+    OUserDriverDetailsPage::~OUserDriverDetailsPage()
+    {
+        dispose();
+    }
+
+    void OUserDriverDetailsPage::dispose()
+    {
+        m_pFTHostname.clear();
+        m_pEDHostname.clear();
+        m_pPortNumber.clear();
+        m_pNFPortNumber.clear();
+        m_pUseCatalog.clear();
+        OCommonBehaviourTabPage::dispose();
+    }
+
 
     SfxTabPage* ODriversSettings::CreateUser( vcl::Window* pParent, const SfxItemSet* _rAttrSet )
     {
@@ -416,6 +450,23 @@ namespace dbaui
         m_pEDHostname->SetModifyHdl(getControlModifiedLink());
         m_pNFPortNumber->SetModifyHdl(getControlModifiedLink());
         m_pEDSocket->SetModifyHdl(getControlModifiedLink());
+    }
+
+    OGeneralSpecialJDBCDetailsPage::~OGeneralSpecialJDBCDetailsPage()
+    {
+        dispose();
+    }
+
+    void OGeneralSpecialJDBCDetailsPage::dispose()
+    {
+        m_pEDHostname.clear();
+        m_pNFPortNumber.clear();
+        m_pFTSocket.clear();
+        m_pEDSocket.clear();
+        m_pFTDriverClass.clear();
+        m_pEDDriverClass.clear();
+        m_pTestJavaDriver.clear();
+        OCommonBehaviourTabPage::dispose();
     }
 
     bool OGeneralSpecialJDBCDetailsPage::FillItemSet( SfxItemSet* _rSet )
@@ -528,6 +579,11 @@ namespace dbaui
     void MySQLNativePage::dispose()
     {
         m_aMySQLSettings.disposeAndClear();
+        m_pSeparator1.clear();
+        m_pSeparator2.clear();
+        m_pUserNameLabel.clear();
+        m_pUserName.clear();
+        m_pPasswordRequired.clear();
         OCommonBehaviourTabPage::dispose();
     }
 
@@ -621,6 +677,20 @@ namespace dbaui
         m_pCBUseSSL->SetClickHdl(LINK(this, OLDAPDetailsPage,OnCheckBoxClick));
     }
 
+    OLDAPDetailsPage::~OLDAPDetailsPage()
+    {
+        dispose();
+    }
+
+    void OLDAPDetailsPage::dispose()
+    {
+        m_pETBaseDN.clear();
+        m_pCBUseSSL.clear();
+        m_pNFPortNumber.clear();
+        m_pNFRowCount.clear();
+        OCommonBehaviourTabPage::dispose();
+    }
+
     SfxTabPage* ODriversSettings::CreateLDAP( vcl::Window* pParent, const SfxItemSet* _rAttrSet )
     {
         return ( new OLDAPDetailsPage( pParent, *_rAttrSet ) );
@@ -692,7 +762,7 @@ namespace dbaui
 
     void OTextDetailsPage::dispose()
     {
-        DELETEZ(m_pTextConnectionHelper);
+        m_pTextConnectionHelper.clear();
         OCommonBehaviourTabPage::dispose();
     }
 

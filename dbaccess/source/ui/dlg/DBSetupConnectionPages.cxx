@@ -81,7 +81,7 @@ using namespace ::com::sun::star;
 
     void OTextConnectionPageSetup::dispose()
     {
-        DELETEZ(m_pTextConnectionHelper);
+        m_pTextConnectionHelper.clear();
         OConnectionTabPageSetup::dispose();
     }
 
@@ -154,6 +154,25 @@ using namespace ::com::sun::star;
         m_pNFPortNumber->SetModifyHdl(getControlModifiedLink());
         m_pCBUseSSL->SetToggleHdl(getControlModifiedLink());
         SetRoadmapStateValue(false);
+    }
+
+    OLDAPConnectionPageSetup::~OLDAPConnectionPageSetup()
+    {
+        dispose();
+    }
+
+    void OLDAPConnectionPageSetup::dispose()
+    {
+        m_pFTHelpText.clear();
+        m_pFTHostServer.clear();
+        m_pETHostServer.clear();
+        m_pFTBaseDN.clear();
+        m_pETBaseDN.clear();
+        m_pFTPortNumber.clear();
+        m_pNFPortNumber.clear();
+        m_pFTDefaultPortNumber.clear();
+        m_pCBUseSSL.clear();
+        OGenericAdministrationPage::dispose();
     }
 
     bool OLDAPConnectionPageSetup::FillItemSet( SfxItemSet* _rSet )
@@ -240,6 +259,19 @@ using namespace ::com::sun::star;
         m_pNATIVEDatabase->SetToggleHdl(LINK(this, OMySQLIntroPageSetup, OnSetupModeSelected));
     }
 
+    OMySQLIntroPageSetup::~OMySQLIntroPageSetup()
+    {
+        dispose();
+    }
+
+    void OMySQLIntroPageSetup::dispose()
+    {
+        m_pODBCDatabase.clear();
+        m_pJDBCDatabase.clear();
+        m_pNATIVEDatabase.clear();
+        OGenericAdministrationPage::dispose();
+    }
+
     IMPL_LINK(OMySQLIntroPageSetup, OnSetupModeSelected, RadioButton*, /*_pBox*/)
     {
         maClickHdl.Call( this );
@@ -308,6 +340,7 @@ using namespace ::com::sun::star;
     void MySQLNativeSetupPage::dispose()
     {
         m_aMySQLSettings.disposeAndClear();
+        m_pHelpText.clear();
         OGenericAdministrationPage::dispose();
     }
 
@@ -396,6 +429,28 @@ using namespace ::com::sun::star;
         }
 
         SetRoadmapStateValue(false);
+    }
+
+    OGeneralSpecialJDBCConnectionPageSetup::~OGeneralSpecialJDBCConnectionPageSetup()
+    {
+        dispose();
+    }
+
+    void OGeneralSpecialJDBCConnectionPageSetup::dispose()
+    {
+        m_pHeaderText.clear();
+        m_pFTHelpText.clear();
+        m_pFTDatabasename.clear();
+        m_pETDatabasename.clear();
+        m_pFTHostname.clear();
+        m_pETHostname.clear();
+        m_pFTPortNumber.clear();
+        m_pFTDefaultPortNumber.clear();
+        m_pNFPortNumber.clear();
+        m_pFTDriverClass.clear();
+        m_pETDriverClass.clear();
+        m_pPBTestJavaDriver.clear();
+        OGenericAdministrationPage::dispose();
     }
 
     OGenericAdministrationPage* OGeneralSpecialJDBCConnectionPageSetup::CreateMySQLJDBCTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet )
@@ -540,6 +595,19 @@ using namespace ::com::sun::star;
         m_pPBTestJavaDriver->SetClickHdl(LINK(this,OJDBCConnectionPageSetup,OnTestJavaClickHdl));
     }
 
+    OJDBCConnectionPageSetup::~OJDBCConnectionPageSetup()
+    {
+        dispose();
+    }
+
+    void OJDBCConnectionPageSetup::dispose()
+    {
+        m_pFTDriverClass.clear();
+        m_pETDriverClass.clear();
+        m_pPBTestJavaDriver.clear();
+        OConnectionTabPageSetup::dispose();
+    }
+
     void OJDBCConnectionPageSetup::fillControls(::std::vector< ISaveValueWrapper* >& _rControlList)
     {
         _rControlList.push_back(new OSaveValueWrapper<Edit>(m_pETDriverClass));
@@ -645,6 +713,17 @@ using namespace ::com::sun::star;
         m_pPasswordrequired->SetToggleHdl(getControlModifiedLink());
     }
 
+    OSpreadSheetConnectionPageSetup::~OSpreadSheetConnectionPageSetup()
+    {
+        dispose();
+    }
+
+    void OSpreadSheetConnectionPageSetup::dispose()
+    {
+        m_pPasswordrequired.clear();
+        OConnectionTabPageSetup::dispose();
+    }
+
     void OSpreadSheetConnectionPageSetup::fillWindows(::std::vector< ISaveValueWrapper* >& /*_rControlList*/)
     {
     }
@@ -687,6 +766,21 @@ using namespace ::com::sun::star;
            m_pPBTestConnection->SetClickHdl(LINK(this,OGenericAdministrationPage,OnTestConnectionClickHdl));
 
         LayoutHelper::fitSizeRightAligned( *m_pPBTestConnection );
+    }
+
+    OAuthentificationPageSetup::~OAuthentificationPageSetup()
+    {
+        dispose();
+    }
+
+    void OAuthentificationPageSetup::dispose()
+    {
+        m_pFTHelpText.clear();
+        m_pFTUserName.clear();
+        m_pETUserName.clear();
+        m_pCBPasswordRequired.clear();
+        m_pPBTestConnection.clear();
+        OGenericAdministrationPage::dispose();
     }
 
     void OAuthentificationPageSetup::fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList)
@@ -752,6 +846,24 @@ using namespace ::com::sun::star;
         m_pCBOpenAfterwards->SetClickHdl(LINK(this, OFinalDBPageSetup, OnOpenSelected));
         m_pCBStartTableWizard->SetClickHdl(getControlModifiedLink());
         m_pRBRegisterDataSource->SetState(true);
+    }
+
+    OFinalDBPageSetup::~OFinalDBPageSetup()
+    {
+        dispose();
+    }
+
+    void OFinalDBPageSetup::dispose()
+    {
+        m_pFTFinalHeader.clear();
+        m_pFTFinalHelpText.clear();
+        m_pRBRegisterDataSource.clear();
+        m_pRBDontregisterDataSource.clear();
+        m_pFTAdditionalSettings.clear();
+        m_pCBOpenAfterwards.clear();
+        m_pCBStartTableWizard.clear();
+        m_pFTFinalText.clear();
+        OGenericAdministrationPage::dispose();
     }
 
     bool OFinalDBPageSetup::IsDatabaseDocumentToBeRegistered()

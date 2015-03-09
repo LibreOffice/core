@@ -28,36 +28,36 @@
 // TabPage Format/(Styles/)Page/Text grid
 class SwTextGridPage: public SfxTabPage
 {
-    RadioButton*     m_pNoGridRB;
-    RadioButton*     m_pLinesGridRB;
-    RadioButton*     m_pCharsGridRB;
-    CheckBox*        m_pSnapToCharsCB;
+    VclPtr<RadioButton>     m_pNoGridRB;
+    VclPtr<RadioButton>     m_pLinesGridRB;
+    VclPtr<RadioButton>     m_pCharsGridRB;
+    VclPtr<CheckBox>        m_pSnapToCharsCB;
 
-    SwPageGridExample*   m_pExampleWN;
+    VclPtr<SwPageGridExample>   m_pExampleWN;
 
-    VclFrame*        m_pLayoutFL;
-    NumericField*    m_pLinesPerPageNF;
-    FixedText*       m_pLinesRangeFT;
+    VclPtr<VclFrame>        m_pLayoutFL;
+    VclPtr<NumericField>    m_pLinesPerPageNF;
+    VclPtr<FixedText>       m_pLinesRangeFT;
 
-    MetricField*     m_pTextSizeMF;
+    VclPtr<MetricField>     m_pTextSizeMF;
 
-    FixedText*       m_pCharsPerLineFT;
-    NumericField*    m_pCharsPerLineNF;
-    FixedText*       m_pCharsRangeFT;
+    VclPtr<FixedText>       m_pCharsPerLineFT;
+    VclPtr<NumericField>    m_pCharsPerLineNF;
+    VclPtr<FixedText>       m_pCharsRangeFT;
 
-    FixedText*       m_pCharWidthFT;
-    MetricField*     m_pCharWidthMF;
+    VclPtr<FixedText>       m_pCharWidthFT;
+    VclPtr<MetricField>     m_pCharWidthMF;
 
-    FixedText*       m_pRubySizeFT;
-    MetricField*     m_pRubySizeMF;
+    VclPtr<FixedText>       m_pRubySizeFT;
+    VclPtr<MetricField>     m_pRubySizeMF;
 
-    CheckBox*        m_pRubyBelowCB;
+    VclPtr<CheckBox>        m_pRubyBelowCB;
 
-    VclFrame*        m_pDisplayFL;
+    VclPtr<VclFrame>        m_pDisplayFL;
 
-    CheckBox*        m_pDisplayCB;
-    CheckBox*        m_pPrintCB;
-    ColorListBox*    m_pColorLB;
+    VclPtr<CheckBox>        m_pDisplayCB;
+    VclPtr<CheckBox>        m_pPrintCB;
+    VclPtr<ColorListBox>    m_pColorLB;
 
     sal_Int32       m_nRubyUserValue;
     bool        m_bRubyUserValue;
@@ -68,7 +68,6 @@ class SwTextGridPage: public SfxTabPage
     bool        m_bVRulerChanged;
 
     SwTextGridPage(vcl::Window *pParent, const SfxItemSet &rSet);
-    virtual ~SwTextGridPage();
 
     void UpdatePageSize(const SfxItemSet& rSet);
     void PutGridItem(SfxItemSet& rSet);
@@ -84,6 +83,9 @@ class SwTextGridPage: public SfxTabPage
     using SfxTabPage::DeactivatePage;
 
 public:
+    virtual ~SwTextGridPage();
+    virtual void dispose() SAL_OVERRIDE;
+
     static SfxTabPage *Create(vcl::Window *pParent, const SfxItemSet *rSet);
     static const sal_uInt16* GetRanges();
 

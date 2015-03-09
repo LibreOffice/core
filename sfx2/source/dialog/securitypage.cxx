@@ -136,10 +136,10 @@ struct SfxSecurityPage_Impl
 {
     SfxSecurityPage &   m_rMyTabPage;
 
-    CheckBox*           m_pOpenReadonlyCB;
-    CheckBox*           m_pRecordChangesCB;         // for record changes
-    PushButton*         m_pProtectPB;               // for record changes
-    PushButton*         m_pUnProtectPB;             // for record changes
+    VclPtr<CheckBox>    m_pOpenReadonlyCB;
+    VclPtr<CheckBox>    m_pRecordChangesCB;         // for record changes
+    VclPtr<PushButton>  m_pProtectPB;               // for record changes
+    VclPtr<PushButton>  m_pUnProtectPB;             // for record changes
     RedliningMode       m_eRedlingMode;             // for record changes
 
     bool                m_bOrigPasswordIsConfirmed;

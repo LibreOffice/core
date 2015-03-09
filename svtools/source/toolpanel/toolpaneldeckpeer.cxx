@@ -64,7 +64,7 @@ namespace svt
     Reference< XAccessibleContext > ToolPanelDeckPeer::CreateAccessibleContext()
     {
         SolarMutexGuard aSolarGuard;
-        if ( m_pDeck == NULL )
+        if ( m_pDeck == nullptr )
             throw DisposedException( OUString(), *this );
 
         vcl::Window* pAccessibleParent( m_pDeck->GetAccessibleParentWindow() );
@@ -78,7 +78,7 @@ namespace svt
     {
         {
             SolarMutexGuard aSolarGuard;
-            m_pDeck = NULL;
+            m_pDeck.clear();
         }
         VCLXWindow::dispose();
     }

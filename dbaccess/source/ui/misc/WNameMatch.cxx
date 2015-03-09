@@ -72,6 +72,26 @@ OWizNameMatching::OWizNameMatching( vcl::Window* pParent)
     m_sDestText   += "\n";
 }
 
+OWizNameMatching::~OWizNameMatching()
+{
+    dispose();
+}
+
+void OWizNameMatching::dispose()
+{
+    m_pTABLE_LEFT.clear();
+    m_pTABLE_RIGHT.clear();
+    m_pCTRL_LEFT.clear();
+    m_pCTRL_RIGHT.clear();
+    m_pColumn_up.clear();
+    m_pColumn_down.clear();
+    m_pColumn_up_right.clear();
+    m_pColumn_down_right.clear();
+    m_pAll.clear();
+    m_pNone.clear();
+    OWizardPage::dispose();
+}
+
 void OWizNameMatching::Reset()
 {
     // urspr"unglichen zustand wiederherstellen

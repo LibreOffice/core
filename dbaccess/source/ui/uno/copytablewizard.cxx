@@ -548,7 +548,7 @@ void SAL_CALL CopyTableWizard::setTitle( const OUString& _rTitle ) throw (Runtim
 
 OCopyTableWizard& CopyTableWizard::impl_getDialog_throw()
 {
-    OCopyTableWizard* pWizard = dynamic_cast< OCopyTableWizard* >( m_pDialog );
+    OCopyTableWizard* pWizard = dynamic_cast< OCopyTableWizard* >( m_pDialog.get() );
     if ( !pWizard )
         throw DisposedException( OUString(), *this );
     return *pWizard;

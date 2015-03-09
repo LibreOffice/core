@@ -42,8 +42,8 @@ public:
     ImplData();
     ~ImplData();
 
-    vcl::Window*         mpParent;
-    Size            maMaxOutSize;
+    VclPtr<vcl::Window> mpParent;
+    Size                maMaxOutSize;
 };
 
 DockingWindow::ImplData::ImplData()
@@ -59,7 +59,7 @@ DockingWindow::ImplData::~ImplData()
 class ImplDockFloatWin : public FloatingWindow
 {
 private:
-    DockingWindow*  mpDockWin;
+    VclPtr<DockingWindow> mpDockWin;
     sal_uLong           mnLastTicks;
     Idle            maDockIdle;
     Point           maDockPos;
@@ -122,6 +122,7 @@ void ImplDockFloatWin::dispose()
 
     disposeBuilder();
 
+    mpDockWin.clear();
     FloatingWindow::dispose();
 }
 
@@ -482,6 +483,9 @@ void DockingWindow::dispose()
     }
     delete mpImplData;
     mpImplData = NULL;
+    mpFloatWin.clear();
+    mpOldBorderWin.clear();
+    mpDialogParent.clear();
     Window::dispose();
 }
 
@@ -867,13 +871,13 @@ void DockingWindow::SetFloatingMode( bool bFloatMode )
                 if ( mpOldBorderWin )
                 {
                     SetParent( mpOldBorderWin );
-                    static_cast<ImplBorderWindow*>(mpOldBorderWin)->GetBorder( mpWindowImpl->mnLeftBorder, mpWindowImpl->mnTopBorder, mpWindowImpl->mnRightBorder, mpWindowImpl->mnBottomBorder );
+                    static_cast<ImplBorderWindow*>(mpOldBorderWin.get())->GetBorder( mpWindowImpl->mnLeftBorder, mpWindowImpl->mnTopBorder, mpWindowImpl->mnRightBorder, mpWindowImpl->mnBottomBorder );
                     mpOldBorderWin->Resize();
                 }
                 mpWindowImpl->mpBorderWindow = mpOldBorderWin;
                 SetParent( pRealParent );
                 mpWindowImpl->mpRealParent = pRealParent;
-                delete static_cast<ImplDockFloatWin*>(mpFloatWin);
+                mpFloatWin.clear();
                 mpFloatWin = NULL;
                 SetPosPixel( maDockPos );
 
@@ -1049,7 +1053,7 @@ bool DockingWindow::IsFloatingMode() const
     if( pWrapper )
         return pWrapper->IsFloatingMode();
     else
-        return (mpFloatWin != NULL);
+        return (mpFloatWin != nullptr);
 }
 
 void DockingWindow::SetMaxOutputSizePixel( const Size& rSize )

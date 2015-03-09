@@ -54,14 +54,16 @@ class SvxPopupWindowListBox: public SfxPopupWindow
 {
     using FloatingWindow::StateChanged;
 
-    ListBox *       m_pListBox;
+    VclPtr<ListBox> m_pListBox;
     ToolBox &       rToolBox;
     bool            bUserSel;
-    sal_uInt16          nTbxId;
-    OUString   maCommandURL;
+    sal_uInt16      nTbxId;
+    OUString        maCommandURL;
 
 public:
     SvxPopupWindowListBox( sal_uInt16 nSlotId, const OUString& rCommandURL, sal_uInt16 nTbxId, ToolBox& rTbx );
+    virtual ~SvxPopupWindowListBox();
+    virtual void dispose() SAL_OVERRIDE;
 
     // SfxPopupWindow
     virtual SfxPopupWindow *    Clone() const SAL_OVERRIDE;
@@ -94,6 +96,17 @@ SvxPopupWindowListBox::SvxPopupWindowListBox(sal_uInt16 nSlotId, const OUString&
     m_pListBox->EnableMultiSelection( true, true );
     SetBackground( GetSettings().GetStyleSettings().GetDialogColor() );
     AddStatusListener( rCommandURL );
+}
+
+SvxPopupWindowListBox::~SvxPopupWindowListBox()
+{
+    dispose();
+}
+
+void SvxPopupWindowListBox::dispose()
+{
+    m_pListBox.clear();
+    SfxPopupWindow::dispose();
 }
 
 SfxPopupWindow* SvxPopupWindowListBox::Clone() const
@@ -140,9 +153,7 @@ SvxListBoxControl::SvxListBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBo
 
 
 SvxListBoxControl::~SvxListBoxControl()
-{
-}
-
+{}
 
 SfxPopupWindow* SvxListBoxControl::CreatePopupWindow()
 {

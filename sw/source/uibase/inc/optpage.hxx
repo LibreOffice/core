@@ -41,28 +41,28 @@ class FontList;
 // Tools->Options->Writer/Web->View
 class SwContentOptPage : public SfxTabPage
 {
-    CheckBox*   m_pCrossCB;
+    VclPtr<CheckBox>   m_pCrossCB;
 
-    CheckBox*   m_pHScrollBox;
-    CheckBox*   m_pVScrollBox;
-    CheckBox*   m_pAnyRulerCB;
-    CheckBox*   m_pHRulerCBox;
-    ListBox*    m_pHMetric;
-    CheckBox*   m_pVRulerCBox;
-    CheckBox*   m_pVRulerRightCBox;
-    ListBox*    m_pVMetric;
-    CheckBox*   m_pSmoothCBox;
+    VclPtr<CheckBox>   m_pHScrollBox;
+    VclPtr<CheckBox>   m_pVScrollBox;
+    VclPtr<CheckBox>   m_pAnyRulerCB;
+    VclPtr<CheckBox>   m_pHRulerCBox;
+    VclPtr<ListBox>    m_pHMetric;
+    VclPtr<CheckBox>   m_pVRulerCBox;
+    VclPtr<CheckBox>   m_pVRulerRightCBox;
+    VclPtr<ListBox>    m_pVMetric;
+    VclPtr<CheckBox>   m_pSmoothCBox;
 
-    CheckBox*   m_pGrfCB;
-    CheckBox*   m_pTblCB;
-    CheckBox*   m_pDrwCB;
-    CheckBox*   m_pFldNameCB;
-    CheckBox*   m_pPostItCB;
+    VclPtr<CheckBox>   m_pGrfCB;
+    VclPtr<CheckBox>   m_pTblCB;
+    VclPtr<CheckBox>   m_pDrwCB;
+    VclPtr<CheckBox>   m_pFldNameCB;
+    VclPtr<CheckBox>   m_pPostItCB;
 
-    VclFrame*   m_pSettingsFrame;
-    FixedText*  m_pSettingsLabel;
-    FixedText*  m_pMetricLabel;
-    ListBox*    m_pMetricLB;
+    VclPtr<VclFrame>   m_pSettingsFrame;
+    VclPtr<FixedText>  m_pSettingsLabel;
+    VclPtr<FixedText>  m_pMetricLabel;
+    VclPtr<ListBox>    m_pMetricLB;
 
     DECL_LINK(VertRulerHdl, CheckBox*);
     DECL_LINK(AnyRulerHdl, CheckBox*);
@@ -70,6 +70,7 @@ public:
                         SwContentOptPage( vcl::Window* pParent,
                                            const SfxItemSet& rSet );
                         virtual ~SwContentOptPage();
+    virtual void        dispose() SAL_OVERRIDE;
 
     static SfxTabPage*  Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet);
@@ -82,29 +83,29 @@ public:
 // TabPage printer settings additions
 class SwAddPrinterTabPage : public SfxTabPage
 {
-    CheckBox*       m_pGrfCB;
-    CheckBox*       m_pCtrlFldCB;
-    CheckBox*       m_pBackgroundCB;
-    CheckBox*       m_pBlackFontCB;
-    CheckBox*       m_pPrintHiddenTextCB;
-    CheckBox*       m_pPrintTextPlaceholderCB;
+    VclPtr<CheckBox>       m_pGrfCB;
+    VclPtr<CheckBox>       m_pCtrlFldCB;
+    VclPtr<CheckBox>       m_pBackgroundCB;
+    VclPtr<CheckBox>       m_pBlackFontCB;
+    VclPtr<CheckBox>       m_pPrintHiddenTextCB;
+    VclPtr<CheckBox>       m_pPrintTextPlaceholderCB;
 
-    VclFrame*       m_pPagesFrame;
-    CheckBox*       m_pLeftPageCB;
-    CheckBox*       m_pRightPageCB;
-    CheckBox*       m_pProspectCB;
-    CheckBox*       m_pProspectCB_RTL;
+    VclPtr<VclFrame>       m_pPagesFrame;
+    VclPtr<CheckBox>       m_pLeftPageCB;
+    VclPtr<CheckBox>       m_pRightPageCB;
+    VclPtr<CheckBox>       m_pProspectCB;
+    VclPtr<CheckBox>       m_pProspectCB_RTL;
 
-    VclFrame*       m_pCommentsFrame;
-    RadioButton*    m_pNoRB;
-    RadioButton*    m_pOnlyRB;
-    RadioButton*    m_pEndRB;
-    RadioButton*    m_pEndPageRB;
-    RadioButton*    m_pInMarginsRB;
+    VclPtr<VclFrame>       m_pCommentsFrame;
+    VclPtr<RadioButton>    m_pNoRB;
+    VclPtr<RadioButton>    m_pOnlyRB;
+    VclPtr<RadioButton>    m_pEndRB;
+    VclPtr<RadioButton>    m_pEndPageRB;
+    VclPtr<RadioButton>    m_pInMarginsRB;
 
-    CheckBox*       m_pPrintEmptyPagesCB;
-    CheckBox*       m_pPaperFromSetupCB;
-    ListBox*        m_pFaxLB;
+    VclPtr<CheckBox>       m_pPrintEmptyPagesCB;
+    VclPtr<CheckBox>       m_pPaperFromSetupCB;
+    VclPtr<ListBox>        m_pFaxLB;
 
     OUString        sNone;
 
@@ -117,6 +118,8 @@ class SwAddPrinterTabPage : public SfxTabPage
                 SwAddPrinterTabPage( vcl::Window* pParent,
                                            const SfxItemSet& rSet );
 public:
+    virtual ~SwAddPrinterTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     static SfxTabPage*  Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet );
@@ -132,20 +135,20 @@ public:
 
 class SwStdFontTabPage : public SfxTabPage
 {
-    FixedText*       pLabelFT;
+    VclPtr<FixedText>       pLabelFT;
 
-    ComboBox*        pStandardBox;
-    FontSizeBox*     pStandardHeightLB;
-    ComboBox*        pTitleBox   ;
-    FontSizeBox*     pTitleHeightLB;
-    ComboBox*        pListBox    ;
-    FontSizeBox*     pListHeightLB;
-    ComboBox*        pLabelBox   ;
-    FontSizeBox*     pLabelHeightLB;
-    ComboBox*        pIdxBox     ;
-    FontSizeBox*     pIndexHeightLB;
-    CheckBox*        pDocOnlyCB  ;
-    PushButton*      pStandardPB;
+    VclPtr<ComboBox>        pStandardBox;
+    VclPtr<FontSizeBox>     pStandardHeightLB;
+    VclPtr<ComboBox>        pTitleBox   ;
+    VclPtr<FontSizeBox>     pTitleHeightLB;
+    VclPtr<ComboBox>        pListBox    ;
+    VclPtr<FontSizeBox>     pListHeightLB;
+    VclPtr<ComboBox>        pLabelBox   ;
+    VclPtr<FontSizeBox>     pLabelHeightLB;
+    VclPtr<ComboBox>        pIdxBox     ;
+    VclPtr<FontSizeBox>     pIndexHeightLB;
+    VclPtr<CheckBox>        pDocOnlyCB  ;
+    VclPtr<PushButton>      pStandardPB;
 
     OUString        sShellStd;
     OUString        sShellTitle;
@@ -203,24 +206,24 @@ public:
 
 class SwTableOptionsTabPage : public SfxTabPage
 {
-    CheckBox*    pHeaderCB;
-    CheckBox*    pRepeatHeaderCB;
-    CheckBox*    pDontSplitCB;
-    CheckBox*    pBorderCB;
+    VclPtr<CheckBox>    pHeaderCB;
+    VclPtr<CheckBox>    pRepeatHeaderCB;
+    VclPtr<CheckBox>    pDontSplitCB;
+    VclPtr<CheckBox>    pBorderCB;
 
-    CheckBox*    pNumFormattingCB;
-    CheckBox*    pNumFmtFormattingCB;
-    CheckBox*    pNumAlignmentCB;
+    VclPtr<CheckBox>    pNumFormattingCB;
+    VclPtr<CheckBox>    pNumFmtFormattingCB;
+    VclPtr<CheckBox>    pNumAlignmentCB;
 
-    MetricField* pRowMoveMF;
-    MetricField* pColMoveMF;
+    VclPtr<MetricField> pRowMoveMF;
+    VclPtr<MetricField> pColMoveMF;
 
-    MetricField* pRowInsertMF;
-    MetricField* pColInsertMF;
+    VclPtr<MetricField> pRowInsertMF;
+    VclPtr<MetricField> pColInsertMF;
 
-    RadioButton* pFixRB;
-    RadioButton* pFixPropRB;
-    RadioButton* pVarRB;
+    VclPtr<RadioButton> pFixRB;
+    VclPtr<RadioButton> pFixPropRB;
+    VclPtr<RadioButton> pVarRB;
 
     SwWrtShell* pWrtShell;
     bool        bHTMLMode;
@@ -229,9 +232,9 @@ class SwTableOptionsTabPage : public SfxTabPage
 
                 SwTableOptionsTabPage( vcl::Window* pParent,
                                            const SfxItemSet& rSet );
-                virtual ~SwTableOptionsTabPage();
-
 public:
+                virtual ~SwTableOptionsTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     static SfxTabPage*  Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet );
@@ -248,36 +251,37 @@ public:
 class SwShdwCrsrOptionsTabPage : public SfxTabPage
 {
     //nonprinting characters
-    CheckBox* m_pParaCB;
-    CheckBox* m_pSHyphCB;
-    CheckBox* m_pSpacesCB;
-    CheckBox* m_pHSpacesCB;
-    CheckBox* m_pTabCB;
-    CheckBox* m_pBreakCB;
-    CheckBox* m_pCharHiddenCB;
-    CheckBox* m_pFldHiddenCB;
-    CheckBox* m_pFldHiddenParaCB;
+    VclPtr<CheckBox> m_pParaCB;
+    VclPtr<CheckBox> m_pSHyphCB;
+    VclPtr<CheckBox> m_pSpacesCB;
+    VclPtr<CheckBox> m_pHSpacesCB;
+    VclPtr<CheckBox> m_pTabCB;
+    VclPtr<CheckBox> m_pBreakCB;
+    VclPtr<CheckBox> m_pCharHiddenCB;
+    VclPtr<CheckBox> m_pFldHiddenCB;
+    VclPtr<CheckBox> m_pFldHiddenParaCB;
 
-    VclFrame* m_pDirectCursorFrame;
-    CheckBox* m_pOnOffCB;
+    VclPtr<VclFrame> m_pDirectCursorFrame;
+    VclPtr<CheckBox> m_pOnOffCB;
 
-    RadioButton* m_pFillMarginRB;
-    RadioButton* m_pFillIndentRB;
-    RadioButton* m_pFillTabRB;
-    RadioButton* m_pFillSpaceRB;
+    VclPtr<RadioButton> m_pFillMarginRB;
+    VclPtr<RadioButton> m_pFillIndentRB;
+    VclPtr<RadioButton> m_pFillTabRB;
+    VclPtr<RadioButton> m_pFillSpaceRB;
 
-    VclFrame* m_pCursorProtFrame;
-    CheckBox* m_pCrsrInProtCB;
-    CheckBox* m_pIgnoreProtCB;
+    VclPtr<VclFrame> m_pCursorProtFrame;
+    VclPtr<CheckBox> m_pCrsrInProtCB;
+    VclPtr<CheckBox> m_pIgnoreProtCB;
 
-    CheckBox* m_pMathBaselineAlignmentCB;
+    VclPtr<CheckBox> m_pMathBaselineAlignmentCB;
 
     SwWrtShell *    m_pWrtShell;
 
     SwShdwCrsrOptionsTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
-    virtual ~SwShdwCrsrOptionsTabPage();
 
 public:
+    virtual ~SwShdwCrsrOptionsTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
 
@@ -329,27 +333,26 @@ public:
 // redlining options
 class SwRedlineOptionsTabPage : public SfxTabPage
 {
-    ListBox*             pInsertLB;
-    ColorListBox*        pInsertColorLB;
-    SvxFontPrevWindow*   pInsertedPreviewWN;
+    VclPtr<ListBox>             pInsertLB;
+    VclPtr<ColorListBox>        pInsertColorLB;
+    VclPtr<SvxFontPrevWindow>   pInsertedPreviewWN;
 
-    ListBox*             pDeletedLB;
-    ColorListBox*        pDeletedColorLB;
-    SvxFontPrevWindow*   pDeletedPreviewWN;
+    VclPtr<ListBox>             pDeletedLB;
+    VclPtr<ColorListBox>        pDeletedColorLB;
+    VclPtr<SvxFontPrevWindow>   pDeletedPreviewWN;
 
-    ListBox*             pChangedLB;
-    ColorListBox*        pChangedColorLB;
-    SvxFontPrevWindow*   pChangedPreviewWN;
+    VclPtr<ListBox>             pChangedLB;
+    VclPtr<ColorListBox>        pChangedColorLB;
+    VclPtr<SvxFontPrevWindow>   pChangedPreviewWN;
 
-    ListBox*             pMarkPosLB;
-    ColorListBox*        pMarkColorLB;
-    SwMarkPreview*       pMarkPreviewWN;
+    VclPtr<ListBox>             pMarkPosLB;
+    VclPtr<ColorListBox>        pMarkColorLB;
+    VclPtr<SwMarkPreview>       pMarkPreviewWN;
 
     OUString             sAuthor;
     OUString             sNone;
 
     SwRedlineOptionsTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
-    virtual ~SwRedlineOptionsTabPage();
 
     DECL_LINK( AttribHdl, ListBox *pLB );
     DECL_LINK(ChangedMaskPrevHdl, void * = 0);
@@ -358,6 +361,8 @@ class SwRedlineOptionsTabPage : public SfxTabPage
     void                InitFontStyle(SvxFontPrevWindow& rExampleWin);
 
 public:
+    virtual ~SwRedlineOptionsTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
 
@@ -374,6 +379,8 @@ class SwTestTabPage : public SfxTabPage
 public:
                         SwTestTabPage( vcl::Window* pParent,
                                            const SfxItemSet& rSet );
+    virtual ~SwTestTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     static SfxTabPage*  Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet );
@@ -382,16 +389,16 @@ public:
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
 
 private:
-    CheckBox* m_pTest1CBox;
-    CheckBox* m_pTest2CBox;
-    CheckBox* m_pTest3CBox;
-    CheckBox* m_pTest4CBox;
-    CheckBox* m_pTest5CBox;
-    CheckBox* m_pTest6CBox;
-    CheckBox* m_pTest7CBox;
-    CheckBox* m_pTest8CBox;
-    CheckBox* m_pTest9CBox;
-    CheckBox* m_pTest10CBox;
+    VclPtr<CheckBox> m_pTest1CBox;
+    VclPtr<CheckBox> m_pTest2CBox;
+    VclPtr<CheckBox> m_pTest3CBox;
+    VclPtr<CheckBox> m_pTest4CBox;
+    VclPtr<CheckBox> m_pTest5CBox;
+    VclPtr<CheckBox> m_pTest6CBox;
+    VclPtr<CheckBox> m_pTest7CBox;
+    VclPtr<CheckBox> m_pTest8CBox;
+    VclPtr<CheckBox> m_pTest9CBox;
+    VclPtr<CheckBox> m_pTest10CBox;
 
     bool        bAttrModified;
 
@@ -403,22 +410,23 @@ private:
 
 class SwCompareOptionsTabPage : public SfxTabPage
 {
-    RadioButton*  m_pAutoRB;
-    RadioButton*  m_pWordRB;
-    RadioButton*  m_pCharRB;
+    VclPtr<RadioButton>  m_pAutoRB;
+    VclPtr<RadioButton>  m_pWordRB;
+    VclPtr<RadioButton>  m_pCharRB;
 
-    CheckBox*     m_pRsidCB;
-    CheckBox*     m_pIgnoreCB;
-    NumericField* m_pLenNF;
-    CheckBox*     m_pStoreRsidCB;
+    VclPtr<CheckBox>     m_pRsidCB;
+    VclPtr<CheckBox>     m_pIgnoreCB;
+    VclPtr<NumericField> m_pLenNF;
+    VclPtr<CheckBox>     m_pStoreRsidCB;
 
     SwCompareOptionsTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
-    virtual ~SwCompareOptionsTabPage();
 
     DECL_LINK(ComparisonHdl, void *);
     DECL_LINK(IgnoreHdl, void *);
 
 public:
+    virtual ~SwCompareOptionsTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     static SfxTabPage* Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
 

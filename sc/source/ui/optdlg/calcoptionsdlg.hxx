@@ -36,6 +36,7 @@ class ScCalcOptionsDialog : public ModalDialog
 public:
     ScCalcOptionsDialog(vcl::Window* pParent, const ScCalcConfig& rConfig);
     virtual ~ScCalcOptionsDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     DECL_LINK( BtnAutomaticSelectHdl, void* );
     DECL_LINK( DeviceSelHdl, void* );
@@ -62,22 +63,22 @@ private:
 #endif
 
 private:
+    VclPtr<CheckBox> mpEmptyAsZero;
+    VclPtr<ListBox> mpConversion;
+    VclPtr<ListBox> mpSyntax;
 
-    CheckBox*     mpEmptyAsZero;
-    ListBox*      mpConversion;
-    ListBox*      mpSyntax;
-    CheckBox*     mpUseOpenCL;
-    NumericField* mpSpinButton;
-    VclMultiLineEdit* mpEditField;
-    PushButton* mpTestButton;
+    VclPtr<CheckBox> mpUseOpenCL;
+    VclPtr<NumericField> mpSpinButton;
+    VclPtr<VclMultiLineEdit> mpEditField;
+    VclPtr<PushButton> mpTestButton;
 
-    FixedText* mpFtFrequency;
-    FixedText* mpFtComputeUnits;
-    FixedText* mpFtMemory;
+    VclPtr<FixedText> mpFtFrequency;
+    VclPtr<FixedText> mpFtComputeUnits;
+    VclPtr<FixedText> mpFtMemory;
 
-    SvTreeListBox* mpOpenclInfoList;
-    RadioButton* mpBtnAutomaticSelectionTrue;
-    RadioButton* mpBtnAutomaticSelectionFalse;
+    VclPtr<SvTreeListBox> mpOpenclInfoList;
+    VclPtr<RadioButton> mpBtnAutomaticSelectionTrue;
+    VclPtr<RadioButton> mpBtnAutomaticSelectionFalse;
 
     OUString maSoftware;
 

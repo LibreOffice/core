@@ -37,18 +37,20 @@ namespace svx
     class SecurityOptionsDialog : public ModalDialog
     {
     private:
-        CheckBox* m_pSaveOrSendDocsCB;
-        CheckBox* m_pSignDocsCB;
-        CheckBox* m_pPrintDocsCB;
-        CheckBox* m_pCreatePdfCB;
+        VclPtr<CheckBox> m_pSaveOrSendDocsCB;
+        VclPtr<CheckBox> m_pSignDocsCB;
+        VclPtr<CheckBox> m_pPrintDocsCB;
+        VclPtr<CheckBox> m_pCreatePdfCB;
 
-        CheckBox* m_pRemovePersInfoCB;
-        CheckBox* m_pRecommPasswdCB;
-        CheckBox* m_pCtrlHyperlinkCB;
-        CheckBox* m_pBlockUntrustedRefererLinksCB;
+        VclPtr<CheckBox> m_pRemovePersInfoCB;
+        VclPtr<CheckBox> m_pRecommPasswdCB;
+        VclPtr<CheckBox> m_pCtrlHyperlinkCB;
+        VclPtr<CheckBox> m_pBlockUntrustedRefererLinksCB;
 
     public:
         SecurityOptionsDialog( vcl::Window* pParent, SvtSecurityOptions* pOptions );
+        virtual ~SecurityOptionsDialog();
+        virtual void dispose() SAL_OVERRIDE;
 
         bool IsSaveOrSendDocsChecked() const { return m_pSaveOrSendDocsCB->IsChecked(); }
         bool IsSignDocsChecked() const { return m_pSignDocsCB->IsChecked(); }

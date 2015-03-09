@@ -33,7 +33,7 @@ class Renderable :
     public cppu::WeakComponentImplHelper1< com::sun::star::view::XRenderable >,
     public vcl::PrinterOptionsHelper
 {
-    BaseWindow*         mpWindow;
+    VclPtr<BaseWindow>  mpWindow;
     osl::Mutex          maMutex;
 
     Printer* getPrinter();

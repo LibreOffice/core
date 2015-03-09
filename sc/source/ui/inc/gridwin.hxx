@@ -136,8 +136,8 @@ class ScGridWindow : public vcl::Window, public DropTargetHelper, public DragSou
 
     std::unique_ptr<ScNoteMarker> mpNoteMarker;
 
-    std::unique_ptr<ScFilterListBox> mpFilterBox;
-    std::unique_ptr<FloatingWindow> mpFilterFloat;
+    VclPtr<ScFilterListBox>        pFilterBox;
+    VclPtr<FloatingWindow>         pFilterFloat;
     std::unique_ptr<ScCheckListMenuWindow> mpAutoFilterPopup;
     std::unique_ptr<ScCheckListMenuWindow> mpDPFieldPopup;
     std::unique_ptr<ScDPFieldButton> mpFilterButton;

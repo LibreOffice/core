@@ -66,7 +66,7 @@ namespace dbaui
         }
         if ( m_pBeamer )
             ::dbaui::notifySystemWindow(this,m_pBeamer,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
-        m_pBeamer = NULL;
+        m_pBeamer.clear();
         if ( m_xBeamer.is() )
         {
             Reference< ::com::sun::star::util::XCloseable > xCloseable(m_xBeamer,UNO_QUERY);
@@ -75,8 +75,7 @@ namespace dbaui
                 xCloseable->close(sal_False); // false - holds the ownership of this frame
         }
 
-        boost::scoped_ptr<vcl::Window> aTemp(m_pSplitter);
-        m_pSplitter = NULL;
+        m_pSplitter.clear();
         ODataView::dispose();
     }
     bool OQueryContainerWindow::switchView( ::dbtools::SQLExceptionInfo* _pErrorInfo )

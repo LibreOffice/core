@@ -73,7 +73,7 @@ private:
     OModuleClient   m_aModuleClient;
     Link            aSelLink;
 
-    StructListBox   *m_pTlbStruct;
+    VclPtr<StructListBox>   m_pTlbStruct;
     Image           maImgEnd;
     Image           maImgError;
 
@@ -90,6 +90,8 @@ protected:
 public:
 
                     StructPage( vcl::Window* pParent);
+    virtual         ~StructPage();
+    virtual void    dispose() SAL_OVERRIDE;
 
     void            ClearStruct();
     virtual SvTreeListEntry*    InsertEntry(const OUString& rText, SvTreeListEntry* pParent,

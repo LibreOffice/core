@@ -271,6 +271,28 @@ void SvxRubyDialog::dispose()
     ClearCharStyleList();
     EventObject aEvent;
     xImpl->disposing(aEvent);
+    m_pLeftFT.clear();
+    m_pRightFT.clear();
+    m_pLeft1ED.clear();
+    m_pRight1ED.clear();
+    m_pLeft2ED.clear();
+    m_pRight2ED.clear();
+    m_pLeft3ED.clear();
+    m_pRight3ED.clear();
+    m_pLeft4ED.clear();
+    m_pRight4ED.clear();
+    for (int i=0; i<7; i++)
+        aEditArr[i].clear();
+    m_pScrolledWindow.clear();
+    m_pScrollSB.clear();
+    m_pAdjustLB.clear();
+    m_pPositionLB.clear();
+    m_pCharStyleFT.clear();
+    m_pCharStyleLB.clear();
+    m_pStylistPB.clear();
+    m_pPreviewWin.clear();
+    m_pApplyPB.clear();
+    m_pClosePB.clear();
     SfxModelessDialog::dispose();
 }
 
@@ -764,6 +786,17 @@ RubyPreview::RubyPreview(vcl::Window *pParent)
 {
     SetMapMode(MAP_TWIP);
     SetBorderStyle( WindowBorderStyle::MONO );
+}
+
+RubyPreview::~RubyPreview()
+{
+    dispose();
+}
+
+void RubyPreview::dispose()
+{
+    m_pParentDlg.clear();
+    vcl::Window::dispose();
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeRubyPreview(vcl::Window *pParent, VclBuilder::stringmap &)

@@ -28,6 +28,7 @@ public:
 private:
     explicit ScTpDefaultsOptions(vcl::Window* pParent, const SfxItemSet& rCoreSet);
     virtual ~ScTpDefaultsOptions();
+    virtual void dispose() SAL_OVERRIDE;
 
     void CheckNumSheets();
     void CheckPrefix(Edit* pEdit);
@@ -38,8 +39,8 @@ private:
     DECL_LINK( PrefixEditOnFocusHdl, Edit* );
 
 private:
-    NumericField* m_pEdNSheets;
-    Edit*         m_pEdSheetPrefix;
+    VclPtr<NumericField> m_pEdNSheets;
+    VclPtr<Edit>         m_pEdSheetPrefix;
 
     // Stores old Sheet Prefix
     OUString maOldPrefixValue;

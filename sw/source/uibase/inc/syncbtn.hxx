@@ -25,12 +25,14 @@
 
 class SwSyncBtnDlg : public SfxFloatingWindow
 {
-    PushButton* m_pSyncBtn;
+    VclPtr<PushButton> m_pSyncBtn;
 
     DECL_LINK( BtnHdl, void* );
 
 public:
     SwSyncBtnDlg(SfxBindings*, SfxChildWindow*, vcl::Window *pParent);
+    virtual ~SwSyncBtnDlg();
+    virtual void dispose() SAL_OVERRIDE;
 };
 
 class SwSyncChildWin : public SfxChildWindow

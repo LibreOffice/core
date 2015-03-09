@@ -105,6 +105,7 @@ void Window::dispose()
         if (pWindowUpdater != NULL)
             pWindowUpdater->UnregisterWindow (this);
     }
+    mpShareWin.clear();
     vcl::Window::dispose();
 }
 

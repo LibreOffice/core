@@ -68,6 +68,15 @@ SwLabPrtPage::~SwLabPrtPage()
 void SwLabPrtPage::dispose()
 {
     delete pPrinter;
+    m_pPageButton.clear();
+    m_pSingleButton.clear();
+    m_pSingleGrid.clear();
+    m_pPrinterFrame.clear();
+    m_pColField.clear();
+    m_pRowField.clear();
+    m_pSynchronCB.clear();
+    m_pPrinterInfo.clear();
+    m_pPrtSetup.clear();
     SfxTabPage::dispose();
 }
 

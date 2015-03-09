@@ -46,6 +46,9 @@ class TextPropertyPanel
       public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
 {
 public:
+    virtual ~TextPropertyPanel();
+    virtual void dispose() SAL_OVERRIDE;
+
     static TextPropertyPanel* Create (
         vcl::Window* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
@@ -73,11 +76,11 @@ public:
 
 private:
     //ui controls
-    ToolBox* mpToolBoxFont;
-    ToolBox* mpToolBoxIncDec;
-    ToolBox* mpToolBoxSpacing;
-    ToolBox* mpToolBoxFontColorSw;
-    ToolBox* mpToolBoxFontColor;
+    VclPtr<ToolBox> mpToolBoxFont;
+    VclPtr<ToolBox> mpToolBoxIncDec;
+    VclPtr<ToolBox> mpToolBoxSpacing;
+    VclPtr<ToolBox> mpToolBoxFontColorSw;
+    VclPtr<ToolBox> mpToolBoxFontColor;
 
     //control items
     ::sfx2::sidebar::ControllerItem maFontSizeControl;

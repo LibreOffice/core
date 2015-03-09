@@ -40,38 +40,38 @@ private:
 
     Link            maOldLink;
 
-    OKButton*       mpOKButton;
-    CancelButton*   mpCancelButton;
-    PushButton*     mpDeviceInfoButton;
-    PushButton*     mpPreviewButton;
-    PushButton*     mpScanButton;
-    PushButton*     mpButtonOption;
+    VclPtr<OKButton>       mpOKButton;
+    VclPtr<CancelButton>   mpCancelButton;
+    VclPtr<PushButton>     mpDeviceInfoButton;
+    VclPtr<PushButton>     mpPreviewButton;
+    VclPtr<PushButton>     mpScanButton;
+    VclPtr<PushButton>     mpButtonOption;
 
-    FixedText*      mpOptionTitle;
-    FixedText*      mpOptionDescTxt;
-    FixedText*      mpVectorTxt;
+    VclPtr<FixedText>      mpOptionTitle;
+    VclPtr<FixedText>      mpOptionDescTxt;
+    VclPtr<FixedText>      mpVectorTxt;
 
-    MetricField*    mpLeftField;
-    MetricField*    mpTopField;
-    MetricField*    mpRightField;
-    MetricField*    mpBottomField;
+    VclPtr<MetricField>    mpLeftField;
+    VclPtr<MetricField>    mpTopField;
+    VclPtr<MetricField>    mpRightField;
+    VclPtr<MetricField>    mpBottomField;
 
-    ListBox*        mpDeviceBox;
-    NumericBox*     mpReslBox;
-    CheckBox*       mpAdvancedBox;
+    VclPtr<ListBox>        mpDeviceBox;
+    VclPtr<NumericBox>     mpReslBox;
+    VclPtr<CheckBox>       mpAdvancedBox;
 
-    NumericField*   mpVectorBox;
-    ListBox*        mpQuantumRangeBox;
-    ListBox*        mpStringRangeBox;
+    VclPtr<NumericField>   mpVectorBox;
+    VclPtr<ListBox>        mpQuantumRangeBox;
+    VclPtr<ListBox>        mpStringRangeBox;
 
-    CheckBox*       mpBoolCheckBox;
+    VclPtr<CheckBox>       mpBoolCheckBox;
 
-    Edit*           mpStringEdit;
-    Edit*           mpNumericEdit;
+    VclPtr<Edit>           mpStringEdit;
+    VclPtr<Edit>           mpNumericEdit;
 
-    SvTreeListBox*  mpOptionBox;
+    VclPtr<SvTreeListBox>  mpOptionBox;
 
-    ScanPreview*    mpPreview;
+    VclPtr<ScanPreview>    mpPreview;
 
     int             mnCurrentOption;
     int             mnCurrentElement;

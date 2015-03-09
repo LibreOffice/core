@@ -215,6 +215,32 @@ SvxProxyTabPage::SvxProxyTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
         aArgumentList );
 }
 
+SvxProxyTabPage::~SvxProxyTabPage()
+{
+    dispose();
+}
+
+void SvxProxyTabPage::dispose()
+{
+    m_pProxyModeLB.clear();
+    m_pHttpProxyFT.clear();
+    m_pHttpProxyED.clear();
+    m_pHttpPortFT.clear();
+    m_pHttpPortED.clear();
+    m_pHttpsProxyFT.clear();
+    m_pHttpsProxyED.clear();
+    m_pHttpsPortFT.clear();
+    m_pHttpsPortED.clear();
+    m_pFtpProxyFT.clear();
+    m_pFtpProxyED.clear();
+    m_pFtpPortFT.clear();
+    m_pFtpPortED.clear();
+    m_pNoProxyForFT.clear();
+    m_pNoProxyForED.clear();
+    m_pNoProxyDescFT.clear();
+    SfxTabPage::dispose();
+}
+
 SfxTabPage* SvxProxyTabPage::Create(vcl::Window* pParent, const SfxItemSet* rAttrSet )
 {
     return new SvxProxyTabPage(pParent, *rAttrSet);
@@ -627,12 +653,20 @@ SvxSecurityTabPage::~SvxSecurityTabPage()
 
 void SvxSecurityTabPage::dispose()
 {
-    delete mpCertPathDlg;
-    mpCertPathDlg = NULL;
     delete mpSecOptions;
     mpSecOptions = NULL;
-    delete mpSecOptDlg;
-    mpSecOptDlg = NULL;
+    mpCertPathDlg.clear();
+    mpSecOptDlg.clear();
+    m_pSecurityOptionsPB.clear();
+    m_pSavePasswordsCB.clear();
+    m_pShowConnectionsPB.clear();
+    m_pMasterPasswordCB.clear();
+    m_pMasterPasswordFT.clear();
+    m_pMasterPasswordPB.clear();
+    m_pMacroSecFrame.clear();
+    m_pMacroSecPB.clear();
+    m_pCertFrame.clear();
+    m_pCertPathPB.clear();
     SfxTabPage::dispose();
 }
 
@@ -983,6 +1017,13 @@ void SvxEMailTabPage::dispose()
 {
     delete pImpl;
     pImpl = NULL;
+    m_pMailContainer.clear();
+    m_pMailerURLFI.clear();
+    m_pMailerURLED.clear();
+    m_pMailerURLPB.clear();
+    m_pSuppressHiddenContainer.clear();
+    m_pSuppressHiddenFI.clear();
+    m_pSuppressHidden.clear();
     SfxTabPage::dispose();
 }
 

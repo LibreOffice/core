@@ -261,6 +261,26 @@ void SpellDialog::dispose()
         delete pImpl;
         pImpl = NULL;
     }
+    m_pLanguageFT.clear();
+    m_pLanguageLB.clear();
+    m_pExplainFT.clear();
+    m_pExplainLink.clear();
+    m_pNotInDictFT.clear();
+    m_pSentenceED.clear();
+    m_pSuggestionFT.clear();
+    m_pSuggestionLB.clear();
+    m_pIgnorePB.clear();
+    m_pIgnoreAllPB.clear();
+    m_pIgnoreRulePB.clear();
+    m_pAddToDictPB.clear();
+    m_pAddToDictMB.clear();
+    m_pChangePB.clear();
+    m_pChangeAllPB.clear();
+    m_pAutoCorrPB.clear();
+    m_pCheckGrammarCB.clear();
+    m_pOptionsPB.clear();
+    m_pUndoPB.clear();
+    m_pClosePB.clear();
     SfxModelessDialog::dispose();
 }
 

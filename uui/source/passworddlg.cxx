@@ -82,6 +82,21 @@ PasswordDialog::PasswordDialog(vcl::Window* _pParent,
     m_pOKBtn->SetClickHdl( LINK( this, PasswordDialog, OKHdl_Impl ) );
 }
 
+PasswordDialog::~PasswordDialog()
+{
+    dispose();
+}
+
+void PasswordDialog::dispose()
+{
+    m_pFTPassword.clear();
+    m_pEDPassword.clear();
+    m_pFTConfirmPassword.clear();
+    m_pEDConfirmPassword.clear();
+    m_pOKBtn.clear();
+    ModalDialog::dispose();
+}
+
 IMPL_LINK_NOARG(PasswordDialog, OKHdl_Impl)
 {
     bool bEDPasswdValid = m_pEDPassword->GetText().getLength() >= nMinLen;

@@ -107,7 +107,7 @@ private:
     com::sun::star::uno::Reference<com::sun::star::awt::XWindow> mxParent;  /// parent window
     com::sun::star::uno::Reference< XComponentContext > mxContext;
 
-    XMLFilterSettingsDialog* mpDialog;
+    VclPtr<XMLFilterSettingsDialog> mpDialog;
 };
 
 
@@ -266,11 +266,7 @@ void SAL_CALL XMLFilterDialogComponent::disposing()
 {
     ::SolarMutexGuard aGuard;
 
-    if( mpDialog )
-    {
-        delete mpDialog;
-        mpDialog = NULL;
-    }
+    mpDialog.clear();
 
     if (pXSLTResMgr)
     {
@@ -328,7 +324,7 @@ sal_Int16 SAL_CALL XMLFilterDialogComponent::execute(  ) throw(RuntimeException,
         pXSLTResMgr = ResMgr::CreateResMgr( "xsltdlg", Application::GetSettings().GetUILanguageTag() );
     }
 
-    if( NULL == mpDialog )
+    if( nullptr == mpDialog )
     {
         vcl::Window* pParent = DIALOG_NO_PARENT;
         if (mxParent.is())

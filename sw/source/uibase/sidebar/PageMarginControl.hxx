@@ -64,7 +64,7 @@ public:
     virtual void dispose() SAL_OVERRIDE;
 
 private:
-    ::svx::sidebar::ValueSetWithTextControl* mpMarginValueSet;
+    VclPtr<::svx::sidebar::ValueSetWithTextControl> mpMarginValueSet;
 
     VclPtr<FixedText> maCustom;
     VclPtr<FixedText> maLeft;

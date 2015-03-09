@@ -33,6 +33,7 @@
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 
+#include <vcl/vclptr.hxx>
 #include <vector>
 
 class ThumbnailView;
@@ -78,7 +79,7 @@ public:
 
     // XComponent
     virtual void SAL_CALL dispose()throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
-        { WeakComponentImplHelperBase::dispose(); }
+        { mpParent.clear(); WeakComponentImplHelperBase::dispose(); }
     virtual void SAL_CALL addEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & xListener)throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
         { WeakComponentImplHelperBase::addEventListener(xListener); }
     virtual void SAL_CALL removeEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & xListener)throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
@@ -129,7 +130,7 @@ public:
 private:
     ::std::vector< ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessibleEventListener > >   mxEventListeners;
-    ThumbnailView*                                                           mpParent;
+    VclPtr<ThumbnailView>                                               mpParent;
     bool                                                                mbIsTransientChildrenDisabled;
     /// The current FOCUSED state.
     bool mbIsFocused;

@@ -1286,6 +1286,17 @@ void VclBin::setAllocation(const Size &rAllocation)
         setLayoutAllocation(*pChild, Point(0, 0), rAllocation);
 }
 
+VclFrame::~VclFrame()
+{
+    dispose();
+}
+
+void VclFrame::dispose()
+{
+    m_pLabel.clear();
+    VclBin::dispose();
+}
+
 //To-Do, hook a DecorationView into VclFrame ?
 
 Size VclFrame::calculateRequisition() const
@@ -1488,7 +1499,7 @@ Size VclExpander::calculateRequisition() const
     WindowImpl* pWindowImpl = ImplGetWindowImpl();
 
     const vcl::Window *pChild = get_child();
-    const vcl::Window *pLabel = pChild != pWindowImpl->mpLastChild ? pWindowImpl->mpLastChild : NULL;
+    const vcl::Window *pLabel = pChild != pWindowImpl->mpLastChild ? pWindowImpl->mpLastChild.get() : NULL;
 
     if (pChild && pChild->IsVisible() && m_pDisclosureButton->IsChecked())
         aRet = getLayoutRequisition(*pChild);
@@ -1525,7 +1536,7 @@ void VclExpander::setAllocation(const Size &rAllocation)
 
     //The label widget is the last (of two) children
     vcl::Window *pChild = get_child();
-    vcl::Window *pLabel = pChild != pWindowImpl->mpLastChild ? pWindowImpl->mpLastChild : NULL;
+    vcl::Window *pLabel = pChild != pWindowImpl->mpLastChild.get() ? pWindowImpl->mpLastChild.get() : NULL;
 
     Size aButtonSize = getLayoutRequisition(*m_pDisclosureButton);
     Size aLabelSize;
@@ -1835,7 +1846,7 @@ const vcl::Window *VclEventBox::get_child() const
 {
     const WindowImpl* pWindowImpl = ImplGetWindowImpl();
 
-    assert(pWindowImpl->mpFirstChild == m_aEventBoxHelper.get());
+    assert(pWindowImpl->mpFirstChild.get() == m_aEventBoxHelper.get());
 
     return pWindowImpl->mpFirstChild->GetWindow(WINDOW_NEXT);
 }
@@ -2004,19 +2015,13 @@ void MessageDialog::dispose()
         m_aOwnedButtons[i].disposeAndClear();
     m_aOwnedButtons.clear();
 
-    delete m_pSecondaryMessage;
-    m_pSecondaryMessage = NULL;
-
-    delete m_pPrimaryMessage;
-    m_pSecondaryMessage = NULL;
-
-    delete m_pImage;
-    m_pImage = NULL;
-
+    m_pSecondaryMessage.clear();
+    m_pSecondaryMessage.clear();
+    m_pImage.clear();
     m_pGrid.disposeAndClear();
     m_pOwnedActionArea.disposeAndClear();
     m_pOwnedContentArea.disposeAndClear();
-
+    m_pPrimaryMessage.clear();
     Dialog::dispose();
 }
 
@@ -2038,7 +2043,7 @@ IMPL_LINK(MessageDialog, ButtonHdl, Button *, pButton)
 
 short MessageDialog::get_response(const vcl::Window *pWindow) const
 {
-    std::map<const vcl::Window*, short>::const_iterator aFind = m_aResponses.find(pWindow);
+    auto aFind = m_aResponses.find(pWindow);
     if (aFind != m_aResponses.end())
         return aFind->second;
     if (!m_pUIBuilder)
@@ -2160,7 +2165,7 @@ short MessageDialog::Execute()
         m_pSecondaryMessage->SetText(m_sSecondaryString);
         m_pSecondaryMessage->Show(bHasSecondaryText);
 
-        MessageDialog::SetMessagesWidths(this, m_pPrimaryMessage, bHasSecondaryText ? m_pSecondaryMessage : NULL);
+        MessageDialog::SetMessagesWidths(this, m_pPrimaryMessage, bHasSecondaryText ? m_pSecondaryMessage.get() : NULL);
 
         VclButtonBox *pButtonBox = get_action_area();
         assert(pButtonBox);

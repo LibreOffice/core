@@ -77,18 +77,10 @@ void ListBox::dispose()
 {
     CallEventListeners( VCLEVENT_OBJECT_DYING );
 
-    // When destroying the FloatWin TH does a GrabFocus to the Parent:
-    // that means this "ListBox => PreNotify() ..."
-    ImplListBox *pImplLB = mpImplLB;
-    mpImplLB = NULL;
-    delete pImplLB;
-
-    delete mpFloatWin;
-    mpFloatWin = NULL;
-    delete mpImplWin;
-    mpImplWin = NULL;
-    delete mpBtn;
-    mpBtn = NULL;
+    mpFloatWin.clear();
+    mpImplWin.clear();
+    mpBtn.clear();
+    mpImplLB.clear();
 
     Control::dispose();
 }

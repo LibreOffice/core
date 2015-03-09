@@ -180,6 +180,20 @@ SwConvertTableDlg:: ~SwConvertTableDlg()
 void SwConvertTableDlg::dispose()
 {
     delete pTAutoFmt;
+    mpTabBtn.clear();
+    mpSemiBtn.clear();
+    mpParaBtn.clear();
+    mpOtherBtn.clear();
+    mpOtherEd.clear();
+    mpKeepColumn.clear();
+    mpOptions.clear();
+    mpHeaderCB.clear();
+    mpRepeatHeaderCB.clear();
+    mpRepeatRows.clear();
+    mpRepeatHeaderNF.clear();
+    mpDontSplitCB.clear();
+    mpBorderCB.clear();
+    mpAutoFmtBtn.clear();
     SfxModalDialog::dispose();
 }
 

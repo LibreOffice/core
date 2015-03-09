@@ -33,8 +33,8 @@ class SfxStyleSheetBasePool;
 class SFX2_DLLPUBLIC SfxNewStyleDlg : public ModalDialog
 {
 private:
-    ComboBox* m_pColBox;
-    OKButton* m_pOKBtn;
+    VclPtr<ComboBox> m_pColBox;
+    VclPtr<OKButton> m_pOKBtn;
 
     VclPtr<MessageDialog> aQueryOverwriteBox;
     SfxStyleSheetBasePool&  rPool;

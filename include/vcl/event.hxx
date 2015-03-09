@@ -26,6 +26,7 @@
 #include <vcl/keycod.hxx>
 #include <vcl/cmdevt.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/vclptr.hxx>
 
 class AllSettings;
 class OutputDevice;
@@ -411,7 +412,7 @@ enum class MouseNotifyEvent
 class VCL_DLLPUBLIC NotifyEvent
 {
 private:
-    vcl::Window*                 mpWindow;
+    VclPtr<vcl::Window>     mpWindow;
     void*                   mpData;
     MouseNotifyEvent        mnEventType;
     long                    mnRetValue;

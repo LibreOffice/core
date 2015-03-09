@@ -30,7 +30,7 @@
 
 using namespace ::com::sun::star::datatransfer;
 
-#define getDataWindow() (static_cast<BrowserDataWin*>(pDataWin))
+#define getDataWindow() (static_cast<BrowserDataWin*>(pDataWin.get()))
 
 
 
@@ -43,7 +43,7 @@ void BrowseBox::StartDrag( sal_Int8 /* _nAction */, const Point& /* _rPosPixel *
 
 sal_Int8 BrowseBox::AcceptDrop( const AcceptDropEvent& _rEvt )
 {
-    BrowserDataWin* pDataWindow = static_cast<BrowserDataWin*>(pDataWin);
+    BrowserDataWin* pDataWindow = static_cast<BrowserDataWin*>(pDataWin.get());
     AcceptDropEvent aTransformed( _rEvt );
     aTransformed.maPosPixel = pDataWindow->ScreenToOutputPixel( OutputToScreenPixel( _rEvt.maPosPixel ) );
     return pDataWindow->AcceptDrop( aTransformed );
@@ -53,7 +53,7 @@ sal_Int8 BrowseBox::AcceptDrop( const AcceptDropEvent& _rEvt )
 
 sal_Int8 BrowseBox::ExecuteDrop( const ExecuteDropEvent& _rEvt )
 {
-    BrowserDataWin* pDataWindow = static_cast<BrowserDataWin*>(pDataWin);
+    BrowserDataWin* pDataWindow = static_cast<BrowserDataWin*>(pDataWin.get());
     ExecuteDropEvent aTransformed( _rEvt );
     aTransformed.maPosPixel = pDataWindow->ScreenToOutputPixel( OutputToScreenPixel( _rEvt.maPosPixel ) );
     return pDataWindow->ExecuteDrop( aTransformed );
@@ -79,8 +79,8 @@ sal_Int8 BrowseBox::ExecuteDrop( const BrowserExecuteDropEvent& )
 
 void* BrowseBox::implGetDataFlavors() const
 {
-    if (static_cast<BrowserDataWin*>(pDataWin)->bCallingDropCallback)
-        return &static_cast<BrowserDataWin*>(pDataWin)->GetDataFlavorExVector();
+    if (static_cast<BrowserDataWin*>(pDataWin.get())->bCallingDropCallback)
+        return &static_cast<BrowserDataWin*>(pDataWin.get())->GetDataFlavorExVector();
     return &GetDataFlavorExVector();
 }
 
@@ -88,8 +88,8 @@ void* BrowseBox::implGetDataFlavors() const
 
 bool BrowseBox::IsDropFormatSupported( SotClipboardFormatId _nFormat )
 {
-    if ( static_cast< BrowserDataWin* >( pDataWin )->bCallingDropCallback )
-        return static_cast< BrowserDataWin* >( pDataWin )->IsDropFormatSupported( _nFormat );
+    if ( static_cast< BrowserDataWin* >( pDataWin.get() )->bCallingDropCallback )
+        return static_cast< BrowserDataWin* >( pDataWin.get() )->IsDropFormatSupported( _nFormat );
 
     return DropTargetHelper::IsDropFormatSupported( _nFormat );
 }
@@ -105,8 +105,8 @@ bool BrowseBox::IsDropFormatSupported( SotClipboardFormatId _nFormat ) const
 
 bool BrowseBox::IsDropFormatSupported( const DataFlavor& _rFlavor )
 {
-    if ( static_cast< BrowserDataWin* >( pDataWin )->bCallingDropCallback )
-        return static_cast< BrowserDataWin* >( pDataWin )->IsDropFormatSupported( _rFlavor );
+    if ( static_cast< BrowserDataWin* >( pDataWin.get() )->bCallingDropCallback )
+        return static_cast< BrowserDataWin* >( pDataWin.get() )->IsDropFormatSupported( _rFlavor );
 
     return DropTargetHelper::IsDropFormatSupported( _rFlavor );
 }
@@ -189,7 +189,7 @@ void BrowseBox::StateChanged( StateChangedType nStateChange )
         // do we have a handle column?
         bool bHandleCol = !pCols->empty() && (0 == (*pCols)[ 0 ]->GetId());
         // do we have a header bar?
-        bool bHeaderBar = (NULL != static_cast<BrowserDataWin&>(GetDataWindow()).pHeaderBar);
+        bool bHeaderBar = (NULL != static_cast<BrowserDataWin&>(GetDataWindow()).pHeaderBar.get());
 
         if  (   nTitleLines
             &&  (   !bHeaderBar
@@ -407,9 +407,9 @@ void BrowseBox::DrawCursor()
     {
         // on these platforms, the StarView focus works correctly
         if ( bReallyHide )
-            static_cast<Control*>(pDataWin)->HideFocus();
+            static_cast<Control*>(pDataWin.get())->HideFocus();
         else
-            static_cast<Control*>(pDataWin)->ShowFocus( aCursor );
+            static_cast<Control*>(pDataWin.get())->ShowFocus( aCursor );
     }
     else
     {
@@ -623,7 +623,7 @@ void BrowseBox::Paint( const Rectangle& rRect )
 
     BrowserColumn *pFirstCol = (*pCols)[ 0 ];
     bool bHandleCol = pFirstCol && pFirstCol->GetId() == 0;
-    bool bHeaderBar = getDataWindow()->pHeaderBar != NULL;
+    bool bHeaderBar = getDataWindow()->pHeaderBar.get() != NULL;
 
     // draw delimitational lines
     if ( !getDataWindow()->bNoHScroll )
@@ -1119,7 +1119,7 @@ void BrowseBox::UpdateScrollbars()
         return;
 
     // protect against recursion
-    BrowserDataWin *pBDW = static_cast<BrowserDataWin*>( pDataWin );
+    BrowserDataWin *pBDW = static_cast<BrowserDataWin*>( pDataWin.get() );
     if ( pBDW->bInUpdateScrollbars )
     {
         pBDW->bHadRecursion = true;
@@ -1258,7 +1258,7 @@ void BrowseBox::UpdateScrollbars()
         getDataWindow()->pCornerWin->Show();
     }
     else
-        DELETEZ( getDataWindow()->pCornerWin );
+        getDataWindow()->pCornerWin.clear();
 
     // scroll headerbar, if necessary
     if ( getDataWindow()->pHeaderBar )
@@ -1539,7 +1539,7 @@ void BrowseBox::MouseButtonUp( const MouseEvent & rEvt )
         bResizing = false;
     }
     else
-        MouseButtonUp( BrowserMouseEvent( static_cast<BrowserDataWin*>(pDataWin),
+        MouseButtonUp( BrowserMouseEvent( static_cast<BrowserDataWin*>(pDataWin.get()),
                 MouseEvent( Point( rEvt.GetPosPixel().X(),
                         rEvt.GetPosPixel().Y() - pDataWin->GetPosPixel().Y() ),
                     rEvt.GetClicks(), rEvt.GetMode(), rEvt.GetButtons(),

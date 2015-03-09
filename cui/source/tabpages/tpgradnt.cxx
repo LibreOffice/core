@@ -139,6 +139,34 @@ SvxGradientTabPage::SvxGradientTabPage
     setPreviewsToSamePlace(pParent, this);
 }
 
+SvxGradientTabPage::~SvxGradientTabPage()
+{
+    dispose();
+}
+
+void SvxGradientTabPage::dispose()
+{
+    m_pLbGradientType.clear();
+    m_pFtCenterX.clear();
+    m_pMtrCenterX.clear();
+    m_pFtCenterY.clear();
+    m_pMtrCenterY.clear();
+    m_pFtAngle.clear();
+    m_pMtrAngle.clear();
+    m_pMtrBorder.clear();
+    m_pLbColorFrom.clear();
+    m_pMtrColorFrom.clear();
+    m_pLbColorTo.clear();
+    m_pMtrColorTo.clear();
+    m_pLbGradients.clear();
+    m_pCtlPreview.clear();
+    m_pBtnAdd.clear();
+    m_pBtnModify.clear();
+    m_pBtnDelete.clear();
+    m_pBtnLoad.clear();
+    m_pBtnSave.clear();
+    SfxTabPage::dispose();
+}
 
 
 void SvxGradientTabPage::Construct()

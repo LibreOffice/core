@@ -54,9 +54,9 @@ class SmEditWindow : public vcl::Window, public DropTargetHelper
 
     SmCmdBoxWindow &rCmdBox;
     EditView       *pEditView;
-    ScrollBar      *pHScrollBar,
-                   *pVScrollBar;
-    ScrollBarBox   *pScrollBox;
+    VclPtr<ScrollBar>      pHScrollBar,
+                           pVScrollBar;
+    VclPtr<ScrollBarBox>   pScrollBox;
     Idle            aModifyIdle,
                     aCursorMoveIdle;
     ESelection      aOldSelection;

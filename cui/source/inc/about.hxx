@@ -34,13 +34,13 @@ private:
     BitmapEx           aBackgroundBitmap;
     BitmapEx           aLogoBitmap;
 
-    VclMultiLineEdit*    m_pVersion;
-    FixedText*           m_pDescriptionText;
-    FixedText*           m_pCopyrightText;
-    FixedImage*          m_pLogoImage;
-    FixedText*           m_pLogoReplacement;
-    PushButton*          m_pCreditsButton;
-    PushButton*          m_pWebsiteButton;
+    VclPtr<VclMultiLineEdit>    m_pVersion;
+    VclPtr<FixedText>           m_pDescriptionText;
+    VclPtr<FixedText>           m_pCopyrightText;
+    VclPtr<FixedImage>          m_pLogoImage;
+    VclPtr<FixedText>           m_pLogoReplacement;
+    VclPtr<PushButton>          m_pCreditsButton;
+    VclPtr<PushButton>          m_pWebsiteButton;
 
     OUString m_aVersionTextStr;
     OUString m_aVendorTextStr;
@@ -66,6 +66,8 @@ protected:
 
 public:
     AboutDialog(vcl::Window* pParent);
+    virtual ~AboutDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     DECL_LINK( HandleClick, PushButton* );
 };

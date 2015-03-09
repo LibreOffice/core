@@ -37,7 +37,7 @@ namespace dbaui
     class OWizTypeSelectControl : public OFieldDescControl
     {
     protected:
-        vcl::Window*             m_pParentTabPage;
+        VclPtr<vcl::Window> m_pParentTabPage;
         virtual void        ActivateAggregate( EControlType eType ) SAL_OVERRIDE;
         virtual void        DeactivateAggregate( EControlType eType ) SAL_OVERRIDE;
 
@@ -52,6 +52,8 @@ namespace dbaui
 
     public:
         OWizTypeSelectControl(vcl::Window* pParent, vcl::Window* pParentTabPage, OTableDesignHelpBar* pHelpBar=NULL);
+        virtual ~OWizTypeSelectControl();
+        virtual void dispose() SAL_OVERRIDE;
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData> getMetaData() SAL_OVERRIDE;
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> getConnection() SAL_OVERRIDE;
@@ -68,13 +70,15 @@ namespace dbaui
                                                 bool _bSet = false);
     protected:
         virtual bool            PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-        vcl::Window*                 m_pParentTabPage;
+        VclPtr<vcl::Window>     m_pParentTabPage;
     public:
         OWizTypeSelectList( vcl::Window* pParent, WinBits nStyle = WB_BORDER )
             : MultiListBox(pParent,nStyle)
             , m_bPKey(false)
             , m_pParentTabPage(NULL)
             {}
+        virtual ~OWizTypeSelectList();
+        virtual void dispose() SAL_OVERRIDE;
         void                    SetPKey(bool bPKey) { m_bPKey = bPKey; }
         void                    SetParentTabPage(vcl::Window* pParentTabPage) { m_pParentTabPage = pParentTabPage; }
     };
@@ -90,13 +94,13 @@ namespace dbaui
         DECL_LINK( ColumnSelectHdl, MultiListBox* );
         DECL_LINK( ButtonClickHdl, Button * );
     protected:
-        OWizTypeSelectList      *m_pColumnNames;
-        FixedText               *m_pColumns;
-        OWizTypeSelectControl   *m_pTypeControl;
-        FixedText               *m_pAutoType;
-        FixedText               *m_pAutoFt;
-        NumericField            *m_pAutoEt;
-        PushButton              *m_pAutoPb;
+        VclPtr<OWizTypeSelectList>      m_pColumnNames;
+        VclPtr<FixedText>               m_pColumns;
+        VclPtr<OWizTypeSelectControl>   m_pTypeControl;
+        VclPtr<FixedText>               m_pAutoType;
+        VclPtr<FixedText>               m_pAutoFt;
+        VclPtr<NumericField>            m_pAutoEt;
+        VclPtr<PushButton>              m_pAutoPb;
 
         Image                   m_imgPKey;
         SvStream*               m_pParserStream; // stream to read the tokens from or NULL

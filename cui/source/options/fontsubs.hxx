@@ -63,18 +63,18 @@ class SvxFontSubstCheckListBox : public SvSimpleTable
 class SvtFontSubstConfig;
 class SvxFontSubstTabPage : public SfxTabPage
 {
-    CheckBox*                   m_pUseTableCB;
-    VclContainer*               m_pReplacements;
-    FontNameBox*                m_pFont1CB;
-    FontNameBox*                m_pFont2CB;
-    PushButton*                 m_pApply;
-    PushButton*                 m_pDelete;
+    VclPtr<CheckBox>                   m_pUseTableCB;
+    VclPtr<VclContainer>               m_pReplacements;
+    VclPtr<FontNameBox>                m_pFont1CB;
+    VclPtr<FontNameBox>                m_pFont2CB;
+    VclPtr<PushButton>                 m_pApply;
+    VclPtr<PushButton>                 m_pDelete;
 
-    SvxFontSubstCheckListBox*   m_pCheckLB;
+    VclPtr<SvxFontSubstCheckListBox>   m_pCheckLB;
 
-    ListBox*                    m_pFontNameLB;
-    CheckBox*                   m_pNonPropFontsOnlyCB;
-    ListBox*                    m_pFontHeightLB;
+    VclPtr<ListBox>                    m_pFontNameLB;
+    VclPtr<CheckBox>                   m_pNonPropFontsOnlyCB;
+    VclPtr<ListBox>                    m_pFontHeightLB;
 
     OUString                    m_sAutomatic;
 

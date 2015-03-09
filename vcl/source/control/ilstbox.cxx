@@ -2174,9 +2174,9 @@ ImplListBox::~ImplListBox()
 
 void ImplListBox::dispose()
 {
-    delete mpHScrollBar;
-    delete mpVScrollBar;
-    delete mpScrollBarBox;
+    mpHScrollBar.clear();
+    mpVScrollBar.clear();
+    mpScrollBarBox.clear();
     maLBWindow.clear();
     Control::dispose();
 }
@@ -2930,6 +2930,18 @@ ImplListBoxFloatingWindow::ImplListBoxFloatingWindow( vcl::Window* pParent ) :
     }
 
 }
+
+ImplListBoxFloatingWindow::~ImplListBoxFloatingWindow()
+{
+    dispose();
+}
+
+void ImplListBoxFloatingWindow::dispose()
+{
+    mpImplLB.clear();
+    FloatingWindow::dispose();
+}
+
 
 bool ImplListBoxFloatingWindow::PreNotify( NotifyEvent& rNEvt )
 {

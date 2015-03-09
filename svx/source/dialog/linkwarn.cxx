@@ -53,6 +53,7 @@ void SvxLinkWarningDialog::dispose()
     bool bChecked = m_pWarningOnBox->IsChecked();
     if ( aMiscOpt.ShowLinkWarningDialog() != bChecked )
         aMiscOpt.SetShowLinkWarningDialog( bChecked );
+    m_pWarningOnBox.clear();
     MessageDialog::dispose();
 }
 

@@ -33,6 +33,8 @@ class ScaleTabPage : public SfxTabPage
 {
 public:
     ScaleTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs );
+    virtual ~ScaleTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     static SfxTabPage* Create( vcl::Window* pParent, const SfxItemSet* rInAttrs );
     virtual bool FillItemSet( SfxItemSet* rOutAttrs ) SAL_OVERRIDE;
@@ -48,38 +50,38 @@ public:
     virtual void StateChanged( StateChangedType nType ) SAL_OVERRIDE;
 
 private:
-    CheckBox*            m_pCbxReverse;
-    CheckBox*            m_pCbxLogarithm;
+    VclPtr<CheckBox>            m_pCbxReverse;
+    VclPtr<CheckBox>            m_pCbxLogarithm;
 
-    VclBox*              m_pBxType;
-    ListBox*             m_pLB_AxisType;
+    VclPtr<VclBox>              m_pBxType;
+    VclPtr<ListBox>             m_pLB_AxisType;
 
-    VclGrid*              m_pBxMinMax;
-    FormattedField*      m_pFmtFldMin;
-    CheckBox*            m_pCbxAutoMin;
+    VclPtr<VclGrid>              m_pBxMinMax;
+    VclPtr<FormattedField>      m_pFmtFldMin;
+    VclPtr<CheckBox>            m_pCbxAutoMin;
 
-    FormattedField*      m_pFmtFldMax;
-    CheckBox*            m_pCbxAutoMax;
+    VclPtr<FormattedField>      m_pFmtFldMax;
+    VclPtr<CheckBox>            m_pCbxAutoMax;
 
-    VclBox*              m_pBxResolution;
-    ListBox*             m_pLB_TimeResolution;
-    CheckBox*            m_pCbx_AutoTimeResolution;
+    VclPtr<VclBox>              m_pBxResolution;
+    VclPtr<ListBox>             m_pLB_TimeResolution;
+    VclPtr<CheckBox>            m_pCbx_AutoTimeResolution;
 
-    FixedText*           m_pTxtMain;
-    FormattedField*      m_pFmtFldStepMain;
-    MetricField*         m_pMt_MainDateStep;
-    ListBox*             m_pLB_MainTimeUnit;
-    CheckBox*            m_pCbxAutoStepMain;
+    VclPtr<FixedText>           m_pTxtMain;
+    VclPtr<FormattedField>      m_pFmtFldStepMain;
+    VclPtr<MetricField>         m_pMt_MainDateStep;
+    VclPtr<ListBox>             m_pLB_MainTimeUnit;
+    VclPtr<CheckBox>            m_pCbxAutoStepMain;
 
-    FixedText*           m_pTxtHelpCount;
-    FixedText*           m_pTxtHelp;
-    MetricField*         m_pMtStepHelp;
-    ListBox*             m_pLB_HelpTimeUnit;
-    CheckBox*            m_pCbxAutoStepHelp;
+    VclPtr<FixedText>           m_pTxtHelpCount;
+    VclPtr<FixedText>           m_pTxtHelp;
+    VclPtr<MetricField>         m_pMtStepHelp;
+    VclPtr<ListBox>             m_pLB_HelpTimeUnit;
+    VclPtr<CheckBox>            m_pCbxAutoStepHelp;
 
-    FormattedField*      m_pFmtFldOrigin;
-    CheckBox*            m_pCbxAutoOrigin;
-    VclBox*              m_pBxOrigin;
+    VclPtr<FormattedField>      m_pFmtFldOrigin;
+    VclPtr<CheckBox>            m_pCbxAutoOrigin;
+    VclPtr<VclBox>              m_pBxOrigin;
 
     double              fMin;
     double              fMax;

@@ -32,7 +32,7 @@ namespace dbaui
                             ,public IClipboardTest
     {
 
-        OTableFieldControl  *m_pFieldControl;
+        VclPtr<OTableFieldControl>  m_pFieldControl;
     protected:
         virtual void Resize() SAL_OVERRIDE;
 

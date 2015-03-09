@@ -354,7 +354,7 @@ private:
 
     struct GridEntry
     {
-        vcl::Window *pChild;
+        VclPtr<vcl::Window> pChild;
         sal_Int32 nSpanWidth;
         sal_Int32 nSpanHeight;
         GridEntry()
@@ -456,7 +456,7 @@ public:
 class VCL_DLLPUBLIC VclFrame : public VclBin
 {
 private:
-    vcl::Window *m_pLabel;
+    VclPtr<vcl::Window> m_pLabel;
 private:
     friend class VclBuilder;
     void designate_label(vcl::Window *pWindow);
@@ -467,6 +467,8 @@ public:
         , m_pLabel(NULL)
     {
     }
+    virtual ~VclFrame();
+    virtual void dispose() SAL_OVERRIDE;
     void set_label(const OUString &rLabel);
     OUString get_label() const;
     virtual vcl::Window *get_child() SAL_OVERRIDE;
@@ -520,6 +522,8 @@ public:
         m_pDisclosureButton->SetToggleHdl(LINK(this, VclExpander, ClickHdl));
         m_pDisclosureButton->Show();
     }
+    virtual ~VclExpander() { dispose(); }
+    void dispose() SAL_OVERRIDE { m_pDisclosureButton.clear(); VclBin::dispose(); }
     virtual vcl::Window *get_child() SAL_OVERRIDE;
     virtual const vcl::Window *get_child() const SAL_OVERRIDE;
     virtual bool set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
@@ -545,7 +549,6 @@ public:
 protected:
     virtual Size calculateRequisition() const SAL_OVERRIDE;
     virtual void setAllocation(const Size &rAllocation) SAL_OVERRIDE;
-    void dispose() SAL_OVERRIDE { m_pDisclosureButton.disposeAndClear(); VclBin::dispose(); }
 private:
     bool m_bResizeTopLevel;
     VclPtr<DisclosureButton> m_pDisclosureButton;
@@ -557,6 +560,8 @@ class VCL_DLLPUBLIC VclScrolledWindow : public VclBin
 {
 public:
     VclScrolledWindow(vcl::Window *pParent, WinBits nStyle = WB_HIDE | WB_CLIPCHILDREN | WB_AUTOHSCROLL | WB_AUTOVSCROLL);
+    virtual ~VclScrolledWindow() { dispose(); }
+    void dispose() SAL_OVERRIDE { m_pVScroll.disposeAndClear(); m_pHScroll.disposeAndClear(); m_aScrollBarBox.clear(); VclBin::dispose(); }
     virtual vcl::Window *get_child() SAL_OVERRIDE;
     virtual const vcl::Window *get_child() const SAL_OVERRIDE;
     virtual bool set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
@@ -572,7 +577,6 @@ protected:
     DECL_LINK(ScrollBarHdl, void *);
     void InitScrollBars(const Size &rRequest);
     virtual bool Notify(NotifyEvent& rNEvt) SAL_OVERRIDE;
-    void dispose() SAL_OVERRIDE { m_pVScroll.disposeAndClear(); m_pHScroll.disposeAndClear(); m_aScrollBarBox.disposeAndClear(); VclBin::dispose(); }
 private:
     bool m_bUserManagedScrolling;
     VclPtr<ScrollBar> m_pVScroll;
@@ -648,7 +652,7 @@ enum VclSizeGroupMode
 class VCL_DLLPUBLIC VclSizeGroup
 {
 private:
-    std::set<vcl::Window*> m_aWindows;
+    std::set< VclPtr<vcl::Window> > m_aWindows;
     bool m_bIgnoreHidden;
     VclSizeGroupMode m_eMode;
 
@@ -661,17 +665,17 @@ public:
     }
     void insert(vcl::Window *pWindow)
     {
-        m_aWindows.insert(pWindow);
+        m_aWindows.insert(VclPtr<vcl::Window>(pWindow));
     }
     void erase(vcl::Window *pWindow)
     {
-        m_aWindows.erase(pWindow);
+        m_aWindows.erase(VclPtr<vcl::Window>(pWindow));
     }
-    const std::set<vcl::Window*>& get_widgets() const
+    const std::set< VclPtr<vcl::Window> >& get_widgets() const
     {
         return m_aWindows;
     }
-    std::set<vcl::Window*>& get_widgets()
+    std::set< VclPtr<vcl::Window> >& get_widgets()
     {
         return m_aWindows;
     }
@@ -714,11 +718,11 @@ private:
     VclPtr<VclBox> m_pOwnedContentArea;
     VclPtr<VclButtonBox> m_pOwnedActionArea;
     VclPtr<VclGrid> m_pGrid;
-    FixedImage* m_pImage;
-    VclMultiLineEdit* m_pPrimaryMessage;
-    VclMultiLineEdit* m_pSecondaryMessage;
+    VclPtr<FixedImage> m_pImage;
+    VclPtr<VclMultiLineEdit> m_pPrimaryMessage;
+    VclPtr<VclMultiLineEdit> m_pSecondaryMessage;
     std::vector<VclPtr<PushButton> > m_aOwnedButtons;
-    std::map<const vcl::Window*, short> m_aResponses;
+    std::map< VclPtr<const vcl::Window>, short> m_aResponses;
     OUString m_sPrimaryString;
     OUString m_sSecondaryString;
     DECL_DLLPRIVATE_LINK(ButtonHdl, Button *);

@@ -28,6 +28,7 @@
 
 #include <svtools/toolboxcontroller.hxx>
 #include <tools/link.hxx>
+#include <vcl/vclptr.hxx>
 
 class ToolBox;
 namespace vcl { class Window; }
@@ -87,9 +88,9 @@ class ComplexToolbarController : public svt::ToolboxController
         void notifyFocusLost();
         void notifyTextChanged( const OUString& aText );
 
-        ToolBox*                                                                    m_pToolbar;
+        VclPtr<ToolBox>                                                             m_pToolbar;
         sal_uInt16                                                                  m_nID;
-        bool                                                                    m_bMadeInvisible;
+        bool                                                                        m_bMadeInvisible;
         mutable ::com::sun::star::util::URL                                         m_aURL;
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer > m_xURLTransformer;
 };

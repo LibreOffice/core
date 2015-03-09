@@ -109,7 +109,27 @@ ScCalcOptionsDialog::ScCalcOptionsDialog(vcl::Window* pParent, const ScCalcConfi
     mpTestButton->SetClickHdl(LINK(this, ScCalcOptionsDialog, TestClickHdl));
 }
 
-ScCalcOptionsDialog::~ScCalcOptionsDialog() {}
+ScCalcOptionsDialog::~ScCalcOptionsDialog()
+{
+    dispose();
+}
+
+void ScCalcOptionsDialog::dispose()
+{
+    mpLbOptionEdit.clear();
+
+    mpUseOpenCL.clear();
+    mpSpinButton.clear();
+    mpEditField.clear();
+    mpTestButton.clear();
+    mpFtFrequency.clear();
+    mpFtComputeUnits.clear();
+    mpFtMemory.clear();
+    mpOpenclInfoList.clear();
+    mpBtnAutomaticSelectionTrue.clear();
+    mpBtnAutomaticSelectionFalse.clear();
+    ModalDialog::dispose();
+}
 
 void ScCalcOptionsDialog::OpenCLAutomaticSelectionChanged()
 {

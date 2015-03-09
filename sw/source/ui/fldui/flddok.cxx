@@ -80,7 +80,28 @@ SwFldDokPage::SwFldDokPage(vcl::Window* pParent, const SfxItemSet& rCoreSet )
 
 SwFldDokPage::~SwFldDokPage()
 {
+    dispose();
 }
+
+void SwFldDokPage::dispose()
+{
+    m_pTypeLB.clear();
+    m_pSelection.clear();
+    m_pSelectionLB.clear();
+    m_pValueFT.clear();
+    m_pValueED.clear();
+    m_pLevelFT.clear();
+    m_pLevelED.clear();
+    m_pDateFT.clear();
+    m_pTimeFT.clear();
+    m_pDateOffsetED.clear();
+    m_pFormat.clear();
+    m_pFormatLB.clear();
+    m_pNumFormatLB.clear();
+    m_pFixedCB.clear();
+    SwFldPage::dispose();
+}
+
 
 void SwFldDokPage::Reset(const SfxItemSet* )
 {

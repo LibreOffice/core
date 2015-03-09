@@ -150,6 +150,18 @@ void ScPrintAreasDlg::dispose()
         for ( sal_uInt16 j=0; j<nCount; j++ )
             delete static_cast<OUString*>(aLb[i]->GetEntryData(j));
     }
+    pLbPrintArea.clear();
+    pEdPrintArea.clear();
+    pRbPrintArea.clear();
+    pLbRepeatRow.clear();
+    pEdRepeatRow.clear();
+    pRbRepeatRow.clear();
+    pLbRepeatCol.clear();
+    pEdRepeatCol.clear();
+    pRbRepeatCol.clear();
+    pBtnOk.clear();
+    pBtnCancel.clear();
+    pRefInputEdit.clear();
     ScAnyRefDlg::dispose();
 }
 

@@ -31,10 +31,10 @@
 
 class SvxInsRowColDlg : public SvxAbstractInsRowColDlg, public ModalDialog
 {
-    NumericField*   m_pCountEdit;
+    VclPtr<NumericField>   m_pCountEdit;
 
-    RadioButton*    m_pBeforeBtn;
-    RadioButton*    m_pAfterBtn;
+    VclPtr<RadioButton>    m_pBeforeBtn;
+    VclPtr<RadioButton>    m_pAfterBtn;
 
     OUString   aRow;
     OUString   aCol;
@@ -43,6 +43,8 @@ class SvxInsRowColDlg : public SvxAbstractInsRowColDlg, public ModalDialog
 
 public:
     SvxInsRowColDlg( vcl::Window* pParent, bool bCol, const OString& sHelpId );
+    virtual ~SvxInsRowColDlg();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual short Execute(void) SAL_OVERRIDE;
 

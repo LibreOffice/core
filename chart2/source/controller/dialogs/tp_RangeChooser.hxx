@@ -48,6 +48,8 @@ public:
                 , ChartTypeTemplateProvider* pTemplateProvider
                 , Dialog * pParentDialog
                 , bool bHideDescription = false );
+    virtual ~RangeChooserTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     //RangeSelectionListenerParent
     virtual void listeningFinished( const OUString & rNewRange ) SAL_OVERRIDE;
@@ -75,21 +77,21 @@ protected: //methods
 
 protected: //member
 
-    FixedText*       m_pFT_Caption;
-    FixedText*       m_pFT_Range;
-    Edit*            m_pED_Range;
-    PushButton*      m_pIB_Range;
+    VclPtr<FixedText>       m_pFT_Caption;
+    VclPtr<FixedText>       m_pFT_Range;
+    VclPtr<Edit>            m_pED_Range;
+    VclPtr<PushButton>      m_pIB_Range;
 
-    RadioButton*     m_pRB_Rows;
-    RadioButton*     m_pRB_Columns;
+    VclPtr<RadioButton>     m_pRB_Rows;
+    VclPtr<RadioButton>     m_pRB_Columns;
 
-    CheckBox*        m_pCB_FirstRowAsLabel;
-    CheckBox*        m_pCB_FirstColumnAsLabel;
-    FixedText*       m_pFTTitle;
+    VclPtr<CheckBox>        m_pCB_FirstRowAsLabel;
+    VclPtr<CheckBox>        m_pCB_FirstColumnAsLabel;
+    VclPtr<FixedText>       m_pFTTitle;
 
-    CheckBox*        m_pCB_TimeBased;
-    Edit*            m_pEd_TimeStart;
-    Edit*            m_pEd_TimeEnd;
+    VclPtr<CheckBox>        m_pCB_TimeBased;
+    VclPtr<Edit>            m_pEd_TimeStart;
+    VclPtr<Edit>            m_pEd_TimeEnd;
 
     sal_Int32       m_nChangingControlCalls;
     bool            m_bIsDirty;
@@ -105,7 +107,7 @@ protected: //member
     ChartTypeTemplateProvider*                              m_pTemplateProvider;
 
     DialogModel &                                           m_rDialogModel;
-    Dialog *                                                m_pParentDialog;
+    VclPtr<Dialog>                                          m_pParentDialog;
     TabPageNotifiable *                                     m_pTabPageNotifiable;
 
 };

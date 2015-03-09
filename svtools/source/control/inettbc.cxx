@@ -91,13 +91,13 @@ class SvtMatchContext_Impl: public salhelper::Thread
 {
     static ::osl::Mutex*            pDirMutex;
 
-    std::vector<OUString>      aPickList;
-    std::vector<OUString>      aCompletions;
-    std::vector<OUString>      aURLs;
+    std::vector<OUString>           aPickList;
+    std::vector<OUString>           aCompletions;
+    std::vector<OUString>           aURLs;
     svtools::AsynchronLink          aLink;
     OUString                        aBaseURL;
     OUString                        aText;
-    SvtURLBox*                      pBox;
+    VclPtr<SvtURLBox>               pBox;
     bool                            bOnlyDirectories;
     bool                            bNoSelection;
 

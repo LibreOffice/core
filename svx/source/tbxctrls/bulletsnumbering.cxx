@@ -40,13 +40,15 @@ class NumberingPopup : public svtools::ToolbarMenu
 {
     bool mbBulletItem;
     NumberingToolBoxControl& mrController;
-    SvxNumValueSet* mpValueSet;
+    VclPtr<SvxNumValueSet> mpValueSet;
     DECL_LINK( VSSelectHdl, void * );
 
 public:
     NumberingPopup( NumberingToolBoxControl& rController,
                     const css::uno::Reference< css::frame::XFrame >& rFrame,
                     vcl::Window* pParent, bool bBulletItem );
+    virtual ~NumberingPopup();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual void statusChanged( const css::frame::FeatureStateEvent& rEvent )
         throw ( css::uno::RuntimeException ) SAL_OVERRIDE;
@@ -131,6 +133,17 @@ NumberingPopup::NumberingPopup( NumberingToolBoxControl& rController,
         AddStatusListener( ".uno:CurrentBulletListType" );
     else
         AddStatusListener( ".uno:CurrentNumListType" );
+}
+
+NumberingPopup::~NumberingPopup()
+{
+    dispose();
+}
+
+void NumberingPopup::dispose()
+{
+    mpValueSet.clear();
+    ToolbarMenu::dispose();
 }
 
 void NumberingPopup::statusChanged( const css::frame::FeatureStateEvent& rEvent )

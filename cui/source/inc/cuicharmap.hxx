@@ -67,16 +67,16 @@ private:
 
     void            init();
 
-    SvxShowCharSet* m_pShowSet;
-    Edit*           m_pShowText;
-    PushButton*     m_pOKBtn;
-    FixedText*      m_pFontText;
-    ListBox*        m_pFontLB;
-    FixedText*      m_pSubsetText;
-    ListBox*        m_pSubsetLB;
-    FixedText*      m_pSymbolText;
-    SvxShowText*    m_pShowChar;
-    FixedText*      m_pCharCodeText;
+    VclPtr<SvxShowCharSet> m_pShowSet;
+    VclPtr<Edit>           m_pShowText;
+    VclPtr<PushButton>     m_pOKBtn;
+    VclPtr<FixedText>      m_pFontText;
+    VclPtr<ListBox>        m_pFontLB;
+    VclPtr<FixedText>      m_pSubsetText;
+    VclPtr<ListBox>        m_pSubsetLB;
+    VclPtr<FixedText>      m_pSymbolText;
+    VclPtr<SvxShowText>    m_pShowChar;
+    VclPtr<FixedText>      m_pCharCodeText;
     vcl::Font       aFont;
     bool            bOne;
     const SubsetMap* pSubsetMap;
@@ -93,6 +93,8 @@ private:
 
 public:
                     SvxCharacterMap( vcl::Window* pParent, bool bOne=true, const SfxItemSet* pSet=0 );
+    virtual         ~SvxCharacterMap();
+    virtual void    dispose() SAL_OVERRIDE;
 
     void            DisableFontSelection();
 

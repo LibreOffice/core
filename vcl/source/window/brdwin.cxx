@@ -1853,7 +1853,7 @@ void ImplBorderWindow::dispose()
 {
     delete mpBorderView;
     mpBorderView = NULL;
-
+    mpMenuBarWindow.clear();
     vcl::Window::dispose();
 }
 

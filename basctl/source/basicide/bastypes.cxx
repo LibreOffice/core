@@ -64,6 +64,8 @@ void BaseWindow::dispose()
         pShellVScrollBar->SetScrollHdl( Link() );
     if ( pShellHScrollBar )
         pShellHScrollBar->SetScrollHdl( Link() );
+    pShellVScrollBar.clear();
+    pShellHScrollBar.clear();
     vcl::Window::dispose();
 }
 
@@ -278,6 +280,17 @@ DockingWindow::DockingWindow (Layout* pParent) :
     pLayout(pParent),
     nShowCount(0)
 { }
+
+DockingWindow::~DockingWindow()
+{
+    dispose();
+}
+
+void DockingWindow::dispose()
+{
+    pLayout.clear();
+    ::DockingWindow::dispose();
+}
 
 // Sets the position and the size of the docking window. This property is saved
 // when the window is floating. Called by Layout.
@@ -526,7 +539,7 @@ void TabBar::Command( const CommandEvent& rCEvt )
                     {
                         Shell::WindowTable& aWindowTable = pShell->GetWindowTable();
                         Shell::WindowTableIt it = aWindowTable.find( GetCurPageId() );
-                        if (it != aWindowTable.end() && dynamic_cast<ModulWindow*>(it->second))
+                        if (it != aWindowTable.end() && dynamic_cast<ModulWindow*>(it->second.get()))
                         {
                             SbModule* pActiveModule = pBasic->FindModule( it->second->GetName() );
                             if( pActiveModule && ( pActiveModule->GetModuleType() == script::ModuleType::DOCUMENT ) )

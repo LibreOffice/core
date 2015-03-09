@@ -58,7 +58,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>
                         m_xLastSection; /// is the previously displayed section
     OUString     m_sLastActivePage;
-    ODesignView*        m_pDesignView;
+    VclPtr<ODesignView>        m_pDesignView;
     OSectionView*       m_pView;
     bool            m_bInitialStateChange;
 

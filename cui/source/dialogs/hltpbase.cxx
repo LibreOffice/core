@@ -114,9 +114,13 @@ void SvxHyperlinkTabPageBase::dispose()
 {
     maTimer.Stop();
 
-    delete mpMarkWnd;
-    mpMarkWnd = NULL;
-
+    mpCbbFrame.clear();
+    mpLbForm.clear();
+    mpEdIndication.clear();
+    mpEdText.clear();
+    mpBtScript.clear();
+    mpDialog.clear();
+    mpMarkWnd.clear();
     IconChoicePage::dispose();
 }
 
@@ -291,13 +295,13 @@ void SvxHyperlinkTabPageBase::SetInitFocus()
 // Ask dialog whether the curretn doc is a HTML-doc
 bool SvxHyperlinkTabPageBase::IsHTMLDoc() const
 {
-    return static_cast<SvxHpLinkDlg*>(mpDialog)->IsHTMLDoc();
+    return static_cast<SvxHpLinkDlg*>(mpDialog.get())->IsHTMLDoc();
 }
 
 // retrieve dispatcher
 SfxDispatcher* SvxHyperlinkTabPageBase::GetDispatcher() const
 {
-    return static_cast<SvxHpLinkDlg*>(mpDialog)->GetDispatcher();
+    return static_cast<SvxHpLinkDlg*>(mpDialog.get())->GetDispatcher();
 }
 
 // Click on imagebutton : Script

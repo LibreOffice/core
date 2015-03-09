@@ -35,6 +35,20 @@ ScNameCreateDlg::ScNameCreateDlg( vcl::Window * pParent, sal_uInt16 nFlags )
     m_pRightBox->Check ( (nFlags & NAME_RIGHT) ? true : false );
 }
 
+ScNameCreateDlg::~ScNameCreateDlg()
+{
+    dispose();
+}
+
+void ScNameCreateDlg::dispose()
+{
+    m_pTopBox.clear();
+    m_pLeftBox.clear();
+    m_pBottomBox.clear();
+    m_pRightBox.clear();
+    ModalDialog::dispose();
+}
+
 sal_uInt16 ScNameCreateDlg::GetFlags() const
 {
     sal_uInt16  nResult = 0;

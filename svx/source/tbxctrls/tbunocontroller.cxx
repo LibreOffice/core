@@ -80,7 +80,7 @@ class FontHeightToolBoxControl : public svt::ToolboxController,
         using svt::ToolboxController::dispatchCommand;
 
     private:
-        SvxFontSizeBox_Impl*                  m_pBox;
+        VclPtr<SvxFontSizeBox_Impl>           m_pBox;
         ::com::sun::star::awt::FontDescriptor m_aCurrentFont;
 };
 
@@ -343,8 +343,7 @@ throw (uno::RuntimeException, std::exception)
     svt::ToolboxController::dispose();
 
     SolarMutexGuard aSolarMutexGuard;
-    delete m_pBox;
-    m_pBox = 0;
+    m_pBox.clear();
 }
 
 // XStatusListener

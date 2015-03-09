@@ -529,6 +529,28 @@ void SwEditRegionDlg::dispose()
     }
 
     delete m_pDocInserter;
+    m_pCurName.clear();
+    m_pTree.clear();
+    m_pFileCB.clear();
+    m_pDDECB.clear();
+    m_pDDEFrame.clear();
+    m_pFileNameFT.clear();
+    m_pDDECommandFT.clear();
+    m_pFileNameED.clear();
+    m_pFilePB.clear();
+    m_pSubRegionFT.clear();
+    m_pSubRegionED.clear();
+    m_pProtectCB.clear();
+    m_pPasswdCB.clear();
+    m_pPasswdPB.clear();
+    m_pHideCB.clear();
+    m_pConditionFT.clear();
+    m_pConditionED.clear();
+    m_pEditInReadonlyCB.clear();
+    m_pOK.clear();
+    m_pOptionsPB.clear();
+    m_pDismiss.clear();
+    m_pOldDefDlgParent.clear();
     SfxModalDialog::dispose();
 }
 
@@ -1545,6 +1567,23 @@ SwInsertSectionTabPage::~SwInsertSectionTabPage()
 void SwInsertSectionTabPage::dispose()
 {
     delete m_pDocInserter;
+    m_pCurName.clear();
+    m_pFileCB.clear();
+    m_pDDECB.clear();
+    m_pDDECommandFT.clear();
+    m_pFileNameFT.clear();
+    m_pFileNameED.clear();
+    m_pFilePB.clear();
+    m_pSubRegionFT.clear();
+    m_pSubRegionED.clear();
+    m_pProtectCB.clear();
+    m_pPasswdCB.clear();
+    m_pPasswdPB.clear();
+    m_pHideCB.clear();
+    m_pConditionFT.clear();
+    m_pConditionED.clear();
+    m_pEditInReadonlyCB.clear();
+    m_pOldDefDlgParent.clear();
     SfxTabPage::dispose();
 }
 
@@ -1847,6 +1886,32 @@ SwSectionFtnEndTabPage::SwSectionFtnEndTabPage( vcl::Window *pParent,
 
 SwSectionFtnEndTabPage::~SwSectionFtnEndTabPage()
 {
+    dispose();
+}
+
+void SwSectionFtnEndTabPage::dispose()
+{
+    pFtnNtAtTextEndCB.clear();
+    pFtnNtNumCB.clear();
+    pFtnOffsetLbl.clear();
+    pFtnOffsetFld.clear();
+    pFtnNtNumFmtCB.clear();
+    pFtnPrefixFT.clear();
+    pFtnPrefixED.clear();
+    pFtnNumViewBox.clear();
+    pFtnSuffixFT.clear();
+    pFtnSuffixED.clear();
+    pEndNtAtTextEndCB.clear();
+    pEndNtNumCB.clear();
+    pEndOffsetLbl.clear();
+    pEndOffsetFld.clear();
+    pEndNtNumFmtCB.clear();
+    pEndPrefixFT.clear();
+    pEndPrefixED.clear();
+    pEndNumViewBox.clear();
+    pEndSuffixFT.clear();
+    pEndSuffixED.clear();
+    SfxTabPage::dispose();
 }
 
 bool SwSectionFtnEndTabPage::FillItemSet( SfxItemSet* rSet )
@@ -2108,6 +2173,15 @@ SwSectionIndentTabPage::SwSectionIndentTabPage(vcl::Window *pParent, const SfxIt
 
 SwSectionIndentTabPage::~SwSectionIndentTabPage()
 {
+    dispose();
+}
+
+void SwSectionIndentTabPage::dispose()
+{
+    m_pBeforeMF.clear();
+    m_pAfterMF.clear();
+    m_pPreviewWin.clear();
+    SfxTabPage::dispose();
 }
 
 bool SwSectionIndentTabPage::FillItemSet( SfxItemSet* rSet)

@@ -28,9 +28,9 @@ class SwFldMgr;
 class SwFldEditDlg : public SfxSingleTabDialog
 {
     SwWrtShell* pSh;
-    PushButton* m_pPrevBT;
-    PushButton* m_pNextBT;
-    PushButton* m_pAddressBT;
+    VclPtr<PushButton> m_pPrevBT;
+    VclPtr<PushButton> m_pNextBT;
+    VclPtr<PushButton> m_pAddressBT;
 
     DECL_LINK(AddressHdl, void *);
     DECL_LINK(NextPrevHdl, Button *pBt = 0);

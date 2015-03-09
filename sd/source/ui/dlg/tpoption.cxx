@@ -122,6 +122,16 @@ SdTpOptionsContents::SdTpOptionsContents( vcl::Window* pParent, const SfxItemSet
 
 SdTpOptionsContents::~SdTpOptionsContents()
 {
+    dispose();
+}
+
+void SdTpOptionsContents::dispose()
+{
+    m_pCbxRuler.clear();
+    m_pCbxDragStripes.clear();
+    m_pCbxHandlesBezier.clear();
+    m_pCbxMoveOutline.clear();
+    SfxTabPage::dispose();
 }
 
 bool SdTpOptionsContents::FillItemSet( SfxItemSet* rAttrs )
@@ -276,6 +286,38 @@ SdTpOptionsMisc::SdTpOptionsMisc(vcl::Window* pParent, const SfxItemSet& rInAttr
 
 SdTpOptionsMisc::~SdTpOptionsMisc()
 {
+    dispose();
+}
+
+void SdTpOptionsMisc::dispose()
+{
+    m_pCbxQuickEdit.clear();
+    m_pCbxPickThrough.clear();
+    m_pNewDocumentFrame.clear();
+    m_pCbxStartWithTemplate.clear();
+    m_pCbxMasterPageCache.clear();
+    m_pCbxCopy.clear();
+    m_pCbxMarkedHitMovesAlways.clear();
+    m_pPresentationFrame.clear();
+    m_pLbMetric.clear();
+    m_pMtrFldTabstop.clear();
+    m_pCbxEnableSdremote.clear();
+    m_pCbxEnablePresenterScreen.clear();
+    m_pCbxUsePrinterMetrics.clear();
+    m_pCbxCompatibility.clear();
+    m_pScaleFrame.clear();
+    m_pCbScale.clear();
+    m_pNewDocLb.clear();
+    m_pFiInfo1.clear();
+    m_pMtrFldOriginalWidth.clear();
+    m_pWidthLb.clear();
+    m_pHeightLb.clear();
+    m_pFiInfo2.clear();
+    m_pMtrFldOriginalHeight.clear();
+    m_pCbxDistrot.clear();
+    m_pMtrFldInfo1.clear();
+    m_pMtrFldInfo2.clear();
+    SfxTabPage::dispose();
 }
 
 void SdTpOptionsMisc::ActivatePage( const SfxItemSet& rSet )

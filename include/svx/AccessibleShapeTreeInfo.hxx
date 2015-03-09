@@ -26,6 +26,7 @@
 #include <com/sun/star/frame/XController.hpp>
 #include <svx/IAccessibleViewForwarder.hxx>
 #include <svx/svxdllapi.h>
+#include <vcl/vclptr.hxx>
 
 class SdrView;
 namespace vcl { class Window; }
@@ -188,7 +189,7 @@ private:
     /** This window is necessary to construct an SvxTextEditSource which in
         turn is used to create an accessible edit engine.
     */
-    vcl::Window* mpWindow;
+    VclPtr<vcl::Window> mpWindow;
 
     /** The view forwarder allows the transformation between internal
         and pixel coordinates and can be asked for the visible area.

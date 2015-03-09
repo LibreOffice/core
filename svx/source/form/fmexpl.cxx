@@ -519,7 +519,7 @@ namespace svxform
 
     void NavigatorFrame::dispose()
     {
-        delete m_pNavigatorTree;
+        m_pNavigatorTree.clear();
         SfxDockingWindow::dispose();
     }
 
@@ -615,7 +615,7 @@ namespace svxform
     {
         pWindow = new NavigatorFrame( _pBindings, this, _pParent );
         eChildAlignment = SfxChildAlignment::NOALIGNMENT;
-        static_cast<SfxDockingWindow*>(pWindow)->Initialize( _pInfo );
+        static_cast<SfxDockingWindow*>(pWindow.get())->Initialize( _pInfo );
     }
 
 

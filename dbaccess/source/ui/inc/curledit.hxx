@@ -36,7 +36,7 @@ class OConnectionURLEdit : public Edit
 {
     ::dbaccess::ODsnTypeCollection*
                         m_pTypeCollection;
-    FixedText*          m_pForcedPrefix;
+    VclPtr<FixedText>          m_pForcedPrefix;
     OUString            m_sSaveValueNoPrefix;
     bool            m_bShowPrefix; // when <TRUE> the prefix will be visible, otherwise not
 

@@ -130,9 +130,9 @@ typedef sal_uLong BrowserMode;
 
 class BrowseEvent
 {
-    vcl::Window*             pWin;
-    long                nRow;
-    Rectangle           aRect;
+    VclPtr<vcl::Window>     pWin;
+    long                    nRow;
+    Rectangle               aRect;
     sal_uInt16              nCol;
     sal_uInt16              nColId;
 
@@ -143,10 +143,10 @@ public:
                                      sal_uInt16 nColumn, sal_uInt16 nColumnId,
                                      const Rectangle& rRect );
 
-    vcl::Window*             GetWindow() const { return pWin; }
+    vcl::Window*        GetWindow() const { return pWin; }
     long                GetRow() const { return nRow; }
-    sal_uInt16              GetColumn() const { return nCol; }
-    sal_uInt16              GetColumnId() const { return nColId; }
+    sal_uInt16          GetColumn() const { return nCol; }
+    sal_uInt16          GetColumnId() const { return nColId; }
     const Rectangle&    GetRect() const { return aRect; }
 };
 
@@ -219,8 +219,8 @@ public:
     static const sal_uInt16 HandleColumnId = 0;
 
 private:
-    vcl::Window*       pDataWin;       // window to display data rows
-    ScrollBar*         pVScroll;       // vertical scrollbar
+    VclPtr<vcl::Window> pDataWin;       // window to display data rows
+    VclPtr<ScrollBar>  pVScroll;       // vertical scrollbar
     VclPtr<ScrollBar>  aHScroll;       // horizontal scrollbar
 
     long            nDataRowHeight; // height of a single data-row

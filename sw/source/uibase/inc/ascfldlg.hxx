@@ -32,14 +32,14 @@ class SwDocShell;
 
 class SwAsciiFilterDlg : public SfxModalDialog
 {
-    SvxTextEncodingBox* m_pCharSetLB;
-    FixedText*          m_pFontFT;
-    ListBox*            m_pFontLB;
-    FixedText*          m_pLanguageFT;
-    SvxLanguageBox*     m_pLanguageLB;
-    RadioButton*        m_pCRLF_RB;
-    RadioButton*        m_pCR_RB;
-    RadioButton*        m_pLF_RB;
+    VclPtr<SvxTextEncodingBox> m_pCharSetLB;
+    VclPtr<FixedText>          m_pFontFT;
+    VclPtr<ListBox>            m_pFontLB;
+    VclPtr<FixedText>          m_pLanguageFT;
+    VclPtr<SvxLanguageBox>     m_pLanguageLB;
+    VclPtr<RadioButton>        m_pCRLF_RB;
+    VclPtr<RadioButton>        m_pCR_RB;
+    VclPtr<RadioButton>        m_pLF_RB;
     bool                m_bSaveLineStatus;
 
     DECL_LINK( CharSetSelHdl, SvxTextEncodingBox* );
@@ -53,6 +53,7 @@ public:
     SwAsciiFilterDlg( vcl::Window* pParent, SwDocShell& rDocSh,
                         SvStream* pStream );
     virtual ~SwAsciiFilterDlg();
+    virtual void dispose() SAL_OVERRIDE;
 
     void FillOptions( SwAsciiOptions& rOptions );
 };

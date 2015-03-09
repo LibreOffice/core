@@ -58,16 +58,19 @@ public:
 
     SfxBindings* GetBindings() { return mpBindings;}
 
+    virtual ~AlignmentPropertyPanel();
+    virtual void dispose() SAL_OVERRIDE;
+
 private:
     //ui controls
-    FixedText*                                  mpFTLeftIndent;
-    MetricField*                                mpMFLeftIndent;
-    CheckBox*                                   mpCBXWrapText;
-    CheckBox*                                   mpCBXMergeCell;
-    FixedText*                                  mpFtRotate;
-    svx::sidebar::SidebarDialControl*           mpCtrlDial;
-    MetricBox*                                  mpMtrAngle;
-    CheckBox*                                   mpCbStacked;
+    VclPtr<FixedText>                                  mpFTLeftIndent;
+    VclPtr<MetricField>                                mpMFLeftIndent;
+    VclPtr<CheckBox>                                   mpCBXWrapText;
+    VclPtr<CheckBox>                                   mpCBXMergeCell;
+    VclPtr<FixedText>                                  mpFtRotate;
+    VclPtr<svx::sidebar::SidebarDialControl>           mpCtrlDial;
+    VclPtr<MetricBox>                                  mpMtrAngle;
+    VclPtr<CheckBox>                                   mpCbStacked;
 
     ::sfx2::sidebar::ControllerItem             maAlignHorControl;
     ::sfx2::sidebar::ControllerItem             maLeftIndentControl;
@@ -95,7 +98,6 @@ private:
         vcl::Window* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings);
-    virtual ~AlignmentPropertyPanel();
 
     void Initialize();
     void FormatDegrees(double& dTmp);

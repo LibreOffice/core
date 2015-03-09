@@ -32,7 +32,7 @@ class SmToolBoxWindow : public SfxFloatingWindow
 {
 
 protected:
-    ToolBox*    m_pToolBoxCat;
+    VclPtr<ToolBox>    m_pToolBoxCat;
     sal_uInt16  m_nUnbinopsId;
     sal_uInt16  m_nRelationsId;
     sal_uInt16  m_nSetoperationsId;
@@ -42,8 +42,8 @@ protected:
     sal_uInt16  m_nBracketsId;
     sal_uInt16  m_nFormatId;
     sal_uInt16  m_nMiscId;
-    ToolBox    *pToolBoxCmd;
-    ToolBox    *vToolBoxCategories[NUM_TBX_CATEGORIES];
+    VclPtr<ToolBox>    pToolBoxCmd;
+    VclPtr<ToolBox>    vToolBoxCategories[NUM_TBX_CATEGORIES];
     ImageList  *aImageLists [NUM_TBX_CATEGORIES + 1];   /* regular */
     sal_uInt16      nActiveCategoryRID;
 

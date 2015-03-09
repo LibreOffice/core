@@ -31,12 +31,12 @@ namespace basctl
 class BreakPointDialog : public ModalDialog
 {
 private:
-    ComboBox*       m_pComboBox;
-    OKButton*       m_pOKButton;
-    PushButton*     m_pNewButton;
-    PushButton*     m_pDelButton;
-    ::CheckBox*     m_pCheckBox;
-    NumericField*   m_pNumericField;
+    VclPtr<ComboBox>       m_pComboBox;
+    VclPtr<OKButton>       m_pOKButton;
+    VclPtr<PushButton>     m_pNewButton;
+    VclPtr<PushButton>     m_pDelButton;
+    ::VclPtr<CheckBox>     m_pCheckBox;
+    VclPtr<NumericField>   m_pNumericField;
 
     BreakPointList & m_rOriginalBreakPointList;
     BreakPointList m_aModifiedBreakPointList;
@@ -53,6 +53,8 @@ protected:
 
 public:
             BreakPointDialog( vcl::Window* pParent, BreakPointList& rBrkList );
+    virtual ~BreakPointDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     void    SetCurrentBreakPoint( BreakPoint* pBrk );
 };

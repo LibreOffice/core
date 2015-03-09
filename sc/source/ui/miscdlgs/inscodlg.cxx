@@ -383,6 +383,28 @@ void ScInsertContentsDlg::dispose()
         else if ( mpRbMoveRight->IsChecked() )
             ScInsertContentsDlg::nPreviousMoveMode = INS_CELLSRIGHT;
     }
+    mpBtnInsAll.clear();
+    mpBtnInsStrings.clear();
+    mpBtnInsNumbers.clear();
+    mpBtnInsDateTime.clear();
+    mpBtnInsFormulas.clear();
+    mpBtnInsNotes.clear();
+    mpBtnInsAttrs.clear();
+    mpBtnInsObjects.clear();
+    mpBtnSkipEmptyCells.clear();
+    mpBtnTranspose.clear();
+    mpBtnLink.clear();
+    mpRbNoOp.clear();
+    mpRbAdd.clear();
+    mpRbSub.clear();
+    mpRbMul.clear();
+    mpRbDiv.clear();
+    mpRbMoveNone.clear();
+    mpRbMoveDown.clear();
+    mpRbMoveRight.clear();
+    mpBtnShortCutPasteValuesOnly.clear();
+    mpBtnShortCutPasteValuesFormats.clear();
+    mpBtnShortCutPasteTranspose.clear();
     ModalDialog::dispose();
 }
 

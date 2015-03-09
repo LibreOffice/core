@@ -45,14 +45,14 @@ public:
 class SfxVersionTableDtor;
 class SfxVersionDialog : public SfxModalDialog
 {
-    PushButton*                 m_pSaveButton;
-    CheckBox*                   m_pSaveCheckBox;
-    SfxVersionsTabListBox_Impl* m_pVersionBox;
-    PushButton*                 m_pOpenButton;
-    PushButton*                 m_pViewButton;
-    PushButton*                 m_pDeleteButton;
-    PushButton*                 m_pCompareButton;
-    PushButton*                 m_pCmisButton;
+    VclPtr<PushButton>                 m_pSaveButton;
+    VclPtr<CheckBox>                   m_pSaveCheckBox;
+    VclPtr<SfxVersionsTabListBox_Impl> m_pVersionBox;
+    VclPtr<PushButton>                 m_pOpenButton;
+    VclPtr<PushButton>                 m_pViewButton;
+    VclPtr<PushButton>                 m_pDeleteButton;
+    VclPtr<PushButton>                 m_pCompareButton;
+    VclPtr<PushButton>                 m_pCmisButton;
     SfxViewFrame*               pViewFrame;
     SfxVersionTableDtor*        m_pTable;
     bool                        m_bIsSaveVersionOnClose;
@@ -72,27 +72,29 @@ public:
 
 class SfxViewVersionDialog_Impl : public SfxModalDialog
 {
-    FixedText*        m_pDateTimeText;
-    FixedText*        m_pSavedByText;
-    VclMultiLineEdit* m_pEdit;
-    OKButton*         m_pOKButton;
-    CancelButton*     m_pCancelButton;
-    CloseButton*      m_pCloseButton;
+    VclPtr<FixedText>        m_pDateTimeText;
+    VclPtr<FixedText>        m_pSavedByText;
+    VclPtr<VclMultiLineEdit> m_pEdit;
+    VclPtr<OKButton>         m_pOKButton;
+    VclPtr<CancelButton>     m_pCancelButton;
+    VclPtr<CloseButton>      m_pCloseButton;
     SfxVersionInfo&   m_rInfo;
 
     DECL_LINK(ButtonHdl, Button*);
 
 public:
     SfxViewVersionDialog_Impl(vcl::Window *pParent, SfxVersionInfo& rInfo, bool bEdit);
+    virtual ~SfxViewVersionDialog_Impl();
+    virtual void dispose() SAL_OVERRIDE;
 };
 
 class SfxCmisVersionsDialog : public SfxModalDialog
 {
-    SfxVersionsTabListBox_Impl* m_pVersionBox;
-    PushButton*                 m_pOpenButton;
-    PushButton*                 m_pViewButton;
-    PushButton*                 m_pDeleteButton;
-    PushButton*                 m_pCompareButton;
+    VclPtr<SfxVersionsTabListBox_Impl> m_pVersionBox;
+    VclPtr<PushButton>                 m_pOpenButton;
+    VclPtr<PushButton>                 m_pViewButton;
+    VclPtr<PushButton>                 m_pDeleteButton;
+    VclPtr<PushButton>                 m_pCompareButton;
     SfxViewFrame*               pViewFrame;
     SfxVersionTableDtor*        m_pTable;
     bool                        m_bIsSaveVersionOnClose;

@@ -253,6 +253,35 @@ void SvxLineTabPage::dispose()
     }
     aGrfBrushItems.clear();
 
+    m_pBoxColor.clear();
+    m_pLbLineStyle.clear();
+    m_pLbColor.clear();
+    m_pBoxWidth.clear();
+    m_pMtrLineWidth.clear();
+    m_pBoxTransparency.clear();
+    m_pMtrTransparent.clear();
+    m_pFlLineEnds.clear();
+    m_pBoxArrowStyles.clear();
+    m_pLbStartStyle.clear();
+    m_pBoxStart.clear();
+    m_pMtrStartWidth.clear();
+    m_pTsbCenterStart.clear();
+    m_pBoxEnd.clear();
+    m_pLbEndStyle.clear();
+    m_pMtrEndWidth.clear();
+    m_pTsbCenterEnd.clear();
+    m_pCbxSynchronize.clear();
+    m_pCtlPreview.clear();
+    m_pFLEdgeStyle.clear();
+    m_pGridEdgeCaps.clear();
+    m_pLBEdgeStyle.clear();
+    m_pLBCapStyle.clear();
+    m_pFlSymbol.clear();
+    m_pGridIconSize.clear();
+    m_pSymbolMB.clear();
+    m_pSymbolWidthMF.clear();
+    m_pSymbolHeightMF.clear();
+    m_pSymbolRatioCB.clear();
     SvxTabPage::dispose();
 }
 

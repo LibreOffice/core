@@ -47,7 +47,7 @@ namespace rptui
                             ,   public ::cppu::BaseMutex
                             ,   public ::comphelper::OPropertyChangeListener
     {
-        OViewsWindow*           m_pParent;
+        VclPtr<OViewsWindow>    m_pParent;
         VclPtr<OStartMarker>    m_aStartMarker;
         VclPtr<OReportSection>  m_aReportSection;
         VclPtr<Splitter>        m_aSplitter;

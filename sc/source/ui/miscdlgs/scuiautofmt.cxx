@@ -88,6 +88,29 @@ ScAutoFormatDlg::ScAutoFormatDlg(vcl::Window* pParent,
     m_pWndPreview->NotifyChange(it->second);
 }
 
+ScAutoFormatDlg::~ScAutoFormatDlg()
+{
+    dispose();
+}
+
+void ScAutoFormatDlg::dispose()
+{
+    m_pLbFormat.clear();
+    m_pWndPreview.clear();
+    m_pBtnOk.clear();
+    m_pBtnCancel.clear();
+    m_pBtnAdd.clear();
+    m_pBtnRemove.clear();
+    m_pBtnRename.clear();
+    m_pBtnNumFormat.clear();
+    m_pBtnBorder.clear();
+    m_pBtnFont.clear();
+    m_pBtnPattern.clear();
+    m_pBtnAlignment.clear();
+    m_pBtnAdjust.clear();
+    ModalDialog::dispose();
+}
+
 void ScAutoFormatDlg::Init()
 {
     m_pLbFormat->SetSelectHdl( LINK( this, ScAutoFormatDlg, SelFmtHdl ) );

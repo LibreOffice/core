@@ -52,10 +52,10 @@ extern bool localesAreEqual( const ::com::sun::star::lang::Locale& rLocaleLeft,
 class ManageLanguageDialog : public ModalDialog
 {
 private:
-    ListBox*            m_pLanguageLB;
-    PushButton*         m_pAddPB;
-    PushButton*         m_pDeletePB;
-    PushButton*         m_pMakeDefPB;
+    VclPtr<ListBox>            m_pLanguageLB;
+    VclPtr<PushButton>         m_pAddPB;
+    VclPtr<PushButton>         m_pDeletePB;
+    VclPtr<PushButton>         m_pMakeDefPB;
 
     boost::shared_ptr<LocalizationMgr> m_xLocalizationMgr;
 
@@ -80,12 +80,12 @@ public:
 class SetDefaultLanguageDialog : public ModalDialog
 {
 private:
-    FixedText*          m_pLanguageFT;
-    SvxLanguageBox*     m_pLanguageLB;
-    FixedText*          m_pCheckLangFT;
-    SvxCheckListBox*    m_pCheckLangLB;
-    FixedText*          m_pDefinedFT;
-    FixedText*          m_pAddedFT;
+    VclPtr<FixedText>          m_pLanguageFT;
+    VclPtr<SvxLanguageBox>     m_pLanguageLB;
+    VclPtr<FixedText>          m_pCheckLangFT;
+    VclPtr<SvxCheckListBox>    m_pCheckLangLB;
+    VclPtr<FixedText>          m_pDefinedFT;
+    VclPtr<FixedText>          m_pAddedFT;
 
     boost::shared_ptr<LocalizationMgr> m_xLocalizationMgr;
 
@@ -93,6 +93,8 @@ private:
 
 public:
     SetDefaultLanguageDialog(vcl::Window* pParent, boost::shared_ptr<LocalizationMgr> xLMgr);
+    virtual ~SetDefaultLanguageDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale >   GetLocales() const;
 };

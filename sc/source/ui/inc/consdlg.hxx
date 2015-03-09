@@ -52,27 +52,27 @@ protected:
     virtual void    Deactivate() SAL_OVERRIDE;
 
 private:
-    ListBox*         pLbFunc;
-    ListBox*         pLbConsAreas;
+    VclPtr<ListBox>         pLbFunc;
+    VclPtr<ListBox>         pLbConsAreas;
 
-    ListBox*         pLbDataArea;
-    formula::RefEdit*        pEdDataArea;
-    formula::RefButton*      pRbDataArea;
+    VclPtr<ListBox>         pLbDataArea;
+    VclPtr<formula::RefEdit>        pEdDataArea;
+    VclPtr<formula::RefButton>      pRbDataArea;
 
-    ListBox*         pLbDestArea;
-    formula::RefEdit*        pEdDestArea;
-    formula::RefButton*      pRbDestArea;
+    VclPtr<ListBox>         pLbDestArea;
+    VclPtr<formula::RefEdit>        pEdDestArea;
+    VclPtr<formula::RefButton>      pRbDestArea;
 
-    VclExpander*     pExpander;
-    CheckBox*        pBtnByRow;
-    CheckBox*        pBtnByCol;
+    VclPtr<VclExpander>     pExpander;
+    VclPtr<CheckBox>        pBtnByRow;
+    VclPtr<CheckBox>        pBtnByCol;
 
-    CheckBox*        pBtnRefs;
+    VclPtr<CheckBox>        pBtnRefs;
 
-    OKButton*        pBtnOk;
-    CancelButton*    pBtnCancel;
-    PushButton*      pBtnAdd;
-    PushButton*      pBtnRemove;
+    VclPtr<OKButton>        pBtnOk;
+    VclPtr<CancelButton>    pBtnCancel;
+    VclPtr<PushButton>      pBtnAdd;
+    VclPtr<PushButton>      pBtnRemove;
 
     OUString         aStrUndefined;
 
@@ -84,7 +84,7 @@ private:
     size_t              nAreaDataCount;
     sal_uInt16          nWhichCons;
 
-    formula::RefEdit*   pRefInputEdit;
+    VclPtr<formula::RefEdit>   pRefInputEdit;
     bool                bDlgLostFocus;
 
     void Init               ();

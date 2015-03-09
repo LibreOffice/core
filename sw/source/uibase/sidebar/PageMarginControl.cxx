@@ -138,7 +138,7 @@ PageMarginControl::~PageMarginControl()
 
 void PageMarginControl::dispose()
 {
-    delete mpMarginValueSet;
+    mpMarginValueSet.clear();
 
     StoreUserCustomValues();
 

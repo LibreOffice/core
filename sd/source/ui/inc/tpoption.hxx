@@ -50,14 +50,15 @@ public:
 class SdTpOptionsContents : public SfxTabPage
 {
 private:
-    CheckBox*    m_pCbxRuler;
-    CheckBox*    m_pCbxDragStripes;
-    CheckBox*    m_pCbxHandlesBezier;
-    CheckBox*    m_pCbxMoveOutline;
+    VclPtr<CheckBox>    m_pCbxRuler;
+    VclPtr<CheckBox>    m_pCbxDragStripes;
+    VclPtr<CheckBox>    m_pCbxHandlesBezier;
+    VclPtr<CheckBox>    m_pCbxMoveOutline;
 
 public:
             SdTpOptionsContents( vcl::Window* pParent, const SfxItemSet& rInAttrs  );
             virtual ~SdTpOptionsContents();
+    virtual void dispose() SAL_OVERRIDE;
 
     static  SfxTabPage* Create( vcl::Window*, const SfxItemSet* );
     virtual bool FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
@@ -73,38 +74,38 @@ class SdTpOptionsMisc : public SfxTabPage
  friend class SdModule;
 
 private:
-    CheckBox    *m_pCbxQuickEdit;
-    CheckBox    *m_pCbxPickThrough;
+    VclPtr<CheckBox>    m_pCbxQuickEdit;
+    VclPtr<CheckBox>    m_pCbxPickThrough;
 
-    VclFrame    *m_pNewDocumentFrame;
-    CheckBox    *m_pCbxStartWithTemplate;
+    VclPtr<VclFrame>    m_pNewDocumentFrame;
+    VclPtr<CheckBox>    m_pCbxStartWithTemplate;
 
-    CheckBox    *m_pCbxMasterPageCache;
-    CheckBox    *m_pCbxCopy;
-    CheckBox    *m_pCbxMarkedHitMovesAlways;
-    VclFrame    *m_pPresentationFrame;
+    VclPtr<CheckBox>    m_pCbxMasterPageCache;
+    VclPtr<CheckBox>    m_pCbxCopy;
+    VclPtr<CheckBox>    m_pCbxMarkedHitMovesAlways;
+    VclPtr<VclFrame>    m_pPresentationFrame;
 
-    ListBox     *m_pLbMetric;
-    MetricField *m_pMtrFldTabstop;
+    VclPtr<ListBox>     m_pLbMetric;
+    VclPtr<MetricField> m_pMtrFldTabstop;
 
-    CheckBox    *m_pCbxEnableSdremote;
-    CheckBox    *m_pCbxEnablePresenterScreen;
-    CheckBox    *m_pCbxUsePrinterMetrics;
-    CheckBox    *m_pCbxCompatibility;
+    VclPtr<CheckBox>    m_pCbxEnableSdremote;
+    VclPtr<CheckBox>    m_pCbxEnablePresenterScreen;
+    VclPtr<CheckBox>    m_pCbxUsePrinterMetrics;
+    VclPtr<CheckBox>    m_pCbxCompatibility;
 
     //Scale
-    VclFrame    *m_pScaleFrame;
-    ComboBox    *m_pCbScale;
-    FixedText   *m_pNewDocLb;
-    FixedText   *m_pFiInfo1;
-    MetricField *m_pMtrFldOriginalWidth;
-    FixedText   *m_pWidthLb;
-    FixedText   *m_pHeightLb;
-    FixedText   *m_pFiInfo2;
-    MetricField *m_pMtrFldOriginalHeight;
-    CheckBox    *m_pCbxDistrot;
-    MetricField *m_pMtrFldInfo1;
-    MetricField *m_pMtrFldInfo2;
+    VclPtr<VclFrame>    m_pScaleFrame;
+    VclPtr<ComboBox>    m_pCbScale;
+    VclPtr<FixedText>   m_pNewDocLb;
+    VclPtr<FixedText>   m_pFiInfo1;
+    VclPtr<MetricField> m_pMtrFldOriginalWidth;
+    VclPtr<FixedText>   m_pWidthLb;
+    VclPtr<FixedText>   m_pHeightLb;
+    VclPtr<FixedText>   m_pFiInfo2;
+    VclPtr<MetricField> m_pMtrFldOriginalHeight;
+    VclPtr<CheckBox>    m_pCbxDistrot;
+    VclPtr<MetricField> m_pMtrFldInfo1;
+    VclPtr<MetricField> m_pMtrFldInfo2;
 
     sal_uInt32          nWidth;
     sal_uInt32          nHeight;
@@ -131,6 +132,7 @@ protected:
 public:
             SdTpOptionsMisc( vcl::Window* pParent, const SfxItemSet& rInAttrs  );
             virtual ~SdTpOptionsMisc();
+    virtual void dispose() SAL_OVERRIDE;
 
     static  SfxTabPage* Create( vcl::Window*, const SfxItemSet* );
     virtual bool FillItemSet( SfxItemSet* ) SAL_OVERRIDE;

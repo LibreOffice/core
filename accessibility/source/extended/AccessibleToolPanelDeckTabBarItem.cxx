@@ -105,7 +105,7 @@ namespace accessibility
         AccessibleToolPanelDeckTabBarItem&  m_rAntiImpl;
         Reference< XAccessible >            m_xAccessibleParent;
         ::svt::IToolPanelDeck*              m_pPanelDeck;
-        ::svt::PanelTabBar*                 m_pTabBar;
+        VclPtr<::svt::PanelTabBar>          m_pTabBar;
         size_t                              m_nItemPos;
     };
 
@@ -139,7 +139,7 @@ namespace accessibility
         m_xAccessibleParent.clear();
         m_pPanelDeck->RemoveListener( *this );
         m_pPanelDeck = NULL;
-        m_pTabBar = NULL;
+        m_pTabBar.clear();
     }
 
     Reference< XAccessibleComponent > AccessibleToolPanelDeckTabBarItem_Impl::getParentAccessibleComponent() const

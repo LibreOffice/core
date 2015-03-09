@@ -42,10 +42,10 @@ class SvxSuperContourDlg : public SvxContourDlg
     void*               pUpdateEditingObject;
     void*               pCheckObj;
     SvxContourDlgItem   aContourItem;
-    ToolBox*            m_pTbx1;
-    MetricField*        m_pMtfTolerance;
-    ContourWindow*      m_pContourWnd;
-    StatusBar*          m_pStbStatus;
+    VclPtr<ToolBox>     m_pTbx1;
+    VclPtr<MetricField> m_pMtfTolerance;
+    VclPtr<ContourWindow> m_pContourWnd;
+    VclPtr<StatusBar>   m_pStbStatus;
     sal_uIntPtr         nGrfChanged;
     bool                bExecState;
     bool                bUpdateGraphicLinked;

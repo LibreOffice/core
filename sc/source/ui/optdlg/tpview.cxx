@@ -101,6 +101,27 @@ ScTpContentOptions::~ScTpContentOptions()
 void ScTpContentOptions::dispose()
 {
     delete pLocalOptions;
+    pGridLB.clear();
+    pColorFT.clear();
+    pColorLB.clear();
+    pBreakCB.clear();
+    pGuideLineCB.clear();
+    pFormulaCB.clear();
+    pNilCB.clear();
+    pAnnotCB.clear();
+    pValueCB.clear();
+    pAnchorCB.clear();
+    pClipMarkCB.clear();
+    pRangeFindCB.clear();
+    pObjGrfLB.clear();
+    pDiagramLB.clear();
+    pDrawLB.clear();
+    pSyncZoomCB.clear();
+    pRowColHeaderCB.clear();
+    pHScrollCB.clear();
+    pVScrollCB.clear();
+    pTblRegCB.clear();
+    pOutlineCB.clear();
     SfxTabPage::dispose();
 }
 
@@ -412,7 +433,29 @@ ScTpLayoutOptions::ScTpLayoutOptions(   vcl::Window* pParent,
 
 ScTpLayoutOptions::~ScTpLayoutOptions()
 {
+    dispose();
 }
+
+void ScTpLayoutOptions::dispose()
+{
+    m_pUnitLB.clear();
+    m_pTabMF.clear();
+    m_pAlwaysRB.clear();
+    m_pRequestRB.clear();
+    m_pNeverRB.clear();
+    m_pAlignCB.clear();
+    m_pAlignLB.clear();
+    m_pEditModeCB.clear();
+    m_pFormatCB.clear();
+    m_pExpRefCB.clear();
+    m_pSortRefUpdateCB.clear();
+    m_pMarkHdrCB.clear();
+    m_pTextFmtCB.clear();
+    m_pReplWarnCB.clear();
+    m_pLegacyCellSelectionCB.clear();
+    SfxTabPage::dispose();
+}
+
 
 SfxTabPage* ScTpLayoutOptions::Create( vcl::Window*          pParent,
                                     const SfxItemSet*   rCoreSet )

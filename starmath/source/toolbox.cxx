@@ -147,9 +147,7 @@ void SmToolBoxWindow::dispose()
     int i;
     for (i = 0;  i < NUM_TBX_CATEGORIES;  ++i)
     {
-        ToolBox *pBox = vToolBoxCategories[i];
-        delete pBox;
-        vToolBoxCategories[i] = 0;
+        vToolBoxCategories[i].clear();
     }
     pToolBoxCmd = 0;
     for (i = 0;  i < NUM_TBX_CATEGORIES + 1;  ++i)
@@ -157,6 +155,8 @@ void SmToolBoxWindow::dispose()
         delete aImageLists[i];
         aImageLists[i] = 0;
     }
+    m_pToolBoxCat.clear();
+    pToolBoxCmd.clear();
     SfxFloatingWindow::dispose();
 }
 
@@ -363,7 +363,7 @@ SmToolBoxWrapper::SmToolBoxWrapper(vcl::Window *pParentWindow,
     eChildAlignment = SfxChildAlignment::NOALIGNMENT;
 
     pWindow = new SmToolBoxWindow(pBindings, this, pParentWindow);
-    static_cast<SfxFloatingWindow *>(pWindow)->Initialize(pInfo);
+    static_cast<SfxFloatingWindow *>(pWindow.get())->Initialize(pInfo);
 }
 
 

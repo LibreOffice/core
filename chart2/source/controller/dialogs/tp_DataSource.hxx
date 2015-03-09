@@ -58,6 +58,8 @@ public:
         ChartTypeTemplateProvider* pTemplateProvider,
         Dialog * pParentDialog,
         bool bHideDescription = false );
+    virtual ~DataSourceTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     void commitPage();
 
@@ -117,34 +119,34 @@ protected:
     void fillRoleListBox();
 
 private:
-    FixedText*     m_pFT_CAPTION;
-    FixedText*     m_pFT_SERIES;
-    SvTreeListBox* m_pLB_SERIES;
-    PushButton*    m_pBTN_ADD;
-    PushButton*    m_pBTN_REMOVE;
-    PushButton*    m_pBTN_UP;
-    PushButton*    m_pBTN_DOWN;
+    VclPtr<FixedText>     m_pFT_CAPTION;
+    VclPtr<FixedText>     m_pFT_SERIES;
+    VclPtr<SvTreeListBox> m_pLB_SERIES;
+    VclPtr<PushButton>    m_pBTN_ADD;
+    VclPtr<PushButton>    m_pBTN_REMOVE;
+    VclPtr<PushButton>    m_pBTN_UP;
+    VclPtr<PushButton>    m_pBTN_DOWN;
 
-    FixedText*     m_pFT_ROLE;
-    SvTabListBox*  m_pLB_ROLE;
-    FixedText*     m_pFT_RANGE;
-    Edit*          m_pEDT_RANGE;
-    PushButton*    m_pIMB_RANGE_MAIN;
+    VclPtr<FixedText>     m_pFT_ROLE;
+    VclPtr<SvTabListBox>  m_pLB_ROLE;
+    VclPtr<FixedText>     m_pFT_RANGE;
+    VclPtr<Edit>          m_pEDT_RANGE;
+    VclPtr<PushButton>    m_pIMB_RANGE_MAIN;
 
-    FixedText*     m_pFT_CATEGORIES;
-    FixedText*     m_pFT_DATALABELS;//used for xy charts
-    Edit*          m_pEDT_CATEGORIES;
-    PushButton*    m_pIMB_RANGE_CAT;
+    VclPtr<FixedText>     m_pFT_CATEGORIES;
+    VclPtr<FixedText>     m_pFT_DATALABELS;//used for xy charts
+    VclPtr<Edit>          m_pEDT_CATEGORIES;
+    VclPtr<PushButton>    m_pIMB_RANGE_CAT;
 
     OUString       m_aFixedTextRange;
 
     ChartTypeTemplateProvider * m_pTemplateProvider;
     DialogModel &               m_rDialogModel;
-    Edit *                      m_pCurrentRangeChoosingField;
+    VclPtr<Edit>                m_pCurrentRangeChoosingField;
     bool                        m_bIsDirty;
     sal_Int32                   m_nLastChartTypeGroupIndex;
 
-    Dialog *                    m_pParentDialog;
+    VclPtr<Dialog>              m_pParentDialog;
     TabPageNotifiable *         m_pTabPageNotifiable;
 };
 

@@ -152,7 +152,8 @@ SwSelectDBTableDialog::~SwSelectDBTableDialog()
 
 void SwSelectDBTableDialog::dispose()
 {
-    delete m_pTable;
+    m_pTable.clear();
+    m_pPreviewPB.clear();
     SfxModalDialog::dispose();
 }
 

@@ -25,14 +25,14 @@ class _SvxMacroTabPage_Impl
 public:
     _SvxMacroTabPage_Impl( const SfxItemSet& rAttrSet );
 
-    PushButton*                     pAssignPB;
-    PushButton*                     pAssignComponentPB;
-    PushButton*                     pDeletePB;
+    VclPtr<PushButton>                     pAssignPB;
+    VclPtr<PushButton>                     pAssignComponentPB;
+    VclPtr<PushButton>                     pDeletePB;
     Image                           aMacroImg;
     Image                           aComponentImg;
     OUString                        sStrEvent;
     OUString                        sAssignedMacro;
-    MacroEventListBox*              pEventLB;
+    VclPtr<MacroEventListBox>              pEventLB;
     bool                        bReadOnly;
     bool                        bIDEDialogMode;
 };
@@ -40,8 +40,8 @@ public:
 class AssignComponentDialog : public ModalDialog
 {
 private:
-    Edit*           mpMethodEdit;
-    OKButton*       mpOKButton;
+    VclPtr<Edit>           mpMethodEdit;
+    VclPtr<OKButton>       mpOKButton;
 
     OUString maURL;
 
@@ -49,6 +49,8 @@ private:
 
 public:
     AssignComponentDialog( vcl::Window * pParent, const OUString& rURL );
+    virtual ~AssignComponentDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     OUString getURL( void ) const
         { return maURL; }

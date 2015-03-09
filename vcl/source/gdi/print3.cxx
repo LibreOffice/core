@@ -156,7 +156,7 @@ public:
 
     vcl::PrinterController::MultiPageSetup                      maMultiPage;
 
-    vcl::PrintProgressDialog*                                   mpProgress;
+    VclPtr<vcl::PrintProgressDialog>                            mpProgress;
 
     ImplPageCache                                               maPageCache;
 
@@ -191,7 +191,6 @@ public:
         mnDefaultPaperBin( -1 ),
         mnFixedPaperBin( -1 )
     {}
-    ~ImplPrinterControllerData() { delete mpProgress; }
 
     Size getRealPaperSize( const Size& i_rPageSize, bool bNoNUP ) const
     {
@@ -1332,8 +1331,7 @@ void PrinterController::abortJob()
     // applications (well, sw) depend on a page request with "IsLastPage" = true
     // to free resources, else they (well, sw) will crash eventually
     setLastPage( true );
-    delete mpImplData->mpProgress;
-    mpImplData->mpProgress = NULL;
+    mpImplData->mpProgress.clear();
     GDIMetaFile aMtf;
     getPageFile( 0, aMtf, false );
 }

@@ -30,11 +30,13 @@ class ScColOrRowDlg : public ModalDialog
 public:
     ScColOrRowDlg(vcl::Window* pParent, const OUString& rStrTitle,
         const OUString& rStrLabel, bool bColDefault = true);
+    virtual ~ScColOrRowDlg();
+    virtual void dispose() SAL_OVERRIDE;
 private:
-    VclFrame*       m_pFrame;
-    RadioButton*    m_pBtnRows;
-    RadioButton*    m_pBtnCols;
-    OKButton*       m_pBtnOk;
+    VclPtr<VclFrame>       m_pFrame;
+    VclPtr<RadioButton>    m_pBtnRows;
+    VclPtr<RadioButton>    m_pBtnCols;
+    VclPtr<OKButton>       m_pBtnOk;
 
     DECL_LINK(OkHdl, void *);
 };

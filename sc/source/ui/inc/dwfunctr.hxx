@@ -51,7 +51,7 @@ private:
     VclPtr<ListBox>     aCatBox;
     VclPtr<ListBox>     aFuncList;
     VclPtr<ListBox>     aDDFuncList;
-    ListBox*            pAllFuncList;
+    VclPtr<ListBox>            pAllFuncList;
 
     SfxChildAlignment   eSfxNewAlignment;
     SfxChildAlignment   eSfxOldAlignment;

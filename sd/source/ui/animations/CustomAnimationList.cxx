@@ -210,7 +210,7 @@ public:
     virtual void Paint(
         const Point&, SvTreeListBox& rDev, const SvViewDataEntry* pView,const SvTreeListEntry* pEntry) SAL_OVERRIDE;
 private:
-    CustomAnimationList* mpParent;
+    VclPtr<CustomAnimationList> mpParent;
     OUString        maDescription;
     CustomAnimationEffectPtr mpEffect;
 };

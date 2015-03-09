@@ -68,6 +68,20 @@ AlignmentPropertyPanel::AlignmentPropertyPanel(
 
 AlignmentPropertyPanel::~AlignmentPropertyPanel()
 {
+    dispose();
+}
+
+void AlignmentPropertyPanel::dispose()
+{
+    mpFTLeftIndent.clear();
+    mpMFLeftIndent.clear();
+    mpCBXWrapText.clear();
+    mpCBXMergeCell.clear();
+    mpFtRotate.clear();
+    mpCtrlDial.clear();
+    mpMtrAngle.clear();
+    mpCbStacked.clear();
+    PanelLayout::dispose();
 }
 
 void AlignmentPropertyPanel::Initialize()

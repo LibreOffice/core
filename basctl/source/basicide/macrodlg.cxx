@@ -122,6 +122,20 @@ void MacroChooser::dispose()
         SfxGetpApp()->SaveBasicAndDialogContainer();
         bForceStoreBasic = false;
     }
+    m_pMacroNameEdit.clear();
+    m_pMacroFromTxT.clear();
+    m_pMacrosSaveInTxt.clear();
+    m_pBasicBox.clear();
+    m_pMacrosInTxt.clear();
+    m_pMacroBox.clear();
+    m_pRunButton.clear();
+    m_pCloseButton.clear();
+    m_pAssignButton.clear();
+    m_pEditButton.clear();
+    m_pDelButton.clear();
+    m_pOrganizeButton.clear();
+    m_pNewLibButton.clear();
+    m_pNewModButton.clear();
     SfxModalDialog::dispose();
 }
 

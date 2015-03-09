@@ -48,7 +48,7 @@ class DropDownFieldDialog;
 
 #define DECL_ABSTDLG_BASE(Class,DialogClass)        \
 protected:                                          \
-    DialogClass*        pDlg;                       \
+    VclPtr<DialogClass> pDlg;                       \
 public:                                             \
                     Class( DialogClass* p)          \
                      : pDlg(p)                      \
@@ -59,7 +59,6 @@ public:                                             \
 #define IMPL_ABSTDLG_BASE(Class)                    \
 Class::~Class()                                     \
 {                                                   \
-    delete pDlg;                                    \
 }                                                   \
 short Class::Execute()                             \
 {                                                   \
@@ -350,7 +349,7 @@ class AbstractAuthMarkFloatDlg_Impl : public AbstractMarkFloatDlg
 class SwMailMergeWizard;
 class AbstractMailMergeWizard_Impl : public AbstractMailMergeWizard
 {
-    SwMailMergeWizard* pDlg;
+    VclPtr<SwMailMergeWizard> pDlg;
     Link               aEndDlgHdl;
 
     DECL_LINK( EndDialogHdl, SwMailMergeWizard* );

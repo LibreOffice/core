@@ -65,12 +65,14 @@ private:
     ScDocument* mpDoc;
     ScAddress maPos;
     ScRangeList maRanges;
-    ScCondFormatDlg* mpDialogParent;
+    VclPtr<ScCondFormatDlg> mpDialogParent;
 
     void DoScroll(long nDiff);
 
 public:
     ScCondFormatList(vcl::Window* pParent, WinBits nStyle);
+    virtual ~ScCondFormatList();
+    virtual void dispose() SAL_OVERRIDE;
 
     void init(ScDocument* pDoc, ScCondFormatDlg* pDialogParent, const ScConditionalFormat* pFormat,
         const ScRangeList& rRanges, const ScAddress& rPos,
@@ -95,18 +97,18 @@ public:
 class ScCondFormatDlg : public ScAnyRefModalDlg
 {
 private:
-    PushButton* mpBtnAdd;
-    PushButton* mpBtnRemove;
-    FixedText* mpFtRange;
-    formula::RefEdit* mpEdRange;
-    formula::RefButton* mpRbRange;
+    VclPtr<PushButton> mpBtnAdd;
+    VclPtr<PushButton> mpBtnRemove;
+    VclPtr<FixedText> mpFtRange;
+    VclPtr<formula::RefEdit> mpEdRange;
+    VclPtr<formula::RefButton> mpRbRange;
 
-    ScCondFormatList* mpCondFormList;
+    VclPtr<ScCondFormatList> mpCondFormList;
 
     ScAddress maPos;
     ScDocument* mpDoc;
 
-    formula::RefEdit* mpLastEdit;
+    VclPtr<formula::RefEdit> mpLastEdit;
 
     DECL_LINK( EdRangeModifyHdl, Edit* );
 protected:
@@ -117,6 +119,7 @@ public:
     SC_DLLPUBLIC ScCondFormatDlg(vcl::Window* pWindow, ScDocument* pDoc, const ScConditionalFormat* pFormat,
             const ScRangeList& rRange, const ScAddress& rPos, condformat::dialog::ScCondFormatDialogType eType);
     virtual ~ScCondFormatDlg();
+    virtual void dispose() SAL_OVERRIDE;
 
     SC_DLLPUBLIC ScConditionalFormat* GetConditionalFormat() const;
 

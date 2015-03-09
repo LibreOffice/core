@@ -73,13 +73,13 @@ namespace pcr
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
                                     m_xORB;
 
-        TabOrderListBox* m_pLB_Controls;
+        VclPtr<TabOrderListBox> m_pLB_Controls;
 
-        OKButton* m_pPB_OK;
+        VclPtr<OKButton> m_pPB_OK;
 
-        PushButton* m_pPB_MoveUp;
-        PushButton* m_pPB_MoveDown;
-        PushButton* m_pPB_AutoOrder;
+        VclPtr<PushButton> m_pPB_MoveUp;
+        VclPtr<PushButton> m_pPB_MoveDown;
+        VclPtr<PushButton> m_pPB_AutoOrder;
 
         ImageList*                  pImageList;
 

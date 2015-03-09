@@ -84,6 +84,30 @@ AxisPositionsTabPage::AxisPositionsTabPage(vcl::Window* pWindow,const SfxItemSet
     m_pLB_PlaceTicks->SetDropDownLineCount( m_pLB_PlaceTicks->GetEntryCount() );
 }
 
+AxisPositionsTabPage::~AxisPositionsTabPage()
+{
+    dispose();
+}
+
+void AxisPositionsTabPage::dispose()
+{
+    m_pFL_AxisLine.clear();
+    m_pLB_CrossesAt.clear();
+    m_pED_CrossesAt.clear();
+    m_pED_CrossesAtCategory.clear();
+    m_pCB_AxisBetweenCategories.clear();
+    m_pFL_Labels.clear();
+    m_pLB_PlaceLabels.clear();
+    m_pED_LabelDistance.clear();
+    m_pCB_TicksInner.clear();
+    m_pCB_TicksOuter.clear();
+    m_pCB_MinorInner.clear();
+    m_pCB_MinorOuter.clear();
+    m_pBxPlaceTicks.clear();
+    m_pLB_PlaceTicks.clear();
+    SfxTabPage::dispose();
+}
+
 SfxTabPage* AxisPositionsTabPage::Create(vcl::Window* pWindow,const SfxItemSet* rOutAttrs)
 {
     return new AxisPositionsTabPage(pWindow, *rOutAttrs);

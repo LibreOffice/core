@@ -205,7 +205,7 @@ bool ScGridWindow::VisibleRange::set(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCRO
 class ScFilterListBox : public ListBox
 {
 private:
-    ScGridWindow*   pGridWin;
+    VclPtr<ScGridWindow>   pGridWin;
     SCCOL           nCol;
     SCROW           nRow;
     bool            bButtonDown;
@@ -266,6 +266,7 @@ void ScFilterListBox::dispose()
 {
     if (IsMouseCaptured())
         ReleaseMouse();
+    pGridWin.clear();
     ListBox::dispose();
 }
 
@@ -537,8 +538,8 @@ void ScGridWindow::dispose()
     // #114409#
     ImpDestroyOverlayObjects();
 
-    delete pFilterBox;
-    delete pFilterFloat;
+    pFilterBox.clear();
+    pFilterFloat.clear();
     delete pNoteMarker;
     vcl::Window::dispose();
 }
@@ -554,8 +555,8 @@ void ScGridWindow::ClickExtern()
         {
             break;
         }
-        mpFilterBox.reset();
-        mpFilterFloat.reset();
+        mpFilterBox.disposeAndClear();
+        mpFilterFloat.disposeAndClear();
     }
     while (false);
 
@@ -631,7 +632,7 @@ struct AutoFilterData : public ScCheckListMenuWindow::ExtendedData
 
 class AutoFilterAction : public ScMenuFloatingWindow::Action
 {
-    ScGridWindow* mpWindow;
+    VclPtr<ScGridWindow> mpWindow;
     ScGridWindow::AutoFilterMode meMode;
 public:
     AutoFilterAction(ScGridWindow* p, ScGridWindow::AutoFilterMode eMode) :
@@ -644,7 +645,7 @@ public:
 
 class AutoFilterPopupEndAction : public ScMenuFloatingWindow::Action
 {
-    ScGridWindow* mpWindow;
+    VclPtr<ScGridWindow> mpWindow;
     ScAddress maPos;
 public:
     AutoFilterPopupEndAction(ScGridWindow* p, const ScAddress& rPos) :
@@ -952,8 +953,8 @@ void ScGridWindow::LaunchDPFieldMenu( SCCOL nCol, SCROW nRow )
 
 void ScGridWindow::DoScenarioMenu( const ScRange& rScenRange )
 {
-    mpFilterBox.reset();
-    mpFilterFloat.reset();
+    mpFilterBox.disposeAndClear();
+    mpFilterFloat.disposeAndClear();
 
     SCCOL nCol = rScenRange.aEnd.Col();     // Zelle unterhalb des Buttons
     SCROW nRow = rScenRange.aStart.Row();
@@ -1088,8 +1089,8 @@ void ScGridWindow::DoScenarioMenu( const ScRange& rScenRange )
 
 void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow, bool bDataSelect )
 {
-    mpFilterBox.reset();
-    mpFilterFloat.reset();
+    mpFilterBox.disposeAndClear();
+    mpFilterFloat.disposeAndClear();
 
     sal_uInt16 i;
     ScDocument* pDoc = pViewData->GetDocument();
@@ -1324,8 +1325,8 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow, bool bDataSelec
 
     if ( bEmpty )
     {
-        mpFilterBox.reset();
-        mpFilterFloat.reset();
+        mpFilterBox.disposeAndClear();
+        mpFilterFloat.disposeAndClear();
     }
     else
     {

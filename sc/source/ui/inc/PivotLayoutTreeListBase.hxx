@@ -35,13 +35,14 @@ public:
 
 protected:
     SvPivotTreeListType meType;
-    ScPivotLayoutDialog* mpParent;
+    VclPtr<ScPivotLayoutDialog> mpParent;
 
 public:
     void Setup(ScPivotLayoutDialog* pParent);
 
     ScPivotLayoutTreeListBase(vcl::Window* pParent, WinBits nBits, SvPivotTreeListType eType = UNDEFINED);
     virtual ~ScPivotLayoutTreeListBase();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual sal_Int8 AcceptDrop(const AcceptDropEvent& rEvent) SAL_OVERRIDE;
     virtual bool NotifyAcceptDrop(SvTreeListEntry* pEntry) SAL_OVERRIDE;

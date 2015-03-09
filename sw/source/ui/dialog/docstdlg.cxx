@@ -73,8 +73,25 @@ SwDocStatPage::SwDocStatPage(vcl::Window *pParent, const SfxItemSet &rSet)
 
 }
 
- SwDocStatPage::~SwDocStatPage()
+SwDocStatPage::~SwDocStatPage()
 {
+    dispose();
+}
+
+void SwDocStatPage::dispose()
+{
+    m_pPageNo.clear();
+    m_pTableNo.clear();
+    m_pGrfNo.clear();
+    m_pOLENo.clear();
+    m_pParaNo.clear();
+    m_pWordNo.clear();
+    m_pCharNo.clear();
+    m_pCharExclSpacesNo.clear();
+    m_pLineLbl.clear();
+    m_pLineNo.clear();
+    m_pUpdatePB.clear();
+    SfxTabPage::dispose();
 }
 
 // Description: fill ItemSet when changed

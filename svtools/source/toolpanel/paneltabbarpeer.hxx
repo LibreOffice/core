@@ -49,7 +49,7 @@ namespace svt
 
     private:
         AccessibleFactoryAccess m_aAccessibleFactory;
-        PanelTabBar*            m_pTabBar;
+        VclPtr<PanelTabBar>     m_pTabBar;
     };
 
 

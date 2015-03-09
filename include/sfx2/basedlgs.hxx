@@ -164,16 +164,12 @@ public:
 
 struct SingleTabDlgImpl
 {
-    SfxTabPage*                 m_pSfxPage;
-    FixedLine*                  m_pLine;
+    VclPtr<SfxTabPage>          m_pSfxPage;
+    VclPtr<FixedLine>           m_pLine;
     OUString                    m_sInfoURL;
     Link                        m_aInfoLink;
 
-    SingleTabDlgImpl()
-        : m_pSfxPage(NULL)
-        , m_pLine(NULL)
-    {
-    }
+    SingleTabDlgImpl();
 };
 
 typedef const sal_uInt16* (*GetTabPageRanges)(); // liefert internationale Which-Werte
@@ -201,9 +197,9 @@ public:
 protected:
     GetTabPageRanges    fnGetRanges;
 
-    OKButton*           pOKBtn;
-    CancelButton*       pCancelBtn;
-    HelpButton*         pHelpBtn;
+    VclPtr<OKButton>      pOKBtn;
+    VclPtr<CancelButton>  pCancelBtn;
+    VclPtr<HelpButton>    pHelpBtn;
 
     SingleTabDlgImpl*   pImpl;
 

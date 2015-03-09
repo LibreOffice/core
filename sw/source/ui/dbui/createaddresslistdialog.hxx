@@ -40,27 +40,27 @@ struct SwCSVData
 class SwFindEntryDialog;
 class SwCreateAddressListDialog : public SfxModalDialog
 {
-    SwAddressControl_Impl*  m_pAddressControl;
+    VclPtr<SwAddressControl_Impl>   m_pAddressControl;
 
-    PushButton              *m_pNewPB;
-    PushButton              *m_pDeletePB;
-    PushButton              *m_pFindPB;
-    PushButton              *m_pCustomizePB;
+    VclPtr<PushButton>              m_pNewPB;
+    VclPtr<PushButton>              m_pDeletePB;
+    VclPtr<PushButton>              m_pFindPB;
+    VclPtr<PushButton>              m_pCustomizePB;
 
-    PushButton              *m_pStartPB;
-    PushButton              *m_pPrevPB;
-    NumericField            *m_pSetNoNF;
-    PushButton              *m_pNextPB;
-    PushButton              *m_pEndPB;
+    VclPtr<PushButton>              m_pStartPB;
+    VclPtr<PushButton>              m_pPrevPB;
+    VclPtr<NumericField>            m_pSetNoNF;
+    VclPtr<PushButton>              m_pNextPB;
+    VclPtr<PushButton>              m_pEndPB;
 
 
-    OKButton                *m_pOK;
+    VclPtr<OKButton>                m_pOK;
 
     OUString                m_sAddressListFilterName;
     OUString                m_sURL;
 
     SwCSVData*              m_pCSVData;
-    SwFindEntryDialog*      m_pFindDlg;
+    VclPtr<SwFindEntryDialog>      m_pFindDlg;
 
     DECL_LINK(NewHdl_Impl, void *);
     DECL_LINK(DeleteHdl_Impl, void *);
@@ -84,14 +84,14 @@ public:
 
 class SwFindEntryDialog : public ModelessDialog
 {
-    Edit*         m_pFindED;
-    CheckBox*     m_pFindOnlyCB;
-    ListBox*      m_pFindOnlyLB;
+    VclPtr<Edit>         m_pFindED;
+    VclPtr<CheckBox>     m_pFindOnlyCB;
+    VclPtr<ListBox>      m_pFindOnlyLB;
 
-    PushButton*   m_pFindPB;
-    CancelButton* m_pCancel;
+    VclPtr<PushButton>   m_pFindPB;
+    VclPtr<CancelButton> m_pCancel;
 
-    SwCreateAddressListDialog*  m_pParent;
+    VclPtr<SwCreateAddressListDialog>  m_pParent;
 
     DECL_LINK(FindHdl_Impl, void *);
     DECL_LINK(FindEnableHdl_Impl, void *);
@@ -99,6 +99,8 @@ class SwFindEntryDialog : public ModelessDialog
 
 public:
     SwFindEntryDialog(SwCreateAddressListDialog* pParent);
+    virtual ~SwFindEntryDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     ListBox& GetFieldsListBox()
     {

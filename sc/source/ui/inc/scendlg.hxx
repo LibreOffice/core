@@ -31,7 +31,8 @@ class ScNewScenarioDlg : public ModalDialog
 {
 public:
     ScNewScenarioDlg(vcl::Window* pParent, const OUString& rName, bool bEdit = false, bool bSheetProtected = false);
-
+    virtual ~ScNewScenarioDlg();
+    virtual void dispose() SAL_OVERRIDE;
     void SetScenarioData( const OUString& rName, const OUString& rComment,
                           const Color& rColor, sal_uInt16 nFlags );
 
@@ -39,14 +40,14 @@ public:
                           Color& rColor, sal_uInt16& rFlags ) const;
 
 private:
-    Edit*               m_pEdName;
-    VclMultiLineEdit*   m_pEdComment;
-    CheckBox*           m_pCbShowFrame;
-    ColorListBox*       m_pLbColor;
-    CheckBox*           m_pCbTwoWay;
-    CheckBox*           m_pCbCopyAll;
-    CheckBox*           m_pCbProtect;
-    OKButton*           m_pBtnOk;
+    VclPtr<Edit>               m_pEdName;
+    VclPtr<VclMultiLineEdit>   m_pEdComment;
+    VclPtr<CheckBox>           m_pCbShowFrame;
+    VclPtr<ColorListBox>       m_pLbColor;
+    VclPtr<CheckBox>           m_pCbTwoWay;
+    VclPtr<CheckBox>           m_pCbCopyAll;
+    VclPtr<CheckBox>           m_pCbProtect;
+    VclPtr<OKButton>           m_pBtnOk;
     const OUString      aDefScenarioName;
     bool                bIsEdit;
 

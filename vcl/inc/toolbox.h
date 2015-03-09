@@ -37,7 +37,7 @@ namespace vcl { class Window; }
 
 struct ImplToolItem
 {
-    vcl::Window*        mpWindow;
+    VclPtr<vcl::Window> mpWindow;
     void*               mpUserData;
     Image               maImage;
     Image               maImageOriginal;

@@ -35,6 +35,7 @@ class ScTableProtectionDlg : public ModalDialog
 public:
     explicit ScTableProtectionDlg(vcl::Window* pParent);
     virtual ~ScTableProtectionDlg();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual short Execute() SAL_OVERRIDE;
 
@@ -49,16 +50,16 @@ private:
 
     void EnableOptionalWidgets(bool bEnable = true);
 
-    CheckBox*        m_pBtnProtect;
+    VclPtr<CheckBox>        m_pBtnProtect;
 
-    VclContainer*    m_pPasswords;
-    VclContainer*    m_pOptions;
-    Edit*            m_pPassword1Edit;
-    Edit*            m_pPassword2Edit;
+    VclPtr<VclContainer>    m_pPasswords;
+    VclPtr<VclContainer>    m_pOptions;
+    VclPtr<Edit>            m_pPassword1Edit;
+    VclPtr<Edit>            m_pPassword2Edit;
 
-    SvxCheckListBox* m_pOptionsListBox;
+    VclPtr<SvxCheckListBox> m_pOptionsListBox;
 
-    OKButton*        m_pBtnOk;
+    VclPtr<OKButton>        m_pBtnOk;
 
     OUString         m_aSelectLockedCells;
     OUString         m_aSelectUnlockedCells;

@@ -31,7 +31,7 @@ namespace pcr
     class ListSelectionDialog : public ModalDialog
     {
     private:
-        ListBox*        m_pEntries;
+        VclPtr<ListBox>        m_pEntries;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                         m_xListBox;
@@ -44,6 +44,8 @@ namespace pcr
             const OUString& _rPropertyName,
             const OUString& _rPropertyUIName
         );
+        virtual ~ListSelectionDialog();
+        virtual void dispose() SAL_OVERRIDE;
 
         // Dialog overridables
         virtual short   Execute() SAL_OVERRIDE;

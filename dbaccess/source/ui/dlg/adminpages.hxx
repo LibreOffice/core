@@ -231,7 +231,7 @@ namespace dbaui
             is modified. The implementation just calls callModifiedHdl.
         */
         DECL_LINK(OnControlModified, void*);
-        DECL_LINK(OnTestConnectionClickHdl,PushButton*);
+        DECL_LINK(OnTestConnectionClickHdl, PushButton*);
 
         /// may be used in SetXXXHdl calls to controls, is a link to <method>OnControlModified</method>
         virtual Link getControlModifiedLink() { return LINK(this, OGenericAdministrationPage, OnControlModified); }

@@ -40,11 +40,11 @@ class ScPreviewShell: public SfxViewShell
 {
     ScDocShell*     pDocShell;
 
-    SystemWindow*   mpFrameWindow;
-    ScPreview*      pPreview;               // Output window
-    ScrollBar*      pHorScroll;
-    ScrollBar*      pVerScroll;
-    vcl::Window*         pCorner;
+    VclPtr<SystemWindow>   mpFrameWindow;
+    VclPtr<ScPreview>      pPreview;               // Output window
+    VclPtr<ScrollBar>      pHorScroll;
+    VclPtr<ScrollBar>      pVerScroll;
+    VclPtr<vcl::Window>    pCorner;
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aSourceData;  // ViewData
     sal_uInt8           nSourceDesignMode;      // form design mode from TabView

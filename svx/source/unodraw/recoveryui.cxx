@@ -67,7 +67,7 @@ class RecoveryUI : public ::cppu::WeakImplHelper2< css::lang::XServiceInfo      
         css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
         /** @short TODO */
-        vcl::Window* m_pParentWindow;
+        VclPtr<vcl::Window> m_pParentWindow;
 
         /** @short TODO */
         RecoveryUI::EJob m_eJob;

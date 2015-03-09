@@ -27,24 +27,26 @@ public:
                     ScAutoFormat* pAutoFormat,
                     const ScAutoFormatData* pSelFormatData,
                     ScViewData *pViewData);
+    virtual ~ScAutoFormatDlg();
+    virtual void dispose() SAL_OVERRIDE;
 
     sal_uInt16 GetIndex() const { return nIndex; }
     OUString GetCurrFormatName();
 
 private:
-    ListBox*        m_pLbFormat;
-    ScAutoFmtPreview* m_pWndPreview;
-    OKButton*       m_pBtnOk;
-    CancelButton*   m_pBtnCancel;
-    PushButton*     m_pBtnAdd;
-    PushButton*     m_pBtnRemove;
-    PushButton*     m_pBtnRename;
-    CheckBox*       m_pBtnNumFormat;
-    CheckBox*       m_pBtnBorder;
-    CheckBox*       m_pBtnFont;
-    CheckBox*       m_pBtnPattern;
-    CheckBox*       m_pBtnAlignment;
-    CheckBox*       m_pBtnAdjust;
+    VclPtr<ListBox>        m_pLbFormat;
+    VclPtr<ScAutoFmtPreview> m_pWndPreview;
+    VclPtr<OKButton>       m_pBtnOk;
+    VclPtr<CancelButton>   m_pBtnCancel;
+    VclPtr<PushButton>     m_pBtnAdd;
+    VclPtr<PushButton>     m_pBtnRemove;
+    VclPtr<PushButton>     m_pBtnRename;
+    VclPtr<CheckBox>       m_pBtnNumFormat;
+    VclPtr<CheckBox>       m_pBtnBorder;
+    VclPtr<CheckBox>       m_pBtnFont;
+    VclPtr<CheckBox>       m_pBtnPattern;
+    VclPtr<CheckBox>       m_pBtnAlignment;
+    VclPtr<CheckBox>       m_pBtnAdjust;
     OUString        aStrTitle;
     OUString        aStrLabel;
     OUString        aStrClose;

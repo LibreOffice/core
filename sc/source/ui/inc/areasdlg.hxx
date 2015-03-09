@@ -46,23 +46,23 @@ public:
     virtual bool    Close() SAL_OVERRIDE;
 
 private:
-    ListBox*                 pLbPrintArea;
-    formula::RefEdit*        pEdPrintArea;
-    formula::RefButton*      pRbPrintArea;
+    VclPtr<ListBox>                 pLbPrintArea;
+    VclPtr<formula::RefEdit>        pEdPrintArea;
+    VclPtr<formula::RefButton>      pRbPrintArea;
 
-    ListBox*                 pLbRepeatRow;
-    formula::RefEdit*        pEdRepeatRow;
-    formula::RefButton*      pRbRepeatRow;
+    VclPtr<ListBox>                 pLbRepeatRow;
+    VclPtr<formula::RefEdit>        pEdRepeatRow;
+    VclPtr<formula::RefButton>      pRbRepeatRow;
 
-    ListBox*                 pLbRepeatCol;
-    formula::RefEdit*        pEdRepeatCol;
-    formula::RefButton*      pRbRepeatCol;
+    VclPtr<ListBox>                 pLbRepeatCol;
+    VclPtr<formula::RefEdit>        pEdRepeatCol;
+    VclPtr<formula::RefButton>      pRbRepeatCol;
 
-    OKButton*        pBtnOk;
-    CancelButton*    pBtnCancel;
+    VclPtr<OKButton>        pBtnOk;
+    VclPtr<CancelButton>    pBtnCancel;
 
     bool            bDlgLostFocus;
-    formula::RefEdit*       pRefInputEdit;
+    VclPtr<formula::RefEdit>       pRefInputEdit;
     ScDocument*     pDoc;
     ScViewData*     pViewData;
     SCTAB           nCurTab;

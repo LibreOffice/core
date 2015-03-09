@@ -20,6 +20,7 @@
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_ACCESSIBILITY_ACCESSIBLEVIEWFORWARDER_HXX
 
 #include <vcl/mapmod.hxx>
+#include <vcl/vclptr.hxx>
 #include <svx/IAccessibleViewForwarder.hxx>
 
 namespace vcl { class Window; }
@@ -48,7 +49,7 @@ private:
     AccessibleViewForwarder& operator=( AccessibleViewForwarder& ) SAL_DELETED_FUNCTION;
 
     AccessibleChartView* m_pAccChartView;
-    vcl::Window* m_pWindow;
+    VclPtr<vcl::Window> m_pWindow;
     MapMode m_aMapMode;
 };
 

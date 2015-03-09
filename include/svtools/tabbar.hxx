@@ -315,6 +315,8 @@ class SVT_DLLPUBLIC TabBar : public vcl::Window
 private:
     std::unique_ptr<TabBar_Impl> mpImpl;
 
+    ImplTabBarList* mpItemList;
+
     OUString        maEditText;
     Color           maSelColor;
     Color           maSelTextColor;

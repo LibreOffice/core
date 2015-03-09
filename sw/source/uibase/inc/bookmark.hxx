@@ -47,9 +47,9 @@ public:
 
 class SwInsertBookmarkDlg: public SvxStandardDialog
 {
-    BookmarkCombo*  m_pBookmarkBox;
-    OKButton*       m_pOkBtn;
-    PushButton*     m_pDeleteBtn;
+    VclPtr<BookmarkCombo>  m_pBookmarkBox;
+    VclPtr<OKButton>       m_pOkBtn;
+    VclPtr<PushButton>     m_pDeleteBtn;
 
     OUString        sRemoveWarning;
     SwWrtShell      &rSh;
@@ -63,6 +63,7 @@ class SwInsertBookmarkDlg: public SvxStandardDialog
 public:
     SwInsertBookmarkDlg(vcl::Window *pParent, SwWrtShell &rSh, SfxRequest& rReq);
     virtual ~SwInsertBookmarkDlg();
+    virtual void dispose() SAL_OVERRIDE;
 };
 
 #endif

@@ -21,7 +21,7 @@
 #define INCLUDED_SVTOOLS_COLRDLG_HXX
 
 #include <svtools/svtdllapi.h>
-
+#include <vcl/vclptr.hxx>
 #include <tools/color.hxx>
 
 namespace vcl { class Window; }
@@ -50,9 +50,9 @@ public:
     short           Execute();
 
 private:
-    vcl::Window*    mpParent;
-    Color           maColor;
-    sal_Int16       meMode;
+    VclPtr<vcl::Window> mpParent;
+    Color               maColor;
+    sal_Int16           meMode;
 };
 
 #endif // INCLUDED_SVTOOLS_COLRDLG_HXX

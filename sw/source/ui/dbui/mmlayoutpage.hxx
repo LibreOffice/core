@@ -38,20 +38,20 @@ namespace com{ namespace sun{ namespace star{ namespace beans{ class XPropertySe
 
 class SwMailMergeLayoutPage : public svt::OWizardPage
 {
-    VclContainer*       m_pPosition;
+    VclPtr<VclContainer>       m_pPosition;
 
-    CheckBox*           m_pAlignToBodyCB;
-    FixedText*          m_pLeftFT;
-    MetricField*        m_pLeftMF;
-    MetricField*        m_pTopMF;
+    VclPtr<CheckBox>           m_pAlignToBodyCB;
+    VclPtr<FixedText>          m_pLeftFT;
+    VclPtr<MetricField>        m_pLeftMF;
+    VclPtr<MetricField>        m_pTopMF;
 
-    VclContainer*       m_pGreetingLine;
-    PushButton*         m_pUpPB;
-    PushButton*         m_pDownPB;
+    VclPtr<VclContainer>       m_pGreetingLine;
+    VclPtr<PushButton>         m_pUpPB;
+    VclPtr<PushButton>         m_pDownPB;
 
-    vcl::Window*             m_pExampleContainerWIN;
+    VclPtr<vcl::Window>             m_pExampleContainerWIN;
 
-    ListBox*            m_pZoomLB;
+    VclPtr<ListBox>            m_pZoomLB;
 
     SwOneExampleFrame*  m_pExampleFrame;
     SwWrtShell*         m_pExampleWrtShell;
@@ -61,7 +61,7 @@ class SwMailMergeLayoutPage : public svt::OWizardPage
 
     bool                m_bIsGreetingInserted;
 
-    SwMailMergeWizard*  m_pWizard;
+    VclPtr<SwMailMergeWizard>  m_pWizard;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  m_xViewProperties;
 

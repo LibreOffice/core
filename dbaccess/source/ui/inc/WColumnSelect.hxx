@@ -35,12 +35,12 @@ namespace dbaui
 
     class OWizColumnSelect : public OWizardPage
     {
-        ListBox*      m_pOrgColumnNames; // left side
-        PushButton*   m_pColumn_RH;
-        PushButton*   m_pColumns_RH;
-        PushButton*   m_pColumn_LH;
-        PushButton*   m_pColumns_LH;
-        ListBox*      m_pNewColumnNames; // right side
+        VclPtr<ListBox>      m_pOrgColumnNames; // left side
+        VclPtr<PushButton>   m_pColumn_RH;
+        VclPtr<PushButton>   m_pColumns_RH;
+        VclPtr<PushButton>   m_pColumn_LH;
+        VclPtr<PushButton>   m_pColumns_LH;
+        VclPtr<ListBox>      m_pNewColumnNames; // right side
 
         DECL_LINK( ButtonClickHdl, Button * );
         DECL_LINK( ListDoubleClickHdl, ListBox * );

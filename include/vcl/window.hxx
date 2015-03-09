@@ -662,7 +662,7 @@ private:
     SAL_DLLPRIVATE long                 ImplGetUnmirroredOutOffX();
 
     // retrieves the list of owner draw decorated windows for this window hiearchy
-    SAL_DLLPRIVATE ::std::vector<vcl::Window *>& ImplGetOwnerDrawList();
+    SAL_DLLPRIVATE ::std::vector<VclPtr<vcl::Window> >& ImplGetOwnerDrawList();
 
     SAL_DLLPRIVATE vcl::Window*         ImplGetTopmostFrameWindow();
 
@@ -1431,7 +1431,7 @@ public:
      */
     void add_mnemonic_label(FixedText *pLabel);
     void remove_mnemonic_label(FixedText *pLabel);
-    std::vector<FixedText*> list_mnemonic_labels() const;
+    std::vector<VclPtr<FixedText> > list_mnemonic_labels() const;
 
     /*
      * Move this widget to be the nNewPosition'd child of its parent

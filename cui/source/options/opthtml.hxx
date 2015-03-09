@@ -30,30 +30,32 @@
 class OfaHtmlTabPage : public SfxTabPage
 {
 
-    NumericField*    aSize1NF;
-    NumericField*    aSize2NF;
-    NumericField*    aSize3NF;
-    NumericField*    aSize4NF;
-    NumericField*    aSize5NF;
-    NumericField*    aSize6NF;
-    NumericField*    aSize7NF;
+    VclPtr<NumericField>    aSize1NF;
+    VclPtr<NumericField>    aSize2NF;
+    VclPtr<NumericField>    aSize3NF;
+    VclPtr<NumericField>    aSize4NF;
+    VclPtr<NumericField>    aSize5NF;
+    VclPtr<NumericField>    aSize6NF;
+    VclPtr<NumericField>    aSize7NF;
 
-    CheckBox*        aNumbersEnglishUSCB;
-    CheckBox*        aUnknownTagCB;
-    CheckBox*        aIgnoreFontNamesCB;
+    VclPtr<CheckBox>        aNumbersEnglishUSCB;
+    VclPtr<CheckBox>        aUnknownTagCB;
+    VclPtr<CheckBox>        aIgnoreFontNamesCB;
 
-    ListBox*         aExportLB;
-    CheckBox*        aStarBasicCB;
-    CheckBox*        aStarBasicWarningCB;
-    CheckBox*        aPrintExtensionCB;
-    CheckBox*        aSaveGrfLocalCB;
-    SvxTextEncodingBox* aCharSetLB;
+    VclPtr<ListBox>         aExportLB;
+    VclPtr<CheckBox>        aStarBasicCB;
+    VclPtr<CheckBox>        aStarBasicWarningCB;
+    VclPtr<CheckBox>        aPrintExtensionCB;
+    VclPtr<CheckBox>        aSaveGrfLocalCB;
+    VclPtr<SvxTextEncodingBox> aCharSetLB;
 
     DECL_LINK(ExportHdl_Impl, ListBox*);
     DECL_LINK(CheckBoxHdl_Impl, CheckBox*);
 
     OfaHtmlTabPage(vcl::Window* pParent, const SfxItemSet& rSet);
 public:
+    virtual ~OfaHtmlTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     static SfxTabPage*  Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet );

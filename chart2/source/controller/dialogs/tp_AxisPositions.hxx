@@ -33,6 +33,8 @@ class AxisPositionsTabPage : public SfxTabPage
 {
 public:
     AxisPositionsTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs );
+    virtual ~AxisPositionsTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     static SfxTabPage* Create( vcl::Window* pParent, const SfxItemSet* rInAttrs );
     virtual bool FillItemSet( SfxItemSet* rOutAttrs ) SAL_OVERRIDE;
@@ -52,30 +54,30 @@ private: //methods:
     DECL_LINK( PlaceLabelsSelectHdl, void* );
 
 private: //member:
-    VclFrame*       m_pFL_AxisLine;
-    ListBox*        m_pLB_CrossesAt;
-    FormattedField* m_pED_CrossesAt;
-    ComboBox*       m_pED_CrossesAtCategory;
-    CheckBox*       m_pCB_AxisBetweenCategories;
+    VclPtr<VclFrame>       m_pFL_AxisLine;
+    VclPtr<ListBox>        m_pLB_CrossesAt;
+    VclPtr<FormattedField> m_pED_CrossesAt;
+    VclPtr<ComboBox>       m_pED_CrossesAtCategory;
+    VclPtr<CheckBox>       m_pCB_AxisBetweenCategories;
 
-    VclFrame*       m_pFL_Labels;
-    ListBox*        m_pLB_PlaceLabels;
-    FormattedField* m_pED_LabelDistance;
+    VclPtr<VclFrame>       m_pFL_Labels;
+    VclPtr<ListBox>        m_pLB_PlaceLabels;
+    VclPtr<FormattedField> m_pED_LabelDistance;
 
-    CheckBox*       m_pCB_TicksInner;
-    CheckBox*       m_pCB_TicksOuter;
+    VclPtr<CheckBox>       m_pCB_TicksInner;
+    VclPtr<CheckBox>       m_pCB_TicksOuter;
 
-    CheckBox*       m_pCB_MinorInner;
-    CheckBox*       m_pCB_MinorOuter;
+    VclPtr<CheckBox>       m_pCB_MinorInner;
+    VclPtr<CheckBox>       m_pCB_MinorOuter;
 
-    VclBox*         m_pBxPlaceTicks;
-    ListBox*        m_pLB_PlaceTicks;
+    VclPtr<VclBox>         m_pBxPlaceTicks;
+    VclPtr<ListBox>        m_pLB_PlaceTicks;
 
 //     Not implemented
-//     CheckBox*       m_pCB_MajorGrid;
-//     PushButton*     m_pPB_MajorGrid;
-//     CheckBox*       m_pCB_MinorGrid;
-//     PushButton*     m_pPB_MinorGrid;
+//     VclPtr<CheckBox>       m_pCB_MajorGrid;
+//     VclPtr<PushButton>     m_pPB_MajorGrid;
+//     VclPtr<CheckBox>       m_pCB_MinorGrid;
+//     VclPtr<PushButton>     m_pPB_MinorGrid;
 
     SvNumberFormatter*  m_pNumFormatter;
 

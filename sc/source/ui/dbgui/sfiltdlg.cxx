@@ -116,6 +116,25 @@ void ScSpecialFilterDlg::dispose()
     // Hack: RefInput-Kontrolle
     pIdle->Stop();
     delete pIdle;
+
+    pLbFilterArea.clear();
+    pEdFilterArea.clear();
+    pRbFilterArea.clear();
+    pExpander.clear();
+    pBtnCase.clear();
+    pBtnRegExp.clear();
+    pBtnHeader.clear();
+    pBtnUnique.clear();
+    pBtnCopyResult.clear();
+    pLbCopyArea.clear();
+    pEdCopyArea.clear();
+    pRbCopyArea.clear();
+    pBtnDestPers.clear();
+    pFtDbAreaLabel.clear();
+    pFtDbArea.clear();
+    pBtnOk.clear();
+    pBtnCancel.clear();
+    pRefInputEdit.clear();
     ScAnyRefDlg::dispose();
 }
 

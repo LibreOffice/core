@@ -93,6 +93,32 @@ SwMailMergeAddressBlockPage::SwMailMergeAddressBlockPage( SwMailMergeWizard* _pP
     m_pNextSetIB->SetClickHdl(aLink);
 }
 
+SwMailMergeAddressBlockPage::~SwMailMergeAddressBlockPage()
+{
+    dispose();
+}
+
+void SwMailMergeAddressBlockPage::dispose()
+{
+    m_pAddressListPB.clear();
+    m_pCurrentAddressFI.clear();
+    m_pStep2.clear();
+    m_pStep3.clear();
+    m_pStep4.clear();
+    m_pSettingsFI.clear();
+    m_pAddressCB.clear();
+    m_pSettingsWIN.clear();
+    m_pSettingsPB.clear();
+    m_pHideEmptyParagraphsCB.clear();
+    m_pAssignPB.clear();
+    m_pPreviewWIN.clear();
+    m_pDocumentIndexFI.clear();
+    m_pPrevSetIB.clear();
+    m_pNextSetIB.clear();
+    m_pWizard.clear();
+    svt::OWizardPage::dispose();
+}
+
 bool SwMailMergeAddressBlockPage::canAdvance() const
 {
     return m_pWizard->GetConfigItem().GetResultSet().is();
@@ -330,6 +356,20 @@ SwSelectAddressBlockDialog::SwSelectAddressBlockDialog(
 
 SwSelectAddressBlockDialog::~SwSelectAddressBlockDialog()
 {
+    dispose();
+}
+
+void SwSelectAddressBlockDialog::dispose()
+{
+    m_pPreview.clear();
+    m_pNewPB.clear();
+    m_pCustomizePB.clear();
+    m_pDeletePB.clear();
+    m_pNeverRB.clear();
+    m_pAlwaysRB.clear();
+    m_pDependentRB.clear();
+    m_pCountryED.clear();
+    SfxModalDialog::dispose();
 }
 
 void SwSelectAddressBlockDialog::SetAddressBlocks(const uno::Sequence< OUString>& rBlocks,
@@ -533,6 +573,26 @@ SwCustomizeAddressBlockDialog::SwCustomizeAddressBlockDialog(
 
 SwCustomizeAddressBlockDialog::~SwCustomizeAddressBlockDialog()
 {
+    dispose();
+}
+
+void SwCustomizeAddressBlockDialog::dispose()
+{
+    m_pAddressElementsFT.clear();
+    m_pAddressElementsLB.clear();
+    m_pInsertFieldIB.clear();
+    m_pRemoveFieldIB.clear();
+    m_pDragFT.clear();
+    m_pDragED.clear();
+    m_pUpIB.clear();
+    m_pLeftIB.clear();
+    m_pRightIB.clear();
+    m_pDownIB.clear();
+    m_pFieldFT.clear();
+    m_pFieldCB.clear();
+    m_pPreviewWIN.clear();
+    m_pOK.clear();
+    SfxModalDialog::dispose();
 }
 
 IMPL_LINK_NOARG(SwCustomizeAddressBlockDialog, OKHdl_Impl)
@@ -750,9 +810,9 @@ class SwAssignFieldsControl : public Control
     VclPtr<HeaderBar>           m_aHeaderHB;
     VclPtr<Window>              m_aWindow;
 
-    ::std::vector<FixedText*>   m_aFieldNames;
-    ::std::vector<ListBox*>     m_aMatches;
-    ::std::vector<FixedText*>   m_aPreviews;
+    ::std::vector<VclPtr<FixedText> >   m_aFieldNames;
+    ::std::vector<VclPtr<ListBox> >     m_aMatches;
+    ::std::vector<VclPtr<FixedText> >   m_aPreviews;
 
     SwMailMergeConfigItem*      m_rConfigItem;
 
@@ -929,14 +989,9 @@ SwAssignFieldsControl::~SwAssignFieldsControl()
 
 void SwAssignFieldsControl::dispose()
 {
-    ::std::vector<FixedText*>::iterator aFIIter;
-    for(aFIIter = m_aFieldNames.begin(); aFIIter != m_aFieldNames.end(); ++aFIIter)
-        delete *aFIIter;
-    ::std::vector<ListBox*>::iterator aLBIter;
-    for(aLBIter = m_aMatches.begin(); aLBIter != m_aMatches.end(); ++aLBIter)
-        delete *aLBIter;
-    for(aFIIter = m_aPreviews.begin(); aFIIter != m_aPreviews.end(); ++aFIIter)
-        delete *aFIIter;
+    m_aFieldNames.clear();
+    m_aMatches.clear();
+    m_aPreviews.clear();
 
     m_aVScroll.disposeAndClear();
     m_aHeaderHB.disposeAndClear();
@@ -972,16 +1027,14 @@ void SwAssignFieldsControl::Resize()
     long nControlHeight = std::max(m_aFieldNames[0]->get_preferred_size().Height(),
                                    m_aMatches[0]->get_preferred_size().Height());
 
-    ::std::vector<FixedText*>::iterator aFIIter;
-    for(aFIIter = m_aFieldNames.begin(); aFIIter != m_aFieldNames.end(); ++aFIIter)
+    for(auto aFIIter = m_aFieldNames.begin(); aFIIter != m_aFieldNames.end(); ++aFIIter)
         (*aFIIter)->SetSizePixel(Size(nColWidth - 6, nControlHeight));
-    ::std::vector<ListBox*>::iterator aLBIter;
-    for(aLBIter = m_aMatches.begin(); aLBIter != m_aMatches.end(); ++aLBIter)
+    for(auto aLBIter = m_aMatches.begin(); aLBIter != m_aMatches.end(); ++aLBIter)
     {
         long nPosY = (*aLBIter)->GetPosPixel().Y();
         (*aLBIter)->SetPosSizePixel(Point(nColWidth, nPosY), Size(nColWidth - 6, nControlHeight));
     }
-    for(aFIIter = m_aPreviews.begin(); aFIIter != m_aPreviews.end(); ++aFIIter)
+    for(auto aFIIter = m_aPreviews.begin(); aFIIter != m_aPreviews.end(); ++aFIIter)
     {
         long nPosY = (*aFIIter)->GetPosPixel().Y();
         (*aFIIter)->SetPosSizePixel(Point(2 * nColWidth + 6, nPosY), Size(nColWidth, nControlHeight));
@@ -1046,14 +1099,11 @@ IMPL_LINK(SwAssignFieldsControl, ScrollHdl_Impl, ScrollBar*, pScroll)
     long nMove = m_nFirstYPos - (*m_aMatches.begin())->GetPosPixel().Y() - (nThumb * m_nYOffset);
 
     SetUpdateMode(false);
-    long nIndex;
-    ::std::vector<FixedText*>::iterator aFIIter;
-    for(nIndex = 0, aFIIter = m_aFieldNames.begin(); aFIIter != m_aFieldNames.end(); ++aFIIter, ++nIndex)
+    for(auto aFIIter = m_aFieldNames.begin(); aFIIter != m_aFieldNames.end(); ++aFIIter)
         lcl_Move(*aFIIter, nMove);
-    ::std::vector<ListBox*>::iterator aLBIter;
-    for(nIndex = 0, aLBIter = m_aMatches.begin(); aLBIter != m_aMatches.end(); ++aLBIter, ++nIndex)
+    for(auto aLBIter = m_aMatches.begin(); aLBIter != m_aMatches.end(); ++aLBIter)
         lcl_Move(*aLBIter, nMove);
-    for(nIndex = 0, aFIIter = m_aPreviews.begin(); aFIIter != m_aPreviews.end(); ++aFIIter, ++nIndex)
+    for(auto aFIIter = m_aPreviews.begin(); aFIIter != m_aPreviews.end(); ++aFIIter)
         lcl_Move(*aFIIter, nMove);
     SetUpdateMode(true);
 
@@ -1082,9 +1132,8 @@ IMPL_LINK(SwAssignFieldsControl, MatchHdl_Impl, ListBox*, pBox)
             }
         }
     }
-    ::std::vector<ListBox*>::iterator aLBIter;
     sal_Int32 nIndex = 0;
-    for(aLBIter = m_aMatches.begin(); aLBIter != m_aMatches.end(); ++aLBIter, ++nIndex)
+    for(auto aLBIter = m_aMatches.begin(); aLBIter != m_aMatches.end(); ++aLBIter, ++nIndex)
     {
         if(*aLBIter == pBox)
         {
@@ -1101,8 +1150,7 @@ IMPL_LINK(SwAssignFieldsControl, GotFocusHdl_Impl, ListBox*, pBox)
     if(0 != (GETFOCUS_TAB & pBox->GetGetFocusFlags()))
     {
         sal_Int32 nIndex = 0;
-        ::std::vector<ListBox*>::iterator aLBIter;
-        for(aLBIter = m_aMatches.begin(); aLBIter != m_aMatches.end(); ++aLBIter, ++nIndex)
+        for(auto aLBIter = m_aMatches.begin(); aLBIter != m_aMatches.end(); ++aLBIter, ++nIndex)
         {
             if(*aLBIter == pBox)
             {
@@ -1161,6 +1209,17 @@ SwAssignFieldsDialog::SwAssignFieldsDialog(
 
 SwAssignFieldsDialog::~SwAssignFieldsDialog()
 {
+    dispose();
+}
+
+void SwAssignFieldsDialog::dispose()
+{
+    m_pMatchingFI.clear();
+    m_pFieldsControl.clear();
+    m_pPreviewFI.clear();
+    m_pPreviewWIN.clear();
+    m_pOK.clear();
+    SfxModalDialog::dispose();
 }
 
 uno::Sequence< OUString > SwAssignFieldsDialog::CreateAssignments()
@@ -1168,9 +1227,8 @@ uno::Sequence< OUString > SwAssignFieldsDialog::CreateAssignments()
     uno::Sequence< OUString > aAssignments(
             m_rConfigItem.GetDefaultAddressHeaders().Count());
     OUString* pAssignments = aAssignments.getArray();
-    ::std::vector<ListBox*>::iterator aLBIter;
     sal_Int32 nIndex = 0;
-    for(aLBIter = m_pFieldsControl->m_aMatches.begin();
+    for(auto aLBIter = m_pFieldsControl->m_aMatches.begin();
                 aLBIter != m_pFieldsControl->m_aMatches.end();
                     ++aLBIter, ++nIndex)
     {
@@ -1212,6 +1270,18 @@ DDListBox::DDListBox(vcl::Window* pParent, WinBits nStyle)
     Show();
 
 }
+
+DDListBox::~DDListBox()
+{
+    dispose();
+}
+
+void DDListBox::dispose()
+{
+    m_pParentDialog.clear();
+    SvTreeListBox::dispose();
+}
+
 
 extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeDDListBox(vcl::Window *pParent, VclBuilder::stringmap &rMap)
 {
@@ -1257,6 +1327,19 @@ AddressMultiLineEdit::AddressMultiLineEdit(vcl::Window* pParent, WinBits nBits)
     EnableFocusSelectionHide(false);
 }
 
+AddressMultiLineEdit::~AddressMultiLineEdit()
+{
+    dispose();
+}
+
+void AddressMultiLineEdit::dispose()
+{
+    EndListening(*GetTextEngine());
+    m_pParentDialog.clear();
+    VclMultiLineEdit::dispose();
+}
+
+
 Size AddressMultiLineEdit::GetOptimalSize() const
 {
     return LogicToPixel(Size(160, 60), MAP_APPFONT);
@@ -1274,11 +1357,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeAddressMultiLineEdit(v
 void AddressMultiLineEdit::SetAddressDialog(SwCustomizeAddressBlockDialog *pParent)
 {
     m_pParentDialog = pParent;
-}
-
-AddressMultiLineEdit::~AddressMultiLineEdit()
-{
-    EndListening(*GetTextEngine());
 }
 
 void AddressMultiLineEdit::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)

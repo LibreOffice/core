@@ -87,7 +87,7 @@ class ScTabView : boost::noncopyable
 private:
     enum BlockMode { None = 0, Normal = 1, Own = 2 };
 
-    vcl::Window*             pFrameWin;              // First !!!
+    VclPtr<vcl::Window>             pFrameWin;              // First !!!
     ScViewData          aViewData;              // must be at the front !
 
     ScViewSelectionEngine*  pSelEngine;
@@ -109,9 +109,9 @@ private:
     ScRowBar*           pRowBar[2];
     ScOutlineWindow*    pColOutline[2];
     ScOutlineWindow*    pRowOutline[2];
-    ScTabSplitter*      pHSplitter;
-    ScTabSplitter*      pVSplitter;
-    ScTabControl*       pTabControl;
+    VclPtr<ScTabSplitter>       pHSplitter;
+    VclPtr<ScTabSplitter>       pVSplitter;
+    VclPtr<ScTabControl>        pTabControl;
     VclPtr<ScrollBar>           aVScrollTop;
     VclPtr<ScrollBar>           aVScrollBottom;         // initially visible
     VclPtr<ScrollBar>           aHScrollLeft;           // initially visible
@@ -129,7 +129,7 @@ private:
     SfxItemSet*         pDrawBrushSet;          // drawing object attributes for paint brush
 
     Timer               aScrollTimer;
-    ScGridWindow*       pTimerWindow;
+    VclPtr<ScGridWindow>       pTimerWindow;
     MouseEvent          aTimerMEvt;
 
     sal_uLong               nTipVisible;

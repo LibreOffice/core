@@ -34,10 +34,10 @@ namespace desktop
     public:
         CmdlineHelpDialog ( void );
 
-        FixedText*   m_pftHead;
-        FixedText*   m_pftLeft;
-        FixedText*   m_pftRight;
-        FixedText*   m_pftBottom;
+        VclPtr<FixedText>   m_pftHead;
+        VclPtr<FixedText>   m_pftLeft;
+        VclPtr<FixedText>   m_pftRight;
+        VclPtr<FixedText>   m_pftBottom;
     };
 #endif
 }

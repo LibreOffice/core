@@ -103,6 +103,17 @@ StructPage::StructPage(vcl::Window* pParent):
     m_pTlbStruct->SetSelectHdl(LINK( this, StructPage, SelectHdl ) );
 }
 
+StructPage::~StructPage()
+{
+    dispose();
+}
+
+void StructPage::dispose()
+{
+    m_pTlbStruct.clear();
+    TabPage::dispose();
+}
+
 void StructPage::ClearStruct()
 {
     m_pTlbStruct->SetActiveFlag(false);

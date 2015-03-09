@@ -60,6 +60,7 @@
 #include <com/sun/star/awt/PosSize.hpp>
 
 #include <cppuhelper/implbase4.hxx>
+#include <vcl/vclptr.hxx>
 
 #include <list>
 
@@ -152,9 +153,9 @@ protected:
 
 protected:
     ::std::list< Reference< ::com::sun::star::lang::XEventListener > >  _aDisposeListeners;
-    MRCListenerMultiplexerHelper*       _pMultiplexer;
+    MRCListenerMultiplexerHelper*           _pMultiplexer;
 
-    Reference< XInterface >                         _xContext;
+    Reference< XInterface >                 _xContext;
 
     sal_Int32                               _nX;
     sal_Int32                               _nY;
@@ -162,11 +163,11 @@ protected:
     sal_Int32                               _nHeight;
     sal_Int16                               _nFlags;
 
-    bool                                _bVisible;
-    bool                                _bInDesignMode;
-    bool                                _bEnable;
+    bool                                    _bVisible;
+    bool                                    _bInDesignMode;
+    bool                                    _bEnable;
 
-    SystemChildWindow*                  _pSysChild;
+    VclPtr<SystemChildWindow>               _pSysChild;
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >                      _xPeer;
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >                          _xPeerWindow;
 

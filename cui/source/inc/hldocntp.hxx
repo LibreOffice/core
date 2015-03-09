@@ -30,11 +30,11 @@
 class SvxHyperlinkNewDocTp : public SvxHyperlinkTabPageBase
 {
 private:
-    RadioButton         *m_pRbtEditNow;
-    RadioButton         *m_pRbtEditLater;
-    SvxHyperURLBox      *m_pCbbPath;
-    PushButton          *m_pBtCreate;
-    ListBox             *m_pLbDocTypes;
+    VclPtr<RadioButton>         m_pRbtEditNow;
+    VclPtr<RadioButton>         m_pRbtEditLater;
+    VclPtr<SvxHyperURLBox>      m_pCbbPath;
+    VclPtr<PushButton>          m_pBtCreate;
+    VclPtr<ListBox>             m_pLbDocTypes;
 
     bool            ImplGetURLObject( const OUString& rPath, const OUString& rBase, INetURLObject& aURLObject ) const;
     void                FillDocumentList ();

@@ -33,6 +33,7 @@ public:
         const OUString& rID, const OUString& rUIXMLDescription );
 
     virtual ~ScStatisticsTwoVariableDialog();
+    virtual void        dispose() SAL_OVERRIDE;
 
     virtual void        SetReference( const ScRange& rRef, ScDocument* pDoc ) SAL_OVERRIDE;
     virtual void        SetActive() SAL_OVERRIDE;
@@ -44,17 +45,17 @@ protected:
     virtual sal_Int16 GetUndoNameId() = 0;
 
     // Widgets
-    FixedText*          mpVariable1RangeLabel;
-    formula::RefEdit*   mpVariable1RangeEdit;
-    formula::RefButton* mpVariable1RangeButton;
+    VclPtr<FixedText>          mpVariable1RangeLabel;
+    VclPtr<formula::RefEdit>   mpVariable1RangeEdit;
+    VclPtr<formula::RefButton> mpVariable1RangeButton;
 
-    FixedText*          mpVariable2RangeLabel;
-    formula::RefEdit*   mpVariable2RangeEdit;
-    formula::RefButton* mpVariable2RangeButton;
+    VclPtr<FixedText>          mpVariable2RangeLabel;
+    VclPtr<formula::RefEdit>   mpVariable2RangeEdit;
+    VclPtr<formula::RefButton> mpVariable2RangeButton;
 
-    FixedText*          mpOutputRangeLabel;
-    formula::RefEdit*   mpOutputRangeEdit;
-    formula::RefButton* mpOutputRangeButton;
+    VclPtr<FixedText>          mpOutputRangeLabel;
+    VclPtr<formula::RefEdit>   mpOutputRangeEdit;
+    VclPtr<formula::RefButton> mpOutputRangeButton;
 
     // Data
     ScViewData*         mViewData;
@@ -69,12 +70,12 @@ protected:
 
 private:
     // Widgets
-    OKButton*           mpButtonOk;
+    VclPtr<OKButton>           mpButtonOk;
 
-    RadioButton*        mpGroupByColumnsRadio;
-    RadioButton*        mpGroupByRowsRadio;
+    VclPtr<RadioButton>        mpGroupByColumnsRadio;
+    VclPtr<RadioButton>        mpGroupByRowsRadio;
 
-    formula::RefEdit*   mpActiveEdit;
+    VclPtr<formula::RefEdit>   mpActiveEdit;
     ScAddress           mCurrentAddress;
     bool                mDialogLostFocus;
 

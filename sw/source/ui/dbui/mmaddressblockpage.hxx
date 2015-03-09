@@ -37,31 +37,31 @@ class SwMailMergeConfigItem;
 
 class SwMailMergeAddressBlockPage : public svt::OWizardPage
 {
-    PushButton*         m_pAddressListPB;
-    FixedText*          m_pCurrentAddressFI;
+    VclPtr<PushButton>         m_pAddressListPB;
+    VclPtr<FixedText>          m_pCurrentAddressFI;
 
-    VclContainer*       m_pStep2;
-    VclContainer*       m_pStep3;
-    VclContainer*       m_pStep4;
+    VclPtr<VclContainer>       m_pStep2;
+    VclPtr<VclContainer>       m_pStep3;
+    VclPtr<VclContainer>       m_pStep4;
 
-    FixedText*          m_pSettingsFI;
-    CheckBox*           m_pAddressCB;
-    SwAddressPreview*   m_pSettingsWIN;
-    PushButton*         m_pSettingsPB;
-    CheckBox*           m_pHideEmptyParagraphsCB;
+    VclPtr<FixedText>          m_pSettingsFI;
+    VclPtr<CheckBox>           m_pAddressCB;
+    VclPtr<SwAddressPreview>   m_pSettingsWIN;
+    VclPtr<PushButton>         m_pSettingsPB;
+    VclPtr<CheckBox>           m_pHideEmptyParagraphsCB;
 
-    PushButton*         m_pAssignPB;
+    VclPtr<PushButton>         m_pAssignPB;
 
-    SwAddressPreview*   m_pPreviewWIN;
-    FixedText*          m_pDocumentIndexFI;
-    PushButton*         m_pPrevSetIB;
-    PushButton*         m_pNextSetIB;
+    VclPtr<SwAddressPreview>   m_pPreviewWIN;
+    VclPtr<FixedText>          m_pDocumentIndexFI;
+    VclPtr<PushButton>         m_pPrevSetIB;
+    VclPtr<PushButton>         m_pNextSetIB;
 
     OUString            m_sDocument;
     OUString            m_sCurrentAddress;
     OUString            m_sChangeAddress;
 
-    SwMailMergeWizard*  m_pWizard;
+    VclPtr<SwMailMergeWizard>  m_pWizard;
 
     DECL_LINK(AddressListHdl_Impl, void *);
     DECL_LINK(SettingsHdl_Impl, PushButton*);
@@ -79,20 +79,22 @@ class SwMailMergeAddressBlockPage : public svt::OWizardPage
 
 public:
     SwMailMergeAddressBlockPage(SwMailMergeWizard* _pParent);
+    virtual ~SwMailMergeAddressBlockPage();
+    virtual void dispose() SAL_OVERRIDE;
     SwMailMergeWizard* GetWizard() { return m_pWizard; }
 };
 
 class SwSelectAddressBlockDialog : public SfxModalDialog
 {
-    SwAddressPreview*   m_pPreview;
-    PushButton*         m_pNewPB;
-    PushButton*         m_pCustomizePB;
-    PushButton*         m_pDeletePB;
+    VclPtr<SwAddressPreview>   m_pPreview;
+    VclPtr<PushButton>         m_pNewPB;
+    VclPtr<PushButton>         m_pCustomizePB;
+    VclPtr<PushButton>         m_pDeletePB;
 
-    RadioButton*        m_pNeverRB;
-    RadioButton*        m_pAlwaysRB;
-    RadioButton*        m_pDependentRB;
-    Edit*               m_pCountryED;
+    VclPtr<RadioButton>        m_pNeverRB;
+    VclPtr<RadioButton>        m_pAlwaysRB;
+    VclPtr<RadioButton>        m_pDependentRB;
+    VclPtr<Edit>               m_pCountryED;
 
     com::sun::star::uno::Sequence< OUString>    m_aAddressBlocks;
     SwMailMergeConfigItem& m_rConfig;
@@ -106,6 +108,7 @@ class SwSelectAddressBlockDialog : public SfxModalDialog
 public:
     SwSelectAddressBlockDialog(vcl::Window* pParent, SwMailMergeConfigItem& rConfig);
     virtual ~SwSelectAddressBlockDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     void    SetAddressBlocks(const com::sun::star::uno::Sequence< OUString>& rBlocks,
                                 sal_uInt16 nSelected);
@@ -119,9 +122,11 @@ public:
 class SwCustomizeAddressBlockDialog;
 class DDListBox : public SvTreeListBox
 {
-    SwCustomizeAddressBlockDialog*   m_pParentDialog;
+    VclPtr<SwCustomizeAddressBlockDialog>   m_pParentDialog;
 public:
     DDListBox(vcl::Window* pParent, const WinBits nStyle);
+    virtual ~DDListBox();
+    virtual void dispose() SAL_OVERRIDE;
 
     void SetAddressDialog(SwCustomizeAddressBlockDialog *pParent);
 
@@ -136,7 +141,7 @@ public:
 class AddressMultiLineEdit : public VclMultiLineEdit, public SfxListener
 {
     Link                            m_aSelectionLink;
-    SwCustomizeAddressBlockDialog*  m_pParentDialog;
+    VclPtr<SwCustomizeAddressBlockDialog>  m_pParentDialog;
 
     using VclMultiLineEdit::Notify;
 
@@ -147,6 +152,7 @@ protected:
 public:
     AddressMultiLineEdit(vcl::Window* pParent, WinBits nWinStyle = WB_LEFT | WB_BORDER);
     virtual ~AddressMultiLineEdit();
+    virtual void    dispose() SAL_OVERRIDE;
 
     void            SetAddressDialog(SwCustomizeAddressBlockDialog *pParent);
 
@@ -183,26 +189,26 @@ public:
         GREETING_MALE
     };
 private:
-    FixedText*              m_pAddressElementsFT;
-    DDListBox*              m_pAddressElementsLB;
+    VclPtr<FixedText>              m_pAddressElementsFT;
+    VclPtr<DDListBox>              m_pAddressElementsLB;
 
-    PushButton*             m_pInsertFieldIB;
-    PushButton*             m_pRemoveFieldIB;
+    VclPtr<PushButton>             m_pInsertFieldIB;
+    VclPtr<PushButton>             m_pRemoveFieldIB;
 
-    FixedText*              m_pDragFT;
-    AddressMultiLineEdit*   m_pDragED;
-    PushButton*             m_pUpIB;
-    PushButton*             m_pLeftIB;
-    PushButton*             m_pRightIB;
-    PushButton*             m_pDownIB;
+    VclPtr<FixedText>              m_pDragFT;
+    VclPtr<AddressMultiLineEdit>   m_pDragED;
+    VclPtr<PushButton>             m_pUpIB;
+    VclPtr<PushButton>             m_pLeftIB;
+    VclPtr<PushButton>             m_pRightIB;
+    VclPtr<PushButton>             m_pDownIB;
 
-    FixedText*              m_pFieldFT;
-    ComboBox*               m_pFieldCB;
+    VclPtr<FixedText>              m_pFieldFT;
+    VclPtr<ComboBox>               m_pFieldCB;
     TextFilter              m_aTextFilter;
 
-    SwAddressPreview*       m_pPreviewWIN;
+    VclPtr<SwAddressPreview>       m_pPreviewWIN;
 
-    OKButton*               m_pOK;
+    VclPtr<OKButton>               m_pOK;
 
     ::std::vector<OUString>   m_aSalutations;
     ::std::vector<OUString>   m_aPunctuations;
@@ -228,6 +234,7 @@ private:
 public:
     SwCustomizeAddressBlockDialog(vcl::Window* pParent, SwMailMergeConfigItem& rConfig, DialogType);
     virtual ~SwCustomizeAddressBlockDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     void            SetAddress(const OUString& rAddress);
     OUString GetAddress();
@@ -236,14 +243,13 @@ public:
 class SwAssignFieldsControl;
 class SwAssignFieldsDialog : public SfxModalDialog
 {
-    FixedText               *m_pMatchingFI;
-    SwAssignFieldsControl   *m_pFieldsControl;
+    VclPtr<FixedText>               m_pMatchingFI;
+    VclPtr<SwAssignFieldsControl>   m_pFieldsControl;
 
-    FixedText               *m_pPreviewFI;
-    SwAddressPreview        *m_pPreviewWIN;
+    VclPtr<FixedText>               m_pPreviewFI;
+    VclPtr<SwAddressPreview>        m_pPreviewWIN;
 
-
-    OKButton                *m_pOK;
+    VclPtr<OKButton>                m_pOK;
 
     OUString                m_sNone;
     OUString                m_rPreviewString;
@@ -260,6 +266,7 @@ public:
                 const OUString& rPreview,
                 bool bIsAddressBlock);
     virtual ~SwAssignFieldsDialog();
+    virtual void dispose() SAL_OVERRIDE;
 };
 #endif
 

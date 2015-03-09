@@ -96,6 +96,7 @@ public:
                     ScOptSolverDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent,
                                  ScDocShell* pDocSh, ScAddress aCursorPos );
                     virtual ~ScOptSolverDlg();
+    virtual void    dispose() SAL_OVERRIDE;
 
     virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc ) SAL_OVERRIDE;
     virtual bool    IsRefInputMode() const SAL_OVERRIDE;
@@ -103,56 +104,56 @@ public:
     virtual bool    Close() SAL_OVERRIDE;
 
 private:
-    FixedText*       m_pFtObjectiveCell;
-    formula::RefEdit*    m_pEdObjectiveCell;
-    formula::RefButton*  m_pRBObjectiveCell;
+    VclPtr<FixedText>       m_pFtObjectiveCell;
+    VclPtr<formula::RefEdit>    m_pEdObjectiveCell;
+    VclPtr<formula::RefButton>  m_pRBObjectiveCell;
 
-    RadioButton*     m_pRbMax;
-    RadioButton*     m_pRbMin;
-    RadioButton*     m_pRbValue;
-    formula::RefEdit*   m_pEdTargetValue;
-    formula::RefButton* m_pRBTargetValue;
+    VclPtr<RadioButton>     m_pRbMax;
+    VclPtr<RadioButton>     m_pRbMin;
+    VclPtr<RadioButton>     m_pRbValue;
+    VclPtr<formula::RefEdit>   m_pEdTargetValue;
+    VclPtr<formula::RefButton> m_pRBTargetValue;
 
-    FixedText*       m_pFtVariableCells;
-    formula::RefEdit*   m_pEdVariableCells;
-    formula::RefButton* m_pRBVariableCells;
+    VclPtr<FixedText>       m_pFtVariableCells;
+    VclPtr<formula::RefEdit>   m_pEdVariableCells;
+    VclPtr<formula::RefButton> m_pRBVariableCells;
 
-    FixedText*       m_pFtCellRef; // labels are together with controls for the first row
-    ScCursorRefEdit* m_pEdLeft1;
-    formula::RefButton* m_pRBLeft1;
-    FixedText*       m_pFtOperator;
-    ListBox*         m_pLbOp1;
-    FixedText*       m_pFtConstraint;
-    ScCursorRefEdit* m_pEdRight1;
-    formula::RefButton* m_pRBRight1;
-    PushButton*      m_pBtnDel1;
+    VclPtr<FixedText>       m_pFtCellRef; // labels are together with controls for the first row
+    VclPtr<ScCursorRefEdit> m_pEdLeft1;
+    VclPtr<formula::RefButton> m_pRBLeft1;
+    VclPtr<FixedText>       m_pFtOperator;
+    VclPtr<ListBox>         m_pLbOp1;
+    VclPtr<FixedText>       m_pFtConstraint;
+    VclPtr<ScCursorRefEdit> m_pEdRight1;
+    VclPtr<formula::RefButton> m_pRBRight1;
+    VclPtr<PushButton>      m_pBtnDel1;
 
-    ScCursorRefEdit* m_pEdLeft2;
-    formula::RefButton* m_pRBLeft2;
-    ListBox*         m_pLbOp2;
-    ScCursorRefEdit* m_pEdRight2;
-    formula::RefButton* m_pRBRight2;
-    PushButton*      m_pBtnDel2;
+    VclPtr<ScCursorRefEdit> m_pEdLeft2;
+    VclPtr<formula::RefButton> m_pRBLeft2;
+    VclPtr<ListBox>         m_pLbOp2;
+    VclPtr<ScCursorRefEdit> m_pEdRight2;
+    VclPtr<formula::RefButton> m_pRBRight2;
+    VclPtr<PushButton>      m_pBtnDel2;
 
-    ScCursorRefEdit* m_pEdLeft3;
-    formula::RefButton* m_pRBLeft3;
-    ListBox*         m_pLbOp3;
-    ScCursorRefEdit* m_pEdRight3;
-    formula::RefButton* m_pRBRight3;
-    PushButton*      m_pBtnDel3;
+    VclPtr<ScCursorRefEdit> m_pEdLeft3;
+    VclPtr<formula::RefButton> m_pRBLeft3;
+    VclPtr<ListBox>         m_pLbOp3;
+    VclPtr<ScCursorRefEdit> m_pEdRight3;
+    VclPtr<formula::RefButton> m_pRBRight3;
+    VclPtr<PushButton>      m_pBtnDel3;
 
-    ScCursorRefEdit* m_pEdLeft4;
-    formula::RefButton* m_pRBLeft4;
-    ListBox*         m_pLbOp4;
-    ScCursorRefEdit* m_pEdRight4;
-    formula::RefButton* m_pRBRight4;
-    PushButton*      m_pBtnDel4;
+    VclPtr<ScCursorRefEdit> m_pEdLeft4;
+    VclPtr<formula::RefButton> m_pRBLeft4;
+    VclPtr<ListBox>         m_pLbOp4;
+    VclPtr<ScCursorRefEdit> m_pEdRight4;
+    VclPtr<formula::RefButton> m_pRBRight4;
+    VclPtr<PushButton>      m_pBtnDel4;
 
-    ScrollBar*       m_pScrollBar;
+    VclPtr<ScrollBar>       m_pScrollBar;
 
-    PushButton*      m_pBtnOpt;
-    PushButton*      m_pBtnCancel;
-    PushButton*      m_pBtnSolve;
+    VclPtr<PushButton>      m_pBtnOpt;
+    VclPtr<PushButton>      m_pBtnCancel;
+    VclPtr<PushButton>      m_pBtnSolve;
 
     OUString        maInputError;
     OUString        maConditionError;
@@ -160,16 +161,16 @@ private:
     ScDocShell*     mpDocShell;
     ScDocument&     mrDoc;
     const SCTAB     mnCurTab;
-    formula::RefEdit*      mpEdActive;
+    VclPtr<formula::RefEdit>      mpEdActive;
     bool            mbDlgLostFocus;
 
     static const sal_uInt16 EDIT_ROW_COUNT = 4;
     ScCursorRefEdit* mpLeftEdit[EDIT_ROW_COUNT];
-    formula::RefButton*     mpLeftButton[EDIT_ROW_COUNT];
+    VclPtr<formula::RefButton>     mpLeftButton[EDIT_ROW_COUNT];
     ScCursorRefEdit* mpRightEdit[EDIT_ROW_COUNT];
-    formula::RefButton*     mpRightButton[EDIT_ROW_COUNT];
-    ListBox*         mpOperator[EDIT_ROW_COUNT];
-    PushButton*      mpDelButton[EDIT_ROW_COUNT];
+    VclPtr<formula::RefButton>     mpRightButton[EDIT_ROW_COUNT];
+    VclPtr<ListBox>         mpOperator[EDIT_ROW_COUNT];
+    VclPtr<PushButton>      mpDelButton[EDIT_ROW_COUNT];
 
     std::vector<ScOptConditionRow> maConditions;
     long            nScrollPos;
@@ -202,10 +203,12 @@ private:
 
 class ScSolverProgressDialog : public ModelessDialog
 {
-    FixedText* m_pFtTime;
+    VclPtr<FixedText> m_pFtTime;
 
 public:
     ScSolverProgressDialog( vcl::Window* pParent );
+    virtual ~ScSolverProgressDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     void    HideTimeLimit();
     void    SetTimeLimit( sal_Int32 nSeconds );
@@ -213,22 +216,26 @@ public:
 
 class ScSolverNoSolutionDialog : public ModalDialog
 {
-    FixedText* m_pFtErrorText;
+    VclPtr<FixedText> m_pFtErrorText;
 
 public:
     ScSolverNoSolutionDialog(vcl::Window* pParent, const OUString& rErrorText);
+    virtual ~ScSolverNoSolutionDialog();
+    virtual void dispose() SAL_OVERRIDE;
 };
 
 class ScSolverSuccessDialog : public ModalDialog
 {
-    FixedText* m_pFtResult;
-    PushButton* m_pBtnOk;
-    PushButton* m_pBtnCancel;
+    VclPtr<FixedText> m_pFtResult;
+    VclPtr<PushButton> m_pBtnOk;
+    VclPtr<PushButton> m_pBtnCancel;
 
     DECL_LINK(ClickHdl, PushButton*);
 
 public:
     ScSolverSuccessDialog( vcl::Window* pParent, const OUString& rSolution );
+    virtual ~ScSolverSuccessDialog();
+    virtual void dispose() SAL_OVERRIDE;
 };
 
 #endif

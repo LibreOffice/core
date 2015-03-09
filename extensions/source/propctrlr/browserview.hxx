@@ -37,7 +37,7 @@ namespace pcr
 
     class OPropertyBrowserView : public vcl::Window
     {
-        OPropertyEditor*        m_pPropBox;
+        VclPtr<OPropertyEditor>        m_pPropBox;
         sal_uInt16              m_nActivePage;
         Link                    m_aPageActivationHandler;
 

@@ -278,7 +278,7 @@ private:
 
 protected:
     /// The core window that is made accessible.
-    ::sd::Window* mpWindow;
+    VclPtr<::sd::Window> mpWindow;
 
     /// The API window that is made accessible.
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow>

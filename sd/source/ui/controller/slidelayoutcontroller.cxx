@@ -67,6 +67,7 @@ class LayoutToolbarMenu : public svtools::ToolbarMenu
 public:
     LayoutToolbarMenu( SlideLayoutController& rController, const Reference< XFrame >& xFrame, vcl::Window* pParent, const bool bInsertPage );
     virtual ~LayoutToolbarMenu();
+    virtual void dispose() SAL_OVERRIDE;
 
 protected:
     DECL_LINK( SelectHdl, void * );
@@ -75,8 +76,8 @@ private:
     SlideLayoutController& mrController;
     Reference< XFrame > mxFrame;
     bool mbInsertPage;
-    ValueSet* mpLayoutSet1;
-    ValueSet* mpLayoutSet2;
+    VclPtr<ValueSet> mpLayoutSet1;
+    VclPtr<ValueSet> mpLayoutSet2;
 };
 
 struct snewfoil_value_info
@@ -256,6 +257,14 @@ LayoutToolbarMenu::LayoutToolbarMenu( SlideLayoutController& rController, const 
 
 LayoutToolbarMenu::~LayoutToolbarMenu()
 {
+    dispose();
+}
+
+void LayoutToolbarMenu::dispose()
+{
+    mpLayoutSet1.clear();
+    mpLayoutSet2.clear();
+    svtools::ToolbarMenu::dispose();
 }
 
 IMPL_LINK( LayoutToolbarMenu, SelectHdl, void *, pControl )

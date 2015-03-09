@@ -43,7 +43,7 @@
 class PaintHelper
 {
 private:
-    vcl::Window* m_pWindow;
+    VclPtr<vcl::Window> m_pWindow;
     vcl::Region* m_pChildRegion;
     Rectangle m_aSelectionRect;
     Rectangle m_aPaintRect;

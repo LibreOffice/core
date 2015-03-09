@@ -49,9 +49,9 @@ namespace rptui
 
     class ConditionField
     {
-        Condition*  m_pParent;
-        Edit*       m_pSubEdit;
-        PushButton* m_pFormula;
+        VclPtr<Condition>  m_pParent;
+        VclPtr<Edit>       m_pSubEdit;
+        VclPtr<PushButton> m_pFormula;
 
         DECL_LINK( OnFormula,   Button* );
     public:
@@ -77,19 +77,19 @@ namespace rptui
 
         ::rptui::OReportController& m_rController;
         IConditionalFormatAction&   m_rAction;
-        FixedText*                  m_pHeader;
-        ListBox*                    m_pConditionType;
-        ListBox*                    m_pOperationList;
-        ConditionField*             m_pCondLHS;
-        FixedText*                  m_pOperandGlue;
-        ConditionField*             m_pCondRHS;
-        ToolBox*                    m_pActions;
-        SvxFontPrevWindow*          m_pPreview;
-        PushButton*                 m_pMoveUp;
-        PushButton*                 m_pMoveDown;
-        PushButton*                 m_pAddCondition;
-        PushButton*                 m_pRemoveCondition;
-        OColorPopup*                m_pColorFloat;
+        VclPtr<FixedText>                  m_pHeader;
+        VclPtr<ListBox>                    m_pConditionType;
+        VclPtr<ListBox>                    m_pOperationList;
+        ConditionField*                    m_pCondLHS;
+        VclPtr<FixedText>                  m_pOperandGlue;
+        ConditionField*                    m_pCondRHS;
+        VclPtr<ToolBox>                    m_pActions;
+        VclPtr<SvxFontPrevWindow>          m_pPreview;
+        VclPtr<PushButton>                 m_pMoveUp;
+        VclPtr<PushButton>                 m_pMoveDown;
+        VclPtr<PushButton>                 m_pAddCondition;
+        VclPtr<PushButton>                 m_pRemoveCondition;
+        VclPtr<OColorPopup>                m_pColorFloat;
 
         ::svx::ToolboxButtonColorUpdater*   m_pBtnUpdaterFontColor; // updates the color below the toolbar icon
         ::svx::ToolboxButtonColorUpdater*   m_pBtnUpdaterBackgroundColor;

@@ -168,21 +168,21 @@ private:
 
     com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
         m_context;
-    FixedText* m_pchecking;
-    Throbber* m_pthrobber;
-    FixedText* m_pUpdate;
-    VclViewport* m_pContainer;
-    UpdateDialog::CheckListBox* m_pUpdates;
-    CheckBox* m_pAll;
-    FixedText* m_pDescription;
-    FixedText* m_pPublisherLabel;
-    FixedHyperlink* m_pPublisherLink;
-    FixedText* m_pReleaseNotesLabel;
-    FixedHyperlink* m_pReleaseNotesLink;
-    VclMultiLineEdit* m_pDescriptions;
-    HelpButton* m_pHelp;
-    PushButton* m_pOk;
-    PushButton* m_pClose;
+    VclPtr<FixedText> m_pchecking;
+    VclPtr<Throbber> m_pthrobber;
+    VclPtr<FixedText> m_pUpdate;
+    VclPtr<VclViewport> m_pContainer;
+    VclPtr<UpdateDialog::CheckListBox> m_pUpdates;
+    VclPtr<CheckBox> m_pAll;
+    VclPtr<FixedText> m_pDescription;
+    VclPtr<FixedText> m_pPublisherLabel;
+    VclPtr<FixedHyperlink> m_pPublisherLink;
+    VclPtr<FixedText> m_pReleaseNotesLabel;
+    VclPtr<FixedHyperlink> m_pReleaseNotesLink;
+    VclPtr<VclMultiLineEdit> m_pDescriptions;
+    VclPtr<HelpButton> m_pHelp;
+    VclPtr<PushButton> m_pOk;
+    VclPtr<PushButton> m_pClose;
     OUString m_error;
     OUString m_none;
     OUString m_noInstallable;

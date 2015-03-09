@@ -37,6 +37,7 @@
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <vcl/status.hxx>
+#include <vcl/vclptr.hxx>
 #include <map>
 
 namespace framework
@@ -98,13 +99,13 @@ class StatusBarManager : public ::cppu::WeakImplHelper3<
     protected:
         typedef std::map< sal_uInt16, ::com::sun::star::uno::Reference< com::sun::star::frame::XStatusbarController > > StatusBarControllerMap;
 
-        bool                                                                                        m_bDisposed : 1,
+        bool                                                                                            m_bDisposed : 1,
                                                                                                         m_bFrameActionRegistered : 1,
                                                                                                         m_bUpdateControllers : 1;
-        bool                                                                                        m_bModuleIdentified;
-        StatusBar*                                                                                      m_pStatusBar;
-        OUString                                                                                   m_aModuleIdentifier;
-        OUString                                                                                   m_aResourceName;
+        bool                                                                                            m_bModuleIdentified;
+        VclPtr<StatusBar>                                                                               m_pStatusBar;
+        OUString                                                                                        m_aModuleIdentifier;
+        OUString                                                                                        m_aResourceName;
         com::sun::star::uno::Reference< com::sun::star::frame::XFrame >                                 m_xFrame;
         com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >                        m_xUICommandLabels;
         StatusBarControllerMap                                                                          m_aControllerMap;

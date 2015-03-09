@@ -29,21 +29,21 @@ class SwLabPage : public SfxTabPage
     OUString      sActDBName;
     SwLabItem     aItem;
 
-    VclContainer* m_pAddressFrame;
+    VclPtr<VclContainer> m_pAddressFrame;
 
-    CheckBox*         m_pAddrBox;
-    VclMultiLineEdit* m_pWritingEdit;
-    ListBox*          m_pDatabaseLB;
-    ListBox*          m_pTableLB;
-    PushButton*       m_pInsertBT;
-    ListBox*          m_pDBFieldLB;
+    VclPtr<CheckBox>         m_pAddrBox;
+    VclPtr<VclMultiLineEdit> m_pWritingEdit;
+    VclPtr<ListBox>          m_pDatabaseLB;
+    VclPtr<ListBox>          m_pTableLB;
+    VclPtr<PushButton>       m_pInsertBT;
+    VclPtr<ListBox>          m_pDBFieldLB;
 
-    RadioButton*      m_pContButton;
-    RadioButton*      m_pSheetButton;
-    ListBox*          m_pMakeBox;
-    ListBox*          m_pTypeBox;
-    ListBox*          m_pHiddenSortTypeBox;
-    FixedText*        m_pFormatInfo;
+    VclPtr<RadioButton>      m_pContButton;
+    VclPtr<RadioButton>      m_pSheetButton;
+    VclPtr<ListBox>          m_pMakeBox;
+    VclPtr<ListBox>          m_pTypeBox;
+    VclPtr<ListBox>          m_pHiddenSortTypeBox;
+    VclPtr<FixedText>        m_pFormatInfo;
 
     bool        m_bLabel;
 
@@ -63,6 +63,8 @@ class SwLabPage : public SfxTabPage
     using TabPage::DeactivatePage;
 
 public:
+    virtual ~SwLabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     static SfxTabPage* Create(vcl::Window* pParent, const SfxItemSet* rSet);
 
@@ -84,9 +86,9 @@ public:
 class SwOneExampleFrame;
 class SwVisitingCardPage : public SfxTabPage
 {
-    SvTreeListBox*  m_pAutoTextLB;
-    ListBox*        m_pAutoTextGroupLB;
-    vcl::Window*         m_pExampleWIN;
+    VclPtr<SvTreeListBox>  m_pAutoTextLB;
+    VclPtr<ListBox>        m_pAutoTextGroupLB;
+    VclPtr<vcl::Window>    m_pExampleWIN;
 
     OUString        sTempURL;
 
@@ -127,26 +129,26 @@ public:
 
 class SwPrivateDataPage : public SfxTabPage
 {
-    Edit* m_pFirstNameED;
-    Edit* m_pNameED;
-    Edit* m_pShortCutED;
+    VclPtr<Edit> m_pFirstNameED;
+    VclPtr<Edit> m_pNameED;
+    VclPtr<Edit> m_pShortCutED;
 
-    Edit* m_pFirstName2ED;
-    Edit* m_pName2ED;
-    Edit* m_pShortCut2ED;
+    VclPtr<Edit> m_pFirstName2ED;
+    VclPtr<Edit> m_pName2ED;
+    VclPtr<Edit> m_pShortCut2ED;
 
-    Edit* m_pStreetED;
-    Edit* m_pZipED;
-    Edit* m_pCityED;
-    Edit* m_pCountryED;
-    Edit* m_pStateED;
-    Edit* m_pTitleED;
-    Edit* m_pProfessionED;
-    Edit* m_pPhoneED;
-    Edit* m_pMobilePhoneED;
-    Edit* m_pFaxED;
-    Edit* m_pHomePageED;
-    Edit* m_pMailED;
+    VclPtr<Edit> m_pStreetED;
+    VclPtr<Edit> m_pZipED;
+    VclPtr<Edit> m_pCityED;
+    VclPtr<Edit> m_pCountryED;
+    VclPtr<Edit> m_pStateED;
+    VclPtr<Edit> m_pTitleED;
+    VclPtr<Edit> m_pProfessionED;
+    VclPtr<Edit> m_pPhoneED;
+    VclPtr<Edit> m_pMobilePhoneED;
+    VclPtr<Edit> m_pFaxED;
+    VclPtr<Edit> m_pHomePageED;
+    VclPtr<Edit> m_pMailED;
 
     SwPrivateDataPage(vcl::Window* pParent, const SfxItemSet& rSet);
 
@@ -154,6 +156,8 @@ class SwPrivateDataPage : public SfxTabPage
     using TabPage::DeactivatePage;
 
 public:
+    virtual ~SwPrivateDataPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     static SfxTabPage* Create(vcl::Window* pParent, const SfxItemSet* rSet);
 
@@ -165,24 +169,24 @@ public:
 
 class SwBusinessDataPage : public SfxTabPage
 {
-    Edit* m_pCompanyED;
-    Edit* m_pCompanyExtED;
-    Edit* m_pSloganED;
+    VclPtr<Edit> m_pCompanyED;
+    VclPtr<Edit> m_pCompanyExtED;
+    VclPtr<Edit> m_pSloganED;
 
-    Edit* m_pStreetED;
-    Edit* m_pZipED;
-    Edit* m_pCityED;
-    Edit* m_pCountryED;
-    Edit* m_pStateED;
+    VclPtr<Edit> m_pStreetED;
+    VclPtr<Edit> m_pZipED;
+    VclPtr<Edit> m_pCityED;
+    VclPtr<Edit> m_pCountryED;
+    VclPtr<Edit> m_pStateED;
 
-    Edit* m_pPositionED;
+    VclPtr<Edit> m_pPositionED;
 
-    Edit* m_pPhoneED;
-    Edit* m_pMobilePhoneED;
-    Edit* m_pFaxED;
+    VclPtr<Edit> m_pPhoneED;
+    VclPtr<Edit> m_pMobilePhoneED;
+    VclPtr<Edit> m_pFaxED;
 
-    Edit* m_pHomePageED;
-    Edit* m_pMailED;
+    VclPtr<Edit> m_pHomePageED;
+    VclPtr<Edit> m_pMailED;
 
     SwBusinessDataPage(vcl::Window* pParent, const SfxItemSet& rSet);
 
@@ -190,6 +194,8 @@ class SwBusinessDataPage : public SfxTabPage
     using TabPage::DeactivatePage;
 
 public:
+    virtual ~SwBusinessDataPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     static SfxTabPage* Create(vcl::Window* pParent, const SfxItemSet* rSet);
 

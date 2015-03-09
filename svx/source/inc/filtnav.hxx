@@ -316,7 +316,7 @@ private:
 class FmFilterNavigatorWin : public SfxDockingWindow, public SfxControllerItem
 {
 private:
-    FmFilterNavigator* m_pNavigator;
+    VclPtr<FmFilterNavigator> m_pNavigator;
 
 protected:
     virtual void Resize() SAL_OVERRIDE;

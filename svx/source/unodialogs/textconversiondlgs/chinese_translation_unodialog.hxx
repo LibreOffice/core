@@ -29,6 +29,7 @@
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase5.hxx>
+#include <vcl/vclptr.hxx>
 
 
 namespace textconversiondlgs
@@ -121,7 +122,7 @@ private:
     com::sun::star::uno::Reference<
         com::sun::star::awt::XWindow >               m_xParentWindow;
 
-    ChineseTranslationDialog*     m_pDialog;
+    VclPtr<ChineseTranslationDialog>     m_pDialog;
 
     bool m_bDisposed; ///Dispose call ready.
     bool m_bInDispose;///In dispose call

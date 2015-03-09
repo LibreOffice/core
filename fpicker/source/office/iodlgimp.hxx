@@ -78,21 +78,19 @@ enum SvtFileDlgType
 
 class SvtFileDialogURLSelector : public MenuButton
 {
+public:
+    virtual ~SvtFileDialogURLSelector();
+    virtual void dispose() SAL_OVERRIDE;
 private:
-    SvtFileDialog*      m_pDlg;
+    VclPtr<SvtFileDialog>      m_pDlg;
     PopupMenu*          m_pMenu;
 
 protected:
     inline        SvtFileDialog*  GetDialogParent()       { return m_pDlg; }
 
-protected:
-
     virtual void    FillURLMenu( PopupMenu* _pMenu ) = 0;
 
-protected:
     SvtFileDialogURLSelector( vcl::Window* _pParent, SvtFileDialog* _pDlg, WinBits nBits, sal_uInt16 _nButtonId );
-    virtual ~SvtFileDialogURLSelector();
-    virtual void dispose() SAL_OVERRIDE;
 
     virtual void        Activate() SAL_OVERRIDE;
 };
@@ -134,32 +132,32 @@ public:
     SvtFileDialogFilterList_Impl*   _pFilter;
     SvtFileDialogFilter_Impl*       _pUserFilter;
 
-    FixedText*                      _pFtFileName;
-    SvtURLBox*                      _pEdFileName;
+    VclPtr<FixedText>                      _pFtFileName;
+    VclPtr<SvtURLBox>                      _pEdFileName;
 
-    FixedText*                      _pFtFileVersion;
-    ListBox*                        _pLbFileVersion;
+    VclPtr<FixedText>                      _pFtFileVersion;
+    VclPtr<ListBox>                        _pLbFileVersion;
 
-    FixedText*                      _pFtTemplates;
-    ListBox*                        _pLbTemplates;
+    VclPtr<FixedText>                      _pFtTemplates;
+    VclPtr<ListBox>                        _pLbTemplates;
 
-    FixedText*                      _pFtImageTemplates;
-    ListBox*                        _pLbImageTemplates;
+    VclPtr<FixedText>                      _pFtImageTemplates;
+    VclPtr<ListBox>                        _pLbImageTemplates;
 
-    FixedText*                      _pFtFileType;
-    ListBox*                        _pLbFilter;
-    PushButton*                     _pBtnFileOpen;
-    PushButton*                     _pBtnCancel;
-    HelpButton*                     _pBtnHelp;
-    SvtUpButton_Impl*               _pBtnUp;
-    PushButton*                     _pBtnNewFolder;
-    CheckBox*                       _pCbPassword;
-    SvtURLBox*                      _pEdCurrentPath;
-    CheckBox*                       _pCbAutoExtension;
-    CheckBox*                       _pCbOptions;
+    VclPtr<FixedText>                      _pFtFileType;
+    VclPtr<ListBox>                        _pLbFilter;
+    VclPtr<PushButton>                     _pBtnFileOpen;
+    VclPtr<PushButton>                     _pBtnCancel;
+    VclPtr<HelpButton>                     _pBtnHelp;
+    VclPtr<SvtUpButton_Impl>               _pBtnUp;
+    VclPtr<PushButton>                     _pBtnNewFolder;
+    VclPtr<CheckBox>                       _pCbPassword;
+    VclPtr<SvtURLBox>                      _pEdCurrentPath;
+    VclPtr<CheckBox>                       _pCbAutoExtension;
+    VclPtr<CheckBox>                       _pCbOptions;
 
-    PlacesListBox*                  _pPlaces;
-    PushButton*                     _pBtnConnectToServer;
+    VclPtr<PlacesListBox>                  _pPlaces;
+    VclPtr<PushButton>                     _pBtnConnectToServer;
 
     SvtFileDlgMode                  _eMode;
     SvtFileDlgType                  _eDlgType;

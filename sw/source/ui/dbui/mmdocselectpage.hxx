@@ -28,21 +28,21 @@ class SwMailMergeWizard;
 
 class SwMailMergeDocSelectPage : public svt::OWizardPage
 {
-    RadioButton*        m_pCurrentDocRB;
-    RadioButton*        m_pNewDocRB;
-    RadioButton*        m_pLoadDocRB;
-    RadioButton*        m_pLoadTemplateRB;
-    RadioButton*        m_pRecentDocRB;
+    VclPtr<RadioButton>        m_pCurrentDocRB;
+    VclPtr<RadioButton>        m_pNewDocRB;
+    VclPtr<RadioButton>        m_pLoadDocRB;
+    VclPtr<RadioButton>        m_pLoadTemplateRB;
+    VclPtr<RadioButton>        m_pRecentDocRB;
 
-    PushButton*         m_pBrowseDocPB;
-    PushButton*         m_pBrowseTemplatePB;
+    VclPtr<PushButton>         m_pBrowseDocPB;
+    VclPtr<PushButton>         m_pBrowseTemplatePB;
 
-    ListBox*            m_pRecentDocLB;
+    VclPtr<ListBox>            m_pRecentDocLB;
 
     OUString            m_sLoadFileName;
     OUString            m_sLoadTemplateName;
 
-    SwMailMergeWizard*  m_pWizard;
+    VclPtr<SwMailMergeWizard>  m_pWizard;
 
     DECL_LINK(DocSelectHdl, RadioButton*);
     DECL_LINK(FileSelectHdl, PushButton*);
@@ -52,6 +52,7 @@ class SwMailMergeDocSelectPage : public svt::OWizardPage
 public:
         SwMailMergeDocSelectPage( SwMailMergeWizard* _pParent);
         virtual ~SwMailMergeDocSelectPage();
+    virtual void dispose() SAL_OVERRIDE;
 
 };
 

@@ -128,7 +128,7 @@ class SW_DLLPUBLIC SwViewShell : public sw::Ring<SwViewShell>
     SwViewShellImp    *mpImp;             // Core-internals of SwViewShell.
                                     // The pointer is never 0.
 
-    ::vcl::Window *mpWin;             ///< = 0 during printing or pdf export
+    VclPtr<::vcl::Window> mpWin;             ///< = 0 during printing or pdf export
     OutputDevice *mpOut;              ///< Window, Printer, VirtDev, ...
     OutputDevice* mpTmpRef;           // Temporariy reference device. Is used
                                      // during (printer depending) prospect

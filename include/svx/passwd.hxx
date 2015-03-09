@@ -33,12 +33,12 @@
 class SVX_DLLPUBLIC SvxPasswordDialog : public SfxModalDialog
 {
 private:
-    FixedText* m_pOldFL;
-    FixedText* m_pOldPasswdFT;
-    Edit* m_pOldPasswdED;
-    Edit* m_pNewPasswdED;
-    Edit* m_pRepeatPasswdED;
-    OKButton* m_pOKBtn;
+    VclPtr<FixedText> m_pOldFL;
+    VclPtr<FixedText> m_pOldPasswdFT;
+    VclPtr<Edit> m_pOldPasswdED;
+    VclPtr<Edit> m_pNewPasswdED;
+    VclPtr<Edit> m_pRepeatPasswdED;
+    VclPtr<OKButton> m_pOKBtn;
 
     OUString        aOldPasswdErrStr;
     OUString        aRepeatPasswdErrStr;
@@ -52,6 +52,8 @@ private:
 
 public:
                     SvxPasswordDialog( vcl::Window* pParent, bool bAllowEmptyPasswords = false, bool bDisableOldPassword = false );
+    virtual         ~SvxPasswordDialog();
+    virtual void    dispose() SAL_OVERRIDE;
 
     OUString        GetOldPassword() const { return m_pOldPasswdED->GetText(); }
     OUString        GetNewPassword() const { return m_pNewPasswdED->GetText(); }

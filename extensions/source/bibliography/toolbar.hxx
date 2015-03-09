@@ -39,12 +39,12 @@ class BibToolBarListener: public cppu::WeakImplHelper1 < ::com::sun::star::frame
 {
 private:
 
-    sal_uInt16      nIndex;
+    sal_uInt16         nIndex;
     OUString           aCommand;
 
 protected:
 
-    BibToolBar      *pToolBar;
+    VclPtr<BibToolBar> pToolBar;
 
 public:
 

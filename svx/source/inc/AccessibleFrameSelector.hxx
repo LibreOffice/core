@@ -34,6 +34,7 @@
 #include <cppuhelper/interfacecontainer.hxx>
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <svx/framebordertype.hxx>
+#include <vcl/vclptr.hxx>
 
 class VclSimpleEvent;
 class VclWindowEvent;
@@ -109,7 +110,7 @@ private:
     void                IsValid() throw (::com::sun::star::uno::RuntimeException);
     void                RemoveFrameSelEventListener();
 
-    FrameSelector*      mpFrameSel;
+    VclPtr<FrameSelector>  mpFrameSel;
     ::osl::Mutex        maFocusMutex;
     ::osl::Mutex        maPropertyMutex;
 

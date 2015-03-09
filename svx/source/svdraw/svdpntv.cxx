@@ -235,10 +235,7 @@ SdrPaintView::~SdrPaintView()
     ClearPageView();
 
 #ifdef DBG_UTIL
-    if(pItemBrowser)
-    {
-        delete pItemBrowser;
-    }
+    pItemBrowser.clear();
 #endif
 
     // delete existing SdrPaintWindows
@@ -474,7 +471,7 @@ void SdrPaintView::AddWindowToPaintView(OutputDevice* pNewWin)
     }
 
 #ifdef DBG_UTIL
-    if (pItemBrowser!=NULL)
+    if (pItemBrowser!=nullptr)
         pItemBrowser->ForceParent();
 #endif
 }
@@ -496,7 +493,7 @@ void SdrPaintView::DeleteWindowFromPaintView(OutputDevice* pOldWin)
     }
 
 #ifdef DBG_UTIL
-    if (pItemBrowser!=NULL)
+    if (pItemBrowser!=nullptr)
         pItemBrowser->ForceParent();
 #endif
 }
@@ -1061,7 +1058,7 @@ void SdrPaintView::SetDefaultAttr(const SfxItemSet& rAttr, bool bReplaceAll)
     else aDefaultAttr.Put(rAttr,false); // if FALSE, regard InvalidItems as "holes," not as Default
     SetNotPersistDefaultAttr(rAttr,bReplaceAll);
 #ifdef DBG_UTIL
-    if (pItemBrowser!=NULL) pItemBrowser->SetDirty();
+    if (pItemBrowser!=nullptr) pItemBrowser->SetDirty();
 #endif
 }
 
@@ -1084,7 +1081,7 @@ void SdrPaintView::SetDefaultStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRe
         }
     }
 #ifdef DBG_UTIL
-    if (pItemBrowser!=NULL) pItemBrowser->SetDirty();
+    if (pItemBrowser!=nullptr) pItemBrowser->SetDirty();
 #endif
 }
 
@@ -1127,16 +1124,15 @@ bool SdrPaintView::SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHar
 void SdrPaintView::ShowItemBrowser(bool bShow)
 {
     if (bShow) {
-        if (pItemBrowser==NULL) {
+        if (pItemBrowser==nullptr) {
             pItemBrowser=new SdrItemBrowser(*static_cast<SdrView*>(this));
         }
         pItemBrowser->Show();
         pItemBrowser->GrabFocus();
     } else {
-        if (pItemBrowser!=NULL) {
+        if (pItemBrowser!=nullptr) {
             pItemBrowser->Hide();
-            delete pItemBrowser;
-            pItemBrowser=NULL;
+            pItemBrowser.clear();
         }
     }
 }

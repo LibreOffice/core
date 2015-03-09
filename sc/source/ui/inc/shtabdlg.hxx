@@ -28,13 +28,15 @@
 class ScShowTabDlg : public ModalDialog
 {
 private:
-    VclFrame* m_pFrame;
-    ListBox* m_pLb;
+    VclPtr<VclFrame> m_pFrame;
+    VclPtr<ListBox> m_pLb;
 
     DECL_LINK( DblClkHdl, void * );
 
 public:
     ScShowTabDlg( vcl::Window* pParent );
+    virtual ~ScShowTabDlg();
+    virtual void dispose() SAL_OVERRIDE;
 
     /** Sets dialog title, fixed text for listbox and help IDs. */
     void    SetDescription(

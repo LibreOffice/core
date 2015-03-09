@@ -53,7 +53,7 @@ class SfxStringItem;
 
 class SfxAccCfgTabListBox_Impl : public SvTabListBox
 {
-    SfxAcceleratorConfigPage*   m_pAccelConfigPage;
+    VclPtr<SfxAcceleratorConfigPage>   m_pAccelConfigPage;
 
     void                        KeyInput( const KeyEvent &rKEvt ) SAL_OVERRIDE;
 
@@ -67,6 +67,8 @@ public:
         , m_pAccelConfigPage(NULL)
     {
     }
+    virtual ~SfxAccCfgTabListBox_Impl();
+    virtual void dispose() SAL_OVERRIDE;
 
     void SetAccelConfigPage(SfxAcceleratorConfigPage* pAccelConfigPage)
     {
@@ -118,17 +120,17 @@ private:
     const SfxStringItem*            m_pFontItem;
     sfx2::FileDialogHelper*         m_pFileDlg;
 
-    SfxAccCfgTabListBox_Impl*       m_pEntriesBox;
-    RadioButton*                    m_pOfficeButton;
-    RadioButton*                    m_pModuleButton;
-    PushButton*                     m_pChangeButton;
-    PushButton*                     m_pRemoveButton;
-    SfxConfigGroupListBox*          m_pGroupLBox;
-    SfxConfigFunctionListBox*       m_pFunctionBox;
-    SvTreeListBox*                  m_pKeyBox;
-    PushButton*                     m_pLoadButton;
-    PushButton*                     m_pSaveButton;
-    PushButton*                     m_pResetButton;
+    VclPtr<SfxAccCfgTabListBox_Impl>       m_pEntriesBox;
+    VclPtr<RadioButton>                    m_pOfficeButton;
+    VclPtr<RadioButton>                    m_pModuleButton;
+    VclPtr<PushButton>                     m_pChangeButton;
+    VclPtr<PushButton>                     m_pRemoveButton;
+    VclPtr<SfxConfigGroupListBox>          m_pGroupLBox;
+    VclPtr<SfxConfigFunctionListBox>       m_pFunctionBox;
+    VclPtr<SvTreeListBox>                  m_pKeyBox;
+    VclPtr<PushButton>                     m_pLoadButton;
+    VclPtr<PushButton>                     m_pSaveButton;
+    VclPtr<PushButton>                     m_pResetButton;
     OUString                        aLoadAccelConfigStr;
     OUString                        aSaveAccelConfigStr;
     OUString                        aFilterAllStr;

@@ -34,7 +34,7 @@ namespace rptui
         VclPtr<Ruler>               m_aVRuler;
         VclPtr<FixedText>           m_aText;
         VclPtr<FixedImage>          m_aImage;
-        OSectionWindow*             m_pParent;
+        VclPtr<OSectionWindow>      m_pParent;
         static Image*               s_pDefCollapsed;
         static Image*               s_pDefExpanded;
         static oslInterlockedCount  s_nImageRefCount; /// When 0 all static images will be destroyed

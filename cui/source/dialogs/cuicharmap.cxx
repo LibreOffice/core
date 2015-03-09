@@ -100,6 +100,25 @@ SvxCharacterMap::SvxCharacterMap( vcl::Window* pParent, bool bOne_, const SfxIte
     CreateOutputItemSet( pSet ? *pSet->GetPool() : SfxGetpApp()->GetPool() );
 }
 
+SvxCharacterMap::~SvxCharacterMap()
+{
+    dispose();
+}
+
+void SvxCharacterMap::dispose()
+{
+    m_pShowSet.clear();
+    m_pShowText.clear();
+    m_pOKBtn.clear();
+    m_pFontText.clear();
+    m_pFontLB.clear();
+    m_pSubsetText.clear();
+    m_pSubsetLB.clear();
+    m_pSymbolText.clear();
+    m_pShowChar.clear();
+    m_pCharCodeText.clear();
+    SfxModalDialog::dispose();
+}
 
 
 void SvxCharacterMap::SetChar( sal_UCS4 c )

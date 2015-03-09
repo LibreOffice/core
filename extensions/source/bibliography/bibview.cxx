@@ -52,9 +52,10 @@ namespace bib
         ,m_pDatMan( _pManager )
         ,m_xDatMan( _pManager )
         ,m_pGeneralPage( NULL )
+        ,m_aFormControlContainer(this)
     {
         if ( m_xDatMan.is() )
-            connectForm( m_xDatMan );
+            m_aFormControlContainer.connectForm( m_xDatMan );
     }
 
 
@@ -66,7 +67,7 @@ namespace bib
     void BibView::dispose()
     {
         BibGeneralPage* pGeneralPage = m_pGeneralPage;
-        m_pGeneralPage = NULL;
+        m_pGeneralPage.clear();
 
         pGeneralPage->CommitActiveControl();
         Reference< XForm > xForm = m_pDatMan->getForm();
@@ -97,8 +98,8 @@ namespace bib
             }
         }
 
-        if ( isFormConnected() )
-            disconnectForm();
+        if ( m_aFormControlContainer.isFormConnected() )
+            m_aFormControlContainer.disconnectForm();
 
         pGeneralPage->RemoveListeners();
         m_xGeneralPage = NULL;
@@ -118,7 +119,8 @@ namespace bib
             m_xGeneralPage = 0;
         }
 
-        m_xGeneralPage = m_pGeneralPage = new BibGeneralPage( this, m_pDatMan );
+        m_pGeneralPage = new BibGeneralPage( this, m_pDatMan );
+        m_xGeneralPage = &m_pGeneralPage->GetFocusListener();
         m_pGeneralPage->Show();
 
         if( HasFocus() )
@@ -156,16 +158,18 @@ namespace bib
         }
     }
 
-    void BibView::_loaded( const EventObject& _rEvent )
+    BibViewFormControlContainer::BibViewFormControlContainer(BibView *pBibView) : mpBibView(pBibView) {}
+
+    void BibViewFormControlContainer::_loaded( const EventObject& _rEvent )
     {
-        UpdatePages();
+        mpBibView->UpdatePages();
         FormControlContainer::_loaded( _rEvent );
         Resize();
     }
 
-    void BibView::_reloaded( const EventObject& _rEvent )
+    void BibViewFormControlContainer::_reloaded( const EventObject& _rEvent )
     {
-        UpdatePages();
+        mpBibView->UpdatePages();
         FormControlContainer::_loaded( _rEvent );
         Resize();
     }
@@ -184,6 +188,11 @@ namespace bib
             m_pGeneralPage->SetSizePixel( aSz );
         }
         Window::Resize();
+    }
+
+    Reference< awt::XControlContainer > BibViewFormControlContainer::getControlContainer()
+    {
+        return mpBibView->getControlContainer();
     }
 
     Reference< awt::XControlContainer > BibView::getControlContainer()

@@ -53,6 +53,20 @@ SvxSplitTableDlg::SvxSplitTableDlg( vcl::Window *pParent, bool bIsTableVertical,
     }
 }
 
+SvxSplitTableDlg::~SvxSplitTableDlg()
+{
+    dispose();
+}
+
+void SvxSplitTableDlg::dispose()
+{
+    m_pCountEdit.clear();
+    m_pHorzBox.clear();
+    m_pVertBox.clear();
+    m_pPropCB.clear();
+    SvxStandardDialog::dispose();
+}
+
 IMPL_LINK( SvxSplitTableDlg, ClickHdl, Button *, pButton )
 {
     const bool bIsVert =  pButton == m_pVertBox ;

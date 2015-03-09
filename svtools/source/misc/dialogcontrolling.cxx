@@ -50,7 +50,7 @@ namespace svt
     struct DialogController_Data
     {
         vcl::Window&                     rInstigator;
-        ::std::vector< vcl::Window* >    aConcernedWindows;
+        ::std::vector< VclPtr<vcl::Window> >    aConcernedWindows;
         PWindowEventFilter          pEventFilter;
         PWindowOperator             pOperator;
 
@@ -111,7 +111,7 @@ namespace svt
 
     void DialogController::impl_updateAll( const VclWindowEvent& _rTriggerEvent )
     {
-        for ( ::std::vector< vcl::Window* >::iterator loop = m_pImpl->aConcernedWindows.begin();
+        for ( auto loop = m_pImpl->aConcernedWindows.begin();
                 loop != m_pImpl->aConcernedWindows.end();
                 ++loop
             )

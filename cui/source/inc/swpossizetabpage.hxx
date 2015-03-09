@@ -34,39 +34,39 @@ class SvxSwPosSizeTabPage : public SfxTabPage
 {
     using TabPage::DeactivatePage;
 
-    MetricField*  m_pWidthMF;
-    MetricField*  m_pHeightMF;
-    CheckBox*     m_pKeepRatioCB;
+    VclPtr<MetricField>  m_pWidthMF;
+    VclPtr<MetricField>  m_pHeightMF;
+    VclPtr<CheckBox>     m_pKeepRatioCB;
 
-    RadioButton*  m_pToPageRB;
-    RadioButton*  m_pToParaRB;
-    RadioButton*  m_pToCharRB;
-    RadioButton*  m_pAsCharRB;
-    RadioButton*  m_pToFrameRB;
+    VclPtr<RadioButton>  m_pToPageRB;
+    VclPtr<RadioButton>  m_pToParaRB;
+    VclPtr<RadioButton>  m_pToCharRB;
+    VclPtr<RadioButton>  m_pAsCharRB;
+    VclPtr<RadioButton>  m_pToFrameRB;
 
-    TriStateBox*  m_pPositionCB;
-    TriStateBox*  m_pSizeCB;
+    VclPtr<TriStateBox>  m_pPositionCB;
+    VclPtr<TriStateBox>  m_pSizeCB;
 
-    VclContainer* m_pPosFrame;
-    FixedText*    m_pHoriFT;
-    ListBox*      m_pHoriLB;
-    FixedText*    m_pHoriByFT;
-    MetricField*  m_pHoriByMF;
-    FixedText*    m_pHoriToFT;
-    ListBox*      m_pHoriToLB;
+    VclPtr<VclContainer> m_pPosFrame;
+    VclPtr<FixedText>    m_pHoriFT;
+    VclPtr<ListBox>      m_pHoriLB;
+    VclPtr<FixedText>    m_pHoriByFT;
+    VclPtr<MetricField>  m_pHoriByMF;
+    VclPtr<FixedText>    m_pHoriToFT;
+    VclPtr<ListBox>      m_pHoriToLB;
 
-    CheckBox*     m_pHoriMirrorCB;
+    VclPtr<CheckBox>     m_pHoriMirrorCB;
 
-    FixedText*    m_pVertFT;
-    ListBox*      m_pVertLB;
-    FixedText*    m_pVertByFT;
-    MetricField*  m_pVertByMF;
-    FixedText*    m_pVertToFT;
-    ListBox*      m_pVertToLB;
+    VclPtr<FixedText>    m_pVertFT;
+    VclPtr<ListBox>      m_pVertLB;
+    VclPtr<FixedText>    m_pVertByFT;
+    VclPtr<MetricField>  m_pVertByMF;
+    VclPtr<FixedText>    m_pVertToFT;
+    VclPtr<ListBox>      m_pVertToLB;
 
-    CheckBox*     m_pFollowCB;
+    VclPtr<CheckBox>     m_pFollowCB;
 
-    SvxSwFrameExample* m_pExampleWN;
+    VclPtr<SvxSwFrameExample> m_pExampleWN;
 
     Link        m_aValidateLink;
 
@@ -123,6 +123,8 @@ class SvxSwPosSizeTabPage : public SfxTabPage
 
 public:
     SvxSwPosSizeTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs  );
+    virtual ~SvxSwPosSizeTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     static SfxTabPage* Create( vcl::Window*, const SfxItemSet* );
     static const sal_uInt16*     GetRanges();

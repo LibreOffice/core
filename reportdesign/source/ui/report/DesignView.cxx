@@ -59,9 +59,11 @@ using namespace container;
 
 class OTaskWindow : public vcl::Window
 {
-    PropBrw* m_pPropWin;
+    VclPtr<PropBrw> m_pPropWin;
 public:
     OTaskWindow(vcl::Window* _pParent) : Window(_pParent),m_pPropWin(NULL){}
+    virtual ~OTaskWindow() { dispose(); }
+    virtual void dispose() SAL_OVERRIDE { m_pPropWin.clear(); vcl::Window::dispose(); }
 
     inline void setPropertyBrowser(PropBrw* _pPropWin)
     {
@@ -163,6 +165,10 @@ void ODesignView::dispose()
 
     m_aSplitWin.disposeAndClear();
     m_aScrollWindow.disposeAndClear();
+    m_pTaskPane.clear();
+    m_pReportExplorer.clear();
+    m_pPropWin.clear();
+    m_pAddField.clear();
     dbaui::ODataView::dispose();
 }
 
@@ -282,7 +288,7 @@ IMPL_LINK_NOARG(ODesignView, MarkTimeout)
         if ( xProp.is() )
         {
             m_pPropWin->Update(xProp);
-            static_cast<OTaskWindow*>(m_pTaskPane)->Resize();
+            static_cast<OTaskWindow*>(m_pTaskPane.get())->Resize();
         }
         Resize();
     }
@@ -446,7 +452,7 @@ void ODesignView::togglePropertyBrowser(bool _bToogleOn)
     {
         m_pPropWin = new PropBrw(getController().getORB(), m_pTaskPane,this);
         m_pPropWin->Invalidate();
-        static_cast<OTaskWindow*>(m_pTaskPane)->setPropertyBrowser(m_pPropWin);
+        static_cast<OTaskWindow*>(m_pTaskPane.get())->setPropertyBrowser(m_pPropWin);
         notifySystemWindow(this,m_pPropWin,::comphelper::mem_fun(&TaskPaneList::AddWindow));
     }
     if ( m_pPropWin && _bToogleOn != m_pPropWin->IsVisible() )

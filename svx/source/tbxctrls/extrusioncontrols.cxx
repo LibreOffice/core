@@ -104,6 +104,17 @@ ExtrusionDirectionWindow::ExtrusionDirectionWindow(
     AddStatusListener( msExtrusionProjection );
 }
 
+ExtrusionDirectionWindow::~ExtrusionDirectionWindow()
+{
+    dispose();
+}
+
+void ExtrusionDirectionWindow::dispose()
+{
+    mpDirectionSet.clear();
+    ToolbarMenu::dispose();
+}
+
 void ExtrusionDirectionWindow::DataChanged( const DataChangedEvent& rDCEvt )
 {
     ToolbarMenu::DataChanged( rDCEvt );
@@ -296,6 +307,17 @@ ExtrusionDepthDialog::ExtrusionDepthDialog( vcl::Window* pParent, double fDepth,
     get(m_pMtrDepth, "depth");
     m_pMtrDepth->SetUnit( eDefaultUnit );
     m_pMtrDepth->SetValue( (int) fDepth * 100, FUNIT_100TH_MM );
+}
+
+ExtrusionDepthDialog::~ExtrusionDepthDialog()
+{
+    dispose();
+}
+
+void ExtrusionDepthDialog::dispose()
+{
+    m_pMtrDepth.clear();
+    ModalDialog::dispose();
 }
 
 double ExtrusionDepthDialog::getDepth() const
@@ -576,6 +598,17 @@ ExtrusionLightingWindow::ExtrusionLightingWindow(svt::ToolboxController& rContro
 
     AddStatusListener( msExtrusionLightingDirection );
     AddStatusListener( msExtrusionLightingIntensity );
+}
+
+ExtrusionLightingWindow::~ExtrusionLightingWindow()
+{
+    dispose();
+}
+
+void ExtrusionLightingWindow::dispose()
+{
+    mpLightingSet.clear();
+    ToolbarMenu::dispose();
 }
 
 void ExtrusionLightingWindow::implSetIntensity( int nLevel, bool bEnabled )

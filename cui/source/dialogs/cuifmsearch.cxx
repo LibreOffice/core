@@ -176,6 +176,34 @@ void FmSearchDialog::dispose()
     delete m_pSearchEngine;
     m_pSearchEngine = NULL;
 
+    m_prbSearchForText.clear();
+    m_prbSearchForNull.clear();
+    m_prbSearchForNotNull.clear();
+    m_pcmbSearchText.clear();
+    m_pftForm.clear();
+    m_plbForm.clear();
+    m_prbAllFields.clear();
+    m_prbSingleField.clear();
+    m_plbField.clear();
+    m_pftPosition.clear();
+    m_plbPosition.clear();
+    m_pcbUseFormat.clear();
+    m_pcbCase.clear();
+    m_pcbBackwards.clear();
+    m_pcbStartOver.clear();
+    m_pcbWildCard.clear();
+    m_pcbRegular.clear();
+    m_pcbApprox.clear();
+    m_ppbApproxSettings.clear();
+    m_pHalfFullFormsCJK.clear();
+    m_pSoundsLikeCJK.clear();
+    m_pSoundsLikeCJKSettings.clear();
+    m_pftRecord.clear();
+    m_pftHint.clear();
+    m_pbSearchAgain.clear();
+    m_pbClose.clear();
+    m_pPreSearchFocus.clear();
+
     ModalDialog::dispose();
 }
 
@@ -609,7 +637,7 @@ void FmSearchDialog::EnableSearchUI(bool bEnable)
             m_pPreSearchFocus->GrabFocus();
             if ( WINDOW_EDIT == m_pPreSearchFocus->GetType() )
             {
-                Edit* pEdit = static_cast< Edit* >( m_pPreSearchFocus );
+                Edit* pEdit = static_cast< Edit* >( m_pPreSearchFocus.get() );
                 pEdit->SetSelection( Selection( 0, pEdit->GetText().getLength() ) );
             }
         }

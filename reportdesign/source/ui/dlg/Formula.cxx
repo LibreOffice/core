@@ -102,6 +102,8 @@ void FormulaDialog::dispose()
     }
 
     StoreFormEditData( m_pFormulaData );
+    m_pEdit.clear();
+    m_pAddField.clear();
     formula::FormulaModalDialog::dispose();
 }
 

@@ -42,7 +42,7 @@ public:
 private:
     explicit ScTpFormulaOptions(vcl::Window* pParent, const SfxItemSet& rCoreSet);
     virtual ~ScTpFormulaOptions();
-
+    virtual void dispose() SAL_OVERRIDE;
     void ResetSeparators();
     void OnFocusSeparatorInput(Edit* pEdit);
     void UpdateCustomCalcRadioButtons(bool bDefault);
@@ -56,20 +56,20 @@ private:
     DECL_LINK( SepEditOnFocusHdl, Edit* );
 
 private:
-    ListBox*     mpLbFormulaSyntax;
-    CheckBox*    mpCbEnglishFuncName;
+    VclPtr<ListBox>     mpLbFormulaSyntax;
+    VclPtr<CheckBox>    mpCbEnglishFuncName;
 
-    RadioButton* mpBtnCustomCalcDefault;
-    RadioButton* mpBtnCustomCalcCustom;
-    PushButton*  mpBtnCustomCalcDetails;
+    VclPtr<RadioButton> mpBtnCustomCalcDefault;
+    VclPtr<RadioButton> mpBtnCustomCalcCustom;
+    VclPtr<PushButton>  mpBtnCustomCalcDetails;
 
-    Edit*        mpEdSepFuncArg;
-    Edit*        mpEdSepArrayCol;
-    Edit*        mpEdSepArrayRow;
-    PushButton*  mpBtnSepReset;
+    VclPtr<Edit>        mpEdSepFuncArg;
+    VclPtr<Edit>        mpEdSepArrayCol;
+    VclPtr<Edit>        mpEdSepArrayRow;
+    VclPtr<PushButton>  mpBtnSepReset;
 
-    ListBox*     mpLbOOXMLRecalcOptions;
-    ListBox*     mpLbODFRecalcOptions;
+    VclPtr<ListBox>     mpLbOOXMLRecalcOptions;
+    VclPtr<ListBox>     mpLbODFRecalcOptions;
 
     /** Stores old separator value of currently focused separator edit box.
         This value is used to revert undesired value change. */

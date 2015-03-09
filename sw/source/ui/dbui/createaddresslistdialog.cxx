@@ -46,11 +46,11 @@ using namespace ::com::sun::star::ui::dialogs;
 
 class SwAddressControl_Impl : public Control
 {
-    ScrollBar                       *m_pScrollBar;
-    Window                          *m_pWindow;
+    VclPtr<ScrollBar>                       m_pScrollBar;
+    VclPtr<Window>                          m_pWindow;
 
-    ::std::vector<FixedText*>       m_aFixedTexts;
-    ::std::vector<Edit*>            m_aEdits;
+    ::std::vector<VclPtr<FixedText> >       m_aFixedTexts;
+    ::std::vector<VclPtr<Edit> >            m_aEdits;
 
     SwCSVData*                      m_pData;
     Size                            m_aWinOutputSize;
@@ -119,14 +119,10 @@ SwAddressControl_Impl::~SwAddressControl_Impl()
 
 void SwAddressControl_Impl::dispose()
 {
-    ::std::vector<FixedText*>::iterator aTextIter;
-    for(aTextIter = m_aFixedTexts.begin(); aTextIter != m_aFixedTexts.end(); ++aTextIter)
-        delete *aTextIter;
-    ::std::vector<Edit*>::iterator aEditIter;
-    for(aEditIter = m_aEdits.begin(); aEditIter != m_aEdits.end(); ++aEditIter)
-        delete *aEditIter;
-    delete m_pScrollBar;
-    delete m_pWindow;
+    m_aFixedTexts.clear();
+    m_aEdits.clear();
+    m_pScrollBar.clear();
+    m_pWindow.clear();
     Control::dispose();
 }
 
@@ -136,12 +132,6 @@ void SwAddressControl_Impl::SetData(SwCSVData& rDBData)
     //when the address data is updated then remove the controls an build again
     if(m_aFixedTexts.size())
     {
-        ::std::vector<FixedText*>::iterator aTextIter;
-        for(aTextIter = m_aFixedTexts.begin(); aTextIter != m_aFixedTexts.end(); ++aTextIter)
-            delete *aTextIter;
-        ::std::vector<Edit*>::iterator aEditIter;
-        for(aEditIter = m_aEdits.begin(); aEditIter != m_aEdits.end(); ++aEditIter)
-            delete *aEditIter;
         m_aFixedTexts.clear();
         m_aEdits.clear();
         m_bNoDataSet = true;
@@ -251,9 +241,8 @@ void SwAddressControl_Impl::SetCurrentDataSet(sal_uInt32 nSet)
         OSL_ENSURE(m_pData->aDBData.size() > m_nCurrentDataSet, "wrong data set index");
         if(m_pData->aDBData.size() > m_nCurrentDataSet)
         {
-            ::std::vector<Edit*>::iterator aEditIter;
             sal_uInt32 nIndex = 0;
-            for(aEditIter = m_aEdits.begin(); aEditIter != m_aEdits.end(); ++aEditIter, ++nIndex)
+            for(auto aEditIter = m_aEdits.begin(); aEditIter != m_aEdits.end(); ++aEditIter, ++nIndex)
             {
                 OSL_ENSURE(nIndex < m_pData->aDBData[m_nCurrentDataSet].size(),
                             "number of columns doesn't match number of Edits");
@@ -387,8 +376,7 @@ void SwAddressControl_Impl::Resize()
     {
         long nNewEditSize = aSize.Width() - (*m_aEdits.begin())->GetPosPixel().X() - nScrollBarWidth - 6;
 
-        ::std::vector<Edit*>::iterator aEditIter;
-        for(aEditIter = m_aEdits.begin(); aEditIter != m_aEdits.end(); ++aEditIter)
+        for(auto aEditIter = m_aEdits.begin(); aEditIter != m_aEdits.end(); ++aEditIter)
         {
             (*aEditIter)->SetSizePixel(Size(nNewEditSize, (*aEditIter)->GetSizePixel().Height()));
         }
@@ -508,7 +496,18 @@ SwCreateAddressListDialog::~SwCreateAddressListDialog()
 void SwCreateAddressListDialog::dispose()
 {
     delete m_pCSVData;
-    delete m_pFindDlg;
+    m_pAddressControl.clear();
+    m_pNewPB.clear();
+    m_pDeletePB.clear();
+    m_pFindPB.clear();
+    m_pCustomizePB.clear();
+    m_pStartPB.clear();
+    m_pPrevPB.clear();
+    m_pSetNoNF.clear();
+    m_pNextPB.clear();
+    m_pEndPB.clear();
+    m_pOK.clear();
+    m_pFindDlg.clear();
     SfxModalDialog::dispose();
 }
 
@@ -763,6 +762,23 @@ SwFindEntryDialog::SwFindEntryDialog(SwCreateAddressListDialog* pParent)
     m_pFindED->SetModifyHdl(LINK(this, SwFindEntryDialog, FindEnableHdl_Impl));
     m_pCancel->SetClickHdl(LINK(this, SwFindEntryDialog, CloseHdl_Impl));
 }
+
+SwFindEntryDialog::~SwFindEntryDialog()
+{
+    dispose();
+}
+
+void SwFindEntryDialog::dispose()
+{
+    m_pFindED.clear();
+    m_pFindOnlyCB.clear();
+    m_pFindOnlyLB.clear();
+    m_pFindPB.clear();
+    m_pCancel.clear();
+    m_pParent.clear();
+    ModelessDialog::dispose();
+}
+
 
 IMPL_LINK_NOARG(SwFindEntryDialog, FindHdl_Impl)
 {

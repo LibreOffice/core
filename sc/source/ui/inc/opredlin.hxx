@@ -36,10 +36,10 @@
 
 class ScRedlineOptionsTabPage : public SfxTabPage
 {
-    ColorListBox*       m_pContentColorLB;
-    ColorListBox*       m_pRemoveColorLB;
-    ColorListBox*       m_pInsertColorLB;
-    ColorListBox*       m_pMoveColorLB;
+    VclPtr<ColorListBox>       m_pContentColorLB;
+    VclPtr<ColorListBox>       m_pRemoveColorLB;
+    VclPtr<ColorListBox>       m_pInsertColorLB;
+    VclPtr<ColorListBox>       m_pMoveColorLB;
     OUString            aAuthorStr;
     DECL_LINK(ColorHdl, void *);
 
@@ -47,7 +47,7 @@ public:
 
     ScRedlineOptionsTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
     virtual ~ScRedlineOptionsTabPage();
-
+    virtual void dispose() SAL_OVERRIDE;
     static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;

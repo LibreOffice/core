@@ -34,15 +34,15 @@ class SdCustomShowList;
 class SdCustomShowDlg : public ModalDialog
 {
 private:
-    ListBox*         m_pLbCustomShows;
-    CheckBox*        m_pCbxUseCustomShow;
-    PushButton*      m_pBtnNew;
-    PushButton*      m_pBtnEdit;
-    PushButton*      m_pBtnRemove;
-    PushButton*      m_pBtnCopy;
-    HelpButton*      m_pBtnHelp;
-    PushButton*      m_pBtnStartShow;
-    OKButton*        m_pBtnOK;
+    VclPtr<ListBox>         m_pLbCustomShows;
+    VclPtr<CheckBox>        m_pCbxUseCustomShow;
+    VclPtr<PushButton>      m_pBtnNew;
+    VclPtr<PushButton>      m_pBtnEdit;
+    VclPtr<PushButton>      m_pBtnRemove;
+    VclPtr<PushButton>      m_pBtnCopy;
+    VclPtr<HelpButton>      m_pBtnHelp;
+    VclPtr<PushButton>      m_pBtnStartShow;
+    VclPtr<OKButton>        m_pBtnOK;
 
     SdDrawDocument& rDoc;
     SdCustomShowList* pCustomShowList;
@@ -57,22 +57,22 @@ private:
 public:
                 SdCustomShowDlg( vcl::Window* pWindow, SdDrawDocument& rDrawDoc );
                 virtual ~SdCustomShowDlg();
-
-    bool        IsModified() const { return bModified; }
-    bool        IsCustomShow() const;
+    virtual void dispose() SAL_OVERRIDE;
+    bool         IsModified() const { return bModified; }
+    bool         IsCustomShow() const;
 };
 
 class SdDefineCustomShowDlg : public ModalDialog
 {
 private:
-    Edit*            m_pEdtName;
-    ListBox*         m_pLbPages;
-    PushButton*      m_pBtnAdd;
-    PushButton*      m_pBtnRemove;
-    SvTreeListBox*   m_pLbCustomPages;
-    OKButton*        m_pBtnOK;
-    CancelButton*    m_pBtnCancel;
-    HelpButton*      m_pBtnHelp;
+    VclPtr<Edit>            m_pEdtName;
+    VclPtr<ListBox>         m_pLbPages;
+    VclPtr<PushButton>      m_pBtnAdd;
+    VclPtr<PushButton>      m_pBtnRemove;
+    VclPtr<SvTreeListBox>   m_pLbCustomPages;
+    VclPtr<OKButton>        m_pBtnOK;
+    VclPtr<CancelButton>    m_pBtnCancel;
+    VclPtr<HelpButton>      m_pBtnHelp;
 
     SdDrawDocument& rDoc;
     SdCustomShow*&  rpCustomShow;
@@ -90,6 +90,7 @@ public:
                     SdDefineCustomShowDlg( vcl::Window* pWindow,
                             SdDrawDocument& rDrawDoc, SdCustomShow*& rpCS );
                     virtual ~SdDefineCustomShowDlg();
+    virtual void    dispose() SAL_OVERRIDE;
 
     bool            IsModified() const { return bModified; }
 };

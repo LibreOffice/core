@@ -64,7 +64,7 @@ namespace svt
     Reference< XAccessibleContext > PanelTabBarPeer::CreateAccessibleContext()
     {
         SolarMutexGuard aSolarGuard;
-        if ( m_pTabBar == NULL )
+        if ( m_pTabBar == nullptr )
             throw DisposedException( OUString(), *this );
 
 
@@ -80,7 +80,7 @@ namespace svt
     {
         {
             SolarMutexGuard aSolarGuard;
-            m_pTabBar = NULL;
+            m_pTabBar.clear();
         }
         VCLXWindow::dispose();
     }

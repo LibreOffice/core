@@ -60,8 +60,8 @@ namespace frm
         const ::boost::shared_ptr< const ICommandDescriptionProvider >
                                         m_pDescriptionProvider;
         ImageSize                       m_eImageSize;
-        ImplNavToolBar*                 m_pToolbar;
-        ::std::vector< vcl::Window* >        m_aChildWins;
+        VclPtr<ImplNavToolBar>          m_pToolbar;
+        ::std::vector< VclPtr<vcl::Window> >        m_aChildWins;
 
     public:
         NavigationToolBar(

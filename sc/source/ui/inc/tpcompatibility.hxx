@@ -25,12 +25,12 @@ public:
     virtual void Reset(const SfxItemSet* rCoreAttrs) SAL_OVERRIDE;
     virtual int DeactivatePage(SfxItemSet* pSet = NULL) SAL_OVERRIDE;
 
+    virtual ~ScTpCompatOptions();
+    virtual void dispose() SAL_OVERRIDE;
 private:
     explicit ScTpCompatOptions(vcl::Window* pParent, const SfxItemSet& rCoreAttrs);
-    virtual ~ScTpCompatOptions();
-
 private:
-    ListBox*   m_pLbKeyBindings;
+    VclPtr<ListBox>   m_pLbKeyBindings;
 };
 
 #endif

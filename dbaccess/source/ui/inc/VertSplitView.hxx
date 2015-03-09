@@ -27,9 +27,9 @@ namespace dbaui
 {
     class OSplitterView : public vcl::Window
     {
-        Splitter*                           m_pSplitter;
-        vcl::Window*                             m_pLeft;
-        vcl::Window*                             m_pRight;
+        VclPtr<Splitter>                m_pSplitter;
+        VclPtr<vcl::Window>             m_pLeft;
+        VclPtr<vcl::Window>             m_pRight;
         bool                            m_bVertical;
 
         void ImplInitSettings( bool bFont, bool bForeground, bool bBackground );

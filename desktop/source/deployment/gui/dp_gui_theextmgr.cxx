@@ -98,8 +98,6 @@ TheExtensionManager::TheExtensionManager( vcl::Window *pParent,
 
 TheExtensionManager::~TheExtensionManager()
 {
-    delete m_pUpdReqDialog;
-    delete m_pExtMgrDialog;
     delete m_pExecuteCmdQueue;
 }
 
@@ -171,8 +169,7 @@ sal_Int16 TheExtensionManager::execute()
     if ( m_pUpdReqDialog )
     {
         nRet = m_pUpdReqDialog->Execute();
-        delete m_pUpdReqDialog;
-        m_pUpdReqDialog = NULL;
+        m_pUpdReqDialog.clear();
     }
 
     return nRet;
@@ -259,10 +256,8 @@ void TheExtensionManager::terminateDialog()
     if ( ! dp_misc::office_is_running() )
     {
         const SolarMutexGuard guard;
-        delete m_pExtMgrDialog;
-        m_pExtMgrDialog = NULL;
-        delete m_pUpdReqDialog;
-        m_pUpdReqDialog = NULL;
+        m_pExtMgrDialog.clear();
+        m_pUpdReqDialog.clear();
         Application::Quit();
     }
 }
@@ -426,10 +421,8 @@ void TheExtensionManager::disposing( lang::EventObject const & rEvt )
         if ( dp_misc::office_is_running() )
         {
             const SolarMutexGuard guard;
-            delete m_pExtMgrDialog;
-            m_pExtMgrDialog = NULL;
-            delete m_pUpdReqDialog;
-            m_pUpdReqDialog = NULL;
+            m_pExtMgrDialog.clear();
+            m_pUpdReqDialog.clear();
         }
         s_ExtMgr.clear();
     }

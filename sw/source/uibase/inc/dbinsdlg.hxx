@@ -87,38 +87,38 @@ public:
 
 class SwInsertDBColAutoPilot : public SfxModalDialog, public utl::ConfigItem
 {
-    RadioButton*    m_pRbAsTable;
-    RadioButton*    m_pRbAsField;
-    RadioButton*    m_pRbAsText;
+    VclPtr<RadioButton>    m_pRbAsTable;
+    VclPtr<RadioButton>    m_pRbAsField;
+    VclPtr<RadioButton>    m_pRbAsText;
 
-    VclFrame*       m_pHeadFrame;
+    VclPtr<VclFrame>       m_pHeadFrame;
 
-    ListBox*        m_pLbTblDbColumn;
-    ListBox*        m_pLbTxtDbColumn;
+    VclPtr<ListBox>        m_pLbTblDbColumn;
+    VclPtr<ListBox>        m_pLbTxtDbColumn;
 
-    VclFrame*       m_pFormatFrame;
-    RadioButton*    m_pRbDbFmtFromDb;
-    RadioButton*    m_pRbDbFmtFromUsr;
-    NumFormatListBox* m_pLbDbFmtFromUsr;
+    VclPtr<VclFrame>       m_pFormatFrame;
+    VclPtr<RadioButton>    m_pRbDbFmtFromDb;
+    VclPtr<RadioButton>    m_pRbDbFmtFromUsr;
+    VclPtr<NumFormatListBox> m_pLbDbFmtFromUsr;
 
     // Page Text/Field
-    PushButton*     m_pIbDbcolToEdit;
-    VclMultiLineEdit* m_pEdDbText;
-    FixedText*      m_pFtDbParaColl;
-    ListBox*        m_pLbDbParaColl;
+    VclPtr<PushButton>     m_pIbDbcolToEdit;
+    VclPtr<VclMultiLineEdit> m_pEdDbText;
+    VclPtr<FixedText>      m_pFtDbParaColl;
+    VclPtr<ListBox>        m_pLbDbParaColl;
 
     // Page Table
-    PushButton*     m_pIbDbcolAllTo;
-    PushButton*     m_pIbDbcolOneTo;
-    PushButton*     m_pIbDbcolOneFrom;
-    PushButton*     m_pIbDbcolAllFrom;
-    FixedText*      m_pFtTableCol;
-    ListBox*        m_pLbTableCol;
-    CheckBox*       m_pCbTableHeadon;
-    RadioButton*    m_pRbHeadlColnms;
-    RadioButton*    m_pRbHeadlEmpty;
-    PushButton*     m_pPbTblFormat;
-    PushButton*     m_pPbTblAutofmt;
+    VclPtr<PushButton>     m_pIbDbcolAllTo;
+    VclPtr<PushButton>     m_pIbDbcolOneTo;
+    VclPtr<PushButton>     m_pIbDbcolOneFrom;
+    VclPtr<PushButton>     m_pIbDbcolAllFrom;
+    VclPtr<FixedText>      m_pFtTableCol;
+    VclPtr<ListBox>        m_pLbTableCol;
+    VclPtr<CheckBox>       m_pCbTableHeadon;
+    VclPtr<RadioButton>    m_pRbHeadlColnms;
+    VclPtr<RadioButton>    m_pRbHeadlEmpty;
+    VclPtr<PushButton>     m_pPbTblFormat;
+    VclPtr<PushButton>     m_pPbTblAutofmt;
 
     SwInsDBColumns  aDBColumns;
     const SwDBData  aDBData;

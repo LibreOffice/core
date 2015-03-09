@@ -144,7 +144,7 @@ void OQueryTableWindow::OnEntryDoubleClicked(SvTreeListEntry* pEntry)
 
 bool OQueryTableWindow::ExistsField(const OUString& strFieldName, OTableFieldDescRef& rInfo)
 {
-    OSL_ENSURE(m_pListBox != NULL, "OQueryTableWindow::ExistsField : doesn't have ::com::sun::star::form::ListBox !");
+    OSL_ENSURE(m_pListBox != nullptr, "OQueryTableWindow::ExistsField : doesn't have ::com::sun::star::form::ListBox !");
     OSL_ENSURE(rInfo.is(),"OQueryTableWindow::ExistsField: invalid argument for OTableFieldDescRef!");
     Reference< XConnection> xConnection = getTableView()->getDesignView()->getController().getConnection();
     bool bExists = false;

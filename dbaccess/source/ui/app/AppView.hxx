@@ -44,9 +44,9 @@ namespace dbaui
     class OTitleWindow;
     class OAppBorderWindow : public vcl::Window
     {
-        OTitleWindow*                       m_pPanel;
-        OApplicationDetailView*             m_pDetailView;
-        OApplicationView*                   m_pView;
+        VclPtr<OTitleWindow>                m_pPanel;
+        VclPtr<OApplicationDetailView>      m_pDetailView;
+        VclPtr<OApplicationView>            m_pView;
 
         void ImplInitSettings();
     protected:
@@ -80,7 +80,7 @@ namespace dbaui
         ::com::sun::star::lang::Locale      m_aLocale;
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
                                             m_xObject;
-        OAppBorderWindow*                   m_pWin;
+        VclPtr<OAppBorderWindow>            m_pWin;
         IApplicationController&             m_rAppController;
         ChildFocusState                     m_eChildFocus;
 

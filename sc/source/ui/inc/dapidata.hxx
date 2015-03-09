@@ -30,9 +30,9 @@ struct ScImportSourceDesc;
 class ScDataPilotDatabaseDlg : public ModalDialog
 {
 private:
-    ListBox*  m_pLbDatabase;
-    ComboBox* m_pCbObject;
-    ListBox*  m_pLbType;
+    VclPtr<ListBox>  m_pLbDatabase;
+    VclPtr<ComboBox> m_pCbObject;
+    VclPtr<ListBox>  m_pLbType;
 
     void    FillObjects();
 
@@ -40,6 +40,8 @@ private:
 
 public:
     ScDataPilotDatabaseDlg(vcl::Window* pParent);
+    virtual ~ScDataPilotDatabaseDlg();
+    virtual void dispose() SAL_OVERRIDE;
 
     void    GetValues( ScImportSourceDesc& rDesc );
 };

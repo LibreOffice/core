@@ -152,14 +152,8 @@ namespace frm
 
     void NavigationToolBar::dispose()
     {
-        for (   ::std::vector< vcl::Window* >::iterator loopChildWins = m_aChildWins.begin();
-                loopChildWins != m_aChildWins.end();
-                ++loopChildWins
-            )
-        {
-            delete *loopChildWins;
-        }
-        delete m_pToolbar;
+        m_aChildWins.clear();
+        m_pToolbar.clear();
         vcl::Window::dispose();
     }
 

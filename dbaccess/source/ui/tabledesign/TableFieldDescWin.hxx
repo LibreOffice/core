@@ -41,9 +41,9 @@ namespace dbaui
             NONE
         };
     private:
-        OTableDesignHelpBar*    m_pHelpBar;
-        OFieldDescGenWin*       m_pGenPage;
-        FixedText*              m_pHeader;
+        VclPtr<OTableDesignHelpBar>    m_pHelpBar;
+        VclPtr<OFieldDescGenWin>       m_pGenPage;
+        VclPtr<FixedText>              m_pHeader;
         ChildFocusState         m_eChildFocus;
 
         IClipboardTest* getActiveChild() const;

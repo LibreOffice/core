@@ -112,6 +112,23 @@ void ScConsolidateDlg::dispose()
 {
     delete [] pAreaData;
     delete pRangeUtil;
+    pLbFunc.clear();
+    pLbConsAreas.clear();
+    pLbDataArea.clear();
+    pEdDataArea.clear();
+    pRbDataArea.clear();
+    pLbDestArea.clear();
+    pEdDestArea.clear();
+    pRbDestArea.clear();
+    pExpander.clear();
+    pBtnByRow.clear();
+    pBtnByCol.clear();
+    pBtnRefs.clear();
+    pBtnOk.clear();
+    pBtnCancel.clear();
+    pBtnAdd.clear();
+    pBtnRemove.clear();
+    pRefInputEdit.clear();
     ScAnyRefDlg::dispose();
 }
 

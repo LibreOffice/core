@@ -32,6 +32,7 @@ class SwDocStatPage: public SfxTabPage
 public:
     SwDocStatPage(vcl::Window *pParent, const SfxItemSet &rSet);
     virtual ~SwDocStatPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     static SfxTabPage *Create(vcl::Window *pParent, const SfxItemSet *rSet);
 
@@ -42,18 +43,18 @@ protected:
     DECL_LINK(UpdateHdl, void *);
 
 private:
-    FixedText*      m_pPageNo;
-    FixedText*      m_pTableNo;
-    FixedText*      m_pGrfNo;
-    FixedText*      m_pOLENo;
-    FixedText*      m_pParaNo;
-    FixedText*      m_pWordNo;
-    FixedText*      m_pCharNo;
-    FixedText*      m_pCharExclSpacesNo;
+    VclPtr<FixedText>      m_pPageNo;
+    VclPtr<FixedText>      m_pTableNo;
+    VclPtr<FixedText>      m_pGrfNo;
+    VclPtr<FixedText>      m_pOLENo;
+    VclPtr<FixedText>      m_pParaNo;
+    VclPtr<FixedText>      m_pWordNo;
+    VclPtr<FixedText>      m_pCharNo;
+    VclPtr<FixedText>      m_pCharExclSpacesNo;
 
-    FixedText*      m_pLineLbl;
-    FixedText*      m_pLineNo;
-    PushButton*     m_pUpdatePB;
+    VclPtr<FixedText>      m_pLineLbl;
+    VclPtr<FixedText>      m_pLineNo;
+    VclPtr<PushButton>     m_pUpdatePB;
 
     SwDocStat       aDocStat;
 

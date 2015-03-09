@@ -48,10 +48,10 @@ namespace svt
     {
     private:
         // Controls
-        ComboBox*       m_pDatasource;
-        PushButton*     m_pAdministrateDatasources;
-        ComboBox*       m_pTable;
-        ScrollBar*      m_pFieldScroller;
+        VclPtr<ComboBox>       m_pDatasource;
+        VclPtr<PushButton>     m_pAdministrateDatasources;
+        VclPtr<ComboBox>       m_pTable;
+        VclPtr<ScrollBar>      m_pFieldScroller;
 
         // string to display for "no selection"
         const OUString  m_sNoFieldSelection;

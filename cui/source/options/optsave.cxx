@@ -206,6 +206,23 @@ void SvxSaveTabPage::dispose()
 {
     delete pImpl;
     pImpl = NULL;
+    aLoadUserSettingsCB.clear();
+    aLoadDocPrinterCB.clear();
+    aDocInfoCB.clear();
+    aBackupCB.clear();
+    aAutoSaveCB.clear();
+    aAutoSaveEdit.clear();
+    aMinuteFT.clear();
+    aUserAutoSaveCB.clear();
+    aRelativeFsysCB.clear();
+    aRelativeInetCB.clear();
+    aODFVersionLB.clear();
+    aWarnAlienFormatCB.clear();
+    aDocTypeLB.clear();
+    aSaveAsFT.clear();
+    aSaveAsLB.clear();
+    aODFWarningFI.clear();
+    aODFWarningFT.clear();
     SfxTabPage::dispose();
 }
 

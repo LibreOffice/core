@@ -40,8 +40,8 @@ namespace dbaui
 
         Link                        m_aModifyHdl;
 
-        ::svt::ListBoxControl*      m_pSortingCell;
-        ::svt::ListBoxControl*      m_pFieldNameCell;
+        VclPtr<::svt::ListBoxControl>      m_pSortingCell;
+        VclPtr<::svt::ListBoxControl>      m_pFieldNameCell;
 
         OUString                    m_sAscendingText;
         OUString                    m_sDescendingText;

@@ -25,13 +25,13 @@
 
 class SwInsertAbstractDlg : public SfxModalDialog
 {
-    NumericField* m_pLevelNF;
-    NumericField* m_pParaNF;
-
-protected:
+    VclPtr<NumericField> m_pLevelNF;
+    VclPtr<NumericField> m_pParaNF;
 
 public:
     SwInsertAbstractDlg( vcl::Window* pParent );
+    virtual ~SwInsertAbstractDlg();
+    virtual void dispose() SAL_OVERRIDE;
 
     sal_uInt8   GetLevel() const;
     sal_uInt8   GetPara() const;

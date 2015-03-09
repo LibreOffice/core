@@ -888,6 +888,18 @@ AssignComponentDialog::AssignComponentDialog( vcl::Window * pParent, const OUStr
     mpMethodEdit->SetText( aMethodName, Selection( 0, SELECTION_MAX ) );
 }
 
+AssignComponentDialog::~AssignComponentDialog()
+{
+    dispose();
+}
+
+void AssignComponentDialog::dispose()
+{
+    mpMethodEdit.clear();
+    mpOKButton.clear();
+    ModalDialog::dispose();
+}
+
 IMPL_LINK( SvxMacroAssignSingleTabDialog, OKHdl_Impl, Button *, pButton )
 {
     (void)pButton; //unused

@@ -35,27 +35,27 @@ namespace chart
 class SchAxisLabelTabPage : public SfxTabPage
 {
 private:
-    CheckBox*            m_pCbShowDescription;
+    VclPtr<CheckBox>            m_pCbShowDescription;
 
-    FixedText*           m_pFlOrder;
-    RadioButton*         m_pRbSideBySide;
-    RadioButton*         m_pRbUpDown;
-    RadioButton*         m_pRbDownUp;
-    RadioButton*         m_pRbAuto;
+    VclPtr<FixedText>           m_pFlOrder;
+    VclPtr<RadioButton>         m_pRbSideBySide;
+    VclPtr<RadioButton>         m_pRbUpDown;
+    VclPtr<RadioButton>         m_pRbDownUp;
+    VclPtr<RadioButton>         m_pRbAuto;
 
-    FixedText*          m_pFlTextFlow;
-    CheckBox*            m_pCbTextOverlap;
-    CheckBox*            m_pCbTextBreak;
-    FixedText*               m_pFtABCD;
-    FixedText*           m_pFlOrient;
-    svx::DialControl*    m_pCtrlDial;
-    FixedText*           m_pFtRotate;
-    NumericField*        m_pNfRotate;
-    TriStateBox*         m_pCbStacked;
+    VclPtr<FixedText>           m_pFlTextFlow;
+    VclPtr<CheckBox>            m_pCbTextOverlap;
+    VclPtr<CheckBox>            m_pCbTextBreak;
+    VclPtr<FixedText>           m_pFtABCD;
+    VclPtr<FixedText>           m_pFlOrient;
+    VclPtr<svx::DialControl>    m_pCtrlDial;
+    VclPtr<FixedText>           m_pFtRotate;
+    VclPtr<NumericField>        m_pNfRotate;
+    VclPtr<TriStateBox>         m_pCbStacked;
     svx::OrientationHelper* m_pOrientHlp;
 
-    FixedText*               m_pFtTextDirection;
-    TextDirectionListBox*    m_pLbTextDirection;
+    VclPtr<FixedText>               m_pFtTextDirection;
+    VclPtr<TextDirectionListBox>    m_pLbTextDirection;
 
     bool                m_bShowStaggeringControls;
 

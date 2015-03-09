@@ -130,6 +130,7 @@ void OReportSection::dispose()
             m_pView->EndListening( *m_pModel );
         m_pView = NULL;
     }
+    m_pParent.clear();
     vcl::Window::dispose();
 }
 

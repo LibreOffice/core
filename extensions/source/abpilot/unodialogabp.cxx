@@ -179,7 +179,7 @@ namespace abp
     {
         if ( _nExecutionResult == RET_OK )
         {
-            const AddressSettings& aSettings = static_cast<OAddessBookSourcePilot*>(m_pDialog)->getSettings();
+            const AddressSettings& aSettings = static_cast<OAddessBookSourcePilot*>(m_pDialog.get())->getSettings();
             m_sDataSourceName = aSettings.bRegisterDataSource ? aSettings.sRegisteredDataSourceName : aSettings.sDataSourceName;
         }
     }

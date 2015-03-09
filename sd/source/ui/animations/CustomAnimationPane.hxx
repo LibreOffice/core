@@ -126,23 +126,23 @@ private:
 
     const CustomAnimationPresets* mpCustomAnimationPresets;
 
-    PushButton* mpPBAddEffect;
-    PushButton* mpPBChangeEffect;
-    PushButton* mpPBRemoveEffect;
-    FixedText*  mpFTEffect;
-    FixedText*  mpFTStart;
-    ListBox*    mpLBStart;
-    FixedText*  mpFTProperty;
-    VclHBox*    mpPlaceholderBox;
-    PropertyControl*    mpLBProperty;
-    PushButton* mpPBPropertyMore;
-    FixedText*  mpFTSpeed;
-    ListBox*   mpCBSpeed;
-    CustomAnimationList*    mpCustomAnimationList;
-    PushButton* mpPBMoveUp;
-    PushButton* mpPBMoveDown;
-    PushButton* mpPBPlay;
-    CheckBox*   mpCBAutoPreview;
+    VclPtr<PushButton> mpPBAddEffect;
+    VclPtr<PushButton> mpPBChangeEffect;
+    VclPtr<PushButton> mpPBRemoveEffect;
+    VclPtr<FixedText>  mpFTEffect;
+    VclPtr<FixedText>  mpFTStart;
+    VclPtr<ListBox>    mpLBStart;
+    VclPtr<FixedText>  mpFTProperty;
+    VclPtr<VclHBox>    mpPlaceholderBox;
+    VclPtr<PropertyControl>    mpLBProperty;
+    VclPtr<PushButton> mpPBPropertyMore;
+    VclPtr<FixedText>  mpFTSpeed;
+    VclPtr<ListBox>   mpCBSpeed;
+    VclPtr<CustomAnimationList>    mpCustomAnimationList;
+    VclPtr<PushButton> mpPBMoveUp;
+    VclPtr<PushButton> mpPBMoveDown;
+    VclPtr<PushButton> mpPBPlay;
+    VclPtr<CheckBox>   mpCBAutoPreview;
 
     OUString    maStrModify;
     OUString    maStrProperty;

@@ -49,7 +49,7 @@ namespace pcr
         struct HiddenPage
         {
             sal_uInt16  nPos;
-            TabPage*    pPage;
+            VclPtr<TabPage>    pPage;
             HiddenPage() : nPos( 0 ), pPage( NULL ) { }
             HiddenPage( sal_uInt16 _nPos, TabPage* _pPage ) : nPos( _nPos ), pPage( _pPage ) { }
         };

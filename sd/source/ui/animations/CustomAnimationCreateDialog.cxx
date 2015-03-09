@@ -165,6 +165,7 @@ class CustomAnimationCreateTabPage : public TabPage
 public:
     CustomAnimationCreateTabPage( vcl::Window* pParent, CustomAnimationCreateDialog* pDialogParent, sal_uInt16 nTabId, const PresetCategoryList& rCategoryList, bool bHasText, bool bIsMotionPath = false );
     virtual ~CustomAnimationCreateTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     PathKind getCreatePathKind() const;
     CustomAnimationPresetPtr getSelectedPreset() const;
@@ -187,12 +188,12 @@ private:
     void clearEffects();
 
 private:
-    CategoryListBox*    mpLBEffects;
-    FixedText*  mpFTSpeed;
-    ListBox*    mpCBSpeed;
-    CheckBox*   mpCBXPReview;
+    VclPtr<CategoryListBox>    mpLBEffects;
+    VclPtr<FixedText>  mpFTSpeed;
+    VclPtr<ListBox>    mpCBSpeed;
+    VclPtr<CheckBox>   mpCBXPReview;
 
-    CustomAnimationCreateDialog*        mpParent;
+    VclPtr<CustomAnimationCreateDialog>        mpParent;
 
     sal_uInt16 mnId;
 
@@ -296,7 +297,18 @@ CustomAnimationCreateTabPage::CustomAnimationCreateTabPage( vcl::Window* pParent
 
 CustomAnimationCreateTabPage::~CustomAnimationCreateTabPage()
 {
+    dispose();
+}
+
+void CustomAnimationCreateTabPage::dispose()
+{
     clearEffects();
+    mpLBEffects.clear();
+    mpFTSpeed.clear();
+    mpCBSpeed.clear();
+    mpCBXPReview.clear();
+    mpParent.clear();
+    TabPage::dispose();
 }
 
 IMPL_LINK( CustomAnimationCreateTabPage, implSelectHdl, Control*, pControl )
@@ -548,6 +560,8 @@ void CustomAnimationCreateDialog::dispose()
     delete mpTabPages[MOTIONPATH];
     delete mpTabPages[MISCEFFECTS];
 
+    mpTabControl.clear();
+    mpPane.clear();
     TabDialog::dispose();
 }
 

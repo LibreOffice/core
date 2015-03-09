@@ -32,25 +32,25 @@ class SdPrintOptions : public SfxTabPage
  friend class SdModule;
 
 private:
-    VclFrame            *m_pFrmContent;
-    CheckBox            *m_pCbxDraw;
-    CheckBox            *m_pCbxNotes;
-    CheckBox            *m_pCbxHandout;
-    CheckBox            *m_pCbxOutline;
-    RadioButton         *m_pRbtColor;
-    RadioButton         *m_pRbtGrayscale;
-    RadioButton         *m_pRbtBlackWhite;
-    CheckBox            *m_pCbxPagename;
-    CheckBox            *m_pCbxDate;
-    CheckBox            *m_pCbxTime;
-    CheckBox            *m_pCbxHiddenPages;
-    RadioButton         *m_pRbtDefault;
-    RadioButton         *m_pRbtPagesize;
-    RadioButton         *m_pRbtPagetile;
-    RadioButton         *m_pRbtBooklet;
-    CheckBox            *m_pCbxFront;
-    CheckBox            *m_pCbxBack;
-    CheckBox            *m_pCbxPaperbin;
+    VclPtr<VclFrame>            m_pFrmContent;
+    VclPtr<CheckBox>            m_pCbxDraw;
+    VclPtr<CheckBox>            m_pCbxNotes;
+    VclPtr<CheckBox>            m_pCbxHandout;
+    VclPtr<CheckBox>            m_pCbxOutline;
+    VclPtr<RadioButton>         m_pRbtColor;
+    VclPtr<RadioButton>         m_pRbtGrayscale;
+    VclPtr<RadioButton>         m_pRbtBlackWhite;
+    VclPtr<CheckBox>            m_pCbxPagename;
+    VclPtr<CheckBox>            m_pCbxDate;
+    VclPtr<CheckBox>            m_pCbxTime;
+    VclPtr<CheckBox>            m_pCbxHiddenPages;
+    VclPtr<RadioButton>         m_pRbtDefault;
+    VclPtr<RadioButton>         m_pRbtPagesize;
+    VclPtr<RadioButton>         m_pRbtPagetile;
+    VclPtr<RadioButton>         m_pRbtBooklet;
+    VclPtr<CheckBox>            m_pCbxFront;
+    VclPtr<CheckBox>            m_pCbxBack;
+    VclPtr<CheckBox>            m_pCbxPaperbin;
 
     const SfxItemSet&   rOutAttrs;
 
@@ -63,6 +63,7 @@ private:
 public:
             SdPrintOptions( vcl::Window* pParent, const SfxItemSet& rInAttrs);
             virtual ~SdPrintOptions();
+    virtual void dispose() SAL_OVERRIDE;
 
     static  SfxTabPage* Create( vcl::Window*, const SfxItemSet* );
 

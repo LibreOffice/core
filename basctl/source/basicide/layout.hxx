@@ -50,6 +50,9 @@ public:
     virtual void GetState (SfxItemSet&, unsigned nWhich) = 0;
     virtual void UpdateDebug (bool bBasicStopped ) = 0;
 
+    virtual ~Layout();
+    virtual void dispose() SAL_OVERRIDE;
+
 protected:
     Layout (vcl::Window* pParent);
 
@@ -67,7 +70,7 @@ protected:
 
 private:
     // the main child window (either ModulWindow or DialogWindow)
-    BaseWindow* pChild;
+    VclPtr<BaseWindow> pChild;
 
     // when this window has at first (nonempty) size
     bool bFirstSize;
@@ -101,7 +104,7 @@ private:
         struct Item
         {
             // pointer to the dockable window
-            DockingWindow* pWin;
+            VclPtr<DockingWindow> pWin;
             // starting and ending position in the strip
             // They may be different from the actual window position, because
             // the window may fill the space of the adjacent currently

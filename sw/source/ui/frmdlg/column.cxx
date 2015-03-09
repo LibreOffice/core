@@ -219,10 +219,11 @@ SwColumnDlg::~SwColumnDlg()
 
 void SwColumnDlg::dispose()
 {
-    delete pTabPage;
     delete pPageSet;
     delete pSectionSet;
     delete pSelectionSet;
+    m_pApplyToLB.clear();
+    pTabPage.clear();
     SfxModalDialog::dispose();
 }
 
@@ -554,6 +555,29 @@ SwColumnPage::~SwColumnPage()
 void SwColumnPage::dispose()
 {
     delete pColMgr;
+    m_pCLNrEdt.clear();
+    m_pDefaultVS.clear();
+    m_pBalanceColsCB.clear();
+    m_pBtnBack.clear();
+    m_pLbl1.clear();
+    m_pLbl2.clear();
+    m_pLbl3.clear();
+    m_pBtnNext.clear();
+    m_pAutoWidthBox.clear();
+    m_pLineTypeLbl.clear();
+    m_pLineTypeDLB.clear();
+    m_pLineWidthLbl.clear();
+    m_pLineWidthEdit.clear();
+    m_pLineColorLbl.clear();
+    m_pLineColorDLB.clear();
+    m_pLineHeightLbl.clear();
+    m_pLineHeightEdit.clear();
+    m_pLinePosLbl.clear();
+    m_pLinePosDLB.clear();
+    m_pTextDirectionFT.clear();
+    m_pTextDirectionLB.clear();
+    m_pPgeExampleWN.clear();
+    m_pFrmExampleWN.clear();
     SfxTabPage::dispose();
 }
 

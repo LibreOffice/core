@@ -146,18 +146,18 @@ private:
     SvTreeListEntry*    pCurrentPageEntry;
     bool hasTreePendingLayout() const;
 
-    OKButton*       pOkPB;
-    PushButton*     pBackPB;
+    VclPtr<OKButton>       pOkPB;
+    VclPtr<PushButton>     pBackPB;
 
-    SvTreeListBox*  pTreeLB;
-    VclBox*         pTabBox;
+    VclPtr<SvTreeListBox>  pTreeLB;
+    VclPtr<VclBox>         pTabBox;
 
     OUString        sTitle;
     OUString        sNotLoadedError;
 
     // for the ColorTabPage
     SfxItemSet*     pColorPageItemSet;
-    SvxColorTabPage *mpColorPage;
+    VclPtr<SvxColorTabPage> mpColorPage;
 
     bool        bForgetSelection;
     bool            bIsFromExtensionManager;

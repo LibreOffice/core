@@ -50,17 +50,17 @@ namespace dbaui
     {
     protected:
 
-        FixedText*          m_pOptionsLabel;
-        Edit*               m_pOptions;
+        VclPtr<FixedText>          m_pOptionsLabel;
+        VclPtr<Edit>               m_pOptions;
 
-        FixedText*          m_pCharsetLabel;
-        CharSetListBox*     m_pCharset;
+        VclPtr<FixedText>          m_pCharsetLabel;
+        VclPtr<CharSetListBox>     m_pCharset;
 
-        CheckBox*           m_pAutoRetrievingEnabled;
-        FixedText*          m_pAutoIncrementLabel;
-        Edit*               m_pAutoIncrement;
-        FixedText*          m_pAutoRetrievingLabel;
-        Edit*               m_pAutoRetrieving;
+        VclPtr<CheckBox>           m_pAutoRetrievingEnabled;
+        VclPtr<FixedText>          m_pAutoIncrementLabel;
+        VclPtr<Edit>               m_pAutoIncrement;
+        VclPtr<FixedText>          m_pAutoRetrievingLabel;
+        VclPtr<Edit>               m_pAutoRetrieving;
 
         sal_uInt32          m_nControlFlags;
 
@@ -93,10 +93,12 @@ namespace dbaui
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) SAL_OVERRIDE;
 
         ODbaseDetailsPage(vcl::Window* pParent, const SfxItemSet& _rCoreAttrs);
+        virtual ~ODbaseDetailsPage();
+        virtual void dispose() SAL_OVERRIDE;
     private:
-        CheckBox*           m_pShowDeleted;
-        FixedText*          m_pFT_Message;
-        PushButton*         m_pIndexes;
+        VclPtr<CheckBox>           m_pShowDeleted;
+        VclPtr<FixedText>          m_pFT_Message;
+        VclPtr<PushButton>         m_pIndexes;
 
         OUString            m_sDsn;
 
@@ -121,10 +123,12 @@ namespace dbaui
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) SAL_OVERRIDE;
 
         OOdbcDetailsPage( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs );
+        virtual ~OOdbcDetailsPage();
+        virtual void dispose() SAL_OVERRIDE;
     protected:
         virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) SAL_OVERRIDE;
     private:
-        CheckBox*           m_pUseCatalog;
+        VclPtr<CheckBox>           m_pUseCatalog;
     };
 
     // OUserDriverDetailsPage
@@ -134,16 +138,18 @@ namespace dbaui
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) SAL_OVERRIDE;
 
         OUserDriverDetailsPage( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs );
+        virtual ~OUserDriverDetailsPage();
+        virtual void dispose() SAL_OVERRIDE;
     protected:
         virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) SAL_OVERRIDE;
         virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
         virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
     private:
-        FixedText*          m_pFTHostname;
-        Edit*               m_pEDHostname;
-        FixedText*          m_pPortNumber;
-        NumericField*       m_pNFPortNumber;
-        CheckBox*           m_pUseCatalog;
+        VclPtr<FixedText>          m_pFTHostname;
+        VclPtr<Edit>               m_pEDHostname;
+        VclPtr<FixedText>          m_pPortNumber;
+        VclPtr<NumericField>       m_pNFPortNumber;
+        VclPtr<CheckBox>           m_pUseCatalog;
     };
 
     // OMySQLODBCDetailsPage
@@ -162,6 +168,8 @@ namespace dbaui
                                         , sal_uInt16 _nPortId
                                         , bool bShowSocket = true
                                         );
+        virtual ~OGeneralSpecialJDBCDetailsPage();
+        virtual void dispose() SAL_OVERRIDE;
 
     protected:
 
@@ -171,14 +179,14 @@ namespace dbaui
         DECL_LINK(OnTestJavaClickHdl,PushButton*);
         DECL_LINK(OnEditModified,Edit*);
 
-        Edit*               m_pEDHostname;
-        NumericField*       m_pNFPortNumber;
-        FixedText*          m_pFTSocket;
-        Edit*               m_pEDSocket;
+        VclPtr<Edit>               m_pEDHostname;
+        VclPtr<NumericField>       m_pNFPortNumber;
+        VclPtr<FixedText>          m_pFTSocket;
+        VclPtr<Edit>               m_pEDSocket;
 
-        FixedText*          m_pFTDriverClass;
-        Edit*               m_pEDDriverClass;
-        PushButton*         m_pTestJavaDriver;
+        VclPtr<FixedText>          m_pFTDriverClass;
+        VclPtr<Edit>               m_pEDDriverClass;
+        VclPtr<PushButton>         m_pTestJavaDriver;
 
         OUString              m_sDefaultJdbcDriverName;
         sal_uInt16              m_nPortId;
@@ -195,13 +203,13 @@ namespace dbaui
         virtual void dispose() SAL_OVERRIDE;
 
     private:
-        FixedText           *m_pSeparator1;
+        VclPtr<FixedText>           m_pSeparator1;
         VclPtr<MySQLNativeSettings> m_aMySQLSettings;
 
-        FixedText           *m_pSeparator2;
-        FixedText           *m_pUserNameLabel;
-        Edit                *m_pUserName;
-        CheckBox            *m_pPasswordRequired;
+        VclPtr<FixedText>           m_pSeparator2;
+        VclPtr<FixedText>           m_pUserNameLabel;
+        VclPtr<Edit>                m_pUserName;
+        VclPtr<CheckBox>            m_pPasswordRequired;
 
     protected:
         virtual bool FillItemSet( SfxItemSet* _rCoreAttrs ) SAL_OVERRIDE;
@@ -217,13 +225,15 @@ namespace dbaui
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) SAL_OVERRIDE;
 
         OLDAPDetailsPage( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs );
+        virtual ~OLDAPDetailsPage();
+        virtual void dispose() SAL_OVERRIDE;
     protected:
         virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) SAL_OVERRIDE;
     private:
-        Edit*               m_pETBaseDN;
-        CheckBox*           m_pCBUseSSL;
-        NumericField*       m_pNFPortNumber;
-        NumericField*       m_pNFRowCount;
+        VclPtr<Edit>               m_pETBaseDN;
+        VclPtr<CheckBox>           m_pCBUseSSL;
+        VclPtr<NumericField>       m_pNFPortNumber;
+        VclPtr<NumericField>       m_pNFRowCount;
 
         sal_Int32           m_iSSLPort;
         sal_Int32           m_iNormalPort;
@@ -244,7 +254,7 @@ namespace dbaui
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) SAL_OVERRIDE;
 
         OTextDetailsPage( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs );
-        OTextConnectionHelper*  m_pTextConnectionHelper;
+        VclPtr<OTextConnectionHelper>  m_pTextConnectionHelper;
 
     protected:
         virtual ~OTextDetailsPage();

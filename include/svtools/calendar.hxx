@@ -401,11 +401,11 @@ method in CalendarField and create an own calendar there ourselves.
 class SVT_DLLPUBLIC CalendarField : public DateField
 {
 private:
-    ImplCFieldFloatWin* mpFloatWin;
-    Calendar*           mpCalendar;
+    VclPtr<ImplCFieldFloatWin> mpFloatWin;
+    VclPtr<Calendar>    mpCalendar;
     WinBits             mnCalendarStyle;
-    PushButton*         mpTodayBtn;
-    PushButton*         mpNoneBtn;
+    VclPtr<PushButton>  mpTodayBtn;
+    VclPtr<PushButton>  mpNoneBtn;
     Date                maDefaultDate;
     bool                mbToday;
     bool                mbNone;

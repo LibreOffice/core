@@ -49,7 +49,7 @@ namespace svt
 
     private:
         AccessibleFactoryAccess m_aAccessibleFactory;
-        ToolPanelDeck*          m_pDeck;
+        VclPtr<ToolPanelDeck>   m_pDeck;
     };
 
 

@@ -103,7 +103,24 @@ XMLFilterSettingsDialog::XMLFilterSettingsDialog(vcl::Window* pParent,
     }
 }
 
+XMLFilterSettingsDialog::~XMLFilterSettingsDialog()
+{
+    dispose();
+}
 
+void XMLFilterSettingsDialog::dispose()
+{
+    m_pFilterListBox.clear();
+    m_pCtrlFilterList.clear();
+    m_pPBNew.clear();
+    m_pPBEdit.clear();
+    m_pPBTest.clear();
+    m_pPBDelete.clear();
+    m_pPBSave.clear();
+    m_pPBOpen.clear();
+    m_pPBClose.clear();
+    ModelessDialog::dispose();
+}
 
 IMPL_LINK(XMLFilterSettingsDialog, ClickHdl_Impl, PushButton *, pButton )
 {
@@ -1404,8 +1421,9 @@ SvxPathControl::~SvxPathControl()
 
 void SvxPathControl::dispose()
 {
-    delete m_pFocusCtrl;
-    delete m_pHeaderBar;
+    m_pVBox.clear();
+    m_pFocusCtrl.clear();
+    m_pHeaderBar.clear();
     vcl::Window::dispose();
 }
 
@@ -1452,7 +1470,16 @@ XMLFilterListBox::XMLFilterListBox(Window* pParent, SvxPathControl* pPathControl
     m_pHeaderBar->Show();
 }
 
+XMLFilterListBox::~XMLFilterListBox()
+{
+    dispose();
+}
 
+void XMLFilterListBox::dispose()
+{
+    m_pHeaderBar.clear();
+    SvTabListBox::dispose();
+}
 
 void XMLFilterListBox::Paint( const Rectangle& rRect )
 {

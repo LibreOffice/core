@@ -44,17 +44,17 @@ private:
     DECL_LINK( ClickApplyHdl, void * );
     DECL_LINK( ClickCancelHdl, void * );
 
-    TabControl*      mpTabCtrl;
+    VclPtr<TabControl>      mpTabCtrl;
 
-    HeaderFooterTabPage*    mpSlideTabPage;
-    HeaderFooterTabPage*    mpNotesHandoutsTabPage;
+    VclPtr<HeaderFooterTabPage>    mpSlideTabPage;
+    VclPtr<HeaderFooterTabPage>    mpNotesHandoutsTabPage;
 
     sal_uInt16 mnSlidesId;
     sal_uInt16 mnNotesId;
 
-    PushButton*      maPBApplyToAll;
-    PushButton*      maPBApply;
-    CancelButton*    maPBCancel;
+    VclPtr<PushButton>      maPBApplyToAll;
+    VclPtr<PushButton>      maPBApply;
+    VclPtr<CancelButton>    maPBCancel;
 
     HeaderFooterSettings    maSlideSettings;
     HeaderFooterSettings    maNotesHandoutSettings;

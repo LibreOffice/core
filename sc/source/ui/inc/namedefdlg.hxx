@@ -26,21 +26,21 @@ class ScViewData;
 class ScNameDefDlg : public ScAnyRefDlg
 {
 private:
-    Edit* m_pEdName;
+    VclPtr<Edit> m_pEdName;
 
-    formula::RefEdit* m_pEdRange;
-    formula::RefButton* m_pRbRange;
+    VclPtr<formula::RefEdit> m_pEdRange;
+    VclPtr<formula::RefButton> m_pRbRange;
 
-    ListBox* m_pLbScope;
+    VclPtr<ListBox> m_pLbScope;
 
-    CheckBox* m_pBtnRowHeader;
-    CheckBox* m_pBtnColHeader;
-    CheckBox* m_pBtnPrintArea;
-    CheckBox* m_pBtnCriteria;
+    VclPtr<CheckBox> m_pBtnRowHeader;
+    VclPtr<CheckBox> m_pBtnColHeader;
+    VclPtr<CheckBox> m_pBtnPrintArea;
+    VclPtr<CheckBox> m_pBtnCriteria;
 
-    PushButton* m_pBtnAdd;
-    PushButton* m_pBtnCancel;
-    FixedText* m_pFtInfo;
+    VclPtr<PushButton> m_pBtnAdd;
+    VclPtr<PushButton> m_pBtnCancel;
+    VclPtr<FixedText> m_pFtInfo;
 
     bool mbUndo; //if true we need to add an undo action after creating a range name
     ScDocument* mpDoc;
@@ -77,7 +77,8 @@ public:
                     ScViewData* pViewData, const std::map<OUString, ScRangeName*>& aRangeMap,
                     const ScAddress& aCursorPos, const bool bUndo);
 
-    virtual ~ScNameDefDlg() {};
+    virtual ~ScNameDefDlg();
+    virtual void    dispose() SAL_OVERRIDE;
 
     virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc ) SAL_OVERRIDE;
     virtual bool    IsRefInputMode() const SAL_OVERRIDE;

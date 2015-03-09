@@ -34,6 +34,9 @@ public:
     virtual bool        FillItemSet     ( SfxItemSet* rCoreAttrs ) SAL_OVERRIDE;
     virtual void        Reset           ( const SfxItemSet* ) SAL_OVERRIDE;
 
+    virtual ~ScTabPageProtection();
+    virtual void dispose() SAL_OVERRIDE;
+
 protected:
     using SfxTabPage::DeactivatePage;
     virtual int         DeactivatePage  ( SfxItemSet* pSet = NULL ) SAL_OVERRIDE;
@@ -42,10 +45,10 @@ private:
                 ScTabPageProtection( vcl::Window*            pParent,
                                      const SfxItemSet&  rCoreAttrs );
 private:
-    TriStateBox*    m_pBtnHideCell;
-    TriStateBox*    m_pBtnProtect;
-    TriStateBox*    m_pBtnHideFormula;
-    TriStateBox*    m_pBtnHidePrint;
+    VclPtr<TriStateBox>    m_pBtnHideCell;
+    VclPtr<TriStateBox>    m_pBtnProtect;
+    VclPtr<TriStateBox>    m_pBtnHideFormula;
+    VclPtr<TriStateBox>    m_pBtnHidePrint;
                                         // current status:
     bool            bTriEnabled;        //  if before - DontCare
     bool            bDontCare;          //  all in  TriState

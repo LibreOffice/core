@@ -188,7 +188,7 @@ void SAL_CALL ChildWindowPane::disposing (void)
 Reference<awt::XWindow> SAL_CALL ChildWindowPane::getWindow (void)
     throw (RuntimeException, std::exception)
 {
-    if (mpWindow == NULL || ! mxWindow.is())
+    if (mpWindow == nullptr || ! mxWindow.is())
         GetWindow();
     return Pane::getWindow();
 }

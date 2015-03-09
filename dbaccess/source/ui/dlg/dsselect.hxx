@@ -41,19 +41,20 @@ namespace dbaui
 class ODatasourceSelectDialog : public ModalDialog
 {
 protected:
-    ListBox*        m_pDatasource;
-    OKButton*       m_pOk;
-    CancelButton*   m_pCancel;
+    VclPtr<ListBox>        m_pDatasource;
+    VclPtr<OKButton>       m_pOk;
+    VclPtr<CancelButton>   m_pCancel;
     SfxItemSet*     m_pOutputSet;
 #ifdef HAVE_ODBC_ADMINISTRATION
-    PushButton*     m_pManageDatasources;
+    VclPtr<PushButton>     m_pManageDatasources;
     ::std::unique_ptr< OOdbcManagement >
                     m_pODBCManagement;
 #endif
 
 public:
     ODatasourceSelectDialog( vcl::Window* _pParent, const StringBag& _rDatasources, SfxItemSet* _pOutputSet = NULL );
-
+    virtual ~ODatasourceSelectDialog();
+    virtual void dispose() SAL_OVERRIDE;
     OUString GetSelected() const { return m_pDatasource->GetSelectEntry();}
     void     Select( const OUString& _rEntry ) { m_pDatasource->SelectEntry(_rEntry); }
 

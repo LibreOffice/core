@@ -85,6 +85,21 @@ SdCustomShowDlg::SdCustomShowDlg( vcl::Window* pWindow,
 
 SdCustomShowDlg::~SdCustomShowDlg()
 {
+    dispose();
+}
+
+void SdCustomShowDlg::dispose()
+{
+    m_pLbCustomShows.clear();
+    m_pCbxUseCustomShow.clear();
+    m_pBtnNew.clear();
+    m_pBtnEdit.clear();
+    m_pBtnRemove.clear();
+    m_pBtnCopy.clear();
+    m_pBtnHelp.clear();
+    m_pBtnStartShow.clear();
+    m_pBtnOK.clear();
+    ModalDialog::dispose();
 }
 
 void SdCustomShowDlg::CheckState()
@@ -336,6 +351,20 @@ SdDefineCustomShowDlg::SdDefineCustomShowDlg( vcl::Window* pWindow,
 
 SdDefineCustomShowDlg::~SdDefineCustomShowDlg()
 {
+    dispose();
+}
+
+void SdDefineCustomShowDlg::dispose()
+{
+    m_pEdtName.clear();
+    m_pLbPages.clear();
+    m_pBtnAdd.clear();
+    m_pBtnRemove.clear();
+    m_pLbCustomPages.clear();
+    m_pBtnOK.clear();
+    m_pBtnCancel.clear();
+    m_pBtnHelp.clear();
+    ModalDialog::dispose();
 }
 
 // CheckState

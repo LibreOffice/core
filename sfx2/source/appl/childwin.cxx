@@ -199,7 +199,6 @@ void SfxChildWindow::Destroy()
 SfxChildWindow::~SfxChildWindow()
 {
     delete pContext;
-    delete pWindow;
     delete pImp;
 }
 
@@ -336,16 +335,16 @@ SfxChildWinInfo SfxChildWindow::GetInfo() const
         sal_uIntPtr nMask = WINDOWSTATE_MASK_POS | WINDOWSTATE_MASK_STATE;
         if ( pWindow->GetStyle() & WB_SIZEABLE )
             nMask |= ( WINDOWSTATE_MASK_WIDTH | WINDOWSTATE_MASK_HEIGHT );
-        aInfo.aWinState = static_cast<SystemWindow*>(pWindow)->GetWindowState( nMask );
+        aInfo.aWinState = static_cast<SystemWindow*>(pWindow.get())->GetWindowState( nMask );
     }
     else if ( pWindow->GetType() == RSC_DOCKINGWINDOW )
     {
-        if (static_cast<DockingWindow*>(pWindow)->GetFloatingWindow() )
-            aInfo.aWinState = static_cast<DockingWindow*>(pWindow)->GetFloatingWindow()->GetWindowState();
+        if (static_cast<DockingWindow*>(pWindow.get())->GetFloatingWindow() )
+            aInfo.aWinState = static_cast<DockingWindow*>(pWindow.get())->GetFloatingWindow()->GetWindowState();
         else
         {
             SfxChildWinInfo aTmpInfo;
-            static_cast<SfxDockingWindow*>(pWindow)->FillInfo( aTmpInfo );
+            static_cast<SfxDockingWindow*>(pWindow.get())->FillInfo( aTmpInfo );
             aInfo.aExtraString = aTmpInfo.aExtraString;
         }
     }
@@ -518,7 +517,6 @@ SfxChildWindowContext::SfxChildWindowContext( sal_uInt16 nId )
 
 SfxChildWindowContext::~SfxChildWindowContext()
 {
-    delete pWindow;
 }
 
 FloatingWindow* SfxChildWindowContext::GetFloatingWindow() const
@@ -654,10 +652,10 @@ void SfxChildWindow::Hide()
     switch ( pWindow->GetType() )
     {
         case RSC_DOCKINGWINDOW :
-            static_cast<DockingWindow*>(pWindow)->Hide();
+            static_cast<DockingWindow*>(pWindow.get())->Hide();
             break;
         case RSC_TOOLBOX :
-            static_cast<ToolBox*>(pWindow)->Hide();
+            static_cast<ToolBox*>(pWindow.get())->Hide();
             break;
         default:
             pWindow->Hide();
@@ -670,10 +668,10 @@ void SfxChildWindow::Show( sal_uInt16 nFlags )
     switch ( pWindow->GetType() )
     {
         case RSC_DOCKINGWINDOW :
-            static_cast<DockingWindow*>(pWindow)->Show( true, nFlags );
+            static_cast<DockingWindow*>(pWindow.get())->Show( true, nFlags );
             break;
         case RSC_TOOLBOX :
-            static_cast<ToolBox*>(pWindow)->Show( true, nFlags );
+            static_cast<ToolBox*>(pWindow.get())->Show( true, nFlags );
             break;
         default:
             pWindow->Show( true, nFlags );

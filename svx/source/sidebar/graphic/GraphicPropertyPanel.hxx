@@ -39,6 +39,9 @@ class GraphicPropertyPanel
     public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
 {
 public:
+    virtual ~GraphicPropertyPanel();
+    virtual void dispose() SAL_OVERRIDE;
+
     static GraphicPropertyPanel* Create(
         vcl::Window* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
@@ -57,14 +60,14 @@ public:
 
 private:
     //ui controls
-    MetricField*                                        mpMtrBrightness;
-    MetricField*                                        mpMtrContrast;
-    ListBox*                                            mpLBColorMode;
-    MetricField*                                        mpMtrTrans;
-    MetricField*                                        mpMtrRed;
-    MetricField*                                        mpMtrGreen;
-    MetricField*                                        mpMtrBlue;
-    MetricField*                                        mpMtrGamma;
+    VclPtr<MetricField>                                        mpMtrBrightness;
+    VclPtr<MetricField>                                        mpMtrContrast;
+    VclPtr<ListBox>                                            mpLBColorMode;
+    VclPtr<MetricField>                                        mpMtrTrans;
+    VclPtr<MetricField>                                        mpMtrRed;
+    VclPtr<MetricField>                                        mpMtrGreen;
+    VclPtr<MetricField>                                        mpMtrBlue;
+    VclPtr<MetricField>                                        mpMtrGamma;
 
     ::sfx2::sidebar::ControllerItem                     maBrightControl;
     ::sfx2::sidebar::ControllerItem                     maContrastControl;

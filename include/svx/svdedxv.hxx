@@ -66,12 +66,12 @@ protected:
     SdrPageView*                pTextEditPV;
     SdrOutliner*                pTextEditOutliner;     // outliner for the TextEdit
     OutlinerView*               pTextEditOutlinerView; // current view of the outliners
-    vcl::Window*                     pTextEditWin;          // matching window to pTextEditOutlinerView
+    VclPtr<vcl::Window>         pTextEditWin;          // matching window to pTextEditOutlinerView
     vcl::Cursor*                pTextEditCursorMerker; // to restore the cursor in each window
     ImpSdrEditPara*             pEditPara; // trashbin for everything else to stay compatible
     SdrObject*                  pMacroObj;
     SdrPageView*                pMacroPV;
-    vcl::Window*                     pMacroWin;
+    VclPtr<vcl::Window>         pMacroWin;
 
     Rectangle                   aTextEditArea;
     Rectangle                   aMinTextEditArea;

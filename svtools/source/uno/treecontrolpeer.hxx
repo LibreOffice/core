@@ -159,7 +159,7 @@ private:
     TreeExpansionListenerMultiplexer maTreeExpansionListeners;
     TreeEditListenerMultiplexer maTreeEditListeners;
     bool mbIsRootDisplayed;
-    UnoTreeListBoxImpl* mpTreeImpl;
+    VclPtr<UnoTreeListBoxImpl> mpTreeImpl;
     sal_Int32 mnEditLock;
     OUString msDefaultCollapsedGraphicURL;
     OUString msDefaultExpandedGraphicURL;

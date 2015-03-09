@@ -406,6 +406,38 @@ void SwMailMergeDlg::dispose()
         delete pData;
     }
     delete pImpl;
+    m_pBeamerWin.clear();
+    m_pAllRB.clear();
+    m_pMarkedRB.clear();
+    m_pFromRB.clear();
+    m_pFromNF.clear();
+    m_pToNF.clear();
+    m_pPrinterRB.clear();
+    m_pMailingRB.clear();
+    m_pFileRB.clear();
+    m_pSingleJobsCB.clear();
+    m_pSaveMergedDocumentFT.clear();
+    m_pSaveSingleDocRB.clear();
+    m_pSaveIndividualRB.clear();
+    m_pGenerateFromDataBaseCB.clear();
+    m_pColumnFT.clear();
+    m_pColumnLB.clear();
+    m_pPathFT.clear();
+    m_pPathED.clear();
+    m_pPathPB.clear();
+    m_pFilterFT.clear();
+    m_pFilterLB.clear();
+    m_pAddressFldLB.clear();
+    m_pSubjectFT.clear();
+    m_pSubjectED.clear();
+    m_pFormatFT.clear();
+    m_pAttachFT.clear();
+    m_pAttachED.clear();
+    m_pAttachPB.clear();
+    m_pFormatHtmlCB.clear();
+    m_pFormatRtfCB.clear();
+    m_pFormatSwCB.clear();
+    m_pOkBTN.clear();
     SvxStandardDialog::dispose();
 }
 
@@ -639,11 +671,33 @@ SwMailMergeCreateFromDlg::SwMailMergeCreateFromDlg(vcl::Window* pParent)
     get(m_pThisDocRB, "document");
 }
 
+SwMailMergeCreateFromDlg::~SwMailMergeCreateFromDlg()
+{
+    dispose();
+}
+
+void SwMailMergeCreateFromDlg::dispose()
+{
+    m_pThisDocRB.clear();
+    ModalDialog::dispose();
+}
+
 SwMailMergeFieldConnectionsDlg::SwMailMergeFieldConnectionsDlg(vcl::Window* pParent)
     : ModalDialog(pParent, "MergeConnectDialog",
         "modules/swriter/ui/mergeconnectdialog.ui")
 {
     get(m_pUseExistingRB, "existing");
+}
+
+SwMailMergeFieldConnectionsDlg::~SwMailMergeFieldConnectionsDlg()
+{
+    dispose();
+}
+
+void SwMailMergeFieldConnectionsDlg::dispose()
+{
+    m_pUseExistingRB.clear();
+    ModalDialog::dispose();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

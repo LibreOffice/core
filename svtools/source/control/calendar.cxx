@@ -2189,10 +2189,10 @@ Size Calendar::CalcWindowSizePixel( long nCalcMonthPerLine,
 class ImplCFieldFloatWin : public FloatingWindow
 {
 private:
-    Calendar*       mpCalendar;
-    PushButton*     mpTodayBtn;
-    PushButton*     mpNoneBtn;
-    FixedLine*      mpFixedLine;
+    VclPtr<Calendar>    mpCalendar;
+    VclPtr<PushButton>  mpTodayBtn;
+    VclPtr<PushButton>  mpNoneBtn;
+    VclPtr<FixedLine>   mpFixedLine;
 
 public:
                     ImplCFieldFloatWin( vcl::Window* pParent );
@@ -2229,9 +2229,10 @@ ImplCFieldFloatWin::~ImplCFieldFloatWin()
 
 void ImplCFieldFloatWin::dispose()
 {
-    delete mpTodayBtn;
-    delete mpNoneBtn;
-    delete mpFixedLine;
+    mpTodayBtn.clear();
+    mpNoneBtn.clear();
+    mpFixedLine.clear();
+    mpCalendar.clear();
     FloatingWindow::dispose();
 }
 
@@ -2257,11 +2258,7 @@ PushButton* ImplCFieldFloatWin::EnableTodayBtn( bool bEnable )
     }
     else
     {
-        if ( mpTodayBtn )
-        {
-            delete mpTodayBtn;
-            mpTodayBtn = NULL;
-        }
+        mpTodayBtn.clear();
     }
 
     return mpTodayBtn;
@@ -2289,11 +2286,7 @@ PushButton* ImplCFieldFloatWin::EnableNoneBtn( bool bEnable )
     }
     else
     {
-        if ( mpNoneBtn )
-        {
-            delete mpNoneBtn;
-            mpNoneBtn = NULL;
-        }
+        mpNoneBtn.clear();
     }
 
     return mpNoneBtn;
@@ -2357,11 +2350,7 @@ void ImplCFieldFloatWin::ArrangeButtons()
     }
     else
     {
-        if ( mpFixedLine )
-        {
-            delete mpFixedLine;
-            mpFixedLine = NULL;
-        }
+        mpFixedLine.clear();
     }
 }
 
@@ -2399,11 +2388,10 @@ CalendarField::~CalendarField()
 
 void CalendarField::dispose()
 {
-    if ( mpFloatWin )
-    {
-        delete mpCalendar;
-        delete mpFloatWin;
-    }
+    mpCalendar.clear();
+    mpFloatWin.clear();
+    mpTodayBtn.clear();
+    mpNoneBtn.clear();
     DateField::dispose();
 }
 

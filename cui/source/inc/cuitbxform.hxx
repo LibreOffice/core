@@ -29,10 +29,12 @@
 class FmInputRecordNoDialog : public ModalDialog
 {
 public:
-    NumericField* m_pRecordNo;
+    VclPtr<NumericField> m_pRecordNo;
 
 public:
     FmInputRecordNoDialog(vcl::Window * pParent);
+    virtual ~FmInputRecordNoDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     void SetValue(long dNew) { m_pRecordNo->SetValue(dNew); }
     long GetValue() const { return static_cast<long>(m_pRecordNo->GetValue()); }

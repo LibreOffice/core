@@ -51,17 +51,27 @@ using namespace comphelper;
 
 class OPasswordDialog : public ModalDialog
 {
-    VclFrame* m_pUser;
-    Edit*     m_pEDOldPassword;
-    Edit*     m_pEDPassword;
-    Edit*     m_pEDPasswordRepeat;
-    OKButton* m_pOKBtn;
+    VclPtr<VclFrame> m_pUser;
+    VclPtr<Edit>     m_pEDOldPassword;
+    VclPtr<Edit>     m_pEDPassword;
+    VclPtr<Edit>     m_pEDPasswordRepeat;
+    VclPtr<OKButton> m_pOKBtn;
 
     DECL_LINK( OKHdl_Impl, void * );
     DECL_LINK( ModifiedHdl, Edit * );
 
 public:
     OPasswordDialog( vcl::Window* pParent,const OUString& _sUserName);
+    virtual ~OPasswordDialog() { dispose(); }
+    virtual void dispose() SAL_OVERRIDE
+    {
+        m_pUser.clear();
+        m_pEDOldPassword.clear();
+        m_pEDPassword.clear();
+        m_pEDPasswordRepeat.clear();
+        m_pOKBtn.clear();
+        ModalDialog::dispose();
+    }
 
     OUString        GetOldPassword() const { return m_pEDOldPassword->GetText(); }
     OUString        GetNewPassword() const { return m_pEDPassword->GetText(); }
@@ -138,6 +148,10 @@ void OUserAdmin::dispose()
 {
     m_xConnection = NULL;
     m_TableCtrl.disposeAndClear();
+    m_pUSER.clear();
+    m_pNEWUSER.clear();
+    m_pCHANGEPWD.clear();
+    m_pDELETEUSER.clear();
     OGenericAdministrationPage::dispose();
 }
 

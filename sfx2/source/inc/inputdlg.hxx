@@ -21,6 +21,8 @@ class InputDialog : public ModalDialog
 public:
     InputDialog (const OUString &labelText, vcl::Window *pParent = NULL);
     OUString getEntryText () const;
+    virtual ~InputDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
 private:
 
@@ -28,10 +30,10 @@ private:
 
 private:
 
-    Edit *m_pEntry;
-    FixedText *m_pLabel;
-    PushButton *m_pOK;
-    PushButton *m_pCancel;
+    VclPtr<Edit>       m_pEntry;
+    VclPtr<FixedText>  m_pLabel;
+    VclPtr<PushButton> m_pOK;
+    VclPtr<PushButton> m_pCancel;
 };
 
 #endif // INCLUDED_SFX2_SOURCE_INC_INPUTDLG_HXX

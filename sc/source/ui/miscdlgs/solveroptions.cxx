@@ -165,6 +165,9 @@ ScSolverOptionsDialog::~ScSolverOptionsDialog()
 void ScSolverOptionsDialog::dispose()
 {
     delete mpCheckButtonData;
+    m_pLbEngine.clear();
+    m_pLbSettings.clear();
+    m_pBtnEdit.clear();
     ModalDialog::dispose();
 }
 
@@ -394,6 +397,18 @@ ScSolverIntegerDialog::ScSolverIntegerDialog(vcl::Window * pParent)
     get(m_pNfValue, "value");
 }
 
+ScSolverIntegerDialog::~ScSolverIntegerDialog()
+{
+    dispose();
+}
+
+void ScSolverIntegerDialog::dispose()
+{
+    m_pFrame.clear();
+    m_pNfValue.clear();
+    ModalDialog::dispose();
+}
+
 void ScSolverIntegerDialog::SetOptionName( const OUString& rName )
 {
     m_pFrame->set_label(rName);
@@ -420,6 +435,18 @@ ScSolverValueDialog::ScSolverValueDialog( vcl::Window * pParent )
 {
     get(m_pFrame, "frame");
     get(m_pEdValue, "value");
+}
+
+ScSolverValueDialog::~ScSolverValueDialog()
+{
+    dispose();
+}
+
+void ScSolverValueDialog::dispose()
+{
+    m_pFrame.clear();
+    m_pEdValue.clear();
+    ModalDialog::dispose();
 }
 
 void ScSolverValueDialog::SetOptionName( const OUString& rName )

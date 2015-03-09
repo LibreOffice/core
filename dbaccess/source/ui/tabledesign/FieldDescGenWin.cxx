@@ -43,8 +43,7 @@ OFieldDescGenWin::~OFieldDescGenWin()
 
 void OFieldDescGenWin::dispose()
 {
-    boost::scoped_ptr<vcl::Window> aTemp(m_pFieldControl);
-    m_pFieldControl = NULL;
+    m_pFieldControl.clear();
     TabPage::dispose();
 }
 

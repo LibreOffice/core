@@ -22,6 +22,7 @@
 
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
+#include <vcl/vclptr.hxx>
 
 #include <vector>
 
@@ -42,7 +43,7 @@ private:
     typedef ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > > AccessibleChildren;
 
     AccessibleChildren      m_aAccessibleChildren;
-    TabControl*             m_pTabControl;
+    VclPtr<TabControl>      m_pTabControl;
 
 protected:
     void                    UpdateFocused();

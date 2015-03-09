@@ -158,7 +158,7 @@ namespace svxform
     {
         OAddConditionDialogBase::executedDialog( _nExecutionResult );
         if ( _nExecutionResult == RET_OK )
-            m_sConditionValue = static_cast< AddConditionDialog* >( m_pDialog )->GetCondition();
+            m_sConditionValue = static_cast< AddConditionDialog* >( m_pDialog.get() )->GetCondition();
     }
 
 

@@ -47,10 +47,10 @@ namespace svx
     class WebConnectionInfoDialog : public ModalDialog
     {
     private:
-        PasswordTable* m_pPasswordsLB;
-        PushButton*    m_pRemoveBtn;
-        PushButton*    m_pRemoveAllBtn;
-        PushButton*    m_pChangeBtn;
+        VclPtr<PasswordTable> m_pPasswordsLB;
+        VclPtr<PushButton>    m_pRemoveBtn;
+        VclPtr<PushButton>    m_pRemoveAllBtn;
+        VclPtr<PushButton>    m_pChangeBtn;
         sal_Int32      m_nPos;
 
     DECL_LINK( HeaderBarClickedHdl, SvSimpleTable* );

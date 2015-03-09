@@ -51,10 +51,12 @@ class SvxSearchAttributeDialog : public ModalDialog
 public:
     SvxSearchAttributeDialog( vcl::Window* pParent, SearchAttrItemList& rLst,
                               const sal_uInt16* pWhRanges );
+    virtual ~SvxSearchAttributeDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
 private:
-    SvxCheckListBox*    m_pAttrLB;
-    OKButton*           m_pOKBtn;
+    VclPtr<SvxCheckListBox>    m_pAttrLB;
+    VclPtr<OKButton>           m_pOKBtn;
 
     SearchAttrItemList& rList;
 
@@ -66,10 +68,10 @@ private:
 class SvxSearchSimilarityDialog : public ModalDialog
 {
 private:
-    NumericField*        m_pOtherFld;
-    NumericField*        m_pLongerFld;
-    NumericField*        m_pShorterFld;
-    CheckBox*            m_pRelaxBox;
+    VclPtr<NumericField>        m_pOtherFld;
+    VclPtr<NumericField>        m_pLongerFld;
+    VclPtr<NumericField>        m_pShorterFld;
+    VclPtr<CheckBox>            m_pRelaxBox;
 
 public:
     SvxSearchSimilarityDialog(  vcl::Window* pParent,
@@ -77,6 +79,8 @@ public:
                                 sal_uInt16 nOther,
                                 sal_uInt16 nShorter,
                                 sal_uInt16 nLonger );
+    virtual ~SvxSearchSimilarityDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     sal_uInt16  GetOther()      { return (sal_uInt16)m_pOtherFld->GetValue(); }
     sal_uInt16  GetShorter()    { return (sal_uInt16)m_pShorterFld->GetValue(); }

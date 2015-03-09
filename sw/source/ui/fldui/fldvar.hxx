@@ -51,22 +51,22 @@ class SwFldVarPage : public SwFldPage
 {
     friend class SelectionListBox;
 
-    ListBox*            m_pTypeLB;
-    VclContainer*       m_pSelection;
-    SelectionListBox*   m_pSelectionLB;
-    FixedText*          m_pNameFT;
-    Edit*               m_pNameED;
-    FixedText*          m_pValueFT;
-    ConditionEdit*      m_pValueED;
-    VclContainer*       m_pFormat;
-    NumFormatListBox*   m_pNumFormatLB;
-    ListBox*            m_pFormatLB;
-    VclContainer*       m_pChapterFrame;
-    ListBox*            m_pChapterLevelLB;
-    CheckBox*           m_pInvisibleCB;
-    FixedText*          m_pSeparatorFT;
-    Edit*               m_pSeparatorED;
-    ToolBox*            m_pNewDelTBX;
+    VclPtr<ListBox>            m_pTypeLB;
+    VclPtr<VclContainer>       m_pSelection;
+    VclPtr<SelectionListBox>   m_pSelectionLB;
+    VclPtr<FixedText>          m_pNameFT;
+    VclPtr<Edit>               m_pNameED;
+    VclPtr<FixedText>          m_pValueFT;
+    VclPtr<ConditionEdit>      m_pValueED;
+    VclPtr<VclContainer>       m_pFormat;
+    VclPtr<NumFormatListBox>   m_pNumFormatLB;
+    VclPtr<ListBox>            m_pFormatLB;
+    VclPtr<VclContainer>       m_pChapterFrame;
+    VclPtr<ListBox>            m_pChapterLevelLB;
+    VclPtr<CheckBox>           m_pInvisibleCB;
+    VclPtr<FixedText>          m_pSeparatorFT;
+    VclPtr<Edit>               m_pSeparatorED;
+    VclPtr<ToolBox>            m_pNewDelTBX;
     sal_uInt16          m_nApplyId;
     sal_uInt16          m_nDeleteId;
 
@@ -93,6 +93,7 @@ public:
                         SwFldVarPage(vcl::Window* pParent, const SfxItemSet& rSet);
 
                         virtual ~SwFldVarPage();
+    virtual void        dispose() SAL_OVERRIDE;
 
     static SfxTabPage*  Create(vcl::Window* pParent, const SfxItemSet* rAttrSet);
 

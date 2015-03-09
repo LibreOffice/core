@@ -70,7 +70,7 @@ class SmGraphicAccessible :
     /// client id in the AccessibleEventNotifier queue
     sal_uInt32                          nClientId;
 
-    SmGraphicWindow     *pWin;
+    VclPtr<SmGraphicWindow>             pWin;
 
     SmGraphicAccessible( const SmGraphicAccessible & ) SAL_DELETED_FUNCTION;
     SmGraphicAccessible & operator = ( const SmGraphicAccessible & ) SAL_DELETED_FUNCTION;
@@ -316,7 +316,7 @@ class SmEditAccessible :
 {
     OUString                                aAccName;
     ::accessibility::AccessibleTextHelper    *pTextHelper;
-    SmEditWindow                           *pWin;
+    VclPtr<SmEditWindow>                    pWin;
 
     SmEditAccessible( const SmEditAccessible & ) SAL_DELETED_FUNCTION;
     SmEditAccessible & operator = ( const SmEditAccessible & ) SAL_DELETED_FUNCTION;

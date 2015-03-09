@@ -38,12 +38,14 @@ public:
                       long           nMinimum  = 0,
                       long           nFirst    = 1,
                       long           nLast     = 100 );
+    virtual ~ScMetricInputDlg();
+    virtual void dispose() SAL_OVERRIDE;
 
     long GetInputValue( FieldUnit eUnit = FUNIT_TWIP ) const;
 
 private:
-    MetricField*    m_pEdValue;
-    CheckBox*       m_pBtnDefVal;
+    VclPtr<MetricField>    m_pEdValue;
+    VclPtr<CheckBox>       m_pBtnDefVal;
     long            nDefaultValue;
     long            nCurrentValue;
 

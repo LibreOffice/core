@@ -117,7 +117,6 @@ ThumbnailViewItem::ThumbnailViewItem(ThumbnailView &rView, sal_uInt16 nId)
 
 ThumbnailViewItem::~ThumbnailViewItem()
 {
-    delete mpTitleED;
     if( mpxAcc )
     {
         static_cast< ThumbnailViewItemAcc* >( mpxAcc->get() )->ParentDestroyed();
@@ -178,9 +177,9 @@ void ThumbnailViewItem::setEditTitle (bool edit, bool bChangeFocus)
     {
         mpTitleED->SetText(maTitle);
         updateTitleEditSize();
-        static_cast<ResizableMultiLineEdit*>(mpTitleED)->SetInGrabFocus(true);
+        static_cast<ResizableMultiLineEdit*>(mpTitleED.get())->SetInGrabFocus(true);
         mpTitleED->GrabFocus();
-        static_cast<ResizableMultiLineEdit*>(mpTitleED)->SetInGrabFocus(false);
+        static_cast<ResizableMultiLineEdit*>(mpTitleED.get())->SetInGrabFocus(false);
     }
     else if (bChangeFocus)
     {

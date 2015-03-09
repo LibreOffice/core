@@ -69,7 +69,7 @@ namespace dbaui
         ::com::sun::star::lang::Locale      m_aLocale;
         OUString                            m_sDecimalSep;
 
-        OSelectionBrowseBox*                m_pSelectionBox;    // presents the lower window
+        VclPtr<OSelectionBrowseBox>         m_pSelectionBox;    // presents the lower window
         ChildFocusState                     m_eChildFocus;
         bool                                m_bInSplitHandler;
 

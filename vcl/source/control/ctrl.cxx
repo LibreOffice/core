@@ -127,6 +127,10 @@ void Control::SetText( const OUString& rStr )
     Window::SetText( rStr );
 }
 
+ControlLayoutData::ControlLayoutData() : m_pParent( NULL )
+{
+}
+
 Rectangle ControlLayoutData::GetCharacterBounds( long nIndex ) const
 {
     return (nIndex >= 0 && nIndex < (long) m_aUnicodeBoundRects.size()) ? m_aUnicodeBoundRects[ nIndex ] : Rectangle();

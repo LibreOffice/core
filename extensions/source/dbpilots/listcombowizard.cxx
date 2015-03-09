@@ -285,6 +285,16 @@ namespace dbp
         m_pSelectTable->SetSelectHdl(LINK(this, OContentTableSelection, OnTableSelected));
     }
 
+    OContentTableSelection::~OContentTableSelection()
+    {
+        dispose();
+    }
+
+    void OContentTableSelection::dispose()
+    {
+        m_pSelectTable.clear();
+        OLCPage::dispose();
+    }
 
     void OContentTableSelection::ActivatePage()
     {
@@ -369,6 +379,18 @@ namespace dbp
         m_pSelectTableField->SetDoubleClickHdl(LINK(this, OContentFieldSelection, OnTableDoubleClicked));
     }
 
+    OContentFieldSelection::~OContentFieldSelection()
+    {
+        dispose();
+    }
+
+    void OContentFieldSelection::dispose()
+    {
+        m_pSelectTableField.clear();
+        m_pDisplayedField.clear();
+        m_pInfo.clear();
+        OLCPage::dispose();
+    }
 
     void OContentFieldSelection::ActivatePage()
     {
@@ -439,6 +461,17 @@ namespace dbp
         m_pTableField->SetSelectHdl(LINK(this, OLinkFieldsPage, OnSelectionModified));
     }
 
+    OLinkFieldsPage::~OLinkFieldsPage()
+    {
+        dispose();
+    }
+
+    void OLinkFieldsPage::dispose()
+    {
+        m_pValueListField.clear();
+        m_pTableField.clear();
+        OLCPage::dispose();
+    }
 
     void OLinkFieldsPage::ActivatePage()
     {

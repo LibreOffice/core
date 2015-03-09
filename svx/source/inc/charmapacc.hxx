@@ -40,7 +40,7 @@ namespace svx
     class SvxShowCharSetVirtualAcc : public ::comphelper::OAccessibleComponentHelper,
                                      public OAccessibleHelper_Base_2
     {
-        SvxShowCharSet*     mpParent; // the vcl control
+        VclPtr<SvxShowCharSet>     mpParent; // the vcl control
         SvxShowCharSetAcc*  m_pTable; // the table, which holds the characters shown by the vcl control
         ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > m_xAcc; // the ref to the table
     protected:

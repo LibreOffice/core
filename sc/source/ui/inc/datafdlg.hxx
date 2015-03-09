@@ -29,15 +29,15 @@ class ScDataFormDlg : public ModalDialog
 {
 private:
 
-    PushButton*     m_pBtnNew;
-    PushButton*     m_pBtnDelete;
-    PushButton*     m_pBtnRestore;
-    PushButton*     m_pBtnPrev;
-    PushButton*     m_pBtnNext;
-    PushButton*     m_pBtnClose;
-    ScrollBar*      m_pSlider;
-    VclGrid*        m_pGrid;
-    FixedText*      m_pFixedText;
+    VclPtr<PushButton>     m_pBtnNew;
+    VclPtr<PushButton>     m_pBtnDelete;
+    VclPtr<PushButton>     m_pBtnRestore;
+    VclPtr<PushButton>     m_pBtnPrev;
+    VclPtr<PushButton>     m_pBtnNext;
+    VclPtr<PushButton>     m_pBtnClose;
+    VclPtr<ScrollBar>      m_pSlider;
+    VclPtr<VclGrid>        m_pGrid;
+    VclPtr<FixedText>      m_pFixedText;
     OUString        sNewRecord;
 
     ScTabViewShell* pTabViewShell;
@@ -57,6 +57,7 @@ private:
 public:
     ScDataFormDlg( vcl::Window* pParent, ScTabViewShell* pTabViewShell);
     virtual ~ScDataFormDlg();
+    virtual void dispose() SAL_OVERRIDE;
 
     void FillCtrls(SCROW nCurrentRow);
 private:

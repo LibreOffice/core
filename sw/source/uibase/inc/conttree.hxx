@@ -233,11 +233,11 @@ private:
     ImageList           aEntryImages;
 
     SwWrtShell*             pActiveShell;
-    SvTreeListEntry*            pEmphasisEntry; // Drag'n Drop emphasis
-    SvTreeListEntry*            pDDSource;      // source for Drag'n Drop
+    SvTreeListEntry*        pEmphasisEntry; // Drag'n Drop emphasis
+    SvTreeListEntry*        pDDSource;      // source for Drag'n Drop
     SwGlblDocContents*      pSwGlblDocContents; // array with sorted content
 
-    vcl::Window*                 pDefParentWin;
+    VclPtr<vcl::Window>     pDefParentWin;
     SwGlblDocContent*       pDocContent;
     sfx2::DocumentInserter* pDocInserter;
 

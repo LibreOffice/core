@@ -131,6 +131,28 @@ SvxConnectionPage::SvxConnectionPage( vcl::Window* pWindow, const SfxItemSet& rI
     m_pLbType->SetSelectHdl( aLink );
 }
 
+SvxConnectionPage::~SvxConnectionPage()
+{
+    dispose();
+}
+
+void SvxConnectionPage::dispose()
+{
+    m_pLbType.clear();
+    m_pFtLine1.clear();
+    m_pMtrFldLine1.clear();
+    m_pFtLine2.clear();
+    m_pMtrFldLine2.clear();
+    m_pFtLine3.clear();
+    m_pMtrFldLine3.clear();
+    m_pMtrFldHorz1.clear();
+    m_pMtrFldVert1.clear();
+    m_pMtrFldHorz2.clear();
+    m_pMtrFldVert2.clear();
+    m_pCtlPreview.clear();
+    SfxTabPage::dispose();
+}
+
 /*************************************************************************
 |*
 |* reads passed Item-Set

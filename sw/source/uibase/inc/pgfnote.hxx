@@ -39,21 +39,22 @@ public:
     virtual bool FillItemSet(SfxItemSet *rSet) SAL_OVERRIDE;
     virtual void Reset(const SfxItemSet *rSet) SAL_OVERRIDE;
 
+    virtual ~SwFootNotePage();
+    virtual void dispose() SAL_OVERRIDE;
 private:
     SwFootNotePage(vcl::Window *pParent, const SfxItemSet &rSet);
-    virtual ~SwFootNotePage();
 
-    RadioButton*    m_pMaxHeightPageBtn;
-    RadioButton*    m_pMaxHeightBtn;
-    MetricField*    m_pMaxHeightEdit;
-    MetricField*    m_pDistEdit;
+    VclPtr<RadioButton>    m_pMaxHeightPageBtn;
+    VclPtr<RadioButton>    m_pMaxHeightBtn;
+    VclPtr<MetricField>    m_pMaxHeightEdit;
+    VclPtr<MetricField>    m_pDistEdit;
 
-    ListBox*        m_pLinePosBox;
-    LineListBox*    m_pLineTypeBox;
-    MetricField*    m_pLineWidthEdit;
-    ColorListBox*   m_pLineColorBox;
-    MetricField*    m_pLineLengthEdit;
-    MetricField*    m_pLineDistEdit;
+    VclPtr<ListBox>        m_pLinePosBox;
+    VclPtr<LineListBox>    m_pLineTypeBox;
+    VclPtr<MetricField>    m_pLineWidthEdit;
+    VclPtr<ColorListBox>   m_pLineColorBox;
+    VclPtr<MetricField>    m_pLineLengthEdit;
+    VclPtr<MetricField>    m_pLineDistEdit;
 
     DECL_LINK(HeightPage, void *);
     DECL_LINK(HeightMetric, void *);

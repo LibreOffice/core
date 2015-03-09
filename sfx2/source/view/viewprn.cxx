@@ -411,9 +411,9 @@ class SfxDialogExecutor_Impl
 {
 private:
     SfxViewShell*           _pViewSh;
-    PrinterSetupDialog*     _pSetupParent;
+    VclPtr<PrinterSetupDialog>  _pSetupParent;
     SfxItemSet*             _pOptions;
-    bool                _bHelpDisabled;
+    bool                    _bHelpDisabled;
 
     DECL_LINK( Execute, void * );
 

@@ -28,7 +28,7 @@ namespace dbaui
         VclPtr<FixedText>   m_aSpace1;
         VclPtr<FixedText>   m_aSpace2;
         VclPtr<FixedText>   m_aTitle;
-        vcl::Window*     m_pChild;
+        VclPtr<vcl::Window> m_pChild;
         bool        m_bShift;
         void ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
     protected:

@@ -25,8 +25,8 @@
 class SfxAlienWarningDialog : public MessageDialog
 {
 private:
-    PushButton*             m_pKeepCurrentBtn;
-    CheckBox*               m_pWarningOnBox;
+    VclPtr<PushButton>             m_pKeepCurrentBtn;
+    VclPtr<CheckBox>               m_pWarningOnBox;
 
 public:
     SfxAlienWarningDialog(vcl::Window* pParent, const OUString& _rFormatName);

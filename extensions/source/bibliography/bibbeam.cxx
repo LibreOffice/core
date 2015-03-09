@@ -29,6 +29,7 @@
 #include <vcl/edit.hxx>
 #include <tools/debug.hxx>
 #include "bibbeam.hxx"
+#include "bibview.hxx"
 #include "toolbar.hrc"
 #include "bibresid.hxx"
 #include "datman.hxx"
@@ -216,17 +217,17 @@ namespace bib
         if ( pToolBar )
         {
             pDatMan->SetToolbar(0);
-
-            DELETEZ( pToolBar );
         }
 
         if( pGridWin )
         {
             BibGridwin* pDel = pGridWin;
-            pGridWin = NULL;
+            pGridWin.clear();
             pDel->disposeGridWin();
             delete pDel;
         }
+        pToolBar.clear();
+        pGridWin.clear();
         BibSplitWindow::dispose();
     }
 

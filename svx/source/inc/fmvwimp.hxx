@@ -45,6 +45,7 @@
 #include <cppuhelper/implbase3.hxx>
 #include <comphelper/uno3.hxx>
 #include <rtl/ref.hxx>
+#include <vcl/vclptr.hxx>
 
 class SdrPageWindow;
 
@@ -93,7 +94,7 @@ class FormViewPageWindowAdapter : public FormViewPageWindowAdapter_Base
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >                            m_xControlContainer;
     css::uno::Reference<css::uno::XComponentContext>                                                        m_xContext;
     FmXFormView*                m_pViewImpl;
-    vcl::Window*                     m_pWindow;
+    VclPtr<vcl::Window>         m_pWindow;
 
 protected:
     virtual ~FormViewPageWindowAdapter();

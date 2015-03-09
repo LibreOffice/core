@@ -56,7 +56,7 @@ namespace dbaui
         // and the table itself (needed for me as I want to lock it as long as the window is alive)
         VclPtr<FixedImage>          m_aTypeImage;
         VclPtr<OTableWindowTitle>   m_aTitle;
-        OTableWindowListBox*    m_pListBox;
+        VclPtr<OTableWindowListBox>    m_pListBox;
         OTableWindowAccess*     m_pAccessible;
 
     private:

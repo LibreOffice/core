@@ -48,9 +48,9 @@ private:
     css::uno::Sequence< css::uno::Reference< css::security::XCertificate > > maCerts;
     SignatureInformations maCertsToIgnore;
 
-    SvSimpleTable*     m_pCertLB;
-    PushButton*         m_pViewBtn;
-    OKButton*           m_pOKBtn;
+    VclPtr<SvSimpleTable>     m_pCertLB;
+    VclPtr<PushButton>         m_pViewBtn;
+    VclPtr<OKButton>           m_pOKBtn;
 
     bool                mbInitialized;
 

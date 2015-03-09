@@ -375,7 +375,7 @@ void Window::StartTracking( sal_uInt16 nFlags )
 {
     ImplSVData* pSVData = ImplGetSVData();
 
-    if ( pSVData->maWinData.mpTrackWin != this )
+    if ( pSVData->maWinData.mpTrackWin.get() != this )
     {
         if ( pSVData->maWinData.mpTrackWin )
             pSVData->maWinData.mpTrackWin->EndTracking( ENDTRACK_CANCEL );
@@ -402,7 +402,7 @@ void Window::EndTracking( sal_uInt16 nFlags )
 {
     ImplSVData* pSVData = ImplGetSVData();
 
-    if ( pSVData->maWinData.mpTrackWin == this )
+    if ( pSVData->maWinData.mpTrackWin.get() == this )
     {
         // due to DbgChkThis in brackets, as the window could be destroyed
         // in the handler
@@ -449,7 +449,7 @@ void Window::StartAutoScroll( sal_uInt16 nFlags )
 {
     ImplSVData* pSVData = ImplGetSVData();
 
-    if ( pSVData->maWinData.mpAutoScrollWin != this )
+    if ( pSVData->maWinData.mpAutoScrollWin.get() != this )
     {
         if ( pSVData->maWinData.mpAutoScrollWin )
             pSVData->maWinData.mpAutoScrollWin->EndAutoScroll();
@@ -464,7 +464,7 @@ void Window::EndAutoScroll()
 {
     ImplSVData* pSVData = ImplGetSVData();
 
-    if ( pSVData->maWinData.mpAutoScrollWin == this )
+    if ( pSVData->maWinData.mpAutoScrollWin.get() == this )
     {
         pSVData->maWinData.mpAutoScrollWin = NULL;
         pSVData->maWinData.mnAutoScrollFlags = 0;
@@ -938,7 +938,7 @@ void Window::EnableDocking( bool bEnable )
 }
 
 // retrieves the list of owner draw decorated windows for this window hiearchy
-::std::vector<vcl::Window *>& Window::ImplGetOwnerDrawList()
+::std::vector<VclPtr<vcl::Window> >& Window::ImplGetOwnerDrawList()
 {
     return ImplGetTopmostFrameWindow()->mpWindowImpl->mpFrameData->maOwnerDrawList;
 }
@@ -1016,7 +1016,7 @@ const vcl::Window* Window::ImplGetFirstOverlapWindow() const
 
 vcl::Window* Window::ImplGetFrameWindow() const
 {
-    return mpWindowImpl ? mpWindowImpl->mpFrameWindow : NULL;
+    return mpWindowImpl ? mpWindowImpl->mpFrameWindow.get() : NULL;
 }
 
 bool Window::IsDockingWindow() const
@@ -1222,7 +1222,7 @@ bool Window::IsInPaint() const
 
 vcl::Window* Window::GetParent() const
 {
-    return mpWindowImpl ? mpWindowImpl->mpRealParent : NULL;
+    return mpWindowImpl ? mpWindowImpl->mpRealParent.get() : NULL;
 }
 
 bool Window::IsVisible() const
@@ -1457,9 +1457,8 @@ void Window::queue_resize(StateChangedType eReason)
     WindowImpl *pWindowImpl = mpWindowImpl->mpBorderWindow ? mpWindowImpl->mpBorderWindow->mpWindowImpl : mpWindowImpl;
     if (pWindowImpl->m_xSizeGroup && pWindowImpl->m_xSizeGroup->get_mode() != VCL_SIZE_GROUP_NONE)
     {
-        std::set<vcl::Window*> &rWindows = pWindowImpl->m_xSizeGroup->get_widgets();
-        for (std::set<vcl::Window*>::iterator aI = rWindows.begin(),
-            aEnd = rWindows.end(); aI != aEnd; ++aI)
+        std::set<VclPtr<vcl::Window> > &rWindows = pWindowImpl->m_xSizeGroup->get_widgets();
+        for (auto aI = rWindows.begin(), aEnd = rWindows.end(); aI != aEnd; ++aI)
         {
             vcl::Window *pOther = *aI;
             if (pOther == this)
@@ -1754,9 +1753,8 @@ Size Window::get_preferred_size() const
         if (eMode != VCL_SIZE_GROUP_NONE)
         {
             const bool bIgnoreInHidden = pWindowImpl->m_xSizeGroup->get_ignore_hidden();
-            const std::set<vcl::Window*> &rWindows = pWindowImpl->m_xSizeGroup->get_widgets();
-            for (std::set<vcl::Window*>::const_iterator aI = rWindows.begin(),
-                aEnd = rWindows.end(); aI != aEnd; ++aI)
+            const std::set<VclPtr<vcl::Window> > &rWindows = pWindowImpl->m_xSizeGroup->get_widgets();
+            for (auto aI = rWindows.begin(), aEnd = rWindows.end(); aI != aEnd; ++aI)
             {
                 const vcl::Window *pOther = *aI;
                 if (pOther == this)
@@ -2040,8 +2038,8 @@ void Window::remove_from_all_size_groups()
 
 void Window::add_mnemonic_label(FixedText *pLabel)
 {
-    std::vector<FixedText*>& v = mpWindowImpl->m_aMnemonicLabels;
-    if (std::find(v.begin(), v.end(), pLabel) != v.end())
+    std::vector<VclPtr<FixedText> >& v = mpWindowImpl->m_aMnemonicLabels;
+    if (std::find(v.begin(), v.end(), VclPtr<FixedText>(pLabel)) != v.end())
         return;
     v.push_back(pLabel);
     pLabel->set_mnemonic_widget(this);
@@ -2049,15 +2047,15 @@ void Window::add_mnemonic_label(FixedText *pLabel)
 
 void Window::remove_mnemonic_label(FixedText *pLabel)
 {
-    std::vector<FixedText*>& v = mpWindowImpl->m_aMnemonicLabels;
-    std::vector<FixedText*>::iterator aFind = std::find(v.begin(), v.end(), pLabel);
+    std::vector<VclPtr<FixedText> >& v = mpWindowImpl->m_aMnemonicLabels;
+    auto aFind = std::find(v.begin(), v.end(), VclPtr<FixedText>(pLabel));
     if (aFind == v.end())
         return;
     v.erase(aFind);
     pLabel->set_mnemonic_widget(NULL);
 }
 
-std::vector<FixedText*> Window::list_mnemonic_labels() const
+std::vector<VclPtr<FixedText> > Window::list_mnemonic_labels() const
 {
     return mpWindowImpl->m_aMnemonicLabels;
 }

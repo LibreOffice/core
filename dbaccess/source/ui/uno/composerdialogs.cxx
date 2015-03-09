@@ -169,7 +169,7 @@ namespace dbaui
         ComposerDialog::executedDialog( _nExecutionResult );
 
         if ( _nExecutionResult && m_pDialog )
-            static_cast< DlgFilterCrit* >( m_pDialog )->BuildWherePart();
+            static_cast< DlgFilterCrit* >( m_pDialog.get() )->BuildWherePart();
     }
 
     // RowsetOrderDialog
@@ -216,9 +216,9 @@ namespace dbaui
             return;
 
         if ( _nExecutionResult )
-            static_cast< DlgOrderCrit* >( m_pDialog )->BuildOrderPart();
+            static_cast< DlgOrderCrit* >( m_pDialog.get() )->BuildOrderPart();
         else if ( m_xComposer.is() )
-            m_xComposer->setOrder( static_cast< DlgOrderCrit* >( m_pDialog )->GetOrignalOrder() );
+            m_xComposer->setOrder( static_cast< DlgOrderCrit* >( m_pDialog.get() )->GetOrignalOrder() );
     }
 
 }   // namespace dbaui

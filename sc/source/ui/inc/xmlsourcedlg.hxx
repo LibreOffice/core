@@ -28,17 +28,17 @@ class ScOrcusXMLContext;
 
 class ScXMLSourceDlg : public ScAnyRefDlg
 {
-    PushButton* mpBtnSelectSource;
-    FixedText* mpFtSourceFile;
+    VclPtr<PushButton> mpBtnSelectSource;
+    VclPtr<FixedText> mpFtSourceFile;
 
-    VclContainer* mpMapGrid;
+    VclPtr<VclContainer> mpMapGrid;
 
-    SvTreeListBox* mpLbTree;
-    formula::RefEdit* mpRefEdit;
-    formula::RefButton* mpRefBtn;
+    VclPtr<SvTreeListBox> mpLbTree;
+    VclPtr<formula::RefEdit> mpRefEdit;
+    VclPtr<formula::RefButton> mpRefBtn;
 
-    PushButton* mpBtnOk;
-    CancelButton* mpBtnCancel;
+    VclPtr<PushButton> mpBtnOk;
+    VclPtr<CancelButton> mpBtnCancel;
 
     OUString maSrcPath;
 
@@ -51,12 +51,14 @@ class ScXMLSourceDlg : public ScAnyRefDlg
 
     ScDocument* mpDoc;
 
-    formula::RefEdit* mpActiveEdit;
+    VclPtr<formula::RefEdit> mpActiveEdit;
     bool mbDlgLostFocus;
 
 public:
     ScXMLSourceDlg(
         SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent, ScDocument* pDoc);
+    virtual ~ScXMLSourceDlg();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual bool IsRefInputMode() const SAL_OVERRIDE;
     virtual void SetReference(const ScRange& rRange, ScDocument* pDoc) SAL_OVERRIDE;

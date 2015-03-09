@@ -37,19 +37,20 @@ enum resetType
 
 class GridDialog : public ModalDialog
 {
-    OKButton*       m_pOKButton;
+    VclPtr<OKButton>       m_pOKButton;
 
-    ListBox*        m_pResetTypeBox;
-    PushButton*     m_pResetButton;
+    VclPtr<ListBox>        m_pResetTypeBox;
+    VclPtr<PushButton>     m_pResetButton;
 
-    GridWindow*     m_pGridWindow;
+    VclPtr<GridWindow>     m_pGridWindow;
 
     DECL_LINK( ClickButtonHdl, Button* );
 
 public:
     GridDialog(double* pXValues, double* pYValues, int nValues,
                 vcl::Window* pParent, bool bCutValues = true);
-
+    virtual ~GridDialog();
+    virtual void dispose() SAL_OVERRIDE;
     void setBoundings(double fMinX, double fMinY, double fMaxX, double fMaxY);
     double* getNewYValues();
 };

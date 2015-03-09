@@ -50,7 +50,7 @@ class AnnotationTextWindow : public Control
 {
 private:
     OutlinerView*       mpOutlinerView;
-    AnnotationWindow*   mpAnnotationWindow;
+    VclPtr<AnnotationWindow>   mpAnnotationWindow;
 
 protected:
     virtual void    Paint( const Rectangle& rRect) SAL_OVERRIDE;
@@ -64,6 +64,7 @@ protected:
 public:
     AnnotationTextWindow( AnnotationWindow* pParent, WinBits nBits );
     virtual ~AnnotationTextWindow();
+    virtual void dispose() SAL_OVERRIDE;
 
     void SetOutlinerView( OutlinerView* pOutlinerView ) { mpOutlinerView = pOutlinerView; }
 
@@ -83,13 +84,13 @@ class AnnotationWindow : public FloatingWindow
 
         OutlinerView*           mpOutlinerView;
         Outliner*               mpOutliner;
-        ScrollBar*              mpVScrollbar;
+        VclPtr<ScrollBar>              mpVScrollbar;
         ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation > mxAnnotation;
         bool                    mbReadonly;
         bool                    mbProtected;
         bool                    mbMouseOverButton;
-        AnnotationTextWindow*   mpTextWindow;
-        MultiLineEdit*          mpMeta;
+        VclPtr<AnnotationTextWindow>   mpTextWindow;
+        VclPtr<MultiLineEdit>          mpMeta;
         Rectangle               maRectMetaButton;
         basegfx::B2DPolygon     maPopupTriangle;
 

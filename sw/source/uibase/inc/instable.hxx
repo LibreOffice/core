@@ -34,22 +34,22 @@ struct SwInsertTableOptions;
 
 class SwInsTableDlg : public SfxModalDialog
 {
-    Edit*           m_pNameEdit;
+    VclPtr<Edit>           m_pNameEdit;
     TextFilter      m_aTextFilter;
 
-    NumericField*   m_pColNF;
-    NumericField*   m_pRowNF;
+    VclPtr<NumericField>   m_pColNF;
+    VclPtr<NumericField>   m_pRowNF;
 
-    CheckBox*       m_pHeaderCB;
-    CheckBox*       m_pRepeatHeaderCB;
-    NumericField*   m_pRepeatHeaderNF;
-    VclContainer*   m_pRepeatGroup;
+    VclPtr<CheckBox>       m_pHeaderCB;
+    VclPtr<CheckBox>       m_pRepeatHeaderCB;
+    VclPtr<NumericField>   m_pRepeatHeaderNF;
+    VclPtr<VclContainer>   m_pRepeatGroup;
 
-    CheckBox*       m_pDontSplitCB;
-    CheckBox*       m_pBorderCB;
+    VclPtr<CheckBox>       m_pDontSplitCB;
+    VclPtr<CheckBox>       m_pBorderCB;
 
-    PushButton*     m_pInsertBtn;
-    PushButton*     m_pAutoFmtBtn;
+    VclPtr<PushButton>     m_pInsertBtn;
+    VclPtr<PushButton>     m_pAutoFmtBtn;
 
     SwWrtShell*     pShell;
     SwTableAutoFmt* pTAutoFmt;

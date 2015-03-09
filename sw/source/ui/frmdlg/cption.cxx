@@ -51,14 +51,14 @@ using namespace ::com::sun::star;
 
 class SwSequenceOptionDialog : public SvxStandardDialog
 {
-    ListBox*        m_pLbLevel;
-    Edit*           m_pEdDelim;
+    VclPtr<ListBox>        m_pLbLevel;
+    VclPtr<Edit>           m_pEdDelim;
 
-    ListBox*        m_pLbCharStyle;
-    CheckBox*       m_pApplyBorderAndShadowCB;
+    VclPtr<ListBox>        m_pLbCharStyle;
+    VclPtr<CheckBox>       m_pApplyBorderAndShadowCB;
 
     //#i61007# order of captions
-    ListBox*        m_pLbCaptionOrder;
+    VclPtr<ListBox>        m_pLbCaptionOrder;
 
     SwView&         rView;
     OUString        aFldTypeName;
@@ -67,6 +67,7 @@ public:
     SwSequenceOptionDialog( vcl::Window *pParent, SwView &rV,
                             const OUString& rSeqFldType );
     virtual ~SwSequenceOptionDialog();
+    virtual void dispose() SAL_OVERRIDE;
     virtual void Apply() SAL_OVERRIDE;
 
     bool IsApplyBorderAndShadow( void ) { return m_pApplyBorderAndShadowCB->IsChecked(); }
@@ -417,6 +418,20 @@ SwCaptionDialog::~SwCaptionDialog()
 void SwCaptionDialog::dispose()
 {
     delete pMgr;
+    m_pTextEdit.clear();
+    m_pCategoryBox.clear();
+    m_pFormatText.clear();
+    m_pFormatBox.clear();
+    m_pNumberingSeparatorFT.clear();
+    m_pNumberingSeparatorED.clear();
+    m_pSepText.clear();
+    m_pSepEdit.clear();
+    m_pPosText.clear();
+    m_pPosBox.clear();
+    m_pOKButton.clear();
+    m_pAutoCaptionButton.clear();
+    m_pOptionButton.clear();
+    m_pPreview.clear();
     SvxStandardDialog::dispose();
 }
 
@@ -461,7 +476,19 @@ SwSequenceOptionDialog::SwSequenceOptionDialog( vcl::Window *pParent, SwView &rV
 
 SwSequenceOptionDialog::~SwSequenceOptionDialog()
 {
+    dispose();
 }
+
+void SwSequenceOptionDialog::dispose()
+{
+    m_pLbLevel.clear();
+    m_pEdDelim.clear();
+    m_pLbCharStyle.clear();
+    m_pApplyBorderAndShadowCB.clear();
+    m_pLbCaptionOrder.clear();
+    SvxStandardDialog::dispose();
+}
+
 
 void SwSequenceOptionDialog::Apply()
 {

@@ -137,6 +137,27 @@ SvxHatchTabPage::SvxHatchTabPage
     setPreviewsToSamePlace(pParent, this);
 }
 
+SvxHatchTabPage::~SvxHatchTabPage()
+{
+    dispose();
+}
+
+void SvxHatchTabPage::dispose()
+{
+    m_pMtrDistance.clear();
+    m_pMtrAngle.clear();
+    m_pCtlAngle.clear();
+    m_pLbLineType.clear();
+    m_pLbLineColor.clear();
+    m_pLbHatchings.clear();
+    m_pCtlPreview.clear();
+    m_pBtnAdd.clear();
+    m_pBtnModify.clear();
+    m_pBtnDelete.clear();
+    m_pBtnLoad.clear();
+    m_pBtnSave.clear();
+    SvxTabPage::dispose();
+}
 
 
 void SvxHatchTabPage::Construct()

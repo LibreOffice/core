@@ -161,6 +161,17 @@ namespace abp
         {
             loop->m_bVisible = false;
         }
+        m_pEvolution.clear();
+        m_pEvolutionGroupwise.clear();
+        m_pEvolutionLdap.clear();
+        m_pMORK.clear();
+        m_pThunderbird.clear();
+        m_pKab.clear();
+        m_pMacab.clear();
+        m_pLDAP.clear();
+        m_pOutlook.clear();
+        m_pOE.clear();
+        m_pOther.clear();
         AddressBookSourcePage::dispose();
     }
 

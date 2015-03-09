@@ -36,25 +36,27 @@ namespace dbaui
     {
     protected:
         // user authentification
-        FixedText*          m_pFL2;
-        FixedText*          m_pUserNameLabel;
-        Edit*               m_pUserName;
-        CheckBox*           m_pPasswordRequired;
+        VclPtr<FixedText>          m_pFL2;
+        VclPtr<FixedText>          m_pUserNameLabel;
+        VclPtr<Edit>               m_pUserName;
+        VclPtr<CheckBox>           m_pPasswordRequired;
 
         // jdbc driver
-        FixedText*          m_pFL3;
-        FixedText*          m_pJavaDriverLabel;
-        Edit*               m_pJavaDriver;
-        PushButton*         m_pTestJavaDriver;
+        VclPtr<FixedText>          m_pFL3;
+        VclPtr<FixedText>          m_pJavaDriverLabel;
+        VclPtr<Edit>               m_pJavaDriver;
+        VclPtr<PushButton>         m_pTestJavaDriver;
 
         // connection test
-        PushButton*         m_pTestConnection;
+        VclPtr<PushButton>         m_pTestConnection;
 
         // called when the test connection button was clicked
-        DECL_LINK(OnTestJavaClickHdl,PushButton*);
-        DECL_LINK(OnEditModified,Edit*);
+        DECL_LINK(OnTestJavaClickHdl, PushButton*);
+        DECL_LINK(OnEditModified, Edit*);
 
     public:
+        virtual ~OConnectionTabPage();
+        virtual void dispose() SAL_OVERRIDE;
         static  SfxTabPage* Create( vcl::Window* pParent, const SfxItemSet* _rAttrSet );
         virtual bool        FillItemSet (SfxItemSet* _rCoreAttrs) SAL_OVERRIDE;
 

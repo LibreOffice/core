@@ -92,8 +92,8 @@ private:
 private:
     ViewShellBase& mrBase;
 
-    TableValueSet* m_pValueSet;
-    CheckBox* m_aCheckBoxes[CB_COUNT];
+    VclPtr<TableValueSet> m_pValueSet;
+    VclPtr<CheckBox> m_aCheckBoxes[CB_COUNT];
 
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > mxSelectedTable;
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawView > mxView;

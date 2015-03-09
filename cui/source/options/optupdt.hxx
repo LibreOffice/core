@@ -29,16 +29,16 @@
 class SvxOnlineUpdateTabPage : public SfxTabPage
 {
 private:
-    CheckBox*           m_pAutoCheckCheckBox;
-    RadioButton*        m_pEveryDayButton;
-    RadioButton*        m_pEveryWeekButton;
-    RadioButton*        m_pEveryMonthButton;
-    PushButton*         m_pCheckNowButton;
-    CheckBox*           m_pAutoDownloadCheckBox;
-    FixedText*          m_pDestPathLabel;
-    FixedText*          m_pDestPath;
-    PushButton*         m_pChangePathButton;
-    FixedText*          m_pLastChecked;
+    VclPtr<CheckBox>           m_pAutoCheckCheckBox;
+    VclPtr<RadioButton>        m_pEveryDayButton;
+    VclPtr<RadioButton>        m_pEveryWeekButton;
+    VclPtr<RadioButton>        m_pEveryMonthButton;
+    VclPtr<PushButton>         m_pCheckNowButton;
+    VclPtr<CheckBox>           m_pAutoDownloadCheckBox;
+    VclPtr<FixedText>          m_pDestPathLabel;
+    VclPtr<FixedText>          m_pDestPath;
+    VclPtr<PushButton>         m_pChangePathButton;
+    VclPtr<FixedText>          m_pLastChecked;
     OUString       m_aNeverChecked;
     OUString       m_aLastCheckedTemplate;
 
@@ -52,6 +52,8 @@ private:
 
 public:
     SvxOnlineUpdateTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
+    virtual ~SvxOnlineUpdateTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     static SfxTabPage*      Create( vcl::Window* pParent, const SfxItemSet* rSet );
 

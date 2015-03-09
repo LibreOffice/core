@@ -1395,6 +1395,17 @@ SvxMenuEntriesListBox::SvxMenuEntriesListBox(vcl::Window* pParent, SvxConfigPage
                      SV_DRAGDROP_APP_DROP);
 }
 
+SvxMenuEntriesListBox::~SvxMenuEntriesListBox()
+{
+    dispose();
+}
+
+void SvxMenuEntriesListBox::dispose()
+{
+    pPage.clear();
+    SvTreeListBox::dispose();
+}
+
 // drag and drop support
 DragDropMode SvxMenuEntriesListBox::NotifyStartDrag(
     TransferDataContainer& aTransferDataContainer, SvTreeListEntry* pEntry )
@@ -1540,6 +1551,32 @@ SvxConfigPage::SvxConfigPage(vcl::Window *pParent, const SfxItemSet& rSet)
 
     m_pDescriptionField->SetControlBackground( GetSettings().GetStyleSettings().GetDialogColor() );
     m_pDescriptionField->EnableCursor( false );
+}
+
+SvxConfigPage::~SvxConfigPage()
+{
+    dispose();
+}
+
+void SvxConfigPage::dispose()
+{
+    m_pTopLevel.clear();
+    m_pTopLevelLabel.clear();
+    m_pTopLevelListBox.clear();
+    m_pNewTopLevelButton.clear();
+    m_pModifyTopLevelButton.clear();
+    m_pContents.clear();
+    m_pContentsLabel.clear();
+    m_pEntries.clear();
+    m_pContentsListBox.clear();
+    m_pAddCommandsButton.clear();
+    m_pModifyCommandButton.clear();
+    m_pMoveUpButton.clear();
+    m_pMoveDownButton.clear();
+    m_pSaveInListBox.clear();
+    m_pDescriptionField.clear();
+    m_pSelectorDlg.clear();
+    SfxTabPage::dispose();
 }
 
 void SvxConfigPage::Reset( const SfxItemSet* )
@@ -2206,6 +2243,11 @@ SvxMenuConfigPage::SvxMenuConfigPage(vcl::Window *pParent, const SfxItemSet& rSe
         LINK( this, SvxMenuConfigPage, EntrySelectHdl ) );
 }
 
+SvxMenuConfigPage::~SvxMenuConfigPage()
+{
+    dispose();
+}
+
 // Populates the Menu combo box
 void SvxMenuConfigPage::Init()
 {
@@ -2219,11 +2261,6 @@ void SvxMenuConfigPage::Init()
     m_pTopLevelListBox->GetSelectHdl().Call(this);
 }
 
-SvxMenuConfigPage::~SvxMenuConfigPage()
-{
-    dispose();
-}
-
 void SvxMenuConfigPage::dispose()
 {
     for ( sal_uInt16 i = 0 ; i < m_pSaveInListBox->GetEntryCount(); ++i )
@@ -2235,11 +2272,8 @@ void SvxMenuConfigPage::dispose()
     }
     m_pSaveInListBox->Clear();
 
-    delete m_pSelectorDlg;
-    m_pSelectorDlg = NULL;
-    delete m_pContentsListBox;
-    m_pContentsListBox = NULL;
-
+    m_pSelectorDlg.clear();
+    m_pContentsListBox.clear();
     SvxConfigPage::dispose();
 }
 
@@ -2547,7 +2581,7 @@ IMPL_LINK( SvxMenuConfigPage, AddCommandsHdl, Button *, pButton )
 {
     (void)pButton;
 
-    if ( m_pSelectorDlg == NULL )
+    if ( m_pSelectorDlg == nullptr )
     {
         // Create Script Selector which also shows builtin commands
         m_pSelectorDlg = new SvxScriptSelectorDialog( this, true, m_xFrame );
@@ -2658,6 +2692,21 @@ SvxMainMenuOrganizerDialog::SvxMainMenuOrganizerDialog(
         LINK( this, SvxMainMenuOrganizerDialog, MoveHdl) );
     m_pMoveDownButton->SetClickHdl (
         LINK( this, SvxMainMenuOrganizerDialog, MoveHdl) );
+}
+
+SvxMainMenuOrganizerDialog::~SvxMainMenuOrganizerDialog()
+{
+    dispose();
+}
+
+void SvxMainMenuOrganizerDialog::dispose()
+{
+    m_pMenuBox.clear();
+    m_pMenuNameEdit.clear();
+    m_pMenuListBox.clear();
+    m_pMoveUpButton.clear();
+    m_pMoveDownButton.clear();
+    ModalDialog::dispose();
 }
 
 IMPL_LINK(SvxMainMenuOrganizerDialog, ModifyHdl, Edit*, pEdit)
@@ -2931,12 +2980,8 @@ void SvxToolbarConfigPage::dispose()
     }
     m_pSaveInListBox->Clear();
 
-    delete m_pSelectorDlg;
-    m_pSelectorDlg = NULL;
-
-    delete m_pContentsListBox;
-    m_pContentsListBox = NULL;
-
+    m_pSelectorDlg.clear();
+    m_pContentsListBox.clear();
     SvxConfigPage::dispose();
 }
 
@@ -4457,7 +4502,7 @@ IMPL_LINK( SvxToolbarConfigPage, AddCommandsHdl, Button *, pButton )
 {
     (void)pButton;
 
-    if ( m_pSelectorDlg == NULL )
+    if ( m_pSelectorDlg == nullptr )
     {
         // Create Script Selector which shows slot commands
         m_pSelectorDlg = new SvxScriptSelectorDialog( this, true, m_xFrame );
@@ -4537,6 +4582,7 @@ void SvxToolbarEntriesListBox::dispose()
     delete m_pButtonData;
     m_pButtonData = NULL;
 
+    pPage.clear();
     SvxMenuEntriesListBox::dispose();
 }
 
@@ -4688,7 +4734,7 @@ TriState SvxToolbarEntriesListBox::NotifyCopying(
     if ( !m_bIsInternalDrag )
     {
         // if the target is NULL then add function to the start of the list
-        static_cast<SvxToolbarConfigPage*>(pPage)->AddFunction( pTarget, pTarget == NULL );
+        static_cast<SvxToolbarConfigPage*>(pPage.get())->AddFunction( pTarget, pTarget == NULL );
 
         // Instant Apply changes to UI
         SvxConfigEntry* pToolbar = pPage->GetTopLevelSelection();
@@ -4719,6 +4765,20 @@ SvxNewToolbarDialog::SvxNewToolbarDialog(vcl::Window* pWindow, const OUString& r
     ModifyHdl(m_pEdtName);
     m_pEdtName->SetModifyHdl(LINK(this, SvxNewToolbarDialog, ModifyHdl));
 }
+
+SvxNewToolbarDialog::~SvxNewToolbarDialog()
+{
+    dispose();
+}
+
+void SvxNewToolbarDialog::dispose()
+{
+    m_pEdtName.clear();
+    m_pBtnOK.clear();
+    m_pSaveInListBox.clear();
+    ModalDialog::dispose();
+}
+
 
 IMPL_LINK(SvxNewToolbarDialog, ModifyHdl, Edit*, pEdit)
 {
@@ -4940,9 +5000,12 @@ void SvxIconSelectorDialog::dispose()
             if ( xi != NULL )
             xi->release();
         }
-        pTbSymbol = NULL;
     }
 
+    pTbSymbol.clear();
+    pFtNote.clear();
+    pBtnImport.clear();
+    pBtnDelete.clear();
     ModalDialog::dispose();
 }
 
@@ -5386,6 +5449,18 @@ SvxIconChangeDialog::SvxIconChangeDialog(
     pFImageInfo->SetImage(InfoBox::GetStandardImage());
     pLineEditDescription->SetControlBackground( GetSettings().GetStyleSettings().GetDialogColor() );
     pLineEditDescription->SetText(aMessage);
+}
+
+SvxIconChangeDialog::~SvxIconChangeDialog()
+{
+    dispose();
+}
+
+void SvxIconChangeDialog::dispose()
+{
+    pFImageInfo.clear();
+    pLineEditDescription.clear();
+    ModalDialog::dispose();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

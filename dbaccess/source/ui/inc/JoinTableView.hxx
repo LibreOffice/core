@@ -52,10 +52,10 @@ namespace dbaui
     class OJoinTableView;
     class OScrollWindowHelper : public vcl::Window
     {
-        VclPtr<ScrollBar>   m_aHScrollBar;
-        VclPtr<ScrollBar>   m_aVScrollBar;
-        vcl::Window*        m_pCornerWindow;
-        OJoinTableView*     m_pTableView;
+        VclPtr<ScrollBar>          m_aHScrollBar;
+        VclPtr<ScrollBar>          m_aVScrollBar;
+        VclPtr<vcl::Window>        m_pCornerWindow;
+        VclPtr<OJoinTableView>     m_pTableView;
 
     protected:
         virtual void Resize() SAL_OVERRIDE;
@@ -82,11 +82,11 @@ namespace dbaui
         friend class OJoinMoveTabWinUndoAct;
 
     public:
-        typedef std::map<OUString, OTableWindow*> OTableWindowMap;
+        typedef std::map<OUString, VclPtr<OTableWindow> > OTableWindowMap;
 
     private:
         OTableWindowMap     m_aTableMap;
-        ::std::vector<OTableConnection*>    m_vTableConnection;
+        ::std::vector<VclPtr<OTableConnection> >    m_vTableConnection;
 
         Idle                m_aDragScrollIdle;
         Rectangle           m_aDragRect;
@@ -97,9 +97,9 @@ namespace dbaui
         Size                m_aOutputSize;
 
 
-        OTableWindow*           m_pDragWin;
-        OTableWindow*           m_pSizingWin;
-        OTableConnection*       m_pSelectedConn;
+        VclPtr<OTableWindow>           m_pDragWin;
+        VclPtr<OTableWindow>           m_pSizingWin;
+        VclPtr<OTableConnection>       m_pSelectedConn;
 
 
         bool                    m_bTrackingInitiallyMoved;
@@ -107,8 +107,8 @@ namespace dbaui
         DECL_LINK(OnDragScrollTimer, void*);
 
     protected:
-        OTableWindow*               m_pLastFocusTabWin;
-        OJoinDesignView*            m_pView;
+        VclPtr<OTableWindow>               m_pLastFocusTabWin;
+        VclPtr<OJoinDesignView>            m_pView;
         OJoinDesignViewAccess*      m_pAccessible;
 
     public:
@@ -183,7 +183,7 @@ namespace dbaui
 
         /** gives a read only access to the connection vector
         */
-        const ::std::vector<OTableConnection*>& getTableConnections() const { return m_vTableConnection; }
+        const ::std::vector<VclPtr<OTableConnection> >& getTableConnections() const { return m_vTableConnection; }
 
         bool ExistsAConn(const OTableWindow* pFromWin) const;
 
@@ -192,7 +192,7 @@ namespace dbaui
             @param  _pFromWin   the table for which connections should be found
             @return an iterator which can be used to travel all connections of the table
         */
-        ::std::vector<OTableConnection*>::const_iterator getTableConnections(const OTableWindow* _pFromWin) const;
+        ::std::vector<VclPtr<OTableConnection> >::const_iterator getTableConnections(const OTableWindow* _pFromWin) const;
 
         /** how many connection belongs to single table
 

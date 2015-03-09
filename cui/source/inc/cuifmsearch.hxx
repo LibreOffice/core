@@ -47,36 +47,36 @@ class FmSearchDialog : public ModalDialog
     friend class FmSearchEngine;
 
     // my all Controls
-    RadioButton     *m_prbSearchForText;
-    RadioButton     *m_prbSearchForNull;
-    RadioButton     *m_prbSearchForNotNull;
-    ComboBox        *m_pcmbSearchText;
-    FixedText       *m_pftForm;
-    ListBox         *m_plbForm;
-    RadioButton     *m_prbAllFields;
-    RadioButton     *m_prbSingleField;
-    ListBox         *m_plbField;
-    FixedText       *m_pftPosition;
-    ListBox         *m_plbPosition;
-    CheckBox        *m_pcbUseFormat;
-    CheckBox        *m_pcbCase;
-    CheckBox        *m_pcbBackwards;
-    CheckBox        *m_pcbStartOver;
-    CheckBox        *m_pcbWildCard;
-    CheckBox        *m_pcbRegular;
-    CheckBox        *m_pcbApprox;
-    PushButton      *m_ppbApproxSettings;
-    CheckBox        *m_pHalfFullFormsCJK;
-    CheckBox        *m_pSoundsLikeCJK;
-    PushButton      *m_pSoundsLikeCJKSettings;
-    FixedText       *m_pftRecord;
-    FixedText       *m_pftHint;
-    PushButton      *m_pbSearchAgain;
-    CancelButton    *m_pbClose;
+    VclPtr<RadioButton>     m_prbSearchForText;
+    VclPtr<RadioButton>     m_prbSearchForNull;
+    VclPtr<RadioButton>     m_prbSearchForNotNull;
+    VclPtr<ComboBox>        m_pcmbSearchText;
+    VclPtr<FixedText>       m_pftForm;
+    VclPtr<ListBox>         m_plbForm;
+    VclPtr<RadioButton>     m_prbAllFields;
+    VclPtr<RadioButton>     m_prbSingleField;
+    VclPtr<ListBox>         m_plbField;
+    VclPtr<FixedText>       m_pftPosition;
+    VclPtr<ListBox>         m_plbPosition;
+    VclPtr<CheckBox>        m_pcbUseFormat;
+    VclPtr<CheckBox>        m_pcbCase;
+    VclPtr<CheckBox>        m_pcbBackwards;
+    VclPtr<CheckBox>        m_pcbStartOver;
+    VclPtr<CheckBox>        m_pcbWildCard;
+    VclPtr<CheckBox>        m_pcbRegular;
+    VclPtr<CheckBox>        m_pcbApprox;
+    VclPtr<PushButton>      m_ppbApproxSettings;
+    VclPtr<CheckBox>        m_pHalfFullFormsCJK;
+    VclPtr<CheckBox>        m_pSoundsLikeCJK;
+    VclPtr<PushButton>      m_pSoundsLikeCJKSettings;
+    VclPtr<FixedText>       m_pftRecord;
+    VclPtr<FixedText>       m_pftHint;
+    VclPtr<PushButton>      m_pbSearchAgain;
+    VclPtr<CancelButton>    m_pbClose;
     OUString        m_sSearch;
     OUString        m_sCancel;
 
-    vcl::Window*         m_pPreSearchFocus;
+    VclPtr<vcl::Window>         m_pPreSearchFocus;
 
     Link    m_lnkFoundHandler;          ///< Handler for "found"
     Link    m_lnkCanceledNotFoundHdl;   ///< Handler for Positioning the Cursors

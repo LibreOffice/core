@@ -929,7 +929,7 @@ void Window::ImplDeleteOverlapBackground()
         else
         {
             vcl::Window* pTemp = mpWindowImpl->mpFrameData->mpFirstBackWin;
-            while ( pTemp->mpWindowImpl->mpOverlapData->mpNextBackWin != this )
+            while ( pTemp->mpWindowImpl->mpOverlapData->mpNextBackWin.get() != this )
                 pTemp = pTemp->mpWindowImpl->mpOverlapData->mpNextBackWin;
             pTemp->mpWindowImpl->mpOverlapData->mpNextBackWin = mpWindowImpl->mpOverlapData->mpNextBackWin;
         }

@@ -133,7 +133,7 @@ class SVX_DLLPUBLIC SdrPaintView : public SfxListener, public SfxRepeatTarget, p
 protected:
     SdrModel*                   pMod;
 #ifdef DBG_UTIL
-    SdrItemBrowser*             pItemBrowser;
+    VclPtr<SdrItemBrowser>      pItemBrowser;
 #endif
     const OutputDevice*         pActualOutDev; // Nur zum vergleichen
     OutputDevice*               pDragWin;
@@ -516,7 +516,7 @@ public:
     // bei bShow=sal_False wird der Browser destruiert
 #ifdef DBG_UTIL
     void ShowItemBrowser(bool bShow=true);
-    bool IsItemBrowserVisible() const { return pItemBrowser!=NULL && GetItemBrowser()->IsVisible(); }
+    bool IsItemBrowserVisible() const { return pItemBrowser!=nullptr && GetItemBrowser()->IsVisible(); }
     vcl::Window* GetItemBrowser() const;
 #endif
 

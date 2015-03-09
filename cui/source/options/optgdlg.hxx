@@ -44,24 +44,24 @@ class OfaMiscTabPage : public SfxTabPage
 {
     using TabPage::DeactivatePage;
 private:
-    CheckBox*     m_pToolTipsCB;
-    CheckBox*     m_pExtHelpCB;
+    VclPtr<CheckBox>     m_pToolTipsCB;
+    VclPtr<CheckBox>     m_pExtHelpCB;
 
-    FixedImage*   m_pFileDlgROImage;
-    CheckBox*     m_pFileDlgCB;
+    VclPtr<FixedImage>   m_pFileDlgROImage;
+    VclPtr<CheckBox>     m_pFileDlgCB;
 
-    CheckBox*     m_pPrintDlgCB;
+    VclPtr<CheckBox>     m_pPrintDlgCB;
 
-    CheckBox*     m_pDocStatusCB;
-    CheckBox*     m_pSaveAlwaysCB;
+    VclPtr<CheckBox>     m_pDocStatusCB;
+    VclPtr<CheckBox>     m_pSaveAlwaysCB;
 
-    VclContainer* m_pYearFrame;
-    NumericField* m_pYearValueField;
-    FixedText*    m_pToYearFT;
+    VclPtr<VclContainer> m_pYearFrame;
+    VclPtr<NumericField> m_pYearValueField;
+    VclPtr<FixedText>    m_pToYearFT;
 
     OUString      m_aStrDateInfo;
 
-    CheckBox*     m_pCollectUsageInfo;
+    VclPtr<CheckBox>     m_pCollectUsageInfo;
 
     DECL_LINK( TwoFigureHdl, NumericField* );
     DECL_LINK( TwoFigureConfigHdl, NumericField* );
@@ -74,6 +74,8 @@ protected:
 
 public:
     OfaMiscTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
+    virtual ~OfaMiscTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
 
@@ -87,30 +89,30 @@ class SvtTabAppearanceCfg;
 class OfaViewTabPage : public SfxTabPage
 {
 private:
-    MetricField*    m_pWindowSizeMF;
-    ListBox*        m_pIconSizeLB;
-    ListBox*        m_pIconStyleLB;
+    VclPtr<MetricField>    m_pWindowSizeMF;
+    VclPtr<ListBox>        m_pIconSizeLB;
+    VclPtr<ListBox>        m_pIconStyleLB;
 
-    CheckBox*       m_pFontAntiAliasing;
-    FixedText*      m_pAAPointLimitLabel;
-    MetricField*    m_pAAPointLimit;
+    VclPtr<CheckBox>       m_pFontAntiAliasing;
+    VclPtr<FixedText>      m_pAAPointLimitLabel;
+    VclPtr<MetricField>    m_pAAPointLimit;
 
-    ListBox*        m_pMenuIconsLB;
+    VclPtr<ListBox>        m_pMenuIconsLB;
 
-    CheckBox*       m_pFontShowCB;
-    CheckBox*       m_pFontHistoryCB;
+    VclPtr<CheckBox>       m_pFontShowCB;
+    VclPtr<CheckBox>       m_pFontHistoryCB;
 
-    CheckBox*       m_pUseHardwareAccell;
-    CheckBox*       m_pUseAntiAliase;
-    CheckBox*       m_pUseOpenGL;
-    CheckBox*       m_pForceOpenGL;
+    VclPtr<CheckBox>       m_pUseHardwareAccell;
+    VclPtr<CheckBox>       m_pUseAntiAliase;
+    VclPtr<CheckBox>       m_pUseOpenGL;
+    VclPtr<CheckBox>       m_pForceOpenGL;
 
-    ListBox*        m_pMousePosLB;
-    ListBox*        m_pMouseMiddleLB;
+    VclPtr<ListBox>        m_pMousePosLB;
+    VclPtr<ListBox>        m_pMouseMiddleLB;
 
     // #i97672#
-    CheckBox*       m_pSelectionCB;
-    MetricField*    m_pSelectionMF;
+    VclPtr<CheckBox>       m_pSelectionCB;
+    VclPtr<MetricField>    m_pSelectionMF;
 
     sal_uInt16      nSizeLB_InitialSelection;
     sal_uInt16      nStyleLB_InitialSelection;
@@ -142,23 +144,23 @@ public:
 struct LanguageConfig_Impl;
 class OfaLanguagesTabPage : public SfxTabPage
 {
-    ListBox*        m_pUserInterfaceLB;
-    FixedText*      m_pLocaleSettingFT;
-    SvxLanguageBox* m_pLocaleSettingLB;
-    CheckBox*       m_pDecimalSeparatorCB;
-    FixedText*      m_pCurrencyFT;
-    ListBox*        m_pCurrencyLB;
-    FixedText*      m_pDatePatternsFT;
-    Edit*           m_pDatePatternsED;
+    VclPtr<ListBox>        m_pUserInterfaceLB;
+    VclPtr<FixedText>      m_pLocaleSettingFT;
+    VclPtr<SvxLanguageBox> m_pLocaleSettingLB;
+    VclPtr<CheckBox>       m_pDecimalSeparatorCB;
+    VclPtr<FixedText>      m_pCurrencyFT;
+    VclPtr<ListBox>        m_pCurrencyLB;
+    VclPtr<FixedText>      m_pDatePatternsFT;
+    VclPtr<Edit>           m_pDatePatternsED;
 
-    SvxLanguageBox* m_pWesternLanguageLB;
-    FixedText*      m_pWesternLanguageFT;
-    SvxLanguageBox* m_pAsianLanguageLB;
-    SvxLanguageBox* m_pComplexLanguageLB;
-    CheckBox*       m_pCurrentDocCB;
-    CheckBox*       m_pAsianSupportCB;
-    CheckBox*       m_pCTLSupportCB;
-    CheckBox*       m_pIgnoreLanguageChangeCB;
+    VclPtr<SvxLanguageBox> m_pWesternLanguageLB;
+    VclPtr<FixedText>      m_pWesternLanguageFT;
+    VclPtr<SvxLanguageBox> m_pAsianLanguageLB;
+    VclPtr<SvxLanguageBox> m_pComplexLanguageLB;
+    VclPtr<CheckBox>       m_pCurrentDocCB;
+    VclPtr<CheckBox>       m_pAsianSupportCB;
+    VclPtr<CheckBox>       m_pCTLSupportCB;
+    VclPtr<CheckBox>       m_pIgnoreLanguageChangeCB;
 
     bool        m_bOldAsian;
     bool        m_bOldCtl;

@@ -508,7 +508,7 @@ private:
     TheModelRef             m_aModel;
 
     //view
-    ChartWindow*        m_pChartWindow;
+    VclPtr<ChartWindow>        m_pChartWindow;
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >      m_xViewWindow;
     ::com::sun::star::uno::Reference<
                        ::com::sun::star::uno::XInterface >                  m_xChartView;

@@ -32,9 +32,9 @@ class DNDEventDispatcher: public ::cppu::WeakImplHelper3<
     ::com::sun::star::datatransfer::dnd::XDropTargetDragContext,
     ::com::sun::star::datatransfer::dnd::XDragGestureListener >
 {
-    vcl::Window * m_pTopWindow;
+    VclPtr<vcl::Window> m_pTopWindow;
 
-    vcl::Window * m_pCurrentWindow;
+    VclPtr<vcl::Window> m_pCurrentWindow;
     void designate_currentwindow(vcl::Window *pWindow);
     DECL_LINK(WindowEventListener, VclSimpleEvent*);
 

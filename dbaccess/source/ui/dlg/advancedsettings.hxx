@@ -40,28 +40,28 @@ namespace dbaui
     class SpecialSettingsPage : public OGenericAdministrationPage
     {
     protected:
-        CheckBox*           m_pIsSQL92Check;
-        CheckBox*           m_pAppendTableAlias;
-        CheckBox*           m_pAsBeforeCorrelationName;
-        CheckBox*           m_pEnableOuterJoin;
-        CheckBox*           m_pIgnoreDriverPrivileges;
-        CheckBox*           m_pParameterSubstitution;
-        CheckBox*           m_pSuppressVersionColumn;
-        CheckBox*           m_pCatalog;
-        CheckBox*           m_pSchema;
-        CheckBox*           m_pIndexAppendix;
-        CheckBox*           m_pDosLineEnds;
-        CheckBox*           m_pCheckRequiredFields;
-        CheckBox*           m_pIgnoreCurrency;
-        CheckBox*           m_pEscapeDateTime;
-        CheckBox*           m_pPrimaryKeySupport;
-        CheckBox*           m_pRespectDriverResultSetType;
+        VclPtr<CheckBox>           m_pIsSQL92Check;
+        VclPtr<CheckBox>           m_pAppendTableAlias;
+        VclPtr<CheckBox>           m_pAsBeforeCorrelationName;
+        VclPtr<CheckBox>           m_pEnableOuterJoin;
+        VclPtr<CheckBox>           m_pIgnoreDriverPrivileges;
+        VclPtr<CheckBox>           m_pParameterSubstitution;
+        VclPtr<CheckBox>           m_pSuppressVersionColumn;
+        VclPtr<CheckBox>           m_pCatalog;
+        VclPtr<CheckBox>           m_pSchema;
+        VclPtr<CheckBox>           m_pIndexAppendix;
+        VclPtr<CheckBox>           m_pDosLineEnds;
+        VclPtr<CheckBox>           m_pCheckRequiredFields;
+        VclPtr<CheckBox>           m_pIgnoreCurrency;
+        VclPtr<CheckBox>           m_pEscapeDateTime;
+        VclPtr<CheckBox>           m_pPrimaryKeySupport;
+        VclPtr<CheckBox>           m_pRespectDriverResultSetType;
 
-        FixedText*          m_pBooleanComparisonModeLabel;
-        ListBox*            m_pBooleanComparisonMode;
+        VclPtr<FixedText>          m_pBooleanComparisonModeLabel;
+        VclPtr<ListBox>            m_pBooleanComparisonMode;
 
-        FixedText*          m_pMaxRowScanLabel;
-        NumericField*       m_pMaxRowScan;
+        VclPtr<FixedText>          m_pMaxRowScanLabel;
+        VclPtr<NumericField>       m_pMaxRowScan;
 
         ::svt::ControlDependencyManager
                             m_aControlDependencies;
@@ -98,12 +98,12 @@ namespace dbaui
     {
     protected:
 
-        VclFrame*   m_pAutoFrame;
-        CheckBox*   m_pAutoRetrievingEnabled;
-        FixedText*  m_pAutoIncrementLabel;
-        Edit*       m_pAutoIncrement;
-        FixedText*  m_pAutoRetrievingLabel;
-        Edit*       m_pAutoRetrieving;
+        VclPtr<VclFrame>   m_pAutoFrame;
+        VclPtr<CheckBox>   m_pAutoRetrievingEnabled;
+        VclPtr<FixedText>  m_pAutoIncrementLabel;
+        VclPtr<Edit>       m_pAutoIncrement;
+        VclPtr<FixedText>  m_pAutoRetrievingLabel;
+        VclPtr<Edit>       m_pAutoRetrieving;
 
         ::svt::ControlDependencyManager
                     m_aControlDependencies;

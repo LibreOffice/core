@@ -64,10 +64,12 @@ public:
 
 class FontworkCharacterSpacingDialog : public ModalDialog
 {
-    MetricField* m_pMtrScale;
+    VclPtr<MetricField> m_pMtrScale;
 
 public:
     FontworkCharacterSpacingDialog( vcl::Window* pParent, sal_Int32 nScale );
+    virtual ~FontworkCharacterSpacingDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     sal_Int32 getScale() const;
 };
@@ -75,8 +77,8 @@ public:
 
 class SVX_DLLPUBLIC FontWorkGalleryDialog : public ModalDialog
 {
-    ValueSet*           mpCtlFavorites;
-    OKButton*           mpOKButton;
+    VclPtr<ValueSet>    mpCtlFavorites;
+    VclPtr<OKButton>    mpOKButton;
 
     sal_uInt16          mnThemeId;
 
@@ -98,6 +100,8 @@ class SVX_DLLPUBLIC FontWorkGalleryDialog : public ModalDialog
 
 public:
     FontWorkGalleryDialog( SdrView* pView, vcl::Window* pParent, sal_uInt16 nSID );
+    virtual ~FontWorkGalleryDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     // SJ: if the SdrObject** is set, the SdrObject is not inserted into the page when executing the dialog
     void SetSdrObjectRef( SdrObject**, SdrModel* pModel );

@@ -8,6 +8,7 @@
  */
 
 #include <string>
+#include <iostream>
 
 #include "plugin.hxx"
 #include "compat.hxx"
@@ -41,6 +42,8 @@ public:
 
     bool VisitCXXDestructorDecl(const CXXDestructorDecl *);
 
+    bool VisitCXXDeleteExpr(const CXXDeleteExpr *);
+
 private:
     bool isDisposeCallingSuperclassDispose(const CXXMethodDecl* pMethodDecl);
 };
@@ -55,10 +58,11 @@ bool BaseCheckNotWindowSubclass(const CXXRecordDecl *BaseDefinition, void *) {
 }
 
 bool isDerivedFromWindow(const CXXRecordDecl *decl) {
-    if (!decl->hasDefinition())
-        return false;
     if (decl->getQualifiedNameAsString().compare("vcl::Window") == 0)
         return true;
+    if (!decl->hasDefinition()) {
+        return false;
+    }
     if (// not sure what hasAnyDependentBases() does,
         // but it avoids classes we don't want, e.g. WeakAggComponentImplHelper1
         !decl->hasAnyDependentBases() &&
@@ -68,9 +72,11 @@ bool isDerivedFromWindow(const CXXRecordDecl *decl) {
     return false;
 }
 
-bool isPointerToWindowSubclass(const QualType& pType) {
-    if (!pType->isPointerType())
+bool isPointerToWindowSubclass(const Type* pType0) {
+    const Type* pType = pType0->getUnqualifiedDesugaredType();
+    if (!pType->isPointerType()) {
         return false;
+    }
     QualType pointeeType = pType->getPointeeType();
     const RecordType *recordType = pointeeType->getAs<RecordType>();
     if (recordType == nullptr) {
@@ -80,7 +86,27 @@ bool isPointerToWindowSubclass(const QualType& pType) {
     if (recordDecl == nullptr) {
         return false;
     }
-    return isDerivedFromWindow(recordDecl);
+    bool b = isDerivedFromWindow(recordDecl);
+    return b;
+}
+
+bool containsPointerToWindowSubclass(const Type* pType0) {
+    const Type* pType = pType0->getUnqualifiedDesugaredType();
+    const CXXRecordDecl* pRecordDecl = pType->getAsCXXRecordDecl();
+    if (pRecordDecl) {
+        const ClassTemplateSpecializationDecl* pTemplate = dyn_cast<ClassTemplateSpecializationDecl>(pRecordDecl);
+        if (pTemplate) {
+            for(unsigned i=0; i<pTemplate->getTemplateArgs().size(); ++i) {
+                const TemplateArgument& rArg = pTemplate->getTemplateArgs()[i];
+                if (rArg.getKind() == TemplateArgument::ArgKind::Type &&
+                    containsPointerToWindowSubclass(rArg.getAsType().getTypePtr()))
+                {
+                    return true;
+                }
+            }
+        }
+    }
+    return isPointerToWindowSubclass(pType);
 }
 
 bool VCLWidgets::VisitCXXDestructorDecl(const CXXDestructorDecl* pCXXDestructorDecl)
@@ -88,7 +114,7 @@ bool VCLWidgets::VisitCXXDestructorDecl(const CXXDestructorDecl* pCXXDestructorD
     if (ignoreLocation(pCXXDestructorDecl)) {
         return true;
     }
-    if (!pCXXDestructorDecl->hasBody()) {
+    if (!pCXXDestructorDecl->isThisDeclarationADefinition()) {
         return true;
     }
     const CXXRecordDecl * pRecordDecl = pCXXDestructorDecl->getParent();
@@ -120,20 +146,20 @@ bool VCLWidgets::VisitCXXDestructorDecl(const CXXDestructorDecl* pCXXDestructorD
     }
     const CompoundStmt *pCompoundStatement = dyn_cast<CompoundStmt>(pCXXDestructorDecl->getBody());
     // having an empty body and no dispose() method is fine
-    if (!foundVclPtrField && !foundDispose && pCompoundStatement->size() == 0) {
+    if (!foundVclPtrField && !foundDispose && pCompoundStatement && pCompoundStatement->size() == 0) {
         return true;
     }
-    if (foundVclPtrField && pCompoundStatement->size() == 0) {
+    if (foundVclPtrField && pCompoundStatement && pCompoundStatement->size() == 0) {
         report(
             DiagnosticsEngine::Warning,
             "vcl::Window subclass with VclPtr field must call dispose() from it's destructor.",
-            pCXXDestructorDecl->getBody()->getLocStart())
-          << pCXXDestructorDecl->getBody()->getSourceRange();
+            pCXXDestructorDecl->getLocStart())
+          << pCXXDestructorDecl->getSourceRange();
         return true;
     }
     // check that the destructor for a vcl::Window subclass does nothing except call into the dispose() method
     bool ok = false;
-    if (pCompoundStatement->size() == 1) {
+    if (pCompoundStatement && pCompoundStatement->size() == 1) {
         const CXXMemberCallExpr *pCallExpr = dyn_cast<CXXMemberCallExpr>(*pCompoundStatement->body_begin());
         if (pCallExpr) {
             ok = true;
@@ -143,9 +169,8 @@ bool VCLWidgets::VisitCXXDestructorDecl(const CXXDestructorDecl* pCXXDestructorD
         report(
             DiagnosticsEngine::Warning,
             "vcl::Window subclass should have nothing in it's destructor but a call to dispose().",
-            pCXXDestructorDecl->getBody()->getLocStart())
-          << pCXXDestructorDecl->getBody()->getSourceRange()
-          << pCXXDestructorDecl->getCanonicalDecl()->getSourceRange();
+            pCXXDestructorDecl->getLocStart())
+          << pCXXDestructorDecl->getSourceRange();
         return true;
     }
     return true;
@@ -183,13 +208,13 @@ bool VCLWidgets::VisitFieldDecl(const FieldDecl * fieldDecl) {
     if (fieldDecl->isBitField()) {
         return true;
     }
-    if (isPointerToWindowSubclass(fieldDecl->getType())) {
-/*        report(
-            DiagnosticsEngine::Remark,
+    if (containsPointerToWindowSubclass(fieldDecl->getType().getTypePtr())) {
+        report(
+            DiagnosticsEngine::Warning,
             "vcl::Window subclass declared as a pointer field, should be wrapped in VclPtr.",
             fieldDecl->getLocation())
           << fieldDecl->getSourceRange();
-        return true;*/
+        return true;
     }
 
     const RecordType *recordType = fieldDecl->getType()->getAs<RecordType>();
@@ -245,7 +270,15 @@ bool VCLWidgets::VisitParmVarDecl(ParmVarDecl const * pvDecl)
         && pMethodDecl->getParent()->getQualifiedNameAsString().find("VclPtr") != std::string::npos) {
         return true;
     }
-    if (pvDecl->getType().getAsString().find("VclPtr") != std::string::npos) {
+    // we exclude this method in VclBuilder because it's so useful to have it like this
+    if (pMethodDecl
+        && pMethodDecl->getNameAsString() == "get"
+        && (pMethodDecl->getParent()->getQualifiedNameAsString() == "VclBuilder"
+            || pMethodDecl->getParent()->getQualifiedNameAsString() == "VclBuilderContainer"))
+    {
+        return true;
+    }
+    if (!pvDecl->getType()->isReferenceType() && pvDecl->getType().getAsString().find("VclPtr") != std::string::npos) {
         report(
             DiagnosticsEngine::Warning,
             "vcl::Window subclass passed as a VclPtr parameter, should be passed as a raw pointer.",
@@ -255,6 +288,43 @@ bool VCLWidgets::VisitParmVarDecl(ParmVarDecl const * pvDecl)
     return true;
 }
 
+static void findDisposeAndClearStatements2(std::vector<std::string>& aVclPtrFields, const Stmt *pStmt);
+
+static void findDisposeAndClearStatements(std::vector<std::string>& aVclPtrFields, const CompoundStmt *pCompoundStatement)
+{
+    for(const Stmt* pStmt : pCompoundStatement->body()) {
+        findDisposeAndClearStatements2(aVclPtrFields, pStmt);
+    }
+}
+
+static void findDisposeAndClearStatements2(std::vector<std::string>& aVclPtrFields, const Stmt *pStmt)
+{
+    if (isa<CompoundStmt>(pStmt)) {
+        findDisposeAndClearStatements(aVclPtrFields, dyn_cast<CompoundStmt>(pStmt));
+        return;
+    }
+    if (!isa<CallExpr>(pStmt)) return;
+    const CallExpr *pCallExpr = dyn_cast<CallExpr>(pStmt);
+
+    if (!pCallExpr->getDirectCallee()) return;
+    if (!isa<CXXMethodDecl>(pCallExpr->getDirectCallee())) return;
+    const CXXMethodDecl *pCalleeMethodDecl = dyn_cast<CXXMethodDecl>(pCallExpr->getDirectCallee());
+    if (pCalleeMethodDecl->getNameAsString() != "disposeAndClear") return;
+
+    if (!pCallExpr->getCallee()) return;
+
+    if (!isa<MemberExpr>(pCallExpr->getCallee())) return;
+    const MemberExpr *pCalleeMemberExpr = dyn_cast<MemberExpr>(pCallExpr->getCallee());
+
+    if (!pCalleeMemberExpr->getBase()) return;
+    if (!isa<MemberExpr>(pCalleeMemberExpr->getBase())) return;
+    const MemberExpr *pCalleeMemberExprBase = dyn_cast<MemberExpr>(pCalleeMemberExpr->getBase());
+
+    std::string xxx = pCalleeMemberExprBase->getMemberDecl()->getNameAsString();
+    aVclPtrFields.erase(std::remove(aVclPtrFields.begin(), aVclPtrFields.end(), xxx), aVclPtrFields.end());
+}
+
+
 bool VCLWidgets::VisitFunctionDecl( const FunctionDecl* functionDecl )
 {
     if (ignoreLocation(functionDecl)) {
@@ -263,16 +333,16 @@ bool VCLWidgets::VisitFunctionDecl( const FunctionDecl* functionDecl )
     // ignore the stuff in the VclPtr template class
     const CXXMethodDecl *pMethodDecl = dyn_cast<CXXMethodDecl>(functionDecl);
     if (pMethodDecl
-        && pMethodDecl->getParent()->getQualifiedNameAsString().find("VclPtr") != std::string::npos) {
+        && pMethodDecl->getParent()->getQualifiedNameAsString() == "VclPtr") {
         return true;
     }
     // ignore the vcl::Window::dispose() method
     if (pMethodDecl
-        && pMethodDecl->getParent()->getQualifiedNameAsString().compare("vcl::Window") == 0) {
+        && pMethodDecl->getParent()->getQualifiedNameAsString() == "vcl::Window") {
         return true;
     }
     QualType t1 { compat::getReturnType(*functionDecl) };
-    if (t1.getAsString().find("VclPtr") != std::string::npos) {
+    if (t1.getAsString().find("VclPtr") == 0) {
         report(
             DiagnosticsEngine::Warning,
             "VclPtr declared as a return type from a method/function, should be passed as a raw pointer.",
@@ -286,54 +356,88 @@ bool VCLWidgets::VisitFunctionDecl( const FunctionDecl* functionDecl )
                 report(
                     DiagnosticsEngine::Warning,
                     "vcl::Window subclass dispose() method MUST call it's superclass dispose() as the last thing it does",
-                    functionDecl->getBody()->getLocStart())
-                  << functionDecl->getBody()->getSourceRange();
+                    functionDecl->getLocStart())
+                  << functionDecl->getSourceRange();
            }
         }
     }
     // check dispose method to make sure we are actually disposing all of the VclPtr fields
-    if (pMethodDecl && pMethodDecl->isInstance() && pMethodDecl->getBody() && pMethodDecl->param_size()==0
-        && pMethodDecl->getNameAsString() == "dispose")
+    if (pMethodDecl && pMethodDecl->isInstance() && pMethodDecl->getBody()
+        && pMethodDecl->param_size()==0
+        && pMethodDecl->getNameAsString() == "dispose"
+        && isDerivedFromWindow(pMethodDecl->getParent()) )
     {
+        // exclude a couple of methods with hard-to-parse code
+        if (pMethodDecl->getQualifiedNameAsString() == "SvxRubyDialog::dispose")
+            return true;
+        if (pMethodDecl->getQualifiedNameAsString() == "SvxPersonalizationTabPage::dispose")
+            return true;
+        if (pMethodDecl->getQualifiedNameAsString() == "SelectPersonaDialog::dispose")
+            return true;
+        if (pMethodDecl->getQualifiedNameAsString() == "MappingDialog_Impl::dispose")
+            return true;
+        if (pMethodDecl->getQualifiedNameAsString() == "BibGeneralPage::dispose")
+            return true;
+        if (pMethodDecl->getQualifiedNameAsString() == "SwCreateAuthEntryDlg_Impl::dispose")
+            return true;
+        if (pMethodDecl->getQualifiedNameAsString() == "SwTableColumnPage::dispose")
+            return true;
+        if (pMethodDecl->getQualifiedNameAsString() == "SwAssignFieldsControl::dispose")
+            return true;
+        if (pMethodDecl->getQualifiedNameAsString() == "ScOptSolverDlg::dispose")
+            return true;
+        if (pMethodDecl->getQualifiedNameAsString() == "ScPivotFilterDlg::dispose")
+            return true;
+        if (pMethodDecl->getQualifiedNameAsString() == "SmToolBoxWindow::dispose")
+            return true;
+        if (pMethodDecl->getQualifiedNameAsString() == "dbaui::DlgOrderCrit::dispose")
+            return true;
+
         std::vector<std::string> aVclPtrFields;
         for(auto fieldDecl : pMethodDecl->getParent()->fields()) {
-            const RecordType *pFieldRecordType = fieldDecl->getType()->getAs<RecordType>();
-            if (pFieldRecordType) {
-                const CXXRecordDecl *pFieldRecordTypeDecl = dyn_cast<CXXRecordDecl>(pFieldRecordType->getDecl());
-                if (pFieldRecordTypeDecl->getQualifiedNameAsString().compare(0, strlen(sVclPtr), sVclPtr) == 0) {
-                   aVclPtrFields.push_back(fieldDecl->getNameAsString());
-                }
-           }
+            if (fieldDecl->getType().getAsString().compare(0, strlen(sVclPtr), sVclPtr) == 0) {
+                aVclPtrFields.push_back(fieldDecl->getNameAsString());
+            }
         }
         if (!aVclPtrFields.empty()) {
-            const CompoundStmt *pCompoundStatement = dyn_cast<CompoundStmt>(pMethodDecl->getBody());
-            for(const Stmt* pStmt : pCompoundStatement->body()) {
-                const CallExpr *pCallExpr = dyn_cast<CallExpr>(pStmt);
-                if (!pCallExpr) continue;
-                if (!pCallExpr->getDirectCallee()) continue;
-                const CXXMethodDecl *pCalleeMethodDecl = dyn_cast<CXXMethodDecl>(pCallExpr->getDirectCallee());
-                if (!pCalleeMethodDecl) continue;
-                if (pCalleeMethodDecl->getNameAsString() != "disposeAndClear") continue;
-                const MemberExpr *pCalleeMemberExpr = dyn_cast<MemberExpr>(pCallExpr->getCallee());
-                if (!pCalleeMemberExpr) continue;
-                const MemberExpr *pCalleeMemberExprBase = dyn_cast<MemberExpr>(pCalleeMemberExpr->getBase());
-                std::string xxx = pCalleeMemberExprBase->getMemberDecl()->getNameAsString();
-                aVclPtrFields.erase(std::remove(aVclPtrFields.begin(), aVclPtrFields.end(), xxx), aVclPtrFields.end());
-            }
+            if (pMethodDecl->getBody() && isa<CompoundStmt>(pMethodDecl->getBody()))
+                findDisposeAndClearStatements( aVclPtrFields, dyn_cast<CompoundStmt>(pMethodDecl->getBody()) );
             if (!aVclPtrFields.empty()) {
+                //pMethodDecl->dump();
                 std::string aMessage = "vcl::Window subclass dispose() method does not call disposeAndClear() on the following field(s) ";
                 for(auto s : aVclPtrFields)
-                    aMessage += ", " + s;
+                    aMessage += "\n    " + s + ".clear();";
                 report(
                     DiagnosticsEngine::Warning,
                     aMessage,
-                    functionDecl->getBody()->getLocStart())
-                  << functionDecl->getBody()->getSourceRange();
+                    functionDecl->getLocStart())
+                  << functionDecl->getSourceRange();
            }
        }
     }
     return true;
 }
+
+bool VCLWidgets::VisitCXXDeleteExpr(const CXXDeleteExpr *pCXXDeleteExpr)
+{
+    if (ignoreLocation(pCXXDeleteExpr)) {
+        return true;
+    }
+    const ImplicitCastExpr* pImplicitCastExpr = dyn_cast<ImplicitCastExpr>(pCXXDeleteExpr->getArgument());
+    if (!pImplicitCastExpr) {
+        return true;
+    }
+    if (pImplicitCastExpr->getCastKind() != CK_UserDefinedConversion) {
+        return true;
+    }
+    report(
+        DiagnosticsEngine::Warning,
+        "calling delete on instance of VclPtr, must rather call disposeAndClear()",
+        pCXXDeleteExpr->getLocStart())
+     << pCXXDeleteExpr->getSourceRange();
+    return true;
+}
+
 
 /**
 The AST looks like:
@@ -347,6 +451,7 @@ bool VCLWidgets::isDisposeCallingSuperclassDispose(const CXXMethodDecl* pMethodD
 {
     const CompoundStmt *pCompoundStatement = dyn_cast<CompoundStmt>(pMethodDecl->getBody());
     if (!pCompoundStatement) return false;
+    if (pCompoundStatement->size() == 0) return false;
     // find the last statement
     const CXXMemberCallExpr *pCallExpr = dyn_cast<CXXMemberCallExpr>(*pCompoundStatement->body_rbegin());
     if (!pCallExpr) return false;

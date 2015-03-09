@@ -34,29 +34,40 @@ namespace bib
 {
 
 
+    class BibView;
+    class BibViewFormControlContainer : public FormControlContainer
+    {
+    private:
+        VclPtr<BibView> mpBibView;
+    protected:
+        // FormControlContainer
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >
+                            getControlContainer() SAL_OVERRIDE;
+        // XLoadListener equivalents
+        virtual void        _loaded( const ::com::sun::star::lang::EventObject& _rEvent ) SAL_OVERRIDE;
+        virtual void        _reloaded( const ::com::sun::star::lang::EventObject& _rEvent ) SAL_OVERRIDE;
+    public:
+        using FormControlContainer::connectForm;
+        using FormControlContainer::disconnectForm;
+        using FormControlContainer::isFormConnected;
+        BibViewFormControlContainer(BibView *pBibView);
+    };
 
-    class BibView : public BibWindow, public FormControlContainer
+    class BibView : public BibWindow
     {
     private:
         BibDataManager*                                                             m_pDatMan;
         ::com::sun::star::uno::Reference< ::com::sun::star::form::XLoadable>        m_xDatMan;
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFocusListener>    m_xGeneralPage;
-        BibGeneralPage*                                                             m_pGeneralPage;
+        VclPtr<BibGeneralPage>                                                      m_pGeneralPage;
+        BibViewFormControlContainer                                                 m_aFormControlContainer;
 
     private:
         DECL_STATIC_LINK(BibView, CallMappingHdl, BibView*);
 
     protected:
         // Window overridables
-            virtual void    Resize() SAL_OVERRIDE;
-
-        // FormControlContainer
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >
-                            getControlContainer() SAL_OVERRIDE;
-
-        // XLoadListener equivalents
-        virtual void        _loaded( const ::com::sun::star::lang::EventObject& _rEvent ) SAL_OVERRIDE;
-        virtual void        _reloaded( const ::com::sun::star::lang::EventObject& _rEvent ) SAL_OVERRIDE;
+        virtual void    Resize() SAL_OVERRIDE;
 
     public:
                             BibView( vcl::Window* _pParent, BibDataManager* _pDatMan, WinBits nStyle = WB_3DLOOK );
@@ -64,6 +75,7 @@ namespace bib
         virtual void        dispose() SAL_OVERRIDE;
 
         void                UpdatePages();
+        css::uno::Reference< css::awt::XControlContainer > getControlContainer();
 
         virtual void        GetFocus() SAL_OVERRIDE;
 

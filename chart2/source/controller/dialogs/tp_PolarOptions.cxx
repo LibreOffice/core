@@ -44,6 +44,22 @@ PolarOptionsTabPage::PolarOptionsTabPage( vcl::Window* pWindow,const SfxItemSet&
     m_pAngleDial->SetLinkedField( m_pNF_StartingAngle );
 }
 
+PolarOptionsTabPage::~PolarOptionsTabPage()
+{
+    dispose();
+}
+
+void PolarOptionsTabPage::dispose()
+{
+    m_pCB_Clockwise.clear();
+    m_pFL_StartingAngle.clear();
+    m_pAngleDial.clear();
+    m_pNF_StartingAngle.clear();
+    m_pFL_PlotOptions.clear();
+    m_pCB_IncludeHiddenCells.clear();
+    SfxTabPage::dispose();
+}
+
 SfxTabPage* PolarOptionsTabPage::Create( vcl::Window* pWindow,const SfxItemSet* rOutAttrs )
 {
     return new PolarOptionsTabPage( pWindow, *rOutAttrs );

@@ -40,22 +40,22 @@ public:
     void ClearModifyFlag();
 
 private:
-    FixedText* m_pFT_Main;
-    FixedText* m_pFT_Sub;
-    Edit* m_pEd_Main;
-    Edit* m_pEd_Sub;
+    VclPtr<FixedText> m_pFT_Main;
+    VclPtr<FixedText> m_pFT_Sub;
+    VclPtr<Edit> m_pEd_Main;
+    VclPtr<Edit> m_pEd_Sub;
 
-    FixedText* m_pFT_XAxis;
-    FixedText* m_pFT_YAxis;
-    FixedText* m_pFT_ZAxis;
-    Edit* m_pEd_XAxis;
-    Edit* m_pEd_YAxis;
-    Edit* m_pEd_ZAxis;
+    VclPtr<FixedText> m_pFT_XAxis;
+    VclPtr<FixedText> m_pFT_YAxis;
+    VclPtr<FixedText> m_pFT_ZAxis;
+    VclPtr<Edit> m_pEd_XAxis;
+    VclPtr<Edit> m_pEd_YAxis;
+    VclPtr<Edit> m_pEd_ZAxis;
 
-    FixedText* m_pFT_SecondaryXAxis;
-    FixedText* m_pFT_SecondaryYAxis;
-    Edit* m_pEd_SecondaryXAxis;
-    Edit* m_pEd_SecondaryYAxis;
+    VclPtr<FixedText> m_pFT_SecondaryXAxis;
+    VclPtr<FixedText> m_pFT_SecondaryYAxis;
+    VclPtr<Edit> m_pEd_SecondaryXAxis;
+    VclPtr<Edit> m_pEd_SecondaryYAxis;
 };
 
 } //namespace chart

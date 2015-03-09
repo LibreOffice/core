@@ -42,23 +42,23 @@
 class SFX2_DLLPUBLIC SfxPasswordDialog : public ModalDialog
 {
 private:
-    VclFrame*       mpPassword1Box;
-    FixedText*      mpUserFT;
-    Edit*           mpUserED;
-    FixedText*      mpPassword1FT;
-    Edit*           mpPassword1ED;
-    FixedText*      mpConfirm1FT;
-    Edit*           mpConfirm1ED;
+    VclPtr<VclFrame>       mpPassword1Box;
+    VclPtr<FixedText>      mpUserFT;
+    VclPtr<Edit>           mpUserED;
+    VclPtr<FixedText>      mpPassword1FT;
+    VclPtr<Edit>           mpPassword1ED;
+    VclPtr<FixedText>      mpConfirm1FT;
+    VclPtr<Edit>           mpConfirm1ED;
 
-    VclFrame*       mpPassword2Box;
-    FixedText*      mpPassword2FT;
-    Edit*           mpPassword2ED;
-    FixedText*      mpConfirm2FT;
-    Edit*           mpConfirm2ED;
+    VclPtr<VclFrame>       mpPassword2Box;
+    VclPtr<FixedText>      mpPassword2FT;
+    VclPtr<Edit>           mpPassword2ED;
+    VclPtr<FixedText>      mpConfirm2FT;
+    VclPtr<Edit>           mpConfirm2ED;
 
-    FixedText*      mpMinLengthFT;
+    VclPtr<FixedText>      mpMinLengthFT;
 
-    OKButton*       mpOKBtn;
+    VclPtr<OKButton>       mpOKBtn;
 
     OUString        maMinLenPwdStr;
     OUString        maMinLenPwdStr1;
@@ -75,6 +75,8 @@ private:
 
 public:
     SfxPasswordDialog(vcl::Window* pParent, const OUString* pGroupText = NULL);
+    virtual ~SfxPasswordDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     OUString GetUser() const
     {

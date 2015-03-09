@@ -67,7 +67,7 @@ private:
 
     bool                           m_bReadOnly;
     boost::scoped_ptr<DataBrowser> m_xBrwData;
-    ToolBox*                       m_pTbxData;
+    VclPtr<ToolBox>                       m_pTbxData;
     ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XChartDocument > m_xChartDoc;
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >

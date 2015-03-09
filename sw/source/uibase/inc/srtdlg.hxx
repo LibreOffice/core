@@ -31,38 +31,38 @@ class CollatorResource;
 
 class SwSortDlg : public SvxStandardDialog
 {
-    FixedText*          m_pColLbl;
-    FixedText*          m_pTypLbl;
+    VclPtr<FixedText>          m_pColLbl;
+    VclPtr<FixedText>          m_pTypLbl;
 
-    CheckBox*           m_pKeyCB1;
-    NumericField*       m_pColEdt1;
-    ListBox*            m_pTypDLB1;
-    RadioButton*        m_pSortUp1RB;
-    RadioButton*        m_pSortDn1RB;
+    VclPtr<CheckBox>           m_pKeyCB1;
+    VclPtr<NumericField>       m_pColEdt1;
+    VclPtr<ListBox>            m_pTypDLB1;
+    VclPtr<RadioButton>        m_pSortUp1RB;
+    VclPtr<RadioButton>        m_pSortDn1RB;
 
-    CheckBox*           m_pKeyCB2;
-    NumericField*       m_pColEdt2;
-    ListBox*            m_pTypDLB2;
-    RadioButton*        m_pSortUp2RB;
-    RadioButton*        m_pSortDn2RB;
+    VclPtr<CheckBox>           m_pKeyCB2;
+    VclPtr<NumericField>       m_pColEdt2;
+    VclPtr<ListBox>            m_pTypDLB2;
+    VclPtr<RadioButton>        m_pSortUp2RB;
+    VclPtr<RadioButton>        m_pSortDn2RB;
 
-    CheckBox*           m_pKeyCB3;
-    NumericField*       m_pColEdt3;
-    ListBox*            m_pTypDLB3;
-    RadioButton*        m_pSortUp3RB;
-    RadioButton*        m_pSortDn3RB;
+    VclPtr<CheckBox>           m_pKeyCB3;
+    VclPtr<NumericField>       m_pColEdt3;
+    VclPtr<ListBox>            m_pTypDLB3;
+    VclPtr<RadioButton>        m_pSortUp3RB;
+    VclPtr<RadioButton>        m_pSortDn3RB;
 
-    RadioButton*        m_pColumnRB;
-    RadioButton*        m_pRowRB;
+    VclPtr<RadioButton>        m_pColumnRB;
+    VclPtr<RadioButton>        m_pRowRB;
 
-    RadioButton*        m_pDelimTabRB;
-    RadioButton*        m_pDelimFreeRB;
-    Edit*               m_pDelimEdt;
-    PushButton*         m_pDelimPB;
+    VclPtr<RadioButton>        m_pDelimTabRB;
+    VclPtr<RadioButton>        m_pDelimFreeRB;
+    VclPtr<Edit>               m_pDelimEdt;
+    VclPtr<PushButton>         m_pDelimPB;
 
-    SvxLanguageBox*     m_pLangLB;
+    VclPtr<SvxLanguageBox>     m_pLangLB;
 
-    CheckBox*           m_pCaseCB;
+    VclPtr<CheckBox>           m_pCaseCB;
 
     OUString aColTxt;
     OUString aRowTxt;

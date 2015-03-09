@@ -328,13 +328,13 @@ IMPL_LINK_NOARG(TabBarEdit, ImplEndTimerHdl)
 
 struct TabBar_Impl
 {
-    std::unique_ptr<ImplTabSizer> mpSizer;
-    std::unique_ptr<ImplTabButton> mpFirstButton;
-    std::unique_ptr<ImplTabButton> mpPrevButton;
-    std::unique_ptr<ImplTabButton> mpNextButton;
-    std::unique_ptr<ImplTabButton> mpLastButton;
-    std::unique_ptr<TabBarEdit> mpEdit;
-    ImplTabBarList mpItemList;
+    VclPtr<ImplTabSizer>  mpSizer;
+    VclPtr<ImplTabButton> mpFirstButton;
+    VclPtr<ImplTabButton> mpPrevButton;
+    VclPtr<ImplTabButton> mpNextButton;
+    VclPtr<ImplTabButton> mpLastButton;
+    VclPtr<TabBarEdit>    mpEdit;
+    ImplTabBarList        mpItemList;
 
     svt::AccessibleFactoryAccess  maAccessibleFactory;
 
@@ -355,6 +355,12 @@ struct TabBar_Impl
             delete mpItemList[i];
         }
         mpItemList.clear();
+
+        mpPrevBtn.disposeAndClear();
+        mpNextBtn.disposeAndClear();
+        mpFirstBtn.disposeAndClear();
+        mpLastBtn.disposeAndClear();
+        mpEdit.disposeAndClear();
     }
 
     sal_uInt16 getItemSize()
@@ -378,6 +384,7 @@ TabBar::~TabBar()
 void TabBar::dispose()
 {
     EndEditMode( true );
+    mpImpl.reset();
     Window::dispose();
 }
 
@@ -661,9 +668,7 @@ void TabBar::ImplInitControls()
         mpImpl->mpSizer->Show();
     }
     else
-    {
-        mpImpl->mpSizer.reset();
-    }
+        mpImpl->mpSizer.disposeAndClear();
 
     Link aLink = LINK( this, TabBar, ImplClickHdl );
 
@@ -687,8 +692,8 @@ void TabBar::ImplInitControls()
     }
     else
     {
-        mpImpl->mpPrevButton.reset();
-        mpImpl->mpNextButton.reset();
+        mpImpl->mpPrevButton.disposeAndClear();
+        mpImpl->mpNextButton.disposeAndClear();
     }
 
     if ( mnWinStyle & WB_SCROLL )
@@ -711,8 +716,8 @@ void TabBar::ImplInitControls()
     }
     else
     {
-        mpImpl->mpFirstButton.reset();
-        mpImpl->mpLastButton.reset();
+        mpImpl->mpFirstButton.disposeAndClear();
+        mpImpl->mpLastButton.disposeAndClear();
     }
 
     mbHasInsertTab  = (mnWinStyle & WB_INSERTTAB);
@@ -2268,7 +2273,8 @@ void TabBar::EndEditMode( bool bCancel )
         else
         {
             // close edit and call end hdl
-            mpImpl->mpEdit.reset();
+            mpImpl->mpEdit.disposeAndClear();
+
             EndRenaming();
             mnEditId = 0;
         }

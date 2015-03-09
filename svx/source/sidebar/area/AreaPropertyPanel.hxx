@@ -35,6 +35,7 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
+#include <vcl/vclptr.hxx>
 #include <svl/intitem.hxx>
 #include <com/sun/star/ui/XUIElement.hpp>
 #include <boost/scoped_ptr.hpp>
@@ -53,6 +54,9 @@ class AreaPropertyPanel
     public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
 {
 public:
+    virtual ~AreaPropertyPanel();
+    virtual void dispose() SAL_OVERRIDE;
+
     static AreaPropertyPanel* Create(
         vcl::Window* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
@@ -96,14 +100,14 @@ private:
     XGradient                                           maGradientRect;
 
     //ui controls
-    FixedText*                                          mpColorTextFT;
-    SvxFillTypeBox*                                     mpLbFillType;
-    SvxFillAttrBox*                                     mpLbFillAttr;
-    ToolBox*                                            mpToolBoxColor; // for new color picker
-    FixedText*                                          mpTrspTextFT;
-    ListBox*                                            mpLBTransType;
-    MetricField*                                        mpMTRTransparent;
-    ToolBox*                                            mpBTNGradient;
+    VclPtr<FixedText>                                          mpColorTextFT;
+    VclPtr<SvxFillTypeBox>                                     mpLbFillType;
+    VclPtr<SvxFillAttrBox>                                     mpLbFillAttr;
+    VclPtr<ToolBox>                                            mpToolBoxColor; // for new color picker
+    VclPtr<FixedText>                                          mpTrspTextFT;
+    VclPtr<ListBox>                                            mpLBTransType;
+    VclPtr<MetricField>                                        mpMTRTransparent;
+    VclPtr<ToolBox>                                            mpBTNGradient;
 
     ::boost::scoped_ptr< XFillStyleItem >               mpStyleItem;
     ::boost::scoped_ptr< XFillColorItem >               mpColorItem;

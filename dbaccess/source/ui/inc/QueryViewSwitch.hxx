@@ -34,8 +34,8 @@ namespace dbaui
     class OQueryContainerWindow;
     class OQueryViewSwitch
     {
-        OQueryDesignView*   m_pDesignView;
-        OQueryTextView*     m_pTextView;
+        VclPtr<OQueryDesignView>   m_pDesignView;
+        VclPtr<OQueryTextView>     m_pTextView;
         bool            m_bAddTableDialogWasVisible; // true if so
     public:
         OQueryViewSwitch(OQueryContainerWindow* pParent, OQueryController& _rController,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& );

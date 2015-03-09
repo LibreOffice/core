@@ -51,8 +51,8 @@ using namespace com::sun::star;
 
 XPropertyListRef SvxColorTabPage::GetList()
 {
-    SvxAreaTabDialog* pArea = dynamic_cast< SvxAreaTabDialog* >( mpTopDlg );
-    SvxLineTabDialog* pLine = dynamic_cast< SvxLineTabDialog* >( mpTopDlg );
+    SvxAreaTabDialog* pArea = dynamic_cast< SvxAreaTabDialog* >( mpTopDlg.get() );
+    SvxLineTabDialog* pLine = dynamic_cast< SvxLineTabDialog* >( mpTopDlg.get() );
 
     XColorListRef pList;
     if( pArea )
@@ -162,8 +162,8 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickLoadHdl_Impl)
             if( pList->Load() )
             {
                 // check whether the table may be deleted:
-                SvxAreaTabDialog* pArea = dynamic_cast< SvxAreaTabDialog* >( mpTopDlg );
-                SvxLineTabDialog* pLine = dynamic_cast< SvxLineTabDialog* >( mpTopDlg );
+                SvxAreaTabDialog* pArea = dynamic_cast< SvxAreaTabDialog* >( mpTopDlg.get() );
+                SvxLineTabDialog* pLine = dynamic_cast< SvxLineTabDialog* >( mpTopDlg.get() );
 
                 // FIXME: want to have a generic set and get method by type ...
                 if( pArea )
@@ -404,6 +404,30 @@ void SvxColorTabPage::dispose()
 {
     delete pShadow;
     pShadow = NULL;
+    mpTopDlg.clear();
+    m_pBoxEmbed.clear();
+    m_pBtnLoad.clear();
+    m_pBtnSave.clear();
+    m_pTableName.clear();
+    m_pEdtName.clear();
+    m_pLbColor.clear();
+    m_pValSetColorList.clear();
+    m_pCtlPreviewOld.clear();
+    m_pCtlPreviewNew.clear();
+    m_pLbColorModel.clear();
+    m_pRGB.clear();
+    m_pR.clear();
+    m_pG.clear();
+    m_pB.clear();
+    m_pCMYK.clear();
+    m_pC.clear();
+    m_pY.clear();
+    m_pM.clear();
+    m_pK.clear();
+    m_pBtnAdd.clear();
+    m_pBtnModify.clear();
+    m_pBtnWorkOn.clear();
+    m_pBtnDelete.clear();
     SfxTabPage::dispose();
 }
 

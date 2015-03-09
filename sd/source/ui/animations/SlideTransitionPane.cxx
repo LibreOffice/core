@@ -386,7 +386,7 @@ struct lcl_AppendSoundToListBox : public ::std::unary_function< OUString, void >
     }
 
 private:
-    ListBox*  mrListBox;
+    VclPtr<ListBox>  mrListBox;
 };
 
 void lcl_FillSoundListBox(
@@ -490,6 +490,19 @@ void SlideTransitionPane::dispose()
 {
     maLateInitTimer.Stop();
     removeListener();
+    mpLB_SLIDE_TRANSITIONS.clear();
+    mpFT_SPEED.clear();
+    mpLB_SPEED.clear();
+    mpFT_SOUND.clear();
+    mpLB_SOUND.clear();
+    mpCB_LOOP_SOUND.clear();
+    mpRB_ADVANCE_ON_MOUSE.clear();
+    mpRB_ADVANCE_AUTO.clear();
+    mpMF_ADVANCE_AUTO_AFTER.clear();
+    mpPB_APPLY_TO_ALL.clear();
+    mpPB_PLAY.clear();
+    mpPB_SLIDE_SHOW.clear();
+    mpCB_AUTO_PREVIEW.clear();
     PanelLayout::dispose();
 }
 

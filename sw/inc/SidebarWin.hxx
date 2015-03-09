@@ -211,11 +211,11 @@ class SwSidebarWin : public vcl::Window
         OutlinerView*   mpOutlinerView;
         Outliner*       mpOutliner;
 
-        sw::sidebarwindows::SidebarTxtControl* mpSidebarTxtControl;
-        ScrollBar*      mpVScrollbar;
-        Edit*           mpMetadataAuthor;
-        Edit*           mpMetadataDate;
-        MenuButton*     mpMenuButton;
+        VclPtr<sw::sidebarwindows::SidebarTxtControl> mpSidebarTxtControl;
+        VclPtr<ScrollBar>      mpVScrollbar;
+        VclPtr<Edit>           mpMetadataAuthor;
+        VclPtr<Edit>           mpMetadataDate;
+        VclPtr<MenuButton>     mpMenuButton;
 
         sw::sidebarwindows::AnchorOverlayObject* mpAnchor;
         sw::sidebarwindows::ShadowOverlayObject* mpShadow;

@@ -187,6 +187,7 @@ void SwGlobalTree::dispose()
 {
     delete pSwGlblDocContents;
     delete pDocInserter;
+    pDefParentWin.clear();
     SvTreeListBox::dispose();
 }
 

@@ -103,11 +103,7 @@ FullScreenPane::~FullScreenPane (void) throw()
 
 void SAL_CALL FullScreenPane::disposing (void)
 {
-    // We have created the window pointed to by mpWindow, we delete it.
-    if (mpWindow != NULL)
-    {
-        delete mpWindow;
-    }
+    mpWindow.clear();
 
     if (mpWorkWindow.get() != NULL)
     {
@@ -126,7 +122,7 @@ sal_Bool SAL_CALL FullScreenPane::isVisible (void)
 {
     ThrowIfDisposed();
 
-    if (mpWindow != NULL)
+    if (mpWindow != nullptr)
         return mpWindow->IsReallyVisible();
     else
         return false;
@@ -137,7 +133,7 @@ void SAL_CALL FullScreenPane::setVisible (const sal_Bool bIsVisible)
 {
     ThrowIfDisposed();
 
-    if (mpWindow != NULL)
+    if (mpWindow != nullptr)
         mpWindow->Show(bIsVisible);
     if (mpWorkWindow != 0)
         mpWorkWindow->Show(bIsVisible);
@@ -160,7 +156,7 @@ void SAL_CALL FullScreenPane::setAccessible (
 {
     ThrowIfDisposed();
 
-    if (mpWindow != NULL)
+    if (mpWindow != nullptr)
     {
         Reference<lang::XInitialization> xInitializable (rxAccessible, UNO_QUERY);
         if (xInitializable.is())

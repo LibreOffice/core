@@ -42,18 +42,18 @@ public:
     void GetImportOptions( ScImportOptions& rOptions ) const;
 
 private:
-    VclFrame*           m_pFieldFrame;
-    FixedText*          m_pFtCharset;
-    SvxTextEncodingBox* m_pLbCharset;
-    FixedText*          m_pFtFieldSep;
-    ComboBox*           m_pEdFieldSep;
-    FixedText*          m_pFtTextSep;
-    ComboBox*           m_pEdTextSep;
-    CheckBox*           m_pCbShown;
-    CheckBox*           m_pCbFormulas;
-    CheckBox*           m_pCbQuoteAll;
-    CheckBox*           m_pCbFixed;
-    OKButton*           m_pBtnOk;
+    VclPtr<VclFrame>           m_pFieldFrame;
+    VclPtr<FixedText>          m_pFtCharset;
+    VclPtr<SvxTextEncodingBox> m_pLbCharset;
+    VclPtr<FixedText>          m_pFtFieldSep;
+    VclPtr<ComboBox>           m_pEdFieldSep;
+    VclPtr<FixedText>          m_pFtTextSep;
+    VclPtr<ComboBox>           m_pEdTextSep;
+    VclPtr<CheckBox>           m_pCbShown;
+    VclPtr<CheckBox>           m_pCbFormulas;
+    VclPtr<CheckBox>           m_pCbQuoteAll;
+    VclPtr<CheckBox>           m_pCbFixed;
+    VclPtr<OKButton>           m_pBtnOk;
 
     ScDelimiterTable*   pFieldSepTab;
     ScDelimiterTable*   pTextSepTab;

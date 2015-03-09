@@ -27,6 +27,7 @@
 #include <tools/rtti.hxx>
 #include <tools/errcode.hxx>
 #include <tools/toolsdllapi.h>
+#include <vcl/vclptr.hxx>
 
 class EDcr_Impl;
 class ErrHdl_Impl;
@@ -121,14 +122,14 @@ class TOOLS_DLLPUBLIC ErrorContext
 
 private:
     ErrorContext*           pNext;
-    vcl::Window*                 pWin;
+    VclPtr<vcl::Window>     pWin;
 
 public:
                             ErrorContext(vcl::Window *pWin=0);
     virtual                 ~ErrorContext();
 
     virtual bool            GetString( sal_uIntPtr nErrId, OUString& rCtxStr ) = 0;
-    vcl::Window*                 GetParent() { return pWin; }
+    vcl::Window*            GetParent() { return pWin; }
 
     static ErrorContext*    GetContext();
 };

@@ -80,6 +80,7 @@ void ORelationTableView::dispose()
 {
     if ( m_pContainerListener.is() )
         m_pContainerListener->dispose();
+    m_pExistingConnection.clear();
     OJoinTableView::dispose();
 }
 
@@ -170,8 +171,8 @@ void ORelationTableView::AddConnection(const OJoinExchangeData& jxdSource, const
     OTableWindow* pSourceWin = jxdSource.pListBox->GetTabWin();
     OTableWindow* pDestWin = jxdDest.pListBox->GetTabWin();
 
-    ::std::vector<OTableConnection*>::const_iterator aIter = getTableConnections().begin();
-    ::std::vector<OTableConnection*>::const_iterator aEnd = getTableConnections().end();
+    auto aIter = getTableConnections().begin();
+    auto aEnd = getTableConnections().end();
     for(;aIter != aEnd;++aIter)
     {
         OTableConnection* pFirst = *aIter;

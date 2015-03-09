@@ -460,6 +460,33 @@ void SvxBackgroundTabPage::dispose()
         delete pParaBck_Impl;
         pParaBck_Impl = NULL;
     }
+
+    m_pAsGrid.clear();
+    m_pSelectTxt.clear();
+    m_pLbSelect.clear();
+    m_pTblDesc.clear();
+    m_pTblLBox.clear();
+    m_pParaLBox.clear();
+    m_pBackGroundColorFrame.clear();
+    m_pBackgroundColorSet.clear();
+    m_pPreviewWin1.clear();
+    m_pColTransFT.clear();
+    m_pColTransMF.clear();
+    m_pBtnPreview.clear();
+    m_pBitmapContainer.clear();
+    m_pFileFrame.clear();
+    m_pBtnBrowse.clear();
+    m_pBtnLink.clear();
+    m_pFtUnlinked.clear();
+    m_pFtFile.clear();
+    m_pTypeFrame.clear();
+    m_pBtnPosition.clear();
+    m_pBtnArea.clear();
+    m_pBtnTile.clear();
+    m_pWndPosition.clear();
+    m_pGraphTransFrame.clear();
+    m_pGraphTransMF.clear();
+    m_pPreviewWin2.clear();
     SvxTabPage::dispose();
 }
 

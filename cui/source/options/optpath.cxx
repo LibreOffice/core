@@ -256,11 +256,13 @@ void SvxPathTabPage::dispose()
     {
         for ( sal_uInt16 i = 0; i < pPathBox->GetEntryCount(); ++i )
             delete static_cast<PathUserData_Impl*>(pPathBox->GetEntry(i)->GetUserData());
-        delete pPathBox;
-        pPathBox = NULL;
+        pPathBox.clear();
     }
     delete pImpl;
     pImpl = NULL;
+    m_pPathCtrl.clear();
+    m_pStandardBtn.clear();
+    m_pPathBtn.clear();
     SfxTabPage::dispose();
 }
 

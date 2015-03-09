@@ -23,6 +23,7 @@
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
 #include <vcl/dllapi.h>
+#include <vcl/vclptr.hxx>
 
 struct ImplCursorData;
 namespace vcl { class Window; }
@@ -40,7 +41,7 @@ class VCL_DLLPUBLIC Cursor
 {
 private:
     ImplCursorData* mpData;
-    vcl::Window*         mpWindow;           // only for shadow cursor
+    VclPtr<vcl::Window> mpWindow;           // only for shadow cursor
     long            mnSlant;
     Size            maSize;
     Point           maPos;

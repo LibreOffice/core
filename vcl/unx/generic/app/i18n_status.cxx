@@ -522,8 +522,6 @@ I18NStatus::I18NStatus() :
 
 I18NStatus::~I18NStatus()
 {
-    if( m_pStatusWindow )
-        delete m_pStatusWindow, m_pStatusWindow = NULL;
     if( pInstance == this )
         pInstance = NULL;
 }
@@ -606,7 +604,7 @@ SalFrame* I18NStatus::getStatusFrame() const
 
 void I18NStatus::toggleStatusWindow()
 {
-    if (m_pStatusWindow != 0)
+    if (m_pStatusWindow != nullptr)
         m_pStatusWindow->toggle(getStatusWindowMode());
 }
 

@@ -648,7 +648,7 @@ void ViewShell::SetActiveWindow (::sd::Window* pWin)
         }
     }
 
-    if (mpActiveWindow != pWin)
+    if (mpActiveWindow.get() != pWin)
         mpActiveWindow = pWin;
 
     // The rest of this function is not guarded anymore against calling this

@@ -93,6 +93,17 @@ ScTabPageSortFields::ScTabPageSortFields(vcl::Window* pParent,
     SetExchangeSupport();
 }
 
+ScTabPageSortFields::~ScTabPageSortFields()
+{
+    dispose();
+}
+
+void ScTabPageSortFields::dispose()
+{
+    pDlg.clear();
+    SfxTabPage::dispose();
+}
+
 void ScTabPageSortFields::SetPosSizePixel(const Point& rAllocPos, const Size& rAllocation)
 {
     SfxTabPage::SetPosSizePixel(rAllocPos, rAllocation);
@@ -109,10 +120,6 @@ void ScTabPageSortFields::SetPosPixel(const Point& rAllocPos)
 {
     SfxTabPage::SetPosPixel(rAllocPos);
     maSortKeyCtrl.setScrollRange();
-}
-
-ScTabPageSortFields::~ScTabPageSortFields()
-{
 }
 
 void ScTabPageSortFields::Init()
@@ -528,6 +535,21 @@ void ScTabPageSortOptions::dispose()
 
     delete pColRes;
     delete pColWrap;        //! not if from document
+    m_pBtnCase.clear();
+    m_pBtnHeader.clear();
+    m_pBtnFormats.clear();
+    m_pBtnNaturalSort.clear();
+    m_pBtnCopyResult.clear();
+    m_pLbOutPos.clear();
+    m_pEdOutPos.clear();
+    m_pBtnSortUser.clear();
+    m_pLbSortUser.clear();
+    m_pLbLanguage.clear();
+    m_pFtAlgorithm.clear();
+    m_pLbAlgorithm.clear();
+    m_pBtnTopDown.clear();
+    m_pBtnLeftRight.clear();
+    pDlg.clear();
     SfxTabPage::dispose();
 }
 

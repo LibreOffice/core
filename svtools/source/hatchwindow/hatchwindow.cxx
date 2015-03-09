@@ -188,7 +188,7 @@ void SAL_CALL VCLXHatchWindow::setController( const uno::Reference< embed::XHatc
 void SAL_CALL VCLXHatchWindow::dispose()
     throw (uno::RuntimeException, std::exception)
 {
-    pHatchWindow = 0;
+    pHatchWindow.clear();
     VCLXWindow::dispose();
 }
 

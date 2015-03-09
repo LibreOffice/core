@@ -28,23 +28,23 @@ class DataStreamDlg : public ModalDialog
 {
     ScDocShell *mpDocShell;
 
-    SvtURLBox*      m_pCbUrl;
-    PushButton*     m_pBtnBrowse;
-    RadioButton*    m_pRBDirectData;
-    RadioButton*    m_pRBScriptData;
-    RadioButton*    m_pRBValuesInLine;
-    RadioButton*    m_pRBAddressValue;
-    CheckBox*       m_pCBRefreshOnEmpty;
-    RadioButton*    m_pRBDataDown;
-    RadioButton*    m_pRBRangeDown;
-    RadioButton*    m_pRBNoMove;
-    RadioButton*    m_pRBMaxLimit;
-    RadioButton*    m_pRBUnlimited;
-    Edit*           m_pEdRange;
-    Edit*           m_pEdLimit;
-    OKButton*       m_pBtnOk;
-    VclFrame*       m_pVclFrameLimit;
-    VclFrame*       m_pVclFrameMove;
+    VclPtr<SvtURLBox>      m_pCbUrl;
+    VclPtr<PushButton>     m_pBtnBrowse;
+    VclPtr<RadioButton>    m_pRBDirectData;
+    VclPtr<RadioButton>    m_pRBScriptData;
+    VclPtr<RadioButton>    m_pRBValuesInLine;
+    VclPtr<RadioButton>    m_pRBAddressValue;
+    VclPtr<CheckBox>       m_pCBRefreshOnEmpty;
+    VclPtr<RadioButton>    m_pRBDataDown;
+    VclPtr<RadioButton>    m_pRBRangeDown;
+    VclPtr<RadioButton>    m_pRBNoMove;
+    VclPtr<RadioButton>    m_pRBMaxLimit;
+    VclPtr<RadioButton>    m_pRBUnlimited;
+    VclPtr<Edit>           m_pEdRange;
+    VclPtr<Edit>           m_pEdLimit;
+    VclPtr<OKButton>       m_pBtnOk;
+    VclPtr<VclFrame>       m_pVclFrameLimit;
+    VclPtr<VclFrame>       m_pVclFrameMove;
 
     DECL_LINK(UpdateHdl, void *);
     DECL_LINK(BrowseHdl, void *);
@@ -54,6 +54,8 @@ class DataStreamDlg : public ModalDialog
 
 public:
     DataStreamDlg(ScDocShell *pDocShell, vcl::Window* pParent);
+    virtual ~DataStreamDlg();
+    virtual void dispose() SAL_OVERRIDE;
 
     void Init( const DataStream& rStrm );
 

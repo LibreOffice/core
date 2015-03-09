@@ -47,7 +47,7 @@ SidebarChildWindow::SidebarChildWindow (
     pWindow->SetHelpId(HID_SIDEBAR_WINDOW);
     pWindow->SetOutputSizePixel(Size(GetDefaultWidth(pWindow), 450));
 
-    SfxDockingWindow* pDockingParent = dynamic_cast<SfxDockingWindow*>(pWindow);
+    SfxDockingWindow* pDockingParent = dynamic_cast<SfxDockingWindow*>(pWindow.get());
     if (pDockingParent != NULL)
     {
         if (pInfo && pInfo->aExtraString.isEmpty() && pInfo->aModule != "simpress")

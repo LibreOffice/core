@@ -39,7 +39,7 @@ public:
     ImplData();
     ~ImplData();
 
-    ToolBox*        mpBox;
+    VclPtr<ToolBox> mpBox;
     Rectangle       maItemEdgeClipRect; // used to clip the common edge between a toolbar item and the border of this window
 };
 
@@ -208,6 +208,8 @@ void FloatingWindow::dispose()
     delete mpImplData;
     mpImplData = NULL;
 
+    mpNextFloat.clear();
+    mpFirstPopupModeWin.clear();
     SystemWindow::dispose();
 }
 
@@ -746,7 +748,7 @@ void FloatingWindow::ImplEndPopupMode( sal_uInt16 nFlags, sal_uLong nFocusId )
     mbInCleanUp = true; // prevent killing this window due to focus change while working with it
 
     // stop the PopupMode also for all following PopupMode windows
-    while ( pSVData->maWinData.mpFirstFloat && pSVData->maWinData.mpFirstFloat != this )
+    while ( pSVData->maWinData.mpFirstFloat && pSVData->maWinData.mpFirstFloat.get() != this )
         pSVData->maWinData.mpFirstFloat->EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL );
 
     // delete window from the list

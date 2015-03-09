@@ -24,6 +24,7 @@
 #include <tools/rtti.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/impdel.hxx>
+#include <vcl/vclptr.hxx>
 
 #include <com/sun/star/uno/Reference.hxx>
 
@@ -213,12 +214,12 @@ public:
 class VCL_DLLPUBLIC VclWindowEvent : public VclSimpleEvent
 {
 private:
-    vcl::Window* pWindow;
+    VclPtr<vcl::Window> pWindow;
     void*   pData;
 
 public:
-    VclWindowEvent( vcl::Window* pWin, sal_uLong n, void* pDat = NULL ) : VclSimpleEvent(n) { pWindow = pWin; pData = pDat; }
-    virtual ~VclWindowEvent() {}
+    VclWindowEvent( vcl::Window* pWin, sal_uLong n, void* pDat = NULL );
+    virtual ~VclWindowEvent();
     TYPEINFO_OVERRIDE();
 
     vcl::Window* GetWindow() const { return pWindow; }

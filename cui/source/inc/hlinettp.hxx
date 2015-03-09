@@ -32,15 +32,15 @@
 class SvxHyperlinkInternetTp : public SvxHyperlinkTabPageBase
 {
 private:
-    RadioButton         *m_pRbtLinktypInternet;
-    RadioButton         *m_pRbtLinktypFTP;
-    SvxHyperURLBox      *m_pCbbTarget;
-    PushButton          *m_pBtBrowse;
-    FixedText           *m_pFtLogin;
-    Edit                *m_pEdLogin;
-    FixedText           *m_pFtPassword;
-    Edit                *m_pEdPassword;
-    CheckBox            *m_pCbAnonymous;
+    VclPtr<RadioButton >        m_pRbtLinktypInternet;
+    VclPtr<RadioButton>         m_pRbtLinktypFTP;
+    VclPtr<SvxHyperURLBox>      m_pCbbTarget;
+    VclPtr<PushButton>          m_pBtBrowse;
+    VclPtr<FixedText>           m_pFtLogin;
+    VclPtr<Edit>                m_pEdLogin;
+    VclPtr<FixedText>           m_pFtPassword;
+    VclPtr<Edit>                m_pEdPassword;
+    VclPtr<CheckBox>            m_pCbAnonymous;
 
     OUString            maStrOldUser;
     OUString            maStrOldPassword;
@@ -78,6 +78,8 @@ protected:
 
 public:
     SvxHyperlinkInternetTp ( vcl::Window *pParent, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet);
+    virtual ~SvxHyperlinkInternetTp();
+    virtual void dispose() SAL_OVERRIDE;
 
     static  IconChoicePage* Create( vcl::Window* pWindow, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet );
 

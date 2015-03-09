@@ -69,7 +69,7 @@ class ClientBox;
 
 class ClientRemovedListener : public ::cppu::WeakImplHelper1< ::com::sun::star::lang::XEventListener >
 {
-    ClientBox   *m_pParent;
+    VclPtr<ClientBox>   m_pParent;
 
 public:
 

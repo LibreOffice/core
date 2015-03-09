@@ -88,19 +88,19 @@ class SwGlossaryDlg : public SvxStandardDialog
     friend class SwNewGlosNameDlg;
     friend class SwGlTreeListBox;
 
-    CheckBox*       m_pInsertTipCB;
-    Edit*           m_pNameED;
-    FixedText*      m_pShortNameLbl;
+    VclPtr<CheckBox>       m_pInsertTipCB;
+    VclPtr<Edit>           m_pNameED;
+    VclPtr<FixedText>      m_pShortNameLbl;
     TextFilter      m_aNoSpaceFilter;
-    Edit*           m_pShortNameEdit;
-    SwGlTreeListBox* m_pCategoryBox;
-    CheckBox*       m_pFileRelCB;
-    CheckBox*       m_pNetRelCB;
-    vcl::Window*         m_pExampleWIN;
-    PushButton*     m_pInsertBtn;
-    MenuButton*     m_pEditBtn;
-    PushButton*     m_pBibBtn;
-    PushButton*     m_pPathBtn;
+    VclPtr<Edit>           m_pShortNameEdit;
+    VclPtr<SwGlTreeListBox> m_pCategoryBox;
+    VclPtr<CheckBox>       m_pFileRelCB;
+    VclPtr<CheckBox>       m_pNetRelCB;
+    VclPtr<vcl::Window>    m_pExampleWIN;
+    VclPtr<PushButton>     m_pInsertBtn;
+    VclPtr<MenuButton>     m_pEditBtn;
+    VclPtr<PushButton>     m_pBibBtn;
+    VclPtr<PushButton>     m_pPathBtn;
 
     OUString        sReadonlyPath;
 

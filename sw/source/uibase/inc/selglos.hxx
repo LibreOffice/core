@@ -29,11 +29,14 @@
 class SwSelGlossaryDlg : public ModalDialog
 {
 protected:
-    ListBox*  m_pGlosBox;
+    VclPtr<ListBox>  m_pGlosBox;
 
     DECL_LINK(DoubleClickHdl, ListBox*);
 public:
     SwSelGlossaryDlg(vcl::Window * pParent, const OUString &rShortName);
+    virtual ~SwSelGlossaryDlg();
+    virtual void dispose() SAL_OVERRIDE;
+
     void InsertGlos(const OUString &rRegion, const OUString &rGlosName)
     {
         const OUString aTmp = rRegion + ":" + rGlosName;

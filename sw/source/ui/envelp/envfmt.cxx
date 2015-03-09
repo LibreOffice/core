@@ -197,6 +197,27 @@ SwEnvFmtPage::SwEnvFmtPage(vcl::Window* pParent, const SfxItemSet& rSet)
 
 }
 
+SwEnvFmtPage::~SwEnvFmtPage()
+{
+    dispose();
+}
+
+void SwEnvFmtPage::dispose()
+{
+    m_pAddrLeftField.clear();
+    m_pAddrTopField.clear();
+    m_pAddrEditButton.clear();
+    m_pSendLeftField.clear();
+    m_pSendTopField.clear();
+    m_pSendEditButton.clear();
+    m_pSizeFormatBox.clear();
+    m_pSizeWidthField.clear();
+    m_pSizeHeightField.clear();
+    m_pPreview.clear();
+    SfxTabPage::dispose();
+}
+
+
 IMPL_LINK_INLINE_START( SwEnvFmtPage, ModifyHdl, Edit *, pEdit )
 {
     long lWVal = static_cast< long >(GetFldVal(*m_pSizeWidthField ));

@@ -164,6 +164,21 @@ CuiAboutConfigTabPage::CuiAboutConfigTabPage( vcl::Window* pParent/*, const SfxI
     m_pPrefBox->SetAlternatingRowColors( true );
 }
 
+CuiAboutConfigTabPage::~CuiAboutConfigTabPage()
+{
+    dispose();
+}
+
+void CuiAboutConfigTabPage::dispose()
+{
+    m_pPrefCtrl.clear();
+    m_pResetBtn.clear();
+    m_pEditBtn.clear();
+    m_pSearchBtn.clear();
+    m_pSearchEdit.clear();
+    ModelessDialog::dispose();
+}
+
 void CuiAboutConfigTabPage::InsertEntry(const OUString& rProp, const OUString& rStatus, const OUString& rType, const OUString& rValue)
 {
     SvTreeListEntry* pEntry = new SvTreeListEntry;
@@ -475,6 +490,17 @@ CuiAboutConfigValueDialog::CuiAboutConfigValueDialog( vcl::Window* pWindow,
     m_pEDValue->SetMaxTextLen( limit == 0 ? EDIT_NOLIMIT : limit);
     m_pEDValue->SetText( rValue );
 
+}
+
+CuiAboutConfigValueDialog::~CuiAboutConfigValueDialog()
+{
+    dispose();
+}
+
+void CuiAboutConfigValueDialog::dispose()
+{
+    m_pEDValue.clear();
+    ModalDialog::dispose();
 }
 
 IMPL_LINK_NOARG( CuiAboutConfigTabPage, ResetBtnHdl_Impl )

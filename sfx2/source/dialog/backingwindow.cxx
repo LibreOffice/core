@@ -203,8 +203,7 @@ void BackingWindow::dispose()
     // deregister drag&drop helper
     if (mxDropTargetListener.is())
     {
-        for (std::vector<vcl::Window*>::iterator aI = maDndWindows.begin(),
-            aEnd = maDndWindows.end(); aI != aEnd; ++aI)
+        for (auto aI = maDndWindows.begin(), aEnd = maDndWindows.end(); aI != aEnd; ++aI)
         {
             vcl::Window *pDndWin = *aI;
             css::uno::Reference< css::datatransfer::dnd::XDropTarget > xDropTarget =
@@ -218,6 +217,27 @@ void BackingWindow::dispose()
         mxDropTargetListener = css::uno::Reference< css::datatransfer::dnd::XDropTargetListener >();
     }
     disposeBuilder();
+    mpOpenButton.clear();
+    mpRecentButton.clear();
+    mpTemplateButton.clear();
+    mpCreateLabel.clear();
+    mpWriterAllButton.clear();
+    mpCalcAllButton.clear();
+    mpImpressAllButton.clear();
+    mpDrawAllButton.clear();
+    mpDBAllButton.clear();
+    mpMathAllButton.clear();
+    mpHelpButton.clear();
+    mpExtensionsButton.clear();
+    mpAllButtonsBox.clear();
+    mpButtonsBox.clear();
+    mpSmallButtonsBox.clear();
+    mpThinBox1.clear();
+    mpThinBox2.clear();
+    mpHelpBox.clear();
+    mpExtensionsBox.clear();
+    mpAllRecentThumbnails.clear();
+    mpLocalView.clear();
     vcl::Window::dispose();
 }
 
@@ -469,8 +489,7 @@ void BackingWindow::setOwningFrame( const com::sun::star::uno::Reference< com::s
     // establish drag&drop mode
     mxDropTargetListener.set(new OpenFileDropTargetListener(mxContext, mxFrame));
 
-    for (std::vector<vcl::Window*>::iterator aI = maDndWindows.begin(),
-        aEnd = maDndWindows.end(); aI != aEnd; ++aI)
+    for (auto aI = maDndWindows.begin(), aEnd = maDndWindows.end(); aI != aEnd; ++aI)
     {
         vcl::Window *pDndWin = *aI;
         css::uno::Reference< css::datatransfer::dnd::XDropTarget > xDropTarget =

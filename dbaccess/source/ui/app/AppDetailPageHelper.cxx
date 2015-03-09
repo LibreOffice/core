@@ -261,7 +261,6 @@ void OAppDetailPageHelper::dispose()
     m_pTablePreview.disposeAndClear();
     m_aBorder.disposeAndClear();
     m_aMenu.reset();
-
     vcl::Window::dispose();
 }
 

@@ -44,15 +44,15 @@ namespace pcr
     class FormLinkDialog : public ModalDialog
     {
     private:
-        FixedText*                      m_pExplanation;
-        FixedText*                      m_pDetailLabel;
-        FixedText*                      m_pMasterLabel;
+        VclPtr<FixedText>                      m_pExplanation;
+        VclPtr<FixedText>                      m_pDetailLabel;
+        VclPtr<FixedText>                      m_pMasterLabel;
         ::std::unique_ptr< FieldLinkRow > m_aRow1;
         ::std::unique_ptr< FieldLinkRow > m_aRow2;
         ::std::unique_ptr< FieldLinkRow > m_aRow3;
         ::std::unique_ptr< FieldLinkRow > m_aRow4;
-        OKButton*                       m_pOK;
-        PushButton*                     m_pSuggest;
+        VclPtr<OKButton>                       m_pOK;
+        VclPtr<PushButton>                     m_pSuggest;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
                                         m_xContext;
@@ -80,6 +80,7 @@ namespace pcr
             const OUString& _sMasterLabel = OUString()
         );
         virtual ~FormLinkDialog( );
+        virtual void dispose() SAL_OVERRIDE;
 
         // Dialog overridables
         virtual short   Execute() SAL_OVERRIDE;

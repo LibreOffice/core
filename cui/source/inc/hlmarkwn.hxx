@@ -39,10 +39,12 @@ class SvxHlinkDlgMarkWnd;
 class SvxHlmarkTreeLBox : public SvTreeListBox
 {
 private:
-    SvxHlinkDlgMarkWnd* mpParentWnd;
+    VclPtr<SvxHlinkDlgMarkWnd> mpParentWnd;
 
 public:
     SvxHlmarkTreeLBox(vcl::Window* pParent, WinBits nStyle);
+    virtual ~SvxHlmarkTreeLBox();
+    virtual void dispose() SAL_OVERRIDE;
 
     void SetParentWnd(SvxHlinkDlgMarkWnd* pParent)
     {
@@ -62,13 +64,13 @@ class SvxHlinkDlgMarkWnd : public ModalDialog //FloatingWindow
 private:
     friend class SvxHlmarkTreeLBox;
 
-    PushButton*       mpBtApply;
-    PushButton*       mpBtClose;
-    SvxHlmarkTreeLBox*  mpLbTree;
+    VclPtr<PushButton>       mpBtApply;
+    VclPtr<PushButton>       mpBtClose;
+    VclPtr<SvxHlmarkTreeLBox>  mpLbTree;
 
     bool            mbUserMoved;
 
-    SvxHyperlinkTabPageBase* mpParent;
+    VclPtr<SvxHyperlinkTabPageBase> mpParent;
 
     OUString        maStrLastURL;
 

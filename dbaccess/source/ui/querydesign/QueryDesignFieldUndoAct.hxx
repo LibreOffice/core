@@ -30,7 +30,7 @@ namespace dbaui
     class OQueryDesignFieldUndoAct : public OCommentUndoAction
     {
     protected:
-        OSelectionBrowseBox*    pOwner;
+        VclPtr<OSelectionBrowseBox>    pOwner;
         sal_uInt16                  m_nColumnPostion;
 
         virtual void    Undo() SAL_OVERRIDE = 0;

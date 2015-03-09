@@ -46,17 +46,17 @@ class SwAddrSourceLB;
 
 class SwAddressListDialog : public SfxModalDialog
 {
-    FixedText*      m_pDescriptionFI;
+    VclPtr<FixedText>      m_pDescriptionFI;
 
-    SwAddrSourceLB* m_pListLB;
+    VclPtr<SwAddrSourceLB> m_pListLB;
 
-    PushButton*     m_pLoadListPB;
-    PushButton*     m_pCreateListPB;
-    PushButton*     m_pFilterPB;
-    PushButton*     m_pEditPB;
-    PushButton*     m_pTablePB;
+    VclPtr<PushButton>     m_pLoadListPB;
+    VclPtr<PushButton>     m_pCreateListPB;
+    VclPtr<PushButton>     m_pFilterPB;
+    VclPtr<PushButton>     m_pEditPB;
+    VclPtr<PushButton>     m_pTablePB;
 
-    OKButton*       m_pOK;
+    VclPtr<OKButton>       m_pOK;
 
     OUString        m_sName;
     OUString        m_sTable;
@@ -66,7 +66,7 @@ class SwAddressListDialog : public SfxModalDialog
 
     bool            m_bInSelectHdl;
 
-    SwMailMergeAddressBlockPage* m_pAddressPage;
+    VclPtr<SwMailMergeAddressBlockPage> m_pAddressPage;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XDatabaseContext> m_xDBContext;
 

@@ -19,6 +19,7 @@
 
 
 #include <svx/AccessibleShapeTreeInfo.hxx>
+#include <vcl/window.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;

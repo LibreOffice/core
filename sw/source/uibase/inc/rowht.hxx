@@ -28,8 +28,8 @@ class SwWrtShell;
 
 class SwTableHeightDlg : public SvxStandardDialog
 {
-    MetricField*    m_pHeightEdit;
-    CheckBox*       m_pAutoHeightCB;
+    VclPtr<MetricField>    m_pHeightEdit;
+    VclPtr<CheckBox>       m_pAutoHeightCB;
     SwWrtShell      &rSh;
 
 protected:
@@ -37,6 +37,8 @@ protected:
 
 public:
     SwTableHeightDlg( vcl::Window *pParent, SwWrtShell &rS );
+    virtual ~SwTableHeightDlg();
+    virtual void dispose() SAL_OVERRIDE;
 };
 
 #endif

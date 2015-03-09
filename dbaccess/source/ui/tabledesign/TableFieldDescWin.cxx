@@ -76,18 +76,9 @@ void OTableFieldDescWin::dispose()
     getGenPage()->Hide();
     m_pHeader->Hide();
 
-    {
-        boost::scoped_ptr<vcl::Window> aTemp(m_pGenPage);
-        m_pGenPage = NULL;
-    }
-    {
-        boost::scoped_ptr<vcl::Window> aTemp(m_pHeader);
-        m_pHeader = NULL;
-    }
-    {
-        boost::scoped_ptr<vcl::Window> aTemp(m_pHelpBar);
-        m_pHelpBar = NULL;
-    }
+    m_pGenPage.clear();
+    m_pHeader.clear();
+    m_pHelpBar.clear();
     TabPage::dispose();
 }
 

@@ -147,7 +147,7 @@ struct ImpTextView
 {
     TextEngine*         mpTextEngine;
 
-    vcl::Window*             mpWindow;
+    VclPtr<vcl::Window> mpWindow;
     TextSelection       maSelection;
     Point               maStartDocPos;
 //    TextPaM             maMBDownPaM;

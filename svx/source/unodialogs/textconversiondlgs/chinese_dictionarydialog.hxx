@@ -61,6 +61,8 @@ class DictionaryList : public SvSimpleTable
 {
 public:
     DictionaryList(SvSimpleTableContainer& rParent, WinBits nBits);
+    virtual ~DictionaryList();
+    virtual void dispose() SAL_OVERRIDE;
 
     void init(const css::uno::Reference< css::linguistic2::XConversionDictionary>& xDictionary,
         vcl::Window *pED_Term, vcl::Window *pED_Mapping, ListBox *pLB_Property,
@@ -99,9 +101,9 @@ public:
     css::uno::Reference<css::linguistic2::XConversionDictionary>  m_xDictionary;
 
 private:
-    vcl::Window*     m_pED_Term;
-    vcl::Window*     m_pED_Mapping;
-    ListBox*    m_pLB_Property;
+    VclPtr<vcl::Window>     m_pED_Term;
+    VclPtr<vcl::Window>     m_pED_Mapping;
+    VclPtr<ListBox>         m_pLB_Property;
 
     std::vector< DictionaryEntry* > m_aToBeDeleted;
 
@@ -147,28 +149,28 @@ private:
 private:
     sal_Int32    m_nTextConversionOptions; //i18n::TextConversionOption
 
-    RadioButton* m_pRB_To_Simplified;
-    RadioButton* m_pRB_To_Traditional;
+    VclPtr<RadioButton> m_pRB_To_Simplified;
+    VclPtr<RadioButton> m_pRB_To_Traditional;
 
-    CheckBox*    m_pCB_Reverse;
+    VclPtr<CheckBox>    m_pCB_Reverse;
 
-    FixedText*   m_pFT_Term;
-    Edit*        m_pED_Term;
+    VclPtr<FixedText>   m_pFT_Term;
+    VclPtr<Edit>        m_pED_Term;
 
-    FixedText*   m_pFT_Mapping;
-    Edit*        m_pED_Mapping;
+    VclPtr<FixedText>   m_pFT_Mapping;
+    VclPtr<Edit>        m_pED_Mapping;
 
-    FixedText*   m_pFT_Property;
-    ListBox*     m_pLB_Property;
+    VclPtr<FixedText>   m_pFT_Property;
+    VclPtr<ListBox>     m_pLB_Property;
 
-    SvSimpleTableContainer* mpToSimplifiedContainer;
-    DictionaryList* m_pCT_DictionaryToSimplified;
-    SvSimpleTableContainer* mpToTraditionalContainer;
-    DictionaryList* m_pCT_DictionaryToTraditional;
+    VclPtr<SvSimpleTableContainer> mpToSimplifiedContainer;
+    VclPtr<DictionaryList>         m_pCT_DictionaryToSimplified;
+    VclPtr<SvSimpleTableContainer> mpToTraditionalContainer;
+    VclPtr<DictionaryList>         m_pCT_DictionaryToTraditional;
 
-    PushButton*  m_pPB_Add;
-    PushButton*  m_pPB_Modify;
-    PushButton*  m_pPB_Delete;
+    VclPtr<PushButton>  m_pPB_Add;
+    VclPtr<PushButton>  m_pPB_Modify;
+    VclPtr<PushButton>  m_pPB_Delete;
 
     css::uno::Reference<css::uno::XComponentContext> m_xContext;
 };

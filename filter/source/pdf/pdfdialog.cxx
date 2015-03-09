@@ -125,7 +125,7 @@ Dialog* PDFDialog::createDialog( vcl::Window* pParent )
 void PDFDialog::executedDialog( sal_Int16 nExecutionResult )
 {
     if( nExecutionResult && m_pDialog )
-        maFilterData = static_cast< ImpPDFTabDialog* >( m_pDialog )->GetFilterData();
+        maFilterData = static_cast< ImpPDFTabDialog* >( m_pDialog.get() )->GetFilterData();
     destroyDialog();
 }
 

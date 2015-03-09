@@ -195,7 +195,9 @@ namespace svt
         if (nCellModifiedEvent)
             Application::RemoveUserEvent(nCellModifiedEvent);
 
-        delete pCheckBoxPaint;
+        pCheckBoxPaint.clear();
+        m_pFocusWhileRequest.clear();
+        pHeader.clear();
         BrowseBox::dispose();
     }
 
@@ -256,7 +258,7 @@ namespace svt
         if (IsEditing())
         {
             EnableAndShow();
-            if (!aController->GetWindow().HasFocus() && (m_pFocusWhileRequest == Application::GetFocusWindow()))
+            if (!aController->GetWindow().HasFocus() && (m_pFocusWhileRequest.get() == Application::GetFocusWindow()))
                 aController->GetWindow().GrabFocus();
         }
         return 0;

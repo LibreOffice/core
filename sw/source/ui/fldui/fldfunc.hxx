@@ -32,33 +32,33 @@
 
 class SwFldFuncPage : public SwFldPage
 {
-    ListBox*        m_pTypeLB;
-    ListBox*        m_pSelectionLB;
-    VclContainer*   m_pFormat;
-    ListBox*        m_pFormatLB;
-    FixedText*      m_pNameFT;
-    ConditionEdit*  m_pNameED;
-    VclContainer*   m_pValueGroup;
-    FixedText*      m_pValueFT;
-    Edit*           m_pValueED;
-    FixedText*      m_pCond1FT;
-    ConditionEdit*  m_pCond1ED;
-    FixedText*      m_pCond2FT;
-    ConditionEdit*  m_pCond2ED;
-    PushButton*     m_pMacroBT;
+    VclPtr<ListBox>        m_pTypeLB;
+    VclPtr<ListBox>        m_pSelectionLB;
+    VclPtr<VclContainer>   m_pFormat;
+    VclPtr<ListBox>        m_pFormatLB;
+    VclPtr<FixedText>      m_pNameFT;
+    VclPtr<ConditionEdit>  m_pNameED;
+    VclPtr<VclContainer>   m_pValueGroup;
+    VclPtr<FixedText>      m_pValueFT;
+    VclPtr<Edit>           m_pValueED;
+    VclPtr<FixedText>      m_pCond1FT;
+    VclPtr<ConditionEdit>  m_pCond1ED;
+    VclPtr<FixedText>      m_pCond2FT;
+    VclPtr<ConditionEdit>  m_pCond2ED;
+    VclPtr<PushButton>     m_pMacroBT;
 
     //controls of "Input list"
-    VclContainer*   m_pListGroup;
-    FixedText*      m_pListItemFT;
-    ReturnActionEdit* m_pListItemED;
-    PushButton*     m_pListAddPB;
-    FixedText*      m_pListItemsFT;
-    ListBox*        m_pListItemsLB;
-    PushButton*     m_pListRemovePB;
-    PushButton*     m_pListUpPB;
-    PushButton*     m_pListDownPB;
-    FixedText*      m_pListNameFT;
-    Edit*           m_pListNameED;
+    VclPtr<VclContainer>   m_pListGroup;
+    VclPtr<FixedText>      m_pListItemFT;
+    VclPtr<ReturnActionEdit> m_pListItemED;
+    VclPtr<PushButton>     m_pListAddPB;
+    VclPtr<FixedText>      m_pListItemsFT;
+    VclPtr<ListBox>        m_pListItemsLB;
+    VclPtr<PushButton>     m_pListRemovePB;
+    VclPtr<PushButton>     m_pListUpPB;
+    VclPtr<PushButton>     m_pListDownPB;
+    VclPtr<FixedText>      m_pListNameFT;
+    VclPtr<Edit>           m_pListNameED;
 
     OUString        m_sOldValueFT;
     OUString        m_sOldNameFT;
@@ -86,6 +86,7 @@ public:
                         SwFldFuncPage(vcl::Window* pParent, const SfxItemSet& rSet);
 
                         virtual ~SwFldFuncPage();
+    virtual void        dispose() SAL_OVERRIDE;
 
     static SfxTabPage*  Create(vcl::Window* pParent, const SfxItemSet* rAttrSet);
 

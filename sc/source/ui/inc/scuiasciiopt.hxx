@@ -32,38 +32,38 @@ class ScImportAsciiDlg : public ModalDialog
 
     OUString               maPreviewLine[ CSV_PREVIEW_LINES ];
 
-    FixedText*                  pFtCharSet;
+    VclPtr<FixedText>                  pFtCharSet;
 
-    SvxTextEncodingBox*         pLbCharSet;
+    VclPtr<SvxTextEncodingBox>         pLbCharSet;
 
-    FixedText*                  pFtCustomLang;
+    VclPtr<FixedText>                  pFtCustomLang;
 
-    SvxLanguageBox*             pLbCustomLang;
+    VclPtr<SvxLanguageBox>             pLbCustomLang;
 
-    FixedText*                  pFtRow;
-    NumericField*               pNfRow;
+    VclPtr<FixedText>                  pFtRow;
+    VclPtr<NumericField>               pNfRow;
 
-    RadioButton*                pRbFixed;
-    RadioButton*                pRbSeparated;
+    VclPtr<RadioButton>                pRbFixed;
+    VclPtr<RadioButton>                pRbSeparated;
 
-    CheckBox*                   pCkbTab;
-    CheckBox*                   pCkbSemicolon;
-    CheckBox*                   pCkbComma;
-    CheckBox*                   pCkbSpace;
-    CheckBox*                   pCkbOther;
-    Edit*                       pEdOther;
-    CheckBox*                   pCkbAsOnce;
+    VclPtr<CheckBox>                   pCkbTab;
+    VclPtr<CheckBox>                   pCkbSemicolon;
+    VclPtr<CheckBox>                   pCkbComma;
+    VclPtr<CheckBox>                   pCkbSpace;
+    VclPtr<CheckBox>                   pCkbOther;
+    VclPtr<Edit>                       pEdOther;
+    VclPtr<CheckBox>                   pCkbAsOnce;
 
-    FixedText*                  pFtTextSep;
-    ComboBox*                   pCbTextSep;
+    VclPtr<FixedText>                  pFtTextSep;
+    VclPtr<ComboBox>                   pCbTextSep;
 
-    CheckBox*                   pCkbQuotedAsText;
-    CheckBox*                   pCkbDetectNumber;
+    VclPtr<CheckBox>                   pCkbQuotedAsText;
+    VclPtr<CheckBox>                   pCkbDetectNumber;
 
-    FixedText*                  pFtType;
-    ListBox*                    pLbType;
+    VclPtr<FixedText>                  pFtType;
+    VclPtr<ListBox>                    pLbType;
 
-    ScCsvTableBox*               mpTableBox;
+    VclPtr<ScCsvTableBox>              mpTableBox;
 
     OUString                    aCharSetUser;
     OUString                    aColumnUser;

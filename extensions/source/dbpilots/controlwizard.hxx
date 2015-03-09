@@ -57,12 +57,12 @@ namespace dbp
     class OControlWizardPage : public OControlWizardPage_Base
     {
     protected:
-        FixedText*      m_pFormDatasourceLabel;
-        FixedText*      m_pFormDatasource;
-        FixedText*      m_pFormContentTypeLabel;
-        FixedText*      m_pFormContentType;
-        FixedText*      m_pFormTableLabel;
-        FixedText*      m_pFormTable;
+        VclPtr<FixedText>      m_pFormDatasourceLabel;
+        VclPtr<FixedText>      m_pFormDatasource;
+        VclPtr<FixedText>      m_pFormContentTypeLabel;
+        VclPtr<FixedText>      m_pFormContentType;
+        VclPtr<FixedText>      m_pFormTableLabel;
+        VclPtr<FixedText>      m_pFormTable;
 
     protected:
         OControlWizard*                 getDialog();
@@ -75,6 +75,7 @@ namespace dbp
     public:
         OControlWizardPage( OControlWizard* _pParent, const OString& rID, const OUString& rUIXMLDescription );
         virtual ~OControlWizardPage();
+        virtual void dispose() SAL_OVERRIDE;
 
     protected:
         void fillListBox(

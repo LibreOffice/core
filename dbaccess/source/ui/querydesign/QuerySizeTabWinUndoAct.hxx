@@ -31,7 +31,7 @@ namespace dbaui
     {
         Point           m_ptNextPosition;
         Size            m_szNextSize;
-        OTableWindow*   m_pTabWin;
+        VclPtr<OTableWindow>   m_pTabWin;
 
     protected:
         inline void ToggleSizePosition();

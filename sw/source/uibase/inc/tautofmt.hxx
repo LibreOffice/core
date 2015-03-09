@@ -39,18 +39,18 @@ enum AutoFmtLine { TOP_LINE, BOTTOM_LINE, LEFT_LINE, RIGHT_LINE };
 
 class SwAutoFormatDlg : public SfxModalDialog
 {
-    ListBox*        m_pLbFormat;
-    VclContainer*   m_pFormatting;
-    CheckBox*       m_pBtnNumFormat;
-    CheckBox*       m_pBtnBorder;
-    CheckBox*       m_pBtnFont;
-    CheckBox*       m_pBtnPattern;
-    CheckBox*       m_pBtnAlignment;
-    OKButton*       m_pBtnOk;
-    CancelButton*   m_pBtnCancel;
-    PushButton*     m_pBtnAdd;
-    PushButton*     m_pBtnRemove;
-    PushButton*     m_pBtnRename;
+    VclPtr<ListBox>        m_pLbFormat;
+    VclPtr<VclContainer>   m_pFormatting;
+    VclPtr<CheckBox>       m_pBtnNumFormat;
+    VclPtr<CheckBox>       m_pBtnBorder;
+    VclPtr<CheckBox>       m_pBtnFont;
+    VclPtr<CheckBox>       m_pBtnPattern;
+    VclPtr<CheckBox>       m_pBtnAlignment;
+    VclPtr<OKButton>       m_pBtnOk;
+    VclPtr<CancelButton>   m_pBtnCancel;
+    VclPtr<PushButton>     m_pBtnAdd;
+    VclPtr<PushButton>     m_pBtnRemove;
+    VclPtr<PushButton>     m_pBtnRename;
     OUString        aStrTitle;
     OUString        aStrLabel;
     OUString        aStrClose;
@@ -58,7 +58,7 @@ class SwAutoFormatDlg : public SfxModalDialog
     OUString        aStrDelMsg;
     OUString        aStrRenameTitle;
     OUString        aStrInvalidFmt;
-    AutoFmtPreview* m_pWndPreview;
+    VclPtr<AutoFmtPreview> m_pWndPreview;
 
     SwWrtShell*             pShell;
     SwTableAutoFmtTbl*      pTableTbl;

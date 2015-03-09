@@ -91,7 +91,6 @@ namespace dbaui
         : OGenericAdministrationPage(pParent, _rId, _rUIXMLDescription, _rCoreAttrs)
         , m_bUserGrabFocus(false)
         , m_pCollection(NULL)
-        , m_bDelete(false)
     {
         get(m_pFT_Connection, "browseurllabel");
         get(m_pConnectionURL, "browseurl");
@@ -115,13 +114,10 @@ namespace dbaui
 
     void OConnectionHelper::dispose()
     {
-        if(m_bDelete)
-        {
-            delete m_pFT_Connection;
-            delete m_pConnectionURL;
-            delete m_pPB_Connection;
-            delete m_pPB_CreateDB;
-        }
+        m_pFT_Connection.clear();
+        m_pConnectionURL.clear();
+        m_pPB_Connection.clear();
+        m_pPB_CreateDB.clear();
         OGenericAdministrationPage::dispose();
     }
 

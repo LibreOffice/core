@@ -85,15 +85,15 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > m_xConnection;
         SvtViewOptions          m_aGeometrySettings;
 
-        ToolBox                 *m_pActions;
-        DbaIndexList            *m_pIndexList;
-        FixedText               *m_pIndexDetails;
-        FixedText               *m_pDescriptionLabel;
-        FixedText               *m_pDescription;
-        CheckBox                *m_pUnique;
-        FixedText               *m_pFieldsLabel;
-        IndexFieldsControl      *m_pFields;
-        PushButton              *m_pClose;
+        VclPtr<ToolBox>                 m_pActions;
+        VclPtr<DbaIndexList>            m_pIndexList;
+        VclPtr<FixedText>               m_pIndexDetails;
+        VclPtr<FixedText>               m_pDescriptionLabel;
+        VclPtr<FixedText>               m_pDescription;
+        VclPtr<CheckBox>                m_pUnique;
+        VclPtr<FixedText>               m_pFieldsLabel;
+        VclPtr<IndexFieldsControl>      m_pFields;
+        VclPtr<PushButton>              m_pClose;
 
         OIndexCollection*       m_pIndexes;
         SvTreeListEntry*            m_pPreviousSelection;

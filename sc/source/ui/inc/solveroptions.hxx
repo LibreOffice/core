@@ -35,9 +35,9 @@ namespace com { namespace sun { namespace star {
 
 class ScSolverOptionsDialog : public ModalDialog
 {
-    ListBox* m_pLbEngine;
-    SvxCheckListBox* m_pLbSettings;
-    PushButton* m_pBtnEdit;
+    VclPtr<ListBox> m_pLbEngine;
+    VclPtr<SvxCheckListBox> m_pLbSettings;
+    VclPtr<PushButton> m_pBtnEdit;
 
     SvLBoxButtonData* mpCheckButtonData;
     com::sun::star::uno::Sequence<OUString> maImplNames;
@@ -70,11 +70,13 @@ public:
 
 class ScSolverIntegerDialog : public ModalDialog
 {
-    VclFrame*     m_pFrame;
-    NumericField* m_pNfValue;
+    VclPtr<VclFrame>     m_pFrame;
+    VclPtr<NumericField> m_pNfValue;
 
 public:
     ScSolverIntegerDialog( vcl::Window * pParent );
+    virtual ~ScSolverIntegerDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     void        SetOptionName( const OUString& rName );
     void        SetValue( sal_Int32 nValue );
@@ -83,11 +85,13 @@ public:
 
 class ScSolverValueDialog : public ModalDialog
 {
-    VclFrame*   m_pFrame;
-    Edit*       m_pEdValue;
+    VclPtr<VclFrame>   m_pFrame;
+    VclPtr<Edit>       m_pEdValue;
 
 public:
     ScSolverValueDialog( vcl::Window * pParent );
+    virtual ~ScSolverValueDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     void        SetOptionName( const OUString& rName );
     void        SetValue( double fValue );

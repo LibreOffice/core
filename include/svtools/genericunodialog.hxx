@@ -38,6 +38,7 @@
 #include <comphelper/propertycontainer.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <tools/link.hxx>
+#include <vcl/vclptr.hxx>
 
 class Dialog;
 namespace vcl { class Window; }
@@ -73,7 +74,7 @@ namespace svt
         ::osl::Mutex                    m_aExecutionMutex;  /// access safety for execute/cancel
 
     protected:
-        Dialog*                     m_pDialog;                  /// the dialog to execute
+        VclPtr<Dialog>              m_pDialog;                  /// the dialog to execute
         bool                        m_bExecuting : 1;           /// we're currently executing the dialog
         bool                        m_bCanceled : 1;            /// endDialog was called while we were executing
         bool                        m_bTitleAmbiguous : 1;      /// m_sTitle has not been set yet

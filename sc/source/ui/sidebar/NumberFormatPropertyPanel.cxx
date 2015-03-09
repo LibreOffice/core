@@ -70,6 +70,18 @@ NumberFormatPropertyPanel::NumberFormatPropertyPanel(
 
 NumberFormatPropertyPanel::~NumberFormatPropertyPanel()
 {
+    dispose();
+}
+
+void NumberFormatPropertyPanel::dispose()
+{
+    mpLbCategory.clear();
+    mpTBCategory.clear();
+    mpEdDecimals.clear();
+    mpEdLeadZeroes.clear();
+    mpBtnNegRed.clear();
+    mpBtnThousand.clear();
+    PanelLayout::dispose();
 }
 
 void NumberFormatPropertyPanel::Initialize()

@@ -29,23 +29,23 @@
 // are performed.
 class SwParagraphNumTabPage : public SfxTabPage
 {
-    VclHBox*                 m_pOutlineStartBX;
-    ListBox*                 m_pOutlineLvLB;
-    VclHBox*                 m_pNumberStyleBX;
-    ListBox*                 m_pNumberStyleLB;
-    PushButton*              m_pEditNumStyleBtn;
+    VclPtr<VclHBox>                 m_pOutlineStartBX;
+    VclPtr<ListBox>                 m_pOutlineLvLB;
+    VclPtr<VclHBox>                 m_pNumberStyleBX;
+    VclPtr<ListBox>                 m_pNumberStyleLB;
+    VclPtr<PushButton>              m_pEditNumStyleBtn;
 
-    TriStateBox*             m_pNewStartCB;
-    VclHBox*                 m_pNewStartBX;
-    TriStateBox*             m_pNewStartNumberCB;
-    NumericField*            m_pNewStartNF;
+    VclPtr<TriStateBox>             m_pNewStartCB;
+    VclPtr<VclHBox>                 m_pNewStartBX;
+    VclPtr<TriStateBox>             m_pNewStartNumberCB;
+    VclPtr<NumericField>            m_pNewStartNF;
 
-    VclFrame*                m_pCountParaFram;
-    TriStateBox*             m_pCountParaCB;
-    TriStateBox*             m_pRestartParaCountCB;
+    VclPtr<VclFrame>                m_pCountParaFram;
+    VclPtr<TriStateBox>             m_pCountParaCB;
+    VclPtr<TriStateBox>             m_pRestartParaCountCB;
 
-    VclHBox*                 m_pRestartBX;
-    NumericField*            m_pRestartNF;
+    VclPtr<VclHBox>                 m_pRestartBX;
+    VclPtr<NumericField>            m_pRestartNF;
 
     // --> OD 2008-04-14 #outlinelevel#
     const OUString msOutlineNumbering;
@@ -70,6 +70,7 @@ protected:
 
 public:
         virtual ~SwParagraphNumTabPage();
+    virtual void        dispose() SAL_OVERRIDE;
 
     static SfxTabPage*  Create( vcl::Window* pParent,
                                 const SfxItemSet* rSet );

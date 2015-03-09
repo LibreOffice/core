@@ -68,7 +68,7 @@ PageOrientationControl::~PageOrientationControl(void)
 
 void PageOrientationControl::dispose()
 {
-    delete mpOrientationValueSet;
+    mpOrientationValueSet.clear();
     ::svx::sidebar::PopupControl::dispose();
 }
 

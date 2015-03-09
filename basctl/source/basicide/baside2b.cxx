@@ -2685,6 +2685,17 @@ pCodeCompleteWindow( pPar )
     SetSelectHdl(LINK(this, CodeCompleteListBox, ImplSelectHdl));
 }
 
+CodeCompleteListBox::~CodeCompleteListBox()
+{
+    dispose();
+}
+
+void CodeCompleteListBox::dispose()
+{
+    pCodeCompleteWindow.clear();
+    ListBox::dispose();
+}
+
 IMPL_LINK_NOARG(CodeCompleteListBox, ImplDoubleClickHdl)
 {
     InsertSelectedEntry();
@@ -2863,8 +2874,8 @@ CodeCompleteWindow::~CodeCompleteWindow()
 
 void CodeCompleteWindow::dispose()
 {
-    delete pListBox;
-    pListBox = NULL;
+    pListBox.clear();
+    pParent.clear();
     vcl::Window::dispose();
 }
 

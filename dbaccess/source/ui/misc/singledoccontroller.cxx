@@ -18,6 +18,7 @@
  */
 
 #include <dbaccess/dbaundomanager.hxx>
+#include <dbaccess/dataview.hxx>
 #include "singledoccontroller.hxx"
 #include "browserids.hxx"
 #include "dbu_misc.hrc"

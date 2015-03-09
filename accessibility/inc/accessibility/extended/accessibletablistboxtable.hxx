@@ -37,7 +37,7 @@ typedef ::cppu::ImplHelper1< ::com::sun::star::accessibility::XAccessibleSelecti
 class AccessibleTabListBoxTable : public AccessibleBrowseBoxTable, public AccessibleTabListBoxTableImplHelper
 {
 private:
-    SvHeaderTabListBox*     m_pTabListBox;
+    VclPtr<SvHeaderTabListBox>     m_pTabListBox;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >  m_xCurChild;
 

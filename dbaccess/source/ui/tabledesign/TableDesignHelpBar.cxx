@@ -43,8 +43,7 @@ OTableDesignHelpBar::~OTableDesignHelpBar()
 
 void OTableDesignHelpBar::dispose()
 {
-    boost::scoped_ptr<vcl::Window> aTemp(m_pTextWin);
-    m_pTextWin = NULL;
+    m_pTextWin.clear();
     TabPage::dispose();
 }
 

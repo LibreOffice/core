@@ -140,6 +140,11 @@ void SvxHyperlinkNewDocTp::dispose()
             delete static_cast<DocumentTypeData*>(m_pLbDocTypes->GetEntryData ( n ));
         m_pLbDocTypes = NULL;
     }
+    m_pRbtEditNow.clear();
+    m_pRbtEditLater.clear();
+    m_pCbbPath.clear();
+    m_pBtCreate.clear();
+    m_pLbDocTypes.clear();
     SvxHyperlinkTabPageBase::dispose();
 }
 

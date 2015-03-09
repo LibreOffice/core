@@ -26,11 +26,13 @@
 class SvxControlFocusHelper : public Control
 {
 private:
-    Control*        m_pFocusCtrl;
+    VclPtr<Control>        m_pFocusCtrl;
 
 public:
     SvxControlFocusHelper( vcl::Window* pParent, const ResId& rId ) :
         Control( pParent, rId ), m_pFocusCtrl( NULL ) {}
+    virtual ~SvxControlFocusHelper();
+    virtual void dispose() SAL_OVERRIDE;
 
     void            SetFocusControl( Control* pCtrl ) { m_pFocusCtrl = pCtrl; }
 

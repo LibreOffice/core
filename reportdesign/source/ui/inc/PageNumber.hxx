@@ -37,14 +37,14 @@ class OReportController;
 \************************************************************************/
 class OPageNumberDialog :   public ModalDialog
 {
-    RadioButton*                            m_pPageN;
-    RadioButton*                            m_pPageNofM;
+    VclPtr<RadioButton>                            m_pPageN;
+    VclPtr<RadioButton>                            m_pPageNofM;
 
-    RadioButton*                            m_pTopPage;
-    RadioButton*                            m_pBottomPage;
-    ListBox*                                m_pAlignmentLst;
+    VclPtr<RadioButton>                            m_pTopPage;
+    VclPtr<RadioButton>                            m_pBottomPage;
+    VclPtr<ListBox>                                m_pAlignmentLst;
 
-    CheckBox*                               m_pShowNumberOnFirstPage;
+    VclPtr<CheckBox>                               m_pShowNumberOnFirstPage;
 
     ::rptui::OReportController*             m_pController;
     ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition>
@@ -57,6 +57,7 @@ public:
                         ,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition>& _xHoldAlive
                         ,::rptui::OReportController* _pController);
     virtual ~OPageNumberDialog();
+    virtual void    dispose() SAL_OVERRIDE;
     virtual short   Execute() SAL_OVERRIDE;
 };
 

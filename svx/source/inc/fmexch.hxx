@@ -98,7 +98,7 @@ namespace svxform
     class SVX_DLLPUBLIC OLocalExchangeHelper
     {
     protected:
-        vcl::Window*             m_pDragSource;
+        VclPtr<vcl::Window> m_pDragSource;
         OLocalExchange*     m_pTransferable;
 
     public:

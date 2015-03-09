@@ -33,6 +33,7 @@
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/uno3.hxx>
 #include <tools/link.hxx>
+#include <vcl/vclptr.hxx>
 
 class SvtFileDialog;
 namespace vcl { class Window; }
@@ -64,7 +65,7 @@ namespace svt
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >  m_xWindow;
         // </properties>
 
-        SvtFileDialog*      m_pDlg;
+        VclPtr<SvtFileDialog>      m_pDlg;
         ImplSVEvent *       m_nCancelEvent;
         bool            m_bExecuting;
 

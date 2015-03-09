@@ -93,7 +93,7 @@ namespace rptui
         TransferableDataHelper  m_aSystemClipboard;     // content of the clipboard
         TransferableClipboardListener*
                                 m_pClipbordNotifier;    /// notifier for changes in the clipboard
-        OGroupsSortingDialog*   m_pGroupsFloater;
+        VclPtr<OGroupsSortingDialog>   m_pGroupsFloater;
 
         OXReportControllerObserver* m_pReportControllerObserver;
 

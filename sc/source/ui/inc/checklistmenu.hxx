@@ -48,6 +48,7 @@ public:
 
     explicit ScMenuFloatingWindow(vcl::Window* pParent, ScDocument* pDoc, sal_uInt16 nMenuStackLevel = 0);
     virtual ~ScMenuFloatingWindow();
+     void dispose() SAL_OVERRIDE;
 
     virtual void PopupModeEnd() SAL_OVERRIDE;
     virtual void MouseMove(const MouseEvent& rMEvt) SAL_OVERRIDE;
@@ -158,7 +159,7 @@ private:
     struct SubMenuItemData
     {
         Timer                   maTimer;
-        ScMenuFloatingWindow*   mpSubMenu;
+        VclPtr<ScMenuFloatingWindow>   mpSubMenu;
         size_t                  mnMenuPos;
 
         DECL_LINK( TimeoutHdl, void* );
@@ -167,7 +168,7 @@ private:
         void reset();
 
     private:
-        ScMenuFloatingWindow* mpParent;
+        VclPtr<ScMenuFloatingWindow> mpParent;
     };
     SubMenuItemData   maOpenTimer;
     SubMenuItemData   maCloseTimer;
@@ -184,7 +185,7 @@ private:
 
     ScDocument* mpDoc;
 
-    ScMenuFloatingWindow* mpParentMenu;
+    VclPtr<ScMenuFloatingWindow> mpParentMenu;
 };
 
 class ScCheckListBox : public SvTreeListBox
@@ -293,11 +294,13 @@ private:
     {
     public:
         CancelButton(ScCheckListMenuWindow* pParent);
+        virtual ~CancelButton();
+        virtual void dispose() SAL_OVERRIDE;
 
         virtual void Click() SAL_OVERRIDE;
 
     private:
-        ScCheckListMenuWindow* mpParent;
+        VclPtr<ScCheckListMenuWindow> mpParent;
     };
 
     enum SectionType {
@@ -341,7 +344,7 @@ private:
     VclPtr<OKButton>        maBtnOk;
     VclPtr<CancelButton>    maBtnCancel;
 
-    ::std::vector<vcl::Window*>          maTabStopCtrls;
+    ::std::vector<VclPtr<vcl::Window> >          maTabStopCtrls;
     size_t                          mnCurTabStop;
 
     ::std::vector<Member>           maMembers;

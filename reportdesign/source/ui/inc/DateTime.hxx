@@ -40,13 +40,13 @@ class OReportController;
 \************************************************************************/
 class ODateTimeDialog : public ModalDialog
 {
-    CheckBox*                                m_pDate;
-    FixedText*                               m_pFTDateFormat;
-    ListBox*                                 m_pDateListBox;
-    CheckBox*                                m_pTime;
-    FixedText*                               m_pFTTimeFormat;
-    ListBox*                                 m_pTimeListBox;
-    OKButton*                                m_pPB_OK;
+    VclPtr<CheckBox>                                m_pDate;
+    VclPtr<FixedText>                               m_pFTDateFormat;
+    VclPtr<ListBox>                                 m_pDateListBox;
+    VclPtr<CheckBox>                                m_pTime;
+    VclPtr<FixedText>                               m_pFTTimeFormat;
+    VclPtr<ListBox>                                 m_pTimeListBox;
+    VclPtr<OKButton>                                m_pPB_OK;
 
     svt::ControlDependencyManager           m_aDateControlling;
     svt::ControlDependencyManager           m_aTimeControlling;
@@ -81,6 +81,7 @@ public:
                         ,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xHoldAlive
                         ,::rptui::OReportController* _pController);
     virtual ~ODateTimeDialog();
+    virtual void dispose() SAL_OVERRIDE;
     virtual short   Execute() SAL_OVERRIDE;
 };
 

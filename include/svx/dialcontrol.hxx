@@ -128,7 +128,7 @@ protected:
         std::unique_ptr<DialControlBmp> mxBmpDisabled;
         std::unique_ptr<DialControlBmp> mxBmpBuffered;
         Link                maModifyHdl;
-        NumericField*       mpLinkField;
+        VclPtr<NumericField>       mpLinkField;
         sal_Int32           mnLinkedFieldValueMultiplyer;
         Size                maWinSize;
         vcl::Font           maWinFont;

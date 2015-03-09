@@ -48,9 +48,9 @@ public:
     bool            DoFillItemSet   ( sal_uInt16        nGroupNo,
                                       SfxItemSet&   rArgSet  );
 protected:
-    ListBox*        mpLbGroup;
-    SvxCheckListBox* mpLbColumns;
-    ListBox*         mpLbFunctions;
+    VclPtr<ListBox>        mpLbGroup;
+    VclPtr<SvxCheckListBox> mpLbColumns;
+    VclPtr<ListBox>         mpLbFunctions;
     const OUString    aStrNone;
     const OUString    aStrColumn;
 
@@ -127,22 +127,22 @@ protected:
 
 public:
     virtual ~ScTpSubTotalOptions();
-
+    virtual void        dispose() SAL_OVERRIDE;
     static SfxTabPage*  Create      ( vcl::Window*               pParent,
                                       const SfxItemSet*     rArgSet );
     virtual bool        FillItemSet ( SfxItemSet* rArgSet ) SAL_OVERRIDE;
     virtual void        Reset       ( const SfxItemSet* rArgSet ) SAL_OVERRIDE;
 
 private:
-    CheckBox*    pBtnPagebreak;
-    CheckBox*    pBtnCase;
-    CheckBox*    pBtnSort;
-    FixedText*   pFlSort;
-    RadioButton* pBtnAscending;
-    RadioButton* pBtnDescending;
-    CheckBox*    pBtnFormats;
-    CheckBox*    pBtnUserDef;
-    ListBox*     pLbUserDef;
+    VclPtr<CheckBox>    pBtnPagebreak;
+    VclPtr<CheckBox>    pBtnCase;
+    VclPtr<CheckBox>    pBtnSort;
+    VclPtr<FixedText>   pFlSort;
+    VclPtr<RadioButton> pBtnAscending;
+    VclPtr<RadioButton> pBtnDescending;
+    VclPtr<CheckBox>    pBtnFormats;
+    VclPtr<CheckBox>    pBtnUserDef;
+    VclPtr<ListBox>     pLbUserDef;
 
     ScViewData*             pViewData;
     ScDocument*             pDoc;

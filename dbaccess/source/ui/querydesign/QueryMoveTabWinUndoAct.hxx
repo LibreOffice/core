@@ -31,7 +31,7 @@ namespace dbaui
     class OJoinMoveTabWinUndoAct : public OQueryDesignUndoAction
     {
         Point           m_ptNextPosition;
-        OTableWindow*   m_pTabWin;
+        VclPtr<OTableWindow>   m_pTabWin;
 
     protected:
         void TogglePosition();

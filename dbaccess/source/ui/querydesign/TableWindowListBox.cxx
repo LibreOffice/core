@@ -79,7 +79,7 @@ void OTableWindowListBox::dispose()
         Application::RemoveUserEvent(m_nUiEvent);
     if( m_aScrollTimer.IsActive() )
         m_aScrollTimer.Stop();
-    m_pTabWin = NULL;
+    m_pTabWin.clear();
     SvTreeListBox::dispose();
 }
 

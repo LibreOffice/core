@@ -25,15 +25,15 @@ class SvxPersonalizationTabPage : public SfxTabPage
     using SfxTabPage::DeactivatePage;
 
 private:
-    RadioButton *m_pNoPersona;                  ///< Just the default look, without any bitmap
-    RadioButton *m_pDefaultPersona;             ///< Use the built-in bitmap
-    RadioButton *m_pOwnPersona;                 ///< Use the user-defined bitmap
-    PushButton *m_pSelectPersona;               ///< Let the user select in the 'own' case
-    PushButton *m_vDefaultPersonaImages[3];     ///< Buttons to show the default persona images
-    PushButton *m_pExtensionPersonaPreview;     ///< Buttons to show the last 3 personas installed via extensions
-    ListBox* m_pPersonaList;                    ///< The ListBox to show the list of installed personas
+    VclPtr<RadioButton> m_pNoPersona;                  ///< Just the default look, without any bitmap
+    VclPtr<RadioButton> m_pDefaultPersona;             ///< Use the built-in bitmap
+    VclPtr<RadioButton> m_pOwnPersona;                 ///< Use the user-defined bitmap
+    VclPtr<PushButton> m_pSelectPersona;               ///< Let the user select in the 'own' case
+    VclPtr<PushButton> m_vDefaultPersonaImages[3];     ///< Buttons to show the default persona images
+    VclPtr<PushButton> m_pExtensionPersonaPreview;     ///< Buttons to show the last 3 personas installed via extensions
+    VclPtr<ListBox> m_pPersonaList;                    ///< The ListBox to show the list of installed personas
     OUString m_aPersonaSettings;                ///< Header and footer images + color to be set in the settings.
-    FixedText *m_pExtensionLabel;               ///< The "select persona installed via extensions" label
+    VclPtr<FixedText> m_pExtensionLabel;               ///< The "select persona installed via extensions" label
 
     std::vector<OUString> m_vDefaultPersonaSettings;
     std::vector<OUString> m_vExtensionPersonaSettings;
@@ -41,6 +41,8 @@ private:
 public:
     ::rtl::Reference< SearchAndParseThread > m_rApplyThread;
     SvxPersonalizationTabPage( vcl::Window *pParent, const SfxItemSet &rSet );
+    virtual ~SvxPersonalizationTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     static SfxTabPage* Create( vcl::Window *pParent, const SfxItemSet *rSet );
 
@@ -77,13 +79,13 @@ https://addons.mozilla.org/firefox/themes ...
 class SelectPersonaDialog : public ModalDialog
 {
 private:
-    Edit *m_pEdit;                          ///< The input line for the search term
-    PushButton *m_pSearchButton;            ///< The search button
-    FixedText *m_pProgressLabel;            ///< The label for showing progress of search
-    PushButton *m_vResultList[9];           ///< List of buttons to show search results
-    PushButton *m_vSearchSuggestions[5];    ///< List of buttons for the search suggestions
-    PushButton *m_pOkButton;                ///< The OK button
-    PushButton *m_pCancelButton;            ///< The Cancel button
+    VclPtr<Edit> m_pEdit;                          ///< The input line for the search term
+    VclPtr<PushButton> m_pSearchButton;            ///< The search button
+    VclPtr<FixedText> m_pProgressLabel;            ///< The label for showing progress of search
+    VclPtr<PushButton> m_vResultList[9];           ///< List of buttons to show search results
+    VclPtr<PushButton> m_vSearchSuggestions[5];    ///< List of buttons for the search suggestions
+    VclPtr<PushButton> m_pOkButton;                ///< The OK button
+    VclPtr<PushButton> m_pCancelButton;            ///< The Cancel button
 
     std::vector<OUString> m_vPersonaSettings;
     OUString m_aSelectedPersona;
@@ -91,6 +93,8 @@ private:
 
 public:
     SelectPersonaDialog( vcl::Window *pParent );
+    virtual ~SelectPersonaDialog();
+    virtual void dispose() SAL_OVERRIDE;
     ::rtl::Reference< SearchAndParseThread > m_rSearchThread;
 
     OUString GetSelectedPersona() const;
@@ -113,7 +117,7 @@ class SearchAndParseThread: public salhelper::Thread
 {
 private:
 
-    SelectPersonaDialog *m_pPersonaDialog;
+    VclPtr<SelectPersonaDialog> m_pPersonaDialog;
     OUString m_aURL;
     bool m_bExecute;
 

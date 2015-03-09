@@ -46,12 +46,12 @@ class FormulaDialog : public formula::FormulaModalDialog,
                       public formula::IControlReferenceHandler
 {
     ::boost::shared_ptr< formula::IFunctionManager > m_aFunctionManager;
-    formula::FormEditData*      m_pFormulaData;
-    OAddFieldWindow*            m_pAddField;
+    formula::FormEditData*             m_pFormulaData;
+    VclPtr<OAddFieldWindow>            m_pAddField;
     ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet >          m_xRowSet;
     ::com::sun::star::uno::Reference< ::com::sun::star::report::meta::XFormulaParser>   m_xParser;
     ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XFormulaOpCodeMapper>    m_xOpCodeMapper;
-    formula::RefEdit*           m_pEdit;
+    VclPtr<formula::RefEdit>           m_pEdit;
     OUString                    m_sFormula;
     sal_Int32                   m_nStart;
     sal_Int32                   m_nEnd;

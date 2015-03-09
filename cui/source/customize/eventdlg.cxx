@@ -118,6 +118,7 @@ void SvxEventConfigPage::dispose()
         pE->SetUserData((void*)0);
         pE = SvTreeListBox::NextSibling( pE );
     }
+    m_pSaveInListBox.clear();
     _SvxMacroTabPage::dispose();
 }
 

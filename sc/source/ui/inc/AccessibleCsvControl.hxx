@@ -29,6 +29,7 @@
 #include <cppuhelper/implbase2.hxx>
 #include <editeng/AccessibleStaticTextBase.hxx>
 #include <comphelper/uno3.hxx>
+#include <vcl/vclptr.hxx>
 #include "AccessibleContextBase.hxx"
 
 class ScCsvControl;
@@ -50,7 +51,7 @@ protected:
     typedef ::com::sun::star::awt::Rectangle    AwtRectangle;
 
 private:
-    ScCsvControl*               mpControl;          /// Pointer to the VCL control.
+    VclPtr<ScCsvControl>               mpControl;          /// Pointer to the VCL control.
 
 public:
     explicit                    ScAccessibleCsvControl(

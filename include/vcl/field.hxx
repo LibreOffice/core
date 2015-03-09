@@ -41,7 +41,7 @@ class LanguageTag;
 class VCL_DLLPUBLIC FormatterBase
 {
 private:
-    Edit*                   mpField;
+    VclPtr<Edit>            mpField;
     LocaleDataWrapper*      mpLocaleDataWrapper;
     Link                    maErrorLink;
     bool                    mbReformat;

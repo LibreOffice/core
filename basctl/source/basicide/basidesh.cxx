@@ -232,11 +232,8 @@ Shell::~Shell()
     SetWindow( 0 );
     SetCurWindow( 0 );
 
-    for (WindowTableIt it = aWindowTable.begin(); it != aWindowTable.end(); ++it)
-    {
-        // no store; does already happen when the BasicManagers are destroyed
-        delete it->second;
-    }
+    // no store; does already happen when the BasicManagers are destroyed
+    aWindowTable.clear();
 
     // Destroy all ContainerListeners for Basic Container.
     if (ContainerListenerImpl* pListener = static_cast<ContainerListenerImpl*>(m_xLibListener.get()))
@@ -255,7 +252,10 @@ void Shell::onDocumentCreated( const ScriptDocument& /*_rDocument*/ )
 
         // for VBA documents, show a warning that we can save them only in ODF
         if (pCurWin->GetDocument().isInVBAMode())
-            GetViewFrame()->AppendInfoBar("vba_save", IDE_RESSTR(RID_STR_CANNOTSAVEVBA));
+        {
+            std::vector< VclPtr<PushButton> > aButtons;
+            GetViewFrame()->AppendInfoBar("vba_save", IDE_RESSTR(RID_STR_CANNOTSAVEVBA), aButtons);
+        }
     }
 
     UpdateWindows();

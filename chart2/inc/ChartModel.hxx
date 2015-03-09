@@ -622,7 +622,7 @@ private:
     sal_Int32 mnStart;
     sal_Int32 mnEnd;
     bool bSet;
-    OpenGLWindow* mpOpenGLWindow;
+    VclPtr<OpenGLWindow> mpOpenGLWindow;
 };
 
 }  // namespace chart

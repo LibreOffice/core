@@ -66,6 +66,17 @@ LookUpComboBox::LookUpComboBox(vcl::Window *pParent)
     EnableAutocomplete( false );
 }
 
+LookUpComboBox::~LookUpComboBox()
+{
+    dispose();
+}
+
+void LookUpComboBox::dispose()
+{
+    m_pDialog.clear();
+    ComboBox::dispose();
+}
+
 extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeLookUpComboBox(vcl::Window *pParent, VclBuilder::stringmap &)
 {
     return new LookUpComboBox(pParent);
@@ -95,6 +106,18 @@ ReplaceEdit::ReplaceEdit(vcl::Window *pParent)
     , m_pBtn(NULL)
 {
 }
+
+ReplaceEdit::~ReplaceEdit()
+{
+    dispose();
+}
+
+void ReplaceEdit::dispose()
+{
+    m_pBtn.clear();
+    Edit::dispose();
+}
+
 
 extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeReplaceEdit(vcl::Window *pParent, VclBuilder::stringmap &)
 {
@@ -176,6 +199,7 @@ ThesaurusAlternativesCtrl::~ThesaurusAlternativesCtrl()
 void ThesaurusAlternativesCtrl::dispose()
 {
     ClearExtraData();
+    m_pDialog.clear();
     SvxCheckListBox::dispose();
 }
 
@@ -512,6 +536,21 @@ SvxThesaurusDialog::SvxThesaurusDialog(
     // disable controls if service is missing
     if (!xThesaurus.is())
         Enable( false );
+}
+
+SvxThesaurusDialog::~SvxThesaurusDialog()
+{
+    dispose();
+}
+
+void SvxThesaurusDialog::dispose()
+{
+    m_pLeftBtn.clear();
+    m_pWordCB.clear();
+    m_pAlternativesCT.clear();
+    m_pReplaceEdit.clear();
+    m_pLangLB.clear();
+    SvxStandardDialog::dispose();
 }
 
 IMPL_LINK( SvxThesaurusDialog, ReplaceBtnHdl_Impl, Button *, EMPTYARG /*pBtn*/ )

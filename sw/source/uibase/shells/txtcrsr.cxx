@@ -43,6 +43,7 @@
 #include <svx/svdouno.hxx>
 #include <svx/fmshell.hxx>
 #include <svx/sdrobjectfilter.hxx>
+#include "outline.hxx"
 
 using namespace ::com::sun::star;
 

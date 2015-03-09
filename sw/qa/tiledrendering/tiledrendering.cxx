@@ -58,24 +58,24 @@ class TiledRenderingDialog: public ModalDialog
 {
 private:
     TiledRenderingApp *mpApp;
-    NumericField *mpContextWidth;
-    NumericField *mpContextHeight;
-    NumericField *mpTilePosX;
-    NumericField *mpTilePosY;
-    NumericField *mpTileWidth;
-    NumericField *mpTileHeight;
-    FixedImage *mpImage;
+    VclPtr<NumericField> mpContextWidth;
+    VclPtr<NumericField> mpContextHeight;
+    VclPtr<NumericField> mpTilePosX;
+    VclPtr<NumericField> mpTilePosY;
+    VclPtr<NumericField> mpTileWidth;
+    VclPtr<NumericField> mpTileHeight;
+    VclPtr<FixedImage> mpImage;
 
 public:
     TiledRenderingDialog(TiledRenderingApp * app) :
         ModalDialog(DIALOG_NO_PARENT, "TiledRendering", "qa/sw/ui/tiledrendering.ui"),
         mpApp(app)
     {
-        PushButton * renderButton;
+        VclPtr<PushButton> renderButton;
         get(renderButton, "buttonRenderTile");
         renderButton->SetClickHdl( LINK( this, TiledRenderingDialog, RenderHdl));
 
-        PushButton * chooseDocumentButton;
+        VclPtr<PushButton> chooseDocumentButton;
         get(chooseDocumentButton, "buttonChooseDocument");
         chooseDocumentButton->SetClickHdl( LINK( this, TiledRenderingDialog, ChooseDocumentHdl));
 
@@ -92,6 +92,19 @@ public:
 
     virtual ~TiledRenderingDialog()
     {
+        dispose();
+    }
+
+    virtual void dispose() SAL_OVERRIDE
+    {
+        mpContextWidth.clear();
+        mpContextHeight.clear();
+        mpTilePosX.clear();
+        mpTilePosY.clear();
+        mpTileWidth.clear();
+        mpTileHeight.clear();
+        mpImage.clear();
+        ModalDialog::dispose();
     }
 
     DECL_LINK ( RenderHdl, Button * );

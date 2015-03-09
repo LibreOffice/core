@@ -495,8 +495,8 @@ void OrganizeDialog::dispose()
     {
         for ( sal_uInt16 i = 0; i < m_pTabCtrl->GetPageCount(); i++ )
             delete m_pTabCtrl->GetTabPage( m_pTabCtrl->GetPageId( i ) );
-        m_pTabCtrl = NULL;
     }
+    m_pTabCtrl.clear();
 
     TabDialog::dispose();
 };
@@ -596,6 +596,22 @@ ObjectPage::ObjectPage(vcl::Window *pParent, const OString &rName, sal_uInt16 nM
 
     m_pEditButton->GrabFocus();
     CheckButtons();
+}
+
+ObjectPage::~ObjectPage()
+{
+    dispose();
+}
+
+void ObjectPage::dispose()
+{
+    m_pBasicBox.clear();
+    m_pEditButton.clear();
+    m_pNewModButton.clear();
+    m_pNewDlgButton.clear();
+    m_pDelButton.clear();
+    pTabDlg.clear();
+    TabPage::dispose();
 }
 
 void ObjectPage::SetCurrentEntry (EntryDescriptor& rDesc)
@@ -926,6 +942,21 @@ LibDialog::LibDialog( vcl::Window* pParent )
     m_pLibBox->set_height_request(m_pLibBox->GetTextHeight() * 8);
     m_pLibBox->set_width_request(m_pLibBox->approximate_char_width() * 32);
 }
+
+LibDialog::~LibDialog()
+{
+    dispose();
+}
+
+void LibDialog::dispose()
+{
+    m_pStorageFrame.clear();
+    m_pLibBox.clear();
+    m_pReferenceBox.clear();
+    m_pReplaceBox.clear();
+    ModalDialog::dispose();
+}
+
 
 void LibDialog::SetStorageName( const OUString& rName )
 {

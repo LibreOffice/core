@@ -283,7 +283,7 @@ ImplSVEvent * Window::PostUserEvent( const Link& rLink, void* pCaller )
 
 void Window::RemoveUserEvent( ImplSVEvent * nUserEvent )
 {
-    DBG_ASSERT( nUserEvent->mpWindow == this,
+    DBG_ASSERT( nUserEvent->mpWindow.get() == this,
                 "Window::RemoveUserEvent(): Event doesn't send to this window or is already removed" );
     DBG_ASSERT( nUserEvent->mbCall,
                 "Window::RemoveUserEvent(): Event is already removed" );
@@ -521,14 +521,14 @@ void Window::ImplCallFocusChangeActivate( vcl::Window* pNewOverlapWindow,
     {
         if ( pSVData->maWinData.mpLastDeacWin )
         {
-            if ( pSVData->maWinData.mpLastDeacWin == pNewOverlapWindow )
+            if ( pSVData->maWinData.mpLastDeacWin.get() == pNewOverlapWindow )
                 bCallActivate = false;
             else
             {
                 vcl::Window* pLastRealWindow = pSVData->maWinData.mpLastDeacWin->ImplGetWindow();
                 pSVData->maWinData.mpLastDeacWin->mpWindowImpl->mbActive = false;
                 pSVData->maWinData.mpLastDeacWin->Deactivate();
-                if ( pLastRealWindow != pSVData->maWinData.mpLastDeacWin )
+                if ( pLastRealWindow != pSVData->maWinData.mpLastDeacWin.get() )
                 {
                     pLastRealWindow->mpWindowImpl->mbActive = true;
                     pLastRealWindow->Activate();
@@ -573,6 +573,23 @@ void Window::ImplCallFocusChangeActivate( vcl::Window* pNewOverlapWindow,
 }
 
 } /* namespace vcl */
+
+NotifyEvent::NotifyEvent()
+{
+    mpWindow    = NULL;
+    mpData      = NULL;
+    mnEventType = MouseNotifyEvent::NONE;
+    mnRetValue  = 0;
+}
+
+NotifyEvent::NotifyEvent( MouseNotifyEvent nEventType, vcl::Window* pWindow,
+                          const void* pEvent, long nRet )
+{
+    mpWindow    = pWindow;
+    mpData      = (void*)pEvent;
+    mnEventType  = nEventType;
+    mnRetValue  = nRet;
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

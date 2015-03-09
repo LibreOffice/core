@@ -54,11 +54,7 @@ CreationWizardUnoDlg::CreationWizardUnoDlg( const uno::Reference< uno::XComponen
 CreationWizardUnoDlg::~CreationWizardUnoDlg()
 {
     SolarMutexGuard aSolarGuard;
-    if( m_pDialog )
-    {
-        delete m_pDialog;
-        m_pDialog = 0;
-    }
+    m_pDialog.clear();
 }
 // lang::XServiceInfo
 OUString SAL_CALL CreationWizardUnoDlg::getImplementationName()
@@ -272,11 +268,7 @@ void SAL_CALL CreationWizardUnoDlg::disposing()
     m_xParentWindow.clear();
 
     SolarMutexGuard aSolarGuard;
-    if( m_pDialog )
-    {
-        delete m_pDialog;
-        m_pDialog = 0;
-    }
+    m_pDialog.clear();
 
     try
     {

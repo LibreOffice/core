@@ -28,9 +28,9 @@
 class QueryFolderNameDialog : public ModalDialog
 {
 private:
-    Edit*     m_pNameEdit;
-    VclFrame* m_pNameLine;
-    OKButton* m_pOKBtn;
+    VclPtr<Edit>     m_pNameEdit;
+    VclPtr<VclFrame> m_pNameLine;
+    VclPtr<OKButton> m_pOKBtn;
 
     DECL_LINK( OKHdl, void * );
     DECL_LINK( NameHdl, void * );
@@ -38,6 +38,8 @@ private:
 public:
     QueryFolderNameDialog(vcl::Window* _pParent, const OUString& rTitle,
         const OUString& rDefaultText, OUString* pGroupName = NULL);
+    virtual ~QueryFolderNameDialog();
+    virtual void dispose() SAL_OVERRIDE;
     OUString GetName() const { return m_pNameEdit->GetText(); }
 };
 

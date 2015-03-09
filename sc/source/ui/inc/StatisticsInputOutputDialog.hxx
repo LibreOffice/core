@@ -33,6 +33,7 @@ public:
         const OUString& rID, const OUString& rUIXMLDescription );
 
     virtual ~ScStatisticsInputOutputDialog();
+    virtual void        dispose() SAL_OVERRIDE;
 
     virtual void        SetReference( const ScRange& rRef, ScDocument* pDoc ) SAL_OVERRIDE;
     virtual void        SetActive() SAL_OVERRIDE;
@@ -44,16 +45,16 @@ protected:
     virtual sal_Int16 GetUndoNameId() = 0;
 
     // Widgets
-    FixedText*          mpInputRangeLabel;
-    formula::RefEdit*   mpInputRangeEdit;
-    formula::RefButton* mpInputRangeButton;
+    VclPtr<FixedText>          mpInputRangeLabel;
+    VclPtr<formula::RefEdit>   mpInputRangeEdit;
+    VclPtr<formula::RefButton> mpInputRangeButton;
 
-    FixedText*          mpOutputRangeLabel;
-    formula::RefEdit*   mpOutputRangeEdit;
-    formula::RefButton* mpOutputRangeButton;
+    VclPtr<FixedText>          mpOutputRangeLabel;
+    VclPtr<formula::RefEdit>   mpOutputRangeEdit;
+    VclPtr<formula::RefButton> mpOutputRangeButton;
 
-    RadioButton*        mpGroupByColumnsRadio;
-    RadioButton*        mpGroupByRowsRadio;
+    VclPtr<RadioButton>        mpGroupByColumnsRadio;
+    VclPtr<RadioButton>        mpGroupByRowsRadio;
 
     // Data
     ScViewData*         mViewData;
@@ -69,9 +70,9 @@ protected:
 
 private:
     // Widgets
-    OKButton*           mpButtonOk;
+    VclPtr<OKButton>           mpButtonOk;
 
-    formula::RefEdit*   mpActiveEdit;
+    VclPtr<formula::RefEdit>   mpActiveEdit;
     ScAddress           mCurrentAddress;
     bool                mDialogLostFocus;
 

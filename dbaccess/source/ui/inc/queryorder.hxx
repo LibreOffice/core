@@ -59,12 +59,12 @@ namespace dbaui
     class DlgOrderCrit : public ModalDialog
     {
     protected:
-        ListBox*        m_pLB_ORDERFIELD1;
-        ListBox*        m_pLB_ORDERVALUE1;
-        ListBox*        m_pLB_ORDERFIELD2;
-        ListBox*        m_pLB_ORDERVALUE2;
-        ListBox*        m_pLB_ORDERFIELD3;
-        ListBox*        m_pLB_ORDERVALUE3;
+        VclPtr<ListBox>        m_pLB_ORDERFIELD1;
+        VclPtr<ListBox>        m_pLB_ORDERVALUE1;
+        VclPtr<ListBox>        m_pLB_ORDERFIELD2;
+        VclPtr<ListBox>        m_pLB_ORDERVALUE2;
+        VclPtr<ListBox>        m_pLB_ORDERFIELD3;
+        VclPtr<ListBox>        m_pLB_ORDERVALUE3;
         OUString        aSTR_NOENTRY;
         OUString        m_sOrgOrder;
 
@@ -72,8 +72,8 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> m_xColumns;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>      m_xConnection;
 
-        ListBox*        m_aColumnList[DOG_ROWS];
-        ListBox*        m_aValueList[DOG_ROWS];
+        VclPtr<ListBox>        m_aColumnList[DOG_ROWS];
+        VclPtr<ListBox>        m_aValueList[DOG_ROWS];
 
         DECL_LINK( FieldListSelectHdl, ListBox * );
         void            EnableLines();
@@ -83,6 +83,8 @@ namespace dbaui
                         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _rxConnection,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer>& _rxComposer,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _rxCols);
+        virtual ~DlgOrderCrit();
+        virtual void dispose() SAL_OVERRIDE;
 
         void            BuildOrderPart();
 

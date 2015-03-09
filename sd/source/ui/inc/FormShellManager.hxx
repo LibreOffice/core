@@ -24,6 +24,7 @@
 
 #include <tools/link.hxx>
 #include <svl/lstner.hxx>
+#include <vcl/vclptr.hxx>
 
 class VclWindowEvent;
 class FmFormShell;
@@ -89,7 +90,7 @@ private:
 
     bool mbIsMainViewChangePending;
 
-    vcl::Window* mpMainViewShellWindow;
+    VclPtr<vcl::Window> mpMainViewShellWindow;
 
     /** Register at window of center pane and at the form shell that
         represents the form tool bar.  The former informs this manager about

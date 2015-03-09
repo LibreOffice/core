@@ -87,15 +87,16 @@ class SfxEmptySplitWin_Impl : public SplitWindow
 */
 friend class SfxSplitWindow;
 
-    SfxSplitWindow*     pOwner;
-    bool                bFadeIn;
-    bool                bAutoHide;
-    bool                bSplit;
-    bool                bEndAutoHide;
-    Timer               aTimer;
-    Point               aLastPos;
+    VclPtr<SfxSplitWindow>  pOwner;
+    bool                    bFadeIn;
+    bool                    bAutoHide;
+    bool                    bSplit;
+    bool                    bEndAutoHide;
+    Timer                   aTimer;
+    Point                   aLastPos;
     sal_uInt16              nState;
 
+public:
                         SfxEmptySplitWin_Impl( SfxSplitWindow *pParent )
                             : SplitWindow( pParent->GetParent(), WinBits( WB_BORDER | WB_3DLOOK ) )
                             , pOwner( pParent )
@@ -119,6 +120,7 @@ friend class SfxSplitWindow;
    virtual void         dispose() SAL_OVERRIDE
                         {
                             aTimer.Stop();
+                            pOwner.clear();
                             SplitWindow::dispose();
                         }
 
@@ -315,10 +317,11 @@ void SfxSplitWindow::dispose()
         // Set pOwner to NULL, otherwise try to delete pEmptyWin once more. The
         // window that is just being docked is always deleted from the outside.
         pEmptyWin->pOwner = NULL;
-        delete pEmptyWin;
     }
+    pEmptyWin.clear();
 
     delete pDockArr;
+    pActive.clear();
     SplitWindow::dispose();
 }
 

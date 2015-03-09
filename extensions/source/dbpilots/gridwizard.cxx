@@ -318,6 +318,21 @@ namespace dbp
         m_pSelFields->SetDoubleClickHdl(LINK(this, OGridFieldsSelection, OnEntryDoubleClicked));
     }
 
+    OGridFieldsSelection::~OGridFieldsSelection()
+    {
+        dispose();
+    }
+
+    void OGridFieldsSelection::dispose()
+    {
+        m_pExistFields.clear();
+        m_pSelectOne.clear();
+        m_pSelectAll.clear();
+        m_pDeselectOne.clear();
+        m_pDeselectAll.clear();
+        m_pSelFields.clear();
+        OGridPage::dispose();
+    }
 
     void OGridFieldsSelection::ActivatePage()
     {

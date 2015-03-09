@@ -159,6 +159,9 @@ namespace pcr
                 delete static_cast<Reference< XPropertySet > *>(pData);
             pLoop = m_pControlTree->Next(pLoop);
         }
+        m_pMainDesc.clear();
+        m_pControlTree.clear();
+        m_pNoAssignment.clear();
         ModalDialog::dispose();
     }
 

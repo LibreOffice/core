@@ -29,6 +29,7 @@ public:
         vcl::Window* pParent, ScViewData* pViewData );
 
     virtual ~ScRandomNumberGeneratorDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual void SetReference( const ScRange& rRef, ScDocument* pDoc ) SAL_OVERRIDE;
     virtual void SetActive() SAL_OVERRIDE;
@@ -36,21 +37,21 @@ public:
 
 private:
     // Widgets
-    FixedText*          mpInputRangeText;
-    formula::RefEdit*   mpInputRangeEdit;
-    formula::RefButton* mpInputRangeButton;
-    ListBox*            mpDistributionCombo;
-    FixedText*          mpParameter1Text;
-    NumericField*       mpParameter1Value;
-    FixedText*          mpParameter2Text;
-    NumericField*       mpParameter2Value;
-    NumericField*       mpSeed;
-    CheckBox*           mpEnableSeed;
-    NumericField*       mpDecimalPlaces;
-    CheckBox*           mpEnableRounding;
-    PushButton*         mpButtonApply;
-    OKButton*           mpButtonOk;
-    CloseButton*        mpButtonClose;
+    VclPtr<FixedText>          mpInputRangeText;
+    VclPtr<formula::RefEdit>   mpInputRangeEdit;
+    VclPtr<formula::RefButton> mpInputRangeButton;
+    VclPtr<ListBox>            mpDistributionCombo;
+    VclPtr<FixedText>          mpParameter1Text;
+    VclPtr<NumericField>       mpParameter1Value;
+    VclPtr<FixedText>          mpParameter2Text;
+    VclPtr<NumericField>       mpParameter2Value;
+    VclPtr<NumericField>       mpSeed;
+    VclPtr<CheckBox>           mpEnableSeed;
+    VclPtr<NumericField>       mpDecimalPlaces;
+    VclPtr<CheckBox>           mpEnableRounding;
+    VclPtr<PushButton>         mpButtonApply;
+    VclPtr<OKButton>           mpButtonOk;
+    VclPtr<CloseButton>        mpButtonClose;
 
     // Data
     ScViewData*         mpViewData;

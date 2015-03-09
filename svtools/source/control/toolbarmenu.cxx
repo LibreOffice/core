@@ -129,7 +129,7 @@ ToolbarMenuEntry::~ToolbarMenuEntry()
             xComponent->dispose();
         mxAccContext.clear();
     }
-    delete mpControl;
+    mpControl.clear();
 }
 
 
@@ -292,7 +292,7 @@ Reference< XAccessible > ToolbarMenu_Impl::getAccessibleChild( Control* pControl
     for( int nEntry = 0; nEntry < nEntryCount; nEntry++ )
     {
         ToolbarMenuEntry* pEntry = maEntryVector[nEntry];
-        if( pEntry && (pEntry->mpControl == pControl) )
+        if( pEntry && (pEntry->mpControl.get() == pControl) )
         {
             return pEntry->getAccessibleChild( childIndex );
         }
@@ -393,7 +393,7 @@ void ToolbarMenu_Impl::notifyHighlightedEntry()
             {
                 sal_Int32 nChildIndex = 0;
                 // todo: if other controls than ValueSet are allowed, addapt this code
-                ValueSet* pValueSet = dynamic_cast< ValueSet* >( pEntry->mpControl );
+                ValueSet* pValueSet = dynamic_cast< ValueSet* >( pEntry->mpControl.get() );
                 if( pValueSet )
                     nChildIndex = static_cast< sal_Int32 >( pValueSet->GetItemPos( pValueSet->GetSelectItemId() ) );
 
@@ -874,7 +874,7 @@ void ToolbarMenu::implHighlightEntry( int nHighlightEntry, bool bHighlight )
             {
                 if( !bHighlight )
                 {
-                    ValueSet* pValueSet = dynamic_cast< ValueSet* >( pEntry->mpControl );
+                    ValueSet* pValueSet = dynamic_cast< ValueSet* >( pEntry->mpControl.get() );
                     if( pValueSet )
                     {
                         pValueSet->SetNoSelection();
@@ -1577,7 +1577,7 @@ public:
     virtual void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-    ToolbarMenu* mpMenu;
+    VclPtr<ToolbarMenu> mpMenu;
 };
 
 
@@ -1594,7 +1594,7 @@ ToolbarMenuStatusListener::ToolbarMenuStatusListener(
 
 void SAL_CALL ToolbarMenuStatusListener::dispose() throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    mpMenu = 0;
+    mpMenu.clear();
     svt::FrameStatusListener::dispose();
 }
 

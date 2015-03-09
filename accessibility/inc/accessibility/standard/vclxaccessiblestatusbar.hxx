@@ -21,6 +21,7 @@
 #define INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_STANDARD_VCLXACCESSIBLESTATUSBAR_HXX
 
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
+#include <vcl/vclptr.hxx>
 
 #include <vector>
 
@@ -36,7 +37,7 @@ private:
     typedef ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > > AccessibleChildren;
 
     AccessibleChildren      m_aAccessibleChildren;
-    StatusBar*              m_pStatusBar;
+    VclPtr<StatusBar>       m_pStatusBar;
 
 protected:
     void                    UpdateShowing( sal_Int32 i, bool bShowing );

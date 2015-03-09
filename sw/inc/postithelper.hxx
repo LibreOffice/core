@@ -89,7 +89,7 @@ namespace SwPostItHelper
 class SwSidebarItem
 {
 public:
-    sw::sidebarwindows::SwSidebarWin* pPostIt;
+    VclPtr<sw::sidebarwindows::SwSidebarWin> pPostIt;
     bool bShow;
     bool bFocus;
 

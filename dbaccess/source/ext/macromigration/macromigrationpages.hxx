@@ -57,6 +57,8 @@ namespace dbmm
     {
     public:
         PreparationPage(vcl::Window *pParent);
+        virtual ~PreparationPage();
+        virtual void dispose() SAL_OVERRIDE;
 
         static TabPage* Create( ::svt::RoadmapWizard& _rParentDialog );
 
@@ -64,7 +66,7 @@ namespace dbmm
         void    showCloseDocsError(bool _bShow);
 
     protected:
-        FixedText*  m_pCloseDocError;
+        VclPtr<FixedText>  m_pCloseDocError;
     };
 
     // SaveDBDocPage
@@ -81,9 +83,9 @@ namespace dbmm
         void            grabLocationFocus() { m_pSaveAsLocation->GrabFocus(); }
 
     protected:
-        ::svt::OFileURLControl*  m_pSaveAsLocation;
-        PushButton*             m_pBrowseSaveAsLocation;
-        FixedText*              m_pStartMigration;
+        VclPtr<::svt::OFileURLControl>  m_pSaveAsLocation;
+        VclPtr<PushButton>             m_pBrowseSaveAsLocation;
+        VclPtr<FixedText>              m_pStartMigration;
         ::svx::DatabaseLocationInputController* m_pLocationController;
 
     protected:
@@ -102,6 +104,8 @@ namespace dbmm
     {
     public:
         ProgressPage(vcl::Window *pParent);
+        virtual ~ProgressPage();
+        virtual void dispose() SAL_OVERRIDE;
 
         static TabPage* Create( ::svt::RoadmapWizard& _rParentDialog );
 
@@ -119,13 +123,13 @@ namespace dbmm
         virtual void    setOverallProgressValue( const sal_uInt32 _nValue ) SAL_OVERRIDE;
 
     private:
-        FixedText*          m_pObjectCount;
-        FixedText*          m_pCurrentObject;
-        FixedText*          m_pCurrentAction;
-        RangeProgressBar    m_aCurrentProgress;
-        FixedText*          m_pAllProgressText;
-        RangeProgressBar    m_aAllProgress;
-        FixedText*          m_pMigrationDone;
+        VclPtr<FixedText>          m_pObjectCount;
+        VclPtr<FixedText>          m_pCurrentObject;
+        VclPtr<FixedText>          m_pCurrentAction;
+        RangeProgressBar           m_aCurrentProgress;
+        VclPtr<FixedText>          m_pAllProgressText;
+        RangeProgressBar           m_aAllProgress;
+        VclPtr<FixedText>          m_pMigrationDone;
     };
 
     // ResultPage
@@ -133,15 +137,17 @@ namespace dbmm
     {
     public:
         ResultPage(vcl::Window *pParent);
+        virtual ~ResultPage();
+        virtual void dispose() SAL_OVERRIDE;
 
         static TabPage* Create( ::svt::RoadmapWizard& _rParentDialog );
 
         void            displayMigrationLog( const bool _bSuccessful, const OUString& _rLog );
 
     private:
-        FixedText*        m_pSuccessLabel;
-        FixedText*        m_pFailureLabel;
-        VclMultiLineEdit* m_pChanges;
+        VclPtr<FixedText>        m_pSuccessLabel;
+        VclPtr<FixedText>        m_pFailureLabel;
+        VclPtr<VclMultiLineEdit> m_pChanges;
     };
 
 } // namespace dbmm

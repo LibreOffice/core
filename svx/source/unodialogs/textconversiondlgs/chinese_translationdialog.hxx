@@ -51,15 +51,15 @@ private:
     void impl_UpdateVariantsCheckBox();
 
 private:
-    RadioButton* m_pRB_To_Simplified;
-    RadioButton* m_pRB_To_Traditional;
+    VclPtr<RadioButton> m_pRB_To_Simplified;
+    VclPtr<RadioButton> m_pRB_To_Traditional;
 
-    CheckBox*   m_pCB_Translate_Commonterms;
-    PushButton* m_pPB_Editterms;
+    VclPtr<CheckBox>   m_pCB_Translate_Commonterms;
+    VclPtr<PushButton> m_pPB_Editterms;
 
-    OKButton*   m_pBP_OK;
+    VclPtr<OKButton>   m_pBP_OK;
 
-    ChineseDictionaryDialog* m_pDictionaryDialog;
+    VclPtr<ChineseDictionaryDialog> m_pDictionaryDialog;
 };
 
 

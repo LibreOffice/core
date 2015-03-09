@@ -116,11 +116,11 @@ class ExtBoxWithBtns_Impl : public ExtensionBox_Impl
 {
     bool            m_bInterfaceLocked;
 
-    PushButton     *m_pOptionsBtn;
-    PushButton     *m_pEnableBtn;
-    PushButton     *m_pRemoveBtn;
+    VclPtr<PushButton>     m_pOptionsBtn;
+    VclPtr<PushButton>     m_pEnableBtn;
+    VclPtr<PushButton>     m_pRemoveBtn;
 
-    ExtMgrDialog   *m_pParent;
+    VclPtr<ExtMgrDialog>   m_pParent;
 
     void            SetButtonPos( const Rectangle& rRect );
     void            SetButtonStatus( const TEntry_Impl& rEntry );
@@ -208,9 +208,10 @@ ExtBoxWithBtns_Impl::~ExtBoxWithBtns_Impl()
 
 void ExtBoxWithBtns_Impl::dispose()
 {
-    delete m_pOptionsBtn;
-    delete m_pEnableBtn;
-    delete m_pRemoveBtn;
+    m_pOptionsBtn.clear();
+    m_pEnableBtn.clear();
+    m_pRemoveBtn.clear();
+    m_pParent.clear();
     ExtensionBox_Impl::dispose();
 }
 
@@ -729,6 +730,17 @@ ExtMgrDialog::~ExtMgrDialog()
 void ExtMgrDialog::dispose()
 {
     m_aIdle.Stop();
+    m_pExtensionBox.clear();
+    m_pAddBtn.clear();
+    m_pUpdateBtn.clear();
+    m_pCloseBtn.clear();
+    m_pBundledCbx.clear();
+    m_pSharedCbx.clear();
+    m_pUserCbx.clear();
+    m_pGetExtensions.clear();
+    m_pProgressText.clear();
+    m_pProgressBar.clear();
+    m_pCancelBtn.clear();
     ModelessDialog::dispose();
 }
 
@@ -1216,6 +1228,13 @@ UpdateRequiredDialog::~UpdateRequiredDialog()
 void UpdateRequiredDialog::dispose()
 {
     m_aIdle.Stop();
+    m_pExtensionBox.clear();
+    m_pUpdateNeeded.clear();
+    m_pUpdateBtn.clear();
+    m_pCloseBtn.clear();
+    m_pCancelBtn.clear();
+    m_pProgressText.clear();
+    m_pProgressBar.clear();
     ModalDialog::dispose();
 }
 
@@ -1589,6 +1608,16 @@ ShowLicenseDialog::ShowLicenseDialog( vcl::Window * pParent,
     m_pLicenseText->SetText(xPackage->getLicenseText());
 }
 
+ShowLicenseDialog::~ShowLicenseDialog()
+{
+    dispose();
+}
+
+void ShowLicenseDialog::dispose()
+{
+    m_pLicenseText.clear();
+    ModalDialog::dispose();
+}
 
 // UpdateRequiredDialogService
 

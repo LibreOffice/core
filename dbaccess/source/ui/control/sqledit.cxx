@@ -121,6 +121,7 @@ void OSqlEdit::dispose()
         n->removePropertiesChangeListener(m_listener.get());
     }
     m_ColorConfig.RemoveListener(this);
+    m_pView.clear();
     MultiLineEditSyntaxHighlight::dispose();
 }
 

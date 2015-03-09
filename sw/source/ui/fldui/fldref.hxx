@@ -34,16 +34,16 @@ class SwTxtNode;
 
 class SwFldRefPage : public SwFldPage
 {
-    ListBox*        m_pTypeLB;
-    VclContainer*   m_pSelection;
-    ListBox*        m_pSelectionLB;
+    VclPtr<ListBox>        m_pTypeLB;
+    VclPtr<VclContainer>   m_pSelection;
+    VclPtr<ListBox>        m_pSelectionLB;
     // #i83479#
-    SwFldRefTreeListBox* m_pSelectionToolTipLB;
-    VclContainer*   m_pFormat;
-    ListBox*        m_pFormatLB;
-    FixedText*      m_pNameFT;
-    Edit*           m_pNameED;
-    Edit*           m_pValueED;
+    VclPtr<SwFldRefTreeListBox> m_pSelectionToolTipLB;
+    VclPtr<VclContainer>   m_pFormat;
+    VclPtr<ListBox>        m_pFormatLB;
+    VclPtr<FixedText>      m_pNameFT;
+    VclPtr<Edit>           m_pNameED;
+    VclPtr<Edit>           m_pValueED;
     OUString    sBookmarkTxt;
     OUString    sFootnoteTxt;
     OUString    sEndnoteTxt;
@@ -77,6 +77,7 @@ public:
                         SwFldRefPage(vcl::Window* pParent, const SfxItemSet& rSet);
 
                         virtual ~SwFldRefPage();
+    virtual void        dispose() SAL_OVERRIDE;
 
     static SfxTabPage*  Create(vcl::Window* pParent, const SfxItemSet* rAttrSet);
 

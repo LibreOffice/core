@@ -129,8 +129,8 @@ public:
 
 class SwScrollNaviPopup : public SfxPopupWindow
 {
-    SwScrollNaviToolBox* m_pToolBox;
-    FixedText*           m_pInfoField;
+    VclPtr<SwScrollNaviToolBox> m_pToolBox;
+    VclPtr<FixedText>           m_pInfoField;
     ImageList       aIList;
 
     OUString        sQuickHelp[2 * NID_COUNT];

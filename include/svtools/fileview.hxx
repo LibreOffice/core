@@ -212,10 +212,12 @@ enum QueryDeleteResult_Impl
 class SVT_DLLPUBLIC QueryDeleteDlg_Impl : public MessageDialog
 {
 private:
-    PushButton* m_pAllButton;
+    VclPtr<PushButton> m_pAllButton;
 public:
 
     QueryDeleteDlg_Impl(vcl::Window* pParent, const OUString& rName);
+    virtual ~QueryDeleteDlg_Impl();
+    virtual void dispose() SAL_OVERRIDE;
 
     void EnableAllButton() { m_pAllButton->Enable(true); }
 };

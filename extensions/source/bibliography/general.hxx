@@ -41,56 +41,70 @@ class BibDataManager;
 #define TYPE_COUNT 22
 #define FIELD_COUNT 31
 
-typedef cppu::WeakAggImplHelper1 < ::com::sun::star::awt::XFocusListener > BibGeneralPageBaseClass;
-
-class BibGeneralPage: public BibGeneralPageBaseClass, public BibTabPage
+/**
+  * We need to split off the listener because both it and the vcl::Window baseclass are ref-counted
+  */
+class BibGeneralPage;
+class BibGeneralPageFocusListener : public cppu::WeakAggImplHelper1 < ::com::sun::star::awt::XFocusListener >
 {
-    VclGrid*            pGrid;
-    VclScrolledWindow*  pScrolledWindow;
+private:
+    VclPtr<BibGeneralPage> mpBibGeneralPage;
+public:
+    BibGeneralPageFocusListener(BibGeneralPage *pBibGeneralPage);
+    virtual void SAL_CALL       focusGained( const ::com::sun::star::awt::FocusEvent& e ) throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL       focusLost( const ::com::sun::star::awt::FocusEvent& e ) throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL       disposing( const ::com::sun::star::lang::EventObject& Source ) throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-    FixedText*          pIdentifierFT;
-    FixedText*          pAuthTypeFT;
-    FixedText*          pYearFT;
+};
 
-    FixedText*          pAuthorFT;
-    FixedText*          pTitleFT;
+class BibGeneralPage: public BibTabPage
+{
+    VclPtr<VclGrid>            pGrid;
+    VclPtr<VclScrolledWindow>  pScrolledWindow;
 
-    FixedText*          pPublisherFT;
-    FixedText*          pAddressFT;
-    FixedText*          pISBNFT;
+    VclPtr<FixedText>          pIdentifierFT;
+    VclPtr<FixedText>          pAuthTypeFT;
+    VclPtr<FixedText>          pYearFT;
 
-    FixedText*          pChapterFT;
-    FixedText*          pPagesFT;
+    VclPtr<FixedText>          pAuthorFT;
+    VclPtr<FixedText>          pTitleFT;
 
-    FixedText*          pEditorFT;
-    FixedText*          pEditionFT;
+    VclPtr<FixedText>          pPublisherFT;
+    VclPtr<FixedText>          pAddressFT;
+    VclPtr<FixedText>          pISBNFT;
 
-    FixedText*          pBooktitleFT;
-    FixedText*          pVolumeFT;
-    FixedText*          pHowpublishedFT;
+    VclPtr<FixedText>          pChapterFT;
+    VclPtr<FixedText>          pPagesFT;
 
-    FixedText*          pOrganizationsFT;
-    FixedText*          pInstitutionFT;
-    FixedText*          pSchoolFT;
+    VclPtr<FixedText>          pEditorFT;
+    VclPtr<FixedText>          pEditionFT;
 
-    FixedText*          pReportTypeFT;
-    FixedText*          pMonthFT;
+    VclPtr<FixedText>          pBooktitleFT;
+    VclPtr<FixedText>          pVolumeFT;
+    VclPtr<FixedText>          pHowpublishedFT;
 
-    FixedText*          pJournalFT;
-    FixedText*          pNumberFT;
-    FixedText*          pSeriesFT;
+    VclPtr<FixedText>          pOrganizationsFT;
+    VclPtr<FixedText>          pInstitutionFT;
+    VclPtr<FixedText>          pSchoolFT;
 
-    FixedText*          pAnnoteFT;
-    FixedText*          pNoteFT;
-    FixedText*          pURLFT;
+    VclPtr<FixedText>          pReportTypeFT;
+    VclPtr<FixedText>          pMonthFT;
 
-    FixedText*          pCustom1FT;
-    FixedText*          pCustom2FT;
-    FixedText*          pCustom3FT;
-    FixedText*          pCustom4FT;
-    FixedText*          pCustom5FT;
+    VclPtr<FixedText>          pJournalFT;
+    VclPtr<FixedText>          pNumberFT;
+    VclPtr<FixedText>          pSeriesFT;
 
-    FixedText*          aFixedTexts[ FIELD_COUNT ];
+    VclPtr<FixedText>          pAnnoteFT;
+    VclPtr<FixedText>          pNoteFT;
+    VclPtr<FixedText>          pURLFT;
+
+    VclPtr<FixedText>          pCustom1FT;
+    VclPtr<FixedText>          pCustom2FT;
+    VclPtr<FixedText>          pCustom3FT;
+    VclPtr<FixedText>          pCustom4FT;
+    VclPtr<FixedText>          pCustom5FT;
+
+    VclPtr<FixedText>          aFixedTexts[ FIELD_COUNT ];
     sal_Int16           nFT2CtrlMap[ FIELD_COUNT ];
 
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >
@@ -114,6 +128,7 @@ class BibGeneralPage: public BibGeneralPageBaseClass, public BibTabPage
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSetListener >
                         xPosListener;
 
+    BibGeneralPageFocusListener maBibGeneralPageFocusListener;
 
     BibDataManager*     pDatMan;
 
@@ -144,16 +159,17 @@ public:
 
     void                        CommitActiveControl();
 
-    virtual void SAL_CALL       disposing( const ::com::sun::star::lang::EventObject& Source ) throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-
-    void SAL_CALL               focusGained( const ::com::sun::star::awt::FocusEvent& e ) throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    void SAL_CALL               focusLost( const ::com::sun::star::awt::FocusEvent& e ) throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-
     void                        RemoveListeners();
 
     virtual void                GetFocus() SAL_OVERRIDE;
 
     virtual bool                HandleShortCutKey( const KeyEvent& rKeyEvent ) SAL_OVERRIDE; // returns true, if key was handled
+
+    inline BibGeneralPageFocusListener& GetFocusListener() { return maBibGeneralPageFocusListener; }
+
+    void focusGained(const css::awt::FocusEvent& rEvent) throw( css::uno::RuntimeException, std::exception );
+    void focusLost(const css::awt::FocusEvent& rEvent) throw( css::uno::RuntimeException, std::exception );
+
 };
 
 

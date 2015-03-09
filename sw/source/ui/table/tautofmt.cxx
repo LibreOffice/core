@@ -106,11 +106,12 @@ public:
                             const OUString& rEditTitle,
                             const OUString& rDefault );
             virtual ~SwStringInputDlg();
+    virtual void dispose() SAL_OVERRIDE;
 
     OUString GetInputString() const;
 
 private:
-    Edit*           m_pEdInput;   // Edit obtains the focus.
+    VclPtr<Edit>           m_pEdInput;   // Edit obtains the focus.
 };
 
 SwStringInputDlg::SwStringInputDlg(vcl::Window* pParent, const OUString& rTitle,
@@ -131,6 +132,13 @@ OUString SwStringInputDlg::GetInputString() const
 
 SwStringInputDlg::~SwStringInputDlg()
 {
+    dispose();
+}
+
+void SwStringInputDlg::dispose()
+{
+    m_pEdInput.clear();
+    ModalDialog::dispose();
 }
 
 // AutoFormat-Dialogue:
@@ -183,6 +191,19 @@ void SwAutoFormatDlg::dispose()
     if (bCoreDataChanged)
         pTableTbl->Save();
     delete pTableTbl;
+    m_pLbFormat.clear();
+    m_pFormatting.clear();
+    m_pBtnNumFormat.clear();
+    m_pBtnBorder.clear();
+    m_pBtnFont.clear();
+    m_pBtnPattern.clear();
+    m_pBtnAlignment.clear();
+    m_pBtnOk.clear();
+    m_pBtnCancel.clear();
+    m_pBtnAdd.clear();
+    m_pBtnRemove.clear();
+    m_pBtnRename.clear();
+    m_pWndPreview.clear();
     SfxModalDialog::dispose();
 }
 

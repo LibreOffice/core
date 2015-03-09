@@ -54,6 +54,7 @@
 #include <shells.hrc>
 #include <SwStyleNameMapper.hxx>
 #include "swabstdlg.hxx"
+#include "outline.hxx"
 #include "chrdlg.hrc"
 #include <boost/scoped_ptr.hpp>
 

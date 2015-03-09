@@ -432,6 +432,17 @@ HelpTabPage_Impl::HelpTabPage_Impl(vcl::Window* pParent, SfxHelpIndexWindow_Impl
 {
 }
 
+HelpTabPage_Impl::~HelpTabPage_Impl()
+{
+    dispose();
+}
+
+void HelpTabPage_Impl::dispose()
+{
+    m_pIdxWin.clear();
+    TabPage::dispose();
+}
+
 // class ContentTabPage_Impl ---------------------------------------------
 ContentTabPage_Impl::ContentTabPage_Impl(vcl::Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin)
     : HelpTabPage_Impl(pParent, _pIdxWin, "HelpContentPage",
@@ -441,6 +452,17 @@ ContentTabPage_Impl::ContentTabPage_Impl(vcl::Window* pParent, SfxHelpIndexWindo
     Size aSize(LogicToPixel(Size(108 , 188), MAP_APPFONT));
     m_pContentBox->set_width_request(aSize.Width());
     m_pContentBox->set_height_request(aSize.Height());
+}
+
+ContentTabPage_Impl::~ContentTabPage_Impl()
+{
+    dispose();
+}
+
+void ContentTabPage_Impl::dispose()
+{
+    m_pContentBox.clear();
+    HelpTabPage_Impl::dispose();
 }
 
 void ContentTabPage_Impl::ActivatePage()
@@ -557,6 +579,8 @@ IndexTabPage_Impl::~IndexTabPage_Impl()
 void IndexTabPage_Impl::dispose()
 {
     ClearIndex();
+    m_pIndexCB.clear();
+    m_pOpenBtn.clear();
     HelpTabPage_Impl::dispose();
 }
 
@@ -984,6 +1008,13 @@ void SearchTabPage_Impl::dispose()
     aUserData = comphelper::string::stripEnd(aUserData, ';');
     Any aUserItem = makeAny( OUString( aUserData ) );
     aViewOpt.SetUserItem( USERITEM_NAME, aUserItem );
+
+    m_pSearchED.clear();
+    m_pSearchBtn.clear();
+    m_pFullWordsCB.clear();
+    m_pScopeCB.clear();
+    m_pResultsLB.clear();
+    m_pOpenBtn.clear();
     HelpTabPage_Impl::dispose();
 }
 
@@ -1295,6 +1326,17 @@ BookmarksTabPage_Impl::BookmarksTabPage_Impl(vcl::Window* pParent, SfxHelpIndexW
     }
 }
 
+BookmarksTabPage_Impl::~BookmarksTabPage_Impl()
+{
+    dispose();
+}
+
+void BookmarksTabPage_Impl::dispose()
+{
+    m_pBookmarksBox.clear();
+    m_pBookmarksPB.clear();
+    HelpTabPage_Impl::dispose();
+}
 
 
 IMPL_LINK_NOARG(BookmarksTabPage_Impl, OpenHdl)
@@ -1447,10 +1489,10 @@ void SfxHelpIndexWindow_Impl::dispose()
 {
     sfx2::RemoveFromTaskPaneList( this );
 
-    DELETEZ( pCPage );
-    DELETEZ( pIPage );
-    DELETEZ( pSPage );
-    DELETEZ( pBPage );
+    pCPage.clear();
+    pIPage.clear();
+    pSPage.clear();
+    pBPage.clear();
 
     for ( sal_uInt16 i = 0; i < m_pActiveLB->GetEntryCount(); ++i )
         delete static_cast<OUString*>(m_pActiveLB->GetEntryData(i));
@@ -1459,7 +1501,9 @@ void SfxHelpIndexWindow_Impl::dispose()
     aViewOpt.SetPageID( (sal_Int32)m_pTabCtrl->GetCurPageId() );
 
     disposeBuilder();
-
+    m_pActiveLB.clear();
+    m_pTabCtrl.clear();
+    pParentWin.clear();
     vcl::Window::dispose();
 }
 
@@ -1933,9 +1977,11 @@ void SfxHelpTextWindow_Impl::dispose()
 
     bIsInClose = true;
     SvtMiscOptions().RemoveListenerLink( LINK( this, SfxHelpTextWindow_Impl, NotifyHdl ) );
-    delete pSrchDlg;
+    pSrchDlg.clear();
     aToolBox.disposeAndClear();
     aOnStartupCB.disposeAndClear();
+    pHelpWin.clear();
+    pTextWin.clear();
     vcl::Window::dispose();
 }
 
@@ -2308,11 +2354,9 @@ IMPL_LINK( SfxHelpTextWindow_Impl, FindHdl, sfx2::SearchDialog*, pDlg )
 
 
 
-IMPL_LINK( SfxHelpTextWindow_Impl, CloseHdl, sfx2::SearchDialog*, pDlg )
+IMPL_LINK( SfxHelpTextWindow_Impl, CloseHdl, sfx2::SearchDialog*, /*pDlg*/ )
 {
-    if ( pDlg )
-        delete pSrchDlg;
-    pSrchDlg = NULL;
+    pSrchDlg.clear();
     return 0;
 }
 
@@ -3036,12 +3080,10 @@ SfxHelpWindow_Impl::~SfxHelpWindow_Impl()
 void SfxHelpWindow_Impl::dispose()
 {
     SaveConfig();
-    vcl::Window* pDel = pIndexWin;
-    pIndexWin = NULL;
-    delete pDel;
+    pIndexWin.clear();
 
     pTextWin->CloseFrame();
-    delete pTextWin;
+    pTextWin.clear();
     SplitWindow::dispose();
 }
 
@@ -3249,7 +3291,16 @@ SfxAddHelpBookmarkDialog_Impl::SfxAddHelpBookmarkDialog_Impl(vcl::Window* pParen
         SetText(get<FixedText>("alttitle")->GetText());
 }
 
+SfxAddHelpBookmarkDialog_Impl::~SfxAddHelpBookmarkDialog_Impl()
+{
+    dispose();
+}
 
+void SfxAddHelpBookmarkDialog_Impl::dispose()
+{
+    m_pTitleED.clear();
+    ModalDialog::dispose();
+}
 
 void SfxAddHelpBookmarkDialog_Impl::SetTitle( const OUString& rTitle )
 {

@@ -46,7 +46,7 @@ namespace svt
     class OControlAccess
     {
         IFilePickerController*  m_pFilePickerController;
-        SvtFileView*            m_pFileView;
+        VclPtr<SvtFileView>     m_pFileView;
 
     public:
         OControlAccess( IFilePickerController* _pController, SvtFileView* _pFileView );

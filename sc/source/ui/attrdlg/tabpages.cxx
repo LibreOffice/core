@@ -59,6 +59,20 @@ ScTabPageProtection::ScTabPageProtection(vcl::Window* pParent, const SfxItemSet&
     m_pBtnHidePrint->SetClickHdl(   LINK( this, ScTabPageProtection, ButtonClickHdl ) );
 }
 
+ScTabPageProtection::~ScTabPageProtection()
+{
+    dispose();
+}
+
+void ScTabPageProtection::dispose()
+{
+    m_pBtnHideCell.clear();
+    m_pBtnProtect.clear();
+    m_pBtnHideFormula.clear();
+    m_pBtnHidePrint.clear();
+    SfxTabPage::dispose();
+}
+
 SfxTabPage* ScTabPageProtection::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
 {
     return ( new ScTabPageProtection( pParent, *rAttrSet ) );

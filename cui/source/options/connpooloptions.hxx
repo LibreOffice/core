@@ -38,19 +38,21 @@ namespace offapp
         using TabPage::ActivatePage;
 
     protected:
-        CheckBox*               m_pEnablePooling;
-        FixedText*              m_pDriversLabel;
-        DriverListControl*      m_pDriverList;
-        FixedText*              m_pDriverLabel;
-        FixedText*              m_pDriver;
-        CheckBox*               m_pDriverPoolingEnabled;
-        FixedText*              m_pTimeoutLabel;
-        NumericField*           m_pTimeout;
+        VclPtr<CheckBox>               m_pEnablePooling;
+        VclPtr<FixedText>              m_pDriversLabel;
+        VclPtr<DriverListControl>      m_pDriverList;
+        VclPtr<FixedText>              m_pDriverLabel;
+        VclPtr<FixedText>              m_pDriver;
+        VclPtr<CheckBox>               m_pDriverPoolingEnabled;
+        VclPtr<FixedText>              m_pTimeoutLabel;
+        VclPtr<NumericField>           m_pTimeout;
 
     protected:
         ConnectionPoolOptionsPage(vcl::Window* _pParent, const SfxItemSet& _rAttrSet);
 
     public:
+        virtual ~ConnectionPoolOptionsPage();
+        virtual void dispose() SAL_OVERRIDE;
         static SfxTabPage*  Create(vcl::Window* _pParent, const SfxItemSet* _rAttrSet);
 
     protected:

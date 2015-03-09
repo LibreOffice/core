@@ -45,24 +45,24 @@ public:
     const ScQueryItem&  GetOutputItem();
 
 private:
-    ListBox*        m_pLbField1;
-    ListBox*        m_pLbCond1;
-    ComboBox*       m_pEdVal1;
+    VclPtr<ListBox>        m_pLbField1;
+    VclPtr<ListBox>        m_pLbCond1;
+    VclPtr<ComboBox>       m_pEdVal1;
 
-    ListBox*        m_pLbConnect1;
-    ListBox*        m_pLbField2;
-    ListBox*        m_pLbCond2;
-    ComboBox*       m_pEdVal2;
+    VclPtr<ListBox>        m_pLbConnect1;
+    VclPtr<ListBox>        m_pLbField2;
+    VclPtr<ListBox>        m_pLbCond2;
+    VclPtr<ComboBox>       m_pEdVal2;
 
-    ListBox*        m_pLbConnect2;
-    ListBox*        m_pLbField3;
-    ListBox*        m_pLbCond3;
-    ComboBox*       m_pEdVal3;
+    VclPtr<ListBox>        m_pLbConnect2;
+    VclPtr<ListBox>        m_pLbField3;
+    VclPtr<ListBox>        m_pLbCond3;
+    VclPtr<ComboBox>       m_pEdVal3;
 
-    CheckBox*       m_pBtnCase;
-    CheckBox*       m_pBtnRegExp;
-    CheckBox*       m_pBtnUnique;
-    FixedText*      m_pFtDbArea;
+    VclPtr<CheckBox>       m_pBtnCase;
+    VclPtr<CheckBox>       m_pBtnRegExp;
+    VclPtr<CheckBox>       m_pBtnUnique;
+    VclPtr<FixedText>      m_pFtDbArea;
     const OUString aStrNone;
     const OUString aStrEmpty;
     const OUString aStrNotEmpty;
@@ -76,9 +76,9 @@ private:
     SCTAB               nSrcTab;
 
     sal_uInt16              nFieldCount;
-    ComboBox*           aValueEdArr[3];
-    ListBox*            aFieldLbArr[3];
-    ListBox*            aCondLbArr[3];
+    VclPtr<ComboBox>           aValueEdArr[3];
+    VclPtr<ListBox>            aFieldLbArr[3];
+    VclPtr<ListBox>            aCondLbArr[3];
 
     std::vector<ScTypedStrData>* pEntryLists[MAXCOLCOUNT];
 

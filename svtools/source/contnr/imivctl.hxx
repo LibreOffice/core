@@ -179,14 +179,14 @@ class SvxIconChoiceCtrl_Impl
     Point                   aDDLastRectPos;
     Point                   aDDPaintOffs;
     Point                   aDDStartPos;
-    SvtIconChoiceCtrl*      pView;
+    VclPtr<SvtIconChoiceCtrl>  pView;
     IcnCursor_Impl*         pImpCursor;
     IcnGridMap_Impl*        pGridMap;
     long                    nMaxVirtWidth;  // max. width aVirtOutputSize for ALIGN_TOP
     long                    nMaxVirtHeight; // max. height aVirtOutputSize for ALIGN_LEFT
     SvxIconChoiceCtrlEntryList_impl*    pZOrderList;
     SvxIconChoiceCtrlColumnInfoMap* pColumns;
-    IcnViewEdit_Impl*       pEdit;
+    VclPtr<IcnViewEdit_Impl>   pEdit;
     WinBits                 nWinBits;
     long                    nMaxBoundHeight;            // height of highest BoundRects
     sal_uInt16              nFlags;

@@ -57,8 +57,7 @@ OQueryTextView::~OQueryTextView()
 
 void OQueryTextView::dispose()
 {
-    boost::scoped_ptr<vcl::Window> aTemp(m_pEdit);
-    m_pEdit = NULL;
+    m_pEdit.clear();
     vcl::Window::dispose();
 }
 

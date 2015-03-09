@@ -35,25 +35,26 @@ namespace dbaui
     class MySQLNativeSettings : public TabPage
     {
     private:
-        FixedText           *m_pDatabaseNameLabel;
-        Edit                *m_pDatabaseName;
-        RadioButton         *m_pHostPortRadio;
-        RadioButton         *m_pSocketRadio;
-        RadioButton         *m_pNamedPipeRadio;
-        FixedText           *m_pHostNameLabel;
-        Edit                *m_pHostName;
-        FixedText           *m_pPortLabel;
-        NumericField        *m_pPort;
-        FixedText           *m_pDefaultPort;
-        Edit                *m_pSocket;
-        Edit                *m_pNamedPipe;
+        VclPtr<FixedText>           m_pDatabaseNameLabel;
+        VclPtr<Edit>                m_pDatabaseName;
+        VclPtr<RadioButton>         m_pHostPortRadio;
+        VclPtr<RadioButton>         m_pSocketRadio;
+        VclPtr<RadioButton>         m_pNamedPipeRadio;
+        VclPtr<FixedText>           m_pHostNameLabel;
+        VclPtr<Edit>                m_pHostName;
+        VclPtr<FixedText>           m_pPortLabel;
+        VclPtr<NumericField>        m_pPort;
+        VclPtr<FixedText>           m_pDefaultPort;
+        VclPtr<Edit>                m_pSocket;
+        VclPtr<Edit>                m_pNamedPipe;
 
         ::svt::ControlDependencyManager
                             m_aControlDependencies;
 
     public:
         MySQLNativeSettings( vcl::Window& _rParent, const Link& _rControlModificationLink );
-
+        virtual ~MySQLNativeSettings();
+        virtual void dispose() SAL_OVERRIDE;
         void fillControls( ::std::vector< ISaveValueWrapper* >& _rControlList );
         void fillWindows( ::std::vector< ISaveValueWrapper* >& _rControlList );
 

@@ -51,6 +51,13 @@ SwCommentRuler::SwCommentRuler( SwViewShell* pViewSh, vcl::Window* pParent, SwEd
 // Destructor
 SwCommentRuler::~SwCommentRuler()
 {
+    dispose();
+}
+
+void SwCommentRuler::dispose()
+{
+    mpSwWin.clear();
+    SvxRuler::dispose();
 }
 
 void SwCommentRuler::Paint( const Rectangle& rRect )

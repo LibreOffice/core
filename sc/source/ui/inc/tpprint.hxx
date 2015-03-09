@@ -25,14 +25,14 @@
 
 class ScTpPrintOptions : public SfxTabPage
 {
-    CheckBox*       m_pSkipEmptyPagesCB;
-    CheckBox*       m_pSelectedSheetsCB;
-    CheckBox*       m_pForceBreaksCB;
+    VclPtr<CheckBox>       m_pSkipEmptyPagesCB;
+    VclPtr<CheckBox>       m_pSelectedSheetsCB;
+    VclPtr<CheckBox>       m_pForceBreaksCB;
 
             ScTpPrintOptions( vcl::Window* pParent, const SfxItemSet& rCoreSet );
-            virtual ~ScTpPrintOptions();
-
 public:
+    virtual ~ScTpPrintOptions();
+    virtual void dispose() SAL_OVERRIDE;
     static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rCoreSet );
     virtual bool        FillItemSet( SfxItemSet* rCoreSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rCoreSet ) SAL_OVERRIDE;

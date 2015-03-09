@@ -33,22 +33,22 @@ class SdrGrafObj;
 class SVX_DLLPUBLIC CompressGraphicsDialog : public ModalDialog
 {
 private:
-    FixedText*       m_pLabelGraphicType;
-    FixedText*       m_pFixedText2;
-    FixedText*       m_pFixedText3;
-    FixedText*       m_pFixedText5;
-    FixedText*       m_pFixedText6;
+    VclPtr<FixedText>       m_pLabelGraphicType;
+    VclPtr<FixedText>       m_pFixedText2;
+    VclPtr<FixedText>       m_pFixedText3;
+    VclPtr<FixedText>       m_pFixedText5;
+    VclPtr<FixedText>       m_pFixedText6;
 
-    CheckBox*        m_pReduceResolutionCB;
-    NumericField*    m_pMFNewWidth;
-    NumericField*    m_pMFNewHeight;
-    ComboBox*        m_pResolutionLB;
-    RadioButton*     m_pLosslessRB;
-    RadioButton*     m_pJpegCompRB;
-    NumericField*    m_pCompressionMF;
-    NumericField*    m_pQualityMF;
-    PushButton*      m_pBtnCalculate;
-    ListBox*         m_pInterpolationCombo;
+    VclPtr<CheckBox>        m_pReduceResolutionCB;
+    VclPtr<NumericField>    m_pMFNewWidth;
+    VclPtr<NumericField>    m_pMFNewHeight;
+    VclPtr<ComboBox>        m_pResolutionLB;
+    VclPtr<RadioButton>     m_pLosslessRB;
+    VclPtr<RadioButton>     m_pJpegCompRB;
+    VclPtr<NumericField>    m_pCompressionMF;
+    VclPtr<NumericField>    m_pQualityMF;
+    VclPtr<PushButton>      m_pBtnCalculate;
+    VclPtr<ListBox>         m_pInterpolationCombo;
 
     SdrGrafObj*     m_pGraphicObj;
     Graphic         m_aGraphic;
@@ -83,6 +83,8 @@ private:
 public:
     CompressGraphicsDialog( vcl::Window* pParent, SdrGrafObj* pGraphicObj, SfxBindings& rBindings );
     CompressGraphicsDialog( vcl::Window* pParent, Graphic& rGraphic, Size rViewSize100mm, Rectangle& rCropRectangle, SfxBindings& rBindings );
+    virtual ~CompressGraphicsDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     SdrGrafObj* GetCompressedSdrGrafObj();
     Graphic GetCompressedGraphic();

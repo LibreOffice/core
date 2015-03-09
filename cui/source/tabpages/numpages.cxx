@@ -228,6 +228,7 @@ void SvxSingleNumPickTabPage::dispose()
     pActNum = NULL;
     delete pSaveNum;
     pSaveNum = NULL;
+    m_pExamplesVS.clear();
     SfxTabPage::dispose();
 }
 
@@ -397,6 +398,7 @@ void SvxBulletPickTabPage::dispose()
     pActNum = NULL;
     delete pSaveNum;
     pSaveNum = NULL;
+    m_pExamplesVS.clear();
     SfxTabPage::dispose();
 }
 
@@ -602,6 +604,7 @@ void SvxNumPickTabPage::dispose()
     pActNum = NULL;
     delete pSaveNum;
     pSaveNum = NULL;
+    m_pExamplesVS.clear();
     SfxTabPage::dispose();
 }
 
@@ -851,6 +854,8 @@ void SvxBitmapPickTabPage::dispose()
     pActNum = NULL;
     delete pSaveNum;
     pSaveNum = NULL;
+    m_pErrorText.clear();
+    m_pExamplesVS.clear();
     SfxTabPage::dispose();
 }
 
@@ -1165,12 +1170,44 @@ void SvxNumOptionsTabPage::dispose()
     if (m_pBitmapMB)
     {
         delete m_pBitmapMB->GetPopupMenu()->GetPopupMenu(m_nGalleryId);
-        m_pBitmapMB = NULL;
     }
     delete pActNum;
     pActNum = NULL;
     delete pSaveNum;
     pSaveNum = NULL;
+    m_pLevelLB.clear();
+    m_pFmtLB.clear();
+    m_pSeparatorFT.clear();
+    m_pPrefixFT.clear();
+    m_pPrefixED.clear();
+    m_pSuffixFT.clear();
+    m_pSuffixED.clear();
+    m_pCharFmtFT.clear();
+    m_pCharFmtLB.clear();
+    m_pBulColorFT.clear();
+    m_pBulColLB.clear();
+    m_pBulRelSizeFT.clear();
+    m_pBulRelSizeMF.clear();
+    m_pAllLevelFT.clear();
+    m_pAllLevelNF.clear();
+    m_pStartFT.clear();
+    m_pStartED.clear();
+    m_pBulletFT.clear();
+    m_pBulletPB.clear();
+    m_pAlignFT.clear();
+    m_pAlignLB.clear();
+    m_pBitmapFT.clear();
+    m_pBitmapMB.clear();
+    m_pWidthFT.clear();
+    m_pWidthMF.clear();
+    m_pHeightFT.clear();
+    m_pHeightMF.clear();
+    m_pRatioCB.clear();
+    m_pOrientFT.clear();
+    m_pOrientLB.clear();
+    m_pAllLevelsFrame.clear();
+    m_pSameLevelCB.clear();
+    m_pPreviewWIN.clear();
     SfxTabPage::dispose();
 }
 
@@ -2736,6 +2773,28 @@ void SvxNumPositionTabPage::dispose()
     pActNum = NULL;
     delete pSaveNum;
     pSaveNum = NULL;
+    m_pLevelLB.clear();
+    m_pDistBorderFT.clear();
+    m_pDistBorderMF.clear();
+    m_pRelativeCB.clear();
+    m_pIndentFT.clear();
+    m_pIndentMF.clear();
+    m_pDistNumFT.clear();
+    m_pDistNumMF.clear();
+    m_pAlignFT.clear();
+    m_pAlignLB.clear();
+    m_pLabelFollowedByFT.clear();
+    m_pLabelFollowedByLB.clear();
+    m_pListtabFT.clear();
+    m_pListtabMF.clear();
+    m_pAlign2FT.clear();
+    m_pAlign2LB.clear();
+    m_pAlignedAtFT.clear();
+    m_pAlignedAtMF.clear();
+    m_pIndentAtFT.clear();
+    m_pIndentAtMF.clear();
+    m_pStandardPB.clear();
+    m_pPreviewWIN.clear();
     SfxTabPage::dispose();
 }
 

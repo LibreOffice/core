@@ -97,6 +97,16 @@ void SwJavaEditDialog::dispose()
     delete pMgr;
     delete pFileDlg;
     Application::SetDefDialogParent( pOldDefDlgParent );
+    m_pTypeED.clear();
+    m_pUrlRB.clear();
+    m_pEditRB.clear();
+    m_pUrlPB.clear();
+    m_pUrlED.clear();
+    m_pEditED.clear();
+    m_pOKBtn.clear();
+    m_pPrevBtn.clear();
+    m_pNextBtn.clear();
+    pOldDefDlgParent.clear();
     SvxStandardDialog::dispose();
 }
 

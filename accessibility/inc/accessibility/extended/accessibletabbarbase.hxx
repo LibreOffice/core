@@ -22,6 +22,7 @@
 
 #include <comphelper/accessiblecomponenthelper.hxx>
 #include <tools/link.hxx>
+#include <vcl/vclptr.hxx>
 
 class TabBar;
 class VCLExternalSolarLock;
@@ -57,7 +58,7 @@ private:
 
 protected:
     VCLExternalSolarLock* m_pExternalLock;
-    TabBar*             m_pTabBar;
+    VclPtr<TabBar>        m_pTabBar;
 };
 
 

@@ -60,8 +60,7 @@ ChartTypeDialog::~ChartTypeDialog()
 
 void ChartTypeDialog::dispose()
 {
-    delete m_pChartTypeTabPage;
-    m_pChartTypeTabPage = NULL;
+    m_pChartTypeTabPage.clear();
     ModalDialog::dispose();
 }
 

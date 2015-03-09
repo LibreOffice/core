@@ -21,6 +21,7 @@
 #define INCLUDED_VCL_PTR_HXX
 
 #include <rtl/ref.hxx>
+#include <cstddef>
 
 /// @cond INTERNAL
 namespace vcl { namespace detail {
@@ -68,6 +69,8 @@ public:
 
 }; }; // namespace detail, namespace vcl
 
+namespace vcl { class Window; }
+
 /**
  * A thin wrapper around rtl::Reference to implement the acquire and dispose semantics we want for references to vcl::Window subclasses.
  *
@@ -91,7 +94,7 @@ public:
 
     /** Constructor...
      */
-    explicit inline VclPtr (reference_type * pBody)
+    inline VclPtr (reference_type * pBody)
         : m_rInnerRef(pBody)
     {}
 
@@ -180,6 +183,41 @@ public:
         }
     }
 
+    /** Returns True if handle points to the same body.
+     */
+    template<class T>
+    inline bool SAL_CALL operator== (const VclPtr<T> & handle) const
+    {
+        return (get() == handle.get());
+    }
+
+    /** Needed to place VclPtr's into STL collection.
+     */
+    inline bool SAL_CALL operator!= (const VclPtr<reference_type> & handle) const
+    {
+        return (m_rInnerRef != handle.m_rInnerRef);
+    }
+
+    /** Makes comparing against NULL easier, resolves compile-time ambiguity */
+    inline bool SAL_CALL operator!= (::std::nullptr_t ) const
+    {
+        return (get() != nullptr);
+    }
+
+    /** Needed to place VclPtr's into STL collection.
+     */
+    inline bool SAL_CALL operator< (const VclPtr<reference_type> & handle) const
+    {
+        return (m_rInnerRef < handle.m_rInnerRef);
+    }
+
+
+    /** Needed to place VclPtr's into STL collection.
+     */
+    inline bool SAL_CALL operator> (const VclPtr<reference_type> & handle) const
+    {
+        return (m_rInnerRef > handle.m_rInnerRef);
+    }
 }; // class VclPtr
 
 #endif // INCLUDED_VCL_PTR_HXX

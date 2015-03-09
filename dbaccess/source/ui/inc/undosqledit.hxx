@@ -21,6 +21,7 @@
 
 #include "GeneralUndo.hxx"
 #include "dbu_control.hrc"
+#include <vcl/vclptr.hxx>
 
 namespace dbaui
 {
@@ -29,7 +30,7 @@ namespace dbaui
     class OSqlEditUndoAct : public OCommentUndoAction
     {
     protected:
-        OSqlEdit*   m_pOwner;
+        VclPtr<OSqlEdit>   m_pOwner;
         OUString    m_strNextText;
 
         virtual void    Undo() SAL_OVERRIDE { ToggleText(); }

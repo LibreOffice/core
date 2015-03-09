@@ -45,11 +45,13 @@ class ScSortWarningDlg : public ModalDialog
 {
 public:
     ScSortWarningDlg( vcl::Window* pParent, const OUString& rExtendText,const OUString& rCurrentText );
+    virtual ~ScSortWarningDlg();
+    virtual void dispose() SAL_OVERRIDE;
     DECL_LINK( BtnHdl, PushButton* );
 private:
-    FixedText*       aFtText;
-    PushButton*      aBtnExtSort;
-    PushButton*      aBtnCurSort;
+    VclPtr<FixedText>       aFtText;
+    VclPtr<PushButton>      aBtnExtSort;
+    VclPtr<PushButton>      aBtnCurSort;
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_SORTDLG_HXX

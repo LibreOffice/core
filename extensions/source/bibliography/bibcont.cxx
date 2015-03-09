@@ -31,6 +31,7 @@
 
 #include "datman.hxx"
 #include "bibcont.hxx"
+#include "bibview.hxx"
 
 
 BibShortCutHandler::~BibShortCutHandler()
@@ -154,6 +155,8 @@ void BibBookContainer::dispose()
     }
 
     CloseBibModul( pBibMod );
+    pTopWin.clear();
+    pBottomWin.clear();
     BibSplitWindow::dispose();
 }
 
@@ -178,7 +181,7 @@ void BibBookContainer::createTopFrame( BibShortCutHandler* pWin )
     if(pTopWin)
     {
         RemoveItem(TOP_WINDOW);
-        delete pTopWin;
+        pTopWin.clear();
     }
     pTopWin=new BibWindowContainer(this,pWin);
     pTopWin->Show();
@@ -195,7 +198,7 @@ void BibBookContainer::createBottomFrame( BibShortCutHandler* pWin )
     if(pBottomWin)
     {
         RemoveItem(BOTTOM_WINDOW);
-        delete pBottomWin;
+        pBottomWin.clear();
     }
 
     pBottomWin=new BibWindowContainer(this,pWin);

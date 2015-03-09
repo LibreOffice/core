@@ -33,7 +33,7 @@ namespace dbaui
     {
     private:
         OUString        m_sHelpText;
-        MultiLineEdit*  m_pTextWin;
+        VclPtr<MultiLineEdit>  m_pTextWin;
 
     protected:
         virtual void Resize() SAL_OVERRIDE;

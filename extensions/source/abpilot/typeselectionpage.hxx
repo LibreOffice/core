@@ -23,6 +23,7 @@
 #include "abspage.hxx"
 #include "addresssettings.hxx"
 #include <vcl/edit.hxx>
+#include <vcl/vclptr.hxx>
 
 
 namespace abp
@@ -35,20 +36,20 @@ namespace abp
     class TypeSelectionPage : public AddressBookSourcePage
     {
     protected:
-        RadioButton* m_pEvolution;
-        RadioButton* m_pEvolutionGroupwise;
-        RadioButton* m_pEvolutionLdap;
-        RadioButton* m_pMORK;
-        RadioButton* m_pThunderbird;
-        RadioButton* m_pKab;
-        RadioButton* m_pMacab;
-        RadioButton* m_pLDAP;
-        RadioButton* m_pOutlook;
-        RadioButton* m_pOE;
-        RadioButton* m_pOther;
+        VclPtr<RadioButton> m_pEvolution;
+        VclPtr<RadioButton> m_pEvolutionGroupwise;
+        VclPtr<RadioButton> m_pEvolutionLdap;
+        VclPtr<RadioButton> m_pMORK;
+        VclPtr<RadioButton> m_pThunderbird;
+        VclPtr<RadioButton> m_pKab;
+        VclPtr<RadioButton> m_pMacab;
+        VclPtr<RadioButton> m_pLDAP;
+        VclPtr<RadioButton> m_pOutlook;
+        VclPtr<RadioButton> m_pOE;
+        VclPtr<RadioButton> m_pOther;
 
         struct ButtonItem {
-            RadioButton *m_pItem;
+            VclPtr<RadioButton> m_pItem;
             AddressSourceType m_eType;
             bool         m_bVisible;
 

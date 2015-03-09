@@ -156,9 +156,8 @@ void SwSidebarWin::dispose()
         {
             mpOutlinerView->SetWindow( 0 );
         }
-        delete mpSidebarTxtControl;
-        mpSidebarTxtControl = 0;
     }
+    mpSidebarTxtControl.clear();
 
     if ( mpOutlinerView )
     {
@@ -175,23 +174,20 @@ void SwSidebarWin::dispose()
     if (mpMetadataAuthor)
     {
         mpMetadataAuthor->RemoveEventListener( LINK( this, SwSidebarWin, WindowEventListener ) );
-        delete mpMetadataAuthor;
-        mpMetadataAuthor = 0;
     }
+    mpMetadataAuthor.clear();
 
     if (mpMetadataDate)
     {
         mpMetadataDate->RemoveEventListener( LINK( this, SwSidebarWin, WindowEventListener ) );
-        delete mpMetadataDate;
-        mpMetadataDate = 0;
     }
+    mpMetadataDate.clear();
 
     if (mpVScrollbar)
     {
         mpVScrollbar->RemoveEventListener( LINK( this, SwSidebarWin, WindowEventListener ) );
-        delete mpVScrollbar;
-        mpVScrollbar = 0;
     }
+    mpVScrollbar.clear();
 
     RemoveEventListener( LINK( this, SwSidebarWin, WindowEventListener ) );
 
@@ -204,8 +200,7 @@ void SwSidebarWin::dispose()
     delete mpTextRangeOverlay;
     mpTextRangeOverlay = NULL;
 
-    delete mpMenuButton;
-    mpMenuButton = 0;
+    mpMenuButton.clear();
 
     if (mnEventId)
         Application::RemoveUserEvent( mnEventId );
@@ -1380,7 +1375,7 @@ void SwSidebarWin::SetChangeTracking( const SwPostItHelper::SwLayoutStatus aLayo
 
 bool SwSidebarWin::HasScrollbar() const
 {
-    return mpVScrollbar != 0;
+    return mpVScrollbar != nullptr;
 }
 
 bool SwSidebarWin::IsScrollbarVisible() const

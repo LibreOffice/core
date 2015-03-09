@@ -54,12 +54,22 @@ ScRetypePassDlg::ScRetypePassDlg(vcl::Window* pParent) :
 
 ScRetypePassDlg::~ScRetypePassDlg()
 {
+    dispose();
+}
+
+void ScRetypePassDlg::dispose()
+{
     DeleteSheets();
+    mpBtnOk.clear();
+    mpTextDocStatus.clear();
+    mpBtnRetypeDoc.clear();
+    mpSheetsBox.clear();
+    ModalDialog::dispose();
 }
 
 void ScRetypePassDlg::DeleteSheets()
 {
-    for(std::vector<VclHBox*>::iterator it = maSheets.begin(); it != maSheets.end(); ++it)
+    for(auto it = maSheets.begin(); it != maSheets.end(); ++it)
     {
         vcl::Window *pWindow = (*it);
         vcl::Window *pChild = pWindow->GetWindow(WINDOW_FIRSTCHILD);
@@ -323,6 +333,19 @@ ScRetypePassInputDlg::ScRetypePassInputDlg(vcl::Window* pParent, ScPassHashProte
 
 ScRetypePassInputDlg::~ScRetypePassInputDlg()
 {
+    dispose();
+}
+
+void ScRetypePassInputDlg::dispose()
+{
+    m_pBtnOk.clear();
+    m_pBtnRetypePassword.clear();
+    m_pPasswordGrid.clear();
+    m_pPassword1Edit.clear();
+    m_pPassword2Edit.clear();
+    m_pBtnMatchOldPass.clear();
+    m_pBtnRemovePassword.clear();
+    ModalDialog::dispose();
 }
 
 short ScRetypePassInputDlg::Execute()

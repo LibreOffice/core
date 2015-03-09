@@ -46,10 +46,10 @@ namespace dbaui
     protected:
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >                 m_xGrid;            // our grid's UNO representation
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >        m_xMe;              // our own UNO representation
-        DBTreeView*             m_pTreeView;
-        Splitter*               m_pSplitter;
-        mutable SbaGridControl* m_pVclControl;  // our grid's VCL representation
-        vcl::Window*                 m_pStatus;
+        VclPtr<DBTreeView>      m_pTreeView;
+        VclPtr<Splitter>        m_pSplitter;
+        mutable VclPtr<SbaGridControl> m_pVclControl;  // our grid's VCL representation
+        VclPtr<vcl::Window>     m_pStatus;
 
         DECL_LINK( SplitHdl, void* );
     // attribute access
@@ -94,7 +94,7 @@ namespace dbaui
     class BrowserViewStatusDisplay
     {
     protected:
-        UnoDataBrowserView*     m_pView;
+        VclPtr<UnoDataBrowserView>     m_pView;
 
     public:
         BrowserViewStatusDisplay( UnoDataBrowserView* _pView, const OUString& _rStatus );

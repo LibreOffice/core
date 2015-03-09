@@ -42,7 +42,8 @@ public:
         vcl::Window* pWindow,
         const SfxItemSet& rInAttrs);
 
-    virtual ~SdPresLayoutDlg (void);
+    virtual ~SdPresLayoutDlg();
+    virtual void dispose() SAL_OVERRIDE;
 
     void                GetAttr(SfxItemSet& rOutAttrs);
 
@@ -51,10 +52,10 @@ public:
 
 private:
     ::sd::DrawDocShell* mpDocSh;
-    ValueSet*           m_pVS;
-    CheckBox*           m_pCbxMasterPage;
-    CheckBox*           m_pCbxCheckMasters;
-    PushButton*         m_pBtnLoad;
+    VclPtr<ValueSet>           m_pVS;
+    VclPtr<CheckBox>           m_pCbxMasterPage;
+    VclPtr<CheckBox>           m_pCbxCheckMasters;
+    VclPtr<PushButton>         m_pBtnLoad;
 
     const SfxItemSet&   mrOutAttrs;
 

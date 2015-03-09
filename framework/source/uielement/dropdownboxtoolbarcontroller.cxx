@@ -155,11 +155,9 @@ throw ( RuntimeException, std::exception )
     SolarMutexGuard aSolarMutexGuard;
 
     m_pToolbar->SetItemWindow( m_nID, 0 );
-    delete m_pListBoxControl;
+    m_pListBoxControl.clear();
 
     ComplexToolbarController::dispose();
-
-    m_pListBoxControl = 0;
 }
 
 Sequence<PropertyValue> DropdownToolbarController::getExecuteArgs(sal_Int16 KeyModifier) const

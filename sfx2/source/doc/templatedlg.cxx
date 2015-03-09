@@ -321,6 +321,16 @@ void SfxTemplateManagerDlg::dispose()
 
     mpSearchView->setItemStateHdl(Link());
     mpSearchView->setOpenTemplateHdl(Link());
+
+    mpTabControl.clear();
+    mpSearchEdit.clear();
+    mpViewBar.clear();
+    mpActionBar.clear();
+    mpTemplateBar.clear();
+    mpSearchView.clear();
+    mpCurView.clear();
+    mpLocalView.clear();
+    mpRemoteView.clear();
     ModalDialog::dispose();
 }
 
@@ -1409,7 +1419,7 @@ void SfxTemplateManagerDlg::switchMainView(bool bDisplayLocal)
 {
     if (bDisplayLocal)
     {
-        mpCurView = mpLocalView;
+        mpCurView = mpLocalView.get();
 
         mpViewBar->HideItem(VIEWBAR_DELETE);
 
@@ -1422,7 +1432,7 @@ void SfxTemplateManagerDlg::switchMainView(bool bDisplayLocal)
     }
     else
     {
-        mpCurView = mpRemoteView;
+        mpCurView = mpRemoteView.get();
 
         mpViewBar->ShowItem(VIEWBAR_DELETE);
 

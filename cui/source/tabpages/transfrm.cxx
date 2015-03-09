@@ -197,6 +197,23 @@ SvxAngleTabPage::SvxAngleTabPage(vcl::Window* pParent, const SfxItemSet& rInAttr
     m_pCtlAngle->SetLinkedField( m_pNfAngle, 2 );
 }
 
+SvxAngleTabPage::~SvxAngleTabPage()
+{
+    dispose();
+}
+
+void SvxAngleTabPage::dispose()
+{
+    m_pFlPosition.clear();
+    m_pMtrPosX.clear();
+    m_pMtrPosY.clear();
+    m_pCtlRect.clear();
+    m_pFlAngle.clear();
+    m_pNfAngle.clear();
+    m_pCtlAngle.clear();
+    SvxTabPage::dispose();
+}
+
 void SvxAngleTabPage::Construct()
 {
     DBG_ASSERT(pView, "No valid view (!)");
@@ -422,6 +439,20 @@ SvxSlantTabPage::SvxSlantTabPage(vcl::Window* pParent, const SfxItemSet& rInAttr
     ePoolUnit = pPool->GetMetric( SID_ATTR_TRANSFORM_POS_X );
 }
 
+SvxSlantTabPage::~SvxSlantTabPage()
+{
+    dispose();
+}
+
+void SvxSlantTabPage::dispose()
+{
+    m_pFlRadius.clear();
+    m_pMtrRadius.clear();
+    m_pFlAngle.clear();
+    m_pMtrAngle.clear();
+    SvxTabPage::dispose();
+}
+
 void SvxSlantTabPage::Construct()
 {
     // get the range
@@ -635,6 +666,33 @@ SvxPositionSizeTabPage::SvxPositionSizeTabPage(vcl::Window* pParent, const SfxIt
     m_pTsbPosProtect->SetClickHdl( LINK( this, SvxPositionSizeTabPage, ChangePosProtectHdl ) );
     m_pTsbSizeProtect->SetClickHdl( LINK( this, SvxPositionSizeTabPage, ChangeSizeProtectHdl ) );
 
+}
+
+SvxPositionSizeTabPage::~SvxPositionSizeTabPage()
+{
+    dispose();
+}
+
+void SvxPositionSizeTabPage::dispose()
+{
+    m_pFlPosition.clear();
+    m_pMtrPosX.clear();
+    m_pMtrPosY.clear();
+    m_pCtlPos.clear();
+    m_pFlSize.clear();
+    m_pFtWidth.clear();
+    m_pMtrWidth.clear();
+    m_pFtHeight.clear();
+    m_pMtrHeight.clear();
+    m_pCbxScale.clear();
+    m_pCtlSize.clear();
+    m_pFlProtect.clear();
+    m_pTsbPosProtect.clear();
+    m_pTsbSizeProtect.clear();
+    m_pFlAdjust.clear();
+    m_pTsbAutoGrowWidth.clear();
+    m_pTsbAutoGrowHeight.clear();
+    SvxTabPage::dispose();
 }
 
 void SvxPositionSizeTabPage::Construct()

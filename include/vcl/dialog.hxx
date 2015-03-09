@@ -40,7 +40,7 @@ class VclButtonBox;
 class VCL_DLLPUBLIC Dialog : public SystemWindow
 {
 private:
-    Dialog*         mpPrevExecuteDlg;
+    VclPtr<Dialog>  mpPrevExecuteDlg;
     DialogImpl*     mpDialogImpl;
     long            mnMousePositioned;
     bool            mbInExecute;

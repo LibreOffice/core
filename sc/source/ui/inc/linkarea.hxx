@@ -37,13 +37,13 @@ class ScDocShell;
 class ScLinkedAreaDlg : public ModalDialog
 {
 private:
-    SvtURLBox*    m_pCbUrl;
-    PushButton*   m_pBtnBrowse;
-    ListBox*      m_pLbRanges;
-    CheckBox*     m_pBtnReload;
-    NumericField* m_pNfDelay;
-    FixedText*    m_pFtSeconds;
-    OKButton*     m_pBtnOk;
+    VclPtr<SvtURLBox>    m_pCbUrl;
+    VclPtr<PushButton>   m_pBtnBrowse;
+    VclPtr<ListBox>      m_pLbRanges;
+    VclPtr<CheckBox>     m_pBtnReload;
+    VclPtr<NumericField> m_pNfDelay;
+    VclPtr<FixedText>    m_pFtSeconds;
+    VclPtr<OKButton>     m_pBtnOk;
 
     ScDocShell*             pSourceShell;
     sfx2::DocumentInserter* pDocInserter;
@@ -64,6 +64,7 @@ private:
 public:
             ScLinkedAreaDlg( vcl::Window* pParent );
             virtual ~ScLinkedAreaDlg();
+    virtual void dispose() SAL_OVERRIDE;
 
     void            InitFromOldLink( const OUString& rFile, const OUString& rFilter,
                                         const OUString& rOptions, const OUString& rSource,

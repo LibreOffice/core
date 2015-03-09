@@ -23,8 +23,8 @@ class PlacesListBox;
 class PlacesListBox_Impl : public SvHeaderTabListBox
 {
     private:
-        HeaderBar*           mpHeaderBar;
-        PlacesListBox*       mpParent;
+        VclPtr<HeaderBar>           mpHeaderBar;
+        VclPtr<PlacesListBox>       mpParent;
 
     public:
         PlacesListBox_Impl( PlacesListBox* pParent, const OUString& rTitle );
@@ -40,10 +40,10 @@ class PlacesListBox : public Control
 {
     private:
         std::vector< PlacePtr > maPlaces;
-        SvtFileDialog*       mpDlg;
-        PlacesListBox_Impl*  mpImpl;
-        PushButton*          mpAddBtn;
-        PushButton*          mpDelBtn;
+        VclPtr<SvtFileDialog>       mpDlg;
+        VclPtr<PlacesListBox_Impl>  mpImpl;
+        VclPtr<PushButton>          mpAddBtn;
+        VclPtr<PushButton>          mpDelBtn;
         sal_Int32            mnNbEditables;
         bool                 mbUpdated;
         bool                 mbSelectionChanged;

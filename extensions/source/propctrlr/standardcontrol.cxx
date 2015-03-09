@@ -1041,7 +1041,7 @@ namespace pcr
     {
         SetCompoundControl( true );
 
-        m_pImplEdit = VclPtr<MultiLineEdit>( new MultiLineEdit( this, WB_TABSTOP | WB_IGNORETAB | WB_NOBORDER | (_nStyle & WB_READONLY) ) );
+        m_pImplEdit = new MultiLineEdit( this, WB_TABSTOP | WB_IGNORETAB | WB_NOBORDER | (_nStyle & WB_READONLY) );
         SetSubEdit( m_pImplEdit );
         m_pImplEdit->Show();
 
@@ -1077,16 +1077,10 @@ namespace pcr
 
     void DropDownEditControl::dispose()
     {
-        {
-            boost::scoped_ptr<vcl::Window> aTemp(m_pFloatingEdit);
-            m_pFloatingEdit = NULL;
-        }
-        SetSubEdit(VclPtr<Edit>());
-        {
-            boost::scoped_ptr<vcl::Window> aTemp(m_pDropdownButton);
-            m_pDropdownButton = NULL;
-        }
+        SetSubEdit(nullptr);
         m_pImplEdit.disposeAndClear();
+        m_pFloatingEdit.clear();
+        m_pDropdownButton.clear();
         DropDownEditControl_Base::dispose();
     }
 
@@ -1095,7 +1089,7 @@ namespace pcr
     {
         ::Size aOutSz = GetOutputSizePixel();
 
-        if (m_pDropdownButton!=NULL)
+        if (m_pDropdownButton!=nullptr)
         {
             long nSBWidth = GetSettings().GetStyleSettings().GetScrollBarSize();
             nSBWidth = CalcZoom( nSBWidth );
