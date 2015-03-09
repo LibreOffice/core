@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a29b11f_9adc2d48",
+        "filename": "bin/update_pch.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2015-03-09T09:08:41Z",
+      "side": 1,
+      "message": "See configure.ac for a portable way on getting the number of CPUs... couldn\u0027t use just use PARALLELISM from config_host.mk? See bin/get_config_variables to read parse that file from a shell script.",
+      "revId": "0d9d4b23ef7e398d5e240275cc0034886838b43f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
