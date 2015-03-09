@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="LibreOfficeTheme" parent="LibreOfficeTheme"/>
+
+    <style name="LibreOfficeTheme.Base" parent="Theme.AppCompat.Light">
+        <item name="android:windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+    </style>
+
+    <style name="BrowserTheme" parent="android:Theme.Holo.Light.DarkActionBar">
+    </style>
+</resources>

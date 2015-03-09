@@ -5,3 +5,4 @@ libs
 obj
 local.properties
 native-code.cxx
+AppCompat-v7

@@ -18,6 +18,8 @@ APP_DATA_PATH=/data/data/$(APP_PACKAGE)
 SODEST=libs/$(ANDROID_APP_ABI)
 OBJLOCAL=obj/local/$(ANDROID_APP_ABI)
 
+APPCOMPATDIR=$(BOOTSTRAPDIR)/../AppCompat-v7
+
 define COPYSO
        $(error COPYSO should not be used now with DISABLE_DYNLOADING)
 endef
@@ -50,6 +52,11 @@ $(BOOTSTRAPDIR)/no-resource-compress.xml : $(ANDROID_SDK_HOME)/tools/ant/build.x
 
 android_version_setup : $(BOOTSTRAPDIR)/no-resource-compress.xml
 
+prepare-appcompat:
+	mkdir $(APPCOMPATDIR) 2>/dev/null; true
+	cp -rf $(ANDROID_SDK_HOME)/extras/android/support/v7/appcompat/* $(APPCOMPATDIR)
+	$(ANDROID_SDK_HOME)/tools/android update lib-project --target android-21 --path $(APPCOMPATDIR)
+
 properties:
 	echo sdk.dir=$(ANDROID_SDK_HOME) >local.properties
 	echo sdk.dir=$(ANDROID_SDK_HOME) >../../Bootstrap/local.properties
@@ -70,6 +77,7 @@ clean: android_version_setup properties
 	$(ANT) $(if $(VERBOSE)$(verbose),,-quiet) -keep-going clean
 	rm -rf assets libs $(SODEST) $(OBJLOCAL) $(BOOTSTRAPDIR)/no-resource-compress.xml
 	rm -f native-code.cxx
+	rm -rf $(APPCOMPATDIR)
 
 #
 # Build / link the single .so for this app

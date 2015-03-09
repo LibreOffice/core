@@ -7,7 +7,7 @@
 
     <!-- App requires OpenGL ES 2.0 -->
     <uses-feature android:glEsVersion="0x00020000" android:required="true" />
-    <uses-sdk android:minSdkVersion="14" android:targetSdkVersion="17"/>
+    <uses-sdk android:minSdkVersion="14" android:targetSdkVersion="21"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
@@ -16,14 +16,14 @@
         android:icon="@drawable/main"
         android:label="@string/app_name"
         android:hardwareAccelerated="true"
-        android:theme="@style/AppTheme"
         android:largeHeap="false">
 
         <!-- Viewer Activity -->
         <activity
             android:name=".LibreOfficeMainActivity"
             android:label="@string/app_name"
-            android:configChanges="orientation|keyboard|keyboardHidden|screenLayout|uiMode|screenSize|smallestScreenSize">
+            android:configChanges="orientation|keyboard|keyboardHidden|screenLayout|uiMode|screenSize|smallestScreenSize"
+            android:theme="@style/LibreOfficeTheme">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.EDIT" />
@@ -91,7 +91,8 @@
 
         <!-- Document Browser Activity -->
         <activity android:name=".ui.LibreOfficeUIActivity"
-                  android:label="@string/app_name">
+                  android:label="@string/app_name"
+                  android:theme="@style/BrowserTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

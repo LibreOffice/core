@@ -17,12 +17,10 @@ include $(BOOTSTRAPDIR)/Makefile.shared
 native-code.cxx: $(SRCDIR)/solenv/bin/native-code.py
 	$< -j -g core -g writer -g calc -g draw -g edit > $@
 
-build-ant: android_version_setup copy-stuff link-so properties
+build-ant: android_version_setup copy-stuff prepare-appcompat link-so properties
 #
 # Copy jar files we need
 #
-	cp $(ANDROID_SDK_HOME)/extras/android/support/v4/android-support-v4.jar libs
-
 	for F in java_uno \
 		 juh \
 		 jurt \
