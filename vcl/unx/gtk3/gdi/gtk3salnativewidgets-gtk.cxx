@@ -837,6 +837,11 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
     case CTRL_MENU_POPUP:
         switch(nPart)
         {
+        case PART_MENU_ITEM:
+            styleClass = GTK_STYLE_CLASS_MENUITEM;
+            context = mpMenuItemStyle;
+            renderType = RENDER_BACKGROUND_AND_FRAME;
+            break;
         case PART_MENU_ITEM_CHECK_MARK:
             styleClass = GTK_STYLE_CLASS_CHECK;
             context = mpMenuItemStyle;
@@ -1423,7 +1428,7 @@ bool GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
         ( (nPart == PART_DRAW_BACKGROUND_HORZ) || (nPart == PART_DRAW_BACKGROUND_VERT) ||
           (nPart == PART_ENTIRE_CONTROL) || (nPart == HAS_THREE_BUTTONS))) ||
        (nType == CTRL_MENU_POPUP &&
-        ( (nPart==PART_ENTIRE_CONTROL) ||
+        ( (nPart == PART_ENTIRE_CONTROL) || (nPart == PART_MENU_ITEM) ||
           (nPart == PART_MENU_ITEM_CHECK_MARK) || (nPart == PART_MENU_ITEM_RADIO_MARK) ||
           (nPart == PART_MENU_SEPARATOR) || (nPart == PART_MENU_SUBMENU_ARROW) ))
       )
