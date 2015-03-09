@@ -31,6 +31,7 @@
 #include "externalrefmgr.hxx"
 #include "calcconfig.hxx"
 #include "token.hxx"
+#include "math.hxx"
 
 #include <map>
 #include <vector>
@@ -1002,8 +1003,7 @@ inline void ScInterpreter::TreatDoubleError( double& rVal )
 
 inline double ScInterpreter::div( const double& fNumerator, const double& fDenominator )
 {
-    return (fDenominator != 0.0) ? (fNumerator / fDenominator) :
-        CreateDoubleError( errDivisionByZero);
+    return sc::div(fNumerator, fDenominator);
 }
 
 inline sal_Int16 ScInterpreter::GetDayOfWeek( sal_Int32 n )
