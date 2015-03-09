@@ -27,12 +27,12 @@ class VCL_DLLPUBLIC Timer : public Scheduler
 {
 protected:
     Link            maTimeoutHdl;          // Callback Link
-    sal_uLong       mnTimeout;
+    sal_uInt64      mnTimeout;
     bool            mbAuto;
 
     virtual void SetDeletionFlags() SAL_OVERRIDE;
     virtual bool ReadyForSchedule( bool bTimer ) SAL_OVERRIDE;
-    virtual sal_uLong UpdateMinPeriod( sal_uLong nMinPeriod, sal_uLong nTime ) SAL_OVERRIDE;
+    virtual sal_uInt64 UpdateMinPeriod( sal_uInt64 nMinPeriod, sal_uInt64 nTime ) SAL_OVERRIDE;
 
 public:
     Timer();
@@ -42,13 +42,13 @@ public:
     /// of course, you can also sub-class and override 'Invoke'
     void            SetTimeoutHdl( const Link& rLink ) { maTimeoutHdl = rLink; }
     const Link&     GetTimeoutHdl() const { return maTimeoutHdl; }
-    void            SetTimeout( sal_uLong nTimeoutMs );
-    sal_uLong       GetTimeout() const { return mnTimeout; }
+    void            SetTimeout( sal_uInt64 nTimeoutMs );
+    sal_uInt64      GetTimeout() const { return mnTimeout; }
     virtual void    Invoke() SAL_OVERRIDE;
     void            Timeout() { Invoke(); }
     Timer&          operator=( const Timer& rTimer );
-    virtual void            Start() SAL_OVERRIDE;
-    static void     ImplStartTimer( ImplSVData* pSVData, sal_uLong nMS );
+    virtual void    Start() SAL_OVERRIDE;
+    static void     ImplStartTimer( ImplSVData* pSVData, sal_uInt64 nMS );
 };
 
 /// An auto-timer is a multi-shot timer re-emitting itself at

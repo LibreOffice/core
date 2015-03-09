@@ -23,7 +23,7 @@
 #include <vcl/timer.hxx>
 #include <saltimer.hxx>
 
-#define MAX_TIMER_PERIOD    ((sal_uLong)0xFFFFFFFF)
+#define MAX_TIMER_PERIOD    ((sal_uInt64)0xFFFFFFFF)
 
 void ImplSchedulerData::Invoke()
 {
@@ -116,8 +116,8 @@ void Scheduler::ProcessTaskScheduling( bool bTimer )
     ImplSchedulerData* pSchedulerData = NULL;
     ImplSchedulerData* pPrevSchedulerData = NULL;
     ImplSVData*        pSVData = ImplGetSVData();
-    sal_uLong          nTime = tools::Time::GetSystemTicks();
-    sal_uLong          nMinPeriod = MAX_TIMER_PERIOD;
+    sal_uInt64         nTime = tools::Time::GetSystemTicks();
+    sal_uInt64         nMinPeriod = MAX_TIMER_PERIOD;
     pSVData->mnUpdateStack++;
 
     if ((pSchedulerData = ImplSchedulerData::GetMostImportantTask(bTimer)))
@@ -168,7 +168,7 @@ void Scheduler::ProcessTaskScheduling( bool bTimer )
     pSVData->mnUpdateStack--;
 }
 
-sal_uLong Scheduler::UpdateMinPeriod( sal_uLong nMinPeriod, sal_uLong nTime )
+sal_uInt64 Scheduler::UpdateMinPeriod( sal_uInt64 nMinPeriod, sal_uInt64 nTime )
 {
     // this period is only usefull for timer
     // so in this implementation it' only a pass through

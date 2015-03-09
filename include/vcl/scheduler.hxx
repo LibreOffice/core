@@ -30,8 +30,8 @@ struct ImplSchedulerData
     Scheduler*          mpScheduler;      // Pointer to VCL Scheduler instance
     bool                mbDelete;    // Destroy this scheduler?
     bool                mbInScheduler;    // Scheduler currently processed?
-    sal_uLong           mnUpdateTime;   // Last Update Time
-    sal_uLong           mnUpdateStack;  // Update Stack
+    sal_uInt64          mnUpdateTime;   // Last Update Time
+    sal_uInt32          mnUpdateStack;  // Update Stack
 
     void Invoke();
 
@@ -59,7 +59,7 @@ protected:
     friend struct ImplSchedulerData;
     virtual void SetDeletionFlags();
     virtual bool ReadyForSchedule( bool bTimer ) { return !bTimer; }
-    virtual sal_uLong UpdateMinPeriod( sal_uLong nMinPeriod, sal_uLong nTime );
+    virtual sal_uInt64 UpdateMinPeriod( sal_uInt64 nMinPeriod, sal_uInt64 nTime );
 
 public:
     Scheduler();

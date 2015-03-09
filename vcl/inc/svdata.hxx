@@ -316,8 +316,8 @@ struct ImplSVData
     SalI18NImeStatus*       mpImeStatus;                    // interface to ime status window
     SalSystem*              mpSalSystem;                    // SalSystem interface
     ResMgr*                 mpResMgr;                       // SV-Resource-Manager
-    sal_uLong               mnTimerPeriod;                  // current timer period
-    sal_uLong               mnUpdateStack;                  // Scheduler on stack
+    sal_uInt64              mnTimerPeriod;                  // current timer period
+    sal_uInt32              mnUpdateStack;                  // Scheduler on stack
     ImplSVAppData           maAppData;                      // indepen data for class Application
     ImplSVGDIData           maGDIData;                      // indepen data for Output classes
     ImplSVWinData           maWinData;                      // indepen data for Windows classes

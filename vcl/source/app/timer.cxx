@@ -23,9 +23,9 @@
 #include <svdata.hxx>
 #include <salinst.hxx>
 
-#define MAX_TIMER_PERIOD    ((sal_uLong)0xFFFFFFFF)
+#define MAX_TIMER_PERIOD    ((sal_uInt64)0xFFFFFFFF)
 
-void Timer::ImplStartTimer( ImplSVData* pSVData, sal_uLong nMS )
+void Timer::ImplStartTimer( ImplSVData* pSVData, sal_uInt64 nMS )
 {
     if ( !nMS )
         nMS = 1;
@@ -54,10 +54,10 @@ bool Timer::ReadyForSchedule( bool bTimer )
     return (mpSchedulerData->mnUpdateTime + mnTimeout) <= tools::Time::GetSystemTicks();
 }
 
-sal_uLong Timer::UpdateMinPeriod( sal_uLong nMinPeriod, sal_uLong nTime )
+sal_uInt64 Timer::UpdateMinPeriod( sal_uInt64 nMinPeriod, sal_uInt64 nTime )
 {
-    sal_uLong nNewTime = tools::Time::GetSystemTicks();
-    sal_uLong nDeltaTime;
+    sal_uInt64 nNewTime = tools::Time::GetSystemTicks();
+    sal_uInt64 nDeltaTime;
     //determine smallest time slot
     if( mpSchedulerData->mnUpdateTime == nTime )
     {
@@ -114,7 +114,7 @@ void Timer::Start()
         Timer::ImplStartTimer( pSVData, mnTimeout );
 }
 
-void Timer::SetTimeout( sal_uLong nNewTimeout )
+void Timer::SetTimeout( sal_uInt64 nNewTimeout )
 {
     mnTimeout = nNewTimeout;
     // if timer is active then renew clock
