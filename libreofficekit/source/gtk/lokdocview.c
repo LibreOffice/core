@@ -505,7 +505,7 @@ static gboolean renderOverlay(GtkWidget* pWidget, GdkEventExpose* pEvent, gpoint
     (void)pEvent;
     pCairo = gdk_cairo_create(gtk_widget_get_window(pWidget));
 
-    if (pDocView->m_bCursorVisible && pDocView->m_bCursorOverlayVisible && !lcl_isEmptyRectangle(&pDocView->m_aVisibleCursor))
+    if (pDocView->m_bEdit && pDocView->m_bCursorVisible && pDocView->m_bCursorOverlayVisible && !lcl_isEmptyRectangle(&pDocView->m_aVisibleCursor))
     {
         if (pDocView->m_aVisibleCursor.width == 0)
             // Set a minimal width if it would be 0.
@@ -521,7 +521,7 @@ static gboolean renderOverlay(GtkWidget* pWidget, GdkEventExpose* pEvent, gpoint
 
     }
 
-    if (pDocView->m_bCursorVisible && !lcl_isEmptyRectangle(&pDocView->m_aVisibleCursor) && !pDocView->m_pTextSelectionRectangles)
+    if (pDocView->m_bEdit && pDocView->m_bCursorVisible && !lcl_isEmptyRectangle(&pDocView->m_aVisibleCursor) && !pDocView->m_pTextSelectionRectangles)
     {
         // Have a cursor, but no selection: we need the middle handle.
         if (!pDocView->m_pHandleMiddle)
@@ -895,6 +895,8 @@ SAL_DLLPUBLIC_EXPORT gboolean lok_docview_open_document( LOKDocView* pDocView, c
     else
     {
         pDocView->pDocument->pClass->initializeForRendering(pDocView->pDocument);
+        pDocView->pDocument->pClass->registerCallback(pDocView->pDocument, &lok_docview_callback_worker, pDocView);
+        g_timeout_add(600, &lcl_handleTimeout, pDocView);
         renderDocument(pDocView, NULL);
     }
 
@@ -949,12 +951,9 @@ SAL_DLLPUBLIC_EXPORT void lok_docview_set_edit( LOKDocView* pDocView,
                                                 gboolean bEdit )
 {
     if (!pDocView->m_bEdit && bEdit)
-    {
-        g_info("lok_docview_set_edit: entering edit mode, registering callback");
-        pDocView->pDocument->pClass->registerCallback(pDocView->pDocument, &lok_docview_callback_worker, pDocView);
-        g_timeout_add(600, &lcl_handleTimeout, pDocView);
-    }
+        g_info("lok_docview_set_edit: entering edit mode");
     pDocView->m_bEdit = bEdit;
+    gtk_widget_queue_draw(GTK_WIDGET(pDocView->pEventBox));
 }
 
 SAL_DLLPUBLIC_EXPORT gboolean lok_docview_get_edit(LOKDocView* pDocView)
