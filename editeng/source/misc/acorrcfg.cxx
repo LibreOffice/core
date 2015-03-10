@@ -321,6 +321,7 @@ void SvxBaseAutoCorrCfg::Commit()
         }
     }
     PutProperties(aNames, aValues);
+    ClearModified();
 }
 
 void SvxBaseAutoCorrCfg::Notify( const Sequence<OUString>& /* aPropertyNames */)
@@ -640,6 +641,7 @@ void SvxSwAutoCorrCfg::Commit()
         }
     }
     PutProperties(aNames, aValues);
+    ClearModified();
 }
 
 void SvxSwAutoCorrCfg::Notify( const Sequence<OUString>& /* aPropertyNames */ )
