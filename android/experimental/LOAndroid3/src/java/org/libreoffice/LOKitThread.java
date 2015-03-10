@@ -3,9 +3,7 @@ package org.libreoffice;
 import android.graphics.Bitmap;
 import android.graphics.PointF;
 import android.graphics.RectF;
-import android.util.Log;
 import android.view.KeyEvent;
-import android.view.MotionEvent;
 
 import org.mozilla.gecko.TextSelectionHandle;
 import org.mozilla.gecko.gfx.CairoImage;
@@ -261,13 +259,13 @@ public class LOKitThread extends Thread {
             return;
         }
         if (touchType.equals("LongPress")) {
-            mInvalidationHandler.changeStateTo(InvalidationHandler.OverlayState.TRANSITION_TO_SELECTION);
+            mInvalidationHandler.changeStateTo(InvalidationHandler.OverlayState.TRANSITION);
             mTileProvider.mouseButtonDown(documentCoordinate, 1);
             mTileProvider.mouseButtonUp(documentCoordinate, 1);
             mTileProvider.mouseButtonDown(documentCoordinate, 2);
             mTileProvider.mouseButtonUp(documentCoordinate, 2);
         } else { // "SingleTap"
-            mInvalidationHandler.changeStateTo(InvalidationHandler.OverlayState.TRANSITION_TO_CURSOR);
+            mInvalidationHandler.changeStateTo(InvalidationHandler.OverlayState.TRANSITION);
             mTileProvider.mouseButtonDown(documentCoordinate, 1);
             mTileProvider.mouseButtonUp(documentCoordinate, 1);
         }
