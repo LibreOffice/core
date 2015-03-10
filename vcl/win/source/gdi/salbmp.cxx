@@ -692,7 +692,7 @@ bool WinSalBitmap::Create( const SalBitmap& rSSalBmp, sal_uInt16 nNewBitCount )
 bool WinSalBitmap::Create( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmapCanvas >& rBitmapCanvas, Size& /*rSize*/, bool bMask )
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XFastPropertySet >
-        xFastPropertySet( xBitmapCanvas, ::com::sun::star::uno::UNO_QUERY );
+        xFastPropertySet( rBitmapCanvas, ::com::sun::star::uno::UNO_QUERY );
 
     if( xFastPropertySet.get() ) {
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > args;
