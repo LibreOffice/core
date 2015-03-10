@@ -851,6 +851,11 @@ sal_uInt16 ScTableRefToken::GetIndex() const
     return mnIndex;
 }
 
+void ScTableRefToken::SetIndex( sal_uInt16 n )
+{
+    mnIndex = n;
+}
+
 ScTableRefToken::Item ScTableRefToken::GetItem() const
 {
     return meItem;
