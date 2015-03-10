@@ -2677,9 +2677,17 @@ void ScFiltersTest::testSharedFormulaXLS()
             CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(1), pFC->GetSharedTopRow());
             CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(10), pFC->GetSharedLength());
 
+            pFC = rDoc.GetFormulaCell(ScAddress(2,10,0));
+            CPPUNIT_ASSERT(pFC);
+            CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(1), pFC->GetSharedTopRow());
+            CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(10), pFC->GetSharedLength());
+
             OUString aFormula;
             rDoc.GetFormula(2, 1, 0, aFormula);
             CPPUNIT_ASSERT_EQUAL(OUString("=SUM(B9:D9)"), aFormula);
+
+            rDoc.GetFormula(2, 10, 0, aFormula);
+            CPPUNIT_ASSERT_EQUAL(OUString("=SUM(B18:D18)"), aFormula);
         }
 
         {
@@ -2688,9 +2696,36 @@ void ScFiltersTest::testSharedFormulaXLS()
             CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(8), pFC->GetSharedTopRow());
             CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(10), pFC->GetSharedLength());
 
+            pFC = rDoc.GetFormulaCell(ScAddress(4,17,0));
+            CPPUNIT_ASSERT(pFC);
+            CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(8), pFC->GetSharedTopRow());
+            CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(10), pFC->GetSharedLength());
+
             OUString aFormula;
             rDoc.GetFormula(4, 8, 0, aFormula);
             CPPUNIT_ASSERT_EQUAL(OUString("=SUM(G9:EY9)"), aFormula);
+
+            rDoc.GetFormula(4, 17, 0, aFormula);
+            CPPUNIT_ASSERT_EQUAL(OUString("=SUM(G18:EY18)"), aFormula);
+        }
+
+        {
+            const ScFormulaCell* pFC = rDoc.GetFormulaCell(ScAddress(6,15,0));
+            CPPUNIT_ASSERT(pFC);
+            CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(15), pFC->GetSharedTopRow());
+            CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(10), pFC->GetSharedLength());
+
+            pFC = rDoc.GetFormulaCell(ScAddress(6,24,0));
+            CPPUNIT_ASSERT(pFC);
+            CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(15), pFC->GetSharedTopRow());
+            CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(10), pFC->GetSharedLength());
+
+            OUString aFormula;
+            rDoc.GetFormula(6, 15, 0, aFormula);
+            CPPUNIT_ASSERT_EQUAL(OUString("=SUM(A16:A40000)"), aFormula);
+
+            rDoc.GetFormula(6, 24, 0, aFormula);
+            CPPUNIT_ASSERT_EQUAL(OUString("=SUM(A25:A40009)"), aFormula);
         }
 
         xDocSh->DoClose();
