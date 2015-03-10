@@ -439,7 +439,7 @@ ScGridWindow::ScGridWindow( vcl::Window* pParent, ScViewData* pData, ScSplitPos 
             mpAutoFillRect(static_cast<Rectangle*>(NULL)),
             pViewData( pData ),
             eWhich( eWhichPos ),
-            pNoteMarker( NULL ),
+            mpNoteMarker(),
             mpFilterBox(),
             mpFilterFloat(),
             mpAutoFilterPopup(),
@@ -519,10 +519,6 @@ ScGridWindow::ScGridWindow( vcl::Window* pParent, ScViewData* pData, ScSplitPos 
 
 ScGridWindow::~ScGridWindow()
 {
-    // #114409#
-    ImpDestroyOverlayObjects();
-
-    delete pNoteMarker;
 }
 
 void ScGridWindow::ClickExtern()
@@ -2458,7 +2454,7 @@ void ScGridWindow::MouseMove( const MouseEvent& rMEvt )
 {
     aCurMousePos = rMEvt.GetPosPixel();
 
-    if ( rMEvt.IsLeaveWindow() && pNoteMarker && !pNoteMarker->IsByKeyboard() )
+    if (rMEvt.IsLeaveWindow() && mpNoteMarker && !mpNoteMarker->IsByKeyboard())
         HideNoteMarker();
 
     ScModule* pScMod = SC_MOD();
@@ -3312,7 +3308,7 @@ void ScGridWindow::KeyInput(const KeyEvent& rKEvt)
         }
         //  query for existing note marker before calling ViewShell's keyboard handling
         //  which may remove the marker
-        bool bHadKeyMarker = ( pNoteMarker && pNoteMarker->IsByKeyboard() );
+        bool bHadKeyMarker = mpNoteMarker && mpNoteMarker->IsByKeyboard();
         ScTabViewShell* pViewSh = pViewData->GetViewShell();
 
         if (pViewData->GetDocShell()->GetProgress())

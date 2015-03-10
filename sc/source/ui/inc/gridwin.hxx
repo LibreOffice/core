@@ -134,7 +134,7 @@ class ScGridWindow : public vcl::Window, public DropTargetHelper, public DragSou
     ScHSplitPos             eHWhich;
     ScVSplitPos             eVWhich;
 
-    ScNoteMarker*           pNoteMarker;
+    std::unique_ptr<ScNoteMarker> mpNoteMarker;
 
     std::unique_ptr<ScFilterListBox> mpFilterBox;
     std::unique_ptr<FloatingWindow> mpFilterFloat;

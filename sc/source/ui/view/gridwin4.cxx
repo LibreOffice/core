@@ -903,8 +903,8 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
     else
         rDevice.SetMapMode(aDrawMode);
 
-    if ( pNoteMarker )
-        pNoteMarker->Draw();        // ueber den Cursor, im Drawing-MapMode
+    if (mpNoteMarker)
+        mpNoteMarker->Draw(); // ueber den Cursor, im Drawing-MapMode
 }
 
 void ScGridWindow::PaintTile( VirtualDevice& rDevice,

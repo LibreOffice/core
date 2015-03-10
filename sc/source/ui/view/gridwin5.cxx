@@ -168,23 +168,23 @@ bool ScGridWindow::ShowNoteMarker( SCsCOL nPosX, SCsROW nPosY, bool bKeyboard )
     {
         bool bNew = true;
         bool bFast = false;
-        if ( pNoteMarker )          // schon eine Notiz angezeigt
+        if (mpNoteMarker) // schon eine Notiz angezeigt
         {
-            if ( pNoteMarker->GetDocPos() == aCellPos ) // dieselbe
-                bNew = false;                           // dann stehenlassen
+            if (mpNoteMarker->GetDocPos() == aCellPos)
+                bNew = false; // dann stehenlassen
             else
-                bFast = true;                           // sonst sofort
+                bFast = true; // sonst sofort
 
             //  marker which was shown for ctrl-F1 isn't removed by mouse events
-            if ( pNoteMarker->IsByKeyboard() && !bKeyboard )
+            if (mpNoteMarker->IsByKeyboard() && !bKeyboard)
                 bNew = false;
         }
-        if ( bNew )
+        if (bNew)
         {
-            if ( bKeyboard )
-                bFast = true;           // keyboard also shows the marker immediately
+            if (bKeyboard)
+                bFast = true; // keyboard also shows the marker immediately
 
-            delete pNoteMarker;
+            mpNoteMarker.reset();
 
             bool bHSplit = pViewData->GetHSplitMode() != SC_SPLIT_NONE;
             bool bVSplit = pViewData->GetVSplitMode() != SC_SPLIT_NONE;
@@ -206,9 +206,9 @@ bool ScGridWindow::ShowNoteMarker( SCsCOL nPosX, SCsROW nPosY, bool bKeyboard )
                 aOrigin.Y() += aLeftSize.Height();
             aMapMode.SetOrigin( aOrigin );
 
-            pNoteMarker = new ScNoteMarker(  pLeft, pRight, pBottom, pDiagonal,
-                                            pDoc, aCellPos, aTrackText,
-                                            aMapMode, bLeftEdge, bFast, bKeyboard );
+            mpNoteMarker.reset(new ScNoteMarker(pLeft, pRight, pBottom, pDiagonal,
+                                                pDoc, aCellPos, aTrackText,
+                                                aMapMode, bLeftEdge, bFast, bKeyboard));
             if ( pViewData->GetScDrawView() )
             {
                 // get position for aCellPos
@@ -226,7 +226,7 @@ bool ScGridWindow::ShowNoteMarker( SCsCOL nPosX, SCsROW nPosY, bool bKeyboard )
                 // the mouse over the cell when the sheet are RTL
                 if ( pDoc->IsNegativePage(nTab))
                     aGridOff.setX(aCurPosHmm.getX() + aOldPos.getX());
-                pNoteMarker->SetGridOff( aGridOff );
+                mpNoteMarker->SetGridOff( aGridOff );
             }
         }
 
@@ -276,14 +276,16 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
         }
     }
 
-    if ( !bDone && pNoteMarker )
+    if (!bDone && mpNoteMarker)
     {
-        if ( pNoteMarker->IsByKeyboard() )
+        if (mpNoteMarker->IsByKeyboard())
         {
             //  marker which was shown for ctrl-F1 isn't removed by mouse events
         }
         else
-            DELETEZ(pNoteMarker);
+        {
+            mpNoteMarker.reset();
+        }
     }
 
     //  Image-Map / Text-URL
@@ -445,7 +447,7 @@ bool ScGridWindow::IsMyModel(SdrEditView* pSdrView)
 
 void ScGridWindow::HideNoteMarker()
 {
-    DELETEZ(pNoteMarker);
+    mpNoteMarker.reset();
 }
 
 com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
