@@ -651,18 +651,21 @@ void SvpSalGraphics::drawMask( const SalTwoRect& rPosAry,
 
 SalBitmap* SvpSalGraphics::getBitmap( long nX, long nY, long nWidth, long nHeight )
 {
-    basebmp::BitmapDeviceSharedPtr aCopy;
+    SvpSalBitmap* pBitmap = new SvpSalBitmap();
+
     if (m_aDevice)
+    {
+        basebmp::BitmapDeviceSharedPtr aCopy;
         aCopy = cloneBitmapDevice(basegfx::B2IVector(nWidth, nHeight),
                                    m_aDevice);
-    basegfx::B2IBox aSrcRect( nX, nY, nX+nWidth, nY+nHeight );
-    basegfx::B2IBox aDestRect( 0, 0, nWidth, nHeight );
+        basegfx::B2IBox aSrcRect( nX, nY, nX+nWidth, nY+nHeight );
+        basegfx::B2IBox aDestRect( 0, 0, nWidth, nHeight );
 
-    if (aCopy)
         aCopy->drawBitmap( m_aOrigDevice, aSrcRect, aDestRect, basebmp::DrawMode_PAINT );
 
-    SvpSalBitmap* pBitmap = new SvpSalBitmap();
-    pBitmap->setBitmap( aCopy );
+        pBitmap->setBitmap( aCopy );
+    }
+
     return pBitmap;
 }
 
