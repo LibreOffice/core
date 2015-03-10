@@ -376,17 +376,17 @@ public:
 
     sal_uLong Find( const com::sun::star::util::SearchOptions& rSearchOpt,
                 bool bSearchInNotes,
-                SwDocPositions eStart, SwDocPositions eEnde,
+                SwDocPositions eStart, SwDocPositions eEnd,
                 bool& bCancel,
                 FindRanges eRng, bool bReplace = false );
 
     sal_uLong Find( const SwTxtFmtColl& rFmtColl,
-                SwDocPositions eStart, SwDocPositions eEnde,
+                SwDocPositions eStart, SwDocPositions eEnd,
                 bool& bCancel,
                 FindRanges eRng, const SwTxtFmtColl* pReplFmt = 0 );
 
     sal_uLong Find( const SfxItemSet& rSet, bool bNoCollections,
-                SwDocPositions eStart, SwDocPositions eEnde,
+                SwDocPositions eStart, SwDocPositions eEnd,
                 bool& bCancel,
                 FindRanges eRng,
                 const com::sun::star::util::SearchOptions* pSearchOpt = 0,

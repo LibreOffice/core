@@ -255,7 +255,7 @@ sal_uLong SwWrtShell::SearchTempl( const OUString &rTempl,
 // search for attributes
 
 sal_uLong SwWrtShell::SearchAttr( const SfxItemSet& rFindSet, bool bNoColls,
-                                SwDocPositions eStart, SwDocPositions eEnde,
+                                SwDocPositions eStart, SwDocPositions eEnd,
                                 FindRanges eFlags, const SearchOptions* pSearchOpt,
                                 const SfxItemSet* pReplaceSet )
 {
@@ -265,7 +265,7 @@ sal_uLong SwWrtShell::SearchAttr( const SfxItemSet& rFindSet, bool bNoColls,
 
     // Searching
     bool bCancel = false;
-    sal_uLong nRet = Find( rFindSet, bNoColls, eStart, eEnde, bCancel, eFlags, pSearchOpt, pReplaceSet);
+    sal_uLong nRet = Find( rFindSet, bNoColls, eStart, eEnd, bCancel, eFlags, pSearchOpt, pReplaceSet);
 
     if(bCancel)
     {

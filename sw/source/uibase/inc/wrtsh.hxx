@@ -366,18 +366,18 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
     // search and replace
     sal_uLong SearchPattern(const com::sun::star::util::SearchOptions& rSearchOpt,
                          bool bSearchInNotes,
-                         SwDocPositions eStart, SwDocPositions eEnde,
+                         SwDocPositions eStart, SwDocPositions eEnd,
                          FindRanges eFlags = FND_IN_BODY,
                          bool bReplace = false );
 
     sal_uLong SearchTempl  (const OUString &rTempl,
-                         SwDocPositions eStart, SwDocPositions eEnde,
+                         SwDocPositions eStart, SwDocPositions eEnd,
                          FindRanges eFlags = FND_IN_BODY,
                          const OUString* pReplTempl = 0 );
 
     sal_uLong SearchAttr   (const SfxItemSet& rFindSet,
                          bool bNoColls,
-                         SwDocPositions eStart,SwDocPositions eEnde,
+                         SwDocPositions eStart, SwDocPositions eEnd,
                          FindRanges eFlags = FND_IN_BODY,
                          const com::sun::star::util::SearchOptions* pSearchOpt = 0,
                          const SfxItemSet* pReplaceSet = 0);

@@ -663,7 +663,7 @@ public:
 
     // Linguistics...
     /// Save selections.
-    void HyphStart( SwDocPositions eStart, SwDocPositions eEnde );
+    void HyphStart( SwDocPositions eStart, SwDocPositions eEnd );
 
     /// restore selections.
     void HyphEnd();
@@ -721,7 +721,7 @@ public:
     /// Functions used for spell checking and text conversion.
 
     /// Save selections.
-    void SpellStart( SwDocPositions eStart, SwDocPositions eEnde,
+    void SpellStart( SwDocPositions eStart, SwDocPositions eEnd,
                      SwDocPositions eCurr, SwConversionArgs *pConvArgs = 0 );
 
     /// Restore selections.
@@ -763,7 +763,7 @@ public:
             const Point* pPt, SwRect& rSelectRect );
 
     void IgnoreGrammarErrorAt( SwPaM& rErrorPosition );
-    void SetLinguRange( SwDocPositions eStart, SwDocPositions eEnde );
+    void SetLinguRange( SwDocPositions eStart, SwDocPositions eEnd );
 
     /// @return reference set in document according to given name.
     const SwFmtRefMark* GetRefMark( const OUString& rName ) const;

@@ -272,7 +272,7 @@ void SwView::SpellStart( SvxSpellArea eWhich,
     bool bIsWrapReverse = !pConvArgs && xProp.is() && xProp->getIsWrapReverse();
 
     SwDocPositions eStart = DOCPOS_START;
-    SwDocPositions eEnde  = DOCPOS_END;
+    SwDocPositions eEnd   = DOCPOS_END;
     SwDocPositions eCurr  = DOCPOS_CURR;
     switch ( eWhich )
     {
@@ -296,7 +296,7 @@ void SwView::SpellStart( SvxSpellArea eWhich,
             if( !bIsWrapReverse )
             {
                 if( bEndDone )
-                    eEnde = DOCPOS_CURR;
+                    eEnd = DOCPOS_CURR;
                 eCurr = DOCPOS_START;
             }
             else if( bEndDone )
@@ -306,20 +306,20 @@ void SwView::SpellStart( SvxSpellArea eWhich,
             if( bIsWrapReverse )
             {
                 eStart = DOCPOS_OTHERSTART;
-                eEnde  = DOCPOS_OTHEREND;
+                eEnd  = DOCPOS_OTHEREND;
                 eCurr = DOCPOS_OTHEREND;
             }
             else
             {
                 eStart = DOCPOS_OTHERSTART;
-                eEnde  = DOCPOS_OTHEREND;
+                eEnd  = DOCPOS_OTHEREND;
                 eCurr = DOCPOS_OTHERSTART;
             }
             break;
         default:
             OSL_ENSURE( false, "SpellStart with unknown Area" );
     }
-    m_pWrtShell->SpellStart( eStart, eEnde, eCurr, pConvArgs );
+    m_pWrtShell->SpellStart( eStart, eEnd, eCurr, pConvArgs );
 }
 
 // Error message while Spelling
