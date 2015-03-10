@@ -115,7 +115,7 @@ public class MockTileProvider implements TileProvider {
     }
 
     @Override
-    public void setTextSelectionReset() {
+    public void setTextSelectionReset(PointF documentCoordinate) {
 
     }
 

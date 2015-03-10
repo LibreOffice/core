@@ -44,11 +44,11 @@ public class Document {
     public static final int CALLBACK_HYPERLINK_CLICKED = 7;
 
     /**
-     * Text selection types
+     * Set text selection types
      */
-    public static final int TEXT_SELECTION_START = 0;
-    public static final int TEXT_SELECTION_END = 1;
-    public static final int TEXT_SELECTION_RESET = 2;
+    public static final int SET_TEXT_SELECTION_START = 0;
+    public static final int SET_TEXT_SELECTION_END = 1;
+    public static final int SET_TEXT_SELECTION_RESET = 2;
 
     private final ByteBuffer handle;
     private MessageCallback messageCallback = null;

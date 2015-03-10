@@ -218,8 +218,7 @@ public class LOKitThread extends Thread {
 
     private void changeHandlePosition(TextSelectionHandle.HandleType handleType, PointF documentCoordinate) {
         if (handleType == TextSelectionHandle.HandleType.MIDDLE) {
-            mTileProvider.mouseButtonDown(documentCoordinate, 1);
-            mTileProvider.mouseButtonUp(documentCoordinate, 1);
+            mTileProvider.setTextSelectionReset(documentCoordinate);
         } else if (handleType == TextSelectionHandle.HandleType.START) {
             mTileProvider.setTextSelectionStart(documentCoordinate);
         } else if (handleType == TextSelectionHandle.HandleType.END) {

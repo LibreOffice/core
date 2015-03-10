@@ -103,5 +103,5 @@ public interface TileProvider {
 
     void setTextSelectionEnd(PointF documentCoordinate);
 
-    void setTextSelectionReset();
+    void setTextSelectionReset(PointF documentCoordinate);
 }

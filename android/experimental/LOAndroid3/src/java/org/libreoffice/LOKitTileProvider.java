@@ -2,7 +2,6 @@ package org.libreoffice;
 
 import android.graphics.Bitmap;
 import android.graphics.PointF;
-import android.graphics.RectF;
 import android.util.Log;
 import android.view.KeyEvent;
 
@@ -10,15 +9,11 @@ import org.libreoffice.kit.DirectBufferAllocator;
 import org.libreoffice.kit.Document;
 import org.libreoffice.kit.LibreOfficeKit;
 import org.libreoffice.kit.Office;
-import org.libreoffice.R;
 
-import org.mozilla.gecko.TextSelection;
-import org.mozilla.gecko.TextSelectionHandle;
 import org.mozilla.gecko.gfx.BufferedCairoImage;
 import org.mozilla.gecko.gfx.CairoImage;
 import org.mozilla.gecko.gfx.GeckoLayerClient;
 import org.mozilla.gecko.gfx.IntSize;
-import org.mozilla.gecko.gfx.LayerView;
 
 
 import java.nio.ByteBuffer;
@@ -364,23 +359,25 @@ public class LOKitTileProvider implements TileProvider {
         mouseButton(Document.MOUSE_BUTTON_UP, documentCoordinate, numberOfClicks);
     }
 
-    @Override
-    public void setTextSelectionStart(PointF documentCoordinate) {
+    private void setTextSelection(int type, PointF documentCoordinate) {
         int x = (int) pixelToTwip(documentCoordinate.x, mDPI);
         int y = (int) pixelToTwip(documentCoordinate.y, mDPI);
-        mDocument.setTextSelection(Document.TEXT_SELECTION_START, x, y);
+        mDocument.setTextSelection(type, x, y);
+    }
+
+    @Override
+    public void setTextSelectionStart(PointF documentCoordinate) {
+        setTextSelection(Document.SET_TEXT_SELECTION_START, documentCoordinate);
     }
 
     @Override
     public void setTextSelectionEnd(PointF documentCoordinate) {
-        int x = (int) pixelToTwip(documentCoordinate.x, mDPI);
-        int y = (int) pixelToTwip(documentCoordinate.y, mDPI);
-        mDocument.setTextSelection(Document.TEXT_SELECTION_END, x, y);
+        setTextSelection(Document.SET_TEXT_SELECTION_END, documentCoordinate);
     }
 
     @Override
-    public void setTextSelectionReset() {
-        mDocument.setTextSelection(Document.TEXT_SELECTION_RESET, 0, 0);
+    public void setTextSelectionReset(PointF documentCoordinate) {
+        setTextSelection(Document.SET_TEXT_SELECTION_RESET, documentCoordinate);
     }
 
     @Override
