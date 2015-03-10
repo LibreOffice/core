@@ -273,9 +273,10 @@ SAL_DLLPUBLIC_EXPORT guint lok_docview_get_type()
 
     if (!lok_docview_type)
     {
+        char pName[] = "LokDocView";
         GtkTypeInfo lok_docview_info =
         {
-            "LokDocView",
+            pName,
             sizeof( LOKDocView ),
             sizeof( LOKDocViewClass ),
             (GtkClassInitFunc) lok_docview_class_init,
@@ -375,7 +376,7 @@ static void lok_docview_init( LOKDocView* pDocView )
 
 SAL_DLLPUBLIC_EXPORT GtkWidget* lok_docview_new( LibreOfficeKit* pOffice )
 {
-    LOKDocView* pDocView = gtk_type_new( lok_docview_get_type() );
+    LOKDocView* pDocView = LOK_DOCVIEW(gtk_type_new(lok_docview_get_type()));
     pDocView->pOffice = pOffice;
     return GTK_WIDGET( pDocView );
 }
@@ -403,7 +404,7 @@ static gboolean lcl_isEmptyRectangle(GdkRectangle* pRectangle)
 /// Takes care of the blinking cursor.
 static gboolean lcl_handleTimeout(gpointer pData)
 {
-    LOKDocView* pDocView = pData;
+    LOKDocView* pDocView = LOK_DOCVIEW(pData);
 
     if (pDocView->m_bEdit)
     {
@@ -518,7 +519,7 @@ static void lcl_renderGraphicHandle(cairo_t* pCairo, GdkRectangle* pSelection, c
 static gboolean renderOverlay(GtkWidget* pWidget, GdkEventExpose* pEvent, gpointer pData)
 {
 #if GTK_CHECK_VERSION(2,14,0) // we need gtk_widget_get_window()
-    LOKDocView* pDocView = pData;
+    LOKDocView* pDocView = LOK_DOCVIEW(pData);
     cairo_t* pCairo;
 
     (void)pEvent;
@@ -556,7 +557,7 @@ static gboolean renderOverlay(GtkWidget* pWidget, GdkEventExpose* pEvent, gpoint
 
         for (i = pDocView->m_pTextSelectionRectangles; i != NULL; i = i->next)
         {
-            GdkRectangle* pRectangle = i->data;
+            GdkRectangle* pRectangle = static_cast<GdkRectangle*>(i->data);
             // Blue with 75% transparency.
             cairo_set_source_rgba(pCairo, ((double)0x43)/255, ((double)0xac)/255, ((double)0xe8)/255, 0.25);
             cairo_rectangle(pCairo,
@@ -642,7 +643,7 @@ void renderDocument(LOKDocView* pDocView, GdkRectangle* pPartial)
         gtk_widget_show(pDocView->pTable);
         if (pDocView->pCanvas)
             g_free(pDocView->pCanvas);
-        pDocView->pCanvas = g_malloc0(sizeof(GtkWidget*) * nRows * nColumns);
+        pDocView->pCanvas = static_cast<GtkWidget**>(g_malloc0(sizeof(GtkWidget*) * nRows * nColumns));
     }
 
     // Render the tiles.
@@ -793,7 +794,7 @@ static const gchar* lcl_LibreOfficeKitCallbackTypeToString(int nType)
 static gboolean lok_docview_callback(gpointer pData)
 {
 #if GLIB_CHECK_VERSION(2,28,0) // we need g_list_free_full()
-    LOKDocViewCallbackData* pCallback = pData;
+    LOKDocViewCallbackData* pCallback = static_cast<LOKDocViewCallbackData*>(pData);
 
     switch (pCallback->m_nType)
     {
@@ -880,7 +881,7 @@ static gboolean lok_docview_callback(gpointer pData)
 /// Our LOK callback, runs on the LO thread.
 static void lok_docview_callback_worker(int nType, const char* pPayload, void* pData)
 {
-    LOKDocView* pDocView = pData;
+    LOKDocView* pDocView = static_cast<LOKDocView*>(pData);
 
     LOKDocViewCallbackData* pCallback = g_new0(LOKDocViewCallbackData, 1);
     pCallback->m_nType = nType;
