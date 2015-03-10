@@ -16,6 +16,24 @@
       "revId": "e94f507fdd8cc46f0a345a868c4ac0b778436848",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a29b11f_dd4cdf78",
+        "filename": "i18npool/source/search/textsearch.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-03-10T16:31:30Z",
+      "side": 1,
+      "message": "we search not on the original string but the return value from transliterate - which does not include the text before startPos, hence if startPos \u003e 0 the offsets in the result need to have startPos added to them (and startPos is included in the offset array already)",
+      "parentUuid": "3a29b11f_1d3497dc",
+      "revId": "e94f507fdd8cc46f0a345a868c4ac0b778436848",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
