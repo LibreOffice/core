@@ -118,6 +118,8 @@ $(eval $(call gb_CppunitTest_use_packages,sd_import_tests,\
 	oox_customshapes \
 ))
 
+$(eval $(call gb_CppunitTest_use_executable,sd_import_tests,xpdfimport))
+
 $(call gb_CppunitTest_get_target,sd_import_tests) : $(call gb_AllLangResTarget_get_target,sd)
 
 # vim: set noet sw=4 ts=4:
