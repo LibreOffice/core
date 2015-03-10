@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a29b11f_1d3497dc",
+        "filename": "i18npool/source/search/textsearch.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-03-10T16:13:52Z",
+      "side": 1,
+      "message": "Why check for startPos\u003e0 here (and below and in searchBackward())? How is that related to the result of regex matches?",
+      "revId": "e94f507fdd8cc46f0a345a868c4ac0b778436848",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
