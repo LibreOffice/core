@@ -354,14 +354,14 @@ SvxPageDescPage::SvxPageDescPage( vcl::Window* pParent, const SfxItemSet& rAttr 
     m_pPaperHeightEdit->SetLast(m_pPaperHeightEdit->Normalize(aDrawinglayerOpt.GetMaximumPaperHeight()), FUNIT_CM);
 
     // #i4219# also for margins (1/100th cm). Was: 9999, keeping.
-    m_pLeftMarginEdit->SetMax(aDrawinglayerOpt.GetMaximumPaperLeftMargin());
-    m_pLeftMarginEdit->SetLast(aDrawinglayerOpt.GetMaximumPaperLeftMargin());
-    m_pRightMarginEdit->SetMax(aDrawinglayerOpt.GetMaximumPaperRightMargin());
-    m_pRightMarginEdit->SetLast(aDrawinglayerOpt.GetMaximumPaperRightMargin());
-    m_pTopMarginEdit->SetMax(aDrawinglayerOpt.GetMaximumPaperTopMargin());
-    m_pTopMarginEdit->SetLast(aDrawinglayerOpt.GetMaximumPaperTopMargin());
-    m_pBottomMarginEdit->SetMax(aDrawinglayerOpt.GetMaximumPaperBottomMargin());
-    m_pBottomMarginEdit->SetLast(aDrawinglayerOpt.GetMaximumPaperBottomMargin());
+    m_pLeftMarginEdit->SetMax(m_pLeftMarginEdit->Normalize(aDrawinglayerOpt.GetMaximumPaperLeftMargin()), FUNIT_MM);
+    m_pLeftMarginEdit->SetLast(m_pLeftMarginEdit->Normalize(aDrawinglayerOpt.GetMaximumPaperLeftMargin()), FUNIT_MM);
+    m_pRightMarginEdit->SetMax(m_pRightMarginEdit->Normalize(aDrawinglayerOpt.GetMaximumPaperRightMargin()), FUNIT_MM);
+    m_pRightMarginEdit->SetLast(m_pRightMarginEdit->Normalize(aDrawinglayerOpt.GetMaximumPaperRightMargin()), FUNIT_MM);
+    m_pTopMarginEdit->SetMax(m_pTopMarginEdit->Normalize(aDrawinglayerOpt.GetMaximumPaperTopMargin()), FUNIT_MM);
+    m_pTopMarginEdit->SetLast(m_pTopMarginEdit->Normalize(aDrawinglayerOpt.GetMaximumPaperTopMargin()), FUNIT_MM);
+    m_pBottomMarginEdit->SetMax(m_pBottomMarginEdit->Normalize(aDrawinglayerOpt.GetMaximumPaperBottomMargin()), FUNIT_MM);
+    m_pBottomMarginEdit->SetLast(m_pBottomMarginEdit->Normalize(aDrawinglayerOpt.GetMaximumPaperBottomMargin()), FUNIT_MM);
 
     m_pPortraitBtn->SetAccessibleRelationMemberOf(m_pOrientationFT);
     m_pLandscapeBtn->SetAccessibleRelationMemberOf(m_pOrientationFT);
