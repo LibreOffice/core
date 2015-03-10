@@ -70,6 +70,7 @@ void lcl_getDragPoint(GdkRectangle* pHandle, GdkEventButton* pEvent, GdkPoint* p
 gboolean lcl_signalMotion(GtkWidget* pEventBox, GdkEventButton* pEvent, LOKDocView* pDocView)
 {
     GdkPoint aPoint;
+    int i;
 
     (void)pEventBox;
     if (pDocView->m_bInDragMiddleHandle)
@@ -79,31 +80,32 @@ gboolean lcl_signalMotion(GtkWidget* pEventBox, GdkEventButton* pEvent, LOKDocVi
         pDocView->pDocument->pClass->setTextSelection(
                 pDocView->pDocument, LOK_SETTEXTSELECTION_RESET,
                 pixelToTwip(aPoint.x) / pDocView->fZoom, pixelToTwip(aPoint.y) / pDocView->fZoom);
+        return FALSE;
     }
-    else if (pDocView->m_bInDragStartHandle)
+    if (pDocView->m_bInDragStartHandle)
     {
         g_info("lcl_signalMotion: dragging the start handle");
         lcl_getDragPoint(&pDocView->m_aHandleStartRect, pEvent, &aPoint);
         pDocView->pDocument->pClass->setTextSelection(
                 pDocView->pDocument, LOK_SETTEXTSELECTION_START,
                 pixelToTwip(aPoint.x) / pDocView->fZoom, pixelToTwip(aPoint.y) / pDocView->fZoom);
+        return FALSE;
     }
-    else if (pDocView->m_bInDragEndHandle)
+    if (pDocView->m_bInDragEndHandle)
     {
         g_info("lcl_signalMotion: dragging the end handle");
         lcl_getDragPoint(&pDocView->m_aHandleEndRect, pEvent, &aPoint);
         pDocView->pDocument->pClass->setTextSelection(
                 pDocView->pDocument, LOK_SETTEXTSELECTION_END,
                 pixelToTwip(aPoint.x) / pDocView->fZoom, pixelToTwip(aPoint.y) / pDocView->fZoom);
+        return FALSE;
     }
-    else
+    for (i = 0; i < GRAPHIC_HANDLE_COUNT; ++i)
     {
-        int i;
-
-        for (i = 0; i < GRAPHIC_HANDLE_COUNT; ++i)
+        if (pDocView->m_bInDragGraphicHandles[i])
         {
-            if (pDocView->m_bInDragGraphicHandles[i])
-                g_info("lcl_signalButton: dragging the graphic handle #%d", i);
+            g_info("lcl_signalButton: dragging the graphic handle #%d", i);
+            return FALSE;
         }
     }
     return FALSE;
