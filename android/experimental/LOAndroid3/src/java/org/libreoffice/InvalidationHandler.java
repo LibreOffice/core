@@ -315,6 +315,10 @@ public class InvalidationHandler implements Document.MessageCallback {
         mTextCursorLayer.showGraphicSelection();
     }
 
+    public OverlayState getCurrentState() {
+        return mState;
+    }
+
     public enum OverlayState {
         NONE,
         TRANSITION,

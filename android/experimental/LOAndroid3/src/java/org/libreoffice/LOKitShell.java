@@ -142,4 +142,8 @@ public class LOKitShell {
     public static void sendChangeHandlePositionEvent(TextSelectionHandle.HandleType handleType, PointF documentCoordinate) {
         LOKitShell.sendEvent(new LOEvent(LOEvent.CHANGE_HANDLE_POSITION, handleType, documentCoordinate));
     }
+
+    public static void sendNavigationClickEvent() {
+        LOKitShell.sendEvent(new LOEvent(LOEvent.NAVIGATION_CLICK));
+    }
 }
