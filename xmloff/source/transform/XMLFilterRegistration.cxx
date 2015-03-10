@@ -47,36 +47,6 @@ namespace
     {
         static const ServiceDescriptor aDescriptors[] =
         {
-            ENUMERATE_SERVICE( OOo2OasisTransformer ),
-            ENUMERATE_SERVICE( Oasis2OOoTransformer ),
-
-            ENUMERATE_SERVICE( XMLAutoTextEventImportOOO ),
-            ENUMERATE_SERVICE( XMLMetaImportOOO ),
-            ENUMERATE_SERVICE( XMLMathSettingsImportOOO ),
-            ENUMERATE_SERVICE( XMLMathMetaImportOOO ),
-            ENUMERATE_SERVICE( XMLCalcSettingsImportOOO ),
-            ENUMERATE_SERVICE( XMLCalcMetaImportOOO ),
-            ENUMERATE_SERVICE( XMLCalcContentImportOOO ),
-            ENUMERATE_SERVICE( XMLCalcStylesImportOOO ),
-            ENUMERATE_SERVICE( XMLCalcImportOOO ),
-            ENUMERATE_SERVICE( XMLWriterSettingsImportOOO ),
-            ENUMERATE_SERVICE( XMLWriterMetaImportOOO ),
-            ENUMERATE_SERVICE( XMLWriterContentImportOOO ),
-            ENUMERATE_SERVICE( XMLWriterStylesImportOOO ),
-            ENUMERATE_SERVICE( XMLWriterImportOOO ),
-            ENUMERATE_SERVICE( XMLChartContentImportOOO ),
-            ENUMERATE_SERVICE( XMLChartStylesImportOOO ),
-            ENUMERATE_SERVICE( XMLChartImportOOO ),
-            ENUMERATE_SERVICE( XMLDrawSettingsImportOOO ),
-            ENUMERATE_SERVICE( XMLDrawMetaImportOOO ),
-            ENUMERATE_SERVICE( XMLDrawContentImportOOO ),
-            ENUMERATE_SERVICE( XMLDrawStylesImportOOO ),
-            ENUMERATE_SERVICE( XMLDrawImportOOO ),
-            ENUMERATE_SERVICE( XMLImpressSettingsImportOOO ),
-            ENUMERATE_SERVICE( XMLImpressMetaImportOOO ),
-            ENUMERATE_SERVICE( XMLImpressContentImportOOO ),
-            ENUMERATE_SERVICE( XMLImpressStylesImportOOO ),
-            ENUMERATE_SERVICE( XMLImpressImportOOO ),
             { NULL, NULL, NULL }
         };
         return aDescriptors;
