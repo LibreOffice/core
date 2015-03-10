@@ -54,7 +54,7 @@ CFStringRef CFStringCreateWithOUString(const rtl::OUString& aString) {
     return ref;
 }
 
-rtl::OUString FSRefToOUString(FSRef fsRef, InfoType info)
+rtl::OUString FSRefToOUString(FSRef const & fsRef, InfoType info)
 {
     //DBG_PRINT_ENTRY("CFStringUtilities", __func__);
 

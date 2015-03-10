@@ -35,7 +35,7 @@ enum InfoType {
 };
 
 OUString CFStringToOUString(const CFStringRef sOrig);
-OUString FSRefToOUString(FSRef fsRef, InfoType info = FULLPATH);
+OUString FSRefToOUString(FSRef const & fsRef, InfoType info = FULLPATH);
 OUString CFURLRefToOUString(CFURLRef aUrlRef, InfoType info);
 CFStringRef CFStringCreateWithOUString(const OUString& aString);
 
