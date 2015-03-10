@@ -149,12 +149,12 @@ void MediaToolBoxControl::implExecuteMediaControl( const MediaItem& rItem )
 {
     MediaItem                               aExecItem( SID_AVMEDIA_TOOLBOX );
     uno::Any                                aAny;
-    auto aArgs(::comphelper::InitPropertySequence({
-        { "AVMediaToolBox", makeAny(aAny) }
-    }));
 
     aExecItem.merge( rItem );
     aExecItem.QueryValue( aAny );
+    auto aArgs(::comphelper::InitPropertySequence({
+        { "AVMediaToolBox", aAny }
+    }));
 
     Dispatch( ".uno:AVMediaToolBox" , aArgs );
 }
