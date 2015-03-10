@@ -118,6 +118,8 @@ void            lok_docview_set_partmode    (LOKDocView* pDocView,
 /// Sets if the viewer is actually an editor or not.
 void            lok_docview_set_edit        (LOKDocView* pDocView,
                                              gboolean bEdit);
+/// Gets if the viewer is actually an editor or not.
+gboolean        lok_docview_get_edit        (LOKDocView* pDocView);
 #ifdef __cplusplus
 }
 #endif

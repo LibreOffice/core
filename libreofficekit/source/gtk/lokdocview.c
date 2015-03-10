@@ -957,4 +957,9 @@ SAL_DLLPUBLIC_EXPORT void lok_docview_set_edit( LOKDocView* pDocView,
     pDocView->m_bEdit = bEdit;
 }
 
+SAL_DLLPUBLIC_EXPORT gboolean lok_docview_get_edit(LOKDocView* pDocView)
+{
+    return pDocView->m_bEdit;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

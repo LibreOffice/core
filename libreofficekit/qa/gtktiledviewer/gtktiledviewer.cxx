@@ -105,6 +105,13 @@ void changeZoom( GtkWidget* pButton, gpointer /* pItem */ )
     }
 }
 
+void toggleEditing(GtkWidget* /*pButton*/, gpointer /*pItem*/)
+{
+    LOKDocView* pLOKDocView = LOK_DOCVIEW(pDocView);
+    bool bEdit = lok_docview_get_edit(pLOKDocView);
+    lok_docview_set_edit(pLOKDocView, !bEdit);
+}
+
 void changeQuadView( GtkWidget* /*pButton*/, gpointer /* pItem */ )
 {
     if ( pDocView )
@@ -338,6 +345,12 @@ int main( int argc, char* argv[] )
     gtk_tool_button_set_label( GTK_TOOL_BUTTON(pEnableQuadView), "Use Quad View" );
     gtk_toolbar_insert( GTK_TOOLBAR(pToolbar), pEnableQuadView, -1 );
     g_signal_connect( G_OBJECT(pEnableQuadView), "toggled", G_CALLBACK(changeQuadView), NULL );
+
+    gtk_toolbar_insert( GTK_TOOLBAR(pToolbar), gtk_separator_tool_item_new(), -1);
+    GtkToolItem* pEnableEditing = gtk_toggle_tool_button_new();
+    gtk_tool_button_set_label(GTK_TOOL_BUTTON(pEnableEditing), "Editing");
+    gtk_toolbar_insert(GTK_TOOLBAR(pToolbar), pEnableEditing, -1);
+    g_signal_connect(G_OBJECT(pEnableEditing), "toggled", G_CALLBACK(toggleEditing), NULL);
 
     gtk_box_pack_start( GTK_BOX(pVBox), pToolbar, FALSE, FALSE, 0 ); // Adds to top.
 
