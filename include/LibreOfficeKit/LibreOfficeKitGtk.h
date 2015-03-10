@@ -82,7 +82,15 @@ struct _LOKDocView
     gboolean m_bInDragEndHandle;
     ///@}
 
+    /// @name Graphic handles.
+    ///@{
+    /// Bitmap of a graphic selection handle.
     cairo_surface_t* m_pGraphicHandle;
+    /// Rectangle of a graphic selection handle, to know if the user clicked on it or not.
+    GdkRectangle m_aGraphicHandleRects[8];
+    /// If we are in the middle of a drag of a graphic selection handle.
+    gboolean m_bInDragGraphicHandles[8];
+    ///@}
 };
 
 struct _LOKDocViewClass

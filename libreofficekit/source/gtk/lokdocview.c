@@ -26,6 +26,8 @@
 
 // Cursor bitmaps from the Android app.
 #define CURSOR_HANDLE_DIR "android/experimental/LOAndroid3/res/drawable/"
+// Number of handles around a graphic selection.
+#define GRAPHIC_HANDLE_COUNT 8
 
 static void lok_docview_class_init( LOKDocViewClass* pClass );
 static void lok_docview_init( LOKDocView* pDocView );
@@ -94,6 +96,16 @@ gboolean lcl_signalMotion(GtkWidget* pEventBox, GdkEventButton* pEvent, LOKDocVi
                 pDocView->pDocument, LOK_SETTEXTSELECTION_END,
                 pixelToTwip(aPoint.x) / pDocView->fZoom, pixelToTwip(aPoint.y) / pDocView->fZoom);
     }
+    else
+    {
+        int i;
+
+        for (i = 0; i < GRAPHIC_HANDLE_COUNT; ++i)
+        {
+            if (pDocView->m_bInDragGraphicHandles[i])
+                g_info("lcl_signalButton: dragging the graphic handle #%d", i);
+        }
+    }
     return FALSE;
 }
 
@@ -105,6 +117,8 @@ gboolean lcl_signalButton(GtkWidget* pEventBox, GdkEventButton* pEvent, LOKDocVi
 
     if (pEvent->type == GDK_BUTTON_RELEASE)
     {
+        int i;
+
         if (pDocView->m_bInDragStartHandle)
         {
             g_info("lcl_signalButton: end of drag start handle");
@@ -123,6 +137,19 @@ gboolean lcl_signalButton(GtkWidget* pEventBox, GdkEventButton* pEvent, LOKDocVi
             pDocView->m_bInDragEndHandle = FALSE;
             return FALSE;
         }
+
+        for (i = 0; i < GRAPHIC_HANDLE_COUNT; ++i)
+        {
+            if (pDocView->m_bInDragGraphicHandles[i])
+            {
+                g_info("lcl_signalButton: end of drag graphic handle #%d", i);
+                pDocView->m_bInDragGraphicHandles[i] = FALSE;
+                pDocView->pDocument->pClass->setGraphicSelection(
+                    pDocView->pDocument, LOK_SETGRAPHICSELECTION_END,
+                    pixelToTwip(pEvent->x) / pDocView->fZoom, pixelToTwip(pEvent->y) / pDocView->fZoom);
+                return FALSE;
+            }
+        }
     }
 
     if (pDocView->m_bEdit)
@@ -134,6 +161,8 @@ gboolean lcl_signalButton(GtkWidget* pEventBox, GdkEventButton* pEvent, LOKDocVi
         aClick.height = 1;
         if (pEvent->type == GDK_BUTTON_PRESS)
         {
+            int i;
+
             if (gdk_rectangle_intersect(&aClick, &pDocView->m_aHandleStartRect, NULL))
             {
                 g_info("lcl_signalButton: start of drag start handle");
@@ -151,6 +180,20 @@ gboolean lcl_signalButton(GtkWidget* pEventBox, GdkEventButton* pEvent, LOKDocVi
                 g_info("lcl_signalButton: start of drag end handle");
                 pDocView->m_bInDragEndHandle = TRUE;
                 return FALSE;
+            }
+
+            for (i = 0; i < GRAPHIC_HANDLE_COUNT; ++i)
+            {
+                if (gdk_rectangle_intersect(&aClick, &pDocView->m_aGraphicHandleRects[i], NULL))
+                {
+                    g_info("lcl_signalButton: start of drag graphic handle #%d", i);
+                    pDocView->m_bInDragGraphicHandles[i] = TRUE;
+                    pDocView->pDocument->pClass->setGraphicSelection(
+                        pDocView->pDocument, LOK_SETGRAPHICSELECTION_START,
+                        pixelToTwip(pDocView->m_aGraphicHandleRects[i].x + pDocView->m_aGraphicHandleRects[i].width / 2) / pDocView->fZoom,
+                        pixelToTwip(pDocView->m_aGraphicHandleRects[i].y + pDocView->m_aGraphicHandleRects[i].height / 2) / pDocView->fZoom);
+                    return FALSE;
+                }
             }
         }
     }
@@ -267,6 +310,8 @@ static void lok_docview_init( LOKDocView* pDocView )
     pDocView->m_bInDragEndHandle = FALSE;
 
     pDocView->m_pGraphicHandle = NULL;
+    memset(&pDocView->m_aGraphicHandleRects, 0, sizeof(pDocView->m_aGraphicHandleRects));
+    memset(&pDocView->m_bInDragGraphicHandles, 0, sizeof(pDocView->m_bInDragGraphicHandles));
 
     gtk_signal_connect( GTK_OBJECT(pDocView), "destroy",
                         GTK_SIGNAL_FUNC(lcl_onDestroy), NULL );
@@ -351,7 +396,7 @@ static void lcl_renderHandle(cairo_t* pCairo, GdkRectangle* pCursor, cairo_surfa
 }
 
 /// Renders pHandle around a pSelection rectangle on pCairo.
-static void lcl_renderGraphicHandle(cairo_t* pCairo, GdkRectangle* pSelection, cairo_surface_t* pHandle, float fZoom)
+static void lcl_renderGraphicHandle(cairo_t* pCairo, GdkRectangle* pSelection, cairo_surface_t* pHandle, GdkRectangle* pGraphicHandleRects, float fZoom)
 {
     int nHandleWidth, nHandleHeight;
     GdkRectangle aSelection;
@@ -365,7 +410,7 @@ static void lcl_renderGraphicHandle(cairo_t* pCairo, GdkRectangle* pSelection, c
     aSelection.width = twipToPixel(pSelection->width) * fZoom;
     aSelection.height = twipToPixel(pSelection->height) * fZoom;
 
-    for (i = 0; i < 8; ++i)
+    for (i = 0; i < GRAPHIC_HANDLE_COUNT; ++i)
     {
         int x = aSelection.x, y = aSelection.y;
         cairo_save(pCairo);
@@ -403,6 +448,11 @@ static void lcl_renderGraphicHandle(cairo_t* pCairo, GdkRectangle* pSelection, c
         // Center the handle.
         x -= nHandleWidth / 2;
         y -= nHandleHeight / 2;
+
+        pGraphicHandleRects[i].x = x;
+        pGraphicHandleRects[i].y = y;
+        pGraphicHandleRects[i].width = nHandleWidth;
+        pGraphicHandleRects[i].height = nHandleHeight;
 
         cairo_translate(pCairo, x, y);
         cairo_set_source_surface(pCairo, pHandle, 0, 0);
@@ -488,7 +538,7 @@ static gboolean renderOverlay(GtkWidget* pWidget, GdkEventExpose* pEvent, gpoint
     {
         if (!pDocView->m_pGraphicHandle)
             pDocView->m_pGraphicHandle = cairo_image_surface_create_from_png(CURSOR_HANDLE_DIR "handle_graphic.png");
-        lcl_renderGraphicHandle(pCairo, &pDocView->m_aGraphicSelection, pDocView->m_pGraphicHandle, pDocView->fZoom);
+        lcl_renderGraphicHandle(pCairo, &pDocView->m_aGraphicSelection, pDocView->m_pGraphicHandle, pDocView->m_aGraphicHandleRects, pDocView->fZoom);
     }
 
     cairo_destroy(pCairo);
