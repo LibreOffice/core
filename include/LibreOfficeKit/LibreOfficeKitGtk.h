@@ -59,6 +59,7 @@ struct _LOKDocView
     /// Position and size of the selection end.
     GdkRectangle m_aTextSelectionEnd;
     GdkRectangle m_aGraphicSelection;
+    gboolean m_bInDragGraphicSelection;
 
     /// @name Start/middle/end handle.
     ///@{

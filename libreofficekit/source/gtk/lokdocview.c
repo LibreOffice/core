@@ -150,6 +150,17 @@ gboolean lcl_signalButton(GtkWidget* pEventBox, GdkEventButton* pEvent, LOKDocVi
                 return FALSE;
             }
         }
+
+        if (pDocView->m_bInDragGraphicSelection)
+        {
+            g_info("lcl_signalButton: end of drag graphic selection");
+            pDocView->m_bInDragGraphicSelection = FALSE;
+            pDocView->pDocument->pClass->setGraphicSelection(
+                pDocView->pDocument, LOK_SETGRAPHICSELECTION_END,
+                pixelToTwip(pEvent->x) / pDocView->fZoom,
+                pixelToTwip(pEvent->y) / pDocView->fZoom);
+            return FALSE;
+        }
     }
 
     if (pDocView->m_bEdit)
@@ -162,6 +173,7 @@ gboolean lcl_signalButton(GtkWidget* pEventBox, GdkEventButton* pEvent, LOKDocVi
         if (pEvent->type == GDK_BUTTON_PRESS)
         {
             int i;
+            GdkRectangle aClickInTwips;
 
             if (gdk_rectangle_intersect(&aClick, &pDocView->m_aHandleStartRect, NULL))
             {
@@ -194,6 +206,21 @@ gboolean lcl_signalButton(GtkWidget* pEventBox, GdkEventButton* pEvent, LOKDocVi
                         pixelToTwip(pDocView->m_aGraphicHandleRects[i].y + pDocView->m_aGraphicHandleRects[i].height / 2) / pDocView->fZoom);
                     return FALSE;
                 }
+            }
+
+            aClickInTwips.x = pixelToTwip(pEvent->x) / pDocView->fZoom;
+            aClickInTwips.y = pixelToTwip(pEvent->y) / pDocView->fZoom;
+            aClickInTwips.width = 1;
+            aClickInTwips.height = 1;
+            if (gdk_rectangle_intersect(&aClickInTwips, &pDocView->m_aGraphicSelection, NULL))
+            {
+                g_info("lcl_signalButton: start of drag graphic selection");
+                pDocView->m_bInDragGraphicSelection = TRUE;
+                pDocView->pDocument->pClass->setGraphicSelection(
+                    pDocView->pDocument, LOK_SETGRAPHICSELECTION_START,
+                    pixelToTwip(pEvent->x) / pDocView->fZoom,
+                    pixelToTwip(pEvent->y) / pDocView->fZoom);
+                return FALSE;
             }
         }
     }
@@ -297,6 +324,7 @@ static void lok_docview_init( LOKDocView* pDocView )
     memset(&pDocView->m_aTextSelectionStart, 0, sizeof(pDocView->m_aTextSelectionStart));
     memset(&pDocView->m_aTextSelectionEnd, 0, sizeof(pDocView->m_aTextSelectionEnd));
     memset(&pDocView->m_aGraphicSelection, 0, sizeof(pDocView->m_aGraphicSelection));
+    pDocView->m_bInDragGraphicSelection = FALSE;
 
     // Start/middle/end handle.
     pDocView->m_pHandleStart = NULL;
