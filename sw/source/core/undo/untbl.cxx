@@ -1187,15 +1187,7 @@ void _SaveLine::CreateNew( SwTable& rTbl, SwTableBox& rParent, _SaveTable& rSTbl
 
     rParent.GetTabLines().push_back( pNew );
 
-    // HB, #127868# robustness: in some cases - which I
-    // cannot reproduce nor see from the code - pNew seems
-    // to be set to NULL in C40_INSERT.
-    OSL_ENSURE(pNew, "Table line just created set to NULL in C40_INSERT");
-
-    if (pNew)
-    {
-        pBox->CreateNew( rTbl, *pNew, rSTbl );
-    }
+    pBox->CreateNew( rTbl, *pNew, rSTbl );
 
     if( pNext )
         pNext->CreateNew( rTbl, rParent, rSTbl );

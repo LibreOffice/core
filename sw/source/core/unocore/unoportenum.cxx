@@ -469,7 +469,7 @@ lcl_ExportFieldMark(
         SwXTextPortion* pPortion = new SwXTextPortion(
             pUnoCrsr, i_xParentText, PORTION_FIELD_START);
         xRef = pPortion;
-        if (pPortion && pFieldmark && pDoc)
+        if (pFieldmark && pDoc)
         {
             pPortion->SetBookmark(
                 SwXFieldmark::CreateXFieldmark(*pDoc, pFieldmark));
@@ -486,7 +486,7 @@ lcl_ExportFieldMark(
         SwXTextPortion* pPortion = new SwXTextPortion(
             pUnoCrsr, i_xParentText, PORTION_FIELD_END);
         xRef = pPortion;
-        if (pPortion && pFieldmark && pDoc)
+        if (pFieldmark && pDoc)
         {
             pPortion->SetBookmark(
                 SwXFieldmark::CreateXFieldmark(*pDoc, pFieldmark));
@@ -502,7 +502,7 @@ lcl_ExportFieldMark(
         SwXTextPortion* pPortion = new SwXTextPortion(
             pUnoCrsr, i_xParentText, PORTION_FIELD_START_END);
         xRef = pPortion;
-        if (pPortion && pFieldmark && pDoc)
+        if (pFieldmark && pDoc)
         {
             pPortion->SetBookmark(
                 SwXFieldmark::CreateXFieldmark(*pDoc, pFieldmark));

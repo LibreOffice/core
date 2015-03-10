@@ -266,47 +266,45 @@ bool SdModule::OutlineToImpress(SfxRequest& rRequest)
             ::sd::DrawDocShell* pDocSh;
             xDocShell = pDocSh = new ::sd::DrawDocShell(
                 SFX_CREATE_MODE_STANDARD, false);
-            if(pDocSh)
+
+            pDocSh->DoInitNew(NULL);
+            SdDrawDocument* pDoc = pDocSh->GetDoc();
+            if(pDoc)
             {
-                pDocSh->DoInitNew(NULL);
-                SdDrawDocument* pDoc = pDocSh->GetDoc();
-                if(pDoc)
+                pDoc->CreateFirstPages();
+                pDoc->StopWorkStartupDelay();
+            }
+
+            SFX_REQUEST_ARG( rRequest, pFrmItem, SfxFrameItem, SID_DOCFRAME, false);
+            SfxViewFrame::LoadDocumentIntoFrame( *pDocSh, pFrmItem, ::sd::OUTLINE_FACTORY_ID );
+
+            ::sd::ViewShell* pViewSh = pDocSh->GetViewShell();
+
+            if (pViewSh && pDoc)
+            {
+                // AutoLayouts have to be finished
+                pDoc->StopWorkStartupDelay();
+
+                SfxViewFrame* pViewFrame = pViewSh->GetViewFrame();
+
+                // When the view frame has not been just created we have
+                // to switch synchronously to the outline view.
+                // (Otherwise the request will be ignored anyway.)
+                ::sd::ViewShellBase* pBase
+                    = dynamic_cast< ::sd::ViewShellBase*>(pViewFrame->GetViewShell());
+                if (pBase != NULL)
                 {
-                    pDoc->CreateFirstPages();
-                    pDoc->StopWorkStartupDelay();
-                }
+                    ::boost::shared_ptr<FrameworkHelper> pHelper (
+                        FrameworkHelper::Instance(*pBase));
+                    pHelper->RequestView(
+                        FrameworkHelper::msOutlineViewURL,
+                        FrameworkHelper::msCenterPaneURL);
 
-                SFX_REQUEST_ARG( rRequest, pFrmItem, SfxFrameItem, SID_DOCFRAME, false);
-                SfxViewFrame::LoadDocumentIntoFrame( *pDocSh, pFrmItem, ::sd::OUTLINE_FACTORY_ID );
-
-                ::sd::ViewShell* pViewSh = pDocSh->GetViewShell();
-
-                if (pViewSh && pDoc)
-                {
-                    // AutoLayouts have to be finished
-                    pDoc->StopWorkStartupDelay();
-
-                    SfxViewFrame* pViewFrame = pViewSh->GetViewFrame();
-
-                    // When the view frame has not been just created we have
-                    // to switch synchronously to the outline view.
-                    // (Otherwise the request will be ignored anyway.)
-                    ::sd::ViewShellBase* pBase
-                        = dynamic_cast< ::sd::ViewShellBase*>(pViewFrame->GetViewShell());
-                    if (pBase != NULL)
-                    {
-                        ::boost::shared_ptr<FrameworkHelper> pHelper (
-                            FrameworkHelper::Instance(*pBase));
-                        pHelper->RequestView(
-                            FrameworkHelper::msOutlineViewURL,
-                            FrameworkHelper::msCenterPaneURL);
-
-                        pHelper->RunOnResourceActivation(
-                            FrameworkHelper::CreateResourceId(
-                            FrameworkHelper::msOutlineViewURL,
-                            FrameworkHelper::msCenterPaneURL),
-                            OutlineToImpressFinalizer(*pBase, *pDoc, *pBytes));
-                    }
+                    pHelper->RunOnResourceActivation(
+                        FrameworkHelper::CreateResourceId(
+                        FrameworkHelper::msOutlineViewURL,
+                        FrameworkHelper::msCenterPaneURL),
+                        OutlineToImpressFinalizer(*pBase, *pDoc, *pBytes));
                 }
             }
         }
@@ -724,20 +722,17 @@ SfxFrame* SdModule::CreateEmptyDocument( DocumentType eDocType, const Reference<
     SfxObjectShellLock xDocShell;
     ::sd::DrawDocShell* pNewDocSh;
     xDocShell = pNewDocSh = new ::sd::DrawDocShell(SFX_CREATE_MODE_STANDARD,false,eDocType);
-    if(pNewDocSh)
+    pNewDocSh->DoInitNew(NULL);
+    SdDrawDocument* pDoc = pNewDocSh->GetDoc();
+    if (pDoc)
     {
-        pNewDocSh->DoInitNew(NULL);
-        SdDrawDocument* pDoc = pNewDocSh->GetDoc();
-        if(pDoc)
-        {
-            pDoc->CreateFirstPages();
-            pDoc->StopWorkStartupDelay();
-        }
-
-        SfxViewFrame* pViewFrame = SfxViewFrame::LoadDocumentIntoFrame( *pNewDocSh, i_rFrame );
-        OSL_ENSURE( pViewFrame, "SdModule::CreateEmptyDocument: no view frame - was the document really loaded?" );
-        pFrame = pViewFrame ? &pViewFrame->GetFrame() : NULL;
+        pDoc->CreateFirstPages();
+        pDoc->StopWorkStartupDelay();
     }
+
+    SfxViewFrame* pViewFrame = SfxViewFrame::LoadDocumentIntoFrame( *pNewDocSh, i_rFrame );
+    OSL_ENSURE( pViewFrame, "SdModule::CreateEmptyDocument: no view frame - was the document really loaded?" );
+    pFrame = pViewFrame ? &pViewFrame->GetFrame() : NULL;
 
     return pFrame;
 }

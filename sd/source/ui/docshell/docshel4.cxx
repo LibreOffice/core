@@ -909,24 +909,13 @@ bool DrawDocShell::GetObjectIsmarked(const OUString& rBookmark)
             // Jump to the page.  This is done by using the API because this
             // takes care of all the little things to be done.  Especially
             // writing the view data to the frame view (see bug #107803#).
-            sal_uInt16 nSdPgNum = (nPgNum - 1) / 2;
             SdUnoDrawView* pUnoDrawView = new SdUnoDrawView (
                 *pDrViewSh,
                 *pDrViewSh->GetView());
-            if (pUnoDrawView != NULL)
-            {
-                ::com::sun::star::uno::Reference<
-                      ::com::sun::star::drawing::XDrawPage> xDrawPage (
-                          pPage->getUnoPage(), ::com::sun::star::uno::UNO_QUERY);
-                pUnoDrawView->setCurrentPage (xDrawPage);
-            }
-            else
-            {
-                // As a fall back switch to the page via the core.
-                DBG_ASSERT (pUnoDrawView!=NULL,
-                    "SdDrawDocShell::GotoBookmark: can't switch page via API");
-                pDrViewSh->SwitchPage(nSdPgNum);
-            }
+            ::com::sun::star::uno::Reference<
+                  ::com::sun::star::drawing::XDrawPage> xDrawPage (
+                      pPage->getUnoPage(), ::com::sun::star::uno::UNO_QUERY);
+            pUnoDrawView->setCurrentPage (xDrawPage);
             delete pUnoDrawView;
 
             if (pObj)
@@ -1002,24 +991,13 @@ bool DrawDocShell::GotoTreeBookmark(const OUString& rBookmark)
             // Jump to the page.  This is done by using the API because this
             // takes care of all the little things to be done.  Especially
             // writing the view data to the frame view (see bug #107803#).
-            sal_uInt16 nSdPgNum = (nPgNum - 1) / 2;
             SdUnoDrawView* pUnoDrawView = new SdUnoDrawView (
                 *pDrViewSh,
                 *pDrViewSh->GetView());
-            if (pUnoDrawView != NULL)
-            {
-                ::com::sun::star::uno::Reference<
-                      ::com::sun::star::drawing::XDrawPage> xDrawPage (
-                          pPage->getUnoPage(), ::com::sun::star::uno::UNO_QUERY);
-                pUnoDrawView->setCurrentPage (xDrawPage);
-            }
-            else
-            {
-                // As a fall back switch to the page via the core.
-                DBG_ASSERT (pUnoDrawView!=NULL,
-                    "SdDrawDocShell::GotoBookmark: can't switch page via API");
-                pDrViewSh->SwitchPage(nSdPgNum);
-            }
+            ::com::sun::star::uno::Reference<
+                  ::com::sun::star::drawing::XDrawPage> xDrawPage (
+                      pPage->getUnoPage(), ::com::sun::star::uno::UNO_QUERY);
+            pUnoDrawView->setCurrentPage (xDrawPage);
             delete pUnoDrawView;
 
             if (pObj)

@@ -2189,11 +2189,8 @@ SwDrawVirtObj* SwDrawVirtObj::Clone() const
 {
     SwDrawVirtObj* pObj = new SwDrawVirtObj( rRefObj, mrDrawContact );
 
-    if ( pObj )
-    {
-        pObj->operator=( *this );
-        // Note: Member <maAnchoredDrawObj> hasn't to be considered.
-    }
+    pObj->operator=( *this );
+    // Note: Member <maAnchoredDrawObj> hasn't to be considered.
 
     return pObj;
 }

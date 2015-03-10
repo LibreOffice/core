@@ -81,12 +81,9 @@ sal_Bool RtfExportFilter::filter(const uno::Sequence< beans::PropertyValue >& aD
     }
 
     // delete the pCurPam
-    if (pCurPam)
-    {
-        while (pCurPam->GetNext() != pCurPam)
-            delete pCurPam->GetNext();
-        delete pCurPam;
-    }
+    while (pCurPam->GetNext() != pCurPam)
+        delete pCurPam->GetNext();
+    delete pCurPam;
     delete pStream;
 
     return sal_True;

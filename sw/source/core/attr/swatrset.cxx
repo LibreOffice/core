@@ -86,20 +86,17 @@ void SwAttrPool::createAndAddSecondaryPools()
 
     // #75371# change DefaultItems for the SdrEdgeObj distance items
     // to TWIPS.
-    if(pSdrPool)
-    {
-        // 1/100th mm in twips
-        const long nDefEdgeDist = ((500 * 72) / 127);
+    // 1/100th mm in twips
+    const long nDefEdgeDist = ((500 * 72) / 127);
 
-        pSdrPool->SetPoolDefaultItem(SdrEdgeNode1HorzDistItem(nDefEdgeDist));
-        pSdrPool->SetPoolDefaultItem(SdrEdgeNode1VertDistItem(nDefEdgeDist));
-        pSdrPool->SetPoolDefaultItem(SdrEdgeNode2HorzDistItem(nDefEdgeDist));
-        pSdrPool->SetPoolDefaultItem(SdrEdgeNode2VertDistItem(nDefEdgeDist));
+    pSdrPool->SetPoolDefaultItem(SdrEdgeNode1HorzDistItem(nDefEdgeDist));
+    pSdrPool->SetPoolDefaultItem(SdrEdgeNode1VertDistItem(nDefEdgeDist));
+    pSdrPool->SetPoolDefaultItem(SdrEdgeNode2HorzDistItem(nDefEdgeDist));
+    pSdrPool->SetPoolDefaultItem(SdrEdgeNode2VertDistItem(nDefEdgeDist));
 
-        // #i33700# // Set shadow distance defaults as PoolDefaultItems
-        pSdrPool->SetPoolDefaultItem(makeSdrShadowXDistItem((300 * 72) / 127));
-        pSdrPool->SetPoolDefaultItem(makeSdrShadowYDistItem((300 * 72) / 127));
-    }
+    // #i33700# // Set shadow distance defaults as PoolDefaultItems
+    pSdrPool->SetPoolDefaultItem(makeSdrShadowXDistItem((300 * 72) / 127));
+    pSdrPool->SetPoolDefaultItem(makeSdrShadowYDistItem((300 * 72) / 127));
 
     SfxItemPool *pEEgPool = EditEngine::CreatePool(false);
 

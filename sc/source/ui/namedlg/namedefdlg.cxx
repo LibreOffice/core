@@ -204,23 +204,20 @@ void ScNameDefDlg::AddPushed()
     {
         if ( mpDoc )
         {
-            ScRangeData*    pNewEntry   = NULL;
             RangeType       nType       = RT_NAME;
 
-            pNewEntry = new ScRangeData( mpDoc,
+            ScRangeData* pNewEntry = new ScRangeData( mpDoc,
                     aName,
                     aExpression,
                     maCursorPos,
                     nType );
-            if (pNewEntry)
-            {
-                nType = nType
-                    | (m_pBtnRowHeader->IsChecked() ? RT_ROWHEADER  : RangeType(0))
-                    | (m_pBtnColHeader->IsChecked() ? RT_COLHEADER  : RangeType(0))
-                    | (m_pBtnPrintArea->IsChecked() ? RT_PRINTAREA  : RangeType(0))
-                    | (m_pBtnCriteria->IsChecked() ? RT_CRITERIA   : RangeType(0));
-                pNewEntry->AddType(nType);
-            }
+
+            nType = nType
+                | (m_pBtnRowHeader->IsChecked() ? RT_ROWHEADER  : RangeType(0))
+                | (m_pBtnColHeader->IsChecked() ? RT_COLHEADER  : RangeType(0))
+                | (m_pBtnPrintArea->IsChecked() ? RT_PRINTAREA  : RangeType(0))
+                | (m_pBtnCriteria->IsChecked() ? RT_CRITERIA   : RangeType(0));
+            pNewEntry->AddType(nType);
 
             // aExpression valid?
             if ( 0 == pNewEntry->GetErrCode() )

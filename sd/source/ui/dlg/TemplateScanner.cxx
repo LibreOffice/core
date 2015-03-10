@@ -373,12 +373,9 @@ TemplateScanner::State TemplateScanner::ScanFolder (void)
             // Scan the folder and insert it into the list of template
             // folders.
             mpTemplateDirectory = new TemplateDir (sTitle, sTargetDir);
-            if (mpTemplateDirectory != NULL)
-            {
-                mpTemplateDirectory->EnableSorting(mbEntrySortingEnabled);
-                // Continue with scanning all entries in the folder.
-                eNextState = INITIALIZE_ENTRY_SCAN;
-            }
+            mpTemplateDirectory->EnableSorting(mbEntrySortingEnabled);
+            // Continue with scanning all entries in the folder.
+            eNextState = INITIALIZE_ENTRY_SCAN;
         }
     }
     else

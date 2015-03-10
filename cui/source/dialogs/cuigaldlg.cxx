@@ -448,13 +448,9 @@ short ActualizeProgress::Execute()
     short nRet;
 
     pIdle = new Idle;
-
-    if ( pIdle )
-    {
-        pIdle->SetIdleHdl( LINK( this, ActualizeProgress, TimeoutHdl ) );
-        pIdle->SetPriority( SchedulerPriority::LOWEST );
-        pIdle->Start();
-    }
+    pIdle->SetIdleHdl( LINK( this, ActualizeProgress, TimeoutHdl ) );
+    pIdle->SetPriority( SchedulerPriority::LOWEST );
+    pIdle->Start();
 
     nRet = ModalDialog::Execute();
 

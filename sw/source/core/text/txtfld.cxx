@@ -145,8 +145,7 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
                         : pFld->ExpandField(bInClipboard) );
                 pRet = new SwFldPortion( aStr );
             }
-            if(pRet)
-                static_cast<SwFldPortion*>(pRet)->m_nAttrFldType= ATTR_PAGECOOUNTFLD;
+            static_cast<SwFldPortion*>(pRet)->m_nAttrFldType= ATTR_PAGECOOUNTFLD;
             break;
 
         case RES_PAGENUMBERFLD:
@@ -174,8 +173,7 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
                         : pFld->ExpandField(bInClipboard) );
                 pRet = new SwFldPortion( aStr );
             }
-            if(pRet)
-                static_cast<SwFldPortion*>(pRet)->m_nAttrFldType= ATTR_PAGENUMBERFLD;
+            static_cast<SwFldPortion*>(pRet)->m_nAttrFldType= ATTR_PAGENUMBERFLD;
             break;
         }
         case RES_GETEXPFLD:
@@ -248,14 +246,11 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
                         : pFld->ExpandField(bInClipboard) );
                 pRet = new SwFldPortion(str);
             }
-            if(pRet)
-            {
-                if( subType == REF_BOOKMARK  )
-                    static_cast<SwFldPortion*>(pRet)->m_nAttrFldType = ATTR_BOOKMARKFLD;
-                else if( subType == REF_SETREFATTR )
-                    static_cast<SwFldPortion*>(pRet)->m_nAttrFldType = ATTR_SETREFATTRFLD;
-                break;
-            }
+            if( subType == REF_BOOKMARK  )
+                static_cast<SwFldPortion*>(pRet)->m_nAttrFldType = ATTR_BOOKMARKFLD;
+            else if( subType == REF_SETREFATTR )
+                static_cast<SwFldPortion*>(pRet)->m_nAttrFldType = ATTR_SETREFATTRFLD;
+            break;
         case RES_DATETIMEFLD:
             subType = static_cast<SwDateTimeField*>(pFld)->GetSubType();
             {
@@ -264,14 +259,11 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
                         : pFld->ExpandField(bInClipboard) );
                 pRet = new SwFldPortion(str);
             }
-            if(pRet)
-            {
-                if( subType & DATEFLD  )
-                    static_cast<SwFldPortion*>(pRet)->m_nAttrFldType= ATTR_DATEFLD;
-                else if( subType & TIMEFLD )
-                    static_cast<SwFldPortion*>(pRet)->m_nAttrFldType = ATTR_TIMEFLD;
-                break;
-            }
+            if( subType & DATEFLD  )
+                static_cast<SwFldPortion*>(pRet)->m_nAttrFldType= ATTR_DATEFLD;
+            else if( subType & TIMEFLD )
+                static_cast<SwFldPortion*>(pRet)->m_nAttrFldType = ATTR_TIMEFLD;
+            break;
         default:
             {
                 OUString const aStr( (bName)

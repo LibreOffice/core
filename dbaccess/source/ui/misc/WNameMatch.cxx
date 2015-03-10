@@ -363,8 +363,7 @@ void OColumnTreeBox::InitEntry(SvTreeListEntry* pEntry, const OUString& rStr, co
 {
     DBTreeListBox::InitEntry(pEntry, rStr, rImg1, rImg2, eButtonKind);
     SvLBoxString* pString = new OColumnString(pEntry, 0, rStr,false);
-    if (pString)
-        pEntry->ReplaceItem( pString, pEntry->ItemCount() - 1 );
+    pEntry->ReplaceItem( pString, pEntry->ItemCount() - 1 );
 }
 
 bool OColumnTreeBox::Select( SvTreeListEntry* pEntry, bool bSelect )

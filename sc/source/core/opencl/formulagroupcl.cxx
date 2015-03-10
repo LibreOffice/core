@@ -4029,9 +4029,6 @@ DynamicKernel* DynamicKernel::create( const ScCalcConfig& rConfig, ScTokenArray&
 
     DynamicKernel* pDynamicKernel = new DynamicKernel(rConfig, Root, nResultSize);
 
-    if (!pDynamicKernel)
-        return NULL;
-
     // OpenCL source code generation and kernel compilation
     try
     {

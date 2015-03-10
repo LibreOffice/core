@@ -1216,13 +1216,8 @@ void AbstractScriptSelectorDialog_Impl::SetRunLabel()
 VclAbstractDialog * AbstractDialogFactory_Impl::CreateSvxScriptOrgDialog( vcl::Window* pParent,
                                             const OUString& rLanguage)
 {
-    Dialog* pDlg=NULL;
-
-    pDlg = new SvxScriptOrgDialog( pParent, rLanguage);
-
-    if ( pDlg )
-        return new CuiVclAbstractDialog_Impl( pDlg );
-    return 0;
+    Dialog* pDlg = new SvxScriptOrgDialog( pParent, rLanguage);
+    return new CuiVclAbstractDialog_Impl( pDlg );
 }
 
 AbstractTitleDialog * AbstractDialogFactory_Impl::CreateTitleDialog( vcl::Window* pParent,
@@ -1295,9 +1290,7 @@ AbstractSvxSearchSimilarityDialog * AbstractDialogFactory_Impl::CreateSvxSearchS
                                                             sal_uInt16 nLonger)
 {
     SvxSearchSimilarityDialog* pDlg = new SvxSearchSimilarityDialog( pParent, bRelax, nOther, nShorter, nLonger );
-    if ( pDlg )
-        return new AbstractSvxSearchSimilarityDialog_Impl( pDlg );
-    return NULL;
+    return new AbstractSvxSearchSimilarityDialog_Impl( pDlg );
 }
 
 //UUUU
@@ -1460,9 +1453,7 @@ AbstractFmSearchDialog*  AbstractDialogFactory_Impl::CreateFmSearchDialog(vcl::W
                                                         const Link& lnkContextSupplier)
 {
     FmSearchDialog* pDlg = new FmSearchDialog( pParent, strInitialText, _rContexts, nInitialContext, lnkContextSupplier );
-    if ( pDlg )
-        return new AbstractFmSearchDialog_Impl( pDlg );
-    return 0;
+    return new AbstractFmSearchDialog_Impl( pDlg );
 }
 
 AbstractGraphicFilterDialog * AbstractDialogFactory_Impl::CreateGraphicFilterEmboss (vcl::Window* pParent,

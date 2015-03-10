@@ -548,10 +548,10 @@ namespace dbaui
             const bool bExists = bIsFile? aCheckExistence.isDocument(): aCheckExistence.isFolder();
             eExists = bExists? PATH_EXIST: PATH_NOT_EXIST;
         }
-        catch(const Exception&)
+        catch (const Exception&)
         {
-            eExists = ( pHandler && pHandler->isDoesNotExist() ) ? PATH_NOT_EXIST: (bIsFile ? PATH_NOT_EXIST : PATH_NOT_KNOWN);
-           }
+            eExists = pHandler->isDoesNotExist() ? PATH_NOT_EXIST : (bIsFile ? PATH_NOT_EXIST : PATH_NOT_KNOWN);
+        }
         return eExists;
     }
     bool OConnectionHelper::PreNotify( NotifyEvent& _rNEvt )

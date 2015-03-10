@@ -993,7 +993,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                     if( pImageMap )
                         pObj->AppendUserData( new SdIMapInfo( *pImageMap ) );
 
-                    if ( pObj && pObj->IsChart() )
+                    if (pObj->IsChart())
                     {
                         bool bDisableDataTableDialog = false;
                         svt::EmbeddedObjectRef::TryRunningState( xObj );

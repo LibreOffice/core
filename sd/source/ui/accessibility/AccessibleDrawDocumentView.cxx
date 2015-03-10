@@ -112,17 +112,16 @@ void AccessibleDrawDocumentView::Init (void)
 
     // Create the children manager.
     mpChildrenManager = new ChildrenManager(this, xShapeList, maShapeTreeInfo, *this);
-    if (mpChildrenManager != NULL)
+
+    rtl::Reference<AccessiblePageShape> xPage(CreateDrawPageShape());
+    if (xPage.is())
     {
-        rtl::Reference<AccessiblePageShape> xPage(CreateDrawPageShape());
-        if (xPage.is())
-        {
-            xPage->Init();
-            mpChildrenManager->AddAccessibleShape (xPage.get());
-            mpChildrenManager->Update ();
-        }
-        mpChildrenManager->UpdateSelection ();
+        xPage->Init();
+        mpChildrenManager->AddAccessibleShape (xPage.get());
+        mpChildrenManager->Update ();
     }
+
+    mpChildrenManager->UpdateSelection ();
 }
 
 void AccessibleDrawDocumentView::ViewForwarderChanged (ChangeType aChangeType,
