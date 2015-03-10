@@ -143,7 +143,7 @@ private:
     void                    enableControls( short nCtrlState );
     void                    setDownloadBtnLabel( bool bAppendDots );
     void                    loadStrings();
-    OUString           loadString( const com::sun::star::uno::Reference< com::sun::star::resource::XResourceBundle > xBundle,
+    OUString           loadString( const com::sun::star::uno::Reference< com::sun::star::resource::XResourceBundle >& xBundle,
                                         sal_Int32 nResourceId ) const;
     OUString           substVariables( const OUString &rSource ) const;
     static void             setProperty( com::sun::star::uno::Sequence< com::sun::star::beans::NamedValue > &rProps,
