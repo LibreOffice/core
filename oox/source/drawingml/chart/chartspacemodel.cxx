@@ -26,7 +26,7 @@ namespace chart {
 // ============================================================================
 
 ChartSpaceModel::ChartSpaceModel(bool bMSO2007Doc) :
-    mnDispBlanksAs( XML_gap ),  // not zero as specified, TODO: OOXML_spec
+    mnDispBlanksAs( bMSO2007Doc ? XML_gap : XML_zero ),  // difference between OOXML spec and MSO 2007
     mnStyle( 2 ),
     mbAutoTitleDel( !bMSO2007Doc ), // difference between OOXML spec and MSO 2007
     mbPlotVisOnly( false ),
