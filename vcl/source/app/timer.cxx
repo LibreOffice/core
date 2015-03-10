@@ -23,7 +23,7 @@
 #include <svdata.hxx>
 #include <salinst.hxx>
 
-#define MAX_TIMER_PERIOD    ((sal_uInt64)0xFFFFFFFF)
+#define MAX_TIMER_PERIOD   SAL_MAX_UINT64
 
 void Timer::ImplStartTimer( ImplSVData* pSVData, sal_uInt64 nMS )
 {

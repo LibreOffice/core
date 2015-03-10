@@ -23,7 +23,7 @@
 #include <vcl/timer.hxx>
 #include <saltimer.hxx>
 
-#define MAX_TIMER_PERIOD    ((sal_uInt64)0xFFFFFFFF)
+#define MAX_TIMER_PERIOD    SAL_MAX_UINT64
 
 void ImplSchedulerData::Invoke()
 {
