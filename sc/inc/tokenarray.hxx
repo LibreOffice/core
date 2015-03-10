@@ -57,6 +57,7 @@ public:
     /// Assignment with references to FormulaToken entries (not copied!)
     ScTokenArray( const ScTokenArray& );
     virtual ~ScTokenArray();
+    void ClearScTokenArray();
     ScTokenArray* Clone() const;    /// True copy!
 
     // An estimate of the number of cells referenced by the token array
