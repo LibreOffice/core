@@ -160,7 +160,7 @@ SwNewGlosNameDlg::SwNewGlosNameDlg(vcl::Window* pParent,
 
 SwNewGlosNameDlg::~SwNewGlosNameDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwNewGlosNameDlg::dispose()
@@ -249,7 +249,7 @@ SwGlossaryDlg::SwGlossaryDlg(SfxViewFrame* pViewFrame,
 
 SwGlossaryDlg::~SwGlossaryDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwGlossaryDlg::dispose()

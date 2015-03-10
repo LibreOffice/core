@@ -142,7 +142,7 @@ WebConnectionInfoDialog::WebConnectionInfoDialog(vcl::Window* pParent)
 
 WebConnectionInfoDialog::~WebConnectionInfoDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void WebConnectionInfoDialog::dispose()

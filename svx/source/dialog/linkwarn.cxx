@@ -43,7 +43,7 @@ SvxLinkWarningDialog::SvxLinkWarningDialog( vcl::Window* pParent, const OUString
 
 SvxLinkWarningDialog::~SvxLinkWarningDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxLinkWarningDialog::dispose()

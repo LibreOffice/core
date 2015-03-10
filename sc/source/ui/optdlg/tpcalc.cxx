@@ -66,7 +66,7 @@ ScTpCalcOptions::ScTpCalcOptions(vcl::Window* pParent, const SfxItemSet& rCoreAt
 
 ScTpCalcOptions::~ScTpCalcOptions()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScTpCalcOptions::dispose()

@@ -27,7 +27,7 @@ LineNumberWindow::LineNumberWindow (vcl::Window* pParent, ModulWindow* pModulWin
 
 LineNumberWindow::~LineNumberWindow()
 {
-    dispose();
+    disposeOnce();
 }
 
 void LineNumberWindow::dispose()

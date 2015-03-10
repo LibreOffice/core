@@ -180,7 +180,7 @@ SwGlobalTree::SwGlobalTree(vcl::Window* pParent, const ResId& rResId) :
 
 SwGlobalTree::~SwGlobalTree()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwGlobalTree::dispose()

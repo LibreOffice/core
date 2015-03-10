@@ -59,7 +59,7 @@ namespace frm
 
     RichTextControl::~RichTextControl( )
     {
-        dispose();
+        disposeOnce();
     }
 
     void RichTextControl::dispose()

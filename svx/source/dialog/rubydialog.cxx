@@ -263,7 +263,7 @@ SvxRubyDialog::SvxRubyDialog(SfxBindings *pBind, SfxChildWindow *pCW,
 
 SvxRubyDialog::~SvxRubyDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxRubyDialog::dispose()
@@ -790,7 +790,7 @@ RubyPreview::RubyPreview(vcl::Window *pParent)
 
 RubyPreview::~RubyPreview()
 {
-    dispose();
+    disposeOnce();
 }
 
 void RubyPreview::dispose()

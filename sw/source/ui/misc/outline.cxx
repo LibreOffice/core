@@ -79,7 +79,7 @@ public:
 
 SwNumNamesDlg::~SwNumNamesDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwNumNamesDlg::dispose()
@@ -209,7 +209,7 @@ SwOutlineTabDialog::SwOutlineTabDialog(vcl::Window* pParent, const SfxItemSet* p
 
 SwOutlineTabDialog::~SwOutlineTabDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwOutlineTabDialog::dispose()
@@ -762,7 +762,7 @@ IMPL_LINK_NOARG(SwOutlineSettingsTabPage, CharFmtHdl)
 
 SwOutlineSettingsTabPage::~SwOutlineSettingsTabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwOutlineSettingsTabPage::dispose()

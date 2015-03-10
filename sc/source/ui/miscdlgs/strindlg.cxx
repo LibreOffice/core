@@ -41,7 +41,7 @@ ScStringInputDlg::ScStringInputDlg( vcl::Window*         pParent,
 
 ScStringInputDlg::~ScStringInputDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScStringInputDlg::dispose()

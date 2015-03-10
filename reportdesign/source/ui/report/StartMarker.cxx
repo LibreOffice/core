@@ -80,7 +80,7 @@ OStartMarker::OStartMarker(OSectionWindow* _pParent,const OUString& _sColorEntry
 
 OStartMarker::~OStartMarker()
 {
-    dispose();
+    disposeOnce();
 }
 
 void OStartMarker::dispose()

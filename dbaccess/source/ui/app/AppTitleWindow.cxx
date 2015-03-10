@@ -47,7 +47,7 @@ OTitleWindow::OTitleWindow(vcl::Window* _pParent,sal_uInt16 _nTitleId,WinBits _n
 
 OTitleWindow::~OTitleWindow()
 {
-    dispose();
+    disposeOnce();
 }
 
 void OTitleWindow::dispose()

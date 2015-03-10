@@ -86,7 +86,7 @@ namespace dbp
 
     OControlWizardPage::~OControlWizardPage()
     {
-        dispose();
+        disposeOnce();
     }
 
     void OControlWizardPage::dispose()

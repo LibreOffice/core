@@ -92,7 +92,7 @@ DockingAreaWindow::DockingAreaWindow( vcl::Window* pParent ) :
 
 DockingAreaWindow::~DockingAreaWindow()
 {
-    dispose();
+    disposeOnce();
 }
 
 void DockingAreaWindow::dispose()

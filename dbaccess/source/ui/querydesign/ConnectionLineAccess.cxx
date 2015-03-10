@@ -180,7 +180,7 @@ namespace dbaui
     }
     OTableConnection::~OTableConnection()
     {
-        dispose();
+        disposeOnce();
     }
     void OTableConnection::dispose()
     {

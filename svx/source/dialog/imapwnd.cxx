@@ -72,7 +72,7 @@ IMapWindow::IMapWindow( vcl::Window* pParent, WinBits nBits, const Reference< XF
 
 IMapWindow::~IMapWindow()
 {
-    dispose();
+    disposeOnce();
 }
 
 void IMapWindow::dispose()

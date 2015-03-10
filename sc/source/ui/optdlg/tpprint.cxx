@@ -41,7 +41,7 @@ ScTpPrintOptions::ScTpPrintOptions( vcl::Window*           pParent,
 
 ScTpPrintOptions::~ScTpPrintOptions()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScTpPrintOptions::dispose()

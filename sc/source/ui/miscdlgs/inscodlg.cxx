@@ -361,7 +361,7 @@ IMPL_LINK_NOARG(ScInsertContentsDlg, LinkBtnHdl)
 
 ScInsertContentsDlg::~ScInsertContentsDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScInsertContentsDlg::dispose()

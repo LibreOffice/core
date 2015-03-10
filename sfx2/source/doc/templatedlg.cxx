@@ -298,7 +298,7 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(vcl::Window *parent)
 
 SfxTemplateManagerDlg::~SfxTemplateManagerDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SfxTemplateManagerDlg::dispose()

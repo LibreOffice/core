@@ -124,7 +124,7 @@ ScaleTabPage::ScaleTabPage(vcl::Window* pWindow,const SfxItemSet& rInAttrs) :
 
 ScaleTabPage::~ScaleTabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScaleTabPage::dispose()

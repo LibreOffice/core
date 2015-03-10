@@ -38,7 +38,7 @@ ScMovingAverageDialog::ScMovingAverageDialog(
 
 ScMovingAverageDialog::~ScMovingAverageDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScMovingAverageDialog::dispose()

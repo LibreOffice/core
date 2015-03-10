@@ -311,7 +311,7 @@ namespace dbaui
 
     DbaIndexDialog::~DbaIndexDialog( )
     {
-        dispose();
+        disposeOnce();
     }
 
     void DbaIndexDialog::dispose()

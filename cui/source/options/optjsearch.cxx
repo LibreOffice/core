@@ -57,7 +57,7 @@ SvxJSearchOptionsPage::SvxJSearchOptionsPage( vcl::Window* pParent, const SfxIte
 
 SvxJSearchOptionsPage::~SvxJSearchOptionsPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxJSearchOptionsPage::dispose()

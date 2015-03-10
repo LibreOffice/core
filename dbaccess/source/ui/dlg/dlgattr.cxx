@@ -52,7 +52,7 @@ SbaSbAttrDlg::SbaSbAttrDlg(vcl::Window* pParent, const SfxItemSet* pCellAttrs,
 
 SbaSbAttrDlg::~SbaSbAttrDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SbaSbAttrDlg::dispose()

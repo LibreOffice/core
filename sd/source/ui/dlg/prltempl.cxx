@@ -223,7 +223,7 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
 
 SdPresLayoutTemplateDlg::~SdPresLayoutTemplateDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SdPresLayoutTemplateDlg::dispose()

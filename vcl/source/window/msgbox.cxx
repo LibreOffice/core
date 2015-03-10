@@ -151,7 +151,7 @@ MessBox::MessBox( vcl::Window* pParent, WinBits nStyle,
 
 MessBox::~MessBox()
 {
-    dispose();
+    disposeOnce();
 }
 
 void MessBox::dispose()

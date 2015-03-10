@@ -127,7 +127,7 @@ SvxGrfCropPage::SvxGrfCropPage ( vcl::Window *pParent, const SfxItemSet &rSet )
 
 SvxGrfCropPage::~SvxGrfCropPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxGrfCropPage::dispose()

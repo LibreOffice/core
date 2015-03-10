@@ -117,7 +117,7 @@ void UnoDataBrowserView::Construct(const Reference< ::com::sun::star::awt::XCont
 
 UnoDataBrowserView::~UnoDataBrowserView()
 {
-    dispose();
+    disposeOnce();
 }
 
 void UnoDataBrowserView::dispose()

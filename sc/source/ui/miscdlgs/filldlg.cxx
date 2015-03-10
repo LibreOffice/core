@@ -76,7 +76,7 @@ ScFillSeriesDlg::ScFillSeriesDlg( vcl::Window*       pParent,
 
 ScFillSeriesDlg::~ScFillSeriesDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScFillSeriesDlg::dispose()

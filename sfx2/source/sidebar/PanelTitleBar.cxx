@@ -60,7 +60,7 @@ PanelTitleBar::PanelTitleBar (
 
 PanelTitleBar::~PanelTitleBar()
 {
-    dispose();
+    disposeOnce();
 }
 
 void PanelTitleBar::dispose()

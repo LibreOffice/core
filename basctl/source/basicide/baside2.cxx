@@ -227,7 +227,7 @@ SbModuleRef ModulWindow::XModule()
 
 ModulWindow::~ModulWindow()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ModulWindow::dispose()
@@ -1477,7 +1477,7 @@ ModulWindowLayout::ModulWindowLayout (vcl::Window* pParent, ObjectCatalog& rObje
 
 ModulWindowLayout::~ModulWindowLayout()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ModulWindowLayout::dispose()

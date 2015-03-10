@@ -81,7 +81,7 @@ ScTpFormulaOptions::ScTpFormulaOptions(vcl::Window* pParent, const SfxItemSet& r
 
 ScTpFormulaOptions::~ScTpFormulaOptions()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScTpFormulaOptions::dispose()

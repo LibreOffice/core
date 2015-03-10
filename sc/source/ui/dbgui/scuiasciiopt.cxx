@@ -464,7 +464,7 @@ ScImportAsciiDlg::ScImportAsciiDlg( vcl::Window* pParent, const OUString& aDatNa
 
 ScImportAsciiDlg::~ScImportAsciiDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScImportAsciiDlg::dispose()

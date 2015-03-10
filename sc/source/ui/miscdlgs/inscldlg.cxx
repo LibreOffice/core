@@ -60,7 +60,7 @@ ScInsertCellDlg::ScInsertCellDlg( vcl::Window* pParent,bool bDisallowCellMove) :
 
 ScInsertCellDlg::~ScInsertCellDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScInsertCellDlg::dispose()

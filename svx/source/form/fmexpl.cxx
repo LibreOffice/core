@@ -514,7 +514,7 @@ namespace svxform
 
     NavigatorFrame::~NavigatorFrame()
     {
-        dispose();
+        disposeOnce();
     }
 
     void NavigatorFrame::dispose()

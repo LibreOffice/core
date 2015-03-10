@@ -345,7 +345,7 @@ SvxSearchDialog::SvxSearchDialog( vcl::Window* pParent, SfxChildWindow* pChildWi
 
 SvxSearchDialog::~SvxSearchDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxSearchDialog::dispose()

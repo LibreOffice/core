@@ -95,7 +95,7 @@ DataEditor::DataEditor(vcl::Window* pParent,
 
 DataEditor::~DataEditor()
 {
-    dispose();
+    disposeOnce();
 }
 
 void DataEditor::dispose()

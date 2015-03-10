@@ -170,7 +170,7 @@ SwLabDlg::SwLabDlg(vcl::Window* pParent, const SfxItemSet& rSet,
 
 SwLabDlg::~SwLabDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwLabDlg::dispose()
@@ -295,7 +295,7 @@ SwLabPage::SwLabPage(vcl::Window* pParent, const SfxItemSet& rSet)
 
 SwLabPage::~SwLabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwLabPage::dispose()
@@ -616,7 +616,7 @@ SwVisitingCardPage::SwVisitingCardPage(vcl::Window* pParent, const SfxItemSet& r
 
 SwVisitingCardPage::~SwVisitingCardPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwVisitingCardPage::dispose()
@@ -768,7 +768,7 @@ SwPrivateDataPage::SwPrivateDataPage(vcl::Window* pParent, const SfxItemSet& rSe
 
 SwPrivateDataPage::~SwPrivateDataPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwPrivateDataPage::dispose()
@@ -884,7 +884,7 @@ SwBusinessDataPage::SwBusinessDataPage(vcl::Window* pParent, const SfxItemSet& r
 
 SwBusinessDataPage::~SwBusinessDataPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwBusinessDataPage::dispose()

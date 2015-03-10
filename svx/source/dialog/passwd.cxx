@@ -99,7 +99,7 @@ SvxPasswordDialog::SvxPasswordDialog(vcl::Window* pParent, bool bAllowEmptyPassw
 
 SvxPasswordDialog::~SvxPasswordDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxPasswordDialog::dispose()

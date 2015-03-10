@@ -110,7 +110,7 @@ namespace dbaui
 
     IndexFieldsControl::~IndexFieldsControl()
     {
-        dispose();
+        disposeOnce();
     }
 
     void IndexFieldsControl::dispose()

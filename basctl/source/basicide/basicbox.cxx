@@ -82,7 +82,7 @@ DocListenerBox::DocListenerBox( vcl::Window* pParent )
 
 DocListenerBox::~DocListenerBox()
 {
-    dispose();
+    disposeOnce();
 }
 
 void DocListenerBox::dispose()
@@ -156,7 +156,7 @@ LibBox::LibBox( vcl::Window* pParent, const uno::Reference< frame::XFrame >& rFr
 
 LibBox::~LibBox()
 {
-    dispose();
+    disposeOnce();
 }
 
 void LibBox::dispose()
@@ -386,7 +386,7 @@ LanguageBox::LanguageBox( vcl::Window* pParent ) :
 
 LanguageBox::~LanguageBox()
 {
-    dispose();
+    disposeOnce();
 }
 
 void LanguageBox::dispose()

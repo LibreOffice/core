@@ -253,7 +253,7 @@ SfxTitleDockingWindow::SfxTitleDockingWindow( SfxBindings* pBind ,
 
 SfxTitleDockingWindow::~SfxTitleDockingWindow()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SfxTitleDockingWindow::dispose()
@@ -1274,7 +1274,7 @@ void SfxDockingWindow::FillInfo(SfxChildWinInfo& rInfo) const
 
 SfxDockingWindow::~SfxDockingWindow()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SfxDockingWindow::dispose()

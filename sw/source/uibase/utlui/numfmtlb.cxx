@@ -109,7 +109,7 @@ void NumFormatListBox::Init(short nFormatType, bool bUsrFmts)
 
 NumFormatListBox::~NumFormatListBox()
 {
-    dispose();
+    disposeOnce();
 }
 
 void NumFormatListBox::dispose()

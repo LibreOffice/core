@@ -30,7 +30,7 @@ QueryPropertiesDialog::QueryPropertiesDialog(
 
 QueryPropertiesDialog::~QueryPropertiesDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void QueryPropertiesDialog::dispose()

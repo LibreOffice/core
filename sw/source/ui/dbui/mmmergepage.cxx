@@ -52,7 +52,7 @@ SwMailMergeMergePage::SwMailMergeMergePage(SwMailMergeWizard* _pParent)
 
 SwMailMergeMergePage::~SwMailMergeMergePage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwMailMergeMergePage::dispose()

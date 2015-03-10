@@ -227,7 +227,7 @@ BrowserDataWin::BrowserDataWin( BrowseBox* pParent )
 
 BrowserDataWin::~BrowserDataWin()
 {
-    dispose();
+    disposeOnce();
 }
 
 void BrowserDataWin::dispose()
@@ -732,7 +732,7 @@ void BrowserDataWin::Invalidate( const Rectangle& rRect, sal_uInt16 nFlags )
 
 BrowserScrollBar::~BrowserScrollBar()
 {
-    dispose();
+    disposeOnce();
 }
 
 void BrowserScrollBar::dispose()

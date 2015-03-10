@@ -89,7 +89,7 @@ namespace svt
 
     ToolPanelDrawer::~ToolPanelDrawer()
     {
-        dispose();
+        disposeOnce();
     }
 
     void ToolPanelDrawer::dispose()

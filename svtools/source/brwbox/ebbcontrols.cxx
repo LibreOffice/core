@@ -249,7 +249,7 @@ namespace svt
 
     CheckBoxControl::~CheckBoxControl()
     {
-        dispose();
+        disposeOnce();
     }
 
     void CheckBoxControl::dispose()

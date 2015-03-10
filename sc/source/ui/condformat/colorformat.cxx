@@ -125,7 +125,7 @@ ScDataBarSettingsDlg::ScDataBarSettingsDlg(vcl::Window* pWindow, const ScDataBar
 
 ScDataBarSettingsDlg::~ScDataBarSettingsDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScDataBarSettingsDlg::dispose()

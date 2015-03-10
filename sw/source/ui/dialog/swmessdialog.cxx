@@ -32,7 +32,7 @@ SwMessageAndEditDialog::SwMessageAndEditDialog(vcl::Window* pParent, const OUStr
 
 SwMessageAndEditDialog::~SwMessageAndEditDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwMessageAndEditDialog::dispose()

@@ -138,7 +138,7 @@ void SAL_CALL OCommonStatement::close()
         MutexGuard aGuard(m_aMutex);
         checkDisposed(rBHelper.bDisposed);
     }
-    dispose();
+    disposeOnce();
 }
 
 void SAL_CALL OStatement::clearBatch()

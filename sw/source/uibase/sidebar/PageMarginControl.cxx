@@ -133,7 +133,7 @@ PageMarginControl::PageMarginControl(
 
 PageMarginControl::~PageMarginControl()
 {
-    dispose();
+    disposeOnce();
 }
 
 void PageMarginControl::dispose()

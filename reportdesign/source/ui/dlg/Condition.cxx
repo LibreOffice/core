@@ -156,7 +156,7 @@ OColorPopup::OColorPopup(vcl::Window* _pParent,Condition* _pCondition)
 
 OColorPopup::~OColorPopup()
 {
-    dispose();
+    disposeOnce();
 }
 
 void OColorPopup::dispose()
@@ -309,7 +309,7 @@ sal_uInt16 Condition::mapToolbarItemToSlotId(sal_uInt16 nItemId) const
 
 Condition::~Condition()
 {
-    dispose();
+    disposeOnce();
 }
 
 void Condition::dispose()

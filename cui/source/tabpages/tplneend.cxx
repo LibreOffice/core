@@ -107,7 +107,7 @@ SvxLineEndDefTabPage::SvxLineEndDefTabPage
 
 SvxLineEndDefTabPage::~SvxLineEndDefTabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxLineEndDefTabPage::dispose()

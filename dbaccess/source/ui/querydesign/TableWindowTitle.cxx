@@ -55,7 +55,7 @@ OTableWindowTitle::OTableWindowTitle( OTableWindow* pParent ) :
 
 OTableWindowTitle::~OTableWindowTitle()
 {
-    dispose();
+    disposeOnce();
 }
 
 void OTableWindowTitle::dispose()

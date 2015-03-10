@@ -145,7 +145,7 @@ namespace pcr
 
     OSelectLabelDialog::~OSelectLabelDialog()
     {
-        dispose();
+        disposeOnce();
     }
 
     void OSelectLabelDialog::dispose()

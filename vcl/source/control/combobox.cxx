@@ -68,7 +68,7 @@ ComboBox::ComboBox( vcl::Window* pParent, const ResId& rResId ) :
 
 ComboBox::~ComboBox()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ComboBox::dispose()

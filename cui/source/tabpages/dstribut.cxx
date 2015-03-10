@@ -43,7 +43,7 @@ SvxDistributeDialog::SvxDistributeDialog(vcl::Window* pParent,
 
 SvxDistributeDialog::~SvxDistributeDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxDistributeDialog::dispose()
@@ -81,7 +81,7 @@ SvxDistributePage::SvxDistributePage(vcl::Window* pWindow,
 
 SvxDistributePage::~SvxDistributePage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxDistributePage::dispose()

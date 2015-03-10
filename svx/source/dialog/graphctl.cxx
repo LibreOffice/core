@@ -84,7 +84,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeGraphCtrl(vcl::Window 
 
 GraphCtrl::~GraphCtrl()
 {
-    dispose();
+    disposeOnce();
 }
 
 void GraphCtrl::dispose()

@@ -111,7 +111,7 @@ OReportSection::OReportSection(OSectionWindow* _pParent,const uno::Reference< re
 
 OReportSection::~OReportSection()
 {
-    dispose();
+    disposeOnce();
 }
 
 void OReportSection::dispose()

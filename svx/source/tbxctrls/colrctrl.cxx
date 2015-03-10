@@ -244,7 +244,7 @@ SvxColorDockingWindow::SvxColorDockingWindow
 
 SvxColorDockingWindow::~SvxColorDockingWindow()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxColorDockingWindow::dispose()

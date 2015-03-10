@@ -294,7 +294,7 @@ ThreeD_SceneIllumination_TabPage::ThreeD_SceneIllumination_TabPage( vcl::Window*
 
 ThreeD_SceneIllumination_TabPage::~ThreeD_SceneIllumination_TabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ThreeD_SceneIllumination_TabPage::dispose()

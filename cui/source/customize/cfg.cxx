@@ -1397,7 +1397,7 @@ SvxMenuEntriesListBox::SvxMenuEntriesListBox(vcl::Window* pParent, SvxConfigPage
 
 SvxMenuEntriesListBox::~SvxMenuEntriesListBox()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxMenuEntriesListBox::dispose()
@@ -1555,7 +1555,7 @@ SvxConfigPage::SvxConfigPage(vcl::Window *pParent, const SfxItemSet& rSet)
 
 SvxConfigPage::~SvxConfigPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxConfigPage::dispose()
@@ -2245,7 +2245,7 @@ SvxMenuConfigPage::SvxMenuConfigPage(vcl::Window *pParent, const SfxItemSet& rSe
 
 SvxMenuConfigPage::~SvxMenuConfigPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 // Populates the Menu combo box
@@ -2696,7 +2696,7 @@ SvxMainMenuOrganizerDialog::SvxMainMenuOrganizerDialog(
 
 SvxMainMenuOrganizerDialog::~SvxMainMenuOrganizerDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxMainMenuOrganizerDialog::dispose()
@@ -2966,7 +2966,7 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(vcl::Window *pParent, const SfxItemSe
 
 SvxToolbarConfigPage::~SvxToolbarConfigPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxToolbarConfigPage::dispose()
@@ -4574,7 +4574,7 @@ SvxToolbarEntriesListBox::SvxToolbarEntriesListBox(vcl::Window* pParent, SvxTool
 
 SvxToolbarEntriesListBox::~SvxToolbarEntriesListBox()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxToolbarEntriesListBox::dispose()
@@ -4768,7 +4768,7 @@ SvxNewToolbarDialog::SvxNewToolbarDialog(vcl::Window* pWindow, const OUString& r
 
 SvxNewToolbarDialog::~SvxNewToolbarDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxNewToolbarDialog::dispose()
@@ -4981,7 +4981,7 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( vcl::Window *pWindow,
 
 SvxIconSelectorDialog::~SvxIconSelectorDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxIconSelectorDialog::dispose()
@@ -5453,7 +5453,7 @@ SvxIconChangeDialog::SvxIconChangeDialog(
 
 SvxIconChangeDialog::~SvxIconChangeDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxIconChangeDialog::dispose()

@@ -64,7 +64,7 @@ namespace svt { namespace table
 
     TableControl::~TableControl()
     {
-        dispose();
+        disposeOnce();
     }
 
     void TableControl::dispose()

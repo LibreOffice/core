@@ -50,7 +50,7 @@ namespace pcr
 
     ListSelectionDialog::~ListSelectionDialog()
     {
-        dispose();
+        disposeOnce();
     }
 
     void ListSelectionDialog::dispose()

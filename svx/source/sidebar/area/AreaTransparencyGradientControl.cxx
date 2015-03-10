@@ -110,7 +110,7 @@ AreaTransparencyGradientControl::AreaTransparencyGradientControl (
 
 AreaTransparencyGradientControl::~AreaTransparencyGradientControl()
 {
-    dispose();
+    disposeOnce();
 }
 
 void AreaTransparencyGradientControl::dispose()

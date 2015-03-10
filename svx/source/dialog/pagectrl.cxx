@@ -90,7 +90,7 @@ SvxPageWindow::SvxPageWindow(vcl::Window* pParent)
 
 SvxPageWindow::~SvxPageWindow()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxPageWindow::dispose()

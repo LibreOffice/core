@@ -64,7 +64,7 @@ SvxSearchFormatDialog::SvxSearchFormatDialog(vcl::Window* pParent, const SfxItem
 
 SvxSearchFormatDialog::~SvxSearchFormatDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxSearchFormatDialog::dispose()
@@ -180,7 +180,7 @@ SvxSearchAttributeDialog::SvxSearchAttributeDialog(vcl::Window* pParent,
 
 SvxSearchAttributeDialog::~SvxSearchAttributeDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxSearchAttributeDialog::dispose()
@@ -261,7 +261,7 @@ SvxSearchSimilarityDialog::SvxSearchSimilarityDialog
 
 SvxSearchSimilarityDialog::~SvxSearchSimilarityDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxSearchSimilarityDialog::dispose()

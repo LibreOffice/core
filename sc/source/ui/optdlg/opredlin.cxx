@@ -57,7 +57,7 @@ ScRedlineOptionsTabPage::ScRedlineOptionsTabPage( vcl::Window* pParent,
 
 ScRedlineOptionsTabPage::~ScRedlineOptionsTabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScRedlineOptionsTabPage::dispose()

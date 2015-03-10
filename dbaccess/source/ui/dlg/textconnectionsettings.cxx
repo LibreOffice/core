@@ -41,7 +41,7 @@ namespace dbaui
 
     TextConnectionSettingsDialog::~TextConnectionSettingsDialog()
     {
-        dispose();
+        disposeOnce();
     }
 
     void TextConnectionSettingsDialog::dispose()

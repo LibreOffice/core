@@ -137,7 +137,7 @@ IMPL_LINK_NOARG(SwInsTableDlg, OKHdl)
 
 SwInsTableDlg::~SwInsTableDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwInsTableDlg::dispose()

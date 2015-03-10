@@ -83,7 +83,7 @@ SdDocPreviewWin::SdDocPreviewWin( vcl::Window* pParent, const WinBits nStyle )
 
 SdDocPreviewWin::~SdDocPreviewWin()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SdDocPreviewWin::dispose()

@@ -88,7 +88,7 @@ SwJavaEditDialog::SwJavaEditDialog(vcl::Window* pParent, SwWrtShell* pWrtSh) :
 
 SwJavaEditDialog::~SwJavaEditDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwJavaEditDialog::dispose()

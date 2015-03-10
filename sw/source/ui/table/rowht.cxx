@@ -77,7 +77,7 @@ SwTableHeightDlg::SwTableHeightDlg(vcl::Window *pParent, SwWrtShell &rS)
 
 SwTableHeightDlg::~SwTableHeightDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwTableHeightDlg::dispose()

@@ -483,7 +483,7 @@ SlideTransitionPane::SlideTransitionPane(
 
 SlideTransitionPane::~SlideTransitionPane()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SlideTransitionPane::dispose()

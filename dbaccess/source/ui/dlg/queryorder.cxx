@@ -127,7 +127,7 @@ DlgOrderCrit::DlgOrderCrit(vcl::Window * pParent,
 
 DlgOrderCrit::~DlgOrderCrit()
 {
-    dispose();
+    disposeOnce();
 }
 
 void DlgOrderCrit::dispose()

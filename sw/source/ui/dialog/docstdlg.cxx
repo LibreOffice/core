@@ -75,7 +75,7 @@ SwDocStatPage::SwDocStatPage(vcl::Window *pParent, const SfxItemSet &rSet)
 
 SwDocStatPage::~SwDocStatPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwDocStatPage::dispose()

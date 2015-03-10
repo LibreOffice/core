@@ -81,7 +81,7 @@ CertificateChooser::CertificateChooser( vcl::Window* _pParent, uno::Reference< u
 
 CertificateChooser::~CertificateChooser()
 {
-    dispose();
+    disposeOnce();
 }
 
 void CertificateChooser::dispose()

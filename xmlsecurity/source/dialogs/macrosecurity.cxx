@@ -84,7 +84,7 @@ MacroSecurity::MacroSecurity( vcl::Window* _pParent,
 
 MacroSecurity::~MacroSecurity()
 {
-    dispose();
+    disposeOnce();
 }
 
 void MacroSecurity::dispose()
@@ -108,7 +108,7 @@ MacroSecurityTP::MacroSecurityTP(vcl::Window* _pParent, const OString& rID,
 
 MacroSecurityTP::~MacroSecurityTP()
 {
-    dispose();
+    disposeOnce();
 }
 
 void MacroSecurityTP::dispose()
@@ -172,7 +172,7 @@ MacroSecurityLevelTP::MacroSecurityLevelTP(vcl::Window* _pParent, MacroSecurity*
 
 MacroSecurityLevelTP::~MacroSecurityLevelTP()
 {
-    dispose();
+    disposeOnce();
 }
 
 void MacroSecurityLevelTP::dispose()
@@ -430,7 +430,7 @@ MacroSecurityTrustedSourcesTP::MacroSecurityTrustedSourcesTP(vcl::Window* _pPare
 
 MacroSecurityTrustedSourcesTP::~MacroSecurityTrustedSourcesTP()
 {
-    dispose();
+    disposeOnce();
 }
 
 void MacroSecurityTrustedSourcesTP::dispose()

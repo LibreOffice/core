@@ -226,7 +226,7 @@ ScScenarioWindow::ScScenarioWindow( vcl::Window* pParent, const OUString& aQH_Li
 
 ScScenarioWindow::~ScScenarioWindow()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScScenarioWindow::dispose()

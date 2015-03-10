@@ -560,7 +560,7 @@ class VCL_DLLPUBLIC VclScrolledWindow : public VclBin
 {
 public:
     VclScrolledWindow(vcl::Window *pParent, WinBits nStyle = WB_HIDE | WB_CLIPCHILDREN | WB_AUTOHSCROLL | WB_AUTOVSCROLL);
-    virtual ~VclScrolledWindow() { dispose(); }
+    virtual ~VclScrolledWindow() { disposeOnce(); }
     void dispose() SAL_OVERRIDE { m_pVScroll.disposeAndClear(); m_pHScroll.disposeAndClear(); m_aScrollBarBox.clear(); VclBin::dispose(); }
     virtual vcl::Window *get_child() SAL_OVERRIDE;
     virtual const vcl::Window *get_child() const SAL_OVERRIDE;

@@ -253,7 +253,7 @@ SfxTemplatePanelControl::SfxTemplatePanelControl(SfxBindings* pBindings, vcl::Wi
 
 SfxTemplatePanelControl::~SfxTemplatePanelControl()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SfxTemplatePanelControl::dispose()

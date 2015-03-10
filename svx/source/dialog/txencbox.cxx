@@ -59,7 +59,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxTextEncodingBox(vcl
 
 SvxTextEncodingBox::~SvxTextEncodingBox()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxTextEncodingBox::dispose()

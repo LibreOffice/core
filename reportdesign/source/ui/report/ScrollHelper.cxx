@@ -69,7 +69,7 @@ OScrollWindowHelper::OScrollWindowHelper( ODesignView* _pDesignView)
 
 OScrollWindowHelper::~OScrollWindowHelper()
 {
-    dispose();
+    disposeOnce();
 }
 
 void OScrollWindowHelper::dispose()

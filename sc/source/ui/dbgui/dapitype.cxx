@@ -53,7 +53,7 @@ ScDataPilotSourceTypeDlg::ScDataPilotSourceTypeDlg(vcl::Window* pParent, bool bE
 
 ScDataPilotSourceTypeDlg::~ScDataPilotSourceTypeDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScDataPilotSourceTypeDlg::dispose()
@@ -126,7 +126,7 @@ ScDataPilotServiceDlg::ScDataPilotServiceDlg( vcl::Window* pParent,
 
 ScDataPilotServiceDlg::~ScDataPilotServiceDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScDataPilotServiceDlg::dispose()

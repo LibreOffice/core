@@ -39,7 +39,7 @@ SchLayoutTabPage::SchLayoutTabPage(vcl::Window* pWindow,const SfxItemSet& rInAtt
 
 SchLayoutTabPage::~SchLayoutTabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SchLayoutTabPage::dispose()

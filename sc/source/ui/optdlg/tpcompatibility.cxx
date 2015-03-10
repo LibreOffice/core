@@ -23,7 +23,7 @@ ScTpCompatOptions::ScTpCompatOptions(vcl::Window *pParent, const SfxItemSet &rCo
 
 ScTpCompatOptions::~ScTpCompatOptions()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScTpCompatOptions::dispose()

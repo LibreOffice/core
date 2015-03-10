@@ -38,7 +38,7 @@ OFieldDescGenWin::OFieldDescGenWin( vcl::Window* pParent, OTableDesignHelpBar* p
 
 OFieldDescGenWin::~OFieldDescGenWin()
 {
-    dispose();
+    disposeOnce();
 }
 
 void OFieldDescGenWin::dispose()

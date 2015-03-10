@@ -297,7 +297,7 @@ CustomAnimationCreateTabPage::CustomAnimationCreateTabPage( vcl::Window* pParent
 
 CustomAnimationCreateTabPage::~CustomAnimationCreateTabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void CustomAnimationCreateTabPage::dispose()
@@ -544,7 +544,7 @@ CustomAnimationCreateDialog::CustomAnimationCreateDialog( vcl::Window* pParent, 
 
 CustomAnimationCreateDialog::~CustomAnimationCreateDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void CustomAnimationCreateDialog::dispose()

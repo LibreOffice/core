@@ -57,7 +57,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSidebarToolBox(vcl::Wi
 
 SidebarToolBox::~SidebarToolBox()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SidebarToolBox::dispose()

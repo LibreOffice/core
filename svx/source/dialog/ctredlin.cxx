@@ -112,7 +112,7 @@ SvxRedlinTable::SvxRedlinTable(SvSimpleTableContainer& rParent, WinBits nBits)
 
 SvxRedlinTable::~SvxRedlinTable()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxRedlinTable::dispose()
@@ -418,7 +418,7 @@ void SvxTPView::DeactivatePage()
 
 SvxTPView::~SvxTPView()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxTPView::dispose()
@@ -604,7 +604,7 @@ SvxTPFilter::SvxTPFilter( vcl::Window * pParent)
 
 SvxTPFilter::~SvxTPFilter()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxTPFilter::dispose()
@@ -1113,7 +1113,7 @@ SvxAcceptChgCtr::SvxAcceptChgCtr(vcl::Window* pParent, VclBuilderContainer* pTop
 
 SvxAcceptChgCtr::~SvxAcceptChgCtr()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxAcceptChgCtr::dispose()

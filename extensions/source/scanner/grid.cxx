@@ -215,7 +215,7 @@ GridDialog::GridDialog(double* pXValues, double* pYValues, int nValues, vcl::Win
 
 GridDialog::~GridDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void GridDialog::dispose()
@@ -229,7 +229,7 @@ void GridDialog::dispose()
 
 GridWindow::~GridWindow()
 {
-    dispose();
+    disposeOnce();
 }
 
 void GridWindow::dispose()

@@ -37,7 +37,7 @@ ScNameCreateDlg::ScNameCreateDlg( vcl::Window * pParent, sal_uInt16 nFlags )
 
 ScNameCreateDlg::~ScNameCreateDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScNameCreateDlg::dispose()

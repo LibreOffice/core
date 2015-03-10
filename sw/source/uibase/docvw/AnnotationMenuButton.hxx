@@ -33,6 +33,7 @@ class AnnotationMenuButton : public MenuButton
     public:
         AnnotationMenuButton( sw::sidebarwindows::SwSidebarWin& rSidebarWin );
         virtual ~AnnotationMenuButton();
+        virtual void dispose() SAL_OVERRIDE;
 
         // override MenuButton methods
         virtual void Select() SAL_OVERRIDE;

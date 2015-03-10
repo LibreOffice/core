@@ -46,7 +46,7 @@ ScColOrRowDlg::ScColOrRowDlg(vcl::Window* pParent, const OUString& rStrTitle,
 
 ScColOrRowDlg::~ScColOrRowDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScColOrRowDlg::dispose()

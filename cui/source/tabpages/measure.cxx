@@ -150,7 +150,7 @@ SvxMeasurePage::SvxMeasurePage( vcl::Window* pWindow, const SfxItemSet& rInAttrs
 
 SvxMeasurePage::~SvxMeasurePage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxMeasurePage::dispose()

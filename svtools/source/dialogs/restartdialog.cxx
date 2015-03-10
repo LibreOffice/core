@@ -47,7 +47,7 @@ public:
         btnYes_->SetClickHdl(LINK(this, RestartDialog, hdlYes));
         btnNo_->SetClickHdl(LINK(this, RestartDialog, hdlNo));
     }
-    virtual ~RestartDialog() { dispose(); }
+    virtual ~RestartDialog() { disposeOnce(); }
     virtual void dispose() SAL_OVERRIDE
     {
         reason_.clear();

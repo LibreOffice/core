@@ -214,7 +214,7 @@ SfxTabPage* SwFldEditDlg::CreatePage(sal_uInt16 nGroup)
 
 SwFldEditDlg::~SwFldEditDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwFldEditDlg::dispose()

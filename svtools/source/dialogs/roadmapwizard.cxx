@@ -149,7 +149,7 @@ namespace svt
 
     RoadmapWizard::~RoadmapWizard()
     {
-        dispose();
+        disposeOnce();
     }
 
     void RoadmapWizard::dispose()

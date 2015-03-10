@@ -102,7 +102,7 @@ ScNameDlg::ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent
 
 ScNameDlg::~ScNameDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScNameDlg::dispose()

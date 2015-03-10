@@ -233,7 +233,7 @@ ScZoomSliderWnd::ScZoomSliderWnd( vcl::Window* pParent, const ::com::sun::star::
 
 ScZoomSliderWnd::~ScZoomSliderWnd()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScZoomSliderWnd::dispose()

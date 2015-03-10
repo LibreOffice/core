@@ -250,7 +250,7 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage(vcl::Window* pParent, const Sfx
 
 SfxManageStyleSheetPage::~SfxManageStyleSheetPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SfxManageStyleSheetPage::dispose()

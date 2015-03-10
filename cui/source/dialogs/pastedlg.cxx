@@ -54,7 +54,7 @@ SvPasteObjectDialog::SvPasteObjectDialog( vcl::Window* pParent )
 
 SvPasteObjectDialog::~SvPasteObjectDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvPasteObjectDialog::dispose()

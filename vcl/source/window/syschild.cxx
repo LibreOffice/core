@@ -133,7 +133,7 @@ SystemChildWindow::SystemChildWindow( vcl::Window* pParent, WinBits nStyle, Syst
 
 SystemChildWindow::~SystemChildWindow()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SystemChildWindow::dispose()

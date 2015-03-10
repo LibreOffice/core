@@ -89,7 +89,7 @@ OScrollWindowHelper::OScrollWindowHelper( vcl::Window* pParent) : Window( pParen
 
 OScrollWindowHelper::~OScrollWindowHelper()
 {
-    dispose();
+    disposeOnce();
 }
 
 void OScrollWindowHelper::dispose()
@@ -181,7 +181,7 @@ OJoinTableView::OJoinTableView( vcl::Window* pParent, OJoinDesignView* pView )
 
 OJoinTableView::~OJoinTableView()
 {
-    dispose();
+    disposeOnce();
 }
 
 void OJoinTableView::dispose()

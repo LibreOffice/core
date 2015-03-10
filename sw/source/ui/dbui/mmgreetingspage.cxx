@@ -292,7 +292,7 @@ SwMailMergeGreetingsPage::SwMailMergeGreetingsPage(SwMailMergeWizard* _pParent)
 
 SwMailMergeGreetingsPage::~SwMailMergeGreetingsPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwMailMergeGreetingsPage::dispose()
@@ -484,7 +484,7 @@ SwMailBodyDialog::SwMailBodyDialog(vcl::Window* pParent, SwMailMergeWizard* _pWi
 
 SwMailBodyDialog::~SwMailBodyDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwMailBodyDialog::dispose()

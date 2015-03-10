@@ -183,7 +183,7 @@ namespace svt
 
     EditBrowseBox::~EditBrowseBox()
     {
-        dispose();
+        disposeOnce();
     }
 
     void EditBrowseBox::dispose()

@@ -44,7 +44,7 @@ PrintMonitor::PrintMonitor(vcl::Window *pParent, bool modal, PrintMonitorType eT
 
 PrintMonitor::~PrintMonitor()
 {
-    dispose();
+    disposeOnce();
 }
 
 void PrintMonitor::dispose()
@@ -73,7 +73,7 @@ CreateMonitor::CreateMonitor( vcl::Window *pParent, bool modal )
 
 CreateMonitor::~CreateMonitor()
 {
-    dispose();
+    disposeOnce();
 }
 
 void CreateMonitor::dispose()
@@ -114,7 +114,7 @@ CancelableDialog::CancelableDialog( vcl::Window *pParent, bool modal,
 
 CancelableDialog::~CancelableDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void CancelableDialog::dispose()

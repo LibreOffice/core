@@ -724,7 +724,7 @@ TextWindow::TextWindow( vcl::Window* pParent ) : Window( pParent )
 
 TextWindow::~TextWindow()
 {
-    dispose();
+    disposeOnce();
 }
 
 void TextWindow::dispose()
@@ -937,7 +937,7 @@ VclMultiLineEdit::VclMultiLineEdit( vcl::Window* pParent, WinBits nWinStyle )
 
 VclMultiLineEdit::~VclMultiLineEdit()
 {
-    dispose();
+    disposeOnce();
 }
 
 void VclMultiLineEdit::dispose()

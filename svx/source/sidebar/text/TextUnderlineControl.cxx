@@ -67,7 +67,7 @@ TextUnderlineControl::TextUnderlineControl (
 
 TextUnderlineControl::~TextUnderlineControl()
 {
-    dispose();
+    disposeOnce();
 }
 
 void TextUnderlineControl::dispose()

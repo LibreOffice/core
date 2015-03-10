@@ -154,7 +154,7 @@ ScAcceptChgDlg::ScAcceptChgDlg(SfxBindings* pB, SfxChildWindow* pCW, vcl::Window
 
 ScAcceptChgDlg::~ScAcceptChgDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScAcceptChgDlg::dispose()

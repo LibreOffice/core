@@ -129,7 +129,7 @@ SvxHyperlinkNewDocTp::SvxHyperlinkNewDocTp ( vcl::Window *pParent, IconChoiceDia
 
 SvxHyperlinkNewDocTp::~SvxHyperlinkNewDocTp ()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxHyperlinkNewDocTp::dispose()

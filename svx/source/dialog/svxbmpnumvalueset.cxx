@@ -423,7 +423,7 @@ void SvxNumValueSet::init(sal_uInt16 nType)
 
 SvxNumValueSet::~SvxNumValueSet()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxNumValueSet::dispose()
@@ -493,7 +493,7 @@ void SvxBmpNumValueSet::init()
 
 SvxBmpNumValueSet::~SvxBmpNumValueSet()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxBmpNumValueSet::dispose()

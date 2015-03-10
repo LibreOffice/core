@@ -85,7 +85,7 @@ SpinfieldControl::SpinfieldControl( vcl::Window* pParent, WinBits nStyle, ISpinf
 
 SpinfieldControl::~SpinfieldControl()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SpinfieldControl::dispose()

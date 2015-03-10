@@ -214,7 +214,7 @@ OFieldExpressionControl::OFieldExpressionControl(OGroupsSortingDialog* _pParentD
 
 OFieldExpressionControl::~OFieldExpressionControl()
 {
-    dispose();
+    disposeOnce();
 }
 
 
@@ -1010,7 +1010,7 @@ OGroupsSortingDialog::OGroupsSortingDialog(vcl::Window* _pParent, bool _bReadOnl
 
 OGroupsSortingDialog::~OGroupsSortingDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void OGroupsSortingDialog::dispose()

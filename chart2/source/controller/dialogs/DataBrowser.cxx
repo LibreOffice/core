@@ -468,7 +468,7 @@ DataBrowser::DataBrowser( vcl::Window* pParent, WinBits nStyle, bool bLiveUpdate
 
 DataBrowser::~DataBrowser()
 {
-    dispose();
+    disposeOnce();
 }
 
 void DataBrowser::dispose()

@@ -941,7 +941,7 @@ namespace
 
     RTSPWDialog::~RTSPWDialog()
     {
-        dispose();
+        disposeOnce();
     }
 
     void RTSPWDialog::dispose()

@@ -66,7 +66,7 @@ MorphDlg::MorphDlg( vcl::Window* pParent, const SdrObject* pObj1, const SdrObjec
 
 MorphDlg::~MorphDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void MorphDlg::dispose()

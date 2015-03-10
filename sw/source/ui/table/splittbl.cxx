@@ -35,7 +35,7 @@ SwSplitTblDlg::SwSplitTblDlg( vcl::Window *pParent, SwWrtShell &rSh )
 
 SwSplitTblDlg::~SwSplitTblDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwSplitTblDlg::dispose()

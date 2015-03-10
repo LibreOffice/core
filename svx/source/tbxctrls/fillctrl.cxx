@@ -562,7 +562,7 @@ FillControl::FillControl(vcl::Window* pParent,WinBits nStyle)
 
 FillControl::~FillControl()
 {
-    dispose();
+    disposeOnce();
 }
 
 void FillControl::dispose()

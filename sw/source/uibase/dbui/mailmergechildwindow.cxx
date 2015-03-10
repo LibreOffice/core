@@ -75,7 +75,7 @@ SwMailMergeChildWin::SwMailMergeChildWin(SfxBindings* _pBindings,
 
 SwMailMergeChildWin::~SwMailMergeChildWin()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwMailMergeChildWin::dispose()

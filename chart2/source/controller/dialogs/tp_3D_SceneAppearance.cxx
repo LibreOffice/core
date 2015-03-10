@@ -122,7 +122,7 @@ ThreeD_SceneAppearance_TabPage::ThreeD_SceneAppearance_TabPage(
 
 ThreeD_SceneAppearance_TabPage::~ThreeD_SceneAppearance_TabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ThreeD_SceneAppearance_TabPage::dispose()

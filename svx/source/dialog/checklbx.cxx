@@ -50,7 +50,7 @@ void SvxCheckListBox::SetNormalStaticImage(const Image& rNormalStaticImage)
 
 SvxCheckListBox::~SvxCheckListBox()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxCheckListBox::dispose()

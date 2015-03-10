@@ -62,7 +62,7 @@ SwLabPrtPage::SwLabPrtPage(vcl::Window* pParent, const SfxItemSet& rSet)
 
 SwLabPrtPage::~SwLabPrtPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwLabPrtPage::dispose()

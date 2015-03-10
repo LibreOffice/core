@@ -133,7 +133,7 @@ SwWrapTabPage::SwWrapTabPage(vcl::Window *pParent, const SfxItemSet &rSet)
 
 SwWrapTabPage::~SwWrapTabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwWrapTabPage::dispose()

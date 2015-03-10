@@ -67,7 +67,7 @@ BreakDlg::BreakDlg(
 
 BreakDlg::~BreakDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void BreakDlg::dispose()

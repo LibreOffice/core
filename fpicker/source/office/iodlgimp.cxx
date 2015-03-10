@@ -106,7 +106,7 @@ SvtFileDialogURLSelector::SvtFileDialogURLSelector( vcl::Window* _pParent, SvtFi
 
 SvtFileDialogURLSelector::~SvtFileDialogURLSelector()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvtFileDialogURLSelector::dispose()

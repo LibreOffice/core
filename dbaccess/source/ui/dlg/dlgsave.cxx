@@ -285,7 +285,7 @@ OSaveAsDlg::OSaveAsDlg( vcl::Window * pParent,
 
 OSaveAsDlg::~OSaveAsDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void OSaveAsDlg::dispose()

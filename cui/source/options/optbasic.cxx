@@ -47,7 +47,7 @@ SvxBasicIDEOptionsPage::SvxBasicIDEOptionsPage( vcl::Window* pParent, const SfxI
 
 SvxBasicIDEOptionsPage::~SvxBasicIDEOptionsPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxBasicIDEOptionsPage::dispose()

@@ -238,7 +238,13 @@ SmElementsControl::SmElementsControl(vcl::Window *pParent)
 
 SmElementsControl::~SmElementsControl()
 {
+    disposeOnce();
+}
+
+void SmElementsControl::dispose()
+{
     mpDocShell->DoClose();
+    Control::dispose();
 }
 
 void SmElementsControl::setVerticalMode(bool bVerticalMode)
@@ -671,7 +677,7 @@ SmElementsDockingWindow::SmElementsDockingWindow(SfxBindings* pInputBindings, Sf
 
 SmElementsDockingWindow::~SmElementsDockingWindow ()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SmElementsDockingWindow::dispose()

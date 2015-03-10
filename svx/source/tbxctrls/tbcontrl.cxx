@@ -278,7 +278,7 @@ protected:
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 public:
     SvxLineWindow_Impl( sal_uInt16 nId, const Reference< XFrame >& rFrame, vcl::Window* pParentWindow );
-    virtual ~SvxLineWindow_Impl() { dispose(); }
+    virtual ~SvxLineWindow_Impl() { disposeOnce(); }
     virtual void dispose() SAL_OVERRIDE { m_aLineStyleLb.disposeAndClear(); SfxPopupWindow::dispose(); }
     virtual SfxPopupWindow* Clone() const SAL_OVERRIDE;
 };
@@ -332,7 +332,7 @@ SvxStyleBox_Impl::SvxStyleBox_Impl(vcl::Window* pParent,
 
 SvxStyleBox_Impl::~SvxStyleBox_Impl()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxStyleBox_Impl::dispose()
@@ -884,7 +884,7 @@ SvxFontNameBox_Impl::SvxFontNameBox_Impl( vcl::Window* pParent, const Reference<
 
 SvxFontNameBox_Impl::~SvxFontNameBox_Impl()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxFontNameBox_Impl::dispose()
@@ -1244,7 +1244,7 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
 
 SvxColorWindow_Impl::~SvxColorWindow_Impl()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxColorWindow_Impl::dispose()
@@ -1525,7 +1525,7 @@ SvxFrameWindow_Impl::SvxFrameWindow_Impl( sal_uInt16 nId, const Reference< XFram
 
 SvxFrameWindow_Impl::~SvxFrameWindow_Impl()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxFrameWindow_Impl::dispose()

@@ -86,14 +86,13 @@ public:
 
 class MaskSet : public ValueSet
 {
-    VclPtr<SvxBmpMask>     pSvxBmpMask;
-
+    VclPtr<SvxBmpMask> pSvxBmpMask;
 
 public:
     MaskSet(SvxBmpMask* pMask, vcl::Window* pParent);
-    virtual ~MaskSet() { dispose(); }
+    virtual ~MaskSet() { disposeOnce(); }
     virtual void dispose() SAL_OVERRIDE { pSvxBmpMask.clear(); ValueSet::dispose(); }
-    virtual void    Select() SAL_OVERRIDE;
+    virtual void Select() SAL_OVERRIDE;
     virtual void KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
     virtual void GetFocus() SAL_OVERRIDE;
     virtual Size GetOptimalSize() const SAL_OVERRIDE
@@ -486,7 +485,7 @@ SvxBmpMask::SvxBmpMask(SfxBindings *pBindinx, SfxChildWindow *pCW, vcl::Window* 
 
 SvxBmpMask::~SvxBmpMask()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxBmpMask::dispose()

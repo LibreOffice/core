@@ -141,7 +141,7 @@ SvxGradientTabPage::SvxGradientTabPage
 
 SvxGradientTabPage::~SvxGradientTabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxGradientTabPage::dispose()

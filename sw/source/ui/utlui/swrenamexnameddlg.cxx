@@ -76,7 +76,7 @@ SwRenameXNamedDlg::SwRenameXNamedDlg( vcl::Window* pWin,
 
 SwRenameXNamedDlg::~SwRenameXNamedDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwRenameXNamedDlg::dispose()

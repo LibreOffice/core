@@ -30,7 +30,7 @@ ScTpDefaultsOptions::ScTpDefaultsOptions(vcl::Window *pParent, const SfxItemSet 
 
 ScTpDefaultsOptions::~ScTpDefaultsOptions()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScTpDefaultsOptions::dispose()

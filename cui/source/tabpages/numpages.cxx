@@ -219,7 +219,7 @@ SvxSingleNumPickTabPage::SvxSingleNumPickTabPage(vcl::Window* pParent,
 
 SvxSingleNumPickTabPage::~SvxSingleNumPickTabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxSingleNumPickTabPage::dispose()
@@ -389,7 +389,7 @@ SvxBulletPickTabPage::SvxBulletPickTabPage(vcl::Window* pParent,
 
 SvxBulletPickTabPage::~SvxBulletPickTabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxBulletPickTabPage::dispose()
@@ -595,7 +595,7 @@ SvxNumPickTabPage::SvxNumPickTabPage(vcl::Window* pParent,
 
 SvxNumPickTabPage::~SvxNumPickTabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxNumPickTabPage::dispose()
@@ -845,7 +845,7 @@ SvxBitmapPickTabPage::SvxBitmapPickTabPage(vcl::Window* pParent,
 
 SvxBitmapPickTabPage::~SvxBitmapPickTabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxBitmapPickTabPage::dispose()
@@ -1162,7 +1162,7 @@ SvxNumOptionsTabPage::SvxNumOptionsTabPage(vcl::Window* pParent,
 
 SvxNumOptionsTabPage::~SvxNumOptionsTabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxNumOptionsTabPage::dispose()
@@ -2764,7 +2764,7 @@ SvxNumPositionTabPage::SvxNumPositionTabPage(vcl::Window* pParent,
 
 SvxNumPositionTabPage::~SvxNumPositionTabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxNumPositionTabPage::dispose()

@@ -174,7 +174,7 @@ SwConvertTableDlg::SwConvertTableDlg( SwView& rView, bool bToTable )
 
 SwConvertTableDlg:: ~SwConvertTableDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwConvertTableDlg::dispose()

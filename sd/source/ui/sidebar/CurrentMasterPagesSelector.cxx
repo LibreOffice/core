@@ -91,7 +91,7 @@ CurrentMasterPagesSelector::CurrentMasterPagesSelector (
 
 CurrentMasterPagesSelector::~CurrentMasterPagesSelector (void)
 {
-    dispose();
+    disposeOnce();
 }
 
 void CurrentMasterPagesSelector::dispose()

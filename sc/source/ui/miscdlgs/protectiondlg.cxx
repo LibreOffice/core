@@ -50,7 +50,7 @@ ScTableProtectionDlg::ScTableProtectionDlg(vcl::Window* pParent)
 
 ScTableProtectionDlg::~ScTableProtectionDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScTableProtectionDlg::dispose()

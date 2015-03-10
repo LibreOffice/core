@@ -109,6 +109,7 @@ class SmElementsControl : public Control
 public:
     SmElementsControl(vcl::Window *pParent);
     virtual ~SmElementsControl();
+    virtual void dispose() SAL_OVERRIDE;
 
     void setElementSetId(sal_uInt16 aSetId);
 

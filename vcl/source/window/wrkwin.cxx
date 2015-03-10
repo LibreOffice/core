@@ -113,7 +113,7 @@ WorkWindow::WorkWindow( SystemParentData* pParent ) :
 
 WorkWindow::~WorkWindow()
 {
-    dispose();
+    disposeOnce();
 }
 
 void WorkWindow::dispose()

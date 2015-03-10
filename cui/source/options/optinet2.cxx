@@ -217,7 +217,7 @@ SvxProxyTabPage::SvxProxyTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
 
 SvxProxyTabPage::~SvxProxyTabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxProxyTabPage::dispose()
@@ -649,7 +649,7 @@ SvxSecurityTabPage::SvxSecurityTabPage(vcl::Window* pParent, const SfxItemSet& r
 
 SvxSecurityTabPage::~SvxSecurityTabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxSecurityTabPage::dispose()
@@ -1011,7 +1011,7 @@ SvxEMailTabPage::SvxEMailTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
 
 SvxEMailTabPage::~SvxEMailTabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxEMailTabPage::dispose()

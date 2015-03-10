@@ -98,7 +98,7 @@ SvxTextAttrPage::SvxTextAttrPage(vcl::Window* pWindow, const SfxItemSet& rInAttr
 
 SvxTextAttrPage::~SvxTextAttrPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxTextAttrPage::dispose()

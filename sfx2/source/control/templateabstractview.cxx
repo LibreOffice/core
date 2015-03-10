@@ -151,7 +151,7 @@ TemplateAbstractView::TemplateAbstractView(vcl::Window *pParent)
 
 TemplateAbstractView::~TemplateAbstractView()
 {
-    dispose();
+    disposeOnce();
 }
 
 void TemplateAbstractView::dispose()

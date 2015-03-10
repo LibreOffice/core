@@ -141,7 +141,7 @@ MacroEventListBox::MacroEventListBox( vcl::Window* pParent, WinBits nStyle )
 
 MacroEventListBox::~MacroEventListBox()
 {
-    dispose();
+    disposeOnce();
 }
 
 void MacroEventListBox::dispose()
@@ -238,7 +238,7 @@ _SvxMacroTabPage::_SvxMacroTabPage(vcl::Window* pParent, const OString& rID,
 
 _SvxMacroTabPage::~_SvxMacroTabPage()
 {
-   dispose();
+    disposeOnce();
 }
 
 void _SvxMacroTabPage::dispose()
@@ -890,7 +890,7 @@ AssignComponentDialog::AssignComponentDialog( vcl::Window * pParent, const OUStr
 
 AssignComponentDialog::~AssignComponentDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void AssignComponentDialog::dispose()

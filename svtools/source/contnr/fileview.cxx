@@ -635,7 +635,7 @@ ViewTabListBox_Impl::ViewTabListBox_Impl( vcl::Window* pParentWin,
 
 ViewTabListBox_Impl::~ViewTabListBox_Impl()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ViewTabListBox_Impl::dispose()
@@ -1096,7 +1096,7 @@ SvtFileView::SvtFileView( vcl::Window* pParent, WinBits nBits,
 
 SvtFileView::~SvtFileView()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvtFileView::dispose()
@@ -2336,7 +2336,7 @@ QueryDeleteDlg_Impl::QueryDeleteDlg_Impl(vcl::Window* pParent, const OUString& r
 
 QueryDeleteDlg_Impl::~QueryDeleteDlg_Impl()
 {
-    dispose();
+    disposeOnce();
 }
 
 void QueryDeleteDlg_Impl::dispose()

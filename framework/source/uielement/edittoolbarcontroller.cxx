@@ -73,7 +73,7 @@ EditControl::EditControl( vcl::Window* pParent, WinBits nStyle, IEditListener* p
 
 EditControl::~EditControl()
 {
-    dispose();
+    disposeOnce();
 }
 
 void EditControl::dispose()

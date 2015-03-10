@@ -106,7 +106,7 @@ ExtrusionDirectionWindow::ExtrusionDirectionWindow(
 
 ExtrusionDirectionWindow::~ExtrusionDirectionWindow()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ExtrusionDirectionWindow::dispose()
@@ -311,7 +311,7 @@ ExtrusionDepthDialog::ExtrusionDepthDialog( vcl::Window* pParent, double fDepth,
 
 ExtrusionDepthDialog::~ExtrusionDepthDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ExtrusionDepthDialog::dispose()
@@ -602,7 +602,7 @@ ExtrusionLightingWindow::ExtrusionLightingWindow(svt::ToolboxController& rContro
 
 ExtrusionLightingWindow::~ExtrusionLightingWindow()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ExtrusionLightingWindow::dispose()

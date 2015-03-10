@@ -114,7 +114,7 @@ HeaderBar::HeaderBar( vcl::Window* pParent, WinBits nWinStyle ) :
 
 HeaderBar::~HeaderBar()
 {
-    dispose();
+    disposeOnce();
 }
 
 void HeaderBar::dispose()

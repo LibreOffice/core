@@ -78,7 +78,7 @@ ODbaseIndexDialog::ODbaseIndexDialog(vcl::Window * pParent, const OUString& aDat
 
 ODbaseIndexDialog::~ODbaseIndexDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ODbaseIndexDialog::dispose()

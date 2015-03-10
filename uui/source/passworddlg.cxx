@@ -84,7 +84,7 @@ PasswordDialog::PasswordDialog(vcl::Window* _pParent,
 
 PasswordDialog::~PasswordDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void PasswordDialog::dispose()

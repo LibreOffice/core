@@ -60,7 +60,7 @@ SwCustomizeAddressListDialog::SwCustomizeAddressListDialog(
 
 SwCustomizeAddressListDialog::~SwCustomizeAddressListDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwCustomizeAddressListDialog::dispose()
@@ -197,7 +197,7 @@ SwAddRenameEntryDialog::SwAddRenameEntryDialog(
 
 SwAddRenameEntryDialog::~SwAddRenameEntryDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwAddRenameEntryDialog::dispose()

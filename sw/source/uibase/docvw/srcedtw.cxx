@@ -270,7 +270,7 @@ SwSrcEditWindow::SwSrcEditWindow( vcl::Window* pParent, SwSrcView* pParentView )
 
 SwSrcEditWindow::~SwSrcEditWindow()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwSrcEditWindow::dispose()

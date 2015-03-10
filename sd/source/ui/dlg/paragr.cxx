@@ -73,7 +73,7 @@ SdParagraphNumTabPage::SdParagraphNumTabPage(vcl::Window* pParent, const SfxItem
 
 SdParagraphNumTabPage::~SdParagraphNumTabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SdParagraphNumTabPage::dispose()

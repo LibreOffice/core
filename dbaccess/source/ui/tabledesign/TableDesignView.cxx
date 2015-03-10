@@ -62,7 +62,7 @@ OTableBorderWindow::OTableBorderWindow(vcl::Window* pParent) : Window(pParent,WB
 
 OTableBorderWindow::~OTableBorderWindow()
 {
-    dispose();
+    disposeOnce();
 }
 
 void OTableBorderWindow::dispose()
@@ -189,7 +189,7 @@ OTableDesignView::OTableDesignView( vcl::Window* pParent,
 
 OTableDesignView::~OTableDesignView()
 {
-    dispose();
+    disposeOnce();
 }
 
 void OTableDesignView::dispose()

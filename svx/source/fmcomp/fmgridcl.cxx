@@ -134,7 +134,7 @@ FmGridHeader::FmGridHeader( BrowseBox* pParent, WinBits nWinBits)
 
 FmGridHeader::~FmGridHeader()
 {
-    dispose();
+    disposeOnce();
 }
 
 void FmGridHeader::dispose()

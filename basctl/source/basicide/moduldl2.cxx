@@ -161,7 +161,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeCheckBox(vcl::Window *
 
 CheckBox::~CheckBox()
 {
-    dispose();
+    disposeOnce();
 }
 
 void CheckBox::dispose()
@@ -394,7 +394,7 @@ NewObjectDialog::NewObjectDialog(vcl::Window * pParent, ObjectMode::Mode eMode,
 
 NewObjectDialog::~NewObjectDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void NewObjectDialog::dispose()
@@ -417,7 +417,7 @@ GotoLineDialog::GotoLineDialog(vcl::Window * pParent )
 
 GotoLineDialog::~GotoLineDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void GotoLineDialog::dispose()
@@ -463,7 +463,7 @@ ExportDialog::ExportDialog(vcl::Window * pParent)
 
 ExportDialog::~ExportDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ExportDialog::dispose()
@@ -520,7 +520,7 @@ LibPage::LibPage(vcl::Window * pParent)
 
 LibPage::~LibPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void LibPage::dispose()

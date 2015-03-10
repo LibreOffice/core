@@ -159,7 +159,7 @@ ScSolverOptionsDialog::ScSolverOptionsDialog( vcl::Window* pParent,
 
 ScSolverOptionsDialog::~ScSolverOptionsDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScSolverOptionsDialog::dispose()
@@ -399,7 +399,7 @@ ScSolverIntegerDialog::ScSolverIntegerDialog(vcl::Window * pParent)
 
 ScSolverIntegerDialog::~ScSolverIntegerDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScSolverIntegerDialog::dispose()
@@ -439,7 +439,7 @@ ScSolverValueDialog::ScSolverValueDialog( vcl::Window * pParent )
 
 ScSolverValueDialog::~ScSolverValueDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScSolverValueDialog::dispose()

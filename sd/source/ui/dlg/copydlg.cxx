@@ -84,7 +84,7 @@ CopyDlg::CopyDlg(vcl::Window* pWindow, const SfxItemSet& rInAttrs,
 
 CopyDlg::~CopyDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void CopyDlg::dispose()

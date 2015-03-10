@@ -162,7 +162,7 @@ namespace svxform
 
     NavigatorTree::~NavigatorTree()
     {
-        dispose();
+        disposeOnce();
     }
 
     void NavigatorTree::dispose()

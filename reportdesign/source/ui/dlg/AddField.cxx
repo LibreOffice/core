@@ -114,7 +114,7 @@ OAddFieldWindowListBox::OAddFieldWindowListBox( OAddFieldWindow* _pParent )
 
 OAddFieldWindowListBox::~OAddFieldWindowListBox()
 {
-    dispose();
+    disposeOnce();
 }
 
 void OAddFieldWindowListBox::dispose()
@@ -216,7 +216,7 @@ OAddFieldWindow::OAddFieldWindow(vcl::Window* pParent
 
 OAddFieldWindow::~OAddFieldWindow()
 {
-    dispose();
+    disposeOnce();
 }
 
 void OAddFieldWindow::dispose()

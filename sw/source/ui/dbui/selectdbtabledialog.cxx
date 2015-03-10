@@ -147,7 +147,7 @@ SwSelectDBTableDialog::SwSelectDBTableDialog(vcl::Window* pParent,
 
 SwSelectDBTableDialog::~SwSelectDBTableDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwSelectDBTableDialog::dispose()

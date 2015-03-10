@@ -615,7 +615,7 @@ void SAL_CALL OResultSet::close() throw(SQLException, RuntimeException, std::exc
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
 
-    dispose();
+    disposeOnce();
 }
 
 sal_Bool SAL_CALL OResultSet::first() throw(SQLException, RuntimeException, std::exception)

@@ -373,7 +373,7 @@ namespace pcr
 
     OBrowserListBox::~OBrowserListBox()
     {
-        dispose();
+        disposeOnce();
     }
 
     void OBrowserListBox::dispose()

@@ -122,7 +122,7 @@ SvxBitmapTabPage::SvxBitmapTabPage(  vcl::Window* pParent, const SfxItemSet& rIn
 
 SvxBitmapTabPage::~SvxBitmapTabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxBitmapTabPage::dispose()

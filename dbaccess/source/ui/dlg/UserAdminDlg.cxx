@@ -73,7 +73,7 @@ namespace dbaui
 
     OUserAdminDlg::~OUserAdminDlg()
     {
-        dispose();
+        disposeOnce();
     }
 
     void OUserAdminDlg::dispose()

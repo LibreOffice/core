@@ -78,7 +78,7 @@ IMPL_LINK_NOARG(SdPageListControl, CheckButtonClickHdl)
 
 SdPageListControl::~SdPageListControl()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SdPageListControl::dispose()

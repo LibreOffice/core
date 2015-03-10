@@ -64,7 +64,7 @@ namespace abp
 
     FinalPage::~FinalPage()
     {
-        dispose();
+        disposeOnce();
     }
 
     void FinalPage::dispose()

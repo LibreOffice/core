@@ -137,7 +137,7 @@ SwSidebarWin::SwSidebarWin( SwEditWin& rEditWin,
 
 SwSidebarWin::~SwSidebarWin()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwSidebarWin::dispose()

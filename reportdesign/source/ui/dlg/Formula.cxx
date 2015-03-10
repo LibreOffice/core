@@ -87,7 +87,7 @@ void FormulaDialog::fill()
 
 FormulaDialog::~FormulaDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void FormulaDialog::dispose()

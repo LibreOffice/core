@@ -109,7 +109,7 @@ namespace dbaui
 
     OConnectionHelper::~OConnectionHelper()
     {
-        dispose();
+        disposeOnce();
     }
 
     void OConnectionHelper::dispose()

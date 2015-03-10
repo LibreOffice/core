@@ -56,7 +56,7 @@ ODocumentInfoPreview::ODocumentInfoPreview(vcl::Window * pParent, WinBits nBits)
 
 ODocumentInfoPreview::~ODocumentInfoPreview()
 {
-   dispose();
+    disposeOnce();
 }
 
 void ODocumentInfoPreview::dispose()

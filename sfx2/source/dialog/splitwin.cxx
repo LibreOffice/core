@@ -116,7 +116,7 @@ public:
                         }
 
                         virtual ~SfxEmptySplitWin_Impl()
-                        { dispose(); }
+                        { disposeOnce(); }
    virtual void         dispose() SAL_OVERRIDE
                         {
                             aTimer.Stop();
@@ -304,7 +304,7 @@ SfxSplitWindow::SfxSplitWindow( vcl::Window* pParent, SfxChildAlignment eAl,
 
 SfxSplitWindow::~SfxSplitWindow()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SfxSplitWindow::dispose()

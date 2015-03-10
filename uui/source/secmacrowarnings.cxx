@@ -89,7 +89,7 @@ MacroWarning::MacroWarning( vcl::Window* _pParent, bool _bWithSignatures, ResMgr
 
 MacroWarning::~MacroWarning()
 {
-    dispose();
+    disposeOnce();
 }
 
 void MacroWarning::dispose()

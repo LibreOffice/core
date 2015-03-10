@@ -68,7 +68,7 @@ SwTableWidthDlg::SwTableWidthDlg(vcl::Window *pParent, SwTableFUNC &rTableFnc )
 
 SwTableWidthDlg::~SwTableWidthDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwTableWidthDlg::dispose()

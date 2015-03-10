@@ -748,7 +748,7 @@ ParaPropertyPanel::ParaPropertyPanel(vcl::Window* pParent,
 
 ParaPropertyPanel::~ParaPropertyPanel()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ParaPropertyPanel::dispose()

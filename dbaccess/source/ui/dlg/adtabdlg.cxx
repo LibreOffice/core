@@ -362,7 +362,7 @@ OAddTableDlg::OAddTableDlg( vcl::Window* pParent, IAddTableDialogContext& _rCont
 
 OAddTableDlg::~OAddTableDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void OAddTableDlg::dispose()

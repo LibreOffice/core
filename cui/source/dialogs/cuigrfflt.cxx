@@ -155,7 +155,7 @@ GraphicFilterDialog::GraphicFilterDialog(vcl::Window* pParent,
 
 GraphicFilterDialog::~GraphicFilterDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void GraphicFilterDialog::dispose()
@@ -216,7 +216,7 @@ GraphicFilterMosaic::GraphicFilterMosaic( vcl::Window* pParent, const Graphic& r
 
 GraphicFilterMosaic::~GraphicFilterMosaic()
 {
-    dispose();
+    disposeOnce();
 }
 
 void GraphicFilterMosaic::dispose()
@@ -280,7 +280,7 @@ GraphicFilterSmooth::GraphicFilterSmooth( vcl::Window* pParent, const Graphic& r
 
 GraphicFilterSmooth::~GraphicFilterSmooth()
 {
-    dispose();
+    disposeOnce();
 }
 
 void GraphicFilterSmooth::dispose()
@@ -338,7 +338,7 @@ GraphicFilterSolarize::GraphicFilterSolarize( vcl::Window* pParent, const Graphi
 
 GraphicFilterSolarize::~GraphicFilterSolarize()
 {
-    dispose();
+    disposeOnce();
 }
 
 void GraphicFilterSolarize::dispose()
@@ -400,7 +400,7 @@ GraphicFilterSepia::GraphicFilterSepia( vcl::Window* pParent, const Graphic& rGr
 
 GraphicFilterSepia::~GraphicFilterSepia()
 {
-    dispose();
+    disposeOnce();
 }
 
 void GraphicFilterSepia::dispose()
@@ -453,7 +453,7 @@ GraphicFilterPoster::GraphicFilterPoster(vcl::Window* pParent, const Graphic& rG
 
 GraphicFilterPoster::~GraphicFilterPoster()
 {
-    dispose();
+    disposeOnce();
 }
 
 void GraphicFilterPoster::dispose()
@@ -526,7 +526,7 @@ GraphicFilterEmboss::GraphicFilterEmboss(vcl::Window* pParent,
 
 GraphicFilterEmboss::~GraphicFilterEmboss()
 {
-    dispose();
+    disposeOnce();
 }
 
 void GraphicFilterEmboss::dispose()

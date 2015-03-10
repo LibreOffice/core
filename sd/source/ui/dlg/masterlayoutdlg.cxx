@@ -77,7 +77,7 @@ MasterLayoutDialog::MasterLayoutDialog( vcl::Window* pParent, SdDrawDocument* pD
 
 MasterLayoutDialog::~MasterLayoutDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void MasterLayoutDialog::dispose()

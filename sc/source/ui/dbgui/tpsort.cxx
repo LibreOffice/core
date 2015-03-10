@@ -95,7 +95,7 @@ ScTabPageSortFields::ScTabPageSortFields(vcl::Window* pParent,
 
 ScTabPageSortFields::~ScTabPageSortFields()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScTabPageSortFields::dispose()
@@ -523,7 +523,7 @@ ScTabPageSortOptions::ScTabPageSortOptions( vcl::Window*             pParent,
 
 ScTabPageSortOptions::~ScTabPageSortOptions()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScTabPageSortOptions::dispose()

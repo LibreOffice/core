@@ -327,7 +327,7 @@ namespace offapp
 
     ConnectionPoolOptionsPage::~ConnectionPoolOptionsPage()
     {
-        dispose();
+        disposeOnce();
     }
 
     void ConnectionPoolOptionsPage::dispose()

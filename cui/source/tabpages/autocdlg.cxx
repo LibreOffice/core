@@ -139,7 +139,7 @@ OfaAutoCorrDlg::OfaAutoCorrDlg(vcl::Window* pParent, const SfxItemSet* _pSet )
 
 OfaAutoCorrDlg::~OfaAutoCorrDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void OfaAutoCorrDlg::dispose()
@@ -206,7 +206,7 @@ OfaAutocorrOptionsPage::OfaAutocorrOptionsPage(vcl::Window* pParent, const SfxIt
 
 OfaAutocorrOptionsPage::~OfaAutocorrOptionsPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void OfaAutocorrOptionsPage::dispose()
@@ -312,7 +312,7 @@ public:
     {
         get(m_pPrcntMF, "margin");
     }
-    virtual ~OfaAutoFmtPrcntSet() { dispose(); }
+    virtual ~OfaAutoFmtPrcntSet() { disposeOnce(); }
     virtual void dispose() SAL_OVERRIDE { m_pPrcntMF.clear(); ModalDialog::dispose(); }
 
     MetricField& GetPrcntFld()
@@ -495,7 +495,7 @@ SvTreeListEntry* OfaSwAutoFmtOptionsPage::CreateEntry(OUString& rTxt, sal_uInt16
 
 OfaSwAutoFmtOptionsPage::~OfaSwAutoFmtOptionsPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void OfaSwAutoFmtOptionsPage::dispose()
@@ -934,7 +934,7 @@ void OfaAutocorrReplacePage::Resize()
 
 OfaAutocorrReplacePage::~OfaAutocorrReplacePage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void OfaAutocorrReplacePage::dispose()
@@ -1452,7 +1452,7 @@ OfaAutocorrExceptPage::OfaAutocorrExceptPage(vcl::Window* pParent, const SfxItem
 
 OfaAutocorrExceptPage::~OfaAutocorrExceptPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void OfaAutocorrExceptPage::dispose()
@@ -1885,7 +1885,7 @@ OfaQuoteTabPage::OfaQuoteTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
 
 OfaQuoteTabPage::~OfaQuoteTabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void OfaQuoteTabPage::dispose()
@@ -2231,7 +2231,7 @@ OfaAutoCompleteTabPage::OfaAutoCompleteTabPage(vcl::Window* pParent,
 
 OfaAutoCompleteTabPage::~OfaAutoCompleteTabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void OfaAutoCompleteTabPage::dispose()
@@ -2424,7 +2424,7 @@ void OfaAutoCompleteTabPage::CopyToClipboard() const
 
 OfaAutoCompleteTabPage::AutoCompleteMultiListBox::~AutoCompleteMultiListBox()
 {
-    dispose();
+    disposeOnce();
 }
 
 void OfaAutoCompleteTabPage::AutoCompleteMultiListBox::dispose()
@@ -2496,7 +2496,7 @@ OfaSmartTagOptionsTabPage::OfaSmartTagOptionsTabPage( vcl::Window* pParent,
 
 OfaSmartTagOptionsTabPage::~OfaSmartTagOptionsTabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void OfaSmartTagOptionsTabPage::dispose()

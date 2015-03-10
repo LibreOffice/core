@@ -83,7 +83,7 @@ ScPivotFilterDlg::ScPivotFilterDlg(vcl::Window* pParent, const SfxItemSet& rArgS
 
 ScPivotFilterDlg::~ScPivotFilterDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScPivotFilterDlg::dispose()

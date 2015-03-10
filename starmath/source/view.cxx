@@ -119,7 +119,7 @@ SmGraphicWindow::SmGraphicWindow(SmViewShell* pShell):
 
 SmGraphicWindow::~SmGraphicWindow()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SmGraphicWindow::dispose()
@@ -728,7 +728,7 @@ SmCmdBoxWindow::SmCmdBoxWindow(SfxBindings *pBindings_, SfxChildWindow *pChildWi
 
 SmCmdBoxWindow::~SmCmdBoxWindow ()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SmCmdBoxWindow::dispose()

@@ -41,7 +41,7 @@ FmShowColsDialog::FmShowColsDialog(vcl::Window* pParent)
 
 FmShowColsDialog::~FmShowColsDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void FmShowColsDialog::dispose()

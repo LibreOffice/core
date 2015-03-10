@@ -78,7 +78,7 @@ ScHFPage::ScHFPage( vcl::Window* pParent, const SfxItemSet& rSet, sal_uInt16 nSe
 
 ScHFPage::~ScHFPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScHFPage::dispose()

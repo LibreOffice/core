@@ -203,7 +203,7 @@ static void calcFontHeightAnyAscent( OutputDevice* _pWin, vcl::Font& _rFont, lon
 
 SwDropCapsPict::~SwDropCapsPict()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwDropCapsPict::dispose()
@@ -576,7 +576,7 @@ SwDropCapsPage::SwDropCapsPage(vcl::Window *pParent, const SfxItemSet &rSet)
 
 SwDropCapsPage::~SwDropCapsPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwDropCapsPage::dispose()

@@ -59,7 +59,7 @@ TitlesAndObjectsTabPage::TitlesAndObjectsTabPage( svt::OWizardMachine* pParent
 
 TitlesAndObjectsTabPage::~TitlesAndObjectsTabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void TitlesAndObjectsTabPage::dispose()

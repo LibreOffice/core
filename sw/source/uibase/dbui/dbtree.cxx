@@ -196,7 +196,7 @@ Size SwDBTreeList::GetOptimalSize() const
 
 SwDBTreeList::~SwDBTreeList()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwDBTreeList::dispose()

@@ -516,7 +516,7 @@ sal_uInt16 SwEditRegionDlg::FindArrPos(const SwSectionFmt* pFmt )
 
 SwEditRegionDlg::~SwEditRegionDlg( )
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwEditRegionDlg::dispose()
@@ -1561,7 +1561,7 @@ SwInsertSectionTabPage::SwInsertSectionTabPage(
 
 SwInsertSectionTabPage::~SwInsertSectionTabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwInsertSectionTabPage::dispose()
@@ -1886,7 +1886,7 @@ SwSectionFtnEndTabPage::SwSectionFtnEndTabPage( vcl::Window *pParent,
 
 SwSectionFtnEndTabPage::~SwSectionFtnEndTabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwSectionFtnEndTabPage::dispose()
@@ -2173,7 +2173,7 @@ SwSectionIndentTabPage::SwSectionIndentTabPage(vcl::Window *pParent, const SfxIt
 
 SwSectionIndentTabPage::~SwSectionIndentTabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwSectionIndentTabPage::dispose()

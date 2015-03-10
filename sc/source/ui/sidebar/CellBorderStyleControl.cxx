@@ -58,7 +58,7 @@ CellBorderStyleControl::CellBorderStyleControl(vcl::Window* pParent, CellAppeara
 
 CellBorderStyleControl::~CellBorderStyleControl(void)
 {
-    dispose();
+    disposeOnce();
 }
 
 void CellBorderStyleControl::dispose()

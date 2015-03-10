@@ -95,7 +95,7 @@ Button::Button( WindowType nType ) :
 
 Button::~Button()
 {
-    dispose();
+    disposeOnce();
 }
 
 void Button::dispose()
@@ -2309,7 +2309,7 @@ void RadioButton::ImplLoadRes( const ResId& rResId )
 
 RadioButton::~RadioButton()
 {
-    dispose();
+    disposeOnce();
 }
 
 void RadioButton::dispose()

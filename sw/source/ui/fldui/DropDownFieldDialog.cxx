@@ -73,7 +73,7 @@ sw::DropDownFieldDialog::DropDownFieldDialog(vcl::Window *pParent, SwWrtShell &r
 
 sw::DropDownFieldDialog::~DropDownFieldDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void sw::DropDownFieldDialog::dispose()

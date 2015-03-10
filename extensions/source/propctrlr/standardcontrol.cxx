@@ -984,7 +984,7 @@ namespace pcr
 
     OMultilineFloatingEdit::~OMultilineFloatingEdit()
     {
-        dispose();
+        disposeOnce();
     }
 
     void OMultilineFloatingEdit::dispose()
@@ -1072,7 +1072,7 @@ namespace pcr
 
     DropDownEditControl::~DropDownEditControl()
     {
-        dispose();
+        disposeOnce();
     }
 
     void DropDownEditControl::dispose()

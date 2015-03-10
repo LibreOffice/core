@@ -75,7 +75,7 @@ ManageLanguageDialog::ManageLanguageDialog(vcl::Window* pParent, boost::shared_p
 
 ManageLanguageDialog::~ManageLanguageDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ManageLanguageDialog::dispose()
@@ -259,7 +259,7 @@ SetDefaultLanguageDialog::SetDefaultLanguageDialog(vcl::Window* pParent, boost::
 
 SetDefaultLanguageDialog::~SetDefaultLanguageDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SetDefaultLanguageDialog::dispose()

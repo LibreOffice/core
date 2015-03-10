@@ -120,7 +120,7 @@ IMPL_LINK_NOARG(SvxTransparenceTabPage, ClickTransGradientHdl_Impl)
 
 SvxTransparenceTabPage::~SvxTransparenceTabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxTransparenceTabPage::dispose()
@@ -797,7 +797,7 @@ SvxAreaTabPage::SvxAreaTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs
 
 SvxAreaTabPage::~SvxAreaTabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxAreaTabPage::dispose()

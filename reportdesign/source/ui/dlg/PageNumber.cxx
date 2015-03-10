@@ -63,7 +63,7 @@ OPageNumberDialog::OPageNumberDialog( vcl::Window* _pParent
 
 OPageNumberDialog::~OPageNumberDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void OPageNumberDialog::dispose()

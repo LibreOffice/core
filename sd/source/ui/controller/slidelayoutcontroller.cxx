@@ -257,7 +257,7 @@ LayoutToolbarMenu::LayoutToolbarMenu( SlideLayoutController& rController, const 
 
 LayoutToolbarMenu::~LayoutToolbarMenu()
 {
-    dispose();
+    disposeOnce();
 }
 
 void LayoutToolbarMenu::dispose()

@@ -484,7 +484,7 @@ SdPublishingDlg::SdPublishingDlg(vcl::Window* pWindow, DocumentType eDocType)
 
 SdPublishingDlg::~SdPublishingDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SdPublishingDlg::dispose()
@@ -1634,7 +1634,7 @@ SdDesignNameDlg::SdDesignNameDlg(vcl::Window* pWindow, const OUString& aName)
 
 SdDesignNameDlg::~SdDesignNameDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SdDesignNameDlg::dispose()

@@ -69,7 +69,7 @@ namespace dbmm
 
     PreparationPage::~PreparationPage()
     {
-        dispose();
+        disposeOnce();
     }
 
     void PreparationPage::dispose()
@@ -106,7 +106,7 @@ namespace dbmm
 
     SaveDBDocPage::~SaveDBDocPage()
     {
-        dispose();
+        disposeOnce();
     }
 
     void SaveDBDocPage::dispose()
@@ -196,7 +196,7 @@ namespace dbmm
 
     ProgressPage::~ProgressPage()
     {
-        dispose();
+        disposeOnce();
     }
 
     void ProgressPage::dispose()
@@ -293,7 +293,7 @@ namespace dbmm
 
     ResultPage::~ResultPage()
     {
-        dispose();
+        disposeOnce();
     }
 
     void ResultPage::dispose()

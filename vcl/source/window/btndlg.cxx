@@ -59,7 +59,7 @@ ButtonDialog::ButtonDialog( vcl::Window* pParent, WinBits nStyle ) :
 
 ButtonDialog::~ButtonDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ButtonDialog::dispose()

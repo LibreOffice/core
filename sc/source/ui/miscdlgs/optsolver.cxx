@@ -55,7 +55,7 @@ ScSolverProgressDialog::ScSolverProgressDialog(vcl::Window* pParent)
 
 ScSolverProgressDialog::~ScSolverProgressDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScSolverProgressDialog::dispose()
@@ -86,7 +86,7 @@ ScSolverNoSolutionDialog::ScSolverNoSolutionDialog( vcl::Window* pParent, const 
 
 ScSolverNoSolutionDialog::~ScSolverNoSolutionDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScSolverNoSolutionDialog::dispose()
@@ -109,7 +109,7 @@ ScSolverSuccessDialog::ScSolverSuccessDialog( vcl::Window* pParent, const OUStri
 
 ScSolverSuccessDialog::~ScSolverSuccessDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScSolverSuccessDialog::dispose()
@@ -303,7 +303,7 @@ ScOptSolverDlg::ScOptSolverDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Windo
 
 ScOptSolverDlg::~ScOptSolverDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScOptSolverDlg::dispose()

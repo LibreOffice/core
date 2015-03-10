@@ -105,7 +105,7 @@ StructPage::StructPage(vcl::Window* pParent):
 
 StructPage::~StructPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void StructPage::dispose()

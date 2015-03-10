@@ -50,10 +50,10 @@ public:
         , nTabStyle(0)
     {
     }
-    virtual ~TabWin_Impl() { dispose(); }
+    virtual ~TabWin_Impl() { disposeOnce(); }
     virtual void dispose() SAL_OVERRIDE { mpPage.clear(); vcl::Window::dispose(); }
 
-    virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
 
     void SetTabulatorTabPage(SvxTabulatorTabPage* pPage) { mpPage = pPage; }
     void SetTabStyle(sal_uInt16 nStyle) {nTabStyle = nStyle; }
@@ -189,7 +189,7 @@ SvxTabulatorTabPage::SvxTabulatorTabPage( vcl::Window* pParent, const SfxItemSet
 
 SvxTabulatorTabPage::~SvxTabulatorTabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxTabulatorTabPage::dispose()

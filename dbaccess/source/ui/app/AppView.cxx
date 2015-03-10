@@ -86,7 +86,7 @@ OAppBorderWindow::OAppBorderWindow(OApplicationView* _pParent,PreviewMode _ePrev
 
 OAppBorderWindow::~OAppBorderWindow()
 {
-    dispose();
+    disposeOnce();
 }
 
 void OAppBorderWindow::dispose()
@@ -208,7 +208,7 @@ OApplicationView::OApplicationView( vcl::Window* pParent
 
 OApplicationView::~OApplicationView()
 {
-    dispose();
+    disposeOnce();
 }
 
 void OApplicationView::dispose()

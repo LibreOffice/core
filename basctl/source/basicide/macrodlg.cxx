@@ -112,7 +112,7 @@ MacroChooser::MacroChooser( vcl::Window* pParnt, bool bCreateEntries )
 
 MacroChooser::~MacroChooser()
 {
-    dispose();
+    disposeOnce();
 }
 
 void MacroChooser::dispose()

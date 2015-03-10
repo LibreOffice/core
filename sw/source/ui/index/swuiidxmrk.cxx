@@ -565,7 +565,7 @@ class SwNewUserIdxDlg : public ModalDialog
                 m_pOKPB->Enable(false);
                 m_pNameED->GrabFocus();
             }
-    virtual ~SwNewUserIdxDlg() { dispose(); }
+    virtual ~SwNewUserIdxDlg() { disposeOnce(); }
     virtual void dispose() SAL_OVERRIDE
     {
         m_pOKPB.clear();
@@ -1527,7 +1527,7 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(vcl::Window* pParent,
 
 SwCreateAuthEntryDlg_Impl::~SwCreateAuthEntryDlg_Impl()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwCreateAuthEntryDlg_Impl::dispose()

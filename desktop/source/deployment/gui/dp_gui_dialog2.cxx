@@ -203,7 +203,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeExtBoxWithBtns(vcl::Wi
 
 ExtBoxWithBtns_Impl::~ExtBoxWithBtns_Impl()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ExtBoxWithBtns_Impl::dispose()
@@ -724,7 +724,7 @@ ExtMgrDialog::ExtMgrDialog(vcl::Window *pParent, TheExtensionManager *pManager)
 
 ExtMgrDialog::~ExtMgrDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ExtMgrDialog::dispose()
@@ -1222,7 +1222,7 @@ UpdateRequiredDialog::UpdateRequiredDialog(vcl::Window *pParent, TheExtensionMan
 
 UpdateRequiredDialog::~UpdateRequiredDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void UpdateRequiredDialog::dispose()
@@ -1610,7 +1610,7 @@ ShowLicenseDialog::ShowLicenseDialog( vcl::Window * pParent,
 
 ShowLicenseDialog::~ShowLicenseDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ShowLicenseDialog::dispose()

@@ -63,7 +63,7 @@ ChineseTranslationDialog::ChineseTranslationDialog( vcl::Window* pParent )
 
 ChineseTranslationDialog::~ChineseTranslationDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ChineseTranslationDialog::dispose()

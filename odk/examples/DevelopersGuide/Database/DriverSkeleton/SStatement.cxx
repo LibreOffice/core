@@ -133,7 +133,7 @@ void SAL_CALL OStatement_Base::close(  ) throw(SQLException, RuntimeException)
         checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
     }
-    dispose();
+    disposeOnce();
 }
 
 

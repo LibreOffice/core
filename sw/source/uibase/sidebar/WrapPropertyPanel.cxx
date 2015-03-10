@@ -89,7 +89,7 @@ WrapPropertyPanel::WrapPropertyPanel(
 
 WrapPropertyPanel::~WrapPropertyPanel()
 {
-    dispose();
+    disposeOnce();
 }
 
 void WrapPropertyPanel::dispose()

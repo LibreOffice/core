@@ -72,7 +72,7 @@ namespace svx
 
     ODocumentLinkDialog::~ODocumentLinkDialog()
     {
-        dispose();
+        disposeOnce();
     }
 
     void ODocumentLinkDialog::dispose()

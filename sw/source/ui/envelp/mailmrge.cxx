@@ -389,7 +389,7 @@ SwMailMergeDlg::SwMailMergeDlg(vcl::Window* pParent, SwWrtShell& rShell,
 
 SwMailMergeDlg::~SwMailMergeDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwMailMergeDlg::dispose()
@@ -673,7 +673,7 @@ SwMailMergeCreateFromDlg::SwMailMergeCreateFromDlg(vcl::Window* pParent)
 
 SwMailMergeCreateFromDlg::~SwMailMergeCreateFromDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwMailMergeCreateFromDlg::dispose()
@@ -691,7 +691,7 @@ SwMailMergeFieldConnectionsDlg::SwMailMergeFieldConnectionsDlg(vcl::Window* pPar
 
 SwMailMergeFieldConnectionsDlg::~SwMailMergeFieldConnectionsDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwMailMergeFieldConnectionsDlg::dispose()

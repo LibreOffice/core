@@ -60,7 +60,7 @@ SwMailMergePrepareMergePage::SwMailMergePrepareMergePage( SwMailMergeWizard* _pP
 
 SwMailMergePrepareMergePage::~SwMailMergePrepareMergePage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwMailMergePrepareMergePage::dispose()

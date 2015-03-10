@@ -88,7 +88,7 @@ ScStatisticsInputOutputDialog::ScStatisticsInputOutputDialog(
 
 ScStatisticsInputOutputDialog::~ScStatisticsInputOutputDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScStatisticsInputOutputDialog::dispose()

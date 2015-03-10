@@ -39,7 +39,7 @@ OSplitterView::OSplitterView(vcl::Window* _pParent,bool _bVertical) : Window(_pP
 
 OSplitterView::~OSplitterView()
 {
-    dispose();
+    disposeOnce();
 }
 
 void OSplitterView::dispose()

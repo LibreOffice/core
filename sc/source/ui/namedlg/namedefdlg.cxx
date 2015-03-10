@@ -95,7 +95,7 @@ ScNameDefDlg::ScNameDefDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* p
 
 ScNameDefDlg::~ScNameDefDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScNameDefDlg::dispose()

@@ -62,7 +62,7 @@ ScLinkedAreaDlg::ScLinkedAreaDlg(vcl::Window* pParent)
 
 ScLinkedAreaDlg::~ScLinkedAreaDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScLinkedAreaDlg::dispose()

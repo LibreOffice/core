@@ -70,7 +70,7 @@ ListBox::ListBox( vcl::Window* pParent, const ResId& rResId ) :
 
 ListBox::~ListBox()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ListBox::dispose()

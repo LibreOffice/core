@@ -76,7 +76,7 @@ ScTabOpDlg::ScTabOpDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pPare
 
 ScTabOpDlg::~ScTabOpDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScTabOpDlg::dispose()

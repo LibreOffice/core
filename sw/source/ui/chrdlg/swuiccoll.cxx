@@ -124,7 +124,7 @@ SwCondCollPage::SwCondCollPage(vcl::Window *pParent, const SfxItemSet &rSet)
 
 SwCondCollPage::~SwCondCollPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwCondCollPage::dispose()

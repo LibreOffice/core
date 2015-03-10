@@ -265,7 +265,7 @@ SwAddressListDialog::SwAddressListDialog(SwMailMergeAddressBlockPage* pParent)
 
 SwAddressListDialog::~SwAddressListDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwAddressListDialog::dispose()

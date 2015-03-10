@@ -52,7 +52,7 @@ DependencyDialog::DependencyDialog(
 
 DependencyDialog::~DependencyDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void DependencyDialog::dispose()

@@ -221,7 +221,7 @@ TabDialog::TabDialog( vcl::Window* pParent, const OUString& rID, const OUString&
 
 TabDialog::~TabDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void TabDialog::dispose()

@@ -173,7 +173,7 @@ SvxGridTabPage::SvxGridTabPage( vcl::Window* pParent, const SfxItemSet& rCoreSet
 
 SvxGridTabPage::~SvxGridTabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxGridTabPage::dispose()

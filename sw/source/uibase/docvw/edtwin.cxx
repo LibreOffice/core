@@ -4968,7 +4968,7 @@ SwEditWin::SwEditWin(vcl::Window *pParent, SwView &rMyView):
 
 SwEditWin::~SwEditWin()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwEditWin::dispose()

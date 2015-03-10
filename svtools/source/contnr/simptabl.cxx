@@ -33,7 +33,7 @@ SvSimpleTableContainer::SvSimpleTableContainer(vcl::Window* pParent, WinBits nBi
 
 SvSimpleTableContainer::~SvSimpleTableContainer()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvSimpleTableContainer::dispose()
@@ -123,7 +123,7 @@ SvSimpleTable::SvSimpleTable(SvSimpleTableContainer& rParent, WinBits nBits):
 
 SvSimpleTable::~SvSimpleTable()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvSimpleTable::dispose()

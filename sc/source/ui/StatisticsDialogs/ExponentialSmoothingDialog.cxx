@@ -38,7 +38,7 @@ ScExponentialSmoothingDialog::ScExponentialSmoothingDialog(
 
 ScExponentialSmoothingDialog::~ScExponentialSmoothingDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScExponentialSmoothingDialog::dispose()

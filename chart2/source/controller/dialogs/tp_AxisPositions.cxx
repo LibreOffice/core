@@ -86,7 +86,7 @@ AxisPositionsTabPage::AxisPositionsTabPage(vcl::Window* pWindow,const SfxItemSet
 
 AxisPositionsTabPage::~AxisPositionsTabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void AxisPositionsTabPage::dispose()

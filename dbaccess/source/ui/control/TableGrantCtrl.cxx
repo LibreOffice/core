@@ -71,7 +71,7 @@ OTableGrantControl::OTableGrantControl( vcl::Window* pParent, WinBits nBits)
 
 OTableGrantControl::~OTableGrantControl()
 {
-    dispose();
+    disposeOnce();
 }
 
 void OTableGrantControl::dispose()

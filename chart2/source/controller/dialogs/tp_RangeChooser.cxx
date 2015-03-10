@@ -124,7 +124,7 @@ RangeChooserTabPage::RangeChooserTabPage( vcl::Window* pParent
 
 RangeChooserTabPage::~RangeChooserTabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void RangeChooserTabPage::dispose()

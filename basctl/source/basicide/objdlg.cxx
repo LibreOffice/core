@@ -69,7 +69,7 @@ ObjectCatalog::ObjectCatalog (vcl::Window* pParent) :
 
 ObjectCatalog::~ObjectCatalog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ObjectCatalog::dispose()

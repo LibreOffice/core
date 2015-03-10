@@ -185,7 +185,7 @@ PropBrw::PropBrw(const Reference< XComponentContext >& _xORB, vcl::Window* pPare
 
 PropBrw::~PropBrw()
 {
-    dispose();
+    disposeOnce();
 }
 
 void PropBrw::dispose()

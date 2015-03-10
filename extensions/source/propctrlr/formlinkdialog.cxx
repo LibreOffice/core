@@ -109,7 +109,7 @@ namespace pcr
 
     FieldLinkRow::~FieldLinkRow()
     {
-        dispose();
+        disposeOnce();
     }
 
     void FieldLinkRow::dispose()
@@ -206,7 +206,7 @@ namespace pcr
 
     FormLinkDialog::~FormLinkDialog( )
     {
-        dispose();
+        disposeOnce();
     }
 
     void FormLinkDialog::dispose( )

@@ -241,7 +241,7 @@ HeaderFooterDialog::HeaderFooterDialog( ViewShell* pViewShell, vcl::Window* pPar
 
 HeaderFooterDialog::~HeaderFooterDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void HeaderFooterDialog::dispose()
@@ -462,7 +462,7 @@ HeaderFooterTabPage::HeaderFooterTabPage( vcl::Window* pWindow, SdDrawDocument* 
 
 HeaderFooterTabPage::~HeaderFooterTabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void HeaderFooterTabPage::dispose()

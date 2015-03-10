@@ -412,7 +412,7 @@ void SwCaptionDialog::DrawSample()
 
 SwCaptionDialog::~SwCaptionDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwCaptionDialog::dispose()
@@ -476,7 +476,7 @@ SwSequenceOptionDialog::SwSequenceOptionDialog( vcl::Window *pParent, SwView &rV
 
 SwSequenceOptionDialog::~SwSequenceOptionDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwSequenceOptionDialog::dispose()

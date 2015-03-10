@@ -514,7 +514,7 @@ SvxHyphenWordDialog::SvxHyphenWordDialog(
 
 SvxHyphenWordDialog::~SvxHyphenWordDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxHyphenWordDialog::dispose()

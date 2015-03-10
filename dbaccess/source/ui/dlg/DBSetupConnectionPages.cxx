@@ -76,7 +76,7 @@ using namespace ::com::sun::star;
 
     OTextConnectionPageSetup::~OTextConnectionPageSetup()
     {
-        dispose();
+        disposeOnce();
     }
 
     void OTextConnectionPageSetup::dispose()
@@ -158,7 +158,7 @@ using namespace ::com::sun::star;
 
     OLDAPConnectionPageSetup::~OLDAPConnectionPageSetup()
     {
-        dispose();
+        disposeOnce();
     }
 
     void OLDAPConnectionPageSetup::dispose()
@@ -261,7 +261,7 @@ using namespace ::com::sun::star;
 
     OMySQLIntroPageSetup::~OMySQLIntroPageSetup()
     {
-        dispose();
+        disposeOnce();
     }
 
     void OMySQLIntroPageSetup::dispose()
@@ -334,7 +334,7 @@ using namespace ::com::sun::star;
 
     MySQLNativeSetupPage::~MySQLNativeSetupPage()
     {
-        dispose();
+        disposeOnce();
     }
 
     void MySQLNativeSetupPage::dispose()
@@ -433,7 +433,7 @@ using namespace ::com::sun::star;
 
     OGeneralSpecialJDBCConnectionPageSetup::~OGeneralSpecialJDBCConnectionPageSetup()
     {
-        dispose();
+        disposeOnce();
     }
 
     void OGeneralSpecialJDBCConnectionPageSetup::dispose()
@@ -597,7 +597,7 @@ using namespace ::com::sun::star;
 
     OJDBCConnectionPageSetup::~OJDBCConnectionPageSetup()
     {
-        dispose();
+        disposeOnce();
     }
 
     void OJDBCConnectionPageSetup::dispose()
@@ -715,7 +715,7 @@ using namespace ::com::sun::star;
 
     OSpreadSheetConnectionPageSetup::~OSpreadSheetConnectionPageSetup()
     {
-        dispose();
+        disposeOnce();
     }
 
     void OSpreadSheetConnectionPageSetup::dispose()
@@ -770,7 +770,7 @@ using namespace ::com::sun::star;
 
     OAuthentificationPageSetup::~OAuthentificationPageSetup()
     {
-        dispose();
+        disposeOnce();
     }
 
     void OAuthentificationPageSetup::dispose()
@@ -850,7 +850,7 @@ using namespace ::com::sun::star;
 
     OFinalDBPageSetup::~OFinalDBPageSetup()
     {
-        dispose();
+        disposeOnce();
     }
 
     void OFinalDBPageSetup::dispose()

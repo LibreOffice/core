@@ -169,7 +169,7 @@ ScFunctionDockWin::ScFunctionDockWin( SfxBindings* pBindingsP,
 
 ScFunctionDockWin::~ScFunctionDockWin()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScFunctionDockWin::dispose()

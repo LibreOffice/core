@@ -57,7 +57,7 @@ SchAlignmentTabPage::SchAlignmentTabPage(vcl::Window* pWindow,
 
 SchAlignmentTabPage::~SchAlignmentTabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SchAlignmentTabPage::dispose()

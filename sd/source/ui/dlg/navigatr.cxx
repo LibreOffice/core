@@ -152,7 +152,7 @@ SdNavigatorWin::SdNavigatorWin(
 
 SdNavigatorWin::~SdNavigatorWin()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SdNavigatorWin::dispose()

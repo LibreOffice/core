@@ -38,7 +38,7 @@ using namespace com::sun::star;
 
 LoginDialog::~LoginDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void LoginDialog::dispose()

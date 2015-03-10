@@ -68,7 +68,7 @@ LookUpComboBox::LookUpComboBox(vcl::Window *pParent)
 
 LookUpComboBox::~LookUpComboBox()
 {
-    dispose();
+    disposeOnce();
 }
 
 void LookUpComboBox::dispose()
@@ -109,7 +109,7 @@ ReplaceEdit::ReplaceEdit(vcl::Window *pParent)
 
 ReplaceEdit::~ReplaceEdit()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ReplaceEdit::dispose()
@@ -193,7 +193,7 @@ void ThesaurusAlternativesCtrl::init(SvxThesaurusDialog *pDialog)
 
 ThesaurusAlternativesCtrl::~ThesaurusAlternativesCtrl()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ThesaurusAlternativesCtrl::dispose()
@@ -540,7 +540,7 @@ SvxThesaurusDialog::SvxThesaurusDialog(
 
 SvxThesaurusDialog::~SvxThesaurusDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxThesaurusDialog::dispose()

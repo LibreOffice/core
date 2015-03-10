@@ -242,7 +242,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( vcl::Window* pParent, SwDocShell& rDocSh,
 
 SwAsciiFilterDlg::~SwAsciiFilterDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwAsciiFilterDlg::dispose()

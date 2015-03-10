@@ -103,7 +103,7 @@ void SvxEventConfigPage::LateInit( const uno::Reference< frame::XFrame >& _rxFra
 
 SvxEventConfigPage::~SvxEventConfigPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxEventConfigPage::dispose()

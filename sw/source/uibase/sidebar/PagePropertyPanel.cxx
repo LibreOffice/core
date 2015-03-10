@@ -200,7 +200,7 @@ PagePropertyPanel::PagePropertyPanel(
 
 PagePropertyPanel::~PagePropertyPanel()
 {
-    dispose();
+    disposeOnce();
 }
 
 void PagePropertyPanel::dispose()

@@ -138,7 +138,7 @@ OutlineBulletDlg::OutlineBulletDlg(
 
 OutlineBulletDlg::~OutlineBulletDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void OutlineBulletDlg::dispose()

@@ -85,7 +85,7 @@ ScCsvGrid::ScCsvGrid( ScCsvControl& rParent ) :
 
 ScCsvGrid::~ScCsvGrid()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScCsvGrid::dispose()

@@ -87,7 +87,7 @@ SfxCommonPrintOptionsTabPage::SfxCommonPrintOptionsTabPage( vcl::Window* pParent
 
 SfxCommonPrintOptionsTabPage::~SfxCommonPrintOptionsTabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SfxCommonPrintOptionsTabPage::dispose()

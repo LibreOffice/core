@@ -94,7 +94,7 @@ ParaLineSpacingControl::ParaLineSpacingControl(sal_uInt16 nId)
 
 ParaLineSpacingControl::~ParaLineSpacingControl()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ParaLineSpacingControl::dispose()

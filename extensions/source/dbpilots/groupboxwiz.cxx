@@ -214,7 +214,7 @@ namespace dbp
 
     ORadioSelectionPage::~ORadioSelectionPage()
     {
-        dispose();
+        disposeOnce();
     }
 
     void ORadioSelectionPage::dispose()
@@ -356,7 +356,7 @@ namespace dbp
 
     ODefaultFieldSelectionPage::~ODefaultFieldSelectionPage()
     {
-        dispose();
+        disposeOnce();
     }
 
     void ODefaultFieldSelectionPage::dispose()
@@ -415,7 +415,7 @@ namespace dbp
 
     OOptionValuesPage::~OOptionValuesPage()
     {
-        dispose();
+        disposeOnce();
     }
 
     void OOptionValuesPage::dispose()
@@ -524,7 +524,7 @@ namespace dbp
 
     OFinalizeGBWPage::~OFinalizeGBWPage()
     {
-        dispose();
+        disposeOnce();
     }
 
     void OFinalizeGBWPage::dispose()

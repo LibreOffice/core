@@ -67,7 +67,7 @@ Control::Control( vcl::Window* pParent, const ResId& rResId ) :
 
 Control::~Control()
 {
-   dispose();
+    disposeOnce();
 }
 
 void Control::dispose()

@@ -39,7 +39,7 @@ ScShowTabDlg::ScShowTabDlg(vcl::Window* pParent)
 
 ScShowTabDlg::~ScShowTabDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScShowTabDlg::dispose()

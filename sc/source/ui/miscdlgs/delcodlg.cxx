@@ -73,7 +73,7 @@ ScDeleteContentsDlg::ScDeleteContentsDlg( vcl::Window* pParent,
 
 ScDeleteContentsDlg::~ScDeleteContentsDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScDeleteContentsDlg::dispose()

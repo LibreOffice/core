@@ -52,7 +52,7 @@ OQueryTextView::OQueryTextView(OQueryContainerWindow* _pParent)
 
 OQueryTextView::~OQueryTextView()
 {
-    dispose();
+    disposeOnce();
 }
 
 void OQueryTextView::dispose()

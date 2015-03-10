@@ -78,7 +78,7 @@ SwGlossDecideDlg::SwGlossDecideDlg(vcl::Window* pParent)
 
 SwGlossDecideDlg::~SwGlossDecideDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwGlossDecideDlg::dispose()

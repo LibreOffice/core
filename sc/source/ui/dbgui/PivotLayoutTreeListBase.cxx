@@ -29,7 +29,7 @@ ScPivotLayoutTreeListBase::ScPivotLayoutTreeListBase(vcl::Window* pParent, WinBi
 
 ScPivotLayoutTreeListBase::~ScPivotLayoutTreeListBase()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScPivotLayoutTreeListBase::dispose()

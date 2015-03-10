@@ -153,7 +153,7 @@ PasswordToOpenModifyDialog::PasswordToOpenModifyDialog(
 
 PasswordToOpenModifyDialog::~PasswordToOpenModifyDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void PasswordToOpenModifyDialog::dispose()

@@ -74,7 +74,7 @@ class SbiInputDialog : public ModalDialog {
     DECL_LINK( Cancel, vcl::Window * );
 public:
     SbiInputDialog( vcl::Window*, const OUString& );
-    virtual ~SbiInputDialog() { dispose(); }
+    virtual ~SbiInputDialog() { disposeOnce(); }
     virtual void dispose() SAL_OVERRIDE;
     const OUString& GetInput() { return aText; }
 };

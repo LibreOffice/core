@@ -170,7 +170,7 @@ namespace dbaui
 
     MySQLNativeSettings::~MySQLNativeSettings()
     {
-        dispose();
+        disposeOnce();
     }
 
     void MySQLNativeSettings::dispose()

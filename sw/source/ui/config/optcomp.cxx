@@ -128,7 +128,7 @@ SwCompatibilityOptPage::SwCompatibilityOptPage(vcl::Window* pParent, const SfxIt
 
 SwCompatibilityOptPage::~SwCompatibilityOptPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwCompatibilityOptPage::dispose()

@@ -502,7 +502,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxFontPrevWindow(vcl:
 
 SvxFontPrevWindow::~SvxFontPrevWindow()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxFontPrevWindow::dispose()

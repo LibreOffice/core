@@ -56,7 +56,7 @@ namespace dbaui
     }
     OQueryContainerWindow::~OQueryContainerWindow()
     {
-        dispose();
+        disposeOnce();
     }
     void OQueryContainerWindow::dispose()
     {

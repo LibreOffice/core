@@ -733,7 +733,7 @@ void AssignmentPersistentData::ImplCommit()
 
     AddressBookSourceDialog::~AddressBookSourceDialog()
     {
-        dispose();
+        disposeOnce();
     }
 
     void AddressBookSourceDialog::dispose()

@@ -224,7 +224,7 @@ SvxPathSelectDialog::SvxPathSelectDialog(vcl::Window* pParent)
 
 SvxMultiPathDialog::~SvxMultiPathDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxMultiPathDialog::dispose()
@@ -247,7 +247,7 @@ void SvxMultiPathDialog::dispose()
 
 SvxPathSelectDialog::~SvxPathSelectDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxPathSelectDialog::dispose()

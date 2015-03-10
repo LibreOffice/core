@@ -240,7 +240,7 @@ ScImportOptionsDlg::ScImportOptionsDlg(
 
 ScImportOptionsDlg::~ScImportOptionsDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScImportOptionsDlg::dispose()

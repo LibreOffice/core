@@ -65,7 +65,7 @@ MasterPasswordCreateDialog::MasterPasswordCreateDialog(vcl::Window* pParent, Res
 
 MasterPasswordCreateDialog::~MasterPasswordCreateDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void MasterPasswordCreateDialog::dispose()

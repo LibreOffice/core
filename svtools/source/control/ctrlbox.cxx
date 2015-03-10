@@ -118,7 +118,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeColorListBox(vcl::Wind
 
 ColorListBox::~ColorListBox()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ColorListBox::dispose()
@@ -749,7 +749,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeLineListBox(vcl::Windo
 
 LineListBox::~LineListBox()
 {
-    dispose();
+    disposeOnce();
 }
 
 void LineListBox::dispose()
@@ -952,7 +952,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeFontNameBox(vcl::Windo
 
 FontNameBox::~FontNameBox()
 {
-    dispose();
+    disposeOnce();
 }
 
 void FontNameBox::dispose()

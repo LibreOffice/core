@@ -38,7 +38,7 @@ ScTextImportOptionsDlg::ScTextImportOptionsDlg(vcl::Window* pParent)
 
 ScTextImportOptionsDlg::~ScTextImportOptionsDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScTextImportOptionsDlg::dispose()

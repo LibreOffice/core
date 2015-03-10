@@ -151,7 +151,7 @@ Splitter::Splitter( vcl::Window* pParent, WinBits nStyle ) :
 
 Splitter::~Splitter()
 {
-    dispose();
+    disposeOnce();
 }
 
 void Splitter::dispose()

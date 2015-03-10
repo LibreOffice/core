@@ -95,7 +95,7 @@ ScTpContentOptions::ScTpContentOptions( vcl::Window*         pParent,
 
 ScTpContentOptions::~ScTpContentOptions()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScTpContentOptions::dispose()
@@ -433,7 +433,7 @@ ScTpLayoutOptions::ScTpLayoutOptions(   vcl::Window* pParent,
 
 ScTpLayoutOptions::~ScTpLayoutOptions()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScTpLayoutOptions::dispose()

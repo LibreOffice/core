@@ -124,7 +124,7 @@ SvxTextAnimationPage::SvxTextAnimationPage( vcl::Window* pWindow, const SfxItemS
 
 SvxTextAnimationPage::~SvxTextAnimationPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxTextAnimationPage::dispose()

@@ -50,7 +50,7 @@ SwMailMergeOutputTypePage::SwMailMergeOutputTypePage(SwMailMergeWizard* pParent)
 
 SwMailMergeOutputTypePage::~SwMailMergeOutputTypePage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwMailMergeOutputTypePage::dispose()
@@ -227,7 +227,7 @@ class SwSendWarningBox_Impl : public MessageDialog
     VclPtr<VclMultiLineEdit> m_pDetailED;
 public:
     SwSendWarningBox_Impl(vcl::Window* pParent, const OUString& rDetails);
-    virtual ~SwSendWarningBox_Impl() { dispose(); }
+    virtual ~SwSendWarningBox_Impl() { disposeOnce(); }
     virtual void dispose() SAL_OVERRIDE
     {
         m_pDetailED.clear();
@@ -305,7 +305,7 @@ SwSendMailDialog::SwSendMailDialog(vcl::Window *pParent, SwMailMergeConfigItem& 
 
 SwSendMailDialog::~SwSendMailDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwSendMailDialog::dispose()

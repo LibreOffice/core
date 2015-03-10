@@ -378,7 +378,7 @@ MappingDialog_Impl::MappingDialog_Impl(vcl::Window* pParent, BibDataManager* pMa
 
 MappingDialog_Impl::~MappingDialog_Impl()
 {
-    dispose();
+    disposeOnce();
 }
 
 void MappingDialog_Impl::dispose()
@@ -520,7 +520,7 @@ IMPL_LINK(DBChangeDialog_Impl, DoubleClickHdl, SvTabListBox*, /*pLB*/)
 
 DBChangeDialog_Impl::~DBChangeDialog_Impl()
 {
-    dispose();
+    disposeOnce();
 }
 
 void DBChangeDialog_Impl::dispose()

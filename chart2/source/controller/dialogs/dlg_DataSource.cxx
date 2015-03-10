@@ -159,7 +159,7 @@ DataSourceDialog::DataSourceDialog(vcl::Window * pParent,
 
 DataSourceDialog::~DataSourceDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void DataSourceDialog::dispose()

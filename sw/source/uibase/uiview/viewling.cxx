@@ -856,7 +856,7 @@ SwFieldDialog::SwFieldDialog( SwEditWin* parent, IFieldmark *fieldBM ) :
 
 SwFieldDialog::~SwFieldDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwFieldDialog::dispose()

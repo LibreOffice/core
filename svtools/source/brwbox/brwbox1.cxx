@@ -138,7 +138,7 @@ BrowseBox::BrowseBox( vcl::Window* pParent, const ResId& rId, BrowserMode nMode 
 
 BrowseBox::~BrowseBox()
 {
-    dispose();
+    disposeOnce();
 }
 
 void BrowseBox::dispose()

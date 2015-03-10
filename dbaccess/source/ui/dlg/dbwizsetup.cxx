@@ -264,7 +264,7 @@ OUString ODbTypeWizDialogSetup::getStateDisplayName( WizardState _nState ) const
 
 ODbTypeWizDialogSetup::~ODbTypeWizDialogSetup()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ODbTypeWizDialogSetup::dispose()

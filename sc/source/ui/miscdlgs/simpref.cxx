@@ -59,7 +59,7 @@ ScSimpleRefDlg::ScSimpleRefDlg(SfxBindings* pB, SfxChildWindow* pCW, vcl::Window
 
 ScSimpleRefDlg::~ScSimpleRefDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScSimpleRefDlg::dispose()

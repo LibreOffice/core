@@ -107,7 +107,7 @@ SwFldRefPage::SwFldRefPage(vcl::Window* pParent, const SfxItemSet& rCoreSet )
 
 SwFldRefPage::~SwFldRefPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwFldRefPage::dispose()

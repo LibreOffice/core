@@ -85,7 +85,7 @@ OReportWindow::OReportWindow(OScrollWindowHelper* _pParent,ODesignView* _pView)
 
 OReportWindow::~OReportWindow()
 {
-    dispose();
+    disposeOnce();
 }
 
 void OReportWindow::dispose()

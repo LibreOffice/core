@@ -287,7 +287,7 @@ SvxFontWorkDialog::SvxFontWorkDialog(SfxBindings *pBindinx,
 
 SvxFontWorkDialog::~SvxFontWorkDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxFontWorkDialog::dispose()

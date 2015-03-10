@@ -105,7 +105,13 @@ void ScRangeManagerTable::setColWidths()
 
 ScRangeManagerTable::~ScRangeManagerTable()
 {
+    disposeOnce();
+}
+
+void ScRangeManagerTable::dispose()
+{
     Clear();
+    SvSimpleTable::dispose();
 }
 
 void ScRangeManagerTable::setInitListener( InitListener* pListener )

@@ -34,7 +34,7 @@ CellLineStyleValueSet::CellLineStyleValueSet( vcl::Window* pParent, const ResId&
 
 CellLineStyleValueSet::~CellLineStyleValueSet()
 {
-    dispose();
+    disposeOnce();
 }
 
 void CellLineStyleValueSet::dispose()

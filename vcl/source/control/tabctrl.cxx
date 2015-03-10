@@ -192,7 +192,7 @@ TabControl::TabControl( vcl::Window* pParent, WinBits nStyle ) :
 
 TabControl::~TabControl()
 {
-    dispose();
+    disposeOnce();
 }
 
 void TabControl::dispose()

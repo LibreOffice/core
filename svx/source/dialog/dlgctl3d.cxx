@@ -69,7 +69,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvx3DPreviewControl(vc
 
 Svx3DPreviewControl::~Svx3DPreviewControl()
 {
-    dispose();
+    disposeOnce();
 }
 
 void Svx3DPreviewControl::dispose()
@@ -1007,7 +1007,7 @@ void SvxLightCtl3D::Init()
 
 SvxLightCtl3D::~SvxLightCtl3D()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxLightCtl3D::dispose()

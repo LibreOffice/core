@@ -62,7 +62,7 @@ OApplicationIconControl::OApplicationIconControl(vcl::Window* _pParent)
 
 OApplicationIconControl::~OApplicationIconControl()
 {
-    dispose();
+    disposeOnce();
 }
 
 void OApplicationIconControl::dispose()

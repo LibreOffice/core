@@ -163,7 +163,7 @@ SwNumPositionTabPage::SwNumPositionTabPage(vcl::Window* pParent,
 
 SwNumPositionTabPage::~SwNumPositionTabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwNumPositionTabPage::dispose()

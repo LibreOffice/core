@@ -59,7 +59,7 @@ Throbber::Throbber( vcl::Window* i_parentWindow, WinBits i_style, const ImageSet
 
 Throbber::~Throbber()
 {
-    dispose();
+    disposeOnce();
 }
 
 void Throbber::dispose()

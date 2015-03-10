@@ -230,7 +230,7 @@ void SvxLineTabPage::ShowSymbolControls(bool bOn)
 
 SvxLineTabPage::~SvxLineTabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxLineTabPage::dispose()

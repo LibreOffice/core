@@ -63,7 +63,7 @@ ScCondFrmtEntry::ScCondFrmtEntry(vcl::Window* pParent, ScDocument* pDoc, const S
 
 ScCondFrmtEntry::~ScCondFrmtEntry()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScCondFrmtEntry::dispose()
@@ -246,7 +246,7 @@ ScConditionFrmtEntry::ScConditionFrmtEntry( vcl::Window* pParent, ScDocument* pD
 
 ScConditionFrmtEntry::~ScConditionFrmtEntry()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScConditionFrmtEntry::dispose()
@@ -616,7 +616,7 @@ ScFormulaFrmtEntry::ScFormulaFrmtEntry( vcl::Window* pParent, ScDocument* pDoc, 
 
 ScFormulaFrmtEntry::~ScFormulaFrmtEntry()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScFormulaFrmtEntry::dispose()
@@ -812,7 +812,7 @@ ScColorScale2FrmtEntry::ScColorScale2FrmtEntry( vcl::Window* pParent, ScDocument
 
 ScColorScale2FrmtEntry::~ScColorScale2FrmtEntry()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScColorScale2FrmtEntry::dispose()
@@ -990,7 +990,7 @@ ScColorScale3FrmtEntry::ScColorScale3FrmtEntry( vcl::Window* pParent, ScDocument
 
 ScColorScale3FrmtEntry::~ScColorScale3FrmtEntry()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScColorScale3FrmtEntry::dispose()
@@ -1228,7 +1228,7 @@ ScDataBarFrmtEntry::ScDataBarFrmtEntry( vcl::Window* pParent, ScDocument* pDoc, 
 
 ScDataBarFrmtEntry::~ScDataBarFrmtEntry()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScDataBarFrmtEntry::dispose()
@@ -1364,7 +1364,7 @@ ScDateFrmtEntry::ScDateFrmtEntry( vcl::Window* pParent, ScDocument* pDoc, const 
 
 ScDateFrmtEntry::~ScDateFrmtEntry()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScDateFrmtEntry::dispose()
@@ -1503,7 +1503,7 @@ ScIconSetFrmtDataEntry::ScIconSetFrmtDataEntry( vcl::Window* pParent, ScIconSetT
 
 ScIconSetFrmtDataEntry::~ScIconSetFrmtDataEntry()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScIconSetFrmtDataEntry::dispose()
@@ -1590,7 +1590,7 @@ ScIconSetFrmtEntry::ScIconSetFrmtEntry( vcl::Window* pParent, ScDocument* pDoc, 
 
 ScIconSetFrmtEntry::~ScIconSetFrmtEntry()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScIconSetFrmtEntry::dispose()

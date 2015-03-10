@@ -203,7 +203,7 @@ namespace svt
 
     ORoadmap::~ORoadmap( )
     {
-        dispose();
+        disposeOnce();
     }
 
     void ORoadmap::dispose()

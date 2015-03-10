@@ -118,7 +118,7 @@ void ScEditWindow::Resize()
 
 ScEditWindow::~ScEditWindow()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScEditWindow::dispose()

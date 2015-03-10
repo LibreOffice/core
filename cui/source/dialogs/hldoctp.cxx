@@ -73,7 +73,7 @@ SvxHyperlinkDocTp::SvxHyperlinkDocTp ( vcl::Window *pParent, IconChoiceDialog* p
 
 SvxHyperlinkDocTp::~SvxHyperlinkDocTp()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxHyperlinkDocTp::dispose()

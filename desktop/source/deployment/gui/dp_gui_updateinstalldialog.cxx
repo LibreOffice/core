@@ -239,7 +239,7 @@ UpdateInstallDialog::UpdateInstallDialog(
 
 UpdateInstallDialog::~UpdateInstallDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void UpdateInstallDialog::dispose()

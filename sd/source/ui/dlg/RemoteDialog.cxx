@@ -32,7 +32,7 @@ RemoteDialog::RemoteDialog( vcl::Window *pWindow )
 
 RemoteDialog::~RemoteDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void RemoteDialog::dispose()

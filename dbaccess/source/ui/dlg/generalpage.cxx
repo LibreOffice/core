@@ -76,7 +76,7 @@ namespace dbaui
 
     OGeneralPage::~OGeneralPage()
     {
-        dispose();
+        disposeOnce();
     }
 
     void OGeneralPage::dispose()
@@ -547,7 +547,7 @@ namespace dbaui
 
     OGeneralPageWizard::~OGeneralPageWizard()
     {
-        dispose();
+        disposeOnce();
     }
 
     void OGeneralPageWizard::dispose()

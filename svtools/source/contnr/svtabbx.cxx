@@ -110,7 +110,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvTabListBox(vcl::Wind
 
 SvTabListBox::~SvTabListBox()
 {
-   dispose();
+    disposeOnce();
 }
 
 void SvTabListBox::dispose()
@@ -526,7 +526,7 @@ SvHeaderTabListBox::SvHeaderTabListBox( vcl::Window* pParent, WinBits nWinStyle 
 
 SvHeaderTabListBox::~SvHeaderTabListBox()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvHeaderTabListBox::dispose()

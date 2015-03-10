@@ -221,7 +221,7 @@ void ParaWin::UpdateArgInput( sal_uInt16 nOffset, sal_uInt16 i )
 
 ParaWin::~ParaWin()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ParaWin::dispose()

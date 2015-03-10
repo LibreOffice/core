@@ -55,7 +55,7 @@ BaseWindow::BaseWindow( vcl::Window* pParent, const ScriptDocument& rDocument, c
 
 BaseWindow::~BaseWindow()
 {
-    dispose();
+    disposeOnce();
 }
 
 void BaseWindow::dispose()
@@ -283,7 +283,7 @@ DockingWindow::DockingWindow (Layout* pParent) :
 
 DockingWindow::~DockingWindow()
 {
-    dispose();
+    disposeOnce();
 }
 
 void DockingWindow::dispose()

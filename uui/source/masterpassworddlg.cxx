@@ -58,7 +58,7 @@ MasterPasswordDialog::MasterPasswordDialog
 
 MasterPasswordDialog::~MasterPasswordDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void MasterPasswordDialog::dispose()

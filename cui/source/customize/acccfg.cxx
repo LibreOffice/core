@@ -674,7 +674,7 @@ void SfxAccCfgTabListBox_Impl::InitEntry(SvTreeListEntry* pEntry,
 
 SfxAccCfgTabListBox_Impl::~SfxAccCfgTabListBox_Impl()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SfxAccCfgTabListBox_Impl::dispose()
@@ -811,7 +811,7 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage( vcl::Window* pParent, const 
 
 SfxAcceleratorConfigPage::~SfxAcceleratorConfigPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SfxAcceleratorConfigPage::dispose()

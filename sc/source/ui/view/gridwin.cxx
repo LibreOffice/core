@@ -259,7 +259,7 @@ ScFilterListBox::ScFilterListBox( vcl::Window* pParent, ScGridWindow* pGrid,
 
 ScFilterListBox::~ScFilterListBox()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScFilterListBox::dispose()
@@ -345,6 +345,7 @@ class ScFilterFloatingWindow : public FloatingWindow
 public:
     ScFilterFloatingWindow( vcl::Window* pParent, WinBits nStyle = WB_STDFLOATWIN );
     virtual ~ScFilterFloatingWindow();
+    virtual void dispose() SAL_OVERRIDE;
     // required for System FloatingWindows that will not process KeyInput by themselves
     virtual vcl::Window* GetPreferredKeyInputWindow() SAL_OVERRIDE;
 };
@@ -355,7 +356,13 @@ ScFilterFloatingWindow::ScFilterFloatingWindow( vcl::Window* pParent, WinBits nS
 
 ScFilterFloatingWindow::~ScFilterFloatingWindow()
 {
+    disposeOnce();
+}
+
+void ScFilterFloatingWindow::dispose()
+{
     EndPopupMode();
+    FloatingWindow::dispose();
 }
 
 vcl::Window* ScFilterFloatingWindow::GetPreferredKeyInputWindow()
@@ -530,7 +537,7 @@ ScGridWindow::ScGridWindow( vcl::Window* pParent, ScViewData* pData, ScSplitPos 
 
 ScGridWindow::~ScGridWindow()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScGridWindow::dispose()

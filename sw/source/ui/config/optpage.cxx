@@ -156,7 +156,7 @@ SwContentOptPage::SwContentOptPage( vcl::Window* pParent,
 
 SwContentOptPage::~SwContentOptPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwContentOptPage::dispose()
@@ -380,7 +380,7 @@ SwAddPrinterTabPage::SwAddPrinterTabPage(vcl::Window* pParent,
 
 SwAddPrinterTabPage::~SwAddPrinterTabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwAddPrinterTabPage::dispose()
@@ -629,7 +629,7 @@ SwStdFontTabPage::SwStdFontTabPage( vcl::Window* pParent,
 
 SwStdFontTabPage::~SwStdFontTabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwStdFontTabPage::dispose()
@@ -1157,7 +1157,7 @@ SwTableOptionsTabPage::SwTableOptionsTabPage( vcl::Window* pParent, const SfxIte
 
 SwTableOptionsTabPage::~SwTableOptionsTabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwTableOptionsTabPage::dispose()
@@ -1413,7 +1413,7 @@ SwShdwCrsrOptionsTabPage::SwShdwCrsrOptionsTabPage( vcl::Window* pParent,
 
 SwShdwCrsrOptionsTabPage::~SwShdwCrsrOptionsTabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwShdwCrsrOptionsTabPage::dispose()
@@ -1851,7 +1851,7 @@ SwRedlineOptionsTabPage::SwRedlineOptionsTabPage( vcl::Window* pParent,
 
 SwRedlineOptionsTabPage::~SwRedlineOptionsTabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwRedlineOptionsTabPage::dispose()
@@ -2370,7 +2370,7 @@ SwCompareOptionsTabPage::SwCompareOptionsTabPage(  vcl::Window* pParent, const S
 
 SwCompareOptionsTabPage::~SwCompareOptionsTabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwCompareOptionsTabPage::dispose()
@@ -2520,7 +2520,7 @@ SwTestTabPage::SwTestTabPage(vcl::Window* pParent, const SfxItemSet& rCoreSet)
 
 SwTestTabPage::~SwTestTabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwTestTabPage::dispose()

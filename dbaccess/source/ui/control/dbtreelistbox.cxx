@@ -84,7 +84,7 @@ void DBTreeListBox::init()
 
 DBTreeListBox::~DBTreeListBox()
 {
-    dispose();
+    disposeOnce();
 }
 
 void DBTreeListBox::dispose()

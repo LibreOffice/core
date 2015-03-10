@@ -93,7 +93,7 @@ OCollectionView::OCollectionView( vcl::Window * pParent
 
 OCollectionView::~OCollectionView()
 {
-    dispose();
+    disposeOnce();
 }
 
 void OCollectionView::dispose()

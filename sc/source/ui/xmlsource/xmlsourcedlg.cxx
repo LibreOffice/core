@@ -117,7 +117,7 @@ ScXMLSourceDlg::ScXMLSourceDlg(
 
 ScXMLSourceDlg::~ScXMLSourceDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScXMLSourceDlg::dispose()

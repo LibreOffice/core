@@ -204,7 +204,7 @@ SwInsFootNoteDlg::SwInsFootNoteDlg(vcl::Window *pParent, SwWrtShell &rShell, boo
 
 SwInsFootNoteDlg::~SwInsFootNoteDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwInsFootNoteDlg::dispose()

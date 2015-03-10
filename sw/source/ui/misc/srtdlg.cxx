@@ -250,7 +250,7 @@ SwSortDlg::SwSortDlg(vcl::Window* pParent, SwWrtShell &rShell)
 
 SwSortDlg::~SwSortDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwSortDlg::dispose()

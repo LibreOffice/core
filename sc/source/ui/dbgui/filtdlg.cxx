@@ -160,7 +160,7 @@ ScFilterDlg::ScFilterDlg(SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pPar
 
 ScFilterDlg::~ScFilterDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScFilterDlg::dispose()

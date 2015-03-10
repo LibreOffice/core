@@ -44,7 +44,7 @@ ScGroupDlg::ScGroupDlg(vcl::Window* pParent, bool bUngroup, bool bRows)
 
 ScGroupDlg::~ScGroupDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScGroupDlg::dispose()

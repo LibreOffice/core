@@ -98,7 +98,7 @@ ImplDockFloatWin2::ImplDockFloatWin2( vcl::Window* pParent, WinBits nWinBits,
 
 ImplDockFloatWin2::~ImplDockFloatWin2()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ImplDockFloatWin2::dispose()
@@ -521,7 +521,7 @@ ImplPopupFloatWin::ImplPopupFloatWin( vcl::Window* pParent, ImplDockingWindowWra
 
 ImplPopupFloatWin::~ImplPopupFloatWin()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ImplPopupFloatWin::dispose()

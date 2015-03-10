@@ -185,7 +185,7 @@ OViewsWindow::OViewsWindow( OReportWindow* _pReportWindow)
 
 OViewsWindow::~OViewsWindow()
 {
-    dispose();
+    disposeOnce();
 }
 
 void OViewsWindow::dispose()

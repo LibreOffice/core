@@ -46,7 +46,7 @@ class SvRTLInputBox : public ModalDialog
 public:
     SvRTLInputBox( vcl::Window* pParent, const OUString& rPrompt, const OUString& rTitle,
         const OUString& rDefault, long nXTwips = -1, long nYTwips = -1 );
-    virtual ~SvRTLInputBox() { dispose(); }
+    virtual ~SvRTLInputBox() { disposeOnce(); }
     virtual void dispose() SAL_OVERRIDE;
     OUString GetText() const SAL_OVERRIDE { return aText; }
 };

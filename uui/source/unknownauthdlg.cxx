@@ -77,7 +77,7 @@ UnknownAuthDialog::UnknownAuthDialog(vcl::Window* pParent,
 
 UnknownAuthDialog::~UnknownAuthDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void UnknownAuthDialog::dispose()

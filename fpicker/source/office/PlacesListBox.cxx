@@ -43,7 +43,7 @@ PlacesListBox_Impl::PlacesListBox_Impl( PlacesListBox* pParent, const OUString& 
 
 PlacesListBox_Impl::~PlacesListBox_Impl( )
 {
-    dispose();
+    disposeOnce();
 }
 
 void PlacesListBox_Impl::dispose()
@@ -88,7 +88,7 @@ PlacesListBox::PlacesListBox( vcl::Window* pParent, SvtFileDialog* pFileDlg, con
 
 PlacesListBox::~PlacesListBox( )
 {
-    dispose();
+    disposeOnce();
 }
 
 void PlacesListBox::dispose()

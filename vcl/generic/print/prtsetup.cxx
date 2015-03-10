@@ -93,7 +93,7 @@ RTSDialog::RTSDialog(const PrinterInfo& rJobData, vcl::Window* pParent)
 
 RTSDialog::~RTSDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void RTSDialog::dispose()
@@ -196,7 +196,7 @@ RTSPaperPage::RTSPaperPage(RTSDialog* pParent)
 
 RTSPaperPage::~RTSPaperPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void RTSPaperPage::dispose()
@@ -378,7 +378,7 @@ RTSDevicePage::RTSDevicePage( RTSDialog* pParent )
 
 RTSDevicePage::~RTSDevicePage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void RTSDevicePage::dispose()

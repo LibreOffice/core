@@ -107,7 +107,7 @@ SwFormatTablePage::SwFormatTablePage(vcl::Window* pParent, const SfxItemSet& rSe
 
 SwFormatTablePage::~SwFormatTablePage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwFormatTablePage::dispose()
@@ -777,7 +777,7 @@ SwTableColumnPage::SwTableColumnPage(vcl::Window* pParent, const SfxItemSet& rSe
 
 SwTableColumnPage::~SwTableColumnPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwTableColumnPage::dispose()
@@ -1352,7 +1352,7 @@ SwTextFlowPage::SwTextFlowPage(vcl::Window* pParent, const SfxItemSet& rSet)
 
 SwTextFlowPage::~SwTextFlowPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwTextFlowPage::dispose()

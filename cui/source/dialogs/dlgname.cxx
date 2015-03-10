@@ -47,7 +47,7 @@ SvxNameDialog::SvxNameDialog( vcl::Window* pWindow, const OUString& rName, const
 
 SvxNameDialog::~SvxNameDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxNameDialog::dispose()
@@ -88,7 +88,7 @@ SvxObjectNameDialog::SvxObjectNameDialog(
 
 SvxObjectNameDialog::~SvxObjectNameDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxObjectNameDialog::dispose()
@@ -133,7 +133,7 @@ SvxObjectTitleDescDialog::SvxObjectTitleDescDialog(
 
 SvxObjectTitleDescDialog::~SvxObjectTitleDescDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxObjectTitleDescDialog::dispose()
@@ -175,7 +175,7 @@ SvxMessDialog::SvxMessDialog( vcl::Window* pWindow, const OUString& rText, const
 
 SvxMessDialog::~SvxMessDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxMessDialog::dispose()

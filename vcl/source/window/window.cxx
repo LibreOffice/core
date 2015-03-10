@@ -137,6 +137,12 @@ bool Window::IsDisposed() const
     return !mpWindowImpl;
 }
 
+void Window::disposeOnce()
+{
+    if (!IsDisposed())
+        dispose();
+}
+
 void Window::dispose()
 {
     if (IsDisposed())
@@ -580,7 +586,7 @@ void Window::dispose()
 Window::~Window()
 {
     vcl::LazyDeletor<vcl::Window>::Undelete( this );
-    dispose();
+    disposeOnce();
 }
 
 } /* namespace vcl */

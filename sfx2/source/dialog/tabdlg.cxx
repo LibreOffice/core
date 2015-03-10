@@ -172,7 +172,7 @@ SfxTabPage::SfxTabPage(vcl::Window *pParent, const OString& rID, const OUString&
 
 SfxTabPage::~SfxTabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SfxTabPage::dispose()
@@ -365,7 +365,7 @@ SfxTabDialog::SfxTabDialog
 
 SfxTabDialog::~SfxTabDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SfxTabDialog::dispose()

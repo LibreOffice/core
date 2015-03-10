@@ -155,7 +155,7 @@ SplashScreen::SplashScreen()
 
 SplashScreen::~SplashScreen()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SplashScreen::dispose()

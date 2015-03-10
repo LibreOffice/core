@@ -138,7 +138,7 @@ SwMailConfigPage::SwMailConfigPage( vcl::Window* pParent, const SfxItemSet& rSet
 
 SwMailConfigPage::~SwMailConfigPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwMailConfigPage::dispose()
@@ -259,7 +259,7 @@ SwTestAccountSettingsDialog::SwTestAccountSettingsDialog(SwMailConfigPage* pPare
 
 SwTestAccountSettingsDialog::~SwTestAccountSettingsDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwTestAccountSettingsDialog::dispose()
@@ -452,7 +452,7 @@ SwAuthenticationSettingsDialog::SwAuthenticationSettingsDialog(
 
 SwAuthenticationSettingsDialog::~SwAuthenticationSettingsDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwAuthenticationSettingsDialog::dispose()

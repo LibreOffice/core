@@ -196,7 +196,7 @@ MediaControl::MediaControl( vcl::Window* pParent, MediaControlStyle eControlStyl
 
 MediaControl::~MediaControl()
 {
-    dispose();
+    disposeOnce();
 }
 
 void MediaControl::dispose()

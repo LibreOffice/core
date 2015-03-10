@@ -81,7 +81,7 @@ SwDBTablePreviewDialog::SwDBTablePreviewDialog(vcl::Window* pParent, uno::Sequen
 
 SwDBTablePreviewDialog::~SwDBTablePreviewDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwDBTablePreviewDialog::dispose()

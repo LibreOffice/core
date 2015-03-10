@@ -72,7 +72,7 @@ ODatasourceSelectDialog::ODatasourceSelectDialog(vcl::Window* _pParent, const St
 
 ODatasourceSelectDialog::~ODatasourceSelectDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ODatasourceSelectDialog::dispose()

@@ -206,7 +206,7 @@ AnimationWindow::AnimationWindow(SfxBindings* pInBindings, SfxChildWindow *pCW, 
 
 AnimationWindow::~AnimationWindow()
 {
-    dispose();
+    disposeOnce();
 }
 
 void AnimationWindow::dispose()

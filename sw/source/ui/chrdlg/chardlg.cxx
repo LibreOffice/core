@@ -185,7 +185,7 @@ SwCharURLPage::SwCharURLPage(vcl::Window* pParent, const SfxItemSet& rCoreSet)
 
 SwCharURLPage::~SwCharURLPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwCharURLPage::dispose()

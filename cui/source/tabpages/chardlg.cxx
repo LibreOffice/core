@@ -185,7 +185,7 @@ SvxCharBasePage::SvxCharBasePage(vcl::Window* pParent, const OString& rID, const
 
 SvxCharBasePage::~SvxCharBasePage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxCharBasePage::dispose()
@@ -379,7 +379,7 @@ SvxCharNamePage::SvxCharNamePage( vcl::Window* pParent, const SfxItemSet& rInSet
 
 SvxCharNamePage::~SvxCharNamePage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxCharNamePage::dispose()
@@ -1378,7 +1378,7 @@ SvxCharEffectsPage::SvxCharEffectsPage( vcl::Window* pParent, const SfxItemSet& 
 
 SvxCharEffectsPage::~SvxCharEffectsPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxCharEffectsPage::dispose()
@@ -2651,7 +2651,7 @@ SvxCharPositionPage::SvxCharPositionPage( vcl::Window* pParent, const SfxItemSet
 
 SvxCharPositionPage::~SvxCharPositionPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxCharPositionPage::dispose()
@@ -3410,7 +3410,7 @@ SvxCharTwoLinesPage::SvxCharTwoLinesPage(vcl::Window* pParent, const SfxItemSet&
 
 SvxCharTwoLinesPage::~SvxCharTwoLinesPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxCharTwoLinesPage::dispose()

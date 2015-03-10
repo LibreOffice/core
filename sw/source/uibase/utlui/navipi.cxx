@@ -841,7 +841,7 @@ SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
 
 SwNavigationPI::~SwNavigationPI()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwNavigationPI::dispose()

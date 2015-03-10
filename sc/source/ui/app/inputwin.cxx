@@ -259,7 +259,7 @@ ScInputWindow::ScInputWindow( vcl::Window* pParent, SfxBindings* pBind ) :
 
 ScInputWindow::~ScInputWindow()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScInputWindow::dispose()
@@ -932,7 +932,7 @@ ScInputBarGroup::ScInputBarGroup(vcl::Window* pParent, ScTabViewShell* pViewSh)
 
 ScInputBarGroup::~ScInputBarGroup()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScInputBarGroup::dispose()
@@ -1499,7 +1499,7 @@ ScTextWnd::ScTextWnd( vcl::Window* pParent, ScTabViewShell* pViewSh )
 
 ScTextWnd::~ScTextWnd()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScTextWnd::dispose()
@@ -2096,7 +2096,7 @@ ScPosWnd::ScPosWnd( vcl::Window* pParent ) :
 
 ScPosWnd::~ScPosWnd()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScPosWnd::dispose()

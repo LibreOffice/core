@@ -119,7 +119,7 @@ SwEndNoteOptionPage::SwEndNoteOptionPage(vcl::Window *pParent, bool bEN,
 
 SwEndNoteOptionPage::~SwEndNoteOptionPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwEndNoteOptionPage::dispose()

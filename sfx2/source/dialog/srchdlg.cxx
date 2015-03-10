@@ -62,7 +62,7 @@ SearchDialog::SearchDialog(vcl::Window* pWindow, const OUString& rConfigName)
 
 SearchDialog::~SearchDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SearchDialog::dispose()

@@ -105,7 +105,7 @@ OSqlEdit::OSqlEdit( OQueryTextView* pParent,  WinBits nWinStyle ) :
 
 OSqlEdit::~OSqlEdit()
 {
-    dispose();
+    disposeOnce();
 }
 
 void OSqlEdit::dispose()

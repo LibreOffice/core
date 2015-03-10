@@ -302,7 +302,7 @@ class OExceptionChainDialog : public ModalDialog
 
 public:
     OExceptionChainDialog( vcl::Window* pParent, const ExceptionDisplayChain& _rExceptions );
-    virtual ~OExceptionChainDialog() { dispose(); }
+    virtual ~OExceptionChainDialog() { disposeOnce(); }
     virtual void dispose() SAL_OVERRIDE
     {
         m_pExceptionList.clear();
@@ -699,7 +699,7 @@ OSQLMessageBox::OSQLMessageBox( vcl::Window* _pParent, const OUString& _rTitle, 
 
 OSQLMessageBox::~OSQLMessageBox()
 {
-    dispose();
+    disposeOnce();
 }
 
 void OSQLMessageBox::dispose()

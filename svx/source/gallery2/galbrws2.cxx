@@ -474,7 +474,7 @@ GalleryBrowser2::GalleryBrowser2( vcl::Window* pParent, Gallery* pGallery ) :
 
 GalleryBrowser2::~GalleryBrowser2()
 {
-    dispose();
+    disposeOnce();
 }
 
 void GalleryBrowser2::dispose()

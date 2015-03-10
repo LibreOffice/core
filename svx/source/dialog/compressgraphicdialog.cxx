@@ -67,7 +67,7 @@ CompressGraphicsDialog::CompressGraphicsDialog( vcl::Window* pParent, Graphic& r
 
 CompressGraphicsDialog::~CompressGraphicsDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void CompressGraphicsDialog::dispose()

@@ -175,7 +175,7 @@ ScDPNumGroupDlg::ScDPNumGroupDlg( vcl::Window* pParent, const ScDPNumGroupInfo& 
 
 ScDPNumGroupDlg::~ScDPNumGroupDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScDPNumGroupDlg::dispose()
@@ -279,7 +279,7 @@ ScDPDateGroupDlg::ScDPDateGroupDlg( vcl::Window* pParent,
 
 ScDPDateGroupDlg::~ScDPDateGroupDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScDPDateGroupDlg::dispose()

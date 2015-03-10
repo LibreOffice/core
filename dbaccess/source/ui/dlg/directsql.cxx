@@ -76,7 +76,7 @@ namespace dbaui
 
     DirectSQLDialog::~DirectSQLDialog()
     {
-        dispose();
+        disposeOnce();
     }
 
     void DirectSQLDialog::dispose()

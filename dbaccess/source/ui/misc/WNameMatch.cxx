@@ -74,7 +74,7 @@ OWizNameMatching::OWizNameMatching( vcl::Window* pParent)
 
 OWizNameMatching::~OWizNameMatching()
 {
-    dispose();
+    disposeOnce();
 }
 
 void OWizNameMatching::dispose()

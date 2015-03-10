@@ -97,7 +97,7 @@ namespace dbaui
 
     OCommonBehaviourTabPage::~OCommonBehaviourTabPage()
     {
-        dispose();
+        disposeOnce();
     }
 
     void OCommonBehaviourTabPage::dispose()
@@ -195,7 +195,7 @@ namespace dbaui
 
     ODbaseDetailsPage::~ODbaseDetailsPage()
     {
-        dispose();
+        disposeOnce();
     }
 
     void ODbaseDetailsPage::dispose()
@@ -283,7 +283,7 @@ namespace dbaui
 
     OOdbcDetailsPage::~OOdbcDetailsPage()
     {
-        dispose();
+        disposeOnce();
     }
 
     void OOdbcDetailsPage::dispose()
@@ -332,7 +332,7 @@ namespace dbaui
 
     OUserDriverDetailsPage::~OUserDriverDetailsPage()
     {
-        dispose();
+        disposeOnce();
     }
 
     void OUserDriverDetailsPage::dispose()
@@ -454,7 +454,7 @@ namespace dbaui
 
     OGeneralSpecialJDBCDetailsPage::~OGeneralSpecialJDBCDetailsPage()
     {
-        dispose();
+        disposeOnce();
     }
 
     void OGeneralSpecialJDBCDetailsPage::dispose()
@@ -573,7 +573,7 @@ namespace dbaui
 
     MySQLNativePage::~MySQLNativePage()
     {
-        dispose();
+        disposeOnce();
     }
 
     void MySQLNativePage::dispose()
@@ -679,7 +679,7 @@ namespace dbaui
 
     OLDAPDetailsPage::~OLDAPDetailsPage()
     {
-        dispose();
+        disposeOnce();
     }
 
     void OLDAPDetailsPage::dispose()
@@ -757,7 +757,7 @@ namespace dbaui
 
     OTextDetailsPage::~OTextDetailsPage()
     {
-        dispose();
+        disposeOnce();
     }
 
     void OTextDetailsPage::dispose()

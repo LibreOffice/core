@@ -54,7 +54,7 @@ IconChoicePage::IconChoicePage( vcl::Window *pParent, const OString& rID,
 
 IconChoicePage::~IconChoicePage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void IconChoicePage::dispose()
@@ -215,7 +215,7 @@ IconChoiceDialog::IconChoiceDialog ( vcl::Window* pParent, const OUString& rID,
 
 IconChoiceDialog ::~IconChoiceDialog ()
 {
-    dispose();
+    disposeOnce();
 }
 
 void IconChoiceDialog::dispose()

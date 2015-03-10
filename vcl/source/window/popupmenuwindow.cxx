@@ -46,7 +46,7 @@ PopupMenuFloatingWindow::PopupMenuFloatingWindow( vcl::Window* pParent, WinBits 
 
 PopupMenuFloatingWindow::~PopupMenuFloatingWindow()
 {
-    dispose();
+    disposeOnce();
 }
 
 void PopupMenuFloatingWindow::dispose()

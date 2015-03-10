@@ -58,7 +58,7 @@ XMLFilterTabPageXSLT::XMLFilterTabPageXSLT( vcl::Window* pParent) :
 
 XMLFilterTabPageXSLT::~XMLFilterTabPageXSLT()
 {
-    dispose();
+    disposeOnce();
 }
 
 void XMLFilterTabPageXSLT::dispose()

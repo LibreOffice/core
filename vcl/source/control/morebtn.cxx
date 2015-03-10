@@ -80,7 +80,7 @@ MoreButton::MoreButton( vcl::Window* pParent, WinBits nStyle ) :
 
 MoreButton::~MoreButton()
 {
-    dispose();
+    disposeOnce();
 }
 
 void MoreButton::dispose()

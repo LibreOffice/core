@@ -136,7 +136,7 @@ ScPrintAreasDlg::ScPrintAreasDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Win
 
 ScPrintAreasDlg::~ScPrintAreasDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScPrintAreasDlg::dispose()

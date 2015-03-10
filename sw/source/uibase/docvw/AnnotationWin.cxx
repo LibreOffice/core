@@ -70,7 +70,7 @@ SwAnnotationWin::SwAnnotationWin( SwEditWin& rEditWin,
 
 SwAnnotationWin::~SwAnnotationWin()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwAnnotationWin::dispose()

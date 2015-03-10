@@ -99,7 +99,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxConfigFunctionListB
 
 SvxConfigFunctionListBox::~SvxConfigFunctionListBox()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxConfigFunctionListBox::dispose()
@@ -233,7 +233,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxConfigGroupListBox(
 
 SvxConfigGroupListBox::~SvxConfigGroupListBox()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxConfigGroupListBox::dispose()
@@ -921,7 +921,7 @@ SvxScriptSelectorDialog::SvxScriptSelectorDialog(
 
 SvxScriptSelectorDialog::~SvxScriptSelectorDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxScriptSelectorDialog::dispose()

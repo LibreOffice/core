@@ -142,7 +142,7 @@ ScContentTree::ScContentTree( vcl::Window* pParent, const ResId& rResId ) :
 
 ScContentTree::~ScContentTree()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScContentTree::dispose()

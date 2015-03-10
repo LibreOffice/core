@@ -35,6 +35,8 @@ public:
         ViewShellBase& rViewShellBase,
         const css::uno::Reference<css::ui::XSidebar>& rxSidebar);
 
+    virtual ~RecentMasterPagesSelector();
+    virtual void dispose() SAL_OVERRIDE;
 protected:
     DECL_LINK(MasterPageListListener, void*);
     virtual void Fill (ItemList& rItemList) SAL_OVERRIDE;
@@ -64,7 +66,6 @@ private:
         ViewShellBase& rBase,
         const ::boost::shared_ptr<MasterPageContainer>& rpContainer,
         const css::uno::Reference<css::ui::XSidebar>& rxSidebar);
-    virtual ~RecentMasterPagesSelector (void);
 
     virtual void LateInit (void) SAL_OVERRIDE;
 };

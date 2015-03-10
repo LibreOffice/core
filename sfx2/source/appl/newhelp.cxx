@@ -303,7 +303,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeContentListBox(vcl::Wi
 
 ContentListBox_Impl::~ContentListBox_Impl()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ContentListBox_Impl::dispose()
@@ -434,7 +434,7 @@ HelpTabPage_Impl::HelpTabPage_Impl(vcl::Window* pParent, SfxHelpIndexWindow_Impl
 
 HelpTabPage_Impl::~HelpTabPage_Impl()
 {
-    dispose();
+    disposeOnce();
 }
 
 void HelpTabPage_Impl::dispose()
@@ -456,7 +456,7 @@ ContentTabPage_Impl::ContentTabPage_Impl(vcl::Window* pParent, SfxHelpIndexWindo
 
 ContentTabPage_Impl::~ContentTabPage_Impl()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ContentTabPage_Impl::dispose()
@@ -573,7 +573,7 @@ IndexTabPage_Impl::IndexTabPage_Impl(vcl::Window* pParent, SfxHelpIndexWindow_Im
 
 IndexTabPage_Impl::~IndexTabPage_Impl()
 {
-    dispose();
+    disposeOnce();
 }
 
 void IndexTabPage_Impl::dispose()
@@ -982,7 +982,7 @@ SearchTabPage_Impl::SearchTabPage_Impl(vcl::Window* pParent, SfxHelpIndexWindow_
 
 SearchTabPage_Impl::~SearchTabPage_Impl()
 {
-   dispose();
+    disposeOnce();
 }
 
 void SearchTabPage_Impl::dispose()
@@ -1190,7 +1190,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeBookmarksBox(vcl::Wind
 
 BookmarksBox_Impl::~BookmarksBox_Impl()
 {
-    dispose();
+    disposeOnce();
 }
 
 void BookmarksBox_Impl::dispose()
@@ -1328,7 +1328,7 @@ BookmarksTabPage_Impl::BookmarksTabPage_Impl(vcl::Window* pParent, SfxHelpIndexW
 
 BookmarksTabPage_Impl::~BookmarksTabPage_Impl()
 {
-    dispose();
+    disposeOnce();
 }
 
 void BookmarksTabPage_Impl::dispose()
@@ -1482,7 +1482,7 @@ SfxHelpIndexWindow_Impl::SfxHelpIndexWindow_Impl(SfxHelpWindow_Impl* _pParent)
 
 SfxHelpIndexWindow_Impl::~SfxHelpIndexWindow_Impl()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SfxHelpIndexWindow_Impl::dispose()
@@ -1968,7 +1968,7 @@ SfxHelpTextWindow_Impl::SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent ) :
 
 SfxHelpTextWindow_Impl::~SfxHelpTextWindow_Impl()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SfxHelpTextWindow_Impl::dispose()
@@ -3074,7 +3074,7 @@ SfxHelpWindow_Impl::SfxHelpWindow_Impl(
 
 SfxHelpWindow_Impl::~SfxHelpWindow_Impl()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SfxHelpWindow_Impl::dispose()
@@ -3293,7 +3293,7 @@ SfxAddHelpBookmarkDialog_Impl::SfxAddHelpBookmarkDialog_Impl(vcl::Window* pParen
 
 SfxAddHelpBookmarkDialog_Impl::~SfxAddHelpBookmarkDialog_Impl()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SfxAddHelpBookmarkDialog_Impl::dispose()

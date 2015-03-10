@@ -63,7 +63,7 @@ PageOrientationControl::PageOrientationControl(
 
 PageOrientationControl::~PageOrientationControl(void)
 {
-    dispose();
+    disposeOnce();
 }
 
 void PageOrientationControl::dispose()

@@ -43,7 +43,7 @@ namespace abp
 
     TableSelectionPage::~TableSelectionPage()
     {
-        dispose();
+        disposeOnce();
     }
 
     void TableSelectionPage::dispose()

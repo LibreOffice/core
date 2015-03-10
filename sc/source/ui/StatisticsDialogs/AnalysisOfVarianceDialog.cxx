@@ -118,7 +118,7 @@ ScAnalysisOfVarianceDialog::ScAnalysisOfVarianceDialog(
 
 ScAnalysisOfVarianceDialog::~ScAnalysisOfVarianceDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScAnalysisOfVarianceDialog::dispose()

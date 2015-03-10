@@ -290,7 +290,7 @@ HelpTextWindow::HelpTextWindow( vcl::Window* pParent, const OUString& rText, sal
 
 HelpTextWindow::~HelpTextWindow()
 {
-    dispose();
+    disposeOnce();
 }
 
 void HelpTextWindow::dispose()

@@ -112,7 +112,7 @@ ImplDockFloatWin::ImplDockFloatWin( vcl::Window* pParent, WinBits nWinBits,
 
 ImplDockFloatWin::~ImplDockFloatWin()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ImplDockFloatWin::dispose()
@@ -471,7 +471,7 @@ DockingWindow::DockingWindow(vcl::Window* pParent, const OString& rID,
 
 DockingWindow::~DockingWindow()
 {
-    dispose();
+    disposeOnce();
 }
 
 void DockingWindow::dispose()

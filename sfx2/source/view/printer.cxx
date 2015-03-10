@@ -229,7 +229,7 @@ SfxPrintOptionsDialog::SfxPrintOptionsDialog(vcl::Window *pParent,
 
 SfxPrintOptionsDialog::~SfxPrintOptionsDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SfxPrintOptionsDialog::dispose()

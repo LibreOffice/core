@@ -287,7 +287,7 @@ namespace dbp
 
     OContentTableSelection::~OContentTableSelection()
     {
-        dispose();
+        disposeOnce();
     }
 
     void OContentTableSelection::dispose()
@@ -381,7 +381,7 @@ namespace dbp
 
     OContentFieldSelection::~OContentFieldSelection()
     {
-        dispose();
+        disposeOnce();
     }
 
     void OContentFieldSelection::dispose()
@@ -463,7 +463,7 @@ namespace dbp
 
     OLinkFieldsPage::~OLinkFieldsPage()
     {
-        dispose();
+        disposeOnce();
     }
 
     void OLinkFieldsPage::dispose()

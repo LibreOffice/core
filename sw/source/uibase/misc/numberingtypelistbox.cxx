@@ -63,7 +63,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSwNumberingTypeListBox
 
 SwNumberingTypeListBox::~SwNumberingTypeListBox()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwNumberingTypeListBox::dispose()

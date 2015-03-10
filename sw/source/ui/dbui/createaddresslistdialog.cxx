@@ -114,7 +114,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSwAddressControlImpl(v
 
 SwAddressControl_Impl::~SwAddressControl_Impl()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwAddressControl_Impl::dispose()
@@ -490,7 +490,7 @@ SwCreateAddressListDialog::SwCreateAddressListDialog(
 
 SwCreateAddressListDialog::~SwCreateAddressListDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwCreateAddressListDialog::dispose()
@@ -765,7 +765,7 @@ SwFindEntryDialog::SwFindEntryDialog(SwCreateAddressListDialog* pParent)
 
 SwFindEntryDialog::~SwFindEntryDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwFindEntryDialog::dispose()

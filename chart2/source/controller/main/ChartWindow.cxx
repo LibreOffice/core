@@ -72,7 +72,7 @@ ChartWindow::ChartWindow( ChartController* pController, vcl::Window* pParent, Wi
 
 ChartWindow::~ChartWindow()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ChartWindow::dispose()

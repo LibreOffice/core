@@ -134,7 +134,7 @@ namespace dbaui
 
     SpecialSettingsPage::~SpecialSettingsPage()
     {
-        dispose();
+        disposeOnce();
     }
 
     void SpecialSettingsPage::dispose()
@@ -343,7 +343,7 @@ namespace dbaui
 
     GeneratedValuesPage::~GeneratedValuesPage()
     {
-        dispose();
+        disposeOnce();
     }
 
     void GeneratedValuesPage::dispose()
@@ -444,7 +444,7 @@ namespace dbaui
 
     AdvancedSettingsDialog::~AdvancedSettingsDialog()
     {
-        dispose();
+        disposeOnce();
     }
 
     void AdvancedSettingsDialog::dispose()

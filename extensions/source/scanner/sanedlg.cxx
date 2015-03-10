@@ -61,7 +61,7 @@ public:
         , mbIsDragging(false)
     {
     }
-    virtual ~ScanPreview() { dispose(); }
+    virtual ~ScanPreview() { disposeOnce(); }
     virtual void dispose() SAL_OVERRIDE
     {
         mpParentDialog.clear();
@@ -245,7 +245,7 @@ SaneDlg::SaneDlg( vcl::Window* pParent, Sane& rSane, bool bScanEnabled ) :
 
 SaneDlg::~SaneDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SaneDlg::dispose()

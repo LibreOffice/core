@@ -70,7 +70,7 @@ NumberFormatPropertyPanel::NumberFormatPropertyPanel(
 
 NumberFormatPropertyPanel::~NumberFormatPropertyPanel()
 {
-    dispose();
+    disposeOnce();
 }
 
 void NumberFormatPropertyPanel::dispose()

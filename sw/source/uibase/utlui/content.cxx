@@ -843,7 +843,7 @@ SwContentTree::SwContentTree(vcl::Window* pParent, const ResId& rResId)
 
 SwContentTree::~SwContentTree()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwContentTree::dispose()

@@ -336,7 +336,7 @@ SvxBorderTabPage::SvxBorderTabPage(vcl::Window* pParent, const SfxItemSet& rCore
 
 SvxBorderTabPage::~SvxBorderTabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxBorderTabPage::dispose()

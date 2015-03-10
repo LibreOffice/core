@@ -66,7 +66,7 @@ OTableFieldDescWin::OTableFieldDescWin( vcl::Window* pParent)
 
 OTableFieldDescWin::~OTableFieldDescWin()
 {
-    dispose();
+    disposeOnce();
 }
 
 void OTableFieldDescWin::dispose()

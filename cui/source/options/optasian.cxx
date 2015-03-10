@@ -151,7 +151,7 @@ SvxAsianLayoutPage::SvxAsianLayoutPage( vcl::Window* pParent, const SfxItemSet& 
 
 SvxAsianLayoutPage::~SvxAsianLayoutPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxAsianLayoutPage::dispose()

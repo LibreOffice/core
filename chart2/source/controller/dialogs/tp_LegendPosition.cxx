@@ -43,7 +43,7 @@ SchLegendPosTabPage::SchLegendPosTabPage(vcl::Window* pWindow, const SfxItemSet&
 
 SchLegendPosTabPage::~SchLegendPosTabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SchLegendPosTabPage::dispose()

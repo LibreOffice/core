@@ -96,7 +96,7 @@ NameClashDialog::NameClashDialog( vcl::Window* pParent, ResMgr* pResMgr,
 
 NameClashDialog::~NameClashDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void NameClashDialog::dispose()

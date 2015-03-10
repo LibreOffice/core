@@ -41,7 +41,7 @@ OpenGLWindow::OpenGLWindow(vcl::Window* pParent):
 
 OpenGLWindow::~OpenGLWindow()
 {
-    dispose();
+    disposeOnce();
 }
 
 void OpenGLWindow::dispose()

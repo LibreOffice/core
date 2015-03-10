@@ -111,7 +111,7 @@ ScCalcOptionsDialog::ScCalcOptionsDialog(vcl::Window* pParent, const ScCalcConfi
 
 ScCalcOptionsDialog::~ScCalcOptionsDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScCalcOptionsDialog::dispose()

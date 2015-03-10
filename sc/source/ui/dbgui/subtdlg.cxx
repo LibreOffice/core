@@ -38,7 +38,7 @@ ScSubTotalDlg::ScSubTotalDlg(vcl::Window* pParent, const SfxItemSet* pArgSet)
 
 ScSubTotalDlg::~ScSubTotalDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScSubTotalDlg::dispose()

@@ -92,7 +92,7 @@ SwMailMergeDocSelectPage::SwMailMergeDocSelectPage(SwMailMergeWizard* pParent)
 
 SwMailMergeDocSelectPage::~SwMailMergeDocSelectPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwMailMergeDocSelectPage::dispose()

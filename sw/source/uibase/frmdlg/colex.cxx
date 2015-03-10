@@ -487,7 +487,7 @@ Size SwColumnOnlyExample::GetOptimalSize() const
 
 SwPageGridExample::~SwPageGridExample()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwPageGridExample::dispose()

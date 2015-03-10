@@ -163,7 +163,7 @@ DbRegistrationOptionsPage::DbRegistrationOptionsPage( vcl::Window* pParent, cons
 
 DbRegistrationOptionsPage::~DbRegistrationOptionsPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void DbRegistrationOptionsPage::dispose()

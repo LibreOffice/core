@@ -61,7 +61,7 @@ namespace bib
 
     BibView::~BibView()
     {
-        dispose();
+        disposeOnce();
     }
 
     void BibView::dispose()

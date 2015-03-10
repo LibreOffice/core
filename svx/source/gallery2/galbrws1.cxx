@@ -146,7 +146,7 @@ GalleryBrowser1::GalleryBrowser1(
 
 GalleryBrowser1::~GalleryBrowser1()
 {
-    dispose();
+    disposeOnce();
 }
 
 void GalleryBrowser1::dispose()

@@ -102,7 +102,7 @@ SvxCharacterMap::SvxCharacterMap( vcl::Window* pParent, bool bOne_, const SfxIte
 
 SvxCharacterMap::~SvxCharacterMap()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxCharacterMap::dispose()

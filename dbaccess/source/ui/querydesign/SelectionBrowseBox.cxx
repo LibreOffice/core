@@ -153,7 +153,7 @@ OSelectionBrowseBox::OSelectionBrowseBox( vcl::Window* pParent )
 
 OSelectionBrowseBox::~OSelectionBrowseBox()
 {
-    dispose();
+    disposeOnce();
 }
 
 void OSelectionBrowseBox::dispose()
@@ -250,7 +250,7 @@ namespace
         virtual void Select() SAL_OVERRIDE;
     public:
         OSelectionBrwBoxHeader(OSelectionBrowseBox* pParent);
-        virtual ~OSelectionBrwBoxHeader() { dispose(); }
+        virtual ~OSelectionBrwBoxHeader() { disposeOnce(); }
         virtual void dispose() SAL_OVERRIDE { m_pBrowseBox.clear(); ::svt::EditBrowserHeader::dispose(); }
     };
     OSelectionBrwBoxHeader::OSelectionBrwBoxHeader(OSelectionBrowseBox* pParent)

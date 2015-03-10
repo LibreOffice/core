@@ -65,7 +65,7 @@ ScNamePasteDlg::ScNamePasteDlg( vcl::Window * pParent, ScDocShell* pShell, bool 
 
 ScNamePasteDlg::~ScNamePasteDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScNamePasteDlg::dispose()

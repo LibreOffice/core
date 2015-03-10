@@ -104,7 +104,7 @@ MasterPagesSelector::MasterPagesSelector (
 
 MasterPagesSelector::~MasterPagesSelector (void)
 {
-    dispose();
+    disposeOnce();
 }
 
 void MasterPagesSelector::dispose()

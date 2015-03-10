@@ -142,7 +142,7 @@ CellAppearancePropertyPanel::CellAppearancePropertyPanel(
 
 CellAppearancePropertyPanel::~CellAppearancePropertyPanel()
 {
-    dispose();
+    disposeOnce();
 }
 
 void CellAppearancePropertyPanel::dispose()

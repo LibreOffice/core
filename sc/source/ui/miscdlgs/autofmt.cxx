@@ -90,7 +90,7 @@ void ScAutoFmtPreview::Resize()
 
 ScAutoFmtPreview::~ScAutoFmtPreview()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScAutoFmtPreview::dispose()

@@ -51,7 +51,7 @@ SwCommentRuler::SwCommentRuler( SwViewShell* pViewSh, vcl::Window* pParent, SwEd
 // Destructor
 SwCommentRuler::~SwCommentRuler()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwCommentRuler::dispose()

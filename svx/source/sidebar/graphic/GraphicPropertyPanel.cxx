@@ -68,7 +68,7 @@ GraphicPropertyPanel::GraphicPropertyPanel(
 
 GraphicPropertyPanel::~GraphicPropertyPanel()
 {
-    dispose();
+    disposeOnce();
 }
 
 void GraphicPropertyPanel::dispose()

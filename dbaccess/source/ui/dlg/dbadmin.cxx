@@ -66,7 +66,7 @@ ODbAdminDialog::ODbAdminDialog(vcl::Window* _pParent
 
 ODbAdminDialog::~ODbAdminDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ODbAdminDialog::dispose()

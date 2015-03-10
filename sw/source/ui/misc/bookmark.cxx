@@ -147,7 +147,7 @@ SwInsertBookmarkDlg::SwInsertBookmarkDlg( vcl::Window *pParent, SwWrtShell &rS, 
 
 SwInsertBookmarkDlg::~SwInsertBookmarkDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwInsertBookmarkDlg::dispose()

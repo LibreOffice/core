@@ -92,7 +92,7 @@ Ruler::Ruler( DrawViewShell& rViewSh, vcl::Window* pParent, ::sd::Window* pWin, 
 
 Ruler::~Ruler()
 {
-    dispose();
+    disposeOnce();
 }
 
 void Ruler::dispose()

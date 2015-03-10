@@ -113,7 +113,7 @@ namespace dbaui
 
     OParameterDialog::~OParameterDialog()
     {
-        dispose();
+        disposeOnce();
     }
 
     void OParameterDialog::dispose()

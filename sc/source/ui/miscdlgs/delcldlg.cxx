@@ -59,7 +59,7 @@ ScDeleteCellDlg::ScDeleteCellDlg(vcl::Window* pParent, bool bDisallowCellMove)
 
 ScDeleteCellDlg::~ScDeleteCellDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScDeleteCellDlg::dispose()

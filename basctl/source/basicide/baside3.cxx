@@ -1408,7 +1408,7 @@ DialogWindowLayout::DialogWindowLayout (vcl::Window* pParent, ObjectCatalog& rOb
 
 DialogWindowLayout::~DialogWindowLayout()
 {
-    dispose();
+    disposeOnce();
 }
 
 void DialogWindowLayout::dispose()

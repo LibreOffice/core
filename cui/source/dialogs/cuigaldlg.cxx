@@ -217,7 +217,7 @@ SearchProgress::SearchProgress( vcl::Window* pParent, const INetURLObject& rStar
 
 SearchProgress::~SearchProgress()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SearchProgress::dispose()
@@ -360,7 +360,7 @@ TakeProgress::TakeProgress(vcl::Window* pWindow)
 
 TakeProgress::~TakeProgress()
 {
-    dispose();
+    disposeOnce();
 }
 
 void TakeProgress::dispose()
@@ -471,7 +471,7 @@ ActualizeProgress::ActualizeProgress(vcl::Window* pWindow, GalleryTheme* pThm)
 
 ActualizeProgress::~ActualizeProgress()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ActualizeProgress::dispose()
@@ -551,7 +551,7 @@ TitleDialog::TitleDialog(vcl::Window* pParent, const OUString& rOldTitle)
 
 TitleDialog::~TitleDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void TitleDialog::dispose()
@@ -583,7 +583,7 @@ GalleryIdDialog::GalleryIdDialog( vcl::Window* pParent, GalleryTheme* _pThm )
 
 GalleryIdDialog::~GalleryIdDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void GalleryIdDialog::dispose()
@@ -677,7 +677,7 @@ TPGalleryThemeGeneral::TPGalleryThemeGeneral(vcl::Window* pParent, const SfxItem
 
 TPGalleryThemeGeneral::~TPGalleryThemeGeneral()
 {
-    dispose();
+    disposeOnce();
 }
 
 void TPGalleryThemeGeneral::dispose()
@@ -831,7 +831,7 @@ void TPGalleryThemeProperties::StartSearchFiles( const OUString& _rFolderURL, sh
 
 TPGalleryThemeProperties::~TPGalleryThemeProperties()
 {
-    dispose();
+    disposeOnce();
 }
 
 void TPGalleryThemeProperties::dispose()

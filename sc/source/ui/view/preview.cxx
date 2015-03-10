@@ -143,7 +143,7 @@ ScPreview::ScPreview( vcl::Window* pParent, ScDocShell* pDocSh, ScPreviewShell* 
 
 ScPreview::~ScPreview()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScPreview::dispose()

@@ -85,7 +85,7 @@ SdCustomShowDlg::SdCustomShowDlg( vcl::Window* pWindow,
 
 SdCustomShowDlg::~SdCustomShowDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SdCustomShowDlg::dispose()
@@ -351,7 +351,7 @@ SdDefineCustomShowDlg::SdDefineCustomShowDlg( vcl::Window* pWindow,
 
 SdDefineCustomShowDlg::~SdDefineCustomShowDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SdDefineCustomShowDlg::dispose()

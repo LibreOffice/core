@@ -36,7 +36,7 @@ namespace abp
     }
     AdminDialogInvokationPage::~AdminDialogInvokationPage()
     {
-        dispose();
+        disposeOnce();
     }
     void AdminDialogInvokationPage::dispose()
     {

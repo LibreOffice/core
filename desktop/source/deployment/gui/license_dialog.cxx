@@ -99,7 +99,7 @@ struct LicenseDialogImpl : public ModalDialog
         css::uno::Reference< css::uno::XComponentContext > const & xContext,
         const OUString & sExtensionName,
         const OUString & sLicenseText);
-    virtual ~LicenseDialogImpl() { dispose(); }
+    virtual ~LicenseDialogImpl() { disposeOnce(); }
     virtual void dispose() SAL_OVERRIDE;
 
     virtual void Activate() SAL_OVERRIDE;
@@ -138,7 +138,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeLicenseView(vcl::Windo
 
 LicenseView::~LicenseView()
 {
-    dispose();
+    disposeOnce();
 }
 
 void LicenseView::dispose()

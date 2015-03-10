@@ -48,7 +48,7 @@ namespace pcr
 
     InspectorHelpWindow::~InspectorHelpWindow()
     {
-        dispose();
+        disposeOnce();
     }
 
     void InspectorHelpWindow::dispose()

@@ -70,7 +70,13 @@ SidebarTxtControl::SidebarTxtControl( SwSidebarWin& rSidebarWin,
 
 SidebarTxtControl::~SidebarTxtControl()
 {
+    disposeOnce();
+}
+
+void SidebarTxtControl::dispose()
+{
     RemoveEventListener( LINK( &mrSidebarWin, SwSidebarWin, WindowEventListener ) );
+    Control::dispose();
 }
 
 OutlinerView* SidebarTxtControl::GetTextView() const

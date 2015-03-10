@@ -539,7 +539,7 @@ PluginProgressWindow::PluginProgressWindow(      vcl::Window*                   
 
 PluginProgressWindow::~PluginProgressWindow()
 {
-    dispose();
+    disposeOnce();
 }
 
 void PluginProgressWindow::dispose()
@@ -668,7 +668,7 @@ SaveDialog::SaveDialog(vcl::Window* pParent, RecoveryCore* pCore)
 
 SaveDialog::~SaveDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SaveDialog::dispose()
@@ -711,7 +711,7 @@ SaveProgressDialog::SaveProgressDialog(vcl::Window* pParent, RecoveryCore* pCore
 
 SaveProgressDialog::~SaveProgressDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SaveProgressDialog::dispose()
@@ -927,7 +927,7 @@ RecoveryDialog::RecoveryDialog(vcl::Window* pParent, RecoveryCore* pCore)
 
 RecoveryDialog::~RecoveryDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void RecoveryDialog::dispose()
@@ -1270,7 +1270,7 @@ BrokenRecoveryDialog::BrokenRecoveryDialog(vcl::Window*       pParent        ,
 
 BrokenRecoveryDialog::~BrokenRecoveryDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void BrokenRecoveryDialog::dispose()

@@ -95,7 +95,7 @@ SwMailMergeAddressBlockPage::SwMailMergeAddressBlockPage( SwMailMergeWizard* _pP
 
 SwMailMergeAddressBlockPage::~SwMailMergeAddressBlockPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwMailMergeAddressBlockPage::dispose()
@@ -356,7 +356,7 @@ SwSelectAddressBlockDialog::SwSelectAddressBlockDialog(
 
 SwSelectAddressBlockDialog::~SwSelectAddressBlockDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwSelectAddressBlockDialog::dispose()
@@ -573,7 +573,7 @@ SwCustomizeAddressBlockDialog::SwCustomizeAddressBlockDialog(
 
 SwCustomizeAddressBlockDialog::~SwCustomizeAddressBlockDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwCustomizeAddressBlockDialog::dispose()
@@ -984,7 +984,7 @@ void SwAssignFieldsControl::Init(SwMailMergeConfigItem& rConfigItem)
 
 SwAssignFieldsControl::~SwAssignFieldsControl()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwAssignFieldsControl::dispose()
@@ -1209,7 +1209,7 @@ SwAssignFieldsDialog::SwAssignFieldsDialog(
 
 SwAssignFieldsDialog::~SwAssignFieldsDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwAssignFieldsDialog::dispose()
@@ -1273,7 +1273,7 @@ DDListBox::DDListBox(vcl::Window* pParent, WinBits nStyle)
 
 DDListBox::~DDListBox()
 {
-    dispose();
+    disposeOnce();
 }
 
 void DDListBox::dispose()
@@ -1329,7 +1329,7 @@ AddressMultiLineEdit::AddressMultiLineEdit(vcl::Window* pParent, WinBits nBits)
 
 AddressMultiLineEdit::~AddressMultiLineEdit()
 {
-    dispose();
+    disposeOnce();
 }
 
 void AddressMultiLineEdit::dispose()

@@ -99,7 +99,7 @@ OTableWindow::OTableWindow( vcl::Window* pParent, const TTableWindowData::value_
 
 OTableWindow::~OTableWindow()
 {
-    dispose();
+    disposeOnce();
 }
 
 void OTableWindow::dispose()

@@ -143,7 +143,7 @@ PageSizeControl::PageSizeControl(
 
 PageSizeControl::~PageSizeControl()
 {
-    dispose();
+    disposeOnce();
 }
 
 void PageSizeControl::dispose()

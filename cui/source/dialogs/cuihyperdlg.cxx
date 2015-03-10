@@ -157,7 +157,7 @@ SvxHpLinkDlg::SvxHpLinkDlg (vcl::Window* pParent, SfxBindings* pBindings)
 
 SvxHpLinkDlg::~SvxHpLinkDlg ()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxHpLinkDlg::dispose()

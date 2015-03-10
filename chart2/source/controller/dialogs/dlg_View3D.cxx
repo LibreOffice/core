@@ -66,7 +66,7 @@ View3DDialog::View3DDialog(vcl::Window* pParent, const uno::Reference< frame::XM
 
 View3DDialog::~View3DDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void View3DDialog::dispose()

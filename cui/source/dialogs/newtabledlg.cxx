@@ -30,7 +30,7 @@ SvxNewTableDialog::SvxNewTableDialog( vcl::Window* pParent )
 
 SvxNewTableDialog::~SvxNewTableDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxNewTableDialog::dispose()

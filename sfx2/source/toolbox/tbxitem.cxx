@@ -1200,7 +1200,7 @@ SfxPopupWindow::SfxPopupWindow(
 
 SfxPopupWindow::~SfxPopupWindow()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SfxPopupWindow::dispose()

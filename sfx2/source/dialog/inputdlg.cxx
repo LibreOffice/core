@@ -28,7 +28,7 @@ InputDialog::InputDialog(const OUString &rLabelText, vcl::Window *pParent)
 
 InputDialog::~InputDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void InputDialog::dispose()

@@ -91,7 +91,7 @@ SwFldFuncPage::SwFldFuncPage(vcl::Window* pParent, const SfxItemSet& rCoreSet)
 
 SwFldFuncPage::~SwFldFuncPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwFldFuncPage::dispose()

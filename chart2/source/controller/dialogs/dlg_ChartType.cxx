@@ -55,7 +55,7 @@ ChartTypeDialog::ChartTypeDialog( vcl::Window* pParent
 
 ChartTypeDialog::~ChartTypeDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ChartTypeDialog::dispose()

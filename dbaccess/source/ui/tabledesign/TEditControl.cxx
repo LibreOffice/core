@@ -253,7 +253,7 @@ void OTableEditorCtrl::ClearModified()
 
 OTableEditorCtrl::~OTableEditorCtrl()
 {
-    dispose();
+    disposeOnce();
 }
 
 void OTableEditorCtrl::dispose()

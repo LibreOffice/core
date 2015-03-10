@@ -194,7 +194,7 @@ void LayoutMenu::implConstruct( DrawDocShell& rDocumentShell )
 
 LayoutMenu::~LayoutMenu (void)
 {
-    dispose();
+    disposeOnce();
 }
 
 void LayoutMenu::dispose()

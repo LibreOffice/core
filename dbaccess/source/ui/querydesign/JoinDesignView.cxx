@@ -61,7 +61,7 @@ OJoinDesignView::OJoinDesignView(vcl::Window* _pParent, OJoinController& _rContr
 
 OJoinDesignView::~OJoinDesignView()
 {
-    dispose();
+    disposeOnce();
 }
 
 void OJoinDesignView::dispose()

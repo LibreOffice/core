@@ -41,7 +41,7 @@ LineWidthValueSet::LineWidthValueSet (
 
 LineWidthValueSet::~LineWidthValueSet()
 {
-    dispose();
+    disposeOnce();
 }
 
 void LineWidthValueSet::dispose()

@@ -519,6 +519,8 @@ protected:
 
     /** This is intended to be used to clear any locally held references to other Window-subclass objects */
     virtual void                        dispose();
+    /* call the dispose() method if we have not already been disposed */
+    void                                disposeOnce();
 
     SAL_DLLPRIVATE void                 ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* pSystemParentData );
 

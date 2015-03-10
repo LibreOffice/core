@@ -74,7 +74,7 @@ SecurityOptionsDialog::SecurityOptionsDialog(vcl::Window* pParent, SvtSecurityOp
 
 SecurityOptionsDialog::~SecurityOptionsDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SecurityOptionsDialog::dispose()

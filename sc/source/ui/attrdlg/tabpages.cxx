@@ -61,7 +61,7 @@ ScTabPageProtection::ScTabPageProtection(vcl::Window* pParent, const SfxItemSet&
 
 ScTabPageProtection::~ScTabPageProtection()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScTabPageProtection::dispose()

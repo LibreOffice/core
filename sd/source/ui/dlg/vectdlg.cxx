@@ -72,7 +72,7 @@ SdVectorizeDlg::SdVectorizeDlg(vcl::Window* pParent, const Bitmap& rBmp, ::sd::D
 
 SdVectorizeDlg::~SdVectorizeDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SdVectorizeDlg::dispose()

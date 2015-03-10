@@ -65,7 +65,7 @@ ScMoveTableDlg::ScMoveTableDlg(vcl::Window* pParent, const OUString& rDefault)
 
 ScMoveTableDlg::~ScMoveTableDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScMoveTableDlg::dispose()

@@ -53,7 +53,7 @@ DlgSize::DlgSize( vcl::Window* pParent, sal_Int32 nVal, bool bRow, sal_Int32 _nA
 
 DlgSize::~DlgSize()
 {
-    dispose();
+    disposeOnce();
 }
 
 void DlgSize::dispose()

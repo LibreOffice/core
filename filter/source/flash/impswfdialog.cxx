@@ -60,7 +60,7 @@ ImpSWFDialog::ImpSWFDialog( vcl::Window* pParent, Sequence< PropertyValue >& rFi
 
 ImpSWFDialog::~ImpSWFDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ImpSWFDialog::dispose()

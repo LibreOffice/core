@@ -96,7 +96,7 @@ FontWorkGalleryDialog::FontWorkGalleryDialog( SdrView* pSdrView, vcl::Window* pP
 
 FontWorkGalleryDialog::~FontWorkGalleryDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void FontWorkGalleryDialog::dispose()
@@ -721,7 +721,7 @@ FontworkCharacterSpacingDialog::FontworkCharacterSpacingDialog( vcl::Window* pPa
 
 FontworkCharacterSpacingDialog::~FontworkCharacterSpacingDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void FontworkCharacterSpacingDialog::dispose()

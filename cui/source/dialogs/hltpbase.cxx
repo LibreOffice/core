@@ -107,7 +107,7 @@ SvxHyperlinkTabPageBase::SvxHyperlinkTabPageBase ( vcl::Window *pParent,
 
 SvxHyperlinkTabPageBase::~SvxHyperlinkTabPageBase()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxHyperlinkTabPageBase::dispose()

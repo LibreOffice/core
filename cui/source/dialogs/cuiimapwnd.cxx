@@ -75,7 +75,7 @@ URLDlg::URLDlg( vcl::Window* pWindow, const OUString& rURL, const OUString& rAlt
 
 URLDlg::~URLDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void URLDlg::dispose()

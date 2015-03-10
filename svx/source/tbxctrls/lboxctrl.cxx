@@ -100,7 +100,7 @@ SvxPopupWindowListBox::SvxPopupWindowListBox(sal_uInt16 nSlotId, const OUString&
 
 SvxPopupWindowListBox::~SvxPopupWindowListBox()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxPopupWindowListBox::dispose()

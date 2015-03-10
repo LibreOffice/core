@@ -54,7 +54,7 @@ DataStreamDlg::DataStreamDlg(ScDocShell *pDocShell, vcl::Window* pParent)
 
 DataStreamDlg::~DataStreamDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void DataStreamDlg::dispose()

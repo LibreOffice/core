@@ -197,7 +197,7 @@ SwAddressPreview::SwAddressPreview(vcl::Window* pParent, WinBits nStyle)
 
 SwAddressPreview::~SwAddressPreview()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwAddressPreview::dispose()

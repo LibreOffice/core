@@ -83,7 +83,7 @@ SvxHyperlinkInternetTp::SvxHyperlinkInternetTp ( vcl::Window *pParent,
 
 SvxHyperlinkInternetTp::~SvxHyperlinkInternetTp()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxHyperlinkInternetTp::dispose()

@@ -69,7 +69,7 @@ namespace pcr
 
     NewDataTypeDialog::~NewDataTypeDialog()
     {
-        dispose();
+        disposeOnce();
     }
 
     void NewDataTypeDialog::dispose()

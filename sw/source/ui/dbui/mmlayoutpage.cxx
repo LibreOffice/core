@@ -155,7 +155,7 @@ SwMailMergeLayoutPage::SwMailMergeLayoutPage( SwMailMergeWizard* _pParent) :
 
 SwMailMergeLayoutPage::~SwMailMergeLayoutPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwMailMergeLayoutPage::dispose()

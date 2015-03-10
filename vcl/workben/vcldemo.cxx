@@ -1384,7 +1384,7 @@ public:
     }
     virtual ~DemoWin()
     {
-        dispose();
+        disposeOnce();
     }
     virtual void dispose() SAL_OVERRIDE
     {

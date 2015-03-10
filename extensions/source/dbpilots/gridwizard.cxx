@@ -320,7 +320,7 @@ namespace dbp
 
     OGridFieldsSelection::~OGridFieldsSelection()
     {
-        dispose();
+        disposeOnce();
     }
 
     void OGridFieldsSelection::dispose()

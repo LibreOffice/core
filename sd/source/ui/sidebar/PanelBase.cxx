@@ -38,7 +38,7 @@ PanelBase::PanelBase (
 
 PanelBase::~PanelBase (void)
 {
-    dispose();
+    disposeOnce();
 }
 
 void PanelBase::dispose()

@@ -79,7 +79,7 @@ ShowWindow::ShowWindow( const ::rtl::Reference< SlideshowImpl >& xController, vc
 
 ShowWindow::~ShowWindow(void)
 {
-    dispose();
+    disposeOnce();
 }
 
 void ShowWindow::dispose()

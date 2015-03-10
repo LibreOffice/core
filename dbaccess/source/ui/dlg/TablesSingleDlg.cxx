@@ -61,7 +61,7 @@ OTableSubscriptionDialog::OTableSubscriptionDialog(vcl::Window* pParent
 
 OTableSubscriptionDialog::~OTableSubscriptionDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void OTableSubscriptionDialog::dispose()

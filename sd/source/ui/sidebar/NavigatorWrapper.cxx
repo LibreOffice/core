@@ -49,7 +49,7 @@ NavigatorWrapper::NavigatorWrapper (
 
 NavigatorWrapper::~NavigatorWrapper (void)
 {
-    dispose();
+    disposeOnce();
 }
 
 void NavigatorWrapper::dispose()

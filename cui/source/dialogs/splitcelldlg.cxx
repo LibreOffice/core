@@ -55,7 +55,7 @@ SvxSplitTableDlg::SvxSplitTableDlg( vcl::Window *pParent, bool bIsTableVertical,
 
 SvxSplitTableDlg::~SvxSplitTableDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxSplitTableDlg::dispose()

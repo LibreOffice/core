@@ -93,7 +93,7 @@ FuncPage::FuncPage(vcl::Window* pParent,const IFunctionManager* _pFunctionManage
 
 FuncPage::~FuncPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void FuncPage::dispose()

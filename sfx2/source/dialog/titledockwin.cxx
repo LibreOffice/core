@@ -59,7 +59,7 @@ namespace sfx2
 
     TitledDockingWindow::~TitledDockingWindow()
     {
-        dispose();
+        disposeOnce();
     }
 
     void TitledDockingWindow::dispose()

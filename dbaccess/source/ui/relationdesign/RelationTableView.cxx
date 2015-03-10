@@ -73,7 +73,7 @@ ORelationTableView::ORelationTableView( vcl::Window* pParent, ORelationDesignVie
 
 ORelationTableView::~ORelationTableView()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ORelationTableView::dispose()

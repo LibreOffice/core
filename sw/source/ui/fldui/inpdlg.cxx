@@ -108,7 +108,7 @@ SwFldInputDlg::SwFldInputDlg( vcl::Window *pParent, SwWrtShell &rS,
 
 SwFldInputDlg::~SwFldInputDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwFldInputDlg::dispose()

@@ -132,7 +132,7 @@ OUString SwStringInputDlg::GetInputString() const
 
 SwStringInputDlg::~SwStringInputDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwStringInputDlg::dispose()
@@ -183,7 +183,7 @@ SwAutoFormatDlg::SwAutoFormatDlg( vcl::Window* pParent, SwWrtShell* pWrtShell,
 
 SwAutoFormatDlg::~SwAutoFormatDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwAutoFormatDlg::dispose()
@@ -565,7 +565,7 @@ void AutoFmtPreview::DetectRTL(SwWrtShell* pWrtShell)
 
 AutoFmtPreview::~AutoFmtPreview()
 {
-    dispose();
+    disposeOnce();
 }
 
 void AutoFmtPreview::dispose()

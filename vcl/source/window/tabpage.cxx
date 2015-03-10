@@ -87,7 +87,7 @@ TabPage::TabPage(vcl::Window *pParent, const OString& rID, const OUString& rUIXM
 
 TabPage::~TabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void TabPage::dispose()

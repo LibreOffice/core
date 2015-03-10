@@ -46,7 +46,7 @@ CellLineStyleControl::CellLineStyleControl(vcl::Window* pParent, CellAppearanceP
 
 CellLineStyleControl::~CellLineStyleControl()
 {
-    dispose();
+    disposeOnce();
 }
 
 void CellLineStyleControl::dispose()

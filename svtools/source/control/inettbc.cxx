@@ -906,7 +906,7 @@ void SvtURLBox::Init(bool bSetDefaultHelpID)
 
 SvtURLBox::~SvtURLBox()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvtURLBox::dispose()

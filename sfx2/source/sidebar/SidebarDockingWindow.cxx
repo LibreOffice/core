@@ -53,7 +53,7 @@ SidebarDockingWindow::SidebarDockingWindow(
 
 SidebarDockingWindow::~SidebarDockingWindow (void)
 {
-    dispose();
+    disposeOnce();
 }
 
 void SidebarDockingWindow::dispose()

@@ -46,7 +46,7 @@ DBTreeView::DBTreeView( vcl::Window* pParent, WinBits nBits)
 
 DBTreeView::~DBTreeView()
 {
-    dispose();
+    disposeOnce();
 }
 
 void DBTreeView::dispose()

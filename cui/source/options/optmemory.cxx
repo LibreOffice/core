@@ -143,7 +143,7 @@ OfaMemoryOptionsPage::OfaMemoryOptionsPage(vcl::Window* pParent, const SfxItemSe
 
 OfaMemoryOptionsPage::~OfaMemoryOptionsPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void OfaMemoryOptionsPage::dispose()

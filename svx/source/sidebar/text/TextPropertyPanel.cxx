@@ -116,7 +116,7 @@ TextPropertyPanel::TextPropertyPanel ( vcl::Window* pParent, const css::uno::Ref
 
 TextPropertyPanel::~TextPropertyPanel()
 {
-    dispose();
+    disposeOnce();
 }
 
 void TextPropertyPanel::dispose()

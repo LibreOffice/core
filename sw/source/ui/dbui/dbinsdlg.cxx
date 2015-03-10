@@ -412,7 +412,7 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
 
 SwInsertDBColAutoPilot::~SwInsertDBColAutoPilot()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwInsertDBColAutoPilot::dispose()

@@ -354,7 +354,7 @@ namespace svt
 
     ToolPanelDeck::~ToolPanelDeck()
     {
-        dispose();
+        disposeOnce();
     }
 
     void ToolPanelDeck::dispose()

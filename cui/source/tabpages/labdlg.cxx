@@ -140,7 +140,7 @@ SvxCaptionTabPage::SvxCaptionTabPage(vcl::Window* pParent, const SfxItemSet& rIn
 
 SvxCaptionTabPage::~SvxCaptionTabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxCaptionTabPage::dispose()

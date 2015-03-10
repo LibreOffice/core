@@ -239,7 +239,7 @@ bool Edit::set_property(const OString &rKey, const OString &rValue)
 
 Edit::~Edit()
 {
-    dispose();
+    disposeOnce();
 }
 
 void Edit::dispose()

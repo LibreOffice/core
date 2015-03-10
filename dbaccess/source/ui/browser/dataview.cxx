@@ -78,7 +78,7 @@ namespace dbaui
 
     ODataView::~ODataView()
     {
-        dispose();
+        disposeOnce();
     }
 
     void ODataView::dispose()

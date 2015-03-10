@@ -44,7 +44,7 @@ XMLFilterTabPageBasic::XMLFilterTabPageBasic(vcl::Window* pParent)
 
 XMLFilterTabPageBasic::~XMLFilterTabPageBasic()
 {
-    dispose();
+    disposeOnce();
 }
 
 void XMLFilterTabPageBasic::dispose()

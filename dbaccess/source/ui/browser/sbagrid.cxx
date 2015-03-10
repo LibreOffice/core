@@ -717,7 +717,7 @@ SbaGridControl::SbaGridControl(Reference< XComponentContext > _rM,
 
 SbaGridControl::~SbaGridControl()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SbaGridControl::dispose()

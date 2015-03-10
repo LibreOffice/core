@@ -211,7 +211,7 @@ namespace sfx2
 
     TaskPaneDockingWindow::~TaskPaneDockingWindow()
     {
-        dispose();
+        disposeOnce();
     }
 
     void TaskPaneDockingWindow::dispose()

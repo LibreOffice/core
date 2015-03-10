@@ -66,7 +66,7 @@ LineWidthControl::LineWidthControl (
 
 LineWidthControl::~LineWidthControl()
 {
-    dispose();
+    disposeOnce();
 }
 
 void LineWidthControl::dispose()

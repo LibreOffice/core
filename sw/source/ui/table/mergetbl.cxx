@@ -30,7 +30,7 @@ SwMergeTblDlg::SwMergeTblDlg( vcl::Window *pParent, bool& rWithPrev )
 
 SwMergeTblDlg::~SwMergeTblDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwMergeTblDlg::dispose()

@@ -122,7 +122,7 @@ SdTpOptionsContents::SdTpOptionsContents( vcl::Window* pParent, const SfxItemSet
 
 SdTpOptionsContents::~SdTpOptionsContents()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SdTpOptionsContents::dispose()
@@ -286,7 +286,7 @@ SdTpOptionsMisc::SdTpOptionsMisc(vcl::Window* pParent, const SfxItemSet& rInAttr
 
 SdTpOptionsMisc::~SdTpOptionsMisc()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SdTpOptionsMisc::dispose()

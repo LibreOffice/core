@@ -214,7 +214,7 @@ SwColumnDlg::SwColumnDlg(vcl::Window* pParent, SwWrtShell& rSh)
 
 SwColumnDlg::~SwColumnDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwColumnDlg::dispose()
@@ -549,7 +549,7 @@ SwColumnPage::SwColumnPage(vcl::Window *pParent, const SfxItemSet &rSet)
 
 SwColumnPage::~SwColumnPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwColumnPage::dispose()

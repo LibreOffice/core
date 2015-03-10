@@ -55,7 +55,7 @@ SdModifyFieldDlg::SdModifyFieldDlg( vcl::Window* pWindow, const SvxFieldData* pI
 
 SdModifyFieldDlg::~SdModifyFieldDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SdModifyFieldDlg::dispose()

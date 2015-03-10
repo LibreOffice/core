@@ -165,7 +165,7 @@ MenuBarWindow::MenuBarWindow( vcl::Window* pParent ) :
 
 MenuBarWindow::~MenuBarWindow()
 {
-    dispose();
+    disposeOnce();
 }
 
 void MenuBarWindow::dispose()

@@ -256,7 +256,7 @@ NavigatorTree::NavigatorTree( vcl::Window* pParent,OReportController& _rControll
 
 NavigatorTree::~NavigatorTree()
 {
-    dispose();
+    disposeOnce();
 }
 
 void NavigatorTree::dispose()

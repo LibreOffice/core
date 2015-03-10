@@ -216,7 +216,7 @@ ScDPFunctionDlg::ScDPFunctionDlg(
 
 ScDPFunctionDlg::~ScDPFunctionDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScDPFunctionDlg::dispose()
@@ -452,7 +452,7 @@ ScDPSubtotalDlg::ScDPSubtotalDlg( vcl::Window* pParent, ScDPObject& rDPObj,
 
 ScDPSubtotalDlg::~ScDPSubtotalDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScDPSubtotalDlg::dispose()
@@ -584,7 +584,7 @@ ScDPSubtotalOptDlg::ScDPSubtotalOptDlg( vcl::Window* pParent, ScDPObject& rDPObj
 
 ScDPSubtotalOptDlg::~ScDPSubtotalOptDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScDPSubtotalOptDlg::dispose()
@@ -866,7 +866,7 @@ ScDPShowDetailDlg::ScDPShowDetailDlg( vcl::Window* pParent, ScDPObject& rDPObj, 
 
 ScDPShowDetailDlg::~ScDPShowDetailDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScDPShowDetailDlg::dispose()

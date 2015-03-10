@@ -52,7 +52,7 @@ OWizardPage::OWizardPage(vcl::Window* pParent, const OString& rID, const OUStrin
 
 OWizardPage::~OWizardPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void OWizardPage::dispose()
@@ -92,7 +92,7 @@ OWizColumnSelect::OWizColumnSelect( vcl::Window* pParent)
 
 OWizColumnSelect::~OWizColumnSelect()
 {
-    dispose();
+    disposeOnce();
 }
 
 void OWizColumnSelect::dispose()

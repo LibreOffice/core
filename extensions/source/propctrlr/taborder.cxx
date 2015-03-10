@@ -118,7 +118,7 @@ namespace pcr
 
     TabOrderDialog::~TabOrderDialog()
     {
-        dispose();
+        disposeOnce();
     }
 
     void TabOrderDialog::dispose()

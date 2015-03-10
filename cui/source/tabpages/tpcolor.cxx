@@ -397,7 +397,7 @@ SvxColorTabPage::SvxColorTabPage(vcl::Window* pParent, const SfxItemSet& rInAttr
 
 SvxColorTabPage::~SvxColorTabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxColorTabPage::dispose()

@@ -36,7 +36,7 @@ SfxDocumentFontsPage::SfxDocumentFontsPage( vcl::Window* parent, const SfxItemSe
 
 SfxDocumentFontsPage::~SfxDocumentFontsPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SfxDocumentFontsPage::dispose()

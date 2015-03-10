@@ -200,7 +200,7 @@ SfxRecordingFloat_Impl::SfxRecordingFloat_Impl(
 
 SfxRecordingFloat_Impl::~SfxRecordingFloat_Impl()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SfxRecordingFloat_Impl::dispose()

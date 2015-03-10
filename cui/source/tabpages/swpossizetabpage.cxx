@@ -590,7 +590,7 @@ SvxSwPosSizeTabPage::SvxSwPosSizeTabPage(vcl::Window* pParent, const SfxItemSet&
 
 SvxSwPosSizeTabPage::~SvxSwPosSizeTabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxSwPosSizeTabPage::dispose()

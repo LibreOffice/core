@@ -94,7 +94,7 @@ ImpSVGDialog::ImpSVGDialog( vcl::Window* pParent, Sequence< PropertyValue >& rFi
 
 ImpSVGDialog::~ImpSVGDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ImpSVGDialog::dispose()

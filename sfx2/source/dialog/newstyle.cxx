@@ -82,7 +82,7 @@ SfxNewStyleDlg::SfxNewStyleDlg( vcl::Window* pParent, SfxStyleSheetBasePool& rIn
 
 SfxNewStyleDlg::~SfxNewStyleDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SfxNewStyleDlg::dispose()

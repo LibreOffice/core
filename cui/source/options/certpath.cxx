@@ -144,7 +144,7 @@ OUString CertPathDialog::getDirectory() const
 
 CertPathDialog::~CertPathDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void CertPathDialog::dispose()

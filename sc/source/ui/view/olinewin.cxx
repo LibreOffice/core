@@ -71,7 +71,7 @@ ScOutlineWindow::ScOutlineWindow( vcl::Window* pParent, ScOutlineMode eMode, ScV
 
 ScOutlineWindow::~ScOutlineWindow()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScOutlineWindow::dispose()

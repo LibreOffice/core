@@ -83,7 +83,7 @@ SchAxisDlg::SchAxisDlg(vcl::Window* pWindow,
 
 SchAxisDlg::~SchAxisDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SchAxisDlg::dispose()

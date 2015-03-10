@@ -86,7 +86,7 @@ SfxTabPage( pParent, "OptHtmlPage" , "cui/ui/opthtmlpage.ui", &rSet )
 
 OfaHtmlTabPage::~OfaHtmlTabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void OfaHtmlTabPage::dispose()

@@ -56,7 +56,7 @@ ScCsvTableBox::ScCsvTableBox( vcl::Window* pParent, WinBits nBits ) :
 
 ScCsvTableBox::~ScCsvTableBox()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScCsvTableBox::dispose()

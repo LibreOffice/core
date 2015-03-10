@@ -90,7 +90,7 @@ ORelationDialog::ORelationDialog( OJoinTableView* pParent,
 
 ORelationDialog::~ORelationDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ORelationDialog::dispose()

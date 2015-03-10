@@ -30,7 +30,7 @@ SdInsertPasteDlg::SdInsertPasteDlg(vcl::Window* pWindow)
 
 SdInsertPasteDlg::~SdInsertPasteDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SdInsertPasteDlg::dispose()

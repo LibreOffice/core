@@ -102,7 +102,7 @@ public:
     DisposableChild(vcl::Window *pParent) : vcl::Window(pParent) {}
     virtual ~DisposableChild()
     {
-        dispose();
+        disposeOnce();
     }
 };
 

@@ -45,7 +45,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeTemplateLocalView(vcl:
 
 TemplateLocalView::~TemplateLocalView()
 {
-    dispose();
+    disposeOnce();
 }
 
 void TemplateLocalView::dispose()

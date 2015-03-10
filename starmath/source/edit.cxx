@@ -123,7 +123,7 @@ SmEditWindow::SmEditWindow( SmCmdBoxWindow &rMyCmdBoxWin ) :
 
 SmEditWindow::~SmEditWindow()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SmEditWindow::dispose()

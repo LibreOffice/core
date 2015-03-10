@@ -34,7 +34,7 @@ AuthFallbackDlg::AuthFallbackDlg(Window* pParent, const OUString& instructions,
 
 AuthFallbackDlg::~AuthFallbackDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void AuthFallbackDlg::dispose()

@@ -175,7 +175,7 @@ SwBreakDlg::SwBreakDlg( vcl::Window *pParent, SwWrtShell &rS )
 
 SwBreakDlg::~SwBreakDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwBreakDlg::dispose()

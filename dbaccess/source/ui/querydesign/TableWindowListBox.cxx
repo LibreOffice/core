@@ -68,7 +68,7 @@ void OTableWindowListBox::dragFinished( )
 
 OTableWindowListBox::~OTableWindowListBox()
 {
-    dispose();
+    disposeOnce();
 }
 
 void OTableWindowListBox::dispose()

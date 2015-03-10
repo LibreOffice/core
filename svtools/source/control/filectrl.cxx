@@ -86,7 +86,7 @@ WinBits FileControl::ImplInitStyle( WinBits nStyle )
 
 FileControl::~FileControl()
 {
-    dispose();
+    disposeOnce();
 }
 
 void FileControl::dispose()

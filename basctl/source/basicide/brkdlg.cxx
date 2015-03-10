@@ -108,7 +108,7 @@ BreakPointDialog::BreakPointDialog( vcl::Window* pParent, BreakPointList& rBrkPn
 
 BreakPointDialog::~BreakPointDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void BreakPointDialog::dispose()

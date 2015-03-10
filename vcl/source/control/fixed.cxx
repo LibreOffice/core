@@ -460,7 +460,7 @@ void FixedText::set_mnemonic_widget(vcl::Window *pWindow)
 
 FixedText::~FixedText()
 {
-    dispose();
+    disposeOnce();
 }
 
 void FixedText::dispose()

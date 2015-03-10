@@ -59,7 +59,7 @@ SvxCTLOptionsPage::SvxCTLOptionsPage( vcl::Window* pParent, const SfxItemSet& rS
 
 SvxCTLOptionsPage::~SvxCTLOptionsPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxCTLOptionsPage::dispose()

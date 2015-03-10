@@ -62,7 +62,7 @@ SvxJSearchOptionsDialog::SvxJSearchOptionsDialog(vcl::Window *pParent,
 
 SvxJSearchOptionsDialog::~SvxJSearchOptionsDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxJSearchOptionsDialog::dispose()

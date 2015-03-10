@@ -2450,7 +2450,7 @@ WaitWindow_Impl::WaitWindow_Impl()
 
 WaitWindow_Impl::~WaitWindow_Impl()
 {
-    dispose();
+    disposeOnce();
 }
 
 void  WaitWindow_Impl::dispose()

@@ -226,7 +226,7 @@ OAppDetailPageHelper::OAppDetailPageHelper(vcl::Window* _pParent,OAppBorderWindo
 
 OAppDetailPageHelper::~OAppDetailPageHelper()
 {
-    dispose();
+    disposeOnce();
 }
 
 void OAppDetailPageHelper::dispose()

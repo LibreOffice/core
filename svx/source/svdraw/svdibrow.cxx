@@ -169,7 +169,7 @@ public:
     :   Edit(pParent, nBits),
         pBrowse(pBrowse_)
     {}
-    virtual ~ImpItemEdit() { dispose(); }
+    virtual ~ImpItemEdit() { disposeOnce(); }
     virtual void dispose() SAL_OVERRIDE { pBrowse.clear(); Edit::dispose(); }
     virtual void KeyInput(const KeyEvent& rEvt) SAL_OVERRIDE;
 };
@@ -213,7 +213,7 @@ _SdrItemBrowserControl::_SdrItemBrowserControl(vcl::Window* pParent, WinBits nBi
 
 _SdrItemBrowserControl::~_SdrItemBrowserControl()
 {
-    dispose();
+    disposeOnce();
 }
 
 void _SdrItemBrowserControl::dispose()
@@ -1055,7 +1055,7 @@ _SdrItemBrowserWindow::_SdrItemBrowserWindow(vcl::Window* pParent, WinBits nBits
 
 _SdrItemBrowserWindow::~_SdrItemBrowserWindow()
 {
-    dispose();
+    disposeOnce();
 }
 
 void _SdrItemBrowserWindow::dispose()

@@ -137,7 +137,7 @@ NumberingPopup::NumberingPopup( NumberingToolBoxControl& rController,
 
 NumberingPopup::~NumberingPopup()
 {
-    dispose();
+    disposeOnce();
 }
 
 void NumberingPopup::dispose()

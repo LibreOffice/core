@@ -142,7 +142,7 @@ SdTPAction::SdTPAction(vcl::Window* pWindow, const SfxItemSet& rInAttrs)
 
 SdTPAction::~SdTPAction()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SdTPAction::dispose()

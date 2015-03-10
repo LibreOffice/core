@@ -22,7 +22,7 @@ SfxCheckinDialog::SfxCheckinDialog( vcl::Window* pParent ) :
 
 SfxCheckinDialog::~SfxCheckinDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SfxCheckinDialog::dispose()

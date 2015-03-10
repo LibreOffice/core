@@ -679,7 +679,7 @@ ScNavigatorDlg::ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, vcl
 
 ScNavigatorDlg::~ScNavigatorDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScNavigatorDlg::dispose()

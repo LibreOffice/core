@@ -112,7 +112,7 @@ SwGlossaryGroupDlg::SwGlossaryGroupDlg(vcl::Window * pParent,
 
 SwGlossaryGroupDlg::~SwGlossaryGroupDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwGlossaryGroupDlg::dispose()

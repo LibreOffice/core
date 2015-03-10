@@ -167,7 +167,7 @@ SvxShadowTabPage::SvxShadowTabPage( vcl::Window* pParent, const SfxItemSet& rInA
 
 SvxShadowTabPage::~SvxShadowTabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxShadowTabPage::dispose()

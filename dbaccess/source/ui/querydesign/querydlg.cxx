@@ -139,7 +139,7 @@ DlgQryJoin::DlgQryJoin( OQueryTableView * pParent,
 
 DlgQryJoin::~DlgQryJoin()
 {
-    dispose();
+    disposeOnce();
 }
 
 void DlgQryJoin::dispose()

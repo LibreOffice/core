@@ -125,7 +125,7 @@ ScrollBar::ScrollBar( vcl::Window* pParent, WinBits nStyle ) :
 
 ScrollBar::~ScrollBar()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScrollBar::dispose()

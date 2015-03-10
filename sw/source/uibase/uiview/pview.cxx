@@ -168,7 +168,7 @@ SwPreviewZoomDlg::SwPreviewZoomDlg( SwPagePreviewWin& rParent )
 
 SwPreviewZoomDlg::~SwPreviewZoomDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwPreviewZoomDlg::dispose()

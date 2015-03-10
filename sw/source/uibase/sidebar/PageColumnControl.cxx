@@ -77,7 +77,7 @@ PageColumnControl::PageColumnControl(
 
 PageColumnControl::~PageColumnControl(void)
 {
-    dispose();
+    disposeOnce();
 }
 
 void PageColumnControl::dispose()

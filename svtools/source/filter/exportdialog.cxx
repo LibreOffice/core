@@ -979,7 +979,7 @@ void ExportDialog::updateControls()
 
 ExportDialog::~ExportDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ExportDialog::dispose()

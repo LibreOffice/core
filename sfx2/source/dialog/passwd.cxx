@@ -127,7 +127,7 @@ SfxPasswordDialog::SfxPasswordDialog(vcl::Window* pParent, const OUString* pGrou
 
 SfxPasswordDialog::~SfxPasswordDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SfxPasswordDialog::dispose()

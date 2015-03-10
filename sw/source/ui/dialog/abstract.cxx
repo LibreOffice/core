@@ -33,7 +33,7 @@ SwInsertAbstractDlg::SwInsertAbstractDlg(vcl::Window* pParent)
 
 SwInsertAbstractDlg::~SwInsertAbstractDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwInsertAbstractDlg::dispose()

@@ -121,7 +121,7 @@ namespace dbaui
 
     OConnectionTabPageSetup::~OConnectionTabPageSetup()
     {
-        dispose();
+        disposeOnce();
     }
 
     void OConnectionTabPageSetup::dispose()

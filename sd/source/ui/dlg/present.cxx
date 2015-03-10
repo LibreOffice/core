@@ -152,7 +152,7 @@ SdStartPresentationDlg::SdStartPresentationDlg( vcl::Window* pWindow,
 
 SdStartPresentationDlg::~SdStartPresentationDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SdStartPresentationDlg::dispose()

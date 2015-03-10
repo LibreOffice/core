@@ -351,7 +351,7 @@ DropdownMenuBox::DropdownMenuBox( vcl::Window* pParent, Edit* pSubControl, Popup
 
 DropdownMenuBox::~DropdownMenuBox()
 {
-    dispose();
+    disposeOnce();
 }
 
 void DropdownMenuBox::dispose()
@@ -1263,7 +1263,7 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( vcl::Window* pParent
 
 CustomAnimationEffectTabPage::~CustomAnimationEffectTabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void CustomAnimationEffectTabPage::dispose()
@@ -1787,7 +1787,7 @@ CustomAnimationDurationTabPage::CustomAnimationDurationTabPage(vcl::Window* pPar
 
 CustomAnimationDurationTabPage::~CustomAnimationDurationTabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void CustomAnimationDurationTabPage::dispose()
@@ -2077,7 +2077,7 @@ CustomAnimationTextAnimTabPage::CustomAnimationTextAnimTabPage(vcl::Window* pPar
 
 CustomAnimationTextAnimTabPage::~CustomAnimationTextAnimTabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void CustomAnimationTextAnimTabPage::dispose()
@@ -2207,7 +2207,7 @@ CustomAnimationDialog::CustomAnimationDialog(vcl::Window* pParent, STLPropertySe
 
 CustomAnimationDialog::~CustomAnimationDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void CustomAnimationDialog::dispose()
@@ -2298,7 +2298,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makePropertyControl( vcl::
 
 PropertyControl::~PropertyControl()
 {
-    dispose();
+    disposeOnce();
 }
 
 void PropertyControl::dispose()

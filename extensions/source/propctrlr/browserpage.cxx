@@ -45,7 +45,7 @@ namespace pcr
 
     OBrowserPage::~OBrowserPage()
     {
-        dispose();
+        disposeOnce();
     }
 
     void OBrowserPage::dispose()

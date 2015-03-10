@@ -125,7 +125,7 @@ void ScTablePage::ShowImage()
 
 ScTablePage::~ScTablePage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScTablePage::dispose()

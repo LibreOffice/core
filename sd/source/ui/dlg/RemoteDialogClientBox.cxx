@@ -124,7 +124,7 @@ Size ClientBox::GetOptimalSize() const
 
 ClientBox::~ClientBox()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ClientBox::dispose()

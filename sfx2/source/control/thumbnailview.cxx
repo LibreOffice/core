@@ -66,7 +66,7 @@ ThumbnailView::ThumbnailView (vcl::Window *pParent, WinBits nWinStyle, bool bDis
 
 ThumbnailView::~ThumbnailView()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ThumbnailView::dispose()

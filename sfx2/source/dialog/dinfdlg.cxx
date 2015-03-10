@@ -628,7 +628,7 @@ SfxDocumentDescPage::SfxDocumentDescPage( vcl::Window * pParent, const SfxItemSe
 
 SfxDocumentDescPage::~SfxDocumentDescPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SfxDocumentDescPage::dispose()
@@ -805,7 +805,7 @@ SfxDocumentPage::SfxDocumentPage(vcl::Window* pParent, const SfxItemSet& rItemSe
 
 SfxDocumentPage::~SfxDocumentPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SfxDocumentPage::dispose()
@@ -1238,7 +1238,7 @@ CustomPropertiesYesNoButton::CustomPropertiesYesNoButton( vcl::Window* pParent, 
 
 CustomPropertiesYesNoButton::~CustomPropertiesYesNoButton()
 {
-    dispose();
+    disposeOnce();
 }
 
 void CustomPropertiesYesNoButton::dispose()
@@ -1293,7 +1293,7 @@ DurationDialog_Impl::DurationDialog_Impl(vcl::Window* pParent,
 
 DurationDialog_Impl::~DurationDialog_Impl()
 {
-    dispose();
+    disposeOnce();
 }
 
 void DurationDialog_Impl::dispose()
@@ -1491,7 +1491,7 @@ CustomPropertiesWindow::CustomPropertiesWindow(vcl::Window* pParent,
 
 CustomPropertiesWindow::~CustomPropertiesWindow()
 {
-    dispose();
+    disposeOnce();
 }
 
 void CustomPropertiesWindow::dispose()
@@ -2138,7 +2138,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeCustomPropertiesContro
 
 CustomPropertiesControl::~CustomPropertiesControl()
 {
-    dispose();
+    disposeOnce();
 }
 
 void CustomPropertiesControl::dispose()
@@ -2189,7 +2189,7 @@ SfxCustomPropertiesPage::SfxCustomPropertiesPage( vcl::Window* pParent, const Sf
 
 SfxCustomPropertiesPage::~SfxCustomPropertiesPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SfxCustomPropertiesPage::dispose()

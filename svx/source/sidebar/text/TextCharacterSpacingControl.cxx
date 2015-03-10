@@ -73,7 +73,7 @@ TextCharacterSpacingControl::TextCharacterSpacingControl (
 
 TextCharacterSpacingControl::~TextCharacterSpacingControl()
 {
-    dispose();
+    disposeOnce();
 }
 
 void TextCharacterSpacingControl::dispose()

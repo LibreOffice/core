@@ -115,7 +115,7 @@ AreaPropertyPanel::AreaPropertyPanel(
 
 AreaPropertyPanel::~AreaPropertyPanel()
 {
-    dispose();
+    disposeOnce();
 }
 
 void AreaPropertyPanel::dispose()

@@ -43,7 +43,7 @@ ScSelEntryDlg::ScSelEntryDlg(vcl::Window*  pParent, const std::vector<OUString> 
 
 ScSelEntryDlg::~ScSelEntryDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScSelEntryDlg::dispose()

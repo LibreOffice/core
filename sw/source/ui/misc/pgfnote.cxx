@@ -135,7 +135,7 @@ SwFootNotePage::SwFootNotePage(vcl::Window *pParent, const SfxItemSet &rSet)
 
 SwFootNotePage::~SwFootNotePage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwFootNotePage::dispose()

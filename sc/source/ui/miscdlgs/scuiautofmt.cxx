@@ -90,7 +90,7 @@ ScAutoFormatDlg::ScAutoFormatDlg(vcl::Window* pParent,
 
 ScAutoFormatDlg::~ScAutoFormatDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScAutoFormatDlg::dispose()

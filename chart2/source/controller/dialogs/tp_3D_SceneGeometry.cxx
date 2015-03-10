@@ -149,7 +149,7 @@ ThreeD_SceneGeometry_TabPage::ThreeD_SceneGeometry_TabPage( vcl::Window* pWindow
 
 ThreeD_SceneGeometry_TabPage::~ThreeD_SceneGeometry_TabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ThreeD_SceneGeometry_TabPage::dispose()

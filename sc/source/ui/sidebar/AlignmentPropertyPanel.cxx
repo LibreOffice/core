@@ -68,7 +68,7 @@ AlignmentPropertyPanel::AlignmentPropertyPanel(
 
 AlignmentPropertyPanel::~AlignmentPropertyPanel()
 {
-    dispose();
+    disposeOnce();
 }
 
 void AlignmentPropertyPanel::dispose()

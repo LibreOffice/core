@@ -250,7 +250,7 @@ AlignmentTabPage::AlignmentTabPage( vcl::Window* pParent, const SfxItemSet& rCor
 
 AlignmentTabPage::~AlignmentTabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void AlignmentTabPage::dispose()

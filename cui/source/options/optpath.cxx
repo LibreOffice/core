@@ -247,7 +247,7 @@ SvxPathTabPage::SvxPathTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
 
 SvxPathTabPage::~SvxPathTabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxPathTabPage::dispose()

@@ -225,7 +225,7 @@ CustomAnimationPane::CustomAnimationPane( Window* pParent, ViewShellBase& rBase,
 
 CustomAnimationPane::~CustomAnimationPane()
 {
-    dispose();
+    disposeOnce();
 }
 
 void CustomAnimationPane::dispose()

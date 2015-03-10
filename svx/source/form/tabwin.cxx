@@ -115,7 +115,7 @@ FmFieldWinListBox::FmFieldWinListBox( FmFieldWin* pParent )
 
 FmFieldWinListBox::~FmFieldWinListBox()
 {
-    dispose();
+    disposeOnce();
 }
 
 void FmFieldWinListBox::dispose()
@@ -198,7 +198,7 @@ FmFieldWin::FmFieldWin(SfxBindings* _pBindings, SfxChildWindow* _pMgr, vcl::Wind
 
 FmFieldWin::~FmFieldWin()
 {
-    dispose();
+    disposeOnce();
 }
 
 void FmFieldWin::dispose()

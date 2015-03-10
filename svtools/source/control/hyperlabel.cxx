@@ -155,7 +155,7 @@ namespace svt
 
     HyperLabel::~HyperLabel( )
     {
-        dispose();
+        disposeOnce();
     }
 
     void HyperLabel::dispose()

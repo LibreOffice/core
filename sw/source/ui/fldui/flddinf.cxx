@@ -89,7 +89,7 @@ SwFldDokInfPage::SwFldDokInfPage(vcl::Window* pParent, const SfxItemSet& rCoreSe
 
 SwFldDokInfPage::~SwFldDokInfPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwFldDokInfPage::dispose()

@@ -239,7 +239,7 @@ void ExtensionBox_Impl::Init()
 
 ExtensionBox_Impl::~ExtensionBox_Impl()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ExtensionBox_Impl::dispose()

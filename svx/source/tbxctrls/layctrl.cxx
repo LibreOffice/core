@@ -157,7 +157,7 @@ TableWindow::TableWindow( sal_uInt16 nSlotId, const OUString& rCmd, const OUStri
 
 TableWindow::~TableWindow()
 {
-    dispose();
+    disposeOnce();
 }
 
 void TableWindow::dispose()

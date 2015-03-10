@@ -133,7 +133,7 @@ SvxConnectionPage::SvxConnectionPage( vcl::Window* pWindow, const SfxItemSet& rI
 
 SvxConnectionPage::~SvxConnectionPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxConnectionPage::dispose()

@@ -61,7 +61,7 @@ ScTabBgColorDlg::ScTabBgColorDlg(vcl::Window* pParent, const OUString& rTitle,
 
 ScTabBgColorDlg::~ScTabBgColorDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScTabBgColorDlg::dispose()
@@ -149,7 +149,7 @@ ScTabBgColorDlg::ScTabBgColorValueSet::ScTabBgColorValueSet(vcl::Window* pParent
 
 ScTabBgColorDlg::ScTabBgColorValueSet::~ScTabBgColorValueSet()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScTabBgColorDlg::ScTabBgColorValueSet::dispose()

@@ -37,7 +37,7 @@ SwSelGlossaryDlg::SwSelGlossaryDlg(vcl::Window * pParent, const OUString &rShort
 
 SwSelGlossaryDlg::~SwSelGlossaryDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwSelGlossaryDlg::dispose()

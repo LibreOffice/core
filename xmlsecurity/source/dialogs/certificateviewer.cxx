@@ -61,7 +61,7 @@ CertificateViewer::CertificateViewer(
 
 CertificateViewer::~CertificateViewer()
 {
-    dispose();
+    disposeOnce();
 }
 
 void CertificateViewer::dispose()
@@ -82,7 +82,7 @@ CertificateViewerTP::CertificateViewerTP( vcl::Window* _pParent, const OString& 
 
 CertificateViewerTP::~CertificateViewerTP()
 {
-    dispose();
+    disposeOnce();
 }
 
 void CertificateViewerTP::dispose()
@@ -151,7 +151,7 @@ CertificateViewerGeneralTP::CertificateViewerGeneralTP( vcl::Window* _pParent, C
 
 CertificateViewerGeneralTP::~CertificateViewerGeneralTP()
 {
-    dispose();
+    disposeOnce();
 }
 
 void CertificateViewerGeneralTP::dispose()
@@ -293,7 +293,7 @@ CertificateViewerDetailsTP::CertificateViewerDetailsTP( vcl::Window* _pParent, C
 
 CertificateViewerDetailsTP::~CertificateViewerDetailsTP()
 {
-    dispose();
+    disposeOnce();
 }
 
 void CertificateViewerDetailsTP::dispose()
@@ -372,7 +372,7 @@ CertificateViewerCertPathTP::CertificateViewerCertPathTP( vcl::Window* _pParent,
 
 CertificateViewerCertPathTP::~CertificateViewerCertPathTP()
 {
-    dispose();
+    disposeOnce();
 }
 
 void CertificateViewerCertPathTP::dispose()

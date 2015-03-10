@@ -270,7 +270,7 @@ IMPL_LINK_NOARG(SwTitlePageDlg, StartPageHdl)
 
 SwTitlePageDlg::~SwTitlePageDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwTitlePageDlg::dispose()

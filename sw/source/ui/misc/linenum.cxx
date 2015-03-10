@@ -169,7 +169,7 @@ SwLineNumberingDlg::SwLineNumberingDlg(SwView *pVw)
 
 SwLineNumberingDlg::~SwLineNumberingDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwLineNumberingDlg::dispose()

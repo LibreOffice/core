@@ -353,7 +353,7 @@ SwLabFmtPage::SwLabFmtPage(vcl::Window* pParent, const SfxItemSet& rSet)
 
 SwLabFmtPage::~SwLabFmtPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwLabFmtPage::dispose()
@@ -623,7 +623,7 @@ SwSaveLabelDlg::SwSaveLabelDlg(SwLabFmtPage* pParent, SwLabRec& rRec)
 
 SwSaveLabelDlg::~SwSaveLabelDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwSaveLabelDlg::dispose()

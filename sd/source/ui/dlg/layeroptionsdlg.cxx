@@ -52,7 +52,7 @@ SdInsertLayerDlg::SdInsertLayerDlg( vcl::Window* pWindow, const SfxItemSet& rInA
 
 SdInsertLayerDlg::~SdInsertLayerDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SdInsertLayerDlg::dispose()

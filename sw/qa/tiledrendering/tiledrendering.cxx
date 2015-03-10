@@ -92,7 +92,7 @@ public:
 
     virtual ~TiledRenderingDialog()
     {
-        dispose();
+        disposeOnce();
     }
 
     virtual void dispose() SAL_OVERRIDE

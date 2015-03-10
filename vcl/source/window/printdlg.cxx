@@ -82,7 +82,7 @@ PrintDialog::PrintPreviewWindow::PrintPreviewWindow( vcl::Window* i_pParent )
 
 PrintDialog::PrintPreviewWindow::~PrintPreviewWindow()
 {
-    dispose();
+    disposeOnce();
 }
 
 void PrintDialog::PrintPreviewWindow::dispose()
@@ -716,7 +716,7 @@ PrintDialog::PrintDialog( vcl::Window* i_pParent, const std::shared_ptr<PrinterC
 
 PrintDialog::~PrintDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void PrintDialog::dispose()
@@ -1916,7 +1916,7 @@ PrintProgressDialog::PrintProgressDialog(vcl::Window* i_pParent, int i_nMax)
 
 PrintProgressDialog::~PrintProgressDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void PrintProgressDialog::dispose()

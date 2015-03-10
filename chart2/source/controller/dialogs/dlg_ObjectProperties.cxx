@@ -481,7 +481,7 @@ SchAttribTabDlg::SchAttribTabDlg(vcl::Window* pParent,
 
 SchAttribTabDlg::~SchAttribTabDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SchAttribTabDlg::dispose()

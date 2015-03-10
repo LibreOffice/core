@@ -55,7 +55,7 @@ SwModalRedlineAcceptDlg::SwModalRedlineAcceptDlg(vcl::Window *pParent)
 
 SwModalRedlineAcceptDlg::~SwModalRedlineAcceptDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwModalRedlineAcceptDlg::dispose()

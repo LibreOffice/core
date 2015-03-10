@@ -106,7 +106,7 @@ void SystemWindow::loadUI(vcl::Window* pParent, const OString& rID, const OUStri
 
 SystemWindow::~SystemWindow()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SystemWindow::dispose()

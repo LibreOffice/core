@@ -40,7 +40,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeConnectionURLEdit(vcl:
 
 OConnectionURLEdit::~OConnectionURLEdit()
 {
-    dispose();
+    disposeOnce();
 }
 
 void OConnectionURLEdit::dispose()

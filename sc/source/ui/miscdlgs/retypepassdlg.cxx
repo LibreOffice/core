@@ -54,7 +54,7 @@ ScRetypePassDlg::ScRetypePassDlg(vcl::Window* pParent) :
 
 ScRetypePassDlg::~ScRetypePassDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScRetypePassDlg::dispose()
@@ -333,7 +333,7 @@ ScRetypePassInputDlg::ScRetypePassInputDlg(vcl::Window* pParent, ScPassHashProte
 
 ScRetypePassInputDlg::~ScRetypePassInputDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScRetypePassInputDlg::dispose()

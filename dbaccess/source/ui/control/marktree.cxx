@@ -37,7 +37,7 @@ OMarkableTreeListBox::OMarkableTreeListBox( vcl::Window* pParent, WinBits nWinSt
 
 OMarkableTreeListBox::~OMarkableTreeListBox()
 {
-    dispose();
+    disposeOnce();
 }
 
 void OMarkableTreeListBox::dispose()

@@ -101,7 +101,7 @@ ScCsvRuler::ScCsvRuler( ScCsvControl& rParent ) :
 
 ScCsvRuler::~ScCsvRuler()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScCsvRuler::dispose()

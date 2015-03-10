@@ -282,7 +282,7 @@ SvxNumberFormatTabPage::SvxNumberFormatTabPage(vcl::Window* pParent,
 
 SvxNumberFormatTabPage::~SvxNumberFormatTabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 

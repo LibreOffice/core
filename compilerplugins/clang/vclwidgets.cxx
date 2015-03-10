@@ -162,13 +162,18 @@ bool VCLWidgets::VisitCXXDestructorDecl(const CXXDestructorDecl* pCXXDestructorD
     if (pCompoundStatement && pCompoundStatement->size() == 1) {
         const CXXMemberCallExpr *pCallExpr = dyn_cast<CXXMemberCallExpr>(*pCompoundStatement->body_begin());
         if (pCallExpr) {
-            ok = true;
+            if( const FunctionDecl* func = pCallExpr->getDirectCallee()) {
+                if( func->getNumParams() == 0 && func->getIdentifier() != NULL
+                    && ( func->getName() == "disposeOnce" )) {
+                    ok = true;
+                }
+            }
         }
     }
     if (!ok) {
         report(
             DiagnosticsEngine::Warning,
-            "vcl::Window subclass should have nothing in it's destructor but a call to dispose().",
+            "vcl::Window subclass should have nothing in it's destructor but a call to disposeOnce().",
             pCXXDestructorDecl->getLocStart())
           << pCXXDestructorDecl->getSourceRange();
         return true;

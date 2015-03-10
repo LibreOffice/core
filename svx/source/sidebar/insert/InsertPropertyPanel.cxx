@@ -77,7 +77,7 @@ InsertPropertyPanel::InsertPropertyPanel (
 
 InsertPropertyPanel::~InsertPropertyPanel()
 {
-    dispose();
+    disposeOnce();
 }
 
 void InsertPropertyPanel::dispose()

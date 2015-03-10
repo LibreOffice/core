@@ -39,7 +39,7 @@ namespace abp
 
     FieldMappingPage::~FieldMappingPage()
     {
-        dispose();
+        disposeOnce();
     }
 
     void FieldMappingPage::dispose()

@@ -138,7 +138,7 @@ SvTreeListEntry* SvxFontSubstTabPage::CreateEntry(OUString& rFont1, OUString& rF
 
 SvxFontSubstTabPage::~SvxFontSubstTabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxFontSubstTabPage::dispose()

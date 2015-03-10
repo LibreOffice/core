@@ -151,7 +151,7 @@ namespace abp
 
     TypeSelectionPage::~TypeSelectionPage()
     {
-        dispose();
+        disposeOnce();
     }
 
     void TypeSelectionPage::dispose()

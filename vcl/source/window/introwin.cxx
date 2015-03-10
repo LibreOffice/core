@@ -40,7 +40,7 @@ IntroWindow::IntroWindow( ) :
 
 IntroWindow::~IntroWindow()
 {
-    dispose();
+    disposeOnce();
 }
 
 void IntroWindow::dispose()

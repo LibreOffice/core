@@ -102,7 +102,7 @@ ODbTypeWizDialog::ODbTypeWizDialog(vcl::Window* _pParent
 
 ODbTypeWizDialog::~ODbTypeWizDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ODbTypeWizDialog::dispose()

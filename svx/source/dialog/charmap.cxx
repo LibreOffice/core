@@ -691,7 +691,7 @@ IMPL_LINK_NOARG(SvxShowCharSet, VscrollHdl)
 
 SvxShowCharSet::~SvxShowCharSet()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxShowCharSet::dispose()

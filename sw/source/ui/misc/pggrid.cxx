@@ -151,7 +151,7 @@ SwTextGridPage::SwTextGridPage(vcl::Window *pParent, const SfxItemSet &rSet) :
 
 SwTextGridPage::~SwTextGridPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwTextGridPage::dispose()

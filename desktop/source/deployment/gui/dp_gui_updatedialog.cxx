@@ -564,7 +564,7 @@ UpdateDialog::UpdateDialog(
 
 UpdateDialog::~UpdateDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void UpdateDialog::dispose()

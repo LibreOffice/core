@@ -221,7 +221,7 @@ SvxGeneralTabPage::SvxGeneralTabPage(vcl::Window* pParent, const SfxItemSet& rCo
 
 SvxGeneralTabPage::~SvxGeneralTabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxGeneralTabPage::dispose()

@@ -55,7 +55,7 @@ Layout::Layout (vcl::Window* pParent) :
 
 Layout::~Layout()
 {
-    dispose();
+    disposeOnce();
 }
 
 void Layout::dispose()

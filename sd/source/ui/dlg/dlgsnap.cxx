@@ -113,7 +113,7 @@ SdSnapLineDlg::SdSnapLineDlg(
 
 SdSnapLineDlg::~SdSnapLineDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SdSnapLineDlg::dispose()

@@ -109,7 +109,7 @@ namespace bib
 
     BibGridwin::~BibGridwin()
     {
-        dispose();
+        disposeOnce();
     }
 
     void BibGridwin::dispose()
@@ -203,7 +203,7 @@ namespace bib
 
     BibBeamer::~BibBeamer()
     {
-        dispose();
+        disposeOnce();
     }
 
     void BibBeamer::dispose()

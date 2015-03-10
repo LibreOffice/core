@@ -84,7 +84,7 @@ SvxOnlineUpdateTabPage::SvxOnlineUpdateTabPage(vcl::Window* pParent, const SfxIt
 
 SvxOnlineUpdateTabPage::~SvxOnlineUpdateTabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxOnlineUpdateTabPage::dispose()

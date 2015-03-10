@@ -147,7 +147,7 @@ namespace frm
 
     NavigationToolBar::~NavigationToolBar( )
     {
-        dispose();
+        disposeOnce();
     }
 
     void NavigationToolBar::dispose()

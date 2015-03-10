@@ -276,7 +276,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSfxConfigFunctionListB
 
 SfxConfigFunctionListBox::~SfxConfigFunctionListBox()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SfxConfigFunctionListBox::dispose()
@@ -429,7 +429,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSfxConfigGroupListBox(
 
 SfxConfigGroupListBox::~SfxConfigGroupListBox()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SfxConfigGroupListBox::dispose()

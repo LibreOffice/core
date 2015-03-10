@@ -159,7 +159,7 @@ void OFieldDescControl::Contruct()
 
 OFieldDescControl::~OFieldDescControl()
 {
-    dispose();
+    disposeOnce();
 }
 
 void OFieldDescControl::dispose()

@@ -363,7 +363,7 @@ WizardDialog::WizardDialog( vcl::Window* pParent, const OUString& rID, const OUS
 
 WizardDialog::~WizardDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void WizardDialog::dispose()

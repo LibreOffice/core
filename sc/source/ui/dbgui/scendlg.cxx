@@ -110,7 +110,7 @@ ScNewScenarioDlg::ScNewScenarioDlg( vcl::Window* pParent, const OUString& rName,
 
 ScNewScenarioDlg::~ScNewScenarioDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScNewScenarioDlg::dispose()

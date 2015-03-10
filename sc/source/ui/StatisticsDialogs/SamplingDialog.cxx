@@ -62,7 +62,7 @@ ScSamplingDialog::ScSamplingDialog(
 
 ScSamplingDialog::~ScSamplingDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScSamplingDialog::dispose()

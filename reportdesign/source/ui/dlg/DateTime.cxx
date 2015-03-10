@@ -113,7 +113,7 @@ ODateTimeDialog::ODateTimeDialog( vcl::Window* _pParent
 
 ODateTimeDialog::~ODateTimeDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ODateTimeDialog::dispose()

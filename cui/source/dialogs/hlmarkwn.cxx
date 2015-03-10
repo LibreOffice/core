@@ -74,7 +74,7 @@ SvxHlmarkTreeLBox::SvxHlmarkTreeLBox(vcl::Window* pParent, WinBits nStyle)
 
 SvxHlmarkTreeLBox::~SvxHlmarkTreeLBox()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxHlmarkTreeLBox::dispose()
@@ -161,7 +161,7 @@ SvxHlinkDlgMarkWnd::SvxHlinkDlgMarkWnd( SvxHyperlinkTabPageBase *pParent )
 
 SvxHlinkDlgMarkWnd::~SvxHlinkDlgMarkWnd()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxHlinkDlgMarkWnd::dispose()

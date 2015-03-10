@@ -94,7 +94,7 @@ SelectPersonaDialog::SelectPersonaDialog( vcl::Window *pParent )
 
 SelectPersonaDialog::~SelectPersonaDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SelectPersonaDialog::dispose()
@@ -312,7 +312,7 @@ SvxPersonalizationTabPage::SvxPersonalizationTabPage( vcl::Window *pParent, cons
 
 SvxPersonalizationTabPage::~SvxPersonalizationTabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxPersonalizationTabPage::dispose()

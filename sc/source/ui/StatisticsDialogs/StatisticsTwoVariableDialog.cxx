@@ -66,7 +66,7 @@ ScStatisticsTwoVariableDialog::ScStatisticsTwoVariableDialog(
 
 ScStatisticsTwoVariableDialog::~ScStatisticsTwoVariableDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScStatisticsTwoVariableDialog::dispose()

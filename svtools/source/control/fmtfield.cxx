@@ -1022,7 +1022,7 @@ void FormattedField::UseInputStringForFormatting( bool bUseInputStr /* = true */
 
 DoubleNumericField::~DoubleNumericField()
 {
-    dispose();
+    disposeOnce();
 }
 
 void DoubleNumericField::dispose()

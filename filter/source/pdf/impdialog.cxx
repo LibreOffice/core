@@ -312,7 +312,7 @@ IMPL_LINK_NOARG(ImpPDFTabDialog, CancelHdl)
 
 ImpPDFTabDialog::~ImpPDFTabDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ImpPDFTabDialog::dispose()
@@ -552,7 +552,7 @@ ImpPDFTabGeneralPage::ImpPDFTabGeneralPage(vcl::Window* pParent, const SfxItemSe
 
 ImpPDFTabGeneralPage::~ImpPDFTabGeneralPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ImpPDFTabGeneralPage::dispose()
@@ -882,7 +882,7 @@ ImpPDFTabOpnFtrPage::ImpPDFTabOpnFtrPage(vcl::Window* pParent, const SfxItemSet&
 
 ImpPDFTabOpnFtrPage::~ImpPDFTabOpnFtrPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ImpPDFTabOpnFtrPage::dispose()
@@ -1057,7 +1057,7 @@ ImpPDFTabViewerPage::ImpPDFTabViewerPage( vcl::Window* pParent,
 
 ImpPDFTabViewerPage::~ImpPDFTabViewerPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ImpPDFTabViewerPage::dispose()
@@ -1171,7 +1171,7 @@ ImpPDFTabSecurityPage::ImpPDFTabSecurityPage(vcl::Window* i_pParent, const SfxIt
 
 ImpPDFTabSecurityPage::~ImpPDFTabSecurityPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ImpPDFTabSecurityPage::dispose()
@@ -1417,7 +1417,7 @@ ImpPDFTabLinksPage::ImpPDFTabLinksPage( vcl::Window* pParent,
 
 ImpPDFTabLinksPage::~ImpPDFTabLinksPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ImpPDFTabLinksPage::dispose()
@@ -1622,7 +1622,7 @@ ImplErrorDialog::ImplErrorDialog(const std::set< vcl::PDFWriter::ErrorCode >& rE
 
 ImplErrorDialog::~ImplErrorDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ImplErrorDialog::dispose()
@@ -1667,7 +1667,7 @@ ImpPDFTabSigningPage::ImpPDFTabSigningPage(vcl::Window* pParent, const SfxItemSe
 
 ImpPDFTabSigningPage::~ImpPDFTabSigningPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ImpPDFTabSigningPage::dispose()

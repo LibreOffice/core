@@ -1491,7 +1491,7 @@ UnoTreeListBoxImpl::UnoTreeListBoxImpl( TreeControlPeer* pPeer, vcl::Window* pPa
 
 UnoTreeListBoxImpl::~UnoTreeListBoxImpl()
 {
-    dispose();
+    disposeOnce();
 }
 
 void UnoTreeListBoxImpl::dispose()

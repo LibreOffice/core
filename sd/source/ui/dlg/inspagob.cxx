@@ -55,7 +55,7 @@ SdInsertPagesObjsDlg::SdInsertPagesObjsDlg(
 
 SdInsertPagesObjsDlg::~SdInsertPagesObjsDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SdInsertPagesObjsDlg::dispose()

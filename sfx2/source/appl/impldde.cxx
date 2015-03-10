@@ -94,7 +94,7 @@ SvDDELinkEditDialog::SvDDELinkEditDialog( vcl::Window* pParent, SvBaseLink* pLin
 
 SvDDELinkEditDialog::~SvDDELinkEditDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvDDELinkEditDialog::dispose()

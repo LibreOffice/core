@@ -366,7 +366,7 @@ BibGeneralPage::BibGeneralPage(vcl::Window* pParent, BibDataManager* pMan):
 
 BibGeneralPage::~BibGeneralPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void BibGeneralPage::dispose()

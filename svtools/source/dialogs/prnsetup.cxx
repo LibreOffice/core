@@ -245,7 +245,7 @@ PrinterSetupDialog::PrinterSetupDialog(vcl::Window* pParent)
 
 PrinterSetupDialog::~PrinterSetupDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void PrinterSetupDialog::dispose()

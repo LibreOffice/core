@@ -73,7 +73,7 @@ ScSolverDlg::ScSolverDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pPa
 
 ScSolverDlg::~ScSolverDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScSolverDlg::dispose()

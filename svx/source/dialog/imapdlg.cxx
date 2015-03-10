@@ -217,7 +217,7 @@ SvxIMapDlg::SvxIMapDlg(SfxBindings *_pBindings, SfxChildWindow *pCW, vcl::Window
 
 SvxIMapDlg::~SvxIMapDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxIMapDlg::dispose()

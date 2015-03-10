@@ -55,7 +55,7 @@ SdPresLayoutDlg::SdPresLayoutDlg(::sd::DrawDocShell* pDocShell,
 
 SdPresLayoutDlg::~SdPresLayoutDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SdPresLayoutDlg::dispose()

@@ -190,7 +190,7 @@ void PropBrw::ImplReCreateController()
 
 PropBrw::~PropBrw()
 {
-    dispose();
+    disposeOnce();
 }
 
 void PropBrw::dispose()

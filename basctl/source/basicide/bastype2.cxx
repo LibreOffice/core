@@ -206,7 +206,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeTreeListBox(vcl::Windo
 
 TreeListBox::~TreeListBox ()
 {
-    dispose();
+    disposeOnce();
 }
 
 void TreeListBox::dispose()

@@ -145,7 +145,7 @@ SvBaseLinksDlg::SvBaseLinksDlg( vcl::Window * pParent, LinkManager* pMgr, bool b
 
 SvBaseLinksDlg::~SvBaseLinksDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvBaseLinksDlg::dispose()

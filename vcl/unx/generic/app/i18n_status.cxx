@@ -124,7 +124,7 @@ XIMStatusWindow::XIMStatusWindow( bool bOn ) :
 
 XIMStatusWindow::~XIMStatusWindow()
 {
-    dispose();
+    disposeOnce();
 }
 
 void XIMStatusWindow::dispose()

@@ -170,7 +170,7 @@ void ScTPValidationValue::RefInputDonePostHdl()
 
 ScTPValidationValue::ScRefButtonEx::~ScRefButtonEx()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScTPValidationValue::ScRefButtonEx::dispose()
@@ -359,7 +359,7 @@ ScTPValidationValue::ScTPValidationValue( vcl::Window* pParent, const SfxItemSet
 
 ScTPValidationValue::~ScTPValidationValue()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScTPValidationValue::dispose()
@@ -687,7 +687,7 @@ ScTPValidationHelp::ScTPValidationHelp( vcl::Window*         pParent,
 
 ScTPValidationHelp::~ScTPValidationHelp()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScTPValidationHelp::dispose()
@@ -760,7 +760,7 @@ ScTPValidationError::ScTPValidationError( vcl::Window*           pParent,
 
 ScTPValidationError::~ScTPValidationError()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScTPValidationError::dispose()

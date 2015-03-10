@@ -204,7 +204,7 @@ ScDataFormDlg::ScDataFormDlg(vcl::Window* pParent, ScTabViewShell* pTabViewShell
 
 ScDataFormDlg::~ScDataFormDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScDataFormDlg::dispose()

@@ -275,7 +275,7 @@ DataSourceTabPage::DataSourceTabPage(
 
 DataSourceTabPage::~DataSourceTabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void DataSourceTabPage::dispose()

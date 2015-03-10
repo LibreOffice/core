@@ -108,7 +108,7 @@ ScShareDocumentDlg::ScShareDocumentDlg( vcl::Window* pParent, ScViewData* pViewD
 
 ScShareDocumentDlg::~ScShareDocumentDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScShareDocumentDlg::dispose()

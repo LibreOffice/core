@@ -86,7 +86,7 @@ BibWindowContainer::BibWindowContainer( vcl::Window* pParent, BibShortCutHandler
 
 BibWindowContainer::~BibWindowContainer()
 {
-    dispose();
+    disposeOnce();
 }
 
 void BibWindowContainer::dispose()
@@ -130,7 +130,7 @@ BibBookContainer::BibBookContainer(vcl::Window* pParent, WinBits nStyle):
 
 BibBookContainer::~BibBookContainer()
 {
-    dispose();
+    disposeOnce();
 }
 
 void BibBookContainer::dispose()

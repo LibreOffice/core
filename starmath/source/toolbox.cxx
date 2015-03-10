@@ -139,7 +139,7 @@ SmToolBoxWindow::SmToolBoxWindow(SfxBindings *pTmpBindings,
 
 SmToolBoxWindow::~SmToolBoxWindow()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SmToolBoxWindow::dispose()

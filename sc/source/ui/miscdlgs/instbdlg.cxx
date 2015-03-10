@@ -64,7 +64,7 @@ ScInsertTableDlg::ScInsertTableDlg( vcl::Window* pParent, ScViewData& rData, SCT
 
 ScInsertTableDlg::~ScInsertTableDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScInsertTableDlg::dispose()

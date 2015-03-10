@@ -54,7 +54,7 @@ SfxTemplateInfoDlg::SfxTemplateInfoDlg (vcl::Window *pParent)
 
 SfxTemplateInfoDlg::~SfxTemplateInfoDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SfxTemplateInfoDlg::dispose()

@@ -359,7 +359,7 @@ SpinField::SpinField( vcl::Window* pParent, const ResId& rResId ) :
 
 SpinField::~SpinField()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SpinField::dispose()

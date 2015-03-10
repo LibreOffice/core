@@ -153,7 +153,7 @@ namespace dbaui
 
     OTextConnectionHelper::~OTextConnectionHelper()
     {
-        dispose();
+        disposeOnce();
     }
 
     void OTextConnectionHelper::dispose()

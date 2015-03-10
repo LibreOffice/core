@@ -63,7 +63,7 @@ void SwMultiTOXMarkDlg::Apply()
 
 SwMultiTOXMarkDlg::~SwMultiTOXMarkDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwMultiTOXMarkDlg::dispose()

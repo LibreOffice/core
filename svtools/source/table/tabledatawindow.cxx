@@ -51,7 +51,7 @@ namespace svt { namespace table
 
     TableDataWindow::~TableDataWindow()
     {
-        dispose();
+        disposeOnce();
     }
 
     void TableDataWindow::dispose()

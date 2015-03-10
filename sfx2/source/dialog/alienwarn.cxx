@@ -51,7 +51,7 @@ SfxAlienWarningDialog::SfxAlienWarningDialog(vcl::Window* pParent, const OUStrin
 
 SfxAlienWarningDialog::~SfxAlienWarningDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SfxAlienWarningDialog::dispose()

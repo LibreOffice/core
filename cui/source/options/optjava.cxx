@@ -202,7 +202,7 @@ SvxJavaOptionsPage::SvxJavaOptionsPage( vcl::Window* pParent, const SfxItemSet& 
 
 SvxJavaOptionsPage::~SvxJavaOptionsPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxJavaOptionsPage::dispose()
@@ -823,7 +823,7 @@ SvxJavaParameterDlg::SvxJavaParameterDlg( vcl::Window* pParent ) :
 
 SvxJavaParameterDlg::~SvxJavaParameterDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxJavaParameterDlg::dispose()
@@ -962,7 +962,7 @@ SvxJavaClassPathDlg::SvxJavaClassPathDlg(vcl::Window* pParent)
 
 SvxJavaClassPathDlg::~SvxJavaClassPathDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxJavaClassPathDlg::dispose()

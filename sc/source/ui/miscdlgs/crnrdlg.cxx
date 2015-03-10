@@ -74,7 +74,7 @@ ScColRowNameRangesDlg::ScColRowNameRangesDlg( SfxBindings* pB,
 
 ScColRowNameRangesDlg::~ScColRowNameRangesDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScColRowNameRangesDlg::dispose()

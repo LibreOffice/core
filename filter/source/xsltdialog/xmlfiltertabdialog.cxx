@@ -75,7 +75,7 @@ XMLFilterTabDialog::XMLFilterTabDialog(vcl::Window *pParent, ResMgr& rResMgr,
 
 XMLFilterTabDialog::~XMLFilterTabDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void XMLFilterTabDialog::dispose()

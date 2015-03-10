@@ -67,7 +67,7 @@ ScTpSubTotalGroup::ScTpSubTotalGroup( vcl::Window* pParent,
 
 ScTpSubTotalGroup::~ScTpSubTotalGroup()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScTpSubTotalGroup::dispose()
@@ -451,7 +451,7 @@ ScTpSubTotalOptions::ScTpSubTotalOptions( vcl::Window*               pParent,
 
 ScTpSubTotalOptions::~ScTpSubTotalOptions()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScTpSubTotalOptions::dispose()

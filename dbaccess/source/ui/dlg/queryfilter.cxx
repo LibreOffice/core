@@ -192,7 +192,7 @@ DlgFilterCrit::DlgFilterCrit(vcl::Window * pParent,
 
 DlgFilterCrit::~DlgFilterCrit()
 {
-    dispose();
+    disposeOnce();
 }
 
 void DlgFilterCrit::dispose()

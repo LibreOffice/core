@@ -47,7 +47,7 @@ SvxInsRowColDlg::SvxInsRowColDlg(vcl::Window* pParent, bool bCol, const OString&
 
 SvxInsRowColDlg::~SvxInsRowColDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxInsRowColDlg::dispose()

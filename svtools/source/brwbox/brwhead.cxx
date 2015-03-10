@@ -38,7 +38,7 @@ BrowserHeader::BrowserHeader( BrowseBox* pParent, WinBits nWinBits )
 
 BrowserHeader::~BrowserHeader()
 {
-    dispose();
+    disposeOnce();
 }
 
 void BrowserHeader::dispose()

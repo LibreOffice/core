@@ -318,7 +318,7 @@ void SAL_CALL OConnection::close(  ) throw(SQLException, RuntimeException)
         checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
     }
-    dispose();
+    disposeOnce();
 }
 
 // XWarningsSupplier

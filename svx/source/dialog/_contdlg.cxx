@@ -88,7 +88,7 @@ SvxContourDlg::SvxContourDlg(SfxBindings* _pBindings, SfxChildWindow* pCW,
 
 SvxContourDlg::~SvxContourDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxContourDlg::dispose()
@@ -294,7 +294,7 @@ SvxSuperContourDlg::SvxSuperContourDlg(SfxBindings *_pBindings, SfxChildWindow *
 
 SvxSuperContourDlg::~SvxSuperContourDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxSuperContourDlg::dispose()

@@ -105,7 +105,7 @@ ScConsolidateDlg::ScConsolidateDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::W
 
 ScConsolidateDlg::~ScConsolidateDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScConsolidateDlg::dispose()

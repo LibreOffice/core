@@ -54,7 +54,7 @@ namespace pcr
 
     OPropertyBrowserView::~OPropertyBrowserView()
     {
-        dispose();
+        disposeOnce();
     }
 
     void OPropertyBrowserView::dispose()

@@ -486,7 +486,7 @@ OrganizeDialog::OrganizeDialog(vcl::Window* pParent, sal_Int16 tabId,
 
 OrganizeDialog::~OrganizeDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void OrganizeDialog::dispose()
@@ -600,7 +600,7 @@ ObjectPage::ObjectPage(vcl::Window *pParent, const OString &rName, sal_uInt16 nM
 
 ObjectPage::~ObjectPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ObjectPage::dispose()
@@ -945,7 +945,7 @@ LibDialog::LibDialog( vcl::Window* pParent )
 
 LibDialog::~LibDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void LibDialog::dispose()

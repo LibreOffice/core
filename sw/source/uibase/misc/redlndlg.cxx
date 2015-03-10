@@ -137,7 +137,7 @@ void SwModelessRedlineAcceptDlg::FillInfo(SfxChildWinInfo& rInfo) const
 
 SwModelessRedlineAcceptDlg::~SwModelessRedlineAcceptDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwModelessRedlineAcceptDlg::dispose()
@@ -1248,7 +1248,7 @@ SwRedlineAcceptPanel::SwRedlineAcceptPanel(vcl::Window* pParent, const css::uno:
 
 SwRedlineAcceptPanel::~SwRedlineAcceptPanel()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwRedlineAcceptPanel::dispose()

@@ -46,7 +46,7 @@ PolarOptionsTabPage::PolarOptionsTabPage( vcl::Window* pWindow,const SfxItemSet&
 
 PolarOptionsTabPage::~PolarOptionsTabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void PolarOptionsTabPage::dispose()

@@ -87,7 +87,7 @@ SwFldVarPage::SwFldVarPage(vcl::Window* pParent, const SfxItemSet& rCoreSet )
 
 SwFldVarPage::~SwFldVarPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwFldVarPage::dispose()

@@ -49,7 +49,7 @@ ScCondFormatList::ScCondFormatList(vcl::Window* pParent, WinBits nStyle)
 
 ScCondFormatList::~ScCondFormatList()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScCondFormatList::dispose()
@@ -447,7 +447,7 @@ ScCondFormatDlg::ScCondFormatDlg(vcl::Window* pParent, ScDocument* pDoc,
 
 ScCondFormatDlg::~ScCondFormatDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScCondFormatDlg::dispose()

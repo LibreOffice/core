@@ -48,6 +48,7 @@ namespace rptui
     public:
         OColorListener(vcl::Window* _pParent,const OUString& _sColorEntry);
         virtual ~OColorListener();
+        virtual void dispose() SAL_OVERRIDE;
 
         using Window::Notify;
         // SfxListener

@@ -235,7 +235,7 @@ BibToolBar::BibToolBar(vcl::Window* pParent, Link aLink, WinBits nStyle):
 
 BibToolBar::~BibToolBar()
 {
-    dispose();
+    disposeOnce();
 }
 
 void BibToolBar::dispose()

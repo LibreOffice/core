@@ -74,7 +74,7 @@ ListBoxControl::ListBoxControl( vcl::Window* pParent, WinBits nStyle, IListBoxLi
 
 ListBoxControl::~ListBoxControl()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ListBoxControl::dispose()

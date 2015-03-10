@@ -158,7 +158,7 @@ ScDbNameDlg::ScDbNameDlg(SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pPar
 
 ScDbNameDlg::~ScDbNameDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScDbNameDlg::dispose()

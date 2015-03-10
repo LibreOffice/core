@@ -178,7 +178,7 @@ XMLFilterTestDialog::XMLFilterTestDialog(vcl::Window* pParent,
 
 XMLFilterTestDialog::~XMLFilterTestDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void XMLFilterTestDialog::dispose()

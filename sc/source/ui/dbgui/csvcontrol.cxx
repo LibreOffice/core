@@ -74,7 +74,7 @@ ScCsvControl::ScCsvControl( vcl::Window* pParent, const ScCsvLayoutData& rData, 
 
 ScCsvControl::~ScCsvControl()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScCsvControl::dispose()

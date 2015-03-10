@@ -62,7 +62,7 @@ namespace pcr
 
     OPropertyEditor::~OPropertyEditor()
     {
-        dispose();
+        disposeOnce();
     }
 
     void OPropertyEditor::dispose()

@@ -88,7 +88,7 @@ SvtIconChoiceCtrl::SvtIconChoiceCtrl( vcl::Window* pParent, WinBits nWinStyle ) 
 
 SvtIconChoiceCtrl::~SvtIconChoiceCtrl()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvtIconChoiceCtrl::dispose()

@@ -58,7 +58,7 @@ SvxAccessibilityOptionsTabPage::SvxAccessibilityOptionsTabPage(vcl::Window* pPar
 
 SvxAccessibilityOptionsTabPage::~SvxAccessibilityOptionsTabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxAccessibilityOptionsTabPage::dispose()

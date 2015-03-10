@@ -169,7 +169,7 @@ SwHeaderFooterWin::SwHeaderFooterWin( SwEditWin* pEditWin, const SwPageFrm* pPag
 
 SwHeaderFooterWin::~SwHeaderFooterWin( )
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwHeaderFooterWin::dispose()

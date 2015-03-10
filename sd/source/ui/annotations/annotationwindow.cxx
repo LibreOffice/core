@@ -118,7 +118,7 @@ AnnotationTextWindow::AnnotationTextWindow( AnnotationWindow* pParent, WinBits n
 
 AnnotationTextWindow::~AnnotationTextWindow()
 {
-    dispose();
+    disposeOnce();
 }
 
 void AnnotationTextWindow::dispose()
@@ -291,7 +291,7 @@ AnnotationWindow::AnnotationWindow( AnnotationManagerImpl& rManager, DrawDocShel
 
 AnnotationWindow::~AnnotationWindow()
 {
-    dispose();
+    disposeOnce();
 }
 
 void AnnotationWindow::dispose()

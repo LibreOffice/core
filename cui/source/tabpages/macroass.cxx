@@ -143,7 +143,7 @@ _SfxMacroTabPage::_SfxMacroTabPage(vcl::Window* pParent, const SfxItemSet& rAttr
 
 _SfxMacroTabPage::~_SfxMacroTabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void _SfxMacroTabPage::dispose()

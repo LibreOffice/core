@@ -49,7 +49,7 @@ namespace svt
 
     OWizardPage::~OWizardPage()
     {
-        dispose();
+        disposeOnce();
     }
 
     void OWizardPage::dispose()
@@ -202,7 +202,7 @@ namespace svt
 
     OWizardMachine::~OWizardMachine()
     {
-        dispose();
+        disposeOnce();
     }
 
     void OWizardMachine::dispose()

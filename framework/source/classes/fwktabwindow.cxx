@@ -81,7 +81,7 @@ FwkTabPage::FwkTabPage(
 
 FwkTabPage::~FwkTabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void FwkTabPage::dispose()
@@ -193,7 +193,7 @@ FwkTabWindow::FwkTabWindow( vcl::Window* pParent )
 
 FwkTabWindow::~FwkTabWindow()
 {
-    dispose();
+    disposeOnce();
 }
 
 void FwkTabWindow::dispose()

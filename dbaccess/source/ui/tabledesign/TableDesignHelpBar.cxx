@@ -38,7 +38,7 @@ OTableDesignHelpBar::OTableDesignHelpBar( vcl::Window* pParent ) :
 
 OTableDesignHelpBar::~OTableDesignHelpBar()
 {
-    dispose();
+    disposeOnce();
 }
 
 void OTableDesignHelpBar::dispose()

@@ -52,7 +52,7 @@ ScSortWarningDlg::ScSortWarningDlg(vcl::Window* pParent,
 
 ScSortWarningDlg::~ScSortWarningDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScSortWarningDlg::dispose()

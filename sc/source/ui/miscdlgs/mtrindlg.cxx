@@ -60,7 +60,7 @@ ScMetricInputDlg::ScMetricInputDlg( vcl::Window*         pParent,
 
 ScMetricInputDlg::~ScMetricInputDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScMetricInputDlg::dispose()

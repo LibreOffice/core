@@ -74,7 +74,7 @@ SdPrintOptions::SdPrintOptions( vcl::Window* pParent, const SfxItemSet& rInAttrs
 
 SdPrintOptions::~SdPrintOptions()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SdPrintOptions::dispose()

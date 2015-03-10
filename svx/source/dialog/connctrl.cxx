@@ -57,7 +57,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxXConnectionPreview(
 
 SvxXConnectionPreview::~SvxXConnectionPreview()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxXConnectionPreview::dispose()

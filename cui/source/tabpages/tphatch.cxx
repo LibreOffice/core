@@ -139,7 +139,7 @@ SvxHatchTabPage::SvxHatchTabPage
 
 SvxHatchTabPage::~SvxHatchTabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxHatchTabPage::dispose()

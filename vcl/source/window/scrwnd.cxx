@@ -84,7 +84,7 @@ ImplWheelWindow::ImplWheelWindow( vcl::Window* pParent ) :
 
 ImplWheelWindow::~ImplWheelWindow()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ImplWheelWindow::dispose()

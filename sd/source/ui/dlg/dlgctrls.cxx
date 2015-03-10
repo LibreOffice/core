@@ -40,7 +40,7 @@ FadeEffectLB::FadeEffectLB(vcl::Window* pParent, WinBits nStyle)
 
 FadeEffectLB::~FadeEffectLB()
 {
-    dispose();
+    disposeOnce();
 }
 
 void FadeEffectLB::dispose()

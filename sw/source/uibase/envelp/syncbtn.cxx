@@ -70,7 +70,7 @@ SwSyncBtnDlg::SwSyncBtnDlg( SfxBindings* _pBindings,
 
 SwSyncBtnDlg::~SwSyncBtnDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwSyncBtnDlg::dispose()

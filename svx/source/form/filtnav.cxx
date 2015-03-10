@@ -1150,7 +1150,7 @@ FmFilterNavigator::FmFilterNavigator( vcl::Window* pParent )
 
 FmFilterNavigator::~FmFilterNavigator()
 {
-    dispose();
+    disposeOnce();
 }
 
 void FmFilterNavigator::dispose()
@@ -1867,7 +1867,7 @@ FmFilterNavigatorWin::FmFilterNavigatorWin( SfxBindings* _pBindings, SfxChildWin
 
 FmFilterNavigatorWin::~FmFilterNavigatorWin()
 {
-    dispose();
+    disposeOnce();
 }
 
 void FmFilterNavigatorWin::dispose()

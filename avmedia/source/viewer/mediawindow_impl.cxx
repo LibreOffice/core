@@ -171,7 +171,7 @@ MediaWindowImpl::MediaWindowImpl( vcl::Window* pParent, MediaWindow* pMediaWindo
 
 MediaWindowImpl::~MediaWindowImpl()
 {
-    dispose();
+    disposeOnce();
 }
 
 void MediaWindowImpl::dispose()

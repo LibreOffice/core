@@ -686,7 +686,7 @@ void OCopyTableWizard::construct()
 
 OCopyTableWizard::~OCopyTableWizard()
 {
-    dispose();
+    disposeOnce();
 }
 
 void OCopyTableWizard::dispose()

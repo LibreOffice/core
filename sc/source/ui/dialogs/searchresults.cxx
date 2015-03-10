@@ -41,7 +41,7 @@ SearchResultsDlg::SearchResultsDlg( SfxBindings* _pBindings, vcl::Window* pParen
 
 SearchResultsDlg::~SearchResultsDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SearchResultsDlg::dispose()

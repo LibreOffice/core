@@ -203,7 +203,7 @@ SvxHFPage::SvxHFPage( vcl::Window* pParent, const SfxItemSet& rSet, sal_uInt16 n
 
 SvxHFPage::~SvxHFPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxHFPage::dispose()

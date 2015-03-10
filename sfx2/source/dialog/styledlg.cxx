@@ -72,7 +72,7 @@ SfxStyleDialog::SfxStyleDialog
 
 SfxStyleDialog::~SfxStyleDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 /*  [Description]

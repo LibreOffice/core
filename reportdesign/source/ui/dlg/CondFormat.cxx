@@ -130,7 +130,7 @@ namespace rptui
 
     ConditionalFormattingDialog::~ConditionalFormattingDialog()
     {
-        dispose();
+        disposeOnce();
     }
 
     void ConditionalFormattingDialog::dispose()

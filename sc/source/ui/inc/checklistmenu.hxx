@@ -197,7 +197,7 @@ class ScCheckListBox : public SvTreeListBox
     public:
 
     ScCheckListBox( vcl::Window* pParent, WinBits nWinStyle = 0 );
-    virtual ~ScCheckListBox() { dispose(); }
+    virtual ~ScCheckListBox() { disposeOnce(); }
     virtual void dispose() SAL_OVERRIDE { delete mpCheckButton; SvTreeListBox::dispose(); }
     void Init();
     void CheckEntry( const OUString& sName, SvTreeListEntry* pParent, bool bCheck = true );

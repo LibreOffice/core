@@ -79,7 +79,7 @@ namespace dbp
 
     OTableSelectionPage::~OTableSelectionPage()
     {
-        dispose();
+        disposeOnce();
     }
 
     void OTableSelectionPage::dispose()
@@ -398,7 +398,7 @@ namespace dbp
 
     OMaybeListSelectionPage::~OMaybeListSelectionPage()
     {
-        dispose();
+        disposeOnce();
     }
 
     void OMaybeListSelectionPage::dispose()
@@ -481,7 +481,7 @@ namespace dbp
 
     ODBFieldPage::~ODBFieldPage()
     {
-        dispose();
+        disposeOnce();
     }
 
     void ODBFieldPage::dispose()

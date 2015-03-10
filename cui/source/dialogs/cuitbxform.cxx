@@ -43,7 +43,7 @@ FmInputRecordNoDialog::FmInputRecordNoDialog(vcl::Window * pParent)
 
 FmInputRecordNoDialog::~FmInputRecordNoDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void FmInputRecordNoDialog::dispose()

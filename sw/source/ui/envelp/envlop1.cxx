@@ -153,7 +153,7 @@ SwEnvDlg::SwEnvDlg(vcl::Window* pParent, const SfxItemSet& rSet,
 
 SwEnvDlg::~SwEnvDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwEnvDlg::dispose()
@@ -235,7 +235,7 @@ SwEnvPage::SwEnvPage(vcl::Window* pParent, const SfxItemSet& rSet)
 
 SwEnvPage::~SwEnvPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwEnvPage::dispose()

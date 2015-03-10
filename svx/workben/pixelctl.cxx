@@ -83,7 +83,7 @@ class MyWin : public WorkWindow
 
 public:
                 MyWin( vcl::Window* pParent, WinBits nWinStyle );
-    virtual      ~MyWin() { dispose(); }
+    virtual      ~MyWin() { disposeOnce(); }
     virtual void dispose() SAL_OVERRIDE;
     void        MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     void        MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;

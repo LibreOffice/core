@@ -104,7 +104,7 @@ void MenuFloatingWindow::doShutdown()
 
 MenuFloatingWindow::~MenuFloatingWindow()
 {
-    dispose();
+    disposeOnce();
 }
 
 void MenuFloatingWindow::dispose()

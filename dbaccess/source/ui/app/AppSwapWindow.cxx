@@ -53,7 +53,7 @@ OApplicationSwapWindow::OApplicationSwapWindow( vcl::Window* _pParent, OAppBorde
 
 OApplicationSwapWindow::~OApplicationSwapWindow()
 {
-    dispose();
+    disposeOnce();
 }
 
 void OApplicationSwapWindow::dispose()

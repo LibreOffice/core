@@ -83,7 +83,7 @@ SvxDefaultColorOptPage::SvxDefaultColorOptPage(vcl::Window* pParent, const SfxIt
 
 SvxDefaultColorOptPage::~SvxDefaultColorOptPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxDefaultColorOptPage::dispose()

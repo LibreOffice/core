@@ -246,7 +246,7 @@ SpellDialog::SpellDialog(SpellDialogChildWindow* pChildWindow,
 
 SpellDialog::~SpellDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SpellDialog::dispose()

@@ -151,7 +151,7 @@ StatusBar::StatusBar( vcl::Window* pParent, WinBits nStyle ) :
 
 StatusBar::~StatusBar()
 {
-    dispose();
+    disposeOnce();
 }
 
 void StatusBar::dispose()

@@ -45,7 +45,7 @@ GraphicExportOptionsDialog::GraphicExportOptionsDialog(vcl::Window* pWindow, con
 
 GraphicExportOptionsDialog::~GraphicExportOptionsDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void GraphicExportOptionsDialog::dispose()

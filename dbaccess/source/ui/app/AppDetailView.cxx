@@ -364,7 +364,7 @@ OTasksWindow::OTasksWindow(vcl::Window* _pParent,OApplicationDetailView* _pDetai
 
 OTasksWindow::~OTasksWindow()
 {
-    dispose();
+    disposeOnce();
 }
 
 void OTasksWindow::dispose()
@@ -566,7 +566,7 @@ OApplicationDetailView::OApplicationDetailView(OAppBorderWindow& _rParent,Previe
 
 OApplicationDetailView::~OApplicationDetailView()
 {
-    dispose();
+    disposeOnce();
 }
 
 void OApplicationDetailView::dispose()

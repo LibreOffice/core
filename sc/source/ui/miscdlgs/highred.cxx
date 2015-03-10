@@ -69,7 +69,7 @@ ScHighlightChgDlg::ScHighlightChgDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl:
 
 ScHighlightChgDlg::~ScHighlightChgDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScHighlightChgDlg::dispose()

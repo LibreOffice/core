@@ -46,7 +46,7 @@ IMPL_LINK_NOARG(SwWordCountFloatDlg, CloseHdl)
 
 SwWordCountFloatDlg::~SwWordCountFloatDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwWordCountFloatDlg::dispose()

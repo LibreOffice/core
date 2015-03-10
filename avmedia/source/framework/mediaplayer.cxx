@@ -75,7 +75,7 @@ MediaFloater::MediaFloater( SfxBindings* _pBindings, SfxChildWindow* pCW, vcl::W
 
 MediaFloater::~MediaFloater()
 {
-    dispose();
+    disposeOnce();
 }
 
 void MediaFloater::dispose()

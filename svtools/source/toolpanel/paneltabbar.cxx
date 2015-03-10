@@ -998,7 +998,7 @@ namespace svt
 
     PanelTabBar::~PanelTabBar()
     {
-        dispose();
+        disposeOnce();
     }
 
     void PanelTabBar::dispose()

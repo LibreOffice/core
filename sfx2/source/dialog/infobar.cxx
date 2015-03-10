@@ -145,7 +145,7 @@ void SfxInfoBarWindow::addButton(PushButton* pButton) {
 
 SfxInfoBarWindow::~SfxInfoBarWindow()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SfxInfoBarWindow::dispose()
@@ -242,7 +242,7 @@ SfxInfoBarContainerWindow::SfxInfoBarContainerWindow(SfxInfoBarContainerChild* p
 
 SfxInfoBarContainerWindow::~SfxInfoBarContainerWindow()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SfxInfoBarContainerWindow::dispose()

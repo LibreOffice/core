@@ -1386,7 +1386,7 @@ FocusForwardingWindow::FocusForwardingWindow (
 
 FocusForwardingWindow::~FocusForwardingWindow (void)
 {
-    dispose();
+    disposeOnce();
 }
 
 void FocusForwardingWindow::dispose()

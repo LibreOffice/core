@@ -84,7 +84,7 @@ ScTpUserLists::ScTpUserLists( vcl::Window*               pParent,
 
 ScTpUserLists::~ScTpUserLists()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScTpUserLists::dispose()

@@ -174,7 +174,7 @@ class ColorConfigWindow_Impl
 {
 public:
     ColorConfigWindow_Impl(vcl::Window* pParent);
-    virtual ~ColorConfigWindow_Impl() { dispose(); }
+    virtual ~ColorConfigWindow_Impl() { disposeOnce(); }
     virtual void dispose() SAL_OVERRIDE;
 
 public:
@@ -915,7 +915,7 @@ void ColorConfigCtrl_Impl::InitHeaderBar(const OUString &rOn, const OUString &rU
 
 ColorConfigCtrl_Impl::~ColorConfigCtrl_Impl()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ColorConfigCtrl_Impl::dispose()
@@ -1067,7 +1067,7 @@ SvxColorOptionsTabPage::SvxColorOptionsTabPage(
 
 SvxColorOptionsTabPage::~SvxColorOptionsTabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxColorOptionsTabPage::dispose()

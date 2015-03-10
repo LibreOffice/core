@@ -44,7 +44,7 @@ ArgEdit::ArgEdit( vcl::Window* pParent, WinBits nBits )
 
 ArgEdit::~ArgEdit()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ArgEdit::dispose()
@@ -374,7 +374,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeEditBox(vcl::Window *p
 
 EditBox::~EditBox()
 {
-    dispose();
+    disposeOnce();
 }
 
 void EditBox::dispose()
@@ -498,7 +498,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeRefEdit(vcl::Window *p
 
 RefEdit::~RefEdit()
 {
-    dispose();
+    disposeOnce();
 }
 
 void RefEdit::dispose()
@@ -607,7 +607,7 @@ RefButton::RefButton( vcl::Window* _pParent, WinBits nStyle ) :
 
 RefButton::~RefButton()
 {
-    dispose();
+    disposeOnce();
 }
 
 void RefButton::dispose()

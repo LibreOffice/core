@@ -133,7 +133,7 @@ ScCondFormatManagerDlg::ScCondFormatManagerDlg(vcl::Window* pParent, ScDocument*
 
 ScCondFormatManagerDlg::~ScCondFormatManagerDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScCondFormatManagerDlg::dispose()

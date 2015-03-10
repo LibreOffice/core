@@ -160,7 +160,7 @@ FmSearchDialog::FmSearchDialog(vcl::Window* pParent, const OUString& sInitialTex
 
 FmSearchDialog::~FmSearchDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void FmSearchDialog::dispose()

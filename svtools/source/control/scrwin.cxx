@@ -53,7 +53,7 @@ ScrollableWindow::ScrollableWindow( vcl::Window* pParent, WinBits nBits,
 
 ScrollableWindow::~ScrollableWindow()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScrollableWindow::dispose()

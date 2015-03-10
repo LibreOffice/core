@@ -185,7 +185,7 @@ ScPivotLayoutDialog::ScPivotLayoutDialog(
 
 ScPivotLayoutDialog::~ScPivotLayoutDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScPivotLayoutDialog::dispose()

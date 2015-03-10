@@ -101,7 +101,7 @@ SwParagraphNumTabPage::SwParagraphNumTabPage(vcl::Window* pParent, const SfxItem
 
 SwParagraphNumTabPage::~SwParagraphNumTabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwParagraphNumTabPage::dispose()

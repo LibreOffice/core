@@ -199,7 +199,7 @@ SvxAngleTabPage::SvxAngleTabPage(vcl::Window* pParent, const SfxItemSet& rInAttr
 
 SvxAngleTabPage::~SvxAngleTabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxAngleTabPage::dispose()
@@ -441,7 +441,7 @@ SvxSlantTabPage::SvxSlantTabPage(vcl::Window* pParent, const SfxItemSet& rInAttr
 
 SvxSlantTabPage::~SvxSlantTabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxSlantTabPage::dispose()
@@ -670,7 +670,7 @@ SvxPositionSizeTabPage::SvxPositionSizeTabPage(vcl::Window* pParent, const SfxIt
 
 SvxPositionSizeTabPage::~SvxPositionSizeTabPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxPositionSizeTabPage::dispose()

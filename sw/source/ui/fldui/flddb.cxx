@@ -74,7 +74,7 @@ SwFldDBPage::SwFldDBPage(vcl::Window* pParent, const SfxItemSet& rCoreSet)
 
 SwFldDBPage::~SwFldDBPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwFldDBPage::dispose()

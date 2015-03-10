@@ -82,7 +82,7 @@ MenuButton::MenuButton( vcl::Window* pParent, WinBits nWinBits )
 
 MenuButton::~MenuButton()
 {
-    dispose();
+    disposeOnce();
 }
 
 void MenuButton::dispose()

@@ -459,7 +459,7 @@ void ToolbarMenu::implInit(const Reference< XFrame >& rFrame)
 
 ToolbarMenu::~ToolbarMenu()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ToolbarMenu::dispose()

@@ -77,7 +77,7 @@ ComboBoxControl::ComboBoxControl( vcl::Window* pParent, WinBits nStyle, IComboBo
 
 ComboBoxControl::~ComboBoxControl()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ComboBoxControl::dispose()

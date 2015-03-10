@@ -125,7 +125,7 @@ ValueSet::ValueSet( vcl::Window* pParent, const ResId& rResId, bool bDisableTran
 
 ValueSet::~ValueSet()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ValueSet::dispose()

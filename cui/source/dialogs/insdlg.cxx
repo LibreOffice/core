@@ -193,7 +193,7 @@ SvInsertOleDlg::SvInsertOleDlg
 
 SvInsertOleDlg::~SvInsertOleDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvInsertOleDlg::dispose()
@@ -413,7 +413,7 @@ SvInsertPlugInDialog::SvInsertPlugInDialog(vcl::Window* pParent,
 
 SvInsertPlugInDialog::~SvInsertPlugInDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvInsertPlugInDialog::dispose()
@@ -517,7 +517,7 @@ SfxInsertFloatingFrameDialog::SfxInsertFloatingFrameDialog( vcl::Window *pParent
 
 SfxInsertFloatingFrameDialog::~SfxInsertFloatingFrameDialog()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SfxInsertFloatingFrameDialog::dispose()

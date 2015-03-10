@@ -84,7 +84,7 @@ ScDataPilotDatabaseDlg::ScDataPilotDatabaseDlg( vcl::Window* pParent ) :
 
 ScDataPilotDatabaseDlg::~ScDataPilotDatabaseDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScDataPilotDatabaseDlg::dispose()

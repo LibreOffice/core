@@ -1846,7 +1846,7 @@ ImplBorderWindow::ImplBorderWindow( vcl::Window* pParent, WinBits nStyle ,
 
 ImplBorderWindow::~ImplBorderWindow()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ImplBorderWindow::dispose()

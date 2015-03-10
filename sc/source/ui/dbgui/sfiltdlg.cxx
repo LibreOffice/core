@@ -97,7 +97,7 @@ ScSpecialFilterDlg::ScSpecialFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, vc
 
 ScSpecialFilterDlg::~ScSpecialFilterDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScSpecialFilterDlg::dispose()

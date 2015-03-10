@@ -127,7 +127,7 @@ SwInputWindow::SwInputWindow( vcl::Window* pParent, SfxBindings* pBind )
 
 SwInputWindow::~SwInputWindow()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwInputWindow::dispose()

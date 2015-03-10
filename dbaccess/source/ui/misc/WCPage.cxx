@@ -105,7 +105,7 @@ OCopyTable::OCopyTable(vcl::Window * pParent)
 
 OCopyTable::~OCopyTable()
 {
-    dispose();
+    disposeOnce();
 }
 
 void OCopyTable::dispose()

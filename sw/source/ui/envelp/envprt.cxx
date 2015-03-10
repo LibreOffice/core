@@ -69,7 +69,7 @@ SwEnvPrtPage::SwEnvPrtPage(vcl::Window* pParent, const SfxItemSet& rSet)
 
 SwEnvPrtPage::~SwEnvPrtPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwEnvPrtPage::dispose()

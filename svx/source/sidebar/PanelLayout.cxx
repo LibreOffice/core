@@ -26,7 +26,7 @@ PanelLayout::PanelLayout(vcl::Window* pParent, const OString& rID, const OUStrin
 
 PanelLayout::~PanelLayout()
 {
-    dispose();
+    disposeOnce();
 }
 
 void PanelLayout::dispose()

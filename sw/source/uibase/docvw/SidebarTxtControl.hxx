@@ -58,6 +58,7 @@ class SidebarTxtControl : public Control
                            SwView& rDocView,
                            SwPostItMgr& rPostItMgr );
         virtual ~SidebarTxtControl();
+        virtual void dispose() SAL_OVERRIDE;
 
         virtual void GetFocus() SAL_OVERRIDE;
 

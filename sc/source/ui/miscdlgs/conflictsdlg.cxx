@@ -442,7 +442,7 @@ ScConflictsDlg::ScConflictsDlg( vcl::Window* pParent, ScViewData* pViewData, ScD
 
 ScConflictsDlg::~ScConflictsDlg()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScConflictsDlg::dispose()

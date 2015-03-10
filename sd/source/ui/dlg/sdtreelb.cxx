@@ -255,7 +255,7 @@ SdPageObjsTLB::SdPageObjsTLB( vcl::Window* pParentWin, WinBits nStyle )
 
 SdPageObjsTLB::~SdPageObjsTLB()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SdPageObjsTLB::dispose()

@@ -152,7 +152,7 @@ IMPL_LINK( ScHFEditPage, ObjectSelectHdl, ScEditWindow*, pEdit )
 
 ScHFEditPage::~ScHFEditPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void ScHFEditPage::dispose()

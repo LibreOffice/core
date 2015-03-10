@@ -444,7 +444,7 @@ const Image&  CustomAnimationList::getImage( sal_uInt16 nId )
 
 CustomAnimationList::~CustomAnimationList()
 {
-    dispose();
+    disposeOnce();
 }
 
 void CustomAnimationList::dispose()

@@ -100,7 +100,7 @@ OSectionWindow::OSectionWindow( OViewsWindow* _pParent,const uno::Reference< rep
 
 OSectionWindow::~OSectionWindow()
 {
-    dispose();
+    disposeOnce();
 }
 
 void OSectionWindow::dispose()

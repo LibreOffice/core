@@ -78,7 +78,7 @@ Size SvxXMeasurePreview::GetOptimalSize() const
 
 SvxXMeasurePreview::~SvxXMeasurePreview()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SvxXMeasurePreview::dispose()

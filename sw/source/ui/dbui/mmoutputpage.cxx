@@ -205,7 +205,7 @@ public:
         get(m_pCCED, "cc");
         get(m_pBCCED, "bcc");
     }
-    virtual ~SwCopyToDialog() { dispose(); }
+    virtual ~SwCopyToDialog() { disposeOnce(); }
     virtual void dispose() SAL_OVERRIDE
     {
         m_pCCED.clear();
@@ -307,7 +307,7 @@ SwMailMergeOutputPage::SwMailMergeOutputPage(SwMailMergeWizard* _pParent)
 
 SwMailMergeOutputPage::~SwMailMergeOutputPage()
 {
-    dispose();
+    disposeOnce();
 }
 
 void SwMailMergeOutputPage::dispose()

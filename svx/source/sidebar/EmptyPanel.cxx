@@ -48,7 +48,7 @@ EmptyPanel::EmptyPanel (vcl::Window* pParent)
 
 EmptyPanel::~EmptyPanel()
 {
-    dispose();
+    disposeOnce();
 }
 
 void EmptyPanel::dispose()

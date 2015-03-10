@@ -117,7 +117,7 @@ PosSizePropertyPanel::PosSizePropertyPanel(
 
 PosSizePropertyPanel::~PosSizePropertyPanel()
 {
-    dispose();
+    disposeOnce();
 }
 
 void PosSizePropertyPanel::dispose()
