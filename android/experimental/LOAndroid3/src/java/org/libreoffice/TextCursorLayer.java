@@ -107,4 +107,28 @@ public class TextCursorLayer extends Layer {
             }
         });
     }
+
+    public void showGraphicSelection() {
+        LOKitShell.getMainHandler().post(new Runnable() {
+            public void run() {
+                mCursorView.showGraphicSelection();
+            }
+        });
+    }
+
+    public void hideGraphicSelection() {
+        LOKitShell.getMainHandler().post(new Runnable() {
+            public void run() {
+                mCursorView.hideGraphicSelection();
+            }
+        });
+    }
+
+    public void changeGraphicSelection(final RectF rectangle) {
+        LOKitShell.getMainHandler().post(new Runnable() {
+            public void run() {
+                mCursorView.changeGraphicSelection(rectangle);
+            }
+        });
+    }
 }

@@ -28,15 +28,21 @@ public class TextCursorView extends View {
     private boolean mInitialized = false;
     private RectF mCursorPosition = new RectF();
     private RectF mCursorScaledPosition = new RectF();
+    private Paint mCursorPaint = new Paint();
     private int mCursorAlpha = 0;
+    private boolean mCursorVisible;
 
     private List<RectF> mSelections = new ArrayList<RectF>();
     private List<RectF> mScaledSelections = new ArrayList<RectF>();
-    private Paint mCursorPaint = new Paint();
     private Paint mSelectionPaint = new Paint();
-
-    private boolean mCursorVisible;
     private boolean mSelectionsVisible;
+
+    private RectF mGraphicSelection = new RectF();
+    private RectF mGraphicScaledSelection = new RectF();
+    private Paint mGraphicSelectionPaint = new Paint();
+    private Paint mGraphicHandleFillPaint = new Paint();
+    private float mRadius = 20.0f;
+    private boolean mGraphicSelectionVisible;
 
     public TextCursorView(Context context) {
         super(context);
@@ -59,13 +65,20 @@ public class TextCursorView extends View {
 
             mCursorPaint.setColor(Color.BLACK);
             mCursorPaint.setAlpha(0xFF);
-
             mCursorVisible = false;
 
             mSelectionPaint.setColor(Color.BLUE);
             mSelectionPaint.setAlpha(50);
-
             mSelectionsVisible = false;
+
+            mGraphicSelectionPaint.setStyle(Paint.Style.STROKE);
+            mGraphicSelectionPaint.setColor(Color.BLACK);
+            mGraphicSelectionPaint.setStrokeWidth(2);
+
+            mGraphicHandleFillPaint.setStyle(Paint.Style.FILL);
+            mGraphicHandleFillPaint.setColor(Color.WHITE);
+            mGraphicSelectionVisible = false;
+
             mInitialized = true;
         }
     }
@@ -78,6 +91,7 @@ public class TextCursorView extends View {
         }
 
         mCursorPosition = position;
+
         ImmutableViewportMetrics metrics = layerView.getViewportMetrics();
         repositionWithViewport(metrics.viewportRectLeft, metrics.viewportRectTop, metrics.zoomFactor);
     }
@@ -95,6 +109,19 @@ public class TextCursorView extends View {
         repositionWithViewport(metrics.viewportRectLeft, metrics.viewportRectTop, metrics.zoomFactor);
     }
 
+    public void changeGraphicSelection(RectF rectangle) {
+        LayerView layerView = LOKitShell.getLayerView();
+        if (layerView == null) {
+            Log.e(LOGTAG, "Can't position selections because layerView is null");
+            return;
+        }
+
+        mGraphicSelection = rectangle;
+
+        ImmutableViewportMetrics metrics = layerView.getViewportMetrics();
+        repositionWithViewport(metrics.viewportRectLeft, metrics.viewportRectTop, metrics.zoomFactor);
+    }
+
     public void repositionWithViewport(float x, float y, float zoom) {
         mCursorScaledPosition = RectUtils.scale(mCursorPosition, zoom);
         mCursorScaledPosition.offset(-x, -y);
@@ -106,6 +133,9 @@ public class TextCursorView extends View {
             scaledSelection.offset(-x, -y);
             mScaledSelections.add(scaledSelection);
         }
+
+        mGraphicScaledSelection = RectUtils.scale(mGraphicSelection, zoom);
+        mGraphicScaledSelection.offset(-x, -y);
         invalidate();
     }
 
@@ -119,6 +149,20 @@ public class TextCursorView extends View {
             for (RectF selection : mScaledSelections) {
                 canvas.drawRect(selection, mSelectionPaint);
             }
+        }
+        if (mGraphicSelectionVisible) {
+            canvas.drawRect(mGraphicScaledSelection, mGraphicSelectionPaint);
+            canvas.drawCircle(mGraphicScaledSelection.left, mGraphicScaledSelection.top, mRadius, mGraphicHandleFillPaint);
+            canvas.drawCircle(mGraphicScaledSelection.left, mGraphicScaledSelection.top, mRadius, mGraphicSelectionPaint);
+
+            canvas.drawCircle(mGraphicScaledSelection.right, mGraphicScaledSelection.top, mRadius, mGraphicHandleFillPaint);
+            canvas.drawCircle(mGraphicScaledSelection.right, mGraphicScaledSelection.top, mRadius, mGraphicSelectionPaint);
+
+            canvas.drawCircle(mGraphicScaledSelection.left, mGraphicScaledSelection.bottom, mRadius, mGraphicHandleFillPaint);
+            canvas.drawCircle(mGraphicScaledSelection.left, mGraphicScaledSelection.bottom, mRadius, mGraphicSelectionPaint);
+
+            canvas.drawCircle(mGraphicScaledSelection.right, mGraphicScaledSelection.bottom, mRadius, mGraphicHandleFillPaint);
+            canvas.drawCircle(mGraphicScaledSelection.right, mGraphicScaledSelection.bottom, mRadius, mGraphicSelectionPaint);
         }
     }
 
@@ -149,6 +193,16 @@ public class TextCursorView extends View {
 
     public void hideSelections() {
         mSelectionsVisible = false;
+        invalidate();
+    }
+
+    public void showGraphicSelection() {
+        mGraphicSelectionVisible = true;
+        invalidate();
+    }
+
+    public void hideGraphicSelection() {
+        mGraphicSelectionVisible = false;
         invalidate();
     }
 }
