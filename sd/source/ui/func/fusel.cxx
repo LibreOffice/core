@@ -71,6 +71,8 @@
 
 #include <svx/sdrhittesthelper.hxx>
 
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+
 using namespace ::com::sun::star;
 
 namespace sd {
@@ -265,6 +267,13 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                 SfxBoolItem aBrowseItem( SID_BROWSE, true );
                 SfxViewFrame* pFrame = mpViewShell->GetViewFrame();
                 mpWindow->ReleaseMouse();
+
+                // If tiled rendering, let client handles URL execution and early returns.
+                if (mpDoc->isTiledRendering()) {
+                    mpDoc->libreOfficeKitCallback(LOK_CALLBACK_HYPERLINK_CLICKED,
+                            aVEvt.pURLField->GetURL().toUtf8().getStr());
+                    return true;
+                }
 
                 if (rMEvt.IsMod1())
                 {

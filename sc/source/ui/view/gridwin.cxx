@@ -2295,8 +2295,9 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
             // ScGlobal::OpenURL() only understands Calc A1 style syntax.
             // Convert it to Calc A1 before calling OpenURL().
 
-            if (pDoc->GetAddressConvention() == formula::FormulaGrammar::CONV_OOO)
-                ScGlobal::OpenURL(aUrl, aTarget);
+            if (pDoc->GetAddressConvention() == formula::FormulaGrammar::CONV_OOO) {
+                ScGlobal::OpenURL(pViewData->GetDocument()->GetDrawLayer(), aUrl, aTarget);
+            }
             else
             {
                 ScAddress aTempAddr;

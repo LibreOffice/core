@@ -44,6 +44,7 @@
 #include <time.h>
 #include <ctype.h>
 #include <numeric>
+#include <svx/svdmodel.hxx>
 
 #include <i18nlangtag/mslangid.hxx>
 #include <com/sun/star/lang/Locale.hpp>
@@ -56,6 +57,8 @@
 #include <unotools/intlwrapper.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/transliterationwrapper.hxx>
+
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #include "global.hxx"
 #include "scresid.hxx"
@@ -127,7 +130,6 @@ long            ScGlobal::nLastColWidthExtra    = STD_EXTRA_WIDTH;
 
 static sal_uInt16 nPPTZoom = 0; // ScreenZoom used to determine nScreenPPTX/Y
 
-class SfxViewShell;
 SfxViewShell* pScActiveViewShell = NULL; //FIXME: Make this a member
 sal_uInt16 nScClickMouseModifier = 0;    //FIXME: This too
 sal_uInt16 nScFillModeMouseModifier = 0; //FIXME: And this
@@ -863,6 +865,16 @@ bool ScGlobal::EETextObjEqual( const EditTextObject* pObj1,
     }
 
     return false;
+}
+
+
+void ScGlobal::OpenURL( const SdrModel* pDrawLayer, const OUString& rURL, const OUString& rTarget ) {
+    if (pDrawLayer && pDrawLayer->isTiledRendering()) {
+            pDrawLayer->libreOfficeKitCallback(LOK_CALLBACK_HYPERLINK_CLICKED, rURL.toUtf8().getStr());
+            return;
+    }
+    // Proceed to openURL if not tiled rendering.
+    OpenURL(rURL, rTarget);
 }
 
 void ScGlobal::OpenURL( const OUString& rURL, const OUString& rTarget )
