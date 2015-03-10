@@ -2057,7 +2057,7 @@ Sequence< ::com::sun::star::uno::Type > SAL_CALL
 
 OUString SAL_CALL OOo2OasisTransformer_getImplementationName() throw()
 {
-    return OUString( "com.sun.star.comp.OOo2OasisTransformer" );
+    return OUString( "com.sun.star.comp.OOo2OasisTransformer");
 }
 
 Sequence< OUString > SAL_CALL OOo2OasisTransformer_getSupportedServiceNames() throw()
@@ -2067,121 +2067,589 @@ Sequence< OUString > SAL_CALL OOo2OasisTransformer_getSupportedServiceNames() th
     return aSeq;
 }
 
-Reference< XInterface > SAL_CALL OOo2OasisTransformer_createInstance(
-        const Reference< XMultiServiceFactory > & )
-    throw( Exception )
+// Writer
+
+OUString SAL_CALL XMLWriterImportOOO_getImplementationName() throw()
 {
-    return (cppu::OWeakObject*)new OOo2OasisTransformer();
+    return OUString( "com.sun.star.comp.XMLWriterImportOOO");
 }
 
-#define OOO_IMPORTER( className, implName, subServiceName )             \
-OUString SAL_CALL className##_getImplementationName() throw()           \
-{                                                                       \
-    return OUString( implName );         \
-}                                                                       \
-                                                                        \
-Sequence< OUString > SAL_CALL className##_getSupportedServiceNames() throw()\
-{                                                                       \
-    const OUString aServiceName( className##_getImplementationName() ); \
-    const Sequence< OUString > aSeq( &aServiceName, 1 );                \
-    return aSeq;                                                        \
-}                                                                       \
-                                                                        \
-Reference< XInterface > SAL_CALL className##_createInstance(            \
-        const Reference< XMultiServiceFactory > & )                     \
-    throw( Exception )                                                  \
-{                                                                       \
-    return (cppu::OWeakObject*)new OOo2OasisTransformer( implName,      \
-                                         subServiceName );              \
+Sequence< OUString > SAL_CALL XMLWriterImportOOO_getSupportedServiceNames() throw()
+{
+    const OUString aServiceName( XMLWriterImportOOO_getImplementationName() );
+    const Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
 }
 
-OOO_IMPORTER( XMLWriterImportOOO,
-              "com.sun.star.comp.Writer.XMLImporter",
-              "com.sun.star.comp.Writer.XMLOasisImporter" )
-OOO_IMPORTER( XMLWriterStylesImportOOO,
-              "com.sun.star.comp.Writer.XMLStylesImporter",
-              "com.sun.star.comp.Writer.XMLOasisStylesImporter" )
-OOO_IMPORTER( XMLWriterContentImportOOO,
-              "com.sun.star.comp.Writer.XMLContentImporter",
-              "com.sun.star.comp.Writer.XMLOasisContentImporter" )
-OOO_IMPORTER( XMLWriterMetaImportOOO,
-              "com.sun.star.comp.Writer.XMLMetaImporter",
-              "com.sun.star.comp.Writer.XMLOasisMetaImporter" )
-OOO_IMPORTER( XMLWriterSettingsImportOOO,
-              "com.sun.star.comp.Writer.XMLSettingsImporter",
-              "com.sun.star.comp.Writer.XMLOasisSettingsImporter" )
+OUString SAL_CALL XMLWriterStylesImportOOO_getImplementationName() throw()
+{
+    return OUString( "com.sun.star.comp.XMLWriterStylesImportOOO");
+}
 
-OOO_IMPORTER( XMLImpressImportOOO,
-              "com.sun.star.comp.Impress.XMLImporter",
-              "com.sun.star.comp.Impress.XMLOasisImporter" )
-OOO_IMPORTER( XMLImpressStylesImportOOO,
-              "com.sun.star.comp.Impress.XMLStylesImporter",
-              "com.sun.star.comp.Impress.XMLOasisStylesImporter" )
-OOO_IMPORTER( XMLImpressContentImportOOO,
-              "com.sun.star.comp.Impress.XMLContentImporter",
-              "com.sun.star.comp.Impress.XMLOasisContentImporter" )
-OOO_IMPORTER( XMLImpressMetaImportOOO,
-              "com.sun.star.comp.Impress.XMLMetaImporter",
-              "com.sun.star.comp.Impress.XMLOasisMetaImporter" )
-OOO_IMPORTER( XMLImpressSettingsImportOOO,
-              "com.sun.star.comp.Impress.XMLSettingsImporter",
-              "com.sun.star.comp.Impress.XMLOasisSettingsImporter" )
+Sequence< OUString > SAL_CALL XMLWriterStylesImportOOO_getSupportedServiceNames() throw()
+{
+    const OUString aServiceName( XMLWriterStylesImportOOO_getImplementationName() );
+    const Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
 
-OOO_IMPORTER( XMLDrawImportOOO,
-              "com.sun.star.comp.Draw.XMLImporter",
-              "com.sun.star.comp.Draw.XMLOasisImporter" )
-OOO_IMPORTER( XMLDrawStylesImportOOO,
-              "com.sun.star.comp.Draw.XMLStylesImporter",
-              "com.sun.star.comp.Draw.XMLOasisStylesImporter" )
-OOO_IMPORTER( XMLDrawContentImportOOO,
-              "com.sun.star.comp.Draw.XMLContentImporter",
-              "com.sun.star.comp.Draw.XMLOasisContentImporter" )
-OOO_IMPORTER( XMLDrawMetaImportOOO,
-              "com.sun.star.comp.Draw.XMLMetaImporter",
-              "com.sun.star.comp.Draw.XMLOasisMetaImporter" )
-OOO_IMPORTER( XMLDrawSettingsImportOOO,
-              "com.sun.star.comp.Draw.XMLSettingsImporter",
-              "com.sun.star.comp.Draw.XMLOasisSettingsImporter" )
+OUString SAL_CALL XMLWriterContentImportOOO_getImplementationName() throw()
+{
+    return OUString( "com.sun.star.comp.XMLWriterContentImportOOO");
+}
 
-OOO_IMPORTER( XMLCalcImportOOO,
-              "com.sun.star.comp.Calc.XMLImporter",
-              "com.sun.star.comp.Calc.XMLOasisImporter" )
-OOO_IMPORTER( XMLCalcStylesImportOOO,
-              "com.sun.star.comp.Calc.XMLStylesImporter",
-              "com.sun.star.comp.Calc.XMLOasisStylesImporter" )
-OOO_IMPORTER( XMLCalcContentImportOOO,
-              "com.sun.star.comp.Calc.XMLContentImporter",
-              "com.sun.star.comp.Calc.XMLOasisContentImporter" )
-OOO_IMPORTER( XMLCalcMetaImportOOO,
-              "com.sun.star.comp.Calc.XMLMetaImporter",
-              "com.sun.star.comp.Calc.XMLOasisMetaImporter" )
-OOO_IMPORTER( XMLCalcSettingsImportOOO,
-              "com.sun.star.comp.Calc.XMLSettingsImporter",
-              "com.sun.star.comp.Calc.XMLOasisSettingsImporter" )
+Sequence< OUString > SAL_CALL XMLWriterContentImportOOO_getSupportedServiceNames() throw()
+{
+    const OUString aServiceName( XMLWriterContentImportOOO_getImplementationName() );
+    const Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
 
-OOO_IMPORTER( XMLChartImportOOO,
-              "com.sun.star.comp.Chart.XMLImporter",
-              "com.sun.star.comp.Chart.XMLOasisImporter" )
-OOO_IMPORTER( XMLChartStylesImportOOO,
-              "com.sun.star.comp.Chart.XMLStylesImporter",
-              "com.sun.star.comp.Chart.XMLOasisStylesImporter" )
-OOO_IMPORTER( XMLChartContentImportOOO,
-              "com.sun.star.comp.Chart.XMLContentImporter",
-              "com.sun.star.comp.Chart.XMLOasisContentImporter" )
+OUString SAL_CALL XMLWriterMetaImportOOO_getImplementationName() throw()
+{
+    return OUString( "com.sun.star.comp.XMLWriterMetaImportOOO");
+}
 
-OOO_IMPORTER( XMLMathMetaImportOOO,
-              "com.sun.star.comp.Math.XMLMetaImporter",
-              "com.sun.star.comp.Math.XMLOasisMetaImporter" )
-OOO_IMPORTER( XMLMathSettingsImportOOO,
-              "com.sun.star.comp.Math.XMLSettingsImporter",
-              "com.sun.star.comp.Math.XMLOasisSettingsImporter" )
+Sequence< OUString > SAL_CALL XMLWriterMetaImportOOO_getSupportedServiceNames() throw()
+{
+    const OUString aServiceName( XMLWriterMetaImportOOO_getImplementationName() );
+    const Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
 
-OOO_IMPORTER( XMLMetaImportOOO,
-              "com.sun.star.document.XMLMetaImporter",
-              "com.sun.star.document.XMLOasisMetaImporter" )
 
-OOO_IMPORTER( XMLAutoTextEventImportOOO,
-              "com.sun.star.comp.Writer.XMLAutotextEventsImporter",
-              "com.sun.star.comp.Writer.XMLOasisAutotextEventsImporter" )
+OUString SAL_CALL XMLWriterSettingsImportOOO_getImplementationName() throw()
+{
+    return OUString( "com.sun.star.comp.XMLWriterSetttingsImportOOO");
+}
+
+Sequence< OUString > SAL_CALL XMLWriterSettingsImportOOO_getSupportedServiceNames() throw()
+{
+    const OUString aServiceName( XMLWriterSettingsImportOOO_getImplementationName() );
+    const Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+// Impress
+
+OUString SAL_CALL XMLImpressImportOOO_getImplementationName() throw()
+{
+    return OUString( "com.sun.star.comp.XMLImpressImportOOO");
+}
+
+Sequence< OUString > SAL_CALL XMLImpressImportOOO_getSupportedServiceNames() throw()
+{
+    const OUString aServiceName( XMLWriterImportOOO_getImplementationName() );
+    const Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+OUString SAL_CALL XMLImpressStylesImportOOO_getImplementationName() throw()
+{
+    return OUString( "com.sun.star.comp.XMLImpressStylesImportOOO");
+}
+
+Sequence< OUString > SAL_CALL XMLImpressStylesImportOOO_getSupportedServiceNames() throw()
+{
+    const OUString aServiceName( XMLImpressStylesImportOOO_getImplementationName() );
+    const Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+
+OUString SAL_CALL XMLImpressContentImportOOO_getImplementationName() throw()
+{
+    return OUString( "com.sun.star.comp.XMLImpressContentImportOOO");
+}
+
+Sequence< OUString > SAL_CALL XMLImpressContentImportOOO_getSupportedServiceNames() throw()
+{
+    const OUString aServiceName( XMLImpressContentImportOOO_getImplementationName() );
+    const Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+OUString SAL_CALL XMLImpressMetaImportOOO_getImplementationName() throw()
+{
+    return OUString( "com.sun.star.comp.XMLImpressMetaImportOOO");
+}
+
+Sequence< OUString > SAL_CALL XMLImpressMetaImportOOO_getSupportedServiceNames() throw()
+{
+    const OUString aServiceName( XMLImpressMetaImportOOO_getImplementationName() );
+    const Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+OUString SAL_CALL XMLImpressSettingsImportOOO_getImplementationName() throw()
+{
+    return OUString( "com.sun.star.comp.XMLImpressSettingsImportOOO");
+}
+
+Sequence< OUString > SAL_CALL XMLImpressSettingsImportOOO_getSupportedServiceNames() throw()
+{
+    const OUString aServiceName( XMLImpressSettingsImportOOO_getImplementationName() );
+    const Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+// Draw
+
+OUString SAL_CALL XMLDrawImportOOO_getImplementationName() throw()
+{
+    return OUString( "com.sun.star.comp.XMLDrawImportOOO");
+}
+
+Sequence< OUString > SAL_CALL XMLDrawImportOOO_getSupportedServiceNames() throw()
+{
+    const OUString aServiceName( XMLDrawImportOOO_getImplementationName() );
+    const Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+
+OUString SAL_CALL XMLDrawStylesImportOOO_getImplementationName() throw()
+{
+    return OUString( "com.sun.star.comp.XMLDrawStylesImportOOO");
+}
+
+Sequence< OUString > SAL_CALL XMLDrawStylesImportOOO_getSupportedServiceNames() throw()
+{
+    const OUString aServiceName( XMLDrawStylesImportOOO_getImplementationName() );
+    const Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+
+OUString SAL_CALL XMLDrawContentImportOOO_getImplementationName() throw()
+{
+    return OUString( "com.sun.star.comp.XMLDrawContentImportOOO");
+}
+
+Sequence< OUString > SAL_CALL XMLDrawContentImportOOO_getSupportedServiceNames() throw()
+{
+    const OUString aServiceName( XMLDrawContentImportOOO_getImplementationName() );
+    const Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+
+OUString SAL_CALL XMLDrawMetaImportOOO_getImplementationName() throw()
+{
+    return OUString( "com.sun.star.comp.XMLDrawMetaImportOOO");
+}
+
+Sequence< OUString > SAL_CALL XMLDrawMetaImportOOO_getSupportedServiceNames() throw()
+{
+    const OUString aServiceName( XMLDrawMetaImportOOO_getImplementationName() );
+    const Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+
+OUString SAL_CALL XMLDrawSettingsImportOOO_getImplementationName() throw()
+{
+    return OUString( "com.sun.star.comp.XMLDrawSettingsImportOOO");
+}
+
+Sequence< OUString > SAL_CALL XMLDrawSettingsImportOOO_getSupportedServiceNames() throw()
+{
+    const OUString aServiceName( XMLDrawSettingsImportOOO_getImplementationName() );
+    const Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+
+// Calc
+
+
+OUString SAL_CALL XMLCalcImportOOO_getImplementationName() throw()
+{
+    return OUString( "com.sun.star.comp.XMLCalcImportOOO");
+}
+
+Sequence< OUString > SAL_CALL XMLCalcImportOOO_getSupportedServiceNames() throw()
+{
+    const OUString aServiceName( XMLCalcImportOOO_getImplementationName() );
+    const Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+
+OUString SAL_CALL XMLCalcStylesImportOOO_getImplementationName() throw()
+{
+    return OUString( "com.sun.star.comp.XMLCalcStylesImportOOO");
+}
+
+Sequence< OUString > SAL_CALL XMLCalcStylesImportOOO_getSupportedServiceNames() throw()
+{
+    const OUString aServiceName( XMLCalcStylesImportOOO_getImplementationName() );
+    const Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+
+OUString SAL_CALL XMLCalcContentImportOOO_getImplementationName() throw()
+{
+    return OUString( "com.sun.star.comp.XMLCalcContentImportOOO");
+}
+
+Sequence< OUString > SAL_CALL XMLCalcContentImportOOO_getSupportedServiceNames() throw()
+{
+    const OUString aServiceName( XMLCalcContentImportOOO_getImplementationName() );
+    const Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+
+OUString SAL_CALL XMLCalcMetaImportOOO_getImplementationName() throw()
+{
+    return OUString( "com.sun.star.comp.XMLCalcMetaImportOOO");
+}
+
+Sequence< OUString > SAL_CALL XMLCalcMetaImportOOO_getSupportedServiceNames() throw()
+{
+    const OUString aServiceName( XMLCalcImportOOO_getImplementationName() );
+    const Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+
+OUString SAL_CALL XMLCalcSettingsImportOOO_getImplementationName() throw()
+{
+    return OUString( "com.sun.star.comp.XMLCalcSettingsImportOOO");
+}
+
+Sequence< OUString > SAL_CALL XMLCalcSettingsImportOOO_getSupportedServiceNames() throw()
+{
+    const OUString aServiceName( XMLCalcSettingsImportOOO_getImplementationName() );
+    const Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+// Chart
+
+OUString SAL_CALL XMLChartImportOOO_getImplementationName() throw()
+{
+    return OUString( "com.sun.star.comp.XMLChartImportOOO");
+}
+
+Sequence< OUString > SAL_CALL XMLChartImportOOO_getSupportedServiceNames() throw()
+{
+    const OUString aServiceName( XMLChartImportOOO_getImplementationName() );
+    const Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+
+OUString SAL_CALL XMLChartStylesImportOOO_getImplementationName() throw()
+{
+    return OUString( "com.sun.star.comp.XMLChartStylesImportOOO");
+}
+
+Sequence< OUString > SAL_CALL XMLChartStylesImportOOO_getSupportedServiceNames() throw()
+{
+    const OUString aServiceName( XMLChartStylesImportOOO_getImplementationName() );
+    const Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+
+OUString SAL_CALL XMLChartContentImportOOO_getImplementationName() throw()
+{
+    return OUString( "com.sun.star.comp.XMLChartContentImportOOO");
+}
+
+Sequence< OUString > SAL_CALL XMLChartContentImportOOO_getSupportedServiceNames() throw()
+{
+    const OUString aServiceName( XMLChartContentImportOOO_getImplementationName() );
+    const Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+
+// Math
+
+OUString SAL_CALL XMLMathMetaImportOOO_getImplementationName() throw()
+{
+    return OUString( "com.sun.star.comp.XMLMathMetaImportOOO");
+}
+
+Sequence< OUString > SAL_CALL XMLMathMetaImportOOO_getSupportedServiceNames() throw()
+{
+    const OUString aServiceName( XMLMathMetaImportOOO_getImplementationName() );
+    const Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+
+OUString SAL_CALL XMLMathSettingsImportOOO_getImplementationName() throw()
+{
+    return OUString( "com.sun.star.comp.XMLMathSettingsImportOOO");
+}
+
+Sequence< OUString > SAL_CALL XMLMathSettingsImportOOO_getSupportedServiceNames() throw()
+{
+    const OUString aServiceName( XMLMathSettingsImportOOO_getImplementationName() );
+    const Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+// meta import
+
+
+OUString SAL_CALL XMLMetaImportOOO_getImplementationName() throw()
+{
+    return OUString( "com.sun.star.document.XMLMetaImportOOO");
+}
+
+Sequence< OUString > SAL_CALL XMLMetaImportOOO_getSupportedServiceNames() throw()
+{
+    const OUString aServiceName( XMLMetaImportOOO_getImplementationName() );
+    const Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+
+// AutoTextEvent
+
+OUString SAL_CALL XMLAutoTextEventImportOOO_getImplementationName() throw()
+{
+    return OUString( "com.sun.star.comp.XMLAutoTextEventImportOOO");
+}
+
+Sequence< OUString > SAL_CALL XMLAutoTextEventImportOOO_getSupportedServiceNames() throw()
+{
+    const OUString aServiceName( XMLAutoTextEventImportOOO_getImplementationName() );
+    const Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+// for .component constructor attribute
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_OOo2OasisTransformer_get_implementation(::com::sun::star::uno::XComponentContext*,
+                                        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new OOo2OasisTransformer());
+}
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_Writer_XMLImporter_get_implementation(::com::sun::star::uno::XComponentContext*,
+                                        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new OOo2OasisTransformer("com.sun.star.comp.Writer.XMLImporter", "com.sun.star.comp.Writer.XMLOasisImporter"));
+}
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_Writer_XMLStylesImporter_get_implementation(::com::sun::star::uno::XComponentContext*,
+                                        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new OOo2OasisTransformer("com.sun.star.comp.Writer.XMLStylesImporter", "com.sun.star.comp.Writer.XMLOasisStylesImporter"));
+}
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_Writer_XMLContentImporter_get_implementation(::com::sun::star::uno::XComponentContext*,
+                                        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new OOo2OasisTransformer("com.sun.star.comp.Writer.XMLContentImporter", "com.sun.star.comp.Writer.XMLOasisContentImporter"));
+}
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_Writer_XMLMetaImporter_get_implementation(::com::sun::star::uno::XComponentContext*,
+                                        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new OOo2OasisTransformer("com.sun.star.comp.Writer.XMLMetaImporter", "com.sun.star.comp.Writer.XMLOasisMetaImporter"));
+}
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_Writer_XMLSettingsImporter_get_implementation(::com::sun::star::uno::XComponentContext*,
+                                        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new OOo2OasisTransformer("com.sun.star.comp.Writer.XMLSettingsImporter", "com.sun.star.comp.Writer.XMLOasisSettingsImporter"));
+}
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_Impress_XMLWriterImporter_get_implementation(::com::sun::star::uno::XComponentContext*,
+                                        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new OOo2OasisTransformer("com.sun.star.comp.Impress.XMLImporter", "com.sun.star.comp.Impress.XMLOasisImporter"));
+}
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_Impress_XMLStylesImporter_get_implementation(::com::sun::star::uno::XComponentContext*,
+                                        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new OOo2OasisTransformer("com.sun.star.comp.Impress.XMLStylesImporter", "com.sun.star.comp.Impress.XMLOasisStylesImporter"));
+}
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_Impress_XMLContentImporter_get_implementation(::com::sun::star::uno::XComponentContext*,
+                                        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new OOo2OasisTransformer("com.sun.star.comp.Impress.XMLContentImporter", "com.sun.star.comp.Impress.XMLOasisContentImporter"));
+}
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_Impress_XMLMetaImporter_get_implementation(::com::sun::star::uno::XComponentContext*,
+                                        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new OOo2OasisTransformer("com.sun.star.comp.Impress.XMLMetaImporter", "com.sun.star.comp.Impress.XMLOasisMetaImporter"));
+}
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_Impress_XMLSettingsImporter_get_implementation(::com::sun::star::uno::XComponentContext*,
+                                        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new OOo2OasisTransformer("com.sun.star.comp.Impress.XMLSettingsImporter", "com.sun.star.comp.Impress.XMLOasisSettingsImporter"));
+}
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_Draw_XMLImporter_get_implementation(::com::sun::star::uno::XComponentContext*,
+                                        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new OOo2OasisTransformer("com.sun.star.comp.Draw.XMLImporter", "com.sun.star.comp.Draw.XMLOasisImporter"));
+}
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_Draw_XMLStylesImporter_get_implementation(::com::sun::star::uno::XComponentContext*,
+                                        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new OOo2OasisTransformer("com.sun.star.comp.Draw.XMLStylesImporter", "com.sun.star.comp.Draw.XMLOasisStylesImporter"));
+}
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_Draw_XMLContentImporter_get_implementation(::com::sun::star::uno::XComponentContext*,
+                                        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new OOo2OasisTransformer("com.sun.star.comp.Draw.XMLContentImporter", "com.sun.star.comp.Draw.XMLOasisContentImporter"));
+}
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_Draw_XMLMetaImporter_get_implementation(::com::sun::star::uno::XComponentContext*,
+                                        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new OOo2OasisTransformer("com.sun.star.comp.Draw.XMLMetaImporter", "com.sun.star.comp.Draw.XMLOasisMetaImporter"));
+}
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_Draw_XMLSettingsImporter_get_implementation(::com::sun::star::uno::XComponentContext*,
+                                        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new OOo2OasisTransformer("com.sun.star.comp.Draw.XMLSettingsImporter", "com.sun.star.comp.Draw.XMLOasisSettingsImporter"));
+}
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_Calc_XMLImporter_get_implementation(::com::sun::star::uno::XComponentContext*,
+                                        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new OOo2OasisTransformer("com.sun.star.comp.Calc.XMLImporter", "com.sun.star.comp.Calc.XMLOasisImporter"));
+}
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_Calc_XMLStylesImporter_get_implementation(::com::sun::star::uno::XComponentContext*,
+                                        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new OOo2OasisTransformer("com.sun.star.comp.Calc.XMLStylesImporter", "com.sun.star.comp.Calc.XMLOasisStylesImporter"));
+}
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_Calc_XMLContentImporter_get_implementation(::com::sun::star::uno::XComponentContext*,
+                                        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new OOo2OasisTransformer("com.sun.star.comp.Calc.XMLContentImporter", "com.sun.star.comp.Calc.XMLOasisContentImporter"));
+}
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_Calc_XMLMetaImporter_get_implementation(::com::sun::star::uno::XComponentContext*,
+                                        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new OOo2OasisTransformer("com.sun.star.comp.Calc.XMLMetaImporter", "com.sun.star.comp.Calc.XMLOasisMetaImporter"));
+}
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_Calc_XMLSettingsImporter_get_implementation(::com::sun::star::uno::XComponentContext*,
+                                        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new OOo2OasisTransformer("com.sun.star.comp.Calc.XMLSettingsImporter", "com.sun.star.comp.Calc.XMLOasisSettingsImporter"));
+}
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_Chart_XMLImporter_get_implementation(::com::sun::star::uno::XComponentContext*,
+                                        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new OOo2OasisTransformer("com.sun.star.comp.Chart.XMLImporter", "com.sun.star.comp.Chart.XMLOasisImporter"));
+}
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_Chart_XMLStylesImporter_get_implementation(::com::sun::star::uno::XComponentContext*,
+                                        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new OOo2OasisTransformer("com.sun.star.comp.Chart.XMLStylesImporter", "com.sun.star.comp.Chart.XMLOasisStylesImporter"));
+}
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_Chart_XMLContentImporter_get_implementation(::com::sun::star::uno::XComponentContext*,
+                                        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new OOo2OasisTransformer("com.sun.star.comp.Chart.XMLContentImporter", "com.sun.star.comp.Chart.XMLOasisContentImporter"));
+}
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_Math_XMLMetaImporter_get_implementation(::com::sun::star::uno::XComponentContext*,
+                                        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new OOo2OasisTransformer("com.sun.star.comp.Math.XMLMetaImporter", "com.sun.star.comp.Math.XMLOasisMetaImporter"));
+}
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_Math_XMLSettingsImporter_get_implementation(::com::sun::star::uno::XComponentContext*,
+                                        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new OOo2OasisTransformer("com.sun.star.comp.Math.XMLSettingsImporter", "com.sun.star.comp.Math.XMLOasisSettingsImporter"));
+}
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_Meta_XMLImporter_get_implementation(::com::sun::star::uno::XComponentContext*,
+                                        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new OOo2OasisTransformer("com.sun.star.comp.Meta.XMLImporter", "com.sun.star.comp.Meta.XMLOasisImporter"));
+}
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_AutoTextEvent_XMLImporter_get_implementation(::com::sun::star::uno::XComponentContext*,
+                                        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new OOo2OasisTransformer("com.sun.star.comp.AutoTextEvent.XMLImporter", "com.sun.star.comp.AutoTextEvent.XMLOasisImporter"));
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

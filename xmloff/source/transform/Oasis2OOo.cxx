@@ -19,6 +19,7 @@
 
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <sax/tools/converter.hxx>
 #include <xmloff/nmspmap.hxx>
@@ -2033,12 +2034,11 @@ Sequence< OUString > SAL_CALL Oasis2OOoTransformer_getSupportedServiceNames()
     return aSeq;
 }
 
-Reference< XInterface > SAL_CALL Oasis2OOoTransformer_createInstance(
-        const Reference< XMultiServiceFactory > &)
-    throw( Exception )
+
+extern "C" SAL_DLLPUBLIC_EXPORT XInterface* SAL_CALL
+com_sun_star_comp_Oasis2OOoTransformer_get_implementation(XComponentContext*, Sequence<Any> const &)
 {
-    SAL_INFO("xmloff.transform", "Creating Oasis2OOoTransformer");
-    return (cppu::OWeakObject*)new Oasis2OOoTransformer;
+    return cppu::acquire(new Oasis2OOoTransformer());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

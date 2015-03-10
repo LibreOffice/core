@@ -19,91 +19,120 @@
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
     prefix="xof" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.Calc.XMLContentImporter">
+  <implementation name="com.sun.star.comp.Calc.XMLContentImporter"
+      constructor="com_sun_star_comp_Calc_XMLContentImporter_get_implementation">
     <service name="com.sun.star.comp.Calc.XMLContentImporter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Calc.XMLImporter">
+  <implementation name="com.sun.star.comp.Calc.XMLImporter"
+      constructor="com_sun_star_comp_Calc_XMLImport_get_implementation">
     <service name="com.sun.star.comp.Calc.XMLImporter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Calc.XMLMetaImporter">
+  <implementation name="com.sun.star.comp.Calc.XMLMetaImporter"
+      constructor="com_sun_star_comp_Calc_XMLMetaImporter_get_implementation">
     <service name="com.sun.star.comp.Calc.XMLMetaImporter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Calc.XMLSettingsImporter">
+  <implementation name="com.sun.star.comp.Calc.XMLSettingsImporter"
+      constructor="com_sun_star_comp_Calc_XMLSettingsImporter_getImplementation">
     <service name="com.sun.star.comp.Calc.XMLSettingsImporter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Calc.XMLStylesImporter">
+  <implementation name="com.sun.star.comp.Calc.XMLStylesImporter"
+      constructor="com_sun_star_comp_Calc_XMLStylesImporter_get_implementation">
     <service name="com.sun.star.comp.Calc.XMLStylesImporter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Chart.XMLContentImporter">
+  <implementation name="com.sun.star.comp.Chart.XMLContentImporter"
+      constructor="com_sun_star_comp_Chart_XMLContentImporter_get_implementation">
     <service name="com.sun.star.comp.Chart.XMLContentImporter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Chart.XMLImporter">
+  <implementation name="com.sun.star.comp.Chart.XMLImporter"
+      constructor="com_sun_star_comp_Chart_XMLImporter_get_implementation">
     <service name="com.sun.star.comp.Chart.XMLImporter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Chart.XMLStylesImporter">
+  <implementation name="com.sun.star.comp.Chart.XMLStylesImporter"
+      constructor="com_sun_star_comp_Chart_XMLStylesImporter_get_implementation">
     <service name="com.sun.star.comp.Chart.XMLStylesImporter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Draw.XMLContentImporter">
+  <implementation name="com.sun.star.comp.Draw.XMLContentImporter"
+      constructor="com_sun_star_comp_Draw_XMLContentImporter_get_implementation">
     <service name="com.sun.star.comp.Draw.XMLContentImporter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Draw.XMLImporter">
+  <implementation name="com.sun.star.comp.Draw.XMLImporter"
+      constructor="com_sun_star_comp_Draw_XMLImporter_get_implementation">
     <service name="com.sun.star.comp.Draw.XMLImporter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Draw.XMLMetaImporter">
+  <implementation name="com.sun.star.comp.Draw.XMLMetaImporter"
+      constructor="com_sun_star_comp_Draw_XMLMetaImporter_get_implementation">
     <service name="com.sun.star.comp.Draw.XMLMetaImporter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Draw.XMLSettingsImporter">
+  <implementation name="com.sun.star.comp.Draw.XMLSettingsImporter"
+      constructor="com_sun_star_comp_Draw_XMLSettingsImporter_get_implementation">
     <service name="com.sun.star.comp.Draw.XMLSettingsImporter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Draw.XMLStylesImporter">
+  <implementation name="com.sun.star.comp.Draw.XMLStylesImporter"
+      constructor="com_sun_star_comp_Draw_XMLStylesImporter_get_implementation">
     <service name="com.sun.star.comp.Draw.XMLStylesImporter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Impress.XMLContentImporter">
+  <implementation name="com.sun.star.comp.Impress.XMLContentImporter"
+      constructor="com_sun_star_comp_Impress_XMLContentImporter_get_implementation">
     <service name="com.sun.star.comp.Impress.XMLContentImporter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Impress.XMLImporter">
+  <implementation name="com.sun.star.comp.Impress.XMLImporter"
+      constructor="com_sun_star_comp_Impress_XMLImporter_get_implementation">
     <service name="com.sun.star.comp.Impress.XMLImporter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Impress.XMLMetaImporter">
+  <implementation name="com.sun.star.comp.Impress.XMLMetaImporter"
+      constructor="com_sun_star_comp_Impress_XMLMetaImporter_get_implementation">
     <service name="com.sun.star.comp.Impress.XMLMetaImporter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Impress.XMLSettingsImporter">
+  <implementation name="com.sun.star.comp.Impress.XMLSettingsImporter"
+      constructor="com_sun_star_comp_Impress_XMLSettingsImporter_get_implementation">
     <service name="com.sun.star.comp.Impress.XMLSettingsImporter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Impress.XMLStylesImporter">
+  <implementation name="com.sun.star.comp.Impress.XMLStylesImporter"
+      constructor="com_sun_star_comp_Impress_XMLStylesImporter_get_implementation">
     <service name="com.sun.star.comp.Impress.XMLStylesImporter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Math.XMLMetaImporter">
+  <implementation name="com.sun.star.comp.Math.XMLMetaImporter"
+      constructor="com_sun_star_comp_Math_XMLMetaImporter_get_implementation">
     <service name="com.sun.star.comp.Math.XMLMetaImporter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Math.XMLSettingsImporter">
+  <implementation name="com.sun.star.comp.Math.XMLSettingsImporter"
+      constructor="com_sun_star_comp_Math_XMLSettingsImporter_get_implementation">
     <service name="com.sun.star.comp.Math.XMLSettingsImporter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.OOo2OasisTransformer">
+  <implementation name="com.sun.star.comp.OOo2OasisTransformer"
+      constructor="com_sun_star_comp_OOo2OasisTransformer_get_implementation">
     <service name="com.sun.star.comp.OOo2OasisTransformer"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Oasis2OOoTransformer">
+  <implementation name="com.sun.star.comp.Oasis2OOoTransformer"
+      constructor="com_sun_star_comp_Oasis2OOoTransformer_get_implementation">
     <service name="com.sun.star.comp.Oasis2OOoTransformer"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Writer.XMLAutotextEventsImporter">
+  <implementation name="com.sun.star.comp.Writer.XMLAutotextEventsImporter"
+      constructor="com_sun_star_comp_Writer_XMLAutotextEventsImporter_get_implementation">
     <service name="com.sun.star.comp.Writer.XMLAutotextEventsImporter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Writer.XMLContentImporter">
+  <implementation name="com.sun.star.comp.Writer.XMLContentImporter"
+      constructor="com_sun_star_comp_Writer_XMLContentImporter_get_implementation">
     <service name="com.sun.star.comp.Writer.XMLContentImporter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Writer.XMLImporter">
+  <implementation name="com.sun.star.comp.Writer.XMLImporter"
+      constructor="com_sun_star_comp_Writer_XMLImporter_get_implementation">
     <service name="com.sun.star.comp.Writer.XMLImporter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Writer.XMLMetaImporter">
+  <implementation name="com.sun.star.comp.Writer.XMLMetaImporter"
+      constructor="com_sun_star_comp_Writer_XMLMetaImporter_get_implementation">
     <service name="com.sun.star.comp.Writer.XMLMetaImporter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Writer.XMLSettingsImporter">
+  <implementation name="com.sun.star.comp.Writer.XMLSettingsImporter"
+      constructor="com_sun_star_comp_Writer_XMLSettingsImporter_get_implementation">
     <service name="com.sun.star.comp.Writer.XMLSettingsImporter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Writer.XMLStylesImporter">
+  <implementation name="com.sun.star.comp.Writer.XMLStylesImporter"
+      constructor="com_sun_star_comp_Writer_XMLStylesImporter_get_implementation">
     <service name="com.sun.star.comp.Writer.XMLStylesImporter"/>
   </implementation>
-  <implementation name="com.sun.star.document.XMLMetaImporter">
+  <implementation name="com.sun.star.document.XMLMetaImporter"
+      constructor="com_sun_star_document_XMLMetaImporter_get_implementation">
     <service name="com.sun.star.document.XMLMetaImporter"/>
   </implementation>
 </component>
