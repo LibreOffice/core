@@ -382,7 +382,7 @@ sal_uInt64 XclExpStream::SetSvStreamPos(sal_uInt64 const nPos)
 
 void XclExpStream::InitRecord( sal_uInt16 nRecId )
 {
-    OSL_ENSURE( mrStrm.remainingSize() == 0, "XclExpStream::InitRecord - not in end position" );
+    assert(mrStrm.remainingSize() == 0);    // stream must be at end position
     mrStrm.WriteUInt16( nRecId );
 
     mnLastSizePos = mrStrm.Tell();
