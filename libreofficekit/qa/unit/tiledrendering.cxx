@@ -16,11 +16,6 @@
 #include <string>
 #include <stdio.h>
 
-#include <sal/types.h>
-#include <tools/stream.hxx>
-#include <vcl/salbtype.hxx>
-#include <vcl/bmpacc.hxx>
-#include <vcl/pngwrite.hxx>
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
 

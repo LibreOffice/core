@@ -11,7 +11,7 @@ $(eval $(call gb_Module_Module,libreofficekit))
 
 ifeq ($(OS),LINUX)
 
-$(eval $(call gb_Module_add_slowcheck_targets,libreofficekit,\
+$(eval $(call gb_Module_add_subsequentcheck_targets,libreofficekit,\
     CppunitTest_libreofficekit_tiledrendering \
 ))
 

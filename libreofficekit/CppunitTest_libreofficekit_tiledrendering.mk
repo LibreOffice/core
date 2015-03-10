@@ -21,11 +21,7 @@ $(eval $(call gb_CppunitTest_use_external,libreofficekit_tiledrendering,boost_he
 # our test specifically tests LOK only functionality which would otherwise not
 # require any normal LO api/libraries.
 $(eval $(call gb_CppunitTest_use_libraries,libreofficekit_tiledrendering, \
-	cppu \
 	sal \
-	tl \
-	test \
-	vcl \
 	$(gb_UWINAPI) \
 ))
 
@@ -36,13 +32,6 @@ $(eval $(call gb_CppunitTest_add_libs,libreofficekit_tiledrendering,\
     -lpthread \
 ))
 endif
-
-$(eval $(call gb_CppunitTest_use_sdk_api,libreofficekit_tiledrendering))
-
-$(eval $(call gb_CppunitTest_use_ure,libreofficekit_tiledrendering))
-
-# Depend on ~everything, as tiled rendering can use most parts of LO.
-$(eval $(call gb_CppunitTest_use_rdb,libreofficekit_tiledrendering,services))
 
 $(eval $(call gb_CppunitTest_use_configuration,libreofficekit_tiledrendering))
 
