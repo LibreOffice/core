@@ -646,8 +646,11 @@ void AquaSalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
             {
                 // this cause crashes on MacOSX 10.4
                 // [AquaSalTimer::pRunningTimer fire];
-                bool idle = true; // TODO
-                ImplGetSVData()->mpSalTimer->CallCallback( idle );
+                if (ImplGetSVData()->mpSalTimer != nullptr)
+                {
+                    bool idle = true; // TODO
+                    ImplGetSVData()->mpSalTimer->CallCallback( idle );
+                }
             }
         }
 

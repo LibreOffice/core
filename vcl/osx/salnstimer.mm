@@ -32,9 +32,9 @@
     ImplSVData* pSVData = ImplGetSVData();
     if( AquaSalTimer::bDispatchTimer )
     {
+        YIELD_GUARD;
         if( pSVData->mpSalTimer )
         {
-            YIELD_GUARD;
             bool idle = true; // TODO
             pSVData->mpSalTimer->CallCallback( idle );
             
