@@ -67,18 +67,15 @@ void ContourWindow::SetPolyPolygon( const tools::PolyPolygon& rPolyPoly )
         aPolyPolygon.append(aPolyPoly[ i ].getB2DPolygon());
         SdrPathObj* pPathObj = new SdrPathObj( OBJ_PATHFILL, aPolyPolygon );
 
-        if ( pPathObj )
-        {
-            SfxItemSet aSet( pModel->GetItemPool() );
+        SfxItemSet aSet( pModel->GetItemPool() );
 
-            aSet.Put( XFillStyleItem( drawing::FillStyle_SOLID ) );
-            aSet.Put( XFillColorItem( "", TRANSCOL ) );
-            aSet.Put( XFillTransparenceItem( 50 ) );
+        aSet.Put( XFillStyleItem( drawing::FillStyle_SOLID ) );
+        aSet.Put( XFillColorItem( "", TRANSCOL ) );
+        aSet.Put( XFillTransparenceItem( 50 ) );
 
-            pPathObj->SetMergedItemSetAndBroadcast(aSet);
+        pPathObj->SetMergedItemSetAndBroadcast(aSet);
 
-            pPage->InsertObject( pPathObj );
-        }
+        pPage->InsertObject( pPathObj );
     }
 
     if ( nPolyCount )

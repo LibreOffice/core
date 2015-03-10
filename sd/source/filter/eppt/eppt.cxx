@@ -1453,17 +1453,10 @@ extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL ExportPPT( const std::vector< 
                         ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator > & rXStatInd,
                             SvMemoryStream* pVBA, sal_uInt32 nCnvrtFlags )
 {
-    PPTWriter*  pPPTWriter;
-    bool bStatus = false;
-
-    pPPTWriter = new PPTWriter( rSvStorage, rXModel, rXStatInd, pVBA, nCnvrtFlags );
-    if ( pPPTWriter )
-    {
-        pPPTWriter->exportPPT(rMediaData);
-        bStatus = pPPTWriter->IsValid();
-        delete pPPTWriter;
-    }
-
+    PPTWriter* pPPTWriter = new PPTWriter( rSvStorage, rXModel, rXStatInd, pVBA, nCnvrtFlags );
+    pPPTWriter->exportPPT(rMediaData);
+    bool bStatus = pPPTWriter->IsValid();
+    delete pPPTWriter;
     return bStatus;
 }
 
@@ -1486,14 +1479,11 @@ extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL SaveVBA( SfxObjectShell& rDocS
                 if ( nLen )
                 {
                     char* pTemp = new char[ nLen ];
-                    if ( pTemp )
-                    {
-                        xTemp->Seek( STREAM_SEEK_TO_BEGIN );
-                        xTemp->Read( pTemp, nLen );
-                        pBas = new SvMemoryStream( pTemp, nLen, StreamMode::READ );
-                        pBas->ObjectOwnsMemory( true );
-                        return true;
-                    }
+                    xTemp->Seek( STREAM_SEEK_TO_BEGIN );
+                    xTemp->Read( pTemp, nLen );
+                    pBas = new SvMemoryStream( pTemp, nLen, StreamMode::READ );
+                    pBas->ObjectOwnsMemory( true );
+                    return true;
                 }
             }
         }

@@ -140,20 +140,15 @@ ScNotesChildren::~ScNotesChildren()
 
 ::accessibility::AccessibleTextHelper* ScNotesChildren::CreateTextHelper(const OUString& rString, const Rectangle& rVisRect, const ScAddress& aCellPos, bool bMarkNote, sal_Int32 nChildOffset) const
 {
-    ::accessibility::AccessibleTextHelper* pTextHelper = NULL;
-
     ::std::unique_ptr < ScAccessibleTextData > pAccessiblePreviewHeaderCellTextData
         (new ScAccessibleNoteTextData(mpViewShell, rString, aCellPos, bMarkNote));
     ::std::unique_ptr< SvxEditSource > pEditSource (new ScAccessibilityEditSource(std::move(pAccessiblePreviewHeaderCellTextData)));
 
-    pTextHelper = new ::accessibility::AccessibleTextHelper(std::move(pEditSource));
+    ::accessibility::AccessibleTextHelper* pTextHelper = new ::accessibility::AccessibleTextHelper(std::move(pEditSource));
 
-    if (pTextHelper)
-    {
-        pTextHelper->SetEventSource(mpAccDoc);
-        pTextHelper->SetStartIndex(nChildOffset);
-        pTextHelper->SetOffset(rVisRect.TopLeft());
-    }
+    pTextHelper->SetEventSource(mpAccDoc);
+    pTextHelper->SetStartIndex(nChildOffset);
+    pTextHelper->SetOffset(rVisRect.TopLeft());
 
     return pTextHelper;
 }

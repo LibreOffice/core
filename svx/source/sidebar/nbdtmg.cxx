@@ -524,7 +524,7 @@ GraphyicBulletsTypeMgr::GraphyicBulletsTypeMgr(const GraphyicBulletsTypeMgr& aTy
     {
         GrfBulDataRelation* pEntry = new GrfBulDataRelation(eNBType::GRAPHICBULLETS);
         GrfBulDataRelation* pSrcEntry = aTypeMgr.aGrfDataLst[i];
-        if ( pEntry && pSrcEntry)
+        if (pSrcEntry)
         {
             pEntry->bIsCustomized = pSrcEntry->bIsCustomized;
             pEntry->nTabIndex = pSrcEntry->nTabIndex;

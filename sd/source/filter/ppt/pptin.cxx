@@ -853,8 +853,7 @@ bool ImplSdPPTImport::Import()
                 }
             }
         }
-        if( pStbMgr )
-            pStbMgr->SetState( nImportedPages++ );
+        pStbMgr->SetState( nImportedPages++ );
     }
 
     // importing slide pages
@@ -984,8 +983,7 @@ bool ImplSdPPTImport::Import()
                         static_cast<SdrPageObj*>(pPageObj)->SetReferencedPage(pSdrModel->GetPage(( nPage << 1 ) + 1));
                 }
 
-                if( pStbMgr )
-                    pStbMgr->SetState( nImportedPages++ );
+                pStbMgr->SetState( nImportedPages++ );
             }
         }
         else
@@ -1257,30 +1255,27 @@ bool ImplSdPPTImport::Import()
                                 if ( pList )
                                 {
                                     SdCustomShow* pSdCustomShow = new SdCustomShow( mpDoc );
-                                    if ( pSdCustomShow )
+                                    pSdCustomShow->SetName( aCuShow );
+                                    sal_uInt32 nFound = 0;
+                                    for ( sal_uInt32 nS = 0; nS < nSCount; nS++ )
                                     {
-                                        pSdCustomShow->SetName( aCuShow );
-                                        sal_uInt32 nFound = 0;
-                                        for ( sal_uInt32 nS = 0; nS < nSCount; nS++ )
+                                        sal_uInt32 nPageNumber;
+                                        rStCtrl.ReadUInt32( nPageNumber );
+                                        sal_uInt16 nPage = pPageList->FindPage( nPageNumber );
+                                        if ( nPage != PPTSLIDEPERSIST_ENTRY_NOTFOUND )
                                         {
-                                            sal_uInt32 nPageNumber;
-                                            rStCtrl.ReadUInt32( nPageNumber );
-                                            sal_uInt16 nPage = pPageList->FindPage( nPageNumber );
-                                            if ( nPage != PPTSLIDEPERSIST_ENTRY_NOTFOUND )
+                                            SdPage* pPage = mpDoc->GetSdPage( nPage, PK_STANDARD );
+                                            if ( pPage )
                                             {
-                                                SdPage* pPage = mpDoc->GetSdPage( nPage, PK_STANDARD );
-                                                if ( pPage )
-                                                {
-                                                    pSdCustomShow->PagesVector().push_back( pPage );
-                                                    nFound++;
-                                                }
+                                                pSdCustomShow->PagesVector().push_back( pPage );
+                                                nFound++;
                                             }
                                         }
-                                        if ( nFound )
-                                            pList->push_back( pSdCustomShow );
-                                        else
-                                            delete pSdCustomShow;
                                     }
+                                    if ( nFound )
+                                        pList->push_back( pSdCustomShow );
+                                    else
+                                        delete pSdCustomShow;
                                 }
                             }
                         }

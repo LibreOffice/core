@@ -124,7 +124,7 @@ svt::OWizardPage* CreationWizard::createPage(WizardState nState)
         ChartTypeTabPage* pChartTypeTabPage = new ChartTypeTabPage(this,m_xChartModel,m_xCC,bDoLiveUpdate);
         pRet  = pChartTypeTabPage;
         m_pTemplateProvider = pChartTypeTabPage;
-        if (m_pTemplateProvider && m_pDialogModel)
+        if (m_pDialogModel)
             m_pDialogModel->setTemplate( m_pTemplateProvider->getCurrentTemplate());
         }
         break;

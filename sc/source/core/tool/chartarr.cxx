@@ -39,14 +39,11 @@ ScMemChart::ScMemChart(SCCOL nCols, SCROW nRows)
     nColCnt = nCols;
     pData   = new double[nColCnt * nRowCnt];
 
-    if (pData)
-    {
-        double *pFill = pData;
+    double *pFill = pData;
 
-        for (SCCOL i = 0; i < nColCnt; i++)
-            for (SCROW j = 0; j < nRowCnt; j++)
-                *(pFill ++) = 0.0;
-    }
+    for (SCCOL i = 0; i < nColCnt; i++)
+        for (SCROW j = 0; j < nRowCnt; j++)
+            *(pFill ++) = 0.0;
 
     pColText = new OUString[nColCnt];
     pRowText = new OUString[nRowCnt];
@@ -238,71 +235,69 @@ ScMemChart* ScChartArray::CreateMemChartSingle()
 
     //  Data
     ScMemChart* pMemChart = new ScMemChart( nColCount, nRowCount );
-    if (pMemChart)
+
+    if ( bValidData )
     {
-        if ( bValidData )
-        {
-            bool bCalcAsShown = pDocument->GetDocOptions().IsCalcAsShown();
-            for (nCol=0; nCol<nColCount; nCol++)
-            {
-                for (nRow=0; nRow<nRowCount; nRow++)
-                {
-                    // DBL_MIN is a Hack for Chart to recognize empty cells.
-                    ScAddress aPos(aCols[nCol], aRows[nRow], nTab1);
-                    double nVal = getCellValue(*pDocument, aPos, DBL_MIN, bCalcAsShown);
-                    pMemChart->SetData(nCol, nRow, nVal);
-                }
-            }
-        }
-        else
-        {
-            // Flag marking data as invalid?
-            for (nCol=0; nCol<nColCount; nCol++)
-                for (nRow=0; nRow<nRowCount; nRow++)
-                    pMemChart->SetData( nCol, nRow, DBL_MIN );
-        }
-
-        //  Column Header
-
+        bool bCalcAsShown = pDocument->GetDocOptions().IsCalcAsShown();
         for (nCol=0; nCol<nColCount; nCol++)
         {
-            OUString aString;
-            if (HasColHeaders())
-                aString = pDocument->GetString(aCols[nCol], nStrRow, nTab1);
-            if (aString.isEmpty())
+            for (nRow=0; nRow<nRowCount; nRow++)
             {
-                OUStringBuffer aBuf;
-                aBuf.append(ScGlobal::GetRscString(STR_COLUMN));
-                aBuf.append(' ');
-
-                ScAddress aPos( aCols[ nCol ], 0, 0 );
-                aBuf.append(aPos.Format(SCA_VALID_COL, NULL));
-
-                aString = aBuf.makeStringAndClear();
+                // DBL_MIN is a Hack for Chart to recognize empty cells.
+                ScAddress aPos(aCols[nCol], aRows[nRow], nTab1);
+                double nVal = getCellValue(*pDocument, aPos, DBL_MIN, bCalcAsShown);
+                pMemChart->SetData(nCol, nRow, nVal);
             }
-            pMemChart->SetColText( nCol, aString);
         }
+    }
+    else
+    {
+        // Flag marking data as invalid?
+        for (nCol=0; nCol<nColCount; nCol++)
+            for (nRow=0; nRow<nRowCount; nRow++)
+                pMemChart->SetData( nCol, nRow, DBL_MIN );
+    }
 
-        //  Row Header
+    //  Column Header
 
-        for (nRow=0; nRow<nRowCount; nRow++)
+    for (nCol=0; nCol<nColCount; nCol++)
+    {
+        OUString aString;
+        if (HasColHeaders())
+            aString = pDocument->GetString(aCols[nCol], nStrRow, nTab1);
+        if (aString.isEmpty())
         {
-            OUString aString;
-            if (HasRowHeaders())
-            {
-                ScAddress aAddr( nStrCol, aRows[nRow], nTab1 );
-                aString = pDocument->GetString(nStrCol, aRows[nRow], nTab1);
-            }
-            if (aString.isEmpty())
-            {
-                OUStringBuffer aBuf;
-                aBuf.append(ScGlobal::GetRscString(STR_ROW));
-                aBuf.append(' ');
-                aBuf.append(static_cast<sal_Int32>(aRows[nRow]+1));
-                aString = aBuf.makeStringAndClear();
-            }
-            pMemChart->SetRowText( nRow, aString);
+            OUStringBuffer aBuf;
+            aBuf.append(ScGlobal::GetRscString(STR_COLUMN));
+            aBuf.append(' ');
+
+            ScAddress aPos( aCols[ nCol ], 0, 0 );
+            aBuf.append(aPos.Format(SCA_VALID_COL, NULL));
+
+            aString = aBuf.makeStringAndClear();
         }
+        pMemChart->SetColText( nCol, aString);
+    }
+
+    //  Row Header
+
+    for (nRow=0; nRow<nRowCount; nRow++)
+    {
+        OUString aString;
+        if (HasRowHeaders())
+        {
+            ScAddress aAddr( nStrCol, aRows[nRow], nTab1 );
+            aString = pDocument->GetString(nStrCol, aRows[nRow], nTab1);
+        }
+        if (aString.isEmpty())
+        {
+            OUStringBuffer aBuf;
+            aBuf.append(ScGlobal::GetRscString(STR_ROW));
+            aBuf.append(' ');
+            aBuf.append(static_cast<sal_Int32>(aRows[nRow]+1));
+            aString = aBuf.makeStringAndClear();
+        }
+        pMemChart->SetRowText( nRow, aString);
     }
 
     return pMemChart;
@@ -334,29 +329,14 @@ ScMemChart* ScChartArray::CreateMemChartMulti()
 
     //  Data
     ScMemChart* pMemChart = new ScMemChart( nColCount, nRowCount );
-    if (pMemChart)
-    {
-        SCSIZE nCol = 0;
-        SCSIZE nRow = 0;
-        bool bCalcAsShown = pDocument->GetDocOptions().IsCalcAsShown();
-        sal_uLong nIndex = 0;
-        if (bValidData)
-        {
-            for ( nCol = 0; nCol < nColCount; nCol++ )
-            {
-                for ( nRow = 0; nRow < nRowCount; nRow++, nIndex++ )
-                {
-                    double nVal = DBL_MIN; // Hack for Chart to recognize empty cells
-                    const ScAddress* pPos = GetPositionMap()->GetPosition( nIndex );
-                    if (pPos)
-                        // otherwise: Gap
-                        nVal = getCellValue(*pDocument, *pPos, DBL_MIN, bCalcAsShown);
 
-                    pMemChart->SetData(nCol, nRow, nVal);
-                }
-            }
-        }
-        else
+    SCSIZE nCol = 0;
+    SCSIZE nRow = 0;
+    bool bCalcAsShown = pDocument->GetDocOptions().IsCalcAsShown();
+    sal_uLong nIndex = 0;
+    if (bValidData)
+    {
+        for ( nCol = 0; nCol < nColCount; nCol++ )
         {
             for ( nRow = 0; nRow < nRowCount; nRow++, nIndex++ )
             {
@@ -369,57 +349,70 @@ ScMemChart* ScChartArray::CreateMemChartMulti()
                 pMemChart->SetData(nCol, nRow, nVal);
             }
         }
-
-        //TODO: Label when gaps
-
-        //  Column header
-
-        SCCOL nPosCol = 0;
-        for ( nCol = 0; nCol < nColCount; nCol++ )
+    }
+    else
+    {
+        for ( nRow = 0; nRow < nRowCount; nRow++, nIndex++ )
         {
-            OUString aString;
-            const ScAddress* pPos = GetPositionMap()->GetColHeaderPosition( static_cast<SCCOL>(nCol) );
-            if ( HasColHeaders() && pPos )
-                aString = pDocument->GetString(pPos->Col(), pPos->Row(), pPos->Tab());
+            double nVal = DBL_MIN; // Hack for Chart to recognize empty cells
+            const ScAddress* pPos = GetPositionMap()->GetPosition( nIndex );
+            if (pPos)
+                // otherwise: Gap
+                nVal = getCellValue(*pDocument, *pPos, DBL_MIN, bCalcAsShown);
 
-            if (aString.isEmpty())
-            {
-                OUStringBuffer aBuf(ScGlobal::GetRscString(STR_COLUMN));
-                aBuf.append(' ');
-                if ( pPos )
-                    nPosCol = pPos->Col() + 1;
-                else
-                    nPosCol++;
-                ScAddress aPos( nPosCol - 1, 0, 0 );
-                aBuf.append(aPos.Format(SCA_VALID_COL, NULL));
-                aString = aBuf.makeStringAndClear();
-            }
-            pMemChart->SetColText( nCol, aString);
+            pMemChart->SetData(nCol, nRow, nVal);
         }
+    }
 
-        //  Row header
+    //TODO: Label when gaps
 
-        SCROW nPosRow = 0;
-        for ( nRow = 0; nRow < nRowCount; nRow++ )
+    //  Column header
+
+    SCCOL nPosCol = 0;
+    for ( nCol = 0; nCol < nColCount; nCol++ )
+    {
+        OUString aString;
+        const ScAddress* pPos = GetPositionMap()->GetColHeaderPosition( static_cast<SCCOL>(nCol) );
+        if ( HasColHeaders() && pPos )
+            aString = pDocument->GetString(pPos->Col(), pPos->Row(), pPos->Tab());
+
+        if (aString.isEmpty())
         {
-            OUString aString;
-            const ScAddress* pPos = GetPositionMap()->GetRowHeaderPosition( nRow );
-            if ( HasRowHeaders() && pPos )
-                aString = pDocument->GetString(pPos->Col(), pPos->Row(), pPos->Tab());
-
-            if (aString.isEmpty())
-            {
-                OUStringBuffer aBuf(ScGlobal::GetRscString(STR_ROW));
-                aBuf.append(' ');
-                if ( pPos )
-                    nPosRow = pPos->Row() + 1;
-                else
-                    nPosRow++;
-                aBuf.append(static_cast<sal_Int32>(nPosRow));
-                aString = aBuf.makeStringAndClear();
-            }
-            pMemChart->SetRowText( nRow, aString);
+            OUStringBuffer aBuf(ScGlobal::GetRscString(STR_COLUMN));
+            aBuf.append(' ');
+            if ( pPos )
+                nPosCol = pPos->Col() + 1;
+            else
+                nPosCol++;
+            ScAddress aPos( nPosCol - 1, 0, 0 );
+            aBuf.append(aPos.Format(SCA_VALID_COL, NULL));
+            aString = aBuf.makeStringAndClear();
         }
+        pMemChart->SetColText( nCol, aString);
+    }
+
+    //  Row header
+
+    SCROW nPosRow = 0;
+    for ( nRow = 0; nRow < nRowCount; nRow++ )
+    {
+        OUString aString;
+        const ScAddress* pPos = GetPositionMap()->GetRowHeaderPosition( nRow );
+        if ( HasRowHeaders() && pPos )
+            aString = pDocument->GetString(pPos->Col(), pPos->Row(), pPos->Tab());
+
+        if (aString.isEmpty())
+        {
+            OUStringBuffer aBuf(ScGlobal::GetRscString(STR_ROW));
+            aBuf.append(' ');
+            if ( pPos )
+                nPosRow = pPos->Row() + 1;
+            else
+                nPosRow++;
+            aBuf.append(static_cast<sal_Int32>(nPosRow));
+            aString = aBuf.makeStringAndClear();
+        }
+        pMemChart->SetRowText( nRow, aString);
     }
 
     return pMemChart;

@@ -1195,7 +1195,7 @@ uno::Reference<XAccessibleRelationSet> ScChildrenShapes::GetRelationSet(const Sc
 {
     utl::AccessibleRelationSetHelper* pRelationSet = new utl::AccessibleRelationSetHelper();
 
-    if(pData && pRelationSet && mpAccessibleDocument)
+    if (pData && mpAccessibleDocument)
     {
         uno::Reference<XAccessible> xAccessible = mpAccessibleDocument->GetAccessibleSpreadsheet(); // should be the current table
         if (pData->pRelationCell && xAccessible.is())

@@ -4415,16 +4415,12 @@ sal_uLong ScChangeTrack::AddLoadedGenerated(
     const ScCellValue& rNewCell, const ScBigRange& aBigRange, const OUString& sNewValue )
 {
     ScChangeActionContent* pAct = new ScChangeActionContent( --nGeneratedMin, rNewCell, aBigRange, pDoc, sNewValue );
-    if ( pAct )
-    {
-        if ( pFirstGeneratedDelContent )
-            pFirstGeneratedDelContent->pPrev = pAct;
-        pAct->pNext = pFirstGeneratedDelContent;
-        pFirstGeneratedDelContent = pAct;
-        aGeneratedMap.insert( ::std::make_pair( pAct->GetActionNumber(), pAct ) );
-        return pAct->GetActionNumber();
-    }
-    return 0;
+    if ( pFirstGeneratedDelContent )
+        pFirstGeneratedDelContent->pPrev = pAct;
+    pAct->pNext = pFirstGeneratedDelContent;
+    pFirstGeneratedDelContent = pAct;
+    aGeneratedMap.insert( ::std::make_pair( pAct->GetActionNumber(), pAct ) );
+    return pAct->GetActionNumber();
 }
 
 void ScChangeTrack::AppendCloned( ScChangeAction* pAppend )

@@ -205,10 +205,8 @@ namespace svxform
         }
         OXFormsTransferable *pTransferable = new OXFormsTransferable(desc);
         Reference< XTransferable > xEnsureDelete = pTransferable;
-        if(pTransferable) {
-            EndSelection();
-            pTransferable->StartDrag( this, DND_ACTION_COPY );
-        }
+        EndSelection();
+        pTransferable->StartDrag( this, DND_ACTION_COPY );
     }
 
     PopupMenu* DataTreeListBox::CreateContextMenu()

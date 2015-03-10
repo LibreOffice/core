@@ -553,18 +553,12 @@ sal_Bool SAL_CALL ChartController::attachModel( const uno::Reference< frame::XMo
     m_aDispatchContainer.setChartDispatch( pDispatch, impl_getAvailableCommands() );
 
     DrawCommandDispatch* pDrawDispatch = new DrawCommandDispatch( m_xCC, this );
-    if ( pDrawDispatch )
-    {
-        pDrawDispatch->initialize();
-        m_aDispatchContainer.setDrawCommandDispatch( pDrawDispatch );
-    }
+    pDrawDispatch->initialize();
+    m_aDispatchContainer.setDrawCommandDispatch( pDrawDispatch );
 
     ShapeController* pShapeController = new ShapeController( m_xCC, this );
-    if ( pShapeController )
-    {
-        pShapeController->initialize();
-        m_aDispatchContainer.setShapeController( pShapeController );
-    }
+    pShapeController->initialize();
+    m_aDispatchContainer.setShapeController( pShapeController );
     aGuard.clear();
 
 #ifdef TEST_ENABLE_MODIFY_LISTENER

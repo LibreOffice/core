@@ -3465,11 +3465,8 @@ void ScXMLExport::ExportShape(const uno::Reference < drawing::XShape >& xShape, 
                                     {
                                         bIsChart = true;
                                         SvXMLAttributeList* pAttrList = new SvXMLAttributeList();
-                                        if ( pAttrList )
-                                        {
-                                            pAttrList->AddAttribute(
-                                                GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_DRAW, GetXMLToken( XML_NOTIFY_ON_UPDATE_OF_RANGES ) ), sRanges );
-                                        }
+                                        pAttrList->AddAttribute(
+                                            GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_DRAW, GetXMLToken( XML_NOTIFY_ON_UPDATE_OF_RANGES ) ), sRanges );
                                         GetShapeExport()->exportShape( xShape, XMLShapeExportFlags::NO_CHART_DATA | SEF_DEFAULT, pPoint, pAttrList );
                                     }
                                 }

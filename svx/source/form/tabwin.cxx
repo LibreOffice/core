@@ -159,11 +159,8 @@ void FmFieldWinListBox::StartDrag( sal_Int8 /*_nAction*/, const Point& /*_rPosPi
         aDescriptor, CTF_FIELD_DESCRIPTOR | CTF_CONTROL_EXCHANGE | CTF_COLUMN_DESCRIPTOR
     );
     Reference< XTransferable> xEnsureDelete = pTransferColumn;
-    if (pTransferColumn)
-    {
-        EndSelection();
-        pTransferColumn->StartDrag( this, DND_ACTION_COPY );
-    }
+    EndSelection();
+    pTransferColumn->StartDrag( this, DND_ACTION_COPY );
 }
 
 FmFieldWinData::FmFieldWinData()

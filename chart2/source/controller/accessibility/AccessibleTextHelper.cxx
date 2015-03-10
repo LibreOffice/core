@@ -80,8 +80,7 @@ void SAL_CALL AccessibleTextHelper::initialize( const Sequence< uno::Any >& aArg
 
     SolarMutexGuard aSolarGuard;
 
-    if( m_pTextHelper )
-        delete m_pTextHelper;
+    delete m_pTextHelper;
 
     vcl::Window* pWindow( VCLUnoHelper::GetWindow( xWindow ));
     if( pWindow )
@@ -93,10 +92,8 @@ void SAL_CALL AccessibleTextHelper::initialize( const Sequence< uno::Any >& aArg
             if( pTextObj )
             {
                 std::unique_ptr<SvxEditSource> pEditSource(new SvxTextEditSource( *pTextObj, 0, *pView, *pWindow ));
-                m_pTextHelper = new ::accessibility::AccessibleTextHelper(
-                    std::move(pEditSource));
-                if( m_pTextHelper )
-                    m_pTextHelper->SetEventSource( xEventSource );
+                m_pTextHelper = new ::accessibility::AccessibleTextHelper(std::move(pEditSource));
+                m_pTextHelper->SetEventSource( xEventSource );
             }
         }
     }
