@@ -22,7 +22,7 @@
 #include <vcl/wrkwin.hxx>
 #include <vcl/morebtn.hxx>
 #include <vcl/msgbox.hxx>
-#include <vcl/idle.hxx>
+#include <vcl/timer.hxx>
 #include <svl/slstitm.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/style.hxx>
@@ -111,7 +111,7 @@ struct SearchDlg_Impl
     bool        bSaveToModule  : 1,
                 bFocusOnSearch : 1;
     sal_uInt16* pRanges;
-    Idle        aSelectionIdle;
+    Timer       aSelectionTimer;
 
     uno::Reference< frame::XDispatch > xCommand1Dispatch;
     uno::Reference< frame::XDispatch > xCommand2Dispatch;
@@ -365,8 +365,8 @@ void SvxSearchDialog::Construct_Impl()
 {
     // temporary to avoid incompatibility
     pImpl = new SearchDlg_Impl();
-    pImpl->aSelectionIdle.SetPriority( SchedulerPriority::LOWEST );
-    pImpl->aSelectionIdle.SetIdleHdl(
+    pImpl->aSelectionTimer.SetTimeout( 500 );
+    pImpl->aSelectionTimer.SetTimeoutHdl(
         LINK( this, SvxSearchDialog, TimeoutHdl_Impl ) );
     EnableControls_Impl( 0 );
 
@@ -409,7 +409,7 @@ void SvxSearchDialog::Construct_Impl()
         new SvxSearchController( SID_SEARCH_OPTIONS, rBindings, *this );
     rBindings.LeaveRegistrations();
     rBindings.GetDispatcher()->Execute( FID_SEARCH_ON, SfxCallMode::SLOT, ppArgs );
-    pImpl->aSelectionIdle.Start();
+    pImpl->aSelectionTimer.Start();
 
 
     SvtCJKOptions aCJKOptions;
