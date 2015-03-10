@@ -25,8 +25,7 @@ typedef struct _LibreOfficeKitDocumentClass LibreOfficeKitDocumentClass;
 
 // Do we have an extended member in this struct ?
 #define LIBREOFFICEKIT_HAS_MEMBER(strct,member,nSize) \
-    ((((size_t)((unsigned char *)&((strct *) 0)->member) +  \
-      sizeof ((strct *) 0)->member)) <= (nSize))
+    (offsetof(strct, member) < (nSize))
 
 #define LIBREOFFICEKIT_HAS(pKit,member) LIBREOFFICEKIT_HAS_MEMBER(LibreOfficeKitClass,member,(pKit)->pClass->nSize)
 
