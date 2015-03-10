@@ -104,9 +104,14 @@ gboolean lcl_signalMotion(GtkWidget* pEventBox, GdkEventButton* pEvent, LOKDocVi
     {
         if (pDocView->m_bInDragGraphicHandles[i])
         {
-            g_info("lcl_signalButton: dragging the graphic handle #%d", i);
+            g_info("lcl_signalMotion: dragging the graphic handle #%d", i);
             return FALSE;
         }
+    }
+    if (pDocView->m_bInDragGraphicSelection)
+    {
+        g_info("lcl_signalMotion: dragging the graphic selection");
+        return FALSE;
     }
     return FALSE;
 }
