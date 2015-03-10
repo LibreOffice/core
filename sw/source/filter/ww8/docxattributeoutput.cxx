@@ -788,7 +788,7 @@ void DocxAttributeOutput::StartParagraphProperties()
 
 void DocxAttributeOutput::InitCollectedParagraphProperties()
 {
-    m_pParagraphSpacingAttrList = NULL;
+    m_pParagraphSpacingAttrList.reset(0);
 
     // Write the elements in the spec order
     static const sal_Int32 aOrder[] =
@@ -853,8 +853,7 @@ void DocxAttributeOutput::WriteCollectedParagraphProperties()
 
     if ( m_pParagraphSpacingAttrList )
     {
-        XFastAttributeListRef xAttrList( m_pParagraphSpacingAttrList );
-        m_pParagraphSpacingAttrList = NULL;
+        XFastAttributeListRef xAttrList( m_pParagraphSpacingAttrList.release() );
 
         m_pSerializer->singleElementNS( XML_w, XML_spacing, xAttrList );
     }
@@ -2390,9 +2389,8 @@ void DocxAttributeOutput::Redline( const SwRedlineData* pRedlineData)
                     // So we need to store the current status of these lists, so that we can revert back to them when
                     // we are done exporting the redline attributes.
                     ::sax_fastparser::FastAttributeList *pFlyAttrList_Original              = m_rExport.SdrExporter().getFlyAttrList();
-                    ::sax_fastparser::FastAttributeList *pParagraphSpacingAttrList_Original = m_pParagraphSpacingAttrList;
+                    std::unique_ptr<sax_fastparser::FastAttributeList> pParagraphSpacingAttrList_Original(m_pParagraphSpacingAttrList.release());
                     m_rExport.SdrExporter().setFlyAttrList(NULL);
-                    m_pParagraphSpacingAttrList = NULL;
 
                     // Output the redline item set
                     m_rExport.OutputItemSet( *pChangesSet, true, false, i18n::ScriptType::LATIN, m_rExport.mbExportModeRTF );
@@ -2402,7 +2400,7 @@ void DocxAttributeOutput::Redline( const SwRedlineData* pRedlineData)
 
                     // Revert back the original values that were stored in 'm_rExport.SdrExporter().getFlyAttrList()', 'm_pParagraphSpacingAttrList'
                     m_rExport.SdrExporter().setFlyAttrList(pFlyAttrList_Original);
-                    m_pParagraphSpacingAttrList = pParagraphSpacingAttrList_Original;
+                    m_pParagraphSpacingAttrList.reset(pParagraphSpacingAttrList_Original.release());
 
                     m_pSerializer->endElementNS( XML_w, XML_pPr );
 
@@ -8281,7 +8279,6 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
     : m_rExport( rExport ),
       m_pSerializer( pSerializer ),
       m_rDrawingML( *pDrawingML ),
-      m_pParagraphSpacingAttrList( NULL ),
       m_pHyperlinkAttrList( NULL ),
       m_bEndCharSdt(false),
       m_bStartedCharSdt(false),
@@ -8352,7 +8349,6 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
 
 DocxAttributeOutput::~DocxAttributeOutput()
 {
-    delete m_pParagraphSpacingAttrList, m_pParagraphSpacingAttrList = NULL;
     delete m_pHyperlinkAttrList, m_pHyperlinkAttrList = NULL;
     delete m_pColorAttrList, m_pColorAttrList = NULL;
     delete m_pBackgroundAttrList, m_pBackgroundAttrList = NULL;
