@@ -6884,7 +6884,7 @@ bool PDFWriterImpl::finalizeSignature()
         SECItem ts_cms_output;
         ts_cms_output.data = 0;
         ts_cms_output.len = 0;
-        PLArenaPool *ts_arena = PORT_NewArena(MAX_SIGNATURE_CONTENT_LENGTH);
+        PLArenaPool *ts_arena = PORT_NewArena(10000);
         NSSCMSEncoderContext *ts_cms_ecx;
         ts_cms_ecx = NSS_CMSEncoder_Start(ts_cms_msg, NULL, NULL, &ts_cms_output, ts_arena, PDFSigningPKCS7PasswordCallback, pass, NULL, NULL, NULL, NULL);
 
@@ -7163,7 +7163,7 @@ bool PDFWriterImpl::finalizeSignature()
     SECItem cms_output;
     cms_output.data = 0;
     cms_output.len = 0;
-    PLArenaPool *arena = PORT_NewArena(MAX_SIGNATURE_CONTENT_LENGTH);
+    PLArenaPool *arena = PORT_NewArena(10000);
     NSSCMSEncoderContext *cms_ecx;
 
     // Possibly it would work to even just pass NULL for the password callback function and its
@@ -7197,10 +7197,19 @@ bool PDFWriterImpl::finalizeSignature()
     }
 #endif
 
+    if (cms_output.len*2 > MAX_SIGNATURE_CONTENT_LENGTH)
+    {
+        SAL_WARN("vcl.pdfwriter", "Signature requires more space (" << cms_output.len*2 << ") than we reserved (" << MAX_SIGNATURE_CONTENT_LENGTH << ")");
+        NSS_CMSMessage_Destroy(cms_msg);
+        return false;
+    }
+
     OStringBuffer cms_hexbuffer;
 
     for (unsigned int i = 0; i < cms_output.len ; i++)
         appendHex(cms_output.data[i], cms_hexbuffer);
+
+    assert(cms_hexbuffer.getLength() <= MAX_SIGNATURE_CONTENT_LENGTH);
 
     // Set file pointer to the m_nSignatureContentOffset, we're ready to overwrite PKCS7 object
     nWritten = 0;
@@ -7353,15 +7362,6 @@ bool PDFWriterImpl::finalizeSignature()
         if (!CryptMsgGetParam(hMsg, CMSG_BARE_CONTENT_PARAM, 0, NULL, &nTsSigLen))
         {
             SAL_WARN("vcl.pdfwriter", "CryptMsgGetParam(CMSG_BARE_CONTENT_PARAM) failed: " << WindowsError(GetLastError()));
-            CryptMsgClose(hDecodedMsg);
-            CryptMsgClose(hMsg);
-            CertFreeCertificateContext(pCertContext);
-            return false;
-        }
-
-        if (nTsSigLen*2 > MAX_SIGNATURE_CONTENT_LENGTH)
-        {
-            SAL_WARN("vcl.pdfwriter", "Signature requires more space (" << nTsSigLen*2 << ") than we reserved (" << MAX_SIGNATURE_CONTENT_LENGTH << ")");
             CryptMsgClose(hDecodedMsg);
             CryptMsgClose(hMsg);
             CertFreeCertificateContext(pCertContext);
