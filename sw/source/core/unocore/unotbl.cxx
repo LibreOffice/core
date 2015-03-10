@@ -1854,7 +1854,7 @@ void SwXTextTableCursor::setPropertyValue(const OUString& rPropertyName, const u
                         m_pPropSet->setPropertyValue(*pEntry, aValue, aItemSet);
                     }
                     SwUnoCursorHelper::SetCrsrAttr(rTblCrsr.GetSelRing(),
-                            aItemSet, nsSetAttrMode::SETATTR_DEFAULT, true);
+                            aItemSet, SetAttrMode::DEFAULT, true);
                 }
             }
         }
@@ -4018,7 +4018,7 @@ void SwXCellRange::setPropertyValue(const OUString& rPropertyName, const uno::An
                         m_pPropSet->setPropertyValue(*pEntry, aValue, aItemSet);
                     }
                     SwUnoCursorHelper::SetCrsrAttr(rCrsr.GetSelRing(),
-                            aItemSet, nsSetAttrMode::SETATTR_DEFAULT, true);
+                            aItemSet, SetAttrMode::DEFAULT, true);
                 }
             }
         }

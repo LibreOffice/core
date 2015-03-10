@@ -1566,7 +1566,7 @@ void SwWrtShell::AutoUpdatePara(SwTxtFmtColl* pColl, const SfxItemSet& rStyleSet
     if(bReset)
     {
         ResetAttr( std::set<sal_uInt16>(), pCrsr );
-        SetAttrSet(aCoreSet, 0, pCrsr);
+        SetAttrSet(aCoreSet, SetAttrMode::DEFAULT, pCrsr);
     }
     mpDoc->ChgFmt(*pColl, rStyleSet );
     EndAction();

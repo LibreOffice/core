@@ -27,6 +27,7 @@
 #include <com/sun/star/uno/Reference.h>
 #include "swdllapi.h"
 #include <i18nlangtag/languagetag.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace linguistic2{
@@ -172,28 +173,30 @@ const sal_Unicode cSequenceMarkSeparator = '!';
 
 #define DB_DELIM ((sal_Unicode)0xff)        // Database <-> table separator.
 
-typedef sal_uInt16 SetAttrMode;
-
-namespace nsSetAttrMode
+enum class SetAttrMode
 {
-    const SetAttrMode SETATTR_DEFAULT        = 0x0000;  // Default.
+    DEFAULT         = 0x0000,  // Default.
     /// @attention: DONTEXPAND does not work very well for CHARATR
     ///             because it can expand only the whole AUTOFMT or nothing
-    const SetAttrMode SETATTR_DONTEXPAND     = 0x0001;  // Don't expand text attribute any further.
-    const SetAttrMode SETATTR_DONTREPLACE    = 0x0002;  // Don't replace another text attribute.
+    DONTEXPAND      = 0x0001,  // Don't expand text attribute any further.
+    DONTREPLACE     = 0x0002,  // Don't replace another text attribute.
 
-    const SetAttrMode SETATTR_NOTXTATRCHR    = 0x0004;  // Don't insert 0xFF at attributes with no end.
+    NOTXTATRCHR     = 0x0004,  // Don't insert 0xFF at attributes with no end.
     /// attention: NOHINTADJUST prevents MergePortions!
     /// when using this need to pay attention to ignore start/end flags of hint
-    const SetAttrMode SETATTR_NOHINTADJUST   = 0x0008;  // No merging of ranges.
-    const SetAttrMode SETATTR_NOFORMATATTR   = 0x0010;  // Do not change into format attribute.
-    const SetAttrMode SETATTR_DONTCHGNUMRULE = 0x0020;  // Do not change NumRule.
-    const SetAttrMode SETATTR_APICALL        = 0x0040;  // Called from API (all UI related
+    NOHINTADJUST    = 0x0008,  // No merging of ranges.
+    NOFORMATATTR    = 0x0010,  // Do not change into format attribute.
+    DONTCHGNUMRULE  = 0x0020,  // Do not change NumRule.
+    APICALL         = 0x0040,  // Called from API (all UI related
                                                         // functionality will be disabled).
     /// Force hint expand (only matters for hints with CH_TXTATR).
-    const SetAttrMode SETATTR_FORCEHINTEXPAND= 0x0080;
+    FORCEHINTEXPAND = 0x0080,
     /// The inserted item is a copy -- intended for use in ndtxt.cxx.
-    const SetAttrMode SETATTR_IS_COPY        = 0x0100;
+    IS_COPY         = 0x0100
+};
+namespace o3tl
+{
+    template<> struct typed_flags<SetAttrMode> : is_typed_flags<SetAttrMode, 0x1ff> {};
 }
 
 #define SW_ISPRINTABLE( c ) ( c >= ' ' && 127 != c )

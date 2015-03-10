@@ -1172,13 +1172,13 @@ void SwEditShell::ApplyChangedSentence(const ::svx::SpellPortions& rNewPortions,
                     mpDoc->getIDocumentContentOperations().DeleteAndJoin(*pCrsr);
                     // ... and apply language if necessary
                     if(aCurrentNewPortion->eLanguage != aCurrentOldPortion->eLanguage)
-                        SetAttrItem( SvxLanguageItem(aCurrentNewPortion->eLanguage, nLangWhichId), nLangWhichId );
+                        SetAttrItem( SvxLanguageItem(aCurrentNewPortion->eLanguage, nLangWhichId) );
                     mpDoc->getIDocumentContentOperations().InsertString(*pCrsr, aCurrentNewPortion->sText);
                 }
                 else if(aCurrentNewPortion->eLanguage != aCurrentOldPortion->eLanguage)
                 {
                     // apply language
-                    SetAttrItem( SvxLanguageItem(aCurrentNewPortion->eLanguage, nLangWhichId), nLangWhichId );
+                    SetAttrItem( SvxLanguageItem(aCurrentNewPortion->eLanguage, nLangWhichId) );
                 }
                 else if( aCurrentNewPortion->bIgnoreThisError )
                 {

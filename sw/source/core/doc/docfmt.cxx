@@ -424,7 +424,7 @@ bool SwDoc::UpdateRsid( const SwPaM &rRg, const sal_Int32 nLen )
     SfxItemSet aSet(GetAttrPool(), RES_CHRATR_RSID, RES_CHRATR_RSID);
     aSet.Put(aRsid);
     bool const bRet(pTxtNode->SetAttr(aSet, nStart,
-        rRg.GetPoint()->nContent.GetIndex(), nsSetAttrMode::SETATTR_DEFAULT));
+        rRg.GetPoint()->nContent.GetIndex(), SetAttrMode::DEFAULT));
 
     if (bRet && GetIDocumentUndoRedo().DoesUndo())
     {
@@ -1784,7 +1784,7 @@ void SwDoc::SetTxtFmtCollByAutoFmt( const SwPosition& rPos, sal_uInt16 nPoolId,
     {
         aPam.SetMark();
         aPam.GetMark()->nContent.Assign(pTNd, pTNd->GetTxt().getLength());
-        getIDocumentContentOperations().InsertItemSet( aPam, *pSet, 0 );
+        getIDocumentContentOperations().InsertItemSet( aPam, *pSet );
     }
 }
 
@@ -1831,13 +1831,13 @@ void SwDoc::SetFmtItemByAutoFmt( const SwPaM& rPam, const SfxItemSet& rSet )
         currentSet.Put(currentSet.Get(whichIds[i], true));
     }
 
-    getIDocumentContentOperations().InsertItemSet( rPam, rSet, nsSetAttrMode::SETATTR_DONTEXPAND );
+    getIDocumentContentOperations().InsertItemSet( rPam, rSet, SetAttrMode::DONTEXPAND );
 
     // fdo#62536: DONTEXPAND does not work when there is already an AUTOFMT
     // here, so insert the old attributes as an empty hint to stop expand
     SwPaM endPam(*pTNd, nEnd);
     endPam.SetMark();
-    getIDocumentContentOperations().InsertItemSet(endPam, currentSet, nsSetAttrMode::SETATTR_DEFAULT);
+    getIDocumentContentOperations().InsertItemSet(endPam, currentSet, SetAttrMode::DEFAULT);
 
     getIDocumentRedlineAccess().SetRedlineMode_intern( eOld );
 }

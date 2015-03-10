@@ -156,7 +156,7 @@ namespace SwUnoCursorHelper
             const SfxItemPropertySet & rPropSet,
             const OUString & rPropertyName,
             const ::com::sun::star::uno::Any & rValue,
-            const SetAttrMode nAttrMode = nsSetAttrMode::SETATTR_DEFAULT,
+            const SetAttrMode nAttrMode = SetAttrMode::DEFAULT,
             const bool bTableMode = false)
         throw (::com::sun::star::beans::UnknownPropertyException,
                 ::com::sun::star::beans::PropertyVetoException,
@@ -169,7 +169,7 @@ namespace SwUnoCursorHelper
             const SfxItemPropertySet & rPropSet,
             const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > &
             rPropertyValues,
-            const SetAttrMode nAttrMode = nsSetAttrMode::SETATTR_DEFAULT,
+            const SetAttrMode nAttrMode = SetAttrMode::DEFAULT,
             const bool bTableMode = false)
         throw (::com::sun::star::beans::UnknownPropertyException,
                 ::com::sun::star::beans::PropertyVetoException,

@@ -287,18 +287,18 @@ public:
 
     /// Insert pAttr into hints array. @return true iff inserted successfully
     bool    InsertHint( SwTxtAttr * const pAttr,
-                  const SetAttrMode nMode = nsSetAttrMode::SETATTR_DEFAULT );
+                  const SetAttrMode nMode = SetAttrMode::DEFAULT );
     /// create new text attribute from rAttr and insert it
     /// @return     inserted hint; 0 if not sure the hint is inserted
     SwTxtAttr* InsertItem( SfxPoolItem& rAttr,
                   const sal_Int32 nStart, const sal_Int32 nEnd,
-                  const SetAttrMode nMode = nsSetAttrMode::SETATTR_DEFAULT );
+                  const SetAttrMode nMode = SetAttrMode::DEFAULT );
 
     /** Set these attributes at TextNode. If the whole range is comprised
        set them only in AutoAttrSet (SwCntntNode::SetAttr). */
     bool SetAttr( const SfxItemSet& rSet,
                   sal_Int32 nStt, sal_Int32 nEnd,
-                  const SetAttrMode nMode = nsSetAttrMode::SETATTR_DEFAULT );
+                  const SetAttrMode nMode = SetAttrMode::DEFAULT );
     /** Query the attributes of textnode over the range.
        Introduce 4th optional parameter <bMergeIndentValuesOfNumRule>.
        If <bMergeIndentValuesOfNumRule> == true, the indent attributes of

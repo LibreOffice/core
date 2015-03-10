@@ -127,7 +127,7 @@ sal_uInt16 SwDoc::SetRubyList( const SwPaM& rPam, const SwRubyList& rList,
                         // set/reset the attribute
                         if( !pEntry->GetRubyAttr().GetText().isEmpty() )
                         {
-                            getIDocumentContentOperations().InsertPoolItem( aPam, pEntry->GetRubyAttr(), 0 );
+                            getIDocumentContentOperations().InsertPoolItem( aPam, pEntry->GetRubyAttr() );
                         }
                         else
                         {
@@ -163,7 +163,7 @@ sal_uInt16 SwDoc::SetRubyList( const SwPaM& rPam, const SwRubyList& rList,
                             aPam.SetMark();
                             aPam.GetMark()->nContent -= pEntry->GetText().getLength();
                             getIDocumentContentOperations().InsertPoolItem(
-                                aPam, pEntry->GetRubyAttr(), nsSetAttrMode::SETATTR_DONTEXPAND );
+                                aPam, pEntry->GetRubyAttr(), SetAttrMode::DONTEXPAND );
                         }
                         else
                             break;

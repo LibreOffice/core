@@ -1403,7 +1403,7 @@ SwXText::insertTextPortion(
           aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_CURSOR);
       SwUnoCursorHelper::SetPropertyValues(*pCursor, *pCursorPropSet,
                                            rCharacterAndParagraphProperties,
-                                           nsSetAttrMode::SETATTR_NOFORMATATTR);
+                                           SetAttrMode::NOFORMATATTR);
     }
     catch (const lang::IllegalArgumentException& rIllegal)
     {

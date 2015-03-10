@@ -393,7 +393,7 @@ void SwTextBoxHelper::syncProperty(SwFrmFmt* pShape, const OUString& rPropertyNa
                         aPaM.GetMark()->nNode = *pMark;
                         aPaM.GetMark()->nContent.Assign(pMark, pMark->GetTxt().getLength());
                         SvxCharRotateItem aItem(900, false, RES_CHRATR_ROTATE);
-                        pFmt->GetDoc()->getIDocumentContentOperations().InsertPoolItem(aPaM, aItem, 0);
+                        pFmt->GetDoc()->getIDocumentContentOperations().InsertPoolItem(aPaM, aItem);
                     }
                 }
             }

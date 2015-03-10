@@ -289,7 +289,7 @@ SwTxtNode* getModelToViewTestDocument(SwDoc *pDoc)
     aPaM.GetPoint()->nContent.Assign(aPaM.GetCntntNode(), 14);
     //set character attribute hidden on range
     SvxCharHiddenItem aHidden(true, RES_CHRATR_HIDDEN);
-    pDoc->getIDocumentContentOperations().InsertPoolItem(aPaM, aHidden, 0 );
+    pDoc->getIDocumentContentOperations().InsertPoolItem(aPaM, aHidden );
     aPaM.DeleteMark();
 
     //turn on red-lining and show changes
@@ -584,8 +584,8 @@ void SwDocTest::testSwScanner()
 
         SvxLanguageItem aCJKLangItem( LANGUAGE_CHINESE_SIMPLIFIED, RES_CHRATR_CJK_LANGUAGE );
         SvxLanguageItem aWestLangItem( LANGUAGE_ENGLISH_US, RES_CHRATR_LANGUAGE );
-        m_pDoc->getIDocumentContentOperations().InsertPoolItem(aPaM, aCJKLangItem, 0 );
-        m_pDoc->getIDocumentContentOperations().InsertPoolItem(aPaM, aWestLangItem, 0 );
+        m_pDoc->getIDocumentContentOperations().InsertPoolItem(aPaM, aCJKLangItem );
+        m_pDoc->getIDocumentContentOperations().InsertPoolItem(aPaM, aWestLangItem );
 
         SwDocStat aDocStat;
         pTxtNode = aPaM.GetNode().GetTxtNode();
@@ -620,8 +620,8 @@ void SwDocTest::testSwScanner()
 
         SvxLanguageItem aCJKLangItem( LANGUAGE_JAPANESE, RES_CHRATR_CJK_LANGUAGE );
         SvxLanguageItem aWestLangItem( LANGUAGE_ENGLISH_US, RES_CHRATR_LANGUAGE );
-        m_pDoc->getIDocumentContentOperations().InsertPoolItem(aPaM, aCJKLangItem, 0 );
-        m_pDoc->getIDocumentContentOperations().InsertPoolItem(aPaM, aWestLangItem, 0 );
+        m_pDoc->getIDocumentContentOperations().InsertPoolItem(aPaM, aCJKLangItem );
+        m_pDoc->getIDocumentContentOperations().InsertPoolItem(aPaM, aWestLangItem );
 
         SwDocStat aDocStat;
         pTxtNode = aPaM.GetNode().GetTxtNode();
@@ -704,7 +704,7 @@ void SwDocTest::testSwScanner()
         SwPostItField aPostIt(
             static_cast<SwPostItFieldType*>(m_pDoc->getIDocumentFieldsAccess().GetSysFldType(RES_POSTITFLD)), OUString("An Author"),
             OUString("Some Text"), OUString("Initials"), OUString("Name"), aDate );
-        m_pDoc->getIDocumentContentOperations().InsertPoolItem(aPaM, SwFmtFld(aPostIt), 0);
+        m_pDoc->getIDocumentContentOperations().InsertPoolItem(aPaM, SwFmtFld(aPostIt));
 
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString("Apple"));
         pTxtNode = aPaM.GetNode().GetTxtNode();
@@ -923,17 +923,17 @@ void SwDocTest::testMergePortionsDeleteNotSorted()
     aPaM.SetMark();
     aPaM.GetPoint()->nContent = 2;
     aPaM.GetMark()->nContent = 4;
-    rIDCO.InsertPoolItem(aPaM, charFmt, IDocumentContentOperations::INS_DEFAULT);
+    rIDCO.InsertPoolItem(aPaM, charFmt);
     aPaM.GetPoint()->nContent = 2;
     aPaM.GetMark()->nContent = 5;
-    rIDCO.InsertPoolItem(aPaM, inetFmt, IDocumentContentOperations::INS_DEFAULT);
+    rIDCO.InsertPoolItem(aPaM, inetFmt);
     aPaM.GetPoint()->nContent = 6;
     aPaM.GetMark()->nContent = 8;
-    rIDCO.InsertPoolItem(aPaM, charFmt, IDocumentContentOperations::INS_DEFAULT);
+    rIDCO.InsertPoolItem(aPaM, charFmt);
     aPaM.GetPoint()->nContent = 4;
     aPaM.GetMark()->nContent = 6;
     // this triggered an STL assert in SwpHints::MergePortions()
-    rIDCO.InsertPoolItem(aPaM, charFmt, IDocumentContentOperations::INS_DEFAULT);
+    rIDCO.InsertPoolItem(aPaM, charFmt);
 }
 
 //See https://bugs.libreoffice.org/show_bug.cgi?id=40599

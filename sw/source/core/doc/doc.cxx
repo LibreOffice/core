@@ -592,7 +592,7 @@ static void lcl_FormatPostIt(
 
     if (bNewPage)
     {
-        pIDCO->InsertPoolItem( aPam, SvxFmtBreakItem( SVX_BREAK_PAGE_AFTER, RES_BREAK ), 0 );
+        pIDCO->InsertPoolItem( aPam, SvxFmtBreakItem( SVX_BREAK_PAGE_AFTER, RES_BREAK ) );
         pIDCO->SplitNode( *aPam.GetPoint(), false );
     }
     else if (!bIsFirstPostIt)

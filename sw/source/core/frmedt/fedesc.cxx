@@ -97,7 +97,7 @@ void SwFEShell::ChgCurPageDesc( const SwPageDesc& rDesc )
     else
     {
         SwPaM aPaM( *static_cast<const SwCntntFrm*>(pFlow)->GetNode() );
-        GetDoc()->getIDocumentContentOperations().InsertPoolItem( aPaM, aNew, 0 );
+        GetDoc()->getIDocumentContentOperations().InsertPoolItem( aPaM, aNew );
     }
     EndAllActionAndCall();
 }

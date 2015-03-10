@@ -575,7 +575,7 @@ bool SwAutoFormat::DoUnderline()
         aBox.SetLine( &aLine, BOX_LINE_BOTTOM );
         aBox.SetDistance( 42 );     // ~0,75 mm
         aSet.Put(aBox);
-        m_pDoc->getIDocumentContentOperations().InsertItemSet( m_aDelPam, aSet, 0 );
+        m_pDoc->getIDocumentContentOperations().InsertItemSet( m_aDelPam, aSet );
 
         m_aDelPam.DeleteMark();
     }

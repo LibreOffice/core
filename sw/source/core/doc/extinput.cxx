@@ -81,7 +81,7 @@ SwExtTextInput::~SwExtTextInput()
                 if ( bLang )
                 {
                     SvxLanguageItem aLangItem( eInputLanguage, nWhich );
-                    pDoc->getIDocumentContentOperations().InsertPoolItem(*this, aLangItem, 0 );
+                    pDoc->getIDocumentContentOperations().InsertPoolItem(*this, aLangItem );
                 }
             }
             rIdx = nSttCnt;

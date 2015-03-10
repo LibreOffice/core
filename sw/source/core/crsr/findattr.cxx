@@ -1181,7 +1181,7 @@ int SwFindParaAttr::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
         // they are not in ReplaceSet
         if( !pSet->Count() )
         {
-            pCrsr->GetDoc()->getIDocumentContentOperations().InsertItemSet( *pCrsr, *pReplSet, 0 );
+            pCrsr->GetDoc()->getIDocumentContentOperations().InsertItemSet( *pCrsr, *pReplSet );
         }
         else
         {
@@ -1202,7 +1202,7 @@ int SwFindParaAttr::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
                 pItem = aIter.NextItem();
             }
             aSet.Put( *pReplSet );
-            pCrsr->GetDoc()->getIDocumentContentOperations().InsertItemSet( *pCrsr, aSet, 0 );
+            pCrsr->GetDoc()->getIDocumentContentOperations().InsertItemSet( *pCrsr, aSet );
         }
 
         return FIND_NO_RING;

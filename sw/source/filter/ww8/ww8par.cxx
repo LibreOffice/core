@@ -1506,7 +1506,7 @@ void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                     }
                     else
                     {
-                        pDoc->getIDocumentContentOperations().InsertPoolItem(aRegion, *rEntry.pAttr, 0);
+                        pDoc->getIDocumentContentOperations().InsertPoolItem(aRegion, *rEntry.pAttr);
                     }
                 }
             }
@@ -1663,7 +1663,7 @@ void SwWW8FltRefStack::SetAttrInDoc(const SwPosition& rTmpPos,
                 }
             }
 
-            pDoc->getIDocumentContentOperations().InsertPoolItem(aPaM, *rEntry.pAttr, 0);
+            pDoc->getIDocumentContentOperations().InsertPoolItem(aPaM, *rEntry.pAttr);
             MoveAttrs(*aPaM.GetPoint());
         }
         break;
@@ -2215,7 +2215,7 @@ long SwWW8ImplReader::Read_And(WW8PLCFManResult* pRes)
 
     SwPaM aEnd(*pPaM->End(), *pPaM->End());
     pCtrlStck->NewAttr(*aEnd.GetPoint(), SvxCharHiddenItem(false, RES_CHRATR_HIDDEN));
-    rDoc.getIDocumentContentOperations().InsertPoolItem(aEnd, SwFmtFld(aPostIt), 0);
+    rDoc.getIDocumentContentOperations().InsertPoolItem(aEnd, SwFmtFld(aPostIt));
     pCtrlStck->SetAttr(*aEnd.GetPoint(), RES_CHRATR_HIDDEN);
     // If this is a range, make sure that it ends after the just inserted character, not before it.
     pReffedStck->MoveAttrs(*aEnd.GetPoint());
@@ -3510,7 +3510,7 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
                 SwPageNumberField aFld(
                     static_cast<SwPageNumberFieldType*>(rDoc.getIDocumentFieldsAccess().GetSysFldType(
                     RES_PAGENUMBERFLD )), PG_RANDOM, SVX_NUM_ARABIC);
-                rDoc.getIDocumentContentOperations().InsertPoolItem(*pPaM, SwFmtFld(aFld), 0);
+                rDoc.getIDocumentContentOperations().InsertPoolItem(*pPaM, SwFmtFld(aFld));
             }
             break;
         case 0xe:
@@ -3523,7 +3523,7 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
                 SwCntntNode *pCntNd=pPaM->GetCntntNode();
                 if (pCntNd!=NULL && pCntNd->Len()>0) // if par is empty not break is needed
                     AppendTxtNode(*pPaM->GetPoint());
-                rDoc.getIDocumentContentOperations().InsertPoolItem(*pPaM, SvxFmtBreakItem(SVX_BREAK_COLUMN_BEFORE, RES_BREAK), 0);
+                rDoc.getIDocumentContentOperations().InsertPoolItem(*pPaM, SvxFmtBreakItem(SVX_BREAK_COLUMN_BEFORE, RES_BREAK));
             }
             break;
         case 0x7:
@@ -4087,7 +4087,7 @@ bool SwWW8ImplReader::ReadText(long nStartCp, long nTextLen, ManTypes nType)
                     AppendTxtNode(*pPaM->GetPoint());
                 }
                 rDoc.getIDocumentContentOperations().InsertPoolItem(*pPaM,
-                    SvxFmtBreakItem(SVX_BREAK_PAGE_BEFORE, RES_BREAK), 0);
+                    SvxFmtBreakItem(SVX_BREAK_PAGE_BEFORE, RES_BREAK));
                 bFirstParaOfPage = true;
                 bPgSecBreak = false;
             }
@@ -4348,7 +4348,7 @@ void GiveNodePageDesc(SwNodeIndex &rIdx, const SwFmtPageDesc &rPgDesc,
             rIdx.GetNode().GetCntntNode(), 0);
         SwPaM aPage(aPamStart);
 
-        rDoc.getIDocumentContentOperations().InsertPoolItem(aPage, rPgDesc, 0);
+        rDoc.getIDocumentContentOperations().InsertPoolItem(aPage, rPgDesc);
     }
 }
 
@@ -4413,7 +4413,7 @@ void wwSectionManager::InsertSegments()
         if ( aIter->maSep.bkc == 1 && aIter->maSep.ccolM1 > 0 )
         {
             SwPaM start( aIter->maStart );
-            mrReader.rDoc.getIDocumentContentOperations().InsertPoolItem( start, SvxFmtBreakItem(SVX_BREAK_COLUMN_BEFORE, RES_BREAK), 0);
+            mrReader.rDoc.getIDocumentContentOperations().InsertPoolItem( start, SvxFmtBreakItem(SVX_BREAK_COLUMN_BEFORE, RES_BREAK));
             continue;
         }
 

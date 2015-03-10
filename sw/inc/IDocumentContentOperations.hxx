@@ -22,6 +22,7 @@
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
+#include "swtypes.hxx"
 
 class SwPaM;
 struct SwPosition;
@@ -187,10 +188,10 @@ public:
         false.
     */
     virtual bool InsertPoolItem(const SwPaM &rRg, const SfxPoolItem&,
-                                const sal_uInt16 nFlags,bool bExpandCharToPara=false) = 0;
+                                const SetAttrMode nFlags = SetAttrMode::DEFAULT, bool bExpandCharToPara=false) = 0;
 
     virtual bool InsertItemSet (const SwPaM &rRg, const SfxItemSet&,
-        const sal_uInt16 nFlags) = 0;
+        const SetAttrMode nFlags = SetAttrMode::DEFAULT) = 0;
 
     /** Removes any leading white space from the paragraph
     */

@@ -390,8 +390,8 @@ lcl_setCharFmtSequence(SwPaM & rPam, uno::Any const& rValue)
         // the first style should replace the current attributes,
         // all other have to be added
         SwUnoCursorHelper::SetCrsrAttr(rPam, aSet, (nStyle)
-                ? nsSetAttrMode::SETATTR_DONTREPLACE
-                : nsSetAttrMode::SETATTR_DEFAULT);
+                ? SetAttrMode::DONTREPLACE
+                : SetAttrMode::DEFAULT);
         rPam.GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_START, NULL);
     }
     return true;

@@ -1804,7 +1804,7 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
     if(pPageNoCharFmt)
     {
         SwFmtCharFmt aCharFmt( pPageNoCharFmt );
-        pNd->InsertItem(aCharFmt, nStartPos, nStartPos + aNumStr.getLength(), nsSetAttrMode::SETATTR_DONTEXPAND);
+        pNd->InsertItem(aCharFmt, nStartPos, nStartPos + aNumStr.getLength(), SetAttrMode::DONTEXPAND);
     }
 
     // The main entries should get their character style
@@ -1832,7 +1832,7 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
         {
             sal_Int32 nStartIdx = (*xCharStyleIdx)[j] + nOffset;
             sal_Int32 nEndIdx   = (*xCharStyleIdx)[j + 1]  + nOffset;
-            pNd->InsertItem(aCharFmt, nStartIdx, nEndIdx, nsSetAttrMode::SETATTR_DONTEXPAND);
+            pNd->InsertItem(aCharFmt, nStartIdx, nEndIdx, SetAttrMode::DONTEXPAND);
         }
 
     }

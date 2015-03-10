@@ -751,7 +751,7 @@ void SwpHints::BuildPortions( SwTxtNode& rNode, SwTxtAttr& rNewHint,
                     // #i90311#
                     // Do not remove existing character format hint during XML import
                     if ( !rNode.GetDoc()->IsInXMLImport() &&
-                         ( !( nsSetAttrMode::SETATTR_DONTREPLACE & nMode ) ||
+                         ( !( SetAttrMode::DONTREPLACE & nMode ) ||
                            bNoLengthAttribute ||
                            bSameCharFmt ) )
                     {
@@ -1231,7 +1231,7 @@ SwTxtAttr* SwTxtNode::InsertItem(
             rAttr,
             nStart,
             nEnd,
-            (nMode & nsSetAttrMode::SETATTR_IS_COPY) ? COPY : NEW,
+            (nMode & SetAttrMode::IS_COPY) ? COPY : NEW,
             this );
 
     if ( pNew )
@@ -1260,7 +1260,7 @@ bool SwTxtNode::InsertHint( SwTxtAttr * const pAttr, const SetAttrMode nMode )
 
     // translate from SetAttrMode to InsertMode (for hints with CH_TXTATR)
     const enum IDocumentContentOperations::InsertFlags nInsertFlags =
-        (nMode & nsSetAttrMode::SETATTR_FORCEHINTEXPAND)
+        (nMode & SetAttrMode::FORCEHINTEXPAND)
         ? static_cast<IDocumentContentOperations::InsertFlags>(
                 IDocumentContentOperations::INS_FORCEHINTEXPAND |
                 IDocumentContentOperations::INS_EMPTYEXPAND)
@@ -1271,14 +1271,14 @@ bool SwTxtNode::InsertHint( SwTxtAttr * const pAttr, const SetAttrMode nMode )
     const bool bDummyChar( pAttr->HasDummyChar() );
     if (bDummyChar)
     {
-        sal_uInt16 nInsMode = nMode;
+        SetAttrMode nInsMode = nMode;
         switch( pAttr->Which() )
         {
         case RES_TXTATR_FLYCNT:
             {
                 SwTxtFlyCnt *pFly = static_cast<SwTxtFlyCnt *>(pAttr);
                 SwFrmFmt* pFmt = pAttr->GetFlyCnt().GetFrmFmt();
-                if( !(nsSetAttrMode::SETATTR_NOTXTATRCHR & nInsMode) )
+                if( !(SetAttrMode::NOTXTATRCHR & nInsMode) )
                 {
                     // Wir muessen zuerst einfuegen, da in SetAnchor()
                     // dem FlyFrm GetStart() uebermittelt wird.
@@ -1301,7 +1301,7 @@ bool SwTxtNode::InsertHint( SwTxtAttr * const pAttr, const SetAttrMode nMode )
                         DestroyAttr(pAttr);
                         return false; // text node full :(
                     }
-                    nInsMode |= nsSetAttrMode::SETATTR_NOTXTATRCHR;
+                    nInsMode |= SetAttrMode::NOTXTATRCHR;
 
                     if (pAnchor &&
                         (FLY_AS_CHAR == pAnchor->GetAnchorId()) &&
@@ -1335,7 +1335,7 @@ bool SwTxtNode::InsertHint( SwTxtAttr * const pAttr, const SetAttrMode nMode )
                         // Der Dtor des TxtHints loescht nicht das Zeichen.
                         // Wenn ein CH_TXTATR_.. vorliegt, dann muss man
                         // dieses explizit loeschen
-                        if( nsSetAttrMode::SETATTR_NOTXTATRCHR & nInsMode )
+                        if( SetAttrMode::NOTXTATRCHR & nInsMode )
                         {
                             // loesche das Zeichen aus dem String !
                             OSL_ENSURE( ( CH_TXTATR_BREAKWORD ==
@@ -1371,7 +1371,7 @@ bool SwTxtNode::InsertHint( SwTxtAttr * const pAttr, const SetAttrMode nMode )
                     // Der Dtor des TxtHints loescht nicht das Zeichen.
                     // Wenn ein CH_TXTATR_.. vorliegt, dann muss man
                     // dieses explizit loeschen
-                    if( nsSetAttrMode::SETATTR_NOTXTATRCHR & nInsMode )
+                    if( SetAttrMode::NOTXTATRCHR & nInsMode )
                     {
                         // loesche das Zeichen aus dem String !
                         OSL_ENSURE( ( CH_TXTATR_BREAKWORD ==
@@ -1412,7 +1412,7 @@ bool SwTxtNode::InsertHint( SwTxtAttr * const pAttr, const SetAttrMode nMode )
                     }
                 }
 
-                if( !(nsSetAttrMode::SETATTR_NOTXTATRCHR & nInsMode) )
+                if( !(SetAttrMode::NOTXTATRCHR & nInsMode) )
                 {
                     // Wir muessen zuerst einfuegen, da sonst gleiche Indizes
                     // entstehen koennen und das Attribut im _SortArr_ am
@@ -1425,7 +1425,7 @@ bool SwTxtNode::InsertHint( SwTxtAttr * const pAttr, const SetAttrMode nMode )
                         DestroyAttr(pAttr);
                         return false; // text node full :(
                     }
-                    nInsMode |= nsSetAttrMode::SETATTR_NOTXTATRCHR;
+                    nInsMode |= SetAttrMode::NOTXTATRCHR;
                 }
 
                 // Wir tragen uns am FtnIdx-Array des Docs ein ...
@@ -1481,7 +1481,7 @@ bool SwTxtNode::InsertHint( SwTxtAttr * const pAttr, const SetAttrMode nMode )
         // eingefuegt, aStart muss danach um einen zurueckgesetzt werden.
         // Wenn wir im SwTxtNode::Copy stehen, so wurde das Zeichen bereits
         // mitkopiert. In solchem Fall ist SETATTR_NOTXTATRCHR angegeben worden.
-        if( !(nsSetAttrMode::SETATTR_NOTXTATRCHR & nInsMode) )
+        if( !(SetAttrMode::NOTXTATRCHR & nInsMode) )
         {
             SwIndex aIdx( this, pAttr->GetStart() );
             OUString const ins( InsertText(OUString(GetCharOfTxtAttr(*pAttr)),
@@ -1515,7 +1515,7 @@ bool SwTxtNode::InsertHint( SwTxtAttr * const pAttr, const SetAttrMode nMode )
                 SwTxtInputFld* pTxtInputFld = dynamic_cast<SwTxtInputFld*>(pAttr);
                 if ( pTxtInputFld )
                 {
-                    if( !(nsSetAttrMode::SETATTR_NOTXTATRCHR & nMode) )
+                    if( !(SetAttrMode::NOTXTATRCHR & nMode) )
                     {
                         SwIndex aIdx( this, pAttr->GetStart() );
                         InsertText( OUString(CH_TXT_ATR_INPUTFIELDSTART), aIdx, nInsertFlags );
@@ -1602,7 +1602,7 @@ bool SwTxtNode::InsertHint( SwTxtAttr * const pAttr, const SetAttrMode nMode )
     if ( !bRet )
     {
         if ( bDummyChar
-             && !(nsSetAttrMode::SETATTR_NOTXTATRCHR & nMode) )
+             && !(SetAttrMode::NOTXTATRCHR & nMode) )
         {
             // undo insertion of dummy character
             // N.B. cannot insert the dummy character after inserting the hint,
@@ -1617,7 +1617,7 @@ bool SwTxtNode::InsertHint( SwTxtAttr * const pAttr, const SetAttrMode nMode )
 
         if ( bHasContent )
         {
-            if ( !(nsSetAttrMode::SETATTR_NOTXTATRCHR & nMode)
+            if ( !(SetAttrMode::NOTXTATRCHR & nMode)
                  && (nEnd - nStart) > 0 )
             {
                 SwIndex aIdx( this, nStart );
@@ -1866,7 +1866,7 @@ bool SwTxtNode::SetAttr(
 
     // gesamter Bereich
     if ( !nStt && (nEnd == m_Text.getLength()) &&
-         !(nMode & nsSetAttrMode::SETATTR_NOFORMATATTR ) )
+         !(nMode & SetAttrMode::NOFORMATATTR ) )
     {
         // sind am Node schon Zeichenvorlagen gesetzt, muss man diese Attribute
         // (rSet) immer als TextAttribute setzen, damit sie angezeigt werden.
@@ -3172,7 +3172,7 @@ bool SwpHints::TryInsertHint(
         break;
     }
 
-    if( nsSetAttrMode::SETATTR_DONTEXPAND & nMode )
+    if( SetAttrMode::DONTEXPAND & nMode )
         pHint->SetDontExpand( true );
 
     // SwTxtAttrs ohne Ende werden sonderbehandelt:
@@ -3217,7 +3217,7 @@ bool SwpHints::TryInsertHint(
 
     // I need this value later on for notification but the pointer may become invalid
     const sal_Int32 nHintEnd = *pHtEnd;
-    const bool bNoHintAdjustMode = (nsSetAttrMode::SETATTR_NOHINTADJUST & nMode);
+    const bool bNoHintAdjustMode = bool(SetAttrMode::NOHINTADJUST & nMode);
 
     // handle nesting attributes: inserting may fail due to overlap!
     if (pHint->IsNesting())

@@ -307,7 +307,7 @@ void SwUnoCursorHelper::SetCrsrAttr(SwPaM & rPam,
         const SfxItemSet& rSet,
         const SetAttrMode nAttrMode, const bool bTableMode)
 {
-    const SetAttrMode nFlags = nAttrMode | nsSetAttrMode::SETATTR_APICALL;
+    const SetAttrMode nFlags = nAttrMode | SetAttrMode::APICALL;
     SwDoc* pDoc = rPam.GetDoc();
     //StartEndAction
     UnoActionContext aAction(pDoc);

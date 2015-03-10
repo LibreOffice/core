@@ -614,7 +614,7 @@ void SwTxtNode::RstTxtAttr(
     // delay inserting the hints because it re-sorts the hints array
     for (SwTxtAttr *const pNew : newAttributes)
     {
-        InsertHint(pNew, nsSetAttrMode::SETATTR_NOHINTADJUST);
+        InsertHint(pNew, SetAttrMode::NOHINTADJUST);
     }
 
     TryDeleteSwpHints();
@@ -1075,7 +1075,7 @@ void SwTxtNode::SetLanguageAndFont( const SwPaM &rPaM,
         aSet.Put( aFontItem );
     }
 
-    GetDoc()->getIDocumentContentOperations().InsertItemSet( rPaM, aSet, 0 );
+    GetDoc()->getIDocumentContentOperations().InsertItemSet( rPaM, aSet );
     // SetAttr( aSet );    <- Does not set language attribute of empty paragraphs correctly,
     //                     <- because since there is no selection the flag to garbage
     //                     <- collect all attributes is set, and therefore attributes spanned

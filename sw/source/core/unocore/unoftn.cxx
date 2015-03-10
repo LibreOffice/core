@@ -323,8 +323,8 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
             dynamic_cast<SwXTextCursor*>(pCursor));
     const bool bForceExpandHints( pTextCursor && pTextCursor->IsAtEndOfMeta() );
     const SetAttrMode nInsertFlags = (bForceExpandHints)
-        ? nsSetAttrMode::SETATTR_FORCEHINTEXPAND
-        : nsSetAttrMode::SETATTR_DEFAULT;
+        ? SetAttrMode::FORCEHINTEXPAND
+        : SetAttrMode::DEFAULT;
 
     pNewDoc->getIDocumentContentOperations().InsertPoolItem(aPam, aFootNote, nInsertFlags);
 

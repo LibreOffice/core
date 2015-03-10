@@ -439,7 +439,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 const SvxFontItem &rFont = static_cast<const SvxFontItem &>( aSet.Get( RES_CHRATR_FONT ));
                 SvxFontItem aFont( rFont.GetFamily(), pFont->GetValue(),
                                     rFont.GetStyleName(), rFont.GetPitch(), RTL_TEXTENCODING_DONTKNOW, RES_CHRATR_FONT );
-                rWrtSh.SetAttrSet( aSet, nsSetAttrMode::SETATTR_DONTEXPAND );
+                rWrtSh.SetAttrSet( aSet, SetAttrMode::DONTEXPAND );
                 rWrtSh.ResetSelect(0, false);
                 rWrtSh.EndSelect();
                 rWrtSh.GotoFtnTxt();
@@ -1036,7 +1036,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                         if ( !static_cast<const SfxStringItem*>(pItem)->GetValue().isEmpty() )
                             rWrtSh.ReplaceDropTxt(static_cast<const SfxStringItem*>(pItem)->GetValue(), pPaM);
                     }
-                    rWrtSh.SetAttrSet( *pSet, 0, pPaM );
+                    rWrtSh.SetAttrSet( *pSet, SetAttrMode::DEFAULT, pPaM );
                     rWrtSh.EndAction();
                     SwTxtFmtColl* pColl = rWrtSh.GetPaMTxtFmtColl( pPaM );
                     if(pColl && pColl->IsAutoUpdateFmt())

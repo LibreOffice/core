@@ -231,7 +231,7 @@ sal_uLong SwASCIIParser::CallParser()
 
                 // !!!!!
                 OSL_ENSURE( false, "Have to change - hard attr. to para. style" );
-                pDoc->getIDocumentContentOperations().InsertItemSet( *pInsPam, *pItemSet, 0 );
+                pDoc->getIDocumentContentOperations().InsertItemSet( *pInsPam, *pItemSet );
             }
         }
         delete pItemSet, pItemSet = 0;
@@ -428,7 +428,7 @@ sal_uLong SwASCIIParser::ReadChars()
                         }
                         pDoc->getIDocumentContentOperations().SplitNode( *pPam->GetPoint(), false );
                         pDoc->getIDocumentContentOperations().InsertPoolItem(
-                            *pPam, SvxFmtBreakItem( SVX_BREAK_PAGE_BEFORE, RES_BREAK ), 0);
+                            *pPam, SvxFmtBreakItem( SVX_BREAK_PAGE_BEFORE, RES_BREAK ) );
                         pLastStt = pStt;
                         nLineLen = 0;
                         bIns = false;

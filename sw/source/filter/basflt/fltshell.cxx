@@ -570,7 +570,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                 SwSetExpField aFld(static_cast<SwSetExpFieldType*>(pFT), pB->GetValSys());
                 aFld.SetSubType( nsSwExtendedSubType::SUB_INVISIBLE );
                 MakePoint(rEntry, pDoc, aRegion);
-                pDoc->getIDocumentContentOperations().InsertPoolItem(aRegion, SwFmtFld(aFld), 0);
+                pDoc->getIDocumentContentOperations().InsertPoolItem(aRegion, SwFmtFld(aFld));
                 MoveAttrs( *(aRegion.GetPoint()) );
             }
             if ( ( !IsFlagSet(HYPO) || IsFlagSet(BOOK_AND_REF) ) &&
@@ -689,11 +689,11 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                 nEnd = rEntry.GetEndCP();
                 if (rEntry.IsParaEnd())
                 {
-                    pDoc->getIDocumentContentOperations().InsertPoolItem(aRegion, *rEntry.pAttr, 0, true);
+                    pDoc->getIDocumentContentOperations().InsertPoolItem(aRegion, *rEntry.pAttr, SetAttrMode::DEFAULT, true);
                 }
                 else
                 {
-                    pDoc->getIDocumentContentOperations().InsertPoolItem(aRegion, *rEntry.pAttr, 0);
+                    pDoc->getIDocumentContentOperations().InsertPoolItem(aRegion, *rEntry.pAttr);
                 }
             }
         }

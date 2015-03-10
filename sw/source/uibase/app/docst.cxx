@@ -900,7 +900,7 @@ sal_uInt16 SwDocShell::ApplyStyles(const OUString &rName, sal_uInt16 nFamily,
         {
             SwFmtCharFmt aFmt(pStyle->GetCharFmt());
             pSh->SetAttrItem( aFmt, (nMode & KEY_SHIFT) ?
-                nsSetAttrMode::SETATTR_DONTREPLACE : nsSetAttrMode::SETATTR_DEFAULT );
+                SetAttrMode::DONTREPLACE : SetAttrMode::DEFAULT );
             break;
         }
         case SFX_STYLE_FAMILY_PARA:

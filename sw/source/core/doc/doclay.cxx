@@ -920,7 +920,7 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
                 {
                     SwFmtCharFmt aCharFmt( pCharFmt );
                     pNew->InsertItem( aCharFmt, 0,
-                        nSepIdx + 1, nsSetAttrMode::SETATTR_DONTEXPAND );
+                        nSepIdx + 1, SetAttrMode::DONTEXPAND );
                 }
             }
         }
@@ -1212,7 +1212,7 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
                 {
                     SwFmtCharFmt aCharFmt( pCharFmt );
                     pNew->InsertItem( aCharFmt, 0, nSepIdx + 1,
-                            nsSetAttrMode::SETATTR_DONTEXPAND );
+                            SetAttrMode::DONTEXPAND );
                 }
             }
         }

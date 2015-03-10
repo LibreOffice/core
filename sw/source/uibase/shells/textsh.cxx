@@ -1105,7 +1105,7 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
 
             rSh.SetMark();
             rSh.ExtendSelection( false, aChars.getLength() );
-            rSh.SetAttrSet( aSet, nsSetAttrMode::SETATTR_DONTEXPAND | nsSetAttrMode::SETATTR_NOFORMATATTR );
+            rSh.SetAttrSet( aSet, SetAttrMode::DONTEXPAND | SetAttrMode::NOFORMATATTR );
             if( !rSh.IsCrsrPtAtEnd() )
                 rSh.SwapPam();
 

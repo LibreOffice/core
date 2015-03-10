@@ -238,8 +238,8 @@ void SwHistorySetTxt::SetInDoc( SwDoc* pDoc, bool )
     if ( pTxtNd )
     {
         SwTxtAttr *const pAttr = pTxtNd->InsertItem(*m_pAttr, m_nStart, m_nEnd,
-                        nsSetAttrMode::SETATTR_NOTXTATRCHR |
-                        nsSetAttrMode::SETATTR_NOHINTADJUST );
+                        SetAttrMode::NOTXTATRCHR |
+                        SetAttrMode::NOHINTADJUST );
         // shouldn't be possible to hit any error/merging path from here
         assert(pAttr);
         if (m_bFormatIgnoreStart)
@@ -307,7 +307,7 @@ void SwHistorySetTxtFld::SetInDoc( SwDoc* pDoc, bool )
     if ( pTxtNd )
     {
         pTxtNd->InsertItem( *m_pFld, m_nPos, m_nPos,
-                    nsSetAttrMode::SETATTR_NOTXTATRCHR );
+                    SetAttrMode::NOTXTATRCHR );
     }
 }
 
@@ -334,7 +334,7 @@ void SwHistorySetRefMark::SetInDoc( SwDoc* pDoc, bool )
          !pTxtNd->GetTxtAttrForCharAt( m_nStart, RES_TXTATR_REFMARK ) )
     {
         pTxtNd->InsertItem( aRefMark, m_nStart, m_nEnd,
-                            nsSetAttrMode::SETATTR_NOTXTATRCHR );
+                            SetAttrMode::NOTXTATRCHR );
     }
 }
 
@@ -378,7 +378,7 @@ void SwHistorySetTOXMark::SetInDoc( SwDoc* pDoc, bool )
     aNew.RegisterToTOXType( *pToxType );
 
     pTxtNd->InsertItem( aNew, m_nStart, m_nEnd,
-                        nsSetAttrMode::SETATTR_NOTXTATRCHR );
+                        SetAttrMode::NOTXTATRCHR );
 }
 
 bool SwHistorySetTOXMark::IsEqual( const SwTOXMark& rCmp ) const

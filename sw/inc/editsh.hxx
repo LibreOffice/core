@@ -231,8 +231,8 @@ public:
                      const bool bMergeIndentValuesOfNumRule = false ) const;
     bool GetCurAttr( SfxItemSet& ,
                      const bool bMergeIndentValuesOfNumRule = false ) const;
-    void SetAttrItem( const SfxPoolItem&, sal_uInt16 nFlags = 0 );
-    void SetAttrSet( const SfxItemSet&, sal_uInt16 nFlags = 0, SwPaM* pCrsr = NULL );
+    void SetAttrItem( const SfxPoolItem&, SetAttrMode nFlags = SetAttrMode::DEFAULT );
+    void SetAttrSet( const SfxItemSet&, SetAttrMode nFlags = SetAttrMode::DEFAULT, SwPaM* pCrsr = NULL );
 
     /** Get RES_CHRATR_* items of one type in the current selection.
      * @param nWhich WhichId of the collected items.

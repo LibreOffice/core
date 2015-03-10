@@ -201,8 +201,8 @@ void SwEditShell::Insert2(SwField& rFld, const bool bForceExpandHints)
     SwFmtFld aFld( rFld );
 
     const SetAttrMode nInsertFlags = (bForceExpandHints)
-        ? nsSetAttrMode::SETATTR_FORCEHINTEXPAND
-        : nsSetAttrMode::SETATTR_DEFAULT;
+        ? SetAttrMode::FORCEHINTEXPAND
+        : SetAttrMode::DEFAULT;
 
     for(SwPaM& rPaM : GetCrsr()->GetRingContainer()) // for each PaM
     {

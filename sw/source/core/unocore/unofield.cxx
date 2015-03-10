@@ -1952,8 +1952,8 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
             : false );
         const SetAttrMode nInsertFlags =
             (bForceExpandHints)
-            ? nsSetAttrMode::SETATTR_FORCEHINTEXPAND
-            : nsSetAttrMode::SETATTR_DEFAULT;
+            ? SetAttrMode::FORCEHINTEXPAND
+            : SetAttrMode::DEFAULT;
 
         if (*aPam.GetPoint() != *aPam.GetMark() &&
             m_pImpl->m_nServiceId == SW_SERVICE_FIELDTYPE_ANNOTATION)
@@ -2021,7 +2021,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
                 SwFmtFld aFmtFld( *pPostItField );
                 delete pPostItField;
                 SwPaM aEnd( *aIntPam.End(), *aIntPam.End() );
-                m_pImpl->m_pDoc->getIDocumentContentOperations().InsertPoolItem( aEnd, aFmtFld, nsSetAttrMode::SETATTR_DEFAULT );
+                m_pImpl->m_pDoc->getIDocumentContentOperations().InsertPoolItem( aEnd, aFmtFld, SetAttrMode::DEFAULT );
                 // delete former annotation
                 {
                     const SwTxtFld* pTxtFld = m_pImpl->m_pFmtFld->GetTxtFld();

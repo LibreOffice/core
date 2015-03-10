@@ -880,7 +880,7 @@ void SwDoc::SetNumRule( const SwPaM& rPam,
         }
         if (!sListId.isEmpty())
         {
-            getIDocumentContentOperations().InsertPoolItem( rPam, SfxStringItem( RES_PARATR_LIST_ID, sListId ), 0 );
+            getIDocumentContentOperations().InsertPoolItem( rPam, SfxStringItem( RES_PARATR_LIST_ID, sListId ) );
         }
     }
 
@@ -920,7 +920,7 @@ void SwDoc::SetNumRule( const SwPaM& rPam,
 
     if ( bSetItem )
     {
-        getIDocumentContentOperations().InsertPoolItem( rPam, SwNumRuleItem( pNewOrChangedNumRule->GetName() ), 0 );
+        getIDocumentContentOperations().InsertPoolItem( rPam, SwNumRuleItem( pNewOrChangedNumRule->GetName() ) );
     }
 
     if ( bResetIndentAttrs
@@ -946,7 +946,7 @@ void SwDoc::SetCounted(const SwPaM & rPam, bool bCounted)
     }
     else
     {
-        getIDocumentContentOperations().InsertPoolItem( rPam, SfxBoolItem( RES_PARATR_LIST_ISCOUNTED, false ), 0 );
+        getIDocumentContentOperations().InsertPoolItem( rPam, SfxBoolItem( RES_PARATR_LIST_ISCOUNTED, false ) );
     }
 }
 

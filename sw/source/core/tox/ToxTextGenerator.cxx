@@ -252,7 +252,7 @@ ToxTextGenerator::GenerateText(SwDoc* pDoc, const std::vector<SwTOXSortTabBase*>
                 {
                     SwFmtCharFmt aFmt( pCharFmt );
                     pTOXNd->InsertItem( aFmt, nStartCharStyle,
-                        rTxt.getLength(), nsSetAttrMode::SETATTR_DONTEXPAND );
+                        rTxt.getLength(), SetAttrMode::DONTEXPAND );
                 }
             }
 

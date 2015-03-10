@@ -651,11 +651,11 @@ void SwRedlineExtraData_FmtColl::Reject( SwPaM& rPam ) const
                 // could have changed, but we don't touch these.
                 SfxItemSet aTmp( *pSet );
                 aTmp.Differentiate( *pTNd->GetpSwAttrSet() );
-                pDoc->getIDocumentContentOperations().InsertItemSet( rPam, aTmp, 0 );
+                pDoc->getIDocumentContentOperations().InsertItemSet( rPam, aTmp );
             }
             else
             {
-                pDoc->getIDocumentContentOperations().InsertItemSet( rPam, *pSet, 0 );
+                pDoc->getIDocumentContentOperations().InsertItemSet( rPam, *pSet );
             }
         }
         rPam.DeleteMark();
@@ -720,7 +720,7 @@ void SwRedlineExtraData_Format::Reject( SwPaM& rPam ) const
     for( it = aWhichIds.begin(); it != aWhichIds.end(); ++it )
     {
         pDoc->getIDocumentContentOperations().InsertPoolItem( rPam, *GetDfltAttr( *it ),
-            nsSetAttrMode::SETATTR_DONTEXPAND );
+            SetAttrMode::DONTEXPAND );
     }
 
     pDoc->getIDocumentRedlineAccess().SetRedlineMode_intern( eOld );

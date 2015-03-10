@@ -261,7 +261,7 @@ void SwTextShell::ExecCharAttrArgs(SfxRequest &rReq)
                     if( pColl )
                         pColl->SetFmtAttr( aAttrSet );
                     else
-                        rWrtSh.SetAttrSet( aAttrSet, 0, pPaM.get() );
+                        rWrtSh.SetAttrSet( aAttrSet, SetAttrMode::DEFAULT, pPaM.get() );
                 }
             }
             rWrtSh.EndUndo( UNDO_INSATTR, NULL);

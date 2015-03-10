@@ -1888,7 +1888,7 @@ bool SwCrsrShell::SetShadowCrsrPos( const Point& rPt, SwFillMode eFillMode )
                 {
                     *m_pCurCrsr->GetPoint() = aPos;
                     GetDoc()->getIDocumentContentOperations().InsertPoolItem( *m_pCurCrsr,
-                            SvxFmtBreakItem( SVX_BREAK_COLUMN_BEFORE, RES_BREAK ), 0);
+                            SvxFmtBreakItem( SVX_BREAK_COLUMN_BEFORE, RES_BREAK ) );
                 }
             }
 
@@ -1913,7 +1913,7 @@ bool SwCrsrShell::SetShadowCrsrPos( const Point& rPt, SwFillMode eFillMode )
                     if( SVX_ADJUST_LEFT != rAdj.GetAdjust() )
                         aSet.Put( SvxAdjustItem( SVX_ADJUST_LEFT, RES_PARATR_ADJUST ) );
 
-                    GetDoc()->getIDocumentContentOperations().InsertItemSet( *m_pCurCrsr, aSet, 0 );
+                    GetDoc()->getIDocumentContentOperations().InsertItemSet( *m_pCurCrsr, aSet );
                 }
                 else {
                     OSL_ENSURE( false, "No CntntNode" );
@@ -1947,7 +1947,7 @@ bool SwCrsrShell::SetShadowCrsrPos( const Point& rPt, SwFillMode eFillMode )
                     default:
                         break;
                     }
-                    GetDoc()->getIDocumentContentOperations().InsertPoolItem( *m_pCurCrsr, aAdj, 0 );
+                    GetDoc()->getIDocumentContentOperations().InsertPoolItem( *m_pCurCrsr, aAdj );
                 }
                 break;
             }

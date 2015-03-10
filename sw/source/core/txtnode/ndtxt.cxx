@@ -1596,7 +1596,7 @@ void SwTxtNode::CopyAttr( SwTxtNode *pDest, const sal_Int32 nTxtStartIdx,
                     {
                         // attribute in the area => copy
                         SwTxtAttr *const pNewHt =
-                            pDest->InsertItem( pHt->GetAttr(), nOldPos, nOldPos, nsSetAttrMode::SETATTR_IS_COPY);
+                            pDest->InsertItem( pHt->GetAttr(), nOldPos, nOldPos, SetAttrMode::IS_COPY);
                         if ( pNewHt )
                         {
                             lcl_CopyHint( nWhich, pHt, pNewHt,
@@ -1608,7 +1608,7 @@ void SwTxtNode::CopyAttr( SwTxtNode *pDest, const sal_Int32 nTxtStartIdx,
                              : 0 == pOtherDoc->GetRefMark( pHt->GetRefMark().GetRefName() ) )
                     {
                         pDest->InsertItem(
-                            pHt->GetAttr(), nOldPos, nOldPos, nsSetAttrMode::SETATTR_IS_COPY);
+                            pHt->GetAttr(), nOldPos, nOldPos, SetAttrMode::IS_COPY);
                     }
                 }
             }
@@ -1853,7 +1853,7 @@ void SwTxtNode::CopyText( SwTxtNode *const pDest,
                 pHt->GetAttr(),
                 nAttrStt - nDeletedDummyChars,
                 nAttrEnd - nDeletedDummyChars,
-                nsSetAttrMode::SETATTR_NOTXTATRCHR | nsSetAttrMode::SETATTR_IS_COPY);
+                SetAttrMode::NOTXTATRCHR | SetAttrMode::IS_COPY);
             if (pNewHt)
             {
                 lcl_CopyHint( nWhich, pHt, pNewHt, pOtherDoc, pDest );
@@ -1877,7 +1877,7 @@ void SwTxtNode::CopyText( SwTxtNode *const pDest,
     // sich selbst passieren!!)
     for ( size_t i = 0; i < aArr.size(); ++i )
     {
-        InsertHint( aArr[ i ], nsSetAttrMode::SETATTR_NOTXTATRCHR );
+        InsertHint( aArr[ i ], SetAttrMode::NOTXTATRCHR );
     }
 
     if( pDest->GetpSwpHints() )
@@ -1970,7 +1970,7 @@ OUString SwTxtNode::InsertText( const OUString & rStr, const SwIndex & rIdx,
                     {
                         bMergePortionsNeeded = true;
                     }
-                    InsertHint( pHt, nsSetAttrMode::SETATTR_NOHINTADJUST );
+                    InsertHint( pHt, SetAttrMode::NOHINTADJUST );
                 }
                 // empty hints at insert position?
                 else if ( (nMode & IDocumentContentOperations::INS_EMPTYEXPAND)
@@ -1979,7 +1979,7 @@ OUString SwTxtNode::InsertText( const OUString & rStr, const SwIndex & rIdx,
                     pHt->GetStart() = pHt->GetStart() - nLen;
                     const size_t nAktLen = m_pSwpHints->Count();
                     m_pSwpHints->DeleteAtPos(i);
-                    InsertHint( pHt/* AUTOSTYLES:, nsSetAttrMode::SETATTR_NOHINTADJUST*/ );
+                    InsertHint( pHt/* AUTOSTYLES:, SetAttrMode::NOHINTADJUST*/ );
                     if ( nAktLen > m_pSwpHints->Count() && i )
                     {
                         --i;
@@ -1999,7 +1999,7 @@ OUString SwTxtNode::InsertText( const OUString & rStr, const SwIndex & rIdx,
                 m_pSwpHints->DeleteAtPos(i);
                 pHt->GetStart() = pHt->GetStart() - nLen;
                 // no effect on format ignore flags here (para start)
-                InsertHint( pHt, nsSetAttrMode::SETATTR_NOHINTADJUST );
+                InsertHint( pHt, SetAttrMode::NOHINTADJUST );
             }
         }
         if (bMergePortionsNeeded)
@@ -2183,7 +2183,7 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
             {
                 *pEndIdx = nDestStart + *pEndIdx;
             }
-            InsertHint( pNewHt, nsSetAttrMode::SETATTR_NOTXTATRCHR );
+            InsertHint( pNewHt, SetAttrMode::NOTXTATRCHR );
         }
     }
     else
@@ -2302,8 +2302,8 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
                                             : *pEndIdx - nTxtStartIdx );
                     }
                     pDest->InsertHint( pHt,
-                              nsSetAttrMode::SETATTR_NOTXTATRCHR
-                            | nsSetAttrMode::SETATTR_DONTREPLACE );
+                              SetAttrMode::NOTXTATRCHR
+                            | SetAttrMode::DONTREPLACE );
                     if ( GetDoc()->GetDocShell() )
                     {
                         GetDoc()->GetDocShell()->Broadcast( SfxSimpleHint(SFX_HINT_USER04));
@@ -2323,9 +2323,9 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
             if ( pNewHt )
             {
                 const bool bSuccess( pDest->InsertHint( pNewHt,
-                              nsSetAttrMode::SETATTR_NOTXTATRCHR
-                            | nsSetAttrMode::SETATTR_DONTREPLACE
-                            | nsSetAttrMode::SETATTR_IS_COPY) );
+                              SetAttrMode::NOTXTATRCHR
+                            | SetAttrMode::DONTREPLACE
+                            | SetAttrMode::IS_COPY) );
                 if (bSuccess)
                 {
                     lcl_CopyHint( nWhich, pHt, pNewHt, pOtherDoc, pDest );

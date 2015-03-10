@@ -1981,9 +1981,9 @@ void SwXDocumentIndexMark::Impl::InsertTOXMark(
 
     const bool bForceExpandHints( !bMark && pTextCursor && pTextCursor->IsAtEndOfMeta() );
     const SetAttrMode nInsertFlags = (bForceExpandHints)
-        ?   ( nsSetAttrMode::SETATTR_FORCEHINTEXPAND
-            | nsSetAttrMode::SETATTR_DONTEXPAND)
-        : nsSetAttrMode::SETATTR_DONTEXPAND;
+        ?   ( SetAttrMode::FORCEHINTEXPAND
+            | SetAttrMode::DONTEXPAND)
+        : SetAttrMode::DONTEXPAND;
 
     ::std::vector<SwTxtAttr *> oldMarks;
     if (bMark)

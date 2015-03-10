@@ -90,10 +90,10 @@ public:
 
     // Add a para for the char attribute exp...
     bool InsertPoolItem(const SwPaM &rRg, const SfxPoolItem&,
-                                const sal_uInt16 nFlags,bool bExpandCharToPara=false) SAL_OVERRIDE;
+                                const SetAttrMode nFlags = SetAttrMode::DEFAULT, bool bExpandCharToPara=false) SAL_OVERRIDE;
 
     bool InsertItemSet (const SwPaM &rRg, const SfxItemSet&,
-        const sal_uInt16 nFlags) SAL_OVERRIDE;
+        const SetAttrMode nFlags = SetAttrMode::DEFAULT) SAL_OVERRIDE;
 
     void RemoveLeadingWhiteSpace(const SwPosition & rPos ) SAL_OVERRIDE;
 

@@ -211,9 +211,9 @@ void SwXReferenceMark::Impl::InsertRefMark(SwPaM& rPam,
 
     const bool bForceExpandHints( !bMark && pCursor && pCursor->IsAtEndOfMeta() );
     const SetAttrMode nInsertFlags = (bForceExpandHints)
-        ?   ( nsSetAttrMode::SETATTR_FORCEHINTEXPAND
-            | nsSetAttrMode::SETATTR_DONTEXPAND)
-        : nsSetAttrMode::SETATTR_DONTEXPAND;
+        ?   ( SetAttrMode::FORCEHINTEXPAND
+            | SetAttrMode::DONTEXPAND)
+        : SetAttrMode::DONTEXPAND;
 
     ::std::vector<SwTxtAttr *> oldMarks;
     if (bMark)
@@ -1030,9 +1030,9 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
             dynamic_cast<SwXTextCursor*>(pCursor));
     const bool bForceExpandHints(pTextCursor && pTextCursor->IsAtEndOfMeta());
     const SetAttrMode nInsertFlags( (bForceExpandHints)
-        ?   ( nsSetAttrMode::SETATTR_FORCEHINTEXPAND
-            | nsSetAttrMode::SETATTR_DONTEXPAND)
-        : nsSetAttrMode::SETATTR_DONTEXPAND );
+        ?   ( SetAttrMode::FORCEHINTEXPAND
+            | SetAttrMode::DONTEXPAND)
+        : SetAttrMode::DONTEXPAND );
 
     const ::boost::shared_ptr< ::sw::Meta> pMeta( (RES_TXTATR_META == i_nWhich)
         ? ::boost::shared_ptr< ::sw::Meta>( new ::sw::Meta() )

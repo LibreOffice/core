@@ -204,7 +204,7 @@ sal_uLong HTMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPam, 
         if( !rDoc.getIDocumentSettingAccess().get(IDocumentSettingAccess::HTML_MODE) )
         {
             rDoc.getIDocumentContentOperations().InsertPoolItem( rPam, SwFmtPageDesc(
-                rDoc.getIDocumentStylePoolAccess().GetPageDescFromPool( RES_POOLPAGE_HTML, false )), 0 );
+                rDoc.getIDocumentStylePoolAccess().GetPageDescFromPool( RES_POOLPAGE_HTML, false )) );
         }
     }
 
@@ -1274,7 +1274,7 @@ void SwHTMLParser::NextToken( int nToken )
 
             if( pPageDesc )
             {
-                pDoc->getIDocumentContentOperations().InsertPoolItem( *pPam, SwFmtPageDesc( pPageDesc ), 0 );
+                pDoc->getIDocumentContentOperations().InsertPoolItem( *pPam, SwFmtPageDesc( pPageDesc ) );
             }
         }
         break;
@@ -2891,7 +2891,7 @@ void SwHTMLParser::_SetAttr( bool bChkEnd, bool bBeforeTable,
                         eJumpTo = JUMPTO_NONE;
                     }
 
-                    pDoc->getIDocumentContentOperations().InsertPoolItem( *pAttrPam, *pAttr->pItem, nsSetAttrMode::SETATTR_DONTREPLACE );
+                    pDoc->getIDocumentContentOperations().InsertPoolItem( *pAttrPam, *pAttr->pItem, SetAttrMode::DONTREPLACE );
                 }
                 pAttrPam->DeleteMark();
 
@@ -2973,7 +2973,7 @@ void SwHTMLParser::_SetAttr( bool bChkEnd, bool bBeforeTable,
             pAttrPam->Move( fnMoveBackward );
         }
 
-        pDoc->getIDocumentContentOperations().InsertPoolItem( *pAttrPam, *pAttr->pItem, 0 );
+        pDoc->getIDocumentContentOperations().InsertPoolItem( *pAttrPam, *pAttr->pItem );
 
         aFields.pop_front();
         delete pAttr;

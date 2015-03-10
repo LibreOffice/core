@@ -1205,7 +1205,7 @@ namespace //local functions originally from docfmt.cxx
                     SwFmtPageDesc aNew( *pDesc );
 
                     // Tables now also know line breaks
-                    if( 0 == (nFlags & nsSetAttrMode::SETATTR_APICALL) &&
+                    if( !(nFlags & SetAttrMode::APICALL) &&
                         0 != ( pTblNd = pNode->FindTableNode() ) )
                     {
                         SwTableNode* pCurTblNd = pTblNd;
@@ -1241,7 +1241,7 @@ namespace //local functions originally from docfmt.cxx
 
             // Tables now also know line breaks
             const SvxFmtBreakItem* pBreak;
-            if( pNode && 0 == (nFlags & nsSetAttrMode::SETATTR_APICALL) &&
+            if( pNode && !(nFlags & SetAttrMode::APICALL) &&
                 0 != (pTblNd = pNode->FindTableNode() ) &&
                 SfxItemState::SET == pOtherSet->GetItemState( RES_BREAK,
                             false, reinterpret_cast<const SfxPoolItem**>(&pBreak) ) )
@@ -1329,7 +1329,7 @@ namespace //local functions originally from docfmt.cxx
                 // if the selection spans across the whole paragraph.
                 // These attributes are inserted as FormatAttributes and
                 // never override the TextAttributes!
-                if( !(nFlags & nsSetAttrMode::SETATTR_DONTREPLACE ) &&
+                if( !(nFlags & SetAttrMode::DONTREPLACE ) &&
                     pTxtNd->HasHints() && !nMkPos && nPtPos == rStr.getLength())
                 {
                     SwIndex aSt( pTxtNd );
@@ -1490,7 +1490,7 @@ namespace //local functions originally from docfmt.cxx
 
         /* Edit the fully selected Nodes. */
         // Reset all attributes from the set!
-        if( pCharSet && pCharSet->Count() && !( nsSetAttrMode::SETATTR_DONTREPLACE & nFlags ) )
+        if( pCharSet && pCharSet->Count() && !( SetAttrMode::DONTREPLACE & nFlags ) )
         {
             ::sw::DocumentContentOperationsManager::ParaRstFmt aPara( pStt, pEnd, pHistory, 0, pCharSet );
             pDoc->GetNodes().ForEach( aSt, aEnd, ::sw::DocumentContentOperationsManager::lcl_RstTxtAttr, &aPara );
@@ -3868,7 +3868,7 @@ bool DocumentContentOperationsManager::ReplaceRangeImpl( SwPaM& rPam, const OUSt
                 *aTmpRange.GetMark() = *aDelPam.GetPoint();
 
                 m_rDoc.RstTxtAttrs( aTmpRange );
-                InsertItemSet( aTmpRange, aSet, 0 );
+                InsertItemSet( aTmpRange, aSet );
             }
 
             if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())

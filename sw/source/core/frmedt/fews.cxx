@@ -329,7 +329,7 @@ static void lcl_SetAPageOffset( sal_uInt16 nOffset, SwPageFrm* pPage, SwFEShell*
         pThis->GetDoc()->SetAttr( aDesc, *pFrm->FindTabFrm()->GetFmt() );
     else
     {
-        pThis->GetDoc()->getIDocumentContentOperations().InsertPoolItem( *pThis->GetCrsr(), aDesc, 0 );
+        pThis->GetDoc()->getIDocumentContentOperations().InsertPoolItem( *pThis->GetCrsr(), aDesc );
     }
 
     pThis->EndAllAction();

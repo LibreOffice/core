@@ -218,7 +218,7 @@ public:
     /// try to insert the hint
     /// @return true iff hint successfully inserted
     bool TryInsertHint( SwTxtAttr * const pHint, SwTxtNode & rNode,
-            const SetAttrMode nMode = nsSetAttrMode::SETATTR_DEFAULT );
+            const SetAttrMode nMode = SetAttrMode::DEFAULT );
 
     bool HasFtn() const          { return m_bFootnote; }
     bool IsInSplitNode() const   { return m_bInSplitNode; }
