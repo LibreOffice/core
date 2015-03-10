@@ -242,12 +242,25 @@ SearchResult TextSearch::searchForward( const OUString& searchStr, sal_Int32 sta
         in_str = xTranslit->transliterate( searchStr, startPos, endPos - startPos, offset );
 
         // JP 20.6.2001: also the start and end positions must be corrected!
-        sal_Int32 const newStartPos =
+        sal_Int32 newStartPos =
             (startPos == 0) ? 0 : FindPosInSeq_Impl( offset, startPos );
 
-        sal_Int32 const newEndPos = (endPos < searchStr.getLength())
+        sal_Int32 newEndPos = (endPos < searchStr.getLength())
             ? FindPosInSeq_Impl( offset, endPos )
             : in_str.getLength();
+
+        sal_Int32 nExtraOffset = 0;
+        if (pRegexMatcher && startPos > 0)
+        {
+            // avoid matching ^ here - in_str omits a prefix of the searchStr
+            // this is a really lame way to do it, but ICU only offers
+            // useAnchoringBounds() to disable *both* bounds but what is needed
+            // here is to disable only one bound and respect the other
+            in_str = "X" + in_str;
+            nExtraOffset = 1;
+            newStartPos += nExtraOffset;
+            newEndPos += nExtraOffset;
+        }
 
         sres = (this->*fnForward)( in_str, newStartPos, newEndPos );
 
@@ -260,14 +273,14 @@ SearchResult TextSearch::searchForward( const OUString& searchStr, sal_Int32 sta
             const sal_Int32 nGroups = sres.startOffset.getLength();
             for ( sal_Int32 k = 0; k < nGroups; k++ )
             {
-                const sal_Int32 nStart = sres.startOffset[k];
+                const sal_Int32 nStart = sres.startOffset[k] - nExtraOffset;
                 if (startPos > 0 || nStart > 0)
                     sres.startOffset[k] = (nStart < nOffsets ? offset[nStart] : (offset[nOffsets - 1] + 1));
                 // JP 20.6.2001: end is ever exclusive and then don't return
                 //               the position of the next character - return the
                 //               next position behind the last found character!
                 //               "a b c" find "b" must return 2,3 and not 2,4!!!
-                const sal_Int32 nStop = sres.endOffset[k];
+                const sal_Int32 nStop = sres.endOffset[k] - nExtraOffset;
                 if (startPos > 0 || nStop > 0)
                     sres.endOffset[k] = offset[(nStop <= nOffsets ? nStop : nOffsets) - 1] + 1;
             }
@@ -344,6 +357,10 @@ SearchResult TextSearch::searchBackward( const OUString& searchStr, sal_Int32 st
 
         sal_Int32 const newEndPos =
             (endPos == 0) ? 0 : FindPosInSeq_Impl( offset, endPos );
+
+        // TODO: this would need nExtraOffset handling to avoid $ matching
+        // if (pRegexMatcher && startPos < searchStr.getLength())
+        // but that appears to be impossible with ICU regex
 
         sres = (this->*fnBackward)( in_str, newStartPos, newEndPos );
 
