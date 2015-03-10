@@ -313,6 +313,14 @@ private:
     std::vector<OUString> maTabNames;                /// sheet names mangled for the current grammar for output
     std::vector<OUString> &GetSetupTabNames() const; /// get or setup tab names for the current grammar
 
+    struct TableRefEntry
+    {
+        ScTokenRef  mxToken;
+        sal_uInt16  mnLevel;
+        TableRefEntry( formula::FormulaToken* p ) : mxToken(p), mnLevel(0) {}
+    };
+    std::vector<TableRefEntry> maTableRefs;     /// "stack" of currently active ocTableRef tokens
+
     bool   NextNewToken(bool bInArray = false);
 
     virtual void SetError(sal_uInt16 nError) SAL_OVERRIDE;

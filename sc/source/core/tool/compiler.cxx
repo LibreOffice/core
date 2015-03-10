@@ -3938,10 +3938,33 @@ ScTokenArray* ScCompiler::CompileString( const OUString& rFormula )
             const FormulaToken* pPrev = pArr->PeekPrev( nIdx);
             if (pPrev && pPrev->GetOpCode() == ocDBArea)
             {
+                FormulaToken* pTableRefToken = new ScTableRefToken( pPrev->GetIndex(), ScTableRefToken::ALL);
+                maTableRefs.push_back( TableRefEntry( pTableRefToken));
                 // pPrev may be dead hereafter.
-                static_cast<ScTokenArray*>(pArr)->ReplaceToken( 1,
-                        new ScTableRefToken( pPrev->GetIndex(), ScTableRefToken::ALL));
+                static_cast<ScTokenArray*>(pArr)->ReplaceToken( 1, pTableRefToken);
             }
+        }
+        switch (eOp)
+        {
+            case ocTableRefOpen:
+                SAL_WARN_IF( maTableRefs.empty(), "sc.core", "ocTableRefOpen without TableRefEntry");
+                if (maTableRefs.empty())
+                    SetError(errPair);
+                else
+                    ++maTableRefs.back().mnLevel;
+                break;
+            case ocTableRefClose:
+                SAL_WARN_IF( maTableRefs.empty(), "sc.core", "ocTableRefClose without TableRefEntry");
+                if (maTableRefs.empty())
+                    SetError(errPair);
+                else
+                {
+                    if (--maTableRefs.back().mnLevel == 0)
+                        maTableRefs.pop_back();
+                }
+                break;
+            default:
+                break;
         }
         eLastOp = maRawToken.GetOpCode();
         if ( bAutoCorrect )
