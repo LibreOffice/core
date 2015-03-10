@@ -137,6 +137,11 @@ struct _LibreOfficeKitDocumentClass
                          int nType,
                          int nX,
                          int nY);
+  /// @see lok::Document::setGraphicSelection
+  void (*setGraphicSelection)(LibreOfficeKitDocument* pThis,
+                         int nType,
+                         int nX,
+                         int nY);
 #endif // LOK_USE_UNSTABLE_API
 };
 

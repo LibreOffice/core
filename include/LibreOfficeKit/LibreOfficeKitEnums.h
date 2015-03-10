@@ -135,6 +135,31 @@ typedef enum
 }
 LibreOfficeKitSetTextSelectionType;
 
+typedef enum
+{
+    /**
+     * A move or a resize action starts. It is assumed that there is a valid
+     * graphic selection (see LOK_CALLBACK_GRAPHIC_SELECTION) and the supplied
+     * coordinates are the ones the user tapped on.
+     *
+     * The type of the action is move by default, unless the coordinates are
+     * the position of a handle (see below), in which case it's a resize.
+     *
+     * There are 8 handles for a graphic selection:
+     * - top-left, top-center, top-right
+     * - middle-left, middle-right
+     * - bottom-left, bottom-center, bottom-right
+     */
+    LOK_SETGRAPHICSELECTION_START,
+    /**
+     * A move or resize action stops. It is assumed that this is always used
+     * only after a LOK_SETTEXTSELECTION_START. The supplied coordinates are
+     * the ones where the user released the screen.
+     */
+    LOK_SETGRAPHICSELECTION_END
+}
+LibreOfficeKitSetGraphicSelectionType;
+
 #endif // LOK_USE_UNSTABLE_API
 
 #ifdef __cplusplus

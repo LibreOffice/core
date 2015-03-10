@@ -115,6 +115,13 @@ public:
      * @see lok::Document::setTextSelection().
      */
     virtual void setTextSelection(int /*nType*/, int /*nX*/, int /*nY*/) { }
+
+    /**
+     * Adjusts the graphic selection.
+     *
+     * @see lok::Document::setGraphicSelection().
+     */
+    virtual void setGraphicSelection(int /*nType*/, int /*nX*/, int /*nY*/) { }
 };
 
 } // namespace vcl

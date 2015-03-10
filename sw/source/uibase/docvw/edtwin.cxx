@@ -6283,4 +6283,22 @@ void SwEditWin::SetCursorLogicPosition(const Point& rPosition, bool bPoint, bool
         rShell.getShellCrsr(/*bBlock=*/false)->Exchange();
 }
 
+void SwEditWin::SetGraphicLogicPosition(bool bStart, const Point& rPosition)
+{
+    if (bStart)
+    {
+        MouseEvent aClickEvent(rPosition, 1, MouseEventModifiers::SIMPLECLICK, MOUSE_LEFT);
+        MouseButtonDown(aClickEvent);
+        MouseEvent aMoveEvent(Point(rPosition.getX() + MIN_MOVE + 1, rPosition.getY()), 0, MouseEventModifiers::SIMPLEMOVE, MOUSE_LEFT);
+        MouseMove(aMoveEvent);
+    }
+    else
+    {
+        MouseEvent aMoveEvent(Point(rPosition.getX() - MIN_MOVE - 1, rPosition.getY()), 0, MouseEventModifiers::SIMPLEMOVE, MOUSE_LEFT);
+        MouseMove(aMoveEvent);
+        MouseEvent aClickEvent(rPosition, 1, MouseEventModifiers::SIMPLECLICK, MOUSE_LEFT);
+        MouseButtonUp(aClickEvent);
+    }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

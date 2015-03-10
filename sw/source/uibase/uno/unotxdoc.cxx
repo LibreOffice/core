@@ -3223,6 +3223,25 @@ void SwXTextDocument::setTextSelection(int nType, int nX, int nY)
     }
 }
 
+void SwXTextDocument::setGraphicSelection(int nType, int nX, int nY)
+{
+    SolarMutexGuard aGuard;
+
+    SwEditWin& rEditWin = pDocShell->GetView()->GetEditWin();
+    switch (nType)
+    {
+    case LOK_SETTEXTSELECTION_START:
+        rEditWin.SetGraphicLogicPosition(/*bStart=*/true, Point(nX, nY));
+        break;
+    case LOK_SETTEXTSELECTION_END:
+        rEditWin.SetGraphicLogicPosition(/*bStart=*/false, Point(nX, nY));
+        break;
+    default:
+        assert(false);
+        break;
+    }
+}
+
 void * SAL_CALL SwXTextDocument::operator new( size_t t) throw()
 {
     return SwXTextDocumentBaseClass::operator new(t);

@@ -141,6 +141,18 @@ public:
     {
         mpDoc->pClass->setTextSelection(mpDoc, nType, nX, nY);
     }
+
+    /**
+     * Adjusts the graphic selection.
+     *
+     * @param nType @see LibreOfficeKitSetGraphicSelectionType
+     * @param nX horizontal position in document coordinates
+     * @param nY vertical position in document coordinates
+     */
+    inline void setGraphicSelection(int nType, int nX, int nY)
+    {
+        mpDoc->pClass->setGraphicSelection(mpDoc, nType, nX, nY);
+    }
 #endif // LOK_USE_UNSTABLE_API
 };
 
