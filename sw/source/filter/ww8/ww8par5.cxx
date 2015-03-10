@@ -101,7 +101,7 @@ namespace
     // #120879# - helper method to identify a bookmark name to match the internal TOC bookmark naming convention
     bool IsTOCBookmarkName(const OUString& rName)
     {
-        return rName.startsWith("_Toc") || rName.startsWith(IDocumentMarkAccess::GetCrossRefHeadingBookmarkNamePrefix());
+        return rName.startsWith("_Toc") || rName.startsWith(IDocumentMarkAccess::GetCrossRefHeadingBookmarkNamePrefix()+"_Toc");
     }
 
     OUString EnsureTOCBookmarkName(const OUString& rName)
@@ -1968,6 +1968,15 @@ eF_ResT SwWW8ImplReader::Read_F_Ref( WW8FieldDesc*, OUString& rStr )
     }
 
     OUString sBkmName(GetMappedBookmark(sOrigBkmName));
+
+    // #i120879# add cross reference bookmark name prefix, if it
+    // matches internal TOC bookmark naming convention
+    if ( IsTOCBookmarkName( sBkmName ) )
+    {
+        sBkmName = EnsureTOCBookmarkName(sBkmName);
+        // track <sBookmarkName> as referenced TOC bookmark.
+        pReffedStck->aReferencedTOCBookmarks.insert( sBkmName );
+    }
 
     SwGetRefField aFld(
         static_cast<SwGetRefFieldType*>(rDoc.getIDocumentFieldsAccess().GetSysFldType( RES_GETREFFLD )),
