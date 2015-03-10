@@ -30,7 +30,7 @@
 #include <vcl/settings.hxx>
 
 #define LOK_USE_UNSTABLE_API
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <LibreOfficeKit/LibreOfficeKit.h>
 
 #include <svx/svdview.hxx>
 #include "tabvwsh.hxx"
@@ -962,12 +962,14 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
 
 void ScGridWindow::LogicInvalidate(const ::vcl::Region* pRegion)
 {
+    /*
     OString sRectangle;
     if (!pRegion)
         sRectangle = "EMPTY";
     else
         sRectangle = pRegion->GetBoundRect().toString();
     pViewData->GetDocument()->GetDrawLayer()->libreOfficeKitCallback(LOK_CALLBACK_INVALIDATE_TILES, sRectangle.getStr());
+    */
 }
 
 void ScGridWindow::CheckNeedsRepaint()
