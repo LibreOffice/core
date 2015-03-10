@@ -1595,6 +1595,12 @@ ScTokenArray& ScTokenArray::operator=( const ScTokenArray& rArr )
     return *this;
 }
 
+void ScTokenArray::ClearScTokenArray()
+{
+    Clear();
+    meVectorState = FormulaVectorEnabled;
+}
+
 ScTokenArray* ScTokenArray::Clone() const
 {
     ScTokenArray* p = new ScTokenArray();
