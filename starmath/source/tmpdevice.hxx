@@ -20,14 +20,16 @@
 #ifndef INCLUDED_STARMATH_SOURCE_TMPDEVICE_HXX
 #define INCLUDED_STARMATH_SOURCE_TMPDEVICE_HXX
 
-#include <boost/noncopyable.hpp>
 #include <tools/color.hxx>
 #include <vcl/lineinfo.hxx>
 #include <vcl/outdev.hxx>
 
-class SmTmpDevice: private boost::noncopyable
+class SmTmpDevice
 {
     OutputDevice  &rOutDev;
+
+    SmTmpDevice(const SmTmpDevice&) SAL_DELETED_FUNCTION;
+    SmTmpDevice& operator=(const SmTmpDevice&) SAL_DELETED_FUNCTION;
 
     Color   Impl_GetColor( const Color& rColor );
 

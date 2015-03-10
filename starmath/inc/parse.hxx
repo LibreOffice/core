@@ -28,9 +28,7 @@
 #include "error.hxx"
 #include "node.hxx"
 
-#include <boost/noncopyable.hpp>
-
-class SmParser : boost::noncopyable
+class SmParser
 {
     OUString        m_aBufferString;
     SmToken         m_aCurToken;
@@ -50,6 +48,9 @@ class SmParser : boost::noncopyable
 
     //! locale where '.' is decimal separator!
     ::com::sun::star::lang::Locale m_aDotLoc;
+
+    SmParser(const SmParser&) SAL_DELETED_FUNCTION;
+    SmParser& operator=(const SmParser&) SAL_DELETED_FUNCTION;
 
 #if OSL_DEBUG_LEVEL > 1
     bool            IsDelimiter( const OUString &rTxt, sal_Int32 nPos );
