@@ -34,6 +34,7 @@ static int help()
 }
 
 static GtkWidget* pDocView;
+static GtkToolItem* pEnableEditing;
 static GtkWidget* pDocViewQuad;
 static GtkWidget* pVBox;
 // GtkComboBox requires gtk 2.24 or later
@@ -105,11 +106,22 @@ void changeZoom( GtkWidget* pButton, gpointer /* pItem */ )
     }
 }
 
+/// User clicked on the button -> inform LOKDocView.
 void toggleEditing(GtkWidget* /*pButton*/, gpointer /*pItem*/)
 {
     LOKDocView* pLOKDocView = LOK_DOCVIEW(pDocView);
-    bool bEdit = lok_docview_get_edit(pLOKDocView);
-    lok_docview_set_edit(pLOKDocView, !bEdit);
+    bool bActive = gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(pEnableEditing));
+    if (lok_docview_get_edit(pLOKDocView) != bActive)
+        lok_docview_set_edit(pLOKDocView, bActive);
+}
+
+/// LOKDocView changed edit state -> inform the tool button.
+static void signalEdit(LOKDocView* pLOKDocView, gboolean bWasEdit, gpointer /*pData*/)
+{
+    gboolean bEdit = lok_docview_get_edit(pLOKDocView);
+    g_info("signalEdit: %d -> %d", bWasEdit, lok_docview_get_edit(pLOKDocView));
+    if (gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(pEnableEditing)) != bEdit)
+        gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(pEnableEditing), bEdit);
 }
 
 void changeQuadView( GtkWidget* /*pButton*/, gpointer /* pItem */ )
@@ -347,7 +359,7 @@ int main( int argc, char* argv[] )
     g_signal_connect( G_OBJECT(pEnableQuadView), "toggled", G_CALLBACK(changeQuadView), NULL );
 
     gtk_toolbar_insert( GTK_TOOLBAR(pToolbar), gtk_separator_tool_item_new(), -1);
-    GtkToolItem* pEnableEditing = gtk_toggle_tool_button_new();
+    pEnableEditing = gtk_toggle_tool_button_new();
     gtk_tool_button_set_label(GTK_TOOL_BUTTON(pEnableEditing), "Editing");
     gtk_toolbar_insert(GTK_TOOLBAR(pToolbar), pEnableEditing, -1);
     g_signal_connect(G_OBJECT(pEnableEditing), "toggled", G_CALLBACK(toggleEditing), NULL);
@@ -357,6 +369,7 @@ int main( int argc, char* argv[] )
     // Docview
     pDocView = lok_docview_new( pOffice );
     pDocViewQuad = 0;
+    g_signal_connect(pDocView, "edit-changed", G_CALLBACK(signalEdit), NULL);
 
     // Input handling.
     g_signal_connect(pWindow, "key-press-event", G_CALLBACK(signalKey), NULL);

@@ -232,7 +232,8 @@ gboolean lcl_signalButton(GtkWidget* pEventBox, GdkEventButton* pEvent, LOKDocVi
         }
     }
 
-    lok_docview_set_edit(pDocView, TRUE);
+    if (!pDocView->m_bEdit)
+        lok_docview_set_edit(pDocView, TRUE);
 
     switch (pEvent->type)
     {
@@ -289,9 +290,27 @@ SAL_DLLPUBLIC_EXPORT guint lok_docview_get_type()
     return lok_docview_type;
 }
 
+enum
+{
+    EDIT_CHANGED,
+    LAST_SIGNAL
+};
+
+static guint docview_signals[LAST_SIGNAL] = { 0 };
+
 static void lok_docview_class_init( LOKDocViewClass* pClass )
 {
-    (void)pClass;
+    GObjectClass *gobject_class = G_OBJECT_CLASS(pClass);
+    pClass->edit_changed = NULL;
+    docview_signals[EDIT_CHANGED] =
+        g_signal_new("edit-changed",
+                     G_TYPE_FROM_CLASS (gobject_class),
+                     G_SIGNAL_RUN_FIRST,
+                     G_STRUCT_OFFSET (LOKDocViewClass, edit_changed),
+                     NULL, NULL,
+                     g_cclosure_marshal_VOID__BOOLEAN,
+                     G_TYPE_NONE, 1,
+                     G_TYPE_BOOLEAN);
 }
 
 static void lok_docview_init( LOKDocView* pDocView )
@@ -950,9 +969,12 @@ SAL_DLLPUBLIC_EXPORT void lok_docview_set_partmode( LOKDocView* pDocView,
 SAL_DLLPUBLIC_EXPORT void lok_docview_set_edit( LOKDocView* pDocView,
                                                 gboolean bEdit )
 {
+    gboolean bWasEdit = pDocView->m_bEdit;
+
     if (!pDocView->m_bEdit && bEdit)
         g_info("lok_docview_set_edit: entering edit mode");
     pDocView->m_bEdit = bEdit;
+    g_signal_emit(pDocView, docview_signals[EDIT_CHANGED], 0, bWasEdit);
     gtk_widget_queue_draw(GTK_WIDGET(pDocView->pEventBox));
 }
 
