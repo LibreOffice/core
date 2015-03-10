@@ -1546,9 +1546,6 @@ ScChangeTrack* XclExpChangeTrack::CreateTempChangeTrack()
 
     // create empty document
     pTempDoc = new ScDocument;
-    OSL_ENSURE( pTempDoc, "XclExpChangeTrack::CreateTempChangeTrack - no temp document" );
-    if( !pTempDoc )
-        return NULL;
 
     // adjust table count
     SCTAB nOrigCount = GetDoc().GetTableCount();

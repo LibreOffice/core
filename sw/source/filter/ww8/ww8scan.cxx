@@ -2884,9 +2884,10 @@ bool WW8PLCFx_Fc_FKP::NewFkp()
             pFkp = *aIter;
             pFkp->Reset(GetStartFc());
         }
-        else if (0 != (pFkp = new WW8Fkp(GetFIBVersion(), pFKPStrm, pDataStrm, nPo,
-            pFkpSizeTab[ ePLCF ], ePLCF, GetStartFc())))
+        else
         {
+            pFkp = new WW8Fkp(GetFIBVersion(), pFKPStrm, pDataStrm, nPo,
+                pFkpSizeTab[ ePLCF ], ePLCF, GetStartFc());
             maFkpCache.push_back(pFkp);
 
             if (maFkpCache.size() > eMaxCache)

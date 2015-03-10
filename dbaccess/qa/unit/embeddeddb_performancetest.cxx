@@ -129,16 +129,7 @@ SvFileStream* EmbeddedDBPerformanceTest::getWordListStream()
 {
     OUString wlPath;
     createFileURL("wordlist", wlPath);
-
-    SvFileStream *pFile(new SvFileStream(wlPath, StreamMode::READ));
-
-    if (!pFile)
-    {
-        fprintf(stderr, "Please ensure the wordlist is present\n");
-        CPPUNIT_ASSERT(false);
-    }
-
-    return pFile;
+    return new SvFileStream(wlPath, StreamMode::READ);
 }
 
 void EmbeddedDBPerformanceTest::printTimes(
