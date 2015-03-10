@@ -95,8 +95,12 @@ ContextHandlerRef ChartSpaceFragment::onCreateContext( sal_Int32 nElement, const
                 case C_TOKEN( backWall ):
                     return new WallFloorContext( *this, mrModel.mxBackWall.create() );
                 case C_TOKEN( dispBlanksAs ):
-                    mrModel.mnDispBlanksAs = rAttribs.getToken( XML_val, XML_zero );
+                {
+                    bool bMSO2007Document = getFilter().isMSO2007Document();
+                    // default value is XML_gap for MSO 2007 and XML_zero in OOXML
+                    mrModel.mnDispBlanksAs = rAttribs.getToken( XML_val, bMSO2007Document ? XML_gap : XML_zero );
                     return 0;
+                }
                 case C_TOKEN( floor ):
                     return new WallFloorContext( *this, mrModel.mxFloor.create() );
                 case C_TOKEN( legend ):
