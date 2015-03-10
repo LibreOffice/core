@@ -153,6 +153,14 @@ public:
     {
         mpDoc->pClass->setGraphicSelection(mpDoc, nType, nX, nY);
     }
+
+    /**
+     * Gets rid of any text or graphic selection.
+     */
+    inline void resetSelection()
+    {
+        mpDoc->pClass->resetSelection(mpDoc);
+    }
 #endif // LOK_USE_UNSTABLE_API
 };
 

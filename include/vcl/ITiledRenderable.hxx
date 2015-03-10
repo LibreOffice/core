@@ -122,6 +122,11 @@ public:
      * @see lok::Document::setGraphicSelection().
      */
     virtual void setGraphicSelection(int /*nType*/, int /*nX*/, int /*nY*/) { }
+
+    /**
+     * @see lok::Document::resetSelection().
+     */
+    virtual void resetSelection() { }
 };
 
 } // namespace vcl

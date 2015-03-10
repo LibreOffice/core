@@ -419,6 +419,8 @@ public:
     virtual void setTextSelection(int nType, int nX, int nY) SAL_OVERRIDE;
     /// @see vcl::ITiledRenderable::setGraphicSelection().
     virtual void setGraphicSelection(int nType, int nX, int nY) SAL_OVERRIDE;
+    /// @see vcl::ITiledRenderable::resetSelection().
+    virtual void resetSelection() SAL_OVERRIDE;
 
     void                        Invalidate();
     void                        Reactivate(SwDocShell* pNewDocShell);

@@ -973,6 +973,11 @@ SAL_DLLPUBLIC_EXPORT void lok_docview_set_edit( LOKDocView* pDocView,
 
     if (!pDocView->m_bEdit && bEdit)
         g_info("lok_docview_set_edit: entering edit mode");
+    else if (pDocView->m_bEdit && !bEdit)
+    {
+        g_info("lok_docview_set_edit: leaving edit mode");
+        pDocView->pDocument->pClass->resetSelection(pDocView->pDocument);
+    }
     pDocView->m_bEdit = bEdit;
     g_signal_emit(pDocView, docview_signals[EDIT_CHANGED], 0, bWasEdit);
     gtk_widget_queue_draw(GTK_WIDGET(pDocView->pEventBox));

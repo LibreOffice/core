@@ -3242,6 +3242,14 @@ void SwXTextDocument::setGraphicSelection(int nType, int nX, int nY)
     }
 }
 
+void SwXTextDocument::resetSelection()
+{
+    SolarMutexGuard aGuard;
+
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    pWrtShell->ResetSelect(0, false);
+}
+
 void * SAL_CALL SwXTextDocument::operator new( size_t t) throw()
 {
     return SwXTextDocumentBaseClass::operator new(t);

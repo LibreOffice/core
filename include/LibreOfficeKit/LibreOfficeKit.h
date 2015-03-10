@@ -142,6 +142,8 @@ struct _LibreOfficeKitDocumentClass
                          int nType,
                          int nX,
                          int nY);
+  /// @see lok::Document::resetSelection
+  void (*resetSelection)(LibreOfficeKitDocument* pThis);
 #endif // LOK_USE_UNSTABLE_API
 };
 
