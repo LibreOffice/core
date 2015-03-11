@@ -3938,7 +3938,7 @@ ScTokenArray* ScCompiler::CompileString( const OUString& rFormula )
             const FormulaToken* pPrev = pArr->PeekPrev( nIdx);
             if (pPrev && pPrev->GetOpCode() == ocDBArea)
             {
-                FormulaToken* pTableRefToken = new ScTableRefToken( pPrev->GetIndex(), ScTableRefToken::ALL);
+                FormulaToken* pTableRefToken = new ScTableRefToken( pPrev->GetIndex(), ScTableRefToken::TABLE);
                 maTableRefs.push_back( TableRefEntry( pTableRefToken));
                 // pPrev may be dead hereafter.
                 static_cast<ScTokenArray*>(pArr)->ReplaceToken( 1, pTableRefToken);
@@ -4700,7 +4700,7 @@ bool ScCompiler::HandleTableRef()
         ScTokenArray* pNew = new ScTokenArray();
         ScTableRefToken::Item eItem = pTR->GetItem();
         bool bGotToken = false;
-        if (eItem == ScTableRefToken::ALL)
+        if (eItem == ScTableRefToken::TABLE || eItem == ScTableRefToken::ALL)
         {
             ScComplexRefData aRefData;
             aRefData.InitFlags();
