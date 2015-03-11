@@ -1715,7 +1715,7 @@ void askForParameters(const Reference< XSingleSelectQueryComposer >& _xComposer,
     ::std::vector<bool, std::allocator<bool> > aNewParameterSet( _aParametersSet );
     if ( nParamCount && ::std::count(aNewParameterSet.begin(),aNewParameterSet.end(),true) != nParamCount )
     {
-        static const OUString PROPERTY_NAME(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME));
+        static const char PROPERTY_NAME[] =OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME);
         aNewParameterSet.resize(nParamCount ,false);
         typedef ::std::map< OUString, ::std::vector<sal_Int32> > TParameterPositions;
         TParameterPositions aParameterNames;

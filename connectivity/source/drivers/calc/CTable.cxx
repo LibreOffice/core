@@ -463,7 +463,7 @@ void OCalcTable::fillColumns()
         {
             case DataType::VARCHAR:
                 {
-                    static const OUString s_sType("VARCHAR");
+                    static const char s_sType[]="VARCHAR";
                     aTypeName = s_sType;
                 }
                 break;

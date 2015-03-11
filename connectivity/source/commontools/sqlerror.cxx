@@ -62,6 +62,7 @@ namespace connectivity
         ~SQLError_Impl();
 
         // versions of the public SQLError methods which are just delegated to this impl-class
+
         static const OUString& getMessagePrefix();
         OUString     getErrorMessage( const ErrorCondition _eCondition, const ParamValue& _rParamValue1, const ParamValue& _rParamValue2, const ParamValue& _rParamValue3 );
         OUString     getSQLState( const ErrorCondition _eCondition );
@@ -114,7 +115,7 @@ namespace connectivity
 
     const OUString& SQLError_Impl::getMessagePrefix()
     {
-        static const OUString s_sMessagePrefix( "[OOoBase]" );
+        static const char s_sMessagePrefix="[OOoBase]";
         return s_sMessagePrefix;
     }
 

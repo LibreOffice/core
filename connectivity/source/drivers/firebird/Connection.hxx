@@ -75,7 +75,7 @@ namespace connectivity
              * Location within the .odb that an embedded .fdb will be stored.
              * Only relevant for embedded dbs.
              */
-            static const OUString our_sDBLocation;
+            static const char our_sDBLocation[];
         protected:
             ::osl::Mutex        m_aMutex;
 

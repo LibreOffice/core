@@ -221,10 +221,10 @@ void PresenterNotesView::CreateToolBar (
 
 void PresenterNotesView::SetSlide (const Reference<drawing::XDrawPage>& rxNotesPage)
 {
-    static const OUString sNotesShapeName (
-        "com.sun.star.presentation.NotesShape");
-    static const OUString sTextShapeName (
-        "com.sun.star.drawing.TextShape");
+    static const char sNotesShapeName[]=
+        "com.sun.star.presentation.NotesShape";
+    static const char sTextShapeName[]=
+        "com.sun.star.drawing.TextShape";
 
     Reference<container::XIndexAccess> xIndexAccess (rxNotesPage, UNO_QUERY);
     if (xIndexAccess.is())

@@ -72,8 +72,7 @@ namespace xmloff
     //= OFormLayerXMLExport_Impl
     const OUString& OFormLayerXMLExport_Impl::getControlNumberStyleNamePrefix()
     {
-        static const OUString s_sControlNumberStyleNamePrefix("C");
-        return s_sControlNumberStyleNamePrefix;
+        return OUString("C");
     }
 
     OFormLayerXMLExport_Impl::OFormLayerXMLExport_Impl(SvXMLExport& _rContext)

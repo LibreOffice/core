@@ -324,7 +324,7 @@ public:
         @onerror
     */
 
-    static const OUString impl_getStaticImplementationName();
+    static const char impl_getStaticImplementationName[];
 
 //  protected methods
 

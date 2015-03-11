@@ -21,13 +21,13 @@
 #define INCLUDED_SD_INC_STRMNAME_H
 
 // PowerPoint-Filter
-static const OUString pFilterPowerPoint97( "MS PowerPoint 97" );
-static const OUString pFilterPowerPoint97Template( "MS PowerPoint 97 Vorlage" );
-static const OUString pFilterPowerPoint97AutoPlay( "MS PowerPoint 97 AutoPlay" );
+static const char pFilterPowerPoint97[]="MS PowerPoint 97" ;
+static const char pFilterPowerPoint97Template[]= "MS PowerPoint 97 Vorlage";
+static const char pFilterPowerPoint97AutoPlay[] =  "MS PowerPoint 97 AutoPlay";
 
 // XML content stream
-static const OUString pStarDrawXMLContent( "content.xml" );
-static const OUString pStarDrawOldXMLContent( "Content.xml" );
+static const char pStarDrawXMLContent[]= "content.xml" ;
+static const char pStarDrawOldXMLContent[]= "Content.xml" ;
 
 #endif // INCLUDED_SD_INC_STRMNAME_H
 
