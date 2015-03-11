@@ -6299,16 +6299,10 @@ TimeStampResp ::= SEQUENCE  {
      timeStampToken TimeStampToken OPTIONAL  }
 */
 
-SEC_ASN1_MKSUB(SECOID_AlgorithmIDTemplate)
-SEC_ASN1_MKSUB(MessageImprint_Template)
-SEC_ASN1_MKSUB(Extensions_Template)
-SEC_ASN1_MKSUB(PKIStatusInfo_Template)
-SEC_ASN1_MKSUB(Any_Template)
-
 const SEC_ASN1Template MessageImprint_Template[] =
 {
     { SEC_ASN1_SEQUENCE, 0, NULL, sizeof(MessageImprint) },
-    { SEC_ASN1_INLINE | SEC_ASN1_XTRN, offsetof(MessageImprint, hashAlgorithm), SEC_ASN1_SUB(SECOID_AlgorithmIDTemplate), 0 },
+    { SEC_ASN1_INLINE, offsetof(MessageImprint, hashAlgorithm), SECOID_AlgorithmIDTemplate, 0 },
     { SEC_ASN1_OCTET_STRING, offsetof(MessageImprint, hashedMessage), 0, 0 },
     { 0, 0, 0, 0 }
 };
@@ -6331,11 +6325,11 @@ const SEC_ASN1Template TimeStampReq_Template[] =
 {
     { SEC_ASN1_SEQUENCE, 0, NULL, sizeof(TimeStampReq) },
     { SEC_ASN1_INTEGER, offsetof(TimeStampReq, version), 0, 0 },
-    { SEC_ASN1_INLINE | SEC_ASN1_XTRN, offsetof(TimeStampReq, messageImprint), SEC_ASN1_SUB(MessageImprint_Template), 0 },
+    { SEC_ASN1_INLINE, offsetof(TimeStampReq, messageImprint), MessageImprint_Template, 0 },
     { SEC_ASN1_OBJECT_ID | SEC_ASN1_OPTIONAL, offsetof(TimeStampReq, reqPolicy), 0, 0 },
     { SEC_ASN1_INTEGER | SEC_ASN1_OPTIONAL, offsetof(TimeStampReq, nonce), 0, 0 },
     { SEC_ASN1_BOOLEAN | SEC_ASN1_OPTIONAL, offsetof(TimeStampReq, certReq), 0, 0 },
-    { SEC_ASN1_XTRN | SEC_ASN1_OPTIONAL | SEC_ASN1_CONTEXT_SPECIFIC | 0, offsetof(TimeStampReq, extensions), SEC_ASN1_SUB(Extensions_Template), 0 },
+    { SEC_ASN1_OPTIONAL | SEC_ASN1_CONTEXT_SPECIFIC | 0, offsetof(TimeStampReq, extensions), Extensions_Template, 0 },
     { 0, 0, 0, 0 }
 };
 
@@ -6367,8 +6361,8 @@ typedef struct {
 const SEC_ASN1Template TimeStampResp_Template[] =
 {
     { SEC_ASN1_SEQUENCE, 0, NULL, sizeof(TimeStampResp) },
-    { SEC_ASN1_INLINE | SEC_ASN1_XTRN, offsetof(TimeStampResp, status), SEC_ASN1_SUB(PKIStatusInfo_Template), 0 },
-    { SEC_ASN1_ANY | SEC_ASN1_OPTIONAL, offsetof(TimeStampResp, timeStampToken), SEC_ASN1_SUB(Any_Template), 0 },
+    { SEC_ASN1_INLINE, offsetof(TimeStampResp, status), PKIStatusInfo_Template, 0 },
+    { SEC_ASN1_ANY | SEC_ASN1_OPTIONAL, offsetof(TimeStampResp, timeStampToken), Any_Template, 0 },
     { 0, 0, 0, 0 }
 };
 
