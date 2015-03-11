@@ -130,35 +130,35 @@ class SubstitutePathVariables_Impl : public utl::ConfigItem
 
         virtual void ImplCommit() SAL_OVERRIDE;
 
-            // Wrapper methods for low-level functions
-            OperatingSystem         GetOperatingSystem();
-            const OUString&    GetYPDomainName();
-            const OUString&    GetDNSDomainName();
-            const OUString&    GetNTDomainName();
-            const OUString&    GetHostName();
+        // Wrapper methods for low-level functions
+        OperatingSystem    GetOperatingSystem();
+        const OUString&    GetYPDomainName();
+        const OUString&    GetDNSDomainName();
+        const OUString&    GetNTDomainName();
+        const OUString&    GetHostName();
 
-            bool                    FilterRuleSet( const SubstituteRuleVector& aRuleSet, SubstituteRule& aActiveRule );
+        bool  FilterRuleSet(const SubstituteRuleVector& aRuleSet, SubstituteRule& aActiveRule);
 
-            void                    ReadSharePointsFromConfiguration( com::sun::star::uno::Sequence< OUString >& aSharePointsSeq );
-            void                    ReadSharePointRuleSetFromConfiguration( const OUString& aSharePointName,
-                                                                                                                                const OUString& aSharePointNodeName,
-                                                                                                                                SubstituteRuleVector& aRuleSet );
+        void  ReadSharePointsFromConfiguration(com::sun::star::uno::Sequence< OUString >& aSharePointsSeq);
+        void  ReadSharePointRuleSetFromConfiguration(const OUString& aSharePointName,
+                  const OUString& aSharePointNodeName,
+                  SubstituteRuleVector& aRuleSet);
 
-            // Stored values for domains and host
-            bool                    m_bYPDomainRetrieved;
-            OUString           m_aYPDomain;
-            bool                    m_bDNSDomainRetrieved;
-            OUString           m_aDNSDomain;
-            bool                    m_bNTDomainRetrieved;
-            OUString           m_aNTDomain;
-            bool                    m_bHostRetrieved;
-            OUString           m_aHost;
+        // Stored values for domains and host
+        bool      m_bYPDomainRetrieved;
+        OUString  m_aYPDomain;
+        bool      m_bDNSDomainRetrieved;
+        OUString  m_aDNSDomain;
+        bool      m_bNTDomainRetrieved;
+        OUString  m_aNTDomain;
+        bool      m_bHostRetrieved;
+        OUString  m_aHost;
 
-            Link                    m_aListenerNotify;
-            const OUString     m_aSharePointsNodeName;
-            const OUString     m_aDirPropertyName;
-            const OUString     m_aEnvPropertyName;
-            const OUString     m_aLevelSep;
+        Link              m_aListenerNotify;
+        const OUString    m_aSharePointsNodeName;
+        const OUString    m_aDirPropertyName;
+        const OUString    m_aEnvPropertyName;
+        const OUString    m_aLevelSep;
 };
 
 enum PreDefVariable
