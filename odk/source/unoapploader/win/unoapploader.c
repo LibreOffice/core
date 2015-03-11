@@ -402,7 +402,7 @@ void writeError( const char* errstr )
     FILE* ferr = getErrorFile( 1 );
     if ( ferr != NULL )
     {
-        fprintf( ferr, errstr );
+        fputs( errstr, ferr );
         fflush( ferr );
     }
 }
