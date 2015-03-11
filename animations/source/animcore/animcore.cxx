@@ -58,8 +58,6 @@
 #include <algorithm>
 #include <string.h>
 
-#include <factreg.hxx>
-
 using ::osl::Mutex;
 using ::osl::Guard;
 using ::cppu::OInterfaceContainerHelper;
@@ -901,6 +899,8 @@ Sequence< OUString > AnimationNode::getSupportedServiceNames(void) throw(std::ex
         return getSupportedServiceNames_ANIMATEMOTION();
     case AnimationNodeType::TRANSITIONFILTER:
         return getSupportedServiceNames_TRANSITIONFILTER();
+    case AnimationNodeType::ANIMATETRANSFORM:
+        return getSupportedServiceNames_ANIMATETRANSFORM();
     case AnimationNodeType::AUDIO:
         return getSupportedServiceNames_AUDIO();
     case AnimationNodeType::COMMAND:
