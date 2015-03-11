@@ -111,9 +111,9 @@ void SvxNoSpaceEdit::KeyInput( const KeyEvent& rKEvent )
         sal_uInt16 nGroup = rKeyCode.GetGroup();
         sal_uInt16 nKey = rKeyCode.GetCode();
         bValid = ( KEYGROUP_NUM == nGroup || KEYGROUP_CURSOR == nGroup ||
-                 ( KEYGROUP_MISC == nGroup && ( nKey < KEY_ADD || nKey > KEY_EQUAL ) ) );
+                ( KEYGROUP_MISC == nGroup && ( nKey < KEY_ADD || nKey > KEY_EQUAL ) ) );
         if ( !bValid && ( rKeyCode.IsMod1() && (
-             KEY_A == nKey || KEY_C == nKey || KEY_V == nKey || KEY_X == nKey || KEY_Z == nKey ) ) )
+                        KEY_A == nKey || KEY_C == nKey || KEY_V == nKey || KEY_X == nKey || KEY_Z == nKey ) ) )
             // Erase, Copy, Paste, Select All und Undo soll funktionieren
             bValid = true;
     }
@@ -155,14 +155,14 @@ bool SvxNoSpaceEdit::set_property(const OString &rKey, const OString &rValue)
 
 SvxProxyTabPage::SvxProxyTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "OptProxyPage","cui/ui/optproxypage.ui", &rSet)
-    , aProxyModePN("ooInetProxyType")
-    , aHttpProxyPN("ooInetHTTPProxyName")
-    , aHttpPortPN("ooInetHTTPProxyPort")
-    , aHttpsProxyPN("ooInetHTTPSProxyName")
-    , aHttpsPortPN("ooInetHTTPSProxyPort")
-    , aFtpProxyPN("ooInetFTPProxyName")
-    , aFtpPortPN("ooInetFTPProxyPort")
-    , aNoProxyDescPN("ooInetNoProxy")
+      , aProxyModePN("ooInetProxyType")
+      , aHttpProxyPN("ooInetHTTPProxyName")
+      , aHttpPortPN("ooInetHTTPProxyPort")
+      , aHttpsProxyPN("ooInetHTTPSProxyName")
+      , aHttpsPortPN("ooInetHTTPSProxyPort")
+      , aFtpProxyPN("ooInetFTPProxyName")
+      , aFtpPortPN("ooInetFTPProxyPort")
+      , aNoProxyDescPN("ooInetNoProxy")
 {
     get(m_pProxyModeLB, "proxymode");
 
@@ -194,8 +194,8 @@ SvxProxyTabPage::SvxProxyTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
 
     Reference< com::sun::star::lang::XMultiServiceFactory >
         xConfigurationProvider(
-            configuration::theDefaultProvider::get(
-                comphelper::getProcessComponentContext() ) );
+                configuration::theDefaultProvider::get(
+                    comphelper::getProcessComponentContext() ) );
 
     OUString aConfigRoot( "org.openoffice.Inet/Settings" );
 
@@ -207,8 +207,8 @@ SvxProxyTabPage::SvxProxyTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     aArgumentList[0] = makeAny( aProperty );
 
     m_xConfigurationUpdateAccess = xConfigurationProvider->createInstanceWithArguments(
-        OUString( "com.sun.star.configuration.ConfigurationUpdateAccess" ),
-        aArgumentList );
+            OUString( "com.sun.star.configuration.ConfigurationUpdateAccess" ),
+            aArgumentList );
 }
 
 SvxProxyTabPage::~SvxProxyTabPage()
@@ -409,7 +409,7 @@ bool SvxProxyTabPage::FillItemSet(SfxItemSet* )
             }
 
             xPropertySet->setPropertyValue(aProxyModePN,
-                makeAny((sal_Int32) nSelPos));
+                    makeAny((sal_Int32) nSelPos));
             bModified = true;
         }
 
@@ -542,18 +542,18 @@ void SvxScriptExecListBox::RequestHelp( const HelpEvent& rHEvt )
     Point aPt = ScreenToOutputPixel( rHEvt.GetMousePosPixel() );
     Rectangle aItemRect;
     if( nCount > 0 ) // if there're some entries, find it.
-         for( nPos = nTop ; nPos <= nTop+nCount-1 ; nPos++ ) {
+        for( nPos = nTop ; nPos <= nTop+nCount-1 ; nPos++ ) {
             aItemRect = GetBoundingRectangle(nPos);
             if( aPt.Y() < aItemRect.Top() || aPt.Y() > aItemRect.Bottom() )
                 continue;
             else
                 break;
         }
-     else // if not, nothing happens.
-         return;
-     OUString aHelpText;
-     if( nPos <= nTop+nCount-1 ) // if find the matching entry, get its content.
-         aHelpText = GetEntry(nPos);
+    else // if not, nothing happens.
+        return;
+    OUString aHelpText;
+    if( nPos <= nTop+nCount-1 ) // if find the matching entry, get its content.
+        aHelpText = GetEntry(nPos);
     if( aHelpText.getLength() && GetTextWidth(aHelpText)<GetOutputSizePixel().Width() )
         aHelpText.clear(); // if the entry is quite short, clear the helping tip content.
     aItemRect = Rectangle(Point(0,0),GetSizePixel());
@@ -579,7 +579,7 @@ SvxSecurityTabPage::SvxSecurityTabPage(vcl::Window* pParent, const SfxItemSet& r
     : SfxTabPage(pParent, "OptSecurityPage", "cui/ui/optsecuritypage.ui", &rSet)
     , mpSecOptions(new SvtSecurityOptions)
     , mpSecOptDlg(NULL)
-    , mpCertPathDlg(NULL)
+      , mpCertPathDlg(NULL)
 {
     get(m_pSecurityOptionsPB, "options");
     get(m_pSavePasswordsCB, "savepassword");
@@ -641,7 +641,7 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, SavePasswordHdl)
     try
     {
         Reference< task::XPasswordContainer2 > xMasterPasswd(
-            task::PasswordContainer::create(comphelper::getProcessComponentContext()));
+                task::PasswordContainer::create(comphelper::getProcessComponentContext()));
 
         if ( m_pSavePasswordsCB->IsChecked() )
         {
@@ -696,7 +696,7 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, MasterPasswordHdl)
     try
     {
         Reference< task::XPasswordContainer2 > xMasterPasswd(
-            task::PasswordContainer::create(comphelper::getProcessComponentContext()));
+                task::PasswordContainer::create(comphelper::getProcessComponentContext()));
 
         if ( xMasterPasswd->isPersistentStoringAllowed() )
             xMasterPasswd->changeMasterPassword( Reference< task::XInteractionHandler >() );
@@ -712,7 +712,7 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, MasterPasswordCBHdl)
     try
     {
         Reference< task::XPasswordContainer2 > xMasterPasswd(
-            task::PasswordContainer::create(comphelper::getProcessComponentContext()));
+                task::PasswordContainer::create(comphelper::getProcessComponentContext()));
 
         if ( m_pMasterPasswordCB->IsChecked() )
         {
@@ -756,7 +756,7 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, ShowPasswordsHdl)
     try
     {
         Reference< task::XPasswordContainer2 > xMasterPasswd(
-            task::PasswordContainer::create(comphelper::getProcessComponentContext()));
+                task::PasswordContainer::create(comphelper::getProcessComponentContext()));
 
         if ( xMasterPasswd->isPersistentStoringAllowed() && xMasterPasswd->authorizateWithMasterPassword( Reference< task::XInteractionHandler>() ) )
         {
@@ -805,7 +805,7 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, MacroSecPBHdl)
     try
     {
         Reference< security::XDocumentDigitalSignatures > xD(
-            security::DocumentDigitalSignatures::createDefault(comphelper::getProcessComponentContext() ) );
+                security::DocumentDigitalSignatures::createDefault(comphelper::getProcessComponentContext() ) );
         xD->manageTrustedSources();
     }
     catch (const Exception& e)
@@ -825,9 +825,9 @@ void SvxSecurityTabPage::InitControls()
     // @@@ Better would be to query the dialog whether it is 'useful' or not. Exposing
     //     macro security dialog implementations here, which is bad.
     if (    mpSecOptions->IsMacroDisabled()
-         || (    mpSecOptions->IsReadOnly( SvtSecurityOptions::E_MACRO_SECLEVEL )
-              && mpSecOptions->IsReadOnly( SvtSecurityOptions::E_MACRO_TRUSTEDAUTHORS )
-              && mpSecOptions->IsReadOnly( SvtSecurityOptions::E_SECUREURLS ) ) )
+            || (    mpSecOptions->IsReadOnly( SvtSecurityOptions::E_MACRO_SECLEVEL )
+                && mpSecOptions->IsReadOnly( SvtSecurityOptions::E_MACRO_TRUSTEDAUTHORS )
+                && mpSecOptions->IsReadOnly( SvtSecurityOptions::E_SECUREURLS ) ) )
     {
         //Hide these
         m_pMacroSecFrame->Hide();
@@ -847,7 +847,7 @@ void SvxSecurityTabPage::InitControls()
     try
     {
         Reference< task::XPasswordContainer2 > xMasterPasswd(
-            task::PasswordContainer::create(comphelper::getProcessComponentContext()));
+                task::PasswordContainer::create(comphelper::getProcessComponentContext()));
 
         if ( xMasterPasswd->isPersistentStoringAllowed() )
         {
@@ -931,6 +931,96 @@ void SvxSecurityTabPage::Reset( const SfxItemSet* )
 {
 }
 
+/*--------------------------------------------------------------------*/
+
+class RemoveHiddenContentCfg_Impl : public utl::ConfigItem
+{
+    friend class SvxEMailTabPage;
+    sal_Bool bHideContent;
+
+    const Sequence<OUString> GetPropertyNames();
+
+    virtual void    ImplCommit() SAL_OVERRIDE;
+
+    public:
+    RemoveHiddenContentCfg_Impl();
+
+    virtual void Notify( const com::sun::star::uno::Sequence< rtl::OUString >& _rPropertyNames);
+};
+
+/* -------------------------------------------------------------------------*/
+
+RemoveHiddenContentCfg_Impl::RemoveHiddenContentCfg_Impl() :
+    utl::ConfigItem("Office.Common/HiddenContent"),
+    bHideContent(sal_True) 
+{
+    const Sequence< OUString > aNames = GetPropertyNames();
+    const Sequence< Any > aValues = GetProperties(aNames);
+    const Any* pValues = aValues.getConstArray();
+    for(sal_Int32 nProp = 0; nProp < aValues.getLength(); nProp++)
+    {
+        if(pValues[nProp].hasValue())
+        {
+            switch(nProp)
+            {
+                case 0:
+                    {
+                        pValues[nProp] >>= bHideContent;
+                    }
+                    break;
+            }
+        }
+    }
+}
+
+/* -------------------------------------------------------------------------*/
+
+const Sequence<OUString> RemoveHiddenContentCfg_Impl::GetPropertyNames() {
+    Sequence<OUString> aRet(1);
+    OUString* pRet = aRet.getArray();
+    pRet[0] = "RemoveHiddenContent";
+    return aRet;
+}
+
+/* -------------------------------------------------------------------------*/
+
+void RemoveHiddenContentCfg_Impl::ImplCommit()
+{
+    const Sequence< OUString > aOrgNames = GetPropertyNames();
+    sal_Int32 nOrgCount = aOrgNames.getLength();
+
+    Sequence< OUString > aNames(nOrgCount);
+    Sequence< Any > aValues(nOrgCount);
+    sal_Int32 nRealCount = 0;
+
+    for(int nProp = 0; nProp < nOrgCount; nProp++)
+    {
+        switch(nProp)
+        {
+            case 0:
+                {
+                    aNames[nRealCount] = aOrgNames[nProp];
+                    aValues[nRealCount] <<= bHideContent;
+                    ++nRealCount;
+                }
+                break;
+        }
+    }
+
+    aNames.realloc(nRealCount);
+    aValues.realloc(nRealCount);
+    PutProperties(aNames, aValues);
+}
+
+
+/* -------------------------------------------------------------------------*/
+
+void RemoveHiddenContentCfg_Impl::Notify( const com::sun::star::uno::Sequence< rtl::OUString >& )
+{
+}
+
+/* -------------------------------------------------------------------------*/
+
 class MailerProgramCfg_Impl : public utl::ConfigItem
 {
     friend class SvxEMailTabPage;
@@ -943,7 +1033,7 @@ class MailerProgramCfg_Impl : public utl::ConfigItem
 
     virtual void    ImplCommit() SAL_OVERRIDE;
 
-public:
+    public:
     MailerProgramCfg_Impl();
     virtual ~MailerProgramCfg_Impl();
 
@@ -968,11 +1058,11 @@ MailerProgramCfg_Impl::MailerProgramCfg_Impl() :
             switch(nProp)
             {
                 case 0 :
-                {
-                    pValues[nProp] >>= sProgram;
-                    bROProgram = pROStates[nProp];
-                }
-                break;
+                    {
+                        pValues[nProp] >>= sProgram;
+                        bROProgram = pROStates[nProp];
+                    }
+                    break;
             }
         }
     }
@@ -1007,18 +1097,18 @@ void MailerProgramCfg_Impl::ImplCommit()
 
     for(int nProp = 0; nProp < nOrgCount; nProp++)
     {
-    switch(nProp)
-    {
+        switch(nProp)
+        {
             case  0:
-            {
-                if (!bROProgram)
                 {
-                    aNames[nRealCount] = aOrgNames[nProp];
-                    aValues[nRealCount] <<= sProgram;
-                    ++nRealCount;
+                    if (!bROProgram)
+                    {
+                        aNames[nRealCount] = aOrgNames[nProp];
+                        aValues[nRealCount] <<= sProgram;
+                        ++nRealCount;
+                    }
                 }
-            }
-            break;
+                break;
         }
     }
 
@@ -1036,16 +1126,18 @@ void MailerProgramCfg_Impl::Notify( const com::sun::star::uno::Sequence< OUStrin
 struct SvxEMailTabPage_Impl
 {
     MailerProgramCfg_Impl aMailConfig;
+    RemoveHiddenContentCfg_Impl aHiddenContentConfig;
 };
 
 SvxEMailTabPage::SvxEMailTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage( pParent, "OptEmailPage", "cui/ui/optemailpage.ui", &rSet)
-    , pImpl(new SvxEMailTabPage_Impl)
+      , pImpl(new SvxEMailTabPage_Impl)
 {
     get(m_pMailContainer, "OptEmailPage");
     get(m_pMailerURLFI, "lockemail");
     get(m_pMailerURLED, "url");
     get(m_pMailerURLPB, "browse");
+    get(m_pHideContentCB, "removehiddencontent");
     m_sDefaultFilterName = get<FixedText>("browsetitle")->GetText();
     m_pMailerURLPB->SetClickHdl( LINK( this, SvxEMailTabPage, FileDialogHdl_Impl ) );
 }
@@ -1077,6 +1169,9 @@ bool SvxEMailTabPage::FillItemSet( SfxItemSet* )
     if ( bMailModified )
         pImpl->aMailConfig.Commit();
 
+    pImpl->aHiddenContentConfig.bHideContent = m_pHideContentCB->IsChecked();
+    pImpl->aHiddenContentConfig.Commit();
+
     return false;
 }
 
@@ -1094,6 +1189,8 @@ void SvxEMailTabPage::Reset( const SfxItemSet* )
     m_pMailerURLED->SaveValue();
 
     m_pMailContainer->Enable(!pImpl->aMailConfig.bROProgram);
+
+    m_pHideContentCB->Check(pImpl->aHiddenContentConfig.bHideContent);
 }
 
 /* -------------------------------------------------------------------------*/
@@ -1103,8 +1200,8 @@ IMPL_LINK(  SvxEMailTabPage, FileDialogHdl_Impl, PushButton*, pButton )
     if (m_pMailerURLPB == pButton && !pImpl->aMailConfig.bROProgram)
     {
         FileDialogHelper aHelper(
-            com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
-            0 );
+                com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
+                0 );
         OUString sPath = m_pMailerURLED->GetText();
         if ( sPath.isEmpty() )
             sPath = "/usr/bin";
