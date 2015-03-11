@@ -55,7 +55,7 @@ IMPL_LINK_NOARG(TSAURLsDialog, OKHdl_Impl)
     css::uno::Sequence<OUString> aNewValue(m_aURLs.size());
     size_t n(0);
 
-    for (auto i = m_aURLs.cbegin(); i != m_aURLs.cend(); ++i)
+    for (auto i = m_aURLs.begin(); i != m_aURLs.end(); ++i)
         aNewValue[n++] = *i;
     officecfg::Office::Common::Security::Scripting::TSAURLs::set(aNewValue, batch);
     batch->commit();
@@ -76,7 +76,7 @@ void TSAURLsDialog::AddTSAURL(const OUString& rURL)
     m_pURLListBox->SetUpdateMode(false);
     m_pURLListBox->Clear();
 
-    for (auto i = m_aURLs.cbegin(); i != m_aURLs.cend(); ++i)
+    for (auto i = m_aURLs.begin(); i != m_aURLs.end(); ++i)
     {
         m_pURLListBox->InsertEntry(*i);
     }
