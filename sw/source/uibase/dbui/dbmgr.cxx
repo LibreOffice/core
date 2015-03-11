@@ -1141,9 +1141,6 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                         rWorkShell.SwViewShell::UpdateFlds();
                         SfxGetpApp()->NotifyEvent(SfxEventHint(SW_EVENT_FIELD_MERGE_FINISHED, SwDocShell::GetEventName(STR_SW_EVENT_FIELD_MERGE_FINISHED), xWorkDocSh));
 
-                        if( bCreateSingleFile )
-                            pWorkDoc->RemoveInvisibleContent();
-
                         // launch MailMergeEvent if required
                         const SwXMailMerge *pEvtSrc = GetMailMergeEvtSrc();
                         if(pEvtSrc)
@@ -1155,6 +1152,8 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
 
                         if(bCreateSingleFile)
                         {
+                            pWorkDoc->RemoveInvisibleContent();
+
                             OSL_ENSURE( pTargetShell, "no target shell available!" );
                             // copy created file into the target document
                             rWorkShell.ConvertFieldsToText();
