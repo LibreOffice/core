@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a29b11f_5d3f6f25",
+        "filename": "embeddedobj/source/msole/oleregister.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-03-11T21:54:31Z",
+      "side": 0,
+      "message": "OneInstance!",
+      "revId": "6095bc7c321b30aea289e9c4a35ff9d05b3304c0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
