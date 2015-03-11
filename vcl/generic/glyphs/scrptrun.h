@@ -103,8 +103,6 @@ public:
 
 private:
 
-    static UBool sameScript(int32_t scriptOne, int32_t scriptTwo);
-
     int32_t charStart;
     int32_t charLimit;
     const UChar *charArray;
@@ -115,14 +113,6 @@ private:
 
     std::vector<ParenStackEntry> parenStack;
     int32_t parenSP;
-
-    static int8_t highBit(int32_t value);
-    static int32_t getPairIndex(UChar32 ch);
-
-    static UChar32 pairedChars[];
-    static const int32_t pairedCharCount;
-    static const int32_t pairedCharPower;
-    static const int32_t pairedCharExtra;
 
     /**
      * The address of this static class variable serves as this class's ID
