@@ -3,6 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="org.libreoffice.MainActivity">
 
+
+    <item android:id="@+id/action_bold"
+          android:title="@string/action_bold"
+          android:icon="@drawable/ic_format_bold_grey600_24dp"
+          android:orderInCategory="100"
+          app:showAsAction="always"/>
+
     <item android:id="@+id/action_about"
         android:title="@string/action_about"
         android:orderInCategory="100" />

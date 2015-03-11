@@ -34,5 +34,6 @@
     <!-- Document provider names -->
     <string name="local_documents">Local documents</string>
     <string name="local_file_system">Local file system</string>
+    <string name="action_bold">Bold</string>
 
 </resources>

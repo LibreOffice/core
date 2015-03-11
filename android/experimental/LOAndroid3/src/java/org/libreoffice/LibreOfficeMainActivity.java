@@ -18,6 +18,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import org.mozilla.gecko.TextSelection;
 import org.mozilla.gecko.ZoomConstraints;
@@ -75,6 +76,9 @@ public class LibreOfficeMainActivity extends ActionBarActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch (id) {
+            case R.id.action_bold:
+                Toast.makeText(this,"set text to bold", Toast.LENGTH_LONG).show();
+                return true;
             case R.id.action_about:
                 mAbout.showAbout();
                 return true;
