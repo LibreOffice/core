@@ -57,12 +57,13 @@ class SvtCJKOptions_Impl : public utl::ConfigItem
     bool        bROEmphasisMarks;
     bool        bROVerticalCallOut;
 
+    virtual void    ImplCommit() SAL_OVERRIDE;
+
 public:
     SvtCJKOptions_Impl();
     virtual ~SvtCJKOptions_Impl();
 
     virtual void    Notify( const com::sun::star::uno::Sequence< OUString >& rPropertyNames ) SAL_OVERRIDE;
-    virtual void    Commit() SAL_OVERRIDE;
     void            Load();
 
     bool IsLoaded()                         { return bIsLoaded;         }
@@ -232,7 +233,7 @@ void    SvtCJKOptions_Impl::Notify( const Sequence< OUString >& )
     NotifyListeners(0);
 }
 
-void    SvtCJKOptions_Impl::Commit()
+void    SvtCJKOptions_Impl::ImplCommit()
 {
     Sequence<OUString> &rPropertyNames = PropertyNames::get();
     OUString* pOrgNames = rPropertyNames.getArray();

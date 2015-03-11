@@ -42,11 +42,12 @@ class SVT_DLLPUBLIC SvxHtmlOptions : public utl::ConfigItem
     void Load( const com::sun::star::uno::Sequence< OUString >& rPropertyNames );
     void CallListeners();
 
+    virtual void    ImplCommit() SAL_OVERRIDE;
+
 public:
     SvxHtmlOptions();
     virtual ~SvxHtmlOptions();
 
-    virtual void    Commit() SAL_OVERRIDE;
     virtual void Notify( const com::sun::star::uno::Sequence< OUString >& _rPropertyNames) SAL_OVERRIDE;
 
     sal_uInt16      GetFontSize(sal_uInt16 nPos) const;

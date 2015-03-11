@@ -54,7 +54,7 @@ SdOptionsItem::~SdOptionsItem()
 {
 }
 
-void SdOptionsItem::Commit()
+void SdOptionsItem::ImplCommit()
 {
     if( IsModified() )
         mrParent.Commit( *this );

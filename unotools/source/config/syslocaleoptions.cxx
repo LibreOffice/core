@@ -67,12 +67,13 @@ class SvtSysLocaleOptions_Impl : public utl::ConfigItem
         void                    MakeRealLocale();
         void                    MakeRealUILocale();
 
+    virtual void                ImplCommit() SAL_OVERRIDE;
+
 public:
                                 SvtSysLocaleOptions_Impl();
     virtual                     ~SvtSysLocaleOptions_Impl();
 
     virtual void                Notify( const com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;
-    virtual void                Commit() SAL_OVERRIDE;
 
             const OUString&     GetLocaleString() const
                                     { return m_aLocaleString; }
@@ -307,7 +308,7 @@ bool SvtSysLocaleOptions_Impl::IsReadOnly( SvtSysLocaleOptions::EOption eOption 
     return bReadOnly;
 }
 
-void SvtSysLocaleOptions_Impl::Commit()
+void SvtSysLocaleOptions_Impl::ImplCommit()
 {
     const Sequence< OUString > aOrgNames = GetPropertyNames();
     sal_Int32 nOrgCount = aOrgNames.getLength();
@@ -384,7 +385,6 @@ void SvtSysLocaleOptions_Impl::Commit()
     aNames.realloc(nRealCount);
     aValues.realloc(nRealCount);
     PutProperties( aNames, aValues );
-    ClearModified();
 }
 
 void SvtSysLocaleOptions_Impl::SetLocaleString( const OUString& rStr )

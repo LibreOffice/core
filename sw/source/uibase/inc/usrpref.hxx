@@ -28,17 +28,20 @@ class SwMasterUsrPref;
 
 class SwContentViewConfig : public utl::ConfigItem
 {
+private:
     SwMasterUsrPref&        rParent;
     bool                    bWeb;
 
     com::sun::star::uno::Sequence<OUString> GetPropertyNames();
+
+    virtual void    ImplCommit() SAL_OVERRIDE;
+
     public:
         SwContentViewConfig(bool bWeb, SwMasterUsrPref& rParent);
         virtual ~SwContentViewConfig();
 
     // utl::ConfigItem
     virtual void    Notify( const com::sun::star::uno::Sequence< OUString > &rPropertyNames ) SAL_OVERRIDE;
-    virtual void    Commit() SAL_OVERRIDE;
 
     void                    Load();
     void                    SetModified(){ConfigItem::SetModified();}
@@ -46,30 +49,36 @@ class SwContentViewConfig : public utl::ConfigItem
 
 class SwLayoutViewConfig : public utl::ConfigItem
 {
+private:
     SwMasterUsrPref&    rParent;
     bool                bWeb;
 
     com::sun::star::uno::Sequence<OUString> GetPropertyNames();
+
+    virtual void        ImplCommit() SAL_OVERRIDE;
+
     public:
         SwLayoutViewConfig(bool bWeb, SwMasterUsrPref& rParent);
         virtual ~SwLayoutViewConfig();
 
     virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;
-    virtual void            Commit() SAL_OVERRIDE;
     void                    Load();
     void                    SetModified(){ConfigItem::SetModified();}
 };
 
 class SwGridConfig : public utl::ConfigItem
 {
+private:
     SwMasterUsrPref&    rParent;
 
     com::sun::star::uno::Sequence<OUString> GetPropertyNames();
+
+    virtual void ImplCommit() SAL_OVERRIDE;
+
     public:
         SwGridConfig(bool bWeb, SwMasterUsrPref& rParent);
         virtual ~SwGridConfig();
 
-    virtual void Commit() SAL_OVERRIDE;
     virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;
     void                    Load();
     void                    SetModified(){ConfigItem::SetModified();}
@@ -77,14 +86,17 @@ class SwGridConfig : public utl::ConfigItem
 
 class SwCursorConfig : public utl::ConfigItem
 {
+private:
     SwMasterUsrPref&    rParent;
 
     com::sun::star::uno::Sequence<OUString> GetPropertyNames();
+
+    virtual void ImplCommit() SAL_OVERRIDE;
+
     public:
         SwCursorConfig(SwMasterUsrPref& rParent);
         virtual ~SwCursorConfig();
 
-    virtual void Commit() SAL_OVERRIDE;
     virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;
     void                    Load();
     void                    SetModified(){ConfigItem::SetModified();}
@@ -92,14 +104,16 @@ class SwCursorConfig : public utl::ConfigItem
 
 class SwWebColorConfig : public utl::ConfigItem
 {
+private:
     SwMasterUsrPref&        rParent;
     com::sun::star::uno::Sequence<OUString> aPropNames;
+
+    virtual void ImplCommit() SAL_OVERRIDE;
 
     public:
         SwWebColorConfig(SwMasterUsrPref& rParent);
         virtual ~SwWebColorConfig();
 
-    virtual void Commit() SAL_OVERRIDE;
     virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;
     void                    Load();
     void                    SetModified(){ConfigItem::SetModified();}

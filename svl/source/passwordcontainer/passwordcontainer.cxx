@@ -383,7 +383,7 @@ void StorageItem::Notify( const Sequence< OUString >& )
 }
 
 
-void StorageItem::Commit()
+void StorageItem::ImplCommit()
 {
     // Do nothing, we stored everything we want already
 }

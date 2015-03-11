@@ -52,7 +52,7 @@ void ScLinkConfigItem::Notify( const com::sun::star::uno::Sequence<OUString>& /*
     //TODO: not implemented yet...
 }
 
-void ScLinkConfigItem::Commit()
+void ScLinkConfigItem::ImplCommit()
 {
     aCommitLink.Call( this );
 }

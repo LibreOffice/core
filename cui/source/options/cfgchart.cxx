@@ -245,7 +245,7 @@ bool SvxChartOptions::RetrieveOptions()
     return false;
 }
 
-void SvxChartOptions::Commit()
+void SvxChartOptions::ImplCommit()
 {
     uno::Sequence< OUString > aNames = GetPropertyNames();
     uno::Sequence< uno::Any > aValues( aNames.getLength());

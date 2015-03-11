@@ -138,6 +138,8 @@ class FWI_DLLPUBLIC HandlerCFGAccess : public ::utl::ConfigItem
     private:
         HandlerCache* m_pCache;
 
+        virtual void ImplCommit() SAL_OVERRIDE;
+
     /* interface */
     public:
                  HandlerCFGAccess( const OUString& sPackage  );
@@ -146,7 +148,6 @@ class FWI_DLLPUBLIC HandlerCFGAccess : public ::utl::ConfigItem
 
         void setCache(HandlerCache* pCache) {m_pCache = pCache;};
         virtual void Notify(const css::uno::Sequence< OUString >& lPropertyNames) SAL_OVERRIDE;
-        virtual void Commit() SAL_OVERRIDE;
 };
 
 } // namespace framework

@@ -102,11 +102,13 @@ class BibConfig : public utl::ConfigItem
     OUString               aColumnDefaults[COLUMN_COUNT];
 
     com::sun::star::uno::Sequence<OUString> GetPropertyNames();
+
+    virtual void    ImplCommit() SAL_OVERRIDE;
+
 public:
     BibConfig();
     virtual ~BibConfig();
 
-    virtual void    Commit() SAL_OVERRIDE;
     virtual void            Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames) SAL_OVERRIDE;
 
     BibDBDescriptor         GetBibliographyURL();

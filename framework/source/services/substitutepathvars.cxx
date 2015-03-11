@@ -125,9 +125,11 @@ class SubstitutePathVariables_Impl : public utl::ConfigItem
         /** is called from the ConfigManager before application ends or from the
             PropertyChangeListener if the sub tree broadcasts changes. */
         virtual void Notify( const com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;
-        virtual void Commit() SAL_OVERRIDE;
 
-        private:
+    private:
+
+        virtual void ImplCommit() SAL_OVERRIDE;
+
             // Wrapper methods for low-level functions
             OperatingSystem         GetOperatingSystem();
             const OUString&    GetYPDomainName();
@@ -458,7 +460,7 @@ void SubstitutePathVariables_Impl::Notify( const com::sun::star::uno::Sequence< 
     // NOT implemented yet!
 }
 
-void SubstitutePathVariables_Impl::Commit()
+void SubstitutePathVariables_Impl::ImplCommit()
 {
 }
 

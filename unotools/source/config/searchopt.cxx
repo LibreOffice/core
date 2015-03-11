@@ -43,6 +43,9 @@ class SvtSearchOptions_Impl : public ConfigItem
     SvtSearchOptions_Impl(const SvtSearchOptions_Impl&) SAL_DELETED_FUNCTION;
     SvtSearchOptions_Impl& operator=(const SvtSearchOptions_Impl&) SAL_DELETED_FUNCTION;
 
+    // ConfigItem
+    virtual void    ImplCommit() SAL_OVERRIDE;
+
 protected:
     bool            IsModified() const { return bModified; }
     using ConfigItem::SetModified;
@@ -56,8 +59,6 @@ public:
     SvtSearchOptions_Impl();
     virtual ~SvtSearchOptions_Impl();
 
-    // ConfigItem
-    virtual void    Commit() SAL_OVERRIDE;
     virtual void    Notify( const com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;
 
     bool            GetFlag( sal_uInt16 nOffset ) const;
@@ -77,7 +78,7 @@ SvtSearchOptions_Impl::~SvtSearchOptions_Impl()
     Commit();
 }
 
-void SvtSearchOptions_Impl::Commit()
+void SvtSearchOptions_Impl::ImplCommit()
 {
     if (IsModified())
         Save();

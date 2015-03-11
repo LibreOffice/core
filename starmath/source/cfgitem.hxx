@@ -137,13 +137,14 @@ protected:
         return const_cast<SmMathConfig*>(this)->GetFontFormatList();
     }
 
+    virtual void    ImplCommit() SAL_OVERRIDE;
+
 public:
     SmMathConfig();
     virtual ~SmMathConfig();
 
     // utl::ConfigItem
     virtual void    Notify( const com::sun::star::uno::Sequence< OUString > &rPropertyNames ) SAL_OVERRIDE;
-    virtual void    Commit() SAL_OVERRIDE;
 
     SmSymbolManager &   GetSymbolManager();
     void                GetSymbols( std::vector< SmSym > &rSymbols ) const;

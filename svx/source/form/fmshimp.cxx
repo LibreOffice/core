@@ -3580,7 +3580,7 @@ void FmXFormShell::Notify( const com::sun::star::uno::Sequence< OUString >& _rPr
         }
 }
 
-void FmXFormShell::Commit()
+void FmXFormShell::ImplCommit()
 {
 }
 

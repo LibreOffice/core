@@ -54,15 +54,19 @@ using namespace com::sun::star::uno;
 
 class SvtAppFilterOptions_Impl : public utl::ConfigItem
 {
+private:
     bool                bLoadVBA;
     bool                bSaveVBA;
+
+protected:
+    virtual void            ImplCommit() SAL_OVERRIDE;
+
 public:
     SvtAppFilterOptions_Impl(const OUString& rRoot) :
         utl::ConfigItem(rRoot),
         bLoadVBA(false),
         bSaveVBA(false)  {}
     virtual ~SvtAppFilterOptions_Impl();
-    virtual void            Commit() SAL_OVERRIDE;
     virtual void            Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames) SAL_OVERRIDE;
     void                    Load();
 
@@ -88,7 +92,7 @@ SvtAppFilterOptions_Impl::~SvtAppFilterOptions_Impl()
         Commit();
 }
 
-void    SvtAppFilterOptions_Impl::Commit()
+void    SvtAppFilterOptions_Impl::ImplCommit()
 {
     Sequence<OUString> aNames(2);
     OUString* pNames = aNames.getArray();
@@ -127,13 +131,16 @@ void    SvtAppFilterOptions_Impl::Load()
 
 class SvtWriterFilterOptions_Impl : public SvtAppFilterOptions_Impl
 {
+private:
     bool                bLoadExecutable;
+
+    virtual void            ImplCommit() SAL_OVERRIDE;
+
 public:
     SvtWriterFilterOptions_Impl(const OUString& rRoot) :
         SvtAppFilterOptions_Impl(rRoot),
         bLoadExecutable(false)
     {}
-    virtual void            Commit() SAL_OVERRIDE;
     void                    Load();
 
     bool                IsLoadExecutable() const {return bLoadExecutable;}
@@ -145,9 +152,9 @@ public:
                             }
 };
 
-void SvtWriterFilterOptions_Impl::Commit()
+void SvtWriterFilterOptions_Impl::ImplCommit()
 {
-    SvtAppFilterOptions_Impl::Commit();
+    SvtAppFilterOptions_Impl::ImplCommit();
 
     Sequence<OUString> aNames(1);
     aNames[0] = "Executable";
@@ -172,13 +179,16 @@ void SvtWriterFilterOptions_Impl::Load()
 
 class SvtCalcFilterOptions_Impl : public SvtAppFilterOptions_Impl
 {
+private:
     bool                bLoadExecutable;
+
+    virtual void            ImplCommit() SAL_OVERRIDE;
+
 public:
     SvtCalcFilterOptions_Impl(const OUString& rRoot) :
         SvtAppFilterOptions_Impl(rRoot),
         bLoadExecutable(false)
     {}
-    virtual void            Commit() SAL_OVERRIDE;
     void                    Load();
 
     bool                IsLoadExecutable() const {return bLoadExecutable;}
@@ -190,9 +200,9 @@ public:
                             }
 };
 
-void SvtCalcFilterOptions_Impl::Commit()
+void SvtCalcFilterOptions_Impl::ImplCommit()
 {
-    SvtAppFilterOptions_Impl::Commit();
+    SvtAppFilterOptions_Impl::ImplCommit();
 
     Sequence<OUString> aNames(1);
     aNames[0] = "Executable";
@@ -367,7 +377,7 @@ void SvtFilterOptions::Notify( const Sequence<OUString>& )
     Load();
 }
 
-void SvtFilterOptions::Commit()
+void SvtFilterOptions::ImplCommit()
 {
     const Sequence<OUString>& aNames = GetPropertyNames();
     Sequence<Any> aValues(aNames.getLength());

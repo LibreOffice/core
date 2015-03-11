@@ -81,6 +81,8 @@ class SVL_DLLPUBLIC SvxSearchItem :
     bool            bContent;           // search in content
     bool            bAsianOptions;      // use asian options?
 
+    virtual void    ImplCommit() SAL_OVERRIDE;
+
 public:
     TYPEINFO_OVERRIDE();
 
@@ -99,7 +101,6 @@ public:
 
     // ConfigItem
     virtual void            Notify( const com::sun::star::uno::Sequence< OUString > &rPropertyNames ) SAL_OVERRIDE;
-    virtual void            Commit() SAL_OVERRIDE;
 
             SvxSearchCmd    GetCommand() const { return nCommand; }
             void            SetCommand(SvxSearchCmd nNewCommand) { nCommand = nNewCommand; }

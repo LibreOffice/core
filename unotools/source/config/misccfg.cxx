@@ -38,6 +38,7 @@ static sal_Int32 nRefCount = 0;
 
 class SfxMiscCfg : public utl::ConfigItem
 {
+private:
     bool            bPaperSize;     // printer warnings
     bool            bPaperOrientation;
     bool            bNotFound;
@@ -46,12 +47,13 @@ class SfxMiscCfg : public utl::ConfigItem
     const com::sun::star::uno::Sequence<OUString> GetPropertyNames();
     void                    Load();
 
+    virtual void            ImplCommit() SAL_OVERRIDE;
+
 public:
     SfxMiscCfg( );
     virtual ~SfxMiscCfg( );
 
     virtual void            Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames) SAL_OVERRIDE;
-    virtual void            Commit() SAL_OVERRIDE;
 
     bool        IsNotFoundWarning()     const {return bNotFound;}
     void        SetNotFoundWarning( bool bSet);
@@ -153,7 +155,7 @@ void SfxMiscCfg::Notify( const com::sun::star::uno::Sequence<OUString>& )
     Load();
 }
 
-void SfxMiscCfg::Commit()
+void SfxMiscCfg::ImplCommit()
 {
     const Sequence<OUString>& rNames = GetPropertyNames();
     Sequence<Any> aValues(rNames.getLength());

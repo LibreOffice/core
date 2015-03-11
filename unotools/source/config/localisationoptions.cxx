@@ -63,16 +63,6 @@ class SvtLocalisationOptions_Impl : public ConfigItem
         virtual void Notify( const Sequence< OUString >& seqPropertyNames ) SAL_OVERRIDE;
 
         /*-****************************************************************************************************
-            @short      write changes to configuration
-            @descr      These method writes the changed values into the sub tree
-                        and should always called in our destructor to guarantee consistency of config data.
-
-            @seealso    baseclass ConfigItem
-        *//*-*****************************************************************************************************/
-
-        virtual void Commit() SAL_OVERRIDE;
-
-        /*-****************************************************************************************************
             @short      access method to get internal values
             @descr      These method give us a chance to regulate access to our internal values.
                         It's not used in the moment - but it's possible for the feature!
@@ -82,6 +72,8 @@ class SvtLocalisationOptions_Impl : public ConfigItem
         sal_Int32   GetDialogScale  (                   ) const { return m_nDialogScale;}
 
     private:
+
+        virtual void ImplCommit() SAL_OVERRIDE;
 
         /*-****************************************************************************************************
             @short      return list of key names of our configuration management which represent oue module tree
@@ -188,7 +180,7 @@ void SvtLocalisationOptions_Impl::Notify( const Sequence< OUString >& seqPropert
 
 //  public method
 
-void SvtLocalisationOptions_Impl::Commit()
+void SvtLocalisationOptions_Impl::ImplCommit()
 {
     // Get names of supported properties, create a list for values and copy current values to it.
     Sequence< OUString >    seqNames    = GetPropertyNames  ();

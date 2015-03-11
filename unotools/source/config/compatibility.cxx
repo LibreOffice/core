@@ -234,16 +234,6 @@ class SvtCompatibilityOptions_Impl : public ConfigItem
 
         virtual void Notify( const Sequence< OUString >& lPropertyNames ) SAL_OVERRIDE;
 
-        /*-****************************************************************************************************
-            @short      write changes to configuration
-            @descr      These method writes the changed values into the sub tree
-                        and should always called in our destructor to guarantee consistency of config data.
-
-            @seealso    baseclass ConfigItem
-        *//*-*****************************************************************************************************/
-
-        virtual void Commit() SAL_OVERRIDE;
-
         //  public interface
 
         /*-****************************************************************************************************
@@ -283,6 +273,8 @@ class SvtCompatibilityOptions_Impl : public ConfigItem
     //  private methods
 
     private:
+
+        virtual void ImplCommit() SAL_OVERRIDE;
 
         /*-****************************************************************************************************
             @short      return list of key names of our configuration management which represent one module tree
@@ -415,7 +407,7 @@ void SvtCompatibilityOptions_Impl::Notify( const Sequence< OUString >& )
 
 //  public method
 
-void SvtCompatibilityOptions_Impl::Commit()
+void SvtCompatibilityOptions_Impl::ImplCommit()
 {
     // Write all properties!
     // Delete complete set first.

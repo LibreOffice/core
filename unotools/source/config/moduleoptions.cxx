@@ -290,7 +290,6 @@ class SvtModuleOptions_Impl : public ::utl::ConfigItem
         //  override methods of baseclass
 
         virtual void Notify( const css::uno::Sequence< OUString >& lPropertyNames ) SAL_OVERRIDE;
-        virtual void Commit(                                                             ) SAL_OVERRIDE;
 
         //  public interface
 
@@ -315,6 +314,8 @@ class SvtModuleOptions_Impl : public ::utl::ConfigItem
     private:
         static css::uno::Sequence< OUString > impl_ExpandSetNames ( const css::uno::Sequence< OUString >& lSetNames   );
                void                                  impl_Read           ( const css::uno::Sequence< OUString >& lSetNames   );
+
+        virtual void ImplCommit() SAL_OVERRIDE;
 
     //  private types
 
@@ -405,7 +406,7 @@ void SvtModuleOptions_Impl::Notify( const css::uno::Sequence< OUString >& )
     @seealso    baseclass ConfigItem
     @threadsafe no
 *//*-*****************************************************************************************************/
-void SvtModuleOptions_Impl::Commit()
+void SvtModuleOptions_Impl::ImplCommit()
 {
     // Reserve memory for ALL possible factory properties!
     // Step over all factories and get her really changed values only.

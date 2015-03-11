@@ -54,12 +54,13 @@ private:
     bool                        m_bROCTLCursorMovement;
     bool                        m_bROCTLTextNumerals;
 
+    virtual void    ImplCommit() SAL_OVERRIDE;
+
 public:
     SvtCTLOptions_Impl();
     virtual ~SvtCTLOptions_Impl();
 
     virtual void    Notify( const Sequence< OUString >& _aPropertyNames ) SAL_OVERRIDE;
-    virtual void    Commit() SAL_OVERRIDE;
     void            Load();
 
     bool            IsLoaded() { return m_bIsLoaded; }
@@ -137,7 +138,7 @@ void SvtCTLOptions_Impl::Notify( const Sequence< OUString >& )
     NotifyListeners(SFX_HINT_CTL_SETTINGS_CHANGED);
 }
 
-void SvtCTLOptions_Impl::Commit()
+void SvtCTLOptions_Impl::ImplCommit()
 {
     Sequence< OUString > &rPropertyNames = PropertyNames::get();
     OUString* pOrgNames = rPropertyNames.getArray();

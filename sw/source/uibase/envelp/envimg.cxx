@@ -236,7 +236,7 @@ SwEnvCfgItem::~SwEnvCfgItem()
 {
 }
 
-void    SwEnvCfgItem::Commit()
+void SwEnvCfgItem::ImplCommit()
 {
     Sequence<OUString> aNames = GetPropertyNames();
     Sequence<Any> aValues(aNames.getLength());

@@ -61,7 +61,7 @@ public:
 
 protected:
     // ____ ::utl::ConfigItem ____
-    virtual void                    Commit() SAL_OVERRIDE;
+    virtual void                    ImplCommit() SAL_OVERRIDE;
     virtual void Notify( const Sequence< OUString > & aPropertyNames ) SAL_OVERRIDE;
 
 private:
@@ -86,7 +86,7 @@ void ChartConfigItem::Notify( const Sequence< OUString > & aPropertyNames )
     }
 }
 
-void ChartConfigItem::Commit()
+void ChartConfigItem::ImplCommit()
 {}
 
 void ChartConfigItem::addPropertyNotification( const OUString & rPropertyName )

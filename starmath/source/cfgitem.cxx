@@ -468,7 +468,7 @@ SmSymbolManager & SmMathConfig::GetSymbolManager()
 }
 
 
-void SmMathConfig::Commit()
+void SmMathConfig::ImplCommit()
 {
     Save();
 }

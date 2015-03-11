@@ -185,7 +185,7 @@ ScInputCfg::ScInputCfg() :
     }
 }
 
-void ScInputCfg::Commit()
+void ScInputCfg::ImplCommit()
 {
     Sequence<OUString> aNames = GetPropertyNames();
     Sequence<Any> aValues(aNames.getLength());

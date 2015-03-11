@@ -101,6 +101,9 @@ namespace utl
 
             com::sun::star::uno::Reference< com::sun::star::container::XHierarchicalNameAccess>
                                         GetTree();
+            /** writes the changed values into the sub tree.
+                Private and only called from non-virtual public Commit().  */
+            virtual void            ImplCommit() = 0;
 
         protected:
             explicit ConfigItem(const OUString &rSubTree,
@@ -166,8 +169,7 @@ namespace utl
 
             bool IsModified() const { return m_bIsModified;}
 
-            /** writes the changed values into the sub tree. Always called in the Dtor of the derived class.  */
-            virtual void            Commit()=0;
+            void                    Commit();
 
             bool IsInValueChange() const { return m_nInValueChange > 0;}
 

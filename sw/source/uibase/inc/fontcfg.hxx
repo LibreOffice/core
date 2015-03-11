@@ -71,11 +71,12 @@ class SW_DLLPUBLIC SwStdFontConfig : public utl::ConfigItem
 
     void ChangeInt( sal_uInt16 nFontType, sal_Int32 nHeight );
 
+    virtual void    ImplCommit() SAL_OVERRIDE;
+
 public:
     SwStdFontConfig();
     virtual ~SwStdFontConfig();
 
-    virtual void    Commit() SAL_OVERRIDE;
     virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;
 
     const OUString&   GetFontStandard(sal_uInt8 nFontGroup) const {return sDefaultFonts[FONT_STANDARD + FONT_PER_GROUP * nFontGroup];}

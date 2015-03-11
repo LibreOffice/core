@@ -24,13 +24,15 @@
 
 class ScAddInCfg : public utl::ConfigItem
 {
+private:
     com::sun::star::uno::Sequence<OUString> GetPropertyNames();
+
+    virtual void    ImplCommit() SAL_OVERRIDE;
 
 public:
             ScAddInCfg();
 
     virtual void    Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames ) SAL_OVERRIDE;
-    virtual void    Commit() SAL_OVERRIDE;
 
     com::sun::star::uno::Sequence< com::sun::star::uno::Any>
             GetProperties(const com::sun::star::uno::Sequence< OUString >& rNames)

@@ -156,7 +156,7 @@ ScPrintCfg::ScPrintCfg() :
     }
 }
 
-void ScPrintCfg::Commit()
+void ScPrintCfg::ImplCommit()
 {
     Sequence<OUString> aNames = GetPropertyNames();
     Sequence<Any> aValues(aNames.getLength());

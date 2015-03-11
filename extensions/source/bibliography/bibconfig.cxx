@@ -218,7 +218,7 @@ void BibConfig::Notify( const com::sun::star::uno::Sequence<OUString>& )
 {
 }
 
-void    BibConfig::Commit()
+void    BibConfig::ImplCommit()
 {
     const Sequence<OUString> aPropertyNames = GetPropertyNames();
     Sequence<Any> aValues(aPropertyNames.getLength());

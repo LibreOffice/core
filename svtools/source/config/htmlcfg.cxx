@@ -190,7 +190,7 @@ void SvxHtmlOptions::Load( const Sequence< OUString >& aNames )
 }
 
 
-void    SvxHtmlOptions::Commit()
+void    SvxHtmlOptions::ImplCommit()
 {
     const Sequence<OUString>& aNames = GetPropertyNames();
 

@@ -175,7 +175,7 @@ SvtSystemLanguageOptions::~SvtSystemLanguageOptions()
 {
 }
 
-void    SvtSystemLanguageOptions::Commit()
+void    SvtSystemLanguageOptions::ImplCommit()
 {
     //does nothing
 }

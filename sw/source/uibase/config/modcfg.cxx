@@ -291,7 +291,7 @@ static sal_Int32 lcl_ConvertAttrToCfg(const AuthorCharAttr& rAttr)
 
 void SwRevisionConfig::Notify( const ::com::sun::star::uno::Sequence< OUString >& ) {}
 
-void SwRevisionConfig::Commit()
+void SwRevisionConfig::ImplCommit()
 {
     const Sequence<OUString>& aNames = GetPropertyNames();
     Sequence<Any> aValues(aNames.getLength());
@@ -633,7 +633,7 @@ static void lcl_WriteOpt(const InsCaptionOpt& rOpt, Any* pValues, sal_Int32 nPro
 
 void SwInsertConfig::Notify( const ::com::sun::star::uno::Sequence< OUString >& ) {}
 
-void SwInsertConfig::Commit()
+void SwInsertConfig::ImplCommit()
 {
     const Sequence<OUString>& aNames = GetPropertyNames();
     Sequence<Any> aValues(aNames.getLength());
@@ -1134,7 +1134,7 @@ SwTableConfig::~SwTableConfig()
 
 void SwTableConfig::Notify( const ::com::sun::star::uno::Sequence< OUString >& ) {}
 
-void SwTableConfig::Commit()
+void SwTableConfig::ImplCommit()
 {
     const Sequence<OUString>& aNames = GetPropertyNames();
     Sequence<Any> aValues(aNames.getLength());
@@ -1236,7 +1236,7 @@ const Sequence<OUString>& SwMiscConfig::GetPropertyNames()
 
 void SwMiscConfig::Notify( const ::com::sun::star::uno::Sequence< OUString >& ) {}
 
-void SwMiscConfig::Commit()
+void SwMiscConfig::ImplCommit()
 {
     const Sequence<OUString>& aNames = GetPropertyNames();
     Sequence<Any> aValues(aNames.getLength());
@@ -1340,7 +1340,7 @@ SwCompareConfig::~SwCompareConfig()
 {
 }
 
-void SwCompareConfig::Commit()
+void SwCompareConfig::ImplCommit()
 {
     const Sequence<OUString>& aNames = GetPropertyNames();
     Sequence<Any> aValues(aNames.getLength());

@@ -111,7 +111,7 @@ const Sequence<OUString>& SvtTabAppearanceCfg::GetPropertyNames()
     return aNames;
 }
 
-void  SvtTabAppearanceCfg::Commit()
+void  SvtTabAppearanceCfg::ImplCommit()
 {
     const Sequence<OUString>& rNames = GetPropertyNames();
     Sequence<Any> aValues(rNames.getLength());

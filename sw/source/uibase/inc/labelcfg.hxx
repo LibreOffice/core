@@ -34,14 +34,16 @@ struct SwLabelMeasure
 
 class SW_DLLPUBLIC SwLabelConfig : public utl::ConfigItem
 {
+private:
     std::vector<OUString> m_aManufacturers;
     std::map< OUString, std::map<OUString, SwLabelMeasure> > m_aLabels;
+
+    virtual void ImplCommit() SAL_OVERRIDE;
 
 public:
     SwLabelConfig();
     virtual ~SwLabelConfig();
 
-    virtual void Commit() SAL_OVERRIDE;
     virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;
 
     void    FillLabels(const OUString& rManufacturer, SwLabRecs& rLabArr);

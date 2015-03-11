@@ -127,7 +127,7 @@ void SwContentViewConfig::Notify( const Sequence< OUString > & /*rPropertyNames*
     Load();
 }
 
-void SwContentViewConfig::Commit()
+void SwContentViewConfig::ImplCommit()
 {
     Sequence<OUString> aNames = GetPropertyNames();
 
@@ -259,7 +259,7 @@ SwLayoutViewConfig::~SwLayoutViewConfig()
 {
 }
 
-void SwLayoutViewConfig::Commit()
+void SwLayoutViewConfig::ImplCommit()
 {
     Sequence<OUString> aNames = GetPropertyNames();
 
@@ -394,7 +394,7 @@ SwGridConfig::~SwGridConfig()
 {
 }
 
-void SwGridConfig::Commit()
+void SwGridConfig::ImplCommit()
 {
     Sequence<OUString> aNames = GetPropertyNames();
 
@@ -479,7 +479,7 @@ SwCursorConfig::~SwCursorConfig()
 {
 }
 
-void SwCursorConfig::Commit()
+void SwCursorConfig::ImplCommit()
 {
     Sequence<OUString> aNames = GetPropertyNames();
 
@@ -544,7 +544,7 @@ SwWebColorConfig::~SwWebColorConfig()
 {
 }
 
-void SwWebColorConfig::Commit()
+void SwWebColorConfig::ImplCommit()
 {
     Sequence<Any> aValues(aPropNames.getLength());
     Any* pValues = aValues.getArray();

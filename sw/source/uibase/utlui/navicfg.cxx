@@ -90,7 +90,7 @@ SwNavigationConfig::~SwNavigationConfig()
 {
 }
 
-void SwNavigationConfig::Commit()
+void SwNavigationConfig::ImplCommit()
 {
     Sequence<OUString> aNames = GetPropertyNames();
     Sequence<Any> aValues(aNames.getLength());

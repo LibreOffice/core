@@ -152,6 +152,7 @@ class SvtLinguConfigItem : public utl::ConfigItem
 
     SvtLinguConfigItem(const SvtLinguConfigItem&) SAL_DELETED_FUNCTION;
     SvtLinguConfigItem& operator=(const SvtLinguConfigItem&) SAL_DELETED_FUNCTION;
+    virtual void    ImplCommit() SAL_OVERRIDE;
 
 public:
     SvtLinguConfigItem();
@@ -159,7 +160,6 @@ public:
 
     // utl::ConfigItem
     virtual void    Notify( const com::sun::star::uno::Sequence< OUString > &rPropertyNames ) SAL_OVERRIDE;
-    virtual void    Commit() SAL_OVERRIDE;
 
     // make some protected functions of utl::ConfigItem public
     using utl::ConfigItem::GetNodeNames;
@@ -207,7 +207,7 @@ void SvtLinguConfigItem::Notify( const uno::Sequence< OUString > &rPropertyNames
     NotifyListeners(0);
 }
 
-void SvtLinguConfigItem::Commit()
+void SvtLinguConfigItem::ImplCommit()
 {
     SaveOptions( GetPropertyNames() );
 }

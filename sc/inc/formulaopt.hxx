@@ -104,12 +104,14 @@ class ScFormulaCfg : public ScFormulaOptions, public utl::ConfigItem
     com::sun::star::uno::Sequence<OUString> GetPropertyNames();
     ScFormulaCfg::PropsToIds GetPropNamesToId();
     void UpdateFromProperties( const com::sun::star::uno::Sequence<OUString>& rNames );
+
+    virtual void ImplCommit() SAL_OVERRIDE;
+
 public:
     ScFormulaCfg();
 
     void SetOptions( const ScFormulaOptions& rNew );
 
-    virtual void Commit() SAL_OVERRIDE;
     virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;
 };
 

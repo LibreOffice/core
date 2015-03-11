@@ -127,7 +127,7 @@ SwPrintOptions::~SwPrintOptions()
 
 void SwPrintOptions::Notify( const ::com::sun::star::uno::Sequence< OUString >& ) {}
 
-void    SwPrintOptions::Commit()
+void SwPrintOptions::ImplCommit()
 {
     Sequence<OUString> aNames = GetPropertyNames();
 

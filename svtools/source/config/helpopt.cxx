@@ -60,12 +60,13 @@ class SvtHelpOptions_Impl : public utl::ConfigItem
 
     Sequence< OUString > GetPropertyNames();
 
+    virtual void    ImplCommit() SAL_OVERRIDE;
+
 public:
                     SvtHelpOptions_Impl();
 
     virtual void    Notify( const com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;
     void            Load( const ::com::sun::star::uno::Sequence< OUString>& aPropertyNames);
-    virtual void    Commit() SAL_OVERRIDE;
 
     void            SetExtendedHelp( bool b )           { bExtendedHelp= b; SetModified(); }
     bool            IsExtendedHelp() const                  { return bExtendedHelp; }
@@ -215,7 +216,7 @@ void  SvtHelpOptions_Impl::Load(const uno::Sequence< OUString>& rPropertyNames)
 
 
 
-void SvtHelpOptions_Impl::Commit()
+void SvtHelpOptions_Impl::ImplCommit()
 {
     Sequence< OUString > aNames = GetPropertyNames();
     Sequence< Any > aValues( aNames.getLength() );

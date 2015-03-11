@@ -25,15 +25,18 @@
 struct SvtFilterOptions_Impl;
 class UNOTOOLS_DLLPUBLIC SvtFilterOptions : public utl::ConfigItem
 {
+private:
     SvtFilterOptions_Impl* pImp;
 
     const com::sun::star::uno::Sequence<OUString>& GetPropertyNames();
+
+    virtual void            ImplCommit() SAL_OVERRIDE;
+
 public:
                     SvtFilterOptions();
     virtual        ~SvtFilterOptions();
 
     virtual void            Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames) SAL_OVERRIDE;
-    virtual void            Commit() SAL_OVERRIDE;
     void                    Load();
 
     void SetLoadWordBasicCode( bool bFlag );

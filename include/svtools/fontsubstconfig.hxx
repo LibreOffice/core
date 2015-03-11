@@ -35,13 +35,16 @@ struct SubstitutionStruct
 
 class SVT_DLLPUBLIC SvtFontSubstConfig : public utl::ConfigItem
 {
+private:
     bool                        bIsEnabled;
     SvtFontSubstConfig_Impl*    pImpl;
+
+    virtual void                ImplCommit() SAL_OVERRIDE;
+
 public:
     SvtFontSubstConfig();
     virtual ~SvtFontSubstConfig();
 
-    virtual void                Commit() SAL_OVERRIDE;
     virtual void                Notify( const com::sun::star::uno::Sequence< OUString >& _rPropertyNames) SAL_OVERRIDE;
 
     bool                        IsEnabled() const {return bIsEnabled;}

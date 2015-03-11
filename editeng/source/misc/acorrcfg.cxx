@@ -236,7 +236,7 @@ SvxBaseAutoCorrCfg::~SvxBaseAutoCorrCfg()
 {
 }
 
-void SvxBaseAutoCorrCfg::Commit()
+void SvxBaseAutoCorrCfg::ImplCommit()
 {
     Sequence<OUString> aNames( GetPropertyNames() );
 
@@ -321,7 +321,6 @@ void SvxBaseAutoCorrCfg::Commit()
         }
     }
     PutProperties(aNames, aValues);
-    ClearModified();
 }
 
 void SvxBaseAutoCorrCfg::Notify( const Sequence<OUString>& /* aPropertyNames */)
@@ -546,7 +545,7 @@ SvxSwAutoCorrCfg::~SvxSwAutoCorrCfg()
 {
 }
 
-void SvxSwAutoCorrCfg::Commit()
+void SvxSwAutoCorrCfg::ImplCommit()
 {
     Sequence<OUString> aNames = GetPropertyNames();
 
@@ -641,7 +640,6 @@ void SvxSwAutoCorrCfg::Commit()
         }
     }
     PutProperties(aNames, aValues);
-    ClearModified();
 }
 
 void SvxSwAutoCorrCfg::Notify( const Sequence<OUString>& /* aPropertyNames */ )

@@ -70,6 +70,9 @@ class ColorConfig_Impl : public utl::ConfigItem
     bool             m_bAutoDetectSystemHC;
 
     uno::Sequence< OUString> GetPropertyNames(const OUString& rScheme);
+
+    virtual void                    ImplCommit() SAL_OVERRIDE;
+
 public:
     ColorConfig_Impl(bool bEditMode = false);
     virtual ~ColorConfig_Impl();
@@ -78,7 +81,6 @@ public:
     void                            CommitCurrentSchemeName();
     //changes the name of the current scheme but doesn't load it!
     void                            SetCurrentSchemeName(const OUString& rSchemeName) {m_sLoadedScheme = rSchemeName;}
-    virtual void                    Commit() SAL_OVERRIDE;
     virtual void                    Notify( const uno::Sequence<OUString>& aPropertyNames) SAL_OVERRIDE;
 
     const ColorConfigValue&         GetColorConfigValue(ColorConfigEntry eValue)
@@ -261,7 +263,7 @@ void    ColorConfig_Impl::Notify( const uno::Sequence<OUString>& )
     NotifyListeners(0);
 }
 
-void ColorConfig_Impl::Commit()
+void ColorConfig_Impl::ImplCommit()
 {
     uno::Sequence < OUString > aColorNames = GetPropertyNames(m_sLoadedScheme);
     uno::Sequence < beans::PropertyValue > aPropValues(aColorNames.getLength());

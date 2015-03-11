@@ -131,7 +131,7 @@ SwStdFontConfig::SwStdFontConfig() :
     }
 }
 
-void    SwStdFontConfig::Commit()
+void SwStdFontConfig::ImplCommit()
 {
     Sequence<OUString> aNames = GetPropertyNames();
     Sequence<Any> aValues(aNames.getLength());

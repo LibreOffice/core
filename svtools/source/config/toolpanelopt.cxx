@@ -78,15 +78,6 @@ class SvtToolPanelOptions_Impl : public ConfigItem
         */
         void Load( const Sequence< OUString >& rPropertyNames );
 
-        /** write changes to configuration
-
-            These method writes the changed values into the sub tree
-            and should always called in our destructor to guarantee consistency of config data.
-
-            \sa baseclass ConfigItem
-        */
-        virtual void Commit() SAL_OVERRIDE;
-
         //  public interface
         bool m_bVisibleImpressView;
         bool m_bVisibleOutlineView;
@@ -95,6 +86,9 @@ class SvtToolPanelOptions_Impl : public ConfigItem
         bool m_bVisibleSlideSorterView;
 
     private:
+
+        virtual void ImplCommit() SAL_OVERRIDE;
+
         /** return list of key names of our configuration management which represent oue module tree
 
             These methods return a static const list of key names. We need it to get needed values from our
@@ -247,7 +241,7 @@ void SvtToolPanelOptions_Impl::Notify( const Sequence< OUString >& rPropertyName
     Load( rPropertyNames );
 }
 
-void SvtToolPanelOptions_Impl::Commit()
+void SvtToolPanelOptions_Impl::ImplCommit()
 {
     // Get names of supported properties, create a list for values and copy current values to it.
     sal_Int32               nCount      = m_seqPropertyNames.getLength();

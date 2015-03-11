@@ -249,15 +249,17 @@ static sal_uInt16 getGroupNodeId( const OUString& rModule )
 
 class MailMergeCfg_Impl : public utl::ConfigItem
 {
+private:
     friend class SvxEMailTabPage;
     // variables
     bool bIsEmailSupported;
+
+    virtual void    ImplCommit() SAL_OVERRIDE;
 
 public:
     MailMergeCfg_Impl();
     virtual ~MailMergeCfg_Impl();
 
-    virtual void    Commit() SAL_OVERRIDE;
     virtual void Notify( const com::sun::star::uno::Sequence< OUString >& _rPropertyNames) SAL_OVERRIDE;
 
     bool IsEmailSupported() const {return bIsEmailSupported;}
@@ -280,7 +282,7 @@ MailMergeCfg_Impl::~MailMergeCfg_Impl()
 {
 }
 /* -------------------------------------------------------------------------*/
-void MailMergeCfg_Impl::Commit()
+void MailMergeCfg_Impl::ImplCommit()
 {
 }
 

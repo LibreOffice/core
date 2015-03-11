@@ -38,7 +38,6 @@ class SysCredentialsConfigItem : public utl::ConfigItem
         virtual void Notify(
             const com::sun::star::uno::Sequence< OUString > &
                 seqPropertyNames ) SAL_OVERRIDE;
-        virtual void Commit() SAL_OVERRIDE;
 
         com::sun::star::uno::Sequence< OUString >
         getSystemCredentialsURLs();
@@ -49,7 +48,9 @@ class SysCredentialsConfigItem : public utl::ConfigItem
 
         //bool isSystemCredentialsURL( const OUString & rURL ) const;
 
-private:
+    private:
+        virtual void ImplCommit() SAL_OVERRIDE;
+
         ::osl::Mutex m_aMutex;
         bool m_bInited;
         com::sun::star::uno::Sequence< OUString > m_seqURLs;

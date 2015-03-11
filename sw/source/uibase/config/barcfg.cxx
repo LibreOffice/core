@@ -110,7 +110,7 @@ Sequence<OUString> SwToolbarConfigItem::GetPropertyNames()
     return aNames;
 }
 
-void SwToolbarConfigItem::Commit()
+void SwToolbarConfigItem::ImplCommit()
 {
     Sequence<OUString> aNames = GetPropertyNames();
 

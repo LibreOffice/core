@@ -45,7 +45,7 @@ public:
     void    SetCommitLink( const Link& rLink );
 
     virtual void    Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames ) SAL_OVERRIDE;
-    virtual void    Commit() SAL_OVERRIDE;
+    virtual void    ImplCommit() SAL_OVERRIDE;
 
     void    SetModified()   { ConfigItem::SetModified(); }
     com::sun::star::uno::Sequence< com::sun::star::uno::Any>

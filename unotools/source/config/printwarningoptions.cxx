@@ -59,7 +59,6 @@ public:
 
 //  override methods of baseclass
 
-    virtual void Commit() SAL_OVERRIDE;
     virtual void    Notify( const com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;
 
 //  public interface
@@ -77,6 +76,8 @@ public:
 //  private methods
 
 private:
+
+    virtual void ImplCommit() SAL_OVERRIDE;
 
     static Sequence< OUString > impl_GetPropertyNames();
 
@@ -164,7 +165,7 @@ SvtPrintWarningOptions_Impl::~SvtPrintWarningOptions_Impl()
 
 //  Commit
 
-void SvtPrintWarningOptions_Impl::Commit()
+void SvtPrintWarningOptions_Impl::ImplCommit()
 {
     Sequence< OUString >    aSeqNames( impl_GetPropertyNames() );
     Sequence< Any >         aSeqValues( aSeqNames.getLength() );

@@ -84,7 +84,7 @@ ScFilterOptions::ScFilterOptions() :
     }
 }
 
-void ScFilterOptions::Commit()
+void ScFilterOptions::ImplCommit()
 {
     // options are never modified from office
 

@@ -2144,7 +2144,7 @@ void SwPostItMgr::GetAllSidebarWinForFrm( const SwFrm& rFrm,
     }
 }
 
-void SwNoteProps::Commit() {}
+void SwNoteProps::ImplCommit() {}
 void SwNoteProps::Notify( const ::com::sun::star::uno::Sequence< OUString >& ) {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

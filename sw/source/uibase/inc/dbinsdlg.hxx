@@ -145,7 +145,7 @@ class SwInsertDBColAutoPilot : public SfxModalDialog, public utl::ConfigItem
     bool SplitTextToColArr( const OUString& rTxt, _DB_Columns& rColArr, bool bInsField );
         using SfxModalDialog::Notify;
     virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;
-    virtual void            Commit() SAL_OVERRIDE;
+    virtual void            ImplCommit() SAL_OVERRIDE;
     void                    Load();
 
     // set the tables - properties

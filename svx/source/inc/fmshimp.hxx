@@ -490,7 +490,6 @@ private:
 
     // ConfigItem related stuff
     SAL_DLLPRIVATE virtual void Notify( const com::sun::star::uno::Sequence< OUString >& _rPropertyNames) SAL_OVERRIDE;
-    SAL_DLLPRIVATE virtual void Commit() SAL_OVERRIDE;
     SAL_DLLPRIVATE void implAdjustConfigCache();
 
     SAL_DLLPRIVATE ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >
@@ -517,6 +516,7 @@ private:
     */
     SAL_DLLPRIVATE void    impl_RemoveElement_nothrow(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& Element);
 
+    SAL_DLLPRIVATE virtual void ImplCommit() SAL_OVERRIDE;
 
     // asynchronous cursor actions/navigation slot handling
 

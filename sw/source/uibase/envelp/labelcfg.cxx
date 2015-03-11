@@ -169,7 +169,7 @@ SwLabelConfig::~SwLabelConfig()
 }
 
 // the config item is not writable ?:
-void SwLabelConfig::Commit() {}
+void SwLabelConfig::ImplCommit() {}
 
 void SwLabelConfig::Notify( const ::com::sun::star::uno::Sequence< OUString >& ) {}
 

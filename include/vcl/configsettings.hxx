@@ -36,12 +36,16 @@ namespace vcl
 
     class VCL_DLLPUBLIC SettingsConfigItem : public ::utl::ConfigItem
     {
+    private:
         std::unordered_map< OUString, SmallOUStrMap, OUStringHash > m_aSettings;
 
         virtual void Notify( const com::sun::star::uno::Sequence< OUString >& rPropertyNames ) SAL_OVERRIDE;
 
         void getValues();
         SettingsConfigItem();
+
+        virtual void ImplCommit() SAL_OVERRIDE;
+
     public:
         virtual ~SettingsConfigItem();
 
@@ -50,7 +54,6 @@ namespace vcl
         const OUString& getValue( const OUString& rGroup, const OUString& rKey ) const;
         void setValue( const OUString& rGroup, const OUString& rKey, const OUString& rValue );
 
-        virtual void Commit() SAL_OVERRIDE;
     };
 
 

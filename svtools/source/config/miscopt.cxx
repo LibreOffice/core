@@ -90,6 +90,8 @@ class SvtMiscOptions_Impl : public ConfigItem
     bool        m_bMacroRecorderMode;
     bool        m_bIconThemeWasSetAutomatically;
 
+        virtual void ImplCommit() SAL_OVERRIDE;
+
     public:
 
          SvtMiscOptions_Impl();
@@ -113,17 +115,6 @@ class SvtMiscOptions_Impl : public ConfigItem
 
          */
         void Load( const Sequence< OUString >& rPropertyNames );
-
-        /*-****************************************************************************************************
-            @short      write changes to configuration
-            @descr      These method writes the changed values into the sub tree
-                        and should always called in our destructor to guarantee consistency of config data.
-
-            @seealso    baseclass ConfigItem
-        *//*-*****************************************************************************************************/
-
-        virtual void Commit() SAL_OVERRIDE;
-
 
         //  public interface
 
@@ -576,7 +567,7 @@ void SvtMiscOptions_Impl::Notify( const Sequence< OUString >& rPropertyNames )
 
 //  public method
 
-void SvtMiscOptions_Impl::Commit()
+void SvtMiscOptions_Impl::ImplCommit()
 {
     // Get names of supported properties, create a list for values and copy current values to it.
     Sequence< OUString >    seqNames    = GetPropertyNames  ();

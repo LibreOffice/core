@@ -57,7 +57,7 @@ SettingsConfigItem::~SettingsConfigItem()
         Commit();
 }
 
-void SettingsConfigItem::Commit()
+void SettingsConfigItem::ImplCommit()
 {
     std::unordered_map< OUString, SmallOUStrMap, OUStringHash >::const_iterator group;
 

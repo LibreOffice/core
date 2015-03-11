@@ -134,7 +134,7 @@ class LngSvcMgr :
 
     // utl::ConfigItem (to allow for listening of changes of relevant properties)
     virtual void    Notify( const com::sun::star::uno::Sequence< OUString > &rPropertyNames ) SAL_OVERRIDE;
-    virtual void    Commit() SAL_OVERRIDE;
+    virtual void    ImplCommit() SAL_OVERRIDE;
 
     void UpdateAll();
     void stopListening();

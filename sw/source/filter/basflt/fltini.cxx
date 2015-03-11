@@ -277,7 +277,7 @@ void SwFilterOptions::GetValues( sal_uInt16 nCnt, const sal_Char** ppNames,
     }
 }
 
-void SwFilterOptions::Commit() {}
+void SwFilterOptions::ImplCommit() {}
 void SwFilterOptions::Notify( const ::com::sun::star::uno::Sequence< OUString >& ) {}
 
 void StgReader::SetFltName( const OUString& rFltNm )

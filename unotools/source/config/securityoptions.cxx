@@ -100,6 +100,9 @@ using namespace ::com::sun::star::uno;
 class SvtSecurityOptions_Impl : public ConfigItem
 {
 
+    private:
+        virtual void ImplCommit() SAL_OVERRIDE;
+
     //  public methods
 
     public:
@@ -123,16 +126,6 @@ class SvtSecurityOptions_Impl : public ConfigItem
         *//*-*****************************************************************************************************/
 
         virtual void Notify( const Sequence< OUString >& seqPropertyNames ) SAL_OVERRIDE;
-
-        /*-****************************************************************************************************
-            @short      write changes to configuration
-            @descr      These method writes the changed values into the sub tree
-                        and should always called in our destructor to guarantee consistency of config data.
-
-            @seealso    baseclass ConfigItem
-        *//*-*****************************************************************************************************/
-
-        virtual void Commit() SAL_OVERRIDE;
 
         //  public interface
 
@@ -572,7 +565,7 @@ void SvtSecurityOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNam
     LoadAuthors();
 }
 
-void SvtSecurityOptions_Impl::Commit()
+void SvtSecurityOptions_Impl::ImplCommit()
 {
     // Get names of supported properties, create a list for values and copy current values to it.
     Sequence< OUString >    lOrgNames = GetPropertyNames();

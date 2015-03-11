@@ -98,7 +98,7 @@ void SvtFontSubstConfig::Notify( const com::sun::star::uno::Sequence< OUString >
 {
 }
 
-void SvtFontSubstConfig::Commit()
+void SvtFontSubstConfig::ImplCommit()
 {
     Sequence<OUString> aNames(1);
     aNames.getArray()[0] = cReplacement;

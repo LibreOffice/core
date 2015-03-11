@@ -81,6 +81,8 @@ class ScInputCfg : public ScInputOptions,
 {
     com::sun::star::uno::Sequence<OUString> GetPropertyNames();
 
+    virtual void    ImplCommit() SAL_OVERRIDE;
+
 public:
             ScInputCfg();
 
@@ -88,7 +90,6 @@ public:
     void            OptionsChanged();   // after direct access to SetOptions base class
 
     virtual void    Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames ) SAL_OVERRIDE;
-    virtual void    Commit() SAL_OVERRIDE;
 };
 
 #endif

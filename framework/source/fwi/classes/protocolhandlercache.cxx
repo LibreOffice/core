@@ -269,7 +269,7 @@ void HandlerCFGAccess::Notify(const css::uno::Sequence< OUString >& /*lPropertyN
     }
 }
 
-void HandlerCFGAccess::Commit()
+void HandlerCFGAccess::ImplCommit()
 {
 }
 

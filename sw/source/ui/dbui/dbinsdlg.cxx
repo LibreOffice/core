@@ -1505,7 +1505,7 @@ static OUString lcl_CreateUniqueName(const Sequence<OUString>& aNames)
 
 void SwInsertDBColAutoPilot::Notify( const ::com::sun::star::uno::Sequence< OUString >&  ) {}
 
-void SwInsertDBColAutoPilot::Commit()
+void SwInsertDBColAutoPilot::ImplCommit()
 {
     Sequence <OUString> aNames = GetNodeNames(OUString());
     const OUString* pNames = aNames.getArray();

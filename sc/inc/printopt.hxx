@@ -74,14 +74,16 @@ private:
 
 class ScPrintCfg : public ScPrintOptions, public utl::ConfigItem
 {
+private:
     com::sun::star::uno::Sequence<OUString> GetPropertyNames();
+
+    virtual void    ImplCommit() SAL_OVERRIDE;
 
 public:
             ScPrintCfg();
 
     void            SetOptions( const ScPrintOptions& rNew );
 
-    virtual void    Commit() SAL_OVERRIDE;
     virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;
 };
 

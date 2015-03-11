@@ -396,7 +396,7 @@ SwLabCfgItem::SwLabCfgItem(bool bLabel) :
 
 void SwLabCfgItem::Notify( const ::com::sun::star::uno::Sequence< OUString >& ) {}
 
-void    SwLabCfgItem::Commit()
+void SwLabCfgItem::ImplCommit()
 {
     Sequence<OUString> aNames = GetPropertyNames();
     Sequence<Any> aValues(aNames.getLength());

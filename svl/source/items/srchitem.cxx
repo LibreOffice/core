@@ -282,7 +282,7 @@ void SvxSearchItem::Notify( const Sequence< OUString > & )
     SetTransliterationFlags( SvtSearchOptions().GetTransliterationFlags() );
 }
 
-void SvxSearchItem::Commit()
+void SvxSearchItem::ImplCommit()
 {
 }
 

@@ -27,17 +27,19 @@
 
 class SC_DLLPUBLIC ScFilterOptions : public utl::ConfigItem
 {
+private:
     bool        bWK3Flag;
     double      fExcelColScale;
     double      fExcelRowScale;
 
     com::sun::star::uno::Sequence<OUString> GetPropertyNames();
 
+    virtual void    ImplCommit() SAL_OVERRIDE;
+
 public:
             ScFilterOptions();
 
     virtual void    Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames ) SAL_OVERRIDE;
-    virtual void    Commit() SAL_OVERRIDE;
 
     bool        GetWK3Flag() const          { return bWK3Flag; }
     double      GetExcelColScale() const    { return fExcelColScale; }

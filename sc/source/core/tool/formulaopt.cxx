@@ -502,7 +502,7 @@ void ScFormulaCfg::UpdateFromProperties( const Sequence<OUString>& aNames )
     }
 }
 
-void ScFormulaCfg::Commit()
+void ScFormulaCfg::ImplCommit()
 {
     Sequence<OUString> aNames = GetPropertyNames();
     Sequence<Any> aValues(aNames.getLength());

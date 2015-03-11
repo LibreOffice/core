@@ -969,11 +969,11 @@ void LngSvcMgr::Notify( const uno::Sequence< OUString > &rPropertyNames )
 }
 
 
-void LngSvcMgr::Commit()
+void LngSvcMgr::ImplCommit()
 {
     // everything necessary should have already been done by 'SaveCfgSvcs'
     // called from within 'setConfiguredServices'.
-    // Also this class usually exits only when the Office i sbeing shutdown.
+    // Also this class usually exits only when the Office is being shutdown.
 }
 
 

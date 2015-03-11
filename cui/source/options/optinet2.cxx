@@ -940,11 +940,13 @@ class MailerProgramCfg_Impl : public utl::ConfigItem
     bool bROProgram;
 
     const Sequence<OUString> GetPropertyNames();
+
+    virtual void    ImplCommit() SAL_OVERRIDE;
+
 public:
     MailerProgramCfg_Impl();
     virtual ~MailerProgramCfg_Impl();
 
-    virtual void    Commit() SAL_OVERRIDE;
     virtual void Notify( const com::sun::star::uno::Sequence< OUString >& _rPropertyNames) SAL_OVERRIDE;
 };
 
@@ -994,7 +996,7 @@ const Sequence<OUString> MailerProgramCfg_Impl::GetPropertyNames()
 
 /* -------------------------------------------------------------------------*/
 
-void MailerProgramCfg_Impl::Commit()
+void MailerProgramCfg_Impl::ImplCommit()
 {
     const Sequence< OUString > aOrgNames = GetPropertyNames();
     sal_Int32 nOrgCount = aOrgNames.getLength();

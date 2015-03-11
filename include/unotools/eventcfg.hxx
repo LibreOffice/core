@@ -64,18 +64,20 @@ typedef std::vector< OUString > SupportedEventsVector;
 
 class GlobalEventConfig_Impl : public utl::ConfigItem
 {
+private:
     EventBindingHash m_eventBindingHash;
     FrameVector m_lFrames;
     SupportedEventsVector m_supportedEvents;
 
     void initBindingInfo();
 
+    virtual void ImplCommit() SAL_OVERRIDE;
+
 public:
     GlobalEventConfig_Impl( );
     virtual ~GlobalEventConfig_Impl( );
 
     void            Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames) SAL_OVERRIDE;
-    void            Commit() SAL_OVERRIDE;
 
     void SAL_CALL replaceByName( const OUString& aName, const ::com::sun::star::uno::Any& aElement ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);

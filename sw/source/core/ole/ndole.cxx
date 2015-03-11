@@ -72,12 +72,13 @@ private:
     sal_Int32 m_nLRU_InitSize;
     uno::Sequence< OUString > GetPropertyNames();
 
+    virtual void ImplCommit() SAL_OVERRIDE;
+
 public:
     SwOLELRUCache();
 
     virtual void Notify( const uno::Sequence<
                                 OUString>& aPropertyNames ) SAL_OVERRIDE;
-    virtual void Commit() SAL_OVERRIDE;
     void Load();
 
     void InsertObj( SwOLEObj& rObj );
@@ -921,7 +922,7 @@ void SwOLELRUCache::Notify( const uno::Sequence< OUString>&  )
     Load();
 }
 
-void SwOLELRUCache::Commit()
+void SwOLELRUCache::ImplCommit()
 {
 }
 

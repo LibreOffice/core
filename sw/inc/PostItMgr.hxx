@@ -99,6 +99,9 @@ class SwNoteProps: public utl::ConfigItem
 {
     private:
         bool bIsShowAnchor;
+
+        virtual void ImplCommit() SAL_OVERRIDE;
+
     public:
         SwNoteProps()
             : ConfigItem(OUString("Office.Writer/Notes"))
@@ -128,7 +131,6 @@ class SwNoteProps: public utl::ConfigItem
             return aNames;
         }
 
-    virtual void Commit() SAL_OVERRIDE;
     virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;
 };
 

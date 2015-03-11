@@ -159,10 +159,10 @@ void GlobalEventConfig_Impl::Notify( const Sequence< OUString >& )
 
 //  public method
 
-void GlobalEventConfig_Impl::Commit()
+void GlobalEventConfig_Impl::ImplCommit()
 {
     //DF need to check it this is correct??
-    OSL_TRACE("In GlobalEventConfig_Impl::Commit");
+    OSL_TRACE("In GlobalEventConfig_Impl::ImplCommit");
     EventBindingHash::const_iterator it = m_eventBindingHash.begin();
     EventBindingHash::const_iterator it_end = m_eventBindingHash.end();
     // clear the existing nodes

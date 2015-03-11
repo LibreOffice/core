@@ -280,9 +280,9 @@ public:
         virtual void    setCommand(const OUString& _rCommand) SAL_OVERRIDE;
 
         virtual void    Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames) SAL_OVERRIDE;
-        virtual void    Commit() SAL_OVERRIDE;
 
     private:
+        virtual void    ImplCommit() SAL_OVERRIDE;
         void            clearFieldAssignment(const OUString& _rLogicalName);
     };
 
@@ -291,7 +291,7 @@ void AssignmentPersistentData::Notify( const com::sun::star::uno::Sequence<OUStr
 {
 }
 
-void AssignmentPersistentData::Commit()
+void AssignmentPersistentData::ImplCommit()
 {
 }
 

@@ -48,7 +48,7 @@ void SysCredentialsConfigItem::Notify(
     m_pOwner->persistentConfigChanged();
 }
 
-void SysCredentialsConfigItem::Commit()
+void SysCredentialsConfigItem::ImplCommit()
 {
     // does nothing
 }

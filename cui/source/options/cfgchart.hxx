@@ -72,6 +72,8 @@ private:
         { return maPropertyNames; }
     bool RetrieveOptions();
 
+    virtual void                ImplCommit() SAL_OVERRIDE;
+
 public:
     SvxChartOptions();
     virtual ~SvxChartOptions();
@@ -79,7 +81,6 @@ public:
     const SvxChartColorTable&   GetDefaultColors();
     void                        SetDefaultColors( const SvxChartColorTable& aCol );
 
-    virtual void                Commit() SAL_OVERRIDE;
     virtual void Notify( const com::sun::star::uno::Sequence< OUString >& _rPropertyNames) SAL_OVERRIDE;
 };
 

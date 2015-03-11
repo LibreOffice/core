@@ -1118,4 +1118,10 @@ Reference< XHierarchicalNameAccess> ConfigItem::GetTree()
     return xRet;
 }
 
+void ConfigItem::Commit()
+{
+    ImplCommit();
+    ClearModified();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

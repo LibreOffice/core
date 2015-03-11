@@ -69,18 +69,10 @@ class SvtExtendedSecurityOptions_Impl : public ConfigItem
 
         virtual void Notify( const Sequence< OUString >& seqPropertyNames ) SAL_OVERRIDE;
 
-        /*-****************************************************************************************************
-            @short      write changes to configuration
-            @descr      These method writes the changed values into the sub tree
-                        and should always called in our destructor to guarantee consistency of config data.
-
-            @seealso    baseclass ConfigItem
-        *//*-*****************************************************************************************************/
-
-        virtual void Commit() SAL_OVERRIDE;
-
         SvtExtendedSecurityOptions::OpenHyperlinkMode   GetOpenHyperlinkMode() { return m_eOpenHyperlinkMode;}
+
     private:
+        virtual void ImplCommit() SAL_OVERRIDE;
 
         /*-****************************************************************************************************
             @short      return list of key names of our configuration management which represent oue module tree
@@ -176,7 +168,7 @@ void SvtExtendedSecurityOptions_Impl::Notify( const Sequence< OUString >& )
 
 //  public method
 
-void SvtExtendedSecurityOptions_Impl::Commit()
+void SvtExtendedSecurityOptions_Impl::ImplCommit()
 {
     // Get names of supported properties, create a list for values and copy current values to it.
     Sequence< OUString >    seqNames    = GetPropertyNames  ();

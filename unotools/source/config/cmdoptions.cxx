@@ -105,16 +105,6 @@ class SvtCommandOptions_Impl : public ConfigItem
         virtual void Notify( const Sequence< OUString >& lPropertyNames ) SAL_OVERRIDE;
 
         /*-****************************************************************************************************
-            @short      write changes to configuration
-            @descr      These method writes the changed values into the sub tree
-                        and should always called in our destructor to guarantee consistency of config data.
-
-            @seealso    baseclass ConfigItem
-        *//*-*****************************************************************************************************/
-
-        virtual void Commit() SAL_OVERRIDE;
-
-        /*-****************************************************************************************************
             @short      base implementation of public interface for "SvtDynamicMenuOptions"!
             @descr      These class is used as static member of "SvtDynamicMenuOptions" ...
                         => The code exist only for one time and isn't duplicated for every instance!
@@ -125,6 +115,8 @@ class SvtCommandOptions_Impl : public ConfigItem
         void EstablisFrameCallback(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame);
 
     private:
+
+        virtual void ImplCommit() SAL_OVERRIDE;
 
         /*-****************************************************************************************************
             @short      return list of key names of our configuration management which represent oue module tree
@@ -233,9 +225,9 @@ void SvtCommandOptions_Impl::Notify( const Sequence< OUString >& )
 
 //  public method
 
-void SvtCommandOptions_Impl::Commit()
+void SvtCommandOptions_Impl::ImplCommit()
 {
-    OSL_FAIL( "SvtCommandOptions_Impl::Commit()\nNot implemented yet!\n" );
+    SAL_WARN("unotools.config","SvtCommandOptions_Impl::ImplCommit(): Not implemented yet!");
 }
 
 //  public method

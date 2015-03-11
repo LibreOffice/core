@@ -105,16 +105,19 @@ public:
 
 class SwLabCfgItem : public utl::ConfigItem
 {
+private:
     SwLabItem   aItem;
     bool    bIsLabel;
 
     com::sun::star::uno::Sequence<OUString> GetPropertyNames();
+
+    virtual void ImplCommit() SAL_OVERRIDE;
+
 public:
     SwLabCfgItem(bool bLabel);
 
     SwLabItem&              GetItem() {return aItem;}
 
-    virtual void Commit() SAL_OVERRIDE;
     virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;
 };
 

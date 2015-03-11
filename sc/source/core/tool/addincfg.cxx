@@ -37,9 +37,9 @@ ScAddInCfg::ScAddInCfg() :
     EnableNotification( aNames );
 }
 
-void ScAddInCfg::Commit()
+void ScAddInCfg::ImplCommit()
 {
-    OSL_FAIL("ScAddInCfg shouldn't be modified");
+    SAL_WARN("sc", "ScAddInCfg shouldn't be modified");
 }
 
 void ScAddInCfg::Notify( const uno::Sequence<OUString>& )

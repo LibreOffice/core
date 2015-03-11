@@ -168,8 +168,6 @@ public:
 
 //  override methods of baseclass
 
-
-    virtual void Commit() SAL_OVERRIDE;
     virtual void Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames) SAL_OVERRIDE;
 
 
@@ -222,17 +220,15 @@ public:
     void        SetTransparentSelection( bool bState );
     void        SetTransparentSelectionPercent( sal_uInt16 nPercent );
 
-
 //  private methods
-
 
 private:
 
+    virtual void ImplCommit() SAL_OVERRIDE;
+
     static Sequence< OUString > impl_GetPropertyNames();
 
-
 //  private member
-
 
 private:
 
@@ -554,7 +550,7 @@ SvtOptionsDrawinglayer_Impl::~SvtOptionsDrawinglayer_Impl()
 
 //  Commit
 
-void SvtOptionsDrawinglayer_Impl::Commit()
+void SvtOptionsDrawinglayer_Impl::ImplCommit()
 {
     Sequence< OUString >    aSeqNames( impl_GetPropertyNames() );
     Sequence< Any >         aSeqValues( aSeqNames.getLength() );

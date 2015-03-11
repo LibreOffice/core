@@ -69,16 +69,19 @@ public:
 
 class SwEnvCfgItem : public utl::ConfigItem
 {
+private:
     SwEnvItem aEnvItem;
 
     com::sun::star::uno::Sequence<OUString> GetPropertyNames();
+
+    virtual void ImplCommit() SAL_OVERRIDE;
+
 public:
     SwEnvCfgItem();
     virtual ~SwEnvCfgItem();
 
     SwEnvItem& GetItem() {return aEnvItem;}
 
-    virtual void            Commit() SAL_OVERRIDE;
     virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;
 };
 

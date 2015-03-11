@@ -143,7 +143,7 @@ ScDefaultsCfg::ScDefaultsCfg() :
     }
 }
 
-void ScDefaultsCfg::Commit()
+void ScDefaultsCfg::ImplCommit()
 {
     Sequence<OUString> aNames = GetPropertyNames();
     Sequence<Any> aValues(aNames.getLength());

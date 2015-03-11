@@ -110,7 +110,7 @@ const SwDBData& SwDBConfig::GetBibliographySource()
     return *pBibImpl;
 }
 
-void SwDBConfig::Commit() {}
+void SwDBConfig::ImplCommit() {}
 void SwDBConfig::Notify( const ::com::sun::star::uno::Sequence< OUString >& ) {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

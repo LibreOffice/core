@@ -190,10 +190,16 @@ typedef ::std::map< OUString, ::std::list< NamePassRecord > > PassMap;
 
 class PasswordContainer;
 
-class StorageItem : public ::utl::ConfigItem {
+class StorageItem
+    : public ::utl::ConfigItem
+{
+private:
     PasswordContainer*     mainCont;
     bool                   hasEncoded;
     OUString        mEncoded;
+
+    virtual void            ImplCommit() SAL_OVERRIDE;
+
 public:
     StorageItem( PasswordContainer* point, const OUString& path ) :
         ConfigItem( path, CONFIG_MODE_IMMEDIATE_UPDATE ),
@@ -217,7 +223,6 @@ public:
     bool useStorage();
 
     virtual void            Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;
-    virtual void            Commit() SAL_OVERRIDE;
 };
 
 
