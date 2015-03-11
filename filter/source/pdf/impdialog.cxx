@@ -1577,9 +1577,9 @@ IMPL_LINK_NOARG( ImpPDFTabSigningPage, ClickmaPbSignCertSelect )
         {
             css::uno::Sequence<OUString> aTSAURLs(officecfg::Office::Common::Security::Scripting::TSAURLs::get());
 
-            for (auto i = aTSAURLs.begin(); i != aTSAURLs.end(); ++i)
+            for (sal_Int32 i = 0; i < aTSAURLs.getLength(); ++i)
             {
-                mpLBSignTSA->InsertEntry( *i );
+                mpLBSignTSA->InsertEntry( aTSAURLs[i] );
             }
         }
         catch (const uno::Exception &e)
