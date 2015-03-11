@@ -42,7 +42,7 @@ namespace connectivity
         public:
 
             KabDatabaseMetaData(KabConnection* _pCon);
-            static const OUString & getAddressBookTableName();
+                      static const OUString & getAddressBookTableName();
             virtual ~KabDatabaseMetaData();
 
             // this interface is really BIG

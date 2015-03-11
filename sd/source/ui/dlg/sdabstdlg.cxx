@@ -42,7 +42,7 @@ SdAbstractDialogFactory* SdAbstractDialogFactory::Create()
 #if HAVE_FEATURE_DESKTOP
 #ifndef DISABLE_DYNLOADING
     static ::osl::Module aDialogLibrary;
-    static const OUString sLibName(SDUI_DLL_NAME);
+    static const char sLibName[]=SDUI_DLL_NAME;
     if ( aDialogLibrary.is() || aDialogLibrary.loadRelative( &thisModule, sLibName ) )
         fp = reinterpret_cast<SdAbstractDialogFactory* (SAL_CALL*)()>(
             aDialogLibrary.getFunctionSymbol( "SdCreateDialogFactory" ));

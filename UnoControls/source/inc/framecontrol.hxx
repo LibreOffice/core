@@ -151,7 +151,7 @@ public:
 
     static const ::com::sun::star::uno::Sequence< OUString > impl_getStaticSupportedServiceNames();
 
-    static const OUString impl_getStaticImplementationName();
+    static const char impl_getStaticImplementationName[];
 
 //  protected methods
 

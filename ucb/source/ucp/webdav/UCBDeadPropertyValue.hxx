@@ -31,19 +31,19 @@ namespace http_dav_ucp
 class UCBDeadPropertyValue
 {
 private:
-    static const OUString aTypeString;
-    static const OUString aTypeLong;
-    static const OUString aTypeShort;
-    static const OUString aTypeBoolean;
-    static const OUString aTypeChar;
-    static const OUString aTypeByte;
-    static const OUString aTypeHyper;
-    static const OUString aTypeFloat;
-    static const OUString aTypeDouble;
+    static const char aTypeString[];
+    static const char aTypeLong[];
+    static const char aTypeShort[];
+    static const char aTypeBoolean[];
+    static const char aTypeChar[];
+    static const char aTypeByte[];
+    static const char aTypeHyper[];
+    static const char aTypeFloat[];
+    static const char aTypeDouble[];
 
-    static const OUString aXMLPre;
-    static const OUString aXMLMid;
-    static const OUString aXMLEnd;
+    static const char aXMLPre[];
+    static const char aXMLMid[];
+    static const char aXMLEnd[];
 
 public:
     static bool supportsType( const com::sun::star::uno::Type & rType );

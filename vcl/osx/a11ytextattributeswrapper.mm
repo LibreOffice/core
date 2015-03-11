@@ -201,19 +201,19 @@ using namespace ::com::sun::star::uno;
 +(void)applyAttributesFrom:(Sequence < PropertyValue >)attributes toString:(NSMutableAttributedString *)string forRange:(NSRange)range fontDescriptor:(AquaA11yFontDescriptor*)fontDescriptor {
     NSAutoreleasePool * pool = [ [ NSAutoreleasePool alloc ] init ];
     // constants
-    static const OUString attrUnderline("CharUnderline");
-    static const OUString attrBold("CharWeight");
-    static const OUString attrFontname("CharFontName");
-    static const OUString attrItalic("CharPosture");
-    static const OUString attrHeight("CharHeight");
-    static const OUString attrStrikethrough("CharStrikeout");
-    static const OUString attrShadow("CharShadowed");
-    static const OUString attrUnderlineColor("CharUnderlineColor");
-    static const OUString attrUnderlineHasColor("CharUnderlineHasColor");
-    static const OUString attrForegroundColor("CharColor");
-    static const OUString attrBackgroundColor("CharBackColor");
-    static const OUString attrSuperscript("CharEscapement");
-    static const OUString attrTextAlignment("ParaAdjust");
+    static const char attrUnderline[]="CharUnderline";
+    static const char attrBold[]="CharWeight";
+    static const char attrFontname[]="CharFontName";
+    static const char attrItalic[]="CharPosture";
+    static const char attrHeight[]="CharHeight";
+    static const char attrStrikethrough[]="CharStrikeout";
+    static const char attrShadow[]="CharShadowed";
+    static const char attrUnderlineColor[]="CharUnderlineColor";
+    static const char attrUnderlineHasColor[]="CharUnderlineHasColor";
+    static const char attrForegroundColor[]="CharColor";
+    static const char attrBackgroundColor[]="CharBackColor";
+    static const char attrSuperscript[]="CharEscapement";
+    static const char attrTextAlignment[]="ParaAdjust";
     // vars
     sal_Int32 underlineColor = 0;
     BOOL underlineHasColor = NO;

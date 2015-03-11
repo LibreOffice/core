@@ -574,7 +574,7 @@ public:
     SC_DLLPUBLIC static ScUnoAddInCollection* GetAddInCollection();
     SC_DLLPUBLIC static ScUserList*         GetUserList();
     static void                 SetUserList( const ScUserList* pNewList );
-    SC_DLLPUBLIC static const OUString&       GetRscString( sal_uInt16 nIndex );
+     SC_DLLPUBLIC static const OUString&       GetRscString( sal_uInt16 nIndex );
     static void                 OpenURL( const OUString& rURL, const OUString& rTarget );
     SC_DLLPUBLIC static OUString            GetAbsDocName( const OUString& rFileName,
                                                 SfxObjectShell* pShell );
@@ -607,7 +607,7 @@ public:
     static SvxBrushItem*    GetEmbeddedBrushItem()  { return pEmbeddedBrushItem; }
     static SvxBrushItem*    GetProtectedBrushItem() { return pProtectedBrushItem; }
     SC_DLLPUBLIC    static const OUString&    GetEmptyOUString();
-    static const OUString&  GetScDocString();
+      static const OUString&  GetScDocString();
 
     /** Returns the specified image list with outline symbols. */
     static ImageList*       GetOutlineSymbols();

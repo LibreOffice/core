@@ -69,249 +69,237 @@ OUString removeFragment(OUString const & uri) {
 }
 
 const OUString& MediaDescriptor::PROP_ABORTED()
-{
-    static const OUString sProp("Aborted");
-    return sProp;
+{return OUString("Aborted");
 }
 
 const OUString& MediaDescriptor::PROP_ASTEMPLATE()
 {
-    static const OUString sProp("AsTemplate");
-    return sProp;
+    return OUString("AsTemplate");
 }
 
 const OUString& MediaDescriptor::PROP_COMPONENTDATA()
 {
-    static const OUString sProp("ComponentData");
-    return sProp;
+    return OUString("ComponentData");
 }
-
 const OUString& MediaDescriptor::PROP_DOCUMENTSERVICE()
 {
-    static const OUString sProp("DocumentService");
-    return sProp;
+    return OUString("DocumentService");
 }
 
 const OUString& MediaDescriptor::PROP_ENCRYPTIONDATA()
 {
-    static const OUString sProp("EncryptionData");
-    return sProp;
+    return OUString("EncryptionData");
+
 }
 
 const OUString& MediaDescriptor::PROP_FILENAME()
 {
-    static const OUString sProp("FileName");
-    return sProp;
+    return OUString("FileName");
+
 }
 
 const OUString& MediaDescriptor::PROP_FILTERNAME()
 {
-    static const OUString sProp("FilterName");
-    return sProp;
+    return OUString("FilterName");
 }
 
 const OUString& MediaDescriptor::PROP_FILTERPROVIDER()
 {
-    static const OUString aProp("FilterProvider");
-    return aProp;
+return OUString("FilterProvider");
+
 }
 
 const OUString& MediaDescriptor::PROP_FILTEROPTIONS()
 {
-    static const OUString sProp("FilterOptions");
-    return sProp;
+    return OUString("FilterOptions");
 }
 
 const OUString& MediaDescriptor::PROP_FRAME()
 {
-    static const OUString sProp("Frame");
-    return sProp;
+return OUString("Frame");
+
 }
 
 const OUString& MediaDescriptor::PROP_FRAMENAME()
 {
-    static const OUString sProp("FrameName");
-    return sProp;
+    return OUString("FrameName");
+
 }
 
 const OUString& MediaDescriptor::PROP_HIDDEN()
 {
-    static const OUString sProp("Hidden");
-    return sProp;
+    return OUString("Hidden");
 }
 
 const OUString& MediaDescriptor::PROP_INPUTSTREAM()
 {
-    static const OUString sProp("InputStream");
-    return sProp;
+    return OUString("InputStream");
 }
 
 const OUString& MediaDescriptor::PROP_INTERACTIONHANDLER()
 {
-    static const OUString sProp("InteractionHandler");
-    return sProp;
+    return OUString("InteractionHandler");
 }
 
 const OUString& MediaDescriptor::PROP_JUMPMARK()
 {
-    static const OUString sProp("JumpMark");
-    return sProp;
+    return OUString("JumpMark");
 }
 
 const OUString& MediaDescriptor::PROP_MACROEXECUTIONMODE()
 {
-    static const OUString sProp("MacroExecutionMode");
-    return sProp;
+    return OUString("MacroExecutionMode");
 }
 
 const OUString& MediaDescriptor::PROP_MEDIATYPE()
 {
-    static const OUString sProp("MediaType");
-    return sProp;
+    return OUString("MediaType");
+
 }
 
 const OUString& MediaDescriptor::PROP_MINIMIZED()
 {
-    static const OUString sProp("Minimized");
-    return sProp;
+   return OUString("Minimized");
+
 }
 
 const OUString& MediaDescriptor::PROP_NOAUTOSAVE()
 {
-    static const OUString sProp("NoAutoSave");
-    return sProp;
+    return OUString("NoAutoSave");
+
 }
 
 const OUString& MediaDescriptor::PROP_OPENNEWVIEW()
 {
-    static const OUString sProp("OpenNewView");
-    return sProp;
+    return OUString("OpenNewView");
+
 }
 
 const OUString& MediaDescriptor::PROP_OUTPUTSTREAM()
 {
-    static const OUString sProp("OutputStream");
-    return sProp;
+    return OUString("OutputStream");
+
 }
 
 const OUString& MediaDescriptor::PROP_POSTDATA()
 {
-    static const OUString sProp("PostData");
-    return sProp;
+    return OUString("PostData");
+
 }
 
 const OUString& MediaDescriptor::PROP_PREVIEW()
 {
-    static const OUString sProp("Preview");
-    return sProp;
+    return OUString("Preview");
+
 }
 
 const OUString& MediaDescriptor::PROP_READONLY()
 {
-    static const OUString sProp("ReadOnly");
-    return sProp;
+    return OUString("ReadOnly");
+
 }
 
 const OUString& MediaDescriptor::PROP_REFERRER()
 {
-    static const OUString sProp("Referer");
-    return sProp;
+    return OUString("Referer");
+
 }
 
 const OUString& MediaDescriptor::PROP_STATUSINDICATOR()
 {
-    static const OUString sProp("StatusIndicator");
-    return sProp;
+    return OUString("StatusIndicator");
+
 }
 
 const OUString& MediaDescriptor::PROP_STREAM()
 {
-    static const OUString sProp("Stream");
-    return sProp;
+    return OUString("Stream");
+
 }
 
 const OUString& MediaDescriptor::PROP_STREAMFOROUTPUT()
 {
-    static const OUString sProp("StreamForOutput");
-    return sProp;
+   return OUString("StreamForOutput");
+
 }
 
 const OUString& MediaDescriptor::PROP_TEMPLATENAME()
 {
-    static const OUString sProp("TemplateName");
-    return sProp;
+    return OUString("TemplateName");
+
 }
 
 const OUString& MediaDescriptor::PROP_TYPENAME()
 {
-    static const OUString sProp("TypeName");
-    return sProp;
+    return OUString("TypeName");
+
 }
 
 const OUString& MediaDescriptor::PROP_UCBCONTENT()
 {
-    static const OUString sProp("UCBContent");
-    return sProp;
+    return OUString("UCBContent");
+
 }
 
 const OUString& MediaDescriptor::PROP_UPDATEDOCMODE()
 {
-    static const OUString sProp("UpdateDocMode");
-    return sProp;
+   return OUString("UpdateDocMode");
+
 }
 
 const OUString& MediaDescriptor::PROP_URL()
 {
-    static const OUString sProp("URL");
-    return sProp;
+    return OUString("URL");
+
 }
 
 const OUString& MediaDescriptor::PROP_VERSION()
 {
-    static const OUString sProp("Version");
-    return sProp;
+    return OUString("Version");
+
 }
 
 const OUString& MediaDescriptor::PROP_DOCUMENTTITLE()
 {
-    static const OUString sProp("DocumentTitle");
-    return sProp;
+    return OUString("DocumentTitle");
+
 }
 
 const OUString& MediaDescriptor::PROP_MODEL()
 {
-    static const OUString sProp("Model");
-    return sProp;
+    return OUString("Model");
+
 }
 
 const OUString& MediaDescriptor::PROP_PASSWORD()
 {
-    static const OUString sProp("Password");
-    return sProp;
+    return OUString("Password");
+
 }
 
 const OUString& MediaDescriptor::PROP_TITLE()
 {
-    static const OUString sProp("Title");
-    return sProp;
+
+   return OUString("Title");
+
 }
 
 const OUString& MediaDescriptor::PROP_SALVAGEDFILE()
 {
-    static const OUString sProp("SalvagedFile");
-    return sProp;
+    return OUString("SalvagedFile");
+
 }
 
 const OUString& MediaDescriptor::PROP_VIEWONLY()
 {
-    static const OUString sProp("ViewOnly");
-    return sProp;
+    return OUString("ViewOnly");
+
 }
 
 const OUString& MediaDescriptor::PROP_DOCUMENTBASEURL()
 {
-    static const OUString sProp("DocumentBaseURL");
-    return sProp;
+    return OUString("DocumentBaseURL");
+
 }
 
 MediaDescriptor::MediaDescriptor()

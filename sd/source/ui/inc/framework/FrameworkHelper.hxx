@@ -58,50 +58,50 @@ class FrameworkHelper
 {
 public:
     // URLs of frequently used panes.
-    static const OUString msPaneURLPrefix;
-    static const OUString msCenterPaneURL;
-    static const OUString msFullScreenPaneURL;
-    static const OUString msLeftImpressPaneURL;
-    static const OUString msLeftDrawPaneURL;
-    static const OUString msSidebarPaneURL;
+    static const char msPaneURLPrefix[];
+    static const char msCenterPaneURL[];
+    static const char msFullScreenPaneURL[];
+    static const char msLeftImpressPaneURL[];
+    static const char msLeftDrawPaneURL[];
+    static const char msSidebarPaneURL[];
 
     // URLs of frequently used views.
-    static const OUString msViewURLPrefix;
-    static const OUString msImpressViewURL;
-    static const OUString msDrawViewURL;
-    static const OUString msOutlineViewURL;
-    static const OUString msNotesViewURL;
-    static const OUString msHandoutViewURL;
-    static const OUString msSlideSorterURL;
-    static const OUString msPresentationViewURL;
-    static const OUString msSidebarViewURL;
+    static const char msViewURLPrefix[];
+    static const char msImpressViewURL[];
+    static const char msDrawViewURL[];
+    static const char msOutlineViewURL[];
+    static const char msNotesViewURL[];
+    static const char msHandoutViewURL[];
+    static const char msSlideSorterURL[];
+    static const char msPresentationViewURL[];
+    static const char msSidebarViewURL[];
 
     // URLs of frequently used tool bars.
-    static const OUString msToolBarURLPrefix;
-    static const OUString msViewTabBarURL;
+    static const char msToolBarURLPrefix[];
+    static const char msViewTabBarURL[];
 
     // URLs of task panels.
-    static const OUString msTaskPanelURLPrefix;
-    static const OUString msAllMasterPagesTaskPanelURL;
-    static const OUString msRecentMasterPagesTaskPanelURL;
-    static const OUString msUsedMasterPagesTaskPanelURL;
-    static const OUString msLayoutTaskPanelURL;
-    static const OUString msTableDesignPanelURL;
-    static const OUString msCustomAnimationTaskPanelURL;
-    static const OUString msSlideTransitionTaskPanelURL;
+    static const char msTaskPanelURLPrefix[];
+    static const char msAllMasterPagesTaskPanelURL[];
+    static const char msRecentMasterPagesTaskPanelURL[];
+    static const char msUsedMasterPagesTaskPanelURL[];
+    static const char msLayoutTaskPanelURL[];
+    static const char msTableDesignPanelURL[];
+    static const char msCustomAnimationTaskPanelURL[];
+    static const char msSlideTransitionTaskPanelURL[];
 
     // Names of frequently used events.
-    static const OUString msResourceActivationRequestEvent;
-    static const OUString msResourceDeactivationRequestEvent;
-    static const OUString msResourceActivationEvent;
-    static const OUString msResourceDeactivationEvent;
-    static const OUString msResourceDeactivationEndEvent;
-    static const OUString msConfigurationUpdateStartEvent;
-    static const OUString msConfigurationUpdateEndEvent;
+    static const char msResourceActivationRequestEvent[];
+    static const char msResourceDeactivationRequestEvent[];
+    static const char msResourceActivationEvent[];
+    static const char msResourceDeactivationEvent[];
+    static const char msResourceDeactivationEndEvent[];
+    static const char msConfigurationUpdateStartEvent[];
+    static const char msConfigurationUpdateEndEvent[];
 
     // Service names of the common controllers.
-    static const OUString msModuleControllerService;
-    static const OUString msConfigurationControllerService;
+    static const char msModuleControllerService[];
+    static const char msConfigurationControllerService[];
 
     /** Return the FrameworkHelper object that is associated with the given
         ViewShellBase.  If such an object does not yet exist, a new one is

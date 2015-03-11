@@ -30,17 +30,17 @@ typedef struct { const char *nspace, *name; } SerfPropName;
 
 struct DAVProperties
 {
-    static const OUString CREATIONDATE;
-    static const OUString DISPLAYNAME;
-    static const OUString GETCONTENTLANGUAGE;
-    static const OUString GETCONTENTLENGTH;
-    static const OUString GETCONTENTTYPE;
-    static const OUString GETETAG;
-    static const OUString GETLASTMODIFIED;
-    static const OUString LOCKDISCOVERY;
-    static const OUString RESOURCETYPE;
-    static const OUString SUPPORTEDLOCK;
-    static const OUString EXECUTABLE;
+    static const char CREATIONDATE[];
+    static const char DISPLAYNAME[];
+    static const char GETCONTENTLANGUAGE[];
+    static const char GETCONTENTLENGTH[];
+    static const char GETCONTENTTYPE[];
+    static const char GETETAG[];
+    static const char GETLASTMODIFIED[];
+    static const char LOCKDISCOVERY[];
+    static const char RESOURCETYPE[];
+    static const char SUPPORTEDLOCK[];
+    static const char EXECUTABLE[];
 
     static void createSerfPropName( const OUString & rFullName,
                                     SerfPropName & rName );
