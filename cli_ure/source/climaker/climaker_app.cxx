@@ -258,7 +258,7 @@ SAL_IMPLEMENT_MAIN()
     sal_uInt32 nCount = osl_getCommandArgCount();
     if (0 == nCount)
     {
-        printf( s_usingText );
+        puts( s_usingText );
         return 0;
     }
 
@@ -310,7 +310,7 @@ SAL_IMPLEMENT_MAIN()
             // options
             if (is_option( info_help, &nPos ))
             {
-                printf( s_usingText );
+                puts( s_usingText );
                 return 0;
             }
             else if (read_argument( &cmd_arg, info_types, &nPos ))
