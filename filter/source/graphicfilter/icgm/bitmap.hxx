@@ -67,8 +67,7 @@ class CGMBitmapDescriptor
         {
             if ( mpAcc )
                 mpBitmap->ReleaseAccess( mpAcc );
-            if ( mpBitmap )
-                delete mpBitmap;
+            delete mpBitmap;
         };
 };
 

@@ -1731,8 +1731,7 @@ OWriteStream::~OWriteStream()
     if ( m_pData && m_pData->m_pTypeCollection )
         delete m_pData->m_pTypeCollection;
 
-    if ( m_pData )
-        delete m_pData;
+    delete m_pData;
 }
 
 void OWriteStream::DeInit()

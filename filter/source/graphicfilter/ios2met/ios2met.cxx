@@ -730,7 +730,6 @@ void OS2METReader::SetRasterOp(RasterOp eROP)
     if (pVirDev->GetRasterOp()!=eROP) pVirDev->SetRasterOp(eROP);
 }
 
-
 void OS2METReader::SetPalette0RGB(sal_uInt16 nIndex, sal_uLong nCol)
 {
     if (pPaletteStack==NULL) {
@@ -751,7 +750,7 @@ void OS2METReader::SetPalette0RGB(sal_uInt16 nIndex, sal_uLong nCol)
             else if (i==0) pPaletteStack->p0RGB[i]=0x00ffffff;
             else pPaletteStack->p0RGB[i]=0;
         }
-        if (pOld0RGB!=NULL) delete[] pOld0RGB;
+        delete[] pOld0RGB;
     }
     pPaletteStack->p0RGB[nIndex]=nCol;
 }
