@@ -4736,16 +4736,16 @@ void SwWW8ImplReader::Read_Border(sal_uInt16 , const sal_uInt8*, short nLen)
                 Rectangle aInnerDist;
                 GetBorderDistance( aBrcs, aInnerDist );
 
-                if ((nBorder & WW8_LEFT)==WW8_LEFT)
+                if (nBorder & (1 << WW8_LEFT))
                     aBox.SetDistance( (sal_uInt16)aInnerDist.Left(), BOX_LINE_LEFT );
 
-                if ((nBorder & WW8_TOP)==WW8_TOP)
+                if (nBorder & (1 << WW8_TOP))
                     aBox.SetDistance( (sal_uInt16)aInnerDist.Top(), BOX_LINE_TOP );
 
-                if ((nBorder & WW8_RIGHT)==WW8_RIGHT)
+                if (nBorder & (1 << WW8_RIGHT))
                     aBox.SetDistance( (sal_uInt16)aInnerDist.Right(), BOX_LINE_RIGHT );
 
-                if ((nBorder & WW8_BOT)==WW8_BOT)
+                if (nBorder & (1 << WW8_BOT))
                     aBox.SetDistance( (sal_uInt16)aInnerDist.Bottom(), BOX_LINE_BOTTOM );
 
                 NewAttr( aBox );
