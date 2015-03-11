@@ -1167,7 +1167,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
 
                             //#i72517# put the styles to the target document
                             //if the source uses headers or footers each new copy need to copy a new page styles
-                            SwPageDesc* pTargetPageDesc;
+                            SwPageDesc* pTargetPageDesc(NULL);
                             if(bPageStylesWithHeaderFooter)
                             {
                                 //create a new pagestyle
