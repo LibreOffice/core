@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a29b11f_5dce8f84",
+        "filename": "xmlsecurity/source/xmlsec/mscrypt/securityenvironment_mscryptimpl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1175,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-03-11T14:46:57Z",
+      "side": 1,
+      "message": "I guess that must read \"context\" not \"xSM\"?",
+      "revId": "36b3157a749960f9dd61e11d2094d1d500de515f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
