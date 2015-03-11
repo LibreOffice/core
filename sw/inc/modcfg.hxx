@@ -61,9 +61,9 @@ class SwRevisionConfig : public utl::ConfigItem
 
     virtual void            ImplCommit() SAL_OVERRIDE;
 
-    public:
-        SwRevisionConfig();
-        virtual ~SwRevisionConfig();
+public:
+    SwRevisionConfig();
+    virtual ~SwRevisionConfig();
 
     virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;
     void                    Load();
@@ -85,9 +85,9 @@ class SwCompareConfig : public utl::ConfigItem
 
     virtual void    ImplCommit() SAL_OVERRIDE;
 
-    public:
-        SwCompareConfig();
-        virtual ~SwCompareConfig();
+public:
+    SwCompareConfig();
+    virtual ~SwCompareConfig();
 
     virtual void    Notify( const ::com::sun::star::uno::Sequence< OUString >& ) SAL_OVERRIDE { };
     void            Load();
@@ -113,9 +113,9 @@ class SwInsertConfig : public utl::ConfigItem
 
     virtual void    ImplCommit() SAL_OVERRIDE;
 
-    public:
-        SwInsertConfig(bool bWeb);
-        virtual ~SwInsertConfig();
+public:
+    SwInsertConfig(bool bWeb);
+    virtual ~SwInsertConfig();
 
     virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;
     void                    Load();
@@ -140,9 +140,9 @@ class SwTableConfig : public utl::ConfigItem
 
     virtual void    ImplCommit() SAL_OVERRIDE;
 
-    public:
-        SwTableConfig(bool bWeb);
-        virtual ~SwTableConfig();
+public:
+    SwTableConfig(bool bWeb);
+    virtual ~SwTableConfig();
 
     virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;
     void                    Load();
@@ -170,9 +170,9 @@ class SwMiscConfig : public utl::ConfigItem
 
     virtual void    ImplCommit() SAL_OVERRIDE;
 
-    public:
-        SwMiscConfig();
-        virtual ~SwMiscConfig();
+public:
+    SwMiscConfig();
+    virtual ~SwMiscConfig();
 
     virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;
     void                    Load();
