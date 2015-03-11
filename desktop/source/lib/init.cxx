@@ -23,6 +23,7 @@
 #include <tools/errinf.hxx>
 #include <osl/file.hxx>
 #include <osl/process.h>
+#include <osl/thread.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/bootstrap.hxx>
 #include <cppuhelper/bootstrap.hxx>
@@ -277,7 +278,7 @@ struct LibLibreOffice_Impl : public _LibreOfficeKit
 {
     OUString maLastExceptionMsg;
     shared_ptr< LibreOfficeKitClass > m_pOfficeClass;
-    pthread_t maThread;
+    oslThread maThread;
 
     LibLibreOffice_Impl()
         : maThread(0)
@@ -813,10 +814,9 @@ static bool initialize_uno(const OUString& aAppProgramURL)
     return true;
 }
 
-static void* lo_startmain(void*)
+static void lo_startmain(void*)
 {
     soffice_main();
-    return 0;
 }
 
 static bool bInitialized = false;
@@ -885,7 +885,7 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath)
         SAL_INFO("lok", "Enabling OfficeIPCThread");
         OfficeIPCThread::EnableOfficeIPCThread();
         SAL_INFO("lok", "Starting soffice_main");
-        pthread_create(&(pLib->maThread), 0, lo_startmain, NULL);
+        pLib->maThread = osl_createThread(lo_startmain, NULL);
         SAL_INFO("lok", "Waiting for OfficeIPCThread");
         OfficeIPCThread::WaitForReady();
         SAL_INFO("lok", "OfficeIPCThread ready -- continuing");
@@ -948,7 +948,8 @@ static void lo_destroy(LibreOfficeKit* pThis)
     SAL_INFO("lok", "LO Destroy");
 
     Application::Quit();
-    pthread_join(pLib->maThread, NULL);
+    osl_joinWithThread(pLib->maThread);
+    osl_destroyThread(pLib->maThread);
 
     delete pLib;
     bInitialized = false;
