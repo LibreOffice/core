@@ -33,103 +33,98 @@
  *   created on: 10/17/2001
  *   created by: Eric R. Mader
  */
-
+/**
+  * This file is largely copied from the ICU project,
+  * under folder source/extra/scrptrun/scrptrun.cpp
+  */
 #include "unicode/utypes.h"
 #include "unicode/uscript.h"
 
 #include "scrptrun.h"
+#include <algorithm>
 
-#define ARRAY_SIZE(array) (sizeof array  / sizeof array[0])
+namespace {
+
+struct PairIndices
+{
+    int8_t ma00[0xff];
+    int8_t ma20[0x7f];
+    int8_t ma30[0x7f];
+
+    PairIndices()
+    {
+        std::fill_n(ma00, 0xff, -1);
+        std::fill_n(ma20, 0x7f, -1);
+        std::fill_n(ma30, 0x7f, -1);
+
+        // characters in the range 0x0000 - 0x007e (inclusive)
+        // ascii paired punctuation
+        ma00[0x28] =  0;
+        ma00[0x29] =  1;
+        ma00[0x3c] =  2;
+        ma00[0x3e] =  3;
+        ma00[0x5b] =  4;
+        ma00[0x5d] =  5;
+        ma00[0x7b] =  6;
+        ma00[0x7d] =  7;
+        // guillemets
+        ma00[0xab] =  8;
+        ma00[0xbb] =  9;
+
+        // characters in the range 0x2000 - 0x207e (inclusive)
+        // general punctuation
+        ma20[0x18] = 10;
+        ma20[0x19] = 11;
+        ma20[0x1c] = 12;
+        ma20[0x1d] = 13;
+        ma20[0x39] = 14;
+        ma20[0x3a] = 15;
+
+        // characters in the range 0x3000 - 0x307e (inclusive)
+        // chinese paired punctuation
+        ma30[0x08] = 16;
+        ma30[0x09] = 17;
+        ma30[0x0a] = 18;
+        ma30[0x0b] = 19;
+        ma30[0x0c] = 20;
+        ma30[0x0d] = 21;
+        ma30[0x0e] = 22;
+        ma30[0x0f] = 23;
+        ma30[0x10] = 24;
+        ma30[0x11] = 25;
+        ma30[0x14] = 26;
+        ma30[0x15] = 27;
+        ma30[0x16] = 28;
+        ma30[0x17] = 29;
+        ma30[0x18] = 30;
+        ma30[0x19] = 31;
+        ma30[0x1a] = 32;
+        ma30[0x1b] = 33;
+    }
+
+    inline int32_t getPairIndex(UChar32 ch) const
+    {
+        if (ch < 0xff)
+            return ma00[ch];
+        if (ch >= 0x2000 && ch < 0x207f)
+            return ma20[ch - 0x2000];
+        if (ch >= 0x3000 && ch < 0x307f)
+            return ma30[ch - 0x3000];
+        return -1;
+    }
+
+};
+
+}
+
+static const PairIndices gPairIndices;
+
 
 namespace vcl {
 
 const char ScriptRun::fgClassID=0;
 
-UChar32 ScriptRun::pairedChars[] = {
-    0x0028, 0x0029, // ascii paired punctuation
-    0x003c, 0x003e,
-    0x005b, 0x005d,
-    0x007b, 0x007d,
-    0x00ab, 0x00bb, // guillemets
-    0x2018, 0x2019, // general punctuation
-    0x201c, 0x201d,
-    0x2039, 0x203a,
-    0x3008, 0x3009, // chinese paired punctuation
-    0x300a, 0x300b,
-    0x300c, 0x300d,
-    0x300e, 0x300f,
-    0x3010, 0x3011,
-    0x3014, 0x3015,
-    0x3016, 0x3017,
-    0x3018, 0x3019,
-    0x301a, 0x301b
-};
-
-const int32_t ScriptRun::pairedCharCount = ARRAY_SIZE(pairedChars);
-const int32_t ScriptRun::pairedCharPower = 1 << highBit(pairedCharCount);
-const int32_t ScriptRun::pairedCharExtra = pairedCharCount - pairedCharPower;
-
-int8_t ScriptRun::highBit(int32_t value)
-{
-    if (value <= 0) {
-        return -32;
-    }
-
-    int8_t bit = 0;
-
-    if (value >= 1 << 16) {
-        value >>= 16;
-        bit += 16;
-    }
-
-    if (value >= 1 << 8) {
-        value >>= 8;
-        bit += 8;
-    }
-
-    if (value >= 1 << 4) {
-        value >>= 4;
-        bit += 4;
-    }
-
-    if (value >= 1 << 2) {
-        value >>= 2;
-        bit += 2;
-    }
-
-    if (value >= 1 << 1) {
-        value >>= 1;
-        bit += 1;
-    }
-
-    return bit;
-}
-
-int32_t ScriptRun::getPairIndex(UChar32 ch)
-{
-    int32_t probe = pairedCharPower;
-    int32_t index = 0;
-
-    if (ch >= pairedChars[pairedCharExtra]) {
-        index = pairedCharExtra;
-    }
-
-    while (probe > (1 << 0)) {
-        probe >>= 1;
-
-        if (ch >= pairedChars[index + probe]) {
-            index += probe;
-        }
-    }
-
-    if (pairedChars[index] != ch) {
-        index = -1;
-    }
-
-    return index;
-}
-
-UBool ScriptRun::sameScript(int32_t scriptOne, int32_t scriptTwo)
+static inline UBool sameScript(int32_t scriptOne, int32_t scriptTwo)
 {
     return scriptOne <= USCRIPT_INHERITED || scriptTwo <= USCRIPT_INHERITED || scriptOne == scriptTwo;
 }
@@ -165,7 +160,7 @@ UBool ScriptRun::next()
         }
 
         UScriptCode sc = uscript_getScript(ch, &error);
-        int32_t pairIndex = getPairIndex(ch);
+        int32_t pairIndex = gPairIndices.getPairIndex(ch);
 
         // Paired character handling:
 
