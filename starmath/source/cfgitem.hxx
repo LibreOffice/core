@@ -33,6 +33,7 @@
 
 #include <symbol.hxx>
 #include <types.hxx>
+#include <memory>
 
 class SmSym;
 class SmFormat;
@@ -92,10 +93,10 @@ public:
 
 class SmMathConfig : public utl::ConfigItem
 {
-    SmFormat *          pFormat;
-    SmCfgOther *        pOther;
-    SmFontFormatList *  pFontFormatList;
-    SmSymbolManager *   pSymbolMgr;
+    std::unique_ptr<SmFormat>         pFormat;
+    std::unique_ptr<SmCfgOther>       pOther;
+    std::unique_ptr<SmFontFormatList> pFontFormatList;
+    std::unique_ptr<SmSymbolManager>  pSymbolMgr;
     bool                bIsOtherModified;
     bool                bIsFormatModified;
 

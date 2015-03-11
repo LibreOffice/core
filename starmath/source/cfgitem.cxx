@@ -328,23 +328,19 @@ const OUString SmFontFormatList::GetNewFontFormatId() const
 
 SmMathConfig::SmMathConfig() :
     ConfigItem(OUString(aRootName))
+    , pFormat()
+    , pOther()
+    , pFontFormatList()
+    , pSymbolMgr()
+    , bIsOtherModified(false)
+    , bIsFormatModified(false)
 {
-    pFormat         = 0;
-    pOther          = 0;
-    pFontFormatList = 0;
-    pSymbolMgr      = 0;
-
-    bIsOtherModified = bIsFormatModified = false;
 }
 
 
 SmMathConfig::~SmMathConfig()
 {
     Save();
-    delete pFormat;
-    delete pOther;
-    delete pFontFormatList;
-    delete pSymbolMgr;
 }
 
 
@@ -461,7 +457,7 @@ SmSymbolManager & SmMathConfig::GetSymbolManager()
 {
     if (!pSymbolMgr)
     {
-        pSymbolMgr = new SmSymbolManager;
+        pSymbolMgr.reset(new SmSymbolManager);
         pSymbolMgr->Load();
     }
     return *pSymbolMgr;
@@ -571,7 +567,7 @@ SmFontFormatList & SmMathConfig::GetFontFormatList()
 void SmMathConfig::LoadFontFormatList()
 {
     if (!pFontFormatList)
-        pFontFormatList = new SmFontFormatList;
+        pFontFormatList.reset(new SmFontFormatList);
     else
         pFontFormatList->Clear();
 
@@ -750,8 +746,8 @@ void SmMathConfig::StripFontFormatList( const std::vector< SmSym > &rSymbols )
     // remove unused font-formats from list
     SmFontFormatList &rFntFmtList = GetFontFormatList();
     size_t nCnt = rFntFmtList.GetCount();
-    SmFontFormat *pTmpFormat = new SmFontFormat[ nCnt ];
-    OUString     *pId        = new OUString    [ nCnt ];
+    std::unique_ptr<SmFontFormat[]> pTmpFormat(new SmFontFormat[ nCnt ]);
+    std::unique_ptr<OUString[]> pId(new OUString[ nCnt ]);
     size_t k;
     for (k = 0;  k < nCnt;  ++k)
     {
@@ -765,15 +761,13 @@ void SmMathConfig::StripFontFormatList( const std::vector< SmSym > &rSymbols )
             rFntFmtList.RemoveFontFormat( pId[k] );
         }
     }
-    delete [] pId;
-    delete [] pTmpFormat;
 }
 
 
 void SmMathConfig::LoadOther()
 {
     if (!pOther)
-        pOther = new SmCfgOther;
+        pOther.reset(new SmCfgOther);
 
     pOther->bPrintTitle = officecfg::Office::Math::Print::Title::get();
     pOther->bPrintFormulaText = officecfg::Office::Math::Print::FormulaText::get();
@@ -814,7 +808,7 @@ void SmMathConfig::SaveOther()
 void SmMathConfig::LoadFormat()
 {
     if (!pFormat)
-        pFormat = new SmFormat;
+        pFormat.reset(new SmFormat);
 
 
     Sequence< OUString > aNames = lcl_GetFormatPropertyNames();
