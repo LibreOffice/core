@@ -6388,6 +6388,17 @@
         <value/>
       </prop>
     </group>
+    <group oor:name="HiddenContent">
+        <info>
+            <author>SH</author>
+            <desc>Specifies whether to remove the hidden content when sending the document attached to an e-mail</desc>
+        </info>
+        <prop oor:name="RemoveHiddenContent" oor:type="xs:boolean">
+            <info>
+                <desc>Specify wheter hidden content should be removed when sending via email</desc>
+            </info>
+        </prop>
+    </group>
     <group oor:name="I18N">
       <info>
         <desc>Contains various language/localization specific settings.</desc>
