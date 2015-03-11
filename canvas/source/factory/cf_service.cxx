@@ -49,17 +49,6 @@ using namespace ::com::sun::star::uno;
 namespace
 {
 
-OUString SAL_CALL getImplName()
-{
-    return OUString("com.sun.star.comp.rendering.CanvasFactory");
-}
-
-Sequence<OUString> SAL_CALL getSuppServices()
-{
-    OUString name("com.sun.star.rendering.CanvasFactory");
-    return Sequence<OUString>(&name, 1);
-}
-
 class CanvasFactory
     : public ::cppu::WeakImplHelper3< lang::XServiceInfo,
                                       lang::XMultiComponentFactory,
@@ -229,7 +218,7 @@ CanvasFactory::~CanvasFactory()
 // XServiceInfo
 OUString CanvasFactory::getImplementationName() throw (RuntimeException, std::exception)
 {
-    return getImplName();
+    return OUString("com.sun.star.comp.rendering.CanvasFactory");
 }
 
 sal_Bool CanvasFactory::supportsService( OUString const & serviceName )
@@ -241,7 +230,8 @@ sal_Bool CanvasFactory::supportsService( OUString const & serviceName )
 Sequence<OUString> CanvasFactory::getSupportedServiceNames()
     throw (RuntimeException, std::exception)
 {
-    return getSuppServices();
+    OUString name("com.sun.star.rendering.CanvasFactory");
+    return Sequence<OUString>(&name, 1);
 }
 
 // XMultiComponentFactory
