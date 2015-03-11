@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a29b11f_9d34274b",
+        "filename": "sc/source/ui/unoobj/appluno.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-03-11T21:51:56Z",
+      "side": 0,
+      "message": "OneInstance!",
+      "revId": "da22538d3ff9e0d0c1ec9b50efb7800e0e9cedc8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
