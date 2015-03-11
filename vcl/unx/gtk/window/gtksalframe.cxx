@@ -405,6 +405,7 @@ void GtkSalFrame::doKeyCallback( guint state,
     vcl::DeletionListener aDel( this );
 
 #if GTK_CHECK_VERSION(3,0,0)
+#if 0
     // shift-zero forces a re-draw and event is swallowed
     if (keyval == GDK_0)
     {
@@ -424,7 +425,7 @@ void GtkSalFrame::doKeyCallback( guint state,
         fprintf(stderr, "toggle dump frames to %d\n", dumpframes);
         return;
     }
-
+#endif
 #endif
 
     /*
@@ -3115,7 +3116,6 @@ bool GtkSalFrame::Dispatch( const XEvent* pEvent )
                 maGeometry.nWidth  = pEvent->xconfigure.width;
                 maGeometry.nHeight = pEvent->xconfigure.height;
                 setMinMaxSize();
-                AllocateFrame();
                 getDisplay()->SendInternalEvent( this, NULL, SALEVENT_RESIZE );
             }
         }
