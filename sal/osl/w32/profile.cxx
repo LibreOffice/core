@@ -2389,7 +2389,7 @@ static sal_Bool lookupProfile(const sal_Unicode *strPath, const sal_Unicode *str
                         osl_closeProfile(hProfile);
 
                         /* if not found, try the fallback */
-                        if ((strlen(Buffer) <= 0)
+                        if ((Buffer[0] == '\0')
                             && (strcmp(SVERSION_LOCATION, SVERSION_FALLBACK)
                                 != 0))
                         {
