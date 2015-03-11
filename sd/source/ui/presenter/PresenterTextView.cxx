@@ -521,7 +521,7 @@ void PresenterTextView::Implementation::CheckTop (void)
 {
     DBG_ASSERT(mpEditEngine!=NULL, "EditEngine missing");
 
-    if (mnTotalHeight < 0)
+    if (mpEditEngine!=NULL && mnTotalHeight < 0)
         mnTotalHeight = mpEditEngine->GetTextHeight();
     if (mpEditEngine!=NULL && mnTop >= mnTotalHeight)
         mnTop = mnTotalHeight - mpEditEngine->GetLineHeight(0,0);
