@@ -175,11 +175,7 @@ SvtCommandOptions_Impl::SvtCommandOptions_Impl()
 
 SvtCommandOptions_Impl::~SvtCommandOptions_Impl()
 {
-    // We must save our current values .. if user forget it!
-    if( IsModified() )
-    {
-        Commit();
-    }
+    assert(!IsModified()); // should have been committed
 }
 
 //  public method

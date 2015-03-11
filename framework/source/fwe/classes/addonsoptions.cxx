@@ -378,11 +378,7 @@ AddonsOptions_Impl::AddonsOptions_Impl()
 
 AddonsOptions_Impl::~AddonsOptions_Impl()
 {
-    // We must save our current values .. if user forget it!
-    if( IsModified() )
-    {
-        Commit();
-    }
+    assert(!IsModified()); // should have been committed
 }
 
 void AddonsOptions_Impl::ReadConfigurationData()

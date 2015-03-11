@@ -249,8 +249,7 @@ SvtSysLocaleOptions_Impl::SvtSysLocaleOptions_Impl()
 
 SvtSysLocaleOptions_Impl::~SvtSysLocaleOptions_Impl()
 {
-    if ( IsModified() )
-        Commit();
+    assert(!IsModified()); // should have been committed
 }
 
 void SvtSysLocaleOptions_Impl::MakeRealLocale()

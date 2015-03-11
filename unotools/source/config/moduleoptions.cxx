@@ -355,22 +355,9 @@ SvtModuleOptions_Impl::SvtModuleOptions_Impl()
     EnableNotification( lFactories );
 }
 
-/*-************************************************************************************************************
-    @short      default dtor
-    @descr      If any values of our cache was modified we should write it back to configuration.
-
-    @attention  Don't forget to call "SetModified()" method of base class ConfigItem if any interface method
-                of this class modify internal member list m_lFactories! Otherwise Commit() will never be called!!!
-
-    @seealso    baseclass ConfigItem
-    @threadsafe no
-*//*-*************************************************************************************************************/
 SvtModuleOptions_Impl::~SvtModuleOptions_Impl()
 {
-    if( IsModified() )
-    {
-        Commit();
-    }
+    assert(!IsModified()); // should have been committed
 }
 
 /*-************************************************************************************************************

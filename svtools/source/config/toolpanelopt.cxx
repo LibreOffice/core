@@ -170,7 +170,7 @@ SvtToolPanelOptions_Impl::SvtToolPanelOptions_Impl()
 
 SvtToolPanelOptions_Impl::~SvtToolPanelOptions_Impl()
 {
-    Commit();
+    assert(!IsModified()); // should have been committed
 }
 
 static int lcl_MapPropertyName( const OUString& rCompare,

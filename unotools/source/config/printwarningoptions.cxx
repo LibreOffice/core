@@ -159,8 +159,7 @@ SvtPrintWarningOptions_Impl::SvtPrintWarningOptions_Impl() :
 
 SvtPrintWarningOptions_Impl::~SvtPrintWarningOptions_Impl()
 {
-    if( IsModified() )
-        Commit();
+    assert(!IsModified()); // should have been committed
 }
 
 //  Commit

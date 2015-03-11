@@ -227,12 +227,7 @@ SvtMenuOptions_Impl::SvtMenuOptions_Impl()
 
 SvtMenuOptions_Impl::~SvtMenuOptions_Impl()
 {
-    // Flush data to configuration!
-    // User has no chance to do that.
-    if( IsModified() )
-    {
-        Commit();
-    }
+    assert(!IsModified()); // should have been committed
 }
 
 

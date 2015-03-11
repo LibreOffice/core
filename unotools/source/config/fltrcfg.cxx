@@ -88,8 +88,7 @@ public:
 
 SvtAppFilterOptions_Impl::~SvtAppFilterOptions_Impl()
 {
-    if(IsModified())
-        Commit();
+    assert(!IsModified()); // should have been committed
 }
 
 void    SvtAppFilterOptions_Impl::ImplCommit()

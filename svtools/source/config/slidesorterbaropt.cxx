@@ -172,7 +172,7 @@ SvtSlideSorterBarOptions_Impl::SvtSlideSorterBarOptions_Impl()
 
 SvtSlideSorterBarOptions_Impl::~SvtSlideSorterBarOptions_Impl()
 {
-    Commit();
+    assert(!IsModified()); // should have been committed
 }
 
 static int lcl_MapPropertyName( const OUString& rCompare,

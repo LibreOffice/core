@@ -386,11 +386,7 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
 
 SvtMiscOptions_Impl::~SvtMiscOptions_Impl()
 {
-    // We must save our current values .. if user forgets it!
-    if( IsModified() )
-    {
-        Commit();
-    }
+    assert(!IsModified()); // should have been committed
 }
 
 static int lcl_MapPropertyName( const OUString& rCompare,

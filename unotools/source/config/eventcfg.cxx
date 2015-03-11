@@ -122,11 +122,7 @@ GlobalEventConfig_Impl::GlobalEventConfig_Impl()
 
 GlobalEventConfig_Impl::~GlobalEventConfig_Impl()
 {
-    // We must save our current values .. if user forget it!
-    if( IsModified() )
-    {
-        Commit();
-    }
+    assert(!IsModified()); // should have been committed
 }
 
 OUString GlobalEventConfig_Impl::GetEventName( sal_Int32 nIndex )

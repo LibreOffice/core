@@ -274,8 +274,7 @@ SvtSecurityOptions_Impl::SvtSecurityOptions_Impl()
 
 SvtSecurityOptions_Impl::~SvtSecurityOptions_Impl()
 {
-    if( IsModified() )
-        Commit();
+    assert(!IsModified()); // should have been committed
 }
 
 void SvtSecurityOptions_Impl::SetProperty( sal_Int32 nProperty, const Any& rValue, bool bRO )

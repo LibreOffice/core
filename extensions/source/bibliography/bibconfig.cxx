@@ -192,8 +192,7 @@ BibConfig::BibConfig()
 
 BibConfig::~BibConfig()
 {
-    if(IsModified())
-        Commit();
+    assert(!IsModified()); // should have been committed
     delete pMappingsArr;
 }
 

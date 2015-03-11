@@ -365,11 +365,7 @@ SvtCompatibilityOptions_Impl::SvtCompatibilityOptions_Impl()
 
 SvtCompatibilityOptions_Impl::~SvtCompatibilityOptions_Impl()
 {
-    // We must save our current values .. if user forget it!
-    if( IsModified() )
-    {
-        Commit();
-    }
+    assert(!IsModified()); // should have been committed
 }
 
 void SvtCompatibilityOptions_Impl::SetDefault( const OUString & sName, bool bValue )

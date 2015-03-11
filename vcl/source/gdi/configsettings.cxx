@@ -53,8 +53,7 @@ SettingsConfigItem::SettingsConfigItem()
 
 SettingsConfigItem::~SettingsConfigItem()
 {
-    if( IsModified() )
-        Commit();
+    assert(!IsModified()); // should have been committed
 }
 
 void SettingsConfigItem::ImplCommit()

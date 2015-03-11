@@ -75,7 +75,7 @@ SvtSearchOptions_Impl::SvtSearchOptions_Impl() :
 
 SvtSearchOptions_Impl::~SvtSearchOptions_Impl()
 {
-    Commit();
+    assert(!IsModified()); // should have been committed
 }
 
 void SvtSearchOptions_Impl::ImplCommit()

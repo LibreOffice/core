@@ -543,8 +543,7 @@ SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl() :
 
 SvtOptionsDrawinglayer_Impl::~SvtOptionsDrawinglayer_Impl()
 {
-    if( IsModified() )
-        Commit();
+    assert(!IsModified()); // should have been committed
 }
 
 

@@ -152,11 +152,7 @@ SvtExtendedSecurityOptions_Impl::SvtExtendedSecurityOptions_Impl()
 
 SvtExtendedSecurityOptions_Impl::~SvtExtendedSecurityOptions_Impl()
 {
-    // We must save our current values .. if user forget it!
-    if( IsModified() )
-    {
-        Commit();
-    }
+    assert(!IsModified()); // should have been committed
 }
 
 //  public method

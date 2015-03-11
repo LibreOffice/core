@@ -128,8 +128,7 @@ SvtCTLOptions_Impl::SvtCTLOptions_Impl() :
 }
 SvtCTLOptions_Impl::~SvtCTLOptions_Impl()
 {
-    if ( IsModified() )
-        Commit();
+    assert(!IsModified()); // should have been committed
 }
 
 void SvtCTLOptions_Impl::Notify( const Sequence< OUString >& )
