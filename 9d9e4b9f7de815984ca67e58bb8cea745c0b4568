@@ -16,6 +16,41 @@
       "revId": "9d9e4b9f7de815984ca67e58bb8cea745c0b4568",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a29b11f_9dfd0771",
+        "filename": "svtools/source/svhtml/parhtml.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1847,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-03-11T21:01:22Z",
+      "side": 0,
+      "message": "it\u0027s a quite obfuscated check if the URL starts with \"internal-\" so can be removed since the next check for \"internal-icon\" checks this as well",
+      "parentUuid": "da20952f_e2cfbcb1",
+      "revId": "9d9e4b9f7de815984ca67e58bb8cea745c0b4568",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a29b11f_fd08bb93",
+        "filename": "svtools/source/svhtml/parhtml.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1849,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-03-11T21:01:22Z",
+      "side": 0,
+      "message": "removing this variable declaration causes build failure",
+      "revId": "9d9e4b9f7de815984ca67e58bb8cea745c0b4568",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
