@@ -42,19 +42,6 @@ using namespace ::oox::core;
 
 using ::oox::drawingml::table::TableStyleListPtr;
 
-OUString ExcelFilter_getImplementationName()
-{
-    return OUString( "com.sun.star.comp.oox.xls.ExcelFilter" );
-}
-
-Sequence< OUString > ExcelFilter_getSupportedServiceNames()
-{
-    Sequence< OUString > aSeq( 2 );
-    aSeq[ 0 ] = "com.sun.star.document.ImportFilter";
-    aSeq[ 1 ] = "com.sun.star.document.ExportFilter";
-    return aSeq;
-}
-
 ExcelFilter::ExcelFilter( const Reference< XComponentContext >& rxContext ) throw( RuntimeException ) :
     XmlFilterBase( rxContext ),
     mpBookGlob( 0 )
@@ -190,7 +177,7 @@ sal_Bool SAL_CALL ExcelFilter::filter( const ::com::sun::star::uno::Sequence< ::
 
 OUString ExcelFilter::implGetImplementationName() const
 {
-    return ExcelFilter_getImplementationName();
+    return OUString( "com.sun.star.comp.oox.xls.ExcelFilter" );
 }
 
 } // namespace xls

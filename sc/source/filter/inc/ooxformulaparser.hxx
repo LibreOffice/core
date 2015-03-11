@@ -91,10 +91,6 @@ private:
     ParserImplRef       mxParserImpl;       /// Implementation of import parser.
 };
 
-OUString SAL_CALL OOXMLFormulaParser_getImplementationName();
-
-css::uno::Sequence< OUString > SAL_CALL OOXMLFormulaParser_getSupportedServiceNames();
-
 } // namespace xls
 } // namespace oox
 

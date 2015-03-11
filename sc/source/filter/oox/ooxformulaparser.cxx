@@ -99,18 +99,6 @@ const FunctionInfo* OOXMLFormulaParserImpl::resolveBadFuncName( const OUString& 
     return 0;
 }
 
-Sequence< OUString > OOXMLFormulaParser_getSupportedServiceNames()
-{
-    Sequence< OUString > aServiceNames( 1 );
-    aServiceNames[ 0 ] =  "com.sun.star.sheet.FilterFormulaParser";
-    return aServiceNames;
-}
-
-OUString OOXMLFormulaParser_getImplementationName()
-{
-    return OUString( "com.sun.star.comp.oox.xls.FormulaParser");
-}
-
 OOXMLFormulaParser::OOXMLFormulaParser()
 {
 }
@@ -122,7 +110,7 @@ OOXMLFormulaParser::~OOXMLFormulaParser()
 // com.sun.star.lang.XServiceInfo interface -----------------------------------
 OUString SAL_CALL OOXMLFormulaParser::getImplementationName() throw( RuntimeException, std::exception )
 {
-    return OOXMLFormulaParser_getImplementationName();
+    return OUString( "com.sun.star.comp.oox.xls.FormulaParser");
 }
 
 sal_Bool SAL_CALL OOXMLFormulaParser::supportsService( const OUString& rService ) throw( RuntimeException, std::exception )
@@ -132,7 +120,9 @@ sal_Bool SAL_CALL OOXMLFormulaParser::supportsService( const OUString& rService 
 
 Sequence< OUString > SAL_CALL OOXMLFormulaParser::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
-    return OOXMLFormulaParser_getSupportedServiceNames();
+    Sequence< OUString > aServiceNames( 1 );
+    aServiceNames[ 0 ] =  "com.sun.star.sheet.FilterFormulaParser";
+    return aServiceNames;
 }
 
 // com.sun.star.lang.XInitialization interface --------------------------------

@@ -58,10 +58,6 @@ private:
     WorkbookGlobals*    mpBookGlob;
 };
 
-OUString SAL_CALL ExcelFilter_getImplementationName();
-
-css::uno::Sequence< OUString > SAL_CALL ExcelFilter_getSupportedServiceNames();
-
 } // namespace xls
 } // namespace oox
 
