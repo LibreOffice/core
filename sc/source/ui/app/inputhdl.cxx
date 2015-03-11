@@ -197,12 +197,11 @@ void removeChars(OUString& rStr, sal_Unicode c)
 void ScInputHandler::InitRangeFinder( const OUString& rFormula )
 {
     DeleteRangeFinder();
+    if ( !pActiveViewSh || !SC_MOD()->GetInputOptions().GetRangeFinder() )
+        return;
     ScDocShell* pDocSh = pActiveViewSh->GetViewData().GetDocShell();
     ScDocument& rDoc = pDocSh->GetDocument();
     const sal_Unicode cSheetSep = lcl_getSheetSeparator(&rDoc);
-
-    if ( !pActiveViewSh || !SC_MOD()->GetInputOptions().GetRangeFinder() )
-        return;
 
     OUString aDelimiters = ScEditUtil::ModifyDelimiters(" !\"");
         // delimiters (in addition to ScEditUtil): only characters that are
