@@ -130,7 +130,7 @@ namespace dxcanvas
     }
 
     void DXCanvasItem::Notify( const com::sun::star::uno::Sequence<OUString>& ) {}
-    void DXCanvasItem::Commit() {}
+    void DXCanvasItem::ImplCommit() {}
 
     bool DXCanvasItem::isDeviceUsable( const DeviceInfo& rDeviceInfo ) const
     {

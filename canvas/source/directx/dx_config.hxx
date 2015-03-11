@@ -66,10 +66,10 @@ namespace dxcanvas
         bool isBlacklistCurrentDevice() const;
         void blacklistDevice( const DeviceInfo& rDeviceInfo );
         void adaptMaxTextureSize( basegfx::B2IVector& io_maxTextureSize ) const;
-            virtual void            Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames);
-            virtual void            Commit();
+        virtual void               Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames) SAL_OVERRIDE;
 
     private:
+        virtual void               ImplCommit() SAL_OVERRIDE;
         typedef std::set< DeviceInfo > ValueSet;
         ValueSet                   maValues;
         boost::optional<sal_Int32> maMaxTextureSize;
