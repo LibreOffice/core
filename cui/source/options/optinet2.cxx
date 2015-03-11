@@ -931,6 +931,94 @@ void SvxSecurityTabPage::Reset( const SfxItemSet* )
 {
 }
 
+/*--------------------------------------------------------------------*/
+
+class RemoveHiddenContentCfg_Impl : public utl::ConfigItem
+{
+    friend class SvxEMailTabPage;
+    bool bHideContent;
+
+    const Sequence<OUString> GetPropertyNames();
+
+    virtual void    ImplCommit() SAL_OVERRIDE;
+
+public:
+    RemoveHiddenContentCfg_Impl();
+
+    virtual void Notify( const com::sun::star::uno::Sequence< rtl::OUString >& _rPropertyNames) SAL_OVERRIDE;
+};
+
+/* -------------------------------------------------------------------------*/
+
+RemoveHiddenContentCfg_Impl::RemoveHiddenContentCfg_Impl() :
+    utl::ConfigItem("Office.Security/HiddenContent"),
+    bHideContent(true)
+{
+    const Sequence< OUString > aNames = GetPropertyNames();
+    const Sequence< Any > aValues = GetProperties(aNames);
+    const Any* pValues = aValues.getConstArray();
+    for(sal_Int32 nProp = 0; nProp < aValues.getLength(); nProp++)
+    {
+        if(pValues[nProp].hasValue())
+        {
+            switch(nProp)
+            {
+                case 0:
+                    {
+                        pValues[nProp] >>= bHideContent;
+                    }
+                    break;
+            }
+        }
+    }
+}
+
+/* -------------------------------------------------------------------------*/
+
+const Sequence<OUString> RemoveHiddenContentCfg_Impl::GetPropertyNames() {
+    Sequence<OUString> aRet(1);
+    OUString* pRet = aRet.getArray();
+    pRet[0] = "RemoveHiddenContent";
+    return aRet;
+}
+
+/* -------------------------------------------------------------------------*/
+
+void RemoveHiddenContentCfg_Impl::ImplCommit()
+{
+    const Sequence< OUString > aOrgNames = GetPropertyNames();
+    sal_Int32 nOrgCount = aOrgNames.getLength();
+
+    Sequence< OUString > aNames(nOrgCount);
+    Sequence< Any > aValues(nOrgCount);
+    sal_Int32 nRealCount = 0;
+
+    for(int nProp = 0; nProp < nOrgCount; nProp++)
+    {
+        switch(nProp)
+        {
+            case 0:
+            {
+                aNames[nRealCount] = aOrgNames[nProp];
+                aValues[nRealCount] <<= bHideContent;
+                ++nRealCount;
+            }
+            break;
+        }
+    }
+
+    aNames.realloc(nRealCount);
+    aValues.realloc(nRealCount);
+    PutProperties(aNames, aValues);
+}
+
+
+/* -------------------------------------------------------------------------*/
+
+void RemoveHiddenContentCfg_Impl::Notify( const com::sun::star::uno::Sequence< rtl::OUString >& )
+{
+}
+
 class MailerProgramCfg_Impl : public utl::ConfigItem
 {
     friend class SvxEMailTabPage;
@@ -938,7 +1026,6 @@ class MailerProgramCfg_Impl : public utl::ConfigItem
     OUString sProgram;
     // readonly states
     bool bROProgram;
-    bool bHidden;
 
     const Sequence<OUString> GetPropertyNames();
 
@@ -974,12 +1061,6 @@ MailerProgramCfg_Impl::MailerProgramCfg_Impl() :
                     bROProgram = pROStates[nProp];
                 }
                 break;
-                case 1 :
-                {
-                    pValues[nProp] >>= bHidden;;
-
-                }
-               break;
             }
         }
     }
@@ -995,10 +1076,9 @@ MailerProgramCfg_Impl::~MailerProgramCfg_Impl()
 
 const Sequence<OUString> MailerProgramCfg_Impl::GetPropertyNames()
 {
-    Sequence<OUString> aRet(2);
+    Sequence<OUString> aRet(1);
     OUString* pRet = aRet.getArray();
     pRet[0] = "Program";
-    pRet[1] = "Hidden";
     return aRet;
 }
 
@@ -1027,13 +1107,6 @@ void MailerProgramCfg_Impl::ImplCommit()
                 }
             }
             break;
-            case  1:
-            {
-                aNames[nRealCount] = aOrgNames[nProp];
-                aValues[nRealCount] <<= bHidden;;
-                ++nRealCount;
-            }
-            break;
         }
     }
 
@@ -1051,6 +1124,7 @@ void MailerProgramCfg_Impl::Notify( const com::sun::star::uno::Sequence< OUStrin
 struct SvxEMailTabPage_Impl
 {
     MailerProgramCfg_Impl aMailConfig;
+    RemoveHiddenContentCfg_Impl aHiddenContentConfig;
 };
 
 SvxEMailTabPage::SvxEMailTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
@@ -1085,14 +1159,16 @@ SfxTabPage*  SvxEMailTabPage::Create( vcl::Window* pParent, const SfxItemSet* rA
 bool SvxEMailTabPage::FillItemSet( SfxItemSet* )
 {
     bool bMailModified = false;
-    if((!pImpl->aMailConfig.bROProgram && m_pMailerURLED->IsValueChangedFromSaved()) || m_pSuppressHidden->IsValueChangedFromSaved())
+    if(!pImpl->aMailConfig.bROProgram && m_pMailerURLED->IsValueChangedFromSaved())
     {
         pImpl->aMailConfig.sProgram = m_pMailerURLED->GetText();
-        pImpl->aMailConfig.bHidden = m_pSuppressHidden->GetState();
         bMailModified = true;
     }
     if ( bMailModified )
         pImpl->aMailConfig.Commit();
+
+    pImpl->aHiddenContentConfig.bHideContent = m_pSuppressHidden->IsChecked();
+    pImpl->aHiddenContentConfig.Commit();
 
     return false;
 }
@@ -1110,13 +1186,9 @@ void SvxEMailTabPage::Reset( const SfxItemSet* )
     m_pMailerURLED->SetText(pImpl->aMailConfig.sProgram);
     m_pMailerURLED->SaveValue();
 
-    if(pImpl->aMailConfig.bHidden)
-        m_pSuppressHidden->SetState(TRISTATE_TRUE);
-    else
-        m_pSuppressHidden->SetState(TRISTATE_FALSE);
-    m_pSuppressHidden->SaveValue();
-
     m_pMailContainer->Enable(!pImpl->aMailConfig.bROProgram);
+
+    m_pSuppressHidden->Check(pImpl->aHiddenContentConfig.bHideContent);
 }
 
 /* -------------------------------------------------------------------------*/

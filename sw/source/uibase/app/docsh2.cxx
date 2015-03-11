@@ -115,7 +115,7 @@
 #include <com/sun/star/script/vba/VBAEventId.hpp>
 #include <editeng/acorrcfg.hxx>
 #include <SwStyleNameMapper.hxx>
-#include <officecfg/Office/Common.hxx>
+#include <officecfg/Office/Security.hxx>
 
 #include <sfx2/fcontnr.hxx>
 
@@ -838,7 +838,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
             mpDoc->getIDocumentLinksAdministration().EmbedAllLinks();
 
             mbRemovedInvisibleContent
-                = officecfg::Office::Common::ExternalMailer::Hidden::get();
+                = officecfg::Office::Security::HiddenContent::RemoveHiddenContent::get();
             if(mbRemovedInvisibleContent)
                 mpDoc->RemoveInvisibleContent();
             if(mpWrtShell)
