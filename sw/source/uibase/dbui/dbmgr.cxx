@@ -136,7 +136,9 @@
 
 #include <boost/scoped_ptr.hpp>
 #include <config_cups.h>
+#if ENABLE_CUPS && !defined(MACOSX)
 #include <vcl/printerinfomanager.hxx>
+#endif
 
 
 using namespace ::osl;
@@ -838,7 +840,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
         // and send them to CUPS only as one job at the very end. Therefore, with CUPS, it's ok
         // to use the faster mode. As I have no idea about other platforms, keep them using
         // the slower singlefile mode (or feel free to check them, or rewrite the printing code).
-#if ENABLE_CUPS
+#if ENABLE_CUPS && !defined(MACOSX)
         bCreateSingleFile = !psp::PrinterInfoManager::get().supportsBatchPrint();
 #else
         bCreateSingleFile = true;
@@ -1215,7 +1217,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                                     SfxPrinter* pDocPrt = pWorkView->GetPrinter(false);
                                     JobSetup aJobSetup = pDocPrt ? pDocPrt->GetJobSetup() : pWorkView->GetJobSetup();
                                     Printer::PreparePrintJob( pWorkView->GetPrinterController(), aJobSetup );
-#if ENABLE_CUPS
+#if ENABLE_CUPS && !defined(MACOSX)
                                     psp::PrinterInfoManager::get().startBatchPrint();
 #endif
                                 }
@@ -1379,7 +1381,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                 if( rMergeDescriptor.nMergeType == DBMGR_MERGE_PRINTER )
                 {
                     Printer::FinishPrintJob( pWorkView->GetPrinterController());
-#if ENABLE_CUPS
+#if ENABLE_CUPS && !defined(MACOSX)
                     psp::PrinterInfoManager::get().flushBatchPrint();
 #endif
                 }
