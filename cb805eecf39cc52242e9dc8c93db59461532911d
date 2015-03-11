@@ -1,0 +1,242 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a29b11f_7dda6b7a",
+        "filename": "UnoControls/inc/basecontrol.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 508,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2015-03-11T08:42:03Z",
+      "side": 1,
+      "message": "this now a static global, but the function definition itself has not been changed?",
+      "revId": "cb805eecf39cc52242e9dc8c93db59461532911d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a29b11f_1de7b741",
+        "filename": "UnoControls/source/inc/framecontrol.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2015-03-11T08:42:03Z",
+      "side": 1,
+      "message": "this now a static global, but the function definition itself has not been changed?",
+      "revId": "cb805eecf39cc52242e9dc8c93db59461532911d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a29b11f_3de4f339",
+        "filename": "UnoControls/source/inc/progressbar.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 327,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2015-03-11T08:42:03Z",
+      "side": 1,
+      "message": "this now a static global, but the function definition itself has not been changed?",
+      "revId": "cb805eecf39cc52242e9dc8c93db59461532911d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a29b11f_ddcfffb1",
+        "filename": "UnoControls/source/inc/progressmonitor.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2015-03-11T08:42:03Z",
+      "side": 1,
+      "message": "this now a static global, but the function definition itself has not been changed?",
+      "revId": "cb805eecf39cc52242e9dc8c93db59461532911d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a29b11f_fdd43b48",
+        "filename": "UnoControls/source/inc/statusindicator.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2015-03-11T08:42:03Z",
+      "side": 1,
+      "message": "this now a static global, but the function definition itself has not been changed?",
+      "revId": "cb805eecf39cc52242e9dc8c93db59461532911d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a29b11f_9dc987af",
+        "filename": "connectivity/source/commontools/sqlerror.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2015-03-11T08:42:03Z",
+      "side": 1,
+      "message": "this cannot have compiled",
+      "revId": "cb805eecf39cc52242e9dc8c93db59461532911d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a29b11f_bdcec3b2",
+        "filename": "connectivity/source/drivers/calc/CTable.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 467,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2015-03-11T08:42:03Z",
+      "side": 1,
+      "message": "this can be simplified to just:\n   aTypeName \u003d \"VARCHAR\";",
+      "revId": "cb805eecf39cc52242e9dc8c93db59461532911d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a29b11f_5dc44f91",
+        "filename": "connectivity/source/drivers/kab/KDatabaseMetaData.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2015-03-11T08:42:03Z",
+      "side": 1,
+      "message": "why the extra spaces?",
+      "revId": "cb805eecf39cc52242e9dc8c93db59461532911d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a29b11f_fd3bdb9a",
+        "filename": "sw/inc/SwStyleNameMapper.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2015-03-11T08:42:03Z",
+      "side": 1,
+      "message": "there is no way this compiled, what is this rubbish?",
+      "revId": "cb805eecf39cc52242e9dc8c93db59461532911d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a29b11f_9d40a709",
+        "filename": "sw/inc/iodetect.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2015-03-11T08:42:03Z",
+      "side": 1,
+      "message": "more rubbish",
+      "revId": "cb805eecf39cc52242e9dc8c93db59461532911d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a29b11f_bd456318",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 496,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2015-03-11T08:42:03Z",
+      "side": 1,
+      "message": "rubbish",
+      "revId": "cb805eecf39cc52242e9dc8c93db59461532911d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a29b11f_5d4bef2b",
+        "filename": "unotools/source/misc/mediadescriptor.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2015-03-11T08:42:03Z",
+      "side": 1,
+      "message": "indentation",
+      "revId": "cb805eecf39cc52242e9dc8c93db59461532911d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a29b11f_7d482b2e",
+        "filename": "unotools/source/misc/mediadescriptor.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2015-03-11T08:42:03Z",
+      "side": 1,
+      "message": "indentation",
+      "revId": "cb805eecf39cc52242e9dc8c93db59461532911d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a29b11f_1d5577c5",
+        "filename": "xmloff/source/forms/layerexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2015-03-11T08:42:03Z",
+      "side": 1,
+      "message": "rubbish",
+      "revId": "cb805eecf39cc52242e9dc8c93db59461532911d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
