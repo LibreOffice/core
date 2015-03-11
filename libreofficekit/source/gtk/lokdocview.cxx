@@ -67,12 +67,10 @@ void lcl_getDragPoint(GdkRectangle* pHandle, GdkEventButton* pEvent, GdkPoint* p
     pPoint->y = aCursor.y + (pEvent->y - aHandle.y);
 }
 
-gboolean lcl_signalMotion(GtkWidget* pEventBox, GdkEventButton* pEvent, LOKDocView* pDocView)
+gboolean lcl_signalMotion(GtkWidget* /*pEventBox*/, GdkEventButton* pEvent, LOKDocView* pDocView)
 {
     GdkPoint aPoint;
-    int i;
 
-    (void)pEventBox;
     if (pDocView->m_bInDragMiddleHandle)
     {
         g_info("lcl_signalMotion: dragging the middle handle");
@@ -100,7 +98,7 @@ gboolean lcl_signalMotion(GtkWidget* pEventBox, GdkEventButton* pEvent, LOKDocVi
                 pixelToTwip(aPoint.x) / pDocView->fZoom, pixelToTwip(aPoint.y) / pDocView->fZoom);
         return FALSE;
     }
-    for (i = 0; i < GRAPHIC_HANDLE_COUNT; ++i)
+    for (int i = 0; i < GRAPHIC_HANDLE_COUNT; ++i)
     {
         if (pDocView->m_bInDragGraphicHandles[i])
         {
@@ -117,15 +115,12 @@ gboolean lcl_signalMotion(GtkWidget* pEventBox, GdkEventButton* pEvent, LOKDocVi
 }
 
 /// Receives a button press event.
-gboolean lcl_signalButton(GtkWidget* pEventBox, GdkEventButton* pEvent, LOKDocView* pDocView)
+gboolean lcl_signalButton(GtkWidget* /*pEventBox*/, GdkEventButton* pEvent, LOKDocView* pDocView)
 {
     g_info("lcl_signalButton: %d, %d (in twips: %d, %d)", (int)pEvent->x, (int)pEvent->y, (int)pixelToTwip(pEvent->x), (int)pixelToTwip(pEvent->y));
-    (void) pEventBox;
 
     if (pEvent->type == GDK_BUTTON_RELEASE)
     {
-        int i;
-
         if (pDocView->m_bInDragStartHandle)
         {
             g_info("lcl_signalButton: end of drag start handle");
@@ -145,7 +140,7 @@ gboolean lcl_signalButton(GtkWidget* pEventBox, GdkEventButton* pEvent, LOKDocVi
             return FALSE;
         }
 
-        for (i = 0; i < GRAPHIC_HANDLE_COUNT; ++i)
+        for (int i = 0; i < GRAPHIC_HANDLE_COUNT; ++i)
         {
             if (pDocView->m_bInDragGraphicHandles[i])
             {
@@ -179,7 +174,6 @@ gboolean lcl_signalButton(GtkWidget* pEventBox, GdkEventButton* pEvent, LOKDocVi
         aClick.height = 1;
         if (pEvent->type == GDK_BUTTON_PRESS)
         {
-            int i;
             GdkRectangle aClickInTwips;
 
             if (gdk_rectangle_intersect(&aClick, &pDocView->m_aHandleStartRect, NULL))
@@ -201,7 +195,7 @@ gboolean lcl_signalButton(GtkWidget* pEventBox, GdkEventButton* pEvent, LOKDocVi
                 return FALSE;
             }
 
-            for (i = 0; i < GRAPHIC_HANDLE_COUNT; ++i)
+            for (int i = 0; i < GRAPHIC_HANDLE_COUNT; ++i)
             {
                 if (gdk_rectangle_intersect(&aClick, &pDocView->m_aGraphicHandleRects[i], NULL))
                 {
@@ -455,7 +449,6 @@ static void lcl_renderGraphicHandle(cairo_t* pCairo, GdkRectangle* pSelection, c
 {
     int nHandleWidth, nHandleHeight;
     GdkRectangle aSelection;
-    int i;
 
     nHandleWidth = cairo_image_surface_get_width(pHandle);
     nHandleHeight = cairo_image_surface_get_height(pHandle);
@@ -465,7 +458,7 @@ static void lcl_renderGraphicHandle(cairo_t* pCairo, GdkRectangle* pSelection, c
     aSelection.width = twipToPixel(pSelection->width) * fZoom;
     aSelection.height = twipToPixel(pSelection->height) * fZoom;
 
-    for (i = 0; i < GRAPHIC_HANDLE_COUNT; ++i)
+    for (int i = 0; i < GRAPHIC_HANDLE_COUNT; ++i)
     {
         int x = aSelection.x, y = aSelection.y;
         cairo_save(pCairo);
@@ -516,13 +509,12 @@ static void lcl_renderGraphicHandle(cairo_t* pCairo, GdkRectangle* pSelection, c
     }
 }
 
-static gboolean renderOverlay(GtkWidget* pWidget, GdkEventExpose* pEvent, gpointer pData)
+static gboolean renderOverlay(GtkWidget* pWidget, GdkEventExpose* /*pEvent*/, gpointer pData)
 {
 #if GTK_CHECK_VERSION(2,14,0) // we need gtk_widget_get_window()
     LOKDocView* pDocView = LOK_DOCVIEW(pData);
     cairo_t* pCairo;
 
-    (void)pEvent;
     pCairo = gdk_cairo_create(gtk_widget_get_window(pWidget));
 
     if (pDocView->m_bEdit && pDocView->m_bCursorVisible && pDocView->m_bCursorOverlayVisible && !lcl_isEmptyRectangle(&pDocView->m_aVisibleCursor))
@@ -553,9 +545,7 @@ static gboolean renderOverlay(GtkWidget* pWidget, GdkEventExpose* pEvent, gpoint
 
     if (pDocView->m_pTextSelectionRectangles)
     {
-        GList* i;
-
-        for (i = pDocView->m_pTextSelectionRectangles; i != NULL; i = i->next)
+        for (GList* i = pDocView->m_pTextSelectionRectangles; i != NULL; i = i->next)
         {
             GdkRectangle* pRectangle = static_cast<GdkRectangle*>(i->data);
             // Blue with 75% transparency.
@@ -603,19 +593,16 @@ static gboolean renderOverlay(GtkWidget* pWidget, GdkEventExpose* pEvent, gpoint
 
 void renderDocument(LOKDocView* pDocView, GdkRectangle* pPartial)
 {
-    long nDocumentWidthTwips, nDocumentHeightTwips, nDocumentWidthPixels, nDocumentHeightPixels;
     const int nTileSizePixels = 256;
-    // Current row / column.
-    guint nRow, nColumn;
-    // Total number of rows / columns in this document.
-    guint nRows, nColumns;
 
     // Get document size and find out how many rows / columns we need.
+    long nDocumentWidthTwips, nDocumentHeightTwips;
     pDocView->pDocument->pClass->getDocumentSize(pDocView->pDocument, &nDocumentWidthTwips, &nDocumentHeightTwips);
-    nDocumentWidthPixels = twipToPixel(nDocumentWidthTwips) * pDocView->fZoom;
-    nDocumentHeightPixels = twipToPixel(nDocumentHeightTwips) * pDocView->fZoom;
-    nRows = ceil((double)nDocumentHeightPixels / nTileSizePixels);
-    nColumns = ceil((double)nDocumentWidthPixels / nTileSizePixels);
+    long nDocumentWidthPixels = twipToPixel(nDocumentWidthTwips) * pDocView->fZoom;
+    long nDocumentHeightPixels = twipToPixel(nDocumentHeightTwips) * pDocView->fZoom;
+    // Total number of rows / columns in this document.
+    guint nRows = ceil((double)nDocumentHeightPixels / nTileSizePixels);
+    guint nColumns = ceil((double)nDocumentWidthPixels / nTileSizePixels);
 
     // Set up our table and the tile pointers.
     if (!pDocView->pTable)
@@ -647,9 +634,9 @@ void renderDocument(LOKDocView* pDocView, GdkRectangle* pPartial)
     }
 
     // Render the tiles.
-    for (nRow = 0; nRow < nRows; ++nRow)
+    for (guint nRow = 0; nRow < nRows; ++nRow)
     {
-        for (nColumn = 0; nColumn < nColumns; ++nColumn)
+        for (guint nColumn = 0; nColumn < nColumns; ++nColumn)
         {
             GdkRectangle aTileRectangleTwips, aTileRectanglePixels;
             gboolean bPaint = TRUE;
@@ -676,13 +663,11 @@ void renderDocument(LOKDocView* pDocView, GdkRectangle* pPartial)
             {
                 // Index of the current tile.
                 guint nTile = nRow * nColumns + nColumn;
-                GdkPixbuf* pPixBuf;
-                unsigned char* pBuffer;
-                int nRowStride;
 
-                pPixBuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8, aTileRectanglePixels.width, aTileRectanglePixels.height);
-                pBuffer = gdk_pixbuf_get_pixels(pPixBuf);
+                GdkPixbuf* pPixBuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8, aTileRectanglePixels.width, aTileRectanglePixels.height);
+                unsigned char* pBuffer = gdk_pixbuf_get_pixels(pPixBuf);
                 g_info("renderDocument: paintTile(%d, %d)", nRow, nColumn);
+                int nRowStride;
                 pDocView->pDocument->pClass->paintTile(pDocView->pDocument,
                                                        // Buffer and its size, depends on the position only.
                                                        pBuffer,
@@ -722,12 +707,10 @@ LOKDocViewCallbackData;
 static GdkRectangle lcl_payloadToRectangle(const char* pPayload)
 {
     GdkRectangle aRet;
-    gchar** ppCoordinates;
-    gchar** ppCoordinate;
 
     aRet.width = aRet.height = aRet.x = aRet.y = 0;
-    ppCoordinates = g_strsplit(pPayload, ", ", 4);
-    ppCoordinate = ppCoordinates;
+    gchar** ppCoordinates = g_strsplit(pPayload, ", ", 4);
+    gchar** ppCoordinate = ppCoordinates;
     if (!*ppCoordinate)
         return aRet;
     aRet.width = atoi(*ppCoordinate);
@@ -751,11 +734,9 @@ static GdkRectangle lcl_payloadToRectangle(const char* pPayload)
 static GList* lcl_payloadToRectangles(const char* pPayload)
 {
     GList* pRet = NULL;
-    gchar** ppRectangles;
-    gchar** ppRectangle;
 
-    ppRectangles = g_strsplit(pPayload, "; ", 0);
-    for (ppRectangle = ppRectangles; *ppRectangle; ++ppRectangle)
+    gchar** ppRectangles = g_strsplit(pPayload, "; ", 0);
+    for (gchar** ppRectangle = ppRectangles; *ppRectangle; ++ppRectangle)
     {
         GdkRectangle aRect = lcl_payloadToRectangle(*ppRectangle);
         GdkRectangle* pRect = g_new0(GdkRectangle, 1);
@@ -763,6 +744,7 @@ static GList* lcl_payloadToRectangles(const char* pPayload)
         pRet = g_list_prepend(pRet, pRect);
     }
     g_strfreev(ppRectangles);
+
     return pRet;
 }
 
