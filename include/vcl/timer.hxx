@@ -35,7 +35,7 @@ protected:
     virtual sal_uInt64 UpdateMinPeriod( sal_uInt64 nMinPeriod, sal_uInt64 nTime ) SAL_OVERRIDE;
 
 private:
-    void InitSystemTimer();
+    static void InitSystemTimer();
 
 public:
     Timer();

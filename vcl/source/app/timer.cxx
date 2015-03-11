@@ -27,6 +27,8 @@
 
 void Timer::ImplStartTimer( ImplSVData* pSVData, sal_uInt64 nMS )
 {
+    InitSystemTimer();
+
     if ( !nMS )
         nMS = 1;
 
@@ -101,7 +103,6 @@ Timer::Timer() : Scheduler()
     mnTimeout = 1;
     mbAuto = false;
     mePriority = SchedulerPriority::HIGHEST;
-    InitSystemTimer();
 }
 
 Timer::Timer( const Timer& rTimer ) : Scheduler(rTimer)
@@ -109,7 +110,6 @@ Timer::Timer( const Timer& rTimer ) : Scheduler(rTimer)
     mnTimeout = rTimer.mnTimeout;
     mbAuto = rTimer.mbAuto;
     maTimeoutHdl = rTimer.maTimeoutHdl;
-    InitSystemTimer();
 }
 
 void Timer::Invoke()
@@ -122,7 +122,6 @@ void Timer::Start()
     Scheduler::Start();
 
     ImplSVData* pSVData = ImplGetSVData();
-    assert( pSVData->mpSalTimer != NULL );
     if ( mnTimeout < pSVData->mnTimerPeriod )
         Timer::ImplStartTimer( pSVData, mnTimeout );
 }
