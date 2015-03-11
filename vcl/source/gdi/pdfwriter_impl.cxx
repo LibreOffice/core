@@ -6857,7 +6857,9 @@ bool PDFWriterImpl::finalizeSignature()
     SECItem response_item;
     NSSCMSAttribute timestamp;
     SECItem values[2];
-    SECItem *valuesp = values;
+    SECItem *valuesp[2];
+    valuesp[0] = values;
+    valuesp[1] = NULL;
     SECOidData typetag;
 
     if( !m_aContext.SignTSA.isEmpty() )
@@ -7114,12 +7116,15 @@ bool PDFWriterImpl::finalizeSignature()
 
         // timestamp.type filled in below
 
+        // Not sure if we actually need two entries in the values array, now when valuesp is an
+        // array too, the pointer to the values array followed by a null pointer. But I don't feel
+        // like experimenting.
         values[0] = response.timeStampToken;
         values[1].type = siBuffer;
         values[1].data = NULL;
         values[1].len = 0;
 
-        timestamp.values = &valuesp;
+        timestamp.values = valuesp;
 
         typetag.oid.data = NULL;
         // id-aa-timeStampToken OBJECT IDENTIFIER ::= { iso(1)
