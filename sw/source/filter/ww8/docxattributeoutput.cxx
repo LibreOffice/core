@@ -1119,10 +1119,9 @@ void DocxAttributeOutput::EndRun()
     // Start the hyperlink after the fields separators or we would generate invalid file
     if ( m_pHyperlinkAttrList )
     {
-        XFastAttributeListRef xAttrList ( m_pHyperlinkAttrList );
+        XFastAttributeListRef xAttrList ( m_pHyperlinkAttrList.release() );
 
         m_pSerializer->startElementNS( XML_w, XML_hyperlink, xAttrList );
-        m_pHyperlinkAttrList = NULL;
         m_startedHyperlink = true;
         m_nHyperLinkCount++;
     }
@@ -2221,7 +2220,7 @@ bool DocxAttributeOutput::StartURL( const OUString& rUrl, const OUString& rTarge
     else
     {
         // Output a hyperlink XML element
-        m_pHyperlinkAttrList = m_pSerializer->createAttrList();
+        m_pHyperlinkAttrList.reset(m_pSerializer->createAttrList());
 
         if ( !bBookmarkOnly )
         {
@@ -8279,7 +8278,6 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
     : m_rExport( rExport ),
       m_pSerializer( pSerializer ),
       m_rDrawingML( *pDrawingML ),
-      m_pHyperlinkAttrList( NULL ),
       m_bEndCharSdt(false),
       m_bStartedCharSdt(false),
       m_bStartedParaSdt(false),
@@ -8349,7 +8347,6 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
 
 DocxAttributeOutput::~DocxAttributeOutput()
 {
-    delete m_pHyperlinkAttrList, m_pHyperlinkAttrList = NULL;
     delete m_pColorAttrList, m_pColorAttrList = NULL;
     delete m_pBackgroundAttrList, m_pBackgroundAttrList = NULL;
 
