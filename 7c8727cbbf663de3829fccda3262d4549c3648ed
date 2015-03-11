@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a29b11f_9de667e7",
+        "filename": "accessibility/source/standard/vclxaccessibleedit.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 516,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-03-11T20:46:08Z",
+      "side": 1,
+      "message": "this is not the same - the Acquire happened before the conditional branch in the old version, in the new version it happens after the code in the conditional branch fiished.... the equivalent thing to do is to add a new scope and put the SolarMutexReleaser and the xClipboard call in it.",
+      "revId": "7c8727cbbf663de3829fccda3262d4549c3648ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a29b11f_bdeb23b0",
+        "filename": "basctl/source/basicide/baside2.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1409,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-03-11T20:46:08Z",
+      "side": 1,
+      "message": "needs also a nested scope",
+      "revId": "7c8727cbbf663de3829fccda3262d4549c3648ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a29b11f_5dd1affa",
+        "filename": "basctl/source/dlged/dlged.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 833,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-03-11T20:46:08Z",
+      "side": 1,
+      "message": "needs nested scope",
+      "revId": "7c8727cbbf663de3829fccda3262d4549c3648ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a29b11f_7dceeb5b",
+        "filename": "basctl/source/dlged/dlged.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1062,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-03-11T20:46:08Z",
+      "side": 1,
+      "message": "needs nested scope",
+      "revId": "7c8727cbbf663de3829fccda3262d4549c3648ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a29b11f_1ddb371d",
+        "filename": "cui/source/dialogs/colorpicker.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-03-11T20:46:08Z",
+      "side": 1,
+      "message": "needs nested scope",
+      "revId": "7c8727cbbf663de3829fccda3262d4549c3648ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a29b11f_3dd8731d",
+        "filename": "desktop/source/app/app.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1722,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-03-11T20:46:08Z",
+      "side": 1,
+      "message": "this is odd - there is no Release following it, so it can\u0027t be replaced?",
+      "revId": "7c8727cbbf663de3829fccda3262d4549c3648ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
