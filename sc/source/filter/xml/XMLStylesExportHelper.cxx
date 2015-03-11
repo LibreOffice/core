@@ -220,9 +220,9 @@ OUString ScMyValidationsContainer::GetCondition(ScXMLExport& rExport, const ScMy
         }
         if (aValidation.aValidationType != sheet::ValidationType_LIST &&
             (!aValidation.sFormula1.isEmpty() ||
-            (aValidation.aOperator == sheet::ConditionOperator_BETWEEN &&
-            aValidation.aOperator == sheet::ConditionOperator_NOT_BETWEEN &&
-            !aValidation.sFormula2.isEmpty())))
+             ((aValidation.aOperator == sheet::ConditionOperator_BETWEEN ||
+               aValidation.aOperator == sheet::ConditionOperator_NOT_BETWEEN) &&
+              !aValidation.sFormula2.isEmpty())))
         {
             if (aValidation.aValidationType != sheet::ValidationType_TEXT_LEN)
                 sCondition += " and ";
