@@ -867,18 +867,14 @@ bool ScGlobal::EETextObjEqual( const EditTextObject* pObj1,
     return false;
 }
 
-
-void ScGlobal::OpenURL( const SdrModel* pDrawLayer, const OUString& rURL, const OUString& rTarget ) {
-    if (pDrawLayer && pDrawLayer->isTiledRendering()) {
-            pDrawLayer->libreOfficeKitCallback(LOK_CALLBACK_HYPERLINK_CLICKED, rURL.toUtf8().getStr());
-            return;
-    }
-    // Proceed to openURL if not tiled rendering.
-    OpenURL(rURL, rTarget);
-}
-
-void ScGlobal::OpenURL( const OUString& rURL, const OUString& rTarget )
+void ScGlobal::OpenURL(const OUString& rURL, const OUString& rTarget, const SdrModel* pDrawLayer)
 {
+    if (pDrawLayer && pDrawLayer->isTiledRendering())
+    {
+        pDrawLayer->libreOfficeKitCallback(LOK_CALLBACK_HYPERLINK_CLICKED, rURL.toUtf8().getStr());
+        return;
+    }
+
     // OpenURL is always called in the GridWindow by mouse clicks in some way or another.
     // That's why pScActiveViewShell and nScClickMouseModifier are correct.
     // SvtSecurityOptions to access Libreoffice global security parameters

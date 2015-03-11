@@ -269,7 +269,8 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                 mpWindow->ReleaseMouse();
 
                 // If tiled rendering, let client handles URL execution and early returns.
-                if (mpDoc->isTiledRendering()) {
+                if (mpDoc->isTiledRendering())
+                {
                     mpDoc->libreOfficeKitCallback(LOK_CALLBACK_HYPERLINK_CLICKED,
                             aVEvt.pURLField->GetURL().toUtf8().getStr());
                     return true;
