@@ -196,19 +196,16 @@ uno::Any SAL_CALL SdXCustomPresentation::getByIndex( sal_Int32 Index )
     if( bDisposing )
         throw lang::DisposedException();
 
-    if( Index < 0 || Index >= (sal_Int32)mpSdCustomShow->PagesVector().size() )
+    if (Index < 0 || !mpSdCustomShow || Index >= (sal_Int32)mpSdCustomShow->PagesVector().size())
         throw lang::IndexOutOfBoundsException();
 
     uno::Any aAny;
-    if(mpSdCustomShow )
-    {
-        SdrPage* pPage = (SdrPage*)mpSdCustomShow->PagesVector()[Index];
+    SdrPage* pPage = (SdrPage*)mpSdCustomShow->PagesVector()[Index];
 
-        if( pPage )
-        {
-            uno::Reference< drawing::XDrawPage > xRef( pPage->getUnoPage(), uno::UNO_QUERY );
-            aAny <<= xRef;
-        }
+    if( pPage )
+    {
+        uno::Reference< drawing::XDrawPage > xRef( pPage->getUnoPage(), uno::UNO_QUERY );
+        aAny <<= xRef;
     }
 
     return aAny;
