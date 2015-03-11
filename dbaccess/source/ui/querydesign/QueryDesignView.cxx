@@ -3529,10 +3529,6 @@ void OQueryDesignView::fillFunctionInfo(  const ::connectivity::OSQLParseNode* p
                     nDataType = DataType::FLOAT;
                 else if ( SQL_ISTOKEN (pDataType, DOUBLE) )
                     nDataType = DataType::DOUBLE;
-                else if ( SQL_ISTOKEN (pDataType, TIME) )
-                    nDataType = DataType::TIME;
-                else if ( SQL_ISTOKEN (pDataType, TIMESTAMP) )
-                    nDataType = DataType::TIMESTAMP;
                 else if ( SQL_ISTOKEN (pDataType, INTERVAL) )
                     // Not in DataType published constant (because not in JDBC...)
                     nDataType = DataType::VARCHAR;
