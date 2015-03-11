@@ -699,20 +699,20 @@ void SdrMarkView::SetMarkHandles()
             }
         }
 
+        Rectangle aRect(GetMarkedObjRect());
+
+        if (GetModel()->isTiledRendering())
+        {
+            OString sRectangle;
+            if (aRect.IsEmpty())
+                sRectangle = "EMPTY";
+            else
+                sRectangle = aRect.toString();
+            GetModel()->libreOfficeKitCallback(LOK_CALLBACK_GRAPHIC_SELECTION, sRectangle.getStr());
+        }
+
         if (bFrmHdl)
         {
-            Rectangle aRect(GetMarkedObjRect());
-
-            if (GetModel()->isTiledRendering())
-            {
-                OString sRectangle;
-                if (aRect.IsEmpty())
-                    sRectangle = "EMPTY";
-                else
-                    sRectangle = aRect.toString();
-                GetModel()->libreOfficeKitCallback(LOK_CALLBACK_GRAPHIC_SELECTION, sRectangle.getStr());
-            }
-
             if(!aRect.IsEmpty())
             { // otherwise nothing is found
                 if( bSingleTextObjMark )
