@@ -53,8 +53,13 @@
 #define SC_OPCODE_ARRAY_COL_SEP      27     /* some convs use sep != col_sep */
 #define SC_OPCODE_TABLE_REF_OPEN     28
 #define SC_OPCODE_TABLE_REF_CLOSE    29
-#define SC_OPCODE_STOP_DIV           30
-#define SC_OPCODE_SKIP               31     /* used to skip raw tokens during string compilation */
+#define SC_OPCODE_TABLE_REF_ITEM_ALL      30
+#define SC_OPCODE_TABLE_REF_ITEM_HEADERS  31
+#define SC_OPCODE_TABLE_REF_ITEM_DATA     32
+#define SC_OPCODE_TABLE_REF_ITEM_TOTALS   33
+#define SC_OPCODE_TABLE_REF_ITEM_THIS_ROW 34
+#define SC_OPCODE_STOP_DIV           35
+#define SC_OPCODE_SKIP               36     /* used to skip raw tokens during string compilation */
 
 /*** error constants #... ***/
 #define SC_OPCODE_START_ERRORS       40

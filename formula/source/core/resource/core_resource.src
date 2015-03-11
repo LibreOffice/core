@@ -30,6 +30,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_CHOOSE { Text = "CHOOSE" ; };
     String SC_OPCODE_OPEN { Text = "(" ; };
     String SC_OPCODE_CLOSE { Text = ")" ; };
+    // SC_OPCODE_TABLE_REF_... not supported in ODFF
     String SC_OPCODE_ARRAY_OPEN { Text = "{" ; };
     String SC_OPCODE_ARRAY_CLOSE { Text = "}" ; };
     String SC_OPCODE_ARRAY_ROW_SEP { Text = "|" ; };
@@ -441,6 +442,11 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML
     String SC_OPCODE_CLOSE { Text = ")" ; };
     String SC_OPCODE_TABLE_REF_OPEN { Text = "[" ; };
     String SC_OPCODE_TABLE_REF_CLOSE { Text = "]" ; };
+    String SC_OPCODE_TABLE_REF_ITEM_ALL { Text = "#All" ; };
+    String SC_OPCODE_TABLE_REF_ITEM_HEADERS { Text = "#Headers" ; };
+    String SC_OPCODE_TABLE_REF_ITEM_DATA { Text = "#Data" ; };
+    String SC_OPCODE_TABLE_REF_ITEM_TOTALS { Text = "#Totals" ; };
+    String SC_OPCODE_TABLE_REF_ITEM_THIS_ROW { Text = "#This Row" ; };
     String SC_OPCODE_ARRAY_OPEN { Text = "{" ; };
     String SC_OPCODE_ARRAY_CLOSE { Text = "}" ; };
     String SC_OPCODE_ARRAY_ROW_SEP { Text = ";" ; };
@@ -854,6 +860,11 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_CLOSE { Text = ")" ; };
     String SC_OPCODE_TABLE_REF_OPEN { Text = "[" ; };
     String SC_OPCODE_TABLE_REF_CLOSE { Text = "]" ; };
+    String SC_OPCODE_TABLE_REF_ITEM_ALL { Text = "#All" ; };
+    String SC_OPCODE_TABLE_REF_ITEM_HEADERS { Text = "#Headers" ; };
+    String SC_OPCODE_TABLE_REF_ITEM_DATA { Text = "#Data" ; };
+    String SC_OPCODE_TABLE_REF_ITEM_TOTALS { Text = "#Totals" ; };
+    String SC_OPCODE_TABLE_REF_ITEM_THIS_ROW { Text = "#This Row" ; };
     String SC_OPCODE_ARRAY_OPEN { Text = "{" ; };
     String SC_OPCODE_ARRAY_CLOSE { Text = "}" ; };
     String SC_OPCODE_ARRAY_ROW_SEP { Text = "|" ; };
@@ -1276,6 +1287,26 @@ Resource RID_STRLIST_FUNCTION_NAMES
     String SC_OPCODE_CLOSE { Text = ")" ; };
     String SC_OPCODE_TABLE_REF_OPEN { Text = "[" ; };
     String SC_OPCODE_TABLE_REF_CLOSE { Text = "]" ; };
+    String SC_OPCODE_TABLE_REF_ITEM_ALL
+    {
+        Text [ en-US ] = "#All" ;
+    };
+    String SC_OPCODE_TABLE_REF_ITEM_HEADERS
+    {
+        Text [ en-US ] = "#Headers" ;
+    };
+    String SC_OPCODE_TABLE_REF_ITEM_DATA
+    {
+        Text [ en-US ] = "#Data" ;
+    };
+    String SC_OPCODE_TABLE_REF_ITEM_TOTALS
+    {
+        Text [ en-US ] = "#Totals" ;
+    };
+    String SC_OPCODE_TABLE_REF_ITEM_THIS_ROW
+    {
+        Text [ en-US ] = "#This Row" ;
+    };
     String SC_OPCODE_ARRAY_OPEN { Text = "{" ; };
     String SC_OPCODE_ARRAY_CLOSE { Text = "}" ; };
     String SC_OPCODE_ARRAY_ROW_SEP { Text = "|" ; };

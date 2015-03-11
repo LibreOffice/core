@@ -53,6 +53,11 @@ enum OpCode : sal_uInt16
         ocStringXML         = SC_OPCODE_STRINGXML,
         ocSpaces            = SC_OPCODE_SPACES,
         ocMatRef            = SC_OPCODE_MAT_REF,
+        ocTableRefItemAll     = SC_OPCODE_TABLE_REF_ITEM_ALL,
+        ocTableRefItemHeaders = SC_OPCODE_TABLE_REF_ITEM_HEADERS,
+        ocTableRefItemData    = SC_OPCODE_TABLE_REF_ITEM_DATA,
+        ocTableRefItemTotals  = SC_OPCODE_TABLE_REF_ITEM_TOTALS,
+        ocTableRefItemThisRow = SC_OPCODE_TABLE_REF_ITEM_THIS_ROW,
         ocSkip              = SC_OPCODE_SKIP,
     // Access commands
         ocDBArea            = SC_OPCODE_DB_AREA,
