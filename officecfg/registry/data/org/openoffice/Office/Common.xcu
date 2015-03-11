@@ -658,7 +658,13 @@
   </node>
   <node oor:name="ExternalMailer" install:module="unixdesktop">
     <prop oor:name="Program">
-      <value oor:external="com.sun.star.configuration.backend.DesktopBackend ExternalMailer"/>
+      <value oor:external=
+          "com.sun.star.configuration.backend.DesktopBackend ExternalMailer"/>
+    </prop>
+  </node>
+  <node oor:name="HiddenContent">
+    <prop oor:name="RemoveHiddenContent">
+      <value oor:external="com.sun.star.configuration.backend.DesktopBackend RemoveHiddenContent" />
     </prop>
   </node>
   <node oor:name="Font">
