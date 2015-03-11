@@ -33,9 +33,6 @@ public:
     // XExtendedFilterDetection
     virtual OUString SAL_CALL detect( com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& lDescriptor )
         throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
-    static com::sun::star::uno::Sequence<OUString> impl_getStaticSupportedServiceNames();
-    static OUString impl_getStaticImplementationName();
 };
 
 #endif

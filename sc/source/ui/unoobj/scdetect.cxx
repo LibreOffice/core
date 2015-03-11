@@ -313,7 +313,7 @@ OUString SAL_CALL ScFilterDetect::detect( uno::Sequence<beans::PropertyValue>& l
 
 OUString SAL_CALL ScFilterDetect::getImplementationName() throw (uno::RuntimeException, std::exception)
 {
-    return impl_getStaticImplementationName();
+    return OUString("com.sun.star.comp.calc.FormatDetector");
 }
 
 sal_Bool ScFilterDetect::supportsService( const OUString& sServiceName )
@@ -325,19 +325,9 @@ sal_Bool ScFilterDetect::supportsService( const OUString& sServiceName )
 com::sun::star::uno::Sequence<OUString> ScFilterDetect::getSupportedServiceNames()
     throw (uno::RuntimeException, std::exception)
 {
-    return impl_getStaticSupportedServiceNames();
-}
-
-uno::Sequence<OUString> ScFilterDetect::impl_getStaticSupportedServiceNames()
-{
     uno::Sequence<OUString> seqServiceNames(1);
     seqServiceNames.getArray()[0] = "com.sun.star.frame.ExtendedTypeDetection";
     return seqServiceNames;
-}
-
-OUString ScFilterDetect::impl_getStaticImplementationName()
-{
-    return OUString("com.sun.star.comp.calc.FormatDetector");
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL

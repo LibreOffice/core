@@ -29,7 +29,7 @@ ScExcelBiffDetect::~ScExcelBiffDetect() {}
 
 OUString ScExcelBiffDetect::getImplementationName() throw (uno::RuntimeException, std::exception)
 {
-    return impl_getStaticImplementationName();
+    return OUString("com.sun.star.comp.calc.ExcelBiffFormatDetector");
 }
 
 sal_Bool ScExcelBiffDetect::supportsService( const OUString& aName ) throw (uno::RuntimeException, std::exception)
@@ -39,7 +39,9 @@ sal_Bool ScExcelBiffDetect::supportsService( const OUString& aName ) throw (uno:
 
 uno::Sequence<OUString> ScExcelBiffDetect::getSupportedServiceNames() throw (uno::RuntimeException, std::exception)
 {
-    return impl_getStaticSupportedServiceNames();
+    uno::Sequence<OUString> aNames(1);
+    aNames[0] = "com.sun.star.frame.ExtendedTypeDetection";
+    return aNames;
 }
 
 namespace {
@@ -191,19 +193,6 @@ OUString ScExcelBiffDetect::detect( uno::Sequence<beans::PropertyValue>& lDescri
     aMediaDesc >> lDescriptor;
     return aType;
 }
-
-uno::Sequence<OUString> ScExcelBiffDetect::impl_getStaticSupportedServiceNames()
-{
-    uno::Sequence<OUString> aNames(1);
-    aNames[0] = "com.sun.star.frame.ExtendedTypeDetection";
-    return aNames;
-}
-
-OUString ScExcelBiffDetect::impl_getStaticImplementationName()
-{
-    return OUString("com.sun.star.comp.calc.ExcelBiffFormatDetector");
-}
-
 
 extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
 com_sun_star_comp_calc_ExcelBiffFormatDetector_get_implementation(::com::sun::star::uno::XComponentContext* context,

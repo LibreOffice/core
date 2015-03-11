@@ -47,10 +47,6 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const OUString& sServiceName ) throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-    /* Helper for XServiceInfo */
-    static com::sun::star::uno::Sequence<OUString> impl_getStaticSupportedServiceNames();
-    static OUString impl_getStaticImplementationName();
-
     // XExtendedFilterDetect
 
     virtual OUString SAL_CALL detect( com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& lDescriptor )
