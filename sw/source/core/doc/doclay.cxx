@@ -325,7 +325,7 @@ SwFlyFrmFmt* SwDoc::MakeFlySection( RndStdIds eAnchorType,
             pFrmFmt = getIDocumentStylePoolAccess().GetFrmFmtFromPool( RES_POOLFRM_FRAME );
 
         sal_uInt16 nCollId = static_cast<sal_uInt16>(
-            GetDocumentSettingManager().get(IDocumentSettingAccess::HTML_MODE) ? RES_POOLCOLL_TEXT : RES_POOLCOLL_FRAME );
+            GetDocumentSettingManager().get(DocumentSettingId::HTML_MODE) ? RES_POOLCOLL_TEXT : RES_POOLCOLL_FRAME );
 
         /* If there is no adjust item in the paragraph style for the content node of the new fly section
            propagate an existing adjust item at the anchor to the new content node. */

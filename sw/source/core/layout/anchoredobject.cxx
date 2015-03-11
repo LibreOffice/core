@@ -435,7 +435,7 @@ bool SwAnchoredObject::ConsiderObjWrapInfluenceOnObjPos() const
     {
         bRet = true;
     }
-    else if ( rObjFmt.getIDocumentSettingAccess()->get(IDocumentSettingAccess::CONSIDER_WRAP_ON_OBJECT_POSITION) )
+    else if ( rObjFmt.getIDocumentSettingAccess()->get(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION) )
     {
         const SwFmtAnchor& rAnchor = rObjFmt.GetAnchor();
         if ( ((rAnchor.GetAnchorId() == FLY_AT_CHAR) ||
@@ -632,7 +632,7 @@ void SwAnchoredObject::UpdateObjInSortedList()
 {
     if ( GetAnchorFrm() )
     {
-        if ( GetFrmFmt().getIDocumentSettingAccess()->get(IDocumentSettingAccess::CONSIDER_WRAP_ON_OBJECT_POSITION) )
+        if ( GetFrmFmt().getIDocumentSettingAccess()->get(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION) )
         {
             // invalidate position of all anchored objects at anchor frame
             if ( GetAnchorFrm()->GetDrawObjs() )

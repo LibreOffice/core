@@ -1059,7 +1059,7 @@ void SwXMLImport::SetViewSettings(const Sequence < PropertyValue > & aViewProps)
         pDoc->GetDocShell()->SetVisArea ( aRect );
 
     if (bChangeBrowseMode)
-        pDoc->getIDocumentSettingAccess().set(IDocumentSettingAccess::BROWSE_MODE, bBrowseMode );
+        pDoc->getIDocumentSettingAccess().set(DocumentSettingId::BROWSE_MODE, bBrowseMode );
 
     if (bChangeShowRedline)
         GetTextImport()->SetShowChanges( bShowRedlineChanges );

@@ -165,7 +165,7 @@ void SwOleClient::FormatChanged()
     if ( pView && xObj.is() && SotExchange::IsMath( xObj->getClassID() ) )
     {
         SwWrtShell & rWrtSh = pView->GetWrtShell();
-        if (rWrtSh.GetDoc()->getIDocumentSettingAccess().get( IDocumentSettingAccess::MATH_BASELINE_ALIGNMENT ))
+        if (rWrtSh.GetDoc()->getIDocumentSettingAccess().get( DocumentSettingId::MATH_BASELINE_ALIGNMENT ))
             rWrtSh.AlignFormulaToBaseline( xObj );
     }
 }

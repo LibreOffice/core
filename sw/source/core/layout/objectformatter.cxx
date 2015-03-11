@@ -136,7 +136,7 @@ SwObjectFormatter::SwObjectFormatter( const SwPageFrm& _rPageFrm,
                                       const bool _bCollectPgNumOfAnchors )
     : mrPageFrm( _rPageFrm ),
       mbFormatOnlyAsCharAnchored( false ),
-      mbConsiderWrapOnObjPos( _rPageFrm.GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::CONSIDER_WRAP_ON_OBJECT_POSITION) ),
+      mbConsiderWrapOnObjPos( _rPageFrm.GetFmt()->getIDocumentSettingAccess()->get(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION) ),
       mpLayAction( _pLayAction ),
       // --> #i26945#
       mpPgNumAndTypeOfAnchors( _bCollectPgNumOfAnchors ? new SwPageNumAndTypeOfAnchors() : 0L )

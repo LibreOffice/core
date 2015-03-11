@@ -133,7 +133,7 @@ void SwLineInfo::CtorInitLineInfo( const SwAttrSet& rAttrSet,
         }
     }
 
-    if ( !rTxtNode.getIDocumentSettingAccess()->get(IDocumentSettingAccess::TABS_RELATIVE_TO_INDENT) )
+    if ( !rTxtNode.getIDocumentSettingAccess()->get(DocumentSettingId::TABS_RELATIVE_TO_INDENT) )
     {
         // remove default tab stop at position 0
         for ( sal_uInt16 i = 0; i < pRuler->Count(); i++ )
@@ -245,7 +245,7 @@ void SwTxtSizeInfo::CtorInitTxtSizeInfo( SwTxtFrm *pFrame, SwFont *pNewFnt,
     else
     {
         // Access via StarONE. We do not need a Shell or an active one.
-        if ( pNd->getIDocumentSettingAccess()->get(IDocumentSettingAccess::HTML_MODE) )
+        if ( pNd->getIDocumentSettingAccess()->get(DocumentSettingId::HTML_MODE) )
         {
             // We can only pick the AppWin here? (there's nothing better to pick?)
             m_pOut = Application::GetDefaultDevice();
@@ -278,7 +278,7 @@ void SwTxtSizeInfo::CtorInitTxtSizeInfo( SwTxtFrm *pFrame, SwFont *pNewFnt,
 
     m_pOpt = m_pVsh ?
            m_pVsh->GetViewOptions() :
-           SW_MOD()->GetViewOption( pNd->getIDocumentSettingAccess()->get(IDocumentSettingAccess::HTML_MODE) ); // Options from Module, due to StarONE
+           SW_MOD()->GetViewOption( pNd->getIDocumentSettingAccess()->get(DocumentSettingId::HTML_MODE) ); // Options from Module, due to StarONE
 
     // bURLNotify is set if MakeGraphic prepares it
     // TODO: Unwind
@@ -1504,7 +1504,7 @@ sal_Int32 SwTxtFormatInfo::ScanPortionEnd( const sal_Int32 nStart,
     const sal_Unicode cThousandSep2 = ',' == cTabDec ? '.' : '\'';
 
     bool bNumFound = false;
-    const bool bTabCompat = GetTxtFrm()->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::TAB_COMPAT);
+    const bool bTabCompat = GetTxtFrm()->GetTxtNode()->getIDocumentSettingAccess()->get(DocumentSettingId::TAB_COMPAT);
 
     for( ; i < nEnd; ++i )
     {

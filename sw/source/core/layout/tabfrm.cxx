@@ -1771,7 +1771,7 @@ void SwTabFrm::MakeAll()
     // #131283#
     // Indicates that two individual rows may keep together, based on the keep
     // attribute set at the first paragraph in the first cell.
-    const bool bTableRowKeep = !bDontSplit && GetFmt()->GetDoc()->GetDocumentSettingManager().get(IDocumentSettingAccess::TABLE_ROW_KEEP);
+    const bool bTableRowKeep = !bDontSplit && GetFmt()->GetDoc()->GetDocumentSettingManager().get(DocumentSettingId::TABLE_ROW_KEEP);
 
     // The Magic Move: Used for the table row keep feature.
     // If only the last row of the table wants to keep (implicitly by setting
@@ -2528,13 +2528,13 @@ bool SwTabFrm::CalcFlyOffsets( SwTwips& rUpper,
     //              floating screen objects
 
     const IDocumentSettingAccess* pIDSA = GetFmt()->getIDocumentSettingAccess();
-    const bool bWrapAllowed = pIDSA->get(IDocumentSettingAccess::USE_FORMER_TEXT_WRAPPING) ||
+    const bool bWrapAllowed = pIDSA->get(DocumentSettingId::USE_FORMER_TEXT_WRAPPING) ||
                                 ( !IsInFtn() && 0 == FindFooterOrHeader() );
 
     if ( pPage->GetSortedObjs() && bWrapAllowed )
     {
         SWRECTFN( this )
-        const bool bConsiderWrapOnObjPos = pIDSA->get(IDocumentSettingAccess::CONSIDER_WRAP_ON_OBJECT_POSITION);
+        const bool bConsiderWrapOnObjPos = pIDSA->get(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION);
         long nPrtPos = (Frm().*fnRect->fnGetTop)();
         nPrtPos = (*fnRect->fnYInc)( nPrtPos, rUpper );
         SwRect aRect( Frm() );
@@ -2855,7 +2855,7 @@ void SwTabFrm::Format( const SwBorderAttrs *pAttrs )
 
         // #i26250# - extend bottom printing area, if table
         // is last content inside a table cell.
-        if ( GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::ADD_PARA_SPACING_TO_TABLE_CELLS) &&
+        if ( GetFmt()->getIDocumentSettingAccess()->get(DocumentSettingId::ADD_PARA_SPACING_TO_TABLE_CELLS) &&
              GetUpper()->IsInTab() && !GetIndNext() )
         {
             nLower += pAttrs->GetULSpace().GetLower();
@@ -2970,7 +2970,7 @@ SwTwips SwTabFrm::GrowFrm( SwTwips nDist, bool bTst, bool bInfo )
         // forward due to the positioning of its objects ). Thus, invalivate this
         // next frame, if document compatibility option 'Consider wrapping style
         // influence on object positioning' is ON.
-        else if ( GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::CONSIDER_WRAP_ON_OBJECT_POSITION) )
+        else if ( GetFmt()->getIDocumentSettingAccess()->get(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION) )
         {
             InvalidateNextPos();
         }
@@ -4820,7 +4820,7 @@ void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
         // #i43913# - no vertical alignment, if wrapping
         // style influence is considered on object positioning and
         // an object is anchored inside the cell.
-        const bool bConsiderWrapOnObjPos( GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::CONSIDER_WRAP_ON_OBJECT_POSITION) );
+        const bool bConsiderWrapOnObjPos( GetFmt()->getIDocumentSettingAccess()->get(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION) );
         //No alignment if border with flow overlaps the cell.
         if ( pPg->GetSortedObjs() )
         {
@@ -5250,7 +5250,7 @@ SwTwips SwTabFrm::CalcHeightOfFirstContentLine() const
     // Calculate the height of the keeping lines
     // (headlines + following keeping lines):
     SwTwips nKeepHeight = nRepeatHeight;
-    if ( GetFmt()->GetDoc()->GetDocumentSettingManager().get(IDocumentSettingAccess::TABLE_ROW_KEEP) )
+    if ( GetFmt()->GetDoc()->GetDocumentSettingManager().get(DocumentSettingId::TABLE_ROW_KEEP) )
     {
         sal_uInt16 nKeepRows = nRepeat;
 

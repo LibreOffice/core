@@ -81,14 +81,14 @@ void DocumentDeviceManager::setPrinter(/*[in]*/ SfxPrinter *pP,/*[in]*/ bool bDe
              mpPrt->SetMapMode( aMapMode );
         }
 
-        if ( m_rDoc.getIDocumentDrawModelAccess().GetDrawModel() && !m_rDoc.GetDocumentSettingManager().get( IDocumentSettingAccess::USE_VIRTUAL_DEVICE ) )
+        if ( m_rDoc.getIDocumentDrawModelAccess().GetDrawModel() && !m_rDoc.GetDocumentSettingManager().get( DocumentSettingId::USE_VIRTUAL_DEVICE ) )
             m_rDoc.getIDocumentDrawModelAccess().GetDrawModel()->SetRefDevice( mpPrt );
     }
 
     if ( bCallPrtDataChanged &&
          // #i41075# Do not call PrtDataChanged() if we do not
          // use the printer for formatting:
-         !m_rDoc.GetDocumentSettingManager().get(IDocumentSettingAccess::USE_VIRTUAL_DEVICE) )
+         !m_rDoc.GetDocumentSettingManager().get(DocumentSettingId::USE_VIRTUAL_DEVICE) )
         PrtDataChanged();
 }
 
@@ -111,7 +111,7 @@ void DocumentDeviceManager::setVirtualDevice(/*[in]*/ VirtualDevice* pVd,/*[in]*
             delete mpVirDev;
         mpVirDev = pVd;
 
-        if ( m_rDoc.getIDocumentDrawModelAccess().GetDrawModel() && m_rDoc.GetDocumentSettingManager().get( IDocumentSettingAccess::USE_VIRTUAL_DEVICE ) )
+        if ( m_rDoc.getIDocumentDrawModelAccess().GetDrawModel() && m_rDoc.GetDocumentSettingManager().get( DocumentSettingId::USE_VIRTUAL_DEVICE ) )
             m_rDoc.getIDocumentDrawModelAccess().GetDrawModel()->SetRefDevice( mpVirDev );
     }
 }
@@ -119,7 +119,7 @@ void DocumentDeviceManager::setVirtualDevice(/*[in]*/ VirtualDevice* pVd,/*[in]*
 OutputDevice* DocumentDeviceManager::getReferenceDevice(/*[in]*/ bool bCreate ) const
 {
     OutputDevice* pRet = 0;
-    if ( !m_rDoc.GetDocumentSettingManager().get(IDocumentSettingAccess::USE_VIRTUAL_DEVICE) )
+    if ( !m_rDoc.GetDocumentSettingManager().get(DocumentSettingId::USE_VIRTUAL_DEVICE) )
     {
         pRet = getPrinter( bCreate );
 
@@ -138,8 +138,8 @@ OutputDevice* DocumentDeviceManager::getReferenceDevice(/*[in]*/ bool bCreate ) 
 
 void DocumentDeviceManager::setReferenceDeviceType(/*[in]*/ bool bNewVirtual, /*[in]*/ bool bNewHiRes )
 {
-    if ( m_rDoc.GetDocumentSettingManager().get(IDocumentSettingAccess::USE_VIRTUAL_DEVICE) != bNewVirtual ||
-         m_rDoc.GetDocumentSettingManager().get(IDocumentSettingAccess::USE_HIRES_VIRTUAL_DEVICE) != bNewHiRes )
+    if ( m_rDoc.GetDocumentSettingManager().get(DocumentSettingId::USE_VIRTUAL_DEVICE) != bNewVirtual ||
+         m_rDoc.GetDocumentSettingManager().get(DocumentSettingId::USE_HIRES_VIRTUAL_DEVICE) != bNewHiRes )
     {
         if ( bNewVirtual )
         {
@@ -165,8 +165,8 @@ void DocumentDeviceManager::setReferenceDeviceType(/*[in]*/ bool bNewVirtual, /*
                 m_rDoc.getIDocumentDrawModelAccess().GetDrawModel()->SetRefDevice( pPrinter );
         }
 
-        m_rDoc.GetDocumentSettingManager().set(IDocumentSettingAccess::USE_VIRTUAL_DEVICE, bNewVirtual );
-        m_rDoc.GetDocumentSettingManager().set(IDocumentSettingAccess::USE_HIRES_VIRTUAL_DEVICE, bNewHiRes );
+        m_rDoc.GetDocumentSettingManager().set(DocumentSettingId::USE_VIRTUAL_DEVICE, bNewVirtual );
+        m_rDoc.GetDocumentSettingManager().set(DocumentSettingId::USE_HIRES_VIRTUAL_DEVICE, bNewHiRes );
         PrtDataChanged();
         m_rDoc.getIDocumentState().SetModified();
     }
@@ -214,7 +214,7 @@ void DocumentDeviceManager::setJobsetup(/*[in]*/ const JobSetup &rJobSetup )
             bDataChanged = true;
         }
     }
-    if ( bDataChanged && !m_rDoc.GetDocumentSettingManager().get(IDocumentSettingAccess::USE_VIRTUAL_DEVICE) )
+    if ( bDataChanged && !m_rDoc.GetDocumentSettingManager().get(DocumentSettingId::USE_VIRTUAL_DEVICE) )
         PrtDataChanged();
 }
 
@@ -262,7 +262,7 @@ VirtualDevice& DocumentDeviceManager::CreateVirtualDevice_() const
     pNewVir->SetReferenceDevice( VirtualDevice::REFDEV_MODE_MSO1 );
 
     // #i60945# External leading compatibility for unix systems.
-    if ( m_rDoc.GetDocumentSettingManager().get(IDocumentSettingAccess::UNIX_FORCE_ZERO_EXT_LEADING ) )
+    if ( m_rDoc.GetDocumentSettingManager().get(DocumentSettingId::UNIX_FORCE_ZERO_EXT_LEADING ) )
         pNewVir->Compat_ZeroExtleadBug();
 
     MapMode aMapMode( pNewVir->GetMapMode() );
@@ -300,7 +300,7 @@ void DocumentDeviceManager::PrtDataChanged()
 // If you change this, also modify InJobSetup in Sw3io if appropriate.
 
     // #i41075#
-    OSL_ENSURE( m_rDoc.getIDocumentSettingAccess().get(IDocumentSettingAccess::USE_VIRTUAL_DEVICE) ||
+    OSL_ENSURE( m_rDoc.getIDocumentSettingAccess().get(DocumentSettingId::USE_VIRTUAL_DEVICE) ||
             0 != getPrinter( false ), "PrtDataChanged will be called recursively!" );
     SwRootFrm* pTmpRoot = m_rDoc.getIDocumentLayoutAccess().GetCurrentLayout();
     boost::scoped_ptr<SwWait> pWait;
@@ -326,7 +326,7 @@ void DocumentDeviceManager::PrtDataChanged()
             bDraw = false;
             if( m_rDoc.getIDocumentDrawModelAccess().GetDrawModel() )
             {
-                m_rDoc.getIDocumentDrawModelAccess().GetDrawModel()->SetAddExtLeading( m_rDoc.GetDocumentSettingManager().get(IDocumentSettingAccess::ADD_EXT_LEADING) );
+                m_rDoc.getIDocumentDrawModelAccess().GetDrawModel()->SetAddExtLeading( m_rDoc.GetDocumentSettingManager().get(DocumentSettingId::ADD_EXT_LEADING) );
                 m_rDoc.getIDocumentDrawModelAccess().GetDrawModel()->SetRefDevice( getReferenceDevice( false ) );
             }
 
@@ -341,7 +341,7 @@ void DocumentDeviceManager::PrtDataChanged()
     }
     if ( bDraw && m_rDoc.getIDocumentDrawModelAccess().GetDrawModel() )
     {
-        const bool bTmpAddExtLeading = m_rDoc.GetDocumentSettingManager().get(IDocumentSettingAccess::ADD_EXT_LEADING);
+        const bool bTmpAddExtLeading = m_rDoc.GetDocumentSettingManager().get(DocumentSettingId::ADD_EXT_LEADING);
         if ( bTmpAddExtLeading != m_rDoc.getIDocumentDrawModelAccess().GetDrawModel()->IsAddExtLeading() )
             m_rDoc.getIDocumentDrawModelAccess().GetDrawModel()->SetAddExtLeading( bTmpAddExtLeading );
 

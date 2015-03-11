@@ -120,57 +120,57 @@ bool sw::DocumentSettingManager::get(/*[in]*/ DocumentSettingId id) const
     switch (id)
     {
         // COMPATIBILITY FLAGS START
-        case PARA_SPACE_MAX: return mbParaSpaceMax; //(n8Dummy1 & DUMMY_PARASPACEMAX);
-        case PARA_SPACE_MAX_AT_PAGES: return mbParaSpaceMaxAtPages; //(n8Dummy1 & DUMMY_PARASPACEMAX_AT_PAGES);
-        case TAB_COMPAT: return mbTabCompat; //(n8Dummy1 & DUMMY_TAB_COMPAT);
-        case ADD_FLY_OFFSETS: return mbAddFlyOffsets; //(n8Dummy2 & DUMMY_ADD_FLY_OFFSETS);
-        case ADD_EXT_LEADING: return mbAddExternalLeading; //(n8Dummy2 & DUMMY_ADD_EXTERNAL_LEADING);
-        case USE_VIRTUAL_DEVICE: return mbUseVirtualDevice; //(n8Dummy1 & DUMMY_USE_VIRTUAL_DEVICE);
-        case USE_HIRES_VIRTUAL_DEVICE: return mbUseHiResolutionVirtualDevice; //(n8Dummy2 & DUMMY_USE_HIRES_VIR_DEV);
-        case OLD_NUMBERING: return mbOldNumbering;
-        case OLD_LINE_SPACING: return mbOldLineSpacing;
-        case ADD_PARA_SPACING_TO_TABLE_CELLS: return mbAddParaSpacingToTableCells;
-        case USE_FORMER_OBJECT_POS: return mbUseFormerObjectPos;
-        case USE_FORMER_TEXT_WRAPPING: return mbUseFormerTextWrapping;
-        case CONSIDER_WRAP_ON_OBJECT_POSITION: return mbConsiderWrapOnObjPos;
-        case DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK: return mbDoNotJustifyLinesWithManualBreak;
-        case IGNORE_FIRST_LINE_INDENT_IN_NUMBERING: return mbIgnoreFirstLineIndentInNumbering;
-        case OUTLINE_LEVEL_YIELDS_OUTLINE_RULE: return mbOutlineLevelYieldsOutlineRule;
-        case TABLE_ROW_KEEP: return mbTableRowKeep;
-        case IGNORE_TABS_AND_BLANKS_FOR_LINE_CALCULATION: return mbIgnoreTabsAndBlanksForLineCalculation;
-        case DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE: return mbDoNotCaptureDrawObjsOnPage;
+        case DocumentSettingId::PARA_SPACE_MAX: return mbParaSpaceMax; //(n8Dummy1 & DUMMY_PARASPACEMAX);
+        case DocumentSettingId::PARA_SPACE_MAX_AT_PAGES: return mbParaSpaceMaxAtPages; //(n8Dummy1 & DUMMY_PARASPACEMAX_AT_PAGES);
+        case DocumentSettingId::TAB_COMPAT: return mbTabCompat; //(n8Dummy1 & DUMMY_TAB_COMPAT);
+        case DocumentSettingId::ADD_FLY_OFFSETS: return mbAddFlyOffsets; //(n8Dummy2 & DUMMY_ADD_FLY_OFFSETS);
+        case DocumentSettingId::ADD_EXT_LEADING: return mbAddExternalLeading; //(n8Dummy2 & DUMMY_ADD_EXTERNAL_LEADING);
+        case DocumentSettingId::USE_VIRTUAL_DEVICE: return mbUseVirtualDevice; //(n8Dummy1 & DUMMY_USE_VIRTUAL_DEVICE);
+        case DocumentSettingId::USE_HIRES_VIRTUAL_DEVICE: return mbUseHiResolutionVirtualDevice; //(n8Dummy2 & DUMMY_USE_HIRES_VIR_DEV);
+        case DocumentSettingId::OLD_NUMBERING: return mbOldNumbering;
+        case DocumentSettingId::OLD_LINE_SPACING: return mbOldLineSpacing;
+        case DocumentSettingId::ADD_PARA_SPACING_TO_TABLE_CELLS: return mbAddParaSpacingToTableCells;
+        case DocumentSettingId::USE_FORMER_OBJECT_POS: return mbUseFormerObjectPos;
+        case DocumentSettingId::USE_FORMER_TEXT_WRAPPING: return mbUseFormerTextWrapping;
+        case DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION: return mbConsiderWrapOnObjPos;
+        case DocumentSettingId::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK: return mbDoNotJustifyLinesWithManualBreak;
+        case DocumentSettingId::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING: return mbIgnoreFirstLineIndentInNumbering;
+        case DocumentSettingId::OUTLINE_LEVEL_YIELDS_OUTLINE_RULE: return mbOutlineLevelYieldsOutlineRule;
+        case DocumentSettingId::TABLE_ROW_KEEP: return mbTableRowKeep;
+        case DocumentSettingId::IGNORE_TABS_AND_BLANKS_FOR_LINE_CALCULATION: return mbIgnoreTabsAndBlanksForLineCalculation;
+        case DocumentSettingId::DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE: return mbDoNotCaptureDrawObjsOnPage;
         // #i68949#
-        case CLIP_AS_CHARACTER_ANCHORED_WRITER_FLY_FRAME: return mbClipAsCharacterAnchoredWriterFlyFrames;
-        case UNIX_FORCE_ZERO_EXT_LEADING: return mbUnixForceZeroExtLeading;
-        case TABS_RELATIVE_TO_INDENT : return mbTabRelativeToIndent;
-        case PROTECT_FORM: return mbProtectForm;
+        case DocumentSettingId::CLIP_AS_CHARACTER_ANCHORED_WRITER_FLY_FRAME: return mbClipAsCharacterAnchoredWriterFlyFrames;
+        case DocumentSettingId::UNIX_FORCE_ZERO_EXT_LEADING: return mbUnixForceZeroExtLeading;
+        case DocumentSettingId::TABS_RELATIVE_TO_INDENT : return mbTabRelativeToIndent;
+        case DocumentSettingId::PROTECT_FORM: return mbProtectForm;
         // #i89181#
-        case TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST: return mbTabAtLeftIndentForParagraphsInList;
-        case INVERT_BORDER_SPACING: return mbInvertBorderSpacing;
-        case COLLAPSE_EMPTY_CELL_PARA: return mbCollapseEmptyCellPara;
-        case SMALL_CAPS_PERCENTAGE_66: return mbSmallCapsPercentage66;
-        case TAB_OVERFLOW: return mbTabOverflow;
-        case UNBREAKABLE_NUMBERINGS: return mbUnbreakableNumberings;
-        case CLIPPED_PICTURES: return mbClippedPictures;
-        case BACKGROUND_PARA_OVER_DRAWINGS: return mbBackgroundParaOverDrawings;
-        case TAB_OVER_MARGIN: return mbTabOverMargin;
-        case SURROUND_TEXT_WRAP_SMALL: return mbSurroundTextWrapSmall;
-        case PROP_LINE_SPACING_SHRINKS_FIRST_LINE: return mbPropLineSpacingShrinksFirstLine;
+        case DocumentSettingId::TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST: return mbTabAtLeftIndentForParagraphsInList;
+        case DocumentSettingId::INVERT_BORDER_SPACING: return mbInvertBorderSpacing;
+        case DocumentSettingId::COLLAPSE_EMPTY_CELL_PARA: return mbCollapseEmptyCellPara;
+        case DocumentSettingId::SMALL_CAPS_PERCENTAGE_66: return mbSmallCapsPercentage66;
+        case DocumentSettingId::TAB_OVERFLOW: return mbTabOverflow;
+        case DocumentSettingId::UNBREAKABLE_NUMBERINGS: return mbUnbreakableNumberings;
+        case DocumentSettingId::CLIPPED_PICTURES: return mbClippedPictures;
+        case DocumentSettingId::BACKGROUND_PARA_OVER_DRAWINGS: return mbBackgroundParaOverDrawings;
+        case DocumentSettingId::TAB_OVER_MARGIN: return mbTabOverMargin;
+        case DocumentSettingId::SURROUND_TEXT_WRAP_SMALL: return mbSurroundTextWrapSmall;
+        case DocumentSettingId::PROP_LINE_SPACING_SHRINKS_FIRST_LINE: return mbPropLineSpacingShrinksFirstLine;
 
-        case BROWSE_MODE: return mbLastBrowseMode; // Attention: normally the SwViewShell has to be asked!
-        case HTML_MODE: return mbHTMLMode;
-        case GLOBAL_DOCUMENT: return mbIsGlobalDoc;
-        case GLOBAL_DOCUMENT_SAVE_LINKS: return mbGlblDocSaveLinks;
-        case LABEL_DOCUMENT: return mbIsLabelDoc;
-        case PURGE_OLE: return mbPurgeOLE;
-        case KERN_ASIAN_PUNCTUATION: return mbKernAsianPunctuation;
-        case DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT: return mbDoNotResetParaAttrsForNumFont;
-        case MATH_BASELINE_ALIGNMENT: return mbMathBaselineAlignment;
-        case STYLES_NODEFAULT: return mbStylesNoDefault;
-        case FLOATTABLE_NOMARGINS: return mbFloattableNomargins;
-        case EMBED_FONTS: return mEmbedFonts;
-        case EMBED_SYSTEM_FONTS: return mEmbedSystemFonts;
-        case APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING: return mApplyParagraphMarkFormatToNumbering;
+        case DocumentSettingId::BROWSE_MODE: return mbLastBrowseMode; // Attention: normally the SwViewShell has to be asked!
+        case DocumentSettingId::HTML_MODE: return mbHTMLMode;
+        case DocumentSettingId::GLOBAL_DOCUMENT: return mbIsGlobalDoc;
+        case DocumentSettingId::GLOBAL_DOCUMENT_SAVE_LINKS: return mbGlblDocSaveLinks;
+        case DocumentSettingId::LABEL_DOCUMENT: return mbIsLabelDoc;
+        case DocumentSettingId::PURGE_OLE: return mbPurgeOLE;
+        case DocumentSettingId::KERN_ASIAN_PUNCTUATION: return mbKernAsianPunctuation;
+        case DocumentSettingId::DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT: return mbDoNotResetParaAttrsForNumFont;
+        case DocumentSettingId::MATH_BASELINE_ALIGNMENT: return mbMathBaselineAlignment;
+        case DocumentSettingId::STYLES_NODEFAULT: return mbStylesNoDefault;
+        case DocumentSettingId::FLOATTABLE_NOMARGINS: return mbFloattableNomargins;
+        case DocumentSettingId::EMBED_FONTS: return mEmbedFonts;
+        case DocumentSettingId::EMBED_SYSTEM_FONTS: return mEmbedSystemFonts;
+        case DocumentSettingId::APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING: return mApplyParagraphMarkFormatToNumbering;
         default:
             OSL_FAIL("Invalid setting id");
     }
@@ -182,28 +182,28 @@ void sw::DocumentSettingManager::set(/*[in]*/ DocumentSettingId id, /*[in]*/ boo
     switch (id)
     {
         // COMPATIBILITY FLAGS START
-        case PARA_SPACE_MAX:
+        case DocumentSettingId::PARA_SPACE_MAX:
             mbParaSpaceMax = value;
             break;
-        case PARA_SPACE_MAX_AT_PAGES:
+        case DocumentSettingId::PARA_SPACE_MAX_AT_PAGES:
             mbParaSpaceMaxAtPages = value;
             break;
-        case TAB_COMPAT:
+        case DocumentSettingId::TAB_COMPAT:
             mbTabCompat = value;
             break;
-        case ADD_FLY_OFFSETS:
+        case DocumentSettingId::ADD_FLY_OFFSETS:
             mbAddFlyOffsets = value;
             break;
-        case ADD_EXT_LEADING:
+        case DocumentSettingId::ADD_EXT_LEADING:
             mbAddExternalLeading = value;
             break;
-        case USE_VIRTUAL_DEVICE:
+        case DocumentSettingId::USE_VIRTUAL_DEVICE:
             mbUseVirtualDevice = value;
             break;
-        case USE_HIRES_VIRTUAL_DEVICE:
+        case DocumentSettingId::USE_HIRES_VIRTUAL_DEVICE:
             mbUseHiResolutionVirtualDevice = value;
             break;
-        case OLD_NUMBERING:
+        case DocumentSettingId::OLD_NUMBERING:
             if (mbOldNumbering != value)
             {
                 mbOldNumbering = value;
@@ -223,154 +223,154 @@ void sw::DocumentSettingManager::set(/*[in]*/ DocumentSettingId id, /*[in]*/ boo
                 }
             }
             break;
-        case OLD_LINE_SPACING:
+        case DocumentSettingId::OLD_LINE_SPACING:
             mbOldLineSpacing = value;
             break;
-        case ADD_PARA_SPACING_TO_TABLE_CELLS:
+        case DocumentSettingId::ADD_PARA_SPACING_TO_TABLE_CELLS:
             mbAddParaSpacingToTableCells = value;
             break;
-        case USE_FORMER_OBJECT_POS:
+        case DocumentSettingId::USE_FORMER_OBJECT_POS:
             mbUseFormerObjectPos = value;
             break;
-        case USE_FORMER_TEXT_WRAPPING:
+        case DocumentSettingId::USE_FORMER_TEXT_WRAPPING:
             mbUseFormerTextWrapping = value;
             break;
-        case CONSIDER_WRAP_ON_OBJECT_POSITION:
+        case DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION:
             mbConsiderWrapOnObjPos = value;
             break;
-        case DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK:
+        case DocumentSettingId::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK:
             mbDoNotJustifyLinesWithManualBreak = value;
             break;
-        case IGNORE_FIRST_LINE_INDENT_IN_NUMBERING:
+        case DocumentSettingId::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING:
             mbIgnoreFirstLineIndentInNumbering = value;
             break;
 
-        case OUTLINE_LEVEL_YIELDS_OUTLINE_RULE:
+        case DocumentSettingId::OUTLINE_LEVEL_YIELDS_OUTLINE_RULE:
             mbOutlineLevelYieldsOutlineRule = value;
             break;
 
-        case TABLE_ROW_KEEP:
+        case DocumentSettingId::TABLE_ROW_KEEP:
             mbTableRowKeep = value;
             break;
 
-        case IGNORE_TABS_AND_BLANKS_FOR_LINE_CALCULATION:
+        case DocumentSettingId::IGNORE_TABS_AND_BLANKS_FOR_LINE_CALCULATION:
             mbIgnoreTabsAndBlanksForLineCalculation = value;
             break;
 
-        case DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE:
+        case DocumentSettingId::DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE:
             mbDoNotCaptureDrawObjsOnPage = value;
             break;
 
         // #i68949#
-        case CLIP_AS_CHARACTER_ANCHORED_WRITER_FLY_FRAME:
+        case DocumentSettingId::CLIP_AS_CHARACTER_ANCHORED_WRITER_FLY_FRAME:
             mbClipAsCharacterAnchoredWriterFlyFrames = value;
             break;
 
-        case UNIX_FORCE_ZERO_EXT_LEADING:
+        case DocumentSettingId::UNIX_FORCE_ZERO_EXT_LEADING:
             mbUnixForceZeroExtLeading = value;
             break;
 
-        case PROTECT_FORM:
+        case DocumentSettingId::PROTECT_FORM:
             mbProtectForm = value;
             break;
 
-        case TABS_RELATIVE_TO_INDENT:
+        case DocumentSettingId::TABS_RELATIVE_TO_INDENT:
             mbTabRelativeToIndent = value;
             break;
         // #i89181#
-        case TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST:
+        case DocumentSettingId::TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST:
             mbTabAtLeftIndentForParagraphsInList = value;
             break;
 
-        case INVERT_BORDER_SPACING:
+        case DocumentSettingId::INVERT_BORDER_SPACING:
             mbInvertBorderSpacing = value;
             break;
 
-        case COLLAPSE_EMPTY_CELL_PARA:
+        case DocumentSettingId::COLLAPSE_EMPTY_CELL_PARA:
             mbCollapseEmptyCellPara = value;
             break;
 
-        case SMALL_CAPS_PERCENTAGE_66:
+        case DocumentSettingId::SMALL_CAPS_PERCENTAGE_66:
             mbSmallCapsPercentage66 = value;
             break;
 
-        case TAB_OVERFLOW:
+        case DocumentSettingId::TAB_OVERFLOW:
             mbTabOverflow = value;
             break;
 
-        case UNBREAKABLE_NUMBERINGS:
+        case DocumentSettingId::UNBREAKABLE_NUMBERINGS:
             mbUnbreakableNumberings = value;
             break;
 
-        case CLIPPED_PICTURES:
+        case DocumentSettingId::CLIPPED_PICTURES:
             mbClippedPictures = value;
             break;
 
-        case BACKGROUND_PARA_OVER_DRAWINGS:
+        case DocumentSettingId::BACKGROUND_PARA_OVER_DRAWINGS:
             mbBackgroundParaOverDrawings = value;
             break;
 
-        case TAB_OVER_MARGIN:
+        case DocumentSettingId::TAB_OVER_MARGIN:
             mbTabOverMargin = value;
             break;
 
-        case SURROUND_TEXT_WRAP_SMALL:
+        case DocumentSettingId::SURROUND_TEXT_WRAP_SMALL:
             mbSurroundTextWrapSmall = value;
             break;
 
-        case PROP_LINE_SPACING_SHRINKS_FIRST_LINE:
+        case DocumentSettingId::PROP_LINE_SPACING_SHRINKS_FIRST_LINE:
             mbPropLineSpacingShrinksFirstLine = value;
             break;
 
         // COMPATIBILITY FLAGS END
 
-        case BROWSE_MODE: //can be used temporary (load/save) when no SwViewShell is available
+        case DocumentSettingId::BROWSE_MODE: //can be used temporary (load/save) when no SwViewShell is available
             mbLastBrowseMode = value;
             break;
 
-        case HTML_MODE:
+        case DocumentSettingId::HTML_MODE:
             mbHTMLMode = value;
             break;
 
-        case GLOBAL_DOCUMENT:
+        case DocumentSettingId::GLOBAL_DOCUMENT:
             mbIsGlobalDoc = value;
             break;
 
-        case GLOBAL_DOCUMENT_SAVE_LINKS:
+        case DocumentSettingId::GLOBAL_DOCUMENT_SAVE_LINKS:
             mbGlblDocSaveLinks = value;
             break;
 
-        case LABEL_DOCUMENT:
+        case DocumentSettingId::LABEL_DOCUMENT:
             mbIsLabelDoc = value;
             break;
 
-        case PURGE_OLE:
+        case DocumentSettingId::PURGE_OLE:
             mbPurgeOLE = value;
             break;
 
-        case KERN_ASIAN_PUNCTUATION:
+        case DocumentSettingId::KERN_ASIAN_PUNCTUATION:
             mbKernAsianPunctuation = value;
             break;
 
-        case DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT:
+        case DocumentSettingId::DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT:
             mbDoNotResetParaAttrsForNumFont = value;
             break;
-        case MATH_BASELINE_ALIGNMENT:
+        case DocumentSettingId::MATH_BASELINE_ALIGNMENT:
             mbMathBaselineAlignment  = value;
             break;
-        case STYLES_NODEFAULT:
+        case DocumentSettingId::STYLES_NODEFAULT:
             mbStylesNoDefault  = value;
             break;
-        case FLOATTABLE_NOMARGINS:
+        case DocumentSettingId::FLOATTABLE_NOMARGINS:
             mbFloattableNomargins = value;
             break;
-        case EMBED_FONTS:
+        case DocumentSettingId::EMBED_FONTS:
             mEmbedFonts = value;
             break;
-        case EMBED_SYSTEM_FONTS:
+        case DocumentSettingId::EMBED_SYSTEM_FONTS:
             mEmbedSystemFonts = value;
             break;
-        case APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING:
+        case DocumentSettingId::APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING:
             mApplyParagraphMarkFormatToNumbering = value;
             break;
         default:
@@ -435,7 +435,7 @@ sal_uInt16 sw::DocumentSettingManager::getLinkUpdateMode( /*[in]*/bool bGlobalSe
 {
     sal_uInt16 nRet = mnLinkUpdMode;
     if( bGlobalSettings && GLOBALSETTING == nRet )
-        nRet = SW_MOD()->GetLinkUpdMode(get(IDocumentSettingAccess::HTML_MODE));
+        nRet = SW_MOD()->GetLinkUpdMode(get(DocumentSettingId::HTML_MODE));
     return nRet;
 }
 
@@ -448,7 +448,7 @@ SwFldUpdateFlags sw::DocumentSettingManager::getFieldUpdateFlags( /*[in]*/bool b
 {
     SwFldUpdateFlags eRet = meFldUpdMode;
     if( bGlobalSettings && AUTOUPD_GLOBALSETTING == eRet )
-        eRet = SW_MOD()->GetFldUpdateFlags(get(IDocumentSettingAccess::HTML_MODE));
+        eRet = SW_MOD()->GetFldUpdateFlags(get(DocumentSettingId::HTML_MODE));
     return eRet;
 }
 

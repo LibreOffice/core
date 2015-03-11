@@ -2460,7 +2460,7 @@ SfxStyleSheetBase* SwDocStyleSheetPool::Find( const OUString& rName,
                                               SfxStyleFamily eFam, sal_uInt16 n )
 {
     sal_uInt16 nSMask = n;
-    if( SFX_STYLE_FAMILY_PARA == eFam &&  rDoc.getIDocumentSettingAccess().get(IDocumentSettingAccess::HTML_MODE) )
+    if( SFX_STYLE_FAMILY_PARA == eFam &&  rDoc.getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE) )
     {
         // then only HTML-Templates are of interest
         if( USHRT_MAX == nSMask )
@@ -2619,7 +2619,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
                     continue;
                 }
 
-                if(  rDoc.getIDocumentSettingAccess().get(IDocumentSettingAccess::HTML_MODE) && !(nId & USER_FMT) &&
+                if(  rDoc.getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE) && !(nId & USER_FMT) &&
                     !( RES_POOLCHR_HTML_BEGIN <= nId &&
                           nId < RES_POOLCHR_HTML_END ) &&
                     RES_POOLCHR_INET_NORMAL != nId &&
@@ -2638,7 +2638,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
         // PoolFormate
         if( bAll )
         {
-            if( ! rDoc.getIDocumentSettingAccess().get(IDocumentSettingAccess::HTML_MODE) )
+            if( ! rDoc.getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE) )
                 AppendStyleList(SwStyleNameMapper::GetChrFmtUINameArray(),
                                 bIsSearchUsed, bSearchHidden, bOnlyHidden,
                                 nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, cCHAR);
@@ -2663,7 +2663,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
         nSearchFamily == SFX_STYLE_FAMILY_ALL )
     {
         sal_uInt16 nSMask = nSrchMask;
-        if(  rDoc.getIDocumentSettingAccess().get(IDocumentSettingAccess::HTML_MODE) )
+        if(  rDoc.getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE) )
         {
             // then only HTML-Template are of interest
             if( SFXSTYLEBIT_ALL_VISIBLE == ( nSMask & SFXSTYLEBIT_ALL_VISIBLE ) )

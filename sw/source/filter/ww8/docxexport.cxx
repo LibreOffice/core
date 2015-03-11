@@ -829,11 +829,11 @@ void DocxExport::WriteSettings()
         pFS->singleElementNS( XML_w, XML_mirrorMargins, FSEND );
 
     // Embed Fonts
-    if( pDoc->getIDocumentSettingAccess().get( IDocumentSettingAccess::EMBED_FONTS ))
+    if( pDoc->getIDocumentSettingAccess().get( DocumentSettingId::EMBED_FONTS ))
         pFS->singleElementNS( XML_w, XML_embedTrueTypeFonts, FSEND );
 
     // Embed System Fonts
-    if( pDoc->getIDocumentSettingAccess().get( IDocumentSettingAccess::EMBED_SYSTEM_FONTS ))
+    if( pDoc->getIDocumentSettingAccess().get( DocumentSettingId::EMBED_SYSTEM_FONTS ))
         pFS->singleElementNS( XML_w, XML_embedSystemFonts, FSEND );
 
     // Default Tab Stop

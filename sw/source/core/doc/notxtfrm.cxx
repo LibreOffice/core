@@ -271,7 +271,7 @@ void SwNoTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
 
     // In case the picture fly frm was clipped, render it with the origin
     // size instead of scaling it
-    if ( rNoTNd.getIDocumentSettingAccess()->get( IDocumentSettingAccess::CLIPPED_PICTURES ) )
+    if ( rNoTNd.getIDocumentSettingAccess()->get( DocumentSettingId::CLIPPED_PICTURES ) )
     {
         const SwFlyFreeFrm *pFly = dynamic_cast< const SwFlyFreeFrm* >( FindFlyFrm() );
         if( pFly )

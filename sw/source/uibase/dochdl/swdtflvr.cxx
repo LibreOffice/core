@@ -318,7 +318,7 @@ void SwTransferable::InitOle( SfxObjectShell* pDoc, SwDoc& rDoc )
     const Size aSz( OLESIZE );
     SwRect aVis( Point( DOCUMENTBORDER, DOCUMENTBORDER ), aSz );
     pDoc->SetVisArea( aVis.SVRect() );
-    rDoc.getIDocumentSettingAccess().set(IDocumentSettingAccess::BROWSE_MODE, true );
+    rDoc.getIDocumentSettingAccess().set(DocumentSettingId::BROWSE_MODE, true );
 }
 
 uno::Reference < embed::XEmbeddedObject > SwTransferable::FindOLEObj( sal_Int64& nAspect ) const

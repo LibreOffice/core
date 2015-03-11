@@ -1438,7 +1438,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                     SvxZoomSliderItem aZoomSliderItem( nCurrentZoom, MINZOOM, MAXZOOM );
                     aZoomSliderItem.AddSnappingPoint( 100 );
 
-                    if ( !m_pWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
+                    if ( !m_pWrtShell->getIDocumentSettingAccess()->get(DocumentSettingId::BROWSE_MODE) )
                     {
                         const sal_uInt16 nColumns = pVOpt->GetViewLayoutColumns();
                         const bool bAutomaticViewLayout = 0 == nColumns;
@@ -1741,7 +1741,7 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
 
         case SID_ATTR_VIEWLAYOUT:
         {
-            if ( pArgs && !rSh.getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) &&
+            if ( pArgs && !rSh.getIDocumentSettingAccess()->get(DocumentSettingId::BROWSE_MODE) &&
                 ( ( GetDocShell()->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED ) || !GetDocShell()->IsInPlaceActive() ) )
             {
                 if ( SfxItemState::SET == pArgs->GetItemState(SID_ATTR_VIEWLAYOUT, true, &pItem ))

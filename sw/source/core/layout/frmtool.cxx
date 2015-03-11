@@ -139,7 +139,7 @@ SwFrmNotify::~SwFrmNotify()
                         if ( !bInvalidPrePos && pPre->IsTabFrm() )
                         {
                             SwTabFrm* pPreTab = static_cast<SwTabFrm*>(pPre);
-                            if ( pPreTab->GetFmt()->GetDoc()->GetDocumentSettingManager().get(IDocumentSettingAccess::TABLE_ROW_KEEP) )
+                            if ( pPreTab->GetFmt()->GetDoc()->GetDocumentSettingManager().get(DocumentSettingId::TABLE_ROW_KEEP) )
                             {
                                 SwRowFrm* pLastRow = static_cast<SwRowFrm*>(pPreTab->GetLastLower());
                                 if ( pLastRow && pLastRow->ShouldRowKeepWithNext() )
@@ -755,7 +755,7 @@ SwCntntNotify::SwCntntNotify( SwCntntFrm *pCntntFrm ) :
     if ( pCntntFrm->IsTxtFrm() )
     {
         SwTxtFrm* pTxtFrm = static_cast<SwTxtFrm*>(pCntntFrm);
-        if ( !pTxtFrm->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::OLD_LINE_SPACING) )
+        if ( !pTxtFrm->GetTxtNode()->getIDocumentSettingAccess()->get(DocumentSettingId::OLD_LINE_SPACING) )
         {
             const SwAttrSet* pSet = pTxtFrm->GetAttrSet();
             const SvxLineSpacingItem &rSpace = pSet->GetLineSpacing();
@@ -1893,7 +1893,7 @@ long SwBorderAttrs::CalcRight( const SwFrm* pCaller ) const
 {
     long nRight=0;
 
-    if (!pCaller->IsTxtFrm() || !static_cast<const SwTxtFrm*>(pCaller)->GetTxtNode()->GetDoc()->GetDocumentSettingManager().get(IDocumentSettingAccess::INVERT_BORDER_SPACING)) {
+    if (!pCaller->IsTxtFrm() || !static_cast<const SwTxtFrm*>(pCaller)->GetTxtNode()->GetDoc()->GetDocumentSettingManager().get(DocumentSettingId::INVERT_BORDER_SPACING)) {
     // OD 23.01.2003 #106895# - for cell frame in R2L text direction the left
     // and right border are painted on the right respectively left.
     if ( pCaller->IsCellFrm() && pCaller->IsRightToLeft() )
@@ -1941,7 +1941,7 @@ long SwBorderAttrs::CalcLeft( const SwFrm *pCaller ) const
 {
     long nLeft=0;
 
-    if (!pCaller->IsTxtFrm() || !static_cast<const SwTxtFrm*>(pCaller)->GetTxtNode()->GetDoc()->GetDocumentSettingManager().get(IDocumentSettingAccess::INVERT_BORDER_SPACING)) {
+    if (!pCaller->IsTxtFrm() || !static_cast<const SwTxtFrm*>(pCaller)->GetTxtNode()->GetDoc()->GetDocumentSettingManager().get(DocumentSettingId::INVERT_BORDER_SPACING)) {
     // OD 23.01.2003 #106895# - for cell frame in R2L text direction the left
     // and right border are painted on the right respectively left.
     if ( pCaller->IsCellFrm() && pCaller->IsRightToLeft() )
@@ -1959,7 +1959,7 @@ long SwBorderAttrs::CalcLeft( const SwFrm *pCaller ) const
         if (pCaller->IsTxtFrm())
         {
             const SwTxtFrm* pTxtFrm = static_cast<const SwTxtFrm*>(pCaller);
-            if (pTxtFrm->GetTxtNode()->GetDoc()->GetDocumentSettingManager().get(IDocumentSettingAccess::FLOATTABLE_NOMARGINS))
+            if (pTxtFrm->GetTxtNode()->GetDoc()->GetDocumentSettingManager().get(DocumentSettingId::FLOATTABLE_NOMARGINS))
             {
                 // If this is explicitly requested, ignore the margins next to the floating table.
                 if (lcl_hasTabFrm(pTxtFrm))

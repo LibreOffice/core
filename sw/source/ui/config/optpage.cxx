@@ -1363,7 +1363,7 @@ bool SwShdwCrsrOptionsTabPage::FillItemSet( SfxItemSet* rSet )
     }
 
     if (m_pWrtShell) {
-        m_pWrtShell->GetDoc()->getIDocumentSettingAccess().set( IDocumentSettingAccess::MATH_BASELINE_ALIGNMENT,
+        m_pWrtShell->GetDoc()->getIDocumentSettingAccess().set( DocumentSettingId::MATH_BASELINE_ALIGNMENT,
                                     m_pMathBaselineAlignmentCB->IsChecked() );
         bRet |= m_pMathBaselineAlignmentCB->IsValueChangedFromSaved();
     }
@@ -1414,7 +1414,7 @@ void SwShdwCrsrOptionsTabPage::Reset( const SfxItemSet* rSet )
     m_pFillSpaceRB->Check( FILL_SPACE == eMode );
 
     if (m_pWrtShell) {
-       m_pMathBaselineAlignmentCB->Check( m_pWrtShell->GetDoc()->getIDocumentSettingAccess().get( IDocumentSettingAccess::MATH_BASELINE_ALIGNMENT ) );
+       m_pMathBaselineAlignmentCB->Check( m_pWrtShell->GetDoc()->getIDocumentSettingAccess().get( DocumentSettingId::MATH_BASELINE_ALIGNMENT ) );
        m_pMathBaselineAlignmentCB->SaveValue();
     } else {
         m_pMathBaselineAlignmentCB->Hide();

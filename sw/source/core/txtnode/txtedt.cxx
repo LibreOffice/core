@@ -161,7 +161,7 @@ lcl_MaskRedlinesAndHiddenText( const SwTxtNode& rNode, OUStringBuffer& rText,
         nRedlinesMasked = lcl_MaskRedlines( rNode, rText, nStt, nEnd, cChar );
     }
 
-    const bool bHideHidden = !SW_MOD()->GetViewOption(rDoc.GetDocumentSettingManager().get(IDocumentSettingAccess::HTML_MODE))->IsShowHiddenChar();
+    const bool bHideHidden = !SW_MOD()->GetViewOption(rDoc.GetDocumentSettingManager().get(DocumentSettingId::HTML_MODE))->IsShowHiddenChar();
 
     // If called from word count, we want to mask the hidden ranges even
     // if they are visible:

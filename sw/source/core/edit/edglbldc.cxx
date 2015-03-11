@@ -33,12 +33,12 @@
 
 bool SwEditShell::IsGlobalDoc() const
 {
-    return getIDocumentSettingAccess()->get(IDocumentSettingAccess::GLOBAL_DOCUMENT);
+    return getIDocumentSettingAccess()->get(DocumentSettingId::GLOBAL_DOCUMENT);
 }
 
 void SwEditShell::SetGlblDocSaveLinks( bool bFlag )
 {
-    getIDocumentSettingAccess()->set(IDocumentSettingAccess::GLOBAL_DOCUMENT_SAVE_LINKS, bFlag);
+    getIDocumentSettingAccess()->set(DocumentSettingId::GLOBAL_DOCUMENT_SAVE_LINKS, bFlag);
     if( !GetDoc()->getIDocumentState().IsModified() )   // Bug 57028
     {
         GetDoc()->GetIDocumentUndoRedo().SetUndoNoResetModified();
@@ -48,14 +48,14 @@ void SwEditShell::SetGlblDocSaveLinks( bool bFlag )
 
 bool SwEditShell::IsGlblDocSaveLinks() const
 {
-    return getIDocumentSettingAccess()->get(IDocumentSettingAccess::GLOBAL_DOCUMENT_SAVE_LINKS);
+    return getIDocumentSettingAccess()->get(DocumentSettingId::GLOBAL_DOCUMENT_SAVE_LINKS);
 }
 
 sal_uInt16 SwEditShell::GetGlobalDocContent( SwGlblDocContents& rArr ) const
 {
     rArr.DeleteAndDestroyAll();
 
-    if( !getIDocumentSettingAccess()->get(IDocumentSettingAccess::GLOBAL_DOCUMENT) )
+    if( !getIDocumentSettingAccess()->get(DocumentSettingId::GLOBAL_DOCUMENT) )
         return 0;
 
     // then all linked areas on the topmost level
@@ -138,7 +138,7 @@ sal_uInt16 SwEditShell::GetGlobalDocContent( SwGlblDocContents& rArr ) const
 bool SwEditShell::InsertGlobalDocContent( const SwGlblDocContent& rInsPos,
         SwSectionData & rNew)
 {
-    if( !getIDocumentSettingAccess()->get(IDocumentSettingAccess::GLOBAL_DOCUMENT) )
+    if( !getIDocumentSettingAccess()->get(DocumentSettingId::GLOBAL_DOCUMENT) )
         return false;
 
     SET_CURR_SHELL( this );
@@ -179,7 +179,7 @@ bool SwEditShell::InsertGlobalDocContent( const SwGlblDocContent& rInsPos,
 bool SwEditShell::InsertGlobalDocContent( const SwGlblDocContent& rInsPos,
                                             const SwTOXBase& rTOX )
 {
-    if( !getIDocumentSettingAccess()->get(IDocumentSettingAccess::GLOBAL_DOCUMENT) )
+    if( !getIDocumentSettingAccess()->get(DocumentSettingId::GLOBAL_DOCUMENT) )
         return false;
 
     SET_CURR_SHELL( this );
@@ -219,7 +219,7 @@ bool SwEditShell::InsertGlobalDocContent( const SwGlblDocContent& rInsPos,
 
 bool SwEditShell::InsertGlobalDocContent( const SwGlblDocContent& rInsPos )
 {
-    if( !getIDocumentSettingAccess()->get(IDocumentSettingAccess::GLOBAL_DOCUMENT) )
+    if( !getIDocumentSettingAccess()->get(DocumentSettingId::GLOBAL_DOCUMENT) )
         return false;
 
     SET_CURR_SHELL( this );
@@ -242,7 +242,7 @@ bool SwEditShell::InsertGlobalDocContent( const SwGlblDocContent& rInsPos )
 bool SwEditShell::DeleteGlobalDocContent( const SwGlblDocContents& rArr ,
                                             size_t nDelPos )
 {
-    if( !getIDocumentSettingAccess()->get(IDocumentSettingAccess::GLOBAL_DOCUMENT) )
+    if( !getIDocumentSettingAccess()->get(DocumentSettingId::GLOBAL_DOCUMENT) )
         return false;
 
     SET_CURR_SHELL( this );
@@ -308,7 +308,7 @@ bool SwEditShell::MoveGlobalDocContent( const SwGlblDocContents& rArr ,
                                         size_t nFromPos, size_t nToPos,
                                         size_t nInsPos )
 {
-    if( !getIDocumentSettingAccess()->get(IDocumentSettingAccess::GLOBAL_DOCUMENT) ||
+    if( !getIDocumentSettingAccess()->get(DocumentSettingId::GLOBAL_DOCUMENT) ||
         nFromPos >= rArr.size() || nToPos > rArr.size() ||
         nInsPos > rArr.size() || nFromPos >= nToPos ||
         ( nFromPos <= nInsPos && nInsPos <= nToPos ) )
@@ -343,7 +343,7 @@ bool SwEditShell::MoveGlobalDocContent( const SwGlblDocContents& rArr ,
 
 bool SwEditShell::GotoGlobalDocContent( const SwGlblDocContent& rPos )
 {
-    if( !getIDocumentSettingAccess()->get(IDocumentSettingAccess::GLOBAL_DOCUMENT) )
+    if( !getIDocumentSettingAccess()->get(DocumentSettingId::GLOBAL_DOCUMENT) )
         return false;
 
     SET_CURR_SHELL( this );

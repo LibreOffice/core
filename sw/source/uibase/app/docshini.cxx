@@ -109,7 +109,7 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
         if ( bWeb )
             bHTMLTemplSet = SetHTMLTemplate( *GetDoc() );// Styles from HTML.vor
         else if( ISA( SwGlobalDocShell ) )
-            GetDoc()->getIDocumentSettingAccess().set(IDocumentSettingAccess::GLOBAL_DOCUMENT, true);       // Globaldokument
+            GetDoc()->getIDocumentSettingAccess().set(DocumentSettingId::GLOBAL_DOCUMENT, true);       // Globaldokument
 
         if ( GetCreateMode() ==  SFX_CREATE_MODE_EMBEDDED )
             SwTransferable::InitOle( this, *mpDoc );
@@ -128,7 +128,7 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
                 mpDoc->getIDocumentSettingAccess().setForbiddenCharacters( eLang, aForbidden);
             }
         }
-        mpDoc->getIDocumentSettingAccess().set(IDocumentSettingAccess::KERN_ASIAN_PUNCTUATION,
+        mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::KERN_ASIAN_PUNCTUATION,
                   !aAsian.IsKerningWesternTextOnly());
         mpDoc->getIDocumentSettingAccess().setCharacterCompressionType(static_cast<SwCharCompressType>(aAsian.GetCharDistanceCompression()));
         mpDoc->getIDocumentDeviceAccess().setPrintData(*SW_MOD()->GetPrtOptions(bWeb));
@@ -293,7 +293,7 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
         // the default for documents created via 'File/New' should be 'on'
         // (old documents, where this property was not yet implemented, will get the
         // value 'false' in the SwDoc c-tor)
-        mpDoc->getIDocumentSettingAccess().set( IDocumentSettingAccess::MATH_BASELINE_ALIGNMENT,
+        mpDoc->getIDocumentSettingAccess().set( DocumentSettingId::MATH_BASELINE_ALIGNMENT,
                 SW_MOD()->GetUsrPref( bWeb )->IsAlignMathObjectsToBaseline() );
     }
 
@@ -406,7 +406,7 @@ void SwDocShell::AddLink()
         SwDocFac aFactory;
         mpDoc = aFactory.GetDoc();
         mpDoc->acquire();
-        mpDoc->getIDocumentSettingAccess().set(IDocumentSettingAccess::HTML_MODE, ISA(SwWebDocShell) );
+        mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::HTML_MODE, ISA(SwWebDocShell) );
     }
     else
         mpDoc->acquire();
@@ -535,13 +535,13 @@ bool  SwDocShell::Load( SfxMedium& rMedium )
                         // by this formats.
                         if( ISA( SwWebDocShell ) )
                         {
-                            if( !mpDoc->getIDocumentSettingAccess().get(IDocumentSettingAccess::HTML_MODE) )
-                                mpDoc->getIDocumentSettingAccess().set(IDocumentSettingAccess::HTML_MODE, true);
+                            if( !mpDoc->getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE) )
+                                mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::HTML_MODE, true);
                         }
                         if( ISA( SwGlobalDocShell ) )
                         {
-                            if( !mpDoc->getIDocumentSettingAccess().get(IDocumentSettingAccess::GLOBAL_DOCUMENT) )
-                                mpDoc->getIDocumentSettingAccess().set(IDocumentSettingAccess::GLOBAL_DOCUMENT, true);
+                            if( !mpDoc->getIDocumentSettingAccess().get(DocumentSettingId::GLOBAL_DOCUMENT) )
+                                mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::GLOBAL_DOCUMENT, true);
                         }
                     }
                 }

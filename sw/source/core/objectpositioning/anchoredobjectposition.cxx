@@ -119,7 +119,7 @@ void SwAnchoredObjectPosition::_GetInfoAboutObj()
     // - it doesn't follow the text flow
     {
         mbDoNotCaptureAnchoredObj = !mbIsObjFly && !mbFollowTextFlow &&
-                                    mpFrmFmt->getIDocumentSettingAccess()->get(IDocumentSettingAccess::DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE);
+                                    mpFrmFmt->getIDocumentSettingAccess()->get(DocumentSettingId::DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE);
     }
 }
 
@@ -409,7 +409,7 @@ SwTwips SwAnchoredObjectPosition::_ImplAdjustVertRelPos( const SwTwips nTopOfAnc
     {
         // #i26945# - no extension of restricted area, if
         // object's attribute follow text flow is set and its inside a table
-        if ( GetFrmFmt().getIDocumentSettingAccess()->get(IDocumentSettingAccess::CONSIDER_WRAP_ON_OBJECT_POSITION) &&
+        if ( GetFrmFmt().getIDocumentSettingAccess()->get(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION) &&
              ( !bFollowTextFlow ||
                !GetAnchoredObj().GetAnchorFrm()->IsInTab() ) )
         {

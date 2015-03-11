@@ -854,7 +854,7 @@ bool SwOLEObj::UnloadObject( uno::Reference< embed::XEmbeddedObject > xObj, cons
         SfxObjectShell* p = pDoc->GetPersist();
         if( p )
         {
-            if( pDoc->GetDocumentSettingManager().get(IDocumentSettingAccess::PURGE_OLE) )
+            if( pDoc->GetDocumentSettingManager().get(DocumentSettingId::PURGE_OLE) )
             {
                 try
                 {

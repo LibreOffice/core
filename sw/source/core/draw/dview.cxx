@@ -843,7 +843,7 @@ void SwDrawView::CheckPossibilities()
                             SwDoc* pDoc = Imp().GetShell()->GetDoc();
                             const bool bProtectMathPos = SotExchange::IsMath( xObj->getClassID() )
                                     && FLY_AS_CHAR == pFly->GetFmt()->GetAnchor().GetAnchorId()
-                                    && pDoc->GetDocumentSettingManager().get( IDocumentSettingAccess::MATH_BASELINE_ALIGNMENT );
+                                    && pDoc->GetDocumentSettingManager().get( DocumentSettingId::MATH_BASELINE_ALIGNMENT );
                             if (bProtectMathPos)
                                 bMoveProtect = true;
                         }

@@ -165,7 +165,7 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
                     SfxTemplateItem aItem(nWhich, aName);
 
                     sal_uInt16 nMask = 0;
-                    if( mpDoc->getIDocumentSettingAccess().get(IDocumentSettingAccess::HTML_MODE) )
+                    if( mpDoc->getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE) )
                         nMask = SWSTYLEBIT_HTML;
                     else
                     {
@@ -191,7 +191,7 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
 
             case SID_STYLE_FAMILY3:
 
-                if( mpDoc->getIDocumentSettingAccess().get(IDocumentSettingAccess::HTML_MODE) )
+                if( mpDoc->getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE) )
                     rSet.DisableItem( nWhich );
                 else
                 {
@@ -207,7 +207,7 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
             case SID_STYLE_FAMILY4:
             {
                 SvxHtmlOptions& rHtmlOpt = SvxHtmlOptions::Get();
-                if( mpDoc->getIDocumentSettingAccess().get(IDocumentSettingAccess::HTML_MODE) && !rHtmlOpt.IsPrintLayoutExtension())
+                if( mpDoc->getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE) && !rHtmlOpt.IsPrintLayoutExtension())
                     rSet.DisableItem( nWhich );
                 else
                 {

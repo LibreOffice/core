@@ -1117,7 +1117,7 @@ SwLinePortion *SwTxtFormatter::WhichFirstPortion(SwTxtFormatInfo &rInf)
         // 10. Decimal tab portion at the beginning of each line in table cells
         if ( !pPor && !pCurr->GetPortion() &&
              GetTxtFrm()->IsInTab() &&
-             GetTxtFrm()->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::TAB_COMPAT) )
+             GetTxtFrm()->GetTxtNode()->getIDocumentSettingAccess()->get(DocumentSettingId::TAB_COMPAT) )
         {
             pPor = NewTabPortion( rInf, true );
         }
@@ -1346,7 +1346,7 @@ SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
                     // We have a decimal tab portion in the line and the next character has to be
                     // aligned at the tab stop position. We store the width from the beginning of
                     // the tab stop portion up to the portion containint the decimal separator:
-                  if ( GetTxtFrm()->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::TAB_COMPAT) /*rInf.GetVsh()->IsTabCompat();*/ &&
+                  if ( GetTxtFrm()->GetTxtNode()->getIDocumentSettingAccess()->get(DocumentSettingId::TAB_COMPAT) /*rInf.GetVsh()->IsTabCompat();*/ &&
                          POR_TABDECIMAL == pLastTabPortion->GetWhichPor() )
                     {
                         OSL_ENSURE( rInf.X() >= pLastTabPortion->Fix(), "Decimal tab stop position cannot be calculated" );
@@ -1616,7 +1616,7 @@ sal_Int32 SwTxtFormatter::FormatLine(const sal_Int32 nStartPos)
     // In case of compat mode, it's possible that a tab portion is wider after
     // formatting than before. If this is the case, we also have to make sure
     // the SwLineLayout is wider as well.
-    if (GetInfo().GetTxtFrm()->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::TAB_OVER_MARGIN))
+    if (GetInfo().GetTxtFrm()->GetTxtNode()->getIDocumentSettingAccess()->get(DocumentSettingId::TAB_OVER_MARGIN))
     {
         sal_uInt16 nSum = 0;
         SwLinePortion* pPor = pCurr->GetFirstPortion();
@@ -1747,7 +1747,7 @@ void SwTxtFormatter::CalcRealHeight( bool bNewLine )
                     // shrink first line of paragraph too on spacing < 100%
                     if (IsParaLine() &&
                         pSpace->GetInterLineSpaceRule() == SVX_INTER_LINE_SPACE_PROP
-                        && GetTxtFrm()->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::PROP_LINE_SPACING_SHRINKS_FIRST_LINE))
+                        && GetTxtFrm()->GetTxtNode()->getIDocumentSettingAccess()->get(DocumentSettingId::PROP_LINE_SPACING_SHRINKS_FIRST_LINE))
                     {
                         long nTmp = pSpace->GetPropLineSpace();
                         // Word will render < 50% too but it's just not readable

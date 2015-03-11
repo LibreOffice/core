@@ -258,7 +258,7 @@ void SwWW8ImplReader::SetDocumentGrid(SwFrmFmt &rFmt, const wwSection &rSection)
     // seem to not add external leading in word, or the character would run across
     // two line in some cases.
     if (eType != GRID_NONE)
-        rDoc.getIDocumentSettingAccess().set(IDocumentSettingAccess::ADD_EXT_LEADING, false);
+        rDoc.getIDocumentSettingAccess().set(DocumentSettingId::ADD_EXT_LEADING, false);
 
     //force to set document as standard page mode
     bool bSquaredMode = false;

@@ -2433,13 +2433,13 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                 pTmpSet = new SfxItemSet( rNode.GetSwAttrSet() );
                 SvxULSpaceItem aUL( *static_cast<const SvxULSpaceItem*>(pItem) );
                 // #i25901#- consider compatibility option
-                if (!pDoc->getIDocumentSettingAccess().get(IDocumentSettingAccess::PARA_SPACE_MAX_AT_PAGES))
+                if (!pDoc->getIDocumentSettingAccess().get(DocumentSettingId::PARA_SPACE_MAX_AT_PAGES))
                 {
                     if( !(ND_HAS_PREV_LAYNODE & nPrvNxtNd ))
                         aUL.SetUpper( 0 );
                 }
                 // #i25901# - consider compatibility option
-                if (!pDoc->getIDocumentSettingAccess().get(IDocumentSettingAccess::ADD_PARA_SPACING_TO_TABLE_CELLS))
+                if (!pDoc->getIDocumentSettingAccess().get(DocumentSettingId::ADD_PARA_SPACING_TO_TABLE_CELLS))
                 {
                     if( !(ND_HAS_NEXT_LAYNODE & nPrvNxtNd ))
                         aUL.SetLower( 0 );

@@ -326,8 +326,8 @@ static void WriteDop( WW8Export& rWrt )
     rDop.SetCompatibilityOptions( rWrt.pDoc->getIDocumentSettingAccess().Getn32DummyCompatibilityOptions1());
     rDop.SetCompatibilityOptions2( rWrt.pDoc->getIDocumentSettingAccess().Getn32DummyCompatibilityOptions2());
 
-    rDop.fNoLeading = !rWrt.pDoc->getIDocumentSettingAccess().get(IDocumentSettingAccess::ADD_EXT_LEADING);
-    rDop.fUsePrinterMetrics = !rWrt.pDoc->getIDocumentSettingAccess().get(IDocumentSettingAccess::USE_VIRTUAL_DEVICE);
+    rDop.fNoLeading = !rWrt.pDoc->getIDocumentSettingAccess().get(DocumentSettingId::ADD_EXT_LEADING);
+    rDop.fUsePrinterMetrics = !rWrt.pDoc->getIDocumentSettingAccess().get(DocumentSettingId::USE_VIRTUAL_DEVICE);
 
     // write default TabStop
     const SvxTabStopItem& rTabStop =
@@ -411,9 +411,9 @@ static void WriteDop( WW8Export& rWrt )
     rDop.cParasFtnEdn   = rDStat.nPara;
     rDop.cLinesFtnEdn   = rDStat.nPara;
 
-    rDop.fDontUseHTMLAutoSpacing = rWrt.pDoc->getIDocumentSettingAccess().get(IDocumentSettingAccess::PARA_SPACE_MAX);
+    rDop.fDontUseHTMLAutoSpacing = rWrt.pDoc->getIDocumentSettingAccess().get(DocumentSettingId::PARA_SPACE_MAX);
 
-    rDop.fExpShRtn = !rWrt.pDoc->getIDocumentSettingAccess().get(IDocumentSettingAccess::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK); // #i56856#
+    rDop.fExpShRtn = !rWrt.pDoc->getIDocumentSettingAccess().get(DocumentSettingId::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK); // #i56856#
 
     rDop.Write( *rWrt.pTableStrm, *rWrt.pFib );
 }
@@ -635,7 +635,7 @@ void WW8Export::ExportDopTypography(WW8DopTypography &rTypo)
 
     const IDocumentSettingAccess* pIDocumentSettingAccess = GetWriter().getIDocumentSettingAccess();
 
-    rTypo.fKerningPunct = sal_uInt16(pIDocumentSettingAccess->get(IDocumentSettingAccess::KERN_ASIAN_PUNCTUATION));
+    rTypo.fKerningPunct = sal_uInt16(pIDocumentSettingAccess->get(DocumentSettingId::KERN_ASIAN_PUNCTUATION));
     rTypo.iJustification = pDoc->getIDocumentSettingAccess().getCharacterCompressionType();
 }
 

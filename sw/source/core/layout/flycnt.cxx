@@ -1313,7 +1313,7 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
     GetFmt()->GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
 
     if( pCnt != GetAnchorFrm() || ( IsAutoPos() && pCnt->IsTxtFrm() &&
-                                  GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::HTML_MODE)) )
+                                  GetFmt()->getIDocumentSettingAccess()->get(DocumentSettingId::HTML_MODE)) )
     {
         //Set the anchor attribute according to the new Cnt.
         SwFmtAnchor aAnch( pFmt->GetAnchor() );

@@ -407,7 +407,7 @@ SwLinePortion *SwTxtFormatter::NewExtraPortion( SwTxtFormatInfo &rInf )
 static void checkApplyParagraphMarkFormatToNumbering( SwFont* pNumFnt, SwTxtFormatInfo& rInf, const IDocumentSettingAccess* pIDSA )
 {
     SwTxtNode* node = rInf.GetTxtFrm()->GetTxtNode();
-    if( !pIDSA->get(IDocumentSettingAccess::APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING ))
+    if( !pIDSA->get(DocumentSettingId::APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING ))
         return;
     if( SwpHints* hints = node->GetpSwpHints())
     {
@@ -509,7 +509,7 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
                 pNumFnt = new SwFont( &rInf.GetCharAttr(), pIDSA );
 
                 // #i53199#
-                if ( !pIDSA->get(IDocumentSettingAccess::DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT) )
+                if ( !pIDSA->get(DocumentSettingId::DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT) )
                 {
                     // i18463:
                     // Underline style of paragraph font should not be considered
@@ -573,7 +573,7 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
                     pNumFnt = new SwFont( &rInf.GetCharAttr(), pIDSA );
 
                     // #i53199#
-                    if ( !pIDSA->get(IDocumentSettingAccess::DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT) )
+                    if ( !pIDSA->get(DocumentSettingId::DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT) )
                     {
                         // i18463:
                         // Underline style of paragraph font should not be considered

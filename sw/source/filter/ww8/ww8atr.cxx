@@ -5185,7 +5185,7 @@ static void ParaTabStopDelAdd( WW8Export& rWrt,
 
 void WW8AttributeOutput::ParaTabStop( const SvxTabStopItem& rTabStops )
 {
-    const bool bTabsRelativeToIndex = m_rWW8Export.pCurPam->GetDoc()->getIDocumentSettingAccess().get( IDocumentSettingAccess::TABS_RELATIVE_TO_INDENT );
+    const bool bTabsRelativeToIndex = m_rWW8Export.pCurPam->GetDoc()->getIDocumentSettingAccess().get( DocumentSettingId::TABS_RELATIVE_TO_INDENT );
 
     long nCurrentLeft = 0;
     if ( bTabsRelativeToIndex )

@@ -2292,8 +2292,8 @@ void SwHTMLWriter::OutCSS1_FrmFmtBackground( const SwFrmFmt& rFrmFmt )
         // The background color is normally only used in Browse-Mode.
         // We always use it for a HTML document, but for a text document
         // only if viewed in Browse-Mode.
-        if( pDoc->getIDocumentSettingAccess().get(IDocumentSettingAccess::HTML_MODE) ||
-            pDoc->getIDocumentSettingAccess().get(IDocumentSettingAccess::BROWSE_MODE))
+        if( pDoc->getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE) ||
+            pDoc->getIDocumentSettingAccess().get(DocumentSettingId::BROWSE_MODE))
         {
             SwViewShell *pVSh = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
             if ( pVSh &&

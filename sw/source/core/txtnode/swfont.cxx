@@ -625,7 +625,7 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
             if( static_cast<const SvxAutoKernItem*>(pItem)->GetValue() )
             {
                 SetAutoKern( ( !pIDocumentSettingAccess ||
-                               !pIDocumentSettingAccess->get(IDocumentSettingAccess::KERN_ASIAN_PUNCTUATION) ) ?
+                               !pIDocumentSettingAccess->get(DocumentSettingId::KERN_ASIAN_PUNCTUATION) ) ?
                                 KERNING_FONTSPECIFIC :
                                 KERNING_ASIAN );
             }
@@ -825,7 +825,7 @@ SwFont::SwFont( const SwAttrSet* pAttrSet,
     if( pAttrSet->GetAutoKern().GetValue() )
     {
         SetAutoKern( ( !pIDocumentSettingAccess ||
-                       !pIDocumentSettingAccess->get(IDocumentSettingAccess::KERN_ASIAN_PUNCTUATION) ) ?
+                       !pIDocumentSettingAccess->get(DocumentSettingId::KERN_ASIAN_PUNCTUATION) ) ?
                         KERNING_FONTSPECIFIC :
                         KERNING_ASIAN );
     }
@@ -894,7 +894,7 @@ SwFont::SwFont( const SwAttrSet* pAttrSet,
         SetVertical( pAttrSet->GetCharRotate().GetValue() );
     else
         SetVertical( 0 );
-    if( pIDocumentSettingAccess && pIDocumentSettingAccess->get( IDocumentSettingAccess::SMALL_CAPS_PERCENTAGE_66 ))
+    if( pIDocumentSettingAccess && pIDocumentSettingAccess->get( DocumentSettingId::SMALL_CAPS_PERCENTAGE_66 ))
     {
         aSub[ SW_LATIN ].smallCapsPercentage66 = true;
         aSub[ SW_CJK ].smallCapsPercentage66 = true;

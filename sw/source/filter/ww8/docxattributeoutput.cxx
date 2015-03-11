@@ -5693,7 +5693,7 @@ void DocxAttributeOutput::FontPitchType( FontPitch ePitch ) const
 
 void DocxAttributeOutput::EmbedFont( const OUString& name, FontFamily family, FontPitch pitch, rtl_TextEncoding encoding )
 {
-    if( !m_rExport.pDoc->getIDocumentSettingAccess().get( IDocumentSettingAccess::EMBED_FONTS ))
+    if( !m_rExport.pDoc->getIDocumentSettingAccess().get( DocumentSettingId::EMBED_FONTS ))
         return; // no font embedding with this document
     EmbedFontStyle( name, XML_embedRegular, family, ITALIC_NONE, WEIGHT_NORMAL, pitch, encoding );
     EmbedFontStyle( name, XML_embedBold, family, ITALIC_NONE, WEIGHT_BOLD, pitch, encoding );

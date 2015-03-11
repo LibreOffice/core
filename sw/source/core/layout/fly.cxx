@@ -1583,7 +1583,7 @@ void CalcCntnt( SwLayoutFrm *pLay,
 
                 // OD 2004-05-17 #i28701# - format anchor frame after its objects
                 // are formatted, if the wrapping style influence has to be considered.
-                if ( pLay->GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::CONSIDER_WRAP_ON_OBJECT_POSITION) )
+                if ( pLay->GetFmt()->getIDocumentSettingAccess()->get(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION) )
                 {
                     pFrm->Calc();
                 }

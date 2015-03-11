@@ -515,7 +515,7 @@ bool SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef& xRef, SwFlyFrmFm
     SwFlyFrmFmt *pFmt = SwFEShell::InsertObject( xRef, &aFrmMgr.GetAttrSet() );
 
     // --> #i972#
-    if ( bStarMath && mpDoc->getIDocumentSettingAccess().get( IDocumentSettingAccess::MATH_BASELINE_ALIGNMENT ) )
+    if ( bStarMath && mpDoc->getIDocumentSettingAccess().get( DocumentSettingId::MATH_BASELINE_ALIGNMENT ) )
         AlignFormulaToBaseline( xRef.GetObject() );
 
     if (pFlyFrmFmt)

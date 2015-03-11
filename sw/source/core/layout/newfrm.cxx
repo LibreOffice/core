@@ -556,7 +556,7 @@ void SwRootFrm::Init( SwFrmFmt* pFmt )
     ::_InsertCnt( pLay, pDoc, aTmp.GetIndex(), true );
     //Remove masters that haven't been replaced yet from the list.
     RemoveMasterObjs( pDrawPage );
-    if( pSettingAccess->get(IDocumentSettingAccess::GLOBAL_DOCUMENT) )
+    if( pSettingAccess->get(DocumentSettingId::GLOBAL_DOCUMENT) )
         pFieldsAccess->UpdateRefFlds( NULL );
     //b6433357: Update page fields after loading
     if ( !pCurrShell || !pCurrShell->Imp()->IsUpdateExpFlds() )

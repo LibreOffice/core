@@ -1872,12 +1872,12 @@ void SwWW8ImplReader::ImportDop()
 
     // The distance between two paragraphs is the sum of the bottom distance of
     // the first paragraph and the top distance of the second one
-    rDoc.getIDocumentSettingAccess().set(IDocumentSettingAccess::PARA_SPACE_MAX, pWDop->fDontUseHTMLAutoSpacing);
-    rDoc.getIDocumentSettingAccess().set(IDocumentSettingAccess::PARA_SPACE_MAX_AT_PAGES, true );
+    rDoc.getIDocumentSettingAccess().set(DocumentSettingId::PARA_SPACE_MAX, pWDop->fDontUseHTMLAutoSpacing);
+    rDoc.getIDocumentSettingAccess().set(DocumentSettingId::PARA_SPACE_MAX_AT_PAGES, true );
     // move tabs on alignment
-    rDoc.getIDocumentSettingAccess().set(IDocumentSettingAccess::TAB_COMPAT, true);
+    rDoc.getIDocumentSettingAccess().set(DocumentSettingId::TAB_COMPAT, true);
     // #i24363# tab stops relative to indent
-    rDoc.getIDocumentSettingAccess().set(IDocumentSettingAccess::TABS_RELATIVE_TO_INDENT, false);
+    rDoc.getIDocumentSettingAccess().set(DocumentSettingId::TABS_RELATIVE_TO_INDENT, false);
 
     // Import Default Tabs
     long nDefTabSiz = pWDop->dxaTab;
@@ -1915,42 +1915,42 @@ void SwWW8ImplReader::ImportDop()
         xViewDataSupplier->setViewData(xIndexAccess);
     }
 
-    rDoc.getIDocumentSettingAccess().set(IDocumentSettingAccess::USE_VIRTUAL_DEVICE, !pWDop->fUsePrinterMetrics);
-    rDoc.getIDocumentSettingAccess().set(IDocumentSettingAccess::USE_HIRES_VIRTUAL_DEVICE, true);
-    rDoc.getIDocumentSettingAccess().set(IDocumentSettingAccess::ADD_FLY_OFFSETS, true );
-    rDoc.getIDocumentSettingAccess().set(IDocumentSettingAccess::ADD_EXT_LEADING, !pWDop->fNoLeading);
-    rDoc.getIDocumentSettingAccess().set(IDocumentSettingAccess::OLD_NUMBERING, false);
-    rDoc.getIDocumentSettingAccess().set(IDocumentSettingAccess::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING, false); // #i47448#
-    rDoc.getIDocumentSettingAccess().set(IDocumentSettingAccess::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK, !pWDop->fExpShRtn); // #i49277#, #i56856#
-    rDoc.getIDocumentSettingAccess().set(IDocumentSettingAccess::DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT, false);  // #i53199#
-    rDoc.getIDocumentSettingAccess().set(IDocumentSettingAccess::OLD_LINE_SPACING, false);
+    rDoc.getIDocumentSettingAccess().set(DocumentSettingId::USE_VIRTUAL_DEVICE, !pWDop->fUsePrinterMetrics);
+    rDoc.getIDocumentSettingAccess().set(DocumentSettingId::USE_HIRES_VIRTUAL_DEVICE, true);
+    rDoc.getIDocumentSettingAccess().set(DocumentSettingId::ADD_FLY_OFFSETS, true );
+    rDoc.getIDocumentSettingAccess().set(DocumentSettingId::ADD_EXT_LEADING, !pWDop->fNoLeading);
+    rDoc.getIDocumentSettingAccess().set(DocumentSettingId::OLD_NUMBERING, false);
+    rDoc.getIDocumentSettingAccess().set(DocumentSettingId::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING, false); // #i47448#
+    rDoc.getIDocumentSettingAccess().set(DocumentSettingId::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK, !pWDop->fExpShRtn); // #i49277#, #i56856#
+    rDoc.getIDocumentSettingAccess().set(DocumentSettingId::DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT, false);  // #i53199#
+    rDoc.getIDocumentSettingAccess().set(DocumentSettingId::OLD_LINE_SPACING, false);
 
     // #i25901# - set new compatibility option
     //      'Add paragraph and table spacing at bottom of table cells'
-    rDoc.getIDocumentSettingAccess().set(IDocumentSettingAccess::ADD_PARA_SPACING_TO_TABLE_CELLS, true);
+    rDoc.getIDocumentSettingAccess().set(DocumentSettingId::ADD_PARA_SPACING_TO_TABLE_CELLS, true);
 
     // #i11860# - set new compatibility option
     //      'Use former object positioning' to <false>
-    rDoc.getIDocumentSettingAccess().set(IDocumentSettingAccess::USE_FORMER_OBJECT_POS, false);
+    rDoc.getIDocumentSettingAccess().set(DocumentSettingId::USE_FORMER_OBJECT_POS, false);
 
     // #i27767# - set new compatibility option
     //      'Conder Wrapping mode when positioning object' to <true>
-    rDoc.getIDocumentSettingAccess().set(IDocumentSettingAccess::CONSIDER_WRAP_ON_OBJECT_POSITION, true);
+    rDoc.getIDocumentSettingAccess().set(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION, true);
 
-    rDoc.getIDocumentSettingAccess().set(IDocumentSettingAccess::USE_FORMER_TEXT_WRAPPING, false); // #i13832#, #i24135#
+    rDoc.getIDocumentSettingAccess().set(DocumentSettingId::USE_FORMER_TEXT_WRAPPING, false); // #i13832#, #i24135#
 
-    rDoc.getIDocumentSettingAccess().set(IDocumentSettingAccess::TABLE_ROW_KEEP, true); //SetTableRowKeep( true );
+    rDoc.getIDocumentSettingAccess().set(DocumentSettingId::TABLE_ROW_KEEP, true); //SetTableRowKeep( true );
 
-    rDoc.getIDocumentSettingAccess().set(IDocumentSettingAccess::IGNORE_TABS_AND_BLANKS_FOR_LINE_CALCULATION, true); // #i3952#
+    rDoc.getIDocumentSettingAccess().set(DocumentSettingId::IGNORE_TABS_AND_BLANKS_FOR_LINE_CALCULATION, true); // #i3952#
 
-    rDoc.getIDocumentSettingAccess().set(IDocumentSettingAccess::INVERT_BORDER_SPACING, true);
-    rDoc.getIDocumentSettingAccess().set(IDocumentSettingAccess::COLLAPSE_EMPTY_CELL_PARA, true);
-    rDoc.getIDocumentSettingAccess().set(IDocumentSettingAccess::TAB_OVERFLOW, true);
-    rDoc.getIDocumentSettingAccess().set(IDocumentSettingAccess::UNBREAKABLE_NUMBERINGS, true);
-    rDoc.getIDocumentSettingAccess().set(IDocumentSettingAccess::CLIPPED_PICTURES, true);
-    rDoc.getIDocumentSettingAccess().set(IDocumentSettingAccess::TAB_OVER_MARGIN, true);
-    rDoc.getIDocumentSettingAccess().set(IDocumentSettingAccess::SURROUND_TEXT_WRAP_SMALL, true);
-    rDoc.getIDocumentSettingAccess().set(IDocumentSettingAccess::PROP_LINE_SPACING_SHRINKS_FIRST_LINE, true);
+    rDoc.getIDocumentSettingAccess().set(DocumentSettingId::INVERT_BORDER_SPACING, true);
+    rDoc.getIDocumentSettingAccess().set(DocumentSettingId::COLLAPSE_EMPTY_CELL_PARA, true);
+    rDoc.getIDocumentSettingAccess().set(DocumentSettingId::TAB_OVERFLOW, true);
+    rDoc.getIDocumentSettingAccess().set(DocumentSettingId::UNBREAKABLE_NUMBERINGS, true);
+    rDoc.getIDocumentSettingAccess().set(DocumentSettingId::CLIPPED_PICTURES, true);
+    rDoc.getIDocumentSettingAccess().set(DocumentSettingId::TAB_OVER_MARGIN, true);
+    rDoc.getIDocumentSettingAccess().set(DocumentSettingId::SURROUND_TEXT_WRAP_SMALL, true);
+    rDoc.getIDocumentSettingAccess().set(DocumentSettingId::PROP_LINE_SPACING_SHRINKS_FIRST_LINE, true);
 
     // COMPATIBILITY FLAGS END
 
@@ -1988,7 +1988,7 @@ void SwWW8ImplReader::ImportDop()
 
     const SvtFilterOptions& rOpt = SvtFilterOptions::Get();
     if (rOpt.IsUseEnhancedFields())
-        rDoc.getIDocumentSettingAccess().set(IDocumentSettingAccess::PROTECT_FORM, pWDop->fProtEnabled );
+        rDoc.getIDocumentSettingAccess().set(DocumentSettingId::PROTECT_FORM, pWDop->fProtEnabled );
 }
 
 void SwWW8ImplReader::ImportDopTypography(const WW8DopTypography &rTypo)
@@ -2025,7 +2025,7 @@ void SwWW8ImplReader::ImportDopTypography(const WW8DopTypography &rTypo)
         rDoc.getIDocumentSettingAccess().setForbiddenCharacters(LANGUAGE_JAPANESE,aForbidden);
     }
 
-    rDoc.getIDocumentSettingAccess().set(IDocumentSettingAccess::KERN_ASIAN_PUNCTUATION, rTypo.fKerningPunct);
+    rDoc.getIDocumentSettingAccess().set(DocumentSettingId::KERN_ASIAN_PUNCTUATION, rTypo.fKerningPunct);
     rDoc.getIDocumentSettingAccess().setCharacterCompressionType(static_cast<SwCharCompressType>(rTypo.iJustification));
 }
 
@@ -4434,7 +4434,7 @@ void wwSectionManager::InsertSegments()
         {
             // here we have the special case that the whole document is protected, with the exception of this section.
             // I want to address this when I do the section rework, so for the moment we disable the overall protection then...
-            mrReader.rDoc.getIDocumentSettingAccess().set(IDocumentSettingAccess::PROTECT_FORM, false );
+            mrReader.rDoc.getIDocumentSettingAccess().set(DocumentSettingId::PROTECT_FORM, false );
         }
 
         if (bInsertPageDesc)

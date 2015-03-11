@@ -2940,7 +2940,7 @@ bool SwTxtNode::GetFirstLineOfsWithNum( short& rFLOffset ) const
             {
                 rFLOffset = rFmt.GetFirstLineOffset();
 
-                if (!getIDocumentSettingAccess()->get(IDocumentSettingAccess::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING))
+                if (!getIDocumentSettingAccess()->get(DocumentSettingId::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING))
                 {
                     SvxLRSpaceItem aItem = GetSwAttrSet().GetLRSpace();
                     rFLOffset = rFLOffset + aItem.GetTxtFirstLineOfst();
@@ -2952,7 +2952,7 @@ bool SwTxtNode::GetFirstLineOfsWithNum( short& rFLOffset ) const
                 {
                     rFLOffset = rFmt.GetFirstLineIndent();
                 }
-                else if (!getIDocumentSettingAccess()->get(IDocumentSettingAccess::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING))
+                else if (!getIDocumentSettingAccess()->get(DocumentSettingId::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING))
                 {
                     SvxLRSpaceItem aItem = GetSwAttrSet().GetLRSpace();
                     rFLOffset = aItem.GetTxtFirstLineOfst();
@@ -2979,7 +2979,7 @@ SwTwips SwTxtNode::GetAdditionalIndentForStartingNewList() const
         {
             nAdditionalIndent = GetSwAttrSet().GetLRSpace().GetLeft();
 
-            if (getIDocumentSettingAccess()->get(IDocumentSettingAccess::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING))
+            if (getIDocumentSettingAccess()->get(DocumentSettingId::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING))
             {
                 nAdditionalIndent = nAdditionalIndent -
                                     GetSwAttrSet().GetLRSpace().GetTxtFirstLineOfst();
@@ -2994,7 +2994,7 @@ SwTwips SwTxtNode::GetAdditionalIndentForStartingNewList() const
             else
             {
                 nAdditionalIndent = GetSwAttrSet().GetLRSpace().GetLeft();
-                if (getIDocumentSettingAccess()->get(IDocumentSettingAccess::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING))
+                if (getIDocumentSettingAccess()->get(DocumentSettingId::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING))
                 {
                     nAdditionalIndent = nAdditionalIndent -
                                         GetSwAttrSet().GetLRSpace().GetTxtFirstLineOfst();
@@ -4230,7 +4230,7 @@ bool SwTxtNode::GetListTabStopPosition( long& nListTabStopPosition ) const
             bListTanStopPositionProvided = true;
             nListTabStopPosition = rFmt.GetListtabPos();
 
-            if ( getIDocumentSettingAccess()->get(IDocumentSettingAccess::TABS_RELATIVE_TO_INDENT) )
+            if ( getIDocumentSettingAccess()->get(DocumentSettingId::TABS_RELATIVE_TO_INDENT) )
             {
                 // tab stop position are treated to be relative to the "before text"
                 // indent value of the paragraph. Thus, adjust <nListTabStopPos>.
@@ -4238,7 +4238,7 @@ bool SwTxtNode::GetListTabStopPosition( long& nListTabStopPosition ) const
                 {
                     nListTabStopPosition -= rFmt.GetIndentAt();
                 }
-                else if (!getIDocumentSettingAccess()->get(IDocumentSettingAccess::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING))
+                else if (!getIDocumentSettingAccess()->get(DocumentSettingId::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING))
                 {
                     SvxLRSpaceItem aItem = GetSwAttrSet().GetLRSpace();
                     nListTabStopPosition -= aItem.GetTxtLeft();

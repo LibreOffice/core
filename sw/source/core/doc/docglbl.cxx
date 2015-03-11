@@ -157,7 +157,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
     // document for every single one and replace linked sections (GlobalDoc) for links (HTML).
     // Finally, we save this document as a GlobalDoc/HTMLDoc.
     if( !mpDocShell || !mpDocShell->GetMedium() ||
-        ( SPLITDOC_TO_GLOBALDOC == eDocType && GetDocumentSettingManager().get(IDocumentSettingAccess::GLOBAL_DOCUMENT) ) )
+        ( SPLITDOC_TO_GLOBALDOC == eDocType && GetDocumentSettingManager().get(DocumentSettingId::GLOBAL_DOCUMENT) ) )
         return false;
 
     sal_uInt16 nOutl = 0;
@@ -487,7 +487,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
     switch( eDocType )
     {
     case SPLITDOC_TO_HTML:
-        if( GetDocumentSettingManager().get(IDocumentSettingAccess::GLOBAL_DOCUMENT) )
+        if( GetDocumentSettingManager().get(DocumentSettingId::GLOBAL_DOCUMENT) )
         {
             // save all remaining sections
             while( !GetSections().empty() )
@@ -500,8 +500,8 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
 
     default:
         // save the Globaldoc
-        GetDocumentSettingManager().set(IDocumentSettingAccess::GLOBAL_DOCUMENT, true);
-        GetDocumentSettingManager().set(IDocumentSettingAccess::GLOBAL_DOCUMENT_SAVE_LINKS, false);
+        GetDocumentSettingManager().set(DocumentSettingId::GLOBAL_DOCUMENT, true);
+        GetDocumentSettingManager().set(DocumentSettingId::GLOBAL_DOCUMENT_SAVE_LINKS, false);
     }
 
     // The medium isn't locked after reopening the document.

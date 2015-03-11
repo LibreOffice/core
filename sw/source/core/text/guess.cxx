@@ -113,7 +113,7 @@ bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
     nLineWidth -= nLeftRightBorderSpace;
 
     const bool bUnbreakableNumberings = rInf.GetTxtFrm()->GetTxtNode()->
-            getIDocumentSettingAccess()->get(IDocumentSettingAccess::UNBREAKABLE_NUMBERINGS);
+            getIDocumentSettingAccess()->get(DocumentSettingId::UNBREAKABLE_NUMBERINGS);
 
     // first check if everything fits to line
     if ( ( long ( nLineWidth ) * 2 > long ( nMaxLen ) * nPorHeight ) ||

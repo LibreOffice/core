@@ -117,7 +117,7 @@ static void lcl_SetDfltBoxAttr( SwFrmFmt& rFmt, sal_uInt8 nId )
     case 3: bBottom = bLeft = bRight = true;        break;
     }
 
-    const bool bHTML = rFmt.getIDocumentSettingAccess()->get(IDocumentSettingAccess::HTML_MODE);
+    const bool bHTML = rFmt.getIDocumentSettingAccess()->get(DocumentSettingId::HTML_MODE);
     Color aCol( bHTML ? COL_GRAY : COL_BLACK );
     SvxBorderLine aLine( &aCol, DEF_LINE_WIDTH_0 );
     if ( bHTML )

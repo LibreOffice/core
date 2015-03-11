@@ -286,7 +286,7 @@ void SwTxtAdjuster::CalcNewBlock( SwLineLayout *pCurrent,
 
     // #i49277#
     const bool bDoNotJustifyLinesWithManualBreak =
-                GetTxtFrm()->GetNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK);
+                GetTxtFrm()->GetNode()->getIDocumentSettingAccess()->get(DocumentSettingId::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK);
 
     SwLinePortion *pPos = pCurrent->GetPortion();
 
@@ -596,7 +596,7 @@ void SwTxtAdjuster::CalcFlyAdjust( SwLineLayout *pCurrent )
 
     // If we only have one line, the text portion is consecutive and we center, then ...
     bool bComplete = 0 == nStart;
-    const bool bTabCompat = GetTxtFrm()->GetNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::TAB_COMPAT);
+    const bool bTabCompat = GetTxtFrm()->GetNode()->getIDocumentSettingAccess()->get(DocumentSettingId::TAB_COMPAT);
     bool bMultiTab = false;
 
     while( pPos )

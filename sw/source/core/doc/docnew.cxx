@@ -331,7 +331,7 @@ SwDoc::SwDoc()
                                   OUTLINE_RULE );
     AddNumRule(mpOutlineRule);
     // Counting of phantoms depends on <IsOldNumbering()>
-    mpOutlineRule->SetCountPhantoms( !GetDocumentSettingManager().get(IDocumentSettingAccess::OLD_NUMBERING) );
+    mpOutlineRule->SetCountPhantoms( !GetDocumentSettingManager().get(DocumentSettingId::OLD_NUMBERING) );
 
     new SwTxtNode(
             SwNodeIndex(GetUndoManager().GetUndoNodes().GetEndOfContent()),
@@ -684,7 +684,7 @@ void SwDoc::ClearDoc()
                                   OUTLINE_RULE );
     AddNumRule(mpOutlineRule);
     // Counting of phantoms depends on <IsOldNumbering()>
-    mpOutlineRule->SetCountPhantoms( !GetDocumentSettingManager().get(IDocumentSettingAccess::OLD_NUMBERING) );
+    mpOutlineRule->SetCountPhantoms( !GetDocumentSettingManager().get(DocumentSettingId::OLD_NUMBERING) );
 
     // remove the dummy pagedesc from the array and delete all the old ones
     sal_uInt16 nDummyPgDsc = 0;

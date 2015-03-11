@@ -820,8 +820,8 @@ bool SwTxtFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
             // This condition is typically for documents imported from the
             // OpenOffice.org file format.
             const IDocumentSettingAccess* pIDSA = pCurrFrm->GetTxtNode()->getIDocumentSettingAccess();
-            if ( (  pIDSA->get(IDocumentSettingAccess::CONSIDER_WRAP_ON_OBJECT_POSITION) ||
-                   !pIDSA->get(IDocumentSettingAccess::USE_FORMER_TEXT_WRAPPING) ) &&
+            if ( (  pIDSA->get(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION) ||
+                   !pIDSA->get(DocumentSettingId::USE_FORMER_TEXT_WRAPPING) ) &&
                  ::FindKontext( pTmp, 0 ) == ::FindKontext( pCurrFrm, 0 ) )
             {
                 return true;
@@ -831,7 +831,7 @@ bool SwTxtFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
             if ( pCurrFrm->GetNext() != pTmp &&
                  ( IsFrmInSameKontext( pTmp, pCurrFrm ) ||
                    // #i13832#, #i24135# wrap around objects in page header
-                   ( !pIDSA->get(IDocumentSettingAccess::USE_FORMER_TEXT_WRAPPING) &&
+                   ( !pIDSA->get(DocumentSettingId::USE_FORMER_TEXT_WRAPPING) &&
                      0 != ( pHeader = pTmp->FindFooterOrHeader() ) &&
                      !pHeader->IsFooterFrm() &&
                      pCurrFrm->IsInDocBody() ) ) )
@@ -874,7 +874,7 @@ SwAnchoredObjList* SwTxtFly::InitAnchoredObjList()
     const bool bFooterHeader = 0 != pCurrFrm->FindFooterOrHeader();
     const IDocumentSettingAccess* pIDSA = pCurrFrm->GetTxtNode()->getIDocumentSettingAccess();
     // #i40155# - check, if frame is marked not to wrap
-    const bool bWrapAllowed = ( pIDSA->get(IDocumentSettingAccess::USE_FORMER_TEXT_WRAPPING) ||
+    const bool bWrapAllowed = ( pIDSA->get(DocumentSettingId::USE_FORMER_TEXT_WRAPPING) ||
                                     ( !pCurrFrm->IsInFtn() && !bFooterHeader ) );
 
     bOn = false;
@@ -887,7 +887,7 @@ SwAnchoredObjList* SwTxtFly::InitAnchoredObjList()
         // #i28701# - consider complete frame area for new
         // text wrapping
         SwRect aRect;
-        if ( pIDSA->get(IDocumentSettingAccess::USE_FORMER_TEXT_WRAPPING) )
+        if ( pIDSA->get(DocumentSettingId::USE_FORMER_TEXT_WRAPPING) )
         {
             aRect = pCurrFrm->Prt();
             aRect += pCurrFrm->Frm().Pos();
@@ -1395,7 +1395,7 @@ SwSurround SwTxtFly::_GetSurroundForTextWrap( const SwAnchoredObject* pAnchoredO
                     nRight = 0;
             }
             const int textMin = GetMaster()->GetNode()
-                ->getIDocumentSettingAccess()->get(IDocumentSettingAccess::SURROUND_TEXT_WRAP_SMALL )
+                ->getIDocumentSettingAccess()->get(DocumentSettingId::SURROUND_TEXT_WRAP_SMALL )
                 ? TEXT_MIN_SMALL : TEXT_MIN;
             if( nLeft < textMin )
                 nLeft = 0;

@@ -796,7 +796,7 @@ sal_uInt16 SwTxtNode::GetScalingOfSelectedText( sal_Int32 nStt, sal_Int32 nEnd )
     else
     {
         // Access via StarONE, there's no need for an existing or active shell
-        if ( getIDocumentSettingAccess()->get(IDocumentSettingAccess::HTML_MODE) )
+        if ( getIDocumentSettingAccess()->get(DocumentSettingId::HTML_MODE) )
             pOut = Application::GetDefaultDevice();
         else
             pOut = getIDocumentDeviceAccess()->getReferenceDevice( true );

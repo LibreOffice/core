@@ -1883,7 +1883,7 @@ void SwRootFrm::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* pVi
         mbSidebarChanged = false;
     }
 
-    if( GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE ) )
+    if( GetFmt()->getIDocumentSettingAccess()->get(DocumentSettingId::BROWSE_MODE ) )
     {
         mnColumns = 1;
         mbBookMode = false;

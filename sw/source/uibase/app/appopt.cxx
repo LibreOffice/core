@@ -396,7 +396,7 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
     if( pAppView )
     {
         SwWrtShell &rWrtSh = pAppView->GetWrtShell();
-        const bool bAlignFormulas = rWrtSh.GetDoc()->getIDocumentSettingAccess().get( IDocumentSettingAccess::MATH_BASELINE_ALIGNMENT );
+        const bool bAlignFormulas = rWrtSh.GetDoc()->getIDocumentSettingAccess().get( DocumentSettingId::MATH_BASELINE_ALIGNMENT );
         pPref->SetAlignMathObjectsToBaseline( bAlignFormulas );
 
         // don't align formulas in documents that are currently loading

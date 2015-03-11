@@ -1727,7 +1727,7 @@ SwTwips SwCntntFrm::GrowFrm( SwTwips nDist, bool bTst, bool bInfo )
             // due to the positioning of its objects ). Thus, invalivate this next frame,
             // if document compatibility option 'Consider wrapping style influence on
             // object positioning' is ON.
-            else if ( GetUpper()->GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::CONSIDER_WRAP_ON_OBJECT_POSITION) )
+            else if ( GetUpper()->GetFmt()->getIDocumentSettingAccess()->get(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION) )
             {
                 InvalidateNextPos();
             }
@@ -1793,7 +1793,7 @@ SwTwips SwCntntFrm::GrowFrm( SwTwips nDist, bool bTst, bool bInfo )
         {
             GetNext()->InvalidatePos();
         }
-        else if ( GetUpper()->GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::CONSIDER_WRAP_ON_OBJECT_POSITION) )
+        else if ( GetUpper()->GetFmt()->getIDocumentSettingAccess()->get(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION) )
         {
             InvalidateNextPos();
         }
@@ -2041,7 +2041,7 @@ void SwCntntFrm::_UpdateAttr( const SfxPoolItem* pOld, const SfxPoolItem* pNew,
                 }
                 // OD 2004-03-17 #i11860#
                 if ( GetIndNext() &&
-                     !GetUpper()->GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::USE_FORMER_OBJECT_POS) )
+                     !GetUpper()->GetFmt()->getIDocumentSettingAccess()->get(DocumentSettingId::USE_FORMER_OBJECT_POS) )
                 {
                     // OD 2004-07-01 #i28701# - use new method <InvalidateObjs(..)>
                     GetIndNext()->InvalidateObjs( true );
@@ -2062,8 +2062,8 @@ void SwCntntFrm::_UpdateAttr( const SfxPoolItem* pOld, const SfxPoolItem* pNew,
             {
                 rInvFlags |= 0x42;
                 const IDocumentSettingAccess* pIDSA = GetUpper()->GetFmt()->getIDocumentSettingAccess();
-                if( pIDSA->get(IDocumentSettingAccess::PARA_SPACE_MAX) ||
-                    pIDSA->get(IDocumentSettingAccess::PARA_SPACE_MAX_AT_PAGES) )
+                if( pIDSA->get(DocumentSettingId::PARA_SPACE_MAX) ||
+                    pIDSA->get(DocumentSettingId::PARA_SPACE_MAX_AT_PAGES) )
                 {
                     rInvFlags |= 0x1;
                     SwFrm* pNxt = FindNext();

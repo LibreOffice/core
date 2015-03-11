@@ -202,7 +202,7 @@ void SwTxtMargin::CtorInitTxtMargin( SwTxtFrm *pNewFrm, SwTxtSizeInfo *pNewInf )
         // #i95907#
         // #i111284#
         if ( bListLevelIndentsApplicableAndLabelAlignmentActive ||
-             !pNode->getIDocumentSettingAccess()->get(IDocumentSettingAccess::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING) )
+             !pNode->getIDocumentSettingAccess()->get(DocumentSettingId::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING) )
         {
             // this calculation is identical this the calculation for R2L layout - see above
             nLeft = pFrm->Frm().Left() +
@@ -228,7 +228,7 @@ void SwTxtMargin::CtorInitTxtMargin( SwTxtFrm *pNewFrm, SwTxtSizeInfo *pNewInf )
     if( nLeft >= nRight &&
          // #i53066# Omit adjustment of nLeft for numbered
          // paras inside cells inside new documents:
-        ( pNode->getIDocumentSettingAccess()->get(IDocumentSettingAccess::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING) ||
+        ( pNode->getIDocumentSettingAccess()->get(DocumentSettingId::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING) ||
           !pFrm->IsInTab() ||
           !nLMWithNum ) )
     {
@@ -300,7 +300,7 @@ void SwTxtMargin::CtorInitTxtMargin( SwTxtFrm *pNewFrm, SwTxtSizeInfo *pNewInf )
         // #i111284#
         if ( pFrm->IsRightToLeft() ||
              bListLevelIndentsApplicableAndLabelAlignmentActive ||
-             !pNode->getIDocumentSettingAccess()->get(IDocumentSettingAccess::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING) )
+             !pNode->getIDocumentSettingAccess()->get(DocumentSettingId::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING) )
         {
             nFirst = nLeft + nFirstLineOfs;
         }
@@ -1213,7 +1213,7 @@ bool SwTxtCursor::GetCharRect( SwRect* pOrig, const sal_Int32 nOfst,
         pCMS->p2Lines->aPortion.Pos().Y() += aCharPos.Y();
     }
 
-    const bool bTabOverMargin = GetTxtFrm()->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::TAB_OVER_MARGIN);
+    const bool bTabOverMargin = GetTxtFrm()->GetTxtNode()->getIDocumentSettingAccess()->get(DocumentSettingId::TAB_OVER_MARGIN);
     // Make sure the cursor respects the right margin, unless in compat mode, where the tab size has priority over the margin size.
     if( pOrig->Left() > nTmpRight && !bTabOverMargin)
         pOrig->Pos().X() = nTmpRight;

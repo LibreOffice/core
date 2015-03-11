@@ -3438,7 +3438,7 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
             bool bChgLRSpace = true;
             if( bBigger )
             {
-                if( GetFrmFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) &&
+                if( GetFrmFmt()->getIDocumentSettingAccess()->get(DocumentSettingId::BROWSE_MODE) &&
                     !rSz.GetWidthPercent() )
                 {
                     bRet = rSz.GetWidth() < USHRT_MAX - nRelDiff;
@@ -3549,7 +3549,7 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
                     // If the Table happens to contain relative values (USHORT_MAX),
                     // we need to convert them to absolute ones now.
                     // Bug 61494
-                    if( GetFrmFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) &&
+                    if( GetFrmFmt()->getIDocumentSettingAccess()->get(DocumentSettingId::BROWSE_MODE) &&
                         !rSz.GetWidthPercent() )
                     {
                         SwTabFrm* pTabFrm = SwIterator<SwTabFrm,SwFmt>( *GetFrmFmt() ).First();

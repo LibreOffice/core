@@ -208,7 +208,7 @@ bool SwCrsrShell::GoPrevBookmark()
 
 bool SwCrsrShell::IsFormProtected()
 {
-    return getIDocumentSettingAccess()->get(IDocumentSettingAccess::PROTECT_FORM);
+    return getIDocumentSettingAccess()->get(DocumentSettingId::PROTECT_FORM);
 }
 
 ::sw::mark::IFieldmark* SwCrsrShell::GetCurrentFieldmark()

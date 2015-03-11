@@ -514,10 +514,10 @@ bool sw_HideObj( const SwTxtFrm& _rFrm,
     if (_eAnchorType == FLY_AT_CHAR)
     {
         const IDocumentSettingAccess* pIDSA = _rFrm.GetTxtNode()->getIDocumentSettingAccess();
-        if ( !pIDSA->get(IDocumentSettingAccess::USE_FORMER_TEXT_WRAPPING) &&
-             !pIDSA->get(IDocumentSettingAccess::OLD_LINE_SPACING) &&
-             !pIDSA->get(IDocumentSettingAccess::USE_FORMER_OBJECT_POS) &&
-              pIDSA->get(IDocumentSettingAccess::CONSIDER_WRAP_ON_OBJECT_POSITION) &&
+        if ( !pIDSA->get(DocumentSettingId::USE_FORMER_TEXT_WRAPPING) &&
+             !pIDSA->get(DocumentSettingId::OLD_LINE_SPACING) &&
+             !pIDSA->get(DocumentSettingId::USE_FORMER_OBJECT_POS) &&
+              pIDSA->get(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION) &&
              _rFrm.IsInDocBody() && !_rFrm.FindNextCnt() )
         {
             const sal_Unicode cAnchorChar =
@@ -2243,7 +2243,7 @@ void SwTxtFrm::_CalcHeightOfLastLine( const bool _bUseFont )
     }
 
     // determine height of last line
-    if ( _bUseFont || pIDSA->get(IDocumentSettingAccess::OLD_LINE_SPACING ) )
+    if ( _bUseFont || pIDSA->get(DocumentSettingId::OLD_LINE_SPACING ) )
     {
         // former determination of last line height for proprotional line
         // spacing - take height of font set at the paragraph
@@ -2626,7 +2626,7 @@ void SwTxtFrm::CalcBaseOfstForFly()
             "SwTxtFrm::CalcBasePosForFly with swapped frame!" );
 
     const SwNode* pNode = GetTxtNode();
-    if ( !pNode->getIDocumentSettingAccess()->get(IDocumentSettingAccess::ADD_FLY_OFFSETS) )
+    if ( !pNode->getIDocumentSettingAccess()->get(DocumentSettingId::ADD_FLY_OFFSETS) )
         return;
 
     SWRECTFN( this )

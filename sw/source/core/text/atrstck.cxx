@@ -726,7 +726,7 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, bool bPush )
             if( static_cast<const SvxAutoKernItem&>(rItem).GetValue() )
             {
                 rFnt.SetAutoKern( ( !mpIDocumentSettingAccess ||
-                                    !mpIDocumentSettingAccess->get(IDocumentSettingAccess::KERN_ASIAN_PUNCTUATION) ) ?
+                                    !mpIDocumentSettingAccess->get(DocumentSettingId::KERN_ASIAN_PUNCTUATION) ) ?
                                      KERNING_FONTSPECIFIC :
                                      KERNING_ASIAN );
             }

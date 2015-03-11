@@ -158,7 +158,7 @@ SfxDocumentInfoDialog* SwDocShell::CreateDocumentInfoDialog(
 
 void SwDocShell::ToggleBrowserMode(bool bSet, SwView* _pView )
 {
-    GetDoc()->getIDocumentSettingAccess().set(IDocumentSettingAccess::BROWSE_MODE, bSet );
+    GetDoc()->getIDocumentSettingAccess().set(DocumentSettingId::BROWSE_MODE, bSet );
     UpdateFontList();
     SwView* pTempView = _pView ? _pView : (SwView*)GetView();
     if( pTempView )
@@ -1309,7 +1309,7 @@ void SwDocShell::ReloadFromHtml( const OUString& rStreamName, SwSrcView* pSrcVie
         }
     }
 #endif
-    bool bWasBrowseMode = mpDoc->getIDocumentSettingAccess().get(IDocumentSettingAccess::BROWSE_MODE);
+    bool bWasBrowseMode = mpDoc->getIDocumentSettingAccess().get(DocumentSettingId::BROWSE_MODE);
     RemoveLink();
 
     // now also the UNO-Model has to be informed about the new Doc #51535#
@@ -1320,7 +1320,7 @@ void SwDocShell::ReloadFromHtml( const OUString& rStreamName, SwSrcView* pSrcVie
     AddLink();
     //#116402# update font list when new document is created
     UpdateFontList();
-    mpDoc->getIDocumentSettingAccess().set(IDocumentSettingAccess::BROWSE_MODE, bWasBrowseMode);
+    mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::BROWSE_MODE, bWasBrowseMode);
     pSrcView->SetPool(&GetPool());
 
     const OUString& rMedname = GetMedium()->GetName();

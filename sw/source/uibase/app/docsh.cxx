@@ -270,7 +270,7 @@ bool SwDocShell::ConvertFrom( SfxMedium& rMedium )
     SW_MOD()->SetEmbeddedLoadSave(
                             SFX_CREATE_MODE_EMBEDDED == GetCreateMode() );
 
-    pRdr->GetDoc()->getIDocumentSettingAccess().set(IDocumentSettingAccess::HTML_MODE, ISA(SwWebDocShell));
+    pRdr->GetDoc()->getIDocumentSettingAccess().set(DocumentSettingId::HTML_MODE, ISA(SwWebDocShell));
 
     // Restore the pool default if reading a saved document.
     mpDoc->RemoveAllFmtLanguageDependencies();
@@ -321,10 +321,10 @@ bool SwDocShell::Save()
     // #i62875#
     // reset compatibility flag <DoNotCaptureDrawObjsOnPage>, if possible
     if ( mpWrtShell && mpDoc &&
-         mpDoc->getIDocumentSettingAccess().get(IDocumentSettingAccess::DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE) &&
+         mpDoc->getIDocumentSettingAccess().get(DocumentSettingId::DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE) &&
          docfunc::AllDrawObjsOnPage( *mpDoc ) )
     {
-        mpDoc->getIDocumentSettingAccess().set(IDocumentSettingAccess::DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE, false);
+        mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE, false);
     }
 
     sal_uLong nErr = ERR_SWG_WRITE_ERROR, nVBWarning = ERRCODE_NONE;
@@ -413,8 +413,8 @@ bool SwDocShell::SaveAs( SfxMedium& rMedium )
         mpView->GetPostItMgr()->UpdateDataOnActiveSidebarWin();
     }
 
-    if( mpDoc->getIDocumentSettingAccess().get(IDocumentSettingAccess::GLOBAL_DOCUMENT) &&
-        !mpDoc->getIDocumentSettingAccess().get(IDocumentSettingAccess::GLOBAL_DOCUMENT_SAVE_LINKS) )
+    if( mpDoc->getIDocumentSettingAccess().get(DocumentSettingId::GLOBAL_DOCUMENT) &&
+        !mpDoc->getIDocumentSettingAccess().get(DocumentSettingId::GLOBAL_DOCUMENT_SAVE_LINKS) )
         RemoveOLEObjects();
 
     {
@@ -441,17 +441,17 @@ bool SwDocShell::SaveAs( SfxMedium& rMedium )
     // #i62875#
     // reset compatibility flag <DoNotCaptureDrawObjsOnPage>, if possible
     if ( mpWrtShell &&
-         mpDoc->getIDocumentSettingAccess().get(IDocumentSettingAccess::DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE) &&
+         mpDoc->getIDocumentSettingAccess().get(DocumentSettingId::DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE) &&
          docfunc::AllDrawObjsOnPage( *mpDoc ) )
     {
-        mpDoc->getIDocumentSettingAccess().set(IDocumentSettingAccess::DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE, false);
+        mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE, false);
     }
 
     sal_uLong nErr = ERR_SWG_WRITE_ERROR, nVBWarning = ERRCODE_NONE;
     uno::Reference < embed::XStorage > xStor = rMedium.GetOutputStorage();
     if( SfxObjectShell::SaveAs( rMedium ) )
     {
-        if( GetDoc()->getIDocumentSettingAccess().get(IDocumentSettingAccess::GLOBAL_DOCUMENT) && !ISA( SwGlobalDocShell ) )
+        if( GetDoc()->getIDocumentSettingAccess().get(DocumentSettingId::GLOBAL_DOCUMENT) && !ISA( SwGlobalDocShell ) )
         {
             // This is to set the correct class id if SaveAs is
             // called from SwDoc::SplitDoc to save a normal doc as
@@ -617,10 +617,10 @@ bool SwDocShell::ConvertTo( SfxMedium& rMedium )
     // #i62875#
     // reset compatibility flag <DoNotCaptureDrawObjsOnPage>, if possible
     if ( mpWrtShell &&
-         mpDoc->getIDocumentSettingAccess().get(IDocumentSettingAccess::DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE) &&
+         mpDoc->getIDocumentSettingAccess().get(DocumentSettingId::DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE) &&
          docfunc::AllDrawObjsOnPage( *mpDoc ) )
     {
-        mpDoc->getIDocumentSettingAccess().set(IDocumentSettingAccess::DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE, false);
+        mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE, false);
     }
 
     if( xWriter->IsStgWriter() &&
@@ -651,15 +651,15 @@ bool SwDocShell::ConvertTo( SfxMedium& rMedium )
             nSaveType = 2;
 
         // Change Flags of the Document accordingly
-        bool bIsHTMLModeSave = GetDoc()->getIDocumentSettingAccess().get(IDocumentSettingAccess::HTML_MODE);
-        bool bIsGlobalDocSave = GetDoc()->getIDocumentSettingAccess().get(IDocumentSettingAccess::GLOBAL_DOCUMENT);
-        bool bIsGlblDocSaveLinksSave = GetDoc()->getIDocumentSettingAccess().get(IDocumentSettingAccess::GLOBAL_DOCUMENT_SAVE_LINKS);
+        bool bIsHTMLModeSave = GetDoc()->getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE);
+        bool bIsGlobalDocSave = GetDoc()->getIDocumentSettingAccess().get(DocumentSettingId::GLOBAL_DOCUMENT);
+        bool bIsGlblDocSaveLinksSave = GetDoc()->getIDocumentSettingAccess().get(DocumentSettingId::GLOBAL_DOCUMENT_SAVE_LINKS);
         if( nMyType != nSaveType )
         {
-            GetDoc()->getIDocumentSettingAccess().set(IDocumentSettingAccess::HTML_MODE, 1 == nSaveType);
-            GetDoc()->getIDocumentSettingAccess().set(IDocumentSettingAccess::GLOBAL_DOCUMENT, 2 == nSaveType);
+            GetDoc()->getIDocumentSettingAccess().set(DocumentSettingId::HTML_MODE, 1 == nSaveType);
+            GetDoc()->getIDocumentSettingAccess().set(DocumentSettingId::GLOBAL_DOCUMENT, 2 == nSaveType);
             if( 2 != nSaveType )
-                GetDoc()->getIDocumentSettingAccess().set(IDocumentSettingAccess::GLOBAL_DOCUMENT_SAVE_LINKS, false);
+                GetDoc()->getIDocumentSettingAccess().set(DocumentSettingId::GLOBAL_DOCUMENT_SAVE_LINKS, false);
         }
 
         // if the target format is storage based, then the output storage must be already created
@@ -684,9 +684,9 @@ bool SwDocShell::ConvertTo( SfxMedium& rMedium )
 
         if( nMyType != nSaveType )
         {
-            GetDoc()->getIDocumentSettingAccess().set(IDocumentSettingAccess::HTML_MODE, bIsHTMLModeSave );
-            GetDoc()->getIDocumentSettingAccess().set(IDocumentSettingAccess::GLOBAL_DOCUMENT, bIsGlobalDocSave);
-            GetDoc()->getIDocumentSettingAccess().set(IDocumentSettingAccess::GLOBAL_DOCUMENT_SAVE_LINKS, bIsGlblDocSaveLinksSave);
+            GetDoc()->getIDocumentSettingAccess().set(DocumentSettingId::HTML_MODE, bIsHTMLModeSave );
+            GetDoc()->getIDocumentSettingAccess().set(DocumentSettingId::GLOBAL_DOCUMENT, bIsGlobalDocSave);
+            GetDoc()->getIDocumentSettingAccess().set(DocumentSettingId::GLOBAL_DOCUMENT_SAVE_LINKS, bIsGlblDocSaveLinksSave);
         }
 
         return bRet;
@@ -1006,7 +1006,7 @@ void SwDocShell::GetState(SfxItemSet& rSet)
         case SID_BROWSER_MODE:
         case FN_PRINT_LAYOUT:
             {
-                bool bState = GetDoc()->getIDocumentSettingAccess().get(IDocumentSettingAccess::BROWSE_MODE);
+                bool bState = GetDoc()->getIDocumentSettingAccess().get(DocumentSettingId::BROWSE_MODE);
                 if(FN_PRINT_LAYOUT == nWhich)
                     bState = !bState;
                 rSet.Put( SfxBoolItem( nWhich, bState));

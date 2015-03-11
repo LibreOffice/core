@@ -251,7 +251,7 @@ void SwFlyInCntFrm::MakeAll()
         // re-activate clipping of as-character anchored Writer fly frames
         // depending on compatibility option <ClipAsCharacterAnchoredWriterFlyFrames>
         if ( mbValidPos && mbValidSize &&
-             GetFmt()->getIDocumentSettingAccess()->get( IDocumentSettingAccess::CLIP_AS_CHARACTER_ANCHORED_WRITER_FLY_FRAME ) )
+             GetFmt()->getIDocumentSettingAccess()->get( DocumentSettingId::CLIP_AS_CHARACTER_ANCHORED_WRITER_FLY_FRAME ) )
         {
             SwFrm* pFrm = AnchorFrm();
             if ( Frm().Left() == (pFrm->Frm().Left()+pFrm->Prt().Left()) &&

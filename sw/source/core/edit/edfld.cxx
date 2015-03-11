@@ -422,12 +422,12 @@ SwFldUpdateFlags SwEditShell::GetFldUpdateFlags(bool bDocSettings) const
 
 void SwEditShell::SetLabelDoc( bool bFlag )
 {
-    GetDoc()->GetDocumentSettingManager().set(IDocumentSettingAccess::LABEL_DOCUMENT, bFlag );
+    GetDoc()->GetDocumentSettingManager().set(DocumentSettingId::LABEL_DOCUMENT, bFlag );
 }
 
 bool SwEditShell::IsLabelDoc() const
 {
-    return getIDocumentSettingAccess()->get(IDocumentSettingAccess::LABEL_DOCUMENT);
+    return getIDocumentSettingAccess()->get(DocumentSettingId::LABEL_DOCUMENT);
 }
 
 void SwEditShell::ChangeAuthorityData(const SwAuthEntry* pNewData)

@@ -906,7 +906,7 @@ bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, bool bMove )
         const bool bFollowTextFlow = pFly->GetFmt()->GetFollowTextFlow().GetValue();
         // #i28701#
         const bool bConsiderWrapOnObjPos =
-                                pFly->GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::CONSIDER_WRAP_ON_OBJECT_POSITION);
+                                pFly->GetFmt()->getIDocumentSettingAccess()->get(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION);
         const SwFmtVertOrient &rV = pFly->GetFmt()->GetVertOrient();
         if( pFly->IsFlyLayFrm() )
         {

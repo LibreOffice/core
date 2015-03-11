@@ -143,7 +143,7 @@ void DocumentDrawModelManager::InitDrawModel()
     // Set the LinkManager in the model so that linked graphics can be inserted.
     // The WinWord import needs it too.
     mpDrawModel->SetLinkManager( & m_rDoc.getIDocumentLinksAdministration().GetLinkManager() );
-    mpDrawModel->SetAddExtLeading( m_rDoc.getIDocumentSettingAccess().get(IDocumentSettingAccess::ADD_EXT_LEADING) );
+    mpDrawModel->SetAddExtLeading( m_rDoc.getIDocumentSettingAccess().get(DocumentSettingId::ADD_EXT_LEADING) );
 
     OutputDevice* pRefDev = m_rDoc.getIDocumentDeviceAccess().getReferenceDevice( false );
     if ( pRefDev )

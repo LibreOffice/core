@@ -186,7 +186,7 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
     }
 
     sal_uInt16 const eUnit = SvXMLUnitConverter::GetMeasureUnit(
-            SW_MOD()->GetMetric(pDoc->getIDocumentSettingAccess().get(IDocumentSettingAccess::HTML_MODE)));
+            SW_MOD()->GetMetric(pDoc->getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE)));
     if (GetMM100UnitConverter().GetXMLMeasureUnit() != eUnit )
     {
         GetMM100UnitConverter().SetXMLMeasureUnit( eUnit );
@@ -240,12 +240,12 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
     }
 
     // adjust document class (eClass)
-    if (pDoc->getIDocumentSettingAccess().get(IDocumentSettingAccess::GLOBAL_DOCUMENT))
+    if (pDoc->getIDocumentSettingAccess().get(DocumentSettingId::GLOBAL_DOCUMENT))
     {
         eClass = XML_TEXT_GLOBAL;
 
         // additionally, we take care of the save-linked-sections-thingy
-        mbSaveLinkedSections = pDoc->getIDocumentSettingAccess().get(IDocumentSettingAccess::GLOBAL_DOCUMENT_SAVE_LINKS);
+        mbSaveLinkedSections = pDoc->getIDocumentSettingAccess().get(DocumentSettingId::GLOBAL_DOCUMENT_SAVE_LINKS);
     }
     // MIB: 03/26/04: The Label information is saved in the settings, so
     // we don't need it here.
@@ -397,7 +397,7 @@ void SwXMLExport::GetViewSettings(Sequence<PropertyValue>& aProps)
     pValue[nIndex++].Value <<= bShowRedlineChanges;
 
     pValue[nIndex].Name = "InBrowseMode";
-    pValue[nIndex++].Value <<= pDoc->getIDocumentSettingAccess().get(IDocumentSettingAccess::BROWSE_MODE);
+    pValue[nIndex++].Value <<= pDoc->getIDocumentSettingAccess().get(DocumentSettingId::BROWSE_MODE);
 
     if ( nIndex < NUM_EXPORTED_VIEW_SETTINGS )
         aProps.realloc(nIndex);

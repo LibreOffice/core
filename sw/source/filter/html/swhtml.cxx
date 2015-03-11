@@ -201,7 +201,7 @@ sal_uLong HTMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPam, 
 
         // Die HTML-Seitenvorlage setzen, wenn des kein HTML-Dokument ist,
         // sonst ist sie schon gesetzt.
-        if( !rDoc.getIDocumentSettingAccess().get(IDocumentSettingAccess::HTML_MODE) )
+        if( !rDoc.getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE) )
         {
             rDoc.getIDocumentContentOperations().InsertPoolItem( rPam, SwFmtPageDesc(
                 rDoc.getIDocumentStylePoolAccess().GetPageDescFromPool( RES_POOLPAGE_HTML, false )) );
@@ -340,8 +340,8 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCrsr, SvStream& rIn,
 
     // Waehrend des Imports in den HTML-Modus schalten, damit die
     // richrigen Vorlagen angelegt werden
-    bOldIsHTMLMode = pDoc->getIDocumentSettingAccess().get(IDocumentSettingAccess::HTML_MODE);
-    pDoc->getIDocumentSettingAccess().set(IDocumentSettingAccess::HTML_MODE, true);
+    bOldIsHTMLMode = pDoc->getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE);
+    pDoc->getIDocumentSettingAccess().set(DocumentSettingId::HTML_MODE, true);
 
     pCSS1Parser = new SwCSS1Parser( pDoc, aFontHeights, sBaseURL, IsNewDoc() );
     pCSS1Parser->SetIgnoreFontFamily( rHtmlOptions.IsIgnoreFontFamily() );
@@ -420,7 +420,7 @@ SwHTMLParser::~SwHTMLParser()
 #endif
     bool bAsync = pDoc->IsInLoadAsynchron();
     pDoc->SetInLoadAsynchron( false );
-    pDoc->getIDocumentSettingAccess().set(IDocumentSettingAccess::HTML_MODE, bOldIsHTMLMode);
+    pDoc->getIDocumentSettingAccess().set(DocumentSettingId::HTML_MODE, bOldIsHTMLMode);
 
     if( pDoc->GetDocShell() && nEventId )
         Application::RemoveUserEvent( nEventId );

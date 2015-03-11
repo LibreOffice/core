@@ -79,14 +79,14 @@ XMLFontAutoStylePool* SwXMLExport::CreateFontAutoStylePool()
     // the embedding only in one of them.
     if( !( getExportFlags() & SvXMLExportFlags::CONTENT) )
         blockFontEmbedding = true;
-    if( !getDoc()->getIDocumentSettingAccess().get( IDocumentSettingAccess::EMBED_FONTS ))
+    if( !getDoc()->getIDocumentSettingAccess().get( DocumentSettingId::EMBED_FONTS ))
         blockFontEmbedding = true;
     return new SwXMLFontAutoStylePool_Impl( *this, !blockFontEmbedding );
 }
 
 void SwXMLImport::NotifyEmbeddedFontRead()
 {
-    getDoc()->getIDocumentSettingAccess().set( IDocumentSettingAccess::EMBED_FONTS, true );
+    getDoc()->getIDocumentSettingAccess().set( DocumentSettingId::EMBED_FONTS, true );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -739,10 +739,10 @@ static void lcl_InvalidateAllObjPos( SwViewShell &_rSh )
 void SwViewShell::SetParaSpaceMax( bool bNew )
 {
     IDocumentSettingAccess* pIDSA = getIDocumentSettingAccess();
-    if( pIDSA->get(IDocumentSettingAccess::PARA_SPACE_MAX) != bNew )
+    if( pIDSA->get(DocumentSettingId::PARA_SPACE_MAX) != bNew )
     {
         SwWait aWait( *GetDoc()->GetDocShell(), true );
-        pIDSA->set(IDocumentSettingAccess::PARA_SPACE_MAX, bNew );
+        pIDSA->set(DocumentSettingId::PARA_SPACE_MAX, bNew );
         const sal_uInt8 nInv = INV_PRTAREA | INV_TABLE | INV_SECTION;
         lcl_InvalidateAllCntnt( *this,  nInv );
     }
@@ -751,10 +751,10 @@ void SwViewShell::SetParaSpaceMax( bool bNew )
 void SwViewShell::SetParaSpaceMaxAtPages( bool bNew )
 {
     IDocumentSettingAccess* pIDSA = getIDocumentSettingAccess();
-    if( pIDSA->get(IDocumentSettingAccess::PARA_SPACE_MAX_AT_PAGES) != bNew )
+    if( pIDSA->get(DocumentSettingId::PARA_SPACE_MAX_AT_PAGES) != bNew )
     {
         SwWait aWait( *GetDoc()->GetDocShell(), true );
-        pIDSA->set(IDocumentSettingAccess::PARA_SPACE_MAX_AT_PAGES, bNew );
+        pIDSA->set(DocumentSettingId::PARA_SPACE_MAX_AT_PAGES, bNew );
         const sal_uInt8 nInv = INV_PRTAREA | INV_TABLE | INV_SECTION;
         lcl_InvalidateAllCntnt( *this,  nInv );
     }
@@ -763,10 +763,10 @@ void SwViewShell::SetParaSpaceMaxAtPages( bool bNew )
 void SwViewShell::SetTabCompat( bool bNew )
 {
     IDocumentSettingAccess* pIDSA = getIDocumentSettingAccess();
-    if( pIDSA->get(IDocumentSettingAccess::TAB_COMPAT) != bNew  )
+    if( pIDSA->get(DocumentSettingId::TAB_COMPAT) != bNew  )
     {
         SwWait aWait( *GetDoc()->GetDocShell(), true );
-        pIDSA->set(IDocumentSettingAccess::TAB_COMPAT, bNew );
+        pIDSA->set(DocumentSettingId::TAB_COMPAT, bNew );
         const sal_uInt8 nInv = INV_PRTAREA | INV_SIZE | INV_TABLE | INV_SECTION;
         lcl_InvalidateAllCntnt( *this, nInv );
     }
@@ -775,10 +775,10 @@ void SwViewShell::SetTabCompat( bool bNew )
 void SwViewShell::SetAddExtLeading( bool bNew )
 {
     IDocumentSettingAccess* pIDSA = getIDocumentSettingAccess();
-    if ( pIDSA->get(IDocumentSettingAccess::ADD_EXT_LEADING) != bNew )
+    if ( pIDSA->get(DocumentSettingId::ADD_EXT_LEADING) != bNew )
     {
         SwWait aWait( *GetDoc()->GetDocShell(), true );
-        pIDSA->set(IDocumentSettingAccess::ADD_EXT_LEADING, bNew );
+        pIDSA->set(DocumentSettingId::ADD_EXT_LEADING, bNew );
         SwDrawModel* pTmpDrawModel = getIDocumentDrawModelAccess()->GetDrawModel();
         if ( pTmpDrawModel )
             pTmpDrawModel->SetAddExtLeading( bNew );
@@ -790,7 +790,7 @@ void SwViewShell::SetAddExtLeading( bool bNew )
 void SwViewShell::SetUseVirDev( bool bNewVirtual )
 {
     IDocumentSettingAccess* pIDSA = getIDocumentSettingAccess();
-    if ( pIDSA->get(IDocumentSettingAccess::USE_VIRTUAL_DEVICE) != bNewVirtual )
+    if ( pIDSA->get(DocumentSettingId::USE_VIRTUAL_DEVICE) != bNewVirtual )
     {
         SwWait aWait( *GetDoc()->GetDocShell(), true );
         // this sets the flag at the document and calls PrtDataChanged
@@ -806,10 +806,10 @@ void SwViewShell::SetUseVirDev( bool bNewVirtual )
 void SwViewShell::SetAddParaSpacingToTableCells( bool _bAddParaSpacingToTableCells )
 {
     IDocumentSettingAccess* pIDSA = getIDocumentSettingAccess();
-    if ( pIDSA->get(IDocumentSettingAccess::ADD_PARA_SPACING_TO_TABLE_CELLS) != _bAddParaSpacingToTableCells )
+    if ( pIDSA->get(DocumentSettingId::ADD_PARA_SPACING_TO_TABLE_CELLS) != _bAddParaSpacingToTableCells )
     {
         SwWait aWait( *GetDoc()->GetDocShell(), true );
-        pIDSA->set(IDocumentSettingAccess::ADD_PARA_SPACING_TO_TABLE_CELLS, _bAddParaSpacingToTableCells );
+        pIDSA->set(DocumentSettingId::ADD_PARA_SPACING_TO_TABLE_CELLS, _bAddParaSpacingToTableCells );
         const sal_uInt8 nInv = INV_PRTAREA;
         lcl_InvalidateAllCntnt( *this, nInv );
     }
@@ -823,10 +823,10 @@ void SwViewShell::SetAddParaSpacingToTableCells( bool _bAddParaSpacingToTableCel
 void SwViewShell::SetUseFormerLineSpacing( bool _bUseFormerLineSpacing )
 {
     IDocumentSettingAccess* pIDSA = getIDocumentSettingAccess();
-    if ( pIDSA->get(IDocumentSettingAccess::OLD_LINE_SPACING) != _bUseFormerLineSpacing )
+    if ( pIDSA->get(DocumentSettingId::OLD_LINE_SPACING) != _bUseFormerLineSpacing )
     {
         SwWait aWait( *GetDoc()->GetDocShell(), true );
-        pIDSA->set(IDocumentSettingAccess::OLD_LINE_SPACING, _bUseFormerLineSpacing );
+        pIDSA->set(DocumentSettingId::OLD_LINE_SPACING, _bUseFormerLineSpacing );
         const sal_uInt8 nInv = INV_PRTAREA;
         lcl_InvalidateAllCntnt( *this, nInv );
     }
@@ -840,10 +840,10 @@ void SwViewShell::SetUseFormerLineSpacing( bool _bUseFormerLineSpacing )
 void SwViewShell::SetUseFormerObjectPositioning( bool _bUseFormerObjPos )
 {
     IDocumentSettingAccess* pIDSA = getIDocumentSettingAccess();
-    if ( pIDSA->get(IDocumentSettingAccess::USE_FORMER_OBJECT_POS) != _bUseFormerObjPos )
+    if ( pIDSA->get(DocumentSettingId::USE_FORMER_OBJECT_POS) != _bUseFormerObjPos )
     {
         SwWait aWait( *GetDoc()->GetDocShell(), true );
-        pIDSA->set(IDocumentSettingAccess::USE_FORMER_OBJECT_POS, _bUseFormerObjPos );
+        pIDSA->set(DocumentSettingId::USE_FORMER_OBJECT_POS, _bUseFormerObjPos );
         lcl_InvalidateAllObjPos( *this );
     }
 }
@@ -852,10 +852,10 @@ void SwViewShell::SetUseFormerObjectPositioning( bool _bUseFormerObjPos )
 void SwViewShell::SetConsiderWrapOnObjPos( bool _bConsiderWrapOnObjPos )
 {
     IDocumentSettingAccess* pIDSA = getIDocumentSettingAccess();
-    if ( pIDSA->get(IDocumentSettingAccess::CONSIDER_WRAP_ON_OBJECT_POSITION) != _bConsiderWrapOnObjPos )
+    if ( pIDSA->get(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION) != _bConsiderWrapOnObjPos )
     {
         SwWait aWait( *GetDoc()->GetDocShell(), true );
-        pIDSA->set(IDocumentSettingAccess::CONSIDER_WRAP_ON_OBJECT_POSITION, _bConsiderWrapOnObjPos );
+        pIDSA->set(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION, _bConsiderWrapOnObjPos );
         lcl_InvalidateAllObjPos( *this );
     }
 }
@@ -863,10 +863,10 @@ void SwViewShell::SetConsiderWrapOnObjPos( bool _bConsiderWrapOnObjPos )
 void SwViewShell::SetUseFormerTextWrapping( bool _bUseFormerTextWrapping )
 {
     IDocumentSettingAccess* pIDSA = getIDocumentSettingAccess();
-    if ( pIDSA->get(IDocumentSettingAccess::USE_FORMER_TEXT_WRAPPING) != _bUseFormerTextWrapping )
+    if ( pIDSA->get(DocumentSettingId::USE_FORMER_TEXT_WRAPPING) != _bUseFormerTextWrapping )
     {
         SwWait aWait( *GetDoc()->GetDocShell(), true );
-        pIDSA->set(IDocumentSettingAccess::USE_FORMER_TEXT_WRAPPING, _bUseFormerTextWrapping );
+        pIDSA->set(DocumentSettingId::USE_FORMER_TEXT_WRAPPING, _bUseFormerTextWrapping );
         const sal_uInt8 nInv = INV_PRTAREA | INV_SIZE | INV_TABLE | INV_SECTION;
         lcl_InvalidateAllCntnt( *this, nInv );
     }
@@ -876,10 +876,10 @@ void SwViewShell::SetUseFormerTextWrapping( bool _bUseFormerTextWrapping )
 void SwViewShell::SetDoNotJustifyLinesWithManualBreak( bool _bDoNotJustifyLinesWithManualBreak )
 {
     IDocumentSettingAccess* pIDSA = getIDocumentSettingAccess();
-    if ( pIDSA->get(IDocumentSettingAccess::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK) != _bDoNotJustifyLinesWithManualBreak )
+    if ( pIDSA->get(DocumentSettingId::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK) != _bDoNotJustifyLinesWithManualBreak )
     {
         SwWait aWait( *GetDoc()->GetDocShell(), true );
-        pIDSA->set(IDocumentSettingAccess::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK, _bDoNotJustifyLinesWithManualBreak );
+        pIDSA->set(DocumentSettingId::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK, _bDoNotJustifyLinesWithManualBreak );
         const sal_uInt8 nInv = INV_PRTAREA | INV_SIZE | INV_TABLE | INV_SECTION;
         lcl_InvalidateAllCntnt( *this, nInv );
     }
@@ -2200,7 +2200,7 @@ void SwViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
     *mpOpt = rOpt;   // First the options are taken.
     mpOpt->SetUIOptions(rOpt);
 
-    mpDoc->GetDocumentSettingManager().set(IDocumentSettingAccess::HTML_MODE, 0 != ::GetHtmlMode(mpDoc->GetDocShell()));
+    mpDoc->GetDocumentSettingManager().set(DocumentSettingId::HTML_MODE, 0 != ::GetHtmlMode(mpDoc->GetDocShell()));
 
     if( bBrowseModeChanged )
     {

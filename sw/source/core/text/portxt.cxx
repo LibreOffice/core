@@ -368,7 +368,7 @@ bool SwTxtPortion::_Format( SwTxtFormatInfo &rInf )
 
                     rInf.IsOtherThanFtnInside() ) ||
                   ( rInf.GetLast() &&
-                    rInf.GetTxtFrm()->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::TAB_COMPAT) &&
+                    rInf.GetTxtFrm()->GetTxtNode()->getIDocumentSettingAccess()->get(DocumentSettingId::TAB_COMPAT) &&
                     rInf.GetLast()->InTabGrp() &&
                     rInf.GetLineStart() + rInf.GetLast()->GetLen() < rInf.GetIdx() &&
                     aGuess.BreakPos() == rInf.GetIdx()  &&

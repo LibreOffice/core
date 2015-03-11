@@ -3358,7 +3358,7 @@ void SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) c
                     gProp.pSLines->LockLines( false );
                 }
 
-                if ( pSh->GetDoc()->GetDocumentSettingManager().get( IDocumentSettingAccess::BACKGROUND_PARA_OVER_DRAWINGS ) )
+                if ( pSh->GetDoc()->GetDocumentSettingManager().get( DocumentSettingId::BACKGROUND_PARA_OVER_DRAWINGS ) )
                     pPage->PaintBaBo( aPaintRect, pPage, true, /*bOnlyTxtBackground=*/true );
 
                 if( pSh->GetWin() )

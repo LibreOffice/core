@@ -384,7 +384,7 @@ sal_uInt16 SwFntObj::GetFontLeading( const SwViewShell *pSh, const OutputDevice&
                                pSh->GetViewOptions()->getBrowseMode() &&
                               !pSh->GetViewOptions()->IsPrtFormat() );
 
-        if ( !bBrowse && rIDSA.get(IDocumentSettingAccess::ADD_EXT_LEADING) )
+        if ( !bBrowse && rIDSA.get(DocumentSettingId::ADD_EXT_LEADING) )
             nRet = nExtLeading;
         else
             nRet = nGuessedLeading;

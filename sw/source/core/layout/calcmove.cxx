@@ -116,7 +116,7 @@ bool SwCntntFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, bool, bool & )
                     // check, if last frame is inside table and if it includes
                     // its lower spacing.
                     if ( !pPrevFrm->GetNext() && pPrevFrm->IsInTab() &&
-                         pIDSA->get(IDocumentSettingAccess::ADD_PARA_SPACING_TO_TABLE_CELLS) )
+                         pIDSA->get(DocumentSettingId::ADD_PARA_SPACING_TO_TABLE_CELLS) )
                     {
                         const SwFrm* pLastFrm = pPrevFrm;
                         // if last frame is a section, take its last content
@@ -856,7 +856,7 @@ void SwLayoutFrm::MakeAll()
 
 bool SwTxtNode::IsCollapse() const
 {
-    if (GetDoc()->GetDocumentSettingManager().get( IDocumentSettingAccess::COLLAPSE_EMPTY_CELL_PARA )
+    if (GetDoc()->GetDocumentSettingManager().get( DocumentSettingId::COLLAPSE_EMPTY_CELL_PARA )
         &&  GetTxt().isEmpty())
     {
         sal_uLong nIdx=GetIndex();
@@ -1901,7 +1901,7 @@ bool SwCntntFrm::_WouldFit( SwTwips nSpace,
 
         // OD 2004-03-01 #106629# - also consider lower spacing in table cells
         if ( bRet && IsInTab() &&
-             pNewUpper->GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::ADD_PARA_SPACING_TO_TABLE_CELLS) )
+             pNewUpper->GetFmt()->getIDocumentSettingAccess()->get(DocumentSettingId::ADD_PARA_SPACING_TO_TABLE_CELLS) )
         {
             nSpace -= rAttrs.GetULSpace().GetLower();
             if ( nSpace < 0 )

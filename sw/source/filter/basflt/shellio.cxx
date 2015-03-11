@@ -103,7 +103,7 @@ sal_uLong SwReader::Read( const Reader& rOptions )
         // For Web documents the default template was set already by InitNew,
         // unless the filter is not HTML,
         // or a SetTemplateName was called in ConvertFrom.
-        if( !pDoc->getIDocumentSettingAccess().get(IDocumentSettingAccess::HTML_MODE) || ReadHTML != po || !po->pTemplate  )
+        if( !pDoc->getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE) || ReadHTML != po || !po->pTemplate  )
             po->SetTemplate( *pDoc );
     }
 
@@ -504,7 +504,7 @@ SwDoc* Reader::GetTemplateDoc()
                         pTemplate->SetOle2Link( Link() );
                         // always FALSE
                         pTemplate->GetIDocumentUndoRedo().DoUndo( false );
-                        pTemplate->getIDocumentSettingAccess().set(IDocumentSettingAccess::BROWSE_MODE, bTmplBrowseMode );
+                        pTemplate->getIDocumentSettingAccess().set(DocumentSettingId::BROWSE_MODE, bTmplBrowseMode );
                         pTemplate->RemoveAllFmtLanguageDependencies();
 
                         ReadXML->SetOrganizerMode( true );
@@ -565,7 +565,7 @@ void Reader::MakeHTMLDummyTemplateDoc()
     ClearTemplate();
     pTemplate = new SwDoc;
     pTemplate->acquire();
-    pTemplate->getIDocumentSettingAccess().set(IDocumentSettingAccess::BROWSE_MODE, bTmplBrowseMode );
+    pTemplate->getIDocumentSettingAccess().set(DocumentSettingId::BROWSE_MODE, bTmplBrowseMode );
     pTemplate->getIDocumentDeviceAccess().getPrinter( true );
     pTemplate->RemoveAllFmtLanguageDependencies();
     aChkDateTime = Date( 1, 1, 2300 );  // year 2300 should be sufficient
@@ -854,8 +854,8 @@ sal_uLong SwWriter::Write( WriterRef& rxWriter, const OUString* pRealFileName )
         pESh->StartAllAction();
     }
 
-    bool bWasPurgeOle = pOutDoc->getIDocumentSettingAccess().get(IDocumentSettingAccess::PURGE_OLE);
-    pOutDoc->getIDocumentSettingAccess().set(IDocumentSettingAccess::PURGE_OLE, false);
+    bool bWasPurgeOle = pOutDoc->getIDocumentSettingAccess().get(DocumentSettingId::PURGE_OLE);
+    pOutDoc->getIDocumentSettingAccess().set(DocumentSettingId::PURGE_OLE, false);
 
     sal_uLong nError = 0;
     if( pMedium )
@@ -867,7 +867,7 @@ sal_uLong SwWriter::Write( WriterRef& rxWriter, const OUString* pRealFileName )
     else if( xStg.is() )
         nError = rxWriter->Write( *pPam, xStg, pRealFileName );
 
-    pOutDoc->getIDocumentSettingAccess().set(IDocumentSettingAccess::PURGE_OLE, bWasPurgeOle );
+    pOutDoc->getIDocumentSettingAccess().set(DocumentSettingId::PURGE_OLE, bWasPurgeOle );
 
     if( pESh )
     {

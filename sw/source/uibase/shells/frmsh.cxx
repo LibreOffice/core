@@ -454,7 +454,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
 
                 // disable vertical positioning for Math Objects anchored 'as char' if baseline alignment is activated
                 aSet.Put( SfxBoolItem( FN_MATH_BASELINE_ALIGNMENT,
-                        rSh.GetDoc()->getIDocumentSettingAccess().get( IDocumentSettingAccess::MATH_BASELINE_ALIGNMENT ) ) );
+                        rSh.GetDoc()->getIDocumentSettingAccess().get( DocumentSettingId::MATH_BASELINE_ALIGNMENT ) ) );
                 const uno::Reference < embed::XEmbeddedObject > xObj( rSh.GetOleRef() );
                 aSet.Put( SfxBoolItem( FN_OLE_IS_MATH, xObj.is() && SotExchange::IsMath( xObj->getClassID() ) ) );
 

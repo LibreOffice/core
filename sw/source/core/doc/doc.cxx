@@ -1583,17 +1583,17 @@ bool SwDoc::ConvertFieldsToText()
 
 bool SwDoc::IsInsTblFormatNum() const
 {
-    return SW_MOD()->IsInsTblFormatNum(GetDocumentSettingManager().get(IDocumentSettingAccess::HTML_MODE));
+    return SW_MOD()->IsInsTblFormatNum(GetDocumentSettingManager().get(DocumentSettingId::HTML_MODE));
 }
 
 bool SwDoc::IsInsTblChangeNumFormat() const
 {
-    return SW_MOD()->IsInsTblChangeNumFormat(GetDocumentSettingManager().get(IDocumentSettingAccess::HTML_MODE));
+    return SW_MOD()->IsInsTblChangeNumFormat(GetDocumentSettingManager().get(DocumentSettingId::HTML_MODE));
 }
 
 bool SwDoc::IsInsTblAlignNum() const
 {
-    return SW_MOD()->IsInsTblAlignNum(GetDocumentSettingManager().get(IDocumentSettingAccess::HTML_MODE));
+    return SW_MOD()->IsInsTblAlignNum(GetDocumentSettingManager().get(DocumentSettingId::HTML_MODE));
 }
 
 /// Set up the InsertDB as Undo table

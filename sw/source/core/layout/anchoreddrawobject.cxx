@@ -220,7 +220,7 @@ void SwAnchoredDrawObject::UpdateLayoutDir()
 
     if ( !NotYetPositioned() &&
          GetFrmFmt().GetLayoutDir() != nOldLayoutDir &&
-         GetFrmFmt().GetDoc()->GetDocumentSettingManager().get(IDocumentSettingAccess::DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE) &&
+         GetFrmFmt().GetDoc()->GetDocumentSettingManager().get(DocumentSettingId::DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE) &&
          !IsOutsidePage() )
     {
         mbCaptureAfterLayoutDirChange = true;

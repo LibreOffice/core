@@ -999,7 +999,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
         std::shared_ptr<sw::ToxTabStopTokenHandler> tabStopTokenHandler =
                 std::make_shared<sw::DefaultToxTabStopTokenHandler>(
                         pSectNd->GetIndex(), *pDefaultPageDesc, GetTOXForm().IsRelTabPos(),
-                        pDoc->GetDocumentSettingManager().get(IDocumentSettingAccess::TABS_RELATIVE_TO_INDENT) ?
+                        pDoc->GetDocumentSettingManager().get(DocumentSettingId::TABS_RELATIVE_TO_INDENT) ?
                                 sw::DefaultToxTabStopTokenHandler::TABSTOPS_RELATIVE_TO_INDENT :
                                 sw::DefaultToxTabStopTokenHandler::TABSTOPS_RELATIVE_TO_PAGE);
         sw::ToxTextGenerator ttgn(GetTOXForm(), tabStopTokenHandler);

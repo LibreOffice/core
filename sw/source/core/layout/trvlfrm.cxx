@@ -1644,7 +1644,7 @@ bool SwFrm::IsProtected() const
     if (this->IsCntntFrm() && static_cast<const SwCntntFrm*>(this)->GetNode())
     {
         const SwDoc *pDoc=static_cast<const SwCntntFrm*>(this)->GetNode()->GetDoc();
-        bool isFormProtected=pDoc->GetDocumentSettingManager().get(IDocumentSettingAccess::PROTECT_FORM );
+        bool isFormProtected=pDoc->GetDocumentSettingManager().get(DocumentSettingId::PROTECT_FORM );
         if (isFormProtected)
         {
             return false; // TODO a hack for now, well deal with it later, I we return true here we have a "double" locking

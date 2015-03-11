@@ -2882,7 +2882,7 @@ sal_Int32 SwEscherEx::WriteFlyFrm(const DrawObj &rObj, sal_uInt32 &rShapeId,
             //In browse mode the sdr object doesn't always exist. For example, the
             //object is in the hidden header/footer. We save the fmt directly
             //in such cases; we copy most of the logic from the block above
-            const bool bBrowseMode = (rFmt.getIDocumentSettingAccess())->get(IDocumentSettingAccess::BROWSE_MODE);
+            const bool bBrowseMode = (rFmt.getIDocumentSettingAccess())->get(DocumentSettingId::BROWSE_MODE);
             if( bBrowseMode && rFmt.GetDoc())
             {
                 if( !rFmt.GetChain().GetPrev() )//obj in header/footer?
