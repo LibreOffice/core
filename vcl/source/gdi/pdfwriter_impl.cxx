@@ -6857,6 +6857,10 @@ bool PDFWriterImpl::finalizeSignature()
 
     char *pass(strdup(OUStringToOString( m_aContext.SignPassword, RTL_TEXTENCODING_UTF8 ).getStr()));
 
+    TimeStampReq src;
+    OStringBuffer response_buffer;
+    TimeStampResp response;
+    SECItem response_item;
     NSSCMSAttribute timestamp;
     SECItem values[2];
     SECItem *valuesp = values;
@@ -6927,7 +6931,6 @@ bool PDFWriterImpl::finalizeSignature()
             fclose(out);
         }
 #endif
-        TimeStampReq src;
 
         unsigned char cOne = 1;
         src.version.type = siUnsignedInteger;
@@ -7029,8 +7032,6 @@ bool PDFWriterImpl::finalizeSignature()
             return false;
         }
 
-        OStringBuffer response_buffer;
-
         if ((rc = curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response_buffer)) != CURLE_OK ||
             (rc = curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, AppendToBuffer)) != CURLE_OK)
         {
@@ -7094,10 +7095,8 @@ bool PDFWriterImpl::finalizeSignature()
         curl_easy_cleanup(curl);
         SECITEM_FreeItem(timestamp_request, PR_TRUE);
 
-        TimeStampResp response;
         memset(&response, 0, sizeof(response));
 
-        SECItem response_item;
         response_item.type = siBuffer;
         response_item.data = reinterpret_cast<unsigned char*>(const_cast<char*>(response_buffer.getStr()));
         response_item.len = response_buffer.getLength();
