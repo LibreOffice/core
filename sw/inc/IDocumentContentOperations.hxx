@@ -138,7 +138,7 @@ public:
     /** Insert string into existing text node at position rRg.Point().
      */
     virtual bool InsertString(const SwPaM &rRg, const OUString&,
-              const enum SwInsertFlags nInsertMode = SwInsertFlags::EMPTYEXPAND ) = 0;
+              const SwInsertFlags nInsertMode = SwInsertFlags::EMPTYEXPAND ) = 0;
 
     /** change text to Upper/Lower/Hiragana/Katagana/...
      */

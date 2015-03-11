@@ -61,7 +61,7 @@ public:
     bool Overwrite(const SwPaM &rRg, const OUString& rStr) SAL_OVERRIDE;
 
     bool InsertString(const SwPaM &rRg, const OUString&,
-              const enum SwInsertFlags nInsertMode = SwInsertFlags::EMPTYEXPAND ) SAL_OVERRIDE;
+              const SwInsertFlags nInsertMode = SwInsertFlags::EMPTYEXPAND ) SAL_OVERRIDE;
 
     void TransliterateText(const SwPaM& rPaM, utl::TransliterationWrapper&) SAL_OVERRIDE;
 

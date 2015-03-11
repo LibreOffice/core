@@ -1105,7 +1105,7 @@ bool DocInsertStringSplitCR(
 {
     bool bOK = true;
 
-        const enum SwInsertFlags nInsertFlags =
+        const SwInsertFlags nInsertFlags =
             bForceExpandHints
             ? ( SwInsertFlags::FORCEHINTEXPAND | SwInsertFlags::EMPTYEXPAND)
             : SwInsertFlags::EMPTYEXPAND;

@@ -408,7 +408,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
     }
     const bool bForceExpandHints(CheckForOwnMemberMeta(aPam, bAbsorb));
 
-    const enum SwInsertFlags nInsertFlags =
+    const SwInsertFlags nInsertFlags =
         bForceExpandHints
         ? ( SwInsertFlags::FORCEHINTEXPAND | SwInsertFlags::EMPTYEXPAND)
         : SwInsertFlags::EMPTYEXPAND;
