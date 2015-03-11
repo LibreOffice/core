@@ -26,7 +26,10 @@
 #include <com/sun/star/frame/XConfigManager.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+
+namespace com { namespace sun { namespace star { namespace uno {
+    class XComponentContext;
+} } } }
 
 class PathService : public ::cppu::WeakImplHelper2< css::frame::XConfigManager, css::lang::XServiceInfo >
 {
