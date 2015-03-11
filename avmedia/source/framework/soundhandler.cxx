@@ -113,7 +113,7 @@ css::uno::Sequence< css::uno::Type > SAL_CALL SoundHandler::getTypes() throw( cs
 /*===========================================================================================================*/
 OUString SAL_CALL SoundHandler::getImplementationName() throw( css::uno::RuntimeException, std::exception )
 {
-    return impl_getStaticImplementationName();
+    return IMPLEMENTATIONNAME_SOUNDHANDLER;
 }
 
 // XServiceInfo
@@ -125,25 +125,9 @@ sal_Bool SAL_CALL SoundHandler::supportsService( const OUString& sServiceName ) 
 // XServiceInfo
 css::uno::Sequence< OUString > SAL_CALL SoundHandler::getSupportedServiceNames() throw( css::uno::RuntimeException, std::exception )
 {
-    return impl_getStaticSupportedServiceNames();
-}
-
-// Helper for XServiceInfo
-css::uno::Sequence< OUString > SoundHandler::impl_getStaticSupportedServiceNames()
-{
     css::uno::Sequence< OUString > seqServiceNames( 1 );
     seqServiceNames.getArray() [0] = "com.sun.star.frame.ContentHandler";
     return seqServiceNames;
-}
-
-// Helper for XServiceInfo
-OUString SoundHandler::impl_getStaticImplementationName()
-{
-    return IMPLEMENTATIONNAME_SOUNDHANDLER;
-}
-
-void SAL_CALL SoundHandler::impl_initService()
-{
 }
 
 /*-************************************************************************************************************
@@ -156,13 +140,12 @@ void SAL_CALL SoundHandler::impl_initService()
     @onerror    Show an assertion and do nothing else.
     @threadsafe yes
 *//*-*************************************************************************************************************/
-SoundHandler::SoundHandler( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory )
+SoundHandler::SoundHandler()
         //  Init baseclasses first
         :   ThreadHelpBase      (          )
         ,   ::cppu::OWeakObject (          )
         // Init member
     ,   m_bError        ( false    )
-        ,   m_xFactory          ( xFactory )
 {
     m_aUpdateIdle.SetIdleHdl(LINK(this, SoundHandler, implts_PlayerNotify));
 }
@@ -357,13 +340,10 @@ IMPL_LINK_NOARG(SoundHandler, implts_PlayerNotify)
 
 
 extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
-com_sun_star_comp_framework_SoundHandler_get_implementation(::com::sun::star::uno::XComponentContext* context,
+com_sun_star_comp_framework_SoundHandler_get_implementation(::com::sun::star::uno::XComponentContext*,
                                                             ::com::sun::star::uno::Sequence<css::uno::Any> const &)
 {
-    css::uno::Reference< css::lang::XMultiServiceFactory> xSM(context->getServiceManager(), css::uno::UNO_QUERY_THROW);
-    avmedia::SoundHandler* pClass = new avmedia::SoundHandler( xSM );
-    pClass->impl_initService();
-    return cppu::acquire( pClass );
+    return cppu::acquire(new avmedia::SoundHandler);
 }
 
 

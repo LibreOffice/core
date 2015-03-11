@@ -21,7 +21,6 @@
 #define INCLUDED_AVMEDIA_SOURCE_FRAMEWORK_SOUNDHANDLER_HXX
 
 #include <com/sun/star/lang/XTypeProvider.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/XNotifyingDispatch.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
@@ -74,7 +73,7 @@ class SoundHandler  :   // interfaces
     public:
 
         // constructor / destructor
-                 SoundHandler( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory );
+                 SoundHandler();
         virtual ~SoundHandler(                                                                        );
 
         //  XInterface, XTypeProvider, XServiceInfo
@@ -88,11 +87,6 @@ class SoundHandler  :   // interfaces
        virtual OUString                                               SAL_CALL getImplementationName              (                                                                               ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
        virtual sal_Bool                                               SAL_CALL supportsService                    ( const OUString&                                               sServiceName    ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
        virtual css::uno::Sequence< OUString >                         SAL_CALL getSupportedServiceNames           (                                                                               ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    /* Helper for XServiceInfo */
-       static css::uno::Sequence< OUString >                          SAL_CALL impl_getStaticSupportedServiceNames(                                                                               );
-       static OUString                                                SAL_CALL impl_getStaticImplementationName   (                                                                               );
-    /* Helper for initialization of service by using own reference! */
-       void                                                   SAL_CALL impl_initService                   (                                                                               );
 
         //  XNotifyingDispatch
         virtual void SAL_CALL dispatchWithNotification(const css::util::URL&                                             aURL      ,
@@ -123,7 +117,6 @@ class SoundHandler  :   // interfaces
     private:
 
         bool m_bError;
-        css::uno::Reference< css::lang::XMultiServiceFactory >     m_xFactory          ;   // global uno service factory to create new services
         css::uno::Reference< css::uno::XInterface >                m_xSelfHold         ;   // we must protect us against dying during async(!) dispatch() call!
         css::uno::Reference< css::media::XPlayer >                 m_xPlayer           ;   // uses avmedia player to play sounds...
 
