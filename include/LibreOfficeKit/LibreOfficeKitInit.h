@@ -39,7 +39,14 @@ extern "C"
 
     void *_dlopen(const char *pFN)
     {
-        return dlopen(pFN, RTLD_LAZY);
+        return dlopen(pFN, RTLD_LAZY
+#if defined __clang__ && defined __linux__ \
+    && defined ENABLE_RUNTIME_OPTIMIZATIONS
+#if !ENABLE_RUNTIME_OPTIMIZATIONS
+                      | RTLD_GLOBAL
+#endif
+#endif
+                      );
     }
 
     void *_dlsym(void *Hnd, const char *pName)

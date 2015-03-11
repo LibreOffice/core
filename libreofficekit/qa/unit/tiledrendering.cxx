@@ -19,6 +19,8 @@
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
 
+#include <config_options.h>
+    // see use of ENABLE_RUNTIME_OPTIMIZATIONS in LibreOfficeKintInit.h
 #define LOK_USE_UNSTABLE_API
 #include <LibreOfficeKit/LibreOfficeKitInit.h>
 #include <LibreOfficeKit/LibreOfficeKit.hxx>

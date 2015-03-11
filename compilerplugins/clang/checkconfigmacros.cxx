@@ -129,9 +129,14 @@ void CheckConfigMacros::checkMacro( const Token& macroToken, SourceLocation loca
     {
     if( configMacros.find( macroToken.getIdentifierInfo()->getName()) != configMacros.end())
         {
-        report( DiagnosticsEngine::Error, "checking whether a config macro %0 is defined",
-            location ) << macroToken.getIdentifierInfo()->getName();
-        report( DiagnosticsEngine::Note, "use #if instead of #ifdef/#ifndef/defined", location );
+        const char* filename = compiler.getSourceManager().getPresumedLoc( location ).getFilename();
+        if( filename == NULL
+            || strncmp( filename, SRCDIR "/include/LibreOfficeKit/", strlen( SRCDIR "/include/LibreOfficeKit/" )) != 0 )
+            {
+            report( DiagnosticsEngine::Error, "checking whether a config macro %0 is defined",
+                location ) << macroToken.getIdentifierInfo()->getName();
+            report( DiagnosticsEngine::Note, "use #if instead of #ifdef/#ifndef/defined", location );
+            }
         }
     }
 
