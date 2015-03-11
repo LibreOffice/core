@@ -465,4 +465,9 @@
       <value>1</value>
     </prop>
   </node>
+  <node oor:name="HiddenContent">
+    <prop oor:name="RemoveHiddenContent">
+      <value oor:external="com.sun.star.configuration.backend.DesktopBackend RemoveHiddenContent" />
+    </prop>
+  </node>
 </oor:component-data>
