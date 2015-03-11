@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a29b11f_1dc81774",
+        "filename": "package/source/xstor/register.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-03-11T14:53:33Z",
+      "side": 0,
+      "message": "OneInstance!",
+      "revId": "ff44575123926d260edb337ce6171b3a09114bbb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
