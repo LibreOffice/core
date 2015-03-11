@@ -50,6 +50,12 @@ public class Document {
     public static final int SET_TEXT_SELECTION_END = 1;
     public static final int SET_TEXT_SELECTION_RESET = 2;
 
+    /**
+     * Set graphic selection types
+     */
+    public static final int SET_GRAPHIC_SELECTION_START = 0;
+    public static final int SET_GRAPHIC_SELECTION_END = 1;
+
     private final ByteBuffer handle;
     private MessageCallback messageCallback = null;
 
@@ -127,12 +133,25 @@ public class Document {
     public native void postMouseEvent(int type, int x, int y, int count);
 
     /**
-     * Change text selection
+     * Change text selection.
      * @param type - text selection type
      * @param x - x coordinate
      * @param y - y coordinate
      */
     public native void setTextSelection(int type, int x, int y);
+
+    /**
+     * Change graphic selection.
+     * @param type - graphic selection type
+     * @param x - x coordinate
+     * @param y - y coordinate
+     */
+    public native void setGraphicSelection(int type, int x, int y);
+
+    /**
+     * Reset current (any kind of) selection.
+     */
+    public native void resetSelection();
 
     /**
      * Callback to retrieve messages from LOK

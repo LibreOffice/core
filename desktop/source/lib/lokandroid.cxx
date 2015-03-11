@@ -291,6 +291,20 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_setText
     pDocument->pClass->setTextSelection(pDocument, type, x, y);
 }
 
+extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_setGraphicSelection
+    (JNIEnv* pEnv, jobject aObject, jint type, jint x, jint y)
+{
+    LibreOfficeKitDocument* pDocument = getHandle<LibreOfficeKitDocument>(pEnv, aObject);
+    pDocument->pClass->setGraphicSelection(pDocument, type, x, y);
+}
+
+extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_resetSelection
+    (JNIEnv* pEnv, jobject aObject)
+{
+    LibreOfficeKitDocument* pDocument = getHandle<LibreOfficeKitDocument>(pEnv, aObject);
+    pDocument->pClass->resetSelection(pDocument);
+}
+
 /* DirectBufferAllocator */
 
 extern "C" SAL_JNI_EXPORT jobject JNICALL Java_org_libreoffice_kit_DirectBufferAllocator_allocateDirectBufferNative
