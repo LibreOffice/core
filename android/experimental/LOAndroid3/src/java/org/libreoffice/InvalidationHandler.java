@@ -250,7 +250,7 @@ public class InvalidationHandler implements Document.MessageCallback {
 
     private synchronized void changeState(OverlayState previous, OverlayState next) {
         mState = next;
-
+        handleGeneralChangeState(previous, next);
         switch (next) {
             case CURSOR:
                 handleCursorState(previous);
@@ -267,6 +267,14 @@ public class InvalidationHandler implements Document.MessageCallback {
             case NONE:
                 handleNoneState(previous);
                 break;
+        }
+    }
+
+    private void handleGeneralChangeState(OverlayState previous, OverlayState next) {
+        if (previous == OverlayState.NONE) {
+            LOKitShell.getToolbarController().switchToEditMode();
+        } else if (next == OverlayState.NONE) {
+            LOKitShell.getToolbarController().switchToViewMode();
         }
     }
 

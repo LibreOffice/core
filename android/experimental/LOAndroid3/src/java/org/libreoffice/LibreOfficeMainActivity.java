@@ -54,6 +54,7 @@ public class LibreOfficeMainActivity extends ActionBarActivity {
     private TextCursorLayer mTextCursorLayer;
     private File mTempFile = null;
     private LOAbout mAbout;
+    private ToolbarController mToolbarController;
 
     public LibreOfficeMainActivity() {
         mAbout = new LOAbout(this, false);
@@ -120,9 +121,7 @@ public class LibreOfficeMainActivity extends ActionBarActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.lo_icon);
-
-        //getSupportActionBar().setHomeAsUpIndicator();
+        mToolbarController = new ToolbarController(getSupportActionBar(), toolbar);
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -322,6 +321,10 @@ public class LibreOfficeMainActivity extends ActionBarActivity {
 
     public TextCursorLayer getTextCursorLayer() {
         return mTextCursorLayer;
+    }
+
+    public ToolbarController getToolbarController() {
+        return mToolbarController;
     }
 
     private class DocumentPartClickListener implements android.widget.AdapterView.OnItemClickListener {

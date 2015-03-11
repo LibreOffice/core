@@ -214,16 +214,7 @@ public class LOKitThread extends Thread {
                 onSwipeRight();
                 break;
             case LOEvent.NAVIGATION_CLICK:
-                if (mInvalidationHandler.getCurrentState() == InvalidationHandler.OverlayState.NONE) {
-                    LOKitShell.getMainHandler().post(new Runnable() {
-                        @Override
-                        public void run() {
-                            LibreOfficeMainActivity.mAppContext.onBackPressed();
-                        }
-                    });
-                } else {
-                    mInvalidationHandler.changeStateTo(InvalidationHandler.OverlayState.NONE);
-                }
+                mInvalidationHandler.changeStateTo(InvalidationHandler.OverlayState.NONE);
                 break;
         }
     }
