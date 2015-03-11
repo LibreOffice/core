@@ -135,7 +135,7 @@ SwInsertBookmarkDlg::SwInsertBookmarkDlg( vcl::Window *pParent, SwWrtShell &rS, 
         ppBookmark != pMarkAccess->getBookmarksEnd();
         ++ppBookmark)
     {
-        if(IDocumentMarkAccess::BOOKMARK == IDocumentMarkAccess::GetType(**ppBookmark))
+        if(IDocumentMarkAccess::MarkType::BOOKMARK == IDocumentMarkAccess::GetType(**ppBookmark))
         {
             m_pBookmarkBox->InsertSwEntry(
                     SwBoxEntry(ppBookmark->get()->GetName(), nId++));

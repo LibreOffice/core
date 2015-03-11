@@ -181,7 +181,7 @@ namespace
         const bool bChangedOPos,
         MarkBase* io_pMark )
     {
-        if ( IDocumentMarkAccess::GetType(*io_pMark) == IDocumentMarkAccess::ANNOTATIONMARK )
+        if ( IDocumentMarkAccess::GetType(*io_pMark) == IDocumentMarkAccess::MarkType::ANNOTATIONMARK )
         {
             // annotation marks are allowed to span a table cell range.
             // but trigger sorting to be save
@@ -302,28 +302,28 @@ IDocumentMarkAccess::MarkType IDocumentMarkAccess::GetType(const IMark& rBkmk)
     const std::type_info* const pMarkTypeInfo = &typeid(rBkmk);
     // not using dynamic_cast<> here for performance
     if(*pMarkTypeInfo == typeid(UnoMark))
-        return UNO_BOOKMARK;
+        return MarkType::UNO_BOOKMARK;
     else if(*pMarkTypeInfo == typeid(DdeBookmark))
-        return DDE_BOOKMARK;
+        return MarkType::DDE_BOOKMARK;
     else if(*pMarkTypeInfo == typeid(Bookmark))
-        return BOOKMARK;
+        return MarkType::BOOKMARK;
     else if(*pMarkTypeInfo == typeid(CrossRefHeadingBookmark))
-        return CROSSREF_HEADING_BOOKMARK;
+        return MarkType::CROSSREF_HEADING_BOOKMARK;
     else if(*pMarkTypeInfo == typeid(CrossRefNumItemBookmark))
-        return CROSSREF_NUMITEM_BOOKMARK;
+        return MarkType::CROSSREF_NUMITEM_BOOKMARK;
     else if(*pMarkTypeInfo == typeid(AnnotationMark))
-        return ANNOTATIONMARK;
+        return MarkType::ANNOTATIONMARK;
     else if(*pMarkTypeInfo == typeid(TextFieldmark))
-        return TEXT_FIELDMARK;
+        return MarkType::TEXT_FIELDMARK;
     else if(*pMarkTypeInfo == typeid(CheckboxFieldmark))
-        return CHECKBOX_FIELDMARK;
+        return MarkType::CHECKBOX_FIELDMARK;
     else if(*pMarkTypeInfo == typeid(NavigatorReminder))
-        return NAVIGATOR_REMINDER;
+        return MarkType::NAVIGATOR_REMINDER;
     else
     {
         assert(false && "IDocumentMarkAccess::GetType(..)"
             " - unknown MarkType. This needs to be fixed!");
-        return UNO_BOOKMARK;
+        return MarkType::UNO_BOOKMARK;
     }
 }
 
@@ -375,7 +375,7 @@ namespace sw { namespace mark
             "MarkManager::makeMark(..)"
             " - more than USHRT_MAX marks are not supported correctly");
         // There should only be one CrossRefBookmark per Textnode per Type
-        if ((eType == CROSSREF_NUMITEM_BOOKMARK || eType == CROSSREF_HEADING_BOOKMARK)
+        if ((eType == MarkType::CROSSREF_NUMITEM_BOOKMARK || eType == MarkType::CROSSREF_HEADING_BOOKMARK)
             && (lcl_FindMarkAtPos(m_vBookmarks, *rPaM.GetPoint(), eType) != m_vBookmarks.end()))
         {   // this can happen via UNO API
             SAL_WARN("sw.core", "MarkManager::makeMark(..)"
@@ -387,31 +387,31 @@ namespace sw { namespace mark
         pMark_t pMark;
         switch(eType)
         {
-            case IDocumentMarkAccess::TEXT_FIELDMARK:
+            case IDocumentMarkAccess::MarkType::TEXT_FIELDMARK:
                 pMark = boost::shared_ptr<IMark>(new TextFieldmark(rPaM));
                 break;
-            case IDocumentMarkAccess::CHECKBOX_FIELDMARK:
+            case IDocumentMarkAccess::MarkType::CHECKBOX_FIELDMARK:
                 pMark = boost::shared_ptr<IMark>(new CheckboxFieldmark(rPaM));
                 break;
-            case IDocumentMarkAccess::NAVIGATOR_REMINDER:
+            case IDocumentMarkAccess::MarkType::NAVIGATOR_REMINDER:
                 pMark = boost::shared_ptr<IMark>(new NavigatorReminder(rPaM));
                 break;
-            case IDocumentMarkAccess::BOOKMARK:
+            case IDocumentMarkAccess::MarkType::BOOKMARK:
                 pMark = boost::shared_ptr<IMark>(new Bookmark(rPaM, vcl::KeyCode(), rName, OUString()));
                 break;
-            case IDocumentMarkAccess::DDE_BOOKMARK:
+            case IDocumentMarkAccess::MarkType::DDE_BOOKMARK:
                 pMark = boost::shared_ptr<IMark>(new DdeBookmark(rPaM));
                 break;
-            case IDocumentMarkAccess::CROSSREF_HEADING_BOOKMARK:
+            case IDocumentMarkAccess::MarkType::CROSSREF_HEADING_BOOKMARK:
                 pMark = boost::shared_ptr<IMark>(new CrossRefHeadingBookmark(rPaM, vcl::KeyCode(), rName, OUString()));
                 break;
-            case IDocumentMarkAccess::CROSSREF_NUMITEM_BOOKMARK:
+            case IDocumentMarkAccess::MarkType::CROSSREF_NUMITEM_BOOKMARK:
                 pMark = boost::shared_ptr<IMark>(new CrossRefNumItemBookmark(rPaM, vcl::KeyCode(), rName, OUString()));
                 break;
-            case IDocumentMarkAccess::UNO_BOOKMARK:
+            case IDocumentMarkAccess::MarkType::UNO_BOOKMARK:
                 pMark = boost::shared_ptr<IMark>(new UnoMark(rPaM));
                 break;
-            case IDocumentMarkAccess::ANNOTATIONMARK:
+            case IDocumentMarkAccess::MarkType::ANNOTATIONMARK:
                 pMark = boost::shared_ptr<IMark>(new AnnotationMark( rPaM, rName ));
                 break;
         }
@@ -427,7 +427,7 @@ namespace sw { namespace mark
             pMarkBase->Swap();
 
         // for performance reasons, we trust UnoMarks to have a (generated) unique name
-        if ( eType != IDocumentMarkAccess::UNO_BOOKMARK )
+        if ( eType != IDocumentMarkAccess::MarkType::UNO_BOOKMARK )
             pMarkBase->SetName( getUniqueMarkName( pMarkBase->GetName() ) );
 
         // register mark
@@ -435,21 +435,21 @@ namespace sw { namespace mark
         lcl_InsertMarkSorted(m_vAllMarks, pMark);
         switch(eType)
         {
-            case IDocumentMarkAccess::BOOKMARK:
-            case IDocumentMarkAccess::CROSSREF_NUMITEM_BOOKMARK:
-            case IDocumentMarkAccess::CROSSREF_HEADING_BOOKMARK:
+            case IDocumentMarkAccess::MarkType::BOOKMARK:
+            case IDocumentMarkAccess::MarkType::CROSSREF_NUMITEM_BOOKMARK:
+            case IDocumentMarkAccess::MarkType::CROSSREF_HEADING_BOOKMARK:
                 lcl_InsertMarkSorted(m_vBookmarks, pMark);
                 break;
-            case IDocumentMarkAccess::TEXT_FIELDMARK:
-            case IDocumentMarkAccess::CHECKBOX_FIELDMARK:
+            case IDocumentMarkAccess::MarkType::TEXT_FIELDMARK:
+            case IDocumentMarkAccess::MarkType::CHECKBOX_FIELDMARK:
                 lcl_InsertMarkSorted(m_vFieldmarks, pMark);
                 break;
-            case IDocumentMarkAccess::ANNOTATIONMARK:
+            case IDocumentMarkAccess::MarkType::ANNOTATIONMARK:
                 lcl_InsertMarkSorted( m_vAnnotationMarks, pMark );
                 break;
-            case IDocumentMarkAccess::NAVIGATOR_REMINDER:
-            case IDocumentMarkAccess::DDE_BOOKMARK:
-            case IDocumentMarkAccess::UNO_BOOKMARK:
+            case IDocumentMarkAccess::MarkType::NAVIGATOR_REMINDER:
+            case IDocumentMarkAccess::MarkType::DDE_BOOKMARK:
+            case IDocumentMarkAccess::MarkType::UNO_BOOKMARK:
                 // no special array for these
                 break;
         }
@@ -473,7 +473,7 @@ namespace sw { namespace mark
         const OUString& rType )
     {
         sw::mark::IMark* pMark = makeMark( rPaM, rName,
-                IDocumentMarkAccess::TEXT_FIELDMARK );
+                IDocumentMarkAccess::MarkType::TEXT_FIELDMARK );
         sw::mark::IFieldmark* pFieldMark = dynamic_cast<sw::mark::IFieldmark*>( pMark );
         if (pFieldMark)
             pFieldMark->SetFieldname( rType );
@@ -487,7 +487,7 @@ namespace sw { namespace mark
         const OUString& rType)
     {
         sw::mark::IMark* pMark = makeMark( rPaM, rName,
-                IDocumentMarkAccess::CHECKBOX_FIELDMARK );
+                IDocumentMarkAccess::MarkType::CHECKBOX_FIELDMARK );
         sw::mark::IFieldmark* pFieldMark = dynamic_cast<sw::mark::IFieldmark*>( pMark );
         if (pFieldMark)
             pFieldMark->SetFieldname( rType );
@@ -512,7 +512,7 @@ namespace sw { namespace mark
         const SwPaM& rPaM,
         const OUString& rName )
     {
-        return makeMark( rPaM, rName, IDocumentMarkAccess::ANNOTATIONMARK );
+        return makeMark( rPaM, rName, IDocumentMarkAccess::MarkType::ANNOTATIONMARK );
     }
 
     void MarkManager::repositionMark(
@@ -679,7 +679,7 @@ namespace sw { namespace mark
         {
             // navigator marks should not be moved
             // TODO: Check if this might make them invalid
-            if(IDocumentMarkAccess::GetType(**ppMark) == NAVIGATOR_REMINDER)
+            if(IDocumentMarkAccess::GetType(**ppMark) == MarkType::NAVIGATOR_REMINDER)
                 continue;
 
             ::sw::mark::MarkBase* pMark = dynamic_cast< ::sw::mark::MarkBase* >(ppMark->get());
@@ -716,12 +716,12 @@ namespace sw { namespace mark
                 {
                     switch ( IDocumentMarkAccess::GetType( *pMark ) )
                     {
-                    case IDocumentMarkAccess::CROSSREF_HEADING_BOOKMARK:
-                    case IDocumentMarkAccess::CROSSREF_NUMITEM_BOOKMARK:
+                    case IDocumentMarkAccess::MarkType::CROSSREF_HEADING_BOOKMARK:
+                    case IDocumentMarkAccess::MarkType::CROSSREF_NUMITEM_BOOKMARK:
                         // no delete of cross-reference bookmarks, if range is inside one paragraph
                         bDeleteMark = rStt != rEnd;
                         break;
-                    case IDocumentMarkAccess::UNO_BOOKMARK:
+                    case IDocumentMarkAccess::MarkType::UNO_BOOKMARK:
                         // no delete of UNO mark, if it is not expanded and only touches the start of the range
                         bDeleteMark = bIsOtherPosInRange
                                       || pMark->IsExpanded()
@@ -766,12 +766,12 @@ namespace sw { namespace mark
                 {
                     switch ( IDocumentMarkAccess::GetType( *pMark ) )
                     {
-                    case IDocumentMarkAccess::CROSSREF_HEADING_BOOKMARK:
-                    case IDocumentMarkAccess::CROSSREF_NUMITEM_BOOKMARK:
+                    case IDocumentMarkAccess::MarkType::CROSSREF_HEADING_BOOKMARK:
+                    case IDocumentMarkAccess::MarkType::CROSSREF_NUMITEM_BOOKMARK:
                         // no move of cross-reference bookmarks, if move occurs inside a certain node
                         bMoveMark = pMark->GetMarkPos().nNode != pNewPos->nNode;
                         break;
-                    case IDocumentMarkAccess::ANNOTATIONMARK:
+                    case IDocumentMarkAccess::MarkType::ANNOTATIONMARK:
                         // no move of annotation marks, if method is called to collect deleted marks
                         bMoveMark = pSaveBkmk == NULL;
                         break;
@@ -854,9 +854,9 @@ namespace sw { namespace mark
 
         switch(IDocumentMarkAccess::GetType(**ppMark))
         {
-            case IDocumentMarkAccess::BOOKMARK:
-            case IDocumentMarkAccess::CROSSREF_HEADING_BOOKMARK:
-            case IDocumentMarkAccess::CROSSREF_NUMITEM_BOOKMARK:
+            case IDocumentMarkAccess::MarkType::BOOKMARK:
+            case IDocumentMarkAccess::MarkType::CROSSREF_HEADING_BOOKMARK:
+            case IDocumentMarkAccess::MarkType::CROSSREF_NUMITEM_BOOKMARK:
                 {
                     IDocumentMarkAccess::iterator_t ppBookmark = lcl_FindMark(m_vBookmarks, *ppMark);
                     if ( ppBookmark != m_vBookmarks.end() )
@@ -871,8 +871,8 @@ namespace sw { namespace mark
                 }
                 break;
 
-            case IDocumentMarkAccess::TEXT_FIELDMARK:
-            case IDocumentMarkAccess::CHECKBOX_FIELDMARK:
+            case IDocumentMarkAccess::MarkType::TEXT_FIELDMARK:
+            case IDocumentMarkAccess::MarkType::CHECKBOX_FIELDMARK:
                 {
                     IDocumentMarkAccess::iterator_t ppFieldmark = lcl_FindMark(m_vFieldmarks, *ppMark);
                     if ( ppFieldmark != m_vFieldmarks.end() )
@@ -888,7 +888,7 @@ namespace sw { namespace mark
                 }
                 break;
 
-            case IDocumentMarkAccess::ANNOTATIONMARK:
+            case IDocumentMarkAccess::MarkType::ANNOTATIONMARK:
                 {
                     IDocumentMarkAccess::iterator_t ppAnnotationMark = lcl_FindMark(m_vAnnotationMarks, *ppMark);
                     if ( ppAnnotationMark != m_vAnnotationMarks.end() )
@@ -903,9 +903,9 @@ namespace sw { namespace mark
                 }
                 break;
 
-            case IDocumentMarkAccess::NAVIGATOR_REMINDER:
-            case IDocumentMarkAccess::DDE_BOOKMARK:
-            case IDocumentMarkAccess::UNO_BOOKMARK:
+            case IDocumentMarkAccess::MarkType::NAVIGATOR_REMINDER:
+            case IDocumentMarkAccess::MarkType::DDE_BOOKMARK:
+            case IDocumentMarkAccess::MarkType::UNO_BOOKMARK:
                 // no special marks container
                 break;
         }

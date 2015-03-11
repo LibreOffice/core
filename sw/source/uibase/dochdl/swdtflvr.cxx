@@ -885,7 +885,7 @@ int SwTransferable::PrepareForCopy( bool bIsCut )
                 ppMark != pMarkAccess->getAllMarksEnd();
                 ++ppMark)
             {
-                if(IDocumentMarkAccess::DDE_BOOKMARK == IDocumentMarkAccess::GetType(**ppMark))
+                if(IDocumentMarkAccess::MarkType::DDE_BOOKMARK == IDocumentMarkAccess::GetType(**ppMark))
                     vDdeMarks.push_back(ppMark->get());
             }
             // remove all DDE-Bookmarks, they are invalid inside the clipdoc!
@@ -3635,7 +3635,7 @@ SwTrnsfrDdeLink::SwTrnsfrDdeLink( SwTransferable& rTrans, SwWrtShell& rSh )
             vcl::KeyCode(),
             OUString(),
             OUString(),
-            IDocumentMarkAccess::DDE_BOOKMARK);
+            IDocumentMarkAccess::MarkType::DDE_BOOKMARK);
         if(pMark)
         {
             sName = pMark->GetName();
@@ -3715,7 +3715,7 @@ bool SwTrnsfrDdeLink::WriteData( SvStream& rStrm )
     IDocumentMarkAccess* const pMarkAccess = pDocShell->GetDoc()->getIDocumentMarkAccess();
     IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->findMark(sName);
     if(ppMark != pMarkAccess->getAllMarksEnd()
-        && IDocumentMarkAccess::GetType(**ppMark) != IDocumentMarkAccess::BOOKMARK)
+        && IDocumentMarkAccess::GetType(**ppMark) != IDocumentMarkAccess::MarkType::BOOKMARK)
     {
         // the mark is still a DdeBookmark
         // we replace it with a Bookmark, so it will get saved etc.
@@ -3742,7 +3742,7 @@ bool SwTrnsfrDdeLink::WriteData( SvStream& rStrm )
         ::sw::mark::IMark* const pNewMark = pMarkAccess->makeMark(
             aPaM,
             sMarkName,
-            IDocumentMarkAccess::BOOKMARK);
+            IDocumentMarkAccess::MarkType::BOOKMARK);
         rServerObject.SetDdeBookmark(*pNewMark);
     }
 

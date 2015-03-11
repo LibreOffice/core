@@ -154,7 +154,8 @@ uno::Reference<text::XTextContent> SwXBookmark::CreateXBookmark(
     if (!xBookmark.is())
     {
         OSL_ENSURE(!pBookmark ||
-            dynamic_cast< ::sw::mark::IBookmark* >(pBookmark) || IDocumentMarkAccess::GetType(*pBookmark) == IDocumentMarkAccess::ANNOTATIONMARK,
+            dynamic_cast< ::sw::mark::IBookmark* >(pBookmark) ||
+            IDocumentMarkAccess::GetType(*pBookmark) == IDocumentMarkAccess::MarkType::ANNOTATIONMARK,
             "<SwXBookmark::GetObject(..)>"
             "SwXBookmark requested for non-bookmark mark and non-annotation mark.");
         SwXBookmark *const pXBookmark =
@@ -229,16 +230,16 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     {
          m_pImpl->m_sMarkName = "Bookmark";
     }
-    if ((eType == IDocumentMarkAccess::BOOKMARK) &&
+    if ((eType == IDocumentMarkAccess::MarkType::BOOKMARK) &&
         ::sw::mark::CrossRefNumItemBookmark::IsLegalName(m_pImpl->m_sMarkName))
     {
-        eType = IDocumentMarkAccess::CROSSREF_NUMITEM_BOOKMARK;
+        eType = IDocumentMarkAccess::MarkType::CROSSREF_NUMITEM_BOOKMARK;
     }
-    else if ((eType == IDocumentMarkAccess::BOOKMARK) &&
+    else if ((eType == IDocumentMarkAccess::MarkType::BOOKMARK) &&
         ::sw::mark::CrossRefHeadingBookmark::IsLegalName(m_pImpl->m_sMarkName) &&
         IDocumentMarkAccess::IsLegalPaMForCrossRefHeadingBookmark( aPam ) )
     {
-        eType = IDocumentMarkAccess::CROSSREF_HEADING_BOOKMARK;
+        eType = IDocumentMarkAccess::MarkType::CROSSREF_HEADING_BOOKMARK;
     }
     m_pImpl->registerInMark(*this,
         m_pImpl->m_pDoc->getIDocumentMarkAccess()->makeMark(
@@ -258,7 +259,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
 void SwXBookmark::attachToRange( const uno::Reference< text::XTextRange > & xTextRange )
 throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
-    attachToRangeEx(xTextRange, IDocumentMarkAccess::BOOKMARK);
+    attachToRangeEx(xTextRange, IDocumentMarkAccess::MarkType::BOOKMARK);
 }
 
 void SAL_CALL SwXBookmark::attach( const uno::Reference< text::XTextRange > & xTextRange )
@@ -571,7 +572,7 @@ void SwXFieldmark::attachToRange( const uno::Reference < text::XTextRange >& xTe
 {
 
     attachToRangeEx( xTextRange,
-                     ( isReplacementObject ? IDocumentMarkAccess::CHECKBOX_FIELDMARK : IDocumentMarkAccess::TEXT_FIELDMARK ) );
+                     ( isReplacementObject ? IDocumentMarkAccess::MarkType::CHECKBOX_FIELDMARK : IDocumentMarkAccess::MarkType::TEXT_FIELDMARK ) );
 }
 
 OUString SwXFieldmark::getFieldType(void)

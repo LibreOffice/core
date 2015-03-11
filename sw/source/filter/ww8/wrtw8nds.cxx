@@ -1795,7 +1795,7 @@ bool MSWordExportBase::GetBookmarks( const SwTxtNode& rNd, sal_Int32 nStt,
     {
         IMark* pMark = ( pMarkAccess->getAllMarksBegin() + i )->get();
 
-        if ( IDocumentMarkAccess::GetType( *(pMark) ) == IDocumentMarkAccess::ANNOTATIONMARK )
+        if ( IDocumentMarkAccess::GetType( *(pMark) ) == IDocumentMarkAccess::MarkType::ANNOTATIONMARK )
         {
             continue;
         }

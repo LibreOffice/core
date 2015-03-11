@@ -37,7 +37,7 @@ namespace sw { namespace mark {
 class IDocumentMarkAccess
 {
     public:
-        enum MarkType
+        enum class MarkType
         {
             UNO_BOOKMARK,
             DDE_BOOKMARK,

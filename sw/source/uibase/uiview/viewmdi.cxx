@@ -397,7 +397,7 @@ IMPL_STATIC_LINK( SwView, MoveNavigationHdl, bool *, pbNext )
                 ppMark != pMarkAccess->getAllMarksEnd();
                 ppMark++)
             {
-                if( IDocumentMarkAccess::GetType(**ppMark) == IDocumentMarkAccess::NAVIGATOR_REMINDER )
+                if( IDocumentMarkAccess::GetType(**ppMark) == IDocumentMarkAccess::MarkType::NAVIGATOR_REMINDER )
                     vNavMarks.push_back(ppMark->get());
             }
 

@@ -216,7 +216,8 @@ namespace
                     continue;
                 IDocumentMarkAccess::MarkType eType = IDocumentMarkAccess::GetType(*pBkmk);
                 // These are the types stored in the container otherwise accessible via getBookmarks*()
-                if (eType != IDocumentMarkAccess::BOOKMARK && eType != IDocumentMarkAccess::CROSSREF_NUMITEM_BOOKMARK && eType != IDocumentMarkAccess::CROSSREF_HEADING_BOOKMARK)
+                if (eType != IDocumentMarkAccess::MarkType::BOOKMARK && eType != IDocumentMarkAccess::MarkType::CROSSREF_NUMITEM_BOOKMARK &&
+                    eType != IDocumentMarkAccess::MarkType::CROSSREF_HEADING_BOOKMARK)
                     continue;
                 // Only handle bookmarks once, if they start and end at this node as well.
                 if (aSeenMarks.find(pBkmk) != aSeenMarks.end())

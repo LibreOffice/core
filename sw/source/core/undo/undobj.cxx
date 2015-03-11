@@ -694,8 +694,8 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
                     // #i92125#
                     // keep cross-reference bookmarks, if content inside one paragraph is deleted.
                     if ( rMark.nNode == rPoint.nNode
-                         && ( IDocumentMarkAccess::GetType(*pBkmk) == IDocumentMarkAccess::CROSSREF_HEADING_BOOKMARK
-                              || IDocumentMarkAccess::GetType(*pBkmk) == IDocumentMarkAccess::CROSSREF_NUMITEM_BOOKMARK ) )
+                         && ( IDocumentMarkAccess::GetType(*pBkmk) == IDocumentMarkAccess::MarkType::CROSSREF_HEADING_BOOKMARK
+                              || IDocumentMarkAccess::GetType(*pBkmk) == IDocumentMarkAccess::MarkType::CROSSREF_NUMITEM_BOOKMARK ) )
                     {
                         continue;
                     }
@@ -749,7 +749,7 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
                             }
                         }
                     }
-                    else if ( IDocumentMarkAccess::GetType(*pBkmk) == IDocumentMarkAccess::ANNOTATIONMARK )
+                    else if ( IDocumentMarkAccess::GetType(*pBkmk) == IDocumentMarkAccess::MarkType::ANNOTATIONMARK )
                     {
                         // delete annotation marks, if its end position is covered by the deletion
                         const SwPosition& rAnnotationEndPos = pBkmk->GetMarkEnd();
@@ -763,7 +763,7 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
 
                 if ( bSavePos || bSaveOtherPos )
                 {
-                    if( IDocumentMarkAccess::GetType(*pBkmk) != IDocumentMarkAccess::UNO_BOOKMARK )
+                    if( IDocumentMarkAccess::GetType(*pBkmk) != IDocumentMarkAccess::MarkType::UNO_BOOKMARK )
                     {
                         if( !pHistory )
                             pHistory = new SwHistory;

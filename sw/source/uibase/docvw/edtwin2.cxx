@@ -197,7 +197,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                                     pMarkAccess->findBookmark( sTmpSearchStr );
                     if ( ppBkmk != pMarkAccess->getBookmarksEnd() &&
                          IDocumentMarkAccess::GetType( *(ppBkmk->get()) )
-                            == IDocumentMarkAccess::CROSSREF_HEADING_BOOKMARK )
+                            == IDocumentMarkAccess::MarkType::CROSSREF_HEADING_BOOKMARK )
                     {
                         SwTxtNode* pTxtNode = ppBkmk->get()->GetMarkStart().nNode.GetNode().GetTxtNode();
                         if ( pTxtNode )

@@ -501,7 +501,7 @@ void SwNavigationPI::MakeMark()
     for(IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getAllMarksBegin();
         ppMark != pMarkAccess->getAllMarksEnd();
         ++ppMark)
-        if( IDocumentMarkAccess::GetType(**ppMark) == IDocumentMarkAccess::NAVIGATOR_REMINDER )
+        if( IDocumentMarkAccess::GetType(**ppMark) == IDocumentMarkAccess::MarkType::NAVIGATOR_REMINDER )
             vNavMarkNames.push_back(ppMark->get()->GetName());
     ::std::sort(vNavMarkNames.begin(), vNavMarkNames.end());
 
@@ -511,7 +511,7 @@ void SwNavigationPI::MakeMark()
     if(vNavMarkNames.size() == MAX_MARKS)
         pMarkAccess->deleteMark(pMarkAccess->findMark(vNavMarkNames[nAutoMarkIdx]));
 
-    rSh.SetBookmark(vcl::KeyCode(), OUString(), OUString(), IDocumentMarkAccess::NAVIGATOR_REMINDER);
+    rSh.SetBookmark(vcl::KeyCode(), OUString(), OUString(), IDocumentMarkAccess::MarkType::NAVIGATOR_REMINDER);
     SwView::SetActMark( nAutoMarkIdx );
 
     if(++nAutoMarkIdx == MAX_MARKS)

@@ -573,7 +573,7 @@ OUString SwTOXPara::GetURL() const
             SwDoc* pDoc = const_cast<SwDoc*>( pTxtNd->GetDoc() );
             ::sw::mark::IMark const * const pMark = pDoc->getIDocumentMarkAccess()->getMarkForTxtNode(
                                 *(pTxtNd),
-                                IDocumentMarkAccess::CROSSREF_HEADING_BOOKMARK);
+                                IDocumentMarkAccess::MarkType::CROSSREF_HEADING_BOOKMARK);
             aTxt = "#" + pMark->GetName();
         }
         break;

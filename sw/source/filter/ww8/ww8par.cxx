@@ -5255,7 +5255,7 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
         {
             IDocumentMarkAccess::const_iterator_t ppBkmk = pMarkAccess->findBookmark( "_PictureBullets" );
             if ( ppBkmk != pMarkAccess->getBookmarksEnd() &&
-                       IDocumentMarkAccess::GetType( *(ppBkmk->get()) ) == IDocumentMarkAccess::BOOKMARK )
+                       IDocumentMarkAccess::GetType( *(ppBkmk->get()) ) == IDocumentMarkAccess::MarkType::BOOKMARK )
             {
                 SwTxtNode* pTxtNode = ppBkmk->get()->GetMarkStart().nNode.GetNode().GetTxtNode();
 

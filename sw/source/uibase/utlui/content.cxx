@@ -144,7 +144,7 @@ namespace
 
     static bool lcl_IsUiVisibleBookmark(const IDocumentMarkAccess::pMark_t& rpMark)
     {
-        return IDocumentMarkAccess::GetType(*rpMark) == IDocumentMarkAccess::BOOKMARK;
+        return IDocumentMarkAccess::GetType(*rpMark) == IDocumentMarkAccess::MarkType::BOOKMARK;
     }
 }
 

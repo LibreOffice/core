@@ -1601,7 +1601,7 @@ sal_Int32 SwXBookmarks::getCount(void)
             pMarkAccess->getBookmarksBegin();
          ppMark != pMarkAccess->getBookmarksEnd(); ++ppMark)
     {
-        if (IDocumentMarkAccess::BOOKMARK ==
+        if (IDocumentMarkAccess::MarkType::BOOKMARK ==
                 IDocumentMarkAccess::GetType(**ppMark))
         {
             ++count; // only count real bookmarks
@@ -1625,7 +1625,7 @@ uno::Any SwXBookmarks::getByIndex(sal_Int32 nIndex)
             pMarkAccess->getBookmarksBegin();
          ppMark != pMarkAccess->getBookmarksEnd(); ++ppMark)
     {
-        if (IDocumentMarkAccess::BOOKMARK ==
+        if (IDocumentMarkAccess::MarkType::BOOKMARK ==
                 IDocumentMarkAccess::GetType(**ppMark))
         {
             if (count == nIndex)
@@ -1674,7 +1674,7 @@ uno::Sequence< OUString > SwXBookmarks::getElementNames(void)
             pMarkAccess->getBookmarksBegin();
          ppMark != pMarkAccess->getBookmarksEnd(); ++ppMark)
     {
-        if (IDocumentMarkAccess::BOOKMARK ==
+        if (IDocumentMarkAccess::MarkType::BOOKMARK ==
                 IDocumentMarkAccess::GetType(**ppMark))
         {
             ret.push_back((*ppMark)->GetName()); // only add real bookmarks
@@ -1712,7 +1712,7 @@ sal_Bool SwXBookmarks::hasElements(void)
             pMarkAccess->getBookmarksBegin();
          ppMark != pMarkAccess->getBookmarksEnd(); ++ppMark)
     {
-        if (IDocumentMarkAccess::BOOKMARK ==
+        if (IDocumentMarkAccess::MarkType::BOOKMARK ==
                 IDocumentMarkAccess::GetType(**ppMark))
         {
             return true;

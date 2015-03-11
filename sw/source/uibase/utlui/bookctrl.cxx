@@ -114,7 +114,7 @@ void SwBookmarkControl::Command( const CommandEvent& rCEvt )
                 ppBookmark != pMarkAccess->getBookmarksEnd();
                 ++ppBookmark)
             {
-                if(IDocumentMarkAccess::BOOKMARK == IDocumentMarkAccess::GetType(**ppBookmark))
+                if(IDocumentMarkAccess::MarkType::BOOKMARK == IDocumentMarkAccess::GetType(**ppBookmark))
                 {
                     aPop.InsertItem( nPopupId, ppBookmark->get()->GetName() );
                     aBookmarkIdx[nPopupId] = static_cast<sal_uInt16>(ppBookmark - ppBookmarkStart);

@@ -216,7 +216,7 @@ namespace
                 : (rMarkStart != rStt && rMarkEnd != rEnd); // rMarkStart == rMarkEnd
             if ( rMarkStart >= rStt && rMarkEnd <= rEnd
                  && ( bIsNotOnBoundary
-                      || IDocumentMarkAccess::GetType( *pMark ) == IDocumentMarkAccess::ANNOTATIONMARK ) )
+                      || IDocumentMarkAccess::GetType( *pMark ) == IDocumentMarkAccess::MarkType::ANNOTATIONMARK ) )
             {
                 vMarksToCopy.push_back(pMark);
             }
@@ -3794,7 +3794,7 @@ bool DocumentContentOperationsManager::ReplaceRangeImpl( SwPaM& rPam, const OUSt
                 m_rDoc.GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, NULL);
 
                 // If any Redline will change (split!) the node
-                const ::sw::mark::IMark* pBkmk = m_rDoc.getIDocumentMarkAccess()->makeMark( aDelPam, OUString(), IDocumentMarkAccess::UNO_BOOKMARK );
+                const ::sw::mark::IMark* pBkmk = m_rDoc.getIDocumentMarkAccess()->makeMark( aDelPam, OUString(), IDocumentMarkAccess::MarkType::UNO_BOOKMARK );
 
                 //JP 06.01.98: MUSS noch optimiert werden!!!
                 m_rDoc.getIDocumentRedlineAccess().SetRedlineMode(
@@ -3886,7 +3886,7 @@ bool DocumentContentOperationsManager::ReplaceRangeImpl( SwPaM& rPam, const OUSt
                 m_rDoc.GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, NULL);
 
                 // If any Redline will change (split!) the node
-                const ::sw::mark::IMark* pBkmk = m_rDoc.getIDocumentMarkAccess()->makeMark( aDelPam, OUString(), IDocumentMarkAccess::UNO_BOOKMARK );
+                const ::sw::mark::IMark* pBkmk = m_rDoc.getIDocumentMarkAccess()->makeMark( aDelPam, OUString(), IDocumentMarkAccess::MarkType::UNO_BOOKMARK );
 
                 SwIndex& rIdx = aDelPam.GetPoint()->nContent;
                 rIdx.Assign( 0, 0 );

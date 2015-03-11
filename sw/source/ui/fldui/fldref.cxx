@@ -482,7 +482,7 @@ void SwFldRefPage::UpdateSubType()
                 ++ppMark)
             {
                 const ::sw::mark::IMark* pBkmk = ppMark->get();
-                if(IDocumentMarkAccess::BOOKMARK == IDocumentMarkAccess::GetType(*pBkmk))
+                if(IDocumentMarkAccess::MarkType::BOOKMARK == IDocumentMarkAccess::GetType(*pBkmk))
                     m_pSelectionLB->InsertEntry( pBkmk->GetName() );
             }
             if (IsFldEdit())
@@ -858,7 +858,7 @@ bool SwFldRefPage::FillItemSet(SfxItemSet* )
                 {
                     ::sw::mark::IMark const * const pMark = pSh->getIDocumentMarkAccess()->getMarkForTxtNode(
                         *(maOutlineNodes[nOutlIdx]),
-                        IDocumentMarkAccess::CROSSREF_HEADING_BOOKMARK);
+                        IDocumentMarkAccess::MarkType::CROSSREF_HEADING_BOOKMARK);
                     aName = pMark->GetName();
                     nTypeId = TYP_GETREFFLD;
                     nSubType = REF_BOOKMARK;
@@ -879,7 +879,7 @@ bool SwFldRefPage::FillItemSet(SfxItemSet* )
                 {
                     ::sw::mark::IMark const * const pMark = pSh->getIDocumentMarkAccess()->getMarkForTxtNode(
                         *(maNumItems[nNumItemIdx]->GetTxtNode()),
-                        IDocumentMarkAccess::CROSSREF_NUMITEM_BOOKMARK);
+                        IDocumentMarkAccess::MarkType::CROSSREF_NUMITEM_BOOKMARK);
                     aName = pMark->GetName();
                     nTypeId = TYP_GETREFFLD;
                     nSubType = REF_BOOKMARK;

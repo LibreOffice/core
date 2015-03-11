@@ -556,7 +556,7 @@ public:
         const vcl::KeyCode&,
         const OUString& rName,
         const OUString& rShortName,
-        IDocumentMarkAccess::MarkType eMark = IDocumentMarkAccess::BOOKMARK);
+        IDocumentMarkAccess::MarkType eMark = IDocumentMarkAccess::MarkType::BOOKMARK);
     bool GotoMark( const ::sw::mark::IMark* const pMark );    // sets CurCrsr.SPoint
     bool GotoMark( const ::sw::mark::IMark* const pMark, bool bAtStart );
     bool GoNextBookmark(); // true, if there was one

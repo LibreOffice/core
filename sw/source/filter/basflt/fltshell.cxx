@@ -581,8 +581,8 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                 const IDocumentMarkAccess::MarkType eBookmarkType =
                     ( pB->IsTOCBookmark() &&
                       IDocumentMarkAccess::IsLegalPaMForCrossRefHeadingBookmark( aRegion ) )
-                    ? IDocumentMarkAccess::CROSSREF_HEADING_BOOKMARK
-                    : IDocumentMarkAccess::BOOKMARK;
+                    ? IDocumentMarkAccess::MarkType::CROSSREF_HEADING_BOOKMARK
+                    : IDocumentMarkAccess::MarkType::BOOKMARK;
                 pDoc->getIDocumentMarkAccess()->makeMark( aRegion, rName, eBookmarkType );
             }
         }

@@ -74,7 +74,7 @@ namespace
 
     static bool lcl_IsInvisibleBookmark(IDocumentMarkAccess::pMark_t pMark)
     {
-        return IDocumentMarkAccess::GetType(*pMark) != IDocumentMarkAccess::BOOKMARK;
+        return IDocumentMarkAccess::GetType(*pMark) != IDocumentMarkAccess::MarkType::BOOKMARK;
     }
 }
 
