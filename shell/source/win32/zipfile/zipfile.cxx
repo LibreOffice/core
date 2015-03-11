@@ -136,7 +136,10 @@ static std::string readString(StreamInterface *stream, unsigned long size)
     unsigned char *tmp = new unsigned char[size];
     unsigned long numBytesRead = stream->sread(tmp, size);
     if (numBytesRead != size)
+    {
+        delete [] tmp;
         throw IOException(-1);
+    }
 
     std::string aStr((char *)tmp, size);
     delete [] tmp;
