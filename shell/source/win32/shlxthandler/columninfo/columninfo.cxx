@@ -110,10 +110,7 @@ HRESULT STDMETHODCALLTYPE CColumnInfo::Initialize(LPCSHCOLUMNINIT /*psci*/)
     return S_OK;
 }
 
-
 // Register all columns we support
-
-
 HRESULT STDMETHODCALLTYPE CColumnInfo::GetColumnInfo(DWORD dwIndex, SHCOLUMNINFO *psci)
 {
     if (dwIndex >= ColumnInfoTableSize)
@@ -126,13 +123,11 @@ HRESULT STDMETHODCALLTYPE CColumnInfo::GetColumnInfo(DWORD dwIndex, SHCOLUMNINFO
     psci->scid.fmtid = ColumnInfoTable[dwIndex].scid.fmtid;
     psci->scid.pid   = ColumnInfoTable[dwIndex].scid.pid;
     ZeroMemory(psci->wszTitle, sizeof(psci->wszTitle));
-    wcsncpy(psci->wszTitle, ColumnInfoTable[dwIndex].wszTitle, (sizeof(psci->wszTitle) - 1));
-
+    wcsncpy(psci->wszTitle, ColumnInfoTable[dwIndex].wszTitle,
+            (sizeof(psci->wszTitle) / sizeof(psci->wszTitle[0]) - 1));
 
     return S_OK;
 }
-
-
 
 HRESULT STDMETHODCALLTYPE CColumnInfo::GetItemData(LPCSHCOLUMNID pscid, LPCSHCOLUMNDATA pscd, VARIANT *pvarData)
 {
