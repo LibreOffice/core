@@ -135,7 +135,7 @@ void CheckConfigMacros::checkMacro( const Token& macroToken, SourceLocation loca
         }
     }
 
-static Plugin::Registration< CheckConfigMacros > X( "bodynotinblock" );
+static Plugin::Registration< CheckConfigMacros > X( "checkconfigmacros" );
 
 } // namespace
 
