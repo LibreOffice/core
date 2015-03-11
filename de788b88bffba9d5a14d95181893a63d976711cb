@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a29b11f_5d952f3e",
+        "filename": "scaddins/source/analysis/analysis.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-03-11T15:35:56Z",
+      "side": 0,
+      "message": "OneInstance!",
+      "revId": "de788b88bffba9d5a14d95181893a63d976711cb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
