@@ -3391,15 +3391,11 @@ void GtkSalFrame::damaged (const basegfx::B2IBox& rDamageRect)
         cairo_surface_write_to_png(cairo_get_target(getCairoContext()), tmp.getStr());
     }
 
-    /* FIXME: this is a dirty hack, to render buttons correctly, we
-     * should of course remove the -1 and +2, but the whole area
-     * won't be rendered then.
-     */
-    gtk_widget_queue_draw_area( m_pWindow,
-                                rDamageRect.getMinX() - 1,
-                                rDamageRect.getMinY() - 1,
-                                rDamageRect.getWidth() + 2,
-                                rDamageRect.getHeight() + 2 );
+    gtk_widget_queue_draw_area(m_pWindow,
+                               rDamageRect.getMinX(),
+                               rDamageRect.getMinY(),
+                               rDamageRect.getWidth(),
+                               rDamageRect.getHeight());
 }
 
 // blit our backing basebmp buffer to the target cairo context cr
