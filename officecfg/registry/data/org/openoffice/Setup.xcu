@@ -875,6 +875,7 @@
                 <it>/org.openoffice.Office.Common/Cache</it>
                 <it>/org.openoffice.Office.Common/DateFormat</it>
                 <it>/org.openoffice.Office.Common/ExternalMailer/Program</it>
+                <it>/org.openoffice.Office.Common/HiddenContent/RemoveHiddenContent</it>
                 <it>/org.openoffice.Office.Common/Filter</it>
                 <it>/org.openoffice.Office.Common/Font</it>
                 <it>/org.openoffice.Office.Common/Forms</it>
