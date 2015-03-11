@@ -240,6 +240,8 @@ bool SvpSalGraphics::isClippedSetup( const basegfx::B2IBox &aRange, SvpSalGraphi
     {
         if( aHitRect.IsInside( aRect ) )
         {
+            //The region to be painted (aRect) is equal to or inside the
+            //current clipping region
 //        fprintf (stderr, " is inside ! avoid deeper clip ...\n");
             return false;
         }
@@ -276,6 +278,7 @@ bool SvpSalGraphics::setClipRegion( const vcl::Region& i_rClip )
     m_aClipMap.reset();
     if( i_rClip.IsEmpty() )
     {
+        m_aDevice = m_aOrigDevice;
         m_bClipSetup = true;
         return true;
     }
@@ -283,8 +286,9 @@ bool SvpSalGraphics::setClipRegion( const vcl::Region& i_rClip )
     RectangleVector aRectangles;
     i_rClip.GetRegionRectangles(aRectangles);
 
-    if(1 == aRectangles.size())
+    if (1 == aRectangles.size())
     {
+        //simplest case, subset the device to clip bounds
         m_aClipMap.reset();
 
         const Rectangle& aBoundRect = aRectangles[0];
@@ -295,7 +299,14 @@ bool SvpSalGraphics::setClipRegion( const vcl::Region& i_rClip )
         m_bClipSetup = true;
     }
     else
+    {
+        //more complex, either setup and tear down temporary
+        //subsets of the original device around render calls
+        //or generate m_aClipMap and pass that to basebmp
+        //calls
+        m_aDevice = m_aOrigDevice;
         m_bClipSetup = false;
+    }
 
     return true;
 }
