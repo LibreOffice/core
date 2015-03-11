@@ -215,12 +215,16 @@ public:
 
     enum Item
     {
-        TABLE    = 0,
-        ALL      = 1,
-        HEADERS  = 2,
-        DATA     = 4,
-        TOTALS   = 8,
-        THIS_ROW = 16
+        TABLE    =   0,
+        ALL      =   1,
+        HEADERS  =   2,
+        DATA     =   4,
+        TOTALS   =   8,
+        THIS_ROW =  16,
+        HEADERS_DATA = HEADERS | DATA,
+        DATA_TOTALS = DATA | TOTALS,
+        HEADERS_DATA_TOTALS = HEADERS | DATA | TOTALS,
+        ALL_COLUMN = HEADERS_DATA_TOTALS | 32   // semantically the same, but just a [#All] item
     };
 
     ScTableRefToken( sal_uInt16 nIndex, Item eItem );
