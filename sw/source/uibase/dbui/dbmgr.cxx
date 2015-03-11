@@ -1183,45 +1183,45 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                                     lcl_CopyFollowPageDesc( *pTargetShell, *pWorkPageDesc, *pTargetPageDesc, nDocNo );
                                 }
                             }
-                        else if( rMergeDescriptor.nMergeType == DBMGR_MERGE_PRINTER )
-                        {
-                            assert(!bCreateSingleFile);
-                            if( 1 == nDocNo ) // set up printing only once at the beginning
+                            else if( rMergeDescriptor.nMergeType == DBMGR_MERGE_PRINTER )
                             {
-                                // printing should be done synchronously otherwise the document
-                                // might already become invalid during the process
-                                uno::Sequence< beans::PropertyValue > aOptions( rMergeDescriptor.aPrintOptions );
-
-                                aOptions.realloc( 2 );
-                                aOptions[ 0 ].Name = "Wait";
-                                aOptions[ 0 ].Value <<= sal_True;
-                                aOptions[ 1 ].Name = "MonitorVisible";
-                                aOptions[ 1 ].Value <<= sal_False;
-                                // move print options
-                                const beans::PropertyValue* pPrintOptions = rMergeDescriptor.aPrintOptions.getConstArray();
-                                for( sal_Int32 nOption = 0, nIndex = 1 ; nOption < rMergeDescriptor.aPrintOptions.getLength(); ++nOption)
+                                assert(!bCreateSingleFile);
+                                if( 1 == nDocNo ) // set up printing only once at the beginning
                                 {
-                                    if( pPrintOptions[nOption].Name == "CopyCount" || pPrintOptions[nOption].Name == "FileName"
-                                        || pPrintOptions[nOption].Name == "Collate" || pPrintOptions[nOption].Name == "Pages"
-                                        || pPrintOptions[nOption].Name == "Wait" || pPrintOptions[nOption].Name == "PrinterName" )
+                                    // printing should be done synchronously otherwise the document
+                                    // might already become invalid during the process
+                                    uno::Sequence< beans::PropertyValue > aOptions( rMergeDescriptor.aPrintOptions );
+
+                                    aOptions.realloc( 2 );
+                                    aOptions[ 0 ].Name = "Wait";
+                                    aOptions[ 0 ].Value <<= sal_True;
+                                    aOptions[ 1 ].Name = "MonitorVisible";
+                                    aOptions[ 1 ].Value <<= sal_False;
+                                    // move print options
+                                    const beans::PropertyValue* pPrintOptions = rMergeDescriptor.aPrintOptions.getConstArray();
+                                    for( sal_Int32 nOption = 0, nIndex = 1 ; nOption < rMergeDescriptor.aPrintOptions.getLength(); ++nOption)
                                     {
-                                        // add an option
-                                        aOptions.realloc( nIndex + 1 );
-                                        aOptions[ nIndex ].Name = pPrintOptions[nOption].Name;
-                                        aOptions[ nIndex++ ].Value = pPrintOptions[nOption].Value ;
+                                        if( pPrintOptions[nOption].Name == "CopyCount" || pPrintOptions[nOption].Name == "FileName"
+                                            || pPrintOptions[nOption].Name == "Collate" || pPrintOptions[nOption].Name == "Pages"
+                                            || pPrintOptions[nOption].Name == "Wait" || pPrintOptions[nOption].Name == "PrinterName" )
+                                        {
+                                            // add an option
+                                            aOptions.realloc( nIndex + 1 );
+                                            aOptions[ nIndex ].Name = pPrintOptions[nOption].Name;
+                                            aOptions[ nIndex++ ].Value = pPrintOptions[nOption].Value ;
+                                        }
                                     }
-                                }
-                                pWorkView->StartPrint( aOptions, IsMergeSilent(), rMergeDescriptor.bPrintAsync );
-                                SfxPrinter* pDocPrt = pWorkView->GetPrinter(false);
-                                JobSetup aJobSetup = pDocPrt ? pDocPrt->GetJobSetup() : pWorkView->GetJobSetup();
-                                Printer::PreparePrintJob( pWorkView->GetPrinterController(), aJobSetup );
+                                    pWorkView->StartPrint( aOptions, IsMergeSilent(), rMergeDescriptor.bPrintAsync );
+                                    SfxPrinter* pDocPrt = pWorkView->GetPrinter(false);
+                                    JobSetup aJobSetup = pDocPrt ? pDocPrt->GetJobSetup() : pWorkView->GetJobSetup();
+                                    Printer::PreparePrintJob( pWorkView->GetPrinterController(), aJobSetup );
 #if ENABLE_CUPS
-                                psp::PrinterInfoManager::get().startBatchPrint();
+                                    psp::PrinterInfoManager::get().startBatchPrint();
 #endif
+                                }
+                                if( !Printer::ExecutePrintJob( pWorkView->GetPrinterController()))
+                                    bCancel = true;
                             }
-                            if( !Printer::ExecutePrintJob( pWorkView->GetPrinterController()))
-                                bCancel = true;
-                        }
                             else
                                 pTargetPageDesc = pTargetShell->FindPageDescByName( sModifiedStartingPageDesc );
 
