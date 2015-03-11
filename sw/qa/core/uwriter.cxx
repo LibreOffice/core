@@ -1179,19 +1179,19 @@ void SwDocTest::testMarkMove()
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString("Paragraph 1"));
         aPaM.SetMark();
         aPaM.GetMark()->nContent -= aPaM.GetMark()->nContent.GetIndex();
-        pMarksAccess->makeMark(aPaM, OUString("Para1"), IDocumentMarkAccess::BOOKMARK);
+        pMarksAccess->makeMark(aPaM, OUString("Para1"), IDocumentMarkAccess::MarkType::BOOKMARK);
 
         m_pDoc->getIDocumentContentOperations().AppendTxtNode(*aPaM.GetPoint());
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString("Paragraph 2"));
         aPaM.SetMark();
         aPaM.GetMark()->nContent -= aPaM.GetMark()->nContent.GetIndex();
-        pMarksAccess->makeMark(aPaM, OUString("Para2"), IDocumentMarkAccess::BOOKMARK);
+        pMarksAccess->makeMark(aPaM, OUString("Para2"), IDocumentMarkAccess::MarkType::BOOKMARK);
 
         m_pDoc->getIDocumentContentOperations().AppendTxtNode(*aPaM.GetPoint());
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString("Paragraph 3"));
         aPaM.SetMark();
         aPaM.GetMark()->nContent -= aPaM.GetMark()->nContent.GetIndex();
-        pMarksAccess->makeMark(aPaM, OUString("Para3"), IDocumentMarkAccess::BOOKMARK);
+        pMarksAccess->makeMark(aPaM, OUString("Para3"), IDocumentMarkAccess::MarkType::BOOKMARK);
     }
 
     // join paragraph 2 and 3 and check

@@ -245,7 +245,7 @@ int MMTest::documentStartPageNumber( int document ) const
     int pos = 0;
     for( mark = marks->getAllMarksBegin(); mark != marks->getAllMarksEnd() && pos < document; ++mark )
     {
-        if( IDocumentMarkAccess::GetType( **mark ) == IDocumentMarkAccess::UNO_BOOKMARK )
+        if( IDocumentMarkAccess::GetType( **mark ) == IDocumentMarkAccess::MarkType::UNO_BOOKMARK )
             ++pos;
     }
     CPPUNIT_ASSERT( pos == document );

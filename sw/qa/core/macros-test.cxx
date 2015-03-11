@@ -203,7 +203,7 @@ void SwMacrosTest::testBookmarkDeleteAndJoin()
     aPaM.Move(fnMoveForward, fnGoDoc);
     IDocumentMarkAccess & rIDMA = *pDoc->getIDocumentMarkAccess();
     sw::mark::IMark *pMark =
-            rIDMA.makeMark(aPaM, "test", IDocumentMarkAccess::BOOKMARK);
+            rIDMA.makeMark(aPaM, "test", IDocumentMarkAccess::MarkType::BOOKMARK);
     CPPUNIT_ASSERT(pMark);
     // select so pMark start position is on a node that is fully deleted
     aPaM.Move(fnMoveBackward, fnGoNode);

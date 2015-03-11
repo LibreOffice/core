@@ -708,7 +708,7 @@ void SwUiWriterTest::testBookmarkUndo()
     IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
     SwPaM aPaM( SwNodeIndex(pDoc->GetNodes().GetEndOfContent(), -1) );
 
-    pMarkAccess->makeMark(aPaM, OUString("Mark"), IDocumentMarkAccess::BOOKMARK);
+    pMarkAccess->makeMark(aPaM, OUString("Mark"), IDocumentMarkAccess::MarkType::BOOKMARK);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
     rUndoManager.Undo();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pMarkAccess->getAllMarksCount());
