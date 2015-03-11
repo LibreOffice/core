@@ -107,6 +107,7 @@
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/ListboxControlActions.hpp>
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
@@ -835,7 +836,9 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 mpWrtShell->StartAllAction();
             mpDoc->getIDocumentFieldsAccess().UpdateFlds( NULL, false );
             mpDoc->getIDocumentLinksAdministration().EmbedAllLinks();
-            mpDoc->RemoveInvisibleContent();
+            if (IsRemoveHiddenContentSet()) {
+                mpDoc->RemoveInvisibleContent();
+            }
             if(mpWrtShell)
                 mpWrtShell->EndAllAction();
         }
@@ -845,8 +848,10 @@ void SwDocShell::Execute(SfxRequest& rReq)
         {
                 if(mpWrtShell)
                     mpWrtShell->StartAllAction();
-                //try to undo the removal of invisible content
-                mpDoc->RestoreInvisibleContent();
+                if (IsRemoveHiddenContentSet()) {
+                    //try to undo the removal of invisible content
+                    mpDoc->RestoreInvisibleContent();
+                }
                 if(mpWrtShell)
                     mpWrtShell->EndAllAction();
         }
@@ -1141,6 +1146,51 @@ void SwDocShell::Execute(SfxRequest& rReq)
         default: OSL_FAIL("wrong Dispatcher");
     }
 }
+/**
+ * Get the configured value whether to remove the hidden content when sending via e-mail
+ */
+bool SwDocShell::IsRemoveHiddenContentSet() {
+
+    bool bRemoveHiddenContent = true; // default behaviour is to be true
+
+    Reference< XMultiServiceFactory > xSMgr( comphelper::getProcessServiceFactory() );
+
+    Reference<XMultiServiceFactory> xConfigProvider = Reference< XMultiServiceFactory >(
+            xSMgr->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                    "com.sun.star.configuration.ConfigurationProvider" ))),
+            UNO_QUERY );
+
+    try {
+        if (xConfigProvider.is()) {
+            Sequence<Any> aArgs(1);
+            beans::PropertyValue aVal;
+
+            aVal.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("nodepath"));
+            aVal.Value <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Common/HiddenContent"));
+
+            aArgs.getArray()[0] <<= aVal;
+            Reference<container::XNameAccess> xConfigAccess = Reference<container::XNameAccess>(
+                    xConfigProvider->createInstanceWithArguments(
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationAccess")),
+                        aArgs
+                        ),
+                    UNO_QUERY
+                    );
+
+            if (xConfigAccess.is()) {
+                Reference<beans::XPropertySet> xSet(xConfigAccess, UNO_QUERY);
+
+                if (xSet.is()) {
+                    xSet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RemoveHiddenContent"))) >>= bRemoveHiddenContent;
+                }
+            }
+        }
+    }
+    catch (Exception&) {}
+
+    return bRemoveHiddenContent;
+}
+
 
 #if defined WNT
 bool SwDocShell::DdeGetData( const OUString& rItem, const OUString& rMimeType,

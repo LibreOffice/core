@@ -149,6 +149,7 @@ protected:
     /// override to update text fields
     virtual void                DoFlushDocInfo() SAL_OVERRIDE;
 
+    bool IsRemoveHiddenContentSet();
 public:
 
     /// but we implement this ourselves.
