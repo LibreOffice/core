@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a29b11f_1d76d73e",
+        "filename": "scaddins/source/pricing/pricing.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-03-11T18:05:15Z",
+      "side": 0,
+      "message": "OneInstance!",
+      "revId": "435228528ea6fc8ab1f1247ac5c38fdfd7fb9415",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
