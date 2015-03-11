@@ -217,24 +217,21 @@ void SAL_CALL ProgressMonitor::addText(
     // Else ... take memory for new item ...
     IMPL_TextlistItem*  pTextItem = new IMPL_TextlistItem;
 
-    if ( pTextItem != NULL )
+    // Set values ...
+    pTextItem->sTopic   = rTopic;
+    pTextItem->sText    = rText;
+
+    // Ready for multithreading
+    MutexGuard aGuard ( m_aMutex );
+
+    // ... and insert it in right list.
+    if ( bbeforeProgress )
     {
-        // Set values ...
-        pTextItem->sTopic   = rTopic;
-        pTextItem->sText    = rText;
-
-        // Ready for multithreading
-        MutexGuard aGuard ( m_aMutex );
-
-        // ... and insert it in right list.
-        if ( bbeforeProgress )
-        {
-            maTextlist_Top.push_back( pTextItem );
-        }
-        else
-        {
-            maTextlist_Bottom.push_back( pTextItem );
-        }
+        maTextlist_Top.push_back( pTextItem );
+    }
+    else
+    {
+        maTextlist_Bottom.push_back( pTextItem );
     }
 
     // ... update window

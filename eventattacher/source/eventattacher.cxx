@@ -296,13 +296,9 @@ EventAttacherImpl::~EventAttacherImpl()
 
 Reference< XInterface > SAL_CALL EventAttacherImpl_CreateInstance( const Reference< XMultiServiceFactory >& rSMgr ) throw( Exception )
 {
-    Reference< XInterface > xRet;
     XEventAttacher *pEventAttacher = (XEventAttacher*) new EventAttacherImpl( comphelper::getComponentContext(rSMgr) );
 
-    if (pEventAttacher)
-    {
-        xRet = Reference<XInterface>::query(pEventAttacher);
-    }
+    Reference< XInterface > xRet = Reference<XInterface>::query(pEventAttacher);
 
     return xRet;
 }

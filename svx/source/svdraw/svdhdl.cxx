@@ -970,14 +970,10 @@ void SdrHdlColor::CreateB2dIAObject()
                                     (sal_uInt16)(aBmpCol.GetSizePixel().Width() - 1) >> 1,
                                     (sal_uInt16)(aBmpCol.GetSizePixel().Height() - 1) >> 1
                                 );
-                            DBG_ASSERT(pNewOverlayObject, "Got NO new IAO!");
 
                             // OVERLAYMANAGER
-                            if(pNewOverlayObject)
-                            {
-                                xManager->add(*pNewOverlayObject);
-                                maOverlayGroup.append(*pNewOverlayObject);
-                            }
+                            xManager->add(*pNewOverlayObject);
+                            maOverlayGroup.append(*pNewOverlayObject);
                         }
                     }
                 }
@@ -1293,17 +1289,13 @@ void SdrHdlLine::CreateB2dIAObject()
                                     aPosition1,
                                     aPosition2
                                 );
-                            DBG_ASSERT(pNewOverlayObject, "Got NO new IAO!");
 
                             // OVERLAYMANAGER
-                            if(pNewOverlayObject)
-                            {
-                                // color(?)
-                                pNewOverlayObject->setBaseColor(Color(COL_LIGHTRED));
+                            // color(?)
+                            pNewOverlayObject->setBaseColor(Color(COL_LIGHTRED));
 
-                                xManager->add(*pNewOverlayObject);
-                                maOverlayGroup.append(*pNewOverlayObject);
-                            }
+                            xManager->add(*pNewOverlayObject);
+                            maOverlayGroup.append(*pNewOverlayObject);
                         }
                     }
                 }
@@ -1356,20 +1348,15 @@ void SdrHdlBezWgt::CreateB2dIAObject()
                                         aPosition1,
                                         aPosition2
                                     );
-                                DBG_ASSERT(pNewOverlayObject, "Got NO new IAO!");
-
                                 // OVERLAYMANAGER
-                                if(pNewOverlayObject)
-                                {
-                                    // line part is not hittable
-                                    pNewOverlayObject->setHittable(false);
+                                // line part is not hittable
+                                pNewOverlayObject->setHittable(false);
 
-                                    // color(?)
-                                    pNewOverlayObject->setBaseColor(Color(COL_LIGHTBLUE));
+                                // color(?)
+                                pNewOverlayObject->setBaseColor(Color(COL_LIGHTBLUE));
 
-                                    xManager->add(*pNewOverlayObject);
-                                    maOverlayGroup.append(*pNewOverlayObject);
-                                }
+                                xManager->add(*pNewOverlayObject);
+                                maOverlayGroup.append(*pNewOverlayObject);
                             }
                         }
                     }
@@ -1411,16 +1398,12 @@ void E3dVolumeMarker::CreateB2dIAObject()
                             ::sdr::overlay::OverlayObject* pNewOverlayObject = new
                             ::sdr::overlay::OverlayPolyPolygonStripedAndFilled(
                                 aWireframePoly);
-                            DBG_ASSERT(pNewOverlayObject, "Got NO new IAO!");
 
                             // OVERLAYMANAGER
-                            if(pNewOverlayObject)
-                            {
-                                pNewOverlayObject->setBaseColor(Color(COL_BLACK));
+                            pNewOverlayObject->setBaseColor(Color(COL_BLACK));
 
-                                xManager->add(*pNewOverlayObject);
-                                maOverlayGroup.append(*pNewOverlayObject);
-                            }
+                            xManager->add(*pNewOverlayObject);
+                            maOverlayGroup.append(*pNewOverlayObject);
                         }
                     }
                 }
@@ -1680,12 +1663,9 @@ void ImpTextframeHdl::CreateB2dIAObject()
                                 true); // allow animation; the Handle is not shown at text edit time
 
                             // OVERLAYMANAGER
-                            if(pNewOverlayObject)
-                            {
-                                pNewOverlayObject->setHittable(false);
-                                xManager->add(*pNewOverlayObject);
-                                maOverlayGroup.append(*pNewOverlayObject);
-                            }
+                            pNewOverlayObject->setHittable(false);
+                            xManager->add(*pNewOverlayObject);
+                            maOverlayGroup.append(*pNewOverlayObject);
                         }
                     }
                 }
@@ -2533,16 +2513,12 @@ void SdrCropViewHdl::CreateB2dIAObject()
             if(xManager.is())
             {
                 ::sdr::overlay::OverlayObject* pNew = new sdr::overlay::OverlayPrimitive2DSequenceObject(aSequence);
-                DBG_ASSERT(pNew, "Got NO new IAO!");
 
-                if(pNew)
-                {
-                    // only informative object, no hit
-                    pNew->setHittable(false);
+                // only informative object, no hit
+                pNew->setHittable(false);
 
-                    xManager->add(*pNew);
-                    maOverlayGroup.append(*pNew);
-                }
+                xManager->add(*pNew);
+                maOverlayGroup.append(*pNew);
             }
         }
     }

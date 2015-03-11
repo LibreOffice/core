@@ -363,10 +363,7 @@ static HWPDrawingObject *LoadDrawingObject(void)
     head = prev = NULL;
     do
     {
-        if ((hdo = new HWPDrawingObject) == NULL)
-        {
-            goto error;
-        }
+        hdo = new HWPDrawingObject;
         if (!LoadCommonHeader(hdo, &link_info))
         {
             goto error;

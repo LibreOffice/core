@@ -44,160 +44,156 @@ void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
 
     if ( ImplGetDimensions( rDesc ) && rDesc.mpBuf )
     {
-        if ( ( rDesc.mpBitmap = new Bitmap( Size( rDesc.mnX, rDesc.mnY ), (sal_uInt16)rDesc.mnDstBitsPerPixel ) ) != NULL )
+        rDesc.mpBitmap = new Bitmap( Size( rDesc.mnX, rDesc.mnY ), (sal_uInt16)rDesc.mnDstBitsPerPixel );
+        if ( ( rDesc.mpAcc = rDesc.mpBitmap->AcquireWriteAccess() ) != NULL )
         {
-            if ( ( rDesc.mpAcc = rDesc.mpBitmap->AcquireWriteAccess() ) != NULL )
+
+            // the picture may either be read from left to right or right to left, from top to bottom ...
+
+            long nxCount = rDesc.mnX + 1;   // +1 because we are using prefix decreasing
+            long nyCount = rDesc.mnY + 1;
+            long    nx, ny, nxC;
+
+            switch ( rDesc.mnDstBitsPerPixel )
             {
-
-                // the picture may either be read from left to right or right to left, from top to bottom ...
-
-                long nxCount = rDesc.mnX + 1;   // +1 because we are using prefix decreasing
-                long nyCount = rDesc.mnY + 1;
-                long    nx, ny, nxC;
-
-                switch ( rDesc.mnDstBitsPerPixel )
+                case 1 :
                 {
-                    case 1 :
+                    if ( rDesc.mnLocalColorPrecision == 1 )
+                        ImplSetCurrentPalette( rDesc );
+                    else
                     {
-                        if ( rDesc.mnLocalColorPrecision == 1 )
-                            ImplSetCurrentPalette( rDesc );
-                        else
-                        {
-                            rDesc.mpAcc->SetPaletteEntryCount( 2 );
-                            rDesc.mpAcc->SetPaletteColor( 0, BMCOL( mpCGM->pElement->nBackGroundColor ) );
-                            rDesc.mpAcc->SetPaletteColor( 1,
-                                ( mpCGM->pElement->nAspectSourceFlags & ASF_FILLINTERIORSTYLE )
-                                    ? BMCOL( mpCGM->pElement->pFillBundle->GetColor() )
-                                        : BMCOL( mpCGM->pElement->aFillBundle.GetColor() ) ) ;
-                        }
-                        for ( ny = 0; --nyCount ; ny++, rDesc.mpBuf += rDesc.mnScanSize )
-                        {
-                            nxC = nxCount;
-                            for ( nx = 0; --nxC; nx++ )
-                            {   // this is not fast, but a one bit/pixel format is rarely used
-                                rDesc.mpAcc->SetPixelIndex( ny, nx, static_cast<sal_uInt8>( (*( rDesc.mpBuf + (nx >> 3)) >> ((nx & 7)^7))) & 1 );
-                            }
+                        rDesc.mpAcc->SetPaletteEntryCount( 2 );
+                        rDesc.mpAcc->SetPaletteColor( 0, BMCOL( mpCGM->pElement->nBackGroundColor ) );
+                        rDesc.mpAcc->SetPaletteColor( 1,
+                            ( mpCGM->pElement->nAspectSourceFlags & ASF_FILLINTERIORSTYLE )
+                                ? BMCOL( mpCGM->pElement->pFillBundle->GetColor() )
+                                    : BMCOL( mpCGM->pElement->aFillBundle.GetColor() ) ) ;
+                    }
+                    for ( ny = 0; --nyCount ; ny++, rDesc.mpBuf += rDesc.mnScanSize )
+                    {
+                        nxC = nxCount;
+                        for ( nx = 0; --nxC; nx++ )
+                        {   // this is not fast, but a one bit/pixel format is rarely used
+                            rDesc.mpAcc->SetPixelIndex( ny, nx, static_cast<sal_uInt8>( (*( rDesc.mpBuf + (nx >> 3)) >> ((nx & 7)^7))) & 1 );
                         }
                     }
-                    break;
+                }
+                break;
 
-                    case 2 :
+                case 2 :
+                {
+                    ImplSetCurrentPalette( rDesc );
+                    for ( ny = 0; --nyCount; ny++, rDesc.mpBuf += rDesc.mnScanSize )
                     {
-                        ImplSetCurrentPalette( rDesc );
-                        for ( ny = 0; --nyCount; ny++, rDesc.mpBuf += rDesc.mnScanSize )
-                        {
-                            nxC = nxCount;
-                            for ( nx = 0; --nxC; nx++ )
-                            {   // this is not fast, but a two bits/pixel format is rarely used
-                                rDesc.mpAcc->SetPixelIndex( ny, nx, static_cast<sal_uInt8>( (*(rDesc.mpBuf + (nx >> 2)) >> (((nx & 3)^3) << 1))) & 3 );
-                            }
+                        nxC = nxCount;
+                        for ( nx = 0; --nxC; nx++ )
+                        {   // this is not fast, but a two bits/pixel format is rarely used
+                            rDesc.mpAcc->SetPixelIndex( ny, nx, static_cast<sal_uInt8>( (*(rDesc.mpBuf + (nx >> 2)) >> (((nx & 3)^3) << 1))) & 3 );
                         }
                     }
-                    break;
+                }
+                break;
 
-                    case 4 :
+                case 4 :
+                {
+                    ImplSetCurrentPalette( rDesc );
+                    for ( ny = 0; --nyCount; ny++, rDesc.mpBuf += rDesc.mnScanSize )
                     {
-                        ImplSetCurrentPalette( rDesc );
+                        nxC = nxCount;
+                        sal_Int8  nDat;
+                        sal_uInt8* pTemp = rDesc.mpBuf;
+                        for ( nx = 0; --nxC; nx++ )
+                        {
+                            nDat = *pTemp++;
+                            rDesc.mpAcc->SetPixelIndex( ny, nx, static_cast<sal_uInt8>(nDat >> 4) );
+                            if ( --nxC )
+                            {
+                                nx ++;
+                                rDesc.mpAcc->SetPixelIndex( ny, nx, static_cast<sal_uInt8>(nDat & 15) );
+                            }
+                            else
+                                break;
+                        }
+                    }
+                }
+                break;
+
+                case 8 :
+                {
+                    ImplSetCurrentPalette( rDesc );
+                    for ( ny = 0; --nyCount; ny++, rDesc.mpBuf += rDesc.mnScanSize )
+                    {
+                        sal_uInt8* pTemp = rDesc.mpBuf;
+                        nxC = nxCount;
+                        for ( nx = 0; --nxC; nx++ )
+                        {
+                            rDesc.mpAcc->SetPixelIndex( ny, nx, *(pTemp++) );
+                        }
+                    }
+                }
+                break;
+
+                case 24 :
+                {
+                    {
+                        BitmapColor aBitmapColor;
                         for ( ny = 0; --nyCount; ny++, rDesc.mpBuf += rDesc.mnScanSize )
                         {
-                            nxC = nxCount;
-                            sal_Int8  nDat;
                             sal_uInt8* pTemp = rDesc.mpBuf;
-                            for ( nx = 0; --nxC; nx++ )
-                            {
-                                nDat = *pTemp++;
-                                rDesc.mpAcc->SetPixelIndex( ny, nx, static_cast<sal_uInt8>(nDat >> 4) );
-                                if ( --nxC )
-                                {
-                                    nx ++;
-                                    rDesc.mpAcc->SetPixelIndex( ny, nx, static_cast<sal_uInt8>(nDat & 15) );
-                                }
-                                else
-                                    break;
-                            }
-                        }
-                    }
-                    break;
-
-                    case 8 :
-                    {
-                        ImplSetCurrentPalette( rDesc );
-                        for ( ny = 0; --nyCount; ny++, rDesc.mpBuf += rDesc.mnScanSize )
-                        {
-                            sal_uInt8* pTemp = rDesc.mpBuf;
                             nxC = nxCount;
                             for ( nx = 0; --nxC; nx++ )
                             {
-                                rDesc.mpAcc->SetPixelIndex( ny, nx, *(pTemp++) );
+                                aBitmapColor.SetRed( *pTemp++ );
+                                aBitmapColor.SetGreen( *pTemp++ );
+                                aBitmapColor.SetBlue( *pTemp++ );
+                                rDesc.mpAcc->SetPixel( ny, nx, aBitmapColor );
                             }
                         }
                     }
-                    break;
-
-                    case 24 :
-                    {
-                        {
-                            BitmapColor aBitmapColor;
-                            for ( ny = 0; --nyCount; ny++, rDesc.mpBuf += rDesc.mnScanSize )
-                            {
-                                sal_uInt8* pTemp = rDesc.mpBuf;
-                                nxC = nxCount;
-                                for ( nx = 0; --nxC; nx++ )
-                                {
-                                    aBitmapColor.SetRed( *pTemp++ );
-                                    aBitmapColor.SetGreen( *pTemp++ );
-                                    aBitmapColor.SetBlue( *pTemp++ );
-                                    rDesc.mpAcc->SetPixel( ny, nx, aBitmapColor );
-                                }
-                            }
-                        }
-                    }
-                    break;
                 }
-                double nX = rDesc.mnR.X - rDesc.mnQ.X;
-                double nY = rDesc.mnR.Y - rDesc.mnQ.Y;
+                break;
+            }
+            double nX = rDesc.mnR.X - rDesc.mnQ.X;
+            double nY = rDesc.mnR.Y - rDesc.mnQ.Y;
 
-                rDesc.mndy = sqrt( nX * nX + nY * nY );
+            rDesc.mndy = sqrt( nX * nX + nY * nY );
 
-                nX = rDesc.mnR.X - rDesc.mnP.X;
-                nY = rDesc.mnR.Y - rDesc.mnP.Y;
+            nX = rDesc.mnR.X - rDesc.mnP.X;
+            nY = rDesc.mnR.Y - rDesc.mnP.Y;
 
-                rDesc.mndx = sqrt( nX * nX + nY * nY );
+            rDesc.mndx = sqrt( nX * nX + nY * nY );
 
-                nX = rDesc.mnR.X - rDesc.mnP.X;
-                nY = rDesc.mnR.Y - rDesc.mnP.Y;
+            nX = rDesc.mnR.X - rDesc.mnP.X;
+            nY = rDesc.mnR.Y - rDesc.mnP.Y;
 
-                rDesc.mnOrientation = acos( nX / sqrt( nX * nX + nY * nY ) ) * 57.29577951308;
-                if ( nY > 0 )
-                    rDesc.mnOrientation = 360 - rDesc.mnOrientation;
+            rDesc.mnOrientation = acos( nX / sqrt( nX * nX + nY * nY ) ) * 57.29577951308;
+            if ( nY > 0 )
+                rDesc.mnOrientation = 360 - rDesc.mnOrientation;
 
-                nX = rDesc.mnQ.X - rDesc.mnR.X;
-                nY = rDesc.mnQ.Y - rDesc.mnR.Y;
+            nX = rDesc.mnQ.X - rDesc.mnR.X;
+            nY = rDesc.mnQ.Y - rDesc.mnR.Y;
 
-                double fAngle = 0.01745329251994 * ( 360 - rDesc.mnOrientation );
-                double fSin = sin(fAngle);
-                double fCos = cos(fAngle);
-                nX = fCos * nX + fSin * nY;
-                nY = -( fSin * nX - fCos * nY );
+            double fAngle = 0.01745329251994 * ( 360 - rDesc.mnOrientation );
+            double fSin = sin(fAngle);
+            double fCos = cos(fAngle);
+            nX = fCos * nX + fSin * nY;
+            nY = -( fSin * nX - fCos * nY );
 
-                fAngle = acos( nX / sqrt( nX * nX + nY * nY ) ) * 57.29577951308;
-                if ( nY > 0 )
-                    fAngle = 360 - fAngle;
+            fAngle = acos( nX / sqrt( nX * nX + nY * nY ) ) * 57.29577951308;
+            if ( nY > 0 )
+                fAngle = 360 - fAngle;
 
-                if ( fAngle > 180 )                 // is the picture build upwards or downwards ?
-                {
-                    rDesc.mnOrigin = rDesc.mnP;
-                }
-                else
-                {
-                    rDesc.mbVMirror = true;
-                    rDesc.mnOrigin = rDesc.mnP;
-                    rDesc.mnOrigin.X += rDesc.mnQ.X - rDesc.mnR.X;
-                    rDesc.mnOrigin.Y += rDesc.mnQ.Y - rDesc.mnR.Y;
-                }
+            if ( fAngle > 180 )                 // is the picture build upwards or downwards ?
+            {
+                rDesc.mnOrigin = rDesc.mnP;
             }
             else
-                rDesc.mbStatus = false;
+            {
+                rDesc.mbVMirror = true;
+                rDesc.mnOrigin = rDesc.mnP;
+                rDesc.mnOrigin.X += rDesc.mnQ.X - rDesc.mnR.X;
+                rDesc.mnOrigin.Y += rDesc.mnQ.Y - rDesc.mnR.Y;
+            }
         }
         else
             rDesc.mbStatus = false;
@@ -358,40 +354,29 @@ void CGMBitmap::ImplInsert( CGMBitmapDescriptor& rSource, CGMBitmapDescriptor& r
     rDest.mndy += rSource.mndy;
 };
 
-
-
 CGMBitmap* CGMBitmap::GetNext()
 {
     if ( pCGMBitmapDescriptor->mpBitmap && pCGMBitmapDescriptor->mbStatus )
     {
         CGMBitmap* pCGMTempBitmap = new CGMBitmap( *mpCGM );
-        if ( pCGMTempBitmap )
+        if ( ( (long)pCGMTempBitmap->pCGMBitmapDescriptor->mnOrientation == (long)pCGMBitmapDescriptor->mnOrientation ) &&
+            ( ( ( pCGMTempBitmap->pCGMBitmapDescriptor->mnR.X == pCGMBitmapDescriptor->mnQ.X ) &&
+                    ( pCGMTempBitmap->pCGMBitmapDescriptor->mnR.Y == pCGMBitmapDescriptor->mnQ.Y ) ) ||
+            ( ( pCGMTempBitmap->pCGMBitmapDescriptor->mnQ.X == pCGMBitmapDescriptor->mnR.X ) &&
+                    ( pCGMTempBitmap->pCGMBitmapDescriptor->mnQ.Y == pCGMBitmapDescriptor->mnR.Y ) ) ) )
         {
-            if ( ( (long)pCGMTempBitmap->pCGMBitmapDescriptor->mnOrientation == (long)pCGMBitmapDescriptor->mnOrientation ) &&
-                ( ( ( pCGMTempBitmap->pCGMBitmapDescriptor->mnR.X == pCGMBitmapDescriptor->mnQ.X ) &&
-                        ( pCGMTempBitmap->pCGMBitmapDescriptor->mnR.Y == pCGMBitmapDescriptor->mnQ.Y ) ) ||
-                ( ( pCGMTempBitmap->pCGMBitmapDescriptor->mnQ.X == pCGMBitmapDescriptor->mnR.X ) &&
-                        ( pCGMTempBitmap->pCGMBitmapDescriptor->mnQ.Y == pCGMBitmapDescriptor->mnR.Y ) ) ) )
-            {
-                ImplInsert( *(pCGMTempBitmap->pCGMBitmapDescriptor), *(pCGMBitmapDescriptor) );
-                delete pCGMTempBitmap;
-                return NULL;
-            }
-            else    // we'll replace the pointers and return the old one
-            {
-                CGMBitmapDescriptor* pTempBD = pCGMBitmapDescriptor;
-                pCGMBitmapDescriptor = pCGMTempBitmap->pCGMBitmapDescriptor;
-                pCGMTempBitmap->pCGMBitmapDescriptor = pTempBD;
-                return pCGMTempBitmap;
-            }
+            ImplInsert( *(pCGMTempBitmap->pCGMBitmapDescriptor), *(pCGMBitmapDescriptor) );
+            delete pCGMTempBitmap;
+            return NULL;
         }
-        return NULL;
+
+        CGMBitmapDescriptor* pTempBD = pCGMBitmapDescriptor;
+        pCGMBitmapDescriptor = pCGMTempBitmap->pCGMBitmapDescriptor;
+        pCGMTempBitmap->pCGMBitmapDescriptor = pTempBD;
+        return pCGMTempBitmap;
     }
     else
         return NULL;
 }
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

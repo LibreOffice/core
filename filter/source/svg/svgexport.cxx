@@ -570,73 +570,70 @@ bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
                 // mpSVGExport = new SVGExport( xDocHandler );
                 mpSVGExport = new SVGExport( xContext, xDocHandler, maFilterData );
 
-                if( mpSVGExport != NULL )
+                // xSVGExport is set up only to manage the life-time of the object pointed by mpSVGExport,
+                // and in order to prevent that it is destroyed when passed to AnimationExporter.
+                Reference< XInterface > xSVGExport = static_cast< ::com::sun::star::document::XFilter* >( mpSVGExport );
+
+                // create an id for each draw page
+                for( sal_Int32 i = 0; i < mSelectedPages.getLength(); ++i )
+                    implRegisterInterface( mSelectedPages[i] );
+
+                // create an id for each master page
+                for( sal_Int32 i = 0; i < mMasterPageTargets.getLength(); ++i )
+                    implRegisterInterface( mMasterPageTargets[i] );
+
+                try
                 {
-                    // xSVGExport is set up only to manage the life-time of the object pointed by mpSVGExport,
-                    // and in order to prevent that it is destroyed when passed to AnimationExporter.
-                    Reference< XInterface > xSVGExport = static_cast< ::com::sun::star::document::XFilter* >( mpSVGExport );
+                    mxDefaultPage = mSelectedPages[0];
 
-                    // create an id for each draw page
-                    for( sal_Int32 i = 0; i < mSelectedPages.getLength(); ++i )
-                        implRegisterInterface( mSelectedPages[i] );
-
-                    // create an id for each master page
-                    for( sal_Int32 i = 0; i < mMasterPageTargets.getLength(); ++i )
-                        implRegisterInterface( mMasterPageTargets[i] );
-
-                    try
+                    if( mxDefaultPage.is() )
                     {
-                        mxDefaultPage = mSelectedPages[0];
+                        SvxDrawPage* pSvxDrawPage = SvxDrawPage::getImplementation( mxDefaultPage );
 
-                        if( mxDefaultPage.is() )
+                        if( pSvxDrawPage )
                         {
-                            SvxDrawPage* pSvxDrawPage = SvxDrawPage::getImplementation( mxDefaultPage );
+                            mpDefaultSdrPage = pSvxDrawPage->GetSdrPage();
+                            mpSdrModel = mpDefaultSdrPage->GetModel();
 
-                            if( pSvxDrawPage )
+                            if( mpSdrModel )
                             {
-                                mpDefaultSdrPage = pSvxDrawPage->GetSdrPage();
-                                mpSdrModel = mpDefaultSdrPage->GetModel();
+                                SdrOutliner& rOutl = mpSdrModel->GetDrawOutliner(NULL);
 
-                                if( mpSdrModel )
-                                {
-                                    SdrOutliner& rOutl = mpSdrModel->GetDrawOutliner(NULL);
-
-                                    maOldFieldHdl = rOutl.GetCalcFieldValueHdl();
-                                    maNewFieldHdl = LINK(this, SVGFilter, CalcFieldHdl);
-                                    rOutl.SetCalcFieldValueHdl(maNewFieldHdl);
-                                }
+                                maOldFieldHdl = rOutl.GetCalcFieldValueHdl();
+                                maNewFieldHdl = LINK(this, SVGFilter, CalcFieldHdl);
+                                rOutl.SetCalcFieldValueHdl(maNewFieldHdl);
                             }
-                            bRet = implExportDocument();
                         }
+                        bRet = implExportDocument();
                     }
-                    catch( ... )
-                    {
-                        delete mpSVGDoc, mpSVGDoc = NULL;
-                        OSL_FAIL( "Exception caught" );
-                    }
-
-                    if( mpSdrModel )
-                    {
-                        //fdo#62682 The maNewFieldHdl can end up getting copied
-                        //into various other outliners which live past this
-                        //method, so get the full list of outliners and restore
-                        //the maOldFieldHdl for all that have ended up using
-                        //maNewFieldHdl
-                        std::vector<SdrOutliner*> aOutliners(mpSdrModel->GetActiveOutliners());
-                        for (auto aIter = aOutliners.begin(); aIter != aOutliners.end(); ++aIter)
-                        {
-                            SdrOutliner* pOutliner = *aIter;
-                            if (maNewFieldHdl == pOutliner->GetCalcFieldValueHdl())
-                                pOutliner->SetCalcFieldValueHdl(maOldFieldHdl);
-                        }
-                    }
-
-                    delete mpSVGWriter, mpSVGWriter = NULL;
-                    mpSVGExport = NULL; // pointed object is released by xSVGExport dtor at the end of this scope
-                    delete mpSVGFontExport, mpSVGFontExport = NULL;
-                    delete mpObjects, mpObjects = NULL;
-                    mbPresentation = false;
                 }
+                catch( ... )
+                {
+                    delete mpSVGDoc, mpSVGDoc = NULL;
+                    OSL_FAIL( "Exception caught" );
+                }
+
+                if( mpSdrModel )
+                {
+                    //fdo#62682 The maNewFieldHdl can end up getting copied
+                    //into various other outliners which live past this
+                    //method, so get the full list of outliners and restore
+                    //the maOldFieldHdl for all that have ended up using
+                    //maNewFieldHdl
+                    std::vector<SdrOutliner*> aOutliners(mpSdrModel->GetActiveOutliners());
+                    for (auto aIter = aOutliners.begin(); aIter != aOutliners.end(); ++aIter)
+                    {
+                        SdrOutliner* pOutliner = *aIter;
+                        if (maNewFieldHdl == pOutliner->GetCalcFieldValueHdl())
+                            pOutliner->SetCalcFieldValueHdl(maOldFieldHdl);
+                    }
+                }
+
+                delete mpSVGWriter, mpSVGWriter = NULL;
+                mpSVGExport = NULL; // pointed object is released by xSVGExport dtor at the end of this scope
+                delete mpSVGFontExport, mpSVGFontExport = NULL;
+                delete mpObjects, mpObjects = NULL;
+                mbPresentation = false;
             }
         }
     }

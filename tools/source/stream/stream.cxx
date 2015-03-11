@@ -1895,27 +1895,24 @@ bool SvMemoryStream::ReAllocateMemory( long nDiff )
     {
         sal_uInt8* pNewBuf   = new sal_uInt8[nNewSize];
 
-        if( pNewBuf )
+        bRetVal = true; // Success!
+        if( nNewSize < nSize )      // Are we shrinking?
         {
-            bRetVal = true; // Success!
-            if( nNewSize < nSize )      // Are we shrinking?
-            {
-                memcpy( pNewBuf, pBuf, (size_t)nNewSize );
-                if( nPos > nNewSize )
-                    nPos = 0L;
-                if( nEndOfData >= nNewSize )
-                    nEndOfData = nNewSize-1L;
-            }
-            else
-            {
-                memcpy( pNewBuf, pBuf, (size_t)nSize );
-            }
-
-            FreeMemory();
-
-            pBuf  = pNewBuf;
-            nSize = nNewSize;
+            memcpy( pNewBuf, pBuf, (size_t)nNewSize );
+            if( nPos > nNewSize )
+                nPos = 0L;
+            if( nEndOfData >= nNewSize )
+                nEndOfData = nNewSize-1L;
         }
+        else
+        {
+            memcpy( pNewBuf, pBuf, (size_t)nSize );
+        }
+
+        FreeMemory();
+
+        pBuf  = pNewBuf;
+        nSize = nNewSize;
     }
     else
     {

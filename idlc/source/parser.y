@@ -566,8 +566,7 @@ interface_dcl :
             pInterface = new AstInterface(
                 *$1->getName(),
                 static_cast< AstInterface const * >(resolveTypedefs($1->getInherits())), pScope);
-            if ( pInterface &&
-                (pDecl = pScope->lookupByName(pInterface->getScopedName())) )
+            if ( (pDecl = pScope->lookupByName(pInterface->getScopedName())) )
             {
                 /*
                  * See if we're defining a forward declared interface.

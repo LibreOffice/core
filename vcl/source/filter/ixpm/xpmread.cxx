@@ -99,19 +99,14 @@ ReadState XPMReader::ReadXPM( Graphic& rGraphic )
                 //              1    Byte   -> 0xFF if colour is transparent
                 //              3    Bytes  -> RGB value of the colour
                 mpColMap = new sal_uInt8[ mnColors * ( 4 + mnCpp ) ];
-                if ( mpColMap )
+                for ( sal_uLong i = 0; i < mnColors; i++ )
                 {
-                    for ( sal_uLong i = 0; i < mnColors; i++ )
+                    if ( !ImplGetColor( i ) )
                     {
-                        if ( !ImplGetColor( i ) )
-                        {
-                            mbStatus = false;
-                            break;
-                        }
+                        mbStatus = false;
+                        break;
                     }
                 }
-                else
-                    mbStatus = false;
 
                 if ( mbStatus )
                 {

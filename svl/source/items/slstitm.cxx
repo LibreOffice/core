@@ -60,9 +60,7 @@ SfxStringListItem::SfxStringListItem( sal_uInt16 which, const std::vector<OUStri
     if( pList /*!!! && pList->Count() */ )
     {
         pImp = new SfxImpStringList;
-
-        if (pImp)
-            pImp->aList = *pList;
+        pImp->aList = *pList;
     }
 }
 
@@ -255,12 +253,9 @@ void SfxStringListItem::SetStringList( const com::sun::star::uno::Sequence< OUSt
         pImp->nRefCount--;
     pImp = new SfxImpStringList;
 
-    if (pImp)
-    {
-        // String belongs to the list
-        for ( sal_Int32 n = 0; n < rList.getLength(); n++ )
-            pImp->aList.push_back(rList[n]);
-    }
+    // String belongs to the list
+    for ( sal_Int32 n = 0; n < rList.getLength(); n++ )
+        pImp->aList.push_back(rList[n]);
 }
 
 void SfxStringListItem::GetStringList( com::sun::star::uno::Sequence< OUString >& rList ) const

@@ -1680,7 +1680,7 @@ SvNumberformat* SvNumberFormatter::ImpInsertFormat( const ::com::sun::star::i18n
                                                  pStringScanner,
                                                  nCheckPos,
                                                  ActLnge);
-    if ( !pFormat || !(nCheckPos == 0) )
+    if (nCheckPos != 0)
     {
         if (LocaleDataWrapper::areChecksEnabled())
         {

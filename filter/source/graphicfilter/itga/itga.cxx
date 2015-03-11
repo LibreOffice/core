@@ -175,8 +175,6 @@ bool TGAReader::ReadTGA(Graphic & rGraphic)
 bool TGAReader::ImplReadHeader()
 {
     mpFileHeader = new TGAFileHeader;
-    if ( mpFileHeader == NULL )
-        return false;
 
     m_rTGA.ReadUChar( mpFileHeader->nImageIDLength ).ReadUChar( mpFileHeader->nColorMapType ).ReadUChar( mpFileHeader->nImageType ).        ReadUInt16( mpFileHeader->nColorMapFirstEntryIndex ).ReadUInt16( mpFileHeader->nColorMapLength ).ReadUChar( mpFileHeader->nColorMapEntrySize ).            ReadUInt16( mpFileHeader->nColorMapXOrigin ).ReadUInt16( mpFileHeader->nColorMapYOrigin ).ReadUInt16( mpFileHeader->nImageWidth ).                ReadUInt16( mpFileHeader->nImageHeight ).ReadUChar( mpFileHeader->nPixelDepth ).ReadUChar( mpFileHeader->nImageDescriptor );
 
@@ -190,56 +188,53 @@ bool TGAReader::ImplReadHeader()
 
     // first we want to get the version
     mpFileFooter = new TGAFileFooter;       // read the TGA-File-Footer to determine whether
-    if ( mpFileFooter )                     // we got an old TGA format or the new one
+                                            // we got an old TGA format or the new one
+
+    sal_uLong nCurStreamPos = m_rTGA.Tell();
+    m_rTGA.Seek( STREAM_SEEK_TO_END );
+    sal_uLong nTemp = m_rTGA.Tell();
+    m_rTGA.Seek( nTemp - SizeOfTGAFileFooter );
+
+    m_rTGA.ReadUInt32( mpFileFooter->nExtensionFileOffset ).ReadUInt32( mpFileFooter->nDeveloperDirectoryOffset ).            ReadUInt32( mpFileFooter->nSignature[0] ).ReadUInt32( mpFileFooter->nSignature[1] ).ReadUInt32( mpFileFooter->nSignature[2] ).                ReadUInt32( mpFileFooter->nSignature[3] ).ReadUChar( mpFileFooter->nPadByte ).ReadUChar( mpFileFooter->nStringTerminator );
+
+
+    if ( !m_rTGA.good())
+        return false;
+
+    // check for sal_True, VISI, ON-X, FILE in the signatures
+    if ( mpFileFooter->nSignature[ 0 ] == (('T'<<24)|('R'<<16)|('U'<<8)|'E') &&
+         mpFileFooter->nSignature[ 1 ] == (('V'<<24)|('I'<<16)|('S'<<8)|'I') &&
+         mpFileFooter->nSignature[ 2 ] == (('O'<<24)|('N'<<16)|('-'<<8)|'X') &&
+         mpFileFooter->nSignature[ 3 ] == (('F'<<24)|('I'<<16)|('L'<<8)|'E') )
     {
-        sal_uLong nCurStreamPos = m_rTGA.Tell();
-        m_rTGA.Seek( STREAM_SEEK_TO_END );
-        sal_uLong nTemp = m_rTGA.Tell();
-        m_rTGA.Seek( nTemp - SizeOfTGAFileFooter );
+        mpExtension = new TGAExtension;
 
-        m_rTGA.ReadUInt32( mpFileFooter->nExtensionFileOffset ).ReadUInt32( mpFileFooter->nDeveloperDirectoryOffset ).            ReadUInt32( mpFileFooter->nSignature[0] ).ReadUInt32( mpFileFooter->nSignature[1] ).ReadUInt32( mpFileFooter->nSignature[2] ).                ReadUInt32( mpFileFooter->nSignature[3] ).ReadUChar( mpFileFooter->nPadByte ).ReadUChar( mpFileFooter->nStringTerminator );
-
-
+        m_rTGA.Seek( mpFileFooter->nExtensionFileOffset );
+        m_rTGA.ReadUInt16( mpExtension->nExtensionSize );
         if ( !m_rTGA.good())
             return false;
-
-        // check for sal_True, VISI, ON-X, FILE in the signatures
-        if ( mpFileFooter->nSignature[ 0 ] == (('T'<<24)|('R'<<16)|('U'<<8)|'E') &&
-             mpFileFooter->nSignature[ 1 ] == (('V'<<24)|('I'<<16)|('S'<<8)|'I') &&
-             mpFileFooter->nSignature[ 2 ] == (('O'<<24)|('N'<<16)|('-'<<8)|'X') &&
-             mpFileFooter->nSignature[ 3 ] == (('F'<<24)|('I'<<16)|('L'<<8)|'E') )
+        if ( mpExtension->nExtensionSize >= SizeOfTGAExtension )
         {
-            mpExtension = new TGAExtension;
-            if ( mpExtension )
-            {
-                m_rTGA.Seek( mpFileFooter->nExtensionFileOffset );
-                m_rTGA.ReadUInt16( mpExtension->nExtensionSize );
-                if ( !m_rTGA.good())
-                    return false;
-                if ( mpExtension->nExtensionSize >= SizeOfTGAExtension )
-                {
-                    mnTGAVersion = 2;
+            mnTGAVersion = 2;
 
-                    m_rTGA.Read( mpExtension->sAuthorName, 41 );
-                    m_rTGA.Read( mpExtension->sAuthorComment, 324 );
-                    m_rTGA.Read( mpExtension->sDateTimeStamp, 12 );
-                    m_rTGA.Read( mpExtension->sJobNameID, 12 );
-                    m_rTGA.ReadChar( mpExtension->sJobNameID[ 0 ] ).ReadChar( mpExtension->sJobNameID[ 1 ] ).ReadChar( mpExtension->sJobNameID[ 2 ] );
-                    m_rTGA.Read( mpExtension->sSoftwareID, 41 );
-                    m_rTGA.ReadUInt16( mpExtension->nSoftwareVersionNumber ).ReadUChar( mpExtension->nSoftwareVersionLetter )
-                       .ReadUInt32( mpExtension->nKeyColor ).ReadUInt16( mpExtension->nPixelAspectRatioNumerator )
-                           .ReadUInt16( mpExtension->nPixelAspectRatioDeNumerator ).ReadUInt16( mpExtension->nGammaValueNumerator )
-                               .ReadUInt16( mpExtension->nGammaValueDeNumerator ).ReadUInt32( mpExtension->nColorCorrectionOffset )
-                                   .ReadUInt32( mpExtension->nPostageStampOffset ).ReadUInt32( mpExtension->nScanLineOffset )
-                                       .ReadUChar( mpExtension->nAttributesType );
+            m_rTGA.Read( mpExtension->sAuthorName, 41 );
+            m_rTGA.Read( mpExtension->sAuthorComment, 324 );
+            m_rTGA.Read( mpExtension->sDateTimeStamp, 12 );
+            m_rTGA.Read( mpExtension->sJobNameID, 12 );
+            m_rTGA.ReadChar( mpExtension->sJobNameID[ 0 ] ).ReadChar( mpExtension->sJobNameID[ 1 ] ).ReadChar( mpExtension->sJobNameID[ 2 ] );
+            m_rTGA.Read( mpExtension->sSoftwareID, 41 );
+            m_rTGA.ReadUInt16( mpExtension->nSoftwareVersionNumber ).ReadUChar( mpExtension->nSoftwareVersionLetter )
+               .ReadUInt32( mpExtension->nKeyColor ).ReadUInt16( mpExtension->nPixelAspectRatioNumerator )
+                   .ReadUInt16( mpExtension->nPixelAspectRatioDeNumerator ).ReadUInt16( mpExtension->nGammaValueNumerator )
+                       .ReadUInt16( mpExtension->nGammaValueDeNumerator ).ReadUInt32( mpExtension->nColorCorrectionOffset )
+                           .ReadUInt32( mpExtension->nPostageStampOffset ).ReadUInt32( mpExtension->nScanLineOffset )
+                               .ReadUChar( mpExtension->nAttributesType );
 
-                    if ( !m_rTGA.good())
-                        return false;
-                }
-            }
+            if ( !m_rTGA.good())
+                return false;
         }
-        m_rTGA.Seek( nCurStreamPos );
     }
+    m_rTGA.Seek( nCurStreamPos );
 
     //  using the TGA file specification this was the correct form but adobe photoshop sets nImageDescriptor
     //  equal to nPixelDepth

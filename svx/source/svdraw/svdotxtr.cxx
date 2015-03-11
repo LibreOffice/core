@@ -459,24 +459,21 @@ SdrObject* SdrTextObj::ImpConvertMakeObj(const basegfx::B2DPolyPolygon& rPolyPol
         pPathObj->SetPathPoly(basegfx::tools::expandToCurve(pPathObj->GetPathPoly()));
     }
 
-    if(pPathObj)
+    pPathObj->ImpSetAnchorPos(aAnchor);
+    pPathObj->NbcSetLayer(SdrLayerID(GetLayer()));
+
+    if(pModel)
     {
-        pPathObj->ImpSetAnchorPos(aAnchor);
-        pPathObj->NbcSetLayer(SdrLayerID(GetLayer()));
+        pPathObj->SetModel(pModel);
 
-        if(pModel)
+        if(!bNoSetAttr)
         {
-            pPathObj->SetModel(pModel);
+            sdr::properties::ItemChangeBroadcaster aC(*pPathObj);
 
-            if(!bNoSetAttr)
-            {
-                sdr::properties::ItemChangeBroadcaster aC(*pPathObj);
-
-                pPathObj->ClearMergedItem();
-                pPathObj->SetMergedItemSet(GetObjectItemSet());
-                pPathObj->GetProperties().BroadcastItemChange(aC);
-                pPathObj->NbcSetStyleSheet(GetStyleSheet(), true);
-            }
+            pPathObj->ClearMergedItem();
+            pPathObj->SetMergedItemSet(GetObjectItemSet());
+            pPathObj->GetProperties().BroadcastItemChange(aC);
+            pPathObj->NbcSetStyleSheet(GetStyleSheet(), true);
         }
     }
 

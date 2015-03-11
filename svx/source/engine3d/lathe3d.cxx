@@ -182,16 +182,13 @@ SdrAttrObj* E3dLatheObj::GetBreakObj()
     basegfx::B2DPolyPolygon aTransPoly(TransformToScreenCoor(aLathePoly3D));
     SdrPathObj* pPathObj = new SdrPathObj(OBJ_PLIN, aTransPoly);
 
-    if(pPathObj)
-    {
-        // Set Attribute
-        SfxItemSet aSet(GetObjectItemSet());
+    // Set Attribute
+    SfxItemSet aSet(GetObjectItemSet());
 
-        // Enable lines to guarantee that the object becomes visible
-        aSet.Put(XLineStyleItem(com::sun::star::drawing::LineStyle_SOLID));
+    // Enable lines to guarantee that the object becomes visible
+    aSet.Put(XLineStyleItem(com::sun::star::drawing::LineStyle_SOLID));
 
-        pPathObj->SetMergedItemSet(aSet);
-    }
+    pPathObj->SetMergedItemSet(aSet);
 
     return pPathObj;
 }

@@ -134,8 +134,6 @@ static std::string readString(StreamInterface *stream, unsigned long size)
     if (!stream || stream->stell() == -1)
         throw IOException(-1);
     unsigned char *tmp = new unsigned char[size];
-    if (!tmp)
-        throw IOException(-1);
     unsigned long numBytesRead = stream->sread(tmp, size);
     if (numBytesRead != size)
         throw IOException(-1);

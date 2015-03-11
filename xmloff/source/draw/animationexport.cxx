@@ -549,12 +549,8 @@ AnimationsExporterImpl::AnimationsExporterImpl( SvXMLExport& rExport, const Refe
     }
 
     mpSdPropHdlFactory = new XMLSdPropHdlFactory( mrExport.GetModel(), mrExport );
-    if( mpSdPropHdlFactory )
-    {
-        // set lock to avoid deletion
-        mpSdPropHdlFactory->acquire();
-    }
-
+    // set lock to avoid deletion
+    mpSdPropHdlFactory->acquire();
 }
 
 AnimationsExporterImpl::~AnimationsExporterImpl()

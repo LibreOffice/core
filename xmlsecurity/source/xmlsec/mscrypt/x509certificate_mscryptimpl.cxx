@@ -210,8 +210,6 @@ OUString SAL_CALL X509Certificate_MSCryptImpl :: getIssuerName() throw ( ::com::
         // Here the cbIssuer count the last 0x00 , take care.
         if( cbIssuer != 0 ) {
             char* issuer = new char[ cbIssuer ] ;
-            if( issuer == NULL )
-                throw RuntimeException() ;
 
             cbIssuer = CertNameToStr(
                 X509_ASN_ENCODING | PKCS_7_ASN_ENCODING ,
@@ -260,8 +258,6 @@ OUString SAL_CALL X509Certificate_MSCryptImpl :: getSubjectName() throw ( ::com:
         if( cbSubject != 0 )
         {
             wchar_t* subject = new wchar_t[ cbSubject ] ;
-            if( subject == NULL )
-                throw RuntimeException() ;
 
             cbSubject = CertNameToStrW(
                 X509_ASN_ENCODING | PKCS_7_ASN_ENCODING ,

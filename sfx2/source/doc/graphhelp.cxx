@@ -61,14 +61,11 @@ SvMemoryStream* GraphicHelper::getFormatStrFromGDI_Impl( const GDIMetaFile* pGDI
     if ( pGDIMeta )
     {
         SvMemoryStream* pStream = new SvMemoryStream( 65535, 65535 );
-        if ( pStream )
-        {
-            Graphic aGraph( *pGDIMeta );
-            if ( GraphicConverter::Export( *pStream, aGraph, nFormat ) == 0 )
-                pResult = pStream;
-            else
-                delete pStream;
-        }
+        Graphic aGraph( *pGDIMeta );
+        if ( GraphicConverter::Export( *pStream, aGraph, nFormat ) == 0 )
+            pResult = pStream;
+        else
+            delete pStream;
     }
 
     return pResult;
@@ -120,60 +117,56 @@ void* GraphicHelper::getWinMetaFileFromGDI_Impl( const GDIMetaFile* pGDIMeta, co
     if ( pGDIMeta )
     {
         SvMemoryStream* pStream = new SvMemoryStream( 65535, 65535 );
-        if ( pStream )
+        Graphic aGraph( *pGDIMeta );
+        sal_Bool bFailed = (sal_Bool)GraphicConverter::Export( *pStream, aGraph, CVT_WMF );
+        pStream->Flush();
+        if ( !bFailed )
         {
-            Graphic aGraph( *pGDIMeta );
-            sal_Bool bFailed = (sal_Bool)GraphicConverter::Export( *pStream, aGraph, CVT_WMF );
-            pStream->Flush();
-            if ( !bFailed )
+            sal_Int32 nLength = pStream->Seek( STREAM_SEEK_TO_END );
+            if ( nLength > 22 )
             {
-                sal_Int32 nLength = pStream->Seek( STREAM_SEEK_TO_END );
-                if ( nLength > 22 )
+                HMETAFILE hMeta = SetMetaFileBitsEx( nLength - 22,
+                                ( reinterpret_cast< const unsigned char*>( pStream->GetData() ) ) + 22 );
+
+                if ( hMeta )
                 {
-                    HMETAFILE hMeta = SetMetaFileBitsEx( nLength - 22,
-                                    ( reinterpret_cast< const unsigned char*>( pStream->GetData() ) ) + 22 );
+                    HGLOBAL hMemory = GlobalAlloc( GMEM_DDESHARE | GMEM_MOVEABLE, sizeof( METAFILEPICT ) );
 
-                    if ( hMeta )
+                    if ( hMemory )
                     {
-                        HGLOBAL hMemory = GlobalAlloc( GMEM_DDESHARE | GMEM_MOVEABLE, sizeof( METAFILEPICT ) );
+                           METAFILEPICT* pMF = (METAFILEPICT*)GlobalLock( hMemory );
 
-                        if ( hMemory )
+                           pMF->hMF = hMeta;
+                           pMF->mm = MM_ANISOTROPIC;
+
+                        MapMode aMetaMode = pGDIMeta->GetPrefMapMode();
+                        MapMode aWinMode( MAP_100TH_MM );
+
+                        if ( aWinMode == pGDIMeta->GetPrefMapMode() )
                         {
-                               METAFILEPICT* pMF = (METAFILEPICT*)GlobalLock( hMemory );
-
-                               pMF->hMF = hMeta;
-                               pMF->mm = MM_ANISOTROPIC;
-
-                            MapMode aMetaMode = pGDIMeta->GetPrefMapMode();
-                            MapMode aWinMode( MAP_100TH_MM );
-
-                            if ( aWinMode == pGDIMeta->GetPrefMapMode() )
-                            {
-                                pMF->xExt = aMetaSize.Width();
-                                pMF->yExt = aMetaSize.Height();
-                            }
-                            else
-                            {
-                                Size aWinSize = OutputDevice::LogicToLogic( Size( aMetaSize.Width(), aMetaSize.Height() ),
-                                                                            pGDIMeta->GetPrefMapMode(),
-                                                                            aWinMode );
-                                pMF->xExt = aWinSize.Width();
-                                pMF->yExt = aWinSize.Height();
-                            }
-
-                            GlobalUnlock( hMemory );
-                            pResult = (void*)hMemory;
+                            pMF->xExt = aMetaSize.Width();
+                            pMF->yExt = aMetaSize.Height();
                         }
                         else
-                               DeleteMetaFile( hMeta );
+                        {
+                            Size aWinSize = OutputDevice::LogicToLogic( Size( aMetaSize.Width(), aMetaSize.Height() ),
+                                                                        pGDIMeta->GetPrefMapMode(),
+                                                                        aWinMode );
+                            pMF->xExt = aWinSize.Width();
+                            pMF->yExt = aWinSize.Height();
+                        }
+
+                        GlobalUnlock( hMemory );
+                        pResult = (void*)hMemory;
                     }
+                    else
+                           DeleteMetaFile( hMeta );
                 }
             }
-
-            delete pStream;
         }
-    }
 
+        delete pStream;
+    }
 #endif
 
 

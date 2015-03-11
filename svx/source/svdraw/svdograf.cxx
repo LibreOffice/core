@@ -1407,22 +1407,18 @@ Reference< XInputStream > SdrGrafObj::getInputStream()
             if( nSize && pSourceData )
             {
                 sal_uInt8 * pBuffer = new sal_uInt8[ nSize ];
-                if( pBuffer )
-                {
-                    memcpy( pBuffer, pSourceData, nSize );
+                memcpy( pBuffer, pSourceData, nSize );
 
-                    SvMemoryStream* pStream = new SvMemoryStream( (void*)pBuffer, (sal_Size)nSize, StreamMode::READ );
-                    pStream->ObjectOwnsMemory( true );
-                    xStream.set( new utl::OInputStreamWrapper( pStream, true ) );
-                }
+                SvMemoryStream* pStream = new SvMemoryStream( (void*)pBuffer, (sal_Size)nSize, StreamMode::READ );
+                pStream->ObjectOwnsMemory( true );
+                xStream.set( new utl::OInputStreamWrapper( pStream, true ) );
             }
         }
 
         if (!xStream.is() && !aFileName.isEmpty())
         {
             SvFileStream* pStream = new SvFileStream( aFileName, StreamMode::READ );
-            if( pStream )
-                xStream.set( new utl::OInputStreamWrapper( pStream ) );
+            xStream.set( new utl::OInputStreamWrapper( pStream ) );
         }
     }
 

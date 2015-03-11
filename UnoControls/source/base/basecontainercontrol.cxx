@@ -225,49 +225,46 @@ void SAL_CALL BaseContainerControl::addControl ( const OUString& rName, const Re
     // take memory for new item
     IMPL_ControlInfo* pNewControl = new IMPL_ControlInfo;
 
-    if (pNewControl!=(IMPL_ControlInfo*)0)
+    // Ready for multithreading
+    MutexGuard aGuard (m_aMutex);
+
+    // set control
+    pNewControl->sName      = rName;
+    pNewControl->xControl   = rControl;
+
+    // and insert in list
+    maControlInfoList.push_back( pNewControl );
+
+    // initialize new control
+    pNewControl->xControl->setContext       ( (OWeakObject*)this    );
+    pNewControl->xControl->addEventListener ( static_cast< XEventListener* >( static_cast< XWindowListener* >( this ) ) );
+
+    // when container has a peer ...
+    if (getPeer().is())
     {
-        // Ready for multithreading
-        MutexGuard aGuard (m_aMutex);
+        // .. then create a peer on child
+        pNewControl->xControl->createPeer ( getPeer()->getToolkit(), getPeer() );
+        impl_activateTabControllers ();
+    }
 
-        // set control
-        pNewControl->sName      = rName;
-        pNewControl->xControl   = rControl;
+    // Send message to all listener
+    OInterfaceContainerHelper* pInterfaceContainer = m_aListeners.getContainer( cppu::UnoType<XContainerListener>::get());
 
-        // and insert in list
-        maControlInfoList.push_back( pNewControl );
+    if (pInterfaceContainer)
+    {
+        // Build event
+        ContainerEvent  aEvent;
 
-        // initialize new control
-        pNewControl->xControl->setContext       ( (OWeakObject*)this    );
-        pNewControl->xControl->addEventListener ( static_cast< XEventListener* >( static_cast< XWindowListener* >( this ) ) );
+        aEvent.Source   = *this;
+        aEvent.Element <<= rControl;
 
-        // when container has a peer ...
-        if (getPeer().is())
+        // Get all listener
+        OInterfaceIteratorHelper    aIterator (*pInterfaceContainer);
+
+        // Send event
+        while ( aIterator.hasMoreElements() )
         {
-            // .. then create a peer on child
-            pNewControl->xControl->createPeer ( getPeer()->getToolkit(), getPeer() );
-            impl_activateTabControllers ();
-        }
-
-        // Send message to all listener
-        OInterfaceContainerHelper* pInterfaceContainer = m_aListeners.getContainer( cppu::UnoType<XContainerListener>::get());
-
-        if (pInterfaceContainer)
-        {
-            // Build event
-            ContainerEvent  aEvent;
-
-            aEvent.Source   = *this;
-            aEvent.Element <<= rControl;
-
-            // Get all listener
-            OInterfaceIteratorHelper    aIterator (*pInterfaceContainer);
-
-            // Send event
-            while ( aIterator.hasMoreElements() )
-            {
-                static_cast<XContainerListener*>(aIterator.next())->elementInserted (aEvent);
-            }
+            static_cast<XContainerListener*>(aIterator.next())->elementInserted (aEvent);
         }
     }
 }

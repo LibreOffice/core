@@ -135,8 +135,7 @@ namespace dxcanvas
         Gdiplus::Graphics* createGraphicsFromHDC(HDC aHDC)
         {
             Gdiplus::Graphics* pRet = new Gdiplus::Graphics(aHDC);
-            if( pRet )
-                setupGraphics( *pRet );
+            setupGraphics( *pRet );
             return pRet;
         }
 

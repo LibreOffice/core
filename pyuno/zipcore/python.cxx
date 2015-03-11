@@ -144,9 +144,6 @@ int wmain(int argc, wchar_t ** argv, wchar_t **) {
             MY_LENGTH(L"\""); //TODO: overflow
     }
     wchar_t * cl = new wchar_t[clSize];
-    if (cl == NULL) {
-        exit(EXIT_FAILURE);
-    }
     wchar_t * cp = encode(cl, pythonhome);
     for (int i = 1; i < argc; ++i) {
         *cp++ = L' ';
@@ -171,8 +168,7 @@ int wmain(int argc, wchar_t ** argv, wchar_t **) {
         orig = (wchar_t *)L"";
     } else {
         orig = new wchar_t[n];
-        if (orig == NULL ||
-            GetEnvironmentVariableW(L"PATH", orig, n) != n - 1)
+        if (GetEnvironmentVariableW(L"PATH", orig, n) != n - 1)
         {
             exit(EXIT_FAILURE);
         }
@@ -198,8 +194,7 @@ int wmain(int argc, wchar_t ** argv, wchar_t **) {
         orig = (wchar_t *)L"";
     } else {
         orig = new wchar_t[n];
-        if (orig == NULL ||
-            GetEnvironmentVariableW(L"PYTHONPATH", orig, n) != n - 1)
+        if (GetEnvironmentVariableW(L"PYTHONPATH", orig, n) != n - 1)
         {
             exit(EXIT_FAILURE);
         }

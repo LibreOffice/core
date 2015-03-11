@@ -1515,10 +1515,7 @@ SvStream& SdrCustomShapeAdjustmentItem::Store( SvStream& rOut, sal_uInt16 nItemV
 SfxPoolItem* SdrCustomShapeAdjustmentItem::Clone( SfxItemPool * /*pPool*/) const
 {
     SdrCustomShapeAdjustmentItem* pItem = new SdrCustomShapeAdjustmentItem;
-
-    if (pItem)
-        pItem->aAdjustmentValueList = aAdjustmentValueList;
-
+    pItem->aAdjustmentValueList = aAdjustmentValueList;
     return pItem;
 }
 

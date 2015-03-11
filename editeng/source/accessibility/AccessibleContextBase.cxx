@@ -69,30 +69,21 @@ AccessibleContextBase::AccessibleContextBase (
 
     // Set some states.  Don't use the SetState method because no events
     // shall be broadcastet (that is not yet initialized anyway).
-    if (pStateSet != NULL)
-    {
-        pStateSet->AddState (AccessibleStateType::ENABLED);
-        pStateSet->AddState (AccessibleStateType::SENSITIVE);
-        pStateSet->AddState (AccessibleStateType::SHOWING);
-        pStateSet->AddState (AccessibleStateType::VISIBLE);
-        pStateSet->AddState (AccessibleStateType::FOCUSABLE);
-        pStateSet->AddState (AccessibleStateType::SELECTABLE);
-    }
+    pStateSet->AddState (AccessibleStateType::ENABLED);
+    pStateSet->AddState (AccessibleStateType::SENSITIVE);
+    pStateSet->AddState (AccessibleStateType::SHOWING);
+    pStateSet->AddState (AccessibleStateType::VISIBLE);
+    pStateSet->AddState (AccessibleStateType::FOCUSABLE);
+    pStateSet->AddState (AccessibleStateType::SELECTABLE);
 
     // Create the relation set.
     ::utl::AccessibleRelationSetHelper* pRelationSet = new ::utl::AccessibleRelationSetHelper ();
     mxRelationSet = pRelationSet;
 }
 
-
-
-
 AccessibleContextBase::~AccessibleContextBase(void)
 {
 }
-
-
-
 
 bool AccessibleContextBase::SetState (sal_Int16 aState)
 {
@@ -368,8 +359,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
         // We are already disposed!
         // Create a new state set that has only set the DEFUNC state.
         pStateSet = new ::utl::AccessibleStateSetHelper ();
-        if (pStateSet != NULL)
-            pStateSet->AddState (AccessibleStateType::DEFUNC);
+        pStateSet->AddState (AccessibleStateType::DEFUNC);
     }
     else
     {

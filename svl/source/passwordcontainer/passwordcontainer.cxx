@@ -399,9 +399,8 @@ PasswordContainer::PasswordContainer( const Reference<XMultiServiceFactory>& xSe
     mComponent->addEventListener( this );
 
     m_pStorageFile = new StorageItem( this, OUString("Office.Common/Passwords") );
-    if( m_pStorageFile )
-        if( m_pStorageFile->useStorage() )
-            m_aContainer = m_pStorageFile->getInfo();
+    if( m_pStorageFile->useStorage() )
+        m_aContainer = m_pStorageFile->getInfo();
 }
 
 

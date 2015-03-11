@@ -112,7 +112,7 @@ bool OlePicture::Read(HWPFile & hwpf)
         return false;
 #ifdef WIN32
     char *data = new char[size];
-    if( data == 0 || hwpf.ReadBlock(data,size) == 0 )
+    if (hwpf.ReadBlock(data,size) == 0)
     {
           delete [] data;
           return false;

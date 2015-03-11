@@ -113,8 +113,6 @@ HDDEDATA CALLBACK DdeInternal::SvrCallback(
                 return (HDDEDATA)NULL;
 
             HSZPAIR* pPairs = new HSZPAIR [nTopics + 1];
-            if ( !pPairs )
-                return (HDDEDATA)NULL;
 
             HSZPAIR* q = pPairs;
             for (DdeServices::iterator aI = rAll.begin(); aI != rAll.end(); ++aI)

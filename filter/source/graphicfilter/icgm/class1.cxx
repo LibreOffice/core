@@ -166,12 +166,9 @@ void CGM::ImplDoClass1()
             if ( mnElementSize > 1 )
             {
                 sal_uInt8* pBuf = new sal_uInt8[ mnElementSize ];
-                if ( pBuf )
-                {
-                    memcpy( pBuf, mpSource, mnElementSize );
-                    maDefRepList.push_back( pBuf );
-                    maDefRepSizeList.push_back( mnElementSize );
-                }
+                memcpy( pBuf, mpSource, mnElementSize );
+                maDefRepList.push_back( pBuf );
+                maDefRepSizeList.push_back( mnElementSize );
             }
             mnParaSize = mnElementSize;
         }

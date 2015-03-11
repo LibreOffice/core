@@ -177,9 +177,6 @@ bool PSDReader::ImplReadHeader()
 
     mpFileHeader = new PSDFileHeader;
 
-    if ( !mpFileHeader )
-        return false;
-
     m_rPSD.ReadUInt32( mpFileHeader->nSignature ).ReadUInt16( mpFileHeader->nVersion ).ReadUInt32( mpFileHeader->nPad1 ).        ReadUInt16( mpFileHeader->nPad2 ).ReadUInt16( mpFileHeader->nChannels ).ReadUInt32( mpFileHeader->nRows ).            ReadUInt32( mpFileHeader->nColumns ).ReadUInt16( mpFileHeader->nDepth ).ReadUInt16( mpFileHeader->nMode );
 
     if ( ( mpFileHeader->nSignature != 0x38425053 ) || ( mpFileHeader->nVersion != 1 ) )
@@ -240,8 +237,6 @@ bool PSDReader::ImplReadHeader()
             if ( nColorLength != 768 )      // we need the color map
                 return false;
             mpPalette = new sal_uInt8[ 768 ];
-            if ( mpPalette == NULL )
-                return false;
             m_rPSD.Read( mpPalette, 768 );
         }
         break;
@@ -255,8 +250,6 @@ bool PSDReader::ImplReadHeader()
             if ( nColorLength )
                 return false;
             mpPalette = new sal_uInt8[ 768 ];
-            if ( mpPalette == NULL )
-                return false;
             for ( sal_uInt16 i = 0; i < 256; i++ )
             {
                 mpPalette[ i ] = mpPalette[ i + 256 ] = mpPalette[ i + 512 ] = (sal_uInt8)i;

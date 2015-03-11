@@ -165,8 +165,7 @@ bool HWPInfo::Read(HWPFile & hwpf)
     {
         info_block = new unsigned char[info_block_len + 1];
 
-        if (0 == info_block ||
-            !HWPReadInfoBlock(info_block, info_block_len, hwpf))
+        if (!HWPReadInfoBlock(info_block, info_block_len, hwpf))
             return false;
     }
 

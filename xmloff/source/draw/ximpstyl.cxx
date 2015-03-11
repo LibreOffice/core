@@ -436,12 +436,9 @@ SvXMLImportContext *SdXMLPageMasterContext::CreateChildContext(
         pContext = new SdXMLPageMasterStyleContext(GetSdImport(), nPrefix, rLocalName, xAttrList);
 
         // remember SdXMLPresentationPlaceholderContext for later evaluation
-        if(pContext)
-        {
-            pContext->AddFirstRef();
-            DBG_ASSERT(!mpPageMasterStyle, "PageMasterStyle is set, there seem to be two of them (!)");
-            mpPageMasterStyle = static_cast<SdXMLPageMasterStyleContext*>(pContext);
-        }
+        pContext->AddFirstRef();
+        DBG_ASSERT(!mpPageMasterStyle, "PageMasterStyle is set, there seem to be two of them (!)");
+        mpPageMasterStyle = static_cast<SdXMLPageMasterStyleContext*>(pContext);
     }
 
     // call base class
@@ -496,11 +493,8 @@ SvXMLImportContext *SdXMLPresentationPageLayoutContext::CreateChildContext(
             GetSdImport(), nPrefix, rLocalName, xAttrList);
 
         // remember SdXMLPresentationPlaceholderContext for later evaluation
-        if(pContext)
-        {
-            pContext->AddFirstRef();
-            maList.push_back( static_cast<SdXMLPresentationPlaceholderContext*>(pContext) );
-        }
+        pContext->AddFirstRef();
+        maList.push_back( static_cast<SdXMLPresentationPlaceholderContext*>(pContext) );
     }
 
     // call base class
@@ -915,11 +909,8 @@ SvXMLImportContext* SdXMLMasterPageContext::CreateChildContext(
                     XML_STYLE_FAMILY_SD_PRESENTATION_ID);
 
                 // add this style to the outer StylesContext class for later processing
-                if(pNew)
-                {
-                    pContext = pNew;
-                    GetSdImport().GetShapeImport()->GetStylesContext()->AddStyle(*pNew);
-                }
+                pContext = pNew;
+                GetSdImport().GetShapeImport()->GetStylesContext()->AddStyle(*pNew);
             }
             break;
         }
@@ -1533,11 +1524,8 @@ SvXMLImportContext* SdXMLMasterStylesContext::CreateChildContext(
                     pContext = new SdXMLMasterPageContext(GetSdImport(),
                         nPrefix, rLocalName, xAttrList, xNewShapes);
 
-                    if(pContext)
-                    {
-                        pContext->AddFirstRef();
-                        maMasterPageList.push_back( static_cast<SdXMLMasterPageContext*>(pContext) );
-                    }
+                    pContext->AddFirstRef();
+                    maMasterPageList.push_back( static_cast<SdXMLMasterPageContext*>(pContext) );
                 }
             }
         }

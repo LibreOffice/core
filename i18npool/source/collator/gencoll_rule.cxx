@@ -131,8 +131,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         printf("\nRule parsering error\n");
     }
 
-    if (coll)
-        delete coll;
+    delete coll;
 
     return U_SUCCESS(status) ? 0 : 1;
 }   // End of main

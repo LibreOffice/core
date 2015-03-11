@@ -431,33 +431,31 @@ void SAL_CALL SdXMLExport::setSourceDocument( const Reference< lang::XComponent 
 
     // prepare factory parts
     mpSdPropHdlFactory = new XMLSdPropHdlFactory( GetModel(), *this );
-    if(mpSdPropHdlFactory)
-    {
-        // set lock to avoid deletion
-        mpSdPropHdlFactory->acquire();
 
-        // build one ref
-        const rtl::Reference< XMLPropertyHandlerFactory > aFactoryRef = mpSdPropHdlFactory;
+    // set lock to avoid deletion
+    mpSdPropHdlFactory->acquire();
 
-        // construct PropertySetMapper
-        rtl::Reference < XMLPropertySetMapper > xMapper = new XMLShapePropertySetMapper( aFactoryRef, true);
+    // build one ref
+    const rtl::Reference< XMLPropertyHandlerFactory > aFactoryRef = mpSdPropHdlFactory;
 
-        // get or create text paragraph export
-        GetTextParagraphExport();
-        mpPropertySetMapper = new XMLShapeExportPropertyMapper( xMapper, *this );
-        // set lock to avoid deletion
-        mpPropertySetMapper->acquire();
+    // construct PropertySetMapper
+    rtl::Reference < XMLPropertySetMapper > xMapper = new XMLShapePropertySetMapper( aFactoryRef, true);
 
-        // chain text attributes
-        mpPropertySetMapper->ChainExportMapper(XMLTextParagraphExport::CreateParaExtPropMapper(*this));
+    // get or create text paragraph export
+    GetTextParagraphExport();
+    mpPropertySetMapper = new XMLShapeExportPropertyMapper( xMapper, *this );
+    // set lock to avoid deletion
+    mpPropertySetMapper->acquire();
 
-        // construct PresPagePropsMapper
-        xMapper = new XMLPropertySetMapper((XMLPropertyMapEntry*)aXMLSDPresPageProps, aFactoryRef, true);
+    // chain text attributes
+    mpPropertySetMapper->ChainExportMapper(XMLTextParagraphExport::CreateParaExtPropMapper(*this));
 
-        mpPresPagePropsMapper = new XMLPageExportPropertyMapper( xMapper, *this  );
-        // set lock to avoid deletion
-        mpPresPagePropsMapper->acquire();
-    }
+    // construct PresPagePropsMapper
+    xMapper = new XMLPropertySetMapper((XMLPropertyMapEntry*)aXMLSDPresPageProps, aFactoryRef, true);
+
+    mpPresPagePropsMapper = new XMLPageExportPropertyMapper( xMapper, *this  );
+    // set lock to avoid deletion
+    mpPresPagePropsMapper->acquire();
 
     // add family name
       GetAutoStylePool()->AddFamily(

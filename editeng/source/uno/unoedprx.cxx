@@ -320,12 +320,8 @@ SvxEditSource* SvxEditSourceAdapter::Clone() const
         if( pClonedAdaptee.get() )
         {
             SvxEditSourceAdapter* pClone = new SvxEditSourceAdapter();
-
-            if( pClone )
-            {
-                pClone->SetEditSource( std::move(pClonedAdaptee) );
-                return pClone;
-            }
+            pClone->SetEditSource( std::move(pClonedAdaptee) );
+            return pClone;
         }
     }
 

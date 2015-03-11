@@ -200,12 +200,9 @@ SdrAttrObj* E3dExtrudeObj::GetBreakObj()
         basegfx::B2DPolyPolygon aPoly = TransformToScreenCoor(aBackSide);
         SdrPathObj* pPathObj = new SdrPathObj(OBJ_PLIN, aPoly);
 
-        if(pPathObj)
-        {
-            SfxItemSet aSet(GetObjectItemSet());
-            aSet.Put(XLineStyleItem(com::sun::star::drawing::LineStyle_SOLID));
-            pPathObj->SetMergedItemSet(aSet);
-        }
+        SfxItemSet aSet(GetObjectItemSet());
+        aSet.Put(XLineStyleItem(com::sun::star::drawing::LineStyle_SOLID));
+        pPathObj->SetMergedItemSet(aSet);
 
         return pPathObj;
     }

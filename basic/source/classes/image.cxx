@@ -383,16 +383,9 @@ void SbiImage::MakeStrings( short nSize )
     nStringSize = 1024;
     pStrings = new sal_Unicode[ nStringSize ];
     pStringOff = new sal_uInt32[ nSize ];
-    if( pStrings && pStringOff )
-    {
-        nStrings = nSize;
-        memset( pStringOff, 0, nSize * sizeof( sal_uInt32 ) );
-        memset( pStrings, 0, nStringSize * sizeof( sal_Unicode ) );
-    }
-    else
-    {
-        bError = true;
-    }
+    nStrings = nSize;
+    memset( pStringOff, 0, nSize * sizeof( sal_uInt32 ) );
+    memset( pStrings, 0, nStringSize * sizeof( sal_Unicode ) );
 }
 
 // Add a string to StringPool. The String buffer is dynamically
@@ -415,18 +408,11 @@ void SbiImage::AddString( const OUString& r )
         {
             sal_uInt32 nNewLen = needed + 1024;
             nNewLen &= 0xFFFFFC00;  // trim to 1K border
-            sal_Unicode* p = NULL;
-            if( (p = new sal_Unicode[ nNewLen ]) != NULL )
-            {
-                memcpy( p, pStrings, nStringSize * sizeof( sal_Unicode ) );
-                delete[] pStrings;
-                pStrings = p;
-                nStringSize = sal::static_int_cast< sal_uInt16 >(nNewLen);
-            }
-            else
-            {
-                bError = true;
-            }
+            sal_Unicode* p = new sal_Unicode[nNewLen];
+            memcpy( p, pStrings, nStringSize * sizeof( sal_Unicode ) );
+            delete[] pStrings;
+            pStrings = p;
+            nStringSize = sal::static_int_cast< sal_uInt16 >(nNewLen);
         }
         if( !bError )
         {

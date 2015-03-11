@@ -770,9 +770,6 @@ Reference< XCertificate > SecurityEnvironment_MSCryptImpl :: createCertificateFr
 
     if( rawCertificate.getLength() > 0 ) {
         xcert = new X509Certificate_MSCryptImpl() ;
-        if( xcert == NULL )
-            throw RuntimeException() ;
-
         xcert->setRawCert( rawCertificate ) ;
     } else {
         xcert = NULL ;
@@ -1064,9 +1061,7 @@ X509Certificate_MSCryptImpl* MswcryCertContextToXCert( PCCERT_CONTEXT cert )
 
     if( cert != NULL ) {
         xcert = new X509Certificate_MSCryptImpl() ;
-        if( xcert != NULL ) {
-            xcert->setMswcryCert( cert ) ;
-        }
+        xcert->setMswcryCert( cert ) ;
     } else {
         xcert = NULL ;
     }

@@ -167,11 +167,8 @@ XMLShapeImportHelper::XMLShapeImportHelper(
     // construct PresPagePropsMapper
     xMapper = new XMLPropertySetMapper((XMLPropertyMapEntry*)aXMLSDPresPageProps, mpSdPropHdlFactory, false);
     mpPresPagePropsMapper = new SvXMLImportPropertyMapper( xMapper, rImporter );
-    if(mpPresPagePropsMapper)
-    {
-        // set lock to avoid deletion
-        mpPresPagePropsMapper->acquire();
-    }
+    // set lock to avoid deletion
+    mpPresPagePropsMapper->acquire();
 
     uno::Reference< lang::XServiceInfo > xInfo( rImporter.GetModel(), uno::UNO_QUERY );
     const OUString aSName( "com.sun.star.presentation.PresentationDocument" );

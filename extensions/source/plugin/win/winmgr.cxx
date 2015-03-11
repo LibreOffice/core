@@ -332,7 +332,7 @@ Sequence< PluginDescription > XPluginManager_Impl::impl_getPluginDescriptions() 
                 continue;
 
             char * pVersionData = new char[dwSize];
-            if (pVersionData && ::GetFileVersionInfo( arFileName, 0, dwSize, pVersionData ))
+            if (::GetFileVersionInfo( arFileName, 0, dwSize, pVersionData))
             {
                 // optional comment
                 OUString aComment;
@@ -433,8 +433,7 @@ Sequence< PluginDescription > XPluginManager_Impl::impl_getPluginDescriptions() 
                     OSL_FAIL( "### cannot get MIME type or extensions!" );
 #endif
             }
-            if (pVersionData)
-                delete[] pVersionData;
+            delete[] pVersionData;
         }
 
         s_bInit = TRUE;

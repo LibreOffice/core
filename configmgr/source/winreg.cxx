@@ -108,82 +108,79 @@ void dumpWindowsRegistryKey(HKEY hKey, OUString aKeyName, oslFileHandle aFileHan
             wchar_t* pValueName = new wchar_t[nLongestValueNameLen + 1];
             wchar_t* pValue = new wchar_t[nLongestValueLen + 1];
 
-            if(pValueName && pValue)
+            bool bFinal = false;
+            OUString aValue;
+
+            for(DWORD i = 0; i < nValues; ++i)
             {
-                bool bFinal = false;
-                OUString aValue;
+                DWORD nValueNameLen = nLongestValueNameLen + 1;
+                DWORD nValueLen = nLongestValueLen + 1;
 
-                for(DWORD i = 0; i < nValues; ++i)
+                RegEnumValueW(hCurKey, i, pValueName, &nValueNameLen, NULL, NULL, (LPBYTE)pValue, &nValueLen);
+                const wchar_t wsValue[] = L"Value";
+                const wchar_t wsFinal[] = L"Final";
+
+                if(!wcscmp(pValueName, wsValue))
+                    aValue = OUString(pValue);
+                if(!wcscmp(pValueName, wsFinal) && *(DWORD*)pValue == 1)
+                    bFinal = true;
+            }
+            sal_Int32 aLastSeparator = aKeyName.lastIndexOf('\\');
+            OUString aPathAndNodes = aKeyName.copy(0, aLastSeparator);
+            OUString aProp = aKeyName.copy(aLastSeparator + 1);
+            bool bHasNode = false;
+            sal_Int32 nCloseNode = 0;
+
+            writeData(aFileHandle, "<item oor:path=\"");
+            for(sal_Int32 nIndex = 0;; ++nIndex)
+            {
+                OUString aNextPathPart = aPathAndNodes.getToken(nIndex, '\\');
+
+                if(!aNextPathPart.isEmpty())
                 {
-                    DWORD nValueNameLen = nLongestValueNameLen + 1;
-                    DWORD nValueLen = nLongestValueLen + 1;
-
-                    RegEnumValueW(hCurKey, i, pValueName, &nValueNameLen, NULL, NULL, (LPBYTE)pValue, &nValueLen);
-                    const wchar_t wsValue[] = L"Value";
-                    const wchar_t wsFinal[] = L"Final";
-
-                    if(!wcscmp(pValueName, wsValue))
-                        aValue = OUString(pValue);
-                    if(!wcscmp(pValueName, wsFinal) && *(DWORD*)pValue == 1)
-                        bFinal = true;
-                }
-                sal_Int32 aLastSeparator = aKeyName.lastIndexOf('\\');
-                OUString aPathAndNodes = aKeyName.copy(0, aLastSeparator);
-                OUString aProp = aKeyName.copy(aLastSeparator + 1);
-                bool bHasNode = false;
-                sal_Int32 nCloseNode = 0;
-
-                writeData(aFileHandle, "<item oor:path=\"");
-                for(sal_Int32 nIndex = 0;; ++nIndex)
-                {
-                    OUString aNextPathPart = aPathAndNodes.getToken(nIndex, '\\');
-
-                    if(!aNextPathPart.isEmpty())
+                    if((aNextPathPart.lastIndexOf("/#") != -1) || bHasNode)
                     {
-                        if((aNextPathPart.lastIndexOf("/#") != -1) || bHasNode)
+                        bHasNode = true;
+                        nCloseNode++;
+                        writeData(aFileHandle, "\"><node oor:name=\"");
+                        sal_Int32 nCommandSeparator = aNextPathPart.lastIndexOf('#');
+                        if(nCommandSeparator != -1)
                         {
-                            bHasNode = true;
-                            nCloseNode++;
-                            writeData(aFileHandle, "\"><node oor:name=\"");
-                            sal_Int32 nCommandSeparator = aNextPathPart.lastIndexOf('#');
-                            if(nCommandSeparator != -1)
-                            {
-                                OUString aNodeOp = aNextPathPart.copy(nCommandSeparator + 1);
-                                writeAttributeValue(aFileHandle, aNextPathPart.copy(0, nCommandSeparator - 1));
-                                writeData(aFileHandle, "\" oor:op=\"");
-                                writeAttributeValue(aFileHandle, aNodeOp);
-                            }
-                            else
-                            {
-                                writeAttributeValue(aFileHandle, aNextPathPart);
-                            }
+                            OUString aNodeOp = aNextPathPart.copy(nCommandSeparator + 1);
+                            writeAttributeValue(aFileHandle, aNextPathPart.copy(0, nCommandSeparator - 1));
+                            writeData(aFileHandle, "\" oor:op=\"");
+                            writeAttributeValue(aFileHandle, aNodeOp);
                         }
                         else
                         {
-                            writeAttributeValue(aFileHandle, "/" + aNextPathPart);
+                            writeAttributeValue(aFileHandle, aNextPathPart);
                         }
                     }
                     else
                     {
-                        writeData(aFileHandle, "\">");
-                        break;
+                        writeAttributeValue(aFileHandle, "/" + aNextPathPart);
                     }
                 }
-
-                writeData(aFileHandle, "<prop oor:name=\"");
-                writeAttributeValue(aFileHandle, aProp);
-                writeData(aFileHandle, "\"");
-                if(bFinal)
-                    writeData(aFileHandle, " oor:finalized=\"true\"");
-                writeData(aFileHandle, "><value>");
-                writeValueContent(aFileHandle, aValue);
-                writeData(aFileHandle, "</value></prop>");
-                for(; nCloseNode > 0; nCloseNode--)
-                    writeData(aFileHandle, "</node>");
-                writeData(aFileHandle, "</item>\n");
-                delete[] pValueName;
-                delete[] pValue;
+                else
+                {
+                    writeData(aFileHandle, "\">");
+                    break;
+                }
             }
+
+            writeData(aFileHandle, "<prop oor:name=\"");
+            writeAttributeValue(aFileHandle, aProp);
+            writeData(aFileHandle, "\"");
+            if(bFinal)
+                writeData(aFileHandle, " oor:finalized=\"true\"");
+            writeData(aFileHandle, "><value>");
+            writeValueContent(aFileHandle, aValue);
+            writeData(aFileHandle, "</value></prop>");
+            for(; nCloseNode > 0; nCloseNode--)
+                writeData(aFileHandle, "</node>");
+            writeData(aFileHandle, "</item>\n");
+            delete[] pValueName;
+            delete[] pValue;
         }
         RegCloseKey(hCurKey);
     }
