@@ -34,6 +34,9 @@ protected:
     virtual bool ReadyForSchedule( bool bTimer ) SAL_OVERRIDE;
     virtual sal_uInt64 UpdateMinPeriod( sal_uInt64 nMinPeriod, sal_uInt64 nTime ) SAL_OVERRIDE;
 
+private:
+    void InitSystemTimer();
+
 public:
     Timer();
     Timer( const Timer& rTimer );

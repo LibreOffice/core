@@ -81,11 +81,27 @@ sal_uInt64 Timer::UpdateMinPeriod( sal_uInt64 nMinPeriod, sal_uInt64 nTime )
     return nMinPeriod;
 }
 
+/**
+ * Initialize the platform specific timer on which all the
+ * platform independent timers are built
+ */
+void Timer::InitSystemTimer()
+{
+    ImplSVData* pSVData = ImplGetSVData();
+    if( ! pSVData->mpSalTimer )
+    {
+        pSVData->mnTimerPeriod = MAX_TIMER_PERIOD;
+        pSVData->mpSalTimer = pSVData->mpDefInst->CreateSalTimer();
+        pSVData->mpSalTimer->SetCallback( CallbackTaskScheduling );
+    }
+}
+
 Timer::Timer() : Scheduler()
 {
     mnTimeout = 1;
     mbAuto = false;
     mePriority = SchedulerPriority::HIGHEST;
+    InitSystemTimer();
 }
 
 Timer::Timer( const Timer& rTimer ) : Scheduler(rTimer)
@@ -93,6 +109,7 @@ Timer::Timer( const Timer& rTimer ) : Scheduler(rTimer)
     mnTimeout = rTimer.mnTimeout;
     mbAuto = rTimer.mbAuto;
     maTimeoutHdl = rTimer.maTimeoutHdl;
+    InitSystemTimer();
 }
 
 void Timer::Invoke()
@@ -103,13 +120,9 @@ void Timer::Invoke()
 void Timer::Start()
 {
     Scheduler::Start();
-    ImplSVData*     pSVData = ImplGetSVData();
-    if( ! pSVData->mpSalTimer )
-    {
-        pSVData->mnTimerPeriod = MAX_TIMER_PERIOD;
-        pSVData->mpSalTimer = pSVData->mpDefInst->CreateSalTimer();
-        pSVData->mpSalTimer->SetCallback( CallbackTaskScheduling );
-    }
+
+    ImplSVData* pSVData = ImplGetSVData();
+    assert( pSVData->mpSalTimer != NULL );
     if ( mnTimeout < pSVData->mnTimerPeriod )
         Timer::ImplStartTimer( pSVData, mnTimeout );
 }
