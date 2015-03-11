@@ -36,9 +36,9 @@ private:
 
     virtual void    ImplCommit() SAL_OVERRIDE;
 
-    public:
-        SwContentViewConfig(bool bWeb, SwMasterUsrPref& rParent);
-        virtual ~SwContentViewConfig();
+public:
+    SwContentViewConfig(bool bWeb, SwMasterUsrPref& rParent);
+    virtual ~SwContentViewConfig();
 
     // utl::ConfigItem
     virtual void    Notify( const com::sun::star::uno::Sequence< OUString > &rPropertyNames ) SAL_OVERRIDE;
@@ -57,9 +57,9 @@ private:
 
     virtual void        ImplCommit() SAL_OVERRIDE;
 
-    public:
-        SwLayoutViewConfig(bool bWeb, SwMasterUsrPref& rParent);
-        virtual ~SwLayoutViewConfig();
+public:
+    SwLayoutViewConfig(bool bWeb, SwMasterUsrPref& rParent);
+    virtual ~SwLayoutViewConfig();
 
     virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;
     void                    Load();
@@ -75,9 +75,9 @@ private:
 
     virtual void ImplCommit() SAL_OVERRIDE;
 
-    public:
-        SwGridConfig(bool bWeb, SwMasterUsrPref& rParent);
-        virtual ~SwGridConfig();
+public:
+    SwGridConfig(bool bWeb, SwMasterUsrPref& rParent);
+    virtual ~SwGridConfig();
 
     virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;
     void                    Load();
@@ -93,9 +93,9 @@ private:
 
     virtual void ImplCommit() SAL_OVERRIDE;
 
-    public:
-        SwCursorConfig(SwMasterUsrPref& rParent);
-        virtual ~SwCursorConfig();
+public:
+    SwCursorConfig(SwMasterUsrPref& rParent);
+    virtual ~SwCursorConfig();
 
     virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;
     void                    Load();
@@ -110,9 +110,9 @@ private:
 
     virtual void ImplCommit() SAL_OVERRIDE;
 
-    public:
-        SwWebColorConfig(SwMasterUsrPref& rParent);
-        virtual ~SwWebColorConfig();
+public:
+    SwWebColorConfig(SwMasterUsrPref& rParent);
+    virtual ~SwWebColorConfig();
 
     virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;
     void                    Load();
