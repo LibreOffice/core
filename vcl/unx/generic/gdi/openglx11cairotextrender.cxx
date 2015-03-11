@@ -65,7 +65,6 @@ void OpenGLX11CairoTextRender::drawSurface(cairo_t* cr)
     cairo_surface_t* pSurface = cairo_get_target(cr);
     int nWidth = cairo_image_surface_get_width( pSurface );
     int nHeight = cairo_image_surface_get_height( pSurface );
-    cairo_surface_flush( pSurface );
     unsigned char *pSrc = cairo_image_surface_get_data( pSurface );
 
     // XXX: lfrb: GLES 2.0 doesn't support GL_UNSIGNED_INT_8_8_8_8_REV
