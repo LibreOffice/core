@@ -795,9 +795,7 @@ void SfxBindings::InvalidateShell
     // important so that is set correctly: pimp-> ball(Msg)Dirty
     pDispatcher->Flush();
 
-    if ( !pDispatcher ||
-         ( pImp->bAllDirty && pImp->bAllMsgDirty ) ||
-         SfxGetpApp()->IsDowning() )
+    if ((pImp->bAllDirty && pImp->bAllMsgDirty) || SfxGetpApp()->IsDowning())
     {
         // if the next one is anyway, then all the servers are collected
         return;
@@ -1328,9 +1326,10 @@ SfxItemSet* SfxBindings::CreateSet_Impl
     DBG_ASSERT( pImp->pCaches != 0, "SfxBindings not initialized" );
 
     DBG_ASSERT( !pImp->bMsgDirty, "CreateSet_Impl with dirty MessageServer" );
+    assert(pDispatcher);
 
     const SfxSlotServer* pMsgSvr = pCache->GetSlotServer(*pDispatcher, pImp->xProv);
-    if(!pMsgSvr || !pDispatcher)
+    if (!pMsgSvr)
         return 0;
 
     pRealSlot = 0;
