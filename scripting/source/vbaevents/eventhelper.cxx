@@ -70,15 +70,11 @@
 #include <comphelper/anytostring.hxx>
 
 #include <com/sun/star/script/XScriptListener.hpp>
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase3.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/evtmethodhelper.hxx>
 
 #include <list>
 #include <unordered_map>
-
-#include <service.hxx>
 
 #define ASYNC 0
 
@@ -461,7 +457,7 @@ ScriptEventHelper::createEvents( const OUString& sCodeName )
 }
 
 
-typedef ::cppu::WeakImplHelper1< container::XNameContainer > NameContainer_BASE;
+typedef ::cppu::WeakImplHelper< container::XNameContainer > NameContainer_BASE;
 
 class ReadOnlyEventsNameContainer : public NameContainer_BASE
 {
@@ -549,7 +545,7 @@ ReadOnlyEventsNameContainer::hasByName( const OUString& aName ) throw (RuntimeEx
     return sal_True;
 }
 
-typedef ::cppu::WeakImplHelper1< XScriptEventsSupplier > EventsSupplier_BASE;
+typedef ::cppu::WeakImplHelper< XScriptEventsSupplier > EventsSupplier_BASE;
 
 class ReadOnlyEventsSupplier : public EventsSupplier_BASE
 {
@@ -563,7 +559,7 @@ private:
     Reference< container::XNameContainer > m_xNameContainer;
 };
 
-typedef ::cppu::WeakImplHelper3< XScriptListener, util::XCloseListener, lang::XInitialization > EventListener_BASE;
+typedef ::cppu::WeakImplHelper< XScriptListener, util::XCloseListener, lang::XInitialization, css::lang::XServiceInfo > EventListener_BASE;
 
 #define EVENTLSTNR_PROPERTY_ID_MODEL         1
 #define EVENTLSTNR_PROPERTY_MODEL            OUString( "Model"  )
@@ -620,6 +616,25 @@ public:
         OPropertyContainer::setFastPropertyValue( nHandle, rValue );
     if ( nHandle == EVENTLSTNR_PROPERTY_ID_MODEL )
             setShellFromModel();
+    }
+
+    OUString SAL_CALL getImplementationName()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    {
+        return OUString( "ooo.vba.EventListener"  );
+    }
+
+    sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    {
+        return cppu::supportsService(this, ServiceName);
+    }
+
+    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    {
+        const OUString strName( getImplementationName() );
+        return Sequence< OUString >( &strName, 1 );
     }
 
 protected:
@@ -1017,7 +1032,7 @@ EventListener::firing_Impl(const ScriptEvent& evt, Any* pRet ) throw(RuntimeExce
     }
 }
 
-typedef ::cppu::WeakImplHelper1< XVBAToOOEventDescGen > VBAToOOEventDescGen_BASE;
+typedef ::cppu::WeakImplHelper< XVBAToOOEventDescGen, css::lang::XServiceInfo > VBAToOOEventDescGen_BASE;
 
 
 class VBAToOOEventDescGen : public VBAToOOEventDescGen_BASE
@@ -1028,6 +1043,26 @@ public:
     // XVBAToOOEventDescGen
     virtual Sequence< ScriptEventDescriptor > SAL_CALL getEventDescriptions( const OUString& sCtrlServiceName, const OUString& sCodeName ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
     virtual Reference< XScriptEventsSupplier > SAL_CALL getEventSupplier( const Reference< XInterface >& xControl,  const OUString& sCodeName ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    OUString SAL_CALL getImplementationName()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    {
+        return OUString( "ooo.vba.VBAToOOEventDesc"  );
+    }
+
+    sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    {
+        return cppu::supportsService(this, ServiceName);
+    }
+
+    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    {
+        const OUString strName( getImplementationName() );
+        return Sequence< OUString >( &strName, 1 );
+    }
+
 private:
     Reference< XComponentContext > m_xContext;
 
@@ -1051,42 +1086,6 @@ VBAToOOEventDescGen::getEventSupplier( const Reference< XInterface >& xControl, 
             evntHelper.getEventListeners(), sCodeName ) ;
     return xSupplier;
 }
-
-// Component related
-
-namespace evtlstner
-{
-    OUString SAL_CALL getImplementationName()
-    {
-        return OUString( "ooo.vba.EventListener"  );
-    }
-
-    uno::Reference< XInterface > SAL_CALL create(
-    Reference< XComponentContext > const & xContext )
-    {
-        return static_cast< lang::XTypeProvider * >( new EventListener( xContext ) );
-    }
-
-    Sequence< OUString > SAL_CALL getSupportedServiceNames()
-    {
-        const OUString strName( ::evtlstner::getImplementationName() );
-        return Sequence< OUString >( &strName, 1 );
-    }
-}
-namespace ooevtdescgen
-{
-    OUString SAL_CALL getImplementationName()
-    {
-        return OUString( "ooo.vba.VBAToOOEventDesc"  );
-    }
-
-    Sequence< OUString > SAL_CALL getSupportedServiceNames()
-    {
-        const OUString strName( ::ooevtdescgen::getImplementationName() );
-        return Sequence< OUString >( &strName, 1 );
-    }
-}
-
 
 extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
 ooo_vba_EventListener_get_implementation(::com::sun::star::uno::XComponentContext* context,

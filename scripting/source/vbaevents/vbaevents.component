@@ -18,7 +18,7 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="vbaevents" xmlns="http://openoffice.org/2010/uno-components">
+    xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="ooo.vba.EventListener"
       constructor="ooo_vba_EventListener_get_implementation">
     <service name="ooo.vba.EventListener"/>
