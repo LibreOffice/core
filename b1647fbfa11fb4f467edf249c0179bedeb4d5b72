@@ -16,6 +16,24 @@
       "revId": "b1647fbfa11fb4f467edf249c0179bedeb4d5b72",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a29b11f_5db0cf8b",
+        "filename": "sw/source/uibase/dbui/dbmgr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1424,
+      "author": {
+        "id": 1000841
+      },
+      "writtenOn": "2015-03-12T10:53:42Z",
+      "side": 1,
+      "message": "will fix missing paranthesis, soon.\n\nputting this !bCancel one to the previous if would change the logic here - look at the \"else if\" that follows. I already tested that. We would run into the second if-Block in case of bCancel\u003d\u003dtrue which was not desired.",
+      "parentUuid": "3a29b11f_3d9073ec",
+      "revId": "b1647fbfa11fb4f467edf249c0179bedeb4d5b72",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
