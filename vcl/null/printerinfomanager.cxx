@@ -131,4 +131,19 @@ void PrinterInfoManager::setDefaultPaper( PPDContext& /* rContext */ ) const
 
 }
 
+bool PrinterInfoManager::startBatchPrint()
+{
+    return false;
+}
+
+bool PrinterInfoManager::flushBatchPrint()
+{
+    return false;
+}
+
+bool PrinterInfoManager::supportsBatchPrint() const
+{
+    return false;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
