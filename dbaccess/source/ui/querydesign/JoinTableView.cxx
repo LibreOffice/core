@@ -373,10 +373,7 @@ void OJoinTableView::RemoveTabWin( OTableWindow* pTabWin )
             rController.setModified(sal_True);
         }
 
-        OUString aWinName = pTabWin->GetWinName();
-        if(m_aTableMap.find(aWinName) != m_aTableMap.end())
-            m_aTableMap.erase( aWinName );
-        else
+        if ( !m_aTableMap.erase( pTabWin->GetWinName() ) )
             m_aTableMap.erase( pTabWin->GetComposedName() );
 
         if (pTabWin == m_pLastFocusTabWin)
