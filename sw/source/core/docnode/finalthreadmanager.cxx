@@ -284,7 +284,7 @@ FinalThreadManager::~FinalThreadManager()
 // com.sun.star.uno.XServiceInfo:
 OUString SAL_CALL FinalThreadManager::getImplementationName() throw (css::uno::RuntimeException, std::exception)
 {
-    return comp_FinalThreadManager::_getImplementationName();
+    return OUString("com.sun.star.util.comp.FinalThreadManager");
 }
 
 sal_Bool SAL_CALL FinalThreadManager::supportsService(OUString const & serviceName) throw (css::uno::RuntimeException, std::exception)
@@ -294,7 +294,9 @@ sal_Bool SAL_CALL FinalThreadManager::supportsService(OUString const & serviceNa
 
 css::uno::Sequence< OUString > SAL_CALL FinalThreadManager::getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception)
 {
-    return comp_FinalThreadManager::_getSupportedServiceNames();
+    css::uno::Sequence< OUString > s(1);
+    s[0] = "com.sun.star.util.JobManager";
+    return s;
 }
 
 // ::com::sun::star::util::XJobManager:
@@ -441,24 +443,6 @@ void SAL_CALL FinalThreadManager::disposing( const css::lang::EventObject& ) thr
 {
     // nothing to do, because instance doesn't hold any references of observed objects
 }
-
-// component helper namespace
-namespace comp_FinalThreadManager {
-
-    OUString SAL_CALL _getImplementationName()
-    {
-        return OUString("com.sun.star.util.comp.FinalThreadManager");
-    }
-
-    css::uno::Sequence< OUString > SAL_CALL _getSupportedServiceNames()
-    {
-        css::uno::Sequence< OUString > s(1);
-        s[0] = "com.sun.star.util.JobManager";
-        return s;
-    }
-
-} // closing component helper namespace
-
 
 extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
 com_sun_star_util_comp_FinalThreadManager_get_implementation(::com::sun::star::uno::XComponentContext* context,

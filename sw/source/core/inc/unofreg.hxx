@@ -39,22 +39,6 @@ css::uno::Sequence< OUString > SAL_CALL SwTextDocument_getSupportedServiceNames(
 OUString SAL_CALL SwTextDocument_getImplementationName() throw();
 css::uno::Reference< css::uno::XInterface > SAL_CALL SwTextDocument_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory > &rSMgr, const sal_uInt64 _nCreationFlags ) throw( css::uno::Exception );
 
-//API objects
-css::uno::Sequence< OUString > SAL_CALL SwXAutoTextContainer_getSupportedServiceNames() throw();
-OUString SAL_CALL SwXAutoTextContainer_getImplementationName() throw();
-css::uno::Reference< css::uno::XInterface > SAL_CALL SwXAutoTextContainer_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr) throw( css::uno::Exception );
-
-css::uno::Sequence< OUString > SAL_CALL SwXModule_getSupportedServiceNames() throw();
-OUString SAL_CALL SwXModule_getImplementationName() throw();
-
-css::uno::Sequence< OUString > SAL_CALL SwXMailMerge_getSupportedServiceNames() throw();
-OUString SAL_CALL SwXMailMerge_getImplementationName() throw();
-css::uno::Reference< css::uno::XInterface > SAL_CALL SwXMailMerge_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr) throw( css::uno::Exception );
-
-// Layout dump filter
-css::uno::Sequence< OUString > SAL_CALL LayoutDumpFilter_getSupportedServiceNames() throw();
-OUString SAL_CALL LayoutDumpFilter_getImplementationName() throw();
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

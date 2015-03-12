@@ -19,7 +19,6 @@
 
 #include <swtypes.hxx>
 #include <osl/diagnose.h>
-#include <unofreg.hxx>
 #include <unomod.hxx>
 #include <unomid.h>
 #include <unoprnms.hxx>
@@ -192,24 +191,6 @@ static ChainablePropertySetInfo * lcl_createPrintSettingsInfo()
     return new ChainablePropertySetInfo ( aPrintSettingsMap_Impl );
 }
 
-Reference< uno::XInterface > SAL_CALL SwXModule_createInstance(
-    const Reference< XMultiServiceFactory > & /*rSMgr*/) throw( Exception )
-{
-    return (cppu::OWeakObject*)new SwXModule();
-}
-
-Sequence< OUString > SAL_CALL SwXModule_getSupportedServiceNames() throw()
-{
-    OUString sService( "com.sun.star.text.GlobalSettings");
-    const Sequence< OUString > aSeq( &sService, 1 );
-    return aSeq;
-}
-
-OUString SAL_CALL SwXModule_getImplementationName() throw()
-{
-    return OUString( "SwXModule"  );
-}
-
 SwXModule::SwXModule() :
     pxViewSettings(0),
     pxPrintSettings(0)
@@ -248,7 +229,7 @@ Reference< XPropertySet >  SwXModule::getPrintSettings(void) throw( uno::Runtime
 
 OUString SwXModule::getImplementationName(void) throw( RuntimeException, std::exception )
 {
-    return SwXModule_getImplementationName();
+    return OUString( "SwXModule"  );
 }
 
 sal_Bool SwXModule::supportsService(const OUString& rServiceName) throw( RuntimeException, std::exception )
@@ -258,7 +239,9 @@ sal_Bool SwXModule::supportsService(const OUString& rServiceName) throw( Runtime
 
 Sequence< OUString > SwXModule::getSupportedServiceNames(void) throw( RuntimeException, std::exception )
 {
-    return SwXModule_getSupportedServiceNames();
+    OUString sService( "com.sun.star.text.GlobalSettings");
+    const Sequence< OUString > aSeq( &sService, 1 );
+    return aSeq;
 }
 
 SwXPrintSettings::SwXPrintSettings(SwXPrintSettingsType eType, SwDoc* pDoc)

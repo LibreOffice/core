@@ -1190,8 +1190,7 @@ void SAL_CALL SwXMailMerge::removeMailMergeEventListener(
 OUString SAL_CALL SwXMailMerge::getImplementationName()
     throw(RuntimeException, std::exception)
 {
-    SolarMutexGuard aGuard;
-    return SwXMailMerge_getImplementationName();
+    return OUString( "SwXMailMerge" );
 }
 
 sal_Bool SAL_CALL SwXMailMerge::supportsService( const OUString& rServiceName )
@@ -1203,24 +1202,11 @@ sal_Bool SAL_CALL SwXMailMerge::supportsService( const OUString& rServiceName )
 uno::Sequence< OUString > SAL_CALL SwXMailMerge::getSupportedServiceNames()
     throw(RuntimeException, std::exception)
 {
-    SolarMutexGuard aGuard;
-    return SwXMailMerge_getSupportedServiceNames();
-}
-
-uno::Sequence< OUString > SAL_CALL SwXMailMerge_getSupportedServiceNames()
-    throw()
-{
     uno::Sequence< OUString > aNames(2);
     OUString *pName = aNames.getArray();
     pName[0] = "com.sun.star.text.MailMerge";
     pName[1] = "com.sun.star.sdb.DataAccessDescriptor";
     return aNames;
-}
-
-OUString SAL_CALL SwXMailMerge_getImplementationName()
-    throw()
-{
-    return OUString( "SwXMailMerge" );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

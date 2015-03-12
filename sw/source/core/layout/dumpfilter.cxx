@@ -8,7 +8,6 @@
  */
 
 #include "dumpfilter.hxx"
-#include "unofreg.hxx"
 
 #include <wrtsh.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -21,18 +20,6 @@
 #include <libxml/xmlwriter.h>
 
 using namespace ::com::sun::star;
-
-OUString SAL_CALL LayoutDumpFilter_getImplementationName() throw()
-{
-    return OUString( "com.sun.star.comp.Writer.LayoutDump" );
-}
-
-uno::Sequence< OUString > SAL_CALL LayoutDumpFilter_getSupportedServiceNames() throw()
-{
-    uno::Sequence< OUString > aSeq( 1 );
-    aSeq[0] = "com.sun.star.document.ExportFilter";
-    return aSeq;
-}
 
 namespace
 {
@@ -156,7 +143,7 @@ namespace sw
     OUString LayoutDumpFilter::getImplementationName(  )
         throw (uno::RuntimeException, std::exception)
     {
-        return LayoutDumpFilter_getImplementationName();
+        return OUString( "com.sun.star.comp.Writer.LayoutDump" );
     }
 
     sal_Bool LayoutDumpFilter::supportsService( const OUString& rServiceName )
@@ -168,7 +155,9 @@ namespace sw
     uno::Sequence< OUString > LayoutDumpFilter::getSupportedServiceNames()
         throw (uno::RuntimeException, std::exception)
     {
-        return LayoutDumpFilter_getSupportedServiceNames();
+        uno::Sequence< OUString > aSeq( 1 );
+        aSeq[0] = "com.sun.star.document.ExportFilter";
+        return aSeq;
     }
 
 } // Namespace sw

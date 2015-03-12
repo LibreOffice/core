@@ -59,27 +59,6 @@
 
 using namespace ::com::sun::star;
 
-uno::Reference< uno::XInterface > SAL_CALL SwXAutoTextContainer_createInstance(
-    const uno::Reference< lang::XMultiServiceFactory > & ) throw( uno::Exception )
-{
-    //the module may not be loaded
-    SolarMutexGuard aGuard;
-    SwGlobals::ensure();
-    return (cppu::OWeakObject*)new SwXAutoTextContainer();
-}
-
-uno::Sequence< OUString > SAL_CALL SwXAutoTextContainer_getSupportedServiceNames() throw()
-{
-    OUString sService("com.sun.star.text.AutoTextContainer");
-    const uno::Sequence< OUString > aSeq( &sService, 1 );
-    return aSeq;
-}
-
-OUString SAL_CALL SwXAutoTextContainer_getImplementationName() throw()
-{
-    return OUString("SwXAutoTextContainer" );
-}
-
 SwXAutoTextContainer::SwXAutoTextContainer()
 {
     pGlossaries = ::GetGlossaries();
@@ -220,7 +199,7 @@ void SwXAutoTextContainer::removeByName(const OUString& aGroupName)
 
 OUString SwXAutoTextContainer::getImplementationName(void) throw( uno::RuntimeException, std::exception )
 {
-    return SwXAutoTextContainer_getImplementationName();
+    return OUString("SwXAutoTextContainer" );
 }
 
 sal_Bool SwXAutoTextContainer::supportsService(const OUString& rServiceName) throw( uno::RuntimeException, std::exception )
@@ -230,7 +209,9 @@ sal_Bool SwXAutoTextContainer::supportsService(const OUString& rServiceName) thr
 
 uno::Sequence< OUString > SwXAutoTextContainer::getSupportedServiceNames(void) throw( uno::RuntimeException, std::exception )
 {
-    return SwXAutoTextContainer_getSupportedServiceNames();
+    OUString sService("com.sun.star.text.AutoTextContainer");
+    const uno::Sequence< OUString > aSeq( &sService, 1 );
+    return aSeq;
 }
 
 namespace

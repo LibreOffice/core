@@ -34,15 +34,6 @@ class CancelJobsThread;
 class TerminateOfficeThread;
 class SwPauseThreadStarting;
 
-// service helper namespace
-namespace comp_FinalThreadManager {
-
-// component and service helper functions:
-OUString SAL_CALL _getImplementationName();
-com::sun::star::uno::Sequence< OUString > SAL_CALL _getSupportedServiceNames();
-
-} // closing service helper namespace
-
 class FinalThreadManager : public ::cppu::WeakImplHelper3< com::sun::star::lang::XServiceInfo,
                                                            com::sun::star::util::XJobManager,
                                                            com::sun::star::frame::XTerminateListener2 >

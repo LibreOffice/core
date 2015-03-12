@@ -18,10 +18,12 @@
  -->
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
     prefix="sw" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="SwXAutoTextContainer" constructor="SwXAutoTextContainer_get_implementation">
+  <implementation name="SwXAutoTextContainer"
+      constructor="SwXAutoTextContainer_get_implementation">
     <service name="com.sun.star.text.AutoTextContainer"/>
   </implementation>
-  <implementation name="SwXMailMerge" constructor="SwXMailMerge_get_implementation">
+  <implementation name="SwXMailMerge"
+      constructor="SwXMailMerge_get_implementation">
     <service name="com.sun.star.sdb.DataAccessDescriptor"/>
     <service name="com.sun.star.text.MailMerge"/>
   </implementation>

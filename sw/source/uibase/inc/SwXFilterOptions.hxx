@@ -51,9 +51,6 @@ public:
                             SwXFilterOptions();
     virtual                 ~SwXFilterOptions();
 
-    static OUString  getImplementationName_Static();
-    static ::com::sun::star::uno::Sequence< OUString> getSupportedServiceNames_Static();
-
                             // XPropertyAccess
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
                             SAL_CALL getPropertyValues() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

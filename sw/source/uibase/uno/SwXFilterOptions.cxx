@@ -39,7 +39,6 @@ using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::lang;
 
-#define SWFILTEROPTIONSOBJ_IMPLNAME     "com.sun.star.comp.Writer.FilterOptionsDialog"
 #define FILTER_OPTIONS_NAME             "FilterOptions"
 
 SwXFilterOptions::SwXFilterOptions() :
@@ -49,17 +48,6 @@ SwXFilterOptions::SwXFilterOptions() :
 
 SwXFilterOptions::~SwXFilterOptions()
 {
-}
-
-OUString  SwXFilterOptions::getImplementationName_Static()
-{
-    return OUString(SWFILTEROPTIONSOBJ_IMPLNAME);
-}
-
-uno::Sequence< OUString> SwXFilterOptions::getSupportedServiceNames_Static()
-{
-    OUString sService("com.sun.star.ui.dialogs.FilterOptionsDialog");
-    return uno::Sequence< OUString> (&sService, 1);
 }
 
 uno::Sequence< beans::PropertyValue > SwXFilterOptions::getPropertyValues() throw (uno::RuntimeException, std::exception)
@@ -151,7 +139,7 @@ void   SwXFilterOptions::setSourceDocument( const uno::Reference<XComponent >& x
 
 OUString SwXFilterOptions::getImplementationName() throw(uno::RuntimeException, std::exception)
 {
-    return OUString(SWFILTEROPTIONSOBJ_IMPLNAME);
+    return OUString("com.sun.star.comp.Writer.FilterOptionsDialog");
 }
 
 sal_Bool SwXFilterOptions::supportsService( const OUString& rServiceName )
@@ -163,7 +151,8 @@ sal_Bool SwXFilterOptions::supportsService( const OUString& rServiceName )
 uno::Sequence< OUString > SwXFilterOptions::getSupportedServiceNames()
                 throw(uno::RuntimeException, std::exception)
 {
-    return SwXFilterOptions::getSupportedServiceNames_Static();
+    OUString sService("com.sun.star.ui.dialogs.FilterOptionsDialog");
+    return uno::Sequence< OUString> (&sService, 1);
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
