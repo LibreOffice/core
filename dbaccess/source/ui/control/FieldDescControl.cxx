@@ -1133,7 +1133,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
     ActivateAggregate( tpType );
 
     OSL_ENSURE(pFieldType.get(),"We need a type information here!");
-    // If the type has changed, subsitute Controls
+    // If the type has changed, substitute Controls
     if( m_pPreviousType != pFieldType )
     {
         // Reset the saved focus' pointer

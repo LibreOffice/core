@@ -83,7 +83,7 @@ public:
     void SelectPage (const model::SharedPageDescriptor& rpDescriptor);
 
     /** Return whether the specified page is selected.  This convenience
-        method is a subsitute for
+        method is a substitute for
         SlideSorterModel::GetPageDescriptor(i)->IsSelected() is included
         here to make this class more self contained.
     */
