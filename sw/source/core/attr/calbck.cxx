@@ -458,19 +458,15 @@ SwClient* SwClientIter::Last( TypeId nType )
 
 SwClient* SwClientIter::Next()
 {
-    do {
-        if( pDelNext == pAct )
-        {
-            pAct = static_cast<SwClient*>(pAct->m_pRight);
-            pDelNext = pAct;
-        }
-        else
-            pAct = pDelNext;
-
-        if( pAct && pAct->IsA( aSrchId ) )
+    if( pDelNext == pAct )
+        pDelNext = static_cast<SwClient*>(pDelNext->m_pRight);
+    while(pDelNext)
+    {
+        if( pDelNext->IsA( aSrchId ) )
             break;
-    } while( pAct );
-    return pAct;
+        pDelNext = static_cast<SwClient*>(pDelNext->m_pRight);
+    }
+    return pAct = pDelNext;
 }
 
 SwClient* SwClientIter::Previous()
