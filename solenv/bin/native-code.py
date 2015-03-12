@@ -62,6 +62,8 @@ core_factory_list = [
     ]
 
 core_constructor_list = [
+# canvas/source/factory/canvasfactory.component
+    "com_sun_star_comp_rendering_CanvasFactory_get_implementation",
 # chart2/source/chartcore.component
     "com_sun_star_comp_chart_AreaChartType_get_implementation",
     "com_sun_star_comp_chart_BarChartType_get_implementation",
