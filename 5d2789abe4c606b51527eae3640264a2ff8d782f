@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a29b11f_3d7e33af",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3721,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2015-03-12T12:22:54Z",
+      "side": 1,
+      "message": "functionally identical, but is_value reads better than not_is_string.",
+      "revId": "5d2789abe4c606b51527eae3640264a2ff8d782f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a29b11f_dd493f90",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3727,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2015-03-12T12:22:54Z",
+      "side": 1,
+      "message": "As ScMatrix::IsEmpty does not exist for single position (only for col/row position), I use the string length to ascertain that the array item is not empty.",
+      "revId": "5d2789abe4c606b51527eae3640264a2ff8d782f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
