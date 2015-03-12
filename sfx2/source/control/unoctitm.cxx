@@ -974,11 +974,11 @@ void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
     {
         if ( !pState->ISA( SfxVisibilityItem ) )
         {
-            bool bBothAvailable = pLastState && !IsInvalidItem(pLastState);
-            if ( bBothAvailable )
+            if (pLastState && !IsInvalidItem(pLastState))
+            {
                 bNotify = pState->Type() != pLastState->Type() || *pState != *pLastState;
-            if ( pLastState && !IsInvalidItem( pLastState ) )
                 delete pLastState;
+            }
             pLastState = !IsInvalidItem(pState) ? pState->Clone() : pState;
             bVisible = true;
         }
