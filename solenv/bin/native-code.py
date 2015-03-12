@@ -197,7 +197,6 @@ calc_factory_list = [
     ("libscdlo.a", "scd_component_getFactory"),
     ("libscfiltlo.a", "scfilt_component_getFactory"),
     ("libsclo.a", "sc_component_getFactory"),
-    ("libavmedialo.a", "avmedia_component_getFactory"),
     ("libanalysislo.a", "analysis_component_getFactory"),
     ("libdatelo.a", "date_component_getFactory"),
     ("libpricinglo.a", "pricing_component_getFactory"),
@@ -205,6 +204,8 @@ calc_factory_list = [
     ]
 
 calc_constructor_list = [
+# avmedia/util/avmedia.component
+    "com_sun_star_comp_framework_SoundHandler_get_implementation",
     ]
 
 draw_factory_list = [
