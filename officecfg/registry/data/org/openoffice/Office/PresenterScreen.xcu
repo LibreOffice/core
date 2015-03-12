@@ -969,6 +969,14 @@
             <value xml:lang="en-US">Shows the Slides Overview</value>
           </prop>
         </node>
+        <node oor:name="x" oor:op="replace">
+          <prop oor:name="Left">
+            <value xml:lang="en-US">Ctrl-'4'</value>
+          </prop>
+          <prop oor:name="Right">
+            <value xml:lang="en-US">Switches monitors</value>
+          </prop>
+        </node>
       </node>
     </node>
   </node>

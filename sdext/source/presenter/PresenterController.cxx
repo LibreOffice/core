@@ -1005,7 +1005,7 @@ void PresenterController::HandleNumericKeyPress (
 
         case awt::KeyModifier::MOD1:
             // Ctrl-1, Ctrl-2, and Ctrl-3 are used to switch between views
-            // (slide view, notes view, normal)
+            // (slide view, notes view, normal). Ctrl-4 switches monitors
             mnPendingSlideNumber = -1;
             if (mpWindowManager.get() == NULL)
                 return;
@@ -1019,6 +1019,9 @@ void PresenterController::HandleNumericKeyPress (
                     break;
                 case 3:
                     mpWindowManager->SetViewMode(PresenterWindowManager::VM_SlideOverview);
+                    break;
+                case 4:
+                    SwitchMonitors();
                     break;
                 default:
                     // Ignore unsupported key.
