@@ -444,13 +444,9 @@ SwClient* SwClientIter::Last( TypeId nType )
 {
     aSrchId = nType;
     GoEnd();
-    while( pDelNext )
-    {
-        if( pDelNext->IsA( aSrchId ) )
-            break;
-        pDelNext = static_cast<SwClient*>(pDelNext->m_pLeft);
-    }
-    return pAct = pDelNext;
+    if( pDelNext && pDelNext->IsA( aSrchId ) )
+        return pDelNext;
+    return Previous();
 }
 
 SwClient* SwClientIter::Next()
