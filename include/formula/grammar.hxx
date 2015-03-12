@@ -54,7 +54,7 @@ public:
     // Room for 256 reference conventions.
     static const int kEnglishBit       = (1 << (kConventionShift + 8));
     // Mask off all non-language bits.
-    static const int kFlagMask         = ~((~int(0)) << kConventionShift);
+    static const int kFlagMask         = ~((~unsigned(0)) << kConventionShift);
 
     /** Values encoding the formula language plus address reference convention
         plus English parsing/formatting
