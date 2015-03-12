@@ -1498,7 +1498,7 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
     gtk_widget_path_append_type(path, GTK_TYPE_TOOL_BUTTON);
     gtk_widget_path_append_type(path, GTK_TYPE_BUTTON);
     gtk_widget_path_iter_add_class (path, 0, GTK_STYLE_CLASS_PRIMARY_TOOLBAR);
-    gtk_widget_path_iter_add_class (path, 0, GTK_STYLE_CLASS_TOOLBAR);
+    gtk_widget_path_iter_add_class (path, 1, GTK_STYLE_CLASS_TOOLBAR);
     gtk_widget_path_iter_add_class (path, 2, GTK_STYLE_CLASS_BUTTON);
     gtk_style_context_set_path(mpToolButtonStyle, path);
     gtk_widget_path_free (path);
