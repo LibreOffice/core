@@ -20,7 +20,7 @@
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
     xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="animcore::Animate"
-      constructor="com_sun_star_animations_Animate_get_implementation">>
+      constructor="com_sun_star_animations_Animate_get_implementation">
     <service name="com.sun.star.animations.Animate"/>
   </implementation>
   <implementation name="animcore::AnimateColor"

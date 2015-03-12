@@ -213,10 +213,21 @@ draw_factory_list = [
     ("libsvgfilterlo.a", "svgfilter_component_getFactory"),
     ("libdeployment.a", "deployment_component_getFactory"),
     ("libemboleobj.a", "emboleobj_component_getFactory"),
-    ("libanimcorelo.a", "animcore_component_getFactory"),
     ]
 
 draw_constructor_list = [
+# animations/source/animcore/animcore.component -- TODO check if all of these are necessary
+    "com_sun_star_animations_Animate_get_implementation",
+    "com_sun_star_animations_AnimateColor_get_implementation",
+    "com_sun_star_animations_AnimateMotion_get_implementation",
+    "com_sun_star_animations_AnimateSet_get_implementation",
+    "com_sun_star_animations_AnimateTransform_get_implementation",
+    "com_sun_star_animations_Audio_get_implementation",
+    "com_sun_star_animations_Command_get_implementation",
+    "com_sun_star_animations_IterateContainer_get_implementation",
+    "com_sun_star_animations_ParallelTimeContainer_get_implementation",
+    "com_sun_star_animations_SequenceTimeContainer_get_implementation",
+    "com_sun_star_animations_TransitionFilter_get_implementation",
     ]
 
 writer_factory_list = [
