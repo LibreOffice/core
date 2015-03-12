@@ -2672,6 +2672,9 @@ bool OutputDevice::GetTextOutlines( ::basegfx::B2DPolyPolygonVector& rVector,
     if( bRet || (OUTDEV_PRINTER == meOutDevType) || !mpFontEntry )
         return bRet;
 
+    // reset work done (tdf#81876)
+    rVector.clear();
+
     // fall back to bitmap conversion
     // Here, we can savely assume that the mapping between characters and glyphs
     // is one-to-one. This is most probably valid for the old bitmap fonts.
