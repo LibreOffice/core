@@ -325,14 +325,11 @@ void MenuBarWindow::ImplCreatePopup( bool bPreSelectFirst )
             // when the frame is reactivated later
             //GrabFocus();
             pActivePopup->ImplExecute( this, Rectangle( aItemTopLeft, aItemBottomRight ), FLOATWIN_POPUPMODE_DOWN | FLOATWIN_POPUPMODE_NOHORZPLACEMENT, pMenu, bPreSelectFirst );
-            if ( pActivePopup )
-            {
-                // does not have a window, if aborted before or if there are no entries
-                if ( pActivePopup->ImplGetFloatingWindow() )
-                    pActivePopup->ImplGetFloatingWindow()->AddPopupModeWindow( this );
-                else
-                    pActivePopup = NULL;
-            }
+            // does not have a window, if aborted before or if there are no entries
+            if ( pActivePopup->ImplGetFloatingWindow() )
+                pActivePopup->ImplGetFloatingWindow()->AddPopupModeWindow( this );
+            else
+                pActivePopup = nullptr;
         }
     }
 }
