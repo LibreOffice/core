@@ -407,13 +407,8 @@ SwClientIter::~SwClientIter()
 SwClient* SwClientIter::operator++()
 {
     if( pDelNext == pAct )
-    {
-        pAct = static_cast<SwClient*>(pAct->m_pRight);
-        pDelNext = pAct;
-    }
-    else
-        pAct = pDelNext;
-    return pAct;
+        pDelNext = static_cast<SwClient*>(pDelNext->m_pRight);
+    return pAct = pDelNext;
 }
 
 SwClient* SwClientIter::GoStart()
