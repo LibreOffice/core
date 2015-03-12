@@ -51,6 +51,7 @@
 #include "mutexholder.hxx"
 
 #include <list>
+#include <memory>
 
 namespace com { namespace sun { namespace star { namespace uno {
     class XComponentContext;
@@ -293,7 +294,7 @@ class OStorage  : public ::com::sun::star::lang::XTypeProvider
                 , public ::cppu::OWeakObject
 {
     OStorage_Impl*  m_pImpl;
-    StorInternalData_Impl* m_pData;
+    std::unique_ptr<StorInternalData_Impl> m_pData;
 
 protected:
 

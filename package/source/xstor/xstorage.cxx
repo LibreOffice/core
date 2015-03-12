@@ -1887,7 +1887,7 @@ OStorage::OStorage( uno::Reference< io::XInputStream > xInputStream,
 : m_pImpl( new OStorage_Impl( xInputStream, nMode, xProperties, xContext, nStorageType ) )
 {
     m_pImpl->m_pAntiImpl = this;
-    m_pData = new StorInternalData_Impl( m_pImpl->m_rMutexRef, m_pImpl->m_bIsRoot, m_pImpl->m_nStorageType, false );
+    m_pData.reset(new StorInternalData_Impl( m_pImpl->m_rMutexRef, m_pImpl->m_bIsRoot, m_pImpl->m_nStorageType, false));
 }
 
 OStorage::OStorage( uno::Reference< io::XStream > xStream,
@@ -1898,7 +1898,7 @@ OStorage::OStorage( uno::Reference< io::XStream > xStream,
 : m_pImpl( new OStorage_Impl( xStream, nMode, xProperties, xContext, nStorageType ) )
 {
     m_pImpl->m_pAntiImpl = this;
-    m_pData = new StorInternalData_Impl( m_pImpl->m_rMutexRef, m_pImpl->m_bIsRoot, m_pImpl->m_nStorageType, false );
+    m_pData.reset(new StorInternalData_Impl( m_pImpl->m_rMutexRef, m_pImpl->m_bIsRoot, m_pImpl->m_nStorageType, false));
 }
 
 OStorage::OStorage( OStorage_Impl* pImpl, bool bReadOnlyWrap )
@@ -1907,7 +1907,7 @@ OStorage::OStorage( OStorage_Impl* pImpl, bool bReadOnlyWrap )
     // this call can be done only from OStorage_Impl implementation to create child storage
     OSL_ENSURE( m_pImpl && m_pImpl->m_rMutexRef.Is(), "The provided pointer & mutex MUST NOT be empty!\n" );
 
-    m_pData = new StorInternalData_Impl( m_pImpl->m_rMutexRef, m_pImpl->m_bIsRoot, m_pImpl->m_nStorageType, bReadOnlyWrap );
+    m_pData.reset(new StorInternalData_Impl( m_pImpl->m_rMutexRef, m_pImpl->m_bIsRoot, m_pImpl->m_nStorageType, bReadOnlyWrap));
 
     OSL_ENSURE( ( m_pImpl->m_nStorageMode & embed::ElementModes::WRITE ) == embed::ElementModes::WRITE ||
                     m_pData->m_bReadOnlyWrap,
@@ -1948,8 +1948,6 @@ OStorage::~OStorage()
             delete m_pData->m_pTypeCollection;
             m_pData->m_pTypeCollection = NULL;
         }
-
-        delete m_pData;
     }
 }
 
