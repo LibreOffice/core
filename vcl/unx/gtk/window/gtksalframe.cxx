@@ -3251,7 +3251,7 @@ gboolean GtkSalFrame::signalButton( GtkWidget*, GdkEventButton* pEvent, gpointer
         }
     }
 
-    return false;
+    return true;
 }
 
 gboolean GtkSalFrame::signalScroll( GtkWidget*, GdkEvent* pEvent, gpointer frame )
@@ -3262,7 +3262,7 @@ gboolean GtkSalFrame::signalScroll( GtkWidget*, GdkEvent* pEvent, gpointer frame
 #if GTK_CHECK_VERSION(3,0,0)
     //TODO: do something less feeble here
     if (pSEvent->direction == GDK_SCROLL_SMOOTH)
-        return false;
+        return true;
 #endif
 
     static sal_uLong        nLines = 0;
@@ -3291,7 +3291,7 @@ gboolean GtkSalFrame::signalScroll( GtkWidget*, GdkEvent* pEvent, gpointer frame
 
     pThis->CallCallback( SALEVENT_WHEELMOUSE, &aEvent );
 
-    return false;
+    return true;
 }
 
 gboolean GtkSalFrame::signalMotion( GtkWidget*, GdkEventMotion* pEvent, gpointer frame )
@@ -3855,8 +3855,7 @@ gboolean GtkSalFrame::signalVisibility( GtkWidget*, GdkEventVisibility* pEvent, 
 {
     GtkSalFrame* pThis = (GtkSalFrame*)frame;
     pThis->m_nVisibility = pEvent->state;
-
-    return false;
+    return true;
 }
 
 void GtkSalFrame::signalDestroy( GtkWidget* pObj, gpointer frame )
