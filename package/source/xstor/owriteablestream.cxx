@@ -55,6 +55,22 @@
 
 using namespace ::com::sun::star;
 
+struct WSInternalData_Impl
+{
+    SotMutexHolderRef m_rSharedMutexRef;
+    ::std::unique_ptr< ::cppu::OTypeCollection> m_pTypeCollection;
+    ::cppu::OMultiTypeInterfaceContainerHelper m_aListenersContainer; // list of listeners
+    sal_Int32 m_nStorageType;
+
+    // the mutex reference MUST NOT be empty
+    WSInternalData_Impl( const SotMutexHolderRef& rMutexRef, sal_Int32 nStorageType )
+    : m_rSharedMutexRef( rMutexRef )
+    , m_pTypeCollection()
+    , m_aListenersContainer( rMutexRef->GetMutex() )
+    , m_nStorageType( nStorageType )
+    {}
+};
+
 namespace package
 {
 
