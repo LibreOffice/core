@@ -349,9 +349,9 @@ void SwPageBreakWin::UpdatePosition( const Point* pEvtPt )
     if ( pPostItMngr && pPostItMngr->HasNotes() && pPostItMngr->ShowNotes() )
         nSidebarWidth = pPostItMngr->GetSidebarBorderWidth( true ) + pPostItMngr->GetSidebarWidth( true );
 
-    if ( pPageFrm->SidebarPosition( ) == sw::sidebarwindows::SIDEBAR_LEFT )
+    if ( pPageFrm->SidebarPosition( ) == sw::sidebarwindows::SidebarPosition::LEFT )
         nPgLeft -= nSidebarWidth;
-    else if ( pPageFrm->SidebarPosition( ) == sw::sidebarwindows::SIDEBAR_RIGHT )
+    else if ( pPageFrm->SidebarPosition( ) == sw::sidebarwindows::SidebarPosition::RIGHT )
         nPgRight += nSidebarWidth;
 
     Size aBtnSize( BUTTON_WIDTH + ARROW_WIDTH, BUTTON_HEIGHT );

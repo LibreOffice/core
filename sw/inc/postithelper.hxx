@@ -64,7 +64,7 @@ struct SwLayoutInfo
         , mPageFrame()
         , mPagePrtArea()
         , mnPageNumber(1)
-        , meSidebarPosition(sw::sidebarwindows::SIDEBAR_NONE)
+        , meSidebarPosition(sw::sidebarwindows::SidebarPosition::NONE)
         , mRedlineAuthor(0)
     {}
 };

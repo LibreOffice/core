@@ -29,11 +29,11 @@ enum class ViewState
     EDIT
 };
 
-enum SidebarPosition
+enum class SidebarPosition
 {
-    SIDEBAR_LEFT,   // sidebar on left side
-    SIDEBAR_RIGHT,  // sidebar on right side
-    SIDEBAR_NONE    // sidebar on neither side
+    LEFT,   // sidebar on left side
+    RIGHT,  // sidebar on right side
+    NONE    // sidebar on neither side
 };
 
 } } // end of namespace sw::sidebarwindows

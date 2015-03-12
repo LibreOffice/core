@@ -1321,7 +1321,7 @@ bool SwLayAction::FormatLayout( SwLayoutFrm *pLay, bool bAddRect )
                 {
                     SwPageFrm::GetBorderAndShadowBoundRect(aPageRect, pSh,
                         aPageRect, pPageFrm->IsLeftShadowNeeded(), pPageFrm->IsRightShadowNeeded(),
-                        pPageFrm->SidebarPosition() == sw::sidebarwindows::SIDEBAR_RIGHT);
+                        pPageFrm->SidebarPosition() == sw::sidebarwindows::SidebarPosition::RIGHT);
                 }
 
                 if ( bPrev )

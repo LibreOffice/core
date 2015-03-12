@@ -1074,7 +1074,7 @@ void SwViewShell::VisPortChgd( const SwRect &rRect)
                     SwTwips nPageRight = 0;
                     const sw::sidebarwindows::SidebarPosition aSidebarPos = pPage->SidebarPosition();
 
-                    if( aSidebarPos != sw::sidebarwindows::SIDEBAR_NONE )
+                    if( aSidebarPos != sw::sidebarwindows::SidebarPosition::NONE )
                     {
                         nPageLeft = aPageRect.Left();
                         nPageRight = aPageRect.Right();
@@ -1473,7 +1473,7 @@ void SwViewShell::PaintDesktop( const SwRect &rRect )
             }
 
             const bool bSidebarRight =
-                static_cast<const SwPageFrm*>(pPage)->SidebarPosition() == sw::sidebarwindows::SIDEBAR_RIGHT;
+                static_cast<const SwPageFrm*>(pPage)->SidebarPosition() == sw::sidebarwindows::SidebarPosition::RIGHT;
             aPageRect.Pos().X() -= bSidebarRight ? 0 : nSidebarWidth;
             aPageRect.SSize().Width() += nSidebarWidth;
 

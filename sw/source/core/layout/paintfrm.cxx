@@ -3270,7 +3270,7 @@ void SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) c
     {
         const bool bPaintRightShadow =  pPage->IsRightShadowNeeded();
         const bool bPaintLeftShadow = pPage->IsLeftShadowNeeded();
-        const bool bRightSidebar = pPage->SidebarPosition() == sw::sidebarwindows::SIDEBAR_RIGHT;
+        const bool bRightSidebar = pPage->SidebarPosition() == sw::sidebarwindows::SidebarPosition::RIGHT;
 
         if ( !pPage->IsEmptyPage() )
         {
@@ -6400,7 +6400,7 @@ SwRect SwPageFrm::GetBoundRect() const
     }
 
     SwPageFrm::GetBorderAndShadowBoundRect( aPageRect, pSh, aResult,
-        IsLeftShadowNeeded(), IsRightShadowNeeded(), SidebarPosition() ==  sw::sidebarwindows::SIDEBAR_RIGHT );
+        IsLeftShadowNeeded(), IsRightShadowNeeded(), SidebarPosition() ==  sw::sidebarwindows::SidebarPosition::RIGHT );
     return aResult;
 }
 

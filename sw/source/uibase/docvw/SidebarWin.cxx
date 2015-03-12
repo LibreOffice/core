@@ -113,7 +113,7 @@ SwSidebarWin::SwSidebarWin( SwEditWin& rEditWin,
     , mColorDark()
     , mColorLight()
     , mChangeColor()
-    , meSidebarPosition( sw::sidebarwindows::SIDEBAR_NONE )
+    , meSidebarPosition( sw::sidebarwindows::SidebarPosition::NONE )
     , mPosSize()
     , mAnchorRect()
     , mPageBorder( 0 )
@@ -542,13 +542,13 @@ void SwSidebarWin::SetPosAndSize()
         Point aLineEnd ;
         switch ( meSidebarPosition )
         {
-            case sw::sidebarwindows::SIDEBAR_LEFT:
+            case sw::sidebarwindows::SidebarPosition::LEFT:
             {
                 aLineStart = EditWin()->PixelToLogic( Point(GetPosPixel().X()+GetSizePixel().Width(),GetPosPixel().Y()-1) );
                 aLineEnd = EditWin()->PixelToLogic( Point(GetPosPixel().X(),GetPosPixel().Y()-1) );
             }
             break;
-            case sw::sidebarwindows::SIDEBAR_RIGHT:
+            case sw::sidebarwindows::SidebarPosition::RIGHT:
             {
                 aLineStart = EditWin()->PixelToLogic( Point(GetPosPixel().X(),GetPosPixel().Y()-1) );
                 aLineEnd = EditWin()->PixelToLogic( Point(GetPosPixel().X()+GetSizePixel().Width(),GetPosPixel().Y()-1) );

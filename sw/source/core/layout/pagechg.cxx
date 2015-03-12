@@ -256,7 +256,7 @@ SwPageFrm::~SwPageFrm()
                     pImp->GetLayAction().SetAgain();
                 // OD 12.02.2003 #i9719#, #105645# - retouche area of page
                 // including border and shadow area.
-                const bool bRightSidebar = (SidebarPosition() == sw::sidebarwindows::SIDEBAR_RIGHT);
+                const bool bRightSidebar = (SidebarPosition() == sw::sidebarwindows::SidebarPosition::RIGHT);
                 SwRect aRetoucheRect;
                 SwPageFrm::GetBorderAndShadowBoundRect( Frm(), pSh, aRetoucheRect, IsLeftShadowNeeded(), IsRightShadowNeeded(), bRightSidebar );
                 pSh->AddPaintRect( aRetoucheRect );
@@ -599,7 +599,7 @@ void SwPageFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
             {
                 // OD 12.02.2003 #i9719#, #105645# - consider border and shadow of
                 // page frame for determine 'old' rectangle - it's used for invalidating.
-                const bool bRightSidebar = (SidebarPosition() == sw::sidebarwindows::SIDEBAR_RIGHT);
+                const bool bRightSidebar = (SidebarPosition() == sw::sidebarwindows::SidebarPosition::RIGHT);
                 SwRect aOldRectWithBorderAndShadow;
                 SwPageFrm::GetBorderAndShadowBoundRect( aOldPageFrmRect, pSh, aOldRectWithBorderAndShadow,
                     IsLeftShadowNeeded(), IsRightShadowNeeded(), bRightSidebar );
@@ -1251,7 +1251,7 @@ sw::sidebarwindows::SidebarPosition SwPageFrm::SidebarPosition() const
     SwViewShell *pSh = getRootFrm()->GetCurrShell();
     if( !pSh || pSh->GetViewOptions()->getBrowseMode() )
     {
-        return sw::sidebarwindows::SIDEBAR_RIGHT;
+        return sw::sidebarwindows::SidebarPosition::RIGHT;
     }
     else
     {
@@ -1260,8 +1260,8 @@ sw::sidebarwindows::SidebarPosition SwPageFrm::SidebarPosition() const
         const bool bRightSidebar = bLTR ? (!bBookMode || OnRightPage()) : (bBookMode && !OnRightPage());
 
         return bRightSidebar
-               ? sw::sidebarwindows::SIDEBAR_RIGHT
-               : sw::sidebarwindows::SIDEBAR_LEFT;
+               ? sw::sidebarwindows::SidebarPosition::RIGHT
+               : sw::sidebarwindows::SidebarPosition::LEFT;
     }
 }
 
@@ -2055,7 +2055,7 @@ void SwRootFrm::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* pVi
 
                 const SwTwips nCurrentPageWidth = pFormatPage->Frm().Width() + (pFormatPage->IsEmptyPage() ? 0 : nSidebarWidth);
                 const Point aOldPagePos = pPageToAdjust->Frm().Pos();
-                const bool bLeftSidebar = pPageToAdjust->SidebarPosition() == sw::sidebarwindows::SIDEBAR_LEFT;
+                const bool bLeftSidebar = pPageToAdjust->SidebarPosition() == sw::sidebarwindows::SidebarPosition::LEFT;
                 const SwTwips nLeftPageAddOffset = bLeftSidebar ?
                                                    nSidebarWidth :
                                                    0;
