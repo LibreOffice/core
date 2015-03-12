@@ -1254,8 +1254,7 @@ void ScFormulaCell::CompileXML( sc::CompileFormulaContext& rCxt, ScProgress& rPr
     pDocument->DecXMLImportedFormulaCount( aFormula.getLength() );
     rProgress.SetStateCountDownOnPercent( pDocument->GetXMLImportedFormulaCount() );
     // pCode may not deleted for queries, but must be empty
-    if ( pCode )
-        pCode->Clear();
+    pCode->Clear();
 
     bool bSkipCompile = false;
 
