@@ -81,15 +81,12 @@ BSTR PromptNew(long hWnd)
                     );
     if( FAILED( hr ) )
     {
-        piTmpConnection->Release( );
-        dlPrompt->Release( );
         return connstr;
     }
 
     dlPrompt->put_hWnd(hWnd);
     if( FAILED( hr ) )
     {
-        piTmpConnection->Release( );
         dlPrompt->Release( );
         return connstr;
     }
