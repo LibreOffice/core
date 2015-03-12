@@ -2267,7 +2267,7 @@ DECLARE_RTFIMPORT_TEST(testFdo49893, "fdo49893.rtf")
 
 DECLARE_RTFIMPORT_TEST(testFdo49893_2, "fdo49893-2.rtf")
 {
-    // Ensure that header text exists on each page (especially on secnd page)
+    // Ensure that header text exists on each page (especially on second page)
     CPPUNIT_ASSERT_EQUAL(OUString("HEADER"),  parseDump("/root/page[1]/header/txt/text()"));
     CPPUNIT_ASSERT_EQUAL(OUString("HEADER"),  parseDump("/root/page[2]/header/txt/text()"));
     CPPUNIT_ASSERT_EQUAL(OUString("HEADER"),  parseDump("/root/page[3]/header/txt/text()"));

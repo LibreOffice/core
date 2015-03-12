@@ -4786,7 +4786,7 @@ RTFError RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int n
         return RTFError::OK;
     }
 
-    // Accent characters (over dot / over coma).
+    // Accent characters (over dot / over comma).
     switch (nKeyword)
     {
     case RTF_ACCNONE:

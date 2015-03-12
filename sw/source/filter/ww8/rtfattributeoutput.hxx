@@ -503,7 +503,7 @@ private:
      */
     OStringBuffer m_aStyles;
     /*
-     * This is the same as m_aStyles but the conents of it is written last.
+     * This is the same as m_aStyles but the contents of it is written last.
      */
     OStringBuffer m_aStylesEnd;
 

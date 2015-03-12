@@ -164,7 +164,7 @@ OUString NameOrIndex::CheckNamedItem( const NameOrIndex* pCheckItem, const sal_u
         }
     }
 
-    // if we have no name yet, find existing item with same conent or
+    // if we have no name yet, find existing item with same content or
     // create a unique name
     if (aUniqueName.isEmpty())
     {
@@ -1477,7 +1477,7 @@ XLineStartItem* XLineStartItem::checkForUniqueItem( SdrModel* pModel ) const
             }
         }
 
-        // if we have no name yet, find existing item with same conent or
+        // if we have no name yet, find existing item with same content or
         // create a unique name
         if( aUniqueName.isEmpty() )
         {
@@ -1760,7 +1760,7 @@ XLineEndItem* XLineEndItem::checkForUniqueItem( SdrModel* pModel ) const
             }
         }
 
-        // if we have no name yet, find existing item with same conent or
+        // if we have no name yet, find existing item with same content or
         // create a unique name
         if( aUniqueName.isEmpty() )
         {

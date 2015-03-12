@@ -392,7 +392,7 @@
 					</xsl:apply-templates>
 				</xsl:element>
 				<!-- after the last draw:frame sibling the CSS float is disabled
-					&#160; is an unbreakable whitespace to give conent to the element and force a browser not to ignore the element -->
+					&#160; is an unbreakable whitespace to give content to the element and force a browser not to ignore the element -->
 				<div style="clear:both; line-height:0; width:0; height:0; margin:0; padding:0;">&#160;</div>
 			</xsl:when>
 			<xsl:when test="text:tab and not(ancestor::text:index-body)">

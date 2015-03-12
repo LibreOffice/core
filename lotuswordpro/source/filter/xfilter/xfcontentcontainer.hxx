@@ -85,7 +85,7 @@ public:
 
 public:
     /**
-     * @descr   Add conent.
+     * @descr   Add content.
      */
     virtual void    Add(XFContent *pContent);
 
