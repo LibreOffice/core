@@ -46,8 +46,6 @@ void ChartController::executeDispatch_EditData()
     Reference< chart2::XChartDocument > xChartDoc( getModel(), uno::UNO_QUERY );
     if( xChartDoc.is())
     {
-        vcl::Window* pParent( NULL );
-
         Reference< ::com::sun::star::chart2::data::XDataProvider > xDataProvider( xChartDoc->getDataProvider());
 
         {
@@ -56,6 +54,7 @@ void ChartController::executeDispatch_EditData()
             UndoLiveUpdateGuardWithData aUndoGuard = UndoLiveUpdateGuardWithData(
                 SCH_RESSTR( STR_ACTION_EDIT_CHART_DATA ),
                 m_xUndoManager );
+            vcl::Window* pParent( NULL );
             DataEditor aDataEditorDialog( pParent, xChartDoc, m_xCC );
             if (aDataEditorDialog.Execute() == RET_OK)
                 aDataEditorDialog.ApplyChangesToModel();

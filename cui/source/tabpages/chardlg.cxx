@@ -3253,8 +3253,6 @@ bool SvxCharPositionPage::FillItemSet( SfxItemSet* rSet )
     else if ( SfxItemState::DEFAULT == rOldSet.GetItemState( nWhich, false ) )
         rSet->InvalidateItem(nWhich);
 
-    bChanged = true;
-
     // Pair-Kerning
     nWhich = GetWhich( SID_ATTR_CHAR_AUTOKERN );
 

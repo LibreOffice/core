@@ -697,10 +697,6 @@ bool VCartesianAxis::createTextShapes(
     if( m_bUseTextLabels && !m_aAxisProperties.m_bComplexCategories )
         pCategories = &m_aTextLabels;
 
-    const TickInfo* pPreviousVisibleTickInfo = NULL;
-    const TickInfo* pPREPreviousVisibleTickInfo = NULL;
-    const TickInfo* pLastVisibleNeighbourTickInfo = NULL;
-
     bool bLimitedHeight = fabs(aTextToTickDistance.getX()) > fabs(aTextToTickDistance.getY());
 
     //prepare properties for multipropertyset-interface of shape
@@ -715,6 +711,9 @@ bool VCartesianAxis::createTextShapes(
 
     uno::Any* pLimitedSpaceAny = PropertyMapper::getValuePointerForLimitedSpace(aPropValues,aPropNames,bLimitedHeight);
 
+    const TickInfo* pPreviousVisibleTickInfo = NULL;
+    const TickInfo* pPREPreviousVisibleTickInfo = NULL;
+    const TickInfo* pLastVisibleNeighbourTickInfo = NULL;
     sal_Int32 nTick = 0;
     for( TickInfo* pTickInfo = rTickIter.firstInfo()
         ; pTickInfo
@@ -895,9 +894,6 @@ bool VCartesianAxis::createTextShapesSimple(
     if( m_bUseTextLabels && !m_aAxisProperties.m_bComplexCategories )
         pCategories = &m_aTextLabels;
 
-    const TickInfo* pPreviousVisibleTickInfo = NULL;
-    const TickInfo* pLastVisibleNeighbourTickInfo = NULL;
-
     bool bLimitedHeight = fabs(aTextToTickDistance.getX()) > fabs(aTextToTickDistance.getY());
 
     //prepare properties for multipropertyset-interface of shape
@@ -912,6 +908,8 @@ bool VCartesianAxis::createTextShapesSimple(
 
     uno::Any* pLimitedSpaceAny = PropertyMapper::getValuePointerForLimitedSpace(aPropValues,aPropNames,bLimitedHeight);
 
+    const TickInfo* pPreviousVisibleTickInfo = NULL;
+    const TickInfo* pLastVisibleNeighbourTickInfo = NULL;
     sal_Int32 nTick = 0;
     for( TickInfo* pTickInfo = rTickIter.firstInfo()
         ; pTickInfo
