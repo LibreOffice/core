@@ -194,7 +194,6 @@ edit_constructor_list = [
     ]
 
 calc_factory_list = [
-    ("libscfiltlo.a", "scfilt_component_getFactory"),
     ("libsclo.a", "sc_component_getFactory"),
     ("libanalysislo.a", "analysis_component_getFactory"),
     ("libdatelo.a", "date_component_getFactory"),
@@ -208,6 +207,9 @@ calc_constructor_list = [
 # sc/util/scd.component -- TODO check if all of these are necessary, probably yes
     "com_sun_star_comp_calc_FormatDetector_get_implementation",
     "com_sun_star_comp_calc_ExcelBiffFormatDetector_get_implementation",
+# sc/util/scfilt.component
+    "com_sun_star_comp_oox_xls_ExcelFilter_get_implementation",
+    "com_sun_star_comp_oox_xls_FormulaParser_get_implementation",
     ]
 
 draw_factory_list = [
