@@ -18,9 +18,9 @@ String STR_VIEWLAYOUT_ONE
     Text [ en-US ] = "Single-page view";
 };
 
-String STR_VIEWLAYOUT_TWO
+String STR_VIEWLAYOUT_MULTI
 {
-    Text [ en-US ] = "Two page view";
+    Text [ en-US ] = "Multiple-page view";
 };
 
 String STR_VIEWLAYOUT_BOOK
