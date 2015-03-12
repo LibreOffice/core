@@ -165,6 +165,7 @@ protected:
     SAL_DLLPRIVATE SfxShellObject* GetShellObj_Impl() const;
     SAL_DLLPRIVATE void SetShellObj_Impl( SfxShellObject* pObj );
     void HandleOpenXmlFilterSettings(SfxRequest &);
+    void ChangeParaSpace(SfxRequest &, SfxItemSet &, SfxItemSet &);
 
 public:
     TYPEINFO_OVERRIDE();

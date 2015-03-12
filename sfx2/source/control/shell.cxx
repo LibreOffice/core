@@ -45,6 +45,10 @@
 #include <sidebar/ContextChangeBroadcaster.hxx>
 #include <com/sun/star/ui/dialogs/XSLTFilterDialog.hpp>
 
+#include <editeng/ulspitem.hxx>
+#include <editeng/eeitem.hxx>
+#include <svx/svxids.hrc>
+
 #include <boost/ptr_container/ptr_map.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 
@@ -306,6 +310,29 @@ void SfxShell::HandleOpenXmlFilterSettings(SfxRequest & rReq)
     {
     }
     rReq.Ignore ();
+}
+
+void SfxShell::ChangeParaSpace(SfxRequest & rReq, SfxItemSet & rEditAttr, SfxItemSet & rNewAttr)
+{
+    SvxULSpaceItem aULSpace(static_cast< const SvxULSpaceItem& >( rEditAttr.Get( EE_PARA_ULSPACE ) ) );
+    sal_uInt16 nUpper = aULSpace.GetUpper();
+    sal_uInt16 nLower = aULSpace.GetLower();
+
+    if ( rReq.GetSlot() == SID_PARASPACE_INCREASE )
+    {
+        nUpper = std::min< sal_uInt16 >( nUpper + 57, 5670 );
+        nLower = std::min< sal_uInt16 >( nLower + 57, 5670 );
+    }
+    else // SID_PARASPACE_DECREASE
+    {
+        nUpper = std::max< sal_Int16 >( nUpper - 57, 0 );
+        nLower = std::max< sal_Int16 >( nLower - 57, 0 );
+    }
+
+    aULSpace.SetUpper( nUpper );
+    aULSpace.SetLower( nLower );
+    rNewAttr.Put( aULSpace );
+    rReq.Done();
 }
 
 void SfxShell::DoActivate_Impl( SfxViewFrame *pFrame, bool bMDI )

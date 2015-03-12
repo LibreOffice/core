@@ -244,26 +244,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
         case SID_PARASPACE_INCREASE:
         case SID_PARASPACE_DECREASE:
         {
-            SvxULSpaceItem aULSpace(
-                static_cast< const SvxULSpaceItem& >( aEditAttr.Get( EE_PARA_ULSPACE ) ) );
-            sal_uInt16 nUpper = aULSpace.GetUpper();
-            sal_uInt16 nLower = aULSpace.GetLower();
-
-            if ( nSlot == SID_PARASPACE_INCREASE )
-            {
-                nUpper = std::min< sal_uInt16 >( nUpper + 57, 5670 );
-                nLower = std::min< sal_uInt16 >( nLower + 57, 5670 );
-            }
-            else
-            {
-                nUpper = std::max< sal_Int16 >( nUpper - 57, 0 );
-                nLower = std::max< sal_Int16 >( nLower - 57, 0 );
-            }
-
-            aULSpace.SetUpper( nUpper );
-            aULSpace.SetLower( nLower );
-            aNewAttr.Put( aULSpace );
-            rReq.Done();
+            ChangeParaSpace( rReq, aEditAttr, aNewAttr );
         }
         break;
         case SID_ATTR_PARA_LINESPACE_10:

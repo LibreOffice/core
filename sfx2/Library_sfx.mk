@@ -57,6 +57,7 @@ $(eval $(call gb_Library_use_libraries,sfx,\
     comphelper \
     cppu \
     cppuhelper \
+    editeng \
     drawinglayer \
     fwe \
     i18nlangtag \
