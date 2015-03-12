@@ -200,15 +200,15 @@ XMLTextMasterPageContext::XMLTextMasterPageContext(
     {
         sName = xAttrList->getValue( FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_name );
     }
-    else if( xAttrList->hasAttribute( FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_display_name ) )
+    if( xAttrList->hasAttribute( FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_display_name ) )
     {
         sDisplayName = xAttrList->getValue( FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_display_name );
     }
-    else if( xAttrList->hasAttribute( FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_next_style_name ) )
+    if( xAttrList->hasAttribute( FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_next_style_name ) )
     {
         sFollow = xAttrList->getValue( FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_next_style_name );
     }
-    else if( xAttrList->hasAttribute( FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_page_layout_name ) )
+    if( xAttrList->hasAttribute( FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_page_layout_name ) )
     {
         sPageMasterName = xAttrList->getValue( FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_page_layout_name );
     }
@@ -227,7 +227,7 @@ XMLTextMasterPageContext::XMLTextMasterPageContext(
 
     Reference< XNameContainer > xPageStyles =
         GetImport().GetTextImport()->GetPageStyles();
-    if( xPageStyles.is() )
+    if( !xPageStyles.is() )
         return;
 
     Any aAny;
