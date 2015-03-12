@@ -70,9 +70,8 @@ void SwWait::LeaveWaitAndUnlockDispatcher()
         {
             // only unlock dispatchers which had been locked
             SfxDispatcher* pDispatcher = pFrame->GetDispatcher();
-            if ( mpLockedDispatchers.find( pDispatcher ) != mpLockedDispatchers.end() )
+            if ( mpLockedDispatchers.erase( pDispatcher ) )
             {
-                mpLockedDispatchers.erase( pDispatcher );
                 pDispatcher->Lock( false );
             }
         }
