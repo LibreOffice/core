@@ -306,12 +306,6 @@ Sequence< OUString >  SlideLayoutController_getSupportedServiceNames() throw( Ru
     return aSNS;
 }
 
-Reference< XInterface > SAL_CALL SlideLayoutController_createInstance( const Reference< XMultiServiceFactory >& rSMgr )
-{
-    return static_cast< cppu::OWeakObject * >(
-        new SlideLayoutController( comphelper::getComponentContext(rSMgr), ".uno:AssignLayout", false ));
-}
-
 OUString InsertSlideController_getImplementationName() throw (css::uno::RuntimeException)
 {
     return OUString( "com.sun.star.comp.sd.InsertSlideController" );

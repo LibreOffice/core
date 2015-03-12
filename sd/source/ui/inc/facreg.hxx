@@ -35,13 +35,6 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL SdPresentationDocument_crea
 OUString SdPresentationDocument_getImplementationName() throw( css::uno::RuntimeException );
 css::uno::Sequence< OUString > SAL_CALL SdPresentationDocument_getSupportedServiceNames() throw( css::uno::RuntimeException );
 
-
-namespace sd
-{
-OUString InsertSlideController_getImplementationName() throw( css::uno::RuntimeException );
-css::uno::Sequence< OUString >  InsertSlideController_getSupportedServiceNames() throw( css::uno::RuntimeException );
-}
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

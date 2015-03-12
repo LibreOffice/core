@@ -33,8 +33,6 @@
 
 using namespace com::sun::star;
 
-using namespace ::sd;
-
 // Declaration and initialization of a map from service names to locally
 // unique factory identifiers.
 

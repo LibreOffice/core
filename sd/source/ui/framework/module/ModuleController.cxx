@@ -268,7 +268,7 @@ com_sun_star_comp_Draw_framework_module_ModuleController_get_implementation(
         ::com::sun::star::uno::XComponentContext* context,
         ::com::sun::star::uno::Sequence<css::uno::Any> const &)
 {
-    css::uno::Reference< css::drawing::framework::XModuleController > xModCont ( sd::framework::ModuleController::CreateInstance(context) );
+    css::uno::Reference< css::uno::XInterface > xModCont ( sd::framework::ModuleController::CreateInstance(context) );
     xModCont->acquire();
     return xModCont.get();
 }
