@@ -75,7 +75,7 @@ struct StorInternalData_Impl
     sal_Int32 m_nStorageType; // the mode in which the storage is used
     bool m_bReadOnlyWrap;
 
-    OChildDispListener_Impl* m_pSubElDispListener;
+    ::rtl::Reference<OChildDispListener_Impl> m_pSubElDispListener;
 
     WeakComponentList m_aOpenSubComponentsList;
 
@@ -89,7 +89,7 @@ struct StorInternalData_Impl
     , m_bIsRoot( bRoot )
     , m_nStorageType( nStorageType )
     , m_bReadOnlyWrap( bReadOnlyWrap )
-    , m_pSubElDispListener( NULL )
+    , m_pSubElDispListener()
     {}
 
     ~StorInternalData_Impl();
@@ -1917,28 +1917,17 @@ OStorage::OStorage( OStorage_Impl* pImpl, bool bReadOnlyWrap )
 
 OStorage::~OStorage()
 {
+    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    if ( m_pImpl )
     {
-        ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
-        if ( m_pImpl )
-        {
-            m_refCount++; // to call dispose
-            try {
-                dispose();
-            }
-            catch( const uno::RuntimeException& rRuntimeException )
-            {
-                m_pImpl->AddLog( rRuntimeException.Message );
-                m_pImpl->AddLog( THROW_WHERE "Handled exception" );
-            }
+        m_refCount++; // to call dispose
+        try {
+            dispose();
         }
-    }
-
-    if ( m_pData )
-    {
-        if ( m_pData->m_pSubElDispListener )
+        catch( const uno::RuntimeException& rRuntimeException )
         {
-            m_pData->m_pSubElDispListener->release();
-            m_pData->m_pSubElDispListener = NULL;
+            m_pImpl->AddLog( rRuntimeException.Message );
+            m_pImpl->AddLog( THROW_WHERE "Handled exception" );
         }
     }
 }
@@ -1959,10 +1948,10 @@ void SAL_CALL OStorage::InternalDispose( bool bNotifyImpl )
 
     if ( m_pData->m_bReadOnlyWrap )
     {
-        OSL_ENSURE( !m_pData->m_aOpenSubComponentsList.size() || m_pData->m_pSubElDispListener,
+        OSL_ENSURE( !m_pData->m_aOpenSubComponentsList.size() || m_pData->m_pSubElDispListener.get(),
                     "If any subelements are open the listener must exist!\n" );
 
-        if ( m_pData->m_pSubElDispListener )
+        if (m_pData->m_pSubElDispListener.get())
         {
             m_pData->m_pSubElDispListener->OwnerIsDisposed();
 
@@ -1977,7 +1966,7 @@ void SAL_CALL OStorage::InternalDispose( bool bNotifyImpl )
                     if ( xTmp.is() )
                     {
                         xTmp->removeEventListener( uno::Reference< lang::XEventListener >(
-                                    static_cast< lang::XEventListener* >( m_pData->m_pSubElDispListener ) ) );
+                            static_cast< lang::XEventListener* >( m_pData->m_pSubElDispListener.get())));
 
                         try {
                             xTmp->dispose();
@@ -2162,14 +2151,13 @@ void OStorage::MakeLinkToSubComponent_Impl( const uno::Reference< lang::XCompone
     if ( !xComponent.is() )
         throw uno::RuntimeException( THROW_WHERE );
 
-    if ( !m_pData->m_pSubElDispListener )
+    if (!m_pData->m_pSubElDispListener.get())
     {
         m_pData->m_pSubElDispListener = new OChildDispListener_Impl( *this );
-        m_pData->m_pSubElDispListener->acquire();
     }
 
     xComponent->addEventListener( uno::Reference< lang::XEventListener >(
-        static_cast< ::cppu::OWeakObject* >( m_pData->m_pSubElDispListener ), uno::UNO_QUERY ) );
+        static_cast< ::cppu::OWeakObject* >(m_pData->m_pSubElDispListener.get()), uno::UNO_QUERY));
 
     m_pData->m_aOpenSubComponentsList.push_back( xComponent );
 }
