@@ -86,6 +86,26 @@ sal_Int32 WorksheetBuffer::getWorksheetCount() const
     return static_cast< sal_Int32 >( maSheetInfos.size() );
 }
 
+sal_Int32 WorksheetBuffer::getAllSheetCount() const
+{
+    sal_Int32 nSheetCount = -1;
+
+    try
+    {
+        Reference< XSpreadsheets > xSheets( getDocument()->getSheets(), UNO_QUERY_THROW );
+        Reference< XIndexAccess > xSheetsIA( xSheets, UNO_QUERY_THROW );
+
+        nSheetCount = xSheetsIA->getCount();
+    }
+    catch( Exception& )
+    {
+        OSL_FAIL( "WorksheetBuffer::getAllSheetCount - cannot retrieve no. of worksheets" );
+    }
+
+    return nSheetCount;
+
+}
+
 OUString WorksheetBuffer::getWorksheetRelId( sal_Int32 nWorksheet ) const
 {
     const SheetInfo* pSheetInfo = maSheetInfos.get( nWorksheet ).get();

@@ -65,6 +65,8 @@ public:
 
     /** Returns the number of original sheets contained in the workbook. */
     sal_Int32           getWorksheetCount() const;
+    /** Returns the number of all sheets, workbook + dummy ones (pivot table caches) */
+    sal_Int32           getAllSheetCount() const;
     /** Returns the OOXML relation identifier of the specified worksheet. */
     OUString     getWorksheetRelId( sal_Int32 nWorksheet ) const;
 
