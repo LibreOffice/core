@@ -45,6 +45,7 @@
 #include <svtools/transfer.hxx>
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -872,6 +873,14 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor, sal_uInt16
             GetCursor()->SetOrientation( 0 );
 
         GetCursor()->SetSize( aCursorSz );
+
+        if (isTiledRendering())
+        {
+            const Point& rPos = GetCursor()->GetPos();
+            Rectangle aRect(rPos.getX(), rPos.getY(), rPos.getX() + GetCursor()->GetWidth(), rPos.getY() + GetCursor()->GetHeight());
+            OString sRect = aRect.toString();
+            libreOfficeKitCallback(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, sRect.getStr());
+        }
 
         unsigned char nCursorDir = CURSOR_DIRECTION_NONE;
         if ( IsInsertMode() && !aEditSelection.HasRange() && ( pEditEngine->pImpEditEngine->HasDifferentRTLLevels( aPaM.GetNode() ) ) )

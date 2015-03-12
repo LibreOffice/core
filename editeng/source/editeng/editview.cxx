@@ -62,6 +62,7 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <linguistic/lngprops.hxx>
 #include <vcl/settings.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
@@ -394,12 +395,17 @@ void EditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
         if ( !pImpEditView->DoAutoScroll() )
             bGotoCursor = false;
         pImpEditView->ShowCursor( bGotoCursor, bForceVisCursor );
+
+        if (pImpEditView->isTiledRendering())
+            pImpEditView->libreOfficeKitCallback(LOK_CALLBACK_CURSOR_VISIBLE, OString::boolean(true).getStr());
     }
 }
 
 void EditView::HideCursor()
 {
     pImpEditView->GetCursor()->Hide();
+    if (pImpEditView->isTiledRendering())
+        pImpEditView->libreOfficeKitCallback(LOK_CALLBACK_CURSOR_VISIBLE, OString::boolean(false).getStr());
 }
 
 Pair EditView::Scroll( long ndX, long ndY, sal_uInt8 nRangeCheck )
