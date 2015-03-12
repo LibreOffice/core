@@ -4745,7 +4745,8 @@ bool ScCompiler::HandleTableRef()
             // Optional [] (or [#All]) may follow.
             if ((bGotToken = GetToken()) && mpToken->GetOpCode() == ocTableRefOpen)
             {
-                if ((bGotToken = GetToken()) && mpToken->GetOpCode() == ocTableRefClose)
+                bool bAll = ((bGotToken = GetToken()) && mpToken->GetOpCode() == ocTableRefItemAll);
+                if (bGotToken && (!bAll || (bGotToken = GetToken())) && mpToken->GetOpCode() == ocTableRefClose)
                     bGotToken = false;  // get next token below
             }
         }
