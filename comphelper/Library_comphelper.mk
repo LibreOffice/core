@@ -82,6 +82,7 @@ $(eval $(call gb_Library_add_exception_objects,comphelper,\
     comphelper/source/misc/componentmodule \
     comphelper/source/misc/configuration \
     comphelper/source/misc/configurationhelper \
+    comphelper/source/misc/dispatchcommand \
     comphelper/source/misc/docpasswordhelper \
     comphelper/source/misc/docpasswordrequest \
     comphelper/source/misc/documentinfo \
