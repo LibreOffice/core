@@ -519,7 +519,7 @@ static gboolean renderOverlay(GtkWidget* pWidget, GdkEventExpose* /*pEvent*/, gp
 
     if (pDocView->m_bEdit && pDocView->m_bCursorVisible && pDocView->m_bCursorOverlayVisible && !lcl_isEmptyRectangle(&pDocView->m_aVisibleCursor))
     {
-        if (pDocView->m_aVisibleCursor.width == 0)
+        if (pDocView->m_aVisibleCursor.width < 30)
             // Set a minimal width if it would be 0.
             pDocView->m_aVisibleCursor.width = 30;
 
