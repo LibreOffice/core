@@ -157,13 +157,15 @@ bool OWizNameMatching::LeavePage()
             OSL_ENSURE((nPos) < static_cast<sal_Int32>(m_pParent->m_vColumnPos.size()),"m_pParent->m_vColumnPos: Illegal index for vector");
             m_pParent->m_vColumnPos[nPos].first = ++nParamPos;
             m_pParent->m_vColumnPos[nPos].second = ::std::distance(rDestColumns.begin(),aDestIter) + 1;
-            bool bNotConvert = true;
 
             TOTypeInfoSP pTypeInfo;
 
             assert(aDestIter != aDestEnd);
             if (aDestIter != aDestEnd)
-                pTypeInfo = m_pParent->convertType((*aDestIter)->second->getSpecialTypeInfo(),bNotConvert);
+            {
+                bool bNotConvert = true;
+                pTypeInfo = m_pParent->convertType((*aDestIter)->second->getSpecialTypeInfo(), bNotConvert);
+            }
 
             sal_Int32 nType = ::com::sun::star::sdbc::DataType::VARCHAR;
             if ( pTypeInfo.get() )
