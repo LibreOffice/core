@@ -953,7 +953,15 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
             -fTilePosXPixel, -fTilePosYPixel, nCol1, nRow1, nCol2, nRow2,
             fPPTX, fPPTY);
 
+    // create a temporary SdrPaintWindow to avoid warnings
+    SdrPaintWindow aTemporaryPaintWindow(*pViewData->GetScDrawView(), rDevice);
+    SdrPageView* pSdrPageView = pViewData->GetScDrawView()->GetSdrPageView();
+    pSdrPageView->AddPaintWindowToPageView(aTemporaryPaintWindow);
+
+    // draw the content
     DrawContent(rDevice, aTabInfo, aOutputData, true, SC_UPDATE_ALL);
+
+    pSdrPageView->RemovePaintWindowFromPageView(aTemporaryPaintWindow);
 }
 
 void ScGridWindow::LogicInvalidate(const ::vcl::Region* pRegion)
