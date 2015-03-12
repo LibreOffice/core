@@ -198,7 +198,6 @@ calc_factory_list = [
     ("libanalysislo.a", "analysis_component_getFactory"),
     ("libdatelo.a", "date_component_getFactory"),
     ("libpricinglo.a", "pricing_component_getFactory"),
-    ("libsvllo.a", "svl_component_getFactory"),
     ]
 
 calc_constructor_list = [
@@ -210,6 +209,10 @@ calc_constructor_list = [
 # sc/util/scfilt.component
     "com_sun_star_comp_oox_xls_ExcelFilter_get_implementation",
     "com_sun_star_comp_oox_xls_FormulaParser_get_implementation",
+# svl/util/svl.component -- TODO check if all of these are necessary
+    "com_sun_star_comp_svl_PathService_get_implementation",
+    "com_sun_star_uno_util_numbers_SvNumberFormatsSupplierServiceObject_get_implementation",
+    "com_sun_star_uno_util_numbers_SvNumberFormatterServiceObject_get_implementation",
     ]
 
 draw_factory_list = [
