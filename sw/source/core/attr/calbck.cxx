@@ -453,12 +453,8 @@ SwClient* SwClientIter::Next()
 {
     if( pDelNext == pAct )
         pDelNext = static_cast<SwClient*>(pDelNext->m_pRight);
-    while(pDelNext)
-    {
-        if( pDelNext->IsA( aSrchId ) )
-            break;
+    while(pDelNext && !pDelNext->IsA( aSrchId ) )
         pDelNext = static_cast<SwClient*>(pDelNext->m_pRight);
-    }
     return pAct = pDelNext;
 }
 
