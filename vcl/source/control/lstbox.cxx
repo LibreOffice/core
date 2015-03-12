@@ -1465,6 +1465,7 @@ void ListBox::SetEdgeBlending(bool bNew)
 
         if(IsDropDownBox())
         {
+            assert(mpImplWin);
             mpImplWin->Invalidate();
         }
         else
