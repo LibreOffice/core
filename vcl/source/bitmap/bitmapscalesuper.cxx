@@ -1004,7 +1004,7 @@ bool BitmapScaleSuper::filter(Bitmap& rBitmap)
             assert( nThreads > 0 );
             sal_uInt32 nStrips = ((nEndY - nStartY) + SCALE_THREAD_STRIP - 1) / SCALE_THREAD_STRIP;
             sal_uInt32 nStripsPerThread = nStrips / nThreads;
-            SAL_INFO("vcl.gdi", "Scale in " << nStrips << " strips " << nStripsPerThread << " per thread" << " we have " << nThreads << " CPU threads ");
+            SAL_INFO("vcl.gdi", "Scale in " << nStrips << " strips " << nStripsPerThread << " per thread we have " << nThreads << " CPU threads ");
             long nStripY = nStartY;
             for ( sal_uInt32 t = 0; t < nThreads - 1; t++ )
             {
