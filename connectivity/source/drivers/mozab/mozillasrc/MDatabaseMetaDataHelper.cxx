@@ -214,13 +214,6 @@ static nsresult getSubsFromParent(const OString& aParent, nsIEnumerator **aSubs)
     NS_ENSURE_SUCCESS(retCode, retCode) ;
     nsCOMPtr<nsIRDFResource> rdfResource ;
 
-    nsCOMPtr<nsIRDFDataSource> rdfDirectory ;
-
-    OString dir("rdf:addressdirectory");
-    rdfService->GetDataSource(dir.getStr(),getter_AddRefs(rdfDirectory)) ;
-
-
-
     OSL_TRACE("uri: %s\n", aParent.getStr()) ;
     retCode = rdfService->GetResource(nsDependentCString(aParent.getStr(),aParent.getLength()), getter_AddRefs(rdfResource)) ;
     NS_ENSURE_SUCCESS(retCode, retCode) ;
