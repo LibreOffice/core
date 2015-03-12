@@ -422,16 +422,12 @@ SwClient* SwClientIter::GoStart()
 
 SwClient* SwClientIter::GoEnd()
 {
-    pAct = pDelNext;
-    if( !pAct )
-        pAct = const_cast<SwClient*>(rRoot.GetDepends());
-    if( pAct )
-    {
-        while( pAct->m_pRight )
-            pAct = static_cast<SwClient*>(pAct->m_pRight);
-    }
-    pDelNext = pAct;
-    return pAct;
+    if(!pDelNext)
+        pDelNext = const_cast<SwClient*>(rRoot.GetDepends());
+    if(pDelNext)
+        while( pDelNext->m_pRight )
+            pDelNext = static_cast<SwClient*>(pDelNext->m_pRight);
+    return pAct = pDelNext;
 }
 
 SwClient* SwClientIter::First( TypeId nType )
