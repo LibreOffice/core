@@ -303,7 +303,7 @@ sal_uLong SwXMLTextBlocks::StartPutBlock( const OUString& rShort, const OUString
 
         uno::Reference< beans::XPropertySet > xRootProps( xRoot, uno::UNO_QUERY_THROW );
         OUString aPropName( "MediaType" );
-        OUString aMime( SotExchange::GetFormatMimeType( SOT_FORMATSTR_ID_STARWRITER_8 ) );
+        OUString aMime( SotExchange::GetFormatMimeType( SotClipboardFormatId::STARWRITER_8 ) );
         xRootProps->setPropertyValue( aPropName, uno::makeAny( aMime ) );
     }
     catch (const uno::Exception&)

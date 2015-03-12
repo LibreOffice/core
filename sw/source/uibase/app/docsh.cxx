@@ -637,17 +637,17 @@ bool SwDocShell::ConvertTo( SfxMedium& rMedium )
 
         // determine the desired Type
         sal_uInt8 nSaveType = 0;
-        sal_uLong nSaveClipId = pFlt->GetFormat();
-        if( SOT_FORMATSTR_ID_STARWRITERWEB_8 == nSaveClipId ||
-            SOT_FORMATSTR_ID_STARWRITERWEB_60 == nSaveClipId ||
-            SOT_FORMATSTR_ID_STARWRITERWEB_50 == nSaveClipId ||
-            SOT_FORMATSTR_ID_STARWRITERWEB_40 == nSaveClipId )
+        SotClipboardFormatId nSaveClipId = pFlt->GetFormat();
+        if( SotClipboardFormatId::STARWRITERWEB_8 == nSaveClipId ||
+            SotClipboardFormatId::STARWRITERWEB_60 == nSaveClipId ||
+            SotClipboardFormatId::STARWRITERWEB_50 == nSaveClipId ||
+            SotClipboardFormatId::STARWRITERWEB_40 == nSaveClipId )
             nSaveType = 1;
-        else if( SOT_FORMATSTR_ID_STARWRITERGLOB_8 == nSaveClipId ||
-                 SOT_FORMATSTR_ID_STARWRITERGLOB_8_TEMPLATE == nSaveClipId ||
-                 SOT_FORMATSTR_ID_STARWRITERGLOB_60 == nSaveClipId ||
-                 SOT_FORMATSTR_ID_STARWRITERGLOB_50 == nSaveClipId ||
-                 SOT_FORMATSTR_ID_STARWRITERGLOB_40 == nSaveClipId )
+        else if( SotClipboardFormatId::STARWRITERGLOB_8 == nSaveClipId ||
+                 SotClipboardFormatId::STARWRITERGLOB_8_TEMPLATE == nSaveClipId ||
+                 SotClipboardFormatId::STARWRITERGLOB_60 == nSaveClipId ||
+                 SotClipboardFormatId::STARWRITERGLOB_50 == nSaveClipId ||
+                 SotClipboardFormatId::STARWRITERGLOB_40 == nSaveClipId )
             nSaveType = 2;
 
         // Change Flags of the Document accordingly

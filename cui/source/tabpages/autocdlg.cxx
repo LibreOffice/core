@@ -2313,7 +2313,7 @@ void OfaAutoCompleteTabPage::CopyToClipboard() const
                 nEncode));
             sData.append(aLineEnd);
         }
-        pCntnr->CopyByteString( SOT_FORMAT_STRING, sData.makeStringAndClear() );
+        pCntnr->CopyByteString( SotClipboardFormatId::STRING, sData.makeStringAndClear() );
         pCntnr->CopyToClipboard( (vcl::Window*)this );
     }
 }

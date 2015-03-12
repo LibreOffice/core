@@ -227,7 +227,7 @@ sal_Int8 SwEditWin::ExecuteDrop( const ExecuteDropEvent& rEvt )
                                 GetDataFlavorExVector(),
                                 m_nDropDestination,
                                 rEvt.mnAction,
-                                nUserOpt, m_nDropFormat, nEventAction, 0,
+                                nUserOpt, m_nDropFormat, nEventAction, SotClipboardFormatId::NONE,
                                 &rEvt.maDropEvent.Transferable );
 
     TransferableDataHelper aData( rEvt.maDropEvent.Transferable );
@@ -430,9 +430,9 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
                 DND_ACTION_MOVE == rEvt.mnAction )
                 nEventAction = DND_ACTION_COPY;
 
-            if( (SOT_FORMATSTR_ID_SBA_FIELDDATAEXCHANGE == m_nDropFormat &&
+            if( (SotClipboardFormatId::SBA_FIELDDATAEXCHANGE == m_nDropFormat &&
                  EXCHG_IN_ACTION_LINK == m_nDropAction) ||
-                 SOT_FORMATSTR_ID_SBA_CTRLDATAEXCHANGE == m_nDropFormat  )
+                 SotClipboardFormatId::SBA_CTRLDATAEXCHANGE == m_nDropFormat  )
             {
                 SdrMarkView* pMView = PTR_CAST( SdrMarkView, rSh.GetDrawView() );
                 if( pMView && !pMView->IsDesignMode() )

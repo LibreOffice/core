@@ -20,6 +20,7 @@
 #define INCLUDED_SVTOOLS_INETIMG_HXX
 
 #include <tools/gen.hxx>
+#include <sot/formats.hxx>
 
 class SvData;
 class SotDataObject;
@@ -67,8 +68,8 @@ public:
     const Size&     GetSizePixel() const { return aSizePixel; }
 
     // Im-/Export
-    bool Write( SvStream& rOStm, sal_uLong nFormat ) const;
-    bool Read( SvStream& rIStm, sal_uLong nFormat );
+    bool Write( SvStream& rOStm, SotClipboardFormatId nFormat ) const;
+    bool Read( SvStream& rIStm, SotClipboardFormatId nFormat );
 };
 
 #endif // INCLUDED_SVTOOLS_INETIMG_HXX

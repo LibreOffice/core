@@ -1610,7 +1610,7 @@ bool OFieldDescControl::isPasteAllowed()
     if ( bAllowed )
     {
         TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard(GetParent()));
-        bAllowed = aTransferData.HasFormat(SOT_FORMAT_STRING);
+        bAllowed = aTransferData.HasFormat(SotClipboardFormatId::STRING);
     }
     return bAllowed;
 }

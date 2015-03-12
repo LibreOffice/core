@@ -153,7 +153,7 @@ static sal_uInt32 nMSOleObjCntr = 0;
 /************************************************************************/
 void Impl_OlePres::Write( SvStream & rStm )
 {
-    WriteClipboardFormat( rStm, FORMAT_GDIMETAFILE );
+    WriteClipboardFormat( rStm, SotClipboardFormatId::GDIMETAFILE );
     rStm.WriteInt32( nJobLen + 4 );       // a TargetDevice that's always empty
     if( nJobLen )
         rStm.Write( pJob, nJobLen );
@@ -166,7 +166,7 @@ void Impl_OlePres::Write( SvStream & rStm )
     sal_uLong nPos = rStm.Tell();
     rStm.WriteInt32( 0 );
 
-    if( GetFormat() == FORMAT_GDIMETAFILE && pMtf )
+    if( GetFormat() == SotClipboardFormatId::GDIMETAFILE && pMtf )
     {
         // Always to 1/100 mm, until Mtf-Solution found
         // Assumption (no scaling, no origin translation)
@@ -6534,7 +6534,7 @@ bool SvxMSDffManager::MakeContentStream( SotStorage * pStor, const GDIMetaFile &
     sal_uInt16 nAspect = ASPECT_CONTENT;
     sal_uLong nAdviseModes = 2;
 
-    Impl_OlePres aEle( FORMAT_GDIMETAFILE );
+    Impl_OlePres aEle( SotClipboardFormatId::GDIMETAFILE );
     // Convert the size in 1/100 mm
     // If a not applicable MapUnit (device dependent) is used,
     // SV tries to guess a best match for the right value
@@ -6729,13 +6729,13 @@ bool SvxMSDffManager::ConvertToOle2( SvStream& rStm, sal_uInt32 nReadLen,
                 if( pIds->nId )
                 {
                     // found!
-                    sal_uLong nCbFmt = SotExchange::RegisterFormatName( aSvrName );
+                    SotClipboardFormatId nCbFmt = SotExchange::RegisterFormatName( aSvrName );
                     rDest->SetClass( SvGlobalName( pIds->nId, 0, 0, 0xc0,0,0,0,0,0,0,0x46 ), nCbFmt,
                                     OUString::createFromAscii( pIds->pDspName ) );
                 }
                 else
                 {
-                    sal_uLong nCbFmt = SotExchange::RegisterFormatName( aSvrName );
+                    SotClipboardFormatId nCbFmt = SotExchange::RegisterFormatName( aSvrName );
                     rDest->SetClass( SvGlobalName(), nCbFmt, aSvrName );
                 }
             }

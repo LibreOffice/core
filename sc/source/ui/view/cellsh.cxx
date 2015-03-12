@@ -344,7 +344,7 @@ void ScCellShell::GetCellState( SfxItemSet& rSet )
 }
 
 static bool lcl_TestFormat( SvxClipboardFmtItem& rFormats, const TransferableDataHelper& rDataHelper,
-                        SotFormatStringId nFormatId )
+                        SotClipboardFormatId nFormatId )
 {
     if ( rDataHelper.HasFormat( nFormatId ) )
     {
@@ -352,15 +352,15 @@ static bool lcl_TestFormat( SvxClipboardFmtItem& rFormats, const TransferableDat
         //  handled by "paste special" dialog / toolbox controller instead.
         //  Only the object type name has to be set here:
         OUString aStrVal;
-        if ( nFormatId == SOT_FORMATSTR_ID_EMBED_SOURCE )
+        if ( nFormatId == SotClipboardFormatId::EMBED_SOURCE )
         {
             TransferableObjectDescriptor aDesc;
             if ( ((TransferableDataHelper&)rDataHelper).GetTransferableObjectDescriptor(
-                                        SOT_FORMATSTR_ID_OBJECTDESCRIPTOR, aDesc ) )
+                                        SotClipboardFormatId::OBJECTDESCRIPTOR, aDesc ) )
                 aStrVal = aDesc.maTypeName;
         }
-        else if ( nFormatId == SOT_FORMATSTR_ID_EMBED_SOURCE_OLE
-          || nFormatId == SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE )
+        else if ( nFormatId == SotClipboardFormatId::EMBED_SOURCE_OLE
+          || nFormatId == SotClipboardFormatId::EMBEDDED_OBJ_OLE )
         {
             OUString aSource;
             SvPasteObjectHelper::GetEmbeddedName( rDataHelper, aStrVal, aSource, nFormatId );
@@ -384,27 +384,27 @@ void ScCellShell::GetPossibleClipboardFormats( SvxClipboardFmtItem& rFormats )
 
     TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pWin ) );
 
-    lcl_TestFormat( rFormats, aDataHelper, SOT_FORMATSTR_ID_DRAWING );
-    lcl_TestFormat( rFormats, aDataHelper, SOT_FORMATSTR_ID_SVXB );
-    lcl_TestFormat( rFormats, aDataHelper, SOT_FORMAT_GDIMETAFILE );
-    lcl_TestFormat( rFormats, aDataHelper, SOT_FORMATSTR_ID_PNG );
-    lcl_TestFormat( rFormats, aDataHelper, SOT_FORMAT_BITMAP );
-    lcl_TestFormat( rFormats, aDataHelper, SOT_FORMATSTR_ID_EMBED_SOURCE );
+    lcl_TestFormat( rFormats, aDataHelper, SotClipboardFormatId::DRAWING );
+    lcl_TestFormat( rFormats, aDataHelper, SotClipboardFormatId::SVXB );
+    lcl_TestFormat( rFormats, aDataHelper, SotClipboardFormatId::GDIMETAFILE );
+    lcl_TestFormat( rFormats, aDataHelper, SotClipboardFormatId::PNG );
+    lcl_TestFormat( rFormats, aDataHelper, SotClipboardFormatId::BITMAP );
+    lcl_TestFormat( rFormats, aDataHelper, SotClipboardFormatId::EMBED_SOURCE );
 
     if ( !bDraw )
     {
-        lcl_TestFormat( rFormats, aDataHelper, SOT_FORMATSTR_ID_LINK );
-        lcl_TestFormat( rFormats, aDataHelper, SOT_FORMAT_STRING );
-        lcl_TestFormat( rFormats, aDataHelper, SOT_FORMATSTR_ID_DIF );
-        lcl_TestFormat( rFormats, aDataHelper, SOT_FORMAT_RTF );
-        lcl_TestFormat( rFormats, aDataHelper, SOT_FORMATSTR_ID_HTML );
-        lcl_TestFormat( rFormats, aDataHelper, SOT_FORMATSTR_ID_HTML_SIMPLE );
-        lcl_TestFormat( rFormats, aDataHelper, SOT_FORMATSTR_ID_BIFF_8 );
-        lcl_TestFormat( rFormats, aDataHelper, SOT_FORMATSTR_ID_BIFF_5 );
+        lcl_TestFormat( rFormats, aDataHelper, SotClipboardFormatId::LINK );
+        lcl_TestFormat( rFormats, aDataHelper, SotClipboardFormatId::STRING );
+        lcl_TestFormat( rFormats, aDataHelper, SotClipboardFormatId::DIF );
+        lcl_TestFormat( rFormats, aDataHelper, SotClipboardFormatId::RTF );
+        lcl_TestFormat( rFormats, aDataHelper, SotClipboardFormatId::HTML );
+        lcl_TestFormat( rFormats, aDataHelper, SotClipboardFormatId::HTML_SIMPLE );
+        lcl_TestFormat( rFormats, aDataHelper, SotClipboardFormatId::BIFF_8 );
+        lcl_TestFormat( rFormats, aDataHelper, SotClipboardFormatId::BIFF_5 );
     }
 
-    if ( !lcl_TestFormat( rFormats, aDataHelper, SOT_FORMATSTR_ID_EMBED_SOURCE_OLE ) )
-        lcl_TestFormat( rFormats, aDataHelper, SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE );
+    if ( !lcl_TestFormat( rFormats, aDataHelper, SotClipboardFormatId::EMBED_SOURCE_OLE ) )
+        lcl_TestFormat( rFormats, aDataHelper, SotClipboardFormatId::EMBEDDED_OBJ_OLE );
 }
 
 //  insert, insert contents
@@ -416,23 +416,23 @@ static bool lcl_IsCellPastePossible( const TransferableDataHelper& rData )
         bPossible = true;
     else
     {
-        if ( rData.HasFormat( SOT_FORMATSTR_ID_PNG ) ||
-             rData.HasFormat( SOT_FORMAT_BITMAP ) ||
-             rData.HasFormat( SOT_FORMAT_GDIMETAFILE ) ||
-             rData.HasFormat( SOT_FORMATSTR_ID_SVXB ) ||
-             rData.HasFormat( FORMAT_PRIVATE ) ||
-             rData.HasFormat( SOT_FORMAT_RTF ) ||
-             rData.HasFormat( SOT_FORMATSTR_ID_EMBED_SOURCE ) ||
-             rData.HasFormat( SOT_FORMATSTR_ID_LINK_SOURCE ) ||
-             rData.HasFormat( SOT_FORMATSTR_ID_EMBED_SOURCE_OLE ) ||
-             rData.HasFormat( SOT_FORMATSTR_ID_LINK_SOURCE_OLE ) ||
-             rData.HasFormat( SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE ) ||
-             rData.HasFormat( SOT_FORMAT_STRING ) ||
-             rData.HasFormat( SOT_FORMATSTR_ID_SYLK ) ||
-             rData.HasFormat( SOT_FORMATSTR_ID_LINK ) ||
-             rData.HasFormat( SOT_FORMATSTR_ID_HTML ) ||
-             rData.HasFormat( SOT_FORMATSTR_ID_HTML_SIMPLE ) ||
-             rData.HasFormat( SOT_FORMATSTR_ID_DIF ) )
+        if ( rData.HasFormat( SotClipboardFormatId::PNG ) ||
+             rData.HasFormat( SotClipboardFormatId::BITMAP ) ||
+             rData.HasFormat( SotClipboardFormatId::GDIMETAFILE ) ||
+             rData.HasFormat( SotClipboardFormatId::SVXB ) ||
+             rData.HasFormat( SotClipboardFormatId::PRIVATE ) ||
+             rData.HasFormat( SotClipboardFormatId::RTF ) ||
+             rData.HasFormat( SotClipboardFormatId::EMBED_SOURCE ) ||
+             rData.HasFormat( SotClipboardFormatId::LINK_SOURCE ) ||
+             rData.HasFormat( SotClipboardFormatId::EMBED_SOURCE_OLE ) ||
+             rData.HasFormat( SotClipboardFormatId::LINK_SOURCE_OLE ) ||
+             rData.HasFormat( SotClipboardFormatId::EMBEDDED_OBJ_OLE ) ||
+             rData.HasFormat( SotClipboardFormatId::STRING ) ||
+             rData.HasFormat( SotClipboardFormatId::SYLK ) ||
+             rData.HasFormat( SotClipboardFormatId::LINK ) ||
+             rData.HasFormat( SotClipboardFormatId::HTML ) ||
+             rData.HasFormat( SotClipboardFormatId::HTML_SIMPLE ) ||
+             rData.HasFormat( SotClipboardFormatId::DIF ) )
         {
             bPossible = true;
         }

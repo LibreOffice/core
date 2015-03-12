@@ -26,13 +26,13 @@ namespace rptui
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
 
-    sal_uInt32 OGroupExchange::getReportGroupId()
+    SotClipboardFormatId OGroupExchange::getReportGroupId()
     {
-        static sal_uInt32 s_nReportFormat = (sal_uInt32)-1;
-        if ( (sal_uInt32)-1 == s_nReportFormat )
+        static SotClipboardFormatId s_nReportFormat = static_cast<SotClipboardFormatId>(-1);
+        if ( static_cast<SotClipboardFormatId>(-1) == s_nReportFormat )
         {
             s_nReportFormat = SotExchange::RegisterFormatName(OUString("application/x-openoffice;windows_formatname=\"reportdesign.GroupFormat\"" ));
-            OSL_ENSURE((sal_uInt32)-1 != s_nReportFormat, "Bad exchange id!");
+            OSL_ENSURE(static_cast<SotClipboardFormatId>(-1) != s_nReportFormat, "Bad exchange id!");
         }
         return s_nReportFormat;
     }
@@ -51,7 +51,7 @@ namespace rptui
 
     bool OGroupExchange::GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& /*rDestDoc*/ )
     {
-        sal_uLong nFormat = SotExchange::GetFormat(rFlavor);
+        SotClipboardFormatId nFormat = SotExchange::GetFormat(rFlavor);
         if(nFormat == OGroupExchange::getReportGroupId() )
         {
             return SetAny(uno::makeAny(m_aGroupRow),rFlavor);

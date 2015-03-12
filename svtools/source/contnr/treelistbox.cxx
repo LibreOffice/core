@@ -1223,7 +1223,7 @@ sal_Int8 SvTreeListBox::AcceptDrop( const AcceptDropEvent& rEvt )
     else
     {
         SvTreeListEntry* pEntry = GetDropTarget( rEvt.maPosPixel );
-        if( !IsDropFormatSupported( SOT_FORMATSTR_ID_TREELISTBOX ) )
+        if( !IsDropFormatSupported( SotClipboardFormatId::TREELISTBOX ) )
         {
             SAL_WARN( "svtools.contnr", "SvTreeListBox::QueryDrop(): no format" );
         }
@@ -1265,9 +1265,9 @@ sal_Int8 SvTreeListBox::ExecuteDrop( const ExecuteDropEvent& rEvt, SvTreeListBox
     SvLBoxDDInfo aDDInfo;
 
     TransferableDataHelper aData( rEvt.maDropEvent.Transferable );
-    if( aData.HasFormat( SOT_FORMATSTR_ID_TREELISTBOX ))
+    if( aData.HasFormat( SotClipboardFormatId::TREELISTBOX ))
     {
-        css::uno::Sequence<sal_Int8> aSeq = aData.GetSequence(SOT_FORMATSTR_ID_TREELISTBOX, OUString());
+        css::uno::Sequence<sal_Int8> aSeq = aData.GetSequence(SotClipboardFormatId::TREELISTBOX, OUString());
         if (sizeof(SvLBoxDDInfo) == aSeq.getLength())
         {
             memcpy( &aDDInfo, aSeq.getConstArray(), sizeof(SvLBoxDDInfo) );
@@ -1347,7 +1347,7 @@ void SvTreeListBox::StartDrag( sal_Int8, const Point& rPosPixel )
     // let derived views do their thing
     WriteDragServerInfo( rPosPixel, &aDDInfo );
 
-    pContainer->CopyAnyData( SOT_FORMATSTR_ID_TREELISTBOX,
+    pContainer->CopyAnyData( SotClipboardFormatId::TREELISTBOX,
                         reinterpret_cast<char*>(&aDDInfo), sizeof(SvLBoxDDInfo) );
     pDDSource = this;
     pDDTarget = 0;

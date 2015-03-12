@@ -73,9 +73,9 @@
 
 using namespace com::sun::star;
 
-#define SCDRAWTRANS_TYPE_EMBOBJ         1
-#define SCDRAWTRANS_TYPE_DRAWMODEL      2
-#define SCDRAWTRANS_TYPE_DOCUMENT       3
+#define SCDRAWTRANS_TYPE_EMBOBJ         SotClipboardFormatId::STRING
+#define SCDRAWTRANS_TYPE_DRAWMODEL      SotClipboardFormatId::BITMAP
+#define SCDRAWTRANS_TYPE_DOCUMENT       SotClipboardFormatId::GDIMETAFILE
 
 ScDrawTransferObj::ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContainerShell,
                                         const TransferableObjectDescriptor& rDesc ) :
@@ -288,38 +288,38 @@ void ScDrawTransferObj::AddSupportedFormats()
 {
     if ( bGrIsBit )             // single bitmap graphic
     {
-        AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
-        AddFormat( SOT_FORMATSTR_ID_SVXB );
-        AddFormat( SOT_FORMATSTR_ID_PNG );
-        AddFormat( SOT_FORMAT_BITMAP );
-        AddFormat( SOT_FORMAT_GDIMETAFILE );
+        AddFormat( SotClipboardFormatId::OBJECTDESCRIPTOR );
+        AddFormat( SotClipboardFormatId::SVXB );
+        AddFormat( SotClipboardFormatId::PNG );
+        AddFormat( SotClipboardFormatId::BITMAP );
+        AddFormat( SotClipboardFormatId::GDIMETAFILE );
     }
     else if ( bGraphic )        // other graphic
     {
         // #i25616#
-        AddFormat( SOT_FORMATSTR_ID_DRAWING );
+        AddFormat( SotClipboardFormatId::DRAWING );
 
-        AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
-        AddFormat( SOT_FORMATSTR_ID_SVXB );
-        AddFormat( SOT_FORMAT_GDIMETAFILE );
-        AddFormat( SOT_FORMATSTR_ID_PNG );
-        AddFormat( SOT_FORMAT_BITMAP );
+        AddFormat( SotClipboardFormatId::OBJECTDESCRIPTOR );
+        AddFormat( SotClipboardFormatId::SVXB );
+        AddFormat( SotClipboardFormatId::GDIMETAFILE );
+        AddFormat( SotClipboardFormatId::PNG );
+        AddFormat( SotClipboardFormatId::BITMAP );
     }
     else if ( pBookmark )       // url button
     {
-//      AddFormat( SOT_FORMATSTR_ID_EMBED_SOURCE );
-        AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
-        AddFormat( SOT_FORMATSTR_ID_SOLK );
-        AddFormat( SOT_FORMAT_STRING );
-        AddFormat( SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR );
-        AddFormat( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK );
-        AddFormat( SOT_FORMATSTR_ID_DRAWING );
+//      AddFormat( SotClipboardFormatId::EMBED_SOURCE );
+        AddFormat( SotClipboardFormatId::OBJECTDESCRIPTOR );
+        AddFormat( SotClipboardFormatId::SOLK );
+        AddFormat( SotClipboardFormatId::STRING );
+        AddFormat( SotClipboardFormatId::UNIFORMRESOURCELOCATOR );
+        AddFormat( SotClipboardFormatId::NETSCAPE_BOOKMARK );
+        AddFormat( SotClipboardFormatId::DRAWING );
     }
     else if ( bOleObj )         // single OLE object
     {
-        AddFormat( SOT_FORMATSTR_ID_EMBED_SOURCE );
-        AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
-        AddFormat( SOT_FORMAT_GDIMETAFILE );
+        AddFormat( SotClipboardFormatId::EMBED_SOURCE );
+        AddFormat( SotClipboardFormatId::OBJECTDESCRIPTOR );
+        AddFormat( SotClipboardFormatId::GDIMETAFILE );
 
         CreateOLEData();
 
@@ -337,29 +337,29 @@ void ScDrawTransferObj::AddSupportedFormats()
     }
     else                        // any drawing objects
     {
-        AddFormat( SOT_FORMATSTR_ID_EMBED_SOURCE );
-        AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
-        AddFormat( SOT_FORMATSTR_ID_DRAWING );
+        AddFormat( SotClipboardFormatId::EMBED_SOURCE );
+        AddFormat( SotClipboardFormatId::OBJECTDESCRIPTOR );
+        AddFormat( SotClipboardFormatId::DRAWING );
 
         // leave out bitmap and metafile if there are only controls
         if ( !lcl_HasOnlyControls( pModel ) )
         {
-            AddFormat( SOT_FORMATSTR_ID_PNG );
-            AddFormat( SOT_FORMAT_BITMAP );
-            AddFormat( SOT_FORMAT_GDIMETAFILE );
+            AddFormat( SotClipboardFormatId::PNG );
+            AddFormat( SotClipboardFormatId::BITMAP );
+            AddFormat( SotClipboardFormatId::GDIMETAFILE );
         }
     }
 
 //  if( pImageMap )
-//      AddFormat( SOT_FORMATSTR_ID_SVIM );
+//      AddFormat( SotClipboardFormatId::SVIM );
 }
 
 bool ScDrawTransferObj::GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc )
 {
     bool bOK = false;
-    sal_uInt32 nFormat = SotExchange::GetFormat( rFlavor );
+    SotClipboardFormatId nFormat = SotExchange::GetFormat( rFlavor );
 
-    if ( bOleObj && nFormat != SOT_FORMAT_GDIMETAFILE )
+    if ( bOleObj && nFormat != SotClipboardFormatId::GDIMETAFILE )
     {
         CreateOLEData();
 
@@ -384,17 +384,17 @@ bool ScDrawTransferObj::GetData( const css::datatransfer::DataFlavor& rFlavor, c
 
     if( HasFormat( nFormat ) )
     {
-        if ( nFormat == SOT_FORMATSTR_ID_LINKSRCDESCRIPTOR || nFormat == SOT_FORMATSTR_ID_OBJECTDESCRIPTOR )
+        if ( nFormat == SotClipboardFormatId::LINKSRCDESCRIPTOR || nFormat == SotClipboardFormatId::OBJECTDESCRIPTOR )
         {
             bOK = SetTransferableObjectDescriptor( aObjDesc, rFlavor );
         }
-        else if ( nFormat == SOT_FORMATSTR_ID_DRAWING )
+        else if ( nFormat == SotClipboardFormatId::DRAWING )
         {
             bOK = SetObject( pModel, SCDRAWTRANS_TYPE_DRAWMODEL, rFlavor );
         }
-        else if ( nFormat == SOT_FORMAT_BITMAP
-            || nFormat == SOT_FORMATSTR_ID_PNG
-            || nFormat == SOT_FORMAT_GDIMETAFILE )
+        else if ( nFormat == SotClipboardFormatId::BITMAP
+            || nFormat == SotClipboardFormatId::PNG
+            || nFormat == SotClipboardFormatId::GDIMETAFILE )
         {
             // #i71538# use complete SdrViews
             // SdrExchangeView aView( pModel );
@@ -402,12 +402,12 @@ bool ScDrawTransferObj::GetData( const css::datatransfer::DataFlavor& rFlavor, c
             SdrPageView* pPv = aView.ShowSdrPage(aView.GetModel()->GetPage(0));
             OSL_ENSURE( pPv, "pPv not there..." );
             aView.MarkAllObj( pPv );
-            if ( nFormat == SOT_FORMAT_GDIMETAFILE )
+            if ( nFormat == SotClipboardFormatId::GDIMETAFILE )
                 bOK = SetGDIMetaFile( aView.GetMarkedObjMetaFile(true), rFlavor );
             else
                 bOK = SetBitmapEx( aView.GetMarkedObjBitmapEx(true), rFlavor );
         }
-        else if ( nFormat == SOT_FORMATSTR_ID_SVXB )
+        else if ( nFormat == SotClipboardFormatId::SVXB )
         {
             // only enabled for single graphics object
 
@@ -423,7 +423,7 @@ bool ScDrawTransferObj::GetData( const css::datatransfer::DataFlavor& rFlavor, c
                 }
             }
         }
-        else if ( nFormat == SOT_FORMATSTR_ID_EMBED_SOURCE )
+        else if ( nFormat == SotClipboardFormatId::EMBED_SOURCE )
         {
             if ( bOleObj )              // single OLE object
             {
@@ -450,7 +450,7 @@ bool ScDrawTransferObj::GetData( const css::datatransfer::DataFlavor& rFlavor, c
     return bOK;
 }
 
-bool ScDrawTransferObj::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId,
+bool ScDrawTransferObj::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, SotClipboardFormatId nUserObjectId,
                                         const ::com::sun::star::datatransfer::DataFlavor& /* rFlavor */ )
 {
     // called from SetObject, put data into stream
@@ -741,7 +741,7 @@ void ScDrawTransferObj::InitDocShell()
             Point(aSrcSize.Width()/2, aSrcSize.Height()/2),
             NULL, 0, OUString(), OUString());
 
-        // put objects to right layer (see ScViewFunc::PasteDataFormat for SOT_FORMATSTR_ID_DRAWING)
+        // put objects to right layer (see ScViewFunc::PasteDataFormat for SotClipboardFormatId::DRAWING)
 
         SdrPage* pPage = pDestModel->GetPage(0);
         if (pPage)

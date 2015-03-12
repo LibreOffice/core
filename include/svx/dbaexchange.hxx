@@ -149,7 +149,7 @@ namespace svx
         virtual void        AddSupportedFormats() SAL_OVERRIDE;
         virtual bool GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) SAL_OVERRIDE;
 
-        static sal_uInt32   getDescriptorFormatId();
+        static SotClipboardFormatId  getDescriptorFormatId();
 
     private:
         SVX_DLLPRIVATE void implConstruct(
@@ -170,7 +170,7 @@ namespace svx
     {
         ODataAccessDescriptor   m_aDescriptor;
         OUString         m_sCompatibleObjectDescription;
-            // needed to provide a SOT_FORMATSTR_ID_SBA_DATAEXCHANGE format
+            // needed to provide a SotClipboardFormatId::SBA_DATAEXCHANGE format
 
     public:
         /** should be used copying and the connection is needed.
@@ -277,7 +277,7 @@ namespace svx
         virtual void        AddSupportedFormats() SAL_OVERRIDE;
         virtual bool GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) SAL_OVERRIDE;
         virtual void        ObjectReleased() SAL_OVERRIDE;
-        static sal_uInt32   getDescriptorFormatId();
+        static SotClipboardFormatId  getDescriptorFormatId();
     };
 
 

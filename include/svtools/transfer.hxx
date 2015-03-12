@@ -218,11 +218,11 @@ protected:
 
     virtual             ~TransferableHelper();
 
-    void                AddFormat( SotFormatStringId nFormat );
+    void                AddFormat( SotClipboardFormatId nFormat );
     void                AddFormat( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
-    void                RemoveFormat( SotFormatStringId nFormat );
+    void                RemoveFormat( SotClipboardFormatId nFormat );
     void                RemoveFormat( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
-    bool                HasFormat( SotFormatStringId nFormat );
+    bool                HasFormat( SotClipboardFormatId nFormat );
     inline bool         HasFormat( const ::com::sun::star::datatransfer::DataFlavor& rFlavor ) { return isDataFlavorSupported( rFlavor ); }
     void                ClearFormats();
 
@@ -235,13 +235,13 @@ protected:
     bool               SetTransferableObjectDescriptor( const TransferableObjectDescriptor& rDesc, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
     bool               SetINetBookmark( const INetBookmark& rBmk, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
     bool               SetINetImage( const INetImage& rINtImg, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
-    bool               SetObject( void* pUserObject, sal_uInt32 nUserObjectId, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+    bool               SetObject( void* pUserObject, SotClipboardFormatId nUserObjectId, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
 
 protected:
 
     virtual void        AddSupportedFormats() = 0;
     virtual bool        GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) = 0;
-    virtual bool        WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+    virtual bool        WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, SotClipboardFormatId nUserObjectId, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
     virtual void        DragFinished( sal_Int8 nDropAction );
     virtual void        ObjectReleased();
 
@@ -299,12 +299,12 @@ public:
     const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >&    GetTransferable() const { return mxTransfer; }
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >           GetXTransferable() const;
 
-    bool                        HasFormat( SotFormatStringId nFormat ) const;
+    bool                        HasFormat( SotClipboardFormatId nFormat ) const;
     bool                        HasFormat( const ::com::sun::star::datatransfer::DataFlavor& rFlavor ) const;
 
     sal_uInt32                  GetFormatCount() const;
 
-    SotFormatStringId                           GetFormat( sal_uInt32 nFormat ) const;
+    SotClipboardFormatId                           GetFormat( sal_uInt32 nFormat ) const;
     ::com::sun::star::datatransfer::DataFlavor  GetFormatDataFlavor( sal_uInt32 nFormat ) const;
 
     DataFlavorExVector&         GetDataFlavorExVector() const {return *mpFormats; }
@@ -316,13 +316,13 @@ public:
 
 public:
 
-    css::uno::Any GetAny( SotFormatStringId nFormat, const OUString& rDestDoc ) const;
+    css::uno::Any GetAny( SotClipboardFormatId nFormat, const OUString& rDestDoc ) const;
     css::uno::Any GetAny( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) const;
 
-    bool                        GetString( SotFormatStringId nFormat, OUString& rStr );
+    bool                        GetString( SotClipboardFormatId nFormat, OUString& rStr );
     bool                        GetString( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, OUString& rStr );
 
-    bool                        GetBitmapEx( SotFormatStringId nFormat, BitmapEx& rBmp );
+    bool                        GetBitmapEx( SotClipboardFormatId nFormat, BitmapEx& rBmp );
     bool                        GetBitmapEx( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, BitmapEx& rBmp );
 
     /** Return as GDI metafile.
@@ -333,34 +333,34 @@ public:
         metafile, with over 3 million (!) actions; which is just too large for
         any reasonable handling - and you need to set a limit.
     */
-    bool                        GetGDIMetaFile( SotFormatStringId nFormat, GDIMetaFile& rMtf, size_t nMaxActions = 0 );
+    bool                        GetGDIMetaFile( SotClipboardFormatId nFormat, GDIMetaFile& rMtf, size_t nMaxActions = 0 );
     bool                        GetGDIMetaFile( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, GDIMetaFile& rMtf );
 
-    bool                        GetGraphic( SotFormatStringId nFormat, Graphic& rGraphic );
+    bool                        GetGraphic( SotClipboardFormatId nFormat, Graphic& rGraphic );
     bool                        GetGraphic( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, Graphic& rGraphic );
 
-    bool                        GetImageMap( SotFormatStringId nFormat, ImageMap& rIMap );
+    bool                        GetImageMap( SotClipboardFormatId nFormat, ImageMap& rIMap );
     bool                        GetImageMap( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, ImageMap& rImap );
 
-    bool                        GetTransferableObjectDescriptor( SotFormatStringId nFormat, TransferableObjectDescriptor& rDesc );
+    bool                        GetTransferableObjectDescriptor( SotClipboardFormatId nFormat, TransferableObjectDescriptor& rDesc );
     bool                        GetTransferableObjectDescriptor( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, TransferableObjectDescriptor& rDesc );
 
-    bool                        GetINetBookmark( SotFormatStringId nFormat, INetBookmark& rBmk );
+    bool                        GetINetBookmark( SotClipboardFormatId nFormat, INetBookmark& rBmk );
     bool                        GetINetBookmark( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, INetBookmark& rBmk );
 
-    bool                        GetINetImage( SotFormatStringId nFormat, INetImage& rINtImg );
+    bool                        GetINetImage( SotClipboardFormatId nFormat, INetImage& rINtImg );
     bool                        GetINetImage( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, INetImage& rINtImg );
 
-    bool                        GetFileList( SotFormatStringId nFormat, FileList& rFileList );
+    bool                        GetFileList( SotClipboardFormatId nFormat, FileList& rFileList );
     bool                        GetFileList( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, FileList& rFileList );
 
-    css::uno::Sequence<sal_Int8> GetSequence( SotFormatStringId nFormat, const OUString& rDestDoc );
+    css::uno::Sequence<sal_Int8> GetSequence( SotClipboardFormatId nFormat, const OUString& rDestDoc );
     css::uno::Sequence<sal_Int8> GetSequence( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc );
 
-    bool                        GetSotStorageStream( SotFormatStringId nFormat, SotStorageStreamRef& rStreamRef );
+    bool                        GetSotStorageStream( SotClipboardFormatId nFormat, SotStorageStreamRef& rStreamRef );
     bool                        GetSotStorageStream( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, SotStorageStreamRef& rStreamRef );
 
-    css::uno::Reference<css::io::XInputStream> GetInputStream( SotFormatStringId nFormat, const OUString& rDestDoc );
+    css::uno::Reference<css::io::XInputStream> GetInputStream( SotClipboardFormatId nFormat, const OUString& rDestDoc );
     css::uno::Reference<css::io::XInputStream> GetInputStream( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc );
 
     bool                        GetInterface( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rIf );
@@ -478,7 +478,7 @@ public:
     virtual             ~DropTargetHelper();
 
                         // typically called by the application in ::AcceptDrop and ::ExecuteDrop and (see above)
-    bool                IsDropFormatSupported( SotFormatStringId nFormat );
+    bool                IsDropFormatSupported( SotClipboardFormatId nFormat );
     bool                IsDropFormatSupported( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
 
     DataFlavorExVector& GetDataFlavorExVector() const {return *mpFormats; }
@@ -507,11 +507,11 @@ public:
     void                CopyImageMap( const ImageMap& rImgMap );
     void                CopyGraphic( const Graphic& rGrf );
     void                CopyString( const OUString& rStr );
-    void                CopyString( sal_uInt16 nFmt, const OUString& rStr );
-    void                CopyAny( sal_uInt16 nFmt, const ::com::sun::star::uno::Any& rAny );
+    void                CopyString( SotClipboardFormatId nFmt, const OUString& rStr );
+    void                CopyAny( SotClipboardFormatId nFmt, const ::com::sun::star::uno::Any& rAny );
 
-    void                CopyByteString( sal_uLong nFormatId, const OString& rStr );
-    void                CopyAnyData( sal_uLong nFormatId, const sal_Char* pData, sal_uLong nLen );
+    void                CopyByteString( SotClipboardFormatId nFormatId, const OString& rStr );
+    void                CopyAnyData( SotClipboardFormatId nFormatId, const sal_Char* pData, sal_uLong nLen );
 
     bool                HasAnyData() const;
 

@@ -73,7 +73,7 @@ void WpftImportTestBase::tearDown()
 }
 
 bool WpftImportTestBase::load(const OUString &, const OUString &rURL, const OUString &,
-                              unsigned int, unsigned int, unsigned int)
+                              unsigned int, SotClipboardFormatId, unsigned int)
 {
     // create an empty frame
     const uno::Reference<lang::XComponent> xDoc(

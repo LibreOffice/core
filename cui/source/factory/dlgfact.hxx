@@ -458,9 +458,9 @@ class AbstractPasteDialog_Impl : public SfxAbstractPasteDialog
 {
 public:
     DECL_ABSTDLG_BASE(AbstractPasteDialog_Impl, SvPasteObjectDialog )
-    virtual void Insert( SotFormatStringId nFormat, const OUString & rFormatName ) SAL_OVERRIDE;
+    virtual void Insert( SotClipboardFormatId nFormat, const OUString & rFormatName ) SAL_OVERRIDE;
     virtual void SetObjName( const SvGlobalName & rClass, const OUString & rObjName ) SAL_OVERRIDE;
-    virtual sal_uLong GetFormat( const TransferableDataHelper& aHelper,
+    virtual SotClipboardFormatId GetFormat( const TransferableDataHelper& aHelper,
                         const DataFlavorExVector* pFormats=0,
                         const TransferableObjectDescriptor* pDesc=0 ) SAL_OVERRIDE;
 };

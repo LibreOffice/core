@@ -211,7 +211,7 @@ void implnPasteSpecial(sal_uInt16 nFlags,sal_uInt16 nFunction,sal_Bool bSkipEmpt
         if ( pView && pWin )
         {
             if ( bAsLink && bOtherDoc )
-                pTabViewShell->PasteFromSystem(0);//SOT_FORMATSTR_ID_LINK
+                pTabViewShell->PasteFromSystem(0);//SotClipboardFormatId::LINK
             else
             {
                 ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard( pWin );

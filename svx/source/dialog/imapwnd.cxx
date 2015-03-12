@@ -524,13 +524,13 @@ sal_Int8 IMapWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
     sal_Int8 nRet = DND_ACTION_NONE;
 
-    if( IsDropFormatSupported( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK ) )
+    if( IsDropFormatSupported( SotClipboardFormatId::NETSCAPE_BOOKMARK ) )
     {
         const OUString  aString;
         INetBookmark    aBookMark( aString, aString );
         SdrObject*      pSdrObj = GetHitSdrObj( rEvt.maPosPixel );
 
-        if( pSdrObj && TransferableDataHelper( rEvt.maDropEvent.Transferable ).GetINetBookmark( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, aBookMark ) )
+        if( pSdrObj && TransferableDataHelper( rEvt.maDropEvent.Transferable ).GetINetBookmark( SotClipboardFormatId::NETSCAPE_BOOKMARK, aBookMark ) )
         {
             IMapObject* pIMapObj = GetIMapObj( pSdrObj );
 

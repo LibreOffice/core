@@ -312,7 +312,7 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
                         SwView* pView = &rView;
 
                         SwTransferable::PasteFormat( rSh, aDataHelper,
-                                        static_cast<const SfxUInt32Item*>(pFmt)->GetValue() );
+                                        static_cast<SotClipboardFormatId>(static_cast<const SfxUInt32Item*>(pFmt)->GetValue()) );
 
                         //Done() has to be called before the shell has been removed
                         rReq.Done();
@@ -344,7 +344,7 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
                             pViewFrame->GetBindings().GetRecorder();
                         if(xRecorder.is()) {
                             SfxRequest aReq( pViewFrame, SID_CLIPBOARD_FORMAT_ITEMS );
-                            aReq.AppendItem( SfxUInt32Item( SID_CLIPBOARD_FORMAT_ITEMS, SOT_FORMAT_STRING ) );
+                            aReq.AppendItem( SfxUInt32Item( SID_CLIPBOARD_FORMAT_ITEMS, static_cast<sal_uInt32>(SotClipboardFormatId::STRING) ) );
                             aReq.Done();
                         }
                     }
@@ -369,7 +369,7 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
                     // Temporary variables, because the shell could already be
                     // destroyed after the paste.
                     SwView* pView = &rView;
-                    sal_uLong nFormatId = 0;
+                    SotClipboardFormatId nFormatId = SotClipboardFormatId::NONE;
                     rReq.Ignore();
                     bIgnore = true;
                     if(SwTransferable::PasteSpecial( rSh, aDataHelper, nFormatId ))
@@ -379,7 +379,7 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
                             pViewFrame->GetBindings().GetRecorder();
                         if(xRecorder.is()) {
                             SfxRequest aReq( pViewFrame, SID_CLIPBOARD_FORMAT_ITEMS );
-                            aReq.AppendItem( SfxUInt32Item( SID_CLIPBOARD_FORMAT_ITEMS, nFormatId ) );
+                            aReq.AppendItem( SfxUInt32Item( SID_CLIPBOARD_FORMAT_ITEMS, static_cast<sal_uInt32>(nFormatId) ) );
                             aReq.Done();
                         }
                     }

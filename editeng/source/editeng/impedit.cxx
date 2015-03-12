@@ -1377,7 +1377,7 @@ void ImpEditView::Paste( ::com::sun::star::uno::Reference< ::com::sun::star::dat
             if ( DoSingleLinePaste() )
             {
                 datatransfer::DataFlavor aFlavor;
-                SotExchange::GetFormatDataFlavor( SOT_FORMAT_STRING, aFlavor );
+                SotExchange::GetFormatDataFlavor( SotClipboardFormatId::STRING, aFlavor );
                 if ( xDataObj->isDataFlavorSupported( aFlavor ) )
                 {
                     try
@@ -1860,7 +1860,7 @@ void ImpEditView::dragEnter( const ::com::sun::star::datatransfer::dnd::DropTarg
     // Check for supported format...
     // Only check for text, will also be there if bin or rtf
     datatransfer::DataFlavor aTextFlavor;
-    SotExchange::GetFormatDataFlavor( SOT_FORMAT_STRING, aTextFlavor );
+    SotExchange::GetFormatDataFlavor( SotClipboardFormatId::STRING, aTextFlavor );
     const ::com::sun::star::datatransfer::DataFlavor* pFlavors = rDTDEE.SupportedDataFlavors.getConstArray();
     int nFlavors = rDTDEE.SupportedDataFlavors.getLength();
     for ( int n = 0; n < nFlavors; n++ )

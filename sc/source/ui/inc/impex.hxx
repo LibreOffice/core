@@ -110,7 +110,7 @@ public:
 
     SC_DLLPUBLIC static void EmbeddedNullTreatment( OUString & rStr );
 
-    static bool  IsFormatSupported( sal_uLong nFormat );
+    static bool  IsFormatSupported( SotClipboardFormatId nFormat );
     static const sal_Unicode* ScanNextFieldFromString( const sal_Unicode* p,
             OUString& rField, sal_Unicode cStr, const sal_Unicode* pSeps,
             bool bMergeSeps, bool& rbIsQuoted, bool& rbOverflowCell );
@@ -135,12 +135,12 @@ public:
     void            SetStreamPath( const OUString& rPath ) { aStreamPath = rPath; }
     const OUString& GetStreamPath() const { return aStreamPath; }
 
-    bool ImportString( const OUString&, sal_uLong=FORMAT_STRING );
-    bool ExportString( OUString&, sal_uLong=FORMAT_STRING );
-    bool ExportByteString( OString&, rtl_TextEncoding, sal_uLong=FORMAT_STRING );
+    bool ImportString( const OUString&, SotClipboardFormatId=SotClipboardFormatId::STRING );
+    bool ExportString( OUString&, SotClipboardFormatId=SotClipboardFormatId::STRING );
+    bool ExportByteString( OString&, rtl_TextEncoding, SotClipboardFormatId=SotClipboardFormatId::STRING );
 
-    bool ImportStream( SvStream&, const OUString& rBaseURL, sal_uLong=FORMAT_STRING );
-    bool ExportStream( SvStream&, const OUString& rBaseURL, sal_uLong=FORMAT_STRING );
+    bool ImportStream( SvStream&, const OUString& rBaseURL, SotClipboardFormatId=SotClipboardFormatId::STRING );
+    bool ExportStream( SvStream&, const OUString& rBaseURL, SotClipboardFormatId=SotClipboardFormatId::STRING );
 
     bool ImportData( const OUString& rMimeType,
                      const ::com::sun::star::uno::Any & rValue );

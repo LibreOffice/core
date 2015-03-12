@@ -32,7 +32,7 @@ public:
     virtual ~SwGlobalDocShell();
 
     virtual void    FillClass( SvGlobalName * pClassName,
-                                   sal_uInt32 * pClipFormat,
+                                   SotClipboardFormatId * pClipFormat,
                                    OUString * pAppName,
                                    OUString * pLongUserName,
                                    OUString * pUserName,

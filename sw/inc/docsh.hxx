@@ -242,7 +242,7 @@ public:
     virtual void ReconnectDdeLink(SfxObjectShell& rServer) SAL_OVERRIDE;
 
     virtual void FillClass( SvGlobalName * pClassName,
-                                   sal_uInt32 * pClipFormat,
+                                   SotClipboardFormatId * pClipFormat,
                                    OUString * pAppName,
                                    OUString * pLongUserName,
                                    OUString * pUserName,

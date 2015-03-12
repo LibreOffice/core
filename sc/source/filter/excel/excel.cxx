@@ -186,7 +186,7 @@ static FltError lcl_ExportExcelBiff( SfxMedium& rMedium, ScDocument *pDocument,
         eRet = SCWARN_EXPORT_MAXROW;
 
     SvGlobalName aGlobName( 0x00020810, 0x0000, 0x0000, 0xc0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46 );
-    sal_uInt32 nClip = SotExchange::RegisterFormatName( aClipName );
+    SotClipboardFormatId nClip = SotExchange::RegisterFormatName( aClipName );
     xRootStrg->SetClass( aGlobName, nClip, aClassName );
 
     xStrgStrm->Commit();

@@ -84,7 +84,7 @@ public:
 
     virtual bool load( const OUString &rFilter, const OUString &rURL,
         const OUString &rUserData, unsigned int nFilterFlags,
-        unsigned int nClipboardID, unsigned int nFilterVersion) SAL_OVERRIDE;
+        SotClipboardFormatId nClipboardID, unsigned int nFilterVersion) SAL_OVERRIDE;
 
     virtual void setUp() SAL_OVERRIDE;
     virtual void tearDown() SAL_OVERRIDE;
@@ -287,7 +287,7 @@ private:
 
 bool ScFiltersTest::load(const OUString &rFilter, const OUString &rURL,
     const OUString &rUserData, unsigned int nFilterFlags,
-        unsigned int nClipboardID, unsigned int nFilterVersion)
+        SotClipboardFormatId nClipboardID, unsigned int nFilterVersion)
 {
     ScDocShellRef xDocShRef = ScBootstrapFixture::load( rURL, rFilter, rUserData,
         OUString(), nFilterFlags, nClipboardID, nFilterVersion);
@@ -1389,7 +1389,7 @@ void ScFiltersTest::testBrokenQuotesCSV()
     std::cout << getFileFormats()[CSV].pName << " Test" << std::endl;
 
     unsigned int nFormatType = getFileFormats()[CSV].nFormatType;
-    unsigned int nClipboardId = nFormatType ? SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS : 0;
+    SotClipboardFormatId nClipboardId = nFormatType ? SotClipboardFormatId::STARCALC_8 : SotClipboardFormatId::NONE;
     ScDocShellRef xDocSh = ScBootstrapFixture::load(aFileName, aFilterName, OUString(), aFilterType,
         nFormatType, nClipboardId, SOFFICE_FILEFORMAT_CURRENT);
 
@@ -1416,7 +1416,7 @@ void ScFiltersTest::testCellValueXLSX()
     std::cout << getFileFormats()[XLSX].pName << " Test" << std::endl;
 
     unsigned int nFormatType = getFileFormats()[XLSX].nFormatType;
-    unsigned int nClipboardId = nFormatType ? SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS : 0;
+    SotClipboardFormatId nClipboardId = nFormatType ? SotClipboardFormatId::STARCALC_8 : SotClipboardFormatId::NONE;
     ScDocShellRef xDocSh = ScBootstrapFixture::load( aFileName, aFilterName, OUString(), aFilterType,
         nFormatType, nClipboardId, SOFFICE_FILEFORMAT_CURRENT);
 
@@ -1471,7 +1471,7 @@ void ScFiltersTest::testPassword_Impl(const OUString& aFileNameBase)
     createFileURL(aFileNameBase, aFileExtension, aFileName);
     OUString aFilterType(getFileFormats()[0].pTypeName, strlen(getFileFormats()[0].pTypeName), RTL_TEXTENCODING_UTF8);
 
-    sal_uInt32 nFormat = SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS;
+    SotClipboardFormatId nFormat = SotClipboardFormatId::STARCALC_8;
     SfxFilter* aFilter = new SfxFilter(
         aFilterName,
         OUString(), getFileFormats()[0].nFormatType, nFormat, aFilterType, 0, OUString(),

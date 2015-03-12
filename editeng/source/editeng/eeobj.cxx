@@ -52,18 +52,18 @@ uno::Any EditDataObject::getTransferData( const datatransfer::DataFlavor& rFlavo
 {
     uno::Any aAny;
 
-    sal_uLong nT = SotExchange::GetFormat( rFlavor );
-    if ( nT == SOT_FORMAT_STRING )
+    SotClipboardFormatId nT = SotExchange::GetFormat( rFlavor );
+    if ( nT == SotClipboardFormatId::STRING )
     {
         aAny <<= GetString();
     }
-    else if ( ( nT == SOT_FORMATSTR_ID_EDITENGINE ) || ( nT == SOT_FORMAT_RTF ) )
+    else if ( ( nT == SotClipboardFormatId::EDITENGINE ) || ( nT == SotClipboardFormatId::RTF ) )
     {
         // No RTF on demand any more:
         // 1) Was not working, because I had to flush() the clipboard immediately anyway
         // 2) Don't have the old pool defaults and the StyleSheetPool here.
 
-        SvMemoryStream* pStream = ( nT == SOT_FORMATSTR_ID_EDITENGINE ) ? &GetStream() : &GetRTFStream();
+        SvMemoryStream* pStream = ( nT == SotClipboardFormatId::EDITENGINE ) ? &GetStream() : &GetRTFStream();
         pStream->Seek( STREAM_SEEK_TO_END );
         sal_Size nLen = pStream->Tell();
         pStream->Seek(0);
@@ -84,9 +84,9 @@ uno::Any EditDataObject::getTransferData( const datatransfer::DataFlavor& rFlavo
 uno::Sequence< datatransfer::DataFlavor > EditDataObject::getTransferDataFlavors(  ) throw(uno::RuntimeException, std::exception)
 {
     uno::Sequence< datatransfer::DataFlavor > aDataFlavors(3);
-    SotExchange::GetFormatDataFlavor( SOT_FORMATSTR_ID_EDITENGINE, aDataFlavors.getArray()[0] );
-    SotExchange::GetFormatDataFlavor( SOT_FORMAT_STRING, aDataFlavors.getArray()[1] );
-    SotExchange::GetFormatDataFlavor( SOT_FORMAT_RTF, aDataFlavors.getArray()[2] );
+    SotExchange::GetFormatDataFlavor( SotClipboardFormatId::EDITENGINE, aDataFlavors.getArray()[0] );
+    SotExchange::GetFormatDataFlavor( SotClipboardFormatId::STRING, aDataFlavors.getArray()[1] );
+    SotExchange::GetFormatDataFlavor( SotClipboardFormatId::RTF, aDataFlavors.getArray()[2] );
 
     return aDataFlavors;
 }
@@ -95,8 +95,8 @@ sal_Bool EditDataObject::isDataFlavorSupported( const datatransfer::DataFlavor& 
 {
     bool bSupported = false;
 
-    sal_uLong nT = SotExchange::GetFormat( rFlavor );
-    if ( ( nT == SOT_FORMAT_STRING ) || ( nT == SOT_FORMAT_RTF ) || ( nT == SOT_FORMATSTR_ID_EDITENGINE ) )
+    SotClipboardFormatId nT = SotExchange::GetFormat( rFlavor );
+    if ( ( nT == SotClipboardFormatId::STRING ) || ( nT == SotClipboardFormatId::RTF ) || ( nT == SotClipboardFormatId::EDITENGINE ) )
         bSupported = true;
 
     return bSupported;

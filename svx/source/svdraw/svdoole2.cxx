@@ -608,7 +608,7 @@ public:
 
 
 SdrEmbedObjectLink::SdrEmbedObjectLink(SdrOle2Obj* pObject):
-    ::sfx2::SvBaseLink( ::sfx2::LINKUPDATE_ONCALL, SOT_FORMATSTR_ID_SVXB ),
+    ::sfx2::SvBaseLink( ::sfx2::LINKUPDATE_ONCALL, SotClipboardFormatId::SVXB ),
     pObj(pObject)
 {
     SetSynchron( false );

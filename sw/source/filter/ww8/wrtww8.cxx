@@ -3388,7 +3388,7 @@ void WW8Export::PrepareStorage()
 
     SvGlobalName aGName( nId1, 0x0000, 0x0000, 0xc0, 0x00, 0x00, 0x00,
                          0x00, 0x00, 0x00, 0x46 );
-    GetWriter().GetStorage().SetClass( aGName, 0, OUString::createFromAscii( pName ));
+    GetWriter().GetStorage().SetClass( aGName, SotClipboardFormatId::NONE, OUString::createFromAscii( pName ));
     SvStorageStreamRef xStor( GetWriter().GetStorage().OpenSotStream(sCompObj) );
     xStor->Write( pData, nLen );
 

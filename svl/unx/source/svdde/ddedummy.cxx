@@ -35,7 +35,7 @@ DdeData::DdeData( const DdeData& )
 {
 }
 
-DdeData::DdeData( const void*, long, sal_uLong)
+DdeData::DdeData( const void*, long, SotClipboardFormatId)
     : pImp(NULL)
 {
 }
@@ -44,13 +44,13 @@ DdeData::~DdeData()
 {
 }
 
-void DdeData::SetFormat( SAL_UNUSED_PARAMETER sal_uLong )
+void DdeData::SetFormat( SAL_UNUSED_PARAMETER SotClipboardFormatId )
 {
 }
 
-sal_uLong DdeData::GetFormat() const
+SotClipboardFormatId DdeData::GetFormat() const
 {
-    return 0L;
+    return SotClipboardFormatId::NONE;
 }
 
 DdeData& DdeData::operator = ( const DdeData& )
@@ -319,7 +319,7 @@ DdeGetPutItem::DdeGetPutItem( const DdeItem& rItem )
 {
 }
 
-DdeData* DdeGetPutItem::Get( SAL_UNUSED_PARAMETER sal_uLong )
+DdeData* DdeGetPutItem::Get( SAL_UNUSED_PARAMETER SotClipboardFormatId )
 {
     return NULL;
 }

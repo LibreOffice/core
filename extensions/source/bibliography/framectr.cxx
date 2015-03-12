@@ -743,7 +743,7 @@ void BibFrameController_Impl::addStatusListener(
                 if ( xDataObj.is() )
                 {
                     datatransfer::DataFlavor aFlavor;
-                    SotExchange::GetFormatDataFlavor( SOT_FORMAT_STRING, aFlavor );
+                    SotExchange::GetFormatDataFlavor( SotClipboardFormatId::STRING, aFlavor );
                     try
                     {
                         uno::Any aData = xDataObj->getTransferData( aFlavor );

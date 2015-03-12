@@ -24,6 +24,7 @@
 #include <tools/solar.h>
 #include <vector>
 #include <sot/sotdllapi.h>
+#include <sot/exchange.hxx>
 
 class StgDirEntry;
 class SvStorageInfo
@@ -54,8 +55,8 @@ public:
 
 typedef ::std::vector< SvStorageInfo > SvStorageInfoList;
 
-SOT_DLLPUBLIC sal_uLong ReadClipboardFormat( SvStream & rStm );
-SOT_DLLPUBLIC void WriteClipboardFormat( SvStream & rStm, sal_uLong nFormat );
+SOT_DLLPUBLIC SotClipboardFormatId ReadClipboardFormat( SvStream & rStm );
+SOT_DLLPUBLIC void WriteClipboardFormat( SvStream & rStm, SotClipboardFormatId nFormat );
 
 #endif // _STORINFO_HXX
 

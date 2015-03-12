@@ -176,18 +176,18 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
 
         case SID_CLIPBOARD_FORMAT_ITEMS:
             {
-                sal_uLong nFormat = 0;
+                SotClipboardFormatId nFormat = SotClipboardFormatId::NONE;
                 const SfxPoolItem* pItem;
                 if ( pReqArgs &&
                      pReqArgs->GetItemState(nSlot, true, &pItem) == SfxItemState::SET &&
                      pItem->ISA(SfxUInt32Item) )
                 {
-                    nFormat = static_cast<const SfxUInt32Item*>(pItem)->GetValue();
+                    nFormat = static_cast<SotClipboardFormatId>(static_cast<const SfxUInt32Item*>(pItem)->GetValue());
                 }
 
-                if ( nFormat )
+                if ( nFormat != SotClipboardFormatId::NONE )
                 {
-                    if (nFormat == SOT_FORMAT_STRING)
+                    if (nFormat == SotClipboardFormatId::STRING)
                         pOutView->Paste();
                     else
                         pOutView->PasteSpecial();
@@ -478,7 +478,7 @@ IMPL_LINK( ScDrawTextObjectBar, ClipboardChanged, TransferableDataHelper*, pData
 {
     if ( pDataHelper )
     {
-        bPastePossible = ( pDataHelper->HasFormat( SOT_FORMAT_STRING ) || pDataHelper->HasFormat( SOT_FORMAT_RTF ) );
+        bPastePossible = ( pDataHelper->HasFormat( SotClipboardFormatId::STRING ) || pDataHelper->HasFormat( SotClipboardFormatId::RTF ) );
 
         SfxBindings& rBindings = pViewData->GetBindings();
         rBindings.Invalidate( SID_PASTE );
@@ -507,7 +507,7 @@ void ScDrawTextObjectBar::GetClipState( SfxItemSet& rSet )
 
         // get initial state
         TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pViewData->GetActiveWin() ) );
-        bPastePossible = ( aDataHelper.HasFormat( SOT_FORMAT_STRING ) || aDataHelper.HasFormat( SOT_FORMAT_RTF ) );
+        bPastePossible = ( aDataHelper.HasFormat( SotClipboardFormatId::STRING ) || aDataHelper.HasFormat( SotClipboardFormatId::RTF ) );
     }
 
     SfxWhichIter aIter( rSet );
@@ -528,10 +528,10 @@ void ScDrawTextObjectBar::GetClipState( SfxItemSet& rSet )
                     TransferableDataHelper aDataHelper(
                             TransferableDataHelper::CreateFromSystemClipboard( pViewData->GetActiveWin() ) );
 
-                    if ( aDataHelper.HasFormat( SOT_FORMAT_STRING ) )
-                        aFormats.AddClipbrdFormat( SOT_FORMAT_STRING );
-                    if ( aDataHelper.HasFormat( SOT_FORMAT_RTF ) )
-                        aFormats.AddClipbrdFormat( SOT_FORMAT_RTF );
+                    if ( aDataHelper.HasFormat( SotClipboardFormatId::STRING ) )
+                        aFormats.AddClipbrdFormat( SotClipboardFormatId::STRING );
+                    if ( aDataHelper.HasFormat( SotClipboardFormatId::RTF ) )
+                        aFormats.AddClipbrdFormat( SotClipboardFormatId::RTF );
 
                     rSet.Put( aFormats );
                 }

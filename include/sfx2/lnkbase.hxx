@@ -96,7 +96,7 @@ protected:
                         m_xInputStreamToLoadFrom;
 
                     SvBaseLink();
-                    SvBaseLink( sal_uInt16 nLinkType, sal_uIntPtr nContentType = FORMAT_STRING );
+                    SvBaseLink( sal_uInt16 nLinkType, SotClipboardFormatId nContentType = SotClipboardFormatId::STRING );
     virtual         ~SvBaseLink();
 
     void            _GetRealObject( bool bConnect = true );
@@ -136,8 +136,8 @@ public:
 
     void            SetUpdateMode( sal_uInt16 );
     sal_uInt16          GetUpdateMode() const;
-    sal_uIntPtr             GetContentType() const;
-    bool            SetContentType( sal_uIntPtr nType );
+    SotClipboardFormatId GetContentType() const;
+    bool                 SetContentType( SotClipboardFormatId nType );
 
     LinkManager*          GetLinkManager();
     const LinkManager*    GetLinkManager() const;

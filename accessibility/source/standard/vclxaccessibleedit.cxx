@@ -519,7 +519,7 @@ sal_Bool VCLXAccessibleEdit::pasteText( sal_Int32 nIndex ) throw (IndexOutOfBoun
             if ( xDataObj.is() )
             {
                 datatransfer::DataFlavor aFlavor;
-                SotExchange::GetFormatDataFlavor( SOT_FORMAT_STRING, aFlavor );
+                SotExchange::GetFormatDataFlavor( SotClipboardFormatId::STRING, aFlavor );
                 if ( xDataObj->isDataFlavorSupported( aFlavor ) )
                 {
                     Any aData = xDataObj->getTransferData( aFlavor );

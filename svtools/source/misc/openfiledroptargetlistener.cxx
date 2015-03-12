@@ -78,7 +78,7 @@ void SAL_CALL OpenFileDropTargetListener::drop( const css::datatransfer::dnd::Dr
             FileList aFileList;
 
             // at first check filelist format
-            if ( aHelper.GetFileList( SOT_FORMAT_FILE_LIST, aFileList ) )
+            if ( aHelper.GetFileList( SotClipboardFormatId::FILE_LIST, aFileList ) )
             {
                 sal_uLong i, nCount = aFileList.Count();
                 for ( i = 0; i < nCount; ++i )
@@ -88,7 +88,7 @@ void SAL_CALL OpenFileDropTargetListener::drop( const css::datatransfer::dnd::Dr
 
             // then, if necessary, the file format
             OUString aFilePath;
-            if ( !bFormatFound && aHelper.GetString( SOT_FORMAT_FILE, aFilePath ) )
+            if ( !bFormatFound && aHelper.GetString( SotClipboardFormatId::FILE, aFilePath ) )
                 implts_OpenFile( aFilePath );
         }
         dtde.Context->dropComplete( css::datatransfer::dnd::DNDConstants::ACTION_NONE != nAction );
@@ -132,8 +132,8 @@ void SAL_CALL OpenFileDropTargetListener::dragOver( const css::datatransfer::dnd
 {
     try
     {
-        bool bAccept = ( implts_IsDropFormatSupported( SOT_FORMAT_FILE ) ||
-                             implts_IsDropFormatSupported( SOT_FORMAT_FILE_LIST ) );
+        bool bAccept = ( implts_IsDropFormatSupported( SotClipboardFormatId::FILE ) ||
+                             implts_IsDropFormatSupported( SotClipboardFormatId::FILE_LIST ) );
 
         if ( !bAccept )
             dtde.Context->rejectDrag();
@@ -170,7 +170,7 @@ void OpenFileDropTargetListener::implts_EndDrag()
     /* } SAFE */
 }
 
-bool OpenFileDropTargetListener::implts_IsDropFormatSupported( SotFormatStringId nFormat )
+bool OpenFileDropTargetListener::implts_IsDropFormatSupported( SotClipboardFormatId nFormat )
 {
     /* SAFE { */
     SolarMutexGuard aGuard;

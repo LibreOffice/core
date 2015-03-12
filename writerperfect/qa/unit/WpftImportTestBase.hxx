@@ -69,7 +69,7 @@ protected:
 
 private:
     virtual bool load(const OUString &, const OUString &rURL, const OUString &,
-                      unsigned int, unsigned int, unsigned int) SAL_OVERRIDE;
+                      unsigned int, SotClipboardFormatId, unsigned int) SAL_OVERRIDE;
 
     void impl_detectFilterName(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> &rDescriptor, const rtl::OUString &rTypeName);
 

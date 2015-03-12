@@ -86,12 +86,12 @@ class SW_DLLPUBLIC SwTransferable : public TransferableHelper
     static bool _CheckForURLOrLNKFile( TransferableDataHelper& rData,
                                 OUString& rFileName, OUString* pTitle = 0 );
     static bool _TestAllowedFormat( const TransferableDataHelper& rData,
-                                        sal_uLong nFormat, SotExchangeDest nDestination );
+                                        SotClipboardFormatId nFormat, SotExchangeDest nDestination );
 
     static bool _PasteFileContent( TransferableDataHelper&,
-                                    SwWrtShell& rSh, sal_uLong nFmt, bool bMsg );
+                                    SwWrtShell& rSh, SotClipboardFormatId nFmt, bool bMsg );
     static bool _PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
-                            sal_uLong nFmt, sal_uInt8 nActionFlags, bool bMsg );
+                            SotClipboardFormatId nFmt, sal_uInt8 nActionFlags, bool bMsg );
     static bool _PasteTargetURL( TransferableDataHelper& rData, SwWrtShell& rSh,
                         sal_uInt16 nAction, const Point* pPt, bool bInsertGRF );
 
@@ -103,21 +103,21 @@ class SW_DLLPUBLIC SwTransferable : public TransferableHelper
                                     const Point* pPt, sal_uInt8 nActionFlags, bool bNeedToSelectBeforePaste);
 
     static bool _PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
-                                sal_uLong nFmt, sal_uInt16 nAction, const Point* pPt,
+                                SotClipboardFormatId nFmt, sal_uInt16 nAction, const Point* pPt,
                                 sal_uInt8 nActionFlags, sal_Int8 nDropAction, bool bNeedToSelectBeforePaste);
 
     static bool _PasteImageMap( TransferableDataHelper& rData,
                                     SwWrtShell& rSh );
 
     static bool _PasteAsHyperlink( TransferableDataHelper& rData,
-                                        SwWrtShell& rSh, sal_uLong nFmt );
+                                        SwWrtShell& rSh, SotClipboardFormatId nFmt );
 
     static bool _PasteFileName( TransferableDataHelper& rData,
-                            SwWrtShell& rSh, sal_uLong nFmt, sal_uInt16 nAction,
+                            SwWrtShell& rSh, SotClipboardFormatId nFmt, sal_uInt16 nAction,
                             const Point* pPt, sal_uInt8 nActionFlags, bool bMsg, bool * graphicInserted );
 
     static bool _PasteDBData( TransferableDataHelper& rData, SwWrtShell& rSh,
-                            sal_uLong nFmt, bool bLink, const Point* pDragPt,
+                            SotClipboardFormatId nFmt, bool bLink, const Point* pDragPt,
                             bool bMsg );
 
     static bool _PasteFileList( TransferableDataHelper& rData,
@@ -138,7 +138,7 @@ protected:
     virtual bool GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) SAL_OVERRIDE;
     virtual bool        WriteObject( SotStorageStreamRef& rxOStm,
                                         void* pUserObject,
-                                        sal_uInt32 nUserObjectId,
+                                        SotClipboardFormatId nUserObjectId,
                                         const css::datatransfer::DataFlavor& rFlavor ) SAL_OVERRIDE;
     virtual void        DragFinished( sal_Int8 nDropAction ) SAL_OVERRIDE;
     virtual void        ObjectReleased() SAL_OVERRIDE;
@@ -169,7 +169,7 @@ public:
     static bool IsPaste( const SwWrtShell&, const TransferableDataHelper& );
     static bool Paste( SwWrtShell&, TransferableDataHelper& );
     static bool PasteData( TransferableDataHelper& rData,
-                          SwWrtShell& rSh, sal_uInt16 nAction, sal_uLong nFormat,
+                          SwWrtShell& rSh, sal_uInt16 nAction, SotClipboardFormatId nFormat,
                           SotExchangeDest nDestination, bool bIsPasteFmt,
                           bool bIsDefault,
                           const Point* pDDPos = 0, sal_Int8 nDropAction = 0,
@@ -178,9 +178,9 @@ public:
     static bool IsPasteSpecial( const SwWrtShell& rWrtShell,
                                 const TransferableDataHelper& );
     static bool PasteUnformatted( SwWrtShell& rSh, TransferableDataHelper& );
-    static bool PasteSpecial( SwWrtShell& rSh, TransferableDataHelper&, sal_uLong& rFormatUsed );
+    static bool PasteSpecial( SwWrtShell& rSh, TransferableDataHelper&, SotClipboardFormatId& rFormatUsed );
     static bool PasteFormat( SwWrtShell& rSh, TransferableDataHelper& rData,
-                             sal_uLong nFormat );
+                             SotClipboardFormatId nFormat );
 
     static void FillClipFmtItem( const SwWrtShell& rSh,
                                 const TransferableDataHelper& rData,

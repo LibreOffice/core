@@ -95,7 +95,7 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
         return SUCCESS;
     }
 
-    sal_uLong nFmt = SotExchange::GetFormatIdFromMimeType( rMimeType );
+    SotClipboardFormatId nFmt = SotExchange::GetFormatIdFromMimeType( rMimeType );
 
     if( pCntntNode->IsNoTxtNode() &&
         nFmt == sfx2::LinkManager::RegisterStatusInfoId() )

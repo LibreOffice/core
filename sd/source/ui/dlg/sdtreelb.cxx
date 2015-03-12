@@ -78,7 +78,7 @@ bool SdPageObjsTLB::IsInDrag()
     return bIsInDrag;
 }
 
-sal_uInt32 SdPageObjsTLB::SdPageObjsTransferable::mnListBoxDropFormatId = SAL_MAX_UINT32;
+SotClipboardFormatId SdPageObjsTLB::SdPageObjsTransferable::mnListBoxDropFormatId = static_cast<SotClipboardFormatId>(SAL_MAX_UINT32);
 
 // - SdPageObjsTLB::SdPageObjsTransferable -
 
@@ -112,21 +112,21 @@ SdPageObjsTLB::SdPageObjsTransferable::~SdPageObjsTransferable()
 
 void SdPageObjsTLB::SdPageObjsTransferable::AddSupportedFormats()
 {
-    AddFormat(SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK);
-    AddFormat(SOT_FORMATSTR_ID_TREELISTBOX);
+    AddFormat(SotClipboardFormatId::NETSCAPE_BOOKMARK);
+    AddFormat(SotClipboardFormatId::TREELISTBOX);
     AddFormat(GetListBoxDropFormatId());
 }
 
 bool SdPageObjsTLB::SdPageObjsTransferable::GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& /*rDestDoc*/ )
 {
-    sal_uLong nFormatId = SotExchange::GetFormat( rFlavor );
+    SotClipboardFormatId nFormatId = SotExchange::GetFormat( rFlavor );
     switch (nFormatId)
     {
-        case SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK:
+        case SotClipboardFormatId::NETSCAPE_BOOKMARK:
             SetINetBookmark( maBookmark, rFlavor );
             return true;
 
-        case SOT_FORMATSTR_ID_TREELISTBOX:
+        case SotClipboardFormatId::TREELISTBOX:
             SetAny(maTreeListBoxData, rFlavor);
             return true;
 
@@ -183,9 +183,9 @@ SdPageObjsTLB::SdPageObjsTransferable* SdPageObjsTLB::SdPageObjsTransferable::ge
     return 0;
 }
 
-sal_uInt32 SdPageObjsTLB::SdPageObjsTransferable::GetListBoxDropFormatId (void)
+SotClipboardFormatId SdPageObjsTLB::SdPageObjsTransferable::GetListBoxDropFormatId()
 {
-    if (mnListBoxDropFormatId == SAL_MAX_UINT32)
+    if (mnListBoxDropFormatId == static_cast<SotClipboardFormatId>(SAL_MAX_UINT32))
         mnListBoxDropFormatId = SotExchange::RegisterFormatMimeType(OUString(
         "application/x-openoffice-treelistbox-moveonly;windows_formatname=\"SV_LBOX_DD_FORMAT_MOVE\""));
     return mnListBoxDropFormatId;
@@ -1281,7 +1281,7 @@ sal_Int8 SdPageObjsTLB::AcceptDrop (const AcceptDropEvent& rEvent)
 {
     sal_Int8 nResult (DND_ACTION_NONE);
 
-    if ( !bIsInDrag && IsDropFormatSupported( FORMAT_FILE ) )
+    if ( !bIsInDrag && IsDropFormatSupported( SotClipboardFormatId::FILE ) )
     {
         nResult = rEvent.mnAction;
     }
@@ -1342,7 +1342,7 @@ sal_Int8 SdPageObjsTLB::ExecuteDrop( const ExecuteDropEvent& rEvt )
                 TransferableDataHelper  aDataHelper( rEvt.maDropEvent.Transferable );
                 OUString                aFile;
 
-                if( aDataHelper.GetString( FORMAT_FILE, aFile ) &&
+                if( aDataHelper.GetString( SotClipboardFormatId::FILE, aFile ) &&
                     static_cast<SdNavigatorWin*>(mpParent)->InsertFile( aFile ) )
                 {
                     nRet = rEvt.mnAction;

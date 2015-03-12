@@ -946,7 +946,7 @@ void FuPoor::DoPasteUnformatted()
         {
             mpView->InsertData( aDataHelper,
                                 mpWindow->PixelToLogic( Rectangle( Point(), mpWindow->GetOutputSizePixel() ).Center() ),
-                                nAction, false, FORMAT_STRING);
+                                nAction, false, SotClipboardFormatId::STRING);
         }
     }
 }

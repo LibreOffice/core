@@ -19,6 +19,7 @@
 
 
 #include <sot/storinfo.hxx>
+#include <sot/exchange.hxx>
 #include <osl/file.hxx>
 #include <unotools/tempfile.hxx>
 #include <tools/stream.hxx>
@@ -932,7 +933,7 @@ bool Storage::Revert()
 // Set the storage type
 
 void Storage::SetClass( const SvGlobalName & rClass,
-                        sal_uLong nOriginalClipFormat,
+                        SotClipboardFormatId nOriginalClipFormat,
                         const OUString & rUserTypeName )
 {
     if( Validate( true ) )
@@ -959,7 +960,7 @@ void Storage::SetClass( const SvGlobalName & rClass,
 }
 
 void Storage::SetConvertClass( const SvGlobalName & rConvertClass,
-                               sal_uLong nOriginalClipFormat,
+                               SotClipboardFormatId nOriginalClipFormat,
                                const OUString & rUserTypeName )
 {
     if( Validate( true ) )
@@ -986,13 +987,13 @@ SvGlobalName Storage::GetClassName()
     return SvGlobalName();
 }
 
-sal_uLong Storage::GetFormat()
+SotClipboardFormatId Storage::GetFormat()
 {
     StgCompObjStream aCompObj( *this, false );
     if( aCompObj.Load() )
         return aCompObj.GetCbFormat();
     pIo->ResetError();
-    return 0;
+    return SotClipboardFormatId::NONE;
 }
 
 OUString Storage::GetUserName()

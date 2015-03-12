@@ -50,7 +50,7 @@ TabControl::TabControlTransferable::~TabControlTransferable()
 
 void TabControl::TabControlTransferable::AddSupportedFormats()
 {
-    AddFormat( SOT_FORMATSTR_ID_STARDRAW_TABBAR );
+    AddFormat( SotClipboardFormatId::STARDRAW_TABBAR );
 }
 
 bool TabControl::TabControlTransferable::GetData( const css::datatransfer::DataFlavor& /*rFlavor*/, const OUString& /*rDestDoc*/ )

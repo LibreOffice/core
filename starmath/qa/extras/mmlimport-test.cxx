@@ -45,7 +45,7 @@ private:
         SfxFilter* pFilter = new SfxFilter(MATHML_XML,
                                            OUString(),
                                            SFX_FILTER_IMPORT | SFX_FILTER_EXPORT | SFX_FILTER_TEMPLATE,
-                                           SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS,
+                                           SotClipboardFormatId::STARCALC_8,
                                            "MathML 1.01",
                                            0,
                                            OUString(),

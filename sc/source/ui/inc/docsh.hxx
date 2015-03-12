@@ -186,7 +186,7 @@ public:
                     GetUndoManager() SAL_OVERRIDE;
 
     virtual void    FillClass( SvGlobalName * pClassName,
-                               sal_uInt32 * pFormat,
+                               SotClipboardFormatId * pFormat,
                                OUString * pAppName,
                                OUString * pFullTypeName,
                                OUString * pShortTypeName,

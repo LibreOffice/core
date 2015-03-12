@@ -13,6 +13,7 @@
 #include <comphelper/documentconstants.hxx>
 #include <rtl/ustring.hxx>
 #include <unotest/detail/unotestdllapi.hxx>
+#include <sot/formats.hxx>
 
 namespace test {
 
@@ -44,7 +45,7 @@ public:
         //SfxFilterFlags for SfxFilter
         unsigned int nFilterFlags = SFX_FILTER_IMPORT,
         //Clipboard id for SfxFilter
-        unsigned int nClipboardID = 0,
+        SotClipboardFormatId nClipboardID = SotClipboardFormatId::NONE,
         //additional filter version for SfxFilter
         unsigned int nFilterVersion = 0,
         //export or import?
@@ -55,7 +56,7 @@ public:
         const OUString &rURL,
         const OUString &rUserData,
         unsigned int nFilterFlags,
-        unsigned int nClipboardID,
+        SotClipboardFormatId nClipboardID,
         unsigned int nFilterVersion) = 0;
 
     virtual bool save(
@@ -63,7 +64,7 @@ public:
         const OUString &/*rURL*/,
         const OUString &/*rUserData*/,
         unsigned int /*nFilterFlags*/,
-        unsigned int /*nClipboardID*/,
+        SotClipboardFormatId /*nClipboardID*/,
         unsigned int /*nFilterVersion*/)
     {
         return true;
@@ -78,7 +79,7 @@ protected:
         const OUString &rURL,
         const OUString &rUserData,
         unsigned int nFilterFlags,
-        unsigned int nClipboardID,
+        SotClipboardFormatId nClipboardID,
         unsigned int nFilterVersion,
         bool bExport);
 };

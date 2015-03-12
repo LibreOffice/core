@@ -42,7 +42,7 @@ protected:
 public:
     TYPEINFO_OVERRIDE();
 
-    SwBaseLink( sal_uInt16 nMode, sal_uInt16 nFormat, SwCntntNode* pNode = 0 )
+    SwBaseLink( sal_uInt16 nMode, SotClipboardFormatId nFormat, SwCntntNode* pNode = 0 )
         : ::sfx2::SvBaseLink( nMode, nFormat ), pCntntNode( pNode ),
         bSwapIn( false ), bNoDataFlag( false ), bIgnoreDataChanged( false ),
         m_pReReadThread(0)

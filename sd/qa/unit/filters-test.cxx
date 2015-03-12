@@ -42,7 +42,7 @@ public:
 
     virtual bool load( const OUString &rFilter,
         const OUString &rURL, const OUString &rUserData,
-        unsigned int nFilterFlags, unsigned int nClipboardID,
+        unsigned int nFilterFlags, SotClipboardFormatId nClipboardID,
         unsigned int nFilterVersion) SAL_OVERRIDE;
 
     virtual void setUp() SAL_OVERRIDE;
@@ -60,7 +60,7 @@ private:
 };
 
 bool SdFiltersTest::load(const OUString &rFilter, const OUString &rURL,
-    const OUString &rUserData, unsigned int nFilterFlags, unsigned int nClipboardID,
+    const OUString &rUserData, unsigned int nFilterFlags, SotClipboardFormatId nClipboardID,
     unsigned int nFilterVersion)
 {
     SfxFilter aFilter(

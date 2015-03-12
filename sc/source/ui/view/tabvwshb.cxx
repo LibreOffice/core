@@ -381,7 +381,7 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
 
                 if(pDescriptorItem)
                 {
-                    //! merge with ScViewFunc::PasteDataFormat (SOT_FORMATSTR_ID_SBA_FIELDDATAEXCHANGE)?
+                    //! merge with ScViewFunc::PasteDataFormat (SotClipboardFormatId::SBA_FIELDDATAEXCHANGE)?
 
                     ScDrawView* pDrView = GetScDrawView();
                     SdrPageView* pPageView = pDrView ? pDrView->GetSdrPageView() : NULL;

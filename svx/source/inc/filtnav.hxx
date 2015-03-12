@@ -206,7 +206,7 @@ class OFilterItemExchange : public OLocalExchange
 public:
     OFilterItemExchange();
 
-    static sal_uInt32       getFormatId( );
+    static SotClipboardFormatId getFormatId( );
     inline static bool  hasFormat( const DataFlavorExVector& _rFormats );
 
     const ::std::vector<FmFilterItem*>& getDraggedEntries() const { return m_aDraggedEntries; }

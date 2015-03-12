@@ -135,9 +135,9 @@ void OApplicationController::convertToView(const OUString& _sName)
     }
 }
 
-void OApplicationController::pasteFormat(sal_uInt32 _nFormatId)
+void OApplicationController::pasteFormat(SotClipboardFormatId _nFormatId)
 {
-    if ( _nFormatId )
+    if ( _nFormatId != SotClipboardFormatId::NONE )
     {
         try
         {

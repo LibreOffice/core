@@ -775,9 +775,9 @@ const SfxFilter* SfxFilterMatcher::GetFilter4Extension( const OUString& rExt, Sf
     return GetFilterForProps( aSeq, nMust, nDont );
 }
 
-const SfxFilter* SfxFilterMatcher::GetFilter4ClipBoardId( sal_uInt32 nId, SfxFilterFlags nMust, SfxFilterFlags nDont ) const
+const SfxFilter* SfxFilterMatcher::GetFilter4ClipBoardId( SotClipboardFormatId nId, SfxFilterFlags nMust, SfxFilterFlags nDont ) const
 {
-    if (nId == 0)
+    if (nId == SotClipboardFormatId::NONE)
         return 0;
 
     com::sun::star::uno::Sequence < com::sun::star::beans::NamedValue > aSeq(1);
@@ -970,7 +970,7 @@ void SfxFilterContainer::ReadSingleFilter_Impl(
         // collect information to add filter to container
         // (attention: some information aren't available on filter directly ... you must search for corresponding type too!)
         sal_Int32       nFlags          = 0 ;
-        sal_Int32       nClipboardId    = 0 ;
+        SotClipboardFormatId nClipboardId    = SotClipboardFormatId::NONE;
         sal_Int32       nDocumentIconId = 0 ;
         sal_Int32       nFormatVersion  = 0 ;
         OUString sMimeType           ;
@@ -1086,7 +1086,7 @@ void SfxFilterContainer::ReadSingleFilter_Impl(
             // For external filters ignore clipboard IDs
             if((nFlags & SFX_FILTER_STARONEFILTER) == SFX_FILTER_STARONEFILTER)
             {
-                nClipboardId = 0;
+                nClipboardId = SotClipboardFormatId::NONE;
             }
         }
         // register SfxFilter

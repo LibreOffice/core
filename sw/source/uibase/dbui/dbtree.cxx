@@ -501,7 +501,7 @@ void SwDBTreeList::StartDrag( sal_Int8 /*nAction*/, const Point& /*rPosPixel*/ )
             sDBName += "." + sColumnName;
         }
 
-        pContainer->CopyString( FORMAT_STRING, sDBName );
+        pContainer->CopyString( SotClipboardFormatId::STRING, sDBName );
         pContainer->StartDrag( this, DND_ACTION_COPY | DND_ACTION_LINK,
                                 Link() );
     }

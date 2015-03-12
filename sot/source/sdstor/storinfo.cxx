@@ -25,9 +25,9 @@
 
 /************** class SvStorageInfo **************************************
 *************************************************************************/
-sal_uLong ReadClipboardFormat( SvStream & rStm )
+SotClipboardFormatId ReadClipboardFormat( SvStream & rStm )
 {
-    sal_uInt32 nFormat = 0;
+    SotClipboardFormatId nFormat = SotClipboardFormatId::NONE;
     sal_Int32 nLen = 0;
     rStm.ReadInt32( nLen );
     if( rStm.IsEof() )
@@ -44,12 +44,18 @@ sal_uLong ReadClipboardFormat( SvStream & rStm )
             rStm.SetError( SVSTREAM_GENERALERROR );
     }
     else if( nLen == -1L )
+    {
         // Windows clipboard format
-        // SV und Win stimmen ueberein (bis einschl. FORMAT_GDIMETAFILE)
-        rStm.ReadUInt32( nFormat );
+        // SV und Win stimmen ueberein (bis einschl. SotClipboardFormatId::GDIMETAFILE)
+        sal_uInt32 nTmp;
+        rStm.ReadUInt32( nTmp );
+        nFormat = static_cast<SotClipboardFormatId>(nTmp);
+    }
     else if( nLen == -2L )
     {
-        rStm.ReadUInt32( nFormat );
+        sal_uInt32 nTmp;
+        rStm.ReadUInt32( nTmp );
+        nFormat = static_cast<SotClipboardFormatId>(nTmp);
         // Mac clipboard format
         // ??? not implemented
         rStm.SetError( SVSTREAM_GENERALERROR );
@@ -62,11 +68,11 @@ sal_uLong ReadClipboardFormat( SvStream & rStm )
     return nFormat;
 }
 
-void WriteClipboardFormat( SvStream & rStm, sal_uLong nFormat )
+void WriteClipboardFormat( SvStream & rStm, SotClipboardFormatId nFormat )
 {
     // determine the clipboard format string
     OUString aCbFmt;
-    if( nFormat > FORMAT_GDIMETAFILE )
+    if( nFormat > SotClipboardFormatId::GDIMETAFILE )
         aCbFmt = SotExchange::GetFormatName( nFormat );
     if( !aCbFmt.isEmpty() )
     {
@@ -76,10 +82,10 @@ void WriteClipboardFormat( SvStream & rStm, sal_uLong nFormat )
         rStm.WriteCharPtr( (const char *)aAsciiCbFmt.getStr() );
         rStm.WriteUChar( 0 );
     }
-    else if( nFormat )
+    else if( nFormat != SotClipboardFormatId::NONE )
     {
         rStm.WriteInt32( -1 )         // for Windows
-            .WriteInt32( nFormat );
+            .WriteInt32( static_cast<sal_Int32>(nFormat) );
     }
     else
     {

@@ -44,10 +44,10 @@ class SwFiltersTest
 public:
     virtual bool load( const OUString &rFilter, const OUString &rURL,
         const OUString &rUserData, unsigned int nFilterFlags,
-        unsigned int nClipboardID, unsigned int nFilterVersion) SAL_OVERRIDE;
+        SotClipboardFormatId nClipboardID, unsigned int nFilterVersion) SAL_OVERRIDE;
     virtual bool save( const OUString &rFilter, const OUString &rURL,
         const OUString &rUserData, unsigned int nFilterFlags,
-        unsigned int nClipboardID, unsigned int nFilterVersion) SAL_OVERRIDE;
+        SotClipboardFormatId nClipboardID, unsigned int nFilterVersion) SAL_OVERRIDE;
     virtual void setUp() SAL_OVERRIDE;
 
     // Ensure CVEs remain unbroken
@@ -60,27 +60,27 @@ public:
 private:
     bool filter( const OUString &rFilter, const OUString &rURL,
         const OUString &rUserData, unsigned int nFilterFlags,
-        unsigned int nClipboardID, unsigned int nFilterVersion, bool bExport);
+        SotClipboardFormatId nClipboardID, unsigned int nFilterVersion, bool bExport);
     uno::Reference<uno::XInterface> m_xWriterComponent;
 };
 
 bool SwFiltersTest::load(const OUString &rFilter, const OUString &rURL,
     const OUString &rUserData, unsigned int nFilterFlags,
-        unsigned int nClipboardID, unsigned int nFilterVersion)
+        SotClipboardFormatId nClipboardID, unsigned int nFilterVersion)
 {
     return filter(rFilter, rURL, rUserData, nFilterFlags, nClipboardID, nFilterVersion, false);
 }
 
 bool SwFiltersTest::save(const OUString &rFilter, const OUString &rURL,
     const OUString &rUserData, unsigned int nFilterFlags,
-        unsigned int nClipboardID, unsigned int nFilterVersion)
+        SotClipboardFormatId nClipboardID, unsigned int nFilterVersion)
 {
     return filter(rFilter, rURL, rUserData, nFilterFlags, nClipboardID, nFilterVersion, true);
 }
 
 bool SwFiltersTest::filter(const OUString &rFilter, const OUString &rURL,
     const OUString &rUserData, unsigned int nFilterFlags,
-        unsigned int nClipboardID, unsigned int nFilterVersion, bool bExport)
+        SotClipboardFormatId nClipboardID, unsigned int nFilterVersion, bool bExport)
 {
     SfxFilter* pFilter = new SfxFilter(
         rFilter, OUString(), nFilterFlags,
@@ -131,7 +131,7 @@ bool SwFiltersTest::filter(const OUString &rFilter, const OUString &rURL,
     return bSaved;
 }
 
-#define isstorage 1
+#define isstorage SotClipboardFormatId::STRING
 
 void SwFiltersTest::testCVEs()
 {
@@ -182,7 +182,7 @@ void SwFiltersTest::testCVEs()
             getURLFromSrc("/sw/qa/core/exportdata/rtf/"),
             OUString(),
             SFX_FILTER_STARONEFILTER,
-            0,
+            SotClipboardFormatId::NONE,
             0,
             /*bExport=*/true);
 
@@ -190,7 +190,7 @@ void SwFiltersTest::testCVEs()
             getURLFromSrc("/sw/qa/core/exportdata/html/"),
             OUString(sHTML),
             0,
-            0,
+            SotClipboardFormatId::NONE,
             0,
             /*bExport=*/true);
 
@@ -198,7 +198,7 @@ void SwFiltersTest::testCVEs()
             getURLFromSrc("/sw/qa/core/exportdata/ooxml/"),
             OUString(),
             SFX_FILTER_STARONEFILTER,
-            0,
+            SotClipboardFormatId::NONE,
             0,
             /*bExport=*/true);
 

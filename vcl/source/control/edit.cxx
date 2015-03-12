@@ -1300,7 +1300,7 @@ void Edit::ImplPaste( uno::Reference< datatransfer::clipboard::XClipboard >& rxC
         if ( xDataObj.is() )
         {
             datatransfer::DataFlavor aFlavor;
-            SotExchange::GetFormatDataFlavor( SOT_FORMAT_STRING, aFlavor );
+            SotExchange::GetFormatDataFlavor( SotClipboardFormatId::STRING, aFlavor );
             try
             {
                 uno::Any aData = xDataObj->getTransferData( aFlavor );
@@ -1991,7 +1991,7 @@ void Edit::Command( const CommandEvent& rCEvt )
                 if ( xDataObj.is() )
                 {
                     datatransfer::DataFlavor aFlavor;
-                    SotExchange::GetFormatDataFlavor( SOT_FORMAT_STRING, aFlavor );
+                    SotExchange::GetFormatDataFlavor( SotClipboardFormatId::STRING, aFlavor );
                     bData = xDataObj->isDataFlavorSupported( aFlavor );
                 }
             }
@@ -2933,7 +2933,7 @@ void Edit::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEvent&
         if ( xDataObj.is() )
         {
             datatransfer::DataFlavor aFlavor;
-            SotExchange::GetFormatDataFlavor( SOT_FORMAT_STRING, aFlavor );
+            SotExchange::GetFormatDataFlavor( SotClipboardFormatId::STRING, aFlavor );
             if ( xDataObj->isDataFlavorSupported( aFlavor ) )
             {
                 uno::Any aData = xDataObj->getTransferData( aFlavor );

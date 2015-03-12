@@ -2702,7 +2702,7 @@ bool EditEngine::HasValidData( const ::com::sun::star::uno::Reference< ::com::su
     {
         // Every application that copies rtf or any other text format also copies plain text into the clipboard....
         datatransfer::DataFlavor aFlavor;
-        SotExchange::GetFormatDataFlavor( SOT_FORMAT_STRING, aFlavor );
+        SotExchange::GetFormatDataFlavor( SotClipboardFormatId::STRING, aFlavor );
         bValidData = rTransferable->isDataFlavorSupported( aFlavor );
     }
 

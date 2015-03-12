@@ -84,13 +84,13 @@ public:
             internally in the navigator for reordering entries.  Its
             lifetime ends with the office application.
         */
-        static sal_uInt32 GetListBoxDropFormatId (void);
+        static SotClipboardFormatId GetListBoxDropFormatId (void);
 
     private:
         /** Temporary drop flavor id that is used internally in the
             navigator.
         */
-        static sal_uInt32 mnListBoxDropFormatId;
+        static SotClipboardFormatId mnListBoxDropFormatId;
 
         SdPageObjsTLB&      mrParent;
         INetBookmark        maBookmark;

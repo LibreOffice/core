@@ -1209,7 +1209,7 @@ bool SwFEShell::PastePages( SwFEShell& rToFill, sal_uInt16 nStartPage, sal_uInt1
     return true;
 }
 
-bool SwFEShell::GetDrawObjGraphic( sal_uLong nFmt, Graphic& rGrf ) const
+bool SwFEShell::GetDrawObjGraphic( SotClipboardFormatId nFmt, Graphic& rGrf ) const
 {
     OSL_ENSURE( Imp()->HasDrawView(), "GetDrawObjGraphic without DrawView?" );
     const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
@@ -1226,7 +1226,7 @@ bool SwFEShell::GetDrawObjGraphic( sal_uLong nFmt, Graphic& rGrf ) const
                 if ( pGrf )
                 {
                     Graphic aGrf( *pGrf );
-                    if( SOT_FORMAT_GDIMETAFILE == nFmt )
+                    if( SotClipboardFormatId::GDIMETAFILE == nFmt )
                     {
                         if( GRAPHIC_BITMAP != aGrf.GetType() )
                         {
@@ -1284,9 +1284,9 @@ bool SwFEShell::GetDrawObjGraphic( sal_uLong nFmt, Graphic& rGrf ) const
                 }
             }
         }
-        else if( SOT_FORMAT_GDIMETAFILE == nFmt )
+        else if( SotClipboardFormatId::GDIMETAFILE == nFmt )
             rGrf = Imp()->GetDrawView()->GetMarkedObjMetaFile();
-        else if( SOT_FORMAT_BITMAP == nFmt || SOT_FORMATSTR_ID_PNG == nFmt )
+        else if( SotClipboardFormatId::BITMAP == nFmt || SotClipboardFormatId::PNG == nFmt )
             rGrf = Imp()->GetDrawView()->GetMarkedObjBitmapEx();
     }
     return bConvert;

@@ -494,7 +494,7 @@ void Clipboard::CreateSlideTransferable (
         // Get bookmark from transferable.
         TransferableDataHelper  aDataHelper (pTransferable);
         INetBookmark aINetBookmark;
-        if ( ! aDataHelper.GetINetBookmark(SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, aINetBookmark))
+        if ( ! aDataHelper.GetINetBookmark(SotClipboardFormatId::NETSCAPE_BOOKMARK, aINetBookmark))
             break;
         const OUString sURL (aINetBookmark.GetURL());
         const sal_Int32 nIndex (sURL.indexOf((sal_Unicode)'#'));

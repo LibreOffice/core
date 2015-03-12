@@ -23,6 +23,7 @@
 #include "stgole.hxx"
 #include "sot/storinfo.hxx"
 #include <boost/scoped_array.hpp>
+#include <sot/exchange.hxx>
 
 #ifdef _MSC_VER
 #pragma warning(disable: 4342)
@@ -97,13 +98,13 @@ StgCompObjStream::StgCompObjStream( BaseStorage& rStg, bool bWr )
     : StgInternalStream( rStg, OUString("\1CompObj"), bWr )
 {
     memset( &aClsId, 0, sizeof( ClsId ) );
-    nCbFormat = 0;
+    nCbFormat = SotClipboardFormatId::NONE;
 }
 
 bool StgCompObjStream::Load()
 {
     memset( &aClsId, 0, sizeof( ClsId ) );
-    nCbFormat = 0;
+    nCbFormat = SotClipboardFormatId::NONE;
     aUserName.clear();
     if( GetError() != SVSTREAM_OK )
         return false;

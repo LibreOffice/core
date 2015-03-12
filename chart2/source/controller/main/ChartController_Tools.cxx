@@ -260,10 +260,10 @@ void ChartController::executeDispatch_Paste()
         TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( m_pChartWindow ));
         if( aDataHelper.GetTransferable().is())
         {
-            if ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_DRAWING ) )
+            if ( aDataHelper.HasFormat( SotClipboardFormatId::DRAWING ) )
             {
                 SotStorageStreamRef xStm;
-                if ( aDataHelper.GetSotStorageStream( SOT_FORMATSTR_ID_DRAWING, xStm ) )
+                if ( aDataHelper.GetSotStorageStream( SotClipboardFormatId::DRAWING, xStm ) )
                 {
                     xStm->Seek( 0 );
                     Reference< io::XInputStream > xInputStream( new utl::OInputStreamWrapper( *xStm ) );
@@ -274,31 +274,31 @@ void ChartController::executeDispatch_Paste()
                     }
                 }
             }
-            else if ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_SVXB ) )
+            else if ( aDataHelper.HasFormat( SotClipboardFormatId::SVXB ) )
             {
                 // graphic exchange format (graphic manager bitmap format?)
                 SotStorageStreamRef xStm;
-                if( aDataHelper.GetSotStorageStream( SOT_FORMATSTR_ID_SVXB, xStm ))
+                if( aDataHelper.GetSotStorageStream( SotClipboardFormatId::SVXB, xStm ))
                     ReadGraphic( *xStm, aGraphic );
             }
-            else if( aDataHelper.HasFormat( FORMAT_GDIMETAFILE ))
+            else if( aDataHelper.HasFormat( SotClipboardFormatId::GDIMETAFILE ))
             {
                 // meta file
                 GDIMetaFile aMetafile;
-                if( aDataHelper.GetGDIMetaFile( FORMAT_GDIMETAFILE, aMetafile ))
+                if( aDataHelper.GetGDIMetaFile( SotClipboardFormatId::GDIMETAFILE, aMetafile ))
                     aGraphic = Graphic( aMetafile );
             }
-            else if( aDataHelper.HasFormat( FORMAT_BITMAP ))
+            else if( aDataHelper.HasFormat( SotClipboardFormatId::BITMAP ))
             {
                 // bitmap (non-graphic-manager)
                 BitmapEx aBmpEx;
-                if( aDataHelper.GetBitmapEx( FORMAT_BITMAP, aBmpEx ))
+                if( aDataHelper.GetBitmapEx( SotClipboardFormatId::BITMAP, aBmpEx ))
                     aGraphic = Graphic( aBmpEx );
             }
-            else if( aDataHelper.HasFormat( FORMAT_STRING ))
+            else if( aDataHelper.HasFormat( SotClipboardFormatId::STRING ))
             {
                 OUString aString;
-                if( aDataHelper.GetString( FORMAT_STRING, aString ) && m_pDrawModelWrapper )
+                if( aDataHelper.GetString( SotClipboardFormatId::STRING, aString ) && m_pDrawModelWrapper )
                 {
                     if( m_pDrawViewWrapper )
                     {

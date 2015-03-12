@@ -1308,7 +1308,7 @@ void SmDocShell::SetVisArea(const Rectangle & rVisArea)
 
 
 void SmDocShell::FillClass(SvGlobalName* pClassName,
-                           sal_uInt32*  pFormat,
+                           SotClipboardFormatId*  pFormat,
                            OUString* /*pAppName*/,
                            OUString* pFullTypeName,
                            OUString* pShortTypeName,
@@ -1318,14 +1318,14 @@ void SmDocShell::FillClass(SvGlobalName* pClassName,
     if (nFileFormat == SOFFICE_FILEFORMAT_60 )
     {
         *pClassName     = SvGlobalName(SO3_SM_CLASSID_60);
-        *pFormat        = SOT_FORMATSTR_ID_STARMATH_60;
+        *pFormat        = SotClipboardFormatId::STARMATH_60;
         *pFullTypeName  = SM_RESSTR(STR_MATH_DOCUMENT_FULLTYPE_CURRENT);
         *pShortTypeName = SM_RESSTR(RID_DOCUMENTSTR);
     }
     else if (nFileFormat == SOFFICE_FILEFORMAT_8 )
     {
         *pClassName     = SvGlobalName(SO3_SM_CLASSID_60);
-        *pFormat        = bTemplate ? SOT_FORMATSTR_ID_STARMATH_8_TEMPLATE : SOT_FORMATSTR_ID_STARMATH_8;
+        *pFormat        = bTemplate ? SotClipboardFormatId::STARMATH_8_TEMPLATE : SotClipboardFormatId::STARMATH_8;
         *pFullTypeName  = SM_RESSTR(STR_MATH_DOCUMENT_FULLTYPE_CURRENT);
         *pShortTypeName = SM_RESSTR(RID_DOCUMENTSTR);
     }

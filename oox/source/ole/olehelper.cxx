@@ -586,7 +586,7 @@ bool MSConvertOCXControls::WriteOCXStream( const Reference< XModel >& rxModel, S
 
     OUString sFullName = exportHelper.getFullName();
     rName = exportHelper.getTypeName();
-    xOleStg->SetClass( aName,0x5C,sFullName);
+    xOleStg->SetClass( aName, SotClipboardFormatId::EMBEDDED_OBJ_OLE, sFullName);
     {
         SvStorageStreamRef pNameStream = xOleStg->OpenSotStream(OUString("\3OCXNAME"));
         Reference< XOutputStream > xOut = new utl::OSeekableOutputStreamWrapper( *pNameStream );

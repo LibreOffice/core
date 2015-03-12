@@ -43,7 +43,7 @@ class SwIntrnlRefLink : public SwBaseLink
 {
     SwDDEFieldType& rFldType;
 public:
-    SwIntrnlRefLink( SwDDEFieldType& rType, sal_uInt16 nUpdateType, sal_uInt16 nFmt )
+    SwIntrnlRefLink( SwDDEFieldType& rType, sal_uInt16 nUpdateType, SotClipboardFormatId nFmt )
         : SwBaseLink( nUpdateType, nFmt ),
         rFldType( rType )
     {}
@@ -62,7 +62,7 @@ public:
 {
     switch( SotExchange::GetFormatIdFromMimeType( rMimeType ) )
     {
-    case FORMAT_STRING:
+    case SotClipboardFormatId::STRING:
         if( !IsNoDataFlag() )
         {
             uno::Sequence< sal_Int8 > aSeq;
@@ -233,7 +233,7 @@ SwDDEFieldType::SwDDEFieldType(const OUString& rName,
     aName( rName ), pDoc( 0 ), nRefCnt( 0 )
 {
     bCRLFFlag = bDeleted = false;
-    refLink = new SwIntrnlRefLink( *this, nUpdateType, FORMAT_STRING );
+    refLink = new SwIntrnlRefLink( *this, nUpdateType, SotClipboardFormatId::STRING );
     SetCmd( rCmd );
 }
 

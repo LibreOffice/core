@@ -65,7 +65,7 @@ public:
     *
     * \return the registered format id
     */
-    static sal_uInt32       getDescriptorFormatId();
+    static SotClipboardFormatId getDescriptorFormatId();
 
 protected:
     // TransferableHelper overridables

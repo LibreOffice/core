@@ -477,7 +477,7 @@ DdeService::DdeService( const OUString& rService )
             nStatus = DMLERR_SYS_ERROR;
         }
     }
-    AddFormat( FORMAT_STRING );
+    AddFormat( SotClipboardFormatId::STRING );
     pSysTopic = new DdeTopic( reinterpret_cast<const sal_Unicode*>(SZDDESYS_TOPIC) );
     pSysTopic->AddItem( DdeItem( reinterpret_cast<const sal_Unicode*>(SZDDESYS_ITEM_TOPICS) ) );
     pSysTopic->AddItem( DdeItem( reinterpret_cast<const sal_Unicode*>(SZDDESYS_ITEM_SYSITEMS) ) );

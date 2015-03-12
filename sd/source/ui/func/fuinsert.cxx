@@ -199,7 +199,7 @@ rtl::Reference<FuPoor> FuInsertClipboard::Create( ViewShell* pViewSh, ::sd::Wind
 void FuInsertClipboard::DoExecute( SfxRequest&  )
 {
     TransferableDataHelper                      aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( mpWindow ) );
-    sal_uLong                                       nFormatId;
+    SotClipboardFormatId                        nFormatId;
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     boost::scoped_ptr<SfxAbstractPasteDialog> pDlg(pFact->CreatePasteDialog( mpViewShell->GetActiveWindow() ));
@@ -207,21 +207,21 @@ void FuInsertClipboard::DoExecute( SfxRequest&  )
     {
         ::com::sun::star::datatransfer::DataFlavor  aFlavor;
 
-        pDlg->Insert( SOT_FORMATSTR_ID_EMBED_SOURCE, OUString() );
-        pDlg->Insert( SOT_FORMATSTR_ID_LINK_SOURCE, OUString() );
-        pDlg->Insert( SOT_FORMATSTR_ID_DRAWING, OUString() );
-        pDlg->Insert( SOT_FORMATSTR_ID_SVXB, OUString() );
-        pDlg->Insert( FORMAT_GDIMETAFILE, OUString() );
-        pDlg->Insert( FORMAT_BITMAP, OUString() );
-        pDlg->Insert( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, OUString() );
-        pDlg->Insert( FORMAT_STRING, OUString() );
-        pDlg->Insert( SOT_FORMATSTR_ID_HTML, OUString() );
-        pDlg->Insert( FORMAT_RTF, OUString() );
-        pDlg->Insert( SOT_FORMATSTR_ID_EDITENGINE, OUString() );
+        pDlg->Insert( SotClipboardFormatId::EMBED_SOURCE, OUString() );
+        pDlg->Insert( SotClipboardFormatId::LINK_SOURCE, OUString() );
+        pDlg->Insert( SotClipboardFormatId::DRAWING, OUString() );
+        pDlg->Insert( SotClipboardFormatId::SVXB, OUString() );
+        pDlg->Insert( SotClipboardFormatId::GDIMETAFILE, OUString() );
+        pDlg->Insert( SotClipboardFormatId::BITMAP, OUString() );
+        pDlg->Insert( SotClipboardFormatId::NETSCAPE_BOOKMARK, OUString() );
+        pDlg->Insert( SotClipboardFormatId::STRING, OUString() );
+        pDlg->Insert( SotClipboardFormatId::HTML, OUString() );
+        pDlg->Insert( SotClipboardFormatId::RTF, OUString() );
+        pDlg->Insert( SotClipboardFormatId::EDITENGINE, OUString() );
 
         //TODO/MBA: testing
         nFormatId = pDlg->GetFormat( aDataHelper );
-        if( nFormatId && aDataHelper.GetTransferable().is() )
+        if( nFormatId != SotClipboardFormatId::NONE && aDataHelper.GetTransferable().is() )
         {
             sal_Int8 nAction = DND_ACTION_COPY;
 
@@ -233,12 +233,12 @@ void FuInsertClipboard::DoExecute( SfxRequest&  )
                 DrawViewShell* pDrViewSh = static_cast<DrawViewShell*>(mpViewShell);
                 INetBookmark        aINetBookmark( aEmptyStr, aEmptyStr );
 
-                if( ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK ) &&
-                    aDataHelper.GetINetBookmark( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, aINetBookmark ) ) ||
-                    ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR ) &&
-                    aDataHelper.GetINetBookmark( SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, aINetBookmark ) ) ||
-                    ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR ) &&
-                    aDataHelper.GetINetBookmark( SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, aINetBookmark ) ) )
+                if( ( aDataHelper.HasFormat( SotClipboardFormatId::NETSCAPE_BOOKMARK ) &&
+                    aDataHelper.GetINetBookmark( SotClipboardFormatId::NETSCAPE_BOOKMARK, aINetBookmark ) ) ||
+                    ( aDataHelper.HasFormat( SotClipboardFormatId::FILEGRPDESCRIPTOR ) &&
+                    aDataHelper.GetINetBookmark( SotClipboardFormatId::FILEGRPDESCRIPTOR, aINetBookmark ) ) ||
+                    ( aDataHelper.HasFormat( SotClipboardFormatId::UNIFORMRESOURCELOCATOR ) &&
+                    aDataHelper.GetINetBookmark( SotClipboardFormatId::UNIFORMRESOURCELOCATOR, aINetBookmark ) ) )
                 {
                     pDrViewSh->InsertURLField( aINetBookmark.GetURL(), aINetBookmark.GetDescription(), aEmptyStr, NULL );
                 }

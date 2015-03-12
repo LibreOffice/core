@@ -30,7 +30,7 @@
 #include <svx/unomodel.hxx>
 #include <svx/svdview.hxx>
 
-#define CHARTTRANSFER_OBJECTTYPE_DRAWMODEL      1
+#define CHARTTRANSFER_OBJECTTYPE_DRAWMODEL      SotClipboardFormatId::STRING
 
 using namespace ::com::sun::star;
 
@@ -66,30 +66,30 @@ void ChartTransferable::AddSupportedFormats()
 {
     if ( m_bDrawing )
     {
-        AddFormat( SOT_FORMATSTR_ID_DRAWING );
+        AddFormat( SotClipboardFormatId::DRAWING );
     }
-    AddFormat( SOT_FORMAT_GDIMETAFILE );
-    AddFormat( SOT_FORMATSTR_ID_PNG );
-    AddFormat( SOT_FORMAT_BITMAP );
+    AddFormat( SotClipboardFormatId::GDIMETAFILE );
+    AddFormat( SotClipboardFormatId::PNG );
+    AddFormat( SotClipboardFormatId::BITMAP );
 }
 
 bool ChartTransferable::GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& /*rDestDoc*/ )
 {
-    sal_uInt32  nFormat = SotExchange::GetFormat( rFlavor );
+    SotClipboardFormatId nFormat = SotExchange::GetFormat( rFlavor );
     bool        bResult = false;
 
     if( HasFormat( nFormat ))
     {
-        if ( nFormat == SOT_FORMATSTR_ID_DRAWING )
+        if ( nFormat == SotClipboardFormatId::DRAWING )
         {
             bResult = SetObject( m_pMarkedObjModel, CHARTTRANSFER_OBJECTTYPE_DRAWMODEL, rFlavor );
         }
-        else if ( nFormat == FORMAT_GDIMETAFILE )
+        else if ( nFormat == SotClipboardFormatId::GDIMETAFILE )
         {
             Graphic aGraphic( m_xMetaFileGraphic );
             bResult = SetGDIMetaFile( aGraphic.GetGDIMetaFile(), rFlavor );
         }
-        else if( nFormat == FORMAT_BITMAP )
+        else if( nFormat == SotClipboardFormatId::BITMAP )
         {
             Graphic aGraphic( m_xMetaFileGraphic );
             bResult = SetBitmapEx( aGraphic.GetBitmapEx(), rFlavor );
@@ -99,7 +99,7 @@ bool ChartTransferable::GetData( const css::datatransfer::DataFlavor& rFlavor, c
     return bResult;
 }
 
-bool ChartTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId,
+bool ChartTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, SotClipboardFormatId nUserObjectId,
     const datatransfer::DataFlavor& /* rFlavor */ )
 {
     // called from SetObject, put data into stream

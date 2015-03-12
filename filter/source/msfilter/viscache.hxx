@@ -26,17 +26,17 @@
 
 class Impl_OlePres
 {
-    sal_uLong   nFormat;
-    sal_uInt16  nAspect;
+    SotClipboardFormatId nFormat;
+    sal_uInt16      nAspect;
     Bitmap *        pBmp;
     GDIMetaFile *   pMtf;
 
-    sal_uInt32  nAdvFlags;
-    sal_Int32   nJobLen;
-    sal_uInt8*  pJob;
-    Size    aSize;      // Groesse in 100TH_MM
+    sal_uInt32      nAdvFlags;
+    sal_Int32       nJobLen;
+    sal_uInt8*      pJob;
+    Size            aSize;      // Groesse in 100TH_MM
 public:
-                    Impl_OlePres( sal_uLong nF )
+                    Impl_OlePres( SotClipboardFormatId nF )
                         : nFormat( nF )
                         , nAspect( ASPECT_CONTENT )
                         , pBmp( NULL )
@@ -57,14 +57,14 @@ public:
                     delete pMtf;
                 pMtf = new GDIMetaFile( rMtf );
             }
-    Bitmap *GetBitmap() const { return pBmp; }
-    GDIMetaFile *GetMetaFile() const { return pMtf; }
-    sal_uLong   GetFormat() const { return nFormat; }
-    void    SetAspect( sal_uInt16 nAsp ) { nAspect = nAsp; }
-    sal_uLong   GetAdviseFlags() const { return nAdvFlags; }
-    void    SetAdviseFlags( sal_uLong nAdv ) { nAdvFlags = nAdv; }
-    void    SetSize( const Size & rSize ) { aSize = rSize; }
-    void    Write( SvStream & rStm );
+    Bitmap              *GetBitmap() const { return pBmp; }
+    GDIMetaFile         *GetMetaFile() const { return pMtf; }
+    SotClipboardFormatId GetFormat() const { return nFormat; }
+    void                 SetAspect( sal_uInt16 nAsp ) { nAspect = nAsp; }
+    sal_uLong            GetAdviseFlags() const { return nAdvFlags; }
+    void                 SetAdviseFlags( sal_uLong nAdv ) { nAdvFlags = nAdv; }
+    void                 SetSize( const Size & rSize ) { aSize = rSize; }
+    void                 Write( SvStream & rStm );
 };
 
 #endif // INCLUDED_FILTER_SOURCE_MSFILTER_VISCACHE_HXX

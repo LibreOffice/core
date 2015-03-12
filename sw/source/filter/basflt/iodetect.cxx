@@ -92,10 +92,10 @@ bool SwIoSystem::IsValidStgFilter( const com::sun::star::uno::Reference < com::s
     bool bRet = false;
     try
     {
-        sal_uLong nStgFmtId = SotStorage::GetFormatID( rStg );
+        SotClipboardFormatId nStgFmtId = SotStorage::GetFormatID( rStg );
         bRet = rStg->isStreamElement( OUString("content.xml") );
         if ( bRet )
-            bRet = ( nStgFmtId && ( rFilter.GetFormat() == nStgFmtId ) );
+            bRet = ( nStgFmtId != SotClipboardFormatId::NONE && ( rFilter.GetFormat() == nStgFmtId ) );
     }
     catch (const com::sun::star::uno::Exception& )
     {
@@ -106,13 +106,13 @@ bool SwIoSystem::IsValidStgFilter( const com::sun::star::uno::Reference < com::s
 
 bool SwIoSystem::IsValidStgFilter(SotStorage& rStg, const SfxFilter& rFilter)
 {
-    sal_uLong nStgFmtId = rStg.GetFormat();
+    SotClipboardFormatId nStgFmtId = rStg.GetFormat();
     /*#i8409# We cannot trust the clipboard id anymore :-(*/
     if (rFilter.GetUserData() == FILTER_WW8 || rFilter.GetUserData() == sWW6)
-        nStgFmtId = 0;
+        nStgFmtId = SotClipboardFormatId::NONE;
 
     bool bRet = SVSTREAM_OK == rStg.GetError() &&
-        ( !nStgFmtId || rFilter.GetFormat() == nStgFmtId ) &&
+        ( nStgFmtId == SotClipboardFormatId::NONE || rFilter.GetFormat() == nStgFmtId ) &&
         ( rStg.IsContained( SwIoSystem::GetSubStorageName( rFilter )) );
     if( bRet )
     {

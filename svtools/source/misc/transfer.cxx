@@ -325,22 +325,22 @@ Any SAL_CALL TransferableHelper::getTransferData2( const DataFlavor& rFlavor, co
                 AddSupportedFormats();
 
             // check alien formats first and try to get a substitution format
-            if( SotExchange::GetFormatDataFlavor( FORMAT_STRING, aSubstFlavor ) &&
+            if( SotExchange::GetFormatDataFlavor( SotClipboardFormatId::STRING, aSubstFlavor ) &&
                 TransferableDataHelper::IsEqual( aSubstFlavor, rFlavor ) )
             {
                 GetData(aSubstFlavor, rDestDoc);
                 bDone = maAny.hasValue();
             }
-            else if(SotExchange::GetFormatDataFlavor(SOT_FORMATSTR_ID_BMP, aSubstFlavor )
+            else if(SotExchange::GetFormatDataFlavor(SotClipboardFormatId::BMP, aSubstFlavor )
                 && TransferableDataHelper::IsEqual( aSubstFlavor, rFlavor )
-                && SotExchange::GetFormatDataFlavor(FORMAT_BITMAP, aSubstFlavor))
+                && SotExchange::GetFormatDataFlavor(SotClipboardFormatId::BITMAP, aSubstFlavor))
             {
                 GetData(aSubstFlavor, rDestDoc);
                 bDone = true;
             }
-            else if( SotExchange::GetFormatDataFlavor( SOT_FORMATSTR_ID_EMF, aSubstFlavor ) &&
+            else if( SotExchange::GetFormatDataFlavor( SotClipboardFormatId::EMF, aSubstFlavor ) &&
                      TransferableDataHelper::IsEqual( aSubstFlavor, rFlavor ) &&
-                     SotExchange::GetFormatDataFlavor( FORMAT_GDIMETAFILE, aSubstFlavor ) )
+                     SotExchange::GetFormatDataFlavor( SotClipboardFormatId::GDIMETAFILE, aSubstFlavor ) )
             {
                 GetData(aSubstFlavor, rDestDoc);
 
@@ -368,9 +368,9 @@ Any SAL_CALL TransferableHelper::getTransferData2( const DataFlavor& rFlavor, co
                     }
                 }
             }
-            else if( SotExchange::GetFormatDataFlavor( SOT_FORMATSTR_ID_WMF, aSubstFlavor ) &&
+            else if( SotExchange::GetFormatDataFlavor( SotClipboardFormatId::WMF, aSubstFlavor ) &&
                      TransferableDataHelper::IsEqual( aSubstFlavor, rFlavor ) &&
-                     SotExchange::GetFormatDataFlavor( FORMAT_GDIMETAFILE, aSubstFlavor ) )
+                     SotExchange::GetFormatDataFlavor( SotClipboardFormatId::GDIMETAFILE, aSubstFlavor ) )
             {
                 GetData(aSubstFlavor, rDestDoc);
 
@@ -589,7 +589,7 @@ void TransferableHelper::ImplFlush()
 
 
 
-void TransferableHelper::AddFormat( SotFormatStringId nFormat )
+void TransferableHelper::AddFormat( SotClipboardFormatId nFormat )
 {
     DataFlavor aFlavor;
 
@@ -607,12 +607,12 @@ void TransferableHelper::AddFormat( const DataFlavor& rFlavor )
     {
         if( TransferableDataHelper::IsEqual( *aIter, rFlavor ) )
         {
-            // update MimeType for SOT_FORMATSTR_ID_OBJECTDESCRIPTOR in every case
-            if( ( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR == aIter->mnSotId ) && mpObjDesc )
+            // update MimeType for SotClipboardFormatId::OBJECTDESCRIPTOR in every case
+            if( ( SotClipboardFormatId::OBJECTDESCRIPTOR == aIter->mnSotId ) && mpObjDesc )
             {
                 DataFlavor aObjDescFlavor;
 
-                SotExchange::GetFormatDataFlavor( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR, aObjDescFlavor );
+                SotExchange::GetFormatDataFlavor( SotClipboardFormatId::OBJECTDESCRIPTOR, aObjDescFlavor );
                 aIter->MimeType = aObjDescFlavor.MimeType;
                 aIter->MimeType += ::ImplGetParameterString( *mpObjDesc );
 
@@ -637,27 +637,27 @@ void TransferableHelper::AddFormat( const DataFlavor& rFlavor )
         aFlavorEx.DataType = rFlavor.DataType;
         aFlavorEx.mnSotId = SotExchange::RegisterFormat( rFlavor );
 
-        if( ( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR == aFlavorEx.mnSotId ) && mpObjDesc )
+        if( ( SotClipboardFormatId::OBJECTDESCRIPTOR == aFlavorEx.mnSotId ) && mpObjDesc )
             aFlavorEx.MimeType += ::ImplGetParameterString( *mpObjDesc );
 
         mpFormats->push_back( aFlavorEx );
 
-        if( FORMAT_BITMAP == aFlavorEx.mnSotId )
+        if( SotClipboardFormatId::BITMAP == aFlavorEx.mnSotId )
         {
-            AddFormat( SOT_FORMATSTR_ID_PNG );
-            AddFormat( SOT_FORMATSTR_ID_BMP );
+            AddFormat( SotClipboardFormatId::PNG );
+            AddFormat( SotClipboardFormatId::BMP );
         }
-        else if( FORMAT_GDIMETAFILE == aFlavorEx.mnSotId )
+        else if( SotClipboardFormatId::GDIMETAFILE == aFlavorEx.mnSotId )
         {
-            AddFormat( SOT_FORMATSTR_ID_EMF );
-            AddFormat( SOT_FORMATSTR_ID_WMF );
+            AddFormat( SotClipboardFormatId::EMF );
+            AddFormat( SotClipboardFormatId::WMF );
         }
     }
 }
 
 
 
-void TransferableHelper::RemoveFormat( SotFormatStringId nFormat )
+void TransferableHelper::RemoveFormat( SotClipboardFormatId nFormat )
 {
     DataFlavor aFlavor;
 
@@ -682,7 +682,7 @@ void TransferableHelper::RemoveFormat( const DataFlavor& rFlavor )
 
 
 
-bool TransferableHelper::HasFormat( SotFormatStringId nFormat )
+bool TransferableHelper::HasFormat( SotClipboardFormatId nFormat )
 {
     bool bRet = false;
 
@@ -721,7 +721,7 @@ bool TransferableHelper::SetString( const OUString& rString, const DataFlavor& r
     DataFlavor aFileFlavor;
 
     if( !rString.isEmpty() &&
-        SotExchange::GetFormatDataFlavor( FORMAT_FILE, aFileFlavor ) &&
+        SotExchange::GetFormatDataFlavor( SotClipboardFormatId::FILE, aFileFlavor ) &&
         TransferableDataHelper::IsEqual( aFileFlavor, rFlavor ) )
     {
         const OString aByteStr(OUStringToOString(rString, osl_getThreadTextEncoding()));
@@ -846,7 +846,7 @@ bool TransferableHelper::SetINetBookmark( const INetBookmark& rBmk,
 
     switch( SotExchange::GetFormat( rFlavor ) )
     {
-        case( SOT_FORMATSTR_ID_SOLK ):
+        case SotClipboardFormatId::SOLK:
         {
             OString sURL(OUStringToOString(rBmk.GetURL(), eSysCSet));
             OString sDesc(OUStringToOString(rBmk.GetDescription(), eSysCSet));
@@ -862,11 +862,11 @@ bool TransferableHelper::SetINetBookmark( const INetBookmark& rBmk,
         }
         break;
 
-        case( FORMAT_STRING ):
+        case SotClipboardFormatId::STRING:
             maAny <<= OUString( rBmk.GetURL() );
             break;
 
-        case( SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR ):
+        case SotClipboardFormatId::UNIFORMRESOURCELOCATOR:
         {
             OString sURL(OUStringToOString(rBmk.GetURL(), eSysCSet));
             Sequence< sal_Int8 > aSeq( sURL.getLength() );
@@ -875,7 +875,7 @@ bool TransferableHelper::SetINetBookmark( const INetBookmark& rBmk,
         }
         break;
 
-        case( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK ):
+        case SotClipboardFormatId::NETSCAPE_BOOKMARK:
         {
             Sequence< sal_Int8 > aSeq( 2048 );
 
@@ -888,7 +888,7 @@ bool TransferableHelper::SetINetBookmark( const INetBookmark& rBmk,
         break;
 
 #ifdef WNT
-        case SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR:
+        case SotClipboardFormatId::FILEGRPDESCRIPTOR:
         {
             Sequence< sal_Int8 >    aSeq( sizeof( FILEGROUPDESCRIPTOR ) );
             FILEGROUPDESCRIPTOR*    pFDesc = (FILEGROUPDESCRIPTOR*) aSeq.getArray();
@@ -912,7 +912,7 @@ bool TransferableHelper::SetINetBookmark( const INetBookmark& rBmk,
         }
         break;
 
-        case SOT_FORMATSTR_ID_FILECONTENT:
+        case SotClipboardFormatId::FILECONTENT:
         {
             OUString aStr( "[InternetShortcut]\x0aURL=" );
             maAny <<= ( aStr += rBmk.GetURL() );
@@ -944,7 +944,7 @@ bool TransferableHelper::SetINetImage( const INetImage& rINtImg,
 
 
 
-bool TransferableHelper::SetObject( void* pUserObject, sal_uInt32 nUserObjectId, const DataFlavor& rFlavor )
+bool TransferableHelper::SetObject( void* pUserObject, SotClipboardFormatId nUserObjectId, const DataFlavor& rFlavor )
 {
     SotStorageStreamRef xStm( new SotStorageStream( OUString() ) );
 
@@ -958,7 +958,7 @@ bool TransferableHelper::SetObject( void* pUserObject, sal_uInt32 nUserObjectId,
         xStm->Seek( STREAM_SEEK_TO_BEGIN );
         xStm->Read( aSeq.getArray(),  nLen );
 
-        if( nLen && ( SotExchange::GetFormat( rFlavor ) == SOT_FORMAT_STRING ) )
+        if( nLen && ( SotExchange::GetFormat( rFlavor ) == SotClipboardFormatId::STRING ) )
         {
             //JP 24.7.2001: as I know was this only for the writer application and this
             //              writes now UTF16 format into the stream
@@ -975,7 +975,7 @@ bool TransferableHelper::SetObject( void* pUserObject, sal_uInt32 nUserObjectId,
 
 
 
-bool TransferableHelper::WriteObject( SotStorageStreamRef&, void*, sal_uInt32, const DataFlavor& )
+bool TransferableHelper::WriteObject( SotStorageStreamRef&, void*, SotClipboardFormatId, const DataFlavor& )
 {
     OSL_FAIL( "TransferableHelper::WriteObject( ... ) not implemented" );
     return false;
@@ -1000,8 +1000,8 @@ void TransferableHelper::PrepareOLE( const TransferableObjectDescriptor& rObjDes
     delete mpObjDesc;
     mpObjDesc = new TransferableObjectDescriptor( rObjDesc );
 
-    if( HasFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR ) )
-        AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
+    if( HasFormat( SotClipboardFormatId::OBJECTDESCRIPTOR ) )
+        AddFormat( SotClipboardFormatId::OBJECTDESCRIPTOR );
 }
 
 
@@ -1357,26 +1357,26 @@ void TransferableDataHelper::FillDataFlavorExVector( const Sequence< DataFlavor 
             rDataFlavorExVector.push_back( aFlavorEx );
 
             // add additional formats for special mime types
-            if(SOT_FORMATSTR_ID_BMP == aFlavorEx.mnSotId || SOT_FORMATSTR_ID_PNG == aFlavorEx.mnSotId)
+            if(SotClipboardFormatId::BMP == aFlavorEx.mnSotId || SotClipboardFormatId::PNG == aFlavorEx.mnSotId)
             {
-                if( SotExchange::GetFormatDataFlavor( SOT_FORMAT_BITMAP, aFlavorEx ) )
+                if( SotExchange::GetFormatDataFlavor( SotClipboardFormatId::BITMAP, aFlavorEx ) )
                 {
-                    aFlavorEx.mnSotId = SOT_FORMAT_BITMAP;
+                    aFlavorEx.mnSotId = SotClipboardFormatId::BITMAP;
                     rDataFlavorExVector.push_back( aFlavorEx );
                 }
             }
-            else if( SOT_FORMATSTR_ID_WMF == aFlavorEx.mnSotId || SOT_FORMATSTR_ID_EMF == aFlavorEx.mnSotId )
+            else if( SotClipboardFormatId::WMF == aFlavorEx.mnSotId || SotClipboardFormatId::EMF == aFlavorEx.mnSotId )
             {
-                if( SotExchange::GetFormatDataFlavor( SOT_FORMAT_GDIMETAFILE, aFlavorEx ) )
+                if( SotExchange::GetFormatDataFlavor( SotClipboardFormatId::GDIMETAFILE, aFlavorEx ) )
                 {
-                    aFlavorEx.mnSotId = SOT_FORMAT_GDIMETAFILE;
+                    aFlavorEx.mnSotId = SotClipboardFormatId::GDIMETAFILE;
                     rDataFlavorExVector.push_back( aFlavorEx );
                 }
             }
-            else if ( SOT_FORMATSTR_ID_HTML_SIMPLE == aFlavorEx.mnSotId  )
+            else if ( SotClipboardFormatId::HTML_SIMPLE == aFlavorEx.mnSotId  )
             {
                 // #104735# HTML_SIMPLE may also be inserted without comments
-                aFlavorEx.mnSotId = SOT_FORMATSTR_ID_HTML_NO_COMMENT;
+                aFlavorEx.mnSotId = SotClipboardFormatId::HTML_NO_COMMENT;
                 rDataFlavorExVector.push_back( aFlavorEx );
             }
             else if( xMimeType.is() && xMimeType->getFullMediaType().equalsIgnoreAsciiCase( "text/plain" ) )
@@ -1387,27 +1387,27 @@ void TransferableDataHelper::FillDataFlavorExVector( const Sequence< DataFlavor 
                     if( xMimeType->getParameterValue( aCharsetStr ).equalsIgnoreAsciiCase( "unicode" ) ||
                         xMimeType->getParameterValue( aCharsetStr ).equalsIgnoreAsciiCase( "utf-16" ) )
                     {
-                        rDataFlavorExVector[ rDataFlavorExVector.size() - 1 ].mnSotId = FORMAT_STRING;
+                        rDataFlavorExVector[ rDataFlavorExVector.size() - 1 ].mnSotId = SotClipboardFormatId::STRING;
 
                     }
                 }
             }
             else if( xMimeType.is() && xMimeType->getFullMediaType().equalsIgnoreAsciiCase( "text/rtf" ) )
             {
-                rDataFlavorExVector[ rDataFlavorExVector.size() - 1 ].mnSotId = FORMAT_RTF;
+                rDataFlavorExVector[ rDataFlavorExVector.size() - 1 ].mnSotId = SotClipboardFormatId::RTF;
             }
             else if( xMimeType.is() && xMimeType->getFullMediaType().equalsIgnoreAsciiCase( "text/html" ) )
 
             {
-                rDataFlavorExVector[ rDataFlavorExVector.size() - 1 ].mnSotId = SOT_FORMATSTR_ID_HTML;
+                rDataFlavorExVector[ rDataFlavorExVector.size() - 1 ].mnSotId = SotClipboardFormatId::HTML;
             }
             else if( xMimeType.is() && xMimeType->getFullMediaType().equalsIgnoreAsciiCase( "text/uri-list" ) )
             {
-                rDataFlavorExVector[ rDataFlavorExVector.size() - 1 ].mnSotId = SOT_FORMAT_FILE_LIST;
+                rDataFlavorExVector[ rDataFlavorExVector.size() - 1 ].mnSotId = SotClipboardFormatId::FILE_LIST;
             }
             else if( xMimeType.is() && xMimeType->getFullMediaType().equalsIgnoreAsciiCase( "application/x-openoffice-objectdescriptor-xml" ) )
             {
-                rDataFlavorExVector[ rDataFlavorExVector.size() - 1 ].mnSotId = SOT_FORMATSTR_ID_OBJECTDESCRIPTOR;
+                rDataFlavorExVector[ rDataFlavorExVector.size() - 1 ].mnSotId = SotClipboardFormatId::OBJECTDESCRIPTOR;
             }
         }
     }
@@ -1432,7 +1432,7 @@ void TransferableDataHelper::InitFormats()
 
         for (DataFlavorExVector::const_iterator aIter( mpFormats->begin() ), aEnd( mpFormats->end() ); aIter != aEnd ; ++aIter)
         {
-            if( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR == aIter->mnSotId )
+            if( SotClipboardFormatId::OBJECTDESCRIPTOR == aIter->mnSotId )
             {
                 ImplSetParameterString( *mpObjDesc, *aIter );
                 break;
@@ -1443,7 +1443,7 @@ void TransferableDataHelper::InitFormats()
 
 
 
-bool TransferableDataHelper::HasFormat( SotFormatStringId nFormat ) const
+bool TransferableDataHelper::HasFormat( SotClipboardFormatId nFormat ) const
 {
     ::osl::MutexGuard aGuard( mpImpl->maMutex );
 
@@ -1494,11 +1494,11 @@ sal_uInt32 TransferableDataHelper::GetFormatCount() const
 
 
 
-SotFormatStringId TransferableDataHelper::GetFormat( sal_uInt32 nFormat ) const
+SotClipboardFormatId TransferableDataHelper::GetFormat( sal_uInt32 nFormat ) const
 {
     ::osl::MutexGuard aGuard( mpImpl->maMutex );
     DBG_ASSERT( nFormat < mpFormats->size(), "TransferableDataHelper::GetFormat: invalid format index" );
-    return( ( nFormat < mpFormats->size() ) ? (*mpFormats)[ nFormat ].mnSotId : 0 );
+    return( ( nFormat < mpFormats->size() ) ? (*mpFormats)[ nFormat ].mnSotId : SotClipboardFormatId::NONE );
 }
 
 
@@ -1543,7 +1543,7 @@ Reference< XTransferable > TransferableDataHelper::GetXTransferable() const
 
 
 
-Any TransferableDataHelper::GetAny( SotFormatStringId nFormat, const OUString& rDestDoc ) const
+Any TransferableDataHelper::GetAny( SotClipboardFormatId nFormat, const OUString& rDestDoc ) const
 {
     Any aReturn;
 
@@ -1566,11 +1566,11 @@ Any TransferableDataHelper::GetAny( const DataFlavor& rFlavor, const OUString& r
     {
         if( mxTransfer.is() )
         {
-            const SotFormatStringId         nRequestFormat = SotExchange::GetFormat( rFlavor );
+            const SotClipboardFormatId         nRequestFormat = SotExchange::GetFormat( rFlavor );
 
             Reference<css::datatransfer::XTransferable2> xTransfer2(mxTransfer, UNO_QUERY);
 
-            if( nRequestFormat )
+            if( nRequestFormat != SotClipboardFormatId::NONE )
             {
                 // try to get alien format first
                 for (DataFlavorExVector::const_iterator aIter( mpFormats->begin() ), aEnd( mpFormats->end() ); aIter != aEnd ; ++aIter)
@@ -1606,7 +1606,7 @@ Any TransferableDataHelper::GetAny( const DataFlavor& rFlavor, const OUString& r
 
 
 
-bool TransferableDataHelper::GetString( SotFormatStringId nFormat, OUString& rStr )
+bool TransferableDataHelper::GetString( SotClipboardFormatId nFormat, OUString& rStr )
 {
     DataFlavor aFlavor;
     return( SotExchange::GetFormatDataFlavor( nFormat, aFlavor ) && GetString( aFlavor, rStr ) );
@@ -1650,14 +1650,14 @@ bool TransferableDataHelper::GetString( const DataFlavor& rFlavor, OUString& rSt
 
 
 
-bool TransferableDataHelper::GetBitmapEx( SotFormatStringId nFormat, BitmapEx& rBmpEx )
+bool TransferableDataHelper::GetBitmapEx( SotClipboardFormatId nFormat, BitmapEx& rBmpEx )
 {
-    if(FORMAT_BITMAP == nFormat)
+    if(SotClipboardFormatId::BITMAP == nFormat)
     {
         // try to get PNG first
         DataFlavor aFlavor;
 
-        if(SotExchange::GetFormatDataFlavor(SOT_FORMATSTR_ID_PNG, aFlavor))
+        if(SotExchange::GetFormatDataFlavor(SotClipboardFormatId::PNG, aFlavor))
         {
             if(GetBitmapEx(aFlavor, rBmpEx))
             {
@@ -1679,13 +1679,13 @@ bool TransferableDataHelper::GetBitmapEx( const DataFlavor& rFlavor, BitmapEx& r
     bool bRet(GetSotStorageStream(rFlavor, xStm));
     bool bSuppressPNG(false); // #122982# If PNG stream not accessed, but BMP one, suppress trying to load PNG
 
-    if(!bRet && HasFormat(SOT_FORMATSTR_ID_PNG) && SotExchange::GetFormatDataFlavor(SOT_FORMATSTR_ID_PNG, aSubstFlavor))
+    if(!bRet && HasFormat(SotClipboardFormatId::PNG) && SotExchange::GetFormatDataFlavor(SotClipboardFormatId::PNG, aSubstFlavor))
     {
         // when no direct success, try if PNG is available
         bRet = GetSotStorageStream(aSubstFlavor, xStm);
     }
 
-    if(!bRet && HasFormat(SOT_FORMATSTR_ID_BMP) && SotExchange::GetFormatDataFlavor(SOT_FORMATSTR_ID_BMP, aSubstFlavor))
+    if(!bRet && HasFormat(SotClipboardFormatId::BMP) && SotExchange::GetFormatDataFlavor(SotClipboardFormatId::BMP, aSubstFlavor))
     {
         // when no direct success, try if BMP is available
         bRet = GetSotStorageStream(aSubstFlavor, xStm);
@@ -1759,7 +1759,7 @@ bool TransferableDataHelper::GetBitmapEx( const DataFlavor& rFlavor, BitmapEx& r
 
 
 
-bool TransferableDataHelper::GetGDIMetaFile(SotFormatStringId nFormat, GDIMetaFile& rMtf, size_t nMaxActions)
+bool TransferableDataHelper::GetGDIMetaFile(SotClipboardFormatId nFormat, GDIMetaFile& rMtf, size_t nMaxActions)
 {
     DataFlavor aFlavor;
     return SotExchange::GetFormatDataFlavor(nFormat, aFlavor) &&
@@ -1782,8 +1782,8 @@ bool TransferableDataHelper::GetGDIMetaFile( const DataFlavor& rFlavor, GDIMetaF
     }
 
     if( !bRet &&
-        HasFormat( SOT_FORMATSTR_ID_EMF ) &&
-        SotExchange::GetFormatDataFlavor( SOT_FORMATSTR_ID_EMF, aSubstFlavor ) &&
+        HasFormat( SotClipboardFormatId::EMF ) &&
+        SotExchange::GetFormatDataFlavor( SotClipboardFormatId::EMF, aSubstFlavor ) &&
         GetSotStorageStream( aSubstFlavor, xStm ) )
     {
         Graphic aGraphic;
@@ -1796,8 +1796,8 @@ bool TransferableDataHelper::GetGDIMetaFile( const DataFlavor& rFlavor, GDIMetaF
     }
 
     if( !bRet &&
-        HasFormat( SOT_FORMATSTR_ID_WMF ) &&
-        SotExchange::GetFormatDataFlavor( SOT_FORMATSTR_ID_WMF, aSubstFlavor ) &&
+        HasFormat( SotClipboardFormatId::WMF ) &&
+        SotExchange::GetFormatDataFlavor( SotClipboardFormatId::WMF, aSubstFlavor ) &&
         GetSotStorageStream( aSubstFlavor, xStm ) )
     {
         Graphic aGraphic;
@@ -1814,14 +1814,14 @@ bool TransferableDataHelper::GetGDIMetaFile( const DataFlavor& rFlavor, GDIMetaF
 
 
 
-bool TransferableDataHelper::GetGraphic( SotFormatStringId nFormat, Graphic& rGraphic )
+bool TransferableDataHelper::GetGraphic( SotClipboardFormatId nFormat, Graphic& rGraphic )
 {
-    if(FORMAT_BITMAP == nFormat)
+    if(SotClipboardFormatId::BITMAP == nFormat)
     {
         // try to get PNG first
         DataFlavor aFlavor;
 
-        if(SotExchange::GetFormatDataFlavor(SOT_FORMATSTR_ID_PNG, aFlavor))
+        if(SotExchange::GetFormatDataFlavor(SotClipboardFormatId::PNG, aFlavor))
         {
             if(GetGraphic(aFlavor, rGraphic))
             {
@@ -1841,7 +1841,7 @@ bool TransferableDataHelper::GetGraphic( const ::com::sun::star::datatransfer::D
     DataFlavor  aFlavor;
     bool        bRet = false;
 
-    if(SotExchange::GetFormatDataFlavor(SOT_FORMATSTR_ID_PNG, aFlavor) &&
+    if(SotExchange::GetFormatDataFlavor(SotClipboardFormatId::PNG, aFlavor) &&
         TransferableDataHelper::IsEqual(aFlavor, rFlavor))
     {
         // try to get PNG first
@@ -1850,7 +1850,7 @@ bool TransferableDataHelper::GetGraphic( const ::com::sun::star::datatransfer::D
         if( ( bRet = GetBitmapEx( aFlavor, aBmpEx ) ) )
             rGraphic = aBmpEx;
     }
-    else if(SotExchange::GetFormatDataFlavor( SOT_FORMAT_BITMAP, aFlavor ) &&
+    else if(SotExchange::GetFormatDataFlavor( SotClipboardFormatId::BITMAP, aFlavor ) &&
         TransferableDataHelper::IsEqual( aFlavor, rFlavor ) )
     {
         BitmapEx aBmpEx;
@@ -1858,7 +1858,7 @@ bool TransferableDataHelper::GetGraphic( const ::com::sun::star::datatransfer::D
         if( ( bRet = GetBitmapEx( aFlavor, aBmpEx ) ) )
             rGraphic = aBmpEx;
     }
-    else if( SotExchange::GetFormatDataFlavor( SOT_FORMAT_GDIMETAFILE, aFlavor ) &&
+    else if( SotExchange::GetFormatDataFlavor( SotClipboardFormatId::GDIMETAFILE, aFlavor ) &&
              TransferableDataHelper::IsEqual( aFlavor, rFlavor ) )
     {
         GDIMetaFile aMtf;
@@ -1882,7 +1882,7 @@ bool TransferableDataHelper::GetGraphic( const ::com::sun::star::datatransfer::D
 
 
 
-bool TransferableDataHelper::GetImageMap( SotFormatStringId nFormat, ImageMap& rIMap )
+bool TransferableDataHelper::GetImageMap( SotClipboardFormatId nFormat, ImageMap& rIMap )
 {
     DataFlavor aFlavor;
     return( SotExchange::GetFormatDataFlavor( nFormat, aFlavor ) && GetImageMap( aFlavor, rIMap ) );
@@ -1906,7 +1906,7 @@ bool TransferableDataHelper::GetImageMap( const ::com::sun::star::datatransfer::
 
 
 
-bool TransferableDataHelper::GetTransferableObjectDescriptor( SotFormatStringId nFormat, TransferableObjectDescriptor& rDesc )
+bool TransferableDataHelper::GetTransferableObjectDescriptor( SotClipboardFormatId nFormat, TransferableObjectDescriptor& rDesc )
 {
     DataFlavor aFlavor;
     return( SotExchange::GetFormatDataFlavor( nFormat, aFlavor ) && GetTransferableObjectDescriptor( aFlavor, rDesc ) );
@@ -1922,7 +1922,7 @@ bool TransferableDataHelper::GetTransferableObjectDescriptor( const ::com::sun::
 
 
 
-bool TransferableDataHelper::GetINetBookmark( SotFormatStringId nFormat, INetBookmark& rBmk )
+bool TransferableDataHelper::GetINetBookmark( SotClipboardFormatId nFormat, INetBookmark& rBmk )
 {
     DataFlavor aFlavor;
     return( SotExchange::GetFormatDataFlavor( nFormat, aFlavor ) && GetINetBookmark( aFlavor, rBmk ) );
@@ -1935,16 +1935,16 @@ bool TransferableDataHelper::GetINetBookmark( const ::com::sun::star::datatransf
     bool bRet = false;
     if( HasFormat( rFlavor ))
     {
-    const SotFormatStringId nFormat = SotExchange::GetFormat( rFlavor );
+    const SotClipboardFormatId nFormat = SotExchange::GetFormat( rFlavor );
     switch( nFormat )
     {
-        case( SOT_FORMATSTR_ID_SOLK ):
-        case( SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR ):
+        case( SotClipboardFormatId::SOLK ):
+        case( SotClipboardFormatId::UNIFORMRESOURCELOCATOR ):
         {
             OUString aString;
             if( GetString( rFlavor, aString ) )
             {
-                if( SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR == nFormat )
+                if( SotClipboardFormatId::UNIFORMRESOURCELOCATOR == nFormat )
                 {
                     rBmk = INetBookmark( aString, aString );
                     bRet = true;
@@ -1985,7 +1985,7 @@ bool TransferableDataHelper::GetINetBookmark( const ::com::sun::star::datatransf
         }
         break;
 
-        case( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK ):
+        case( SotClipboardFormatId::NETSCAPE_BOOKMARK ):
         {
             Sequence<sal_Int8> aSeq = GetSequence(rFlavor, OUString());
 
@@ -2001,7 +2001,7 @@ bool TransferableDataHelper::GetINetBookmark( const ::com::sun::star::datatransf
         break;
 
 #ifdef WNT
-        case SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR:
+        case SotClipboardFormatId::FILEGRPDESCRIPTOR:
         {
             Sequence<sal_Int8> aSeq = GetSequence(rFlavor, OUString());
 
@@ -2026,7 +2026,7 @@ bool TransferableDataHelper::GetINetBookmark( const ::com::sun::star::datatransf
                             aSeq.realloc( 0 );
                             pStream.reset();
 
-                            if (SotExchange::GetFormatDataFlavor(SOT_FORMATSTR_ID_FILECONTENT, aFileContentFlavor))
+                            if (SotExchange::GetFormatDataFlavor(SotClipboardFormatId::FILECONTENT, aFileContentFlavor))
                             {
                                 aSeq = GetSequence(aFileContentFlavor, OUString());
                                 if (aSeq.getLength())
@@ -2058,7 +2058,7 @@ bool TransferableDataHelper::GetINetBookmark( const ::com::sun::star::datatransf
         }
         break;
 #endif
-
+        default: break;
     }
     }
     return bRet;
@@ -2066,7 +2066,7 @@ bool TransferableDataHelper::GetINetBookmark( const ::com::sun::star::datatransf
 
 
 
-bool TransferableDataHelper::GetINetImage( SotFormatStringId nFormat,
+bool TransferableDataHelper::GetINetImage( SotClipboardFormatId nFormat,
                                                 INetImage& rINtImg )
 {
     DataFlavor aFlavor;
@@ -2089,7 +2089,7 @@ bool TransferableDataHelper::GetINetImage(
 
 
 
-bool TransferableDataHelper::GetFileList( SotFormatStringId nFormat,
+bool TransferableDataHelper::GetFileList( SotClipboardFormatId nFormat,
                                                 FileList& rFileList )
 {
     DataFlavor aFlavor;
@@ -2107,7 +2107,7 @@ bool TransferableDataHelper::GetFileList(
 
     for( sal_uInt32 i = 0, nFormatCount = GetFormatCount(); ( i < nFormatCount ) && !bRet; ++i )
     {
-        if( SOT_FORMAT_FILE_LIST == GetFormat( i ) )
+        if( SotClipboardFormatId::FILE_LIST == GetFormat( i ) )
         {
             const DataFlavor aFlavor( GetFormatDataFlavor( i ) );
 
@@ -2134,7 +2134,7 @@ bool TransferableDataHelper::GetFileList(
 
 
 
-Sequence<sal_Int8> TransferableDataHelper::GetSequence( SotFormatStringId nFormat, const OUString& rDestDoc )
+Sequence<sal_Int8> TransferableDataHelper::GetSequence( SotClipboardFormatId nFormat, const OUString& rDestDoc )
 {
     DataFlavor aFlavor;
     if (!SotExchange::GetFormatDataFlavor(nFormat, aFlavor))
@@ -2159,7 +2159,7 @@ Sequence<sal_Int8> TransferableDataHelper::GetSequence( const DataFlavor& rFlavo
 
 
 
-bool TransferableDataHelper::GetSotStorageStream( SotFormatStringId nFormat, SotStorageStreamRef& rxStream )
+bool TransferableDataHelper::GetSotStorageStream( SotClipboardFormatId nFormat, SotStorageStreamRef& rxStream )
 {
     DataFlavor aFlavor;
     return( SotExchange::GetFormatDataFlavor( nFormat, aFlavor ) && GetSotStorageStream( aFlavor, rxStream ) );
@@ -2181,7 +2181,7 @@ bool TransferableDataHelper::GetSotStorageStream( const DataFlavor& rFlavor, Sot
     return aSeq.getLength();
 }
 
-Reference<XInputStream> TransferableDataHelper::GetInputStream( SotFormatStringId nFormat, const OUString& rDestDoc )
+Reference<XInputStream> TransferableDataHelper::GetInputStream( SotClipboardFormatId nFormat, const OUString& rDestDoc )
 {
     DataFlavor aFlavor;
     if (!SotExchange::GetFormatDataFlavor(nFormat, aFlavor))

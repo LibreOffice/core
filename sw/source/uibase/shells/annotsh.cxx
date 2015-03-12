@@ -902,16 +902,16 @@ void SwAnnotationShell::ExecClpbrd(SfxRequest &rReq)
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 boost::scoped_ptr<SfxAbstractPasteDialog> pDlg(pFact->CreatePasteDialog( &rView.GetEditWin() ));
 
-                pDlg->Insert( SOT_FORMAT_STRING, OUString() );
-                pDlg->Insert( SOT_FORMAT_RTF,    OUString() );
+                pDlg->Insert( SotClipboardFormatId::STRING, OUString() );
+                pDlg->Insert( SotClipboardFormatId::RTF,    OUString() );
 
                 TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( &rView.GetEditWin() ) );
 
-                sal_uLong nFormat = pDlg->GetFormat( aDataHelper.GetTransferable() );
+                SotClipboardFormatId nFormat = pDlg->GetFormat( aDataHelper.GetTransferable() );
 
-                if (nFormat > 0)
+                if (nFormat != SotClipboardFormatId::NONE)
                 {
-                    if (nFormat == SOT_FORMAT_STRING)
+                    if (nFormat == SotClipboardFormatId::STRING)
                         pOLV->Paste();
                     else
                         pOLV->PasteSpecial();
@@ -921,17 +921,17 @@ void SwAnnotationShell::ExecClpbrd(SfxRequest &rReq)
         }
         case SID_CLIPBOARD_FORMAT_ITEMS:
         {
-            sal_uLong nFormat = 0;
+            SotClipboardFormatId nFormat = SotClipboardFormatId::NONE;
             const SfxPoolItem* pItem;
             if ( rReq.GetArgs() && rReq.GetArgs()->GetItemState(nSlot, true, &pItem) == SfxItemState::SET &&
                                     pItem->ISA(SfxUInt32Item) )
             {
-                nFormat = static_cast<const SfxUInt32Item*>(pItem)->GetValue();
+                nFormat = static_cast<SotClipboardFormatId>(static_cast<const SfxUInt32Item*>(pItem)->GetValue());
             }
 
-            if ( nFormat )
+            if ( nFormat != SotClipboardFormatId::NONE )
             {
-                if (SOT_FORMAT_STRING == nFormat)
+                if (SotClipboardFormatId::STRING == nFormat)
                     pOLV->Paste();
                 else
                     pOLV->PasteSpecial();
@@ -950,7 +950,7 @@ void SwAnnotationShell::StateClpbrd(SfxItemSet &rSet)
     OutlinerView* pOLV = pPostItMgr->GetActiveSidebarWin()->GetOutlinerView();
 
     TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( &rView.GetEditWin() ) );
-    bool bPastePossible = ( aDataHelper.HasFormat( SOT_FORMAT_STRING ) || aDataHelper.HasFormat( SOT_FORMAT_RTF ) );
+    bool bPastePossible = ( aDataHelper.HasFormat( SotClipboardFormatId::STRING ) || aDataHelper.HasFormat( SotClipboardFormatId::RTF ) );
     bPastePossible = bPastePossible &&  (pPostItMgr->GetActiveSidebarWin()->GetLayoutStatus()!=SwPostItHelper::DELETED);
 
     SfxWhichIter aIter(rSet);
@@ -984,9 +984,9 @@ void SwAnnotationShell::StateClpbrd(SfxItemSet &rSet)
                     if ( bPastePossible )
                     {
                         SvxClipboardFmtItem aFormats( SID_CLIPBOARD_FORMAT_ITEMS );
-                        if ( aDataHelper.HasFormat( SOT_FORMAT_RTF ) )
-                            aFormats.AddClipbrdFormat( SOT_FORMAT_RTF );
-                        aFormats.AddClipbrdFormat( SOT_FORMAT_STRING );
+                        if ( aDataHelper.HasFormat( SotClipboardFormatId::RTF ) )
+                            aFormats.AddClipbrdFormat( SotClipboardFormatId::RTF );
+                        aFormats.AddClipbrdFormat( SotClipboardFormatId::STRING );
                         rSet.Put( aFormats );
                     }
                     else

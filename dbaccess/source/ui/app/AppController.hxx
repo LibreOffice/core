@@ -259,7 +259,7 @@ namespace dbaui
             @param  _nFormatId
                 The format to be copied.
         */
-        void pasteFormat(sal_uInt32 _nFormatId);
+        void pasteFormat(SotClipboardFormatId _nFormatId);
 
         /** pastes a query, form or report into the data source
             @param  _eType
@@ -287,7 +287,7 @@ namespace dbaui
             @param  _rFormatIds
                 The vector to be filled up.
         */
-        void getSupportedFormats(ElementType _eType,::std::vector<SotFormatStringId>& _rFormatIds) const;
+        void getSupportedFormats(ElementType _eType,::std::vector<SotClipboardFormatId>& _rFormatIds) const;
 
         /** adds a listener to the current name access.
             @param  _xCollection

@@ -118,7 +118,7 @@ public:
     sal_uInt32               DetectFilter( SfxMedium& rMedium, const SfxFilter **, bool bPlugIn, bool bAPI = false ) const;
 
     const SfxFilter*    GetFilter4Mime( const OUString& rMime, SfxFilterFlags nMust = SFX_FILTER_IMPORT, SfxFilterFlags nDont = SFX_FILTER_NOTINSTALLED) const;
-    const SfxFilter*    GetFilter4ClipBoardId( sal_uInt32 nId, SfxFilterFlags nMust = SFX_FILTER_IMPORT, SfxFilterFlags nDont = SFX_FILTER_NOTINSTALLED ) const;
+    const SfxFilter*    GetFilter4ClipBoardId( SotClipboardFormatId nId, SfxFilterFlags nMust = SFX_FILTER_IMPORT, SfxFilterFlags nDont = SFX_FILTER_NOTINSTALLED ) const;
     const SfxFilter*    GetFilter4EA( const OUString& rEA, SfxFilterFlags nMust = SFX_FILTER_IMPORT, SfxFilterFlags nDont = SFX_FILTER_NOTINSTALLED ) const;
     const SfxFilter*    GetFilter4Extension( const OUString& rExt, SfxFilterFlags nMust = SFX_FILTER_IMPORT, SfxFilterFlags nDont = SFX_FILTER_NOTINSTALLED ) const;
     const SfxFilter*    GetFilter4FilterName( const OUString& rName, SfxFilterFlags nMust = 0, SfxFilterFlags nDont = SFX_FILTER_NOTINSTALLED ) const;

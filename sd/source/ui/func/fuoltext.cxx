@@ -279,7 +279,7 @@ void FuOutlineText::DoPasteUnformatted()
    if (aDataHelper.GetTransferable().is())
    {
        OUString aText;
-       if (aDataHelper.GetString(FORMAT_STRING, aText))
+       if (aDataHelper.GetString(SotClipboardFormatId::STRING, aText))
            pOutlineView->GetViewByWindow(mpWindow)->InsertText(aText);
    }
 }

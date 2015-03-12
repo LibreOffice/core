@@ -57,7 +57,7 @@ namespace dbaui
         void StartDrag( vcl::Window* pWindow, sal_Int8 nDragSourceActions, IDragTransferableListener* _pListener );
 
         static OJoinExchangeData    GetSourceDescription(const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& _rxObject);
-        static bool             isFormatAvailable( const DataFlavorExVector& _rFormats ,SotFormatStringId _nSlotID=SOT_FORMATSTR_ID_SBA_JOIN);
+        static bool             isFormatAvailable( const DataFlavorExVector& _rFormats ,SotClipboardFormatId _nSlotID=SotClipboardFormatId::SBA_JOIN);
 
     protected:
         virtual void                AddSupportedFormats() SAL_OVERRIDE;

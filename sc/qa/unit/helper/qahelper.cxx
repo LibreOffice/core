@@ -533,7 +533,7 @@ OUString toString(
 
 ScDocShellRef ScBootstrapFixture::load( bool bReadWrite,
     const OUString& rURL, const OUString& rFilter, const OUString &rUserData,
-    const OUString& rTypeName, unsigned int nFilterFlags, unsigned int nClipboardID,
+    const OUString& rTypeName, unsigned int nFilterFlags, SotClipboardFormatId nClipboardID,
     sal_uIntPtr nFilterVersion, const OUString* pPassword )
 {
     SfxFilter* pFilter = new SfxFilter(
@@ -566,7 +566,7 @@ ScDocShellRef ScBootstrapFixture::load( bool bReadWrite,
 
 ScDocShellRef ScBootstrapFixture::load(
     const OUString& rURL, const OUString& rFilter, const OUString &rUserData,
-    const OUString& rTypeName, unsigned int nFilterFlags, unsigned int nClipboardID,
+    const OUString& rTypeName, unsigned int nFilterFlags, SotClipboardFormatId nClipboardID,
     sal_uIntPtr nFilterVersion, const OUString* pPassword )
 {
     return load( false, rURL, rFilter, rUserData, rTypeName, nFilterFlags, nClipboardID,  nFilterVersion, pPassword );
@@ -581,7 +581,9 @@ ScDocShellRef ScBootstrapFixture::loadDoc(
     createFileURL( rFileName, aFileExtension, aFileName );
     OUString aFilterType(aFileFormats[nFormat].pTypeName, strlen(aFileFormats[nFormat].pTypeName), RTL_TEXTENCODING_UTF8);
     unsigned int nFormatType = aFileFormats[nFormat].nFormatType;
-    unsigned int nClipboardId = nFormatType ? SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS : 0;
+    SotClipboardFormatId nClipboardId = SotClipboardFormatId::NONE;
+    if (nFormatType)
+        nClipboardId = SotClipboardFormatId::STARCALC_8;
 
     return load(bReadWrite, aFileName, aFilterName, OUString(), aFilterType, nFormatType, nClipboardId, nFormatType);
 }
@@ -619,9 +621,9 @@ ScDocShellRef ScBootstrapFixture::saveAndReload(
 
     utl::TempFile aTempFile;
     SfxMedium aStoreMedium( aTempFile.GetURL(), STREAM_STD_WRITE );
-    sal_uInt32 nExportFormat = 0;
+    SotClipboardFormatId nExportFormat = SotClipboardFormatId::NONE;
     if (nFormatType == ODS_FORMAT_TYPE)
-        nExportFormat = SFX_FILTER_EXPORT | SFX_FILTER_USESOPTIONS;
+        nExportFormat = SotClipboardFormatId::STARCHART_8;
     SfxFilter* pExportFilter = new SfxFilter(
         rFilter,
         OUString(), nFormatType, nExportFormat, rTypeName, 0, OUString(),
@@ -633,9 +635,9 @@ ScDocShellRef ScBootstrapFixture::saveAndReload(
 
     //std::cout << "File: " << aTempFile.GetURL() << std::endl;
 
-    sal_uInt32 nFormat = 0;
+    SotClipboardFormatId nFormat = SotClipboardFormatId::NONE;
     if (nFormatType == ODS_FORMAT_TYPE)
-        nFormat = SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS;
+        nFormat = SotClipboardFormatId::STARCALC_8;
 
     ScDocShellRef xDocSh = load(aTempFile.GetURL(), rFilter, rUserData, rTypeName, nFormatType, nFormat );
     if(nFormatType == XLSX_FORMAT_TYPE)
@@ -664,10 +666,10 @@ boost::shared_ptr<utl::TempFile> ScBootstrapFixture::exportTo( ScDocShell* pShel
     boost::shared_ptr<utl::TempFile> pTempFile(new utl::TempFile());
     pTempFile->EnableKillingFile();
     SfxMedium aStoreMedium( pTempFile->GetURL(), STREAM_STD_WRITE );
-    sal_uInt32 nExportFormat = 0;
+    SotClipboardFormatId nExportFormat = SotClipboardFormatId::NONE;
     sal_Int32 nFormatType = aFileFormats[nFormat].nFormatType;
     if (nFormatType == ODS_FORMAT_TYPE)
-        nExportFormat = SFX_FILTER_EXPORT | SFX_FILTER_USESOPTIONS;
+        nExportFormat = SotClipboardFormatId::STARCHART_8;
     SfxFilter* pExportFilter = new SfxFilter(
         aFilterName,
         OUString(), nFormatType, nExportFormat, aFilterType, 0, OUString(),

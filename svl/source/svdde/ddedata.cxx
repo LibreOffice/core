@@ -117,13 +117,13 @@ sal_uLong DdeData::GetExternalFormat( sal_uLong nFmt )
 {
     switch( nFmt )
     {
-    case FORMAT_STRING:
+    case SotClipboardFormatId::STRING:
         nFmt = CF_TEXT;
         break;
-    case FORMAT_BITMAP:
+    case SotClipboardFormatId::BITMAP:
         nFmt = CF_BITMAP;
         break;
-    case FORMAT_GDIMETAFILE:
+    case SotClipboardFormatId::GDIMETAFILE:
         nFmt = CF_METAFILEPICT;
         break;
 
@@ -144,15 +144,15 @@ sal_uLong DdeData::GetInternalFormat( sal_uLong nFmt )
     switch( nFmt )
     {
     case CF_TEXT:
-        nFmt = FORMAT_STRING;
+        nFmt = SotClipboardFormatId::STRING;
         break;
 
     case CF_BITMAP:
-        nFmt = FORMAT_BITMAP;
+        nFmt = SotClipboardFormatId::BITMAP;
         break;
 
     case CF_METAFILEPICT:
-        nFmt = FORMAT_GDIMETAFILE;
+        nFmt = SotClipboardFormatId::GDIMETAFILE;
         break;
 
     default:

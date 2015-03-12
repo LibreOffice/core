@@ -1269,21 +1269,21 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             {
                 WaitObject aWait( GetViewData()->GetDialogParent() );
 
-                sal_uLong nFormat = 0;
+                SotClipboardFormatId nFormat = SotClipboardFormatId::NONE;
                 const SfxPoolItem* pItem;
                 if ( pReqArgs &&
                      pReqArgs->GetItemState(nSlot, true, &pItem) == SfxItemState::SET &&
                      pItem->ISA(SfxUInt32Item) )
                 {
-                    nFormat = static_cast<const SfxUInt32Item*>(pItem)->GetValue();
+                    nFormat = static_cast<SotClipboardFormatId>(static_cast<const SfxUInt32Item*>(pItem)->GetValue());
                 }
 
-                if ( nFormat )
+                if ( nFormat != SotClipboardFormatId::NONE )
                 {
                     vcl::Window* pWin = GetViewData()->GetActiveWin();
                     bool bCells = ( ScTransferObj::GetOwnClipboard( pWin ) != NULL );
                     bool bDraw = ( ScDrawTransferObj::GetOwnClipboard( pWin ) != NULL );
-                    bool bOle = ( nFormat == SOT_FORMATSTR_ID_EMBED_SOURCE );
+                    bool bOle = ( nFormat == SotClipboardFormatId::EMBED_SOURCE );
 
                     if ( bCells && bOle )
                         pTabViewShell->PasteFromSystem();
@@ -1454,7 +1454,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         {
                             WaitObject aWait( GetViewData()->GetDialogParent() );
                             if ( bAsLink && bOtherDoc )
-                                pTabViewShell->PasteFromSystem(SOT_FORMATSTR_ID_LINK);  // DDE insert
+                                pTabViewShell->PasteFromSystem(SotClipboardFormatId::LINK);  // DDE insert
                             else
                             {
                                 pTabViewShell->PasteFromClip( nFlags, pOwnClip->GetDocument(),
@@ -1530,12 +1530,12 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                      pReqArgs->GetItemState(nSlot, true, &pItem) == SfxItemState::SET &&
                      pItem->ISA(SfxUInt32Item) )
                 {
-                    sal_uLong nFormat = static_cast<const SfxUInt32Item*>(pItem)->GetValue();
+                    SotClipboardFormatId nFormat = static_cast<SotClipboardFormatId>(static_cast<const SfxUInt32Item*>(pItem)->GetValue());
                     bool bRet=true;
                     {
                         WaitObject aWait( GetViewData()->GetDialogParent() );
                         bool bDraw = ( ScDrawTransferObj::GetOwnClipboard( pWin ) != NULL );
-                        if ( bDraw && nFormat == SOT_FORMATSTR_ID_EMBED_SOURCE )
+                        if ( bDraw && nFormat == SotClipboardFormatId::EMBED_SOURCE )
                             pTabViewShell->PasteDraw();
                         else
                             bRet = pTabViewShell->PasteFromSystem(nFormat, true);       // TRUE: no error messages
@@ -1575,28 +1575,28 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             {
                             for (sal_uInt16 i=0; i<nFormatCount; i++)
                             {
-                                sal_uLong nFormatId = aFormats.GetClipbrdFormatId( i );
+                                SotClipboardFormatId nFormatId = aFormats.GetClipbrdFormatId( i );
                                 OUString aName = aFormats.GetClipbrdFormatName( i );
                                 // special case for paste dialog: '*' is replaced by object type
-                                if ( nFormatId == SOT_FORMATSTR_ID_EMBED_SOURCE )
+                                if ( nFormatId == SotClipboardFormatId::EMBED_SOURCE )
                                     aName = "*";
                                 pDlg->Insert( nFormatId, aName );
                             }
 
                             TransferableDataHelper aDataHelper(
                                 TransferableDataHelper::CreateFromSystemClipboard( pWin ) );
-                            sal_uLong nFormat = pDlg->GetFormat( aDataHelper.GetTransferable() );
-                            if (nFormat > 0)
+                            SotClipboardFormatId nFormat = pDlg->GetFormat( aDataHelper.GetTransferable() );
+                            if (nFormat != SotClipboardFormatId::NONE)
                             {
                                 {
                                     WaitObject aWait( GetViewData()->GetDialogParent() );
-                                    if ( bDraw && nFormat == SOT_FORMATSTR_ID_EMBED_SOURCE )
+                                    if ( bDraw && nFormat == SotClipboardFormatId::EMBED_SOURCE )
                                         pTabViewShell->PasteDraw();
                                     else
                                         pTabViewShell->PasteFromSystem(nFormat);
                                 }
                                 rReq.SetReturnValue(SfxInt16Item(nSlot, 1));    // 1 = success
-                                rReq.AppendItem( SfxUInt32Item( nSlot, nFormat ) );
+                                rReq.AppendItem( SfxUInt32Item( nSlot, static_cast<sal_uInt32>(nFormat) ) );
                                 rReq.Done();
                             }
                             else

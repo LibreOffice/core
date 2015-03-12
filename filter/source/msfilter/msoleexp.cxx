@@ -222,7 +222,7 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef& rObj, SvSto
             // this is a SO6 embedded object, save in old binary format
             rDestStg.SetVersion( SOFFICE_FILEFORMAT_31 );
             rDestStg.SetClass( aEmbName,
-                                SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE,
+                                SotClipboardFormatId::EMBEDDED_OBJ_OLE,
                                 GetStorageType( aEmbName ) );
             SotStorageStreamRef xExtStm = rDestStg.OpenSotStream(
                                             OUString( "properties_stream" ),

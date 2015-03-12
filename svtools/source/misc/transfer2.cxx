@@ -322,7 +322,7 @@ sal_Int8 DropTargetHelper::ExecuteDrop( const ExecuteDropEvent& )
 
 
 
-bool DropTargetHelper::IsDropFormatSupported( SotFormatStringId nFormat )
+bool DropTargetHelper::IsDropFormatSupported( SotClipboardFormatId nFormat )
 {
     DataFlavorExVector::iterator    aIter( mpFormats->begin() ), aEnd( mpFormats->end() );
     bool                            bRet = false;
@@ -365,7 +365,7 @@ bool DropTargetHelper::IsDropFormatSupported( const DataFlavor& rFlavor )
 struct TDataCntnrEntry_Impl
 {
     ::com::sun::star::uno::Any aAny;
-    SotFormatStringId nId;
+    SotClipboardFormatId nId;
 };
 
 
@@ -421,7 +421,7 @@ bool TransferDataContainer::GetData(
     TDataCntnrEntryList::iterator   aIter( pImpl->aFmtList.begin() ),
                                     aEnd( pImpl->aFmtList.end() );
     bool bFnd = false;
-    sal_uLong nFmtId = SotExchange::GetFormat( rFlavor );
+    SotClipboardFormatId nFmtId = SotExchange::GetFormat( rFlavor );
 
     // test first the list
     for( ; aIter != aEnd; ++aIter )
@@ -438,23 +438,24 @@ bool TransferDataContainer::GetData(
     if( !bFnd )
         switch( nFmtId )
         {
-         case SOT_FORMAT_STRING:
-         case SOT_FORMATSTR_ID_SOLK:
-         case SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK:
-         case SOT_FORMATSTR_ID_FILECONTENT:
-         case SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR:
-         case SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR:
+         case SotClipboardFormatId::STRING:
+         case SotClipboardFormatId::SOLK:
+         case SotClipboardFormatId::NETSCAPE_BOOKMARK:
+         case SotClipboardFormatId::FILECONTENT:
+         case SotClipboardFormatId::FILEGRPDESCRIPTOR:
+         case SotClipboardFormatId::UNIFORMRESOURCELOCATOR:
             if( pImpl->pBookmk )
                 bFnd = SetINetBookmark( *pImpl->pBookmk, rFlavor );
             break;
 
-        case SOT_FORMATSTR_ID_SVXB:
-        case SOT_FORMATSTR_ID_PNG:
-        case SOT_FORMAT_BITMAP:
-        case SOT_FORMAT_GDIMETAFILE:
+        case SotClipboardFormatId::SVXB:
+        case SotClipboardFormatId::PNG:
+        case SotClipboardFormatId::BITMAP:
+        case SotClipboardFormatId::GDIMETAFILE:
             if( pImpl->pGrf )
                 bFnd = SetGraphic( *pImpl->pGrf, rFlavor );
             break;
+        default: break;
         }
 
     return bFnd;
@@ -469,17 +470,17 @@ void TransferDataContainer::CopyINetBookmark( const INetBookmark& rBkmk )
     else
         *pImpl->pBookmk = rBkmk;
 
-     AddFormat( SOT_FORMAT_STRING );
-     AddFormat( SOT_FORMATSTR_ID_SOLK );
-     AddFormat( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK );
-     AddFormat( SOT_FORMATSTR_ID_FILECONTENT );
-     AddFormat( SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR );
-     AddFormat( SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR );
+     AddFormat( SotClipboardFormatId::STRING );
+     AddFormat( SotClipboardFormatId::SOLK );
+     AddFormat( SotClipboardFormatId::NETSCAPE_BOOKMARK );
+     AddFormat( SotClipboardFormatId::FILECONTENT );
+     AddFormat( SotClipboardFormatId::FILEGRPDESCRIPTOR );
+     AddFormat( SotClipboardFormatId::UNIFORMRESOURCELOCATOR );
 }
 
 
 
-void TransferDataContainer::CopyAnyData( sal_uLong nFormatId,
+void TransferDataContainer::CopyAnyData( SotClipboardFormatId nFormatId,
                                         const sal_Char* pData, sal_uLong nLen )
 {
     if( nLen )
@@ -497,7 +498,7 @@ void TransferDataContainer::CopyAnyData( sal_uLong nFormatId,
 
 
 
-void TransferDataContainer::CopyByteString( sal_uLong nFormatId,
+void TransferDataContainer::CopyByteString( SotClipboardFormatId nFormatId,
                                             const OString& rStr )
 {
     CopyAnyData( nFormatId, rStr.getStr(), rStr.getLength() );
@@ -509,8 +510,8 @@ void TransferDataContainer::CopyINetImage( const INetImage& rINtImg )
 {
     SvMemoryStream aMemStm( 1024, 1024 );
     aMemStm.SetVersion( SOFFICE_FILEFORMAT_50 );
-    rINtImg.Write( aMemStm, SOT_FORMATSTR_ID_INET_IMAGE );
-    CopyAnyData( SOT_FORMATSTR_ID_INET_IMAGE, (sal_Char*)aMemStm.GetData(),
+    rINtImg.Write( aMemStm, SotClipboardFormatId::INET_IMAGE );
+    CopyAnyData( SotClipboardFormatId::INET_IMAGE, (sal_Char*)aMemStm.GetData(),
                     aMemStm.Seek( STREAM_SEEK_TO_END ) );
 }
 
@@ -521,7 +522,7 @@ void TransferDataContainer::CopyImageMap( const ImageMap& rImgMap )
     SvMemoryStream aMemStm( 8192, 8192 );
     aMemStm.SetVersion( SOFFICE_FILEFORMAT_50 );
     rImgMap.Write( aMemStm, OUString() );
-    CopyAnyData( SOT_FORMATSTR_ID_SVIM, (sal_Char*)aMemStm.GetData(),
+    CopyAnyData( SotClipboardFormatId::SVIM, (sal_Char*)aMemStm.GetData(),
                     aMemStm.Seek( STREAM_SEEK_TO_END ) );
 }
 
@@ -537,23 +538,23 @@ void TransferDataContainer::CopyGraphic( const Graphic& rGrf )
         else
             *pImpl->pGrf = rGrf;
 
-        AddFormat( SOT_FORMATSTR_ID_SVXB );
+        AddFormat( SotClipboardFormatId::SVXB );
 
         if( GRAPHIC_BITMAP == nType )
         {
-            AddFormat( SOT_FORMATSTR_ID_PNG );
-            AddFormat( SOT_FORMAT_BITMAP );
+            AddFormat( SotClipboardFormatId::PNG );
+            AddFormat( SotClipboardFormatId::BITMAP );
         }
         else if( GRAPHIC_GDIMETAFILE == nType )
         {
-            AddFormat( SOT_FORMAT_GDIMETAFILE );
+            AddFormat( SotClipboardFormatId::GDIMETAFILE );
         }
     }
 }
 
 
 
-void TransferDataContainer::CopyString( sal_uInt16 nFmt, const OUString& rStr )
+void TransferDataContainer::CopyString( SotClipboardFormatId nFmt, const OUString& rStr )
 {
     if( !rStr.isEmpty() )
     {
@@ -570,12 +571,12 @@ void TransferDataContainer::CopyString( sal_uInt16 nFmt, const OUString& rStr )
 
 void TransferDataContainer::CopyString( const OUString& rStr )
 {
-    CopyString( SOT_FORMAT_STRING, rStr );
+    CopyString( SotClipboardFormatId::STRING, rStr );
 }
 
 
 
-void TransferDataContainer::CopyAny( sal_uInt16 nFmt,
+void TransferDataContainer::CopyAny( SotClipboardFormatId nFmt,
                                     const ::com::sun::star::uno::Any& rAny )
 {
     TDataCntnrEntry_Impl aEntry;

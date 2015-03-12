@@ -514,7 +514,7 @@ void OutlineViewShell::FuSupport(SfxRequest &rReq)
                 {
                     pOlView->InsertData( aDataHelper,
                                          GetActiveWindow()->PixelToLogic( Rectangle( Point(), GetActiveWindow()->GetOutputSizePixel() ).Center() ),
-                                         nAction, false, FORMAT_STRING);
+                                         nAction, false, SotClipboardFormatId::STRING);
                 }
             }
 
@@ -716,9 +716,9 @@ IMPL_LINK( OutlineViewShell, ClipboardChanged, TransferableDataHelper*, pDataHel
     if ( pDataHelper )
     {
         bPastePossible = ( pDataHelper->GetFormatCount() != 0 &&
-                            ( pDataHelper->HasFormat( FORMAT_STRING ) ||
-                              pDataHelper->HasFormat( FORMAT_RTF ) ||
-                              pDataHelper->HasFormat( SOT_FORMATSTR_ID_HTML ) ) );
+                            ( pDataHelper->HasFormat( SotClipboardFormatId::STRING ) ||
+                              pDataHelper->HasFormat( SotClipboardFormatId::RTF ) ||
+                              pDataHelper->HasFormat( SotClipboardFormatId::HTML ) ) );
 
         SfxBindings& rBindings = GetViewFrame()->GetBindings();
         rBindings.Invalidate( SID_PASTE );
@@ -901,9 +901,9 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
             // get initial state
             TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( GetActiveWindow() ) );
             bPastePossible = ( aDataHelper.GetFormatCount() != 0 &&
-                                ( aDataHelper.HasFormat( FORMAT_STRING ) ||
-                                  aDataHelper.HasFormat( FORMAT_RTF ) ||
-                                  aDataHelper.HasFormat( SOT_FORMATSTR_ID_HTML ) ) );
+                                ( aDataHelper.HasFormat( SotClipboardFormatId::STRING ) ||
+                                  aDataHelper.HasFormat( SotClipboardFormatId::RTF ) ||
+                                  aDataHelper.HasFormat( SotClipboardFormatId::HTML ) ) );
         }
 
         if( !bPastePossible )

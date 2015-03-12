@@ -52,19 +52,19 @@ namespace svx
 
 
 
-    sal_uInt32 OComponentTransferable::getDescriptorFormatId(bool _bExtractForm)
+    SotClipboardFormatId OComponentTransferable::getDescriptorFormatId(bool _bExtractForm)
     {
-        static sal_uInt32 s_nReportFormat = (sal_uInt32)-1;
-        static sal_uInt32 s_nFormFormat = (sal_uInt32)-1;
-        if ( _bExtractForm && (sal_uInt32)-1 == s_nFormFormat )
+        static SotClipboardFormatId s_nReportFormat = static_cast<SotClipboardFormatId>(-1);
+        static SotClipboardFormatId s_nFormFormat = static_cast<SotClipboardFormatId>(-1);
+        if ( _bExtractForm && static_cast<SotClipboardFormatId>(-1) == s_nFormFormat )
         {
             s_nFormFormat = SotExchange::RegisterFormatName(OUString("application/x-openoffice;windows_formatname=\"dbaccess.FormComponentDescriptorTransfer\"" ));
-            OSL_ENSURE((sal_uInt32)-1 != s_nFormFormat, "OComponentTransferable::getDescriptorFormatId: bad exchange id!");
+            OSL_ENSURE(static_cast<SotClipboardFormatId>(-1) != s_nFormFormat, "OComponentTransferable::getDescriptorFormatId: bad exchange id!");
         }
-        else if ( !_bExtractForm && (sal_uInt32)-1 == s_nReportFormat)
+        else if ( !_bExtractForm && static_cast<SotClipboardFormatId>(-1) == s_nReportFormat)
         {
             s_nReportFormat = SotExchange::RegisterFormatName(OUString("application/x-openoffice;windows_formatname=\"dbaccess.ReportComponentDescriptorTransfer\""));
-            OSL_ENSURE((sal_uInt32)-1 != s_nReportFormat, "OComponentTransferable::getDescriptorFormatId: bad exchange id!");
+            OSL_ENSURE(static_cast<SotClipboardFormatId>(-1) != s_nReportFormat, "OComponentTransferable::getDescriptorFormatId: bad exchange id!");
         }
         return _bExtractForm ? s_nFormFormat : s_nReportFormat;
     }
@@ -88,7 +88,7 @@ namespace svx
 
     bool OComponentTransferable::GetData( const DataFlavor& _rFlavor, const OUString& /*rDestDoc*/ )
     {
-        const sal_uInt32 nFormatId = SotExchange::GetFormat(_rFlavor);
+        const SotClipboardFormatId nFormatId = SotExchange::GetFormat(_rFlavor);
         if ( nFormatId == getDescriptorFormatId(true) || nFormatId == getDescriptorFormatId(false) )
             return SetAny( makeAny( m_aDescriptor.createPropertyValueSequence() ), _rFlavor );
 

@@ -4960,7 +4960,7 @@ SwEditWin::SwEditWin(vcl::Window *pParent, SwView &rMyView):
     m_rView( rMyView ),
 
     m_aActHitType(SDRHIT_NONE),
-    m_nDropFormat( 0 ),
+    m_nDropFormat( SotClipboardFormatId::NONE ),
     m_nDropAction( 0 ),
     m_nDropDestination( SotExchangeDest::NONE ),
 
@@ -5368,7 +5368,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
             if( !aDataHelper.GetXTransferable().is() )
                 break;
 
-            sal_uLong nDropFormat;
+            SotClipboardFormatId nDropFormat;
             sal_uInt16 nEventAction, nDropAction;
             SotExchangeDest nDropDestination;
             nDropDestination = GetDropDestination( rCEvt.GetMousePosPixel() );

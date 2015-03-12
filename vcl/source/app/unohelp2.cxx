@@ -74,8 +74,8 @@ namespace vcl { namespace unohelper {
     {
         uno::Any aAny;
 
-        sal_uLong nT = SotExchange::GetFormat( rFlavor );
-        if ( nT == SOT_FORMAT_STRING )
+        SotClipboardFormatId nT = SotExchange::GetFormat( rFlavor );
+        if ( nT == SotClipboardFormatId::STRING )
         {
             aAny <<= GetString();
         }
@@ -89,14 +89,14 @@ namespace vcl { namespace unohelper {
     uno::Sequence< datatransfer::DataFlavor > TextDataObject::getTransferDataFlavors(  ) throw(uno::RuntimeException, std::exception)
     {
         uno::Sequence< datatransfer::DataFlavor > aDataFlavors(1);
-        SotExchange::GetFormatDataFlavor( SOT_FORMAT_STRING, aDataFlavors.getArray()[0] );
+        SotExchange::GetFormatDataFlavor( SotClipboardFormatId::STRING, aDataFlavors.getArray()[0] );
         return aDataFlavors;
     }
 
     sal_Bool TextDataObject::isDataFlavorSupported( const datatransfer::DataFlavor& rFlavor ) throw(uno::RuntimeException, std::exception)
     {
-        sal_uLong nT = SotExchange::GetFormat( rFlavor );
-        return ( nT == SOT_FORMAT_STRING );
+        SotClipboardFormatId nT = SotExchange::GetFormat( rFlavor );
+        return ( nT == SotClipboardFormatId::STRING );
     }
 
 }}  // namespace vcl::unohelper

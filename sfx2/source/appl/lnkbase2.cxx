@@ -67,10 +67,10 @@ struct ImplBaseLinkData
     struct tClientType
     {
         // applies for all links
-        sal_uIntPtr nCntntType; // Update Format
+        SotClipboardFormatId nCntntType; // Update Format
         // Not Ole-Links
-        bool    bIntrnlLnk;  // It is an internal link
-        sal_uInt16  nUpdateMode; // UpdateMode
+        bool                 bIntrnlLnk;  // It is an internal link
+        sal_uInt16           nUpdateMode; // UpdateMode
     };
 
     struct tDDEType
@@ -84,7 +84,7 @@ struct ImplBaseLinkData
     };
     ImplBaseLinkData()
     {
-        ClientType.nCntntType = 0;
+        ClientType.nCntntType = SotClipboardFormatId::NONE;
         ClientType.bIntrnlLnk = false;
         ClientType.nUpdateMode = 0;
         DDEType.pItem = NULL;
@@ -108,7 +108,7 @@ public:
 #endif
     virtual ~ImplDdeItem();
 
-    virtual DdeData* Get( sal_uIntPtr ) SAL_OVERRIDE;
+    virtual DdeData* Get( SotClipboardFormatId ) SAL_OVERRIDE;
     virtual bool     Put( const DdeData* ) SAL_OVERRIDE;
     virtual void     AdviseLoop( bool ) SAL_OVERRIDE;
 
@@ -135,7 +135,7 @@ SvBaseLink::SvBaseLink()
 
 
 
-SvBaseLink::SvBaseLink( sal_uInt16 nUpdateMode, sal_uIntPtr nContentType )
+SvBaseLink::SvBaseLink( sal_uInt16 nUpdateMode, SotClipboardFormatId nContentType )
     : m_bIsReadOnly(false)
 {
     pImpl = new BaseLink_Impl();
@@ -419,16 +419,16 @@ void SvBaseLink::_GetRealObject( bool bConnect)
         Disconnect();
 }
 
-sal_uIntPtr SvBaseLink::GetContentType() const
+SotClipboardFormatId SvBaseLink::GetContentType() const
 {
     if( OBJECT_CLIENT_SO & nObjType )
         return pImplData->ClientType.nCntntType;
 
-    return 0;  // all Formats ?
+    return SotClipboardFormatId::NONE;  // all Formats ?
 }
 
 
-bool SvBaseLink::SetContentType( sal_uIntPtr nType )
+bool SvBaseLink::SetContentType( SotClipboardFormatId nType )
 {
     if( OBJECT_CLIENT_SO & nObjType )
     {
@@ -578,7 +578,7 @@ ImplDdeItem::~ImplDdeItem()
     aRef->Disconnect();
 }
 
-DdeData* ImplDdeItem::Get( sal_uIntPtr nFormat )
+DdeData* ImplDdeItem::Get( SotClipboardFormatId nFormat )
 {
     if( pLink->GetObj() )
     {

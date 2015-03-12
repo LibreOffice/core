@@ -25,12 +25,12 @@
 
 static const sal_Unicode TOKEN_SEPARATOR = '\001';
 
-bool INetImage::Write( SvStream& rOStm, sal_uLong nFormat ) const
+bool INetImage::Write( SvStream& rOStm, SotClipboardFormatId nFormat ) const
 {
     bool bRet = false;
     switch( nFormat )
     {
-    case SOT_FORMATSTR_ID_INET_IMAGE:
+    case SotClipboardFormatId::INET_IMAGE:
         {
             OUString sString;
             (sString += aImageURL ) += OUString(TOKEN_SEPARATOR);
@@ -51,18 +51,19 @@ bool INetImage::Write( SvStream& rOStm, sal_uLong nFormat ) const
         }
         break;
 
-    case SOT_FORMATSTR_ID_NETSCAPE_IMAGE:
+    case SotClipboardFormatId::NETSCAPE_IMAGE:
         break;
+    default: break;
     }
     return bRet;
 }
 
-bool INetImage::Read( SvStream& rIStm, sal_uLong nFormat )
+bool INetImage::Read( SvStream& rIStm, SotClipboardFormatId nFormat )
 {
     bool bRet = false;
     switch( nFormat )
     {
-    case SOT_FORMATSTR_ID_INET_IMAGE:
+    case SotClipboardFormatId::INET_IMAGE:
         {
             OUString sINetImg = read_zeroTerminated_uInt8s_ToOUString(rIStm, RTL_TEXTENCODING_UTF8);
             sal_Int32 nStart = 0;
@@ -78,7 +79,7 @@ bool INetImage::Read( SvStream& rIStm, sal_uLong nFormat )
         }
         break;
 
-    case SOT_FORMATSTR_ID_NETSCAPE_IMAGE:
+    case SotClipboardFormatId::NETSCAPE_IMAGE:
         {
 /*
     --> structure size  MUST - alignment of 4!
@@ -130,6 +131,7 @@ bool INetImage::Read( SvStream& rIStm, sal_uLong nFormat )
             bRet = 0 == rIStm.GetError();
         }
         break;
+    default: break;
     }
     return bRet;
 }

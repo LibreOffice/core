@@ -93,9 +93,9 @@ public:
 class SfxAbstractPasteDialog : virtual public VclAbstractDialog
 {
 public:
-    virtual void Insert( SotFormatStringId nFormat, const rtl::OUString & rFormatName ) = 0;
+    virtual void Insert( SotClipboardFormatId nFormat, const rtl::OUString & rFormatName ) = 0;
     virtual void SetObjName( const SvGlobalName & rClass, const rtl::OUString & rObjName ) = 0;
-    virtual sal_uIntPtr GetFormat( const TransferableDataHelper& aHelper,
+    virtual SotClipboardFormatId GetFormat( const TransferableDataHelper& aHelper,
                         const DataFlavorExVector* pFormats=0,
                         const TransferableObjectDescriptor* pDesc=0 ) = 0;
 };

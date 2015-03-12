@@ -84,6 +84,8 @@ public:
     virtual bool        Equals( const BaseStorageStream& rStream ) const = 0;
 };
 
+enum class SotClipboardFormatId : sal_uLong;
+
 class BaseStorage : public StorageBase
 {
 public:
@@ -94,13 +96,13 @@ public:
     virtual const ClsId&        GetClassId() const = 0;
     virtual void                SetDirty() = 0;
     virtual void                SetClass( const SvGlobalName & rClass,
-                                          sal_uLong nOriginalClipFormat,
+                                          SotClipboardFormatId nOriginalClipFormat,
                                           const OUString & rUserTypeName ) = 0;
     virtual void                SetConvertClass( const SvGlobalName & rConvertClass,
-                                                 sal_uLong nOriginalClipFormat,
+                                                 SotClipboardFormatId nOriginalClipFormat,
                                                  const OUString & rUserTypeName ) = 0;
     virtual SvGlobalName        GetClassName() = 0;
-    virtual sal_uLong           GetFormat() = 0;
+    virtual SotClipboardFormatId         GetFormat() = 0;
     virtual OUString            GetUserName() = 0;
     virtual bool                ShouldConvert() = 0;
     virtual void                FillInfoList( SvStorageInfoList* ) const = 0;
@@ -194,13 +196,13 @@ public:
     virtual const ClsId&        GetClassId() const SAL_OVERRIDE;
     virtual void                SetDirty() SAL_OVERRIDE;
     virtual void                SetClass( const SvGlobalName & rClass,
-                                          sal_uLong nOriginalClipFormat,
+                                          SotClipboardFormatId nOriginalClipFormat,
                                           const OUString & rUserTypeName ) SAL_OVERRIDE;
     virtual void                SetConvertClass( const SvGlobalName & rConvertClass,
-                                                 sal_uLong nOriginalClipFormat,
+                                                 SotClipboardFormatId nOriginalClipFormat,
                                                  const OUString & rUserTypeName ) SAL_OVERRIDE;
     virtual SvGlobalName        GetClassName() SAL_OVERRIDE;
-    virtual sal_uLong           GetFormat() SAL_OVERRIDE;
+    virtual SotClipboardFormatId         GetFormat() SAL_OVERRIDE;
     virtual OUString            GetUserName() SAL_OVERRIDE;
     virtual bool                ShouldConvert() SAL_OVERRIDE;
     virtual void                FillInfoList( SvStorageInfoList* ) const SAL_OVERRIDE;
@@ -310,13 +312,13 @@ public:
     virtual const ClsId&        GetClassId() const SAL_OVERRIDE;
     virtual void                SetDirty() SAL_OVERRIDE;
     virtual void                SetClass( const SvGlobalName & rClass,
-                                          sal_uLong nOriginalClipFormat,
+                                          SotClipboardFormatId nOriginalClipFormat,
                                           const OUString & rUserTypeName ) SAL_OVERRIDE;
     virtual void                SetConvertClass( const SvGlobalName & rConvertClass,
-                                                 sal_uLong nOriginalClipFormat,
+                                                 SotClipboardFormatId nOriginalClipFormat,
                                                  const OUString & rUserTypeName ) SAL_OVERRIDE;
     virtual SvGlobalName        GetClassName() SAL_OVERRIDE;
-    virtual sal_uLong           GetFormat() SAL_OVERRIDE;
+    virtual SotClipboardFormatId         GetFormat() SAL_OVERRIDE;
     virtual OUString            GetUserName() SAL_OVERRIDE;
     virtual bool                ShouldConvert() SAL_OVERRIDE;
     virtual void                FillInfoList( SvStorageInfoList* ) const SAL_OVERRIDE;

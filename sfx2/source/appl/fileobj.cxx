@@ -76,11 +76,11 @@ bool SvFileObject::GetData( ::com::sun::star::uno::Any & rData,
                                 const OUString & rMimeType,
                                 bool bGetSynchron )
 {
-    sal_uIntPtr nFmt = SotExchange::RegisterFormatMimeType( rMimeType );
+    SotClipboardFormatId nFmt = SotExchange::RegisterFormatMimeType( rMimeType );
     switch( nType )
     {
     case FILETYPE_TEXT:
-        if( FORMAT_FILE == nFmt )
+        if( SotClipboardFormatId::FILE == nFmt )
         {
             // The media in the application must be opened to lookup the
             // relative file links!! This is done through the link manager
@@ -94,8 +94,8 @@ bool SvFileObject::GetData( ::com::sun::star::uno::Any & rData,
         {
             SfxMediumRef xTmpMed;
 
-            if( FORMAT_GDIMETAFILE == nFmt || FORMAT_BITMAP == nFmt ||
-                SOT_FORMATSTR_ID_SVXB == nFmt )
+            if( SotClipboardFormatId::GDIMETAFILE == nFmt || SotClipboardFormatId::BITMAP == nFmt ||
+                SotClipboardFormatId::SVXB == nFmt )
             {
                 Graphic aGrf;
 
@@ -138,15 +138,15 @@ bool SvFileObject::GetData( ::com::sun::star::uno::Any & rData,
                     aGrf.SetDefaultType();
                 }
 
-                if( SOT_FORMATSTR_ID_SVXB != nFmt )
+                if( SotClipboardFormatId::SVXB != nFmt )
                     nFmt = (bLoadError || GRAPHIC_BITMAP == aGrf.GetType())
-                                ? FORMAT_BITMAP
-                                : FORMAT_GDIMETAFILE;
+                                ? SotClipboardFormatId::BITMAP
+                                : SotClipboardFormatId::GDIMETAFILE;
 
                 SvMemoryStream aMemStm( 0, 65535 );
                 switch ( nFmt )
                 {
-                case SOT_FORMATSTR_ID_SVXB:
+                case SotClipboardFormatId::SVXB:
                     if( GRAPHIC_NONE != aGrf.GetType() )
                     {
                         aMemStm.SetVersion( SOFFICE_FILEFORMAT_50 );
@@ -154,7 +154,7 @@ bool SvFileObject::GetData( ::com::sun::star::uno::Any & rData,
                     }
                     break;
 
-                case  FORMAT_BITMAP:
+                case SotClipboardFormatId::BITMAP:
                 {
                     const Bitmap aBitmap(aGrf.GetBitmap());
 

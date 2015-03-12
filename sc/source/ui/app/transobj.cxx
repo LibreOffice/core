@@ -65,10 +65,10 @@
 
 using namespace com::sun::star;
 
-#define SCTRANS_TYPE_IMPEX          1
-#define SCTRANS_TYPE_EDIT_RTF       2
-#define SCTRANS_TYPE_EDIT_BIN       3
-#define SCTRANS_TYPE_EMBOBJ         4
+#define SCTRANS_TYPE_IMPEX          SotClipboardFormatId::STRING
+#define SCTRANS_TYPE_EDIT_RTF       SotClipboardFormatId::BITMAP
+#define SCTRANS_TYPE_EDIT_BIN       SotClipboardFormatId::GDIMETAFILE
+#define SCTRANS_TYPE_EMBOBJ         SotClipboardFormatId::PRIVATE
 
 void ScTransferObj::GetAreaSize( ScDocument* pDoc, SCTAB nTab1, SCTAB nTab2, SCROW& nRow, SCCOL& nCol )
 {
@@ -209,7 +209,7 @@ ScTransferObj* ScTransferObj::GetOwnClipboard( vcl::Window* pUIWin )
         //  may be from other clipboard operations (like flushing, #86059#)
 
         TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pUIWin ) );
-        if ( !aDataHelper.HasFormat( SOT_FORMATSTR_ID_DIF ) )
+        if ( !aDataHelper.HasFormat( SotClipboardFormatId::DIF ) )
         {
 //          OSL_FAIL("ScTransferObj wasn't released");
             pObj = NULL;
@@ -220,36 +220,36 @@ ScTransferObj* ScTransferObj::GetOwnClipboard( vcl::Window* pUIWin )
 
 void ScTransferObj::AddSupportedFormats()
 {
-    AddFormat( SOT_FORMATSTR_ID_EMBED_SOURCE );
-    AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
-    AddFormat( SOT_FORMAT_GDIMETAFILE );
-    AddFormat( SOT_FORMATSTR_ID_PNG );
-    AddFormat( SOT_FORMAT_BITMAP );
+    AddFormat( SotClipboardFormatId::EMBED_SOURCE );
+    AddFormat( SotClipboardFormatId::OBJECTDESCRIPTOR );
+    AddFormat( SotClipboardFormatId::GDIMETAFILE );
+    AddFormat( SotClipboardFormatId::PNG );
+    AddFormat( SotClipboardFormatId::BITMAP );
 
     // ScImportExport formats
-    AddFormat( SOT_FORMATSTR_ID_HTML );
-    AddFormat( SOT_FORMATSTR_ID_SYLK );
-    AddFormat( SOT_FORMATSTR_ID_LINK );
-    AddFormat( SOT_FORMATSTR_ID_DIF );
-    AddFormat( SOT_FORMAT_STRING );
+    AddFormat( SotClipboardFormatId::HTML );
+    AddFormat( SotClipboardFormatId::SYLK );
+    AddFormat( SotClipboardFormatId::LINK );
+    AddFormat( SotClipboardFormatId::DIF );
+    AddFormat( SotClipboardFormatId::STRING );
 
-    AddFormat( SOT_FORMAT_RTF );
+    AddFormat( SotClipboardFormatId::RTF );
     if ( aBlock.aStart == aBlock.aEnd )
-        AddFormat( SOT_FORMATSTR_ID_EDITENGINE );
+        AddFormat( SotClipboardFormatId::EDITENGINE );
 }
 
 bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUString& /*rDestDoc*/ )
 {
-    sal_uInt32  nFormat = SotExchange::GetFormat( rFlavor );
+    SotClipboardFormatId nFormat = SotExchange::GetFormat( rFlavor );
     bool        bOK = false;
 
     if( HasFormat( nFormat ) )
     {
-        if ( nFormat == SOT_FORMATSTR_ID_LINKSRCDESCRIPTOR || nFormat == SOT_FORMATSTR_ID_OBJECTDESCRIPTOR )
+        if ( nFormat == SotClipboardFormatId::LINKSRCDESCRIPTOR || nFormat == SotClipboardFormatId::OBJECTDESCRIPTOR )
         {
             bOK = SetTransferableObjectDescriptor( aObjDesc, rFlavor );
         }
-        else if ( ( nFormat == SOT_FORMAT_RTF || nFormat == SOT_FORMATSTR_ID_EDITENGINE ) &&
+        else if ( ( nFormat == SotClipboardFormatId::RTF || nFormat == SotClipboardFormatId::EDITENGINE ) &&
                         aBlock.aStart == aBlock.aEnd )
         {
             //  RTF from a single cell is handled by EditEngine
@@ -275,19 +275,19 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
             }
 
             bOK = SetObject( &aEngine,
-                            (nFormat == FORMAT_RTF) ? SCTRANS_TYPE_EDIT_RTF : SCTRANS_TYPE_EDIT_BIN,
+                            (nFormat == SotClipboardFormatId::RTF) ? SCTRANS_TYPE_EDIT_RTF : SCTRANS_TYPE_EDIT_BIN,
                             rFlavor );
         }
-        else if ( ScImportExport::IsFormatSupported( nFormat ) || nFormat == SOT_FORMAT_RTF )
+        else if ( ScImportExport::IsFormatSupported( nFormat ) || nFormat == SotClipboardFormatId::RTF )
         {
             //  if this transfer object was used to create a DDE link, filtered rows
             //  have to be included for subsequent calls (to be consistent with link data)
-            if ( nFormat == SOT_FORMATSTR_ID_LINK )
+            if ( nFormat == SotClipboardFormatId::LINK )
                 bUsedForLink = true;
 
             bool bIncludeFiltered = pDoc->IsCutMode() || bUsedForLink;
 
-            bool bReduceBlockFormat = nFormat == SOT_FORMATSTR_ID_HTML || nFormat == SOT_FORMAT_RTF;
+            bool bReduceBlockFormat = nFormat == SotClipboardFormatId::HTML || nFormat == SotClipboardFormatId::RTF;
             ScRange aReducedBlock = aBlock;
             if (bReduceBlockFormat && (aBlock.aEnd.Col() == MAXCOL || aBlock.aEnd.Row() == MAXROW) && aBlock.aStart.Tab() == aBlock.aEnd.Tab())
             {
@@ -332,7 +332,7 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
                 OSL_FAIL("unknown DataType");
             }
         }
-        else if ( nFormat == SOT_FORMAT_BITMAP || nFormat == SOT_FORMATSTR_ID_PNG )
+        else if ( nFormat == SotClipboardFormatId::BITMAP || nFormat == SotClipboardFormatId::PNG )
         {
             Rectangle aMMRect = pDoc->GetMMRect( aBlock.aStart.Col(), aBlock.aStart.Row(),
                                                  aBlock.aEnd.Col(), aBlock.aEnd.Row(),
@@ -346,7 +346,7 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
             Bitmap aBmp = aVirtDev.GetBitmap( Point(), aVirtDev.GetOutputSize() );
             bOK = SetBitmapEx( aBmp, rFlavor );
         }
-        else if ( nFormat == SOT_FORMAT_GDIMETAFILE )
+        else if ( nFormat == SotClipboardFormatId::GDIMETAFILE )
         {
             // #i123405# Do not limit visual size calculation for metafile creation.
             // It seems unlikely that removing the limitation causes problems since
@@ -375,7 +375,7 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
 
             bOK = SetGDIMetaFile( aMtf, rFlavor );
         }
-        else if ( nFormat == SOT_FORMATSTR_ID_EMBED_SOURCE )
+        else if ( nFormat == SotClipboardFormatId::EMBED_SOURCE )
         {
             //TODO/LATER: differentiate between formats?!
             // #i123405# Do limit visual size calculation to PageSize
@@ -388,7 +388,7 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
     return bOK;
 }
 
-bool ScTransferObj::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId,
+bool ScTransferObj::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, SotClipboardFormatId nUserObjectId,
                                         const datatransfer::DataFlavor& rFlavor )
 {
     // called from SetObject, put data into stream
@@ -400,7 +400,7 @@ bool ScTransferObj::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject,
             {
                 ScImportExport* pImpEx = (ScImportExport*)pUserObject;
 
-                sal_uInt32 nFormat = SotExchange::GetFormat( rFlavor );
+                SotClipboardFormatId nFormat = SotExchange::GetFormat( rFlavor );
                 // mba: no BaseURL for data exchange
                 if ( pImpEx->ExportStream( *rxOStm, OUString(), nFormat ) )
                     bRet = ( rxOStm->GetError() == ERRCODE_NONE );

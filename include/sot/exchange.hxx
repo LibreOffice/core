@@ -26,6 +26,7 @@
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
 #include <sot/sotdllapi.h>
+#include <sot/formats.hxx>
 #include <tools/solar.h>
 
 class SotDataObject;
@@ -34,11 +35,10 @@ namespace com { namespace sun { namespace star { namespace datatransfer {
     class XTransferable;
 } } } }
 
-typedef sal_uLong SotFormatStringId;
 
 struct DataFlavorEx : public ::com::sun::star::datatransfer::DataFlavor
 {
-    SotFormatStringId mnSotId;
+    SotClipboardFormatId mnSotId;
 };
 
 typedef ::std::vector< DataFlavorEx >                               _DataFlavorExVector;
@@ -52,21 +52,7 @@ struct DataFlavorExVector : public _DataFlavorExVector
 
 
 SOT_DLLPUBLIC bool IsFormatSupported( const DataFlavorExVector& rDataFlavorExVector,
-                                      sal_uLong nId );
-
-// - predefined formats -
-// Do NOT change the order of these values as the implementation depends on them!
-
-// stardard formats for that Copy/Paste methods exist
-#define FORMAT_STRING           1
-#define FORMAT_BITMAP           2
-#define FORMAT_GDIMETAFILE      3
-#define FORMAT_PRIVATE          4
-#define FORMAT_FILE             5
-#define FORMAT_FILE_LIST        6
-
-// further formats (only via CopyData/PasteData)
-#define FORMAT_RTF              10
+                                      SotClipboardFormatId nId );
 
 // actions
 #define EXCHG_ACTION_MASK                       ((sal_uInt16)0x00FF)
@@ -138,16 +124,16 @@ class SvGlobalName;
 class SOT_DLLPUBLIC SotExchange
 {
 public:
-    static sal_uLong    RegisterFormat( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
-    static sal_uLong    RegisterFormatName( const OUString& rName );
-    static sal_uLong    RegisterFormatMimeType( const OUString& rMimeType );
+    static SotClipboardFormatId    RegisterFormat( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+    static SotClipboardFormatId    RegisterFormatName( const OUString& rName );
+    static SotClipboardFormatId    RegisterFormatMimeType( const OUString& rMimeType );
 
-    static sal_uLong    GetFormat( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
-    static OUString     GetFormatName( sal_uLong nFormat );
-    static bool         GetFormatDataFlavor( sal_uLong nFormat, ::com::sun::star::datatransfer::DataFlavor& rFlavor );
-    static OUString     GetFormatMimeType( sal_uLong nFormat );
+    static SotClipboardFormatId    GetFormat( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+    static OUString     GetFormatName( SotClipboardFormatId nFormat );
+    static bool         GetFormatDataFlavor( SotClipboardFormatId nFormat, ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+    static OUString     GetFormatMimeType( SotClipboardFormatId nFormat );
     static bool         IsInternal( const SvGlobalName& );
-    static sal_uLong    GetFormatIdFromMimeType( const OUString& rMimeType );
+    static SotClipboardFormatId   GetFormatIdFromMimeType( const OUString& rMimeType );
 
     // same for XTransferable interface
     static sal_uInt16   GetExchangeAction(
@@ -160,11 +146,11 @@ public:
         // user action (EXCHG_IN_*, EXCHG_INOUT_*)
         sal_uInt16 nUserAction,
         // In:- Out: format to use
-        sal_uLong& rFormat,
+        SotClipboardFormatId& rFormat,
         // In:- Out: default action (EXCHG_IN_*, EXCHG_INOUT_*)
         sal_uInt16& rDefaultAction,
         // In:- optional - check only for this specific format
-        sal_uLong nOnlyTestFormat = 0,
+        SotClipboardFormatId nOnlyTestFormat = SotClipboardFormatId::NONE,
         // In:- optional - check the contents of Xtransferable
         const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >* pxTransferable = NULL );
 

@@ -812,7 +812,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >
                                                         xRef( pClipCntnr );
 
-                        pClipCntnr->CopyAnyData( FORMAT_RTF, (sal_Char*)
+                        pClipCntnr->CopyAnyData( SotClipboardFormatId::RTF, (sal_Char*)
                                     pStrm->GetData(), pStrm->GetEndOfData() );
                         pClipCntnr->CopyToClipboard(
                             GetView()? &GetView()->GetEditWin() : 0 );
@@ -1171,7 +1171,7 @@ void SwDocShell::ReconnectDdeLink(SfxObjectShell& rServer)
 }
 
 void SwDocShell::FillClass( SvGlobalName * pClassName,
-                                   sal_uInt32 * pClipFormat,
+                                   SotClipboardFormatId * pClipFormat,
                                    OUString * /*pAppName*/,
                                    OUString * pLongUserName,
                                    OUString * pUserName,
@@ -1181,13 +1181,13 @@ void SwDocShell::FillClass( SvGlobalName * pClassName,
     if (nVersion == SOFFICE_FILEFORMAT_60)
     {
         *pClassName     = SvGlobalName( SO3_SW_CLASSID_60 );
-        *pClipFormat    = SOT_FORMATSTR_ID_STARWRITER_60;
+        *pClipFormat    = SotClipboardFormatId::STARWRITER_60;
         *pLongUserName = SW_RESSTR(STR_WRITER_DOCUMENT_FULLTYPE);
     }
     else if (nVersion == SOFFICE_FILEFORMAT_8)
     {
         *pClassName     = SvGlobalName( SO3_SW_CLASSID_60 );
-        *pClipFormat    = bTemplate ? SOT_FORMATSTR_ID_STARWRITER_8_TEMPLATE : SOT_FORMATSTR_ID_STARWRITER_8;
+        *pClipFormat    = bTemplate ? SotClipboardFormatId::STARWRITER_8_TEMPLATE : SotClipboardFormatId::STARWRITER_8;
         *pLongUserName = SW_RESSTR(STR_WRITER_DOCUMENT_FULLTYPE);
     }
 // #FIXME check with new Event handling

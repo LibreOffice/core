@@ -139,7 +139,7 @@ namespace frm
 
         // initial state
         TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( _rView.GetWindow() ) );
-        m_bPastePossible = ( aDataHelper.HasFormat( SOT_FORMAT_STRING ) || aDataHelper.HasFormat( SOT_FORMAT_RTF ) );
+        m_bPastePossible = ( aDataHelper.HasFormat( SotClipboardFormatId::STRING ) || aDataHelper.HasFormat( SotClipboardFormatId::RTF ) );
     }
 
 
@@ -156,8 +156,8 @@ namespace frm
     IMPL_LINK( OPasteClipboardDispatcher, OnClipboardChanged, TransferableDataHelper*, _pDataHelper )
     {
         OSL_ENSURE( _pDataHelper, "OPasteClipboardDispatcher::OnClipboardChanged: ooops!" );
-        m_bPastePossible = _pDataHelper->HasFormat( SOT_FORMAT_STRING )
-                        || _pDataHelper->HasFormat( SOT_FORMAT_RTF );
+        m_bPastePossible = _pDataHelper->HasFormat( SotClipboardFormatId::STRING )
+                        || _pDataHelper->HasFormat( SotClipboardFormatId::RTF );
 
         invalidate();
 

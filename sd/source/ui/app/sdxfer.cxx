@@ -73,8 +73,8 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::datatransfer;
 using namespace ::com::sun::star::datatransfer::clipboard;
 
-#define SDTRANSFER_OBJECTTYPE_DRAWMODEL         0x00000001
-#define SDTRANSFER_OBJECTTYPE_DRAWOLE           0x00000002
+#define SDTRANSFER_OBJECTTYPE_DRAWMODEL         static_cast<SotClipboardFormatId>(0x00000001)
+#define SDTRANSFER_OBJECTTYPE_DRAWOLE           static_cast<SotClipboardFormatId>(0x00000002)
 
 SdTransferable::SdTransferable( SdDrawDocument* pSrcDoc, ::sd::View* pWorkView, bool bInitOnGetData )
 :   mpPageDocShell( NULL )
@@ -393,11 +393,11 @@ void SdTransferable::AddSupportedFormats()
             CreateData();
 
         if( mpObjDesc )
-            AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
+            AddFormat( SotClipboardFormatId::OBJECTDESCRIPTOR );
 
         if( mpOLEDataHelper )
         {
-            AddFormat( SOT_FORMATSTR_ID_EMBED_SOURCE );
+            AddFormat( SotClipboardFormatId::EMBED_SOURCE );
 
             DataFlavorExVector              aVector( mpOLEDataHelper->GetDataFlavorExVector() );
             DataFlavorExVector::iterator    aIter( aVector.begin() ), aEnd( aVector.end() );
@@ -408,45 +408,45 @@ void SdTransferable::AddSupportedFormats()
         else if( mpGraphic )
         {
             // #i25616#
-            AddFormat( SOT_FORMATSTR_ID_DRAWING );
+            AddFormat( SotClipboardFormatId::DRAWING );
 
-            AddFormat( SOT_FORMATSTR_ID_SVXB );
+            AddFormat( SotClipboardFormatId::SVXB );
 
             if( mpGraphic->GetType() == GRAPHIC_BITMAP )
             {
-                AddFormat( SOT_FORMATSTR_ID_PNG );
-                AddFormat( SOT_FORMAT_BITMAP );
-                AddFormat( SOT_FORMAT_GDIMETAFILE );
+                AddFormat( SotClipboardFormatId::PNG );
+                AddFormat( SotClipboardFormatId::BITMAP );
+                AddFormat( SotClipboardFormatId::GDIMETAFILE );
             }
             else
             {
-                AddFormat( SOT_FORMAT_GDIMETAFILE );
-                AddFormat( SOT_FORMATSTR_ID_PNG );
-                AddFormat( SOT_FORMAT_BITMAP );
+                AddFormat( SotClipboardFormatId::GDIMETAFILE );
+                AddFormat( SotClipboardFormatId::PNG );
+                AddFormat( SotClipboardFormatId::BITMAP );
             }
         }
         else if( mpBookmark )
         {
-            AddFormat( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK );
-            AddFormat( FORMAT_STRING );
+            AddFormat( SotClipboardFormatId::NETSCAPE_BOOKMARK );
+            AddFormat( SotClipboardFormatId::STRING );
         }
         else
         {
-            AddFormat( SOT_FORMATSTR_ID_EMBED_SOURCE );
-            AddFormat( SOT_FORMATSTR_ID_DRAWING );
+            AddFormat( SotClipboardFormatId::EMBED_SOURCE );
+            AddFormat( SotClipboardFormatId::DRAWING );
             if( !mpSdDrawDocument || !lcl_HasOnlyControls( mpSdDrawDocument ) )
             {
-                AddFormat( SOT_FORMAT_GDIMETAFILE );
-                AddFormat( SOT_FORMATSTR_ID_PNG );
-                AddFormat( SOT_FORMAT_BITMAP );
+                AddFormat( SotClipboardFormatId::GDIMETAFILE );
+                AddFormat( SotClipboardFormatId::PNG );
+                AddFormat( SotClipboardFormatId::BITMAP );
             }
 
             if( lcl_HasOnlyOneTable( mpSdDrawDocument ) )
-                AddFormat( SOT_FORMAT_RTF );
+                AddFormat( SotClipboardFormatId::RTF );
         }
 
         if( mpImageMap )
-            AddFormat( SOT_FORMATSTR_ID_SVIM );
+            AddFormat( SotClipboardFormatId::SVIM );
     }
 }
 
@@ -455,12 +455,12 @@ bool SdTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
     if (SD_MOD()==NULL)
         return false;
 
-    sal_uInt32  nFormat = SotExchange::GetFormat( rFlavor );
+    SotClipboardFormatId nFormat = SotExchange::GetFormat( rFlavor );
     bool        bOK = false;
 
     CreateData();
 
-    if( nFormat == SOT_FORMAT_RTF && lcl_HasOnlyOneTable( mpSdDrawDocument ) )
+    if( nFormat == SotClipboardFormatId::RTF && lcl_HasOnlyOneTable( mpSdDrawDocument ) )
     {
         bOK = SetTableRTF( mpSdDrawDocument, rFlavor );
     }
@@ -475,7 +475,7 @@ bool SdTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
         }
 
         // TODO/LATER: support all the graphical formats, the embedded object scenario should not have separated handling
-        if( nFormat == FORMAT_GDIMETAFILE && mpGraphic )
+        if( nFormat == SotClipboardFormatId::GDIMETAFILE && mpGraphic )
             bOK = SetGDIMetaFile( mpGraphic->GetGDIMetaFile(), rFlavor );
         else
             bOK = SetAny( mpOLEDataHelper->GetAny(rFlavor, rDestDoc), rFlavor );
@@ -485,11 +485,11 @@ bool SdTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
     }
     else if( HasFormat( nFormat ) )
     {
-        if( ( nFormat == SOT_FORMATSTR_ID_LINKSRCDESCRIPTOR || nFormat == SOT_FORMATSTR_ID_OBJECTDESCRIPTOR ) && mpObjDesc )
+        if( ( nFormat == SotClipboardFormatId::LINKSRCDESCRIPTOR || nFormat == SotClipboardFormatId::OBJECTDESCRIPTOR ) && mpObjDesc )
         {
             bOK = SetTransferableObjectDescriptor( *mpObjDesc, rFlavor );
         }
-        else if( nFormat == SOT_FORMATSTR_ID_DRAWING )
+        else if( nFormat == SotClipboardFormatId::DRAWING )
         {
             SfxObjectShellRef aOldRef( maDocShellRef );
 
@@ -516,25 +516,25 @@ bool SdTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
 
             maDocShellRef = aOldRef;
         }
-        else if( nFormat == FORMAT_GDIMETAFILE )
+        else if( nFormat == SotClipboardFormatId::GDIMETAFILE )
         {
             if( mpSdViewIntern )
                 bOK = SetGDIMetaFile( mpSdViewIntern->GetMarkedObjMetaFile( true ), rFlavor );
         }
-        else if( FORMAT_BITMAP == nFormat || SOT_FORMATSTR_ID_PNG == nFormat )
+        else if( SotClipboardFormatId::BITMAP == nFormat || SotClipboardFormatId::PNG == nFormat )
         {
             if( mpSdViewIntern )
                 bOK = SetBitmapEx( mpSdViewIntern->GetMarkedObjBitmapEx(true), rFlavor );
         }
-        else if( ( nFormat == FORMAT_STRING ) && mpBookmark )
+        else if( ( nFormat == SotClipboardFormatId::STRING ) && mpBookmark )
         {
             bOK = SetString( mpBookmark->GetURL(), rFlavor );
         }
-        else if( ( nFormat == SOT_FORMATSTR_ID_SVXB ) && mpGraphic )
+        else if( ( nFormat == SotClipboardFormatId::SVXB ) && mpGraphic )
         {
             bOK = SetGraphic( *mpGraphic, rFlavor );
         }
-        else if( ( nFormat == SOT_FORMATSTR_ID_SVIM ) && mpImageMap )
+        else if( ( nFormat == SotClipboardFormatId::SVIM ) && mpImageMap )
         {
             bOK = SetImageMap( *mpImageMap, rFlavor );
         }
@@ -542,7 +542,7 @@ bool SdTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
         {
             bOK = SetINetBookmark( *mpBookmark, rFlavor );
         }
-        else if( nFormat == SOT_FORMATSTR_ID_EMBED_SOURCE )
+        else if( nFormat == SotClipboardFormatId::EMBED_SOURCE )
         {
             sal_uLong nOldSwapMode = 0;
 
@@ -573,7 +573,7 @@ bool SdTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
     return bOK;
 }
 
-bool SdTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pObject, sal_uInt32 nObjectType, const DataFlavor& )
+bool SdTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pObject, SotClipboardFormatId nObjectType, const DataFlavor& )
 {
     bool bRet = false;
 

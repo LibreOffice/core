@@ -477,29 +477,29 @@ void GalleryTransferable::AddSupportedFormats()
 {
     if( SGA_OBJ_SVDRAW == meObjectKind )
     {
-        AddFormat( SOT_FORMATSTR_ID_DRAWING );
-        AddFormat( SOT_FORMATSTR_ID_SVXB );
-        AddFormat( FORMAT_GDIMETAFILE );
-        AddFormat( FORMAT_BITMAP );
+        AddFormat( SotClipboardFormatId::DRAWING );
+        AddFormat( SotClipboardFormatId::SVXB );
+        AddFormat( SotClipboardFormatId::GDIMETAFILE );
+        AddFormat( SotClipboardFormatId::BITMAP );
     }
     else
     {
         if( mpURL )
-            AddFormat( FORMAT_FILE );
+            AddFormat( SotClipboardFormatId::FILE );
 
         if( mpGraphicObject )
         {
-            AddFormat( SOT_FORMATSTR_ID_SVXB );
+            AddFormat( SotClipboardFormatId::SVXB );
 
             if( mpGraphicObject->GetType() == GRAPHIC_GDIMETAFILE )
             {
-                AddFormat( FORMAT_GDIMETAFILE );
-                AddFormat( FORMAT_BITMAP );
+                AddFormat( SotClipboardFormatId::GDIMETAFILE );
+                AddFormat( SotClipboardFormatId::BITMAP );
             }
             else
             {
-                AddFormat( FORMAT_BITMAP );
-                AddFormat( FORMAT_GDIMETAFILE );
+                AddFormat( SotClipboardFormatId::BITMAP );
+                AddFormat( SotClipboardFormatId::GDIMETAFILE );
             }
         }
     }
@@ -507,33 +507,33 @@ void GalleryTransferable::AddSupportedFormats()
 
 bool GalleryTransferable::GetData( const datatransfer::DataFlavor& rFlavor, const OUString& /*rDestDoc*/ )
 {
-    sal_uInt32  nFormat = SotExchange::GetFormat( rFlavor );
+    SotClipboardFormatId nFormat = SotExchange::GetFormat( rFlavor );
     bool        bRet = false;
 
     InitData( false );
 
-    if( ( SOT_FORMATSTR_ID_DRAWING == nFormat ) && ( SGA_OBJ_SVDRAW == meObjectKind ) )
+    if( ( SotClipboardFormatId::DRAWING == nFormat ) && ( SGA_OBJ_SVDRAW == meObjectKind ) )
     {
-        bRet = ( mxModelStream.Is() && SetObject( &mxModelStream, 0, rFlavor ) );
+        bRet = ( mxModelStream.Is() && SetObject( &mxModelStream, SotClipboardFormatId::NONE, rFlavor ) );
     }
-    else if( ( SOT_FORMATSTR_ID_SVIM == nFormat ) && mpImageMap )
+    else if( ( SotClipboardFormatId::SVIM == nFormat ) && mpImageMap )
     {
         // TODO/MBA: do we need a BaseURL here?!
         bRet = SetImageMap( *mpImageMap, rFlavor );
     }
-    else if( ( FORMAT_FILE == nFormat ) && mpURL )
+    else if( ( SotClipboardFormatId::FILE == nFormat ) && mpURL )
     {
         bRet = SetString( mpURL->GetMainURL( INetURLObject::NO_DECODE ), rFlavor );
     }
-    else if( ( SOT_FORMATSTR_ID_SVXB == nFormat ) && mpGraphicObject )
+    else if( ( SotClipboardFormatId::SVXB == nFormat ) && mpGraphicObject )
     {
         bRet = SetGraphic( mpGraphicObject->GetGraphic(), rFlavor );
     }
-    else if( ( FORMAT_GDIMETAFILE == nFormat ) && mpGraphicObject )
+    else if( ( SotClipboardFormatId::GDIMETAFILE == nFormat ) && mpGraphicObject )
     {
         bRet = SetGDIMetaFile( mpGraphicObject->GetGraphic().GetGDIMetaFile(), rFlavor );
     }
-    else if( ( FORMAT_BITMAP == nFormat ) && mpGraphicObject )
+    else if( ( SotClipboardFormatId::BITMAP == nFormat ) && mpGraphicObject )
     {
         bRet = SetBitmapEx( mpGraphicObject->GetGraphic().GetBitmapEx(), rFlavor );
     }
@@ -542,7 +542,7 @@ bool GalleryTransferable::GetData( const datatransfer::DataFlavor& rFlavor, cons
 }
 
 bool GalleryTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject,
-                                           sal_uInt32, const datatransfer::DataFlavor& )
+                                           SotClipboardFormatId, const datatransfer::DataFlavor& )
 {
     bool bRet = false;
 

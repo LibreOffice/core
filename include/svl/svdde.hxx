@@ -62,11 +62,11 @@ class SVL_DLLPUBLIC DdeData
 
     SVL_DLLPRIVATE void            Lock();
 
-    void            SetFormat( sal_uLong nFmt );
+    void            SetFormat( SotClipboardFormatId nFmt );
 
 public:
                     DdeData();
-                    DdeData( SAL_UNUSED_PARAMETER const void*, SAL_UNUSED_PARAMETER long, SAL_UNUSED_PARAMETER sal_uLong = FORMAT_STRING );
+                    DdeData( SAL_UNUSED_PARAMETER const void*, SAL_UNUSED_PARAMETER long, SAL_UNUSED_PARAMETER SotClipboardFormatId = SotClipboardFormatId::STRING );
                     DdeData( SAL_UNUSED_PARAMETER const OUString& );
                     DdeData( const DdeData& );
                     ~DdeData();
@@ -74,7 +74,7 @@ public:
     operator const  void*() const;
     operator        long() const;
 
-    sal_uLong           GetFormat() const;
+    SotClipboardFormatId GetFormat() const;
 
     DdeData&        operator = ( const DdeData& );
 
@@ -118,8 +118,8 @@ public:
     void            SetDoneHdl( const Link& rLink ) { aDone = rLink; }
     const Link&     GetDoneHdl() const { return aDone; }
 
-    void            SetFormat( sal_uLong nFmt ) { aDdeData.SetFormat( nFmt );  }
-    sal_uLong           GetFormat() const       { return aDdeData.GetFormat(); }
+    void                 SetFormat( SotClipboardFormatId nFmt ) { aDdeData.SetFormat( nFmt );  }
+    SotClipboardFormatId GetFormat() const       { return aDdeData.GetFormat(); }
 
     long            GetError();
 
@@ -187,7 +187,7 @@ class SVL_DLLPUBLIC DdePoke : public DdeTransaction
 {
 public:
             DdePoke( DdeConnection&, const OUString&, const char*, long,
-                     sal_uLong = FORMAT_STRING, long = 0 );
+                     SotClipboardFormatId = SotClipboardFormatId::STRING, long = 0 );
             DdePoke( DdeConnection&, const OUString&, SAL_UNUSED_PARAMETER const DdeData&, long = 0 );
             DdePoke( DdeConnection&, const OUString&, const OUString&, long = 0 );
 };
@@ -274,7 +274,7 @@ public:
                     DdeGetPutItem( const OUString& rStr );
                     DdeGetPutItem( const DdeItem& rItem );
 
-    virtual DdeData* Get( sal_uLong );
+    virtual DdeData* Get( SotClipboardFormatId );
     virtual bool    Put( const DdeData* );
     virtual void    AdviseLoop( bool );     // Start / Stop AdviseLoop
 };

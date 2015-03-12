@@ -104,12 +104,12 @@ uno::Any TETextDataObject::getTransferData( const datatransfer::DataFlavor& rFla
 {
     uno::Any aAny;
 
-    sal_uLong nT = SotExchange::GetFormat( rFlavor );
-    if ( nT == SOT_FORMAT_STRING )
+    SotClipboardFormatId nT = SotExchange::GetFormat( rFlavor );
+    if ( nT == SotClipboardFormatId::STRING )
     {
         aAny <<= GetText();
     }
-    else if ( nT == SOT_FORMATSTR_ID_HTML )
+    else if ( nT == SotClipboardFormatId::HTML )
     {
         GetHTMLStream().Seek( STREAM_SEEK_TO_END );
         sal_uLong nLen = GetHTMLStream().Tell();
@@ -131,16 +131,16 @@ uno::Sequence< datatransfer::DataFlavor > TETextDataObject::getTransferDataFlavo
     GetHTMLStream().Seek( STREAM_SEEK_TO_END );
     bool bHTML = GetHTMLStream().Tell() > 0;
     uno::Sequence< datatransfer::DataFlavor > aDataFlavors( bHTML ? 2 : 1 );
-    SotExchange::GetFormatDataFlavor( SOT_FORMAT_STRING, aDataFlavors.getArray()[0] );
+    SotExchange::GetFormatDataFlavor( SotClipboardFormatId::STRING, aDataFlavors.getArray()[0] );
     if ( bHTML )
-        SotExchange::GetFormatDataFlavor( SOT_FORMATSTR_ID_HTML, aDataFlavors.getArray()[1] );
+        SotExchange::GetFormatDataFlavor( SotClipboardFormatId::HTML, aDataFlavors.getArray()[1] );
     return aDataFlavors;
 }
 
 sal_Bool TETextDataObject::isDataFlavorSupported( const datatransfer::DataFlavor& rFlavor ) throw(uno::RuntimeException, std::exception)
 {
-    sal_uLong nT = SotExchange::GetFormat( rFlavor );
-    return ( nT == SOT_FORMAT_STRING );
+    SotClipboardFormatId nT = SotExchange::GetFormat( rFlavor );
+    return ( nT == SotClipboardFormatId::STRING );
 }
 
 struct ImpTextView
@@ -1179,7 +1179,7 @@ void TextView::Paste( uno::Reference< datatransfer::clipboard::XClipboard >& rxC
         if ( xDataObj.is() )
         {
             datatransfer::DataFlavor aFlavor;
-            SotExchange::GetFormatDataFlavor( SOT_FORMAT_STRING, aFlavor );
+            SotExchange::GetFormatDataFlavor( SotClipboardFormatId::STRING, aFlavor );
             if ( xDataObj->isDataFlavorSupported( aFlavor ) )
             {
                 try
@@ -2062,7 +2062,7 @@ void TextView::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEv
         if ( xDataObj.is() )
         {
             datatransfer::DataFlavor aFlavor;
-            SotExchange::GetFormatDataFlavor( SOT_FORMAT_STRING, aFlavor );
+            SotExchange::GetFormatDataFlavor( SotClipboardFormatId::STRING, aFlavor );
             if ( xDataObj->isDataFlavorSupported( aFlavor ) )
             {
                 uno::Any aData = xDataObj->getTransferData( aFlavor );

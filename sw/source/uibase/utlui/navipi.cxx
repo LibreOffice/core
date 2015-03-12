@@ -1092,24 +1092,24 @@ IMPL_LINK(SwNavigationPI, DoneLink, SfxPoolItem *, pItem)
 OUString SwNavigationPI::CreateDropFileName( TransferableDataHelper& rData )
 {
     OUString sFileName;
-    sal_uLong nFmt;
-    if( rData.HasFormat( nFmt = FORMAT_FILE_LIST ))
+    SotClipboardFormatId nFmt;
+    if( rData.HasFormat( nFmt = SotClipboardFormatId::FILE_LIST ))
     {
         FileList aFileList;
         rData.GetFileList( nFmt, aFileList );
         sFileName = aFileList.GetFile( 0 );
     }
-    else if( rData.HasFormat( nFmt = FORMAT_STRING ) ||
-              rData.HasFormat( nFmt = FORMAT_FILE ) ||
-             rData.HasFormat( nFmt = SOT_FORMATSTR_ID_FILENAME ))
+    else if( rData.HasFormat( nFmt = SotClipboardFormatId::STRING ) ||
+              rData.HasFormat( nFmt = SotClipboardFormatId::FILE ) ||
+             rData.HasFormat( nFmt = SotClipboardFormatId::FILENAME ))
     {
         (void)rData.GetString(nFmt, sFileName);
     }
-    else if( rData.HasFormat( nFmt = SOT_FORMATSTR_ID_SOLK ) ||
-                rData.HasFormat( nFmt = SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK )||
-                rData.HasFormat( nFmt = SOT_FORMATSTR_ID_FILECONTENT ) ||
-                rData.HasFormat( nFmt = SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR ) ||
-                rData.HasFormat( nFmt = SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR ))
+    else if( rData.HasFormat( nFmt = SotClipboardFormatId::SOLK ) ||
+                rData.HasFormat( nFmt = SotClipboardFormatId::NETSCAPE_BOOKMARK )||
+                rData.HasFormat( nFmt = SotClipboardFormatId::FILECONTENT ) ||
+                rData.HasFormat( nFmt = SotClipboardFormatId::FILEGRPDESCRIPTOR ) ||
+                rData.HasFormat( nFmt = SotClipboardFormatId::UNIFORMRESOURCELOCATOR ))
     {
         INetBookmark aBkmk( aEmptyOUStr, aEmptyOUStr );
         if (rData.GetINetBookmark(nFmt, aBkmk))
@@ -1125,14 +1125,14 @@ OUString SwNavigationPI::CreateDropFileName( TransferableDataHelper& rData )
 sal_Int8 SwNavigationPI::AcceptDrop( const AcceptDropEvent& /*rEvt*/ )
 {
     return ( !SwContentTree::IsInDrag() &&
-        ( aContentTree.IsDropFormatSupported( FORMAT_FILE ) ||
-          aContentTree.IsDropFormatSupported( FORMAT_STRING ) ||
-          aContentTree.IsDropFormatSupported( SOT_FORMATSTR_ID_SOLK ) ||
-           aContentTree.IsDropFormatSupported( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK )||
-           aContentTree.IsDropFormatSupported( SOT_FORMATSTR_ID_FILECONTENT ) ||
-           aContentTree.IsDropFormatSupported( SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR ) ||
-           aContentTree.IsDropFormatSupported( SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR ) ||
-           aContentTree.IsDropFormatSupported( SOT_FORMATSTR_ID_FILENAME )))
+        ( aContentTree.IsDropFormatSupported( SotClipboardFormatId::FILE ) ||
+          aContentTree.IsDropFormatSupported( SotClipboardFormatId::STRING ) ||
+          aContentTree.IsDropFormatSupported( SotClipboardFormatId::SOLK ) ||
+           aContentTree.IsDropFormatSupported( SotClipboardFormatId::NETSCAPE_BOOKMARK )||
+           aContentTree.IsDropFormatSupported( SotClipboardFormatId::FILECONTENT ) ||
+           aContentTree.IsDropFormatSupported( SotClipboardFormatId::FILEGRPDESCRIPTOR ) ||
+           aContentTree.IsDropFormatSupported( SotClipboardFormatId::UNIFORMRESOURCELOCATOR ) ||
+           aContentTree.IsDropFormatSupported( SotClipboardFormatId::FILENAME )))
         ? DND_ACTION_COPY
         : DND_ACTION_NONE;
 }

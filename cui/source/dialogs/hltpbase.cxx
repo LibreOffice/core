@@ -48,7 +48,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxHyperURLBox(vcl::Wi
 
 sal_Int8 SvxHyperURLBox::AcceptDrop( const AcceptDropEvent& /* rEvt */ )
 {
-    return IsDropFormatSupported( FORMAT_STRING ) ? DND_ACTION_COPY : DND_ACTION_NONE;
+    return IsDropFormatSupported( SotClipboardFormatId::STRING ) ? DND_ACTION_COPY : DND_ACTION_NONE;
 }
 
 sal_Int8 SvxHyperURLBox::ExecuteDrop( const ExecuteDropEvent& rEvt )
@@ -57,7 +57,7 @@ sal_Int8 SvxHyperURLBox::ExecuteDrop( const ExecuteDropEvent& rEvt )
     OUString                aString;
     sal_Int8                nRet = DND_ACTION_NONE;
 
-    if( aDataHelper.GetString( FORMAT_STRING, aString ) )
+    if( aDataHelper.GetString( SotClipboardFormatId::STRING, aString ) )
     {
         SetText( aString );
         nRet = DND_ACTION_COPY;

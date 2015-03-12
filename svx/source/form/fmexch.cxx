@@ -99,7 +99,7 @@ namespace svxform
     }
 
 
-    bool OLocalExchange::hasFormat( const DataFlavorExVector& _rFormats, sal_uInt32 _nFormatId )
+    bool OLocalExchange::hasFormat( const DataFlavorExVector& _rFormats, SotClipboardFormatId _nFormatId )
     {
         DataFlavorExVector::const_iterator aSearch;
 
@@ -154,7 +154,7 @@ namespace svxform
     }
 
 
-    static bool lcl_fillDataFlavorEx( SotFormatStringId nId, DataFlavorEx& _rFlavor )
+    static bool lcl_fillDataFlavorEx( SotClipboardFormatId nId, DataFlavorEx& _rFlavor )
     {
         _rFlavor.mnSotId = nId;
         return SotExchange::GetFormatDataFlavor( _rFlavor.mnSotId, _rFlavor );
@@ -280,7 +280,7 @@ namespace svxform
 
     bool OControlExchange::GetData( const DataFlavor& _rFlavor, const OUString& rDestDoc )
     {
-        const sal_uInt32 nFormatId = SotExchange::GetFormat( _rFlavor );
+        const SotClipboardFormatId nFormatId = SotExchange::GetFormat( _rFlavor );
 
         if ( getControlPathFormatId( ) == nFormatId )
         {
@@ -317,37 +317,37 @@ namespace svxform
     }
 
 
-    sal_uInt32 OControlExchange::getControlPathFormatId()
+    SotClipboardFormatId OControlExchange::getControlPathFormatId()
     {
-        static sal_uInt32 s_nFormat = (sal_uInt32)-1;
-        if ((sal_uInt32)-1 == s_nFormat)
+        static SotClipboardFormatId s_nFormat = static_cast<SotClipboardFormatId>(-1);
+        if (static_cast<SotClipboardFormatId>(-1) == s_nFormat)
         {
             s_nFormat = SotExchange::RegisterFormatName(OUString("application/x-openoffice;windows_formatname=\"svxform.ControlPathExchange\""));
-            DBG_ASSERT((sal_uInt32)-1 != s_nFormat, "OControlExchange::getControlPathFormatId: bad exchange id!");
+            DBG_ASSERT(static_cast<SotClipboardFormatId>(-1) != s_nFormat, "OControlExchange::getControlPathFormatId: bad exchange id!");
         }
         return s_nFormat;
     }
 
 
-    sal_uInt32 OControlExchange::getHiddenControlModelsFormatId()
+    SotClipboardFormatId OControlExchange::getHiddenControlModelsFormatId()
     {
-        static sal_uInt32 s_nFormat = (sal_uInt32)-1;
-        if ((sal_uInt32)-1 == s_nFormat)
+        static SotClipboardFormatId s_nFormat = static_cast<SotClipboardFormatId>(-1);
+        if (static_cast<SotClipboardFormatId>(-1) == s_nFormat)
         {
             s_nFormat = SotExchange::RegisterFormatName(OUString("application/x-openoffice;windows_formatname=\"svxform.HiddenControlModelsExchange\""));
-            DBG_ASSERT((sal_uInt32)-1 != s_nFormat, "OControlExchange::getHiddenControlModelsFormatId: bad exchange id!");
+            DBG_ASSERT(static_cast<SotClipboardFormatId>(-1) != s_nFormat, "OControlExchange::getHiddenControlModelsFormatId: bad exchange id!");
         }
         return s_nFormat;
     }
 
 
-    sal_uInt32 OControlExchange::getFieldExchangeFormatId()
+    SotClipboardFormatId OControlExchange::getFieldExchangeFormatId()
     {
-        static sal_uInt32 s_nFormat = (sal_uInt32)-1;
-        if ((sal_uInt32)-1 == s_nFormat)
+        static SotClipboardFormatId s_nFormat = static_cast<SotClipboardFormatId>(-1);
+        if (static_cast<SotClipboardFormatId>(-1) == s_nFormat)
         {
             s_nFormat = SotExchange::RegisterFormatName(OUString("application/x-openoffice;windows_formatname=\"svxform.FieldNameExchange\""));
-            DBG_ASSERT((sal_uInt32)-1 != s_nFormat, "OControlExchange::getFieldExchangeFormatId: bad exchange id!");
+            DBG_ASSERT(static_cast<SotClipboardFormatId>(-1) != s_nFormat, "OControlExchange::getFieldExchangeFormatId: bad exchange id!");
         }
         return s_nFormat;
     }

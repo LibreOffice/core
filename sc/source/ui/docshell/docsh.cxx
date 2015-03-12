@@ -178,7 +178,7 @@ SFX_IMPL_OBJECTFACTORY( ScDocShell, SvGlobalName(SO3_SC_CLASSID), SFXOBJECTSHELL
 TYPEINIT1( ScDocShell, SfxObjectShell ); // SfxInPlaceObject: No TypeInfo?
 
 void ScDocShell::FillClass( SvGlobalName* pClassName,
-                                        sal_uInt32* pFormat,
+                                        SotClipboardFormatId* pFormat,
                                         OUString* /* pAppName */,
                                         OUString* pFullTypeName,
                                         OUString* pShortTypeName,
@@ -188,14 +188,14 @@ void ScDocShell::FillClass( SvGlobalName* pClassName,
     if ( nFileFormat == SOFFICE_FILEFORMAT_60 )
     {
         *pClassName     = SvGlobalName( SO3_SC_CLASSID_60 );
-        *pFormat        = SOT_FORMATSTR_ID_STARCALC_60;
+        *pFormat        = SotClipboardFormatId::STARCALC_60;
         *pFullTypeName  = OUString( ScResId( SCSTR_LONG_SCDOC_NAME ) );
         *pShortTypeName = OUString( ScResId( SCSTR_SHORT_SCDOC_NAME ) );
     }
     else if ( nFileFormat == SOFFICE_FILEFORMAT_8 )
     {
         *pClassName     = SvGlobalName( SO3_SC_CLASSID_60 );
-        *pFormat        = bTemplate ? SOT_FORMATSTR_ID_STARCALC_8_TEMPLATE : SOT_FORMATSTR_ID_STARCALC_8;
+        *pFormat        = bTemplate ? SotClipboardFormatId::STARCALC_8_TEMPLATE : SotClipboardFormatId::STARCALC_8;
         *pFullTypeName  = "calc8";
         *pShortTypeName = ScResId(SCSTR_SHORT_SCDOC_NAME).toString();
     }
@@ -1313,7 +1313,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                 if (pInStream)
                 {
                     pInStream->Seek( 0 );
-                    bRet = aImpEx.ImportStream( *pInStream, rMedium.GetBaseURL(), SOT_FORMATSTR_ID_SYLK );
+                    bRet = aImpEx.ImportStream( *pInStream, rMedium.GetBaseURL(), SotClipboardFormatId::SYLK );
                     eError = bRet ? eERR_OK : SCERR_IMPORT_UNKNOWN;
                     aDocument.StartAllListeners();
                     sc::SetFormulaDirtyContext aCxt;
@@ -2405,7 +2405,7 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
 
             ScImportExport aImExport( &aDocument, aRange );
             aImExport.SetFormulas( true );
-            bRet = aImExport.ExportStream( *pStream, rMed.GetBaseURL( true ), SOT_FORMATSTR_ID_SYLK );
+            bRet = aImExport.ExportStream( *pStream, rMed.GetBaseURL( true ), SotClipboardFormatId::SYLK );
         }
     }
     else if (aFltName == pFilterHtml)
@@ -2424,7 +2424,7 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
             ScImportExport aImExport(&aDocument);
             aImExport.SetStreamPath(rMed.GetName());
             aImExport.SetFilterOptions(sFilterOptions);
-            bRet = aImExport.ExportStream(*pStream, rMed.GetBaseURL(true), SOT_FORMATSTR_ID_HTML);
+            bRet = aImExport.ExportStream(*pStream, rMed.GetBaseURL(true), SotClipboardFormatId::HTML);
             if (bRet && !aImExport.GetNonConvertibleChars().isEmpty())
             {
                 SetError(*new StringErrorInfo(

@@ -37,13 +37,13 @@ OReportExchange::OReportExchange(const TSectionElements& _rCopyElements )
 {
 }
 
-sal_uInt32 OReportExchange::getDescriptorFormatId()
+SotClipboardFormatId OReportExchange::getDescriptorFormatId()
 {
-    static sal_uInt32 s_nFormat = (sal_uInt32)-1;
-    if ((sal_uInt32)-1 == s_nFormat)
+    static SotClipboardFormatId s_nFormat = static_cast<SotClipboardFormatId>(-1);
+    if (static_cast<SotClipboardFormatId>(-1) == s_nFormat)
     {
         s_nFormat = SotExchange::RegisterFormatName(OUString("application/x-openoffice;windows_formatname=\"report.ReportObjectsTransfer\""));
-        OSL_ENSURE((sal_uInt32)-1 != s_nFormat, "OReportExchange::getDescriptorFormatId: bad exchange id!");
+        OSL_ENSURE(static_cast<SotClipboardFormatId>(-1) != s_nFormat, "OReportExchange::getDescriptorFormatId: bad exchange id!");
     }
     return s_nFormat;
 }
@@ -55,7 +55,7 @@ void OReportExchange::AddSupportedFormats()
 
 bool OReportExchange::GetData( const datatransfer::DataFlavor& _rFlavor, const OUString& /*rDestDoc*/ )
 {
-    const sal_uInt32 nFormatId = SotExchange::GetFormat(_rFlavor);
+    const SotClipboardFormatId nFormatId = SotExchange::GetFormat(_rFlavor);
     return (nFormatId == getDescriptorFormatId()) && SetAny( uno::Any(m_aCopyElements), _rFlavor );
 }
 
@@ -66,7 +66,7 @@ bool OReportExchange::canExtract(const DataFlavorExVector& _rFlavor)
 
 OReportExchange::TSectionElements OReportExchange::extractCopies(const TransferableDataHelper& _rData)
 {
-    sal_Int32 nKnownFormatId = getDescriptorFormatId();
+    SotClipboardFormatId nKnownFormatId = getDescriptorFormatId();
     if ( _rData.HasFormat( nKnownFormatId ) )
     {
         // extract the any from the transferable

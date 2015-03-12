@@ -163,7 +163,7 @@ bool ScServerObject::GetData(
     OUString aDdeTextFmt = pDocSh->GetDdeTextFmt();
     ScDocument& rDoc = pDocSh->GetDocument();
 
-    if( FORMAT_STRING == SotExchange::GetFormatIdFromMimeType( rMimeType ))
+    if( SotClipboardFormatId::STRING == SotExchange::GetFormatIdFromMimeType( rMimeType ))
     {
         ScImportExport aObj( &rDoc, aRange );
         if( aDdeTextFmt[0] == 'F' )
@@ -171,7 +171,7 @@ bool ScServerObject::GetData(
         if( aDdeTextFmt == "SYLK" || aDdeTextFmt == "FSYLK" )
         {
             OString aByteData;
-            if( aObj.ExportByteString( aByteData, osl_getThreadTextEncoding(), SOT_FORMATSTR_ID_SYLK ) )
+            if( aObj.ExportByteString( aByteData, osl_getThreadTextEncoding(), SotClipboardFormatId::SYLK ) )
             {
                 rData <<= ::com::sun::star::uno::Sequence< sal_Int8 >(
                                         reinterpret_cast<const sal_Int8*>(aByteData.getStr()),

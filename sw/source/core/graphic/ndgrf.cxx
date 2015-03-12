@@ -697,7 +697,7 @@ bool SwGrfNode::RestorePersistentData()
 
 void SwGrfNode::InsertLink( const OUString& rGrfName, const OUString& rFltName )
 {
-    refLink = new SwBaseLink( sfx2::LINKUPDATE_ONCALL, FORMAT_GDIMETAFILE, this );
+    refLink = new SwBaseLink( sfx2::LINKUPDATE_ONCALL, SotClipboardFormatId::GDIMETAFILE, this );
 
     IDocumentLinksAdministration* pIDLA = getIDocumentLinksAdministration();
     if( GetNodes().IsDocNodes() )
@@ -717,7 +717,7 @@ void SwGrfNode::InsertLink( const OUString& rGrfName, const OUString& rFltName )
         {
             const bool bSync = rFltName == "SYNCHRON";
             refLink->SetSynchron( bSync );
-            refLink->SetContentType( SOT_FORMATSTR_ID_SVXB );
+            refLink->SetContentType( SotClipboardFormatId::SVXB );
 
             pIDLA->GetLinkManager().InsertFileLink( *refLink,
                                             OBJECT_CLIENT_GRF, rGrfName,

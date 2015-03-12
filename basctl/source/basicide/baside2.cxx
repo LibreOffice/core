@@ -1412,7 +1412,7 @@ bool ModulWindow::IsPasteAllowed()
         if ( xTransf.is() )
         {
             datatransfer::DataFlavor aFlavor;
-            SotExchange::GetFormatDataFlavor( SOT_FORMAT_STRING, aFlavor );
+            SotExchange::GetFormatDataFlavor( SotClipboardFormatId::STRING, aFlavor );
             if ( xTransf->isDataFlavorSupported( aFlavor ) )
                 bPaste = true;
         }

@@ -39,6 +39,7 @@ typedef short StorageMode;
 
 class SvStorage;
 
+enum class SotClipboardFormatId : sal_uLong;
 
 /*************************************************************************
 *************************************************************************/
@@ -165,10 +166,10 @@ public:
 
                         // own data sector
     void                SetClass( const SvGlobalName & rClass,
-                                  sal_uLong bOriginalClipFormat,
+                                  SotClipboardFormatId bOriginalClipFormat,
                                   const OUString & rUserTypeName );
     SvGlobalName        GetClassName(); // type of data in the storage
-    sal_uLong           GetFormat();
+    SotClipboardFormatId GetFormat();
     OUString            GetUserName();
 
                         // list of all elements
@@ -199,7 +200,7 @@ public:
 
     static SotStorage*  OpenOLEStorage( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage,
                                         const OUString& rEleName, StreamMode = STREAM_STD_READWRITE );
-    static sal_Int32    GetFormatID( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage );
+    static SotClipboardFormatId  GetFormatID( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage );
     static sal_Int32    GetVersion( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage );
 };
 

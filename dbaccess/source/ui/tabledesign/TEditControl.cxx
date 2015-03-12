@@ -769,10 +769,10 @@ void OTableEditorCtrl::InsertRows( long nRow )
     ::std::vector<  ::boost::shared_ptr<OTableRow> > vInsertedUndoRedoRows; // need for undo/redo handling
     // get rows from clipboard
     TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard(GetParent()));
-    if(aTransferData.HasFormat(SOT_FORMATSTR_ID_SBA_TABED))
+    if(aTransferData.HasFormat(SotClipboardFormatId::SBA_TABED))
     {
         SotStorageStreamRef aStreamRef;
-        bool bOk = aTransferData.GetSotStorageStream(SOT_FORMATSTR_ID_SBA_TABED,aStreamRef);
+        bool bOk = aTransferData.GetSotStorageStream(SotClipboardFormatId::SBA_TABED,aStreamRef);
         if (bOk && aStreamRef.Is())
         {
             aStreamRef->Seek(STREAM_SEEK_TO_BEGIN);
@@ -1173,11 +1173,11 @@ bool OTableEditorCtrl::IsPasteAllowed( long /*nRow*/ )
     if ( bAllowed )
     {
         TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard(GetParent()));
-        bool bRowFormat = aTransferData.HasFormat(SOT_FORMATSTR_ID_SBA_TABED);
+        bool bRowFormat = aTransferData.HasFormat(SotClipboardFormatId::SBA_TABED);
         if ( m_eChildFocus == ROW )
             bAllowed = bRowFormat;
         else
-            bAllowed = !bRowFormat && aTransferData.HasFormat(SOT_FORMAT_STRING);
+            bAllowed = !bRowFormat && aTransferData.HasFormat(SotClipboardFormatId::STRING);
     }
 
     return bAllowed;
@@ -1235,7 +1235,7 @@ void OTableEditorCtrl::copy()
 void OTableEditorCtrl::paste()
 {
     TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard(GetParent()));
-    if(aTransferData.HasFormat(SOT_FORMATSTR_ID_SBA_TABED))
+    if(aTransferData.HasFormat(SotClipboardFormatId::SBA_TABED))
     {
         if( nPasteEvent )
             Application::RemoveUserEvent( nPasteEvent );

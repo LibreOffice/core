@@ -34,150 +34,169 @@
 #endif
 
 #endif
-#include <sot/exchange.hxx>
 
-#define SOT_FORMAT_SYSTEM_START                 ((sal_uLong)0)
-#define SOT_FORMAT_STRING                       ((sal_uLong)FORMAT_STRING)
-#define SOT_FORMAT_BITMAP                       ((sal_uLong)FORMAT_BITMAP)
-#define SOT_FORMAT_GDIMETAFILE                  ((sal_uLong)FORMAT_GDIMETAFILE)
-#define SOT_FORMAT_PRIVATE                      ((sal_uLong)FORMAT_PRIVATE)
-#define SOT_FORMAT_FILE                         ((sal_uLong)FORMAT_FILE)
-#define SOT_FORMAT_FILE_LIST                    ((sal_uLong)FORMAT_FILE_LIST)
-#define SOT_FORMAT_RTF                          ((sal_uLong)FORMAT_RTF)
+#include <tools/solar.h>
 
-#define SOT_FORMATSTR_ID_DRAWING                ((sal_uLong)11)
-#define SOT_FORMATSTR_ID_SVXB                   ((sal_uLong)12)
-#define SOT_FORMATSTR_ID_SVIM                   ((sal_uLong)13)
-#define SOT_FORMATSTR_ID_XFA                    ((sal_uLong)14)
-#define SOT_FORMATSTR_ID_EDITENGINE             ((sal_uLong)15)
-#define SOT_FORMATSTR_ID_INTERNALLINK_STATE     ((sal_uLong)16)
-#define SOT_FORMATSTR_ID_SOLK                   ((sal_uLong)17)
-#define SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK      ((sal_uLong)18)
-#define SOT_FORMATSTR_ID_TREELISTBOX            ((sal_uLong)19)
-#define SOT_FORMATSTR_ID_NATIVE                 ((sal_uLong)20)
-#define SOT_FORMATSTR_ID_OWNERLINK              ((sal_uLong)21)
-#define SOT_FORMATSTR_ID_STARSERVER             ((sal_uLong)22)
-#define SOT_FORMATSTR_ID_STAROBJECT             ((sal_uLong)23)
-#define SOT_FORMATSTR_ID_APPLETOBJECT           ((sal_uLong)24)
-#define SOT_FORMATSTR_ID_PLUGIN_OBJECT          ((sal_uLong)25)
-#define SOT_FORMATSTR_ID_STARWRITER_30          ((sal_uLong)26)
-#define SOT_FORMATSTR_ID_STARWRITER_40          ((sal_uLong)27)
-#define SOT_FORMATSTR_ID_STARWRITER_50          ((sal_uLong)28)
-#define SOT_FORMATSTR_ID_STARWRITERWEB_40       ((sal_uLong)29)
-#define SOT_FORMATSTR_ID_STARWRITERWEB_50       ((sal_uLong)30)
-#define SOT_FORMATSTR_ID_STARWRITERGLOB_40      ((sal_uLong)31)
-#define SOT_FORMATSTR_ID_STARWRITERGLOB_50      ((sal_uLong)32)
-#define SOT_FORMATSTR_ID_STARDRAW               ((sal_uLong)33)
-#define SOT_FORMATSTR_ID_STARDRAW_40            ((sal_uLong)34)
-#define SOT_FORMATSTR_ID_STARIMPRESS_50         ((sal_uLong)35)
-#define SOT_FORMATSTR_ID_STARDRAW_50            ((sal_uLong)36)
-#define SOT_FORMATSTR_ID_STARCALC               ((sal_uLong)37)
-#define SOT_FORMATSTR_ID_STARCALC_40            ((sal_uLong)38)
-#define SOT_FORMATSTR_ID_STARCALC_50            ((sal_uLong)39)
-#define SOT_FORMATSTR_ID_STARCHART              ((sal_uLong)40)
-#define SOT_FORMATSTR_ID_STARCHART_40           ((sal_uLong)41)
-#define SOT_FORMATSTR_ID_STARCHART_50           ((sal_uLong)42)
-#define SOT_FORMATSTR_ID_STARIMAGE              ((sal_uLong)43)
-#define SOT_FORMATSTR_ID_STARIMAGE_40           ((sal_uLong)44)
-#define SOT_FORMATSTR_ID_STARIMAGE_50           ((sal_uLong)45)
-#define SOT_FORMATSTR_ID_STARMATH               ((sal_uLong)46)
-#define SOT_FORMATSTR_ID_STARMATH_40            ((sal_uLong)47)
-#define SOT_FORMATSTR_ID_STARMATH_50            ((sal_uLong)48)
-#define SOT_FORMATSTR_ID_STAROBJECT_PAINTDOC    ((sal_uLong)49)
-#define SOT_FORMATSTR_ID_FILLED_AREA            ((sal_uLong)50)
-#define SOT_FORMATSTR_ID_HTML                   ((sal_uLong)51)
-#define SOT_FORMATSTR_ID_HTML_SIMPLE            ((sal_uLong)52)
-#define SOT_FORMATSTR_ID_CHAOS                  ((sal_uLong)53)
-#define SOT_FORMATSTR_ID_CNT_MSGATTACHFILE      ((sal_uLong)54)
-#define SOT_FORMATSTR_ID_BIFF_5                 ((sal_uLong)55)
-#define SOT_FORMATSTR_ID_BIFF__5                ((sal_uLong)56)
-#define SOT_FORMATSTR_ID_SYLK                   ((sal_uLong)57)
-#define SOT_FORMATSTR_ID_SYLK_BIGCAPS           ((sal_uLong)58)
-#define SOT_FORMATSTR_ID_LINK                   ((sal_uLong)59)
-#define SOT_FORMATSTR_ID_DIF                    ((sal_uLong)60)
-#define SOT_FORMATSTR_ID_STARDRAW_TABBAR        ((sal_uLong)61)
-#define SOT_FORMATSTR_ID_SONLK                  ((sal_uLong)62)
-#define SOT_FORMATSTR_ID_MSWORD_DOC             ((sal_uLong)63)
-#define SOT_FORMATSTR_ID_STAR_FRAMESET_DOC      ((sal_uLong)64)
-#define SOT_FORMATSTR_ID_OFFICE_DOC             ((sal_uLong)65)
-#define SOT_FORMATSTR_ID_NOTES_DOCINFO          ((sal_uLong)66)
-#define SOT_FORMATSTR_ID_NOTES_HNOTE            ((sal_uLong)67)
-#define SOT_FORMATSTR_ID_NOTES_NATIVE           ((sal_uLong)68)
-#define SOT_FORMATSTR_ID_SFX_DOC                ((sal_uLong)69)
-#define SOT_FORMATSTR_ID_EVDF                   ((sal_uLong)70)
-#define SOT_FORMATSTR_ID_ESDF                   ((sal_uLong)71)
-#define SOT_FORMATSTR_ID_IDF                    ((sal_uLong)72)
-#define SOT_FORMATSTR_ID_EFTP                   ((sal_uLong)73)
-#define SOT_FORMATSTR_ID_EFD                    ((sal_uLong)74)
-#define SOT_FORMATSTR_ID_SVX_FORMFIELDEXCH      ((sal_uLong)75)
-#define SOT_FORMATSTR_ID_EXTENDED_TABBAR        ((sal_uLong)76)
-#define SOT_FORMATSTR_ID_SBA_DATAEXCHANGE       ((sal_uLong)77)
-#define SOT_FORMATSTR_ID_SBA_FIELDDATAEXCHANGE  ((sal_uLong)78)
-#define SOT_FORMATSTR_ID_SBA_PRIVATE_URL        ((sal_uLong)79)
-#define SOT_FORMATSTR_ID_SBA_TABED              ((sal_uLong)80)
-#define SOT_FORMATSTR_ID_SBA_TABID              ((sal_uLong)81)
-#define SOT_FORMATSTR_ID_SBA_JOIN               ((sal_uLong)82)
-#define SOT_FORMATSTR_ID_OBJECTDESCRIPTOR       ((sal_uLong)83)
-#define SOT_FORMATSTR_ID_LINKSRCDESCRIPTOR      ((sal_uLong)84)
-#define SOT_FORMATSTR_ID_EMBED_SOURCE           ((sal_uLong)85)
-#define SOT_FORMATSTR_ID_LINK_SOURCE            ((sal_uLong)86)
-#define SOT_FORMATSTR_ID_EMBEDDED_OBJ           ((sal_uLong)87)
-#define SOT_FORMATSTR_ID_FILECONTENT            ((sal_uLong)88)
-#define SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR      ((sal_uLong)89)
-#define SOT_FORMATSTR_ID_FILENAME               ((sal_uLong)90)
-#define SOT_FORMATSTR_ID_SD_OLE                 ((sal_uLong)91)
-#define SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE       ((sal_uLong)92)
-#define SOT_FORMATSTR_ID_EMBED_SOURCE_OLE       ((sal_uLong)93)
-#define SOT_FORMATSTR_ID_OBJECTDESCRIPTOR_OLE   ((sal_uLong)94)
-#define SOT_FORMATSTR_ID_LINKSRCDESCRIPTOR_OLE  ((sal_uLong)95)
-#define SOT_FORMATSTR_ID_LINK_SOURCE_OLE        ((sal_uLong)96)
-#define SOT_FORMATSTR_ID_SBA_CTRLDATAEXCHANGE   ((sal_uLong)97)
-#define SOT_FORMATSTR_ID_OUTPLACE_OBJ           ((sal_uLong)98)
-#define SOT_FORMATSTR_ID_CNT_OWN_CLIP           ((sal_uLong)99)
-#define SOT_FORMATSTR_ID_INET_IMAGE             ((sal_uLong)100)
-#define SOT_FORMATSTR_ID_NETSCAPE_IMAGE         ((sal_uLong)101)
-#define SOT_FORMATSTR_ID_SBA_FORMEXCHANGE       ((sal_uLong)102)
-#define SOT_FORMATSTR_ID_SBA_REPORTEXCHANGE     ((sal_uLong)103)
-#define SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR ((sal_uLong)104)
-#define SOT_FORMATSTR_ID_STARCHARTDOCUMENT_50   ((sal_uLong)105)
-#define SOT_FORMATSTR_ID_GRAPHOBJ               ((sal_uLong)106)
-#define SOT_FORMATSTR_ID_STARWRITER_60          ((sal_uLong)107)
-#define SOT_FORMATSTR_ID_STARWRITERWEB_60       ((sal_uLong)108)
-#define SOT_FORMATSTR_ID_STARWRITERGLOB_60      ((sal_uLong)109)
-#define SOT_FORMATSTR_ID_STARDRAW_60            ((sal_uLong)110)
-#define SOT_FORMATSTR_ID_STARIMPRESS_60         ((sal_uLong)111)
-#define SOT_FORMATSTR_ID_STARCALC_60            ((sal_uLong)112)
-#define SOT_FORMATSTR_ID_STARCHART_60           ((sal_uLong)113)
-#define SOT_FORMATSTR_ID_STARMATH_60            ((sal_uLong)114)
-#define SOT_FORMATSTR_ID_WMF                    ((sal_uLong)115)
-#define SOT_FORMATSTR_ID_DBACCESS_QUERY         ((sal_uLong)116)
-#define SOT_FORMATSTR_ID_DBACCESS_TABLE         ((sal_uLong)117)
-#define SOT_FORMATSTR_ID_DBACCESS_COMMAND       ((sal_uLong)118)
-#define SOT_FORMATSTR_ID_DIALOG_60              ((sal_uLong)119)
-#define SOT_FORMATSTR_ID_EMF                    ((sal_uLong)120)
-#define SOT_FORMATSTR_ID_BIFF_8                 ((sal_uLong)121)
-#define SOT_FORMATSTR_ID_BMP                    ((sal_uLong)122)
-#define SOT_FORMATSTR_ID_HTML_NO_COMMENT        ((sal_uLong)123)
-#define SOT_FORMATSTR_ID_STARWRITER_8           ((sal_uLong)124)
-#define SOT_FORMATSTR_ID_STARWRITERWEB_8        ((sal_uLong)125)
-#define SOT_FORMATSTR_ID_STARWRITERGLOB_8       ((sal_uLong)126)
-#define SOT_FORMATSTR_ID_STARDRAW_8             ((sal_uLong)127)
-#define SOT_FORMATSTR_ID_STARIMPRESS_8          ((sal_uLong)128)
-#define SOT_FORMATSTR_ID_STARCALC_8             ((sal_uLong)129)
-#define SOT_FORMATSTR_ID_STARCHART_8            ((sal_uLong)130)
-#define SOT_FORMATSTR_ID_STARMATH_8             ((sal_uLong)131)
-#define SOT_FORMATSTR_ID_XFORMS                 ((sal_uLong)132)
-#define SOT_FORMATSTR_ID_STARWRITER_8_TEMPLATE  ((sal_uLong)133)
-#define SOT_FORMATSTR_ID_STARDRAW_8_TEMPLATE    ((sal_uLong)134)
-#define SOT_FORMATSTR_ID_STARIMPRESS_8_TEMPLATE ((sal_uLong)135)
-#define SOT_FORMATSTR_ID_STARCALC_8_TEMPLATE    ((sal_uLong)136)
-#define SOT_FORMATSTR_ID_STARCHART_8_TEMPLATE   ((sal_uLong)137)
-#define SOT_FORMATSTR_ID_STARMATH_8_TEMPLATE    ((sal_uLong)138)
-#define SOT_FORMATSTR_ID_STARBASE_8             ((sal_uLong)139)
-#define SOT_FORMATSTR_ID_HC_GDIMETAFILE         ((sal_uLong)140)
-#define SOT_FORMATSTR_ID_PNG                    ((sal_uLong)141)
-#define SOT_FORMATSTR_ID_STARWRITERGLOB_8_TEMPLATE ((sal_uLong)142)
-#define SOT_FORMATSTR_ID_USER_END               SOT_FORMATSTR_ID_STARWRITERGLOB_8_TEMPLATE
+// - predefined formats -
+// Do NOT change the order of these values as the implementation depends on them!
+enum class SotClipboardFormatId : sal_uLong
+{
+// standard formats for that Copy/Paste methods exist
+    STRING                 = 1,
+    BITMAP                 = 2,
+    GDIMETAFILE            = 3,
+    PRIVATE                = 4,
+    FILE                   = 5,
+    FILE_LIST              = 6,
+// further formats (only via CopyData/PasteData)
+    RTF                    = 10,
+
+    NONE                   = 0,
+    ONLY_USED_IN_SW        = 8, // the SW module essentially creates its own ID's and this is one of them
+    DRAWING                = 11,
+    SVXB                   = 12,
+    SVIM                   = 13,
+    XFA                    = 14,
+    EDITENGINE             = 15,
+    INTERNALLINK_STATE     = 16,
+    SOLK                   = 17,
+    NETSCAPE_BOOKMARK      = 18,
+    TREELISTBOX            = 19,
+    NATIVE                 = 20,
+    OWNERLINK              = 21,
+    STARSERVER             = 22,
+    STAROBJECT             = 23,
+    APPLETOBJECT           = 24,
+    PLUGIN_OBJECT          = 25,
+    STARWRITER_30          = 26,
+    STARWRITER_40          = 27,
+    STARWRITER_50          = 28,
+    STARWRITERWEB_40       = 29,
+    STARWRITERWEB_50       = 30,
+    STARWRITERGLOB_40      = 31,
+    STARWRITERGLOB_50      = 32,
+    STARDRAW               = 33,
+    STARDRAW_40            = 34,
+    STARIMPRESS_50         = 35,
+    STARDRAW_50            = 36,
+    STARCALC               = 37,
+    STARCALC_40            = 38,
+    STARCALC_50            = 39,
+    STARCHART              = 40,
+    STARCHART_40           = 41,
+    STARCHART_50           = 42,
+    STARIMAGE              = 43,
+    STARIMAGE_40           = 44,
+    STARIMAGE_50           = 45,
+    STARMATH               = 46,
+    STARMATH_40            = 47,
+    STARMATH_50            = 48,
+    STAROBJECT_PAINTDOC    = 49,
+    FILLED_AREA            = 50,
+    HTML                   = 51,
+    HTML_SIMPLE            = 52,
+    CHAOS                  = 53,
+    CNT_MSGATTACHFILE      = 54,
+    BIFF_5                 = 55,
+    BIFF__5                = 56,
+    SYLK                   = 57,
+    SYLK_BIGCAPS           = 58,
+    LINK                   = 59,
+    DIF                    = 60,
+    STARDRAW_TABBAR        = 61,
+    SONLK                  = 62,
+    MSWORD_DOC             = 63,
+    STAR_FRAMESET_DOC      = 64,
+    OFFICE_DOC             = 65,
+    NOTES_DOCINFO          = 66,
+    NOTES_HNOTE            = 67,
+    NOTES_NATIVE           = 68,
+    SFX_DOC                = 69,
+    EVDF                   = 70,
+    ESDF                   = 71,
+    IDF                    = 72,
+    EFTP                   = 73,
+    EFD                    = 74,
+    SVX_FORMFIELDEXCH      = 75,
+    EXTENDED_TABBAR        = 76,
+    SBA_DATAEXCHANGE       = 77,
+    SBA_FIELDDATAEXCHANGE  = 78,
+    SBA_PRIVATE_URL        = 79,
+    SBA_TABED              = 80,
+    SBA_TABID              = 81,
+    SBA_JOIN               = 82,
+    OBJECTDESCRIPTOR       = 83,
+    LINKSRCDESCRIPTOR      = 84,
+    EMBED_SOURCE           = 85,
+    LINK_SOURCE            = 86,
+    EMBEDDED_OBJ           = 87,
+    FILECONTENT            = 88,
+    FILEGRPDESCRIPTOR      = 89,
+    FILENAME               = 90,
+    SD_OLE                 = 91,
+    EMBEDDED_OBJ_OLE       = 92,
+    EMBED_SOURCE_OLE       = 93,
+    OBJECTDESCRIPTOR_OLE   = 94,
+    LINKSRCDESCRIPTOR_OLE  = 95,
+    LINK_SOURCE_OLE        = 96,
+    SBA_CTRLDATAEXCHANGE   = 97,
+    OUTPLACE_OBJ           = 98,
+    CNT_OWN_CLIP           = 99,
+    INET_IMAGE             = 100,
+    NETSCAPE_IMAGE         = 101,
+    SBA_FORMEXCHANGE       = 102,
+    SBA_REPORTEXCHANGE     = 103,
+    UNIFORMRESOURCELOCATOR = 104,
+    STARCHARTDOCUMENT_50   = 105,
+    GRAPHOBJ               = 106,
+    STARWRITER_60          = 107,
+    STARWRITERWEB_60       = 108,
+    STARWRITERGLOB_60      = 109,
+    STARDRAW_60            = 110,
+    STARIMPRESS_60         = 111,
+    STARCALC_60            = 112,
+    STARCHART_60           = 113,
+    STARMATH_60            = 114,
+    WMF                    = 115,
+    DBACCESS_QUERY         = 116,
+    DBACCESS_TABLE         = 117,
+    DBACCESS_COMMAND       = 118,
+    DIALOG_60              = 119,
+    EMF                    = 120,
+    BIFF_8                 = 121,
+    BMP                    = 122,
+    HTML_NO_COMMENT        = 123,
+    STARWRITER_8           = 124,
+    STARWRITERWEB_8        = 125,
+    STARWRITERGLOB_8       = 126,
+    STARDRAW_8             = 127,
+    STARIMPRESS_8          = 128,
+    STARCALC_8             = 129,
+    STARCHART_8            = 130,
+    STARMATH_8             = 131,
+    XFORMS                 = 132,
+    STARWRITER_8_TEMPLATE  = 133,
+    STARDRAW_8_TEMPLATE    = 134,
+    STARIMPRESS_8_TEMPLATE = 135,
+    STARCALC_8_TEMPLATE    = 136,
+    STARCHART_8_TEMPLATE   = 137,
+    STARMATH_8_TEMPLATE    = 138,
+    STARBASE_8             = 139,
+    HC_GDIMETAFILE         = 140,
+    PNG                    = 141,
+    STARWRITERGLOB_8_TEMPLATE = 142,
+    // the point at which we start allocating "runtime" format IDs
+    USER_END  = STARWRITERGLOB_8_TEMPLATE
+};
+
+/** Make it easier to iterate over format IDs */
+inline SotClipboardFormatId& operator++(SotClipboardFormatId& v)
+{
+    v = static_cast<SotClipboardFormatId>(static_cast<sal_uLong>(v) + 1);
+    return v;
+}
+
+#define SOT_FORMAT_SYSTEM_START   SotClipboardFormatId::NONE
 
 #endif // INCLUDED_SOT_FORMATS_HXX
 

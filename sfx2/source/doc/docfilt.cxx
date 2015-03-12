@@ -41,7 +41,7 @@ SfxFilter::SfxFilter( const OUString& rProvider, const OUString &rFilterName ) :
     maProvider(rProvider),
     nFormatType(0),
     nVersion(0),
-    lFormat(0),
+    lFormat(SotClipboardFormatId::NONE),
     nDocIcon(0)
 {
 }
@@ -49,7 +49,7 @@ SfxFilter::SfxFilter( const OUString& rProvider, const OUString &rFilterName ) :
 SfxFilter::SfxFilter( const OUString &rName,
                       const OUString &rWildCard,
                       SfxFilterFlags nType,
-                      sal_uInt32 lFmt,
+                      SotClipboardFormatId lFmt,
                       const OUString &rTypNm,
                       sal_uInt16 nIcon,
                       const OUString &rMimeType,
@@ -165,8 +165,8 @@ OUString SfxFilter::GetTypeFromStorage( const SotStorage& rStg )
     }
     else
     {
-        sal_Int32 nClipId = ((SotStorage&)rStg).GetFormat();
-        if ( nClipId )
+        SotClipboardFormatId nClipId = ((SotStorage&)rStg).GetFormat();
+        if ( nClipId != SotClipboardFormatId::NONE )
         {
             const SfxFilter* pFilter = SfxFilterMatcher().GetFilter4ClipBoardId( nClipId );
             if ( pFilter )
@@ -198,8 +198,8 @@ OUString SfxFilter::GetTypeFromStorage(
         {
             ::com::sun::star::datatransfer::DataFlavor aDataFlavor;
             aDataFlavor.MimeType = aMediaType;
-            sal_uInt32 nClipId = SotExchange::GetFormat( aDataFlavor );
-            if ( nClipId )
+            SotClipboardFormatId nClipId = SotExchange::GetFormat( aDataFlavor );
+            if ( nClipId != SotClipboardFormatId::NONE )
             {
                 SfxFilterFlags nMust = SFX_FILTER_IMPORT, nDont = SFX_FILTER_NOTINSTALLED;
                 if ( bTemplate )

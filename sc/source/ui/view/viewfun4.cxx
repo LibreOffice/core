@@ -82,7 +82,7 @@ void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
                                     ::com::sun::star::datatransfer::XTransferable >& rxTransferable )
 {
     TransferableDataHelper aDataHelper( rxTransferable );
-    if ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_EDITENGINE ) )
+    if ( aDataHelper.HasFormat( SotClipboardFormatId::EDITENGINE ) )
     {
         HideAllCursors();
 
@@ -165,11 +165,11 @@ void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
 
         OUString aStr;
         SotStorageStreamRef xStream;
-        if ( aDataHelper.GetSotStorageStream( SOT_FORMAT_RTF, xStream ) && xStream.Is() )
+        if ( aDataHelper.GetSotStorageStream( SotClipboardFormatId::RTF, xStream ) && xStream.Is() )
             // mba: clipboard always must contain absolute URLs (could be from alien source)
-            aImpEx.ImportStream( *xStream, OUString(), SOT_FORMAT_RTF );
-        else if ( aDataHelper.GetString( SOT_FORMAT_RTF, aStr ) )
-            aImpEx.ImportString( aStr, SOT_FORMAT_RTF );
+            aImpEx.ImportStream( *xStream, OUString(), SotClipboardFormatId::RTF );
+        else if ( aDataHelper.GetString( SotClipboardFormatId::RTF, aStr ) )
+            aImpEx.ImportString( aStr, SotClipboardFormatId::RTF );
 
         AdjustRowHeight( nStartRow, aImpEx.GetRange().aEnd.Row() );
         pDocSh->UpdateOle(&GetViewData());
@@ -564,7 +564,7 @@ void ScViewFunc::DoSheetConversion( const ScConversionParam& rConvParam, bool bR
     rDoc.EnableIdle(bOldEnabled);
 }
 
-// Pasten von FORMAT_FILE-Items
+// Pasten von SotClipboardFormatId::FILE-Items
 //  wird nicht direkt aus Drop aufgerufen, sondern asynchron -> Dialoge sind erlaubt
 
 bool ScViewFunc::PasteFile( const Point& rPos, const OUString& rFile, bool bLink )
@@ -669,7 +669,7 @@ bool ScViewFunc::PasteFile( const Point& rPos, const OUString& rFile, bool bLink
     }
 }
 
-bool ScViewFunc::PasteBookmark( sal_uLong nFormatId,
+bool ScViewFunc::PasteBookmark( SotClipboardFormatId nFormatId,
                                 const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::datatransfer::XTransferable >& rxTransferable,
                                 SCCOL nPosX, SCROW nPosY )

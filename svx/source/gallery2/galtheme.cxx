@@ -1185,24 +1185,24 @@ bool GalleryTheme::InsertTransferable( const uno::Reference< datatransfer::XTran
         TransferableDataHelper  aDataHelper( rxTransferable );
         boost::scoped_ptr<Graphic> pGraphic;
 
-        if( aDataHelper.HasFormat( SOT_FORMATSTR_ID_DRAWING ) )
+        if( aDataHelper.HasFormat( SotClipboardFormatId::DRAWING ) )
         {
             SotStorageStreamRef xModelStm;
 
-            if( aDataHelper.GetSotStorageStream( SOT_FORMATSTR_ID_DRAWING, xModelStm ) )
+            if( aDataHelper.GetSotStorageStream( SotClipboardFormatId::DRAWING, xModelStm ) )
                 bRet = InsertModelStream( xModelStm, nInsertPos );
         }
-        else if( aDataHelper.HasFormat( SOT_FORMAT_FILE_LIST ) ||
-                 aDataHelper.HasFormat( FORMAT_FILE ) )
+        else if( aDataHelper.HasFormat( SotClipboardFormatId::FILE_LIST ) ||
+                 aDataHelper.HasFormat( SotClipboardFormatId::FILE ) )
         {
             FileList aFileList;
 
-            if( aDataHelper.HasFormat( SOT_FORMAT_FILE_LIST ) )
-                aDataHelper.GetFileList( SOT_FORMAT_FILE_LIST, aFileList );
+            if( aDataHelper.HasFormat( SotClipboardFormatId::FILE_LIST ) )
+                aDataHelper.GetFileList( SotClipboardFormatId::FILE_LIST, aFileList );
             else
             {
                 OUString aFile;
-                if (aDataHelper.GetString(FORMAT_FILE, aFile) && !aFile.isEmpty())
+                if (aDataHelper.GetString(SotClipboardFormatId::FILE, aFile) && !aFile.isEmpty())
                     aFileList.AppendFile( aFile );
             }
 
@@ -1226,16 +1226,16 @@ bool GalleryTheme::InsertTransferable( const uno::Reference< datatransfer::XTran
         else
         {
             Graphic aGraphic;
-            sal_uIntPtr nFormat = 0;
+            SotClipboardFormatId nFormat = SotClipboardFormatId::NONE;
 
-            if( aDataHelper.HasFormat( SOT_FORMATSTR_ID_SVXB ) )
-                nFormat = SOT_FORMATSTR_ID_SVXB;
-            else if( aDataHelper.HasFormat( FORMAT_GDIMETAFILE ) )
-                nFormat = FORMAT_GDIMETAFILE;
-            else if( aDataHelper.HasFormat( FORMAT_BITMAP ) )
-                nFormat = FORMAT_BITMAP;
+            if( aDataHelper.HasFormat( SotClipboardFormatId::SVXB ) )
+                nFormat = SotClipboardFormatId::SVXB;
+            else if( aDataHelper.HasFormat( SotClipboardFormatId::GDIMETAFILE ) )
+                nFormat = SotClipboardFormatId::GDIMETAFILE;
+            else if( aDataHelper.HasFormat( SotClipboardFormatId::BITMAP ) )
+                nFormat = SotClipboardFormatId::BITMAP;
 
-            if( nFormat && aDataHelper.GetGraphic( nFormat, aGraphic ) )
+            if( nFormat != SotClipboardFormatId::NONE && aDataHelper.GetGraphic( nFormat, aGraphic ) )
                 pGraphic.reset(new Graphic( aGraphic ));
         }
 
@@ -1243,13 +1243,13 @@ bool GalleryTheme::InsertTransferable( const uno::Reference< datatransfer::XTran
         {
             bRet = false;
 
-            if( aDataHelper.HasFormat( SOT_FORMATSTR_ID_SVIM ) )
+            if( aDataHelper.HasFormat( SotClipboardFormatId::SVIM ) )
             {
 
                 ImageMap aImageMap;
 
                 // according to KA we don't need a BaseURL here
-                if( aDataHelper.GetImageMap( SOT_FORMATSTR_ID_SVIM, aImageMap ) )
+                if( aDataHelper.GetImageMap( SotClipboardFormatId::SVIM, aImageMap ) )
                 {
                     SvxGalleryDrawModel aModel;
 

@@ -188,82 +188,82 @@ void SvObjectServerList::FillInsertObjects()
     }
 }
 
-OUString SvPasteObjectHelper::GetSotFormatUIName( SotFormatStringId nId )
+OUString SvPasteObjectHelper::GetSotFormatUIName( SotClipboardFormatId nId )
 {
     struct SotResourcePair
     {
-        SotFormatStringId   mnSotId;
+        SotClipboardFormatId   mnSotId;
         sal_uInt16              mnResId;
     };
 
     static const SotResourcePair aSotResourcePairs[] =
     {
-        { SOT_FORMAT_STRING,                    STR_FORMAT_STRING },
-        { SOT_FORMAT_BITMAP,                    STR_FORMAT_BITMAP },
-        { SOT_FORMAT_GDIMETAFILE,               STR_FORMAT_GDIMETAFILE },
-        { SOT_FORMAT_RTF,                       STR_FORMAT_RTF },
-        { SOT_FORMATSTR_ID_DRAWING,             STR_FORMAT_ID_DRAWING },
-        { SOT_FORMATSTR_ID_SVXB,                STR_FORMAT_ID_SVXB },
-        { SOT_FORMATSTR_ID_INTERNALLINK_STATE,  STR_FORMAT_ID_INTERNALLINK_STATE },
-        { SOT_FORMATSTR_ID_SOLK,                STR_FORMAT_ID_SOLK },
-        { SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK,   STR_FORMAT_ID_NETSCAPE_BOOKMARK },
-        { SOT_FORMATSTR_ID_STARSERVER,          STR_FORMAT_ID_STARSERVER },
-        { SOT_FORMATSTR_ID_STAROBJECT,          STR_FORMAT_ID_STAROBJECT },
-        { SOT_FORMATSTR_ID_APPLETOBJECT,        STR_FORMAT_ID_APPLETOBJECT },
-        { SOT_FORMATSTR_ID_PLUGIN_OBJECT,       STR_FORMAT_ID_PLUGIN_OBJECT },
-        { SOT_FORMATSTR_ID_STARWRITER_30,       STR_FORMAT_ID_STARWRITER_30 },
-        { SOT_FORMATSTR_ID_STARWRITER_40,       STR_FORMAT_ID_STARWRITER_40 },
-        { SOT_FORMATSTR_ID_STARWRITER_50,       STR_FORMAT_ID_STARWRITER_50 },
-        { SOT_FORMATSTR_ID_STARWRITERWEB_40,    STR_FORMAT_ID_STARWRITERWEB_40 },
-        { SOT_FORMATSTR_ID_STARWRITERWEB_50,    STR_FORMAT_ID_STARWRITERWEB_50 },
-        { SOT_FORMATSTR_ID_STARWRITERGLOB_40,   STR_FORMAT_ID_STARWRITERGLOB_40 },
-        { SOT_FORMATSTR_ID_STARWRITERGLOB_50,   STR_FORMAT_ID_STARWRITERGLOB_50 },
-        { SOT_FORMATSTR_ID_STARDRAW,            STR_FORMAT_ID_STARDRAW },
-        { SOT_FORMATSTR_ID_STARDRAW_40,         STR_FORMAT_ID_STARDRAW_40 },
-        { SOT_FORMATSTR_ID_STARIMPRESS_50,      STR_FORMAT_ID_STARIMPRESS_50 },
-        { SOT_FORMATSTR_ID_STARDRAW_50,         STR_FORMAT_ID_STARDRAW_50 },
-        { SOT_FORMATSTR_ID_STARCALC,            STR_FORMAT_ID_STARCALC },
-        { SOT_FORMATSTR_ID_STARCALC_40,         STR_FORMAT_ID_STARCALC_40 },
-        { SOT_FORMATSTR_ID_STARCALC_50,         STR_FORMAT_ID_STARCALC_50 },
-        { SOT_FORMATSTR_ID_STARCHART,           STR_FORMAT_ID_STARCHART },
-        { SOT_FORMATSTR_ID_STARCHART_40,        STR_FORMAT_ID_STARCHART_40 },
-        { SOT_FORMATSTR_ID_STARCHART_50,        STR_FORMAT_ID_STARCHART_50 },
-        { SOT_FORMATSTR_ID_STARIMAGE,           STR_FORMAT_ID_STARIMAGE },
-        { SOT_FORMATSTR_ID_STARIMAGE_40,        STR_FORMAT_ID_STARIMAGE_40 },
-        { SOT_FORMATSTR_ID_STARIMAGE_50,        STR_FORMAT_ID_STARIMAGE_50 },
-        { SOT_FORMATSTR_ID_STARMATH,            STR_FORMAT_ID_STARMATH },
-        { SOT_FORMATSTR_ID_STARMATH_40,         STR_FORMAT_ID_STARMATH_40 },
-        { SOT_FORMATSTR_ID_STARMATH_50,         STR_FORMAT_ID_STARMATH_50 },
-        { SOT_FORMATSTR_ID_STAROBJECT_PAINTDOC, STR_FORMAT_ID_STAROBJECT_PAINTDOC },
-        { SOT_FORMATSTR_ID_HTML,                STR_FORMAT_ID_HTML },
-        { SOT_FORMATSTR_ID_HTML_SIMPLE,         STR_FORMAT_ID_HTML_SIMPLE },
-        { SOT_FORMATSTR_ID_BIFF_5,              STR_FORMAT_ID_BIFF_5 },
-        { SOT_FORMATSTR_ID_BIFF_8,              STR_FORMAT_ID_BIFF_8 },
-        { SOT_FORMATSTR_ID_SYLK,                STR_FORMAT_ID_SYLK },
-        { SOT_FORMATSTR_ID_LINK,                STR_FORMAT_ID_LINK },
-        { SOT_FORMATSTR_ID_DIF,                 STR_FORMAT_ID_DIF },
-        { SOT_FORMATSTR_ID_MSWORD_DOC,          STR_FORMAT_ID_MSWORD_DOC },
-        { SOT_FORMATSTR_ID_STAR_FRAMESET_DOC,   STR_FORMAT_ID_STAR_FRAMESET_DOC },
-        { SOT_FORMATSTR_ID_OFFICE_DOC,          STR_FORMAT_ID_OFFICE_DOC },
-        { SOT_FORMATSTR_ID_NOTES_DOCINFO,       STR_FORMAT_ID_NOTES_DOCINFO },
-        { SOT_FORMATSTR_ID_SFX_DOC,             STR_FORMAT_ID_SFX_DOC },
-        { SOT_FORMATSTR_ID_STARCHARTDOCUMENT_50,STR_FORMAT_ID_STARCHARTDOCUMENT_50 },
-        { SOT_FORMATSTR_ID_GRAPHOBJ,            STR_FORMAT_ID_GRAPHOBJ },
-        { SOT_FORMATSTR_ID_STARWRITER_60,       STR_FORMAT_ID_STARWRITER_60 },
-        { SOT_FORMATSTR_ID_STARWRITERWEB_60,    STR_FORMAT_ID_STARWRITERWEB_60 },
-        { SOT_FORMATSTR_ID_STARWRITERGLOB_60,   STR_FORMAT_ID_STARWRITERGLOB_60 },
-        { SOT_FORMATSTR_ID_STARDRAW_60,         STR_FORMAT_ID_STARDRAW_60 },
-        { SOT_FORMATSTR_ID_STARIMPRESS_60,      STR_FORMAT_ID_STARIMPRESS_60 },
-        { SOT_FORMATSTR_ID_STARCALC_60,         STR_FORMAT_ID_STARCALC_60 },
-        { SOT_FORMATSTR_ID_STARCHART_60,        STR_FORMAT_ID_STARCHART_60 },
-        { SOT_FORMATSTR_ID_STARMATH_60,         STR_FORMAT_ID_STARMATH_60 },
-        { SOT_FORMATSTR_ID_WMF,                 STR_FORMAT_ID_WMF },
-        { SOT_FORMATSTR_ID_DBACCESS_QUERY,      STR_FORMAT_ID_DBACCESS_QUERY },
-        { SOT_FORMATSTR_ID_DBACCESS_TABLE,      STR_FORMAT_ID_DBACCESS_TABLE },
-        { SOT_FORMATSTR_ID_DBACCESS_COMMAND,    STR_FORMAT_ID_DBACCESS_COMMAND },
-        { SOT_FORMATSTR_ID_DIALOG_60,           STR_FORMAT_ID_DIALOG_60 },
-        { SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR,   STR_FORMAT_ID_FILEGRPDESCRIPTOR },
-        { SOT_FORMATSTR_ID_HTML_NO_COMMENT,     STR_FORMAT_ID_HTML_NO_COMMENT }
+        { SotClipboardFormatId::STRING,                    STR_FORMAT_STRING },
+        { SotClipboardFormatId::BITMAP,                    STR_FORMAT_BITMAP },
+        { SotClipboardFormatId::GDIMETAFILE,               STR_FORMAT_GDIMETAFILE },
+        { SotClipboardFormatId::RTF,                       STR_FORMAT_RTF },
+        { SotClipboardFormatId::DRAWING,             STR_FORMAT_ID_DRAWING },
+        { SotClipboardFormatId::SVXB,                STR_FORMAT_ID_SVXB },
+        { SotClipboardFormatId::INTERNALLINK_STATE,  STR_FORMAT_ID_INTERNALLINK_STATE },
+        { SotClipboardFormatId::SOLK,                STR_FORMAT_ID_SOLK },
+        { SotClipboardFormatId::NETSCAPE_BOOKMARK,   STR_FORMAT_ID_NETSCAPE_BOOKMARK },
+        { SotClipboardFormatId::STARSERVER,          STR_FORMAT_ID_STARSERVER },
+        { SotClipboardFormatId::STAROBJECT,          STR_FORMAT_ID_STAROBJECT },
+        { SotClipboardFormatId::APPLETOBJECT,        STR_FORMAT_ID_APPLETOBJECT },
+        { SotClipboardFormatId::PLUGIN_OBJECT,       STR_FORMAT_ID_PLUGIN_OBJECT },
+        { SotClipboardFormatId::STARWRITER_30,       STR_FORMAT_ID_STARWRITER_30 },
+        { SotClipboardFormatId::STARWRITER_40,       STR_FORMAT_ID_STARWRITER_40 },
+        { SotClipboardFormatId::STARWRITER_50,       STR_FORMAT_ID_STARWRITER_50 },
+        { SotClipboardFormatId::STARWRITERWEB_40,    STR_FORMAT_ID_STARWRITERWEB_40 },
+        { SotClipboardFormatId::STARWRITERWEB_50,    STR_FORMAT_ID_STARWRITERWEB_50 },
+        { SotClipboardFormatId::STARWRITERGLOB_40,   STR_FORMAT_ID_STARWRITERGLOB_40 },
+        { SotClipboardFormatId::STARWRITERGLOB_50,   STR_FORMAT_ID_STARWRITERGLOB_50 },
+        { SotClipboardFormatId::STARDRAW,            STR_FORMAT_ID_STARDRAW },
+        { SotClipboardFormatId::STARDRAW_40,         STR_FORMAT_ID_STARDRAW_40 },
+        { SotClipboardFormatId::STARIMPRESS_50,      STR_FORMAT_ID_STARIMPRESS_50 },
+        { SotClipboardFormatId::STARDRAW_50,         STR_FORMAT_ID_STARDRAW_50 },
+        { SotClipboardFormatId::STARCALC,            STR_FORMAT_ID_STARCALC },
+        { SotClipboardFormatId::STARCALC_40,         STR_FORMAT_ID_STARCALC_40 },
+        { SotClipboardFormatId::STARCALC_50,         STR_FORMAT_ID_STARCALC_50 },
+        { SotClipboardFormatId::STARCHART,           STR_FORMAT_ID_STARCHART },
+        { SotClipboardFormatId::STARCHART_40,        STR_FORMAT_ID_STARCHART_40 },
+        { SotClipboardFormatId::STARCHART_50,        STR_FORMAT_ID_STARCHART_50 },
+        { SotClipboardFormatId::STARIMAGE,           STR_FORMAT_ID_STARIMAGE },
+        { SotClipboardFormatId::STARIMAGE_40,        STR_FORMAT_ID_STARIMAGE_40 },
+        { SotClipboardFormatId::STARIMAGE_50,        STR_FORMAT_ID_STARIMAGE_50 },
+        { SotClipboardFormatId::STARMATH,            STR_FORMAT_ID_STARMATH },
+        { SotClipboardFormatId::STARMATH_40,         STR_FORMAT_ID_STARMATH_40 },
+        { SotClipboardFormatId::STARMATH_50,         STR_FORMAT_ID_STARMATH_50 },
+        { SotClipboardFormatId::STAROBJECT_PAINTDOC, STR_FORMAT_ID_STAROBJECT_PAINTDOC },
+        { SotClipboardFormatId::HTML,                STR_FORMAT_ID_HTML },
+        { SotClipboardFormatId::HTML_SIMPLE,         STR_FORMAT_ID_HTML_SIMPLE },
+        { SotClipboardFormatId::BIFF_5,              STR_FORMAT_ID_BIFF_5 },
+        { SotClipboardFormatId::BIFF_8,              STR_FORMAT_ID_BIFF_8 },
+        { SotClipboardFormatId::SYLK,                STR_FORMAT_ID_SYLK },
+        { SotClipboardFormatId::LINK,                STR_FORMAT_ID_LINK },
+        { SotClipboardFormatId::DIF,                 STR_FORMAT_ID_DIF },
+        { SotClipboardFormatId::MSWORD_DOC,          STR_FORMAT_ID_MSWORD_DOC },
+        { SotClipboardFormatId::STAR_FRAMESET_DOC,   STR_FORMAT_ID_STAR_FRAMESET_DOC },
+        { SotClipboardFormatId::OFFICE_DOC,          STR_FORMAT_ID_OFFICE_DOC },
+        { SotClipboardFormatId::NOTES_DOCINFO,       STR_FORMAT_ID_NOTES_DOCINFO },
+        { SotClipboardFormatId::SFX_DOC,             STR_FORMAT_ID_SFX_DOC },
+        { SotClipboardFormatId::STARCHARTDOCUMENT_50,STR_FORMAT_ID_STARCHARTDOCUMENT_50 },
+        { SotClipboardFormatId::GRAPHOBJ,            STR_FORMAT_ID_GRAPHOBJ },
+        { SotClipboardFormatId::STARWRITER_60,       STR_FORMAT_ID_STARWRITER_60 },
+        { SotClipboardFormatId::STARWRITERWEB_60,    STR_FORMAT_ID_STARWRITERWEB_60 },
+        { SotClipboardFormatId::STARWRITERGLOB_60,   STR_FORMAT_ID_STARWRITERGLOB_60 },
+        { SotClipboardFormatId::STARDRAW_60,         STR_FORMAT_ID_STARDRAW_60 },
+        { SotClipboardFormatId::STARIMPRESS_60,      STR_FORMAT_ID_STARIMPRESS_60 },
+        { SotClipboardFormatId::STARCALC_60,         STR_FORMAT_ID_STARCALC_60 },
+        { SotClipboardFormatId::STARCHART_60,        STR_FORMAT_ID_STARCHART_60 },
+        { SotClipboardFormatId::STARMATH_60,         STR_FORMAT_ID_STARMATH_60 },
+        { SotClipboardFormatId::WMF,                 STR_FORMAT_ID_WMF },
+        { SotClipboardFormatId::DBACCESS_QUERY,      STR_FORMAT_ID_DBACCESS_QUERY },
+        { SotClipboardFormatId::DBACCESS_TABLE,      STR_FORMAT_ID_DBACCESS_TABLE },
+        { SotClipboardFormatId::DBACCESS_COMMAND,    STR_FORMAT_ID_DBACCESS_COMMAND },
+        { SotClipboardFormatId::DIALOG_60,           STR_FORMAT_ID_DIALOG_60 },
+        { SotClipboardFormatId::FILEGRPDESCRIPTOR,   STR_FORMAT_ID_FILEGRPDESCRIPTOR },
+        { SotClipboardFormatId::HTML_NO_COMMENT,     STR_FORMAT_ID_HTML_NO_COMMENT }
     };
 
     OUString aUIName;
@@ -283,13 +283,13 @@ OUString SvPasteObjectHelper::GetSotFormatUIName( SotFormatStringId nId )
     return aUIName;
 }
 
-bool SvPasteObjectHelper::GetEmbeddedName(const TransferableDataHelper& rData, OUString& _rName, OUString& _rSource, SotFormatStringId& _nFormat)
+bool SvPasteObjectHelper::GetEmbeddedName(const TransferableDataHelper& rData, OUString& _rName, OUString& _rSource, SotClipboardFormatId& _nFormat)
 {
     bool bRet = false;
-    if( _nFormat == SOT_FORMATSTR_ID_EMBED_SOURCE_OLE || _nFormat == SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE )
+    if( _nFormat == SotClipboardFormatId::EMBED_SOURCE_OLE || _nFormat == SotClipboardFormatId::EMBEDDED_OBJ_OLE )
     {
         datatransfer::DataFlavor aFlavor;
-        SotExchange::GetFormatDataFlavor( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR_OLE, aFlavor );
+        SotExchange::GetFormatDataFlavor( SotClipboardFormatId::OBJECTDESCRIPTOR_OLE, aFlavor );
 
         uno::Any aAny;
         if( rData.HasFormat( aFlavor ) &&
@@ -315,7 +315,7 @@ bool SvPasteObjectHelper::GetEmbeddedName(const TransferableDataHelper& rData, O
 
                 _rName += pUserTypeName;
                 // the following statement was here for historical reasons, it is commented out since it causes bug i49460
-                // _nFormat = SOT_FORMATSTR_ID_EMBED_SOURCE_OLE;
+                // _nFormat = SotClipboardFormatId::EMBED_SOURCE_OLE;
             }
 
             // determine the source of the embedded object

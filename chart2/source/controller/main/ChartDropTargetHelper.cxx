@@ -82,7 +82,7 @@ sal_Int8 ChartDropTargetHelper::AcceptDrop( const AcceptDropEvent& rEvt )
     if( ( rEvt.mnAction == DND_ACTION_COPY ||
           rEvt.mnAction == DND_ACTION_MOVE ) &&
         satisfiesPrerequisites() &&
-        IsDropFormatSupported( SOT_FORMATSTR_ID_LINK ) )
+        IsDropFormatSupported( SotClipboardFormatId::LINK ) )
     {
         // @todo: check if the data is suitable. Is this possible without XTransferable?
         nResult = rEvt.mnAction;
@@ -101,9 +101,9 @@ sal_Int8 ChartDropTargetHelper::ExecuteDrop( const ExecuteDropEvent& rEvt )
         satisfiesPrerequisites())
     {
         TransferableDataHelper aDataHelper( rEvt.maDropEvent.Transferable );
-        if( aDataHelper.HasFormat( SOT_FORMATSTR_ID_LINK ))
+        if( aDataHelper.HasFormat( SotClipboardFormatId::LINK ))
         {
-            Sequence<sal_Int8> aBytes = aDataHelper.GetSequence(SOT_FORMATSTR_ID_LINK, OUString());
+            Sequence<sal_Int8> aBytes = aDataHelper.GetSequence(SotClipboardFormatId::LINK, OUString());
             if (aBytes.getLength())
             {
                 ::std::vector< OUString > aStrings( lcl_getStringsFromByteSequence( aBytes ));

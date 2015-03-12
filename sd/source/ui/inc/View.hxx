@@ -147,7 +147,8 @@ public:
 
     bool                    InsertData( const TransferableDataHelper& rDataHelper,
                                         const Point& rPos, sal_Int8& rDnDAction, bool bDrag,
-                                        sal_uLong nFormat = 0, sal_uInt16 nPage = SDRPAGE_NOTFOUND, sal_uInt16 nLayer = SDRLAYER_NOTFOUND );
+                                        SotClipboardFormatId nFormat = SotClipboardFormatId::NONE,
+                                        sal_uInt16 nPage = SDRPAGE_NOTFOUND, sal_uInt16 nLayer = SDRLAYER_NOTFOUND );
     /** gets the metafile from the given transferable helper and insert it as a graphic shape.
         @param bOptimize if set to true, the metafile is analyzed and if only one bitmap action is
                          present, then is inserted as a single graphic.

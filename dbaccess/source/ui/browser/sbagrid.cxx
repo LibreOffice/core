@@ -1251,10 +1251,11 @@ void SbaGridControl::DoFieldDrag(sal_uInt16 nColumnPos, sal_Int16 nRowPos)
         {
             switch (_aType.mnSotId)
             {
-                case SOT_FORMATSTR_ID_DBACCESS_TABLE:   // table descriptor
-                case SOT_FORMATSTR_ID_DBACCESS_QUERY:   // query descriptor
-                case SOT_FORMATSTR_ID_DBACCESS_COMMAND: // SQL command
+                case SotClipboardFormatId::DBACCESS_TABLE:   // table descriptor
+                case SotClipboardFormatId::DBACCESS_QUERY:   // query descriptor
+                case SotClipboardFormatId::DBACCESS_COMMAND: // SQL command
                     return true;
+                default: break;
             }
             return false;
         }
@@ -1267,7 +1268,7 @@ sal_Int8 SbaGridControl::AcceptDrop( const BrowserAcceptDropEvent& rEvt )
     if (!::dbtools::getConnection(Reference< XRowSet > (getDataSource(),UNO_QUERY)).is())
         return nAction;
 
-    if ( IsDropFormatSupported( FORMAT_STRING ) ) do
+    if ( IsDropFormatSupported( SotClipboardFormatId::STRING ) ) do
     {   // odd construction, but spares us a lot of (explicit ;) goto's
 
         if (!GetEmptyRow().Is())
@@ -1366,7 +1367,7 @@ sal_Int8 SbaGridControl::ExecuteDrop( const BrowserExecuteDropEvent& rEvt )
     if (!::dbtools::getConnection(Reference< XRowSet > (xDataSource,UNO_QUERY)).is())
         return DND_ACTION_NONE;
 
-    if ( IsDropFormatSupported( FORMAT_STRING ) )
+    if ( IsDropFormatSupported( SotClipboardFormatId::STRING ) )
     {
         long    nRow = GetRowAtYPosPixel(rEvt.maPosPixel.Y(), false);
         sal_uInt16  nCol = GetColumnAtXPosPixel(rEvt.maPosPixel.X(), false);
@@ -1395,7 +1396,7 @@ sal_Int8 SbaGridControl::ExecuteDrop( const BrowserExecuteDropEvent& rEvt )
         // get the dropped string
         TransferableDataHelper aDropped( rEvt.maDropEvent.Transferable );
         OUString sDropped;
-        if ( !aDropped.GetString( FORMAT_STRING, sDropped ) )
+        if ( !aDropped.GetString( SotClipboardFormatId::STRING, sDropped ) )
             return DND_ACTION_NONE;
 
         rEdit.SetText( sDropped );

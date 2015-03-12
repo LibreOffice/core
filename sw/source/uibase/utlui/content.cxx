@@ -3447,13 +3447,13 @@ void NaviContentBookmark::Copy( TransferDataContainer& rData ) const
                     OUStringToOString(aDescr, eSysCSet) + OString(NAVI_BOOKMARK_DELIM) +
                     OString::number(nDefDrag) + OString(NAVI_BOOKMARK_DELIM) +
                     OString::number(nDocSh));
-    rData.CopyByteString(SOT_FORMATSTR_ID_SONLK, sStrBuf);
+    rData.CopyByteString(SotClipboardFormatId::SONLK, sStrBuf);
 }
 
 bool NaviContentBookmark::Paste( TransferableDataHelper& rData )
 {
     OUString sStr;
-    bool bRet = rData.GetString( SOT_FORMATSTR_ID_SONLK, sStr );
+    bool bRet = rData.GetString( SotClipboardFormatId::SONLK, sStr );
     if( bRet )
     {
         sal_Int32 nPos = 0;

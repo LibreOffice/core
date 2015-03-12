@@ -44,12 +44,12 @@ void ScLinkTransferObj::AddSupportedFormats()
     {
         //  TransferableHelper::SetINetBookmark formats
 
-        AddFormat( SOT_FORMATSTR_ID_SOLK );
-        AddFormat( SOT_FORMAT_STRING );
-        AddFormat( SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR );
-        AddFormat( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK );
-        AddFormat( SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR );
-        AddFormat( SOT_FORMATSTR_ID_FILECONTENT );
+        AddFormat( SotClipboardFormatId::SOLK );
+        AddFormat( SotClipboardFormatId::STRING );
+        AddFormat( SotClipboardFormatId::UNIFORMRESOURCELOCATOR );
+        AddFormat( SotClipboardFormatId::NETSCAPE_BOOKMARK );
+        AddFormat( SotClipboardFormatId::FILEGRPDESCRIPTOR );
+        AddFormat( SotClipboardFormatId::FILECONTENT );
     }
 }
 

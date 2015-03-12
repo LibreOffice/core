@@ -391,7 +391,7 @@ bool AbstractInsertObjectDialog_Impl::IsCreateNew()
    return pDlg->GetIconIfIconified( pGraphicMediaType );
 }
 
-void AbstractPasteDialog_Impl::Insert( SotFormatStringId nFormat, const OUString & rFormatName )
+void AbstractPasteDialog_Impl::Insert( SotClipboardFormatId nFormat, const OUString & rFormatName )
 {
     pDlg->Insert( nFormat, rFormatName );
 }
@@ -401,7 +401,7 @@ void AbstractPasteDialog_Impl::SetObjName( const SvGlobalName & rClass, const OU
     pDlg->SetObjName( rClass, rObjName );
 }
 
-sal_uLong AbstractPasteDialog_Impl::GetFormat( const TransferableDataHelper& aHelper,
+SotClipboardFormatId AbstractPasteDialog_Impl::GetFormat( const TransferableDataHelper& aHelper,
                         const DataFlavorExVector* pFormats,
                         const TransferableObjectDescriptor* pDesc )
 {

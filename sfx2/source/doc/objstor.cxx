@@ -310,25 +310,25 @@ namespace {
  * Chart2 does not have an Object shell, so handle this here for now
  * If we ever implement a full scale object shell in chart2 move it there
  */
-sal_uInt32 GetChartVersion( sal_Int32 nVersion, bool bTemplate )
+SotClipboardFormatId GetChartVersion( sal_Int32 nVersion, bool bTemplate )
 {
     if( nVersion == SOFFICE_FILEFORMAT_60)
     {
-        return SOT_FORMATSTR_ID_STARCHART_60;
+        return SotClipboardFormatId::STARCHART_60;
     }
     else if( nVersion == SOFFICE_FILEFORMAT_8)
     {
         if (bTemplate)
         {
             SAL_WARN("sfx", "no chart template support yet");
-            return SOT_FORMATSTR_ID_STARCHART_8;
+            return SotClipboardFormatId::STARCHART_8;
         }
         else
-            return SOT_FORMATSTR_ID_STARCHART_8;
+            return SotClipboardFormatId::STARCHART_8;
     }
 
     SAL_WARN("sfx", "unsupported version");
-    return 0;
+    return SotClipboardFormatId::NONE;
 }
 
 }
@@ -343,14 +343,14 @@ void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xSto
     {
         SvGlobalName aName;
         OUString aFullTypeName, aShortTypeName, aAppName;
-        sal_uInt32 nClipFormat=0;
+        SotClipboardFormatId nClipFormat = SotClipboardFormatId::NONE;
 
         if(!bChart)
             FillClass( &aName, &nClipFormat, &aAppName, &aFullTypeName, &aShortTypeName, nVersion, bTemplate );
         else
             nClipFormat = GetChartVersion(nVersion, bTemplate);
 
-        if ( nClipFormat )
+        if ( nClipFormat != SotClipboardFormatId::NONE )
         {
             // basic doesn't have a ClipFormat
             // without MediaType the storage is not really usable, but currently the BasicIDE still
@@ -1346,7 +1346,7 @@ bool SfxObjectShell::SaveTo_Impl
         // If the filter is a "cross export" filter ( f.e. a filter for exporting an impress document from
         // a draw document ), the ClassId of the destination storage is different from the ClassId of this
         // document. It can be retrieved from the default filter for the desired target format
-        long nFormat = rMedium.GetFilter()->GetFormat();
+        SotClipboardFormatId nFormat = rMedium.GetFilter()->GetFormat();
         SfxFilterMatcher& rMatcher = SfxGetpApp()->GetFilterMatcher();
         const SfxFilter *pFilt = rMatcher.GetFilter4ClipBoardId( nFormat );
         if ( pFilt )
@@ -3330,26 +3330,26 @@ bool StoragesOfUnknownMediaTypeAreCopied_Impl( const uno::Reference< embed::XSto
                 {
                     ::com::sun::star::datatransfer::DataFlavor aDataFlavor;
                     aDataFlavor.MimeType = aMediaType;
-                    sal_uInt32 nFormat = SotExchange::GetFormat( aDataFlavor );
+                    SotClipboardFormatId nFormat = SotExchange::GetFormat( aDataFlavor );
 
                     switch ( nFormat )
                     {
-                        case SOT_FORMATSTR_ID_STARWRITER_60 :
-                        case SOT_FORMATSTR_ID_STARWRITERWEB_60 :
-                        case SOT_FORMATSTR_ID_STARWRITERGLOB_60 :
-                        case SOT_FORMATSTR_ID_STARDRAW_60 :
-                        case SOT_FORMATSTR_ID_STARIMPRESS_60 :
-                        case SOT_FORMATSTR_ID_STARCALC_60 :
-                        case SOT_FORMATSTR_ID_STARCHART_60 :
-                        case SOT_FORMATSTR_ID_STARMATH_60 :
-                        case SOT_FORMATSTR_ID_STARWRITER_8:
-                        case SOT_FORMATSTR_ID_STARWRITERWEB_8:
-                        case SOT_FORMATSTR_ID_STARWRITERGLOB_8:
-                        case SOT_FORMATSTR_ID_STARDRAW_8:
-                        case SOT_FORMATSTR_ID_STARIMPRESS_8:
-                        case SOT_FORMATSTR_ID_STARCALC_8:
-                        case SOT_FORMATSTR_ID_STARCHART_8:
-                        case SOT_FORMATSTR_ID_STARMATH_8:
+                        case SotClipboardFormatId::STARWRITER_60 :
+                        case SotClipboardFormatId::STARWRITERWEB_60 :
+                        case SotClipboardFormatId::STARWRITERGLOB_60 :
+                        case SotClipboardFormatId::STARDRAW_60 :
+                        case SotClipboardFormatId::STARIMPRESS_60 :
+                        case SotClipboardFormatId::STARCALC_60 :
+                        case SotClipboardFormatId::STARCHART_60 :
+                        case SotClipboardFormatId::STARMATH_60 :
+                        case SotClipboardFormatId::STARWRITER_8:
+                        case SotClipboardFormatId::STARWRITERWEB_8:
+                        case SotClipboardFormatId::STARWRITERGLOB_8:
+                        case SotClipboardFormatId::STARDRAW_8:
+                        case SotClipboardFormatId::STARIMPRESS_8:
+                        case SotClipboardFormatId::STARCALC_8:
+                        case SotClipboardFormatId::STARCHART_8:
+                        case SotClipboardFormatId::STARMATH_8:
                             break;
 
                         default:
@@ -3468,26 +3468,26 @@ bool SfxObjectShell::CopyStoragesOfUnknownMediaType( const uno::Reference< embed
                 {
                     ::com::sun::star::datatransfer::DataFlavor aDataFlavor;
                     aDataFlavor.MimeType = aMediaType;
-                    sal_uInt32 nFormat = SotExchange::GetFormat( aDataFlavor );
+                    SotClipboardFormatId nFormat = SotExchange::GetFormat( aDataFlavor );
 
                     switch ( nFormat )
                     {
-                        case SOT_FORMATSTR_ID_STARWRITER_60 :
-                        case SOT_FORMATSTR_ID_STARWRITERWEB_60 :
-                        case SOT_FORMATSTR_ID_STARWRITERGLOB_60 :
-                        case SOT_FORMATSTR_ID_STARDRAW_60 :
-                        case SOT_FORMATSTR_ID_STARIMPRESS_60 :
-                        case SOT_FORMATSTR_ID_STARCALC_60 :
-                        case SOT_FORMATSTR_ID_STARCHART_60 :
-                        case SOT_FORMATSTR_ID_STARMATH_60 :
-                        case SOT_FORMATSTR_ID_STARWRITER_8:
-                        case SOT_FORMATSTR_ID_STARWRITERWEB_8:
-                        case SOT_FORMATSTR_ID_STARWRITERGLOB_8:
-                        case SOT_FORMATSTR_ID_STARDRAW_8:
-                        case SOT_FORMATSTR_ID_STARIMPRESS_8:
-                        case SOT_FORMATSTR_ID_STARCALC_8:
-                        case SOT_FORMATSTR_ID_STARCHART_8:
-                        case SOT_FORMATSTR_ID_STARMATH_8:
+                        case SotClipboardFormatId::STARWRITER_60 :
+                        case SotClipboardFormatId::STARWRITERWEB_60 :
+                        case SotClipboardFormatId::STARWRITERGLOB_60 :
+                        case SotClipboardFormatId::STARDRAW_60 :
+                        case SotClipboardFormatId::STARIMPRESS_60 :
+                        case SotClipboardFormatId::STARCALC_60 :
+                        case SotClipboardFormatId::STARCHART_60 :
+                        case SotClipboardFormatId::STARMATH_60 :
+                        case SotClipboardFormatId::STARWRITER_8:
+                        case SotClipboardFormatId::STARWRITERWEB_8:
+                        case SotClipboardFormatId::STARWRITERGLOB_8:
+                        case SotClipboardFormatId::STARDRAW_8:
+                        case SotClipboardFormatId::STARIMPRESS_8:
+                        case SotClipboardFormatId::STARCALC_8:
+                        case SotClipboardFormatId::STARCHART_8:
+                        case SotClipboardFormatId::STARMATH_8:
                             break;
 
                         default:

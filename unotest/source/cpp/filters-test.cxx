@@ -53,7 +53,7 @@ void decode(const OUString& rIn, const OUString &rOut)
 void FiltersTest::recursiveScan(filterStatus nExpected,
     const OUString &rFilter, const OUString &rURL,
     const OUString &rUserData, unsigned int nFilterFlags,
-    unsigned int nClipboardID, unsigned int nFilterVersion, bool bExport)
+    SotClipboardFormatId nClipboardID, unsigned int nFilterVersion, bool bExport)
 {
     osl::Directory aDir(rURL);
 
@@ -131,7 +131,7 @@ void FiltersTest::recursiveScan(filterStatus nExpected,
 
 void FiltersTest::testDir(const OUString &rFilter,
     const OUString &rURL, const OUString &rUserData,
-    unsigned int nFilterFlags, unsigned int nClipboardID,
+    unsigned int nFilterFlags, SotClipboardFormatId nClipboardID,
     unsigned int nFilterVersion, bool bExport)
 {
     fprintf(stderr, "File tested,Test Result,Execution tools::Time (ms)\n");

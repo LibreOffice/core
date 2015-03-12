@@ -106,9 +106,9 @@ protected:
         FileFormat *pFmt = getFormat(nFormat);
         CPPUNIT_ASSERT_MESSAGE( "missing filter info", pFmt->pName != NULL );
 
-        sal_uInt32 nOptions = 0;
+        SotClipboardFormatId nOptions = SotClipboardFormatId::NONE;
         if (pFmt->nFormatType)
-            nOptions = SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS;
+            nOptions = SotClipboardFormatId::STARCALC_8;
         SfxFilter* aFilter = new SfxFilter(
             OUString::createFromAscii( pFmt->pFilterName ),
             OUString(), pFmt->nFormatType, nOptions,
@@ -142,9 +142,9 @@ protected:
     void exportTo(sd::DrawDocShell* pShell, FileFormat* pFormat, utl::TempFile& rTempFile)
     {
         SfxMedium aStoreMedium(rTempFile.GetURL(), STREAM_STD_WRITE);
-        sal_uInt32 nExportFormat = 0;
+        SotClipboardFormatId nExportFormat = SotClipboardFormatId::NONE;
         if (pFormat->nFormatType == ODP_FORMAT_TYPE)
-            nExportFormat = SFX_FILTER_EXPORT | SFX_FILTER_USESOPTIONS;
+            nExportFormat = SotClipboardFormatId::STARCALC_8;
         SfxFilter* pExportFilter = new SfxFilter(
                                         OUString::createFromAscii(pFormat->pFilterName),
                                         OUString(), pFormat->nFormatType, nExportFormat,
@@ -161,9 +161,9 @@ protected:
     void save(sd::DrawDocShell* pShell, FileFormat* pFormat, utl::TempFile& rTempFile)
     {
         SfxMedium aStoreMedium(rTempFile.GetURL(), STREAM_STD_WRITE);
-        sal_uInt32 nExportFormat = 0;
+        SotClipboardFormatId nExportFormat = SotClipboardFormatId::NONE;
         if (pFormat->nFormatType == ODP_FORMAT_TYPE)
-            nExportFormat = SFX_FILTER_EXPORT | SFX_FILTER_USESOPTIONS;
+            nExportFormat = SotClipboardFormatId::STARCHART_8;
         SfxFilter* pExportFilter = new SfxFilter(
                                         OUString::createFromAscii(pFormat->pFilterName),
                                         OUString(), pFormat->nFormatType, nExportFormat,

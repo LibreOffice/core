@@ -52,7 +52,7 @@ protected:
 
     virtual void            AddSupportedFormats() SAL_OVERRIDE;
     virtual bool GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) SAL_OVERRIDE;
-    virtual bool            WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId, const ::com::sun::star::datatransfer::DataFlavor& rFlavor ) SAL_OVERRIDE;
+    virtual bool            WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, SotClipboardFormatId nUserObjectId, const ::com::sun::star::datatransfer::DataFlavor& rFlavor ) SAL_OVERRIDE;
 
 public:
 
@@ -64,7 +64,7 @@ public:
 
 void SvxColorValueSetData::AddSupportedFormats()
 {
-    AddFormat( SOT_FORMATSTR_ID_XFA );
+    AddFormat( SotClipboardFormatId::XFA );
 }
 
 
@@ -73,16 +73,16 @@ bool SvxColorValueSetData::GetData( const css::datatransfer::DataFlavor& rFlavor
 {
     bool bRet = false;
 
-    if( SotExchange::GetFormat( rFlavor ) == SOT_FORMATSTR_ID_XFA )
+    if( SotExchange::GetFormat( rFlavor ) == SotClipboardFormatId::XFA )
     {
-        SetObject( &maData, 0, rFlavor );
+        SetObject( &maData, SotClipboardFormatId::NONE, rFlavor );
         bRet = true;
     }
 
     return bRet;
 }
 
-bool SvxColorValueSetData::WriteObject( SotStorageStreamRef& rxOStm, void*, sal_uInt32 , const ::com::sun::star::datatransfer::DataFlavor&  )
+bool SvxColorValueSetData::WriteObject( SotStorageStreamRef& rxOStm, void*, SotClipboardFormatId, const ::com::sun::star::datatransfer::DataFlavor&  )
 {
     WriteXFillExchangeData( *rxOStm, maData );
     return( rxOStm->GetError() == ERRCODE_NONE );

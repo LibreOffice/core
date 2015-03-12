@@ -971,7 +971,7 @@ namespace svx
                     if ( pActiveControlVCLWindow )
                     {
                         TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pActiveControlVCLWindow) );
-                        bDisable |= !aDataHelper.HasFormat( SOT_FORMAT_STRING );
+                        bDisable |= !aDataHelper.HasFormat( SotClipboardFormatId::STRING );
                     }
                     else
                         bDisable |= true;

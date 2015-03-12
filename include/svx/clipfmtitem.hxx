@@ -20,6 +20,7 @@
 #define INCLUDED_SVX_CLIPFMTITEM_HXX
 
 #include <rtl/ustring.hxx>
+#include <sot/formats.hxx>
 #include <svl/poolitem.hxx>
 #include <svx/svxdllapi.h>
 
@@ -42,12 +43,12 @@ public:
     virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const SAL_OVERRIDE;
     virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) SAL_OVERRIDE;
 
-    void AddClipbrdFormat( sal_uIntPtr nId, sal_uInt16 nPos = USHRT_MAX );
-    void AddClipbrdFormat( sal_uIntPtr nId, const OUString& rName,
+    void AddClipbrdFormat( SotClipboardFormatId nId, sal_uInt16 nPos = USHRT_MAX );
+    void AddClipbrdFormat( SotClipboardFormatId nId, const OUString& rName,
                             sal_uInt16 nPos = USHRT_MAX );
     sal_uInt16 Count() const;
 
-    sal_uIntPtr GetClipbrdFormatId( sal_uInt16 nPos ) const;
+    SotClipboardFormatId GetClipbrdFormatId( sal_uInt16 nPos ) const;
     const OUString GetClipbrdFormatName( sal_uInt16 nPos ) const;
 };
 

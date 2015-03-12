@@ -96,7 +96,7 @@ SvStream& WriteFileList( SvStream& rOStm, SAL_UNUSED_PARAMETER const FileList& )
 
 /* #i28176#
    The Windows clipboard bridge now provides a double '\0'
-   terminated list of file names for format SOT_FORMAT_FILE_LIST
+   terminated list of file names for format SotClipboardFormatId::FILE_LIST
    instead of the original Windows Sv_DROPFILES structure. All strings
    in this list are UTF16 strings. Shell link files will be already
    resolved by the Windows clipboard bridge.*/

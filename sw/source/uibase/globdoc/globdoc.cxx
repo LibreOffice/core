@@ -44,7 +44,7 @@ SwGlobalDocShell::~SwGlobalDocShell()
 }
 
 void SwGlobalDocShell::FillClass( SvGlobalName * pClassName,
-                                   sal_uInt32 * pClipFormat,
+                                   SotClipboardFormatId * pClipFormat,
                                    OUString * /*pAppName*/,
                                    OUString * pLongUserName,
                                    OUString * pUserName,
@@ -54,14 +54,14 @@ void SwGlobalDocShell::FillClass( SvGlobalName * pClassName,
     if (nVersion == SOFFICE_FILEFORMAT_60)
     {
         *pClassName = SvGlobalName( SO3_SWGLOB_CLASSID_60 );
-        *pClipFormat = SOT_FORMATSTR_ID_STARWRITERGLOB_60;
+        *pClipFormat = SotClipboardFormatId::STARWRITERGLOB_60;
         *pLongUserName = SW_RESSTR(STR_WRITER_GLOBALDOC_FULLTYPE);
         OSL_ENSURE( !bTemplate, "No template for Writer Global" );
     }
     else if (nVersion == SOFFICE_FILEFORMAT_8)
     {
         *pClassName     = SvGlobalName( SO3_SWGLOB_CLASSID_60 );
-        *pClipFormat    = bTemplate ? SOT_FORMATSTR_ID_STARWRITERGLOB_8_TEMPLATE : SOT_FORMATSTR_ID_STARWRITERGLOB_8;
+        *pClipFormat    = bTemplate ? SotClipboardFormatId::STARWRITERGLOB_8_TEMPLATE : SotClipboardFormatId::STARWRITERGLOB_8;
         *pLongUserName = SW_RESSTR(STR_WRITER_GLOBALDOC_FULLTYPE);
     }
 

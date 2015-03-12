@@ -41,7 +41,7 @@ class ImpSdrObjTextLink: public ::sfx2::SvBaseLink
 
 public:
     ImpSdrObjTextLink( SdrTextObj* pObj1 )
-        : ::sfx2::SvBaseLink( ::sfx2::LINKUPDATE_ONCALL, FORMAT_FILE ),
+        : ::sfx2::SvBaseLink( ::sfx2::LINKUPDATE_ONCALL, SotClipboardFormatId::FILE ),
             pSdrObj( pObj1 )
     {}
     virtual ~ImpSdrObjTextLink();

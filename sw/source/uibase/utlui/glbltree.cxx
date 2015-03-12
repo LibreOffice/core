@@ -213,7 +213,7 @@ sal_Int8 SwGlobalTree::ExecuteDrop( const ExecuteDropEvent& rEvt )
         const SwGlblDocContent* pCnt = pDropEntry ?
                     (const SwGlblDocContent*)pDropEntry->GetUserData() :
                             0;
-        if( aData.HasFormat( FORMAT_FILE_LIST ))
+        if( aData.HasFormat( SotClipboardFormatId::FILE_LIST ))
         {
             nRet = rEvt.mnAction;
             boost::scoped_ptr<SwGlblDocContents> pTempContents(new SwGlblDocContents);
@@ -224,7 +224,7 @@ sal_Int8 SwGlobalTree::ExecuteDrop( const ExecuteDropEvent& rEvt )
 
             // Get data
             FileList aFileList;
-            aData.GetFileList( FORMAT_FILE_LIST, aFileList );
+            aData.GetFileList( SotClipboardFormatId::FILE_LIST, aFileList );
             for ( size_t n = aFileList.Count(); n--; )
             {
                 sFileName = aFileList.GetFile(n);
@@ -290,15 +290,15 @@ sal_Int8 SwGlobalTree::AcceptDrop( const AcceptDropEvent& rEvt )
             if( pDDSource != pDropEntry )
                 nRet = rEvt.mnAction;
         }
-        else if( IsDropFormatSupported( FORMAT_FILE ) ||
-                  IsDropFormatSupported( FORMAT_STRING ) ||
-                  IsDropFormatSupported( FORMAT_FILE_LIST ) ||
-                  IsDropFormatSupported( SOT_FORMATSTR_ID_SOLK ) ||
-                   IsDropFormatSupported( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK )||
-                   IsDropFormatSupported( SOT_FORMATSTR_ID_FILECONTENT ) ||
-                   IsDropFormatSupported( SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR ) ||
-                   IsDropFormatSupported( SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR ) ||
-                   IsDropFormatSupported( SOT_FORMATSTR_ID_FILENAME ))
+        else if( IsDropFormatSupported( SotClipboardFormatId::FILE ) ||
+                  IsDropFormatSupported( SotClipboardFormatId::STRING ) ||
+                  IsDropFormatSupported( SotClipboardFormatId::FILE_LIST ) ||
+                  IsDropFormatSupported( SotClipboardFormatId::SOLK ) ||
+                   IsDropFormatSupported( SotClipboardFormatId::NETSCAPE_BOOKMARK )||
+                   IsDropFormatSupported( SotClipboardFormatId::FILECONTENT ) ||
+                   IsDropFormatSupported( SotClipboardFormatId::FILEGRPDESCRIPTOR ) ||
+                   IsDropFormatSupported( SotClipboardFormatId::UNIFORMRESOURCELOCATOR ) ||
+                   IsDropFormatSupported( SotClipboardFormatId::FILENAME ))
                 nRet = DND_ACTION_LINK;
 
         if(pEmphasisEntry && pEmphasisEntry != pDropEntry)

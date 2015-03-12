@@ -265,31 +265,32 @@ void SvDDEObject::Edit( vcl::Window* pParent, sfx2::SvBaseLink* pBaseLink, const
 
 bool SvDDEObject::ImplHasOtherFormat( DdeTransaction& rReq )
 {
-    sal_uInt16 nFmt = 0;
+    SotClipboardFormatId nFmt = SotClipboardFormatId::NONE;
     switch( rReq.GetFormat() )
     {
-    case FORMAT_RTF:
-        nFmt = FORMAT_STRING;
+    case SotClipboardFormatId::RTF:
+        nFmt = SotClipboardFormatId::STRING;
         break;
 
-    case SOT_FORMATSTR_ID_HTML_SIMPLE:
-    case SOT_FORMATSTR_ID_HTML:
-        nFmt = FORMAT_RTF;
+    case SotClipboardFormatId::HTML_SIMPLE:
+    case SotClipboardFormatId::HTML:
+        nFmt = SotClipboardFormatId::RTF;
         break;
 
-    case FORMAT_GDIMETAFILE:
-        nFmt = FORMAT_BITMAP;
+    case SotClipboardFormatId::GDIMETAFILE:
+        nFmt = SotClipboardFormatId::BITMAP;
         break;
 
-    case SOT_FORMATSTR_ID_SVXB:
-        nFmt = FORMAT_GDIMETAFILE;
+    case SotClipboardFormatId::SVXB:
+        nFmt = SotClipboardFormatId::GDIMETAFILE;
         break;
 
     // something else?
+    default: break;
     }
-    if( nFmt )
+    if( nFmt != SotClipboardFormatId::NONE )
         rReq.SetFormat( nFmt );         // try it once more
-    return 0 != nFmt;
+    return SotClipboardFormatId::NONE != nFmt;
 }
 
 bool SvDDEObject::IsPending() const
@@ -313,19 +314,19 @@ bool SvDDEObject::IsDataComplete() const
 
 IMPL_LINK( SvDDEObject, ImplGetDDEData, DdeData*, pData )
 {
-    sal_uIntPtr nFmt = pData->GetFormat();
+    SotClipboardFormatId nFmt = pData->GetFormat();
     switch( nFmt )
     {
-    case FORMAT_GDIMETAFILE:
+    case SotClipboardFormatId::GDIMETAFILE:
         break;
 
-    case FORMAT_BITMAP:
+    case SotClipboardFormatId::BITMAP:
         break;
 
     default:
         {
             const sal_Char* p = (sal_Char*)( pData->operator const void*() );
-            long nLen = FORMAT_STRING == nFmt ? (p ? strlen( p ) : 0) : (long)*pData;
+            long nLen = SotClipboardFormatId::STRING == nFmt ? (p ? strlen( p ) : 0) : (long)*pData;
 
             Sequence< sal_Int8 > aSeq( reinterpret_cast<const sal_Int8*>(p), nLen );
             if( pGetData )

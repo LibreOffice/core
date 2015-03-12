@@ -1688,7 +1688,7 @@ static bool lcl_getServiceName ( const OUString &rFileURL, OUString &rName )
             uno::Reference< embed::XStorage > xStorage =
                     comphelper::OStorageHelper::GetStorageFromURL( rFileURL, embed::ElementModes::READ );
 
-            sal_uIntPtr nFormat = SotStorage::GetFormatID( xStorage );
+            SotClipboardFormatId nFormat = SotStorage::GetFormatID( xStorage );
 
             const SfxFilter* pFilter = SfxGetpApp()->GetFilterMatcher().GetFilter4ClipBoardId( nFormat );
 

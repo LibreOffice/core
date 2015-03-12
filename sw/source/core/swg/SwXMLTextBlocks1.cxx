@@ -179,8 +179,7 @@ sal_uLong SwXMLTextBlocks::GetMacroTable( sal_uInt16 nIdx,
         try
         {
             xRoot = xBlkRoot->openStorageElement( aPackageName, embed::ElementModes::READ );
-            long nTmp = SOT_FORMATSTR_ID_STARWRITER_60;
-            bool bOasis = ( SotStorage::GetVersion( xRoot ) > nTmp );
+            bool bOasis = SotStorage::GetVersion( xRoot ) > SOFFICE_FILEFORMAT_60;
 
             OUString sStreamName("atevent.xml");
             uno::Reference < io::XStream > xDocStream = xRoot->openStreamElement(
@@ -554,8 +553,7 @@ sal_uLong SwXMLTextBlocks::SetMacroTable(
         {
             xRoot = xBlkRoot->openStorageElement( aPackageName, embed::ElementModes::WRITE );
             OUString sStreamName("atevent.xml" );
-            long nTmp = SOT_FORMATSTR_ID_STARWRITER_60;
-            bool bOasis = ( SotStorage::GetVersion( xRoot ) > nTmp );
+            bool bOasis = SotStorage::GetVersion( xRoot ) > SOFFICE_FILEFORMAT_60;
 
             uno::Reference < io::XStream > xDocStream = xRoot->openStreamElement( sStreamName,
                         embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE );

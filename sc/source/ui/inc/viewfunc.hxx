@@ -111,10 +111,10 @@ public:
                                     InsertDeleteFlags nUndoExtraFlags = IDF_NONE,
                                     bool bAllowDialogs = false );
 
-    void            FillTab( InsertDeleteFlags nFlags, sal_uInt16 nFunction, bool bSkipEmpty, bool bAsLink );
+    void                        FillTab( InsertDeleteFlags nFlags, sal_uInt16 nFunction, bool bSkipEmpty, bool bAsLink );
 
     SC_DLLPUBLIC void           PasteFromSystem();
-    SC_DLLPUBLIC bool           PasteFromSystem( sal_uLong nFormatId, bool bApi = false );
+    SC_DLLPUBLIC bool           PasteFromSystem( SotClipboardFormatId nFormatId, bool bApi = false );
     void                        PasteFromTransferable( const ::com::sun::star::uno::Reference<
                                                        ::com::sun::star::datatransfer::XTransferable >& rxTransferable );
 
@@ -126,7 +126,7 @@ public:
                         const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& rxTransferable,
                         SdrObject& rHitObj);
 
-    bool            PasteDataFormat( sal_uLong nFormatId,
+    bool            PasteDataFormat( SotClipboardFormatId nFormatId,
                                         const ::com::sun::star::uno::Reference<
                                             ::com::sun::star::datatransfer::XTransferable >& rxTransferable,
                                         SCCOL nPosX, SCROW nPosY, Point* pLogicPos = NULL,
@@ -138,7 +138,7 @@ public:
     bool            PasteMetaFile( const Point&, const GDIMetaFile& );
     bool            PasteGraphic( const Point& rPos, const Graphic& rGraphic,
                                     const OUString& rFile, const OUString& rFilter );
-    bool            PasteBookmark( sal_uLong nFormatId,
+    bool            PasteBookmark( SotClipboardFormatId nFormatId,
                                 const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::datatransfer::XTransferable >& rxTransferable,
                                 SCCOL nPosX, SCROW nPosY );

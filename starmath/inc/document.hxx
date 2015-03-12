@@ -117,7 +117,7 @@ class SM_DLLPUBLIC SmDocShell : public SfxObjectShell, public SfxListener
                              sal_uInt16 nAspect = ASPECT_CONTENT) SAL_OVERRIDE;
 
     virtual void        FillClass(SvGlobalName* pClassName,
-                                  sal_uInt32*  pFormat,
+                                  SotClipboardFormatId*  pFormat,
                                   OUString* pAppName,
                                   OUString* pFullTypeName,
                                   OUString* pShortTypeName,

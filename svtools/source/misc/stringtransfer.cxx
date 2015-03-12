@@ -40,14 +40,14 @@ namespace svt
 
     void OStringTransferable::AddSupportedFormats()
     {
-        AddFormat(SOT_FORMAT_STRING);
+        AddFormat(SotClipboardFormatId::STRING);
     }
 
 
     bool OStringTransferable::GetData( const DataFlavor& _rFlavor, const OUString& /*rDestDoc*/ )
     {
-        sal_uInt32 nFormat = SotExchange::GetFormat( _rFlavor );
-        if (SOT_FORMAT_STRING == nFormat)
+        SotClipboardFormatId nFormat = SotExchange::GetFormat( _rFlavor );
+        if (SotClipboardFormatId::STRING == nFormat)
             return SetString( m_sContent, _rFlavor );
 
         return false;
@@ -76,10 +76,10 @@ namespace svt
                 ++aSearch
             )
         {
-            if (SOT_FORMAT_STRING == aSearch->mnSotId)
+            if (SotClipboardFormatId::STRING == aSearch->mnSotId)
             {
                 OUString sContent;
-                bool bSuccess = aClipboardData.GetString( SOT_FORMAT_STRING, sContent );
+                bool bSuccess = aClipboardData.GetString( SotClipboardFormatId::STRING, sContent );
                 _rContent = sContent;
                 return bSuccess;
             }

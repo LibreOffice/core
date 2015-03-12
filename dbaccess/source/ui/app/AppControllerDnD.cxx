@@ -773,17 +773,17 @@ Reference<XNameContainer> OApplicationController::getQueryDefinitions() const
     return xNames;
 }
 
-void OApplicationController::getSupportedFormats(ElementType _eType,::std::vector<SotFormatStringId>& _rFormatIds) const
+void OApplicationController::getSupportedFormats(ElementType _eType,::std::vector<SotClipboardFormatId>& _rFormatIds) const
 {
     switch( _eType )
     {
         case E_TABLE:
-            _rFormatIds.push_back(SOT_FORMATSTR_ID_DBACCESS_TABLE);
-            _rFormatIds.push_back(SOT_FORMAT_RTF);
-            _rFormatIds.push_back(SOT_FORMATSTR_ID_HTML);
+            _rFormatIds.push_back(SotClipboardFormatId::DBACCESS_TABLE);
+            _rFormatIds.push_back(SotClipboardFormatId::RTF);
+            _rFormatIds.push_back(SotClipboardFormatId::HTML);
             // run through
         case E_QUERY:
-            _rFormatIds.push_back(SOT_FORMATSTR_ID_DBACCESS_QUERY);
+            _rFormatIds.push_back(SotClipboardFormatId::DBACCESS_QUERY);
             break;
         default:
             break;

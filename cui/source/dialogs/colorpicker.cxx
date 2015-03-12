@@ -219,7 +219,7 @@ void HexColorControl::Paste()
         if ( xDataObj.is() )
         {
             ::com::sun::star::datatransfer::DataFlavor aFlavor;
-            SotExchange::GetFormatDataFlavor( SOT_FORMAT_STRING, aFlavor );
+            SotExchange::GetFormatDataFlavor( SotClipboardFormatId::STRING, aFlavor );
             try
             {
                 ::com::sun::star::uno::Any aData = xDataObj->getTransferData( aFlavor );

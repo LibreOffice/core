@@ -606,7 +606,7 @@ const OUString & SotStorage::GetName() const
 }
 
 void SotStorage::SetClass( const SvGlobalName & rName,
-                           sal_uLong nOriginalClipFormat,
+                           SotClipboardFormatId nOriginalClipFormat,
                            const OUString & rUserTypeName )
 {
     DBG_ASSERT( Owner(), "must be owner" );
@@ -627,9 +627,9 @@ SvGlobalName SotStorage::GetClassName()
     return aGN;
 }
 
-sal_uLong SotStorage::GetFormat()
+SotClipboardFormatId SotStorage::GetFormat()
 {
-    sal_uLong nFormat = 0;
+    SotClipboardFormatId nFormat = SotClipboardFormatId::NONE;
     DBG_ASSERT( Owner(), "must be owner" );
     if( m_pOwnStg )
         nFormat = m_pOwnStg->GetFormat();
@@ -863,11 +863,11 @@ SotStorage* SotStorage::OpenOLEStorage( const com::sun::star::uno::Reference < c
     return new SotStorage( pStream, true );
 }
 
-sal_Int32 SotStorage::GetFormatID( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage )
+SotClipboardFormatId SotStorage::GetFormatID( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage )
 {
     uno::Reference< beans::XPropertySet > xProps( xStorage, uno::UNO_QUERY );
     if ( !xProps.is() )
-        return 0;
+        return SotClipboardFormatId::NONE;
 
     OUString aMediaType;
     xProps->getPropertyValue("MediaType") >>= aMediaType;
@@ -878,39 +878,40 @@ sal_Int32 SotStorage::GetFormatID( const com::sun::star::uno::Reference < com::s
         return SotExchange::GetFormat( aDataFlavor );
     }
 
-    return 0;
+    return SotClipboardFormatId::NONE;
 }
 
 sal_Int32 SotStorage::GetVersion( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage )
 {
-    sal_Int32 nSotFormatID = SotStorage::GetFormatID( xStorage );
+    SotClipboardFormatId nSotFormatID = SotStorage::GetFormatID( xStorage );
     switch( nSotFormatID )
     {
-    case SOT_FORMATSTR_ID_STARWRITER_8:
-    case SOT_FORMATSTR_ID_STARWRITER_8_TEMPLATE:
-    case SOT_FORMATSTR_ID_STARWRITERWEB_8:
-    case SOT_FORMATSTR_ID_STARWRITERGLOB_8:
-    case SOT_FORMATSTR_ID_STARWRITERGLOB_8_TEMPLATE:
-    case SOT_FORMATSTR_ID_STARDRAW_8:
-    case SOT_FORMATSTR_ID_STARDRAW_8_TEMPLATE:
-    case SOT_FORMATSTR_ID_STARIMPRESS_8:
-    case SOT_FORMATSTR_ID_STARIMPRESS_8_TEMPLATE:
-    case SOT_FORMATSTR_ID_STARCALC_8:
-    case SOT_FORMATSTR_ID_STARCALC_8_TEMPLATE:
-    case SOT_FORMATSTR_ID_STARCHART_8:
-    case SOT_FORMATSTR_ID_STARCHART_8_TEMPLATE:
-    case SOT_FORMATSTR_ID_STARMATH_8:
-    case SOT_FORMATSTR_ID_STARMATH_8_TEMPLATE:
+    case SotClipboardFormatId::STARWRITER_8:
+    case SotClipboardFormatId::STARWRITER_8_TEMPLATE:
+    case SotClipboardFormatId::STARWRITERWEB_8:
+    case SotClipboardFormatId::STARWRITERGLOB_8:
+    case SotClipboardFormatId::STARWRITERGLOB_8_TEMPLATE:
+    case SotClipboardFormatId::STARDRAW_8:
+    case SotClipboardFormatId::STARDRAW_8_TEMPLATE:
+    case SotClipboardFormatId::STARIMPRESS_8:
+    case SotClipboardFormatId::STARIMPRESS_8_TEMPLATE:
+    case SotClipboardFormatId::STARCALC_8:
+    case SotClipboardFormatId::STARCALC_8_TEMPLATE:
+    case SotClipboardFormatId::STARCHART_8:
+    case SotClipboardFormatId::STARCHART_8_TEMPLATE:
+    case SotClipboardFormatId::STARMATH_8:
+    case SotClipboardFormatId::STARMATH_8_TEMPLATE:
         return SOFFICE_FILEFORMAT_8;
-    case SOT_FORMATSTR_ID_STARWRITER_60:
-    case SOT_FORMATSTR_ID_STARWRITERWEB_60:
-    case SOT_FORMATSTR_ID_STARWRITERGLOB_60:
-    case SOT_FORMATSTR_ID_STARDRAW_60:
-    case SOT_FORMATSTR_ID_STARIMPRESS_60:
-    case SOT_FORMATSTR_ID_STARCALC_60:
-    case SOT_FORMATSTR_ID_STARCHART_60:
-    case SOT_FORMATSTR_ID_STARMATH_60:
+    case SotClipboardFormatId::STARWRITER_60:
+    case SotClipboardFormatId::STARWRITERWEB_60:
+    case SotClipboardFormatId::STARWRITERGLOB_60:
+    case SotClipboardFormatId::STARDRAW_60:
+    case SotClipboardFormatId::STARIMPRESS_60:
+    case SotClipboardFormatId::STARCALC_60:
+    case SotClipboardFormatId::STARCHART_60:
+    case SotClipboardFormatId::STARMATH_60:
         return SOFFICE_FILEFORMAT_60;
+    default: break;
     }
 
     return 0;

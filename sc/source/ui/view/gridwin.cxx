@@ -3775,10 +3775,10 @@ sal_Int8 ScGridWindow::AcceptDrop( const AcceptDropEvent& rEvt )
                         pViewData->GetTabNo(), PixelToLogic(rEvt.maPosPixel) );
             if ( pHitObj && nMyAction == DND_ACTION_LINK ) // && !rData.pDrawTransfer )
             {
-                if ( IsDropFormatSupported(SOT_FORMATSTR_ID_SVXB)
-                    || IsDropFormatSupported(SOT_FORMAT_GDIMETAFILE)
-                    || IsDropFormatSupported(SOT_FORMATSTR_ID_PNG)
-                    || IsDropFormatSupported(SOT_FORMAT_BITMAP) )
+                if ( IsDropFormatSupported(SotClipboardFormatId::SVXB)
+                    || IsDropFormatSupported(SotClipboardFormatId::GDIMETAFILE)
+                    || IsDropFormatSupported(SotClipboardFormatId::PNG)
+                    || IsDropFormatSupported(SotClipboardFormatId::BITMAP) )
                 {
                     //  graphic dragged onto drawing object
                     DrawMarkDropObj( pHitObj );
@@ -3797,47 +3797,47 @@ sal_Int8 ScGridWindow::AcceptDrop( const AcceptDropEvent& rEvt )
                     case DND_ACTION_COPYMOVE:
                         {
                             bool bMove = ( nMyAction == DND_ACTION_MOVE );
-                            if ( IsDropFormatSupported( SOT_FORMATSTR_ID_EMBED_SOURCE ) ||
-                                 IsDropFormatSupported( SOT_FORMATSTR_ID_LINK_SOURCE ) ||
-                                 IsDropFormatSupported( SOT_FORMATSTR_ID_EMBED_SOURCE_OLE ) ||
-                                 IsDropFormatSupported( SOT_FORMATSTR_ID_LINK_SOURCE_OLE ) ||
-                                 IsDropFormatSupported( SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE ) ||
-                                 IsDropFormatSupported( SOT_FORMAT_STRING ) ||
-                                 IsDropFormatSupported( SOT_FORMATSTR_ID_SYLK ) ||
-                                 IsDropFormatSupported( SOT_FORMATSTR_ID_LINK ) ||
-                                 IsDropFormatSupported( SOT_FORMATSTR_ID_HTML ) ||
-                                 IsDropFormatSupported( SOT_FORMATSTR_ID_HTML_SIMPLE ) ||
-                                 IsDropFormatSupported( SOT_FORMATSTR_ID_DIF ) ||
-                                 IsDropFormatSupported( SOT_FORMATSTR_ID_DRAWING ) ||
-                                 IsDropFormatSupported( SOT_FORMATSTR_ID_SVXB ) ||
-                                 IsDropFormatSupported( SOT_FORMAT_RTF ) ||
-                                 IsDropFormatSupported( SOT_FORMAT_GDIMETAFILE ) ||
-                                 IsDropFormatSupported( SOT_FORMATSTR_ID_PNG ) ||
-                                 IsDropFormatSupported( SOT_FORMAT_BITMAP ) ||
-                                 IsDropFormatSupported( SOT_FORMATSTR_ID_SBA_DATAEXCHANGE ) ||
-                                 IsDropFormatSupported( SOT_FORMATSTR_ID_SBA_FIELDDATAEXCHANGE ) ||
+                            if ( IsDropFormatSupported( SotClipboardFormatId::EMBED_SOURCE ) ||
+                                 IsDropFormatSupported( SotClipboardFormatId::LINK_SOURCE ) ||
+                                 IsDropFormatSupported( SotClipboardFormatId::EMBED_SOURCE_OLE ) ||
+                                 IsDropFormatSupported( SotClipboardFormatId::LINK_SOURCE_OLE ) ||
+                                 IsDropFormatSupported( SotClipboardFormatId::EMBEDDED_OBJ_OLE ) ||
+                                 IsDropFormatSupported( SotClipboardFormatId::STRING ) ||
+                                 IsDropFormatSupported( SotClipboardFormatId::SYLK ) ||
+                                 IsDropFormatSupported( SotClipboardFormatId::LINK ) ||
+                                 IsDropFormatSupported( SotClipboardFormatId::HTML ) ||
+                                 IsDropFormatSupported( SotClipboardFormatId::HTML_SIMPLE ) ||
+                                 IsDropFormatSupported( SotClipboardFormatId::DIF ) ||
+                                 IsDropFormatSupported( SotClipboardFormatId::DRAWING ) ||
+                                 IsDropFormatSupported( SotClipboardFormatId::SVXB ) ||
+                                 IsDropFormatSupported( SotClipboardFormatId::RTF ) ||
+                                 IsDropFormatSupported( SotClipboardFormatId::GDIMETAFILE ) ||
+                                 IsDropFormatSupported( SotClipboardFormatId::PNG ) ||
+                                 IsDropFormatSupported( SotClipboardFormatId::BITMAP ) ||
+                                 IsDropFormatSupported( SotClipboardFormatId::SBA_DATAEXCHANGE ) ||
+                                 IsDropFormatSupported( SotClipboardFormatId::SBA_FIELDDATAEXCHANGE ) ||
                                  ( !bMove && (
-                                    IsDropFormatSupported( SOT_FORMAT_FILE_LIST ) ||
-                                     IsDropFormatSupported( SOT_FORMAT_FILE ) ||
-                                     IsDropFormatSupported( SOT_FORMATSTR_ID_SOLK ) ||
-                                     IsDropFormatSupported( SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR ) ||
-                                     IsDropFormatSupported( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK ) ||
-                                     IsDropFormatSupported( SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR ) ) ) )
+                                    IsDropFormatSupported( SotClipboardFormatId::FILE_LIST ) ||
+                                     IsDropFormatSupported( SotClipboardFormatId::FILE ) ||
+                                     IsDropFormatSupported( SotClipboardFormatId::SOLK ) ||
+                                     IsDropFormatSupported( SotClipboardFormatId::UNIFORMRESOURCELOCATOR ) ||
+                                     IsDropFormatSupported( SotClipboardFormatId::NETSCAPE_BOOKMARK ) ||
+                                     IsDropFormatSupported( SotClipboardFormatId::FILEGRPDESCRIPTOR ) ) ) )
                             {
                                 nRet = nMyAction;
                             }
                         }
                         break;
                     case DND_ACTION_LINK:
-                        if ( IsDropFormatSupported( SOT_FORMATSTR_ID_LINK_SOURCE ) ||
-                             IsDropFormatSupported( SOT_FORMATSTR_ID_LINK_SOURCE_OLE ) ||
-                             IsDropFormatSupported( SOT_FORMATSTR_ID_LINK ) ||
-                             IsDropFormatSupported( SOT_FORMAT_FILE_LIST ) ||
-                             IsDropFormatSupported( SOT_FORMAT_FILE ) ||
-                             IsDropFormatSupported( SOT_FORMATSTR_ID_SOLK ) ||
-                             IsDropFormatSupported( SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR ) ||
-                             IsDropFormatSupported( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK ) ||
-                             IsDropFormatSupported( SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR ) )
+                        if ( IsDropFormatSupported( SotClipboardFormatId::LINK_SOURCE ) ||
+                             IsDropFormatSupported( SotClipboardFormatId::LINK_SOURCE_OLE ) ||
+                             IsDropFormatSupported( SotClipboardFormatId::LINK ) ||
+                             IsDropFormatSupported( SotClipboardFormatId::FILE_LIST ) ||
+                             IsDropFormatSupported( SotClipboardFormatId::FILE ) ||
+                             IsDropFormatSupported( SotClipboardFormatId::SOLK ) ||
+                             IsDropFormatSupported( SotClipboardFormatId::UNIFORMRESOURCELOCATOR ) ||
+                             IsDropFormatSupported( SotClipboardFormatId::NETSCAPE_BOOKMARK ) ||
+                             IsDropFormatSupported( SotClipboardFormatId::FILEGRPDESCRIPTOR ) )
                         {
                             nRet = nMyAction;
                         }
@@ -3874,116 +3874,116 @@ sal_Int8 ScGridWindow::AcceptDrop( const AcceptDropEvent& rEvt )
     return nRet;
 }
 
-static sal_uLong lcl_GetDropFormatId( const uno::Reference<datatransfer::XTransferable>& xTransfer, bool bPreferText = false )
+static SotClipboardFormatId lcl_GetDropFormatId( const uno::Reference<datatransfer::XTransferable>& xTransfer, bool bPreferText = false )
 {
     TransferableDataHelper aDataHelper( xTransfer );
 
-    if ( !aDataHelper.HasFormat( SOT_FORMATSTR_ID_SBA_DATAEXCHANGE ) )
+    if ( !aDataHelper.HasFormat( SotClipboardFormatId::SBA_DATAEXCHANGE ) )
     {
         //  use bookmark formats if no sba is present
 
-        if ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_SOLK ) )
-            return SOT_FORMATSTR_ID_SOLK;
-        else if ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR ) )
-            return SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR;
-        else if ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK ) )
-            return SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK;
-        else if ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR ) )
-            return SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR;
+        if ( aDataHelper.HasFormat( SotClipboardFormatId::SOLK ) )
+            return SotClipboardFormatId::SOLK;
+        else if ( aDataHelper.HasFormat( SotClipboardFormatId::UNIFORMRESOURCELOCATOR ) )
+            return SotClipboardFormatId::UNIFORMRESOURCELOCATOR;
+        else if ( aDataHelper.HasFormat( SotClipboardFormatId::NETSCAPE_BOOKMARK ) )
+            return SotClipboardFormatId::NETSCAPE_BOOKMARK;
+        else if ( aDataHelper.HasFormat( SotClipboardFormatId::FILEGRPDESCRIPTOR ) )
+            return SotClipboardFormatId::FILEGRPDESCRIPTOR;
     }
 
-    sal_uLong nFormatId = 0;
-    if ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_DRAWING ) )
-        nFormatId = SOT_FORMATSTR_ID_DRAWING;
-    else if ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_SVXB ) )
-        nFormatId = SOT_FORMATSTR_ID_SVXB;
-    else if ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_EMBED_SOURCE ) )
+    SotClipboardFormatId nFormatId = SotClipboardFormatId::NONE;
+    if ( aDataHelper.HasFormat( SotClipboardFormatId::DRAWING ) )
+        nFormatId = SotClipboardFormatId::DRAWING;
+    else if ( aDataHelper.HasFormat( SotClipboardFormatId::SVXB ) )
+        nFormatId = SotClipboardFormatId::SVXB;
+    else if ( aDataHelper.HasFormat( SotClipboardFormatId::EMBED_SOURCE ) )
     {
         //  If it's a Writer object, insert RTF instead of OLE
 
         bool bDoRtf = false;
         SotStorageStreamRef xStm;
         TransferableObjectDescriptor aObjDesc;
-        if( aDataHelper.GetTransferableObjectDescriptor( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR, aObjDesc ) &&
-            aDataHelper.GetSotStorageStream( SOT_FORMATSTR_ID_EMBED_SOURCE, xStm ) )
+        if( aDataHelper.GetTransferableObjectDescriptor( SotClipboardFormatId::OBJECTDESCRIPTOR, aObjDesc ) &&
+            aDataHelper.GetSotStorageStream( SotClipboardFormatId::EMBED_SOURCE, xStm ) )
         {
             SotStorageRef xStore( new SotStorage( *xStm ) );
             bDoRtf = ( ( aObjDesc.maClassName == SvGlobalName( SO3_SW_CLASSID ) ||
                          aObjDesc.maClassName == SvGlobalName( SO3_SWWEB_CLASSID ) )
-                       && aDataHelper.HasFormat( SOT_FORMAT_RTF ) );
+                       && aDataHelper.HasFormat( SotClipboardFormatId::RTF ) );
         }
         if ( bDoRtf )
-            nFormatId = FORMAT_RTF;
+            nFormatId = SotClipboardFormatId::RTF;
         else
-            nFormatId = SOT_FORMATSTR_ID_EMBED_SOURCE;
+            nFormatId = SotClipboardFormatId::EMBED_SOURCE;
     }
-    else if ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_LINK_SOURCE ) )
-        nFormatId = SOT_FORMATSTR_ID_LINK_SOURCE;
-    else if ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_SBA_DATAEXCHANGE ) )
-        nFormatId = SOT_FORMATSTR_ID_SBA_DATAEXCHANGE;
-    else if ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_SBA_FIELDDATAEXCHANGE ) )
-        nFormatId = SOT_FORMATSTR_ID_SBA_FIELDDATAEXCHANGE;
-    else if ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_BIFF_8 ) )
-        nFormatId = SOT_FORMATSTR_ID_BIFF_8;
-    else if ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_BIFF_5 ) )
-        nFormatId = SOT_FORMATSTR_ID_BIFF_5;
-    else if ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_EMBED_SOURCE_OLE ) )
-        nFormatId = SOT_FORMATSTR_ID_EMBED_SOURCE_OLE;
-    else if ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE ) )
-        nFormatId = SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE;
-    else if ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_LINK_SOURCE_OLE ) )
-        nFormatId = SOT_FORMATSTR_ID_LINK_SOURCE_OLE;
-    else if ( aDataHelper.HasFormat( SOT_FORMAT_RTF ) )
-        nFormatId = SOT_FORMAT_RTF;
-    else if ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_HTML ) )
-        nFormatId = SOT_FORMATSTR_ID_HTML;
-    else if ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_HTML_SIMPLE ) )
-        nFormatId = SOT_FORMATSTR_ID_HTML_SIMPLE;
-    else if ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_SYLK ) )
-        nFormatId = SOT_FORMATSTR_ID_SYLK;
-    else if ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_LINK ) )
-        nFormatId = SOT_FORMATSTR_ID_LINK;
-    else if ( bPreferText && aDataHelper.HasFormat( SOT_FORMAT_STRING ) ) // #i86734# the behaviour introduced in #i62773# is wrong when pasting
-        nFormatId = SOT_FORMAT_STRING;
-    else if ( aDataHelper.HasFormat( SOT_FORMAT_FILE_LIST ) )
-        nFormatId = SOT_FORMAT_FILE_LIST;
-    else if ( aDataHelper.HasFormat( SOT_FORMAT_FILE ) )    // #i62773# FILE_LIST/FILE before STRING (Unix file managers)
-        nFormatId = SOT_FORMAT_FILE;
-    else if ( aDataHelper.HasFormat( SOT_FORMAT_STRING ) )
-        nFormatId = SOT_FORMAT_STRING;
-    else if ( aDataHelper.HasFormat( SOT_FORMAT_GDIMETAFILE ) )
-        nFormatId = SOT_FORMAT_GDIMETAFILE;
-    else if ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_PNG ) )
-        nFormatId = SOT_FORMATSTR_ID_PNG;
-    else if ( aDataHelper.HasFormat( SOT_FORMAT_BITMAP ) )
-        nFormatId = SOT_FORMAT_BITMAP;
+    else if ( aDataHelper.HasFormat( SotClipboardFormatId::LINK_SOURCE ) )
+        nFormatId = SotClipboardFormatId::LINK_SOURCE;
+    else if ( aDataHelper.HasFormat( SotClipboardFormatId::SBA_DATAEXCHANGE ) )
+        nFormatId = SotClipboardFormatId::SBA_DATAEXCHANGE;
+    else if ( aDataHelper.HasFormat( SotClipboardFormatId::SBA_FIELDDATAEXCHANGE ) )
+        nFormatId = SotClipboardFormatId::SBA_FIELDDATAEXCHANGE;
+    else if ( aDataHelper.HasFormat( SotClipboardFormatId::BIFF_8 ) )
+        nFormatId = SotClipboardFormatId::BIFF_8;
+    else if ( aDataHelper.HasFormat( SotClipboardFormatId::BIFF_5 ) )
+        nFormatId = SotClipboardFormatId::BIFF_5;
+    else if ( aDataHelper.HasFormat( SotClipboardFormatId::EMBED_SOURCE_OLE ) )
+        nFormatId = SotClipboardFormatId::EMBED_SOURCE_OLE;
+    else if ( aDataHelper.HasFormat( SotClipboardFormatId::EMBEDDED_OBJ_OLE ) )
+        nFormatId = SotClipboardFormatId::EMBEDDED_OBJ_OLE;
+    else if ( aDataHelper.HasFormat( SotClipboardFormatId::LINK_SOURCE_OLE ) )
+        nFormatId = SotClipboardFormatId::LINK_SOURCE_OLE;
+    else if ( aDataHelper.HasFormat( SotClipboardFormatId::RTF ) )
+        nFormatId = SotClipboardFormatId::RTF;
+    else if ( aDataHelper.HasFormat( SotClipboardFormatId::HTML ) )
+        nFormatId = SotClipboardFormatId::HTML;
+    else if ( aDataHelper.HasFormat( SotClipboardFormatId::HTML_SIMPLE ) )
+        nFormatId = SotClipboardFormatId::HTML_SIMPLE;
+    else if ( aDataHelper.HasFormat( SotClipboardFormatId::SYLK ) )
+        nFormatId = SotClipboardFormatId::SYLK;
+    else if ( aDataHelper.HasFormat( SotClipboardFormatId::LINK ) )
+        nFormatId = SotClipboardFormatId::LINK;
+    else if ( bPreferText && aDataHelper.HasFormat( SotClipboardFormatId::STRING ) ) // #i86734# the behaviour introduced in #i62773# is wrong when pasting
+        nFormatId = SotClipboardFormatId::STRING;
+    else if ( aDataHelper.HasFormat( SotClipboardFormatId::FILE_LIST ) )
+        nFormatId = SotClipboardFormatId::FILE_LIST;
+    else if ( aDataHelper.HasFormat( SotClipboardFormatId::FILE ) )    // #i62773# FILE_LIST/FILE before STRING (Unix file managers)
+        nFormatId = SotClipboardFormatId::FILE;
+    else if ( aDataHelper.HasFormat( SotClipboardFormatId::STRING ) )
+        nFormatId = SotClipboardFormatId::STRING;
+    else if ( aDataHelper.HasFormat( SotClipboardFormatId::GDIMETAFILE ) )
+        nFormatId = SotClipboardFormatId::GDIMETAFILE;
+    else if ( aDataHelper.HasFormat( SotClipboardFormatId::PNG ) )
+        nFormatId = SotClipboardFormatId::PNG;
+    else if ( aDataHelper.HasFormat( SotClipboardFormatId::BITMAP ) )
+        nFormatId = SotClipboardFormatId::BITMAP;
 
     return nFormatId;
 }
 
-static sal_uLong lcl_GetDropLinkId( const uno::Reference<datatransfer::XTransferable>& xTransfer )
+static SotClipboardFormatId lcl_GetDropLinkId( const uno::Reference<datatransfer::XTransferable>& xTransfer )
 {
     TransferableDataHelper aDataHelper( xTransfer );
 
-    sal_uLong nFormatId = 0;
-    if ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_LINK_SOURCE ) )
-        nFormatId = SOT_FORMATSTR_ID_LINK_SOURCE;
-    else if ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_LINK_SOURCE_OLE ) )
-        nFormatId = SOT_FORMATSTR_ID_LINK_SOURCE_OLE;
-    else if ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_LINK ) )
-        nFormatId = SOT_FORMATSTR_ID_LINK;
-    else if ( aDataHelper.HasFormat( SOT_FORMAT_FILE_LIST ) )
-        nFormatId = SOT_FORMAT_FILE_LIST;
-    else if ( aDataHelper.HasFormat( SOT_FORMAT_FILE ) )
-        nFormatId = SOT_FORMAT_FILE;
-    else if ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_SOLK ) )
-        nFormatId = SOT_FORMATSTR_ID_SOLK;
-    else if ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR ) )
-        nFormatId = SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR;
-    else if ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK ) )
-        nFormatId = SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK;
-    else if ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR ) )
-        nFormatId = SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR;
+    SotClipboardFormatId nFormatId = SotClipboardFormatId::NONE;
+    if ( aDataHelper.HasFormat( SotClipboardFormatId::LINK_SOURCE ) )
+        nFormatId = SotClipboardFormatId::LINK_SOURCE;
+    else if ( aDataHelper.HasFormat( SotClipboardFormatId::LINK_SOURCE_OLE ) )
+        nFormatId = SotClipboardFormatId::LINK_SOURCE_OLE;
+    else if ( aDataHelper.HasFormat( SotClipboardFormatId::LINK ) )
+        nFormatId = SotClipboardFormatId::LINK;
+    else if ( aDataHelper.HasFormat( SotClipboardFormatId::FILE_LIST ) )
+        nFormatId = SotClipboardFormatId::FILE_LIST;
+    else if ( aDataHelper.HasFormat( SotClipboardFormatId::FILE ) )
+        nFormatId = SotClipboardFormatId::FILE;
+    else if ( aDataHelper.HasFormat( SotClipboardFormatId::SOLK ) )
+        nFormatId = SotClipboardFormatId::SOLK;
+    else if ( aDataHelper.HasFormat( SotClipboardFormatId::UNIFORMRESOURCELOCATOR ) )
+        nFormatId = SotClipboardFormatId::UNIFORMRESOURCELOCATOR;
+    else if ( aDataHelper.HasFormat( SotClipboardFormatId::NETSCAPE_BOOKMARK ) )
+        nFormatId = SotClipboardFormatId::NETSCAPE_BOOKMARK;
+    else if ( aDataHelper.HasFormat( SotClipboardFormatId::FILEGRPDESCRIPTOR ) )
+        nFormatId = SotClipboardFormatId::FILEGRPDESCRIPTOR;
 
     return nFormatId;
 }
@@ -4445,10 +4445,10 @@ sal_Int8 ScGridWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
 
     bool bDone = false;
 
-    sal_uLong nFormatId = bIsLink ?
+    SotClipboardFormatId nFormatId = bIsLink ?
                         lcl_GetDropLinkId( rEvt.maDropEvent.Transferable ) :
                         lcl_GetDropFormatId( rEvt.maDropEvent.Transferable );
-    if ( nFormatId )
+    if ( nFormatId != SotClipboardFormatId::NONE )
     {
         pScMod->SetInExecuteDrop( true );   // #i28468# prevent error messages from PasteDataFormat
         bPasteIsDrop = true;
@@ -4523,8 +4523,8 @@ void ScGridWindow::PasteSelection( const Point& rPosPixel )
         uno::Reference<datatransfer::XTransferable> xTransferable = aDataHelper.GetTransferable();
         if ( xTransferable.is() )
         {
-            sal_uLong nFormatId = lcl_GetDropFormatId( xTransferable, true );
-            if ( nFormatId )
+            SotClipboardFormatId nFormatId = lcl_GetDropFormatId( xTransferable, true );
+            if ( nFormatId != SotClipboardFormatId::NONE )
             {
                 bPasteIsDrop = true;
                 pViewData->GetView()->PasteDataFormat( nFormatId, xTransferable, nPosX, nPosY, &aLogicPos );

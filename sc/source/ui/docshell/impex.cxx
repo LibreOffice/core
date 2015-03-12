@@ -192,14 +192,14 @@ void ScImportExport::SetFilterOptions(const OUString& rFilterOptions)
     maFilterOptions = rFilterOptions;
 }
 
-bool ScImportExport::IsFormatSupported( sal_uLong nFormat )
+bool ScImportExport::IsFormatSupported( SotClipboardFormatId nFormat )
 {
-    return nFormat == FORMAT_STRING
-              || nFormat == SOT_FORMATSTR_ID_SYLK
-              || nFormat == SOT_FORMATSTR_ID_LINK
-              || nFormat == SOT_FORMATSTR_ID_HTML
-              || nFormat == SOT_FORMATSTR_ID_HTML_SIMPLE
-              || nFormat == SOT_FORMATSTR_ID_DIF;
+    return nFormat == SotClipboardFormatId::STRING
+              || nFormat == SotClipboardFormatId::SYLK
+              || nFormat == SotClipboardFormatId::LINK
+              || nFormat == SotClipboardFormatId::HTML
+              || nFormat == SotClipboardFormatId::HTML_SIMPLE
+              || nFormat == SotClipboardFormatId::DIF;
 }
 
 // Prepare for Undo
@@ -278,12 +278,12 @@ bool ScImportExport::ExportData( const OUString& rMimeType,
     return false;
 }
 
-bool ScImportExport::ImportString( const OUString& rText, sal_uLong nFmt )
+bool ScImportExport::ImportString( const OUString& rText, SotClipboardFormatId nFmt )
 {
     switch ( nFmt )
     {
         // formats supporting unicode
-        case FORMAT_STRING :
+        case SotClipboardFormatId::STRING :
         {
             ScImportStringStream aStrm( rText);
             return ImportStream( aStrm, OUString(), nFmt );
@@ -301,10 +301,10 @@ bool ScImportExport::ImportString( const OUString& rText, sal_uLong nFmt )
     }
 }
 
-bool ScImportExport::ExportString( OUString& rText, sal_uLong nFmt )
+bool ScImportExport::ExportString( OUString& rText, SotClipboardFormatId nFmt )
 {
-    OSL_ENSURE( nFmt == FORMAT_STRING, "ScImportExport::ExportString: Unicode not supported for other formats than FORMAT_STRING" );
-    if ( nFmt != FORMAT_STRING )
+    OSL_ENSURE( nFmt == SotClipboardFormatId::STRING, "ScImportExport::ExportString: Unicode not supported for other formats than SotClipboardFormatId::STRING" );
+    if ( nFmt != SotClipboardFormatId::STRING )
     {
         rtl_TextEncoding eEnc = osl_getThreadTextEncoding();
         OString aTmp;
@@ -332,7 +332,7 @@ bool ScImportExport::ExportString( OUString& rText, sal_uLong nFmt )
     // ExportStream must handle RTL_TEXTENCODING_UNICODE
 }
 
-bool ScImportExport::ExportByteString( OString& rText, rtl_TextEncoding eEnc, sal_uLong nFmt )
+bool ScImportExport::ExportByteString( OString& rText, rtl_TextEncoding eEnc, SotClipboardFormatId nFmt )
 {
     OSL_ENSURE( eEnc != RTL_TEXTENCODING_UNICODE, "ScImportExport::ExportByteString: Unicode not supported" );
     if ( eEnc == RTL_TEXTENCODING_UNICODE )
@@ -359,36 +359,36 @@ bool ScImportExport::ExportByteString( OString& rText, rtl_TextEncoding eEnc, sa
     return false;
 }
 
-bool ScImportExport::ImportStream( SvStream& rStrm, const OUString& rBaseURL, sal_uLong nFmt )
+bool ScImportExport::ImportStream( SvStream& rStrm, const OUString& rBaseURL, SotClipboardFormatId nFmt )
 {
-    if( nFmt == FORMAT_STRING )
+    if( nFmt == SotClipboardFormatId::STRING )
     {
         if( ExtText2Doc( rStrm ) )      // evaluate pExtOptions
             return true;
     }
-    if( nFmt == SOT_FORMATSTR_ID_SYLK )
+    if( nFmt == SotClipboardFormatId::SYLK )
     {
         if( Sylk2Doc( rStrm ) )
             return true;
     }
-    if( nFmt == SOT_FORMATSTR_ID_DIF )
+    if( nFmt == SotClipboardFormatId::DIF )
     {
         if( Dif2Doc( rStrm ) )
             return true;
     }
-    if( nFmt == FORMAT_RTF )
+    if( nFmt == SotClipboardFormatId::RTF )
     {
         if( RTF2Doc( rStrm, rBaseURL ) )
             return true;
     }
-    if( nFmt == SOT_FORMATSTR_ID_LINK )
+    if( nFmt == SotClipboardFormatId::LINK )
         return true;            // Link-Import?
-    if ( nFmt == SOT_FORMATSTR_ID_HTML )
+    if ( nFmt == SotClipboardFormatId::HTML )
     {
         if( HTML2Doc( rStrm, rBaseURL ) )
             return true;
     }
-    if ( nFmt == SOT_FORMATSTR_ID_HTML_SIMPLE )
+    if ( nFmt == SotClipboardFormatId::HTML_SIMPLE )
     {
         MSE40HTMLClipFormatObj aMSE40ClpObj;                // needed to skip the header data
         SvStream* pHTML = aMSE40ClpObj.IsValid( rStrm );
@@ -399,24 +399,24 @@ bool ScImportExport::ImportStream( SvStream& rStrm, const OUString& rBaseURL, sa
     return false;
 }
 
-bool ScImportExport::ExportStream( SvStream& rStrm, const OUString& rBaseURL, sal_uLong nFmt )
+bool ScImportExport::ExportStream( SvStream& rStrm, const OUString& rBaseURL, SotClipboardFormatId nFmt )
 {
-    if( nFmt == FORMAT_STRING )
+    if( nFmt == SotClipboardFormatId::STRING )
     {
         if( Doc2Text( rStrm ) )
             return true;
     }
-    if( nFmt == SOT_FORMATSTR_ID_SYLK )
+    if( nFmt == SotClipboardFormatId::SYLK )
     {
         if( Doc2Sylk( rStrm ) )
             return true;
     }
-    if( nFmt == SOT_FORMATSTR_ID_DIF )
+    if( nFmt == SotClipboardFormatId::DIF )
     {
         if( Doc2Dif( rStrm ) )
             return true;
     }
-    if( nFmt == SOT_FORMATSTR_ID_LINK && !bAll )
+    if( nFmt == SotClipboardFormatId::LINK && !bAll )
     {
         OUString aDocName;
         if ( pDoc->IsClipboard() )
@@ -459,12 +459,12 @@ bool ScImportExport::ExportStream( SvStream& rStrm, const OUString& rBaseURL, sa
             return rStrm.GetError() == SVSTREAM_OK;
         }
     }
-    if( nFmt == SOT_FORMATSTR_ID_HTML )
+    if( nFmt == SotClipboardFormatId::HTML )
     {
         if( Doc2HTML( rStrm, rBaseURL ) )
             return true;
     }
-    if( nFmt == FORMAT_RTF )
+    if( nFmt == SotClipboardFormatId::RTF )
     {
         if( Doc2RTF( rStrm ) )
             return true;

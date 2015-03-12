@@ -598,7 +598,7 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                         aReturn.bEnabled = !isDataSourceReadOnly() && !isConnectionReadOnly() && isTableFormat();
                         break;
                     case E_QUERY:
-                        aReturn.bEnabled = !isDataSourceReadOnly() && getViewClipboard().HasFormat(SOT_FORMATSTR_ID_DBACCESS_QUERY);
+                        aReturn.bEnabled = !isDataSourceReadOnly() && getViewClipboard().HasFormat(SotClipboardFormatId::DBACCESS_QUERY);
                         break;
                     default:
                         aReturn.bEnabled = !isDataSourceReadOnly() && OComponentTransferable::canExtractComponentDescriptor(getViewClipboard().GetDataFlavorExVector(),getContainer()->getElementType() == E_FORM);
@@ -1033,7 +1033,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                             break;
 
                         case E_QUERY:
-                            if ( rTransferData.HasFormat(SOT_FORMATSTR_ID_DBACCESS_QUERY) )
+                            if ( rTransferData.HasFormat(SotClipboardFormatId::DBACCESS_QUERY) )
                                 paste( E_QUERY, ODataAccessObjectTransferable::extractObjectDescriptor( rTransferData ) );
                             break;
                         default:
@@ -1064,11 +1064,11 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                     {
                         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                         ::std::unique_ptr<SfxAbstractPasteDialog> pDlg(pFact->CreatePasteDialog( getView() ));
-                        ::std::vector<SotFormatStringId> aFormatIds;
+                        ::std::vector<SotClipboardFormatId> aFormatIds;
                         getSupportedFormats(getContainer()->getElementType(),aFormatIds);
-                        const ::std::vector<SotFormatStringId>::iterator aEnd = aFormatIds.end();
+                        const ::std::vector<SotClipboardFormatId>::iterator aEnd = aFormatIds.end();
                         OUString sEmpty;
-                        for (::std::vector<SotFormatStringId>::iterator aIter = aFormatIds.begin();aIter != aEnd; ++aIter)
+                        for (::std::vector<SotClipboardFormatId>::iterator aIter = aFormatIds.begin();aIter != aEnd; ++aIter)
                             pDlg->Insert(*aIter,sEmpty);
 
                         const TransferableDataHelper& rClipboard = getViewClipboard();
@@ -1082,9 +1082,9 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                         {
                             if ( pIter->Name == "FormatStringId" )
                             {
-                                SotFormatStringId nFormatId = 0;
-                                if ( pIter->Value >>= nFormatId )
-                                    pasteFormat(nFormatId);
+                                sal_uLong nTmp;
+                                if ( pIter->Value >>= nTmp )
+                                    pasteFormat(static_cast<SotClipboardFormatId>(nTmp));
                                 break;
                             }
                         }

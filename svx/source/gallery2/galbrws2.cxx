@@ -274,12 +274,12 @@ void GalleryThemePopup::ExecutePopup( vcl::Window *pWindow, const ::Point &aPos 
 
         if( aDataHelper.GetFormatCount() )
         {
-            if( aDataHelper.HasFormat( SOT_FORMATSTR_ID_DRAWING ) ||
-                aDataHelper.HasFormat( SOT_FORMAT_FILE_LIST ) ||
-                aDataHelper.HasFormat( FORMAT_FILE ) ||
-                aDataHelper.HasFormat( SOT_FORMATSTR_ID_SVXB ) ||
-                aDataHelper.HasFormat( FORMAT_GDIMETAFILE ) ||
-                aDataHelper.HasFormat( FORMAT_BITMAP ) )
+            if( aDataHelper.HasFormat( SotClipboardFormatId::DRAWING ) ||
+                aDataHelper.HasFormat( SotClipboardFormatId::FILE_LIST ) ||
+                aDataHelper.HasFormat( SotClipboardFormatId::FILE ) ||
+                aDataHelper.HasFormat( SotClipboardFormatId::SVXB ) ||
+                aDataHelper.HasFormat( SotClipboardFormatId::GDIMETAFILE ) ||
+                aDataHelper.HasFormat( SotClipboardFormatId::BITMAP ) )
             {
                 bEnable = sal_True;
             }
@@ -574,12 +574,12 @@ sal_Int8 GalleryBrowser2::AcceptDrop( DropTargetHelper& rTarget, const AcceptDro
     {
         if( !mpCurTheme->IsDragging() )
         {
-            if( rTarget.IsDropFormatSupported( SOT_FORMATSTR_ID_DRAWING ) ||
-                rTarget.IsDropFormatSupported( SOT_FORMAT_FILE_LIST ) ||
-                rTarget.IsDropFormatSupported( FORMAT_FILE ) ||
-                rTarget.IsDropFormatSupported( SOT_FORMATSTR_ID_SVXB ) ||
-                rTarget.IsDropFormatSupported( FORMAT_GDIMETAFILE ) ||
-                rTarget.IsDropFormatSupported( FORMAT_BITMAP ) )
+            if( rTarget.IsDropFormatSupported( SotClipboardFormatId::DRAWING ) ||
+                rTarget.IsDropFormatSupported( SotClipboardFormatId::FILE_LIST ) ||
+                rTarget.IsDropFormatSupported( SotClipboardFormatId::FILE ) ||
+                rTarget.IsDropFormatSupported( SotClipboardFormatId::SVXB ) ||
+                rTarget.IsDropFormatSupported( SotClipboardFormatId::GDIMETAFILE ) ||
+                rTarget.IsDropFormatSupported( SotClipboardFormatId::BITMAP ) )
             {
                 nRet = DND_ACTION_COPY;
             }

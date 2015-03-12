@@ -46,14 +46,15 @@ bool SwServerObject::GetData( uno::Any & rData,
     WriterRef xWrt;
     switch( SotExchange::GetFormatIdFromMimeType( rMimeType ) )
     {
-    case FORMAT_STRING:
+    case SotClipboardFormatId::STRING:
         ::GetASCWriter( OUString(), OUString(), xWrt );
         break;
 
-    case FORMAT_RTF:
+    case SotClipboardFormatId::RTF:
         // mba: no BaseURL for data exchange
         ::GetRTFWriter( OUString(), OUString(), xWrt );
         break;
+    default: break;
     }
 
     if( xWrt.Is() )

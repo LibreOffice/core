@@ -174,7 +174,7 @@ void SwDocTest::testFileNameFields()
 
     SfxFilter aFilter(
         OUString("Text"),
-        OUString(), 0, 0, OUString(), 0, OUString(),
+        OUString(), 0, SotClipboardFormatId::NONE, OUString(), 0, OUString(),
         OUString("TEXT"), OUString() );
     aDstMed.SetFilter(&aFilter);
 

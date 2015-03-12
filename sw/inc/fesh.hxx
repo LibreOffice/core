@@ -29,6 +29,7 @@
 #include <flyenum.hxx>
 
 #include <svx/svdtypes.hxx>
+#include <sot/formats.hxx>
 #include <rtl/ustring.hxx>
 #include <svtools/embedhlp.hxx>
 #include <o3tl/typed_flags_set.hxx>
@@ -520,7 +521,7 @@ public:
 
     /** Get selected DrawObj as graphics (MetaFile/Bitmap).
      Return value indicates if it was converted. */
-    bool GetDrawObjGraphic( sal_uLong nFmt, Graphic& rGrf ) const;
+    bool GetDrawObjGraphic( SotClipboardFormatId nFmt, Graphic& rGrf ) const;
 
     void Paste( SvStream& rStm, sal_uInt16 nAction, const Point* pPt = 0 );
     bool Paste( const Graphic &rGrf, const OUString& rURL );

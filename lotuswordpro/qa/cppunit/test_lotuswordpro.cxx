@@ -29,7 +29,7 @@ namespace
 
         virtual bool load(const OUString &,
             const OUString &rURL, const OUString &,
-            unsigned int, unsigned int, unsigned int) SAL_OVERRIDE;
+            unsigned int, SotClipboardFormatId, unsigned int) SAL_OVERRIDE;
 
         void test();
 
@@ -51,7 +51,7 @@ namespace
 
     bool LotusWordProTest::load(const OUString &,
         const OUString &rURL, const OUString &,
-        unsigned int, unsigned int, unsigned int)
+        unsigned int, SotClipboardFormatId, unsigned int)
     {
         uno::Sequence< beans::PropertyValue > aDescriptor(1);
         aDescriptor[0].Name = "URL";

@@ -73,10 +73,10 @@ void SvEmbedTransferHelper::SetParentShellID( const OUString& rShellID )
 
 void SvEmbedTransferHelper::AddSupportedFormats()
 {
-    AddFormat( SOT_FORMATSTR_ID_EMBED_SOURCE );
-    AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
-    AddFormat( FORMAT_GDIMETAFILE );
-    AddFormat( FORMAT_BITMAP );
+    AddFormat( SotClipboardFormatId::EMBED_SOURCE );
+    AddFormat( SotClipboardFormatId::OBJECTDESCRIPTOR );
+    AddFormat( SotClipboardFormatId::GDIMETAFILE );
+    AddFormat( SotClipboardFormatId::BITMAP );
 }
 
 
@@ -89,16 +89,16 @@ bool SvEmbedTransferHelper::GetData( const css::datatransfer::DataFlavor& rFlavo
     {
         try
         {
-            sal_uInt32 nFormat = SotExchange::GetFormat( rFlavor );
+            SotClipboardFormatId nFormat = SotExchange::GetFormat( rFlavor );
             if( HasFormat( nFormat ) )
             {
-                if( nFormat == SOT_FORMATSTR_ID_OBJECTDESCRIPTOR )
+                if( nFormat == SotClipboardFormatId::OBJECTDESCRIPTOR )
                 {
                     TransferableObjectDescriptor aDesc;
                     FillTransferableObjectDescriptor( aDesc, m_xObj, m_pGraphic, m_nAspect );
                     bRet = SetTransferableObjectDescriptor( aDesc, rFlavor );
                 }
-                else if( nFormat == SOT_FORMATSTR_ID_EMBED_SOURCE )
+                else if( nFormat == SotClipboardFormatId::EMBED_SOURCE )
                 {
                     try
                     {
@@ -157,7 +157,7 @@ bool SvEmbedTransferHelper::GetData( const css::datatransfer::DataFlavor& rFlavo
                     {
                     }
                 }
-                else if ( nFormat == FORMAT_GDIMETAFILE && m_pGraphic )
+                else if ( nFormat == SotClipboardFormatId::GDIMETAFILE && m_pGraphic )
                 {
                     SvMemoryStream aMemStm( 65535, 65535 );
                     aMemStm.SetVersion( SOFFICE_FILEFORMAT_CURRENT );
@@ -170,7 +170,7 @@ bool SvEmbedTransferHelper::GetData( const css::datatransfer::DataFlavor& rFlavo
                     SetAny( aAny, rFlavor );
                     bRet = true;
                 }
-                else if ( ( nFormat == FORMAT_BITMAP || nFormat == SOT_FORMATSTR_ID_PNG ) && m_pGraphic )
+                else if ( ( nFormat == SotClipboardFormatId::BITMAP || nFormat == SotClipboardFormatId::PNG ) && m_pGraphic )
                 {
                     bRet = SetBitmapEx( m_pGraphic->GetBitmapEx(), rFlavor );
                 }
@@ -209,7 +209,7 @@ void SvEmbedTransferHelper::FillTransferableObjectDescriptor( TransferableObject
 {
     //TODO/LATER: need TypeName to fill it into the Descriptor (will be shown in listbox)
     ::com::sun::star::datatransfer::DataFlavor aFlavor;
-    SotExchange::GetFormatDataFlavor( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR, aFlavor );
+    SotExchange::GetFormatDataFlavor( SotClipboardFormatId::OBJECTDESCRIPTOR, aFlavor );
 
     rDesc.maClassName = SvGlobalName( xObj->getClassID() );
     rDesc.maTypeName = aFlavor.HumanPresentableName;

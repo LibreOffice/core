@@ -884,7 +884,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
                 {
                     mpDrawView->InsertData( aDataHelper,
                                             GetActiveWindow()->PixelToLogic( Rectangle( Point(), GetActiveWindow()->GetOutputSizePixel() ).Center() ),
-                                            nAction, false, FORMAT_STRING);
+                                            nAction, false, SotClipboardFormatId::STRING);
                 }
             }
 
@@ -897,15 +897,15 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
             WaitObject              aWait( (Window*)GetActiveWindow() );
             TransferableDataHelper  aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( GetActiveWindow() ) );
             const SfxItemSet*       pReqArgs = rReq.GetArgs();
-            sal_uInt32                  nFormat = 0;
+            SotClipboardFormatId    nFormat = SotClipboardFormatId::NONE;
 
             if( pReqArgs )
             {
                 SFX_REQUEST_ARG( rReq, pIsActive, SfxUInt32Item, SID_CLIPBOARD_FORMAT_ITEMS, false );
-                nFormat = pIsActive->GetValue();
+                nFormat = static_cast<SotClipboardFormatId>(pIsActive->GetValue());
             }
 
-            if( nFormat && aDataHelper.GetTransferable().is() )
+            if( nFormat != SotClipboardFormatId::NONE && aDataHelper.GetTransferable().is() )
             {
                 sal_Int8 nAction = DND_ACTION_COPY;
 
@@ -915,12 +915,12 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
                 {
                     INetBookmark    aINetBookmark( aEmptyStr, aEmptyStr );
 
-                    if( ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK ) &&
-                          aDataHelper.GetINetBookmark( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, aINetBookmark ) ) ||
-                        ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR ) &&
-                          aDataHelper.GetINetBookmark( SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, aINetBookmark ) ) ||
-                        ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR ) &&
-                          aDataHelper.GetINetBookmark( SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, aINetBookmark ) ) )
+                    if( ( aDataHelper.HasFormat( SotClipboardFormatId::NETSCAPE_BOOKMARK ) &&
+                          aDataHelper.GetINetBookmark( SotClipboardFormatId::NETSCAPE_BOOKMARK, aINetBookmark ) ) ||
+                        ( aDataHelper.HasFormat( SotClipboardFormatId::FILEGRPDESCRIPTOR ) &&
+                          aDataHelper.GetINetBookmark( SotClipboardFormatId::FILEGRPDESCRIPTOR, aINetBookmark ) ) ||
+                        ( aDataHelper.HasFormat( SotClipboardFormatId::UNIFORMRESOURCELOCATOR ) &&
+                          aDataHelper.GetINetBookmark( SotClipboardFormatId::UNIFORMRESOURCELOCATOR, aINetBookmark ) ) )
                     {
                         InsertURLField( aINetBookmark.GetURL(), aINetBookmark.GetDescription(), aEmptyStr, NULL );
                     }

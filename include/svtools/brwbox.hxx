@@ -404,8 +404,8 @@ protected:
     inline const DataFlavorExVector&
                     GetDataFlavors() const;
 
-    bool            IsDropFormatSupported( SotFormatStringId nFormat );     // need this because the base class' IsDropFormatSupported is not const ...
-    bool            IsDropFormatSupported( SotFormatStringId nFormat ) const;
+    bool            IsDropFormatSupported( SotClipboardFormatId nFormat );     // need this because the base class' IsDropFormatSupported is not const ...
+    bool            IsDropFormatSupported( SotClipboardFormatId nFormat ) const;
 
     bool            IsDropFormatSupported( const css::datatransfer::DataFlavor& _rFlavor );        // need this because the base class' IsDropFormatSupported is not const ...
     bool            IsDropFormatSupported( const css::datatransfer::DataFlavor& _rFlavor ) const;

@@ -62,7 +62,7 @@ SwWebDocShell::~SwWebDocShell()
 }
 
 void SwWebDocShell::FillClass( SvGlobalName * pClassName,
-                                   sal_uInt32 * pClipFormat,
+                                   SotClipboardFormatId * pClipFormat,
                                    OUString * /*pAppName*/,
                                    OUString * pLongUserName,
                                    OUString * pUserName,
@@ -75,13 +75,13 @@ void SwWebDocShell::FillClass( SvGlobalName * pClassName,
     if (nVersion == SOFFICE_FILEFORMAT_60)
     {
         *pClassName = SvGlobalName( SO3_SWWEB_CLASSID_60 );
-        *pClipFormat = SOT_FORMATSTR_ID_STARWRITERWEB_60;
+        *pClipFormat = SotClipboardFormatId::STARWRITERWEB_60;
         *pLongUserName = SW_RESSTR(STR_WRITER_WEBDOC_FULLTYPE);
     }
     else if (nVersion == SOFFICE_FILEFORMAT_8)
     {
         *pClassName     = SvGlobalName( SO3_SWWEB_CLASSID_60 );
-        *pClipFormat    = SOT_FORMATSTR_ID_STARWRITERWEB_8;
+        *pClipFormat    = SotClipboardFormatId::STARWRITERWEB_8;
         *pLongUserName = SW_RESSTR(STR_WRITER_WEBDOC_FULLTYPE);
     }
     *pUserName = SW_RESSTR(STR_HUMAN_SWWEBDOC_NAME);

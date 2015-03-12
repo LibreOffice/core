@@ -65,7 +65,7 @@ public:
 
     virtual bool load( const OUString &rFilter, const OUString &rURL,
             const OUString &rUserData, unsigned int nFilterFlags,
-            unsigned int nClipboardID, unsigned int nFilterVersion) SAL_OVERRIDE;
+            SotClipboardFormatId nClipboardID, unsigned int nFilterVersion) SAL_OVERRIDE;
     void testSharedFormulaXLS();
 #if 0
     void testSharedFormulaXLSGroundWater();
@@ -557,7 +557,7 @@ bool ScOpenCLTest::initTestEnv(const OUString& fileName, sal_Int32 nFormat,
 
 bool ScOpenCLTest::load(const OUString &rFilter, const OUString &rURL,
     const OUString &rUserData, unsigned int nFilterFlags,
-        unsigned int nClipboardID, unsigned int nFilterVersion)
+        SotClipboardFormatId nClipboardID, unsigned int nFilterVersion)
 {
     ScDocShellRef xDocShRef = ScBootstrapFixture::load(rURL, rFilter, rUserData,
         OUString(), nFilterFlags, nClipboardID, nFilterVersion );

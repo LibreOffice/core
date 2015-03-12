@@ -117,13 +117,13 @@ void OFilterItemExchange::AddSupportedFormats()
 }
 
 
-sal_uInt32 OFilterItemExchange::getFormatId()
+SotClipboardFormatId OFilterItemExchange::getFormatId()
 {
-    static sal_uInt32 s_nFormat = (sal_uInt32)-1;
-    if ((sal_uInt32)-1 == s_nFormat)
+    static SotClipboardFormatId s_nFormat = static_cast<SotClipboardFormatId>(-1);
+    if (static_cast<SotClipboardFormatId>(-1) == s_nFormat)
     {
         s_nFormat = SotExchange::RegisterFormatName(OUString("application/x-openoffice;windows_formatname=\"form.FilterControlExchange\""));
-        DBG_ASSERT((sal_uInt32)-1 != s_nFormat, "OFilterExchangeHelper::getFormatId: bad exchange id!");
+        DBG_ASSERT(static_cast<SotClipboardFormatId>(-1) != s_nFormat, "OFilterExchangeHelper::getFormatId: bad exchange id!");
     }
     return s_nFormat;
 }

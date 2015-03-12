@@ -3471,7 +3471,7 @@ EditSelection ImpEditEngine::InsertText( uno::Reference< datatransfer::XTransfer
         if ( bUseSpecial )
         {
             // BIN
-            SotExchange::GetFormatDataFlavor( SOT_FORMATSTR_ID_EDITENGINE, aFlavor );
+            SotExchange::GetFormatDataFlavor( SotClipboardFormatId::EDITENGINE, aFlavor );
             if ( rxDataObj->isDataFlavorSupported( aFlavor ) )
             {
                 try
@@ -3493,7 +3493,7 @@ EditSelection ImpEditEngine::InsertText( uno::Reference< datatransfer::XTransfer
             if ( !bDone )
             {
                 // RTF
-                SotExchange::GetFormatDataFlavor( SOT_FORMAT_RTF, aFlavor );
+                SotExchange::GetFormatDataFlavor( SotClipboardFormatId::RTF, aFlavor );
                 if ( rxDataObj->isDataFlavorSupported( aFlavor ) )
                 {
                     try
@@ -3520,7 +3520,7 @@ EditSelection ImpEditEngine::InsertText( uno::Reference< datatransfer::XTransfer
         }
         if ( !bDone )
         {
-            SotExchange::GetFormatDataFlavor( SOT_FORMAT_STRING, aFlavor );
+            SotExchange::GetFormatDataFlavor( SotClipboardFormatId::STRING, aFlavor );
             if ( rxDataObj->isDataFlavorSupported( aFlavor ) )
             {
                 try

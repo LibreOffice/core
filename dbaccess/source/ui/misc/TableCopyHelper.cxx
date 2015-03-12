@@ -177,12 +177,12 @@ void OTableCopyHelper::pasteTable( const ::svx::ODataAccessDescriptor& _rPasteDa
                  i_rDestDataSourceName, i_rDestConnection );
 }
 
-void OTableCopyHelper::pasteTable( SotFormatStringId _nFormatId
+void OTableCopyHelper::pasteTable( SotClipboardFormatId _nFormatId
                                   ,const TransferableDataHelper& _rTransData
                                   ,const OUString& i_rDestDataSource
                                   ,const SharedConnection& _xConnection)
 {
-    if ( _nFormatId == SOT_FORMATSTR_ID_DBACCESS_TABLE || _nFormatId == SOT_FORMATSTR_ID_DBACCESS_QUERY )
+    if ( _nFormatId == SotClipboardFormatId::DBACCESS_TABLE || _nFormatId == SotClipboardFormatId::DBACCESS_QUERY )
     {
         if ( ODataAccessObjectTransferable::canExtractObjectDescriptor(_rTransData.GetDataFlavorExVector()) )
         {
@@ -196,13 +196,13 @@ void OTableCopyHelper::pasteTable( SotFormatStringId _nFormatId
         {
             DropDescriptor aTrans;
             bool bOk;
-            if ( _nFormatId != SOT_FORMAT_RTF )
-                bOk = const_cast<TransferableDataHelper&>(_rTransData).GetSotStorageStream(SOT_FORMATSTR_ID_HTML ,aTrans.aHtmlRtfStorage);
+            if ( _nFormatId != SotClipboardFormatId::RTF )
+                bOk = const_cast<TransferableDataHelper&>(_rTransData).GetSotStorageStream(SotClipboardFormatId::HTML ,aTrans.aHtmlRtfStorage);
             else
-                bOk = const_cast<TransferableDataHelper&>(_rTransData).GetSotStorageStream(SOT_FORMAT_RTF,aTrans.aHtmlRtfStorage);
+                bOk = const_cast<TransferableDataHelper&>(_rTransData).GetSotStorageStream(SotClipboardFormatId::RTF,aTrans.aHtmlRtfStorage);
 
             aTrans.nType            = E_TABLE;
-            aTrans.bHtml            = SOT_FORMATSTR_ID_HTML == _nFormatId;
+            aTrans.bHtml            = SotClipboardFormatId::HTML == _nFormatId;
             aTrans.sDefaultTableName = GetTableNameForAppend();
             if ( !bOk || !copyTagTable(aTrans,false,_xConnection) )
                 m_pController->showError(SQLException(ModuleRes(STR_NO_TABLE_FORMAT_INSIDE), *m_pController, OUString("S1000"), 0, Any()));
@@ -224,12 +224,12 @@ void OTableCopyHelper::pasteTable( const TransferableDataHelper& _rTransData
                                   ,const OUString& i_rDestDataSource
                                   ,const SharedConnection& _xConnection)
 {
-    if ( _rTransData.HasFormat(SOT_FORMATSTR_ID_DBACCESS_TABLE) || _rTransData.HasFormat(SOT_FORMATSTR_ID_DBACCESS_QUERY) )
-        pasteTable( SOT_FORMATSTR_ID_DBACCESS_TABLE,_rTransData,i_rDestDataSource,_xConnection);
-    else if ( _rTransData.HasFormat(SOT_FORMATSTR_ID_HTML) )
-        pasteTable( SOT_FORMATSTR_ID_HTML,_rTransData,i_rDestDataSource,_xConnection);
-    else if ( _rTransData.HasFormat(SOT_FORMAT_RTF) )
-        pasteTable( SOT_FORMAT_RTF,_rTransData,i_rDestDataSource,_xConnection);
+    if ( _rTransData.HasFormat(SotClipboardFormatId::DBACCESS_TABLE) || _rTransData.HasFormat(SotClipboardFormatId::DBACCESS_QUERY) )
+        pasteTable( SotClipboardFormatId::DBACCESS_TABLE,_rTransData,i_rDestDataSource,_xConnection);
+    else if ( _rTransData.HasFormat(SotClipboardFormatId::HTML) )
+        pasteTable( SotClipboardFormatId::HTML,_rTransData,i_rDestDataSource,_xConnection);
+    else if ( _rTransData.HasFormat(SotClipboardFormatId::RTF) )
+        pasteTable( SotClipboardFormatId::RTF,_rTransData,i_rDestDataSource,_xConnection);
 }
 
 bool OTableCopyHelper::copyTagTable(OTableCopyHelper::DropDescriptor& _rDesc, bool _bCheck, const SharedConnection& _xConnection)
@@ -255,10 +255,10 @@ bool OTableCopyHelper::copyTagTable(OTableCopyHelper::DropDescriptor& _rDesc, bo
 
 bool OTableCopyHelper::isTableFormat(const TransferableDataHelper& _rClipboard)  const
 {
-    bool bTableFormat   =   _rClipboard.HasFormat(SOT_FORMATSTR_ID_DBACCESS_TABLE)
-                ||  _rClipboard.HasFormat(SOT_FORMATSTR_ID_DBACCESS_QUERY)
-                ||  _rClipboard.HasFormat(SOT_FORMAT_RTF)
-                ||  _rClipboard.HasFormat(SOT_FORMATSTR_ID_HTML);
+    bool bTableFormat   =   _rClipboard.HasFormat(SotClipboardFormatId::DBACCESS_TABLE)
+                ||  _rClipboard.HasFormat(SotClipboardFormatId::DBACCESS_QUERY)
+                ||  _rClipboard.HasFormat(SotClipboardFormatId::RTF)
+                ||  _rClipboard.HasFormat(SotClipboardFormatId::HTML);
 
     return bTableFormat;
 }
@@ -268,14 +268,14 @@ bool OTableCopyHelper::copyTagTable(const TransferableDataHelper& _aDroppedData
                                    ,const SharedConnection& _xConnection)
 {
     bool bRet = false;
-    bool bHtml = _aDroppedData.HasFormat(SOT_FORMATSTR_ID_HTML);
-    if ( bHtml || _aDroppedData.HasFormat(SOT_FORMAT_RTF) )
+    bool bHtml = _aDroppedData.HasFormat(SotClipboardFormatId::HTML);
+    if ( bHtml || _aDroppedData.HasFormat(SotClipboardFormatId::RTF) )
     {
         bool bOk;
         if ( bHtml )
-            bOk = const_cast<TransferableDataHelper&>(_aDroppedData).GetSotStorageStream(SOT_FORMATSTR_ID_HTML ,_rAsyncDrop.aHtmlRtfStorage);
+            bOk = const_cast<TransferableDataHelper&>(_aDroppedData).GetSotStorageStream(SotClipboardFormatId::HTML ,_rAsyncDrop.aHtmlRtfStorage);
         else
-            bOk = const_cast<TransferableDataHelper&>(_aDroppedData).GetSotStorageStream(SOT_FORMAT_RTF,_rAsyncDrop.aHtmlRtfStorage);
+            bOk = const_cast<TransferableDataHelper&>(_aDroppedData).GetSotStorageStream(SotClipboardFormatId::RTF,_rAsyncDrop.aHtmlRtfStorage);
 
         _rAsyncDrop.bHtml           = bHtml;
         _rAsyncDrop.bError          = !copyTagTable(_rAsyncDrop,true,_xConnection);

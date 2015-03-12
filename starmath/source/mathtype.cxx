@@ -1889,7 +1889,7 @@ int MathType::ConvertFromStarMath( SfxMedium& rMedium )
 
         SvGlobalName aGName(0x0002ce02L, 0x0000, 0x0000,0xc0,0x00,
             0x00,0x00,0x00,0x00,0x00,0x46 );
-        pStor->SetClass( aGName, 0, OUString("Microsoft Equation 3.0"));
+        pStor->SetClass( aGName, SotClipboardFormatId::NONE, OUString("Microsoft Equation 3.0"));
 
         static sal_uInt8 const aCompObj[] = {
             0x01, 0x00, 0xFE, 0xFF, 0x03, 0x0A, 0x00, 0x00,

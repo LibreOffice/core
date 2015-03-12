@@ -225,12 +225,12 @@ protected:
 
     ScDocShellRef load(
         bool bReadWrite, const OUString& rURL, const OUString& rFilter, const OUString &rUserData,
-        const OUString& rTypeName, unsigned int nFilterFlags, unsigned int nClipboardID,
+        const OUString& rTypeName, unsigned int nFilterFlags, SotClipboardFormatId nClipboardID,
         sal_uIntPtr nFilterVersion = SOFFICE_FILEFORMAT_CURRENT, const OUString* pPassword = NULL );
 
     ScDocShellRef load(
         const OUString& rURL, const OUString& rFilter, const OUString &rUserData,
-        const OUString& rTypeName, unsigned int nFilterFlags, unsigned int nClipboardID,
+        const OUString& rTypeName, unsigned int nFilterFlags, SotClipboardFormatId nClipboardID,
         sal_uIntPtr nFilterVersion = SOFFICE_FILEFORMAT_CURRENT, const OUString* pPassword = NULL );
 
     ScDocShellRef loadDoc(const OUString& rFileName, sal_Int32 nFormat, bool bReadWrite = false );

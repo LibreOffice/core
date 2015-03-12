@@ -151,7 +151,7 @@ public:
     // got the appropriate information as a string.
     // Is now required for FileObject in conjunction with JavaScript
     // this needs information about Load/Abort/Error
-    static sal_uIntPtr RegisterStatusInfoId();
+    static SotClipboardFormatId RegisterStatusInfoId();
 
     // if the mimetype says graphic/bitmap/gdimetafile then get the
     // graphic from the Any. Return says no errors

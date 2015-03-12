@@ -104,7 +104,7 @@ using namespace ::com::sun::star::linguistic2;
     sal_uInt32 nFormatCount (rDataHelper.GetFormatCount());
     for (sal_uInt32 i=0; i<nFormatCount; i++)
     {
-        const SotFormatStringId nTestFormat = rDataHelper.GetFormat(i);
+        const SotClipboardFormatId nTestFormat = rDataHelper.GetFormat(i);
 
         // Check if the current format is the same as one that has already
         // been handled.
@@ -124,13 +124,13 @@ using namespace ::com::sun::star::linguistic2;
         {
             switch (nTestFormat)
             {
-                case SOT_FORMATSTR_ID_EMBED_SOURCE:
+                case SotClipboardFormatId::EMBED_SOURCE:
                 {
                     OUString sName;
 
                     TransferableObjectDescriptor aDescriptor;
                     if (rDataHelper.GetTransferableObjectDescriptor(
-                        SOT_FORMATSTR_ID_OBJECTDESCRIPTOR, aDescriptor))
+                        SotClipboardFormatId::OBJECTDESCRIPTOR, aDescriptor))
                     {
                         sName = aDescriptor.maTypeName;
                     }
@@ -142,24 +142,25 @@ using namespace ::com::sun::star::linguistic2;
                     break;
                 }
 
-                case SOT_FORMATSTR_ID_LINK_SOURCE:
-                case SOT_FORMATSTR_ID_DRAWING:
-                case SOT_FORMATSTR_ID_SVXB:
-                case FORMAT_GDIMETAFILE:
-                case FORMAT_BITMAP:
-                case SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK:
-                case FORMAT_STRING:
-                case SOT_FORMATSTR_ID_HTML:
-                case FORMAT_RTF:
-                case SOT_FORMATSTR_ID_EDITENGINE:
+                case SotClipboardFormatId::LINK_SOURCE:
+                case SotClipboardFormatId::DRAWING:
+                case SotClipboardFormatId::SVXB:
+                case SotClipboardFormatId::GDIMETAFILE:
+                case SotClipboardFormatId::BITMAP:
+                case SotClipboardFormatId::NETSCAPE_BOOKMARK:
+                case SotClipboardFormatId::STRING:
+                case SotClipboardFormatId::HTML:
+                case SotClipboardFormatId::RTF:
+                case SotClipboardFormatId::EDITENGINE:
                     pResult->AddClipbrdFormat(nTestFormat);
                     break;
+                default: break;
             }
         }
     }
 
     // Check some OLE formats whose names are handled differently.
-    SotFormatStringId nFormat (SOT_FORMATSTR_ID_EMBED_SOURCE_OLE);
+    SotClipboardFormatId nFormat (SotClipboardFormatId::EMBED_SOURCE_OLE);
     bool bHasFormat (rDataHelper.HasFormat(nFormat));
     if ( ! bHasFormat)
     {

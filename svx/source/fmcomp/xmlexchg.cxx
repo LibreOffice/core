@@ -34,13 +34,13 @@ namespace svx
 
     void OXFormsTransferable::AddSupportedFormats()
     {
-        AddFormat( SOT_FORMATSTR_ID_XFORMS );
+        AddFormat( SotClipboardFormatId::XFORMS );
     }
 
     bool OXFormsTransferable::GetData( const DataFlavor& _rFlavor, const OUString& /*rDestDoc*/ )
     {
-        const sal_uInt32 nFormatId = SotExchange::GetFormat( _rFlavor );
-        if ( SOT_FORMATSTR_ID_XFORMS == nFormatId )
+        const SotClipboardFormatId nFormatId = SotExchange::GetFormat( _rFlavor );
+        if ( SotClipboardFormatId::XFORMS == nFormatId )
         {
             return SetString(OUString("XForms-Transferable"), _rFlavor);
         }

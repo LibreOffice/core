@@ -86,28 +86,28 @@ SvPasteObjectDialog::~SvPasteObjectDialog()
 /*************************************************************************
 |*    SvPasteObjectDialog::Insert()
 *************************************************************************/
-void SvPasteObjectDialog::Insert( SotFormatStringId nFormat, const OUString& rFormatName )
+void SvPasteObjectDialog::Insert( SotClipboardFormatId nFormat, const OUString& rFormatName )
 {
     aSupplementMap.insert( ::std::make_pair( nFormat, rFormatName ) );
 }
 
-sal_uLong SvPasteObjectDialog::GetFormat( const TransferableDataHelper& rHelper,
+SotClipboardFormatId SvPasteObjectDialog::GetFormat( const TransferableDataHelper& rHelper,
                                       const DataFlavorExVector* pFormats,
                                       const TransferableObjectDescriptor* )
 {
     //TODO/LATER: why is the Descriptor never used?!
     TransferableObjectDescriptor aDesc;
-    if (rHelper.HasFormat(SOT_FORMATSTR_ID_OBJECTDESCRIPTOR))
+    if (rHelper.HasFormat(SotClipboardFormatId::OBJECTDESCRIPTOR))
     {
         (void)const_cast<TransferableDataHelper&>(rHelper).GetTransferableObjectDescriptor(
-                                SOT_FORMATSTR_ID_OBJECTDESCRIPTOR, aDesc);
+                                SotClipboardFormatId::OBJECTDESCRIPTOR, aDesc);
     }
     if ( !pFormats )
         pFormats = &rHelper.GetDataFlavorExVector();
 
     // create and fill dialog box
     OUString aSourceName, aTypeName;
-    sal_uLong nSelFormat = 0;
+    SotClipboardFormatId nSelFormat = SotClipboardFormatId::NONE;
     SvGlobalName aEmptyNm;
 
     ObjectLB().SetUpdateMode( false );
@@ -117,9 +117,9 @@ sal_uLong SvPasteObjectDialog::GetFormat( const TransferableDataHelper& rHelper,
     while( aIter != aEnd )
     {
         ::com::sun::star::datatransfer::DataFlavor aFlavor( *aIter );
-        SotFormatStringId nFormat = (*aIter++).mnSotId;
+        SotClipboardFormatId nFormat = (*aIter++).mnSotId;
 
-        ::std::map< SotFormatStringId, OUString >::iterator itName =
+        ::std::map< SotClipboardFormatId, OUString >::iterator itName =
             aSupplementMap.find( nFormat );
 
         // if there is an "Embed Source" or and "Embedded Object" on the
@@ -143,7 +143,7 @@ sal_uLong SvPasteObjectDialog::GetFormat( const TransferableDataHelper& rHelper,
         {
             aName = *pName;
 
-            if( SOT_FORMATSTR_ID_EMBED_SOURCE == nFormat )
+            if( SotClipboardFormatId::EMBED_SOURCE == nFormat )
             {
                 if( aDesc.maClassName != aEmptyNm )
                 {
@@ -155,7 +155,7 @@ sal_uLong SvPasteObjectDialog::GetFormat( const TransferableDataHelper& rHelper,
                         aName = aTypeName = aDesc.maTypeName;
                 }
             }
-            else if( SOT_FORMATSTR_ID_LINK_SOURCE == nFormat )
+            else if( SotClipboardFormatId::LINK_SOURCE == nFormat )
             {
                 continue;
             }
@@ -201,7 +201,7 @@ sal_uLong SvPasteObjectDialog::GetFormat( const TransferableDataHelper& rHelper,
 
     if( Dialog::Execute() == RET_OK )
     {
-        nSelFormat  = reinterpret_cast<sal_uLong>(ObjectLB().GetSelectEntryData());
+        nSelFormat = static_cast<SotClipboardFormatId>(reinterpret_cast<sal_uLong>(ObjectLB().GetSelectEntryData()));
     }
 
     return nSelFormat;

@@ -58,7 +58,7 @@ public:
 
     virtual bool load( const OUString &rFilter, const OUString &rURL,
         const OUString &rUserData, unsigned int nFilterFlags,
-        unsigned int nClipboardID, unsigned int nFilterVersion) SAL_OVERRIDE;
+        SotClipboardFormatId nClipboardID, unsigned int nFilterVersion) SAL_OVERRIDE;
     /**
      * Ensure CVEs remain unbroken
      */
@@ -114,7 +114,7 @@ private:
 
 bool ScFiltersTest::load(const OUString &rFilter, const OUString &rURL,
     const OUString &rUserData, unsigned int nFilterFlags,
-        unsigned int nClipboardID, unsigned int nFilterVersion)
+    SotClipboardFormatId nClipboardID, unsigned int nFilterVersion)
 {
     ScDocShellRef xDocShRef = ScBootstrapFixture::load(rURL, rFilter, rUserData,
         OUString(), nFilterFlags, nClipboardID, nFilterVersion );

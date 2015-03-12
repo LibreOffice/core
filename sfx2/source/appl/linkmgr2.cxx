@@ -501,11 +501,11 @@ void LinkManager::CancelTransfers()
     // gets the appropriate information as a string
     // For now this is required for file object in conjunction with JavaScript
     // - needs information about Load/Abort/Error
-sal_uIntPtr LinkManager::RegisterStatusInfoId()
+SotClipboardFormatId LinkManager::RegisterStatusInfoId()
 {
-    static sal_uIntPtr nFormat = 0;
+    static SotClipboardFormatId nFormat = SotClipboardFormatId::NONE;
 
-    if( !nFormat )
+    if( nFormat == SotClipboardFormatId::NONE )
     {
         nFormat = SotExchange::RegisterFormatName(
                     OUString("StatusInfo from SvxInternalLink"));
@@ -529,13 +529,13 @@ bool LinkManager::GetGraphicFromAny( const OUString& rMimeType,
 
         switch( SotExchange::GetFormatIdFromMimeType( rMimeType ) )
         {
-        case SOT_FORMATSTR_ID_SVXB:
+        case SotClipboardFormatId::SVXB:
             {
                 ReadGraphic( aMemStm, rGrf );
                 bRet = true;
             }
             break;
-        case FORMAT_GDIMETAFILE:
+        case SotClipboardFormatId::GDIMETAFILE:
             {
                 GDIMetaFile aMtf;
                 aMtf.Read( aMemStm );
@@ -543,7 +543,7 @@ bool LinkManager::GetGraphicFromAny( const OUString& rMimeType,
                 bRet = true;
             }
             break;
-        case FORMAT_BITMAP:
+        case SotClipboardFormatId::BITMAP:
             {
                 Bitmap aBmp;
                 ReadDIB(aBmp, aMemStm, true);
@@ -551,6 +551,7 @@ bool LinkManager::GetGraphicFromAny( const OUString& rMimeType,
                 bRet = true;
             }
             break;
+        default: break;
         }
     }
     return bRet;

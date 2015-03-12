@@ -1554,11 +1554,11 @@ void SmViewShell::Execute(SfxRequest& rReq)
         {
             TransferableDataHelper aData( TransferableDataHelper::CreateFromSystemClipboard(GetEditWindow()) );
             uno::Reference < io::XInputStream > xStrm;
-            SotFormatStringId nId;
+            SotClipboardFormatId nId;
             if( aData.GetTransferable().is() &&
-                ( aData.HasFormat( nId = SOT_FORMATSTR_ID_EMBEDDED_OBJ ) ||
-                  (aData.HasFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR ) &&
-                   aData.HasFormat( nId = SOT_FORMATSTR_ID_EMBED_SOURCE ))))
+                ( aData.HasFormat( nId = SotClipboardFormatId::EMBEDDED_OBJ ) ||
+                  (aData.HasFormat( SotClipboardFormatId::OBJECTDESCRIPTOR ) &&
+                   aData.HasFormat( nId = SotClipboardFormatId::EMBED_SOURCE ))))
                 xStrm = aData.GetInputStream(nId, OUString());
 
             if (xStrm.is())
@@ -1610,7 +1610,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
                                                     GetEditWindow()) );
 
                     if( aDataHelper.GetTransferable().is() &&
-                        aDataHelper.HasFormat( FORMAT_STRING ))
+                        aDataHelper.HasFormat( SotClipboardFormatId::STRING ))
                         pWin->Paste();
                     else
                         bCallExec = true;
@@ -1861,10 +1861,10 @@ void SmViewShell::GetState(SfxItemSet &rSet)
                                                         pEditWin) );
 
                 bPasteState = aDataHelper.GetTransferable().is() &&
-                 ( aDataHelper.HasFormat( FORMAT_STRING ) ||
-                   aDataHelper.HasFormat( SOT_FORMATSTR_ID_EMBEDDED_OBJ ) ||
-                   (aDataHelper.HasFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR )
-                      && aDataHelper.HasFormat( SOT_FORMATSTR_ID_EMBED_SOURCE )));
+                 ( aDataHelper.HasFormat( SotClipboardFormatId::STRING ) ||
+                   aDataHelper.HasFormat( SotClipboardFormatId::EMBEDDED_OBJ ) ||
+                   (aDataHelper.HasFormat( SotClipboardFormatId::OBJECTDESCRIPTOR )
+                      && aDataHelper.HasFormat( SotClipboardFormatId::EMBED_SOURCE )));
             }
             if( !bPasteState )
                 rSet.DisableItem( nWh );

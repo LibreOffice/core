@@ -42,7 +42,7 @@ class SvPasteObjectDialog : public ModalDialog
     FixedText* m_pFtObjectSource;
     ListBox* m_pLbInsertList;
     OKButton* m_pOKButton;
-    ::std::map< SotFormatStringId, OUString > aSupplementMap;
+    ::std::map< SotClipboardFormatId, OUString > aSupplementMap;
     SvGlobalName    aObjClassName;
     OUString        aObjName;
 
@@ -57,9 +57,9 @@ public:
                 SvPasteObjectDialog( vcl::Window* pParent );
                 virtual ~SvPasteObjectDialog();
 
-    void        Insert( SotFormatStringId nFormat, const OUString & rFormatName );
+    void        Insert( SotClipboardFormatId nFormat, const OUString & rFormatName );
     void        SetObjName( const SvGlobalName & rClass, const OUString & rObjName );
-    sal_uLong       GetFormat( const TransferableDataHelper& aHelper,
+    SotClipboardFormatId GetFormat( const TransferableDataHelper& aHelper,
                         const DataFlavorExVector* pFormats=0,
                         const TransferableObjectDescriptor* pDesc=0 );
 };

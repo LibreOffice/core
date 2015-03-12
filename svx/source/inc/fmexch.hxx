@@ -74,7 +74,7 @@ namespace svxform
 
         void        clear();
 
-        static  bool    hasFormat( const DataFlavorExVector& _rFormats, sal_uInt32 _nFormatId );
+        static  bool    hasFormat( const DataFlavorExVector& _rFormats, SotClipboardFormatId _nFormatId );
 
     protected:
         // XClipboardOwner
@@ -210,9 +210,9 @@ namespace svxform
         OControlExchange( );
 
     public:
-        static sal_uInt32       getFieldExchangeFormatId( );
-        static sal_uInt32       getControlPathFormatId( );
-        static sal_uInt32       getHiddenControlModelsFormatId( );
+        static SotClipboardFormatId getFieldExchangeFormatId( );
+        static SotClipboardFormatId getControlPathFormatId( );
+        static SotClipboardFormatId getHiddenControlModelsFormatId( );
 
         inline static bool  hasFieldExchangeFormat( const DataFlavorExVector& _rFormats );
         inline static bool  hasControlPathFormat( const DataFlavorExVector& _rFormats );

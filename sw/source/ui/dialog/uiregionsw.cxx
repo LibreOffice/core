@@ -1377,9 +1377,9 @@ static void lcl_ReadSections( SfxMedium& rMedium, ComboBox& rBox )
     if( rMedium.IsStorage() && (xStg = rMedium.GetStorage()).is() )
     {
         std::vector<OUString*> aArr;
-        sal_uInt32 nFormat = SotStorage::GetFormatID( xStg );
-        if ( nFormat == SOT_FORMATSTR_ID_STARWRITER_60 || nFormat == SOT_FORMATSTR_ID_STARWRITERGLOB_60 ||
-            nFormat == SOT_FORMATSTR_ID_STARWRITER_8 || nFormat == SOT_FORMATSTR_ID_STARWRITERGLOB_8)
+        SotClipboardFormatId nFormat = SotStorage::GetFormatID( xStg );
+        if ( nFormat == SotClipboardFormatId::STARWRITER_60 || nFormat == SotClipboardFormatId::STARWRITERGLOB_60 ||
+            nFormat == SotClipboardFormatId::STARWRITER_8 || nFormat == SotClipboardFormatId::STARWRITERGLOB_8)
             SwGetReaderXML()->GetSectionList( rMedium, aArr );
 
         for(std::vector<OUString*>::const_iterator it(aArr.begin()); it != aArr.end(); ++it) {

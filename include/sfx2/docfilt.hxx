@@ -28,6 +28,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/config.h>
 #include <sal/types.h>
+#include <sot/formats.hxx>
 #include <sfx2/dllapi.h>
 #include <sfx2/sfxdefs.hxx>
 #include <tools/wldcrd.hxx>
@@ -60,7 +61,7 @@ class SFX2_DLLPUBLIC SfxFilter
 
     SfxFilterFlags  nFormatType;
     sal_uIntPtr     nVersion;
-    sal_uIntPtr     lFormat;
+    SotClipboardFormatId lFormat;
     sal_uInt16      nDocIcon;
 
 public:
@@ -69,7 +70,7 @@ public:
     SfxFilter( const OUString &rName,
                const OUString &rWildCard,
                SfxFilterFlags nFormatType,
-               sal_uInt32 lFormat,
+               SotClipboardFormatId lFormat,
                const OUString &rTypeName,
                sal_uInt16 nDocIcon,
                const OUString &rMimeType,
@@ -90,14 +91,14 @@ public:
     const OUString& GetName() const { return  maFilterName; }
     const WildCard& GetWildcard() const { return aWildCard; }
     const OUString& GetRealTypeName() const { return aTypeName; }
-    sal_uIntPtr         GetFormat() const { return lFormat; }
+    SotClipboardFormatId GetFormat() const { return lFormat; }
     const OUString& GetTypeName() const { return aTypeName; }
     const OUString& GetUIName() const { return aUIName; }
     sal_uInt16          GetDocIconId() const { return nDocIcon; }
     const OUString& GetUserData() const { return aUserData; }
     const OUString& GetDefaultTemplate() const { return aDefaultTemplate; }
     void            SetDefaultTemplate( const OUString& rStr ) { aDefaultTemplate = rStr; }
-    bool            UsesStorage() const { return GetFormat() != 0; }
+    bool            UsesStorage() const { return GetFormat() != SotClipboardFormatId::NONE; }
     void SetURLPattern( const OUString& rStr );
     OUString GetURLPattern() const { return aPattern; }
     void            SetUIName( const OUString& rName ) { aUIName = rName; }

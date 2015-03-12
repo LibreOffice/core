@@ -314,80 +314,80 @@ TYPEINIT1( UCBStorage, BaseStorage );
 
 #define min( x, y ) (( x < y ) ? x : y)
 
-sal_Int32 GetFormatId_Impl( SvGlobalName aName )
+SotClipboardFormatId GetFormatId_Impl( SvGlobalName aName )
 {
     if ( aName == SvGlobalName( SO3_SW_CLASSID_60 ) )
-        return SOT_FORMATSTR_ID_STARWRITER_60;
+        return SotClipboardFormatId::STARWRITER_60;
     if ( aName == SvGlobalName( SO3_SWWEB_CLASSID_60 ) )
-        return SOT_FORMATSTR_ID_STARWRITERWEB_60;
+        return SotClipboardFormatId::STARWRITERWEB_60;
     if ( aName == SvGlobalName( SO3_SWGLOB_CLASSID_60 ) )
-        return SOT_FORMATSTR_ID_STARWRITERGLOB_60;
+        return SotClipboardFormatId::STARWRITERGLOB_60;
     if ( aName == SvGlobalName( SO3_SDRAW_CLASSID_60 ) )
-        return SOT_FORMATSTR_ID_STARDRAW_60;
+        return SotClipboardFormatId::STARDRAW_60;
     if ( aName == SvGlobalName( SO3_SIMPRESS_CLASSID_60 ) )
-        return SOT_FORMATSTR_ID_STARIMPRESS_60;
+        return SotClipboardFormatId::STARIMPRESS_60;
     if ( aName == SvGlobalName( SO3_SC_CLASSID_60 ) )
-        return SOT_FORMATSTR_ID_STARCALC_60;
+        return SotClipboardFormatId::STARCALC_60;
     if ( aName == SvGlobalName( SO3_SCH_CLASSID_60 ) )
-        return SOT_FORMATSTR_ID_STARCHART_60;
+        return SotClipboardFormatId::STARCHART_60;
     if ( aName == SvGlobalName( SO3_SM_CLASSID_60 ) )
-        return SOT_FORMATSTR_ID_STARMATH_60;
+        return SotClipboardFormatId::STARMATH_60;
     if ( aName == SvGlobalName( SO3_OUT_CLASSID ) ||
          aName == SvGlobalName( SO3_APPLET_CLASSID ) ||
          aName == SvGlobalName( SO3_PLUGIN_CLASSID ) ||
          aName == SvGlobalName( SO3_IFRAME_CLASSID ) )
         // allowed, but not supported
-        return 0;
+        return SotClipboardFormatId::NONE;
     else
     {
         OSL_FAIL( "Unknown UCB storage format!" );
-        return 0;
+        return SotClipboardFormatId::NONE;
     }
 }
 
 
-SvGlobalName GetClassId_Impl( sal_Int32 nFormat )
+SvGlobalName GetClassId_Impl( SotClipboardFormatId nFormat )
 {
     switch ( nFormat )
     {
-        case SOT_FORMATSTR_ID_STARWRITER_8 :
-        case SOT_FORMATSTR_ID_STARWRITER_8_TEMPLATE :
+        case SotClipboardFormatId::STARWRITER_8 :
+        case SotClipboardFormatId::STARWRITER_8_TEMPLATE :
             return SvGlobalName( SO3_SW_CLASSID_60 );
-        case SOT_FORMATSTR_ID_STARWRITERWEB_8 :
+        case SotClipboardFormatId::STARWRITERWEB_8 :
             return SvGlobalName( SO3_SWWEB_CLASSID_60 );
-        case SOT_FORMATSTR_ID_STARWRITERGLOB_8 :
-        case SOT_FORMATSTR_ID_STARWRITERGLOB_8_TEMPLATE :
+        case SotClipboardFormatId::STARWRITERGLOB_8 :
+        case SotClipboardFormatId::STARWRITERGLOB_8_TEMPLATE :
             return SvGlobalName( SO3_SWGLOB_CLASSID_60 );
-        case SOT_FORMATSTR_ID_STARDRAW_8 :
-        case SOT_FORMATSTR_ID_STARDRAW_8_TEMPLATE :
+        case SotClipboardFormatId::STARDRAW_8 :
+        case SotClipboardFormatId::STARDRAW_8_TEMPLATE :
             return SvGlobalName( SO3_SDRAW_CLASSID_60 );
-        case SOT_FORMATSTR_ID_STARIMPRESS_8 :
-        case SOT_FORMATSTR_ID_STARIMPRESS_8_TEMPLATE :
+        case SotClipboardFormatId::STARIMPRESS_8 :
+        case SotClipboardFormatId::STARIMPRESS_8_TEMPLATE :
             return SvGlobalName( SO3_SIMPRESS_CLASSID_60 );
-        case SOT_FORMATSTR_ID_STARCALC_8 :
-        case SOT_FORMATSTR_ID_STARCALC_8_TEMPLATE :
+        case SotClipboardFormatId::STARCALC_8 :
+        case SotClipboardFormatId::STARCALC_8_TEMPLATE :
             return SvGlobalName( SO3_SC_CLASSID_60 );
-        case SOT_FORMATSTR_ID_STARCHART_8 :
-        case SOT_FORMATSTR_ID_STARCHART_8_TEMPLATE :
+        case SotClipboardFormatId::STARCHART_8 :
+        case SotClipboardFormatId::STARCHART_8_TEMPLATE :
             return SvGlobalName( SO3_SCH_CLASSID_60 );
-        case SOT_FORMATSTR_ID_STARMATH_8 :
-        case SOT_FORMATSTR_ID_STARMATH_8_TEMPLATE :
+        case SotClipboardFormatId::STARMATH_8 :
+        case SotClipboardFormatId::STARMATH_8_TEMPLATE :
             return SvGlobalName( SO3_SM_CLASSID_60 );
-        case SOT_FORMATSTR_ID_STARWRITER_60 :
+        case SotClipboardFormatId::STARWRITER_60 :
             return SvGlobalName( SO3_SW_CLASSID_60 );
-        case SOT_FORMATSTR_ID_STARWRITERWEB_60 :
+        case SotClipboardFormatId::STARWRITERWEB_60 :
             return SvGlobalName( SO3_SWWEB_CLASSID_60 );
-        case SOT_FORMATSTR_ID_STARWRITERGLOB_60 :
+        case SotClipboardFormatId::STARWRITERGLOB_60 :
             return SvGlobalName( SO3_SWGLOB_CLASSID_60 );
-        case SOT_FORMATSTR_ID_STARDRAW_60 :
+        case SotClipboardFormatId::STARDRAW_60 :
             return SvGlobalName( SO3_SDRAW_CLASSID_60 );
-        case SOT_FORMATSTR_ID_STARIMPRESS_60 :
+        case SotClipboardFormatId::STARIMPRESS_60 :
             return SvGlobalName( SO3_SIMPRESS_CLASSID_60 );
-        case SOT_FORMATSTR_ID_STARCALC_60 :
+        case SotClipboardFormatId::STARCALC_60 :
             return SvGlobalName( SO3_SC_CLASSID_60 );
-        case SOT_FORMATSTR_ID_STARCHART_60 :
+        case SotClipboardFormatId::STARCHART_60 :
             return SvGlobalName( SO3_SCH_CLASSID_60 );
-        case SOT_FORMATSTR_ID_STARMATH_60 :
+        case SotClipboardFormatId::STARMATH_60 :
             return SvGlobalName( SO3_SM_CLASSID_60 );
         default :
             return SvGlobalName();
@@ -492,7 +492,7 @@ public:
     bool                        m_bDirty;           // ???
     bool                        m_bIsLinked;
     bool                        m_bListCreated;
-    sal_uLong                   m_nFormat;
+    SotClipboardFormatId                 m_nFormat;
     OUString                    m_aUserTypeName;
     SvGlobalName                m_aClassId;
 
@@ -1540,7 +1540,7 @@ UCBStorage_Impl::UCBStorage_Impl( const ::ucbhelper::Content& rContent, const OU
     , m_bDirty( false )
     , m_bIsLinked( true )
     , m_bListCreated( false )
-    , m_nFormat( 0 )
+    , m_nFormat( SotClipboardFormatId::NONE )
     , m_aClassId( SvGlobalName() )
     , m_bRepairPackage( bIsRepair )
     , m_xProgressHandler( xProgressHandler )
@@ -1573,7 +1573,7 @@ UCBStorage_Impl::UCBStorage_Impl( const OUString& rName, StreamMode nMode, UCBSt
     , m_bDirty( false )
     , m_bIsLinked( false )
     , m_bListCreated( false )
-    , m_nFormat( 0 )
+    , m_nFormat( SotClipboardFormatId::NONE )
     , m_aClassId( SvGlobalName() )
     , m_bRepairPackage( bIsRepair )
     , m_xProgressHandler( xProgressHandler )
@@ -1624,7 +1624,7 @@ UCBStorage_Impl::UCBStorage_Impl( SvStream& rStream, UCBStorage* pStorage, bool 
     , m_bDirty( false )
     , m_bIsLinked( false )
     , m_bListCreated( false )
-    , m_nFormat( 0 )
+    , m_nFormat( SotClipboardFormatId::NONE )
     , m_aClassId( SvGlobalName() )
     , m_bRepairPackage( false )
 {
@@ -2429,7 +2429,7 @@ void UCBStorage::SetDirty()
     pImp->m_bDirty = true;
 }
 
-void UCBStorage::SetClass( const SvGlobalName & rClass, sal_uLong nOriginalClipFormat, const OUString & rUserTypeName )
+void UCBStorage::SetClass( const SvGlobalName & rClass, SotClipboardFormatId nOriginalClipFormat, const OUString & rUserTypeName )
 {
     pImp->m_aClassId = rClass;
     pImp->m_nFormat = nOriginalClipFormat;
@@ -2454,7 +2454,7 @@ void UCBStorage::SetClassId( const ClsId& rClsId )
     // kept up to date, and also the other type information that is hold only at runtime because it can be reconstructed from
     // the content type
     pImp->m_nFormat = GetFormatId_Impl( pImp->m_aClassId );
-    if ( pImp->m_nFormat )
+    if ( pImp->m_nFormat != SotClipboardFormatId::NONE )
     {
         ::com::sun::star::datatransfer::DataFlavor aDataFlavor;
         SotExchange::GetFormatDataFlavor( pImp->m_nFormat, aDataFlavor );
@@ -2468,7 +2468,7 @@ const ClsId& UCBStorage::GetClassId() const
     return ( const ClsId& ) pImp->m_aClassId.GetCLSID();
 }
 
-void UCBStorage::SetConvertClass( const SvGlobalName & /*rConvertClass*/, sal_uLong /*nOriginalClipFormat*/, const OUString & /*rUserTypeName*/ )
+void UCBStorage::SetConvertClass( const SvGlobalName & /*rConvertClass*/, SotClipboardFormatId /*nOriginalClipFormat*/, const OUString & /*rUserTypeName*/ )
 {
     // ???
 }
@@ -2484,7 +2484,7 @@ SvGlobalName UCBStorage::GetClassName()
     return  pImp->m_aClassId;
 }
 
-sal_uLong UCBStorage::GetFormat()
+SotClipboardFormatId UCBStorage::GetFormat()
 {
     return pImp->m_nFormat;
 }

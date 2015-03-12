@@ -472,13 +472,13 @@ void ScViewFunc::PasteFromSystem()
         TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pWin ) );
 
         {
-            sal_uLong nBiff8 = SotExchange::RegisterFormatName(OUString("Biff8"));
-            sal_uLong nBiff5 = SotExchange::RegisterFormatName(OUString("Biff5"));
+            SotClipboardFormatId nBiff8 = SotExchange::RegisterFormatName(OUString("Biff8"));
+            SotClipboardFormatId nBiff5 = SotExchange::RegisterFormatName(OUString("Biff5"));
 
             SotExchangeDest nDestination = SotExchangeDest::SCDOC_FREE_AREA;
             sal_uInt16 nSourceOptions = EXCHG_IN_ACTION_COPY;
-            sal_uLong nFormat;          // output param for GetExchangeAction
-            sal_uInt16 nEventAction;    // output param for GetExchangeAction
+            SotClipboardFormatId nFormat; // output param for GetExchangeAction
+            sal_uInt16 nEventAction;      // output param for GetExchangeAction
 
             uno::Reference<com::sun::star::datatransfer::XTransferable> xTransferable( aDataHelper.GetXTransferable() );
             sal_uInt16 nAction = SotExchange::GetExchangeAction(
@@ -486,7 +486,7 @@ void ScViewFunc::PasteFromSystem()
                                     nDestination,
                                     nSourceOptions,
                                     EXCHG_IN_ACTION_DEFAULT,
-                                    nFormat, nEventAction, 0,
+                                    nFormat, nEventAction, SotClipboardFormatId::NONE,
                                     &xTransferable );
 
             if ( nAction != EXCHG_INOUT_ACTION_NONE )
@@ -499,10 +499,10 @@ void ScViewFunc::PasteFromSystem()
                 case EXCHG_OUT_ACTION_INSERT_GDIMETAFILE:
                 case EXCHG_OUT_ACTION_INSERT_BITMAP:
                 case EXCHG_OUT_ACTION_INSERT_GRAPH:
-                    // FORMAT_BITMAP
-                    // SOT_FORMATSTR_ID_PNG
-                    // FORMAT_GDIMETAFILE
-                    // SOT_FORMATSTR_ID_SVXB
+                    // SotClipboardFormatId::BITMAP
+                    // SotClipboardFormatId::PNG
+                    // SotClipboardFormatId::GDIMETAFILE
+                    // SotClipboardFormatId::SVXB
                     PasteFromSystem(nFormat);
                     break;
                 default:
@@ -515,19 +515,19 @@ void ScViewFunc::PasteFromSystem()
                 //  first SvDraw-model, then drawing
                 //  (only one drawing is allowed)
 
-                if (aDataHelper.HasFormat( SOT_FORMATSTR_ID_DRAWING ))
+                if (aDataHelper.HasFormat( SotClipboardFormatId::DRAWING ))
                 {
                     // special case for tables from drawing
-                    if( aDataHelper.HasFormat( SOT_FORMAT_RTF ) )
+                    if( aDataHelper.HasFormat( SotClipboardFormatId::RTF ) )
                     {
-                        PasteFromSystem( FORMAT_RTF );
+                        PasteFromSystem( SotClipboardFormatId::RTF );
                     }
                     else
                     {
-                        PasteFromSystem( SOT_FORMATSTR_ID_DRAWING );
+                        PasteFromSystem( SotClipboardFormatId::DRAWING );
                     }
                 }
-                else if (aDataHelper.HasFormat( SOT_FORMATSTR_ID_EMBED_SOURCE ))
+                else if (aDataHelper.HasFormat( SotClipboardFormatId::EMBED_SOURCE ))
                 {
                     //  If it's a Writer object, insert RTF instead of OLE
 
@@ -537,45 +537,45 @@ void ScViewFunc::PasteFromSystem()
 
                     bool bDoRtf = false;
                     TransferableObjectDescriptor aObjDesc;
-                    if( aDataHelper.GetTransferableObjectDescriptor( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR, aObjDesc ) )
+                    if( aDataHelper.GetTransferableObjectDescriptor( SotClipboardFormatId::OBJECTDESCRIPTOR, aObjDesc ) )
                     {
                         bDoRtf = ( ( aObjDesc.maClassName == SvGlobalName( SO3_SW_CLASSID ) ||
                                      aObjDesc.maClassName == SvGlobalName( SO3_SWWEB_CLASSID ) )
-                                   && aDataHelper.HasFormat( SOT_FORMAT_RTF ) );
+                                   && aDataHelper.HasFormat( SotClipboardFormatId::RTF ) );
                     }
                     if ( bDoRtf )
-                        PasteFromSystem( FORMAT_RTF );
+                        PasteFromSystem( SotClipboardFormatId::RTF );
                     else if ( aObjDesc.maClassName == SvGlobalName( 0,0,0,0,0,0,0,0,0,0,0 )
-                              && aDataHelper.HasFormat( SOT_FORMATSTR_ID_SYLK ))
-                        PasteFromSystem( SOT_FORMATSTR_ID_SYLK );
+                              && aDataHelper.HasFormat( SotClipboardFormatId::SYLK ))
+                        PasteFromSystem( SotClipboardFormatId::SYLK );
                     else
-                        PasteFromSystem( SOT_FORMATSTR_ID_EMBED_SOURCE );
+                        PasteFromSystem( SotClipboardFormatId::EMBED_SOURCE );
                 }
-                else if (aDataHelper.HasFormat( SOT_FORMATSTR_ID_LINK_SOURCE ))
-                    PasteFromSystem( SOT_FORMATSTR_ID_LINK_SOURCE );
+                else if (aDataHelper.HasFormat( SotClipboardFormatId::LINK_SOURCE ))
+                    PasteFromSystem( SotClipboardFormatId::LINK_SOURCE );
                     // the following format can not affect scenario from #89579#
-                else if (aDataHelper.HasFormat( SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE ))
-                    PasteFromSystem( SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE );
-                    // FORMAT_PRIVATE no longer here (can't work if pOwnClip is NULL)
+                else if (aDataHelper.HasFormat( SotClipboardFormatId::EMBEDDED_OBJ_OLE ))
+                    PasteFromSystem( SotClipboardFormatId::EMBEDDED_OBJ_OLE );
+                    // SotClipboardFormatId::PRIVATE no longer here (can't work if pOwnClip is NULL)
                 else if (aDataHelper.HasFormat(nBiff8))      // before xxx_OLE formats
                     PasteFromSystem(nBiff8);
                 else if (aDataHelper.HasFormat(nBiff5))
                     PasteFromSystem(nBiff5);
-                else if (aDataHelper.HasFormat(FORMAT_RTF))
-                    PasteFromSystem(FORMAT_RTF);
-                else if (aDataHelper.HasFormat(SOT_FORMATSTR_ID_HTML))
-                    PasteFromSystem(SOT_FORMATSTR_ID_HTML);
-                else if (aDataHelper.HasFormat(SOT_FORMATSTR_ID_HTML_SIMPLE))
-                    PasteFromSystem(SOT_FORMATSTR_ID_HTML_SIMPLE);
-                else if (aDataHelper.HasFormat(SOT_FORMATSTR_ID_SYLK))
-                    PasteFromSystem(SOT_FORMATSTR_ID_SYLK);
-                else if (aDataHelper.HasFormat(FORMAT_STRING))
-                    PasteFromSystem(FORMAT_STRING);
+                else if (aDataHelper.HasFormat(SotClipboardFormatId::RTF))
+                    PasteFromSystem(SotClipboardFormatId::RTF);
+                else if (aDataHelper.HasFormat(SotClipboardFormatId::HTML))
+                    PasteFromSystem(SotClipboardFormatId::HTML);
+                else if (aDataHelper.HasFormat(SotClipboardFormatId::HTML_SIMPLE))
+                    PasteFromSystem(SotClipboardFormatId::HTML_SIMPLE);
+                else if (aDataHelper.HasFormat(SotClipboardFormatId::SYLK))
+                    PasteFromSystem(SotClipboardFormatId::SYLK);
+                else if (aDataHelper.HasFormat(SotClipboardFormatId::STRING))
+                    PasteFromSystem(SotClipboardFormatId::STRING);
                 // xxx_OLE formats come last, like in SotExchange tables
-                else if (aDataHelper.HasFormat( SOT_FORMATSTR_ID_EMBED_SOURCE_OLE ))
-                    PasteFromSystem( SOT_FORMATSTR_ID_EMBED_SOURCE_OLE );
-                else if (aDataHelper.HasFormat( SOT_FORMATSTR_ID_LINK_SOURCE_OLE ))
-                    PasteFromSystem( SOT_FORMATSTR_ID_LINK_SOURCE_OLE );
+                else if (aDataHelper.HasFormat( SotClipboardFormatId::EMBED_SOURCE_OLE ))
+                    PasteFromSystem( SotClipboardFormatId::EMBED_SOURCE_OLE );
+                else if (aDataHelper.HasFormat( SotClipboardFormatId::LINK_SOURCE_OLE ))
+                    PasteFromSystem( SotClipboardFormatId::LINK_SOURCE_OLE );
             }
         }
     }
@@ -622,61 +622,61 @@ void ScViewFunc::PasteFromTransferable( const uno::Reference<datatransfer::XTran
     {
             TransferableDataHelper aDataHelper( rxTransferable );
         {
-            sal_uLong nBiff8 = SotExchange::RegisterFormatName(OUString("Biff8"));
-            sal_uLong nBiff5 = SotExchange::RegisterFormatName(OUString("Biff5"));
-            sal_uLong nFormatId = 0;
+            SotClipboardFormatId nBiff8 = SotExchange::RegisterFormatName(OUString("Biff8"));
+            SotClipboardFormatId nBiff5 = SotExchange::RegisterFormatName(OUString("Biff5"));
+            SotClipboardFormatId nFormatId = SotClipboardFormatId::NONE;
                 //  first SvDraw-model, then drawing
                 //  (only one drawing is allowed)
 
-            if (aDataHelper.HasFormat( SOT_FORMATSTR_ID_DRAWING ))
-                nFormatId = SOT_FORMATSTR_ID_DRAWING;
-            else if (aDataHelper.HasFormat( SOT_FORMATSTR_ID_SVXB ))
-                nFormatId = SOT_FORMATSTR_ID_SVXB;
-            else if (aDataHelper.HasFormat( SOT_FORMATSTR_ID_EMBED_SOURCE ))
+            if (aDataHelper.HasFormat( SotClipboardFormatId::DRAWING ))
+                nFormatId = SotClipboardFormatId::DRAWING;
+            else if (aDataHelper.HasFormat( SotClipboardFormatId::SVXB ))
+                nFormatId = SotClipboardFormatId::SVXB;
+            else if (aDataHelper.HasFormat( SotClipboardFormatId::EMBED_SOURCE ))
             {
                 //  If it's a Writer object, insert RTF instead of OLE
                 bool bDoRtf = false;
                 TransferableObjectDescriptor aObjDesc;
-                if( aDataHelper.GetTransferableObjectDescriptor( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR, aObjDesc ) )
+                if( aDataHelper.GetTransferableObjectDescriptor( SotClipboardFormatId::OBJECTDESCRIPTOR, aObjDesc ) )
                 {
                     bDoRtf = ( ( aObjDesc.maClassName == SvGlobalName( SO3_SW_CLASSID ) ||
                                  aObjDesc.maClassName == SvGlobalName( SO3_SWWEB_CLASSID ) )
-                               && aDataHelper.HasFormat( SOT_FORMAT_RTF ) );
+                               && aDataHelper.HasFormat( SotClipboardFormatId::RTF ) );
                 }
                 if ( bDoRtf )
-                    nFormatId = FORMAT_RTF;
+                    nFormatId = SotClipboardFormatId::RTF;
                 else
-                    nFormatId = SOT_FORMATSTR_ID_EMBED_SOURCE;
+                    nFormatId = SotClipboardFormatId::EMBED_SOURCE;
             }
-            else if (aDataHelper.HasFormat( SOT_FORMATSTR_ID_LINK_SOURCE ))
-                nFormatId = SOT_FORMATSTR_ID_LINK_SOURCE;
+            else if (aDataHelper.HasFormat( SotClipboardFormatId::LINK_SOURCE ))
+                nFormatId = SotClipboardFormatId::LINK_SOURCE;
             // the following format can not affect scenario from #89579#
-            else if (aDataHelper.HasFormat( SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE ))
-                nFormatId = SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE;
-            // FORMAT_PRIVATE no longer here (can't work if pOwnClip is NULL)
+            else if (aDataHelper.HasFormat( SotClipboardFormatId::EMBEDDED_OBJ_OLE ))
+                nFormatId = SotClipboardFormatId::EMBEDDED_OBJ_OLE;
+            // SotClipboardFormatId::PRIVATE no longer here (can't work if pOwnClip is NULL)
             else if (aDataHelper.HasFormat(nBiff8))      // before xxx_OLE formats
                 nFormatId = nBiff8;
             else if (aDataHelper.HasFormat(nBiff5))
                 nFormatId = nBiff5;
-            else if (aDataHelper.HasFormat(FORMAT_RTF))
-                nFormatId = FORMAT_RTF;
-            else if (aDataHelper.HasFormat(SOT_FORMATSTR_ID_HTML))
-                nFormatId = SOT_FORMATSTR_ID_HTML;
-            else if (aDataHelper.HasFormat(SOT_FORMATSTR_ID_HTML_SIMPLE))
-                nFormatId = SOT_FORMATSTR_ID_HTML_SIMPLE;
-            else if (aDataHelper.HasFormat(SOT_FORMATSTR_ID_SYLK))
-                nFormatId = SOT_FORMATSTR_ID_SYLK;
-            else if (aDataHelper.HasFormat(FORMAT_STRING))
-                nFormatId = FORMAT_STRING;
-            else if (aDataHelper.HasFormat(FORMAT_GDIMETAFILE))
-                nFormatId = FORMAT_GDIMETAFILE;
-            else if (aDataHelper.HasFormat(FORMAT_BITMAP))
-                nFormatId = FORMAT_BITMAP;
+            else if (aDataHelper.HasFormat(SotClipboardFormatId::RTF))
+                nFormatId = SotClipboardFormatId::RTF;
+            else if (aDataHelper.HasFormat(SotClipboardFormatId::HTML))
+                nFormatId = SotClipboardFormatId::HTML;
+            else if (aDataHelper.HasFormat(SotClipboardFormatId::HTML_SIMPLE))
+                nFormatId = SotClipboardFormatId::HTML_SIMPLE;
+            else if (aDataHelper.HasFormat(SotClipboardFormatId::SYLK))
+                nFormatId = SotClipboardFormatId::SYLK;
+            else if (aDataHelper.HasFormat(SotClipboardFormatId::STRING))
+                nFormatId = SotClipboardFormatId::STRING;
+            else if (aDataHelper.HasFormat(SotClipboardFormatId::GDIMETAFILE))
+                nFormatId = SotClipboardFormatId::GDIMETAFILE;
+            else if (aDataHelper.HasFormat(SotClipboardFormatId::BITMAP))
+                nFormatId = SotClipboardFormatId::BITMAP;
             // xxx_OLE formats come last, like in SotExchange tables
-            else if (aDataHelper.HasFormat( SOT_FORMATSTR_ID_EMBED_SOURCE_OLE ))
-                nFormatId = SOT_FORMATSTR_ID_EMBED_SOURCE_OLE;
-            else if (aDataHelper.HasFormat( SOT_FORMATSTR_ID_LINK_SOURCE_OLE ))
-                nFormatId = SOT_FORMATSTR_ID_LINK_SOURCE_OLE;
+            else if (aDataHelper.HasFormat( SotClipboardFormatId::EMBED_SOURCE_OLE ))
+                nFormatId = SotClipboardFormatId::EMBED_SOURCE_OLE;
+            else if (aDataHelper.HasFormat( SotClipboardFormatId::LINK_SOURCE_OLE ))
+                nFormatId = SotClipboardFormatId::LINK_SOURCE_OLE;
             else
                 return;
 
@@ -687,14 +687,14 @@ void ScViewFunc::PasteFromTransferable( const uno::Reference<datatransfer::XTran
     }
 }
 
-bool ScViewFunc::PasteFromSystem( sal_uLong nFormatId, bool bApi )
+bool ScViewFunc::PasteFromSystem( SotClipboardFormatId nFormatId, bool bApi )
 {
     UpdateInputLine();
 
     bool bRet = true;
     vcl::Window* pWin = GetActiveWin();
     ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard( pWin );
-    if ( nFormatId == 0 && pOwnClip )
+    if ( nFormatId == SotClipboardFormatId::NONE && pOwnClip )
     {
         // keep a reference in case the clipboard is changed during PasteFromClip
         uno::Reference<datatransfer::XTransferable> aOwnClipRef( pOwnClip );
@@ -742,12 +742,12 @@ bool ScViewFunc::PasteOnDrawObjectLinked(
 {
     TransferableDataHelper aDataHelper( rxTransferable );
 
-    if ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_SVXB ) )
+    if ( aDataHelper.HasFormat( SotClipboardFormatId::SVXB ) )
     {
         SotStorageStreamRef xStm;
         ScDrawView* pScDrawView = GetScDrawView();
 
-        if( pScDrawView && aDataHelper.GetSotStorageStream( SOT_FORMATSTR_ID_SVXB, xStm ) )
+        if( pScDrawView && aDataHelper.GetSotStorageStream( SotClipboardFormatId::SVXB, xStm ) )
         {
             Graphic aGraphic;
 
@@ -762,12 +762,12 @@ bool ScViewFunc::PasteOnDrawObjectLinked(
             }
         }
     }
-    else if ( aDataHelper.HasFormat( SOT_FORMAT_GDIMETAFILE ) )
+    else if ( aDataHelper.HasFormat( SotClipboardFormatId::GDIMETAFILE ) )
     {
         GDIMetaFile aMtf;
         ScDrawView* pScDrawView = GetScDrawView();
 
-        if( pScDrawView && aDataHelper.GetGDIMetaFile( FORMAT_GDIMETAFILE, aMtf ) )
+        if( pScDrawView && aDataHelper.GetGDIMetaFile( SotClipboardFormatId::GDIMETAFILE, aMtf ) )
         {
             const OUString aEmpty;
             const OUString aBeginUndo(ScGlobal::GetRscString(STR_UNDO_DRAGDROP));
@@ -778,12 +778,12 @@ bool ScViewFunc::PasteOnDrawObjectLinked(
             }
         }
     }
-    else if ( aDataHelper.HasFormat( SOT_FORMAT_BITMAP ) || aDataHelper.HasFormat( SOT_FORMATSTR_ID_PNG ) )
+    else if ( aDataHelper.HasFormat( SotClipboardFormatId::BITMAP ) || aDataHelper.HasFormat( SotClipboardFormatId::PNG ) )
     {
         BitmapEx aBmpEx;
         ScDrawView* pScDrawView = GetScDrawView();
 
-        if( pScDrawView && aDataHelper.GetBitmapEx( FORMAT_BITMAP, aBmpEx ) )
+        if( pScDrawView && aDataHelper.GetBitmapEx( SotClipboardFormatId::BITMAP, aBmpEx ) )
         {
             const OUString aEmpty;
             const OUString aBeginUndo(ScGlobal::GetRscString(STR_UNDO_DRAGDROP));

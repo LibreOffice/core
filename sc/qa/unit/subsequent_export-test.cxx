@@ -224,9 +224,9 @@ ScDocShellRef ScExportTest::saveAndReloadPassword(ScDocShell* pShell, const OUSt
     utl::TempFile aTempFile;
     aTempFile.EnableKillingFile();
     SfxMedium aStoreMedium( aTempFile.GetURL(), STREAM_STD_WRITE );
-    sal_uInt32 nExportFormat = 0;
+    SotClipboardFormatId nExportFormat = SotClipboardFormatId::NONE;
     if (nFormatType == ODS_FORMAT_TYPE)
-        nExportFormat = SFX_FILTER_EXPORT | SFX_FILTER_USESOPTIONS;
+        nExportFormat = SotClipboardFormatId::STARCHART_8;
     SfxFilter* pExportFilter = new SfxFilter(
         rFilter,
         OUString(), nFormatType, nExportFormat, rTypeName, 0, OUString(),
@@ -247,9 +247,9 @@ ScDocShellRef ScExportTest::saveAndReloadPassword(ScDocShell* pShell, const OUSt
 
     //std::cout << "File: " << aTempFile.GetURL() << std::endl;
 
-    sal_uInt32 nFormat = 0;
+    SotClipboardFormatId nFormat = SotClipboardFormatId::NONE;
     if (nFormatType == ODS_FORMAT_TYPE)
-        nFormat = SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS;
+        nFormat = SotClipboardFormatId::STARCALC_8;
 
     OUString aPass("test");
     return load(aTempFile.GetURL(), rFilter, rUserData, rTypeName, nFormatType, nFormat, SOFFICE_FILEFORMAT_CURRENT, &aPass);

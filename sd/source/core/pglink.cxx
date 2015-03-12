@@ -31,7 +31,7 @@
 
 SdPageLink::SdPageLink(SdPage* pPg, const OUString& rFileName,
                        const OUString& rBookmarkName) :
-    ::sfx2::SvBaseLink( ::sfx2::LINKUPDATE_ONCALL, FORMAT_FILE),
+    ::sfx2::SvBaseLink( ::sfx2::LINKUPDATE_ONCALL, SotClipboardFormatId::FILE),
     pPage(pPg)
 {
     pPage->SetFileName(rFileName);

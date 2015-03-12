@@ -2059,7 +2059,7 @@ bool ScDocShell::DdeGetData( const OUString& rItem,
                              const OUString& rMimeType,
                              ::com::sun::star::uno::Any & rValue )
 {
-    if( FORMAT_STRING == SotExchange::GetFormatIdFromMimeType( rMimeType ) )
+    if( SotClipboardFormatId::STRING == SotExchange::GetFormatIdFromMimeType( rMimeType ) )
     {
         if( rItem.equalsIgnoreAsciiCase( "Format" ) )
         {
@@ -2081,7 +2081,7 @@ bool ScDocShell::DdeGetData( const OUString& rItem,
         {
             OString aData;
             if( aObj.ExportByteString( aData, osl_getThreadTextEncoding(),
-                                        SOT_FORMATSTR_ID_SYLK ) )
+                                        SotClipboardFormatId::SYLK ) )
             {
                 rValue <<= ::com::sun::star::uno::Sequence< sal_Int8 >(
                                             reinterpret_cast<const sal_Int8*>(aData.getStr()),
@@ -2107,7 +2107,7 @@ bool ScDocShell::DdeSetData( const OUString& rItem,
                              const OUString& rMimeType,
                              const ::com::sun::star::uno::Any & rValue )
 {
-    if( FORMAT_STRING == SotExchange::GetFormatIdFromMimeType( rMimeType ))
+    if( SotClipboardFormatId::STRING == SotExchange::GetFormatIdFromMimeType( rMimeType ))
     {
         if( rItem.equalsIgnoreAsciiCase( "Format" ) )
         {
@@ -2127,7 +2127,7 @@ bool ScDocShell::DdeSetData( const OUString& rItem,
             OUString aData;
             if ( ScByteSequenceToString::GetString( aData, rValue, osl_getThreadTextEncoding() ) )
             {
-                return aObj.ImportString( aData, SOT_FORMATSTR_ID_SYLK );
+                return aObj.ImportString( aData, SotClipboardFormatId::SYLK );
             }
             return false;
         }

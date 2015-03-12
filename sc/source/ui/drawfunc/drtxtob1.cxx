@@ -116,18 +116,18 @@ void ScDrawTextObjectBar::ExecutePasteContents( SfxRequest & /* rReq */ )
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     boost::scoped_ptr<SfxAbstractPasteDialog> pDlg(pFact->CreatePasteDialog( pViewData->GetDialogParent() ));
 
-    pDlg->Insert( SOT_FORMAT_STRING, EMPTY_OUSTRING );
-    pDlg->Insert( SOT_FORMAT_RTF,    EMPTY_OUSTRING );
+    pDlg->Insert( SotClipboardFormatId::STRING, EMPTY_OUSTRING );
+    pDlg->Insert( SotClipboardFormatId::RTF,    EMPTY_OUSTRING );
 
     TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pViewData->GetActiveWin() ) );
 
-    sal_uLong nFormat = pDlg->GetFormat( aDataHelper.GetTransferable() );
+    SotClipboardFormatId nFormat = pDlg->GetFormat( aDataHelper.GetTransferable() );
 
     //! test if outliner view is still valid
 
-    if (nFormat > 0)
+    if (nFormat != SotClipboardFormatId::NONE)
     {
-        if (nFormat == SOT_FORMAT_STRING)
+        if (nFormat == SotClipboardFormatId::STRING)
             pOutView->Paste();
         else
             pOutView->PasteSpecial();

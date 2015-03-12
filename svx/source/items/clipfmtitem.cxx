@@ -25,7 +25,7 @@
 struct SvxClipboardFmtItem_Impl
 {
     boost::ptr_vector< boost::nullable<OUString> > aFmtNms;
-    std::vector<sal_uIntPtr> aFmtIds;
+    std::vector<SotClipboardFormatId> aFmtIds;
 
     SvxClipboardFmtItem_Impl() {}
     SvxClipboardFmtItem_Impl( const SvxClipboardFmtItem_Impl& );
@@ -84,7 +84,7 @@ bool SvxClipboardFmtItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_
         pImpl->aFmtIds.clear();
         pImpl->aFmtNms.clear();
         for ( sal_uInt16 n=0; n < nCount; ++n )
-            AddClipbrdFormat( sal_uIntPtr( aClipFormats.Identifiers[n] ), aClipFormats.Names[n], n );
+            AddClipbrdFormat( static_cast<SotClipboardFormatId>(aClipFormats.Identifiers[n]), aClipFormats.Names[n], n );
 
         return true;
     }
@@ -118,7 +118,7 @@ SfxPoolItem* SvxClipboardFmtItem::Clone( SfxItemPool * /*pPool*/ ) const
     return new SvxClipboardFmtItem( *this );
 }
 
-void SvxClipboardFmtItem::AddClipbrdFormat( sal_uIntPtr nId, sal_uInt16 nPos )
+void SvxClipboardFmtItem::AddClipbrdFormat( SotClipboardFormatId nId, sal_uInt16 nPos )
 {
     if( nPos > pImpl->aFmtNms.size() )
         nPos = pImpl->aFmtNms.size();
@@ -127,7 +127,7 @@ void SvxClipboardFmtItem::AddClipbrdFormat( sal_uIntPtr nId, sal_uInt16 nPos )
     pImpl->aFmtIds.insert( pImpl->aFmtIds.begin()+nPos, nId );
 }
 
-void SvxClipboardFmtItem::AddClipbrdFormat( sal_uIntPtr nId, const OUString& rName,
+void SvxClipboardFmtItem::AddClipbrdFormat( SotClipboardFormatId nId, const OUString& rName,
                             sal_uInt16 nPos )
 {
     if( nPos > pImpl->aFmtNms.size() )
@@ -142,7 +142,7 @@ sal_uInt16 SvxClipboardFmtItem::Count() const
     return pImpl->aFmtIds.size();
 }
 
-sal_uIntPtr SvxClipboardFmtItem::GetClipbrdFormatId( sal_uInt16 nPos ) const
+SotClipboardFormatId SvxClipboardFmtItem::GetClipbrdFormatId( sal_uInt16 nPos ) const
 {
     return pImpl->aFmtIds[ nPos ];
 }

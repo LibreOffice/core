@@ -197,62 +197,62 @@ void ScSelectionTransferObj::AddSupportedFormats()
         case SC_SELTRANS_CELL:
         case SC_SELTRANS_CELLS:
             //  same formats as in ScTransferObj::AddSupportedFormats
-            AddFormat( SOT_FORMATSTR_ID_EMBED_SOURCE );
-            AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
-            AddFormat( SOT_FORMAT_GDIMETAFILE );
-            AddFormat( SOT_FORMATSTR_ID_PNG );
-            AddFormat( SOT_FORMAT_BITMAP );
-            AddFormat( SOT_FORMATSTR_ID_HTML );
-            AddFormat( SOT_FORMATSTR_ID_SYLK );
-            AddFormat( SOT_FORMATSTR_ID_LINK );
-            AddFormat( SOT_FORMATSTR_ID_DIF );
-            AddFormat( SOT_FORMAT_STRING );
-            AddFormat( SOT_FORMAT_RTF );
+            AddFormat( SotClipboardFormatId::EMBED_SOURCE );
+            AddFormat( SotClipboardFormatId::OBJECTDESCRIPTOR );
+            AddFormat( SotClipboardFormatId::GDIMETAFILE );
+            AddFormat( SotClipboardFormatId::PNG );
+            AddFormat( SotClipboardFormatId::BITMAP );
+            AddFormat( SotClipboardFormatId::HTML );
+            AddFormat( SotClipboardFormatId::SYLK );
+            AddFormat( SotClipboardFormatId::LINK );
+            AddFormat( SotClipboardFormatId::DIF );
+            AddFormat( SotClipboardFormatId::STRING );
+            AddFormat( SotClipboardFormatId::RTF );
             if ( eMode == SC_SELTRANS_CELL )
-                AddFormat( SOT_FORMATSTR_ID_EDITENGINE );
+                AddFormat( SotClipboardFormatId::EDITENGINE );
             break;
 
         // different graphic formats as in ScDrawTransferObj::AddSupportedFormats:
 
         case SC_SELTRANS_DRAW_BITMAP:
-            AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
-            AddFormat( SOT_FORMATSTR_ID_SVXB );
-            AddFormat( SOT_FORMATSTR_ID_PNG );
-            AddFormat( SOT_FORMAT_BITMAP );
-            AddFormat( SOT_FORMAT_GDIMETAFILE );
+            AddFormat( SotClipboardFormatId::OBJECTDESCRIPTOR );
+            AddFormat( SotClipboardFormatId::SVXB );
+            AddFormat( SotClipboardFormatId::PNG );
+            AddFormat( SotClipboardFormatId::BITMAP );
+            AddFormat( SotClipboardFormatId::GDIMETAFILE );
             break;
 
         case SC_SELTRANS_DRAW_GRAPHIC:
-            AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
-            AddFormat( SOT_FORMATSTR_ID_SVXB );
-            AddFormat( SOT_FORMAT_GDIMETAFILE );
-            AddFormat( SOT_FORMATSTR_ID_PNG );
-            AddFormat( SOT_FORMAT_BITMAP );
+            AddFormat( SotClipboardFormatId::OBJECTDESCRIPTOR );
+            AddFormat( SotClipboardFormatId::SVXB );
+            AddFormat( SotClipboardFormatId::GDIMETAFILE );
+            AddFormat( SotClipboardFormatId::PNG );
+            AddFormat( SotClipboardFormatId::BITMAP );
              break;
 
         case SC_SELTRANS_DRAW_BOOKMARK:
-            AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
-            AddFormat( SOT_FORMATSTR_ID_SOLK );
-            AddFormat( SOT_FORMAT_STRING );
-            AddFormat( SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR );
-            AddFormat( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK );
-            AddFormat( SOT_FORMATSTR_ID_DRAWING );
+            AddFormat( SotClipboardFormatId::OBJECTDESCRIPTOR );
+            AddFormat( SotClipboardFormatId::SOLK );
+            AddFormat( SotClipboardFormatId::STRING );
+            AddFormat( SotClipboardFormatId::UNIFORMRESOURCELOCATOR );
+            AddFormat( SotClipboardFormatId::NETSCAPE_BOOKMARK );
+            AddFormat( SotClipboardFormatId::DRAWING );
             break;
 
         case SC_SELTRANS_DRAW_OLE:
-            AddFormat( SOT_FORMATSTR_ID_EMBED_SOURCE );
-            AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
-            AddFormat( SOT_FORMAT_GDIMETAFILE );
+            AddFormat( SotClipboardFormatId::EMBED_SOURCE );
+            AddFormat( SotClipboardFormatId::OBJECTDESCRIPTOR );
+            AddFormat( SotClipboardFormatId::GDIMETAFILE );
             break;
 
         case SC_SELTRANS_DRAW_OTHER:
             //  other drawing objects
-            AddFormat( SOT_FORMATSTR_ID_EMBED_SOURCE );
-            AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
-            AddFormat( SOT_FORMATSTR_ID_DRAWING );
-            AddFormat( SOT_FORMATSTR_ID_PNG );
-            AddFormat( SOT_FORMAT_BITMAP );
-            AddFormat( SOT_FORMAT_GDIMETAFILE );
+            AddFormat( SotClipboardFormatId::EMBED_SOURCE );
+            AddFormat( SotClipboardFormatId::OBJECTDESCRIPTOR );
+            AddFormat( SotClipboardFormatId::DRAWING );
+            AddFormat( SotClipboardFormatId::PNG );
+            AddFormat( SotClipboardFormatId::BITMAP );
+            AddFormat( SotClipboardFormatId::GDIMETAFILE );
             break;
 
         default:

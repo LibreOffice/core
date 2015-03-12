@@ -86,7 +86,7 @@ void* BrowseBox::implGetDataFlavors() const
 
 
 
-bool BrowseBox::IsDropFormatSupported( SotFormatStringId _nFormat )
+bool BrowseBox::IsDropFormatSupported( SotClipboardFormatId _nFormat )
 {
     if ( static_cast< BrowserDataWin* >( pDataWin )->bCallingDropCallback )
         return static_cast< BrowserDataWin* >( pDataWin )->IsDropFormatSupported( _nFormat );
@@ -96,7 +96,7 @@ bool BrowseBox::IsDropFormatSupported( SotFormatStringId _nFormat )
 
 
 
-bool BrowseBox::IsDropFormatSupported( SotFormatStringId _nFormat ) const
+bool BrowseBox::IsDropFormatSupported( SotClipboardFormatId _nFormat ) const
 {
     return const_cast< BrowseBox* >( this )->IsDropFormatSupported( _nFormat );
 }

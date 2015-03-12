@@ -146,7 +146,7 @@ sal_Int8 DropListBox_Impl::AcceptDrop( const AcceptDropEvent& rEvt )
 */
 
 {
-    if ( IsDropFormatSupported( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR ) )
+    if ( IsDropFormatSupported( SotClipboardFormatId::OBJECTDESCRIPTOR ) )
     {
         // special case: page styles are allowed to create new styles by example
         // but not allowed to be created by drag and drop
@@ -173,7 +173,7 @@ sal_Int8 DropListBox_Impl::ExecuteDrop( const ExecuteDropEvent& rEvt )
 
         for ( sal_uInt32 i = 0; i < nFormatCount; ++i )
         {
-            SotFormatStringId nId = aHelper.GetFormat(i);
+            SotClipboardFormatId nId = aHelper.GetFormat(i);
             TransferableObjectDescriptor aDesc;
 
             if ( aHelper.GetTransferableObjectDescriptor( nId, aDesc ) )
@@ -2617,7 +2617,7 @@ sal_Int8    DropToolBox_Impl::AcceptDrop( const AcceptDropEvent& rEvt )
     // special case: page styles are allowed to create new styles by example
     // but not allowed to be created by drag and drop
     if ( nItemId != SfxTemplate::SfxFamilyIdToNId( SFX_STYLE_FAMILY_PAGE )&&
-        IsDropFormatSupported( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR ) &&
+        IsDropFormatSupported( SotClipboardFormatId::OBJECTDESCRIPTOR ) &&
         !rParent.bNewByExampleDisabled )
     {
         nReturn = DND_ACTION_COPY;

@@ -149,13 +149,13 @@ namespace svx
     }
 
 
-    sal_uInt32 OColumnTransferable::getDescriptorFormatId()
+    SotClipboardFormatId OColumnTransferable::getDescriptorFormatId()
     {
-        static sal_uInt32 s_nFormat = (sal_uInt32)-1;
-        if ((sal_uInt32)-1 == s_nFormat)
+        static SotClipboardFormatId s_nFormat = static_cast<SotClipboardFormatId>(-1);
+        if (static_cast<SotClipboardFormatId>(-1) == s_nFormat)
         {
             s_nFormat = SotExchange::RegisterFormatName(OUString("application/x-openoffice;windows_formatname=\"dbaccess.ColumnDescriptorTransfer\""));
-            OSL_ENSURE((sal_uInt32)-1 != s_nFormat, "OColumnTransferable::getDescriptorFormatId: bad exchange id!");
+            OSL_ENSURE(static_cast<SotClipboardFormatId>(-1) != s_nFormat, "OColumnTransferable::getDescriptorFormatId: bad exchange id!");
         }
         return s_nFormat;
     }
@@ -210,10 +210,10 @@ namespace svx
     void OColumnTransferable::AddSupportedFormats()
     {
         if (CTF_CONTROL_EXCHANGE & m_nFormatFlags)
-            AddFormat(SOT_FORMATSTR_ID_SBA_CTRLDATAEXCHANGE);
+            AddFormat(SotClipboardFormatId::SBA_CTRLDATAEXCHANGE);
 
         if (CTF_FIELD_DESCRIPTOR & m_nFormatFlags)
-            AddFormat(SOT_FORMATSTR_ID_SBA_FIELDDATAEXCHANGE);
+            AddFormat(SotClipboardFormatId::SBA_FIELDDATAEXCHANGE);
 
         if (CTF_COLUMN_DESCRIPTOR & m_nFormatFlags)
             AddFormat(getDescriptorFormatId());
@@ -222,12 +222,13 @@ namespace svx
 
     bool OColumnTransferable::GetData( const DataFlavor& _rFlavor, const OUString& /*rDestDoc*/ )
     {
-        const sal_uInt32 nFormatId = SotExchange::GetFormat(_rFlavor);
+        const SotClipboardFormatId nFormatId = SotExchange::GetFormat(_rFlavor);
         switch (nFormatId)
         {
-            case SOT_FORMATSTR_ID_SBA_FIELDDATAEXCHANGE:
-            case SOT_FORMATSTR_ID_SBA_CTRLDATAEXCHANGE:
+            case SotClipboardFormatId::SBA_FIELDDATAEXCHANGE:
+            case SotClipboardFormatId::SBA_CTRLDATAEXCHANGE:
                 return SetString(m_sCompatibleFormat, _rFlavor);
+            default: break;
         }
         if (nFormatId == getDescriptorFormatId())
             return SetAny( makeAny( m_aDescriptor.createPropertyValueSequence() ), _rFlavor );
@@ -246,9 +247,9 @@ namespace svx
                 ++aCheck
             )
         {
-            if (bFieldFormat && (SOT_FORMATSTR_ID_SBA_FIELDDATAEXCHANGE == aCheck->mnSotId))
+            if (bFieldFormat && (SotClipboardFormatId::SBA_FIELDDATAEXCHANGE == aCheck->mnSotId))
                 return true;
-            if (bControlFormat && (SOT_FORMATSTR_ID_SBA_CTRLDATAEXCHANGE == aCheck->mnSotId))
+            if (bControlFormat && (SotClipboardFormatId::SBA_CTRLDATAEXCHANGE == aCheck->mnSotId))
                 return true;
             if (bDescriptorFormat && (getDescriptorFormatId() == aCheck->mnSotId))
                 return true;
@@ -334,12 +335,12 @@ namespace svx
         }
 
         // check if we have a (string) format we can use ....
-        SotFormatStringId   nRecognizedFormat = 0;
-        if (_rData.HasFormat(SOT_FORMATSTR_ID_SBA_FIELDDATAEXCHANGE))
-            nRecognizedFormat = SOT_FORMATSTR_ID_SBA_FIELDDATAEXCHANGE;
-        if (_rData.HasFormat(SOT_FORMATSTR_ID_SBA_CTRLDATAEXCHANGE))
-            nRecognizedFormat = SOT_FORMATSTR_ID_SBA_CTRLDATAEXCHANGE;
-        if (!nRecognizedFormat)
+        SotClipboardFormatId   nRecognizedFormat = SotClipboardFormatId::NONE;
+        if (_rData.HasFormat(SotClipboardFormatId::SBA_FIELDDATAEXCHANGE))
+            nRecognizedFormat = SotClipboardFormatId::SBA_FIELDDATAEXCHANGE;
+        if (_rData.HasFormat(SotClipboardFormatId::SBA_CTRLDATAEXCHANGE))
+            nRecognizedFormat = SotClipboardFormatId::SBA_CTRLDATAEXCHANGE;
+        if (nRecognizedFormat == SotClipboardFormatId::NONE)
             return false;
 
         OUString sFieldDescription;
@@ -361,17 +362,15 @@ namespace svx
         if ( _pContainer )
         {
             if ( m_nFormatFlags & CTF_FIELD_DESCRIPTOR )
-                _pContainer->CopyAny( SOT_FORMATSTR_ID_SBA_FIELDDATAEXCHANGE, makeAny( m_sCompatibleFormat ) );
+                _pContainer->CopyAny( SotClipboardFormatId::SBA_FIELDDATAEXCHANGE, makeAny( m_sCompatibleFormat ) );
 
             if ( m_nFormatFlags & CTF_CONTROL_EXCHANGE )
-                _pContainer->CopyAny( SOT_FORMATSTR_ID_SBA_CTRLDATAEXCHANGE, makeAny( m_sCompatibleFormat ) );
+                _pContainer->CopyAny( SotClipboardFormatId::SBA_CTRLDATAEXCHANGE, makeAny( m_sCompatibleFormat ) );
 
             if ( m_nFormatFlags & CTF_COLUMN_DESCRIPTOR )
             {
                 Any aContent = makeAny( m_aDescriptor.createPropertyValueSequence() );
-                _pContainer->CopyAny(
-                    sal::static_int_cast< sal_uInt16 >( getDescriptorFormatId() ),
-                    aContent );
+                _pContainer->CopyAny( getDescriptorFormatId(), aContent );
             }
         }
     }
@@ -447,33 +446,34 @@ namespace svx
         switch (nObjectType)
         {
             case CommandType::TABLE:
-                AddFormat(SOT_FORMATSTR_ID_DBACCESS_TABLE);
+                AddFormat(SotClipboardFormatId::DBACCESS_TABLE);
                 break;
             case CommandType::QUERY:
-                AddFormat(SOT_FORMATSTR_ID_DBACCESS_QUERY);
+                AddFormat(SotClipboardFormatId::DBACCESS_QUERY);
                 break;
             case CommandType::COMMAND:
-                AddFormat(SOT_FORMATSTR_ID_DBACCESS_COMMAND);
+                AddFormat(SotClipboardFormatId::DBACCESS_COMMAND);
                 break;
         }
 
         if (!m_sCompatibleObjectDescription.isEmpty())
-            AddFormat(SOT_FORMATSTR_ID_SBA_DATAEXCHANGE);
+            AddFormat(SotClipboardFormatId::SBA_DATAEXCHANGE);
     }
 
 
     bool ODataAccessObjectTransferable::GetData( const DataFlavor& rFlavor, const OUString& /*rDestDoc*/ )
     {
-        sal_uIntPtr nFormat = SotExchange::GetFormat(rFlavor);
+        SotClipboardFormatId nFormat = SotExchange::GetFormat(rFlavor);
         switch (nFormat)
         {
-            case SOT_FORMATSTR_ID_DBACCESS_TABLE:
-            case SOT_FORMATSTR_ID_DBACCESS_QUERY:
-            case SOT_FORMATSTR_ID_DBACCESS_COMMAND:
+            case SotClipboardFormatId::DBACCESS_TABLE:
+            case SotClipboardFormatId::DBACCESS_QUERY:
+            case SotClipboardFormatId::DBACCESS_COMMAND:
                 return SetAny( makeAny(m_aDescriptor.createPropertyValueSequence()), rFlavor );
 
-            case SOT_FORMATSTR_ID_SBA_DATAEXCHANGE:
+            case SotClipboardFormatId::SBA_DATAEXCHANGE:
                 return SetString(m_sCompatibleObjectDescription, rFlavor);
+            default: break;
         }
         return false;
     }
@@ -486,11 +486,11 @@ namespace svx
                 ++aCheck
             )
         {
-            if (SOT_FORMATSTR_ID_DBACCESS_TABLE == aCheck->mnSotId)
+            if (SotClipboardFormatId::DBACCESS_TABLE == aCheck->mnSotId)
                 return true;
-            if (SOT_FORMATSTR_ID_DBACCESS_QUERY == aCheck->mnSotId)
+            if (SotClipboardFormatId::DBACCESS_QUERY == aCheck->mnSotId)
                 return true;
-            if (SOT_FORMATSTR_ID_DBACCESS_COMMAND == aCheck->mnSotId)
+            if (SotClipboardFormatId::DBACCESS_COMMAND == aCheck->mnSotId)
                 return true;
         }
         return false;
@@ -499,15 +499,15 @@ namespace svx
 
     ODataAccessDescriptor ODataAccessObjectTransferable::extractObjectDescriptor(const TransferableDataHelper& _rData)
     {
-        sal_Int32 nKnownFormatId = 0;
-        if ( _rData.HasFormat( SOT_FORMATSTR_ID_DBACCESS_TABLE ) )
-            nKnownFormatId = SOT_FORMATSTR_ID_DBACCESS_TABLE;
-        if ( _rData.HasFormat( SOT_FORMATSTR_ID_DBACCESS_QUERY ) )
-            nKnownFormatId = SOT_FORMATSTR_ID_DBACCESS_QUERY;
-        if ( _rData.HasFormat( SOT_FORMATSTR_ID_DBACCESS_COMMAND ) )
-            nKnownFormatId = SOT_FORMATSTR_ID_DBACCESS_COMMAND;
+        SotClipboardFormatId nKnownFormatId = SotClipboardFormatId::NONE;
+        if ( _rData.HasFormat( SotClipboardFormatId::DBACCESS_TABLE ) )
+            nKnownFormatId = SotClipboardFormatId::DBACCESS_TABLE;
+        if ( _rData.HasFormat( SotClipboardFormatId::DBACCESS_QUERY ) )
+            nKnownFormatId = SotClipboardFormatId::DBACCESS_QUERY;
+        if ( _rData.HasFormat( SotClipboardFormatId::DBACCESS_COMMAND ) )
+            nKnownFormatId = SotClipboardFormatId::DBACCESS_COMMAND;
 
-        if (0 != nKnownFormatId)
+        if (SotClipboardFormatId::NONE != nKnownFormatId)
         {
             // extract the any from the transferable
             DataFlavor aFlavor;
@@ -582,7 +582,7 @@ namespace svx
         OUString sDatasourceName = _rDatasource;
         sObjectName = _rCommand;
 
-        // for compatibility: create a string which can be used for the SOT_FORMATSTR_ID_SBA_DATAEXCHANGE format
+        // for compatibility: create a string which can be used for the SotClipboardFormatId::SBA_DATAEXCHANGE format
 
         bool bTreatAsStatement = (CommandType::COMMAND == _nCommandType);
             // statements are - in this old and ugly format - described as queries
@@ -621,13 +621,13 @@ namespace svx
     {
     }
 
-    sal_uInt32 OMultiColumnTransferable::getDescriptorFormatId()
+    SotClipboardFormatId OMultiColumnTransferable::getDescriptorFormatId()
     {
-        static sal_uInt32 s_nFormat = (sal_uInt32)-1;
-        if ((sal_uInt32)-1 == s_nFormat)
+        static SotClipboardFormatId s_nFormat = static_cast<SotClipboardFormatId>(-1);
+        if (static_cast<SotClipboardFormatId>(-1) == s_nFormat)
         {
             s_nFormat = SotExchange::RegisterFormatName(OUString("application/x-openoffice;windows_formatname=\"dbaccess.MultipleColumnDescriptorTransfer\""));
-            OSL_ENSURE((sal_uInt32)-1 != s_nFormat, "OColumnTransferable::getDescriptorFormatId: bad exchange id!");
+            OSL_ENSURE(static_cast<SotClipboardFormatId>(-1) != s_nFormat, "OColumnTransferable::getDescriptorFormatId: bad exchange id!");
         }
         return s_nFormat;
     }
@@ -639,7 +639,7 @@ namespace svx
 
     bool OMultiColumnTransferable::GetData( const DataFlavor& _rFlavor, const OUString& /*rDestDoc*/ )
     {
-        const sal_uInt32 nFormatId = SotExchange::GetFormat(_rFlavor);
+        const SotClipboardFormatId nFormatId = SotExchange::GetFormat(_rFlavor);
         if (nFormatId == getDescriptorFormatId())
         {
             return SetAny( makeAny( m_aDescriptors ), _rFlavor );

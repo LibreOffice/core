@@ -47,13 +47,14 @@ namespace dbaui
         {
             switch (_aType.mnSotId)
             {
-                case SOT_FORMAT_RTF:                    // RTF data descriptions
-                case SOT_FORMATSTR_ID_HTML:             // HTML data descriptions
-                case SOT_FORMATSTR_ID_DBACCESS_TABLE:   // table descriptor
+                case SotClipboardFormatId::RTF:                    // RTF data descriptions
+                case SotClipboardFormatId::HTML:             // HTML data descriptions
+                case SotClipboardFormatId::DBACCESS_TABLE:   // table descriptor
                     return (E_TABLE == eEntryType);
-                case SOT_FORMATSTR_ID_DBACCESS_QUERY:   // query descriptor
-                case SOT_FORMATSTR_ID_DBACCESS_COMMAND: // SQL command
+                case SotClipboardFormatId::DBACCESS_QUERY:   // query descriptor
+                case SotClipboardFormatId::DBACCESS_COMMAND: // SQL command
                     return ((E_QUERY == eEntryType) || ( !bQueryDrop && E_TABLE == eEntryType));
+                default: break;
             }
             return false;
         }
@@ -111,7 +112,7 @@ namespace dbaui
             @param  _sDestDataSourceName
                 The name of the dest data source.
         */
-        void pasteTable( SotFormatStringId _nFormatId
+        void pasteTable( SotClipboardFormatId _nFormatId
                         ,const TransferableDataHelper& _rTransData
                         ,const OUString& _sDestDataSourceName
                         ,const SharedConnection& _xConnection);

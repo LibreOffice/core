@@ -108,7 +108,7 @@ friend void     PageNumNotify(  SwViewShell* pVwSh,
 
     int             m_aActHitType;    // current mouse pointer
 
-    sal_uLong       m_nDropFormat;   // format from the last QueryDrop
+    SotClipboardFormatId m_nDropFormat;   // format from the last QueryDrop
     sal_uInt16      m_nDropAction;   // action from the last QueryDrop
     SotExchangeDest m_nDropDestination;  // destination from the last QueryDrop
 
@@ -250,8 +250,8 @@ public:
 
     void            StartExecuteDrag();
     void            DragFinished();
-    sal_uInt16          GetDropAction() const { return m_nDropAction; }
-    sal_uLong           GetDropFormat() const { return m_nDropFormat; }
+    sal_uInt16           GetDropAction() const { return m_nDropAction; }
+    SotClipboardFormatId GetDropFormat() const { return m_nDropFormat; }
 
     Color           GetTextColor() { return m_aTextColor; }
 

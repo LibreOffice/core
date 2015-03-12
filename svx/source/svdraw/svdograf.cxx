@@ -195,7 +195,7 @@ void SAL_CALL SdrGraphicUpdater::run(void)
 }
 
 SdrGraphicLink::SdrGraphicLink(SdrGrafObj& rObj)
-: ::sfx2::SvBaseLink( ::sfx2::LINKUPDATE_ONCALL, SOT_FORMATSTR_ID_SVXB )
+: ::sfx2::SvBaseLink( ::sfx2::LINKUPDATE_ONCALL, SotClipboardFormatId::SVXB )
 , rGrafObj( rObj )
 , pGraphicUpdater( NULL )
 {

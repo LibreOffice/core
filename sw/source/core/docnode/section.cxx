@@ -72,7 +72,7 @@ class SwIntrnlSectRefLink : public SwBaseLink
 {
     SwSectionFmt& rSectFmt;
 public:
-    SwIntrnlSectRefLink( SwSectionFmt& rFmt, sal_uInt16 nUpdateType, sal_uInt16 nFmt )
+    SwIntrnlSectRefLink( SwSectionFmt& rFmt, sal_uInt16 nUpdateType, SotClipboardFormatId nFmt )
         : SwBaseLink( nUpdateType, nFmt ),
         rSectFmt( rFmt )
     {}
@@ -1144,7 +1144,7 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
         return ;
 
     const OUString sName( pDShell->GetMedium()->GetName() );
-    const OUString sMimeType( SotExchange::GetFormatMimeType( FORMAT_FILE ));
+    const OUString sMimeType( SotExchange::GetFormatMimeType( SotClipboardFormatId::FILE ));
     uno::Any aValue;
     aValue <<= sName; // Arbitrary name
 
@@ -1189,7 +1189,7 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
     SwSectionNode* pSectNd = rSectFmt.GetSectionNode( false );
     SwDoc* pDoc = rSectFmt.GetDoc();
 
-    sal_uLong nDataFormat = SotExchange::GetFormatIdFromMimeType( rMimeType );
+    SotClipboardFormatId nDataFormat = SotExchange::GetFormatIdFromMimeType( rMimeType );
 
     if( !pSectNd || !pDoc || pDoc->IsInDtor() || ChkNoDataFlag() ||
         sfx2::LinkManager::RegisterStatusInfoId() == nDataFormat )
@@ -1248,15 +1248,15 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
     Reader* pRead = 0;
     switch( nDataFormat )
     {
-    case FORMAT_STRING:
+    case SotClipboardFormatId::STRING:
         pRead = ReadAscii;
         break;
 
-    case FORMAT_RTF:
+    case SotClipboardFormatId::RTF:
         pRead = SwReaderWriter::GetReader( READER_WRITER_RTF );
         break;
 
-    case FORMAT_FILE:
+    case SotClipboardFormatId::FILE:
         if ( rValue.hasValue() )
         {
             OUString sFileName;
@@ -1400,6 +1400,7 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
             }
         }
         break;
+    default: break;
     }
 
     // Only create DDE if Shell is available!
@@ -1510,7 +1511,7 @@ void SwSection::CreateLink( LinkCreateType eCreateType )
     if (!m_RefLink.Is())
     {
         // create BaseLink
-        m_RefLink = new SwIntrnlSectRefLink( *pFmt, nUpdateType, FORMAT_RTF );
+        m_RefLink = new SwIntrnlSectRefLink( *pFmt, nUpdateType, SotClipboardFormatId::RTF );
     }
     else
     {
@@ -1532,7 +1533,7 @@ void SwSection::CreateLink( LinkCreateType eCreateType )
         break;
     case FILE_LINK_SECTION:
         {
-            pLnk->SetContentType( FORMAT_FILE );
+            pLnk->SetContentType( SotClipboardFormatId::FILE );
             sal_Int32 nIndex = 0;
             const OUString sFile(sCmd.getToken( 0, sfx2::cTokenSeparator, nIndex ));
             const OUString sFltr(sCmd.getToken( 0, sfx2::cTokenSeparator, nIndex ));

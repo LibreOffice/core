@@ -56,7 +56,7 @@ namespace dbaui
         m_pDragListener = NULL;
     }
 
-    bool OJoinExchObj::isFormatAvailable( const DataFlavorExVector& _rFormats ,SotFormatStringId _nSlotID)
+    bool OJoinExchObj::isFormatAvailable( const DataFlavorExVector& _rFormats ,SotClipboardFormatId _nSlotID)
     {
         DataFlavorExVector::const_iterator aCheckEnd = _rFormats.end();
         for (   DataFlavorExVector::const_iterator aCheck = _rFormats.begin();
@@ -108,15 +108,15 @@ namespace dbaui
 
     void OJoinExchObj::AddSupportedFormats()
     {
-        AddFormat( SOT_FORMATSTR_ID_SBA_JOIN );
+        AddFormat( SotClipboardFormatId::SBA_JOIN );
         if ( m_bFirstEntry )
-            AddFormat( SOT_FORMATSTR_ID_SBA_TABID );
+            AddFormat( SotClipboardFormatId::SBA_TABID );
     }
 
     bool OJoinExchObj::GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& /*rDestDoc*/ )
     {
-        sal_uInt32 nFormat = SotExchange::GetFormat(rFlavor);
-        if ( SOT_FORMATSTR_ID_SBA_JOIN == nFormat )
+        SotClipboardFormatId nFormat = SotExchange::GetFormat(rFlavor);
+        if ( SotClipboardFormatId::SBA_JOIN == nFormat )
             // this is a HACK
             // we don't really copy our data, the instances using us have to call GetSourceDescription ....
             // if, one day, we have a _lot_ of time, this hack should be removed ....

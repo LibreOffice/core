@@ -114,7 +114,7 @@ void PPTWriter::exportPPTPre( const std::vector< com::sun::star::beans::Property
     }
 
     SvGlobalName aGName( 0x64818d10L, 0x4f9b, 0x11cf, 0x86, 0xea, 0x00, 0xaa, 0x00, 0xb9, 0x29, 0xe8 );
-    mrStg->SetClass( aGName, 0,  OUString("MS PowerPoint 97") );
+    mrStg->SetClass( aGName, SotClipboardFormatId::NONE, OUString("MS PowerPoint 97") );
 
     if ( !ImplCreateCurrentUserStream() )
         return;

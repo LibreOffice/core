@@ -340,12 +340,12 @@ void View::DoPaste (vcl::Window* pWindow)
             {
                 INetBookmark    aINetBookmark( aEmptyStr, aEmptyStr );
 
-                if( ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK ) &&
-                      aDataHelper.GetINetBookmark( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, aINetBookmark ) ) ||
-                    ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR ) &&
-                      aDataHelper.GetINetBookmark( SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, aINetBookmark ) ) ||
-                    ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR ) &&
-                      aDataHelper.GetINetBookmark( SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, aINetBookmark ) ) )
+                if( ( aDataHelper.HasFormat( SotClipboardFormatId::NETSCAPE_BOOKMARK ) &&
+                      aDataHelper.GetINetBookmark( SotClipboardFormatId::NETSCAPE_BOOKMARK, aINetBookmark ) ) ||
+                    ( aDataHelper.HasFormat( SotClipboardFormatId::FILEGRPDESCRIPTOR ) &&
+                      aDataHelper.GetINetBookmark( SotClipboardFormatId::FILEGRPDESCRIPTOR, aINetBookmark ) ) ||
+                    ( aDataHelper.HasFormat( SotClipboardFormatId::UNIFORMRESOURCELOCATOR ) &&
+                      aDataHelper.GetINetBookmark( SotClipboardFormatId::UNIFORMRESOURCELOCATOR, aINetBookmark ) ) )
                 {
                     pDrViewSh->InsertURLField( aINetBookmark.GetURL(), aINetBookmark.GetDescription(), aEmptyStr, NULL );
                 }
@@ -512,12 +512,12 @@ sal_Int8 View::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTarge
             }
             else
             {
-                const bool  bDrawing = rTargetHelper.IsDropFormatSupported( SOT_FORMATSTR_ID_DRAWING );
-                const bool  bGraphic = rTargetHelper.IsDropFormatSupported( SOT_FORMATSTR_ID_SVXB );
-                const bool  bMtf = rTargetHelper.IsDropFormatSupported( FORMAT_GDIMETAFILE );
-                const bool  bBitmap = rTargetHelper.IsDropFormatSupported( FORMAT_BITMAP );
-                bool        bBookmark = rTargetHelper.IsDropFormatSupported( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK );
-                bool        bXFillExchange = rTargetHelper.IsDropFormatSupported( SOT_FORMATSTR_ID_XFA );
+                const bool  bDrawing = rTargetHelper.IsDropFormatSupported( SotClipboardFormatId::DRAWING );
+                const bool  bGraphic = rTargetHelper.IsDropFormatSupported( SotClipboardFormatId::SVXB );
+                const bool  bMtf = rTargetHelper.IsDropFormatSupported( SotClipboardFormatId::GDIMETAFILE );
+                const bool  bBitmap = rTargetHelper.IsDropFormatSupported( SotClipboardFormatId::BITMAP );
+                bool        bBookmark = rTargetHelper.IsDropFormatSupported( SotClipboardFormatId::NETSCAPE_BOOKMARK );
+                bool        bXFillExchange = rTargetHelper.IsDropFormatSupported( SotClipboardFormatId::XFA );
 
                 // check handle insert
                 if( !nRet && ( (bXFillExchange && ( SDRDRAG_GRADIENT == GetDragMode() )) || ( SDRDRAG_TRANSPARENCE == GetDragMode() ) ) )
@@ -584,12 +584,12 @@ sal_Int8 View::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTarge
                 // check normal insert
                 if( !nRet )
                 {
-                    const bool  bSBAFormat = rTargetHelper.IsDropFormatSupported( SOT_FORMATSTR_ID_SVX_FORMFIELDEXCH );
-                    const bool  bEditEngine = rTargetHelper.IsDropFormatSupported( SOT_FORMATSTR_ID_EDITENGINE );
-                    const bool  bString = rTargetHelper.IsDropFormatSupported( FORMAT_STRING );
-                    const bool  bRTF = rTargetHelper.IsDropFormatSupported( FORMAT_RTF );
-                    const bool  bFile = rTargetHelper.IsDropFormatSupported( FORMAT_FILE );
-                    const bool  bFileList = rTargetHelper.IsDropFormatSupported( FORMAT_FILE_LIST );
+                    const bool  bSBAFormat = rTargetHelper.IsDropFormatSupported( SotClipboardFormatId::SVX_FORMFIELDEXCH );
+                    const bool  bEditEngine = rTargetHelper.IsDropFormatSupported( SotClipboardFormatId::EDITENGINE );
+                    const bool  bString = rTargetHelper.IsDropFormatSupported( SotClipboardFormatId::STRING );
+                    const bool  bRTF = rTargetHelper.IsDropFormatSupported( SotClipboardFormatId::RTF );
+                    const bool  bFile = rTargetHelper.IsDropFormatSupported( SotClipboardFormatId::FILE );
+                    const bool  bFileList = rTargetHelper.IsDropFormatSupported( SotClipboardFormatId::FILE_LIST );
 
                     if( mpDropMarker )
                     {
@@ -674,7 +674,7 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTar
                 aPos = pTargetWindow->PixelToLogic( rEvt.maPosPixel );
 
             // handle insert?
-            if( (!nRet && ( SDRDRAG_GRADIENT == GetDragMode() )) || (( SDRDRAG_TRANSPARENCE == GetDragMode() ) && aDataHelper.HasFormat( SOT_FORMATSTR_ID_XFA )) )
+            if( (!nRet && ( SDRDRAG_GRADIENT == GetDragMode() )) || (( SDRDRAG_TRANSPARENCE == GetDragMode() ) && aDataHelper.HasFormat( SotClipboardFormatId::XFA )) )
             {
                 const SdrHdlList& rHdlList = GetHdlList();
 
@@ -688,7 +688,7 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTar
                         {
                             SotStorageStreamRef xStm;
 
-                            if( aDataHelper.GetSotStorageStream( SOT_FORMATSTR_ID_XFA, xStm ) && xStm.Is() )
+                            if( aDataHelper.GetSotStorageStream( SotClipboardFormatId::XFA, xStm ) && xStm.Is() )
                             {
                                 XFillExchangeData aFillData( XFillAttrSetItem( &mrDoc.GetPool() ) );
 
@@ -703,7 +703,7 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTar
             }
 
             // standard insert?
-            if( !nRet && InsertData( aDataHelper, aPos, nDropAction, true, 0, nPage, nLayer ) )
+            if( !nRet && InsertData( aDataHelper, aPos, nDropAction, true, SotClipboardFormatId::NONE, nPage, nLayer ) )
                 nRet = nDropAction;
 
             // special insert?
@@ -713,8 +713,8 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTar
                 INetBookmark    aINetBookmark( aTmpString1, aTmpString2 );
 
                 // insert bookmark
-                if( aDataHelper.HasFormat( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK ) &&
-                    aDataHelper.GetINetBookmark( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, aINetBookmark ) )
+                if( aDataHelper.HasFormat( SotClipboardFormatId::NETSCAPE_BOOKMARK ) &&
+                    aDataHelper.GetINetBookmark( SotClipboardFormatId::NETSCAPE_BOOKMARK, aINetBookmark ) )
                 {
                     SdPageObjsTLB::SdPageObjsTransferable* pPageObjsTransferable = SdPageObjsTLB::SdPageObjsTransferable::getImplementation( aDataHelper.GetXTransferable() );
 
@@ -816,7 +816,7 @@ IMPL_LINK( View, ExecuteNavigatorDrop, SdNavigatorDropEvent*, pSdNavigatorDropEv
     SdPageObjsTLB::SdPageObjsTransferable*  pPageObjsTransferable = SdPageObjsTLB::SdPageObjsTransferable::getImplementation( aDataHelper.GetXTransferable() );
     INetBookmark                            aINetBookmark;
 
-    if( pPageObjsTransferable && aDataHelper.GetINetBookmark( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, aINetBookmark ) )
+    if( pPageObjsTransferable && aDataHelper.GetINetBookmark( SotClipboardFormatId::NETSCAPE_BOOKMARK, aINetBookmark ) )
     {
         Point   aPos;
         OUString  aBookmark;

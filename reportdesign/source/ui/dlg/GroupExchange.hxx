@@ -34,7 +34,7 @@ namespace rptui
     public:
         OGroupExchange(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any>& _aGroupRow);
 
-        static sal_uInt32   getReportGroupId();
+        static SotClipboardFormatId getReportGroupId();
     protected:
         virtual void        AddSupportedFormats() SAL_OVERRIDE;
         virtual bool GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) SAL_OVERRIDE;

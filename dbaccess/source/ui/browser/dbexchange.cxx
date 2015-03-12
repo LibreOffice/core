@@ -134,9 +134,9 @@ namespace dbaui
         osl_atomic_decrement( &m_refCount );
     }
 
-    bool ODataClipboard::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId, const ::com::sun::star::datatransfer::DataFlavor& /*rFlavor*/ )
+    bool ODataClipboard::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, SotClipboardFormatId nUserObjectId, const ::com::sun::star::datatransfer::DataFlavor& /*rFlavor*/ )
     {
-        if (nUserObjectId == SOT_FORMAT_RTF || nUserObjectId == SOT_FORMATSTR_ID_HTML )
+        if (nUserObjectId == SotClipboardFormatId::RTF || nUserObjectId == SotClipboardFormatId::HTML )
         {
             ODatabaseImportExport* pExport = reinterpret_cast<ODatabaseImportExport*>(pUserObject);
             if ( pExport && rxOStm.Is() )
@@ -151,28 +151,30 @@ namespace dbaui
     void ODataClipboard::AddSupportedFormats()
     {
         if ( m_pRtf.is() )
-            AddFormat( SOT_FORMAT_RTF );
+            AddFormat( SotClipboardFormatId::RTF );
 
         if ( m_pHtml.is() )
-            AddFormat( SOT_FORMATSTR_ID_HTML );
+            AddFormat( SotClipboardFormatId::HTML );
 
         ODataAccessObjectTransferable::AddSupportedFormats();
     }
 
     bool ODataClipboard::GetData( const DataFlavor& rFlavor, const OUString& rDestDoc )
     {
-        const sal_uLong nFormat = SotExchange::GetFormat(rFlavor);
+        const SotClipboardFormatId nFormat = SotExchange::GetFormat(rFlavor);
         switch (nFormat)
         {
-            case SOT_FORMAT_RTF:
+            case SotClipboardFormatId::RTF:
                 if ( m_pRtf.is() )
                     m_pRtf->initialize(getDescriptor());
-                return m_pRtf.is() && SetObject( m_pRtf.get(), SOT_FORMAT_RTF, rFlavor );
+                return m_pRtf.is() && SetObject( m_pRtf.get(), SotClipboardFormatId::RTF, rFlavor );
 
-            case SOT_FORMATSTR_ID_HTML:
+            case SotClipboardFormatId::HTML:
                 if ( m_pHtml.is() )
                     m_pHtml->initialize(getDescriptor());
-                return m_pHtml.is() && SetObject( m_pHtml.get(), SOT_FORMATSTR_ID_HTML, rFlavor );
+                return m_pHtml.is() && SetObject( m_pHtml.get(), SotClipboardFormatId::HTML, rFlavor );
+
+            default: break;
         }
 
         return ODataAccessObjectTransferable::GetData(rFlavor, rDestDoc);
