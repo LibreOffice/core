@@ -1585,7 +1585,7 @@
             <desc>Specifies number of columns of the view layout. 0 means the view layout is set to automatic.</desc>
             <label>View Layout Columns</label>
           </info>
-          <value>0</value>
+          <value>1</value>
         </prop>
         <prop oor:name="BookMode" oor:type="xs:boolean" oor:nillable="false">
           <!-- UIHints: (Status Bar) -->
