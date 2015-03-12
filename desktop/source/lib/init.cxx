@@ -27,6 +27,7 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/bootstrap.hxx>
 #include <cppuhelper/bootstrap.hxx>
+#include <comphelper/dispatchcommand.hxx>
 #include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -213,6 +214,8 @@ static void doc_postMouseEvent (LibreOfficeKitDocument* pThis,
                                 int nX,
                                 int nY,
                                 int nCount);
+static void doc_postUnoCommand(LibreOfficeKitDocument* pThis,
+                               const char* pCommand);
 static void doc_setTextSelection (LibreOfficeKitDocument* pThis,
                                   int nType,
                                   int nX,
@@ -251,6 +254,7 @@ struct LibLODocument_Impl : public _LibreOfficeKitDocument
             m_pDocumentClass->registerCallback = doc_registerCallback;
             m_pDocumentClass->postKeyEvent = doc_postKeyEvent;
             m_pDocumentClass->postMouseEvent = doc_postMouseEvent;
+            m_pDocumentClass->postUnoCommand = doc_postUnoCommand;
             m_pDocumentClass->setTextSelection = doc_setTextSelection;
             m_pDocumentClass->setGraphicSelection = doc_setGraphicSelection;
             m_pDocumentClass->resetSelection = doc_resetSelection;
@@ -721,6 +725,16 @@ static void doc_postKeyEvent(LibreOfficeKitDocument* /*pThis*/, int nType, int n
         }
     }
 #endif
+}
+
+static void doc_postUnoCommand(LibreOfficeKitDocument* /*pThis*/, const char* pCommand)
+{
+    OUString aCommand(pCommand, strlen(pCommand), RTL_TEXTENCODING_UTF8);
+
+    if (!comphelper::dispatchCommand(aCommand))
+    {
+        gImpl->maLastExceptionMsg = "Failed to dispatch the .uno: command";
+    }
 }
 
 static void doc_postMouseEvent(LibreOfficeKitDocument* pThis, int nType, int nX, int nY, int nCount)

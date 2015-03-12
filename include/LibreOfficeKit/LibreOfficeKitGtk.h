@@ -121,6 +121,9 @@ void            lok_docview_set_edit        (LOKDocView* pDocView,
                                              gboolean bEdit);
 /// Gets if the viewer is actually an editor or not.
 gboolean        lok_docview_get_edit        (LOKDocView* pDocView);
+
+/// Posts the .uno: command to the LibreOfficeKit.
+void            lok_docview_post_command    (LOKDocView* pDocView, const char* pCommand);
 #ifdef __cplusplus
 }
 #endif

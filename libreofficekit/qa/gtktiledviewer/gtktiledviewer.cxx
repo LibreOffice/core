@@ -35,6 +35,7 @@ static int help()
 
 static GtkWidget* pDocView;
 static GtkToolItem* pEnableEditing;
+static GtkToolItem* pBold;
 static GtkWidget* pDocViewQuad;
 static GtkWidget* pVBox;
 // GtkComboBox requires gtk 2.24 or later
@@ -122,6 +123,14 @@ static void signalEdit(LOKDocView* pLOKDocView, gboolean bWasEdit, gpointer /*pD
     g_info("signalEdit: %d -> %d", bWasEdit, lok_docview_get_edit(pLOKDocView));
     if (gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(pEnableEditing)) != bEdit)
         gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(pEnableEditing), bEdit);
+}
+
+/// User clicked on the 'Bold' button -> inform LOKDocView.
+void toggleBold(GtkWidget* /*pButton*/, gpointer /*pItem*/)
+{
+    LOKDocView* pLOKDocView = LOK_DOCVIEW(pDocView);
+
+    lok_docview_post_command(pLOKDocView, ".uno:Bold");
 }
 
 void changeQuadView( GtkWidget* /*pButton*/, gpointer /* pItem */ )
@@ -363,6 +372,12 @@ int main( int argc, char* argv[] )
     gtk_tool_button_set_label(GTK_TOOL_BUTTON(pEnableEditing), "Editing");
     gtk_toolbar_insert(GTK_TOOLBAR(pToolbar), pEnableEditing, -1);
     g_signal_connect(G_OBJECT(pEnableEditing), "toggled", G_CALLBACK(toggleEditing), NULL);
+
+    gtk_toolbar_insert( GTK_TOOLBAR(pToolbar), gtk_separator_tool_item_new(), -1);
+    pBold = gtk_toggle_tool_button_new();
+    gtk_tool_button_set_label(GTK_TOOL_BUTTON(pBold), "Bold");
+    gtk_toolbar_insert(GTK_TOOLBAR(pToolbar), pBold, -1);
+    g_signal_connect(G_OBJECT(pBold), "toggled", G_CALLBACK(toggleBold), NULL);
 
     gtk_box_pack_start( GTK_BOX(pVBox), pToolbar, FALSE, FALSE, 0 ); // Adds to top.
 

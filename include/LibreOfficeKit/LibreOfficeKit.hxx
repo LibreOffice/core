@@ -131,6 +131,16 @@ public:
     }
 
     /**
+     * Posts an UNO command to the document.
+     *
+     * @param pCommand uno command to be posted to the document, like ".uno:Bold"
+     */
+    inline void postUnoCommand(const char* pCommand)
+    {
+        mpDoc->pClass->postUnoCommand(mpDoc, pCommand);
+    }
+
+    /**
      * Sets the start or end of a text selection.
      *
      * @param nType @see LibreOfficeKitSetTextSelectionType
