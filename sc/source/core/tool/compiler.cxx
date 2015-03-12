@@ -3582,26 +3582,27 @@ bool ScCompiler::NextNewToken( bool bInArray )
     {
         mbRewind = false;
         const OUString aOrg( cSymbol );
+        aUpper.clear();
+        bool bAsciiUpper = false;
 
         if (bAsciiNonAlnum)
         {
+            bAsciiUpper = lcl_UpperAsciiOrI18n( aUpper, aOrg, meGrammar);
             if (cSymbol[0] == '#')
             {
                 // This can be only an error constant, if any.
-                lcl_UpperAsciiOrI18n( aUpper, aOrg, meGrammar);
                 if (IsErrorConstant( aUpper))
                     return true;
                 break;  // do; create ocBad token or set error.
             }
-            if (IsOpCode( aOrg, bInArray ))
+            if (IsOpCode( aUpper, bInArray ))
                 return true;
         }
 
-        aUpper.clear();
-        bool bAsciiUpper = false;
         if (bMayBeFuncName)
         {
-            bAsciiUpper = lcl_UpperAsciiOrI18n( aUpper, aOrg, meGrammar);
+            if (aUpper.isEmpty())
+                bAsciiUpper = lcl_UpperAsciiOrI18n( aUpper, aOrg, meGrammar);
             if (IsOpCode( aUpper, bInArray ))
                 return true;
         }

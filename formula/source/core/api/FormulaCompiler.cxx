@@ -151,7 +151,7 @@ public:
 
 private:
     bool getOpCodeString( OUString& rStr, sal_uInt16 nOp );
-    void putDefaultOpCode( FormulaCompiler::NonConstOpCodeMapPtr xMap, sal_uInt16 nOp );
+    void putDefaultOpCode( FormulaCompiler::NonConstOpCodeMapPtr xMap, sal_uInt16 nOp, const CharClass* pCharClass );
 
 private:
     FormulaCompiler::SeparatorType meSepType;
@@ -162,11 +162,13 @@ OpCodeList::OpCodeList( sal_uInt16 nRID, FormulaCompiler::NonConstOpCodeMapPtr x
     Resource( ResId( nRID, *ResourceManager::getResManager()))
     , meSepType( eSepType)
 {
+    SvtSysLocale aSysLocale;
+    const CharClass* pCharClass = (xMap->isEnglish() ? NULL : aSysLocale.GetCharClassPtr());
     if (meSepType == FormulaCompiler::RESOURCE_BASE)
     {
         for (sal_uInt16 i = 0; i <= SC_OPCODE_LAST_OPCODE_ID; ++i)
         {
-            putDefaultOpCode( xMap, i);
+            putDefaultOpCode( xMap, i, pCharClass);
         }
     }
     else
@@ -175,9 +177,9 @@ OpCodeList::OpCodeList( sal_uInt16 nRID, FormulaCompiler::NonConstOpCodeMapPtr x
         {
             OUString aOpStr;
             if ( getOpCodeString( aOpStr, i) )
-                xMap->putOpCode( aOpStr, OpCode(i));
+                xMap->putOpCode( aOpStr, OpCode(i), pCharClass);
             else
-                putDefaultOpCode( xMap, i);
+                putDefaultOpCode( xMap, i, pCharClass);
         }
     }
 
@@ -235,12 +237,13 @@ bool OpCodeList::getOpCodeString( OUString& rStr, sal_uInt16 nOp )
     return false;
 }
 
-void OpCodeList::putDefaultOpCode( FormulaCompiler::NonConstOpCodeMapPtr xMap, sal_uInt16 nOp )
+void OpCodeList::putDefaultOpCode( FormulaCompiler::NonConstOpCodeMapPtr xMap, sal_uInt16 nOp,
+        const CharClass* pCharClass )
 {
     ResId aRes( nOp, *ResourceManager::getResManager());
     aRes.SetRT( RSC_STRING);
     if (IsAvailableRes( aRes))
-        xMap->putOpCode( aRes.toString(), OpCode( nOp));
+        xMap->putOpCode( aRes.toString(), OpCode( nOp), pCharClass);
 }
 
 // static
@@ -508,7 +511,7 @@ uno::Sequence< sheet::FormulaOpCodeMapEntry > FormulaCompiler::OpCodeMap::create
 }
 
 
-void FormulaCompiler::OpCodeMap::putOpCode( const OUString & rStr, const OpCode eOp )
+void FormulaCompiler::OpCodeMap::putOpCode( const OUString & rStr, const OpCode eOp, const CharClass* pCharClass )
 {
     DBG_ASSERT( 0 < eOp && sal_uInt16(eOp) < mnSymbols, "OpCodeMap::putOpCode: OpCode out of range");
     if (0 < eOp && sal_uInt16(eOp) < mnSymbols)
@@ -519,8 +522,10 @@ void FormulaCompiler::OpCodeMap::putOpCode( const OUString & rStr, const OpCode 
                 "OpCodeMap::putOpCode: reusing OpCode " << static_cast<sal_uInt16>(eOp)
                 << ", replacing '" << mpTable[eOp] << "' with '" << rStr << "' in "
                 << (mbEnglish ? "" : "non-") << "English map 0x" << ::std::hex << meGrammar);
+        // Case preserving opcode -> string, upper string -> opcode
         mpTable[eOp] = rStr;
-        mpHashMap->insert( OpCodeHashMap::value_type( rStr, eOp));
+        OUString aUpper( pCharClass ? pCharClass->uppercase( rStr) : rStr.toAsciiUpperCase());
+        mpHashMap->insert( OpCodeHashMap::value_type( aUpper, eOp));
     }
 }
 
@@ -623,13 +628,15 @@ FormulaCompiler::OpCodeMapPtr FormulaCompiler::CreateOpCodeMap(
     NonConstOpCodeMapPtr xMap( new OpCodeMap( SC_OPCODE_LAST_OPCODE_ID + 1, false,
                 FormulaGrammar::mergeToGrammar( FormulaGrammar::setEnglishBit(
                         FormulaGrammar::GRAM_EXTERNAL, bEnglish), FormulaGrammar::CONV_UNSPECIFIED)));
+    SvtSysLocale aSysLocale;
+    const CharClass* pCharClass = (xMap->isEnglish() ? NULL : aSysLocale.GetCharClassPtr());
     FormulaOpCodeMapEntry const * pArr2 = rMapping.getConstArray();
     FormulaOpCodeMapEntry const * const pStop = pArr2 + rMapping.getLength();
     for ( ; pArr2 < pStop; ++pArr2)
     {
         OpCode eOp = OpCode(pArr2->Token.OpCode);
         if (eOp != ocExternal)
-            xMap->putOpCode( pArr2->Name, eOp);
+            xMap->putOpCode( pArr2->Name, eOp, pCharClass);
         else
         {
             OUString aExternalName;
@@ -722,9 +729,9 @@ void FormulaCompiler::InitSymbolsEnglishXL() const
     // TODO: For now, just replace the separators to the Excel English
     // variants. Later, if we want to properly map Excel functions with Calc
     // functions, we'll need to do a little more work here.
-    mxSymbolsEnglishXL->putOpCode( OUString(','), ocSep);
-    mxSymbolsEnglishXL->putOpCode( OUString(','), ocArrayColSep);
-    mxSymbolsEnglishXL->putOpCode( OUString(';'), ocArrayRowSep);
+    mxSymbolsEnglishXL->putOpCode( OUString(','), ocSep, NULL);
+    mxSymbolsEnglishXL->putOpCode( OUString(','), ocArrayColSep, NULL);
+    mxSymbolsEnglishXL->putOpCode( OUString(';'), ocArrayRowSep, NULL);
 }
 
 void FormulaCompiler::InitSymbolsOOXML() const
@@ -1947,9 +1954,9 @@ void FormulaCompiler::UpdateSeparatorsNative(
 {
     NonConstOpCodeMapPtr xSymbolsNative;
     lcl_fillNativeSymbols( xSymbolsNative);
-    xSymbolsNative->putOpCode( rSep, ocSep);
-    xSymbolsNative->putOpCode( rArrayColSep, ocArrayColSep);
-    xSymbolsNative->putOpCode( rArrayRowSep, ocArrayRowSep);
+    xSymbolsNative->putOpCode( rSep, ocSep, NULL);
+    xSymbolsNative->putOpCode( rArrayColSep, ocArrayColSep, NULL);
+    xSymbolsNative->putOpCode( rArrayRowSep, ocArrayRowSep, NULL);
 }
 
 void FormulaCompiler::ResetNativeSymbols()

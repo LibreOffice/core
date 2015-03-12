@@ -46,6 +46,7 @@ namespace com { namespace sun { namespace star {
     }
 }}}
 
+class CharClass;
 
 namespace formula
 {
@@ -159,7 +160,7 @@ public:
         inline bool hasExternals() const { return !mpExternalHashMap->empty(); }
 
         /// Put entry of symbol String and OpCode pair.
-        void putOpCode( const OUString & rStr, const OpCode eOp );
+        void putOpCode( const OUString & rStr, const OpCode eOp, const CharClass* pCharClass );
 
         /// Put entry of symbol String and AddIn international String pair.
         void putExternal( const OUString & rSymbol, const OUString & rAddIn );
