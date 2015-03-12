@@ -324,7 +324,7 @@ OUString ShutdownIcon::GetResString( int id )
         m_pResMgr = SfxResId::GetResMgr();
     ResId aResId( id, *m_pResMgr );
     aResId.SetRT( RSC_STRING );
-    if( !m_pResMgr || !m_pResMgr->IsAvailable( aResId ) )
+    if (!m_pResMgr->IsAvailable(aResId))
         return OUString();
 
     return ResId(id, *m_pResMgr).toString();
