@@ -842,7 +842,10 @@ namespace sw { namespace mark
         { }
         virtual ~LazyFieldmarkDeleter()
         {
-            dynamic_cast<Fieldmark&>(*m_pFieldmark.get()).ReleaseDoc(m_pDoc);
+            Fieldmark *const pFieldMark(
+                    dynamic_cast<Fieldmark*>(m_pFieldmark.get()));
+            assert(pFieldMark);
+            pFieldMark->ReleaseDoc(m_pDoc);
         }
     };
 
