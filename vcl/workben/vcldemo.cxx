@@ -7,6 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <math.h>
+#include <rtl/math.hxx>
+
 #include <comphelper/processfactory.hxx>
 #include <comphelper/random.hxx>
 #include <cppuhelper/bootstrap.hxx>
@@ -110,8 +113,8 @@ class DemoRenderer
     void     InitRenderers();
 
 public:
-    DemoRenderer() : mnSegmentsX(4)
-                   , mnSegmentsY(4)
+    DemoRenderer() : mnSegmentsX(0)
+                   , mnSegmentsY(0)
                    , mnSelectedRenderer(-1)
                    , iterCount(0)
 #if FIXME_BOUNCE_BUTTON
@@ -128,6 +131,11 @@ public:
         maIntroBW.Filter(BMP_FILTER_EMBOSS_GREY);
 
         InitRenderers();
+        mnSegmentsX = rtl::math::round(sqrt(maRenderers.size()), 0,
+                                       rtl_math_RoundingMode_Up);
+        mnSegmentsY = rtl::math::round(sqrt(maRenderers.size()), 0,
+                                       rtl_math_RoundingMode_Down);
+        mnSegmentsY = floor(sqrt(maRenderers.size()));
     }
 
     OUString getRendererList();
