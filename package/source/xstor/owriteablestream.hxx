@@ -276,7 +276,7 @@ protected:
     ::com::sun::star::uno::Reference < ::com::sun::star::io::XSeekable > m_xSeekable;
 
     OWriteStream_Impl* m_pImpl;
-    WSInternalData_Impl* m_pData;
+    std::unique_ptr<WSInternalData_Impl> m_pData;
 
     bool m_bInStreamDisconnected;
     bool m_bInitOnDemand;

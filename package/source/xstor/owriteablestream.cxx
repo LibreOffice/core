@@ -1683,7 +1683,7 @@ OWriteStream::OWriteStream( OWriteStream_Impl* pImpl, bool bTransacted )
     if ( !m_pImpl || !m_pImpl->m_rMutexRef.Is() )
         throw uno::RuntimeException(); // just a disaster
 
-    m_pData = new WSInternalData_Impl( pImpl->m_rMutexRef, m_pImpl->m_nStorageType );
+    m_pData.reset(new WSInternalData_Impl(pImpl->m_rMutexRef, m_pImpl->m_nStorageType));
 }
 
 OWriteStream::OWriteStream( OWriteStream_Impl* pImpl, uno::Reference< io::XStream > xStream, bool bTransacted )
@@ -1699,7 +1699,7 @@ OWriteStream::OWriteStream( OWriteStream_Impl* pImpl, uno::Reference< io::XStrea
     if ( !m_pImpl || !m_pImpl->m_rMutexRef.Is() )
         throw uno::RuntimeException(); // just a disaster
 
-    m_pData = new WSInternalData_Impl( pImpl->m_rMutexRef, m_pImpl->m_nStorageType );
+    m_pData.reset(new WSInternalData_Impl(pImpl->m_rMutexRef, m_pImpl->m_nStorageType));
 
     if ( xStream.is() )
     {
@@ -1712,23 +1712,19 @@ OWriteStream::OWriteStream( OWriteStream_Impl* pImpl, uno::Reference< io::XStrea
 
 OWriteStream::~OWriteStream()
 {
+    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    if ( m_pImpl )
     {
-        ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
-        if ( m_pImpl )
+        m_refCount++;
+        try {
+            dispose();
+        }
+        catch( const uno::RuntimeException& rRuntimeException )
         {
-            m_refCount++;
-            try {
-                dispose();
-            }
-            catch( const uno::RuntimeException& rRuntimeException )
-            {
-                m_pImpl->AddLog( rRuntimeException.Message );
-                m_pImpl->AddLog( "Quiet exception" );
-            }
+            m_pImpl->AddLog( rRuntimeException.Message );
+            m_pImpl->AddLog( "Quiet exception" );
         }
     }
-
-    delete m_pData;
 }
 
 void OWriteStream::DeInit()
