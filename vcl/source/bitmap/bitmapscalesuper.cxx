@@ -75,9 +75,9 @@ struct ScaleContext {
 
 #define SCALE_THREAD_STRIP 32
 struct ScaleRangeContext {
-    ScaleContext &mrCtx;
+    ScaleContext *mrCtx;
     long mnStartY, mnEndY;
-    ScaleRangeContext( ScaleContext &rCtx, long nStartY )
+    ScaleRangeContext( ScaleContext *rCtx, long nStartY )
         : mrCtx( rCtx ), mnStartY( nStartY ),
           mnEndY( nStartY + SCALE_THREAD_STRIP ) {}
 };
@@ -95,7 +95,7 @@ public:
     {
         std::vector< ScaleRangeContext >::iterator it;
         for (it = maStrips.begin(); it != maStrips.end(); ++it)
-            mpFn( it->mrCtx, it->mnStartY, it->mnEndY );
+            mpFn( *(it->mrCtx), it->mnStartY, it->mnEndY );
     }
 };
 
@@ -1011,7 +1011,7 @@ bool BitmapScaleSuper::filter(Bitmap& rBitmap)
                 ScaleTask *pTask = new ScaleTask( pScaleRangeFn );
                 for ( sal_uInt32 j = 0; j < nStripsPerThread; j++ )
                 {
-                    ScaleRangeContext aRC( aContext, nStripY );
+                    ScaleRangeContext aRC( &aContext, nStripY );
                     pTask->push( aRC );
                     nStripY += SCALE_THREAD_STRIP;
                 }
