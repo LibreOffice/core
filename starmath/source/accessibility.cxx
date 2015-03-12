@@ -788,13 +788,12 @@ sal_Bool SAL_CALL SmGraphicAccessible::supportsService(
 Sequence< OUString > SAL_CALL SmGraphicAccessible::getSupportedServiceNames()
     throw (RuntimeException, std::exception)
 {
-    Sequence< OUString > aNames(4);
-    OUString *pNames = aNames.getArray();
-    pNames[0] = "com::sun::star::accessibility::Accessible";
-    pNames[1] = "com::sun::star::accessibility::AccessibleComponent";
-    pNames[2] = "com::sun::star::accessibility::AccessibleContext";
-    pNames[3] = "com::sun::star::accessibility::AccessibleText";
-    return aNames;
+    return Sequence< OUString >{
+        "com::sun::star::accessibility::Accessible",
+        "com::sun::star::accessibility::AccessibleComponent",
+        "com::sun::star::accessibility::AccessibleContext",
+        "com::sun::star::accessibility::AccessibleText"
+    };
 }
 
 
@@ -1925,12 +1924,11 @@ sal_Bool SAL_CALL SmEditAccessible::supportsService(
 Sequence< OUString > SAL_CALL SmEditAccessible::getSupportedServiceNames()
     throw (RuntimeException, std::exception)
 {
-    Sequence< OUString > aNames(3);
-    OUString *pNames = aNames.getArray();
-    pNames[0] = "com::sun::star::accessibility::Accessible";
-    pNames[1] = "com::sun::star::accessibility::AccessibleComponent";
-    pNames[2] = "com::sun::star::accessibility::AccessibleContext";
-    return aNames;
+    return Sequence< OUString >{
+        "com::sun::star::accessibility::Accessible",
+        "com::sun::star::accessibility::AccessibleComponent",
+        "com::sun::star::accessibility::AccessibleContext"
+    };
 }
 
 
