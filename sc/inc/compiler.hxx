@@ -381,7 +381,9 @@ public:
 
     // Check if it is a valid english function name
     bool IsEnglishSymbol( const OUString& rName );
+
     bool IsErrorConstant( const OUString& ) const;
+    bool IsTableRefItem( const OUString& ) const;
 
     /**
      * When auto correction is set, the jump command reorder must be enabled.

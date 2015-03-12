@@ -3282,6 +3282,27 @@ bool ScCompiler::IsErrorConstant( const OUString& rName ) const
         return false;
 }
 
+bool ScCompiler::IsTableRefItem( const OUString& rName ) const
+{
+    OpCodeHashMap::const_iterator iLook( mxSymbols->getHashMap()->find( rName));
+    if (iLook != mxSymbols->getHashMap()->end())
+    {
+        switch ((*iLook).second)
+        {
+            case ocTableRefItemAll:
+            case ocTableRefItemHeaders:
+            case ocTableRefItemData:
+            case ocTableRefItemTotals:
+            case ocTableRefItemThisRow:
+                maRawToken.SetOpCode( (*iLook).second );
+                return true;
+            default:
+                ;
+        }
+    }
+    return false;
+}
+
 void ScCompiler::SetAutoCorrection( bool bVal )
 {
     assert(mbJumpCommandReorder);
@@ -3596,9 +3617,17 @@ bool ScCompiler::NextNewToken( bool bInArray )
             bAsciiUpper = lcl_UpperAsciiOrI18n( aUpper, aOrg, meGrammar);
             if (cSymbol[0] == '#')
             {
+                // Check for TableRef item specifiers first.
+                if (!maTableRefs.empty())
+                {
+                    if (IsTableRefItem( aUpper ))
+                        return true;
+                }
+
                 // This can be only an error constant, if any.
                 if (IsErrorConstant( aUpper))
                     return true;
+
                 break;  // do; create ocBad token or set error.
             }
             if (IsOpCode( aUpper, bInArray ))
