@@ -3564,6 +3564,12 @@ bool ScCompiler::NextNewToken( bool bInArray )
         bMayBeFuncName = ScGlobal::pCharClass->isLetter( aTmpStr, 0 );
         bAsciiNonAlnum = false;
     }
+    if (bAsciiNonAlnum && cSymbol[1] == 0)
+    {
+        // Shortcut for operators and separators that need no further checks or upper.
+        if (IsOpCode( OUString( cSymbol), bInArray ))
+            return true;
+    }
     if ( bMayBeFuncName )
     {
         // a function name must be followed by a parenthesis
