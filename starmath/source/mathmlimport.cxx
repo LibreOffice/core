@@ -2011,7 +2011,8 @@ static const SvXMLTokenMapEntry aColorTokenMap[] =
 
 static const SvXMLTokenMapEntry aActionAttrTokenMap[] =
 {
-    { XML_NAMESPACE_MATH,   XML_SELECTION,      XML_TOK_SELECTION },
+    { XML_NAMESPACE_MATH,   XML_SELECTION,      XML_TOK_SELECTION,
+        (NAMESPACE | XML_NAMESPACE_MATH | XML_selection) },
     XML_TOKEN_MAP_END
 };
 
