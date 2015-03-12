@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a29b11f_e89a3bc5",
+        "filename": "sc/source/filter/oox/worksheetbuffer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-03-12T22:56:44Z",
+      "side": 1,
+      "message": "if possible it would be good to use ScDocument here. Sadly I don\u0027t see ScDocument used already in that file. We try to reduce the usage of UNO in the OOX calc import.",
+      "revId": "2ae1f06566088986395c7db36f322b9cf41c8ace",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
