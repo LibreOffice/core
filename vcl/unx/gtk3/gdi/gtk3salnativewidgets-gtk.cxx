@@ -835,6 +835,11 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
         }
         break;
     case CTRL_MENU_POPUP:
+
+        // map selected menu entries in vcl parlance to gtk prelight
+        if (nPart >= PART_MENU_ITEM && nPart <= PART_MENU_SUBMENU_ARROW && (nState & ControlState::SELECTED))
+            flags = (GtkStateFlags) (flags | GTK_STATE_FLAG_PRELIGHT);
+
         switch(nPart)
         {
         case PART_MENU_ITEM:
