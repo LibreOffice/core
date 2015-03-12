@@ -571,7 +571,7 @@ SvXMLStyleContext *SvXMLStylesContext::CreateStyleChildContext(
                 const OUString& rValue = xAttrList->getValue( (FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_family) );
                 nFamily = GetFamily( rValue );
             }
-            pStyle = (FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_style)==Element
+            pStyle = XML_TOK_STYLE_STYLE==nToken
                 ? CreateStyleStyleChildContext( nFamily, Element, xAttrList )
                 : CreateDefaultStyleStyleChildContext( nFamily, Element, xAttrList );
         }
