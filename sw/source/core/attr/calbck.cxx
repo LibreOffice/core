@@ -468,17 +468,13 @@ SwClient* SwClientIter::Next()
 
 SwClient* SwClientIter::Previous()
 {
-    do {
-        if( pDelNext == pAct )
-            pAct = static_cast<SwClient*>(pAct->m_pLeft);
-        else
-            pAct = static_cast<SwClient*>(pDelNext->m_pLeft);
-        pDelNext = pAct;
-
-        if( pAct && pAct->IsA( aSrchId ) )
+    while(pDelNext)
+    {
+        pDelNext = static_cast<SwClient*>(pDelNext->m_pLeft);
+        if( pDelNext && pDelNext->IsA( aSrchId ) )
             break;
-    } while( pAct );
-    return pAct;
+    }
+    return pAct = pDelNext;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
