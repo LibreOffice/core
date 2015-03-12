@@ -3717,8 +3717,21 @@ void ScInterpreter::GetNumberSequenceArray( sal_uInt8 nParamCount, vector<double
                 else
                 {
                     for (SCSIZE i = 0; i < nCount; ++i)
-                        if (!pMat->IsString(i))
+                    {
+                        if ( pMat->IsValue( i ) )
                             rArray.push_back( pMat->GetDouble(i));
+                        else
+                        {
+                            // tdf 88547 try to convert string to (date)value
+                            OUString aStr = pMat->GetString( i ).getString();
+                            if ( aStr.getLength() > 0 )
+                            {
+                                double fVal = ConvertStringToValue( aStr );
+                                if ( !nGlobalError )
+                                    rArray.push_back( fVal );
+                            }
+                        }
+                    }
                 }
             }
             break;
@@ -3739,7 +3752,6 @@ void ScInterpreter::GetNumberSequenceArray( sal_uInt8 nParamCount, vector<double
 void ScInterpreter::GetSortArray( sal_uInt8 nParamCount, vector<double>& rSortArray, vector<long>* pIndexOrder )
 {
     GetNumberSequenceArray( nParamCount, rSortArray);
-
     if (rSortArray.size() > MAX_ANZ_DOUBLE_FOR_SORT)
         SetError( errStackOverflow);
     else if (rSortArray.empty())
