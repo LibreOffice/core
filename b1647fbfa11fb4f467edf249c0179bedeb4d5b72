@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a29b11f_3d9073ec",
+        "filename": "sw/source/uibase/dbui/dbmgr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1424,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-03-12T10:38:07Z",
+      "side": 1,
+      "message": "there is a parenthesis missing here - only the assert is in the then-branch!\n\nactually - it would be easier to read if you add \" \u0026\u0026 !bCancel\" to the previous \"if\" because then there isn\u0027t another level of indentation for no good reason.",
+      "revId": "b1647fbfa11fb4f467edf249c0179bedeb4d5b72",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
