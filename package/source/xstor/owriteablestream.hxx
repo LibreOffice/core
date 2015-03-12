@@ -43,10 +43,12 @@
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/interfacecontainer.h>
+#include <cppuhelper/typeprovider.hxx>
 
 #include <comphelper/sequenceashashmap.hxx>
 
 #include <list>
+#include <memory>
 
 #include "ocompinstream.hxx"
 #include "mutexholder.hxx"
@@ -65,10 +67,6 @@ struct PreCreationStruct
 
 };
 
-namespace cppu {
-    class OTypeCollection;
-}
-
 namespace package {
     bool PackageEncryptionDatasEqual( const ::comphelper::SequenceAsHashMap& aHash1, const ::comphelper::SequenceAsHashMap& aHash2 );
 }
@@ -76,14 +74,14 @@ namespace package {
 struct WSInternalData_Impl
 {
     SotMutexHolderRef m_rSharedMutexRef;
-    ::cppu::OTypeCollection* m_pTypeCollection;
+    ::std::unique_ptr< ::cppu::OTypeCollection> m_pTypeCollection;
     ::cppu::OMultiTypeInterfaceContainerHelper m_aListenersContainer; // list of listeners
     sal_Int32 m_nStorageType;
 
     // the mutex reference MUST NOT be empty
     WSInternalData_Impl( const SotMutexHolderRef& rMutexRef, sal_Int32 nStorageType )
     : m_rSharedMutexRef( rMutexRef )
-    , m_pTypeCollection( NULL )
+    , m_pTypeCollection()
     , m_aListenersContainer( rMutexRef->GetMutex() )
     , m_nStorageType( nStorageType )
     {}

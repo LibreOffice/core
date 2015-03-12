@@ -1728,9 +1728,6 @@ OWriteStream::~OWriteStream()
         }
     }
 
-    if ( m_pData && m_pData->m_pTypeCollection )
-        delete m_pData->m_pTypeCollection;
-
     delete m_pData;
 }
 
@@ -1922,11 +1919,11 @@ void SAL_CALL OWriteStream::release() throw()
 uno::Sequence< uno::Type > SAL_CALL OWriteStream::getTypes()
         throw( uno::RuntimeException, std::exception )
 {
-    if ( m_pData->m_pTypeCollection == NULL )
+    if (! m_pData->m_pTypeCollection)
     {
         ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
-        if ( m_pData->m_pTypeCollection == NULL )
+        if (! m_pData->m_pTypeCollection)
         {
             if ( m_bTransacted )
             {
@@ -1946,13 +1943,13 @@ uno::Sequence< uno::Type > SAL_CALL OWriteStream::getTypes()
                                     ,   cppu::UnoType<embed::XTransactedObject>::get()
                                     ,   cppu::UnoType<embed::XTransactionBroadcaster>::get());
 
-                    m_pData->m_pTypeCollection = new ::cppu::OTypeCollection
+                    m_pData->m_pTypeCollection.reset(new ::cppu::OTypeCollection
                                     (   cppu::UnoType<beans::XPropertySet>::get()
-                                    ,   aTmpCollection.getTypes() );
+                                    ,   aTmpCollection.getTypes()));
                 }
                 else if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML )
                 {
-                    m_pData->m_pTypeCollection = new ::cppu::OTypeCollection
+                    m_pData->m_pTypeCollection.reset(new ::cppu::OTypeCollection
                                     (   cppu::UnoType<lang::XTypeProvider>::get()
                                     ,   cppu::UnoType<io::XInputStream>::get()
                                     ,   cppu::UnoType<io::XOutputStream>::get()
@@ -1964,11 +1961,11 @@ uno::Sequence< uno::Type > SAL_CALL OWriteStream::getTypes()
                                     ,   cppu::UnoType<embed::XExtendedStorageStream>::get()
                                     ,   cppu::UnoType<embed::XTransactedObject>::get()
                                     ,   cppu::UnoType<embed::XTransactionBroadcaster>::get()
-                                    ,   cppu::UnoType<beans::XPropertySet>::get());
+                                    ,   cppu::UnoType<beans::XPropertySet>::get()));
                 }
                 else // if ( m_pData->m_nStorageType == embed::StorageFormats::ZIP )
                 {
-                    m_pData->m_pTypeCollection = new ::cppu::OTypeCollection
+                    m_pData->m_pTypeCollection.reset(new ::cppu::OTypeCollection
                                     (   cppu::UnoType<lang::XTypeProvider>::get()
                                     ,   cppu::UnoType<io::XInputStream>::get()
                                     ,   cppu::UnoType<io::XOutputStream>::get()
@@ -1979,14 +1976,14 @@ uno::Sequence< uno::Type > SAL_CALL OWriteStream::getTypes()
                                     ,   cppu::UnoType<embed::XExtendedStorageStream>::get()
                                     ,   cppu::UnoType<embed::XTransactedObject>::get()
                                     ,   cppu::UnoType<embed::XTransactionBroadcaster>::get()
-                                    ,   cppu::UnoType<beans::XPropertySet>::get());
+                                    ,   cppu::UnoType<beans::XPropertySet>::get()));
                 }
             }
             else
             {
                 if ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE )
                 {
-                    m_pData->m_pTypeCollection = new ::cppu::OTypeCollection
+                    m_pData->m_pTypeCollection.reset(new ::cppu::OTypeCollection
                                     (   cppu::UnoType<lang::XTypeProvider>::get()
                                     ,   cppu::UnoType<io::XInputStream>::get()
                                     ,   cppu::UnoType<io::XOutputStream>::get()
@@ -1996,11 +1993,11 @@ uno::Sequence< uno::Type > SAL_CALL OWriteStream::getTypes()
                                     ,   cppu::UnoType<lang::XComponent>::get()
                                     ,   cppu::UnoType<embed::XEncryptionProtectedSource2>::get()
                                     ,   cppu::UnoType<embed::XEncryptionProtectedSource>::get()
-                                    ,   cppu::UnoType<beans::XPropertySet>::get());
+                                    ,   cppu::UnoType<beans::XPropertySet>::get()));
                 }
                 else if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML )
                 {
-                    m_pData->m_pTypeCollection = new ::cppu::OTypeCollection
+                    m_pData->m_pTypeCollection.reset(new ::cppu::OTypeCollection
                                     (   cppu::UnoType<lang::XTypeProvider>::get()
                                     ,   cppu::UnoType<io::XInputStream>::get()
                                     ,   cppu::UnoType<io::XOutputStream>::get()
@@ -2009,11 +2006,11 @@ uno::Sequence< uno::Type > SAL_CALL OWriteStream::getTypes()
                                     ,   cppu::UnoType<io::XTruncate>::get()
                                     ,   cppu::UnoType<lang::XComponent>::get()
                                     ,   cppu::UnoType<embed::XRelationshipAccess>::get()
-                                    ,   cppu::UnoType<beans::XPropertySet>::get());
+                                    ,   cppu::UnoType<beans::XPropertySet>::get()));
                 }
                 else // if ( m_pData->m_nStorageType == embed::StorageFormats::ZIP )
                 {
-                    m_pData->m_pTypeCollection = new ::cppu::OTypeCollection
+                    m_pData->m_pTypeCollection.reset(new ::cppu::OTypeCollection
                                     (   cppu::UnoType<lang::XTypeProvider>::get()
                                     ,   cppu::UnoType<io::XInputStream>::get()
                                     ,   cppu::UnoType<io::XOutputStream>::get()
@@ -2021,7 +2018,7 @@ uno::Sequence< uno::Type > SAL_CALL OWriteStream::getTypes()
                                     ,   cppu::UnoType<io::XSeekable>::get()
                                     ,   cppu::UnoType<io::XTruncate>::get()
                                     ,   cppu::UnoType<lang::XComponent>::get()
-                                    ,   cppu::UnoType<beans::XPropertySet>::get());
+                                    ,   cppu::UnoType<beans::XPropertySet>::get()));
                 }
             }
         }
