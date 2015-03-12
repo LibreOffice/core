@@ -202,7 +202,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
         {
             if(rKEvt.GetKeyCode().IsMod1())
             {
-                if(mpViewShell && mpViewShell->ISA(DrawViewShell))
+                if (mpViewShell->ISA(DrawViewShell))
                 {
                     DrawViewShell* pDrawViewShell =
                         static_cast<DrawViewShell*>(mpViewShell);
