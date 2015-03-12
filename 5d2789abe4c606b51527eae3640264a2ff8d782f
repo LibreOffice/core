@@ -33,6 +33,24 @@
       "revId": "5d2789abe4c606b51527eae3640264a2ff8d782f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a29b11f_7d090b31",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3727,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-03-12T16:07:14Z",
+      "side": 1,
+      "message": "Note that \u0027empty\u0027 (mdds::mtm::element_empty) is something different than \u0027empty string\u0027 anyway. For clarification it may help to look at sc/source/core/tool/scmatrix.cxx the implementations of ScMatrixImpl::IsEmpty(), ScMatrixImpl::IsEmptyCell(), ScMatrixImpl::IsEmptyResult() and ScMatrixImpl::IsEmptyPath()\n\nApart from that we can of course implement ScMatrix::IsEmpty...(SCSIZE nIndex) if needed (which I think is not here).",
+      "parentUuid": "3a29b11f_dd493f90",
+      "revId": "5d2789abe4c606b51527eae3640264a2ff8d782f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
