@@ -111,18 +111,21 @@ SmPrintUIOptions::SmPrintUIOptions()
     m_aUIProperties[nIdx++].Value = setSubgroupControlOpt("size", aLocalizedStrings.GetString(5), OUString());
 
     // create a radio button group for print format (matches to SID_PRINTSIZE)
-    Sequence< OUString > aChoices( 3 );
-    aChoices[0] = aLocalizedStrings.GetString( 6 );
-    aChoices[1] = aLocalizedStrings.GetString( 7 );
-    aChoices[2] = aLocalizedStrings.GetString( 8 );
-    Sequence< OUString > aHelpIds( 3 );
-    aHelpIds[0] = ".HelpID:vcl:PrintDialog:PrintFormat:RadioButton:0";
-    aHelpIds[1] = ".HelpID:vcl:PrintDialog:PrintFormat:RadioButton:1";
-    aHelpIds[2] = ".HelpID:vcl:PrintDialog:PrintFormat:RadioButton:2";
-    Sequence< OUString > aWidgetIds( 3 );
-    aWidgetIds[0] = "originalsize";
-    aWidgetIds[1] = "fittopage";
-    aWidgetIds[2] = "scaling";
+    Sequence< OUString > aChoices{
+        aLocalizedStrings.GetString( 6 ),
+        aLocalizedStrings.GetString( 7 ),
+        aLocalizedStrings.GetString( 8 )
+    };
+    Sequence< OUString > aHelpIds{
+        ".HelpID:vcl:PrintDialog:PrintFormat:RadioButton:0",
+        ".HelpID:vcl:PrintDialog:PrintFormat:RadioButton:1",
+        ".HelpID:vcl:PrintDialog:PrintFormat:RadioButton:2"
+    };
+    Sequence< OUString > aWidgetIds{
+        "originalsize",
+        "fittopage",
+        "scaling"
+    };
     OUString aPrintFormatProp( PRTUIOPT_PRINT_FORMAT );
     m_aUIProperties[nIdx++].Value = setChoiceRadiosControlOpt(aWidgetIds, OUString(),
                                                     aHelpIds,

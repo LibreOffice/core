@@ -139,9 +139,7 @@ Sequence< OUString > SAL_CALL SmFilterDetect::getSupportedServiceNames() throw( 
 /* Helper for XServiceInfo */
 Sequence< OUString > SmFilterDetect::impl_getStaticSupportedServiceNames()
 {
-    Sequence< OUString > seqServiceNames( 1 );
-    seqServiceNames.getArray() [0] = "com.sun.star.frame.ExtendedTypeDetection";
-    return seqServiceNames ;
+    return Sequence< OUString >{ "com.sun.star.frame.ExtendedTypeDetection" };
 }
 
 /* Helper for XServiceInfo */
