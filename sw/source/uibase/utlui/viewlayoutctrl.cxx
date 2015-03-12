@@ -30,7 +30,7 @@ SFX_IMPL_STATUSBAR_CONTROL( SwViewLayoutControl, SvxViewLayoutItem );
 
 struct SwViewLayoutControl::SwViewLayoutControl_Impl
 {
-    sal_uInt16      mnState; // 0 = single, 1 = auto, 2 = book, 3 = none
+    sal_uInt16      mnState; // 0 = auto, 1= single, 2 = book, 3 = none
     Image       maImageSingleColumn;
     Image       maImageSingleColumn_Active;
     Image       maImageAutomatic;
@@ -43,7 +43,7 @@ SwViewLayoutControl::SwViewLayoutControl( sal_uInt16 _nSlotId, sal_uInt16 _nId, 
     SfxStatusBarControl( _nSlotId, _nId, rStatusBar ),
     mpImpl( new SwViewLayoutControl_Impl )
 {
-    mpImpl->mnState = 0;
+    mpImpl->mnState = 1;
 
     mpImpl->maImageSingleColumn         = Image( SW_RES(IMG_VIEWLAYOUT_SINGLECOLUMN) );
     mpImpl->maImageSingleColumn_Active  = Image( SW_RES(IMG_VIEWLAYOUT_SINGLECOLUMN_ACTIVE) );
@@ -209,7 +209,7 @@ bool SwViewLayoutControl::MouseMove( const MouseEvent & rEvt )
     }
     else if ( nXDiff < nXOffset + nImageWidthSingle + nImageWidthAuto )
     {
-        GetStatusBar().SetQuickHelpText(GetId(), SW_RESSTR(STR_VIEWLAYOUT_TWO));
+        GetStatusBar().SetQuickHelpText(GetId(), SW_RESSTR(STR_VIEWLAYOUT_MULTI));
     }
     else
     {
