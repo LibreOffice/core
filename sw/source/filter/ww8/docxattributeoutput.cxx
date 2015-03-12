@@ -1883,8 +1883,7 @@ void DocxAttributeOutput::WriteCollectedRunProperties()
 
     if ( m_pColorAttrList )
     {
-        XFastAttributeListRef xAttrList( m_pColorAttrList );
-        m_pColorAttrList = NULL;
+        XFastAttributeListRef xAttrList( m_pColorAttrList.release() );
 
         m_pSerializer->singleElementNS( XML_w, XML_color, xAttrList );
     }
@@ -8281,7 +8280,6 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_bEndCharSdt(false),
       m_bStartedCharSdt(false),
       m_bStartedParaSdt(false),
-      m_pColorAttrList( NULL ),
       m_pBackgroundAttrList( NULL ),
       m_endPageRef( false ),
       m_pFootnotesList( new ::docx::FootnotesList() ),
@@ -8347,7 +8345,6 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
 
 DocxAttributeOutput::~DocxAttributeOutput()
 {
-    delete m_pColorAttrList, m_pColorAttrList = NULL;
     delete m_pBackgroundAttrList, m_pBackgroundAttrList = NULL;
 
     delete m_pFootnotesList, m_pFootnotesList = NULL;

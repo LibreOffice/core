@@ -735,7 +735,7 @@ private:
     /// If an SDT around paragraphs is currently open.
     bool m_bStartedParaSdt;
     /// Attributes of the run color
-    ::sax_fastparser::FastAttributeList *m_pColorAttrList;
+    std::unique_ptr<sax_fastparser::FastAttributeList> m_pColorAttrList;
     /// Attributes of the paragraph background
     ::sax_fastparser::FastAttributeList *m_pBackgroundAttrList;
     OUString m_sOriginalBackgroundColor;
