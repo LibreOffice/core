@@ -224,7 +224,7 @@ public:
         HEADERS_DATA = HEADERS | DATA,
         DATA_TOTALS = DATA | TOTALS,
         HEADERS_DATA_TOTALS = HEADERS | DATA | TOTALS,
-        ALL_COLUMN = HEADERS_DATA_TOTALS | 32   // semantically the same, but just a [#All] item
+        ALL_COLUMN = HEADERS_DATA_TOTALS | ALL  // semantically the same, but just a [#All] item
     };
 
     ScTableRefToken( sal_uInt16 nIndex, Item eItem );
