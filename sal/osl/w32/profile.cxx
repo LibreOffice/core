@@ -2150,8 +2150,7 @@ static sal_Bool lookupProfile(const sal_Unicode *strPath, const sal_Unicode *str
 
             /* open sversion.ini in the users directory, and try to locate the entry
                with the highest version for StarOffice */
-            if ((strcmp(SVERSION_LOCATION, SVERSION_FALLBACK) != 0) &&
-                (osl_getProfileName(strSVLocation, strSVName, &strSVProfile)))
+            if ( osl_getProfileName(strSVLocation, strSVName, &strSVProfile) )
             {
                 hProfile = osl_openProfile(strSVProfile, osl_Profile_READLOCK);
                 if (hProfile)
@@ -2389,9 +2388,7 @@ static sal_Bool lookupProfile(const sal_Unicode *strPath, const sal_Unicode *str
                         osl_closeProfile(hProfile);
 
                         /* if not found, try the fallback */
-                        if ((Buffer[0] == '\0')
-                            && (strcmp(SVERSION_LOCATION, SVERSION_FALLBACK)
-                                != 0))
+                        if (Buffer[0] == '\0')
                         {
                             if (osl_getProfileName(
                                     strSVFallback, strSVName, &strSVProfile))
