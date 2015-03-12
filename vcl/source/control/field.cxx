@@ -115,9 +115,21 @@ static bool ImplNumericGetValue( const OUString& rStr, sal_Int64& rValue,
     {
         bFrac = true;
         nFracNumPos = aStr.lastIndexOf(' ', nFracDivPos);
-        aStr1.append(aStr.getStr(), nFracNumPos);
-        aStrNum.append(aStr.getStr()+nFracNumPos+1, nFracDivPos-nFracNumPos-1);
-        aStrDenom.append(aStr.getStr()+nFracDivPos+1);
+
+        // If in "a b/c" format.
+        if(nFracNumPos != -1 )
+        {
+            aStr1.append(aStr.getStr(), nFracNumPos);
+            aStrNum.append(aStr.getStr()+nFracNumPos+1, nFracDivPos-nFracNumPos-1);
+            aStrDenom.append(aStr.getStr()+nFracDivPos+1);
+        }
+        // "a/b" format, or not a fraction at all
+        else
+        {
+            aStrNum.append(aStr.getStr(), nFracDivPos);
+            aStrDenom.append(aStr.getStr()+nFracDivPos+1);
+        }
+
     }
     // parse decimal strings
     else if ( nDecPos >= 0)
