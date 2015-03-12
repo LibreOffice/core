@@ -25,10 +25,10 @@ namespace chart {
 
 // ============================================================================
 
-ChartSpaceModel::ChartSpaceModel() :
+ChartSpaceModel::ChartSpaceModel(bool bMSO2007Doc) :
     mnDispBlanksAs( XML_gap ),  // not zero as specified, TODO: OOXML_spec
     mnStyle( 2 ),
-    mbAutoTitleDel( false ),
+    mbAutoTitleDel( !bMSO2007Doc ), // difference between OOXML spec and MSO 2007
     mbPlotVisOnly( false ),
     mbShowLabelsOverMax( false ),
     mbPivotChart( false )

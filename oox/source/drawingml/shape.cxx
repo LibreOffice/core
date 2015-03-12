@@ -869,7 +869,8 @@ void Shape::finalizeXShape( XmlFilterBase& rFilter, const Reference< XShapes >& 
                 Reference< chart2::XChartDocument > xChartDoc( xDocModel, UNO_QUERY_THROW );
 
                 // load the chart data from the XML fragment
-                chart::ChartSpaceModel aModel;
+                bool bMSO2007Doc = rFilter.isMSO2007Document();
+                chart::ChartSpaceModel aModel(bMSO2007Doc);
                 chart::ChartSpaceFragment *pChartSpaceFragment = new chart::ChartSpaceFragment(
                         rFilter, mxChartShapeInfo->maFragmentPath, aModel );
                 const OUString aThemeOverrideFragmentPath( pChartSpaceFragment->

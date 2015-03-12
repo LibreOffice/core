@@ -57,7 +57,7 @@ struct ChartSpaceModel
     bool                mbShowLabelsOverMax;/// True = show labels over chart maximum.
     bool                mbPivotChart;       /// True = pivot chart.
 
-    explicit            ChartSpaceModel();
+    explicit            ChartSpaceModel(bool bMSO2007Doc);
                         ~ChartSpaceModel();
 };
 
