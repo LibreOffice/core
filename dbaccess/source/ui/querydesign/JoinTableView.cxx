@@ -495,8 +495,8 @@ void OJoinTableView::EnsureVisible(const Point& _rPoint,const Size& _rSize)
         if (nScrollX)
             bVisbile = ScrollPane(nScrollX, true, true);
 
-        if (nScrollY)
-            bVisbile = bVisbile && ScrollPane(nScrollY, false, true);
+        if (nScrollY && bVisbile)
+            ScrollPane(nScrollY, false, true);
     }
 }
 
