@@ -190,7 +190,7 @@ OUString UpdateCheckConfig::getDesktopDirectory()
 #ifdef WNT
     WCHAR szPath[MAX_PATH];
 
-    if( ! FAILED( SHGetSpecialFolderPathW( NULL, szPath, CSIDL_DESKTOPDIRECTORY, true ) ) )
+    if (TRUE == SHGetSpecialFolderPathW(nullptr, szPath, CSIDL_DESKTOPDIRECTORY, true))
     {
         aRet = OUString( reinterpret_cast< sal_Unicode * >(szPath) );
         osl::FileBase::getFileURLFromSystemPath( aRet, aRet );
@@ -219,7 +219,7 @@ OUString UpdateCheckConfig::getAllUsersDirectory()
 #ifdef WNT
     WCHAR szPath[MAX_PATH];
 
-    if( ! FAILED( SHGetSpecialFolderPathW( NULL, szPath, CSIDL_COMMON_DOCUMENTS, true ) ) )
+    if (TRUE == SHGetSpecialFolderPathW(nullptr, szPath, CSIDL_COMMON_DOCUMENTS, true))
     {
         aRet = OUString( reinterpret_cast< sal_Unicode * >(szPath) );
         osl::FileBase::getFileURLFromSystemPath( aRet, aRet );
