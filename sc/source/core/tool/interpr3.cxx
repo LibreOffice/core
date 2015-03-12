@@ -3357,7 +3357,7 @@ void ScInterpreter::ScMedian()
     if ( !MustHaveParamCountMin( nParamCount, 1 )  )
         return;
     vector<double> aArray;
-    GetNumberSequenceArray( nParamCount, aArray);
+    GetNumberSequenceArray( nParamCount, aArray, false );
     PushDouble( GetMedian( aArray));
 }
 
@@ -3434,7 +3434,7 @@ void ScInterpreter::ScPercentile( bool bInclusive )
         return;
     }
     vector<double> aArray;
-    GetNumberSequenceArray( 1, aArray);
+    GetNumberSequenceArray( 1, aArray, false );
     if ( bInclusive )
         PushDouble( GetPercentile( aArray, alpha ));
     else
@@ -3452,7 +3452,7 @@ void ScInterpreter::ScQuartile( bool bInclusive )
         return;
     }
     vector<double> aArray;
-    GetNumberSequenceArray( 1, aArray);
+    GetNumberSequenceArray( 1, aArray, false );
     if ( bInclusive )
         PushDouble( fFlag == 2.0 ? GetMedian( aArray ) : GetPercentile( aArray, 0.25 * fFlag ) );
     else
@@ -3465,7 +3465,7 @@ void ScInterpreter::ScModalValue()
     if ( !MustHaveParamCountMin( nParamCount, 1 ) )
         return;
     vector<double> aSortArray;
-    GetSortArray(nParamCount, aSortArray);
+    GetSortArray( nParamCount, aSortArray, NULL, false );
     SCSIZE nSize = aSortArray.size();
     if (aSortArray.empty() || nSize == 0 || nGlobalError)
         PushNoValue();
@@ -3520,7 +3520,7 @@ void ScInterpreter::CalculateSmallLarge(bool bSmall)
      * actually are defined to return an array of values if an array of
      * positions was passed, in which case, depending on the number of values,
      * we may or will need a real sorted array again, see #i32345. */
-    GetNumberSequenceArray(1, aSortArray);
+    GetNumberSequenceArray(1, aSortArray, false );
     SCSIZE nSize = aSortArray.size();
     if (aSortArray.empty() || nSize == 0 || nGlobalError || nSize < k)
         PushNoValue();
@@ -3551,7 +3551,7 @@ void ScInterpreter::ScPercentrank( bool bInclusive )
     double fSignificance = ( nParamCount == 3 ? ::rtl::math::approxFloor( GetDouble() ) : 3.0 );
     double fNum = GetDouble();
     vector<double> aSortArray;
-    GetSortArray( 1, aSortArray );
+    GetSortArray( 1, aSortArray, NULL, false );
     SCSIZE nSize = aSortArray.size();
     if ( aSortArray.empty() || nSize == 0 || nGlobalError )
         PushNoValue();
@@ -3644,7 +3644,7 @@ void ScInterpreter::ScTrimMean()
         return;
     }
     vector<double> aSortArray;
-    GetSortArray(1, aSortArray);
+    GetSortArray( 1, aSortArray, NULL, false );
     SCSIZE nSize = aSortArray.size();
     if (aSortArray.empty() || nSize == 0 || nGlobalError)
         PushNoValue();
@@ -3662,7 +3662,7 @@ void ScInterpreter::ScTrimMean()
     }
 }
 
-void ScInterpreter::GetNumberSequenceArray( sal_uInt8 nParamCount, vector<double>& rArray )
+void ScInterpreter::GetNumberSequenceArray( sal_uInt8 nParamCount, vector<double>& rArray, bool bAllowText )
 {
     ScAddress aAdr;
     ScRange aRange;
@@ -3727,8 +3727,24 @@ void ScInterpreter::GetNumberSequenceArray( sal_uInt8 nParamCount, vector<double
                 else
                 {
                     for (SCSIZE i = 0; i < nCount; ++i)
-                        if (!pMat->IsString(i))
+                    {
+                        if ( pMat->IsValue( i ) )
                             rArray.push_back( pMat->GetDouble(i));
+                        else
+                        {
+                            if ( bAllowText )
+                            {
+                                // tdf 88547 try to convert string to (date)value
+                                OUString aStr = pMat->GetString( i ).getString();
+                                if ( aStr.getLength() > 0 )
+                                {
+                                    double fVal = ConvertStringToValue( aStr );
+                                    if ( !nGlobalError )
+                                        rArray.push_back( fVal );
+                                }
+                            }
+                        }
+                    }
                 }
             }
             break;
@@ -3746,10 +3762,9 @@ void ScInterpreter::GetNumberSequenceArray( sal_uInt8 nParamCount, vector<double
         PopError();
 }
 
-void ScInterpreter::GetSortArray( sal_uInt8 nParamCount, vector<double>& rSortArray, vector<long>* pIndexOrder )
+void ScInterpreter::GetSortArray( sal_uInt8 nParamCount, vector<double>& rSortArray, vector<long>* pIndexOrder, bool bAllowText )
 {
-    GetNumberSequenceArray( nParamCount, rSortArray);
-
+    GetNumberSequenceArray( nParamCount, rSortArray, bAllowText );
     if (rSortArray.size() > MAX_ANZ_DOUBLE_FOR_SORT)
         SetError( errStackOverflow);
     else if (rSortArray.empty())
@@ -3849,7 +3864,7 @@ void ScInterpreter::ScRank( bool bAverage )
         bAscending = false;
 
     vector<double> aSortArray;
-    GetSortArray( 1, aSortArray );
+    GetSortArray( 1, aSortArray, NULL, false );
     double fVal = GetDouble();
     SCSIZE nSize = aSortArray.size();
     if ( aSortArray.empty() || nSize == 0 || nGlobalError )

@@ -834,7 +834,7 @@ void ScInterpreter::ScModalValue_Multi()
     if ( !MustHaveParamCountMin( nParamCount, 1 ) )
         return;
     vector<double> aSortArray;
-    GetSortArray(nParamCount, aSortArray);
+    GetSortArray( nParamCount, aSortArray, NULL, false );
     SCSIZE nSize = aSortArray.size();
     if ( aSortArray.empty() || nSize == 0 || nGlobalError )
         PushNoValue();
@@ -1801,7 +1801,7 @@ void ScInterpreter::ScFrequency()
     vector<double>  aBinArray;
     vector<long>    aBinIndexOrder;
 
-    GetSortArray(1, aBinArray, &aBinIndexOrder);
+    GetSortArray( 1, aBinArray, &aBinIndexOrder, false );
     SCSIZE nBinSize = aBinArray.size();
     if (nGlobalError)
     {
@@ -1810,7 +1810,7 @@ void ScInterpreter::ScFrequency()
     }
 
     vector<double>  aDataArray;
-    GetSortArray(1, aDataArray);
+    GetSortArray( 1, aDataArray, NULL, false );
     SCSIZE nDataSize = aDataArray.size();
 
     if (aDataArray.empty() || nGlobalError)
