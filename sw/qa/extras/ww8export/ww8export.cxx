@@ -464,6 +464,75 @@ DECLARE_WW8EXPORT_TEST(testCommentedTable, "commented-table.doc")
     CPPUNIT_ASSERT_EQUAL(OUString("fore." SAL_NEWLINE_STRING "A1" SAL_NEWLINE_STRING "B1" SAL_NEWLINE_STRING "Afte"), xField->getAnchor()->getString());
 }
 
+DECLARE_WW8EXPORT_TEST(testCommentExport, "comment-export.odt")
+{
+    struct TextPortionInfo {
+        OUString sKind;
+        OUString sText;
+        int nAnnotationID;
+    };
+
+    const TextPortionInfo aTextPortions[] = {
+        {"Annotation", "Comment on [A...A]", 0},
+        {"Text", "[A xx ", 0},
+        {"Annotation", "Comment on [B...B]", 1},
+        {"Text", "[B x ", 0},
+        {"Annotation", "Comment on [C..C]", 2},
+        {"Text", "[C x B]", 0},
+        {"AnnotationEnd", "", 1},
+        {"Text", " x C]", 0},
+        {"AnnotationEnd", "", 2},
+        {"Text", " xx A]", 0},
+        {"AnnotationEnd", "", 0},
+        {"Text", " Comment on a point", 0},
+        {"Annotation", "Comment on point", 3},
+        {"Text", "x ", 0},
+        {"Annotation", "Comment on AA...BB", 4},
+        {"Annotation", "Comment on AAAAAA", 5},
+        {"Text", "AAAAAA", 0},
+        {"AnnotationEnd", "", 5},
+        {"Text", " BBBBBB", 0},
+        {"AnnotationEnd", "", 4}
+    };
+
+    OUString sNames[6];
+
+    const int nNumberOfTextPortions = sizeof(aTextPortions) / (sizeof(TextPortionInfo));
+
+    uno::Reference<text::XTextRange> xPara = getParagraph(1);
+
+    for (int i = 0; i < nNumberOfTextPortions; ++i)
+    {
+        OUString sKind = aTextPortions[i].sKind;
+        uno::Reference<text::XTextRange> xRun(getRun(xPara, i + 1), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xPropertySet(xRun, uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(sKind, getProperty<OUString>(xPropertySet, "TextPortionType"));
+
+        if (sKind == OUString("Text"))
+        {
+            // Check if textportion has the correct text
+            CPPUNIT_ASSERT_EQUAL(aTextPortions[i].sText, xRun->getString());
+        }
+        else if (sKind == OUString("Annotation"))
+        {
+            // Check if the comment text is correct and save the name of the comment
+            uno::Reference<beans::XPropertySet> xComment(getProperty< uno::Reference<beans::XPropertySet> >(xRun, "TextField"), uno::UNO_QUERY);
+            CPPUNIT_ASSERT_EQUAL(aTextPortions[i].sText, getProperty<OUString>(xComment, "Content"));
+            sNames[aTextPortions[i].nAnnotationID] = getProperty<OUString>(xComment, "Name");
+        }
+        else // if (sKind == OUString("AnnotationEnd"))
+        {
+            // Check if the correct Annotation ends here (by Name)
+            uno::Reference<container::XNamed> xBookmark(getProperty< uno::Reference<beans::XPropertySet> >(xRun, "Bookmark"), uno::UNO_QUERY);
+            CPPUNIT_ASSERT_EQUAL(sNames[aTextPortions[i].nAnnotationID], xBookmark->getName());
+        }
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+
+
+
+
