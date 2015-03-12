@@ -70,7 +70,7 @@ struct StorInternalData_Impl
 {
     SotMutexHolderRef m_rSharedMutexRef;
     ::cppu::OMultiTypeInterfaceContainerHelper m_aListenersContainer; // list of listeners
-    ::cppu::OTypeCollection* m_pTypeCollection;
+    ::std::unique_ptr< ::cppu::OTypeCollection> m_pTypeCollection;
     bool m_bIsRoot;
     sal_Int32 m_nStorageType; // the mode in which the storage is used
     bool m_bReadOnlyWrap;
@@ -85,7 +85,7 @@ struct StorInternalData_Impl
     StorInternalData_Impl( const SotMutexHolderRef& rMutexRef, bool bRoot, sal_Int32 nStorageType, bool bReadOnlyWrap )
     : m_rSharedMutexRef( rMutexRef )
     , m_aListenersContainer( rMutexRef->GetMutex() )
-    , m_pTypeCollection( NULL )
+    , m_pTypeCollection()
     , m_bIsRoot( bRoot )
     , m_nStorageType( nStorageType )
     , m_bReadOnlyWrap( bReadOnlyWrap )
@@ -160,8 +160,6 @@ uno::Reference< io::XInputStream > GetSeekableTempCopy( uno::Reference< io::XInp
 
 StorInternalData_Impl::~StorInternalData_Impl()
 {
-    if ( m_pTypeCollection )
-        delete m_pTypeCollection;
 }
 
 SotElement_Impl::SotElement_Impl( const OUString& rName, bool bStor, bool bNew )
@@ -1942,12 +1940,6 @@ OStorage::~OStorage()
             m_pData->m_pSubElDispListener->release();
             m_pData->m_pSubElDispListener = NULL;
         }
-
-        if ( m_pData->m_pTypeCollection )
-        {
-            delete m_pData->m_pTypeCollection;
-            m_pData->m_pTypeCollection = NULL;
-        }
     }
 }
 
@@ -2260,17 +2252,17 @@ void SAL_CALL OStorage::release() throw()
 uno::Sequence< uno::Type > SAL_CALL OStorage::getTypes()
         throw( uno::RuntimeException, std::exception )
 {
-    if ( m_pData->m_pTypeCollection == NULL )
+    if (! m_pData->m_pTypeCollection)
     {
         ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
-        if ( m_pData->m_pTypeCollection == NULL )
+        if (! m_pData->m_pTypeCollection)
         {
             if ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE )
             {
                 if ( m_pData->m_bIsRoot )
                 {
-                    m_pData->m_pTypeCollection = new ::cppu::OTypeCollection
+                    m_pData->m_pTypeCollection.reset(new ::cppu::OTypeCollection
                                     (   cppu::UnoType<lang::XTypeProvider>::get()
                                     ,   cppu::UnoType<embed::XStorage>::get()
                                     ,   cppu::UnoType<embed::XStorage2>::get()
@@ -2281,11 +2273,11 @@ uno::Sequence< uno::Type > SAL_CALL OStorage::getTypes()
                                     ,   cppu::UnoType<embed::XEncryptionProtectedStorage>::get()
                                     ,   cppu::UnoType<embed::XEncryptionProtectedSource2>::get()
                                     ,   cppu::UnoType<embed::XEncryptionProtectedSource>::get()
-                                    ,   cppu::UnoType<beans::XPropertySet>::get());
+                                    ,   cppu::UnoType<beans::XPropertySet>::get()));
                 }
                 else
                 {
-                    m_pData->m_pTypeCollection = new ::cppu::OTypeCollection
+                    m_pData->m_pTypeCollection.reset(new ::cppu::OTypeCollection
                                     (   cppu::UnoType<lang::XTypeProvider>::get()
                                     ,   cppu::UnoType<embed::XStorage>::get()
                                     ,   cppu::UnoType<embed::XStorage2>::get()
@@ -2293,29 +2285,29 @@ uno::Sequence< uno::Type > SAL_CALL OStorage::getTypes()
                                     ,   cppu::UnoType<embed::XTransactedObject>::get()
                                     ,   cppu::UnoType<embed::XTransactionBroadcaster>::get()
                                     ,   cppu::UnoType<util::XModifiable>::get()
-                                    ,   cppu::UnoType<beans::XPropertySet>::get());
+                                    ,   cppu::UnoType<beans::XPropertySet>::get()));
                 }
             }
             else if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML )
             {
-                m_pData->m_pTypeCollection = new ::cppu::OTypeCollection
+                m_pData->m_pTypeCollection.reset(new ::cppu::OTypeCollection
                                 (   cppu::UnoType<lang::XTypeProvider>::get()
                                 ,   cppu::UnoType<embed::XStorage>::get()
                                 ,   cppu::UnoType<embed::XTransactedObject>::get()
                                 ,   cppu::UnoType<embed::XTransactionBroadcaster>::get()
                                 ,   cppu::UnoType<util::XModifiable>::get()
                                 ,   cppu::UnoType<embed::XRelationshipAccess>::get()
-                                ,   cppu::UnoType<beans::XPropertySet>::get());
+                                ,   cppu::UnoType<beans::XPropertySet>::get()));
             }
             else
             {
-                m_pData->m_pTypeCollection = new ::cppu::OTypeCollection
+                m_pData->m_pTypeCollection.reset(new ::cppu::OTypeCollection
                                 (   cppu::UnoType<lang::XTypeProvider>::get()
                                 ,   cppu::UnoType<embed::XStorage>::get()
                                 ,   cppu::UnoType<embed::XTransactedObject>::get()
                                 ,   cppu::UnoType<embed::XTransactionBroadcaster>::get()
                                 ,   cppu::UnoType<util::XModifiable>::get()
-                                ,   cppu::UnoType<beans::XPropertySet>::get());
+                                ,   cppu::UnoType<beans::XPropertySet>::get()));
             }
         }
     }
