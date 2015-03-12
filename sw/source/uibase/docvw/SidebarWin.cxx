@@ -995,7 +995,7 @@ void SwSidebarWin::ActivatePostIt()
     mpOutliner->GetUndoManager().Clear();
 
     CheckMetaText();
-    SetViewState(VS_EDIT);
+    SetViewState(ViewState::EDIT);
     GetOutlinerView()->ShowCursor();
 
     mpOutlinerView->GetEditView().SetInsertMode(mrView.GetWrtShellPtr()->IsInsMode());
@@ -1017,7 +1017,7 @@ void SwSidebarWin::DeactivatePostIt()
 
     mpOutliner->CompleteOnlineSpelling();
 
-    SetViewState(VS_NORMAL);
+    SetViewState(ViewState::NORMAL);
     // write the visible text back into the SwField
     UpdateData();
 
@@ -1125,7 +1125,7 @@ IMPL_LINK( SwSidebarWin, WindowEventListener, VclSimpleEvent*, pEvent )
                 mbMouseOver = true;
                 if ( !HasFocus() )
                 {
-                    SetViewState(VS_VIEW);
+                    SetViewState(ViewState::VIEW);
                     Invalidate();
                 }
             }
@@ -1136,7 +1136,7 @@ IMPL_LINK( SwSidebarWin, WindowEventListener, VclSimpleEvent*, pEvent )
                     mbMouseOver = false;
                     if ( !HasFocus() )
                     {
-                        SetViewState(VS_NORMAL);
+                        SetViewState(ViewState::NORMAL);
                         Invalidate();
                     }
                 }
@@ -1250,7 +1250,7 @@ void SwSidebarWin::SetViewState(ViewState bViewState)
 {
     switch (bViewState)
     {
-        case VS_EDIT:
+        case ViewState::EDIT:
         {
             if (mpAnchor)
             {
@@ -1271,7 +1271,7 @@ void SwSidebarWin::SetViewState(ViewState bViewState)
                 mpShadow->SetShadowState(SS_EDIT);
             break;
         }
-        case VS_VIEW:
+        case ViewState::VIEW:
         {
             if (mpAnchor)
             {
@@ -1285,7 +1285,7 @@ void SwSidebarWin::SetViewState(ViewState bViewState)
                 mpShadow->SetShadowState(SS_VIEW);
             break;
         }
-        case VS_NORMAL:
+        case ViewState::NORMAL:
         {
             if (mpAnchor)
             {

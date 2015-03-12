@@ -22,11 +22,11 @@
 
 namespace sw { namespace sidebarwindows {
 
-enum ViewState
+enum class ViewState
 {
-    VS_NORMAL,
-    VS_VIEW,
-    VS_EDIT
+    NORMAL,
+    VIEW,
+    EDIT
 };
 
 enum SidebarPosition
