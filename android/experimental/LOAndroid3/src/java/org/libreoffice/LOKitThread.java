@@ -178,7 +178,7 @@ public class LOKitThread extends Thread {
     private void processEvent(LOEvent event) {
         switch (event.mType) {
             case LOEvent.LOAD:
-                loadDocument(event.mFilename);
+                loadDocument(event.mString);
                 break;
             case LOEvent.CLOSE:
                 closeDocument();
@@ -215,6 +215,9 @@ public class LOKitThread extends Thread {
                 break;
             case LOEvent.NAVIGATION_CLICK:
                 mInvalidationHandler.changeStateTo(InvalidationHandler.OverlayState.NONE);
+                break;
+            case LOEvent.UNO_COMMAND:
+                mTileProvider.postUnoCommand(event.mString);
                 break;
         }
     }

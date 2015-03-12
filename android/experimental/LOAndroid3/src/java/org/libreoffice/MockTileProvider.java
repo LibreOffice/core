@@ -91,32 +91,30 @@ public class MockTileProvider implements TileProvider {
 
     @Override
     public void sendKeyEvent(KeyEvent keyEvent) {
-
     }
 
     @Override
     public void mouseButtonDown(PointF documentCoordinate, int numberOfClicks) {
-
     }
 
     @Override
     public void mouseButtonUp(PointF documentCoordinate, int numberOfClicks) {
+    }
 
+    @Override
+    public void postUnoCommand(String command) {
     }
 
     @Override
     public void setTextSelectionStart(PointF documentCoordinate) {
-
     }
 
     @Override
     public void setTextSelectionEnd(PointF documentCoordinate) {
-
     }
 
     @Override
     public void setTextSelectionReset(PointF documentCoordinate) {
-
     }
 
     @Override

@@ -133,6 +133,12 @@ public class Document {
     public native void postMouseEvent(int type, int x, int y, int count);
 
     /**
+     * Post a .uno: command to LOK
+     * @param command - the command, like ".uno:Bold"
+     */
+    public native void postUnoCommand(String command);
+
+    /**
      * Change text selection.
      * @param type - text selection type
      * @param x - x coordinate

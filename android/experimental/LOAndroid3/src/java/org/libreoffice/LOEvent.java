@@ -24,14 +24,15 @@ public class LOEvent implements Comparable<LOEvent> {
     public static final int SWIPE_RIGHT = 11;
     public static final int SWIPE_LEFT = 12;
     public static final int NAVIGATION_CLICK = 13;
+    public static final int UNO_COMMAND = 14;
 
     public final int mType;
     public int mPriority = 0;
-    public String mTypeString;
+    private String mTypeString;
 
     public ThumbnailCreator.ThumbnailCreationTask mTask;
     public int mPartIndex;
-    public String mFilename;
+    public String mString;
     public ComposedTileLayer mComposedTileLayer;
     public String mTouchType;
     public PointF mDocumentCoordinate;
@@ -51,8 +52,8 @@ public class LOEvent implements Comparable<LOEvent> {
 
     public LOEvent(int type, String filename) {
         mType = type;
-        mTypeString = "Filename";
-        mFilename = filename;
+        mTypeString = "String";
+        mString = filename;
     }
 
     public LOEvent(int type, int partIndex) {

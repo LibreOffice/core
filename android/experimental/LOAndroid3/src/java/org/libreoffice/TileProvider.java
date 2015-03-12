@@ -99,6 +99,13 @@ public interface TileProvider {
      */
     void mouseButtonUp(PointF documentCoordinate, int numberOfClicks);
 
+    /**
+     * Post a UNO command to LOK.
+     *
+     * @param command - the .uno: command, like ".uno:Bold"
+     */
+    void postUnoCommand(String command);
+
     void setTextSelectionStart(PointF documentCoordinate);
 
     void setTextSelectionEnd(PointF documentCoordinate);

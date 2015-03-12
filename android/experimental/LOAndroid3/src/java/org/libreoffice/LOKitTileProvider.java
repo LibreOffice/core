@@ -359,6 +359,11 @@ public class LOKitTileProvider implements TileProvider {
         mouseButton(Document.MOUSE_BUTTON_UP, documentCoordinate, numberOfClicks);
     }
 
+    @Override
+    public void postUnoCommand(String command) {
+        mDocument.postUnoCommand(command);
+    }
+
     private void setTextSelection(int type, PointF documentCoordinate) {
         int x = (int) pixelToTwip(documentCoordinate.x, mDPI);
         int y = (int) pixelToTwip(documentCoordinate.y, mDPI);

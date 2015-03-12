@@ -77,7 +77,7 @@ public class LibreOfficeMainActivity extends ActionBarActivity {
         int id = item.getItemId();
         switch (id) {
             case R.id.action_bold:
-                Toast.makeText(this,"set text to bold", Toast.LENGTH_LONG).show();
+                LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:Bold"));
                 return true;
             case R.id.action_about:
                 mAbout.showAbout();

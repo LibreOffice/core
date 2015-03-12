@@ -284,6 +284,18 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_postMou
     pDocument->pClass->postMouseEvent(pDocument, type, x, y, count);
 }
 
+extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_postUnoCommand
+    (JNIEnv* pEnv, jobject aObject, jstring command)
+{
+    LibreOfficeKitDocument* pDocument = getHandle<LibreOfficeKitDocument>(pEnv, aObject);
+
+    const char* pCommand = pEnv->GetStringUTFChars(command, NULL);
+
+    pDocument->pClass->postUnoCommand(pDocument, pCommand);
+
+    pEnv->ReleaseStringUTFChars(command, pCommand);
+}
+
 extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_setTextSelection
     (JNIEnv* pEnv, jobject aObject, jint type, jint x, jint y)
 {
