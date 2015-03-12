@@ -1236,7 +1236,6 @@ SfxItemSet* OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
             if ( pViewFrame )
             {
                 const SfxPoolItem* pItem = NULL;
-                SfxPoolItem* pClone = NULL;
                 SfxDispatcher* pDispatch = pViewFrame->GetDispatcher();
                 if(SfxItemState::DEFAULT <= pDispatch->QueryState(SID_ATTR_LANGUAGE, pItem))
                     pRet->Put(SfxUInt16Item(SID_ATTR_LANGUAGE, static_cast<const SvxLanguageItem*>(pItem)->GetLanguage()));
@@ -1248,7 +1247,7 @@ SfxItemSet* OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
                 pRet->Put(aHyphen);
                 if(SfxItemState::DEFAULT <= pDispatch->QueryState(SID_AUTOSPELL_CHECK, pItem))
                 {
-                    pClone = pItem->Clone();
+                    SfxPoolItem* pClone = pItem->Clone();
                     pRet->Put(*pClone);
                     delete pClone;
                 }

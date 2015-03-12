@@ -737,8 +737,6 @@ void SbiParser::DefEnum( bool bPrivate )
             default:
             {
                 // TODO: Check existing!
-                bool bDefined = false;
-
                 pDim = NULL;
                 pElem = VarDecl( &pDim, false, true );
                 if( !pElem )
@@ -760,7 +758,7 @@ void SbiParser::DefEnum( bool bPrivate )
                     Next();
 
                     SbiConstExpression aExpr( this );
-                    if( !bDefined && aExpr.IsValid() )
+                    if( aExpr.IsValid() )
                     {
                         SbxVariableRef xConvertVar = new SbxVariable();
                         if( aExpr.GetType() == SbxSTRING )

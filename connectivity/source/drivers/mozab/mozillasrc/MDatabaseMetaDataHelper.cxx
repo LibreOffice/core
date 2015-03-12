@@ -173,7 +173,6 @@ static nsresult insertPABDescription()
         }
     }
     PR_FREEIF (value);
-    value=nsnull;
     if (bSetted == sal_True)
     {
         const char* pHisDescription = static_cast< const char* >( getHisDescription( ) );
@@ -218,7 +217,7 @@ static nsresult getSubsFromParent(const OString& aParent, nsIEnumerator **aSubs)
     nsCOMPtr<nsIRDFDataSource> rdfDirectory ;
 
     OString dir("rdf:addressdirectory");
-    retCode = rdfService->GetDataSource(dir.getStr(),getter_AddRefs(rdfDirectory)) ;
+    rdfService->GetDataSource(dir.getStr(),getter_AddRefs(rdfDirectory)) ;
 
 
 
@@ -665,7 +664,6 @@ MDatabaseMetaDataHelper::testLDAPConnection( OConnection* _pCon )
 {
     const sal_Unicode QUERY_CHAR = '?';
     const sal_Char*   MOZ_SCHEMA = "moz-abldapdirectory://";
-    const sal_Char*   LDAP_SCHEMA = "ldap://";
 
     OString   sAbURI;
     OUString   sAbBindDN;
@@ -681,6 +679,7 @@ MDatabaseMetaDataHelper::testLDAPConnection( OConnection* _pCon )
 
     sal_Int32 pos = sAbURI.indexOf( MOZ_SCHEMA );
     if ( pos != -1 ) {
+        const sal_Char*   LDAP_SCHEMA = "ldap://";
         sAbURI = sAbURI.replaceAt (pos, rtl_str_getLength( MOZ_SCHEMA ), OString(LDAP_SCHEMA) );
     }
 

@@ -1276,7 +1276,6 @@ IMPL_LINK( SvxNumberFormatTabPage, SelFormatHdl_Impl, void *, pLb )
 
 IMPL_LINK( SvxNumberFormatTabPage, ClickHdl_Impl, PushButton*, pIB)
 {
-    bool        bAdded = false;
     bool        bDeleted = false;
     sal_uLong       nReturn = 0;
     const sal_uLong nReturnChanged  = 0x1;  // THE boolean return value
@@ -1294,7 +1293,7 @@ IMPL_LINK( SvxNumberFormatTabPage, ClickHdl_Impl, PushButton*, pIB)
         sal_Int32            nErrPos=0;
 
         pNumFmtShell->SetCurCurrencyEntry(NULL);
-        bAdded = pNumFmtShell->AddFormat( aFormat, nErrPos,
+        bool bAdded = pNumFmtShell->AddFormat( aFormat, nErrPos,
                                           nCatLbSelPos, nFmtLbSelPos,
                                           aEntryList);
         if ( bAdded )
