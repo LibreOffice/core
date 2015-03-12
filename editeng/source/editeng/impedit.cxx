@@ -76,6 +76,8 @@ ImpEditView::ImpEditView( EditView* pView, EditEngine* pEng, vcl::Window* pWindo
     pPointer            = NULL;
     pBackgroundColor    = NULL;
     mbTiledRendering    = false;
+    mpLibreOfficeKitCallback = 0;
+    mpLibreOfficeKitData = 0;
     nScrollDiffX        = 0;
     nExtraCursorFlags   = 0;
     nCursorBidiLevel    = CURSOR_BIDILEVEL_DONTKNOW;
@@ -121,6 +123,18 @@ void ImpEditView::setTiledRendering(bool bTiledRendering)
 bool ImpEditView::isTiledRendering() const
 {
     return mbTiledRendering;
+}
+
+void ImpEditView::registerLibreOfficeKitCallback(LibreOfficeKitCallback pCallback, void* pData)
+{
+    mpLibreOfficeKitCallback = pCallback;
+    mpLibreOfficeKitData = pData;
+}
+
+void ImpEditView::libreOfficeKitCallback(int nType, const char* pPayload) const
+{
+    if (mpLibreOfficeKitCallback)
+        mpLibreOfficeKitCallback(nType, pPayload, mpLibreOfficeKitData);
 }
 
 void ImpEditView::SetEditSelection( const EditSelection& rEditSelection )

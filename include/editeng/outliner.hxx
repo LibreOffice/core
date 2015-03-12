@@ -36,6 +36,8 @@
 #include <svtools/grfmgr.hxx>
 
 #include <tools/rtti.hxx>
+#define LOK_USE_UNSTABLE_API
+#include <LibreOfficeKit/LibreOfficeKit.h>
 #include <vector>
 
 class OutlinerEditEng;
@@ -268,6 +270,8 @@ public:
 
     /// Set if we are doing tiled rendering.
     void        setTiledRendering(bool bTiledRendering);
+    /// @see vcl::ITiledRenderable::registerCallback().
+    void registerLibreOfficeKitCallback(LibreOfficeKitCallback pCallback, void* pLibreOfficeKitData);
 
     SfxItemSet  GetAttribs();
 

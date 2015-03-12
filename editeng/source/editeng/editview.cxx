@@ -582,6 +582,11 @@ bool EditView::isTiledRendering()
     return pImpEditView->isTiledRendering();
 }
 
+void EditView::registerLibreOfficeKitCallback(LibreOfficeKitCallback pCallback, void* pLibreOfficeKitData)
+{
+    pImpEditView->registerLibreOfficeKitCallback(pCallback, pLibreOfficeKitData);
+}
+
 void EditView::SetControlWord( sal_uInt32 nWord )
 {
     pImpEditView->nControl = nWord;

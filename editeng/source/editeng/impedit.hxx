@@ -52,6 +52,8 @@
 
 #include <i18nlangtag/lang.h>
 #include <rtl/ref.hxx>
+#define LOK_USE_UNSTABLE_API
+#include <LibreOfficeKit/LibreOfficeKit.h>
 
 #include <boost/noncopyable.hpp>
 
@@ -217,6 +219,8 @@ private:
     vcl::Cursor*        pCursor;
     Color*              pBackgroundColor;
     bool                mbTiledRendering;
+    LibreOfficeKitCallback mpLibreOfficeKitCallback;
+    void* mpLibreOfficeKitData;
     EditEngine*         pEditEngine;
     vcl::Window*             pOutWin;
     Pointer*            pPointer;
@@ -367,6 +371,10 @@ public:
 
     void            setTiledRendering(bool bTiledRendering);
     bool            isTiledRendering() const;
+    /// @see vcl::ITiledRenderable::registerCallback().
+    void registerLibreOfficeKitCallback(LibreOfficeKitCallback pCallback, void* pLibreOfficeKitData);
+    /// Invokes the registered callback, if there are any.
+    void libreOfficeKitCallback(int nType, const char* pPayload) const;
 
     bool        IsWrongSpelledWord( const EditPaM& rPaM, bool bMarkIfWrong );
     OUString        SpellIgnoreOrAddWord( bool bAdd );

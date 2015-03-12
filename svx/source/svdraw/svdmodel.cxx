@@ -820,6 +820,16 @@ void SdrModel::libreOfficeKitCallback(int nType, const char* pPayload) const
         mpLibreOfficeKitCallback(nType, pPayload, mpLibreOfficeKitData);
 }
 
+LibreOfficeKitCallback SdrModel::getLibreOfficeKitCallback() const
+{
+    return mpLibreOfficeKitCallback;
+}
+
+void* SdrModel::getLibreOfficeKitData() const
+{
+    return mpLibreOfficeKitData;
+}
+
 void SdrModel::ImpReformatAllTextObjects()
 {
     if( isLocked() )

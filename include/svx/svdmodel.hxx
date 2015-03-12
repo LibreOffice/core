@@ -343,6 +343,10 @@ public:
     bool isTiledRendering() const;
     /// The actual implementation of the vcl::ITiledRenderable::registerCallback() API.
     void registerLibreOfficeKitCallback(LibreOfficeKitCallback pCallback, void* pLibreOfficeKitData);
+    /// Gets the LOK callback registered by registerLibreOfficeKitCallback().
+    LibreOfficeKitCallback getLibreOfficeKitCallback() const;
+    /// Gets the LOK data registered by registerLibreOfficeKitCallback().
+    void* getLibreOfficeKitData() const;
     /// Invokes the registered callback, if there are any.
     void libreOfficeKitCallback(int nType, const char* pPayload) const;
     // If a new MapMode is set on the RefDevice (or similar)

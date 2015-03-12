@@ -27,6 +27,8 @@
 #include <tools/color.hxx>
 #include <tools/gen.hxx>
 #include <vcl/cursor.hxx>
+#define LOK_USE_UNSTABLE_API
+#include <LibreOfficeKit/LibreOfficeKit.h>
 
 class EditEngine;
 class ImpEditEngine;
@@ -171,6 +173,8 @@ public:
 
     void            setTiledRendering(bool bTiledRendering);
     bool            isTiledRendering();
+    /// @see vcl::ITiledRenderable::registerCallback().
+    void registerLibreOfficeKitCallback(LibreOfficeKitCallback pCallback, void* pLibreOfficeKitData);
 
     void            SetControlWord( sal_uInt32 nWord );
     sal_uInt32      GetControlWord() const;
