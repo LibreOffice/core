@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a29b11f_284b535b",
+        "filename": "connectivity/source/drivers/mozab/mozillasrc/MDatabaseMetaDataHelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-03-12T22:28:38Z",
+      "side": 1,
+      "message": "probably there should be a  NS_ENSURE_SUCCESS(retCode) here?\n\n... but i get the impression the entire statement is dead code? nothing using rdfDirectory below, i\u0027ll remove it.",
+      "revId": "a46e819788ecdaead0b235f6c8670f1e947ffe72",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
