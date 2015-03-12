@@ -128,7 +128,7 @@ public:
     virtual ~XMLHyperlinkHint_Impl()
     {
         if (NULL != pEvents)
-            pEvents->ReleaseRef();
+            pEvents->release();
     }
 
     void SetHRef( const OUString& s ) { sHRef = s; }
@@ -149,7 +149,7 @@ public:
     {
         pEvents = pCtxt;
         if (pEvents != NULL)
-            pEvents->AddFirstRef();
+            pEvents->acquire();
     }
 };
 
@@ -206,7 +206,7 @@ public:
     css::uno::Reference < css::text::XTextContent > GetTextContent() const
     {
         css::uno::Reference < css::text::XTextContent > xTxt;
-        SvXMLImportContext *pContext = &xContext;
+        SvXMLImportContext *pContext = xContext.get();
         if( pContext->ISA( XMLTextFrameContext ) )
             xTxt = PTR_CAST( XMLTextFrameContext, pContext )->GetTextContent();
         else if( pContext->ISA( XMLTextFrameHyperlinkContext ) )
@@ -220,7 +220,7 @@ public:
     css::uno::Reference < css::drawing::XShape > GetShape() const
     {
         css::uno::Reference < css::drawing::XShape > xShape;
-        SvXMLImportContext *pContext = &xContext;
+        SvXMLImportContext *pContext = xContext.get();
         if( pContext->ISA( XMLTextFrameContext ) )
             xShape = PTR_CAST( XMLTextFrameContext, pContext )->GetShape();
         else if( pContext->ISA( XMLTextFrameHyperlinkContext ) )
@@ -232,7 +232,7 @@ public:
     bool IsBoundAtChar() const
     {
         bool bRet = false;
-        SvXMLImportContext *pContext = &xContext;
+        SvXMLImportContext *pContext = xContext.get();
         if( pContext->ISA( XMLTextFrameContext ) )
             bRet = css::text::TextContentAnchorType_AT_CHARACTER ==
                 PTR_CAST( XMLTextFrameContext, pContext )
@@ -266,7 +266,7 @@ public:
     // Frame "to character": anchor moves from first to last char after saving (#i33242#)
     css::uno::Reference < css::drawing::XShape > GetShape() const
     {
-        return static_cast<SvXMLShapeContext*>(&xContext)->getShape();
+        return static_cast<SvXMLShapeContext*>(xContext.get())->getShape();
     }
 };
 #endif

@@ -39,7 +39,7 @@ class XMLFontStyleContextFontFace : public SvXMLStyleContext
 
     XMLFontStylesContext *GetStyles()
     {
-        return static_cast<XMLFontStylesContext *>(&xStyles);
+        return static_cast<XMLFontStylesContext *>(xStyles.get());
     }
 
 public:

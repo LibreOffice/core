@@ -1120,7 +1120,7 @@ SvxXMLListStyleContext::~SvxXMLListStyleContext()
         {
             SvxXMLListLevelStyleContext_Impl *pStyle = pLevelStyles->back();
             pLevelStyles->pop_back();
-            pStyle->ReleaseRef();
+            pStyle->release();
         }
     }
 
@@ -1149,7 +1149,7 @@ SvXMLImportContext *SvxXMLListStyleContext::CreateChildContext(
         if( !pLevelStyles )
             pLevelStyles = new SvxXMLListStyle_Impl;
         pLevelStyles->push_back( pLevelStyle );
-        pLevelStyle->AddFirstRef();
+        pLevelStyle->acquire();
 
         pContext = pLevelStyle;
     }
@@ -1179,7 +1179,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
         if( !pLevelStyles )
             pLevelStyles = new SvxXMLListStyle_Impl;
         pLevelStyles->push_back( pLevelStyle );
-        pLevelStyle->AddFirstRef();
+        pLevelStyle->acquire();
 
         pContext = pLevelStyle;
     }

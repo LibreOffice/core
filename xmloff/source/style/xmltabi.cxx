@@ -199,7 +199,7 @@ SvxXMLTabStopImportContext::~SvxXMLTabStopImportContext()
         {
             SvxXMLTabStopContext_Impl *pTabStop = mpTabStops->back();
             mpTabStops->pop_back();
-            pTabStop->ReleaseRef();
+            pTabStop->release();
         }
     }
 
@@ -225,7 +225,7 @@ SvXMLImportContext *SvxXMLTabStopImportContext::CreateChildContext(
             mpTabStops = new SvxXMLTabStopArray_Impl;
 
         mpTabStops->push_back( pTabStopContext );
-        pTabStopContext->AddFirstRef();
+        pTabStopContext->acquire();
 
         pContext = pTabStopContext;
     }

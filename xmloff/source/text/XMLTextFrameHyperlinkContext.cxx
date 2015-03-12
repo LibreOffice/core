@@ -220,9 +220,9 @@ Reference< XFastContextHandler > SAL_CALL
 
 TextContentAnchorType XMLTextFrameHyperlinkContext::GetAnchorType() const
 {
-    if( xFrameContext.Is() )
+    if( xFrameContext.is() )
     {
-        SvXMLImportContext *pContext = &xFrameContext;
+        SvXMLImportContext *pContext = xFrameContext.get();
         return PTR_CAST( XMLTextFrameContext, pContext ) ->GetAnchorType();
     }
     else
@@ -233,9 +233,9 @@ TextContentAnchorType XMLTextFrameHyperlinkContext::GetAnchorType() const
 Reference < XTextContent > XMLTextFrameHyperlinkContext::GetTextContent() const
 {
     Reference <XTextContent > xTxt;
-    if( xFrameContext.Is() )
+    if( xFrameContext.is() )
     {
-        SvXMLImportContext *pContext = &xFrameContext;
+        SvXMLImportContext *pContext = xFrameContext.get();
         xTxt = PTR_CAST( XMLTextFrameContext, pContext )->GetTextContent();
     }
 
@@ -246,9 +246,9 @@ Reference < XTextContent > XMLTextFrameHyperlinkContext::GetTextContent() const
 Reference < drawing::XShape > XMLTextFrameHyperlinkContext::GetShape() const
 {
     Reference < drawing::XShape > xShape;
-    if( xFrameContext.Is() )
+    if( xFrameContext.is() )
     {
-        SvXMLImportContext *pContext = &xFrameContext;
+        SvXMLImportContext *pContext = xFrameContext.get();
         xShape = PTR_CAST( XMLTextFrameContext, pContext )->GetShape();
     }
 

@@ -231,7 +231,7 @@ OFormLayerXMLImport_Impl::~OFormLayerXMLImport_Impl()
     // outlined to allow forward declaration of OAttribute2Property in the header
 
     if (m_pAutoStyles)
-        m_pAutoStyles->ReleaseRef();
+        m_pAutoStyles->release();
 }
 
 void OFormLayerXMLImport_Impl::setAutoStyleContext(SvXMLStylesContext* _pNewContext)
@@ -239,7 +239,7 @@ void OFormLayerXMLImport_Impl::setAutoStyleContext(SvXMLStylesContext* _pNewCont
     OSL_ENSURE(!m_pAutoStyles, "OFormLayerXMLImport_Impl::setAutoStyleContext: not to be called twice!");
     m_pAutoStyles = _pNewContext;
     if (m_pAutoStyles)
-        m_pAutoStyles->AddFirstRef();
+        m_pAutoStyles->acquire();
 }
 
 void OFormLayerXMLImport_Impl::applyControlNumberStyle(const Reference< XPropertySet >& _rxControlModel, const OUString& _rControlNumerStyleName)
@@ -252,7 +252,7 @@ void OFormLayerXMLImport_Impl::applyControlNumberStyle(const Reference< XPropert
     {
         m_pAutoStyles = m_rImporter.GetShapeImport()->GetAutoStylesContext();
         if (m_pAutoStyles)
-            m_pAutoStyles->AddFirstRef();
+            m_pAutoStyles->acquire();
     }
 
     if (m_pAutoStyles)

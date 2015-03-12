@@ -221,7 +221,7 @@ SdXML3DSceneAttributesHelper::~SdXML3DSceneAttributesHelper()
 {
     // release remembered light contexts, they are no longer needed
     for ( size_t i = maList.size(); i > 0; )
-        maList[ --i ]->ReleaseRef();
+        maList[ --i ]->release();
     maList.clear();
 }
 
@@ -231,8 +231,11 @@ SvXMLImportContext * SdXML3DSceneAttributesHelper::create3DLightContext( sal_uIn
     SvXMLImportContext* pContext = new SdXML3DLightContext(mrImport, nPrfx, rLName, xAttrList);
 
     // remember SdXML3DLightContext for later evaluation
-    pContext->AddFirstRef();
-    maList.push_back( static_cast<SdXML3DLightContext*>(pContext) );
+    if(pContext)
+    {
+        pContext->acquire();
+        maList.push_back( static_cast<SdXML3DLightContext*>(pContext) );
+    }
 
     return pContext;
 }

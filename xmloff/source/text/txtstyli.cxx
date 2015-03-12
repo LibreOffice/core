@@ -217,7 +217,7 @@ SvXMLImportContext *XMLTextStyleContext::CreateChildContext(
         // (for delayed processing of events)
         pEventContext = new XMLEventsImportContext( GetImport(), nPrefix,
                                                    rLocalName);
-        pEventContext->AddFirstRef();
+        pEventContext->acquire();
         pContext = pEventContext;
     }
 
@@ -239,7 +239,7 @@ Reference< XFastContextHandler > SAL_CALL
         //create and remember events import context
         //(for delayed processing of events)
         pEventContext = new XMLEventsImportContext( GetImport(), Element );
-        pEventContext->AddFirstRef();
+        pEventContext->acquire();
         pContext = pEventContext;
     }
     else
@@ -308,7 +308,7 @@ void XMLTextStyleContext::CreateAndInsert( bool bOverwrite )
         // set event suppplier and release reference to context
         Reference<document::XEventsSupplier> xEventsSupplier(xStyle,UNO_QUERY);
         pEventContext->SetEvents(xEventsSupplier);
-        pEventContext->ReleaseRef();
+        pEventContext->release();
     }
 
     // XML import: reconstrution of assignment of paragraph style to outline levels (#i69629#)

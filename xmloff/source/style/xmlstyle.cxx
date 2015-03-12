@@ -343,7 +343,7 @@ SvXMLStylesContext_Impl::~SvXMLStylesContext_Impl()
     for ( size_t i = 0, n = aStyles.size(); i < n; ++i )
     {
         SvXMLStyleContext *pStyle = aStyles[ i ];
-        pStyle->ReleaseRef();
+        pStyle->release();
     }
     aStyles.clear();
 }
@@ -351,7 +351,7 @@ SvXMLStylesContext_Impl::~SvXMLStylesContext_Impl()
 inline void SvXMLStylesContext_Impl::AddStyle( SvXMLStyleContext *pStyle )
 {
     aStyles.push_back( pStyle );
-    pStyle->AddFirstRef();
+    pStyle->acquire();
 
     FlushIndex();
 }
@@ -363,7 +363,7 @@ void SvXMLStylesContext_Impl::Clear()
     for ( size_t i = 0, n = aStyles.size(); i < n; ++i )
     {
         SvXMLStyleContext *pStyle = aStyles[ i ];
-        pStyle->ReleaseRef();
+        pStyle->release();
     }
     aStyles.clear();
 }

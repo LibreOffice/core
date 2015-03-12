@@ -376,7 +376,7 @@ SwXMLTextStyleContext_Impl::~SwXMLTextStyleContext_Impl()
         {
             SwXMLConditionContext_Impl *pCond = &*pConditions->back();
             pConditions->pop_back();
-            pCond->ReleaseRef();
+            pCond->release();
         }
         delete pConditions;
     }
@@ -399,7 +399,7 @@ SvXMLImportContext *SwXMLTextStyleContext_Impl::CreateChildContext(
             if( !pConditions )
                pConditions = new SwXMLConditions_Impl;
             pConditions->push_back( pCond );
-            pCond->AddFirstRef();
+            pCond->acquire();
         }
         pContext = pCond;
     }
@@ -427,7 +427,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
             if( !pConditions )
                 pConditions = new SwXMLConditions_Impl;
             pConditions->push_back( pCond );
-            pCond->AddFirstRef();
+            pCond->acquire();
         }
         pContext = pCond;
     }

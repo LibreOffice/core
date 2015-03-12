@@ -1569,7 +1569,7 @@ TYPEINIT1( XMLTextFrameContext, SvXMLImportContext );
 bool XMLTextFrameContext::CreateIfNotThere( ::com::sun::star::uno::Reference <
         ::com::sun::star::beans::XPropertySet >& rPropSet )
 {
-    SvXMLImportContext *pContext = &m_xImplContext;
+    SvXMLImportContext *pContext = m_xImplContext.get();
     XMLTextFrameContext_Impl *pImpl = PTR_CAST( XMLTextFrameContext_Impl, pContext );
     if( pImpl )
     {
@@ -1698,16 +1698,16 @@ void XMLTextFrameContext::EndElement()
     SvXMLImportContextRef const pMultiContext(solveMultipleImages());
 
     SvXMLImportContext const*const pContext =
-        (pMultiContext) ? &pMultiContext : &m_xImplContext;
+        (pMultiContext.is()) ? pMultiContext.get() : m_xImplContext.get();
     XMLTextFrameContext_Impl *pImpl = const_cast<XMLTextFrameContext_Impl*>(PTR_CAST( XMLTextFrameContext_Impl, pContext ));
-    assert(!pMultiContext || pImpl);
+    assert(!pMultiContext.is() || pImpl);
     if( pImpl )
     {
         pImpl->CreateIfNotThere();
 
         // fdo#68839: in case the surviving image was not the first one,
         // it will have a counter added to its name - set the original name
-        if (pMultiContext) // do this only when necessary; esp. not for text
+        if (pMultiContext.is()) // do this only when necessary; esp. not for text
         {                  // frames that may have entries in GetRenameMap()!
             pImpl->SetName();
         }
@@ -1739,16 +1739,16 @@ void SAL_CALL XMLTextFrameContext::endFastElement( sal_Int32 /*Element*/ )
     SvXMLImportContextRef const pMultiContext(solveMultipleImages());
 
     SvXMLImportContext const*const pContext =
-        (pMultiContext) ? &pMultiContext : &m_xImplContext;
+        (pMultiContext.is()) ? pMultiContext.get() : m_xImplContext.get();
     XMLTextFrameContext_Impl *pImpl = const_cast<XMLTextFrameContext_Impl*>(PTR_CAST( XMLTextFrameContext_Impl, pContext ));
-    assert(!pMultiContext || pImpl);
+    assert(!pMultiContext.is() || pImpl);
     if( pImpl )
     {
         pImpl->CreateIfNotThere();
 
         // fdo#68839: in case the surviving image was not the first one,
         // it will have a counter added to its name - set the original name
-        if (pMultiContext) // do this only when necessary; esp. not for text
+        if (pMultiContext.is()) // do this only when necessary; esp. not for text
         {                  // frames that may have entries in GetRenameMap()!
             pImpl->SetName();
         }
@@ -1781,7 +1781,7 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
 {
     SvXMLImportContext *pContext = 0;
 
-    if( !m_xImplContext.Is() )
+    if( !m_xImplContext.is() )
     {
         // no child exists
         if( XML_NAMESPACE_DRAW == p_nPrefix )
@@ -1864,7 +1864,7 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
 
                 if(getSupportsMultipleContents() && XML_TEXT_FRAME_GRAPHIC == nFrameType)
                 {
-                    addContent(*m_xImplContext);
+                    addContent(*m_xImplContext.get());
                 }
             }
         }
@@ -1877,9 +1877,9 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
             m_eDefaultAnchorType, XML_TEXT_FRAME_GRAPHIC, m_xAttrList);
 
         m_xImplContext = pContext;
-        addContent(*m_xImplContext);
+        addContent(*m_xImplContext.get());
     }
-    else if( m_bSupportsReplacement && !m_xReplImplContext &&
+    else if( m_bSupportsReplacement && !m_xReplImplContext.is() &&
              XML_NAMESPACE_DRAW == p_nPrefix &&
              IsXMLToken( rLocalName, XML_IMAGE ) )
     {
@@ -1973,8 +1973,8 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
     else
     {
         // the child is a drawing shape
-        pContext = XMLShapeImportHelper::CreateFrameChildContext(
-                                    &m_xImplContext, p_nPrefix, rLocalName, xAttrList );
+        pContext = GetImport().GetShapeImport()->CreateFrameChildContext(
+                                    m_xImplContext.get(), p_nPrefix, rLocalName, xAttrList );
     }
 
     if( !pContext )
@@ -1990,7 +1990,7 @@ Reference< XFastContextHandler > SAL_CALL
 {
     SvXMLImportContext *pContext = 0;
 
-    if( !m_xImplContext.Is() )
+    if( !m_xImplContext.is() )
     {
         // no child exists
         sal_uInt16 nFrameType = USHRT_MAX;
@@ -2061,7 +2061,7 @@ Reference< XFastContextHandler > SAL_CALL
             if( getSupportsMultipleContents()
                 && XML_TEXT_FRAME_GRAPHIC == nFrameType )
             {
-                addContent(*m_xImplContext);
+                addContent(*m_xImplContext.get());
             }
         }
     }
@@ -2074,9 +2074,9 @@ Reference< XFastContextHandler > SAL_CALL
             m_eDefaultAnchorType, XML_TEXT_FRAME_GRAPHIC, m_xFastAttrList );
 
         m_xImplContext = pContext;
-        addContent(*m_xImplContext);
+        addContent(*m_xImplContext.get());
     }
-    else if( m_bSupportsReplacement && !m_xReplImplContext &&
+    else if( m_bSupportsReplacement && !m_xReplImplContext.is() &&
             Element == (NAMESPACE | XML_NAMESPACE_DRAW | XML_image) )
     {
         // read replacement image
@@ -2088,7 +2088,7 @@ Reference< XFastContextHandler > SAL_CALL
             m_xReplImplContext = pContext;
         }
     }
-    else if( m_xImplContext-ISA( XMLTextFrameContext_Impl ) )
+    else if( m_xImplContext.get()->ISA( XMLTextFrameContext_Impl ) )
     {
         // the child is a writer frame
         // Implement Title/Description Elements UI (#i73249#)
@@ -2159,7 +2159,7 @@ Reference< XFastContextHandler > SAL_CALL
     {
         // the child is a drawing shape
         pContext = GetImport().GetShapeImport()->CreateFrameChildContext(
-                &m_xImplContext, Element, xAttrList );
+                m_xImplContext.get(), Element, xAttrList );
     }
 
     if( !pContext )
@@ -2181,7 +2181,7 @@ void XMLTextFrameContext::SetHyperlink( const OUString& rHRef,
 
 TextContentAnchorType XMLTextFrameContext::GetAnchorType() const
 {
-    SvXMLImportContext *pContext = &m_xImplContext;
+    SvXMLImportContext *pContext = m_xImplContext.get();
     XMLTextFrameContext_Impl *pImpl = PTR_CAST( XMLTextFrameContext_Impl, pContext );
     if( pImpl )
         return pImpl->GetAnchorType();
@@ -2192,7 +2192,7 @@ TextContentAnchorType XMLTextFrameContext::GetAnchorType() const
 Reference < XTextContent > XMLTextFrameContext::GetTextContent() const
 {
     Reference < XTextContent > xTxtCntnt;
-    SvXMLImportContext *pContext = &m_xImplContext;
+    SvXMLImportContext *pContext = m_xImplContext.get();
     XMLTextFrameContext_Impl *pImpl = PTR_CAST( XMLTextFrameContext_Impl, pContext );
     if( pImpl )
         xTxtCntnt.set( pImpl->GetPropSet(), UNO_QUERY );
@@ -2203,7 +2203,7 @@ Reference < XTextContent > XMLTextFrameContext::GetTextContent() const
 Reference < XShape > XMLTextFrameContext::GetShape() const
 {
     Reference < XShape > xShape;
-    SvXMLImportContext* pContext = &m_xImplContext;
+    SvXMLImportContext* pContext = m_xImplContext.get();
     SvXMLShapeContext* pImpl = PTR_CAST( SvXMLShapeContext, pContext );
     if ( pImpl )
     {

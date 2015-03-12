@@ -78,7 +78,7 @@ MultiImageImportHelper::~MultiImageImportHelper()
 {
     while(!maImplContextVector.empty())
     {
-        delete *(maImplContextVector.end() - 1);
+        delete (*(maImplContextVector.end() - 1)).get();
         maImplContextVector.pop_back();
     }
 }
@@ -95,7 +95,7 @@ SvXMLImportContextRef MultiImageImportHelper::solveMultipleImages()
 
         for(a = 0; a < maImplContextVector.size(); a++)
         {
-            const OUString aStreamURL(getGraphicURLFromImportContext(**maImplContextVector[a]));
+            const OUString aStreamURL(getGraphicURLFromImportContext(*maImplContextVector[a].get()));
             const sal_uInt32 nNewQuality(getQualityIndex(aStreamURL));
 
             if(nNewQuality > nBestQuality)
@@ -112,17 +112,17 @@ SvXMLImportContextRef MultiImageImportHelper::solveMultipleImages()
         }
 
         // Take out the most valuable one
-        const std::vector< SvXMLImportContextRef* >::iterator aRemove(maImplContextVector.begin() + nIndexOfPreferred);
-        pContext = **aRemove;
-        delete *aRemove;
+        const std::vector< SvXMLImportContextRef >::iterator aRemove(maImplContextVector.begin() + nIndexOfPreferred);
+        pContext = *aRemove;
+        delete (*aRemove).get();
         maImplContextVector.erase(aRemove);
 
         // remove the rest from parent
         for(a = 0; a < maImplContextVector.size(); a++)
         {
-            SvXMLImportContext& rCandidate = **maImplContextVector[a];
+            SvXMLImportContext& rCandidate = *maImplContextVector[a].get();
 
-            if(pContext)
+            if(pContext.is())
             {
                 // #i124143# evtl. copy imported GluePoints before deprecating
                 // this graphic and context
@@ -134,7 +134,7 @@ SvXMLImportContextRef MultiImageImportHelper::solveMultipleImages()
     }
     else if (maImplContextVector.size() == 1)
     {
-        pContext = *maImplContextVector.front();
+        pContext = maImplContextVector.front();
     }
 
     return pContext;
@@ -144,7 +144,7 @@ void MultiImageImportHelper::addContent(const SvXMLImportContext& rSvXMLImportCo
 {
     if(dynamic_cast< const SvXMLImportContext* >(&rSvXMLImportContext))
     {
-        maImplContextVector.push_back(new SvXMLImportContextRef(const_cast< SvXMLImportContext* >(&rSvXMLImportContext)));
+        maImplContextVector.push_back( const_cast<SvXMLImportContext*>(&rSvXMLImportContext) );
     }
 }
 

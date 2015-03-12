@@ -451,7 +451,7 @@ SvXMLImport::~SvXMLImport() throw ()
             SvXMLImportContext *pContext = mpContexts->back();
             mpContexts->pop_back();
             if( pContext )
-                pContext->ReleaseRef();
+                pContext->release();
         }
         delete mpContexts;
     }
@@ -590,14 +590,14 @@ void SAL_CALL SvXMLImport::endDocument()
         }
     }
 
-    if( mxFontDecls.Is() )
-        static_cast<SvXMLStylesContext *>(&mxFontDecls)->Clear();
-    if( mxStyles.Is() )
-        static_cast<SvXMLStylesContext *>(&mxStyles)->Clear();
-    if( mxAutoStyles.Is() )
-        static_cast<SvXMLStylesContext *>(&mxAutoStyles)->Clear();
-    if( mxMasterStyles.Is() )
-        static_cast<SvXMLStylesContext *>(&mxMasterStyles)->Clear();
+    if( mxFontDecls.is() )
+        static_cast<SvXMLStylesContext *>(mxFontDecls.get())->Clear();
+    if( mxStyles.is() )
+        static_cast<SvXMLStylesContext *>(mxStyles.get())->Clear();
+    if( mxAutoStyles.is() )
+        static_cast<SvXMLStylesContext *>(mxAutoStyles.get())->Clear();
+    if( mxMasterStyles.is() )
+        static_cast<SvXMLStylesContext *>(mxMasterStyles.get())->Clear();
 
     // possible form-layer related knittings which can only be done when
     // the whole document exists
@@ -724,7 +724,7 @@ void SAL_CALL SvXMLImport::startElement( const OUString& rName,
     if( !pContext )
         pContext = new SvXMLImportContext( *this, nPrefix, aLocalName );
 
-    pContext->AddFirstRef();
+    pContext->acquire();
 
     // Remember old namespace map.
     if( pRewindMap )
@@ -768,7 +768,7 @@ rName
         SvXMLNamespaceMap *pRewindMap = pContext->GetRewindMap();
 
         // Delete the current context.
-        pContext->ReleaseRef();
+        pContext->release();
         pContext = 0;
 
         // Rewind a namespace map.
@@ -831,6 +831,7 @@ void SAL_CALL SvXMLImport::startFastElement (sal_Int32 Element,
 
     // Call a startElement at the new context.
     xContext->startFastElement( Element, Attribs );
+    xContext->acquire();
 
     // Push context on stack.
     mpFastContexts->push_back( xContext );
@@ -851,7 +852,7 @@ void SAL_CALL SvXMLImport::endFastElement (sal_Int32 Element)
         uno::Reference< XFastContextHandler > xContext = mpFastContexts->back();
         mpFastContexts->pop_back();
         xContext->endFastElement( Element );
-        xContext = 0;
+        xContext->release();
     }
 }
 
@@ -1615,32 +1616,32 @@ void SvXMLImport::SetMasterStyles( SvXMLStylesContext *pMasterStyles )
 
 XMLFontStylesContext *SvXMLImport::GetFontDecls()
 {
-    return static_cast<XMLFontStylesContext *>(&mxFontDecls);
+    return static_cast<XMLFontStylesContext *>(mxFontDecls.get());
 }
 
 SvXMLStylesContext *SvXMLImport::GetStyles()
 {
-    return static_cast<SvXMLStylesContext *>(&mxStyles);
+    return static_cast<SvXMLStylesContext *>(mxStyles.get());
 }
 
 SvXMLStylesContext *SvXMLImport::GetAutoStyles()
 {
-    return static_cast<SvXMLStylesContext *>(&mxAutoStyles);
+    return static_cast<SvXMLStylesContext *>(mxAutoStyles.get());
 }
 
 const XMLFontStylesContext *SvXMLImport::GetFontDecls() const
 {
-    return static_cast<const XMLFontStylesContext *>(&mxFontDecls);
+    return static_cast<const XMLFontStylesContext *>(mxFontDecls.get());
 }
 
 const SvXMLStylesContext *SvXMLImport::GetStyles() const
 {
-    return static_cast<const SvXMLStylesContext *>(&mxStyles);
+    return static_cast<const SvXMLStylesContext *>(mxStyles.get());
 }
 
 const SvXMLStylesContext *SvXMLImport::GetAutoStyles() const
 {
-    return static_cast<const SvXMLStylesContext *>(&mxAutoStyles);
+    return static_cast<const SvXMLStylesContext *>(mxAutoStyles.get());
 }
 
 OUString SvXMLImport::GetAbsoluteReference(const OUString& rValue) const
@@ -1831,14 +1832,14 @@ void SvXMLImport::SetError(
 
 void SvXMLImport::DisposingModel()
 {
-    if( mxFontDecls.Is() )
-        static_cast<SvXMLStylesContext *>(&mxFontDecls)->Clear();
-    if( mxStyles.Is() )
-        static_cast<SvXMLStylesContext *>(&mxStyles)->Clear();
-    if( mxAutoStyles.Is() )
-        static_cast<SvXMLStylesContext *>(&mxAutoStyles)->Clear();
-    if( mxMasterStyles.Is() )
-        static_cast<SvXMLStylesContext *>(&mxMasterStyles)->Clear();
+    if( mxFontDecls.is() )
+        static_cast<SvXMLStylesContext *>(mxFontDecls.get())->Clear();
+    if( mxStyles.is() )
+        static_cast<SvXMLStylesContext *>(mxStyles.get())->Clear();
+    if( mxAutoStyles.is() )
+        static_cast<SvXMLStylesContext *>(mxAutoStyles.get())->Clear();
+    if( mxMasterStyles.is() )
+        static_cast<SvXMLStylesContext *>(mxMasterStyles.get())->Clear();
 
     mxModel.set(0);
     mxEventListener.set(NULL);

@@ -420,8 +420,8 @@ void XMLIndexTOCContext::EndElement()
 
         // get rid of last paragraph (unless it's the only paragraph)
         rHelper->GetCursor()->goRight(1, sal_False);
-        if( xBodyContextRef.Is() &&
-            static_cast<XMLIndexBodyContext*>(&xBodyContextRef)->HasContent() )
+        if( xBodyContextRef.is() &&
+            static_cast<XMLIndexBodyContext*>(xBodyContextRef.get())->HasContent() )
         {
             rHelper->GetCursor()->goLeft(1, sal_True);
             rHelper->GetText()->insertString(rHelper->GetCursorAsRange(),
@@ -451,8 +451,8 @@ void SAL_CALL XMLIndexTOCContext::endFastElement( sal_Int32 /*Element*/ )
 
         // get rid of last paragraph (unless it's the only paragraph)
         rHelper->GetCursor()->goRight(1, sal_False);
-        if( xBodyContextRef.Is() &&
-            static_cast<XMLIndexBodyContext*>(&xBodyContextRef)->HasContent() )
+        if( xBodyContextRef.is() &&
+            static_cast<XMLIndexBodyContext*>(xBodyContextRef.get())->HasContent() )
         {
             rHelper->GetCursor()->goLeft(1, sal_True);
             rHelper->GetText()->insertString(rHelper->GetCursorAsRange(),
@@ -485,8 +485,8 @@ SvXMLImportContext* XMLIndexTOCContext::CreateChildContext(
             {
                 pContext = new XMLIndexBodyContext(GetImport(), nPrefix,
                                                    rLocalName);
-                if ( !xBodyContextRef.Is() ||
-                     !static_cast<XMLIndexBodyContext*>(&xBodyContextRef)->HasContent() )
+                if ( !xBodyContextRef.is() ||
+                     !static_cast<XMLIndexBodyContext*>(xBodyContextRef.get())->HasContent() )
                 {
                     xBodyContextRef = pContext;
                 }
@@ -566,8 +566,8 @@ Reference< XFastContextHandler > SAL_CALL
             if( XML_index_body == (Element & XML_index_body) )
             {
                 pContext = new XMLIndexBodyContext(GetImport(), Element);
-                if( !xBodyContextRef.Is() ||
-                    !static_cast<XMLIndexBodyContext*>(&xBodyContextRef)->HasContent() )
+                if( !xBodyContextRef.is() ||
+                    !static_cast<XMLIndexBodyContext*>(xBodyContextRef.get())->HasContent() )
                 {
                     xBodyContextRef = pContext;
                 }

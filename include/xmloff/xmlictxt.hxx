@@ -33,8 +33,8 @@
 class SvXMLNamespaceMap;
 class SvXMLImport;
 
-class XMLOFF_DLLPUBLIC SvXMLImportContext : public SvRefBase,
-        public ::cppu::WeakImplHelper1< ::css::xml::sax::XFastContextHandler >
+class XMLOFF_DLLPUBLIC SvXMLImportContext :
+    public ::cppu::WeakImplHelper1< ::css::xml::sax::XFastContextHandler >
 {
     friend class SvXMLImport;
 
@@ -128,7 +128,8 @@ public:
     virtual void onDemandRescueUsefulDataFromTemporary( const SvXMLImportContext& rCandidate );
 };
 
-typedef tools::SvRef<SvXMLImportContext> SvXMLImportContextRef;
+//typedef tools::SvRef<SvXMLImportContext> SvXMLImportContextRef;
+typedef css::uno::Reference< SvXMLImportContext > SvXMLImportContextRef;
 
 #endif // INCLUDED_XMLOFF_XMLICTXT_HXX
 

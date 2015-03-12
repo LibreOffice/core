@@ -72,10 +72,10 @@ XMLTextListBlockContext::XMLTextListBlockContext(
     // Inherit style name from parent list, as well as the flags whether
     // numbering must be restarted and formats have to be created.
     OUString sParentListStyleName;
-    if( mxParentListBlock.Is() )
+    if( mxParentListBlock.is() )
     {
         XMLTextListBlockContext *pParent =
-                                static_cast<XMLTextListBlockContext *>(&mxParentListBlock);
+                                static_cast<XMLTextListBlockContext *>(mxParentListBlock.get());
         msListStyleName = pParent->GetListStyleName();
         sParentListStyleName = msListStyleName;
         mxNumRules = pParent->GetNumRules();
@@ -258,10 +258,10 @@ XMLTextListBlockContext::XMLTextListBlockContext(
     // Inherit style name from parent list, as well as the flags whether
     // numbering must be restarted and formats have to be created.
     OUString sParentListStyleName;
-    if( mxParentListBlock.Is() )
+    if( mxParentListBlock.is() )
     {
         XMLTextListBlockContext *pParent =
-            static_cast<XMLTextListBlockContext *>(&mxParentListBlock);
+            static_cast<XMLTextListBlockContext *>(mxParentListBlock.get());
         msListStyleName = pParent->GetListStyleName();
         sParentListStyleName = msListStyleName;
         mxNumRules = pParent->GetNumRules();
@@ -419,7 +419,7 @@ void XMLTextListBlockContext::EndElement()
     // Numbering has not to be restarted if it has been restarted within
     // a child list.
     XMLTextListBlockContext *pParent =
-                                static_cast<XMLTextListBlockContext *>(&mxParentListBlock);
+                                static_cast<XMLTextListBlockContext *>(mxParentListBlock.get());
     if( pParent )
     {
         pParent->mbRestartNumbering = mbRestartNumbering;
@@ -439,7 +439,7 @@ void SAL_CALL XMLTextListBlockContext::endFastElement( sal_Int32 /*Element*/ )
     // Numbering has not to be restarted if it has been restarted within
     // a child list.
     XMLTextListBlockContext *pParent =
-        static_cast<XMLTextListBlockContext *>(&mxParentListBlock);
+        static_cast<XMLTextListBlockContext *>(mxParentListBlock.get());
     if( pParent )
     {
         pParent->mbRestartNumbering = mbRestartNumbering;

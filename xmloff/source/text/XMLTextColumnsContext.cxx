@@ -474,11 +474,11 @@ XMLTextColumnsContext::~XMLTextColumnsContext()
         for (XMLTextColumnsArray_Impl::iterator it = pColumns->begin();
                 it != pColumns->end(); ++it)
         {
-           (*it)->ReleaseRef();
+           (*it)->release();
         }
     }
     if( pColumnSep )
-        pColumnSep->ReleaseRef();
+        pColumnSep->release();
 
     delete pColumns;
     delete pColumnAttrTokenMap;
@@ -504,7 +504,7 @@ SvXMLImportContext *XMLTextColumnsContext::CreateChildContext(
             pColumns = new XMLTextColumnsArray_Impl;
 
         pColumns->push_back( pColumn );
-        pColumn->AddFirstRef();
+        pColumn->acquire();
 
         pContext = pColumn;
     }
@@ -514,7 +514,7 @@ SvXMLImportContext *XMLTextColumnsContext::CreateChildContext(
         pColumnSep =
             new XMLTextColumnSepContext_Impl( GetImport(), nPrefix, rLocalName,
                                            xAttrList, *pColumnSepAttrTokenMap );
-        pColumnSep->AddFirstRef();
+        pColumnSep->acquire();
 
         pContext = pColumnSep;
     }
@@ -544,7 +544,7 @@ Reference< xml::sax::XFastContextHandler > SAL_CALL
             pColumns = new XMLTextColumnsArray_Impl;
 
         pColumns->push_back( pColumn );
-        pColumn->AddFirstRef();
+        pColumn->acquire();
 
         pContext = pColumn;
     }
@@ -552,7 +552,7 @@ Reference< xml::sax::XFastContextHandler > SAL_CALL
     {
         pColumnSep = new XMLTextColumnSepContext_Impl( GetImport(),
                 Element, xAttrList, *pColumnSepAttrTokenMap );
-        pColumnSep->AddFirstRef();
+        pColumnSep->acquire();
 
         pContext = pColumnSep;
     }

@@ -86,7 +86,7 @@ protected:
     virtual void SetAttribute( sal_uInt16 nPrefixKey,
                                const OUString& rLocalName,
                                const OUString& rValue ) SAL_OVERRIDE;
-    SvXMLStylesContext *GetStyles() { return static_cast<SvXMLStylesContext *>(&mxStyles); }
+    SvXMLStylesContext *GetStyles() { return static_cast<SvXMLStylesContext *>(mxStyles.get()); }
     ::std::vector< XMLPropertyState > & GetProperties() { return maProperties; }
 
     // Override this method to create a new style. It's called by
@@ -123,7 +123,7 @@ public:
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::beans::XPropertySet > & rPropSet );
 
-    const SvXMLStylesContext *GetStyles() const { return static_cast<const SvXMLStylesContext *>(&mxStyles); }
+    const SvXMLStylesContext *GetStyles() const { return static_cast<const SvXMLStylesContext *>(mxStyles.get()); }
     const ::std::vector< XMLPropertyState > & GetProperties() const { return maProperties; }
 
     const ::com::sun::star::uno::Reference <

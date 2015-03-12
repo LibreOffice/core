@@ -60,9 +60,9 @@ XMLShapePropertySetContext::~XMLShapePropertySetContext()
 void XMLShapePropertySetContext::EndElement()
 {
 Reference< container::XIndexReplace > xNumRule;
-if( mxBulletStyle.Is() )
+if( mxBulletStyle.is() )
 {
-    SvxXMLListStyleContext* pBulletStyle = static_cast<SvxXMLListStyleContext*>(&mxBulletStyle);
+    SvxXMLListStyleContext* pBulletStyle = static_cast<SvxXMLListStyleContext*>(mxBulletStyle.get());
     xNumRule = SvxXMLListStyleContext::CreateNumRule( GetImport().GetModel() );
     if( xNumRule.is() )
         pBulletStyle->FillUnoNumRule(xNumRule);
@@ -81,9 +81,9 @@ void SAL_CALL XMLShapePropertySetContext::endFastElement( sal_Int32 Element )
     throw(uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
     Reference< container::XIndexReplace > xNumRule;
-    if( mxBulletStyle.Is() )
+    if( mxBulletStyle.is() )
     {
-    SvxXMLListStyleContext* pBulletStyle = static_cast<SvxXMLListStyleContext*>(&mxBulletStyle);
+    SvxXMLListStyleContext* pBulletStyle = static_cast<SvxXMLListStyleContext*>(mxBulletStyle.get());
     xNumRule = SvxXMLListStyleContext::CreateNumRule( GetImport().GetModel() );
     if( xNumRule.is() )
         pBulletStyle->FillUnoNumRule(xNumRule);

@@ -61,7 +61,7 @@ void XMLPropStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
 {
     if( XML_NAMESPACE_STYLE == nPrefixKey && IsXMLToken( rLocalName, XML_FAMILY ) )
     {
-        DBG_ASSERT( GetFamily() == static_cast<SvXMLStylesContext *>(&mxStyles)->GetFamily( rValue ), "unexpected style family" );
+        DBG_ASSERT( GetFamily() == static_cast<SvXMLStylesContext *>(mxStyles.get())->GetFamily( rValue ), "unexpected style family" );
     }
     else
     {
@@ -208,7 +208,7 @@ SvXMLImportContext *XMLPropStyleContext::CreateChildContext(
     if( nFamily )
     {
         rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap =
-            static_cast<SvXMLStylesContext *>(&mxStyles)->GetImportPropertyMapper(
+            static_cast<SvXMLStylesContext *>(mxStyles.get())->GetImportPropertyMapper(
                                                         GetFamily() );
         if( xImpPrMap.is() )
             pContext = new SvXMLPropertySetContext( GetImport(), nPrefix,
@@ -270,7 +270,7 @@ Reference< XFastContextHandler > SAL_CALL
     if( nFamily )
     {
         rtl::Reference< SvXMLImportPropertyMapper > xImpPrMap =
-            static_cast<SvXMLStylesContext *>(&mxStyles)
+            static_cast<SvXMLStylesContext *>(mxStyles.get())
             ->GetImportPropertyMapper( GetFamily() );
         if( xImpPrMap.is() )
             pContext = new SvXMLPropertySetContext( GetImport(), Element,
@@ -287,7 +287,7 @@ void XMLPropStyleContext::FillPropertySet(
             const Reference< XPropertySet > & rPropSet )
 {
     rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap =
-        static_cast<SvXMLStylesContext *>(&mxStyles)->GetImportPropertyMapper(
+        static_cast<SvXMLStylesContext *>(mxStyles.get())->GetImportPropertyMapper(
                                                                 GetFamily() );
     DBG_ASSERT( xImpPrMap.is(), "There is the import prop mapper" );
     if( xImpPrMap.is() )
@@ -303,7 +303,7 @@ Reference < XStyle > XMLPropStyleContext::Create()
     Reference < XStyle > xNewStyle;
 
     OUString sServiceName(
-        static_cast<SvXMLStylesContext *>(&mxStyles)->GetServiceName( GetFamily() ) );
+        static_cast<SvXMLStylesContext *>(mxStyles.get())->GetServiceName( GetFamily() ) );
     if( !sServiceName.isEmpty() )
     {
         Reference< XMultiServiceFactory > xFactory( GetImport().GetModel(),
@@ -324,7 +324,7 @@ typedef ::std::set < OUString > PropertyNameSet;
 
 void XMLPropStyleContext::CreateAndInsert( bool bOverwrite )
 {
-    SvXMLStylesContext* pSvXMLStylesContext = static_cast< SvXMLStylesContext* >(&mxStyles);
+    SvXMLStylesContext* pSvXMLStylesContext = static_cast< SvXMLStylesContext* >(mxStyles.get());
     rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap = pSvXMLStylesContext->GetImportPropertyMapper(GetFamily());
     OSL_ENSURE(xImpPrMap.is(), "There is no import prop mapper");
 
@@ -511,7 +511,7 @@ void XMLPropStyleContext::Finish( bool bOverwrite )
     {
         // The families cintaner must exist
         Reference < XNameContainer > xFamilies =
-            static_cast<SvXMLStylesContext *>(&mxStyles)->GetStylesContainer( GetFamily() );
+            static_cast<SvXMLStylesContext *>(mxStyles.get())->GetStylesContainer( GetFamily() );
         DBG_ASSERT( xFamilies.is(), "Families lost" );
         if( !xFamilies.is() )
             return;
