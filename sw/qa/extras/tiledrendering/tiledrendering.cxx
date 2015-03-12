@@ -8,6 +8,7 @@
  */
 
 #include <swmodeltestbase.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
 #include <crsskip.hxx>
@@ -21,9 +22,11 @@ class SwTiledRenderingTest : public SwModelTestBase
 {
 
 public:
+    void testSetGraphicSelection();
     void testResetSelection();
 
     CPPUNIT_TEST_SUITE(SwTiledRenderingTest);
+    CPPUNIT_TEST(testSetGraphicSelection);
     CPPUNIT_TEST(testResetSelection);
     CPPUNIT_TEST_SUITE_END();
 
@@ -37,12 +40,35 @@ SwXTextDocument* SwTiledRenderingTest::createDoc(const char* pName)
 
     SwXTextDocument* pTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDocument);
+    pTextDocument->initializeForTiledRendering();
     return pTextDocument;
+}
+
+void SwTiledRenderingTest::testSetGraphicSelection()
+{
+    SwXTextDocument* pXTextDocument = createDoc("shape.fodt");
+    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    SdrPage* pPage = pWrtShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    SdrObject* pObject = pPage->GetObj(0);
+    pWrtShell->SelectObj(Point(), 0, pObject);
+    // Make sure the rectangle has 8 handles: at each corner and at the center of each edge.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(8), pObject->GetHdlCount());
+    // Take the bottom center one.
+    SdrHdl* pHdl = pObject->GetHdl(6);
+    CPPUNIT_ASSERT_EQUAL(HDL_LOWER, pHdl->GetKind());
+    Rectangle aShapeBefore = pObject->GetSnapRect();
+    // Resize.
+    pXTextDocument->setGraphicSelection(LOK_SETGRAPHICSELECTION_START, pHdl->GetPos().getX(), pHdl->GetPos().getY());
+    pXTextDocument->setGraphicSelection(LOK_SETGRAPHICSELECTION_END, pHdl->GetPos().getX(), pHdl->GetPos().getY() + 1000);
+    Rectangle aShapeAfter = pObject->GetSnapRect();
+    // Check that a resize happened, but aspect ratio is not kept.
+    CPPUNIT_ASSERT_EQUAL(aShapeBefore.getWidth(), aShapeAfter.getWidth());
+    CPPUNIT_ASSERT_EQUAL(aShapeBefore.getHeight() + 1000, aShapeAfter.getHeight());
 }
 
 void SwTiledRenderingTest::testResetSelection()
 {
-    SwXTextDocument* pXTextDocument = createDoc("reset-selection.fodt");
+    SwXTextDocument* pXTextDocument = createDoc("shape.fodt");
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
     // Select one character.
     pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, 1, /*bBasicCall=*/false);
