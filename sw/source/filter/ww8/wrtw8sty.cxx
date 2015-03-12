@@ -2289,16 +2289,20 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
                 std::vector< std::pair<WW8_CP, int> > aRangeStartPos; // The second of the pair is the original index before sorting.
                 std::vector< std::pair<WW8_CP, int> > aRangeEndPos; // Same, so we can map between the indexes before/after sorting.
                 std::map<int, int> aAtnStartMap; // Maps from annotation index to start index.
+                std::map<int, int> aStartAtnMap; // Maps from start index to annotation index.
                 std::map<int, int> aStartEndMap; // Maps from start index to end index.
                 // then write first the GrpXstAtnOwners
+                int nIdx = 0;
                 for ( i = 0; i < nLen; ++i )
                 {
                     const WW8_Annotation& rAtn = *(const WW8_Annotation*)aCntnt[i];
                     aStrArr.push_back(std::pair<OUString,OUString>(rAtn.msOwner,rAtn.m_sInitials));
+                    // record start and end positions for ranges
                     if( rAtn.m_nRangeStart != rAtn.m_nRangeEnd )
                     {
-                        aRangeStartPos.push_back(std::make_pair(rAtn.m_nRangeStart, i));
-                        aRangeEndPos.push_back(std::make_pair(rAtn.m_nRangeEnd, i));
+                        aRangeStartPos.push_back(std::make_pair(rAtn.m_nRangeStart, nIdx));
+                        aRangeEndPos.push_back(std::make_pair(rAtn.m_nRangeEnd, nIdx));
+                        ++nIdx;
                     }
                 }
 
@@ -2313,10 +2317,13 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
                 // that knows what index to reference, after sorting.
                 std::sort(aRangeStartPos.begin(), aRangeStartPos.end(), &lcl_PosComp);
                 for (i = 0; i < aRangeStartPos.size(); ++i)
+                {
                     aAtnStartMap[aRangeStartPos[i].second] = i;
+                    aStartAtnMap[i] = aRangeStartPos[i].second;
+                }
                 std::sort(aRangeEndPos.begin(), aRangeEndPos.end(), &lcl_PosComp);
                 for (i = 0; i < aRangeEndPos.size(); ++i)
-                    aStartEndMap[aRangeEndPos[ aAtnStartMap[i] ].second] = i;
+                    aStartEndMap[aAtnStartMap[ aRangeEndPos[i].second ]] = i;
 
                 if ( rWrt.bWrtWW8 )
                 {
@@ -2354,7 +2361,7 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
                         {
                             SwWW8Writer::WriteLong( *rWrt.pTableStrm, aRangeStartPos[i].first );
                         }
-                        SwWW8Writer::WriteLong( *rWrt.pTableStrm, aRangeStartPos[i-1].first + 1);
+                        SwWW8Writer::WriteLong( *rWrt.pTableStrm, rFib.ccpText + 1);
 
                         // Commented text ranges additional informations (Plcfbkf.aFBKF)
                         for ( i = 0; i < aRangeStartPos.size(); ++i )
@@ -2372,7 +2379,7 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
                         {
                             SwWW8Writer::WriteLong( *rWrt.pTableStrm, aRangeEndPos[i].first );
                         }
-                        SwWW8Writer::WriteLong( *rWrt.pTableStrm, aRangeEndPos[i-1].first + 1);
+                        SwWW8Writer::WriteLong( *rWrt.pTableStrm, rFib.ccpText + 1);
 
                         nFcStart = rWrt.pTableStrm->Tell();
                         rFib.lcbPlcfAtnbkl = nFcStart - rFib.fcPlcfAtnbkl;
@@ -2388,7 +2395,7 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
                             SwWW8Writer::WriteShort( *rWrt.pTableStrm, 0 );         // SttbfAtnBkmk.cchData
                             // One ATNBE structure for all text ranges
                             SwWW8Writer::WriteShort( *rWrt.pTableStrm, 0x0100 );    // ATNBE.bmc
-                            SwWW8Writer::WriteLong( *rWrt.pTableStrm, aAtnStartMap[i] );          // ATNBE.lTag
+                            SwWW8Writer::WriteLong( *rWrt.pTableStrm, aStartAtnMap[i] );          // ATNBE.lTag
                             SwWW8Writer::WriteLong( *rWrt.pTableStrm, -1 );         // ATNBE.lTagOld
                         }
 
@@ -2397,7 +2404,7 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
                     }
                 }
 
-                // Write the extended >= Word XP ATLD records
+                // Write the extended >= Word XP ATRD records
                 if( rWrt.bWrtWW8 )
                 {
                     for( i = 0; i < nLen; ++i )
@@ -2541,7 +2548,7 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
                 // SVBT16 ibst;      // index into GrpXstAtnOwners
                 // SVBT16 ak;        // not used
                 // SVBT16 grfbmc;    // not used
-                // SVBT32 ITagBkmk;  // when not -1, this tag identifies the
+                // SVBT32 ITagBkmk;  // when not -1, this tag identifies the ATNBE
 
                 SwWW8Writer::WriteShort( *rWrt.pTableStrm, nFndPos );
                 SwWW8Writer::WriteShort( *rWrt.pTableStrm, 0 );
