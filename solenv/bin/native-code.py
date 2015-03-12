@@ -194,7 +194,6 @@ edit_constructor_list = [
     ]
 
 calc_factory_list = [
-    ("libscdlo.a", "scd_component_getFactory"),
     ("libscfiltlo.a", "scfilt_component_getFactory"),
     ("libsclo.a", "sc_component_getFactory"),
     ("libanalysislo.a", "analysis_component_getFactory"),
@@ -206,6 +205,9 @@ calc_factory_list = [
 calc_constructor_list = [
 # avmedia/util/avmedia.component
     "com_sun_star_comp_framework_SoundHandler_get_implementation",
+# sc/util/scd.component -- TODO check if all of these are necessary, probably yes
+    "com_sun_star_comp_calc_FormatDetector_get_implementation",
+    "com_sun_star_comp_calc_ExcelBiffFormatDetector_get_implementation",
     ]
 
 draw_factory_list = [
