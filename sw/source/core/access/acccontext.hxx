@@ -148,7 +148,7 @@ protected:
     // SwFrm might belong the current object or to any child or grandchild!
     // #i27301# - use new type definition for <_nStates>
     void InvalidateChildrenStates( const SwFrm* _pFrm,
-                                   tAccessibleStates _nStates );
+                                   AccessibleStates _nStates );
 
     // Dispose children of the specified SwFrm. The SwFrm might belong to
     // the current object or to any other child or grandchild.
@@ -346,7 +346,7 @@ public:
 
     // Check states
     // #i27301# - use new type definition for <_nStates>
-    void InvalidateStates( tAccessibleStates _nStates );
+    void InvalidateStates( AccessibleStates _nStates );
 
     // the XAccessibleRelationSet may have changed
     void InvalidateRelation( sal_uInt16 nType );

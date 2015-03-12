@@ -352,7 +352,7 @@ void SwAccessibleContext::ScrolledOut( const SwRect& rOldVisArea )
 
 // #i27301# - use new type definition for <_nStates>
 void SwAccessibleContext::InvalidateChildrenStates( const SwFrm* _pFrm,
-                                                    tAccessibleStates _nStates )
+                                                    AccessibleStates _nStates )
 {
     const SwAccessibleChildSList aVisList( GetVisArea(), *_pFrm, *(GetMap()) );
 
@@ -1283,14 +1283,14 @@ void SwAccessibleContext::InvalidateFocus()
 }
 
 // #i27301# - use new type definition for <_nStates>
-void SwAccessibleContext::InvalidateStates( tAccessibleStates _nStates )
+void SwAccessibleContext::InvalidateStates( AccessibleStates _nStates )
 {
     if( GetMap() )
     {
         SwViewShell *pVSh = GetMap()->GetShell();
         if( pVSh )
         {
-            if( (_nStates & ACC_STATE_EDITABLE) != 0 )
+            if( _nStates & AccessibleStates::EDITABLE )
             {
                 bool bIsOldEditableState;
                 bool bIsNewEditableState = IsEditable( pVSh );
@@ -1304,7 +1304,7 @@ void SwAccessibleContext::InvalidateStates( tAccessibleStates _nStates )
                     FireStateChangedEvent( AccessibleStateType::EDITABLE,
                                            bIsNewEditableState  );
             }
-            if( (_nStates & ACC_STATE_OPAQUE) != 0 )
+            if( _nStates & AccessibleStates::OPAQUE )
             {
                 bool bIsOldOpaqueState;
                 bool bIsNewOpaqueState = IsOpaque( pVSh );

@@ -344,7 +344,7 @@ private:
                                                 // the same as xAcc for any other
                                                 // event type
     EventType   meType;                         // The event type
-    tAccessibleStates mnStates;                 // check states or update caret pos
+    AccessibleStates mnStates;                 // check states or update caret pos
 
 public:
     const SwFrm* mpParentFrm;   // The object that fires the event
@@ -360,7 +360,7 @@ public:
         : mxAcc( pA ),
           maFrmOrObj( rFrmOrObj ),
           meType( eT ),
-          mnStates( 0 ),
+          mnStates( AccessibleStates::NONE ),
           mpParentFrm( nullptr )
     {}
 
@@ -368,7 +368,7 @@ public:
                             const SwAccessibleChild& rFrmOrObj )
         : maFrmOrObj( rFrmOrObj ),
           meType( eT ),
-          mnStates( 0 ),
+          mnStates( AccessibleStates::NONE ),
           mpParentFrm( nullptr )
     {
         OSL_ENSURE( SwAccessibleEvent_Impl::DISPOSE == meType,
@@ -377,7 +377,7 @@ public:
 
     SwAccessibleEvent_Impl( EventType eT )
         : meType( eT ),
-          mnStates( 0 ),
+          mnStates( AccessibleStates::NONE ),
           mpParentFrm( nullptr )
     {
         OSL_ENSURE( SwAccessibleEvent_Impl::SHAPE_SELECTION == meType,
@@ -392,7 +392,7 @@ public:
           mxAcc( pA ),
           maFrmOrObj( rFrmOrObj ),
           meType( eT ),
-          mnStates( 0 ),
+          mnStates( AccessibleStates::NONE ),
           mpParentFrm( nullptr )
     {
         OSL_ENSURE( SwAccessibleEvent_Impl::CHILD_POS_CHANGED == meType ||
@@ -403,7 +403,7 @@ public:
     SwAccessibleEvent_Impl( EventType eT,
                             SwAccessibleContext *pA,
                             const SwAccessibleChild& rFrmOrObj,
-                            const tAccessibleStates _nStates )
+                            const AccessibleStates _nStates )
         : mxAcc( pA ),
           maFrmOrObj( rFrmOrObj ),
           meType( eT ),
@@ -419,7 +419,7 @@ public:
         maOldBox( rR ),
         maFrmOrObj( rFrmOrObj ),
         meType( eT ),
-        mnStates( 0 ),
+        mnStates( AccessibleStates::NONE ),
         mpParentFrm( pParentFrm )
     {
         OSL_ENSURE( SwAccessibleEvent_Impl::CHILD_POS_CHANGED == meType,
@@ -461,39 +461,39 @@ public:
     }
 
     // <SetStates(..)> only used in method <SwAccessibleMap::AppendEvent(..)>
-    inline void SetStates( tAccessibleStates _nStates )
+    inline void SetStates( AccessibleStates _nStates )
     {
         mnStates |= _nStates;
     }
 
     inline bool IsUpdateCursorPos() const
     {
-        return (mnStates & ACC_STATE_CARET) != 0;
+        return bool(mnStates & AccessibleStates::CARET);
     }
     inline bool IsInvalidateStates() const
     {
-        return (mnStates & ACC_STATE_MASK) != 0;
+        return bool(mnStates & (AccessibleStates::EDITABLE | AccessibleStates::OPAQUE));
     }
     inline bool IsInvalidateRelation() const
     {
-        return (mnStates & ACC_STATE_RELATION_MASK) != 0;
+        return bool(mnStates & (AccessibleStates::RELATION_FROM | AccessibleStates::RELATION_TO));
     }
     inline bool IsInvalidateTextSelection() const
     {
-        return ( mnStates & ACC_STATE_TEXT_SELECTION_CHANGED ) != 0;
+        return bool( mnStates & AccessibleStates::TEXT_SELECTION_CHANGED );
     }
 
     inline bool IsInvalidateTextAttrs() const
     {
-        return ( mnStates & ACC_STATE_TEXT_ATTRIBUTE_CHANGED ) != 0;
+        return bool( mnStates & AccessibleStates::TEXT_ATTRIBUTE_CHANGED );
     }
 
-    inline tAccessibleStates GetStates() const
+    inline AccessibleStates GetStates() const
     {
-        return mnStates & ACC_STATE_MASK;
+        return mnStates;
     }
 
-    inline tAccessibleStates GetAllStates() const
+    inline AccessibleStates GetAllStates() const
     {
         return mnStates;
     }
@@ -937,12 +937,12 @@ void SwAccessibleMap::FireEvent( const SwAccessibleEvent_Impl& rEvent )
             {
                 // both events CONTENT_FLOWS_FROM_RELATION_CHANGED and
                 // CONTENT_FLOWS_TO_RELATION_CHANGED are possible
-                if ( rEvent.GetAllStates() & ACC_STATE_RELATION_FROM )
+                if ( rEvent.GetAllStates() & AccessibleStates::RELATION_FROM )
                 {
                     xAccImpl->InvalidateRelation(
                         AccessibleEventId::CONTENT_FLOWS_FROM_RELATION_CHANGED );
                 }
-                if ( rEvent.GetAllStates() & ACC_STATE_RELATION_TO )
+                if ( rEvent.GetAllStates() & AccessibleStates::RELATION_TO )
                 {
                     xAccImpl->InvalidateRelation(
                         AccessibleEventId::CONTENT_FLOWS_TO_RELATION_CHANGED );
@@ -1082,7 +1082,7 @@ void SwAccessibleMap::InvalidateCursorPosition(
         SwAccessibleEvent_Impl aEvent( SwAccessibleEvent_Impl::CARET_OR_STATES,
                                        pAccImpl,
                                        SwAccessibleChild(pAccImpl->GetFrm()),
-                                       ACC_STATE_CARET );
+                                       AccessibleStates::CARET );
         AppendEvent( aEvent );
     }
     else
@@ -2570,7 +2570,7 @@ void SwAccessibleMap::InvalidateAttr( const SwTxtFrm& rTxtFrm )
             {
                 SwAccessibleEvent_Impl aEvent( SwAccessibleEvent_Impl::INVALID_ATTR,
                                                pAccImpl, aFrmOrObj );
-                aEvent.SetStates( ACC_STATE_TEXT_ATTRIBUTE_CHANGED );
+                aEvent.SetStates( AccessibleStates::TEXT_ATTRIBUTE_CHANGED );
                 AppendEvent( aEvent );
             }
             else
@@ -2839,7 +2839,7 @@ void SwAccessibleMap::SetCursorContext(
     mxCursorContext = xAcc;
 }
 
-void SwAccessibleMap::InvalidateStates( tAccessibleStates _nStates,
+void SwAccessibleMap::InvalidateStates( AccessibleStates _nStates,
                                         const SwFrm* _pFrm )
 {
     // Start with the frame or the first upper that is accessible
@@ -2899,8 +2899,8 @@ void SwAccessibleMap::_InvalidateRelationSet( const SwFrm* pFrm,
                 SwAccessibleEvent_Impl aEvent( SwAccessibleEvent_Impl::CARET_OR_STATES,
                                                pAccImpl, SwAccessibleChild(pFrm),
                                                ( bFrom
-                                                 ? ACC_STATE_RELATION_FROM
-                                                 : ACC_STATE_RELATION_TO ) );
+                                                 ? AccessibleStates::RELATION_FROM
+                                                 : AccessibleStates::RELATION_TO ) );
                 AppendEvent( aEvent );
             }
             else
@@ -2961,7 +2961,7 @@ void SwAccessibleMap::InvalidateParaTextSelection( const SwTxtFrm& _rTxtFrm )
                     SwAccessibleEvent_Impl::CARET_OR_STATES,
                     pAccImpl,
                     SwAccessibleChild( &_rTxtFrm ),
-                    ACC_STATE_TEXT_SELECTION_CHANGED );
+                    AccessibleStates::TEXT_SELECTION_CHANGED );
                 AppendEvent( aEvent );
             }
             else

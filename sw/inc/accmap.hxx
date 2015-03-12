@@ -32,8 +32,9 @@
 #include "fesh.hxx"
 #include <vector>
 #include <set>
-class SwAccessibleParagraph;
+#include <o3tl/typed_flags_set.hxx>
 
+class SwAccessibleParagraph;
 class SwViewShell;
 class Rectangle;
 class SwFrm;
@@ -45,9 +46,7 @@ class SwAccessibleEventList_Impl;
 class SwAccessibleEventMap_Impl;
 class SwShapeList_Impl;
 class SdrObject;
-namespace accessibility {
-    class AccessibleShape;
-}
+namespace accessibility { class AccessibleShape; }
 class SwAccessibleShapeMap_Impl;
 struct SwAccessibleEvent_Impl;
 class SwAccessibleSelectedParas_Impl;
@@ -57,22 +56,23 @@ class SwAccPreviewData;
 struct PreviewPage;
 namespace vcl { class Window; }
 
-// real states for events
-#define ACC_STATE_EDITABLE 0x01
-#define ACC_STATE_OPAQUE 0x02
-
-// pseudo states for events
-#define ACC_STATE_TEXT_ATTRIBUTE_CHANGED 0x0200
-#define ACC_STATE_TEXT_SELECTION_CHANGED 0x0100
-#define ACC_STATE_CARET 0x80
-#define ACC_STATE_RELATION_FROM 0x40
-#define ACC_STATE_RELATION_TO 0x20
-
-#define ACC_STATE_RELATION_MASK 0x60
-
-#define ACC_STATE_MASK 0x1F
-
-typedef sal_uInt16 tAccessibleStates;
+enum class AccessibleStates
+{
+    NONE                   = 0x0000,
+    // real states for events
+    EDITABLE               = 0x0001,
+    OPAQUE                 = 0x0002,
+    // pseudo states for events
+    TEXT_ATTRIBUTE_CHANGED = 0x0200,
+    TEXT_SELECTION_CHANGED = 0x0100,
+    CARET                  = 0x0080,
+    RELATION_FROM          = 0x0040,
+    RELATION_TO            = 0x0020,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<AccessibleStates> : is_typed_flags<AccessibleStates, 0x3e3> {};
+}
 
 class SwAccessibleMap : public ::accessibility::IAccessibleViewForwarder,
                         public ::accessibility::IAccessibleParent
@@ -212,7 +212,7 @@ public:
 
     // Invalidate state of whole tree. If an action is open, this call
     // is processed when the last action ends.
-    void InvalidateStates( tAccessibleStates _nStates,
+    void InvalidateStates( AccessibleStates _nStates,
                            const SwFrm* _pFrm = 0 );
 
     void InvalidateRelationSet( const SwFrm* pMaster, const SwFrm* pFollow );
