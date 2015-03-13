@@ -221,15 +221,49 @@ class SwClientIter : public sw::Ring<SwClientIter>
     // iterator can be limited to return only SwClient objects of a certain type
     TypeId aSrchId;
 
+    static SwClientIter* pClientIters;
+
 public:
-    SW_DLLPUBLIC SwClientIter( const SwModify& );
-    SW_DLLPUBLIC ~SwClientIter();
+    SwClientIter( const SwModify& rModify )
+        : rRoot(rModify)
+        , aSrchId(nullptr)
+    {
+        MoveTo(pClientIters);
+        pClientIters = this;
+        pAct = pDelNext = const_cast<SwClient*>(rRoot.GetDepends());
+    }
+    ~SwClientIter()
+    {
+        assert(pClientIters);
+        if(pClientIters == this)
+            pClientIters = unique() ? nullptr : GetNextInRing();
+        MoveTo(nullptr);
+    }
 
     const SwModify& GetModify() const { return rRoot; }
 
-    SwClient* operator++();
-    SwClient* GoStart();
-    SwClient* GoEnd();
+    SwClient* operator++()
+    {
+        if( pDelNext == pAct )
+            pDelNext = static_cast<SwClient*>(pDelNext->m_pRight);
+        return pAct = pDelNext;
+    }
+    SwClient* GoStart()
+    {
+        if((pDelNext = const_cast<SwClient*>(rRoot.GetDepends())))
+            while( pDelNext->m_pLeft )
+                pDelNext = static_cast<SwClient*>(pDelNext->m_pLeft);
+        return pAct = pDelNext;
+    }
+    SwClient* GoEnd()
+    {
+        if(!pDelNext)
+            pDelNext = const_cast<SwClient*>(rRoot.GetDepends());
+        if(pDelNext)
+            while( pDelNext->m_pRight )
+                pDelNext = static_cast<SwClient*>(pDelNext->m_pRight);
+        return pAct = pDelNext;
+    }
 
     // returns the current SwClient object;
     // in case this was already removed, the object marked down to become
@@ -242,10 +276,41 @@ public:
     // SwModify::Add() asserts this
     bool IsChanged() const { return pDelNext != pAct; }
 
-    SW_DLLPUBLIC SwClient* First( TypeId nType );
-    SW_DLLPUBLIC SwClient* Next();
-    SW_DLLPUBLIC SwClient* Last( TypeId nType );
-    SW_DLLPUBLIC SwClient* Previous();
+    SwClient* First( TypeId nType )
+    {
+        aSrchId = nType;
+        GoStart();
+        if(!pDelNext)
+            return nullptr;
+        pAct = nullptr;
+        return Next();
+    }
+    SwClient* Last( TypeId nType )
+    {
+        aSrchId = nType;
+        GoEnd();
+        if(!pDelNext)
+            return nullptr;
+        if( pDelNext->IsA( aSrchId ) )
+            return pDelNext;
+        return Previous();
+    }
+    SwClient* Next()
+    {
+        if( pDelNext == pAct )
+            pDelNext = static_cast<SwClient*>(pDelNext->m_pRight);
+        while(pDelNext && !pDelNext->IsA( aSrchId ) )
+            pDelNext = static_cast<SwClient*>(pDelNext->m_pRight);
+        return pAct = pDelNext;
+    }
+
+    SwClient* Previous()
+    {
+        pDelNext = static_cast<SwClient*>(pDelNext->m_pLeft);
+        while(pDelNext && !pDelNext->IsA( aSrchId ) )
+            pDelNext = static_cast<SwClient*>(pDelNext->m_pLeft);
+        return pAct = pDelNext;
+    }
 };
 
 #endif

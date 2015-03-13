@@ -23,7 +23,6 @@
 #include <swcache.hxx>
 #include <swfntcch.hxx>
 
-static SwClientIter* pClientIters = nullptr;
 
 TYPEINIT0( SwClient );
 
@@ -206,9 +205,9 @@ void SwModify::Add( SwClient* pDepend )
     if(pDepend->pRegisteredIn != this )
     {
 #if OSL_DEBUG_LEVEL > 0
-        if(pClientIters)
+        if(SwClientIter::pClientIters)
         {
-            for(auto& rIter : pClientIters->GetRingContainer())
+            for(auto& rIter : SwClientIter::pClientIters->GetRingContainer())
                 OSL_ENSURE( &rIter.GetModify() != pRoot, "Client added to active ClientIter" );
         }
 #endif
@@ -258,9 +257,9 @@ SwClient* SwModify::Remove( SwClient* pDepend )
             pR->m_pLeft = pL;
 
         // update ClientIters
-        if(pClientIters)
+        if(SwClientIter::pClientIters)
         {
-            for(auto& rIter : pClientIters->GetRingContainer())
+            for(auto& rIter : SwClientIter::pClientIters->GetRingContainer())
             {
                 if( rIter.pAct == pDepend || rIter.pDelNext == pDepend )
                 {
@@ -362,84 +361,5 @@ bool SwDepend::GetInfo( SfxPoolItem& rInfo ) const
     return pToTell ? pToTell->GetInfo( rInfo ) : true;
 }
 
-SwClientIter::SwClientIter( const SwModify& rModify )
-    : rRoot(rModify)
-    , aSrchId(nullptr)
-{
-    MoveTo(pClientIters);
-    pClientIters = this;
-    pAct = pDelNext = const_cast<SwClient*>(rRoot.GetDepends());
-}
-
-SwClientIter::~SwClientIter()
-{
-    assert(pClientIters);
-    if(pClientIters == this)
-        pClientIters = unique() ? nullptr : GetNextInRing();
-    MoveTo(nullptr);
-}
-
-SwClient* SwClientIter::operator++()
-{
-    if( pDelNext == pAct )
-        pDelNext = static_cast<SwClient*>(pDelNext->m_pRight);
-    return pAct = pDelNext;
-}
-
-SwClient* SwClientIter::GoStart()
-{
-    if((pDelNext = const_cast<SwClient*>(rRoot.GetDepends())))
-        while( pDelNext->m_pLeft )
-            pDelNext = static_cast<SwClient*>(pDelNext->m_pLeft);
-    return pAct = pDelNext;
-}
-
-SwClient* SwClientIter::GoEnd()
-{
-    if(!pDelNext)
-        pDelNext = const_cast<SwClient*>(rRoot.GetDepends());
-    if(pDelNext)
-        while( pDelNext->m_pRight )
-            pDelNext = static_cast<SwClient*>(pDelNext->m_pRight);
-    return pAct = pDelNext;
-}
-
-SwClient* SwClientIter::First( TypeId nType )
-{
-    aSrchId = nType;
-    GoStart();
-    if(!pDelNext)
-        return nullptr;
-    pAct = nullptr;
-    return Next();
-}
-
-SwClient* SwClientIter::Last( TypeId nType )
-{
-    aSrchId = nType;
-    GoEnd();
-    if(!pDelNext)
-        return nullptr;
-    if( pDelNext->IsA( aSrchId ) )
-        return pDelNext;
-    return Previous();
-}
-
-SwClient* SwClientIter::Next()
-{
-    if( pDelNext == pAct )
-        pDelNext = static_cast<SwClient*>(pDelNext->m_pRight);
-    while(pDelNext && !pDelNext->IsA( aSrchId ) )
-        pDelNext = static_cast<SwClient*>(pDelNext->m_pRight);
-    return pAct = pDelNext;
-}
-
-SwClient* SwClientIter::Previous()
-{
-    pDelNext = static_cast<SwClient*>(pDelNext->m_pLeft);
-    while(pDelNext && !pDelNext->IsA( aSrchId ) )
-        pDelNext = static_cast<SwClient*>(pDelNext->m_pLeft);
-    return pAct = pDelNext;
-}
-
+SwClientIter* SwClientIter::pClientIters = nullptr;
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
