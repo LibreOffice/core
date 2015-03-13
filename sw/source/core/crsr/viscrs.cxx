@@ -339,7 +339,11 @@ void SwSelPaintRects::Show()
             }
         }
 
-        if (GetShell()->isTiledRendering())
+        // Tiled editing does not expose the draw and writer cursor, it just
+        // talks about "the" cursor at the moment. As long as that's true,
+        // don't say anything about the Writer cursor till a draw object is
+        // being edited.
+        if (GetShell()->isTiledRendering() && !pView->GetTextEditObject())
         {
             if (!empty())
             {
