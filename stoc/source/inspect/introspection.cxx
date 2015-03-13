@@ -1575,7 +1575,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
     throw (css::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard g(m_aMutex);
-    if (rBHelper.bDisposed) {
+    if (rBHelper.bDisposed || rBHelper.bInDispose) {
         throw css::lang::DisposedException(
             getImplementationName(), static_cast<OWeakObject *>(this));
     }
