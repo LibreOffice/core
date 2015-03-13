@@ -705,7 +705,6 @@ bool TypeDetection::impl_getPreselectionForType(
                 WildCard aCheck(*pIt);
                 if (aCheck.Matches(aParsedURL.Main))
                 {
-                    bBreakDetection        = true;
                     bMatchByPattern        = true;
                     break;
                 }
