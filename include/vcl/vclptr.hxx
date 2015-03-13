@@ -179,7 +179,7 @@ public:
         ::rtl::Reference<reference_type> aTmp(m_rInnerRef);
         m_rInnerRef.clear(); // we should use some 'swap' method ideally ;-)
         if (aTmp.get()) {
-            aTmp->dispose();
+            aTmp->disposeOnce();
         }
     }
 

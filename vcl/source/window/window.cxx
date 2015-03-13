@@ -139,18 +139,15 @@ bool Window::IsDisposed() const
 
 void Window::disposeOnce()
 {
-    if (!IsDisposed())
-        dispose();
+    if (!mpWindowImpl || mpWindowImpl->mbInDispose)
+        return;
+    mpWindowImpl->mbInDispose = true;
+    dispose();
 }
 
 void Window::dispose()
 {
-    if (IsDisposed())
-        return;
-
-    assert( !mpWindowImpl->mbInDispose && "vcl::Window - already in dispose()" );
-    mpWindowImpl->mbInDispose = true;
-
+    assert( mpWindowImpl && mpWindowImpl->mbInDispose ); // should only be called from disposeOnce()
     assert( !mpWindowImpl->mpParent ||
             !mpWindowImpl->mpParent->IsDisposed() ||
             "vcl::Window child should have its parent disposed first" );
@@ -605,8 +602,8 @@ WindowImpl::WindowImpl( WindowType nType )
     mpOverlapWindow                     = NULL;                      // first overlap parent
     mpBorderWindow                      = NULL;                      // Border-Window
     mpClientWindow                      = NULL;                      // Client-Window of a FrameWindow
-    mpParent                            = NULL;                      // parent (inkl. BorderWindow)
-    mpRealParent                        = NULL;                      // real parent (exkl. BorderWindow)
+    mpParent                            = NULL;                      // parent (incl. BorderWindow)
+    mpRealParent                        = NULL;                      // real parent (excl. BorderWindow)
     mpFirstChild                        = NULL;                      // first child window
     mpLastChild                         = NULL;                      // last child window
     mpFirstOverlap                      = NULL;                      // first overlap window (only set in overlap windows)
