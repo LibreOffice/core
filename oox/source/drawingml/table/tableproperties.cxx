@@ -297,7 +297,6 @@ void TableProperties::pushToPropSet( const ::oox::core::XmlFilterBase& rFilterBa
     {
         TableStyle* pTableStyle = (TableStyle*)&rTableStyle;
         delete pTableStyle;
-        mbOwnTblStyle = false;
     }
 }
 
