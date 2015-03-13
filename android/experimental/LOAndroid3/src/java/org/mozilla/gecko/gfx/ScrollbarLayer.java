@@ -13,8 +13,10 @@ import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.opengl.GLES20;
+import android.util.Log;
 
 import org.libreoffice.kit.DirectBufferAllocator;
+import org.libreoffice.LibreOfficeMainActivity;
 import org.mozilla.gecko.util.FloatUtils;
 
 import java.nio.ByteBuffer;
@@ -24,6 +26,7 @@ import java.nio.FloatBuffer;
  * Draws a small rect. This is scaled to become a scrollbar.
  */
 public class ScrollbarLayer extends TileLayer {
+    private static String LOGTAG = LayerView.class.getName();
     public static final long FADE_DELAY = 500; // milliseconds before fade-out starts
     private static final float FADE_AMOUNT = 0.03f; // how much (as a percent) the scrollbar should fade per frame
 
@@ -204,6 +207,9 @@ public class ScrollbarLayer extends TileLayer {
         beginTransaction(); // called on compositor thread
         mOpacity = 1.0f;
         endTransaction();
+
+        // Scrollbar is now visible, scrolling will start: hide the soft keyboard.
+        LibreOfficeMainActivity.mAppContext.hideSoftKeyboard();
         return true;
     }
 
@@ -445,3 +451,5 @@ public class ScrollbarLayer extends TileLayer {
         return new RectF(barStart, bottom - BAR_SIZE, barEnd, bottom);
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
