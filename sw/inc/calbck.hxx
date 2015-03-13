@@ -23,6 +23,7 @@
 #include <tools/rtti.hxx>
 #include "swdllapi.h"
 #include <boost/noncopyable.hpp>
+#include <ring.hxx>
 
 class SwModify;
 class SwClientIter;
@@ -202,7 +203,7 @@ protected:
     virtual void SwClientNotify( const SwModify& rModify, const SfxHint& rHint ) SAL_OVERRIDE;
 };
 
-class SwClientIter
+class SwClientIter : public sw::Ring<SwClientIter>
 {
     friend SwClient* SwModify::Remove(SwClient *); ///< for pointer adjustments
     friend void SwModify::Add(SwClient *pDepend);   ///< for pointer adjustments
@@ -216,11 +217,6 @@ class SwClientIter
     // is marked down to become the current object in the next step
     // this is necessary because iteration requires access to members of the current object
     SwClient* pDelNext;
-
-    // SwClientIter objects are tracked in linked list so that they can react
-    // when the current (pAct) or marked down (pDelNext) SwClient is removed
-    // from its SwModify
-    SwClientIter *pNxtIter;
 
     // iterator can be limited to return only SwClient objects of a certain type
     TypeId aSrchId;

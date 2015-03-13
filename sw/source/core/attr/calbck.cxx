@@ -206,11 +206,10 @@ void SwModify::Add( SwClient* pDepend )
     if(pDepend->pRegisteredIn != this )
     {
 #if OSL_DEBUG_LEVEL > 0
-        SwClientIter* pTmp = pClientIters;
-        while( pTmp )
+        if(pClientIters)
         {
-            OSL_ENSURE( &pTmp->GetModify() != pRoot, "Client added to active ClientIter" );
-            pTmp = pTmp->pNxtIter;
+            for(auto& rIter : pClientIters->GetRingContainer())
+                OSL_ENSURE( &rIter.GetModify() != pRoot, "Client added to active ClientIter" );
         }
 #endif
         // deregister new client in case it is already registered elsewhere
@@ -259,18 +258,18 @@ SwClient* SwModify::Remove( SwClient* pDepend )
             pR->m_pLeft = pL;
 
         // update ClientIters
-        SwClientIter* pTmp = pClientIters;
-        while( pTmp )
+        if(pClientIters)
         {
-            if( pTmp->pAct == pDepend || pTmp->pDelNext == pDepend )
+            for(auto& rIter : pClientIters->GetRingContainer())
             {
-                // if object being removed is the current or next object in an
-                // iterator, advance this iterator
-                pTmp->pDelNext = static_cast<SwClient*>(pR);
+                if( rIter.pAct == pDepend || rIter.pDelNext == pDepend )
+                {
+                    // if object being removed is the current or next object in an
+                    // iterator, advance this iterator
+                    rIter.pDelNext = static_cast<SwClient*>(pR);
+                }
             }
-            pTmp = pTmp->pNxtIter;
         }
-
         pDepend->m_pLeft = nullptr;
         pDepend->m_pRight = nullptr;
     }
@@ -365,32 +364,19 @@ bool SwDepend::GetInfo( SfxPoolItem& rInfo ) const
 
 SwClientIter::SwClientIter( const SwModify& rModify )
     : rRoot(rModify)
-    , pNxtIter(nullptr)
     , aSrchId(nullptr)
 {
-    if( pClientIters )
-        pNxtIter = pClientIters;
+    MoveTo(pClientIters);
     pClientIters = this;
-
     pAct = pDelNext = const_cast<SwClient*>(rRoot.GetDepends());
 }
 
 SwClientIter::~SwClientIter()
 {
     assert(pClientIters);
-    // reorganize list of ClientIters
-    if( pClientIters == this )
-        pClientIters = pNxtIter;
-    else
-    {
-        SwClientIter* pTmp = pClientIters;
-        while( pTmp->pNxtIter != this )
-        {
-            assert(pTmp);
-            pTmp = pTmp->pNxtIter;
-        }
-        pTmp->pNxtIter = pNxtIter;
-    }
+    if(pClientIters == this)
+        pClientIters = unique() ? nullptr : GetNextInRing();
+    MoveTo(nullptr);
 }
 
 SwClient* SwClientIter::operator++()
