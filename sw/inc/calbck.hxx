@@ -96,7 +96,7 @@ class SW_DLLPUBLIC SwClient : ::sw::WriterListener
 
 protected:
     // single argument ctors shall be explicit.
-    explicit SwClient(SwModify *pToRegisterIn);
+    inline explicit SwClient( SwModify* pToRegisterIn );
 
     // write access to pRegisteredIn shall be granted only to the object itself (protected access)
     SwModify* GetRegisteredInNonConst() const { return pRegisteredIn; }
@@ -105,7 +105,8 @@ public:
 
     SwClient() : pRegisteredIn(nullptr) {}
     virtual ~SwClient();
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
+    virtual void Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue )
+        { CheckRegistration( pOldValue, pNewValue ); }
 
     // in case an SwModify object is destroyed that itself is registered in another SwModify,
     // its SwClient objects can decide to get registered to the latter instead by calling this method
@@ -114,7 +115,7 @@ public:
     // controlled access to Modify method
     // mba: this is still considered a hack and it should be fixed; the name makes grep-ing easier
     void ModifyNotification( const SfxPoolItem *pOldValue, const SfxPoolItem *pNewValue ) { this->Modify ( pOldValue, pNewValue ); }
-   void SwClientNotifyCall( const SwModify& rModify, const SfxHint& rHint ) { SwClientNotify( rModify, rHint ); }
+    void SwClientNotifyCall( const SwModify& rModify, const SfxHint& rHint ) { SwClientNotify( rModify, rHint ); }
 
     const SwModify* GetRegisteredIn() const { return pRegisteredIn; }
     SwModify* GetRegisteredIn() { return pRegisteredIn; }
@@ -123,7 +124,7 @@ public:
     TYPEINFO();
 
     // get information about attribute
-    virtual bool GetInfo( SfxPoolItem& ) const;
+    virtual bool GetInfo( SfxPoolItem& ) const { return true; }
 };
 
 
@@ -313,6 +314,12 @@ public:
     }
 };
 
+SwClient::SwClient( SwModify* pToRegisterIn )
+    : pRegisteredIn( nullptr )
+{
+    if(pToRegisterIn)
+        pToRegisterIn->Add(this);
+}
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

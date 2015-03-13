@@ -26,12 +26,11 @@
 
 TYPEINIT0( SwClient );
 
-SwClient::SwClient( SwModify* pToRegisterIn )
-    : pRegisteredIn( nullptr )
+SwClient::~SwClient()
 {
-    if(pToRegisterIn)
-        // connect to SwModify
-        pToRegisterIn->Add(this);
+    OSL_ENSURE( !pRegisteredIn || pRegisteredIn->GetDepends(), "SwModify still known, but Client already disconnected!" );
+    if( pRegisteredIn && pRegisteredIn->GetDepends() )
+        pRegisteredIn->Remove( this );
 }
 
 void SwClient::CheckRegistration( const SfxPoolItem* pOld, const SfxPoolItem* )
@@ -57,23 +56,6 @@ void SwClient::CheckRegistration( const SfxPoolItem* pOld, const SfxPoolItem* )
     }
 }
 
-void SwClient::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue )
-{
-    CheckRegistration( pOldValue, pNewValue );
-}
-
-SwClient::~SwClient()
-{
-    OSL_ENSURE( !pRegisteredIn || pRegisteredIn->GetDepends(), "SwModify still known, but Client already disconnected!" );
-    if( pRegisteredIn && pRegisteredIn->GetDepends() )
-        // still connected
-        pRegisteredIn->Remove( this );
-}
-
-bool SwClient::GetInfo( SfxPoolItem& ) const
-{
-    return true;
-}
 
 SwModify::SwModify()
     : SwClient(nullptr), pRoot(nullptr)
