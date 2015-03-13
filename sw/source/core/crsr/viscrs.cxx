@@ -710,7 +710,7 @@ void SwShellTableCrsr::SaveTblBoxCntnt( const SwPosition* pPos )
 void SwShellTableCrsr::FillRects()
 {
     // Calculate the new rectangles. If the cursor is still "parked" do nothing
-    if (m_SelectedBoxes.empty() || bParked || !GetPoint()->nNode.GetIndex())
+    if (m_SelectedBoxes.empty() || m_bParked || !GetPoint()->nNode.GetIndex())
         return;
 
     bool bStart = true;
@@ -779,7 +779,7 @@ void SwShellTableCrsr::FillStartEnd(SwRect& rStart, SwRect& rEnd) const
 bool SwShellTableCrsr::IsInside( const Point& rPt ) const
 {
     // Calculate the new rectangles. If the cursor is still "parked" do nothing
-    if (m_SelectedBoxes.empty() || bParked || !GetPoint()->nNode.GetIndex())
+    if (m_SelectedBoxes.empty() || m_bParked || !GetPoint()->nNode.GetIndex())
         return false;
 
     SwNodes& rNds = GetDoc()->GetNodes();

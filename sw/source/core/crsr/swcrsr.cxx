@@ -2111,10 +2111,10 @@ void SwCursor::RestoreSavePos()
 SwTableCursor::SwTableCursor( const SwPosition &rPos, SwPaM* pRing )
     : SwCursor( rPos, pRing, false )
 {
-    bParked = false;
-    bChg = false;
-    nTblPtNd = 0, nTblMkNd = 0;
-    nTblPtCnt = 0, nTblMkCnt = 0;
+    m_bParked = false;
+    m_bChanged = false;
+    m_nTblPtNd = 0, m_nTblMkNd = 0;
+    m_nTblPtCnt = 0, m_nTblMkCnt = 0;
 }
 
 SwTableCursor::~SwTableCursor() {}
@@ -2151,19 +2151,19 @@ lcl_SeekEntry(const SwSelBoxes& rTmp, SwStartNode const*const pSrch,
 
 SwCursor* SwTableCursor::MakeBoxSels( SwCursor* pAktCrsr )
 {
-    if( bChg )
+    if (m_bChanged)
     {
-        if( bParked )
+        if (m_bParked)
         {
             // move back into content
             Exchange();
             Move( fnMoveForward );
             Exchange();
             Move( fnMoveForward );
-            bParked = false;
+            m_bParked = false;
         }
 
-        bChg = false;
+        m_bChanged = false;
 
         // create temporary copies so that all boxes that
         // have already cursors can be removed
@@ -2252,13 +2252,13 @@ void SwTableCursor::InsertBox( const SwTableBox& rTblBox )
 {
     SwTableBox* pBox = (SwTableBox*)&rTblBox;
     m_SelectedBoxes.insert(pBox);
-    bChg = true;
+    m_bChanged = true;
 }
 
 void SwTableCursor::DeleteBox(size_t const nPos)
 {
     m_SelectedBoxes.erase(m_SelectedBoxes.begin() + nPos);
-    bChg = true;
+    m_bChanged = true;
 }
 
 bool SwTableCursor::NewTableSelection()
@@ -2322,10 +2322,10 @@ bool SwTableCursor::IsCrsrMovedUpdt()
     if( !IsCrsrMoved() )
         return false;
 
-    nTblMkNd = GetMark()->nNode.GetIndex();
-    nTblPtNd = GetPoint()->nNode.GetIndex();
-    nTblMkCnt = GetMark()->nContent.GetIndex();
-    nTblPtCnt = GetPoint()->nContent.GetIndex();
+    m_nTblMkNd = GetMark()->nNode.GetIndex();
+    m_nTblPtNd = GetPoint()->nNode.GetIndex();
+    m_nTblMkCnt = GetMark()->nContent.GetIndex();
+    m_nTblPtCnt = GetPoint()->nContent.GetIndex();
     return true;
 }
 
@@ -2345,8 +2345,8 @@ void SwTableCursor::ParkCrsr()
     GetMark()->nNode = *pNd;
     GetMark()->nContent.Assign( 0, 0 );
 
-    bChg = true;
-    bParked = true;
+    m_bChanged = true;
+    m_bParked = true;
 }
 
 bool SwTableCursor::HasReadOnlyBoxSel() const

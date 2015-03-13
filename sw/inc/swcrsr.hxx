@@ -226,10 +226,11 @@ public:
 **/
 class SwCrsrSaveState
 {
-    SwCursor& rCrsr;
+private:
+    SwCursor& m_rCrsr;
 public:
-    SwCrsrSaveState( SwCursor& rC ) : rCrsr( rC ) { rC.SaveState(); }
-    ~SwCrsrSaveState() { rCrsr.RestoreState(); }
+    SwCrsrSaveState( SwCursor& rC ) : m_rCrsr( rC ) { rC.SaveState(); }
+    ~SwCrsrSaveState() { m_rCrsr.RestoreState(); }
 };
 
 // internal, used by SwCursor::SaveState() etc.
@@ -253,12 +254,13 @@ class SwTableCursor : public virtual SwCursor
 {
 
 protected:
-    sal_uLong nTblPtNd, nTblMkNd;
-    sal_Int32 nTblPtCnt;
-    sal_Int32 nTblMkCnt;
+    sal_uLong m_nTblPtNd;
+    sal_uLong m_nTblMkNd;
+    sal_Int32 m_nTblPtCnt;
+    sal_Int32 m_nTblMkCnt;
     SwSelBoxes m_SelectedBoxes;
-    bool bChg : 1;
-    bool bParked : 1;       // Table-cursor was parked.
+    bool m_bChanged : 1;
+    bool m_bParked : 1;       // Table-cursor was parked.
 
     virtual bool IsSelOvrCheck(int eFlags) SAL_OVERRIDE;
 
@@ -286,13 +288,13 @@ public:
     // Has table cursor been changed?
     bool IsCrsrMoved() const
     {
-        return  nTblMkNd != GetMark()->nNode.GetIndex() ||
-                nTblPtNd != GetPoint()->nNode.GetIndex() ||
-                nTblMkCnt != GetMark()->nContent.GetIndex() ||
-                nTblPtCnt != GetPoint()->nContent.GetIndex();
+        return  m_nTblMkNd != GetMark()->nNode.GetIndex() ||
+                m_nTblPtNd != GetPoint()->nNode.GetIndex() ||
+                m_nTblMkCnt != GetMark()->nContent.GetIndex() ||
+                m_nTblPtCnt != GetPoint()->nContent.GetIndex();
     }
 
-    bool IsChgd() const { return bChg; }
+    bool IsChgd() const { return m_bChanged; }
 
     // Park table cursor at start node of boxes.
     void ParkCrsr();
