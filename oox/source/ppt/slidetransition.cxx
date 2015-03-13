@@ -346,7 +346,9 @@ namespace oox { namespace ppt {
                 mnTransitionSubType = TransitionSubType::EIGHTBLADE;
                 break;
             default:
-                OSL_TRACE( "OOX: strange number of blades for thw wheel-wipe %d", param1 );
+                SAL_INFO(
+                    "oox.ppt",
+                    "strange number of blades for thw wheel-wipe " << param1);
                 if( param1 > 8 )
                 {
                     mnTransitionSubType = TransitionSubType::EIGHTBLADE;

@@ -851,7 +851,10 @@ uno::Sequence<OUString> SAL_CALL SalGtkFilePicker::getSelectedFiles() throw( uno
                 OUString sExtension = "." + sToken;
                 OUString &rBase = aSelectedFiles[nIndex];
                 sal_Int32 nExtensionIdx = rBase.getLength() - sExtension.getLength();
-                OSL_TRACE( "idx are %d %d", rBase.lastIndexOf( sExtension ), nExtensionIdx );
+                SAL_INFO(
+                    "vcl.gtk",
+                    "idx are " << rBase.lastIndexOf(sExtension) << " "
+                        << nExtensionIdx);
 
                 if( rBase.lastIndexOf( sExtension ) != nExtensionIdx )
                     rBase += sExtension;

@@ -48,7 +48,7 @@ sal_Int32 SwVbaRevision::GetPosition() throw (css::uno::RuntimeException)
         if( xProps == mxRedlineProps )
         {
             nPos = i;
-            OSL_TRACE(" SwVbaRevision::SwVbaRevision, the redline position is %d, ", nPos );
+            SAL_INFO("sw.ui", "the redline position is " << nPos);
             break;
         }
     }

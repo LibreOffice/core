@@ -145,8 +145,10 @@ namespace slideshow
                                 maActionClassVector[ nActionIndex ] = CLASS_SHAPE_START;
                             }
                         }
-                        VERBOSE_TRACE( "Shape text structure: %s at action #%d",
-                                       pAct->GetComment().getStr(), nActionIndex );
+                        SAL_INFO(
+                            "slideshow",
+                            "Shape text structure: " << pAct->GetComment()
+                                << " at action #" << nActionIndex);
                         ++nActionIndex;
                         break;
                     }

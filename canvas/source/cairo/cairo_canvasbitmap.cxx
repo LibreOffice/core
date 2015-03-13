@@ -82,7 +82,9 @@ namespace cairocanvas
         ENSURE_OR_THROW( mpSurfaceProvider.is(),
                           "CanvasBitmap::CanvasBitmap(): Invalid surface or device" );
 
-        OSL_TRACE( "bitmap size: %dx%d", rSize.getX(), rSize.getY() );
+        SAL_INFO(
+            "canvas.cairo",
+            "bitmap size: " << rSize.getX() << "x" << rSize.getY());
 
         mpBufferSurface = mpSurfaceProvider->createSurface( rSize, bHasAlpha ? CAIRO_CONTENT_COLOR_ALPHA : CAIRO_CONTENT_COLOR );
         mpBufferCairo = mpBufferSurface->getCairo();

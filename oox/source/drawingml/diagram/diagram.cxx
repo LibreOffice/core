@@ -49,15 +49,12 @@ namespace dgm {
 
 void Connection::dump()
 {
-    OSL_TRACE("dgm: cnx modelId %s, srcId %s, dstId %s, parTransId %s, presId %s, sibTransId %s, srcOrd %d, dstOrd %d",
-              OUSTRING_TO_CSTR( msModelId ),
-              OUSTRING_TO_CSTR( msSourceId ),
-              OUSTRING_TO_CSTR( msDestId ),
-              OUSTRING_TO_CSTR( msParTransId ),
-              OUSTRING_TO_CSTR( msPresId ),
-              OUSTRING_TO_CSTR( msSibTransId ),
-              mnSourceOrder,
-              mnDestOrder );
+    SAL_INFO(
+        "oox.drawingml",
+        "cnx modelId " << msModelId << ", srcId " << msSourceId << ", dstId "
+            << msDestId << ", parTransId " << msParTransId << ", presId "
+            << msPresId << ", sibTransId " << msSibTransId << ", srcOrd "
+            << mnSourceOrder << ", dstOrd " << mnDestOrder);
 }
 
 void Point::dump()

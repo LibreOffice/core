@@ -23,6 +23,7 @@
 
 #include "storcach.hxx"
 
+#include "sal/log.hxx"
 #include "sal/types.h"
 #include "sal/macros.h"
 #include "rtl/alloc.h"
@@ -335,8 +336,11 @@ void PageCache_Impl::rescale_Impl (sal_Size new_size)
         Entry ** old_table = m_hash_table;
         sal_Size old_size  = m_hash_size;
 
-        OSL_TRACE("ave chain length: %zu, total entries: %zu [old_size: %zu new_size: %zu]",
-                  m_hash_entries >> m_hash_shift, m_hash_entries, old_size, new_size);
+        SAL_INFO(
+            "store",
+            "ave chain length: " << (m_hash_entries >> m_hash_shift)
+                << ", total entries: " << m_hash_entries << " [old_size: "
+                << old_size << " new_size: " << new_size << "]");
 
         memset (new_table, 0, new_bytes);
 

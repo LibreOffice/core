@@ -262,7 +262,11 @@ void ScParameterClassification::Init()
                         pRun->aData.nParam[j] =  pRun->aData.nParam[j - pRun->aData.nRepeatLast];
                     else
                     {
-                        OSL_TRACE( "bad classification: eOp %d, repeated param %d negative offset", pRaw->eOp, j);
+                        SAL_INFO(
+                            "sc.core",
+                            "bad classification: eOp " << +pRaw->eOp
+                                << ", repeated param " << j
+                                << " negative offset");
                         pRun->aData.nParam[j] =  Unknown;
                     }
                 }

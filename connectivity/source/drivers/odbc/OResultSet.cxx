@@ -1700,7 +1700,10 @@ bool OResultSet::move(IResultSetHelper::Movement _eCursorPosition, sal_Int32 _nO
     else
         m_nCurrentFetchState = N3SQLFetchScroll(m_aStatementHandle,nFetchOrientation,_nOffset);
 
-    OSL_TRACE( __FILE__": OResultSet::move(%d,%d), FetchState = %d",nFetchOrientation,_nOffset,m_nCurrentFetchState);
+    SAL_INFO(
+        "connectivity.odbc",
+        "move(" << nFetchOrientation << "," << _nOffset << "), FetchState = "
+            << m_nCurrentFetchState);
     OTools::ThrowException(m_pStatement->getOwnConnection(),m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
 
     const bool bSuccess = m_nCurrentFetchState == SQL_SUCCESS || m_nCurrentFetchState == SQL_SUCCESS_WITH_INFO;
@@ -1759,7 +1762,9 @@ bool OResultSet::move(IResultSetHelper::Movement _eCursorPosition, sal_Int32 _nO
 sal_Int32 OResultSet::getDriverPos() const
 {
     sal_Int32 nValue = getStmtOption<SQLULEN, SQL_IS_UINTEGER>(SQL_ATTR_ROW_NUMBER);
-    OSL_TRACE( __FILE__": OResultSet::getDriverPos() = RowNum = %d, RowPos = %d", nValue, m_nRowPos);
+    SAL_INFO(
+        "connectivity.odbc",
+        "RowNum = " << nValue << ", RowPos = " << m_nRowPos);
     return nValue ? nValue : m_nRowPos;
 }
 

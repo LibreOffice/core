@@ -361,12 +361,11 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
             break;
     }
 
-    OSL_TRACE("Layouting shape %s: (%d,%d,%d,%d)",
-              OUSTRING_TO_CSTR( rName ),
-              rShape->getPosition().X,
-              rShape->getPosition().Y,
-              rShape->getSize().Width,
-              rShape->getSize().Height);
+    SAL_INFO(
+        "oox.drawingml",
+        "Layouting shape " << rName << ": (" << rShape->getPosition().X << ","
+        << rShape->getPosition().Y << "," << rShape->getSize().Width << ","
+        << rShape->getSize().Height << ")");
 }
 
 void LayoutNode::accept( LayoutAtomVisitor& rVisitor )
@@ -381,10 +380,11 @@ bool LayoutNode::setupShape( const ShapePtr& rShape, const Diagram& rDgm, sal_uI
     if( aDataNode != rDgm.getData()->getPointsPresNameMap().end() &&
         aDataNode->second.size() > nIdx )
     {
-        OSL_TRACE( "Filling content from %d th layout node named \"%s\", modelId \"%s\"",
-                   nIdx,
-                   OUSTRING_TO_CSTR( msName ),
-                   OUSTRING_TO_CSTR( aDataNode->second.at(nIdx)->msModelId ) );
+        SAL_INFO(
+            "oox.drawingml",
+            "Filling content from " << nIdx << "th layout node named \""
+                << msName << "\", modelId \""
+                << aDataNode->second.at(nIdx)->msModelId << "\"");
 
         // got the presentation node - now, need the actual data node:
         const DiagramData::StringMap::const_iterator aNodeName=rDgm.getData()->getPresOfNameMap().find(
@@ -413,9 +413,13 @@ bool LayoutNode::setupShape( const ShapePtr& rShape, const Diagram& rDgm, sal_uI
                     rShape->getCustomShapeProperties() = aDataNode2->second->mpShape->getCustomShapeProperties();
                     rShape->setMasterTextListStyle( aDataNode2->second->mpShape->getMasterTextListStyle() );
 
-                    OSL_TRACE( "Custom shape with preset type %d added for layout node named \"%s\"",
-                               rShape->getCustomShapeProperties()->getShapePresetType(),
-                               OUSTRING_TO_CSTR( msName ) );
+                    SAL_INFO(
+                        "oox.drawingml",
+                        "Custom shape with preset type "
+                            << (rShape->getCustomShapeProperties()
+                                ->getShapePresetType())
+                            << " added for layout node named \"" << msName
+                            << "\"");
                 }
 
                 // append text with right outline level
@@ -452,9 +456,12 @@ bool LayoutNode::setupShape( const ShapePtr& rShape, const Diagram& rDgm, sal_uI
         }
         else
         {
-            OSL_TRACE("ShapeCreationVisitor::visit: no data node name found while processing shape type %d for layout node named \"%s\"",
-                      rShape->getCustomShapeProperties()->getShapePresetType(),
-                      OUSTRING_TO_CSTR( msName ) );
+            SAL_INFO(
+                "oox.drawingml",
+                "ShapeCreationVisitor::visit: no data node name found while"
+                    " processing shape type "
+                    << rShape->getCustomShapeProperties()->getShapePresetType()
+                    << " for layout node named \"" << msName << "\"");
         }
 
         // TODO(Q1): apply styling & coloring - taking
@@ -462,20 +469,32 @@ bool LayoutNode::setupShape( const ShapePtr& rShape, const Diagram& rDgm, sal_uI
         // now, but docs are a bit unclear on this
         if( !msStyleLabel.isEmpty() )
         {
-            OSL_TRACE("setting style with label %s",
-                      OUSTRING_TO_CSTR( msStyleLabel ) );
+            SAL_INFO(
+                "oox.drawingml", "setting style with label " << msStyleLabel);
 
             const DiagramQStyleMap::const_iterator aStyle=rDgm.getStyles().find(msStyleLabel);
             if( aStyle != rDgm.getStyles().end() )
             {
                 rShape->getShapeStyleRefs()[XML_fillRef] = aStyle->second.maFillStyle;
-                OSL_TRACE("added fill style with id %d", aStyle->second.maFillStyle.mnThemedIdx);
+                SAL_INFO(
+                    "oox.drawingml",
+                    "added fill style with id "
+                        << aStyle->second.maFillStyle.mnThemedIdx);
                 rShape->getShapeStyleRefs()[XML_lnRef] = aStyle->second.maLineStyle;
-                OSL_TRACE("added line style with id %d", aStyle->second.maLineStyle.mnThemedIdx);
+                SAL_INFO(
+                    "oox.drawingml",
+                    "added line style with id "
+                        << aStyle->second.maLineStyle.mnThemedIdx);
                 rShape->getShapeStyleRefs()[XML_effectRef] = aStyle->second.maEffectStyle;
-                OSL_TRACE("added effect style with id %d", aStyle->second.maEffectStyle.mnThemedIdx);
+                SAL_INFO(
+                    "oox.drawingml",
+                    "added effect style with id "
+                        << aStyle->second.maEffectStyle.mnThemedIdx);
                 rShape->getShapeStyleRefs()[XML_fontRef] = aStyle->second.maTextStyle;
-                OSL_TRACE("added fontref style with id %d", aStyle->second.maTextStyle.mnThemedIdx);
+                SAL_INFO(
+                    "oox.drawingml",
+                    "added fontref style with id "
+                        << aStyle->second.maTextStyle.mnThemedIdx);
                 Color aColor=aStyle->second.maTextStyle.maPhClr;
                 OSL_TRACE("added fontref color with alpha %d", aColor.getTransparency() );
             }
@@ -501,9 +520,11 @@ bool LayoutNode::setupShape( const ShapePtr& rShape, const Diagram& rDgm, sal_uI
     }
     else
     {
-        OSL_TRACE("ShapeCreationVisitor::visit: no text found while processing shape type %d for layout node named \"%s\"",
-                  rShape->getCustomShapeProperties()->getShapePresetType(),
-                  OUSTRING_TO_CSTR( msName ) );
+        SAL_INFO(
+            "oox.drawingml",
+            "no text found while processing shape type "
+                << rShape->getCustomShapeProperties()->getShapePresetType()
+                << " for layout node named \"" << msName << "\"");
     }
 
     return false;
@@ -631,8 +652,11 @@ void ShapeCreationVisitor::visit(LayoutNode& rAtom)
     ShapePtr pCurrShape(rAtom.getShape());
     if( pCurrShape )
     {
-        OSL_TRACE("ShapeCreationVisitor::visit: processing shape type %d",
-                  pCurrShape->getCustomShapeProperties()->getShapePresetType() );
+        SAL_INFO(
+            "oox.drawingml",
+            "processing shape type "
+                << (pCurrShape->getCustomShapeProperties()
+                    ->getShapePresetType()));
 
         // TODO(F3): cloned shape shares all properties by reference,
         // don't change them!

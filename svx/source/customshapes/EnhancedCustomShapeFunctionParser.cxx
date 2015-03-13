@@ -153,7 +153,12 @@ public:
     }
     virtual double operator()() const SAL_OVERRIDE
     {
-        OSL_TRACE("  $%d --> %f (angle: %f)", mnIndex, mrCustoShape.GetAdjustValueAsDouble( mnIndex ), 180.0*mrCustoShape.GetAdjustValueAsDouble( mnIndex )/10800000.0);
+        SAL_INFO(
+            "svx",
+            "$" << mnIndex << " --> "
+                << mrCustoShape.GetAdjustValueAsDouble(mnIndex) << " (angle: "
+                << 180.0*mrCustoShape.GetAdjustValueAsDouble(mnIndex)/10800000.0
+                << ")");
         return mrCustoShape.GetAdjustValueAsDouble( mnIndex );
     }
     virtual bool isConstant() const SAL_OVERRIDE

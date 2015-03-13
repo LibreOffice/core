@@ -923,7 +923,10 @@ void BarChart::createShapes()
     /* @todo remove series shapes if empty
     */
 
-    OSL_TRACE( "\nPPPPPPPPP<<<<<<<<<<<< bar chart :: createShapes():: skipped points: %d created points: %d", nSkippedPoints, nCreatedPoints );
+    SAL_INFO(
+        "chart2",
+        "skipped points: " << nSkippedPoints << " created points: "
+            << nCreatedPoints);
 }
 
 } //namespace chart

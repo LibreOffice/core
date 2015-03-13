@@ -457,7 +457,7 @@ void PropertyMap::dump( Reference< XPropertySet > rXPropSet )
     Reference< XPropertySetInfo > info = rXPropSet->getPropertySetInfo ();
     Sequence< Property > props = info->getProperties ();
 
-    OSL_TRACE("dump props, len: %d", props.getLength ());
+    SAL_INFO("oox", "dump props, len: " << props.getLength ());
 
     for (int i=0; i < props.getLength (); i++) {
         OString name = OUStringToOString( props [i].Name, RTL_TEXTENCODING_UTF8);

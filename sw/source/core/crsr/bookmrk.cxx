@@ -47,16 +47,18 @@ namespace
         SwTxtNode* pTxtNode = rPos.nNode.GetNode().GetTxtNode();
         if(pTxtNode == NULL && rPos.nContent.GetIndex() > 0)
         {
-            OSL_TRACE(
-                "bookmrk.cxx::lcl_FixPosition"
-                " - illegal position: %d without proper TxtNode", rPos.nContent.GetIndex());
+            SAL_INFO(
+                "sw.core",
+                "illegal position: " << rPos.nContent.GetIndex()
+                    << " without proper TxtNode");
             rPos.nContent.Assign(NULL, 0);
         }
         else if(pTxtNode != NULL && rPos.nContent.GetIndex() > pTxtNode->Len())
         {
-            OSL_TRACE(
-                "bookmrk.cxx::lcl_FixPosition"
-                " - illegal position: %d is beyond %d", rPos.nContent.GetIndex(), pTxtNode->Len());
+            SAL_INFO(
+                "sw.core",
+                "illegal position: " << rPos.nContent.GetIndex()
+                    << " is beyond " << pTxtNode->Len());
             rPos.nContent.Assign(pTxtNode, pTxtNode->Len());
         }
     }

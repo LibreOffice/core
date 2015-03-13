@@ -87,11 +87,11 @@ ScVbaComment::getAnnotationIndex() throw (uno::RuntimeException)
 
         if ( xAddress.Column == aAddress.Column && xAddress.Row == aAddress.Row && xAddress.Sheet == aAddress.Sheet )
         {
-            OSL_TRACE("** terminating search, index is %d", aIndex );
+            SAL_INFO("sc.ui", "terminating search, index is " << aIndex);
             break;
         }
     }
-    OSL_TRACE("** returning index is %d", aIndex );
+    SAL_INFO("sc.ui", "returning index is " << aIndex);
 
        return aIndex;
 }

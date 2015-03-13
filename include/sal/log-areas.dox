@@ -500,6 +500,7 @@ certain functionality.
 @li @c reportdesign
 @li @c rsc
 @li @c sax
+@li @c scripting
 @li @c scripting.provider
 @li @c shell
 @li @c stoc

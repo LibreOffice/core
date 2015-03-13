@@ -767,7 +767,9 @@ EventListener::initialize( const Sequence< Any >& aArguments ) throw (Exception,
 {
     if ( aArguments.getLength() == 1 )
         aArguments[0] >>= m_xModel;
-    OSL_TRACE("EventListener::initialize() args %d m_xModel %d", aArguments.getLength(), m_xModel.is() );
+    SAL_INFO(
+        "scripting",
+        "args " << aArguments.getLength() << " m_xModel " << m_xModel.is());
 }
 
 // XInterface

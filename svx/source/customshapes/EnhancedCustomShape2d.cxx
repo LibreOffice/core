@@ -638,7 +638,10 @@ void EnhancedCustomShape2d::SetPathSize( sal_Int32 nIndex )
     if ( seqSubViewSize.getLength() && nIndex < seqSubViewSize.getLength() ) {
         nWidth = seqSubViewSize[ nIndex ].Width;
         nHeight = seqSubViewSize[ nIndex ].Height;
-        OSL_TRACE("set subpath %d size: %d x %d", nIndex, nWidth, nHeight);
+        SAL_INFO(
+            "svx",
+            "set subpath " << nIndex << " size: " << nWidth << " x "
+                << nHeight);
     }
 
     if ( nWidth && nHeight ) {
@@ -653,7 +656,10 @@ void EnhancedCustomShape2d::SetPathSize( sal_Int32 nIndex )
     fYScale = nCoordHeight == 0 ? 0.0 : (double)aLogicRect.GetHeight() / (double)nCoordHeight;
     if ( bOOXMLShape )
     {
-        OSL_TRACE("ooxml shape, path width: %d height: %d", nCoordWidth, nCoordHeight);
+        SAL_INFO(
+            "svx",
+            "ooxml shape, path width: " << nCoordWidth << " height: "
+                << nCoordHeight);
         if ( nCoordWidth == 0 )
             fXScale = 1.0;
         if ( nCoordHeight == 0 )
@@ -806,8 +812,10 @@ EnhancedCustomShape2d::EnhancedCustomShape2d( SdrObject* pAObj ) :
             }
             catch ( EnhancedCustomShape::ParseError& )
             {
-                OSL_TRACE("error: equation number: %d, parser failed ( %s )",
-                          i, OUStringToOString( seqEquations[ i ], RTL_TEXTENCODING_ASCII_US ).getStr());
+                SAL_INFO(
+                    "svx",
+                    "error: equation number: " << i << ", parser failed ("
+                        << seqEquations[i] << ")");
             }
         }
     }
@@ -890,8 +898,10 @@ double EnhancedCustomShape2d::GetEquationValueAsDouble( const sal_Int32 nIndex )
         nLevel --;
 #endif
         }
-        OSL_TRACE("  ?%d --> %f (angle: %f)", nIndex,
-                  fNumber, 180.0*fNumber/10800000.0);
+        SAL_INFO(
+            "svx",
+            "?" << nIndex << " --> " << fNumber << " (angle: "
+                << 180.0*fNumber/10800000.0 << ")");
     }
 
     return fNumber;

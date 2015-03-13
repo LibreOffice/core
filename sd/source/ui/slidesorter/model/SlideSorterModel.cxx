@@ -56,16 +56,16 @@ namespace {
             SharedPageDescriptor pDescriptor (rModel.GetPageDescriptor(nIndex));
             if (pDescriptor)
             {
-                OSL_TRACE("%d %d %d %d %p",
-                    nIndex,
-                    pDescriptor->GetPageIndex(),
-                    pDescriptor->GetVisualState().mnPageId,
-                    FromCoreIndex(pDescriptor->GetPage()->GetPageNum()),
-                    pDescriptor->GetPage());
+                SAL_INFO(
+                    "sd.sls",
+                    nIndex << " " << pDescriptor->GetPageIndex() << " "
+                        << pDescriptor->GetVisualState().mnPageId << " "
+                        << FromCoreIndex(pDescriptor->GetPage()->GetPageNum())
+                        << " " << pDescriptor->GetPage());
             }
             else
             {
-                OSL_TRACE("%d", nIndex);
+                SAL_INFO("sd.sls", nIndex);
             }
         }
 
@@ -292,7 +292,7 @@ void SlideSorterModel::Resync (void)
                 && maPageDescriptors[nIndex]->GetPage()
                 != GetPage(nIndex))
             {
-                OSL_TRACE("page %d differs", nIndex);
+                SAL_INFO("sd.sls", "page " << nIndex << " differs");
                 bIsUpToDate = false;
                 break;
             }
@@ -332,7 +332,10 @@ void SlideSorterModel::ClearDescriptorList (void)
         {
             if ( ! iDescriptor->unique())
             {
-                OSL_TRACE("SlideSorterModel::ClearDescriptorList: trying to delete page descriptor  that is still used with count %zu", iDescriptor->use_count());
+                SAL_INFO(
+                    "sd.sls",
+                    "trying to delete page descriptor that is still used with"
+                        " count " << iDescriptor->use_count());
                 // No assertion here because that can hang the office when
                 // opening a dialog from here.
             }

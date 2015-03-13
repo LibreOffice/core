@@ -98,7 +98,7 @@ namespace DOM
 
                 io_rContext.maNamespaces.back().push_back(aNS);
 
-                OSL_TRACE("Added with token 0x%x", aIter->second);
+                SAL_INFO("unoxml", "Added with token " << aIter->second);
             }
         }
     }

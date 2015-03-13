@@ -391,13 +391,13 @@ namespace accessibility
             // we just received the focus, also send caret event then
             UpdateSelection();
 
-            OSL_TRACE("AccessibleTextHelper_Impl::SetChildFocus(): Paragraph %d received focus", nChild );
+            SAL_INFO("svx", "Paragraph " << nChild << " received focus");
         }
         else
         {
             maParaManager.SetFocus( -1 );
 
-            OSL_TRACE("AccessibleTextHelper_Impl::SetChildFocus(): Paragraph %d lost focus", nChild );
+            SAL_INFO("svx", "Paragraph " << nChild << " lost focus");
 
             if( mbGroupHasFocus )
                 SetShapeFocus( true );
@@ -412,7 +412,7 @@ namespace accessibility
         mbGroupHasFocus = true;
         maParaManager.SetFocus( nNewChild );
 
-        OSL_TRACE("AccessibleTextHelper_Impl::ChangeChildFocus(): Paragraph %d received focus", nNewChild );
+        SAL_INFO("svx", "Paragraph " << nNewChild << " received focus");
     }
 
     void AccessibleTextHelper_Impl::SetShapeFocus( bool bHaveFocus )
@@ -554,8 +554,12 @@ namespace accessibility
 
                             ChangeChildFocus( aSelection.nEndPara );
 
-                            OSL_TRACE("AccessibleTextHelper_Impl::UpdateSelection(): focus changed, Object: %p, Paragraph: %d, Last paragraph: %d",
-                                       this, aSelection.nEndPara, maLastSelection.nEndPara);
+                            SAL_INFO(
+                                "svx",
+                                "focus changed, Object: " << this
+                                    << ", Paragraph: " << aSelection.nEndPara
+                                    << ", Last paragraph: "
+                                    << maLastSelection.nEndPara);
                         }
                     }
 
@@ -583,8 +587,13 @@ namespace accessibility
                                                  aOldCursor );
                     }
 
-                    OSL_TRACE("AccessibleTextHelper_Impl::UpdateSelection(): caret changed, Object: %p, New pos: %d, Old pos: %d, New para: %d, Old para: %d",
-                               this, aSelection.nEndPos, maLastSelection.nEndPos, aSelection.nEndPara, maLastSelection.nEndPara);
+                    SAL_INFO(
+                        "svx",
+                        "caret changed, Object: " << this << ", New pos: "
+                            << aSelection.nEndPos << ", Old pos: "
+                            << maLastSelection.nEndPos << ", New para: "
+                            << aSelection.nEndPara << ", Old para: "
+                            << maLastSelection.nEndPara);
 
                     // #108947# Sort new range before calling FireEvent
                     ::std::pair<sal_Int32, sal_Int32> sortedSelection(

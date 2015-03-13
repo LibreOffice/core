@@ -122,8 +122,10 @@ struct DocumentHandler
     // XFastContextHandler
     virtual void SAL_CALL startFastElement( ::sal_Int32 Element, const uno::Reference< xml::sax::XFastAttributeList >& ) throw (xml::sax::SAXException, uno::RuntimeException) SAL_OVERRIDE
     {
-        OSL_TRACE("Seen element: %c with namespace 0x%x",
-                  Element & 0xFFFF, Element & 0xFFFF0000);
+        SAL_INFO(
+            "unoxml",
+            "Seen element: " << (Element & 0xFFFF) << " with namespace "
+                << (Element & 0xFFFF0000));
     }
 
     virtual void SAL_CALL startUnknownElement( const OUString& , const OUString& , const uno::Reference< xml::sax::XFastAttributeList >& ) throw (xml::sax::SAXException, uno::RuntimeException) SAL_OVERRIDE

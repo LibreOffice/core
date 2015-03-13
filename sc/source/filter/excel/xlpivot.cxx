@@ -244,7 +244,8 @@ void XclPCNumGroupInfo::SetScDateType( sal_Int32 nScType )
         case ScDPGroupBy::MONTHS:     nXclType = EXC_SXNUMGROUP_TYPE_MONTH;   break;
         case ScDPGroupBy::QUARTERS:   nXclType = EXC_SXNUMGROUP_TYPE_QUART;   break;
         case ScDPGroupBy::YEARS:      nXclType = EXC_SXNUMGROUP_TYPE_YEAR;    break;
-        default:    OSL_TRACE( "XclPCNumGroupInfo::SetScDateType - unexpected date type %d", nScType );
+        default:
+            SAL_INFO("sc.filter", "unexpected date type " << nScType);
     }
     SetXclDataType( nXclType );
 }

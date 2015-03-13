@@ -114,7 +114,9 @@ namespace cairocanvas
 
     void SpriteDeviceHelper::setSize( const ::basegfx::B2ISize& rSize )
     {
-        OSL_TRACE("SpriteDeviceHelper::setSize(): device size %d x %d", rSize.getX(), rSize.getY() );
+        SAL_INFO(
+            "canvas.cairo",
+            "device size " << rSize.getX() << " x " << rSize.getY());
 
         if( !mpSpriteCanvas )
             return; // disposed

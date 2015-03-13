@@ -85,7 +85,9 @@ namespace cairocanvas
 
     void DeviceHelper::setSize( const ::basegfx::B2ISize& rSize )
     {
-        OSL_TRACE("DeviceHelper::setSize(): device size %d x %d", rSize.getX(), rSize.getY() );
+        SAL_INFO(
+            "canvas.cairo",
+            "device size " << rSize.getX() << " x " << rSize.getY());
 
         if( !mpRefDevice )
             return; // disposed

@@ -384,7 +384,9 @@ ORowSetValue& x)
     ::osl::MutexGuard aGuard( m_aMutex );
     checkAndResizeParameters(parameterIndex);
 
-    OSL_TRACE("setParameter( %d, '%s')", parameterIndex, OUtoCStr(x) );
+    SAL_INFO(
+        "connectivity.mork",
+        "setParameter(" << parameterIndex << ", '" << x.getString() << "')");
     (m_aParameterRow->get())[parameterIndex] = x;
 }
 

@@ -1012,7 +1012,7 @@ namespace oox { namespace ppt {
 
         default:
             nNodeType = AnimationNodeType::CUSTOM;
-            OSL_TRACE( "OOX: uhandled token %x", aElementToken );
+            SAL_INFO("oox.ppt", "uhandled token " << aElementToken);
             break;
         }
 

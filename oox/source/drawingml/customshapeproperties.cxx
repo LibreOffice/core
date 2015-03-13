@@ -40,8 +40,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::graphic;
 using namespace ::com::sun::star::drawing;
 
-# define USS(x) OUStringToOString( x, RTL_TEXTENCODING_UTF8 ).getStr()
-
 namespace oox { namespace drawingml {
 
 CustomShapeProperties::CustomShapeProperties()
@@ -96,7 +94,8 @@ CustomShapeProperties::PresetDataMap CustomShapeProperties::maPresetDataMap;
 
 static OUString GetConnectorShapeType( sal_Int32 nType )
 {
-    OSL_TRACE("GetConnectorShapeType preset: %d %d", nType, XML_straightConnector1);
+    SAL_INFO(
+        "oox.drawingml", "preset: " << nType << " " << XML_straightConnector1);
 
     OUString sType;
     switch( nType )
@@ -115,7 +114,7 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
 {
     if ( mnShapePresetType >= 0 )
     {
-        OSL_TRACE("preset: %d", mnShapePresetType);
+        SAL_INFO("oox.drawingml", "preset: " << mnShapePresetType);
 
         if (maPresetDataMap.empty())
             initializePresetDataMap();
@@ -127,7 +126,10 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
 
         if (sConnectorShapeType.getLength() > 0)
         {
-            OSL_TRACE("connector shape: %s (%d)", USS(sConnectorShapeType), mnShapePresetType);
+            SAL_INFO(
+                "oox.drawingml",
+                "connector shape: " << sConnectorShapeType << " ("
+                    << mnShapePresetType << ")");
             //const uno::Reference < drawing::XShape > xShape( xPropSet, UNO_QUERY );
             Reference< drawing::XEnhancedCustomShapeDefaulter > xDefaulter( xShape, UNO_QUERY );
             if( xDefaulter.is() ) {
@@ -137,7 +139,9 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
         }
         else if (maPresetDataMap.find(mnShapePresetType) != maPresetDataMap.end())
         {
-            OSL_TRACE("found property map for preset: %d", mnShapePresetType);
+            SAL_INFO(
+                "oox.drawingml",
+                "found property map for preset: " << mnShapePresetType);
 
             aPropertyMap = maPresetDataMap[mnShapePresetType];
 #ifdef DEBUG

@@ -696,7 +696,7 @@ void OEvoabResultSet::construct( const QueryData& _rData )
         }
     }
     m_nLength = m_pVersionHelper->getNumContacts();
-    OSL_TRACE( "Query return %d records", m_nLength );
+    SAL_INFO("connectivity.evoab2", "Query return " << m_nLength << " records");
     m_nIndex = -1;
 
     // create our meta data (need the EBookQuery for this)

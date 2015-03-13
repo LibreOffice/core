@@ -2648,7 +2648,10 @@ void SAL_CALL VCLXMultiPage::removeTab( sal_Int32 ID ) throw (uno::RuntimeExcept
 void SAL_CALL VCLXMultiPage::activateTab( sal_Int32 ID ) throw (uno::RuntimeException, lang::IndexOutOfBoundsException, std::exception)
 {
     TabControl *pTabControl = getTabControl();
-    OSL_TRACE("Attempting to activate tab %d, active tab is %d, numtabs is %d", ID, getActiveTabID(), getWindows().getLength() );
+    SAL_INFO(
+        "toolkit",
+        "Attempting to activate tab " << ID << ", active tab is "
+            << getActiveTabID() << ", numtabs is " << getWindows().getLength());
     if ( pTabControl->GetTabPage( sal::static_int_cast< sal_uInt16 >( ID ) ) == NULL )
         throw lang::IndexOutOfBoundsException();
     pTabControl->SelectTabPage( sal::static_int_cast< sal_uInt16 >( ID ) );

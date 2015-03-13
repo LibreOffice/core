@@ -302,7 +302,10 @@ sal_Int32 AxisHelper::getExplicitNumberFormatKeyForAxis(
                 for( tNumberformatFrequency::const_iterator aIt = aKeyMap.begin();
                     aIt != aKeyMap.end(); ++aIt )
                 {
-                    OSL_TRACE( "NumberFormatKey %d appears %d times", (*aIt).first, (*aIt).second );
+                    SAL_INFO(
+                        "chart2.tools",
+                        "NumberFormatKey " << (*aIt).first << " appears "
+                            << (*aIt).second << " times");
                     // all values must at least be 1
                     if( (*aIt).second > nMaxFreq )
                     {

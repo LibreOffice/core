@@ -1019,7 +1019,10 @@ void AreaChart::createShapes()
 
     //... todo
 
-    OSL_TRACE( "\nPPPPPPPPP<<<<<<<<<<<< area chart :: createShapes():: skipped points: %d created points: %d", nSkippedPoints, nCreatedPoints );
+    SAL_INFO(
+        "chart2",
+        "skipped points: " << nSkippedPoints << " created points: "
+            << nCreatedPoints);
 }
 
 } //namespace chart

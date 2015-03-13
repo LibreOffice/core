@@ -395,8 +395,10 @@ bool checkDocChecksum( const OUString& rInPDFFileURL,
     bool bRet = false;
     if( rChkSum.getLength() != 2* RTL_DIGEST_LENGTH_MD5 )
     {
-        OSL_TRACE( "checksum of length %d, expected %d\n",
-                   rChkSum.getLength(), 2*RTL_DIGEST_LENGTH_MD5 );
+        SAL_INFO(
+            "sdext.pdfimport",
+            "checksum of length " << rChkSum.getLength() << ", expected "
+                << 2*RTL_DIGEST_LENGTH_MD5);
         return false;
     }
 

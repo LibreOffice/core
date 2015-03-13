@@ -399,7 +399,10 @@ static bool lcl_XL_getExternalDoc( const sal_Unicode** ppErrRet, OUString& rExte
                         OUString aStr;
                         if (!(rInfo.Data >>= aStr))
                         {
-                            OSL_TRACE( "ScRange::Parse_XL_Header: Data type mismatch for ExternalLinkInfo %d", i);
+                            SAL_INFO(
+                                "sc.core",
+                                "Data type mismatch for ExternalLinkInfo "
+                                    << i);
                             *ppErrRet = NULL;
                             return false;
                         }
@@ -413,8 +416,10 @@ static bool lcl_XL_getExternalDoc( const sal_Unicode** ppErrRet, OUString& rExte
                         *ppErrRet = NULL;
                         return false;
                 default:
-                    OSL_TRACE( "ScRange::Parse_XL_Header: unhandled ExternalLinkType %d for index %d",
-                            rInfo.Type, i);
+                    SAL_INFO(
+                        "sc.core",
+                        "unhandled ExternalLinkType " << rInfo.Type
+                            << " for index " << i);
                     *ppErrRet = NULL;
                     return false;
             }

@@ -250,7 +250,7 @@ sal_Int32 SAL_CALL OResultSet::getRow(  ) throw(SQLException, RuntimeException, 
 {
     ResultSetEntryGuard aGuard( *this );
 
-    OSL_TRACE("In/Out: OResultSet::getRow, return = %u", m_nRowPos );
+    SAL_INFO("connectivity.mork", "return = " << m_nRowPos);
     return m_nRowPos;
 }
 
@@ -327,7 +327,7 @@ sal_uInt32 OResultSet::currentRowCount()
 
 bool OResultSet::fetchCurrentRow( ) throw(SQLException, RuntimeException)
 {
-    OSL_TRACE("fetchCurrentRow, m_nRowPos = %u", m_nRowPos );
+    SAL_INFO("connectivity.mork", "m_nRowPos = " << m_nRowPos);
     return fetchRow(getCurrentCardNumber());
 }
 
@@ -363,7 +363,7 @@ bool OResultSet::pushCard(sal_uInt32 /*cardNumber*/) throw(SQLException, Runtime
 
 bool OResultSet::fetchRow(sal_Int32 cardNumber,bool bForceReload) throw(SQLException, RuntimeException)
 {
-    OSL_TRACE("fetchRow, cardNumber = %u", cardNumber );
+    SAL_INFO("connectivity.mork", "cardNumber = " << cardNumber);
     if (!bForceReload)
     {
         // Check whether we've already fetched the row...
@@ -559,7 +559,6 @@ sal_Bool SAL_CALL OResultSet::rowDeleted(  ) throw(SQLException, RuntimeExceptio
 {
     SAL_WARN("connectivity.mork", "OResultSet::rowDeleted() NOT IMPLEMENTED!");
     ResultSetEntryGuard aGuard( *this );
-    OSL_TRACE("In/Out: OResultSet::rowDeleted, m_RowStates=%u",m_RowStates );
     return sal_True;//return ((m_RowStates & RowStates_Deleted) == RowStates_Deleted) ;
 }
 
@@ -567,7 +566,6 @@ sal_Bool SAL_CALL OResultSet::rowInserted(  ) throw(SQLException, RuntimeExcepti
 {
     SAL_WARN("connectivity.mork", "OResultSet::rowInserted() NOT IMPLEMENTED!");
     ResultSetEntryGuard aGuard( *this );
-    OSL_TRACE("In/Out: OResultSet::rowInserted,m_RowStates=%u",m_RowStates );
     return sal_True;//return ((m_RowStates & RowStates_Inserted) == RowStates_Inserted);
 }
 
@@ -575,7 +573,6 @@ sal_Bool SAL_CALL OResultSet::rowUpdated(  ) throw(SQLException, RuntimeExceptio
 {
     SAL_WARN("connectivity.mork", "OResultSet::rowUpdated() NOT IMPLEMENTED!");
     ResultSetEntryGuard aGuard( *this );
-    OSL_TRACE("In/Out: OResultSet::rowUpdated,m_RowStates=%u",m_RowStates );
     return sal_True;// return ((m_RowStates & RowStates_Updated) == RowStates_Updated) ;
 }
 
@@ -752,7 +749,9 @@ void OResultSet::parseParameter( const OSQLParseNode* pNode, OUString& rMatchStr
     }
     // XXX - Now we know name, what's value????
     m_nParamIndex ++;
-    OSL_TRACE("Parameter name [%d]: %s", m_nParamIndex,OUtoCStr(aParameterName) );
+    SAL_INFO(
+        "connectivity.mork",
+        "Parameter name [" << m_nParamIndex << "]: " << aParameterName);
 
     if ( m_aParameterRow.is() ) {
         OSL_ENSURE( m_nParamIndex < (sal_Int32)m_aParameterRow->get().size() + 1, "More parameters than values found" );
@@ -1079,9 +1078,8 @@ void OResultSet::fillRowData()
     for (sal_Int32 i = 1; aIter != m_xColumns->get().end();++aIter, i++)
     {
         (*aIter)->getPropertyValue(sProprtyName) >>= sName;
-#if OSL_DEBUG_LEVEL > 0
-        OSL_TRACE("Query Columns : (%d) %s", i, OUtoCStr(sName) );
-#endif
+        SAL_INFO(
+            "connectivity.mork", "Query Columns : (" << i << ") " << sName);
         m_aAttributeStrings.push_back( sName );
     }
 
@@ -1120,11 +1118,9 @@ void OResultSet::fillRowData()
     //determine whether the address book is readonly
     determineReadOnly();
 
-#if OSL_DEBUG_LEVEL > 0
-    OSL_TRACE( "executeQuery returned %d", rv );
+    SAL_INFO("connectivity.mork", "executeQuery returned " << rv);
 
     OSL_TRACE( "\tOUT OResultSet::fillRowData()" );
-#endif
 }
 
 
@@ -1149,7 +1145,7 @@ static bool matchRow( OValueRow& row1, OValueRow& row2 )
 
 sal_Int32 OResultSet::getRowForCardNumber(sal_Int32 nCardNum)
 {
-    OSL_TRACE("In/Out: OResultSet::getRowForCardNumber, nCardNum = %u", nCardNum );
+    SAL_INFO("connectivity.mork", "nCardNum = " << nCardNum);
 
     if ( m_pKeySet.is() )
     {
@@ -1158,7 +1154,7 @@ sal_Int32 OResultSet::getRowForCardNumber(sal_Int32 nCardNum)
         {
             if (nCardNum == (m_pKeySet->get())[nPos])
             {
-                OSL_TRACE("In/Out: OResultSet::getRowForCardNumber, return = %u", nPos+1 );
+                SAL_INFO("connectivity.mork", "return = " << nPos+1);
                 return nPos+1;
             }
         }
@@ -1282,7 +1278,10 @@ void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLExcep
                         {
                             const ORowSetValue& value = getValue(nRow, *aIter);
 
-                            OSL_TRACE( "Adding Value: (%d,%d) : %s", nRow, *aIter,OUtoCStr( value ));
+                            SAL_INFO(
+                                "connectivity.mork",
+                                "Adding Value: (" << nRow << "," << *aIter
+                                    << ") : " << value.getString());
 
                             pKeyValue->pushKey(new ORowSetValueDecorator(value));
                         }
@@ -1406,9 +1405,10 @@ void OResultSet::setBoundedColumns(const OValueRow& _rRow,
                         sal_Int32 nTableColumnPos = i + 1;
                             // get first table column is the bookmark column
 
-#if OSL_DEBUG_LEVEL > 0
-                        OSL_TRACE("Set Col Mapping: %d -> %d", nSelectColumnPos, nTableColumnPos );
-#endif
+                        SAL_INFO(
+                            "connectivity.mork",
+                            "Set Col Mapping: " << nSelectColumnPos << " -> "
+                                << nTableColumnPos);
                         _rColMapping[nSelectColumnPos] = nTableColumnPos;
                     }
 
@@ -1451,7 +1451,9 @@ bool OResultSet::validRow( sal_uInt32 nRow)
 #endif
             if (m_aQueryHelper.checkRowAvailable( nRow ) == false)
             {
-                OSL_TRACE("validRow(%u): return False", nRow);
+                SAL_INFO(
+                    "connectivity.mork",
+                    "validRow(" << nRow << "): return False");
                 return false;
             }
 
@@ -1465,12 +1467,10 @@ bool OResultSet::validRow( sal_uInt32 nRow)
 
     if (( nRow == 0 ) ||
         ( nRow > (sal_uInt32)nNumberOfRecords && m_aQueryHelper.queryComplete()) ){
-        OSL_TRACE("validRow(%u): return False", nRow);
+        SAL_INFO("connectivity.mork", "validRow(" << nRow << "): return False");
         return false;
     }
-#if OSL_DEBUG_LEVEL > 0
-    OSL_TRACE("validRow(%u): return True", nRow);
-#endif
+    SAL_INFO("connectivity.mork", "validRow(" << nRow << "): return True");
 
     return true;
 }
@@ -1507,7 +1507,7 @@ bool OResultSet::seekRow( eRowPosition pos, sal_Int32 nOffset )
     sal_Int32  nRetrievedRows = currentRowCount();
     sal_Int32  nCurPos = m_nRowPos;
 
-    OSL_TRACE("seekRow: nCurPos = %d", nCurPos );
+    SAL_INFO("connectivity.mork", "nCurPos = " << nCurPos);
     switch( pos ) {
         case NEXT_POS:
             OSL_TRACE("seekRow: NEXT");
@@ -1529,18 +1529,19 @@ bool OResultSet::seekRow( eRowPosition pos, sal_Int32 nOffset )
             nCurPos = nRetrievedRows;
             break;
         case ABSOLUTE_POS:
-            OSL_TRACE("seekRow: ABSOLUTE : %d", nOffset);
+            SAL_INFO("connectivity.mork", "ABSOLUTE : " << nOffset);
             nCurPos = nOffset;
             break;
         case RELATIVE_POS:
-            OSL_TRACE("seekRow: RELATIVE : %d", nOffset);
+            SAL_INFO("connectivity.mork", "RELATIVE : " << nOffset);
             nCurPos += sal_uInt32( nOffset );
             break;
     }
 
     if ( nCurPos <= 0 ) {
         m_nRowPos = 0;
-        OSL_TRACE("seekRow: return False, m_nRowPos = %u", m_nRowPos );
+        SAL_INFO(
+            "connectivity.mork", "return False, m_nRowPos = " << m_nRowPos);
         return false;
     }
     sal_Int32 nCurCard = nCurPos;
@@ -1554,13 +1555,14 @@ bool OResultSet::seekRow( eRowPosition pos, sal_Int32 nOffset )
     if ( nCurCard > nNumberOfRecords) {
         fillKeySet(nNumberOfRecords);
         m_nRowPos = static_cast<sal_uInt32>(m_pKeySet->get().size() + 1);
-        OSL_TRACE("seekRow: return False, m_nRowPos = %u", m_nRowPos );
+        SAL_INFO(
+            "connectivity.mork", "return False, m_nRowPos = " << m_nRowPos);
         return false;
     }
     //Insert new retrieved items for later use
     fillKeySet(nNumberOfRecords);
     m_nRowPos = (sal_uInt32)nCurPos;
-    OSL_TRACE("seekRow: return True, m_nRowPos = %u", m_nRowPos );
+    SAL_INFO("connectivity.mork", "return True, m_nRowPos = " << m_nRowPos);
     fetchCurrentRow();
     return true;
 }
@@ -1570,14 +1572,16 @@ void OResultSet::setColumnMapping(const ::std::vector<sal_Int32>& _aColumnMappin
     m_aColMapping = _aColumnMapping;
 #if OSL_DEBUG_LEVEL > 0
     for ( sal_uInt32 i = 0; i < m_aColMapping.size(); i++ )
-        OSL_TRACE("Set Mapped: %d -> %d", i, m_aColMapping[i] );
+        SAL_INFO(
+            "connectivity.mork",
+            "Set Mapped: " << i << " -> " << m_aColMapping[i]);
 #endif
 }
 
 
 ::com::sun::star::uno::Any OResultSet::getBookmark(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
-    OSL_TRACE("getBookmark, m_nRowPos = %u", m_nRowPos );
+    SAL_INFO("connectivity.mork", "m_nRowPos = " << m_nRowPos);
     ResultSetEntryGuard aGuard( *this );
     if ( fetchCurrentRow() == false ) {
         m_pStatement->getOwnConnection()->throwSQLException( STR_ERROR_GET_ROW, *this );
@@ -1589,7 +1593,8 @@ void OResultSet::setColumnMapping(const ::std::vector<sal_Int32>& _aColumnMappin
 sal_Bool  OResultSet::moveToBookmark( const ::com::sun::star::uno::Any& bookmark ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     ResultSetEntryGuard aGuard( *this );
-    OSL_TRACE("moveToBookmark, bookmark = %u", comphelper::getINT32(bookmark) );
+    SAL_INFO(
+        "connectivity.mork", "bookmark = " << comphelper::getINT32(bookmark));
     sal_Int32 nCardNum = comphelper::getINT32(bookmark);
     m_nRowPos = getRowForCardNumber(nCardNum);
     fetchCurrentRow();
@@ -1598,7 +1603,9 @@ sal_Bool  OResultSet::moveToBookmark( const ::com::sun::star::uno::Any& bookmark
 sal_Bool  OResultSet::moveRelativeToBookmark( const ::com::sun::star::uno::Any& bookmark, sal_Int32 rows ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     ResultSetEntryGuard aGuard( *this );
-    OSL_TRACE("moveRelativeToBookmark, bookmark = %u rows= %u", comphelper::getINT32(bookmark),rows );
+    SAL_INFO(
+        "connectivity.mork",
+        "bookmark = " << comphelper::getINT32(bookmark) << " rows= " << rows);
     sal_Int32 nCardNum = comphelper::getINT32(bookmark);
     m_nRowPos = getRowForCardNumber(nCardNum);
     return seekRow(RELATIVE_POS,rows );
@@ -1606,7 +1613,7 @@ sal_Bool  OResultSet::moveRelativeToBookmark( const ::com::sun::star::uno::Any& 
 sal_Int32 OResultSet::compareBookmarks( const ::com::sun::star::uno::Any& lhs, const ::com::sun::star::uno::Any& rhs ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     ResultSetEntryGuard aGuard( *this );
-    OSL_TRACE("compareBookmarks, m_nRowPos = %u", m_nRowPos );
+    SAL_INFO("connectivity.mork", "m_nRowPos = " << m_nRowPos);
         sal_Int32 nFirst=0;
         sal_Int32 nSecond=0;
         sal_Int32 nResult=0;
@@ -1627,13 +1634,13 @@ sal_Int32 OResultSet::compareBookmarks( const ::com::sun::star::uno::Any& lhs, c
 sal_Bool OResultSet::hasOrderedBookmarks(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     ResultSetEntryGuard aGuard( *this );
-    OSL_TRACE("hasOrderedBookmarks, m_nRowPos = %u", m_nRowPos );
+    SAL_INFO("connectivity.mork", "m_nRowPos = " << m_nRowPos);
     return sal_True;
 }
 sal_Int32 OResultSet::hashBookmark( const ::com::sun::star::uno::Any& bookmark ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     ResultSetEntryGuard aGuard( *this );
-    OSL_TRACE("hashBookmark, m_nRowPos = %u", m_nRowPos );
+    SAL_INFO("connectivity.mork", "m_nRowPos = " << m_nRowPos);
     return  comphelper::getINT32(bookmark);
 }
 
@@ -1666,7 +1673,7 @@ void OResultSet::checkPendingUpdate() throw(SQLException, RuntimeException)
 }
 void OResultSet::updateValue(sal_Int32 columnIndex ,const ORowSetValue& x) throw(SQLException, RuntimeException)
 {
-    OSL_TRACE("updateValue, m_nRowPos = %u", m_nRowPos );
+    SAL_INFO("connectivity.mork", "m_nRowPos = " << m_nRowPos);
     ResultSetEntryGuard aGuard( *this );
     if ( fetchCurrentRow() == false ) {
         m_pStatement->getOwnConnection()->throwSQLException( STR_ERROR_GET_ROW, *this );
@@ -1686,7 +1693,7 @@ void OResultSet::updateValue(sal_Int32 columnIndex ,const ORowSetValue& x) throw
 
 void SAL_CALL OResultSet::updateNull( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
-    OSL_TRACE("updateNull, m_nRowPos = %u", m_nRowPos );
+    SAL_INFO("connectivity.mork", "m_nRowPos = " << m_nRowPos);
     ResultSetEntryGuard aGuard( *this );
     if ( fetchCurrentRow() == false )
         m_pStatement->getOwnConnection()->throwSQLException( STR_ERROR_GET_ROW, *this );
@@ -1814,13 +1821,13 @@ void SAL_CALL OResultSet::updateNumericObject( sal_Int32 columnIndex, const Any&
 void SAL_CALL OResultSet::insertRow(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     ResultSetEntryGuard aGuard( *this );
-    OSL_TRACE("insertRow in, m_nRowPos = %u", m_nRowPos );
+    SAL_INFO("connectivity.mork", "in, m_nRowPos = " << m_nRowPos);
 //    m_RowStates = RowStates_Inserted;
     updateRow();
     m_nOldRowPos = 0;
     m_nNewRow = 0;
     //m_aQueryHelper.setRowStates(getCurrentCardNumber(),m_RowStates);
-    OSL_TRACE("insertRow out, m_nRowPos = %u", m_nRowPos );
+    SAL_INFO("connectivity.mork", "out, m_nRowPos = " << m_nRowPos);
 }
 
 void SAL_CALL OResultSet::updateRow(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
@@ -1846,7 +1853,7 @@ void SAL_CALL OResultSet::moveToInsertRow(  ) throw(::com::sun::star::sdbc::SQLE
 void SAL_CALL OResultSet::moveToCurrentRow(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     ResultSetEntryGuard aGuard( *this );
-    OSL_TRACE("moveToCurrentRow, m_nRowPos = %u", m_nRowPos );
+    SAL_INFO("connectivity.mork", "m_nRowPos = " << m_nRowPos);
     if (rowInserted())
     {
         m_nRowPos = m_nOldRowPos;
