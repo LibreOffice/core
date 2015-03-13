@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a29b11f_a8dc4347",
+        "filename": "accessibility/source/standard/vclxaccessibleedit.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 516,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-03-13T20:21:11Z",
+      "side": 1,
+      "message": "this is the wrong way around---instead of temporarily releasing the solar mutex you now temporarily (redundantly) acquire it one more time",
+      "revId": "01aa90c5f1b8ffc64fd72bb622bb7666796eaece",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
