@@ -276,6 +276,14 @@ public:
     // otherwise it returns the next SwClient that still is
     SwClient* operator()() const
         { return m_pPosition; }
+    // returns the current SwClient object, wether it is still a client or not
+    SwClient& operator*() const
+        { return *m_pCurrent; }
+    // returns the current SwClient object, wether it is still a client or not
+    SwClient* operator->() const
+        { return m_pCurrent; }
+    explicit operator bool() const
+        { return m_pCurrent!=nullptr; }
 
     // return "true" if an object was removed from a client chain in iteration
     // adding objects to a client chain in iteration is forbidden

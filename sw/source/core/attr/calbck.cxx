@@ -272,24 +272,15 @@ void SwModify::CheckCaching( const sal_uInt16 nWhich )
 
 void SwModify::CallSwClientNotify( const SfxHint& rHint ) const
 {
-    SwClientIter aIter(*this);
-    SwClient* pClient = aIter.GoStart();
-    while( pClient )
-    {
-        pClient->SwClientNotify( *this, rHint );
-        pClient = ++aIter;
-    }
+    for(SwClientIter aIter(*this); aIter; ++aIter)
+        aIter->SwClientNotify( *this, rHint );
 }
 
 void SwModify::ModifyBroadcast( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue, TypeId nType )
 {
-    SwClientIter aIter( *this );
-    SwClient* pClient = aIter.First( nType );
-    while( pClient )
-    {
-        pClient->Modify( pOldValue, pNewValue );
-        pClient = aIter.Next();
-    }
+    SwClientIter aIter(*this);
+    for(aIter.First(nType); aIter; aIter.Next())
+        aIter->Modify( pOldValue, pNewValue );
 }
 
 SwDepend::SwDepend( SwClient* pTellHim, SwModify* pDepend )
