@@ -141,6 +141,51 @@ String RID_SVXSTR_ZOOM_OUT
     Text [ en-US ] = "Zoom Out";
 };
 
+String RID_SVXSTR_ZOOM_25
+{
+    Text [ en-US ] = "25%" ;
+};
+
+String RID_SVXSTR_ZOOM_50
+{
+    Text [ en-US ] = "50%" ;
+};
+
+String RID_SVXSTR_ZOOM_75
+{
+    Text [ en-US ] = "75%" ;
+};
+
+String RID_SVXSTR_ZOOM_100
+{
+    Text [ en-US ] = "100%" ;
+};
+
+String RID_SVXSTR_ZOOM_150
+{
+    Text [ en-US ] = "150%" ;
+};
+
+String RID_SVXSTR_ZOOM_200
+{
+    Text [ en-US ] = "200%" ;
+};
+
+String RID_SVXSTR_ZOOM_WHOLE_PAGE
+{
+    Text [ en-US ] = "Entire Page" ;
+};
+
+String RID_SVXSTR_ZOOM_PAGE_WIDTH
+{
+    Text [ en-US ] = "Page Width" ;
+};
+
+String RID_SVXSTR_ZOOM_OPTIMAL_VIEW
+{
+    Text [ en-US ] = "Optimal View" ;
+};
+
  // PopupMenu -------------------------------------------------------------
 Menu RID_SVXMNU_ZOOM
 {
