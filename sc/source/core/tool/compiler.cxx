@@ -89,6 +89,7 @@ enum ScanState
     ssGetReference,
     ssSkipReference,
     ssGetErrorConstant,
+    ssGetTableRefItem,
     ssStop
 };
 
@@ -1985,7 +1986,10 @@ Label_MaskStateMachine:
                 else if( nMask & SC_COMPILER_C_CHAR_ERRCONST )
                 {
                     *pSym++ = c;
-                    eState = ssGetErrorConstant;
+                    if (!maTableRefs.empty() && maTableRefs.back().mnLevel)
+                        eState = ssGetTableRefItem;
+                    else
+                        eState = ssGetErrorConstant;
                 }
                 else if( nMask & SC_COMPILER_C_CHAR_DONTCARE )
                 {
@@ -2185,6 +2189,26 @@ Label_MaskStateMachine:
                         }
                         else
                             *pSym++ = c;
+                    }
+                }
+                break;
+            case ssGetTableRefItem:
+                {
+                    // Scan whatever up to the next ']' closer.
+                    if (c != ']')
+                    {
+                        if( pSym == &cSymbol[ MAXSTRLEN-1 ] )
+                        {
+                            SetError( errStringOverflow);
+                            eState = ssStop;
+                        }
+                        else
+                            *pSym++ = c;
+                    }
+                    else
+                    {
+                        --pSrc;
+                        eState = ssStop;
                     }
                 }
                 break;
