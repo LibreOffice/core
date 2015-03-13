@@ -16,6 +16,23 @@
       "revId": "32908c1d6754fc55efd7585797a934c405bdac37",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a29b11f_a8c9a3ae",
+        "filename": "sfx2/source/control/shell.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-03-13T11:54:06Z",
+      "side": 1,
+      "message": "we don\u0027t want sfx2 to depend on editeng - that is just bad factoring",
+      "revId": "32908c1d6754fc55efd7585797a934c405bdac37",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
