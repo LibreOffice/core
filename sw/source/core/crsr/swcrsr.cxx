@@ -114,25 +114,31 @@ struct _PercentHdl
 };
 
 SwCursor::SwCursor( const SwPosition &rPos, SwPaM* pRing, bool bColumnSel )
-    : SwPaM( rPos, pRing ), pSavePos( 0 ), mnRowSpanOffset( 0 ), nCursorBidiLevel( 0 ),
-    mbColumnSelection( bColumnSel )
+    : SwPaM( rPos, pRing )
+    , m_pSavePos(nullptr)
+    , m_nRowSpanOffset(0)
+    , m_nCursorBidiLevel(0)
+    , m_bColumnSelection(bColumnSel)
 {
 }
 
 // @@@ semantic: no copy ctor.
 SwCursor::SwCursor( SwCursor& rCpy )
-    : SwPaM( rCpy ), pSavePos( 0 ), mnRowSpanOffset( rCpy.mnRowSpanOffset ),
-    nCursorBidiLevel( rCpy.nCursorBidiLevel ), mbColumnSelection( rCpy.mbColumnSelection )
+    : SwPaM( rCpy )
+    , m_pSavePos(nullptr)
+    , m_nRowSpanOffset(rCpy.m_nRowSpanOffset)
+    , m_nCursorBidiLevel(rCpy.m_nCursorBidiLevel)
+    , m_bColumnSelection(rCpy.m_bColumnSelection)
 {
 }
 
 SwCursor::~SwCursor()
 {
-    while( pSavePos )
+    while( m_pSavePos )
     {
-        _SwCursor_SavePos* pNxt = pSavePos->pNext;
-        delete pSavePos;
-        pSavePos = pNxt;
+        _SwCursor_SavePos* pNxt = m_pSavePos->pNext;
+        delete m_pSavePos;
+        m_pSavePos = pNxt;
     }
 }
 
@@ -161,16 +167,16 @@ bool SwCursor::IsSkipOverProtectSections() const
 void SwCursor::SaveState()
 {
     _SwCursor_SavePos* pNew = CreateNewSavePos();
-    pNew->pNext = pSavePos;
-    pSavePos = pNew;
+    pNew->pNext = m_pSavePos;
+    m_pSavePos = pNew;
 }
 
 void SwCursor::RestoreState()
 {
-    if( pSavePos ) // Robust
+    if (m_pSavePos) // Robust
     {
-        _SwCursor_SavePos* pDel = pSavePos;
-        pSavePos = pSavePos->pNext;
+        _SwCursor_SavePos* pDel = m_pSavePos;
+        m_pSavePos = m_pSavePos->pNext;
         delete pDel;
     }
 }
@@ -235,7 +241,7 @@ bool SwCursor::IsSelOvr( int eFlags )
         return true;
     }
 
-    if( pSavePos->nNode != GetPoint()->nNode.GetIndex() &&
+    if (m_pSavePos->nNode != GetPoint()->nNode.GetIndex() &&
         // (1997) in UI-ReadOnly everything is allowed
         ( !pDoc->GetDocShell() || !pDoc->GetDocShell()->IsReadOnlyUI() ))
     {
@@ -255,8 +261,8 @@ bool SwCursor::IsSelOvr( int eFlags )
 
             // set cursor to new position:
             SwNodeIndex aIdx( rPtIdx );
-            sal_Int32 nCntntPos = pSavePos->nCntnt;
-            bool bGoNxt = pSavePos->nNode < rPtIdx.GetIndex();
+            sal_Int32 nCntntPos = m_pSavePos->nCntnt;
+            bool bGoNxt = m_pSavePos->nNode < rPtIdx.GetIndex();
             SwCntntNode* pCNd = bGoNxt
                 ? rNds.GoNextSection( &rPtIdx, bSkipOverHiddenSections, bSkipOverProtectSections)
                 : rNds.GoPrevSection( &rPtIdx, bSkipOverHiddenSections, bSkipOverProtectSections);
@@ -272,7 +278,7 @@ bool SwCursor::IsSelOvr( int eFlags )
                 ::CheckNodesRange( rPtIdx, aIdx, true );
             if( !bValidNodesRange )
             {
-                rPtIdx = pSavePos->nNode;
+                rPtIdx = m_pSavePos->nNode;
                 if( 0 == ( pCNd = rPtIdx.GetNode().GetCntntNode() ) )
                 {
                     bIsValidPos = false;
@@ -342,7 +348,7 @@ bool SwCursor::IsSelOvr( int eFlags )
         {
             // skip to the next/prev valid paragraph with a layout
             SwNodeIndex& rPtIdx = GetPoint()->nNode;
-            bool bGoNxt = pSavePos->nNode < rPtIdx.GetIndex();
+            bool bGoNxt = m_pSavePos->nNode < rPtIdx.GetIndex();
             while( 0 != ( pFrm = ( bGoNxt ? pFrm->GetNextCntntFrm() : pFrm->GetPrevCntntFrm() ))
                    && 0 == pFrm->Frm().Height() )
                 ;
@@ -370,8 +376,8 @@ bool SwCursor::IsSelOvr( int eFlags )
                 const sal_Int32 nTmpPos = bGoNxt ? 0 : pCNd->Len();
                 GetPoint()->nContent.Assign( pCNd, nTmpPos );
 
-                if ( rPtIdx.GetIndex() == pSavePos->nNode
-                     && nTmpPos == pSavePos->nCntnt )
+                if (rPtIdx.GetIndex() == m_pSavePos->nNode
+                    && nTmpPos == m_pSavePos->nCntnt)
                 {
                     // new position equals saved one
                     // --> trigger restore of saved pos by setting <pFrm> to NULL - see below
@@ -432,11 +438,11 @@ bool SwCursor::IsSelOvr( int eFlags )
         {
             const sal_uLong nRefNodeIdx =
                 ( nsSwCursorSelOverFlags::SELOVER_TOGGLE & eFlags )
-                ? pSavePos->nNode
+                ? m_pSavePos->nNode
                 : GetMark()->nNode.GetIndex();
             const sal_Int32 nRefContentIdx =
                 ( nsSwCursorSelOverFlags::SELOVER_TOGGLE & eFlags )
-                ? pSavePos->nCntnt
+                ? m_pSavePos->nCntnt
                 : GetMark()->nContent.GetIndex();
             const bool bIsForwardSelection =
                 nRefNodeIdx < GetPoint()->nNode.GetIndex()
@@ -481,8 +487,8 @@ bool SwCursor::IsSelOvr( int eFlags )
     if (nsSwCursorSelOverFlags::SELOVER_CHANGEPOS & eFlags)
     {
         bool bSelTop = GetPoint()->nNode.GetIndex() <
-            (( nsSwCursorSelOverFlags::SELOVER_TOGGLE & eFlags ) ? pSavePos->nNode
-            : GetMark()->nNode.GetIndex());
+            ((nsSwCursorSelOverFlags::SELOVER_TOGGLE & eFlags)
+                 ? m_pSavePos->nNode : GetMark()->nNode.GetIndex());
 
         do { // loop for table after table
             sal_uLong nSEIdx = pPtNd->EndOfSectionIndex();
@@ -549,7 +555,7 @@ bool SwCursor::IsInProtectTable( bool bMove, bool bChgCrsr )
         return false;
 
     // Current position == last save position?
-    if ( pSavePos->nNode == GetPoint()->nNode.GetIndex() )
+    if (m_pSavePos->nNode == GetPoint()->nNode.GetIndex())
         return false;
 
     // Check for convered cell:
@@ -584,7 +590,7 @@ bool SwCursor::IsInProtectTable( bool bMove, bool bChgCrsr )
     }
 
     // We are in a protected table cell. Traverse top to bottom?
-    if( pSavePos->nNode < GetPoint()->nNode.GetIndex() )
+    if (m_pSavePos->nNode < GetPoint()->nNode.GetIndex())
     {
         // search next valid box
         // if there is another StartNode after the EndNode of a cell then
@@ -1642,7 +1648,7 @@ bool SwCursor::LeftRight( bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMode,
         // corrected, we check if the last move has moved the cursor to a
         // different table cell. In this case we set the cursor to the stored
         // covered position and redo the move:
-        if ( mnRowSpanOffset )
+        if (m_nRowSpanOffset)
         {
             const SwNode* pOldTabBoxSttNode = aOldNodeIdx.GetNode().FindTableBoxStartNode();
             const SwTableNode* pOldTabSttNode = pOldTabBoxSttNode ? pOldTabBoxSttNode->FindTableNode() : 0;
@@ -1660,7 +1666,9 @@ bool SwCursor::LeftRight( bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMode,
                 SwTableBox* pTableBox = pOldTabBoxSttNode->GetTblBox();
                 if ( pTableBox && pTableBox->getRowSpan() > 1 )
                 {
-                    pTableBox = & pTableBox->FindEndOfRowSpan( pOldTabSttNode->GetTable(), (sal_uInt16)(pTableBox->getRowSpan() + mnRowSpanOffset ) );
+                    pTableBox = & pTableBox->FindEndOfRowSpan(
+                        pOldTabSttNode->GetTable(),
+                        static_cast<sal_uInt16>(pTableBox->getRowSpan() + m_nRowSpanOffset));
                     SwNodeIndex& rPtIdx = GetPoint()->nNode;
                     SwNodeIndex aNewIdx( *pTableBox->GetSttNd() );
                     rPtIdx = aNewIdx;
@@ -1676,7 +1684,7 @@ bool SwCursor::LeftRight( bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMode,
                             break;
                     }
                 }
-                mnRowSpanOffset = 0;
+                m_nRowSpanOffset = 0;
             }
         }
 
@@ -1689,7 +1697,7 @@ bool SwCursor::LeftRight( bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMode,
             if ( pTableBox && pTableBox->getRowSpan() < 1 )
             {
                 // Store the row span offset:
-                mnRowSpanOffset = pTableBox->getRowSpan();
+                m_nRowSpanOffset = pTableBox->getRowSpan();
 
                 // Move cursor to non-covered cell:
                 const SwTableNode* pTblNd = pTableBoxStartNode->FindTableNode();
@@ -1935,16 +1943,17 @@ bool SwCursor::GoPrevNextCell( bool bNext, sal_uInt16 nCnt )
 
         // Check if we have to move the cursor to a covered cell before
         // proceeding:
-        if ( mnRowSpanOffset )
+        if (m_nRowSpanOffset)
         {
             if ( pTableBox && pTableBox->getRowSpan() > 1 )
             {
-                pTableBox = & pTableBox->FindEndOfRowSpan( pTblNd->GetTable(), (sal_uInt16)(pTableBox->getRowSpan() + mnRowSpanOffset) );
+                pTableBox = & pTableBox->FindEndOfRowSpan( pTblNd->GetTable(),
+                    static_cast<sal_uInt16>(pTableBox->getRowSpan() + m_nRowSpanOffset));
                 SwNodeIndex aNewIdx( *pTableBox->GetSttNd() );
                 rPtIdx = aNewIdx;
                 pTableBoxStartNode = rPtIdx.GetNode().FindTableBoxStartNode();
             }
-            mnRowSpanOffset = 0;
+            m_nRowSpanOffset = 0;
         }
 
         const SwNode* pTmpNode = bNext ?
@@ -1962,7 +1971,7 @@ bool SwCursor::GoPrevNextCell( bool bNext, sal_uInt16 nCnt )
         pTableBox = pTableBoxStartNode->GetTblBox();
         if ( pTableBox && pTableBox->getRowSpan() < 1 )
         {
-            mnRowSpanOffset = pTableBox->getRowSpan();
+            m_nRowSpanOffset = pTableBox->getRowSpan();
             // move cursor to non-covered cell:
             pTableBox = & pTableBox->FindStartOfRowSpan( pTblNd->GetTable(), USHRT_MAX );
             SwNodeIndex aNewIdx( *pTableBox->GetSttNd() );
@@ -2077,18 +2086,18 @@ void SwCursor::RestoreSavePos()
     // This method is not supposed to be used in cases when nodes may be
     // deleted; detect such cases, but do not crash (example: fdo#40831).
     sal_uLong uNodeCount = GetPoint()->nNode.GetNodes().Count();
-    OSL_ENSURE(!pSavePos || pSavePos->nNode < uNodeCount,
+    OSL_ENSURE(!m_pSavePos || m_pSavePos->nNode < uNodeCount,
         "SwCursor::RestoreSavePos: invalid node: "
         "probably something was deleted; consider using SwUnoCrsr instead");
-    if( pSavePos && pSavePos->nNode < uNodeCount )
+    if (m_pSavePos && m_pSavePos->nNode < uNodeCount)
     {
-        GetPoint()->nNode = pSavePos->nNode;
+        GetPoint()->nNode = m_pSavePos->nNode;
 
         sal_Int32 nIdx = 0;
         if ( GetCntntNode() )
         {
-            if ( pSavePos->nCntnt <= GetCntntNode()->Len() )
-                nIdx = pSavePos->nCntnt;
+            if (m_pSavePos->nCntnt <= GetCntntNode()->Len())
+                nIdx = m_pSavePos->nCntnt;
             else
             {
                 nIdx = GetCntntNode()->Len();

@@ -60,10 +60,10 @@ class SW_DLLPUBLIC SwCursor : public SwPaM
 {
     friend class SwCrsrSaveState;
 
-    _SwCursor_SavePos* pSavePos;
-    long mnRowSpanOffset;        // required for travelling in tabs with rowspans
-    sal_uInt8 nCursorBidiLevel;       // bidi level of the cursor
-    bool mbColumnSelection;      // true: cursor is aprt of a column selection
+    _SwCursor_SavePos* m_pSavePos;
+    long m_nRowSpanOffset;        // required for travelling in tabs with rowspans
+    sal_uInt8 m_nCursorBidiLevel; // bidi level of the cursor
+    bool m_bColumnSelection;      // true: cursor is aprt of a column selection
 
     sal_uLong FindAll( SwFindParas& , SwDocPositions, SwDocPositions, FindRanges, bool& bCancel );
 
@@ -74,7 +74,7 @@ protected:
     void SaveState();
     void RestoreState();
 
-    const _SwCursor_SavePos* GetSavePos() const { return pSavePos; }
+    const _SwCursor_SavePos* GetSavePos() const { return m_pSavePos; }
 
     virtual const SwCntntFrm* DoSetBidiLevelLeftRight(
         bool & io_rbLeft, bool bVisualAllowed, bool bInsertCrsr);
@@ -205,14 +205,14 @@ public:
     virtual bool IsSkipOverProtectSections() const;
     virtual bool IsSkipOverHiddenSections() const;
 
-    sal_uInt8 GetCrsrBidiLevel() const { return nCursorBidiLevel; }
-    void SetCrsrBidiLevel( sal_uInt8 nNewLevel ) { nCursorBidiLevel = nNewLevel; }
+    sal_uInt8 GetCrsrBidiLevel() const { return m_nCursorBidiLevel; }
+    void SetCrsrBidiLevel( sal_uInt8 nNewLevel ) { m_nCursorBidiLevel = nNewLevel; }
 
-    bool IsColumnSelection() const { return mbColumnSelection; }
-    void SetColumnSelection( bool bNew ) { mbColumnSelection = bNew; }
+    bool IsColumnSelection() const { return m_bColumnSelection; }
+    void SetColumnSelection( bool bNew ) { m_bColumnSelection = bNew; }
 
-    long GetCrsrRowSpanOffset() const { return mnRowSpanOffset; }
-    void SetCrsrRowSpanOffset( long nNew ) { mnRowSpanOffset = nNew; }
+    long GetCrsrRowSpanOffset() const { return m_nRowSpanOffset; }
+    void SetCrsrRowSpanOffset( long nNew ) { m_nRowSpanOffset = nNew; }
 
     DECL_FIXEDMEMPOOL_NEWDEL( SwCursor )
 };
