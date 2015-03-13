@@ -135,6 +135,7 @@ void ValueSet::dispose()
         xComponent->dispose();
 
     ImplDeleteItems();
+    mpScrollBar.disposeAndClear();
     Control::dispose();
 }
 
@@ -350,18 +351,15 @@ void ValueSet::Format()
     long        nOff;
     long        nNoneHeight;
     long        nNoneSpace;
-    std::unique_ptr<ScrollBar> xDeletedScrollBar;
+    VclPtr<ScrollBar> xDeletedScrollBar;
 
     // consider the scrolling
     if ( nStyle & WB_VSCROLL )
         ImplInitScrollBar();
     else
     {
-        if ( mxScrollBar.get() )
-        {
-            // delete ScrollBar not until later, to prevent recursive calls
-            xDeletedScrollBar.swap(mxScrollBar);
-        }
+        xDeletedScrollBar = mxScrollBar;
+        mxScrollBar.clear();
     }
 
     // calculate item offset
@@ -674,6 +672,8 @@ void ValueSet::Format()
 
     // waiting for the next since the formatting is finished
     mbFormat = false;
+
+    xDeletedScrollBar.disposeAndClear();
 }
 
 void ValueSet::ImplDrawItemText(const OUString& rText)

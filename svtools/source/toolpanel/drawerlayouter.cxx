@@ -132,7 +132,7 @@ namespace svt
     {
         ENSURE_OR_RETURN( i_nChildIndex < m_aDrawers.size(), "illegal index", NULL );
 
-        const PToolPanelDrawer pDrawer( m_aDrawers[ i_nChildIndex ] );
+        ToolPanelDrawer *pDrawer( m_aDrawers[ i_nChildIndex ] );
 
         Reference< XAccessible > xItemAccessible = pDrawer->GetAccessible( false );
         if ( !xItemAccessible.is() )
@@ -151,7 +151,7 @@ namespace svt
     {
         OSL_PRECOND( i_nPosition <= m_aDrawers.size(), "DrawerDeckLayouter::PanelInserted: inconsistency!" );
 
-        PToolPanelDrawer pDrawer( new ToolPanelDrawer( m_rParentWindow, i_pPanel->GetDisplayName() ) );
+        ToolPanelDrawer *pDrawer( new ToolPanelDrawer( m_rParentWindow, i_pPanel->GetDisplayName() ) );
         pDrawer->SetHelpId( i_pPanel->GetHelpID() );
         // proper Z-Order
         if ( i_nPosition == 0 )
@@ -160,8 +160,8 @@ namespace svt
         }
         else
         {
-            const PToolPanelDrawer pFirstDrawer( m_aDrawers[ i_nPosition - 1 ] );
-            pDrawer->SetZOrder( pFirstDrawer.get(), WINDOW_ZORDER_BEHIND );
+            ToolPanelDrawer* pFirstDrawer( m_aDrawers[ i_nPosition - 1 ] );
+            pDrawer->SetZOrder( pFirstDrawer, WINDOW_ZORDER_BEHIND );
         }
 
         pDrawer->Show();
@@ -213,10 +213,7 @@ namespace svt
 
     size_t DrawerDeckLayouter::impl_getPanelPositionFromWindow( const vcl::Window* i_pDrawerWindow ) const
     {
-        for (   ::std::vector< PToolPanelDrawer >::const_iterator drawerPos = m_aDrawers.begin();
-                drawerPos != m_aDrawers.end();
-                ++drawerPos
-            )
+        for ( auto drawerPos = m_aDrawers.begin(); drawerPos != m_aDrawers.end(); ++drawerPos )
         {
             if ( drawerPos->get() == i_pDrawerWindow )
                 return drawerPos - m_aDrawers.begin();
@@ -229,7 +226,6 @@ namespace svt
     {
         OSL_PRECOND( i_nPosition < m_aDrawers.size(), "DrawerDeckLayouter::impl_removeDrawer: invalid panel position!" );
         m_aDrawers[ i_nPosition ]->RemoveEventListener( LINK( this, DrawerDeckLayouter, OnWindowEvent ) );
-        OSL_ENSURE( m_aDrawers[ i_nPosition ].unique(), "DrawerDeckLayouter::impl_removeDrawer: somebody else is still holding a reference!" );
         m_aDrawers.erase( m_aDrawers.begin() + i_nPosition );
     }
 

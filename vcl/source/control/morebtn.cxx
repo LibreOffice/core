@@ -22,7 +22,7 @@
 #include <tools/rc.h>
 #include <vector>
 
-typedef ::std::vector< vcl::Window* > ImplMoreWindowList;
+typedef ::std::vector< VclPtr<vcl::Window> > ImplMoreWindowList;
 
 struct ImplMoreButtonData
 {

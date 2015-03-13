@@ -693,7 +693,7 @@ void ListBox::Resize()
 void ListBox::FillLayoutData() const
 {
     mpControlData->mpLayoutData = new vcl::ControlLayoutData();
-    const ImplListBoxWindowPtr rMainWin = mpImplLB->GetMainWindow();
+    const ImplListBoxWindow* rMainWin = mpImplLB->GetMainWindow();
     if( mpFloatWin )
     {
         // Dropdown mode
@@ -701,13 +701,13 @@ void ListBox::FillLayoutData() const
         mpImplWin->SetLayoutDataParent( this );
         if( mpFloatWin->IsReallyVisible() )
         {
-            AppendLayoutData( *(rMainWin.get()) );
+            AppendLayoutData( *rMainWin );
             rMainWin->SetLayoutDataParent( this );
         }
     }
     else
     {
-        AppendLayoutData( *(rMainWin.get()) );
+        AppendLayoutData( *rMainWin );
         rMainWin->SetLayoutDataParent( this );
     }
 }
@@ -723,7 +723,7 @@ long ListBox::GetIndexForPoint( const Point& rPoint, sal_Int32& rPos ) const
     {
         // Point must be either in main list window
         // or in impl window (dropdown case)
-        ImplListBoxWindowPtr rMain = mpImplLB->GetMainWindow();
+        ImplListBoxWindow* rMain = mpImplLB->GetMainWindow();
 
         // Convert coordinates to ImplListBoxWindow pixel coordinate space
         Point aConvPoint = LogicToPixel( rPoint );
@@ -1373,7 +1373,7 @@ void ListBox::UserDraw( const UserDrawEvent& )
 
 void ListBox::DrawEntry( const UserDrawEvent& rEvt, bool bDrawImage, bool bDrawText, bool bDrawTextAtImagePos )
 {
-    if ( rEvt.GetDevice() == mpImplLB->GetMainWindow().get() )
+    if ( rEvt.GetDevice() == mpImplLB->GetMainWindow() )
         mpImplLB->GetMainWindow()->DrawEntry( rEvt.GetItemId(), bDrawImage, bDrawText, bDrawTextAtImagePos );
     else if ( rEvt.GetDevice() == mpImplWin )
         mpImplWin->DrawEntry( bDrawImage, bDrawText, bDrawTextAtImagePos );

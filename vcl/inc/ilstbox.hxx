@@ -378,12 +378,10 @@ protected:
     virtual void                            SelectEntry( ::vcl::StringEntryIdentifier _entry ) SAL_OVERRIDE;
 };
 
-typedef rtl::Reference<ImplListBoxWindow> ImplListBoxWindowPtr;
-
 class ImplListBox : public Control
 {
 private:
-    ImplListBoxWindowPtr maLBWindow;
+    VclPtr<ImplListBoxWindow> maLBWindow;
     VclPtr<ScrollBar>    mpHScrollBar;
     VclPtr<ScrollBar>    mpVScrollBar;
     VclPtr<ScrollBarBox> mpScrollBarBox;
@@ -418,7 +416,7 @@ public:
     virtual void    dispose() SAL_OVERRIDE;
 
     const ImplEntryList*    GetEntryList() const            { return maLBWindow->GetEntryList(); }
-    ImplListBoxWindowPtr    GetMainWindow()                 { return maLBWindow; }
+    ImplListBoxWindow*      GetMainWindow()                 { return maLBWindow.get(); }
 
     virtual void    Resize() SAL_OVERRIDE;
     virtual const Wallpaper& GetDisplayBackground() const SAL_OVERRIDE;

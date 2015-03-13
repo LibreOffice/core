@@ -84,7 +84,7 @@
 
 static void ImplDrawButton( ToolBox* pThis, const Rectangle &rRect, sal_uInt16 highlight, bool bChecked, bool bEnabled, bool bIsWindow );
 
-typedef ::std::vector< ToolBox* > ImplTBList;
+typedef ::std::vector< VclPtr<ToolBox> > ImplTBList;
 
 class ImplTBDragMgr
 {

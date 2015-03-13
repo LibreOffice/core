@@ -29,12 +29,8 @@
 
 namespace svt
 {
-
-
     class ToolPanelViewShell;
     class ToolPanelDrawer;
-    typedef std::shared_ptr< ToolPanelDrawer >  PToolPanelDrawer;
-
 
     //= ToolPanelDrawer
 
@@ -79,7 +75,7 @@ namespace svt
 private:
         vcl::Window&                             m_rParentWindow;
         IToolPanelDeck&                     m_rPanelDeck;
-        ::std::vector< PToolPanelDrawer >   m_aDrawers;
+        ::std::vector< VclPtr<ToolPanelDrawer> >   m_aDrawers;
         ::boost::optional< size_t >         m_aLastKnownActivePanel;
     };
 

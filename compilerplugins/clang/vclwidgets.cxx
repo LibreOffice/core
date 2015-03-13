@@ -48,17 +48,22 @@ private:
     bool isDisposeCallingSuperclassDispose(const CXXMethodDecl* pMethodDecl);
 };
 
-static const char sVclPtr[] = "VclPtr";
+static bool startsWith(const std::string& s, const char* other)
+{
+    return s.compare(0, strlen(other), other) == 0;
+}
 
 bool BaseCheckNotWindowSubclass(const CXXRecordDecl *BaseDefinition, void *) {
-    if (BaseDefinition->getQualifiedNameAsString().compare("vcl::Window") == 0) {
+    if (BaseDefinition && BaseDefinition->getQualifiedNameAsString().compare("vcl::Window") == 0) {
         return false;
     }
     return true;
 }
 
 bool isDerivedFromWindow(const CXXRecordDecl *decl) {
-    if (decl->getQualifiedNameAsString().compare("vcl::Window") == 0)
+    if (!decl)
+        return false;
+    if (decl->getQualifiedNameAsString() == "vcl::Window")
         return true;
     if (!decl->hasDefinition()) {
         return false;
@@ -72,26 +77,24 @@ bool isDerivedFromWindow(const CXXRecordDecl *decl) {
     return false;
 }
 
-bool isPointerToWindowSubclass(const Type* pType0) {
-    const Type* pType = pType0->getUnqualifiedDesugaredType();
-    if (!pType->isPointerType()) {
+bool containsWindowSubclass(const Type* pType0);
+
+bool containsWindowSubclass(const QualType& qType) {
+    if (startsWith(qType.getAsString(), "VclPtr"))
         return false;
-    }
-    QualType pointeeType = pType->getPointeeType();
-    const RecordType *recordType = pointeeType->getAs<RecordType>();
-    if (recordType == nullptr) {
+    if (startsWith(qType.getAsString(), "class VclPtr"))
         return false;
-    }
-    const CXXRecordDecl *recordDecl = dyn_cast<CXXRecordDecl>(recordType->getDecl());
-    if (recordDecl == nullptr) {
+    if (startsWith(qType.getAsString(), "const class VclPtr"))
         return false;
-    }
-    bool b = isDerivedFromWindow(recordDecl);
-    return b;
+    return containsWindowSubclass(qType.getTypePtr());
 }
 
-bool containsPointerToWindowSubclass(const Type* pType0) {
+bool containsWindowSubclass(const Type* pType0) {
+    if (!pType0)
+        return false;
     const Type* pType = pType0->getUnqualifiedDesugaredType();
+    if (!pType)
+        return false;
     const CXXRecordDecl* pRecordDecl = pType->getAsCXXRecordDecl();
     if (pRecordDecl) {
         const ClassTemplateSpecializationDecl* pTemplate = dyn_cast<ClassTemplateSpecializationDecl>(pRecordDecl);
@@ -99,14 +102,19 @@ bool containsPointerToWindowSubclass(const Type* pType0) {
             for(unsigned i=0; i<pTemplate->getTemplateArgs().size(); ++i) {
                 const TemplateArgument& rArg = pTemplate->getTemplateArgs()[i];
                 if (rArg.getKind() == TemplateArgument::ArgKind::Type &&
-                    containsPointerToWindowSubclass(rArg.getAsType().getTypePtr()))
+                    containsWindowSubclass(rArg.getAsType()))
                 {
                     return true;
                 }
             }
         }
     }
-    return isPointerToWindowSubclass(pType);
+    if (pType->isPointerType()) {
+        QualType pointeeType = pType->getPointeeType();
+        return containsWindowSubclass(pointeeType);
+    } else {
+        return isDerivedFromWindow(pRecordDecl);
+    }
 }
 
 bool VCLWidgets::VisitCXXDestructorDecl(const CXXDestructorDecl* pCXXDestructorDecl)
@@ -131,7 +139,7 @@ bool VCLWidgets::VisitCXXDestructorDecl(const CXXDestructorDecl* pCXXDestructorD
         const RecordType *pFieldRecordType = fieldDecl->getType()->getAs<RecordType>();
         if (pFieldRecordType) {
             const CXXRecordDecl *pFieldRecordTypeDecl = dyn_cast<CXXRecordDecl>(pFieldRecordType->getDecl());
-            if (pFieldRecordTypeDecl->getQualifiedNameAsString().compare(0, strlen(sVclPtr), sVclPtr) == 0) {
+            if (startsWith(pFieldRecordTypeDecl->getQualifiedNameAsString(), "VclPtr")) {
                foundVclPtrField = true;
                break;
             }
@@ -213,15 +221,14 @@ bool VCLWidgets::VisitFieldDecl(const FieldDecl * fieldDecl) {
     if (fieldDecl->isBitField()) {
         return true;
     }
-    if (containsPointerToWindowSubclass(fieldDecl->getType().getTypePtr())) {
+    if (containsWindowSubclass(fieldDecl->getType())) {
         report(
             DiagnosticsEngine::Warning,
-            "vcl::Window subclass declared as a pointer field, should be wrapped in VclPtr.",
+            "vcl::Window subclass declared as a pointer field, should be wrapped in VclPtr." + fieldDecl->getType().getAsString(),
             fieldDecl->getLocation())
           << fieldDecl->getSourceRange();
         return true;
     }
-
     const RecordType *recordType = fieldDecl->getType()->getAs<RecordType>();
     if (recordType == nullptr) {
         return true;
@@ -243,7 +250,7 @@ bool VCLWidgets::VisitFieldDecl(const FieldDecl * fieldDecl) {
     // If this field is a VclPtr field, then the class MUST have a dispose method
     const CXXRecordDecl *pParentRecordDecl = dyn_cast<CXXRecordDecl>(fieldDecl->getParent());
     if (pParentRecordDecl && isDerivedFromWindow(pParentRecordDecl)
-        && recordDecl->getQualifiedNameAsString().compare(0, strlen(sVclPtr), sVclPtr) == 0)
+        && startsWith(recordDecl->getQualifiedNameAsString(), "VclPtr"))
     {
         bool foundDispose = false;
         for(auto methodDecl : pParentRecordDecl->methods()) {
@@ -287,8 +294,8 @@ bool VCLWidgets::VisitParmVarDecl(ParmVarDecl const * pvDecl)
         report(
             DiagnosticsEngine::Warning,
             "vcl::Window subclass passed as a VclPtr parameter, should be passed as a raw pointer.",
-            pvDecl->getLocation())
-          << pvDecl->getSourceRange();
+            pvDecl->getCanonicalDecl()->getLocation())
+          << pvDecl->getCanonicalDecl()->getSourceRange();
     }
     return true;
 }
@@ -400,7 +407,7 @@ bool VCLWidgets::VisitFunctionDecl( const FunctionDecl* functionDecl )
 
         std::vector<std::string> aVclPtrFields;
         for(auto fieldDecl : pMethodDecl->getParent()->fields()) {
-            if (fieldDecl->getType().getAsString().compare(0, strlen(sVclPtr), sVclPtr) == 0) {
+            if (startsWith(fieldDecl->getType().getAsString(), "VclPtr")) {
                 aVclPtrFields.push_back(fieldDecl->getNameAsString());
             }
         }

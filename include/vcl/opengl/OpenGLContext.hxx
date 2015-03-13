@@ -252,7 +252,6 @@ private:
     VclPtr<vcl::Window> m_xWindow;
     VclPtr<vcl::Window> mpWindow; //points to m_pWindow or the parent window, don't delete it
     VclPtr<SystemChildWindow> m_pChildWindow;
-    boost::scoped_ptr<SystemChildWindow> m_pChildWindowGC;
     bool mbInitialized;
     int  mnRefCount;
     bool mbRequestLegacyContext;

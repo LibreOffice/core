@@ -19,7 +19,7 @@ public:
     OpenGLContext& getContext() { return maContext;}
 private:
     OpenGLContext maContext;
-    std::unique_ptr<SystemChildWindow> mxChildWindow;
+    VclPtr<SystemChildWindow> mxChildWindow;
 };
 
 OpenGLWindowImpl::OpenGLWindowImpl(vcl::Window* pWindow)

@@ -201,7 +201,7 @@ private:
     Timer           maTimer;
     ValueItemList   mItemList;
     ValueSetItemPtr mpNoneItem;
-    std::unique_ptr<ScrollBar> mxScrollBar;
+    VclPtr<ScrollBar> mxScrollBar;
     Rectangle       maNoneItemRect;
     Rectangle       maItemListRect;
     long            mnItemWidth;

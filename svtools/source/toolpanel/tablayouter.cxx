@@ -41,7 +41,7 @@ namespace svt
     {
         TabAlignment                    eAlignment;
         IToolPanelDeck&                 rPanels;
-        ::std::unique_ptr< PanelTabBar > pTabBar;
+        VclPtr< PanelTabBar >           pTabBar;
         AccessibleFactoryAccess         aAccessibleFactory;
 
         TabDeckLayouter_Data( vcl::Window& i_rParent, IToolPanelDeck& i_rPanels,
