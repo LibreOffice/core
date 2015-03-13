@@ -155,10 +155,10 @@ public:
     // the same, but without setting bModifyLocked or checking for any of the flags
     // mba: it would be interesting to know why this is necessary
     // also allows to limit callback to certain type (HACK)
-    void ModifyBroadcast( const SfxPoolItem *pOldValue, const SfxPoolItem *pNewValue, TypeId nType = TYPE(SwClient) );
+    inline void ModifyBroadcast( const SfxPoolItem *pOldValue, const SfxPoolItem *pNewValue, TypeId nType = TYPE(SwClient) );
 
     // a more universal broadcasting mechanism
-    void CallSwClientNotify( const SfxHint& rHint ) const;
+    inline void CallSwClientNotify( const SfxHint& rHint ) const;
 
     // single argument ctors shall be explicit.
     explicit SwModify( SwModify* pToRegisterIn )
@@ -332,6 +332,19 @@ SwClient::SwClient( SwModify* pToRegisterIn )
 {
     if(pToRegisterIn)
         pToRegisterIn->Add(this);
+}
+
+void SwModify::ModifyBroadcast( const SfxPoolItem *pOldValue, const SfxPoolItem *pNewValue, TypeId nType)
+{
+    SwClientIter aIter(*this);
+    for(aIter.First(nType); aIter; aIter.Next())
+        aIter->Modify( pOldValue, pNewValue );
+}
+
+void SwModify::CallSwClientNotify( const SfxHint& rHint ) const
+{
+    for(SwClientIter aIter(*this); aIter; ++aIter)
+        aIter->SwClientNotify( *this, rHint );
 }
 #endif
 
