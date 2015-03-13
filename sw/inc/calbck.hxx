@@ -208,108 +208,108 @@ class SwClientIter : public sw::Ring<SwClientIter>
     friend SwClient* SwModify::Remove(SwClient *); ///< for pointer adjustments
     friend void SwModify::Add(SwClient *pDepend);   ///< for pointer adjustments
 
-    const SwModify& rRoot;
+    const SwModify& m_rRoot;
 
     // the current object in an iteration
-    SwClient* pAct;
+    SwClient* m_pCurrent;
 
     // in case the current object is already removed, the next object in the list
     // is marked down to become the current object in the next step
     // this is necessary because iteration requires access to members of the current object
-    SwClient* pDelNext;
+    SwClient* m_pPosition;
 
     // iterator can be limited to return only SwClient objects of a certain type
-    TypeId aSrchId;
+    TypeId m_aSearchType;
 
-    static SwClientIter* pClientIters;
+    static SW_DLLPUBLIC SwClientIter* our_pClientIters;
 
 public:
     SwClientIter( const SwModify& rModify )
-        : rRoot(rModify)
-        , aSrchId(nullptr)
+        : m_rRoot(rModify)
+        , m_aSearchType(nullptr)
     {
-        MoveTo(pClientIters);
-        pClientIters = this;
-        pAct = pDelNext = const_cast<SwClient*>(rRoot.GetDepends());
+        MoveTo(our_pClientIters);
+        our_pClientIters = this;
+        m_pCurrent = m_pPosition = const_cast<SwClient*>(m_rRoot.GetDepends());
     }
     ~SwClientIter()
     {
-        assert(pClientIters);
-        if(pClientIters == this)
-            pClientIters = unique() ? nullptr : GetNextInRing();
+        assert(our_pClientIters);
+        if(our_pClientIters == this)
+            our_pClientIters = unique() ? nullptr : GetNextInRing();
         MoveTo(nullptr);
     }
 
-    const SwModify& GetModify() const { return rRoot; }
+    const SwModify& GetModify() const { return m_rRoot; }
 
     SwClient* operator++()
     {
-        if( pDelNext == pAct )
-            pDelNext = static_cast<SwClient*>(pDelNext->m_pRight);
-        return pAct = pDelNext;
+        if( m_pPosition == m_pCurrent )
+            m_pPosition = static_cast<SwClient*>(m_pPosition->m_pRight);
+        return m_pCurrent = m_pPosition;
     }
     SwClient* GoStart()
     {
-        if((pDelNext = const_cast<SwClient*>(rRoot.GetDepends())))
-            while( pDelNext->m_pLeft )
-                pDelNext = static_cast<SwClient*>(pDelNext->m_pLeft);
-        return pAct = pDelNext;
+        if((m_pPosition = const_cast<SwClient*>(m_rRoot.GetDepends())))
+            while( m_pPosition->m_pLeft )
+                m_pPosition = static_cast<SwClient*>(m_pPosition->m_pLeft);
+        return m_pCurrent = m_pPosition;
     }
     SwClient* GoEnd()
     {
-        if(!pDelNext)
-            pDelNext = const_cast<SwClient*>(rRoot.GetDepends());
-        if(pDelNext)
-            while( pDelNext->m_pRight )
-                pDelNext = static_cast<SwClient*>(pDelNext->m_pRight);
-        return pAct = pDelNext;
+        if(!m_pPosition)
+            m_pPosition = const_cast<SwClient*>(m_rRoot.GetDepends());
+        if(m_pPosition)
+            while( m_pPosition->m_pRight )
+                m_pPosition = static_cast<SwClient*>(m_pPosition->m_pRight);
+        return m_pCurrent = m_pPosition;
     }
 
     // returns the current SwClient object;
     // in case this was already removed, the object marked down to become
     // the next current one is returned
     SwClient* operator()() const
-        { return pDelNext == pAct ? pAct : pDelNext; }
+        { return m_pPosition == m_pCurrent ? m_pCurrent : m_pPosition; }
 
     // return "true" if an object was removed from a client chain in iteration
     // adding objects to a client chain in iteration is forbidden
     // SwModify::Add() asserts this
-    bool IsChanged() const { return pDelNext != pAct; }
+    bool IsChanged() const { return m_pPosition != m_pCurrent; }
 
     SwClient* First( TypeId nType )
     {
-        aSrchId = nType;
+        m_aSearchType = nType;
         GoStart();
-        if(!pDelNext)
+        if(!m_pPosition)
             return nullptr;
-        pAct = nullptr;
+        m_pCurrent = nullptr;
         return Next();
     }
     SwClient* Last( TypeId nType )
     {
-        aSrchId = nType;
+        m_aSearchType = nType;
         GoEnd();
-        if(!pDelNext)
+        if(!m_pPosition)
             return nullptr;
-        if( pDelNext->IsA( aSrchId ) )
-            return pDelNext;
+        if( m_pPosition->IsA( m_aSearchType ) )
+            return m_pPosition;
         return Previous();
     }
     SwClient* Next()
     {
-        if( pDelNext == pAct )
-            pDelNext = static_cast<SwClient*>(pDelNext->m_pRight);
-        while(pDelNext && !pDelNext->IsA( aSrchId ) )
-            pDelNext = static_cast<SwClient*>(pDelNext->m_pRight);
-        return pAct = pDelNext;
+        if( m_pPosition == m_pCurrent )
+            m_pPosition = static_cast<SwClient*>(m_pPosition->m_pRight);
+        while(m_pPosition && !m_pPosition->IsA( m_aSearchType ) )
+            m_pPosition = static_cast<SwClient*>(m_pPosition->m_pRight);
+        return m_pCurrent = m_pPosition;
     }
 
     SwClient* Previous()
     {
-        pDelNext = static_cast<SwClient*>(pDelNext->m_pLeft);
-        while(pDelNext && !pDelNext->IsA( aSrchId ) )
-            pDelNext = static_cast<SwClient*>(pDelNext->m_pLeft);
-        return pAct = pDelNext;
+        m_pPosition = static_cast<SwClient*>(m_pPosition->m_pLeft);
+        while(m_pPosition && !m_pPosition->IsA( m_aSearchType ) )
+            m_pPosition = static_cast<SwClient*>(m_pPosition->m_pLeft);
+        return m_pCurrent = m_pPosition;
     }
 };
 

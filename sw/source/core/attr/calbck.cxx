@@ -205,9 +205,9 @@ void SwModify::Add( SwClient* pDepend )
     if(pDepend->pRegisteredIn != this )
     {
 #if OSL_DEBUG_LEVEL > 0
-        if(SwClientIter::pClientIters)
+        if(SwClientIter::our_pClientIters)
         {
-            for(auto& rIter : SwClientIter::pClientIters->GetRingContainer())
+            for(auto& rIter : SwClientIter::our_pClientIters->GetRingContainer())
                 OSL_ENSURE( &rIter.GetModify() != pRoot, "Client added to active ClientIter" );
         }
 #endif
@@ -257,15 +257,15 @@ SwClient* SwModify::Remove( SwClient* pDepend )
             pR->m_pLeft = pL;
 
         // update ClientIters
-        if(SwClientIter::pClientIters)
+        if(SwClientIter::our_pClientIters)
         {
-            for(auto& rIter : SwClientIter::pClientIters->GetRingContainer())
+            for(auto& rIter : SwClientIter::our_pClientIters->GetRingContainer())
             {
-                if( rIter.pAct == pDepend || rIter.pDelNext == pDepend )
+                if( rIter.m_pCurrent == pDepend || rIter.m_pPosition == pDepend )
                 {
                     // if object being removed is the current or next object in an
                     // iterator, advance this iterator
-                    rIter.pDelNext = static_cast<SwClient*>(pR);
+                    rIter.m_pPosition = static_cast<SwClient*>(pR);
                 }
             }
         }
@@ -361,5 +361,5 @@ bool SwDepend::GetInfo( SfxPoolItem& rInfo ) const
     return pToTell ? pToTell->GetInfo( rInfo ) : true;
 }
 
-SwClientIter* SwClientIter::pClientIters = nullptr;
+SwClientIter* SwClientIter::our_pClientIters = nullptr;
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
