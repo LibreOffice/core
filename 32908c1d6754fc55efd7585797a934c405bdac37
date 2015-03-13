@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a29b11f_e8e8fb18",
+        "filename": "sfx2/Library_sfx.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2015-03-13T09:05:45Z",
+      "side": 1,
+      "message": "Are you sure this is necessary? Don\u0027t you just use the EE_PARA_ULSPACE define from the global editeng headers? gb_Library_use_libraries define what libraries are used at link-time instead.",
+      "revId": "32908c1d6754fc55efd7585797a934c405bdac37",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
