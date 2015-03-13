@@ -1087,9 +1087,18 @@
 #define RID_SVXIMG_SHADOW_SIZE           (RID_SVX_START + 1379)
 #define RID_SVXIMG_SHADOW_XDIST          (RID_SVX_START + 1380)
 #define RID_SVXIMG_SHADOW_YDIST          (RID_SVX_START + 1381)
+#define RID_SVXSTR_ZOOM_25               (RID_SVX_START + 1382)
+#define RID_SVXSTR_ZOOM_50               (RID_SVX_START + 1383)
+#define RID_SVXSTR_ZOOM_75               (RID_SVX_START + 1384)
+#define RID_SVXSTR_ZOOM_100              (RID_SVX_START + 1385)
+#define RID_SVXSTR_ZOOM_150              (RID_SVX_START + 1386)
+#define RID_SVXSTR_ZOOM_200              (RID_SVX_START + 1387)
+#define RID_SVXSTR_ZOOM_WHOLE_PAGE       (RID_SVX_START + 1388)
+#define RID_SVXSTR_ZOOM_PAGE_WIDTH       (RID_SVX_START + 1389)
+#define RID_SVXSTR_ZOOM_OPTIMAL_VIEW     (RID_SVX_START + 1390)
 
 // !!! IMPORTANT: consider and update RID_SVXSTR_NEXTFREE when introducing new RIDs for Strings !!!
-#define RID_SVXSTR_NEXTFREE              (RID_SVX_START + 1382)
+#define RID_SVXSTR_NEXTFREE              (RID_SVX_START + 1391)
 
 // if we have _a_lot_ time, we should group the resource ids by type, instead
 // of grouping them by semantics. The reason is that resource ids have to be

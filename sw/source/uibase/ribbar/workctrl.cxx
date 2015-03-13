@@ -46,14 +46,18 @@
 #include <rtl/ustring.hxx>
 #include "swabstdlg.hxx"
 #include <misc.hrc>
-
+#include <sfx2/zoomitem.hxx>
 #include <vcl/svapp.hxx>
+#include <svx/dialmgr.hxx>
+#include <svx/dialogs.hrc>
 
 // Size check
 #define NAVI_ENTRIES 20
 #if NAVI_ENTRIES != NID_COUNT
 #error SwScrollNaviPopup-CTOR static array wrong size. Are new IDs added?
 #endif
+
+#define ZOOM_ENTRIES 9
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -563,13 +567,17 @@ SwZoomBox_Impl::SwZoomBox_Impl(
 {
     EnableAutocomplete( false );
     sal_uInt16 aZoomValues[] =
-    {   25, 50, 75, 100, 150, 200 };
-    for(sal_uInt16 i = 0; i < sizeof(aZoomValues)/sizeof(sal_uInt16); i++)
+    { RID_SVXSTR_ZOOM_25 , RID_SVXSTR_ZOOM_50 ,
+      RID_SVXSTR_ZOOM_75 , RID_SVXSTR_ZOOM_100 ,
+      RID_SVXSTR_ZOOM_150 , RID_SVXSTR_ZOOM_200 ,
+      RID_SVXSTR_ZOOM_WHOLE_PAGE, RID_SVXSTR_ZOOM_PAGE_WIDTH ,
+      RID_SVXSTR_ZOOM_OPTIMAL_VIEW };
+    for(sal_uInt16 i = 0; i < ZOOM_ENTRIES ; i++)
     {
-        OUString sEntry = unicode::formatPercent(aZoomValues[i],
-            Application::GetSettings().GetUILanguageTag());
+        OUString sEntry = SVX_RESSTR( aZoomValues[i] );
         InsertEntry(sEntry);
     }
+
 }
 
 SwZoomBox_Impl::~SwZoomBox_Impl()
@@ -580,26 +588,28 @@ void    SwZoomBox_Impl::Select()
     if ( !IsTravelSelect() )
     {
         OUString sEntry(comphelper::string::remove(GetText(), '%'));
-        sal_uInt16 nZoom = (sal_uInt16)sEntry.toInt32();
-        if(nZoom < MINZOOM)
-            nZoom = MINZOOM;
-        if(nZoom > MAXZOOM)
-            nZoom = MAXZOOM;
+        SvxZoomItem aZoom(SVX_ZOOM_PERCENT,100);
+        if(sEntry == SVX_RESSTR( RID_SVXSTR_ZOOM_PAGE_WIDTH ) )
+            aZoom.SetType(SVX_ZOOM_PAGEWIDTH);
+        else if(sEntry == SVX_RESSTR( RID_SVXSTR_ZOOM_OPTIMAL_VIEW ) )
+            aZoom.SetType(SVX_ZOOM_OPTIMAL);
+        else if(sEntry == SVX_RESSTR( RID_SVXSTR_ZOOM_WHOLE_PAGE) )
+            aZoom.SetType(SVX_ZOOM_WHOLEPAGE);
+        else
+            {
+            sal_uInt16 nZoom = (sal_uInt16)sEntry.toInt32();
+            if(nZoom < MINZOOM)
+                nZoom = MINZOOM;
+            if(nZoom > MAXZOOM)
+                nZoom = MAXZOOM;
+            aZoom.SetValue(nZoom);
+            }
+        if( FN_PREVIEW_ZOOM == nSlotId )
+            {
+            SfxObjectShell* pCurrentShell = SfxObjectShell::Current();
 
-        SfxUInt16Item aItem( nSlotId, nZoom );
-        if ( FN_PREVIEW_ZOOM == nSlotId )
-        {
-            Any a;
-            Sequence< PropertyValue > aArgs( 1 );
-            aArgs[0].Name = "PreviewZoom";
-            aItem.QueryValue( a );
-            aArgs[0].Value = a;
-            SfxToolBoxControl::Dispatch(
-                m_xDispatchProvider,
-                OUString( ".uno:PreviewZoom" ),
-                aArgs );
-        }
-
+            pCurrentShell->GetDispatcher()->Execute(SID_ATTR_ZOOM, SfxCallMode::ASYNCHRON, &aZoom, 0L);
+            }
         ReleaseFocus();
     }
 }
