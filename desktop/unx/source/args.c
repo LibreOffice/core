@@ -21,7 +21,6 @@ is_env_arg (rtl_uString *str)
 
 static struct {
     const char   *name;
-    unsigned int  bTwoArgs : 1;
     unsigned int  bInhibitSplash : 1;
     unsigned int  bInhibitPagein : 1;
     unsigned int  bInhibitJavaLdx : 1;
@@ -29,31 +28,31 @@ static struct {
     const char   *pPageinType;
 } pArgDescr[] = {
     /* have a trailing argument */
-    { "pt",         1, 0, 0, 0, 0, NULL },
-    { "display",    1, 0, 0, 0, 0, NULL },
+    { "pt",         0, 0, 0, 0, NULL },
+    { "display",    0, 0, 0, 0, NULL },
 
     /* no splash */
-    { "nologo",     0, 1, 0, 0, 0, NULL },
-    { "headless",   0, 1, 0, 0, 0, NULL },
-    { "invisible",  0, 1, 0, 0, 0, NULL },
-    { "quickstart", 0, 1, 0, 0, 0, NULL },
-    { "minimized",  0, 1, 0, 0, 0, NULL },
-    { "convert-to",  0, 1, 0, 0, 0, NULL },
+    { "nologo",     1, 0, 0, 0, NULL },
+    { "headless",   1, 0, 0, 0, NULL },
+    { "invisible",  1, 0, 0, 0, NULL },
+    { "quickstart", 1, 0, 0, 0, NULL },
+    { "minimized",  1, 0, 0, 0, NULL },
+    { "convert-to", 1, 0, 0, 0, NULL },
 
     /* pagein bits */
-    { "writer",     0, 0, 0, 0, 0, "pagein-writer"  },
-    { "calc",       0, 0, 0, 0, 0, "pagein-calc"    },
-    { "draw",       0, 0, 0, 0, 0, "pagein-draw"    },
-    { "impress",    0, 0, 0, 0, 0, "pagein-impress" },
+    { "writer",     0, 0, 0, 0, "pagein-writer"  },
+    { "calc",       0, 0, 0, 0, "pagein-calc"    },
+    { "draw",       0, 0, 0, 0, "pagein-draw"    },
+    { "impress",    0, 0, 0, 0, "pagein-impress" },
 
     /* Do not send --help/--version over the pipe, as their output shall go to
        the calling process's stdout (ideally, this would also happen in the
        presence of unknown options); also prevent splash/pagein/javaldx overhead
        (as these options will be processed early in soffice_main): */
-    { "version",    0, 1, 1, 1, 1, NULL },
-    { "help",       0, 1, 1, 1, 1, NULL },
-    { "h",          0, 1, 1, 1, 1, NULL },
-    { "?",          0, 1, 1, 1, 1, NULL },
+    { "version",    1, 1, 1, 1, NULL },
+    { "help",       1, 1, 1, 1, NULL },
+    { "h",          1, 1, 1, 1, NULL },
+    { "?",          1, 1, 1, 1, NULL },
 };
 
 Args *args_parse (void)
