@@ -930,8 +930,10 @@ PluginDescription XPlugin_Impl::fitDescription( const OUString& rURL )
 
 
 PluginStream::PluginStream( XPlugin_Impl* pPlugin,
-                            const char* url, sal_uInt32 len, sal_uInt32 lastmod ) :
-        m_pPlugin( pPlugin )
+                            const char* url, sal_uInt32 len, sal_uInt32 lastmod)
+    : m_wPlugin(static_cast< ::cppu::OWeakObject* >(pPlugin))
+    , m_pPlugin(pPlugin)
+
 {
     memset( &m_aNPStream, 0, sizeof( m_aNPStream ) );
     m_aNPStream.url             = strdup( url );
@@ -941,14 +943,19 @@ PluginStream::PluginStream( XPlugin_Impl* pPlugin,
 
 PluginStream::~PluginStream()
 {
-    Guard< Mutex > aGuard( m_pPlugin->getMutex() );
-
-    if( m_pPlugin && m_pPlugin->getPluginComm() )
+    uno::Reference<uno::XInterface> const xPlugin(m_wPlugin);
+    XPlugin_Impl *const pPlugin(m_pPlugin);
+    if (xPlugin.is() && pPlugin)
     {
-        m_pPlugin->getPluginComm()->NPP_DestroyStream( &m_pPlugin->getNPPInstance(),
-                                                       &m_aNPStream, NPRES_DONE );
-        m_pPlugin->checkListeners( m_aNPStream.url );
-        m_pPlugin->getPluginComm()->NPP_SetWindow( m_pPlugin );
+        Guard< Mutex > aGuard( pPlugin->getMutex() );
+
+        if( m_pPlugin && m_pPlugin->getPluginComm() )
+        {
+            m_pPlugin->getPluginComm()->NPP_DestroyStream( &m_pPlugin->getNPPInstance(),
+                                                           &m_aNPStream, NPRES_DONE );
+            m_pPlugin->checkListeners( m_aNPStream.url );
+            m_pPlugin->getPluginComm()->NPP_SetWindow( m_pPlugin );
+        }
     }
     ::free( (void*)m_aNPStream.url );
 }
@@ -962,6 +969,7 @@ PluginInputStream::PluginInputStream( XPlugin_Impl* pPlugin,
         m_nMode( NP_NORMAL ),
         m_nWritePos( 0 )
 {
+    assert(m_pPlugin);
     Guard< Mutex > aGuard( m_pPlugin->getMutex() );
 
     m_pPlugin->getInputStreams().push_back( this );
@@ -991,30 +999,38 @@ PluginInputStream::PluginInputStream( XPlugin_Impl* pPlugin,
 
 PluginInputStream::~PluginInputStream()
 {
-    Guard< Mutex > aGuard( m_pPlugin->getMutex() );
-
-    m_pPlugin->getInputStreams().remove( this );
-
     OUString aFile( m_aFileStream.GetFileName() );
 
     m_aFileStream.Close();
-    if( m_pPlugin )
+
+    uno::Reference<uno::XInterface> const xPlugin(m_wPlugin);
+    XPlugin_Impl *const pPlugin(m_pPlugin);
+    if (xPlugin.is() && pPlugin)
     {
-        OString aFileName(OUStringToOString(aFile, m_pPlugin->getTextEncoding()));
-        if( m_pPlugin->getPluginComm() && m_nMode != -1 )
-            // mode -1 means either an error occurred,
-            // or the plugin is already disposing
+        Guard< Mutex > aGuard( pPlugin->getMutex() );
+
+        pPlugin->getInputStreams().remove( this );
+
+        if( m_pPlugin )
         {
-            m_pPlugin->getPluginComm()->addFileToDelete( aFile );
-            if( m_nMode == NP_ASFILE )
+            OString aFileName(OUStringToOString(aFile, m_pPlugin->getTextEncoding()));
+            if( m_pPlugin->getPluginComm() && m_nMode != -1 )
+                // mode -1 means either an error occurred,
+                // or the plugin is already disposing
             {
-                m_pPlugin->getPluginComm()->
-                    NPP_StreamAsFile( &m_pPlugin->getNPPInstance(),
-                                      &m_aNPStream,
-                                      aFileName.getStr() );
+                m_pPlugin->getPluginComm()->addFileToDelete( aFile );
+                if( m_nMode == NP_ASFILE )
+                {
+                    m_pPlugin->getPluginComm()->
+                        NPP_StreamAsFile( &m_pPlugin->getNPPInstance(),
+                                          &m_aNPStream,
+                                          aFileName.getStr() );
+                }
+                m_pPlugin->getPluginComm()->NPP_SetWindow( m_pPlugin );
+                m_pPlugin->getInputStreams().remove( this );
             }
-            m_pPlugin->getPluginComm()->NPP_SetWindow( m_pPlugin );
-            m_pPlugin->getInputStreams().remove( this );
+            else
+                osl::File::remove( aFile );
         }
         else
             osl::File::remove( aFile );
@@ -1058,21 +1074,28 @@ void PluginInputStream::load()
 
 void PluginInputStream::setMode( sal_Int32 nMode )
 {
+    assert(m_pPlugin); // this is currently only called from two places...
     Guard< Mutex > aGuard( m_pPlugin->getMutex() );
 
     m_nMode = nMode;
 
     // invalidation by plugin
-    if( m_nMode == -1 && m_pPlugin )
+    if (m_nMode == -1)
     {
         m_pPlugin->getInputStreams().remove( this );
         m_pPlugin = NULL;
+        m_wPlugin.clear();
     }
 }
 
 void PluginInputStream::writeBytes( const Sequence<sal_Int8>& Buffer ) throw(std::exception)
 {
-    Guard< Mutex > aGuard( m_pPlugin->getMutex() );
+    uno::Reference<uno::XInterface> const xPlugin(m_wPlugin);
+    XPlugin_Impl *const pPlugin(m_pPlugin);
+    if (!xPlugin.is() || !pPlugin)
+        return;
+
+    Guard< Mutex > aGuard( pPlugin->getMutex() );
 
     m_aFileStream.Seek( STREAM_SEEK_TO_END );
     m_aFileStream.Write( Buffer.getConstArray(), Buffer.getLength() );
@@ -1120,7 +1143,12 @@ void PluginInputStream::writeBytes( const Sequence<sal_Int8>& Buffer ) throw(std
 
 void PluginInputStream::closeOutput() throw(std::exception)
 {
-    Guard< Mutex > aGuard( m_pPlugin->getMutex() );
+    uno::Reference<uno::XInterface> const xPlugin(m_wPlugin);
+    XPlugin_Impl *const pPlugin(m_pPlugin);
+    if (!xPlugin.is() || !pPlugin)
+        return;
+
+    Guard< Mutex > aGuard( pPlugin->getMutex() );
 
     flush();
     m_xSource = uno::Reference< com::sun::star::io::XActiveDataSource >();
@@ -1128,7 +1156,12 @@ void PluginInputStream::closeOutput() throw(std::exception)
 
 sal_uInt32 PluginInputStream::read( sal_uInt32 offset, sal_Int8* buffer, sal_uInt32 size )
 {
-    Guard< Mutex > aGuard( m_pPlugin->getMutex() );
+    uno::Reference<uno::XInterface> const xPlugin(m_wPlugin);
+    XPlugin_Impl *const pPlugin(m_pPlugin);
+    if (!xPlugin.is() || !pPlugin)
+        return 0;
+
+    Guard< Mutex > aGuard( pPlugin->getMutex() );
 
     if( m_nMode != NP_SEEK )
         return 0;

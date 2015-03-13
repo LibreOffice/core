@@ -331,6 +331,7 @@ enum PluginStreamType { InputStream, OutputStream };
 class PluginStream
 {
 protected:
+    css::uno::WeakReference<css::uno::XInterface> m_wPlugin;
     XPlugin_Impl*       m_pPlugin;
     NPStream            m_aNPStream;
 public:
