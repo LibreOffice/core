@@ -395,7 +395,7 @@ public:
     // ::com::sun::star::util::XCloneable
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    // ITiledRenderable
+    /// @see vcl::ITiledRenderable::paintTile().
     virtual void paintTile( VirtualDevice &rDevice,
                             int nOutputWidth,
                             int nOutputHeight,
@@ -403,15 +403,11 @@ public:
                             int nTilePosY,
                             long nTileWidth,
                             long nTileHeight ) SAL_OVERRIDE;
+    /// @see vcl::ITiledRenderable::getDocumentSize().
     virtual Size getDocumentSize() SAL_OVERRIDE;
+    /// @see vcl::ITiledRenderable::initializeForTiledRendering().
     virtual void initializeForTiledRendering() SAL_OVERRIDE;
-    /**
-     * Registers a callback that will be invoked whenever the tiled renderer
-     * wants to notify the client about an event.
-     *
-     * @param pCallBack is the callback function
-     * @param pData is private data of the client that will be sent back when the callback is invoked
-     */
+    /// @see vcl::ITiledRenderable::registerCallback().
     virtual void registerCallback(LibreOfficeKitCallback pCallback, void* pData) SAL_OVERRIDE;
     /// @see vcl::ITiledRenderable::postMouseEvent().
     virtual void postMouseEvent(int nType, int nX, int nY, int nCount) SAL_OVERRIDE;
