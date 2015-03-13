@@ -369,18 +369,10 @@ SwClientIter::SwClientIter( const SwModify& rModify )
     , aSrchId(nullptr)
 {
     if( pClientIters )
-    {
-        // append to list of ClientIters
-        SwClientIter* pTmp = pClientIters;
-        while( pTmp->pNxtIter )
-            pTmp = pTmp->pNxtIter;
-        pTmp->pNxtIter = this;
-    }
-    else
-        pClientIters = this;
+        pNxtIter = pClientIters;
+    pClientIters = this;
 
-    pAct = const_cast<SwClient*>(rRoot.GetDepends());
-    pDelNext = pAct;
+    pAct = pDelNext = const_cast<SwClient*>(rRoot.GetDepends());
 }
 
 SwClientIter::~SwClientIter()
