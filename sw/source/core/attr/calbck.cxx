@@ -270,30 +270,5 @@ void SwModify::CheckCaching( const sal_uInt16 nWhich )
     }
 }
 
-SwDepend::SwDepend( SwClient* pTellHim, SwModify* pDepend )
-    : SwClient( pDepend )
-{
-    pToTell  = pTellHim;
-}
-
-void SwDepend::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue )
-{
-    if( pNewValue && pNewValue->Which() == RES_OBJECTDYING )
-        CheckRegistration(pOldValue,pNewValue);
-    else if( pToTell )
-        pToTell->ModifyNotification(pOldValue, pNewValue);
-}
-
-void SwDepend::SwClientNotify( const SwModify& rMod, const SfxHint& rHint )
-{
-    if ( pToTell )
-        pToTell->SwClientNotifyCall( rMod, rHint );
-}
-
-bool SwDepend::GetInfo( SfxPoolItem& rInfo ) const
-{
-    return pToTell ? pToTell->GetInfo( rInfo ) : true;
-}
-
 SwClientIter* SwClientIter::our_pClientIters = nullptr;
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

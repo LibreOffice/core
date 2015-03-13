@@ -24,6 +24,8 @@
 #include "swdllapi.h"
 #include <boost/noncopyable.hpp>
 #include <ring.hxx>
+#include <hintids.hxx>
+#include <hints.hxx>
 
 class SwModify;
 class SwClientIter;
@@ -199,15 +201,26 @@ class SW_DLLPUBLIC SwDepend: public SwClient
 
 public:
     SwDepend() : pToTell(0) {}
-    SwDepend(SwClient *pTellHim, SwModify *pDepend);
+    SwDepend(SwClient *pTellHim, SwModify *pDepend) : SwClient(pDepend), pToTell(pTellHim) {}
 
     SwClient* GetToTell() { return pToTell; }
 
     /** get Client information */
-    virtual bool GetInfo( SfxPoolItem & ) const SAL_OVERRIDE;
+    virtual bool GetInfo( SfxPoolItem& rInfo) const SAL_OVERRIDE
+        { return pToTell ? pToTell->GetInfo( rInfo ) : true; }
 protected:
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNewValue ) SAL_OVERRIDE;
-    virtual void SwClientNotify( const SwModify& rModify, const SfxHint& rHint ) SAL_OVERRIDE;
+    virtual void Modify( const SfxPoolItem* pOldValue, const SfxPoolItem *pNewValue ) SAL_OVERRIDE
+    {
+        if( pNewValue && pNewValue->Which() == RES_OBJECTDYING )
+            CheckRegistration(pOldValue,pNewValue);
+        else if( pToTell )
+            pToTell->ModifyNotification(pOldValue, pNewValue);
+    }
+    virtual void SwClientNotify( const SwModify& rModify, const SfxHint& rHint ) SAL_OVERRIDE
+    {
+        if ( pToTell )
+            pToTell->SwClientNotifyCall( rModify, rHint );
+    }
 };
 
 class SwClientIter : public sw::Ring<SwClientIter>
