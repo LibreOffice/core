@@ -92,7 +92,7 @@ namespace {
             SAL_WARN("vcl.opengl", rDetail << " shader " << nId << " compile for " << rName << " failed : " << &ErrorMessage[0]);
         }
         else
-            SAL_WARN("vcl.opengl", rDetail << " shader: " << rName << " compile " << nId << "failed without error log");
+            SAL_WARN("vcl.opengl", rDetail << " shader: " << rName << " compile " << nId << " failed without error log");
         return 0;
     }
 }
