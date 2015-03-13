@@ -592,14 +592,12 @@ sal_Bool VCLXAccessibleStatusBarItem::copyText( sal_Int32 nStartIndex, sal_Int32
             OUString sText( getTextRange( nStartIndex, nEndIndex ) );
 
             ::vcl::unohelper::TextDataObject* pDataObj = new ::vcl::unohelper::TextDataObject( sText );
-            const sal_uInt32 nRef = Application::ReleaseSolarMutex();
+            SolarMutexReleaser aReleaser;
             xClipboard->setContents( pDataObj, NULL );
 
             Reference< datatransfer::clipboard::XFlushableClipboard > xFlushableClipboard( xClipboard, uno::UNO_QUERY );
             if( xFlushableClipboard.is() )
                 xFlushableClipboard->flushClipboard();
-
-            Application::AcquireSolarMutex( nRef );
 
             bReturn = true;
         }

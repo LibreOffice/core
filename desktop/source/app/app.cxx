@@ -1591,7 +1591,7 @@ int Desktop::Main()
         }
 
         // Release solar mutex just before we wait for our client to connect
-        int nAcquireCount = Application::ReleaseSolarMutex();
+        SolarMutexClearableGuard aSolarMutex;
 
         // Post user event to startup first application component window
         // We have to send this OpenClients message short before execute() to
@@ -1605,8 +1605,7 @@ int Desktop::Main()
         aConfigErrHandler.deactivate();
 
        // Acquire solar mutex just before we enter our message loop
-        if ( nAcquireCount )
-            Application::AcquireSolarMutex( nAcquireCount );
+        aSolarMutex.clear();
 
         // call Application::Execute to process messages in vcl message loop
         SAL_INFO( "desktop.app", "PERFORMANCE - enter Application::Execute()" );
@@ -1714,12 +1713,12 @@ int Desktop::doShutdown()
     FlushConfiguration();
     // The acceptors in the AcceptorMap must be released (in DeregisterServices)
     // with the solar mutex unlocked, to avoid deadlock:
-    sal_uLong nAcquireCount = Application::ReleaseSolarMutex();
+    SolarMutexClearableGuard aSolarMutex;
     DeregisterServices();
 #if HAVE_FEATURE_SCRIPTING
     StarBASIC::DetachAllDocBasicItems();
 #endif
-    Application::AcquireSolarMutex(nAcquireCount);
+    aSolarMutex.clear();
     // be sure that path/language options gets destroyed before
     // UCB is deinitialized
     SAL_INFO( "desktop.app", "-> dispose path/language options" );

@@ -59,7 +59,7 @@ long SolarThreadExecutor::impl_execute( const TimeValue* _pTimeout )
     {
         osl_resetCondition( m_aStart );
         osl_resetCondition( m_aFinish );
-        sal_uLong nSolarMutexCount = Application::ReleaseSolarMutex();
+        SolarMutexReleaser aReleaser;
         ImplSVEvent * nEvent = Application::PostUserEvent( LINK( this, SolarThreadExecutor, worker ) );
         if ( osl_cond_result_timeout == osl_waitCondition( m_aStart, _pTimeout ) )
         {
@@ -68,8 +68,6 @@ long SolarThreadExecutor::impl_execute( const TimeValue* _pTimeout )
         }
         else
             osl_waitCondition( m_aFinish, NULL );
-        if( nSolarMutexCount )
-            Application::AcquireSolarMutex( nSolarMutexCount );
     }
     return m_nReturn;
 }

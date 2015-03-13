@@ -811,9 +811,8 @@ void DlgEditor::Copy()
             aSeqData[0] = aDialogModelBytesAny;
             pTrans = new DlgEdTransferableImpl( m_ClipboardDataFlavors , aSeqData );
         }
-        const sal_uInt32 nRef = Application::ReleaseSolarMutex();
+        SolarMutexReleaser aReleaser;
         xClipboard->setContents( pTrans , pTrans );
-        Application::AcquireSolarMutex( nRef );
     }
 }
 
@@ -831,9 +830,9 @@ void DlgEditor::Paste()
     if ( xClipboard.is() )
     {
         // get clipboard content
-        const sal_uInt32 nRef = Application::ReleaseSolarMutex();
+        SolarMutexClearableGuard aSolarMutex;
         Reference< datatransfer::XTransferable > xTransf = xClipboard->getContents();
-        Application::AcquireSolarMutex( nRef );
+        aSolarMutex.clear();
         if ( xTransf.is() )
         {
             // Is target dialog (library) localized?
@@ -1061,9 +1060,9 @@ bool DlgEditor::IsPasteAllowed()
     if ( xClipboard.is() )
     {
         // get clipboard content
-        const sal_uInt32 nRef = Application::ReleaseSolarMutex();
+        SolarMutexReleaser aReleaser;
         Reference< datatransfer::XTransferable > xTransf = xClipboard->getContents();
-        Application::AcquireSolarMutex( nRef );
+
         return xTransf.is() && xTransf->isDataFlavorSupported( m_ClipboardDataFlavors[0] );
     }
     return false;
