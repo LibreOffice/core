@@ -377,22 +377,19 @@ SwClientIter::SwClientIter( const SwModify& rModify )
 
 SwClientIter::~SwClientIter()
 {
-    if( pClientIters )
+    assert(pClientIters);
+    // reorganize list of ClientIters
+    if( pClientIters == this )
+        pClientIters = pNxtIter;
+    else
     {
-        // reorganize list of ClientIters
-        if( pClientIters == this )
-            pClientIters = pNxtIter;
-        else
+        SwClientIter* pTmp = pClientIters;
+        while( pTmp->pNxtIter != this )
         {
-            SwClientIter* pTmp = pClientIters;
-            while( pTmp->pNxtIter != this )
-                if( nullptr == ( pTmp = pTmp->pNxtIter ) )
-                {
-                    OSL_ENSURE( this, "Lost my pointer" );
-                    return ;
-                }
-            pTmp->pNxtIter = pNxtIter;
+            assert(pTmp);
+            pTmp = pTmp->pNxtIter;
         }
+        pTmp->pNxtIter = pNxtIter;
     }
 }
 
