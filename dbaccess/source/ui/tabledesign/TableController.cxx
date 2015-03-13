@@ -527,7 +527,7 @@ void OTableController::impl_initialize()
     }
     try
     {
-        loadData();                 // fill the column information form the table
+        loadData();                 // fill the column information from the table
         getView()->initialize();    // show the windows and fill with our information
         ClearUndoManager();
         setModified(sal_False);     // and we are not modified yet
@@ -1510,7 +1510,7 @@ OUString OTableController::getPrivateTitle() const
 
 void OTableController::reload()
 {
-    loadData();                 // fill the column information form the table
+    loadData();                 // fill the column information from the table
     static_cast<OTableDesignView*>(getView())->reSync();    // show the windows and fill with our information
     ClearUndoManager();
     setModified(sal_False);     // and we are not modified yet
