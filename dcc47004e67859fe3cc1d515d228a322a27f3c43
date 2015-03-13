@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a29b11f_08877762",
+        "filename": "sw/source/uibase/utlui/statusbar.src",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2015-03-13T04:45:17Z",
+      "side": 1,
+      "message": "Please write this word in full, and hyphenate it for added clarity. “Multiple-page view”.",
+      "revId": "dcc47004e67859fe3cc1d515d228a322a27f3c43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
