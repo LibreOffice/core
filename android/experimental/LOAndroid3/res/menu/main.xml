@@ -10,6 +10,12 @@
           android:orderInCategory="100"
           app:showAsAction="always"/>
 
+    <item android:id="@+id/action_keyboard"
+          android:title="@string/action_keyboard"
+          android:icon="@drawable/ic_format_keyboard_grey600_24dp"
+          android:orderInCategory="100"
+          app:showAsAction="always"/>
+
     <item android:id="@+id/action_about"
         android:title="@string/action_about"
         android:orderInCategory="100" />
