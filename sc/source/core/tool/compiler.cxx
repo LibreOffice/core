@@ -3308,23 +3308,44 @@ bool ScCompiler::IsErrorConstant( const OUString& rName ) const
 
 bool ScCompiler::IsTableRefItem( const OUString& rName ) const
 {
+    bool bItem = false;
     OpCodeHashMap::const_iterator iLook( mxSymbols->getHashMap()->find( rName));
     if (iLook != mxSymbols->getHashMap()->end())
     {
+        // Only called when there actually is a current TableRef, hence
+        // accessing maTableRefs.back() is safe.
+        ScTableRefToken* p = dynamic_cast<ScTableRefToken*>(maTableRefs.back().mxToken.get());
+        assert(p);  // not a ScTableRefToken can't be
+
         switch ((*iLook).second)
         {
             case ocTableRefItemAll:
+                bItem = true;
+                p->AddItem( ScTableRefToken::ALL);
+                break;
             case ocTableRefItemHeaders:
+                bItem = true;
+                p->AddItem( ScTableRefToken::HEADERS);
+                break;
             case ocTableRefItemData:
+                bItem = true;
+                p->AddItem( ScTableRefToken::DATA);
+                break;
             case ocTableRefItemTotals:
+                bItem = true;
+                p->AddItem( ScTableRefToken::TOTALS);
+                break;
             case ocTableRefItemThisRow:
-                maRawToken.SetOpCode( (*iLook).second );
-                return true;
+                bItem = true;
+                p->AddItem( ScTableRefToken::THIS_ROW);
+                break;
             default:
                 ;
         }
+        if (bItem)
+            maRawToken.SetOpCode( (*iLook).second );
     }
-    return false;
+    return bItem;
 }
 
 void ScCompiler::SetAutoCorrection( bool bVal )
