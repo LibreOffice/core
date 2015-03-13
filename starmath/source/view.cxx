@@ -1974,6 +1974,7 @@ SmViewShell::~SmViewShell()
     SmEditWindow *pEditWin = GetEditWindow();
     if (pEditWin)
         pEditWin->DeleteEditView( *this );
+    aGraphic.disposeAndClear();
 }
 
 void SmViewShell::Deactivate( bool bIsMDIActivate )
