@@ -16,6 +16,24 @@
       "revId": "59f1b74cc26b365da5cb15824a5ac011dafdee8c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a29b11f_c845ff17",
+        "filename": "dbaccess/source/ui/querydesign/JoinTableView.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 498,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2015-03-13T12:53:58Z",
+      "side": 1,
+      "message": "Dunno. Looks weird but seems to have been done on purpose by\n\ncommit 7ef6b6f8f0d36d60b52f4e833463f982b10739b0\nDate:   Wed May 22 09:27:07 2002 +0000\n\n    #99302# check if movement implies to scroll the pane",
+      "parentUuid": "3a29b11f_28e7d341",
+      "revId": "59f1b74cc26b365da5cb15824a5ac011dafdee8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
