@@ -114,9 +114,11 @@ public:
 
 class SwShellCrsr : public virtual SwCursor, public SwSelPaintRects
 {
+private:
     // Document positions of start/end characters of a SSelection.
-    Point aMkPt, aPtPt;
-    const SwPosition* pPt;      // For assignment of GetPoint() to aPtPt.
+    Point m_MarkPt;
+    Point m_PointPt;
+    const SwPosition* m_pInitialPoint; // For assignment of GetPoint() to m_PointPt.
 
     using SwCursor::UpDown;
 
@@ -135,14 +137,14 @@ public:
     void Hide();            // Hide all selections.
     void Invalidate( const SwRect& rRect );
 
-    const Point& GetPtPos() const   { return( SwPaM::GetPoint() == pPt ? aPtPt : aMkPt ); }
-          Point& GetPtPos()         { return( SwPaM::GetPoint() == pPt ? aPtPt : aMkPt ); }
-    const Point& GetMkPos() const   { return( SwPaM::GetMark() == pPt ? aPtPt : aMkPt ); }
-          Point& GetMkPos()         { return( SwPaM::GetMark() == pPt ? aPtPt : aMkPt ); }
-    const Point& GetSttPos() const  { return( SwPaM::Start() == pPt ? aPtPt : aMkPt ); }
-          Point& GetSttPos()        { return( SwPaM::Start() == pPt ? aPtPt : aMkPt ); }
-    const Point& GetEndPos() const  { return( SwPaM::End() == pPt ? aPtPt : aMkPt ); }
-          Point& GetEndPos()        { return( SwPaM::End() == pPt ? aPtPt : aMkPt ); }
+    const Point& GetPtPos() const   { return (SwPaM::GetPoint() == m_pInitialPoint) ? m_PointPt : m_MarkPt; }
+          Point& GetPtPos()         { return (SwPaM::GetPoint() == m_pInitialPoint) ? m_PointPt : m_MarkPt; }
+    const Point& GetMkPos() const   { return (SwPaM::GetMark() == m_pInitialPoint) ? m_PointPt : m_MarkPt; }
+          Point& GetMkPos()         { return (SwPaM::GetMark() == m_pInitialPoint) ? m_PointPt : m_MarkPt; }
+    const Point& GetSttPos() const  { return (SwPaM::Start() == m_pInitialPoint) ? m_PointPt : m_MarkPt; }
+          Point& GetSttPos()        { return (SwPaM::Start() == m_pInitialPoint) ? m_PointPt : m_MarkPt; }
+    const Point& GetEndPos() const  { return (SwPaM::End() == m_pInitialPoint) ? m_PointPt : m_MarkPt; }
+          Point& GetEndPos()        { return (SwPaM::End() == m_pInitialPoint) ? m_PointPt : m_MarkPt; }
 
     virtual void SetMark() SAL_OVERRIDE;
 

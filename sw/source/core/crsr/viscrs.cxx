@@ -518,7 +518,7 @@ SwShellCrsr::SwShellCrsr(
     const SwPosition &rPos )
     : SwCursor(rPos,0,false)
     , SwSelPaintRects(rCShell)
-    , pPt(SwPaM::GetPoint())
+    , m_pInitialPoint(SwPaM::GetPoint())
 {}
 
 SwShellCrsr::SwShellCrsr(
@@ -528,17 +528,17 @@ SwShellCrsr::SwShellCrsr(
     SwPaM* pRing )
     : SwCursor(rPos, pRing, false)
     , SwSelPaintRects(rCShell)
-    , aMkPt(rPtPos)
-    , aPtPt(rPtPos)
-    , pPt(SwPaM::GetPoint())
+    , m_MarkPt(rPtPos)
+    , m_PointPt(rPtPos)
+    , m_pInitialPoint(SwPaM::GetPoint())
 {}
 
 SwShellCrsr::SwShellCrsr( SwShellCrsr& rICrsr )
     : SwCursor(rICrsr)
     , SwSelPaintRects(*rICrsr.GetShell())
-    , aMkPt(rICrsr.GetMkPos())
-    , aPtPt(rICrsr.GetPtPos())
-    , pPt(SwPaM::GetPoint())
+    , m_MarkPt(rICrsr.GetMkPos())
+    , m_PointPt(rICrsr.GetPtPos())
+    , m_pInitialPoint(SwPaM::GetPoint())
 {}
 
 SwShellCrsr::~SwShellCrsr()
@@ -551,10 +551,10 @@ bool SwShellCrsr::IsReadOnlyAvailable() const
 
 void SwShellCrsr::SetMark()
 {
-    if( SwPaM::GetPoint() == pPt )
-        aMkPt = aPtPt;
+    if (SwPaM::GetPoint() == m_pInitialPoint)
+        m_MarkPt = m_PointPt;
     else
-        aPtPt = aMkPt;
+        m_PointPt = m_MarkPt;
     SwPaM::SetMark();
 }
 
