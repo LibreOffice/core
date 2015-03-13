@@ -12,7 +12,7 @@
 #define INCLUDED_VCL_ITILEDRENDERABLE_HXX
 
 #define LOK_USE_UNSTABLE_API
-#include <LibreOfficeKit/LibreOfficeKit.h>
+#include <LibreOfficeKit/LibreOfficeKitTypes.h>
 #include <tools/gen.hxx>
 #include <vcl/virdev.hxx>
 

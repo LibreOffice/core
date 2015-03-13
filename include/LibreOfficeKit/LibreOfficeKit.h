@@ -12,6 +12,8 @@
 
 #include <stddef.h>
 
+#include <LibreOfficeKit/LibreOfficeKitTypes.h>
+
 #ifdef __cplusplus
 extern "C"
 {
@@ -28,10 +30,6 @@ typedef struct _LibreOfficeKitDocumentClass LibreOfficeKitDocumentClass;
     (offsetof(strct, member) < (nSize))
 
 #define LIBREOFFICEKIT_HAS(pKit,member) LIBREOFFICEKIT_HAS_MEMBER(LibreOfficeKitClass,member,(pKit)->pClass->nSize)
-
-#ifdef LOK_USE_UNSTABLE_API
-typedef void (*LibreOfficeKitCallback)(int nType, const char* pPayload, void* pData);
-#endif // LOK_USE_UNSTABLE_API
 
 struct _LibreOfficeKit
 {

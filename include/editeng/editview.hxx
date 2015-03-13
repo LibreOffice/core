@@ -28,7 +28,7 @@
 #include <tools/gen.hxx>
 #include <vcl/cursor.hxx>
 #define LOK_USE_UNSTABLE_API
-#include <LibreOfficeKit/LibreOfficeKit.h>
+#include <LibreOfficeKit/LibreOfficeKitTypes.h>
 
 class EditEngine;
 class ImpEditEngine;

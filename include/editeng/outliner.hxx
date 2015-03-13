@@ -37,7 +37,7 @@
 
 #include <tools/rtti.hxx>
 #define LOK_USE_UNSTABLE_API
-#include <LibreOfficeKit/LibreOfficeKit.h>
+#include <LibreOfficeKit/LibreOfficeKitTypes.h>
 #include <vector>
 
 class OutlinerEditEng;
