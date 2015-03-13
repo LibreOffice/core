@@ -337,7 +337,7 @@ const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForLineSeriesPrope
 
 const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForTextLabelProperties()
 {
-    // taget name (drawing layer) : source name (chart model)
+    // target name (drawing layer) : source name (chart model)
     static tMakePropertyNameMap aMap = tMakePropertyNameMap
         ( getPropertyNameMapForCharacterProperties() )
         ( "LineStyle", CHART_UNONAME_LABEL_BORDER_STYLE )
