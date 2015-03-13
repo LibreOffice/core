@@ -179,6 +179,14 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, vcl::Region* pRegion, Ou
     // but someone switches the update mode!
 
     // pRegion: When not NULL, then only calculate Region.
+
+    vcl::Region aRegion;
+    if (isTiledRendering())
+    {
+        assert(!pRegion);
+        pRegion = &aRegion;
+    }
+
     tools::PolyPolygon* pPolyPoly = NULL;
     if ( pRegion )
         pPolyPoly = new tools::PolyPolygon;
@@ -313,6 +321,24 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, vcl::Region* pRegion, Ou
     if ( pRegion )
     {
         *pRegion = vcl::Region( *pPolyPoly );
+
+        if (isTiledRendering())
+        {
+            std::vector<Rectangle> aRectangles;
+            pRegion->GetRegionRectangles(aRectangles);
+            std::stringstream ss;
+
+            for (size_t i = 0; i < aRectangles.size(); ++i)
+            {
+                const Rectangle& rRectangle = aRectangles[i];
+                if (i)
+                    ss << "; ";
+                ss << rRectangle.toString().getStr();
+            }
+            OString sRectangle = ss.str().c_str();
+            libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION, sRectangle.getStr());
+        }
+
         delete pPolyPoly;
     }
     else
