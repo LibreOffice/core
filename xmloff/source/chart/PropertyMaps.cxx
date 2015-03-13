@@ -251,7 +251,7 @@ void XMLChartExportPropertyMapper::ContextFilter(
                 break;
 
             // the following property is deprecated
-            // elemet-item symbol-image is used now
+            // element-item symbol-image is used now
             case XML_SCH_CONTEXT_SPECIAL_SYMBOL_IMAGE_NAME:
                 property->mnIndex = -1;
                 break;
