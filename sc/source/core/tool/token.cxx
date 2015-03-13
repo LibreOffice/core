@@ -861,6 +861,11 @@ ScTableRefToken::Item ScTableRefToken::GetItem() const
     return meItem;
 }
 
+void ScTableRefToken::AddItem( ScTableRefToken::Item eItem )
+{
+    meItem = static_cast<ScTableRefToken::Item>(meItem | eItem);
+}
+
 bool ScTableRefToken::operator==( const FormulaToken& r ) const
 {
     if ( !FormulaToken::operator==(r) )

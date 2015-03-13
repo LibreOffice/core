@@ -237,6 +237,7 @@ public:
     virtual FormulaToken*       Clone() const SAL_OVERRIDE { return new ScTableRefToken(*this); }
 
             Item                GetItem() const;
+            void                AddItem( Item );
 
 private:
 
