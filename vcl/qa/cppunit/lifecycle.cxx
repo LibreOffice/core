@@ -57,9 +57,9 @@ void LifecycleTest::testMultiDispose()
     VclPtr<WorkWindow> xWin(new WorkWindow((vcl::Window *)NULL,
                                            WB_APP|WB_STDWORK));
     CPPUNIT_ASSERT(xWin.get() != NULL);
-    xWin->dispose();
-    xWin->dispose();
-    xWin->dispose();
+    xWin->disposeOnce();
+    xWin->disposeOnce();
+    xWin->disposeOnce();
     CPPUNIT_ASSERT(xWin->GetWindow(0) == NULL);
     CPPUNIT_ASSERT(xWin->GetChild(0) == NULL);
     CPPUNIT_ASSERT(xWin->GetChildCount() == 0);
@@ -113,8 +113,8 @@ void LifecycleTest::testChildDispose()
     CPPUNIT_ASSERT(xWin.get() != NULL);
     VclPtr<DisposableChild> xChild(new DisposableChild(xWin.get()));
     xWin->Show();
-    xChild->dispose();
-    xWin->dispose();
+    xChild->disposeOnce();
+    xWin->disposeOnce();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(LifecycleTest);
