@@ -102,13 +102,13 @@ inline void DbgSetTestSolarMutex( DbgTestSolarMutexProc pProc )
 }
 
 #define DBG_ASSERTWARNING( sCon, aWarning ) \
-    SAL_DETAIL_INFO_IF_FORMAT(!(sCon), "legacy.tools", aWarning)
+    SAL_DETAIL_INFO_IF_FORMAT(!(sCon), "legacy.tools", "%s", aWarning)
 
 #define DBG_ASSERT( sCon, aError ) \
-    SAL_DETAIL_WARN_IF_FORMAT(!(sCon), "legacy.tools", aError)
+    SAL_DETAIL_WARN_IF_FORMAT(!(sCon), "legacy.tools", "%s", aError)
 
 #define DBG_WARNING( aWarning ) \
-    SAL_DETAIL_INFO_IF_FORMAT(true, "legacy.tools", aWarning)
+    SAL_DETAIL_INFO_IF_FORMAT(true, "legacy.tools", "%s", aWarning)
 
 #define DBG_TESTSOLARMUTEX()                \
 do                                          \
