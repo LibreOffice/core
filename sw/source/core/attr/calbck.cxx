@@ -56,27 +56,6 @@ void SwClient::CheckRegistration( const SfxPoolItem* pOld, const SfxPoolItem* )
     }
 }
 
-
-SwModify::SwModify()
-    : SwClient(nullptr), pRoot(nullptr)
-{
-    bModifyLocked = false;
-    bLockClientList = false;
-    bInDocDTOR = false;
-    bInCache = false;
-    bInSwFntCache = false;
-}
-
-SwModify::SwModify( SwModify* pToRegisterIn )
-    : SwClient( pToRegisterIn ), pRoot( nullptr )
-{
-    bModifyLocked = false;
-    bLockClientList = false;
-    bInDocDTOR = false;
-    bInCache = false;
-    bInSwFntCache = false;
-}
-
 SwModify::~SwModify()
 {
     OSL_ENSURE( !IsModifyLocked(), "Modify destroyed but locked." );
@@ -115,11 +94,6 @@ SwModify::~SwModify()
                 static_cast<SwClient*>(pRoot)->CheckRegistration( &aDyObject, &aDyObject );
         }
     }
-}
-
-void SwModify::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue )
-{
-    NotifyClients( pOldValue, pNewValue );
 }
 
 void SwModify::NotifyClients( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue )

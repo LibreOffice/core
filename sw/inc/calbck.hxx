@@ -141,10 +141,13 @@ class SW_DLLPUBLIC SwModify: public SwClient
     bool bInSwFntCache : 1;
 
     // mba: IMHO this method should be pure virtual
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) SAL_OVERRIDE
+        { NotifyClients( pOld, pNew ); };
 
 public:
-    SwModify();
+    SwModify()
+        : SwClient(nullptr), pRoot(nullptr), bModifyLocked(false), bLockClientList(false), bInDocDTOR(false), bInCache(false), bInSwFntCache(false)
+    {}
 
     // broadcasting: send notifications to all clients
     void NotifyClients( const SfxPoolItem *pOldValue, const SfxPoolItem *pNewValue );
@@ -158,7 +161,10 @@ public:
     void CallSwClientNotify( const SfxHint& rHint ) const;
 
     // single argument ctors shall be explicit.
-    explicit SwModify( SwModify *pToRegisterIn );
+    explicit SwModify( SwModify* pToRegisterIn )
+        : SwClient(pToRegisterIn), pRoot(nullptr), bModifyLocked(false), bLockClientList(false), bInDocDTOR(false), bInCache(false), bInSwFntCache(false)
+    {}
+
     virtual ~SwModify();
 
     void Add(SwClient *pDepend);
