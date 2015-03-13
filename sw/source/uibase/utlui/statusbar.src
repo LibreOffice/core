@@ -20,7 +20,7 @@ String STR_VIEWLAYOUT_ONE
 
 String STR_VIEWLAYOUT_MULTI
 {
-    Text [ en-US ] = "Multi page view";
+    Text [ en-US ] = "Multiple-page view";
 };
 
 String STR_VIEWLAYOUT_BOOK
