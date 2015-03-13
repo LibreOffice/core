@@ -26,6 +26,7 @@
 
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Type.hxx>
@@ -34,6 +35,9 @@
 #include <rtl/instance.hxx>
 #include <sal/types.h>
 
+namespace com { namespace sun { namespace star { namespace uno {
+    class XEventListener;
+} } } }
 namespace osl { class Mutex; }
 
 #if defined LIBO_INTERNAL_ONLY
@@ -74,6 +78,20 @@ public:
 
     void SAL_CALL release() throw () SAL_OVERRIDE
     { WeakComponentImplHelperBase::release(); }
+
+    void SAL_CALL dispose() throw (css::uno::RuntimeException, std::exception)
+        SAL_OVERRIDE
+    { WeakComponentImplHelperBase::dispose(); }
+
+    void SAL_CALL addEventListener(
+        css::uno::Reference<css::lang::XEventListener> const & xListener)
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    { WeakComponentImplHelperBase::addEventListener(xListener); }
+
+    void SAL_CALL removeEventListener(
+        css::uno::Reference<css::lang::XEventListener> const & aListener)
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    { WeakComponentImplHelperBase::removeEventListener(aListener); }
 
     css::uno::Sequence<css::uno::Type> SAL_CALL getTypes()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
