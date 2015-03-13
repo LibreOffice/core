@@ -1326,30 +1326,6 @@ Sequence< Reference<XIdlMethod> > ImplIntrospectionAccess::getMethods(sal_Int32 
         sal_Int32 nConcept = pConcepts[ i ];
         if( nConcept & MethodConcepts )
             pDestMethods[ iDest++ ] = pSourceMethods[ i ];
-
-    #if OSL_DEBUG_LEVEL > 0
-        static bool debug = false;
-        if ( debug )
-        {
-            // Methode mit Concepts ausgeben
-            const Reference< XIdlMethod >& rxMethod = pSourceMethods[ i ];
-            OString aNameStr = OUStringToOString( rxMethod->getName(), osl_getThreadTextEncoding() );
-            OString ConceptStr;
-            if( nConcept & MethodConcept::DANGEROUS )
-                ConceptStr += "DANGEROUS |";
-            if( nConcept & MethodConcept::PROPERTY )
-                ConceptStr += "PROPERTY |";
-            if( nConcept & MethodConcept::LISTENER )
-                ConceptStr += "LISTENER |";
-            if( nConcept & MethodConcept::ENUMERATION )
-                ConceptStr += "ENUMERATION |";
-            if( nConcept & MethodConcept::NAMECONTAINER )
-                ConceptStr += "NAMECONTAINER |";
-            if( nConcept & MethodConcept::INDEXCONTAINER )
-                ConceptStr += "INDEXCONTAINER |";
-            OSL_TRACE( "Method %ld: %s, Concepts = %s", i, aNameStr.getStr(), ConceptStr.getStr() );
-        }
-    #endif
     }
 
     // Auf die richtige Laenge bringen
