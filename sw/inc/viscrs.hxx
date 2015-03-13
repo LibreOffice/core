@@ -66,21 +66,21 @@ class SwSelPaintRects : public SwRects
     friend void _InitCore();
     friend void _FinitCore();
 
-    static long nPixPtX, nPixPtY;
-    static MapMode *pMapMode;
+    static long s_nPixPtX, s_nPixPtY;
+    static MapMode *s_pMapMode;
 
-    const SwCrsrShell* pCShell;
+    const SwCrsrShell* m_pCursorShell;
 
 #if HAVE_FEATURE_DESKTOP || defined(ANDROID)
-    sdr::overlay::OverlayObject*    mpCursorOverlay;
+    sdr::overlay::OverlayObject*    m_pCursorOverlay;
 
-    // access to mpCursorOverlay for swapContent
-    sdr::overlay::OverlayObject* getCursorOverlay() const { return mpCursorOverlay; }
-    void setCursorOverlay(sdr::overlay::OverlayObject* pNew) { mpCursorOverlay = pNew; }
+    // access to m_pCursorOverlay for swapContent
+    sdr::overlay::OverlayObject* getCursorOverlay() const { return m_pCursorOverlay; }
+    void setCursorOverlay(sdr::overlay::OverlayObject* pNew) { m_pCursorOverlay = pNew; }
 #endif
 
-    bool mbShowTxtInputFldOverlay;
-    sw::overlay::OverlayRangesOutline* mpTxtInputFldOverlay;
+    bool m_bShowTxtInputFldOverlay;
+    sw::overlay::OverlayRangesOutline* m_pTxtInputFldOverlay;
 
     void HighlightInputFld();
 
@@ -93,7 +93,7 @@ public:
     virtual void FillStartEnd(SwRect& rStart, SwRect& rEnd) const = 0;
 
     // #i75172# in SwCrsrShell::CreateCrsr() the content of SwSelPaintRects is exchanged. To
-    // make a complete swap access to mpCursorOverlay is needed there
+    // make a complete swap access to m_pCursorOverlay is needed there
     void swapContent(SwSelPaintRects& rSwap);
 
     void Show();
@@ -102,10 +102,10 @@ public:
 
     inline void SetShowTxtInputFldOverlay( const bool bShow )
     {
-        mbShowTxtInputFldOverlay = bShow;
+        m_bShowTxtInputFldOverlay = bShow;
     }
 
-    const SwCrsrShell* GetShell() const { return pCShell; }
+    const SwCrsrShell* GetShell() const { return m_pCursorShell; }
     // check current MapMode of the shell and set possibly the static members.
     // Optional set the parameters pX, pY
     static void Get1PixelInLogic( const SwViewShell& rSh,

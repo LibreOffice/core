@@ -61,9 +61,9 @@
 // MapMode. This is done so that on ShowCrsr the same size does not have to be
 // expensively determined again and again.
 
-long SwSelPaintRects::nPixPtX = 0;
-long SwSelPaintRects::nPixPtY = 0;
-MapMode* SwSelPaintRects::pMapMode = 0;
+long SwSelPaintRects::s_nPixPtX = 0;
+long SwSelPaintRects::s_nPixPtY = 0;
+MapMode* SwSelPaintRects::s_pMapMode = 0;
 
 // Starting from here: classes / methods for the non-text-cursor
 SwVisCrsr::SwVisCrsr( const SwCrsrShell * pCShell )
@@ -204,11 +204,11 @@ void SwVisCrsr::_SetPosAndShow()
 
 SwSelPaintRects::SwSelPaintRects( const SwCrsrShell& rCSh )
     : SwRects()
-    , pCShell( &rCSh )
+    , m_pCursorShell( &rCSh )
 #if HAVE_FEATURE_DESKTOP
-    , mpCursorOverlay( 0 )
-    , mbShowTxtInputFldOverlay( true )
-    , mpTxtInputFldOverlay( NULL )
+    , m_pCursorOverlay(nullptr)
+    , m_bShowTxtInputFldOverlay(true)
+    , m_pTxtInputFldOverlay(nullptr)
 #endif
 {
 }
@@ -223,34 +223,34 @@ void SwSelPaintRects::swapContent(SwSelPaintRects& rSwap)
     SwRects::swap(rSwap);
 
 #if HAVE_FEATURE_DESKTOP
-    // #i75172# also swap mpCursorOverlay
+    // #i75172# also swap m_pCursorOverlay
     sdr::overlay::OverlayObject* pTempOverlay = getCursorOverlay();
     setCursorOverlay(rSwap.getCursorOverlay());
     rSwap.setCursorOverlay(pTempOverlay);
 
-    const bool bTempShowTxtInputFldOverlay = mbShowTxtInputFldOverlay;
-    mbShowTxtInputFldOverlay = rSwap.mbShowTxtInputFldOverlay;
-    rSwap.mbShowTxtInputFldOverlay = bTempShowTxtInputFldOverlay;
+    const bool bTempShowTxtInputFldOverlay = m_bShowTxtInputFldOverlay;
+    m_bShowTxtInputFldOverlay = rSwap.m_bShowTxtInputFldOverlay;
+    rSwap.m_bShowTxtInputFldOverlay = bTempShowTxtInputFldOverlay;
 
-    sw::overlay::OverlayRangesOutline* pTempTxtInputFldOverlay = mpTxtInputFldOverlay;
-    mpTxtInputFldOverlay = rSwap.mpTxtInputFldOverlay;
-    rSwap.mpTxtInputFldOverlay = pTempTxtInputFldOverlay;
+    sw::overlay::OverlayRangesOutline* pTempTxtInputFldOverlay = m_pTxtInputFldOverlay;
+    m_pTxtInputFldOverlay = rSwap.m_pTxtInputFldOverlay;
+    rSwap.m_pTxtInputFldOverlay = pTempTxtInputFldOverlay;
 #endif
 }
 
 void SwSelPaintRects::Hide()
 {
 #if HAVE_FEATURE_DESKTOP
-    if(mpCursorOverlay)
+    if (m_pCursorOverlay)
     {
-        delete mpCursorOverlay;
-        mpCursorOverlay = 0;
+        delete m_pCursorOverlay;
+        m_pCursorOverlay = nullptr;
     }
 
-    if ( mpTxtInputFldOverlay != NULL )
+    if (m_pTxtInputFldOverlay != nullptr)
     {
-        delete mpTxtInputFldOverlay;
-        mpTxtInputFldOverlay = NULL;
+        delete m_pTxtInputFldOverlay;
+        m_pTxtInputFldOverlay = nullptr;
     }
 #endif
 
@@ -283,7 +283,7 @@ void SwShellCrsr::FillStartEnd(SwRect& rStart, SwRect& rEnd) const
 
 void SwSelPaintRects::Show()
 {
-    SdrView* pView = (SdrView*)pCShell->GetDrawView();
+    SdrView *const pView = const_cast<SdrView*>(m_pCursorShell->GetDrawView());
 
     if(pView && pView->PaintWindowCount())
     {
@@ -305,16 +305,16 @@ void SwSelPaintRects::Show()
                 aPntRect.Right() + 1, aPntRect.Bottom() + 1));
         }
 
-        if(mpCursorOverlay)
+        if (m_pCursorOverlay)
         {
             if(!aNewRanges.empty())
             {
-                static_cast< sdr::overlay::OverlaySelection* >(mpCursorOverlay)->setRanges(aNewRanges);
+                static_cast<sdr::overlay::OverlaySelection*>(m_pCursorOverlay)->setRanges(aNewRanges);
             }
             else
             {
-                delete mpCursorOverlay;
-                mpCursorOverlay = 0;
+                delete m_pCursorOverlay;
+                m_pCursorOverlay = nullptr;
             }
         }
         else if(!empty())
@@ -329,13 +329,13 @@ void SwSelPaintRects::Show()
                 const Color aHighlight(aSvtOptionsDrawinglayer.getHilightColor());
 
                 // create correct selection
-                mpCursorOverlay = new sdr::overlay::OverlaySelection(
+                m_pCursorOverlay = new sdr::overlay::OverlaySelection(
                     sdr::overlay::OVERLAY_TRANSPARENT,
                     aHighlight,
                     aNewRanges,
                     true);
 
-                xTargetOverlay->add(*mpCursorOverlay);
+                xTargetOverlay->add(*m_pCursorOverlay);
             }
         }
 
@@ -395,7 +395,7 @@ void SwSelPaintRects::HighlightInputFld()
 {
     std::vector< basegfx::B2DRange > aInputFldRanges;
 
-    if ( mbShowTxtInputFldOverlay )
+    if (m_bShowTxtInputFldOverlay)
     {
         SwTxtInputFld* pCurTxtInputFldAtCrsr =
             dynamic_cast<SwTxtInputFld*>(GetShell()->GetTxtFldAtPos( GetShell()->GetCrsr()->Start(), false ));
@@ -424,9 +424,9 @@ void SwSelPaintRects::HighlightInputFld()
 
     if ( aInputFldRanges.size() > 0 )
     {
-        if ( mpTxtInputFldOverlay != NULL )
+        if (m_pTxtInputFldOverlay != nullptr)
         {
-            mpTxtInputFldOverlay->setRanges( aInputFldRanges );
+            m_pTxtInputFldOverlay->setRanges( aInputFldRanges );
         }
         else
         {
@@ -441,17 +441,18 @@ void SwSelPaintRects::HighlightInputFld()
                 Color aHighlight(aSvtOptionsDrawinglayer.getHilightColor());
                 aHighlight.DecreaseLuminance( 128 );
 
-                mpTxtInputFldOverlay = new sw::overlay::OverlayRangesOutline( aHighlight, aInputFldRanges );
-                xTargetOverlay->add( *mpTxtInputFldOverlay );
+                m_pTxtInputFldOverlay = new sw::overlay::OverlayRangesOutline(
+                        aHighlight, aInputFldRanges );
+                xTargetOverlay->add( *m_pTxtInputFldOverlay );
             }
         }
     }
     else
     {
-        if ( mpTxtInputFldOverlay != NULL )
+        if (m_pTxtInputFldOverlay != nullptr)
         {
-            delete mpTxtInputFldOverlay;
-            mpTxtInputFldOverlay = NULL;
+            delete m_pTxtInputFldOverlay;
+            m_pTxtInputFldOverlay = nullptr;
         }
     }
 }
@@ -480,9 +481,9 @@ void SwSelPaintRects::Invalidate( const SwRect& rRect )
         {
             SwRect& rRectIt = *it;
             if( rRectIt.Right() == GetShell()->m_aOldRBPos.X() )
-                rRectIt.Right( rRectIt.Right() + nPixPtX );
+                rRectIt.Right( rRectIt.Right() + s_nPixPtX );
             if( rRectIt.Bottom() == GetShell()->m_aOldRBPos.Y() )
-                rRectIt.Bottom( rRectIt.Bottom() + nPixPtY );
+                rRectIt.Bottom( rRectIt.Bottom() + s_nPixPtY );
         }
     }
 }
@@ -497,20 +498,20 @@ void SwSelPaintRects::Get1PixelInLogic( const SwViewShell& rSh,
         pOut = rSh.GetOut();
 
     const MapMode& rMM = pOut->GetMapMode();
-    if( pMapMode->GetMapUnit() != rMM.GetMapUnit() ||
-        pMapMode->GetScaleX() != rMM.GetScaleX() ||
-        pMapMode->GetScaleY() != rMM.GetScaleY() )
+    if (s_pMapMode->GetMapUnit() != rMM.GetMapUnit() ||
+        s_pMapMode->GetScaleX() != rMM.GetScaleX() ||
+        s_pMapMode->GetScaleY() != rMM.GetScaleY())
     {
-        *pMapMode = rMM;
+        *s_pMapMode = rMM;
         Size aTmp( 1, 1 );
         aTmp = pOut->PixelToLogic( aTmp );
-        nPixPtX = aTmp.Width();
-        nPixPtY = aTmp.Height();
+        s_nPixPtX = aTmp.Width();
+        s_nPixPtY = aTmp.Height();
     }
     if( pX )
-        *pX = nPixPtX;
+        *pX = s_nPixPtX;
     if( pY )
-        *pY = nPixPtY;
+        *pY = s_nPixPtY;
 }
 
 SwShellCrsr::SwShellCrsr(
