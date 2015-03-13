@@ -22,10 +22,12 @@ class SwTiledRenderingTest : public SwModelTestBase
 {
 
 public:
+    void testSetTextSelection();
     void testSetGraphicSelection();
     void testResetSelection();
 
     CPPUNIT_TEST_SUITE(SwTiledRenderingTest);
+    CPPUNIT_TEST(testSetTextSelection);
     CPPUNIT_TEST(testSetGraphicSelection);
     CPPUNIT_TEST(testResetSelection);
     CPPUNIT_TEST_SUITE_END();
@@ -42,6 +44,26 @@ SwXTextDocument* SwTiledRenderingTest::createDoc(const char* pName)
     CPPUNIT_ASSERT(pTextDocument);
     pTextDocument->initializeForTiledRendering();
     return pTextDocument;
+}
+
+void SwTiledRenderingTest::testSetTextSelection()
+{
+    SwXTextDocument* pXTextDocument = createDoc("set-text-selection.fodt");
+    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    // Move the cursor into the second word.
+    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 5, /*bBasicCall=*/false);
+    // Create a selection by on the word.
+    pWrtShell->SelWrd();
+    SwShellCrsr* pShellCrsr = pWrtShell->getShellCrsr(false);
+    // Did we indeed manage to select the second word?
+    CPPUNIT_ASSERT_EQUAL(OUString("bbb"), pShellCrsr->GetTxt());
+
+    // Now use setTextSelection() to move the start of the selection 1000 twips left.
+    Point aStart = pShellCrsr->GetSttPos();
+    aStart.setX(aStart.getX() - 1000);
+    pXTextDocument->setTextSelection(LOK_SETTEXTSELECTION_START, aStart.getX(), aStart.getY());
+    // The new selection must include the first word, too -- but not the ending dot.
+    CPPUNIT_ASSERT_EQUAL(OUString("Aaa bbb"), pShellCrsr->GetTxt());
 }
 
 void SwTiledRenderingTest::testSetGraphicSelection()

@@ -82,7 +82,7 @@ There are currently two known LOK clients supporting tiled editing:
 
 Core has next to no idea what is the LOK client, so for effective development,
 it's recommended that the core part is developed against gtktiledviewer, and
-once a feature works there, then implement the Android part, with is slower
+once a feature works there, then implement the Android part, with its slower
 development iteration (slow uploading to the device, the need to link all
 object files into a single .so, etc).
 
