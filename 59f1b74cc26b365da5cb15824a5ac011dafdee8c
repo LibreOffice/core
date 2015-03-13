@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a29b11f_28e7d341",
+        "filename": "dbaccess/source/ui/querydesign/JoinTableView.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 498,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-03-13T11:34:33Z",
+      "side": 1,
+      "message": "this is very odd.... same thing as the old code, but more obviously odd...\n\nis it really the intent that the visibility after scrolling in X direction should determine whether to scroll in Y direction?",
+      "revId": "59f1b74cc26b365da5cb15824a5ac011dafdee8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
