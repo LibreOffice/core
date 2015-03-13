@@ -1431,7 +1431,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getUDTs(
             args[1].l = schemaPattern.toChar() == '%' ? NULL : convertwchar_tToJavaString(t.pEnv,schemaPattern);
             args[2].l = convertwchar_tToJavaString(t.pEnv,typeNamePattern);
             jintArray pArray = t.pEnv->NewIntArray(types.getLength());
-            t.pEnv->SetIntArrayRegion(pArray,0,types.getLength(),(jint*)types.getConstArray());
+            t.pEnv->SetIntArrayRegion(pArray,0,types.getLength(),reinterpret_cast<jint const *>(types.getConstArray()));
             args[3].l = pArray;
 
             out = t.pEnv->CallObjectMethod( object, mID, args[0].l, args[1].l,args[2].l,args[3].l);
