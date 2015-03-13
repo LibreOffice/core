@@ -1203,7 +1203,7 @@ void ScDPSaveData::WriteToSource( const uno::Reference<sheet::XDimensionsSupplie
             OUString aName = iter->GetName();
             OUString aCoreName = ScDPUtil::getSourceDimensionName(aName);
 
-            OSL_TRACE( "%s", aName.getStr() );
+            SAL_INFO("sc.core", aName);
 
             bool bData = iter->IsDataLayout();
 

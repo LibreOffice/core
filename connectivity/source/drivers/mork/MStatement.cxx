@@ -502,12 +502,16 @@ void OCommonStatement::createColumnMapping()
     // now check which columns are bound
 #if OSL_DEBUG_LEVEL > 0
     for ( i = 0; i < m_aColMapping.size(); i++ )
-        OSL_TRACE("BEFORE Mapped: %d -> %d", i, m_aColMapping[i] );
+        SAL_INFO(
+            "connectivity.mork",
+            "BEFORE Mapped: " << i << " -> " << m_aColMapping[i]);
 #endif
     OResultSet::setBoundedColumns(m_aRow,xColumns,xNames,true,m_xDBMetaData,m_aColMapping);
 #if OSL_DEBUG_LEVEL > 0
     for ( i = 0; i < m_aColMapping.size(); i++ )
-        OSL_TRACE("AFTER  Mapped: %d -> %d", i, m_aColMapping[i] );
+        SAL_INFO(
+            "connectivity.mork",
+            "AFTER  Mapped: " << i << " -> " << m_aColMapping[i]);
 #endif
 }
 

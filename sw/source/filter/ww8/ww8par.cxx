@@ -473,7 +473,7 @@ Sttb::~Sttb()
 
 bool Sttb::Read( SvStream& rS )
 {
-    OSL_TRACE("Sttb::Read() stream pos 0x%x", rS.Tell() );
+    SAL_INFO("sw.ww8", "stream pos " << rS.Tell());
     nOffSet = rS.Tell();
     rS.ReadUInt16( fExtend ).ReadUInt16( cData ).ReadUInt16( cbExtra );
     if ( cData )

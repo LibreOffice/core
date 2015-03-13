@@ -44,7 +44,10 @@ public:
     DbgStyleSheetReferences() : mnStyles(0), mnPools(0) {}
     ~DbgStyleSheetReferences()
     {
-        OSL_TRACE("DbgStyleSheetReferences\nSfxStyleSheetBase left %ld\nSfxStyleSheetBasePool left %ld", mnStyles, mnPools );
+        SAL_WARN_IF(
+            mnStyles != 0 || mnPools != 0, "svl.items",
+            "SfxStyleSheetBase left " << mnStyles
+                << "; SfxStyleSheetBasePool left " << mnPools);
     }
 
     sal_uInt32 mnStyles;

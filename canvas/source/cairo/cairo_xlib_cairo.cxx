@@ -356,8 +356,11 @@ namespace cairo
                                           const BitmapSystemData& rData,
                                           const Size&             rSize )
     {
-        OSL_TRACE( "requested size: %d x %d available size: %d x %d",
-                   rSize.Width(), rSize.Height(), rData.mnWidth, rData.mnHeight );
+        SAL_INFO(
+            "canvas.cairo",
+            "requested size: " << rSize.Width() << " x " << rSize.Height()
+                << " available size: " << rData.mnWidth << " x "
+                << rData.mnHeight);
         if ( rData.mnWidth == rSize.Width() && rData.mnHeight == rSize.Height() )
         {
             if( rRefDevice.GetOutDevType() == OUTDEV_WINDOW )

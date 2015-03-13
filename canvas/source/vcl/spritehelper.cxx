@@ -332,8 +332,9 @@ namespace vclcanvas
                                                                         2,'.',NULL,' ') );
 
                     rTargetSurface.DrawText( aOutPos+Point(2,2), text );
-                    VERBOSE_TRACE( "SpriteHelper::redraw(): sprite %X has prio %f\n",
-                                   this, getPriority() );
+                    SAL_INFO(
+                        "canvas.level2",
+                        "sprite " << this << " has prio " << getPriority());
                 }
             }
         }

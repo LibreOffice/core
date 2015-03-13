@@ -715,7 +715,7 @@ void SfxDispatcher::DoDeactivate_Impl(bool bMDI, SfxViewFrame* pNew)
 
     if ( bMDI )
     {
-        OSL_TRACE(OStringBuffer("Deactivate Dispatcher").append(reinterpret_cast<sal_Int64>(this)).getStr());
+        SAL_INFO("sfx.control", "Deactivate Dispatcher " << this);
         DBG_ASSERT( xImp->bActive, "Deactivate error" );
         xImp->bActive = false;
 
@@ -736,7 +736,7 @@ void SfxDispatcher::DoDeactivate_Impl(bool bMDI, SfxViewFrame* pNew)
         }
     }
     else {
-        OSL_TRACE(OStringBuffer("Non-MDI-DeActivate Dispatcher").append(reinterpret_cast<sal_Int64>(this)).getStr());
+        SAL_INFO("sfx.control", "Non-MDI-DeActivate Dispatcher " << this);
     }
 
     if ( IsAppDispatcher() && !pSfxApp->IsDowning() )

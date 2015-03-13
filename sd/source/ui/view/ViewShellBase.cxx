@@ -1380,12 +1380,12 @@ FocusForwardingWindow::FocusForwardingWindow (
     : vcl::Window(&rParentWindow, WinBits(WB_CLIPCHILDREN | WB_DIALOGCONTROL)),
         mrBase(rBase)
 {
-    OSL_TRACE("created FocusForwardingWindow at %x", this);
+    SAL_INFO("sd.view", "created FocusForwardingWindow at " << this);
 }
 
 FocusForwardingWindow::~FocusForwardingWindow (void)
 {
-    OSL_TRACE("destroyed FocusForwardingWindow at %x", this);
+    SAL_INFO("sd.view", "destroyed FocusForwardingWindow at " << this);
 }
 
 void FocusForwardingWindow::KeyInput (const KeyEvent& rKEvt)

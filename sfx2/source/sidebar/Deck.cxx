@@ -284,15 +284,13 @@ void Deck::PrintWindowSubTree (vcl::Window* pRoot, int nIndentation)
     static const char* sIndentation = "                                                                  ";
     const Point aLocation (pRoot->GetPosPixel());
     const Size aSize (pRoot->GetSizePixel());
-    OUString sClassification = GetWindowClassification(pRoot);
-    const char* sVisible = pRoot->IsVisible() ? "visible" : "hidden";
-    OSL_TRACE("%s%x %s %s +%d+%d x%dx%d",
-        sIndentation+strlen(sIndentation)-nIndentation*4,
-        pRoot,
-        OUStringToOString(sClassification, RTL_TEXTENCODING_ASCII_US).getStr(),
-        sVisible,
-        aLocation.X(),aLocation.Y(),
-        aSize.Width(),aSize.Height());
+    SAL_INFO(
+        "sfx.sidebar",
+        sIndentation+strlen(sIndentation)-nIndentation*4 << pRoot << " "
+            << GetWindowClassification(pRoot) << " "
+            << (pRoot->IsVisible() ? "visible" : "hidden") << " +"
+            << aLocation.X() << "+" << aLocation.Y() << " x" << aSize.Width()
+            << "x" << aSize.Height());
 
     const sal_uInt16 nChildCount (pRoot->GetChildCount());
     for (sal_uInt16 nIndex=0; nIndex<nChildCount; ++nIndex)

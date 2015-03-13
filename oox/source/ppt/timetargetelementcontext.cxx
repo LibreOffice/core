@@ -134,7 +134,10 @@ namespace oox { namespace ppt {
             return new ShapeTargetElementContext( *this, mpTarget->maShapeTarget );
         }
         default:
-            OSL_TRACE( "OOX: unhandled tag %ld in TL_TimeTargetElement.", getBaseToken( aElementToken ) );
+            SAL_INFO(
+                "oox.ppt",
+                "unhandled tag " << getBaseToken(aElementToken)
+                    << " in TL_TimeTargetElement");
             break;
         }
 

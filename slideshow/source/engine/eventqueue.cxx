@@ -265,11 +265,11 @@ namespace slideshow
                 }
                 else
                 {
-#if OSL_DEBUG_LEVEL > 0
-                    VERBOSE_TRACE( "Ignoring discharged event: unknown (0x%X), timeout was: %f",
-                                   event.pEvent.get(),
-                                   event.pEvent->getActivationTime(0.0) );
-#endif
+                    SAL_INFO(
+                        "slideshow.eventqueue",
+                        "Ignoring discharged event: unknown ("
+                            << event.pEvent.get() << "), timeout was: "
+                            << event.pEvent->getActivationTime(0.0));
                 }
             }
         }

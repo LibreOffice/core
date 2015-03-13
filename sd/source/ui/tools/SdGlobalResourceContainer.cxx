@@ -157,7 +157,8 @@ SdGlobalResourceContainer::~SdGlobalResourceContainer (void)
         if ( ! iSharedResource->unique())
         {
             SdGlobalResource* pResource = iSharedResource->get();
-            OSL_TRACE(" %p %d", pResource, iSharedResource->use_count());
+            SAL_INFO(
+                "sd.tools", pResource << " " << iSharedResource->use_count());
             DBG_ASSERT(iSharedResource->unique(),
                 "SdGlobalResource still held in ~SdGlobalResourceContainer");
         }

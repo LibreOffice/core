@@ -528,26 +528,26 @@ namespace cairocanvas
             cairo_set_font_matrix(pSCairo.get(), &m);
 
 #if (defined CAIRO_HAS_WIN32_SURFACE) && (OSL_DEBUG_LEVEL > 1)
-# define TEMP_TRACE_FONT OUStringToOString( reinterpret_cast<const sal_Unicode*> (logfont.lfFaceName), RTL_TEXTENCODING_UTF8 ).getStr()
+# define TEMP_TRACE_FONT OUString(reinterpret_cast<const sal_Unicode*> (logfont.lfFaceName))
 #else
-# define TEMP_TRACE_FONT OUStringToOString( aFont.GetName(), RTL_TEXTENCODING_UTF8 ).getStr()
+# define TEMP_TRACE_FONT aFont.GetName()
 #endif
-            OSL_TRACE("\r\n:cairocanvas::TextLayout::draw(S,O,p,v,r): Size:(%d,%d), Pos (%d,%d), G(%d,%d,%d) %s%s%s%s || Name:%s - %s",
-                      aFont.GetWidth(),
-                      aFont.GetHeight(),
-                      (int) rOutpos.X(),
-                      (int) rOutpos.Y(),
-                      cairo_glyphs.size() > 0 ? cairo_glyphs[0].index : -1,
-                      cairo_glyphs.size() > 1 ? cairo_glyphs[1].index : -1,
-                      cairo_glyphs.size() > 2 ? cairo_glyphs[2].index : -1,
-                      maLogicalAdvancements.getLength() ? "ADV " : "",
-                      rSysFontData.bAntialias ? "AA " : "",
-                      rSysFontData.bFakeBold ? "FB " : "",
-                      rSysFontData.bFakeItalic ? "FI " : "",
-                      TEMP_TRACE_FONT,
-                      OUStringToOString( maText.Text.copy( maText.StartPosition, maText.Length ),
-                                                RTL_TEXTENCODING_UTF8 ).getStr()
-                );
+            SAL_INFO(
+                "canvas.cairo",
+                "Size:(" << aFont.GetWidth() << "," << aFont.GetHeight()
+                    << "), Pos (" << rOutpos.X() << "," << rOutpos.Y()
+                    << "), G("
+                    << (cairo_glyphs.size() > 0 ? cairo_glyphs[0].index : -1)
+                    << ","
+                    << (cairo_glyphs.size() > 1 ? cairo_glyphs[1].index : -1)
+                    << ","
+                    << (cairo_glyphs.size() > 2 ? cairo_glyphs[2].index : -1)
+                    << ") " << (maLogicalAdvancements.getLength() ? "ADV " : "")
+                    << (rSysFontData.bAntialias ? "AA " : "")
+                    << (rSysFontData.bFakeBold ? "FB " : "")
+                    << (rSysFontData.bFakeItalic ? "FI " : "") << " || Name:"
+                    << TEMP_TRACE_FONT << " - "
+                    << maText.Text.copy(maText.StartPosition, maText.Length));
 #undef TEMP_TRACE_FONT
 
             cairo_show_glyphs(pSCairo.get(), &cairo_glyphs[0], cairo_glyphs.size());

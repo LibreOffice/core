@@ -231,9 +231,7 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
         else if ( nSubCount == 0 )
         {
             // for a simple property there can be only one parameter and its name *must* match
-            OUStringBuffer aStr("Property name does not match: ");
-            aStr.append(aName);
-            OSL_FAIL( aStr.getStr() );
+            SAL_WARN("sfx.appl", "Property name does not match: " << aName);
         }
 #endif
         else

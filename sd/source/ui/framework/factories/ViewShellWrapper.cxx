@@ -75,11 +75,14 @@ void SAL_CALL ViewShellWrapper::disposing (void)
 {
     ::osl::MutexGuard aGuard( maMutex );
 
-    OSL_TRACE("disposing ViewShellWrapper %x", this);
+    SAL_INFO("sd.ui", "disposing ViewShellWrapper " << this);
     Reference<awt::XWindow> xWindow (mxWindow);
     if (xWindow.is())
     {
-        OSL_TRACE("removing ViewShellWrapper %x from window listener at %x", this, mxWindow.get());
+        SAL_INFO(
+            "sd.ui",
+            "removing ViewShellWrapper " << this << " from window listener at "
+                << mxWindow.get());
         xWindow->removeWindowListener(this);
     }
 

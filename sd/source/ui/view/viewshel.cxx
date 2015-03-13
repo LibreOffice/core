@@ -158,8 +158,10 @@ ViewShell::~ViewShell()
 
     if (mpContentWindow)
     {
-        OSL_TRACE("destroying mpContentWindow at %x with parent %x", mpContentWindow.get(),
-            mpContentWindow->GetParent());
+        SAL_INFO(
+            "sd.ui",
+            "destroying mpContentWindow at " << mpContentWindow.get()
+                << " with parent " << mpContentWindow->GetParent());
         mpContentWindow.reset();
     }
 }
@@ -238,9 +240,10 @@ void ViewShell::doShow(void)
 {
     mpContentWindow->Show();
     static_cast< vcl::Window*>(mpContentWindow.get())->Resize();
-    OSL_TRACE("content window has size %d %d",
-        mpContentWindow->GetSizePixel().Width(),
-        mpContentWindow->GetSizePixel().Height());
+    SAL_INFO(
+        "sd.view",
+        "content window has size " << mpContentWindow->GetSizePixel().Width()
+            << " " << mpContentWindow->GetSizePixel().Height());
 
     if ( ! GetDocSh()->IsPreview())
     {

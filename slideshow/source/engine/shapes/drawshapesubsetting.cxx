@@ -371,19 +371,23 @@ namespace slideshow
                 // safe cast, since order does not depend on mnSubsetQueriedCount
                 const_cast<SubsetEntry&>(*aIter).mnSubsetQueriedCount--;
 
-                VERBOSE_TRACE( "Subset summary: shape 0x%X, %d open subsets, revoked subset has refcount %d",
-                               this,
-                               maSubsetShapes.size(),
-                               aIter->mnSubsetQueriedCount );
+                SAL_INFO(
+                    "slideshow",
+                    "Subset summary: shape " << this << ", "
+                        << maSubsetShapes.size()
+                        << " open subsets, revoked subset has refcount "
+                        << aIter->mnSubsetQueriedCount);
 
                 return false; // not the last client
             }
 
-            VERBOSE_TRACE( "Subset summary: shape 0x%X, %d open subsets, cleared subset has range [%d,%d]",
-                           this,
-                           maSubsetShapes.size(),
-                           aEntry.mnStartActionIndex,
-                           aEntry.mnEndActionIndex );
+            SAL_INFO(
+                "slideshow",
+                "Subset summary: shape " << this << ", "
+                    << maSubsetShapes.size()
+                    << " open subsets, cleared subset has range ["
+                    << aEntry.mnStartActionIndex << ","
+                    << aEntry.mnEndActionIndex << "]");
 
             // yes, remove from set
             maSubsetShapes.erase( aIter );

@@ -99,10 +99,10 @@ SfxObjectShell* findShellForUrl( const OUString& sMacroURLOrPath )
         // a new document :/
         if ( xModel.is() )
         {
-            OSL_TRACE("shell 0x%x has model with url %s and we look for %s", pShell
-                , OUStringToOString( xModel->getURL(), RTL_TEXTENCODING_UTF8 ).getStr()
-                , OUStringToOString( aURL, RTL_TEXTENCODING_UTF8 ).getStr()
-            );
+            SAL_INFO(
+                "filter.ms",
+                "shell " << pShell << " has model with url " << xModel->getURL()
+                    << " and we look for " << aURL);
             OUString aName = xModel->getURL() ;
             if (aName.isEmpty())
                 {
@@ -309,7 +309,7 @@ MacroResolvedInfo resolveVBAMacro( SfxObjectShell* pShell, const OUString& Macro
         // assume for now that the document name is *this* document
         OUString sDocUrlOrPath = aMacroName.copy( 0, nDocSepIndex );
         aMacroName = aMacroName.copy( nDocSepIndex + 1 );
-        OSL_TRACE("doc search, current shell is 0x%x", pShell );
+        SAL_INFO("filter.ms", "doc search, current shell is " << pShell);
         SfxObjectShell* pFoundShell = 0;
         if( bSearchGlobalTemplates )
         {
@@ -320,7 +320,9 @@ MacroResolvedInfo resolveVBAMacro( SfxObjectShell* pShell, const OUString& Macro
         }
         if( !pFoundShell )
             pFoundShell = findShellForUrl( sDocUrlOrPath );
-        OSL_TRACE("doc search, after find, found shell is 0x%x", pFoundShell );
+        SAL_INFO(
+            "filter.ms",
+            "doc search, after find, found shell is " << pFoundShell);
         return resolveVBAMacro( pFoundShell, aMacroName );
     }
 

@@ -304,7 +304,10 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
                 {
                     aSubViewSize[i].Width = static_cast< sal_Int32 >( maPath2DList[i].w );
                     aSubViewSize[i].Height = static_cast< sal_Int32 >( maPath2DList[i].h );
-                    OSL_TRACE("set subpath %d size: %d x %d", i, maPath2DList[i].w, maPath2DList[i].h);
+                    SAL_INFO(
+                        "oox.cscode",
+                        "set subpath " << i << " size: " << maPath2DList[i].w
+                            << " x " << maPath2DList[i].h);
                 }
                 aPath.setProperty( PROP_SubViewSize, aSubViewSize);
             }

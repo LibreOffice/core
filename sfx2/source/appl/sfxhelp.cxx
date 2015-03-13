@@ -66,7 +66,6 @@
 #include <sfx2/sfxuno.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/frame.hxx>
-#include <rtl/strbuf.hxx>
 #include <rtl/string.hxx>
 
 using namespace ::com::sun::star::beans;
@@ -631,11 +630,7 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow, const
     if (!xHelp.is() || !xHelpContent.is() || !pHelpWindow)
         return false;
 
-#ifdef DBG_UTIL
-    OStringBuffer aTmp("SfxHelp: HelpId = ");
-    aTmp.append(OUStringToOString(aHelpURL, RTL_TEXTENCODING_UTF8));
-    OSL_TRACE( aTmp.getStr() );
-#endif
+    SAL_INFO("sfx.appl", "HelpId = " << aHelpURL);
 
     pHelpWindow->SetHelpURL( aHelpURL );
     pHelpWindow->loadHelpContent(aHelpURL);

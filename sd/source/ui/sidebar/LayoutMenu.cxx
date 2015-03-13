@@ -137,7 +137,7 @@ LayoutMenu::LayoutMenu (
       mbIsDisposed(false)
 {
     implConstruct( *mrBase.GetDocument()->GetDocSh() );
-    OSL_TRACE("created LayoutMenu at %x", this);
+    SAL_INFO("sd.ui", "created LayoutMenu at " << this);
 
     SetStyle(GetStyle() | WB_ITEMBORDER | WB_FLATVALUESET | WB_TABSTOP);
 
@@ -194,7 +194,7 @@ void LayoutMenu::implConstruct( DrawDocShell& rDocumentShell )
 
 LayoutMenu::~LayoutMenu (void)
 {
-    OSL_TRACE("destroying LayoutMenu at %x", this);
+    SAL_INFO("sd.ui", "destroying LayoutMenu at " << this);
     Dispose();
 }
 
@@ -203,7 +203,7 @@ void LayoutMenu::Dispose (void)
     if (mbIsDisposed)
         return;
 
-    OSL_TRACE("disposing LayoutMenu at %x", this);
+    SAL_INFO("sd.ui", "disposing LayoutMenu at " << this);
 
     mbIsDisposed = true;
 

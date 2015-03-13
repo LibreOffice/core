@@ -327,12 +327,12 @@ class Toolbarmenu : public ::PopupMenu
 
 Toolbarmenu::Toolbarmenu()
 {
-    OSL_TRACE("**** contstructing Toolbarmenu 0x%x", this );
+    SAL_INFO("fwk.uielement", "contstructing Toolbarmenu " << this);
 }
 
 Toolbarmenu::~Toolbarmenu()
 {
-    OSL_TRACE("**** destructing Toolbarmenu 0x%x", this );
+    SAL_INFO("fwk.uielement", "destructing Toolbarmenu " << this);
 }
 
 void SAL_CALL MenuToolbarController::click() throw (RuntimeException, std::exception)

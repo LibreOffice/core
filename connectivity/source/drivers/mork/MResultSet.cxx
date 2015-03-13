@@ -1269,7 +1269,9 @@ void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLExcep
                     OSL_TRACE("OrderbyColumnNumber->size() = %zu",m_aOrderbyColumnNumber.size());
 #if OSL_DEBUG_LEVEL > 0
                     for ( ::std::vector<sal_Int32>::size_type i = 0; i < m_aColMapping.size(); i++ )
-                        OSL_TRACE("Mapped: %d -> %d", i, m_aColMapping[i] );
+                        SAL_INFO(
+                            "connectivity.mork",
+                            "Mapped: " << i << " -> " << m_aColMapping[i]);
 #endif
                     for ( sal_Int32 nRow = 1; nRow <= m_aQueryHelper.getResultCount(); nRow++ ) {
 
@@ -1292,7 +1294,9 @@ void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLExcep
                     m_CurrentRowCount = static_cast<sal_Int32>(m_pKeySet->get().size());
 #if OSL_DEBUG_LEVEL > 0
                     for( OKeySet::Vector::size_type i = 0; i < m_pKeySet->get().size(); i++ )
-                        OSL_TRACE("Sorted: %d -> %d", i, (m_pKeySet->get())[i] );
+                        SAL_INFO(
+                            "connectivity.mork",
+                            "Sorted: " << i << " -> " << (m_pKeySet->get())[i]);
 #endif
 
                     beforeFirst(); // Go back to start

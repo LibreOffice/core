@@ -192,7 +192,7 @@ TBCHeader::~TBCHeader()
 
 bool TBCHeader::Read( SvStream &rS )
 {
-    OSL_TRACE("TBCHeader::Read() stream pos 0x%x", rS.Tell() );
+    SAL_INFO("filter.ms", "stream pos " << rS.Tell());
     nOffSet = rS.Tell();
     rS.ReadSChar( bSignature ).ReadSChar( bVersion ).ReadUChar( bFlagsTCR ).ReadUChar( tct ).ReadUInt16( tcid ).ReadUInt32( tbct ).ReadUChar( bPriority );
     //  bit 4 ( from lsb )
@@ -230,7 +230,7 @@ TBCData::TBCData( const TBCHeader& Header ) : rHeader( Header )
 
 bool TBCData::Read(SvStream &rS)
 {
-    OSL_TRACE("TBCData::Read() stream pos 0x%x", rS.Tell() );
+    SAL_INFO("filter.ms", "stream pos " << rS.Tell());
     nOffSet = rS.Tell();
     if ( !controlGeneralInfo.Read(rS) /*|| !controlSpecificInfo.Read(rS)*/ )
         return false;
@@ -375,7 +375,7 @@ void TBCData::Print( FILE* fp )
 bool
 WString::Read( SvStream &rS )
 {
-    OSL_TRACE("WString::Read() stream pos 0x%x", rS.Tell() );
+    SAL_INFO("filter.ms", "stream pos " << rS.Tell());
     nOffSet = rS.Tell();
     sal_uInt8 nChars = 0;
     rS.ReadUChar( nChars );
@@ -393,7 +393,7 @@ TBCExtraInfo::TBCExtraInfo()
 bool
 TBCExtraInfo::Read( SvStream &rS )
 {
-    OSL_TRACE("TBCExtraInfo::Read() stream pos 0x%x", rS.Tell() );
+    SAL_INFO("filter.ms", "stream pos " << rS.Tell());
     nOffSet = rS.Tell();
     if( !wstrHelpFile.Read( rS )  )
         return false;
@@ -439,7 +439,7 @@ TBCGeneralInfo::TBCGeneralInfo() : bFlags( 0 )
 
 bool TBCGeneralInfo::Read( SvStream &rS )
 {
-    OSL_TRACE("TBCGeneralInfo::Read() stream pos 0x%x", rS.Tell() );
+    SAL_INFO("filter.ms", "stream pos " << rS.Tell());
     nOffSet = rS.Tell();
     rS.ReadUChar( bFlags );
 
@@ -521,7 +521,7 @@ TBCMenuSpecific::TBCMenuSpecific() : tbid( 0 )
 bool
 TBCMenuSpecific::Read( SvStream &rS)
 {
-    OSL_TRACE("TBCMenuSpecific::Read() stream pos 0x%x", rS.Tell() );
+    SAL_INFO("filter.ms", "stream pos " << rS.Tell());
     nOffSet = rS.Tell();
     rS.ReadInt32( tbid );
     if ( tbid == 1 )
@@ -557,7 +557,7 @@ TBCBSpecific::TBCBSpecific() : bFlags( 0 )
 
 bool TBCBSpecific::Read( SvStream &rS)
 {
-    OSL_TRACE("TBCBSpecific::Read() stream pos 0x%x", rS.Tell() );
+    SAL_INFO("filter.ms", "stream pos " << rS.Tell());
     nOffSet = rS.Tell();
     rS.ReadUChar( bFlags );
 
@@ -720,7 +720,7 @@ TBCBitMap::~TBCBitMap()
 
 bool TBCBitMap::Read( SvStream& rS)
 {
-    OSL_TRACE("TBCBitMap::Read() stream pos 0x%x", rS.Tell() );
+    SAL_INFO("filter.ms", "stream pos " << rS.Tell());
     nOffSet = rS.Tell();
     rS.ReadInt32( cbDIB );
     // cbDIB = sizeOf(biHeader) + sizeOf(colors) + sizeOf(bitmapData) + 10
@@ -748,7 +748,7 @@ bFlags( 0 )
 
 bool TB::Read(SvStream &rS)
 {
-    OSL_TRACE("TB::Read() stream pos 0x%x", rS.Tell() );
+    SAL_INFO("filter.ms", "stream pos " << rS.Tell());
     nOffSet = rS.Tell();
     rS.ReadUChar( bSignature ).ReadUChar( bVersion ).ReadInt16( cCL ).ReadInt32( ltbid ).ReadUInt32( ltbtr ).ReadUInt16( cRowsDefault ).ReadUInt16( bFlags );
     name.Read( rS );
@@ -783,7 +783,7 @@ TBVisualData::TBVisualData() : tbds(0), tbv(0), tbdsDock(0), iRow(0)
 
 bool TBVisualData::Read( SvStream& rS )
 {
-    OSL_TRACE("TBVisualData::Read() stream pos 0x%x", rS.Tell() );
+    SAL_INFO("filter.ms", "stream pos " << rS.Tell());
     nOffSet = rS.Tell();
     rS.ReadSChar( tbds ).ReadSChar( tbv ).ReadSChar( tbdsDock ).ReadSChar( iRow );
     rcDock.Read( rS );

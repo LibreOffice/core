@@ -77,7 +77,7 @@ ScCTB::ScCTB(sal_uInt16 nNum ) : nViews( nNum ), ectbid(0)
 
 bool ScCTB::Read( SvStream &rS )
 {
-    OSL_TRACE("ScCTB::Read() stream pos 0x%x", rS.Tell() );
+    SAL_INFO("sc.filter", "stream pos " << rS.Tell());
     nOffSet = rS.Tell();
     tb.Read( rS );
     for ( sal_uInt16 index = 0; index < nViews; ++index )
@@ -188,7 +188,7 @@ bool ScCTB::ImportCustomToolBar( ScCTBWrapper& rWrapper, CustomToolBarImportHelp
 }
 bool CTBS::Read( SvStream &rS )
 {
-    OSL_TRACE("CTBS::Read() stream pos 0x%x", rS.Tell() );
+    SAL_INFO("sc.filter", "stream pos " << rS.Tell());
     nOffSet = rS.Tell();
     rS.ReadUChar( bSignature ).ReadUChar( bVersion ).ReadUInt16( reserved1 ).ReadUInt16( reserved2 ).ReadUInt16( reserved3 ).ReadUInt16( ctb ).ReadUInt16( ctbViews ).ReadUInt16( ictbView );
     return true;
@@ -220,7 +220,7 @@ ScTBC::ScTBC()
 bool
 ScTBC::Read(SvStream &rS)
 {
-    OSL_TRACE("ScTBC::Read() stream pos 0x%x", rS.Tell() );
+    SAL_INFO("sc.filter", "stream pos " << rS.Tell());
     nOffSet = rS.Tell();
     if ( !tbch.Read( rS ) )
         return false;
@@ -329,7 +329,7 @@ TBCCmd::Print(FILE* fp)
 
 bool TBCCmd::Read( SvStream &rS )
 {
-    OSL_TRACE("TBCCmd::Read() stream pos 0x%x", rS.Tell() );
+    SAL_INFO("sc.filter", "stream pos " << rS.Tell());
     nOffSet = rS.Tell();
     rS.ReadUInt16( cmdID );
     sal_uInt16 temp;
@@ -354,7 +354,7 @@ ScCTBWrapper::~ScCTBWrapper()
 bool
 ScCTBWrapper::Read( SvStream &rS)
 {
-    OSL_TRACE("ScCTBWrapper::Read() stream pos 0x%x", rS.Tell() );
+    SAL_INFO("sc.filter", "stream pos " << rS.Tell());
     nOffSet = rS.Tell();
     if (!ctbSet.Read(rS))
         return false;

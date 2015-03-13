@@ -1123,7 +1123,7 @@ Rectangle EnhancedCustomShape2d::GetTextRect() const
         aBottomRight.Y() = aLogicRect.GetHeight() - aBottomRight.Y();
     }
     Rectangle aRect( aTopLeft, aBottomRight );
-    OSL_TRACE("EnhancedCustomShape2d::GetTextRect: %d x %d", aRect.GetWidth(), aRect.GetHeight());
+    SAL_INFO("svx", aRect.GetWidth() << " x " << aRect.GetHeight());
     if( aRect.GetWidth() <= 1 || aRect.GetHeight() <= 1 )
         return aLogicRect;
     aRect.Move( aLogicRect.Left(), aLogicRect.Top() );
@@ -1481,7 +1481,10 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                     if ( rSrcPt < nCoordSize )
                     {
                         const Point aTempPoint(GetPoint( seqCoordinates[ rSrcPt++ ], true, true ));
-                        OSL_TRACE("moveTo: %d,%d", aTempPoint.X(), aTempPoint.Y());
+                        SAL_INFO(
+                            "svx",
+                            "moveTo: " << aTempPoint.X() << ","
+                                << aTempPoint.Y());
                         aNewB2DPolygon.append(basegfx::B2DPoint(aTempPoint.X(), aTempPoint.Y()));
                     }
                 }
@@ -1717,7 +1720,10 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                     for ( sal_Int32 i(0L); ( i < nPntCount ) && ( rSrcPt < nCoordSize ); i++ )
                     {
                         const Point aTempPoint(GetPoint( seqCoordinates[ rSrcPt++ ], true, true ));
-                        OSL_TRACE("lineTo: %d,%d", aTempPoint.X(), aTempPoint.Y());
+                        SAL_INFO(
+                            "svx",
+                            "lineTo: " << aTempPoint.X() << ","
+                                << aTempPoint.Y());
                         aNewB2DPolygon.append(basegfx::B2DPoint(aTempPoint.X(), aTempPoint.Y()));
                     }
                 }
@@ -1798,9 +1804,15 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
 
                             Point aEndPoint ( aStartPoint.getX() - fWR*(cos(fT) - cos(fTE)), aStartPoint.getY() - fHR*(sin(fT) - sin(fTE)) );
 
-                            OSL_TRACE("ARCANGLETO rect: %d, %d   x   %d, %d   start: %d, %d end: %d, %d clockwise: %d",
-                                      aRect.Left(), aRect.Top(), aRect.Right(), aRect.Bottom(),
-                                      aStartPoint.X(), aStartPoint.Y(), aEndPoint.X(), aEndPoint.Y(), bClockwise);
+                            SAL_INFO(
+                                "svx",
+                                "ARCANGLETO rect: " << aRect.Left() << ", "
+                                    << aRect.Top() << "   x   " << aRect.Right()
+                                    << ", " << aRect.Bottom() << "   start: "
+                                    << aStartPoint.X() << ", "
+                                    << aStartPoint.Y() << " end: "
+                                    << aEndPoint.X() << ", " << aEndPoint.Y()
+                                    << " clockwise: " << int(bClockwise));
                             basegfx::B2DPolygon aArc = CreateArc( aRect, bClockwise ? aEndPoint : aStartPoint, bClockwise ? aStartPoint : aEndPoint, bClockwise, aStartPoint == aEndPoint && fSwingAngle > F_PI);
                             // Now that we have the arc, move it to aStartPointB2D.
                             basegfx::B2DHomMatrix aMatrix = basegfx::tools::createTranslateB2DHomMatrix(aStartPointB2D.getX(), aStartPointB2D.getY());

@@ -62,11 +62,10 @@ void Connection::dump()
 
 void Point::dump()
 {
-    OSL_TRACE( "dgm: pt text %x, cnxId %s, modelId %s, type %d",
-               mpShape.get(),
-               OUSTRING_TO_CSTR( msCnxId ),
-               OUSTRING_TO_CSTR( msModelId ),
-               mnType );
+    SAL_INFO(
+        "oox.drawingml",
+        "pt text " << mpShape.get() << ", cnxId " << msCnxId << ", modelId "
+            << msModelId << ", type " << mnType);
 }
 
 } // dgm namespace

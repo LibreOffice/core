@@ -117,7 +117,8 @@ namespace svxform
             ++pSearch;
         }
 
-        OSL_FAIL("lcl_implMapAsciiValue: could not convert the ascii value " + _rAsciiValue + " !");
+        SAL_WARN(
+            "svx.form", "could not convert the ascii value " << _rAsciiValue);
         return -1;
     }
 
