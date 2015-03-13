@@ -208,7 +208,7 @@ long SwWrtShell::SelAll()
     return 1;
 }
 
-// Desciption: Text search
+// Description: Text search
 
 sal_uLong SwWrtShell::SearchPattern( const SearchOptions& rSearchOpt, bool bSearchInNotes,
                                 SwDocPositions eStt, SwDocPositions eEnd,

@@ -29,7 +29,7 @@ from com.sun.star.document.MacroExecMode import NEVER_EXECUTE
 from com.sun.star.document.UpdateDocMode import NO_UPDATE
 
 '''
-About the member fields Title, Decription and Author:
+About the member fields Title, Description and Author:
 There is an ambiguicy in handling these fields.
 On the one hand, the user can set those fields to a custom value,
 relevant only for the web-wizard.

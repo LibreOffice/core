@@ -201,7 +201,7 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
     const SwFmtHeader& rSourceHead = rSource.GetMaster().GetHeader();
     if( rDestHead.IsActive() )
     {
-        // Let the destination page descrition point to the source node position,
+        // Let the destination page description point to the source node position,
         // from now on this descriptor is responsible for the content nodes!
         const SfxPoolItem* pItem;
         rDest.GetMaster().GetAttrSet().GetItemState( RES_HEADER, false, &pItem );
