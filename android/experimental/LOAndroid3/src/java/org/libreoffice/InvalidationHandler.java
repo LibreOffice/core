@@ -321,6 +321,7 @@ public class InvalidationHandler implements Document.MessageCallback {
 
     private void handleGraphicSelectionState(OverlayState previous) {
         mTextCursorLayer.showGraphicSelection();
+        LibreOfficeMainActivity.mAppContext.hideSoftKeyboard();
     }
 
     public OverlayState getCurrentState() {
@@ -335,3 +336,5 @@ public class InvalidationHandler implements Document.MessageCallback {
         SELECTION
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
