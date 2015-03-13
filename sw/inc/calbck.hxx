@@ -27,6 +27,7 @@
 #include <hintids.hxx>
 #include <hints.hxx>
 
+
 class SwModify;
 class SwClientIter;
 class SfxPoolItem;
@@ -200,7 +201,7 @@ class SW_DLLPUBLIC SwDepend: public SwClient
     SwClient *pToTell;
 
 public:
-    SwDepend() : pToTell(0) {}
+    SwDepend() : pToTell(nullptr) {}
     SwDepend(SwClient *pTellHim, SwModify *pDepend) : SwClient(pDepend), pToTell(pTellHim) {}
 
     SwClient* GetToTell() { return pToTell; }
@@ -217,10 +218,7 @@ protected:
             pToTell->ModifyNotification(pOldValue, pNewValue);
     }
     virtual void SwClientNotify( const SwModify& rModify, const SfxHint& rHint ) SAL_OVERRIDE
-    {
-        if ( pToTell )
-            pToTell->SwClientNotifyCall( rModify, rHint );
-    }
+        { if(pToTel) pToTell->SwClientNotifyCall(rModify, rHint); }
 };
 
 class SwClientIter : public sw::Ring<SwClientIter>
