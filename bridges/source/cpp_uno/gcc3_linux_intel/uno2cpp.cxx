@@ -67,7 +67,7 @@ static void cpp_call(
         else
         {
             // complex return via ptr
-            pCppReturn = *(void **)pCppStack
+            pCppReturn = *reinterpret_cast<void **>(pCppStack)
                 = (bridges::cpp_uno::shared::relatesToInterfaceType(
                        pReturnTypeDescr )
                    ? alloca( pReturnTypeDescr->nSize )
@@ -78,7 +78,7 @@ static void cpp_call(
     // push this
     void * pAdjustedThisPtr = reinterpret_cast< void ** >(pThis->getCppI())
         + aVtableSlot.offset;
-    *(void**)pCppStack = pAdjustedThisPtr;
+    *reinterpret_cast<void **>(pCppStack) = pAdjustedThisPtr;
     pCppStack += sizeof( void* );
 
     // stack space
@@ -123,7 +123,7 @@ static void cpp_call(
             {
                 // cpp out is constructed mem, uno out is not!
                 uno_constructData(
-                    *(void **)pCppStack = pCppArgs[nPos] = alloca( pParamTypeDescr->nSize ),
+                    *reinterpret_cast<void **>(pCppStack) = pCppArgs[nPos] = alloca( pParamTypeDescr->nSize ),
                     pParamTypeDescr );
                 pTempIndices[nTempIndices] = nPos; // default constructed for cpp call
                 // will be released at reconversion
@@ -134,7 +134,7 @@ static void cpp_call(
                          pParamTypeDescr ))
             {
                 uno_copyAndConvertData(
-                    *(void **)pCppStack = pCppArgs[nPos] = alloca( pParamTypeDescr->nSize ),
+                    *reinterpret_cast<void **>(pCppStack) = pCppArgs[nPos] = alloca( pParamTypeDescr->nSize ),
                     pUnoArgs[nPos], pParamTypeDescr,
                     pThis->getBridge()->getUno2Cpp() );
 
@@ -144,7 +144,7 @@ static void cpp_call(
             }
             else // direct way
             {
-                *(void **)pCppStack = pCppArgs[nPos] = pUnoArgs[nPos];
+                *reinterpret_cast<void **>(pCppStack) = pCppArgs[nPos] = pUnoArgs[nPos];
                 // no longer needed
                 TYPELIB_DANGER_RELEASE( pParamTypeDescr );
             }
@@ -158,7 +158,7 @@ static void cpp_call(
         CPPU_CURRENT_NAMESPACE::callVirtualMethod(
             pAdjustedThisPtr, aVtableSlot.index,
             pCppReturn, pReturnTypeDescr, bSimpleReturn,
-            (sal_Int32 *)pCppStackStart, (pCppStack - pCppStackStart) / sizeof(sal_Int32) );
+            reinterpret_cast<sal_Int32 *>(pCppStackStart), (pCppStack - pCppStackStart) / sizeof(sal_Int32) );
         // NO exception occurred...
         *ppUnoExc = 0;
 
@@ -276,7 +276,7 @@ void unoInterfaceProxyDispatch(
             // dependent dispatch
             cpp_call(
                 pThis, aVtableSlot,
-                ((typelib_InterfaceAttributeTypeDescription *)pMemberDescr)->pAttributeTypeRef,
+                reinterpret_cast<typelib_InterfaceAttributeTypeDescription const *>(pMemberDescr)->pAttributeTypeRef,
                 0, 0, // no params
                 pReturn, pArgs, ppException );
         }
@@ -285,7 +285,7 @@ void unoInterfaceProxyDispatch(
             // is SET
             typelib_MethodParameter aParam;
             aParam.pTypeRef =
-                ((typelib_InterfaceAttributeTypeDescription *)pMemberDescr)->pAttributeTypeRef;
+                reinterpret_cast<typelib_InterfaceAttributeTypeDescription const *>(pMemberDescr)->pAttributeTypeRef;
             aParam.bIn      = sal_True;
             aParam.bOut     = sal_False;
 
@@ -334,7 +334,7 @@ void unoInterfaceProxyDispatch(
                 uno_Interface * pInterface = 0;
                 (*pThis->pBridge->getUnoEnv()->getRegisteredInterface)(
                     pThis->pBridge->getUnoEnv(),
-                    (void **)&pInterface, pThis->oid.pData, (typelib_InterfaceTypeDescription *)pTD );
+                    reinterpret_cast<void **>(&pInterface), pThis->oid.pData, reinterpret_cast<typelib_InterfaceTypeDescription *>(pTD) );
 
                 if (pInterface)
                 {
@@ -353,9 +353,9 @@ void unoInterfaceProxyDispatch(
             // dependent dispatch
             cpp_call(
                 pThis, aVtableSlot,
-                ((typelib_InterfaceMethodTypeDescription *)pMemberDescr)->pReturnTypeRef,
-                ((typelib_InterfaceMethodTypeDescription *)pMemberDescr)->nParams,
-                ((typelib_InterfaceMethodTypeDescription *)pMemberDescr)->pParams,
+                reinterpret_cast<typelib_InterfaceMethodTypeDescription const *>(pMemberDescr)->pReturnTypeRef,
+                reinterpret_cast<typelib_InterfaceMethodTypeDescription const *>(pMemberDescr)->nParams,
+                reinterpret_cast<typelib_InterfaceMethodTypeDescription const *>(pMemberDescr)->pParams,
                 pReturn, pArgs, ppException );
         }
         break;

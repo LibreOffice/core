@@ -63,7 +63,7 @@ void cpp2uno_call(
         }
         else // complex return via ptr (pCppReturn)
         {
-            pCppReturn = *(void **)pCppStack;
+            pCppReturn = *reinterpret_cast<void **>(pCppStack);
             pCppStack += sizeof(void *);
 
             pUnoReturn = (bridges::cpp_uno::shared::relatesToInterfaceType(
@@ -114,7 +114,7 @@ void cpp2uno_call(
         }
         else // ptr to complex value | ref
         {
-            pCppArgs[nPos] = *(void **)pCppStack;
+            pCppArgs[nPos] = *reinterpret_cast<void **>(pCppStack);
 
             if (! rParam.bIn) // is pure out
             {
@@ -129,7 +129,7 @@ void cpp2uno_call(
                          pParamTypeDescr ))
             {
                 uno_copyAndConvertData( pUnoArgs[nPos] = alloca( pParamTypeDescr->nSize ),
-                                        *(void **)pCppStack, pParamTypeDescr,
+                                        *reinterpret_cast<void **>(pCppStack), pParamTypeDescr,
                                         pThis->getBridge()->getCpp2Uno() );
                 pTempIndices[nTempIndices] = nPos; // has to be reconverted
                 // will be released at reconversion
@@ -137,7 +137,7 @@ void cpp2uno_call(
             }
             else // direct way
             {
-                pUnoArgs[nPos] = *(void **)pCppStack;
+                pUnoArgs[nPos] = *reinterpret_cast<void **>(pCppStack);
                 // no longer needed
                 TYPELIB_DANGER_RELEASE( pParamTypeDescr );
             }
@@ -266,7 +266,7 @@ extern "C" void cpp_vtable_call(
             // is GET method
             cpp2uno_call(
                 pCppI, aMemberDescr.get(),
-                ((typelib_InterfaceAttributeTypeDescription *)aMemberDescr.get())->pAttributeTypeRef,
+                reinterpret_cast<typelib_InterfaceAttributeTypeDescription *>(aMemberDescr.get())->pAttributeTypeRef,
                 0, 0, // no params
                 pCallStack, pReturnValue );
         }
@@ -275,7 +275,7 @@ extern "C" void cpp_vtable_call(
             // is SET method
             typelib_MethodParameter aParam;
             aParam.pTypeRef =
-                ((typelib_InterfaceAttributeTypeDescription *)aMemberDescr.get())->pAttributeTypeRef;
+                reinterpret_cast<typelib_InterfaceAttributeTypeDescription *>(aMemberDescr.get())->pAttributeTypeRef;
             aParam.bIn      = sal_True;
             aParam.bOut     = sal_False;
 
@@ -307,8 +307,8 @@ extern "C" void cpp_vtable_call(
                 XInterface * pInterface = 0;
                 (*pCppI->getBridge()->getCppEnv()->getRegisteredInterface)(
                     pCppI->getBridge()->getCppEnv(),
-                    (void **)&pInterface, pCppI->getOid().pData,
-                    (typelib_InterfaceTypeDescription *)pTD );
+                    reinterpret_cast<void **>(&pInterface), pCppI->getOid().pData,
+                    reinterpret_cast<typelib_InterfaceTypeDescription *>(pTD) );
 
                 if (pInterface)
                 {
@@ -326,9 +326,9 @@ extern "C" void cpp_vtable_call(
         default:
             cpp2uno_call(
                 pCppI, aMemberDescr.get(),
-                ((typelib_InterfaceMethodTypeDescription *)aMemberDescr.get())->pReturnTypeRef,
-                ((typelib_InterfaceMethodTypeDescription *)aMemberDescr.get())->nParams,
-                ((typelib_InterfaceMethodTypeDescription *)aMemberDescr.get())->pParams,
+                reinterpret_cast<typelib_InterfaceMethodTypeDescription *>(aMemberDescr.get())->pReturnTypeRef,
+                reinterpret_cast<typelib_InterfaceMethodTypeDescription *>(aMemberDescr.get())->nParams,
+                reinterpret_cast<typelib_InterfaceMethodTypeDescription *>(aMemberDescr.get())->pParams,
                 pCallStack, pReturnValue );
         }
         break;
@@ -428,7 +428,7 @@ unsigned char * codeSnippet(
     // jmp privateSnippetExecutor:
     *p++ = 0xE9;
     *reinterpret_cast< sal_Int32 * >(p)
-        = ((unsigned char *) exec) - p - sizeof (sal_Int32) - writetoexecdiff;
+        = reinterpret_cast<unsigned char *>(exec) - p - sizeof (sal_Int32) - writetoexecdiff;
     p += sizeof (sal_Int32);
     assert(p - code <= codeSnippetSize);
     return code + codeSnippetSize;
