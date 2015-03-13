@@ -1680,7 +1680,7 @@ bool ORowSetCache::reFillMatrix(sal_Int32 _nNewStartPos, sal_Int32 _nNewEndPos)
 bool ORowSetCache::fill(ORowSetMatrix::iterator& _aIter, const ORowSetMatrix::const_iterator& _aEnd, sal_Int32& _nPos, bool _bCheck)
 {
     const sal_Int32 nColumnCount = m_xMetaData->getColumnCount();
-    for(; _bCheck && _aIter != _aEnd; _aIter++, _nPos++)
+    for (; _bCheck && _aIter != _aEnd; ++_aIter, ++_nPos)
     {
         if ( !_aIter->is() )
             *_aIter = new ORowSetValueVector(nColumnCount);

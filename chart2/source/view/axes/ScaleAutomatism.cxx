@@ -570,7 +570,7 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForDateTimeAxis(
     {
     case DAY:
         if( rExplicitScale.ShiftedCategoryPosition )
-            aMaxDate++;//for explicit scales we need one interval more (maximum excluded)
+            ++aMaxDate; //for explicit scales we need one interval more (maximum excluded)
         break;
     case MONTH:
         aMinDate.SetDay(1);

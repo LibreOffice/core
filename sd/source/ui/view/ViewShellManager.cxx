@@ -997,7 +997,7 @@ IMPL_LINK(ViewShellManager::Implementation, WindowEventHandler, VclWindowEvent*,
             {
                 for (ActiveShellList::iterator aI(maActiveViewShells.begin());
                      aI!=maActiveViewShells.end();
-                     aI++)
+                     ++aI)
                 {
                     if (pEventWindow == static_cast< ::vcl::Window*>(aI->GetWindow()))
                     {

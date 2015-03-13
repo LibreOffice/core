@@ -1888,7 +1888,8 @@ bool ChartView::getExplicitValuesForAxis(
                 switch( rExplicitScale.TimeResolution )
                 {
                 case ::com::sun::star::chart::TimeUnit::DAY:
-                    aMaxDate--;break;
+                    --aMaxDate;
+                    break;
                 case ::com::sun::star::chart::TimeUnit::MONTH:
                     aMaxDate = DateHelper::GetDateSomeMonthsAway(aMaxDate,-1);
                     break;

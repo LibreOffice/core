@@ -93,7 +93,7 @@ static void ImplCalendarSelectDateRange( IntDateSet* pTable,
         while ( aStartDate <= aEndDate )
         {
             pTable->insert( aStartDate.GetDate() );
-            aStartDate++;
+            ++aStartDate;
         }
     }
     else
@@ -443,7 +443,7 @@ void Calendar::ImplFormat()
         aTempDate += nDaysInMonth;
     }
     Date aTempDate2 = aTempDate;
-    aTempDate2--;
+    --aTempDate2;
     nDaysInMonth = aTempDate2.GetDaysInMonth();
     aTempDate2 -= nDaysInMonth-1;
     nWeekDay = (sal_uInt16)aTempDate2.GetDayOfWeek();
@@ -1086,7 +1086,7 @@ void Calendar::ImplMouseSelect( const Date& rDate, sal_uInt16 nHitTest,
     Date    aTempDate = rDate;
 
     if ( !(nHitTest & CALENDAR_HITTEST_DAY) )
-        aTempDate--;
+        --aTempDate;
 
     if ( mbMultiSelection )
     {
@@ -1231,7 +1231,7 @@ void Calendar::ImplScroll( bool bPrev )
     Date aNewFirstMonth = GetFirstMonth();
     if ( bPrev )
     {
-        aNewFirstMonth--;
+        --aNewFirstMonth;
         aNewFirstMonth -= aNewFirstMonth.GetDaysInMonth()-1;
     }
     else
@@ -1526,11 +1526,11 @@ void Calendar::KeyInput( const KeyEvent& rKEvt )
             break;
 
         case KEY_LEFT:
-            aNewDate--;
+            --aNewDate;
             break;
 
         case KEY_RIGHT:
-            aNewDate++;
+            ++aNewDate;
             break;
 
         case KEY_UP:
@@ -1897,7 +1897,7 @@ void Calendar::SetCurDate( const Date& rNewDate )
             {
                 Date aFirstDate = GetFirstMonth();
                 aFirstDate += aFirstDate.GetDaysInMonth();
-                aTempDate++;
+                ++aTempDate;
                 while ( nDateOff > aTempDate.GetDaysInMonth() )
                 {
                     aFirstDate += aFirstDate.GetDaysInMonth();
@@ -1957,7 +1957,7 @@ Date Calendar::GetLastMonth() const
     sal_uInt16 nMonthCount = GetMonthCount();
     for ( sal_uInt16 i = 0; i < nMonthCount; i++ )
         aDate += aDate.GetDaysInMonth();
-    aDate--;
+    --aDate;
     return aDate;
 }
 
@@ -2037,7 +2037,7 @@ Rectangle Calendar::GetDateRect( const Date& rDate ) const
                 }
                 else
                     nDayIndex++;
-                aLastDate++;
+                ++aLastDate;
             }
         }
     }

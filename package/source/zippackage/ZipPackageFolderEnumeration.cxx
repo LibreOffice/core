@@ -51,7 +51,7 @@ uno::Any SAL_CALL ZipPackageFolderEnumeration::nextElement(  )
     if (aIterator == rContents.end() )
         throw container::NoSuchElementException(THROW_WHERE );
     aAny <<= (*aIterator).second->xTunnel;
-    aIterator++;
+    ++aIterator;
     return aAny;
 }
 

@@ -2029,7 +2029,7 @@ bool ScHorizontalCellIterator::SkipInvalidInRow()
         {
             debugiter("skip empty cells at column %d, row %d\n",
                       (int)maColPos->mnCol, (int)nRow);
-            maColPos++;
+            ++maColPos;
         }
     }
 
@@ -2068,7 +2068,7 @@ void ScHorizontalCellIterator::Advance()
     assert (mbMore);
     assert (maColPos != maColPositions.end());
 
-    maColPos++;
+    ++maColPos;
 
     SkipInvalid();
 }
