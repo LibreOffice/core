@@ -2438,6 +2438,11 @@ void ScGridWindow::LogicMouseButtonUp(const MouseEvent& rMouseEvent)
     assert(rDoc.GetDrawLayer()->isTiledRendering());
 
     MouseButtonUp(rMouseEvent);
+
+    // sometimes MouseButtonDown captures mouse and starts tracking, and VCL
+    // will not take care of releasing that with tiled rendering
+    if (IsTracking())
+        EndTracking();
 }
 
 void ScGridWindow::FakeButtonUp()
