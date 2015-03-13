@@ -18,14 +18,16 @@
  */
 #ifndef INCLUDED_SW_INC_UNOCRSR_HXX
 #define INCLUDED_SW_INC_UNOCRSR_HXX
+
 #include <swcrsr.hxx>
 #include <calbck.hxx>
 
 class SwUnoCrsr : public virtual SwCursor, public SwModify
 {
-    bool bRemainInSection : 1;
-    bool bSkipOverHiddenSections : 1;
-    bool bSkipOverProtectSections : 1;
+private:
+    bool m_bRemainInSection : 1;
+    bool m_bSkipOverHiddenSections : 1;
+    bool m_bSkipOverProtectSections : 1;
 
 public:
     SwUnoCrsr( const SwPosition &rPos, SwPaM* pRing = 0 );
@@ -48,18 +50,18 @@ public:
 
     virtual bool IsReadOnlyAvailable() const SAL_OVERRIDE;
 
-    bool IsRemainInSection() const          { return bRemainInSection; }
-    void SetRemainInSection( bool bFlag )   { bRemainInSection = bFlag; }
+    bool IsRemainInSection() const          { return m_bRemainInSection; }
+    void SetRemainInSection( bool bFlag )   { m_bRemainInSection = bFlag; }
 
     virtual bool IsSkipOverProtectSections() const SAL_OVERRIDE
-                                    { return bSkipOverProtectSections; }
+                                    { return m_bSkipOverProtectSections; }
     void SetSkipOverProtectSections( bool bFlag )
-                                    { bSkipOverProtectSections = bFlag; }
+                                    { m_bSkipOverProtectSections = bFlag; }
 
     virtual bool IsSkipOverHiddenSections() const SAL_OVERRIDE
-                                    { return bSkipOverHiddenSections; }
+                                    { return m_bSkipOverHiddenSections; }
     void SetSkipOverHiddenSections( bool bFlag )
-                                    { bSkipOverHiddenSections = bFlag; }
+                                    { m_bSkipOverHiddenSections = bFlag; }
 
     // make copy of cursor
     virtual SwUnoCrsr * Clone() const;
@@ -72,7 +74,7 @@ class SwUnoTableCrsr : public virtual SwUnoCrsr, public virtual SwTableCursor
     // The selection has the same order as the table boxes, i.e.
     // if something is deleted from the one array at a certain position
     // it has also to be deleted from the other!
-    SwCursor aTblSel;
+    SwCursor m_aTblSel;
 
     using SwTableCursor::MakeBoxSels;
 
@@ -91,8 +93,8 @@ public:
 
     void MakeBoxSels();
 
-          SwCursor& GetSelRing()            { return aTblSel; }
-    const SwCursor& GetSelRing() const      { return aTblSel; }
+          SwCursor& GetSelRing()            { return m_aTblSel; }
+    const SwCursor& GetSelRing() const      { return m_aTblSel; }
 };
 
 #endif

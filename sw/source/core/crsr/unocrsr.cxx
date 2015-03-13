@@ -27,10 +27,11 @@
 IMPL_FIXEDMEMPOOL_NEWDEL( SwUnoCrsr )
 
 SwUnoCrsr::SwUnoCrsr( const SwPosition &rPos, SwPaM* pRing )
-    : SwCursor( rPos, pRing, false ), SwModify( 0 ),
-    bRemainInSection( true ),
-    bSkipOverHiddenSections( false ),
-    bSkipOverProtectSections( false )
+    : SwCursor( rPos, pRing, false )
+    , SwModify(nullptr)
+    , m_bRemainInSection(true)
+    , m_bSkipOverHiddenSections(false)
+    , m_bSkipOverProtectSections(false)
 {}
 
 SwUnoCrsr::~SwUnoCrsr()
@@ -98,7 +99,7 @@ void SwUnoCrsr::DoSetBidiLevelUpDown()
 
 bool SwUnoCrsr::IsSelOvr( int eFlags )
 {
-    if( bRemainInSection )
+    if (m_bRemainInSection)
     {
         SwDoc* pDoc = GetDoc();
         SwNodeIndex aOldIdx( *pDoc->GetNodes()[ GetSavePos()->nNode ] );
@@ -183,15 +184,18 @@ bool SwUnoCrsr::IsSelOvr( int eFlags )
 }
 
 SwUnoTableCrsr::SwUnoTableCrsr(const SwPosition& rPos)
-    : SwCursor(rPos,0,false), SwUnoCrsr(rPos), SwTableCursor(rPos), aTblSel(rPos,0,false)
+    : SwCursor(rPos, 0, false)
+    , SwUnoCrsr(rPos)
+    , SwTableCursor(rPos)
+    , m_aTblSel(rPos, 0, false)
 {
     SetRemainInSection(false);
 }
 
 SwUnoTableCrsr::~SwUnoTableCrsr()
 {
-    while( aTblSel.GetNext() != &aTblSel )
-        delete aTblSel.GetNext();
+    while (m_aTblSel.GetNext() != &m_aTblSel)
+        delete m_aTblSel.GetNext();
 }
 
 bool SwUnoTableCrsr::IsSelOvr( int eFlags )
@@ -227,7 +231,7 @@ void SwUnoTableCrsr::MakeBoxSels()
 
     if( IsChgd() )
     {
-        SwTableCursor::MakeBoxSels( &aTblSel );
+        SwTableCursor::MakeBoxSels( &m_aTblSel );
         if (!GetSelectedBoxesCount())
         {
             const SwTableBox* pBox;
