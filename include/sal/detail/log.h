@@ -60,7 +60,7 @@ SAL_DLLPUBLIC void SAL_CALL sal_detail_logFormat(
     enum sal_detail_LogLevel level, char const * area, char const * where,
     char const * format, ...)
 /* TODO: enabling this will produce a huge amount of -Werror=format errors: */
-#if defined __GNUC__ && 0
+#if defined __GNUC__
     __attribute__((format(printf, 4, 5)))
 #endif
     ;
