@@ -196,32 +196,32 @@ public:
 /*
  * Helper class for objects that need to depend on more than one SwClient
  */
-class SW_DLLPUBLIC SwDepend: public SwClient
+class SW_DLLPUBLIC SwDepend SAL_FINAL : public SwClient
 {
-    SwClient *pToTell;
+    SwClient *m_pToTell;
 
 public:
-    SwDepend() : pToTell(nullptr) {}
-    SwDepend(SwClient *pTellHim, SwModify *pDepend) : SwClient(pDepend), pToTell(pTellHim) {}
+    SwDepend() : m_pToTell(nullptr) {}
+    SwDepend(SwClient *pTellHim, SwModify *pDepend) : SwClient(pDepend), m_pToTell(pTellHim) {}
 
-    SwClient* GetToTell() { return pToTell; }
+    SwClient* GetToTell() { return m_pToTell; }
 
     /** get Client information */
     virtual bool GetInfo( SfxPoolItem& rInfo) const SAL_OVERRIDE
-        { return pToTell ? pToTell->GetInfo( rInfo ) : true; }
+        { return m_pToTell ? m_pToTell->GetInfo( rInfo ) : true; }
 protected:
     virtual void Modify( const SfxPoolItem* pOldValue, const SfxPoolItem *pNewValue ) SAL_OVERRIDE
     {
         if( pNewValue && pNewValue->Which() == RES_OBJECTDYING )
             CheckRegistration(pOldValue,pNewValue);
-        else if( pToTell )
-            pToTell->ModifyNotification(pOldValue, pNewValue);
+        else if( m_pToTell )
+            m_pToTell->ModifyNotification(pOldValue, pNewValue);
     }
     virtual void SwClientNotify( const SwModify& rModify, const SfxHint& rHint ) SAL_OVERRIDE
-        { if(pToTel) pToTell->SwClientNotifyCall(rModify, rHint); }
+        { if(m_pToTell) m_pToTell->SwClientNotifyCall(rModify, rHint); }
 };
 
-class SwClientIter : public sw::Ring<SwClientIter>
+class SwClientIter SAL_FINAL : public sw::Ring<SwClientIter>
 {
     friend SwClient* SwModify::Remove(SwClient *); ///< for pointer adjustments
     friend void SwModify::Add(SwClient *pDepend);   ///< for pointer adjustments
