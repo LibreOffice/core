@@ -142,6 +142,13 @@ void Window::disposeOnce()
     if (!mpWindowImpl || mpWindowImpl->mbInDispose)
         return;
     mpWindowImpl->mbInDispose = true;
+
+    // catch badness where our Window was not wrapped safely
+    // in a VclPtr cosily.
+    assert( mnRefCnt>0 );
+
+    // hold a ref in case something silly happens during dispose.
+    VclPtr<Window> aRef(this);
     dispose();
 }
 
