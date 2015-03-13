@@ -81,9 +81,9 @@ typedef unsigned int uint32_t;
 
 #define HASH_FIND(hh,head,keyptr,keylen,out)                                     \
 do {                                                                             \
-  unsigned _hf_bkt,_hf_hashv;                                                    \
   out=NULL;                                                                      \
   if (head) {                                                                    \
+     unsigned _hf_bkt,_hf_hashv;                                                 \
      HASH_FCN(keyptr,keylen, (head)->hh.tbl->num_buckets, _hf_hashv, _hf_bkt);   \
      if (HASH_BLOOM_TEST((head)->hh.tbl, _hf_hashv)) {                           \
        HASH_FIND_IN_BKT((head)->hh.tbl, hh, (head)->hh.tbl->buckets[ _hf_bkt ],  \
@@ -247,11 +247,11 @@ do {                                                                            
 #define HASH_OOPS(...) do { fprintf(stderr,__VA_ARGS__); exit(-1); } while (0)
 #define HASH_FSCK(hh,head)                                                       \
 do {                                                                             \
-    unsigned _bkt_i;                                                             \
-    unsigned _count, _bkt_count;                                                 \
-    char *_prev;                                                                 \
-    struct UT_hash_handle *_thh;                                                 \
     if (head) {                                                                  \
+        unsigned _bkt_i;                                                         \
+        unsigned _count, _bkt_count;                                             \
+        char *_prev;                                                             \
+        struct UT_hash_handle *_thh;                                             \
         _count = 0;                                                              \
         for( _bkt_i = 0; _bkt_i < (head)->hh.tbl->num_buckets; _bkt_i++) {       \
             _bkt_count = 0;                                                      \
@@ -268,12 +268,12 @@ do {                                                                            
             }                                                                    \
             _count += _bkt_count;                                                \
             if ((head)->hh.tbl->buckets[_bkt_i].count !=  _bkt_count) {          \
-               HASH_OOPS("invalid bucket count %d, actual %d\n",                 \
+               HASH_OOPS("invalid bucket count %d, actual %u\n",                 \
                 (head)->hh.tbl->buckets[_bkt_i].count, _bkt_count);              \
             }                                                                    \
         }                                                                        \
         if (_count != (head)->hh.tbl->num_items) {                               \
-            HASH_OOPS("invalid hh item count %d, actual %d\n",                   \
+            HASH_OOPS("invalid hh item count %d, actual %u\n",                   \
                 (head)->hh.tbl->num_items, _count );                             \
         }                                                                        \
         /* traverse hh in app order; check next/prev integrity, count */         \
@@ -291,7 +291,7 @@ do {                                                                            
                                   (head)->hh.tbl->hho) : NULL );                 \
         }                                                                        \
         if (_count != (head)->hh.tbl->num_items) {                               \
-            HASH_OOPS("invalid app item count %d, actual %d\n",                  \
+            HASH_OOPS("invalid app item count %d, actual %u\n",                  \
                 (head)->hh.tbl->num_items, _count );                             \
         }                                                                        \
     }                                                                            \
