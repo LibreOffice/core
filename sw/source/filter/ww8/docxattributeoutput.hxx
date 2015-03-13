@@ -737,7 +737,7 @@ private:
     /// Attributes of the run color
     std::unique_ptr<sax_fastparser::FastAttributeList> m_pColorAttrList;
     /// Attributes of the paragraph background
-    ::sax_fastparser::FastAttributeList *m_pBackgroundAttrList;
+    std::unique_ptr<sax_fastparser::FastAttributeList> m_pBackgroundAttrList;
     OUString m_sOriginalBackgroundColor;
     OUString m_hyperLinkAnchor;
     bool m_endPageRef;

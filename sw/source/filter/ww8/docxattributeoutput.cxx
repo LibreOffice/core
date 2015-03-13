@@ -860,8 +860,7 @@ void DocxAttributeOutput::WriteCollectedParagraphProperties()
 
     if ( m_pBackgroundAttrList )
     {
-        XFastAttributeListRef xAttrList( m_pBackgroundAttrList );
-        m_pBackgroundAttrList = NULL;
+        XFastAttributeListRef xAttrList( m_pBackgroundAttrList.release() );
 
         m_pSerializer->singleElementNS( XML_w, XML_shd, xAttrList );
     }
@@ -7533,15 +7532,14 @@ void DocxAttributeOutput::FormatBackground( const SvxBrushItem& rBrush )
 
         if( !m_pBackgroundAttrList )
         {
-            m_pBackgroundAttrList = m_pSerializer->createAttrList();
+            m_pBackgroundAttrList.reset(m_pSerializer->createAttrList());
             m_pBackgroundAttrList->add( FSNS( XML_w, XML_fill ), sColor.getStr() );
             m_pBackgroundAttrList->add( FSNS( XML_w, XML_val ), "clear" );
         }
         else if ( sOriginalFill != sColor )
         {
             // fill was modified during edition, theme fill attribute must be dropped
-            delete m_pBackgroundAttrList;
-            m_pBackgroundAttrList = m_pSerializer->createAttrList();
+            m_pBackgroundAttrList.reset(m_pSerializer->createAttrList());
             m_pBackgroundAttrList->add( FSNS( XML_w, XML_fill ), sColor.getStr() );
             m_pBackgroundAttrList->add( FSNS( XML_w, XML_val ), "clear" );
         }
@@ -8280,7 +8278,6 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_bEndCharSdt(false),
       m_bStartedCharSdt(false),
       m_bStartedParaSdt(false),
-      m_pBackgroundAttrList( NULL ),
       m_endPageRef( false ),
       m_pFootnotesList( new ::docx::FootnotesList() ),
       m_pEndnotesList( new ::docx::FootnotesList() ),
@@ -8345,8 +8342,6 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
 
 DocxAttributeOutput::~DocxAttributeOutput()
 {
-    delete m_pBackgroundAttrList, m_pBackgroundAttrList = NULL;
-
     delete m_pFootnotesList, m_pFootnotesList = NULL;
     delete m_pEndnotesList, m_pEndnotesList = NULL;
 
