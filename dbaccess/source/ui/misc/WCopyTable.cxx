@@ -1080,7 +1080,7 @@ void OCopyTableWizard::loadData(  const ICopyTableSourceObject& _rSourceObject, 
         _rColVector.push_back(_rColumns.insert(ODatabaseExport::TColumns::value_type(pActFieldDescr->GetName(),pActFieldDescr)).first);
     }
 
-    // determine which coumns belong to the primary key
+    // determine which columns belong to the primary key
     Sequence< OUString > aPrimaryKeyColumns( _rSourceObject.getPrimaryKeyColumnNames() );
     const OUString* pKeyColName  = aPrimaryKeyColumns.getConstArray();
     const OUString* pKeyColEnd   = pKeyColName + aPrimaryKeyColumns.getLength();
