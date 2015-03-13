@@ -804,7 +804,7 @@ IMPL_LINK( ScHFEditPage, MenuHdl, ScExtIButton*, pBtn )
 
     if(pBtn!=NULL)
     {
-        OSL_ENSURE( true, pBtn->GetSelected());
+        SAL_WARN_IF(pBtn->GetSelected() == 0, "sc.ui", "nothing selected");
         OString sSelectedId = pBtn->GetSelectedIdent();
 
         if (sSelectedId == "title")
