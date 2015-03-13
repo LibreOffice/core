@@ -272,11 +272,10 @@ public:
         return m_pCurrent = m_pPosition;
     }
 
-    // returns the current SwClient object;
-    // in case this was already removed, the object marked down to become
-    // the next current one is returned
+    // returns the current SwClient object, if its still a listener
+    // otherwise it returns the next SwClient that still is
     SwClient* operator()() const
-        { return m_pPosition == m_pCurrent ? m_pCurrent : m_pPosition; }
+        { return m_pPosition; }
 
     // return "true" if an object was removed from a client chain in iteration
     // adding objects to a client chain in iteration is forbidden
