@@ -222,7 +222,7 @@ protected:
     Rectangle               aClientArea;
     Rectangle               aUpperClientArea;
     SfxWorkWindow*          pParent;
-    SfxSplitWindow*         pSplit[SFX_SPLITWINDOWS_MAX];
+    VclPtr<SfxSplitWindow>  pSplit[SFX_SPLITWINDOWS_MAX];
     SfxChildList_Impl       aChildren;
     SfxChildWindows_Impl    aChildWins;
     SfxBindings*            pBindings;

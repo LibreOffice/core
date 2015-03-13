@@ -606,7 +606,6 @@ SfxWorkWindow::SfxWorkWindow( vcl::Window *pWin, SfxBindings& rB, SfxWorkWindow*
     m_aTbxTypeName( "private:resource/toolbar/" ),
     m_aProgressBarResName( "private:resource/progressbar/progressbar" )
 {
-    memset(pSplit, 0, sizeof(pSplit));
     DBG_ASSERT (pBindings, "No Bindings!");
 
     pBindings->SetWorkWindow_Impl( this );
@@ -633,10 +632,10 @@ SfxWorkWindow::~SfxWorkWindow()
     // Delete SplitWindows
     for ( sal_uInt16 n=0; n<SFX_SPLITWINDOWS_MAX; n++ )
     {
-        SfxSplitWindow *p = pSplit[n];
+        VclPtr<SfxSplitWindow> p = pSplit[n];
         if (p->GetWindowCount())
             ReleaseChild_Impl(*p);
-        delete p;
+        pSplit[n].disposeAndClear();
     }
 
     // Delete help structure for Child-Windows
@@ -677,8 +676,8 @@ void SfxWorkWindow::DeleteControllers_Impl()
     for ( n=0; n<SFX_SPLITWINDOWS_MAX; n++ )
     {
         SfxSplitWindow *p = pSplit[n];
-           if (p->GetWindowCount())
-        p->Lock();
+        if (p->GetWindowCount())
+            p->Lock();
     }
 
     // Delete Child-Windows
@@ -2534,7 +2533,7 @@ bool SfxWorkWindow::IsAutoHideMode( const SfxSplitWindow *pSplitWin )
 {
     for ( sal_uInt16 n=0; n<SFX_SPLITWINDOWS_MAX; n++ )
     {
-        if ( pSplit[n] != pSplitWin && pSplit[n]->IsAutoHide( true ) )
+        if ( pSplit[n].get() != pSplitWin && pSplit[n]->IsAutoHide( true ) )
             return true;
     }
     return false;
