@@ -394,6 +394,7 @@ public:
     void MulOp(svl::SharedString aString, double fVal, ScMatrix& rMat);
     void DivOp(bool bFlag, svl::SharedString aString, double fVal, ScMatrix& rMat);
     void PowOp(bool bFlag, svl::SharedString aString, double fVal, ScMatrix& rMat);
+    void AmpersandOp(bool bFlag, svl::SharedString aString, ScMatrix& rMat);
 
     ScMatrix& operator+= ( const ScMatrix& r );
 
