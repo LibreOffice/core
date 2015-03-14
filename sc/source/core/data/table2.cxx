@@ -428,7 +428,7 @@ void ScTable::DeleteArea(
                 aCol[i].DeleteArea(nRow1, nRow2, nDelFlag, bBroadcast, pBroadcastSpans);
         }
 
-            // Zellschutz auf geschuetzter Tabelle nicht setzen
+            // Do not set protected cell in a protected table
 
         if ( IsProtected() && (nDelFlag & IDF_ATTRIB) )
         {
@@ -3097,7 +3097,7 @@ void ScTable::DBShowRow(SCROW nRow, bool bShow)
 {
     if (ValidRow(nRow) && pRowFlags)
     {
-        //  Always set Filter-Flag, also unchanged when Hidden
+        //  Always set filter flag; unchanged when Hidden
         bool bChanged = SetRowHidden(nRow, nRow, !bShow);
         SetRowFiltered(nRow, nRow, !bShow);
 

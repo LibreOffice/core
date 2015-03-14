@@ -1480,7 +1480,7 @@ short ScTable::CompareCell(
             if (eType2 == CELLTYPE_FORMULA && rCell2.mpFormula->IsValue())
                 bStr2 = false;
 
-            if ( bStr1 && bStr2 )           // nur Strings untereinander als String vergleichen!
+            if ( bStr1 && bStr2 )           // compare a String only with a String!
             {
                 OUString aStr1;
                 OUString aStr2;
