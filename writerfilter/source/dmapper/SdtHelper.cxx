@@ -15,7 +15,6 @@
 #include <editeng/unoprnms.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/datetime.hxx>
-#include <DomainMapper_Impl.hxx>
 #include <comphelper/sequence.hxx>
 
 namespace writerfilter

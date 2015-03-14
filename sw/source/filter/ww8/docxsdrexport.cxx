@@ -17,7 +17,6 @@
 #include <svx/svdogrp.hxx>
 #include <oox/token/tokens.hxx>
 #include <oox/export/utils.hxx>
-#include <oox/export/vmlexport.hxx>
 #include <oox/token/properties.hxx>
 #include <textboxhelper.hxx>
 #include <fmtanchr.hxx>
@@ -31,7 +30,6 @@
 #include <docxexportfilter.hxx>
 #include <comphelper/seqstream.hxx>
 #include <comphelper/sequence.hxx>
-
 
 #include <IDocumentDrawModelAccess.hxx>
 

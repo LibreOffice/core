@@ -19,7 +19,6 @@
 
 #ifdef DEBUG_WRITERFILTER
 #include <iostream>
-#include <osl/process.h>
 #endif
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -28,12 +27,9 @@
 #include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/io/WrongFormatException.hpp>
-#include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -44,7 +40,6 @@
 #include <oox/ole/olestorage.hxx>
 #include <oox/ole/vbaproject.hxx>
 #include <ooxml/OOXMLDocument.hxx>
-#include <osl/diagnose.h>
 #include <unotools/mediadescriptor.hxx>
 
 using namespace ::com::sun::star;

@@ -18,14 +18,11 @@
  */
 
 #include <com/sun/star/document/XExtendedFilterDetection.hpp>
-#include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <comphelper/storagehelper.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <sot/storage.hxx>
-#include <unotools/ucbstreamhelper.hxx>
 
 using namespace ::com::sun::star;
 

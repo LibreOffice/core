@@ -17,14 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tools/stream.hxx>
 #include <poolfmt.hxx>
 #include <shellio.hxx>
 #include <ndtxt.hxx>
 #include <doc.hxx>
 #include <docsh.hxx>
 #include <IDocumentStylePoolAccess.hxx>
-#include <pam.hxx>
 #include <swerror.h>
 
 #include <unotextrange.hxx>
@@ -32,11 +30,8 @@
 #include <unotools/streamwrap.hxx>
 #include <comphelper/processfactory.hxx>
 
-#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XImporter.hpp>
-#include <com/sun/star/document/XExporter.hpp>
-#include <com/sun/star/text/XTextRange.hpp>
 
 using namespace ::com::sun::star;
 
