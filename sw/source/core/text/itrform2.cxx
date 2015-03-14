@@ -1303,13 +1303,6 @@ SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
             {
                 rInf.SetFull(true);
                 CalcFlyWidth( rInf );
-
-                // In case we have no portion to return, but CalcFlyWidth()
-                // created a fly portion, then return that. Otherwise such a
-                // fly portion would not be ever inserted to the layout.
-                if (!pPor)
-                    pPor = rInf.GetFly();
-
                 return pPor;
             }
             cChar = rInf.GetChar( rInf.GetIdx() );

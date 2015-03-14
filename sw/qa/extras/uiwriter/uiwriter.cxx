@@ -72,7 +72,6 @@ public:
     void testChineseConversionSimplifiedToTraditional();
     void testFdo85554();
     void testAutoCorr();
-    void testFdo87005();
     void testMergeDoc();
     void testCreatePortions();
     void testBookmarkUndo();
@@ -80,6 +79,7 @@ public:
     void testFdo87448();
     void testTdf68183();
     void testCp1000115();
+    void testTdf90003();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -104,7 +104,6 @@ public:
     CPPUNIT_TEST(testChineseConversionSimplifiedToTraditional);
     CPPUNIT_TEST(testFdo85554);
     CPPUNIT_TEST(testAutoCorr);
-    CPPUNIT_TEST(testFdo87005);
     CPPUNIT_TEST(testMergeDoc);
     CPPUNIT_TEST(testCreatePortions);
     CPPUNIT_TEST(testBookmarkUndo);
@@ -112,6 +111,7 @@ public:
     CPPUNIT_TEST(testFdo87448);
     CPPUNIT_TEST(testTdf68183);
     CPPUNIT_TEST(testCp1000115);
+    CPPUNIT_TEST(testTdf90003);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -648,15 +648,6 @@ void SwUiWriterTest::testAutoCorr()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xTable->getColumns()->getCount());
 }
 
-void SwUiWriterTest::testFdo87005()
-{
-    createDoc("fdo87005.odt");
-    xmlDocPtr pXmlDoc = parseLayoutDump();
-    CPPUNIT_ASSERT(pXmlDoc);
-    // This was 1, no SwFlyPortion was created for the second fly.
-    assertXPath(pXmlDoc, "//Special[@nType='POR_FLY']", 2);
-}
-
 void SwUiWriterTest::testMergeDoc()
 {
     SwDoc* const pDoc1(createDoc("merge-change1.odt"));
@@ -844,6 +835,16 @@ void SwUiWriterTest::testCp1000115()
     // second page.
     CPPUNIT_ASSERT_EQUAL(2, xmlXPathNodeSetGetLength(pXmlNodes));
     xmlXPathFreeObject(pXmlObj);
+}
+
+void SwUiWriterTest::testTdf90003()
+{
+    createDoc("tdf90003.odt");
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT(pXmlDoc);
+    // This was 1: an unexpected fly portion was created, resulting in too
+    // large x position for the empty paragraph marker.
+    assertXPath(pXmlDoc, "//Special[@nType='POR_FLY']", 0);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
