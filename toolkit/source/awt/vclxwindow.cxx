@@ -366,7 +366,7 @@ void VCLXWindow::ImplExecuteAsyncWithoutSolarLock( const Callback& i_callback )
     return mpImpl->getAccessibleFactory().getFactory();
 }
 
-void VCLXWindow::SetWindow( vcl::Window* pWindow )
+void VCLXWindow::SetWindow( VclPtr<vcl::Window> pWindow )
 {
     if ( GetWindow() )
     {
@@ -922,10 +922,10 @@ void VCLXWindow::dispose(  ) throw(::com::sun::star::uno::RuntimeException, std:
 
         if ( GetWindow() )
         {
-            OutputDevice* pOutDev = GetOutputDevice();
+            VclPtr<OutputDevice> pOutDev = GetOutputDevice();
             SetWindow( NULL );  // so that handlers are logged off, if necessary (virtual)
-            SetOutputDevice( pOutDev );
-            DestroyOutputDevice();
+            SetOutputDevice( NULL );
+            pOutDev.disposeAndClear();
         }
 
         // #i14103# dispose the accessible context after the window has been destroyed,
@@ -1921,7 +1921,7 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const ::com::sun::st
         {
             case BASEPROPERTY_REFERENCE_DEVICE:
             {
-                Control* pControl = dynamic_cast< Control* >( GetWindow() );
+                VclPtr<Control> pControl = GetAsDynamic<Control >();
                 OSL_ENSURE( pControl, "VCLXWindow::setProperty( RefDevice ): need a Control for this!" );
                 if ( !pControl )
                     break;

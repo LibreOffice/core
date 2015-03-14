@@ -199,7 +199,7 @@ namespace toolkit
     {
         SolarMutexClearableGuard aGuard;
         Reference< XSpinValue > xKeepAlive( this );
-        SpinButton* pSpinButton = static_cast< SpinButton* >( GetWindow() );
+        VclPtr<SpinButton> pSpinButton = GetAs<SpinButton>();
         if ( !pSpinButton )
             return;
 

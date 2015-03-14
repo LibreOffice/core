@@ -43,20 +43,13 @@
 //  class VCLXDevice
 
 VCLXDevice::VCLXDevice()
-    : mpOutputDevice(NULL)
-    , pDummy(NULL)
+    : pDummy(NULL)
     , nFlags(0)
 {
 }
 
 VCLXDevice::~VCLXDevice()
 {
-}
-
-void VCLXDevice::DestroyOutputDevice()
-{
-    delete mpOutputDevice;
-    mpOutputDevice = NULL;
 }
 
 void VCLXDevice::SetCreatedWithToolkit( bool bCreatedWithToolkit )
@@ -129,14 +122,14 @@ IMPL_XTYPEPROVIDER_END
         OutDevType eDevType = mpOutputDevice->GetOutDevType();
         if ( eDevType == OUTDEV_WINDOW )
         {
-            aDevSz = static_cast<vcl::Window*>(mpOutputDevice)->GetSizePixel();
-            static_cast<vcl::Window*>(mpOutputDevice)->GetBorder( aInfo.LeftInset, aInfo.TopInset, aInfo.RightInset, aInfo.BottomInset );
+            aDevSz = static_cast<vcl::Window*>(mpOutputDevice.get())->GetSizePixel();
+            static_cast<vcl::Window*>(mpOutputDevice.get())->GetBorder( aInfo.LeftInset, aInfo.TopInset, aInfo.RightInset, aInfo.BottomInset );
         }
         else if ( eDevType == OUTDEV_PRINTER )
         {
-            aDevSz = static_cast<Printer*>(mpOutputDevice)->GetPaperSizePixel();
+            aDevSz = static_cast<Printer*>(mpOutputDevice.get())->GetPaperSizePixel();
             Size aOutSz = mpOutputDevice->GetOutputSizePixel();
-            Point aOffset = static_cast<Printer*>(mpOutputDevice)->GetPageOffset();
+            Point aOffset = static_cast<Printer*>(mpOutputDevice.get())->GetPageOffset();
             aInfo.LeftInset = aOffset.X();
             aInfo.TopInset = aOffset.Y();
             aInfo.RightInset = aDevSz.Width() - aOutSz.Width() - aOffset.X();
@@ -228,18 +221,14 @@ IMPL_XTYPEPROVIDER_END
     return xDBmp;
 }
 
-
 VCLXVirtualDevice::~VCLXVirtualDevice()
 {
     SolarMutexGuard aGuard;
 
-    DestroyOutputDevice();
+    mpOutputDevice.disposeAndClear();
 }
 
-
-
 // Interface implementation of ::com::sun::star::awt::XUnitConversion
-
 
 ::com::sun::star::awt::Point SAL_CALL VCLXDevice::convertPointToLogic( const ::com::sun::star::awt::Point& aPoint, ::sal_Int16 TargetUnit ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception)
 {

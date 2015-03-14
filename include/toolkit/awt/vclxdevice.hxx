@@ -27,43 +27,40 @@
 #include <cppuhelper/weak.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/vclptr.hxx>
 
 #include <com/sun/star/awt/XUnitConversion.hpp>
 
 class OutputDevice;
 class VirtualDevice;
 
-
-//  class VCLXDevice
-
-
 // For using nDummy, no incompatible update, add a sal_Bool bCreatedWithToolkitMember later...
 #define FLAGS_CREATEDWITHTOOLKIT    0x00000001
 
-class TOOLKIT_DLLPUBLIC VCLXDevice :    public ::com::sun::star::awt::XDevice,
+/// An UNO wrapper for the VCL OutputDevice
+class TOOLKIT_DLLPUBLIC VCLXDevice :
+                    public ::com::sun::star::awt::XDevice,
                     public ::com::sun::star::lang::XTypeProvider,
                     public ::com::sun::star::lang::XUnoTunnel,
                     public ::com::sun::star::awt::XUnitConversion,
                     public ::cppu::OWeakObject
 {
     friend class VCLXGraphics;
+    friend class VCLXVirtualDevice;
 
 private:
-    OutputDevice*           mpOutputDevice;
+    VclPtr<OutputDevice>    mpOutputDevice;
 
 public:
     void*                   pDummy;
     sal_uInt32              nFlags;
 
-protected:
-    void                    DestroyOutputDevice();
-
 public:
                             VCLXDevice();
                             virtual ~VCLXDevice();
 
-    void                    SetOutputDevice( OutputDevice* pOutDev ) { mpOutputDevice = pOutDev; }
-    OutputDevice*           GetOutputDevice() const { return mpOutputDevice; }
+    void                    SetOutputDevice( VclPtr<OutputDevice> pOutDev ) { mpOutputDevice = pOutDev; }
+    VclPtr<OutputDevice>    GetOutputDevice() const { return mpOutputDevice; }
 
     void                    SetCreatedWithToolkit( bool bCreatedWithToolkit );
 
