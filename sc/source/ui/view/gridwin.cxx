@@ -2105,7 +2105,78 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
             }
         }
         else
+        {
             pViewData->GetDispatcher().Execute( FID_FILL_AUTO, SfxCallMode::SLOT | SfxCallMode::RECORD );
+
+            SCROW nTillRow = pViewData->GetRefEndY();
+            SCCOL nTillCol = pViewData->GetRefEndX();
+            SCROW nRowRepeatSize = (nEndRow - nStartRow + 1);
+            SCCOL nColRepeatSize = (nEndCol - nStartCol + 1);
+
+            if ( mpSpellCheckCxt )
+            {
+                bool bVert = (nTillCol == nEndCol);
+                bool bPositive = (nTillCol > nEndCol || nTillRow > nEndRow);
+
+                if ( bVert && bPositive )
+                {
+                    for ( SCCOL nColItr = nStartCol; nColItr <= nEndCol; ++nColItr )
+                    {
+                        for ( SCROW nRowItr = nEndRow + 1; nRowItr <= nTillRow; ++nRowItr )
+                        {
+                            SCROW nRowToCopy = nStartRow + ( ( nRowItr - nEndRow - 1 ) % nRowRepeatSize );
+                            const std::vector<editeng::MisspellRanges>* pRanges = mpSpellCheckCxt->getMisspellRanges( nColItr, nRowToCopy );
+                            if ( !pRanges )
+                                continue;
+                            mpSpellCheckCxt->setMisspellRanges( nColItr, nRowItr, pRanges );
+                        }
+                    }
+                }
+                else if ( bVert && !bPositive )
+                {
+                    for ( SCCOL nColItr = nStartCol; nColItr <= nEndCol; ++nColItr )
+                    {
+                        for ( SCROW nRowItr = nStartRow - 1; nRowItr >= nTillRow; --nRowItr )
+                        {
+                            SCROW nRowToCopy = nEndRow - ( ( nStartRow - 1 - nRowItr ) % nRowRepeatSize );
+                            const std::vector<editeng::MisspellRanges>* pRanges = mpSpellCheckCxt->getMisspellRanges( nColItr, nRowToCopy );
+                            if ( !pRanges )
+                                continue;
+                            mpSpellCheckCxt->setMisspellRanges( nColItr, nRowItr, pRanges );
+                        }
+                    }
+                }
+                else if ( !bVert && bPositive )
+                {
+                    for ( SCROW nRowItr = nStartRow; nRowItr <= nEndRow; ++nRowItr )
+                    {
+                        for ( SCCOL nColItr = nEndCol + 1; nColItr <= nTillCol; ++nColItr )
+                        {
+                            SCCOL nColToCopy = nStartCol + ( ( nColItr - nEndCol - 1 ) % nColRepeatSize );
+                            const std::vector<editeng::MisspellRanges>* pRanges = mpSpellCheckCxt->getMisspellRanges( nColToCopy, nRowItr );
+                            if ( !pRanges )
+                                continue;
+                            mpSpellCheckCxt->setMisspellRanges( nColItr, nRowItr, pRanges );
+                        }
+                    }
+                }
+                else
+                {
+                    for ( SCROW nRowItr = nStartRow; nRowItr <= nEndRow; ++nRowItr )
+                    {
+                        for ( SCCOL nColItr = nStartCol - 1; nColItr >= nTillCol; --nColItr )
+                        {
+                            SCCOL nColToCopy = nEndCol - ( ( nStartCol - 1 - nColItr ) % nColRepeatSize );
+                            const std::vector<editeng::MisspellRanges>* pRanges = mpSpellCheckCxt->getMisspellRanges( nColToCopy, nRowItr );
+                            if ( !pRanges )
+                                continue;
+                            mpSpellCheckCxt->setMisspellRanges( nColItr, nRowItr, pRanges );
+                        }
+                    }
+                }
+            }
+
+        }
     }
     else if (pViewData->GetFillMode() == SC_FILL_MATRIX)
     {
