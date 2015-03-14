@@ -36,7 +36,6 @@
 
 #include <vector>
 #include <limits>
-#include <type_traits>
 
 #include <mdds/multi_type_matrix.hpp>
 #include <mdds/multi_type_vector_types.hpp>
@@ -2546,20 +2545,17 @@ private:
     TOp maOp;
     svl::SharedString maString;
     double mfVal;
-    bool mbUseForEmpty;
     COp<TOp, TEmptyRes> maCOp;
 
 public:
-
     typedef TEmptyRes empty_value_type;
     typedef TRet number_value_type;
     typedef svl::SharedString string_value_type;
 
-    MatOp(TOp op, svl::SharedString aString, double fVal=0.0, bool bUseForEmpty=true):
-        maOp(op),
+    MatOp(TOp aOp, svl::SharedString aString, double fVal=0.0):
+        maOp(aOp),
         maString(aString),
-        mfVal(fVal),
-        mbUseForEmpty(bUseForEmpty)
+        mfVal(fVal)
     { }
 
     TRet operator()(double fVal) const
@@ -2584,7 +2580,7 @@ public:
 
     bool useFunctionForEmpty() const
     {
-        return mbUseForEmpty;
+        return true;
     }
 };
 
@@ -2592,21 +2588,21 @@ public:
 
 void ScMatrix::NotOp(svl::SharedString aString, ScMatrix& rMat)
 {
-    auto not_ = [&](double a, double){return double(a == 0.0);};
+    auto not_ = [](double a, double){return double(a == 0.0);};
     matop::MatOp<decltype(not_), double> aOp(not_, aString);
     pImpl->ApplyOperation(aOp, *rMat.pImpl);
 }
 
 void ScMatrix::NegOp(svl::SharedString aString, ScMatrix& rMat)
 {
-    auto neg_ = [&](double a, double){return -a;};
+    auto neg_ = [](double a, double){return -a;};
     matop::MatOp<decltype(neg_), double> aOp(neg_, aString);
     pImpl->ApplyOperation(aOp, *rMat.pImpl);
 }
 
 void ScMatrix::AddOp(svl::SharedString aString, double fVal, ScMatrix& rMat)
 {
-    auto add_ = [&](double a, double b){return a + b;};
+    auto add_ = [](double a, double b){return a + b;};
     matop::MatOp<decltype(add_)> aOp(add_, aString, fVal);
     pImpl->ApplyOperation(aOp, *rMat.pImpl);
 }
@@ -2615,13 +2611,13 @@ void ScMatrix::SubOp(bool bFlag, svl::SharedString aString, double fVal, ScMatri
 {
     if (bFlag)
     {
-        auto sub_ = [&](double a, double b){return b - a;};
+        auto sub_ = [](double a, double b){return b - a;};
         matop::MatOp<decltype(sub_)> aOp(sub_, aString, fVal);
         pImpl->ApplyOperation(aOp, *rMat.pImpl);
     }
     else
     {
-        auto sub_ = [&](double a, double b){return a - b;};
+        auto sub_ = [](double a, double b){return a - b;};
         matop::MatOp<decltype(sub_)> aOp(sub_, aString, fVal);
         pImpl->ApplyOperation(aOp, *rMat.pImpl);
     }
@@ -2629,7 +2625,7 @@ void ScMatrix::SubOp(bool bFlag, svl::SharedString aString, double fVal, ScMatri
 
 void ScMatrix::MulOp(svl::SharedString aString, double fVal, ScMatrix& rMat)
 {
-    auto mul_ = [&](double a, double b){return a * b;};
+    auto mul_ = [](double a, double b){return a * b;};
     matop::MatOp<decltype(mul_)> aOp(mul_, aString, fVal);
     pImpl->ApplyOperation(aOp, *rMat.pImpl);
 }
@@ -2638,13 +2634,13 @@ void ScMatrix::DivOp(bool bFlag, svl::SharedString aString, double fVal, ScMatri
 {
     if (bFlag)
     {
-        auto div_ = [&](double a, double b){return sc::div(b, a);};
+        auto div_ = [](double a, double b){return sc::div(b, a);};
         matop::MatOp<decltype(div_), svl::SharedString> aOp(div_, aString, fVal);
         pImpl->ApplyOperation(aOp, *rMat.pImpl);
     }
     else
     {
-        auto div_ = [&](double a, double b){return sc::div(a, b);};
+        auto div_ = [](double a, double b){return sc::div(a, b);};
         matop::MatOp<decltype(div_), svl::SharedString> aOp(div_, aString, fVal);
         pImpl->ApplyOperation(aOp, *rMat.pImpl);
     }
@@ -2654,13 +2650,13 @@ void ScMatrix::PowOp(bool bFlag, svl::SharedString aString, double fVal, ScMatri
 {
     if (bFlag)
     {
-        auto pow_ = [&](double a, double b){return pow(b, a);};
+        auto pow_ = [](double a, double b){return pow(b, a);};
         matop::MatOp<decltype(pow_)> aOp(pow_, aString, fVal);
         pImpl->ApplyOperation(aOp, *rMat.pImpl);
     }
     else
     {
-        auto pow_ = [&](double a, double b){return pow(a, b);};
+        auto pow_ = [](double a, double b){return pow(a, b);};
         matop::MatOp<decltype(pow_)> aOp(pow_, aString, fVal);
         pImpl->ApplyOperation(aOp, *rMat.pImpl);
     }
