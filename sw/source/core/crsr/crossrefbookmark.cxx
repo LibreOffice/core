@@ -72,7 +72,7 @@ namespace sw { namespace mark
         const vcl::KeyCode& rCode,
         const OUString& rName,
         const OUString& rShortName)
-        : CrossRefBookmark(rPaM, rCode, rName, rShortName, IDocumentMarkAccess::GetCrossRefHeadingBookmarkNamePrefix())
+        : CrossRefBookmark(rPaM, rCode, rName, rShortName, IDocumentMarkAccess::GetCrossRefHeadingBookmarkNamePrefix()+"_Toc")
     { }
 
     bool CrossRefHeadingBookmark::IsLegalName(const OUString& rName)
