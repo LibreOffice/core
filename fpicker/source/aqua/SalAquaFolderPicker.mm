@@ -178,7 +178,7 @@ rtl::OUString SAL_CALL SalAquaFolderPicker::getDirectory() throw( uno::RuntimeEx
     }
 
     long nFiles = [files count];
-    OSL_TRACE("# of items: %d", nFiles);
+    SAL_INFO("fpicker.aqua", "# of items: " << nFiles);
 
     if (nFiles < 1) {
         throw uno::RuntimeException("no directory selected", static_cast< cppu::OWeakObject * >( this ));

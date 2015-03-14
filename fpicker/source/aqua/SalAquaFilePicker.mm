@@ -333,7 +333,7 @@ uno::Sequence<rtl::OUString> SAL_CALL SalAquaFilePicker::getFiles() throw( uno::
     }
 
     long nFiles = [files count];
-    OSL_TRACE("# of items: %d", nFiles);
+    SAL_INFO("fpicker.aqua", "# of items: " << nFiles);
 
     uno::Sequence< rtl::OUString > aSelectedFiles(nFiles > 1 ? nFiles + 1 : nFiles);
 

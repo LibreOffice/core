@@ -169,7 +169,7 @@ int SalAquaPicker::run()
         NSString *temp = [NSString stringWithOUString:m_sDisplayDirectory];
         startDirectory = [NSURL URLWithString:temp];
 
-        OSL_TRACE("start dir: %s", [startDirectory path]);
+        SAL_INFO("fpicker.aqua", "start dir: " << [startDirectory path]);
     }
     else {
         startDirectory = [NSURL fileURLWithPath:NSHomeDirectory() isDirectory:YES];
