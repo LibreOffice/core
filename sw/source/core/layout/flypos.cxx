@@ -51,7 +51,7 @@ SwPosFlyFrm::SwPosFlyFrm( const SwNodeIndex& rIdx, const SwFrmFmt* pFmt,
         if( RES_FLYFRMFMT == pFmt->Which() )
         {
             // Let's see if we have an SdrObject for this
-            SwFlyFrm* pFly = SwIterator<SwFlyFrm,SwFmt>::FirstElement(*pFmt);
+            SwFlyFrm* pFly = SwIterator<SwFlyFrm,SwFmt>(*pFmt).First();
             if( pFly )
             {
                 nOrdNum = pFly->GetVirtDrawObj()->GetOrdNum();
@@ -61,7 +61,7 @@ SwPosFlyFrm::SwPosFlyFrm( const SwNodeIndex& rIdx, const SwFrmFmt* pFmt,
         else if( RES_DRAWFRMFMT == pFmt->Which() )
         {
             // Let's see if we have an SdrObject for this
-            SwDrawContact* pContact = SwIterator<SwDrawContact,SwFmt>::FirstElement(*pFmt);
+            SwDrawContact* pContact = SwIterator<SwDrawContact,SwFmt>(*pFmt).First();
             if( pContact )
             {
                 nOrdNum = pContact->GetMaster()->GetOrdNum();

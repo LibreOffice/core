@@ -400,7 +400,7 @@ void SwFlyFrm::InitDrawObj( bool bNotify )
     // need to create a new Ref, else we create the Contact now.
 
     IDocumentDrawModelAccess* pIDDMA = GetFmt()->getIDocumentDrawModelAccess();
-    SwFlyDrawContact *pContact = SwIterator<SwFlyDrawContact,SwFmt>::FirstElement( *GetFmt() );
+    SwFlyDrawContact *pContact = SwIterator<SwFlyDrawContact,SwFmt>( *GetFmt() ).First();
     if ( !pContact )
     {
         // #i52858# - method name changed
@@ -461,7 +461,7 @@ void SwFlyFrm::FinitDrawObj()
 
         if ( bContinue )
             // no Frm left, find Contact object to destroy
-            pMyContact = SwIterator<SwFlyDrawContact,SwFmt>::FirstElement( *GetFmt() );
+            pMyContact = SwIterator<SwFlyDrawContact,SwFmt>( *GetFmt() ).First();
     }
 
     // OD, OS 2004-03-31 #116203# - clear user call of Writer fly frame 'master'

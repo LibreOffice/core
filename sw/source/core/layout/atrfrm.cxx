@@ -147,7 +147,7 @@ void DelHFFormat( SwClient *pToRemove, SwFrmFmt *pFmt )
                     if ( pNode->IsCntntNode() &&
                          static_cast<SwCntntNode*>(pNode)->GetDepends() )
                     {
-                        SwCrsrShell *pShell = SwIterator<SwCrsrShell,SwCntntNode>::FirstElement( *static_cast<SwCntntNode*>(pNode) );
+                        SwCrsrShell *pShell = SwIterator<SwCrsrShell,SwCntntNode>( *static_cast<SwCntntNode*>(pNode) ).First();
                         if( pShell )
                         {
                             pShell->ParkCrsr( aIdx );
@@ -2704,7 +2704,7 @@ SwRect SwFrmFmt::FindLayoutRect( const bool bPrtArea, const Point* pPoint,
 
 SwContact* SwFrmFmt::FindContactObj()
 {
-    return SwIterator<SwContact,SwFmt>::FirstElement( *this );
+    return SwIterator<SwContact,SwFmt>( *this ).First();
 }
 
 SdrObject* SwFrmFmt::FindSdrObject()
@@ -2731,10 +2731,10 @@ bool SwFrmFmt::IsLowerOf( const SwFrmFmt& rFmt ) const
 {
     //Also linking from inside to outside or from outside to inside is not
     //allowed.
-    SwFlyFrm *pSFly = SwIterator<SwFlyFrm,SwFmt>::FirstElement(*this);
+    SwFlyFrm *pSFly = SwIterator<SwFlyFrm,SwFmt>(*this).First();
     if( pSFly )
     {
-        SwFlyFrm *pAskFly = SwIterator<SwFlyFrm,SwFmt>::FirstElement(rFmt);
+        SwFlyFrm *pAskFly = SwIterator<SwFlyFrm,SwFmt>(rFmt).First();
         if( pAskFly )
             return pSFly->IsLowerOf( pAskFly );
     }
@@ -2903,7 +2903,7 @@ void SwFlyFrmFmt::MakeFrms()
             }
             if ( pCNd )
             {
-                if( SwIterator<SwFrm,SwCntntNode>::FirstElement( *pCNd ) )
+                if( SwIterator<SwFrm,SwCntntNode>( *pCNd ).First() )
                 {
                     pModify = pCNd;
                 }
@@ -3062,7 +3062,7 @@ bool SwFlyFrmFmt::GetInfo( SfxPoolItem& rInfo ) const
     {
     case RES_CONTENT_VISIBLE:
         {
-            static_cast<SwPtrMsgPoolItem&>(rInfo).pObject = SwIterator<SwFrm,SwFmt>::FirstElement( *this );
+            static_cast<SwPtrMsgPoolItem&>(rInfo).pObject = SwIterator<SwFrm,SwFmt>( *this ).First();
         }
         bRet = false;
         break;
@@ -3373,7 +3373,7 @@ IMapObject* SwFrmFmt::GetIMapObject( const Point& rPoint,
 
     if( !pFly )
     {
-        pFly = SwIterator<SwFlyFrm,SwFmt>::FirstElement( *this );
+        pFly = SwIterator<SwFlyFrm,SwFmt>( *this ).First();
         if( !pFly )
             return 0;
     }

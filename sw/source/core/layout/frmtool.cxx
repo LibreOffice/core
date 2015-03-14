@@ -1118,7 +1118,7 @@ static bool lcl_ObjConnected( const SwFrmFmt *pFmt, const SwFrm* pSib )
     }
     else
     {
-        SwDrawContact *pContact = SwIterator<SwDrawContact,SwFmt>::FirstElement(*pFmt);
+        SwDrawContact *pContact = SwIterator<SwDrawContact,SwFmt>(*pFmt).First();
         if ( pContact )
             return pContact->GetAnchorFrm() != 0;
     }
