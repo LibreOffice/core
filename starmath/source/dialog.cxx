@@ -496,12 +496,11 @@ IMPL_LINK( SmFontTypeDialog, MenuSelectHdl, Menu *, pMenu )
 
     if (pActiveListBox)
     {
-        SmFontDialog *pFontDialog = new SmFontDialog(this, pFontListDev, bHideCheckboxes);
+        std::unique_ptr<SmFontDialog> pFontDialog(new SmFontDialog(this, pFontListDev, bHideCheckboxes));
 
         pActiveListBox->WriteTo(*pFontDialog);
         if (pFontDialog->Execute() == RET_OK)
             pActiveListBox->ReadFrom(*pFontDialog);
-        delete pFontDialog;
     }
     return 0;
 }
@@ -1380,7 +1379,7 @@ IMPL_LINK_NOARG( SmSymbolDialog, SymbolChangeHdl )
 
 IMPL_LINK_NOARG(SmSymbolDialog, EditClickHdl)
 {
-    SmSymDefineDialog *pDialog = new SmSymDefineDialog(this, pFontListDev, rSymbolMgr);
+    std::unique_ptr<SmSymDefineDialog> pDialog(new SmSymDefineDialog(this, pFontListDev, rSymbolMgr));
 
     // set current symbol and SymbolSet for the new dialog
     const OUString  aSymSetName (m_pSymbolSets->GetSelectEntry()),
@@ -1417,7 +1416,6 @@ IMPL_LINK_NOARG(SmSymbolDialog, EditClickHdl)
         nSymPos = static_cast< sal_uInt16 >(aSymbolSet.size()) - 1;
     SelectSymbol( nSymPos );
 
-    delete pDialog;
     return 0;
 }
 
@@ -1959,7 +1957,7 @@ void SmSymDefineDialog::UpdateButtons()
         bAdd    = aSymbolMgrCopy.GetSymbolByName(aTmpSymbolName) == NULL;
 
         // only delete it if all settings are equal
-        bDelete = pOrigSymbol != NULL;
+        bDelete = bool(pOrigSymbol);
 
         // only change it if the old symbol exists and the new one is different
         bChange = pOrigSymbol && !bEqual;
@@ -1974,7 +1972,8 @@ SmSymDefineDialog::SmSymDefineDialog(vcl::Window * pParent,
         OutputDevice *pFntListDevice, SmSymbolManager &rMgr) :
     ModalDialog         (pParent, "EditSymbols", "modules/smath/ui/symdefinedialog.ui"),
     rSymbolMgr          (rMgr),
-    pSubsetMap          (NULL),
+    pOrigSymbol         (),
+    pSubsetMap          (),
     pFontList           (NULL)
 {
     get(pOldSymbols, "oldSymbols");
@@ -1996,8 +1995,6 @@ SmSymDefineDialog::SmSymDefineDialog(vcl::Window * pParent,
     get(pDeleteBtn, "delete");
 
     pFontList = new FontList( pFntListDevice );
-
-    pOrigSymbol = 0;
 
     // auto completion is troublesome since that symbols character also gets automatically selected in the
     // display and if the user previously selected a character to define/redefine that one this is bad
@@ -2035,8 +2032,6 @@ SmSymDefineDialog::SmSymDefineDialog(vcl::Window * pParent,
 
 SmSymDefineDialog::~SmSymDefineDialog()
 {
-    delete pSubsetMap;
-    delete pOrigSymbol;
 }
 
 void SmSymDefineDialog::InitColor_Impl()
@@ -2168,15 +2163,14 @@ void SmSymDefineDialog::SetOrigSymbol(const SmSym *pSymbol,
                                       const OUString &rSymbolSetName)
 {
     // clear old symbol
-    delete pOrigSymbol;
-    pOrigSymbol = 0;
+    pOrigSymbol.reset();
 
     OUString   aSymName,
                 aSymSetName;
     if (pSymbol)
     {
         // set new symbol
-        pOrigSymbol = new SmSym( *pSymbol );
+        pOrigSymbol.reset(new SmSym( *pSymbol ));
 
         aSymName    = pSymbol->GetName();
         aSymSetName = rSymbolSetName;
@@ -2279,9 +2273,7 @@ void SmSymDefineDialog::SetFont(const OUString &rFontName, const OUString &rStyl
     // update subset listbox for new font's unicode subsets
     FontCharMapPtr pFontCharMap;
     pCharsetDisplay->GetFontCharMap( pFontCharMap );
-    if (pSubsetMap)
-        delete pSubsetMap;
-    pSubsetMap = new SubsetMap( pFontCharMap );
+    pSubsetMap.reset(new SubsetMap( pFontCharMap ));
 
     pFontsSubsetLB->Clear();
     bool bFirst = true;

@@ -39,6 +39,7 @@
 #include "utility.hxx"
 #include "format.hxx"
 #include "symbol.hxx"
+#include <memory>
 
 class SubsetMap;
 #define CATEGORY_NONE   0xFFFF
@@ -408,9 +409,9 @@ class SmSymDefineDialog : public ModalDialog
 
     SmSymbolManager     aSymbolMgrCopy,
                        &rSymbolMgr;
-    const SmSym        *pOrigSymbol;
+    std::unique_ptr<SmSym> pOrigSymbol;
 
-    const SubsetMap    *pSubsetMap;
+    std::unique_ptr<SubsetMap> pSubsetMap;
     FontList           *pFontList;
 
     DECL_LINK(OldSymbolChangeHdl, ComboBox *);
