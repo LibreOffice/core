@@ -74,7 +74,7 @@ void SwWrtShell::MoveCrsr( bool bWithSelect )
     else
     {
         EndSelect();
-        (this->*fnKillSel)( 0, false );
+        (this->*m_fnKillSel)( 0, false );
     }
 }
 
@@ -100,7 +100,7 @@ bool SwWrtShell::Left( sal_uInt16 nMode, bool bSelect,
     {
         Point aTmp( VisArea().Pos() );
         aTmp.X() -= VisArea().Width() * nReadOnlyScrollOfst / 100;
-        rView.SetVisArea( aTmp );
+        m_rView.SetVisArea( aTmp );
         return true;
     }
     else
@@ -117,8 +117,8 @@ bool SwWrtShell::Right( sal_uInt16 nMode, bool bSelect,
     {
         Point aTmp( VisArea().Pos() );
         aTmp.X() += VisArea().Width() * nReadOnlyScrollOfst / 100;
-        aTmp.X() = rView.SetHScrollMax( aTmp.X() );
-        rView.SetVisArea( aTmp );
+        aTmp.X() = m_rView.SetHScrollMax( aTmp.X() );
+        m_rView.SetVisArea( aTmp );
         return true;
     }
     else
@@ -134,7 +134,7 @@ bool SwWrtShell::Up( bool bSelect, sal_uInt16 nCount, bool bBasicCall )
     {
         Point aTmp( VisArea().Pos() );
         aTmp.Y() -= VisArea().Height() * nReadOnlyScrollOfst / 100;
-        rView.SetVisArea( aTmp );
+        m_rView.SetVisArea( aTmp );
         return true;
     }
 
@@ -148,8 +148,8 @@ bool SwWrtShell::Down( bool bSelect, sal_uInt16 nCount, bool bBasicCall )
     {
         Point aTmp( VisArea().Pos() );
         aTmp.Y() += VisArea().Height() * nReadOnlyScrollOfst / 100;
-        aTmp.Y() = rView.SetVScrollMax( aTmp.Y() );
-        rView.SetVisArea( aTmp );
+        aTmp.Y() = m_rView.SetVScrollMax( aTmp.Y() );
+        m_rView.SetVisArea( aTmp );
         return true;
     }
 
@@ -163,7 +163,7 @@ bool SwWrtShell::LeftMargin( bool bSelect, bool bBasicCall )
     {
         Point aTmp( VisArea().Pos() );
         aTmp.X() = DOCUMENTBORDER;
-        rView.SetVisArea( aTmp );
+        m_rView.SetVisArea( aTmp );
         return true;
     }
     else
@@ -181,7 +181,7 @@ bool SwWrtShell::RightMargin( bool bSelect, bool bBasicCall  )
         aTmp.X() = GetDocSize().Width() - VisArea().Width() + DOCUMENTBORDER;
         if( DOCUMENTBORDER > aTmp.X() )
             aTmp.X() = DOCUMENTBORDER;
-        rView.SetVisArea( aTmp );
+        m_rView.SetVisArea( aTmp );
         return true;
     }
     else
@@ -197,7 +197,7 @@ bool SwWrtShell::GoStart( bool bKeepArea, bool *pMoveTable,
     if ( IsCrsrInTbl() )
     {
         const bool bBoxSelection = HasBoxSelection();
-        if( !bBlockMode )
+        if( !m_bBlockMode )
         {
             if ( !bSelect )
                 EnterStdMode();
@@ -230,7 +230,7 @@ bool SwWrtShell::GoStart( bool bKeepArea, bool *pMoveTable,
         }
     }
 
-    if( !bBlockMode )
+    if( !m_bBlockMode )
     {
         if ( !bSelect )
             EnterStdMode();
@@ -396,9 +396,9 @@ bool SwWrtShell::PushCrsr(SwTwips lOffset, bool bSelect)
     bool bDiff = false;
     SwRect aOldRect( GetCharRect() ), aTmpArea( VisArea() );
 
-    // bDestOnStack indicates if I could not set the coursor at the current
+    // m_bDestOnStack indicates if I could not set the coursor at the current
     // position, because in this region is no content.
-    if( !bDestOnStack )
+    if( !m_bDestOnStack )
     {
         Point aPt( aOldRect.Center() );
 
@@ -408,12 +408,12 @@ bool SwWrtShell::PushCrsr(SwTwips lOffset, bool bSelect)
             aPt.Y() = aTmpArea.Top() + aTmpArea.Height() / 2;
 
         aPt.Y() += lOffset;
-        aDest = GetCntntPos(aPt,lOffset > 0);
-        aDest.X() = aPt.X();
-        bDestOnStack = true;
+        m_aDest = GetCntntPos(aPt,lOffset > 0);
+        m_aDest.X() = aPt.X();
+        m_bDestOnStack = true;
     }
 
-    // If we had a frame selection, it must be removed after the fnSetCrsr
+    // If we had a frame selection, it must be removed after the m_fnSetCrsr
     // and we have to remember the position on the stack to return to it later.
     bool bIsFrmSel = false;
 
@@ -422,7 +422,7 @@ bool SwWrtShell::PushCrsr(SwTwips lOffset, bool bSelect)
     //position is longer on the stack.
     //The new visible region is to be determined beforehand.
     aTmpArea.Pos().Y() += lOffset;
-    if( aTmpArea.IsInside(aDest) )
+    if( aTmpArea.IsInside(m_aDest) )
     {
         if( bSelect )
             SttSelect();
@@ -446,7 +446,7 @@ bool SwWrtShell::PushCrsr(SwTwips lOffset, bool bSelect)
             CallChgLnk();
         }
 
-        (this->*fnSetCrsr)( &aDest, true );
+        (this->*m_fnSetCrsr)( &m_aDest, true );
 
         bDiff = aOldRect != GetCharRect();
 
@@ -458,41 +458,41 @@ bool SwWrtShell::PushCrsr(SwTwips lOffset, bool bSelect)
         }
 
             // reset Dest. SPoint Flags
-        bDestOnStack = false;
+        m_bDestOnStack = false;
     }
 
     // Position into the stack; bDiff indicates if there is a
     // difference between the old and the new cursor position.
-    pCrsrStack = new CrsrStack( bDiff, bIsFrmSel, aOldRect.Center(),
-                                lOffset, pCrsrStack );
-    return !bDestOnStack && bDiff;
+    m_pCrsrStack = new CrsrStack( bDiff, bIsFrmSel, aOldRect.Center(),
+                                lOffset, m_pCrsrStack );
+    return !m_bDestOnStack && bDiff;
 }
 
 bool SwWrtShell::PopCrsr(bool bUpdate, bool bSelect)
 {
-    if( 0 == pCrsrStack)
+    if( 0 == m_pCrsrStack)
         return false;
 
-    const bool bValidPos = pCrsrStack->bValidCurPos;
+    const bool bValidPos = m_pCrsrStack->bValidCurPos;
     if( bUpdate && bValidPos )
     {
             // If a predecessor is on the stack,
             // use the flag for a valid position.
         SwRect aTmpArea(VisArea());
-        aTmpArea.Pos().Y() -= pCrsrStack->lOffset;
-        if( aTmpArea.IsInside( pCrsrStack->aDocPos ) )
+        aTmpArea.Pos().Y() -= m_pCrsrStack->lOffset;
+        if( aTmpArea.IsInside( m_pCrsrStack->aDocPos ) )
         {
             if( bSelect )
                 SttSelect();
             else
                 EndSelect();
 
-            (this->*fnSetCrsr)(&pCrsrStack->aDocPos, !pCrsrStack->bIsFrmSel);
-            if( pCrsrStack->bIsFrmSel && IsObjSelectable(pCrsrStack->aDocPos))
+            (this->*m_fnSetCrsr)(&m_pCrsrStack->aDocPos, !m_pCrsrStack->bIsFrmSel);
+            if( m_pCrsrStack->bIsFrmSel && IsObjSelectable(m_pCrsrStack->aDocPos))
             {
                 HideCrsr();
-                SelectObj( pCrsrStack->aDocPos );
-                EnterSelFrmMode( &pCrsrStack->aDocPos );
+                SelectObj( m_pCrsrStack->aDocPos );
+                EnterSelFrmMode( &m_pCrsrStack->aDocPos );
             }
         }
             // If a discrepancy between the visible range and the
@@ -504,13 +504,13 @@ bool SwWrtShell::PopCrsr(bool bUpdate, bool bSelect)
             return false;
         }
     }
-    CrsrStack *pTmp = pCrsrStack;
-    pCrsrStack = pCrsrStack->pNext;
+    CrsrStack *pTmp = m_pCrsrStack;
+    m_pCrsrStack = m_pCrsrStack->pNext;
     delete pTmp;
-    if( 0 == pCrsrStack )
+    if( 0 == m_pCrsrStack )
     {
-        ePageMove = MV_NO;
-        bDestOnStack = false;
+        m_ePageMove = MV_NO;
+        m_bDestOnStack = false;
     }
     return bValidPos;
 }
@@ -520,14 +520,14 @@ bool SwWrtShell::PopCrsr(bool bUpdate, bool bSelect)
 
 void SwWrtShell::_ResetCursorStack()
 {
-    while(pCrsrStack)
+    while(m_pCrsrStack)
     {
-        CrsrStack* const pTmp = pCrsrStack->pNext;
-        delete pCrsrStack;
-        pCrsrStack = pTmp;
+        CrsrStack* const pTmp = m_pCrsrStack->pNext;
+        delete m_pCrsrStack;
+        m_pCrsrStack = pTmp;
     }
-    ePageMove = MV_NO;
-    bDestOnStack = false;
+    m_ePageMove = MV_NO;
+    m_bDestOnStack = false;
 }
 /**
     if no stack exists --> cancel selection
@@ -554,11 +554,11 @@ bool SwWrtShell::PageCrsr(SwTwips lOffset, bool bSelect)
         // SwViewShell::StartAction();
     PageMove eDir = lOffset > 0? MV_PAGE_DOWN: MV_PAGE_UP;
         // Change of direction and stack present
-    if( eDir != ePageMove && ePageMove != MV_NO && PopCrsr( true, bSelect ))
+    if( eDir != m_ePageMove && m_ePageMove != MV_NO && PopCrsr( true, bSelect ))
         return true;
 
     const bool bRet = PushCrsr(lOffset, bSelect);
-    ePageMove = eDir;
+    m_ePageMove = eDir;
     return bRet;
 }
 
@@ -583,7 +583,7 @@ bool SwWrtShell::GotoMark( const ::sw::mark::IMark* const pMark, bool bSelect, b
     SwPosition aPos = *GetCrsr()->GetPoint();
     bool bRet = SwCrsrShell::GotoMark( pMark, bStart );
     if (bRet)
-        aNavigationMgr.addEntry(aPos);
+        m_aNavigationMgr.addEntry(aPos);
     return bRet;
 }
 
@@ -592,7 +592,7 @@ bool SwWrtShell::GotoFly( const OUString& rName, FlyCntType eType, bool bSelFram
     SwPosition aPos = *GetCrsr()->GetPoint();
     bool bRet = SwFEShell::GotoFly(rName, eType, bSelFrame);
     if (bRet)
-        aNavigationMgr.addEntry(aPos);
+        m_aNavigationMgr.addEntry(aPos);
     return bRet;
 }
 
@@ -601,7 +601,7 @@ bool SwWrtShell::GotoINetAttr( const SwTxtINetFmt& rAttr )
     SwPosition aPos = *GetCrsr()->GetPoint();
     bool bRet = SwCrsrShell::GotoINetAttr(rAttr);
     if (bRet)
-        aNavigationMgr.addEntry(aPos);
+        m_aNavigationMgr.addEntry(aPos);
     return bRet;
 }
 
@@ -616,7 +616,7 @@ bool SwWrtShell::GotoOutline( const OUString& rName )
     SwPosition aPos = *GetCrsr()->GetPoint();
     bool bRet = SwCrsrShell::GotoOutline (rName);
     if (bRet)
-        aNavigationMgr.addEntry(aPos);
+        m_aNavigationMgr.addEntry(aPos);
     return bRet;
 }
 
@@ -625,7 +625,7 @@ bool SwWrtShell::GotoRegion( const OUString& rName )
     SwPosition aPos = *GetCrsr()->GetPoint();
     bool bRet = SwCrsrShell::GotoRegion (rName);
     if (bRet)
-        aNavigationMgr.addEntry(aPos);
+        m_aNavigationMgr.addEntry(aPos);
     return bRet;
  }
 
@@ -635,7 +635,7 @@ bool SwWrtShell::GotoRefMark( const OUString& rRefMark, sal_uInt16 nSubType,
     SwPosition aPos = *GetCrsr()->GetPoint();
     bool bRet = SwCrsrShell::GotoRefMark(rRefMark, nSubType, nSeqNo);
     if (bRet)
-        aNavigationMgr.addEntry(aPos);
+        m_aNavigationMgr.addEntry(aPos);
     return bRet;
 }
 
@@ -644,7 +644,7 @@ bool SwWrtShell::GotoNextTOXBase( const OUString* pName )
     SwPosition aPos = *GetCrsr()->GetPoint();
     bool bRet = SwCrsrShell::GotoNextTOXBase(pName);
     if (bRet)
-        aNavigationMgr.addEntry(aPos);
+        m_aNavigationMgr.addEntry(aPos);
     return bRet;
 }
 
@@ -653,7 +653,7 @@ bool SwWrtShell::GotoTable( const OUString& rName )
    SwPosition aPos = *GetCrsr()->GetPoint();
     bool bRet = SwCrsrShell::GotoTable(rName);
     if (bRet)
-        aNavigationMgr.addEntry(aPos);
+        m_aNavigationMgr.addEntry(aPos);
     return bRet;
 }
 
@@ -661,7 +661,7 @@ bool SwWrtShell::GotoFld( const SwFmtFld& rFld ) {
     SwPosition aPos = *GetCrsr()->GetPoint();
     bool bRet = SwCrsrShell::GotoFld(rFld);
     if (bRet)
-        aNavigationMgr.addEntry(aPos);
+        m_aNavigationMgr.addEntry(aPos);
     return bRet;
 }
 
@@ -669,7 +669,7 @@ const SwRangeRedline* SwWrtShell::GotoRedline( sal_uInt16 nArrPos, bool bSelect 
     SwPosition aPos = *GetCrsr()->GetPoint();
     const SwRangeRedline *pRedline = SwCrsrShell::GotoRedline(nArrPos, bSelect);
     if (pRedline)
-        aNavigationMgr.addEntry(aPos);
+        m_aNavigationMgr.addEntry(aPos);
     return pRedline;
 }
 

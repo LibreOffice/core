@@ -109,30 +109,30 @@ using namespace sw::mark;
 using namespace com::sun::star;
 
 #define COMMON_INI_LIST \
-        fnDrag(&SwWrtShell::BeginDrag),\
-        fnSetCrsr(&SwWrtShell::SetCrsr),\
-        fnEndDrag(&SwWrtShell::DefaultEndDrag),\
-        fnKillSel(&SwWrtShell::Ignore),\
-        pModeStack(0), \
-        ePageMove(MV_NO),\
-        pCrsrStack(0),  \
-        rView(rShell),\
-        aNavigationMgr(*this), \
-        bDestOnStack(false)
+        m_fnDrag(&SwWrtShell::BeginDrag),\
+        m_fnSetCrsr(&SwWrtShell::SetCrsr),\
+        m_fnEndDrag(&SwWrtShell::DefaultEndDrag),\
+        m_fnKillSel(&SwWrtShell::Ignore),\
+        m_pModeStack(0), \
+        m_ePageMove(MV_NO),\
+        m_pCrsrStack(0),  \
+        m_rView(rShell),\
+        m_aNavigationMgr(*this), \
+        m_bDestOnStack(false)
 
 #define BITFLD_INI_LIST \
-        bClearMark = \
-        bIns = true;\
-        bAddMode = \
-        bBlockMode = \
-        bExtMode = \
-        bInSelect = \
-        bCopy = \
-        bLayoutMode = \
-        bSelWrd = \
-        bSelLn = \
-        mbRetainSelection = false; \
-        bIsInClickToEdit = false;
+        m_bClearMark = \
+        m_bIns = true;\
+        m_bAddMode = \
+        m_bBlockMode = \
+        m_bExtMode = \
+        m_bInSelect = \
+        m_bCopy = \
+        m_bLayoutMode = \
+        m_bSelWrd = \
+        m_bSelLn = \
+        m_bRetainSelection = false; \
+        m_bIsInClickToEdit = false;
 
 static SvxAutoCorrect* lcl_IsAutoCorr()
 {
@@ -196,10 +196,10 @@ void SwWrtShell::Insert( const OUString &rStr )
 
     bool bStarted = false;
     bool bHasSel = HasSelection(),
-         bCallIns = bIns /*|| bHasSel*/;
+         bCallIns = m_bIns /*|| bHasSel*/;
     bool bDeleted = false;
 
-    if( bHasSel || ( !bIns && SelectHiddenRange() ) )
+    if( bHasSel || ( !m_bIns && SelectHiddenRange() ) )
     {
             // Only here parenthesizing, because the normal
             // insert is already in parentheses at Editshell.
@@ -935,7 +935,7 @@ void SwWrtShell::InsertFootnote(const OUString &rStr, bool bEndNote, bool bEdit 
             Left(CRSR_SKIP_CHARS, false, 1, false );
             GotoFtnTxt();
         }
-        aNavigationMgr.addEntry(aPos);
+        m_aNavigationMgr.addEntry(aPos);
     }
 }
 
@@ -950,7 +950,7 @@ void SwWrtShell::SplitNode( bool bAutoFmt, bool bCheckTableStart )
     {
         SwActContext aActContext(this);
 
-        rView.GetEditWin().FlushInBuffer();
+        m_rView.GetEditWin().FlushInBuffer();
         bool bHasSel = HasSelection();
         if( bHasSel )
         {
@@ -1493,7 +1493,7 @@ SwFrmFmt *SwWrtShell::GetTblStyle(const OUString &rFmtName)
 
 void SwWrtShell::addCurrentPosition() {
     SwPaM* pPaM = GetCrsr();
-    aNavigationMgr.addEntry(*pPaM->GetPoint());
+    m_aNavigationMgr.addEntry(*pPaM->GetPoint());
 }
 
 // Applying templates
@@ -1658,8 +1658,8 @@ bool SwWrtShell::Pop( bool bOldCrsr )
     bool bRet = SwCrsrShell::Pop( bOldCrsr );
     if( bRet && IsSelection() )
     {
-        fnSetCrsr = &SwWrtShell::SetCrsrKillSel;
-        fnKillSel = &SwWrtShell::ResetSelect;
+        m_fnSetCrsr = &SwWrtShell::SetCrsrKillSel;
+        m_fnKillSel = &SwWrtShell::ResetSelect;
     }
     return bRet;
 }

@@ -326,7 +326,7 @@ void SwWrtShell::ClickToField( const SwField& rFld )
         EndAllAction();
     }
 
-    bIsInClickToEdit = true;
+    m_bIsInClickToEdit = true;
     switch( rFld.GetTyp()->Which() )
     {
     case RES_JUMPEDITFLD:
@@ -406,7 +406,7 @@ void SwWrtShell::ClickToField( const SwField& rFld )
         SAL_WARN_IF(rFld.IsClickable(), "sw", "unhandled clickable field!");
     }
 
-    bIsInClickToEdit = false;
+    m_bIsInClickToEdit = false;
 }
 
 void SwWrtShell::ClickToINetAttr( const SwFmtINetFmt& rItem, sal_uInt16 nFilter )
@@ -414,7 +414,7 @@ void SwWrtShell::ClickToINetAttr( const SwFmtINetFmt& rItem, sal_uInt16 nFilter 
     if( rItem.GetValue().isEmpty() )
         return ;
 
-    bIsInClickToEdit = true;
+    m_bIsInClickToEdit = true;
 
     // At first run the possibly set ObjectSelect Macro
     const SvxMacro* pMac = rItem.GetMacro( SFX_EVENT_MOUSECLICK_OBJECT );
@@ -434,7 +434,7 @@ void SwWrtShell::ClickToINetAttr( const SwFmtINetFmt& rItem, sal_uInt16 nFilter 
         const_cast<SwTxtINetFmt*>(pTxtAttr)->SetVisitedValid( true );
     }
 
-    bIsInClickToEdit = false;
+    m_bIsInClickToEdit = false;
 }
 
 bool SwWrtShell::ClickToINetGrf( const Point& rDocPt, sal_uInt16 nFilter )

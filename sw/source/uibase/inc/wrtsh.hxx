@@ -94,19 +94,19 @@ private:
 
     typedef long (SwWrtShell::*SELECTFUNC)(const Point *, bool bProp );
 
-    SELECTFUNC  fnDrag;
-    SELECTFUNC  fnSetCrsr;
-    SELECTFUNC  fnEndDrag;
-    SELECTFUNC  fnKillSel;
+    SELECTFUNC  m_fnDrag;
+    SELECTFUNC  m_fnSetCrsr;
+    SELECTFUNC  m_fnEndDrag;
+    SELECTFUNC  m_fnKillSel;
 
 public:
 
     using SwEditShell::Insert;
 
-    long SetCursor    (const Point* pPt, bool bProp) { return (this->*fnSetCrsr)(pPt, bProp); }
-    long Drag         (const Point* pPt, bool bProp) { return (this->*fnDrag)(pPt, bProp); }
-    long EndDrag      (const Point* pPt, bool bProp) { return (this->*fnEndDrag)(pPt, bProp); }
-    long KillSelection(const Point* pPt, bool bProp) { return (this->*fnKillSel)(pPt, bProp); }
+    long SetCursor    (const Point* pPt, bool bProp) { return (this->*m_fnSetCrsr)(pPt, bProp); }
+    long Drag         (const Point* pPt, bool bProp) { return (this->*m_fnDrag)(pPt, bProp); }
+    long EndDrag      (const Point* pPt, bool bProp) { return (this->*m_fnEndDrag)(pPt, bProp); }
+    long KillSelection(const Point* pPt, bool bProp) { return (this->*m_fnKillSel)(pPt, bProp); }
 
     // reset all selections
     long ResetSelect( const Point *, bool );
@@ -115,45 +115,45 @@ public:
     inline void ResetCursorStack();
     SelectionType   GetSelectionType() const;
 
-    bool    IsModePushed() const { return 0 != pModeStack; }
+    bool    IsModePushed() const { return 0 != m_pModeStack; }
     void    PushMode();
     void    PopMode();
 
     void    SttSelect();
     void    EndSelect();
-    bool    IsInSelect() const { return bInSelect; }
-    void    SetInSelect(bool bSel = true) { bInSelect = bSel; }
+    bool    IsInSelect() const { return m_bInSelect; }
+    void    SetInSelect(bool bSel = true) { m_bInSelect = bSel; }
         // is there a text- or frameselection?
     bool    HasSelection() const { return SwCrsrShell::HasSelection() ||
                                         IsMultiSelection() || IsSelFrmMode() || IsObjSelected(); }
     bool     Pop( bool bOldCrsr = true );
 
     void    EnterStdMode();
-    bool    IsStdMode() const { return !bExtMode && !bAddMode && !bBlockMode; }
+    bool    IsStdMode() const { return !m_bExtMode && !m_bAddMode && !m_bBlockMode; }
 
     void    EnterExtMode();
     void    LeaveExtMode();
     bool    ToggleExtMode();
-    bool    IsExtMode() const { return bExtMode; }
+    bool    IsExtMode() const { return m_bExtMode; }
 
     void    EnterAddMode();
     void    LeaveAddMode();
     bool    ToggleAddMode();
-    bool    IsAddMode() const { return bAddMode; }
+    bool    IsAddMode() const { return m_bAddMode; }
 
     void    EnterBlockMode();
     void    LeaveBlockMode();
     bool    ToggleBlockMode();
-    bool    IsBlockMode() const { return bBlockMode; }
+    bool    IsBlockMode() const { return m_bBlockMode; }
 
     void    SetInsMode( bool bOn = true );
-    void    ToggleInsMode() { SetInsMode( !bIns ); }
-    bool    IsInsMode() const { return bIns; }
+    void    ToggleInsMode() { SetInsMode( !m_bIns ); }
+    bool    IsInsMode() const { return m_bIns; }
     void    SetRedlineModeAndCheckInsMode( sal_uInt16 eMode );
 
     void    EnterSelFrmMode(const Point *pStartDrag = 0);
     void    LeaveSelFrmMode();
-    bool    IsSelFrmMode() const { return bLayoutMode; }
+    bool    IsSelFrmMode() const { return m_bLayoutMode; }
         // reset selection of frames
     void    UnSelectFrm();
 
@@ -164,9 +164,9 @@ public:
     inline void EndSelTblCells();
 
     // leave per word or per line selection mode. Is usually called in MB-Up.
-    bool    IsExtSel() const { return bSelWrd || bSelLn; }
+    bool    IsExtSel() const { return m_bSelWrd || m_bSelLn; }
 
-    // query whether the active fnDrag pointer is set to BeginDrag
+    // query whether the active m_fnDrag pointer is set to BeginDrag
     // is needed for MouseMove to work around bugs 55592/55931
     inline bool Is_FnDragEQBeginDrag() const;
 
@@ -254,8 +254,8 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
     void    NoEdit(bool bHideCrsr = true);
     void    Edit();
 
-    bool IsRetainSelection() const { return mbRetainSelection; }
-    void SetRetainSelection( bool bRet ) { mbRetainSelection = bRet; }
+    bool IsRetainSelection() const { return m_bRetainSelection; }
+    void SetRetainSelection( bool bRet ) { m_bRetainSelection = bRet; }
 
     // change current data base and notify
     void ChgDBData(const SwDBData& SwDBData);
@@ -412,8 +412,8 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
     bool SelectNextPrevHyperlink( bool bNext = true );
 
     // determine corresponding SwView
-    const SwView&       GetView() const { return rView; }
-    SwView&             GetView() { return rView; }
+    const SwView&       GetView() const { return m_rView; }
+    SwView&             GetView() { return m_rView; }
 
     // Because nobody else is doing it, here is a ExecMacro()
     void ExecMacro( const SvxMacro& rMacro, OUString* pRet = 0, SbxArray* pArgs = 0 );
@@ -455,7 +455,7 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
 
     OUString GetSelDescr() const;
 
-    SwNavigationMgr& GetNavigationMgr() { return aNavigationMgr; }
+    SwNavigationMgr& GetNavigationMgr() { return m_aNavigationMgr; }
 
     void addCurrentPosition();
     bool GotoFly( const OUString& rName, FlyCntType eType = FLYCNTTYPE_ALL,
@@ -493,7 +493,7 @@ private:
             bExt(_bExt),
             bIns(_bIns)
              {}
-    } *pModeStack;
+    } *m_pModeStack;
 
     // carry cursor along when PageUp / -Down
     enum PageMove
@@ -501,7 +501,7 @@ private:
         MV_NO,
         MV_PAGE_UP,
         MV_PAGE_DOWN
-    }  ePageMove;
+    }  m_ePageMove;
 
     struct CrsrStack
     {
@@ -522,14 +522,14 @@ private:
 
         }
 
-    } *pCrsrStack;
+    } *m_pCrsrStack;
 
-    SwView  &rView;
-    SwNavigationMgr aNavigationMgr;
+    SwView  &m_rView;
+    SwNavigationMgr m_aNavigationMgr;
 
-    Point   aDest;
-    bool    bDestOnStack;
-    bool    HasCrsrStack() const { return 0 != pCrsrStack; }
+    Point   m_aDest;
+    bool    m_bDestOnStack;
+    bool    HasCrsrStack() const { return 0 != m_pCrsrStack; }
     SAL_DLLPRIVATE bool  PushCrsr(SwTwips lOffset, bool bSelect);
     SAL_DLLPRIVATE bool  PopCrsr(bool bUpdate, bool bSelect = false);
 
@@ -547,21 +547,21 @@ private:
     SAL_DLLPRIVATE bool _BwdPara();
 
         // selections
-    bool    bIns            :1;
-    bool    bInSelect       :1;
-    bool    bExtMode        :1;
-    bool    bAddMode        :1;
-    bool    bBlockMode      :1;
-    bool    bLayoutMode     :1;
-    bool    bCopy           :1;
-    bool    bSelWrd         :1;
-    bool    bSelLn          :1;
-    bool    bIsInClickToEdit:1;
-    bool    bClearMark      :1;     // don't delete selection for ChartAutoPilot
-    bool    mbRetainSelection :1; // Do not remove selections
+    bool    m_bIns            :1;
+    bool    m_bInSelect       :1;
+    bool    m_bExtMode        :1;
+    bool    m_bAddMode        :1;
+    bool    m_bBlockMode      :1;
+    bool    m_bLayoutMode     :1;
+    bool    m_bCopy           :1;
+    bool    m_bSelWrd         :1;
+    bool    m_bSelLn          :1;
+    bool    m_bIsInClickToEdit:1;
+    bool    m_bClearMark      :1;     // don't delete selection for ChartAutoPilot
+    bool    m_bRetainSelection :1; // Do not remove selections
 
-    Point   aStart;
-    Link    aSelTblLink;
+    Point   m_aStart;
+    Link    m_aSelTblLink;
 
     // resets the cursor stack after movement by PageUp/-Down
     SAL_DLLPRIVATE void  _ResetCursorStack();
@@ -593,7 +593,7 @@ private:
     SAL_DLLPRIVATE long  AddLeaveSelect(const Point *, bool bProp=false );
     SAL_DLLPRIVATE long  Ignore(const Point *, bool bProp=false );
 
-    SAL_DLLPRIVATE void  LeaveExtSel() { bSelWrd = bSelLn = false;}
+    SAL_DLLPRIVATE void  LeaveExtSel() { m_bSelWrd = m_bSelLn = false;}
 
     SAL_DLLPRIVATE bool  GoStart(bool KeepArea = false, bool * = 0,
             bool bSelect = false, bool bDontMoveRegion = false);
@@ -619,24 +619,24 @@ inline void SwWrtShell::ResetCursorStack()
 inline void SwWrtShell::SelTblCells(const Link &rLink, bool bMark )
 {
     SetSelTblCells( true );
-    bClearMark = bMark;
-    aSelTblLink = rLink;
+    m_bClearMark = bMark;
+    m_aSelTblLink = rLink;
 }
 inline void SwWrtShell::EndSelTblCells()
 {
     SetSelTblCells( false );
-    bClearMark = true;
+    m_bClearMark = true;
 }
 
-inline bool SwWrtShell::IsInClickToEdit() const { return bIsInClickToEdit; }
+inline bool SwWrtShell::IsInClickToEdit() const { return m_bIsInClickToEdit; }
 
 inline bool SwWrtShell::Is_FnDragEQBeginDrag() const
 {
 #ifdef __GNUC__
     SELECTFUNC  fnTmp = &SwWrtShell::BeginDrag;
-    return fnDrag == fnTmp;
+    return m_fnDrag == fnTmp;
 #else
-    return fnDrag == &SwWrtShell::BeginDrag;
+    return m_fnDrag == &SwWrtShell::BeginDrag;
 #endif
 }
 

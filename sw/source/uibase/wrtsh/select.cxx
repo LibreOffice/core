@@ -81,9 +81,9 @@ bool SwWrtShell::SelWrd(const Point *pPt, bool )
     EndSelect();
     if( bRet )
     {
-        bSelWrd = true;
+        m_bSelWrd = true;
         if(pPt)
-            aStart = *pPt;
+            m_aStart = *pPt;
     }
     return bRet;
 }
@@ -99,9 +99,9 @@ void SwWrtShell::SelSentence(const Point *pPt, bool )
     }
     EndSelect();
     if(pPt)
-        aStart = *pPt;
-    bSelLn = true;
-    bSelWrd = false;  // disable SelWord, otherwise no SelLine goes on
+        m_aStart = *pPt;
+    m_bSelLn = true;
+    m_bSelWrd = false;  // disable SelWord, otherwise no SelLine goes on
 }
 
 void SwWrtShell::SelPara(const Point *pPt, bool )
@@ -115,9 +115,9 @@ void SwWrtShell::SelPara(const Point *pPt, bool )
     }
     EndSelect();
     if(pPt)
-        aStart = *pPt;
-    bSelLn = false;
-    bSelWrd = false;  // disable SelWord, otherwise no SelLine goes on
+        m_aStart = *pPt;
+    m_bSelLn = false;
+    m_bSelWrd = false;  // disable SelWord, otherwise no SelLine goes on
 }
 
 long SwWrtShell::SelAll()
@@ -125,7 +125,7 @@ long SwWrtShell::SelAll()
     const bool bLockedView = IsViewLocked();
     LockView( true );
     {
-        if(bBlockMode)
+        if(m_bBlockMode)
             LeaveBlockMode();
         SwMvContext aMvContext(this);
         bool bMoveTable = false;
@@ -279,25 +279,25 @@ sal_uLong SwWrtShell::SearchAttr( const SfxItemSet& rFindSet, bool bNoColls,
 
 void SwWrtShell::PushMode()
 {
-    pModeStack = new ModeStack( pModeStack, bIns, bExtMode, bAddMode, bBlockMode );
+    m_pModeStack = new ModeStack( m_pModeStack, m_bIns, m_bExtMode, m_bAddMode, m_bBlockMode );
 }
 
 void SwWrtShell::PopMode()
 {
-    if ( 0 == pModeStack )
+    if ( 0 == m_pModeStack )
         return;
 
-    if ( bExtMode && !pModeStack->bExt )
+    if ( m_bExtMode && !m_pModeStack->bExt )
         LeaveExtMode();
-    if ( bAddMode && !pModeStack->bAdd )
+    if ( m_bAddMode && !m_pModeStack->bAdd )
         LeaveAddMode();
-    if ( bBlockMode && !pModeStack->bBlock )
+    if ( m_bBlockMode && !m_pModeStack->bBlock )
         LeaveBlockMode();
-    bIns = pModeStack->bIns;
+    m_bIns = m_pModeStack->bIns;
 
-    ModeStack *pTmp = pModeStack->pNext;
-    delete pModeStack;
-    pModeStack = pTmp;
+    ModeStack *pTmp = m_pModeStack->pNext;
+    delete m_pModeStack;
+    m_pModeStack = pTmp;
 }
 
 // Two methodes for setting cursors: the first maps at the
@@ -348,11 +348,11 @@ long SwWrtShell::ResetSelect(const Point *,bool)
         //  after EndAction().
         {
             SwActContext aActContext(this);
-            bSelWrd = bSelLn = false;
+            m_bSelWrd = m_bSelLn = false;
             KillPams();
             ClearMark();
-            fnKillSel = &SwWrtShell::Ignore;
-            fnSetCrsr = &SwWrtShell::SetCrsr;
+            m_fnKillSel = &SwWrtShell::Ignore;
+            m_fnSetCrsr = &SwWrtShell::SetCrsr;
         }
 
         // After canceling of all selections an update of Attr-Controls
@@ -374,19 +374,19 @@ long SwWrtShell::Ignore(const Point *, bool ) {
 
 void SwWrtShell::SttSelect()
 {
-    if(bInSelect)
+    if(m_bInSelect)
         return;
     if(!HasMark())
         SetMark();
-    if( bBlockMode )
+    if( m_bBlockMode )
     {
         SwShellCrsr* pTmp = getShellCrsr( true );
         if( !pTmp->HasMark() )
             pTmp->SetMark();
     }
-    fnKillSel = &SwWrtShell::Ignore;
-    fnSetCrsr = &SwWrtShell::SetCrsr;
-    bInSelect = true;
+    m_fnKillSel = &SwWrtShell::Ignore;
+    m_fnSetCrsr = &SwWrtShell::SetCrsr;
+    m_bInSelect = true;
     Invalidate();
     SwTransferable::CreateSelection( *this );
 }
@@ -395,18 +395,18 @@ void SwWrtShell::SttSelect()
 
 void SwWrtShell::EndSelect()
 {
-    if(bInSelect && !bExtMode)
+    if(m_bInSelect && !m_bExtMode)
     {
-        bInSelect = false;
-        if (bAddMode)
+        m_bInSelect = false;
+        if (m_bAddMode)
         {
             AddLeaveSelect(0, false);
         }
         else
         {
             SttLeaveSelect(0, false);
-            fnSetCrsr = &SwWrtShell::SetCrsrKillSel;
-            fnKillSel = &SwWrtShell::ResetSelect;
+            m_fnSetCrsr = &SwWrtShell::SetCrsrKillSel;
+            m_fnKillSel = &SwWrtShell::ResetSelect;
         }
     }
     SwWordCountWrapper *pWrdCnt = static_cast<SwWordCountWrapper*>(GetView().GetViewFrame()->GetChildWindow(SwWordCountWrapper::GetChildWindowId()));
@@ -435,7 +435,7 @@ long SwWrtShell::ExtSelWrd(const Point *pPt, bool )
 
     // check the direction of the selection with the new point
     bool bRet = false, bMoveCrsr = true, bToTop = false;
-    SwCrsrShell::SelectWord( &aStart );     // select the startword
+    SwCrsrShell::SelectWord( &m_aStart );     // select the startword
     SwCrsrShell::Push();                    // save the cursor
     SwCrsrShell::SetCrsr( *pPt );           // and check the direction
 
@@ -520,13 +520,13 @@ long SwWrtShell::ExtSelLn(const Point *pPt, bool )
 
 void SwWrtShell::EnterStdMode()
 {
-    if(bAddMode)
+    if(m_bAddMode)
         LeaveAddMode();
-    if(bBlockMode)
+    if(m_bBlockMode)
         LeaveBlockMode();
-    bBlockMode = false;
-    bExtMode = false;
-    bInSelect = false;
+    m_bBlockMode = false;
+    m_bExtMode = false;
+    m_bInSelect = false;
     if(IsSelFrmMode())
     {
         UnSelectFrm();
@@ -539,12 +539,12 @@ void SwWrtShell::EnterStdMode()
         // GetChgLnk().Call()
         {
             SwActContext aActContext(this);
-            bSelWrd = bSelLn = false;
+            m_bSelWrd = m_bSelLn = false;
             if( !IsRetainSelection() )
                 KillPams();
             ClearMark();
-            fnSetCrsr = &SwWrtShell::SetCrsrKillSel;
-            fnKillSel = &SwWrtShell::ResetSelect;
+            m_fnSetCrsr = &SwWrtShell::SetCrsrKillSel;
+            m_fnKillSel = &SwWrtShell::ResetSelect;
         }
     }
     Invalidate();
@@ -555,21 +555,21 @@ void SwWrtShell::EnterStdMode()
 
 void SwWrtShell::EnterExtMode()
 {
-    if(bBlockMode)
+    if(m_bBlockMode)
     {
         LeaveBlockMode();
         KillPams();
         ClearMark();
     }
-    bExtMode = true;
-    bAddMode = false;
-    bBlockMode = false;
+    m_bExtMode = true;
+    m_bAddMode = false;
+    m_bBlockMode = false;
     SttSelect();
 }
 
 void SwWrtShell::LeaveExtMode()
 {
-    bExtMode = false;
+    m_bExtMode = false;
     EndSelect();
 }
 
@@ -578,7 +578,7 @@ void SwWrtShell::LeaveExtMode()
 
 long SwWrtShell::SttLeaveSelect(const Point *, bool )
 {
-    if(SwCrsrShell::HasSelection() && !IsSelTblCells() && bClearMark) {
+    if(SwCrsrShell::HasSelection() && !IsSelTblCells() && m_bClearMark) {
         return 0;
     }
     ClearMark();
@@ -600,13 +600,13 @@ long SwWrtShell::AddLeaveSelect(const Point *, bool )
 void SwWrtShell::EnterAddMode()
 {
     if(IsTableMode()) return;
-    if(bBlockMode)
+    if(m_bBlockMode)
         LeaveBlockMode();
-    fnKillSel = &SwWrtShell::Ignore;
-    fnSetCrsr = &SwWrtShell::SetCrsr;
-    bAddMode = true;
-    bBlockMode = false;
-    bExtMode = false;
+    m_fnKillSel = &SwWrtShell::Ignore;
+    m_fnSetCrsr = &SwWrtShell::SetCrsr;
+    m_bAddMode = true;
+    m_bBlockMode = false;
+    m_bExtMode = false;
     if(SwCrsrShell::HasSelection())
         CreateCrsr();
     Invalidate();
@@ -614,9 +614,9 @@ void SwWrtShell::EnterAddMode()
 
 void SwWrtShell::LeaveAddMode()
 {
-    fnKillSel = &SwWrtShell::ResetSelect;
-    fnSetCrsr = &SwWrtShell::SetCrsrKillSel;
-    bAddMode = false;
+    m_fnKillSel = &SwWrtShell::ResetSelect;
+    m_fnSetCrsr = &SwWrtShell::SetCrsrKillSel;
+    m_bAddMode = false;
     Invalidate();
 }
 
@@ -624,16 +624,16 @@ void SwWrtShell::LeaveAddMode()
 
 void SwWrtShell::EnterBlockMode()
 {
-    bBlockMode = false;
+    m_bBlockMode = false;
     EnterStdMode();
-    bBlockMode = true;
+    m_bBlockMode = true;
     CrsrToBlockCrsr();
     Invalidate();
 }
 
 void SwWrtShell::LeaveBlockMode()
 {
-    bBlockMode = false;
+    m_bBlockMode = false;
     BlockCrsrToCrsr();
     EndSelect();
     Invalidate();
@@ -643,9 +643,9 @@ void SwWrtShell::LeaveBlockMode()
 
 void SwWrtShell::SetInsMode( bool bOn )
 {
-    bIns = bOn;
-    SwCrsrShell::SetOverwriteCrsr( !bIns );
-    const SfxBoolItem aTmp( SID_ATTR_INSERT, bIns );
+    m_bIns = bOn;
+    SwCrsrShell::SetOverwriteCrsr( !m_bIns );
+    const SfxBoolItem aTmp( SID_ATTR_INSERT, m_bIns );
     GetView().GetViewFrame()->GetBindings().SetState( aTmp );
     StartAction();
     EndAction();
@@ -663,7 +663,7 @@ void SwWrtShell::SetRedlineModeAndCheckInsMode( sal_uInt16 eMode )
 
 long SwWrtShell::BeginFrmDrag(const Point *pPt, bool bIsShift)
 {
-    fnDrag = &SwFEShell::Drag;
+    m_fnDrag = &SwFEShell::Drag;
     if(bStartDrag)
     {
         Point aTmp( nStartDragX, nStartDragY );
@@ -682,21 +682,21 @@ void SwWrtShell::EnterSelFrmMode(const Point *pPos)
         nStartDragY = pPos->Y();
         bStartDrag = true;
     }
-    bLayoutMode = true;
+    m_bLayoutMode = true;
     HideCrsr();
 
         // equal call of BeginDrag in the SwFEShell
-    fnDrag          = &SwWrtShell::BeginFrmDrag;
-    fnEndDrag       = &SwWrtShell::UpdateLayoutFrm;
+    m_fnDrag          = &SwWrtShell::BeginFrmDrag;
+    m_fnEndDrag       = &SwWrtShell::UpdateLayoutFrm;
     SwBaseShell::SetFrmMode( FLY_DRAG_START, this );
     Invalidate();
 }
 
 void SwWrtShell::LeaveSelFrmMode()
 {
-    fnDrag          = &SwWrtShell::BeginDrag;
-    fnEndDrag       = &SwWrtShell::DefaultEndDrag;
-    bLayoutMode = false;
+    m_fnDrag          = &SwWrtShell::BeginDrag;
+    m_fnEndDrag       = &SwWrtShell::DefaultEndDrag;
+    m_bLayoutMode = false;
     bStartDrag = false;
     Edit();
     SwBaseShell::SetFrmMode( FLY_DRAG_END, this );
@@ -715,7 +715,7 @@ IMPL_LINK( SwWrtShell, ExecFlyMac, void *, pFlyFmt )
     {
         const SvxMacro &rMac = rFmtMac.GetMacro(SW_EVENT_OBJECT_SELECT);
         if( IsFrmSelected() )
-            bLayoutMode = true;
+            m_bLayoutMode = true;
         CallChgLnk();
         ExecMacro( rMac );
     }
@@ -726,7 +726,7 @@ long SwWrtShell::UpdateLayoutFrm(const Point *pPt, bool )
 {
         // still a dummy
     SwFEShell::EndDrag( pPt, false );
-    fnDrag = &SwWrtShell::BeginFrmDrag;
+    m_fnDrag = &SwWrtShell::BeginFrmDrag;
     return 1;
 }
 
@@ -734,47 +734,47 @@ long SwWrtShell::UpdateLayoutFrm(const Point *pPt, bool )
 
 bool SwWrtShell::ToggleAddMode()
 {
-    bAddMode ? LeaveAddMode(): EnterAddMode();
+    m_bAddMode ? LeaveAddMode(): EnterAddMode();
     Invalidate();
-    return !bAddMode;
+    return !m_bAddMode;
 }
 
 bool SwWrtShell::ToggleBlockMode()
 {
-    bBlockMode ? LeaveBlockMode(): EnterBlockMode();
+    m_bBlockMode ? LeaveBlockMode(): EnterBlockMode();
     Invalidate();
-    return !bBlockMode;
+    return !m_bBlockMode;
 }
 
 bool SwWrtShell::ToggleExtMode()
 {
-    bExtMode ? LeaveExtMode() : EnterExtMode();
+    m_bExtMode ? LeaveExtMode() : EnterExtMode();
     Invalidate();
-    return !bExtMode;
+    return !m_bExtMode;
 }
 
 // Dragging in standard mode (Selecting of content)
 
 long SwWrtShell::BeginDrag(const Point * /*pPt*/, bool )
 {
-    if(bSelWrd)
+    if(m_bSelWrd)
     {
-        bInSelect = true;
+        m_bInSelect = true;
         if( !IsCrsrPtAtEnd() )
             SwapPam();
 
-        fnDrag = &SwWrtShell::ExtSelWrd;
-        fnSetCrsr = &SwWrtShell::Ignore;
+        m_fnDrag = &SwWrtShell::ExtSelWrd;
+        m_fnSetCrsr = &SwWrtShell::Ignore;
     }
-    else if(bSelLn)
+    else if(m_bSelLn)
     {
-        bInSelect = true;
-        fnDrag = &SwWrtShell::ExtSelLn;
-        fnSetCrsr = &SwWrtShell::Ignore;
+        m_bInSelect = true;
+        m_fnDrag = &SwWrtShell::ExtSelLn;
+        m_fnSetCrsr = &SwWrtShell::Ignore;
     }
     else
     {
-        fnDrag = &SwWrtShell::DefaultDrag;
+        m_fnDrag = &SwWrtShell::DefaultDrag;
         SttSelect();
     }
 
@@ -784,19 +784,19 @@ long SwWrtShell::BeginDrag(const Point * /*pPt*/, bool )
 long SwWrtShell::DefaultDrag(const Point *, bool )
 {
     if( IsSelTblCells() )
-        aSelTblLink.Call(this);
+        m_aSelTblLink.Call(this);
 
     return 1;
 }
 
 long SwWrtShell::DefaultEndDrag(const Point * /*pPt*/, bool )
 {
-    fnDrag = &SwWrtShell::BeginDrag;
+    m_fnDrag = &SwWrtShell::BeginDrag;
     if( IsExtSel() )
         LeaveExtSel();
 
     if( IsSelTblCells() )
-        aSelTblLink.Call(this);
+        m_aSelTblLink.Call(this);
     EndSelect();
     return 1;
 }
@@ -808,8 +808,8 @@ bool SwWrtShell::SelectTableRowCol( const Point& rPt, const Point* pEnd, bool bR
     SttSelect();
     if(SelTblRowCol( rPt, pEnd, bRowDrag ))
     {
-        fnSetCrsr = &SwWrtShell::SetCrsrKillSel;
-        fnKillSel = &SwWrtShell::ResetSelect;
+        m_fnSetCrsr = &SwWrtShell::SetCrsrKillSel;
+        m_fnKillSel = &SwWrtShell::ResetSelect;
         return true;
     }
     return false;
@@ -821,8 +821,8 @@ bool SwWrtShell::SelectTableRow()
 {
     if ( SelTblRow() )
     {
-        fnSetCrsr = &SwWrtShell::SetCrsrKillSel;
-        fnKillSel = &SwWrtShell::ResetSelect;
+        m_fnSetCrsr = &SwWrtShell::SetCrsrKillSel;
+        m_fnKillSel = &SwWrtShell::ResetSelect;
         return true;
     }
     return false;
@@ -832,8 +832,8 @@ bool SwWrtShell::SelectTableCol()
 {
     if ( SelTblCol() )
     {
-        fnSetCrsr = &SwWrtShell::SetCrsrKillSel;
-        fnKillSel = &SwWrtShell::ResetSelect;
+        m_fnSetCrsr = &SwWrtShell::SetCrsrKillSel;
+        m_fnKillSel = &SwWrtShell::ResetSelect;
         return true;
     }
     return false;
@@ -843,8 +843,8 @@ bool SwWrtShell::SelectTableCell()
 {
     if ( SelTblBox() )
     {
-        fnSetCrsr = &SwWrtShell::SetCrsrKillSel;
-        fnKillSel = &SwWrtShell::ResetSelect;
+        m_fnSetCrsr = &SwWrtShell::SetCrsrKillSel;
+        m_fnKillSel = &SwWrtShell::ResetSelect;
         return true;
     }
     return false;
@@ -947,8 +947,8 @@ bool SwWrtShell::SelectNextPrevHyperlink( bool bNext )
 
         // Set the function pointer for the canceling of the selection
         // set at cursor
-        fnKillSel = &SwWrtShell::ResetSelect;
-        fnSetCrsr = &SwWrtShell::SetCrsrKillSel;
+        m_fnKillSel = &SwWrtShell::ResetSelect;
+        m_fnSetCrsr = &SwWrtShell::SetCrsrKillSel;
         bCreateXSelection = true;
     }
     else if( bFrmSelected )

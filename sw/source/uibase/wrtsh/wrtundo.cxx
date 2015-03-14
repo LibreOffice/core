@@ -70,8 +70,8 @@ void SwWrtShell::Do( DoType eDoType, sal_uInt16 nCnt )
 
         // Set the function pointer for canceling the selection at the
         // cursor position.
-        fnKillSel = &SwWrtShell::ResetSelect;
-        fnSetCrsr = &SwWrtShell::SetCrsrKillSel;
+        m_fnKillSel = &SwWrtShell::ResetSelect;
+        m_fnSetCrsr = &SwWrtShell::SetCrsrKillSel;
         bCreateXSelection = true;
     }
     else if ( bFrmSelected )

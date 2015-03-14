@@ -43,7 +43,7 @@ extern bool g_bNoInterrupt;       // in swmodule.cxx
 bool SwWrtShell::MoveBookMark( BookMarkMove eFuncId, const ::sw::mark::IMark* const pMark)
 {
     addCurrentPosition();
-    (this->*fnKillSel)( 0, false );
+    (this->*m_fnKillSel)( 0, false );
 
     bool bRet = true;
     switch(eFuncId)
@@ -61,15 +61,15 @@ bool SwWrtShell::MoveBookMark( BookMarkMove eFuncId, const ::sw::mark::IMark* co
     }
     if( IsSelection() )
     {
-        fnKillSel = &SwWrtShell::ResetSelect;
-        fnSetCrsr = &SwWrtShell::SetCrsrKillSel;
+        m_fnKillSel = &SwWrtShell::ResetSelect;
+        m_fnSetCrsr = &SwWrtShell::SetCrsrKillSel;
     }
     return bRet;
 }
 
 bool SwWrtShell::GotoField( const SwFmtFld& rFld )
 {
-    (this->*fnKillSel)( 0, false );
+    (this->*m_fnKillSel)( 0, false );
 
     bool bRet = SwCrsrShell::GotoFld( rFld );
     if( bRet && IsSelFrmMode() )
@@ -80,8 +80,8 @@ bool SwWrtShell::GotoField( const SwFmtFld& rFld )
 
     if( IsSelection() )
     {
-        fnKillSel = &SwWrtShell::ResetSelect;
-        fnSetCrsr = &SwWrtShell::SetCrsrKillSel;
+        m_fnKillSel = &SwWrtShell::ResetSelect;
+        m_fnSetCrsr = &SwWrtShell::SetCrsrKillSel;
     }
 
     return bRet;
@@ -89,7 +89,7 @@ bool SwWrtShell::GotoField( const SwFmtFld& rFld )
 
 bool SwWrtShell::GotoFieldmark(::sw::mark::IFieldmark const * const pMark)
 {
-    (this->*fnKillSel)( 0, false );
+    (this->*m_fnKillSel)( 0, false );
     bool bRet = SwCrsrShell::GotoFieldmark(pMark);
     if( bRet && IsSelFrmMode() )
     {
@@ -98,8 +98,8 @@ bool SwWrtShell::GotoFieldmark(::sw::mark::IFieldmark const * const pMark)
     }
     if( IsSelection() )
     {
-        fnKillSel = &SwWrtShell::ResetSelect;
-        fnSetCrsr = &SwWrtShell::SetCrsrKillSel;
+        m_fnKillSel = &SwWrtShell::ResetSelect;
+        m_fnSetCrsr = &SwWrtShell::SetCrsrKillSel;
     }
     return bRet;
 }
