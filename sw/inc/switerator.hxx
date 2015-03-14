@@ -28,7 +28,15 @@ template< class TElementType, class TSource > class SwIterator SAL_FINAL
 public:
 
     SwIterator( const TSource& rSrc ) : aClientIter(rSrc) { assert(TElementType::IsOf( TYPE(SwClient) )); }
-    TElementType* First()     { SwClient* p = aClientIter.First(TYPE(TElementType)); return PTR_CAST(TElementType,p); }
+    TElementType* First()
+    {
+        aClientIter.m_aSearchType = TYPE(TElementType);
+        aClientIter.GoStart();
+        if(!aClientIter.m_pPosition)
+            return nullptr;
+        aClientIter.m_pCurrent = nullptr;
+        return PTR_CAST(TElementType,aClientIter.Next());
+    }
     TElementType* Last()      { SwClient* p = aClientIter.Last( TYPE(TElementType)); return PTR_CAST(TElementType,p); }
     TElementType* Next()      { SwClient* p = aClientIter.Next();     return PTR_CAST(TElementType,p); }
     TElementType* Previous()  { SwClient* p = aClientIter.Previous(); return PTR_CAST(TElementType,p);  }
