@@ -17,17 +17,19 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <stdio.h>
+#include <SettingsTable.hxx>
+
+#include <vector>
+
 #include <rtl/ustring.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
-#include <SettingsTable.hxx>
+#include <comphelper/sequence.hxx>
 #include <ooxml/resourceids.hxx>
 #include <ConversionHelper.hxx>
-
 #include "dmapperLoggers.hxx"
 #include "util.hxx"
 
@@ -82,7 +84,7 @@ struct SettingsTable_Impl
     bool                m_bMirrorMargin;
     uno::Sequence<beans::PropertyValue> m_pThemeFontLangProps;
 
-    uno::Sequence<beans::PropertyValue> m_pCompatSettings;
+    std::vector<beans::PropertyValue> m_aCompatSettings;
     uno::Sequence<beans::PropertyValue> m_pCurrentCompatSetting;
 
     SettingsTable_Impl( DomainMapper& rDMapper, const uno::Reference< lang::XMultiServiceFactory > & xTextFactory ) :
@@ -113,7 +115,6 @@ struct SettingsTable_Impl
     , m_bSplitPgBreakAndParaMark(false)
     , m_bMirrorMargin(false)
     , m_pThemeFontLangProps(3)
-    , m_pCompatSettings(0)
     , m_pCurrentCompatSetting(3)
     {}
 
@@ -275,10 +276,10 @@ void SettingsTable::lcl_sprm(Sprm& rSprm)
         {
             pProperties->resolve(*this);
 
-            sal_Int32 nLength = m_pImpl->m_pCompatSettings.getLength();
-            m_pImpl->m_pCompatSettings.realloc(nLength + 1);
-            m_pImpl->m_pCompatSettings[nLength].Name = "compatSetting";
-            m_pImpl->m_pCompatSettings[nLength].Value = uno::makeAny(m_pImpl->m_pCurrentCompatSetting);
+            beans::PropertyValue aValue;
+            aValue.Name = "compatSetting";
+            aValue.Value = uno::makeAny(m_pImpl->m_pCurrentCompatSetting);
+            m_pImpl->m_aCompatSettings.push_back(aValue);
         }
     }
     break;
@@ -301,10 +302,8 @@ void SettingsTable::lcl_entry(int /*pos*/, writerfilter::Reference<Properties>::
 {
     ref->resolve(*this);
 }
+
 //returns default TabStop in 1/100th mm
-
-
-
 int SettingsTable::GetDefaultTabStop() const
 {
     return ConversionHelper::convertTwipToMM100( m_pImpl->m_nDefaultTabStop );
@@ -372,7 +371,7 @@ uno::Sequence<beans::PropertyValue> SettingsTable::GetThemeFontLangProperties() 
 
 uno::Sequence<beans::PropertyValue> SettingsTable::GetCompatSettings() const
 {
-    return m_pImpl->m_pCompatSettings;
+    return comphelper::containerToSequence(m_pImpl->m_aCompatSettings);
 }
 
 void SettingsTable::ApplyProperties(uno::Reference<text::XTextDocument> const& xDoc)
@@ -398,7 +397,6 @@ void SettingsTable::ApplyProperties(uno::Reference<text::XTextDocument> const& x
         }
     }
 }
-
 
 }//namespace dmapper
 } //namespace writerfilter
