@@ -407,7 +407,7 @@ sal_uInt16 SwHTMLTableLayout::GetBrowseWidthByTabFrm(
 sal_uInt16 SwHTMLTableLayout::GetBrowseWidthByTable( const SwDoc& rDoc ) const
 {
     sal_uInt16 nBrowseWidth = 0;
-    SwTabFrm* pFrm = SwIterator<SwTabFrm,SwFmt>::FirstElement( *pSwTable->GetFrmFmt() );
+    SwTabFrm* pFrm = SwIterator<SwTabFrm,SwFmt>( *pSwTable->GetFrmFmt() ).First();
     if( pFrm )
     {
         nBrowseWidth = GetBrowseWidthByTabFrm( *pFrm );

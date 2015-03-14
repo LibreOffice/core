@@ -586,7 +586,7 @@ bool SwTable::_InsertRow( SwDoc* pDoc, const SwSelBoxes& rBoxes,
 
     // Find Lines for the layout update
     const bool bLayout = !IsNewModel() &&
-        0 != SwIterator<SwTabFrm,SwFmt>::FirstElement( *GetFrmFmt() );
+        0 != SwIterator<SwTabFrm,SwFmt>( *GetFrmFmt() ).First();
 
     if ( bLayout )
     {
@@ -3552,7 +3552,7 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
                     if( GetFrmFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) &&
                         !rSz.GetWidthPercent() )
                     {
-                        SwTabFrm* pTabFrm = SwIterator<SwTabFrm,SwFmt>::FirstElement( *GetFrmFmt() );
+                        SwTabFrm* pTabFrm = SwIterator<SwTabFrm,SwFmt>( *GetFrmFmt() ).First();
                         if( pTabFrm &&
                             pTabFrm->Prt().Width() != rSz.GetWidth() )
                         {

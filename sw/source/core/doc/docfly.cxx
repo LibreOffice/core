@@ -1056,7 +1056,7 @@ SwChainRet SwDoc::Chain( SwFrmFmt &rSource, const SwFrmFmt &rDest )
         SwFmtFrmSize aSize( rSource.GetFrmSize() );
         if ( aSize.GetHeightSizeType() != ATT_FIX_SIZE )
         {
-            SwFlyFrm *pFly = SwIterator<SwFlyFrm,SwFmt>::FirstElement( rSource );
+            SwFlyFrm *pFly = SwIterator<SwFlyFrm,SwFmt>( rSource ).First();
             if ( pFly )
                 aSize.SetHeight( pFly->Frm().Height() );
             aSize.SetHeightSizeType( ATT_FIX_SIZE );

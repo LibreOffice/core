@@ -491,14 +491,14 @@ _ZSortFly::_ZSortFly( const SwFrmFmt* pFrmFmt, const SwFmtAnchor* pFlyAn,
         if( pFmt->getIDocumentLayoutAccess()->GetCurrentViewShell() )
         {
             // See if there is an SdrObject for it
-            SwFlyFrm* pFly = SwIterator<SwFlyFrm,SwFmt>::FirstElement( *pFrmFmt );
+            SwFlyFrm* pFly = SwIterator<SwFlyFrm,SwFmt>( *pFrmFmt ).First();
             if( pFly )
                 nOrdNum = pFly->GetVirtDrawObj()->GetOrdNum();
         }
         else
         {
             // See if there is an SdrObject for it
-            SwFlyDrawContact* pContact = SwIterator<SwFlyDrawContact,SwFmt>::FirstElement( *pFrmFmt );
+            SwFlyDrawContact* pContact = SwIterator<SwFlyDrawContact,SwFmt>( *pFrmFmt ).First();
             if( pContact )
                 nOrdNum = pContact->GetMaster()->GetOrdNum();
         }
@@ -506,7 +506,7 @@ _ZSortFly::_ZSortFly( const SwFrmFmt* pFrmFmt, const SwFmtAnchor* pFlyAn,
     else if( RES_DRAWFRMFMT == pFmt->Which() )
     {
         // See if there is an SdrObject for it
-        SwDrawContact* pContact = SwIterator<SwDrawContact,SwFmt>::FirstElement( *pFrmFmt );
+        SwDrawContact* pContact = SwIterator<SwDrawContact,SwFmt>( *pFrmFmt ).First();
         if( pContact )
             nOrdNum = pContact->GetMaster()->GetOrdNum();
     }
