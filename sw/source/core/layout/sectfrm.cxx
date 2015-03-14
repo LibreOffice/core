@@ -2283,6 +2283,7 @@ void SwSectionFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
 
 void SwSectionFrm::SwClientNotify( const SwModify& rMod, const SfxHint& rHint )
 {
+    SwClient::SwClientNotify(rMod, rHint);
     // #i117863#
     const SwSectionFrmMoveAndDeleteHint* pHint =
                     dynamic_cast<const SwSectionFrmMoveAndDeleteHint*>(&rHint);

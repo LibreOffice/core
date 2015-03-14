@@ -204,8 +204,9 @@ void SwFmtFld::InvalidateField()
     NotifyClients(&item, &item);
 }
 
-void SwFmtFld::SwClientNotify( const SwModify&, const SfxHint& rHint )
+void SwFmtFld::SwClientNotify( const SwModify& rModify, const SfxHint& rHint )
 {
+    SwClient::SwClientNotify(rModify, rHint);
     if( !mpTxtFld )
         return;
 

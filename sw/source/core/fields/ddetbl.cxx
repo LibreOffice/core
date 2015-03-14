@@ -86,8 +86,9 @@ void SwDDETable::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         SwTable::Modify( pOld, pNew );
 }
 
-void SwDDETable::SwClientNotify( const SwModify&, const SfxHint& rHint )
+void SwDDETable::SwClientNotify( const SwModify& rModify, const SfxHint& rHint )
 {
+    SwClient::SwClientNotify(rModify, rHint);
     const SwFieldHint* pHint = dynamic_cast<const SwFieldHint*>( &rHint );
     if ( pHint )
         // replace DDETable by real table

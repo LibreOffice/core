@@ -26,6 +26,7 @@
 #include <ring.hxx>
 #include <hintids.hxx>
 #include <hints.hxx>
+#include <typeinfo>
 
 
 class SwModify;
@@ -65,6 +66,12 @@ class SwClient;
 class SwClientIter;
 namespace sw
 {
+    struct LegacyModifyHint SAL_FINAL: SfxHint
+    {
+        LegacyModifyHint(const SfxPoolItem* pOld, const SfxPoolItem* pNew) : m_pOld(pOld), m_pNew(pNew) {};
+        const SfxPoolItem* m_pOld;
+        const SfxPoolItem* m_pNew;
+    };
     /// refactoring out the some of the more sane SwClient functionality
     class SW_DLLPUBLIC WriterListener : ::boost::noncopyable
     {
@@ -79,11 +86,7 @@ namespace sw
                 : m_pLeft(nullptr), m_pRight(nullptr)
             {}
             virtual ~WriterListener() {};
-            // callbacks received from SwModify (friend class - so these methods can be private)
-            // should be called only from SwModify the client is registered in
-            // mba: IMHO these methods should be pure virtual
-            virtual void Modify(const SfxPoolItem*, const SfxPoolItem*) {};
-            virtual void SwClientNotify( const SwModify&, const SfxHint&) {};
+            virtual void SwClientNotify( const SwModify&, const SfxHint& rHint) =0;
         public:
             bool IsLast() const { return !m_pLeft && !m_pRight; }
    };
@@ -108,8 +111,20 @@ public:
 
     SwClient() : pRegisteredIn(nullptr) {}
     virtual ~SwClient() SAL_OVERRIDE;
+    // callbacks received from SwModify (friend class - so these methods can be private)
+    // should be called only from SwModify the client is registered in
+    // mba: IMHO this method should be pure virtual
+    // DO NOT USE IN NEW CODE! use SwClientNotify instead.
     virtual void Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue ) SAL_OVERRIDE
         { CheckRegistration( pOldValue, pNewValue ); }
+    // when overriding this, you MUST call SwClient::SwClientModify() in the override!
+    virtual void SwClientNotify( const SwModify&, const SfxHint& rHint)
+    {
+        // assuming the compiler to realize that a dynamic_cast to a final class is just a pointer compare ...
+        auto pLegacyHint(dynamic_cast<const sw::LegacyModifyHint*>(&rHint));
+        if(pLegacyHint)
+            Modify(pLegacyHint->m_pOld, pLegacyHint->m_pNew);
+    };
 
     // in case an SwModify object is destroyed that itself is registered in another SwModify,
     // its SwClient objects can decide to get registered to the latter instead by calling this method
@@ -144,6 +159,7 @@ class SW_DLLPUBLIC SwModify: public SwClient
     bool bInSwFntCache : 1;
 
     // mba: IMHO this method should be pure virtual
+    // DO NOT USE IN NEW CODE! use CallSwClientNotify instead.
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) SAL_OVERRIDE
         { NotifyClients( pOld, pNew ); };
 
@@ -151,22 +167,24 @@ public:
     SwModify()
         : SwClient(nullptr), pRoot(nullptr), bModifyLocked(false), bLockClientList(false), bInDocDTOR(false), bInCache(false), bInSwFntCache(false)
     {}
-
-    // broadcasting: send notifications to all clients
-    void NotifyClients( const SfxPoolItem *pOldValue, const SfxPoolItem *pNewValue );
-
-    // the same, but without setting bModifyLocked or checking for any of the flags
-    // mba: it would be interesting to know why this is necessary
-    // also allows to limit callback to certain type (HACK)
-    inline void ModifyBroadcast( const SfxPoolItem *pOldValue, const SfxPoolItem *pNewValue, TypeId nType = TYPE(SwClient) );
-
-    // a more universal broadcasting mechanism
-    inline void CallSwClientNotify( const SfxHint& rHint ) const;
-
-    // single argument ctors shall be explicit.
     explicit SwModify( SwModify* pToRegisterIn )
         : SwClient(pToRegisterIn), pRoot(nullptr), bModifyLocked(false), bLockClientList(false), bInDocDTOR(false), bInCache(false), bInSwFntCache(false)
     {}
+
+    // broadcasting: send notifications to all clients
+    // DO NOT USE IN NEW CODE! use CallSwClientNotify instead.
+    void NotifyClients( const SfxPoolItem *pOldValue, const SfxPoolItem *pNewValue );
+    // DO NOT USE IN NEW CODE! use CallSwClientNotify instead.
+    void ModifyBroadcast( const SfxPoolItem *pOldValue, const SfxPoolItem *pNewValue)
+        { CallSwClientNotify( sw::LegacyModifyHint{ pOldValue, pNewValue } ); };
+    // the same, but without setting bModifyLocked or checking for any of the flags
+    // mba: it would be interesting to know why this is necessary
+    // also allows to limit callback to certain type (HACK)
+    // DO NOT USE IN NEW CODE! use CallSwClientNotify instead.
+    inline void ModifyBroadcast( const SfxPoolItem *pOldValue, const SfxPoolItem *pNewValue, TypeId nType );
+
+    // a more universal broadcasting mechanism
+    inline void CallSwClientNotify( const SfxHint& rHint ) const;
 
     virtual ~SwModify();
 

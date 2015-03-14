@@ -5069,6 +5069,7 @@ bool SwTxtNode::IsInContent() const
 
 void SwTxtNode::SwClientNotify( const SwModify& rModify, const SfxHint& rHint )
 {
+    SwClient::SwClientNotify(rModify, rHint);
     const SwAttrHint* pHint = dynamic_cast<const SwAttrHint*>(&rHint);
     if ( pHint && pHint->GetId() == RES_CONDTXTFMTCOLL && &rModify == GetRegisteredIn() )
         ChkCondColl();

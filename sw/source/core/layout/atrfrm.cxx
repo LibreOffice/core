@@ -628,8 +628,9 @@ SfxPoolItem*  SwFmtPageDesc::Clone( SfxItemPool* ) const
     return new SwFmtPageDesc( *this );
 }
 
-void SwFmtPageDesc::SwClientNotify( const SwModify&, const SfxHint& rHint )
+void SwFmtPageDesc::SwClientNotify( const SwModify& rModify, const SfxHint& rHint )
 {
+    SwClient::SwClientNotify(rModify, rHint);
     const SwPageDescHint* pHint = dynamic_cast<const SwPageDescHint*>(&rHint);
     if ( pHint )
     {
