@@ -510,7 +510,7 @@ bool ImplHandleMouseEvent( vcl::Window* pWindow, MouseNotifyEvent nSVEvent, bool
                                     nClicks,
                                     false );
 
-                                sal_uLong nCount = Application::ReleaseSolarMutex();
+                                SolarMutexReleaser aReleaser;
 
                                 // FIXME: where do I get Action from ?
                                 ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragSource > xDragSource = pMouseDownWin->GetDragSource();
@@ -520,8 +520,6 @@ bool ImplHandleMouseEvent( vcl::Window* pWindow, MouseNotifyEvent nSVEvent, bool
                                     static_cast < DNDListenerContainer * > ( xDragGestureRecognizer.get() )->fireDragGestureEvent( 0,
                                         relLoc.X(), relLoc.Y(), xDragSource, ::com::sun::star::uno::makeAny( aMouseEvent ) );
                                 }
-
-                                Application::AcquireSolarMutex( nCount );
                             }
                         }
                     }

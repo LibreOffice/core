@@ -577,12 +577,11 @@ sal_Bool SAL_CALL VCLXAccessibleListItem::copyText( sal_Int32 nStartIndex, sal_I
             OUString sText( getTextRange( nStartIndex, nEndIndex ) );
             ::vcl::unohelper::TextDataObject* pDataObj = new ::vcl::unohelper::TextDataObject( sText );
 
-            const sal_uInt32 nRef = Application::ReleaseSolarMutex();
+            SolarMutexReleaser aReleaser;
             xClipboard->setContents( pDataObj, NULL );
             Reference< datatransfer::clipboard::XFlushableClipboard > xFlushableClipboard( xClipboard, uno::UNO_QUERY );
             if( xFlushableClipboard.is() )
                 xFlushableClipboard->flushClipboard();
-            Application::AcquireSolarMutex( nRef );
 
             bRet = true;
         }

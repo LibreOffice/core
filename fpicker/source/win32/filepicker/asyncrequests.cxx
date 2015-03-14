@@ -28,7 +28,7 @@ namespace vista{
 static void lcl_sleep( ::osl::Condition& aCondition,
                        ::sal_Int32       nMilliSeconds )
 {
-    sal_uLong nAcquireCount = Application::ReleaseSolarMutex();
+    SolarMutexReleaser aReleaser;
 
     if (nMilliSeconds < 1)
         aCondition.wait(0);
@@ -39,8 +39,6 @@ static void lcl_sleep( ::osl::Condition& aCondition,
         aTime.Nanosec = (nMilliSeconds % 1000) * 1000000;
         aCondition.wait(&aTime);
     }
-
-    Application::AcquireSolarMutex( nAcquireCount );
 }
 
 void Request::wait( ::sal_Int32 nMilliSeconds )
