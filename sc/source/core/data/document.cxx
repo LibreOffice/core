@@ -2270,7 +2270,7 @@ void ScDocument::TransposeClip( ScDocument* pTransClip, InsertDeleteFlags nFlags
                     Rectangle aDestRect = pTransClip->GetMMRect( 0, 0,
                             static_cast<SCCOL>(aClipRange.aEnd.Row() - aClipRange.aStart.Row()),
                             static_cast<SCROW>(aClipRange.aEnd.Col() - aClipRange.aStart.Col()), i );
-                    pTransClip->pDrawLayer->CopyFromClip( pDrawLayer, i, aSourceRect, ScAddress(0,0,i), aDestRect );
+                    pTransClip->pDrawLayer->CopyFromClip( pDrawLayer, i, aSourceRect, ScAddress(0,0,i), aD  estRect );
                 }
             }
 
@@ -2739,7 +2739,7 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
         pDestRanges = &aLocalRangeList;
     }
 
-    bInsertingFromOtherDoc = true;  // kein Broadcast/Listener aufbauen bei Insert
+    bInsertingFromOtherDoc = true;  // don't setup Broadcast/Listener on Insert
 
     sc::ColumnSpanSet aBroadcastSpans(false);
 
