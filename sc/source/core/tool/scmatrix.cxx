@@ -36,6 +36,7 @@
 
 #include <vector>
 #include <limits>
+#include <functional>
 
 #include <mdds/multi_type_matrix.hpp>
 #include <mdds/multi_type_vector_types.hpp>
@@ -2584,6 +2585,50 @@ public:
     }
 };
 
+
+struct AmpersandOp
+{
+private:
+    std::function<svl::SharedString(svl::SharedString,svl::SharedString)> maOp;
+    svl::SharedString maString;
+
+public:
+    typedef svl::SharedString empty_value_type;
+    typedef double number_value_type;
+    typedef svl::SharedString string_value_type;
+
+    AmpersandOp(std::function<svl::SharedString(svl::SharedString,svl::SharedString)> aOp, svl::SharedString aString):
+        maOp(aOp),
+        maString(aString)
+    { }
+
+    double operator()(double fVal) const
+    {
+        return CreateDoubleError(GetDoubleErrorValue(fVal));
+    }
+
+    double operator()(bool fVal) const
+    {
+        return CreateDoubleError(GetDoubleErrorValue(double(fVal)));
+    }
+
+    svl::SharedString operator()(svl::SharedString aVal) const
+    {
+        return maOp(maString, aVal);
+    }
+
+    svl::SharedString operator()(char) const
+    {
+        return maString;
+    }
+
+    bool useFunctionForEmpty() const
+    {
+        return true;
+    }
+};
+
+
 }
 
 void ScMatrix::NotOp(svl::SharedString aString, ScMatrix& rMat)
@@ -2658,6 +2703,24 @@ void ScMatrix::PowOp(bool bFlag, svl::SharedString aString, double fVal, ScMatri
     {
         auto pow_ = [](double a, double b){return pow(a, b);};
         matop::MatOp<decltype(pow_)> aOp(pow_, aString, fVal);
+        pImpl->ApplyOperation(aOp, *rMat.pImpl);
+    }
+}
+
+void ScMatrix::AmpersandOp(bool bFlag, svl::SharedString aString, ScMatrix& rMat)
+{
+    if (bFlag)
+    {
+        auto amp_ = [](svl::SharedString a, svl::SharedString b) -> svl::SharedString
+                    {return a.getString() += b.getString();};
+        matop::AmpersandOp aOp(amp_, aString);
+        pImpl->ApplyOperation(aOp, *rMat.pImpl);
+    }
+    else
+    {
+        auto amp_ = [](svl::SharedString a, svl::SharedString b) -> svl::SharedString
+                    {return b.getString() += a.getString();};
+        matop::AmpersandOp aOp(amp_, aString);
         pImpl->ApplyOperation(aOp, *rMat.pImpl);
     }
 }
