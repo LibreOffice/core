@@ -64,6 +64,8 @@ class SfxHint;
 class SwModify;
 class SwClient;
 class SwClientIter;
+template<typename E, typename S> class SwIterator;
+
 namespace sw
 {
     struct LegacyModifyHint SAL_FINAL: SfxHint
@@ -241,8 +243,10 @@ protected:
 
 class SwClientIter SAL_FINAL : public sw::Ring<SwClientIter>
 {
-    friend SwClient* SwModify::Remove(SwClient *); ///< for pointer adjustments
-    friend void SwModify::Add(SwClient *pDepend);   ///< for pointer adjustments
+    friend SwClient* SwModify::Remove(SwClient*); ///< for pointer adjustments
+    friend void SwModify::Add(SwClient*);   ///< for pointer adjustments
+    template<typename E, typename S> friend class SwIterator; ///< for typed interation
+    friend void SwModify::ModifyBroadcast( const SfxPoolItem*, const SfxPoolItem*, TypeId); ///< for typed iteration
 
     const SwModify& m_rRoot;
 
@@ -258,6 +262,42 @@ class SwClientIter SAL_FINAL : public sw::Ring<SwClientIter>
     TypeId m_aSearchType;
 
     static SW_DLLPUBLIC SwClientIter* our_pClientIters;
+
+    SwClient* First( TypeId nType )
+    {
+        m_aSearchType = nType;
+        GoStart();
+        if(!m_pPosition)
+            return nullptr;
+        m_pCurrent = nullptr;
+        return Next();
+    }
+    SwClient* Last( TypeId nType )
+    {
+        m_aSearchType = nType;
+        GoEnd();
+        if(!m_pPosition)
+            return nullptr;
+        if( m_pPosition->IsA( m_aSearchType ) )
+            return m_pPosition;
+        return Previous();
+    }
+    SwClient* Next()
+    {
+        if( m_pPosition == m_pCurrent )
+            m_pPosition = static_cast<SwClient*>(m_pPosition->m_pRight);
+        while(m_pPosition && !m_pPosition->IsA( m_aSearchType ) )
+            m_pPosition = static_cast<SwClient*>(m_pPosition->m_pRight);
+        return m_pCurrent = m_pPosition;
+    }
+
+    SwClient* Previous()
+    {
+        m_pPosition = static_cast<SwClient*>(m_pPosition->m_pLeft);
+        while(m_pPosition && !m_pPosition->IsA( m_aSearchType ) )
+            m_pPosition = static_cast<SwClient*>(m_pPosition->m_pLeft);
+        return m_pCurrent = m_pPosition;
+    }
 
 public:
     SwClientIter( const SwModify& rModify )
@@ -314,42 +354,6 @@ public:
     // adding objects to a client chain in iteration is forbidden
     // SwModify::Add() asserts this
     bool IsChanged() const { return m_pPosition != m_pCurrent; }
-
-    SwClient* First( TypeId nType )
-    {
-        m_aSearchType = nType;
-        GoStart();
-        if(!m_pPosition)
-            return nullptr;
-        m_pCurrent = nullptr;
-        return Next();
-    }
-    SwClient* Last( TypeId nType )
-    {
-        m_aSearchType = nType;
-        GoEnd();
-        if(!m_pPosition)
-            return nullptr;
-        if( m_pPosition->IsA( m_aSearchType ) )
-            return m_pPosition;
-        return Previous();
-    }
-    SwClient* Next()
-    {
-        if( m_pPosition == m_pCurrent )
-            m_pPosition = static_cast<SwClient*>(m_pPosition->m_pRight);
-        while(m_pPosition && !m_pPosition->IsA( m_aSearchType ) )
-            m_pPosition = static_cast<SwClient*>(m_pPosition->m_pRight);
-        return m_pCurrent = m_pPosition;
-    }
-
-    SwClient* Previous()
-    {
-        m_pPosition = static_cast<SwClient*>(m_pPosition->m_pLeft);
-        while(m_pPosition && !m_pPosition->IsA( m_aSearchType ) )
-            m_pPosition = static_cast<SwClient*>(m_pPosition->m_pLeft);
-        return m_pCurrent = m_pPosition;
-    }
 };
 
 SwClient::SwClient( SwModify* pToRegisterIn )
