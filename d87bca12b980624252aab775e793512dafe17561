@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a29b11f_c8ebbfaf",
+        "filename": "sw/qa/extras/ww8import/ww8import.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 525,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2015-03-14T10:44:57Z",
+      "side": 1,
+      "message": "You could use CPPUNIT_ASSERT_EQUAL() here. Also, rtl::OUString::indexOf() returns sal_Int32, which is long on 32bit platforms, -1 is int, so it might cause a problem, let\u0027s see what the tinderboxes say. ;-)",
+      "revId": "d87bca12b980624252aab775e793512dafe17561",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
