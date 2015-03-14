@@ -107,7 +107,6 @@ extern "C"
 
 OSLTEST_DECLARE( ServiceFTP,  "ftp" );
 OSLTEST_DECLARE( ServiceTELNET,  "telnet" );
-OSLTEST_DECLARE( ServiceGOPHER,  "gopher" );
 OSLTEST_DECLARE( ServiceIMAP,  "imap" );
 OSLTEST_DECLARE( ServiceHTTPS,  "https" );
 OSLTEST_DECLARE( ServiceNETBIOS,  "netbios-dgm" );
