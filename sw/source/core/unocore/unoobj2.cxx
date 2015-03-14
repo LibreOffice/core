@@ -1742,7 +1742,7 @@ lcl_CreateNextObject(SwUnoCrsr& i_rUnoCrsr,
     // the format should be valid here, otherwise the client
     // would have been removed in ::Modify
     // check for a shape first
-    SwDrawContact* const pContact = SwIterator<SwDrawContact,SwFmt>::FirstElement( *pFormat );
+    SwDrawContact* const pContact = SwIterator<SwDrawContact,SwFmt>( *pFormat ).First();
     if (pContact)
     {
         SdrObject * const pSdr = pContact->GetMaster();

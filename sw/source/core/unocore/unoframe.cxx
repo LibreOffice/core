@@ -2203,7 +2203,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
             // format document completely in order to get correct value
             pFmt->GetDoc()->GetEditShell()->CalcLayout();
 
-            SwFrm* pTmpFrm = SwIterator<SwFrm,SwFmt>::FirstElement( *pFmt );
+            SwFrm* pTmpFrm = SwIterator<SwFrm,SwFmt>( *pFmt ).First();
             if ( pTmpFrm )
             {
                 OSL_ENSURE( pTmpFrm->IsValid(), "frame not valid" );
@@ -3616,7 +3616,7 @@ uno::Reference< lang::XComponent >  SwXTextEmbeddedObject::getEmbeddedObject(voi
             uno::Reference< frame::XModel > xModel( xRet, uno::UNO_QUERY);
             if( xBrdcst.is() && xModel.is() )
             {
-                SwXOLEListener* pListener = SwIterator<SwXOLEListener,SwFmt>::FirstElement( *pFmt );
+                SwXOLEListener* pListener = SwIterator<SwXOLEListener,SwFmt>( *pFmt ).First();
                 //create a new one if the OLE object doesn't have one already
                 if( !pListener )
                 {
@@ -3656,7 +3656,7 @@ uno::Reference< embed::XEmbeddedObject > SAL_CALL SwXTextEmbeddedObject::getExte
             uno::Reference< frame::XModel > xModel( xComp, uno::UNO_QUERY);
             if( xBrdcst.is() && xModel.is() )
             {
-                SwXOLEListener* pListener = SwIterator<SwXOLEListener,SwFmt>::FirstElement( *pFmt );
+                SwXOLEListener* pListener = SwIterator<SwXOLEListener,SwFmt>( *pFmt ).First();
                 //create a new one if the OLE object doesn't have one already
                 if( !pListener )
                 {

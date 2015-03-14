@@ -2259,7 +2259,7 @@ uno::Reference< table::XTableRows >  SwXTextTable::getRows(void) throw( uno::Run
     uno::Reference< table::XTableRows >  xRet;
     if (SwFrmFmt* pFmt = GetFrmFmt())
     {
-        SwXTableRows* pRows = SwIterator<SwXTableRows,SwFmt>::FirstElement(*pFmt);
+        SwXTableRows* pRows = SwIterator<SwXTableRows,SwFmt>(*pFmt).First();
         if (!pRows)
             pRows = new SwXTableRows(*pFmt);
         xRet = pRows;
@@ -2275,7 +2275,7 @@ uno::Reference< table::XTableColumns >  SwXTextTable::getColumns(void) throw( un
     uno::Reference< table::XTableColumns >  xRet;
     if (SwFrmFmt* pFmt = GetFrmFmt())
     {
-        SwXTableColumns* pCols = SwIterator<SwXTableColumns,SwFmt>::FirstElement(*pFmt);
+        SwXTableColumns* pCols = SwIterator<SwXTableColumns,SwFmt>(*pFmt).First();
         if (!pCols)
             pCols = new SwXTableColumns(*pFmt);
         xRet = pCols;
@@ -3184,7 +3184,7 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName, const uno::An
                         break; // something else
                     }
                     SwDoc* pDoc = pFmt->GetDoc();
-                    SwFrm* pFrm = SwIterator<SwFrm,SwFmt>::FirstElement( *pFmt );
+                    SwFrm* pFrm = SwIterator<SwFrm,SwFmt>( *pFmt ).First();
                     // tables without layout (invisible header/footer?)
                     if (!pFrm)
                     {
@@ -3378,7 +3378,7 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName)
                 case FN_UNO_TABLE_BORDER2:
                 {
                     SwDoc* pDoc = pFmt->GetDoc();
-                    SwFrm* pFrm = SwIterator<SwFrm,SwFmt>::FirstElement( *pFmt );
+                    SwFrm* pFrm = SwIterator<SwFrm,SwFmt>( *pFmt ).First();
                     // tables without layout (invisible header/footer?)
                     if (!pFrm)
                     {

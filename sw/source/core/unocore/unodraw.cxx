@@ -283,7 +283,7 @@ uno::Reference< uno::XInterface >   SwFmDrawPage::GetInterface( SdrObject* pObj 
     if( pObj )
     {
         SwFrmFmt* pFmt = ::FindFrmFmt( pObj );
-        SwXShape* pxShape = SwIterator<SwXShape,SwFmt>::FirstElement( *pFmt );
+        SwXShape* pxShape = SwIterator<SwXShape,SwFmt>( *pFmt ).First();
         if(pxShape)
         {
             xShape =  *(cppu::OWeakObject*)pxShape;
