@@ -58,9 +58,9 @@ Property Get BeginGroup() As Boolean
 End Property		&apos;	BeginGroup (get)
 
 REM -----------------------------------------------------------------------------------------------------------------------
-Property Get Builtin() As Boolean
-	Builtin = _PropertyGet(&quot;Builtin&quot;)
-End Property		&apos;	Builtin (get)
+Property Get BuiltIn() As Boolean
+	BuiltIn = _PropertyGet(&quot;BuiltIn&quot;)
+End Property		&apos;	BuiltIn (get)
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Property Get Caption() As Variant
@@ -199,7 +199,7 @@ REM ----------------------------------------------------------------------------
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Private Function _PropertiesList() As Variant
-	 _PropertiesList = Array(&quot;BeginGroup&quot;, &quot;Builtin&quot;, &quot;Caption&quot;, &quot;Index&quot; _
+	 _PropertiesList = Array(&quot;BeginGroup&quot;, &quot;BuiltIn&quot;, &quot;Caption&quot;, &quot;Index&quot; _
 	 							, &quot;ObjectType&quot;, &quot;OnAction&quot;, &quot;Parent&quot; _
 	 							, &quot;TooltipText&quot;, &quot;Type&quot;, &quot;Visible&quot; _
 	 							)
@@ -222,7 +222,7 @@ Const cstUnoPrefix = &quot;.uno:&quot;
 	Select Case UCase(psProperty)
 		Case UCase(&quot;BeginGroup&quot;)
 			_PropertyGet = _BeginGroup
-		Case UCase(&quot;Builtin&quot;)
+		Case UCase(&quot;BuiltIn&quot;)
 			sValue = _GetPropertyValue(_Element, &quot;CommandURL&quot;, &quot;&quot;)
 			_PropertyGet = ( _IsLeft(sValue, cstUnoPrefix) )
 		Case UCase(&quot;Caption&quot;)

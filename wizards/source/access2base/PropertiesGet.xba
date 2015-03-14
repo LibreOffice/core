@@ -74,10 +74,10 @@ Public Function getBorderStyle(Optional pvObject As Variant) As Variant
 End Function		&apos;	getBorderStyle
 
 REM -----------------------------------------------------------------------------------------------------------------------
-Public Function getBuiltin(Optional pvObject As Variant) As Boolean
-	If IsMissing(pvObject) Or IsEmpty(pvObject) Then Call _TraceArguments(&quot;getBuiltin&quot;)
-	getBuiltin = PropertiesGet._getProperty(pvObject, &quot;Builtin&quot;)
-End Function		&apos;	getBuiltin
+Public Function getBuiltIn(Optional pvObject As Variant) As Boolean
+	If IsMissing(pvObject) Or IsEmpty(pvObject) Then Call _TraceArguments(&quot;getBuiltIn&quot;)
+	getBuiltIn = PropertiesGet._getProperty(pvObject, &quot;BuiltIn&quot;)
+End Function		&apos;	getBuiltIn
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Public Function getButtonLeft(Optional pvObject As Variant) As Boolean
@@ -798,9 +798,9 @@ Public Function _getProperty(pvItem As Variant, ByVal psProperty As String, ByVa
 		Case UCase(&quot;BorderStyle&quot;)
 			If Not Utils._CheckArgument(pvItem, 1, OBJCONTROL) Then Goto Exit_Function
 			_getProperty = pvItem.BorderStyle
-		Case UCase(&quot;Builtin&quot;)
+		Case UCase(&quot;BuiltIn&quot;)
 			If Not Utils._CheckArgument(pvItem, 1, Array(OBJCOMMANDBAR, OBJCOMMANDBARCONTROL)) Then Goto Exit_Function
-			_getProperty = pvItem.Builtin
+			_getProperty = pvItem.BuiltIn
 		Case UCase(&quot;ButtonLeft&quot;)
 			If Not Utils._CheckArgument(pvItem, 1, OBJEVENT) Then Goto Exit_Function
 			_getProperty = pvItem.ButtonLeft

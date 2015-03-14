@@ -53,9 +53,9 @@ REM --- CLASS GET/LET/SET PROPERTIES					        														---
 REM -----------------------------------------------------------------------------------------------------------------------
 
 REM -----------------------------------------------------------------------------------------------------------------------
-Property Get Builtin() As Boolean
-	Builtin = _PropertyGet(&quot;Builtin&quot;)
-End Property		&apos;	Builtin (get)
+Property Get BuiltIn() As Boolean
+	BuiltIn = _PropertyGet(&quot;BuiltIn&quot;)
+End Property		&apos;	BuiltIn (get)
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Property Get Name() As String
@@ -278,7 +278,7 @@ End Function
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Private Function _PropertiesList() As Variant
-	 _PropertiesList = Array(&quot;Builtin&quot;, &quot;Name&quot;, &quot;ObjectType&quot;, &quot;Visible&quot;)
+	 _PropertiesList = Array(&quot;BuiltIn&quot;, &quot;Name&quot;, &quot;ObjectType&quot;, &quot;Visible&quot;)
 End Function	&apos;	_PropertiesList
 
 REM -----------------------------------------------------------------------------------------------------------------------
@@ -294,7 +294,7 @@ Dim cstThisSub As String
 Dim oLayout As Object, iElementIndex As Integer
 	
 	Select Case UCase(psProperty)
-		Case UCase(&quot;Builtin&quot;)
+		Case UCase(&quot;BuiltIn&quot;)
 			_PropertyGet = ( _BarBuiltin = 1 )
 		Case UCase(&quot;Name&quot;)
 			_PropertyGet = _Name

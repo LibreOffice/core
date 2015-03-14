@@ -2257,6 +2257,10 @@ Dim oWindow As _Window
 				Set oFrame = oComp.Frame
 				iType = acDiagram
 				sName = &quot;&quot;
+			Case &quot;com.sun.star.comp.sfx2.BackingComp&quot;				&apos;	Welcome screen
+				Set oFrame = oComp.Frame
+				iType = acWelcome
+				sName = &quot;&quot;
 			Case Else		&apos;	Other Calc, ..., whatever documents
 				If Utils._hasUNOProperty(oComp, &quot;Location&quot;) Then
 					vLocation = Split(oComp.getLocation(), &quot;/&quot;)

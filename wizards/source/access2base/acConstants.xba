@@ -53,6 +53,7 @@ Global Const acTable = 0
 Global Const acBasicIDE = 101
 Global Const acDatabaseWindow = 102
 Global Const acDocument = 111
+Global Const acWelcome = 112
 &apos;			Subtype if acDocument
 Global Const docWriter = &quot;Writer&quot;
 Global Const docCalc = &quot;Calc&quot;
