@@ -26,6 +26,7 @@
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
+#include <vcl/vclptr.hxx>
 
 namespace vcl { class Window; }
 
@@ -116,7 +117,7 @@ namespace toolkit
         // stops listening at the control model
         void stopModelListening( );
 
-        vcl::Window* implGetWindow( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >* _pxUNOWindow = NULL ) const;
+        VclPtr< vcl::Window > implGetWindow( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >* _pxUNOWindow = NULL ) const;
     };
 
 

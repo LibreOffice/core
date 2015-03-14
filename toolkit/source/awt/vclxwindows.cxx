@@ -5162,7 +5162,7 @@ void VCLXTimeField::setTime( const util::Time& aTime ) throw(::com::sun::star::u
 {
     SolarMutexGuard aGuard;
 
-    TimeField* pTimeField = static_cast<TimeField*>(GetWindow());
+    VclPtr< TimeField > pTimeField = GetAs< TimeField >();
     if ( pTimeField )
     {
         pTimeField->SetTime( aTime );
@@ -5179,7 +5179,7 @@ util::Time VCLXTimeField::getTime() throw(::com::sun::star::uno::RuntimeExceptio
 {
     SolarMutexGuard aGuard;
 
-    TimeField* pTimeField = static_cast<TimeField*>(GetWindow());
+    VclPtr< TimeField > pTimeField = GetAs< TimeField >();
     if ( pTimeField )
         return pTimeField->GetTime().GetUNOTime();
     else
@@ -5190,7 +5190,7 @@ void VCLXTimeField::setMin( const util::Time& aTime ) throw(::com::sun::star::un
 {
     SolarMutexGuard aGuard;
 
-    TimeField* pTimeField = static_cast<TimeField*>(GetWindow());
+    VclPtr< TimeField > pTimeField = GetAs< TimeField >();
     if ( pTimeField )
         pTimeField->SetMin( aTime );
 }
@@ -5199,7 +5199,7 @@ util::Time VCLXTimeField::getMin() throw(::com::sun::star::uno::RuntimeException
 {
     SolarMutexGuard aGuard;
 
-    TimeField* pTimeField = static_cast<TimeField*>(GetWindow());
+    VclPtr< TimeField > pTimeField = GetAs< TimeField >();
     if ( pTimeField )
         return pTimeField->GetMin().GetUNOTime();
     else
@@ -5210,7 +5210,7 @@ void VCLXTimeField::setMax( const util::Time& aTime ) throw(::com::sun::star::un
 {
     SolarMutexGuard aGuard;
 
-    TimeField* pTimeField = static_cast<TimeField*>(GetWindow());
+    VclPtr< TimeField > pTimeField = GetAs< TimeField >();
     if ( pTimeField )
         pTimeField->SetMax( aTime );
 }
@@ -5219,7 +5219,7 @@ util::Time VCLXTimeField::getMax() throw(::com::sun::star::uno::RuntimeException
 {
     SolarMutexGuard aGuard;
 
-    TimeField* pTimeField = static_cast<TimeField*>(GetWindow());
+    VclPtr< TimeField > pTimeField = GetAs< TimeField >();
     if ( pTimeField )
         return pTimeField->GetMax().GetUNOTime();
     else
@@ -5230,7 +5230,7 @@ void VCLXTimeField::setFirst( const util::Time& aTime ) throw(::com::sun::star::
 {
     SolarMutexGuard aGuard;
 
-    TimeField* pTimeField = static_cast<TimeField*>(GetWindow());
+    VclPtr< TimeField > pTimeField = GetAs< TimeField >();
     if ( pTimeField )
         pTimeField->SetFirst( aTime );
 }
@@ -5239,7 +5239,7 @@ util::Time VCLXTimeField::getFirst() throw(::com::sun::star::uno::RuntimeExcepti
 {
     SolarMutexGuard aGuard;
 
-    TimeField* pTimeField = static_cast<TimeField*>(GetWindow());
+    VclPtr< TimeField > pTimeField = GetAs< TimeField >();
     if ( pTimeField )
         return pTimeField->GetFirst().GetUNOTime();
     else
@@ -5250,7 +5250,7 @@ void VCLXTimeField::setLast( const util::Time& aTime ) throw(::com::sun::star::u
 {
     SolarMutexGuard aGuard;
 
-    TimeField* pTimeField = static_cast<TimeField*>(GetWindow());
+    VclPtr< TimeField > pTimeField = GetAs< TimeField >();
     if ( pTimeField )
         pTimeField->SetLast( aTime );
 }
@@ -5259,7 +5259,7 @@ util::Time VCLXTimeField::getLast() throw(::com::sun::star::uno::RuntimeExceptio
 {
     SolarMutexGuard aGuard;
 
-    TimeField* pTimeField = static_cast<TimeField*>(GetWindow());
+    VclPtr< TimeField > pTimeField = GetAs< TimeField >();
     if ( pTimeField )
         return pTimeField->GetLast().GetUNOTime();
     else
@@ -5270,7 +5270,7 @@ void VCLXTimeField::setEmpty() throw(::com::sun::star::uno::RuntimeException, st
 {
     SolarMutexGuard aGuard;
 
-    TimeField* pTimeField = static_cast<TimeField*>(GetWindow());
+    VclPtr< TimeField > pTimeField = GetAs< TimeField >();
     if ( pTimeField )
         pTimeField->SetEmptyTime();
 }
@@ -5279,7 +5279,7 @@ sal_Bool VCLXTimeField::isEmpty() throw(::com::sun::star::uno::RuntimeException,
 {
     SolarMutexGuard aGuard;
 
-    TimeField* pTimeField = static_cast<TimeField*>(GetWindow());
+    VclPtr< TimeField > pTimeField = GetAs< TimeField >();
     return pTimeField ? pTimeField->IsEmptyTime() : sal_False;
 }
 
@@ -5309,8 +5309,8 @@ void VCLXTimeField::setProperty( const OUString& PropertyName, const ::com::sun:
             {
                 if ( bVoid )
                 {
-                    static_cast<TimeField*>(GetWindow())->EnableEmptyFieldValue( true );
-                    static_cast<TimeField*>(GetWindow())->SetEmptyFieldValue();
+                    GetAs< TimeField >()->EnableEmptyFieldValue( true );
+                    GetAs< TimeField >()->SetEmptyFieldValue();
                 }
                 else
                 {
@@ -5338,14 +5338,14 @@ void VCLXTimeField::setProperty( const OUString& PropertyName, const ::com::sun:
             {
                 sal_Int16 n = sal_Int16();
                 if ( Value >>= n )
-                    static_cast<TimeField*>(GetWindow())->SetExtFormat( (ExtTimeFieldFormat) n );
+                    GetAs< TimeField >()->SetExtFormat( (ExtTimeFieldFormat) n );
             }
             break;
             case BASEPROPERTY_ENFORCE_FORMAT:
             {
                 bool bEnforce( true );
                 OSL_VERIFY( Value >>= bEnforce );
-                static_cast< TimeField* >( GetWindow() )->EnforceValidValue( bEnforce );
+                GetAs< TimeField >()->EnforceValidValue( bEnforce );
             }
             break;
             default:
@@ -5383,7 +5383,7 @@ void VCLXTimeField::setProperty( const OUString& PropertyName, const ::com::sun:
             break;
             case BASEPROPERTY_ENFORCE_FORMAT:
             {
-                aProp <<= static_cast< TimeField* >( GetWindow() )->IsEnforceValidValue( );
+                aProp <<= GetAs< TimeField >()->IsEnforceValidValue( );
             }
             break;
             default:
@@ -5536,7 +5536,7 @@ void VCLXNumericField::setFirst( double Value ) throw(::com::sun::star::uno::Run
 {
     SolarMutexGuard aGuard;
 
-    NumericField* pNumericField = static_cast<NumericField*>(GetWindow());
+    VclPtr< NumericField > pNumericField = GetAs< NumericField >();
     if ( pNumericField )
         pNumericField->SetFirst(
             (long)ImplCalcLongValue( Value, pNumericField->GetDecimalDigits() ) );
@@ -5546,7 +5546,7 @@ double VCLXNumericField::getFirst() throw(::com::sun::star::uno::RuntimeExceptio
 {
     SolarMutexGuard aGuard;
 
-    NumericField* pNumericField = static_cast<NumericField*>(GetWindow());
+    VclPtr< NumericField > pNumericField = GetAs< NumericField >();
     return pNumericField
         ? ImplCalcDoubleValue( (double)pNumericField->GetFirst(), pNumericField->GetDecimalDigits() )
         : 0;
@@ -5556,7 +5556,7 @@ void VCLXNumericField::setLast( double Value ) throw(::com::sun::star::uno::Runt
 {
     SolarMutexGuard aGuard;
 
-    NumericField* pNumericField = static_cast<NumericField*>(GetWindow());
+    VclPtr< NumericField > pNumericField = GetAs< NumericField >();
     if ( pNumericField )
         pNumericField->SetLast(
             (long)ImplCalcLongValue( Value, pNumericField->GetDecimalDigits() ) );
@@ -5566,7 +5566,7 @@ double VCLXNumericField::getLast() throw(::com::sun::star::uno::RuntimeException
 {
     SolarMutexGuard aGuard;
 
-    NumericField* pNumericField = static_cast<NumericField*>(GetWindow());
+    VclPtr< NumericField > pNumericField = GetAs< NumericField >();
     return pNumericField
         ? ImplCalcDoubleValue( (double)pNumericField->GetLast(), pNumericField->GetDecimalDigits() )
         : 0;
@@ -5587,7 +5587,7 @@ void VCLXNumericField::setSpinSize( double Value ) throw(::com::sun::star::uno::
 {
     SolarMutexGuard aGuard;
 
-    NumericField* pNumericField = static_cast<NumericField*>(GetWindow());
+    VclPtr< NumericField > pNumericField = GetAs< NumericField >();
     if ( pNumericField )
         pNumericField->SetSpinSize(
             (long)ImplCalcLongValue( Value, pNumericField->GetDecimalDigits() ) );
@@ -5597,7 +5597,7 @@ double VCLXNumericField::getSpinSize() throw(::com::sun::star::uno::RuntimeExcep
 {
     SolarMutexGuard aGuard;
 
-    NumericField* pNumericField = static_cast<NumericField*>(GetWindow());
+    VclPtr< NumericField > pNumericField = GetAs< NumericField >();
     return pNumericField
         ? ImplCalcDoubleValue( (double)pNumericField->GetSpinSize(), pNumericField->GetDecimalDigits() )
         : 0;
@@ -5639,8 +5639,8 @@ void VCLXNumericField::setProperty( const OUString& PropertyName, const ::com::s
             {
                 if ( bVoid )
                 {
-                    static_cast<NumericField*>(GetWindow())->EnableEmptyFieldValue( true );
-                    static_cast<NumericField*>(GetWindow())->SetEmptyFieldValue();
+                    GetAs< NumericField >()->EnableEmptyFieldValue( true );
+                    GetAs< NumericField >()->SetEmptyFieldValue();
                 }
                 else
                 {
@@ -5682,7 +5682,7 @@ void VCLXNumericField::setProperty( const OUString& PropertyName, const ::com::s
             {
                 bool b = bool();
                 if ( Value >>= b )
-                     static_cast<NumericField*>(GetWindow())->SetUseThousandSep( b );
+                     GetAs< NumericField >()->SetUseThousandSep( b );
             }
             break;
             default:
@@ -5726,7 +5726,7 @@ void VCLXNumericField::setProperty( const OUString& PropertyName, const ::com::s
             break;
             case BASEPROPERTY_NUMSHOWTHOUSANDSEP:
             {
-                aProp <<= static_cast<NumericField*>(GetWindow())->IsUseThousandSep();
+                aProp <<= GetAs< NumericField >()->IsUseThousandSep();
             }
             break;
             default:
@@ -5794,7 +5794,7 @@ MetricFormatter *VCLXMetricField::GetMetricFormatter() throw(::com::sun::star::u
 
 MetricField *VCLXMetricField::GetMetricField() throw(::com::sun::star::uno::RuntimeException)
 {
-    MetricField *pField = static_cast<MetricField *>(GetWindow());
+    VclPtr< MetricField > pField = GetAs< MetricField >();
     if (!pField)
         throw ::com::sun::star::uno::RuntimeException();
     return pField;
@@ -5932,21 +5932,21 @@ void VCLXMetricField::setProperty( const OUString& PropertyName, const ::com::su
             {
                 bool b = false;
                 if ( Value >>= b )
-                     static_cast<NumericField*>(GetWindow())->SetUseThousandSep( b );
+                     GetAs< NumericField >()->SetUseThousandSep( b );
             }
             break;
             case BASEPROPERTY_UNIT:
             {
                 sal_uInt16 nVal = 0;
                 if ( Value >>= nVal )
-                    static_cast<MetricField*>(GetWindow())->SetUnit( (FieldUnit) nVal );
+                    GetAs< MetricField >()->SetUnit( (FieldUnit) nVal );
                 break;
             }
             case BASEPROPERTY_CUSTOMUNITTEXT:
             {
                 OUString aStr;
                 if ( Value >>= aStr )
-                    static_cast<MetricField*>(GetWindow())->SetCustomUnitText( aStr );
+                    GetAs< MetricField >()->SetCustomUnitText( aStr );
                 break;
             }
             default:
@@ -5970,13 +5970,13 @@ void VCLXMetricField::setProperty( const OUString& PropertyName, const ::com::su
         switch ( nPropType )
         {
             case BASEPROPERTY_NUMSHOWTHOUSANDSEP:
-                aProp <<= static_cast<NumericField*>(GetWindow())->IsUseThousandSep();
+                aProp <<= GetAs< NumericField >()->IsUseThousandSep();
                 break;
             case BASEPROPERTY_UNIT:
-                aProp <<= (sal_uInt16) (static_cast<MetricField*>(GetWindow())->GetUnit());
+                aProp <<= (sal_uInt16) (GetAs< MetricField >()->GetUnit());
                 break;
             case BASEPROPERTY_CUSTOMUNITTEXT:
-                aProp <<= OUString( static_cast<MetricField*>(GetWindow())->GetCustomUnitText() );
+                aProp <<= OUString( GetAs< MetricField >()->GetCustomUnitText() );
                 break;
             default:
             {
@@ -6132,7 +6132,7 @@ void VCLXCurrencyField::setFirst( double Value ) throw(::com::sun::star::uno::Ru
 {
     SolarMutexGuard aGuard;
 
-    LongCurrencyField* pCurrencyField = static_cast<LongCurrencyField*>(GetWindow());
+    VclPtr< LongCurrencyField > pCurrencyField = GetAs< LongCurrencyField >();
     if ( pCurrencyField )
         pCurrencyField->SetFirst(
             ImplCalcLongValue( Value, pCurrencyField->GetDecimalDigits() ) );
@@ -6142,7 +6142,7 @@ double VCLXCurrencyField::getFirst() throw(::com::sun::star::uno::RuntimeExcepti
 {
     SolarMutexGuard aGuard;
 
-    LongCurrencyField* pCurrencyField = static_cast<LongCurrencyField*>(GetWindow());
+    VclPtr< LongCurrencyField > pCurrencyField = GetAs< LongCurrencyField >();
     return pCurrencyField
         ? ImplCalcDoubleValue( (double)pCurrencyField->GetFirst(), pCurrencyField->GetDecimalDigits() )
         : 0;
@@ -6152,7 +6152,7 @@ void VCLXCurrencyField::setLast( double Value ) throw(::com::sun::star::uno::Run
 {
     SolarMutexGuard aGuard;
 
-    LongCurrencyField* pCurrencyField = static_cast<LongCurrencyField*>(GetWindow());
+    VclPtr< LongCurrencyField > pCurrencyField = GetAs< LongCurrencyField >();
     if ( pCurrencyField )
         pCurrencyField->SetLast(
             ImplCalcLongValue( Value, pCurrencyField->GetDecimalDigits() ) );
@@ -6162,7 +6162,7 @@ double VCLXCurrencyField::getLast() throw(::com::sun::star::uno::RuntimeExceptio
 {
     SolarMutexGuard aGuard;
 
-    LongCurrencyField* pCurrencyField = static_cast<LongCurrencyField*>(GetWindow());
+    VclPtr< LongCurrencyField > pCurrencyField = GetAs< LongCurrencyField >();
     return pCurrencyField
         ? ImplCalcDoubleValue( (double)pCurrencyField->GetLast(), pCurrencyField->GetDecimalDigits() )
         : 0;
@@ -6172,7 +6172,7 @@ void VCLXCurrencyField::setSpinSize( double Value ) throw(::com::sun::star::uno:
 {
     SolarMutexGuard aGuard;
 
-    LongCurrencyField* pCurrencyField = static_cast<LongCurrencyField*>(GetWindow());
+    VclPtr< LongCurrencyField > pCurrencyField = GetAs< LongCurrencyField >();
     if ( pCurrencyField )
         pCurrencyField->SetSpinSize(
             ImplCalcLongValue( Value, pCurrencyField->GetDecimalDigits() ) );
@@ -6182,7 +6182,7 @@ double VCLXCurrencyField::getSpinSize() throw(::com::sun::star::uno::RuntimeExce
 {
     SolarMutexGuard aGuard;
 
-    LongCurrencyField* pCurrencyField = static_cast<LongCurrencyField*>(GetWindow());
+    VclPtr< LongCurrencyField > pCurrencyField = GetAs< LongCurrencyField >();
     return pCurrencyField
         ? ImplCalcDoubleValue( (double)pCurrencyField->GetSpinSize(), pCurrencyField->GetDecimalDigits() )
         : 0;
@@ -6235,8 +6235,8 @@ void VCLXCurrencyField::setProperty( const OUString& PropertyName, const ::com::
             {
                 if ( bVoid )
                 {
-                    static_cast<LongCurrencyField*>(GetWindow())->EnableEmptyFieldValue( true );
-                    static_cast<LongCurrencyField*>(GetWindow())->SetEmptyFieldValue();
+                    GetAs< LongCurrencyField >()->EnableEmptyFieldValue( true );
+                    GetAs< LongCurrencyField >()->SetEmptyFieldValue();
                 }
                 else
                 {
@@ -6278,14 +6278,14 @@ void VCLXCurrencyField::setProperty( const OUString& PropertyName, const ::com::
             {
                 OUString aString;
                 if ( Value >>= aString )
-                     static_cast<LongCurrencyField*>(GetWindow())->SetCurrencySymbol( aString );
+                     GetAs< LongCurrencyField >()->SetCurrencySymbol( aString );
             }
             break;
             case BASEPROPERTY_NUMSHOWTHOUSANDSEP:
             {
                 bool b = bool();
                 if ( Value >>= b )
-                     static_cast<LongCurrencyField*>(GetWindow())->SetUseThousandSep( b );
+                     GetAs< LongCurrencyField >()->SetUseThousandSep( b );
             }
             break;
             default:
@@ -6329,12 +6329,12 @@ void VCLXCurrencyField::setProperty( const OUString& PropertyName, const ::com::
             break;
             case BASEPROPERTY_CURRENCYSYMBOL:
             {
-                aProp <<= OUString( static_cast<LongCurrencyField*>(GetWindow())->GetCurrencySymbol() );
+                aProp <<= OUString( GetAs< LongCurrencyField >()->GetCurrencySymbol() );
             }
             break;
             case BASEPROPERTY_NUMSHOWTHOUSANDSEP:
             {
-                aProp <<= static_cast<LongCurrencyField*>(GetWindow())->IsUseThousandSep();
+                aProp <<= GetAs< LongCurrencyField >()->IsUseThousandSep();
             }
             break;
             default:
@@ -6406,7 +6406,7 @@ void VCLXPatternField::setMasks( const OUString& EditMask, const OUString& Liter
 {
     SolarMutexGuard aGuard;
 
-    PatternField* pPatternField = static_cast<PatternField*>(GetWindow());
+    VclPtr< PatternField > pPatternField = GetAs< PatternField >();
     if ( pPatternField )
     {
         pPatternField->SetMask( OUStringToOString(EditMask, RTL_TEXTENCODING_ASCII_US), LiteralMask );
@@ -6417,7 +6417,7 @@ void VCLXPatternField::getMasks( OUString& EditMask, OUString& LiteralMask ) thr
 {
     SolarMutexGuard aGuard;
 
-    PatternField* pPatternField = static_cast<PatternField*>(GetWindow());
+    VclPtr< PatternField > pPatternField = GetAs< PatternField >();
     if ( pPatternField )
     {
         EditMask = OStringToOUString(pPatternField->GetEditMask(), RTL_TEXTENCODING_ASCII_US);
@@ -6428,12 +6428,9 @@ void VCLXPatternField::getMasks( OUString& EditMask, OUString& LiteralMask ) thr
 void VCLXPatternField::setString( const OUString& Str ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-
-    PatternField* pPatternField = static_cast<PatternField*>(GetWindow());
+    VclPtr< PatternField > pPatternField = GetAs< PatternField >();
     if ( pPatternField )
-    {
         pPatternField->SetString( Str );
-    }
 }
 
 OUString VCLXPatternField::getString() throw(::com::sun::star::uno::RuntimeException, std::exception)
@@ -6441,7 +6438,7 @@ OUString VCLXPatternField::getString() throw(::com::sun::star::uno::RuntimeExcep
     SolarMutexGuard aGuard;
 
     OUString aString;
-    PatternField* pPatternField = static_cast<PatternField*>(GetWindow());
+    VclPtr< PatternField > pPatternField = GetAs< PatternField >();
     if ( pPatternField )
         aString = pPatternField->GetString();
     return aString;

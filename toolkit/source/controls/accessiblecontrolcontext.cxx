@@ -225,17 +225,18 @@ namespace toolkit
     }
 
 
-    vcl::Window* OAccessibleControlContext::implGetWindow( Reference< awt::XWindow >* _pxUNOWindow ) const
+    VclPtr< vcl::Window > OAccessibleControlContext::implGetWindow( Reference< awt::XWindow >* _pxUNOWindow ) const
     {
         Reference< awt::XControl > xControl( getAccessibleCreator(), UNO_QUERY );
         Reference< awt::XWindow > xWindow;
         if ( xControl.is() )
             xWindow.set(xControl->getPeer(), css::uno::UNO_QUERY);
 
-        vcl::Window* pWindow = xWindow.is() ? VCLUnoHelper::GetWindow( xWindow ) : NULL;
+        VclPtr< vcl::Window > pWindow = xWindow.is() ? VCLUnoHelper::GetWindow( xWindow ) : VclPtr< vcl::Window >();
 
         if ( _pxUNOWindow )
             *_pxUNOWindow = xWindow;
+
         return pWindow;
     }
 
@@ -259,7 +260,7 @@ namespace toolkit
 
         // our control
         Reference< awt::XWindow > xWindow;
-        vcl::Window* pVCLWindow = implGetWindow( &xWindow );
+        VclPtr< vcl::Window > pVCLWindow = implGetWindow( &xWindow );
 
         awt::Rectangle aBounds( 0, 0, 0, 0 );
         if ( xWindow.is() )
@@ -319,7 +320,7 @@ namespace toolkit
             // want to do some VCL stuff here ...
         OContextEntryGuard aGuard( this );
 
-        vcl::Window* pWindow = implGetWindow( );
+        VclPtr< vcl::Window > pWindow = implGetWindow();
         sal_Int32 nColor = 0;
         if ( pWindow )
         {
@@ -345,7 +346,7 @@ namespace toolkit
             // want to do some VCL stuff here ...
         OContextEntryGuard aGuard( this );
 
-        vcl::Window* pWindow = implGetWindow( );
+        VclPtr< vcl::Window > pWindow = implGetWindow();
         sal_Int32 nColor = 0;
         if ( pWindow )
         {

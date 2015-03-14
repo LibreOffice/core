@@ -56,11 +56,12 @@ namespace com { namespace sun { namespace star { namespace awt {
 #include <vcl/bitmapex.hxx>
 #include <vcl/region.hxx>
 #include <vcl/metric.hxx>
+#include <vcl/vclptr.hxx>
+#include <vcl/window.hxx>
 #include <tools/mapunit.hxx>
 #include <tools/fldunit.hxx>
 #include <tools/poly.hxx>
 
-namespace vcl { class Window; }
 class OutputDevice;
 class MouseEvent;
 class KeyEvent;
@@ -79,9 +80,9 @@ public:
     static ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap>    CreateBitmap( const BitmapEx& rBitmap );
 
     // Window
-    static vcl::Window*                                                          GetWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow>& rxWindow );
-    static vcl::Window*                                                          GetWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow2>& rxWindow2 );
-    static vcl::Window*                                                          GetWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer>& rxWindowPeer );
+    static VclPtr< vcl::Window >                                                          GetWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow>& rxWindow );
+    static VclPtr< vcl::Window >                                                          GetWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow2>& rxWindow2 );
+    static VclPtr< vcl::Window >                                                          GetWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer>& rxWindowPeer );
     static ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow>    GetInterface( vcl::Window* pWindow );
 
     // OutputDevice

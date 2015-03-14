@@ -108,22 +108,22 @@ BitmapEx VCLUnoHelper::GetBitmap( const ::com::sun::star::uno::Reference< ::com:
     return xBmp;
 }
 
-vcl::Window* VCLUnoHelper::GetWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow>& rxWindow )
+VclPtr< vcl::Window > VCLUnoHelper::GetWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow>& rxWindow )
 {
     VCLXWindow* pVCLXWindow = VCLXWindow::GetImplementation( rxWindow );
-    return pVCLXWindow ? pVCLXWindow->GetWindow() : NULL;
+    return pVCLXWindow ? pVCLXWindow->GetWindow() : VclPtr< vcl::Window >();
 }
 
-vcl::Window* VCLUnoHelper::GetWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow2>& rxWindow )
+VclPtr< vcl::Window > VCLUnoHelper::GetWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow2>& rxWindow )
 {
     VCLXWindow* pVCLXWindow = VCLXWindow::GetImplementation( rxWindow );
-    return pVCLXWindow ? pVCLXWindow->GetWindow() : NULL;
+    return pVCLXWindow ? pVCLXWindow->GetWindow() : VclPtr< vcl::Window >();
 }
 
-vcl::Window* VCLUnoHelper::GetWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer>& rxWindow )
+VclPtr< vcl::Window > VCLUnoHelper::GetWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer>& rxWindow )
 {
     VCLXWindow* pVCLXWindow = VCLXWindow::GetImplementation( rxWindow );
-    return pVCLXWindow ? pVCLXWindow->GetWindow() : NULL;
+    return pVCLXWindow ? pVCLXWindow->GetWindow() : VclPtr< vcl::Window >();
 }
 
 vcl::Region VCLUnoHelper::GetRegion( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XRegion >& rxRegion )
