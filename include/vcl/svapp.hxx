@@ -1674,13 +1674,29 @@ class SolarMutexTryAndBuyGuard
 class SolarMutexReleaser
 {
     sal_uLong mnReleased;
+    bool m_bCleared;
 
 public:
-    SolarMutexReleaser(): mnReleased(Application::ReleaseSolarMutex()) {}
+    SolarMutexReleaser()
+        : m_bCleared(false)
+        , mnReleased( Application::ReleaseSolarMutex() ) { }
 
     ~SolarMutexReleaser()
     {
-        Application::AcquireSolarMutex( mnReleased );
+        if( !m_bCleared )
+        {
+            Application::AcquireSolarMutex( mnReleased );
+        }
+    }
+
+    /** Releases mutex. **/
+    void SAL_CALL clear()
+    {
+        if( !m_bCleared )
+            {
+                Application::AcquireSolarMutex( mnReleased );
+                m_bCleared = true;
+            }
     }
 };
 
