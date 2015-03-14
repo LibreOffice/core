@@ -176,9 +176,9 @@ int ImplSVMain()
     // here ..
     if( pSVData->mxAccessBridge.is() )
     {
-      sal_uLong nCount = Application::ReleaseSolarMutex();
+      SolarMutexReleaser aReleaser;
       pSVData->mxAccessBridge->dispose();
-      Application::AcquireSolarMutex(nCount);
+      aReleaser.clear();
       pSVData->mxAccessBridge.clear();
     }
 
@@ -472,7 +472,7 @@ void DeInitVCL()
 
     if( pSVData->mpApp || pSVData->maDeInitHook.IsSet() )
     {
-        sal_uLong nCount = Application::ReleaseSolarMutex();
+        SolarMutexReleaser aReleaser;
         // call deinit to deinitialize application class
         // soffice/sfx implementation disposes the global service manager
         // Warning: After this call you can't call uno services
@@ -484,7 +484,6 @@ void DeInitVCL()
         {
             pSVData->maDeInitHook.Call(0);
         }
-        Application::AcquireSolarMutex(nCount);
     }
 
     if ( pSVData->maAppData.mpSettings )

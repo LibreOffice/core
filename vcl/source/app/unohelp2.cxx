@@ -47,7 +47,7 @@ namespace vcl { namespace unohelper {
 
         TextDataObject* pDataObj = new TextDataObject( rContent );
 
-        const sal_uInt32 nRef = Application::ReleaseSolarMutex();
+        SolarMutexReleaser aReleaser;
         try
         {
             rxClipboard->setContents( pDataObj, NULL );
@@ -59,7 +59,6 @@ namespace vcl { namespace unohelper {
         catch( const uno::Exception& )
         {
         }
-        Application::AcquireSolarMutex( nRef );
     }
 
     // ::com::sun::star::uno::XInterface

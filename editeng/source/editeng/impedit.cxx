@@ -1264,7 +1264,7 @@ void ImpEditView::CutCopy( ::com::sun::star::uno::Reference< ::com::sun::star::d
     {
         uno::Reference<datatransfer::XTransferable> xData = pEditEngine->CreateTransferable( GetEditSelection() );
 
-        const sal_uInt32 nRef = Application::ReleaseSolarMutex();
+        SolarMutexReleaser aReleaser;
 
         try
         {
@@ -1279,7 +1279,7 @@ void ImpEditView::CutCopy( ::com::sun::star::uno::Reference< ::com::sun::star::d
         {
         }
 
-        Application::AcquireSolarMutex( nRef );
+        aReleaser.clear();
 
         if ( bCut )
         {
@@ -1297,7 +1297,7 @@ void ImpEditView::Paste( ::com::sun::star::uno::Reference< ::com::sun::star::dat
     {
         uno::Reference< datatransfer::XTransferable > xDataObj;
 
-        const sal_uInt32 nRef = Application::ReleaseSolarMutex();
+        SolarMutexReleaser aReleaser;
 
         try
         {
@@ -1307,7 +1307,7 @@ void ImpEditView::Paste( ::com::sun::star::uno::Reference< ::com::sun::star::dat
         {
         }
 
-        Application::AcquireSolarMutex( nRef );
+        aReleaser.clear();
 
         if ( xDataObj.is() && EditEngine::HasValidData( xDataObj ) )
         {
