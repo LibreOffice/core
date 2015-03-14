@@ -35,34 +35,34 @@ public:
         if(!aClientIter.m_pPosition)
             return nullptr;
         aClientIter.m_pCurrent = nullptr;
-        return PTR_CAST(TElementType,aClientIter.Next());
+        return Next();
     }
     TElementType* Last()
     {
         aClientIter.m_aSearchType = TYPE(TElementType);
-        GoEnd();
+        aClientIter.GoEnd();
         if(!aClientIter.m_pPosition)
             return nullptr;
-        if(aClientIter.m_pPosition->IsA(TYPE(TElementType))
+        if(aClientIter.m_pPosition->IsA(TYPE(TElementType)))
             return PTR_CAST(TElementType,aClientIter.m_pPosition);
-        return PTR_CAST(TElementType,aClientIter.Previous());
+        return Previous();
     }
     TElementType* Next()
     {
         if( aClientIter.m_pPosition == aClientIter.m_pCurrent )
-            aClientIter.m_pPosition = static_cast<SwClient*>(aClientIter.m_pPosition->m_pRight);
+            aClientIter.m_pPosition = aClientIter.GetRighOfPos();
         while(aClientIter.m_pPosition && !aClientIter.m_pPosition->IsA( TYPE(TElementType) ) )
-            aClientIter.m_pPosition = static_cast<SwClient*>(aClientIter.m_pPosition->m_pRight);
+            aClientIter.m_pPosition = aClientIter.GetRighOfPos();
         return PTR_CAST(TElementType,aClientIter.m_pCurrent = aClientIter.m_pPosition);
     }
     TElementType* Previous()
     {
-        aClientIter.m_pPosition = static_cast<SwClient*>(aClientIter.m_pPosition->m_pLeft);
+        aClientIter.m_pPosition = aClientIter.GetLeftOfPos();
         while(aClientIter.m_pPosition && !aClientIter.m_pPosition->IsA( TYPE(TElementType) ) )
-            aClientIter.m_pPosition = static_cast<SwClient*>(aClientIter.m_pPosition->m_pLeft);
+            aClientIter.m_pPosition = aClientIter.GetLeftOfPos();
         return PTR_CAST(TElementType,aClientIter.m_pCurrent = aClientIter.m_pPosition);
     }
-    static TElementType* FirstElement( const TSource& rMod ) { SwClient* p = SwClientIter(rMod).First(TYPE(TElementType)); return PTR_CAST(TElementType,p); }
+    static TElementType* FirstElement( const TSource& rMod ) { return SwIterator<TElementType, TSource>(rMod).First(); }
     bool IsChanged()          { return aClientIter.IsChanged(); }
 };
 

@@ -257,6 +257,8 @@ class SwClientIter SAL_FINAL : public sw::Ring<SwClientIter>
     // is marked down to become the current object in the next step
     // this is necessary because iteration requires access to members of the current object
     SwClient* m_pPosition;
+    SwClient* GetLeftOfPos() { return static_cast<SwClient*>(m_pPosition->m_pLeft); }
+    SwClient* GetRighOfPos() { return static_cast<SwClient*>(m_pPosition->m_pRight); }
 
     // iterator can be limited to return only SwClient objects of a certain type
     TypeId m_aSearchType;
@@ -330,8 +332,16 @@ SwClient::SwClient( SwModify* pToRegisterIn )
 void SwModify::ModifyBroadcast( const SfxPoolItem *pOldValue, const SfxPoolItem *pNewValue, TypeId nType)
 {
     SwClientIter aIter(*this);
-    for(aIter.First(nType); aIter; aIter.Next())
+    aIter.GoStart();
+    while(aIter)
+    {
+        if( aIter.m_pPosition == aIter.m_pCurrent )
+            aIter.m_pPosition = static_cast<SwClient*>(aIter.m_pPosition->m_pRight);
+        while(aIter.m_pPosition && !aIter.m_pPosition->IsA( nType ) )
+            aIter.m_pPosition = static_cast<SwClient*>(aIter.m_pPosition->m_pRight);
+        aIter.m_pCurrent = aIter.m_pPosition;
         aIter->Modify( pOldValue, pNewValue );
+    }
 }
 
 void SwModify::CallSwClientNotify( const SfxHint& rHint ) const
