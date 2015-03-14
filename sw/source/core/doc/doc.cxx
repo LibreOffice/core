@@ -1434,45 +1434,33 @@ bool SwDoc::RemoveInvisibleContent()
 
 bool SwDoc::HasInvisibleContent() const
 {
-    bool bRet = false;
-
-    SwClientIter aIter( *getIDocumentFieldsAccess().GetSysFldType( RES_HIDDENPARAFLD ) );
-    if( aIter.First( TYPE( SwFmtFld ) ) )
-        bRet = true;
+    if(SwIterator<SwFmtFld,SwFieldType>(*getIDocumentFieldsAccess().GetSysFldType( RES_HIDDENPARAFLD)).First())
+        return true;
 
     // Search for any hidden paragraph (hidden text attribute)
-    if( ! bRet )
+    for( sal_uLong n = GetNodes().Count()-1; n; --n)
     {
-        for( sal_uLong n = GetNodes().Count(); !bRet && (n > 0); )
+        SwTxtNode* pTxtNd = GetNodes()[ n ]->GetTxtNode();
+        if ( pTxtNd )
         {
-            SwTxtNode* pTxtNd = GetNodes()[ --n ]->GetTxtNode();
-            if ( pTxtNd )
-            {
-                SwPaM aPam(*pTxtNd, 0, *pTxtNd, pTxtNd->GetTxt().getLength());
-                if( pTxtNd->HasHiddenCharAttribute( true ) ||  ( pTxtNd->HasHiddenCharAttribute( false ) ) )
-                {
-                    bRet = true;
-                }
-            }
+            SwPaM aPam(*pTxtNd, 0, *pTxtNd, pTxtNd->GetTxt().getLength());
+            if( pTxtNd->HasHiddenCharAttribute( true ) ||  ( pTxtNd->HasHiddenCharAttribute( false ) ) )
+                return true;
         }
     }
 
-    if( ! bRet )
+    const SwSectionFmts& rSectFmts = GetSections();
+    for( SwSectionFmts::size_type n = rSectFmts.size()-1; n; --n )
     {
-        const SwSectionFmts& rSectFmts = GetSections();
-
-        for( SwSectionFmts::size_type n = rSectFmts.size(); !bRet && (n > 0); )
-        {
-            SwSectionFmt* pSectFmt = rSectFmts[ --n ];
-            // don't add sections in Undo/Redo
-            if( !pSectFmt->IsInNodesArr())
-                continue;
-            SwSection* pSect = pSectFmt->GetSection();
-            if( pSect->IsHidden() )
-                bRet = true;
-        }
+        SwSectionFmt* pSectFmt = rSectFmts[ n ];
+        // don't add sections in Undo/Redo
+        if( !pSectFmt->IsInNodesArr())
+            continue;
+        SwSection* pSect = pSectFmt->GetSection();
+        if( pSect->IsHidden() )
+            return true;
     }
-    return bRet;
+    return false;
 }
 
 bool SwDoc::RestoreInvisibleContent()
