@@ -37,7 +37,16 @@ public:
         aClientIter.m_pCurrent = nullptr;
         return PTR_CAST(TElementType,aClientIter.Next());
     }
-    TElementType* Last()      { SwClient* p = aClientIter.Last( TYPE(TElementType)); return PTR_CAST(TElementType,p); }
+    TElementType* Last()
+    {
+        aClientIter.m_aSearchType = TYPE(TElementType);
+        GoEnd();
+        if(!aClientIter.m_pPosition)
+            return nullptr;
+        if(aClientIter.m_pPosition->IsA(TYPE(TElementType))
+            return PTR_CAST(TElementType,aClientIter.m_pPosition);
+        return PTR_CAST(TElementType,aClientIter.Previous());
+    }
     TElementType* Next()      { SwClient* p = aClientIter.Next();     return PTR_CAST(TElementType,p); }
     TElementType* Previous()  { SwClient* p = aClientIter.Previous(); return PTR_CAST(TElementType,p);  }
     static TElementType* FirstElement( const TSource& rMod ) { SwClient* p = SwClientIter(rMod).First(TYPE(TElementType)); return PTR_CAST(TElementType,p); }

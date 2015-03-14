@@ -263,16 +263,6 @@ class SwClientIter SAL_FINAL : public sw::Ring<SwClientIter>
 
     static SW_DLLPUBLIC SwClientIter* our_pClientIters;
 
-    SwClient* Last( TypeId nType )
-    {
-        m_aSearchType = nType;
-        GoEnd();
-        if(!m_pPosition)
-            return nullptr;
-        if( m_pPosition->IsA( m_aSearchType ) )
-            return m_pPosition;
-        return Previous();
-    }
     SwClient* Next()
     {
         if( m_pPosition == m_pCurrent )
