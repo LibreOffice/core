@@ -62,7 +62,6 @@ public:
             aClientIter.m_pPosition = aClientIter.GetLeftOfPos();
         return PTR_CAST(TElementType,aClientIter.m_pCurrent = aClientIter.m_pPosition);
     }
-    static TElementType* FirstElement( const TSource& rMod ) { return SwIterator<TElementType, TSource>(rMod).First(); }
     bool IsChanged()          { return aClientIter.IsChanged(); }
 };
 
