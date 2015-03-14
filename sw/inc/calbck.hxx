@@ -283,10 +283,6 @@ public:
         return m_pCurrent = m_pPosition;
     }
 
-    // returns the current SwClient object, if its still a listener
-    // otherwise it returns the next SwClient that still is
-    SwClient* operator()() const
-        { return m_pPosition; }
     // returns the current SwClient object, wether it is still a client or not
     SwClient& operator*() const
         { return *m_pCurrent; }
