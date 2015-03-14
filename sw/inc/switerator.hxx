@@ -27,7 +27,7 @@ template< class TElementType, class TSource > class SwIterator SAL_FINAL
     SwClientIter aClientIter;
 public:
 
-    SwIterator( const TSource& rSrc ) : aClientIter(rSrc) { SAL_WARN_IF( !TElementType::IsOf( TYPE(SwClient) ), "sw", "Incompatible types!" ); }
+    SwIterator( const TSource& rSrc ) : aClientIter(rSrc) { assert(TElementType::IsOf( TYPE(SwClient) )); }
     TElementType* First()     { SwClient* p = aClientIter.First(TYPE(TElementType)); return PTR_CAST(TElementType,p); }
     TElementType* Last()      { SwClient* p = aClientIter.Last( TYPE(TElementType)); return PTR_CAST(TElementType,p); }
     TElementType* Next()      { SwClient* p = aClientIter.Next();     return PTR_CAST(TElementType,p); }
