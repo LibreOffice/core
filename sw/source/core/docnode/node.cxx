@@ -708,7 +708,7 @@ SwFrmFmt* SwNode::GetFlyFmt() const
     {
         if( IsCntntNode() )
         {
-            SwCntntFrm* pFrm = SwIterator<SwCntntFrm,SwCntntNode>::FirstElement( *static_cast<const SwCntntNode*>(this) );
+            SwCntntFrm* pFrm = SwIterator<SwCntntFrm,SwCntntNode>( *static_cast<const SwCntntNode*>(this) ).First();
             if( pFrm )
                 pRet = pFrm->FindFlyFrm()->GetFmt();
         }
@@ -1412,7 +1412,7 @@ bool SwCntntNode::GetInfo( SfxPoolItem& rInfo ) const
     case RES_CONTENT_VISIBLE:
         {
             static_cast<SwPtrMsgPoolItem&>(rInfo).pObject =
-                SwIterator<SwFrm,SwCntntNode>::FirstElement(*this);
+                SwIterator<SwFrm,SwCntntNode>(*this).First();
         }
         return false;
     }

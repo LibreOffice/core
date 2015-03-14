@@ -679,7 +679,7 @@ SwSectionFmt::~SwSectionFmt()
 
 SwSection * SwSectionFmt::GetSection() const
 {
-    return SwIterator<SwSection,SwSectionFmt>::FirstElement( *this );
+    return SwIterator<SwSection,SwSectionFmt>( *this ).First();
 }
 
 // Do not destroy all Frms in aDepend (Frms are recognized with a PTR_CAST).
@@ -858,7 +858,7 @@ bool SwSectionFmt::GetInfo( SfxPoolItem& rInfo ) const
 
     case RES_CONTENT_VISIBLE:
         {
-            SwFrm* pFrm = SwIterator<SwFrm,SwFmt>::FirstElement(*this);
+            SwFrm* pFrm = SwIterator<SwFrm,SwFmt>(*this).First();
             // if the current section has no own frame search for the children
             if(!pFrm)
             {
@@ -866,7 +866,7 @@ bool SwSectionFmt::GetInfo( SfxPoolItem& rInfo ) const
                 SwSectionFmt* pChild = aFormatIter.First();
                 while(pChild && !pFrm)
                 {
-                    pFrm = SwIterator<SwFrm,SwFmt>::FirstElement(*pChild);
+                    pFrm = SwIterator<SwFrm,SwFmt>(*pChild).First();
                     pChild = aFormatIter.Next();
                 }
             }

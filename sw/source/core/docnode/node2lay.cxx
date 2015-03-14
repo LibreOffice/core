@@ -69,9 +69,9 @@ SwNode* GoNextWithFrm(const SwNodes& rNodes, SwNodeIndex *pIdx)
         pNd = &aTmp.GetNode();
         bool bFound = false;
         if ( pNd->IsCntntNode() )
-            bFound = ( SwIterator<SwFrm,SwCntntNode>::FirstElement(*static_cast<SwCntntNode*>(pNd)) != 0);
+            bFound = SwIterator<SwFrm,SwCntntNode>(*static_cast<SwCntntNode*>(pNd)).First();
         else if ( pNd->IsTableNode() )
-            bFound = ( SwIterator<SwFrm,SwFmt>::FirstElement(*static_cast<SwTableNode*>(pNd)->GetTable().GetFrmFmt()) != 0 );
+            bFound = SwIterator<SwFrm,SwFmt>(*static_cast<SwTableNode*>(pNd)->GetTable().GetFrmFmt()).First() ;
         else if( pNd->IsEndNode() && !pNd->StartOfSectionNode()->IsSectionNode() )
         {
             pNd = 0;
@@ -101,9 +101,9 @@ SwNode* GoPreviousWithFrm(SwNodeIndex *pIdx)
         pNd = &aTmp.GetNode();
         bool bFound = false;
         if ( pNd->IsCntntNode() )
-            bFound = ( SwIterator<SwFrm,SwCntntNode>::FirstElement(*static_cast<SwCntntNode*>(pNd)) != 0);
+            bFound = SwIterator<SwFrm,SwCntntNode>(*static_cast<SwCntntNode*>(pNd)).First();
         else if ( pNd->IsTableNode() )
-            bFound = ( SwIterator<SwFrm,SwFmt>::FirstElement(*static_cast<SwTableNode*>(pNd)->GetTable().GetFrmFmt()) != 0 );
+            bFound = SwIterator<SwFrm,SwFmt>(*static_cast<SwTableNode*>(pNd)->GetTable().GetFrmFmt()).First();
         else if( pNd->IsStartNode() && !pNd->IsSectionNode() )
         {
             pNd = 0;
