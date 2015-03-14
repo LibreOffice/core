@@ -513,9 +513,8 @@ sal_Bool VCLXAccessibleEdit::pasteText( sal_Int32 nIndex ) throw (IndexOutOfBoun
         Reference< datatransfer::clipboard::XClipboard > xClipboard = GetWindow()->GetClipboard();
         if ( xClipboard.is() )
         {
-            const sal_uInt32 nRef = Application::ReleaseSolarMutex();
             Reference< datatransfer::XTransferable > xDataObj = xClipboard->getContents();
-            Application::AcquireSolarMutex( nRef );
+            SolarMutexReleaser nRef;
             if ( xDataObj.is() )
             {
                 datatransfer::DataFlavor aFlavor;
