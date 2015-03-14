@@ -657,17 +657,7 @@
 
 // internal graphics names
 #define OOO_STRING_SVTOOLS_HTML_private_image "private:image/"
-#define OOO_STRING_SVTOOLS_HTML_internal_gopher "internal-gopher-"
 #define OOO_STRING_SVTOOLS_HTML_internal_icon "internal-icon-"
-#define OOO_STRING_SVTOOLS_HTML_INT_GOPHER_binary "binary"
-#define OOO_STRING_SVTOOLS_HTML_INT_GOPHER_image "image"
-#define OOO_STRING_SVTOOLS_HTML_INT_GOPHER_index "index"
-#define OOO_STRING_SVTOOLS_HTML_INT_GOPHER_menu "menu"
-#define OOO_STRING_SVTOOLS_HTML_INT_GOPHER_movie "movie"
-#define OOO_STRING_SVTOOLS_HTML_INT_GOPHER_sound "sound"
-#define OOO_STRING_SVTOOLS_HTML_INT_GOPHER_telnet "telnet"
-#define OOO_STRING_SVTOOLS_HTML_INT_GOPHER_text "text"
-#define OOO_STRING_SVTOOLS_HTML_INT_GOPHER_unknown "unknown"
 #define OOO_STRING_SVTOOLS_HTML_INT_ICON_baddata "baddata"
 #define OOO_STRING_SVTOOLS_HTML_INT_ICON_delayed "delayed"
 #define OOO_STRING_SVTOOLS_HTML_INT_ICON_embed "embed"

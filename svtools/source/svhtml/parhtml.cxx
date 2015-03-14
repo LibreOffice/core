@@ -1842,41 +1842,9 @@ int HTMLParser::FilterListing( int nToken )
 
 bool HTMLParser::InternalImgToPrivateURL( OUString& rURL )
 {
-    if( rURL.getLength() < 19 || 'i' != rURL[0] ||
-        rURL.compareTo( OOO_STRING_SVTOOLS_HTML_internal_gopher, 9 ) != 0 )
-        return false;
-
     bool bFound = false;
 
-    if( rURL.startsWith( OOO_STRING_SVTOOLS_HTML_internal_gopher ) )
-    {
-        OUString aName( rURL.copy(16) );
-        switch( aName[0] )
-        {
-        case 'b':
-            bFound = aName == OOO_STRING_SVTOOLS_HTML_INT_GOPHER_binary;
-            break;
-        case 'i':
-            bFound = aName == OOO_STRING_SVTOOLS_HTML_INT_GOPHER_image ||
-                     aName == OOO_STRING_SVTOOLS_HTML_INT_GOPHER_index;
-            break;
-        case 'm':
-            bFound = aName == OOO_STRING_SVTOOLS_HTML_INT_GOPHER_menu ||
-                     aName == OOO_STRING_SVTOOLS_HTML_INT_GOPHER_movie;
-            break;
-        case 's':
-            bFound = aName == OOO_STRING_SVTOOLS_HTML_INT_GOPHER_sound;
-            break;
-        case 't':
-            bFound = aName == OOO_STRING_SVTOOLS_HTML_INT_GOPHER_telnet ||
-                     aName == OOO_STRING_SVTOOLS_HTML_INT_GOPHER_text;
-            break;
-        case 'u':
-            bFound = aName == OOO_STRING_SVTOOLS_HTML_INT_GOPHER_unknown;
-            break;
-        }
-    }
-    else if( rURL.startsWith( OOO_STRING_SVTOOLS_HTML_internal_icon ) )
+    if( rURL.startsWith( OOO_STRING_SVTOOLS_HTML_internal_icon ) )
     {
         OUString aName( rURL.copy(14) );
         switch( aName[0] )
