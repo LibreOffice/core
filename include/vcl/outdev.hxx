@@ -263,6 +263,26 @@ class VCL_DLLPUBLIC OutputDevice
     friend class vcl::PDFWriterImpl;
     friend void ImplHandleResize( vcl::Window* pWindow, long nNewWidth, long nNewHeight );
 
+    // All of this will need to be replicated in Window
+    // or a shared base-class as/when we can break the
+    // OutputDevice -> Window inheritance.
+private:
+    mutable int mnRefCnt;         // reference count
+
+    template<typename T> friend class ::rtl::Reference;
+    template<typename T> friend class ::VclPtr;
+
+    inline void acquire() const
+    {
+        mnRefCnt++;
+    }
+
+    inline void release() const
+    {
+        if (!--mnRefCnt)
+            delete const_cast<OutputDevice*>(this);
+    }
+
 private:
     OutputDevice(const OutputDevice&) SAL_DELETED_FUNCTION;
     OutputDevice& operator=(const OutputDevice&) SAL_DELETED_FUNCTION;
@@ -352,6 +372,7 @@ private:
     mutable bool                    mbTextSpecial : 1;
     mutable bool                    mbRefPoint : 1;
     mutable bool                    mbEnableRTL : 1;
+    mutable bool                    mbDisposed : 1;
 
     /** @name Initialization and accessor functions
      */
@@ -359,9 +380,16 @@ private:
 
 protected:
                                 OutputDevice();
-
 public:
     virtual                     ~OutputDevice();
+
+protected:
+    /// release all references to other objects.
+    virtual void                        dispose();
+
+public:
+    /// call the dispose() method if we have not already been disposed.
+    void                                disposeOnce();
 
 public:
 

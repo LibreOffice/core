@@ -137,23 +137,10 @@ bool Window::IsDisposed() const
     return !mpWindowImpl;
 }
 
-void Window::disposeOnce()
-{
-    if (!mpWindowImpl || mpWindowImpl->mbInDispose)
-        return;
-    mpWindowImpl->mbInDispose = true;
-
-    // catch badness where our Window was not wrapped safely
-    // in a VclPtr cosily.
-    assert( mnRefCnt>0 );
-
-    // hold a ref in case something silly happens during dispose.
-    VclPtr<Window> aRef(this);
-    dispose();
-}
-
 void Window::dispose()
 {
+    mpWindowImpl->mbInDispose = true;
+
     assert( mpWindowImpl && mpWindowImpl->mbInDispose ); // should only be called from disposeOnce()
     assert( !mpWindowImpl->mpParent ||
             !mpWindowImpl->mpParent->IsDisposed() ||
@@ -585,6 +572,8 @@ void Window::dispose()
 
     // should be the last statements
     delete mpWindowImpl; mpWindowImpl = NULL;
+
+    OutputDevice::dispose();
 }
 
 Window::~Window()
