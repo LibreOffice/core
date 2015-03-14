@@ -414,6 +414,8 @@ public:
     void EnableAutoSpell( bool bEnable );
     void ResetAutoSpell();
     void SetAutoSpellData( SCCOL nPosX, SCROW nPosY, const std::vector<editeng::MisspellRanges>* pRanges );
+    const std::vector<editeng::MisspellRanges>* GetAutoSpellData( SCCOL nPosX, SCROW nPosY );
+    bool InsideVisibleRange( SCCOL nPosX, SCROW nPosY );
 
     void            DeleteCopySourceOverlay();
     void            UpdateCopySourceOverlay();

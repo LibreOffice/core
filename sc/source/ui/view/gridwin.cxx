@@ -5764,6 +5764,22 @@ void ScGridWindow::SetAutoSpellData( SCCOL nPosX, SCROW nPosY, const std::vector
     mpSpellCheckCxt->setMisspellRanges(nPosX, nPosY, pRanges);
 }
 
+const std::vector<editeng::MisspellRanges>* ScGridWindow::GetAutoSpellData( SCCOL nPosX, SCROW nPosY )
+{
+    if (!mpSpellCheckCxt)
+        return NULL;
+
+    if (!maVisibleRange.isInside(nPosX, nPosY))
+        return NULL;
+
+    return mpSpellCheckCxt->getMisspellRanges(nPosX, nPosY);
+}
+
+bool ScGridWindow::InsideVisibleRange( SCCOL nPosX, SCROW nPosY )
+{
+    return maVisibleRange.isInside(nPosX, nPosY);
+}
+
 // #114409#
 void ScGridWindow::CursorChanged()
 {
