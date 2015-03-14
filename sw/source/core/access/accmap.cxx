@@ -1338,15 +1338,13 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                     if(nStartIndex.GetNode().IsCntntNode())
                     {
                         SwCntntNode* pCNd = static_cast<SwCntntNode*>(&(nStartIndex.GetNode()));
-                        SwClientIter aClientIter( *pCNd );
-                        pFrm = static_cast<SwFrm*>(aClientIter.First( TYPE(SwFrm)));
+                        pFrm = SwIterator<SwFrm, SwCntntNode>(*pCNd).First();
                     }
                     else if( nStartIndex.GetNode().IsTableNode() )
                     {
                         SwTableNode * pTable = static_cast<SwTableNode *>(&(nStartIndex.GetNode()));
                         SwFrmFmt* pFmt = const_cast<SwFrmFmt*>(pTable->GetTable().GetFrmFmt());
-                        SwClientIter aClientIter( *pFmt );
-                        pFrm = static_cast<SwFrm*>(aClientIter.First( TYPE(SwFrm)));
+                        pFrm = SwIterator<SwFrm, SwFrmFmt>(*pFmt).First();
                     }
 
                     if( pFrm && mpFrmMap)
