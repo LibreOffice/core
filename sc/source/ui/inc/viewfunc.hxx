@@ -368,6 +368,8 @@ private:
                                         bool bAttrChanged, bool bAddUndo );
 
     void            MarkAndJumpToRanges(const ScRangeList& rRanges);
+    void            CopyAutoSpellData( FillDir eDir, SCCOL nStartCol, SCROW nStartRow,
+                                       SCCOL nEndCol, SCROW nEndRow, sal_uLong nCount );
 };
 
 #endif
