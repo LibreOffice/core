@@ -43,6 +43,10 @@ struct CompareOptions;
 
 }
 
+namespace svl {
+class SharedStringPool;
+}
+
 /**
  * Try NOT to use this struct.  This struct should go away in a hopefully
  * not so distant futture.
@@ -394,6 +398,7 @@ public:
     void MulOp(svl::SharedString aString, double fVal, ScMatrix& rMat);
     void DivOp(bool bFlag, svl::SharedString aString, double fVal, ScMatrix& rMat);
     void PowOp(bool bFlag, svl::SharedString aString, double fVal, ScMatrix& rMat);
+    void AmpersandOp(bool bFlag, svl::SharedString aString, ScMatrix& rMat, svl::SharedStringPool& rStrPool);
 
     ScMatrix& operator+= ( const ScMatrix& r );
 

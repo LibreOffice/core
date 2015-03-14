@@ -1362,37 +1362,9 @@ void ScInterpreter::ScAmpersand()
                     for (SCSIZE j = 0; j < nR; ++j)
                         pResMat->PutError( nGlobalError, i, j);
             }
-            else if (bFlag)
-            {
-                for (SCSIZE i = 0; i < nC; ++i)
-                    for (SCSIZE j = 0; j < nR; ++j)
-                    {
-                        sal_uInt16 nErr = pMat->GetErrorIfNotString( i, j);
-                        if (nErr)
-                            pResMat->PutError( nErr, i, j);
-                        else
-                        {
-                            OUString aTmp = sStr;
-                            aTmp += pMat->GetString(*pFormatter, i, j).getString();
-                            pResMat->PutString(mrStrPool.intern(aTmp), i, j);
-                        }
-                    }
-            }
             else
             {
-                for (SCSIZE i = 0; i < nC; ++i)
-                    for (SCSIZE j = 0; j < nR; ++j)
-                    {
-                        sal_uInt16 nErr = pMat->GetErrorIfNotString( i, j);
-                        if (nErr)
-                            pResMat->PutError( nErr, i, j);
-                        else
-                        {
-                            OUString aTmp = pMat->GetString(*pFormatter, i, j).getString();
-                            aTmp += sStr;
-                            pResMat->PutString(mrStrPool.intern(aTmp), i, j);
-                        }
-                    }
+                pMat->AmpersandOp(bFlag, sStr, *pResMat, mrStrPool);
             }
             PushMatrix(pResMat);
         }
