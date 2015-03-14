@@ -55,7 +55,13 @@ public:
             aClientIter.m_pPosition = static_cast<SwClient*>(aClientIter.m_pPosition->m_pRight);
         return PTR_CAST(TElementType,aClientIter.m_pCurrent = aClientIter.m_pPosition);
     }
-    TElementType* Previous()  { SwClient* p = aClientIter.Previous(); return PTR_CAST(TElementType,p);  }
+    TElementType* Previous()
+    {
+        aClientIter.m_pPosition = static_cast<SwClient*>(aClientIter.m_pPosition->m_pLeft);
+        while(aClientIter.m_pPosition && !aClientIter.m_pPosition->IsA( TYPE(TElementType) ) )
+            aClientIter.m_pPosition = static_cast<SwClient*>(aClientIter.m_pPosition->m_pLeft);
+        return PTR_CAST(TElementType,aClientIter.m_pCurrent = aClientIter.m_pPosition);
+    }
     static TElementType* FirstElement( const TSource& rMod ) { SwClient* p = SwClientIter(rMod).First(TYPE(TElementType)); return PTR_CAST(TElementType,p); }
     bool IsChanged()          { return aClientIter.IsChanged(); }
 };
