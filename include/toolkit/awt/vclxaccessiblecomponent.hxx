@@ -85,6 +85,10 @@ public:
 
     VCLXWindow*    GetVCLXWindow() const { return mpVCLXindow; }
     VclPtr<vcl::Window> GetWindow() const;
+    template< class derived_type > VclPtr< derived_type > GetAs() const {
+        return VclPtr< derived_type >( static_cast< derived_type * >( GetWindow().get() ) ); }
+    template< class derived_type > VclPtr< derived_type > GetAsDynamic() const {
+        return VclPtr< derived_type >( dynamic_cast< derived_type * >( GetWindow().get() ) ); }
 
     virtual void SAL_CALL disposing() SAL_OVERRIDE;
 

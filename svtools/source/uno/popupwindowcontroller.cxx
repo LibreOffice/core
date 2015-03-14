@@ -216,7 +216,7 @@ void SAL_CALL PopupWindowController::doubleClick() throw (RuntimeException, std:
 
 Reference< awt::XWindow > SAL_CALL PopupWindowController::createPopupWindow() throw (RuntimeException, std::exception)
 {
-    ToolBox* pToolBox = dynamic_cast< ToolBox* >( VCLUnoHelper::GetWindow( getParent() ) );
+    VclPtr< ToolBox > pToolBox = dynamic_cast< ToolBox* >( VCLUnoHelper::GetWindow( getParent() ).get() );
     if( pToolBox )
     {
         vcl::Window* pItemWindow = pToolBox->GetItemWindow( pToolBox->GetDownItemId() );

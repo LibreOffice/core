@@ -517,7 +517,7 @@ void StatusbarController::bindListener()
 
         if ( m_xParentWindow.is() )
         {
-            StatusBar* pStatusBar = dynamic_cast< StatusBar* >( VCLUnoHelper::GetWindow( m_xParentWindow ));
+            VclPtr< StatusBar > pStatusBar = dynamic_cast< StatusBar* >( VCLUnoHelper::GetWindow( m_xParentWindow ).get() );
             if ( pStatusBar && pStatusBar->GetType() == WINDOW_STATUSBAR )
                 aRect = pStatusBar->GetItemRect( m_nID );
         }

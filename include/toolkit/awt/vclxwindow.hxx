@@ -128,7 +128,7 @@ public:
     VCLXWindow( bool bWithDefaultProps = false );
     virtual ~VCLXWindow();
 
-    virtual void        SetWindow( VclPtr<vcl::Window> pWindow );
+    virtual void SetWindow( const VclPtr< vcl::Window > &pWindow );
     template< class derived_type > VclPtr< derived_type > GetAs() const {
         return VclPtr< derived_type >( static_cast< derived_type * >( GetOutputDevice().get() ) ); }
     template< class derived_type > VclPtr< derived_type > GetAsDynamic() const {

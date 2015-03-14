@@ -124,7 +124,7 @@ public:
                     VCLXFileControl();
                     virtual ~VCLXFileControl();
 
-    void            SetWindow( vcl::Window* pWindow ) SAL_OVERRIDE;
+    virtual void SetWindow( const VclPtr< vcl::Window > &pWindow ) SAL_OVERRIDE;
 
     // ::com::sun::star::uno::XInterface
     ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -176,8 +176,6 @@ protected:
 
     sal_Int32                   nKeyToSetDelayed;
 
-    FormattedField*             GetFormattedField() const { return static_cast<FormattedField*>(GetWindow()); }
-
 public:
     SVTXFormattedField();
     virtual ~SVTXFormattedField();
@@ -210,7 +208,7 @@ protected:
     void    NotifyTextListeners();
     ::com::sun::star::uno::Any  convertEffectiveValue(const ::com::sun::star::uno::Any& rValue);
 
-    virtual void    SetWindow(vcl::Window* _pWindow) SAL_OVERRIDE;
+    virtual void    SetWindow( const VclPtr< vcl::Window > &_pWindow) SAL_OVERRIDE;
 
     static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) SAL_OVERRIDE { return ImplGetPropertyIds( aIds ); }
@@ -250,8 +248,7 @@ private:
     static RMItemData GetRMItemData( const ::com::sun::star::container::ContainerEvent& _rEvent );
 
 protected:
-    ::svt::ORoadmap*                GetRoadmap() const;
-    void                            ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) SAL_OVERRIDE;
+    virtual void ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) SAL_OVERRIDE;
 
     virtual ~SVTXRoadmap();
 

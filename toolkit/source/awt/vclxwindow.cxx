@@ -366,7 +366,7 @@ void VCLXWindow::ImplExecuteAsyncWithoutSolarLock( const Callback& i_callback )
     return mpImpl->getAccessibleFactory().getFactory();
 }
 
-void VCLXWindow::SetWindow( VclPtr<vcl::Window> pWindow )
+void VCLXWindow::SetWindow( const VclPtr<vcl::Window> &pWindow )
 {
     if ( GetWindow() )
     {

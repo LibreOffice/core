@@ -223,7 +223,7 @@ void TreeControlPeer::disposeControl()
 
 
 
-void TreeControlPeer::SetWindow( vcl::Window* pWindow )
+void TreeControlPeer::SetWindow( const VclPtr< vcl::Window > &pWindow )
 {
     VCLXWindow::SetWindow( pWindow );
 }
