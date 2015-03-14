@@ -159,7 +159,7 @@ void SwPageNumberFieldType::ChangeExpansion( SwDoc* pDoc,
                 const SwCntntNode* pNd = PTR_CAST( SwCntntNode, pDesc->GetDefinedIn() );
                 if( pNd )
                 {
-                    if ( SwIterator<SwFrm,SwCntntNode>::FirstElement(*pNd) )
+                    if ( SwIterator<SwFrm,SwCntntNode>(*pNd).First() )
                         bVirtuell = true;
                 }
                 else if( pDesc->GetDefinedIn()->ISA( SwFmt ))

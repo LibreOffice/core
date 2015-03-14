@@ -2232,7 +2232,7 @@ bool SwFEShell::GotoFly( const OUString& rName, FlyCntType eType, bool bSelFrm )
     {
         SET_CURR_SHELL( this );
 
-        SwFlyFrm* pFrm = SwIterator<SwFlyFrm,SwFmt>::FirstElement( *pFlyFmt );
+        SwFlyFrm* pFrm = SwIterator<SwFlyFrm,SwFmt>( *pFlyFmt ).First();
         if( pFrm )
         {
             if( bSelFrm )

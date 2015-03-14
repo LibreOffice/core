@@ -1469,7 +1469,7 @@ SwTableBox* SwTable::GetTblBox( sal_uLong nSttIdx )
         if ( pTblNd && pTblNd->GetTable().GetFrmFmt() )
             pModify = pTblNd->GetTable().GetFrmFmt();
 
-        SwFrm* pFrm = pModify ? SwIterator<SwFrm,SwModify>::FirstElement(*pModify) : NULL;
+        SwFrm* pFrm = pModify ? SwIterator<SwFrm,SwModify>(*pModify).First() : nullptr;
         while ( pFrm && !pFrm->IsCellFrm() )
             pFrm = pFrm->GetUpper();
         if ( pFrm )
@@ -1730,7 +1730,7 @@ SwTableBoxFmt* SwTableBox::CheckBoxFmt( SwTableBoxFmt* pFmt )
     if( SfxItemState::SET == pFmt->GetItemState( RES_BOXATR_VALUE, false ) ||
         SfxItemState::SET == pFmt->GetItemState( RES_BOXATR_FORMULA, false ) )
     {
-        SwTableBox* pOther = SwIterator<SwTableBox,SwFmt>::FirstElement( *pFmt );
+        SwTableBox* pOther = SwIterator<SwTableBox,SwFmt>( *pFmt ).First();
         if( pOther )
         {
             SwTableBoxFmt* pNewFmt = pFmt->GetDoc()->MakeTableBoxFmt();
@@ -1927,7 +1927,7 @@ bool SwTable::GetInfo( SfxPoolItem& rInfo ) const
             break;
 
         case RES_CONTENT_VISIBLE:
-            static_cast<SwPtrMsgPoolItem&>(rInfo).pObject = SwIterator<SwFrm,SwFmt>::FirstElement( *GetFrmFmt() );
+            static_cast<SwPtrMsgPoolItem&>(rInfo).pObject = SwIterator<SwFrm,SwFmt>( *GetFrmFmt() ).First();
             return false;
     }
     return true;
@@ -1936,8 +1936,8 @@ bool SwTable::GetInfo( SfxPoolItem& rInfo ) const
 SwTable * SwTable::FindTable( SwFrmFmt const*const pFmt )
 {
     return (pFmt)
-        ? SwIterator<SwTable,SwFmt>::FirstElement(*pFmt)
-        : 0;
+        ? SwIterator<SwTable,SwFmt>(*pFmt).First()
+        : nullptr;
 }
 
 SwTableNode* SwTable::GetTableNode() const
@@ -2595,7 +2595,7 @@ public:
     {
         m_pTable = pTable;
         SwFrmFmt * pFrmFmt = m_pTable->GetFrmFmt();
-        m_pTabFrm = SwIterator<SwTabFrm,SwFmt>::FirstElement(*pFrmFmt);
+        m_pTabFrm = SwIterator<SwTabFrm,SwFmt>(*pFrmFmt).First();
         if (m_pTabFrm && m_pTabFrm->IsFollow())
             m_pTabFrm = m_pTabFrm->FindMaster(true);
     }
@@ -2738,7 +2738,7 @@ bool SwTable::HasLayout() const
 {
     const SwFrmFmt* pFrmFmt = GetFrmFmt();
     //a table in a clipboard document doesn't have any layout information
-    return pFrmFmt && SwIterator<SwTabFrm,SwFmt>::FirstElement(*pFrmFmt);
+    return pFrmFmt && SwIterator<SwTabFrm,SwFmt>(*pFrmFmt).First();
 }
 
 void SwTableLine::RegisterToFormat( SwFmt& rFmt )

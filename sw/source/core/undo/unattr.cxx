@@ -153,7 +153,7 @@ void SwUndoFmtAttr::Init()
         if ( pDoc->GetTblFrmFmts()->Contains( m_pFmt ))
         {
             // Table Format: save table position, table formats are volatile!
-            SwTable * pTbl = SwIterator<SwTable,SwFmt>::FirstElement( *m_pFmt );
+            SwTable * pTbl = SwIterator<SwTable,SwFmt>( *m_pFmt ).First();
             if ( pTbl )
             {
                 m_nNodeIndex = pTbl->GetTabSortBoxes()[ 0 ]->GetSttNd()
@@ -166,7 +166,7 @@ void SwUndoFmtAttr::Init()
         }
         else if ( 0 != dynamic_cast< SwTableBoxFmt* >( m_pFmt ) )
         {
-            SwTableBox * pTblBox = SwIterator<SwTableBox,SwFmt>::FirstElement( *m_pFmt );
+            SwTableBox * pTblBox = SwIterator<SwTableBox,SwFmt>( *m_pFmt ).First();
             if ( pTblBox )
             {
                 m_nNodeIndex = pTblBox->GetSttIdx();

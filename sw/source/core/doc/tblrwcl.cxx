@@ -586,7 +586,7 @@ bool SwTable::_InsertRow( SwDoc* pDoc, const SwSelBoxes& rBoxes,
 
     // Find Lines for the layout update
     const bool bLayout = !IsNewModel() &&
-        0 != SwIterator<SwTabFrm,SwFmt>( *GetFrmFmt() ).First();
+        nullptr != SwIterator<SwTabFrm,SwFmt>( *GetFrmFmt() ).First();
 
     if ( bLayout )
     {

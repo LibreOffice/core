@@ -639,7 +639,7 @@ void SwDrawContact::GetTextObjectsFromFmt( std::list<SdrTextObj*>& rTextObjects,
         const SwFrmFmt* pFly = (*pDoc->GetSpzFrmFmts())[n];
         if( pFly->IsA( TYPE(SwDrawFrmFmt) ) )
         {
-            SwDrawContact* pContact = SwIterator<SwDrawContact,SwFrmFmt>::FirstElement(*pFly);
+            SwDrawContact* pContact = SwIterator<SwDrawContact,SwFrmFmt>(*pFly).First();
             if( pContact )
             {
                 SdrObject* pSdrO = pContact->GetMaster();
@@ -1794,7 +1794,7 @@ void SwDrawContact::ConnectToLayout( const SwFmtAnchor* pAnch )
                     {
                         SwNodeIndex aIdx( pAnch->GetCntntAnchor()->nNode );
                         SwCntntNode* pCNd = pDrawFrmFmt->GetDoc()->GetNodes().GoNext( &aIdx );
-                        if ( SwIterator<SwFrm,SwCntntNode>::FirstElement( *pCNd ) )
+                        if ( SwIterator<SwFrm,SwCntntNode>( *pCNd ).First() )
                             pModify = pCNd;
                         else
                         {
