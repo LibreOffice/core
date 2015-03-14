@@ -132,7 +132,7 @@ struct DocxSdrExport::Impl
     const Size* m_pFlyFrameSize;
     bool m_bTextFrameSyntax;
     bool m_bDMLTextFrameSyntax;
-    sax_fastparser::FastAttributeList* m_pFlyAttrList;
+    std::unique_ptr<sax_fastparser::FastAttributeList> m_pFlyAttrList;
     sax_fastparser::FastAttributeList* m_pTextboxAttrList;
     OStringBuffer m_aTextFrameStyle;
     bool m_bFrameBtLr;
@@ -160,7 +160,6 @@ struct DocxSdrExport::Impl
           m_pFlyFrameSize(0),
           m_bTextFrameSyntax(false),
           m_bDMLTextFrameSyntax(false),
-          m_pFlyAttrList(0),
           m_pTextboxAttrList(0),
           m_bFrameBtLr(false),
           m_bDrawingOpen(false),
@@ -181,7 +180,6 @@ struct DocxSdrExport::Impl
 
     ~Impl()
     {
-        delete m_pFlyAttrList, m_pFlyAttrList = NULL;
         delete m_pTextboxAttrList, m_pTextboxAttrList = NULL;
     }
 
@@ -220,14 +218,9 @@ bool DocxSdrExport::getDMLTextFrameSyntax()
     return m_pImpl->m_bDMLTextFrameSyntax;
 }
 
-sax_fastparser::FastAttributeList*& DocxSdrExport::getFlyAttrList()
+std::unique_ptr<sax_fastparser::FastAttributeList>& DocxSdrExport::getFlyAttrList()
 {
     return m_pImpl->m_pFlyAttrList;
-}
-
-void DocxSdrExport::setFlyAttrList(sax_fastparser::FastAttributeList* pAttrList)
-{
-    m_pImpl->m_pFlyAttrList = pAttrList;
 }
 
 sax_fastparser::FastAttributeList* DocxSdrExport::getTextboxAttrList()
@@ -1592,7 +1585,7 @@ void DocxSdrExport::writeVMLTextFrame(sw::Frame* pParentFrame, bool bTextBoxOnly
     m_pImpl->m_pFlyFrameSize = &aSize;
 
     m_pImpl->m_bTextFrameSyntax = true;
-    m_pImpl->m_pFlyAttrList = pFS->createAttrList();
+    m_pImpl->m_pFlyAttrList.reset(pFS->createAttrList());
     m_pImpl->m_pTextboxAttrList = pFS->createAttrList();
     m_pImpl->m_aTextFrameStyle = "position:absolute";
     if (!bTextBoxOnly)
@@ -1610,8 +1603,7 @@ void DocxSdrExport::writeVMLTextFrame(sw::Frame* pParentFrame, bool bTextBoxOnly
         if (!sAnchorId.isEmpty())
             m_pImpl->m_pFlyAttrList->addNS(XML_w14, XML_anchorId, OUStringToOString(sAnchorId, RTL_TEXTENCODING_UTF8));
     }
-    sax_fastparser::XFastAttributeListRef xFlyAttrList(m_pImpl->m_pFlyAttrList);
-    m_pImpl->m_pFlyAttrList = NULL;
+    sax_fastparser::XFastAttributeListRef xFlyAttrList(m_pImpl->m_pFlyAttrList.release());
     m_pImpl->m_bFrameBtLr = checkFrameBtlr(m_pImpl->m_rExport.pDoc->GetNodes()[nStt], m_pImpl->m_pTextboxAttrList);
     sax_fastparser::XFastAttributeListRef xTextboxAttrList(m_pImpl->m_pTextboxAttrList);
     m_pImpl->m_pTextboxAttrList = NULL;

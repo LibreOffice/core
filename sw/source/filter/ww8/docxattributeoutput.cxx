@@ -845,8 +845,7 @@ void DocxAttributeOutput::WriteCollectedParagraphProperties()
 {
     if ( m_rExport.SdrExporter().getFlyAttrList() )
     {
-        XFastAttributeListRef xAttrList( m_rExport.SdrExporter().getFlyAttrList() );
-        m_rExport.SdrExporter().setFlyAttrList(NULL);
+        XFastAttributeListRef xAttrList( m_rExport.SdrExporter().getFlyAttrList().release() );
 
         m_pSerializer->singleElementNS( XML_w, XML_framePr, xAttrList );
     }
@@ -2385,9 +2384,8 @@ void DocxAttributeOutput::Redline( const SwRedlineData* pRedlineData)
                     // to the DOCX when the function 'WriteCollectedParagraphProperties' gets called.
                     // So we need to store the current status of these lists, so that we can revert back to them when
                     // we are done exporting the redline attributes.
-                    ::sax_fastparser::FastAttributeList *pFlyAttrList_Original              = m_rExport.SdrExporter().getFlyAttrList();
+                    std::unique_ptr<sax_fastparser::FastAttributeList> pFlyAttrList_Original(m_rExport.SdrExporter().getFlyAttrList().release());
                     std::unique_ptr<sax_fastparser::FastAttributeList> pParagraphSpacingAttrList_Original(m_pParagraphSpacingAttrList.release());
-                    m_rExport.SdrExporter().setFlyAttrList(NULL);
 
                     // Output the redline item set
                     m_rExport.OutputItemSet( *pChangesSet, true, false, i18n::ScriptType::LATIN, m_rExport.mbExportModeRTF );
@@ -2396,7 +2394,7 @@ void DocxAttributeOutput::Redline( const SwRedlineData* pRedlineData)
                     WriteCollectedParagraphProperties();
 
                     // Revert back the original values that were stored in 'm_rExport.SdrExporter().getFlyAttrList()', 'm_pParagraphSpacingAttrList'
-                    m_rExport.SdrExporter().setFlyAttrList(pFlyAttrList_Original);
+                    m_rExport.SdrExporter().getFlyAttrList().reset(pFlyAttrList_Original.release());
                     m_pParagraphSpacingAttrList.reset(pParagraphSpacingAttrList_Original.release());
 
                     m_pSerializer->endElementNS( XML_w, XML_pPr );
