@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a29b11f_48f9ef4c",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 672,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2015-03-15T10:10:58Z",
+      "side": 1,
+      "message": "Wrap these two lines in an \"if (mbExported)\" condition.",
+      "revId": "dc9671840a793118d4869edd7edd26ed99083486",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
