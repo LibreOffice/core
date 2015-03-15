@@ -110,6 +110,14 @@ void UnitsTest::testUTUnit() {
 
     CPPUNIT_ASSERT(aM_S*aS == aM);
     CPPUNIT_ASSERT(aM/aS == aM_S);
+
+    // Do some simple conversion testing
+    UtUnit aCM;
+    UtUnit::createUnit("cm", aCM, mpUnitsImpl->mpUnitSystem);
+    CPPUNIT_ASSERT(aCM.areConvertibleTo(aM));
+    CPPUNIT_ASSERT(!aCM.areConvertibleTo(aS));
+    CPPUNIT_ASSERT(aCM.convertValueTo(0.0, aM) == 0.0); // 0 converts to 0
+    CPPUNIT_ASSERT(aCM.convertValueTo(100.0, aM) == 1.0);
 }
 
 void UnitsTest::testUnitVerification() {
