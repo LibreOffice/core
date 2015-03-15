@@ -534,7 +534,7 @@ void OPropertySetHelper::setFastPropertyValue( sal_Int32 nHandle, const Any& rVa
         if( nAttributes & PropertyAttribute::CONSTRAINED )
         {
             // In aValue is the converted rValue
-            // fire a constarined event
+            // fire a constrained event
             // second parameter NULL means constrained
             fire( &nHandle, &rValue, &aOldVal, 1, sal_True );
         }
