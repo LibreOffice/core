@@ -95,6 +95,10 @@ public:
         // i.e. we are working with this / rUnit.
         return UtUnit(ut_divide(this->get(), rUnit.get()));
     }
+
+    bool areConvertibleTo(const UtUnit& rUnit) {
+        return ut_are_convertible(this->get(), rUnit.get());
+    }
 };
 
 template< typename charT, typename traits >
