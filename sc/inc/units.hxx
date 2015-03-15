@@ -57,6 +57,25 @@ public:
                                              ScAddress& rHeaderCellAddress,
                                              OUString& rCellUnit) = 0;
 
+    /**
+     * Convert a cell with local unit annotation to store data in the units represented by
+     * its (column-level) header.
+     *
+     * This method should only be used with the data provided by isCellConversionRecommended.
+     * It will remove the cell's local unit annotation, and not add any of it's own annotation.
+     * You should use the (yet to be implemented) convertCells() method for more generic
+     * unit conversion.
+     *
+     * Returns true for successful conversion, false if an error occured (e.g. if the data
+     * has been modified in the meantime, i.e. that the units no longer correspond
+     * to the expected annotation or header).
+     */
+    virtual bool convertCellToHeaderUnit(const ScAddress& rCellAddress,
+                                         ScDocument* pDoc,
+                                         const OUString& rsNewUnit,
+                                         const OUString& rsOldUnit) = 0;
+
+
     virtual ~Units() {}
 };
 

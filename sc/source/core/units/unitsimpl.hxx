@@ -67,6 +67,10 @@ public:
                                              OUString& rHeaderUnit,
                                              ScAddress& rHeaderCellAddress,
                                              OUString& rCellUnit) SAL_OVERRIDE;
+    virtual bool convertCellToHeaderUnit(const ScAddress& rCellAddress,
+                                         ScDocument* pDoc,
+                                         const OUString& rsNewUnit,
+                                         const OUString& rsOldUnit) SAL_OVERRIDE;
 
 private:
     UtUnit getOutputUnitsForOpCode(std::stack< UtUnit >& rUnitStack, const OpCode& rOpCode);
