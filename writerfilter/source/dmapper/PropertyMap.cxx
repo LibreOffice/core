@@ -41,6 +41,7 @@
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/TextGridMode.hpp>
 #include <com/sun/star/text/XTextCopy.hpp>
+#include <comphelper/sequence.hxx>
 #include "dmapperLoggers.hxx"
 #include "PropertyMapHelper.hxx"
 
@@ -65,7 +66,7 @@ PropertyMap::~PropertyMap()
 
 uno::Sequence< beans::PropertyValue > PropertyMap::GetPropertyValues(bool bCharGrabBag)
 {
-    if(!m_aValues.getLength() && !m_vMap.empty())
+    if(m_aValues.empty() && !m_vMap.empty())
     {
         size_t nCharGrabBag = 0;
         size_t nParaGrabBag = 0;
@@ -94,20 +95,7 @@ uno::Sequence< beans::PropertyValue > PropertyMap::GetPropertyValues(bool bCharG
                 nRowGrabBag++;
         }
 
-        // In case there are properties to be grab-bagged and we can have a char grab-bag, allocate one slot for it.
-        size_t nCharGrabBagSize = 0;
-        if (bCharGrabBag)
-            nCharGrabBagSize = nCharGrabBag ? 1 : 0;
-        size_t nParaGrabBagSize = nParaGrabBag ? 1 : 0;
-        size_t nCellGrabBagSize = nCellGrabBag ? 1 : 0;
-        size_t nRowGrabBagSize = nRowGrabBag ? 1 : 0;
-
         // If there are any grab bag properties, we need one slot for them.
-        m_aValues.realloc( m_vMap.size() - nCharGrabBag + nCharGrabBagSize
-                                  - nParaGrabBag + nParaGrabBagSize
-                                  - nCellGrabBagSaved + nCellGrabBagSize
-                                  - nRowGrabBag + nRowGrabBagSize);
-        ::com::sun::star::beans::PropertyValue* pValues = m_aValues.getArray();
         uno::Sequence<beans::PropertyValue> aCharGrabBagValues(nCharGrabBag);
         uno::Sequence<beans::PropertyValue> aParaGrabBagValues(nParaGrabBag);
         uno::Sequence<beans::PropertyValue> aCellGrabBagValues(nCellGrabBag);
@@ -118,7 +106,6 @@ uno::Sequence< beans::PropertyValue > PropertyMap::GetPropertyValues(bool bCharG
         beans::PropertyValue* pRowGrabBagValues = aRowGrabBagValues.getArray();
         //style names have to be the first elements within the property sequence
         //otherwise they will overwrite 'hard' attributes
-        sal_Int32 nValue = 0;
         sal_Int32 nRowGrabBagValue = 0;
         sal_Int32 nCellGrabBagValue = 0;
         sal_Int32 nParaGrabBagValue = 0;
@@ -127,24 +114,27 @@ uno::Sequence< beans::PropertyValue > PropertyMap::GetPropertyValues(bool bCharG
         MapIterator aParaStyleIter = m_vMap.find(PROP_PARA_STYLE_NAME);
         if( aParaStyleIter != m_vMap.end())
         {
-            pValues[nValue].Name = rPropNameSupplier.GetName( aParaStyleIter->first );
-            pValues[nValue].Value = aParaStyleIter->second.getValue();
-            ++nValue;
+            beans::PropertyValue aValue;
+            aValue.Name = rPropNameSupplier.GetName( aParaStyleIter->first );
+            aValue.Value = aParaStyleIter->second.getValue();
+            m_aValues.push_back(aValue);
         }
 
         MapIterator aCharStyleIter = m_vMap.find(PROP_CHAR_STYLE_NAME);
         if( aCharStyleIter != m_vMap.end())
         {
-            pValues[nValue].Name = rPropNameSupplier.GetName( aCharStyleIter->first );
-            pValues[nValue].Value = aCharStyleIter->second.getValue();
-            ++nValue;
+            beans::PropertyValue aValue;
+            aValue.Name = rPropNameSupplier.GetName( aCharStyleIter->first );
+            aValue.Value = aCharStyleIter->second.getValue();
+            m_aValues.push_back(aValue);
         }
         MapIterator aNumRuleIter = m_vMap.find(PROP_NUMBERING_RULES);
         if( aNumRuleIter != m_vMap.end())
         {
-            pValues[nValue].Name = rPropNameSupplier.GetName( aNumRuleIter->first );
-            pValues[nValue].Value = aNumRuleIter->second.getValue();
-            ++nValue;
+            beans::PropertyValue aValue;
+            aValue.Name = rPropNameSupplier.GetName( aNumRuleIter->first );
+            aValue.Value = aNumRuleIter->second.getValue();
+            m_aValues.push_back(aValue);
         }
         MapIterator aMapIter = m_vMap.begin();
         for( ; aMapIter != m_vMap.end(); ++aMapIter )
@@ -192,39 +182,44 @@ uno::Sequence< beans::PropertyValue > PropertyMap::GetPropertyValues(bool bCharG
                     }
                     else
                     {
-                        pValues[nValue].Name = rPropNameSupplier.GetName( aMapIter->first );
-                        pValues[nValue].Value = aMapIter->second.getValue();
-                        ++nValue;
+                        beans::PropertyValue aValue;
+                        aValue.Name = rPropNameSupplier.GetName( aMapIter->first );
+                        aValue.Value = aMapIter->second.getValue();
+                        m_aValues.push_back(aValue);
                     }
                 }
             }
         }
         if (nCharGrabBag && bCharGrabBag)
         {
-            pValues[nValue].Name = "CharInteropGrabBag";
-            pValues[nValue].Value = uno::makeAny(aCharGrabBagValues);
-            ++nValue;
+            beans::PropertyValue aValue;
+            aValue.Name = "CharInteropGrabBag";
+            aValue.Value = uno::makeAny(aCharGrabBagValues);
+            m_aValues.push_back(aValue);
         }
         if (nParaGrabBag)
         {
-            pValues[nValue].Name = "ParaInteropGrabBag";
-            pValues[nValue].Value = uno::makeAny(aParaGrabBagValues);
-            ++nValue;
+            beans::PropertyValue aValue;
+            aValue.Name = "ParaInteropGrabBag";
+            aValue.Value = uno::makeAny(aParaGrabBagValues);
+            m_aValues.push_back(aValue);
         }
         if (nCellGrabBag)
         {
-            pValues[nValue].Name = "CellInteropGrabBag";
-            pValues[nValue].Value = uno::makeAny(aCellGrabBagValues);
-            ++nValue;
+            beans::PropertyValue aValue;
+            aValue.Name = "CellInteropGrabBag";
+            aValue.Value = uno::makeAny(aCellGrabBagValues);
+            m_aValues.push_back(aValue);
         }
         if (nRowGrabBag)
         {
-            pValues[nValue].Name = "RowInteropGrabBag";
-            pValues[nValue].Value = uno::makeAny(aRowGrabBagValues);
-            ++nValue;
+            beans::PropertyValue aValue;
+            aValue.Name = "RowInteropGrabBag";
+            aValue.Value = uno::makeAny(aRowGrabBagValues);
+            m_aValues.push_back(aValue);
         }
     }
-    return m_aValues;
+    return comphelper::containerToSequence(m_aValues);
 }
 
 #ifdef DEBUG_WRITERFILTER

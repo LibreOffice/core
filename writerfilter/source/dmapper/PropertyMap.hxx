@@ -105,7 +105,7 @@ public:
 class PropertyMap
 {
     /// Cache the property values for the GetPropertyValues() call(s).
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >   m_aValues;
+    std::vector< ::com::sun::star::beans::PropertyValue >   m_aValues;
 
     //marks context as footnote context - ::text( ) events contain either the footnote character or can be ignored
     //depending on sprmCSymbol
@@ -123,8 +123,8 @@ class PropertyMap
 protected:
     void Invalidate()
     {
-        if(m_aValues.getLength())
-            m_aValues.realloc( 0 );
+        if(m_aValues.size())
+            m_aValues.clear();
     }
 
 public:
@@ -136,7 +136,7 @@ public:
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > GetPropertyValues(bool bCharGrabBag = true);
         //Sequence: Grab Bags: The CHAR_GRAB_BAG has Name "CharInteropGrabBag" and the PARA_GRAB_BAG has Name "ParaInteropGrabBag"
         //  the contained properties are their Value.
-    bool hasEmptyPropertyValues() const {return !m_aValues.getLength();}
+    bool hasEmptyPropertyValues() const {return m_aValues.empty();}
 
     //Add property, optionally overwriting existing attributes
     void Insert( PropertyIds eId, const ::com::sun::star::uno::Any& rAny, bool bOverwrite = true, GrabBagType i_GrabBagType = NO_GRAB_BAG );
