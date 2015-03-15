@@ -1016,7 +1016,7 @@ void RtfAttributeOutput::DefaultStyle(sal_uInt16 /*nStyle*/)
 
 void RtfAttributeOutput::StartStyle(const OUString& rName, StyleType eType,
                                     sal_uInt16 nBase, sal_uInt16 nNext, sal_uInt16 /*nWwId*/, sal_uInt16 nId,
-                                    bool /* bAutoUpdate */)
+                                    bool bAutoUpdate)
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC << ", rName = '" << rName << "'");
 
@@ -1035,6 +1035,9 @@ void RtfAttributeOutput::StartStyle(const OUString& rName, StyleType eType,
 
     m_aStylesheet.append(OOO_STRING_SVTOOLS_RTF_SNEXT);
     m_aStylesheet.append((sal_Int32)nNext);
+
+    if (bAutoUpdate)
+        m_aStylesheet.append(OOO_STRING_SVTOOLS_RTF_SAUTOUPD);
 
     m_rStyleName = rName;
     m_nStyleId = nId;

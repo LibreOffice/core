@@ -867,6 +867,15 @@ DECLARE_RTFEXPORT_TEST(testMargmirror, "margmirror.rtf")
     CPPUNIT_ASSERT_EQUAL(style::PageStyleLayout_MIRRORED, getProperty<style::PageStyleLayout>(xPageStyle, "PageStyleLayout"));
 }
 
+DECLARE_RTFEXPORT_TEST(testSautoupd, "sautoupd.rtf")
+{
+    // \sautoupd was ignored during import and export.
+    uno::Reference<beans::XPropertySet> xHeading1(getStyles("ParagraphStyles")->getByName("Heading 1"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xHeading1, "IsAutoUpdate"));
+    uno::Reference<beans::XPropertySet> xHeading2(getStyles("ParagraphStyles")->getByName("Heading 2"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xHeading2, "IsAutoUpdate"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
