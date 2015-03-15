@@ -951,58 +951,14 @@ void SwSectionFmt::UpdateParent()
     const SwFmtEditInReadonly* pEditInReadonly = 0;
     bool bIsHidden = false;
 
-    SwClientIter aIter( *this );    // TODO
-    ::SwClient * pLast = aIter.GoStart();
-    if( pLast ) // Could we jump to the beginning?
-        do {
-            if( pLast->IsA( TYPE(SwSectionFmt) ) )
+    SwIterator<SwClient,SwSectionFmt> aIter(*this);
+    for(SwClient* pLast = aIter.First(); pLast; pLast = aIter.Next())
+    {
+        if( pLast->IsA( TYPE(SwSectionFmt) ) )
+        {
+            if( !pSection )
             {
-                if( !pSection )
-                {
-                    pSection = GetSection();
-                    if( GetRegisteredIn() )
-                    {
-                        const SwSection* pPS = GetParentSection();
-                        pProtect = &pPS->GetFmt()->GetProtect();
-                        // edit in readonly sections
-                        pEditInReadonly = &pPS->GetFmt()->GetEditInReadonly();
-                        bIsHidden = pPS->IsHiddenFlag();
-                    }
-                    else
-                    {
-                        pProtect = &GetProtect();
-                        // edit in readonly sections
-                        pEditInReadonly = &GetEditInReadonly();
-                        bIsHidden = pSection->IsHidden();
-                    }
-                }
-                if (!pProtect->IsCntntProtected() !=
-                    !pSection->IsProtectFlag())
-                {
-                    pLast->ModifyNotification( (SfxPoolItem*)pProtect,
-                                    (SfxPoolItem*)pProtect );
-                }
-
-                // edit in readonly sections
-                if (!pEditInReadonly->GetValue() !=
-                    !pSection->IsEditInReadonlyFlag())
-                {
-                    pLast->ModifyNotification( (SfxPoolItem*)pEditInReadonly,
-                                    (SfxPoolItem*)pEditInReadonly );
-                }
-
-                if( bIsHidden == pSection->IsHiddenFlag() )
-                {
-                    SwMsgPoolItem aMsgItem( static_cast<sal_uInt16>(bIsHidden
-                                ? RES_SECTION_HIDDEN
-                                : RES_SECTION_NOT_HIDDEN ) );
-                    pLast->ModifyNotification( &aMsgItem, &aMsgItem );
-                }
-            }
-            else if( !pSection &&
-                    pLast->IsA( TYPE(SwSection) ) )
-            {
-                pSection = static_cast<SwSection*>(pLast);
+                pSection = GetSection();
                 if( GetRegisteredIn() )
                 {
                     const SwSection* pPS = GetParentSection();
@@ -1019,7 +975,50 @@ void SwSectionFmt::UpdateParent()
                     bIsHidden = pSection->IsHidden();
                 }
             }
-        } while( 0 != ( pLast = ++aIter ));
+            if (!pProtect->IsCntntProtected() !=
+                !pSection->IsProtectFlag())
+            {
+                pLast->ModifyNotification( (SfxPoolItem*)pProtect,
+                                (SfxPoolItem*)pProtect );
+            }
+
+            // edit in readonly sections
+            if (!pEditInReadonly->GetValue() !=
+                !pSection->IsEditInReadonlyFlag())
+            {
+                pLast->ModifyNotification( (SfxPoolItem*)pEditInReadonly,
+                                (SfxPoolItem*)pEditInReadonly );
+            }
+
+            if( bIsHidden == pSection->IsHiddenFlag() )
+            {
+                SwMsgPoolItem aMsgItem( static_cast<sal_uInt16>(bIsHidden
+                            ? RES_SECTION_HIDDEN
+                            : RES_SECTION_NOT_HIDDEN ) );
+                pLast->ModifyNotification( &aMsgItem, &aMsgItem );
+            }
+        }
+        else if( !pSection &&
+                pLast->IsA( TYPE(SwSection) ) )
+        {
+            pSection = static_cast<SwSection*>(pLast);
+            if( GetRegisteredIn() )
+            {
+                const SwSection* pPS = GetParentSection();
+                pProtect = &pPS->GetFmt()->GetProtect();
+                // edit in readonly sections
+                pEditInReadonly = &pPS->GetFmt()->GetEditInReadonly();
+                bIsHidden = pPS->IsHiddenFlag();
+            }
+            else
+            {
+                pProtect = &GetProtect();
+                // edit in readonly sections
+                pEditInReadonly = &GetEditInReadonly();
+                bIsHidden = pSection->IsHidden();
+            }
+        }
+    }
 }
 
 SwSectionNode* SwSectionFmt::GetSectionNode(bool const bAlways)
