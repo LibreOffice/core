@@ -47,7 +47,7 @@ public:
 
     void testUnitFromHeaderExtraction();
 
-    void testCellConversionRequired();
+    void testCellConversion();
 
     CPPUNIT_TEST_SUITE(UnitsTest);
 
@@ -58,7 +58,7 @@ public:
     CPPUNIT_TEST(testUnitValueStringSplitting);
     CPPUNIT_TEST(testUnitFromHeaderExtraction);
 
-    CPPUNIT_TEST(testCellConversionRequired);
+    CPPUNIT_TEST(testCellConversion);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -320,7 +320,9 @@ void UnitsTest::testUnitFromHeaderExtraction() {
     // CPPUNIT_ASSERT(aUnit == aTestUnit);
 }
 
-void UnitsTest::testCellConversionRequired() {
+void UnitsTest::testCellConversion() {
+    // We test both isCellConversionRecommended, and convertCellToHeaderUnit
+    // since their arguments are essentially shared / dependent.
     mpDoc->EnsureTable(0);
 
     // Set up a column with a normal header and a few data values
@@ -358,12 +360,17 @@ void UnitsTest::testCellConversionRequired() {
     // First united cell: "cm" (convertible to "m")
     address.IncRow();
     mpDoc->SetNumberFormat(address, nKeyCM);
-    mpDoc->SetValue(address, 10);
+    mpDoc->SetValue(address, 100);
 
     CPPUNIT_ASSERT(mpUnitsImpl->isCellConversionRecommended(address, mpDoc, sHeaderUnit, aHeaderAddress, sCellUnit));
     CPPUNIT_ASSERT(sHeaderUnit == "m");
     CPPUNIT_ASSERT(sCellUnit == "cm");
     CPPUNIT_ASSERT(aHeaderAddress == ScAddress(20, 0, 0));
+
+    // Test conversion (From cm to m)
+    CPPUNIT_ASSERT(mpUnitsImpl->convertCellToHeaderUnit(address, mpDoc, sHeaderUnit, sCellUnit));
+    CPPUNIT_ASSERT(mpDoc->GetValue(address) == 1);
+    CPPUNIT_ASSERT(mpDoc->GetNumberFormat(address) == 0);
 
     // Second united cell: "kg" (not convertible to "m")
     address.IncRow();
@@ -374,6 +381,10 @@ void UnitsTest::testCellConversionRequired() {
     CPPUNIT_ASSERT(sHeaderUnit.isEmpty());
     CPPUNIT_ASSERT(sCellUnit.isEmpty());
     CPPUNIT_ASSERT(!aHeaderAddress.IsValid());
+
+    // We specifically don't test conversion with invalid units since that would be nonsensical
+    // (i.e. would require us passing in made up arguments, where it's specifically necessary
+    // to pass in the output of isCellConversionRecommended).
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(UnitsTest);
