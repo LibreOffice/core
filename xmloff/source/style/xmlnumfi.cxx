@@ -110,6 +110,7 @@ struct SvXMLNumberInfo
     sal_Int32   nDecimals;
     sal_Int32   nInteger;
     sal_Int32   nExpDigits;
+    sal_Int32   nExpInterval;
     sal_Int32   nNumerDigits;
     sal_Int32   nDenomDigits;
     sal_Int32   nFracDenominator;
@@ -121,7 +122,7 @@ struct SvXMLNumberInfo
 
     SvXMLNumberInfo()
     {
-        nDecimals = nInteger = nExpDigits = nNumerDigits = nDenomDigits = nFracDenominator = -1;
+        nDecimals = nInteger = nExpDigits = nExpInterval = nNumerDigits = nDenomDigits = nFracDenominator = -1;
         bGrouping = bDecReplace = bVarDecimals = false;
         fDisplayFactor = 1.0;
     }
@@ -203,7 +204,7 @@ public:
 class SvXMLNumFmtPropContext : public SvXMLImportContext
 {
     SvXMLNumFormatContext&  rParent;
-	sal_Int32				m_nColor;
+    sal_Int32               m_nColor;
     bool                    bColSet;
 
 public:
@@ -276,6 +277,7 @@ enum SvXMLStyleElemAttrTokens
     XML_TOK_ELEM_ATTR_DECIMAL_REPLACEMENT,
     XML_TOK_ELEM_ATTR_DENOMINATOR_VALUE,
     XML_TOK_ELEM_ATTR_MIN_EXPONENT_DIGITS,
+    XML_TOK_ELEM_ATTR_EXPONENT_INTERVAL,
     XML_TOK_ELEM_ATTR_MIN_NUMERATOR_DIGITS,
     XML_TOK_ELEM_ATTR_MIN_DENOMINATOR_DIGITS,
     XML_TOK_ELEM_ATTR_RFC_LANGUAGE_TAG,
@@ -571,6 +573,8 @@ const SvXMLTokenMap& SvXMLNumImpData::GetStyleElemAttrTokenMap()
             { XML_NAMESPACE_NUMBER, XML_DECIMAL_REPLACEMENT,     XML_TOK_ELEM_ATTR_DECIMAL_REPLACEMENT  },
             { XML_NAMESPACE_NUMBER, XML_DENOMINATOR_VALUE,       XML_TOK_ELEM_ATTR_DENOMINATOR_VALUE  },
             { XML_NAMESPACE_NUMBER, XML_MIN_EXPONENT_DIGITS,     XML_TOK_ELEM_ATTR_MIN_EXPONENT_DIGITS  },
+            // number:exponent-interval will be supported in ODF 1.3
+            { XML_NAMESPACE_LO_EXT, XML_EXPONENT_INTERVAL,       XML_TOK_ELEM_ATTR_EXPONENT_INTERVAL    },
             { XML_NAMESPACE_NUMBER, XML_MIN_NUMERATOR_DIGITS,    XML_TOK_ELEM_ATTR_MIN_NUMERATOR_DIGITS },
             { XML_NAMESPACE_NUMBER, XML_MIN_DENOMINATOR_DIGITS,  XML_TOK_ELEM_ATTR_MIN_DENOMINATOR_DIGITS },
             { XML_NAMESPACE_NUMBER, XML_RFC_LANGUAGE_TAG,        XML_TOK_ELEM_ATTR_RFC_LANGUAGE_TAG     },
@@ -958,6 +962,10 @@ SvXMLNumFmtElementContext::SvXMLNumFmtElementContext( SvXMLImport& rImport,
                 if (::sax::Converter::convertNumber( nAttrVal, sValue, 0 ))
                     aNumInfo.nExpDigits = nAttrVal;
                 break;
+            case XML_TOK_ELEM_ATTR_EXPONENT_INTERVAL:
+                if (::sax::Converter::convertNumber( nAttrVal, sValue, 0 ))
+                    aNumInfo.nExpInterval = nAttrVal;
+                break;
             case XML_TOK_ELEM_ATTR_MIN_NUMERATOR_DIGITS:
                 if (::sax::Converter::convertNumber( nAttrVal, sValue, 0 ))
                     aNumInfo.nNumerDigits = nAttrVal;
@@ -1219,6 +1227,14 @@ void SvXMLNumFmtElementContext::EndElement()
 
         case XML_TOK_STYLE_SCIENTIFIC_NUMBER:
             {
+                // exponential interval for engineering notation
+                if( !aNumInfo.bGrouping && aNumInfo.nExpInterval > aNumInfo.nInteger )
+                {
+                    for (sal_Int32 i=0; i<aNumInfo.nExpInterval-aNumInfo.nInteger; i++)
+                    {
+                        rParent.AddToCode( '#' );
+                    }
+                }
                 rParent.AddNumber( aNumInfo );      // simple number
 
                 rParent.AddToCode( OUString("E+") );
@@ -1790,6 +1806,32 @@ void SvXMLNumFormatContext::AddNumber( const SvXMLNumberInfo& rInfo )
         // so it has to be removed if nLeading is 0 (".00E+0", not "#.00E+0").
 
         aNumStr.stripStart('#');
+    }
+
+    if ( bGrouping && rInfo.nExpInterval > rInfo.nInteger )
+    {
+        sal_Int32 nIndex = 0;
+        sal_Int32 nDigits = rInfo.nInteger;
+        sal_Int32 nIntegerEnd = aNumStr.indexOf( pFormatter->GetNumDecimalSep() );
+        if ( nIntegerEnd < 0 )
+            nIntegerEnd = aNumStr.getLength();
+        while ( nIndex >= 0 && nIndex < nIntegerEnd )
+        {
+            if ( ( nIndex = aNumStr.indexOf( '#', nIndex ) ) >= 0 )
+            {
+                nDigits ++;
+                nIndex ++;
+            }
+            else
+                nIndex = -1;
+        }
+        if( rInfo.nExpInterval > nDigits )
+        {
+            for (sal_Int32 i=0; i<rInfo.nExpInterval-nDigits; i++)
+            {
+                aNumStr.insert( 0, '#' );
+            }
+        }
     }
 
     if ( nEmbeddedCount )

@@ -3244,6 +3244,8 @@ namespace xmloff { namespace token {
         XML_CHART_DUNITS_BUILTINUNIT,
         XML_EXTERNALDATA,
 
+        XML_EXPONENT_INTERVAL,
+
         XML_TOKEN_END
     };
 
