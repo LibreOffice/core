@@ -725,6 +725,7 @@ namespace xmloff { namespace token {
         XML_EXECUTE_MACRO,
         XML_EXISTS,
         XML_EXP,
+        XML_EXPONENT_INTERVAL,
         XML_EXPONENTIAL,
         XML_EXPRESSION,
         XML_EXTRA,

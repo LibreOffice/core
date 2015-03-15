@@ -634,7 +634,7 @@ void SvXMLNumFmtExport::WriteNumberElement_Impl(
 
 void SvXMLNumFmtExport::WriteScientificElement_Impl(
                             sal_Int32 nDecimals, sal_Int32 nInteger,
-                            bool bGrouping, sal_Int32 nExp )
+                            bool bGrouping, sal_Int32 nExp, sal_Int32 nExpInterval )
 {
     FinishTextElement_Impl();
 
@@ -665,6 +665,13 @@ void SvXMLNumFmtExport::WriteScientificElement_Impl(
                               OUString::number( nExp ) );
     }
 
+    //  exponent interval for engineering notation
+    if ( nExpInterval >= 0 )
+    {        // when exponent-interval will be part of ODF 1.3, change to XML_NAMESPACE_NUMBER
+         rExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_EXPONENT_INTERVAL,
+                              OUString::number( nExpInterval ) );
+    }
+
     SvXMLElementExport aElem( rExport,
                               XML_NAMESPACE_NUMBER, XML_SCIENTIFIC_NUMBER,
                               true, false );
@@ -679,7 +686,7 @@ void SvXMLNumFmtExport::WriteFractionElement_Impl(
     //  integer digits
     if ( nInteger >= 0 )        // negative = default (no integer part)
     {
-        rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_MIN_INTEGER_DIGITS,
+        rExport.AddAttribute( XML_NAMESPACE_LO_EXT, XML_MIN_INTEGER_DIGITS,
                               OUString::number( nInteger ) );
     }
 
@@ -1400,8 +1407,8 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                             case css::util::NumberFormat::SCIENTIFIC:
                                 // #i43959# for scientific numbers, count all integer symbols ("0" and "#")
                                 // as integer digits: use nIntegerSymbols instead of nLeading
-                                // (use of '#' to select multiples in exponent might be added later)
-                                WriteScientificElement_Impl( nPrecision, nIntegerSymbols, bThousand, nExpDigits );
+                                // nIntegerSymbols represents exponent interval (for engineering notation)
+                                WriteScientificElement_Impl( nPrecision, nLeading, bThousand, nExpDigits, nIntegerSymbols );
                                 bAnyContent = true;
                                 break;
                             case css::util::NumberFormat::FRACTION:
