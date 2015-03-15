@@ -243,10 +243,8 @@ protected:
 
 class SwClientIter SAL_FINAL : public sw::Ring<SwClientIter>
 {
-    friend SwClient* SwModify::Remove(SwClient*); ///< for pointer adjustments
-    friend void SwModify::Add(SwClient*);   ///< for pointer adjustments
+    friend class SwModify;
     template<typename E, typename S> friend class SwIterator; ///< for typed interation
-    friend void SwModify::ModifyBroadcast( const SfxPoolItem*, const SfxPoolItem*, TypeId); ///< for typed iteration
 
     const SwModify& m_rRoot;
 
@@ -259,6 +257,22 @@ class SwClientIter SAL_FINAL : public sw::Ring<SwClientIter>
     SwClient* m_pPosition;
     SwClient* GetLeftOfPos() { return static_cast<SwClient*>(m_pPosition->m_pLeft); }
     SwClient* GetRighOfPos() { return static_cast<SwClient*>(m_pPosition->m_pRight); }
+    SwClient* GoStart()
+    {
+        if((m_pPosition = const_cast<SwClient*>(m_rRoot.GetDepends())))
+            while( m_pPosition->m_pLeft )
+                m_pPosition = static_cast<SwClient*>(m_pPosition->m_pLeft);
+        return m_pCurrent = m_pPosition;
+    }
+    SwClient* GoEnd()
+    {
+        if(!m_pPosition)
+            m_pPosition = const_cast<SwClient*>(m_rRoot.GetDepends());
+        if(m_pPosition)
+            while( m_pPosition->m_pRight )
+                m_pPosition = static_cast<SwClient*>(m_pPosition->m_pRight);
+        return m_pCurrent = m_pPosition;
+    }
 
     static SW_DLLPUBLIC SwClientIter* our_pClientIters;
 
@@ -284,22 +298,6 @@ public:
     {
         if( m_pPosition == m_pCurrent )
             m_pPosition = static_cast<SwClient*>(m_pPosition->m_pRight);
-        return m_pCurrent = m_pPosition;
-    }
-    SwClient* GoStart()
-    {
-        if((m_pPosition = const_cast<SwClient*>(m_rRoot.GetDepends())))
-            while( m_pPosition->m_pLeft )
-                m_pPosition = static_cast<SwClient*>(m_pPosition->m_pLeft);
-        return m_pCurrent = m_pPosition;
-    }
-    SwClient* GoEnd()
-    {
-        if(!m_pPosition)
-            m_pPosition = const_cast<SwClient*>(m_rRoot.GetDepends());
-        if(m_pPosition)
-            while( m_pPosition->m_pRight )
-                m_pPosition = static_cast<SwClient*>(m_pPosition->m_pRight);
         return m_pCurrent = m_pPosition;
     }
 
