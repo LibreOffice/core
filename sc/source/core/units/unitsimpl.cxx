@@ -208,7 +208,7 @@ OUString UnitsImpl::extractUnitStringForCell(const ScAddress& rAddress, ScDocume
     return extractUnitStringFromFormat(rFormatString);
 }
 
-bool UnitsImpl::extractUnitFromHeaderString(const OUString& rString, UtUnit& aUnit) {
+bool UnitsImpl::extractUnitFromHeaderString(const OUString& rString, UtUnit& aUnit, OUString& sUnitString) {
     com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
 
     uno::Reference<lang::XMultiServiceFactory> xFactory(xContext->getServiceManager(), uno::UNO_QUERY_THROW);
@@ -243,7 +243,7 @@ bool UnitsImpl::extractUnitFromHeaderString(const OUString& rString, UtUnit& aUn
             // i.e. startOffset is the last character of the intended substring, endOffset the first character.
             // We specifically grab the offsets for the first actual regex group, which are stored in [1], the indexes
             // at [0] represent the whole matched string (i.e. including square brackets).
-            OUString sUnitString = rString.copy(aResult.endOffset[1], aResult.startOffset[1] - aResult.endOffset[1]);
+            sUnitString = rString.copy(aResult.endOffset[1], aResult.startOffset[1] - aResult.endOffset[1]);
 
             if (UtUnit::createUnit(sUnitString, aUnit, mpUnitSystem)) {
                 return true;
@@ -260,7 +260,7 @@ bool UnitsImpl::extractUnitFromHeaderString(const OUString& rString, UtUnit& aUn
     // E.g. by parsing in this way we might end up with unmatched parentheses which udunits won't like.
     // for now operators have to be completely freestanding i.e. "cm / kg" or completely within a valid unit string e.g. "cm/kg"
     const OUString sOperators = "/*"; // valid
-    OUString sCurrent = "";
+    sUnitString.clear();
     for (sal_Int32 nToken = 0; nToken < nTokenCount; nToken++) {
         OUString sToken = rString.getToken(nToken, ' ');
         UtUnit aTestUnit;
@@ -268,11 +268,11 @@ bool UnitsImpl::extractUnitFromHeaderString(const OUString& rString, UtUnit& aUn
             // Only test for a separator character if we have already got something in our string, as
             // some of the operators could be used as separators from description to unit
             // (e.g. "a description / kg").
-            ((sCurrent.getLength() > 0) && (sToken.getLength() == 1) && (sOperators.indexOf(sToken[0]) != -1))) {
+            ((sUnitString.getLength() > 0) && (sToken.getLength() == 1) && (sOperators.indexOf(sToken[0]) != -1))) {
                 // we're repeatedly testing the string hence using an OUStringBuffer isn't of much use since there's
                 // no simple/efficient way of repeatedly getting a testable OUString from the buffer.
-                sCurrent += sToken;
-        } else if (sCurrent.getLength() > 0) {
+                sUnitString += sToken;
+        } else if (sUnitString.getLength() > 0) {
             // If we have units, followed by text, followed by units, we should still flag an error since
             // that's ambiguous (unless the desired units are enclose in [] in which case we've
             // already extracted these desired units in step 1 above.
@@ -282,12 +282,13 @@ bool UnitsImpl::extractUnitFromHeaderString(const OUString& rString, UtUnit& aUn
 
     // We test the length to make sure we don't return the dimensionless unit 1 if we haven't found any units
     // in the header.
-    if (sCurrent.getLength() && UtUnit::createUnit(sCurrent, aUnit, mpUnitSystem)) {
+    if (sUnitString.getLength() && UtUnit::createUnit(sUnitString, aUnit, mpUnitSystem)) {
         return true;
     }
 
     // 3. Give up
     aUnit = UtUnit(); // assign invalid
+    sUnitString.clear();
     return false;
 }
 
@@ -321,8 +322,9 @@ UtUnit UnitsImpl::getUnitForRef(FormulaToken* pToken, const ScAddress& rFormulaA
         // differently defined units of their own. (However as these intervening cells
         // will have the unit stored in the number format it would be ignored when
         // checking the cell's string anyway.)
-        if (pDoc->GetCellType(aAddress) == CELLTYPE_STRING &&
-            extractUnitFromHeaderString(pDoc->GetString(aAddress), aUnit)) {
+        UtUnit aUnit;
+        if (pDoc->GetCellType(rHeaderAddress) == CELLTYPE_STRING &&
+            extractUnitFromHeaderString(pDoc->GetString(rHeaderAddress), aUnit, rsHeaderUnitString)) {
             // TODO: one potential problem is that we could have a text only "united" data cell
             // (where the unit wasn't automatically extracted due to being entered via
             // a different spreadsheet program).
