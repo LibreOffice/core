@@ -118,13 +118,10 @@ void DelHFFormat( SwClient *pToRemove, SwFrmFmt *pFmt )
     {
         // nested scope because DTOR of SwClientIter resets the flag bTreeChg.
         // It's suboptimal if the format is deleted beforehand.
-        SwClientIter aIter( *pFmt );        // TODO
-        SwClient *pLast = aIter.GoStart();
-        if( pLast )
-            do {
-                bDel = pLast->IsA( TYPE(SwFrm) )
-                    || SwXHeadFootText::IsXHeadFootText(pLast);
-            } while( bDel && 0 != ( pLast = ++aIter ));
+        SwIterator<SwClient,SwFrmFmt> aIter(*pFmt);
+        for(SwClient* pLast = aIter.First(); bDel && pLast; pLast = aIter.Next())
+            if(!pLast->IsA(TYPE(SwFrm)) || !SwXHeadFootText::IsXHeadFootText(pLast))
+                bDel = false;
     }
 
     if ( bDel )
