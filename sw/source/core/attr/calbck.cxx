@@ -75,12 +75,8 @@ SwModify::~SwModify()
             // forget me so that they don't try to get removed from my list
             // later when they also get destroyed
             SwClientIter aIter( *this );
-            SwClient* p = aIter.GoStart();
-            while ( p )
-            {
-                p->pRegisteredIn = nullptr;
-                p = ++aIter;
-            }
+            for(aIter.GoStart(); aIter; ++aIter)
+                aIter->pRegisteredIn = nullptr;
         }
         else
         {
@@ -136,22 +132,13 @@ void SwModify::NotifyClients( const SfxPoolItem* pOldValue, const SfxPoolItem* p
 
 bool SwModify::GetInfo( SfxPoolItem& rInfo ) const
 {
-    bool bRet = true;       // means: continue with next
-
-    if( pRoot )
-    {
-        SwClientIter aIter( *(SwModify*)this );
-
-        SwClient* pLast = aIter.GoStart();
-        if( pLast )
-        {
-            while( ( bRet = pLast->GetInfo( rInfo ) ) &&
-                   nullptr != ( pLast = ++aIter ) )
-                ;
-        }
-    }
-
-    return bRet;
+    if(!pRoot)
+        return true;
+    SwClientIter aIter( *const_cast<SwModify*>(this) );
+    for(aIter.GoStart(); aIter; ++aIter)
+        if(!aIter->GetInfo( rInfo ))
+            return false;
+    return true;
 }
 
 void SwModify::Add( SwClient* pDepend )
