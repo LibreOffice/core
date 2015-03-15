@@ -132,7 +132,7 @@ namespace pcr
                                         ,public ::comphelper::IEventProcessor
     {
     public:
-        enum NotifcationMode
+        enum NotificationMode
         {
             eSynchronously,
             eAsynchronously
@@ -140,7 +140,7 @@ namespace pcr
 
     private:
         IControlContext*    m_pContext;
-        NotifcationMode     m_eMode;
+        NotificationMode     m_eMode;
 
     public:
         /** creates an instance
@@ -162,7 +162,7 @@ namespace pcr
             @param  _eMode
                 the new notification mode
         */
-        void setNotificationMode( NotifcationMode _eMode );
+        void setNotificationMode( NotificationMode _eMode );
 
         virtual void SAL_CALL acquire() throw() SAL_OVERRIDE;
         virtual void SAL_CALL release() throw() SAL_OVERRIDE;
@@ -240,7 +240,7 @@ namespace pcr
     }
 
 
-    void PropertyControlContext_Impl::setNotificationMode( NotifcationMode _eMode )
+    void PropertyControlContext_Impl::setNotificationMode( NotificationMode _eMode )
     {
         SolarMutexGuard aGuard;
         m_eMode = _eMode;
