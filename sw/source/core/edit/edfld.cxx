@@ -179,14 +179,14 @@ void SwEditShell::FieldToText( SwFieldType* pType )
     StartUndo( UNDO_DELETE );
     Push();
     SwPaM* pPaM = GetCrsr();
-
+    // TODO: this is really hackish
     SwFieldHint aHint( pPaM );
-    SwClientIter aIter( *pType );
-    for ( SwClient* pClient = aIter.GoStart(); pClient; pClient = ++aIter )
+    SwIterator<SwClient,SwFieldType> aIter(*pType);
+    for( SwClient* pClient = aIter.First(); pClient; pClient = aIter.Next() )
     {
         pPaM->DeleteMark();
         pClient->SwClientNotifyCall( *pType, aHint );
-     }
+    }
 
     Pop( false );
     EndAllAction();
