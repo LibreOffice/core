@@ -22,7 +22,7 @@
 #include <calbck.hxx>
 #include <sal/log.hxx>
 
-template< class TElementType, class TSource > class SwIterator
+template< class TElementType, class TSource > class SwIterator SAL_FINAL
 {
     SwClientIter aClientIter;
 public:
