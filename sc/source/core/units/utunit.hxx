@@ -99,6 +99,21 @@ public:
     bool areConvertibleTo(const UtUnit& rUnit) {
         return ut_are_convertible(this->get(), rUnit.get());
     }
+
+    double convertValueTo(double nOriginalValue, const UtUnit& rUnit) {
+        // We could write our own cv_converter wrapper too, but that
+        // seems unnecessary given the limited selection of
+        // operations (convert float/double, either individually
+        // or as an array) -- of which we only need a subset anyway
+        // (ie. only for doubles).
+        cv_converter* pConverter = ut_get_converter(this->get(), rUnit.get());
+        assert(pConverter);
+
+        float nConvertedValue = cv_convert_double(pConverter, nOriginalValue);
+
+        cv_free(pConverter);
+        return nConvertedValue;
+    }
 };
 
 template< typename charT, typename traits >
