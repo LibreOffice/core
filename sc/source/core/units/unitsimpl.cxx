@@ -479,4 +479,45 @@ bool UnitsImpl::isCellConversionRecommended(const ScAddress& rCellAddress,
     return false;
 }
 
+bool UnitsImpl::convertCellToHeaderUnit(const ScAddress& rCellAddress,
+                             ScDocument* pDoc,
+                             const OUString& rsNewUnit,
+                             const OUString& rsOldUnit) {
+    assert(rCellAddress.IsValid());
+
+    OUString sCellUnit = extractUnitStringForCell(rCellAddress, pDoc);
+    UtUnit aOldUnit;
+    UtUnit::createUnit(sCellUnit, aOldUnit, mpUnitSystem);
+
+    OUString sHeaderUnitFound;
+    ScAddress aHeaderAddress; // Unused, but passed by reference
+    UtUnit aNewUnit = findHeaderUnitForCell(rCellAddress, pDoc, sHeaderUnitFound, aHeaderAddress);
+
+    // We test that we still have all data in the same format as expected.
+    // This is maybe a tad defensive, but this call is most likely to be delayed
+    // relative to isCellConversionRecommended (e.g. if the user is asked for
+    // confirmation that conversion is desired), hence it's entirely feasible
+    // for data to be changed in the document but this action to be still
+    // called afterwards (especially for non-modal interactions, e.g.
+    // with an infobar which can remain open whilst the document is edited).
+    if ((sCellUnit == rsOldUnit) &&
+        (sHeaderUnitFound == rsNewUnit) &&
+        (pDoc->GetCellType(rCellAddress) == CELLTYPE_VALUE)) {
+        assert(aOldUnit.areConvertibleTo(aNewUnit));
+        double nOldValue = pDoc->GetValue(rCellAddress);
+        double nNewValue = aOldUnit.convertValueTo(nOldValue, aNewUnit);
+
+        pDoc->SetValue(rCellAddress, nNewValue);
+        pDoc->SetNumberFormat(rCellAddress, 0); // 0 == no number format?
+
+        return true;
+    }
+
+    // In an ideal scenario the UI is written such that we never reach this point,
+    // however that is likely to be hard to achieve, hence we still allow
+    // for this case (see above for more information).
+    SAL_INFO("sc.units", "Unit conversion cancelled: units changed in meantime.");
+    return false;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
