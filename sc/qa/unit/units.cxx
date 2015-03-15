@@ -259,43 +259,51 @@ void UnitsTest::testUnitValueStringSplitting() {
 
 void UnitsTest::testUnitFromHeaderExtraction() {
     UtUnit aUnit;
+    OUString sUnitString;
 
     OUString sEmpty = "";
-    CPPUNIT_ASSERT(!mpUnitsImpl->extractUnitFromHeaderString(sEmpty, aUnit));
+    CPPUNIT_ASSERT(!mpUnitsImpl->extractUnitFromHeaderString(sEmpty, aUnit, sUnitString));
     CPPUNIT_ASSERT(aUnit == UtUnit());
+    CPPUNIT_ASSERT(sUnitString.isEmpty());
 
     OUString sSimple = "bla bla [cm/s]";
-    CPPUNIT_ASSERT(mpUnitsImpl->extractUnitFromHeaderString(sSimple, aUnit));
+    CPPUNIT_ASSERT(mpUnitsImpl->extractUnitFromHeaderString(sSimple, aUnit, sUnitString));
     // We need to test in Units (rather than testing Unit::getString()) as
     // any given unit can have multiple string representations (and utunits defaults to
     // representing e.g. cm as (I think) "0.01m").
     UtUnit aTestUnit;
     CPPUNIT_ASSERT(UtUnit::createUnit("cm/s", aTestUnit, mpUnitsImpl->mpUnitSystem));
     CPPUNIT_ASSERT(aUnit == aTestUnit);
+    CPPUNIT_ASSERT(sUnitString == "cm/s");
 
     OUString sFreeStanding = "bla bla kg/h";
-    CPPUNIT_ASSERT(mpUnitsImpl->extractUnitFromHeaderString(sFreeStanding, aUnit));
+    CPPUNIT_ASSERT(mpUnitsImpl->extractUnitFromHeaderString(sFreeStanding, aUnit, sUnitString));
     CPPUNIT_ASSERT(UtUnit::createUnit("kg/h", aTestUnit, mpUnitsImpl->mpUnitSystem));
     CPPUNIT_ASSERT(aUnit == aTestUnit);
+    CPPUNIT_ASSERT(sUnitString == "kg/h");
 
     OUString sFreeStandingWithSpaces = "bla bla m / s";
-    CPPUNIT_ASSERT(mpUnitsImpl->extractUnitFromHeaderString(sFreeStandingWithSpaces, aUnit));
+    CPPUNIT_ASSERT(mpUnitsImpl->extractUnitFromHeaderString(sFreeStandingWithSpaces, aUnit, sUnitString));
     CPPUNIT_ASSERT(UtUnit::createUnit("m/s", aTestUnit, mpUnitsImpl->mpUnitSystem));
     CPPUNIT_ASSERT(aUnit == aTestUnit);
+    CPPUNIT_ASSERT(sUnitString == "m/s");
 
     OUString sOperatorSeparated = "bla bla / t/s";
-    CPPUNIT_ASSERT(mpUnitsImpl->extractUnitFromHeaderString(sOperatorSeparated, aUnit));
+    CPPUNIT_ASSERT(mpUnitsImpl->extractUnitFromHeaderString(sOperatorSeparated, aUnit, sUnitString));
     CPPUNIT_ASSERT(UtUnit::createUnit("t/s", aTestUnit, mpUnitsImpl->mpUnitSystem));
     CPPUNIT_ASSERT(aUnit == aTestUnit);
+    CPPUNIT_ASSERT(sUnitString == "t/s");
+
 
     OUString sRoundBrackets = "bla bla (t/h)";
-    CPPUNIT_ASSERT(mpUnitsImpl->extractUnitFromHeaderString(sRoundBrackets, aUnit));
+    CPPUNIT_ASSERT(mpUnitsImpl->extractUnitFromHeaderString(sRoundBrackets, aUnit, sUnitString));
     CPPUNIT_ASSERT(UtUnit::createUnit("t/h", aTestUnit, mpUnitsImpl->mpUnitSystem));
     CPPUNIT_ASSERT(aUnit == aTestUnit);
+    CPPUNIT_ASSERT(sUnitString == "(t/h)");
 
     // This becomes more of a nightmare to support, so let's not bother for now.
     // OUString sFreeStandingMixedSpaces = "bla bla m /s* kg";
-    // CPPUNIT_ASSERT(mpUnitsImpl->extractUnitFromHeaderString(sFreeStanding, aUnit));
+    // CPPUNIT_ASSERT(mpUnitsImpl->extractUnitFromHeaderString(sFreeStanding, aUnit, sUnitString));
     // CPPUNIT_ASSERT(UtUnit::createUnit("m/s", aTestUnit, mpUnitsImpl->mpUnitSystem));
     // CPPUNIT_ASSERT(aUnit == aTestUnit);
 }
