@@ -71,6 +71,17 @@ private:
     UtUnit getUnitForRef(formula::FormulaToken* pToken,
                          const ScAddress& rFormulaAddress,
                          ScDocument* pDoc);
+
+    /**
+     * Return both the UtUnit and the String as we usually want the UtUnit
+     * (which is created from the String, and has to be created to ensure
+     * that there is a valid unit), but we might also need the original
+     * String (which can't necessarily be regenerated from the UtUnit).
+     */
+    UtUnit findHeaderUnitForCell(const ScAddress& rCellAddress,
+                                 ScDocument* pDoc,
+                                 OUString& rsHeaderUnitString,
+                                 ScAddress& rHeaderAddress);
 };
 
 }} // namespace sc::units

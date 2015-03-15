@@ -312,11 +312,28 @@ UtUnit UnitsImpl::getUnitForRef(FormulaToken* pToken, const ScAddress& rFormulaA
         return aUnit;
     }
 
+    OUString aHeaderUnitString; // Unused -- passed by reference below
+    ScAddress aHeaderAddress; // Unused too
+    UtUnit aHeaderUnit = findHeaderUnitForCell(aInputAddress, pDoc, aHeaderUnitString, aHeaderAddress);
+    if (aHeaderUnit.isValid())
+        return aHeaderUnit;
+
+    SAL_INFO("sc.units", "no unit obtained for token at cell " << aInputAddress.GetColRowString());
+
+    // We return the dimensionless unit 1 if we don't find any other data suggesting a unit.
+    UtUnit::createUnit("", aUnit, mpUnitSystem);
+    return aUnit;
+}
+
+UtUnit UnitsImpl::findHeaderUnitForCell(const ScAddress& rCellAddress,
+                                        ScDocument* pDoc,
+                                        OUString& rsHeaderUnitString,
+                                        ScAddress& rHeaderAddress) {
     // Scan UPwards from the current cell to find a header. This is since we could potentially
     // have two different sets of data sharing a column, hence finding the closest header is necessary.
-    ScAddress aAddress = aInputAddress;
-    while (aAddress.Row() > 0) {
-        aAddress.IncRow(-1);
+    rHeaderAddress = rCellAddress;
+    while (rHeaderAddress.Row() > 0) {
+        rHeaderAddress.IncRow(-1);
 
         // We specifically test for string cells as intervening data cells could have
         // differently defined units of their own. (However as these intervening cells
@@ -336,12 +353,9 @@ UtUnit UnitsImpl::getUnitForRef(FormulaToken* pToken, const ScAddress& rFormulaA
             return aUnit;
         }
     }
-
-    SAL_INFO("sc.units", "no unit obtained for token at cell " << aInputAddress.GetColRowString());
-
-    // We return the dimensionless unit 1 if we don't find any other data suggesting a unit.
-    UtUnit::createUnit("", aUnit, mpUnitSystem);
-    return aUnit;
+    rHeaderAddress.SetInvalid();
+    rsHeaderUnitString.clear();
+    return UtUnit();
 }
 
 // getUnitForRef: check format -> if not in format, use more complicated method? (Format overrides header definition)
