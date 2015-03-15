@@ -4608,12 +4608,6 @@ void SwWW8ImplReader::Read_Shade( sal_uInt16, const sal_uInt8* pData, short nLen
     {
         // Ende des Attributes
         pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_BACKGROUND );
-        if (bShdTxtCol)
-        {
-            // Zeichenfarbe auch
-            pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_CHRATR_COLOR );
-            bShdTxtCol = false;
-        }
     }
     else
     {
@@ -4631,12 +4625,6 @@ void SwWW8ImplReader::Read_ParaBackColor(sal_uInt16, const sal_uInt8* pData, sho
     {
         // Ende des Attributes
         pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_BACKGROUND );
-        if (bShdTxtCol)
-        {
-            // Zeichenfarbe auch
-            pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_CHRATR_COLOR );
-            bShdTxtCol = false;
-        }
     }
     else
     {

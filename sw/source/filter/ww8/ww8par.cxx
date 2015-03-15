@@ -4201,7 +4201,6 @@ SwWW8ImplReader::SwWW8ImplReader(sal_uInt8 nVersionPara, SvStorage* pStorage,
     , nInTable(0)
     , bWasTabRowEnd(false)
     , bWasTabCellEnd(false)
-    , bShdTxtCol(false)
     , bAnl(false)
     , bHdFtFtnEdn(false)
     , bFtnEdn(false)
