@@ -39,6 +39,24 @@ public:
      */
     virtual bool splitUnitsFromInputString(const OUString& rInput, OUString& rValue, OUString& rUnit) = 0;
 
+    /**
+     * Check whether a cell should have it's data converted to another unit for
+     * sensible unit verification.
+     *
+     * Returns true if the cell has a local unit annotation (e.g. contains "10cm",
+     * but split into value (10) and unit format ('#"cm"')), but the column header
+     * defines a different unit (e.g. "length [m]).
+     * The data returned can then be used by convertCellToHeaderUnit if the user
+     * desires conversion in this case.
+     *
+     * If returning false, the header and cell units will be empty and the address invalid.
+     */
+    virtual bool isCellConversionRecommended(const ScAddress& rCellAddress,
+                                             ScDocument* pDoc,
+                                             OUString& rHeaderUnit,
+                                             ScAddress& rHeaderCellAddress,
+                                             OUString& rCellUnit) = 0;
+
     virtual ~Units() {}
 };
 

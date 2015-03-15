@@ -47,6 +47,8 @@ public:
 
     void testUnitFromHeaderExtraction();
 
+    void testCellConversionRequired();
+
     CPPUNIT_TEST_SUITE(UnitsTest);
 
     CPPUNIT_TEST(testUTUnit);
@@ -55,6 +57,8 @@ public:
     CPPUNIT_TEST(testUnitFromFormatStringExtraction);
     CPPUNIT_TEST(testUnitValueStringSplitting);
     CPPUNIT_TEST(testUnitFromHeaderExtraction);
+
+    CPPUNIT_TEST(testCellConversionRequired);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -306,6 +310,62 @@ void UnitsTest::testUnitFromHeaderExtraction() {
     // CPPUNIT_ASSERT(mpUnitsImpl->extractUnitFromHeaderString(sFreeStanding, aUnit, sUnitString));
     // CPPUNIT_ASSERT(UtUnit::createUnit("m/s", aTestUnit, mpUnitsImpl->mpUnitSystem));
     // CPPUNIT_ASSERT(aUnit == aTestUnit);
+}
+
+void UnitsTest::testCellConversionRequired() {
+    mpDoc->EnsureTable(0);
+
+    // Set up a column with a normal header and a few data values
+    ScAddress address(20, 0, 0);
+    mpDoc->SetString(address, "length [m]");
+
+    address.IncRow();
+    mpDoc->SetValue(address, 1);
+    address.IncRow();
+    mpDoc->SetValue(address, 2);
+    address.IncRow();
+    mpDoc->SetValue(address, 3);
+
+    ScAddress aHeaderAddress;
+    OUString sHeaderUnit, sCellUnit;
+
+    // Test that we don't expect conversion for an non-united value cell
+    CPPUNIT_ASSERT(!mpUnitsImpl->isCellConversionRecommended(address, mpDoc, sHeaderUnit, aHeaderAddress, sCellUnit));
+    CPPUNIT_ASSERT(sHeaderUnit.isEmpty());
+    CPPUNIT_ASSERT(sCellUnit.isEmpty());
+    CPPUNIT_ASSERT(!aHeaderAddress.IsValid());
+
+    // And now set up cells with local units
+    SvNumberFormatter* pFormatter = mpDoc->GetFormatTable();
+    sal_uInt32 nKeyCM, nKeyKG;
+
+    sal_Int32 nCheckPos; // Passed by reference - unused
+    short nType = css::util::NumberFormat::DEFINED;
+
+    OUString sCM = "#\"cm\"";
+    pFormatter->PutEntry(sCM, nCheckPos, nType, nKeyCM);
+    OUString sKG = "#\"kg\"";
+    pFormatter->PutEntry(sKG, nCheckPos, nType, nKeyKG);
+
+    // First united cell: "cm" (convertible to "m")
+    address.IncRow();
+    mpDoc->SetNumberFormat(address, nKeyCM);
+    mpDoc->SetValue(address, 10);
+
+    CPPUNIT_ASSERT(mpUnitsImpl->isCellConversionRecommended(address, mpDoc, sHeaderUnit, aHeaderAddress, sCellUnit));
+    CPPUNIT_ASSERT(sHeaderUnit == "m");
+    CPPUNIT_ASSERT(sCellUnit == "cm");
+    CPPUNIT_ASSERT(aHeaderAddress == ScAddress(20, 0, 0));
+
+    // Second united cell: "kg" (not convertible to "m")
+    address.IncRow();
+    mpDoc->SetNumberFormat(address, nKeyKG);
+    mpDoc->SetValue(address, 50);
+
+    CPPUNIT_ASSERT(!mpUnitsImpl->isCellConversionRecommended(address, mpDoc, sHeaderUnit, aHeaderAddress, sCellUnit));
+    CPPUNIT_ASSERT(sHeaderUnit.isEmpty());
+    CPPUNIT_ASSERT(sCellUnit.isEmpty());
+    CPPUNIT_ASSERT(!aHeaderAddress.IsValid());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(UnitsTest);

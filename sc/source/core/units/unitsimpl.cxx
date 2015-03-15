@@ -454,4 +454,29 @@ bool UnitsImpl::splitUnitsFromInputString(const OUString& rInput, OUString& rVal
     }
 }
 
+bool UnitsImpl::isCellConversionRecommended(const ScAddress& rCellAddress,
+                                 ScDocument* pDoc,
+                                 OUString& rsHeaderUnit,
+                                 ScAddress& rHeaderCellAddress,
+                                 OUString& rsCellUnit) {
+    assert(rCellAddress.IsValid());
+
+    UtUnit aCellUnit;
+    rsCellUnit = extractUnitStringForCell(rCellAddress, pDoc);
+
+    if (!rsCellUnit.isEmpty() && UtUnit::createUnit(rsCellUnit, aCellUnit, mpUnitSystem)) {
+        UtUnit aHeaderUnit = findHeaderUnitForCell(rCellAddress, pDoc, rsHeaderUnit, rHeaderCellAddress);
+        if (rHeaderCellAddress.IsValid()) {
+            if (aHeaderUnit.areConvertibleTo(aCellUnit)) {
+                return true;
+            }
+        }
+    }
+
+    rsHeaderUnit.clear();
+    rHeaderCellAddress.SetInvalid();
+    rsCellUnit.clear();
+    return false;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
