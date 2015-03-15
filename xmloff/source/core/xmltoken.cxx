@@ -729,6 +729,7 @@ namespace xmloff { namespace token {
         TOKEN( "execute-macro",                   XML_EXECUTE_MACRO ),
         TOKEN( "exists",                          XML_EXISTS ),
         TOKEN( "exp",                             XML_EXP ),
+        TOKEN( "exponent-interval",               XML_EXPONENT_INTERVAL ),
         TOKEN( "exponential",                     XML_EXPONENTIAL ),
         TOKEN( "expression",                      XML_EXPRESSION ),
         TOKEN( "extra",                           XML_EXTRA ),
