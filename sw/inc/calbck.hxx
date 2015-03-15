@@ -260,15 +260,11 @@ class SwClientIter SAL_FINAL : public sw::Ring<SwClientIter>
     SwClient* GetLeftOfPos() { return static_cast<SwClient*>(m_pPosition->m_pLeft); }
     SwClient* GetRighOfPos() { return static_cast<SwClient*>(m_pPosition->m_pRight); }
 
-    // iterator can be limited to return only SwClient objects of a certain type
-    TypeId m_aSearchType;
-
     static SW_DLLPUBLIC SwClientIter* our_pClientIters;
 
 public:
     SwClientIter( const SwModify& rModify )
         : m_rRoot(rModify)
-        , m_aSearchType(nullptr)
     {
         MoveTo(our_pClientIters);
         our_pClientIters = this;

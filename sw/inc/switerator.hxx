@@ -30,7 +30,6 @@ public:
     SwIterator( const TSource& rSrc ) : aClientIter(rSrc) { assert(TElementType::IsOf( TYPE(SwClient) )); }
     TElementType* First()
     {
-        aClientIter.m_aSearchType = TYPE(TElementType);
         aClientIter.GoStart();
         if(!aClientIter.m_pPosition)
             return nullptr;
@@ -39,7 +38,6 @@ public:
     }
     TElementType* Last()
     {
-        aClientIter.m_aSearchType = TYPE(TElementType);
         aClientIter.GoEnd();
         if(!aClientIter.m_pPosition)
             return nullptr;
