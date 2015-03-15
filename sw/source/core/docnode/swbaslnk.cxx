@@ -50,6 +50,7 @@
 #include <tabfrm.hxx>
 #include <cntfrm.hxx>
 #include <htmltbl.hxx>
+#include <switerator.hxx>
 
 using namespace com::sun::star;
 
@@ -64,18 +65,16 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
     //              after a Paint will be swapped out! So all other "behind"
     //              them havent't a loaded Graphic.
     rGrfNd.LockModify();
-
-    SwClientIter aIter( rGrfNd );   // TODO
-    for( int n = 0; n < 2; ++n )
     {
-        SwClient * pLast = aIter.GoStart();
-        if( pLast )     // Were we able to jump to the beginning?
-        {
-            do {
-                if( (0 == n) != pLast->ISA( SwCntntFrm ) )
-                    pLast->ModifyNotification( &rItem, &rItem );
-            } while( 0 != ( pLast = ++aIter ));
-        }
+        SwIterator<SwClient,SwGrfNode> aIter(rGrfNd);
+        for(SwClient* pLast = aIter.First(); pLast; pLast = aIter.Next())
+            if(!pLast->ISA(SwCntntFrm))
+                pLast->ModifyNotification(&rItem, &rItem);
+    }
+    {
+        SwIterator<SwCntntFrm,SwGrfNode> aIter(rGrfNd);
+        for(SwClient* pLast = aIter.First(); pLast; pLast = aIter.Next())
+            pLast->ModifyNotification(&rItem, &rItem);
     }
     rGrfNd.UnlockModify();
 }
