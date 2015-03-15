@@ -172,7 +172,7 @@ void SdTabTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     }
 }
 
-const SfxItemSet* SdTabTemplateDlg::GetRefreshedSet()
+void SdTabTemplateDlg::RefreshInputSet()
 {
     SfxItemSet* pRet = GetInputSetImpl();
 
@@ -183,8 +183,6 @@ const SfxItemSet* SdTabTemplateDlg::GetRefreshedSet()
     }
     else
         pRet = new SfxItemSet( GetStyleSheet().GetItemSet() );
-
-    return pRet;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

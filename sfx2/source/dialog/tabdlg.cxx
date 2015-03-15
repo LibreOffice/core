@@ -318,7 +318,7 @@ SfxTabDialog::SfxTabDialog
 )
     : TabDialog(pParent, rID, rUIXMLDescription)
     , pFrame(pViewFrame)
-    , pSet(pItemSet)
+    , pSet(pItemSet ? new SfxItemSet(*pItemSet) : 0)
     , pOutSet(0)
     , pRanges(0)
     , nAppPageId(USHRT_MAX)
@@ -347,7 +347,7 @@ SfxTabDialog::SfxTabDialog
 )
     : TabDialog(pParent, rID, rUIXMLDescription)
     , pFrame(0)
-    , pSet(pItemSet)
+    , pSet(pItemSet ? new SfxItemSet(*pItemSet) : 0)
     , pOutSet(0)
     , pRanges(0)
     , nAppPageId(USHRT_MAX)
@@ -397,6 +397,7 @@ SfxTabDialog::~SfxTabDialog()
     }
 
     delete pImpl;
+    delete pSet;
     delete pOutSet;
     delete pExampleSet;
     delete [] pRanges;
@@ -735,7 +736,7 @@ SfxItemSet* SfxTabDialog::GetInputSetImpl()
 */
 
 {
-    return (SfxItemSet*)pSet;
+    return pSet;
 }
 
 
@@ -856,7 +857,7 @@ SfxItemSet* SfxTabDialog::CreateInputItemSet( sal_uInt16 )
 
 
 
-const SfxItemSet* SfxTabDialog::GetRefreshedSet()
+void SfxTabDialog::RefreshInputSet()
 
 /*  [Description]
 
@@ -866,8 +867,7 @@ const SfxItemSet* SfxTabDialog::GetRefreshedSet()
 */
 
 {
-    SAL_INFO ( "sfx.dialog", "GetRefreshedSet not implemented" );
-    return 0;
+    SAL_INFO ( "sfx.dialog", "RefreshInputSet not implemented" );
 }
 
 
@@ -1240,8 +1240,7 @@ IMPL_LINK( SfxTabDialog, DeactivatePageHdl, TabControl *, pTabCtrl )
 
     if ( nRet & SfxTabPage::REFRESH_SET )
     {
-        pSet = GetRefreshedSet();
-        DBG_ASSERT( pSet, "GetRefreshedSet() returns NULL" );
+        RefreshInputSet();
         // Flag all Pages as to be initialized as new
 
         for ( SfxTabDlgData_Impl::const_iterator it = pImpl->aData.begin(); it != pImpl->aData.end(); ++it )
@@ -1353,8 +1352,8 @@ void SfxTabDialog::SetInputSet( const SfxItemSet* pInSet )
 
 {
     bool bSet = ( pSet != NULL );
-
-    pSet = pInSet;
+    delete pSet;
+    pSet = pInSet ? new SfxItemSet(*pInSet) : 0;
 
     if ( !bSet && !pExampleSet && !pOutSet )
     {

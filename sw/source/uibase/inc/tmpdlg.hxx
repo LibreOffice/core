@@ -78,7 +78,7 @@ public:
                     SwWrtShell*         pActShell = 0,
                     bool                bNew = false );
 
-    const SfxItemSet* GetRefreshedSet() SAL_OVERRIDE;
+    virtual void RefreshInputSet() SAL_OVERRIDE;
 
     virtual void PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) SAL_OVERRIDE;
     virtual short Ok() SAL_OVERRIDE;

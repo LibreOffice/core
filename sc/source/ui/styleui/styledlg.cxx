@@ -173,12 +173,11 @@ void ScStyleDlg::PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage )
     }
 }
 
-const SfxItemSet* ScStyleDlg::GetRefreshedSet()
+void ScStyleDlg::RefreshInputSet()
 {
     SfxItemSet* pItemSet = GetInputSetImpl();
     pItemSet->ClearItem();
     pItemSet->SetParent( GetStyleSheet().GetItemSet().GetParent() );
-    return pItemSet;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

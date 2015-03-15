@@ -170,7 +170,7 @@ protected :
     inline SfxItemSet*      GetInputSetImpl() { return (SfxItemSet*)pSet; }
     inline IconChoicePage*  GetTabPage( sal_uInt16 nPageId )
                                 { return ( GetPageData (nPageId)->pPage?GetPageData (nPageId)->pPage:NULL); }
-    const SfxItemSet*       GetRefreshedSet();
+    void                    RefreshInputSet();
 
     void                    ActivatePageImpl ();
     bool                    DeActivatePageImpl ();

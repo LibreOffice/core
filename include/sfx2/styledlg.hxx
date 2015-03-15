@@ -34,7 +34,7 @@ private:
     DECL_DLLPRIVATE_LINK( CancelHdl, Button * );
     sal_uInt16 m_nOrganizerId;
 protected:
-    virtual const SfxItemSet*   GetRefreshedSet() SAL_OVERRIDE;
+    virtual void   RefreshInputSet() SAL_OVERRIDE;
 
 public:
     SfxStyleDialog(vcl::Window* pParent, const OUString& rID,

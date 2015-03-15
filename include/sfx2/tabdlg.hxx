@@ -81,7 +81,7 @@ friend class SfxTabDialogController;
     bool m_bOwnsResetBtn;
     bool m_bOwnsBaseFmtBtn;
 
-    const SfxItemSet*   pSet;
+    SfxItemSet*         pSet;
     SfxItemSet*         pOutSet;
     TabDlg_Impl*        pImpl;
     sal_uInt16*         pRanges;
@@ -103,7 +103,7 @@ protected:
     // Is deleted in Sfx!
     virtual SfxItemSet*         CreateInputItemSet( sal_uInt16 nId );
     // Is not deleted in Sfx!
-    virtual const SfxItemSet*   GetRefreshedSet();
+    virtual void                RefreshInputSet();
     virtual void                PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
 
     VclButtonBox*   m_pActionArea;

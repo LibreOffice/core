@@ -547,8 +547,7 @@ bool IconChoiceDialog::DeActivatePageImpl ()
 
         if ( nRet & IconChoicePage::REFRESH_SET )
         {
-            pSet = GetRefreshedSet();
-            DBG_ASSERT( pSet, "GetRefreshedSet() liefert NULL" );
+            RefreshInputSet();
             // flag all pages to be newly initialized
             for ( size_t i = 0, nCount = maPageList.size(); i < nCount; ++i )
             {
@@ -723,10 +722,9 @@ void IconChoiceDialog::Start_Impl()
     ActivatePageImpl();
 }
 
-const SfxItemSet* IconChoiceDialog::GetRefreshedSet()
+void IconChoiceDialog::RefreshInputSet()
 {
-    SAL_WARN( "cui.dialogs", "GetRefreshedSet not implemented" );
-    return 0;
+    SAL_WARN( "cui.dialogs", "RefreshInputSet not implemented" );
 }
 
 /**********************************************************************

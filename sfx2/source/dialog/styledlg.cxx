@@ -81,12 +81,11 @@ SfxStyleDialog::~SfxStyleDialog()
 {
     pExampleSet = 0;
     pStyle = 0;
-    delete GetInputSetImpl();
 }
 
 
 
-const SfxItemSet* SfxStyleDialog::GetRefreshedSet()
+void SfxStyleDialog::RefreshInputSet()
 
 /*  [Description]
 
@@ -95,7 +94,7 @@ const SfxItemSet* SfxStyleDialog::GetRefreshedSet()
 */
 
 {
-    return GetInputSetImpl();
+    SfxTabDialog::RefreshInputSet();
 }
 
 

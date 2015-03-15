@@ -363,12 +363,11 @@ short SwTemplateDlg::Ok()
     return nRet;
 }
 
-const SfxItemSet* SwTemplateDlg::GetRefreshedSet()
+void SwTemplateDlg::RefreshInputSet()
 {
     SfxItemSet* pInSet = GetInputSetImpl();
     pInSet->ClearItem();
     pInSet->SetParent( &GetStyleSheet().GetItemSet() );
-    return pInSet;
 }
 
 void SwTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )

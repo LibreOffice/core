@@ -33,7 +33,7 @@ public:
 
 protected:
     virtual void                PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage ) SAL_OVERRIDE;
-    virtual const SfxItemSet*   GetRefreshedSet() SAL_OVERRIDE;
+    virtual void                RefreshInputSet() SAL_OVERRIDE;
 
 private:
     sal_uInt16 nDlgRsc;
