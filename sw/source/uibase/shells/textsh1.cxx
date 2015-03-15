@@ -28,6 +28,7 @@
 #include <editeng/langitem.hxx>
 #include <svtools/langtab.hxx>
 #include <svl/slstitm.hxx>
+#include <svl/grabbagitem.hxx>
 #include <string.h>
 #include <svl/stritem.hxx>
 #include <sfx2/htmlmode.hxx>
@@ -1178,6 +1179,26 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 SvxBrushItem aBrushItem(RES_CHRATR_BACKGROUND);
                 aBrushItem.SetColor(aSet);
                 rWrtSh.SetAttrItem( aBrushItem );
+
+                // Remove MS specific highlight when background is set
+                rWrtSh.SetAttrItem( SvxBrushItem(RES_CHRATR_HIGHLIGHT) );
+
+                // Remove shading marker
+                SfxItemSet aCoreSet( rWrtSh.GetView().GetPool(), RES_CHRATR_GRABBAG, RES_CHRATR_GRABBAG );
+                rWrtSh.GetCurAttr( aCoreSet );
+
+                const SfxPoolItem *pTmpItem;
+                if( SfxItemState::SET == aCoreSet.GetItemState( RES_CHRATR_GRABBAG, false, &pTmpItem ) )
+                {
+                    SfxGrabBagItem aGrabBag(*static_cast<const SfxGrabBagItem*>(pTmpItem));
+                    std::map<OUString, com::sun::star::uno::Any>& rMap = aGrabBag.GetGrabBag();
+                    auto aIterator = rMap.find("CharShadingMarker");
+                    if( aIterator != rMap.end() )
+                    {
+                        aIterator->second = uno::makeAny(false);
+                    }
+                    rWrtSh.SetAttrItem( aGrabBag );
+                }
             }
             else if(!pApply || pApply->nColor != SID_ATTR_CHAR_COLOR_BACKGROUND_EXT)
             {
@@ -1210,6 +1231,26 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 {
                     rWrtSh.SetAttrItem(
                         SvxBrushItem( rEdtWin.GetTextBackColor(), RES_CHRATR_BACKGROUND) );
+
+                    // Remove MS specific highlight when background is set
+                    rWrtSh.SetAttrItem( SvxBrushItem(RES_CHRATR_HIGHLIGHT) );
+
+                    // Remove shading marker
+                    SfxItemSet aCoreSet( rWrtSh.GetView().GetPool(), RES_CHRATR_GRABBAG, RES_CHRATR_GRABBAG );
+                    rWrtSh.GetCurAttr( aCoreSet );
+
+                    const SfxPoolItem *pTmpItem;
+                    if( SfxItemState::SET == aCoreSet.GetItemState( RES_CHRATR_GRABBAG, false, &pTmpItem ) )
+                    {
+                        SfxGrabBagItem aGrabBag(*static_cast<const SfxGrabBagItem*>(pTmpItem));
+                        std::map<OUString, com::sun::star::uno::Any>& rMap = aGrabBag.GetGrabBag();
+                        auto aIterator = rMap.find("CharShadingMarker");
+                        if( aIterator != rMap.end() )
+                        {
+                            aIterator->second = uno::makeAny(false);
+                        }
+                        rWrtSh.SetAttrItem( aGrabBag );
+                    }
                 }
                 else
                     rWrtSh.SetAttrItem(
@@ -1540,10 +1581,19 @@ void SwTextShell::GetState( SfxItemSet &rSet )
             break;
         case SID_ATTR_CHAR_COLOR_BACKGROUND:
             {
+                // Always use the visible background
                 SfxItemSet aSet( GetPool() );
                 rSh.GetCurAttr( aSet );
-                const SvxBrushItem& aBrushItem = static_cast< const SvxBrushItem& >( aSet.Get(RES_CHRATR_BACKGROUND) );
-                rSet.Put( SvxColorItem(aBrushItem.GetColor(), nWhich) );
+                const SvxBrushItem& aBrushItem = static_cast< const SvxBrushItem& >( aSet.Get(RES_CHRATR_HIGHLIGHT) );
+                if( aBrushItem.GetColor() != COL_TRANSPARENT )
+                {
+                    rSet.Put( SvxColorItem(aBrushItem.GetColor(), nWhich) );
+                }
+                else
+                {
+                    const SvxBrushItem& aBrushItem2 = static_cast< const SvxBrushItem& >( aSet.Get(RES_CHRATR_BACKGROUND) );
+                    rSet.Put( SvxColorItem(aBrushItem2.GetColor(), nWhich) );
+                }
             }
             break;
         case SID_ATTR_CHAR_COLOR_BACKGROUND_EXT:
