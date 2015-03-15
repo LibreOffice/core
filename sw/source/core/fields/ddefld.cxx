@@ -33,6 +33,7 @@
 #include <swddetbl.hxx>
 #include <unofldmid.h>
 #include <hints.hxx>
+#include <switerator.hxx>
 
 using namespace ::com::sun::star;
 
@@ -105,25 +106,24 @@ public:
         bool bCallModify = false;
         rFldType.LockModify();
 
-        SwClientIter aIter( rFldType );     // TODO
-        SwClient * pLast = aIter.GoStart();
-        if( pLast )     // Could we jump to beginning?
-            do {
-                // a DDE table or a DDE field attribute in the text
-                if( !pLast->IsA( TYPE( SwFmtFld ) ) ||
-                    static_cast<SwFmtFld*>(pLast)->GetTxtFld() )
+        SwIterator<SwClient,SwFieldType> aIter(rFldType);
+        for(SwClient* pLast = aIter.First(); pLast; pLast = aIter.Next())
+        {
+            // a DDE table or a DDE field attribute in the text
+            if( !pLast->IsA( TYPE( SwFmtFld ) ) ||
+                static_cast<SwFmtFld*>(pLast)->GetTxtFld() )
+            {
+                if( !bCallModify )
                 {
-                    if( !bCallModify )
-                    {
-                        if( pESh )
-                            pESh->StartAllAction();
-                        else if( pSh )
-                            pSh->StartAction();
-                    }
-                    pLast->ModifyNotification( 0, &aUpdateDDE );
-                    bCallModify = true;
+                    if( pESh )
+                        pESh->StartAllAction();
+                    else if( pSh )
+                        pSh->StartAction();
                 }
-            } while( 0 != ( pLast = ++aIter ));
+                pLast->ModifyNotification( 0, &aUpdateDDE );
+                bCallModify = true;
+            }
+        }
 
         rFldType.UnlockModify();
 
@@ -169,25 +169,23 @@ const SwNode* SwIntrnlRefLink::GetAnchor() const
 {
     // here, any anchor of the normal NodesArray should be sufficient
     const SwNode* pNd = 0;
-    SwClientIter aIter( rFldType );     // TODO
-    SwClient * pLast = aIter.GoStart();
-    if( pLast )     // Could we jump to beginning?
-        do {
-            // a DDE table or a DDE field attribute in the text
-            if( !pLast->IsA( TYPE( SwFmtFld ) ))
-            {
-                SwDepend* pDep = static_cast<SwDepend*>(pLast);
-                SwDDETable* pDDETbl = static_cast<SwDDETable*>(pDep->GetToTell());
-                pNd = pDDETbl->GetTabSortBoxes()[0]->GetSttNd();
-            }
-            else if( static_cast<SwFmtFld*>(pLast)->GetTxtFld() )
-                pNd = static_cast<SwFmtFld*>(pLast)->GetTxtFld()->GetpTxtNode();
+    SwIterator<SwClient,SwFieldType> aIter(rFldType);
+    for(SwClient* pLast = aIter.First(); pLast; pLast = aIter.Next())
+    {
+        // a DDE table or a DDE field attribute in the text
+        if( !pLast->IsA( TYPE( SwFmtFld ) ))
+        {
+            SwDepend* pDep = static_cast<SwDepend*>(pLast);
+            SwDDETable* pDDETbl = static_cast<SwDDETable*>(pDep->GetToTell());
+            pNd = pDDETbl->GetTabSortBoxes()[0]->GetSttNd();
+        }
+        else if( static_cast<SwFmtFld*>(pLast)->GetTxtFld() )
+            pNd = static_cast<SwFmtFld*>(pLast)->GetTxtFld()->GetpTxtNode();
 
-            if( pNd && &rFldType.GetDoc()->GetNodes() == &pNd->GetNodes() )
-                break;
-            pNd = 0;
-        } while( 0 != ( pLast = ++aIter ));
-
+        if( pNd && &rFldType.GetDoc()->GetNodes() == &pNd->GetNodes() )
+            break;
+        pNd = 0;
+    }
     return pNd;
 }
 
@@ -196,36 +194,35 @@ bool SwIntrnlRefLink::IsInRange( sal_uLong nSttNd, sal_uLong nEndNd,
 {
     // here, any anchor of the normal NodesArray should be sufficient
     SwNodes* pNds = &rFldType.GetDoc()->GetNodes();
-    SwClientIter aIter( rFldType );         // TODO
-    SwClient * pLast = aIter.GoStart();
-    if( pLast )     // Could we jump to beginning?
-        do {
-            // a DDE table or a DDE field attribute in the text
-            if( !pLast->IsA( TYPE( SwFmtFld ) ))
+    SwIterator<SwClient,SwFieldType> aIter(rFldType);
+    for(SwClient* pLast = aIter.First(); pLast; pLast = aIter.Next())
+    {
+        // a DDE table or a DDE field attribute in the text
+        if( !pLast->IsA( TYPE( SwFmtFld ) ))
+        {
+            SwDepend* pDep = static_cast<SwDepend*>(pLast);
+            SwDDETable* pDDETbl = static_cast<SwDDETable*>(pDep->GetToTell());
+            const SwTableNode* pTblNd = pDDETbl->GetTabSortBoxes()[0]->
+                            GetSttNd()->FindTableNode();
+            if( pTblNd->GetNodes().IsDocNodes() &&
+                nSttNd < pTblNd->EndOfSectionIndex() &&
+                nEndNd > pTblNd->GetIndex() )
+                return true;
+        }
+        else if( static_cast<SwFmtFld*>(pLast)->GetTxtFld() )
+        {
+            const SwTxtFld* pTFld = static_cast<SwFmtFld*>(pLast)->GetTxtFld();
+            const SwTxtNode* pNd = pTFld->GetpTxtNode();
+            if( pNd && pNds == &pNd->GetNodes() )
             {
-                SwDepend* pDep = static_cast<SwDepend*>(pLast);
-                SwDDETable* pDDETbl = static_cast<SwDDETable*>(pDep->GetToTell());
-                const SwTableNode* pTblNd = pDDETbl->GetTabSortBoxes()[0]->
-                                GetSttNd()->FindTableNode();
-                if( pTblNd->GetNodes().IsDocNodes() &&
-                    nSttNd < pTblNd->EndOfSectionIndex() &&
-                    nEndNd > pTblNd->GetIndex() )
+                sal_uLong nNdPos = pNd->GetIndex();
+                if( nSttNd <= nNdPos && nNdPos <= nEndNd &&
+                    ( nNdPos != nSttNd || pTFld->GetStart() >= nStt ) &&
+                    ( nNdPos != nEndNd || pTFld->GetStart() < nEnd ))
                     return true;
             }
-            else if( static_cast<SwFmtFld*>(pLast)->GetTxtFld() )
-            {
-                const SwTxtFld* pTFld = static_cast<SwFmtFld*>(pLast)->GetTxtFld();
-                const SwTxtNode* pNd = pTFld->GetpTxtNode();
-                if( pNd && pNds == &pNd->GetNodes() )
-                {
-                    sal_uLong nNdPos = pNd->GetIndex();
-                    if( nSttNd <= nNdPos && nNdPos <= nEndNd &&
-                        ( nNdPos != nSttNd || pTFld->GetStart() >= nStt ) &&
-                        ( nNdPos != nEndNd || pTFld->GetStart() < nEnd ))
-                        return true;
-                }
-            }
-        } while( 0 != ( pLast = ++aIter ));
+        }
+    }
 
     return false;
 }
