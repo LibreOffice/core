@@ -62,6 +62,11 @@ public:
 
     virtual bool verifyFormula(ScTokenArray* pArray, const ScAddress& rFormulaAddress, ScDocument* pDoc) SAL_OVERRIDE;
     virtual bool splitUnitsFromInputString(const OUString& rInput, OUString& rValue, OUString& rUnit) SAL_OVERRIDE;
+    virtual bool isCellConversionRecommended(const ScAddress& rCellAddress,
+                                             ScDocument* pDoc,
+                                             OUString& rHeaderUnit,
+                                             ScAddress& rHeaderCellAddress,
+                                             OUString& rCellUnit) SAL_OVERRIDE;
 
 private:
     UtUnit getOutputUnitsForOpCode(std::stack< UtUnit >& rUnitStack, const OpCode& rOpCode);
