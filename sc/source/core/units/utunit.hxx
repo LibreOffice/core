@@ -82,6 +82,10 @@ public:
         return ut_compare(this->get(), rUnit.get()) == 0;
     }
 
+    bool operator!=(const UtUnit& rUnit) {
+        return !operator==(rUnit);
+    }
+
     UtUnit operator*(const UtUnit& rUnit) {
         return UtUnit(ut_multiply(this->get(), rUnit.get()));
     }
