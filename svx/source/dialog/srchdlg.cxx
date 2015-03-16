@@ -2307,7 +2307,7 @@ static vcl::Window* lcl_GetSearchLabelWindow()
         return 0;
     css::uno::Reference< css::awt::XWindow > xWindow(
             xUIElement->getRealInterface(), css::uno::UNO_QUERY_THROW);
-    ToolBox* pToolBox = static_cast<ToolBox*>( VCLUnoHelper::GetWindow(xWindow) );
+    VclPtr< ToolBox > pToolBox = static_cast<ToolBox*>( VCLUnoHelper::GetWindow(xWindow).get() );
     for (size_t i = 0; pToolBox && i < pToolBox->GetItemCount(); ++i)
         if (pToolBox->GetItemCommand(i) == ".uno:SearchLabel")
             return pToolBox->GetItemWindow(i);

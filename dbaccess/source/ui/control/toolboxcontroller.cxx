@@ -169,7 +169,7 @@ namespace dbaui
                     {
                         m_aCommandURL = aFind->first;
 
-                        ToolBox* pToolBox = static_cast<ToolBox*>(VCLUnoHelper::GetWindow(getParent()));
+                        VclPtr< ToolBox > pToolBox = static_cast<ToolBox*>(VCLUnoHelper::GetWindow(getParent()).get());
                         lcl_copy(pMenu.get(),nItemId,i,pToolBox,m_nToolBoxId, m_aCommandURL);
                         break;
                     }
@@ -228,7 +228,7 @@ namespace dbaui
         SolarMutexGuard aSolarMutexGuard;
         ::osl::MutexGuard aGuard(m_aMutex);
 
-        ToolBox* pToolBox = static_cast<ToolBox*>(VCLUnoHelper::GetWindow(getParent()));
+        VclPtr< ToolBox > pToolBox = static_cast<ToolBox*>(VCLUnoHelper::GetWindow(getParent()).get());
         ::std::unique_ptr<PopupMenu> pMenu = getMenu();
 
         sal_uInt16 nSelected = pMenu->Execute(pToolBox, pToolBox->GetItemRect( m_nToolBoxId ),POPUPMENU_EXECUTE_DOWN);

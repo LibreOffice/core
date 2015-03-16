@@ -109,7 +109,7 @@ namespace pcr
     void OBrowserLine::setControl( const Reference< XPropertyControl >& _rxControl )
     {
         m_xControl = _rxControl;
-        m_pControlWindow = m_xControl.is() ? VCLUnoHelper::GetWindow( _rxControl->getControlWindow() ) : NULL;
+        m_pControlWindow = m_xControl.is() ? VCLUnoHelper::GetWindow( _rxControl->getControlWindow() ) : VclPtr<vcl::Window>();
         DBG_ASSERT( m_pControlWindow, "OBrowserLine::setControl: setting NULL controls/windows is not allowed!" );
 
         if ( m_pControlWindow )

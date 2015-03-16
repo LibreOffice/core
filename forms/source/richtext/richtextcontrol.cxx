@@ -314,7 +314,7 @@ namespace frm
     {
         {
             SolarMutexGuard aGuard;
-            RichTextControl* pRichTextControl = static_cast< RichTextControl* >( GetWindow() );
+            VclPtr< RichTextControl > pRichTextControl = GetAs< RichTextControl* >();
 
             if ( pRichTextControl )
             {
@@ -417,7 +417,7 @@ namespace frm
         }
         else if ( _rPropertyName == PROPERTY_HIDEINACTIVESELECTION )
         {
-            RichTextControl* pRichTextControl = static_cast< RichTextControl* >( GetWindow() );
+            VclPtr< RichTextControl > pRichTextControl = GetAs< RichTextControl* >();
             bool bHide = pRichTextControl->GetHideInactiveSelection();
             OSL_VERIFY( _rValue >>= bHide );
             pRichTextControl->SetHideInactiveSelection( bHide );
@@ -469,7 +469,7 @@ namespace frm
 
     ORichTextPeer::SingleAttributeDispatcher ORichTextPeer::implCreateDispatcher( SfxSlotId _nSlotId, const ::com::sun::star::util::URL& _rURL )
     {
-        RichTextControl* pRichTextControl = static_cast< RichTextControl* >( GetWindow() );
+        VclPtr< RichTextControl > pRichTextControl = GetAs< RichTextControl* >();
         OSL_PRECOND( pRichTextControl, "ORichTextPeer::implCreateDispatcher: invalid window!" );
         if ( !pRichTextControl )
             return SingleAttributeDispatcher( NULL );

@@ -46,19 +46,16 @@ OColumnPeer::OColumnPeer(vcl::Window* _pParent,const Reference<XComponentContext
 void OColumnPeer::setEditWidth(sal_Int32 _nWidth)
 {
     SolarMutexGuard aGuard;
-
-    OColumnControlWindow* pFieldControl = static_cast<OColumnControlWindow*>( GetWindow() );
+    VclPtr<OColumnControlWindow> pFieldControl = GetAs<OColumnControlWindow>();
     if ( pFieldControl )
-    {
         pFieldControl->setEditWidth(_nWidth);
-    }
 }
 
 void OColumnPeer::setColumn(const Reference< XPropertySet>& _xColumn)
 {
     SolarMutexGuard aGuard;
 
-    OColumnControlWindow* pFieldControl = static_cast<OColumnControlWindow*>( GetWindow() );
+    VclPtr<OColumnControlWindow> pFieldControl = GetAs<OColumnControlWindow>();
     if ( pFieldControl )
     {
         if ( m_pActFieldDescr )
@@ -105,7 +102,7 @@ void OColumnPeer::setColumn(const Reference< XPropertySet>& _xColumn)
 void OColumnPeer::setConnection(const Reference< XConnection>& _xCon)
 {
     SolarMutexGuard aGuard;
-    OColumnControlWindow* pFieldControl = static_cast<OColumnControlWindow*>( GetWindow() );
+    VclPtr<OColumnControlWindow> pFieldControl = GetAs<OColumnControlWindow>();
     if ( pFieldControl )
         pFieldControl->setConnection(_xCon);
 }
@@ -131,7 +128,7 @@ void OColumnPeer::setProperty( const OUString& _rPropertyName, const Any& Value)
 Any OColumnPeer::getProperty( const OUString& _rPropertyName ) throw( RuntimeException, std::exception )
 {
     Any aProp;
-    OFieldDescControl* pFieldControl = static_cast<OFieldDescControl*>( GetWindow() );
+    VclPtr< OFieldDescControl > pFieldControl = GetAs< OFieldDescControl >();
     if (pFieldControl && _rPropertyName == PROPERTY_COLUMN)
     {
         aProp <<= m_xColumn;

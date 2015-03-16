@@ -1251,7 +1251,7 @@ Sequence< sal_Bool > SAL_CALL FmXGridPeer::queryFieldDataType( const Type& xType
 
     Reference< XIndexContainer >  xColumns = getColumns();
 
-    FmGridControl* pGrid = static_cast<FmGridControl*>(GetWindow());
+    VclPtr< FmGridControl > pGrid = GetAs< FmGridControl >();
     sal_Int32 nColumns = pGrid->GetViewColCount();
 
     DbGridColumns aColumns = pGrid->GetColumns();
@@ -1305,7 +1305,7 @@ Sequence< sal_Bool > SAL_CALL FmXGridPeer::queryFieldDataType( const Type& xType
 
 Sequence< Any > SAL_CALL FmXGridPeer::queryFieldData( sal_Int32 nRow, const Type& xType ) throw(RuntimeException, std::exception)
 {
-    FmGridControl* pGrid = static_cast<FmGridControl*>(GetWindow());
+    VclPtr< FmGridControl > pGrid = GetAs< FmGridControl >();
     DBG_ASSERT(pGrid && pGrid->IsOpen(), "FmXGridPeer::queryFieldData : have no valid grid window !");
     if (!pGrid || !pGrid->IsOpen())
         return Sequence< Any>();
@@ -1737,7 +1737,7 @@ void FmXGridPeer::elementInserted(const ContainerEvent& evt) throw( RuntimeExcep
 {
     SolarMutexGuard aGuard;
 
-    FmGridControl* pGrid = static_cast<FmGridControl*>(GetWindow());
+    VclPtr< FmGridControl > pGrid = GetAs< FmGridControl >();
     // Handle Column beruecksichtigen
     if (!pGrid || !m_xColumns.is() || pGrid->IsInColumnMove() || m_xColumns->getCount() == ((sal_Int32)pGrid->GetModelColCount()))
         return;
@@ -2056,7 +2056,7 @@ Any FmXGridPeer::getProperty( const OUString& _rPropertyName ) throw( RuntimeExc
     Any aProp;
     if (GetWindow())
     {
-        FmGridControl* pGrid = static_cast<FmGridControl*>(GetWindow());
+        VclPtr< FmGridControl > pGrid = GetAs< FmGridControl >();
         vcl::Window* pDataWindow  = &pGrid->GetDataWindow();
 
         if ( _rPropertyName == FM_PROP_NAME )
@@ -2192,7 +2192,7 @@ void FmXGridPeer::stopCursorListening()
 
 void FmXGridPeer::updateGrid(const Reference< XRowSet >& _rxCursor)
 {
-    FmGridControl* pGrid = static_cast<FmGridControl*>(GetWindow());
+    VclPtr< FmGridControl > pGrid = GetAs< FmGridControl >();
     if (pGrid)
         pGrid->setDataSource(_rxCursor);
 }
@@ -2206,7 +2206,7 @@ Reference< XRowSet >  FmXGridPeer::getRowSet() throw( RuntimeException, std::exc
 
 void FmXGridPeer::setRowSet(const Reference< XRowSet >& _rDatabaseCursor) throw( RuntimeException, std::exception )
 {
-    FmGridControl* pGrid = static_cast<FmGridControl*>(GetWindow());
+    VclPtr< FmGridControl > pGrid = GetAs< FmGridControl >();
     if (!pGrid || !m_xColumns.is() || !m_xColumns->getCount())
         return;
     // unregister all listeners
@@ -2383,7 +2383,7 @@ void FmXGridPeer::setMode(const OUString& Mode) throw( NoSupportException, Runti
 
     m_aMode = Mode;
 
-    FmGridControl* pGrid = static_cast<FmGridControl*>(GetWindow());
+    VclPtr< FmGridControl > pGrid = GetAs< FmGridControl >();
     if ( Mode == "FilterMode" )
         pGrid->SetFilterMode(true);
     else
@@ -2459,7 +2459,7 @@ void FmXGridPeer::columnHidden(DbGridColumn* pColumn)
 
 void FmXGridPeer::draw( sal_Int32 x, sal_Int32 y ) throw( RuntimeException, std::exception )
 {
-    FmGridControl* pGrid = static_cast<FmGridControl*>(GetWindow());
+    VclPtr< FmGridControl > pGrid = GetAs< FmGridControl >();
     sal_Int32 nOldFlags = pGrid->GetBrowserFlags();
     pGrid->SetBrowserFlags(nOldFlags | EBBF_NOROWPICTURE);
 
@@ -2657,7 +2657,7 @@ void FmXGridPeer::resetted(const EventObject& rEvent) throw( RuntimeException, s
 {
     if (m_xColumns == rEvent.Source)
     {   // my model was reset -> refresh the grid content
-        FmGridControl* pGrid = static_cast<FmGridControl*>(GetWindow());
+        VclPtr< FmGridControl > pGrid = GetAs< FmGridControl >();
         if (!pGrid)
             return;
         SolarMutexGuard aGuard;
@@ -2667,7 +2667,7 @@ void FmXGridPeer::resetted(const EventObject& rEvent) throw( RuntimeException, s
     else if (m_xCursor == rEvent.Source)
     {
         SolarMutexGuard aGuard;
-        FmGridControl* pGrid = static_cast<FmGridControl*>(GetWindow());
+        VclPtr< FmGridControl > pGrid = GetAs< FmGridControl >();
         if (pGrid && pGrid->IsOpen())
             pGrid->positioned(rEvent);
     }

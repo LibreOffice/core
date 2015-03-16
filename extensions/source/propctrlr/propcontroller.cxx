@@ -375,7 +375,7 @@ namespace pcr
         // announcement is responsible for calling setComponent, too.
         Reference< XWindow > xContainerWindow = m_xFrame->getContainerWindow();
         VCLXWindow* pContainerWindow = VCLXWindow::GetImplementation(xContainerWindow);
-        vcl::Window* pParentWin = pContainerWindow ? pContainerWindow->GetWindow() : NULL;
+        VclPtr<vcl::Window> pParentWin = pContainerWindow ? pContainerWindow->GetWindow() : VclPtr<vcl::Window>();
         if (!pParentWin)
             throw RuntimeException("The frame is invalid. Unable to extract the container window.",*this);
 

@@ -309,7 +309,7 @@ void SAL_CALL SbaXGridPeer::dispose(void) throw( RuntimeException, std::exceptio
 
 void SbaXGridPeer::NotifyStatusChanged(const ::com::sun::star::util::URL& _rUrl, const Reference< ::com::sun::star::frame::XStatusListener > & xControl)
 {
-    SbaGridControl* pGrid = static_cast<SbaGridControl*>(GetWindow());
+    VclPtr< SbaGridControl > pGrid = GetAs< SbaGridControl >();
     if (!pGrid)
         return;
 
@@ -361,7 +361,7 @@ Reference< ::com::sun::star::frame::XDispatch >  SAL_CALL SbaXGridPeer::queryDis
 
 IMPL_LINK( SbaXGridPeer, OnDispatchEvent, void*, /*NOTINTERESTEDIN*/ )
 {
-    SbaGridControl* pGrid = static_cast< SbaGridControl* >( GetWindow() );
+    VclPtr< SbaGridControl > pGrid = GetAs< SbaGridControl >();
     if ( pGrid )    // if this fails, we were disposing before arriving here
     {
         if ( Application::GetMainThreadIdentifier() != ::osl::Thread::getCurrentIdentifier() )
@@ -398,7 +398,7 @@ SbaXGridPeer::DispatchType SbaXGridPeer::classifyDispatchURL( const URL& _rURL )
 
 void SAL_CALL SbaXGridPeer::dispatch(const URL& aURL, const Sequence< PropertyValue >& aArgs) throw( RuntimeException, std::exception )
 {
-    SbaGridControl* pGrid = static_cast<SbaGridControl*>(GetWindow());
+    VclPtr< SbaGridControl > pGrid = GetAs< SbaGridControl >();
     if (!pGrid)
         return;
 
