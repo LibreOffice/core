@@ -1548,6 +1548,12 @@ ImpPDFTabSigningPage::ImpPDFTabSigningPage(Window* pParent, const SfxItemSet& rC
     mpPbSignCertSelect->SetClickHdl( LINK( this, ImpPDFTabSigningPage, ClickmaPbSignCertSelect ) );
     mpPbSignCertClear->SetClickHdl( LINK( this, ImpPDFTabSigningPage, ClickmaPbSignCertClear ) );
     mpLBSignTSA->SetSelectHdl( LINK( this, ImpPDFTabSigningPage, SelectLBSignTSA ) );
+
+//FIXME: timestamping does not work on Windows (LOfC 4.3)
+#ifdef WNT
+    get<VclContainer>("label15")->Hide();
+    mpLBSignTSA->Hide();
+#endif
 }
 
 
