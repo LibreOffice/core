@@ -23,5 +23,3 @@ if echo $1 | grep '^mailto:' > /dev/null; then
 else
   kfmclient openURL "$1" &
 fi
-
-exit 0
