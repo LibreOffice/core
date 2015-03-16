@@ -46,6 +46,7 @@
 #include "scopetools.hxx"
 #include "editutil.hxx"
 #include "sharedformula.hxx"
+#include "units.hxx"
 #include <listenercontext.hxx>
 
 #include <com/sun/star/i18n/LocaleDataItem.hpp>
