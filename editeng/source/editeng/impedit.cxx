@@ -326,8 +326,19 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, vcl::Region* pRegion, Ou
         {
             std::vector<Rectangle> aRectangles;
             pRegion->GetRegionRectangles(aRectangles);
-            std::stringstream ss;
 
+            if (!aRectangles.empty())
+            {
+                Rectangle& rStart = aRectangles.front();
+                Rectangle aStart = Rectangle(rStart.Left(), rStart.Top(), rStart.Left() + 1, rStart.Bottom());
+                libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION_START, aStart.toString().getStr());
+
+                Rectangle& rEnd = aRectangles.back();
+                Rectangle aEnd = Rectangle(rEnd.Right() - 1, rEnd.Top(), rEnd.Right(), rEnd.Bottom());
+                libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION_END, aEnd.toString().getStr());
+            }
+
+            std::stringstream ss;
             for (size_t i = 0; i < aRectangles.size(); ++i)
             {
                 const Rectangle& rRectangle = aRectangles[i];
