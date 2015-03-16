@@ -91,6 +91,8 @@ public:
 
     void                    EnableEmptyFieldValue( bool bEnable )   { mbEmptyFieldValueEnabled = bEnable; }
     bool                    IsEmptyFieldValueEnabled() const        { return mbEmptyFieldValueEnabled; }
+
+    void                    SelectAllText();
 };
 
 

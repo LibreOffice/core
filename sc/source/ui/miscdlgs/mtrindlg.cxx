@@ -55,6 +55,7 @@ ScMetricInputDlg::ScMetricInputDlg( vcl::Window*         pParent,
     nDefaultValue = sal::static_int_cast<long>( m_pEdValue->GetValue() );
     m_pEdValue->SetValue           ( m_pEdValue->Normalize( nCurrent ), FUNIT_TWIP );
     nCurrentValue = sal::static_int_cast<long>( m_pEdValue->GetValue() );
+    m_pEdValue->SelectAllText();
     m_pBtnDefVal->Check( nCurrentValue == nDefaultValue );
 }
 

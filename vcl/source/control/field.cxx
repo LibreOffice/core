@@ -462,6 +462,15 @@ void FormatterBase::ImplSetText( const OUString& rText, Selection* pNewSelection
     }
 }
 
+void FormatterBase::SelectAllText()
+{
+    if ( mpField )
+    {
+        Selection aSel( 0, mpField->GetText().getLength() );
+        mpField->SetSelection( aSel );
+    }
+}
+
 void FormatterBase::SetEmptyFieldValue()
 {
     if ( mpField )
