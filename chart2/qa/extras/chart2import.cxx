@@ -63,6 +63,11 @@ public:
 
     void testTransparentBackground(OUString const & filename);
 
+    // below are OOXML default value tests for cases
+    // where we fixed the handling of MSO 2007 vs OOXML
+    void testAutoTitleDelDefaultValue2007XLSX();
+    void testAutoTitleDelDefaultValue2013XLSX();
+
     CPPUNIT_TEST_SUITE(Chart2ImportTest);
     CPPUNIT_TEST(Fdo60083);
     CPPUNIT_TEST(testSteppedLines);
@@ -93,6 +98,8 @@ public:
     CPPUNIT_TEST(testAxisTextRotationXLSX);
     // CPPUNIT_TEST(testTextCanOverlapXLSX); // TODO : temporarily disabled.
     CPPUNIT_TEST(testNumberFormatsXLSX);
+    CPPUNIT_TEST(testAutoTitleDelDefaultValue2007XLSX);
+    CPPUNIT_TEST(testAutoTitleDelDefaultValue2013XLSX);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -746,6 +753,30 @@ void Chart2ImportTest::testNumberFormatsXLSX()
     CPPUNIT_ASSERT_EQUAL(false, bSuccess);
     bSuccess = xPropertySet->getPropertyValue(CHART_UNONAME_LINK_TO_SRC_NUMFMT) >>= bLinkNumberFormatToSource;
     CPPUNIT_ASSERT_MESSAGE("\"LinkNumberFormatToSource\" should be set to true.", bSuccess && bLinkNumberFormatToSource);
+}
+
+void Chart2ImportTest::testAutoTitleDelDefaultValue2007XLSX()
+{
+    load("/chart2/qa/extras/data/xlsx/", "autotitledel_2007.xlsx");
+    Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+    CPPUNIT_ASSERT_MESSAGE("failed to load chart", xChartDoc.is());
+
+    Reference<chart2::XTitled> xTitled(xChartDoc, uno::UNO_QUERY_THROW);
+    OUString aTitle = getTitleString(xTitled);
+    CPPUNIT_ASSERT_MESSAGE("autoTitleDel default value is false in MSO 2007 documents",
+            !aTitle.isEmpty());
+}
+
+void Chart2ImportTest::testAutoTitleDelDefaultValue2013XLSX()
+{
+    load("/chart2/qa/extras/data/xlsx/", "autotitledel_2013.xlsx");
+    Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+    CPPUNIT_ASSERT_MESSAGE("failed to load chart", xChartDoc.is());
+
+    Reference<chart2::XTitled> xTitled(xChartDoc, uno::UNO_QUERY_THROW);
+    uno::Reference<chart2::XTitle> xTitle = xTitled->getTitleObject();
+    CPPUNIT_ASSERT_MESSAGE("autoTitleDel default value is true in the OOXML spec",
+            !xTitle.is());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ImportTest);
