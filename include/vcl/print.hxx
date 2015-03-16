@@ -426,7 +426,7 @@ class VCL_DLLPUBLIC PrinterController
 {
     ImplPrinterControllerData* mpImplData;
 protected:
-    PrinterController( const std::shared_ptr<Printer>& );
+    PrinterController( const VclPtr<Printer>& );
 public:
     enum NupOrderType
     { LRTB, TBLR, TBRL, RLTB };
@@ -469,7 +469,7 @@ public:
 
     virtual ~PrinterController();
 
-    const std::shared_ptr<Printer>& getPrinter() const;
+    const VclPtr<Printer>& getPrinter() const;
     /* for implementations: get current job properties as changed by e.g. print dialog
        this gets the current set of properties initially told to Printer::PrintJob
 
@@ -550,7 +550,7 @@ public:
     SAL_DLLPRIVATE PageSize getPageFile( int i_inUnfilteredPage, GDIMetaFile& rMtf, bool i_bMayUseCache = false );
     VCL_PLUGIN_PUBLIC PageSize getFilteredPageFile( int i_nFilteredPage, GDIMetaFile& o_rMtf, bool i_bMayUseCache = false );
     VCL_PLUGIN_PUBLIC void printFilteredPage( int i_nPage );
-    SAL_DLLPRIVATE void setPrinter( const std::shared_ptr<Printer>& );
+    SAL_DLLPRIVATE void setPrinter( const VclPtr<Printer>& );
     SAL_DLLPRIVATE void setOptionChangeHdl( const Link& );
     VCL_PLUGIN_PUBLIC void createProgressDialog();
     VCL_PLUGIN_PUBLIC bool isProgressCanceled() const;

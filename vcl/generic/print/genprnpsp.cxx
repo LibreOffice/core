@@ -1079,7 +1079,7 @@ bool PspSalPrinter::StartJob( const OUString* i_pFileName, const OUString& i_rJo
 
     std::shared_ptr<vcl::PDFWriter> xWriter;
     std::vector< PDFPrintFile > aPDFFiles;
-    std::shared_ptr<Printer> xPrinter(i_rController.getPrinter());
+    VclPtr<Printer> xPrinter( i_rController.getPrinter() );
     int nAllPages = i_rController.getFilteredPageCount();
     i_rController.createProgressDialog();
     bool bAborted = false;

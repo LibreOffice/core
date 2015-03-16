@@ -140,7 +140,7 @@ public:
     typedef std::unordered_map< OUString, ControlDependency, OUStringHash > ControlDependencyMap;
     typedef std::unordered_map< OUString, Sequence< sal_Bool >, OUStringHash > ChoiceDisableMap;
 
-    std::shared_ptr<Printer>                                    mxPrinter;
+    VclPtr< Printer >                                           mxPrinter;
     Sequence< PropertyValue >                                   maUIOptions;
     std::vector< PropertyValue >                                maUIProperties;
     std::vector< bool >                                         maUIPropertyEnabled;
@@ -206,7 +206,7 @@ public:
     void resetPaperToLastConfigured();
 };
 
-PrinterController::PrinterController(const std::shared_ptr<Printer>& i_xPrinter)
+PrinterController::PrinterController( const VclPtr<Printer>& i_xPrinter )
     : mpImplData( new ImplPrinterControllerData )
 {
     mpImplData->mxPrinter = i_xPrinter;
@@ -319,7 +319,7 @@ void Printer::PreparePrintJob(std::shared_ptr<PrinterController> xController,
     if (!xController->getPrinter())
     {
         OUString aPrinterName( i_rInitSetup.GetPrinterName() );
-        std::shared_ptr<Printer> xPrinter(std::make_shared<Printer>(aPrinterName));
+        VclPtr<Printer> xPrinter( new Printer( aPrinterName ) );
         xPrinter->SetJobSetup(i_rInitSetup);
         xController->setPrinter(xPrinter);
     }
@@ -770,12 +770,12 @@ void PrinterController::setJobState( view::PrintableState i_eState )
     mpImplData->meJobState = i_eState;
 }
 
-const std::shared_ptr<Printer>& PrinterController::getPrinter() const
+const VclPtr<Printer>& PrinterController::getPrinter() const
 {
     return mpImplData->mxPrinter;
 }
 
-void PrinterController::setPrinter(const std::shared_ptr<Printer>& i_rPrinter)
+void PrinterController::setPrinter( const VclPtr<Printer>& i_rPrinter )
 {
     mpImplData->mxPrinter = i_rPrinter;
     setValue( OUString( "Name" ),

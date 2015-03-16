@@ -131,7 +131,7 @@ namespace dbaui
         for (; aIter != aEnd; ++aIter)
             addStatusListener(aIter->first);
 
-        ToolBox*    pToolBox = static_cast<ToolBox*>(VCLUnoHelper::GetWindow(getParent()));
+        VclPtr< ToolBox > pToolBox = static_cast<ToolBox*>(VCLUnoHelper::GetWindow(getParent()).get());
         if ( pToolBox )
         {
             sal_uInt16 nCount = pToolBox->GetItemCount();

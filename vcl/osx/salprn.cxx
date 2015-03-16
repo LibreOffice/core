@@ -448,7 +448,7 @@ bool AquaSalInfoPrinter::StartJob( const OUString* i_pFileName,
             // information (e.g. brochure printing scales to the found paper size)
             // also SetPaperSizeUser has the advantage that we can share a
             // platform independent paper matching algorithm
-            std::shared_ptr<Printer> pPrinter( i_rController.getPrinter() );
+            VclPtr<Printer> pPrinter( i_rController.getPrinter() );
             pPrinter->SetMapMode( MapMode( MAP_100TH_MM ) );
             pPrinter->SetPaperSizeUser( aCurSize, true );
 

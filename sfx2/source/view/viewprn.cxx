@@ -59,7 +59,7 @@ class SfxPrinterController : public vcl::PrinterController, public SfxListener
     Any                                     maCompleteSelection;
     Any                                     maSelection;
     Reference< view::XRenderable >          mxRenderable;
-    mutable Printer*                        mpLastPrinter;
+    mutable VclPtr<Printer>                 mpLastPrinter;
     mutable Reference<awt::XDevice>         mxDevice;
     SfxViewShell*                           mpViewShell;
     SfxObjectShell*                         mpObjectShell;
@@ -74,7 +74,7 @@ class SfxPrinterController : public vcl::PrinterController, public SfxListener
     const Any& getSelectionObject() const;
 
 public:
-    SfxPrinterController( const std::shared_ptr<Printer>& i_rPrinter,
+    SfxPrinterController( const VclPtr<Printer>& i_rPrinter,
                           const Any& i_rComplete,
                           const Any& i_rSelection,
                           const Any& i_rViewProp,
@@ -94,7 +94,7 @@ public:
     virtual void jobFinished( com::sun::star::view::PrintableState ) SAL_OVERRIDE;
 };
 
-SfxPrinterController::SfxPrinterController( const std::shared_ptr<Printer>& i_rPrinter,
+SfxPrinterController::SfxPrinterController( const VclPtr<Printer>& i_rPrinter,
                                             const Any& i_rComplete,
                                             const Any& i_rSelection,
                                             const Any& i_rViewProp,
@@ -204,12 +204,12 @@ const Any& SfxPrinterController::getSelectionObject() const
 
 Sequence< beans::PropertyValue > SfxPrinterController::getMergedOptions() const
 {
-    std::shared_ptr<Printer> xPrinter(getPrinter());
-    if (xPrinter.get() != mpLastPrinter)
+    VclPtr<Printer> xPrinter( getPrinter() );
+    if( xPrinter.get() != mpLastPrinter )
     {
         mpLastPrinter = xPrinter.get();
         VCLXDevice* pXDevice = new VCLXDevice();
-        pXDevice->SetOutputDevicePtr( mpLastPrinter );
+        pXDevice->SetOutputDevice( mpLastPrinter );
         mxDevice = Reference< awt::XDevice >( pXDevice );
     }
 
@@ -224,8 +224,8 @@ Sequence< beans::PropertyValue > SfxPrinterController::getMergedOptions() const
 int SfxPrinterController::getPageCount() const
 {
     int nPages = 0;
-    std::shared_ptr<Printer> xPrinter(getPrinter());
-    if (mxRenderable.is() && xPrinter)
+    VclPtr<Printer> xPrinter( getPrinter() );
+    if( mxRenderable.is() && pPrinter )
     {
         Sequence< beans::PropertyValue > aJobOptions( getMergedOptions() );
         try
@@ -244,7 +244,7 @@ int SfxPrinterController::getPageCount() const
 
 Sequence< beans::PropertyValue > SfxPrinterController::getPageParameters( int i_nPage ) const
 {
-    std::shared_ptr<Printer> xPrinter(getPrinter());
+    VclPtr<Printer> xPrinter( getPrinter() );
     Sequence< beans::PropertyValue > aResult;
 
     if (mxRenderable.is() && xPrinter)
@@ -269,8 +269,8 @@ Sequence< beans::PropertyValue > SfxPrinterController::getPageParameters( int i_
 
 void SfxPrinterController::printPage( int i_nPage ) const
 {
-    std::shared_ptr<Printer> xPrinter(getPrinter());
-    if (mxRenderable.is() && xPrinter)
+    VclPtr<Printer> xPrinter( getPrinter() );
+    if( mxRenderable.is() && pPrinter )
     {
         Sequence< beans::PropertyValue > aJobOptions( getMergedOptions() );
         try
@@ -451,8 +451,8 @@ IMPL_LINK_NOARG(SfxDialogExecutor_Impl, Execute)
         return 0;
 
     // Create Dialog
-    boost::scoped_ptr<SfxPrintOptionsDialog> pDlg(new SfxPrintOptionsDialog( static_cast<vcl::Window*>(_pSetupParent),
-                                                             _pViewSh, _pOptions ));
+    VclPtr<SfxPrintOptionsDialog> pDlg(new SfxPrintOptionsDialog( static_cast<vcl::Window*>(_pSetupParent),
+                                                                  _pViewSh, _pOptions ));
     if ( _bHelpDisabled )
         pDlg->DisableHelp();
     if ( pDlg->Execute() == RET_OK )
@@ -582,7 +582,7 @@ void SfxViewShell::StartPrint( const uno::Sequence < beans::PropertyValue >& rPr
         aSelection <<= GetObjectShell()->GetModel();
     Any aComplete( makeAny( GetObjectShell()->GetModel() ) );
     Any aViewProp( makeAny( xController ) );
-    std::shared_ptr<Printer> aPrt;
+    VclPtr<Printer> aPrt;
 
     const beans::PropertyValue* pVal = rProps.getConstArray();
     for( sal_Int32 i = 0; i < rProps.getLength(); i++ )
