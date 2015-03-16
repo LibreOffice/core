@@ -179,6 +179,7 @@
 #define SC_UNONAME_TABLAYOUT        "TableLayout"
 #define SC_UNONAME_AUTOPRINT        "AutomaticPrintArea"
 #define SC_UNONAME_TABCOLOR         "TabColor"
+#define SC_UNONAME_CONDFORMAT       "ConditionalFormats"
 
 #define SC_UNONAME_VISFLAG          "VisibleFlag"
 

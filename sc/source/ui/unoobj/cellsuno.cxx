@@ -60,6 +60,7 @@
 #include <com/sun/star/beans/SetPropertyTolerantFailed.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/textfield/Type.hpp>
+#include <com/sun/star/sheet/XConditionalFormats.hpp>
 
 #include "autoform.hxx"
 #include "cellmergeoption.hxx"
@@ -126,6 +127,7 @@
 #include "stylehelper.hxx"
 #include "dputil.hxx"
 #include <sortparam.hxx>
+#include "condformatuno.hxx"
 
 #include <list>
 #include <boost/scoped_array.hpp>
@@ -816,6 +818,7 @@ static const SfxItemPropertySet* lcl_GetSheetPropertySet()
         {OUString(SC_UNONAME_TBLBORD),  SC_WID_UNO_TBLBORD, cppu::UnoType<table::TableBorder>::get(),   0, 0 | CONVERT_TWIPS },
         {OUString(SC_UNONAME_TBLBORD2),  SC_WID_UNO_TBLBORD2, cppu::UnoType<table::TableBorder2>::get(),   0, 0 | CONVERT_TWIPS },
         {OUString(SC_UNONAME_TABLAYOUT),SC_WID_UNO_TABLAYOUT,cppu::UnoType<sal_Int16>::get(),           0, 0 },
+        {OUString(SC_UNONAME_CONDFORMAT), SC_WID_UNO_CONDFORMAT, cppu::UnoType<sheet::XConditionalFormats>::get(), 0, 0},
         {OUString(SC_UNONAME_TOPBORDER),ATTR_BORDER,        ::cppu::UnoType<table::BorderLine>::get(), 0, TOP_BORDER | CONVERT_TWIPS },
         {OUString(SC_UNONAME_TOPBORDER2),ATTR_BORDER,       ::cppu::UnoType<table::BorderLine2>::get(), 0, TOP_BORDER | CONVERT_TWIPS },
         {OUString(SC_UNONAME_USERDEF),  ATTR_USERDEF,       cppu::UnoType<container::XNameContainer>::get(), 0, 0 },
@@ -8441,6 +8444,14 @@ void ScTableSheetObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
                 pDocSh->GetDocument().SetCodeName( GetTab_Impl(), aCodeName );
             }
         }
+        else if (pEntry->nWID == SC_WID_UNO_CONDFORMAT)
+        {
+            uno::Reference<sheet::XConditionalFormats> xCondFormat;
+            if (aValue >>= xCondFormat)
+            {
+                // how to set the format correctly
+            }
+        }
         else
             ScCellRangeObj::SetOnePropertyValue(pEntry, aValue);        // base class, no Item WID
     }
@@ -8594,6 +8605,10 @@ void ScTableSheetObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
             if ( pDocSh )
                 pDocSh->GetDocument().GetCodeName( GetTab_Impl(), aCodeName );
             rAny <<= OUString( aCodeName );
+        }
+        else if (pEntry->nWID == SC_WID_UNO_CONDFORMAT)
+        {
+            rAny <<= uno::Reference<sheet::XConditionalFormats>(new ScCondFormatsObj(pDocSh->GetDocument(), nTab));
         }
         else
             ScCellRangeObj::GetOnePropertyValue(pEntry, rAny);

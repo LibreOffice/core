@@ -71,7 +71,8 @@
 #define SC_WID_UNO_TABCOLOR         ( SC_WID_UNO_START + 41 )
 #define SC_WID_UNO_NAMES            ( SC_WID_UNO_START + 42 )
 #define SC_WID_UNO_TBLBORD2         ( SC_WID_UNO_START + 43 )
-#define SC_WID_UNO_END              ( SC_WID_UNO_START + 43 )
+#define SC_WID_UNO_CONDFORMAT       ( SC_WID_UNO_START + 44 )
+#define SC_WID_UNO_END              ( SC_WID_UNO_START + 44 )
 
 inline bool IsScUnoWid( sal_uInt16 nWid )
 {
