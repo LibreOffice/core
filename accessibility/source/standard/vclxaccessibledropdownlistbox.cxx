@@ -56,17 +56,10 @@ VCLXAccessibleDropDownListBox::~VCLXAccessibleDropDownListBox()
 {
 }
 
-
-
-
 bool VCLXAccessibleDropDownListBox::IsValid (void) const
 {
-    return static_cast<ListBox*>(GetWindow()) != NULL;
-
+    return GetWindow().get() != NULL;
 }
-
-
-
 
 void VCLXAccessibleDropDownListBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {

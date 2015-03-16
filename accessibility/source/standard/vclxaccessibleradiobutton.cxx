@@ -90,7 +90,7 @@ void VCLXAccessibleRadioButton::FillAccessibleRelationSet( utl::AccessibleRelati
 {
     VCLXAccessibleTextComponent::FillAccessibleRelationSet( rRelationSet );
 
-    RadioButton* pRadioButton = dynamic_cast< RadioButton* >( GetWindow() );
+    VclPtr< RadioButton > pRadioButton = GetAsDynamic< RadioButton >();
     if ( pRadioButton )
     {
         ::std::vector< VclPtr<RadioButton> > aGroup(pRadioButton->GetRadioButtonGroup(true));

@@ -53,21 +53,15 @@ VCLXAccessibleTextField::~VCLXAccessibleTextField (void)
 {
 }
 
-
-
-
 OUString VCLXAccessibleTextField::implGetText (void)
 {
     OUString aText;
-    ListBox* pListBox = static_cast<ListBox*>(GetWindow());
-    if (pListBox!=NULL && !pListBox->IsInDropDown())
+    VclPtr< ListBox > pListBox = GetAs< ListBox >();
+    if (pListBox && !pListBox->IsInDropDown())
         aText = pListBox->GetSelectEntry();
 
     return aText;
 }
-
-
-
 
 IMPLEMENT_FORWARD_XINTERFACE2(VCLXAccessibleTextField, VCLXAccessibleTextComponent, VCLXAccessible_BASE)
 IMPLEMENT_FORWARD_XTYPEPROVIDER2(VCLXAccessibleTextField, VCLXAccessibleTextComponent, VCLXAccessible_BASE)

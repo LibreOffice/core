@@ -67,11 +67,6 @@ namespace accessibility
     IMPLEMENT_FORWARD_XINTERFACE2(AccessibleListBox, VCLXAccessibleComponent, AccessibleListBox_BASE)
     IMPLEMENT_FORWARD_XTYPEPROVIDER2(AccessibleListBox, VCLXAccessibleComponent, AccessibleListBox_BASE)
 
-    SvTreeListBox* AccessibleListBox::getListBox() const
-    {
-        return  static_cast< SvTreeListBox* >( const_cast<AccessibleListBox*>(this)->GetWindow() );
-    }
-
     void AccessibleListBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
     {
         if ( isAlive() )
@@ -592,7 +587,10 @@ namespace accessibility
         }
     }
 
-
+    VclPtr< SvTreeListBox > AccessibleListBox::getListBox() const
+    {
+        return GetAs< SvTreeListBox >();
+    }
 
 }// namespace accessibility
 

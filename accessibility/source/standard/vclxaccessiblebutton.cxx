@@ -65,7 +65,7 @@ void VCLXAccessibleButton::ProcessWindowEvent( const VclWindowEvent& rVclWindowE
             Any aOldValue;
             Any aNewValue;
 
-            PushButton* pButton = static_cast<PushButton*>( GetWindow() );
+            VclPtr< PushButton > pButton = GetAs< PushButton >();
             if ( pButton && pButton->GetState() == TRISTATE_TRUE )
                 aNewValue <<= AccessibleStateType::CHECKED;
             else
@@ -85,7 +85,7 @@ void VCLXAccessibleButton::FillAccessibleStateSet( utl::AccessibleStateSetHelper
 {
     VCLXAccessibleTextComponent::FillAccessibleStateSet( rStateSet );
 
-    PushButton* pButton = static_cast<PushButton*>( GetWindow() );
+    VclPtr< PushButton > pButton = GetAs< PushButton >();
     if ( pButton )
     {
         rStateSet.AddState( AccessibleStateType::FOCUSABLE );
@@ -196,7 +196,7 @@ sal_Bool VCLXAccessibleButton::doAccessibleAction ( sal_Int32 nIndex ) throw (In
     if ( nIndex < 0 || nIndex >= getAccessibleActionCount() )
         throw IndexOutOfBoundsException();
 
-    PushButton* pButton = static_cast<PushButton*>( GetWindow() );
+    VclPtr< PushButton > pButton = GetAs< PushButton >();
     if ( pButton )
         pButton->Click();
 
@@ -264,7 +264,7 @@ Any VCLXAccessibleButton::getCurrentValue(  ) throw (RuntimeException, std::exce
 
     Any aValue;
 
-    PushButton* pButton = static_cast<PushButton*>( GetWindow() );
+    VclPtr< PushButton > pButton = GetAs< PushButton >();
     if ( pButton )
         aValue <<= (sal_Int32) pButton->IsPressed();
 
@@ -279,7 +279,7 @@ sal_Bool VCLXAccessibleButton::setCurrentValue( const Any& aNumber ) throw (Runt
 
     bool bReturn = false;
 
-    PushButton* pButton = static_cast<PushButton*>( GetWindow() );
+    VclPtr< PushButton > pButton = GetAs< PushButton >();
     if ( pButton )
     {
         sal_Int32 nValue = 0;

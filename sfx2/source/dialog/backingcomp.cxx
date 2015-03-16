@@ -403,8 +403,8 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
 
     // initialize the component and its parent window
     css::uno::Reference< css::awt::XWindow > xParentWindow = xFrame->getContainerWindow();
-    WorkWindow* pParent = static_cast<WorkWindow*>(VCLUnoHelper::GetWindow(xParentWindow));
-    vcl::Window*     pWindow = VCLUnoHelper::GetWindow(m_xWindow);
+    VclPtr< WorkWindow > pParent = static_cast<WorkWindow*>(VCLUnoHelper::GetWindow(xParentWindow).get());
+    VclPtr< vcl::Window > pWindow = VCLUnoHelper::GetWindow(m_xWindow);
 
     // disable full screen mode of the frame!
     if (pParent && pParent->IsFullScreenMode())
@@ -800,7 +800,7 @@ void SAL_CALL BackingComp::dispatch( const css::util::URL& aURL, const css::uno:
 
             // Recalculate minimum width
             css::uno::Reference< css::awt::XWindow > xParentWindow = m_xFrame->getContainerWindow();
-            WorkWindow* pParent = static_cast<WorkWindow*>(VCLUnoHelper::GetWindow(xParentWindow));
+            VclPtr< WorkWindow > pParent = static_cast<WorkWindow*>(VCLUnoHelper::GetWindow(xParentWindow).get());
             if( pParent )
             {
                 pParent->SetMinOutputSizePixel( Size(

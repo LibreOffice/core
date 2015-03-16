@@ -367,11 +367,10 @@ namespace accessibility
         }
     }
 
-    SvtIconChoiceCtrl* AccessibleIconChoiceCtrl::getCtrl()
+    VclPtr< SvtIconChoiceCtrl > AccessibleIconChoiceCtrl::getCtrl()
     {
-        return static_cast<SvtIconChoiceCtrl*>(GetWindow());
+        return GetAs<SvtIconChoiceCtrl >();
     }
-
 
 }// namespace accessibility
 

@@ -254,7 +254,7 @@ awt::Rectangle VCLXAccessibleTextComponent::getCharacterBounds( sal_Int32 nIndex
         throw IndexOutOfBoundsException();
 
     awt::Rectangle aRect;
-    Control* pControl = static_cast< Control* >( GetWindow() );
+    VclPtr< Control > pControl = GetAs< Control >();
     if ( pControl )
         aRect = AWTRectangle( pControl->GetCharacterBounds( nIndex ) );
 
@@ -277,7 +277,7 @@ sal_Int32 VCLXAccessibleTextComponent::getIndexAtPoint( const awt::Point& aPoint
     OExternalLockGuard aGuard( this );
 
     sal_Int32 nIndex = -1;
-    Control* pControl = static_cast< Control* >( GetWindow() );
+    VclPtr< Control > pControl = GetAs< Control >();
     if ( pControl )
         nIndex = pControl->GetIndexForPoint( VCLPoint( aPoint ) );
 

@@ -72,16 +72,16 @@ VCLXAccessibleList::VCLXAccessibleList (VCLXWindow* pVCLWindow, BoxType aBoxType
     {
         case COMBOBOX:
         {
-            ComboBox* pBox = static_cast<ComboBox*>(GetWindow());
-            if ( pBox != NULL )
+            VclPtr< ComboBox > pBox = GetAs< ComboBox >();
+            if ( pBox )
                 m_pListBoxHelper = new VCLListBoxHelper<ComboBox> (*pBox);
             break;
         }
 
         case LISTBOX:
         {
-            ListBox* pBox = static_cast<ListBox*>(GetWindow());
-            if ( pBox != NULL )
+            VclPtr< ListBox > pBox = GetAs< ListBox >();
+            if ( pBox )
                 m_pListBoxHelper = new VCLListBoxHelper<ListBox> (*pBox);
             break;
         }
@@ -189,8 +189,8 @@ void VCLXAccessibleList::UpdateSelection_Acc (const ::rtl::OUString& sTextOfSele
 {
     if ( m_aBoxType == COMBOBOX )
     {
-        ComboBox* pBox = static_cast<ComboBox*>(GetWindow());
-        if ( pBox != NULL )
+        VclPtr< ComboBox > pBox = GetAs< ComboBox >();
+        if ( pBox )
         {
             // Find the index of the selected item inside the VCL control...
             sal_Int32 nIndex = pBox->GetEntryPos(sTextOfSelectedItem);
@@ -458,7 +458,7 @@ void VCLXAccessibleList::ProcessWindowEvent (const VclWindowEvent& rVclWindowEve
 
  void VCLXAccessibleList::FillAccessibleRelationSet( utl::AccessibleRelationSetHelper& rRelationSet )
 {
-    ListBox* pBox = static_cast<ListBox*>(GetWindow());
+    VclPtr< ListBox > pBox = GetAs< ListBox >();
     if( m_aBoxType == LISTBOX  )
     {
         if (m_pListBoxHelper && (m_pListBoxHelper->GetStyle() & WB_DROPDOWN ) != WB_DROPDOWN)
@@ -483,8 +483,8 @@ void VCLXAccessibleList::UpdateSelection (const OUString& sTextOfSelectedItem)
 {
     if ( m_aBoxType == COMBOBOX )
     {
-        ComboBox* pBox = static_cast<ComboBox*>(GetWindow());
-        if ( pBox != NULL )
+        VclPtr< ComboBox > pBox = GetAs< ComboBox >();
+        if ( pBox )
         {
             // Find the index of the selected item inside the VCL control...
             sal_Int32 nIndex = pBox->GetEntryPos(sTextOfSelectedItem);
@@ -930,7 +930,7 @@ awt::Rectangle VCLXAccessibleList::implGetBounds() throw (uno::RuntimeException)
         aBounds.Y = 0;
         if ( m_aBoxType == COMBOBOX )
         {
-            ComboBox* pBox = static_cast<ComboBox*>(GetWindow());
+            VclPtr< ComboBox > pBox = GetAs< ComboBox >();
             if ( pBox )
             {
                 Size aSize = pBox->GetSubEdit()->GetSizePixel();
@@ -960,7 +960,7 @@ awt::Point VCLXAccessibleList::getLocationOnScreen(  ) throw (uno::RuntimeExcept
         aPos = VCLXAccessibleComponent::getLocationOnScreen();
         if ( m_aBoxType == COMBOBOX )
         {
-            ComboBox* pBox = static_cast<ComboBox*>(GetWindow());
+            VclPtr< ComboBox > pBox = GetAs< ComboBox >();
             if ( pBox )
             {
                 aPos.Y += pBox->GetSubEdit()->GetSizePixel().Height();

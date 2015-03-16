@@ -626,7 +626,7 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow, const
     if (!xHelp.is())
         pHelpWindow = impl_createHelp(xHelp, xHelpContent);
     else
-        pHelpWindow = static_cast<SfxHelpWindow_Impl*>(VCLUnoHelper::GetWindow(xHelp->getComponentWindow()));
+        pHelpWindow = static_cast<SfxHelpWindow_Impl*>(VCLUnoHelper::GetWindow(xHelp->getComponentWindow()).get());
     if (!xHelp.is() || !xHelpContent.is() || !pHelpWindow)
         return false;
 
