@@ -45,6 +45,11 @@
           <value>1</value>
         </prop>
       </node>
+      <node oor:name=".uno:RestoreEditingView" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Jump to last edited Slide</value>
+        </prop>
+      </node>
       <node oor:name=".uno:Remote" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Impress R~emote</value>
