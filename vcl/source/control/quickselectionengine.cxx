@@ -122,7 +122,7 @@ namespace vcl
                 OSL_TRACE( "QuickSelectionEngine::HandleKeyEvent: searching for %s", OUStringToOString(m_pData->sCurrentSearchString, RTL_TEXTENCODING_UTF8).getStr() );
 
                 if ( m_pData->sCurrentSearchString.getLength() == 1 )
-                {   // first character in the search -> remmeber
+                {   // first character in the search -> remember
                     m_pData->aSingleSearchChar.reset( c );
                 }
                 else if ( m_pData->sCurrentSearchString.getLength() > 1 )
