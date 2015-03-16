@@ -20,7 +20,7 @@ using namespace css;
 
 namespace sc_apitest {
 
-#define NUMBER_OF_TESTS 1
+#define NUMBER_OF_TESTS 2
 
 class ScConditionalFormatTest : public CalcUnoApiTest
 {
@@ -32,9 +32,11 @@ public:
 
     uno::Reference< uno::XInterface > init();
     void testRequestCondFormatListFromSheet();
+    void testCondFormatListProperties();
 
     CPPUNIT_TEST_SUITE(ScConditionalFormatTest);
     CPPUNIT_TEST(testRequestCondFormatListFromSheet);
+    CPPUNIT_TEST(testCondFormatListProperties);
     CPPUNIT_TEST_SUITE_END();
 private:
 
@@ -77,6 +79,29 @@ void ScConditionalFormatTest::testRequestCondFormatListFromSheet()
     uno::Reference<sheet::XConditionalFormats> xCondFormats;
     CPPUNIT_ASSERT(aAny >>= xCondFormats);
     CPPUNIT_ASSERT(xCondFormats.is());
+}
+
+namespace {
+
+uno::Reference<sheet::XConditionalFormats> getConditionalFormatList(uno::Reference<uno::XInterface> xInterface)
+{
+    uno::Reference<sheet::XSpreadsheet> xSheet(xInterface, uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xProps(xSheet, uno::UNO_QUERY_THROW);
+    uno::Any aAny = xProps->getPropertyValue("ConditionalFormats");
+    uno::Reference<sheet::XConditionalFormats> xCondFormats;
+    CPPUNIT_ASSERT(aAny >>= xCondFormats);
+    CPPUNIT_ASSERT(xCondFormats.is());
+
+    return xCondFormats;
+}
+
+}
+
+void ScConditionalFormatTest::testCondFormatListProperties()
+{
+    uno::Reference<sheet::XConditionalFormats> xCondFormat =
+        getConditionalFormatList(init());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xCondFormat->getLength());
 }
 
 void ScConditionalFormatTest::setUp()
