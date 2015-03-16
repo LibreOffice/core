@@ -4368,12 +4368,12 @@ void VCLXComboBox::setProperty( const OUString& PropertyName, const ::com::sun::
             {
                 sal_Int16 n = sal_Int16();
                 if ( Value >>= n )
-                     pComboBox->EnableAutocomplete( n != 0 );
+                     pComboBox->EnableAutocomplete( n != 0, true );
                 else
                 {
                     bool b = bool();
                     if ( Value >>= b )
-                        pComboBox->EnableAutocomplete( b );
+                        pComboBox->EnableAutocomplete( b, true );
                 }
             }
             break;
