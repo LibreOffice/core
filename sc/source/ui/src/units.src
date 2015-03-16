@@ -31,16 +31,16 @@ PushButton BT_UNITS_EDIT_CELL
     Text[ en-US ] = "Edit Formula";
 };
 
-String STR_UNITS_CONV_REQUIRED
+String STR_UNITS_CONVERSION_RECOMMENDED
 {
-    Text [ en-US ] = "You entered data in $1, would you like to convert to $2?" ;
+    Text [ en-US ] = "You entered data in [$1] in cell $2, where [$3] (defined at cell $4) would be expected." ;
 };
 
-PushButton BT_UNITS_CONV_THISCELL
+PushButton BT_UNITS_CONVERT_THIS_CELL
 {
     Pos = MAP_APPFONT( 0 , 0 );
     Size = MAP_APPFONT( 70 , 0 );
-    Text [ en-US ] = "Convert (only this cell)" ;
+    Text [ en-US ] = "Convert to [$1]" ;
 };
 
 PushButton BT_UNITS_CONV_ALL
