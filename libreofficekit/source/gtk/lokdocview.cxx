@@ -337,9 +337,9 @@ static void lok_docview_class_init( gpointer ptr )
                      G_TYPE_BOOLEAN);
 }
 
-static void lok_docview_init( GTypeInstance *, gpointer ptr )
+static void lok_docview_init( GTypeInstance* pInstance, gpointer )
 {
-    LOKDocView* pDocView = static_cast<LOKDocView *>(ptr);
+    LOKDocView* pDocView = reinterpret_cast<LOKDocView *>(pInstance);
     // Gtk ScrolledWindow is apparently not fully initialised yet, we specifically
     // have to set the [hv]adjustment to prevent GTK assertions from firing, see
     // https://bugzilla.gnome.org/show_bug.cgi?id=438114 for more info.
