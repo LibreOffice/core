@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a29b11f_68770bd5",
+        "filename": "sc/source/core/data/document.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2273,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-03-16T05:23:00Z",
+      "side": 1,
+      "message": "Obviously this breaks the build.",
+      "revId": "71b3df0fa2ca63fbeabffbcb0472ee67089628df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a29b11f_8874e7cf",
+        "filename": "sc/source/core/data/formulacell.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2260,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-03-16T05:23:00Z",
+      "side": 1,
+      "message": "Diese Uebersetzung verliert den interessanten Teil des Kommentars.",
+      "revId": "71b3df0fa2ca63fbeabffbcb0472ee67089628df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a29b11f_28811390",
+        "filename": "sc/source/core/data/table3.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1482,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-03-16T05:23:00Z",
+      "side": 1,
+      "message": "That one looses the important part of the comment as well.\n\nit should be something like: only compare as strings if both are strings",
+      "revId": "71b3df0fa2ca63fbeabffbcb0472ee67089628df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
