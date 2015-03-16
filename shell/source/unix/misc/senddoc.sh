@@ -438,5 +438,3 @@ case `basename "$MAILER" | sed 's/-.*$//'` in
         ${MAILER} "${MAILTO}" &
         ;;
 esac
-
-exit 0
