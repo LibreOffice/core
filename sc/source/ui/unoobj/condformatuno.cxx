@@ -13,6 +13,7 @@
 #include "conditio.hxx"
 #include "colorscale.hxx"
 #include "docsh.hxx"
+#include "miscuno.hxx"
 
 #include "cellsuno.hxx"
 
@@ -70,10 +71,11 @@ struct ConditionEntryApiMap
     sal_Int32 nApiMode;
 };
 
+/*
 ConditionEntryApiMap aConditionEntryMap[] =
 {
-
 };
+*/
 
 enum ColorScaleProperties
 {
@@ -184,8 +186,9 @@ const IconSetTypeApiMap aIconSetApiMap[] =
 
 }
 
-ScCondFormatsObj::ScCondFormatsObj(ScDocument* pDoc, SCTAB nTab):
-    mpFormatList(pDoc->GetCondFormList(nTab))
+ScCondFormatsObj::ScCondFormatsObj(ScDocument& rDoc, SCTAB nTab):
+    mnTab(nTab),
+    mrDoc(rDoc)
 {
 }
 
@@ -194,16 +197,27 @@ ScCondFormatsObj::~ScCondFormatsObj()
 }
 
 sal_Int32 ScCondFormatsObj::addByRange(const uno::Reference< sheet::XConditionalFormat >& xCondFormat,
-        const uno::Reference< sheet::XSheetCellRanges >& xRanges)
+        const uno::Reference< sheet::XSheetCellRanges >& /*xRanges*/)
     throw(uno::RuntimeException, std::exception)
 {
+    if (!xCondFormat.is())
+        return 0;
 
+    SolarMutexGuard aGuard;
+    /*
+    ScCondFormatObj* pFormatObj = ScCondFormatObj::getImplementation(xCondFormat);
+    ScConditionalFormat* pFormat = pFormatObj->getCoreObject();
+    mpFormatList->InsertNew(pFormat);
+    */
     return 0;
 }
 
 void ScCondFormatsObj::removeByID(const sal_Int32 nID)
     throw(uno::RuntimeException, std::exception)
 {
+    SolarMutexGuard aGuard;
+    ScConditionalFormatList* pFormatList = getCoreObject();;
+    pFormatList->erase(nID);
 }
 
 uno::Sequence<uno::Reference<sheet::XConditionalFormat> > ScCondFormatsObj::getConditionalFormats()
@@ -216,10 +230,20 @@ sal_Int32 ScCondFormatsObj::getLength()
     throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    return mpFormatList->size();;
+    ScConditionalFormatList* pFormatList = getCoreObject();;
+    return pFormatList->size();;
 }
 
-ScCondFormatObj::ScCondFormatObj(ScDocument* pDoc, ScConditionalFormat* pFormat):
+ScConditionalFormatList* ScCondFormatsObj::getCoreObject()
+{
+    ScConditionalFormatList* pList = mrDoc.GetCondFormList(mnTab);
+    if (!pList)
+        throw uno::RuntimeException();
+
+    return pList;
+}
+
+ScCondFormatObj::ScCondFormatObj(ScDocument* /*pDoc*/, ScConditionalFormat* pFormat):
     mpFormat(pFormat),
     maPropSet(getCondFormatPropset())
 {
@@ -229,12 +253,12 @@ ScCondFormatObj::~ScCondFormatObj()
 {
 }
 
-void ScCondFormatObj::addEntry(const uno::Reference<sheet::XConditionEntry>& xEntry)
+void ScCondFormatObj::addEntry(const uno::Reference<sheet::XConditionEntry>& /*xEntry*/)
     throw(uno::RuntimeException, std::exception)
 {
 }
 
-void ScCondFormatObj::removeByIndex(const sal_Int32 nIndex)
+void ScCondFormatObj::removeByIndex(const sal_Int32 /*nIndex*/)
     throw(uno::RuntimeException, std::exception)
 {
 }
@@ -249,7 +273,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScCondFormatObj::getPropertySet
 }
 
 void SAL_CALL ScCondFormatObj::setPropertyValue(
-                        const OUString& aPropertyName, const uno::Any& aValue )
+                        const OUString& aPropertyName, const uno::Any& /*aValue*/ )
                 throw(beans::UnknownPropertyException, beans::PropertyVetoException,
                         lang::IllegalArgumentException, lang::WrappedTargetException,
                         uno::RuntimeException, std::exception)
@@ -345,6 +369,12 @@ ScConditionEntryObj::~ScConditionEntryObj()
 {
 }
 
+sal_Int32 ScConditionEntryObj::getType()
+    throw(uno::RuntimeException, std::exception)
+{
+    return 0;
+}
+
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScConditionEntryObj::getPropertySetInfo()
     throw(uno::RuntimeException, std::exception)
 {
@@ -354,7 +384,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScConditionEntryObj::getPropert
 }
 
 void SAL_CALL ScConditionEntryObj::setPropertyValue(
-                        const OUString& aPropertyName, const uno::Any& aValue )
+                        const OUString& aPropertyName, const uno::Any& /*aValue*/ )
                 throw(beans::UnknownPropertyException, beans::PropertyVetoException,
                         lang::IllegalArgumentException, lang::WrappedTargetException,
                         uno::RuntimeException, std::exception)
@@ -473,7 +503,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScColorScaleFormatObj::getPrope
 }
 
 void SAL_CALL ScColorScaleFormatObj::setPropertyValue(
-                        const OUString& aPropertyName, const uno::Any& aValue )
+                        const OUString& aPropertyName, const uno::Any& /*aValue*/ )
                 throw(beans::UnknownPropertyException, beans::PropertyVetoException,
                         lang::IllegalArgumentException, lang::WrappedTargetException,
                         uno::RuntimeException, std::exception)
