@@ -815,7 +815,12 @@ bool SwFEShell::Paste( SwDoc* pClpDoc, bool bIncludingPageFrames )
         FOREACHPAM_START(GetCrsr())
 
         if( pSrcNd &&
-            0 != ( pDestNd = GetDoc()->IsIdxInTbl( PCURCRSR->GetPoint()->nNode )))
+            0 != ( pDestNd = GetDoc()->IsIdxInTbl( PCURCRSR->GetPoint()->nNode )) &&
+            // are we at the beginning of the cell? (if not, we will insert a nested table)
+            // first paragraph of the cell?
+            PCURCRSR->GetNode().GetIndex() == PCURCRSR->GetNode().FindTableBoxStartNode()->GetIndex()+1 &&
+            // beginning of the paragraph?
+            !PCURCRSR->GetPoint()->nContent.GetIndex())
         {
             SwPosition aDestPos( *PCURCRSR->GetPoint() );
 
