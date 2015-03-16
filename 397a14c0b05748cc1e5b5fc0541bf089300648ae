@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a29b11f_885b8754",
+        "filename": "accessibility/source/standard/vclxaccessibleedit.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 518,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-03-16T08:53:31Z",
+      "side": 1,
+      "message": "I think introducing SolarMutexReleaser::clear makes the code less readable and maintainable, not more.  For a \"guard\" object like aReleaser it is important to easily determine the range of code it guards, and the easiest way to do that is with a block:\n\n  Reference\u003cdatatransfer::XTransferable\u003e xDataObj;\n  {\n    SolarMutexReleaser aReleaser;\n    xDataObj \u003d xClipboard-\u003egetContents();\n  }\n\n(And especially so for SolarMutexReleaser, where each use of it is a gross hack.  It is actually a good thing to have these hacks stand out like ugly warts in the code.)",
+      "revId": "397a14c0b05748cc1e5b5fc0541bf089300648ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
