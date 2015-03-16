@@ -118,7 +118,7 @@ class ScConflictsDlg : public ModalDialog
 {
 private:
     VclPtr<SvSimpleTableContainer> m_pLbConflictsContainer;
-    boost::scoped_ptr<SvxRedlinTable>    m_pLbConflicts;
+    VclPtr<SvxRedlinTable>      m_pLbConflicts;
     VclPtr<PushButton>          m_pBtnKeepMine;
     VclPtr<PushButton>          m_pBtnKeepOther;
     VclPtr<PushButton>          m_pBtnKeepAllMine;

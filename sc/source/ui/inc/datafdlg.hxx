@@ -20,8 +20,6 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 
-#include <boost/ptr_container/ptr_vector.hpp>
-
 #define MAX_DATAFORM_COLS   256
 #define MAX_DATAFORM_ROWS   32000
 
@@ -51,8 +49,8 @@ private:
     SCTAB           nTab;
     bool            bNoSelection;
 
-    boost::ptr_vector<boost::nullable<FixedText> > maFixedTexts;
-    boost::ptr_vector<boost::nullable<Edit> > maEdits;
+    std::vector<VclPtr<FixedText> > maFixedTexts;
+    std::vector<VclPtr<Edit> >      maEdits;
 
 public:
     ScDataFormDlg( vcl::Window* pParent, ScTabViewShell* pTabViewShell);

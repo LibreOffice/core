@@ -178,16 +178,16 @@ ScTabView::~ScTabView()
     // Delete this before the grid windows, since it's a child window of one of them.
     mpInputHintWindow.reset();
     for (i=0; i<4; i++)
-        delete pGridWin[i];
+        pGridWin[i].disposeAndClear();
 
     delete pHdrSelEng;
 
     for (i=0; i<2; i++)
     {
-        delete pColBar[i];
-        delete pRowBar[i];
-        delete pColOutline[i];
-        delete pRowOutline[i];
+        pColBar[i].disposeAndClear();
+        pRowBar[i].disposeAndClear();
+        pColOutline[i].disposeAndClear();
+        pRowOutline[i].disposeAndClear();
     }
 
     pHSplitter.disposeAndClear();

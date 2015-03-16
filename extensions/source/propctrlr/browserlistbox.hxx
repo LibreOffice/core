@@ -95,8 +95,7 @@ namespace pcr
     protected:
         VclPtr<Window>              m_aLinesPlayground;
         VclPtr<ScrollBar>           m_aVScroll;
-        ::std::unique_ptr< InspectorHelpWindow >
-                                    m_pHelpWindow;
+        VclPtr<InspectorHelpWindow> m_pHelpWindow;
         ListBoxLines                m_aLines;
         IPropertyLineListener*      m_pLineListener;
         IPropertyControlObserver*   m_pControlObserver;

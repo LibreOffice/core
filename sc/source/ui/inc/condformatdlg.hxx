@@ -22,8 +22,6 @@
 #include "rangelst.hxx"
 #include "condformathelper.hxx"
 
-#include <boost/ptr_container/ptr_vector.hpp>
-#include <boost/scoped_ptr.hpp>
 #include "anyrefdg.hxx"
 
 class ScDocument;
@@ -56,11 +54,11 @@ class ScCondFormatDlg;
 class ScCondFormatList : public Control
 {
 private:
-    typedef boost::ptr_vector<ScCondFrmtEntry> EntryContainer;
+    typedef std::vector<VclPtr<ScCondFrmtEntry>> EntryContainer;
     EntryContainer maEntries;
 
     bool mbHasScrollBar;
-    boost::scoped_ptr<ScrollBar> mpScrollBar;
+    VclPtr<ScrollBar> mpScrollBar;
 
     ScDocument* mpDoc;
     ScAddress maPos;

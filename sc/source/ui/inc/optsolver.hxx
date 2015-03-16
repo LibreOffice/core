@@ -165,12 +165,12 @@ private:
     bool            mbDlgLostFocus;
 
     static const sal_uInt16 EDIT_ROW_COUNT = 4;
-    ScCursorRefEdit* mpLeftEdit[EDIT_ROW_COUNT];
+    VclPtr<ScCursorRefEdit>        mpLeftEdit[EDIT_ROW_COUNT];
     VclPtr<formula::RefButton>     mpLeftButton[EDIT_ROW_COUNT];
-    ScCursorRefEdit* mpRightEdit[EDIT_ROW_COUNT];
+    VclPtr<ScCursorRefEdit>        mpRightEdit[EDIT_ROW_COUNT];
     VclPtr<formula::RefButton>     mpRightButton[EDIT_ROW_COUNT];
-    VclPtr<ListBox>         mpOperator[EDIT_ROW_COUNT];
-    VclPtr<PushButton>      mpDelButton[EDIT_ROW_COUNT];
+    VclPtr<ListBox>                mpOperator[EDIT_ROW_COUNT];
+    VclPtr<PushButton>             mpDelButton[EDIT_ROW_COUNT];
 
     std::vector<ScOptConditionRow> maConditions;
     long            nScrollPos;

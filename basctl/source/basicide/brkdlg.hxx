@@ -35,7 +35,7 @@ private:
     VclPtr<OKButton>       m_pOKButton;
     VclPtr<PushButton>     m_pNewButton;
     VclPtr<PushButton>     m_pDelButton;
-    ::VclPtr<CheckBox>     m_pCheckBox;
+    VclPtr<CheckBox>       m_pCheckBox;
     VclPtr<NumericField>   m_pNumericField;
 
     BreakPointList & m_rOriginalBreakPointList;

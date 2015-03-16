@@ -204,7 +204,9 @@ void MediaWindowImpl::dispose()
     mpEmptyBmpEx = NULL;
     delete mpAudioBmpEx;
     mpAudioBmpEx = NULL;
-    mpMediaWindowControl.clear();
+    mpMediaWindowControl.disposeAndClear();
+    mpChildWindow.disposeAndClear();
+
     Control::dispose();
 }
 

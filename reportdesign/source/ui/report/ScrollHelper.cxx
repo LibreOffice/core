@@ -301,12 +301,12 @@ void OScrollWindowHelper::setMarked(const uno::Sequence< uno::Reference< report:
     m_aReportWindow->setMarked(_xShape,_bMark);
 }
 
-::boost::shared_ptr<OSectionWindow> OScrollWindowHelper::getMarkedSection(NearSectionAccess nsa) const
+OSectionWindow* OScrollWindowHelper::getMarkedSection(NearSectionAccess nsa) const
 {
     return m_aReportWindow->getMarkedSection(nsa);
 }
 
-::boost::shared_ptr<OSectionWindow> OScrollWindowHelper::getSectionWindow(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection) const
+OSectionWindow* OScrollWindowHelper::getSectionWindow(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection) const
 {
     return  m_aReportWindow->getSectionWindow(_xSection);
 }

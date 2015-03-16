@@ -227,7 +227,7 @@ public:
         void Dispose (void);
     private:
         view::SlideSorterView& mrView;
-        SharedSdWindow mpWindow;
+        VclPtr<sd::Window> mpWindow;
     };
 
     ToolTip& GetToolTip (void) const;

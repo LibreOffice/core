@@ -94,12 +94,12 @@ public:
 
 private:
     css::uno::Reference<css::frame::XFrame> mxFrame;
-    ::boost::scoped_ptr<CheckBox> mpMenuButton;
+    VclPtr<CheckBox> mpMenuButton;
     class Item
     {
     public:
         DECL_LINK(HandleClick, Button*);
-        ::boost::shared_ptr<RadioButton> mpButton;
+        VclPtr<RadioButton> mpButton;
         ::rtl::OUString msDeckId;
         ::boost::function<void(const ::rtl::OUString&rsDeckId)> maDeckActivationFunctor;
         bool mbIsHidden;

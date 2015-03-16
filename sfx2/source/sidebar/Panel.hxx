@@ -68,7 +68,7 @@ public:
 
 private:
     const ::rtl::OUString msPanelId;
-    ::boost::scoped_ptr<PanelTitleBar> mpTitleBar;
+    VclPtr<PanelTitleBar> mpTitleBar;
     const bool mbIsTitleBarOptional;
     css::uno::Reference<css::ui::XUIElement> mxElement;
     css::uno::Reference<css::ui::XSidebarPanel> mxPanelComponent;
@@ -76,8 +76,7 @@ private:
     const ::boost::function<void(void)> maDeckLayoutTrigger;
     const ::boost::function<Context(void)> maContextAccess;
 };
-typedef ::boost::shared_ptr<Panel> SharedPanel;
-typedef ::std::vector<SharedPanel> SharedPanelContainer;
+typedef ::std::vector< VclPtr< Panel > > SharedPanelContainer;
 
 } } // end of namespace sfx2::sidebar
 

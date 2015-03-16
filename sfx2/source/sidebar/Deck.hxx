@@ -89,11 +89,11 @@ private:
     Image maIcon;
     sal_Int32 mnMinimalWidth;
     SharedPanelContainer maPanels;
-    ::boost::scoped_ptr<DeckTitleBar> mpTitleBar;
-    ::boost::scoped_ptr<vcl::Window> mpScrollClipWindow;
-    ::boost::scoped_ptr<ScrollContainerWindow> mpScrollContainer;
-    ::boost::scoped_ptr<vcl::Window> mpFiller;
-    ::boost::scoped_ptr<ScrollBar> mpVerticalScrollBar;
+    VclPtr<DeckTitleBar> mpTitleBar;
+    VclPtr<vcl::Window> mpScrollClipWindow;
+    VclPtr<ScrollContainerWindow> mpScrollContainer;
+    VclPtr<vcl::Window> mpFiller;
+    VclPtr<ScrollBar> mpVerticalScrollBar;
 
     DECL_LINK(HandleVerticalScrollBarChange,void*);
     bool ProcessWheelEvent(CommandEvent* pCommandEvent);

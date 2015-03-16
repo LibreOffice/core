@@ -48,9 +48,9 @@ public:
 
 private:
     Gallery* mpGallery;
-    ::boost::scoped_ptr<GallerySplitter> mpSplitter;
-    ::boost::scoped_ptr<GalleryBrowser1> mpBrowser1;
-    ::boost::scoped_ptr<GalleryBrowser2> mpBrowser2;
+    VclPtr<GallerySplitter> mpSplitter;
+    VclPtr<GalleryBrowser1> mpBrowser1;
+    VclPtr<GalleryBrowser2> mpBrowser2;
     Size maLastSize;
     bool mbIsInitialResize;
 
@@ -63,6 +63,8 @@ private:
 
 protected:
     void ThemeSelectionHasChanged (void);
+    virtual ~GalleryControl();
+    virtual void dispose() SAL_OVERRIDE;
 };
 
 } } // end of namespace svx::sidebar

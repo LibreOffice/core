@@ -390,6 +390,7 @@ namespace pcr
         Clear();
         m_aLinesPlayground.disposeAndClear();
         m_aVScroll.disposeAndClear();
+        m_pHelpWindow.disposeAndClear();
         Control::dispose();
     }
 

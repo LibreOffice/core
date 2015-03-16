@@ -65,7 +65,7 @@ private:
 
     VclPtr<TabControl> mpTabControl;
 
-    CustomAnimationCreateTabPage* mpTabPages[5];
+    VclPtr<CustomAnimationCreateTabPage> mpTabPages[5];
     sal_uInt16 mnEntranceId, mnEmphasisId, mnExitId, mnMPathId, mnMiscId;
 };
 

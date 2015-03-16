@@ -64,7 +64,7 @@ public:
     enum Orientation { HORIZONTAL, VERTICAL, GRID };
 
     Layouter (
-        const SharedSdWindow& rpWindow,
+        sd::Window *rpWindow,
         const ::boost::shared_ptr<Theme>& rpTheme);
     ~Layouter (void);
 
@@ -192,7 +192,7 @@ public:
 
 private:
     ::boost::scoped_ptr<Implementation> mpImplementation;
-    SharedSdWindow mpWindow;
+    VclPtr<sd::Window> mpWindow;
 };
 
 /** Collect all values concerning the logical and visual properties of the

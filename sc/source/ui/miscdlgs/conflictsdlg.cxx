@@ -448,6 +448,7 @@ ScConflictsDlg::~ScConflictsDlg()
 void ScConflictsDlg::dispose()
 {
     m_pLbConflictsContainer.clear();
+    m_pLbConflicts.disposeAndClear();
     m_pBtnKeepMine.clear();
     m_pBtnKeepOther.clear();
     m_pBtnKeepAllMine.clear();

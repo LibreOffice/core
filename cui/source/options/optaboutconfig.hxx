@@ -50,7 +50,7 @@ private:
     VclPtr<Edit> m_pSearchEdit;
 
     std::vector< boost::shared_ptr< Prop_Impl > > m_vectorOfModified;
-    boost::scoped_ptr< SvSimpleTable > m_pPrefBox;
+    VclPtr< SvSimpleTable > m_pPrefBox;
 
      //for search
     ::com::sun::star::util::SearchOptions m_options;

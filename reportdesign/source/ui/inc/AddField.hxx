@@ -56,7 +56,7 @@ class  OAddFieldWindow  :public FloatingWindow
 
     VclPtr<ToolBox>                                                             m_aActions;
 
-    ::std::unique_ptr<OAddFieldWindowListBox>                                   m_pListBox;
+    VclPtr<OAddFieldWindowListBox>                                              m_pListBox;
     VclPtr<FixedLine>                                                           m_aFixedLine;
     VclPtr<FixedText>                                                           m_aHelpText;
 

@@ -299,7 +299,7 @@ void OReportWindow::unmarkAllObjects(OSectionView* _pSectionView)
 
 void OReportWindow::showProperties(const uno::Reference< report::XSection>& _xReportComponent)
 {
-    ::boost::shared_ptr<OSectionWindow> pSectionWindow = m_aViewsWindow->getSectionWindow( _xReportComponent );
+    OSectionWindow* pSectionWindow = m_aViewsWindow->getSectionWindow( _xReportComponent );
     m_pView->UpdatePropertyBrowserDelayed(pSectionWindow->getReportSection().getSectionView());
 }
 
@@ -326,12 +326,12 @@ void OReportWindow::setMarked(const uno::Sequence< uno::Reference< report::XRepo
     m_aViewsWindow->setMarked(_xShape,_bMark);
 }
 
-::boost::shared_ptr<OSectionWindow> OReportWindow::getMarkedSection(NearSectionAccess nsa) const
+OSectionWindow* OReportWindow::getMarkedSection(NearSectionAccess nsa) const
 {
     return  m_aViewsWindow->getMarkedSection(nsa);
 }
 
-::boost::shared_ptr<OSectionWindow> OReportWindow::getSectionWindow(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection) const
+OSectionWindow* OReportWindow::getSectionWindow(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection) const
 {
     return  m_aViewsWindow->getSectionWindow(_xSection);
 }

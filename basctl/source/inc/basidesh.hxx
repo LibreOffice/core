@@ -74,12 +74,12 @@ private:
     VclPtr<ScrollBar>         aHScrollBar;
     VclPtr<ScrollBar>         aVScrollBar;
     VclPtr<ScrollBarBox>      aScrollBarBox;
-    boost::scoped_ptr<TabBar> pTabBar; // basctl::TabBar
+    VclPtr<TabBar> pTabBar; // basctl::TabBar
     bool                bTabBarSplitted;
     bool                bCreatingWindow;
     // layout windows
-    boost::scoped_ptr<ModulWindowLayout> pModulLayout;
-    boost::scoped_ptr<DialogWindowLayout> pDialogLayout;
+    VclPtr<ModulWindowLayout> pModulLayout;
+    VclPtr<DialogWindowLayout> pDialogLayout;
     // the active layout window
     VclPtr<Layout> pLayout;
     // common object catalog window

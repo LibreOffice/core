@@ -113,7 +113,7 @@ private:
             long nStartPos, nEndPos;
             // splitter line window before the window
             // (the first one is always nullptr)
-            boost::shared_ptr<Splitter> pSplit;
+            VclPtr<Splitter> pSplit;
         };
         std::vector<Item> vItems;
     private:

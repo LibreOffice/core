@@ -26,6 +26,7 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/utility.hpp>
 #include <boost/scoped_ptr.hpp>
+#include <vcl/vclptr.hxx>
 
 #include "viewlayer.hxx"
 
@@ -147,8 +148,8 @@ namespace slideshow
                                                      const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rVCLDeviceParams,
                                                      const OUString& rMimeType );
             ViewLayerSharedPtr                    mpViewLayer;
-            ::std::unique_ptr< SystemChildWindow >  mpMediaWindow;
-            boost::scoped_ptr< ::vcl::Window >    mpEventHandlerParent;
+            VclPtr< SystemChildWindow >  mpMediaWindow;
+            VclPtr< ::vcl::Window >    mpEventHandlerParent;
             mutable ::com::sun::star::awt::Point  maWindowOffset;
             mutable ::basegfx::B2DRectangle       maBounds;
 

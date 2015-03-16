@@ -292,6 +292,7 @@ void ScInputWindow::dispose()
 
     pRuntimeWindow.reset();
 
+    pRuntimeWindow.disposeAndClear();
     ToolBox::dispose();
 }
 

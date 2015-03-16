@@ -662,11 +662,11 @@ IMPL_LINK( ScOptSolverDlg, GetFocusHdl, Control*, pCtrl )
     for ( sal_uInt16 nRow = 0; nRow < EDIT_ROW_COUNT; ++nRow )
     {
         if( pCtrl == mpLeftEdit[nRow] || pCtrl == mpLeftButton[nRow] )
-            pEdit = mpEdActive = mpLeftEdit[nRow];
+            pEdit = mpEdActive = mpLeftEdit[nRow].get();
         else if( pCtrl == mpRightEdit[nRow] || pCtrl == mpRightButton[nRow] )
-            pEdit = mpEdActive = mpRightEdit[nRow];
+            pEdit = mpEdActive = mpRightEdit[nRow].get();
         else if( pCtrl == mpOperator[nRow] )    // focus on "operator" list box
-            mpEdActive = mpRightEdit[nRow];     // use right edit for ref input, but don't change selection
+            mpEdActive = mpRightEdit[nRow].get();     // use right edit for ref input, but don't change selection
     }
     if( pCtrl == m_pRbValue )                   // focus on "Value of" radio button
         mpEdActive = m_pEdTargetValue;          // use value edit for ref input, but don't change selection
@@ -702,7 +702,7 @@ IMPL_LINK( ScOptSolverDlg, DelBtnHdl, PushButton*, pBtn )
                     // If the button is disabled, focus would normally move to the next control,
                     // (left edit of the next row). Move it to left edit of this row instead.
 
-                    mpEdActive = mpLeftEdit[nRow];
+                    mpEdActive = mpLeftEdit[nRow].get();
                     mpEdActive->GrabFocus();
                 }
             }

@@ -67,7 +67,7 @@ public:
 
     virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
 
-    ::boost::shared_ptr< ::TabControl> GetTabControl (void) const { return mpTabControl;}
+    ::TabControl* GetTabControl (void) const { return mpTabControl;}
 
     bool ActivatePage (void);
 
@@ -149,14 +149,14 @@ public:
         GetTabBarButtons (void);
 
 private:
-    ::boost::shared_ptr< ::TabControl> mpTabControl;
+    VclPtr< ::TabControl> mpTabControl;
     ::com::sun::star::uno::Reference<
         ::com::sun::star::frame::XController> mxController;
     ::com::sun::star::uno::Reference<
         ::com::sun::star::drawing::framework::XConfigurationController> mxConfigurationController;
     typedef ::std::vector<com::sun::star::drawing::framework::TabBarButton> TabBarButtonList;
     TabBarButtonList maTabBarButtons;
-    ::boost::scoped_ptr<TabPage> mpTabPage;
+    VclPtr<TabPage> mpTabPage;
     ::com::sun::star::uno::Reference<
         ::com::sun::star::drawing::framework::XResourceId> mxViewTabBarId;
     ViewShellBase* mpViewShellBase;

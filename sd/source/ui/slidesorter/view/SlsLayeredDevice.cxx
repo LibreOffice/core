@@ -38,10 +38,10 @@ class LayerInvalidator : public ILayerInvalidator
 public:
     LayerInvalidator (
         const ::boost::shared_ptr<LayeredDevice>& rpLayeredDevice,
-        const SharedSdWindow& rpTargetWindow,
+        sd::Window *pTargetWindow,
         const int nLayer)
         : mpLayeredDevice(rpLayeredDevice),
-          mpTargetWindow(rpTargetWindow),
+          mpTargetWindow(pTargetWindow),
           mnLayer(nLayer)
     {
     }
@@ -58,7 +58,7 @@ public:
 
 private:
     const ::boost::shared_ptr<LayeredDevice> mpLayeredDevice;
-    SharedSdWindow mpTargetWindow;
+    VclPtr<sd::Window> mpTargetWindow;
     const int mnLayer;
 };
 
@@ -107,7 +107,7 @@ public:
     Layer (void);
     ~Layer (void);
 
-    void Initialize (const SharedSdWindow& rpTargetWindow);
+    void Initialize (sd::Window *pTargetWindow);
     void InvalidateRectangle (const Rectangle& rInvalidationBox);
     void InvalidateRegion (const vcl::Region& rInvalidationRegion);
     void Validate (const MapMode& rMapMode);
@@ -159,11 +159,11 @@ private:
 
 //===== LayeredDevice =========================================================
 
-LayeredDevice::LayeredDevice (const SharedSdWindow& rpTargetWindow)
-    : mpTargetWindow(rpTargetWindow),
+LayeredDevice::LayeredDevice (sd::Window* pTargetWindow)
+    : mpTargetWindow(pTargetWindow),
       mpLayers(new LayerContainer()),
       mpBackBuffer(new VirtualDevice(*mpTargetWindow)),
-      maSavedMapMode(rpTargetWindow->GetMapMode())
+      maSavedMapMode(pTargetWindow->GetMapMode())
 {
     mpBackBuffer->SetOutputSizePixel(mpTargetWindow->GetSizePixel());
 }
@@ -379,15 +379,15 @@ Layer::~Layer (void)
 {
 }
 
-void Layer::Initialize (const SharedSdWindow& rpTargetWindow)
+void Layer::Initialize (sd::Window *pTargetWindow)
 {
 #if 0
-    (void)rpTargetWindow;
+    (void)pTargetWindow;
 #else
     if ( ! mpLayerDevice)
     {
-        mpLayerDevice.reset(new VirtualDevice(*rpTargetWindow));
-        mpLayerDevice->SetOutputSizePixel(rpTargetWindow->GetSizePixel());
+        mpLayerDevice.reset(new VirtualDevice(*pTargetWindow));
+        mpLayerDevice->SetOutputSizePixel(pTargetWindow->GetSizePixel());
     }
 #endif
 }

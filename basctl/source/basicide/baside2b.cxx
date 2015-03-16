@@ -271,6 +271,7 @@ void EditorWindow::dispose()
         EndListening( *pEditEngine );
         pEditEngine->RemoveView(pEditView.get());
     }
+    pCodeCompleteWnd.disposeAndClear();
     vcl::Window::dispose();
 }
 

@@ -96,7 +96,7 @@ class SmElementsControl : public Control
     SmElementList maElementList;
     Size          maMaxElementDimensions;
     bool          mbVerticalMode;
-    std::unique_ptr<ScrollBar> mxScroll;
+    VclPtr< ScrollBar > mxScroll;
 
     void addElement(const OUString& aElementVisual, const OUString& aElementSource, const OUString& aHelpText);
 

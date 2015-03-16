@@ -80,7 +80,7 @@ protected:
 
 private:
     css::uno::Reference<css::uno::XComponentContext> mxComponentContext;
-    ::boost::scoped_ptr<WorkWindow> mpWorkWindow;
+    VclPtr<WorkWindow> mpWorkWindow;
 
     void ExtractArguments (
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxPaneId,

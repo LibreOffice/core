@@ -65,6 +65,19 @@ GalleryControl::GalleryControl (
     InitSettings();
 }
 
+GalleryControl::~GalleryControl()
+{
+    disposeOnce();
+}
+
+void GalleryControl::dispose()
+{
+    mpSplitter.disposeAndClear();
+    mpBrowser1.disposeAndClear();
+    mpBrowser2.disposeAndClear();
+    vcl::Window::dispose();
+}
+
 void GalleryControl::InitSettings (void)
 {
     SetBackground( Wallpaper( GALLERY_DLG_COLOR ) );

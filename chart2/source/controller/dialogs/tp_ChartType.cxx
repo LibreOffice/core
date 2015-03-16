@@ -505,8 +505,8 @@ private:
     VclPtr<FixedText>  m_pFT_LineType;
     VclPtr<ListBox>    m_pLB_LineType;
     VclPtr<PushButton> m_pPB_DetailsDialog;
-    boost::scoped_ptr< SplinePropertiesDialog > m_pSplinePropertiesDialog;
-    boost::scoped_ptr< SteppedPropertiesDialog > m_pSteppedPropertiesDialog;
+    VclPtr< SplinePropertiesDialog > m_pSplinePropertiesDialog;
+    VclPtr< SteppedPropertiesDialog > m_pSteppedPropertiesDialog;
 };
 
 SplineResourceGroup::SplineResourceGroup(VclBuilderContainer* pWindow)

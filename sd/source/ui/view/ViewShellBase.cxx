@@ -139,7 +139,7 @@ public:
         the content window.
         It does not include the ViewTabBar.
     */
-    ::boost::scoped_ptr< vcl::Window> mpViewWindow;
+    VclPtr<vcl::Window> mpViewWindow;
     ::boost::shared_ptr<ToolBarManager> mpToolBarManager;
     ::boost::shared_ptr<ViewShellManager> mpViewShellManager;
     ::boost::shared_ptr<tools::EventMultiplexer> mpEventMultiplexer;

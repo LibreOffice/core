@@ -195,7 +195,7 @@ void Layout::SplittedSide::Add (DockingWindow* pWin, Size const& rSize)
     // splitter
     if (!vItems.empty())
     {
-        aItem.pSplit = boost::make_shared<Splitter>(&rLayout, bVertical ? WB_VSCROLL : WB_HSCROLL);
+        aItem.pSplit = new Splitter(&rLayout, bVertical ? WB_VSCROLL : WB_HSCROLL);
         aItem.pSplit->SetSplitPosPixel(aItem.nStartPos - nSplitThickness);
         InitSplitter(*aItem.pSplit);
     }

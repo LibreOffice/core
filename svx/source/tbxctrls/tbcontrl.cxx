@@ -154,7 +154,7 @@ private:
     OUString                        aMoreKey;
     OUString                        sDefaultStyle;
     bool                            bInSpecialMode;
-    MenuButton*                     m_pButtons[MAX_STYLES_ENTRIES];
+    VclPtr<MenuButton>              m_pButtons[MAX_STYLES_ENTRIES];
     PopupMenu                       m_aMenu;
 
     void            ReleaseFocus();
@@ -339,8 +339,7 @@ void SvxStyleBox_Impl::dispose()
 {
     for(int i = 0; i < MAX_STYLES_ENTRIES; i++)
     {
-        delete m_pButtons[i];
-        m_pButtons[i] = NULL;
+        m_pButtons[i].disposeAndClear();
     }
     ComboBox::dispose();
 }
@@ -720,7 +719,7 @@ void SvxStyleBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
                     unsigned int nId = (aRect.getY() / aRect.GetSize().Height());
                     if(nId < MAX_STYLES_ENTRIES)
                     {
-                        if(m_pButtons[nId] == NULL)
+                        if(m_pButtons[nId] == nullptr)
                         {
                             m_pButtons[nId] = new MenuButton(static_cast<vcl::Window*>(pDevice), WB_FLATBUTTON | WB_NOPOINTERFOCUS);
                             m_pButtons[nId]->SetSizePixel(Size(20, aRect.GetSize().Height()));

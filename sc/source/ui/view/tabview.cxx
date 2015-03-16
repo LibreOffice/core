@@ -2231,17 +2231,17 @@ void ScTabView::EnableRefInput(bool bFlag)
 
     if(pTabControl!=nullptr) pTabControl->EnableInput(bFlag,true);
 
-    if(pGridWin[SC_SPLIT_BOTTOMLEFT]!=NULL)
+    if(pGridWin[SC_SPLIT_BOTTOMLEFT]!=nullptr)
         pGridWin[SC_SPLIT_BOTTOMLEFT]->EnableInput(bFlag,false);
-    if(pGridWin[SC_SPLIT_BOTTOMRIGHT]!=NULL)
+    if(pGridWin[SC_SPLIT_BOTTOMRIGHT]!=nullptr)
         pGridWin[SC_SPLIT_BOTTOMRIGHT]->EnableInput(bFlag,false);
-    if(pGridWin[SC_SPLIT_TOPLEFT]!=NULL)
+    if(pGridWin[SC_SPLIT_TOPLEFT]!=nullptr)
         pGridWin[SC_SPLIT_TOPLEFT]->EnableInput(bFlag,false);
-    if(pGridWin[SC_SPLIT_TOPRIGHT]!=NULL)
+    if(pGridWin[SC_SPLIT_TOPRIGHT]!=nullptr)
         pGridWin[SC_SPLIT_TOPRIGHT]->EnableInput(bFlag,false);
-    if(pColBar[SC_SPLIT_RIGHT]!=NULL)
+    if(pColBar[SC_SPLIT_RIGHT]!=nullptr)
         pColBar[SC_SPLIT_RIGHT]->EnableInput(bFlag,false);
-    if(pRowBar[SC_SPLIT_TOP]!=NULL)
+    if(pRowBar[SC_SPLIT_TOP]!=nullptr)
         pRowBar[SC_SPLIT_TOP]->EnableInput(bFlag,false);
 }
 

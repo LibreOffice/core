@@ -118,6 +118,7 @@ void BreakPointDialog::dispose()
     m_pNewButton.clear();
     m_pDelButton.clear();
     m_pNumericField.clear();
+    m_pCheckBox.clear();
     ModalDialog::dispose();
 }
 

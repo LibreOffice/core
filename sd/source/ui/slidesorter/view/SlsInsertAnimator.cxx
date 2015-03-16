@@ -43,7 +43,7 @@ public:
     virtual model::SlideSorterModel& GetModel (void) const = 0;
     virtual view::SlideSorterView& GetView (void) const = 0;
     virtual ::boost::shared_ptr<controller::Animator> GetAnimator (void) = 0;
-    virtual SharedSdWindow GetContentWindow (void) = 0;
+    virtual sd::Window *GetContentWindow (void) = 0;
 
 protected:
     ~AnimatorAccess() {}
@@ -128,7 +128,7 @@ public:
     virtual model::SlideSorterModel& GetModel (void) const SAL_OVERRIDE { return mrModel; }
     virtual view::SlideSorterView& GetView (void) const SAL_OVERRIDE { return mrView; }
     virtual ::boost::shared_ptr<controller::Animator> GetAnimator (void) SAL_OVERRIDE { return mpAnimator; }
-    virtual SharedSdWindow GetContentWindow (void) SAL_OVERRIDE { return mrSlideSorter.GetContentWindow(); }
+    virtual sd::Window *GetContentWindow (void) SAL_OVERRIDE { return mrSlideSorter.GetContentWindow(); }
 
 private:
     model::SlideSorterModel& mrModel;

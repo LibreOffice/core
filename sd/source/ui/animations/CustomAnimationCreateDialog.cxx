@@ -554,11 +554,11 @@ void CustomAnimationCreateDialog::dispose()
     SdOptions* pOptions = SD_MOD()->GetSdOptions(DOCUMENT_TYPE_IMPRESS);
     pOptions->SetPreviewNewEffects( getCurrentPage()->getIsPreview() );
 
-    delete mpTabPages[ENTRANCE];
-    delete mpTabPages[EMPHASIS];
-    delete mpTabPages[EXIT];
-    delete mpTabPages[MOTIONPATH];
-    delete mpTabPages[MISCEFFECTS];
+    mpTabPages[ENTRANCE].disposeAndClear();
+    mpTabPages[EMPHASIS].disposeAndClear();
+    mpTabPages[EXIT].disposeAndClear();
+    mpTabPages[MOTIONPATH].disposeAndClear();
+    mpTabPages[MISCEFFECTS].disposeAndClear();
 
     mpTabControl.clear();
     mpPane.clear();

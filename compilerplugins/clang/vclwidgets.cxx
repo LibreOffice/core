@@ -112,6 +112,10 @@ bool containsWindowSubclass(const Type* pType0) {
     if (pType->isPointerType()) {
         QualType pointeeType = pType->getPointeeType();
         return containsWindowSubclass(pointeeType);
+    } else if (pType->isArrayType()) {
+        const ArrayType* pArrayType = dyn_cast<ArrayType>(pType);
+        QualType elementType = pArrayType->getElementType();
+        return containsWindowSubclass(elementType);
     } else {
         return isDerivedFromWindow(pRecordDecl);
     }
@@ -315,6 +319,12 @@ static void findDisposeAndClearStatements2(std::vector<std::string>& aVclPtrFiel
         findDisposeAndClearStatements(aVclPtrFields, dyn_cast<CompoundStmt>(pStmt));
         return;
     }
+    if (isa<ForStmt>(pStmt)) {
+        const CompoundStmt *pBody = dyn_cast<CompoundStmt>(dyn_cast<ForStmt>(pStmt)->getBody());
+        if (pBody)
+            findDisposeAndClearStatements(aVclPtrFields, pBody);
+        return;
+    }
     if (!isa<CallExpr>(pStmt)) return;
     const CallExpr *pCallExpr = dyn_cast<CallExpr>(pStmt);
 
@@ -403,6 +413,12 @@ bool VCLWidgets::VisitFunctionDecl( const FunctionDecl* functionDecl )
         if (pMethodDecl->getQualifiedNameAsString() == "SmToolBoxWindow::dispose")
             return true;
         if (pMethodDecl->getQualifiedNameAsString() == "dbaui::DlgOrderCrit::dispose")
+            return true;
+        if (pMethodDecl->getQualifiedNameAsString() == "SvxStyleBox_Impl::dispose")
+            return true;
+        if (pMethodDecl->getQualifiedNameAsString() == "dbaui::OAppDetailPageHelper::dispose")
+            return true;
+        if (pMethodDecl->getQualifiedNameAsString() == "sd::CustomAnimationCreateDialog::dispose")
             return true;
 
         std::vector<std::string> aVclPtrFields;

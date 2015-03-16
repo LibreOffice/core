@@ -239,6 +239,7 @@ void OAddFieldWindow::dispose()
     m_aFixedLine.disposeAndClear();
     m_aHelpText.disposeAndClear();
     m_aInsertButton.disposeAndClear();
+    m_pListBox.disposeAndClear();
     FloatingWindow::dispose();
 }
 

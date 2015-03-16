@@ -135,7 +135,7 @@ void SAL_CALL FullScreenPane::setVisible (const sal_Bool bIsVisible)
 
     if (mpWindow != nullptr)
         mpWindow->Show(bIsVisible);
-    if (mpWorkWindow != 0)
+    if (mpWorkWindow != nullptr)
         mpWorkWindow->Show(bIsVisible);
 }
 
@@ -144,7 +144,7 @@ Reference<css::accessibility::XAccessible> SAL_CALL FullScreenPane::getAccessibl
 {
     ThrowIfDisposed();
 
-    if (mpWorkWindow != 0)
+    if (mpWorkWindow != nullptr)
         return mpWorkWindow->GetAccessible(false);
     else
         return NULL;

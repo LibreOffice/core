@@ -178,9 +178,9 @@ public:
     bool HasFocus() const;
 
 private:
-    ::boost::shared_ptr< FixedImage >        m_spSymbol;
-    ::boost::shared_ptr< SeriesHeaderEdit >  m_spSeriesName;
-    ::boost::shared_ptr< FixedText >         m_spColorBar;
+    VclPtr< FixedImage >        m_spSymbol;
+    VclPtr< SeriesHeaderEdit >  m_spSeriesName;
+    VclPtr< FixedText >         m_spColorBar;
     OutputDevice *                           m_pDevice;
     Link                                     m_aChangeLink;
 

@@ -109,7 +109,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >
     GetComponentInterface(bool bCreate = true) SAL_OVERRIDE;
     CodeCompleteDataCache aCodeCompleteCache;
-    boost::scoped_ptr< CodeCompleteWindow > pCodeCompleteWnd;
+    VclPtr<CodeCompleteWindow> pCodeCompleteWnd;
     OUString GetActualSubName( sal_uLong nLine ); // gets the actual subroutine name according to line number
     void SetupAndShowCodeCompleteWnd(const std::vector< OUString >& aEntryVect, TextSelection aSel );
     void HandleAutoCorrect();

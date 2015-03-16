@@ -248,11 +248,9 @@ void OAppDetailPageHelper::dispose()
         {
             m_pLists[i]->clearCurrentSelection();
             m_pLists[i]->Hide();
-            boost::scoped_ptr<DBTreeListBox> aTemp(m_pLists[i]);
             m_pLists[i]->clearCurrentSelection();   // why a second time?
-            m_pLists[i] = NULL;
+            m_pLists[i].disposeAndClear();
         }
-
     }
     m_aFL.disposeAndClear();
     m_aTBPreview.disposeAndClear();
@@ -369,7 +367,7 @@ void OAppDetailPageHelper::describeCurrentSelectionForControl( const Control& _r
 void OAppDetailPageHelper::describeCurrentSelectionForType( const ElementType _eType, Sequence< NamedDatabaseObject >& _out_rSelectedObjects )
 {
     OSL_ENSURE( _eType < E_ELEMENT_TYPE_COUNT, "OAppDetailPageHelper::describeCurrentSelectionForType: invalid type!" );
-    DBTreeListBox* pList = ( _eType < E_ELEMENT_TYPE_COUNT ) ? m_pLists[ _eType ] : NULL;
+    DBTreeListBox* pList = ( _eType < E_ELEMENT_TYPE_COUNT ) ? m_pLists[ _eType ].get() : NULL;
     OSL_ENSURE( pList, "OAppDetailPageHelper::describeCurrentSelectionForType: "
                        "You really should ensure this type has already been viewed before!" );
     if ( !pList )
@@ -586,7 +584,7 @@ void OAppDetailPageHelper::createTablesPage(const Reference< XConnection>& _xCon
     }
     if ( !m_pLists[E_TABLE]->GetEntryCount() )
     {
-        static_cast<OTableTreeListBox*>(m_pLists[E_TABLE])->UpdateTableList(_xConnection);
+        static_cast<OTableTreeListBox*>(m_pLists[E_TABLE].get())->UpdateTableList(_xConnection);
 
         SvTreeListEntry* pEntry = m_pLists[E_TABLE]->First();
         if ( pEntry )
@@ -1226,7 +1224,7 @@ void OAppDetailPageHelper::DataChanged( const DataChangedEvent& rDCEvt )
         ImplInitSettings();
         if ( m_pLists[ E_TABLE ] )
         {
-            OTableTreeListBox* pTableTree = dynamic_cast< OTableTreeListBox* >( m_pLists[ E_TABLE ] );
+            OTableTreeListBox* pTableTree = dynamic_cast< OTableTreeListBox* >( m_pLists[ E_TABLE ].get() );
             OSL_ENSURE( pTableTree != NULL, "OAppDetailPageHelper::DataChanged: a tree list for tables which is no TableTreeList?" );
             if ( pTableTree )
                 pTableTree->notifyHiContrastChanged();

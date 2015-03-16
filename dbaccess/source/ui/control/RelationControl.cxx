@@ -59,7 +59,7 @@ namespace dbaui
     {
         friend class OTableListBoxControl;
 
-        ::std::unique_ptr< ::svt::ListBoxControl> m_pListCell;
+        VclPtr< ::svt::ListBoxControl>          m_pListCell;
         TTableConnectionData::value_type        m_pConnData;
         OTableListBoxControl*                   m_pBoxControl;
         long                                    m_nDataPos;
@@ -101,6 +101,8 @@ namespace dbaui
         void lateInit();
 
     protected:
+        virtual ~ORelationControl() { disposeOnce(); }
+        virtual void dispose() SAL_OVERRIDE { m_pListCell.disposeAndClear(); ORelationControl_Base::dispose(); }
         virtual void Resize() SAL_OVERRIDE;
         virtual Size GetOptimalSize() const SAL_OVERRIDE;
         virtual bool PreNotify(NotifyEvent& rNEvt ) SAL_OVERRIDE;

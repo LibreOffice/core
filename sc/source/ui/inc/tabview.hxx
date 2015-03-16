@@ -104,11 +104,11 @@ private:
     FuPoor*             pDrawActual;
     FuPoor*             pDrawOld;
 
-    ScGridWindow*       pGridWin[4];
-    ScColBar*           pColBar[2];
-    ScRowBar*           pRowBar[2];
-    ScOutlineWindow*    pColOutline[2];
-    ScOutlineWindow*    pRowOutline[2];
+    VclPtr<ScGridWindow>        pGridWin[4];
+    VclPtr<ScColBar>            pColBar[2];
+    VclPtr<ScRowBar>            pRowBar[2];
+    VclPtr<ScOutlineWindow>     pColOutline[2];
+    VclPtr<ScOutlineWindow>     pRowOutline[2];
     VclPtr<ScTabSplitter>       pHSplitter;
     VclPtr<ScTabSplitter>       pVSplitter;
     VclPtr<ScTabControl>        pTabControl;
@@ -120,7 +120,7 @@ private:
     VclPtr<ScCornerButton>      aTopButton;
     VclPtr<ScrollBarBox>        aScrollBarBox;
 
-    boost::scoped_ptr<ScHintWindow> mpInputHintWindow; // popup window for data validation
+    VclPtr<ScHintWindow>        mpInputHintWindow; // popup window for data validation
 
     ScPageBreakData*    pPageBreakData;
     std::vector<ScHighlightEntry>   maHighlightRanges;

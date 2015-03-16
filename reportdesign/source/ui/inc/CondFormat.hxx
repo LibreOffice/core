@@ -70,8 +70,7 @@ namespace rptui
     class ConditionalFormattingDialog  :public ModalDialog
                                         ,public IConditionalFormatAction
     {
-        typedef ::boost::shared_ptr< Condition >    ConditionPtr;
-        typedef ::std::vector< ConditionPtr >       Conditions;
+        typedef ::std::vector< VclPtr<Condition> >  Conditions;
 
         OModuleClient             m_aModuleClient;
         VclPtr<vcl::Window>       m_pConditionPlayground;

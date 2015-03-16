@@ -47,6 +47,7 @@ namespace dbaui
     void TextConnectionSettingsDialog::dispose()
     {
         m_pOK.clear();
+        m_pTextConnectionHelper.disposeAndClear();
         ModalDialog::dispose();
     }
 

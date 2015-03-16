@@ -295,7 +295,7 @@ class ScIconSetFrmtEntry : public ScCondFrmtEntry
     // icon set ui elements
     VclPtr<ListBox> maLbIconSetType;
 
-    typedef boost::ptr_vector<ScIconSetFrmtDataEntry> ScIconSetFrmtDataEntriesType;
+    typedef std::vector<VclPtr<ScIconSetFrmtDataEntry>> ScIconSetFrmtDataEntriesType;
     ScIconSetFrmtDataEntriesType maEntries;
 
     virtual OUString GetExpressionString() SAL_OVERRIDE;

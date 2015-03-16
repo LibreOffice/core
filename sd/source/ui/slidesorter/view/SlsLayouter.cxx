@@ -29,7 +29,7 @@ namespace sd { namespace slidesorter { namespace view {
 class Layouter::Implementation
 {
 public:
-    SharedSdWindow mpWindow;
+    VclPtr<sd::Window> mpWindow;
     sal_Int32 mnRequestedLeftBorder;
     sal_Int32 mnRequestedRightBorder;
     sal_Int32 mnRequestedTopBorder;
@@ -200,7 +200,7 @@ public:
 
 protected:
     Implementation (
-        const SharedSdWindow& rpWindow,
+        sd::Window *pWindow,
         const ::boost::shared_ptr<view::Theme>& rpTheme);
     Implementation (const Implementation& rImplementation);
 
@@ -271,7 +271,7 @@ class GridImplementation : public Layouter::Implementation
 {
 public:
     GridImplementation (
-        const SharedSdWindow& rpWindow,
+        sd::Window *pWindow,
         const ::boost::shared_ptr<view::Theme>& rpTheme);
     GridImplementation (const Implementation& rImplementation);
 
@@ -292,10 +292,10 @@ protected:
 //===== Layouter ==============================================================
 
 Layouter::Layouter (
-    const SharedSdWindow& rpWindow,
+    sd::Window *pWindow,
     const ::boost::shared_ptr<Theme>& rpTheme)
-    : mpImplementation(new GridImplementation(rpWindow, rpTheme)),
-      mpWindow(rpWindow)
+    : mpImplementation(new GridImplementation(pWindow, rpTheme)),
+      mpWindow(pWindow)
 {
 }
 
@@ -427,9 +427,9 @@ Layouter::Implementation* Layouter::Implementation::Create (
 }
 
 Layouter::Implementation::Implementation (
-    const SharedSdWindow& rpWindow,
+    sd::Window *pWindow,
     const ::boost::shared_ptr<view::Theme>& rpTheme)
-    : mpWindow(rpWindow),
+    : mpWindow(pWindow),
       mnRequestedLeftBorder(5),
       mnRequestedRightBorder(5),
       mnRequestedTopBorder(5),
@@ -1102,9 +1102,9 @@ void VerticalImplementation::CalculateLogicalInsertPosition (
 //===== GridImplementation ================================================
 
 GridImplementation::GridImplementation (
-    const SharedSdWindow& rpWindow,
+    sd::Window *pWindow,
     const ::boost::shared_ptr<view::Theme>& rpTheme)
-    : Implementation(rpWindow, rpTheme)
+    : Implementation(pWindow, rpTheme)
 {
 }
 

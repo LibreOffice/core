@@ -1578,11 +1578,11 @@ ScIconSetFrmtEntry::ScIconSetFrmtEntry( vcl::Window* pParent, ScDocument* pDoc, 
                 i < n; ++i)
         {
             maEntries.push_back( new ScIconSetFrmtDataEntry( this, eType, pDoc, i, &pIconSetFormatData->maEntries[i] ) );
-            Point aPos = maEntries[0].GetPosPixel();
-            aPos.Y() += maEntries[0].GetSizePixel().Height() * i * 1.2;
-            maEntries[i].SetPosPixel( aPos );
+            Point aPos = maEntries[0]->GetPosPixel();
+            aPos.Y() += maEntries[0]->GetSizePixel().Height() * i * 1.2;
+            maEntries[i]->SetPosPixel( aPos );
         }
-        maEntries.begin()->SetFirstEntry();
+        maEntries[0]->SetFirstEntry();
     }
     else
         IconSetTypeHdl(NULL);
@@ -1620,12 +1620,12 @@ IMPL_LINK_NOARG( ScIconSetFrmtEntry, IconSetTypeHdl )
     for(size_t i = 0; i < nElements; ++i)
     {
         maEntries.push_back( new ScIconSetFrmtDataEntry( this, static_cast<ScIconSetType>(nPos), mpDoc, i ) );
-        Point aPos = maEntries[0].GetPosPixel();
-        aPos.Y() += maEntries[0].GetSizePixel().Height() * i * 1.2;
-        maEntries[i].SetPosPixel( aPos );
-        maEntries[i].Show();
+        Point aPos = maEntries[0]->GetPosPixel();
+        aPos.Y() += maEntries[0]->GetSizePixel().Height() * i * 1.2;
+        maEntries[i]->SetPosPixel( aPos );
+        maEntries[i]->Show();
     }
-    maEntries.begin()->SetFirstEntry();
+    maEntries[0]->SetFirstEntry();
 
     SetHeight();
     static_cast<ScCondFormatList*>(GetParent())->RecalcAll();
@@ -1645,7 +1645,7 @@ void ScIconSetFrmtEntry::SetActive()
     for(ScIconSetFrmtDataEntriesType::iterator itr = maEntries.begin(),
             itrEnd = maEntries.end(); itr != itrEnd; ++itr)
     {
-        itr->Show();
+        (*itr)->Show();
     }
 
     Select();
@@ -1658,7 +1658,7 @@ void ScIconSetFrmtEntry::SetInactive()
     for(ScIconSetFrmtDataEntriesType::iterator itr = maEntries.begin(),
             itrEnd = maEntries.end(); itr != itrEnd; ++itr)
     {
-        itr->Hide();
+        (*itr)->Hide();
     }
 
     Deselect();
@@ -1673,7 +1673,7 @@ ScFormatEntry* ScIconSetFrmtEntry::GetEntry() const
     for(ScIconSetFrmtDataEntriesType::const_iterator itr = maEntries.begin(),
             itrEnd = maEntries.end(); itr != itrEnd; ++itr)
     {
-        pData->maEntries.push_back(itr->CreateEntry(mpDoc, maPos));
+        pData->maEntries.push_back((*itr)->CreateEntry(mpDoc, maPos));
     }
     pFormat->SetIconSetData(pData);
 

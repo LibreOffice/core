@@ -71,6 +71,7 @@ void TabBar::dispose()
 {
     maItems.clear();
     mpMenuButton.reset();
+    mpMenuButton.disposeAndClear();
     vcl::Window::dispose();
 }
 
@@ -184,7 +185,7 @@ void TabBar::Layout (void)
         Theme::GetInteger(Theme::Int_TabItemHeight) * GetDPIScaleFactor());
 
     // Place the menu button and the separator.
-    if (mpMenuButton != 0)
+    if (mpMenuButton != nullptr)
     {
         mpMenuButton->SetPosSizePixel(
             Point(nX,nY),

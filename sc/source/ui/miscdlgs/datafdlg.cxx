@@ -157,27 +157,27 @@ ScDataFormDlg::ScDataFormDlg(vcl::Window* pParent, ScTabViewShell* pTabViewShell
                 maFixedTexts.push_back( new FixedText(m_pGrid) );
                 maEdits.push_back( new Edit(m_pGrid, WB_BORDER) );
 
-                maFixedTexts[nIndex].set_grid_left_attach(0);
-                maEdits[nIndex].set_grid_left_attach(1);
-                maFixedTexts[nIndex].set_grid_top_attach(nGridRow);
-                maEdits[nIndex].set_grid_top_attach(nGridRow);
+                maFixedTexts[nIndex]->set_grid_left_attach(0);
+                maEdits[nIndex]->set_grid_left_attach(1);
+                maFixedTexts[nIndex]->set_grid_top_attach(nGridRow);
+                maEdits[nIndex]->set_grid_top_attach(nGridRow);
 
-                maEdits[nIndex].SetWidthInChars(32);
-                maEdits[nIndex].set_hexpand(true);
+                maEdits[nIndex]->SetWidthInChars(32);
+                maEdits[nIndex]->set_hexpand(true);
 
                 ++nGridRow;
 
-                maFixedTexts[nIndex].SetText(aFieldName);
-                maFixedTexts[nIndex].Show();
-                maEdits[nIndex].Show();
+                maFixedTexts[nIndex]->SetText(aFieldName);
+                maFixedTexts[nIndex]->Show();
+                maEdits[nIndex]->Show();
             }
             else
             {
                 maFixedTexts.push_back( NULL );
                 maEdits.push_back( NULL );
             }
-            if (!maEdits.is_null(nIndex))
-                maEdits[nIndex].SetModifyHdl( HDL(Impl_DataModifyHdl) );
+            if (maEdits[nIndex] != nullptr)
+                maEdits[nIndex]->SetModifyHdl( HDL(Impl_DataModifyHdl) );
         }
     }
 
@@ -225,15 +225,15 @@ void ScDataFormDlg::FillCtrls(SCROW /*nCurrentRow*/)
 {
     for (sal_uInt16 i = 0; i < aColLength; ++i)
     {
-        if (!maEdits.is_null(i))
+        if (maEdits[i] != nullptr)
         {
             if (nCurrentRow<=nEndRow && pDoc)
             {
                 OUString  aFieldName(pDoc->GetString(i + nStartCol, nCurrentRow, nTab));
-                maEdits[i].SetText(aFieldName);
+                maEdits[i]->SetText(aFieldName);
             }
             else
-                maEdits[i].SetText(OUString());
+                maEdits[i]->SetText(OUString());
         }
     }
 
@@ -265,10 +265,10 @@ IMPL_LINK_NOARG(ScDataFormDlg, Impl_NewHdl)
     if ( pDoc )
     {
         bool bHasData = false;
-        boost::ptr_vector<Edit>::iterator itr = maEdits.begin(), itrEnd = maEdits.end();
+        auto itr = maEdits.begin(), itrEnd = maEdits.end();
         for(; itr != itrEnd; ++itr)
-            if (!boost::is_null(itr))
-                if ( !(*itr).GetText().isEmpty() )
+            if ((*itr) != nullptr)
+                if ( !(*itr)->GetText().isEmpty() )
                 {
                     bHasData = true;
                     break;
@@ -381,8 +381,8 @@ void ScDataFormDlg::SetButtonState()
         m_pBtnPrev->Enable( true );
 
     m_pBtnRestore->Enable( false );
-    if ( maEdits.size()>=1 && !maEdits.is_null(0) )
-        maEdits[0].GrabFocus();
+    if ( maEdits.size()>=1 && maEdits[0] != nullptr )
+        maEdits[0]->GrabFocus();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

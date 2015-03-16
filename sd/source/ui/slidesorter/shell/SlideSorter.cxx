@@ -71,18 +71,18 @@ private:
 
 ::boost::shared_ptr<SlideSorter> SlideSorter::CreateSlideSorter(
     ViewShell& rViewShell,
-    const ::boost::shared_ptr<sd::Window>& rpContentWindow,
-    const ::boost::shared_ptr<ScrollBar>& rpHorizontalScrollBar,
-    const ::boost::shared_ptr<ScrollBar>& rpVerticalScrollBar,
-    const ::boost::shared_ptr<ScrollBarBox>& rpScrollBarBox)
+    sd::Window* pContentWindow,
+    ScrollBar* pHorizontalScrollBar,
+    ScrollBar* pVerticalScrollBar,
+    ScrollBarBox* pScrollBarBox)
 {
     ::boost::shared_ptr<SlideSorter> pSlideSorter(
         new SlideSorter(
             rViewShell,
-            rpContentWindow,
-            rpHorizontalScrollBar,
-            rpVerticalScrollBar,
-            rpScrollBarBox));
+            pContentWindow,
+            pHorizontalScrollBar,
+            pVerticalScrollBar,
+            pScrollBarBox));
     pSlideSorter->Init();
     return pSlideSorter;
 }
@@ -103,10 +103,10 @@ private:
 
 SlideSorter::SlideSorter (
     ViewShell& rViewShell,
-    const ::boost::shared_ptr<sd::Window>& rpContentWindow,
-    const ::boost::shared_ptr<ScrollBar>& rpHorizontalScrollBar,
-    const ::boost::shared_ptr<ScrollBar>& rpVerticalScrollBar,
-    const ::boost::shared_ptr<ScrollBarBox>& rpScrollBarBox)
+    sd::Window* pContentWindow,
+    ScrollBar* pHorizontalScrollBar,
+    ScrollBar* pVerticalScrollBar,
+    ScrollBarBox* pScrollBarBox)
     : mbIsValid(false),
       mpSlideSorterController(),
       mpSlideSorterModel(),
@@ -114,11 +114,11 @@ SlideSorter::SlideSorter (
       mxControllerWeak(),
       mpViewShell(&rViewShell),
       mpViewShellBase(&rViewShell.GetViewShellBase()),
-      mpContentWindow(rpContentWindow),
+      mpContentWindow(pContentWindow),
       mbOwnesContentWindow(false),
-      mpHorizontalScrollBar(rpHorizontalScrollBar),
-      mpVerticalScrollBar(rpVerticalScrollBar),
-      mpScrollBarBox(rpScrollBarBox),
+      mpHorizontalScrollBar(pHorizontalScrollBar),
+      mpVerticalScrollBar(pVerticalScrollBar),
+      mpScrollBarBox(pScrollBarBox),
       mbLayoutPending(true),
       mpProperties(new controller::Properties()),
       mpTheme(new view::Theme(mpProperties))
@@ -170,7 +170,7 @@ void SlideSorter::Init (void)
     SetupListeners ();
 
     // Initialize the window.
-    SharedSdWindow pContentWindow (GetContentWindow());
+    sd::Window *pContentWindow (GetContentWindow());
     if (pContentWindow)
     {
         ::vcl::Window* pParentWindow = pContentWindow->GetParent();
@@ -211,18 +211,6 @@ SlideSorter::~SlideSorter (void)
     mpHorizontalScrollBar.reset();
     mpVerticalScrollBar.reset();
     mpScrollBarBox.reset();
-
-    if (mbOwnesContentWindow)
-    {
-        OSL_ASSERT(mpContentWindow.unique());
-    }
-    else
-    {
-        // Assume that outside this class only the owner holds a reference
-        // to the content window.
-        OSL_ASSERT(mpContentWindow.use_count()==2);
-    }
-    mpContentWindow.reset();
 }
 
 model::SlideSorterModel& SlideSorter::GetModel (void) const
@@ -253,7 +241,7 @@ void SlideSorter::Paint (const Rectangle& rRepaintArea)
 {
     GetController().Paint(
         rRepaintArea,
-        GetContentWindow().get());
+        GetContentWindow());
 }
 
 void SlideSorter::SetupControls (::vcl::Window* )
@@ -263,7 +251,7 @@ void SlideSorter::SetupControls (::vcl::Window* )
 
 void SlideSorter::SetupListeners (void)
 {
-    SharedSdWindow pWindow (GetContentWindow());
+    sd::Window *pWindow (GetContentWindow());
     if (pWindow)
     {
         ::vcl::Window* pParentWindow = pWindow->GetParent();
@@ -292,7 +280,7 @@ void SlideSorter::ReleaseListeners (void)
 {
     mpSlideSorterController->GetScrollBarManager().Disconnect();
 
-    SharedSdWindow pWindow (GetContentWindow());
+    sd::Window *pWindow (GetContentWindow());
     if (pWindow)
     {
         pWindow->RemoveEventListener(
@@ -425,7 +413,7 @@ void SlideSorter::SetCurrentFunction (const rtl::Reference<FuPoor>& rpFunction)
     }
     else
     {
-        ContentWindow* pWindow = dynamic_cast<ContentWindow*>(GetContentWindow().get());
+        ContentWindow* pWindow = dynamic_cast<ContentWindow*>(GetContentWindow());
         if (pWindow != NULL)
             pWindow->SetCurrentFunction(rpFunction);
     }

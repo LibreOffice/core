@@ -38,7 +38,7 @@ namespace rptui
     public:
         /** returns the section which is currently marked.
         */
-        virtual ::boost::shared_ptr<OSectionWindow> getMarkedSection(NearSectionAccess nsa) const =0;
+        virtual OSectionWindow* getMarkedSection(NearSectionAccess nsa) const =0;
 
         /** mark the section on the given position .
         *

@@ -48,7 +48,7 @@ public:
     PageObjectLayouter(
         const Size& rPageObjectWindowSize,
         const Size& rPreviewModelSize,
-        const SharedSdWindow& rpWindow,
+        sd::Window *pWindow,
         const sal_Int32 nPageCount);
     ~PageObjectLayouter(void);
 
@@ -125,7 +125,7 @@ private:
         const CoordinateSystem eCoordinateSystem);
 
 private:
-    SharedSdWindow mpWindow;
+    VclPtr<sd::Window> mpWindow;
     Size maPageObjectSize;
     Rectangle maFocusIndicatorBoundingBox;
     Rectangle maPageObjectBoundingBox;

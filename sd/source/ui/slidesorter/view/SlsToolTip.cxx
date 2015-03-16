@@ -37,7 +37,7 @@ ToolTip::ToolTip (SlideSorter& rSlideSorter)
       maShowTimer(),
       maHiddenTimer()
 {
-    SharedSdWindow window = rSlideSorter.GetContentWindow();
+    sd::Window *window = rSlideSorter.GetContentWindow();
     const HelpSettings& rHelpSettings = window->GetSettings().GetHelpSettings();
     maShowTimer.SetTimeout(rHelpSettings.GetTipDelay());
     maShowTimer.SetTimeoutHdl(LINK(this, ToolTip, DelayTrigger));
@@ -109,7 +109,7 @@ void ToolTip::DoShow (void)
         return;
     }
 
-    SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
+    sd::Window *pWindow (mrSlideSorter.GetContentWindow());
     if (!msCurrentHelpText.isEmpty() && pWindow)
     {
         Rectangle aBox (
@@ -124,7 +124,7 @@ void ToolTip::DoShow (void)
         if (aBox.Bottom() >= pWindow->GetSizePixel().Height())
             return;
 
-        vcl::Window* pParent (pWindow.get());
+        vcl::Window* pParent (pWindow);
         while (pParent!=NULL && pParent->GetParent()!=NULL)
             pParent = pParent->GetParent();
         const Point aOffset (pWindow->GetWindowExtentsRelative(pParent).TopLeft());
@@ -135,7 +135,7 @@ void ToolTip::DoShow (void)
         // tip at the top of a rectangle that is placed below the preview.
         aBox.Move(aOffset.X(), aOffset.Y() + aBox.GetHeight() + 3);
         mnHelpWindowHandle = Help::ShowTip(
-            pWindow.get(),
+            pWindow,
             aBox,
             msCurrentHelpText,
             QUICKHELP_CENTER | QUICKHELP_TOP);

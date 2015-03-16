@@ -45,7 +45,7 @@ class LayeredDevice
 
 {
 public:
-    LayeredDevice (const SharedSdWindow& rpTargetWindow);
+    LayeredDevice (sd::Window *pTargetWindow);
     ~LayeredDevice (void);
 
     void Invalidate (
@@ -72,7 +72,7 @@ public:
     void Dispose (void);
 
 private:
-    SharedSdWindow mpTargetWindow;
+    VclPtr<sd::Window> mpTargetWindow;
     class LayerContainer;
     ::boost::scoped_ptr<LayerContainer> mpLayers;
     ::boost::scoped_ptr<VirtualDevice> mpBackBuffer;

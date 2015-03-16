@@ -47,10 +47,10 @@ namespace pcr
         VclPtr<FixedText>                      m_pExplanation;
         VclPtr<FixedText>                      m_pDetailLabel;
         VclPtr<FixedText>                      m_pMasterLabel;
-        ::std::unique_ptr< FieldLinkRow > m_aRow1;
-        ::std::unique_ptr< FieldLinkRow > m_aRow2;
-        ::std::unique_ptr< FieldLinkRow > m_aRow3;
-        ::std::unique_ptr< FieldLinkRow > m_aRow4;
+        VclPtr<FieldLinkRow>                   m_aRow1;
+        VclPtr<FieldLinkRow>                   m_aRow2;
+        VclPtr<FieldLinkRow>                   m_aRow3;
+        VclPtr<FieldLinkRow>                   m_aRow4;
         VclPtr<OKButton>                       m_pOK;
         VclPtr<PushButton>                     m_pSuggest;
 

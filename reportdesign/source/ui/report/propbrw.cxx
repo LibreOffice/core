@@ -514,7 +514,7 @@ void PropBrw::Update( OSectionView* pNewView )
         const sal_uInt16 nSectionCount = pViews->getSectionCount();
         for (sal_uInt16 i = 0; i < nSectionCount; ++i)
         {
-            ::boost::shared_ptr<OSectionWindow> pSectionWindow = pViews->getSectionWindow(i);
+            OSectionWindow* pSectionWindow = pViews->getSectionWindow(i);
             if ( pSectionWindow )
             {
                 const SdrMarkList& rMarkList = pSectionWindow->getReportSection().getSectionView().GetMarkedObjectList();

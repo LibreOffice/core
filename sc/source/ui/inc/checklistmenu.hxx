@@ -149,7 +149,7 @@ private:
         bool            mbSeparator:1;
 
         ::boost::shared_ptr<Action> mpAction;
-        ::boost::shared_ptr<ScMenuFloatingWindow> mpSubMenuWin;
+        VclPtr<ScMenuFloatingWindow> mpSubMenuWin;
 
         MenuItemData();
     };

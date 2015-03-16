@@ -55,6 +55,7 @@ ScCondFormatList::~ScCondFormatList()
 void ScCondFormatList::dispose()
 {
     mpDialogParent.clear();
+    mpScrollBar.disposeAndClear();
     Control::dispose();
 }
 
@@ -106,7 +107,7 @@ void ScCondFormatList::init(ScDocument* pDoc, ScCondFormatDlg* pDialogParent,
             }
         }
         if(nCount)
-            EntrySelectHdl(&maEntries[0]);
+            EntrySelectHdl(maEntries[0].get());
     }
     else
     {
@@ -133,7 +134,7 @@ void ScCondFormatList::init(ScDocument* pDoc, ScCondFormatDlg* pDialogParent,
     }
     RecalcAll();
     if (!maEntries.empty())
-        maEntries.begin()->SetActive();
+        (*maEntries.begin())->SetActive();
 
     RecalcAll();
 }
@@ -169,7 +170,7 @@ ScConditionalFormat* ScCondFormatList::GetConditionalFormat() const
     ScConditionalFormat* pFormat = new ScConditionalFormat(0, mpDoc);
     for(EntryContainer::const_iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
     {
-        ScFormatEntry* pEntry = itr->GetEntry();
+        ScFormatEntry* pEntry = (*itr)->GetEntry();
         if(pEntry)
             pFormat->AddEntry(pEntry);
     }
@@ -185,8 +186,8 @@ void ScCondFormatList::RecalcAll()
     sal_Int32 nIndex = 1;
     for(EntryContainer::iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
     {
-        nTotalHeight += itr->GetSizePixel().Height();
-        itr->SetIndex( nIndex );
+        nTotalHeight += (*itr)->GetSizePixel().Height();
+        (*itr)->SetIndex( nIndex );
         ++nIndex;
     }
 
@@ -210,15 +211,15 @@ void ScCondFormatList::RecalcAll()
     Point aPoint(0,-1*mpScrollBar->GetThumbPos());
     for(EntryContainer::iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
     {
-        itr->SetPosPixel(aPoint);
-        Size aSize = itr->GetSizePixel();
+        (*itr)->SetPosPixel(aPoint);
+        Size aSize = (*itr)->GetSizePixel();
         if(mbHasScrollBar)
             aSize.Width() = aCtrlSize.Width() - nSrcBarSize;
         else
             aSize.Width() = aCtrlSize.Width();
-        itr->SetSizePixel(aSize);
+        (*itr)->SetSizePixel(aSize);
 
-        aPoint.Y() += itr->GetSizePixel().Height();
+        aPoint.Y() += (*itr)->GetSizePixel().Height();
     }
 }
 
@@ -236,7 +237,7 @@ IMPL_LINK(ScCondFormatList, ColFormatTypeHdl, ListBox*, pBox)
     EntryContainer::iterator itr = maEntries.begin();
     for(; itr != maEntries.end(); ++itr)
     {
-        if(itr->IsSelected())
+        if((*itr)->IsSelected())
             break;
     }
     if(itr == maEntries.end())
@@ -246,34 +247,34 @@ IMPL_LINK(ScCondFormatList, ColFormatTypeHdl, ListBox*, pBox)
     switch(nPos)
     {
         case 0:
-            if(itr->GetType() == condformat::entry::COLORSCALE2)
+            if((*itr)->GetType() == condformat::entry::COLORSCALE2)
                 return 0;
 
-            maEntries.replace( itr, new ScColorScale2FrmtEntry( this, mpDoc, maPos ) );
+            *itr = new ScColorScale2FrmtEntry( this, mpDoc, maPos );
             break;
         case 1:
-            if(itr->GetType() == condformat::entry::COLORSCALE3)
+            if((*itr)->GetType() == condformat::entry::COLORSCALE3)
                 return 0;
 
-            maEntries.replace( itr, new ScColorScale3FrmtEntry( this, mpDoc, maPos ) );
+            *itr = new ScColorScale3FrmtEntry( this, mpDoc, maPos );
             break;
         case 2:
-            if(itr->GetType() == condformat::entry::DATABAR)
+            if((*itr)->GetType() == condformat::entry::DATABAR)
                 return 0;
 
-            maEntries.replace( itr, new ScDataBarFrmtEntry( this, mpDoc, maPos ) );
+            *itr = new ScDataBarFrmtEntry( this, mpDoc, maPos );
             break;
         case 3:
-            if(itr->GetType() == condformat::entry::ICONSET)
+            if((*itr)->GetType() == condformat::entry::ICONSET)
                 return 0;
 
-            maEntries.replace( itr, new ScIconSetFrmtEntry( this, mpDoc, maPos ) );
+            *itr = new ScIconSetFrmtEntry( this, mpDoc, maPos );
             break;
         default:
             break;
     }
     mpDialogParent->InvalidateRefData();
-    itr->SetActive();
+    (*itr)->SetActive();
     RecalcAll();
     return 0;
 }
@@ -293,7 +294,7 @@ IMPL_LINK(ScCondFormatList, AfterTypeListHdl, ListBox*, pBox)
     EntryContainer::iterator itr = maEntries.begin();
     for(; itr != maEntries.end(); ++itr)
     {
-        if(itr->IsSelected())
+        if((*itr)->IsSelected())
             break;
     }
     if(itr == maEntries.end())
@@ -303,7 +304,7 @@ IMPL_LINK(ScCondFormatList, AfterTypeListHdl, ListBox*, pBox)
     switch(nPos)
     {
         case 0:
-            switch(itr->GetType())
+            switch((*itr)->GetType())
             {
                 case condformat::entry::FORMULA:
                 case condformat::entry::CONDITION:
@@ -315,33 +316,33 @@ IMPL_LINK(ScCondFormatList, AfterTypeListHdl, ListBox*, pBox)
                 case condformat::entry::ICONSET:
                     return 0;
             }
-            maEntries.replace( itr, new ScColorScale3FrmtEntry(this, mpDoc, maPos));
+            *itr = new ScColorScale3FrmtEntry(this, mpDoc, maPos);
             mpDialogParent->InvalidateRefData();
-            itr->SetActive();
+            (*itr)->SetActive();
             break;
         case 1:
-            if(itr->GetType() == condformat::entry::CONDITION)
+            if((*itr)->GetType() == condformat::entry::CONDITION)
                 return 0;
 
-            maEntries.replace( itr, new ScConditionFrmtEntry(this, mpDoc, mpDialogParent, maPos));
+            *itr = new ScConditionFrmtEntry(this, mpDoc, mpDialogParent, maPos);
             mpDialogParent->InvalidateRefData();
-            itr->SetActive();
+            (*itr)->SetActive();
             break;
         case 2:
-            if(itr->GetType() == condformat::entry::FORMULA)
+            if((*itr)->GetType() == condformat::entry::FORMULA)
                 return 0;
 
-            maEntries.replace( itr, new ScFormulaFrmtEntry(this, mpDoc, mpDialogParent, maPos));
+            *itr = new ScFormulaFrmtEntry(this, mpDoc, mpDialogParent, maPos);
             mpDialogParent->InvalidateRefData();
-            itr->SetActive();
+            (*itr)->SetActive();
             break;
         case 3:
-            if(itr->GetType() == condformat::entry::DATE)
+            if((*itr)->GetType() == condformat::entry::DATE)
                 return 0;
 
-            maEntries.replace( itr, new ScDateFrmtEntry( this, mpDoc ));
+            *itr = new ScDateFrmtEntry( this, mpDoc );
             mpDialogParent->InvalidateRefData();
-            itr->SetActive();
+            (*itr)->SetActive();
             break;
 
     }
@@ -355,7 +356,7 @@ IMPL_LINK_NOARG( ScCondFormatList, AddBtnHdl )
     maEntries.push_back( pNewEntry );
     for(EntryContainer::iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
     {
-        itr->SetInactive();
+        (*itr)->SetInactive();
     }
     mpDialogParent->InvalidateRefData();
     pNewEntry->SetActive();
@@ -367,7 +368,7 @@ IMPL_LINK_NOARG( ScCondFormatList, RemoveBtnHdl )
 {
     for(EntryContainer::iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
     {
-        if(itr->IsSelected())
+        if((*itr)->IsSelected())
         {
             maEntries.erase(itr);
             break;
@@ -388,7 +389,7 @@ IMPL_LINK( ScCondFormatList, EntrySelectHdl, ScCondFrmtEntry*, pEntry )
     bool bReGrabFocus = HasChildPathFocus();
     for(EntryContainer::iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
     {
-        itr->SetInactive();
+        (*itr)->SetInactive();
     }
     mpDialogParent->InvalidateRefData();
     pEntry->SetActive();

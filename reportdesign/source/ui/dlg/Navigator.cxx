@@ -882,7 +882,7 @@ public:
 
     uno::Reference< report::XReportDefinition>  m_xReport;
     ::rptui::OReportController&                 m_rController;
-    ::std::unique_ptr<NavigatorTree>            m_pNavigatorTree;
+    VclPtr<NavigatorTree>                       m_pNavigatorTree;
 };
 
 ONavigatorImpl::ONavigatorImpl(OReportController& _rController,ONavigator* _pParent)

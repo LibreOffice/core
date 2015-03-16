@@ -38,9 +38,9 @@ const static sal_Int32 gnInfoAreaMinWidth = 26;
 PageObjectLayouter::PageObjectLayouter (
     const Size& rPageObjectWindowSize,
     const Size& rPageSize,
-    const SharedSdWindow& rpWindow,
+    sd::Window *pWindow,
     const sal_Int32 nPageCount)
-    : mpWindow(rpWindow),
+    : mpWindow(pWindow),
       maPageObjectSize(rPageObjectWindowSize.Width(), rPageObjectWindowSize.Height()),
       maPageObjectBoundingBox(),
       maPageNumberAreaBoundingBox(),
@@ -48,7 +48,7 @@ PageObjectLayouter::PageObjectLayouter (
       maTransitionEffectBoundingBox(),
       maTransitionEffectIcon(IconCache::Instance().GetIcon(BMP_FADE_EFFECT_INDICATOR)),
       maCustomAnimationEffectIcon(IconCache::Instance().GetIcon(BMP_CUSTOM_ANIMATION_INDICATOR)),
-      mpPageNumberFont(Theme::GetFont(Theme::Font_PageNumber, *rpWindow))
+      mpPageNumberFont(Theme::GetFont(Theme::Font_PageNumber, *pWindow))
 {
     const Size aPageNumberAreaSize (GetPageNumberAreaSize(nPageCount));
 

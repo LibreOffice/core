@@ -55,8 +55,6 @@ class SlotManager;
 class Properties;
 } } }
 
-typedef ::boost::shared_ptr<sd::Window> SharedSdWindow;
-
 namespace sd { namespace slidesorter {
 
 /** Show previews for all the slides in a document and allow the user to
@@ -98,10 +96,10 @@ public:
     */
     static ::boost::shared_ptr<SlideSorter> CreateSlideSorter (
         ViewShell& rViewShell,
-        const ::boost::shared_ptr<sd::Window>& rpContentWindow,
-        const ::boost::shared_ptr<ScrollBar>& rpHorizontalScrollBar,
-        const ::boost::shared_ptr<ScrollBar>& rpVerticalScrollBar,
-        const ::boost::shared_ptr<ScrollBarBox>& rpScrollBarBox);
+        sd::Window* pContentWindow,
+        ScrollBar* pHorizontalScrollBar,
+        ScrollBar* pVerticalScrollBar,
+        ScrollBarBox* pScrollBarBox);
 
     /** Create a new slide sorter that is losely coupled to the given view
         shell.  The view shell may even be missing.
@@ -120,21 +118,21 @@ public:
 
     /** Return the control of the vertical scroll bar.
     */
-    ::boost::shared_ptr<ScrollBar> GetVerticalScrollBar (void) const { return mpVerticalScrollBar;}
+    ScrollBar* GetVerticalScrollBar (void) const { return mpVerticalScrollBar;}
 
     /** Return the control of the horizontal scroll bar.
     */
-    ::boost::shared_ptr<ScrollBar> GetHorizontalScrollBar (void) const { return mpHorizontalScrollBar;}
+    ScrollBar* GetHorizontalScrollBar (void) const { return mpHorizontalScrollBar;}
 
     /** Return the scroll bar filler that paints the little square that is
         enclosed by the two scroll bars.
     */
-    ::boost::shared_ptr<ScrollBarBox> GetScrollBarFiller (void) const { return mpScrollBarBox;}
+    ScrollBarBox* GetScrollBarFiller (void) const { return mpScrollBarBox;}
 
     /** Return the content window.  This is a sibling and is geometrically
         enclosed by the scroll bars.
     */
-    SharedSdWindow GetContentWindow (void) const { return mpContentWindow;}
+    sd::Window* GetContentWindow (void) const { return mpContentWindow;}
 
     model::SlideSorterModel& GetModel (void) const;
 
@@ -222,11 +220,11 @@ private:
     ::com::sun::star::uno::WeakReference<com::sun::star::frame::XController> mxControllerWeak;
     ViewShell* mpViewShell;
     ViewShellBase* mpViewShellBase;
-    SharedSdWindow mpContentWindow;
+    VclPtr<sd::Window> mpContentWindow;
     bool mbOwnesContentWindow;
-    ::boost::shared_ptr<ScrollBar> mpHorizontalScrollBar;
-    ::boost::shared_ptr<ScrollBar> mpVerticalScrollBar;
-    ::boost::shared_ptr<ScrollBarBox> mpScrollBarBox;
+    VclPtr<ScrollBar> mpHorizontalScrollBar;
+    VclPtr<ScrollBar> mpVerticalScrollBar;
+    VclPtr<ScrollBarBox> mpScrollBarBox;
 
     /** Set this flag to <TRUE/> to force a layout before the next paint.
     */
@@ -240,10 +238,10 @@ private:
 
     SlideSorter (
         ViewShell& rViewShell,
-        const ::boost::shared_ptr<sd::Window>& rpContentWindow,
-        const ::boost::shared_ptr<ScrollBar>& rpHorizontalScrollBar,
-        const ::boost::shared_ptr<ScrollBar>& rpVerticalScrollBar,
-        const ::boost::shared_ptr<ScrollBarBox>& rpScrollBarBox);
+        sd::Window* pContentWindow,
+        ScrollBar* pHorizontalScrollBar,
+        ScrollBar* pVerticalScrollBar,
+        ScrollBarBox* pScrollBarBox);
     SlideSorter (
         ViewShellBase& rBase,
         ViewShell* pViewShell,

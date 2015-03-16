@@ -32,7 +32,6 @@
 #include <unotools/options.hxx>
 #include <list>
 #include <vector>
-#include <boost/shared_ptr.hpp>
 
 #include "MarkedSection.hxx"
 #include "SectionWindow.hxx"
@@ -108,7 +107,7 @@ namespace rptui
     {
         typedef ::std::multimap<Rectangle,::std::pair<SdrObject*,OSectionView*>,RectangleLess>      TRectangleMap;
     public:
-        typedef ::std::vector< ::boost::shared_ptr<OSectionWindow> >                                TSectionsMap;
+        typedef ::std::vector< VclPtr<OSectionWindow> >                                TSectionsMap;
 
         struct TReportPairHelper : public ::std::unary_function< TSectionsMap::value_type, OReportSection >
         {
@@ -182,7 +181,7 @@ namespace rptui
         * \param _nPos
         * \return the section at this pos or an empty section
         */
-        ::boost::shared_ptr<OSectionWindow> getSectionWindow(const sal_uInt16 _nPos) const;
+        OSectionWindow* getSectionWindow(const sal_uInt16 _nPos) const;
 
         /** turns the grid on or off
         *
@@ -236,7 +235,7 @@ namespace rptui
         /** returns the report section window for the given xsection
             @param  _xSection   the section
         */
-        ::boost::shared_ptr<OSectionWindow> getSectionWindow(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection) const;
+        OSectionWindow* getSectionWindow(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection) const;
 
         /** checks if the keycode is known by the child windows
             @param  _rCode  the keycode
@@ -253,7 +252,7 @@ namespace rptui
         void            setMarked(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent> >& _xShape, bool _bMark);
 
         // IMarkedSection
-        ::boost::shared_ptr<OSectionWindow> getMarkedSection(NearSectionAccess nsa = CURRENT) const SAL_OVERRIDE;
+        OSectionWindow* getMarkedSection(NearSectionAccess nsa = CURRENT) const SAL_OVERRIDE;
         virtual void markSection(const sal_uInt16 _nPos) SAL_OVERRIDE;
 
         /** align all marked objects in all sections
