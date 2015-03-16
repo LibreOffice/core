@@ -97,10 +97,10 @@ public class InvalidationHandler implements Document.MessageCallback {
             return null;
         }
 
-        int width = Integer.decode(coordinates[0]);
-        int height = Integer.decode(coordinates[1]);
-        int x = Integer.decode(coordinates[2]);
-        int y = Integer.decode(coordinates[3]);
+        int x = Integer.decode(coordinates[0]);
+        int y = Integer.decode(coordinates[1]);
+        int width = Integer.decode(coordinates[2]);
+        int height = Integer.decode(coordinates[3]);
 
         float dpi = (float) LOKitShell.getDpi();
 

@@ -741,19 +741,19 @@ static GdkRectangle lcl_payloadToRectangle(const char* pPayload)
     gchar** ppCoordinate = ppCoordinates;
     if (!*ppCoordinate)
         return aRet;
-    aRet.width = atoi(*ppCoordinate);
-    ++ppCoordinate;
-    if (!*ppCoordinate)
-        return aRet;
-    aRet.height = atoi(*ppCoordinate);
-    ++ppCoordinate;
-    if (!*ppCoordinate)
-        return aRet;
     aRet.x = atoi(*ppCoordinate);
     ++ppCoordinate;
     if (!*ppCoordinate)
         return aRet;
     aRet.y = atoi(*ppCoordinate);
+    ++ppCoordinate;
+    if (!*ppCoordinate)
+        return aRet;
+    aRet.width = atoi(*ppCoordinate);
+    ++ppCoordinate;
+    if (!*ppCoordinate)
+        return aRet;
+    aRet.height = atoi(*ppCoordinate);
     g_strfreev(ppCoordinates);
     return aRet;
 }
