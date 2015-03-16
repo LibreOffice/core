@@ -36,7 +36,7 @@ class Renderable :
     VclPtr<BaseWindow>  mpWindow;
     osl::Mutex          maMutex;
 
-    Printer* getPrinter();
+    VclPtr<Printer> getPrinter();
 public:
     Renderable (BaseWindow*);
     virtual ~Renderable();

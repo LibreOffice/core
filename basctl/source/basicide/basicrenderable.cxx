@@ -86,7 +86,7 @@ VclPtr< Printer > Renderable::getPrinter()
     if( aValue >>= xRenderDevice )
     {
         VCLXDevice* pDevice = VCLXDevice::GetImplementation(xRenderDevice);
-        VclPtr< OutputDevice > pOut = pDevice ? pDevice->GetOutputDevice() : VclPtr< OutputDevice >;
+        VclPtr< OutputDevice > pOut = pDevice ? pDevice->GetOutputDevice() : VclPtr< OutputDevice >();
         pPrinter = dynamic_cast<Printer*>(pOut.get());
     }
     return pPrinter;
