@@ -22,11 +22,13 @@ class SwTiledRenderingTest : public SwModelTestBase
 {
 
 public:
+    void testPostMouseEvent();
     void testSetTextSelection();
     void testSetGraphicSelection();
     void testResetSelection();
 
     CPPUNIT_TEST_SUITE(SwTiledRenderingTest);
+    CPPUNIT_TEST(testPostMouseEvent);
     CPPUNIT_TEST(testSetTextSelection);
     CPPUNIT_TEST(testSetGraphicSelection);
     CPPUNIT_TEST(testResetSelection);
@@ -46,9 +48,26 @@ SwXTextDocument* SwTiledRenderingTest::createDoc(const char* pName)
     return pTextDocument;
 }
 
+void SwTiledRenderingTest::testPostMouseEvent()
+{
+    SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
+    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    SwShellCrsr* pShellCrsr = pWrtShell->getShellCrsr(false);
+    // Did we manage to go after the first character?
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), pShellCrsr->GetPoint()->nContent.GetIndex());
+
+    Point aStart = pShellCrsr->GetSttPos();
+    aStart.setX(aStart.getX() - 1000);
+    pXTextDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN, aStart.getX(), aStart.getY(), 1);
+    pXTextDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP, aStart.getX(), aStart.getY(), 1);
+    // The new cursor position must be before the first word.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), pShellCrsr->GetPoint()->nContent.GetIndex());
+}
+
 void SwTiledRenderingTest::testSetTextSelection()
 {
-    SwXTextDocument* pXTextDocument = createDoc("set-text-selection.fodt");
+    SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
     // Move the cursor into the second word.
     pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 5, /*bBasicCall=*/false);
