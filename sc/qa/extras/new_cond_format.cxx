@@ -33,10 +33,12 @@ public:
     uno::Reference< uno::XInterface > init();
     void testRequestCondFormatListFromSheet();
     void testCondFormatListProperties();
+    void testCondFormatListFormats();
 
     CPPUNIT_TEST_SUITE(ScConditionalFormatTest);
     CPPUNIT_TEST(testRequestCondFormatListFromSheet);
     CPPUNIT_TEST(testCondFormatListProperties);
+    CPPUNIT_TEST(testCondFormatListFormats);
     CPPUNIT_TEST_SUITE_END();
 private:
 
@@ -102,6 +104,20 @@ void ScConditionalFormatTest::testCondFormatListProperties()
     uno::Reference<sheet::XConditionalFormats> xCondFormat =
         getConditionalFormatList(init());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xCondFormat->getLength());
+}
+
+void ScConditionalFormatTest::testCondFormatListFormats()
+{
+    uno::Reference<sheet::XConditionalFormats> xCondFormatList =
+        getConditionalFormatList(init());
+
+    uno::Sequence<uno::Reference<sheet::XConditionalFormat> > xCondFormats =
+        xCondFormatList->getConditionalFormats();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xCondFormats.getLength());
+    for (sal_Int32 i = 0, n = xCondFormats.getLength(); i < n; ++i)
+    {
+        CPPUNIT_ASSERT(xCondFormats[i].is());
+    }
 }
 
 void ScConditionalFormatTest::setUp()
