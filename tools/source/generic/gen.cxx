@@ -198,7 +198,7 @@ SvStream& WriteRectangle( SvStream& rOStream, const Rectangle& rRect )
 OString Rectangle::toString() const
 {
     std::stringstream ss;
-    ss << getWidth() << ", " << getHeight() << ", " << getX() << ", " << getY();
+    ss << getX() << ", " << getY() << ", " << getWidth() << ", " << getHeight();
     return ss.str().c_str();
 }
 

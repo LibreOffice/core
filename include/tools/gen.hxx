@@ -440,6 +440,7 @@ public:
     void                setY( long n ) { nBottom += n-nTop; nTop = n; }
     void                setWidth( long n ) { nRight = nLeft + n; }
     void                setHeight( long n ) { nBottom = nTop + n; }
+    /// Returns the string representation of the rectangle, format is "x, y, width, height".
     rtl::OString        toString() const;
 
 private:
