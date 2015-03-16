@@ -471,11 +471,12 @@ bool SwPrintUIOptions::processPropertiesAndCheckFormat( const uno::Sequence< bea
     uno::Any aVal( getValue( "RenderDevice" ) );
     aVal >>= xRenderDevice;
 
-    OutputDevice* pOut = 0;
+    VclPtr< OutputDevice > pOut;
     if (xRenderDevice.is())
     {
         VCLXDevice*     pDevice = VCLXDevice::GetImplementation( xRenderDevice );
-        pOut = pDevice ? pDevice->GetOutputDevice() : 0;
+        if (pDevice)
+            pOut = pDevice->GetOutputDevice();
     }
     bChanged = bChanged || (pOut != m_pLast);
     if( pOut )
