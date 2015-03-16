@@ -2387,7 +2387,7 @@ void DbTimeField::updateFromModel( Reference< XPropertySet > _rxModel )
     OSL_ENSURE( _rxModel.is() && m_pWindow, "DbTimeField::updateFromModel: invalid call!" );
 
     util::Time aTime;
-    if ( _rxModel->getPropertyValue( FM_PROP_DATE ) >>= aTime )
+    if ( _rxModel->getPropertyValue( FM_PROP_TIME ) >>= aTime )
         static_cast< TimeField* >( m_pWindow )->SetTime( ::tools::Time( aTime ) );
     else
         static_cast< TimeField* >( m_pWindow )->SetText( OUString() );
