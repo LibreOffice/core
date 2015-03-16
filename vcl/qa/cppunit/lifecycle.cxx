@@ -15,6 +15,7 @@
 #include <vcl/edit.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/field.hxx>
+#include <vcl/virdev.hxx>
 
 class LifecycleTest : public test::BootstrapFixture
 {
@@ -24,6 +25,7 @@ public:
     LifecycleTest() : BootstrapFixture(true, false) {}
 
     void testCast();
+    void testVirtualDevice();
     void testMultiDispose();
     void testIsolatedWidgets();
     void testParentedWidgets();
@@ -31,6 +33,7 @@ public:
 
     CPPUNIT_TEST_SUITE(LifecycleTest);
     CPPUNIT_TEST(testCast);
+    CPPUNIT_TEST(testVirtualDevice);
     CPPUNIT_TEST(testMultiDispose);
     CPPUNIT_TEST(testIsolatedWidgets);
     CPPUNIT_TEST(testParentedWidgets);
@@ -50,6 +53,11 @@ void LifecycleTest::testCast()
 
 // the following line should NOT compile
 //    VclPtr<PushButton> xButton2(xWindow);
+}
+
+void LifecycleTest::testVirtualDevice()
+{
+    VclPtr<VirtualDevice> pVDev = new VirtualDevice();
 }
 
 void LifecycleTest::testMultiDispose()
