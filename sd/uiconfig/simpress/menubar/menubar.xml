@@ -413,6 +413,7 @@
             <menu:menuitem menu:id=".uno:PresentationCurrentSlide"/>
             <menu:menuitem menu:id=".uno:PresentationDialog"/>
             <menu:menuitem menu:id=".uno:RehearseTimings"/>
+            <menu:menuitem menu:id=".uno:RestoreEditingView"/>
             <menu:menuitem menu:id=".uno:Remote"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:AnimationEffects"/>
