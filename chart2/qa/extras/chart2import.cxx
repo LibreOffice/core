@@ -19,6 +19,7 @@
 #include <com/sun/star/chart/XChartDataArray.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/chart/XTwoAxisXSupplier.hpp>
+#include <com/sun/star/chart/MissingValueTreatment.hpp>
 
 #include <com/sun/star/util/Color.hpp>
 
@@ -67,6 +68,8 @@ public:
     // where we fixed the handling of MSO 2007 vs OOXML
     void testAutoTitleDelDefaultValue2007XLSX();
     void testAutoTitleDelDefaultValue2013XLSX();
+    void testDispBlanksAsDefaultValue2007XLSX();
+    void testDispBlanksAsDefaultValue2013XLSX();
 
     CPPUNIT_TEST_SUITE(Chart2ImportTest);
     CPPUNIT_TEST(Fdo60083);
@@ -100,6 +103,8 @@ public:
     CPPUNIT_TEST(testNumberFormatsXLSX);
     CPPUNIT_TEST(testAutoTitleDelDefaultValue2007XLSX);
     CPPUNIT_TEST(testAutoTitleDelDefaultValue2013XLSX);
+    CPPUNIT_TEST(testDispBlanksAsDefaultValue2007XLSX);
+    CPPUNIT_TEST(testDispBlanksAsDefaultValue2013XLSX);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -777,6 +782,34 @@ void Chart2ImportTest::testAutoTitleDelDefaultValue2013XLSX()
     uno::Reference<chart2::XTitle> xTitle = xTitled->getTitleObject();
     CPPUNIT_ASSERT_MESSAGE("autoTitleDel default value is true in the OOXML spec",
             !xTitle.is());
+}
+
+void Chart2ImportTest::testDispBlanksAsDefaultValue2007XLSX()
+{
+    load("/chart2/qa/extras/data/xlsx/", "dispBlanksAs_2007.xlsx");
+    Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+    CPPUNIT_ASSERT_MESSAGE("failed to load chart", xChartDoc.is());
+
+    Reference<beans::XPropertySet> xDiagram(xChartDoc->getFirstDiagram(), UNO_QUERY);
+    CPPUNIT_ASSERT(xDiagram.is());
+    uno::Any aAny = xDiagram->getPropertyValue("MissingValueTreatment");
+    sal_Int32 nMissingValueTreatment = -2;
+    CPPUNIT_ASSERT(aAny >>= nMissingValueTreatment);
+    CPPUNIT_ASSERT_EQUAL(chart::MissingValueTreatment::LEAVE_GAP, nMissingValueTreatment);
+}
+
+void Chart2ImportTest::testDispBlanksAsDefaultValue2013XLSX()
+{
+    load("/chart2/qa/extras/data/xlsx/", "dispBlanksAs_2013.xlsx");
+    Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+    CPPUNIT_ASSERT_MESSAGE("failed to load chart", xChartDoc.is());
+
+    Reference<beans::XPropertySet> xDiagram(xChartDoc->getFirstDiagram(), UNO_QUERY);
+    CPPUNIT_ASSERT(xDiagram.is());
+    uno::Any aAny = xDiagram->getPropertyValue("MissingValueTreatment");
+    sal_Int32 nMissingValueTreatment = -2;
+    CPPUNIT_ASSERT(aAny >>= nMissingValueTreatment);
+    CPPUNIT_ASSERT_EQUAL(chart::MissingValueTreatment::USE_ZERO, nMissingValueTreatment);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ImportTest);
