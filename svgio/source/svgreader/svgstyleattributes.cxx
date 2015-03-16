@@ -1088,8 +1088,12 @@ namespace svgio
 
                 if(bClipPathIsNonzero || bFillRuleIsNonzero)
                 {
-                    // nonzero is wanted, solve geometrically (see description on basegfx)
-                    aPath = basegfx::tools::createNonzeroConform(aPath);
+                    if(getFill() || getSvgGradientNodeFill() || getSvgPatternNodeFill()) {
+                        // nonzero is wanted, solve geometrically (see description on basegfx)
+                        // basegfx::tools::createNonzeroConform() is expensive for huge paths
+                        // and is only needed if path will be filled later on
+                        aPath = basegfx::tools::createNonzeroConform(aPath);
+                    }
                 }
 
                 add_fill(aPath, rTarget, aGeoRange);
