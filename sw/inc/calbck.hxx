@@ -107,8 +107,8 @@ protected:
 public:
 
     SwClient() : pRegisteredIn(nullptr) {}
-    virtual ~SwClient();
-    virtual void Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue )
+    virtual ~SwClient() SAL_OVERRIDE;
+    virtual void Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue ) SAL_OVERRIDE
         { CheckRegistration( pOldValue, pNewValue ); }
 
     // in case an SwModify object is destroyed that itself is registered in another SwModify,
@@ -250,7 +250,7 @@ public:
         our_pClientIters = this;
         m_pCurrent = m_pPosition = const_cast<SwClient*>(m_rRoot.GetDepends());
     }
-    ~SwClientIter()
+    ~SwClientIter() SAL_OVERRIDE
     {
         assert(our_pClientIters);
         if(our_pClientIters == this)
