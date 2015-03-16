@@ -324,29 +324,34 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, vcl::Region* pRegion, Ou
 
         if (isTiledRendering())
         {
-            std::vector<Rectangle> aRectangles;
-            pRegion->GetRegionRectangles(aRectangles);
-
-            if (!aRectangles.empty())
+            OString sRectangle;
+            // If we are not in selection mode, then the exported selection should be empty.
+            if (pEditEngine->pImpEditEngine->IsInSelectionMode())
             {
-                Rectangle& rStart = aRectangles.front();
-                Rectangle aStart = Rectangle(rStart.Left(), rStart.Top(), rStart.Left() + 1, rStart.Bottom());
-                libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION_START, aStart.toString().getStr());
+                std::vector<Rectangle> aRectangles;
+                pRegion->GetRegionRectangles(aRectangles);
 
-                Rectangle& rEnd = aRectangles.back();
-                Rectangle aEnd = Rectangle(rEnd.Right() - 1, rEnd.Top(), rEnd.Right(), rEnd.Bottom());
-                libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION_END, aEnd.toString().getStr());
-            }
+                if (!aRectangles.empty())
+                {
+                    Rectangle& rStart = aRectangles.front();
+                    Rectangle aStart = Rectangle(rStart.Left(), rStart.Top(), rStart.Left() + 1, rStart.Bottom());
+                    libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION_START, aStart.toString().getStr());
 
-            std::stringstream ss;
-            for (size_t i = 0; i < aRectangles.size(); ++i)
-            {
-                const Rectangle& rRectangle = aRectangles[i];
-                if (i)
-                    ss << "; ";
-                ss << rRectangle.toString().getStr();
+                    Rectangle& rEnd = aRectangles.back();
+                    Rectangle aEnd = Rectangle(rEnd.Right() - 1, rEnd.Top(), rEnd.Right(), rEnd.Bottom());
+                    libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION_END, aEnd.toString().getStr());
+                }
+
+                std::stringstream ss;
+                for (size_t i = 0; i < aRectangles.size(); ++i)
+                {
+                    const Rectangle& rRectangle = aRectangles[i];
+                    if (i)
+                        ss << "; ";
+                    ss << rRectangle.toString().getStr();
+                }
+                sRectangle = ss.str().c_str();
             }
-            OString sRectangle = ss.str().c_str();
             libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION, sRectangle.getStr());
         }
 
