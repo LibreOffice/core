@@ -22,8 +22,10 @@
 
 #include <cppuhelper/implbase1.hxx>
 #include <svl/itemprop.hxx>
+#include <svl/lstner.hxx>
 
 class ScDocument;
+class ScDocShell;
 class ScConditionalFormatList;
 class ScConditionalFormat;
 class ScIconSetFormat;
@@ -43,12 +45,15 @@ class XSheetCellRanges;
 
 } } }
 
-class ScCondFormatsObj : public cppu::WeakImplHelper1<com::sun::star::sheet::XConditionalFormats>
+class ScCondFormatsObj : public cppu::WeakImplHelper1<com::sun::star::sheet::XConditionalFormats>,
+                            public SfxListener
 {
 public:
-    ScCondFormatsObj(ScDocument& rDoc, SCTAB nTab);
+    ScCondFormatsObj(ScDocShell* pDocShell, SCTAB nTab);
 
     virtual ~ScCondFormatsObj();
+
+    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) SAL_OVERRIDE;
 
     static ScCondFormatsObj* getImplementation( uno::Reference< com::sun::star::sheet::XConditionalFormats > xCondFormat );
 
@@ -73,7 +78,7 @@ public:
 private:
     ScConditionalFormatList* getCoreObject();
     SCTAB mnTab;
-    ScDocument& mrDoc;
+    ScDocShell* mpDocShell;
 };
 
 class ScCondFormatObj : public com::sun::star::sheet::XConditionalFormat,

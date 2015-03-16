@@ -186,14 +186,26 @@ const IconSetTypeApiMap aIconSetApiMap[] =
 
 }
 
-ScCondFormatsObj::ScCondFormatsObj(ScDocument& rDoc, SCTAB nTab):
+ScCondFormatsObj::ScCondFormatsObj(ScDocShell* pDocShell, SCTAB nTab):
     mnTab(nTab),
-    mrDoc(rDoc)
+    mpDocShell(pDocShell)
 {
+    pDocShell->GetDocument().AddUnoObject(*this);
 }
 
 ScCondFormatsObj::~ScCondFormatsObj()
 {
+    if (mpDocShell)
+        mpDocShell->GetDocument().RemoveUnoObject(*this);
+}
+
+void ScCondFormatsObj::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
+{
+    if ( dynamic_cast<const SfxSimpleHint*>(&rHint) &&
+            static_cast<const SfxSimpleHint&>(rHint).GetId() == SFX_HINT_DYING )
+    {
+        mpDocShell = NULL;       // ungueltig geworden
+    }
 }
 
 sal_Int32 ScCondFormatsObj::addByRange(const uno::Reference< sheet::XConditionalFormat >& xCondFormat,
@@ -236,7 +248,10 @@ sal_Int32 ScCondFormatsObj::getLength()
 
 ScConditionalFormatList* ScCondFormatsObj::getCoreObject()
 {
-    ScConditionalFormatList* pList = mrDoc.GetCondFormList(mnTab);
+    if (!mpDocShell)
+        throw uno::RuntimeException();
+
+    ScConditionalFormatList* pList = mpDocShell->GetDocument().GetCondFormList(mnTab);
     if (!pList)
         throw uno::RuntimeException();
 
