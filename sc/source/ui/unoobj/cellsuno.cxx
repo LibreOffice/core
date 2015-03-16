@@ -8608,7 +8608,7 @@ void ScTableSheetObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
         }
         else if (pEntry->nWID == SC_WID_UNO_CONDFORMAT)
         {
-            rAny <<= uno::Reference<sheet::XConditionalFormats>(new ScCondFormatsObj(pDocSh->GetDocument(), nTab));
+            rAny <<= uno::Reference<sheet::XConditionalFormats>(new ScCondFormatsObj(pDocSh, nTab));
         }
         else
             ScCellRangeObj::GetOnePropertyValue(pEntry, rAny);
