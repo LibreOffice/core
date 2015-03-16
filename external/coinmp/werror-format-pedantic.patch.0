@@ -1,0 +1,10 @@
+--- Cbc/configure
++++ Cbc/configure
+@@ -3780,7 +3780,6 @@
+           *-darwin*)
+             ;;
+           *)
+-            coin_warn_cxxflags="-pedantic-errors $coin_warn_cxxflags"
+             ;;
+         esac
+     esac
