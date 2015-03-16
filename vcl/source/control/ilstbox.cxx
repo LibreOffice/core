@@ -287,7 +287,7 @@ sal_Int32 ImplEntryList::FindMatchingEntry( const OUString& rStr, sal_Int32 nSta
         }
         else
         {
-            bMatch = rStr.isEmpty() || (rStr == pImplEntry->maStr );
+            bMatch = rStr.isEmpty() || (pImplEntry->maStr.startsWith(rStr));
         }
         if ( bMatch )
         {
