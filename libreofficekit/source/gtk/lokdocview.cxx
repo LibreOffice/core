@@ -29,8 +29,8 @@
 // Number of handles around a graphic selection.
 #define GRAPHIC_HANDLE_COUNT 8
 
-static void lok_docview_class_init( LOKDocViewClass* pClass );
-static void lok_docview_init( LOKDocView* pDocView );
+static void lok_docview_class_init( gpointer );
+static void lok_docview_init( GTypeInstance *, gpointer );
 static float pixelToTwip(float nInput);
 static gboolean renderOverlay(GtkWidget* pWidget, GdkEventExpose* pEvent, gpointer pData);
 
@@ -301,8 +301,8 @@ SAL_DLLPUBLIC_EXPORT guint lok_docview_get_type()
             pName,
             sizeof( LOKDocView ),
             sizeof( LOKDocViewClass ),
-            (GtkClassInitFunc) lok_docview_class_init,
-            (GtkObjectInitFunc) lok_docview_init,
+            lok_docview_class_init,
+            lok_docview_init,
             NULL,
             NULL,
             (GtkClassInitFunc) NULL
@@ -321,8 +321,9 @@ enum
 
 static guint docview_signals[LAST_SIGNAL] = { 0 };
 
-static void lok_docview_class_init( LOKDocViewClass* pClass )
+static void lok_docview_class_init( gpointer ptr )
 {
+    LOKDocViewClass* pClass = static_cast<LOKDocViewClass *>(ptr);
     GObjectClass *gobject_class = G_OBJECT_CLASS(pClass);
     pClass->edit_changed = NULL;
     docview_signals[EDIT_CHANGED] =
@@ -336,8 +337,9 @@ static void lok_docview_class_init( LOKDocViewClass* pClass )
                      G_TYPE_BOOLEAN);
 }
 
-static void lok_docview_init( LOKDocView* pDocView )
+static void lok_docview_init( GTypeInstance *, gpointer ptr )
 {
+    LOKDocView* pDocView = static_cast<LOKDocView *>(ptr);
     // Gtk ScrolledWindow is apparently not fully initialised yet, we specifically
     // have to set the [hv]adjustment to prevent GTK assertions from firing, see
     // https://bugzilla.gnome.org/show_bug.cgi?id=438114 for more info.
@@ -878,7 +880,7 @@ static gboolean lok_docview_callback(gpointer pData)
     }
     break;
     default:
-        g_assert(0);
+        g_assert(false);
         break;
     }
 

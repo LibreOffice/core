@@ -112,7 +112,7 @@ void toggleEditing(GtkWidget* /*pButton*/, gpointer /*pItem*/)
 {
     LOKDocView* pLOKDocView = LOK_DOCVIEW(pDocView);
     bool bActive = gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(pEnableEditing));
-    if (lok_docview_get_edit(pLOKDocView) != bActive)
+    if (bool(lok_docview_get_edit(pLOKDocView)) != bActive)
         lok_docview_set_edit(pLOKDocView, bActive);
 }
 
