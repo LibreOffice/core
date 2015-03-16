@@ -564,19 +564,35 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
             }
         }
     }
-    else
+    else // ( !bFormula )
     {
         ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
         for ( ; itr != itrEnd; ++itr )
         {
             bool bNumFmtSet = false;
-            rFunc.SetNormalString( bNumFmtSet, ScAddress( nCol, nRow, *itr ), rString, false );
+            const ScAddress aAddress( nCol, nRow, *itr );
+            rFunc.SetNormalString( bNumFmtSet, aAddress, rString, false );
             if (bNumFmtSet)
             {
                 /* FIXME: if set on any sheet results in changed only on
                  * sheet nTab for TestFormatArea() and DoAutoAttributes() */
                 bNumFmtChanged = true;
             }
+
+#ifdef ENABLE_CALC_UNITVERIFICATION
+            boost::shared_ptr< sc::units::Units > pUnits = sc::units::Units::GetUnits();
+
+            OUString sHeaderUnit, sCellUnit;
+            ScAddress aHeaderAddress;
+
+            if ( pUnits->isCellConversionRecommended( aAddress, pDoc, sHeaderUnit, aHeaderAddress, sCellUnit ) ) {
+                NotifyUnitConversionRecommended( aAddress, pDoc, sHeaderUnit, aHeaderAddress, sCellUnit );
+            } else {
+                SfxViewFrame* pViewFrame = GetViewData().GetViewShell()->GetFrame();
+                OUString sAddress = aAddress.Format( SCA_BITS, pDoc );
+                pViewFrame->RemoveInfoBar( sAddress );
+            }
+#endif
         }
     }
 
@@ -2868,6 +2884,108 @@ IMPL_LINK( ScViewFunc, EditUnitErrorFormulaHandler, PushButton*, pButton )
     // UI making it a bit easier to see where the data is coming from).
     ScModule* pScMod = SC_MOD();
     pScMod->SetInputMode( SC_INPUT_TABLE );
+
+    return 0;
+}
+
+/*
+ * PushButton wrapper used to persist cell conversion data between data
+ * entry and whenever the user chooses to activate conversion.
+ * This is required as there doesn't seem to be any other way to pass
+ * data to the Handler. This is the easiest way of passing the data (we can't
+ * wrap the infobar itself as it is constructed by Viewframe's AppendInfoBar,
+ * and hidden elements seem even more hacky).
+ *
+ * Forward declaration in viewfunc.hxx
+ */
+struct UnitConversionPushButton: public PushButton
+{
+    const ScAddress aCellAddress;
+    ScDocument* mpDoc;
+    const OUString sHeaderUnit;
+    const OUString sCellUnit;
+
+    UnitConversionPushButton( vcl::Window* pParent,
+                              const ResId& rResId,
+                              const ScAddress& rCellAddress,
+                              ScDocument* pDoc,
+                              const OUString& rsHeaderUnit,
+                              const OUString& rsCellUnit ):
+        PushButton( pParent, rResId ),
+        aCellAddress( rCellAddress ),
+        mpDoc( pDoc ),
+        sHeaderUnit( rsHeaderUnit ),
+        sCellUnit( rsCellUnit )
+        {}
+};
+
+void ScViewFunc::NotifyUnitConversionRecommended( const ScAddress& rCellAddress,
+                                                 ScDocument* pDoc,
+                                                 const OUString& rsHeaderUnit,
+                                                 const ScAddress& rHeaderAddress,
+                                                 const OUString& rsCellUnit ) {
+    SfxViewFrame* pViewFrame = GetViewData().GetViewShell()->GetFrame();
+
+    // As with NotifyUnitErrorInFormula we use the cell address as the infobar id.
+    // See NotifyUnitErrorInFormula for full details on why. It's impossible for both
+    // infobars to be valid for a single cell anyways (as the UnitErrorInFormula infobar
+    // can only appear for Formulas, whereas this one can only appear for values), hence
+    // using the same id format is not an issue.
+    OUString sTitle = SC_RESSTR( STR_UNITS_CONVERSION_RECOMMENDED );
+    sTitle = sTitle.replaceAll( "$1", rsCellUnit );
+    sTitle = sTitle.replaceAll( "$2", rCellAddress.GetColRowString() );
+    sTitle = sTitle.replaceAll( "$3", rsHeaderUnit );
+    sTitle = sTitle.replaceAll( "$4", rHeaderAddress.GetColRowString() );
+
+    OUString sCellAddress = rCellAddress.Format( SCA_BITS, pDoc );
+    SfxInfoBarWindow* pInfoBar = pViewFrame->AppendInfoBar( sCellAddress, sTitle );
+
+    assert( pInfoBar );
+
+    UnitConversionPushButton* pButtonConvertCell = new UnitConversionPushButton( &pViewFrame->GetWindow(),
+                                                                                 ScResId(BT_UNITS_CONVERT_THIS_CELL),
+                                                                                 rCellAddress,
+                                                                                 pDoc,
+                                                                                 rsHeaderUnit,
+                                                                                 rsCellUnit );
+    pButtonConvertCell->SetClickHdl( LINK( this, ScViewFunc, UnitConversionRecommendedHandler ) );
+
+    OUString sConvertText = pButtonConvertCell->GetText();
+    sConvertText = sConvertText.replaceAll( "$1", rsHeaderUnit );
+    pButtonConvertCell->SetText( sConvertText );
+
+    pInfoBar->addButton( pButtonConvertCell );
+}
+
+IMPL_LINK( ScViewFunc, UnitConversionRecommendedHandler, UnitConversionPushButton*, pButton )
+{
+    // Do conversion first, and only then remove the infobar as we need data from the infobar
+    // (specifically from the pushbutton) to do the conversion.
+#ifdef ENABLE_CALC_UNITVERIFICATION
+    boost::shared_ptr< sc::units::Units > pUnits = sc::units::Units::GetUnits();
+
+    pUnits->convertCellToHeaderUnit( pButton->aCellAddress,
+                                     pButton->mpDoc,
+                                     pButton->sHeaderUnit,
+                                     pButton->sCellUnit );
+#endif
+
+    OUString sAddress;
+    {
+        // keep pInfoBar within this scope only as we'll be deleting it just below (using RemoveInfoBar)
+        SfxInfoBarWindow* pInfoBar = dynamic_cast< SfxInfoBarWindow* >( pButton->GetParent() );
+        sAddress = pInfoBar->getId();
+    }
+    SfxViewFrame* pViewFrame = GetViewData().GetViewShell()->GetFrame();
+    pViewFrame->RemoveInfoBar( sAddress );
+
+
+    // We make sure we then scroll to the desired cell to make the change clear.
+    SfxStringItem aPosition( SID_CURRENTCELL, sAddress );
+    SfxBoolItem aUnmark( FN_PARAM_1, true ); // Removes existing selection if present.
+    GetViewData().GetDispatcher().Execute( SID_CURRENTCELL,
+                                           SfxCallMode::SYNCHRON | SfxCallMode::RECORD,
+                                           &aPosition, &aUnmark, 0L );
 
     return 0;
 }
