@@ -127,7 +127,7 @@ void SAL_CALL OToolboxController::initialize( const Sequence< Any >& _rArguments
     SolarMutexGuard aSolarMutexGuard;
     ::osl::MutexGuard aGuard(m_aMutex);
 
-    ToolBox*    pToolBox = static_cast<ToolBox*>(VCLUnoHelper::GetWindow(getParent()));
+    VclPtr< ToolBox > pToolBox = static_cast<ToolBox*>(VCLUnoHelper::GetWindow(getParent()).get());
     if ( pToolBox )
     {
         const sal_uInt16 nCount = pToolBox->GetItemCount();

@@ -1201,8 +1201,9 @@ public:
         if (aDev >>= xRenderDevice)
         {
             VCLXDevice* pDevice = VCLXDevice::GetImplementation(xRenderDevice);
-            OutputDevice* pOut = pDevice ? pDevice->GetOutputDevice() : NULL;
-            mpPrinter = dynamic_cast<Printer*>(pOut);
+            VclPtr< OutputDevice > pOut = pDevice ? pDevice->GetOutputDevice()
+                                                  : VclPtr< OutputDevice >();
+            mpPrinter = dynamic_cast<Printer*>(pOut.get());
             Size aPageSizePixel = mpPrinter ? mpPrinter->GetPaperSizePixel() : Size();
             if( aPageSizePixel != maPrinterPageSizePixel )
             {

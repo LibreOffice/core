@@ -158,7 +158,6 @@ SwPrintUIOptions::SwPrintUIOptions(
     bool bHasSelection,
     bool bHasPostIts,
     const SwPrintData &rDefaultPrintData ) :
-    m_pLast( NULL ),
     m_rDefaultPrintData( rDefaultPrintData )
 {
     ResStringArray aLocalizedStrings( SW_RES( STR_PRINTOPTUI ) );
@@ -478,7 +477,7 @@ bool SwPrintUIOptions::processPropertiesAndCheckFormat( const uno::Sequence< bea
         if (pDevice)
             pOut = pDevice->GetOutputDevice();
     }
-    bChanged = bChanged || (pOut != m_pLast);
+    bChanged = bChanged || (pOut.get() != m_pLast.get());
     if( pOut )
         m_pLast = pOut;
 

@@ -172,7 +172,7 @@ public:
 
 class SwPrintUIOptions : public vcl::PrinterOptionsHelper
 {
-    OutputDevice* m_pLast;
+    VclPtr< OutputDevice > m_pLast;
     const SwPrintData & m_rDefaultPrintData;
 
 public:
