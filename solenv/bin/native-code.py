@@ -56,7 +56,6 @@ core_factory_list = [
     ("libxolo.a", "xo_component_getFactory"),
     ("libxsec_xmlsec.a", "xsec_xmlsec_component_getFactory", "#ifndef ANDROID"),
     ("libxstor.a", "xstor_component_getFactory"),
-    ("libvbaeventslo.a", "vbaevents_component_getFactory", "#if HAVE_FEATURE_SCRIPTING"),
     ("libvclcanvaslo.a", "vclcanvas_component_getFactory"),
     ("libmtfrendererlo.a", "mtfrenderer_component_getFactory"),
     ]
@@ -209,6 +208,9 @@ calc_constructor_list = [
 # sc/util/scfilt.component
     "com_sun_star_comp_oox_xls_ExcelFilter_get_implementation",
     "com_sun_star_comp_oox_xls_FormulaParser_get_implementation",
+# scripting/source/vbaevents/vbaevents.component -- TODO check if all of these are necessary
+    ("ooo_vba_EventListener_get_implementation", "#if HAVE_FEATURE_SCRIPTING"),
+    ("ooo_vba_VBAToOOEventDesc_get_implementation", "#if HAVE_FEATURE_SCRIPTING"),
 # svl/util/svl.component -- TODO check if all of these are necessary
     "com_sun_star_comp_svl_PathService_get_implementation",
     "com_sun_star_uno_util_numbers_SvNumberFormatsSupplierServiceObject_get_implementation",
