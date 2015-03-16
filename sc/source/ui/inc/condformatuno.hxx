@@ -21,8 +21,10 @@
 #include <com/sun/star/sheet/XIconSetEntry.hpp>
 
 #include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase2.hxx>
 #include <svl/itemprop.hxx>
 #include <svl/lstner.hxx>
+#include <rtl/ref.hxx>
 
 class ScDocument;
 class ScDocShell;
@@ -75,18 +77,18 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException,
                                       std::exception) SAL_OVERRIDE;
 
-private:
     ScConditionalFormatList* getCoreObject();
+
+private:
     SCTAB mnTab;
     ScDocShell* mpDocShell;
 };
 
-class ScCondFormatObj : public com::sun::star::sheet::XConditionalFormat,
-                        public com::sun::star::beans::XPropertySet,
-                        public cppu::OWeakObject
+class ScCondFormatObj : public cppu::WeakImplHelper2<com::sun::star::sheet::XConditionalFormat,
+                            com::sun::star::beans::XPropertySet>
 {
 public:
-    ScCondFormatObj(ScDocument* pDoc, ScConditionalFormat* pList);
+    ScCondFormatObj(ScDocShell* pDocShell, rtl::Reference<ScCondFormatsObj> xCondFormats, sal_Int32 nKey);
 
     virtual ~ScCondFormatObj();
 
@@ -98,6 +100,24 @@ public:
                                       std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL removeByIndex(const sal_Int32 nIndex)
+                                throw(::com::sun::star::uno::RuntimeException,
+                                      std::exception) SAL_OVERRIDE;
+
+    // XIndexAccess
+
+    virtual uno::Type SAL_CALL getElementType()
+                                throw(::com::sun::star::uno::RuntimeException,
+                                      std::exception) SAL_OVERRIDE;
+
+    virtual sal_Bool SAL_CALL hasElements()
+                                throw(::com::sun::star::uno::RuntimeException,
+                                      std::exception) SAL_OVERRIDE;
+
+    virtual sal_Int32 SAL_CALL getCount()
+                                throw(::com::sun::star::uno::RuntimeException,
+                                      std::exception) SAL_OVERRIDE;
+
+    virtual uno::Any SAL_CALL getByIndex(sal_Int32 nIndex)
                                 throw(::com::sun::star::uno::RuntimeException,
                                       std::exception) SAL_OVERRIDE;
 
@@ -142,9 +162,13 @@ public:
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
+    ScConditionalFormat* getCoreObject();
+
 private:
-    ScConditionalFormat* mpFormat;
+    rtl::Reference<ScCondFormatsObj> mxCondFormatList;
+    ScDocShell* mpDocShell;
     SfxItemPropertySet maPropSet;
+    sal_Int32 mnKey;
 };
 
 class ScConditionEntryObj : public com::sun::star::beans::XPropertySet,

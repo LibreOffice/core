@@ -235,7 +235,17 @@ void ScCondFormatsObj::removeByID(const sal_Int32 nID)
 uno::Sequence<uno::Reference<sheet::XConditionalFormat> > ScCondFormatsObj::getConditionalFormats()
     throw(uno::RuntimeException, std::exception)
 {
-    return uno::Sequence<uno::Reference<sheet::XConditionalFormat> >();
+    SolarMutexGuard aGuard;
+    ScConditionalFormatList* pFormatList = getCoreObject();;
+    size_t n = pFormatList->size();
+    uno::Sequence<uno::Reference<sheet::XConditionalFormat> > aCondFormats(n);
+    sal_Int32 i = 0;
+    for (ScConditionalFormatList::const_iterator itr = pFormatList->begin(); itr != pFormatList->end(); ++itr, ++i) {
+        uno::Reference<sheet::XConditionalFormat> xCondFormat(new ScCondFormatObj(mpDocShell, this, itr->GetKey()));
+        aCondFormats[i] = xCondFormat;
+    }
+
+    return aCondFormats;
 }
 
 sal_Int32 ScCondFormatsObj::getLength()
@@ -258,14 +268,27 @@ ScConditionalFormatList* ScCondFormatsObj::getCoreObject()
     return pList;
 }
 
-ScCondFormatObj::ScCondFormatObj(ScDocument* /*pDoc*/, ScConditionalFormat* pFormat):
-    mpFormat(pFormat),
-    maPropSet(getCondFormatPropset())
+ScCondFormatObj::ScCondFormatObj(ScDocShell* pDocShell, rtl::Reference<ScCondFormatsObj> xCondFormats,
+        sal_Int32 nKey):
+    mxCondFormatList(xCondFormats),
+    mpDocShell(pDocShell),
+    maPropSet(getCondFormatPropset()),
+    mnKey(nKey)
 {
 }
 
 ScCondFormatObj::~ScCondFormatObj()
 {
+}
+
+ScConditionalFormat* ScCondFormatObj::getCoreObject()
+{
+    ScConditionalFormatList* pList = mxCondFormatList->getCoreObject();
+    ScConditionalFormat* pFormat = pList->GetFormat(mnKey);
+    if (!pFormat)
+        throw uno::RuntimeException();
+
+    return pFormat;
 }
 
 void ScCondFormatObj::addEntry(const uno::Reference<sheet::XConditionEntry>& /*xEntry*/)
@@ -276,6 +299,36 @@ void ScCondFormatObj::addEntry(const uno::Reference<sheet::XConditionEntry>& /*x
 void ScCondFormatObj::removeByIndex(const sal_Int32 /*nIndex*/)
     throw(uno::RuntimeException, std::exception)
 {
+}
+
+uno::Type ScCondFormatObj::getElementType()
+    throw(uno::RuntimeException, std::exception)
+{
+    return cppu::UnoType<sheet::XConditionEntry>::get();
+}
+
+sal_Bool ScCondFormatObj::hasElements()
+    throw(uno::RuntimeException, std::exception)
+{
+    SolarMutexGuard aGuard;
+    ScConditionalFormat* pFormat = getCoreObject();
+    return !pFormat->IsEmpty();
+}
+
+sal_Int32 ScCondFormatObj::getCount()
+    throw(uno::RuntimeException, std::exception)
+{
+    SolarMutexGuard aGuard;
+    ScConditionalFormat* pFormat = getCoreObject();
+
+    return pFormat->size();
+}
+
+uno::Any ScCondFormatObj::getByIndex(sal_Int32 /*nIndex*/)
+    throw(uno::RuntimeException, std::exception)
+{
+    uno::Any aAny;
+    return aAny;
 }
 
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScCondFormatObj::getPropertySetInfo()
@@ -327,14 +380,13 @@ uno::Any SAL_CALL ScCondFormatObj::getPropertyValue( const OUString& aPropertyNa
     switch(pEntry->nWID)
     {
         case ID:
-            aAny <<= sal_Int32(mpFormat->GetKey());
+            aAny <<= sal_Int32(getCoreObject()->GetKey());
         break;
         case CondFormat_Range:
         {
-            const ScRangeList& rRange = mpFormat->GetRange();
-            ScDocShell* pShell = static_cast<ScDocShell*>(mpFormat->GetDocument()->GetDocumentShell());
+            const ScRangeList& rRange = getCoreObject()->GetRange();
             uno::Reference<sheet::XSheetCellRanges> xRange;
-            xRange.set(new ScCellRangesObj(pShell, rRange));
+            xRange.set(new ScCellRangesObj(mpDocShell, rRange));
         }
         break;
         default:
