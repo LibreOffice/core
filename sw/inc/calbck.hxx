@@ -117,7 +117,7 @@ public:
     // should be called only from SwModify the client is registered in
     // mba: IMHO this method should be pure virtual
     // DO NOT USE IN NEW CODE! use SwClientNotify instead.
-    virtual void Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue ) SAL_OVERRIDE
+    virtual void Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue )
         { CheckRegistration( pOldValue, pNewValue ); }
     // when overriding this, you MUST call SwClient::SwClientModify() in the override!
     virtual void SwClientNotify( const SwModify&, const SfxHint& rHint)
