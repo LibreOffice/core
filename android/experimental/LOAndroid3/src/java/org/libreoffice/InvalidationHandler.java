@@ -19,22 +19,12 @@ public class InvalidationHandler implements Document.MessageCallback {
     private static String LOGTAG = InvalidationHandler.class.getSimpleName();
     private final TextCursorLayer mTextCursorLayer;
     private final TextSelection mTextSelection;
-    private TileProvider mTileProvider;
     private OverlayState mState;
 
     public InvalidationHandler(LibreOfficeMainActivity mainActivity) {
         mTextCursorLayer = mainActivity.getTextCursorLayer();
         mTextSelection = mainActivity.getTextSelection();
-        mTileProvider = null;
         mState = OverlayState.NONE;
-    }
-
-    /**
-     * Sets the tile provider, without this the
-     * @param tileProvider
-     */
-    public void setTileProvider(TileProvider tileProvider) {
-        mTileProvider = tileProvider;
     }
 
     /**
