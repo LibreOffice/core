@@ -349,7 +349,7 @@ void Window::dispose()
         if ( pMySysWin && pMySysWin->ImplIsInTaskPaneList( this ) )
         {
             OStringBuffer aTempStr("Window (");
-            aTempStr.append(OUStringToOString(GetText(), RTL_TEXTENCODING_UTF8));
+            aTempStr.append(lcl_createWindowInfo(*this));
             aTempStr.append(") still in TaskPanelList!");
             OSL_FAIL( aTempStr.getStr() );
             Application::Abort(OStringToOUString(aTempStr.makeStringAndClear(), RTL_TEXTENCODING_UTF8));   // abort in debug builds, this must be fixed!
