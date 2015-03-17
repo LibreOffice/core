@@ -16,6 +16,7 @@
 #include "miscuno.hxx"
 
 #include "cellsuno.hxx"
+#include "convuno.hxx"
 
 #include <vcl/svapp.hxx>
 #include <rtl/ustring.hxx>
@@ -341,7 +342,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScCondFormatObj::getPropertySet
 }
 
 void SAL_CALL ScCondFormatObj::setPropertyValue(
-                        const OUString& aPropertyName, const uno::Any& /*aValue*/ )
+                        const OUString& aPropertyName, const uno::Any& aValue )
                 throw(beans::UnknownPropertyException, beans::PropertyVetoException,
                         lang::IllegalArgumentException, lang::WrappedTargetException,
                         uno::RuntimeException, std::exception)
@@ -359,6 +360,23 @@ void SAL_CALL ScCondFormatObj::setPropertyValue(
             throw lang::IllegalArgumentException();
         break;
         case CondFormat_Range:
+        {
+            uno::Reference<sheet::XSheetCellRanges> xRange;
+            if (aValue >>= xRange)
+            {
+                ScConditionalFormat* pFormat = getCoreObject();
+                uno::Sequence<table::CellRangeAddress> aRanges =
+                    xRange->getRangeAddresses();
+                ScRangeList aTargetRange;
+                for (size_t i = 0, n = aRanges.getLength(); i < n; ++i)
+                {
+                    ScRange aRange;
+                    ScUnoConversion::FillScRange(aRange, aRanges[i]);
+                    aTargetRange.Join(aRange);
+                }
+                pFormat->SetRange(aTargetRange);
+            }
+        }
         break;
         default:
             SAL_WARN("sc", "unknown property");
@@ -387,6 +405,7 @@ uno::Any SAL_CALL ScCondFormatObj::getPropertyValue( const OUString& aPropertyNa
             const ScRangeList& rRange = getCoreObject()->GetRange();
             uno::Reference<sheet::XSheetCellRanges> xRange;
             xRange.set(new ScCellRangesObj(mpDocShell, rRange));
+            aAny <<= xRange;
         }
         break;
         default:
