@@ -30,7 +30,7 @@ public:
     virtual void setUp() SAL_OVERRIDE;
     virtual void tearDown() SAL_OVERRIDE;
 
-    uno::Reference< uno::XInterface > init();
+    uno::Reference< uno::XInterface > init(sal_Int32 nIndex = 0);
     void testRequestCondFormatListFromSheet();
     void testCondFormatListProperties();
     void testCondFormatListFormats();
@@ -54,7 +54,7 @@ ScConditionalFormatTest::ScConditionalFormatTest()
 {
 }
 
-uno::Reference< uno::XInterface > ScConditionalFormatTest::init()
+uno::Reference< uno::XInterface > ScConditionalFormatTest::init(sal_Int32 nIndex)
 {
     if(!mxComponent.is())
     {
@@ -68,7 +68,7 @@ uno::Reference< uno::XInterface > ScConditionalFormatTest::init()
     // get the first sheet
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference< container::XIndexAccess > xIndex (xDoc->getSheets(), uno::UNO_QUERY_THROW);
-    uno::Reference< sheet::XSpreadsheet > xSheet( xIndex->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference< sheet::XSpreadsheet > xSheet( xIndex->getByIndex(nIndex), uno::UNO_QUERY_THROW);
 
     return xSheet;
 }
