@@ -2532,7 +2532,7 @@ void MenuBar::ImplDestroy( MenuBar* pMenu, bool bDelete )
         IMenuBarWindow* pMenuWin = pMenu->getMenuBarWindow();
         if (pMenuWin)
             pMenuWin->KillActivePopup();
-        delete pWindow;
+        pWindow->disposeOnce();
     }
     pMenu->pWindow = NULL;
 }
