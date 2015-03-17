@@ -1313,22 +1313,23 @@ void ImpEditView::CutCopy( ::com::sun::star::uno::Reference< ::com::sun::star::d
     {
         uno::Reference<datatransfer::XTransferable> xData = pEditEngine->CreateTransferable( GetEditSelection() );
 
-        const sal_uInt32 nRef = Application::ReleaseSolarMutex();
-
-        try
         {
-            rxClipboard->setContents( xData, NULL );
+            SolarMutexReleaser aReleaser;
 
-            // #87756# FlushClipboard, but it would be better to become a TerminateListener to the Desktop and flush on demand...
-            uno::Reference< datatransfer::clipboard::XFlushableClipboard > xFlushableClipboard( rxClipboard, uno::UNO_QUERY );
-            if( xFlushableClipboard.is() )
-                xFlushableClipboard->flushClipboard();
-        }
-        catch( const ::com::sun::star::uno::Exception& )
-        {
-        }
+            try
+                {
+                    rxClipboard->setContents( xData, NULL );
 
-        Application::AcquireSolarMutex( nRef );
+                    // #87756# FlushClipboard, but it would be better to become a TerminateListener to the Desktop and flush on demand...
+                    uno::Reference< datatransfer::clipboard::XFlushableClipboard > xFlushableClipboard( rxClipboard, uno::UNO_QUERY );
+                    if( xFlushableClipboard.is() )
+                        xFlushableClipboard->flushClipboard();
+                }
+            catch( const ::com::sun::star::uno::Exception& )
+                {
+                }
+
+        }
 
         if ( bCut )
         {
@@ -1346,17 +1347,18 @@ void ImpEditView::Paste( ::com::sun::star::uno::Reference< ::com::sun::star::dat
     {
         uno::Reference< datatransfer::XTransferable > xDataObj;
 
-        const sal_uInt32 nRef = Application::ReleaseSolarMutex();
-
-        try
         {
-            xDataObj = rxClipboard->getContents();
-        }
-        catch( const ::com::sun::star::uno::Exception& )
-        {
-        }
+            SolarMutexReleaser aReleaser;
 
-        Application::AcquireSolarMutex( nRef );
+            try
+                {
+                    xDataObj = rxClipboard->getContents();
+                }
+            catch( const ::com::sun::star::uno::Exception& )
+                {
+                }
+
+        }
 
         if ( xDataObj.is() && EditEngine::HasValidData( xDataObj ) )
         {

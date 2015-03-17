@@ -1134,7 +1134,7 @@ void TextView::Copy( uno::Reference< datatransfer::clipboard::XClipboard >& rxCl
         if ( mpImpl->mpTextEngine->HasAttrib( TEXTATTR_HYPERLINK ) )  // then also as HTML
             mpImpl->mpTextEngine->Write( pDataObj->GetHTMLStream(), &mpImpl->maSelection, true );
 
-        const sal_uInt32 nRef = Application::ReleaseSolarMutex();
+        SolarMutexReleaser aReleaser;
 
         try
         {
@@ -1147,8 +1147,6 @@ void TextView::Copy( uno::Reference< datatransfer::clipboard::XClipboard >& rxCl
         catch( const ::com::sun::star::uno::Exception& )
         {
         }
-
-        Application::AcquireSolarMutex( nRef );
     }
 }
 
@@ -1164,17 +1162,18 @@ void TextView::Paste( uno::Reference< datatransfer::clipboard::XClipboard >& rxC
     {
         uno::Reference< datatransfer::XTransferable > xDataObj;
 
-        const sal_uInt32 nRef = Application::ReleaseSolarMutex();
-
-        try
         {
-            xDataObj = rxClipboard->getContents();
-        }
-        catch( const ::com::sun::star::uno::Exception& )
-        {
-        }
+            SolarMutexReleaser aReleaser;
 
-        Application::AcquireSolarMutex( nRef );
+            try
+                {
+                    xDataObj = rxClipboard->getContents();
+                }
+            catch( const ::com::sun::star::uno::Exception& )
+                {
+                }
+
+        }
 
         if ( xDataObj.is() )
         {

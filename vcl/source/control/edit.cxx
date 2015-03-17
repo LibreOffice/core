@@ -1285,17 +1285,14 @@ void Edit::ImplPaste( uno::Reference< datatransfer::clipboard::XClipboard >& rxC
     {
         uno::Reference< datatransfer::XTransferable > xDataObj;
 
-        const sal_uInt32 nRef = Application::ReleaseSolarMutex();
-
         try
-        {
-            xDataObj = rxClipboard->getContents();
-        }
+            {
+                SolarMutexReleaser aReleaser;
+                xDataObj = rxClipboard->getContents();
+            }
         catch( const ::com::sun::star::uno::Exception& )
-        {
-        }
-
-        Application::AcquireSolarMutex( nRef );
+            {
+            }
 
         if ( xDataObj.is() )
         {
@@ -1985,9 +1982,10 @@ void Edit::Command( const CommandEvent& rCEvt )
             uno::Reference< datatransfer::clipboard::XClipboard > xClipboard = GetClipboard();
             if ( xClipboard.is() )
             {
-                const sal_uInt32 nRef = Application::ReleaseSolarMutex();
-                uno::Reference< datatransfer::XTransferable > xDataObj = xClipboard->getContents();
-                Application::AcquireSolarMutex( nRef );
+                {
+                    SolarMutexReleaser aReleaser;
+                    uno::Reference< datatransfer::XTransferable > xDataObj = xClipboard->getContents();
+                }
                 if ( xDataObj.is() )
                 {
                     datatransfer::DataFlavor aFlavor;
