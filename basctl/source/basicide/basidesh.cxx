@@ -232,6 +232,12 @@ Shell::~Shell()
     SetWindow( 0 );
     SetCurWindow( 0 );
 
+    for (WindowTable::iterator it = aWindowTable.begin(); it != aWindowTable.end(); ++it)
+    {
+        // no store; does already happen when the BasicManagers are destroyed
+        it->second.disposeAndClear();
+    }
+
     // no store; does already happen when the BasicManagers are destroyed
     aWindowTable.clear();
 

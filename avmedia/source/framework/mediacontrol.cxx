@@ -202,7 +202,7 @@ MediaControl::~MediaControl()
 void MediaControl::dispose()
 {
     maZoomToolBox->SetItemWindow( AVMEDIA_TOOLBOXITEM_ZOOM, NULL );
-    mpZoomListBox.disposeAndClear();
+    mpZoomListBox.clear();
     maTimeEdit.disposeAndClear();
     maZoomToolBox.disposeAndClear();
     maVolumeSlider.disposeAndClear();

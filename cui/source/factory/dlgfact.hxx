@@ -72,8 +72,9 @@ public:                                             \
 #define IMPL_ABSTDLG_BASE(Class)                    \
 Class::~Class()                                     \
 {                                                   \
+     pDlg.disposeAndClear();                        \
 }                                                   \
-short Class::Execute()                             \
+short Class::Execute()                              \
 {                                                   \
     return pDlg->Execute();                         \
 }

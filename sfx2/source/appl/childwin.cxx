@@ -160,7 +160,6 @@ SfxChildWindow::SfxChildWindow(vcl::Window *pParentWindow, sal_uInt16 nId)
     : pParent(pParentWindow)
     , nType(nId)
     , eChildAlignment(SfxChildAlignment::NOALIGNMENT)
-    , pWindow(0L)
 {
     pImp = new SfxChildWindow_Impl;
     pImp->pFact = 0L;
@@ -199,6 +198,7 @@ void SfxChildWindow::Destroy()
 SfxChildWindow::~SfxChildWindow()
 {
     delete pContext;
+    pWindow.disposeAndClear();
     delete pImp;
 }
 
@@ -510,13 +510,13 @@ void SfxChildWindow::CreateContext( sal_uInt16 nContextId, SfxBindings& rBinding
 }
 
 SfxChildWindowContext::SfxChildWindowContext( sal_uInt16 nId )
-    : pWindow( NULL )
-    , nContextId( nId )
+    : nContextId( nId )
 {
 }
 
 SfxChildWindowContext::~SfxChildWindowContext()
 {
+    pWindow.disposeAndClear();
 }
 
 FloatingWindow* SfxChildWindowContext::GetFloatingWindow() const
