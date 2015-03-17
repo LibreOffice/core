@@ -274,9 +274,9 @@ void SAL_CALL SfxToolBoxControl::dispose() throw (::com::sun::star::uno::Runtime
 
     // Remove and destroy our item window at our toolbox
     SolarMutexGuard aGuard;
-    vcl::Window* pWindow = pImpl->pBox->GetItemWindow( pImpl->nTbxId );
+    VclPtr< vcl::Window > pWindow = pImpl->pBox->GetItemWindow( pImpl->nTbxId );
     pImpl->pBox->SetItemWindow( pImpl->nTbxId, 0 );
-    delete pWindow;
+    pWindow.disposeAndClear();
 
     // Dispose an open sub toolbar. It's possible that we have an open
     // sub toolbar while we get disposed. Therefore we have to dispose
