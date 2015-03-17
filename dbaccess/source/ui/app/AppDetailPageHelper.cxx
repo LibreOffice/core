@@ -252,13 +252,14 @@ void OAppDetailPageHelper::dispose()
             m_pLists[i].disposeAndClear();
         }
     }
-    m_aFL.disposeAndClear();
-    m_aTBPreview.disposeAndClear();
-    m_aPreview.disposeAndClear();
-    m_aDocumentInfo.disposeAndClear();
-    m_pTablePreview.disposeAndClear();
-    m_aBorder.disposeAndClear();
     m_aMenu.reset();
+    m_pTablePreview.disposeAndClear();
+    m_aDocumentInfo.disposeAndClear();
+    m_aPreview.disposeAndClear();
+    m_aBorder.disposeAndClear();
+    m_aTBPreview.disposeAndClear();
+    m_aFL.disposeAndClear();
+
     vcl::Window::dispose();
 }
 

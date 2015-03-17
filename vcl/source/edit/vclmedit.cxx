@@ -255,6 +255,11 @@ void ImpVclMEdit::InitFromStyle( WinBits nWinStyle )
 ImpVclMEdit::~ImpVclMEdit()
 {
     EndListening( *mpTextWindow->GetTextEngine() );
+    mpScrollBox.disposeAndClear();
+    mpVScrollBar.disposeAndClear();
+    mpHScrollBar.disposeAndClear();
+    mpTextWindow.disposeAndClear();
+    pVclMultiLineEdit.disposeAndClear();
 }
 
 void ImpVclMEdit::ImpSetScrollBarRanges()
@@ -1153,17 +1158,17 @@ void VclMultiLineEdit::SetText( const OUString& rStr )
 
 OUString VclMultiLineEdit::GetText() const
 {
-    return pImpVclMEdit->GetText();
+    return pImpVclMEdit ? pImpVclMEdit->GetText() : OUString("");
 }
 
 OUString VclMultiLineEdit::GetText( LineEnd aSeparator ) const
 {
-    return pImpVclMEdit->GetText( aSeparator );
+    return pImpVclMEdit ? pImpVclMEdit->GetText( aSeparator ) : OUString("");
 }
 
-OUString VclMultiLineEdit::GetTextLines(  LineEnd aSeparator ) const
+OUString VclMultiLineEdit::GetTextLines( LineEnd aSeparator ) const
 {
-    return pImpVclMEdit->GetTextLines( aSeparator );
+    return pImpVclMEdit ? pImpVclMEdit->GetTextLines( aSeparator ) : OUString("");
 }
 
 void VclMultiLineEdit::Resize()
