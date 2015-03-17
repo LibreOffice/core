@@ -741,8 +741,8 @@ private:
     OUString m_sOriginalBackgroundColor;
     OUString m_hyperLinkAnchor;
     bool m_endPageRef;
-    ::docx::FootnotesList *m_pFootnotesList;
-    ::docx::FootnotesList *m_pEndnotesList;
+    std::unique_ptr<docx::FootnotesList> m_pFootnotesList;
+    std::unique_ptr<docx::FootnotesList> m_pEndnotesList;
     int m_footnoteEndnoteRefTag;
     boost::scoped_ptr< const WW8_SepInfo > m_pSectionInfo;
 

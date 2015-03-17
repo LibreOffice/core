@@ -8340,9 +8340,6 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
 
 DocxAttributeOutput::~DocxAttributeOutput()
 {
-    delete m_pFootnotesList, m_pFootnotesList = NULL;
-    delete m_pEndnotesList, m_pEndnotesList = NULL;
-
     delete m_pTableWrt, m_pTableWrt = NULL;
     delete m_pParagraphSdtPrTokenChildren; m_pParagraphSdtPrTokenChildren = NULL;
     delete m_pParagraphSdtPrTokenAttributes; m_pParagraphSdtPrTokenAttributes = NULL;
