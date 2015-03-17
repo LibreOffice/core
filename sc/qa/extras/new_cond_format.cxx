@@ -20,7 +20,7 @@ using namespace css;
 
 namespace sc_apitest {
 
-#define NUMBER_OF_TESTS 2
+#define NUMBER_OF_TESTS 4
 
 class ScConditionalFormatTest : public CalcUnoApiTest
 {
@@ -34,11 +34,13 @@ public:
     void testRequestCondFormatListFromSheet();
     void testCondFormatListProperties();
     void testCondFormatListFormats();
+    void testCondFormatProperties();
 
     CPPUNIT_TEST_SUITE(ScConditionalFormatTest);
     CPPUNIT_TEST(testRequestCondFormatListFromSheet);
     CPPUNIT_TEST(testCondFormatListProperties);
     CPPUNIT_TEST(testCondFormatListFormats);
+    CPPUNIT_TEST(testCondFormatProperties);
     CPPUNIT_TEST_SUITE_END();
 private:
 
@@ -118,6 +120,32 @@ void ScConditionalFormatTest::testCondFormatListFormats()
     {
         CPPUNIT_ASSERT(xCondFormats[i].is());
     }
+}
+
+void ScConditionalFormatTest::testCondFormatProperties()
+{
+    uno::Reference<sheet::XConditionalFormats> xCondFormatList =
+        getConditionalFormatList(init(1));
+
+    uno::Sequence<uno::Reference<sheet::XConditionalFormat> > xCondFormats =
+        xCondFormatList->getConditionalFormats();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xCondFormats.getLength());
+
+    uno::Reference<sheet::XConditionalFormat> xCondFormat = xCondFormats[0];
+    CPPUNIT_ASSERT(xCondFormat.is());
+    uno::Reference<beans::XPropertySet> xPropSet(xCondFormat, uno::UNO_QUERY_THROW);
+    uno::Any aAny = xPropSet->getPropertyValue("Range");
+    uno::Reference<sheet::XSheetCellRanges> xCellRanges;
+    CPPUNIT_ASSERT(aAny >>= xCellRanges);
+    CPPUNIT_ASSERT(xCellRanges.is());
+    uno::Sequence<table::CellRangeAddress> aRanges = xCellRanges->getRangeAddresses();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aRanges.getLength());
+    table::CellRangeAddress aRange = aRanges[0];
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(1), aRange.Sheet);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), aRange.StartColumn);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6), aRange.StartRow);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(7), aRange.EndColumn);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(16), aRange.EndRow);
 }
 
 void ScConditionalFormatTest::setUp()
