@@ -117,8 +117,7 @@ SidebarController::SidebarController (
       mxReadOnlyModeDispatch(),
       mbIsDocumentReadOnly(false),
       mpSplitWindow(NULL),
-      mnWidthOnSplitterButtonDown(0),
-      mpCloseIndicator()
+      mnWidthOnSplitterButtonDown(0)
 {
     // Listen for context change events.
     css::uno::Reference<css::ui::XContextChangeEventMultiplexer> xMultiplexer (
@@ -173,6 +172,8 @@ SidebarController* SidebarController::GetSidebarControllerForFrame (
 
 void SAL_CALL SidebarController::disposing (void)
 {
+    mpCloseIndicator.disposeAndClear();
+
     SidebarControllerContainer::iterator iEntry (maSidebarControllerContainer.find(mxFrame));
     if (iEntry != maSidebarControllerContainer.end())
         maSidebarControllerContainer.erase(iEntry);
@@ -204,10 +205,10 @@ void SAL_CALL SidebarController::disposing (void)
     {
         mpCurrentDeck->Dispose();
         mpCurrentDeck->PrintWindowTree();
-        mpCurrentDeck.reset();
+        mpCurrentDeck.disposeAndClear();
     }
 
-    mpTabBar.reset();
+    mpTabBar.disposeAndClear();
 
     Theme::GetPropertySet()->removePropertyChangeListener(
         OUString(""),
@@ -537,7 +538,7 @@ void SidebarController::SwitchToDeck (
         if (mpCurrentDeck)
         {
             mpCurrentDeck->Dispose();
-            mpCurrentDeck.reset();
+            mpCurrentDeck.disposeAndClear();
         }
 
         msCurrentDeckId = rDeckDescriptor.msId;
