@@ -96,6 +96,7 @@ public:
     void testBnc862510_7();
     void testPDFImport();
     void testPDFImportSkipImages();
+    void testBulletSuffix();
 
     CPPUNIT_TEST_SUITE(SdImportTest);
 
@@ -130,6 +131,7 @@ public:
     CPPUNIT_TEST(testBnc862510_7);
     CPPUNIT_TEST(testPDFImport);
     CPPUNIT_TEST(testPDFImportSkipImages);
+    CPPUNIT_TEST(testBulletSuffix);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -1109,6 +1111,29 @@ void SdImportTest::testPDFImportSkipImages()
     uno::Reference<text::XText> xText = uno::Reference<text::XTextRange>(xShape, uno::UNO_QUERY)->getText();
     CPPUNIT_ASSERT_MESSAGE( "not a text shape", xText.is() );
 
+    xDocShRef->DoClose();
+}
+
+void SdImportTest::testBulletSuffix()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/pptx/n83889.pptx"), PPTX );
+
+    uno::Reference< drawing::XDrawPagesSupplier > xDoc(
+        xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW );
+
+    uno::Reference< drawing::XDrawPage > xPage(
+        xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW );
+    SdDrawDocument *pDoc = xDocShRef->GetDoc();
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+
+    // check suffix of the char bullet
+    const SdrPage *pPage = pDoc->GetPage(1);
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+    SdrTextObj *pTxtObj = dynamic_cast<SdrTextObj *>( pPage->GetObj(0) );
+    CPPUNIT_ASSERT_MESSAGE( "no text object", pTxtObj != NULL);
+    const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
+    const SvxNumBulletItem *pNumFmt = dynamic_cast<const SvxNumBulletItem *>(aEdit.GetParaAttribs(1).GetItem(EE_PARA_NUMBULLET));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Bullet's suffix is wrong!", OUString(pNumFmt->GetNumRule()->GetLevel(0).GetSuffix()), OUString("") );
     xDocShRef->DoClose();
 }
 

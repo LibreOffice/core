@@ -225,7 +225,9 @@ ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aEl
         }
         case A_TOKEN( buChar ):         // CT_TextCharBullet
             try {
+
                 mrBulletList.setBulletChar( rAttribs.getString( XML_char ).get() );
+                mrBulletList.setSuffixNone();
             }
             catch(SAXException& /* e */)
             {
