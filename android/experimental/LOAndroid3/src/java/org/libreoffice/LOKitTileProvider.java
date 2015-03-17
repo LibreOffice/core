@@ -457,6 +457,28 @@ public class LOKitTileProvider implements TileProvider {
         setTextSelection(Document.SET_TEXT_SELECTION_RESET, documentCoordinate);
     }
 
+    /**
+     * @see org.libreoffice.TileProvider#setGraphicSelectionStart(android.graphics.PointF)
+     */
+    @Override
+    public void setGraphicSelectionStart(PointF documentCoordinate) {
+        setGraphicSelection(Document.SET_GRAPHIC_SELECTION_START, documentCoordinate);
+    }
+
+    /**
+     * @see org.libreoffice.TileProvider#setGraphicSelectionEnd(android.graphics.PointF)
+     */
+    @Override
+    public void setGraphicSelectionEnd(PointF documentCoordinate) {
+        setGraphicSelection(Document.SET_GRAPHIC_SELECTION_END, documentCoordinate);
+    }
+
+    private void setGraphicSelection(int type, PointF documentCoordinate) {
+        int x = (int) pixelToTwip(documentCoordinate.x, mDPI);
+        int y = (int) pixelToTwip(documentCoordinate.y, mDPI);
+        mDocument.setGraphicSelection(type, x, y);
+    }
+
     @Override
     protected void finalize() throws Throwable {
         close();
