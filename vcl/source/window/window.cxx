@@ -273,8 +273,7 @@ void Window::dispose()
             {
                 OStringBuffer aTempStr;
                 aTempStr.append("Window (");
-                aTempStr.append(OUStringToOString(GetText(),
-                                                       RTL_TEXTENCODING_UTF8));
+                aTempStr.append(lcl_createWindowInfo(*this));
                 aTempStr.append(") with live SystemWindows destroyed: ");
                 aTempStr.append(aErrorStr.toString());
                 OSL_FAIL(aTempStr.getStr());
@@ -298,7 +297,7 @@ void Window::dispose()
         if ( bError )
         {
             OStringBuffer aTempStr( "Window (" );
-            aTempStr.append(OUStringToOString(GetText(), RTL_TEXTENCODING_UTF8));
+            aTempStr.append(lcl_createWindowInfo(*this));
             aTempStr.append(") with live SystemWindows destroyed: ");
             aTempStr.append(aErrorStr.toString());
             OSL_FAIL( aTempStr.getStr() );
@@ -308,7 +307,7 @@ void Window::dispose()
         if ( mpWindowImpl->mpFirstChild )
         {
             OStringBuffer aTempStr("Window (");
-            aTempStr.append(OUStringToOString(GetText(), RTL_TEXTENCODING_UTF8));
+            aTempStr.append(lcl_createWindowInfo(*this));
             aTempStr.append(") with live children destroyed: ");
             pTempWin = mpWindowImpl->mpFirstChild;
             while ( pTempWin )
@@ -323,7 +322,7 @@ void Window::dispose()
         if ( mpWindowImpl->mpFirstOverlap )
         {
             OStringBuffer aTempStr("Window (");
-            aTempStr.append(OUStringToOString(GetText(), RTL_TEXTENCODING_UTF8));
+            aTempStr.append(lcl_createWindowInfo(*this));
             aTempStr.append(") with live SystemWindows destroyed: ");
             pTempWin = mpWindowImpl->mpFirstOverlap;
             while ( pTempWin )
