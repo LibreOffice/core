@@ -25,7 +25,7 @@
 namespace cairo
 {
  /***************************************************************************************
- * Platform independent part of surface backends for OpenOffice.org Cairo Canvas        *
+ * Platform independent part of surface backends for LibreOffice Cairo Canvas           *
  * For the rest of the functions (and the platform-specific derived                     *
  *  Surface classes), see platform specific cairo_<platform>_cairo.cxx                  *
  ****************************************************************************************/

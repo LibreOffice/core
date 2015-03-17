@@ -19,7 +19,7 @@
 
 #ifdef WNT
 /************************************************************************
- * Win32 surface backend for OpenOffice.org Cairo Canvas                *
+ * Win32 surface backend for LibreOffice Cairo Canvas                   *
  ************************************************************************/
 
 #include <osl/diagnose.h>

@@ -19,7 +19,7 @@
 
 #if defined MACOSX || defined IOS
 /************************************************************************
- * Mac OS X/Quartz and iOS surface backend for OpenOffice.org Cairo Canvas      *
+ * Mac OS X/Quartz and iOS surface backend for LibreOffice Cairo Canvas *
  ************************************************************************/
 
 #include <osl/diagnose.h>
