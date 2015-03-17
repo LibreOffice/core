@@ -34,6 +34,7 @@
 #include <com/sun/star/reflection/XServiceConstructorDescription.hpp>
 #include <com/sun/star/reflection/XServiceTypeDescription2.hpp>
 #include <cppuhelper/exc_hlp.hxx>
+#include <rtl/strbuf.hxx>
 #include <test/bootstrapfixture.hxx>
 #include <vcl/svapp.hxx>
 
@@ -41,6 +42,56 @@ namespace {
 
 OString msg(OUString const & string) {
     return OUStringToOString(string, osl_getThreadTextEncoding());
+}
+
+OString msg(css::uno::Sequence<OUString> const & strings) {
+    OStringBuffer buf("{");
+    for (sal_Int32 i = 0; i != strings.getLength(); ++i) {
+        if (i != 0) {
+            buf.append(", ");
+        }
+        buf.append('"');
+        buf.append(msg(strings[i]));
+        buf.append('"');
+    }
+    buf.append('}');
+    return buf.makeStringAndClear();
+}
+
+bool unique(css::uno::Sequence<OUString> const & strings) {
+    // Assumes small sequences for which quadratic algorithm is acceptable:
+    for (sal_Int32 i = 0; i < strings.getLength() - 1; ++i) {
+        for (sal_Int32 j = i + 1; j != strings.getLength(); ++j) {
+            if (strings[j] == strings[i]) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+bool contains(
+    css::uno::Sequence<OUString> const & strings, OUString const & string)
+{
+    for (sal_Int32 i = 0; i != strings.getLength(); ++i) {
+        if (string == strings[i]) {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool contains(
+    css::uno::Sequence<OUString> const & strings1,
+    css::uno::Sequence<OUString> const & strings2)
+{
+    // Assumes small sequences for which quadratic algorithm is acceptable:
+    for (sal_Int32 i = 0; i != strings2.getLength(); ++i) {
+        if (!contains(strings1, strings2[i])) {
+            return false;
+        }
+    }
+    return true;
 }
 
 class Test: public test::BootstrapFixture {
@@ -54,6 +105,8 @@ public:
 private:
     void createInstance(
         OUString const & name, bool withArguments,
+        OUString const & implementationName,
+        css::uno::Sequence<OUString> const & serviceNames,
         std::vector<css::uno::Reference<css::lang::XComponent>> * components);
 };
 
@@ -93,13 +146,18 @@ void Test::test() {
             serviceName(theServiceName),
             defaultConstructor(theDefaultConstructor)
         {}
-        OUString serviceName;
-        bool defaultConstructor;
+        OUString const serviceName;
+        bool const defaultConstructor;
     };
     struct Implementation {
-        Implementation(css::uno::Reference<css::lang::XServiceInfo> theFactory):
-            factory(theFactory), accumulationBased(false) {}
-        css::uno::Reference<css::lang::XServiceInfo> factory;
+        Implementation(
+            css::uno::Reference<css::lang::XServiceInfo> const & theFactory,
+            css::uno::Sequence<OUString> const & theServiceNames):
+            factory(theFactory), serviceNames(theServiceNames),
+            accumulationBased(false)
+        {}
+        css::uno::Reference<css::lang::XServiceInfo> const factory;
+        css::uno::Sequence<OUString> const serviceNames;
         std::vector<Constructor> constructors;
         bool accumulationBased;
     };
@@ -124,7 +182,7 @@ void Test::test() {
             if (desc.is()) {
                 CPPUNIT_ASSERT_MESSAGE(
                     (OString(
-                        "no implementations of singlie-interface--based \""
+                        "no implementations of single-interface--based \""
                         + msg(serviceNames[i]) + "\"")
                      .getStr()),
                     !desc->isSingleInterfaceBased());
@@ -141,7 +199,16 @@ void Test::test() {
                 OUString name(j->getImplementationName());
                 auto k = impls.find(name);
                 if (k == impls.end()) {
-                    k = impls.insert(std::make_pair(name, Implementation(j)))
+                    css::uno::Sequence<OUString> servs(
+                        j->getSupportedServiceNames());
+                    CPPUNIT_ASSERT_MESSAGE(
+                        (OString(
+                            "implementation \"" + msg(name)
+                            + "\" supports non-unique " + msg(servs))
+                         .getStr()),
+                        unique(servs));
+                    k = impls.insert(
+                            std::make_pair(name, Implementation(j, servs)))
                         .first;
                 } else {
                     CPPUNIT_ASSERT_MESSAGE(
@@ -151,6 +218,13 @@ void Test::test() {
                          .getStr()),
                         j == k->second.factory);
                 }
+                CPPUNIT_ASSERT_MESSAGE(
+                    (OString(
+                        "implementation \"" + msg(name) + "\" supports "
+                        + msg(k->second.serviceNames) + " but not \""
+                        + msg(serviceNames[i]) + "\"")
+                     .getStr()),
+                    contains(k->second.serviceNames, serviceNames[i]));
                 if (desc.is()) {
                     if (desc->isSingleInterfaceBased()) {
                         if (serviceImpls2.size() == 1) {
@@ -187,7 +261,8 @@ void Test::test() {
         {
             if (i.second.constructors.empty()) {
                 if (i.second.accumulationBased) {
-                    createInstance(i.first, false, &comps);
+                    createInstance(
+                        i.first, false, i.first, i.second.serviceNames, &comps);
                 } else {
                     std::cout
                         << "no obvious way to instantiate implementation \""
@@ -196,7 +271,8 @@ void Test::test() {
             } else {
                 for (auto const & j: i.second.constructors) {
                     createInstance(
-                        j.serviceName, !j.defaultConstructor, &comps);
+                        j.serviceName, !j.defaultConstructor, i.first,
+                        i.second.serviceNames, &comps);
                 }
             }
         }
@@ -209,6 +285,8 @@ void Test::test() {
 
 void Test::createInstance(
     OUString const & name, bool withArguments,
+    OUString const & implementationName,
+    css::uno::Sequence<OUString> const & serviceNames,
     std::vector<css::uno::Reference<css::lang::XComponent>> * components)
 {
     assert(components != nullptr);
@@ -226,18 +304,93 @@ void Test::createInstance(
         css::uno::Any a(cppu::getCaughtException());
         CPPUNIT_FAIL(
             OString(
-                "creating \"" + msg(name) + "\" caused "
-                + msg(a.getValueTypeName()) + " \"" + msg(e.Message) + "\"")
+                "instantiating \"" + msg(implementationName) + "\" via \""
+                + msg(name) + "\"  caused " + msg(a.getValueTypeName()) + " \""
+                + msg(e.Message) + "\"")
             .getStr());
     }
     CPPUNIT_ASSERT_MESSAGE(
-        (OString("creating \"" + msg(name) + "\" returned null reference")
+        (OString(
+            "instantiating \"" + msg(implementationName) + "\" via \""
+            + msg(name) + "\" returned null reference")
          .getStr()),
         inst.is());
     css::uno::Reference<css::lang::XComponent> comp(inst, css::uno::UNO_QUERY);
     if (comp.is()) {
         components->push_back(comp);
     }
+    css::uno::Reference<css::lang::XServiceInfo> info(
+        inst, css::uno::UNO_QUERY);
+    CPPUNIT_ASSERT_MESSAGE(
+        (OString(
+            "instantiating \"" + msg(implementationName) + "\" via \""
+            + msg(name) + "\" does not provide XServiceInfo")
+         .getStr()),
+        info.is());
+    OUString expImpl(implementationName);
+    css::uno::Sequence<OUString> expServs(serviceNames);
+    // Special cases:
+    if (name == "com.sun.star.comp.configuration.ConfigurationProvider") {
+        // Instantiating a ConfigurationProvider with no or empty args must
+        // return theDefaultProvider:
+        expImpl = "com.sun.star.comp.configuration.DefaultProvider";
+        expServs = {"com.sun.star.configuration.DefaultProvider"};
+    } else if (name == "com.sun.star.datatransfer.clipboard.SystemClipboard") {
+        // SystemClipboard is a wrapper returning either a platform-specific or
+        // the generic VCLGenericClipboard:
+#if defined WNT
+        expImpl = "com.sun.star.datatransfer.clipboard.ClipboardW32";
+#else
+        expImpl = "com.sun.star.datatransfer.VCLGenericClipboard";
+#endif
+#if !defined WNT
+    } else if (name == "com.sun.star.comp.datatransfer.dnd.OleDragSource_V1"
+               || name == "com.sun.star.datatransfer.dnd.XdndSupport")
+    {
+        expImpl = "com.sun.star.datatransfer.dnd.VclGenericDragSource";
+        expServs = {"com.sun.star.datatransfer.dnd.GenericDragSource"};
+    } else if (name == "com.sun.star.comp.datatransfer.dnd.OleDropTarget_V1"
+               || name == "com.sun.star.datatransfer.dnd.XdndDropTarget")
+    {
+        expImpl = "com.sun.star.datatransfer.dnd.VclGenericDropTarget";
+        expServs = {"com.sun.star.datatransfer.dnd.GenericDropTarget"};
+#endif
+    } else if (name == "com.sun.star.ui.dialogs.FolderPicker") {
+        // FolderPicker is a wrapper returning either a platform-specific or the
+        // generic OfficeFolderPicker:
+#if defined WNT
+        expImpl = "com.sun.star.ui.dialogs.Win32FolderPicker";
+        expServs = {"com.sun.star.ui.dialogs.SystemFolderPicker"};
+#else
+        expImpl = "com.sun.star.svtools.OfficeFolderPicker";
+        expServs = {"com.sun.star.ui.dialogs.OfficeFolderPicker"};
+#endif
+    }
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        (OString(
+            "instantiating \"" + msg(implementationName) + "\" via \""
+            + msg(name) + "\" reports wrong implementation name")
+         .getStr()),
+        expImpl, info->getImplementationName());
+    css::uno::Sequence<OUString> servs(info->getSupportedServiceNames());
+    CPPUNIT_ASSERT_MESSAGE(
+        (OString(
+            "instantiating \"" + msg(implementationName) + "\" via \""
+            + msg(name) + "\" reports non-unique " + msg(servs))
+         .getStr()),
+        unique(servs));
+    // Some implementations like "com.sun.star.comp.Calc.SpreadsheetDocument"
+    // report sub-services like
+    // "com.sun.star.sheet.SpreadsheetDocumentSettings", and
+    // "com.sun.star.document.OfficeDocument" that are not listed in the
+    // .component file, so check for containment instead of equality:
+    CPPUNIT_ASSERT_MESSAGE(
+        (OString(
+            "instantiating \"" + msg(implementationName) + "\" via \""
+            + msg(name) + "\" reports " + msg(servs) + " different from "
+            + msg(expServs))
+         .getStr()),
+        contains(servs, expServs));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
