@@ -151,7 +151,9 @@ void SwModify::Add( SwClient* pDepend )
         if(SwClientIter::our_pClientIters)
         {
             for(auto& rIter : SwClientIter::our_pClientIters->GetRingContainer())
+            {
                 OSL_ENSURE( &rIter.GetModify() != pRoot, "Client added to active ClientIter" );
+            }
         }
 #endif
         // deregister new client in case it is already registered elsewhere
