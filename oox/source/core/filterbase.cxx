@@ -392,11 +392,6 @@ bool FilterBase::importBinaryData( StreamDataSequence& orDataSeq, const OUString
 
 // com.sun.star.lang.XServiceInfo interface
 
-OUString SAL_CALL FilterBase::getImplementationName() throw( RuntimeException, std::exception )
-{
-    return implGetImplementationName();
-}
-
 sal_Bool SAL_CALL FilterBase::supportsService( const OUString& rServiceName ) throw( RuntimeException, std::exception )
 {
     return cppu::supportsService(this, rServiceName);

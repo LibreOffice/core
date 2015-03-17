@@ -67,7 +67,7 @@ const ::oox::drawingml::table::TableStyleListPtr ShapeFilterBase::getTableStyles
     return new ::oox::ole::VbaProject( getComponentContext(), getModel(), "Writer" );
 }
 
-OUString ShapeFilterBase::implGetImplementationName() const
+OUString ShapeFilterBase::getImplementationName() throw (css::uno::RuntimeException, std::exception)
 {
     return OUString();
 }

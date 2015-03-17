@@ -50,7 +50,7 @@ public:
     virtual ::oox::drawingml::chart::ChartConverter* getChartConverter() SAL_OVERRIDE;
 
 private:
-    virtual OUString implGetImplementationName() const SAL_OVERRIDE;
+    virtual OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::oox::ole::VbaProject* implCreateVbaProject() const SAL_OVERRIDE;
     drawingml::ThemePtr mpThemePtr;
 };

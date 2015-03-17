@@ -163,7 +163,7 @@ const oox::drawingml::table::TableStyleListPtr QuickDiagrammingLayout::getTableS
     return 0;
 }
 
-OUString QuickDiagrammingLayout::implGetImplementationName() const
+OUString QuickDiagrammingLayout::getImplementationName() throw (css::uno::RuntimeException, std::exception)
 {
     return QuickDiagrammingLayout_getImplementationName();
 }

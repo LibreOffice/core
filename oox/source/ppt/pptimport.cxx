@@ -226,7 +226,7 @@ GraphicHelper* PowerPointImport::implCreateGraphicHelper() const
     return new ::oox::ole::VbaProject( getComponentContext(), getModel(), "Impress" );
 }
 
-OUString PowerPointImport::implGetImplementationName() const
+OUString PowerPointImport::getImplementationName() throw (css::uno::RuntimeException, std::exception)
 {
     return PowerPointImport_getImplementationName();
 }

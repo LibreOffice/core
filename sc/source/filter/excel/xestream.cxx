@@ -1127,7 +1127,7 @@ bool XclExpXmlStream::exportDocument()
     return new ::oox::xls::ExcelVbaProject( getComponentContext(), Reference< XSpreadsheetDocument >( getModel(), UNO_QUERY ) );
 }
 
-OUString XclExpXmlStream::implGetImplementationName() const
+OUString XclExpXmlStream::getImplementationName() throw (css::uno::RuntimeException, std::exception)
 {
     return OUString( "TODO" );
 }

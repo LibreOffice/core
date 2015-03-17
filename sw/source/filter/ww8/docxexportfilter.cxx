@@ -91,7 +91,7 @@ OUString DocxExport_getImplementationName()
     return OUString( IMPL_NAME );
 }
 
-OUString DocxExportFilter::implGetImplementationName() const
+OUString DocxExportFilter::getImplementationName() throw (css::uno::RuntimeException, std::exception)
 {
     return DocxExport_getImplementationName();
 }

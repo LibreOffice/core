@@ -112,7 +112,7 @@ oox::drawingml::chart::ChartConverter* QuickDiagrammingImport::getChartConverter
     return 0;
 }
 
-OUString QuickDiagrammingImport::implGetImplementationName() const
+OUString QuickDiagrammingImport::getImplementationName() throw (css::uno::RuntimeException, std::exception)
 {
     return QuickDiagrammingImport_getImplementationName();
 }

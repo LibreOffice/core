@@ -199,10 +199,6 @@ public:
 
     // com.sun.star.lang.XServiceInfo interface -------------------------------
 
-    virtual OUString SAL_CALL
-                        getImplementationName()
-                            throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-
     virtual sal_Bool SAL_CALL
                         supportsService( const OUString& rServiceName )
                             throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
@@ -273,8 +269,6 @@ private:
 
     /** Derived classes create a VBA project manager object. */
     virtual ::oox::ole::VbaProject* implCreateVbaProject() const = 0;
-
-    virtual OUString implGetImplementationName() const = 0;
 
     virtual StorageRef  implCreateStorage(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxInStream ) const = 0;

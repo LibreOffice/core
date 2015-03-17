@@ -61,7 +61,7 @@ public:
 
 private:
     virtual ::oox::ole::VbaProject* implCreateVbaProject() const SAL_OVERRIDE;
-    virtual OUString implGetImplementationName() const SAL_OVERRIDE;
+    virtual OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual GraphicHelper* implCreateGraphicHelper() const SAL_OVERRIDE;
 
     ::boost::shared_ptr< ::oox::drawingml::chart::ChartConverter > mxChartConv;

@@ -45,9 +45,7 @@ public:
     virtual bool        exportDocument() SAL_OVERRIDE;
 
 private:
-
-    /// Implementatio of the filter abstract method.
-    virtual OUString implGetImplementationName() const SAL_OVERRIDE;
+    virtual OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual ::oox::ole::VbaProject* implCreateVbaProject() const SAL_OVERRIDE
     {

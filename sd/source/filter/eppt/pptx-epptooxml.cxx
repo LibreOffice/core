@@ -2162,7 +2162,7 @@ uno::Reference< uno::XInterface > SAL_CALL PowerPointExport_createInstance(const
     return (cppu::OWeakObject*)new PowerPointExport( rxCtxt );
 }
 
-OUString PowerPointExport::implGetImplementationName() const
+OUString PowerPointExport::getImplementationName() throw (css::uno::RuntimeException, std::exception)
 {
     return PowerPointExport_getImplementationName();
 }

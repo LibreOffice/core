@@ -175,7 +175,7 @@ sal_Bool SAL_CALL ExcelFilter::filter( const ::com::sun::star::uno::Sequence< ::
     return false;
 }
 
-OUString ExcelFilter::implGetImplementationName() const
+OUString ExcelFilter::getImplementationName() throw (css::uno::RuntimeException, std::exception)
 {
     return OUString( "com.sun.star.comp.oox.xls.ExcelFilter" );
 }
