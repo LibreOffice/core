@@ -134,10 +134,9 @@ void VCLSession::callSaveRequested( bool bShutdown, bool bCancelable )
         }
     }
 
-    sal_uLong nAcquireCount = Application::ReleaseSolarMutex();
+    SolarMutexReleaser aReleaser;
     for( std::list< Listener >::const_iterator it = aListeners.begin(); it != aListeners.end(); ++it )
         it->m_xListener->doSave( bShutdown, bCancelable );
-    Application::AcquireSolarMutex( nAcquireCount );
 }
 
 void VCLSession::callInteractionGranted( bool bInteractionGranted )
@@ -162,11 +161,9 @@ void VCLSession::callInteractionGranted( bool bInteractionGranted )
         }
     }
 
-    sal_uLong nAcquireCount = Application::ReleaseSolarMutex();
+    SolarMutexReleaser aReleaser;
     for( std::list< Listener >::const_iterator it = aListeners.begin(); it != aListeners.end(); ++it )
         it->m_xListener->approveInteraction( bInteractionGranted );
-
-    Application::AcquireSolarMutex( nAcquireCount );
 }
 
 void VCLSession::callShutdownCancelled()
@@ -180,10 +177,9 @@ void VCLSession::callShutdownCancelled()
         m_bInteractionRequested = m_bInteractionDone = m_bInteractionGranted = false;
     }
 
-    sal_uLong nAcquireCount = Application::ReleaseSolarMutex();
+    SolarMutexReleaser aReleaser;
     for( std::list< Listener >::const_iterator it = aListeners.begin(); it != aListeners.end(); ++it )
         it->m_xListener->shutdownCanceled();
-    Application::AcquireSolarMutex( nAcquireCount );
 }
 
 void VCLSession::callQuit()
@@ -197,14 +193,13 @@ void VCLSession::callQuit()
         m_bInteractionRequested = m_bInteractionDone = m_bInteractionGranted = false;
     }
 
-    sal_uLong nAcquireCount = Application::ReleaseSolarMutex();
+    SolarMutexReleaser aReleaser;
     for( std::list< Listener >::const_iterator it = aListeners.begin(); it != aListeners.end(); ++it )
     {
         css::uno::Reference< XSessionManagerListener2 > xListener2( it->m_xListener, UNO_QUERY );
         if( xListener2.is() )
             xListener2->doQuit();
     }
-    Application::AcquireSolarMutex( nAcquireCount );
 }
 
 void VCLSession::SalSessionEventProc( void* pData, SalSessionEvent* pEvent )

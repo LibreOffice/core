@@ -204,17 +204,14 @@ void HexColorControl::Paste()
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > xDataObj;
 
-        const sal_uInt32 nRef = Application::ReleaseSolarMutex();
-
         try
         {
+            SolarMutexReleaser aReleaser;
             xDataObj = aClipboard->getContents();
         }
         catch( const ::com::sun::star::uno::Exception& )
         {
         }
-
-        Application::AcquireSolarMutex( nRef );
 
         if ( xDataObj.is() )
         {

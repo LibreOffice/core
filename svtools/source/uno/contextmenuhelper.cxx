@@ -612,7 +612,7 @@ ContextMenuHelper::completeMenuProperties(
 IMPL_STATIC_LINK_NOINSTANCE( ContextMenuHelper, ExecuteHdl_Impl, ExecuteInfo*, pExecuteInfo )
 {
     // Release solar mutex to prevent deadlocks with clipboard thread
-    const sal_uInt32 nRef = Application::ReleaseSolarMutex();
+    SolarMutexReleaser aReleaser;
     try
     {
         // Asynchronous execution as this can lead to our own destruction while we are
@@ -623,8 +623,6 @@ IMPL_STATIC_LINK_NOINSTANCE( ContextMenuHelper, ExecuteHdl_Impl, ExecuteInfo*, p
     {
     }
 
-    // Acquire solar mutex again
-    Application::AcquireSolarMutex( nRef );
     delete pExecuteInfo;
     return 0;
 }

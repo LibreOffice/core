@@ -1588,22 +1588,22 @@ int Desktop::Main()
         }
 
         // Release solar mutex just before we wait for our client to connect
-        int nAcquireCount = Application::ReleaseSolarMutex();
+        {
+            SolarMutexReleaser aReleaser;
 
-        // Post user event to startup first application component window
-        // We have to send this OpenClients message short before execute() to
-        // minimize the risk that this message overtakes type detection construction!!
-        Application::PostUserEvent( LINK( this, Desktop, OpenClients_Impl ) );
+            // Post user event to startup first application component window
+            // We have to send this OpenClients message short before execute() to
+            // minimize the risk that this message overtakes type detection construction!!
+            Application::PostUserEvent( LINK( this, Desktop, OpenClients_Impl ) );
 
-        // Post event to enable acceptors
-        Application::PostUserEvent( LINK( this, Desktop, EnableAcceptors_Impl) );
+            // Post event to enable acceptors
+            Application::PostUserEvent( LINK( this, Desktop, EnableAcceptors_Impl) );
 
-        // The configuration error handler currently is only for startup
-        aConfigErrHandler.deactivate();
+            // The configuration error handler currently is only for startup
+            aConfigErrHandler.deactivate();
 
-       // Acquire solar mutex just before we enter our message loop
-        if ( nAcquireCount )
-            Application::AcquireSolarMutex( nAcquireCount );
+            // Acquire solar mutex just before we enter our message loop
+        }
 
         // call Application::Execute to process messages in vcl message loop
         SAL_INFO( "desktop.app", "PERFORMANCE - enter Application::Execute()" );
@@ -1711,12 +1711,13 @@ int Desktop::doShutdown()
     FlushConfiguration();
     // The acceptors in the AcceptorMap must be released (in DeregisterServices)
     // with the solar mutex unlocked, to avoid deadlock:
-    sal_uLong nAcquireCount = Application::ReleaseSolarMutex();
-    DeregisterServices();
+    {
+        SolarMutexReleaser aReleaser;
+        DeregisterServices();
 #if HAVE_FEATURE_SCRIPTING
-    StarBASIC::DetachAllDocBasicItems();
+        StarBASIC::DetachAllDocBasicItems();
 #endif
-    Application::AcquireSolarMutex(nAcquireCount);
+    }
     // be sure that path/language options gets destroyed before
     // UCB is deinitialized
     SAL_INFO( "desktop.app", "-> dispose path/language options" );

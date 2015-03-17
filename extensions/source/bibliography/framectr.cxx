@@ -730,15 +730,15 @@ void BibFrameController_Impl::addStatusListener(
             if(xClip.is())
             {
                 uno::Reference< datatransfer::XTransferable > xDataObj;
-                const sal_uInt32 nRef = Application::ReleaseSolarMutex();
+
                 try
-                {
-                    xDataObj = xClip->getContents();
-                }
+                    {
+                        SolarMutexReleaser aReleaser;
+                        xDataObj = xClip->getContents();
+                    }
                 catch( const uno::Exception& )
-                {
-                }
-                Application::AcquireSolarMutex( nRef );
+                    {
+                    }
 
                 if ( xDataObj.is() )
                 {
