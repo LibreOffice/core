@@ -539,7 +539,7 @@ IMPL_LINK( ScDPSubtotalDlg, ClickHdl, PushButton*, pBtn )
 {
     if (pBtn == mpBtnOptions)
     {
-        boost::scoped_ptr<ScDPSubtotalOptDlg> pDlg(new ScDPSubtotalOptDlg( this, mrDPObj, maLabelData, mrDataFields, mbEnableLayout ));
+        VclPtr<ScDPSubtotalOptDlg> pDlg(new ScDPSubtotalOptDlg( this, mrDPObj, maLabelData, mrDataFields, mbEnableLayout ));
         if( pDlg->Execute() == RET_OK )
             pDlg->FillLabelData( maLabelData );
     }

@@ -164,17 +164,8 @@ OFieldDescControl::~OFieldDescControl()
 
 void OFieldDescControl::dispose()
 {
-    {
-        boost::scoped_ptr<vcl::Window> aTemp(m_pVertScroll);
-        m_pVertScroll    = NULL;
-    }
-    {
-        boost::scoped_ptr<vcl::Window> aTemp(m_pHorzScroll);
-        m_pHorzScroll    = NULL;
-    }
     if ( m_bAdded )
         ::dbaui::notifySystemWindow(this,this,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
-    pLastFocusWindow = NULL;
 
     // Destroy children
     DeactivateAggregate( tpDefault );

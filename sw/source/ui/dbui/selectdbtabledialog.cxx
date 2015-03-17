@@ -187,7 +187,7 @@ IMPL_LINK(SwSelectDBTableDialog, PreviewHdl, PushButton*, pButton)
         pProperties[4].Name = "ShowTreeViewButton";
         pProperties[4].Value <<= sal_False;
 
-        boost::scoped_ptr<SwDBTablePreviewDialog> pDlg(new SwDBTablePreviewDialog(pButton, aProperties));
+        VclPtr<SwDBTablePreviewDialog> pDlg(new SwDBTablePreviewDialog(pButton, aProperties));
         pDlg->Execute();
     }
 

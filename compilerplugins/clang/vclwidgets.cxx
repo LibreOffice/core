@@ -215,6 +215,29 @@ bool VCLWidgets::VisitVarDecl(const VarDecl * pVarDecl) {
             pVarDecl->getLocation())
           << pVarDecl->getSourceRange();
     }
+    if (   !startsWith(pVarDecl->getType().getAsString(), "std::vector<vcl::Window *>")
+        && !startsWith(pVarDecl->getType().getAsString(), "std::map<vcl::Window *, Size>")
+        && !startsWith(pVarDecl->getType().getAsString(), "std::map<vcl::Window *, class Size>")
+        && !startsWith(pVarDecl->getType().getAsString(), "::std::vector<class Button *>")
+        && !startsWith(pVarDecl->getType().getAsString(), "::std::vector<Button *>")
+        && !startsWith(pVarDecl->getType().getAsString(), "::std::mem_fun1_t<")
+        && !startsWith(pVarDecl->getType().getAsString(), "::comphelper::mem_fun1_t<")
+        && !startsWith(pVarDecl->getType().getAsString(), "::std::pair<formula::RefButton *, formula::RefEdit *>")
+        && !startsWith(pVarDecl->getType().getAsString(), "::std::pair<RefButton *, RefEdit *>")
+        && !startsWith(pVarDecl->getType().getAsString(), "std::list<SwSidebarWin *>")
+        && !startsWith(pVarDecl->getType().getAsString(), "::std::map<OTableWindow *, sal_Int32>")
+        && !startsWith(pVarDecl->getType().getAsString(), "::std::map<class OTableWindow *, sal_Int32>")
+        && !startsWith(pVarDecl->getType().getAsString(), "::std::multimap<sal_Int32, OTableWindow *>")
+        && !startsWith(pVarDecl->getType().getAsString(), "::std::multimap<sal_Int32, class OTableWindow *>")
+        && !startsWith(pVarDecl->getType().getAsString(), "::dbp::OMultiInstanceAutoRegistration< ::dbp::OUnoAutoPilot<")
+        && containsWindowSubclass(pVarDecl->getType()))
+    {
+        report(
+            DiagnosticsEngine::Warning,
+            "vcl::Window subclass should be wrapped in VclPtr. " + pVarDecl->getType().getAsString(),
+            pVarDecl->getLocation())
+          << pVarDecl->getSourceRange();
+    }
     return true;
 }
 

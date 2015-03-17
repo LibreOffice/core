@@ -93,7 +93,7 @@ handleLockedDocumentRequest_(
             aMessage = UUIInteractionHelper::replaceMessageWithArguments(
                 aMessage, aArguments );
 
-            boost::scoped_ptr< OpenLockedQueryBox > xDialog(new OpenLockedQueryBox(
+            VclPtr< OpenLockedQueryBox > xDialog(new OpenLockedQueryBox(
                             pParent, xManager.get(), aMessage ) );
             nResult = xDialog->Execute();
         }
@@ -107,7 +107,7 @@ handleLockedDocumentRequest_(
             aMessage = UUIInteractionHelper::replaceMessageWithArguments(
                 aMessage, aArguments );
 
-            boost::scoped_ptr< TryLaterQueryBox > xDialog(
+            VclPtr< TryLaterQueryBox > xDialog(
                 new TryLaterQueryBox( pParent, xManager.get(), aMessage ) );
             nResult = xDialog->Execute();
         }
@@ -122,7 +122,7 @@ handleLockedDocumentRequest_(
             aMessage = UUIInteractionHelper::replaceMessageWithArguments(
                 aMessage, aArguments );
 
-            boost::scoped_ptr< AlreadyOpenQueryBox > xDialog(
+            VclPtr< AlreadyOpenQueryBox > xDialog(
                 new AlreadyOpenQueryBox( pParent,
                                          xManager.get(),
                                          aMessage,
@@ -163,7 +163,7 @@ handleChangedByOthersRequest_(
         if (!xManager.get())
             return;
 
-        boost::scoped_ptr< FileChangedQueryBox > xDialog(
+        VclPtr< FileChangedQueryBox > xDialog(
             new FileChangedQueryBox( pParent, xManager.get() ) );
         sal_Int32 nResult = xDialog->Execute();
 
@@ -198,7 +198,7 @@ handleLockFileIgnoreRequest_(
         if (!xManager.get())
             return;
 
-        boost::scoped_ptr< LockFailedQueryBox > xDialog(
+        VclPtr< LockFailedQueryBox > xDialog(
             new LockFailedQueryBox( pParent, xManager.get() ) );
         sal_Int32 nResult = xDialog->Execute();
 

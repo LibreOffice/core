@@ -582,7 +582,7 @@ void SwSendMailDialog::DocumentSent( uno::Reference< mail::XMailMessage> xMessag
 
     if (pError)
     {
-        boost::scoped_ptr<SwSendWarningBox_Impl> pDlg(new SwSendWarningBox_Impl(0, *pError));
+        VclPtr<SwSendWarningBox_Impl> pDlg(new SwSendWarningBox_Impl(0, *pError));
         pDlg->Execute();
     }
 }

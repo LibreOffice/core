@@ -446,7 +446,7 @@ long SvxBitmapTabPage::CheckChanges_Impl()
         {
             ResMgr& rMgr = CUI_MGR();
             Image aWarningBoxImage = WarningBox::GetStandardImage();
-            boost::scoped_ptr<SvxMessDialog> aMessDlg(new SvxMessDialog(GetParentDialog(),
+            VclPtr<SvxMessDialog> aMessDlg(new SvxMessDialog(GetParentDialog(),
                                                         SVX_RES( RID_SVXSTR_BITMAP ),
                                                         CUI_RES( RID_SVXSTR_ASK_CHANGE_BITMAP ),
                                                         &aWarningBoxImage  ));
@@ -510,7 +510,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickAddHdl_Impl)
     DBG_ASSERT(pFact, "Dialog creation failed!");
     boost::scoped_ptr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc ));
     DBG_ASSERT(pDlg, "Dialog creation failed!");
-    boost::scoped_ptr<MessageDialog> pWarnBox;
+    VclPtr<MessageDialog> pWarnBox;
     sal_uInt16         nError(1);
 
     while( pDlg->Execute() == RET_OK )
@@ -610,7 +610,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl_Impl)
         if( !nError )
         {
             OUString aDesc( ResId(RID_SVXSTR_DESC_EXT_BITMAP, rMgr) );
-            boost::scoped_ptr<MessageDialog> pWarnBox;
+            VclPtr<MessageDialog> pWarnBox;
 
             // convert file URL to UI name
             OUString        aName;

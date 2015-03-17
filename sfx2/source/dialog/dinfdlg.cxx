@@ -1370,7 +1370,7 @@ CustomPropertiesEditButton::CustomPropertiesEditButton(vcl::Window* pParent, Win
 
 IMPL_LINK_NOARG(CustomPropertiesEditButton, ClickHdl)
 {
-    boost::scoped_ptr<DurationDialog_Impl> pDurationDlg(new DurationDialog_Impl( this, m_pLine->m_aDurationField->GetDuration() ));
+    VclPtr<DurationDialog_Impl> pDurationDlg(new DurationDialog_Impl( this, m_pLine->m_aDurationField->GetDuration() ));
     if ( RET_OK == pDurationDlg->Execute() )
         m_pLine->m_aDurationField->SetDuration( pDurationDlg->GetDuration() );
     return 1;

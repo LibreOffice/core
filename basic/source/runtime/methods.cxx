@@ -4607,7 +4607,7 @@ RTLFUNC(MsgBox)
     }
 
     nType &= (16+32+64);
-    boost::scoped_ptr<MessBox> pBox;
+    VclPtr<MessBox> pBox;
 
     SolarMutexGuard aSolarGuard;
 

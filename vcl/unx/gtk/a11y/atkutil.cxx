@@ -497,7 +497,7 @@ static void handle_toolbox_buttonchange(VclWindowEvent const *pEvent)
 
 /*****************************************************************************/
 
-static std::set< vcl::Window * > g_aWindowList;
+static std::set< VclPtr<vcl::Window> > g_aWindowList;
 
 static void handle_get_focus(::VclWindowEvent const * pEvent)
 {

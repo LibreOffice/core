@@ -312,7 +312,6 @@ void SAL_CALL OGenericUnoController::initialize( const Sequence< Any >& aArgumen
     catch(Exception&)
     {
         // no one clears my view if I won't
-        boost::scoped_ptr<vcl::Window> aTemp(m_pView);
         m_pView = NULL;
         throw;
     }

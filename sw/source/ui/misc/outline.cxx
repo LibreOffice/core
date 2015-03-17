@@ -287,7 +287,7 @@ IMPL_LINK( SwOutlineTabDialog, MenuSelectHdl, Menu *, pMenu )
         nLevelNo = 9;
     else if (sIdent == "saveas")
     {
-        boost::scoped_ptr<SwNumNamesDlg> pDlg(new SwNumNamesDlg(this));
+        VclPtr<SwNumNamesDlg> pDlg(new SwNumNamesDlg(this));
         const OUString *aStrArr[SwChapterNumRules::nMaxRules];
         for(sal_uInt16 i = 0; i < SwChapterNumRules::nMaxRules; ++i)
         {

@@ -96,9 +96,6 @@ void FormulaDialog::dispose()
     {
         SvtViewOptions aDlgOpt( E_WINDOW, OUString( HID_RPT_FIELD_SEL_WIN ) );
         aDlgOpt.SetWindowState(OStringToOUString(m_pAddField->GetWindowState((WINDOWSTATE_MASK_X | WINDOWSTATE_MASK_Y | WINDOWSTATE_MASK_STATE | WINDOWSTATE_MASK_MINIMIZED)), RTL_TEXTENCODING_ASCII_US));
-
-        boost::scoped_ptr<vcl::Window> aTemp2(m_pAddField);
-        m_pAddField = NULL;
     }
 
     StoreFormEditData( m_pFormulaData );

@@ -88,7 +88,7 @@ executeLoginDialog(
         if (!bCanUseSysCreds)
             nFlags |= LF_NO_USESYSCREDS;
 
-        boost::scoped_ptr< LoginDialog > xDialog(
+        VclPtr< LoginDialog > xDialog(
                 new LoginDialog(pParent, nFlags, rInfo.GetServer(), rRealm));
         if (!rInfo.GetErrorText().isEmpty())
             xDialog->SetErrorText(rInfo.GetErrorText());
@@ -417,7 +417,7 @@ executeMasterPasswordDialog(
         boost::scoped_ptr< ResMgr > xManager(ResMgr::CreateResMgr("uui"));
         if( nMode == task::PasswordRequestMode_PASSWORD_CREATE )
         {
-            boost::scoped_ptr< MasterPasswordCreateDialog > xDialog(
+            VclPtr< MasterPasswordCreateDialog > xDialog(
                 new MasterPasswordCreateDialog(pParent, xManager.get()));
             rInfo.SetResult(xDialog->Execute()
                 == RET_OK ? ERRCODE_BUTTON_OK : ERRCODE_BUTTON_CANCEL);
@@ -426,7 +426,7 @@ executeMasterPasswordDialog(
         }
         else
         {
-            boost::scoped_ptr< MasterPasswordDialog > xDialog(
+            VclPtr< MasterPasswordDialog > xDialog(
                 new MasterPasswordDialog(pParent, nMode, xManager.get()));
             rInfo.SetResult(xDialog->Execute()
                 == RET_OK ? ERRCODE_BUTTON_OK : ERRCODE_BUTTON_CANCEL);
@@ -517,7 +517,7 @@ executePasswordDialog(
         {
             if (bIsSimplePasswordRequest)
             {
-                boost::scoped_ptr< PasswordDialog > pDialog(
+                VclPtr< PasswordDialog > pDialog(
                     new PasswordDialog( pParent, nMode, xManager.get(), aDocName,
                     bIsPasswordToModify, bIsSimplePasswordRequest ) );
                 pDialog->SetMinLen(0);
@@ -541,7 +541,7 @@ executePasswordDialog(
         }
         else // enter password or reenter password
         {
-            boost::scoped_ptr< PasswordDialog > pDialog(
+            VclPtr< PasswordDialog > pDialog(
                 new PasswordDialog( pParent, nMode, xManager.get(), aDocName,
                 bIsPasswordToModify, bIsSimplePasswordRequest ) );
             pDialog->SetMinLen(0);

@@ -764,8 +764,8 @@ void SlideSorterView::Notify (SfxBroadcaster& rBroadcaster, const SfxHint& rHint
 
 void SlideSorterView::UpdatePageUnderMouse ()
 {
-    ::boost::shared_ptr<ScrollBar> pVScrollBar (mrSlideSorter.GetVerticalScrollBar());
-    ::boost::shared_ptr<ScrollBar> pHScrollBar (mrSlideSorter.GetHorizontalScrollBar());
+    VclPtr<ScrollBar> pVScrollBar (mrSlideSorter.GetVerticalScrollBar());
+    VclPtr<ScrollBar> pHScrollBar (mrSlideSorter.GetHorizontalScrollBar());
     if ((pVScrollBar && pVScrollBar->IsVisible() && pVScrollBar->IsTracking())
         || (pHScrollBar && pHScrollBar->IsVisible() && pHScrollBar->IsTracking()))
     {

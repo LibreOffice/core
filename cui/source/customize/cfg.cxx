@@ -2443,7 +2443,7 @@ IMPL_LINK( SvxMenuConfigPage, MenuSelectHdl, MenuButton *, pButton )
         OUString aNewName( stripHotKey( pMenuData->GetName() ) );
         OUString aDesc = CUI_RESSTR( RID_SVXSTR_LABEL_NEW_NAME );
 
-        boost::scoped_ptr<SvxNameDialog> pNameDialog(new SvxNameDialog( this, aNewName, aDesc ));
+        VclPtr<SvxNameDialog> pNameDialog(new SvxNameDialog( this, aNewName, aDesc ));
         pNameDialog->SetHelpId( HID_SVX_CONFIG_RENAME_MENU );
         pNameDialog->SetText( CUI_RESSTR( RID_SVXSTR_RENAME_MENU ) );
 
@@ -2460,7 +2460,7 @@ IMPL_LINK( SvxMenuConfigPage, MenuSelectHdl, MenuButton *, pButton )
     {
         SvxConfigEntry* pMenuData = GetTopLevelSelection();
 
-        boost::scoped_ptr<SvxMainMenuOrganizerDialog> pDialog(
+        VclPtr<SvxMainMenuOrganizerDialog> pDialog(
             new SvxMainMenuOrganizerDialog( this,
                 GetSaveInData()->GetEntries(), pMenuData ));
 
@@ -2486,7 +2486,7 @@ IMPL_LINK( SvxMenuConfigPage, EntrySelectHdl, MenuButton *, pButton )
         OUString aNewName;
         OUString aDesc = CUI_RESSTR( RID_SVXSTR_SUBMENU_NAME );
 
-        boost::scoped_ptr<SvxNameDialog> pNameDialog(new SvxNameDialog( this, aNewName, aDesc ));
+        VclPtr<SvxNameDialog> pNameDialog(new SvxNameDialog( this, aNewName, aDesc ));
         pNameDialog->SetHelpId( HID_SVX_CONFIG_NAME_SUBMENU );
         pNameDialog->SetText( CUI_RESSTR( RID_SVXSTR_ADD_SUBMENU ) );
 
@@ -2523,7 +2523,7 @@ IMPL_LINK( SvxMenuConfigPage, EntrySelectHdl, MenuButton *, pButton )
         OUString aNewName( stripHotKey( pEntry->GetName() ) );
         OUString aDesc = CUI_RESSTR( RID_SVXSTR_LABEL_NEW_NAME );
 
-        boost::scoped_ptr<SvxNameDialog> pNameDialog(new SvxNameDialog( this, aNewName, aDesc ));
+        VclPtr<SvxNameDialog> pNameDialog(new SvxNameDialog( this, aNewName, aDesc ));
         pNameDialog->SetHelpId( HID_SVX_CONFIG_RENAME_MENU_ITEM );
         pNameDialog->SetText( CUI_RESSTR( RID_SVXSTR_RENAME_MENU ) );
 
@@ -2563,7 +2563,7 @@ IMPL_LINK( SvxMenuConfigPage, NewMenuHdl, Button *, pButton )
 {
     (void)pButton;
 
-    boost::scoped_ptr<SvxMainMenuOrganizerDialog> pDialog(
+    VclPtr<SvxMainMenuOrganizerDialog> pDialog(
         new SvxMainMenuOrganizerDialog( 0,
             GetSaveInData()->GetEntries(), NULL, true ));
 
@@ -3103,7 +3103,7 @@ IMPL_LINK( SvxToolbarConfigPage, ToolbarSelectHdl, MenuButton *, pButton )
             OUString aNewName( stripHotKey( pToolbar->GetName() ) );
             OUString aDesc = CUI_RESSTR( RID_SVXSTR_LABEL_NEW_NAME );
 
-            boost::scoped_ptr<SvxNameDialog> pNameDialog(new SvxNameDialog( this, aNewName, aDesc ));
+            VclPtr<SvxNameDialog> pNameDialog(new SvxNameDialog( this, aNewName, aDesc ));
             pNameDialog->SetHelpId( HID_SVX_CONFIG_RENAME_TOOLBAR );
             pNameDialog->SetText( CUI_RESSTR( RID_SVXSTR_RENAME_TOOLBAR ) );
 
@@ -3189,7 +3189,7 @@ IMPL_LINK( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton )
             OUString aNewName( stripHotKey( pEntry->GetName() ) );
             OUString aDesc = CUI_RESSTR( RID_SVXSTR_LABEL_NEW_NAME );
 
-            boost::scoped_ptr<SvxNameDialog> pNameDialog(new SvxNameDialog( this, aNewName, aDesc ));
+            VclPtr<SvxNameDialog> pNameDialog(new SvxNameDialog( this, aNewName, aDesc ));
             pNameDialog->SetHelpId( HID_SVX_CONFIG_RENAME_TOOLBAR_ITEM );
             pNameDialog->SetText( CUI_RESSTR( RID_SVXSTR_RENAME_TOOLBAR ) );
 
@@ -3319,7 +3319,7 @@ IMPL_LINK( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton )
                 }
             }
 
-            boost::scoped_ptr<SvxIconSelectorDialog> pIconDialog(
+            VclPtr<SvxIconSelectorDialog> pIconDialog(
                 new SvxIconSelectorDialog( 0,
                     GetSaveInData()->GetImageManager(),
                     GetSaveInData()->GetParentImageManager() ));
@@ -4447,7 +4447,7 @@ IMPL_LINK( SvxToolbarConfigPage, NewToolbarHdl, Button *, pButton )
     OUString aNewURL =
         generateCustomURL( GetSaveInData()->GetEntries() );
 
-    boost::scoped_ptr<SvxNewToolbarDialog> pNameDialog(new SvxNewToolbarDialog( 0, aNewName ));
+    VclPtr<SvxNewToolbarDialog> pNameDialog(new SvxNewToolbarDialog( 0, aNewName ));
 
     sal_uInt16 nInsertPos;
     for ( sal_uInt16 i = 0 ; i < m_pSaveInListBox->GetEntryCount(); ++i )

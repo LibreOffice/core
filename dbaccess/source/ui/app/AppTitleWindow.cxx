@@ -55,7 +55,6 @@ void OTitleWindow::dispose()
     if ( m_pChild )
     {
         m_pChild->Hide();
-        boost::scoped_ptr<vcl::Window> aTemp(m_pChild);
     }
     m_pChild.clear();
     m_aSpace1.disposeAndClear();

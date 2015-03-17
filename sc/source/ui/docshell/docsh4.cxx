@@ -1130,7 +1130,7 @@ bool ScDocShell::ExecuteChangeProtectionDialog( vcl::Window* _pParent, bool bJus
         OUString aText( ScResId( SCSTR_PASSWORD ) );
         OUString aPassword;
 
-        boost::scoped_ptr<SfxPasswordDialog> pDlg(new SfxPasswordDialog(
+        VclPtr<SfxPasswordDialog> pDlg(new SfxPasswordDialog(
             _pParent ? _pParent : GetActiveDialogParent(), &aText ));
         pDlg->SetText( aTitle );
         pDlg->SetMinLen( 1 );

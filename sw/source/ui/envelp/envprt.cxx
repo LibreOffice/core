@@ -116,7 +116,7 @@ IMPL_LINK( SwEnvPrtPage, ButtonHdl, Button *, pBtn )
         // Call printer setup
         if (pPrt)
         {
-            boost::scoped_ptr<PrinterSetupDialog> pDlg(new PrinterSetupDialog(this));
+            VclPtr<PrinterSetupDialog> pDlg(new PrinterSetupDialog(this));
             pDlg->SetPrinter(pPrt);
             pDlg->Execute();
             pDlg.reset();

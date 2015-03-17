@@ -57,7 +57,6 @@ namespace svt
 
     public:
         RoadmapItem( ORoadmap& _rParent, const Size& _rItemPlayground );
-        ~RoadmapItem( );
 
         void                    SetID( sal_Int16 _ID );
         sal_Int16               GetID() const;
@@ -825,19 +824,6 @@ namespace svt
 
         // update the index in both controls, which triggers updating the geometry of both
         ImplUpdateIndex( _RMIndex );
-    }
-
-
-    RoadmapItem::~RoadmapItem( )
-    {
-        {
-            boost::scoped_ptr<Control> xTakeOnership(mpID);
-            mpID = NULL;
-        }
-        {
-            boost::scoped_ptr<Control> xTakeOnership(mpDescription);
-            mpDescription = NULL;
-        }
     }
 
 

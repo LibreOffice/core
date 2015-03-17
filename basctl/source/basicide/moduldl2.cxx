@@ -688,7 +688,7 @@ IMPL_LINK( LibPage, ButtonHdl, Button *, pButton )
                 bool const bProtected = xPasswd->isLibraryPasswordProtected( aLibName );
 
                 // change password dialog
-                boost::scoped_ptr<SvxPasswordDialog> pDlg(new SvxPasswordDialog( this, true, !bProtected ));
+                VclPtr<SvxPasswordDialog> pDlg(new SvxPasswordDialog( this, true, !bProtected ));
                 pDlg->SetCheckPasswordHdl( LINK( this, LibPage, CheckPasswordHdl ) );
 
                 if ( pDlg->Execute() == RET_OK )
@@ -826,7 +826,7 @@ void LibPage::InsertLib()
 
         if ( xModLibContImport.is() || xDlgLibContImport.is() )
         {
-            boost::scoped_ptr<LibDialog> pLibDlg;
+            VclPtr<LibDialog> pLibDlg;
 
             Reference< script::XLibraryContainer > xModLibContImp( xModLibContImport, UNO_QUERY );
             Reference< script::XLibraryContainer > xDlgLibContImp( xDlgLibContImport, UNO_QUERY );

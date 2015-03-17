@@ -356,7 +356,7 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
                 {
                     case SID_STYLE_NEW_BY_EXAMPLE:
                     {
-                        boost::scoped_ptr<SfxNewStyleDlg> pDlg(new SfxNewStyleDlg( 0,
+                        VclPtr<SfxNewStyleDlg> pDlg(new SfxNewStyleDlg( 0,
                                                     *GetStyleSheetPool()));
                         if(RET_OK == pDlg->Execute())
                         {

@@ -407,7 +407,7 @@ IMPL_LINK( SfxVersionDialog, ButtonHdl_Impl, Button*, pButton )
     {
         SfxVersionInfo aInfo;
         aInfo.aAuthor = SvtUserOptions().GetFullName();
-        boost::scoped_ptr<SfxViewVersionDialog_Impl> pDlg(new SfxViewVersionDialog_Impl(this, aInfo, true));
+        VclPtr<SfxViewVersionDialog_Impl> pDlg(new SfxViewVersionDialog_Impl(this, aInfo, true));
         short nRet = pDlg->Execute();
         if ( nRet == RET_OK )
         {
@@ -439,7 +439,7 @@ IMPL_LINK( SfxVersionDialog, ButtonHdl_Impl, Button*, pButton )
     else if (pButton == m_pViewButton && pEntry)
     {
         SfxVersionInfo* pInfo = static_cast<SfxVersionInfo*>(pEntry->GetUserData());
-        boost::scoped_ptr<SfxViewVersionDialog_Impl> pDlg(new SfxViewVersionDialog_Impl(this, *pInfo, false));
+        VclPtr<SfxViewVersionDialog_Impl> pDlg(new SfxViewVersionDialog_Impl(this, *pInfo, false));
         pDlg->Execute();
     }
     else if (pEntry && pButton == m_pCompareButton)
@@ -462,7 +462,7 @@ IMPL_LINK( SfxVersionDialog, ButtonHdl_Impl, Button*, pButton )
     }
     else if (pButton == m_pCmisButton)
     {
-        boost::scoped_ptr<SfxCmisVersionsDialog> pDlg(new SfxCmisVersionsDialog(pViewFrame, false));
+        VclPtr<SfxCmisVersionsDialog> pDlg(new SfxCmisVersionsDialog(pViewFrame, false));
         pDlg->Execute();
     }
 

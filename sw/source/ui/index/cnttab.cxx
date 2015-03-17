@@ -1478,7 +1478,7 @@ IMPL_LINK(SwTOXSelectTabPage, LanguageHdl, ListBox*, pBox)
 
 IMPL_LINK(SwTOXSelectTabPage, AddStylesHdl, PushButton*, pButton)
 {
-    boost::scoped_ptr<SwAddStylesDlg_Impl> pDlg(new SwAddStylesDlg_Impl(pButton,
+    VclPtr<SwAddStylesDlg_Impl> pDlg(new SwAddStylesDlg_Impl(pButton,
         static_cast<SwMultiTOXTabDialog*>(GetTabDialog())->GetWrtShell(),
         aStyleArr));
     pDlg->Execute();
@@ -1514,7 +1514,7 @@ IMPL_LINK(SwTOXSelectTabPage, MenuExecuteHdl, Menu*, pMenu)
                 return 0;
         }
 
-        boost::scoped_ptr<SwAutoMarkDlg_Impl> pAutoMarkDlg(new SwAutoMarkDlg_Impl(
+        VclPtr<SwAutoMarkDlg_Impl> pAutoMarkDlg(new SwAutoMarkDlg_Impl(
                 m_pAutoMarkPB, sAutoMarkURL, bNew ));
 
         if( RET_OK != pAutoMarkDlg->Execute() && bNew )

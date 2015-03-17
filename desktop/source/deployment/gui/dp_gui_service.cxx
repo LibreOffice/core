@@ -223,7 +223,7 @@ void ServiceImpl::startExecuteModal(
         catch (const Exception & exc) {
             if (bAppUp) {
                 const SolarMutexGuard guard;
-                boost::scoped_ptr<MessageDialog> box(
+                VclPtr<MessageDialog> box(
                     new MessageDialog(Application::GetActiveTopWindow(),
                                       exc.Message));
                 box->Execute();

@@ -584,7 +584,7 @@ IMPL_LINK( SwNewUserIdxDlg, ModifyHdl, Edit*, pEdit)
 
 IMPL_LINK_NOARG(SwIndexMarkPane, NewUserIdxHdl)
 {
-    boost::scoped_ptr<SwNewUserIdxDlg> pDlg(new SwNewUserIdxDlg(this));
+    VclPtr<SwNewUserIdxDlg> pDlg(new SwNewUserIdxDlg(this));
     if(RET_OK == pDlg->Execute())
     {
         OUString sNewName(pDlg->GetName());

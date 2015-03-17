@@ -540,7 +540,7 @@ IMPL_LINK(SwMailMergeOutputPage, DocumentSelectionHdl_Impl, RadioButton*, pButto
 
 IMPL_LINK(SwMailMergeOutputPage, CopyToHdl_Impl, PushButton*, pButton)
 {
-    boost::scoped_ptr<SwCopyToDialog> pDlg(new SwCopyToDialog(pButton));
+    VclPtr<SwCopyToDialog> pDlg(new SwCopyToDialog(pButton));
     pDlg->SetCC(m_sCC );
     pDlg->SetBCC(m_sBCC);
     if(RET_OK == pDlg->Execute())
@@ -988,7 +988,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
         if(RET_YES == nRet )
         {
             SfxAllItemSet aSet(pTargetView->GetPool());
-            boost::scoped_ptr<SwMailConfigDlg> pDlg(new SwMailConfigDlg(pButton, aSet));
+            VclPtr<SwMailConfigDlg> pDlg(new SwMailConfigDlg(pButton, aSet));
             nRet = pDlg->Execute();
         }
 

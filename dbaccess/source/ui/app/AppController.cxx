@@ -309,9 +309,7 @@ OApplicationController::~OApplicationController()
         osl_atomic_increment( &m_refCount );
         dispose();
     }
-    ::std::unique_ptr< vcl::Window> aTemp( getView() );
     clearView();
-
 }
 
 IMPLEMENT_FORWARD_XTYPEPROVIDER2(OApplicationController,OApplicationController_CBASE,OApplicationController_Base)
@@ -447,7 +445,6 @@ bool OApplicationController::Construct(vcl::Window* _pParent)
 
     if ( !bSuccess )
     {
-        ::std::unique_ptr< vcl::Window> aTemp( getView() );
         clearView();
         return false;
     }
@@ -2048,7 +2045,7 @@ void OApplicationController::renameEntry()
         if ( xContainer.is() )
         {
             ::std::unique_ptr< IObjectNameCheck > pNameChecker;
-            ::std::unique_ptr< OSaveAsDlg > aDialog;
+            VclPtr< OSaveAsDlg > aDialog;
 
             Reference<XRename> xRename;
             const ElementType eType = getContainer()->getElementType();

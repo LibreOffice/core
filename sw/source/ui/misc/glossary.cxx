@@ -503,7 +503,7 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
     else if (sItemIdent == "rename")
     {
         m_pShortNameEdit->SetText(pGlossaryHdl->GetGlossaryShortName(m_pNameED->GetText()));
-        boost::scoped_ptr<SwNewGlosNameDlg> pNewNameDlg(new SwNewGlosNameDlg(this, m_pNameED->GetText(),
+        VclPtr<SwNewGlosNameDlg> pNewNameDlg(new SwNewGlosNameDlg(this, m_pNameED->GetText(),
                                                                              m_pShortNameEdit->GetText() ));
         if( RET_OK == pNewNameDlg->Execute() &&
             pGlossaryHdl->Rename( m_pShortNameEdit->GetText(),
@@ -651,7 +651,7 @@ IMPL_LINK_NOARG(SwGlossaryDlg, BibHdl)
         if(bIsWritable)
         {
 
-            boost::scoped_ptr<SwGlossaryGroupDlg> pDlg(new SwGlossaryGroupDlg( this, pGloss->GetPathArray(), pGlossaryHdl ));
+            VclPtr<SwGlossaryGroupDlg> pDlg(new SwGlossaryGroupDlg( this, pGloss->GetPathArray(), pGlossaryHdl ));
             if ( RET_OK == pDlg->Execute() )
             {
                 Init();

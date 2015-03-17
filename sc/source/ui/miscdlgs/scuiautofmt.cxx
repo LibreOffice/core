@@ -224,7 +224,7 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, AddHdl)
 
         while ( !bOk )
         {
-            boost::scoped_ptr<ScStringInputDlg> pDlg(new ScStringInputDlg( this,
+            VclPtr<ScStringInputDlg> pDlg(new ScStringInputDlg( this,
                                          aStrTitle,
                                          aStrLabel,
                                          aFormatName,
@@ -331,7 +331,7 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, RenameHdl)
         OUString aFormatName = m_pLbFormat->GetSelectEntry();
         OUString aEntry;
 
-        boost::scoped_ptr<ScStringInputDlg> pDlg(new ScStringInputDlg( this,
+        VclPtr<ScStringInputDlg> pDlg(new ScStringInputDlg( this,
                                          aStrRename,
                                          aStrLabel,
                                          aFormatName,

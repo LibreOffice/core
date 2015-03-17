@@ -139,28 +139,18 @@ void ODesignView::dispose()
     if ( m_pPropWin )
     {
         notifySystemWindow(this,m_pPropWin,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
-        ::std::unique_ptr<vcl::Window> aTemp2(m_pPropWin);
-        m_pPropWin = NULL;
     }
     if ( m_pAddField )
     {
         SvtViewOptions aDlgOpt( E_WINDOW, OUString( UID_RPT_RPT_APP_VIEW ) );
         aDlgOpt.SetWindowState(OStringToOUString(m_pAddField->GetWindowState(WINDOWSTATE_MASK_ALL), RTL_TEXTENCODING_ASCII_US));
         notifySystemWindow(this,m_pAddField,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
-        ::std::unique_ptr<vcl::Window> aTemp2(m_pAddField);
-        m_pAddField = NULL;
     }
     if ( m_pReportExplorer )
     {
         SvtViewOptions aDlgOpt(E_WINDOW, OStringToOUString(m_pReportExplorer->GetHelpId(), RTL_TEXTENCODING_UTF8));
         aDlgOpt.SetWindowState(OStringToOUString(m_pReportExplorer->GetWindowState(WINDOWSTATE_MASK_ALL), RTL_TEXTENCODING_ASCII_US));
         notifySystemWindow(this,m_pReportExplorer,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
-        ::std::unique_ptr<vcl::Window> aTemp2(m_pReportExplorer);
-        m_pReportExplorer = NULL;
-    }
-    {
-        ::std::unique_ptr<vcl::Window> aTemp2(m_pTaskPane);
-        m_pTaskPane = NULL;
     }
 
     m_aSplitWin.disposeAndClear();

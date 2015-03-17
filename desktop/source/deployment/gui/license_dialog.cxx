@@ -329,7 +329,7 @@ sal_Int16 LicenseDialog::execute() throw (RuntimeException, std::exception)
 
 sal_Int16 LicenseDialog::solar_execute()
 {
-    std::unique_ptr<LicenseDialogImpl> dlg(
+    VclPtr<LicenseDialogImpl> dlg(
         new LicenseDialogImpl(
             VCLUnoHelper::GetWindow(m_parent),
             m_xComponentContext, m_sExtensionName, m_sLicenseText));

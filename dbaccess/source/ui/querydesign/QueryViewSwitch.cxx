@@ -42,14 +42,6 @@ OQueryViewSwitch::OQueryViewSwitch(OQueryContainerWindow* _pParent, OQueryContro
 
 OQueryViewSwitch::~OQueryViewSwitch()
 {
-    {
-        boost::scoped_ptr<vcl::Window> aTemp(m_pTextView);
-        m_pTextView = NULL;
-    }
-    {
-        boost::scoped_ptr<vcl::Window> aTemp(m_pDesignView);
-        m_pDesignView = NULL;
-    }
 }
 
 void OQueryViewSwitch::Construct()

@@ -48,7 +48,7 @@ namespace {
         }
     };
 
-    typedef ::std::map < SidebarWinKey, sw::sidebarwindows::SwSidebarWin*, SidebarWinOrder > SidebarWinContainer;
+    typedef ::std::map < SidebarWinKey, VclPtr<sw::sidebarwindows::SwSidebarWin>, SidebarWinOrder > SidebarWinContainer;
 
     struct FrmKey
     {

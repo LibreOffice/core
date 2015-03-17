@@ -1617,8 +1617,8 @@ public:
             }
 
             VclPtr<DemoWin> aMainWin(new DemoWin(aRenderer, bThreads));
-            std::unique_ptr<DemoWidgets> xWidgets;
-            std::unique_ptr<DemoPopup> xPopup;
+            VclPtr<DemoWidgets> aWidgets;
+            VclPtr<DemoPopup> xPopup;
 
             aMainWin->SetText("Interactive VCL demo #1");
 

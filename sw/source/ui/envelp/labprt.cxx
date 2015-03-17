@@ -88,7 +88,7 @@ IMPL_LINK( SwLabPrtPage, CountHdl, Button *, pButton )
         if (!pPrinter)
             pPrinter = new Printer;
 
-        boost::scoped_ptr<PrinterSetupDialog> pDlg(new PrinterSetupDialog(this));
+        VclPtr<PrinterSetupDialog> pDlg(new PrinterSetupDialog(this));
         pDlg->SetPrinter(pPrinter);
         pDlg->Execute();
         pDlg.reset();

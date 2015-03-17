@@ -315,7 +315,7 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, AddHdl)
     bool bOk = false, bFmtInserted = false;
     while( !bOk )
     {
-        boost::scoped_ptr<SwStringInputDlg> pDlg(new SwStringInputDlg( this,
+        VclPtr<SwStringInputDlg> pDlg(new SwStringInputDlg( this,
                                                        aStrTitle,
                                                        aStrLabel,
                                                        OUString() ));
@@ -377,7 +377,7 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, RemoveHdl)
     aMessage += m_pLbFormat->GetSelectEntry();
     aMessage += "\n";
 
-    boost::scoped_ptr<MessBox> pBox(new MessBox( this, WinBits( WB_OK_CANCEL ),
+    VclPtr<MessBox> pBox(new MessBox( this, WinBits( WB_OK_CANCEL ),
                                                  aStrDelTitle, aMessage));
 
     if ( pBox->Execute() == RET_OK )
@@ -412,7 +412,7 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, RenameHdl)
     bool bOk = false;
     while( !bOk )
     {
-        boost::scoped_ptr<SwStringInputDlg> pDlg(new SwStringInputDlg( this,
+        VclPtr<SwStringInputDlg> pDlg(new SwStringInputDlg( this,
                                                        aStrRenameTitle,
                                                        m_pLbFormat->GetSelectEntry(),
                                                        OUString() ));

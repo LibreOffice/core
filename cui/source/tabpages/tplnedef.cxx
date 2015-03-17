@@ -246,7 +246,7 @@ void SvxLineDefTabPage::CheckChanges_Impl()
     {
         ResMgr& rMgr = CUI_MGR();
         Image aWarningBoxImage = WarningBox::GetStandardImage();
-        boost::scoped_ptr<SvxMessDialog> aMessDlg(new SvxMessDialog(GetParentDialog(),
+        VclPtr<SvxMessDialog> aMessDlg(new SvxMessDialog(GetParentDialog(),
                                                     SVX_RESSTR( RID_SVXSTR_LINESTYLE ),
                                                     OUString( ResId( RID_SVXSTR_ASK_CHANGE_LINESTYLE, rMgr ) ),
                                                     &aWarningBoxImage ));

@@ -1484,7 +1484,7 @@ void BibDataManager::RemoveMeAsUidListener()
 
 void BibDataManager::CreateMappingDialog(vcl::Window* pParent)
 {
-    boost::scoped_ptr<MappingDialog_Impl> pDlg(new MappingDialog_Impl(pParent, this));
+    VclPtr<MappingDialog_Impl> pDlg(new MappingDialog_Impl(pParent, this));
     if(RET_OK == pDlg->Execute() && pBibView)
     {
         reload();
@@ -1494,7 +1494,7 @@ void BibDataManager::CreateMappingDialog(vcl::Window* pParent)
 OUString BibDataManager::CreateDBChangeDialog(vcl::Window* pParent)
 {
     OUString uRet;
-    boost::scoped_ptr<DBChangeDialog_Impl> pDlg(new DBChangeDialog_Impl(pParent, this ));
+    VclPtr<DBChangeDialog_Impl> pDlg(new DBChangeDialog_Impl(pParent, this ));
     if(RET_OK == pDlg->Execute())
     {
         OUString sNewURL = pDlg->GetCurrentURL();

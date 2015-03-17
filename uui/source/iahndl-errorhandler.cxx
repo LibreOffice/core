@@ -55,7 +55,7 @@ executeErrorDialog(
             //TODO! must be internationalized
     aText.append(rMessage);
 
-    boost::scoped_ptr< MessBox > xBox;
+    VclPtr< MessBox > xBox;
     try
     {
         switch (eClassification)

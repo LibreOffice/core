@@ -179,7 +179,7 @@ IMPL_LINK_NOARG(SdPresLayoutDlg, ClickLayoutHdl)
  */
 IMPL_LINK_NOARG(SdPresLayoutDlg, ClickLoadHdl)
 {
-    boost::scoped_ptr<SfxNewFileDialog> pDlg(new SfxNewFileDialog(this, SFXWB_PREVIEW));
+    VclPtr<SfxNewFileDialog> pDlg(new SfxNewFileDialog(this, SFXWB_PREVIEW));
     pDlg->SetText(SD_RESSTR(STR_LOAD_PRESENTATION_LAYOUT));
 
     if(!IsReallyVisible())

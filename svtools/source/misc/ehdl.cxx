@@ -89,7 +89,7 @@ static sal_uInt16 aWndFunc(
     aErr = aErr.replaceAll("$(ACTION)", aAction);
     aErr = aErr.replaceAll("$(ERROR)", rErr);
 
-    boost::scoped_ptr<MessBox> pBox;
+    VclPtr<MessBox> pBox;
     switch ( nFlags & 0xf000 )
     {
         case ERRCODE_MSG_ERROR:

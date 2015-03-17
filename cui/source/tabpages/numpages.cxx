@@ -2095,7 +2095,7 @@ IMPL_LINK_NOARG(SvxNumOptionsTabPage, PopupActivateHdl_Impl)
 
 IMPL_LINK_NOARG(SvxNumOptionsTabPage, BulletHdl_Impl)
 {
-    boost::scoped_ptr<SvxCharacterMap> pMap(new SvxCharacterMap( this, true ));
+    VclPtr<SvxCharacterMap> pMap(new SvxCharacterMap( this, true ));
 
     sal_uInt16 nMask = 1;
     const vcl::Font* pFmtFont = 0;

@@ -1530,7 +1530,6 @@ void OJoinTableView::clearLayoutInformation()
     {
         if ( aIter->second )
             aIter->second->clearListBox();
-        boost::scoped_ptr<vcl::Window> aTemp(aIter->second);
         aIter->second = NULL;
     }
 

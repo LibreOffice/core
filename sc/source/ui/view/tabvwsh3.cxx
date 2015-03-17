@@ -975,7 +975,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     {
                         OUString aText(ScResId(SCSTR_PASSWORD));
 
-                        boost::scoped_ptr<SfxPasswordDialog> pDlg(new SfxPasswordDialog(GetDialogParent(), &aText));
+                        VclPtr<SfxPasswordDialog> pDlg(new SfxPasswordDialog(GetDialogParent(), &aText));
                         pDlg->SetText( ScResId(SCSTR_UNPROTECTDOC) );
                         pDlg->SetMinLen( 0 );
                         pDlg->SetHelpId( GetStaticInterface()->GetSlot(FID_PROTECT_DOC)->GetCommand() );
@@ -997,7 +997,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 {
                     OUString aText(ScResId(SCSTR_PASSWORDOPT));
 
-                    boost::scoped_ptr<SfxPasswordDialog> pDlg(new SfxPasswordDialog(GetDialogParent(), &aText));
+                    VclPtr<SfxPasswordDialog> pDlg(new SfxPasswordDialog(GetDialogParent(), &aText));
                     pDlg->SetText( ScResId(SCSTR_PROTECTDOC) );
                     pDlg->SetMinLen( 0 );
                     pDlg->SetHelpId( GetStaticInterface()->GetSlot(FID_PROTECT_DOC)->GetCommand() );
@@ -1043,7 +1043,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 if (pProtect && pProtect->isProtectedWithPass())
                 {
                     OUString aText( ScResId(SCSTR_PASSWORDOPT) );
-                    boost::scoped_ptr<SfxPasswordDialog> pDlg(new SfxPasswordDialog(GetDialogParent(), &aText));
+                    VclPtr<SfxPasswordDialog> pDlg(new SfxPasswordDialog(GetDialogParent(), &aText));
                     pDlg->SetText( ScResId(SCSTR_UNPROTECTTAB) );
                     pDlg->SetMinLen( 0 );
                     pDlg->SetHelpId( GetStaticInterface()->GetSlot(FID_PROTECT_TABLE)->GetCommand() );
@@ -1069,7 +1069,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             {
                 // Protect a current sheet.
 
-                boost::scoped_ptr<ScTableProtectionDlg> pDlg(new ScTableProtectionDlg(GetDialogParent()));
+                VclPtr<ScTableProtectionDlg> pDlg(new ScTableProtectionDlg(GetDialogParent()));
 
                 ScTableProtection* pProtect = pDoc->GetTabProtection(nTab);
                 if (pProtect)

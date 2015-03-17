@@ -319,7 +319,7 @@ IMPL_LINK( SwEnvFmtPage, EditHdl, MenuButton *, pButton )
         ::PrepareBoxInfo( aTmpSet, *pSh );
 
         const OUString sFmtStr = pColl->GetName();
-        boost::scoped_ptr<SwParaDlg> pDlg(new SwParaDlg(GetParentSwEnvDlg(), pSh->GetView(), aTmpSet, DLG_ENVELOP, &sFmtStr));
+        VclPtr<SwParaDlg> pDlg(new SwParaDlg(GetParentSwEnvDlg(), pSh->GetView(), aTmpSet, DLG_ENVELOP, &sFmtStr));
 
         if ( pDlg->Execute() == RET_OK )
         {

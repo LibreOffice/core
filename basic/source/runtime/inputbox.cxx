@@ -183,7 +183,7 @@ RTLFUNC(InputBox)
             nX = rPar.Get(4)->GetLong();
             nY = rPar.Get(5)->GetLong();
         }
-        boost::scoped_ptr<SvRTLInputBox> pDlg(new SvRTLInputBox(Application::GetDefDialogParent(),
+        VclPtr<SvRTLInputBox> pDlg(new SvRTLInputBox(Application::GetDefDialogParent(),
                     rPrompt,aTitle,aDefault,nX,nY));
         pDlg->Execute();
         rPar.Get(0)->PutString( pDlg->GetText() );

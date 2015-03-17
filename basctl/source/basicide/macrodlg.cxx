@@ -777,7 +777,7 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
         StoreMacroDescription();
 
         EntryDescriptor aDesc = m_pBasicBox->GetEntryDescriptor(m_pBasicBox->FirstSelected());
-        boost::scoped_ptr<OrganizeDialog> pDlg(new OrganizeDialog( this, 0, aDesc ));
+        VclPtr<OrganizeDialog> pDlg(new OrganizeDialog( this, 0, aDesc ));
         sal_uInt16 nRet = pDlg->Execute();
         pDlg.reset();
 

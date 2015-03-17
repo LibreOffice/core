@@ -1573,7 +1573,7 @@ void CustomAnimationPane::showOptions(const OString& sPage)
 {
     STLPropertySet* pSet = createSelectionSet();
 
-    boost::scoped_ptr<CustomAnimationDialog> pDlg(new CustomAnimationDialog(this, pSet, sPage));
+    VclPtr<CustomAnimationDialog> pDlg(new CustomAnimationDialog(this, pSet, sPage));
     if( pDlg->Execute() )
     {
         addUndo();
@@ -1752,7 +1752,7 @@ void CustomAnimationPane::onChange( bool bCreate )
         }
     }
 
-    boost::scoped_ptr<CustomAnimationCreateDialog> pDlg(new CustomAnimationCreateDialog( this, this, aTargets, bHasText, sPresetId, fDuration ));
+    VclPtr<CustomAnimationCreateDialog> pDlg(new CustomAnimationCreateDialog( this, this, aTargets, bHasText, sPresetId, fDuration ));
     if( pDlg->Execute() )
     {
         addUndo();

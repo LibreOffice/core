@@ -170,10 +170,7 @@ OJoinDesignView* OJoinController::getJoinView()
 
 void OJoinController::disposing()
 {
-    {
-        boost::scoped_ptr< vcl::Window > pEnsureDelete( m_pAddTableDialog );
-        m_pAddTableDialog   = NULL;
-    }
+    m_pAddTableDialog   = NULL;
 
     OJoinController_BASE::disposing();
 

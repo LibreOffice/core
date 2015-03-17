@@ -297,7 +297,7 @@ void Shell::onDocumentClosed( const ScriptDocument& _rDocument )
 
     bool bSetCurWindow = false;
     bool bSetCurLib = ( _rDocument == m_aCurDocument );
-    std::vector<BaseWindow*> aDeleteVec;
+    std::vector<VclPtr<BaseWindow> > aDeleteVec;
 
     // remove all windows which belong to this document
     for (WindowTableIt it = aWindowTable.begin(); it != aWindowTable.end(); ++it)
@@ -318,7 +318,7 @@ void Shell::onDocumentClosed( const ScriptDocument& _rDocument )
         }
     }
     // delete windows outside main loop so we don't invalidate the original iterator
-    for (std::vector<BaseWindow*>::const_iterator it = aDeleteVec.begin(); it != aDeleteVec.end(); ++it)
+    for (auto it = aDeleteVec.begin(); it != aDeleteVec.end(); ++it)
     {
         BaseWindow* pWin = *it;
         pWin->StoreData();
@@ -599,14 +599,14 @@ void Shell::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId&,
 void Shell::CheckWindows()
 {
     bool bSetCurWindow = false;
-    std::vector<BaseWindow*> aDeleteVec;
+    std::vector<VclPtr<BaseWindow> > aDeleteVec;
     for (WindowTableIt it = aWindowTable.begin(); it != aWindowTable.end(); ++it)
     {
         BaseWindow* pWin = it->second;
         if ( pWin->GetStatus() & BASWIN_TOBEKILLED )
             aDeleteVec.push_back( pWin );
     }
-    for ( std::vector<BaseWindow*>::const_iterator it = aDeleteVec.begin(); it != aDeleteVec.end(); ++it )
+    for ( auto it = aDeleteVec.begin(); it != aDeleteVec.end(); ++it )
     {
         BaseWindow* pWin = *it;
         pWin->StoreData();
@@ -623,14 +623,14 @@ void Shell::CheckWindows()
 void Shell::RemoveWindows( const ScriptDocument& rDocument, const OUString& rLibName, bool bDestroy )
 {
     bool bChangeCurWindow = pCurWin ? false : true;
-    std::vector<BaseWindow*> aDeleteVec;
+    std::vector<VclPtr<BaseWindow> > aDeleteVec;
     for (WindowTableIt it = aWindowTable.begin(); it != aWindowTable.end(); ++it)
     {
         BaseWindow* pWin = it->second;
         if ( pWin->IsDocument( rDocument ) && pWin->GetLibName() == rLibName )
             aDeleteVec.push_back( pWin );
     }
-    for ( std::vector<BaseWindow*>::const_iterator it = aDeleteVec.begin(); it != aDeleteVec.end(); ++it )
+    for ( auto it = aDeleteVec.begin(); it != aDeleteVec.end(); ++it )
     {
         BaseWindow* pWin = *it;
         if ( pWin == pCurWin )
@@ -650,7 +650,7 @@ void Shell::UpdateWindows()
     bool bChangeCurWindow = pCurWin ? false : true;
     if ( !m_aCurLibName.isEmpty() )
     {
-        std::vector<BaseWindow*> aDeleteVec;
+        std::vector<VclPtr<BaseWindow> > aDeleteVec;
         for (WindowTableIt it = aWindowTable.begin(); it != aWindowTable.end(); ++it)
         {
             BaseWindow* pWin = it->second;
@@ -666,7 +666,7 @@ void Shell::UpdateWindows()
                     aDeleteVec.push_back( pWin );
             }
         }
-        for ( std::vector<BaseWindow*>::const_iterator it = aDeleteVec.begin(); it != aDeleteVec.end(); ++it )
+        for ( auto it = aDeleteVec.begin(); it != aDeleteVec.end(); ++it )
         {
             RemoveWindow( *it, false, false );
         }

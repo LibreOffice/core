@@ -358,7 +358,7 @@ IMPL_LINK_NOARG(SwAddressListDialog, LoadHdl_Impl)
 IMPL_LINK(SwAddressListDialog, CreateHdl_Impl, PushButton*, pButton)
 {
     OUString sInputURL;
-    boost::scoped_ptr<SwCreateAddressListDialog> pDlg(
+    VclPtr<SwCreateAddressListDialog> pDlg(
             new SwCreateAddressListDialog(
                     pButton,
                     sInputURL,
@@ -457,7 +457,7 @@ IMPL_LINK(SwAddressListDialog, EditHdl_Impl, PushButton*, pButton)
         pUserData->xColumnsSupplier.clear();
         pUserData->xConnection.clear();
             // will automatically close if it was the las reference
-        boost::scoped_ptr<SwCreateAddressListDialog> pDlg(
+        VclPtr<SwCreateAddressListDialog> pDlg(
                 new SwCreateAddressListDialog(
                         pButton,
                         pUserData->sURL,
@@ -576,7 +576,7 @@ void SwAddressListDialog::DetectTablesAndQueries(
             if(nTables > 1 && bWidthDialog)
             {
                 //now call the table select dialog - if more than one table exists
-                boost::scoped_ptr<SwSelectDBTableDialog> pDlg(new SwSelectDBTableDialog(this, pUserData->xConnection));
+                VclPtr<SwSelectDBTableDialog> pDlg(new SwSelectDBTableDialog(this, pUserData->xConnection));
                 const OUString sTable = SvTabListBox::GetEntryText(pSelect, ITEMID_TABLE - 1);
                 if(!sTable.isEmpty())
                     pDlg->SetSelectedTable(sTable, pUserData->nCommandType == CommandType::TABLE);

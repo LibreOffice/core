@@ -682,7 +682,7 @@ void SaveDialog::dispose()
 IMPL_LINK_NOARG(SaveDialog, OKButtonHdl)
 {
     // start crash-save with progress
-    boost::scoped_ptr<SaveProgressDialog> pProgress(new SaveProgressDialog(this, m_pCore));
+    VclPtr<SaveProgressDialog> pProgress(new SaveProgressDialog(this, m_pCore));
     short nResult = pProgress->Execute();
     pProgress.reset();
 
@@ -988,7 +988,7 @@ short RecoveryDialog::execute()
                  // failed recovery documents. They must be saved to
                  // a user selected directrory.
                  short                 nRet                  = DLG_RET_UNKNOWN;
-                 boost::scoped_ptr<BrokenRecoveryDialog> pBrokenRecoveryDialog(new BrokenRecoveryDialog(this, m_pCore, !m_bWasRecoveryStarted));
+                 VclPtr<BrokenRecoveryDialog> pBrokenRecoveryDialog(new BrokenRecoveryDialog(this, m_pCore, !m_bWasRecoveryStarted));
                  OUString              sSaveDir              = pBrokenRecoveryDialog->getSaveDirURL(); // get the default dir
                  if (pBrokenRecoveryDialog->isExecutionNeeded())
                  {
@@ -1057,7 +1057,7 @@ short RecoveryDialog::execute()
                  // If no temp files exists or user decided to ignore it ...
                  // we have to remove all recovery/session data anyway!
                  short                 nRet                  = DLG_RET_UNKNOWN;
-                 boost::scoped_ptr<BrokenRecoveryDialog> pBrokenRecoveryDialog(new BrokenRecoveryDialog(this, m_pCore, !m_bWasRecoveryStarted));
+                 VclPtr<BrokenRecoveryDialog> pBrokenRecoveryDialog(new BrokenRecoveryDialog(this, m_pCore, !m_bWasRecoveryStarted));
                  OUString              sSaveDir              = pBrokenRecoveryDialog->getSaveDirURL(); // get the default save location
 
                  // dialog itself checks if there is a need to copy files for this mode.

@@ -1931,7 +1931,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 const ScPatternAttr* pPattern = pDoc->GetPattern(aPos.Col(), aPos.Row(), aPos.Tab());
                 const std::vector<sal_uInt32>& rCondFormats = static_cast<const ScCondFormatItem&>(pPattern->GetItem(ATTR_CONDITIONAL)).GetCondFormatData();
                 bool bContainsCondFormat = !rCondFormats.empty();
-                boost::scoped_ptr<ScCondFormatDlg> pCondFormatDlg;
+                VclPtr<ScCondFormatDlg> pCondFormatDlg;
                 if(bContainsCondFormat)
                 {
                     bool bContainsExistingCondFormat = false;

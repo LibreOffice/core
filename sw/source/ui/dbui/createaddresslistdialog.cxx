@@ -570,7 +570,7 @@ IMPL_LINK_NOARG(SwCreateAddressListDialog, FindHdl_Impl)
 
 IMPL_LINK(SwCreateAddressListDialog, CustomizeHdl_Impl, PushButton*, pButton)
 {
-    boost::scoped_ptr<SwCustomizeAddressListDialog> pDlg(new SwCustomizeAddressListDialog(pButton, *m_pCSVData));
+    VclPtr<SwCustomizeAddressListDialog> pDlg(new SwCustomizeAddressListDialog(pButton, *m_pCSVData));
     if(RET_OK == pDlg->Execute())
     {
         delete m_pCSVData;

@@ -145,8 +145,7 @@ executeUnknownAuthDialog(
     {
         SolarMutexGuard aGuard;
 
-        boost::scoped_ptr< UnknownAuthDialog > xDialog(
-            new UnknownAuthDialog(pParent, rXCert, xContext));
+        VclPtr< UnknownAuthDialog > xDialog(new UnknownAuthDialog(pParent, rXCert, xContext));
 
         // Get correct resource string
         OUString aMessage;
@@ -187,8 +186,7 @@ executeSSLWarnDialog(
     {
         SolarMutexGuard aGuard;
 
-        boost::scoped_ptr< SSLWarnDialog > xDialog(
-           new SSLWarnDialog(pParent, rXCert, xContext));
+        VclPtr< SSLWarnDialog > xDialog(new SSLWarnDialog(pParent, rXCert, xContext));
 
         // Get correct resource string
         OUString aMessage_1;
