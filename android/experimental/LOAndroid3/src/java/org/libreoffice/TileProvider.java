@@ -134,6 +134,16 @@ public interface TileProvider {
      * @param documentCoordinate
      */
     void setTextSelectionReset(PointF documentCoordinate);
+
+    /**
+     * Send a request to change start the change of graphic selection.
+     */
+    void setGraphicSelectionStart(PointF documentCoordinate);
+
+    /**
+     * Send a request to change end the change of graphic selection..
+     */
+    void setGraphicSelectionEnd(PointF documentCoordinate);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

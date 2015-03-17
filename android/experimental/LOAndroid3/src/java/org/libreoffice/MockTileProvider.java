@@ -126,6 +126,14 @@ public class MockTileProvider implements TileProvider {
     }
 
     @Override
+    public void setGraphicSelectionStart(PointF documentCoordinate) {
+    }
+
+    @Override
+    public void setGraphicSelectionEnd(PointF documentCoordinate) {
+    }
+
+    @Override
     public void changePart(int partIndex) {
     }
 
