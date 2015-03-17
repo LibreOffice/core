@@ -608,7 +608,7 @@ public:
 
 IMPL_STATIC_LINK_NOINSTANCE( AsyncExecute, ExecuteHdl_Impl, ExecuteInfo*, pExecuteInfo )
 {
-    const sal_uInt32 nRef = Application::ReleaseSolarMutex();
+    SolarMutexReleaser aReleaser;
     try
     {
         // Asynchronous execution as this can lead to our own destruction!
@@ -620,7 +620,6 @@ IMPL_STATIC_LINK_NOINSTANCE( AsyncExecute, ExecuteHdl_Impl, ExecuteInfo*, pExecu
     {
     }
 
-    Application::AcquireSolarMutex( nRef );
     delete pExecuteInfo;
     return 0;
 }

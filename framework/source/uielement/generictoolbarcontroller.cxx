@@ -271,7 +271,7 @@ throw ( RuntimeException, std::exception )
 
 IMPL_STATIC_LINK_NOINSTANCE( GenericToolbarController, ExecuteHdl_Impl, ExecuteInfo*, pExecuteInfo )
 {
-   const sal_uInt32 nRef = Application::ReleaseSolarMutex();
+   SolarMutexReleaser aReleaser;
    try
    {
         // Asynchronous execution as this can lead to our own destruction!
@@ -283,7 +283,6 @@ IMPL_STATIC_LINK_NOINSTANCE( GenericToolbarController, ExecuteHdl_Impl, ExecuteI
    {
    }
 
-   Application::AcquireSolarMutex( nRef );
    delete pExecuteInfo;
    return 0;
 }

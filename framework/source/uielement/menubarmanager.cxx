@@ -1019,9 +1019,8 @@ IMPL_LINK( MenuBarManager, Select, Menu *, pMenu )
 
     if ( xDispatch.is() )
     {
-        const sal_uInt32 nRef = Application::ReleaseSolarMutex();
+        SolarMutexReleaser aReleaser;
         xDispatch->dispatch( aTargetURL, aArgs );
-        Application::AcquireSolarMutex( nRef );
     }
 
     return 1;

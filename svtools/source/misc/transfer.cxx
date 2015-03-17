@@ -571,7 +571,7 @@ void TransferableHelper::ImplFlush()
     if( mxClipboard.is() )
     {
         Reference< XFlushableClipboard >    xFlushableClipboard( mxClipboard, UNO_QUERY );
-        const sal_uInt32                    nRef = Application::ReleaseSolarMutex();
+        SolarMutexReleaser aReleaser;
 
         try
         {
@@ -582,8 +582,6 @@ void TransferableHelper::ImplFlush()
         {
             OSL_FAIL( "Could not flush clipboard" );
         }
-
-        Application::AcquireSolarMutex( nRef );
     }
 }
 
@@ -1019,7 +1017,7 @@ void TransferableHelper::CopyToClipboard( vcl::Window *pWindow ) const
 
     if( mxClipboard.is() && !mxTerminateListener.is() )
     {
-        const sal_uInt32 nRef = Application::ReleaseSolarMutex();
+        SolarMutexReleaser aReleaser;
 
         try
         {
@@ -1032,8 +1030,6 @@ void TransferableHelper::CopyToClipboard( vcl::Window *pWindow ) const
         catch( const ::com::sun::star::uno::Exception& )
         {
         }
-
-        Application::AcquireSolarMutex( nRef );
     }
 }
 
@@ -1049,7 +1045,7 @@ void TransferableHelper::CopyToSelection( vcl::Window *pWindow ) const
 
     if( xSelection.is() && !mxTerminateListener.is() )
     {
-        const sal_uInt32 nRef = Application::ReleaseSolarMutex();
+        SolarMutexReleaser aReleaser;
 
         try
         {
@@ -1062,8 +1058,6 @@ void TransferableHelper::CopyToSelection( vcl::Window *pWindow ) const
         catch( const ::com::sun::star::uno::Exception& )
         {
         }
-
-        Application::AcquireSolarMutex( nRef );
     }
 }
 
@@ -1092,7 +1086,7 @@ void TransferableHelper::StartDrag( vcl::Window* pWindow, sal_Int8 nDnDSourceAct
         // we can receive drag events from the system only in the main
         // thread
 #if !defined(MACOSX)
-        const sal_uInt32 nRef = Application::ReleaseSolarMutex();
+        SolarMutexReleaser aReleaser;
 #endif
 
         try
@@ -1108,11 +1102,6 @@ void TransferableHelper::StartDrag( vcl::Window* pWindow, sal_Int8 nDnDSourceAct
         catch( const ::com::sun::star::uno::Exception& )
         {
         }
-
-        // See above for the reason of this define
-#if !defined(MACOSX)
-        Application::AcquireSolarMutex( nRef );
-#endif
     }
 }
 
@@ -2283,24 +2272,22 @@ TransferableDataHelper TransferableDataHelper::CreateFromSelection( vcl::Window*
 
     if( xSelection.is() )
        {
-        const sal_uInt32 nRef = Application::ReleaseSolarMutex();
+           SolarMutexReleaser aReleaser;
 
-          try
-        {
-            Reference< XTransferable > xTransferable( xSelection->getContents() );
-
-            if( xTransferable.is() )
+           try
                {
-                aRet = TransferableDataHelper( xTransferable );
-                   aRet.mxClipboard = xSelection;
-            }
-           }
-        catch( const ::com::sun::star::uno::Exception& )
-        {
-           }
+                   Reference< XTransferable > xTransferable( xSelection->getContents() );
 
-        Application::AcquireSolarMutex( nRef );
-    }
+                   if( xTransferable.is() )
+                       {
+                           aRet = TransferableDataHelper( xTransferable );
+                           aRet.mxClipboard = xSelection;
+                       }
+               }
+           catch( const ::com::sun::star::uno::Exception& )
+               {
+               }
+       }
 
     return aRet;
 }

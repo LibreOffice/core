@@ -404,14 +404,12 @@ sal_Bool VCLXAccessibleMenuItem::copyText( sal_Int32 nStartIndex, sal_Int32 nEnd
                 OUString sText( getTextRange( nStartIndex, nEndIndex ) );
 
                 ::vcl::unohelper::TextDataObject* pDataObj = new ::vcl::unohelper::TextDataObject( sText );
-                const sal_uInt32 nRef = Application::ReleaseSolarMutex();
-                xClipboard->setContents( pDataObj, NULL );
 
+                SolarMutexReleaser aReleaser;
+                xClipboard->setContents( pDataObj, NULL );
                 Reference< datatransfer::clipboard::XFlushableClipboard > xFlushableClipboard( xClipboard, uno::UNO_QUERY );
                 if( xFlushableClipboard.is() )
                     xFlushableClipboard->flushClipboard();
-
-                Application::AcquireSolarMutex( nRef );
 
                 bReturn = true;
             }
