@@ -2296,18 +2296,14 @@ bool SvNumberformat::ImpGetScientificOutput(double fNumber,
         }
         ExpStr = sStr.toString().copy( nExpStart );    // part following the "E+"
         sStr.truncate( nExPos );
-        // cut any decimal delimiter
-        sal_Int32 index = 0;
 
-        while((index = sStr.indexOf('.', index)) >= 0)
-        {
-            sStr.remove(index, 1);
-        }
         if ( rInfo.nCntPre != 1 ) // rescale Exp
         {
             sal_Int32 nExp = ExpStr.toString().toInt32() * nExpSign;
-
-            nExp -= (sal_Int32)rInfo.nCntPre - 1;
+            sal_Int32 nRescale = nExp % (sal_Int32)rInfo.nCntPre;
+            if( nRescale < 0 )
+                nRescale += (sal_Int32)rInfo.nCntPre;
+            nExp -= nRescale;
             if ( nExp < 0 )
             {
                 nExpSign = -1;
@@ -2318,6 +2314,19 @@ bool SvNumberformat::ImpGetScientificOutput(double fNumber,
                 nExpSign = 1;
             }
             ExpStr = OUString::number( nExp );
+            // rescale mantissa
+            sStr = ::rtl::math::doubleToUString( fNumber,
+                                         rtl_math_StringFormat_E,
+                                         nRescale + rInfo.nCntPost, '.' );
+            sStr.truncate( sStr.indexOf('E') );
+        }
+
+        // cut any decimal delimiter
+        sal_Int32 index = 0;
+
+        while((index = sStr.indexOf('.', index)) >= 0)
+        {
+            sStr.remove(index, 1);
         }
     }
 
