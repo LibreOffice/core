@@ -39,7 +39,9 @@ class DecoToolBox : public ToolBox
 
     using Window::ImplInit;
 public:
-            DecoToolBox( vcl::Window* pParent, WinBits nStyle = 0 );
+             DecoToolBox( vcl::Window* pParent, WinBits nStyle = 0 );
+    virtual ~DecoToolBox() {}
+
     void    ImplInit();
 
     void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;

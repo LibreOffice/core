@@ -81,6 +81,8 @@ void DecoToolBox::calcMinSize()
     }
     aTbx->SetOutStyle( TOOLBOX_STYLE_FLAT );
     maMinSize = aTbx->CalcWindowSizePixel();
+
+    aTbx.disposeAndClear();
 }
 
 void DecoToolBox::SetImages( long nMaxHeight, bool bForce )
@@ -173,9 +175,9 @@ void MenuBarWindow::dispose()
     aCloseBtn->RemoveEventListener(LINK(this, MenuBarWindow, ToolboxEventHdl));
     RemoveEventListener(LINK(this, MenuBarWindow, ShowHideListener));
 
-    aCloseBtn.disposeAndClear();
-    aFloatBtn.disposeAndClear();
     aHideBtn.disposeAndClear();
+    aFloatBtn.disposeAndClear();
+    aCloseBtn.disposeAndClear();
 
     Window::dispose();
 }

@@ -165,6 +165,7 @@ ImplToolItem::ImplToolItem( const ImplToolItem& rItem ) :
 
 ImplToolItem::~ImplToolItem()
 {
+    mpWindow.disposeAndClear();
 }
 
 ImplToolItem& ImplToolItem::operator=( const ImplToolItem& rItem )
