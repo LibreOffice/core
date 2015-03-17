@@ -626,6 +626,7 @@ private:
     VclPtr<EventBoxHelper> m_aEventBoxHelper;
 protected:
     virtual void dispose() SAL_OVERRIDE;
+    virtual ~VclEventBox();
 public:
     VclEventBox(vcl::Window* pParent)
         : VclBin(pParent)

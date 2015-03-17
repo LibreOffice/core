@@ -108,6 +108,7 @@ public:
     virtual void Resize() SAL_OVERRIDE;
 
     virtual bool Close() SAL_OVERRIDE;
+    virtual ~MyWin() { disposeOnce(); }
     virtual void dispose() SAL_OVERRIDE;
 
     void parseList( const OString& rList );

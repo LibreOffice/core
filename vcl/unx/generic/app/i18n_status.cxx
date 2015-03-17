@@ -316,6 +316,7 @@ public:
     virtual void setText( const OUString & ) SAL_OVERRIDE;
     virtual void show( bool bShow, I18NStatus::ShowReason eReason ) SAL_OVERRIDE;
     virtual void toggle( bool bOn ) SAL_OVERRIDE;
+    virtual ~IIIMPStatusWindow() { disposeOnce(); }
     virtual void dispose() SAL_OVERRIDE;
     void layout();
 

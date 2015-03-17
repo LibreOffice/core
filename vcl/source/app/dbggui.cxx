@@ -217,6 +217,7 @@ public:
     void            SetInfoText( const OUString& rStr );
 private:
     virtual void    dispose() SAL_OVERRIDE;
+    virtual         ~DbgInfoDialog() { disposeOnce(); }
 };
 
 class DbgDialog : public ModalDialog
@@ -238,6 +239,7 @@ public:
     void            RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
 private:
     virtual void    dispose() SAL_OVERRIDE;
+    virtual         ~DbgDialog() { disposeOnce(); }
 };
 
 DbgDialog::DbgDialog() :
@@ -831,7 +833,7 @@ void DbgGUIStart()
 
     if ( pData )
     {
-        std::unique_ptr<DbgDialog> xDialog(new DbgDialog);
+        VclPtr<DbgDialog> pDialog(new DbgDialog);
         // we switch off dialog tests for the debug dialog
         sal_uLong nOldFlags = pData->nTestFlags;
         pData->nTestFlags &= ~DBG_TEST_DIALOG;

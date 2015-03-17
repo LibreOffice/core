@@ -270,6 +270,13 @@ bool VCLWidgets::VisitFieldDecl(const FieldDecl * fieldDecl) {
                 fieldDecl->getLocation())
               << fieldDecl->getSourceRange();
         }
+        if (!pParentRecordDecl->hasUserDeclaredDestructor()) {
+            report(
+                DiagnosticsEngine::Warning,
+                "vcl::Window subclass with a VclPtr field MUST have an explicit destructor.",
+                fieldDecl->getLocation())
+              << fieldDecl->getSourceRange();
+        }
     }
 
     return true;
@@ -293,13 +300,6 @@ bool VCLWidgets::VisitParmVarDecl(ParmVarDecl const * pvDecl)
             || pMethodDecl->getParent()->getQualifiedNameAsString() == "VclBuilderContainer"))
     {
         return true;
-    }
-    if (!pvDecl->getType()->isReferenceType() && pvDecl->getType().getAsString().find("VclPtr") != std::string::npos) {
-        report(
-            DiagnosticsEngine::Warning,
-            "vcl::Window subclass passed as a VclPtr parameter, should be passed as a raw pointer.",
-            pvDecl->getCanonicalDecl()->getLocation())
-          << pvDecl->getCanonicalDecl()->getSourceRange();
     }
     return true;
 }
@@ -362,14 +362,6 @@ bool VCLWidgets::VisitFunctionDecl( const FunctionDecl* functionDecl )
     if (pMethodDecl
         && pMethodDecl->getParent()->getQualifiedNameAsString() == "vcl::Window") {
         return true;
-    }
-    QualType t1 { compat::getReturnType(*functionDecl) };
-    if (t1.getAsString().find("VclPtr") == 0) {
-        report(
-            DiagnosticsEngine::Warning,
-            "VclPtr declared as a return type from a method/function, should be passed as a raw pointer.",
-            functionDecl->getLocation())
-          << functionDecl->getSourceRange();
     }
     if (functionDecl->hasBody() && pMethodDecl && isDerivedFromWindow(pMethodDecl->getParent())) {
         // check the last thing that the dispose() method does, is to call into the superclass dispose method
