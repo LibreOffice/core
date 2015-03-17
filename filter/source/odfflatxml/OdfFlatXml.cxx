@@ -10,13 +10,14 @@
 
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/factory.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <osl/diagnose.h>
 
 #include <sax/tools/documenthandleradapter.hxx>
 
 #include <com/sun/star/lang/XComponent.hpp>
-
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Type.hxx>
 
@@ -53,8 +54,8 @@ namespace filter {
          * OdfFlatXml export and imports ODF flat XML documents by plugging a pass-through
          * filter implementation into XmlFilterAdaptor.
          */
-        class OdfFlatXml : public WeakImplHelper3<XImportFilter,
-                                                  XExportFilter, DocumentHandlerAdapter>
+        class OdfFlatXml : public WeakImplHelper<XImportFilter,
+                                                  XExportFilter, DocumentHandlerAdapter, css::lang::XServiceInfo>
         {
         private:
             Reference< XComponentContext > m_xContext;
@@ -80,6 +81,22 @@ namespace filter {
                      const Sequence< OUString >& userData)
                 throw (IllegalArgumentException,
                        RuntimeException, std::exception) SAL_OVERRIDE;
+
+            OUString SAL_CALL getImplementationName()
+                throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+            { return OUString("com.sun.star.comp.filter.OdfFlatXml"); }
+
+            sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
+                throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+            { return cppu::supportsService(this, ServiceName); }
+
+            css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
+                throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+            {
+                return css::uno::Sequence<OUString>{
+                    "com.sun.star.document.ImportFilter",
+                        "com.sun.star.document.ExportFilter"};
+            }
 
             // UNO component helper methods
 

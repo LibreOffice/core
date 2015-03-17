@@ -34,7 +34,10 @@ public:
     DECLARE_DEFAULT_LEAF_XTOR( OImageButtonModel );
 
 // ::com::sun::star::lang::XServiceInfo
-    IMPLEMENTATION_NAME(OImageButtonModel);
+    OUString SAL_CALL getImplementationName()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    { return OUString("com.sun.star.form.OImageButtonModel"); }
+
     virtual StringSequence SAL_CALL getSupportedServiceNames() throw(std::exception) SAL_OVERRIDE;
 
 // ::com::sun::star::io::XPersistObject
@@ -63,7 +66,10 @@ public:
     OImageButtonControl(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxFactory);
 
     // XServiceInfo
-    IMPLEMENTATION_NAME(OImageButtonControl);
+    OUString SAL_CALL getImplementationName()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    { return OUString("com.sun.star.form.OImageButtonControl"); }
+
     virtual StringSequence SAL_CALL getSupportedServiceNames() throw(std::exception) SAL_OVERRIDE;
 
     // UNO Binding

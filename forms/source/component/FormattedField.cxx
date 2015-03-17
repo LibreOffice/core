@@ -254,9 +254,10 @@ IMPL_LINK(OFormattedControl, OnKeyPressed, void*, /*EMPTYARG*/)
 StringSequence  OFormattedControl::getSupportedServiceNames() throw(std::exception)
 {
     StringSequence aSupported = OBoundControl::getSupportedServiceNames();
-    aSupported.realloc(aSupported.getLength() + 1);
+    aSupported.realloc(aSupported.getLength() + 2);
     OUString*pArray = aSupported.getArray();
-    pArray[aSupported.getLength()-1] = FRM_SUN_CONTROL_FORMATTEDFIELD;
+    pArray[aSupported.getLength()-2] = FRM_SUN_CONTROL_FORMATTEDFIELD;
+    pArray[aSupported.getLength()-1] = STARDIV_ONE_FORM_CONTROL_FORMATTEDFIELD;
     return aSupported;
 }
 
@@ -315,7 +316,7 @@ StringSequence OFormattedModel::getSupportedServiceNames() throw(std::exception)
 {
     StringSequence aSupported = OEditBaseModel::getSupportedServiceNames();
     sal_Int32 nOldLen = aSupported.getLength();
-    aSupported.realloc( nOldLen + 8 );
+    aSupported.realloc( nOldLen + 9 );
     OUString* pStoreTo = aSupported.getArray() + nOldLen;
     *pStoreTo++ = BINDABLE_CONTROL_MODEL;
     *pStoreTo++ = DATA_AWARE_CONTROL_MODEL;
@@ -325,6 +326,7 @@ StringSequence OFormattedModel::getSupportedServiceNames() throw(std::exception)
     *pStoreTo++ = FRM_SUN_COMPONENT_FORMATTEDFIELD;
     *pStoreTo++ = FRM_SUN_COMPONENT_DATABASE_FORMATTEDFIELD;
     *pStoreTo++ = BINDABLE_DATABASE_FORMATTED_FIELD;
+    *pStoreTo++ = FRM_COMPONENT_FORMATTEDFIELD;
     return aSupported;
 }
 

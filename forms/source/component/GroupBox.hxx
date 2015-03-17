@@ -33,7 +33,10 @@ public:
     DECLARE_DEFAULT_LEAF_XTOR( OGroupBoxModel );
 
     // XServiceInfo
-    IMPLEMENTATION_NAME(OGroupBoxModel);
+    OUString SAL_CALL getImplementationName()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    { return OUString("com.sun.star.form.OGroupBoxModel"); }
+
     virtual StringSequence SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XPersistObject
@@ -61,7 +64,10 @@ public:
     OGroupBoxControl(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxFactory);
 
     // XServiceInfo
-    IMPLEMENTATION_NAME(OGroupBoxControl);
+    OUString SAL_CALL getImplementationName()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    { return OUString("com.sun.star.form.OGroupBoxControl"); }
+
     virtual StringSequence SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 

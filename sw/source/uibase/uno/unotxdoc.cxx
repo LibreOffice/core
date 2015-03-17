@@ -1770,7 +1770,11 @@ Sequence< OUString > SwXTextDocument::getAvailableServiceNames(void)
 
 OUString SwXTextDocument::getImplementationName(void) throw( RuntimeException, std::exception )
 {
-    return OUString("SwXTextDocument");
+    return PTR_CAST(SwGlobalDocShell, pDocShell) != nullptr
+        ? OUString("com.sun.star.comp.Writer.GlobalDocument")
+        : PTR_CAST(SwWebDocShell, pDocShell) != nullptr
+        ? OUString("com.sun.star.comp.Writer.WebDocument")
+        : OUString("com.sun.star.comp.Writer.TextDocument");
 }
 
 sal_Bool SwXTextDocument::supportsService(const OUString& rServiceName) throw( RuntimeException, std::exception )

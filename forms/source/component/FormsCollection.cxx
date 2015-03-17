@@ -85,7 +85,7 @@ Any SAL_CALL OFormsCollection::queryAggregation(const Type& _rType) throw(Runtim
 
 OUString SAL_CALL OFormsCollection::getImplementationName() throw(RuntimeException, std::exception)
 {
-    return OUString("com.sun.star.comp.forms.OFormsCollection");
+    return OUString("com.sun.star.form.OFormsCollection");
 }
 
 sal_Bool SAL_CALL OFormsCollection::supportsService( const OUString& _rServiceName ) throw(RuntimeException, std::exception)

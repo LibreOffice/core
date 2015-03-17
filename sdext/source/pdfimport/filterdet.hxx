@@ -26,15 +26,15 @@
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 
 
 namespace pdfi
 {
 
-typedef ::cppu::WeakComponentImplHelper1<
-    css::document::XExtendedFilterDetection > PDFDetectorBase;
+typedef ::cppu::WeakComponentImplHelper<
+    css::document::XExtendedFilterDetection, css::lang::XServiceInfo> PDFDetectorBase;
 
 class PDFDetector : private cppu::BaseMutex,
                     public PDFDetectorBase
@@ -50,6 +50,15 @@ public:
     // XExtendedFilterDetection
     virtual OUString SAL_CALL detect( css::uno::Sequence<
                                                css::beans::PropertyValue >& io_rDescriptor )
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    OUString SAL_CALL getImplementationName()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 

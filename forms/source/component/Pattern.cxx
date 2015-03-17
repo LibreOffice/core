@@ -53,10 +53,11 @@ Sequence<Type> OPatternControl::_getTypes()
 StringSequence OPatternControl::getSupportedServiceNames() throw(std::exception)
 {
     StringSequence aSupported = OBoundControl::getSupportedServiceNames();
-    aSupported.realloc(aSupported.getLength() + 1);
+    aSupported.realloc(aSupported.getLength() + 2);
 
     OUString*pArray = aSupported.getArray();
-    pArray[aSupported.getLength()-1] = FRM_SUN_CONTROL_PATTERNFIELD;
+    pArray[aSupported.getLength()-2] = FRM_SUN_CONTROL_PATTERNFIELD;
+    pArray[aSupported.getLength()-1] = STARDIV_ONE_FORM_CONTROL_PATTERNFIELD;
     return aSupported;
 }
 
@@ -100,11 +101,12 @@ IMPLEMENT_DEFAULT_CLONING( OPatternModel )
 StringSequence SAL_CALL OPatternModel::getSupportedServiceNames() throw(std::exception)
 {
     StringSequence aSupported = OBoundControlModel::getSupportedServiceNames();
-    aSupported.realloc(aSupported.getLength() + 2);
+    aSupported.realloc(aSupported.getLength() + 3);
 
     OUString*pArray = aSupported.getArray();
-    pArray[aSupported.getLength()-2] = FRM_SUN_COMPONENT_DATABASE_PATTERNFIELD;
-    pArray[aSupported.getLength()-1] = FRM_SUN_COMPONENT_PATTERNFIELD;
+    pArray[aSupported.getLength()-3] = FRM_SUN_COMPONENT_DATABASE_PATTERNFIELD;
+    pArray[aSupported.getLength()-2] = FRM_SUN_COMPONENT_PATTERNFIELD;
+    pArray[aSupported.getLength()-1] = FRM_COMPONENT_PATTERNFIELD;
     return aSupported;
 }
 

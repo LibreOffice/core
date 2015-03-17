@@ -35,7 +35,9 @@
 #include <rtl/ref.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/compbase.hxx>
+#include <cppuhelper/supportsservice.hxx>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/ui/XSidebar.hpp>
 #include <com/sun/star/ui/XUIElementFactory.hpp>
 
@@ -54,7 +56,7 @@ namespace {
 #define SERVICE_NAME "com.sun.star.ui.UIElementFactory"
 */
 
-typedef ::cppu::WeakComponentImplHelper1< css::ui::XUIElementFactory >
+typedef ::cppu::WeakComponentImplHelper< css::ui::XUIElementFactory, css::lang::XServiceInfo >
     PanelFactoryInterfaceBase;
 
 class PanelFactory
@@ -74,6 +76,18 @@ public:
             css::container::NoSuchElementException,
             css::lang::IllegalArgumentException,
             css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    OUString SAL_CALL getImplementationName()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    { return OUString("org.apache.openoffice.comp.svx.sidebar.PanelFactory"); }
+
+    sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    { return cppu::supportsService(this, ServiceName); }
+
+    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    { return css::uno::Sequence<OUString>{"com.sun.star.ui.UIElementFactory"}; }
 };
 
 PanelFactory::PanelFactory (void)

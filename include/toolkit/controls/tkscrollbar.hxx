@@ -54,7 +54,11 @@ namespace toolkit
         OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XServiceInfo
-        DECLIMPL_SERVICEINFO_DERIVED( UnoControlScrollBarModel, UnoControlModel, "com.sun.star.awt.UnoControlScrollBarModel" )
+        OUString SAL_CALL getImplementationName()
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+        css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     };
 
 
@@ -104,7 +108,11 @@ namespace toolkit
         sal_Int32 SAL_CALL getOrientation(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // ::com::sun::star::lang::XServiceInfo
-        DECLIMPL_SERVICEINFO_DERIVED( UnoScrollBarControl, UnoControlBase, "com.sun.star.awt.UnoControlScrollBar" )
+        OUString SAL_CALL getImplementationName()
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+        css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     };
 
 

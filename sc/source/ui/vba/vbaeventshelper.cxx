@@ -615,6 +615,19 @@ void SAL_CALL ScVbaEventsHelper::notifyEvent( const css::document::EventObject& 
     VbaEventsHelperBase::notifyEvent( rEvent );
 }
 
+OUString ScVbaEventsHelper::getImplementationName()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return OUString("ScVbaEventsHelper");
+}
+
+css::uno::Sequence<OUString> ScVbaEventsHelper::getSupportedServiceNames()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return css::uno::Sequence<OUString>{
+        "com.sun.star.script.vba.VBASpreadsheetEventProcessor"};
+}
+
 // protected ------------------------------------------------------------------
 
 bool ScVbaEventsHelper::implPrepareEvent( EventQueue& rEventQueue,

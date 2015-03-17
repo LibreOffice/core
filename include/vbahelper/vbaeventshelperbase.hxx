@@ -26,7 +26,7 @@
 #include <com/sun/star/document/XEventListener.hpp>
 #include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
 #include <com/sun/star/util/XChangesListener.hpp>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <vbahelper/vbahelper.hxx>
 
 namespace com { namespace sun { namespace star {
@@ -36,10 +36,11 @@ namespace com { namespace sun { namespace star {
 
 
 
-typedef ::cppu::WeakImplHelper3<
+typedef ::cppu::WeakImplHelper<
     css::script::vba::XVBAEventProcessor,
     css::document::XEventListener,
-    css::util::XChangesListener > VbaEventsHelperBase_BASE;
+    css::util::XChangesListener,
+    css::lang::XServiceInfo > VbaEventsHelperBase_BASE;
 
 class VBAHELPER_DLLPUBLIC VbaEventsHelperBase : public VbaEventsHelperBase_BASE
 {
@@ -61,6 +62,9 @@ public:
 
     // lang::XEventListener
     virtual void SAL_CALL disposing( const css::lang::EventObject& rEvent ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // little helpers ---------------------------------------------------------
 

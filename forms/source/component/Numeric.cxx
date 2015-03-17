@@ -45,10 +45,11 @@ ONumericControl::ONumericControl(const Reference<XComponentContext>& _rxFactory)
 StringSequence ONumericControl::getSupportedServiceNames() throw(std::exception)
 {
     StringSequence aSupported = OBoundControl::getSupportedServiceNames();
-    aSupported.realloc(aSupported.getLength() + 1);
+    aSupported.realloc(aSupported.getLength() + 2);
 
     OUString*pArray = aSupported.getArray();
-    pArray[aSupported.getLength()-1] = FRM_SUN_CONTROL_NUMERICFIELD;
+    pArray[aSupported.getLength()-2] = FRM_SUN_CONTROL_NUMERICFIELD;
+    pArray[aSupported.getLength()-1] = STARDIV_ONE_FORM_CONTROL_NUMERICFIELD;
     return aSupported;
 }
 
@@ -99,7 +100,7 @@ StringSequence ONumericModel::getSupportedServiceNames() throw(std::exception)
     StringSequence aSupported = OBoundControlModel::getSupportedServiceNames();
 
     sal_Int32 nOldLen = aSupported.getLength();
-    aSupported.realloc( nOldLen + 8 );
+    aSupported.realloc( nOldLen + 9 );
     OUString* pStoreTo = aSupported.getArray() + nOldLen;
 
     *pStoreTo++ = BINDABLE_CONTROL_MODEL;
@@ -112,6 +113,8 @@ StringSequence ONumericModel::getSupportedServiceNames() throw(std::exception)
     *pStoreTo++ = FRM_SUN_COMPONENT_NUMERICFIELD;
     *pStoreTo++ = FRM_SUN_COMPONENT_DATABASE_NUMERICFIELD;
     *pStoreTo++ = BINDABLE_DATABASE_NUMERIC_FIELD;
+
+    *pStoreTo++ = FRM_COMPONENT_NUMERICFIELD;
 
     return aSupported;
 }

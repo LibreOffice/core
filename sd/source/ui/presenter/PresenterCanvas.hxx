@@ -27,23 +27,25 @@
 #include <com/sun/star/awt/XWindowListener.hpp>
 #include <com/sun/star/geometry/AffineMatrix2D.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
 #include <com/sun/star/rendering/XBitmapCanvas.hpp>
 #include <com/sun/star/rendering/VolatileContentDestroyedException.hpp>
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase4.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <boost/noncopyable.hpp>
 #include <boost/shared_ptr.hpp>
 
 namespace sd { namespace presenter {
 
 namespace {
-    typedef ::cppu::WeakComponentImplHelper4 <
+    typedef ::cppu::WeakComponentImplHelper <
         css::rendering::XSpriteCanvas,
         css::rendering::XBitmap,
         css::awt::XWindowListener,
-        css::lang::XInitialization
+        css::lang::XInitialization,
+        css::lang::XServiceInfo
     > PresenterCanvasInterfaceBase;
 }
 
@@ -146,6 +148,15 @@ public:
     virtual void SAL_CALL initialize (
         const css::uno::Sequence<css::uno::Any>& rArguments)
         throw(css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    OUString SAL_CALL getImplementationName()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XCanvas
 

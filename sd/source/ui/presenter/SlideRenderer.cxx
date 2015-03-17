@@ -25,6 +25,7 @@
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <cppcanvas/vclfactory.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -60,6 +61,24 @@ void SAL_CALL SlideRenderer::initialize (const Sequence<Any>& rArguments)
         throw RuntimeException("SlideRenderer: invalid number of arguments",
                 static_cast<XWeak*>(this));
     }
+}
+
+OUString SlideRenderer::getImplementationName()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return OUString("com.sun.star.comp.Draw.SlideRenderer");
+}
+
+sal_Bool SlideRenderer::supportsService(OUString const & ServiceName)
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return cppu::supportsService(this, ServiceName);
+}
+
+css::uno::Sequence<OUString> SlideRenderer::getSupportedServiceNames()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return css::uno::Sequence<OUString>{"com.sun.star.drawing.SlideRenderer"};
 }
 
 //----- XSlideRenderer --------------------------------------------------------

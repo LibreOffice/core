@@ -55,18 +55,12 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::system::SystemShellExecuteFlags;
 using namespace cppu;
 
-#define SHELLEXEC_IMPL_NAME  "com.sun.star.comp.system.SystemShellExecute2"
-
-
-// helper functions
-
-
 namespace // private
 {
     Sequence< OUString > SAL_CALL ShellExec_getSupportedServiceNames()
     {
         Sequence< OUString > aRet(1);
-        aRet[0] = "com.sun.star.sys.shell.SystemShellExecute";
+        aRet[0] = "com.sun.star.system.SystemShellExecute";
         return aRet;
     }
 }
@@ -273,7 +267,7 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
 OUString SAL_CALL ShellExec::getImplementationName(  )
     throw( RuntimeException, std::exception )
 {
-    return OUString(SHELLEXEC_IMPL_NAME );
+    return OUString("com.sun.star.comp.system.SystemShellExecute");
 }
 
 //  XServiceInfo

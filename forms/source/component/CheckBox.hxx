@@ -36,7 +36,10 @@ public:
     DECLARE_DEFAULT_LEAF_XTOR( OCheckBoxModel );
 
     // XServiceInfo
-    IMPLEMENTATION_NAME(OCheckBoxModel);
+    OUString SAL_CALL getImplementationName()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    { return OUString("com.sun.star.form.OCheckBoxModel"); }
+
     virtual StringSequence SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XPersistObject
@@ -66,7 +69,10 @@ public:
     OCheckBoxControl(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxContext);
 
     // XServiceInfo
-    IMPLEMENTATION_NAME(OCheckBoxControl);
+    OUString SAL_CALL getImplementationName()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    { return OUString("com.sun.star.form.OCheckBoxControl"); }
+
     virtual StringSequence SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 

@@ -60,12 +60,6 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::configuration;
 
-#define COMP_IMPL_NAME  "com.sun.star.comp.system.SimpleCommandMail2"
-
-
-// helper functions
-
-
 namespace // private
 {
     Sequence< OUString > SAL_CALL Component_getSupportedServiceNames()
@@ -313,7 +307,7 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
 OUString SAL_CALL CmdMailSuppl::getImplementationName(  )
     throw( RuntimeException, std::exception )
 {
-    return OUString(COMP_IMPL_NAME);
+    return OUString("com.sun.star.comp.system.SimpleCommandMail");
 }
 
 //  XServiceInfo

@@ -31,6 +31,7 @@
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
+#include <cppuhelper/supportsservice.hxx>
 
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::uno;
@@ -424,6 +425,27 @@ uno::Sequence< util::RevisionTag > SAL_CALL XMLVersionListPersistence::load( con
     }
 
     return aVersions;
+}
+
+OUString XMLVersionListPersistence::getImplementationName()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return OUString("XMLVersionListPersistence");
+}
+
+sal_Bool XMLVersionListPersistence::supportsService(
+    OUString const & ServiceName)
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return cppu::supportsService(this, ServiceName);
+}
+
+css::uno::Sequence<OUString>
+XMLVersionListPersistence::getSupportedServiceNames()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return css::uno::Sequence<OUString>{
+        "com.sun.star.document.DocumentRevisionListPersistence"};
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL

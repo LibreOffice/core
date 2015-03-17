@@ -32,7 +32,7 @@
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/io/TempFile.hpp>
-
+#include <cppuhelper/supportsservice.hxx>
 #include <boost/scoped_ptr.hpp>
 #include <string.h>
 
@@ -386,6 +386,24 @@ OUString SAL_CALL PDFDetector::detect( uno::Sequence< beans::PropertyValue >& rF
     }
 
     return aOutTypeName;
+}
+
+OUString PDFDetector::getImplementationName()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return OUString("org.libreoffice.comp.documents.PDFDetector");
+}
+
+sal_Bool PDFDetector::supportsService(OUString const & ServiceName)
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return cppu::supportsService(this, ServiceName);
+}
+
+css::uno::Sequence<OUString> PDFDetector::getSupportedServiceNames()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return css::uno::Sequence<OUString>{"com.sun.star.document.ImportFilter"};
 }
 
 bool checkDocChecksum( const OUString& rInPDFFileURL,

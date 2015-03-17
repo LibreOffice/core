@@ -1161,7 +1161,7 @@ Sequence<OUString> OObjectOutputStream_getSupportedServiceNames(void)
 // XServiceInfo
 OUString OObjectOutputStream::getImplementationName() throw (std::exception)
 {
-    return ODataInputStream_getImplementationName();
+    return OObjectOutputStream_getImplementationName();
 }
 
 // XServiceInfo

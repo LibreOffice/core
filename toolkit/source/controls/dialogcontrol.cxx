@@ -31,6 +31,7 @@
 #include <com/sun/star/resource/XStringResourceResolver.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
+#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <tools/debug.hxx>
@@ -167,7 +168,19 @@ public:
     OUString SAL_CALL getServiceName() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XServiceInfo
-    DECLIMPL_SERVICEINFO_DERIVED( UnoControlDialogModel, ControlModelContainerBase, "com.sun.star.awt.UnoControlDialogModel" )
+    OUString SAL_CALL getImplementationName()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    { return OUString("stardiv.Toolkit.UnoControlDialogModel"); }
+
+    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    {
+        auto s(ControlModelContainerBase::getSupportedServiceNames());
+        s.realloc(s.getLength() + 2);
+        s[s.getLength() - 2] = "com.sun.star.awt.UnoControlDialogModel";
+        s[s.getLength() - 1] = "stardiv.vcl.controlmodel.Dialog";
+        return s;
+    }
 };
 
 UnoControlDialogModel::UnoControlDialogModel( const Reference< XComponentContext >& rxContext )
@@ -383,6 +396,26 @@ void UnoDialogControl::createPeer( const Reference< XToolkit > & rxToolkit, cons
         ImplSetPeerProperty( GetPropertyName( BASEPROPERTY_SCROLLLEFT ), ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_SCROLLLEFT ) ) );
 
     }
+}
+
+OUString UnoDialogControl::getImplementationName()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return OUString("stardiv.Toolkit.UnoDialogControl");
+}
+
+sal_Bool UnoDialogControl::supportsService(OUString const & ServiceName)
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return cppu::supportsService(this, ServiceName);
+}
+
+css::uno::Sequence<OUString> UnoDialogControl::getSupportedServiceNames()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return css::uno::Sequence<OUString>{
+        OUString::createFromAscii(szServiceName2_UnoControlDialog),
+        "stardiv.vcl.control.Dialog"};
 }
 
 void UnoDialogControl::PrepareWindowDescriptor( ::com::sun::star::awt::WindowDescriptor& rDesc )

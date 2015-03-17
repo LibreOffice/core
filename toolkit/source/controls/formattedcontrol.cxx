@@ -418,6 +418,22 @@ namespace toolkit
         return xInfo;
     }
 
+    OUString UnoControlFormattedFieldModel::getImplementationName()
+        throw (css::uno::RuntimeException, std::exception)
+    {
+        return OUString("stardiv.Toolkit.UnoControlFormattedFieldModel");
+    }
+
+    css::uno::Sequence<OUString>
+    UnoControlFormattedFieldModel::getSupportedServiceNames()
+        throw (css::uno::RuntimeException, std::exception)
+    {
+        auto s(UnoControlModel::getSupportedServiceNames());
+        s.realloc(s.getLength() + 2);
+        s[s.getLength() - 2] = "com.sun.star.awt.UnoControlFormattedFieldModel";
+        s[s.getLength() - 1] = "stardiv.vcl.controlmodel.FormattedField";
+        return s;
+    }
 
     // = UnoFormattedFieldControl
 
@@ -453,7 +469,22 @@ namespace toolkit
             GetTextListeners().textChanged( e );
     }
 
+    OUString UnoFormattedFieldControl::getImplementationName()
+        throw (css::uno::RuntimeException, std::exception)
+    {
+        return OUString("stardiv.Toolkit.UnoFormattedFieldControl");
+    }
 
+    css::uno::Sequence<OUString>
+    UnoFormattedFieldControl::getSupportedServiceNames()
+        throw (css::uno::RuntimeException, std::exception)
+    {
+        auto s(UnoEditControl::getSupportedServiceNames());
+        s.realloc(s.getLength() + 2);
+        s[s.getLength() - 2] = "com.sun.star.awt.UnoControlFormattedField";
+        s[s.getLength() - 1] = "stardiv.vcl.control.FormattedField";
+        return s;
+    }
 }   // namespace toolkit
 
 

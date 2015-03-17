@@ -46,10 +46,11 @@ using namespace ::com::sun::star::form::binding;
 StringSequence SAL_CALL ORadioButtonControl::getSupportedServiceNames() throw(RuntimeException, std::exception)
 {
     StringSequence aSupported = OBoundControl::getSupportedServiceNames();
-    aSupported.realloc(aSupported.getLength() + 1);
+    aSupported.realloc(aSupported.getLength() + 2);
 
     OUString* pArray = aSupported.getArray();
-    pArray[aSupported.getLength()-1] = FRM_SUN_CONTROL_RADIOBUTTON;
+    pArray[aSupported.getLength()-2] = FRM_SUN_CONTROL_RADIOBUTTON;
+    pArray[aSupported.getLength()-1] = STARDIV_ONE_FORM_CONTROL_RADIOBUTTON;
     return aSupported;
 }
 
@@ -115,7 +116,7 @@ StringSequence SAL_CALL ORadioButtonModel::getSupportedServiceNames() throw(Runt
     StringSequence aSupported = OReferenceValueComponent::getSupportedServiceNames();
 
     sal_Int32 nOldLen = aSupported.getLength();
-    aSupported.realloc( nOldLen + 8 );
+    aSupported.realloc( nOldLen + 9 );
     OUString* pStoreTo = aSupported.getArray() + nOldLen;
 
     *pStoreTo++ = BINDABLE_CONTROL_MODEL;
@@ -128,6 +129,8 @@ StringSequence SAL_CALL ORadioButtonModel::getSupportedServiceNames() throw(Runt
     *pStoreTo++ = FRM_SUN_COMPONENT_RADIOBUTTON;
     *pStoreTo++ = FRM_SUN_COMPONENT_DATABASE_RADIOBUTTON;
     *pStoreTo++ = BINDABLE_DATABASE_RADIO_BUTTON;
+
+    *pStoreTo++ = FRM_COMPONENT_RADIOBUTTON;
 
     return aSupported;
 }

@@ -34,7 +34,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <comphelper/namedvaluecollection.hxx>
-
+#include <cppuhelper/supportsservice.hxx>
 #include <boost/bind.hpp>
 
 using namespace css;
@@ -46,7 +46,7 @@ namespace sc { namespace sidebar {
 #define IMPLEMENTATION_NAME "org.apache.openoffice.comp.sc.sidebar.ScPanelFactory"
 #define SERVICE_NAME "com.sun.star.ui.UIElementFactory"
 
-::rtl::OUString SAL_CALL ScPanelFactory::getImplementationName (void)
+::rtl::OUString SAL_CALL ScPanelFactory::getImplementationName_static()
 {
     return OUString(IMPLEMENTATION_NAME);
 }
@@ -59,7 +59,7 @@ css::uno::Reference<css::uno::XInterface> SAL_CALL ScPanelFactory::createInstanc
     return xService;
 }
 
-css::uno::Sequence<OUString> SAL_CALL ScPanelFactory::getSupportedServiceNames (void)
+css::uno::Sequence<OUString> SAL_CALL ScPanelFactory::getSupportedServiceNames_static()
 {
     css::uno::Sequence<OUString> aServiceNames (1);
     aServiceNames[0] = SERVICE_NAME;
@@ -166,6 +166,24 @@ Reference<ui::XUIElement> SAL_CALL ScPanelFactory::createUIElement (
     }
 
     return xElement;
+}
+
+OUString ScPanelFactory::getImplementationName()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return getImplementationName_static();
+}
+
+sal_Bool ScPanelFactory::supportsService(OUString const & ServiceName)
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return cppu::supportsService(this, ServiceName);
+}
+
+css::uno::Sequence<OUString> ScPanelFactory::getSupportedServiceNames()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return getSupportedServiceNames_static();
 }
 
 } } // end of namespace sc::sidebar

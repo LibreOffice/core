@@ -52,7 +52,10 @@ public:
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue) throw ( ::com::sun::star::uno::Exception, std::exception) SAL_OVERRIDE;
 
     // ::com::sun::star::lang::XServiceInfo
-    IMPLEMENTATION_NAME(OTimeModel);
+    OUString SAL_CALL getImplementationName()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    { return OUString("com.sun.star.form.OTimeModel"); }
+
     virtual StringSequence SAL_CALL getSupportedServiceNames() throw(std::exception) SAL_OVERRIDE;
 
     // OControlModel's property handling
@@ -106,7 +109,10 @@ public:
     DECLARE_UNO3_AGG_DEFAULTS(OTimeControl, OBoundControl)
 
     // ::com::sun::star::lang::XServiceInfo
-    IMPLEMENTATION_NAME(OTimeControl);
+    OUString SAL_CALL getImplementationName()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    { return OUString("com.sun.star.form.OTimeControl"); }
+
     virtual StringSequence SAL_CALL getSupportedServiceNames() throw(std::exception) SAL_OVERRIDE;
 };
 

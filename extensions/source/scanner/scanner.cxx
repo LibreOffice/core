@@ -19,7 +19,7 @@
 
 #include <scanner.hxx>
 
-#include <cppuhelper/queryinterface.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 // - ScannerManager -
 
@@ -44,39 +44,28 @@ ScannerManager::~ScannerManager()
     ReleaseData();
 }
 
-
-
-Any SAL_CALL ScannerManager::queryInterface( const Type& rType ) throw( RuntimeException, std::exception )
-{
-    const Any aRet( cppu::queryInterface( rType,
-                                          static_cast< XScannerManager2* >( this ),
-                                          static_cast< css::awt::XBitmap* >( this ) ) );
-
-    return( aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType ) );
-}
-
-
-
-void SAL_CALL ScannerManager::acquire() throw()
-{
-    OWeakObject::acquire();
-}
-
-
-
-void SAL_CALL ScannerManager::release() throw()
-{
-    OWeakObject::release();
-}
-
-
-
 Sequence< sal_Int8 > SAL_CALL ScannerManager::getMaskDIB() throw(std::exception)
 {
     return Sequence< sal_Int8 >();
 }
 
+OUString ScannerManager::getImplementationName()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return getImplementationName_Static();
+}
 
+sal_Bool ScannerManager::supportsService(OUString const & ServiceName)
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return cppu::supportsService(this, ServiceName);
+}
+
+css::uno::Sequence<OUString> ScannerManager::getSupportedServiceNames()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return getSupportedServiceNames_Static();
+}
 
 OUString ScannerManager::getImplementationName_Static() throw()
 {

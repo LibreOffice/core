@@ -34,6 +34,7 @@ from com.sun.star.mail.MailServiceType import IMAP
 from com.sun.star.uno import XCurrentContext
 from com.sun.star.lang import IllegalArgumentException
 from com.sun.star.lang import EventObject
+from com.sun.star.lang import XServiceInfo
 from com.sun.star.mail import SendMailMessageFailedException
 
 from email.mime.base import MIMEBase
@@ -49,6 +50,11 @@ from socket import _GLOBAL_DEFAULT_TIMEOUT
 
 import sys, smtplib, imaplib, poplib
 dbg = False
+
+# pythonloader looks for a static g_ImplementationHelper variable
+g_ImplementationHelper = unohelper.ImplementationHelper()
+g_providerImplName = "org.openoffice.pyuno.MailServiceProvider"
+g_messageImplName = "org.openoffice.pyuno.MailMessage"
 
 #no stderr under windows, output to pymailmerge.log
 #with no buffering
@@ -428,7 +434,7 @@ class PyMailPOP3Service(unohelper.Base, XMailService):
 			print("PyMailPOP3Service getCurrentConnectionContext", file=dbgout)
 		return self.connectioncontext
 
-class PyMailServiceProvider(unohelper.Base, XMailServiceProvider):
+class PyMailServiceProvider(unohelper.Base, XMailServiceProvider, XServiceInfo):
 	def __init__( self, ctx ):
 		if dbg:
 			print("PyMailServiceProvider init", file=dbgout)
@@ -444,6 +450,15 @@ class PyMailServiceProvider(unohelper.Base, XMailServiceProvider):
 			return PyMailIMAPService(self.ctx);
 		else:
 			print("PyMailServiceProvider, unknown TYPE " + aType, file=dbgout)
+
+	def getImplementationName(self):
+		return g_providerImplName
+
+	def supportsService(self, ServiceName):
+		return g_ImplementationHelper.supportsService(g_providerImplName, ServiceName)
+
+	def getSupportedServiceNames(self):
+		return g_ImplementationHelper.getSupportedServiceNames(g_providerImplName)
 
 class PyMailMessage(unohelper.Base, XMailMessage):
 	def __init__( self, ctx, sTo='', sFrom='', Subject='', Body=None, aMailAttachment=None ):
@@ -497,11 +512,18 @@ class PyMailMessage(unohelper.Base, XMailMessage):
 			print("PyMailMessage.getAttachments", file=dbgout)
 		return tuple(self.aMailAttachments)
 
-# pythonloader looks for a static g_ImplementationHelper variable
-g_ImplementationHelper = unohelper.ImplementationHelper()
+	def getImplementationName(self):
+		return g_messageImplName
+
+	def supportsService(self, ServiceName):
+		return g_ImplementationHelper.supportsService(g_messageImplName, ServiceName)
+
+	def getSupportedServiceNames(self):
+		return g_ImplementationHelper.getSupportedServiceNames(g_messageImplName)
+
 g_ImplementationHelper.addImplementation( \
-	PyMailServiceProvider, "org.openoffice.pyuno.MailServiceProvider",
+	PyMailServiceProvider, g_providerImplName,
 		("com.sun.star.mail.MailServiceProvider",),)
 g_ImplementationHelper.addImplementation( \
-	PyMailMessage, "org.openoffice.pyuno.MailMessage",
+	PyMailMessage, g_messageImplName,
 		("com.sun.star.mail.MailMessage",),)

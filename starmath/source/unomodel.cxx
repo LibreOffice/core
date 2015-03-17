@@ -402,7 +402,7 @@ static sal_Int16 lcl_AnyToINT16(const uno::Any& rAny)
 
 OUString SmModel::getImplementationName(void) throw( uno::RuntimeException, std::exception )
 {
-    return OUString("com.sun.star.comp.math.FormulaDocument");
+    return OUString("com.sun.star.comp.Math.FormulaDocument");
 }
 
 sal_Bool SmModel::supportsService(const OUString& rServiceName) throw( uno::RuntimeException, std::exception )

@@ -398,6 +398,25 @@ void SAL_CALL ResourceId::initialize (const Sequence<Any>& aArguments)
     ParseResourceURL();
 }
 
+OUString ResourceId::getImplementationName()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return OUString("com.sun.star.comp.Draw.framework.ResourceId");
+}
+
+sal_Bool ResourceId::supportsService(OUString const & ServiceName)
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return cppu::supportsService(this, ServiceName);
+}
+
+css::uno::Sequence<OUString> ResourceId::getSupportedServiceNames()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return css::uno::Sequence<OUString>{
+        "com.sun.star.drawing.framework.ResourceId"};
+}
+
 /** When eMode is DIRECTLY then the anchor of the called object and the
     anchor represented by the given sequence of anchor URLs have to be
     identical.   When eMode is RECURSIVE then the anchor of the called

@@ -65,7 +65,18 @@ public:
     void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue ) throw (::com::sun::star::uno::Exception, std::exception) SAL_OVERRIDE;
 
     // XServiceInfo
-    DECLIMPL_SERVICEINFO_DERIVED( UnoGridModel, UnoControlModel, "com.sun.star.awt.grid.UnoControlGridModel" )
+    OUString SAL_CALL getImplementationName()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    { return OUString("stardiv.Toolkit.GridControlModel"); }
+
+    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    {
+        auto s(UnoControlModel::getSupportedServiceNames());
+        s.realloc(s.getLength() + 1);
+        s[s.getLength() - 1] = "com.sun.star.awt.grid.UnoControlGridModel";
+        return s;
+    }
 };
 
 
@@ -108,7 +119,18 @@ public:
     virtual void SAL_CALL removeSelectionListener(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridSelectionListener > & listener) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // ::com::sun::star::lang::XServiceInfo
-    DECLIMPL_SERVICEINFO_DERIVED( UnoGridControl, UnoControlBase, "com.sun.star.awt.grid.UnoControlGrid" )
+    OUString SAL_CALL getImplementationName()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    { return OUString("stardiv.Toolkit.GridControl"); }
+
+    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    {
+        auto s(UnoControlBase::getSupportedServiceNames());
+        s.realloc(s.getLength() + 1);
+        s[s.getLength() - 1] = "com.sun.star.awt.grid.UnoControlGrid";
+        return s;
+    }
 
     using UnoControl::getPeer;
 

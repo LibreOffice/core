@@ -224,7 +224,7 @@ uno::Sequence<OUString> ScFunctionAccess::getSupportedServiceNames_Static()
 // XServiceInfo
 OUString SAL_CALL ScFunctionAccess::getImplementationName() throw(uno::RuntimeException, std::exception)
 {
-    return OUString( "ScFunctionAccess");
+    return getImplementationName_Static();
 }
 
 sal_Bool SAL_CALL ScFunctionAccess::supportsService( const OUString& rServiceName )

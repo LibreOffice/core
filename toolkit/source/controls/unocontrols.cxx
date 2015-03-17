@@ -71,17 +71,6 @@ using ::com::sun::star::graphic::XGraphic;
 using ::com::sun::star::uno::Reference;
 using namespace ::toolkit;
 
-#define IMPL_SERVICEINFO_DERIVED( ImplName, BaseClass, ServiceName ) \
-    OUString SAL_CALL ImplName::getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) { return OUString( "stardiv.Toolkit." #ImplName ); } \
-    ::com::sun::star::uno::Sequence< OUString > SAL_CALL ImplName::getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception) \
-                            { \
-                                ::com::sun::star::uno::Sequence< OUString > aNames = BaseClass::getSupportedServiceNames( ); \
-                                aNames.realloc( aNames.getLength() + 1 ); \
-                                aNames[ aNames.getLength() - 1 ] = ServiceName; \
-                                return aNames; \
-                            } \
-
-
 uno::Reference< graphic::XGraphic >
 ImageHelper::getGraphicAndGraphicObjectFromURL_nothrow( uno::Reference< graphic::XGraphicObject >& xOutGraphicObj, const OUString& _rURL )
 {
@@ -169,6 +158,22 @@ uno::Reference< beans::XPropertySetInfo > UnoControlEditModel::getPropertySetInf
 {
     static uno::Reference< beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
+}
+
+OUString UnoControlEditModel::getImplementationName()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return OUString("stardiv.Toolkit.UnoControlEditModel");
+}
+
+css::uno::Sequence<OUString> UnoControlEditModel::getSupportedServiceNames()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    auto s(UnoControlModel::getSupportedServiceNames());
+    s.realloc(s.getLength() + 2);
+    s[s.getLength() - 2] = "com.sun.star.awt.UnoControlEditModel";
+    s[s.getLength() - 1] = "stardiv.vcl.controlmodel.Edit";
+    return s;
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
@@ -492,8 +497,9 @@ OUString UnoEditControl::getImplementationName(  ) throw(uno::RuntimeException, 
 uno::Sequence< OUString > UnoEditControl::getSupportedServiceNames() throw(uno::RuntimeException, std::exception)
 {
     uno::Sequence< OUString > aNames = UnoControlBase::getSupportedServiceNames( );
-    aNames.realloc( aNames.getLength() + 1 );
-    aNames[ aNames.getLength() - 1 ] = OUString::createFromAscii( szServiceName2_UnoControlEdit );
+    aNames.realloc( aNames.getLength() + 2 );
+    aNames[ aNames.getLength() - 2 ] = OUString::createFromAscii( szServiceName2_UnoControlEdit );
+    aNames[ aNames.getLength() - 1 ] = "stardiv.vcl.control.Edit";
     return aNames;
 }
 
@@ -565,6 +571,23 @@ uno::Reference< beans::XPropertySetInfo > UnoControlFileControlModel::getPropert
     return xInfo;
 }
 
+OUString UnoControlFileControlModel::getImplementationName()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return OUString("stardiv.Toolkit.UnoControlFileControlModel");
+}
+
+css::uno::Sequence<OUString>
+UnoControlFileControlModel::getSupportedServiceNames()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    auto s(UnoControlModel::getSupportedServiceNames());
+    s.realloc(s.getLength() + 2);
+    s[s.getLength() - 2] = "com.sun.star.awt.UnoControlFileControlModel";
+    s[s.getLength() - 1] = "stardiv.vcl.controlmodel.FileControl";
+    return s;
+}
+
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 stardiv_Toolkit_UnoControlFileControlModel_get_implementation(
     css::uno::XComponentContext *context,
@@ -584,6 +607,22 @@ UnoFileControl::UnoFileControl()
 OUString UnoFileControl::GetComponentServiceName()
 {
     return OUString("filecontrol");
+}
+
+OUString UnoFileControl::getImplementationName()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return OUString("stardiv.Toolkit.UnoFileControl");
+}
+
+css::uno::Sequence<OUString> UnoFileControl::getSupportedServiceNames()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    auto s(UnoEditControl::getSupportedServiceNames());
+    s.realloc(s.getLength() + 2);
+    s[s.getLength() - 2] = "com.sun.star.awt.UnoControlFileControl";
+    s[s.getLength() - 1] = "stardiv.vcl.control.FileControl";
+    return s;
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
@@ -720,6 +759,22 @@ uno::Reference< beans::XPropertySetInfo > UnoControlButtonModel::getPropertySetI
 {
     static uno::Reference< beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
+}
+
+OUString UnoControlButtonModel::getImplementationName()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return OUString("stardiv.Toolkit.UnoControlButtonModel");
+}
+
+css::uno::Sequence<OUString> UnoControlButtonModel::getSupportedServiceNames()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    auto s(GraphicControlModel::getSupportedServiceNames());
+    s.realloc(s.getLength() + 2);
+    s[s.getLength() - 2] = "com.sun.star.awt.UnoControlButtonModel";
+    s[s.getLength() - 1] = "stardiv.vcl.controlmodel.Button";
+    return s;
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
@@ -870,6 +925,22 @@ awt::Size UnoButtonControl::calcAdjustedSize( const awt::Size& rNewSize ) throw(
     return Impl_calcAdjustedSize( rNewSize );
 }
 
+OUString UnoButtonControl::getImplementationName()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return OUString("stardiv.Toolkit.UnoButtonControl");
+}
+
+css::uno::Sequence<OUString> UnoButtonControl::getSupportedServiceNames()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    auto s(UnoControlBase::getSupportedServiceNames());
+    s.realloc(s.getLength() + 2);
+    s[s.getLength() - 2] = "com.sun.star.awt.UnoControlButton";
+    s[s.getLength() - 1] = "stardiv.vcl.control.Button";
+    return s;
+}
+
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 stardiv_Toolkit_UnoButtonControl_get_implementation(
     css::uno::XComponentContext *,
@@ -891,6 +962,25 @@ UnoControlImageControlModel::UnoControlImageControlModel( const Reference< XComp
 OUString UnoControlImageControlModel::getServiceName() throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     return OUString::createFromAscii( szServiceName_UnoControlImageControlModel );
+}
+
+OUString UnoControlImageControlModel::getImplementationName()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return OUString("stardiv.Toolkit.UnoControlImageControlModel");
+}
+
+css::uno::Sequence<OUString>
+UnoControlImageControlModel::getSupportedServiceNames()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    auto s(GraphicControlModel::getSupportedServiceNames());
+    s.realloc(s.getLength() + 4);
+    s[s.getLength() - 4] = "com.sun.star.awt.UnoControlImageButtonModel";
+    s[s.getLength() - 3] = "com.sun.star.awt.UnoControlImageControlModel";
+    s[s.getLength() - 2] = "stardiv.vcl.controlmodel.ImageButton";
+    s[s.getLength() - 1] = "stardiv.vcl.controlmodel.ImageControl";
+    return s;
 }
 
 uno::Any UnoControlImageControlModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
@@ -1013,6 +1103,24 @@ awt::Size UnoImageControlControl::calcAdjustedSize( const awt::Size& rNewSize ) 
     return Impl_calcAdjustedSize( rNewSize );
 }
 
+OUString UnoImageControlControl::getImplementationName()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return OUString("stardiv.Toolkit.UnoImageControlControl");
+}
+
+css::uno::Sequence<OUString> UnoImageControlControl::getSupportedServiceNames()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    auto s(UnoControlBase::getSupportedServiceNames());
+    s.realloc(s.getLength() + 4);
+    s[s.getLength() - 4] = "com.sun.star.awt.UnoControlImageButton";
+    s[s.getLength() - 3] = "com.sun.star.awt.UnoControlImageControl";
+    s[s.getLength() - 2] = "stardiv.vcl.control.ImageButton";
+    s[s.getLength() - 1] = "stardiv.vcl.control.ImageControl";
+    return s;
+}
+
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 stardiv_Toolkit_UnoImageControlControl_get_implementation(
     css::uno::XComponentContext *,
@@ -1065,6 +1173,23 @@ uno::Reference< beans::XPropertySetInfo > UnoControlRadioButtonModel::getPropert
 {
     static uno::Reference< beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
+}
+
+OUString UnoControlRadioButtonModel::getImplementationName()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return OUString("stardiv.Toolkit.UnoControlRadioButtonModel");
+}
+
+css::uno::Sequence<OUString>
+UnoControlRadioButtonModel::getSupportedServiceNames()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    auto s(GraphicControlModel::getSupportedServiceNames());
+    s.realloc(s.getLength() + 2);
+    s[s.getLength() - 2] = "com.sun.star.awt.UnoControlRadioButtonModel";
+    s[s.getLength() - 1] = "stardiv.vcl.controlmodel.RadioButton";
+    return s;
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
@@ -1237,6 +1362,22 @@ awt::Size UnoRadioButtonControl::calcAdjustedSize( const awt::Size& rNewSize ) t
     return Impl_calcAdjustedSize( rNewSize );
 }
 
+OUString UnoRadioButtonControl::getImplementationName()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return OUString("stardiv.Toolkit.UnoRadioButtonControl");
+}
+
+css::uno::Sequence<OUString> UnoRadioButtonControl::getSupportedServiceNames()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    auto s(UnoControlBase::getSupportedServiceNames());
+    s.realloc(s.getLength() + 2);
+    s[s.getLength() - 2] = "com.sun.star.awt.UnoControlRadioButton";
+    s[s.getLength() - 1] = "stardiv.vcl.control.RadioButton";
+    return s;
+}
+
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 stardiv_Toolkit_UnoRadioButtonControl_get_implementation(
     css::uno::XComponentContext *,
@@ -1289,6 +1430,22 @@ uno::Reference< beans::XPropertySetInfo > UnoControlCheckBoxModel::getPropertySe
 {
     static uno::Reference< beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
+}
+
+OUString UnoControlCheckBoxModel::getImplementationName()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return OUString( "stardiv.Toolkit.UnoControlCheckBoxModel");
+}
+
+css::uno::Sequence<OUString> UnoControlCheckBoxModel::getSupportedServiceNames()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    auto s(GraphicControlModel::getSupportedServiceNames());
+    s.realloc(s.getLength() + 2);
+    s[s.getLength() - 2] = "com.sun.star.awt.UnoControlCheckBoxModel";
+    s[s.getLength() - 1] = "stardiv.vcl.controlmodel.CheckBox";
+    return s;
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
@@ -1434,6 +1591,22 @@ awt::Size UnoCheckBoxControl::getPreferredSize(  ) throw(uno::RuntimeException, 
 awt::Size UnoCheckBoxControl::calcAdjustedSize( const awt::Size& rNewSize ) throw(uno::RuntimeException, std::exception)
 {
     return Impl_calcAdjustedSize( rNewSize );
+}
+
+OUString UnoCheckBoxControl::getImplementationName()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return OUString("stardiv.Toolkit.UnoCheckBoxControl");
+}
+
+css::uno::Sequence<OUString> UnoCheckBoxControl::getSupportedServiceNames()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    auto s(UnoControlBase::getSupportedServiceNames());
+    s.realloc(s.getLength() + 2);
+    s[s.getLength() - 2] = "com.sun.star.awt.UnoControlCheckBox";
+    s[s.getLength() - 1] = "stardiv.vcl.control.CheckBox";
+    return s;
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
@@ -1697,6 +1870,23 @@ uno::Reference< beans::XPropertySetInfo > UnoControlFixedTextModel::getPropertyS
     return xInfo;
 }
 
+OUString UnoControlFixedTextModel::getImplementationName()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return OUString("stardiv.Toolkit.UnoControlFixedTextModel");
+}
+
+css::uno::Sequence<OUString>
+UnoControlFixedTextModel::getSupportedServiceNames()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    auto s(UnoControlModel::getSupportedServiceNames());
+    s.realloc(s.getLength() + 2);
+    s[s.getLength() - 2] = "com.sun.star.awt.UnoControlFixedTextModel";
+    s[s.getLength() - 1] = "stardiv.vcl.controlmodel.FixedText";
+    return s;
+}
+
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 stardiv_Toolkit_UnoControlFixedTextModel_get_implementation(
     css::uno::XComponentContext *context,
@@ -1786,6 +1976,22 @@ awt::Size UnoFixedTextControl::calcAdjustedSize( const awt::Size& rNewSize ) thr
     return Impl_calcAdjustedSize( rNewSize );
 }
 
+OUString UnoFixedTextControl::getImplementationName()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return OUString("stardiv.Toolkit.UnoFixedTextControl");
+}
+
+css::uno::Sequence<OUString> UnoFixedTextControl::getSupportedServiceNames()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    auto s(UnoControlBase::getSupportedServiceNames());
+    s.realloc(s.getLength() + 2);
+    s[s.getLength() - 2] = "com.sun.star.awt.UnoControlFixedText";
+    s[s.getLength() - 1] = "stardiv.vcl.control.FixedText";
+    return s;
+}
+
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 stardiv_Toolkit_UnoFixedTextControl_get_implementation(
     css::uno::XComponentContext *,
@@ -1846,6 +2052,22 @@ uno::Reference< beans::XPropertySetInfo > UnoControlGroupBoxModel::getPropertySe
     return xInfo;
 }
 
+OUString UnoControlGroupBoxModel::getImplementationName()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return OUString("stardiv.Toolkit.UnoControlGroupBoxModel");
+}
+
+css::uno::Sequence<OUString> UnoControlGroupBoxModel::getSupportedServiceNames()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    auto s(UnoControlModel::getSupportedServiceNames());
+    s.realloc(s.getLength() + 2);
+    s[s.getLength() - 2] = "com.sun.star.awt.UnoControlGroupBoxModel";
+    s[s.getLength() - 1] = "stardiv.vcl.controlmodel.GroupBox";
+    return s;
+}
+
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 stardiv_Toolkit_UnoControlGroupBoxModel_get_implementation(
     css::uno::XComponentContext *context,
@@ -1872,6 +2094,22 @@ OUString UnoGroupBoxControl::GetComponentServiceName()
 sal_Bool UnoGroupBoxControl::isTransparent() throw(uno::RuntimeException, std::exception)
 {
     return sal_True;
+}
+
+OUString UnoGroupBoxControl::getImplementationName()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return OUString("stardiv.Toolkit.UnoGroupBoxControl");
+}
+
+css::uno::Sequence<OUString> UnoGroupBoxControl::getSupportedServiceNames()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    auto s(UnoControlBase::getSupportedServiceNames());
+    s.realloc(s.getLength() + 2);
+    s[s.getLength() - 2] = "com.sun.star.awt.UnoControlGroupBox";
+    s[s.getLength() - 1] = "stardiv.vcl.control.GroupBox";
+    return s;
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
@@ -2009,7 +2247,22 @@ UnoControlListBoxModel::UnoControlListBoxModel( const UnoControlListBoxModel& i_
 UnoControlListBoxModel::~UnoControlListBoxModel()
 {
 }
-IMPL_SERVICEINFO_DERIVED( UnoControlListBoxModel, UnoControlModel, "com.sun.star.awt.UnoControlListBoxModel" )
+
+OUString UnoControlListBoxModel::getImplementationName()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return OUString("stardiv.Toolkit.UnoControlListBoxModel");
+}
+
+css::uno::Sequence<OUString> UnoControlListBoxModel::getSupportedServiceNames()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    auto s(UnoControlModel::getSupportedServiceNames());
+    s.realloc(s.getLength() + 2);
+    s[s.getLength() - 2] = "com.sun.star.awt.UnoControlListBoxModel";
+    s[s.getLength() - 1] = "stardiv.vcl.controlmodel.ListBox";
+    return s;
+}
 
 OUString UnoControlListBoxModel::getServiceName() throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
@@ -2452,7 +2705,22 @@ OUString UnoListBoxControl::GetComponentServiceName()
 {
     return OUString("listbox");
 }
-IMPL_SERVICEINFO_DERIVED( UnoListBoxControl, UnoControlBase, "com.sun.star.awt.UnoControlListBox" )
+
+OUString UnoListBoxControl::getImplementationName()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return OUString("stardiv.Toolkit.UnoListBoxControl");
+}
+
+css::uno::Sequence<OUString> UnoListBoxControl::getSupportedServiceNames()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    auto s(UnoControlBase::getSupportedServiceNames());
+    s.realloc(s.getLength() + 2);
+    s[s.getLength() - 2] = "com.sun.star.awt.UnoControlListBox";
+    s[s.getLength() - 1] = "stardiv.vcl.control.ListBox";
+    return s;
+}
 
 void UnoListBoxControl::dispose() throw(uno::RuntimeException, std::exception)
 {
@@ -2877,7 +3145,21 @@ UnoControlComboBoxModel::UnoControlComboBoxModel( const Reference< XComponentCon
     UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXComboBox );
 }
 
-IMPL_SERVICEINFO_DERIVED( UnoControlComboBoxModel, UnoControlModel, "com.sun.star.awt.UnoControlComboBoxModel" )
+OUString UnoControlComboBoxModel::getImplementationName()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return OUString("stardiv.Toolkit.UnoControlComboBoxModel");
+}
+
+css::uno::Sequence<OUString> UnoControlComboBoxModel::getSupportedServiceNames()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    auto s(UnoControlModel::getSupportedServiceNames());
+    s.realloc(s.getLength() + 2);
+    s[s.getLength() - 2] = "com.sun.star.awt.UnoControlComboBoxModel";
+    s[s.getLength() - 1] = "stardiv.vcl.controlmodel.ComboBox";
+    return s;
+}
 
 uno::Reference< beans::XPropertySetInfo > UnoControlComboBoxModel::getPropertySetInfo(  ) throw(uno::RuntimeException, std::exception)
 {
@@ -2963,7 +3245,22 @@ UnoComboBoxControl::UnoComboBoxControl()
     maComponentInfos.nWidth = 100;
     maComponentInfos.nHeight = 12;
 }
-IMPL_SERVICEINFO_DERIVED( UnoComboBoxControl, UnoEditControl, "com.sun.star.awt.UnoControlComboBox" )
+
+OUString UnoComboBoxControl::getImplementationName()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return OUString( "stardiv.Toolkit.UnoComboBoxControl");
+}
+
+css::uno::Sequence<OUString> UnoComboBoxControl::getSupportedServiceNames()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    auto s(UnoEditControl::getSupportedServiceNames());
+    s.realloc(s.getLength() + 2);
+    s[s.getLength() - 2] = "com.sun.star.awt.UnoControlComboBox";
+    s[s.getLength() - 1] = "stardiv.vcl.control.ComboBox";
+    return s;
+}
 
 OUString UnoComboBoxControl::GetComponentServiceName()
 {
@@ -3409,6 +3706,23 @@ uno::Reference< beans::XPropertySetInfo > UnoControlDateFieldModel::getPropertyS
     return xInfo;
 }
 
+OUString UnoControlDateFieldModel::getImplementationName()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return OUString("stardiv.Toolkit.UnoControlDateFieldModel");
+}
+
+css::uno::Sequence<OUString>
+UnoControlDateFieldModel::getSupportedServiceNames()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    auto s(UnoControlModel::getSupportedServiceNames());
+    s.realloc(s.getLength() + 2);
+    s[s.getLength() - 2] = "com.sun.star.awt.UnoControlDateFieldModel";
+    s[s.getLength() - 1] = "stardiv.vcl.controlmodel.DateField";
+    return s;
+}
+
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 stardiv_Toolkit_UnoControlDateFieldModel_get_implementation(
     css::uno::XComponentContext *context,
@@ -3613,6 +3927,22 @@ sal_Bool UnoDateFieldControl::isStrictFormat() throw(uno::RuntimeException, std:
     return ImplGetPropertyValue_BOOL( BASEPROPERTY_STRICTFORMAT );
 }
 
+OUString UnoDateFieldControl::getImplementationName()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return OUString("stardiv.Toolkit.UnoDateFieldControl");
+}
+
+css::uno::Sequence<OUString> UnoDateFieldControl::getSupportedServiceNames()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    auto s(UnoSpinFieldControl::getSupportedServiceNames());
+    s.realloc(s.getLength() + 2);
+    s[s.getLength() - 2] = "com.sun.star.awt.UnoControlDateField";
+    s[s.getLength() - 1] = "stardiv.vcl.control.DateField";
+    return s;
+}
+
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 stardiv_Toolkit_UnoDateFieldControl_get_implementation(
     css::uno::XComponentContext *,
@@ -3663,6 +3993,23 @@ uno::Reference< beans::XPropertySetInfo > UnoControlTimeFieldModel::getPropertyS
 {
     static uno::Reference< beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
+}
+
+OUString UnoControlTimeFieldModel::getImplementationName()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return OUString("stardiv.Toolkit.UnoControlTimeFieldModel");
+}
+
+css::uno::Sequence<OUString>
+UnoControlTimeFieldModel::getSupportedServiceNames()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    auto s(UnoControlModel::getSupportedServiceNames());
+    s.realloc(s.getLength() + 2);
+    s[s.getLength() - 2] = "com.sun.star.awt.UnoControlTimeFieldModel";
+    s[s.getLength() - 1] = "stardiv.vcl.controlmodel.TimeField";
+    return s;
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
@@ -3828,6 +4175,22 @@ sal_Bool UnoTimeFieldControl::isStrictFormat() throw(uno::RuntimeException, std:
     return ImplGetPropertyValue_BOOL( BASEPROPERTY_STRICTFORMAT );
 }
 
+OUString UnoTimeFieldControl::getImplementationName()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return OUString("stardiv.Toolkit.UnoTimeFieldControl");
+}
+
+css::uno::Sequence<OUString> UnoTimeFieldControl::getSupportedServiceNames()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    auto s(UnoSpinFieldControl::getSupportedServiceNames());
+    s.realloc(s.getLength() + 2);
+    s[s.getLength() - 2] = "com.sun.star.awt.UnoControlTimeField";
+    s[s.getLength() - 1] = "stardiv.vcl.control.TimeField";
+    return s;
+}
+
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 stardiv_Toolkit_UnoTimeFieldControl_get_implementation(
     css::uno::XComponentContext *,
@@ -3878,6 +4241,23 @@ uno::Reference< beans::XPropertySetInfo > UnoControlNumericFieldModel::getProper
 {
     static uno::Reference< beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
+}
+
+OUString UnoControlNumericFieldModel::getImplementationName()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return OUString("stardiv.Toolkit.UnoControlNumericFieldModel");
+}
+
+css::uno::Sequence<OUString>
+UnoControlNumericFieldModel::getSupportedServiceNames()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    auto s(UnoControlModel::getSupportedServiceNames());
+    s.realloc(s.getLength() + 2);
+    s[s.getLength() - 2] = "com.sun.star.awt.UnoControlNumericFieldModel";
+    s[s.getLength() - 1] = "stardiv.vcl.controlmodel.NumericField";
+    return s;
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
@@ -4016,6 +4396,22 @@ sal_Bool UnoNumericFieldControl::isStrictFormat() throw(uno::RuntimeException, s
     return ImplGetPropertyValue_BOOL( BASEPROPERTY_STRICTFORMAT );
 }
 
+OUString UnoNumericFieldControl::getImplementationName()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return OUString("stardiv.Toolkit.UnoNumericFieldControl");
+}
+
+css::uno::Sequence<OUString> UnoNumericFieldControl::getSupportedServiceNames()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    auto s(UnoSpinFieldControl::getSupportedServiceNames());
+    s.realloc(s.getLength() + 2);
+    s[s.getLength() - 2] = "com.sun.star.awt.UnoControlNumericField";
+    s[s.getLength() - 1] = "stardiv.vcl.control.NumericField";
+    return s;
+}
+
 void UnoNumericFieldControl::setSpinSize( double Digits ) throw(uno::RuntimeException, std::exception)
 {
     uno::Any aAny;
@@ -4096,6 +4492,23 @@ uno::Reference< beans::XPropertySetInfo > UnoControlCurrencyFieldModel::getPrope
 {
     static uno::Reference< beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
+}
+
+OUString UnoControlCurrencyFieldModel::getImplementationName()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return OUString("stardiv.Toolkit.UnoControlCurrencyFieldModel");
+}
+
+css::uno::Sequence<OUString>
+UnoControlCurrencyFieldModel::getSupportedServiceNames()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    auto s(UnoControlModel::getSupportedServiceNames());
+    s.realloc(s.getLength() + 2);
+    s[s.getLength() - 2] = "com.sun.star.awt.UnoControlCurrencyFieldModel";
+    s[s.getLength() - 1] = "stardiv.vcl.controlmodel.CurrencyField";
+    return s;
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
@@ -4233,6 +4646,23 @@ sal_Bool UnoCurrencyFieldControl::isStrictFormat() throw(uno::RuntimeException, 
     return ImplGetPropertyValue_BOOL( BASEPROPERTY_STRICTFORMAT );
 }
 
+OUString UnoCurrencyFieldControl::getImplementationName()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return OUString("stardiv.Toolkit.UnoCurrencyFieldControl");
+}
+
+css::uno::Sequence<OUString>
+UnoCurrencyFieldControl::getSupportedServiceNames()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    auto s(UnoSpinFieldControl::getSupportedServiceNames());
+    s.realloc(s.getLength() + 2);
+    s[s.getLength() - 2] = "com.sun.star.awt.UnoControlCurrencyField";
+    s[s.getLength() - 1] = "stardiv.vcl.control.CurrencyField";
+    return s;
+}
+
 void UnoCurrencyFieldControl::setSpinSize( double Digits ) throw(uno::RuntimeException, std::exception)
 {
     uno::Any aAny;
@@ -4306,6 +4736,23 @@ uno::Reference< beans::XPropertySetInfo > UnoControlPatternFieldModel::getProper
 {
     static uno::Reference< beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
+}
+
+OUString UnoControlPatternFieldModel::getImplementationName()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return OUString("stardiv.Toolkit.UnoControlPatternFieldModel");
+}
+
+css::uno::Sequence<OUString>
+UnoControlPatternFieldModel::getSupportedServiceNames()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    auto s(UnoControlModel::getSupportedServiceNames());
+    s.realloc(s.getLength() + 2);
+    s[s.getLength() - 2] = "com.sun.star.awt.UnoControlPatternFieldModel";
+    s[s.getLength() - 1] = "stardiv.vcl.controlmodel.PatternField";
+    return s;
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
@@ -4405,6 +4852,22 @@ sal_Bool UnoPatternFieldControl::isStrictFormat() throw(uno::RuntimeException, s
     return ImplGetPropertyValue_BOOL( BASEPROPERTY_STRICTFORMAT );
 }
 
+OUString UnoPatternFieldControl::getImplementationName()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return OUString("stardiv.Toolkit.UnoPatternFieldControl");
+}
+
+css::uno::Sequence<OUString> UnoPatternFieldControl::getSupportedServiceNames()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    auto s(UnoSpinFieldControl::getSupportedServiceNames());
+    s.realloc(s.getLength() + 2);
+    s[s.getLength() - 2] = "com.sun.star.awt.UnoControlPatternField";
+    s[s.getLength() - 1] = "stardiv.vcl.control.PatternField";
+    return s;
+}
+
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 stardiv_Toolkit_UnoPatternFieldControl_get_implementation(
     css::uno::XComponentContext *,
@@ -4467,6 +4930,23 @@ uno::Reference< beans::XPropertySetInfo > UnoControlProgressBarModel::getPropert
 {
     static uno::Reference< beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
+}
+
+OUString UnoControlProgressBarModel::getImplementationName()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return OUString("stardiv.Toolkit.UnoControlProgressBarModel");
+}
+
+css::uno::Sequence<OUString>
+UnoControlProgressBarModel::getSupportedServiceNames()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    auto s(UnoControlModel::getSupportedServiceNames());
+    s.realloc(s.getLength() + 2);
+    s[s.getLength() - 2] = "com.sun.star.awt.UnoControlProgressBarModel";
+    s[s.getLength() - 1] = "stardiv.vcl.controlmodel.ProgressBar";
+    return s;
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
@@ -4553,6 +5033,22 @@ sal_Int32 UnoProgressBarControl::getValue() throw(::com::sun::star::uno::Runtime
     return ImplGetPropertyValue_INT32( BASEPROPERTY_PROGRESSVALUE );
 }
 
+OUString UnoProgressBarControl::getImplementationName()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return OUString("stardiv.Toolkit.UnoProgressBarControl");
+}
+
+css::uno::Sequence<OUString> UnoProgressBarControl::getSupportedServiceNames()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    auto s(UnoControlBase::getSupportedServiceNames());
+    s.realloc(s.getLength() + 2);
+    s[s.getLength() - 2] = "com.sun.star.awt.UnoControlProgressBar";
+    s[s.getLength() - 1] = "stardiv.vcl.control.ProgressBar";
+    return s;
+}
+
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 stardiv_Toolkit_UnoProgressBarControl_get_implementation(
     css::uno::XComponentContext *,
@@ -4613,6 +5109,23 @@ uno::Reference< beans::XPropertySetInfo > UnoControlFixedLineModel::getPropertyS
     return xInfo;
 }
 
+OUString UnoControlFixedLineModel::getImplementationName()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return OUString("stardiv.Toolkit.UnoControlFixedLineModel");
+}
+
+css::uno::Sequence<OUString>
+UnoControlFixedLineModel::getSupportedServiceNames()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    auto s(UnoControlModel::getSupportedServiceNames());
+    s.realloc(s.getLength() + 2);
+    s[s.getLength() - 2] = "com.sun.star.awt.UnoControlFixedLineModel";
+    s[s.getLength() - 1] = "stardiv.vcl.controlmodel.FixedLine";
+    return s;
+}
+
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 stardiv_Toolkit_UnoControlFixedLineModel_get_implementation(
     css::uno::XComponentContext *context,
@@ -4639,6 +5152,22 @@ OUString UnoFixedLineControl::GetComponentServiceName()
 sal_Bool UnoFixedLineControl::isTransparent() throw(uno::RuntimeException, std::exception)
 {
     return sal_True;
+}
+
+OUString UnoFixedLineControl::getImplementationName()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return OUString("stardiv.Toolkit.UnoFixedLineControl");
+}
+
+css::uno::Sequence<OUString> UnoFixedLineControl::getSupportedServiceNames()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    auto s(UnoControlBase::getSupportedServiceNames());
+    s.realloc(s.getLength() + 2);
+    s[s.getLength() - 2] = "com.sun.star.awt.UnoControlFixedLine";
+    s[s.getLength() - 1] = "stardiv.vcl.control.FixedLine";
+    return s;
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL

@@ -104,7 +104,7 @@ namespace dbaxml
 
     Reference< XInterface > SAL_CALL ODBExportHelper::Create(const Reference< XMultiServiceFactory >& _rxORB)
     {
-        return static_cast< XServiceInfo* >(new ODBExport(comphelper::getComponentContext(_rxORB), SvXMLExportFlags::SETTINGS | SvXMLExportFlags::PRETTY ));
+        return static_cast< XServiceInfo* >(new ODBExport(comphelper::getComponentContext(_rxORB), getImplementationName_Static(), SvXMLExportFlags::SETTINGS | SvXMLExportFlags::PRETTY ));
     }
 
     OUString SAL_CALL ODBExportHelper::getImplementationName_Static(  ) throw (RuntimeException)
@@ -121,7 +121,7 @@ namespace dbaxml
 
     Reference< XInterface > SAL_CALL ODBFullExportHelper::Create(const Reference< XMultiServiceFactory >& _rxORB)
     {
-        return static_cast< XServiceInfo* >(new ODBExport(comphelper::getComponentContext(_rxORB), SvXMLExportFlags::ALL));
+        return static_cast< XServiceInfo* >(new ODBExport(comphelper::getComponentContext(_rxORB), getImplementationName_Static(), SvXMLExportFlags::ALL));
     }
     OUString SAL_CALL ODBFullExportHelper::getImplementationName_Static(  ) throw (RuntimeException)
     {
@@ -183,8 +183,8 @@ namespace dbaxml
             // nothing to do here
         }
     };
-ODBExport::ODBExport(const Reference< XComponentContext >& _rxContext, SvXMLExportFlags nExportFlag)
-: SvXMLExport( util::MeasureUnit::MM_10TH, _rxContext, getImplementationName_Static(), XML_DATABASE,
+ODBExport::ODBExport(const Reference< XComponentContext >& _rxContext, OUString const & implementationName, SvXMLExportFlags nExportFlag)
+: SvXMLExport( util::MeasureUnit::MM_10TH, _rxContext, implementationName, XML_DATABASE,
         SvXMLExportFlags::OASIS | nExportFlag)
 ,m_aTypeCollection(_rxContext)
 ,m_bAllreadyFilled(false)
@@ -266,7 +266,7 @@ css::uno::Sequence<OUString> ODBExport::getSupportedServiceNames_Static()
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
     SAL_CALL ODBExport::Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB)
 {
-    return static_cast< XServiceInfo* >(new ODBExport( comphelper::getComponentContext(_rxORB)));
+    return static_cast< XServiceInfo* >(new ODBExport( comphelper::getComponentContext(_rxORB), getImplementationName_Static()));
 }
 
 void ODBExport::exportDataSource()

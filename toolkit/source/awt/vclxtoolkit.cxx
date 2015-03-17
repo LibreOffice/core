@@ -1509,8 +1509,8 @@ sal_Bool VCLXToolkit::supportsService( const OUString& rServiceName ) throw(::co
 
 ::com::sun::star::uno::Sequence< OUString > VCLXToolkit::getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
-    OUString aServiceName("com.sun.star.awt.Toolkit");
-    return ::com::sun::star::uno::Sequence< OUString >( &aServiceName, 1);
+    return css::uno::Sequence<OUString>{
+        "com.sun.star.awt.Toolkit", "stardiv.vcl.VclToolkit"};
 }
 
 // css::awt::XExtendedToolkit:

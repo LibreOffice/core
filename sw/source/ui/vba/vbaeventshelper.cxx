@@ -83,7 +83,7 @@ OUString SwVbaEventsHelper::implGetDocumentModuleName( const EventHandlerInfo& /
 namespace vbaeventshelper
 {
 namespace sdecl = comphelper::service_decl;
-sdecl::class_<SwVbaEventsHelper, sdecl::with_args<true> > serviceImpl;
+sdecl::inheritingClass_<SwVbaEventsHelper, sdecl::with_args<true> > serviceImpl;
 extern sdecl::ServiceDecl const serviceDecl(
     serviceImpl,
     "SwVbaEventsHelper",

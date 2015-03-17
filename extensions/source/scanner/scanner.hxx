@@ -23,12 +23,13 @@
 #include <tools/stream.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/scanner/XScannerManager2.hpp>
 #include <com/sun/star/scanner/ScannerException.hpp>
@@ -37,7 +38,9 @@ using namespace cppu;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::scanner;
 
-class ScannerManager : public OWeakObject, XScannerManager2, css::awt::XBitmap
+class ScannerManager:
+    public cppu::WeakImplHelper<
+        XScannerManager2, css::awt::XBitmap, css::lang::XServiceInfo>
 {
 protected:
 
@@ -52,11 +55,6 @@ public:
                                             ScannerManager();
     virtual                                 ~ScannerManager();
 
-    // XInterface
-    virtual Any SAL_CALL                    queryInterface( const Type & rType ) throw( RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL                   acquire() throw() SAL_OVERRIDE;
-    virtual void SAL_CALL                   release() throw() SAL_OVERRIDE;
-
     // XScannerManager
     virtual Sequence< ScannerContext > SAL_CALL  getAvailableScanners() throw(std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL               configureScanner( ScannerContext& scanner_context ) throw( ScannerException, std::exception ) SAL_OVERRIDE;
@@ -69,6 +67,15 @@ public:
     virtual css::awt::Size SAL_CALL              getSize() throw(std::exception) SAL_OVERRIDE;
     virtual Sequence< sal_Int8 > SAL_CALL        getDIB() throw(std::exception) SAL_OVERRIDE;
     virtual Sequence< sal_Int8 > SAL_CALL        getMaskDIB() throw(std::exception) SAL_OVERRIDE;
+
+    OUString SAL_CALL getImplementationName()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // Misc
     static OUString                         getImplementationName_Static() throw();

@@ -181,6 +181,12 @@ void SAL_CALL VbaEventsHelperBase::disposing( const lang::EventObject& rEvent ) 
         stopListening();
 }
 
+sal_Bool VbaEventsHelperBase::supportsService(OUString const & ServiceName)
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return cppu::supportsService(this, ServiceName);
+}
+
 void VbaEventsHelperBase::processVbaEventNoThrow( sal_Int32 nEventId, const uno::Sequence< uno::Any >& rArgs )
 {
     try

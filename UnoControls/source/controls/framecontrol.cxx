@@ -161,6 +161,18 @@ Any SAL_CALL FrameControl::queryAggregation( const Type& aType ) throw( RuntimeE
     return aReturn;
 }
 
+OUString FrameControl::getImplementationName()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return impl_getStaticImplementationName();
+}
+
+css::uno::Sequence<OUString> FrameControl::getSupportedServiceNames()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return impl_getStaticSupportedServiceNames();
+}
+
 //  XControl
 
 void SAL_CALL FrameControl::createPeer( const   Reference< XToolkit >&      xToolkit    ,

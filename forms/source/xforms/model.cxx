@@ -36,6 +36,7 @@
 
 #include <comphelper/propertysetinfo.hxx>
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 
 #include <algorithm>
@@ -680,6 +681,23 @@ Sequence<sal_Int8> Model::getImplementationId()
     return css::uno::Sequence<sal_Int8>();
 }
 
+OUString Model::getImplementationName()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return OUString("com.sun.star.form.Model");
+}
+
+sal_Bool Model::supportsService(OUString const & ServiceName)
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return cppu::supportsService(this, ServiceName);
+}
+
+css::uno::Sequence<OUString> Model::getSupportedServiceNames()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return css::uno::Sequence<OUString>{"com.sun.star.xforms.Model"};
+}
 
 extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
 com_sun_star_form_Model_get_implementation(::com::sun::star::uno::XComponentContext*,

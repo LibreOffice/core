@@ -153,7 +153,14 @@ public:
 
 
     // ::com::sun::star::lang::XServiceInfo
-    DECLIMPL_SERVICEINFO( UnoDialogControl, szServiceName2_UnoControlDialog )
+    OUString SAL_CALL getImplementationName()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 protected:
     virtual void PrepareWindowDescriptor( ::com::sun::star::awt::WindowDescriptor& rDesc ) SAL_OVERRIDE;

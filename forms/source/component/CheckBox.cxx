@@ -48,10 +48,11 @@ OCheckBoxControl::OCheckBoxControl(const Reference<XComponentContext>& _rxFactor
 StringSequence SAL_CALL OCheckBoxControl::getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     StringSequence aSupported = OBoundControl::getSupportedServiceNames();
-    aSupported.realloc(aSupported.getLength() + 1);
+    aSupported.realloc(aSupported.getLength() + 2);
 
     OUString* pArray = aSupported.getArray();
-    pArray[aSupported.getLength()-1] = FRM_SUN_CONTROL_CHECKBOX;
+    pArray[aSupported.getLength()-2] = FRM_SUN_CONTROL_CHECKBOX;
+    pArray[aSupported.getLength()-1] = STARDIV_ONE_FORM_CONTROL_CHECKBOX;
     return aSupported;
 }
 
@@ -88,7 +89,7 @@ StringSequence SAL_CALL OCheckBoxModel::getSupportedServiceNames() throw(::com::
     StringSequence aSupported = OReferenceValueComponent::getSupportedServiceNames();
 
     sal_Int32 nOldLen = aSupported.getLength();
-    aSupported.realloc( nOldLen + 8 );
+    aSupported.realloc( nOldLen + 9 );
     OUString* pStoreTo = aSupported.getArray() + nOldLen;
 
     *pStoreTo++ = BINDABLE_CONTROL_MODEL;
@@ -101,6 +102,8 @@ StringSequence SAL_CALL OCheckBoxModel::getSupportedServiceNames() throw(::com::
     *pStoreTo++ = FRM_SUN_COMPONENT_CHECKBOX;
     *pStoreTo++ = FRM_SUN_COMPONENT_DATABASE_CHECKBOX;
     *pStoreTo++ = BINDABLE_DATABASE_CHECK_BOX;
+
+    *pStoreTo++ = FRM_COMPONENT_CHECKBOX;
 
     return aSupported;
 }

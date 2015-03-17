@@ -177,7 +177,7 @@ OUString SAL_CALL OFormattedFieldWrapper::getServiceName() throw(RuntimeExceptio
 
 OUString SAL_CALL OFormattedFieldWrapper::getImplementationName(  ) throw (RuntimeException, std::exception)
 {
-    return OUString("com.sun.star.comp.forms.OFormattedFieldWrapper");
+    return OUString("com.sun.star.comp.forms.OFormattedFieldWrapper_ForcedFormatted");
 }
 
 sal_Bool SAL_CALL OFormattedFieldWrapper::supportsService( const OUString& _rServiceName ) throw (RuntimeException, std::exception)

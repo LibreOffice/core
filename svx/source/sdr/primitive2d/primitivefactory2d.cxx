@@ -18,7 +18,10 @@
  */
 
 #include <com/sun/star/graphic/XPrimitiveFactory2D.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <cppuhelper/compbase.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <rtl/ref.hxx>
 #include <svx/svdobj.hxx>
@@ -30,7 +33,7 @@ using namespace com::sun::star;
 
 namespace {
 
-typedef cppu::WeakComponentImplHelper1< ::com::sun::star::graphic::XPrimitiveFactory2D > PrimitiveFactory2DImplBase;
+typedef cppu::WeakComponentImplHelper< ::com::sun::star::graphic::XPrimitiveFactory2D, css::lang::XServiceInfo > PrimitiveFactory2DImplBase;
 
 // base class for C++ implementation of com::sun::star::graphic::XPrimitiveFactory2D
 class PrimitiveFactory2D
@@ -44,6 +47,20 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XPrimitive2D > > SAL_CALL createPrimitivesFromXShape( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aParms ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XPrimitive2D > > SAL_CALL createPrimitivesFromXDrawPage( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& xDrawPage, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aParms ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
+    OUString SAL_CALL getImplementationName()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    { return OUString("com.sun.star.comp.graphic.PrimitiveFactory2D"); }
+
+    sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    { return cppu::supportsService(this, ServiceName); }
+
+    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    {
+        return css::uno::Sequence<OUString>{
+            "com.sun.star.graphic.PrimitiveFactory2D"};
+    }
 };
 
 Primitive2DSequence SAL_CALL PrimitiveFactory2D::createPrimitivesFromXShape(

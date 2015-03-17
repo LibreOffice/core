@@ -79,7 +79,9 @@ public abstract class ScriptProvider implements
 
     private final String[] __serviceNames = {
         "com.sun.star.script.provider.ScriptProviderFor",
-        "com.sun.star.script.provider.LanguageScriptProvider"
+        "com.sun.star.script.provider.LanguageScriptProvider",
+        "com.sun.star.script.browse.BrowseNode",
+        "com.sun.star.script.provider.ScriptProvider"
     };
 
     protected String language;

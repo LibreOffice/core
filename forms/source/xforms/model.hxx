@@ -20,11 +20,12 @@
 #ifndef INCLUDED_FORMS_SOURCE_XFORMS_MODEL_HXX
 #define INCLUDED_FORMS_SOURCE_XFORMS_MODEL_HXX
 
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <propertysetbase.hxx>
 #include <com/sun/star/xforms/XModel2.hpp>
 #include <com/sun/star/xforms/XFormsUIHelper1.hpp>
 #include <com/sun/star/util/XUpdatable.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
@@ -65,12 +66,13 @@ namespace xforms
  *
  * See http://www.w3.org/TR/xforms/ for more information.
  */
-typedef cppu::ImplInheritanceHelper4<
+typedef cppu::ImplInheritanceHelper<
     PropertySetBase,
     com::sun::star::xforms::XModel2,
     com::sun::star::xforms::XFormsUIHelper1,
     com::sun::star::util::XUpdatable,
-    com::sun::star::lang::XUnoTunnel
+    com::sun::star::lang::XUnoTunnel,
+    css::lang::XServiceInfo
 > Model_t;
 class Model : public Model_t
 {
@@ -439,6 +441,14 @@ public:
     virtual IntSequence_t SAL_CALL getImplementationId()
         throw( RuntimeException_t ) SAL_OVERRIDE;
 
+    OUString SAL_CALL getImplementationName()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 } // namespace

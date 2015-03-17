@@ -105,7 +105,11 @@ public:
     // ::com::sun::star::awt::XWindow
     void SAL_CALL setVisible( sal_Bool Visible ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    DECLIMPL_SERVICEINFO_DERIVED( UnoControlContainer, UnoControlBase, "com.sun.star.awt.UnoControlContainer" )
+    OUString SAL_CALL getImplementationName()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 protected:
     virtual void PrepareWindowDescriptor( ::com::sun::star::awt::WindowDescriptor& rDesc ) SAL_OVERRIDE;

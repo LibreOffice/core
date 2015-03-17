@@ -62,6 +62,33 @@ namespace comphelper
         return aReturn;
     }
 
+    /// concat additional elements from right sequence to left sequence
+    ///
+    /// be aware that this takes time O(|left| * |right|)
+    template<typename T> css::uno::Sequence<T> combineSequences(
+        css::uno::Sequence<T> const & left, css::uno::Sequence<T> const & right)
+    {
+        sal_Int32 n1 = left.getLength();
+        css::uno::Sequence<T> ret(n1 + right.getLength());
+            //TODO: check for overflow
+        T * p = ret.getArray();
+        internal::implCopySequence(left.getConstArray(), p, n1);
+        sal_Int32 n2 = n1;
+        for (sal_Int32 i = 0; i != right.getLength(); ++i) {
+            bool found = false;
+            for (sal_Int32 j = 0; j != n1; ++j) {
+                if (right[i] == left[j]) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                ret[n2++] = right[i];
+            }
+        }
+        ret.realloc(n2);
+        return ret;
+    }
 
     /// concat three sequences
     template <class T>

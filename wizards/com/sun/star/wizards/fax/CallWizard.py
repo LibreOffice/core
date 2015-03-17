@@ -20,11 +20,16 @@ import traceback
 
 from .FaxWizardDialogImpl import FaxWizardDialogImpl, Desktop
 
+from com.sun.star.lang import XServiceInfo
 from com.sun.star.task import XJobExecutor
+
+# pythonloader looks for a static g_ImplementationHelper variable
+g_ImplementationHelper = unohelper.ImplementationHelper()
+g_implName = "com.sun.star.wizards.fax.CallWizard"
 
 # implement a UNO component by deriving from the standard unohelper.Base class
 # and from the interface(s) you want to implement.
-class CallWizard(unohelper.Base, XJobExecutor):
+class CallWizard(unohelper.Base, XJobExecutor, XServiceInfo):
     def __init__(self, ctx):
         # store the component context for later use
         self.ctx = ctx
@@ -51,13 +56,19 @@ class CallWizard(unohelper.Base, XJobExecutor):
             print ("Wizard failure exception " + str(type(e)) +
                    " message " + str(e) + " args " + str(e.args) +
                    traceback.format_exc())
-                   
-# pythonloader looks for a static g_ImplementationHelper variable
-g_ImplementationHelper = unohelper.ImplementationHelper()
+
+    def getImplementationName(self):
+        return g_implName
+
+    def supportsService(self, ServiceName):
+        return g_ImplementationHelper.supportsService(g_implName, ServiceName)
+
+    def getSupportedServiceNames(self):
+        return g_ImplementationHelper.getSupportedServiceNames(g_implName)
 
 g_ImplementationHelper.addImplementation( \
     CallWizard,                               # UNO object class
-    "com.sun.star.wizards.fax.CallWizard",    # implemtenation name
+    g_implName,                               # implemtenation name
     ("com.sun.star.task.Job",),)              # list of implemented services
                                               # (the only service)
 

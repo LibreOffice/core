@@ -54,10 +54,11 @@ Sequence<Type> OCurrencyControl::_getTypes()
 StringSequence SAL_CALL OCurrencyControl::getSupportedServiceNames() throw(std::exception)
 {
     StringSequence aSupported = OBoundControl::getSupportedServiceNames();
-    aSupported.realloc(aSupported.getLength() + 1);
+    aSupported.realloc(aSupported.getLength() + 2);
 
     OUString*pArray = aSupported.getArray();
-    pArray[aSupported.getLength()-1] = FRM_SUN_CONTROL_CURRENCYFIELD;
+    pArray[aSupported.getLength()-2] = FRM_SUN_CONTROL_CURRENCYFIELD;
+    pArray[aSupported.getLength()-1] = STARDIV_ONE_FORM_CONTROL_CURRENCYFIELD;
     return aSupported;
 }
 
@@ -150,7 +151,7 @@ StringSequence SAL_CALL OCurrencyModel::getSupportedServiceNames() throw(std::ex
     StringSequence aSupported = OBoundControlModel::getSupportedServiceNames();
 
     sal_Int32 nOldLen = aSupported.getLength();
-    aSupported.realloc( nOldLen + 4 );
+    aSupported.realloc( nOldLen + 5 );
     OUString* pStoreTo = aSupported.getArray() + nOldLen;
 
     *pStoreTo++ = DATA_AWARE_CONTROL_MODEL;
@@ -158,6 +159,8 @@ StringSequence SAL_CALL OCurrencyModel::getSupportedServiceNames() throw(std::ex
 
     *pStoreTo++ = FRM_SUN_COMPONENT_CURRENCYFIELD;
     *pStoreTo++ = FRM_SUN_COMPONENT_DATABASE_CURRENCYFIELD;
+
+    *pStoreTo++ = FRM_COMPONENT_CURRENCYFIELD;
 
     return aSupported;
 }

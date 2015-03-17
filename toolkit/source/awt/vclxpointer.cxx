@@ -20,11 +20,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <toolkit/awt/vclxpointer.hxx>
 #include <toolkit/helper/macros.hxx>
-#include <cppuhelper/typeprovider.hxx>
-#include <cppuhelper/queryinterface.hxx>
-
-
-//  class VCLXPointer
+#include <cppuhelper/supportsservice.hxx>
 
 VCLXPointer::VCLXPointer()
 {
@@ -34,23 +30,8 @@ VCLXPointer::~VCLXPointer()
 {
 }
 
-// ::com::sun::star::uno::XInterface
-::com::sun::star::uno::Any VCLXPointer::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception)
-{
-    ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        (static_cast< ::com::sun::star::awt::XPointer* >(this)),
-                                        (static_cast< ::com::sun::star::lang::XUnoTunnel* >(this)),
-                                        (static_cast< ::com::sun::star::lang::XTypeProvider* >(this)) );
-    return (aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType ));
-}
-
 // ::com::sun::star::lang::XUnoTunnel
 IMPL_XUNOTUNNEL( VCLXPointer )
-
-// ::com::sun::star::lang::XTypeProvider
-IMPL_XTYPEPROVIDER_START( VCLXPointer )
-    cppu::UnoType<com::sun::star::awt::XPointer>::get()
-IMPL_XTYPEPROVIDER_END
 
 void VCLXPointer::setType( sal_Int32 nType ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
@@ -64,6 +45,25 @@ sal_Int32 VCLXPointer::getType() throw(::com::sun::star::uno::RuntimeException, 
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     return (sal_Int32)maPointer.GetStyle();
+}
+
+OUString VCLXPointer::getImplementationName()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return OUString("stardiv.Toolkit.VCLXPointer");
+}
+
+sal_Bool VCLXPointer::supportsService(OUString const & ServiceName)
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return cppu::supportsService(this, ServiceName);
+}
+
+css::uno::Sequence<OUString> VCLXPointer::getSupportedServiceNames()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return css::uno::Sequence<OUString>{
+        "com.sun.star.awt.Pointer", "stardiv.vcl.Pointer"};
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL

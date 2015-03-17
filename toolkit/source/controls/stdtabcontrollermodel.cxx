@@ -24,6 +24,7 @@
 #include <toolkit/helper/macros.hxx>
 #include <toolkit/helper/servicenames.hxx>
 #include <toolkit/helper/property.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <rtl/uuid.h>
@@ -412,6 +413,26 @@ void StdTabControllerModel::read( const ::com::sun::star::uno::Reference< ::com:
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > > aCtrlSeq = ImplReadControls( InStream );
         setGroup( aCtrlSeq, aGroupName );
     }
+}
+
+OUString StdTabControllerModel::getImplementationName()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return OUString("stardiv.Toolkit.StdTabControllerModel");
+}
+
+sal_Bool StdTabControllerModel::supportsService(OUString const & ServiceName)
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return cppu::supportsService(this, ServiceName);
+}
+
+css::uno::Sequence<OUString> StdTabControllerModel::getSupportedServiceNames()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return css::uno::Sequence<OUString>{
+        OUString::createFromAscii(szServiceName2_TabControllerModel),
+        "stardiv.vcl.controlmodel.TabController"};
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL

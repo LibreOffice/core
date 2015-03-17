@@ -523,7 +523,7 @@ OUString getImplementationName_PAR()
 Sequence<OUString> getSupportedServiceNames_SEQ()
 {
     Sequence<OUString> aRet(1);
-    aRet.getArray()[0] = "com.sun.star.animations.SequenceTimContainer";
+    aRet.getArray()[0] = "com.sun.star.animations.SequenceTimeContainer";
     return aRet;
 }
 

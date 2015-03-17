@@ -20,6 +20,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <toolkit/awt/vclxprinter.hxx>
 #include <toolkit/helper/macros.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <rtl/uuid.h>
 
@@ -379,6 +380,25 @@ VCLXInfoPrinter::~VCLXInfoPrinter()
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XInfoPrinter > xP;
     xP = new VCLXInfoPrinter( rPrinterName );
     return xP;
+}
+
+OUString VCLXPrinterServer::getImplementationName()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return OUString("stardiv.Toolkit.VCLXPrinterServer");
+}
+
+sal_Bool VCLXPrinterServer::supportsService(OUString const & ServiceName)
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return cppu::supportsService(this, ServiceName);
+}
+
+css::uno::Sequence<OUString> VCLXPrinterServer::getSupportedServiceNames()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return css::uno::Sequence<OUString>{
+        "com.sun.star.awt.PrinterServer", "stardiv.vcl.PrinterServer"};
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL

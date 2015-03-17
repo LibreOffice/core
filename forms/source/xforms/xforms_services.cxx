@@ -24,14 +24,39 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
+#include <cppuhelper/supportsservice.hxx>
 
 using namespace ::com::sun::star;
+
+namespace {
+
+class Implementation:
+    public cppu::ImplInheritanceHelper<
+        NameContainer<css::uno::Reference<css::beans::XPropertySet>>,
+        css::lang::XServiceInfo>
+{
+    OUString SAL_CALL getImplementationName()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    { return OUString("com.sun.star.form.XForms"); }
+
+    sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    { return cppu::supportsService(this, ServiceName); }
+
+    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    {
+        return css::uno::Sequence<OUString>{"com.sun.star.xforms.XForms"};
+    }
+};
+
+}
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface* SAL_CALL
 com_sun_star_form_XForms_get_implementation(uno::XComponentContext*,
         uno::Sequence<uno::Any> const &)
 {
-    return cppu::acquire(new NameContainer<uno::Reference<beans::XPropertySet> >());
+    return cppu::acquire(new Implementation);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

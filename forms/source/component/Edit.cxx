@@ -142,10 +142,12 @@ void OEditControl::disposing()
 StringSequence  OEditControl::getSupportedServiceNames() throw(std::exception)
 {
     StringSequence aSupported = OBoundControl::getSupportedServiceNames();
-    aSupported.realloc(aSupported.getLength() + 1);
+    aSupported.realloc(aSupported.getLength() + 3);
 
     OUString*pArray = aSupported.getArray();
-    pArray[aSupported.getLength()-1] = FRM_SUN_CONTROL_TEXTFIELD;
+    pArray[aSupported.getLength()-3] = FRM_SUN_CONTROL_TEXTFIELD;
+    pArray[aSupported.getLength()-2] = STARDIV_ONE_FORM_CONTROL_EDIT;
+    pArray[aSupported.getLength()-1] = STARDIV_ONE_FORM_CONTROL_TEXTFIELD;
     return aSupported;
 }
 
@@ -330,7 +332,7 @@ StringSequence SAL_CALL OEditModel::getSupportedServiceNames() throw(std::except
     StringSequence aSupported = OBoundControlModel::getSupportedServiceNames();
 
     sal_Int32 nOldLen = aSupported.getLength();
-    aSupported.realloc( nOldLen + 8 );
+    aSupported.realloc( nOldLen + 9 );
     OUString* pStoreTo = aSupported.getArray() + nOldLen;
 
     *pStoreTo++ = BINDABLE_CONTROL_MODEL;
@@ -343,6 +345,8 @@ StringSequence SAL_CALL OEditModel::getSupportedServiceNames() throw(std::except
     *pStoreTo++ = FRM_SUN_COMPONENT_TEXTFIELD;
     *pStoreTo++ = FRM_SUN_COMPONENT_DATABASE_TEXTFIELD;
     *pStoreTo++ = BINDABLE_DATABASE_TEXT_FIELD;
+
+    *pStoreTo++ = FRM_COMPONENT_TEXTFIELD;
 
     return aSupported;
 }

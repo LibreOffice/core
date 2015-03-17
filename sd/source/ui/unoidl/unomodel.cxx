@@ -1177,7 +1177,9 @@ uno::Sequence< OUString > SAL_CALL SdXImpressDocument::getAvailableServiceNames(
 OUString SAL_CALL SdXImpressDocument::getImplementationName()
     throw(uno::RuntimeException, std::exception)
 {
-    return OUString( "SdXImpressDocument" );
+    return mbImpressDoc
+        ? OUString("com.sun.star.comp.Draw.PresentationDocument")
+        : OUString("com.sun.star.comp.Draw.DrawingDocument");
 }
 
 sal_Bool SAL_CALL SdXImpressDocument::supportsService( const OUString& ServiceName )

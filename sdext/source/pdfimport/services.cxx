@@ -40,7 +40,7 @@ namespace
 
     static Reference< XInterface > Create_PDFIRawAdaptor_Writer( const Reference< XComponentContext >& _rxContext )
     {
-        pdfi::PDFIRawAdaptor* pAdaptor = new pdfi::PDFIRawAdaptor( _rxContext );
+        pdfi::PDFIRawAdaptor* pAdaptor = new pdfi::PDFIRawAdaptor( "org.libreoffice.comp.documents.WriterPDFImport", _rxContext );
 
         pAdaptor->setTreeVisitorFactory(pdfi::createWriterTreeVisitorFactory());
         pAdaptor->enableToplevelText(); // TEMP! TEMP!
@@ -50,7 +50,7 @@ namespace
 
     static Reference< XInterface > Create_PDFIRawAdaptor_Draw( const Reference< XComponentContext >& _rxContext )
     {
-        pdfi::PDFIRawAdaptor* pAdaptor = new pdfi::PDFIRawAdaptor( _rxContext );
+        pdfi::PDFIRawAdaptor* pAdaptor = new pdfi::PDFIRawAdaptor( "org.libreoffice.comp.documents.DrawPDFImport", _rxContext );
 
         pAdaptor->setTreeVisitorFactory(pdfi::createDrawTreeVisitorFactory());
 
@@ -59,7 +59,7 @@ namespace
 
     static Reference< XInterface > Create_PDFIRawAdaptor_Impress( const Reference< XComponentContext >& _rxContext )
     {
-        pdfi::PDFIRawAdaptor* pAdaptor = new pdfi::PDFIRawAdaptor( _rxContext );
+        pdfi::PDFIRawAdaptor* pAdaptor = new pdfi::PDFIRawAdaptor( "org.libreoffice.comp.documents.ImpressPDFImport", _rxContext );
 
         pAdaptor->setTreeVisitorFactory(pdfi::createImpressTreeVisitorFactory());
 

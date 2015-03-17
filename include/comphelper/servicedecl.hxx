@@ -197,6 +197,22 @@ public:
         : ServiceImpl_BASE(rServiceDecl, xContext) {}
 };
 
+template <typename ImplT>
+class InheritingServiceImpl : public OwnServiceImpl< ImplT >
+{
+typedef OwnServiceImpl< ImplT > ServiceImpl_BASE;
+public:
+    InheritingServiceImpl(
+        ServiceDecl const& rServiceDecl,
+        css::uno::Sequence<css::uno::Any> const& args,
+        css::uno::Reference<css::uno::XComponentContext> const& xContext )
+        : ServiceImpl_BASE(rServiceDecl, args, xContext) {}
+    InheritingServiceImpl(
+        ServiceDecl const& rServiceDecl,
+        css::uno::Reference<css::uno::XComponentContext> const& xContext )
+        : ServiceImpl_BASE(rServiceDecl, xContext) {}
+};
+
 template <typename ServiceImplT>
 struct PostProcessDefault {
     css::uno::Reference<css::uno::XInterface>
@@ -298,6 +314,24 @@ struct class_ : public serviceimpl_base< detail::ServiceImpl<ImplT_>, WithArgsT 
     explicit class_( PostProcessFuncT const& postProcessFunc ) : baseT( postProcessFunc ) {}
 };
 
+template <typename ImplT_, typename WithArgsT = with_args<false> >
+struct inheritingClass_ : public serviceimpl_base< detail::InheritingServiceImpl<ImplT_>, WithArgsT >
+{
+    typedef serviceimpl_base< detail::InheritingServiceImpl<ImplT_>, WithArgsT > baseT;
+    /** Default ctor.  Implementation class without args, expecting
+        component context as single argument.
+    */
+    inheritingClass_() : baseT() {}
+    template <typename PostProcessFuncT>
+    /** Ctor to pass a post processing function/functor.
+
+        @tpl PostProcessDefaultT let your compiler deduce this
+        @param postProcessFunc function/functor that gets the yet unacquired
+                               ImplT_ pointer returning a
+                               uno::Reference<uno::XInterface>
+    */
+    explicit inheritingClass_( PostProcessFuncT const& postProcessFunc ) : baseT( postProcessFunc ) {}
+};
 
 // component_... helpers with arbitrary service declarations:
 

@@ -55,7 +55,10 @@ public:
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> _getTypes() SAL_OVERRIDE;
 
 // ::com::sun::star::lang::XServiceInfo
-    IMPLEMENTATION_NAME(OButtonModel);
+    OUString SAL_CALL getImplementationName()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    { return OUString("com.sun.star.form.OButtonModel"); }
+
     virtual StringSequence SAL_CALL getSupportedServiceNames() throw(std::exception) SAL_OVERRIDE;
 
 // ::com::sun::star::io::XPersistObject
@@ -131,7 +134,10 @@ public:
     virtual ~OButtonControl();
 
     // XServiceInfo
-    IMPLEMENTATION_NAME(OButtonControl);
+    OUString SAL_CALL getImplementationName()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    { return OUString("com.sun.star.form.OButtonControl"); }
+
     virtual StringSequence SAL_CALL getSupportedServiceNames() throw(std::exception) SAL_OVERRIDE;
 
     // UNO binding

@@ -23,17 +23,19 @@
 #include "MutexOwner.hxx"
 #include <com/sun/star/drawing/framework/XConfiguration.hpp>
 #include <com/sun/star/drawing/framework/XConfigurationControllerBroadcaster.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/container/XNamed.hpp>
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 
 #include <boost/scoped_ptr.hpp>
 
 namespace {
 
-typedef ::cppu::WeakComponentImplHelper2 <
+typedef ::cppu::WeakComponentImplHelper <
     ::com::sun::star::drawing::framework::XConfiguration,
-    ::com::sun::star::container::XNamed
+    ::com::sun::star::container::XNamed,
+    css::lang::XServiceInfo
     > ConfigurationInterfaceBase;
 
 } // end of anonymous namespace.
@@ -127,6 +129,15 @@ public:
     */
     virtual void SAL_CALL setName (const OUString& rName)
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    OUString SAL_CALL getImplementationName()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
     class ResourceContainer;

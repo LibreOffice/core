@@ -198,7 +198,7 @@ namespace FORMS_MODULE_NAMESPACE
         \
         Sequence< OUString > SAL_CALL classname::getSupportedServiceNames(  ) throw (RuntimeException, std::exception) \
         { \
-            return ::comphelper::concatSequences( \
+            return ::comphelper::combineSequences( \
                 getAggregateServiceNames(), \
                 getSupportedServiceNames_Static() \
             ); \
@@ -273,7 +273,7 @@ namespace FORMS_MODULE_NAMESPACE
                    aOwnNames[ 4 ] = service5; \
                    aOwnNames[ 5 ] = service6; \
                    aOwnNames[ 6 ] = service7; \
-                   aOwnNames[ 6 ] = service8; \
+                   aOwnNames[ 7 ] = service8; \
             \
             return ::comphelper::concatSequences( \
                 baseclass::getSupportedServiceNames_Static(), \

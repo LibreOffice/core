@@ -234,6 +234,26 @@ void SAL_CALL Configuration::setName (const OUString& rsName)
     (void)rsName; // rsName is ignored.
 }
 
+OUString Configuration::getImplementationName()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return OUString(
+        "com.sun.star.comp.Draw.framework.configuration.Configuration");
+}
+
+sal_Bool Configuration::supportsService(OUString const & ServiceName)
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return cppu::supportsService(this, ServiceName);
+}
+
+css::uno::Sequence<OUString> Configuration::getSupportedServiceNames()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return css::uno::Sequence<OUString>{
+        "com.sun.star.drawing.framework.Configuration"};
+}
+
 void Configuration::PostEvent (
     const Reference<XResourceId>& rxResourceId,
     const bool bActivation)

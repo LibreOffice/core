@@ -41,7 +41,7 @@
 #include <com/sun/star/security/CertificateValidity.hpp>
 #include <com/sun/star/security/SerialNumberAdapter.hpp>
 #include <comphelper/documentconstants.hxx>
-
+#include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 #include <stdio.h>
@@ -87,6 +87,26 @@ void DocumentDigitalSignatures::initialize( const Sequence< Any >& aArguments)
         if (m_sODFVersion.isEmpty())
             m_sODFVersion = ODFVER_010_TEXT;
     }
+}
+
+OUString DocumentDigitalSignatures::getImplementationName()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return GetImplementationName();
+}
+
+sal_Bool DocumentDigitalSignatures::supportsService(
+    OUString const & ServiceName)
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return cppu::supportsService(this, ServiceName);
+}
+
+css::uno::Sequence<OUString>
+DocumentDigitalSignatures::getSupportedServiceNames()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return GetSupportedServiceNames();
 }
 
 sal_Bool DocumentDigitalSignatures::signDocumentContent(

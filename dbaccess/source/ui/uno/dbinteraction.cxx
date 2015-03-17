@@ -350,7 +350,7 @@ namespace dbaui
     // LegacyInteractionHandler
     IMPLEMENT_SERVICE_INFO_IMPLNAME_STATIC(LegacyInteractionHandler, "com.sun.star.comp.dbaccess.LegacyInteractionHandler")
     IMPLEMENT_SERVICE_INFO_SUPPORTS(LegacyInteractionHandler)
-    IMPLEMENT_SERVICE_INFO_GETSUPPORTED1_STATIC(LegacyInteractionHandler, "com.sun.star.sdb.LegacyInteractionHandler")
+    IMPLEMENT_SERVICE_INFO_GETSUPPORTED1_STATIC(LegacyInteractionHandler, "com.sun.star.sdb.InteractionHandler")
 
     Reference< XInterface >
         SAL_CALL LegacyInteractionHandler::Create(const Reference< XMultiServiceFactory >& _rxORB)

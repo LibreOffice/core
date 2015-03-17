@@ -30,6 +30,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <rtl/ref.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/window.hxx>
@@ -211,6 +212,24 @@ void SAL_CALL PresenterCanvas::initialize (
         throw RuntimeException("PresenterCanvas: invalid number of arguments",
                 static_cast<XWeak*>(this));
     }
+}
+
+OUString PresenterCanvas::getImplementationName()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return OUString("com.sun.star.comp.Draw.PresenterCanvasFactory");
+}
+
+sal_Bool PresenterCanvas::supportsService(OUString const & ServiceName)
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return cppu::supportsService(this, ServiceName);
+}
+
+css::uno::Sequence<OUString> PresenterCanvas::getSupportedServiceNames()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return css::uno::Sequence<OUString>{"com.sun.star.rendering.Canvas"};
 }
 
 //----- XCanvas ---------------------------------------------------------------

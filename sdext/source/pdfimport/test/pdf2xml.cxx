@@ -72,7 +72,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         test::BootstrapFixtureBase aEnv;
         aEnv.setUp();
 
-        pdfi::PDFIRawAdaptor aAdaptor( aEnv.getComponentContext() );
+        pdfi::PDFIRawAdaptor aAdaptor( OUString(), aEnv.getComponentContext() );
         aAdaptor.setTreeVisitorFactory(pTreeFactory);
         aAdaptor.odfConvert( aSrcURL, new OutputWrap(aDstURL), NULL );
     }

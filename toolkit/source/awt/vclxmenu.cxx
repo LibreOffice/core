@@ -188,13 +188,14 @@ throw (css::uno::RuntimeException, std::exception)
     const bool bIsPopupMenu = IsPopupMenu();
     aGuard.clear();
 
-    css::uno::Sequence< OUString > aNames( 1 );
     if ( bIsPopupMenu )
-        aNames[ 0 ] = OUString::createFromAscii( szServiceName2_PopupMenu );
+        return css::uno::Sequence<OUString>{
+            OUString::createFromAscii(szServiceName2_PopupMenu),
+            "stardiv.vcl.PopupMenu"};
     else
-        aNames[ 0 ] = OUString::createFromAscii( szServiceName2_MenuBar );
-
-    return aNames;
+        return css::uno::Sequence<OUString>{
+            OUString::createFromAscii(szServiceName2_MenuBar),
+            "stardiv.vcl.MenuBar"};
 }
 
 sal_Bool SAL_CALL VCLXMenu::supportsService(const OUString& rServiceName )

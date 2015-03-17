@@ -817,6 +817,22 @@ void UnoControlContainer::setVisible( sal_Bool bVisible ) throw(uno::RuntimeExce
         createPeer( uno::Reference< awt::XToolkit > (), uno::Reference< awt::XWindowPeer > () );
 }
 
+OUString UnoControlContainer::getImplementationName()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return OUString("stardiv.Toolkit.UnoControlContainer");
+}
+
+css::uno::Sequence<OUString> UnoControlContainer::getSupportedServiceNames()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    auto s(UnoControlBase::getSupportedServiceNames());
+    s.realloc(s.getLength() + 2);
+    s[s.getLength() - 2] = "com.sun.star.awt.UnoControlContainer";
+    s[s.getLength() - 1] = "stardiv.vcl.control.ControlContainer";
+    return s;
+}
+
 void UnoControlContainer::PrepareWindowDescriptor( ::com::sun::star::awt::WindowDescriptor& rDesc )
 {
     // HACK due to the fact that we can't really use VSCROLL & HSCROLL

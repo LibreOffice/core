@@ -191,10 +191,11 @@ IMPLEMENT_DEFAULT_CLONING( OImageControlModel )
 StringSequence  OImageControlModel::getSupportedServiceNames() throw(std::exception)
 {
     StringSequence aSupported = OBoundControlModel::getSupportedServiceNames();
-    aSupported.realloc(aSupported.getLength() + 1);
+    aSupported.realloc(aSupported.getLength() + 2);
 
     OUString*pArray = aSupported.getArray();
-    pArray[aSupported.getLength()-1] = FRM_SUN_COMPONENT_IMAGECONTROL;
+    pArray[aSupported.getLength()-2] = FRM_SUN_COMPONENT_IMAGECONTROL;
+    pArray[aSupported.getLength()-1] = FRM_COMPONENT_IMAGECONTROL;
     return aSupported;
 }
 
@@ -725,10 +726,11 @@ Any SAL_CALL OImageControlControl::queryAggregation(const Type& _rType) throw (R
 StringSequence  OImageControlControl::getSupportedServiceNames() throw(std::exception)
 {
     StringSequence aSupported = OBoundControl::getSupportedServiceNames();
-    aSupported.realloc(aSupported.getLength() + 1);
+    aSupported.realloc(aSupported.getLength() + 2);
 
     OUString*pArray = aSupported.getArray();
-    pArray[aSupported.getLength()-1] = FRM_SUN_CONTROL_IMAGECONTROL;
+    pArray[aSupported.getLength()-2] = FRM_SUN_CONTROL_IMAGECONTROL;
+    pArray[aSupported.getLength()-1] = STARDIV_ONE_FORM_CONTROL_IMAGECONTROL;
     return aSupported;
 }
 

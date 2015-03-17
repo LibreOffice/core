@@ -120,10 +120,9 @@ void OHiddenModel::describeFixedProperties( Sequence< Property >& _rProps ) cons
 
 StringSequence SAL_CALL OHiddenModel::getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
-    StringSequence aSupported( 2 );
-    aSupported[ 0 ] = FRM_SUN_COMPONENT_HIDDENCONTROL;
-    aSupported[ 1 ] = FRM_SUN_FORMCOMPONENT;
-    return aSupported;
+    return css::uno::Sequence<OUString>{
+        FRM_SUN_COMPONENT_HIDDENCONTROL, FRM_SUN_FORMCOMPONENT,
+        FRM_COMPONENT_HIDDEN, FRM_COMPONENT_HIDDENCONTROL };
 }
 
 

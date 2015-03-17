@@ -20,19 +20,21 @@
 #ifndef INCLUDED_SDEXT_SOURCE_PRESENTER_PRESENTERPROTOCOLHANDLER_HXX
 #define INCLUDED_SDEXT_SOURCE_PRESENTER_PRESENTERPROTOCOLHANDLER_HXX
 
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <rtl/ref.hxx>
 
 namespace sdext { namespace presenter {
 
 namespace {
-    typedef ::cppu::WeakComponentImplHelper2 <
+    typedef ::cppu::WeakComponentImplHelper <
         css::lang::XInitialization,
+        css::lang::XServiceInfo,
         css::frame::XDispatchProvider
     > PresenterProtocolHandlerInterfaceBase;
 }
@@ -59,6 +61,15 @@ public:
     virtual void SAL_CALL initialize(
         const css::uno::Sequence<css::uno::Any>& aArguments)
         throw (css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    OUString SAL_CALL getImplementationName()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XDispatchProvider
 

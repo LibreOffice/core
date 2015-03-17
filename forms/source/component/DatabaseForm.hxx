@@ -383,8 +383,6 @@ public:
     // com::sun::star::lang::XServiceInfo - static version
     static  OUString SAL_CALL getImplementationName_Static();
     static  ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_Static();
-    static  ::com::sun::star::uno::Sequence< OUString > SAL_CALL getCurrentServiceNames_Static();
-    static  ::com::sun::star::uno::Sequence< OUString > SAL_CALL getCompatibleServiceNames_Static();
     static  ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL Create( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory );
 
     // com::sun::star::io::XPersistObject

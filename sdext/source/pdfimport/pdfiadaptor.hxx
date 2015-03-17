@@ -23,6 +23,7 @@
 #include "xmlemitter.hxx"
 #include "treevisitorfactory.hxx"
 
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/xml/XImportFilter.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -33,15 +34,16 @@
 #include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 
 
 namespace pdfi
 {
-    typedef ::cppu::WeakComponentImplHelper2<
+    typedef ::cppu::WeakComponentImplHelper<
         css::document::XFilter,
-        css::document::XImporter > PDFIHybridAdaptorBase;
+        css::document::XImporter,
+        css::lang::XServiceInfo> PDFIHybridAdaptorBase;
 
     class PDFIHybridAdaptor : private cppu::BaseMutex,
                               public PDFIHybridAdaptorBase
@@ -64,11 +66,20 @@ namespace pdfi
         virtual void SAL_CALL setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDocument )
             throw( css::lang::IllegalArgumentException, std::exception ) SAL_OVERRIDE;
 
+        OUString SAL_CALL getImplementationName()
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+        sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+        css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     };
 
-    typedef ::cppu::WeakComponentImplHelper2<
+    typedef ::cppu::WeakComponentImplHelper<
         css::xml::XImportFilter,
-        css::document::XImporter > PDFIAdaptorBase;
+        css::document::XImporter,
+        css::lang::XServiceInfo> PDFIAdaptorBase;
 
     /** Adapts raw pdf import to XImportFilter interface
      */
@@ -76,6 +87,7 @@ namespace pdfi
                            public PDFIAdaptorBase
     {
     private:
+        OUString const m_implementationName;
         css::uno::Reference<
             css::uno::XComponentContext >  m_xContext;
         css::uno::Reference<
@@ -92,7 +104,8 @@ namespace pdfi
                     const OUString&                                         rFilterOptions = OUString());
 
     public:
-        explicit PDFIRawAdaptor( const css::uno::Reference<
+        explicit PDFIRawAdaptor( OUString const & implementationName,
+                                 const css::uno::Reference<
                                        css::uno::XComponentContext >& xContext );
 
         /** Set factory object used to create the tree visitors
@@ -125,6 +138,15 @@ namespace pdfi
         // XImporter
         virtual void SAL_CALL setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDocument )
             throw( css::lang::IllegalArgumentException, std::exception ) SAL_OVERRIDE;
+
+        OUString SAL_CALL getImplementationName()
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+        sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+        css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     };
 }
 

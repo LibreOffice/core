@@ -3768,39 +3768,12 @@ OUString SAL_CALL ODatabaseForm::getImplementationName_Static()
     return OUString( "com.sun.star.comp.forms.ODatabaseForm" );
 }
 
-
-Sequence< OUString > SAL_CALL ODatabaseForm::getCompatibleServiceNames_Static()
-{
-    Sequence< OUString > aServices( 1 );
-    OUString* pServices = aServices.getArray();
-
-    *pServices++ = FRM_COMPONENT_FORM;
-
-    return aServices;
-}
-
-
-Sequence< OUString > SAL_CALL ODatabaseForm::getCurrentServiceNames_Static()
-{
-    Sequence< OUString > aServices( 5 );
-    OUString* pServices = aServices.getArray();
-
-    *pServices++ = FRM_SUN_FORMCOMPONENT;
-    *pServices++ = "com.sun.star.form.FormComponents";
-    *pServices++ = FRM_SUN_COMPONENT_FORM;
-    *pServices++ = FRM_SUN_COMPONENT_HTMLFORM;
-    *pServices++ = FRM_SUN_COMPONENT_DATAFORM;
-
-    return aServices;
-}
-
-
 Sequence< OUString > SAL_CALL ODatabaseForm::getSupportedServiceNames_Static()
 {
-    return ::comphelper::concatSequences(
-        getCurrentServiceNames_Static(),
-        getCompatibleServiceNames_Static()
-    );
+    return css::uno::Sequence<OUString>{
+        FRM_SUN_FORMCOMPONENT, "com.sun.star.form.FormComponents",
+        FRM_SUN_COMPONENT_FORM, FRM_SUN_COMPONENT_HTMLFORM,
+        FRM_SUN_COMPONENT_DATAFORM, FRM_COMPONENT_FORM};
 }
 
 
@@ -3820,13 +3793,9 @@ Sequence< OUString > SAL_CALL ODatabaseForm::getSupportedServiceNames() throw( R
 
     // concat with out own services
     return ::comphelper::concatSequences(
-        getCurrentServiceNames_Static(),
+        getSupportedServiceNames_Static(),
         aServices
     );
-    // use getCurrentXXX instead of getSupportedXXX, because at runtime, we do not want to have
-    // the compatible names
-    // This is maily to be consistent with the implementation before fixing #97083#, though the
-    // better solution _may_ be to return the compatible names at runtime, too
 }
 
 sal_Bool SAL_CALL ODatabaseForm::supportsService(const OUString& ServiceName) throw( RuntimeException, std::exception )

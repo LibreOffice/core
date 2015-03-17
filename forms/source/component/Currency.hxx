@@ -38,7 +38,10 @@ public:
     DECLARE_DEFAULT_LEAF_XTOR( OCurrencyModel );
 
     // ::com::sun::star::lang::XServiceInfo
-    IMPLEMENTATION_NAME(OCurrencyModel);
+    OUString SAL_CALL getImplementationName()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    { return OUString("com.sun.star.form.OCurrencyModel"); }
+
     virtual StringSequence SAL_CALL getSupportedServiceNames() throw(std::exception) SAL_OVERRIDE;
 
     // ::com::sun::star::io::XPersistObject
@@ -74,7 +77,10 @@ protected:
 public:
     OCurrencyControl(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxContext);
     // ::com::sun::star::lang::XServiceInfo
-    IMPLEMENTATION_NAME(OCurrencyControl);
+    OUString SAL_CALL getImplementationName()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    { return OUString("com.sun.star.form.OCurrencyControl"); }
+
     virtual StringSequence SAL_CALL getSupportedServiceNames() throw(std::exception) SAL_OVERRIDE;
 };
 

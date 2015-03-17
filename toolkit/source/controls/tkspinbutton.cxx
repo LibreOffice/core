@@ -189,7 +189,7 @@ public:
 
     OUString SAL_CALL UnoSpinButtonModel::getImplementationName(  ) throw(RuntimeException, std::exception)
     {
-        return OUString( "com.sun.star.comp.toolkit.UnoSpinButtonModel" );
+        return OUString( "stardiv.Toolkit.UnoSpinButtonModel" );
     }
 
 
@@ -252,7 +252,7 @@ public:
 
     OUString SAL_CALL UnoSpinButtonControl::getImplementationName(  ) throw(RuntimeException, std::exception)
     {
-        return OUString( "com.sun.star.comp.toolkit.UnoSpinButtonControl" );
+        return OUString( "stardiv.Toolkit.UnoSpinButtonControl" );
     }
 
 

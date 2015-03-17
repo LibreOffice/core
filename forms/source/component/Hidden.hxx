@@ -43,7 +43,10 @@ public:
                 throw (::com::sun::star::lang::IllegalArgumentException) SAL_OVERRIDE;
 
     // XServiceInfo
-    IMPLEMENTATION_NAME(OHiddenModel);
+    OUString SAL_CALL getImplementationName()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    { return OUString("com.sun.star.form.OHiddenModel"); }
+
     virtual StringSequence SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XPersistObject

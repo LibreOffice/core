@@ -38,7 +38,10 @@ public:
     DECLARE_DEFAULT_LEAF_XTOR( ONumericModel );
 
     // ::com::sun::star::lang::XServiceInfo
-    IMPLEMENTATION_NAME(ONumericModel);
+    OUString SAL_CALL getImplementationName()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    { return OUString("com.sun.star.form.ONumericModel"); }
+
     virtual StringSequence SAL_CALL getSupportedServiceNames() throw(std::exception) SAL_OVERRIDE;
 
     // ::com::sun::star::io::XPersistObject
@@ -72,7 +75,10 @@ public:
     ONumericControl(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxFactory);
 
     // ::com::sun::star::lang::XServiceInfo
-    IMPLEMENTATION_NAME(ONumericControl);
+    OUString SAL_CALL getImplementationName()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    { return OUString("com.sun.star.form.ONumericControl"); }
+
     virtual StringSequence SAL_CALL getSupportedServiceNames() throw(std::exception) SAL_OVERRIDE;
 };
 

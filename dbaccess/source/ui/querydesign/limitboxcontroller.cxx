@@ -129,7 +129,7 @@ void SAL_CALL LimitBoxController::release() throw ()
 /// XServiceInfo
 IMPLEMENT_SERVICE_INFO_IMPLNAME_STATIC(LimitBoxController, "org.libreoffice.comp.dbu.LimitBoxController")
 IMPLEMENT_SERVICE_INFO_SUPPORTS(LimitBoxController)
-IMPLEMENT_SERVICE_INFO_GETSUPPORTED1_STATIC(LimitBoxController, "com.sun.star.frame.ToolboxController")
+IMPLEMENT_SERVICE_INFO_GETSUPPORTED1_STATIC(LimitBoxController, "com.sun.star.frame.ToolbarController")
 
 uno::Reference< uno::XInterface >
     SAL_CALL LimitBoxController::Create(const uno::Reference< css::lang::XMultiServiceFactory >& _rxORB)

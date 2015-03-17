@@ -36,6 +36,7 @@
 #include <com/sun/star/presentation/XSlideShowView.hpp>
 #include <com/sun/star/presentation/XPresentationSupplier.hpp>
 #include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -287,6 +288,25 @@ void SAL_CALL PresenterProtocolHandler::initialize (const Sequence<Any>& aArgume
             OSL_ASSERT(false);
         }
     }
+}
+
+OUString PresenterProtocolHandler::getImplementationName()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return getImplementationName_static();
+}
+
+sal_Bool PresenterProtocolHandler::supportsService(OUString const & ServiceName)
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return cppu::supportsService(this, ServiceName);
+}
+
+css::uno::Sequence<OUString>
+PresenterProtocolHandler::getSupportedServiceNames()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return getSupportedServiceNames_static();
 }
 
 //----- XDispatchProvider -----------------------------------------------------

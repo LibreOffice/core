@@ -32,7 +32,10 @@ public:
     DECLARE_DEFAULT_LEAF_XTOR( ORadioButtonModel );
 
     // XServiceInfo
-    IMPLEMENTATION_NAME(ORadioButtonModel);
+    OUString SAL_CALL getImplementationName()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    { return OUString("com.sun.star.form.ORadioButtonModel"); }
+
     virtual StringSequence SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // OPropertySetHelper
@@ -83,7 +86,10 @@ public:
     ORadioButtonControl(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxFactory);
 
     // XServiceInfo
-    IMPLEMENTATION_NAME(ORadioButtonControl);
+    OUString SAL_CALL getImplementationName()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    { return OUString("com.sun.star.form.ORadioButtonControl"); }
+
     virtual StringSequence SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 protected:

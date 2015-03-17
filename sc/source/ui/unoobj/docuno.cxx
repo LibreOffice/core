@@ -2164,7 +2164,7 @@ uno::Sequence<OUString> SAL_CALL ScModelObj::getAvailableServiceNames()
 // XServiceInfo
 OUString SAL_CALL ScModelObj::getImplementationName() throw(uno::RuntimeException, std::exception)
 {
-    return OUString( "ScModelObj" );
+    return OUString( "com.sun.star.comp.Calc.SpreadsheetDocument" );
 }
 
 sal_Bool SAL_CALL ScModelObj::supportsService( const OUString& rServiceName )

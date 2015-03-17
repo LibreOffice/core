@@ -70,7 +70,10 @@ class OFormattedModel
         virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
         // XServiceInfo
-        IMPLEMENTATION_NAME(OFormattedModel);
+        OUString SAL_CALL getImplementationName()
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        { return OUString("com.sun.star.form.OFormattedModel"); }
+
         virtual StringSequence SAL_CALL getSupportedServiceNames() throw(std::exception) SAL_OVERRIDE;
 
         // XPersistObject
@@ -158,7 +161,10 @@ class OFormattedModel
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> _getTypes() SAL_OVERRIDE;
 
         // ::com::sun::star::lang::XServiceInfo
-        IMPLEMENTATION_NAME(OFormattedControl);
+        OUString SAL_CALL getImplementationName()
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        { return OUString("com.sun.star.form.OFormattedControl"); }
+
         virtual StringSequence SAL_CALL getSupportedServiceNames() throw(std::exception) SAL_OVERRIDE;
 
         // ::com::sun::star::lang::XEventListener

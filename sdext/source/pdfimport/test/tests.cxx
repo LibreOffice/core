@@ -473,7 +473,7 @@ namespace
 
         void testOdfDrawExport()
         {
-            pdfi::PDFIRawAdaptor aAdaptor( getComponentContext() );
+            pdfi::PDFIRawAdaptor aAdaptor( OUString(), getComponentContext() );
             aAdaptor.setTreeVisitorFactory( createDrawTreeVisitorFactory() );
 
             OUString tempFileURL;
@@ -488,7 +488,7 @@ namespace
 
         void testOdfWriterExport()
         {
-            pdfi::PDFIRawAdaptor aAdaptor( getComponentContext() );
+            pdfi::PDFIRawAdaptor aAdaptor( OUString(), getComponentContext() );
             aAdaptor.setTreeVisitorFactory( createWriterTreeVisitorFactory() );
 
             OUString tempFileURL;

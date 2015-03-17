@@ -40,8 +40,7 @@
 #include "com/sun/star/datatransfer/dnd/XDropTarget.hpp"
 #include "com/sun/star/datatransfer/dnd/DNDConstants.hpp"
 
-#include "cppuhelper/compbase1.hxx"
-#include "cppuhelper/compbase2.hxx"
+#include "cppuhelper/compbase.hxx"
 #include "cppuhelper/implbase1.hxx"
 #include <cppuhelper/supportsservice.hxx>
 
@@ -53,7 +52,7 @@ namespace vcl
 {
 // generic implementation to satisfy SalInstance
 class GenericClipboard :
-        public cppu::WeakComponentImplHelper2 <
+        public cppu::WeakComponentImplHelper<
         datatransfer::clipboard::XSystemClipboard,
         XServiceInfo
         >
@@ -65,7 +64,7 @@ class GenericClipboard :
 
 public:
 
-    GenericClipboard() : cppu::WeakComponentImplHelper2<
+    GenericClipboard() : cppu::WeakComponentImplHelper<
         datatransfer::clipboard::XSystemClipboard,
         XServiceInfo
         >( m_aMutex )
@@ -205,7 +204,7 @@ void GenericClipboard::removeClipboardListener( const Reference< datatransfer::c
     m_aListeners.remove( listener );
 }
 
-class ClipboardFactory : public ::cppu::WeakComponentImplHelper1<
+class ClipboardFactory : public ::cppu::WeakComponentImplHelper<
     com::sun::star::lang::XSingleServiceFactory
 >
 {
@@ -222,7 +221,7 @@ public:
 };
 
 ClipboardFactory::ClipboardFactory() :
-        cppu::WeakComponentImplHelper1<
+        cppu::WeakComponentImplHelper<
     com::sun::star::lang::XSingleServiceFactory
 >( m_aMutex )
 {
@@ -267,14 +266,15 @@ Reference< XSingleServiceFactory > SAL_CALL Clipboard_createFactory( const Refer
 /*
 *   generic DragSource dummy
 */
-class GenericDragSource : public cppu::WeakComponentImplHelper2<
+class GenericDragSource : public cppu::WeakComponentImplHelper<
             datatransfer::dnd::XDragSource,
-            XInitialization
+            XInitialization,
+            css::lang::XServiceInfo
             >
 {
     osl::Mutex                          m_aMutex;
 public:
-    GenericDragSource() : cppu::WeakComponentImplHelper2< datatransfer::dnd::XDragSource, XInitialization >( m_aMutex ) {}
+    GenericDragSource() : WeakComponentImplHelper( m_aMutex ) {}
     virtual ~GenericDragSource();
 
     // XDragSource
@@ -290,7 +290,18 @@ public:
     // XInitialization
     virtual void        SAL_CALL initialize( const Sequence< Any >& arguments ) throw( ::com::sun::star::uno::Exception, std::exception ) SAL_OVERRIDE;
 
-#if !defined UNX
+    OUString SAL_CALL getImplementationName()
+                throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    { return getImplementationName_static(); }
+
+    sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    { return cppu::supportsService(this, ServiceName); }
+
+    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    { return getSupportedServiceNames_static(); }
+
     static Sequence< OUString > getSupportedServiceNames_static()
     {
         Sequence< OUString > aRet( 1 );
@@ -302,7 +313,6 @@ public:
     {
         return OUString("com.sun.star.datatransfer.dnd.VclGenericDragSource");
     }
-#endif
 };
 
 GenericDragSource::~GenericDragSource()
@@ -377,17 +387,15 @@ Reference< XInterface > SAL_CALL DragSource_createInstance( const Reference< XMu
 *   generic DragSource dummy
 */
 
-class GenericDropTarget : public cppu::WeakComponentImplHelper2<
+class GenericDropTarget : public cppu::WeakComponentImplHelper<
                                            datatransfer::dnd::XDropTarget,
-                                           XInitialization
+                                           XInitialization,
+                                           css::lang::XServiceInfo
                                            >
 {
     osl::Mutex m_aMutex;
 public:
-    GenericDropTarget() : cppu::WeakComponentImplHelper2<
-                                           datatransfer::dnd::XDropTarget,
-                                           XInitialization
-                                           > ( m_aMutex )
+    GenericDropTarget() : WeakComponentImplHelper( m_aMutex )
     {}
     virtual ~GenericDropTarget();
 
@@ -402,7 +410,18 @@ public:
     virtual sal_Int8    SAL_CALL getDefaultActions() throw(std::exception) SAL_OVERRIDE;
     virtual void        SAL_CALL setDefaultActions( sal_Int8 actions ) throw(std::exception) SAL_OVERRIDE;
 
-#if !defined UNX
+    OUString SAL_CALL getImplementationName()
+                throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    { return getImplementationName_static(); }
+
+    sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    { return cppu::supportsService(this, ServiceName); }
+
+    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    { return getSupportedServiceNames_static(); }
+
     static Sequence< OUString > getSupportedServiceNames_static()
     {
         Sequence< OUString > aRet( 1 );
@@ -414,7 +433,6 @@ public:
     {
         return OUString("com.sun.star.datatransfer.dnd.VclGenericDropTarget");
     }
-#endif
 };
 
 GenericDropTarget::~GenericDropTarget()

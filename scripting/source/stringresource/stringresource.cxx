@@ -775,7 +775,7 @@ StringResourcePersistenceImpl::~StringResourcePersistenceImpl()
 OUString StringResourcePersistenceImpl::getImplementationName(  )
     throw (RuntimeException, std::exception)
 {
-    return OUString( "com.sun.star.comp.scripting.StringResourceWithLocation");
+    return OUString( "com.sun.star.comp.scripting.StringResource");
 }
 
 

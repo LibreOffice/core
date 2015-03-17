@@ -87,7 +87,7 @@ StringSequence SAL_CALL OComboBoxModel::getSupportedServiceNames() throw(Runtime
     StringSequence aSupported = OBoundControlModel::getSupportedServiceNames();
 
     sal_Int32 nOldLen = aSupported.getLength();
-    aSupported.realloc( nOldLen + 8 );
+    aSupported.realloc( nOldLen + 9 );
     OUString* pStoreTo = aSupported.getArray() + nOldLen;
 
     *pStoreTo++ = BINDABLE_CONTROL_MODEL;
@@ -100,6 +100,8 @@ StringSequence SAL_CALL OComboBoxModel::getSupportedServiceNames() throw(Runtime
     *pStoreTo++ = FRM_SUN_COMPONENT_COMBOBOX;
     *pStoreTo++ = FRM_SUN_COMPONENT_DATABASE_COMBOBOX;
     *pStoreTo++ = BINDABLE_DATABASE_COMBO_BOX;
+
+    *pStoreTo++ = FRM_COMPONENT_COMBOBOX;
 
     return aSupported;
 }
@@ -868,10 +870,11 @@ OComboBoxControl::OComboBoxControl(const Reference<XComponentContext>& _rxContex
 StringSequence SAL_CALL OComboBoxControl::getSupportedServiceNames() throw(RuntimeException, std::exception)
 {
     StringSequence aSupported = OBoundControl::getSupportedServiceNames();
-    aSupported.realloc(aSupported.getLength() + 1);
+    aSupported.realloc(aSupported.getLength() + 2);
 
     OUString* pArray = aSupported.getArray();
-    pArray[aSupported.getLength()-1] = FRM_SUN_CONTROL_COMBOBOX;
+    pArray[aSupported.getLength()-2] = FRM_SUN_CONTROL_COMBOBOX;
+    pArray[aSupported.getLength()-1] = STARDIV_ONE_FORM_CONTROL_COMBOBOX;
     return aSupported;
 }
 

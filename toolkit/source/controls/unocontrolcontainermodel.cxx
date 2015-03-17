@@ -45,6 +45,23 @@ OUString UnoControlContainerModel::getServiceName() throw(::com::sun::star::uno:
     return OUString::createFromAscii( szServiceName_UnoControlContainerModel );
 }
 
+OUString UnoControlContainerModel::getImplementationName()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return OUString("stardiv.Toolkit.UnoControlContainerModel");
+}
+
+css::uno::Sequence<OUString>
+UnoControlContainerModel::getSupportedServiceNames()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    auto s(UnoControlModel::getSupportedServiceNames());
+    s.realloc(s.getLength() + 2);
+    s[s.getLength() - 2] = "com.sun.star.awt.UnoControlContainerModel";
+    s[s.getLength() - 1] = "stardiv.vcl.controlmodel.ControlContainer";
+    return s;
+}
+
 ::com::sun::star::uno::Any UnoControlContainerModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 {
     ::com::sun::star::uno::Any aDefault;

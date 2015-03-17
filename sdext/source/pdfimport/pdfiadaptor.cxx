@@ -32,6 +32,7 @@
 
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implementationentry.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
@@ -200,10 +201,27 @@ void SAL_CALL PDFIHybridAdaptor::setTargetDocument( const uno::Reference< lang::
         throw lang::IllegalArgumentException();
 }
 
+OUString PDFIHybridAdaptor::getImplementationName()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return OUString("org.libreoffice.comp.documents.HybridPDFImport");
+}
 
+sal_Bool PDFIHybridAdaptor::supportsService(OUString const & ServiceName)
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return cppu::supportsService(this, ServiceName);
+}
 
-PDFIRawAdaptor::PDFIRawAdaptor( const uno::Reference< uno::XComponentContext >& xContext ) :
+css::uno::Sequence<OUString> PDFIHybridAdaptor::getSupportedServiceNames()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return css::uno::Sequence<OUString>{"com.sun.star.document.ImportFilter"};
+}
+
+PDFIRawAdaptor::PDFIRawAdaptor( OUString const & implementationName, const uno::Reference< uno::XComponentContext >& xContext ) :
     PDFIAdaptorBase( m_aMutex ),
+    m_implementationName(implementationName),
     m_xContext( xContext ),
     m_xModel(),
     m_pVisitorFactory(),
@@ -314,6 +332,24 @@ void SAL_CALL PDFIRawAdaptor::setTargetDocument( const uno::Reference< lang::XCo
     m_xModel = uno::Reference< frame::XModel >( xDocument, uno::UNO_QUERY );
     if( xDocument.is() && ! m_xModel.is() )
         throw lang::IllegalArgumentException();
+}
+
+OUString PDFIRawAdaptor::getImplementationName()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return m_implementationName;
+}
+
+sal_Bool PDFIRawAdaptor::supportsService(OUString const & ServiceName)
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return cppu::supportsService(this, ServiceName);
+}
+
+css::uno::Sequence<OUString> PDFIRawAdaptor::getSupportedServiceNames()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return css::uno::Sequence<OUString>{"com.sun.star.document.ImportFilter"};
 }
 
 }

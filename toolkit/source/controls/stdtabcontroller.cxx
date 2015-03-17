@@ -25,6 +25,7 @@
 #include <toolkit/controls/stdtabcontrollermodel.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/helper/macros.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <rtl/uuid.h>
@@ -365,6 +366,25 @@ void StdTabController::activateLast(  ) throw(RuntimeException, std::exception)
     ImplActivateControl( false );
 }
 
+OUString StdTabController::getImplementationName()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return OUString("stardiv.Toolkit.StdTabController");
+}
+
+sal_Bool StdTabController::supportsService(OUString const & ServiceName)
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return cppu::supportsService(this, ServiceName);
+}
+
+css::uno::Sequence<OUString> StdTabController::getSupportedServiceNames()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return css::uno::Sequence<OUString>{
+        OUString::createFromAscii(szServiceName2_TabController),
+        "stardiv.vcl.control.TabController"};
+}
 
 Reference< XControl >  StdTabController::FindControl( Sequence< Reference< XControl > >& rCtrls,
  const Reference< XControlModel > & rxCtrlModel )

@@ -49,6 +49,22 @@ namespace toolkit
         return OUString::createFromAscii( szServiceName_UnoControlScrollBarModel );
     }
 
+    OUString UnoControlScrollBarModel::getImplementationName()
+        throw (css::uno::RuntimeException, std::exception)
+    {
+        return OUString("stardiv.Toolkit.UnoControlScrollBarModel");
+    }
+
+    css::uno::Sequence<OUString>
+    UnoControlScrollBarModel::getSupportedServiceNames()
+        throw (css::uno::RuntimeException, std::exception)
+    {
+        auto s(UnoControlModel::getSupportedServiceNames());
+        s.realloc(s.getLength() + 2);
+        s[s.getLength() - 2] = "com.sun.star.awt.UnoControlScrollBarModel";
+        s[s.getLength() - 1] = "stardiv.vcl.controlmodel.ScrollBar";
+        return s;
+    }
 
     uno::Any UnoControlScrollBarModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
     {
@@ -278,8 +294,21 @@ namespace toolkit
         return n;
     }
 
+    OUString UnoScrollBarControl::getImplementationName()
+        throw (css::uno::RuntimeException, std::exception)
+    {
+        return OUString("stardiv.Toolkit.UnoScrollBarControl");
+    }
 
-
+    css::uno::Sequence<OUString> UnoScrollBarControl::getSupportedServiceNames()
+        throw (css::uno::RuntimeException, std::exception)
+    {
+        auto s(UnoControlBase::getSupportedServiceNames());
+        s.realloc(s.getLength() + 2);
+        s[s.getLength() - 2] = "com.sun.star.awt.UnoControlScrollBar";
+        s[s.getLength() - 1] = "stardiv.vcl.control.ScrollBar";
+        return s;
+    }
 
 }  // namespace toolkit
 

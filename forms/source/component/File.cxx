@@ -70,10 +70,11 @@ Sequence<Type> OFileControlModel::_getTypes()
 StringSequence  OFileControlModel::getSupportedServiceNames() throw(RuntimeException, std::exception)
 {
     StringSequence aSupported = OControlModel::getSupportedServiceNames();
-    aSupported.realloc(aSupported.getLength() + 1);
+    aSupported.realloc(aSupported.getLength() + 2);
 
     OUString*pArray = aSupported.getArray();
-    pArray[aSupported.getLength()-1] = FRM_SUN_COMPONENT_FILECONTROL;
+    pArray[aSupported.getLength()-2] = FRM_SUN_COMPONENT_FILECONTROL;
+    pArray[aSupported.getLength()-1] = FRM_COMPONENT_FILECONTROL;
     return aSupported;
 }
 

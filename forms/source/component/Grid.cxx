@@ -169,9 +169,11 @@ void OGridControlModel::cloneColumns( const OGridControlModel* _pOriginalContain
 StringSequence OGridControlModel::getSupportedServiceNames() throw(RuntimeException, std::exception)
 {
     StringSequence aSupported = OControlModel::getSupportedServiceNames();
-    aSupported.realloc(aSupported.getLength() + 2);
-    aSupported[aSupported.getLength()-2] = "com.sun.star.awt.UnoControlModel";
-    aSupported[aSupported.getLength()-1] = FRM_SUN_COMPONENT_GRIDCONTROL;
+    aSupported.realloc(aSupported.getLength() + 4);
+    aSupported[aSupported.getLength()-4] = "com.sun.star.awt.UnoControlModel";
+    aSupported[aSupported.getLength()-3] = FRM_SUN_COMPONENT_GRIDCONTROL;
+    aSupported[aSupported.getLength()-2] = FRM_COMPONENT_GRID;
+    aSupported[aSupported.getLength()-1] = FRM_COMPONENT_GRIDCONTROL;
     return aSupported;
 }
 Any SAL_CALL OGridControlModel::queryAggregation( const Type& _rType ) throw (RuntimeException, std::exception)

@@ -25,13 +25,14 @@
 #include <com/sun/star/awt/XPrinter.hpp>
 #include <com/sun/star/awt/XPrinterServer.hpp>
 #include <com/sun/star/awt/XInfoPrinter.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <cppuhelper/weak.hxx>
 #include <osl/mutex.hxx>
 
 #include <toolkit/helper/mutexandbroadcasthelper.hxx>
 #include <cppuhelper/propshlp.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
 
 #include <vcl/oldprintadaptor.hxx>
@@ -49,7 +50,7 @@
 //  class VCLXPrinterPropertySet
 
 
-typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::awt::XPrinterPropertySet
+typedef ::cppu::WeakImplHelper <   ::com::sun::star::awt::XPrinterPropertySet
                                 >   VCLXPrinterPropertySet_Base;
 class VCLXPrinterPropertySet    :public VCLXPrinterPropertySet_Base
                                 ,public MutexAndBroadcastHelper
@@ -102,7 +103,7 @@ public:
 //  class VCLXPrinter
 
 
-typedef ::cppu::ImplInheritanceHelper1  <   VCLXPrinterPropertySet
+typedef ::cppu::ImplInheritanceHelper  <   VCLXPrinterPropertySet
                                         ,   ::com::sun::star::awt::XPrinter
                                         >   VCLXPrinter_Base;
 class VCLXPrinter:  public VCLXPrinter_Base
@@ -141,7 +142,7 @@ public:
 //  class VCLXInfoPrinter
 
 
-typedef ::cppu::ImplInheritanceHelper1  <   VCLXPrinterPropertySet
+typedef ::cppu::ImplInheritanceHelper  <   VCLXPrinterPropertySet
                                         ,   ::com::sun::star::awt::XInfoPrinter
                                         >   VCLXInfoPrinter_Base;
 class VCLXInfoPrinter:  public VCLXInfoPrinter_Base
@@ -174,7 +175,8 @@ public:
 //  class VCLXPrinterServer
 
 
-typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::awt::XPrinterServer
+typedef ::cppu::WeakImplHelper <   ::com::sun::star::awt::XPrinterServer,
+                                   css::lang::XServiceInfo
                                 >   VCLXPrinterServer_Base;
 class VCLXPrinterServer : public VCLXPrinterServer_Base
 {
@@ -183,6 +185,15 @@ public:
     ::com::sun::star::uno::Sequence< OUString > SAL_CALL getPrinterNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPrinter > SAL_CALL createPrinter( const OUString& printerName ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XInfoPrinter > SAL_CALL createInfoPrinter( const OUString& printerName ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    OUString SAL_CALL getImplementationName()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_TOOLKIT_AWT_VCLXPRINTER_HXX

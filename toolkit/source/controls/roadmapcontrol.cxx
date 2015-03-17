@@ -81,7 +81,22 @@ static void lcl_throwIndexOutOfBoundsException( )
         return OUString::createFromAscii( szServiceName_UnoControlRoadmapModel );
     }
 
+    OUString UnoControlRoadmapModel::getImplementationName()
+        throw (css::uno::RuntimeException, std::exception)
+    {
+        return OUString("stardiv.Toolkit.UnoControlRoadmapModel");
+    }
 
+    css::uno::Sequence<OUString>
+    UnoControlRoadmapModel::getSupportedServiceNames()
+        throw (css::uno::RuntimeException, std::exception)
+    {
+        auto s(UnoControlRoadmapModel_Base::getSupportedServiceNames());
+        s.realloc(s.getLength() + 2);
+        s[s.getLength() - 2] = "com.sun.star.awt.UnoControlRoadmapModel";
+        s[s.getLength() - 1] = "stardiv.vcl.controlmodel.Roadmap";
+        return s;
+    }
 
     Any UnoControlRoadmapModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
     {
@@ -485,6 +500,22 @@ void SAL_CALL UnoRoadmapControl::propertyChange( const PropertyChangeEvent& evt 
     Reference< XPropertyChangeListener >  xPeer(getPeer(), UNO_QUERY);
     if ( xPeer.is() )
         xPeer->propertyChange( evt );
+}
+
+OUString UnoRoadmapControl::getImplementationName()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return OUString("stardiv.Toolkit.UnoRoadmapControl");
+}
+
+css::uno::Sequence<OUString> UnoRoadmapControl::getSupportedServiceNames()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    auto s(UnoControlBase::getSupportedServiceNames());
+    s.realloc(s.getLength() + 2);
+    s[s.getLength() - 2] = "com.sun.star.awt.UnoControlRoadmap";
+    s[s.getLength() - 1] = "stardiv.vcl.control.Roadmap";
+    return s;
 }
 
 }

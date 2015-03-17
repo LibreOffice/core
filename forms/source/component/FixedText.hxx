@@ -33,7 +33,10 @@ public:
     DECLARE_DEFAULT_LEAF_XTOR( OFixedTextModel );
 
 // XServiceInfo
-    IMPLEMENTATION_NAME(OFixedTextModel);
+    OUString SAL_CALL getImplementationName()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    { return OUString("com.sun.star.form.OFixedTextModel"); }
+
     virtual StringSequence SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 // XPersistObject

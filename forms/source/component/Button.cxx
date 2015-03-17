@@ -116,10 +116,11 @@ IMPLEMENT_DEFAULT_CLONING( OButtonModel )
 StringSequence  OButtonModel::getSupportedServiceNames() throw(std::exception)
 {
     StringSequence aSupported = OClickableImageBaseModel::getSupportedServiceNames();
-    aSupported.realloc( aSupported.getLength() + 1 );
+    aSupported.realloc( aSupported.getLength() + 2 );
 
     OUString* pArray = aSupported.getArray();
-    pArray[ aSupported.getLength() - 1 ] = FRM_SUN_COMPONENT_COMMANDBUTTON;
+    pArray[ aSupported.getLength() - 2 ] = FRM_SUN_COMPONENT_COMMANDBUTTON;
+    pArray[ aSupported.getLength() - 1 ] = FRM_COMPONENT_COMMANDBUTTON;
 
     return aSupported;
 }
@@ -340,10 +341,11 @@ Sequence<Type> OButtonControl::_getTypes()
 StringSequence  OButtonControl::getSupportedServiceNames() throw(std::exception)
 {
     StringSequence aSupported = OClickableImageBaseControl::getSupportedServiceNames();
-    aSupported.realloc(aSupported.getLength() + 1);
+    aSupported.realloc(aSupported.getLength() + 2);
 
     OUString*pArray = aSupported.getArray();
-    pArray[aSupported.getLength()-1] = FRM_SUN_CONTROL_COMMANDBUTTON;
+    pArray[aSupported.getLength()-2] = FRM_SUN_CONTROL_COMMANDBUTTON;
+    pArray[aSupported.getLength()-1] = STARDIV_ONE_FORM_CONTROL_COMMANDBUTTON;
     return aSupported;
 }
 

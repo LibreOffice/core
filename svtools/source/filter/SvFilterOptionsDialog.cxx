@@ -164,7 +164,7 @@ uno::Sequence< OUString > SAL_CALL SvFilterOptionsDialog::getSupportedServiceNam
 {
     uno::Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.ui.dialog.FilterOptionsDialog";
+    pArray[0] = "com.sun.star.ui.dialogs.FilterOptionsDialog";
     return aRet;
 }
 

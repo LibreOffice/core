@@ -89,9 +89,9 @@ static const SfxItemPropertyMapEntry* lcl_GetSettingsPropertyMap()
 #define SCRECENTFUNCTIONSOBJ_SERVICE    "com.sun.star.sheet.RecentFunctions"
 #define SCSPREADSHEETSETTINGS_SERVICE   "com.sun.star.sheet.GlobalSheetSettings"
 
-SC_SIMPLE_SERVICE_INFO( ScFunctionListObj, "ScFunctionListObj", SCFUNCTIONLISTOBJ_SERVICE )
-SC_SIMPLE_SERVICE_INFO( ScRecentFunctionsObj, "ScRecentFunctionsObj", SCRECENTFUNCTIONSOBJ_SERVICE )
-SC_SIMPLE_SERVICE_INFO( ScSpreadsheetSettings, "ScSpreadsheetSettings", SCSPREADSHEETSETTINGS_SERVICE )
+SC_SIMPLE_SERVICE_INFO( ScFunctionListObj, "stardiv.StarCalc.ScFunctionListObj", SCFUNCTIONLISTOBJ_SERVICE )
+SC_SIMPLE_SERVICE_INFO( ScRecentFunctionsObj, "stardiv.StarCalc.ScRecentFunctionsObj", SCRECENTFUNCTIONSOBJ_SERVICE )
+SC_SIMPLE_SERVICE_INFO( ScSpreadsheetSettings, "stardiv.StarCalc.ScSpreadsheetSettings", SCSPREADSHEETSETTINGS_SERVICE )
 
 extern "C" {
 
@@ -280,13 +280,13 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL sc_component_getFactory(
                 ScDocument_createInstance,
                 ScDocument_getSupportedServiceNames() ));
     }
-    else if ( aImpl == ::sc::sidebar::ScPanelFactory::getImplementationName() )
+    else if ( aImpl == ::sc::sidebar::ScPanelFactory::getImplementationName_static() )
     {
         xFactory = ::cppu::createSingleFactory(
             reinterpret_cast<lang::XMultiServiceFactory*>(pServiceManager),
-            ::sc::sidebar::ScPanelFactory::getImplementationName(),
+            ::sc::sidebar::ScPanelFactory::getImplementationName_static(),
             ::sc::sidebar::ScPanelFactory::createInstance,
-            ::sc::sidebar::ScPanelFactory::getSupportedServiceNames() );
+            ::sc::sidebar::ScPanelFactory::getSupportedServiceNames_static() );
     }
 
     void* pRet = NULL;

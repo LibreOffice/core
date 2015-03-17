@@ -22,9 +22,9 @@
 
 
 #include <com/sun/star/awt/XPointer.hpp>
-#include <com/sun/star/lang/XTypeProvider.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <osl/mutex.hxx>
 
 #include <vcl/pointr.hxx>
@@ -33,10 +33,8 @@
 //  class VCLXPointer
 
 
-class VCLXPointer : public ::com::sun::star::awt::XPointer,
-                    public ::com::sun::star::lang::XTypeProvider,
-                    public ::com::sun::star::lang::XUnoTunnel,
-                    public ::cppu::OWeakObject
+class VCLXPointer: public cppu::WeakImplHelper<
+    css::awt::XPointer, css::lang::XUnoTunnel, css::lang::XServiceInfo>
 {
 private:
     ::osl::Mutex    maMutex;
@@ -51,23 +49,23 @@ public:
 
     const Pointer&      GetPointer() const { return maPointer; }
 
-    // ::com::sun::star::uno::XInterface
-    ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    void                        SAL_CALL acquire() throw() SAL_OVERRIDE  { OWeakObject::acquire(); }
-    void                        SAL_CALL release() throw() SAL_OVERRIDE  { OWeakObject::release(); }
-
     // ::com::sun::star::lang::XUnoTunnel
     static const ::com::sun::star::uno::Sequence< sal_Int8 >&   GetUnoTunnelId() throw();
     static VCLXPointer*                                         GetImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxIFace );
     sal_Int64                                                   SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rIdentifier ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
     // ::com::sun::star::awt::XPointer
     void SAL_CALL setType( sal_Int32 nType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     sal_Int32 SAL_CALL getType(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    OUString SAL_CALL getImplementationName()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 

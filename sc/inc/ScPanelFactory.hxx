@@ -19,9 +19,10 @@
 #ifndef INCLUDED_SC_INC_SCPANELFACTORY_HXX
 #define INCLUDED_SC_INC_SCPANELFACTORY_HXX
 
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/ui/XUIElementFactory.hpp>
 #include <boost/noncopyable.hpp>
 
@@ -30,8 +31,8 @@ namespace sc { namespace sidebar {
 
 namespace
 {
-    typedef ::cppu::WeakComponentImplHelper1 <
-        css::ui::XUIElementFactory
+    typedef ::cppu::WeakComponentImplHelper <
+        css::ui::XUIElementFactory, css::lang::XServiceInfo
         > PanelFactoryInterfaceBase;
 }
 
@@ -41,10 +42,10 @@ class ScPanelFactory
       public PanelFactoryInterfaceBase
 {
 public:
-    static ::rtl::OUString SAL_CALL getImplementationName(void);
+    static ::rtl::OUString SAL_CALL getImplementationName_static();
     static css::uno::Reference<css::uno::XInterface> SAL_CALL createInstance(
         const css::uno::Reference<css::lang::XMultiServiceFactory>& rxFactory);
-    static css::uno::Sequence<rtl::OUString> SAL_CALL getSupportedServiceNames(void);
+    static css::uno::Sequence<rtl::OUString> SAL_CALL getSupportedServiceNames_static();
 
     ScPanelFactory(void);
     virtual ~ScPanelFactory(void);
@@ -57,6 +58,15 @@ public:
             css::container::NoSuchElementException,
             css::lang::IllegalArgumentException,
             css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+
+    OUString SAL_CALL getImplementationName()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 } } // end of namespace sc::sidebar

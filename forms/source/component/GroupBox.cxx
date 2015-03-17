@@ -60,10 +60,11 @@ OGroupBoxModel::OGroupBoxModel( const OGroupBoxModel* _pOriginal, const Referenc
 StringSequence SAL_CALL OGroupBoxModel::getSupportedServiceNames() throw(RuntimeException, std::exception)
 {
     StringSequence aSupported = OControlModel::getSupportedServiceNames();
-    aSupported.realloc(aSupported.getLength() + 1);
+    aSupported.realloc(aSupported.getLength() + 2);
 
     OUString* pArray = aSupported.getArray();
-    pArray[aSupported.getLength()-1] = FRM_SUN_COMPONENT_GROUPBOX;
+    pArray[aSupported.getLength()-2] = FRM_SUN_COMPONENT_GROUPBOX;
+    pArray[aSupported.getLength()-1] = FRM_COMPONENT_GROUPBOX;
     return aSupported;
 }
 
@@ -130,10 +131,11 @@ OGroupBoxControl::OGroupBoxControl(const Reference<XComponentContext>& _rxFactor
 StringSequence SAL_CALL OGroupBoxControl::getSupportedServiceNames() throw(RuntimeException, std::exception)
 {
     StringSequence aSupported = OControl::getSupportedServiceNames();
-    aSupported.realloc(aSupported.getLength() + 1);
+    aSupported.realloc(aSupported.getLength() + 2);
 
     OUString* pArray = aSupported.getArray();
-    pArray[aSupported.getLength()-1] = FRM_SUN_CONTROL_GROUPBOX;
+    pArray[aSupported.getLength()-2] = FRM_SUN_CONTROL_GROUPBOX;
+    pArray[aSupported.getLength()-1] = STARDIV_ONE_FORM_CONTROL_GROUPBOX;
     return aSupported;
 }
 

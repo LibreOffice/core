@@ -59,10 +59,11 @@ Sequence<Type> OTimeControl::_getTypes()
 StringSequence SAL_CALL OTimeControl::getSupportedServiceNames() throw(std::exception)
 {
     StringSequence aSupported = OBoundControl::getSupportedServiceNames();
-    aSupported.realloc(aSupported.getLength() + 1);
+    aSupported.realloc(aSupported.getLength() + 2);
 
     OUString*pArray = aSupported.getArray();
-    pArray[aSupported.getLength()-1] = FRM_SUN_CONTROL_TIMEFIELD;
+    pArray[aSupported.getLength()-2] = FRM_SUN_CONTROL_TIMEFIELD;
+    pArray[aSupported.getLength()-1] = STARDIV_ONE_FORM_CONTROL_TIMEFIELD;
     return aSupported;
 }
 
@@ -76,7 +77,7 @@ StringSequence SAL_CALL OTimeModel::getSupportedServiceNames() throw(std::except
     StringSequence aSupported = OBoundControlModel::getSupportedServiceNames();
 
     sal_Int32 nOldLen = aSupported.getLength();
-    aSupported.realloc( nOldLen + 8 );
+    aSupported.realloc( nOldLen + 9 );
     OUString* pStoreTo = aSupported.getArray() + nOldLen;
 
     *pStoreTo++ = BINDABLE_CONTROL_MODEL;
@@ -89,6 +90,8 @@ StringSequence SAL_CALL OTimeModel::getSupportedServiceNames() throw(std::except
     *pStoreTo++ = FRM_SUN_COMPONENT_TIMEFIELD;
     *pStoreTo++ = FRM_SUN_COMPONENT_DATABASE_TIMEFIELD;
     *pStoreTo++ = BINDABLE_DATABASE_TIME_FIELD;
+
+    *pStoreTo++ = FRM_COMPONENT_TIMEFIELD;
 
     return aSupported;
 }

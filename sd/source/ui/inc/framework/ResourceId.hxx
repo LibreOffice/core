@@ -20,17 +20,23 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_FRAMEWORK_RESOURCEID_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_FRAMEWORK_RESOURCEID_HXX
 
+#include <sal/config.h>
+
+#include <vector>
+
 #include <com/sun/star/drawing/framework/XResourceId.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <boost/scoped_ptr.hpp>
 
 namespace {
 
-typedef ::cppu::WeakImplHelper2 <
+typedef ::cppu::WeakImplHelper <
     css::drawing::framework::XResourceId,
-    css::lang::XInitialization
+    css::lang::XInitialization,
+    css::lang::XServiceInfo
     > ResourceIdInterfaceBase;
 
 } // end of anonymous namespace.
@@ -154,6 +160,15 @@ public:
 
     void SAL_CALL initialize (
         const css::uno::Sequence<css::uno::Any>& aArguments)
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    OUString SAL_CALL getImplementationName()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
