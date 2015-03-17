@@ -1320,9 +1320,29 @@ Selection EditView::GetSurroundingTextSelection() const
     }
 }
 
-void EditView::SetCursorLogicPosition(const Point& rPosition, bool /*bPoint*/, bool /*bClearMark*/)
+void EditView::SetCursorLogicPosition(const Point& rPosition, bool bPoint, bool bClearMark)
 {
-    pImpEditView->SetCursorAtPoint(rPosition);
+    Point aDocPos(pImpEditView->GetDocPos(rPosition));
+    EditPaM aPaM = pImpEditView->pEditEngine->GetPaM(aDocPos);
+    EditSelection aSelection(pImpEditView->GetEditSelection());
+
+    // Explicitly create or delete the selection.
+    if (bClearMark)
+        pImpEditView->DeselectAll();
+    else
+        pImpEditView->CreateAnchor();
+
+    if (bPoint)
+        aSelection.Max() = aPaM;
+    else
+        aSelection.Min() = aPaM;
+
+    if (pImpEditView->GetEditSelection().Min() != aSelection.Min())
+        pImpEditView->pEditEngine->CursorMoved(pImpEditView->GetEditSelection().Min().GetNode());
+    pImpEditView->DrawSelection(aSelection);
+    if (pImpEditView->GetEditSelection() != aSelection)
+        pImpEditView->SetEditSelection(aSelection);
+    ShowCursor(/*bGotoCursor=*/false, /*bForceCursor=*/true);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
