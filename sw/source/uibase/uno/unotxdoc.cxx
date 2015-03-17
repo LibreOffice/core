@@ -3175,6 +3175,8 @@ void SwXTextDocument::initializeForTiledRendering()
 
 void SwXTextDocument::registerCallback(LibreOfficeKitCallback pCallback, void* pData)
 {
+    SolarMutexGuard aGuard;
+
     SwDoc* pDoc = pDocShell->GetDoc();
     SwViewShell* pViewShell = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
     pViewShell->registerLibreOfficeKitCallback(pCallback, pData);

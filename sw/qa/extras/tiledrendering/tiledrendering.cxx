@@ -9,6 +9,7 @@
 
 #include <swmodeltestbase.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <comphelper/string.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
 #include <crsskip.hxx>
@@ -20,14 +21,15 @@ static const char* DATA_DIRECTORY = "/sw/qa/extras/tiledrendering/data/";
 /// Testsuite for the SwXTextDocument methods implementing the vcl::ITiledRenderable interface.
 class SwTiledRenderingTest : public SwModelTestBase
 {
-
 public:
+    void testRegisterCallback();
     void testPostMouseEvent();
     void testSetTextSelection();
     void testSetGraphicSelection();
     void testResetSelection();
 
     CPPUNIT_TEST_SUITE(SwTiledRenderingTest);
+    CPPUNIT_TEST(testRegisterCallback);
     CPPUNIT_TEST(testPostMouseEvent);
     CPPUNIT_TEST(testSetTextSelection);
     CPPUNIT_TEST(testSetGraphicSelection);
@@ -36,6 +38,9 @@ public:
 
 private:
     SwXTextDocument* createDoc(const char* pName);
+    static void callback(int nType, const char* pPayload, void* pData);
+    void callbackImpl(int nType, const char* pPayload);
+    Rectangle m_aInvalidation;
 };
 
 SwXTextDocument* SwTiledRenderingTest::createDoc(const char* pName)
@@ -46,6 +51,45 @@ SwXTextDocument* SwTiledRenderingTest::createDoc(const char* pName)
     CPPUNIT_ASSERT(pTextDocument);
     pTextDocument->initializeForTiledRendering();
     return pTextDocument;
+}
+
+void SwTiledRenderingTest::callback(int nType, const char* pPayload, void* pData)
+{
+    static_cast<SwTiledRenderingTest*>(pData)->callbackImpl(nType, pPayload);
+}
+
+void SwTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
+{
+    switch (nType)
+    {
+    case LOK_CALLBACK_INVALIDATE_TILES:
+    {
+        if (m_aInvalidation.IsEmpty())
+        {
+            uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(OUString::createFromAscii(pPayload));
+            CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), aSeq.getLength());
+            m_aInvalidation.setX(aSeq[0].toInt32());
+            m_aInvalidation.setY(aSeq[1].toInt32());
+            m_aInvalidation.setWidth(aSeq[2].toInt32());
+            m_aInvalidation.setHeight(aSeq[3].toInt32());
+        }
+    }
+    break;
+    }
+}
+
+void SwTiledRenderingTest::testRegisterCallback()
+{
+    SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
+    pXTextDocument->registerCallback(&SwTiledRenderingTest::callback, this);
+    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    // Insert a character at the begining of the document.
+    pWrtShell->Insert("x");
+
+    // Check that the top left 256x256px tile would be invalidated.
+    Rectangle aTopLeft(0, 0, 256*15, 256*15); // 1 px = 15 twips, assuming 96 DPI.
+    CPPUNIT_ASSERT(!m_aInvalidation.IsEmpty());
+    CPPUNIT_ASSERT(m_aInvalidation.IsOver(aTopLeft));
 }
 
 void SwTiledRenderingTest::testPostMouseEvent()
