@@ -20,7 +20,7 @@ using namespace css;
 
 namespace sc_apitest {
 
-#define NUMBER_OF_TESTS 4
+#define NUMBER_OF_TESTS 5
 
 class ScConditionalFormatTest : public CalcUnoApiTest
 {
@@ -35,12 +35,14 @@ public:
     void testCondFormatListProperties();
     void testCondFormatListFormats();
     void testCondFormatProperties();
+    void testCondFormatXIndex();
 
     CPPUNIT_TEST_SUITE(ScConditionalFormatTest);
     CPPUNIT_TEST(testRequestCondFormatListFromSheet);
     CPPUNIT_TEST(testCondFormatListProperties);
     CPPUNIT_TEST(testCondFormatListFormats);
     CPPUNIT_TEST(testCondFormatProperties);
+    CPPUNIT_TEST(testCondFormatXIndex);
     CPPUNIT_TEST_SUITE_END();
 private:
 
@@ -146,6 +148,30 @@ void ScConditionalFormatTest::testCondFormatProperties()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(6), aRange.StartRow);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(7), aRange.EndColumn);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(16), aRange.EndRow);
+}
+
+void ScConditionalFormatTest::testCondFormatXIndex()
+{
+    uno::Reference<sheet::XConditionalFormats> xCondFormatList =
+        getConditionalFormatList(init(1));
+
+    uno::Sequence<uno::Reference<sheet::XConditionalFormat> > xCondFormats =
+        xCondFormatList->getConditionalFormats();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xCondFormats.getLength());
+
+    uno::Reference<sheet::XConditionalFormat> xCondFormat = xCondFormats[0];
+    CPPUNIT_ASSERT(xCondFormat.is());
+
+    uno::Type aType = xCondFormat->getElementType();
+    CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.sheet.XConditionEntry"), aType.getTypeName());
+
+    CPPUNIT_ASSERT(xCondFormat->hasElements());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xCondFormat->getCount());
+    /*
+     * missing implementation
+    uno::Any aAny = xCondFormat->getByIndex(0);
+    CPPUNIT_ASSERT(aAny.hasValue());
+    */
 }
 
 void ScConditionalFormatTest::setUp()
