@@ -171,9 +171,8 @@ private:
     sal_Int32 mnKey;
 };
 
-class ScConditionEntryObj : public com::sun::star::beans::XPropertySet,
-                            public com::sun::star::sheet::XConditionEntry,
-                         public cppu::OWeakObject
+class ScConditionEntryObj : public cppu::WeakImplHelper2<com::sun::star::beans::XPropertySet,
+                                com::sun::star::sheet::XConditionEntry>
 {
 public:
 
@@ -232,8 +231,7 @@ private:
     ScCondFormatEntry* pFormat;
 };
 
-class ScColorScaleFormatObj : public com::sun::star::beans::XPropertySet,
-                         public cppu::OWeakObject
+class ScColorScaleFormatObj : public cppu::WeakImplHelper1<com::sun::star::beans::XPropertySet>
 {
 public:
 
@@ -288,8 +286,7 @@ private:
     SfxItemPropertySet maPropSet;
 };
 
-class ScDataBarFormatObj : public com::sun::star::beans::XPropertySet,
-                         public cppu::OWeakObject
+class ScDataBarFormatObj : public cppu::WeakImplHelper1<com::sun::star::beans::XPropertySet>
 {
 public:
     ScDataBarFormatObj();
@@ -343,8 +340,7 @@ private:
     SfxItemPropertySet maPropSet;
 };
 
-class ScIconSetFormatObj : public com::sun::star::beans::XPropertySet,
-                         public cppu::OWeakObject
+class ScIconSetFormatObj : public cppu::WeakImplHelper1<com::sun::star::beans::XPropertySet>
 {
 public:
     ScIconSetFormatObj();
