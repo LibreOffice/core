@@ -933,7 +933,7 @@ void SfxTemplateManagerDlg::OnTemplateImport ()
                     {
                         OUString aMsg(SfxResId(STR_MSG_ERROR_IMPORT).toString());
                         aMsg = aMsg.replaceFirst("$1",pFolder->maTitle);
-                        MessageDialog(this, aMsg.replaceFirst("$2",aTemplateList));
+                        MessageDialog(this, aMsg.replaceFirst("$2",aTemplateList)).Execute();
                     }
                 }
             }
@@ -956,7 +956,7 @@ void SfxTemplateManagerDlg::OnTemplateImport ()
                 {
                     OUString aMsg(SfxResId(STR_MSG_ERROR_IMPORT).toString());
                     aMsg = aMsg.replaceFirst("$1",mpLocalView->getCurRegionName());
-                    MessageDialog(this, aMsg.replaceFirst("$2",aTemplateList));
+                    MessageDialog(this, aMsg.replaceFirst("$2",aTemplateList)).Execute();
                 }
             }
 
