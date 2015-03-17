@@ -34,6 +34,9 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Main activity of the LibreOffice App. It is started in the UI thread.
+ */
 public class LibreOfficeMainActivity extends ActionBarActivity {
 
     private static final String LOGTAG = "LibreOfficeMainActivity";

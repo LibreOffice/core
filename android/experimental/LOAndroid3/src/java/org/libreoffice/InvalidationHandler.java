@@ -29,6 +29,10 @@ public class InvalidationHandler implements Document.MessageCallback {
         mState = OverlayState.NONE;
     }
 
+    /**
+     * Sets the tile provider, without this the
+     * @param tileProvider
+     */
     public void setTileProvider(TileProvider tileProvider) {
         mTileProvider = tileProvider;
     }
@@ -244,10 +248,19 @@ public class InvalidationHandler implements Document.MessageCallback {
         }
     }
 
+    /**
+     * Trigger a transition to a new overlay state.
+     * @param next - new state to transition to
+     */
     public synchronized void changeStateTo(OverlayState next) {
         changeState(mState, next);
     }
 
+    /**
+     * Executes a transition from old overlay state to a new overlay state.
+     * @param previous - old state
+     * @param next - new state
+     */
     private synchronized void changeState(OverlayState previous, OverlayState next) {
         mState = next;
         handleGeneralChangeState(previous, next);
@@ -270,6 +283,9 @@ public class InvalidationHandler implements Document.MessageCallback {
         }
     }
 
+    /**
+     * Handle a general transition - executed for all transitions.
+     */
     private void handleGeneralChangeState(OverlayState previous, OverlayState next) {
         if (previous == OverlayState.NONE) {
             LOKitShell.getToolbarController().switchToEditMode();
@@ -278,6 +294,9 @@ public class InvalidationHandler implements Document.MessageCallback {
         }
     }
 
+    /**
+     * Handle a transition to OverlayState.NONE state.
+     */
     private void handleNoneState(OverlayState previous) {
         if (previous == OverlayState.NONE) {
             return;
@@ -293,12 +312,18 @@ public class InvalidationHandler implements Document.MessageCallback {
         LibreOfficeMainActivity.mAppContext.hideSoftKeyboard();
     }
 
+    /**
+     * Handle a transition to OverlayState.SELECTION state.
+     */
     private void handleSelectionState(OverlayState previous) {
         mTextSelection.showHandle(TextSelectionHandle.HandleType.START);
         mTextSelection.showHandle(TextSelectionHandle.HandleType.END);
         mTextCursorLayer.showSelections();
     }
 
+    /**
+     * Handle a transition to OverlayState.CURSOR state.
+     */
     private void handleCursorState(OverlayState previous) {
         LibreOfficeMainActivity.mAppContext.showSoftKeyboard();
         if (previous == OverlayState.TRANSITION) {
@@ -307,6 +332,9 @@ public class InvalidationHandler implements Document.MessageCallback {
         }
     }
 
+    /**
+     * Handle a transition to OverlayState.TRANSITION state.
+     */
     private void handleTransitionState(OverlayState previous) {
         if (previous == OverlayState.SELECTION) {
             mTextSelection.hideHandle(TextSelectionHandle.HandleType.START);
@@ -319,20 +347,43 @@ public class InvalidationHandler implements Document.MessageCallback {
         }
     }
 
+    /**
+     * Handle a transition to OverlayState.GRAPHIC_SELECTION state.
+     */
     private void handleGraphicSelectionState(OverlayState previous) {
         mTextCursorLayer.showGraphicSelection();
         LibreOfficeMainActivity.mAppContext.hideSoftKeyboard();
     }
 
+    /**
+     * The current state the overlay is in.
+     */
     public OverlayState getCurrentState() {
         return mState;
     }
 
     public enum OverlayState {
+        /**
+         * State where the overlay is empty
+         */
         NONE,
+        /**
+         * In-between state where we need to transition to a new overlay state.
+         * In this state we properly disable the older state and wait to transition
+         * to a new state triggered by an invalidation.
+         */
         TRANSITION,
+        /**
+         * State where we operate with the cursor.
+         */
         CURSOR,
+        /**
+         * State where we operate the graphic selection.
+         */
         GRAPHIC_SELECTION,
+        /**
+         * State where we operate the text selection.
+         */
         SELECTION
     }
 }

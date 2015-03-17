@@ -21,6 +21,9 @@ import org.libreoffice.R;
 import org.mozilla.gecko.gfx.ImmutableViewportMetrics;
 import org.mozilla.gecko.gfx.LayerView;
 
+/**
+ * Custom image view used for showing the text selection handles.
+ */
 public class TextSelectionHandle extends ImageView implements View.OnTouchListener {
     private static final String LOGTAG = TextSelectionHandle.class.getSimpleName();
     private long mLastTime = 0;
