@@ -742,7 +742,7 @@ bool CUPSManager::printJobs( const PendingJob& job, const std::vector< OString >
                 "    option " << pOptions[n].name << "=" << pOptions[n].value);
 #if OSL_DEBUG_LEVEL > 1
         OString aCmd( "cp " );
-        aCmd = aCmd + it->second;
+        aCmd = aCmd + files.front();
         aCmd = aCmd + OString( " $HOME/cupsprint.ps" );
         system( aCmd.getStr() );
 #endif
