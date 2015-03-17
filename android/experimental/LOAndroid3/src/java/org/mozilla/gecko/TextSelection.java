@@ -18,6 +18,10 @@ import org.mozilla.gecko.util.FloatUtils;
 import static org.mozilla.gecko.TextSelectionHandle.HandleType.MIDDLE;
 import static org.mozilla.gecko.TextSelectionHandle.HandleType.START;
 
+/**
+ * TextSelection operates the text selection (start, middle and end) handles. It is a Layer implementation
+ * that intercepts viewport changes and repositions the text handles accordingly.
+ */
 public class TextSelection extends Layer {
     private static final String LOGTAG = "GeckoTextSelection";
 
@@ -40,9 +44,15 @@ public class TextSelection extends Layer {
         }
     }
 
+    /**
+     * Destroys created resources if any were created.
+     */
     void destroy() {
     }
 
+    /**
+     * Reposition the handles when draw happens.
+     */
     @Override
     public void draw(final RenderContext context) {
         // cache the relevant values from the context and bail out if they are the same. we do this
@@ -66,6 +76,9 @@ public class TextSelection extends Layer {
         });
     }
 
+    /**
+     * Shows the requested handle.
+     */
     public void showHandle(final TextSelectionHandle.HandleType handleType) {
         LOKitShell.getMainHandler().post(new Runnable() {
             public void run() {
@@ -84,6 +97,9 @@ public class TextSelection extends Layer {
         });
     }
 
+    /**
+     * Get instance of the requested handle type..
+     */
     private TextSelectionHandle getHandle(TextSelectionHandle.HandleType handleType) {
         if (handleType == START) {
             return mStartHandle;
@@ -94,6 +110,9 @@ public class TextSelection extends Layer {
         }
     }
 
+    /**
+     * Hides the requested handle.
+     */
     public void hideHandle(final TextSelectionHandle.HandleType handleType) {
         LOKitShell.getMainHandler().post(new Runnable() {
             public void run() {
@@ -103,7 +122,9 @@ public class TextSelection extends Layer {
         });
     }
 
-
+    /**
+     * Position the handle requested handle to the input rectangle (expressed in document coordinates)
+     */
     public void positionHandle(final TextSelectionHandle.HandleType handleType, final RectF position) {
         LOKitShell.getMainHandler().post(new Runnable() {
             public void run() {

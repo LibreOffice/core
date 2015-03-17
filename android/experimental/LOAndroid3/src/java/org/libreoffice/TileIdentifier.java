@@ -13,6 +13,9 @@ import android.graphics.RectF;
 
 import org.mozilla.gecko.gfx.IntSize;
 
+/**
+ * Identifies the tile by its position (x and y coordinate on the document), zoom and tile size (currently static)
+ */
 public class TileIdentifier {
     public final int x;
     public final int y;
@@ -26,10 +29,16 @@ public class TileIdentifier {
         this.size = size;
     }
 
+    /**
+     * Returns a rectangle of the tiles position in scaled coordinates.
+     */
     public RectF getRectF() {
         return new RectF(x, y, x + size.width, y + size.height);
     }
 
+    /**
+     * Returns a rectangle of the tiles position in non-scaled coordinates (coordinates as the zoom would be 1).
+     */
     public RectF getCSSRectF() {
         float cssX = x / zoom;
         float cssY = y / zoom;
@@ -38,6 +47,9 @@ public class TileIdentifier {
         return new RectF(cssX, cssY, cssX + cssSizeW, cssY + cssSizeH);
     }
 
+    /**
+     * Returns a integer rectangle of the tiles position in non-scaled and rounded coordinates (coordinates as the zoom would be 1).
+     */
     public Rect getCSSRect() {
         float cssX = x / zoom;
         float cssY = y / zoom;

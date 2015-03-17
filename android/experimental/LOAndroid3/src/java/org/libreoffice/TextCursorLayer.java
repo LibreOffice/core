@@ -38,6 +38,9 @@ public class TextCursorLayer extends Layer {
         }
     }
 
+    /**
+     * @see Layer#draw(org.mozilla.gecko.gfx.Layer.RenderContext)
+     */
     @Override
     public void draw(final RenderContext context) {
         if (FloatUtils.fuzzyEquals(mViewLeft, context.viewport.left)
@@ -57,6 +60,9 @@ public class TextCursorLayer extends Layer {
         });
     }
 
+    /**
+     * Show the cursor at the defined cursor position on the overlay.
+     */
     public void showCursor() {
         LOKitShell.getMainHandler().post(new Runnable() {
             public void run() {
@@ -72,6 +78,9 @@ public class TextCursorLayer extends Layer {
         });
     }
 
+    /**
+     * Hide the cursor at the defined cursor position on the overlay.
+     */
     public void hideCursor() {
         LOKitShell.getMainHandler().post(new Runnable() {
             public void run() {
@@ -80,6 +89,9 @@ public class TextCursorLayer extends Layer {
         });
     }
 
+    /**
+     * Position the cursor to the input position on the overlay.
+     */
     public void positionCursor(final RectF position) {
         LOKitShell.getMainHandler().post(new Runnable() {
             public void run() {
@@ -88,6 +100,9 @@ public class TextCursorLayer extends Layer {
         });
     }
 
+    /**
+     * Show selections on the overlay.
+     */
     public void showSelections() {
         LOKitShell.getMainHandler().post(new Runnable() {
             public void run() {
@@ -100,6 +115,9 @@ public class TextCursorLayer extends Layer {
         });
     }
 
+    /**
+     * Hide selections on the overlay.
+     */
     public void hideSelections() {
         LOKitShell.getMainHandler().post(new Runnable() {
             public void run() {
@@ -108,6 +126,9 @@ public class TextCursorLayer extends Layer {
         });
     }
 
+    /**
+     * Change the list of selections.
+     */
     public void changeSelections(final List<RectF> selections) {
         LOKitShell.getMainHandler().post(new Runnable() {
             public void run() {
@@ -116,6 +137,9 @@ public class TextCursorLayer extends Layer {
         });
     }
 
+    /**
+     * Show the graphic selection on the overlay.
+     */
     public void showGraphicSelection() {
         LOKitShell.getMainHandler().post(new Runnable() {
             public void run() {
@@ -124,6 +148,9 @@ public class TextCursorLayer extends Layer {
         });
     }
 
+    /**
+     * Hide the graphic selection on the overlay.
+     */
     public void hideGraphicSelection() {
         LOKitShell.getMainHandler().post(new Runnable() {
             public void run() {
@@ -132,6 +159,9 @@ public class TextCursorLayer extends Layer {
         });
     }
 
+    /**
+     * Change the graphic selection rectangle to the input rectangle.
+     */
     public void changeGraphicSelection(final RectF rectangle) {
         LOKitShell.getMainHandler().post(new Runnable() {
             public void run() {

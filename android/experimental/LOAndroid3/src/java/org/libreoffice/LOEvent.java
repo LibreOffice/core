@@ -18,6 +18,9 @@ import org.mozilla.gecko.gfx.ComposedTileLayer;
 import org.mozilla.gecko.gfx.IntSize;
 import org.mozilla.gecko.gfx.SubTile;
 
+/**
+ * Events and data that is queued and processed by LOKitThread.
+ */
 public class LOEvent implements Comparable<LOEvent> {
     public static final int SIZE_CHANGED = 1;
     public static final int CHANGE_PART = 2;

@@ -11,6 +11,9 @@ package org.libreoffice;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 
+/**
+ * Controls the changes to the toolbar.
+ */
 public class ToolbarController {
     private final Toolbar mToolbar;
     private final ActionBar mActionBar;
@@ -21,7 +24,11 @@ public class ToolbarController {
         switchToViewMode();
     }
 
+    /**
+     * Change the toolbar to edit mode.
+     */
     void switchToEditMode() {
+        // Insure the change is done on UI thread
         LOKitShell.getMainHandler().post(new Runnable() {
             @Override
             public void run() {
@@ -33,7 +40,11 @@ public class ToolbarController {
         });
     }
 
+    /**
+     * Change the toolbar to view mode.
+     */
     void switchToViewMode() {
+        // Insure the change is done on UI thread
         LOKitShell.getMainHandler().post(new Runnable() {
             @Override
             public void run() {

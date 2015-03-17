@@ -48,6 +48,12 @@ public class LOKitTileProvider implements TileProvider {
 
     private long objectCreationTime = System.currentTimeMillis();
 
+    /**
+     * Initialize LOKit and load the document.
+     * @param layerClient - layerclient implementation
+     * @param messageCallback - callback for messages retrieved from LOKit
+     * @param input - input path of the document
+     */
     public LOKitTileProvider(GeckoLayerClient layerClient, Document.MessageCallback messageCallback, String input) {
         mLayerClient = layerClient;
         mMessageCallback = messageCallback;
@@ -89,7 +95,10 @@ public class LOKitTileProvider implements TileProvider {
         }
     }
 
-    public void postLoad() {
+    /**
+     * Triggered after the document is loaded.
+     */
+    private void postLoad() {
         mDocument.setMessageCallback(mMessageCallback);
 
         int parts = mDocument.getParts();
@@ -151,11 +160,18 @@ public class LOKitTileProvider implements TileProvider {
         return (input / dpi) * 1440.0f;
     }
 
+
+    /**
+     * @see TileProvider#getPartsCount()
+     */
     @Override
     public int getPartsCount() {
         return mDocument.getParts();
     }
 
+    /**
+     * @see TileProvider#onSwipeLeft()
+     */
     @Override
     public void onSwipeLeft() {
         if (mDocument.getDocumentType() == Document.DOCTYPE_PRESENTATION &&
@@ -164,6 +180,9 @@ public class LOKitTileProvider implements TileProvider {
         }
     }
 
+    /**
+     * @see TileProvider#onSwipeRight()
+     */
     @Override
     public void onSwipeRight() {
         if (mDocument.getDocumentType() == Document.DOCTYPE_PRESENTATION &&
@@ -213,21 +232,33 @@ public class LOKitTileProvider implements TileProvider {
         return true;
     }
 
+    /**
+     * @see TileProvider#getPageWidth()
+     */
     @Override
     public int getPageWidth() {
         return (int) twipToPixel(mWidthTwip, mDPI);
     }
 
+    /**
+     * @see TileProvider#getPageHeight()
+     */
     @Override
     public int getPageHeight() {
         return (int) twipToPixel(mHeightTwip, mDPI);
     }
 
+    /**
+     * @see TileProvider#isReady()
+     */
     @Override
     public boolean isReady() {
         return mIsReady;
     }
 
+    /**
+     * @see TileProvider#createTile(float, float, org.mozilla.gecko.gfx.IntSize, float)
+     */
     @Override
     public CairoImage createTile(float x, float y, IntSize tileSize, float zoom) {
         ByteBuffer buffer = DirectBufferAllocator.guardedAllocate(tileSize.width * tileSize.height * 4);
@@ -239,6 +270,9 @@ public class LOKitTileProvider implements TileProvider {
         return image;
     }
 
+    /**
+     * @see TileProvider#rerenderTile(org.mozilla.gecko.gfx.CairoImage, float, float, org.mozilla.gecko.gfx.IntSize, float)
+     */
     @Override
     public void rerenderTile(CairoImage image, float x, float y, IntSize tileSize, float zoom) {
         if (mDocument != null && image.getBuffer() != null) {
@@ -260,6 +294,9 @@ public class LOKitTileProvider implements TileProvider {
         }
     }
 
+    /**
+     * @see TileProvider#thumbnail(int)
+     */
     @Override
     public Bitmap thumbnail(int size) {
         int widthPixel = getPageWidth();
@@ -289,6 +326,9 @@ public class LOKitTileProvider implements TileProvider {
         return bitmap;
     }
 
+    /**
+     * @see TileProvider#close()
+     */
     @Override
     public void close() {
         Log.i(LOGTAG, "Document destroyed: " + mInputFile);
@@ -298,11 +338,17 @@ public class LOKitTileProvider implements TileProvider {
         }
     }
 
+    /**
+     * @see TileProvider#isTextDocument()
+     */
     @Override
     public boolean isTextDocument() {
         return mDocument != null && mDocument.getDocumentType() == Document.DOCTYPE_TEXT;
     }
 
+    /**
+     * @see TileProvider#isSpreadsheet()
+     */
     @Override
     public boolean isSpreadsheet() {
         return mDocument != null && mDocument.getDocumentType() == Document.DOCTYPE_SPREADSHEET;
@@ -335,6 +381,9 @@ public class LOKitTileProvider implements TileProvider {
         return 0;
     }
 
+    /**
+     * @see TileProvider#sendKeyEvent(android.view.KeyEvent)
+     */
     @Override
     public void sendKeyEvent(KeyEvent keyEvent) {
         if (keyEvent.getAction() == KeyEvent.ACTION_MULTIPLE) {
@@ -357,11 +406,17 @@ public class LOKitTileProvider implements TileProvider {
         mDocument.postMouseEvent(type, x, y, numberOfClicks);
     }
 
+    /**
+     * @see TileProvider#mouseButtonDown(android.graphics.PointF, int)
+     */
     @Override
     public void mouseButtonDown(PointF documentCoordinate, int numberOfClicks) {
         mouseButton(Document.MOUSE_BUTTON_DOWN, documentCoordinate, numberOfClicks);
     }
 
+    /**
+     * @see TileProvider#mouseButtonUp(android.graphics.PointF, int)
+     */
     @Override
     public void mouseButtonUp(PointF documentCoordinate, int numberOfClicks) {
         mouseButton(Document.MOUSE_BUTTON_UP, documentCoordinate, numberOfClicks);
@@ -378,16 +433,25 @@ public class LOKitTileProvider implements TileProvider {
         mDocument.setTextSelection(type, x, y);
     }
 
+    /**
+     * @see TileProvider#setTextSelectionStart(android.graphics.PointF)
+     */
     @Override
     public void setTextSelectionStart(PointF documentCoordinate) {
         setTextSelection(Document.SET_TEXT_SELECTION_START, documentCoordinate);
     }
 
+    /**
+     * @see TileProvider#setTextSelectionEnd(android.graphics.PointF)
+     */
     @Override
     public void setTextSelectionEnd(PointF documentCoordinate) {
         setTextSelection(Document.SET_TEXT_SELECTION_END, documentCoordinate);
     }
 
+    /**
+     * @see TileProvider#setTextSelectionReset(android.graphics.PointF)
+     */
     @Override
     public void setTextSelectionReset(PointF documentCoordinate) {
         setTextSelection(Document.SET_TEXT_SELECTION_RESET, documentCoordinate);
@@ -399,6 +463,9 @@ public class LOKitTileProvider implements TileProvider {
         super.finalize();
     }
 
+    /**
+     * @see TileProvider#changePart(int)
+     */
     @Override
     public void changePart(int partIndex) {
         if (mDocument == null)
@@ -408,6 +475,9 @@ public class LOKitTileProvider implements TileProvider {
         resetDocumentSize();
     }
 
+    /**
+     * @see TileProvider#getCurrentPartNumber()
+     */
     @Override
     public int getCurrentPartNumber() {
         if (mDocument == null)
@@ -417,4 +487,4 @@ public class LOKitTileProvider implements TileProvider {
     }
 }
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+// vim:set shiftwidth=4 softtabstop=4 expandtab:

@@ -17,6 +17,9 @@ import android.view.KeyEvent;
 import org.mozilla.gecko.gfx.CairoImage;
 import org.mozilla.gecko.gfx.IntSize;
 
+/**
+ * Provides the tiles and other document information.
+ */
 public interface TileProvider {
     /**
      * Returns the page width in pixels.
@@ -114,10 +117,22 @@ public interface TileProvider {
      */
     void postUnoCommand(String command);
 
+    /**
+     * Send text selection start coordinate.
+     * @param documentCoordinate
+     */
     void setTextSelectionStart(PointF documentCoordinate);
 
+    /**
+     * Send text selection end coordinate.
+     * @param documentCoordinate
+     */
     void setTextSelectionEnd(PointF documentCoordinate);
 
+    /**
+     * Send text selection reset coordinate.
+     * @param documentCoordinate
+     */
     void setTextSelectionReset(PointF documentCoordinate);
 }
 

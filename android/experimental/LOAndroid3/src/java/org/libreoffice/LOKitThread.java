@@ -16,6 +16,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
 
+/**
+ * Thread that communicates with LibreOffice through LibreOfficeKit JNI interface. The thread
+ * consumes events from other threads (maininly the UI thread) and acts accordingly.
+ */
 public class LOKitThread extends Thread {
     private static final String LOGTAG = LOKitThread.class.getSimpleName();
 
@@ -32,6 +36,9 @@ public class LOKitThread extends Thread {
         TileProviderFactory.initialize();
     }
 
+    /**
+     * Starting point of the thread. Processes events that gather in the queue.
+     */
     @Override
     public void run() {
         while (true) {
@@ -45,7 +52,9 @@ public class LOKitThread extends Thread {
         }
     }
 
-    /* Viewport changed, recheck if tiles need to be added / removed */
+    /**
+     * Viewport changed, Recheck if tiles need to be added / removed.
+     */
     private void tileReevaluationRequest(ComposedTileLayer composedTileLayer) {
         if (mTileProvider == null) {
             return;
@@ -74,7 +83,9 @@ public class LOKitThread extends Thread {
         mLayerClient.forceRender();
     }
 
-    /* Invalidate tiles that intersect the input rect */
+    /**
+     * Invalidate tiles that intersect the input rect.
+     */
     private void tileInvalidation(RectF rect) {
         if (mLayerClient == null || mTileProvider == null) {
             return;
@@ -113,6 +124,9 @@ public class LOKitThread extends Thread {
         mLayerClient.forceRender();
     }
 
+    /**
+     * Reposition the view (zoom and position) when the document is firstly shown. This is document type dependent.
+     */
     private void zoomAndRepositionTheDocument() {
         if (mTileProvider.isSpreadsheet()) {
             // Don't do anything for spreadsheets - show at 100%
@@ -139,6 +153,9 @@ public class LOKitThread extends Thread {
         redraw();
     }
 
+    /**
+     * Change part of the document.
+     */
     private void changePart(int partIndex) {
         LOKitShell.showProgressSpinner();
         mTileProvider.changePart(partIndex);
@@ -148,6 +165,10 @@ public class LOKitThread extends Thread {
         LOKitShell.hideProgressSpinner();
     }
 
+    /**
+     * Handle load document event.
+     * @param filename - filename where the document is located
+     */
     private void loadDocument(String filename) {
         if (mApplication == null) {
             mApplication = LibreOfficeMainActivity.mAppContext;
@@ -168,6 +189,9 @@ public class LOKitThread extends Thread {
         }
     }
 
+    /**
+     * Close the currently loaded document.
+     */
     public void closeDocument() {
         if (mTileProvider != null) {
             mTileProvider.close();
@@ -175,6 +199,9 @@ public class LOKitThread extends Thread {
         }
     }
 
+    /**
+     * Process the input event.
+     */
     private void processEvent(LOEvent event) {
         switch (event.mType) {
             case LOEvent.LOAD:
@@ -222,6 +249,9 @@ public class LOKitThread extends Thread {
         }
     }
 
+    /**
+     * Request a change of the handle position.
+     */
     private void changeHandlePosition(TextSelectionHandle.HandleType handleType, PointF documentCoordinate) {
         if (handleType == TextSelectionHandle.HandleType.MIDDLE) {
             mTileProvider.setTextSelectionReset(documentCoordinate);
@@ -245,10 +275,16 @@ public class LOKitThread extends Thread {
         mTileProvider.sendKeyEvent(keyEvent);
     }
 
+    /**
+     * Process swipe left event.
+     */
     private void onSwipeLeft() {
         mTileProvider.onSwipeLeft();
     }
 
+    /**
+     * Process swipe right event.
+     */
     private void onSwipeRight() {
         mTileProvider.onSwipeRight();
     }
@@ -276,15 +312,24 @@ public class LOKitThread extends Thread {
         }
     }
 
+    /**
+     * Create thumbnail for the requested document task.
+     */
     private void createThumbnail(final ThumbnailCreator.ThumbnailCreationTask task) {
         final Bitmap bitmap = task.getThumbnail(mTileProvider);
         task.applyBitmap(bitmap);
     }
 
+    /**
+     * Queue an event.
+     */
     public void queueEvent(LOEvent event) {
         mEventQueue.add(event);
     }
 
+    /**
+     * Clear all events in the queue (used when document is closed).
+     */
     public void clearQueue() {
         mEventQueue.clear();
     }
