@@ -296,8 +296,8 @@ Sub Custom_Number_Format_Sample()
     TestLog_ASSERT TestStr = "1,000,000", "#,###: " & TestStr
     'MsgBox TestStr
     
-    TestStr = Format(1.09837555, "######E-###") '109838E-5
-    TestLog_ASSERT TestStr = "109838E-5", "######E-###: " & TestStr
+    TestStr = Format(1.09837555, "######E-###") '109838E-5 => 1E0 with engineering notation
+    TestLog_ASSERT TestStr = "1E0", "######E-###: " & TestStr
     'MsgBox TestStr
     
     TestStr = Format(2345.25, "$#,###.##") '$2.345.25
