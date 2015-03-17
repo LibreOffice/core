@@ -2174,10 +2174,9 @@ ImplListBox::~ImplListBox()
 
 void ImplListBox::dispose()
 {
-    mpHScrollBar.clear();
-    mpVScrollBar.clear();
-    mpScrollBarBox.clear();
-    maLBWindow.clear();
+    mpHScrollBar.disposeAndClear();
+    mpVScrollBar.disposeAndClear();
+    mpScrollBarBox.disposeAndClear();
     maLBWindow.disposeAndClear();
     Control::dispose();
 }
