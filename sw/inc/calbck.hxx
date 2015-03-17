@@ -121,6 +121,7 @@ public:
         { CheckRegistration( pOldValue, pNewValue ); }
     // when overriding this, you MUST call SwClient::SwClientModify() in the override!
     virtual void SwClientNotify( const SwModify&, const SfxHint& rHint)
+        SAL_OVERRIDE
     {
         // assuming the compiler to realize that a dynamic_cast to a final class is just a pointer compare ...
         auto pLegacyHint(dynamic_cast<const sw::LegacyModifyHint*>(&rHint));
