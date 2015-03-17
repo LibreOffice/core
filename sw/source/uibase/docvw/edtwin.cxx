@@ -54,6 +54,7 @@
 #include <svx/svdhdl.hxx>
 #include <svx/svdoutl.hxx>
 #include <editeng/editeng.hxx>
+#include <editeng/editview.hxx>
 #include <editeng/svxacorr.hxx>
 #include <editeng/scripttypeitem.hxx>
 #include <editeng/flditem.hxx>
@@ -6268,6 +6269,17 @@ void SwEditWin::LogicMouseButtonUp(const MouseEvent& rMouseEvent)
 
 void SwEditWin::SetCursorLogicPosition(const Point& rPosition, bool bPoint, bool bClearMark)
 {
+    if (SdrView* pSdrView = m_rView.GetWrtShell().GetDrawView())
+    {
+        // Editing shape text, then route the call to editeng.
+        if (pSdrView->GetTextEditObject())
+        {
+            EditView& rEditView = pSdrView->GetTextEditOutlinerView()->GetEditView();
+            rEditView.SetCursorLogicPosition(rPosition, bPoint, bClearMark);
+            return;
+        }
+    }
+
     // Not an SwWrtShell, as that would make SwCrsrShell::GetCrsr() inaccessible.
     SwEditShell& rShell = m_rView.GetWrtShell();
     SwMvContext aMvContext(&rShell);

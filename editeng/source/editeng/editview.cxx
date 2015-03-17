@@ -1320,4 +1320,9 @@ Selection EditView::GetSurroundingTextSelection() const
     }
 }
 
+void EditView::SetCursorLogicPosition(const Point& rPosition, bool /*bPoint*/, bool /*bClearMark*/)
+{
+    pImpEditView->SetCursorAtPoint(rPosition);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
