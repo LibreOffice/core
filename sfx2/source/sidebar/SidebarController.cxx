@@ -621,6 +621,7 @@ void SidebarController::SwitchToDeck (
         }
         else
         {
+            iPanel = rCurrentPanels.end();
             for (auto a = rCurrentPanels.begin(); a != rCurrentPanels.end(); ++a)
             {
                 iPanel = a;
