@@ -250,6 +250,8 @@ public:
                             com::sun::star::uno::Reference< com::sun::star::linguistic2::XSpellChecker1 > xSpell,
                             com::sun::star::uno::Reference< com::sun::star::linguistic2::XLanguageGuessing > xLangGuess,
                             bool bIsParaText );
+    /// Allows adjusting the point or mark of the selection to a document coordinate.
+    void SetCursorLogicPosition(const Point& rPosition, bool bPoint, bool bClearMark);
 };
 
 #endif // INCLUDED_EDITENG_EDITVIEW_HXX
