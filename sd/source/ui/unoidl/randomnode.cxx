@@ -570,7 +570,7 @@ Sequence< OUString > RandomAnimationNode::getSupportedServiceNames(void) throw(s
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
-com_sun_star_comp_embed_MSOLEObjectSystemCreator_get_implementation(::com::sun::star::uno::XComponentContext*,
+RandomAnimationNode_get_implementation(::com::sun::star::uno::XComponentContext*,
                                                                     ::com::sun::star::uno::Sequence<css::uno::Any> const &)
 {
     return cppu::acquire(new sd::RandomAnimationNode());
