@@ -1450,6 +1450,11 @@ bool AquaSalGraphics::SupportsCairo() const
     return true;
 }
 
+bool AquaSalGraphics::CanResizeCairoSurface() const
+{
+    return false;
+}
+
 long AquaSalGraphics::GetGraphicsWidth() const
 {
     long w = 0;
