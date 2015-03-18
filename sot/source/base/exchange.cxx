@@ -63,7 +63,7 @@ namespace
             /*  2 SotClipboardFormatId::BITMAP*/                       { "application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"", "Bitmap", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
             /*  3 SotClipboardFormatId::GDIMETAFILE*/                  { "application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"", "GDIMetaFile", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
             /*  4 SotClipboardFormatId::PRIVATE*/                      { "application/x-openoffice-private;windows_formatname=\"Private\"", "Private", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
-            /*  5 SotClipboardFormatId::FILE*/                         { "application/x-openoffice-file;windows_formatname=\"FileName\"", "FileName", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+            /*  5 SotClipboardFormatId::SIMPLE_FILE*/                         { "application/x-openoffice-file;windows_formatname=\"FileName\"", "FileName", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
             /*  6 SotClipboardFormatId::FILE_LIST*/                    { "application/x-openoffice-filelist;windows_formatname=\"FileList\"", "FileList", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
             /*  7 EMPTY*/                                   { "", "", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
             /*  8 EMPTY*/                                   { "", "", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },

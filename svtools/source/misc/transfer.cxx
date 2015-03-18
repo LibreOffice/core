@@ -721,7 +721,7 @@ bool TransferableHelper::SetString( const OUString& rString, const DataFlavor& r
     DataFlavor aFileFlavor;
 
     if( !rString.isEmpty() &&
-        SotExchange::GetFormatDataFlavor( SotClipboardFormatId::FILE, aFileFlavor ) &&
+        SotExchange::GetFormatDataFlavor( SotClipboardFormatId::SIMPLE_FILE, aFileFlavor ) &&
         TransferableDataHelper::IsEqual( aFileFlavor, rFlavor ) )
     {
         const OString aByteStr(OUStringToOString(rString, osl_getThreadTextEncoding()));

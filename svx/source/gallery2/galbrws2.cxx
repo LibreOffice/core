@@ -276,7 +276,7 @@ void GalleryThemePopup::ExecutePopup( vcl::Window *pWindow, const ::Point &aPos 
         {
             if( aDataHelper.HasFormat( SotClipboardFormatId::DRAWING ) ||
                 aDataHelper.HasFormat( SotClipboardFormatId::FILE_LIST ) ||
-                aDataHelper.HasFormat( SotClipboardFormatId::FILE ) ||
+                aDataHelper.HasFormat( SotClipboardFormatId::SIMPLE_FILE ) ||
                 aDataHelper.HasFormat( SotClipboardFormatId::SVXB ) ||
                 aDataHelper.HasFormat( SotClipboardFormatId::GDIMETAFILE ) ||
                 aDataHelper.HasFormat( SotClipboardFormatId::BITMAP ) )
@@ -576,7 +576,7 @@ sal_Int8 GalleryBrowser2::AcceptDrop( DropTargetHelper& rTarget, const AcceptDro
         {
             if( rTarget.IsDropFormatSupported( SotClipboardFormatId::DRAWING ) ||
                 rTarget.IsDropFormatSupported( SotClipboardFormatId::FILE_LIST ) ||
-                rTarget.IsDropFormatSupported( SotClipboardFormatId::FILE ) ||
+                rTarget.IsDropFormatSupported( SotClipboardFormatId::SIMPLE_FILE ) ||
                 rTarget.IsDropFormatSupported( SotClipboardFormatId::SVXB ) ||
                 rTarget.IsDropFormatSupported( SotClipboardFormatId::GDIMETAFILE ) ||
                 rTarget.IsDropFormatSupported( SotClipboardFormatId::BITMAP ) )

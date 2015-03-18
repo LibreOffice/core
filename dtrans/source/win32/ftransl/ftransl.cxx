@@ -243,7 +243,7 @@ void SAL_CALL CDataFormatTranslator::initTranslationTable()
     m_TranslTable.push_back(FormatEntry("application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"", "GDIMetaFile", NULL, CF_INVALID, CPPUTYPE_DEFAULT));
     // SotClipboardFormatId::PRIVATE
     m_TranslTable.push_back(FormatEntry("application/x-openoffice-private;windows_formatname=\"Private\"", "Private", NULL, CF_INVALID, CPPUTYPE_DEFAULT));
-    // SotClipboardFormatId::FILE
+    // SotClipboardFormatId::SIMPLE_FILE
     m_TranslTable.push_back(FormatEntry("application/x-openoffice-file;windows_formatname=\"FileName\"", "FileName", NULL, CF_INVALID, CPPUTYPE_DEFAULT));
     // SotClipboardFormatId::RTF
     m_TranslTable.push_back(FormatEntry("text/richtext", "Rich Text Format", NULL, CF_INVALID, CPPUTYPE_DEFAULT));

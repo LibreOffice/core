@@ -588,7 +588,7 @@ sal_Int8 View::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTarge
                     const bool  bEditEngine = rTargetHelper.IsDropFormatSupported( SotClipboardFormatId::EDITENGINE );
                     const bool  bString = rTargetHelper.IsDropFormatSupported( SotClipboardFormatId::STRING );
                     const bool  bRTF = rTargetHelper.IsDropFormatSupported( SotClipboardFormatId::RTF );
-                    const bool  bFile = rTargetHelper.IsDropFormatSupported( SotClipboardFormatId::FILE );
+                    const bool  bFile = rTargetHelper.IsDropFormatSupported( SotClipboardFormatId::SIMPLE_FILE );
                     const bool  bFileList = rTargetHelper.IsDropFormatSupported( SotClipboardFormatId::FILE_LIST );
 
                     if( mpDropMarker )

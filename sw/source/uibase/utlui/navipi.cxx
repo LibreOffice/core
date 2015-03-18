@@ -1100,7 +1100,7 @@ OUString SwNavigationPI::CreateDropFileName( TransferableDataHelper& rData )
         sFileName = aFileList.GetFile( 0 );
     }
     else if( rData.HasFormat( nFmt = SotClipboardFormatId::STRING ) ||
-              rData.HasFormat( nFmt = SotClipboardFormatId::FILE ) ||
+              rData.HasFormat( nFmt = SotClipboardFormatId::SIMPLE_FILE ) ||
              rData.HasFormat( nFmt = SotClipboardFormatId::FILENAME ))
     {
         (void)rData.GetString(nFmt, sFileName);
@@ -1125,7 +1125,7 @@ OUString SwNavigationPI::CreateDropFileName( TransferableDataHelper& rData )
 sal_Int8 SwNavigationPI::AcceptDrop( const AcceptDropEvent& /*rEvt*/ )
 {
     return ( !SwContentTree::IsInDrag() &&
-        ( aContentTree.IsDropFormatSupported( SotClipboardFormatId::FILE ) ||
+        ( aContentTree.IsDropFormatSupported( SotClipboardFormatId::SIMPLE_FILE ) ||
           aContentTree.IsDropFormatSupported( SotClipboardFormatId::STRING ) ||
           aContentTree.IsDropFormatSupported( SotClipboardFormatId::SOLK ) ||
            aContentTree.IsDropFormatSupported( SotClipboardFormatId::NETSCAPE_BOOKMARK )||

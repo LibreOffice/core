@@ -290,7 +290,7 @@ sal_Int8 SwGlobalTree::AcceptDrop( const AcceptDropEvent& rEvt )
             if( pDDSource != pDropEntry )
                 nRet = rEvt.mnAction;
         }
-        else if( IsDropFormatSupported( SotClipboardFormatId::FILE ) ||
+        else if( IsDropFormatSupported( SotClipboardFormatId::SIMPLE_FILE ) ||
                   IsDropFormatSupported( SotClipboardFormatId::STRING ) ||
                   IsDropFormatSupported( SotClipboardFormatId::FILE_LIST ) ||
                   IsDropFormatSupported( SotClipboardFormatId::SOLK ) ||

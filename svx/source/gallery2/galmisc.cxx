@@ -485,7 +485,7 @@ void GalleryTransferable::AddSupportedFormats()
     else
     {
         if( mpURL )
-            AddFormat( SotClipboardFormatId::FILE );
+            AddFormat( SotClipboardFormatId::SIMPLE_FILE );
 
         if( mpGraphicObject )
         {
@@ -521,7 +521,7 @@ bool GalleryTransferable::GetData( const datatransfer::DataFlavor& rFlavor, cons
         // TODO/MBA: do we need a BaseURL here?!
         bRet = SetImageMap( *mpImageMap, rFlavor );
     }
-    else if( ( SotClipboardFormatId::FILE == nFormat ) && mpURL )
+    else if( ( SotClipboardFormatId::SIMPLE_FILE == nFormat ) && mpURL )
     {
         bRet = SetString( mpURL->GetMainURL( INetURLObject::NO_DECODE ), rFlavor );
     }

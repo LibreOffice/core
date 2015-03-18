@@ -586,7 +586,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
             }
         }
     }
-    else if ( nFormatId == SotClipboardFormatId::FILE )
+    else if ( nFormatId == SotClipboardFormatId::SIMPLE_FILE )
     {
         OUString aFile;
         if ( aDataHelper.GetString( nFormatId, aFile ) )

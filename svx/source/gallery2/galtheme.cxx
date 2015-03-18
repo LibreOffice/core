@@ -1193,7 +1193,7 @@ bool GalleryTheme::InsertTransferable( const uno::Reference< datatransfer::XTran
                 bRet = InsertModelStream( xModelStm, nInsertPos );
         }
         else if( aDataHelper.HasFormat( SotClipboardFormatId::FILE_LIST ) ||
-                 aDataHelper.HasFormat( SotClipboardFormatId::FILE ) )
+                 aDataHelper.HasFormat( SotClipboardFormatId::SIMPLE_FILE ) )
         {
             FileList aFileList;
 
@@ -1202,7 +1202,7 @@ bool GalleryTheme::InsertTransferable( const uno::Reference< datatransfer::XTran
             else
             {
                 OUString aFile;
-                if (aDataHelper.GetString(SotClipboardFormatId::FILE, aFile) && !aFile.isEmpty())
+                if (aDataHelper.GetString(SotClipboardFormatId::SIMPLE_FILE, aFile) && !aFile.isEmpty())
                     aFileList.AppendFile( aFile );
             }
 

@@ -46,7 +46,7 @@ enum class SotClipboardFormatId : sal_uLong
     BITMAP                 = 2,
     GDIMETAFILE            = 3,
     PRIVATE                = 4,
-    FILE                   = 5,
+    SIMPLE_FILE            = 5,
     FILE_LIST              = 6,
 // further formats (only via CopyData/PasteData)
     RTF                    = 10,

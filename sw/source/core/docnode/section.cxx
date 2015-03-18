@@ -1144,7 +1144,7 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
         return ;
 
     const OUString sName( pDShell->GetMedium()->GetName() );
-    const OUString sMimeType( SotExchange::GetFormatMimeType( SotClipboardFormatId::FILE ));
+    const OUString sMimeType( SotExchange::GetFormatMimeType( SotClipboardFormatId::SIMPLE_FILE ));
     uno::Any aValue;
     aValue <<= sName; // Arbitrary name
 
@@ -1256,7 +1256,7 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
         pRead = SwReaderWriter::GetReader( READER_WRITER_RTF );
         break;
 
-    case SotClipboardFormatId::FILE:
+    case SotClipboardFormatId::SIMPLE_FILE:
         if ( rValue.hasValue() )
         {
             OUString sFileName;
@@ -1533,7 +1533,7 @@ void SwSection::CreateLink( LinkCreateType eCreateType )
         break;
     case FILE_LINK_SECTION:
         {
-            pLnk->SetContentType( SotClipboardFormatId::FILE );
+            pLnk->SetContentType( SotClipboardFormatId::SIMPLE_FILE );
             sal_Int32 nIndex = 0;
             const OUString sFile(sCmd.getToken( 0, sfx2::cTokenSeparator, nIndex ));
             const OUString sFltr(sCmd.getToken( 0, sfx2::cTokenSeparator, nIndex ));

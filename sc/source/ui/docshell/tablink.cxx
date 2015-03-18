@@ -59,7 +59,7 @@ TYPEINIT1(ScTableLink, ::sfx2::SvBaseLink);
 ScTableLink::ScTableLink(ScDocShell* pDocSh, const OUString& rFile,
                             const OUString& rFilter, const OUString& rOpt,
                             sal_uLong nRefresh ):
-    ::sfx2::SvBaseLink(sfx2::LINKUPDATE_ONCALL,SotClipboardFormatId::FILE),
+    ::sfx2::SvBaseLink(sfx2::LINKUPDATE_ONCALL,SotClipboardFormatId::SIMPLE_FILE),
     ScRefreshTimer( nRefresh ),
     pImpl( new TableLink_Impl ),
     aFileName(rFile),
@@ -76,7 +76,7 @@ ScTableLink::ScTableLink(ScDocShell* pDocSh, const OUString& rFile,
 ScTableLink::ScTableLink(SfxObjectShell* pShell, const OUString& rFile,
                             const OUString& rFilter, const OUString& rOpt,
                             sal_uLong nRefresh ):
-    ::sfx2::SvBaseLink(sfx2::LINKUPDATE_ONCALL,SotClipboardFormatId::FILE),
+    ::sfx2::SvBaseLink(sfx2::LINKUPDATE_ONCALL,SotClipboardFormatId::SIMPLE_FILE),
     ScRefreshTimer( nRefresh ),
     pImpl( new TableLink_Impl ),
     aFileName(rFile),

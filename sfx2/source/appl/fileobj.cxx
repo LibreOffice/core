@@ -80,7 +80,7 @@ bool SvFileObject::GetData( ::com::sun::star::uno::Any & rData,
     switch( nType )
     {
     case FILETYPE_TEXT:
-        if( SotClipboardFormatId::FILE == nFmt )
+        if( SotClipboardFormatId::SIMPLE_FILE == nFmt )
         {
             // The media in the application must be opened to lookup the
             // relative file links!! This is done through the link manager

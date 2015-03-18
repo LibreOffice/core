@@ -1454,11 +1454,11 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
         bReturn = true;
     }
 
-    if(!bReturn && CHECK_FORMAT_TRANS(SotClipboardFormatId::FILE))
+    if(!bReturn && CHECK_FORMAT_TRANS(SotClipboardFormatId::SIMPLE_FILE))
     {
         OUString aDropFile;
 
-        if( aDataHelper.GetString( SotClipboardFormatId::FILE, aDropFile ) )
+        if( aDataHelper.GetString( SotClipboardFormatId::SIMPLE_FILE, aDropFile ) )
         {
             maDropFileVector.clear();
             maDropFileVector.push_back( aDropFile );

@@ -88,7 +88,7 @@ void SAL_CALL OpenFileDropTargetListener::drop( const css::datatransfer::dnd::Dr
 
             // then, if necessary, the file format
             OUString aFilePath;
-            if ( !bFormatFound && aHelper.GetString( SotClipboardFormatId::FILE, aFilePath ) )
+            if ( !bFormatFound && aHelper.GetString( SotClipboardFormatId::SIMPLE_FILE, aFilePath ) )
                 implts_OpenFile( aFilePath );
         }
         dtde.Context->dropComplete( css::datatransfer::dnd::DNDConstants::ACTION_NONE != nAction );
@@ -132,7 +132,7 @@ void SAL_CALL OpenFileDropTargetListener::dragOver( const css::datatransfer::dnd
 {
     try
     {
-        bool bAccept = ( implts_IsDropFormatSupported( SotClipboardFormatId::FILE ) ||
+        bool bAccept = ( implts_IsDropFormatSupported( SotClipboardFormatId::SIMPLE_FILE ) ||
                              implts_IsDropFormatSupported( SotClipboardFormatId::FILE_LIST ) );
 
         if ( !bAccept )

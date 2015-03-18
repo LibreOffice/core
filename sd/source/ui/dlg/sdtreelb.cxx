@@ -1281,7 +1281,7 @@ sal_Int8 SdPageObjsTLB::AcceptDrop (const AcceptDropEvent& rEvent)
 {
     sal_Int8 nResult (DND_ACTION_NONE);
 
-    if ( !bIsInDrag && IsDropFormatSupported( SotClipboardFormatId::FILE ) )
+    if ( !bIsInDrag && IsDropFormatSupported( SotClipboardFormatId::SIMPLE_FILE ) )
     {
         nResult = rEvent.mnAction;
     }
@@ -1342,7 +1342,7 @@ sal_Int8 SdPageObjsTLB::ExecuteDrop( const ExecuteDropEvent& rEvt )
                 TransferableDataHelper  aDataHelper( rEvt.maDropEvent.Transferable );
                 OUString                aFile;
 
-                if( aDataHelper.GetString( SotClipboardFormatId::FILE, aFile ) &&
+                if( aDataHelper.GetString( SotClipboardFormatId::SIMPLE_FILE, aFile ) &&
                     static_cast<SdNavigatorWin*>(mpParent)->InsertFile( aFile ) )
                 {
                     nRet = rEvt.mnAction;

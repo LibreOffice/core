@@ -3818,7 +3818,7 @@ sal_Int8 ScGridWindow::AcceptDrop( const AcceptDropEvent& rEvt )
                                  IsDropFormatSupported( SotClipboardFormatId::SBA_FIELDDATAEXCHANGE ) ||
                                  ( !bMove && (
                                     IsDropFormatSupported( SotClipboardFormatId::FILE_LIST ) ||
-                                     IsDropFormatSupported( SotClipboardFormatId::FILE ) ||
+                                     IsDropFormatSupported( SotClipboardFormatId::SIMPLE_FILE ) ||
                                      IsDropFormatSupported( SotClipboardFormatId::SOLK ) ||
                                      IsDropFormatSupported( SotClipboardFormatId::UNIFORMRESOURCELOCATOR ) ||
                                      IsDropFormatSupported( SotClipboardFormatId::NETSCAPE_BOOKMARK ) ||
@@ -3833,7 +3833,7 @@ sal_Int8 ScGridWindow::AcceptDrop( const AcceptDropEvent& rEvt )
                              IsDropFormatSupported( SotClipboardFormatId::LINK_SOURCE_OLE ) ||
                              IsDropFormatSupported( SotClipboardFormatId::LINK ) ||
                              IsDropFormatSupported( SotClipboardFormatId::FILE_LIST ) ||
-                             IsDropFormatSupported( SotClipboardFormatId::FILE ) ||
+                             IsDropFormatSupported( SotClipboardFormatId::SIMPLE_FILE ) ||
                              IsDropFormatSupported( SotClipboardFormatId::SOLK ) ||
                              IsDropFormatSupported( SotClipboardFormatId::UNIFORMRESOURCELOCATOR ) ||
                              IsDropFormatSupported( SotClipboardFormatId::NETSCAPE_BOOKMARK ) ||
@@ -3947,8 +3947,8 @@ static SotClipboardFormatId lcl_GetDropFormatId( const uno::Reference<datatransf
         nFormatId = SotClipboardFormatId::STRING;
     else if ( aDataHelper.HasFormat( SotClipboardFormatId::FILE_LIST ) )
         nFormatId = SotClipboardFormatId::FILE_LIST;
-    else if ( aDataHelper.HasFormat( SotClipboardFormatId::FILE ) )    // #i62773# FILE_LIST/FILE before STRING (Unix file managers)
-        nFormatId = SotClipboardFormatId::FILE;
+    else if ( aDataHelper.HasFormat( SotClipboardFormatId::SIMPLE_FILE ) )    // #i62773# FILE_LIST/FILE before STRING (Unix file managers)
+        nFormatId = SotClipboardFormatId::SIMPLE_FILE;
     else if ( aDataHelper.HasFormat( SotClipboardFormatId::STRING ) )
         nFormatId = SotClipboardFormatId::STRING;
     else if ( aDataHelper.HasFormat( SotClipboardFormatId::GDIMETAFILE ) )
@@ -3974,8 +3974,8 @@ static SotClipboardFormatId lcl_GetDropLinkId( const uno::Reference<datatransfer
         nFormatId = SotClipboardFormatId::LINK;
     else if ( aDataHelper.HasFormat( SotClipboardFormatId::FILE_LIST ) )
         nFormatId = SotClipboardFormatId::FILE_LIST;
-    else if ( aDataHelper.HasFormat( SotClipboardFormatId::FILE ) )
-        nFormatId = SotClipboardFormatId::FILE;
+    else if ( aDataHelper.HasFormat( SotClipboardFormatId::SIMPLE_FILE ) )
+        nFormatId = SotClipboardFormatId::SIMPLE_FILE;
     else if ( aDataHelper.HasFormat( SotClipboardFormatId::SOLK ) )
         nFormatId = SotClipboardFormatId::SOLK;
     else if ( aDataHelper.HasFormat( SotClipboardFormatId::UNIFORMRESOURCELOCATOR ) )
