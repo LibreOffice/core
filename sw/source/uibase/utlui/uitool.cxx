@@ -25,6 +25,7 @@
 #include <unotools/collatorwrapper.hxx>
 #include <svl/urihelper.hxx>
 #include <svl/stritem.hxx>
+#include <svl/grabbagitem.hxx>
 #include <unotools/syslocale.hxx>
 #include <sfx2/app.hxx>
 #include <IDocumentStylePoolAccess.hxx>
@@ -175,20 +176,33 @@ void ConvertAttrCharToGen(SfxItemSet& rSet, const sal_uInt8 nMode)
     }
 }
 
-void ConvertAttrGenToChar(SfxItemSet& rSet, const sal_uInt8 nMode)
+void ConvertAttrGenToChar(SfxItemSet& rSet, const SfxItemSet& rOrigSet, const sal_uInt8 nMode)
 {
     // Background / highlighting
     {
-        const SfxPoolItem *pTmpBrush;
-        if( SfxItemState::SET == rSet.GetItemState( RES_BACKGROUND, false, &pTmpBrush ) )
+        const SfxPoolItem *pTmpItem;
+        if( SfxItemState::SET == rSet.GetItemState( RES_BACKGROUND, false, &pTmpItem ) )
         {
-            SvxBrushItem aTmpBrush( *static_cast<const SvxBrushItem*>(pTmpBrush) );
+            SvxBrushItem aTmpBrush( *static_cast<const SvxBrushItem*>(pTmpItem) );
             aTmpBrush.SetWhich( RES_CHRATR_BACKGROUND );
             rSet.Put( aTmpBrush );
 
             // Highlight is an MS specific thing, so remove it at the first time when LO modifies
             // this part of the imported document.
             rSet.Put( SvxBrushItem(RES_CHRATR_HIGHLIGHT) );
+
+            // Remove shading marker
+            if( SfxItemState::SET == rOrigSet.GetItemState( RES_CHRATR_GRABBAG, false, &pTmpItem ) )
+            {
+                SfxGrabBagItem aGrabBag(*static_cast<const SfxGrabBagItem*>(pTmpItem));
+                std::map<OUString, com::sun::star::uno::Any>& rMap = aGrabBag.GetGrabBag();
+                auto aIterator = rMap.find("CharShadingMarker");
+                if( aIterator != rMap.end() )
+                {
+                    aIterator->second = uno::makeAny(false);
+                }
+                rSet.Put( aGrabBag );
+            }
         }
         rSet.ClearItem( RES_BACKGROUND );
     }

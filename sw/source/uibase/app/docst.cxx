@@ -573,7 +573,7 @@ IMPL_LINK_NOARG(ApplyStyle, ApplyHdl)
         SfxItemSet aTmpSet( *m_pDlg->GetOutputItemSet() );
         if( SFX_STYLE_FAMILY_CHAR == m_nFamily )
         {
-            ::ConvertAttrGenToChar(aTmpSet, CONV_ATTR_STD);
+            ::ConvertAttrGenToChar(aTmpSet, m_xTmp->GetItemSet(), CONV_ATTR_STD);
         }
 
         m_xTmp->SetItemSet( aTmpSet );
@@ -823,7 +823,7 @@ sal_uInt16 SwDocShell::Edit(
             ::SfxToSwPageDescAttr( *GetWrtShell(), xTmp->GetItemSet() );
         else
         {
-            ::ConvertAttrGenToChar(xTmp->GetItemSet(), CONV_ATTR_STD);
+            ::ConvertAttrGenToChar(xTmp->GetItemSet(), xTmp->GetItemSet(), CONV_ATTR_STD);
         }
         if(SFX_STYLE_FAMILY_PAGE == nFamily)
             mpView->InvalidateRulerPos();

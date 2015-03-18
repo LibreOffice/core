@@ -59,9 +59,10 @@ SW_DLLPUBLIC void ConvertAttrCharToGen(SfxItemSet& rSet, const sal_uInt8 nMode);
  * This method is used after executed a character dialog.
  *
  * @param[in,out]   rSet    the set in which character attributes are stored
+ * @param[in]       rOrigSet    original itemset used as input for the dialog
  * @param[in]       nMode   specify the dialog which was called before
 **/
-SW_DLLPUBLIC void ConvertAttrGenToChar(SfxItemSet& rSet, const sal_uInt8 nMode);
+SW_DLLPUBLIC void ConvertAttrGenToChar(SfxItemSet& rSet, const SfxItemSet& rOrigSet, const sal_uInt8 nMode);
 
 // SfxItemSets <-> PageDesc
 void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc );

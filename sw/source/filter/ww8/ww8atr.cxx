@@ -5636,14 +5636,27 @@ const SwRedlineData* AttributeOutputBase::GetParagraphMarkerRedline( const SwTxt
 
 void AttributeOutputBase::CharBackgroundBase( const SvxBrushItem& rBrush )
 {
-    const SvtFilterOptions& rOpt = SvtFilterOptions::Get();
-    if( rOpt.IsCharBackground2Highlighting() )
+    bool bConvertToShading = SvtFilterOptions::Get().IsCharBackground2Shading();
+    bool bHasShadingMarker = false;
+
+    // Check shading marker
     {
-        CharHighlight(rBrush);
+        const SfxGrabBagItem& aGrabBag = static_cast< const SfxGrabBagItem& >( GetExport().GetItem( RES_CHRATR_GRABBAG ) );
+        const std::map<OUString, com::sun::star::uno::Any>& rMap = aGrabBag.GetGrabBag();
+        auto aIterator = rMap.find("CharShadingMarker");
+        if( aIterator != rMap.end() )
+        {
+            aIterator->second >>= bHasShadingMarker;
+        }
+    }
+
+    if( bConvertToShading || bHasShadingMarker )
+    {
+        CharBackground(rBrush);
     }
     else
     {
-        CharBackground(rBrush);
+        CharHighlight(rBrush);
     }
 }
 
