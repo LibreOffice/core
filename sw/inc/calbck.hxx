@@ -31,7 +31,6 @@
 
 
 class SwModify;
-class SwClientIter;
 class SfxPoolItem;
 class SfxHint;
 
@@ -79,7 +78,6 @@ namespace sw
     class SW_DLLPUBLIC WriterListener : ::boost::noncopyable
     {
         friend class ::SwModify;
-        friend class ::SwClient;
         friend class ::sw::ClientIteratorBase;
         private:
             WriterListener* m_pLeft;
