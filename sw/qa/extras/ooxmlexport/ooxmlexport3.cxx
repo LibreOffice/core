@@ -469,7 +469,7 @@ DECLARE_OOXMLEXPORT_TEST(testSmartart, "smartart.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("RenderedShapes"), nValue); // Rendered bitmap has the proper name
 }
 
-/*
+
 DECLARE_OOXMLEXPORT_TEST(testCharHighlight, "char_highlight.docx")
 {
     const uno::Reference< text::XTextRange > xPara = getParagraph(1);
@@ -516,7 +516,7 @@ DECLARE_OOXMLEXPORT_TEST(testCharHighlight, "char_highlight.docx")
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0x0000ff), getProperty<sal_Int32>(xRun,"CharBackColor"));
     }
 }
-*/
+
 
 DECLARE_OOXMLEXPORT_TEST(testFontNameIsEmpty, "font-name-is-empty.docx")
 {

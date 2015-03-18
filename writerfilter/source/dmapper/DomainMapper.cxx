@@ -1414,7 +1414,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
         {
             sal_Int32 nColor = 0;
             if( (mbIsHighlightSet = getColorFromId(nIntValue, nColor)) )
-                rContext->Insert(PROP_CHAR_BACK_COLOR, uno::makeAny( nColor ));
+                rContext->Insert(PROP_CHAR_HIGHLIGHT, uno::makeAny( nColor ));
             else if (mnBackgroundColor)
                 rContext->Insert(PROP_CHAR_BACK_COLOR, uno::makeAny( mnBackgroundColor ));
             else
