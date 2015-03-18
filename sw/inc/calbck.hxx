@@ -245,7 +245,7 @@ protected:
 
 class SwClientIter SAL_FINAL : public sw::Ring<SwClientIter>
 {
-    friend class SwModify;
+    friend SwClient* SwModify::Remove(SwClient*);
     template<typename E, typename S> friend class SwIterator; ///< for typed interation
 
     const SwModify& m_rRoot;
