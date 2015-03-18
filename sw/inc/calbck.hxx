@@ -285,23 +285,6 @@ public:
             our_pClientIters = unique() ? nullptr : GetNextInRing();
         MoveTo(nullptr);
     }
-
-    SwClient* operator++()
-    {
-        if( m_pPosition == m_pCurrent )
-            m_pPosition = static_cast<SwClient*>(m_pPosition->m_pRight);
-        return m_pCurrent = m_pPosition;
-    }
-
-    // returns the current SwClient object, wether it is still a client or not
-    SwClient& operator*() const
-        { return *m_pCurrent; }
-    // returns the current SwClient object, wether it is still a client or not
-    SwClient* operator->() const
-        { return m_pCurrent; }
-    explicit operator bool() const
-        { return m_pCurrent!=nullptr; }
-
     // return "true" if an object was removed from a client chain in iteration
     // adding objects to a client chain in iteration is forbidden
     // SwModify::Add() asserts this
@@ -401,23 +384,19 @@ SwClient::SwClient( SwModify* pToRegisterIn )
 
 void SwModify::ModifyBroadcast( const SfxPoolItem *pOldValue, const SfxPoolItem *pNewValue, TypeId nType)
 {
-    SwClientIter aIter(*this);
-    aIter.GoStart();
-    while(aIter)
+    SwIterator<SwClient,SwModify> aIter(*this);
+    for(SwClient* pClient = aIter.First(); pClient; pClient = aIter.Next())
     {
-        if( aIter.m_pPosition == aIter.m_pCurrent )
-            aIter.m_pPosition = static_cast<SwClient*>(aIter.m_pPosition->m_pRight);
-        while(aIter.m_pPosition && !aIter.m_pPosition->IsA( nType ) )
-            aIter.m_pPosition = static_cast<SwClient*>(aIter.m_pPosition->m_pRight);
-        aIter.m_pCurrent = aIter.m_pPosition;
-        aIter->Modify( pOldValue, pNewValue );
+        if(pClient->IsA(nType))
+            pClient->Modify( pOldValue, pNewValue );
     }
 }
 
 void SwModify::CallSwClientNotify( const SfxHint& rHint ) const
 {
-    for(SwClientIter aIter(*this); aIter; ++aIter)
-        aIter->SwClientNotify( *this, rHint );
+    SwIterator<SwClient,SwModify> aIter(*this);
+    for(SwClient* pClient = aIter.First(); pClient; pClient = aIter.Next())
+        pClient->SwClientNotify( *this, rHint );
 }
 #endif
 

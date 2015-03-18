@@ -74,9 +74,9 @@ SwModify::~SwModify()
             // If the document gets destroyed anyway, just tell clients to
             // forget me so that they don't try to get removed from my list
             // later when they also get destroyed
-            SwClientIter aIter( *this );
-            for(aIter.GoStart(); aIter; ++aIter)
-                aIter->pRegisteredIn = nullptr;
+            SwIterator<SwClient,SwModify> aIter(*this);
+            for(SwClient* pClient = aIter.First(); pClient; pClient = aIter.Next())
+                pClient->pRegisteredIn = nullptr;
         }
         else
         {
@@ -134,9 +134,9 @@ bool SwModify::GetInfo( SfxPoolItem& rInfo ) const
 {
     if(!pRoot)
         return true;
-    SwClientIter aIter( *const_cast<SwModify*>(this) );
-    for(aIter.GoStart(); aIter; ++aIter)
-        if(!aIter->GetInfo( rInfo ))
+    SwIterator<SwClient,SwModify> aIter(*this);
+    for(SwClient* pClient = aIter.First(); pClient; pClient = aIter.Next())
+        if(!pClient->GetInfo( rInfo ))
             return false;
     return true;
 }
