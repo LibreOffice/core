@@ -3870,8 +3870,8 @@ OUString SwDoc::GetUniqueTblName() const
     ResId aId( STR_TABLE_DEFNAME, *pSwResMgr );
     const OUString aName( aId );
 
-    sal_uInt16 nNum, nTmp, nFlagSize = ( mpTblFrmFmtTbl->size() / 8 ) +2;
-    sal_uInt16 n;
+    size_t nNum, nTmp, nFlagSize = (mpTblFrmFmtTbl->size() / 8) + 2;
+    size_t n;
 
     sal_uInt8* pSetFlags = new sal_uInt8[ nFlagSize ];
     memset( pSetFlags, 0, nFlagSize );
@@ -3914,7 +3914,7 @@ SwTableFmt* SwDoc::FindTblFmtByName( const OUString& rName, bool bAll ) const
     else
     {
         // Only the ones set in the Doc
-        for( sal_uInt16 n = 0; n < mpTblFrmFmtTbl->size(); ++n )
+        for( size_t n = 0; n < mpTblFrmFmtTbl->size(); ++n )
         {
             const SwFrmFmt* pFmt = (*mpTblFrmFmtTbl)[ n ];
             if( !pFmt->IsDefault() && IsUsed( *pFmt ) &&
