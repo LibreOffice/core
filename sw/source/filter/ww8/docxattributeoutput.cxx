@@ -3384,7 +3384,7 @@ void DocxAttributeOutput::TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_
     }
     else
     {
-        ::sax_fastparser::FastAttributeList* pAttrList = NULL;
+        std::unique_ptr<sax_fastparser::FastAttributeList> pAttrList;
 
         for( aGrabBagElement = aGrabBag.begin(); aGrabBagElement != aGrabBag.end(); ++aGrabBagElement )
         {
@@ -3411,8 +3411,7 @@ void DocxAttributeOutput::TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_
             else if( aGrabBagElement->first == "val")
                 AddToAttrList( pAttrList, FSNS( XML_w, XML_val ), sValue.getStr() );
         }
-        m_pSerializer->singleElementNS( XML_w, XML_shd,
-                XFastAttributeListRef( pAttrList ) );
+        m_pSerializer->singleElementNS( XML_w, XML_shd, XFastAttributeListRef( pAttrList.release() ) );
     }
 }
 
