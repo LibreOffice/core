@@ -670,15 +670,6 @@ DECLARE_RTFEXPORT_TEST(testFdo77600, "fdo77600.rtf")
     CPPUNIT_ASSERT_EQUAL(OUString("Arial"), getProperty<OUString>(getRun(getParagraph(1), 3), "CharFontName"));
 }
 
-DECLARE_RTFEXPORT_TEST(testFdo79599, "fdo79599.rtf")
-{
-    // test for \highlightNN, document has full \colortbl (produced in MS Word 2003 or 2007)
-
-    // test \highlight11 = dark magenta
-    uno::Reference<beans::XPropertySet> xRun(getRun(getParagraph(11),1), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0x800080), getProperty<sal_uInt32>(xRun, "CharBackColor"));
-}
-
 DECLARE_RTFEXPORT_TEST(testFdo80167, "fdo80167.rtf")
 {
     // Problem was that after export, the page break was missing, so this was 1.

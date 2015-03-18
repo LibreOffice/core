@@ -328,7 +328,7 @@ protected:
     virtual void CharBorder(const ::editeng::SvxBorderLine* pAllBorder, const sal_uInt16 nDist, const bool bShadow) SAL_OVERRIDE;
 
     /// Sfx item RES_CHRATR_HIGHLIGHT
-    virtual void CharHighlight(const SvxBrushItem&) SAL_OVERRIDE {};
+    virtual void CharHighlight(const SvxBrushItem&) SAL_OVERRIDE;
 
     /// Sfx item RES_TXTATR_INETFMT
     virtual void TextINetFormat(const SwFmtINetFmt&) SAL_OVERRIDE;

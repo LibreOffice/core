@@ -469,55 +469,6 @@ DECLARE_OOXMLEXPORT_TEST(testSmartart, "smartart.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("RenderedShapes"), nValue); // Rendered bitmap has the proper name
 }
 
-
-DECLARE_OOXMLEXPORT_TEST(testCharHighlight, "char_highlight.docx")
-{
-    const uno::Reference< text::XTextRange > xPara = getParagraph(1);
-    // Both highlight and background
-    const sal_Int32 nBackColor(0x4F81BD);
-    for( int nRun = 1; nRun <= 16; ++nRun )
-    {
-        const uno::Reference<beans::XPropertySet> xRun(getRun(xPara,nRun), uno::UNO_QUERY);
-        sal_Int32 nHighlightColor = 0;
-        switch( nRun )
-        {
-            case 1: nHighlightColor = 0x000000; break; //black
-            case 2: nHighlightColor = 0x0000ff; break; //blue
-            case 3: nHighlightColor = 0x00ffff; break; //cyan
-            case 4: nHighlightColor = 0x00ff00; break; //green
-            case 5: nHighlightColor = 0xff00ff; break; //magenta
-            case 6: nHighlightColor = 0xff0000; break; //red
-            case 7: nHighlightColor = 0xffff00; break; //yellow
-            case 8: nHighlightColor = 0xffffff; break; //white
-            case 9: nHighlightColor = 0x000080;  break;//dark blue
-            case 10: nHighlightColor = 0x008080; break; //dark cyan
-            case 11: nHighlightColor = 0x008000; break; //dark green
-            case 12: nHighlightColor = 0x800080; break; //dark magenta
-            case 13: nHighlightColor = 0x800000; break; //dark red
-            case 14: nHighlightColor = 0x808000; break; //dark yellow
-            case 15: nHighlightColor = 0x808080; break; //dark gray
-            case 16: nHighlightColor = 0xC0C0C0; break; //light gray
-        }
-        CPPUNIT_ASSERT_EQUAL(nHighlightColor, getProperty<sal_Int32>(xRun,"CharHighlight"));
-        CPPUNIT_ASSERT_EQUAL(nBackColor, getProperty<sal_Int32>(xRun,"CharBackColor"));
-    }
-
-    // Only highlight
-    {
-        const uno::Reference<beans::XPropertySet> xRun(getRun(xPara,17), uno::UNO_QUERY);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(0xC0C0C0), getProperty<sal_Int32>(xRun,"CharHighlight"));
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(COL_TRANSPARENT), getProperty<sal_Int32>(xRun,"CharBackColor"));
-    }
-
-    // Only background
-    {
-        const uno::Reference<beans::XPropertySet> xRun(getRun(xPara,18), uno::UNO_QUERY);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(COL_TRANSPARENT), getProperty<sal_Int32>(xRun,"CharHighlight"));
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(0x0000ff), getProperty<sal_Int32>(xRun,"CharBackColor"));
-    }
-}
-
-
 DECLARE_OOXMLEXPORT_TEST(testFontNameIsEmpty, "font-name-is-empty.docx")
 {
     // Check no empty font name is exported
