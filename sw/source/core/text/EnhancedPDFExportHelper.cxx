@@ -72,7 +72,7 @@
 #include <IMark.hxx>
 #include <printdata.hxx>
 #include <SwNodeNum.hxx>
-#include <switerator.hxx>
+#include <calbck.hxx>
 #include <stack>
 
 #include <tools/globname.hxx>

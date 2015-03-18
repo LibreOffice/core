@@ -23,7 +23,7 @@
 #include "dcontact.hxx"
 #include "flyfrm.hxx"
 #include "dflyobj.hxx"
-#include "switerator.hxx"
+#include <calbck.hxx>
 
 bool SwPosFlyFrmCmp::operator()(const SwPosFlyFrmPtr& rA, const SwPosFlyFrmPtr& rB) const
 {

@@ -62,7 +62,7 @@
 #include <fmtanchr.hxx>
 #include <comcore.hrc>
 #include <unochart.hxx>
-#include <switerator.hxx>
+#include <calbck.hxx>
 #include <memory>
 #include <vector>
 

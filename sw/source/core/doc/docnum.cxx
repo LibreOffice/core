@@ -53,7 +53,7 @@
 #include <SwStyleNameMapper.hxx>
 #include <SwNodeNum.hxx>
 #include <list.hxx>
-#include <switerator.hxx>
+#include <calbck.hxx>
 #include <comphelper/string.hxx>
 #include <tools/datetimeutils.hxx>
 

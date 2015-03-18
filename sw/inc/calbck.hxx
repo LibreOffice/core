@@ -27,6 +27,7 @@
 #include <hintids.hxx>
 #include <hints.hxx>
 #include <typeinfo>
+#include <type_traits>
 
 
 class SwModify;
@@ -306,6 +307,52 @@ public:
     // adding objects to a client chain in iteration is forbidden
     // SwModify::Add() asserts this
     bool IsChanged() const { return m_pPosition != m_pCurrent; }
+};
+
+template< class TElementType, class TSource > class SwIterator SAL_FINAL
+{
+
+    static_assert(std::is_base_of<SwClient,TElementType>::value, "TElementType needs to be derived from SwClient");
+    SwClientIter aClientIter;
+public:
+
+    SwIterator( const TSource& rSrc ) : aClientIter(rSrc) {}
+    TElementType* First()
+    {
+        aClientIter.GoStart();
+        if(!aClientIter.m_pPosition)
+            return nullptr;
+        aClientIter.m_pCurrent = nullptr;
+        return Next();
+    }
+    TElementType* Last()
+    {
+        if(!aClientIter.m_pPosition)
+            aClientIter.m_pPosition = const_cast<SwClient*>(aClientIter.m_rRoot.GetDepends());
+        if(!aClientIter.m_pPosition)
+            return PTR_CAST(TElementType,aClientIter.m_pCurrent = nullptr);
+        while(aClientIter.GetRighOfPos())
+            aClientIter.m_pPosition = aClientIter.GetRighOfPos();
+        if(aClientIter.m_pPosition->IsA(TYPE(TElementType)))
+            return PTR_CAST(TElementType,aClientIter.m_pCurrent = aClientIter.m_pPosition);
+        return Previous();
+    }
+    TElementType* Next()
+    {
+        if( aClientIter.m_pPosition == aClientIter.m_pCurrent )
+            aClientIter.m_pPosition = aClientIter.GetRighOfPos();
+        while(aClientIter.m_pPosition && !aClientIter.m_pPosition->IsA( TYPE(TElementType) ) )
+            aClientIter.m_pPosition = aClientIter.GetRighOfPos();
+        return PTR_CAST(TElementType,aClientIter.m_pCurrent = aClientIter.m_pPosition);
+    }
+    TElementType* Previous()
+    {
+        aClientIter.m_pPosition = aClientIter.GetLeftOfPos();
+        while(aClientIter.m_pPosition && !aClientIter.m_pPosition->IsA( TYPE(TElementType) ) )
+            aClientIter.m_pPosition = aClientIter.GetLeftOfPos();
+        return PTR_CAST(TElementType,aClientIter.m_pCurrent = aClientIter.m_pPosition);
+    }
+    bool IsChanged()          { return aClientIter.IsChanged(); }
 };
 
 SwClient::SwClient( SwModify* pToRegisterIn )

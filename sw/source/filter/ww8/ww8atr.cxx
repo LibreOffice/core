@@ -317,7 +317,7 @@ void MSWordExportBase::OutputItemSet( const SfxItemSet& rSet, bool bPapFmt, bool
     }
 }
 
-#include "switerator.hxx"
+#include <calbck.hxx>
 
 void MSWordExportBase::GatherChapterFields()
 {

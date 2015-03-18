@@ -62,7 +62,7 @@
 #include <poolfmt.hrc>
 
 #include <SwUndoField.hxx>
-#include "switerator.hxx"
+#include <calbck.hxx>
 
 using namespace ::com::sun::star::uno;
 

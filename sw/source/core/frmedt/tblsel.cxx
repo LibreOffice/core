@@ -46,7 +46,7 @@
 #include <mvsave.hxx>
 #include <sectfrm.hxx>
 #include <frmtool.hxx>
-#include <switerator.hxx>
+#include <calbck.hxx>
 #include <deque>
 
 // see also swtable.cxx

@@ -53,7 +53,7 @@
 #include "pagedesc.hxx"
 #include <editeng/frmdiritem.hxx>
 #include <sortedobjs.hxx>
-#include <switerator.hxx>
+#include <calbck.hxx>
 #include <txtfly.hxx>
 
 using namespace ::com::sun::star;

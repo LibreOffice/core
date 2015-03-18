@@ -39,7 +39,7 @@
 #include <IDocumentLayoutAccess.hxx>
 #include <unofldmid.h>
 #include <unoprnms.hxx>
-#include <switerator.hxx>
+#include <calbck.hxx>
 #include <unomid.h>
 
 using namespace ::com::sun::star::uno;

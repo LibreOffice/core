@@ -32,7 +32,7 @@
 #include <sectfrm.hxx>
 #include <objectformatter.hxx>
 #include "viewopt.hxx"
-#include <switerator.hxx>
+#include <calbck.hxx>
 
 #define ENDNOTE 0x80000000
 

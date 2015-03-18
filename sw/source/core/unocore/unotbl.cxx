@@ -94,7 +94,7 @@
 #include <sortopt.hxx>
 #include <rtl/math.hxx>
 #include <editeng/frmdiritem.hxx>
-#include <switerator.hxx>
+#include <calbck.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/string.hxx>
 #include <cppuhelper/supportsservice.hxx>

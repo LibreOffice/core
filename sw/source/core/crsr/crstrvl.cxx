@@ -64,7 +64,7 @@
 #include <fmturl.hxx>
 #include "txtfrm.hxx"
 #include <wrong.hxx>
-#include <switerator.hxx>
+#include <calbck.hxx>
 #include <vcl/window.hxx>
 #include <docufld.hxx>
 

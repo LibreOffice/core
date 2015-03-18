@@ -31,7 +31,7 @@
 #include <fmtfld.hxx>
 #include <edimp.hxx>
 #include <flddat.hxx>
-#include <switerator.hxx>
+#include <calbck.hxx>
 
 using namespace com::sun::star;
 

@@ -34,7 +34,7 @@
 #include <ndindex.hxx>
 #include <fmtftntx.hxx>
 #include <section.hxx>
-#include <switerator.hxx>
+#include <calbck.hxx>
 
 namespace {
     /// Get a sorted list of the used footnote reference numbers.

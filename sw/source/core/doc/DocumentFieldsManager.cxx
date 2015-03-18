@@ -33,7 +33,7 @@
 #include <cntfrm.hxx>
 #include <section.hxx>
 #include <docufld.hxx>
-#include <switerator.hxx>
+#include <calbck.hxx>
 #include <cellatr.hxx>
 #include <swtable.hxx>
 #include <frmfmt.hxx>

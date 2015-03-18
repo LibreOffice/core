@@ -67,7 +67,7 @@
 #include <svx/svditer.hxx>
 
 #include <vector>
-#include <switerator.hxx>
+#include <calbck.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::linguistic2;

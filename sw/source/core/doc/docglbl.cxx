@@ -46,7 +46,7 @@
 #include <section.hxx>
 #include <doctxm.hxx>
 #include <poolfmt.hxx>
-#include <switerator.hxx>
+#include <calbck.hxx>
 #include <boost/scoped_ptr.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>

@@ -58,7 +58,7 @@
 #include "flyfrms.hxx"
 #include "sectfrm.hxx"
 #include <vcl/svapp.hxx>
-#include "switerator.hxx"
+#include <calbck.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <textboxhelper.hxx>

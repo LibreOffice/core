@@ -52,7 +52,7 @@
 #include <sortedobjs.hxx>
 #include <objectformatter.hxx>
 #include <layouter.hxx>
-#include <switerator.hxx>
+#include <calbck.hxx>
 #include <DocumentSettingManager.hxx>
 #include <docary.hxx>
 

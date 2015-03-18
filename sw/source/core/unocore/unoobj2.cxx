@@ -110,7 +110,7 @@
 #include <algorithm>
 #include <iterator>
 #include <boost/bind.hpp>
-#include <switerator.hxx>
+#include <calbck.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 

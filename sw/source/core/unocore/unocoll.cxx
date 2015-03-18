@@ -71,7 +71,7 @@
 #include <unorefmark.hxx>
 #include <unometa.hxx>
 #include "docsh.hxx"
-#include <switerator.hxx>
+#include <calbck.hxx>
 #include <com/sun/star/document/XCodeNameQuery.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/form/XFormsSupplier.hpp>

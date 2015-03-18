@@ -27,7 +27,7 @@
 #include <svx/framelink.hxx>
 #include <drawdoc.hxx>
 #include <tgrditem.hxx>
-#include <switerator.hxx>
+#include <calbck.hxx>
 #include <fmtsrnd.hxx>
 #include <fmtclds.hxx>
 #include <comcore.hrc>

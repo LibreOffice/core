@@ -56,7 +56,7 @@
 #include <SwStyleNameMapper.hxx>
 #include <unofldmid.h>
 #include <numrule.hxx>
-#include <switerator.hxx>
+#include <calbck.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;

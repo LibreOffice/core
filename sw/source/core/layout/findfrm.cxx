@@ -30,7 +30,7 @@
 #include "txtftn.hxx"
 #include "fmtftn.hxx"
 #include <txtfrm.hxx>
-#include <switerator.hxx>
+#include <calbck.hxx>
 
 /// Searches the first CntntFrm in BodyText below the page.
 SwLayoutFrm *SwFtnBossFrm::FindBodyCont()

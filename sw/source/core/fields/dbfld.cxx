@@ -38,7 +38,7 @@
 #include <expfld.hxx>
 #include <txtatr.hxx>
 #include <unofldmid.h>
-#include <switerator.hxx>
+#include <calbck.hxx>
 
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star;

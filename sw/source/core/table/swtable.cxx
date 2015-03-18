@@ -58,7 +58,7 @@
 #include <viewsh.hxx>
 #include <redline.hxx>
 #include <list>
-#include <switerator.hxx>
+#include <calbck.hxx>
 
 #ifdef DBG_UTIL
 #define CHECK_TABLE(t) (t).CheckConsistency();

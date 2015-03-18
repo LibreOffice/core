@@ -34,7 +34,7 @@
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentStylePoolAccess.hxx>
 #include <poolfmt.hxx>
-#include <switerator.hxx>
+#include <calbck.hxx>
 
 using namespace ::com::sun::star;
 

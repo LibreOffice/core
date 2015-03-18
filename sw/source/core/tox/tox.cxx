@@ -32,7 +32,7 @@
 #include <SwStyleNameMapper.hxx>
 #include <hints.hxx>
 #include <functional>
-#include <switerator.hxx>
+#include <calbck.hxx>
 
 #include <boost/optional.hpp>
 

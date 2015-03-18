@@ -54,7 +54,7 @@
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <editeng/lrspitem.hxx>
-#include <switerator.hxx>
+#include <calbck.hxx>
 
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star;

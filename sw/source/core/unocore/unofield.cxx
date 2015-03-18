@@ -93,7 +93,7 @@
 #include <editeng/outliner.hxx>
 #include <docsh.hxx>
 #include <fmtmeta.hxx>
-#include <switerator.hxx>
+#include <calbck.hxx>
 #include <rtl/strbuf.hxx>
 #include <vector>
 

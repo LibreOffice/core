@@ -33,7 +33,7 @@
 #include <swddetbl.hxx>
 #include <unofldmid.h>
 #include <hints.hxx>
-#include <switerator.hxx>
+#include <calbck.hxx>
 
 using namespace ::com::sun::star;
 

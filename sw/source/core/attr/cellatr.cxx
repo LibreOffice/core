@@ -28,7 +28,7 @@
 #include <rolbck.hxx>
 #include <rtl/math.hxx>
 #include <rtl/ustring.hxx>
-#include <switerator.hxx>
+#include <calbck.hxx>
 #include <swtable.hxx>
 
 SwTblBoxNumFormat::SwTblBoxNumFormat( sal_uInt32 nFormat, bool bFlag )

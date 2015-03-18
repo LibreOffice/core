@@ -27,7 +27,7 @@
 #include "bodyfrm.hxx"
 #include "rootfrm.hxx"
 #include "sectfrm.hxx"
-#include "switerator.hxx"
+#include <calbck.hxx>
 #include "ftnfrm.hxx"
 #include <IDocumentState.hxx>
 #include <IDocumentLayoutAccess.hxx>

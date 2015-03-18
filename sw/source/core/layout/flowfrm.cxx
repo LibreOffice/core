@@ -52,7 +52,7 @@
 #include <sortedobjs.hxx>
 #include <layouter.hxx>
 #include <fmtfollowtextflow.hxx>
-#include <switerator.hxx>
+#include <calbck.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 

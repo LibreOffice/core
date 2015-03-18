@@ -61,7 +61,7 @@
 #include <fmteiro.hxx>
 #include <swerror.h>
 #include <unosection.hxx>
-#include <switerator.hxx>
+#include <calbck.hxx>
 #include <svl/smplhint.hxx>
 #include <algorithm>
 #include <ndsect.hxx>

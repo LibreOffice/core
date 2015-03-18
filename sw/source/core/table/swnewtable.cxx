@@ -40,7 +40,7 @@
 #include <editeng/boxitem.hxx>
 #include <editeng/protitem.hxx>
 #include <swtblfmt.hxx>
-#include <switerator.hxx>
+#include <calbck.hxx>
 
 #ifdef DBG_UTIL
 #define CHECK_TABLE(t) (t).CheckConsistency();

@@ -68,7 +68,7 @@
 #include <breakit.hxx>
 #include <editsh.hxx>
 #include <scriptinfo.hxx>
-#include <switerator.hxx>
+#include <calbck.hxx>
 #include <ToxTextGenerator.hxx>
 #include <ToxTabStopTokenHandler.hxx>
 #include <tools/datetimeutils.hxx>

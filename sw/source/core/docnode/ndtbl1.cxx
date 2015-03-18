@@ -48,7 +48,7 @@
 #include "docary.hxx"
 #include "ndindex.hxx"
 #include "undobj.hxx"
-#include "switerator.hxx"
+#include <calbck.hxx>
 #include <UndoTable.hxx>
 
 using ::editeng::SvxBorderLine;

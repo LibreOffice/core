@@ -50,7 +50,7 @@
 #include <tabfrm.hxx>
 #include <cntfrm.hxx>
 #include <htmltbl.hxx>
-#include <switerator.hxx>
+#include <calbck.hxx>
 
 using namespace com::sun::star;
 

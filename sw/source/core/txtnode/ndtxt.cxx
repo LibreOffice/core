@@ -83,7 +83,7 @@
 #include <svl/intitem.hxx>
 #include <list.hxx>
 #include <sortedobjs.hxx>
-#include <switerator.hxx>
+#include <calbck.hxx>
 #include <attrhint.hxx>
 #include <memory>
 

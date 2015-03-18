@@ -54,7 +54,7 @@
 #include <unocoll.hxx>
 #include <redline.hxx>
 #include <crsskip.hxx>
-#include <switerator.hxx>
+#include <calbck.hxx>
 #include <docufld.hxx>
 #include <osl/mutex.hxx>
 #include <txtfld.hxx>

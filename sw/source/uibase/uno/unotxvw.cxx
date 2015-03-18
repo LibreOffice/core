@@ -69,7 +69,7 @@
 #include <unocrsrhelper.hxx>
 #include <unotextrange.hxx>
 #include <sfx2/docfile.hxx>
-#include <switerator.hxx>
+#include <calbck.hxx>
 #include "swdtflvr.hxx"
 #include <vcl/svapp.hxx>
 #include <comphelper/processfactory.hxx>

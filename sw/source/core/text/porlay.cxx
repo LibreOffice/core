@@ -46,7 +46,7 @@
 #include <docary.hxx>
 #include <redline.hxx>
 #include <section.hxx>
-#include <switerator.hxx>
+#include <calbck.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentContentOperations.hxx>

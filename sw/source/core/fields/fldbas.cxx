@@ -46,7 +46,7 @@
 #include <comcore.hrc>
 #include <docary.hxx>
 #include <authfld.hxx>
-#include <switerator.hxx>
+#include <calbck.hxx>
 
 using namespace ::com::sun::star;
 using namespace nsSwDocInfoSubType;

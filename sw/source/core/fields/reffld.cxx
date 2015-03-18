@@ -56,7 +56,7 @@
 #include <comcore.hrc>
 #include <numrule.hxx>
 #include <SwNodeNum.hxx>
-#include <switerator.hxx>
+#include <calbck.hxx>
 
 #include <set>
 #include <map>

@@ -57,7 +57,7 @@
 #include <redline.hxx>
 #include <section.hxx>
 #include <charfmt.hxx>
-#include <switerator.hxx>
+#include <calbck.hxx>
 
 SwUndoFmtAttrHelper::SwUndoFmtAttrHelper( SwFmt& rFmt, bool bSvDrwPt )
     : SwClient( &rFmt )

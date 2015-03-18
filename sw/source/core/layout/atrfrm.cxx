@@ -73,7 +73,7 @@
 #include <svx/svdundo.hxx>
 #include <sortedobjs.hxx>
 #include <HandleAnchorNodeChg.hxx>
-#include <switerator.hxx>
+#include <calbck.hxx>
 #include <pagedeschint.hxx>
 #ifndef NDEBUG
 #include <ndtxt.hxx>

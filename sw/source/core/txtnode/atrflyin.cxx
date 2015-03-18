@@ -33,7 +33,7 @@
 #include "txtfrm.hxx"
 #include "flyfrms.hxx"
 #include <objectformatter.hxx>
-#include <switerator.hxx>
+#include <calbck.hxx>
 
 SwFmtFlyCnt::SwFmtFlyCnt( SwFrmFmt *pFrmFmt )
     : SfxPoolItem( RES_TXTATR_FLYCNT ),

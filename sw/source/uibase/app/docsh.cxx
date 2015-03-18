@@ -119,7 +119,7 @@
 #include <unotextrange.hxx>
 
 #include <sfx2/Metadatable.hxx>
-#include <switerator.hxx>
+#include <calbck.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

@@ -70,7 +70,7 @@
 #include <ndtxt.hxx>
 #include <dflyobj.hxx>
 #include <prevwpage.hxx>
-#include <switerator.hxx>
+#include <calbck.hxx>
 #include <boost/bind.hpp>
 
 using namespace ::com::sun::star;

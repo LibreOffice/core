@@ -66,7 +66,7 @@
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <svx/sdr/contact/viewobjectcontactofsdrobj.hxx>
 #include <com/sun/star/text/WritingMode2.hpp>
-#include <switerator.hxx>
+#include <calbck.hxx>
 #include <algorithm>
 #include <txtfly.hxx>
 

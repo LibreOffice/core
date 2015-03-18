@@ -36,7 +36,7 @@
 #include <editeng/langitem.hxx>
 #include <charatr.hxx>
 #include <editeng/fhgtitem.hxx>
-#include <switerator.hxx>
+#include <calbck.hxx>
 
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star;

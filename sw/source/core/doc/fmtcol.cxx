@@ -32,7 +32,7 @@
 #include <node.hxx>
 #include <numrule.hxx>
 #include <paratr.hxx>
-#include <switerator.hxx>
+#include <calbck.hxx>
 #include <svl/intitem.hxx>
 
 TYPEINIT1( SwTxtFmtColl, SwFmtColl );

@@ -23,7 +23,7 @@
 #include "frmfmt.hxx"
 #include "rowfrm.hxx"
 #include "tabfrm.hxx"
-#include "switerator.hxx"
+#include <calbck.hxx>
 
 void SwTxtNode::fillSoftPageBreakList( SwSoftPageBreakList& rBreak ) const
 {

@@ -32,7 +32,7 @@
 #include <IDocumentStylePoolAccess.hxx>
 #include <docary.hxx>
 #include <redline.hxx>
-#include <switerator.hxx>
+#include <calbck.hxx>
 
 using namespace ::com::sun::star;
 

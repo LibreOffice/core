@@ -36,7 +36,7 @@
 #include <dbmgr.hxx>
 #include <swddetbl.hxx>
 #include <hints.hxx>
-#include <switerator.hxx>
+#include <calbck.hxx>
 #include <fieldhint.hxx>
 #include <DocumentSettingManager.hxx>
 #include <IDocumentContentOperations.hxx>

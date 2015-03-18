@@ -26,7 +26,7 @@
 #include <IDocumentLayoutAccess.hxx>
 #include <view.hxx>
 #include <ndtxt.hxx>
-#include <switerator.hxx>
+#include <calbck.hxx>
 #include <fmtfld.hxx>
 #include <rootfrm.hxx>
 #include <docufld.hxx>

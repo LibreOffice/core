@@ -74,7 +74,7 @@
 #include <swtable.hxx>
 #include <fldupde.hxx>
 #include <IGrammarContact.hxx>
-#include <switerator.hxx>
+#include <calbck.hxx>
 #include <ftnidx.hxx>
 
 TYPEINIT1( SwTxtFrm, SwCntntFrm );

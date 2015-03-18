@@ -60,7 +60,7 @@
 #include <paratr.hxx>
 #include <sortedobjs.hxx>
 #include <objectformatter.hxx>
-#include <switerator.hxx>
+#include <calbck.hxx>
 #include <DocumentSettingManager.hxx>
 #include <IDocumentTimerAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>

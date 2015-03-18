@@ -59,7 +59,7 @@
 #include <fmtcnct.hxx>
 #include <dflyobj.hxx>
 #include <undoflystrattr.hxx>
-#include <switerator.hxx>
+#include <calbck.hxx>
 #include <boost/scoped_ptr.hpp>
 
 //UUUU

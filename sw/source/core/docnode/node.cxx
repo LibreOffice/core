@@ -64,7 +64,7 @@
 #include <IDocumentLinksAdministration.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentLayoutAccess.hxx>
-#include <switerator.hxx>
+#include <calbck.hxx>
 #include "ndole.hxx"
 
 using namespace ::com::sun::star::i18n;

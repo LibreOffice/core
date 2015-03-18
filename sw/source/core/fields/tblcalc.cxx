@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <switerator.hxx>
+#include <calbck.hxx>
 #include <cntfrm.hxx>
 #include <doc.hxx>
 #include <pam.hxx>

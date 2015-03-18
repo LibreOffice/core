@@ -78,7 +78,7 @@
 #include "annotsh.hxx"
 #include "swabstdlg.hxx"
 #include "swevent.hxx"
-#include "switerator.hxx"
+#include <calbck.hxx>
 #include <boost/scoped_ptr.hpp>
 
 // distance between Anchor Y and initial note position

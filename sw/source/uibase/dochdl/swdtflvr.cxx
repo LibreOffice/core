@@ -122,7 +122,7 @@
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <swserv.hxx>
-#include <switerator.hxx>
+#include <calbck.hxx>
 
 #include <vcl/GraphicNativeTransform.hxx>
 #include <vcl/GraphicNativeMetadata.hxx>

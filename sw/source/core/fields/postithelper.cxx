@@ -34,7 +34,7 @@
 #include <redline.hxx>
 #include <scriptinfo.hxx>
 #include <editeng/charhiddenitem.hxx>
-#include <switerator.hxx>
+#include <calbck.hxx>
 
 class Point;
 

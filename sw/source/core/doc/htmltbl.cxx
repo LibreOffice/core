@@ -39,7 +39,7 @@
 #include "viewopt.hxx"
 #include "htmltbl.hxx"
 #include "ndindex.hxx"
-#include "switerator.hxx"
+#include <calbck.hxx>
 #include <o3tl/numeric.hxx>
 #ifdef DBG_UTIL
 #include "tblrwcl.hxx"

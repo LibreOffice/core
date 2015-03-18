@@ -69,7 +69,7 @@
 #include <app.hrc>
 #include <edtwin.hxx>
 #include <PostItMgr.hxx>
-#include <switerator.hxx>
+#include <calbck.hxx>
 #include <boost/scoped_ptr.hpp>
 
 using namespace nsSwDocInfoSubType;

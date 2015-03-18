@@ -54,7 +54,7 @@
 #include <ndole.hxx>
 #include <docsh.hxx>
 #include <sfx2/docfile.hxx>
-#include <switerator.hxx>
+#include <calbck.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 #include <toolkit/helper/vclunohelper.hxx>

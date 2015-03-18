@@ -95,7 +95,7 @@
 
 #include <editeng/outliner.hxx>
 #include <editeng/outlobj.hxx>
-#include <switerator.hxx>
+#include <calbck.hxx>
 #include <docary.hxx>
 
 #define URL_DECODE  INetURLObject::DECODE_UNAMBIGUOUS
