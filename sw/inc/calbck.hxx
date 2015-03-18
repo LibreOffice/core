@@ -245,7 +245,8 @@ protected:
 
 class SwClientIter SAL_FINAL : public sw::Ring<SwClientIter>
 {
-    friend SwClient* SwModify::Remove(SwClient*);
+    friend SwModify;
+    //friend SwClient* SwModify::Remove(SwClient*);
     template<typename E, typename S> friend class SwIterator; ///< for typed interation
 
     const SwModify& m_rRoot;
@@ -253,6 +254,13 @@ class SwClientIter SAL_FINAL : public sw::Ring<SwClientIter>
     // the current object in an iteration
     SwClient* m_pCurrent;
 
+    SwClientIter( const SwModify& rModify )
+        : m_rRoot(rModify)
+    {
+        MoveTo(our_pClientIters);
+        our_pClientIters = this;
+        m_pCurrent = m_pPosition = const_cast<SwClient*>(m_rRoot.GetDepends());
+    }
     // in case the current object is already removed, the next object in the list
     // is marked down to become the current object in the next step
     // this is necessary because iteration requires access to members of the current object
@@ -271,13 +279,6 @@ class SwClientIter SAL_FINAL : public sw::Ring<SwClientIter>
     static SW_DLLPUBLIC SwClientIter* our_pClientIters;
 
 public:
-    SwClientIter( const SwModify& rModify )
-        : m_rRoot(rModify)
-    {
-        MoveTo(our_pClientIters);
-        our_pClientIters = this;
-        m_pCurrent = m_pPosition = const_cast<SwClient*>(m_rRoot.GetDepends());
-    }
     ~SwClientIter() SAL_OVERRIDE
     {
         assert(our_pClientIters);
