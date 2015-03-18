@@ -414,6 +414,7 @@ protected:
     virtual void CharAnimatedText( const SvxBlinkItem& ) = 0;
 
     /// Sfx item RES_CHRATR_BACKGROUND
+    void CharBackgroundBase( const SvxBrushItem& );
     virtual void CharBackground( const SvxBrushItem& ) = 0;
 
     /// Sfx item RES_CHRATR_CJK_FONT

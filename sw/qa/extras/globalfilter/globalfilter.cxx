@@ -18,6 +18,7 @@
 #include <doc.hxx>
 #include <ndgrf.hxx>
 #include <drawdoc.hxx>
+#include <unotools/fltrcfg.hxx>
 
 class Test : public SwModelTestBase
 {
@@ -363,6 +364,9 @@ void Test::testCharHighlight()
         "MS Word 97",
         "Office Open XML Text",
     };
+
+    SvtFilterOptions& rOpt = SvtFilterOptions::Get();
+    rOpt.SetCharBackground2Shading();
 
     for( size_t nFilter = 0; nFilter < SAL_N_ELEMENTS(aFilterNames); ++nFilter )
     {
