@@ -3173,10 +3173,7 @@ bool SfxMedium::SaveVersionList_Impl( bool /*bUseXML*/ )
 bool SfxMedium::IsReadOnly() const
 {
     // a) ReadOnly filter can't produce read/write contents!
-    bool bReadOnly = (
-                    (pImp->m_pFilter                                                                         ) &&
-                    ((pImp->m_pFilter->GetFilterFlags() & SFX_FILTER_OPENREADONLY) == SFX_FILTER_OPENREADONLY)
-                );
+    bool bReadOnly = pImp->m_pFilter && (pImp->m_pFilter->GetFilterFlags() & SfxFilterFlags::OPENREADONLY);
 
     // b) if filter allow read/write contents .. check open mode of the storage
     if (!bReadOnly)

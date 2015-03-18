@@ -36,18 +36,18 @@ struct FileFormat
     const char* pFilterName;
     const char* pTypeName;
     const char* pUserData;
-    sal_uLong nFormatType;
+    SfxFilterFlags nFormatType;
 };
 
 // These values are taken from "Flags" in filter/source/config/fragments/filters/*
-// You need to turn value of oor:name="Flags" to SFX_FILTER_*, see
+// You need to turn value of oor:name="Flags" to SfxFilterFlags::*, see
 // include/comphelper/documentconstants.hxx for the possible values.
-// Note: 3RDPARTYFILTER == SFX_FILTER_STARONEFILTER
-#define ODP_FORMAT_TYPE  ( SFX_FILTER_IMPORT | SFX_FILTER_EXPORT | SFX_FILTER_TEMPLATE | SFX_FILTER_OWN | SFX_FILTER_DEFAULT | SFX_FILTER_ENCRYPTION | SFX_FILTER_PREFERED )
-#define PPT_FORMAT_TYPE  ( SFX_FILTER_IMPORT | SFX_FILTER_EXPORT | SFX_FILTER_ALIEN )
-#define PPTX_FORMAT_TYPE ( SFX_FILTER_IMPORT | SFX_FILTER_EXPORT | SFX_FILTER_ALIEN | SFX_FILTER_STARONEFILTER | SFX_FILTER_PREFERED )
-#define HTML_FORMAT_TYPE ( SFX_FILTER_EXPORT | SFX_FILTER_ALIEN )
-#define PDF_FORMAT_TYPE  ( SFX_FILTER_STARONEFILTER | SFX_FILTER_ALIEN | SFX_FILTER_IMPORT | SFX_FILTER_PREFERED )
+// Note: 3RDPARTYFILTER == SfxFilterFlags::STARONEFILTER
+#define ODP_FORMAT_TYPE  ( SfxFilterFlags::IMPORT | SfxFilterFlags::EXPORT | SfxFilterFlags::TEMPLATE | SfxFilterFlags::OWN | SfxFilterFlags::DEFAULT | SfxFilterFlags::ENCRYPTION | SfxFilterFlags::PREFERED )
+#define PPT_FORMAT_TYPE  ( SfxFilterFlags::IMPORT | SfxFilterFlags::EXPORT | SfxFilterFlags::ALIEN )
+#define PPTX_FORMAT_TYPE ( SfxFilterFlags::IMPORT | SfxFilterFlags::EXPORT | SfxFilterFlags::ALIEN | SfxFilterFlags::STARONEFILTER | SfxFilterFlags::PREFERED )
+#define HTML_FORMAT_TYPE ( SfxFilterFlags::EXPORT | SfxFilterFlags::ALIEN )
+#define PDF_FORMAT_TYPE  ( SfxFilterFlags::STARONEFILTER | SfxFilterFlags::ALIEN | SfxFilterFlags::IMPORT | SfxFilterFlags::PREFERED )
 
 /** List of file formats we support in Impress unit tests.
 
@@ -64,7 +64,7 @@ FileFormat aFileFormats[] =
     { "pptx", "Impress Office Open XML", "Office Open XML Presentation", "", PPTX_FORMAT_TYPE },
     { "html", "graphic_HTML", "graphic_HTML", "", HTML_FORMAT_TYPE },
     { "pdf",  "draw_pdf_import", "pdf_Portable_Document_Format", "", PDF_FORMAT_TYPE },
-    { 0, 0, 0, 0, 0 }
+    { 0, 0, 0, 0, SfxFilterFlags::NONE }
 };
 
 #define ODP  0
@@ -107,7 +107,7 @@ protected:
         CPPUNIT_ASSERT_MESSAGE( "missing filter info", pFmt->pName != NULL );
 
         SotClipboardFormatId nOptions = SotClipboardFormatId::NONE;
-        if (pFmt->nFormatType)
+        if (pFmt->nFormatType != SfxFilterFlags::NONE)
             nOptions = SotClipboardFormatId::STARCALC_8;
         SfxFilter* aFilter = new SfxFilter(
             OUString::createFromAscii( pFmt->pFilterName ),

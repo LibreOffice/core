@@ -83,7 +83,7 @@ public:
     ScFiltersTest();
 
     virtual bool load( const OUString &rFilter, const OUString &rURL,
-        const OUString &rUserData, unsigned int nFilterFlags,
+        const OUString &rUserData, SfxFilterFlags nFilterFlags,
         SotClipboardFormatId nClipboardID, unsigned int nFilterVersion) SAL_OVERRIDE;
 
     virtual void setUp() SAL_OVERRIDE;
@@ -286,7 +286,7 @@ private:
 };
 
 bool ScFiltersTest::load(const OUString &rFilter, const OUString &rURL,
-    const OUString &rUserData, unsigned int nFilterFlags,
+    const OUString &rUserData, SfxFilterFlags nFilterFlags,
         SotClipboardFormatId nClipboardID, unsigned int nFilterVersion)
 {
     ScDocShellRef xDocShRef = ScBootstrapFixture::load( rURL, rFilter, rUserData,
@@ -1388,8 +1388,8 @@ void ScFiltersTest::testBrokenQuotesCSV()
     OUString aFilterType(getFileFormats()[CSV].pTypeName, strlen(getFileFormats()[CSV].pTypeName), RTL_TEXTENCODING_UTF8);
     std::cout << getFileFormats()[CSV].pName << " Test" << std::endl;
 
-    unsigned int nFormatType = getFileFormats()[CSV].nFormatType;
-    SotClipboardFormatId nClipboardId = nFormatType ? SotClipboardFormatId::STARCALC_8 : SotClipboardFormatId::NONE;
+    SfxFilterFlags nFormatType = getFileFormats()[CSV].nFormatType;
+    SotClipboardFormatId nClipboardId = bool(nFormatType) ? SotClipboardFormatId::STARCALC_8 : SotClipboardFormatId::NONE;
     ScDocShellRef xDocSh = ScBootstrapFixture::load(aFileName, aFilterName, OUString(), aFilterType,
         nFormatType, nClipboardId, SOFFICE_FILEFORMAT_CURRENT);
 
@@ -1415,8 +1415,8 @@ void ScFiltersTest::testCellValueXLSX()
     OUString aFilterType(getFileFormats()[XLSX].pTypeName, strlen(getFileFormats()[XLSX].pTypeName), RTL_TEXTENCODING_UTF8);
     std::cout << getFileFormats()[XLSX].pName << " Test" << std::endl;
 
-    unsigned int nFormatType = getFileFormats()[XLSX].nFormatType;
-    SotClipboardFormatId nClipboardId = nFormatType ? SotClipboardFormatId::STARCALC_8 : SotClipboardFormatId::NONE;
+    SfxFilterFlags nFormatType = getFileFormats()[XLSX].nFormatType;
+    SotClipboardFormatId nClipboardId = bool(nFormatType) ? SotClipboardFormatId::STARCALC_8 : SotClipboardFormatId::NONE;
     ScDocShellRef xDocSh = ScBootstrapFixture::load( aFileName, aFilterName, OUString(), aFilterType,
         nFormatType, nClipboardId, SOFFICE_FILEFORMAT_CURRENT);
 

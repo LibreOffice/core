@@ -43,10 +43,10 @@ class SwFiltersTest
 {
 public:
     virtual bool load( const OUString &rFilter, const OUString &rURL,
-        const OUString &rUserData, unsigned int nFilterFlags,
+        const OUString &rUserData, SfxFilterFlags nFilterFlags,
         SotClipboardFormatId nClipboardID, unsigned int nFilterVersion) SAL_OVERRIDE;
     virtual bool save( const OUString &rFilter, const OUString &rURL,
-        const OUString &rUserData, unsigned int nFilterFlags,
+        const OUString &rUserData, SfxFilterFlags nFilterFlags,
         SotClipboardFormatId nClipboardID, unsigned int nFilterVersion) SAL_OVERRIDE;
     virtual void setUp() SAL_OVERRIDE;
 
@@ -59,27 +59,27 @@ public:
 
 private:
     bool filter( const OUString &rFilter, const OUString &rURL,
-        const OUString &rUserData, unsigned int nFilterFlags,
+        const OUString &rUserData, SfxFilterFlags nFilterFlags,
         SotClipboardFormatId nClipboardID, unsigned int nFilterVersion, bool bExport);
     uno::Reference<uno::XInterface> m_xWriterComponent;
 };
 
 bool SwFiltersTest::load(const OUString &rFilter, const OUString &rURL,
-    const OUString &rUserData, unsigned int nFilterFlags,
+    const OUString &rUserData, SfxFilterFlags nFilterFlags,
         SotClipboardFormatId nClipboardID, unsigned int nFilterVersion)
 {
     return filter(rFilter, rURL, rUserData, nFilterFlags, nClipboardID, nFilterVersion, false);
 }
 
 bool SwFiltersTest::save(const OUString &rFilter, const OUString &rURL,
-    const OUString &rUserData, unsigned int nFilterFlags,
+    const OUString &rUserData, SfxFilterFlags nFilterFlags,
         SotClipboardFormatId nClipboardID, unsigned int nFilterVersion)
 {
     return filter(rFilter, rURL, rUserData, nFilterFlags, nClipboardID, nFilterVersion, true);
 }
 
 bool SwFiltersTest::filter(const OUString &rFilter, const OUString &rURL,
-    const OUString &rUserData, unsigned int nFilterFlags,
+    const OUString &rUserData, SfxFilterFlags nFilterFlags,
         SotClipboardFormatId nClipboardID, unsigned int nFilterVersion, bool bExport)
 {
     SfxFilter* pFilter = new SfxFilter(
@@ -95,7 +95,7 @@ bool SwFiltersTest::filter(const OUString &rFilter, const OUString &rURL,
     SfxFilter* pExportFilter = 0;
     if (bExport)
     {
-        SfxGetpApp()->GetFilterMatcher().GuessFilter(*pSrcMed, &pImportFilter, SFX_FILTER_IMPORT, 0);
+        SfxGetpApp()->GetFilterMatcher().GuessFilter(*pSrcMed, &pImportFilter, SfxFilterFlags::IMPORT, SfxFilterFlags::NONE);
         pExportFilter = pFilter;
     }
     else
@@ -138,13 +138,13 @@ void SwFiltersTest::testCVEs()
     testDir(OUString("Staroffice XML (Writer)"),
             getURLFromSrc("/sw/qa/core/data/xml/"),
             OUString(FILTER_XML),
-            SFX_FILTER_IMPORT | SFX_FILTER_OWN | SFX_FILTER_DEFAULT,
+            SfxFilterFlags::IMPORT | SfxFilterFlags::OWN | SfxFilterFlags::DEFAULT,
             isstorage, SOFFICE_FILEFORMAT_CURRENT);
 
     testDir(OUString("writer8"),
             getURLFromSrc("/sw/qa/core/data/odt/"),
             OUString(FILTER_XML),
-            SFX_FILTER_IMPORT | SFX_FILTER_OWN | SFX_FILTER_DEFAULT,
+            SfxFilterFlags::IMPORT | SfxFilterFlags::OWN | SfxFilterFlags::DEFAULT,
             isstorage, SOFFICE_FILEFORMAT_CURRENT);
 
     testDir(OUString("MS Word 97"),
@@ -162,12 +162,12 @@ void SwFiltersTest::testCVEs()
     testDir(OUString("MS Word 2007 XML"),
             getURLFromSrc("/sw/qa/core/data/ooxml/"),
             OUString(),
-            SFX_FILTER_STARONEFILTER);
+            SfxFilterFlags::STARONEFILTER);
 
     testDir(OUString("Rich Text Format"),
             getURLFromSrc("/sw/qa/core/data/rtf/"),
             OUString(),
-            SFX_FILTER_STARONEFILTER);
+            SfxFilterFlags::STARONEFILTER);
 
     testDir(OUString("HTML"),
             getURLFromSrc("/sw/qa/core/data/html/"),
@@ -176,12 +176,12 @@ void SwFiltersTest::testCVEs()
     testDir("T602Document",
             getURLFromSrc("/sw/qa/core/data/602/"),
             OUString(),
-            SFX_FILTER_STARONEFILTER);
+            SfxFilterFlags::STARONEFILTER);
 
     testDir("Rich Text Format",
             getURLFromSrc("/sw/qa/core/exportdata/rtf/"),
             OUString(),
-            SFX_FILTER_STARONEFILTER,
+            SfxFilterFlags::STARONEFILTER,
             SotClipboardFormatId::NONE,
             0,
             /*bExport=*/true);
@@ -189,7 +189,7 @@ void SwFiltersTest::testCVEs()
     testDir("HTML",
             getURLFromSrc("/sw/qa/core/exportdata/html/"),
             OUString(sHTML),
-            0,
+            SfxFilterFlags::NONE,
             SotClipboardFormatId::NONE,
             0,
             /*bExport=*/true);
@@ -197,7 +197,7 @@ void SwFiltersTest::testCVEs()
     testDir("MS Word 2007 XML",
             getURLFromSrc("/sw/qa/core/exportdata/ooxml/"),
             OUString(),
-            SFX_FILTER_STARONEFILTER,
+            SfxFilterFlags::STARONEFILTER,
             SotClipboardFormatId::NONE,
             0,
             /*bExport=*/true);

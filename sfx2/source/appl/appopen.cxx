@@ -302,7 +302,7 @@ sal_uIntPtr SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const OUStri
     }
 
     aMedium.UseInteractionHandler( true );
-    sal_uIntPtr nErr = GetFilterMatcher().GuessFilter( aMedium,&pFilter,SFX_FILTER_TEMPLATE, 0 );
+    sal_uIntPtr nErr = GetFilterMatcher().GuessFilter( aMedium,&pFilter,SfxFilterFlags::TEMPLATE, SfxFilterFlags::NONE );
     if ( 0 != nErr)
     {
         delete pSet;
@@ -315,7 +315,7 @@ sal_uIntPtr SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const OUStri
         return ERRCODE_SFX_NOTATEMPLATE;
     }
 
-    if ( pFilter->GetFilterFlags() & SFX_FILTER_STARONEFILTER )
+    if ( pFilter->GetFilterFlags() & SfxFilterFlags::STARONEFILTER )
     {
         DBG_ASSERT( !xDoc.Is(), "Sorry, not implemented!" );
         delete pSet;

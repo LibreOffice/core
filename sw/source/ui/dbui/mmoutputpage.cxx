@@ -987,7 +987,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
         {
             pSfxFlt = pFilterContainer->GetFilter4FilterName(
                 OUString("writer_pdf_Export"),
-                SFX_FILTER_EXPORT);
+                SfxFilterFlags::EXPORT);
         }
         break;
         case MM_DOCTYPE_WORD:
@@ -1020,12 +1020,12 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
         {
             bAsBody = true;
             pSfxFlt = pFilterContainer->GetFilter4FilterName(
-                OUString("Text (encoded)"), SFX_FILTER_EXPORT);
+                OUString("Text (encoded)"), SfxFilterFlags::EXPORT);
         }
         break;
     }
     if(!pSfxFlt)
-        pSfxFlt = pFilterContainer->GetFilter4Extension(sExtension, SFX_FILTER_EXPORT);
+        pSfxFlt = pFilterContainer->GetFilter4Extension(sExtension, SfxFilterFlags::EXPORT);
 
     if(!pSfxFlt)
         return 0;

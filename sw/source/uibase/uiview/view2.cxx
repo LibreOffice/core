@@ -2081,7 +2081,7 @@ long SwView::InsertDoc( sal_uInt16 nSlotId, const OUString& rFileName, const OUS
             pMed = new SfxMedium(rFileName, StreamMode::READ, 0, 0 );
             SfxFilterMatcher aMatcher( rFact.GetFilterContainer()->GetName() );
             pMed->UseInteractionHandler( true );
-            ErrCode nErr = aMatcher.GuessFilter(*pMed, &pFilter, SFX_FILTER_VERSION_NONE);
+            ErrCode nErr = aMatcher.GuessFilter(*pMed, &pFilter, SfxFilterFlags::NONE);
             if ( nErr )
                 DELETEZ(pMed);
             else
@@ -2151,7 +2151,7 @@ long SwView::InsertMedium( sal_uInt16 nSlotId, SfxMedium* pMedium, sal_Int16 nVe
             SwReader* pRdr;
             Reader *pRead = pDocSh->StartConvertFrom( *pMedium, &pRdr, m_pWrtShell );
             if( pRead ||
-                (pMedium->GetFilter()->GetFilterFlags() & SFX_FILTER_STARONEFILTER) != 0 )
+                (pMedium->GetFilter()->GetFilterFlags() & SfxFilterFlags::STARONEFILTER) )
             {
                 sal_uInt16 nUndoCheck = 0;
                 SwDoc *pDoc = pDocSh->GetDoc();

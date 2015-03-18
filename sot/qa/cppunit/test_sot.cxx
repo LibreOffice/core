@@ -33,7 +33,7 @@ namespace
 
         virtual bool load(const OUString &,
             const OUString &rURL, const OUString &,
-            unsigned int, SotClipboardFormatId, unsigned int) SAL_OVERRIDE;
+            SfxFilterFlags, SotClipboardFormatId, unsigned int) SAL_OVERRIDE;
 
         void test();
         void testSize();
@@ -104,7 +104,7 @@ namespace
 
     bool SotTest::load(const OUString &,
         const OUString &rURL, const OUString &,
-        unsigned int, SotClipboardFormatId, unsigned int)
+        SfxFilterFlags, SotClipboardFormatId, unsigned int)
     {
         SvFileStream aStream(rURL, StreamMode::READ);
         SotStorageRef xObjStor = new SotStorage(aStream);

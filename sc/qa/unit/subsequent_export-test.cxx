@@ -83,7 +83,7 @@ public:
     virtual void tearDown() SAL_OVERRIDE;
 
 #if !defined MACOSX && !defined DRAGONFLY
-    ScDocShellRef saveAndReloadPassword( ScDocShell*, const OUString&, const OUString&, const OUString&, sal_uLong );
+    ScDocShellRef saveAndReloadPassword( ScDocShell*, const OUString&, const OUString&, const OUString&, SfxFilterFlags );
 #endif
 
     void test();
@@ -219,7 +219,7 @@ void ScExportTest::registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx)
 
 #if !defined MACOSX && !defined DRAGONFLY
 ScDocShellRef ScExportTest::saveAndReloadPassword(ScDocShell* pShell, const OUString &rFilter,
-    const OUString &rUserData, const OUString& rTypeName, sal_uLong nFormatType)
+    const OUString &rUserData, const OUString& rTypeName, SfxFilterFlags nFormatType)
 {
     utl::TempFile aTempFile;
     aTempFile.EnableKillingFile();

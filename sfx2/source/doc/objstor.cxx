@@ -669,14 +669,14 @@ bool SfxObjectShell::DoLoad( SfxMedium *pMed )
         if ( nError != ERRCODE_NONE )
             SetError( nError, OUString( OSL_LOG_PREFIX  ) );
 
-        if (pMedium->GetFilter()->GetFilterFlags() & SFX_FILTER_STARTPRESENTATION)
+        if (pMedium->GetFilter()->GetFilterFlags() & SfxFilterFlags::STARTPRESENTATION)
             pSet->Put( SfxBoolItem( SID_DOC_STARTPRESENTATION, true) );
     }
 
     EnableSetModified( false );
 
     pMedium->LockOrigFileOnDemand( true, false );
-    if ( GetError() == ERRCODE_NONE && bOwnStorageFormat && ( !pFilter || !( pFilter->GetFilterFlags() & SFX_FILTER_STARONEFILTER ) ) )
+    if ( GetError() == ERRCODE_NONE && bOwnStorageFormat && ( !pFilter || !( pFilter->GetFilterFlags() & SfxFilterFlags::STARONEFILTER ) ) )
     {
         uno::Reference< embed::XStorage > xStorage;
         if ( pMedium->GetError() == ERRCODE_NONE )
@@ -750,7 +750,7 @@ bool SfxObjectShell::DoLoad( SfxMedium *pMed )
         {
             pImp->nLoadedFlags = 0;
             pImp->bModelInitialized = false;
-            if ( pMedium->GetFilter() && ( pMedium->GetFilter()->GetFilterFlags() & SFX_FILTER_STARONEFILTER ) )
+            if ( pMedium->GetFilter() && ( pMedium->GetFilter()->GetFilterFlags() & SfxFilterFlags::STARONEFILTER ) )
             {
                 uno::Reference < beans::XPropertySet > xSet( GetModel(), uno::UNO_QUERY );
                 OUString sLockUpdates("LockUpdates");
@@ -1130,7 +1130,7 @@ bool SfxObjectShell::SaveTo_Impl
         // if no filter was set, use the default filter
         // this should be changed in the feature, it should be an error!
         SAL_WARN( "sfx.doc","No filter set!");
-        pFilter = GetFactory().GetFilterContainer()->GetAnyFilter( SFX_FILTER_IMPORT | SFX_FILTER_EXPORT );
+        pFilter = GetFactory().GetFilterContainer()->GetAnyFilter( SfxFilterFlags::IMPORT | SfxFilterFlags::EXPORT );
         rMedium.SetFilter(pFilter);
     }
 
@@ -1385,7 +1385,7 @@ bool SfxObjectShell::SaveTo_Impl
 
     bool bOk = false;
     // TODO/LATER: get rid of bOk
-    if (bOwnTarget && pFilter && !(pFilter->GetFilterFlags() & SFX_FILTER_STARONEFILTER))
+    if (bOwnTarget && pFilter && !(pFilter->GetFilterFlags() & SfxFilterFlags::STARONEFILTER))
     {
         AddLog( OUString( OSL_LOG_PREFIX "Storing in own format."  ) );
         uno::Reference< embed::XStorage > xMedStorage = rMedium.GetStorage();
@@ -1554,7 +1554,7 @@ bool SfxObjectShell::SaveTo_Impl
     {
         AddLog( OUString( OSL_LOG_PREFIX "Storing in alien format."  ) );
         // it's a "SaveAs" in an alien format
-        if ( rMedium.GetFilter() && ( rMedium.GetFilter()->GetFilterFlags() & SFX_FILTER_STARONEFILTER ) )
+        if ( rMedium.GetFilter() && ( rMedium.GetFilter()->GetFilterFlags() & SfxFilterFlags::STARONEFILTER ) )
             bOk = ExportTo( rMedium );
         else
             bOk = ConvertTo( rMedium );
@@ -2129,13 +2129,13 @@ bool SfxObjectShell::ConvertFrom
 /*  [Description]
 
     This method is called for loading of documents over all filters which are
-    not SFX_FILTER_OWN or for which no clipboard format has been registered
+    not SfxFilterFlags::OWN or for which no clipboard format has been registered
     (thus no storage format that is used). In other words, with this method
     it is imported.
 
     Files which are to be opened here should be opened through 'rMedium'
     to guarantee the right open modes. Especially if the format is retained
-    (only possible with SFX_FILTER_SIMULATE or SFX_FILTER_ONW) file which must
+    (only possible with SfxFilterFlags::SIMULATE or SfxFilterFlags::ONW) file which must
     be opened STREAM_SHARE_DENYWRITE.
 
     [Return value]
@@ -2167,7 +2167,7 @@ bool SfxObjectShell::ConvertFrom
     [Cross-references]
 
     <SfxObjectShell::ConvertTo(SfxMedium&)>
-    <SFX_FILTER_REGISTRATION>
+    <SfxFilterFlags::REGISTRATION>
 */
 {
     return false;
@@ -2433,13 +2433,13 @@ bool SfxObjectShell::ConvertTo
 /*  [Description]
 
     This method is called for saving of documents over all filters which are
-    not SFX_FILTER_OWN or for which no clipboard format has been registered
+    not SfxFilterFlags::OWN or for which no clipboard format has been registered
     (thus no storage format that is used). In other words, with this method
     it is exported.
 
     Files which are to be opened here should be opened through 'rMedium'
     to guarantee the right open modes. Especially if the format is retained
-    (only possible with SFX_FILTER_SIMULATE or SFX_FILTER_ONW) file which must
+    (only possible with SfxFilterFlags::SIMULATE or SfxFilterFlags::ONW) file which must
     be opened STREAM_SHARE_DENYWRITE.
 
     [Return value]
@@ -2471,7 +2471,7 @@ bool SfxObjectShell::ConvertTo
     [Cross-references]
 
     <SfxObjectShell::ConvertFrom(SfxMedium&)>
-    <SFX_FILTER_REGISTRATION>
+    <SfxFilterFlags::REGISTRATION>
 */
 
 {
@@ -2806,7 +2806,7 @@ bool SfxObjectShell::PreDoSaveAs_Impl
     if ( !aFilterName.isEmpty() )
         pNewFile->SetFilter( GetFactory().GetFilterContainer()->GetFilter4FilterName( aFilterName ) );
     else
-        pNewFile->SetFilter( GetFactory().GetFilterContainer()->GetAnyFilter( SFX_FILTER_IMPORT | SFX_FILTER_EXPORT ) );
+        pNewFile->SetFilter( GetFactory().GetFilterContainer()->GetAnyFilter( SfxFilterFlags::IMPORT | SfxFilterFlags::EXPORT ) );
 
     if ( pNewFile->GetErrorCode() != ERRCODE_NONE )
     {

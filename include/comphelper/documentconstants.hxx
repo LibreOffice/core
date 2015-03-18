@@ -20,6 +20,7 @@
 #define INCLUDED_COMPHELPER_DOCUMENTCONSTANTS_HXX
 
 #include <rtl/ustring.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 // formats of SO6/7
 #define MIMETYPE_VND_SUN_XML_WRITER_ASCII               "application/vnd.sun.xml.writer"
@@ -72,8 +73,6 @@
 #define ODFVER_011_TEXT "1.1"
 #define ODFVER_012_TEXT "1.2"
 
-#endif
-
 // filter flags
 // TODO/LATER: The flags should be part of the UNO specification
 
@@ -105,33 +104,43 @@
 // in filter, and rename the obscure ones to describe their meaning
 // using terms that are understandable.
 
-#define SFX_FILTER_IMPORT            0x00000001L
-#define SFX_FILTER_EXPORT            0x00000002L
-#define SFX_FILTER_TEMPLATE          0x00000004L
-#define SFX_FILTER_INTERNAL          0x00000008L
-#define SFX_FILTER_TEMPLATEPATH      0x00000010L
-#define SFX_FILTER_OWN               0x00000020L
-#define SFX_FILTER_ALIEN             0x00000040L
-#define SFX_FILTER_USESOPTIONS       0x00000080L
+enum class SfxFilterFlags
+{
+    IMPORT            = 0x00000001L,
+    EXPORT            = 0x00000002L,
+    TEMPLATE          = 0x00000004L,
+    INTERNAL          = 0x00000008L,
+    TEMPLATEPATH      = 0x00000010L,
+    OWN               = 0x00000020L,
+    ALIEN             = 0x00000040L,
+    USESOPTIONS       = 0x00000080L,
 
-#define SFX_FILTER_DEFAULT           0x00000100L
-#define SFX_FILTER_EXECUTABLE        0x00000200L
-#define SFX_FILTER_SUPPORTSSELECTION 0x00000400L
-#define SFX_FILTER_NOTINFILEDLG      0x00001000L
-#define SFX_FILTER_OPENREADONLY      0x00010000L
-#define SFX_FILTER_MUSTINSTALL       0x00020000L
-#define SFX_FILTER_CONSULTSERVICE    0x00040000L
+    DEFAULT           = 0x00000100L,
+    EXECUTABLE        = 0x00000200L,
+    SUPPORTSSELECTION = 0x00000400L,
+    NOTINFILEDLG      = 0x00001000L,
+    OPENREADONLY      = 0x00010000L,
+    MUSTINSTALL       = 0x00020000L,
+    CONSULTSERVICE    = 0x00040000L,
 
-#define SFX_FILTER_STARONEFILTER     0x00080000L
-#define SFX_FILTER_PACKED            0x00100000L
+    STARONEFILTER     = 0x00080000L,
+    PACKED            = 0x00100000L,
 
+    ENCRYPTION        = 0x01000000L,
+    PASSWORDTOMODIFY  = 0x02000000L,
 
-#define SFX_FILTER_ENCRYPTION        0x01000000L
-#define SFX_FILTER_PASSWORDTOMODIFY  0x02000000L
+    PREFERED          = 0x10000000L,
 
-#define SFX_FILTER_PREFERED          0x10000000L
+    STARTPRESENTATION = 0x20000000L,
 
-#define SFX_FILTER_VERSION_NONE      0
-#define SFX_FILTER_NOTINSTALLED      SFX_FILTER_MUSTINSTALL | SFX_FILTER_CONSULTSERVICE
+    NONE              = 0
+};
+namespace o3tl
+{
+    template<> struct typed_flags<SfxFilterFlags> : is_typed_flags<SfxFilterFlags, 0x331f17ffL> {};
+}
 
+#define SFX_FILTER_NOTINSTALLED (SfxFilterFlags::MUSTINSTALL | SfxFilterFlags::CONSULTSERVICE)
+
+#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -347,9 +347,9 @@ SwMailMergeDlg::SwMailMergeDlg(vcl::Window* pParent, SwWrtShell& rShell,
                 xMSF->createInstance("com.sun.star.document.FilterFactory"), UNO_QUERY_THROW);
         uno::Reference< container::XContainerQuery > xQuery(xFilterFactory, UNO_QUERY_THROW);
         const OUString sCommand("matchByDocumentService=com.sun.star.text.TextDocument:iflags="
-            + OUString::number(SFX_FILTER_EXPORT)
+            + OUString::number(static_cast<sal_Int32>(SfxFilterFlags::EXPORT))
             + ":eflags="
-            + OUString::number(SFX_FILTER_NOTINFILEDLG)
+            + OUString::number(static_cast<sal_Int32>(SfxFilterFlags::NOTINFILEDLG))
             + ":default_first");
         uno::Reference< container::XEnumeration > xList = xQuery->createSubSetEnumerationByQuery(sCommand);
         const OUString sName("Name");

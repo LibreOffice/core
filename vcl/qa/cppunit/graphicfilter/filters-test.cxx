@@ -32,7 +32,7 @@ public:
 
     virtual bool load(const OUString &,
         const OUString &rURL, const OUString &,
-        unsigned int, SotClipboardFormatId, unsigned int) SAL_OVERRIDE;
+        SfxFilterFlags, SotClipboardFormatId, unsigned int) SAL_OVERRIDE;
 
     void checkExportImport(const OUString& aFilterShortName);
 
@@ -53,7 +53,7 @@ public:
 
 bool VclFiltersTest::load(const OUString &,
     const OUString &rURL, const OUString &,
-    unsigned int, SotClipboardFormatId, unsigned int)
+    SfxFilterFlags, SotClipboardFormatId, unsigned int)
 {
     SvFileStream aFileStream(rURL, StreamMode::READ);
     Graphic aGraphic;

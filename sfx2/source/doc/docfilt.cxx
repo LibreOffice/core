@@ -39,7 +39,7 @@ using namespace ::com::sun::star;
 SfxFilter::SfxFilter( const OUString& rProvider, const OUString &rFilterName ) :
     maFilterName(rFilterName),
     maProvider(rProvider),
-    nFormatType(0),
+    nFormatType(SfxFilterFlags::NONE),
     nVersion(0),
     lFormat(SotClipboardFormatId::NONE),
     nDocIcon(0)
@@ -134,7 +134,7 @@ const SfxFilter* SfxFilter::GetDefaultFilterFromFactory( const OUString& rFact )
 const SfxFilter* SfxFilter::GetFilterByName( const OUString& rName )
 {
     SfxFilterMatcher aMatch;
-    return aMatch.GetFilter4FilterName( rName, 0, 0 );
+    return aMatch.GetFilter4FilterName( rName, SfxFilterFlags::NONE, SfxFilterFlags::NONE );
 }
 
 OUString SfxFilter::GetTypeFromStorage( const SotStorage& rStg )
@@ -201,13 +201,13 @@ OUString SfxFilter::GetTypeFromStorage(
             SotClipboardFormatId nClipId = SotExchange::GetFormat( aDataFlavor );
             if ( nClipId != SotClipboardFormatId::NONE )
             {
-                SfxFilterFlags nMust = SFX_FILTER_IMPORT, nDont = SFX_FILTER_NOTINSTALLED;
+                SfxFilterFlags nMust = SfxFilterFlags::IMPORT, nDont = SFX_FILTER_NOTINSTALLED;
                 if ( bTemplate )
                     // template filter was preselected, try to verify
-                    nMust |= SFX_FILTER_TEMPLATEPATH;
+                    nMust |= SfxFilterFlags::TEMPLATEPATH;
                 else
                     // template filters shouldn't be detected if not explicitly asked for
-                    nDont |= SFX_FILTER_TEMPLATEPATH;
+                    nDont |= SfxFilterFlags::TEMPLATEPATH;
 
                 const SfxFilter* pFilter = 0;
                 if (!aName.isEmpty())

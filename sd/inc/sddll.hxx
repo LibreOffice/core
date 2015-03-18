@@ -21,7 +21,6 @@
 #define INCLUDED_SD_INC_SDDLL_HXX
 
 #include <sfx2/module.hxx>
-#include <sfx2/sfxdefs.hxx>
 
 /*************************************************************************
 |*

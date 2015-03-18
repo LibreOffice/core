@@ -706,7 +706,7 @@ sal_Bool MimeConfigurationHelper::AddFilterNameCheckOwnFile(
     {
         sal_Int32 nFlags = GetFilterFlags( aFilterName );
         // check the OWN flag
-        bResult = ( nFlags & SFX_FILTER_OWN );
+        bResult = ( nFlags & SfxFilterFlags::OWN );
     }
 
     return bResult;
@@ -742,22 +742,22 @@ OUString MimeConfigurationHelper::GetDefaultFilterFromServiceName( const OUStrin
                     if ( xFilterEnum->nextElement() >>= aProps )
                     {
                         SequenceAsHashMap aPropsHM( aProps );
-                        sal_Int32 nFlags = aPropsHM.getUnpackedValueOrDefault( "Flags", (sal_Int32)0 );
+                        SfxFilterFlags nFlags = static_cast<SfxFilterFlags>(aPropsHM.getUnpackedValueOrDefault( "Flags", (sal_Int32)0 ));
 
                         // that should be import, export, own filter and not a template filter ( TemplatePath flag )
-                        sal_Int32 const nRequired = (SFX_FILTER_OWN
+                        SfxFilterFlags const nRequired = (SfxFilterFlags::OWN
                             // fdo#78159 for OOoXML, there is code to convert
                             // to ODF in OCommonEmbeddedObject::store*
                             // so accept it even though there's no export
-                            | (SOFFICE_FILEFORMAT_60 == nVersion ? 0 : SFX_FILTER_EXPORT)
-                            | SFX_FILTER_IMPORT );
-                        if ( ( ( nFlags & nRequired ) == nRequired ) && !( nFlags & SFX_FILTER_TEMPLATEPATH ) )
+                            | (SOFFICE_FILEFORMAT_60 == nVersion ? SfxFilterFlags::NONE : SfxFilterFlags::EXPORT)
+                            | SfxFilterFlags::IMPORT );
+                        if ( ( ( nFlags & nRequired ) == nRequired ) && !( nFlags & SfxFilterFlags::TEMPLATEPATH ) )
                         {
                             // if there are more than one filter the preffered one should be used
                             // if there is no preffered filter the first one will be used
-                            if ( aResult.isEmpty() || ( nFlags & SFX_FILTER_PREFERED ) )
+                            if ( aResult.isEmpty() || ( nFlags & SfxFilterFlags::PREFERED ) )
                                 aResult = aPropsHM.getUnpackedValueOrDefault( "Name", OUString() );
-                            if ( nFlags & SFX_FILTER_PREFERED )
+                            if ( nFlags & SfxFilterFlags::PREFERED )
                                 break; // the preferred filter was found
                         }
                     }
@@ -787,15 +787,15 @@ OUString MimeConfigurationHelper::GetExportFilterFromImportFilter( const OUStrin
             if ( aImpFilterAny >>= aImpData )
             {
                 SequenceAsHashMap aImpFilterHM( aImpData );
-                sal_Int32 nFlags = aImpFilterHM.getUnpackedValueOrDefault( "Flags", (sal_Int32)0 );
+                SfxFilterFlags nFlags = static_cast<SfxFilterFlags>(aImpFilterHM.getUnpackedValueOrDefault( "Flags", (sal_Int32)0 ));
 
-                if ( !( nFlags & SFX_FILTER_IMPORT ) )
+                if ( !( nFlags & SfxFilterFlags::IMPORT ) )
                 {
                     OSL_FAIL( "This is no import filter!" );
                     throw uno::Exception();
                 }
 
-                if ( nFlags & SFX_FILTER_EXPORT )
+                if ( nFlags & SfxFilterFlags::EXPORT )
                 {
                     aExportFilterName = aImportFilterName;
                 }
@@ -816,8 +816,8 @@ OUString MimeConfigurationHelper::GetExportFilterFromImportFilter( const OUStrin
                         uno::Sequence< beans::PropertyValue > aExportFilterProps = SearchForFilter(
                             uno::Reference< container::XContainerQuery >( xFilterFactory, uno::UNO_QUERY_THROW ),
                             aSearchRequest,
-                            SFX_FILTER_EXPORT,
-                            SFX_FILTER_INTERNAL );
+                            SfxFilterFlags::EXPORT,
+                            SfxFilterFlags::INTERNAL );
 
                         if ( aExportFilterProps.getLength() )
                         {
@@ -840,8 +840,8 @@ OUString MimeConfigurationHelper::GetExportFilterFromImportFilter( const OUStrin
 uno::Sequence< beans::PropertyValue > MimeConfigurationHelper::SearchForFilter(
                                                         const uno::Reference< container::XContainerQuery >& xFilterQuery,
                                                         const uno::Sequence< beans::NamedValue >& aSearchRequest,
-                                                        sal_Int32 nMustFlags,
-                                                        sal_Int32 nDontFlags )
+                                                        SfxFilterFlags nMustFlags,
+                                                        SfxFilterFlags nDontFlags )
 {
     uno::Sequence< beans::PropertyValue > aFilterProps;
     uno::Reference< container::XEnumeration > xFilterEnum =
@@ -857,11 +857,11 @@ uno::Sequence< beans::PropertyValue > MimeConfigurationHelper::SearchForFilter(
             if ( xFilterEnum->nextElement() >>= aProps )
             {
                 SequenceAsHashMap aPropsHM( aProps );
-                sal_Int32 nFlags = aPropsHM.getUnpackedValueOrDefault("Flags",
-                                                                        (sal_Int32)0 );
+                SfxFilterFlags nFlags = static_cast<SfxFilterFlags>(aPropsHM.getUnpackedValueOrDefault("Flags",
+                                                                        (sal_Int32)0 ));
                 if ( ( ( nFlags & nMustFlags ) == nMustFlags ) && !( nFlags & nDontFlags ) )
                 {
-                    if ( ( nFlags & SFX_FILTER_DEFAULT ) == SFX_FILTER_DEFAULT )
+                    if ( ( nFlags & SfxFilterFlags::DEFAULT ) == SfxFilterFlags::DEFAULT )
                     {
                         aFilterProps = aProps;
                         break;

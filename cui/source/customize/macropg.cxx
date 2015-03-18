@@ -29,7 +29,6 @@
 #include <tools/diagnose_ex.h>
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
-#include <sfx2/sfxdefs.hxx>
 #include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <dialmgr.hxx>

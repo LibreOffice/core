@@ -57,7 +57,7 @@ public:
     virtual void tearDown() SAL_OVERRIDE;
 
     virtual bool load( const OUString &rFilter, const OUString &rURL,
-        const OUString &rUserData, unsigned int nFilterFlags,
+        const OUString &rUserData, SfxFilterFlags nFilterFlags,
         SotClipboardFormatId nClipboardID, unsigned int nFilterVersion) SAL_OVERRIDE;
     /**
      * Ensure CVEs remain unbroken
@@ -113,7 +113,7 @@ private:
 };
 
 bool ScFiltersTest::load(const OUString &rFilter, const OUString &rURL,
-    const OUString &rUserData, unsigned int nFilterFlags,
+    const OUString &rUserData, SfxFilterFlags nFilterFlags,
     SotClipboardFormatId nClipboardID, unsigned int nFilterVersion)
 {
     ScDocShellRef xDocShRef = ScBootstrapFixture::load(rURL, rFilter, rUserData,

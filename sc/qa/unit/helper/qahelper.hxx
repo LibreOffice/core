@@ -40,15 +40,15 @@
 #define SCQAHELPER_DLLPUBLIC  SAL_DLLPUBLIC_IMPORT
 #endif
 
-#define ODS_FORMAT_TYPE 50331943
-#define XLS_FORMAT_TYPE 318767171
-#define XLSX_FORMAT_TYPE 268959811
-#define LOTUS123_FORMAT_TYPE 268435649
-#define CSV_FORMAT_TYPE  (SFX_FILTER_IMPORT | SFX_FILTER_EXPORT | SFX_FILTER_ALIEN | SFX_FILTER_USESOPTIONS)
-#define HTML_FORMAT_TYPE (SFX_FILTER_IMPORT | SFX_FILTER_EXPORT | SFX_FILTER_ALIEN | SFX_FILTER_USESOPTIONS)
-#define DIF_FORMAT_TYPE 195
-#define XLS_XML_FORMAT_TYPE (SFX_FILTER_IMPORT | SFX_FILTER_EXPORT | SFX_FILTER_ALIEN)
-#define XLSB_XML_FORMAT_TYPE 268959809
+#define ODS_FORMAT_TYPE      static_cast<SfxFilterFlags>(50331943)
+#define XLS_FORMAT_TYPE      static_cast<SfxFilterFlags>(318767171)
+#define XLSX_FORMAT_TYPE     static_cast<SfxFilterFlags>(268959811)
+#define LOTUS123_FORMAT_TYPE static_cast<SfxFilterFlags>(268435649)
+#define CSV_FORMAT_TYPE      (SfxFilterFlags::IMPORT | SfxFilterFlags::EXPORT | SfxFilterFlags::ALIEN | SfxFilterFlags::USESOPTIONS)
+#define HTML_FORMAT_TYPE     (SfxFilterFlags::IMPORT | SfxFilterFlags::EXPORT | SfxFilterFlags::ALIEN | SfxFilterFlags::USESOPTIONS)
+#define DIF_FORMAT_TYPE      (SfxFilterFlags::IMPORT | SfxFilterFlags::EXPORT | SfxFilterFlags::ALIEN | SfxFilterFlags::USESOPTIONS)
+#define XLS_XML_FORMAT_TYPE  (SfxFilterFlags::IMPORT | SfxFilterFlags::EXPORT | SfxFilterFlags::ALIEN)
+#define XLSB_XML_FORMAT_TYPE static_cast<SfxFilterFlags>(268959809)
 
 #define ODS      0
 #define XLS      1
@@ -91,7 +91,7 @@ struct TestParam
 };
 
 struct FileFormat {
-    const char* pName; const char* pFilterName; const char* pTypeName; unsigned int nFormatType;
+    const char* pName; const char* pFilterName; const char* pTypeName; SfxFilterFlags nFormatType;
 };
 
 // Printers for the calc data structures. Needed for the EQUAL assertion
@@ -225,12 +225,12 @@ protected:
 
     ScDocShellRef load(
         bool bReadWrite, const OUString& rURL, const OUString& rFilter, const OUString &rUserData,
-        const OUString& rTypeName, unsigned int nFilterFlags, SotClipboardFormatId nClipboardID,
+        const OUString& rTypeName, SfxFilterFlags nFilterFlags, SotClipboardFormatId nClipboardID,
         sal_uIntPtr nFilterVersion = SOFFICE_FILEFORMAT_CURRENT, const OUString* pPassword = NULL );
 
     ScDocShellRef load(
         const OUString& rURL, const OUString& rFilter, const OUString &rUserData,
-        const OUString& rTypeName, unsigned int nFilterFlags, SotClipboardFormatId nClipboardID,
+        const OUString& rTypeName, SfxFilterFlags nFilterFlags, SotClipboardFormatId nClipboardID,
         sal_uIntPtr nFilterVersion = SOFFICE_FILEFORMAT_CURRENT, const OUString* pPassword = NULL );
 
     ScDocShellRef loadDoc(const OUString& rFileName, sal_Int32 nFormat, bool bReadWrite = false );
@@ -246,7 +246,7 @@ public:
     void createCSVPath(const OUString& aFileBase, OUString& rCSVPath);
 
     ScDocShellRef saveAndReload(ScDocShell* pShell, const OUString &rFilter,
-    const OUString &rUserData, const OUString& rTypeName, sal_uLong nFormatType);
+    const OUString &rUserData, const OUString& rTypeName, SfxFilterFlags nFormatType);
 
     ScDocShellRef saveAndReload( ScDocShell* pShell, sal_Int32 nFormat );
 

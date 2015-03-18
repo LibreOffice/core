@@ -403,9 +403,9 @@ void SfxSaveTabPage::Reset( const SfxItemSet* )
                     sal_IntPtr nData = reinterpret_cast<sal_IntPtr>(aDocTypeLB->GetEntryData(n));
                     OUString sCommand;
                     sCommand = "matchByDocumentService=%1:iflags=" +
-                               OUString::number(SFX_FILTER_IMPORT|SFX_FILTER_EXPORT) +
+                               OUString::number(static_cast<sal_Int32>(SfxFilterFlags::IMPORT|SfxFilterFlags::EXPORT)) +
                                ":eflags=" +
-                               OUString::number(SFX_FILTER_NOTINFILEDLG) +
+                               OUString::number(static_cast<sal_Int32>(SfxFilterFlags::NOTINFILEDLG)) +
                                ":default_first";
                     OUString sReplace;
                     switch(nData)
@@ -430,9 +430,9 @@ void SfxSaveTabPage::Reset( const SfxItemSet* )
                         OUString sFilter = aFilter.getUnpackedValueOrDefault("Name",OUString());
                         if (!sFilter.isEmpty())
                         {
-                            sal_Int32 nFlags = aFilter.getUnpackedValueOrDefault("Flags",sal_Int32());
+                            SfxFilterFlags nFlags = static_cast<SfxFilterFlags>(aFilter.getUnpackedValueOrDefault("Flags",sal_Int32()));
                             lList.push_back(sFilter);
-                            lAlienList.push_back(0 != (nFlags & SFX_FILTER_ALIEN));
+                            lAlienList.push_back(bool(nFlags & SfxFilterFlags::ALIEN));
                             lODFList.push_back( isODFFormat( sFilter ) );
                         }
                     }

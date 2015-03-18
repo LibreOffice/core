@@ -44,7 +44,6 @@
 #include <sfx2/sfxcommands.h>
 #include "about.hxx"
 #include <config_buildid.h>
-#include <sfx2/sfxdefs.hxx>
 #include <sfx2/app.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <vcl/bitmap.hxx>

@@ -494,7 +494,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
                 DelSectionFmt( GetSections().front() );
 
             SfxFilterContainer* pFCntnr = mpDocShell->GetFactory().GetFilterContainer();
-            pFilter = pFCntnr->GetFilter4EA( pFilter->GetTypeName(), SFX_FILTER_EXPORT );
+            pFilter = pFCntnr->GetFilter4EA( pFilter->GetTypeName(), SfxFilterFlags::EXPORT );
         }
         break;
 

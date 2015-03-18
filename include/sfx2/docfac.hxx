@@ -29,7 +29,6 @@
 #include <rtl/ustring.hxx>
 
 #include <sfx2/objsh.hxx>
-#include <sfx2/sfxdefs.hxx>
 
 class SfxMedium;
 class SfxFilter;

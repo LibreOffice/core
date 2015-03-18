@@ -35,7 +35,7 @@ public:
 
     virtual bool load(const OUString&,
                       const OUString& rURL, const OUString&,
-                      unsigned int, SotClipboardFormatId, unsigned int) SAL_OVERRIDE;
+                      SfxFilterFlags, SotClipboardFormatId, unsigned int) SAL_OVERRIDE;
 
     void test();
 
@@ -55,7 +55,7 @@ void RtfTest::setUp()
 
 bool RtfTest::load(const OUString&,
                    const OUString& rURL, const OUString&,
-                   unsigned int, SotClipboardFormatId, unsigned int)
+                   SfxFilterFlags, SotClipboardFormatId, unsigned int)
 {
     uno::Sequence< beans::PropertyValue > aDescriptor =
     {

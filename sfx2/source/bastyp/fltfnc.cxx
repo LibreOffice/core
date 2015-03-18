@@ -529,7 +529,7 @@ sal_uInt32  SfxFilterMatcher::GuessFilterControlDefaultUI( SfxMedium& rMedium, c
 
 bool SfxFilterMatcher::IsFilterInstalled_Impl( const SfxFilter* pFilter )
 {
-    if ( pFilter->GetFilterFlags() & SFX_FILTER_MUSTINSTALL )
+    if ( pFilter->GetFilterFlags() & SfxFilterFlags::MUSTINSTALL )
     {
         // Here could a  re-installation be offered
         OUString aText( SfxResId(STR_FILTER_NOT_INSTALLED).toString() );
@@ -546,9 +546,9 @@ bool SfxFilterMatcher::IsFilterInstalled_Impl( const SfxFilter* pFilter )
             // then the  Filterflag be deleted
         }
 
-        return ( !(pFilter->GetFilterFlags() & SFX_FILTER_MUSTINSTALL) );
+        return ( !(pFilter->GetFilterFlags() & SfxFilterFlags::MUSTINSTALL) );
     }
-    else if ( pFilter->GetFilterFlags() & SFX_FILTER_CONSULTSERVICE )
+    else if ( pFilter->GetFilterFlags() & SfxFilterFlags::CONSULTSERVICE )
     {
         OUString aText( SfxResId(STR_FILTER_CONSULT_SERVICE).toString() );
         aText = aText.replaceFirst( "$(FILTER)", pFilter->GetUIName() );
@@ -575,7 +575,7 @@ sal_uInt32 SfxFilterMatcher::DetectFilter( SfxMedium& rMedium, const SfxFilter**
         else
         {
             SFX_ITEMSET_ARG( rMedium.GetItemSet(), pSalvageItem, SfxStringItem, SID_DOC_SALVAGE, false);
-            if ( ( pOldFilter->GetFilterFlags() & SFX_FILTER_PACKED ) && pSalvageItem )
+            if ( ( pOldFilter->GetFilterFlags() & SfxFilterFlags::PACKED ) && pSalvageItem )
                 // Salvage is always done without packing
                 pOldFilter = 0;
         }
@@ -603,7 +603,7 @@ sal_uInt32 SfxFilterMatcher::DetectFilter( SfxMedium& rMedium, const SfxFilter**
         const SfxFilter* pInstallFilter = NULL;
 
         // Now test the filter which are not installed (ErrCode is irrelevant)
-        GuessFilter( rMedium, &pInstallFilter, SFX_FILTER_IMPORT, SFX_FILTER_CONSULTSERVICE );
+        GuessFilter( rMedium, &pInstallFilter, SfxFilterFlags::IMPORT, SfxFilterFlags::CONSULTSERVICE );
         if ( pInstallFilter )
         {
             if ( IsFilterInstalled_Impl( pInstallFilter ) )
@@ -614,7 +614,7 @@ sal_uInt32 SfxFilterMatcher::DetectFilter( SfxMedium& rMedium, const SfxFilter**
         {
           // Now test the filter, which first must be obtained by Star
           // (ErrCode is irrelevant)
-            GuessFilter( rMedium, &pInstallFilter, SFX_FILTER_IMPORT, 0 );
+            GuessFilter( rMedium, &pInstallFilter, SfxFilterFlags::IMPORT, SfxFilterFlags::NONE );
             if ( pInstallFilter )
                 IsFilterInstalled_Impl( pInstallFilter );
         }
@@ -716,7 +716,7 @@ const SfxFilter* SfxFilterMatcher::GetFilter4EA( const OUString& rType, SfxFilte
             SfxFilterFlags nFlags = pFilter->GetFilterFlags();
             if ( (nFlags & nMust) == nMust && !(nFlags & nDont ) && pFilter->GetTypeName() == rType )
             {
-                if (nFlags & SFX_FILTER_PREFERED)
+                if (nFlags & SfxFilterFlags::PREFERED)
                     return pFilter;
                 if (!pFirst)
                     pFirst = pFilter;
@@ -798,7 +798,7 @@ const SfxFilter* SfxFilterMatcher::GetFilter4UIName( const OUString& rName, SfxF
         if ( (nFlags & nMust) == nMust &&
              !(nFlags & nDont ) && pFilter->GetUIName() == rName )
         {
-            if ( pFilter->GetFilterFlags() & SFX_FILTER_PREFERED )
+            if ( pFilter->GetFilterFlags() & SfxFilterFlags::PREFERED )
                 return pFilter;
             else if ( !pFirstFilter )
                 pFirstFilter = pFilter;
@@ -864,7 +864,7 @@ const SfxFilter* SfxFilterMatcher::GetFilter4FilterName( const OUString& rName, 
 
 IMPL_STATIC_LINK( SfxFilterMatcher, MaybeFileHdl_Impl, OUString*, pString )
 {
-    const SfxFilter* pFilter = pThis->GetFilter4Extension( *pString, SFX_FILTER_IMPORT );
+    const SfxFilter* pFilter = pThis->GetFilter4Extension( *pString, SfxFilterFlags::IMPORT );
     if (pFilter && !pFilter->GetWildcard().Matches( OUString() ) &&
         !pFilter->GetWildcard().Matches(OUString("*.*")) &&
         !pFilter->GetWildcard().Matches(OUString('*'))
@@ -883,8 +883,8 @@ SfxFilterMatcherIter::SfxFilterMatcherIter(
     : nOrMask( nOrMaskP ), nAndMask( nAndMaskP ),
       nCurrent(0), m_rMatch(rMatcher.m_rImpl)
 {
-    if( nOrMask == 0xffff ) //Due to falty build on s
-        nOrMask = 0;
+    if( nOrMask == static_cast<SfxFilterFlags>(0xffff) ) //Due to faulty build on s
+        nOrMask = SfxFilterFlags::NONE;
     m_rMatch.InitForIterating();
 }
 
@@ -969,7 +969,7 @@ void SfxFilterContainer::ReadSingleFilter_Impl(
     {
         // collect information to add filter to container
         // (attention: some information aren't available on filter directly ... you must search for corresponding type too!)
-        sal_Int32       nFlags          = 0 ;
+        SfxFilterFlags       nFlags          = SfxFilterFlags::NONE;
         SotClipboardFormatId nClipboardId    = SotClipboardFormatId::NONE;
         sal_Int32       nDocumentIconId = 0 ;
         sal_Int32       nFormatVersion  = 0 ;
@@ -998,7 +998,9 @@ void SfxFilterContainer::ReadSingleFilter_Impl(
             }
             else if ( lFilterProperties[nFilterProperty].Name == "Flags" )
             {
-                lFilterProperties[nFilterProperty].Value >>= nFlags;
+                sal_Int32 nTmp;
+                lFilterProperties[nFilterProperty].Value >>= nTmp;
+                nFlags = static_cast<SfxFilterFlags>(nTmp);
             }
             else if ( lFilterProperties[nFilterProperty].Name == "UIName" )
             {
@@ -1084,7 +1086,7 @@ void SfxFilterContainer::ReadSingleFilter_Impl(
             nClipboardId = SotExchange::RegisterFormatName( sHumanName );
 
             // For external filters ignore clipboard IDs
-            if((nFlags & SFX_FILTER_STARONEFILTER) == SFX_FILTER_STARONEFILTER)
+            if(nFlags & SfxFilterFlags::STARONEFILTER)
             {
                 nClipboardId = SotClipboardFormatId::NONE;
             }

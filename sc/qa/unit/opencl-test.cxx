@@ -64,7 +64,7 @@ public:
     virtual void tearDown() SAL_OVERRIDE;
 
     virtual bool load( const OUString &rFilter, const OUString &rURL,
-            const OUString &rUserData, unsigned int nFilterFlags,
+            const OUString &rUserData, SfxFilterFlags nFilterFlags,
             SotClipboardFormatId nClipboardID, unsigned int nFilterVersion) SAL_OVERRIDE;
     void testSharedFormulaXLS();
 #if 0
@@ -556,7 +556,7 @@ bool ScOpenCLTest::initTestEnv(const OUString& fileName, sal_Int32 nFormat,
 }
 
 bool ScOpenCLTest::load(const OUString &rFilter, const OUString &rURL,
-    const OUString &rUserData, unsigned int nFilterFlags,
+    const OUString &rUserData, SfxFilterFlags nFilterFlags,
         SotClipboardFormatId nClipboardID, unsigned int nFilterVersion)
 {
     ScDocShellRef xDocShRef = ScBootstrapFixture::load(rURL, rFilter, rUserData,

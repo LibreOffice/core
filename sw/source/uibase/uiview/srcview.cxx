@@ -305,7 +305,7 @@ void SwSrcView::Execute(SfxRequest& rReq)
             // search for an html filter for export
             SfxFilterContainer* pFilterCont = GetObjectShell()->GetFactory().GetFilterContainer();
             const SfxFilter* pFilter =
-                pFilterCont->GetFilter4Extension( OUString("html"), SFX_FILTER_EXPORT );
+                pFilterCont->GetFilter4Extension( OUString("html"), SfxFilterFlags::EXPORT );
             if ( pFilter )
             {
                 // filter found -> use its uiname and wildcard

@@ -44,7 +44,7 @@ private:
         // filter/source/config/fragments/filters/MathML_XML__Math_.xcu
         SfxFilter* pFilter = new SfxFilter(MATHML_XML,
                                            OUString(),
-                                           SFX_FILTER_IMPORT | SFX_FILTER_EXPORT | SFX_FILTER_TEMPLATE,
+                                           SfxFilterFlags::IMPORT | SfxFilterFlags::EXPORT | SfxFilterFlags::TEMPLATE,
                                            SotClipboardFormatId::STARCALC_8,
                                            "MathML 1.01",
                                            0,

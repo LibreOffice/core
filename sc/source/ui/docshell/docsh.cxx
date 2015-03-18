@@ -2223,7 +2223,7 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
             /*  #i104990# If the imported document contains a medium
                 password, determine if we can save it, otherwise ask the users
                 whether they want to save without it. */
-            if( (rMed.GetFilter()->GetFilterFlags() & SFX_FILTER_ENCRYPTION) == 0 )
+            if( (rMed.GetFilter()->GetFilterFlags() & SfxFilterFlags::ENCRYPTION) == SfxFilterFlags::NONE )
             {
                 SfxItemSet* pItemSet = rMed.GetItemSet();
                 const SfxPoolItem* pItem = 0;

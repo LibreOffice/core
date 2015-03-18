@@ -221,7 +221,7 @@ namespace dbaui
                     ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION,
                     0,
                     aModule.GetFactoryEmptyDocumentURL(SvtModuleOptions::E_CALC)
-                    ,SFX_FILTER_IMPORT);
+                    ,SfxFilterFlags::IMPORT);
                 askForFileName(aFileDlg);
             }
             break;

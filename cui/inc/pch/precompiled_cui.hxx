@@ -397,7 +397,6 @@
 #include <sfx2/printopt.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/sfxcommands.h>
-#include <sfx2/sfxdefs.hxx>
 #include <sfx2/sfxdlg.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/sfxuno.hxx>

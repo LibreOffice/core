@@ -516,7 +516,7 @@ void FileDialogHelper_Impl::updateSelectionBox()
         const SfxFilter* pFilter = getCurentSfxFilter();
         mbSelectionFltrEnabled = updateExtendedControl(
             ExtendedFilePickerElementIds::CHECKBOX_SELECTION,
-            ( mbSelectionEnabled && pFilter && ( pFilter->GetFilterFlags() & SFX_FILTER_SUPPORTSSELECTION ) != 0 ) );
+            ( mbSelectionEnabled && pFilter && ( pFilter->GetFilterFlags() & SfxFilterFlags::SUPPORTSSELECTION ) ) );
         uno::Reference< XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
         xCtrlAccess->setValue( ExtendedFilePickerElementIds::CHECKBOX_SELECTION, 0, makeAny( mbSelection ) );
     }
@@ -532,7 +532,7 @@ void FileDialogHelper_Impl::enablePasswordBox( bool bInit )
     const SfxFilter* pCurrentFilter = getCurentSfxFilter();
     mbIsPwdEnabled = updateExtendedControl(
         ExtendedFilePickerElementIds::CHECKBOX_PASSWORD,
-        pCurrentFilter && ( pCurrentFilter->GetFilterFlags() & SFX_FILTER_ENCRYPTION )
+        pCurrentFilter && ( pCurrentFilter->GetFilterFlags() & SfxFilterFlags::ENCRYPTION )
     );
 
     if( bInit )
@@ -897,11 +897,11 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
     mbSelectionFltrEnabled  = false;
 
     // default settings
-    m_nDontFlags = SFX_FILTER_INTERNAL | SFX_FILTER_NOTINFILEDLG | SFX_FILTER_NOTINSTALLED;
+    m_nDontFlags = SFX_FILTER_NOTINSTALLED | SfxFilterFlags::INTERNAL | SfxFilterFlags::NOTINFILEDLG;
     if (OPEN == lcl_OpenOrSave(m_nDialogType))
-        m_nMustFlags = SFX_FILTER_IMPORT;
+        m_nMustFlags = SfxFilterFlags::IMPORT;
     else
-        m_nMustFlags = SFX_FILTER_EXPORT;
+        m_nMustFlags = SfxFilterFlags::EXPORT;
 
 
     mpMatcher = NULL;
@@ -1730,9 +1730,9 @@ void FileDialogHelper_Impl::addFilters( const OUString& rFactory,
     sQuery.append(":module=");
     sQuery.append(rFactory); // use long name here !
     sQuery.append(":iflags=");
-    sQuery.append(OUString::number(m_nMustFlags));
+    sQuery.append(OUString::number(static_cast<sal_Int32>(m_nMustFlags)));
     sQuery.append(":eflags=");
-    sQuery.append(OUString::number(m_nDontFlags));
+    sQuery.append(OUString::number(static_cast<sal_Int32>(m_nDontFlags)));
 
     uno::Reference< XEnumeration > xResult;
     try
@@ -2591,7 +2591,7 @@ ErrCode FileOpenDialog_Impl( sal_Int16 nDialogType,
 {
     ErrCode nRet;
     FileDialogHelper aDialog( nDialogType, nFlags,
-            rFact, nDialog, 0, 0, rStandardDir, rBlackList );
+            rFact, nDialog, SfxFilterFlags::NONE, SfxFilterFlags::NONE, rStandardDir, rBlackList );
 
     OUString aPath;
     if ( pPath )
@@ -2613,7 +2613,7 @@ ErrCode RequestPassword(const SfxFilter* pCurrentFilter, OUString& aURL, SfxItem
         ::comphelper::DocPasswordRequestType_MS :
         ::comphelper::DocPasswordRequestType_STANDARD;
 
-    ::rtl::Reference< ::comphelper::DocPasswordRequest > pPasswordRequest( new ::comphelper::DocPasswordRequest( eType, ::com::sun::star::task::PasswordRequestMode_PASSWORD_CREATE, aURL, ( pCurrentFilter->GetFilterFlags() & SFX_FILTER_PASSWORDTOMODIFY ) != 0 ) );
+    ::rtl::Reference< ::comphelper::DocPasswordRequest > pPasswordRequest( new ::comphelper::DocPasswordRequest( eType, ::com::sun::star::task::PasswordRequestMode_PASSWORD_CREATE, aURL, bool( pCurrentFilter->GetFilterFlags() & SfxFilterFlags::PASSWORDTOMODIFY ) ) );
 
     uno::Reference< com::sun::star::task::XInteractionRequest > rRequest( pPasswordRequest.get() );
     xInteractionHandler->handle( rRequest );

@@ -42,7 +42,7 @@ public:
 
     virtual bool load( const OUString &rFilter,
         const OUString &rURL, const OUString &rUserData,
-        unsigned int nFilterFlags, SotClipboardFormatId nClipboardID,
+        SfxFilterFlags nFilterFlags, SotClipboardFormatId nClipboardID,
         unsigned int nFilterVersion) SAL_OVERRIDE;
 
     virtual void setUp() SAL_OVERRIDE;
@@ -60,7 +60,7 @@ private:
 };
 
 bool SdFiltersTest::load(const OUString &rFilter, const OUString &rURL,
-    const OUString &rUserData, unsigned int nFilterFlags, SotClipboardFormatId nClipboardID,
+    const OUString &rUserData, SfxFilterFlags nFilterFlags, SotClipboardFormatId nClipboardID,
     unsigned int nFilterVersion)
 {
     SfxFilter aFilter(
@@ -86,7 +86,7 @@ void SdFiltersTest::testCVEs()
 
     testDir(OUString("Impress Office Open XML"),
             getURLFromSrc("/sd/qa/unit/data/pptx/"),
-            OUString(""),  (SFX_FILTER_IMPORT | SFX_FILTER_ALIEN | SFX_FILTER_STARONEFILTER));
+            OUString(""),  (SfxFilterFlags::IMPORT | SfxFilterFlags::ALIEN | SfxFilterFlags::STARONEFILTER));
 
     testDir(OUString("impress8"),
             getURLFromSrc("/sd/qa/unit/data/odp/"),

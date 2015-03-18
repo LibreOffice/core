@@ -916,7 +916,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
             if( bEMail && !rMergeDescriptor.bSendAsAttachment )
             {
                 OUString sExtension = rMergeDescriptor.bSendAsHTML ? OUString("html") : OUString("txt");
-                pStoreToFilter = pFilterContainer->GetFilter4Extension(sExtension, SFX_FILTER_EXPORT);
+                pStoreToFilter = pFilterContainer->GetFilter4Extension(sExtension, SfxFilterFlags::EXPORT);
             }
             else if( !rMergeDescriptor.sSaveToFilter.isEmpty())
             {

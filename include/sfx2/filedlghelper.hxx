@@ -30,7 +30,6 @@
 #include <vcl/edit.hxx>
 #include <vcl/button.hxx>
 #include <vcl/graph.hxx>
-#include <sfx2/sfxdefs.hxx>
 #include <sfx2/sfxuno.hxx>
 #include <sfx2/docfilt.hxx>
 
@@ -108,8 +107,8 @@ public:
                             FileDialogHelper( sal_Int16 nDialogType,
                                               sal_Int64 nFlags,
                                               const OUString& rFactory,
-                                              SfxFilterFlags nMust = 0,
-                                              SfxFilterFlags nDont = 0 );
+                                              SfxFilterFlags nMust = SfxFilterFlags::NONE,
+                                              SfxFilterFlags nDont = SfxFilterFlags::NONE );
 
                             FileDialogHelper( sal_Int16 nDialogType,
                                               sal_Int64 nFlags,

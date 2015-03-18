@@ -162,51 +162,51 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
                     xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
 
                 // Get other draw/impress filters
-                pFilter = aMatch.GetFilter4ClipBoardId( SotClipboardFormatId::STARIMPRESS_60, SFX_FILTER_IMPORT, SFX_FILTER_TEMPLATEPATH );
+                pFilter = aMatch.GetFilter4ClipBoardId( SotClipboardFormatId::STARIMPRESS_60, SfxFilterFlags::IMPORT, SfxFilterFlags::TEMPLATEPATH );
                 if( pFilter )
                     xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
 
-                pFilter = aMatch.GetFilter4ClipBoardId( SotClipboardFormatId::STARIMPRESS_60, SFX_FILTER_TEMPLATEPATH );
+                pFilter = aMatch.GetFilter4ClipBoardId( SotClipboardFormatId::STARIMPRESS_60, SfxFilterFlags::TEMPLATEPATH );
                 if( pFilter )
                     xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
 
-                pFilter = aMatch.GetFilter4ClipBoardId( SotClipboardFormatId::STARDRAW_60, SFX_FILTER_IMPORT, SFX_FILTER_TEMPLATEPATH  );
+                pFilter = aMatch.GetFilter4ClipBoardId( SotClipboardFormatId::STARDRAW_60, SfxFilterFlags::IMPORT, SfxFilterFlags::TEMPLATEPATH  );
                 if( pFilter )
                     xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
 
-                pFilter = aMatch.GetFilter4ClipBoardId( SotClipboardFormatId::STARDRAW_60, SFX_FILTER_TEMPLATEPATH  );
+                pFilter = aMatch.GetFilter4ClipBoardId( SotClipboardFormatId::STARDRAW_60, SfxFilterFlags::TEMPLATEPATH  );
                 if( pFilter )
                     xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
 
-                pFilter = aMatch.GetFilter4ClipBoardId( SotClipboardFormatId::STARIMPRESS_50, SFX_FILTER_IMPORT, SFX_FILTER_TEMPLATEPATH  );
+                pFilter = aMatch.GetFilter4ClipBoardId( SotClipboardFormatId::STARIMPRESS_50, SfxFilterFlags::IMPORT, SfxFilterFlags::TEMPLATEPATH  );
                 if( pFilter )
                     xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
 
-                pFilter = aMatch.GetFilter4ClipBoardId( SotClipboardFormatId::STARIMPRESS_50, SFX_FILTER_TEMPLATEPATH );
+                pFilter = aMatch.GetFilter4ClipBoardId( SotClipboardFormatId::STARIMPRESS_50, SfxFilterFlags::TEMPLATEPATH );
                 if( pFilter )
                     xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
 
-                pFilter = aMatch.GetFilter4ClipBoardId( SotClipboardFormatId::STARDRAW_50, SFX_FILTER_IMPORT, SFX_FILTER_TEMPLATEPATH  );
+                pFilter = aMatch.GetFilter4ClipBoardId( SotClipboardFormatId::STARDRAW_50, SfxFilterFlags::IMPORT, SfxFilterFlags::TEMPLATEPATH  );
                 if( pFilter )
                     xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
 
-                pFilter = aMatch.GetFilter4ClipBoardId( SotClipboardFormatId::STARDRAW_50, SFX_FILTER_TEMPLATEPATH  );
+                pFilter = aMatch.GetFilter4ClipBoardId( SotClipboardFormatId::STARDRAW_50, SfxFilterFlags::TEMPLATEPATH  );
                 if( pFilter )
                     xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
 
-                pFilter = aMatch.GetFilter4ClipBoardId( SotClipboardFormatId::STARDRAW_40, SFX_FILTER_IMPORT, SFX_FILTER_TEMPLATEPATH  );
+                pFilter = aMatch.GetFilter4ClipBoardId( SotClipboardFormatId::STARDRAW_40, SfxFilterFlags::IMPORT, SfxFilterFlags::TEMPLATEPATH  );
                 if( pFilter )
                     xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
 
-                pFilter = aMatch.GetFilter4ClipBoardId( SotClipboardFormatId::STARDRAW_40, SFX_FILTER_TEMPLATEPATH  );
+                pFilter = aMatch.GetFilter4ClipBoardId( SotClipboardFormatId::STARDRAW_40, SfxFilterFlags::TEMPLATEPATH  );
                 if( pFilter )
                     xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
 
-                pFilter = aMatch.GetFilter4ClipBoardId( SotClipboardFormatId::STARDRAW, SFX_FILTER_IMPORT, SFX_FILTER_TEMPLATEPATH  );
+                pFilter = aMatch.GetFilter4ClipBoardId( SotClipboardFormatId::STARDRAW, SfxFilterFlags::IMPORT, SfxFilterFlags::TEMPLATEPATH  );
                 if( pFilter )
                     xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
 
-                pFilter = aMatch.GetFilter4ClipBoardId( SotClipboardFormatId::STARDRAW, SFX_FILTER_TEMPLATEPATH  );
+                pFilter = aMatch.GetFilter4ClipBoardId( SotClipboardFormatId::STARDRAW, SfxFilterFlags::TEMPLATEPATH  );
                 if( pFilter )
                     xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
 
@@ -250,7 +250,7 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
     SfxMedium*          pMedium = new SfxMedium( aFile, StreamMode::READ | StreamMode::NOCREATE );
     const SfxFilter*    pFilter = NULL;
 
-    SfxGetpApp()->GetFilterMatcher().GuessFilter( *pMedium, &pFilter, SFX_FILTER_IMPORT, SFX_FILTER_NOTINSTALLED | SFX_FILTER_EXECUTABLE );
+    SfxGetpApp()->GetFilterMatcher().GuessFilter( *pMedium, &pFilter, SfxFilterFlags::IMPORT, SFX_FILTER_NOTINSTALLED | SfxFilterFlags::EXECUTABLE );
 
     bool                bDrawMode = mpViewShell && mpViewShell->ISA(DrawViewShell);
     bool                bInserted = false;

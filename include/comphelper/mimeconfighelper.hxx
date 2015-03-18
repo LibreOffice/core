@@ -32,6 +32,8 @@
 #include <comphelper/comphelperdllapi.h>
 
 
+enum class SfxFilterFlags;
+
 namespace comphelper {
 
 class COMPHELPER_DLLPUBLIC MimeConfigurationHelper
@@ -124,8 +126,8 @@ public:
     static ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SearchForFilter(
                         const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerQuery >& xFilterQuery,
                         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& aSearchRequest,
-                        sal_Int32 nMustFlags,
-                        sal_Int32 nDontFlags );
+                        SfxFilterFlags nMustFlags,
+                        SfxFilterFlags nDontFlags );
 
     static bool ClassIDsEqual( const ::com::sun::star::uno::Sequence< sal_Int8 >& aClassID1,
                         const ::com::sun::star::uno::Sequence< sal_Int8 >& aClassID2 );

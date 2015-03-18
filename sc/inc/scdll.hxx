@@ -23,7 +23,6 @@
 class SfxMedium;
 class SfxFilter;
 
-#include <sfx2/sfxdefs.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/docfac.hxx>
 

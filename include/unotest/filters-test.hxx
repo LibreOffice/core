@@ -43,7 +43,7 @@ public:
         //additional filter data for SfxFilter
         const OUString &rUserData = OUString(),
         //SfxFilterFlags for SfxFilter
-        unsigned int nFilterFlags = SFX_FILTER_IMPORT,
+        SfxFilterFlags nFilterFlags = SfxFilterFlags::IMPORT,
         //Clipboard id for SfxFilter
         SotClipboardFormatId nClipboardID = SotClipboardFormatId::NONE,
         //additional filter version for SfxFilter
@@ -55,7 +55,7 @@ public:
         const OUString &rFilter,
         const OUString &rURL,
         const OUString &rUserData,
-        unsigned int nFilterFlags,
+        SfxFilterFlags nFilterFlags,
         SotClipboardFormatId nClipboardID,
         unsigned int nFilterVersion) = 0;
 
@@ -63,7 +63,7 @@ public:
         const OUString &/*rFilter*/,
         const OUString &/*rURL*/,
         const OUString &/*rUserData*/,
-        unsigned int /*nFilterFlags*/,
+        SfxFilterFlags /*nFilterFlags*/,
         SotClipboardFormatId /*nClipboardID*/,
         unsigned int /*nFilterVersion*/)
     {
@@ -78,7 +78,7 @@ protected:
         const OUString &rFilter,
         const OUString &rURL,
         const OUString &rUserData,
-        unsigned int nFilterFlags,
+        SfxFilterFlags nFilterFlags,
         SotClipboardFormatId nClipboardID,
         unsigned int nFilterVersion,
         bool bExport);

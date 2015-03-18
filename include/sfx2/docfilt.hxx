@@ -30,7 +30,6 @@
 #include <sal/types.h>
 #include <sot/formats.hxx>
 #include <sfx2/dllapi.h>
-#include <sfx2/sfxdefs.hxx>
 #include <tools/wldcrd.hxx>
 
 #define SFX_FILTER_STARTPRESENTATION 0x20000000L
@@ -78,13 +77,13 @@ public:
                const OUString& rServiceName );
     ~SfxFilter();
 
-    bool IsAllowedAsTemplate() const { return (nFormatType & SFX_FILTER_TEMPLATE) != 0; }
-    bool IsOwnFormat() const { return (nFormatType & SFX_FILTER_OWN) != 0; }
-    bool IsOwnTemplateFormat() const { return (nFormatType & SFX_FILTER_TEMPLATEPATH) != 0; }
-    bool IsAlienFormat() const { return (nFormatType & SFX_FILTER_ALIEN) != 0; }
-    bool CanImport() const { return (nFormatType & SFX_FILTER_IMPORT) != 0; }
-    bool CanExport() const { return (nFormatType & SFX_FILTER_EXPORT) != 0; }
-    bool IsInternal() const { return (nFormatType & SFX_FILTER_INTERNAL) != 0; }
+    bool IsAllowedAsTemplate() const { return bool(nFormatType & SfxFilterFlags::TEMPLATE); }
+    bool IsOwnFormat() const { return bool(nFormatType & SfxFilterFlags::OWN); }
+    bool IsOwnTemplateFormat() const { return bool(nFormatType & SfxFilterFlags::TEMPLATEPATH); }
+    bool IsAlienFormat() const { return bool(nFormatType & SfxFilterFlags::ALIEN); }
+    bool CanImport() const { return bool(nFormatType & SfxFilterFlags::IMPORT); }
+    bool CanExport() const { return bool(nFormatType & SfxFilterFlags::EXPORT); }
+    bool IsInternal() const { return bool(nFormatType & SfxFilterFlags::INTERNAL); }
     SfxFilterFlags  GetFilterFlags() const  { return nFormatType; }
     const OUString& GetFilterName() const { return maFilterName; }
     const OUString& GetMimeType() const { return aMimeType; }

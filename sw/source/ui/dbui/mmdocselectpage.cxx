@@ -141,7 +141,7 @@ IMPL_LINK(SwMailMergeDocSelectPage, FileSelectHdl, PushButton*, pButton)
                 xFltMgr->appendFilter( pFlt->GetUIName(), sWild );
 
                 // #i40125
-                if(pFlt->GetFilterFlags() & SFX_FILTER_DEFAULT)
+                if(pFlt->GetFilterFlags() & SfxFilterFlags::DEFAULT)
                     xFltMgr->setCurrentFilter( pFlt->GetUIName() ) ;
             }
 

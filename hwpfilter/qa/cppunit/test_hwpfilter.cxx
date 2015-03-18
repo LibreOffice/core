@@ -28,7 +28,7 @@ namespace
 
         virtual bool load(const OUString &,
             const OUString &rURL, const OUString &,
-            unsigned int, SotClipboardFormatId, unsigned int) SAL_OVERRIDE;
+            SfxFilterFlags, SotClipboardFormatId, unsigned int) SAL_OVERRIDE;
 
         void test();
 
@@ -51,7 +51,7 @@ namespace
 
     bool HwpFilterTest::load(const OUString &,
         const OUString &rURL, const OUString &,
-        unsigned int, SotClipboardFormatId, unsigned int)
+        SfxFilterFlags, SotClipboardFormatId, unsigned int)
     {
         uno::Sequence< beans::PropertyValue > aDescriptor(1);
         aDescriptor[0].Name = "URL";

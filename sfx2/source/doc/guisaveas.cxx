@@ -167,18 +167,18 @@ static sal_uInt8 getStoreModeFromSlotName( const OUString& aSlotName )
 }
 
 
-static sal_Int32 getMustFlags( sal_Int8 nStoreMode )
+static SfxFilterFlags getMustFlags( sal_Int8 nStoreMode )
 {
-    return ( SFX_FILTER_EXPORT
-            | ( ( ( nStoreMode & EXPORT_REQUESTED ) && !( nStoreMode & WIDEEXPORT_REQUESTED ) ) ? 0 : SFX_FILTER_IMPORT ) );
+    return ( SfxFilterFlags::EXPORT
+            | ( ( ( nStoreMode & EXPORT_REQUESTED ) && !( nStoreMode & WIDEEXPORT_REQUESTED ) ) ? SfxFilterFlags::NONE : SfxFilterFlags::IMPORT ) );
 }
 
 
-static sal_Int32 getDontFlags( sal_Int8 nStoreMode )
+static SfxFilterFlags getDontFlags( sal_Int8 nStoreMode )
 {
-    return ( SFX_FILTER_INTERNAL
-            | SFX_FILTER_NOTINFILEDLG
-            | ( ( ( nStoreMode & EXPORT_REQUESTED ) && !( nStoreMode & WIDEEXPORT_REQUESTED ) ) ? SFX_FILTER_IMPORT : 0 ) );
+    return ( SfxFilterFlags::INTERNAL
+            | SfxFilterFlags::NOTINFILEDLG
+            | ( ( ( nStoreMode & EXPORT_REQUESTED ) && !( nStoreMode & WIDEEXPORT_REQUESTED ) ) ? SfxFilterFlags::IMPORT : SfxFilterFlags::NONE ) );
 }
 
 
@@ -290,8 +290,8 @@ public:
 
 
     OUString GetDocServiceName();
-    uno::Sequence< beans::PropertyValue > GetDocServiceDefaultFilterCheckFlags( sal_Int32 nMust, sal_Int32 nDont );
-    uno::Sequence< beans::PropertyValue > GetDocServiceAnyFilter( sal_Int32 nMust, sal_Int32 nDont );
+    uno::Sequence< beans::PropertyValue > GetDocServiceDefaultFilterCheckFlags( SfxFilterFlags nMust, SfxFilterFlags nDont );
+    uno::Sequence< beans::PropertyValue > GetDocServiceAnyFilter( SfxFilterFlags nMust, SfxFilterFlags nDont );
     uno::Sequence< beans::PropertyValue > GetPreselectedFilter_Impl( sal_Int8 nStoreMode );
     uno::Sequence< beans::PropertyValue > GetDocServiceDefaultFilter();
 
@@ -510,16 +510,16 @@ uno::Sequence< beans::PropertyValue > ModelData_Impl::GetDocServiceDefaultFilter
 }
 
 
-uno::Sequence< beans::PropertyValue > ModelData_Impl::GetDocServiceDefaultFilterCheckFlags( sal_Int32 nMust,
-                                                                                                sal_Int32 nDont )
+uno::Sequence< beans::PropertyValue > ModelData_Impl::GetDocServiceDefaultFilterCheckFlags( SfxFilterFlags nMust,
+                                                                                            SfxFilterFlags nDont )
 {
     uno::Sequence< beans::PropertyValue > aFilterProps;
     uno::Sequence< beans::PropertyValue > aProps = GetDocServiceDefaultFilter();
     if ( aProps.getLength() )
     {
         ::comphelper::SequenceAsHashMap aFiltHM( aProps );
-        sal_Int32 nFlags = aFiltHM.getUnpackedValueOrDefault("Flags",
-                                                        (sal_Int32)0 );
+        SfxFilterFlags nFlags = static_cast<SfxFilterFlags>(aFiltHM.getUnpackedValueOrDefault("Flags",
+                                                        (sal_Int32)0 ));
         if ( ( ( nFlags & nMust ) == nMust ) && !( nFlags & nDont ) )
             aFilterProps = aProps;
     }
@@ -529,7 +529,7 @@ uno::Sequence< beans::PropertyValue > ModelData_Impl::GetDocServiceDefaultFilter
 
 
 
-uno::Sequence< beans::PropertyValue > ModelData_Impl::GetDocServiceAnyFilter( sal_Int32 nMust, sal_Int32 nDont )
+uno::Sequence< beans::PropertyValue > ModelData_Impl::GetDocServiceAnyFilter( SfxFilterFlags nMust, SfxFilterFlags nDont )
 {
     uno::Sequence< beans::NamedValue > aSearchRequest( 1 );
     aSearchRequest[0].Name = "DocumentService";
@@ -543,8 +543,8 @@ uno::Sequence< beans::PropertyValue > ModelData_Impl::GetPreselectedFilter_Impl(
 {
     uno::Sequence< beans::PropertyValue > aFilterProps;
 
-    sal_Int32 nMust = getMustFlags( nStoreMode );
-    sal_Int32 nDont = getDontFlags( nStoreMode );
+    SfxFilterFlags nMust = getMustFlags( nStoreMode );
+    SfxFilterFlags nDont = getDontFlags( nStoreMode );
 
     if ( nStoreMode & PDFEXPORT_REQUESTED )
     {
@@ -749,7 +749,7 @@ bool hasMacros( const uno::Reference< frame::XModel >& xModel  )
 sal_Int8 ModelData_Impl::CheckFilter( const OUString& aFilterName )
 {
     ::comphelper::SequenceAsHashMap aFiltPropsHM;
-    sal_Int32 nFiltFlags = 0;
+    SfxFilterFlags nFiltFlags = SfxFilterFlags::NONE;
     if ( !aFilterName.isEmpty() )
     {
         // get properties of filter
@@ -758,29 +758,29 @@ sal_Int8 ModelData_Impl::CheckFilter( const OUString& aFilterName )
             m_pOwner->GetFilterConfiguration()->getByName( aFilterName ) >>= aFilterProps;
 
         aFiltPropsHM = ::comphelper::SequenceAsHashMap( aFilterProps );
-        nFiltFlags = aFiltPropsHM.getUnpackedValueOrDefault("Flags", (sal_Int32)0 );
+        nFiltFlags = static_cast<SfxFilterFlags>(aFiltPropsHM.getUnpackedValueOrDefault("Flags", (sal_Int32)0 ));
     }
 
     // only a temporary solution until default filter retrieving feature is implemented
     // then GetDocServiceDefaultFilter() must be used
-    ::comphelper::SequenceAsHashMap aDefFiltPropsHM = GetDocServiceDefaultFilterCheckFlags( 3, 0 );
-    sal_Int32 nDefFiltFlags = aDefFiltPropsHM.getUnpackedValueOrDefault("Flags", (sal_Int32)0 );
+    ::comphelper::SequenceAsHashMap aDefFiltPropsHM = GetDocServiceDefaultFilterCheckFlags( SfxFilterFlags::IMPORT | SfxFilterFlags::EXPORT, SfxFilterFlags::NONE );
+    SfxFilterFlags nDefFiltFlags = static_cast<SfxFilterFlags>(aDefFiltPropsHM.getUnpackedValueOrDefault("Flags", (sal_Int32)0 ));
 
     // if the old filter is not acceptable
     // and there is no default filter or it is not acceptable for requested parameters then proceed with saveAs
-    if ( ( !aFiltPropsHM.size() || !( nFiltFlags & SFX_FILTER_EXPORT ) )
-      && ( !aDefFiltPropsHM.size() || !( nDefFiltFlags & SFX_FILTER_EXPORT ) || nDefFiltFlags & SFX_FILTER_INTERNAL ) )
+    if ( ( !aFiltPropsHM.size() || !( nFiltFlags & SfxFilterFlags::EXPORT ) )
+      && ( !aDefFiltPropsHM.size() || !( nDefFiltFlags & SfxFilterFlags::EXPORT ) || nDefFiltFlags & SfxFilterFlags::INTERNAL ) )
         return STATUS_SAVEAS;
 
     // so at this point there is either an acceptable old filter or default one
-    if ( !aFiltPropsHM.size() || !( nFiltFlags & SFX_FILTER_EXPORT ) )
+    if ( !aFiltPropsHM.size() || !( nFiltFlags & SfxFilterFlags::EXPORT ) )
     {
         // so the default filter must be acceptable
         return STATUS_SAVEAS_STANDARDNAME;
     }
-    else if ( ( !( nFiltFlags & SFX_FILTER_OWN ) || ( nFiltFlags & SFX_FILTER_ALIEN ) )
+    else if ( ( !( nFiltFlags & SfxFilterFlags::OWN ) || ( nFiltFlags & SfxFilterFlags::ALIEN ) )
            && aDefFiltPropsHM.size()
-           && ( nDefFiltFlags & SFX_FILTER_EXPORT ) && !( nDefFiltFlags & SFX_FILTER_INTERNAL ))
+           && ( nDefFiltFlags & SfxFilterFlags::EXPORT ) && !( nDefFiltFlags & SfxFilterFlags::INTERNAL ))
     {
         // the default filter is acceptable and the old filter is alien one
         // so ask to make a saveAs operation
@@ -926,8 +926,8 @@ bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
     OUString aDocServiceName = GetDocServiceName();
     DBG_ASSERT( !aDocServiceName.isEmpty(), "No document service for this module set!" );
 
-    sal_Int32 nMust = getMustFlags( nStoreMode );
-    sal_Int32 nDont = getDontFlags( nStoreMode );
+    SfxFilterFlags nMust = getMustFlags( nStoreMode );
+    SfxFilterFlags nDont = getDontFlags( nStoreMode );
     sfx2::FileDialogHelper::Context eCtxt = sfx2::FileDialogHelper::UNKNOWN_CONTEXT;
 
     if ( ( nStoreMode & EXPORT_REQUESTED ) && !( nStoreMode & WIDEEXPORT_REQUESTED ) )
@@ -1008,9 +1008,9 @@ bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
             m_pOwner->GetFilterConfiguration()->getByName( aOldFilterName ) >>= aOldFilterProps;
 
         ::comphelper::SequenceAsHashMap aOldFiltPropsHM( aOldFilterProps );
-        sal_Int32 nOldFiltFlags = aOldFiltPropsHM.getUnpackedValueOrDefault("Flags", (sal_Int32)0 );
+        SfxFilterFlags nOldFiltFlags = static_cast<SfxFilterFlags>(aOldFiltPropsHM.getUnpackedValueOrDefault("Flags", (sal_Int32)0 ));
 
-        if ( bSetStandardName || ( nOldFiltFlags & nMust ) != nMust || nOldFiltFlags & nDont )
+        if ( bSetStandardName || ( nOldFiltFlags & nMust ) != nMust || bool(nOldFiltFlags & nDont) )
         {
             // the suggested type will be changed, the extension should be adjusted
             aAdjustToType = aPreselectedFilterPropsHM.getUnpackedValueOrDefault(

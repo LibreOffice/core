@@ -1015,7 +1015,7 @@ void InsertFile(SwUnoCrsr* pUnoCrsr, const OUString& rURL,
             pMed->GetItemSet()->Put( SfxStringItem( SID_DOC_BASEURL, sBaseURL ) );
 
         SfxFilterMatcher aMatcher( rFact.GetFilterContainer()->GetName() );
-        ErrCode nErr = aMatcher.GuessFilter(*pMed, &pFilter, SFX_FILTER_VERSION_NONE);
+        ErrCode nErr = aMatcher.GuessFilter(*pMed, &pFilter, SfxFilterFlags::NONE);
         if ( nErr || !pFilter)
             DELETEZ(pMed);
         else

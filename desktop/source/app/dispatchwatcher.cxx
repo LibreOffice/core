@@ -95,9 +95,9 @@ const SfxFilter* impl_lookupExportFilterForUrl( const rtl::OUString& rUrl, const
     sQuery.append(":module=");
     sQuery.append(rFactory); // use long name here !
     sQuery.append(":iflags=");
-    sQuery.append(OUString::number(SFX_FILTER_EXPORT));
+    sQuery.append(OUString::number(static_cast<sal_Int32>(SfxFilterFlags::EXPORT)));
     sQuery.append(":eflags=");
-    sQuery.append(OUString::number(SFX_FILTER_NOTINSTALLED));
+    sQuery.append(OUString::number(static_cast<sal_Int32>(SFX_FILTER_NOTINSTALLED)));
 
     const Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
     const Reference< XContainerQuery > xFilterFactory(
@@ -117,7 +117,7 @@ const SfxFilter* impl_lookupExportFilterForUrl( const rtl::OUString& rUrl, const
             const SfxFilter* const pFilter( SfxFilter::GetFilterByName( aName ) );
             if ( pFilter && pFilter->CanExport() && pFilter->GetWildcard().Matches( rUrl ) )
             {
-                if ( !pBestMatch || ( SFX_FILTER_PREFERED & pFilter->GetFilterFlags() ) )
+                if ( !pBestMatch || ( SfxFilterFlags::PREFERED & pFilter->GetFilterFlags() ) )
                     pBestMatch = pFilter;
             }
         }
@@ -134,7 +134,7 @@ const SfxFilter* impl_getExportFilterFromUrl( const rtl::OUString& rUrl, const r
             UNO_QUERY_THROW );
     const rtl::OUString aTypeName( xTypeDetector->queryTypeByURL( rUrl ) );
 
-    const SfxFilter* pFilter( SfxFilterMatcher( rFactory ).GetFilter4EA( aTypeName, SFX_FILTER_EXPORT ) );
+    const SfxFilter* pFilter( SfxFilterMatcher( rFactory ).GetFilter4EA( aTypeName, SfxFilterFlags::EXPORT ) );
     if ( !pFilter )
         pFilter = impl_lookupExportFilterForUrl( rUrl, rFactory );
     if ( !pFilter )

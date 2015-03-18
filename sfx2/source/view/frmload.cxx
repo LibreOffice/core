@@ -263,7 +263,7 @@ const SfxFilter* SfxFrameLoader_Impl::impl_getFilterFromServiceName_nothrow( con
             UNO_QUERY_THROW );
 
         const SfxFilterMatcher& rMatcher = SfxGetpApp()->GetFilterMatcher();
-        const SfxFilterFlags nMust = SFX_FILTER_IMPORT;
+        const SfxFilterFlags nMust = SfxFilterFlags::IMPORT;
         const SfxFilterFlags nDont = SFX_FILTER_NOTINSTALLED;
 
         Reference < XEnumeration > xEnum( xQuery->createSubSetEnumerationByProperties(
@@ -281,7 +281,7 @@ const SfxFilter* SfxFrameLoader_Impl::impl_getFilterFromServiceName_nothrow( con
 
             SfxFilterFlags nFlags = pFilter->GetFilterFlags();
             if  (   ( ( nFlags & nMust ) == nMust )
-                &&  ( ( nFlags & nDont ) == 0 )
+                &&  ( ( nFlags & nDont ) == SfxFilterFlags::NONE )
                 )
             {
                 return pFilter;

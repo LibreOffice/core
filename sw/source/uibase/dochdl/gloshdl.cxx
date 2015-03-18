@@ -729,7 +729,7 @@ bool SwGlossaryHdl::ImportGlossaries( const OUString& rName )
         boost::scoped_ptr<SfxMedium> pMed(new SfxMedium( rName, StreamMode::READ, 0, 0 ));
         SfxFilterMatcher aMatcher( OUString("swriter") );
         pMed->UseInteractionHandler( true );
-        if (!aMatcher.GuessFilter(*pMed, &pFilter, SFX_FILTER_VERSION_NONE))
+        if (!aMatcher.GuessFilter(*pMed, &pFilter, SfxFilterFlags::NONE))
         {
             SwTextBlocks *pGlossary = NULL;
             pMed->SetFilter( pFilter );
