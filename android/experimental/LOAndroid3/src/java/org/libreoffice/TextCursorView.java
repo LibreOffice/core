@@ -12,10 +12,12 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.RelativeLayout;
 
@@ -29,7 +31,7 @@ import java.util.List;
 /**
  * Text cursor view responsible to show the cursor drawable on the screen.
  */
-public class TextCursorView extends View {
+public class TextCursorView extends View implements View.OnTouchListener {
     private static final String LOGTAG = TextCursorView.class.getSimpleName();
     private static final float CURSOR_WIDTH = 2f;
 
@@ -51,6 +53,10 @@ public class TextCursorView extends View {
     private Paint mGraphicHandleFillPaint = new Paint();
     private float mRadius = 20.0f;
     private boolean mGraphicSelectionVisible;
+    private PointF mTouchStart = new PointF();
+    private PointF mDeltaPoint = new PointF();
+    private boolean mGraphicSelectionMove = false;
+    private LayerView mLayerView;
 
     public TextCursorView(Context context) {
         super(context);
@@ -67,9 +73,12 @@ public class TextCursorView extends View {
         initialize();
     }
 
+    /**
+     * Initialize the selection and cursor view.
+     */
     private void initialize() {
         if (!mInitialized) {
-            postDelayed(cursorAnimation, 500);
+            setOnTouchListener(this);
 
             mCursorPaint.setColor(Color.BLACK);
             mCursorPaint.setAlpha(0xFF);
@@ -86,6 +95,8 @@ public class TextCursorView extends View {
             mGraphicHandleFillPaint.setStyle(Paint.Style.FILL);
             mGraphicHandleFillPaint.setColor(Color.WHITE);
             mGraphicSelectionVisible = false;
+
+            postDelayed(cursorAnimation, 500);
 
             mInitialized = true;
         }
@@ -171,6 +182,12 @@ public class TextCursorView extends View {
 
             canvas.drawCircle(mGraphicScaledSelection.right, mGraphicScaledSelection.bottom, mRadius, mGraphicHandleFillPaint);
             canvas.drawCircle(mGraphicScaledSelection.right, mGraphicScaledSelection.bottom, mRadius, mGraphicSelectionPaint);
+
+            if (mGraphicSelectionMove) {
+                RectF one = new RectF(mGraphicScaledSelection);
+                one.offset(mDeltaPoint.x, mDeltaPoint.y);
+                canvas.drawRect(one, mGraphicSelectionPaint);
+            }
         }
     }
 
@@ -212,6 +229,54 @@ public class TextCursorView extends View {
     public void hideGraphicSelection() {
         mGraphicSelectionVisible = false;
         invalidate();
+    }
+
+    @Override
+    public boolean onTouch(View view, MotionEvent event) {
+        if (mLayerView == null) {
+            mLayerView = LOKitShell.getLayerView();
+            if (mLayerView == null) {
+                return false;
+            }
+        }
+
+        switch (event.getActionMasked()) {
+            case MotionEvent.ACTION_DOWN: {
+                mTouchStart.x = event.getX();
+                mTouchStart.y = event.getY();
+                if (mGraphicSelectionVisible && mGraphicScaledSelection.contains(mTouchStart.x, mTouchStart.y)) {
+                    mGraphicSelectionMove = true;
+                    PointF documentPoint = mLayerView.getLayerClient().convertViewPointToLayerPoint(mTouchStart);
+                    Log.i(LOGTAG, "Down: " + documentPoint);
+                    LOKitShell.sendTouchEvent("GraphicSelectionStart", documentPoint);
+                    return true;
+                }
+            }
+            case MotionEvent.ACTION_UP: {
+                if (mGraphicSelectionMove) {
+                    mGraphicSelectionMove = false;
+                    mTouchStart.offset(mDeltaPoint.x, mDeltaPoint.y);
+                    PointF documentPoint = mLayerView.getLayerClient().convertViewPointToLayerPoint(mTouchStart);
+                    Log.i(LOGTAG, "Up: " + documentPoint);
+                    LOKitShell.sendTouchEvent("GraphicSelectionEnd", documentPoint);
+                    mTouchStart.x = 0.0f;
+                    mTouchStart.y = 0.0f;
+                    mDeltaPoint.x = 0.0f;
+                    mDeltaPoint.y = 0.0f;
+                    invalidate();
+                    return true;
+                }
+            }
+            case MotionEvent.ACTION_MOVE: {
+                if (mGraphicSelectionMove) {
+                    mDeltaPoint.x = event.getX() - mTouchStart.x;
+                    mDeltaPoint.y = event.getY() - mTouchStart.y;
+                    invalidate();
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
 

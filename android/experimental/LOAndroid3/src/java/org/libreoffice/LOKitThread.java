@@ -304,10 +304,14 @@ public class LOKitThread extends Thread {
             mTileProvider.mouseButtonUp(documentCoordinate, 1);
             mTileProvider.mouseButtonDown(documentCoordinate, 2);
             mTileProvider.mouseButtonUp(documentCoordinate, 2);
-        } else { // "SingleTap"
+        } else if (touchType.equals("SingleTap")) {
             mInvalidationHandler.changeStateTo(InvalidationHandler.OverlayState.TRANSITION);
             mTileProvider.mouseButtonDown(documentCoordinate, 1);
             mTileProvider.mouseButtonUp(documentCoordinate, 1);
+        } else if (touchType.equals("GraphicSelectionStart")) {
+            mTileProvider.setGraphicSelectionStart(documentCoordinate);
+        } else if (touchType.equals("GraphicSelectionEnd")) {
+            mTileProvider.setGraphicSelectionEnd(documentCoordinate);
         }
     }
 
