@@ -21,7 +21,7 @@ GlyphCache& GtkCairoTextRender::getPlatformGlyphCache()
 
 cairo_t* GtkCairoTextRender::getCairoContext()
 {
-    return mrParent.getCairoContext();
+    return mrParent.GetCairoContext();
 }
 
 void GtkCairoTextRender::getSurfaceOffset(double& nDX, double& nDY)

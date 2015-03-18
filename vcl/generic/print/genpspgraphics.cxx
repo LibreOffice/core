@@ -1219,6 +1219,11 @@ bool GenPspGraphics::CanResizeCairoSurface() const
     return false;
 }
 
+cairo_t* GenPspGraphics::GetCairoContext() const
+{
+    return NULL;
+}
+
 SystemFontData GenPspGraphics::GetSysFontData( int /* nFallbacklevel */ ) const
 {
     return SystemFontData();

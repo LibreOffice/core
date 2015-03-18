@@ -743,4 +743,9 @@ bool SvpSalGraphics::CanResizeCairoSurface() const
     return false;
 }
 
+cairo_t* SvpSalGraphics::GetCairoContext() const
+{
+    return NULL;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

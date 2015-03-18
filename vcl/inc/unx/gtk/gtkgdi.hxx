@@ -50,12 +50,11 @@ public:
                                                     Rectangle &rNativeBoundingRegion,
                                                     Rectangle &rNativeContentRegion ) SAL_OVERRIDE;
     virtual bool        SupportsCairo() const SAL_OVERRIDE;
+    virtual cairo_t*    GetCairoContext() const SAL_OVERRIDE;
 
     void updateSettings( AllSettings& rSettings );
     static void refreshFontconfig( GtkSettings *pSettings );
     static void signalSettingsNotify( GObject*, GParamSpec *pSpec, gpointer );
-
-    cairo_t* getCairoContext();
 
     void clipRegion(cairo_t* cr);
 

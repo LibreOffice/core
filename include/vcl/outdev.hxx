@@ -235,6 +235,7 @@ class VCLXGraphics;
 class OutDevStateStack;
 
 typedef boost::intrusive_ptr< FontCharMap > FontCharMapPtr;
+typedef struct _cairo cairo_t;
 
 namespace vcl {
     class FontInfo;
@@ -378,6 +379,7 @@ public:
     SystemGraphicsData          GetSystemGfxData() const;
     bool                        SupportsCairo() const;
     bool                        CanResizeCairoSurface() const;
+    cairo_t*                    GetCairoContext() const;
     css::uno::Any               GetSystemGfxDataAny() const;
 
     void                        SetRefPoint();

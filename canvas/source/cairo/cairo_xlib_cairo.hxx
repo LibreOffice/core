@@ -97,6 +97,28 @@ namespace cairo {
         void* getRenderFormat() const { return maSysData.pRenderFormat; }
         long getDrawable() const { return mpPixmap ? mpPixmap->mhDrawable : maSysData.hDrawable; }
     };
+
+    class Gtk3Surface : public Surface
+    {
+        CairoSurfaceSharedPtr mpSurface;
+        int mnWidth;
+        int mnHeight;
+    public:
+        /// takes over ownership of passed cairo_surface
+        explicit Gtk3Surface(const CairoSurfaceSharedPtr& pSurface, int width, int height);
+        /// create surface on subarea of given drawable
+        explicit Gtk3Surface(const OutputDevice& rRefDevice, int x, int y, int width, int height);
+
+        // Surface interface
+        virtual CairoSharedPtr getCairo() const SAL_OVERRIDE;
+        virtual CairoSurfaceSharedPtr getCairoSurface() const SAL_OVERRIDE { return mpSurface; }
+        virtual SurfaceSharedPtr getSimilar( Content aContent, int width, int height ) const SAL_OVERRIDE;
+
+        virtual boost::shared_ptr<VirtualDevice> createVirtualDevice() const SAL_OVERRIDE;
+
+        virtual void Resize(int width, int height) SAL_OVERRIDE;
+        virtual void flush() const SAL_OVERRIDE;
+    };
 }
 
 #endif
