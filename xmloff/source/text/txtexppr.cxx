@@ -27,6 +27,7 @@
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/text/XChapterNumberingSupplier.hpp>
 #include <tools/debug.hxx>
+#include <tools/color.hxx>
 #include <xmloff/txtprmap.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/maptype.hxx>
@@ -658,6 +659,10 @@ void XMLTextExportPropertySetMapper::ContextFilter(
     XMLPropertyState* pRepeatOffsetX = NULL;
     XMLPropertyState* pRepeatOffsetY = NULL;
 
+    // character background and highlight
+    XMLPropertyState* pCharBackground = NULL;
+    XMLPropertyState* pCharHighlight = NULL;
+
     bool bNeedsAnchor = false;
 
     for( ::std::vector< XMLPropertyState >::iterator aIter = rProperties.begin();
@@ -816,6 +821,9 @@ void XMLTextExportPropertySetMapper::ContextFilter(
                     propertyState->mnIndex = -1;
             }
             break;
+
+        case CTF_CHAR_BACKGROUND: pCharBackground = propertyState; break;
+        case CTF_CHAR_HIGHLIGHT: pCharHighlight = propertyState; break;
         }
     }
 
@@ -1117,6 +1125,17 @@ void XMLTextExportPropertySetMapper::ContextFilter(
 
     if( pClipState != NULL && pClip11State != NULL  )
         pClip11State->mnIndex = -1;
+
+    // When both background attributes are available export the visible one
+    if( pCharHighlight && pCharBackground )
+    {
+        sal_uInt32 nColor = COL_TRANSPARENT;
+        pCharHighlight->maValue >>= nColor;
+        if( nColor == COL_TRANSPARENT )
+            pCharHighlight->mnIndex = -1;
+        else
+            pCharBackground->mnIndex = -1;
+    }
 
     SvXMLExportPropertyMapper::ContextFilter(bEnableFoFontFamily, rProperties, rPropSet);
 }
