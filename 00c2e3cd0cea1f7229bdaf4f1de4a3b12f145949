@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a29b11f_234934d1",
+        "filename": "include/vcl/field.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-03-18T22:15:09Z",
+      "side": 1,
+      "message": "OK, it is probably not a bad idea to place a new method into vcl as it may be of general use. But is there any specific reason why did you make it a member of FormatterBase class? \n\nTo me, for example Edit class would be a more appropriate place (as the edit field in affected Calc dialog is a MetricField, which is derived from SpinBox, which is derived from Edit)",
+      "revId": "00c2e3cd0cea1f7229bdaf4f1de4a3b12f145949",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
