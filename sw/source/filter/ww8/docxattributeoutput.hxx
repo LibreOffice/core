@@ -440,13 +440,13 @@ private:
         FontPitch pitch, rtl_TextEncoding encoding );
 
     /**
-     * Translate a color object to the corresponding HighlightColorValues enumaration item
+     * Translate an ico value to the corresponding HighlightColorValues enumaration item
      *
-     * @param[in]   rColor      a color object to translate
+     * @param[in]   nIco      ico value [0..16]
      * @return      color name (e.g. "red"), if color is inside the enumeration's range
      *              empty string, otherwise
     **/
-    OString TransHighlightColor( const Color& rColor );
+    static OString TransHighlightColor( sal_uInt8 nIco );
 protected:
 
     /// Output frames - the implementation.

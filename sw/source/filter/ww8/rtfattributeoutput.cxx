@@ -2475,7 +2475,7 @@ void RtfAttributeOutput::CharHighlight(const SvxBrushItem& rBrush)
     if (!rBrush.GetColor().GetTransparency())
     {
         m_aStyles.append(OOO_STRING_SVTOOLS_RTF_HIGHLIGHT);
-        m_aStyles.append((sal_Int32)m_rExport.GetColor(rBrush.GetColor()));
+        m_aStyles.append(static_cast<sal_Int32>(msfilter::util::TransColToIco(rBrush.GetColor())));
     }
 }
 

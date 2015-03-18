@@ -3471,7 +3471,6 @@ MSWordExportBase::MSWordExportBase( SwDoc *pDocument, SwPaM *pCurrentPam, SwPaM 
     , mpTopNodeOfHdFtPage(0)
     , pBkmks(0)
     , pRedlAuthors(0)
-    , pBmpPal(0)
     , pOLEExp(0)
     , pOCXExp(0)
     , mpTableInfo(new ww8::WW8TableInfo())
@@ -3539,7 +3538,6 @@ MSWordExportBase::MSWordExportBase( SwDoc *pDocument, SwPaM *pCurrentPam, SwPaM 
 
 MSWordExportBase::~MSWordExportBase()
 {
-    delete pBmpPal;
     delete pOLEExp;
     delete pOCXExp;
 }
