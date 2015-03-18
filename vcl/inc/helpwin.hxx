@@ -20,12 +20,13 @@
 #ifndef INCLUDED_VCL_INC_HELPWIN_HXX
 #define INCLUDED_VCL_INC_HELPWIN_HXX
 
+#include <vcl/dllapi.h>
 #include <vcl/floatwin.hxx>
 #include <vcl/timer.hxx>
 
 // - HelpTextWindow -
 
-class HelpTextWindow : public FloatingWindow
+class VCL_DLLPUBLIC HelpTextWindow : public FloatingWindow
 {
 private:
     Rectangle           maHelpArea; // If next Help for the same rectangle w/ same text, then keep window

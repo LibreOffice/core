@@ -37,6 +37,8 @@
 #include <vcl/salbtype.hxx>
 #include <vcl/bmpacc.hxx>
 #include <vcl/help.hxx>
+#include "helpwin.hxx"
+
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <vcldemo-debug.hxx>
@@ -1447,6 +1449,7 @@ class DemoWidgets : public WorkWindow
     VclBox     *mpBox;
     ToolBox    *mpToolbox;
     PushButton *mpButton;
+    HelpTextWindow *pHelpWindow;
 
     Timer       maHelpTimer;
     DECL_LINK  (HelpTimerCb, void *);
@@ -1522,7 +1525,10 @@ IMPL_LINK_NOARG(DemoWidgets,HelpTimerCb)
     Point aPos = GetPosPixel();
 
     aPos.Move(100,100);
-    Help::ShowBalloon( this, aPos, "This is another help balloon text" );
+    OUString aText = "This is a help text test";
+    pHelpWindow = new HelpTextWindow( this, aText, 1 /* balloon */, 0 );
+
+    pHelpWindow->ShowHelp( 3 /* delay none */ );
 
     return 0;
 }
