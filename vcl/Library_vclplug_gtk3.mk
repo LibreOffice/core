@@ -102,6 +102,7 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_gtk3,\
     vcl/unx/gtk3/app/gtk3gtkinst \
     vcl/unx/gtk3/app/gtk3gtksys \
     vcl/unx/gtk3/app/gtk3fpicker \
+    vcl/unx/gtk3/gdi/cairo_gtk3_cairo \
     vcl/unx/gtk3/gdi/gtk3cairotextrender \
     vcl/unx/gtk3/gdi/gtk3gtkprintwrapper \
     vcl/unx/gtk3/gdi/gtk3salnativewidgets-gtk \

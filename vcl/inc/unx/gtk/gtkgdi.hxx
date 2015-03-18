@@ -49,11 +49,16 @@ public:
                                                     const OUString& rCaption,
                                                     Rectangle &rNativeBoundingRegion,
                                                     Rectangle &rNativeContentRegion ) SAL_OVERRIDE;
+    virtual bool        SupportsCairo() const SAL_OVERRIDE;
+    virtual cairo::SurfaceSharedPtr CreateSurface(const cairo::CairoSurfaceSharedPtr& rSurface) const SAL_OVERRIDE;
+    virtual cairo::SurfaceSharedPtr CreateSurface(const OutputDevice& rRefDevice, int x, int y, int width, int height) const SAL_OVERRIDE;
+    void WidgetQueueDraw() const;
+
     void updateSettings( AllSettings& rSettings );
     static void refreshFontconfig( GtkSettings *pSettings );
     static void signalSettingsNotify( GObject*, GParamSpec *pSpec, gpointer );
 
-    cairo_t* getCairoContext();
+    cairo_t* getCairoContext() const;
 
     void clipRegion(cairo_t* cr);
 

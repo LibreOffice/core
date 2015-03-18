@@ -1,0 +1,51 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#ifndef INCLUDED_CANVAS_SOURCE_CAIRO_CAIRO_GTK3_CAIRO_HXX
+#define INCLUDED_CANVAS_SOURCE_CAIRO_CAIRO_GTK3_CAIRO_HXX
+
+#include <sal/config.h>
+
+#include <sal/types.h>
+
+#include <vcl/cairo.hxx>
+
+class GtkSalGraphics;
+class OutputDevice;
+
+namespace cairo {
+
+    class Gtk3Surface : public Surface
+    {
+        const GtkSalGraphics* mpGraphics;
+        cairo_t* cr;
+        CairoSurfaceSharedPtr mpSurface;
+    public:
+        /// takes over ownership of passed cairo_surface
+        explicit Gtk3Surface(const CairoSurfaceSharedPtr& pSurface);
+        /// create surface on subarea of given drawable
+        explicit Gtk3Surface(const GtkSalGraphics* pGraphics, int x, int y, int width, int height);
+
+        // Surface interface
+        virtual CairoSharedPtr getCairo() const SAL_OVERRIDE;
+        virtual CairoSurfaceSharedPtr getCairoSurface() const SAL_OVERRIDE { return mpSurface; }
+        virtual SurfaceSharedPtr getSimilar(int nContentType, int width, int height) const SAL_OVERRIDE;
+
+        virtual boost::shared_ptr<VirtualDevice> createVirtualDevice() const SAL_OVERRIDE;
+
+        virtual void flush() const SAL_OVERRIDE;
+
+        ~Gtk3Surface();
+    };
+
+}
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,6 +17,7 @@
 #include <vcl/settings.hxx>
 #include "fontmanager.hxx"
 #include "gtk3cairotextrender.hxx"
+#include "cairo_gtk3_cairo.hxx"
 
 GtkStyleContext* GtkSalGraphics::mpButtonStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpEntryStyle = NULL;
@@ -1447,6 +1448,27 @@ bool GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
     return false;
 }
 
+bool GtkSalGraphics::SupportsCairo() const
+{
+    return true;
+}
+
+cairo::SurfaceSharedPtr GtkSalGraphics::CreateSurface(const cairo::CairoSurfaceSharedPtr& rSurface) const
+{
+    return cairo::SurfaceSharedPtr(new cairo::Gtk3Surface(rSurface));
+}
+
+cairo::SurfaceSharedPtr GtkSalGraphics::CreateSurface(const OutputDevice& /*rRefDevice*/, int x, int y, int width, int height) const
+{
+    return cairo::SurfaceSharedPtr(new cairo::Gtk3Surface(this, x, y, width, height));
+}
+
+void GtkSalGraphics::WidgetQueueDraw() const
+{
+    //request gtk to sync the entire contents
+    gtk_widget_queue_draw(mpWindow);
+}
+
 static GtkWidget* gCacheWindow;
 static GtkWidget* gDumbContainer;
 
@@ -1551,7 +1573,7 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
     gtk_widget_path_free(path);
 }
 
-cairo_t* GtkSalGraphics::getCairoContext()
+cairo_t* GtkSalGraphics::getCairoContext() const
 {
     return mpFrame->getCairoContext();
 }

@@ -3356,7 +3356,7 @@ gboolean GtkSalFrame::signalCrossing( GtkWidget*, GdkEventCrossing* pEvent, gpoi
 
 #if GTK_CHECK_VERSION(3,0,0)
 
-cairo_t* GtkSalFrame::getCairoContext()
+cairo_t* GtkSalFrame::getCairoContext() const
 {
     basebmp::RawMemorySharedArray data = m_aFrame->getBuffer();
     basegfx::B2IVector size = m_aFrame->getSize();
@@ -3391,7 +3391,9 @@ void GtkSalFrame::damaged (const basegfx::B2IBox& rDamageRect)
     {
         static int frame;
         OString tmp("/tmp/frame" + OString::number(frame++) + ".png");
-        cairo_surface_write_to_png(cairo_get_target(getCairoContext()), tmp.getStr());
+        cairo_t* cr = getCairoContext();
+        cairo_surface_write_to_png(cairo_get_target(cr), tmp.getStr());
+        cairo_destroy(cr);
     }
 
     gtk_widget_queue_draw_area(m_pWindow,
@@ -3408,10 +3410,14 @@ gboolean GtkSalFrame::signalDraw( GtkWidget*, cairo_t *cr, gpointer frame )
 
     cairo_save(cr);
 
-    cairo_surface_t *pSurface = cairo_get_target(pThis->getCairoContext());
+    cairo_t* source = pThis->getCairoContext();
+    cairo_surface_t *pSurface = cairo_get_target(source);
+
     cairo_set_operator( cr, CAIRO_OPERATOR_OVER );
     cairo_set_source_surface(cr, pSurface, 0, 0);
     cairo_paint(cr);
+
+    cairo_destroy(source);
 
     cairo_restore(cr);
 
