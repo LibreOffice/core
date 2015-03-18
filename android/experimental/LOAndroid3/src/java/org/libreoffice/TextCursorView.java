@@ -184,6 +184,18 @@ public class TextCursorView extends View implements View.OnTouchListener {
             canvas.drawCircle(mGraphicScaledSelection.right, mGraphicScaledSelection.bottom, mRadius, mGraphicHandleFillPaint);
             canvas.drawCircle(mGraphicScaledSelection.right, mGraphicScaledSelection.bottom, mRadius, mGraphicSelectionPaint);
 
+            canvas.drawCircle(mGraphicScaledSelection.left, mGraphicScaledSelection.centerY(), mRadius, mGraphicHandleFillPaint);
+            canvas.drawCircle(mGraphicScaledSelection.left, mGraphicScaledSelection.centerY(), mRadius, mGraphicSelectionPaint);
+
+            canvas.drawCircle(mGraphicScaledSelection.right, mGraphicScaledSelection.centerY(), mRadius, mGraphicHandleFillPaint);
+            canvas.drawCircle(mGraphicScaledSelection.right, mGraphicScaledSelection.centerY(), mRadius, mGraphicSelectionPaint);
+
+            canvas.drawCircle(mGraphicScaledSelection.centerX(), mGraphicScaledSelection.top, mRadius, mGraphicHandleFillPaint);
+            canvas.drawCircle(mGraphicScaledSelection.centerX(), mGraphicScaledSelection.top, mRadius, mGraphicSelectionPaint);
+
+            canvas.drawCircle(mGraphicScaledSelection.centerX(), mGraphicScaledSelection.bottom, mRadius, mGraphicHandleFillPaint);
+            canvas.drawCircle(mGraphicScaledSelection.centerX(), mGraphicScaledSelection.bottom, mRadius, mGraphicSelectionPaint);
+
             if (mGraphicSelectionMove) {
                 RectF one = new RectF(mGraphicScaledSelection);
                 one.offset(mDeltaPoint.x, mDeltaPoint.y);
