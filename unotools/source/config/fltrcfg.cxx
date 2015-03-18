@@ -51,6 +51,7 @@ using namespace com::sun::star::uno;
 #define FILTERCFG_USE_ENHANCED_FIELDS   0x100000
 #define FILTERCFG_WORD_WBCTBL           0x200000
 #define FILTERCFG_SMARTART_SHAPE_LOAD   0x400000
+#define FILTERCFG_CHAR_BACKGROUND_TO_HIGHLIGHTING   0x8000000
 
 class SvtAppFilterOptions_Impl : public utl::ConfigItem
 {
@@ -251,7 +252,8 @@ struct SvtFilterOptions_Impl
             FILTERCFG_IMPRESS_LOAD |
             FILTERCFG_IMPRESS_SAVE |
             FILTERCFG_USE_ENHANCED_FIELDS |
-            FILTERCFG_SMARTART_SHAPE_LOAD;
+            FILTERCFG_SMARTART_SHAPE_LOAD |
+            FILTERCFG_CHAR_BACKGROUND_TO_HIGHLIGHTING;
         Load();
     }
 
@@ -322,7 +324,7 @@ const Sequence<OUString>& SvtFilterOptions::GetPropertyNames()
     static Sequence<OUString> aNames;
     if(!aNames.getLength())
     {
-        int nCount = 13;
+        int nCount = 14;
         aNames.realloc(nCount);
         static const char* aPropNames[] =
         {
@@ -338,7 +340,8 @@ const Sequence<OUString>& SvtFilterOptions::GetPropertyNames()
             "Export/EnableExcelPreview",        //  9
             "Export/EnableWordPreview",         // 10
             "Import/ImportWWFieldsAsEnhancedFields", // 11
-            "Import/SmartArtToShapes"           // 12
+            "Import/SmartArtToShapes",          // 12
+            "Export/CharBackgroundToHighlighting"    // 13
         };
         OUString* pNames = aNames.getArray();
         for(int i = 0; i < nCount; i++)
@@ -365,6 +368,7 @@ static sal_uLong lcl_GetFlag(sal_Int32 nProp)
         case 10: nFlag = FILTERCFG_ENABLE_WORD_PREVIEW; break;
         case 11: nFlag = FILTERCFG_USE_ENHANCED_FIELDS; break;
         case 12: nFlag = FILTERCFG_SMARTART_SHAPE_LOAD; break;
+        case 13: nFlag = FILTERCFG_CHAR_BACKGROUND_TO_HIGHLIGHTING; break;
 
         default: OSL_FAIL("illegal value");
     }
@@ -632,6 +636,29 @@ bool SvtFilterOptions::IsEnableCalcPreview() const
 bool SvtFilterOptions::IsEnableWordPreview() const
 {
     return pImp->IsFlag( FILTERCFG_ENABLE_WORD_PREVIEW );
+}
+
+
+bool SvtFilterOptions::IsCharBackground2Highlighting() const
+{
+    return pImp->IsFlag( FILTERCFG_CHAR_BACKGROUND_TO_HIGHLIGHTING );
+}
+
+bool SvtFilterOptions::IsCharBackground2Shading() const
+{
+    return !pImp->IsFlag( FILTERCFG_CHAR_BACKGROUND_TO_HIGHLIGHTING );
+}
+
+void SvtFilterOptions::SetCharBackground2Highlighting()
+{
+    pImp->SetFlag( FILTERCFG_CHAR_BACKGROUND_TO_HIGHLIGHTING, true );
+    SetModified();
+}
+
+void SvtFilterOptions::SetCharBackground2Shading()
+{
+    pImp->SetFlag( FILTERCFG_CHAR_BACKGROUND_TO_HIGHLIGHTING, false );
+    SetModified();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

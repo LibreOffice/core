@@ -87,6 +87,11 @@ public:
     bool IsEnableCalcPreview() const;
     bool IsEnableWordPreview() const;
 
+    bool IsCharBackground2Highlighting() const;
+    bool IsCharBackground2Shading() const;
+    void SetCharBackground2Highlighting();
+    void SetCharBackground2Shading();
+
     static SvtFilterOptions& Get();
 };
 
