@@ -230,6 +230,7 @@ bool VCLWidgets::VisitVarDecl(const VarDecl * pVarDecl) {
         && !startsWith(pVarDecl->getType().getAsString(), "::std::multimap<sal_Int32, OTableWindow *>")
         && !startsWith(pVarDecl->getType().getAsString(), "::std::multimap<sal_Int32, class OTableWindow *>")
         && !startsWith(pVarDecl->getType().getAsString(), "::dbp::OMultiInstanceAutoRegistration< ::dbp::OUnoAutoPilot<")
+        && !startsWith(pVarDecl->getType().getAsString(), "SwSidebarWin_iterator")
         && containsWindowSubclass(pVarDecl->getType()))
     {
         report(
@@ -399,6 +400,9 @@ bool VCLWidgets::VisitFunctionDecl( const FunctionDecl* functionDecl )
         }
     }
     // check dispose method to make sure we are actually disposing all of the VclPtr fields
+    /*
+       Now that we are in the debugging phase this is no longer useful, since we have to break this rule on
+       occassion to make the destruction process work cleanly.
     if (pMethodDecl && pMethodDecl->isInstance() && pMethodDecl->getBody()
         && pMethodDecl->param_size()==0
         && pMethodDecl->getNameAsString() == "dispose"
@@ -458,6 +462,7 @@ bool VCLWidgets::VisitFunctionDecl( const FunctionDecl* functionDecl )
            }
        }
     }
+    */
     return true;
 }
 
@@ -465,6 +470,14 @@ bool VCLWidgets::VisitCXXDeleteExpr(const CXXDeleteExpr *pCXXDeleteExpr)
 {
     if (ignoreLocation(pCXXDeleteExpr)) {
         return true;
+    }
+    const CXXRecordDecl *pPointee = pCXXDeleteExpr->getArgument()->getType()->getPointeeCXXRecordDecl();
+    if (pPointee && isDerivedFromWindow(pPointee)) {
+        report(
+            DiagnosticsEngine::Warning,
+            "calling delete on instance of vcl::Window subclass, must rather call disposeAndClear()",
+            pCXXDeleteExpr->getLocStart())
+          << pCXXDeleteExpr->getSourceRange();
     }
     const ImplicitCastExpr* pImplicitCastExpr = dyn_cast<ImplicitCastExpr>(pCXXDeleteExpr->getArgument());
     if (!pImplicitCastExpr) {

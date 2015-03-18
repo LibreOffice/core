@@ -471,7 +471,7 @@ void SfxDocTplService_Impl::init_Impl()
             aGuard.clear();
             SolarMutexClearableGuard aSolarGuard;
 
-            WaitWindow_Impl* pWin = new WaitWindow_Impl();
+            VclPtr<WaitWindow_Impl> pWin = new WaitWindow_Impl();
 
             aSolarGuard.clear();
             ::osl::ClearableMutexGuard anotherGuard( maMutex );
@@ -481,7 +481,7 @@ void SfxDocTplService_Impl::init_Impl()
             anotherGuard.clear();
             SolarMutexGuard aSecondSolarGuard;
 
-            delete pWin;
+            pWin.disposeAndClear();
         }
         else if ( needsUpdate() )
             // the UI should be shown only on the first update

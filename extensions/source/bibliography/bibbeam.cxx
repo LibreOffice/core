@@ -215,11 +215,9 @@ namespace bib
             m_xToolBarRef->dispose();
 
         if ( pToolBar )
-        {
             pDatMan->SetToolbar(0);
-            pToolBar.disposeAndClear();
-        }
 
+        pToolBar.disposeAndClear();
         pGridWin.disposeAndClear();
         BibSplitWindow::dispose();
     }

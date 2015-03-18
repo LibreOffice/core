@@ -265,7 +265,7 @@ bool OJoinTableView::RemoveConnection( OTableConnection* _pConn,bool _bDelete )
                                                 Any());
     if ( _bDelete )
     {
-        delete _pConn;
+        VclPtr<OTableConnection>(_pConn).disposeAndClear();
     }
 
     return true;
@@ -326,7 +326,7 @@ void OJoinTableView::AddTabWin(const OUString& _rComposedName, const OUString& r
     TTableWindowData::value_type pNewTabWinData(createTableWindowData( _rComposedName, rWinName,rWinName ));
 
     // insert new window in window list
-    OTableWindow* pNewTabWin = createWindow( pNewTabWinData );
+    VclPtr<OTableWindow> pNewTabWin = createWindow( pNewTabWinData );
     if ( pNewTabWin->Init() )
     {
         m_pView->getController().getTableWindowData().push_back( pNewTabWinData);
@@ -348,7 +348,7 @@ void OJoinTableView::AddTabWin(const OUString& _rComposedName, const OUString& r
     else
     {
         pNewTabWin->clearListBox();
-        delete pNewTabWin;
+        pNewTabWin.disposeAndClear();
     }
 }
 
@@ -398,7 +398,7 @@ void OJoinTableView::RemoveTabWin( OTableWindow* pTabWin )
             m_pLastFocusTabWin = NULL;
 
         pTabWin->clearListBox();
-        delete pTabWin;
+        VclPtr<OTableWindow>(pTabWin).disposeAndClear();
 
     }
     if ( (sal_Int32)m_vTableConnection.size() < (nCount-1) ) // if some connections could be removed

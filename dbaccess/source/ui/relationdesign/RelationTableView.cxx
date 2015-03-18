@@ -106,14 +106,14 @@ void ORelationTableView::ReSync()
     for(;aIter != rTabWinDataList.rend();++aIter)
     {
         TTableWindowData::value_type pData = *aIter;
-        OTableWindow* pTabWin = createWindow(pData);
+        VclPtr<OTableWindow> pTabWin = createWindow(pData);
 
         if (!pTabWin->Init())
         {
             // initialisation failed, which means this TabWin is not available, therefore,
             // it should be cleaned up, including its data in the document
             pTabWin->clearListBox();
-            delete pTabWin;
+            pTabWin.disposeAndClear();
             arrInvalidTables.push_back(pData->GetTableName());
 
             rTabWinDataList.erase( ::std::remove(rTabWinDataList.begin(), rTabWinDataList.end(), *aIter), rTabWinDataList.end());
@@ -300,7 +300,7 @@ void ORelationTableView::AddTabWin(const OUString& _rComposedName, const OUStrin
     pNewTabWinData->ShowAll(false);
 
     // link new window into the window list
-    OTableWindow* pNewTabWin = createWindow( pNewTabWinData );
+    VclPtr<OTableWindow> pNewTabWin = createWindow( pNewTabWinData );
     if(pNewTabWin->Init())
     {
         m_pView->getController().getTableWindowData().push_back( pNewTabWinData);
@@ -320,7 +320,7 @@ void ORelationTableView::AddTabWin(const OUString& _rComposedName, const OUStrin
     else
     {
         pNewTabWin->clearListBox();
-        delete pNewTabWin;
+        pNewTabWin.disposeAndClear();
     }
 }
 

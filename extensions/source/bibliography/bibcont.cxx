@@ -93,9 +93,9 @@ void BibWindowContainer::dispose()
 {
     if( pChild )
     {
-        vcl::Window* pDel = GetChild();
+        VclPtr<vcl::Window> pDel = GetChild();
         pChild = NULL;          // prevents GetFocus for child while deleting!
-        delete pDel;
+        pDel.disposeAndClear();
     }
     vcl::Window::dispose();
 }
@@ -142,16 +142,16 @@ void BibBookContainer::dispose()
 
     if( pTopWin )
     {
-        vcl::Window* pDel = pTopWin;
+        VclPtr<vcl::Window> pDel = pTopWin;
         pTopWin = NULL;         // prevents GetFocus for child while deleting!
-        delete pDel;
+        pDel.disposeAndClear();
     }
 
     if( pBottomWin )
     {
-        vcl::Window* pDel = pBottomWin;
+        VclPtr<vcl::Window> pDel = pBottomWin;
         pBottomWin = NULL;      // prevents GetFocus for child while deleting!
-        delete pDel;
+        pDel.disposeAndClear();
     }
 
     CloseBibModul( pBibMod );

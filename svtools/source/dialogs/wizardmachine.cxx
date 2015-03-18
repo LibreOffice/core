@@ -214,7 +214,7 @@ namespace svt
         m_pHelp.disposeAndClear();
 
         for (WizardState i=0; i<m_pImpl->nFirstUnknownPage; ++i)
-            delete GetPage(i);
+            VclPtr<vcl::Window>(GetPage(i)).disposeAndClear();
 
         delete m_pImpl;
         WizardDialog::dispose();

@@ -943,7 +943,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
             bool bPageStylesWithHeaderFooter = false;
 
             vcl::Window *pSourceWindow = 0;
-            CancelableDialog *pProgressDlg = 0;
+            VclPtr<CancelableModelessDialog> pProgressDlg;
 
             if (!IsMergeSilent()) {
                 pSourceWindow = &pSourceShell->GetView().GetEditWin();
@@ -953,7 +953,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                     pProgressDlg = new CreateMonitor( pParent, pParent != pSourceWindow );
                 else {
                     pProgressDlg = new PrintMonitor( pParent, pParent != pSourceWindow, PrintMonitor::MONITOR_TYPE_PRINT );
-                    static_cast<PrintMonitor*>( pProgressDlg )->SetText(pSourceShell->GetView().GetDocShell()->GetTitle(22));
+                    static_cast<PrintMonitor*>( pProgressDlg.get() )->SetText(pSourceShell->GetView().GetDocShell()->GetTitle(22));
                 }
                 pProgressDlg->SetCancelHdl( LINK(this, SwDBManager, PrtCancelHdl) );
                 pProgressDlg->Show();
@@ -1028,7 +1028,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
             int targetDocPageCount = 0;
             if( !IsMergeSilent() && bMergeShell &&
                     lcl_getCountFromResultSet( nDocCount, pImpl->pMergeData->xResultSet ) )
-                static_cast<CreateMonitor*>( pProgressDlg )->SetTotalCount( nDocCount );
+                static_cast<CreateMonitor*>( pProgressDlg.get() )->SetTotalCount( nDocCount );
 
             long nStartRow, nEndRow;
             bool bFreezedLayouts = false;
@@ -1092,9 +1092,9 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                             aTempFileURL.reset( new INetURLObject(aTempFile->GetURL()));
                         if (!IsMergeSilent()) {
                             if( bMergeShell )
-                                static_cast<CreateMonitor*>( pProgressDlg )->SetCurrentPosition( nDocNo );
+                                static_cast<CreateMonitor*>( pProgressDlg.get() )->SetCurrentPosition( nDocNo );
                             else {
-                                PrintMonitor *pPrintMonDlg = static_cast<PrintMonitor*>( pProgressDlg );
+                                PrintMonitor *pPrintMonDlg = static_cast<PrintMonitor*>( pProgressDlg.get() );
                                 pPrintMonDlg->m_pPrinter->SetText( createTempFile ? aTempFileURL->GetBase() : OUString( pSourceDocSh->GetTitle( 22 )));
                                 OUString sStat(SW_RES(STR_STATSTR_LETTER));   // Brief
                                 sStat += " ";
@@ -1409,7 +1409,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                 std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::mem_fun(&SwRootFrm::AllCheckPageDescs));
             }
 
-            DELETEZ( pProgressDlg );
+            pProgressDlg.disposeAndClear();
 
             // save the single output document
             if (bMergeShell)

@@ -1625,13 +1625,8 @@ public:
         m_pParent(pTokenWin)
     {
     }
-<<<<<<< HEAD
-    virtual ~SwTOXButton() { dispose(); }
-    virtual void dispose() SAL_OVERRIDE { m_pParent.clear(); PushButton::dispose(); }
-=======
     virtual ~SwTOXButton() { disposeOnce(); }
-    virtual void dispose() SAL_OVERRIDE { m_pParent.disposeAndClear(); PushButton::dispose(); }
->>>>>>> 82c89a6... vclwidget: only call dispose() once
+    virtual void dispose() SAL_OVERRIDE { m_pParent.clear(); PushButton::dispose(); }
 
     virtual void KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
     virtual void RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
@@ -2772,9 +2767,10 @@ void SwTokenWindow::dispose()
 {
     for (ctrl_iterator it = aControlList.begin(); it != aControlList.end(); ++it)
     {
-        it->SetGetFocusHdl( Link() );
-        it->SetLoseFocusHdl( Link() );
-        it->disposeAndClear();
+        VclPtr<Control> pControl = (*it);
+        pControl->SetGetFocusHdl( Link() );
+        pControl->SetLoseFocusHdl( Link() );
+        pControl.disposeAndClear();
     }
     aControlList.clear();
     disposeBuilder();
@@ -3192,15 +3188,15 @@ void SwTokenWindow::RemoveControl(SwTOXButton* pDel, bool bInternalCall )
     ctrl_iterator itLeft = it, itRight = it;
     --itLeft;
     ++itRight;
-    Control *pLeftEdit = *itLeft;
-    Control *pRightEdit = *itRight;
+    VclPtr<Control> pLeftEdit = *itLeft;
+    VclPtr<Control> pRightEdit = *itRight;
 
-    static_cast<SwTOXEdit*>(pLeftEdit)->SetText(static_cast<SwTOXEdit*>(pLeftEdit)->GetText() +
-                                     static_cast<SwTOXEdit*>(pRightEdit)->GetText());
-    static_cast<SwTOXEdit*>(pLeftEdit)->AdjustSize();
+    static_cast<SwTOXEdit*>(pLeftEdit.get())->SetText(static_cast<SwTOXEdit*>(pLeftEdit.get())->GetText() +
+                                     static_cast<SwTOXEdit*>(pRightEdit.get())->GetText());
+    static_cast<SwTOXEdit*>(pLeftEdit.get())->AdjustSize();
 
     aControlList.erase(itRight);
-    delete pRightEdit;
+    pRightEdit.disposeAndClear();
 
     aControlList.erase(it);
     pActiveCtrl->Hide();

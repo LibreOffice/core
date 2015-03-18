@@ -1698,7 +1698,7 @@ namespace svxform
             else if (sIdent == "instancesremove")
             {
                 sal_uInt16 nId = 0;
-                XFormsPage* pPage = GetCurrentPage( nId );
+                VclPtr<XFormsPage> pPage = GetCurrentPage( nId );
                 if ( pPage )
                 {
                     OUString sInstName = pPage->GetInstanceName();
@@ -1718,7 +1718,7 @@ namespace svxform
                             if ( aFoundPage != aPageListEnd )
                             {
                                 m_aPageList.erase( aFoundPage );
-                                delete pPage;
+                                pPage.disposeAndClear() ;
                                 bDoRemove = true;
                             }
                         }
@@ -2010,10 +2010,10 @@ namespace svxform
         sal_Int32 i, nCount = m_aPageList.size();
         for ( i = 0; i < nCount; ++i )
         {
-            XFormsPage* pPage = m_aPageList[i];
+            VclPtr<XFormsPage> pPage = m_aPageList[i];
             pPage->ClearModel();
             if ( bClearPages )
-                delete pPage;
+                pPage.disposeAndClear();
         }
 
         if ( bClearPages )

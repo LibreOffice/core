@@ -1384,7 +1384,7 @@ void SfxPopupWindow::Delete()
 {
     if ( m_aDeleteLink.IsSet() )
         m_aDeleteLink.Call( this );
-    delete this;
+    VclPtr<SfxPopupWindow>(this).disposeAndClear();
 }
 
 

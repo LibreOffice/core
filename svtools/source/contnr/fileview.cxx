@@ -1589,11 +1589,7 @@ SvtFileView_Impl::SvtFileView_Impl( SvtFileView* pAntiImpl, Reference < XCommand
 SvtFileView_Impl::~SvtFileView_Impl()
 {
     Clear();
-
-    // use temp pointer to prevent access of deleted member (GetFocus())
-    ViewTabListBox_Impl* pTemp = mpView;
-    mpView = NULL;
-    delete pTemp;
+    mpView.disposeAndClear();
 }
 
 

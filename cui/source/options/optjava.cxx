@@ -437,7 +437,7 @@ IMPL_LINK( SvxJavaOptionsPage, DialogClosedHdl, DialogClosedEvent*, pEvt )
 
 IMPL_LINK_NOARG( SvxJavaOptionsPage, ExpertConfigHdl_Impl )
 {
-    CuiAboutConfigTabPage* m_pExpertConfigDlg = new CuiAboutConfigTabPage(this);
+    VclPtr<CuiAboutConfigTabPage> m_pExpertConfigDlg = new CuiAboutConfigTabPage(this);
     m_pExpertConfigDlg->Reset();//initialize and reset function
 
     if( RET_OK == m_pExpertConfigDlg->Execute() )
@@ -445,7 +445,7 @@ IMPL_LINK_NOARG( SvxJavaOptionsPage, ExpertConfigHdl_Impl )
         m_pExpertConfigDlg->FillItemSet();//save changes if there are any
     }
 
-    delete m_pExpertConfigDlg;
+    m_pExpertConfigDlg.disposeAndClear();
     return 0;
 }
 

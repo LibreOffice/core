@@ -286,6 +286,7 @@ void SfxInfoBarContainerWindow::removeInfoBar(SfxInfoBarWindow* pInfoBar)
             break;
         }
     }
+    pInfoBar->disposeOnce();
 
     long nY = 0;
     for (auto it = m_pInfoBars.begin(); it != m_pInfoBars.end(); ++it)

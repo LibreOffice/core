@@ -259,7 +259,7 @@ void OQueryTableView::ReSync()
     for(;aIter != rTabWinDataList.rend();++aIter)
     {
         OQueryTableWindowData* pData = static_cast<OQueryTableWindowData*>(aIter->get());
-        OTableWindow* pTabWin = createWindow(*aIter);
+        VclPtr<OTableWindow> pTabWin = createWindow(*aIter);
 
         // I dont't use ShowTabWin as this adds the window data to the list of documents.
         // This would be bad as I am getting them from there.
@@ -269,7 +269,7 @@ void OQueryTableView::ReSync()
             // The initialisation has gone wrong, this TabWin is not available, so
             // I must clean up the data and the document
             pTabWin->clearListBox();
-            delete pTabWin;
+            pTabWin.disposeAndClear();
             arrInvalidTables.push_back(pData->GetAliasName());
 
             rTabWinDataList.erase( ::std::remove(rTabWinDataList.begin(), rTabWinDataList.end(), *aIter), rTabWinDataList.end());
@@ -926,7 +926,7 @@ bool OQueryTableView::ShowTabWin( OQueryTableWindow* pTabWin, OQueryTabWinUndoAc
             // Initialisation failed
             // (for example when the Connection to the database is not available at the moment)
             pTabWin->clearListBox();
-            delete pTabWin;
+            VclPtr<OQueryTableWindow>(pTabWin).disposeAndClear();
         }
     }
 

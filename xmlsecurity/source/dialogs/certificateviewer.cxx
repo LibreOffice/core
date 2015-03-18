@@ -66,9 +66,9 @@ CertificateViewer::~CertificateViewer()
 
 void CertificateViewer::dispose()
 {
-    delete mpTabCtrl->GetTabPage(mnGeneralId);
-    delete mpTabCtrl->GetTabPage(mnDetailsId);
-    delete mpTabCtrl->GetTabPage(mnPathId);
+    mpTabCtrl->GetTabPage(mnGeneralId)->disposeOnce();
+    mpTabCtrl->GetTabPage(mnDetailsId)->disposeOnce();
+    mpTabCtrl->GetTabPage(mnPathId)->disposeOnce();
     mpTabCtrl.clear();
     TabDialog::dispose();
 }

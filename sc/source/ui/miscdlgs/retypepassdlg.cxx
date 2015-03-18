@@ -71,15 +71,15 @@ void ScRetypePassDlg::DeleteSheets()
 {
     for(auto it = maSheets.begin(); it != maSheets.end(); ++it)
     {
-        vcl::Window *pWindow = (*it);
+        VclPtr<vcl::Window> pWindow = (*it);
         vcl::Window *pChild = pWindow->GetWindow(WINDOW_FIRSTCHILD);
         while (pChild)
         {
-            vcl::Window *pOldChild = pChild;
+            VclPtr<vcl::Window> pOldChild = pChild;
             pChild = pChild->GetWindow(WINDOW_NEXT);
-            delete pOldChild;
+            pOldChild.disposeAndClear();
         }
-        delete pWindow;
+        pWindow.disposeAndClear();
     }
 }
 

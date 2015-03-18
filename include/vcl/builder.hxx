@@ -76,7 +76,7 @@ public:
     short           get_response(const vcl::Window *pWindow) const;
 
     OString         get_by_window(const vcl::Window *pWindow) const;
-    void            delete_by_window(const vcl::Window *pWindow);
+    void            delete_by_window(vcl::Window *pWindow);
 
     //release ownership of pWindow, i.e. don't delete it
     void            drop_ownership(const vcl::Window *pWindow);

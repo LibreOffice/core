@@ -126,7 +126,7 @@ IMPL_LINK( PopupWindowControllerImpl, WindowEventListener, VclSimpleEvent*, pEve
 IMPL_STATIC_LINK( PopupWindowControllerImpl, AsyncDeleteWindowHdl, vcl::Window*, pWindow )
 {
     (void)*pThis;
-    delete pWindow;
+    VclPtr<vcl::Window>(pWindow).disposeAndClear();
     return 0;
 }
 

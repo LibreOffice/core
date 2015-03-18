@@ -494,7 +494,7 @@ void OrganizeDialog::dispose()
     if (m_pTabCtrl)
     {
         for ( sal_uInt16 i = 0; i < m_pTabCtrl->GetPageCount(); i++ )
-            delete m_pTabCtrl->GetTabPage( m_pTabCtrl->GetPageId( i ) );
+            VclPtr<vcl::Window>(m_pTabCtrl->GetTabPage( m_pTabCtrl->GetPageId( i ) )).disposeAndClear();
     }
     m_pTabCtrl.clear();
 

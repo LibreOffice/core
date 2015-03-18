@@ -81,12 +81,12 @@ namespace pcr
         for(long i = nCount-1; i >= 0; --i)
         {
             sal_uInt16 nID = m_aTabControl->GetPageId((sal_uInt16)i);
-            OBrowserPage* pPage = static_cast<OBrowserPage*>(m_aTabControl->GetTabPage(nID));
+            VclPtr<OBrowserPage> pPage = static_cast<OBrowserPage*>(m_aTabControl->GetTabPage(nID));
             if (pPage)
             {
                 pPage->EnableInput(false);
                 m_aTabControl->RemovePage(nID);
-                delete pPage;
+                pPage.disposeAndClear();
             }
         }
         m_aTabControl->Clear();
@@ -243,13 +243,12 @@ namespace pcr
 
     void OPropertyEditor::RemovePage(sal_uInt16 nID)
     {
-        OBrowserPage* pPage = static_cast<OBrowserPage*>(m_aTabControl->GetTabPage(nID));
+        VclPtr<OBrowserPage> pPage = static_cast<OBrowserPage*>(m_aTabControl->GetTabPage(nID));
 
         if (pPage)
             pPage->EnableInput(false);
         m_aTabControl->RemovePage(nID);
-        if (pPage)
-            delete pPage;
+        pPage.disposeAndClear();
     }
 
 

@@ -2097,7 +2097,7 @@ void Window::SetBorderStyle( WindowBorderStyle nBorderStyle )
             // this is a little awkward: some controls (e.g. svtools ProgressBar)
             // cannot avoid getting constructed with WB_BORDER but want to disable
             // borders in case of NWF drawing. So they need a method to remove their border window
-            vcl::Window* pBorderWin = mpWindowImpl->mpBorderWindow;
+            VclPtr<vcl::Window> pBorderWin = mpWindowImpl->mpBorderWindow;
             // remove us as border window's client
             pBorderWin->mpWindowImpl->mpClientWindow = NULL;
             mpWindowImpl->mpBorderWindow = NULL;
@@ -2109,7 +2109,7 @@ void Window::SetBorderStyle( WindowBorderStyle nBorderStyle )
             Size aBorderSize( pBorderWin->GetSizePixel() );
             setPosSizePixel( aBorderPos.X(), aBorderPos.Y(), aBorderSize.Width(), aBorderSize.Height() );
             // release border window
-            delete pBorderWin;
+            pBorderWin.disposeAndClear();
 
             // set new style bits
             SetStyle( GetStyle() & (~WB_BORDER) );

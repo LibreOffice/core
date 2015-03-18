@@ -547,7 +547,7 @@ IMPL_LINK( SmFontTypeDialog, MenuSelectHdl, Menu *, pMenu )
 
     if (pActiveListBox)
     {
-        std::unique_ptr<SmFontDialog> pFontDialog(new SmFontDialog(this, pFontListDev, bHideCheckboxes));
+        ScopedVclPtrInstance<SmFontDialog> pFontDialog(this, pFontListDev, bHideCheckboxes);
 
         pActiveListBox->WriteTo(*pFontDialog);
         if (pFontDialog->Execute() == RET_OK)
@@ -1504,7 +1504,7 @@ IMPL_LINK_NOARG( SmSymbolDialog, SymbolChangeHdl )
 
 IMPL_LINK_NOARG(SmSymbolDialog, EditClickHdl)
 {
-    std::unique_ptr<SmSymDefineDialog> pDialog(new SmSymDefineDialog(this, pFontListDev, rSymbolMgr));
+    ScopedVclPtrInstance<SmSymDefineDialog> pDialog(this, pFontListDev, rSymbolMgr);
 
     // set current symbol and SymbolSet for the new dialog
     const OUString  aSymSetName (m_pSymbolSets->GetSelectEntry()),

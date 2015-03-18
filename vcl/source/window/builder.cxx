@@ -3292,10 +3292,10 @@ void VclBuilder::delete_by_name(const OString& sID)
     }
 }
 
-void VclBuilder::delete_by_window(const vcl::Window *pWindow)
+void VclBuilder::delete_by_window(vcl::Window *pWindow)
 {
     drop_ownership(pWindow);
-    delete pWindow;
+    VclPtr<vcl::Window>(pWindow).disposeAndClear();
 }
 
 void VclBuilder::drop_ownership(const vcl::Window *pWindow)

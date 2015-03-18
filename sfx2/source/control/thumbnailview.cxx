@@ -276,7 +276,7 @@ void ThumbnailView::CalculateItemPositions (bool bScrollBarUsed)
     Size        aWinSize = GetOutputSizePixel();
     size_t      nItemCount = mFilteredItemList.size();
     WinBits     nStyle = GetStyle();
-    ScrollBar*  pDelScrBar = NULL;
+    VclPtr<ScrollBar>  pDelScrBar;
 
     // consider the scrolling
     if ( nStyle & WB_VSCROLL )
@@ -441,7 +441,7 @@ void ThumbnailView::CalculateItemPositions (bool bScrollBarUsed)
     }
 
     // delete ScrollBar
-    delete pDelScrBar;
+    pDelScrBar.disposeAndClear();
 }
 
 size_t ThumbnailView::ImplGetItem( const Point& rPos ) const

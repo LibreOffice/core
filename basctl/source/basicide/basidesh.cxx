@@ -819,7 +819,7 @@ void Shell::RemoveWindow( BaseWindow* pWindow_, bool bDestroy, bool bAllowChange
     {
         if ( !( pWindow_->GetStatus() & BASWIN_INRESCHEDULE ) )
         {
-            delete pWindow_;
+            VclPtr<BaseWindow>(pWindow_).disposeAndClear();
         }
         else
         {

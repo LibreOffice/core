@@ -923,7 +923,7 @@ void ExtensionCmdQueue::Thread::_removeExtension( ::rtl::Reference< ProgressCmdE
 void ExtensionCmdQueue::Thread::_checkForUpdates(
     const std::vector<uno::Reference<deployment::XPackage > > &vExtensionList )
 {
-    UpdateDialog* pUpdateDialog;
+    VclPtr<UpdateDialog> pUpdateDialog;
     std::vector< UpdateData > vData;
 
     const SolarMutexGuard guard;
@@ -970,7 +970,7 @@ void ExtensionCmdQueue::Thread::_checkForUpdates(
     else
         pUpdateDialog->notifyMenubar( false, false ); // check if there updates to be notified via menu bar icon
 
-    delete pUpdateDialog;
+    pUpdateDialog.disposeAndClear();
 }
 
 

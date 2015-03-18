@@ -411,7 +411,8 @@ IMPL_STATIC_LINK( SwSendMailDialog, RemoveThis, Timer*, pTimer )
             (!pThis->m_pImpl->xMailDispatcher.is() ||
                     !pThis->m_pImpl->xMailDispatcher->isRunning()))
     {
-        delete pThis;
+        VclPtr<vcl::Window> a(pThis);
+        a.disposeAndClear();
     }
     else
     {

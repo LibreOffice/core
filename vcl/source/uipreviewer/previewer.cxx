@@ -68,7 +68,7 @@ int UIPreviewApp::Main()
 
     try
     {
-        Dialog *pDialog = new Dialog(DIALOG_NO_PARENT, WB_STDDIALOG | WB_SIZEABLE);
+        VclPtr<Dialog> pDialog = new Dialog(DIALOG_NO_PARENT, WB_STDDIALOG | WB_SIZEABLE);
 
         {
             VclBuilder aBuilder(pDialog, OUString(), uifiles[0]);
@@ -90,7 +90,7 @@ int UIPreviewApp::Main()
             pRealDialog->Execute();
         }
 
-        delete pDialog;
+        pDialog.disposeAndClear();
     }
     catch (const uno::Exception &e)
     {

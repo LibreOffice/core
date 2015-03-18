@@ -89,13 +89,13 @@ MacroSecurity::~MacroSecurity()
 
 void MacroSecurity::dispose()
 {
-    delete m_pTabCtrl->GetTabPage(m_nSecTrustId);
-    delete m_pTabCtrl->GetTabPage(m_nSecLevelId);
+    m_pTabCtrl->GetTabPage(m_nSecTrustId)->disposeOnce();
+    m_pTabCtrl->GetTabPage(m_nSecLevelId)->disposeOnce();
     m_pTabCtrl.clear();
     m_pOkBtn.clear();
     m_pResetBtn.clear();
-    mpLevelTP.clear();
-    mpTrustSrcTP.clear();
+    mpLevelTP.disposeAndClear();
+    mpTrustSrcTP.disposeAndClear();
     TabDialog::dispose();
 }
 

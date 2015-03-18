@@ -693,11 +693,11 @@ void OCopyTableWizard::dispose()
 {
     for ( ;; )
     {
-        TabPage *pPage = GetPage(0);
-        if ( pPage == NULL )
+        VclPtr<TabPage> pPage = GetPage(0);
+        if ( pPage == nullptr )
             break;
         RemovePage( pPage );
-        delete pPage;
+        pPage.disposeAndClear();
     }
 
     if ( m_bDeleteSourceColumns )

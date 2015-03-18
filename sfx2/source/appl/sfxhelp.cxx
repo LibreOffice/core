@@ -402,8 +402,8 @@ SfxHelpWindow_Impl* impl_createHelp(Reference< XFrame2 >& rHelpTask   ,
 
     // create all internal windows and sub frames ...
     Reference< ::com::sun::star::awt::XWindow > xParentWindow = xHelpTask->getContainerWindow();
-    vcl::Window*                                     pParentWindow = VCLUnoHelper::GetWindow( xParentWindow );
-    SfxHelpWindow_Impl*                         pHelpWindow   = new SfxHelpWindow_Impl( xHelpTask, pParentWindow, WB_DOCKBORDER );
+    vcl::Window*                                pParentWindow = VCLUnoHelper::GetWindow( xParentWindow );
+    VclPtr<SfxHelpWindow_Impl>                  pHelpWindow   = new SfxHelpWindow_Impl( xHelpTask, pParentWindow, WB_DOCKBORDER );
     Reference< ::com::sun::star::awt::XWindow > xHelpWindow   = VCLUnoHelper::GetInterface( pHelpWindow );
 
     Reference< XFrame > xHelpContent;
@@ -429,7 +429,7 @@ SfxHelpWindow_Impl* impl_createHelp(Reference< XFrame2 >& rHelpTask   ,
 
     if (!xHelpContent.is())
     {
-        delete pHelpWindow;
+        pHelpWindow.disposeAndClear();
         return NULL;
     }
 

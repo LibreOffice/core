@@ -264,14 +264,14 @@ bool DockingWindow::ImplStartDocking( const Point& rPos )
     mbStartFloat    = mbLastFloatMode;
 
     // calculate FloatingBorder
-    FloatingWindow* pWin;
+    VclPtr<FloatingWindow> pWin;
     if ( mpFloatWin )
         pWin = mpFloatWin;
     else
         pWin = new ImplDockFloatWin( mpImplData->mpParent, mnFloatBits, NULL );
     pWin->GetBorder( mnDockLeft, mnDockTop, mnDockRight, mnDockBottom );
     if ( !mpFloatWin )
-        delete pWin;
+        pWin.disposeAndClear();
 
     Point   aPos    = ImplOutputToFrame( Point() );
     Size    aSize   = Window::GetOutputSizePixel();
