@@ -140,6 +140,10 @@ OfaMSFilterTabPage2::OfaMSFilterTabPage2( vcl::Window* pParent, const SfxItemSet
     pCheckButtonData(0)
 {
     get(m_pCheckLBContainer, "checklbcontainer");
+
+    get( aHighlightingRB, "highlighting");
+    get( aShadingRB,      "shading"     );
+
     Size aControlSize(248, 55);
     aControlSize = LogicToPixel(aControlSize, MAP_APPFONT);
     m_pCheckLBContainer->set_width_request(aControlSize.Width());
@@ -220,6 +224,14 @@ bool OfaMSFilterTabPage2::FillItemSet( SfxItemSet* )
         }
     }
 
+    if( aHighlightingRB->IsValueChangedFromSaved() )
+    {
+        if( aHighlightingRB->IsChecked() )
+            rOpt.SetCharBackground2Highlighting();
+        else
+            rOpt.SetCharBackground2Shading();
+    }
+
     return true;
 }
 
@@ -279,6 +291,13 @@ void OfaMSFilterTabPage2::Reset( const SfxItemSet* )
         }
     }
     m_pCheckLB->SetUpdateMode( true );
+
+    if (rOpt.IsCharBackground2Highlighting())
+        aHighlightingRB->Check(true);
+    else
+        aShadingRB->Check(true);
+
+    aHighlightingRB->SaveValue();
 }
 
 void OfaMSFilterTabPage2::InsertEntry( const OUString& _rTxt, sal_IntPtr _nType )

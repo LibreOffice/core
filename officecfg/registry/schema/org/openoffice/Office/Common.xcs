@@ -4082,6 +4082,13 @@
             </info>
             <value>false</value>
           </prop>
+          <prop oor:name="CharBackgroundToHighlighting" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Specifies if character background is exported as highlighting
+              (and not as shading) when saving to Word document</desc>
+            </info>
+            <value>true</value>
+          </prop>
         </group>
       </group>
       <group oor:name="Graphic">
