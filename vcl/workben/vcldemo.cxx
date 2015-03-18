@@ -37,6 +37,7 @@
 #include <vcl/salbtype.hxx>
 #include <vcl/bmpacc.hxx>
 #include <vcl/help.hxx>
+
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <vcldemo-debug.hxx>
@@ -1448,9 +1449,6 @@ class DemoWidgets : public WorkWindow
     ToolBox    *mpToolbox;
     PushButton *mpButton;
 
-    Timer       maHelpTimer;
-    DECL_LINK  (HelpTimerCb, void *);
-
 public:
     DemoWidgets() :
         WorkWindow(NULL, WB_STDWORK),
@@ -1478,17 +1476,15 @@ public:
         mpButton->Show();
 
         Show();
-
-        maHelpTimer.SetTimeoutHdl(LINK(this,DemoWidgets,HelpTimerCb));
-        maHelpTimer.SetTimeout(1000);
-        maHelpTimer.Start();
     }
+
     virtual ~DemoWidgets()
     {
         delete mpButton;
         delete mpToolbox;
         delete mpBox;
     }
+
     virtual void Paint(const Rectangle&) SAL_OVERRIDE
     {
         Rectangle aWholeSize(Point(0, 0),GetOutputSizePixel());
@@ -1516,17 +1512,44 @@ public:
     }
 };
 
-// Horrible code to manually provoke a help event
-IMPL_LINK_NOARG(DemoWidgets,HelpTimerCb)
+class DemoPopup : public FloatingWindow
 {
-    Point aPos = mpToolbox->GetPosPixel();
-    aPos.Move(10,10);
-    HelpEvent aHelpEvent( aPos, HelpEventMode::BALLOON );
-//    pSVData->maHelpData.mbRequestingHelp = true;
-    mpToolbox->RequestHelp( aHelpEvent );
-//    pSVData->maHelpData.mbRequestingHelp = false;
-    return 0;
-}
+ public:
+    DemoPopup() : FloatingWindow( NULL, WB_SYSTEMWINDOW|WB_TOOLTIPWIN)
+    {
+        SetType( WINDOW_HELPTEXTWINDOW );
+
+        SetOutputSizePixel( Size( 300, 30 ) );
+        SetBackground(Wallpaper(COL_YELLOW));
+
+        Show( true, SHOW_NOACTIVATE );
+        Update();
+    }
+
+    virtual void Paint( const Rectangle& ) SAL_OVERRIDE
+    {
+        // Interestingly in GL mode on Windows, this doesn't render.
+
+        Size aSize = GetOutputSizePixel();
+        Rectangle aTextRect(Point(6, 6), aSize);
+
+        SetTextColor(COL_BLACK);
+        SetTextAlign(ALIGN_TOP);
+        DrawText(aTextRect, "This is a standalone help text test",
+                 TEXT_DRAW_MULTILINE|TEXT_DRAW_WORDBREAK|
+                 TEXT_DRAW_LEFT|TEXT_DRAW_TOP);
+
+        SetLineColor(COL_BLACK);
+        SetFillColor();
+        DrawRect( Rectangle( Point(), aSize ) );
+        aSize.Width() -= 2;
+        aSize.Height() -= 2;
+        Color aColor( GetLineColor() );
+        SetLineColor( ( COL_GRAY ) );
+        DrawRect( Rectangle( Point( 1, 1 ), aSize ) );
+        SetLineColor( aColor );
+    }
+};
 
 class DemoApp : public Application
 {
@@ -1552,7 +1575,7 @@ public:
     {
         try
         {
-            bool bWidgets = false, bThreads = false;
+            bool bWidgets = false, bThreads = false, bPopup = false;
             DemoRenderer aRenderer;
 
             for (sal_Int32 i = 0; i < GetCommandLineParamCount(); i++)
@@ -1577,6 +1600,8 @@ public:
                 }
                 else if (aArg == "--widgets")
                     bWidgets = true;
+                else if (aArg == "--popup")
+                    bPopup = true;
                 else if (aArg == "--threads")
                     bThreads = true;
                 else if (aArg.startsWith("--"))
@@ -1589,11 +1614,14 @@ public:
 
             DemoWin aMainWin(aRenderer, bThreads);
             std::unique_ptr<DemoWidgets> xWidgets;
+            std::unique_ptr<DemoPopup> xPopup;
 
             aMainWin.SetText("Interactive VCL demo #1");
 
             if (bWidgets)
                 xWidgets.reset(new DemoWidgets());
+            else if (bPopup)
+                xPopup.reset(new DemoPopup());
             else
                 aMainWin.Show();
 
