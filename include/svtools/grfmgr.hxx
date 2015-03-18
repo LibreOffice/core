@@ -161,6 +161,8 @@ class SVT_DLLPUBLIC GraphicObject : public SvDataCopyStream
 private:
 
     static GraphicManager*  mpGlobalMgr;
+    // for text-only mode set by FilterOptions = SkipImages
+    static bool             mbSkipImages;
 
     Graphic                 maGraphic;
     GraphicAttr             maAttr;
@@ -508,6 +510,9 @@ public:
 
     // read access
     sal_uLong GetDataChangeTimeStamp() const { return mnDataChangeTimeStamp; }
+
+    static void SetSkipImages(bool bValue) { mbSkipImages = bValue; }
+    static bool IsSkipImages() { return mbSkipImages; }
 };
 
 typedef ::std::vector< GraphicObject* > GraphicObjectList_impl;

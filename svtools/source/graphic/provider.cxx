@@ -391,6 +391,9 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
 
     uno::Sequence< ::beans::PropertyValue > aFilterData;
 
+    if ( GraphicObject::IsSkipImages() )
+        return xRet;
+
     for( sal_Int32 i = 0; ( i < rMediaProperties.getLength() ) && !pIStm && !xRet.is(); ++i )
     {
         const OUString   aName( rMediaProperties[ i ].Name );

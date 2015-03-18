@@ -4278,9 +4278,12 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
 
             if ( bGraphic )
             {
-                pRet = ImportGraphic( rSt, aSet, aObjData );        // SJ: #68396# is no longer true (fixed in ppt2000)
-                ApplyAttributes( rSt, aSet, aObjData );
-                pRet->SetMergedItemSet(aSet);
+                if ( !GraphicObject::IsSkipImages() )
+                {
+                    pRet = ImportGraphic( rSt, aSet, aObjData );        // SJ: #68396# is no longer true (fixed in ppt2000)
+                    ApplyAttributes( rSt, aSet, aObjData );
+                    pRet->SetMergedItemSet(aSet);
+                }
             }
             else if ( aObjData.eShapeType == mso_sptLine && !( GetPropertyValue( DFF_Prop_fc3DLightFace ) & 8 ) )
             {

@@ -46,6 +46,7 @@ using com::sun::star::container::XNameContainer;
 using com::sun::star::beans::XPropertySet;
 
 GraphicManager* GraphicObject::mpGlobalMgr = NULL;
+bool GraphicObject::mbSkipImages = false;
 
 struct GrfSimpleCacheObj
 {

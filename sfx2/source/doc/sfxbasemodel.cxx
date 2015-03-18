@@ -76,6 +76,7 @@
 #include <svtools/transfer.hxx>
 #include <svtools/ehdl.hxx>
 #include <svtools/sfxecode.hxx>
+#include <svtools/grfmgr.hxx>
 #include <rtl/strbuf.hxx>
 #include <framework/configimporter.hxx>
 #include <framework/interaction.hxx>
@@ -115,6 +116,7 @@
 #include <sfx2/DocumentMetadataAccess.hxx>
 
 #include <sfx2/sfxresid.hxx>
+#include <sfx2/sfxsids.hrc>
 
 
 //  namespaces
@@ -1855,9 +1857,19 @@ void SAL_CALL SfxBaseModel::load(   const Sequence< beans::PropertyValue >& seqA
     SFX_ITEMSET_ARG( pMedium->GetItemSet(), pSalvageItem, SfxStringItem, SID_DOC_SALVAGE, false );
     bool bSalvage = pSalvageItem ? sal_True : sal_False;
 
+    // skip images (for faster text extraction with some filters)?
+
+    SFX_ITEMSET_ARG( pMedium->GetItemSet(), pFilterOptionsItem, SfxStringItem, SID_FILE_FILTEROPTIONS, false );
+    bool bSkipImages = pFilterOptionsItem && pFilterOptionsItem->GetValue() == "SkipImages" ? sal_True : sal_False;
+
     // load document
+
+    if (bSkipImages) GraphicObject::SetSkipImages(true);
+
     if ( !m_pData->m_pObjectShell->DoLoad(pMedium) )
         nError=ERRCODE_IO_GENERAL;
+
+    if (bSkipImages) GraphicObject::SetSkipImages(false);
 
     // QUESTION: if the following happens outside of DoLoad, something important is missing there!
     Reference< task::XInteractionHandler > xHandler = pMedium->GetInteractionHandler();
