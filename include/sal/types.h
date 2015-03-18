@@ -235,9 +235,7 @@ typedef void *                   sal_Handle;
 #define SAL_MAX_SIZE        SAL_MAX_UINT64
 #endif
 
-#if defined(SAL_W32) || defined(SAL_UNX)
-#   define SAL_MAX_ENUM 0x7fffffff
-#endif
+#define SAL_MAX_ENUM 0x7fffffff
 
 #if defined(_MSC_VER) || defined(__MINGW32__)
 #   define SAL_DLLPUBLIC_EXPORT    __declspec(dllexport)
