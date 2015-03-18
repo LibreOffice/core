@@ -220,7 +220,7 @@ public:
         : DdeTopic( pShell->GetTitle(SFX_TITLE_FULLNAME) ), pSh( pShell )
     {}
 
-    virtual DdeData* Get( sal_uIntPtr ) SAL_OVERRIDE;
+    virtual DdeData* Get( SotClipboardFormatId ) SAL_OVERRIDE;
     virtual bool Put( const DdeData* ) SAL_OVERRIDE;
     virtual bool Execute( const OUString* ) SAL_OVERRIDE;
     virtual bool StartAdviseLoop() SAL_OVERRIDE;
@@ -529,7 +529,7 @@ DdeService* SfxApplication::GetDdeService()
 
 #if defined WNT
 
-DdeData* SfxDdeDocTopic_Impl::Get( sal_uIntPtr nFormat )
+DdeData* SfxDdeDocTopic_Impl::Get(SotClipboardFormatId nFormat)
 {
     OUString sMimeType( SotExchange::GetFormatMimeType( nFormat ));
     ::com::sun::star::uno::Any aValue;
