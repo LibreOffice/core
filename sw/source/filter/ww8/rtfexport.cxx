@@ -931,12 +931,31 @@ void RtfExport::InsColorLine(const SvxBoxItem& rBox)
     if (rBox.GetRight() && pLine != rBox.GetRight())
         InsColor(rBox.GetRight()->GetColor());
 }
+
 void RtfExport::OutColorTable()
 {
     // Build the table from rPool since the colors provided to
     // RtfAttributeOutput callbacks are too late.
     sal_uInt32 nMaxItem;
     const SfxItemPool& rPool = pDoc->GetAttrPool();
+
+    // MSO Word uses a default color table with 16 colors (which is used e.g. for highlighting)
+    InsColor(COL_BLACK);
+    InsColor(COL_LIGHTBLUE);
+    InsColor(COL_LIGHTCYAN);
+    InsColor(COL_LIGHTGREEN);
+    InsColor(COL_LIGHTMAGENTA);
+    InsColor(COL_LIGHTRED);
+    InsColor(COL_YELLOW);
+    InsColor(COL_WHITE);
+    InsColor(COL_BLUE);
+    InsColor(COL_CYAN);
+    InsColor(COL_GREEN);
+    InsColor(COL_MAGENTA);
+    InsColor(COL_RED);
+    InsColor(COL_BROWN);
+    InsColor(COL_GRAY);
+    InsColor(COL_LIGHTGRAY);
 
     // char color
     {
@@ -976,7 +995,7 @@ void RtfExport::OutColorTable()
     // background color
     static const sal_uInt16 aBrushIds[] =
     {
-        RES_BACKGROUND, RES_CHRATR_BACKGROUND, RES_CHRATR_HIGHLIGHT, 0
+        RES_BACKGROUND, RES_CHRATR_BACKGROUND, 0
     };
 
     for (const sal_uInt16* pIds = aBrushIds; *pIds; ++pIds)

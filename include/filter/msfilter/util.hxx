@@ -146,6 +146,15 @@ MSFILTER_DLLPUBLIC MSO_SPT GETVMLShapeType(const OString& aType);
  */
 MSFILTER_DLLPUBLIC bool HasTextBoxContent(sal_uInt32 nShapeType);
 
+/**
+ * Convert the input color value to an ico value (0..16)
+ *
+ * @param[in]   rCol       input color for conversion
+ *
+ * @return                 ico value [0..16]
+**/
+MSFILTER_DLLPUBLIC sal_uInt8 TransColToIco( const Color& rCol );
+
 }
 
 }

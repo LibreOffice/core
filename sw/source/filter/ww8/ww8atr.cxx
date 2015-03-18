@@ -1286,7 +1286,7 @@ void WW8AttributeOutput::CharHighlight( const SvxBrushItem& rBrush )
 {
     if( m_rWW8Export.bWrtWW8 && rBrush.GetColor() != COL_TRANSPARENT )
     {
-        sal_uInt8 nColor = m_rWW8Export.TransCol( rBrush.GetColor() );
+        sal_uInt8 nColor = msfilter::util::TransColToIco( rBrush.GetColor() );
         // sprmCHighlight
         m_rWW8Export.InsUInt16( NS_sprm::LN_CHighlight );
         m_rWW8Export.pO->push_back( nColor );
@@ -1605,54 +1605,6 @@ void WW8AttributeOutput::CharEmphasisMark( const SvxEmphasisMarkItem& rEmphasisM
     }
 }
 
-// TransCol uebersetzt SW-Farben in WW. Heraus kommt die bei WW fuer
-// Text- und Hintergrundfarbe benutzte Codierung.
-// Gibt es keine direkte Entsprechung, dann wird versucht, eine moeglichst
-// aehnliche WW-Farbe zu finden.
-// return: 5-Bit-Wert ( 0..16 )
-sal_uInt8 WW8Export::TransCol( const Color& rCol )
-{
-    sal_uInt8 nCol = 0;      // ->Auto
-    switch( rCol.GetColor() )
-    {
-    case COL_BLACK:         nCol = 1;   break;
-    case COL_BLUE:          nCol = 9;   break;
-    case COL_GREEN:         nCol = 11;  break;
-    case COL_CYAN:          nCol = 10;  break;
-    case COL_RED:           nCol = 13;  break;
-    case COL_MAGENTA:       nCol = 12;  break;
-    case COL_BROWN:         nCol = 14;  break;
-    case COL_GRAY:          nCol = 15;  break;
-    case COL_LIGHTGRAY:     nCol = 16;  break;
-    case COL_LIGHTBLUE:     nCol = 2;   break;
-    case COL_LIGHTGREEN:    nCol = 4;   break;
-    case COL_LIGHTCYAN:     nCol = 3;   break;
-    case COL_LIGHTRED:      nCol = 6;   break;
-    case COL_LIGHTMAGENTA:  nCol = 5;   break;
-    case COL_YELLOW:        nCol = 7;   break;
-    case COL_WHITE:         nCol = 8;   break;
-    case COL_AUTO:          nCol = 0;   break;
-
-    default:
-        if( !pBmpPal )
-        {
-            pBmpPal = new BitmapPalette( 16 );
-            static const ColorData aColArr[ 16 ] = {
-                COL_BLACK,      COL_LIGHTBLUE,  COL_LIGHTCYAN,  COL_LIGHTGREEN,
-                COL_LIGHTMAGENTA,COL_LIGHTRED,  COL_YELLOW,     COL_WHITE,
-                COL_BLUE,       COL_CYAN,       COL_GREEN,      COL_MAGENTA,
-                COL_RED,        COL_BROWN,      COL_GRAY,       COL_LIGHTGRAY
-            };
-
-            for( sal_uInt16 i = 0; i < 16; ++i )
-                pBmpPal->operator[]( i ) = Color( aColArr[ i ] );
-        }
-        nCol = static_cast< sal_uInt8 >(pBmpPal->GetBestIndex( rCol ) + 1);
-        break;
-    }
-    return nCol;
-}
-
 // TransBrush uebersetzt SW-Brushes in WW. Heraus kommt WW8_SHD.
 // Nicht-Standardfarben des SW werden noch nicht in die
 // Misch-Werte ( 0 .. 95% ) vom WW uebersetzt.
@@ -1666,7 +1618,7 @@ bool WW8Export::TransBrush(const Color& rCol, WW8_SHD& rShd)
     else
     {
         rShd.SetFore( 0);
-        rShd.SetBack( TransCol( rCol ) );
+        rShd.SetBack( msfilter::util::TransColToIco( rCol ) );
         rShd.SetStyle( bWrtWW8, 0 );
     }
     return !rCol.GetTransparency();
@@ -1686,7 +1638,7 @@ void WW8AttributeOutput::CharColor( const SvxColorItem& rColor )
     else
         m_rWW8Export.pO->push_back( 98 );
 
-    sal_uInt8 nColor = m_rWW8Export.TransCol( rColor.GetValue() );
+    sal_uInt8 nColor = msfilter::util::TransColToIco( rColor.GetValue() );
     m_rWW8Export.pO->push_back( nColor );
 
     if ( m_rWW8Export.bWrtWW8 && nColor )
@@ -4388,7 +4340,7 @@ void WW8Export::Out_BorderLine(ww::bytes& rO, const SvxBorderLine* pLine,
     if( pLine && pLine->GetBorderLineStyle() != table::BorderLineStyle::NONE )
     {
         aBrcVer9 = TranslateBorderLine( *pLine, nDist, bShadow );
-        sal_uInt8 ico = TransCol( msfilter::util::BGRToRGB(aBrcVer9.cv()) );
+        sal_uInt8 ico = msfilter::util::TransColToIco( msfilter::util::BGRToRGB(aBrcVer9.cv()) );
         aBrcVer8 = WW8_BRC( aBrcVer9.dptLineWidth(), aBrcVer9.brcType(), ico,
             aBrcVer9.dptSpace(), aBrcVer9.fShadow(), aBrcVer9.fFrame() );
     }

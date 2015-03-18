@@ -32,6 +32,7 @@ public:
     void testCharHighlight();
     void testCharHighlightBody();
     void testMSCharBackgroundEditing();
+    void testCharBackgroundToHighlighting();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testSwappedOutImageExport);
@@ -40,6 +41,7 @@ public:
     CPPUNIT_TEST(testGraphicShape);
     CPPUNIT_TEST(testCharHighlight);
     CPPUNIT_TEST(testMSCharBackgroundEditing);
+    CPPUNIT_TEST(testCharBackgroundToHighlighting);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -576,6 +578,77 @@ void Test::testMSCharBackgroundEditing()
                 CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(nBackColor), getProperty<sal_Int32>(xRun,"CharHighlight"));
                 CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(COL_TRANSPARENT), getProperty<sal_Int32>(xRun,"CharBackColor"));
             }
+        }
+    }
+}
+
+void Test::testCharBackgroundToHighlighting()
+{
+    // MSO highlighting has less kind of values so let's see how LO character background is converted
+    // to these values
+
+    const char* aFilterNames[] = {
+        "Rich Text Format",
+        "MS Word 97",
+        "Office Open XML Text",
+    };
+
+    for( size_t nFilter = 0; nFilter < SAL_N_ELEMENTS(aFilterNames); ++nFilter )
+    {
+        if (mxComponent.is())
+            mxComponent->dispose();
+        mxComponent = loadFromDesktop(getURLFromSrc("/sw/qa/extras/globalfilter/data/char_background.odt"),
+                                      "com.sun.star.text.TextDocument");
+
+        const OString sFailedMessage = OString("Failed on filter: ") + aFilterNames[nFilter];
+
+
+        SvtFilterOptions& rOpt = SvtFilterOptions::Get();
+        rOpt.SetCharBackground2Highlighting();
+
+        // Export the document and import again for a check
+        uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+
+        utl::MediaDescriptor aMediaDescriptor;
+        aMediaDescriptor["FilterName"] <<= OUString::createFromAscii(aFilterNames[nFilter]);
+
+        utl::TempFile aTempFile;
+        aTempFile.EnableKillingFile();
+        xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+        uno::Reference< lang::XComponent > xComponent(xStorable, uno::UNO_QUERY);
+        xComponent->dispose();
+        mxComponent = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.text.TextDocument");
+
+        // Check highlight color
+        const uno::Reference< text::XTextRange > xPara = getParagraph(1);
+        for( int nRun = 1; nRun <= 20; ++nRun )
+        {
+            const uno::Reference<beans::XPropertySet> xRun(getRun(xPara,nRun), uno::UNO_QUERY);
+            sal_Int32 nHighlightColor = 0;
+            switch( nRun )
+            {
+                case 1: nHighlightColor = 0x000000; break; //black
+                case 2: nHighlightColor = 0xffff00; break; //yellow
+                case 3: nHighlightColor = 0xff00ff; break; //magenta
+                case 4: nHighlightColor = 0x00ffff; break; //cyan
+                case 5: nHighlightColor = 0xffff00; break; //yellow
+                case 6: nHighlightColor = 0xff0000; break; //red
+                case 7: nHighlightColor = 0x0000ff; break; //blue
+                case 8: nHighlightColor = 0x00ff00; break; //green
+                case 9: nHighlightColor = 0x008000; break; //dark green
+                case 10: nHighlightColor = 0x800080; break; //dark magenta
+                case 11: nHighlightColor = 0x000080; break; //dark blue
+                case 12: nHighlightColor = 0x000000; break; //black
+                case 13: nHighlightColor = 0x808000; break; //dark yellow
+                case 14: nHighlightColor = 0x808080; break; //dark gray
+                case 15: nHighlightColor = 0x000000; break; //white
+                case 16: nHighlightColor = 0xff0000; break; //red
+                case 17: nHighlightColor = 0xC0C0C0; break; //light gray
+                case 18: nHighlightColor = 0x800000; break; //dark red
+                case 19: nHighlightColor = 0x008080; break; //dark cyan
+                case 20: nHighlightColor = 0xffffff; break; //white
+            }
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), nHighlightColor, getProperty<sal_Int32>(xRun,"CharHighlight"));
         }
     }
 }

@@ -463,7 +463,6 @@ public:
     std::stack< sal_Int32 > m_aCurrentCharPropStarts; ///< To remember the position in a run.
     WW8_WrtBookmarks* pBkmks;
     WW8_WrtRedlineAuthor* pRedlAuthors;
-    BitmapPalette* pBmpPal;
     boost::shared_ptr<NfKeywordTable> pKeyMap;
     SvxMSExportOLEObjects* pOLEExp;
     SwMSConvertControls* pOCXExp;
@@ -1096,7 +1095,6 @@ public:
     void Out_SwFmtTableBox( ww::bytes& rO, const SvxBoxItem * rBox );
     void Out_CellRangeBorders(const SvxBoxItem * pBox, sal_uInt8 nStart,
         sal_uInt8 nLimit);
-    sal_uInt8 TransCol( const Color& rCol );
     bool TransBrush(const Color& rCol, WW8_SHD& rShd);
     WW8_BRCVer9 TranslateBorderLine(const ::editeng::SvxBorderLine& pLine,
         sal_uInt16 nDist, bool bShadow);

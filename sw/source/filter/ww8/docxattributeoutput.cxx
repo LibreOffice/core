@@ -5786,26 +5786,26 @@ void DocxAttributeOutput::EmbedFontStyle( const OUString& name, int tag, FontFam
         FSEND );
 }
 
-OString DocxAttributeOutput::TransHighlightColor( const Color& rColor )
+OString DocxAttributeOutput::TransHighlightColor( sal_uInt8 nIco )
 {
-    switch (rColor.GetColor())
+    switch (nIco)
     {
-        case 0x000000: return OString("black"); break;
-        case 0x0000ff: return OString("blue"); break;
-        case 0x00ffff: return OString("cyan"); break;
-        case 0x00ff00: return OString("green"); break;
-        case 0xff00ff: return OString("magenta"); break;
-        case 0xff0000: return OString("red"); break;
-        case 0xffff00: return OString("yellow"); break;
-        case 0xffffff: return OString("white"); break;
-        case 0x000080: return OString("darkBlue"); break;
-        case 0x008080: return OString("darkCyan"); break;
-        case 0x008000: return OString("darkGreen"); break;
-        case 0x800080: return OString("darkMagenta"); break;
-        case 0x800000: return OString("darkRed"); break;
-        case 0x808000: return OString("darkYellow"); break;
-        case 0x808080: return OString("darkGray"); break;
-        case 0xC0C0C0: return OString("lightGray"); break;
+        case 1: return OString("black"); break;
+        case 2: return OString("blue"); break;
+        case 3: return OString("cyan"); break;
+        case 4: return OString("green"); break;
+        case 5: return OString("magenta"); break;
+        case 6: return OString("red"); break;
+        case 7: return OString("yellow"); break;
+        case 8: return OString("white"); break;
+        case 9: return OString("darkBlue"); break;
+        case 10: return OString("darkCyan"); break;
+        case 11: return OString("darkGreen"); break;
+        case 12: return OString("darkMagenta"); break;
+        case 13: return OString("darkRed"); break;
+        case 14: return OString("darkYellow"); break;
+        case 15: return OString("darkGray"); break;
+        case 16: return OString("lightGray"); break;
         default: return OString(); break;
     }
 }
@@ -6411,7 +6411,7 @@ void DocxAttributeOutput::CharBorder(
 
 void DocxAttributeOutput::CharHighlight( const SvxBrushItem& rHighlight )
 {
-    const OString sColor = TransHighlightColor( rHighlight.GetColor() );
+    const OString sColor = TransHighlightColor( msfilter::util::TransColToIco(rHighlight.GetColor()) );
     if ( !sColor.isEmpty() )
     {
         m_pSerializer->singleElementNS( XML_w, XML_highlight,
