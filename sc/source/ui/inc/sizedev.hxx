@@ -27,17 +27,17 @@ class ScDocShell;
 
 class ScSizeDeviceProvider
 {
-    OutputDevice*   pDevice;
-    bool            bOwner;
-    double          nPPTX;
-    double          nPPTY;
-    MapMode         aOldMapMode;
+    VclPtr<OutputDevice> pDevice;
+    bool                 bOwner;
+    double               nPPTX;
+    double               nPPTY;
+    MapMode              aOldMapMode;
 
 public:
                 ScSizeDeviceProvider( ScDocShell* pDocSh );
                 ~ScSizeDeviceProvider();
 
-    OutputDevice*   GetDevice() const   { return pDevice; }
+    OutputDevice*   GetDevice() const   { return pDevice.get(); }
     double          GetPPTX() const     { return nPPTX; }
     double          GetPPTY() const     { return nPPTY; }
     bool            IsPrinter() const   { return !bOwner; }

@@ -146,7 +146,7 @@ void DrawDocShell::SetPrinter(SfxPrinter *pNewPrinter)
 
     if ( mpPrinter && mbOwnPrinter && (mpPrinter != pNewPrinter) )
     {
-        delete mpPrinter;
+        mpPrinter.disposeAndClear();
     }
 
     mpPrinter = pNewPrinter;
@@ -204,11 +204,11 @@ void DrawDocShell::UpdateRefDevice()
     if( mpDoc )
     {
         // Determine the device for which the output will be formatted.
-        OutputDevice* pRefDevice = NULL;
+        VclPtr< OutputDevice > pRefDevice;
         switch (mpDoc->GetPrinterIndependentLayout())
         {
             case ::com::sun::star::document::PrinterIndependentLayout::DISABLED:
-                pRefDevice = mpPrinter;
+                pRefDevice = mpPrinter.get();
                 break;
 
             case ::com::sun::star::document::PrinterIndependentLayout::ENABLED:
@@ -224,7 +224,7 @@ void DrawDocShell::UpdateRefDevice()
                 pRefDevice = mpPrinter;
                 break;
         }
-        mpDoc->SetRefDevice( pRefDevice );
+        mpDoc->SetRefDevice( pRefDevice.get() );
 
         ::sd::Outliner* pOutl = mpDoc->GetOutliner( false );
 

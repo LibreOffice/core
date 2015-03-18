@@ -55,8 +55,8 @@ DocumentDeviceManager::DocumentDeviceManager( SwDoc& i_rSwdoc ) : m_rDoc( i_rSwd
 SfxPrinter* DocumentDeviceManager::getPrinter(/*[in]*/ bool bCreate ) const
 {
     SfxPrinter* pRet = 0;
-    if ( !bCreate ||  mpPrt )
-        pRet =  mpPrt;
+    if ( !bCreate || mpPrt )
+        pRet = mpPrt;
     else
         pRet = &CreatePrinter_();
 
@@ -65,10 +65,10 @@ SfxPrinter* DocumentDeviceManager::getPrinter(/*[in]*/ bool bCreate ) const
 
 void DocumentDeviceManager::setPrinter(/*[in]*/ SfxPrinter *pP,/*[in]*/ bool bDeleteOld,/*[in]*/ bool bCallPrtDataChanged )
 {
-    if ( pP !=  mpPrt )
+    if ( pP != mpPrt )
     {
         if ( bDeleteOld )
-            delete  mpPrt;
+            mpPrt.disposeAndClear();
          mpPrt = pP;
 
         // our printer should always use TWIP. Don't rely on this being set in SwViewShell::InitPrt, there
@@ -78,7 +78,7 @@ void DocumentDeviceManager::setPrinter(/*[in]*/ SfxPrinter *pP,/*[in]*/ bool bDe
         {
             MapMode aMapMode( mpPrt->GetMapMode() );
             aMapMode.SetMapUnit( MAP_TWIP );
-             mpPrt->SetMapMode( aMapMode );
+            mpPrt->SetMapMode( aMapMode );
         }
 
         if ( m_rDoc.getIDocumentDrawModelAccess().GetDrawModel() && !m_rDoc.GetDocumentSettingManager().get( DocumentSettingId::USE_VIRTUAL_DEVICE ) )
@@ -105,10 +105,10 @@ VirtualDevice* DocumentDeviceManager::getVirtualDevice(/*[in]*/ bool bCreate ) c
 
 void DocumentDeviceManager::setVirtualDevice(/*[in]*/ VirtualDevice* pVd,/*[in]*/ bool bDeleteOld, /*[in]*/ bool )
 {
-    if ( mpVirDev != pVd )
+    if ( mpVirDev.get() != pVd )
     {
         if ( bDeleteOld )
-            delete mpVirDev;
+            mpVirDev.disposeAndClear();
         mpVirDev = pVd;
 
         if ( m_rDoc.getIDocumentDrawModelAccess().GetDrawModel() && m_rDoc.GetDocumentSettingManager().get( DocumentSettingId::USE_VIRTUAL_DEVICE ) )
@@ -193,7 +193,7 @@ void DocumentDeviceManager::setJobsetup(/*[in]*/ const JobSetup &rJobSetup )
             }
         }
         else
-            delete mpPrt, mpPrt = 0;
+            mpPrt.disposeAndClear();
     }
 
     if( !mpPrt )
@@ -247,8 +247,8 @@ void DocumentDeviceManager::setPrintData(/*[in]*/ const SwPrintData& rPrtData )
 DocumentDeviceManager::~DocumentDeviceManager()
 {
     delete mpPrtData;
-    delete mpVirDev;
-    DELETEZ( mpPrt );
+    mpVirDev.disposeAndClear();
+    mpPrt.disposeAndClear();
 }
 
 VirtualDevice& DocumentDeviceManager::CreateVirtualDevice_() const
@@ -292,7 +292,7 @@ SfxPrinter& DocumentDeviceManager::CreatePrinter_() const
 
     SfxPrinter* pNewPrt = new SfxPrinter( pSet );
     const_cast<DocumentDeviceManager*>(this)->setPrinter( pNewPrt, true, true );
-    return *mpPrt;
+    return *mpPrt.get();
 }
 
 void DocumentDeviceManager::PrtDataChanged()

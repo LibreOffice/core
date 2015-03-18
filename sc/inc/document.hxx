@@ -285,8 +285,8 @@ private:
     ScFieldEditEngine*  pEditEngine;                    // uses pEditPool from xPoolHelper
     ScNoteEditEngine*   pNoteEngine;                    // uses pEditPool from xPoolHelper
     SfxObjectShell*     pShell;
-    SfxPrinter*         pPrinter;
-    VirtualDevice*      pVirtualDevice_100th_mm;
+    VclPtr<SfxPrinter>    pPrinter;
+    VclPtr<VirtualDevice> pVirtualDevice_100th_mm;
     ScDrawLayer*        pDrawLayer;                     // SdrModel
     rtl::Reference<XColorList> pColorList;
     ScValidationDataList* pValidationList;              // validity

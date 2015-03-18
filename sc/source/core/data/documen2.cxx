@@ -417,7 +417,7 @@ ScDocument::~ScDocument()
     delete pChartCollection;
     DeleteDrawLayer();
     delete pFormatExchangeList;
-    delete pPrinter;
+    pPrinter.disposeAndClear();
     ImplDeleteOptions();
     delete pConsolidateDlgData;
     delete pClipData;
@@ -426,7 +426,7 @@ ScDocument::~ScDocument()
     delete pEditEngine;
     delete pNoteEngine;
     delete pChangeViewSettings;         // and delete
-    delete pVirtualDevice_100th_mm;
+    pVirtualDevice_100th_mm.disposeAndClear();
 
     delete pDPCollection;
 

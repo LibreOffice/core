@@ -141,9 +141,9 @@ private:
         void adjustForHyperlinkInPDF(Point aURLStart, OutputDevice* pDev);
     };
 
-    OutputDevice* mpDev;        // Device
-    OutputDevice* mpRefDevice;  // printer if used for preview
-    OutputDevice* pFmtDevice;   // reference for text formatting
+    VclPtr<OutputDevice> mpDev;        // Device
+    VclPtr<OutputDevice> mpRefDevice;  // printer if used for preview
+    VclPtr<OutputDevice> pFmtDevice;   // reference for text formatting
     ScTableInfo& mrTabInfo;
     RowInfo* pRowInfo;          // Info block
     SCSIZE nArrCount;           // occupied lines in info block

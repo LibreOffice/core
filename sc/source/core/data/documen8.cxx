@@ -149,7 +149,7 @@ SfxPrinter* ScDocument::GetPrinter(bool bCreateIfNotExist)
 
 void ScDocument::SetPrinter( SfxPrinter* pNewPrinter )
 {
-    if ( pNewPrinter == pPrinter )
+    if ( pNewPrinter == pPrinter.get() )
     {
         //  #i6706# SetPrinter is called with the same printer again if
         //  the JobSetup has changed. In that case just call UpdateDrawPrinter
@@ -158,11 +158,11 @@ void ScDocument::SetPrinter( SfxPrinter* pNewPrinter )
     }
     else
     {
-        SfxPrinter* pOld = pPrinter;
+        VclPtr<SfxPrinter> pOld = pPrinter;
         pPrinter = pNewPrinter;
         UpdateDrawPrinter();
         pPrinter->SetDigitLanguage( SC_MOD()->GetOptDigitLanguage() );
-        delete pOld;
+        pOld.disposeAndClear();
     }
     InvalidateTextWidth(NULL, NULL, false);     // in both cases
 }

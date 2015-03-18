@@ -144,7 +144,7 @@ protected:
         in the sense that it does not represent a printer.  The pointer may
         be NULL when the virtual device could not be created.
     */
-    OutputDevice*           mpVirtualRefDevice;
+    VclPtr< OutputDevice >  mpVirtualRefDevice;
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 

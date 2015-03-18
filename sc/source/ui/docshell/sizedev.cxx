@@ -55,7 +55,7 @@ ScSizeDeviceProvider::ScSizeDeviceProvider( ScDocShell* pDocSh )
 ScSizeDeviceProvider::~ScSizeDeviceProvider()
 {
     if (bOwner)
-        delete pDevice;
+        pDevice.disposeAndClear();
     else
         pDevice->SetMapMode( aOldMapMode );
 }

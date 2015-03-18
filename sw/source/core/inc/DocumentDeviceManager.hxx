@@ -22,7 +22,7 @@
 #include <IDocumentDeviceAccess.hxx>
 #include <boost/utility.hpp>
 #include <sal/types.h>
-
+#include <vcl/vclptr.hxx>
 
 class SwDoc;
 class SfxPrinter;
@@ -72,8 +72,8 @@ private:
                                 invalidations and notifications. */
 
     SwDoc& m_rDoc;
-    SfxPrinter* mpPrt;
-    VirtualDevice* mpVirDev;
+    VclPtr<SfxPrinter> mpPrt;
+    VclPtr<VirtualDevice> mpVirDev;
     SwPrintData* mpPrtData;
 };
 

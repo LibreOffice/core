@@ -531,7 +531,7 @@ SmPrinterAccess::SmPrinterAccess( SmDocShell &rDocShell )
             }
         }
     }
-    if ( 0 != (pRefDev = rDocShell.GetRefDev()) && pPrinter != pRefDev )
+    if ( !!(pRefDev = rDocShell.GetRefDev()) && pPrinter.get() != pRefDev.get() )
     {
         pRefDev->Push( PushFlags::MAPMODE );
         if ( SFX_CREATE_MODE_EMBEDDED == rDocShell.GetCreateMode() )
@@ -616,7 +616,7 @@ OutputDevice* SmDocShell::GetRefDev()
 
 void SmDocShell::SetPrinter( SfxPrinter *pNew )
 {
-    delete pPrinter;
+    pPrinter.disposeAndClear();
     pPrinter = pNew;    //Transfer ownership
     pPrinter->SetMapMode( MapMode(MAP_100TH_MM) );
     SetFormulaArranged(false);
@@ -693,7 +693,7 @@ SmDocShell::~SmDocShell()
     delete pEditEngine;
     SfxItemPool::Free(pEditEngineItemPool);
     delete pTree;
-    delete pPrinter;
+    pPrinter.disposeAndClear();
 }
 
 bool SmDocShell::ConvertFrom(SfxMedium &rMedium)

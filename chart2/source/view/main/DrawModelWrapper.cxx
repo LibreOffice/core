@@ -150,7 +150,8 @@ DrawModelWrapper::DrawModelWrapper( const uno::Reference<uno::XComponentContext>
     OutputDevice* pDefaultDevice = rOutliner.GetRefDevice();
     if( !pDefaultDevice )
         pDefaultDevice = Application::GetDefaultDevice();
-    m_pRefDevice.reset(new VirtualDevice(*pDefaultDevice));
+    m_pRefDevice.disposeAndClear();
+    m_pRefDevice = new VirtualDevice(*pDefaultDevice);
     MapMode aMapMode = m_pRefDevice->GetMapMode();
     aMapMode.SetMapUnit(MAP_100TH_MM);
     m_pRefDevice->SetMapMode(aMapMode);
@@ -176,6 +177,7 @@ DrawModelWrapper::~DrawModelWrapper()
         }
         SfxItemPool::Free(m_pChartItemPool);
     }
+    m_pRefDevice.disposeAndClear();
 }
 
 uno::Reference< uno::XInterface > DrawModelWrapper

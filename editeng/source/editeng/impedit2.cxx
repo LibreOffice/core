@@ -172,7 +172,7 @@ ImpEditEngine::~ImpEditEngine()
     bDowning = true;
     SetUpdateMode( false );
 
-    delete pVirtDev;
+    pVirtDev.disposeAndClear();
     delete pEmptyItemSet;
     delete pUndoManager;
     delete pTextRanger;
@@ -180,14 +180,14 @@ ImpEditEngine::~ImpEditEngine()
     delete pColorConfig;
     delete pCTLOptions;
     if ( bOwnerOfRefDev )
-        delete pRefDev;
+        pRefDev.disposeAndClear();
     delete pSpellInfo;
 }
 
 void ImpEditEngine::SetRefDevice( OutputDevice* pRef )
 {
     if ( bOwnerOfRefDev )
-        delete pRefDev;
+        pRefDev.disposeAndClear();
 
     if ( !pRef )
     {
