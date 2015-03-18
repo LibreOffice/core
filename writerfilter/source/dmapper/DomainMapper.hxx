@@ -170,8 +170,6 @@ private:
     OUString getBracketStringFromEnum(const sal_Int32 nIntValue, const bool bIsPrefix = true);
     com::sun::star::style::TabAlign getTabAlignFromValue(const sal_Int32 nIntValue);
     sal_Unicode getFillCharFromValue(const sal_Int32 nIntValue);
-    sal_Int32 mnBackgroundColor;
-    bool mbIsHighlightSet;
     bool mbIsSplitPara;
     boost::scoped_ptr< GraphicZOrderHelper > zOrderHelper;
 };

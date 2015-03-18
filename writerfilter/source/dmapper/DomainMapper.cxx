@@ -102,7 +102,7 @@ LoggedProperties(dmapper_logger, "DomainMapper"),
 LoggedTable(dmapper_logger, "DomainMapper"),
 LoggedStream(dmapper_logger, "DomainMapper"),
     m_pImpl( new DomainMapper_Impl( *this, xContext, xModel, eDocumentType, xInsertTextRange, !rMediaDesc.getUnpackedValueOrDefault("InsertMode", false))),
-    mnBackgroundColor(0), mbIsHighlightSet(false), mbIsSplitPara(false)
+    mbIsSplitPara(false)
 {
     // #i24363# tab stops relative to indent
     m_pImpl->SetDocumentSettingsProperty(
@@ -1412,13 +1412,18 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
         break;
     case NS_ooxml::LN_EG_RPrBase_highlight:
         {
-            sal_Int32 nColor = 0;
-            if( (mbIsHighlightSet = getColorFromId(nIntValue, nColor)) )
-                rContext->Insert(PROP_CHAR_HIGHLIGHT, uno::makeAny( nColor ));
-            else if (mnBackgroundColor)
-                rContext->Insert(PROP_CHAR_BACK_COLOR, uno::makeAny( mnBackgroundColor ));
-            else
-                rContext->Insert(PROP_CHAR_BACK_COLOR, uno::makeAny( nIntValue ));
+            // OOXML import uses an ID
+            if( IsOOXMLImport() )
+            {
+                sal_Int32 nColor = 0;
+                if( getColorFromId(nIntValue, nColor) )
+                    rContext->Insert(PROP_CHAR_HIGHLIGHT, uno::makeAny( nColor ));
+            }
+            // RTF import uses the actual color value
+            else if( IsRTFImport() )
+            {
+                rContext->Insert(PROP_CHAR_HIGHLIGHT, uno::makeAny( nIntValue ));
+            }
         }
         break;
     case NS_ooxml::LN_EG_RPrBase_em:

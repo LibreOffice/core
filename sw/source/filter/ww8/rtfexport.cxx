@@ -976,7 +976,7 @@ void RtfExport::OutColorTable()
     // background color
     static const sal_uInt16 aBrushIds[] =
     {
-        RES_BACKGROUND, RES_CHRATR_BACKGROUND, 0
+        RES_BACKGROUND, RES_CHRATR_BACKGROUND, RES_CHRATR_HIGHLIGHT, 0
     };
 
     for (const sal_uInt16* pIds = aBrushIds; *pIds; ++pIds)
