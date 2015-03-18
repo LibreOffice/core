@@ -2336,6 +2336,9 @@ void GtkSalFrame::SetScreen( unsigned int nNewScreen, int eType, Rectangle *pSiz
         if( !(m_nStyle & SAL_FRAME_STYLE_SIZEABLE) )
             gtk_window_set_resizable( GTK_WINDOW(m_pWindow), TRUE );
         gtk_window_resize( GTK_WINDOW( m_pWindow ), maGeometry.nWidth, maGeometry.nHeight );
+        //I wonder if we should instead leave maGeometry alone and rely on
+        //configure-event to trigger signalConfigure and set it there
+        AllocateFrame();
     }
 
     gtk_window_move( GTK_WINDOW( m_pWindow ), maGeometry.nX, maGeometry.nY );
