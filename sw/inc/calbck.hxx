@@ -64,11 +64,11 @@ class SfxHint;
 
 class SwModify;
 class SwClient;
-class SwClientIter;
 template<typename E, typename S> class SwIterator;
 
 namespace sw
 {
+    class ClientIteratorBase;
     struct LegacyModifyHint SAL_FINAL: SfxHint
     {
         LegacyModifyHint(const SfxPoolItem* pOld, const SfxPoolItem* pNew) : m_pOld(pOld), m_pNew(pNew) {};
@@ -80,7 +80,7 @@ namespace sw
     {
         friend class ::SwModify;
         friend class ::SwClient;
-        friend class ::SwClientIter;
+        friend class ::sw::ClientIteratorBase;
         private:
             WriterListener* m_pLeft;
             WriterListener* m_pRight; ///< double-linked list of other clients
@@ -99,7 +99,7 @@ class SW_DLLPUBLIC SwClient : ::sw::WriterListener
 {
     // avoids making the details of the linked list and the callback method public
     friend class SwModify;
-    friend class SwClientIter;
+    friend class sw::ClientIteratorBase;
 
     SwModify *pRegisteredIn;        ///< event source
 
@@ -243,60 +243,62 @@ protected:
         { if(m_pToTell) m_pToTell->SwClientNotifyCall(rModify, rHint); }
 };
 
-class SwClientIter SAL_FINAL : public sw::Ring<SwClientIter>
+namespace sw
 {
-    friend SwModify;
-    //friend SwClient* SwModify::Remove(SwClient*);
-    template<typename E, typename S> friend class SwIterator; ///< for typed interation
-
-    const SwModify& m_rRoot;
-
-    // the current object in an iteration
-    SwClient* m_pCurrent;
-
-    SwClientIter( const SwModify& rModify )
-        : m_rRoot(rModify)
+    class ClientIteratorBase SAL_FINAL : public sw::Ring< ::sw::ClientIteratorBase >
     {
-        MoveTo(our_pClientIters);
-        our_pClientIters = this;
-        m_pCurrent = m_pPosition = const_cast<SwClient*>(m_rRoot.GetDepends());
-    }
-    // in case the current object is already removed, the next object in the list
-    // is marked down to become the current object in the next step
-    // this is necessary because iteration requires access to members of the current object
-    SwClient* m_pPosition;
-    SwClient* GetLeftOfPos() { return static_cast<SwClient*>(m_pPosition->m_pLeft); }
-    SwClient* GetRighOfPos() { return static_cast<SwClient*>(m_pPosition->m_pRight); }
-    SwClient* GoStart()
-    {
-        if((m_pPosition = const_cast<SwClient*>(m_rRoot.GetDepends())))
-            while( m_pPosition->m_pLeft )
-                m_pPosition = static_cast<SwClient*>(m_pPosition->m_pLeft);
-        return m_pCurrent = m_pPosition;
-    }
-    const SwModify& GetModify() const { return m_rRoot; }
+        friend SwModify;
+        template<typename E, typename S> friend class ::SwIterator; ///< for typed interation
 
-    static SW_DLLPUBLIC SwClientIter* our_pClientIters;
+        const SwModify& m_rRoot;
 
-public:
-    ~SwClientIter() SAL_OVERRIDE
-    {
-        assert(our_pClientIters);
-        if(our_pClientIters == this)
-            our_pClientIters = unique() ? nullptr : GetNextInRing();
-        MoveTo(nullptr);
-    }
-    // return "true" if an object was removed from a client chain in iteration
-    // adding objects to a client chain in iteration is forbidden
-    // SwModify::Add() asserts this
-    bool IsChanged() const { return m_pPosition != m_pCurrent; }
-};
+        // the current object in an iteration
+        SwClient* m_pCurrent;
+
+        ClientIteratorBase( const SwModify& rModify )
+            : m_rRoot(rModify)
+        {
+            MoveTo(our_pClientIters);
+            our_pClientIters = this;
+            m_pCurrent = m_pPosition = const_cast<SwClient*>(m_rRoot.GetDepends());
+        }
+        // in case the current object is already removed, the next object in the list
+        // is marked down to become the current object in the next step
+        // this is necessary because iteration requires access to members of the current object
+        SwClient* m_pPosition;
+        SwClient* GetLeftOfPos() { return static_cast<SwClient*>(m_pPosition->m_pLeft); }
+        SwClient* GetRighOfPos() { return static_cast<SwClient*>(m_pPosition->m_pRight); }
+        SwClient* GoStart()
+        {
+            if((m_pPosition = const_cast<SwClient*>(m_rRoot.GetDepends())))
+                while( m_pPosition->m_pLeft )
+                    m_pPosition = static_cast<SwClient*>(m_pPosition->m_pLeft);
+            return m_pCurrent = m_pPosition;
+        }
+        const SwModify& GetModify() const { return m_rRoot; }
+
+        static SW_DLLPUBLIC ClientIteratorBase* our_pClientIters;
+
+    public:
+        ~ClientIteratorBase() SAL_OVERRIDE
+        {
+            assert(our_pClientIters);
+            if(our_pClientIters == this)
+                our_pClientIters = unique() ? nullptr : GetNextInRing();
+            MoveTo(nullptr);
+        }
+        // return "true" if an object was removed from a client chain in iteration
+        // adding objects to a client chain in iteration is forbidden
+        // SwModify::Add() asserts this
+        bool IsChanged() const { return m_pPosition != m_pCurrent; }
+    };
+}
 
 template< typename TElementType, typename TSource > class SwIterator SAL_FINAL
 {
     static_assert(std::is_base_of<SwClient,TElementType>::value, "TElementType needs to be derived from SwClient");
     static_assert(std::is_base_of<SwModify,TSource>::value, "TSource needs to be derived from SwModify");
-    SwClientIter aClientIter;
+    sw::ClientIteratorBase aClientIter;
 public:
 
     SwIterator( const TSource& rSrc ) : aClientIter(rSrc) {}
@@ -341,7 +343,7 @@ public:
 template< typename TSource > class SwIterator<SwClient, TSource>
 {
     static_assert(std::is_base_of<SwModify,TSource>::value, "TSource needs to be derived from SwModify");
-    SwClientIter aClientIter;
+    sw::ClientIteratorBase aClientIter;
 public:
     SwIterator( const TSource& rSrc ) : aClientIter(rSrc) {}
     SwClient* First()

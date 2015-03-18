@@ -148,9 +148,9 @@ void SwModify::Add( SwClient* pDepend )
     if(pDepend->pRegisteredIn != this )
     {
 #if OSL_DEBUG_LEVEL > 0
-        if(SwClientIter::our_pClientIters)
+        if(sw::ClientIteratorBase::our_pClientIters)
         {
-            for(auto& rIter : SwClientIter::our_pClientIters->GetRingContainer())
+            for(auto& rIter : sw::ClientIteratorBase::our_pClientIters->GetRingContainer())
             {
                 OSL_ENSURE( &rIter.GetModify() != pRoot, "Client added to active ClientIter" );
             }
@@ -201,10 +201,10 @@ SwClient* SwModify::Remove( SwClient* pDepend )
         if( pR )
             pR->m_pLeft = pL;
 
-        // update ClientIters
-        if(SwClientIter::our_pClientIters)
+        // update ClientIterators
+        if(sw::ClientIteratorBase::our_pClientIters)
         {
-            for(auto& rIter : SwClientIter::our_pClientIters->GetRingContainer())
+            for(auto& rIter : sw::ClientIteratorBase::our_pClientIters->GetRingContainer())
             {
                 if( rIter.m_pCurrent == pDepend || rIter.m_pPosition == pDepend )
                 {
@@ -259,5 +259,5 @@ void SwModify::CheckCaching( const sal_uInt16 nWhich )
     }
 }
 
-SwClientIter* SwClientIter::our_pClientIters = nullptr;
+sw::ClientIteratorBase* sw::ClientIteratorBase::our_pClientIters = nullptr;
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
