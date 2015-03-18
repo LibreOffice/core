@@ -286,6 +286,8 @@ namespace sw
             // adding objects to a client chain in iteration is forbidden
             // SwModify::Add() asserts this
             bool IsChanged() const { return m_pPosition != m_pCurrent; }
+            // ensures the iterator to point at a current client
+            SwClient* Sync() { return m_pCurrent = m_pPosition; }
     };
 }
 
@@ -294,7 +296,6 @@ template< typename TElementType, typename TSource > class SwIterator SAL_FINAL :
     static_assert(std::is_base_of<SwClient,TElementType>::value, "TElementType needs to be derived from SwClient");
     static_assert(std::is_base_of<SwModify,TSource>::value, "TSource needs to be derived from SwModify");
 public:
-
     SwIterator( const TSource& rSrc ) : sw::ClientIteratorBase(rSrc) {}
     TElementType* First()
     {
@@ -309,11 +310,11 @@ public:
         if(!m_pPosition)
             m_pPosition = const_cast<SwClient*>(m_rRoot.GetDepends());
         if(!m_pPosition)
-            return PTR_CAST(TElementType,m_pCurrent = nullptr);
+            return PTR_CAST(TElementType,Sync());
         while(GetRightOfPos())
             m_pPosition = GetRightOfPos();
         if(m_pPosition->IsA(TYPE(TElementType)))
-            return PTR_CAST(TElementType,m_pCurrent = m_pPosition);
+            return PTR_CAST(TElementType,Sync());
         return Previous();
     }
     TElementType* Next()
@@ -322,14 +323,14 @@ public:
             m_pPosition = GetRightOfPos();
         while(m_pPosition && !m_pPosition->IsA( TYPE(TElementType) ) )
             m_pPosition = GetRightOfPos();
-        return PTR_CAST(TElementType,m_pCurrent = m_pPosition);
+        return PTR_CAST(TElementType,Sync());
     }
     TElementType* Previous()
     {
         m_pPosition = GetLeftOfPos();
         while(m_pPosition && !m_pPosition->IsA( TYPE(TElementType) ) )
             m_pPosition = GetLeftOfPos();
-        return PTR_CAST(TElementType,m_pCurrent = m_pPosition);
+        return PTR_CAST(TElementType,Sync());
     }
     using sw::ClientIteratorBase::IsChanged;
 };
@@ -349,18 +350,18 @@ public:
             return m_pCurrent = nullptr;
         while(GetRightOfPos())
             m_pPosition = GetRightOfPos();
-        return m_pCurrent = m_pPosition;
+        return Sync();
     }
     SwClient* Next()
     {
         if( m_pPosition == m_pCurrent )
             m_pPosition = GetRightOfPos();
-        return m_pCurrent = m_pPosition;
+        return Sync();
     }
     SwClient* Previous()
     {
         m_pPosition = GetLeftOfPos();
-        return m_pCurrent = m_pPosition;
+        return Sync();
     }
     using sw::ClientIteratorBase::IsChanged;
 };
