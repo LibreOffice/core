@@ -567,8 +567,6 @@ SalLayout* CairoTextRender::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackL
 SystemFontData CairoTextRender::GetSysFontData( int nFallbackLevel ) const
 {
     SystemFontData aSysFontData;
-    aSysFontData.nSize = sizeof( SystemFontData );
-    aSysFontData.nFontId = 0;
 
     if (nFallbackLevel >= MAX_FALLBACK) nFallbackLevel = MAX_FALLBACK - 1;
     if (nFallbackLevel < 0 ) nFallbackLevel = 0;
