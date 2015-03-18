@@ -385,7 +385,7 @@ DdePoke::DdePoke( DdeConnection& d, const OUString& i, const OUString& rData,
                   long n )
     : DdeTransaction( d, i, n )
 {
-    aDdeData = DdeData( (void*) rData.getStr(), sizeof(sal_Unicode) * (rData.getLength()), CF_TEXT );
+    aDdeData = DdeData( (void*) rData.getStr(), sizeof(sal_Unicode) * (rData.getLength()), SotClipboardFormatId::STRING );
     nType = XTYP_POKE;
 }
 
@@ -400,7 +400,7 @@ DdePoke::DdePoke( DdeConnection& d, const OUString& i, const DdeData& rData,
 DdeExecute::DdeExecute( DdeConnection& d, const OUString& rData, long n )
     : DdeTransaction( d, OUString(), n )
 {
-    aDdeData = DdeData( (void*)rData.getStr(), sizeof(sal_Unicode) * (rData.getLength() + 1), CF_TEXT );
+    aDdeData = DdeData( (void*)rData.getStr(), sizeof(sal_Unicode) * (rData.getLength() + 1), SotClipboardFormatId::STRING );
     nType = XTYP_EXECUTE;
 }
 
