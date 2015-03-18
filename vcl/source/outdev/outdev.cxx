@@ -308,39 +308,6 @@ bool OutputDevice::SupportsCairo() const
     return mpGraphics->SupportsCairo();
 }
 
-bool OutputDevice::CanResizeCairoSurface() const
-{
-    if (!mpGraphics)
-    {
-        if (!AcquireGraphics())
-            return false;
-    }
-
-    return mpGraphics->CanResizeCairoSurface();
-}
-
-cairo_t* OutputDevice::GetCairoContext() const
-{
-    if (!mpGraphics)
-    {
-        if (!AcquireGraphics())
-            return NULL;
-    }
-
-    return mpGraphics->GetCairoContext();
-}
-
-void OutputDevice::FlushCairoContext(cairo_t* cr) const
-{
-    if (!mpGraphics)
-    {
-        if (!AcquireGraphics())
-            return;
-    }
-
-    mpGraphics->FlushCairoContext(cr);
-}
-
 css::uno::Any OutputDevice::GetSystemGfxDataAny() const
 {
     const SystemGraphicsData aSysData = GetSystemGfxData();

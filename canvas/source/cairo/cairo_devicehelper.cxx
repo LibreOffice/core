@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <canvas/debug.hxx>
 #include <canvas/verbosetrace.hxx>
 #include <canvas/canvastools.hxx>
@@ -92,20 +94,18 @@ namespace cairocanvas
 
         OutputDevice* pOutDev=getOutputDevice();
 
-        if (mpSurface && pOutDev->CanResizeCairoSurface())
-        {
-            // X11 only
+#if HAVE_FEATURE_X11
+        // X11 only
+        if( mpSurface )
             mpSurface->Resize( rSize.getX() + pOutDev->GetOutOffXPixel(),
                                rSize.getY() + pOutDev->GetOutOffYPixel() );
-        }
         else
-        {
+#endif
             mpSurface = cairo::createSurface(
                 *pOutDev,
                 pOutDev->GetOutOffXPixel(),
                 pOutDev->GetOutOffYPixel(),
                 rSize.getX(), rSize.getY() );
-        }
     }
 
     geometry::RealSize2D DeviceHelper::getPhysicalResolution()

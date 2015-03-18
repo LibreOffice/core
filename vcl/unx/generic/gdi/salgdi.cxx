@@ -462,20 +462,6 @@ bool X11SalGraphics::SupportsCairo() const
     return XQueryExtension(pDisplay, "RENDER", &nDummy, &nDummy, &nDummy);
 }
 
-bool X11SalGraphics::CanResizeCairoSurface() const
-{
-    return true;
-}
-
-cairo_t* X11SalGraphics::GetCairoContext() const
-{
-    return NULL;
-}
-
-void X11SalGraphics::FlushCairoContext(cairo_t*) const
-{
-}
-
 // draw a poly-polygon
 bool X11SalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rOrigPolyPoly, double fTransparency )
 {

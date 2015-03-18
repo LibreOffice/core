@@ -324,103 +324,17 @@ namespace cairo
         return X11SysData( rVirDev.GetSystemGfxData() );
     }
 
-    /**
-     * Surface::Surface:   Create Canvas surface from Window reference.
-     * @param x horizontal location of the new surface
-     * @param y vertical location of the new surface
-     * @param width width of the new surface
-     * @param height height of the new surface
-     *
-     * Set the mpSurface to the new surface or NULL
-     **/
-    Gtk3Surface::Gtk3Surface(const OutputDevice& rRefDevice, int x, int y, int width, int height)
-        : mpSurface(cairo_get_target(rRefDevice.GetCairoContext()), &cairo_surface_flush)
-        , mpDevice(&rRefDevice)
-        , mnWidth(width)
-        , mnHeight(height)
-    {
-        cairo_surface_set_device_offset(mpSurface.get(), x, y );
-    }
-
-    /**
-     * Surface::Surface:     Create generic Canvas surface using given Cairo Surface
-     *
-     * @param pSurface Cairo Surface
-     *
-     * This constructor only stores data, it does no processing.
-     * It is used with e.g. cairo_image_surface_create_for_data()
-     *
-     * Set the mpSurface as pSurface
-     **/
-    Gtk3Surface::Gtk3Surface(const CairoSurfaceSharedPtr& pSurface, int width, int height)
-        : mpSurface(pSurface)
-        , mpDevice(NULL)
-        , mnWidth(width)
-        , mnHeight(height)
-    {
-    }
-
-    /**
-     * Surface::getCairo:  Create Cairo (drawing object) for the Canvas surface
-     *
-     * @return new Cairo or NULL
-     **/
-    CairoSharedPtr Gtk3Surface::getCairo() const
-    {
-        return CairoSharedPtr(cairo_create(mpSurface.get()),
-                              &cairo_destroy);
-    }
-
-    /**
-     * Surface::getSimilar:  Create new similar Canvas surface
-     * @param aContent format of the new surface (cairo_content_t from cairo/src/cairo.h)
-     * @param width width of the new surface
-     * @param height height of the new surface
-     *
-     * Creates a new Canvas surface.
-     *
-     * Cairo surface from aContent (cairo_content_t)
-     *
-     * @return new surface or NULL
-     **/
-    SurfaceSharedPtr Gtk3Surface::getSimilar( Content aContent, int width, int height ) const
-    {
-        return SurfaceSharedPtr(
-            new Gtk3Surface(CairoSurfaceSharedPtr(
-                               cairo_surface_create_similar( mpSurface.get(), aContent, width, height ),
-                               &cairo_surface_destroy ), width, height));
-    }
-
-    /**
-     * Surface::Resize:  Resizes the Canvas surface.
-     * @param width new width of the surface
-     * @param height new height of the surface
-     *
-     * Only used on X11.
-     *
-     * @return The new surface or NULL
-     **/
-    void Gtk3Surface::Resize( int /*width*/, int /*height*/ )
-    {
-        assert(false && "not supposed to be called!");
-    }
-
-    void Gtk3Surface::flush() const
-    {
-        cairo_surface_flush(mpSurface.get());
-        if (mpDevice)
-            mpDevice->FlushCairoContext(NULL);
-    }
-
-    boost::shared_ptr<VirtualDevice> Gtk3Surface::createVirtualDevice() const
-    {
-        return boost::shared_ptr<VirtualDevice>(new VirtualDevice(NULL, Size(mnWidth, mnHeight), 0));
-    }
-
     SurfaceSharedPtr createSurface( const OutputDevice& rRefDevice,
                                     int x, int y, int width, int height )
     {
-        return SurfaceSharedPtr(new Gtk3Surface(rRefDevice, x, y, width, height));
+        if( rRefDevice.GetOutDevType() == OUTDEV_WINDOW )
+            return SurfaceSharedPtr(new X11Surface(getSysData(static_cast<const vcl::Window&>(rRefDevice)),
+                                                   x,y,width,height));
+        else if( rRefDevice.GetOutDevType() == OUTDEV_VIRDEV )
+            return SurfaceSharedPtr(new X11Surface(getSysData(static_cast<const VirtualDevice&>(rRefDevice)),
+                                                   x,y,width,height));
+        else
+            return SurfaceSharedPtr();
     }
 
     SurfaceSharedPtr createBitmapSurface( const OutputDevice&     rRefDevice,

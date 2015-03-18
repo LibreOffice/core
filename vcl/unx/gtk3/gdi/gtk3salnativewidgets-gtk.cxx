@@ -922,7 +922,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
         return false;
     }
 
-    cairo_t *cr = GetCairoContext();
+    cairo_t *cr = getCairoContext();
     clipRegion(cr);
     cairo_translate(cr, rControlRegion.Left(), rControlRegion.Top());
 
@@ -1447,11 +1447,6 @@ bool GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
     return false;
 }
 
-bool GtkSalGraphics::SupportsCairo() const
-{
-    return true;
-}
-
 static GtkWidget* gCacheWindow;
 static GtkWidget* gDumbContainer;
 
@@ -1556,15 +1551,9 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
     gtk_widget_path_free(path);
 }
 
-cairo_t* GtkSalGraphics::GetCairoContext() const
+cairo_t* GtkSalGraphics::getCairoContext()
 {
     return mpFrame->getCairoContext();
-}
-
-void GtkSalGraphics::FlushCairoContext(cairo_t *) const
-{
-    //request gtk to sync the entire contents
-    gtk_widget_queue_draw(mpWindow);
 }
 
 void GtkSalGraphics::clipRegion(cairo_t* cr)
