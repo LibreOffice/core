@@ -219,13 +219,13 @@ void UnoWrapper::WindowDestroyed( vcl::Window* pWindow )
 {
     // their still might be some children created with ::com::sun::star::loader::Java
     // that would otherwise not be destroyed until the garbage collector cleans up
-    vcl::Window* pChild = pWindow->GetWindow( WINDOW_FIRSTCHILD );
+    VclPtr< vcl::Window > pChild = pWindow->GetWindow( WINDOW_FIRSTCHILD );
     while ( pChild )
     {
-        vcl::Window* pNextChild = pChild->GetWindow( WINDOW_NEXT );
+        VclPtr< vcl::Window > pNextChild = pChild->GetWindow( WINDOW_NEXT );
 
-        vcl::Window* pClient = pChild->GetWindow( WINDOW_CLIENT );
-        if ( pClient->GetWindowPeer() )
+        VclPtr< vcl::Window > pClient = pChild->GetWindow( WINDOW_CLIENT );
+        if ( pClient && pClient->GetWindowPeer() )
         {
             ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xComp( pClient->GetComponentInterface( false ), ::com::sun::star::uno::UNO_QUERY );
             xComp->dispose();
@@ -235,16 +235,16 @@ void UnoWrapper::WindowDestroyed( vcl::Window* pWindow )
     }
 
     // System-Windows suchen...
-    vcl::Window* pOverlap = pWindow->GetWindow( WINDOW_OVERLAP );
+    VclPtr< vcl::Window > pOverlap = pWindow->GetWindow( WINDOW_OVERLAP );
     if ( pOverlap )
     {
         pOverlap = pOverlap->GetWindow( WINDOW_FIRSTOVERLAP );
         while ( pOverlap )
         {
-            vcl::Window* pNextOverlap = pOverlap->GetWindow( WINDOW_NEXT );
-            vcl::Window* pClient = pOverlap->GetWindow( WINDOW_CLIENT );
+            VclPtr< vcl::Window > pNextOverlap = pOverlap->GetWindow( WINDOW_NEXT );
+            VclPtr< vcl::Window > pClient = pOverlap->GetWindow( WINDOW_CLIENT );
 
-            if ( pClient->GetWindowPeer() && lcl_ImplIsParent( pWindow, pClient ) )
+            if ( pClient && pClient->GetWindowPeer() && lcl_ImplIsParent( pWindow, pClient ) )
             {
                 ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xComp( pClient->GetComponentInterface( false ), ::com::sun::star::uno::UNO_QUERY );
                 xComp->dispose();
@@ -254,9 +254,11 @@ void UnoWrapper::WindowDestroyed( vcl::Window* pWindow )
         }
     }
 
-    vcl::Window* pParent = pWindow->GetParent();
-    if ( pParent && pParent->GetWindowPeer() )
-        pParent->GetWindowPeer()->notifyWindowRemoved( *pWindow );
+    {
+        VclPtr< vcl::Window > pParent = pWindow->GetParent();
+        if ( pParent && pParent->GetWindowPeer() )
+            pParent->GetWindowPeer()->notifyWindowRemoved( *pWindow );
+    }
 
     VCLXWindow* pWindowPeer = pWindow->GetWindowPeer();
     uno::Reference< lang::XComponent > xWindowPeerComp( pWindow->GetComponentInterface( false ), uno::UNO_QUERY );
@@ -276,13 +278,13 @@ void UnoWrapper::WindowDestroyed( vcl::Window* pWindow )
     // #i42462#/#116855# no, don't loop: Instead, just ensure that all our top-window-children
     // are disposed, too (which should also be a valid fix for #102132#, but doesn't have the extreme
     // performance penalties)
-    vcl::Window* pTopWindowChild = pWindow->GetWindow( WINDOW_FIRSTTOPWINDOWCHILD );
+    VclPtr< vcl::Window > pTopWindowChild = pWindow->GetWindow( WINDOW_FIRSTTOPWINDOWCHILD );
     while ( pTopWindowChild )
     {
         OSL_ENSURE( pTopWindowChild->GetParent() == pWindow,
                     "UnoWrapper::WindowDestroyed: inconsistency in the SystemWindow relationship!" );
 
-        vcl::Window* pNextTopChild = pTopWindowChild->GetWindow( WINDOW_NEXTTOPWINDOWSIBLING );
+        VclPtr< vcl::Window > pNextTopChild = pTopWindowChild->GetWindow( WINDOW_NEXTTOPWINDOWSIBLING );
 
         //the window still could be on the stack, so we have to
         // use lazy delete ( it will automatically
