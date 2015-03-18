@@ -134,6 +134,7 @@
 #include "fields.hxx"
 #include <vcl/outdev.hxx>
 #include <i18nlangtag/languagetag.hxx>
+#include <unotools/fltrcfg.hxx>
 
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
@@ -5310,7 +5311,7 @@ void AttributeOutputBase::OutputItem( const SfxPoolItem& rHt )
             CharAnimatedText( static_cast< const SvxBlinkItem& >( rHt ) );
             break;
         case RES_CHRATR_BACKGROUND:
-            CharBackground( static_cast< const SvxBrushItem& >( rHt ) );
+            CharBackgroundBase( static_cast< const SvxBrushItem& >( rHt ) );
             break;
 
         case RES_CHRATR_CJK_FONT:
@@ -5631,6 +5632,19 @@ const SwRedlineData* AttributeOutputBase::GetParagraphMarkerRedline( const SwTxt
         }
     }
     return NULL;
+}
+
+void AttributeOutputBase::CharBackgroundBase( const SvxBrushItem& rBrush )
+{
+    const SvtFilterOptions& rOpt = SvtFilterOptions::Get();
+    if( rOpt.IsCharBackground2Highlighting() )
+    {
+        CharHighlight(rBrush);
+    }
+    else
+    {
+        CharBackground(rBrush);
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
