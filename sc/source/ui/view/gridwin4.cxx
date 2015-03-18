@@ -866,13 +866,14 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         }
     }
 
-    //  InPlace Edit-View
-    // moved after EndDrawLayers() to get it outside the overlay buffer and
-    // on top of everything
+    // In-place editing - when the user is typing, we need to paint the text
+    // using the editeng.
+    // It's being done after EndDrawLayers() to get it outside the overlay
+    // buffer and on top of everything.
     if ( bEditMode && (pViewData->GetRefTabNo() == pViewData->GetTabNo()) )
     {
-        //! use pContentDev for EditView?
-        rDevice.SetMapMode(MAP_PIXEL);
+        // get the coordinates of the area we need to clear (overpaint by
+        // the background)
         SCCOL nCol1 = pViewData->GetEditStartCol();
         SCROW nRow1 = pViewData->GetEditStartRow();
         SCCOL nCol2 = pViewData->GetEditEndCol();
@@ -882,12 +883,25 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         Point aStart = pViewData->GetScrPos( nCol1, nRow1, eWhich );
         Point aEnd = pViewData->GetScrPos( nCol2+1, nRow2+1, eWhich );
 
+        // don't overwrite grid
         long nLayoutSign = bLayoutRTL ? -1 : 1;
-        aEnd.X() -= 2 * nLayoutSign;        // don't overwrite grid
+        aEnd.X() -= 2 * nLayoutSign;
         aEnd.Y() -= 2;
-        rDevice.DrawRect(Rectangle(aStart, aEnd));
 
-        rDevice.SetMapMode(bIsTiledRendering? aDrawMode: pViewData->GetLogicMode());
+        // set the correct mapmode
+        Rectangle aBackground(aStart, aEnd);
+        if (bIsTiledRendering)
+        {
+            aBackground += Point(nScrX, nScrY);
+            rDevice.SetMapMode(aDrawMode);
+        }
+        else
+            rDevice.SetMapMode(pViewData->GetLogicMode());
+
+        // paint the background
+        rDevice.DrawRect(rDevice.PixelToLogic(aBackground));
+
+        // paint the editeng text
         pEditView->Paint(rDevice.PixelToLogic(Rectangle(Point(nScrX, nScrY), Size(aOutputData.GetScrW(), aOutputData.GetScrH()))), &rDevice);
         rDevice.SetMapMode(MAP_PIXEL);
     }
