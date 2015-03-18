@@ -446,6 +446,7 @@ public:
 
     virtual SystemGraphicsData GetGraphicsData() const SAL_OVERRIDE;
     virtual bool               SupportsCairo() const SAL_OVERRIDE;
+    virtual bool               CanResizeCairoSurface() const SAL_OVERRIDE;
     virtual SystemFontData     GetSysFontData( int nFallbacklevel ) const SAL_OVERRIDE;
 
     virtual void               BeginPaint() SAL_OVERRIDE;
