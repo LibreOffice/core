@@ -374,7 +374,7 @@ DdeHotLink::DdeHotLink( DdeConnection& d, const OUString& i, long n )
 }
 
 DdePoke::DdePoke( DdeConnection& d, const OUString& i, const char* p,
-                  long l, sal_uLong f, long n )
+                  long l, SotClipboardFormatId f, long n )
     : DdeTransaction( d, i, n )
 {
     aDdeData = DdeData( p, l, f );
