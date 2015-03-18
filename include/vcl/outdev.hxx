@@ -377,6 +377,7 @@ public:
 
     SystemGraphicsData          GetSystemGfxData() const;
     bool                        SupportsCairo() const;
+    bool                        CanResizeCairoSurface() const;
     css::uno::Any               GetSystemGfxDataAny() const;
 
     void                        SetRefPoint();
