@@ -3116,7 +3116,8 @@ void DocxAttributeOutput::EndSection()
 void DocxAttributeOutput::SectionFormProtection( bool bProtected )
 {
     if ( bProtected )
-        m_pSerializer->singleElementNS( XML_w, XML_formProt, FSEND );
+        m_pSerializer->singleElementNS( XML_w, XML_formProt,
+                FSNS( XML_w, XML_val ), "true", FSEND );
     else
         m_pSerializer->singleElementNS( XML_w, XML_formProt,
                 FSNS( XML_w, XML_val ), "false", FSEND );
