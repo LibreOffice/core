@@ -1519,12 +1519,11 @@ public:
 // Horrible code to manually provoke a help event
 IMPL_LINK_NOARG(DemoWidgets,HelpTimerCb)
 {
-    Point aPos = mpToolbox->GetPosPixel();
-    aPos.Move(10,10);
-    HelpEvent aHelpEvent( aPos, HelpEventMode::BALLOON );
-//    pSVData->maHelpData.mbRequestingHelp = true;
-    mpToolbox->RequestHelp( aHelpEvent );
-//    pSVData->maHelpData.mbRequestingHelp = false;
+    Point aPos = GetPosPixel();
+
+    aPos.Move(100,100);
+    Help::ShowBalloon( this, aPos, "This is another help balloon text" );
+
     return 0;
 }
 
