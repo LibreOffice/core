@@ -438,6 +438,9 @@ public:
 
     virtual SystemGraphicsData  GetGraphicsData() const = 0;
 
+    /// Check whether cairo will work
+    virtual bool                IsCairoWorking() const = 0;
+
     virtual SystemFontData      GetSysFontData( int nFallbacklevel ) const = 0;
 
 protected:

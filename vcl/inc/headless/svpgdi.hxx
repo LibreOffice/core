@@ -199,6 +199,7 @@ public:
     virtual bool        drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, sal_uLong nSize ) SAL_OVERRIDE;
 
     virtual SystemGraphicsData GetGraphicsData() const SAL_OVERRIDE;
+    virtual bool            IsCairoWorking() const SAL_OVERRIDE;
     virtual SystemFontData  GetSysFontData( int nFallbacklevel ) const SAL_OVERRIDE;
 
     virtual void            BeginPaint() SAL_OVERRIDE { };

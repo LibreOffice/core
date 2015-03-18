@@ -92,7 +92,7 @@ namespace cairocanvas
         if( !pSysData || !pSysData->nSize )
             throw lang::NoSupportException( "Passed SystemGraphicsData invalid!" );
 
-        bool bHasXRender = IsCairoWorking(pOutDev);
+        bool bHasXRender = pOutDev->IsCairoWorking();
         ENSURE_ARG_OR_THROW( bHasXRender == true, "SpriteCanvas::SpriteCanvas: No RENDER extension" );
 
         // setup helper

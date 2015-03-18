@@ -455,6 +455,13 @@ SystemGraphicsData X11SalGraphics::GetGraphicsData() const
     return aRes;
 }
 
+bool X11SalGraphics::IsCairoWorking() const
+{
+    Display *pDisplay = GetXDisplay();
+    int nDummy;
+    return XQueryExtension(pDisplay, "RENDER", &nDummy, &nDummy, &nDummy);
+}
+
 // draw a poly-polygon
 bool X11SalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rOrigPolyPoly, double fTransparency )
 {

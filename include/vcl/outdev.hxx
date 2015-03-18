@@ -376,6 +376,7 @@ public:
     const AllSettings&          GetSettings() const { return *mxSettings; }
 
     SystemGraphicsData          GetSystemGfxData() const;
+    bool                        IsCairoWorking() const;
     css::uno::Any               GetSystemGfxDataAny() const;
 
     void                        SetRefPoint();

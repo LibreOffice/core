@@ -1445,6 +1445,11 @@ SystemGraphicsData AquaSalGraphics::GetGraphicsData() const
     return aRes;
 }
 
+bool AquaSalGraphics::IsCairoWorking() const
+{
+    return true;
+}
+
 long AquaSalGraphics::GetGraphicsWidth() const
 {
     long w = 0;

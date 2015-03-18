@@ -85,7 +85,7 @@ namespace cairocanvas
             throw lang::NoSupportException(
                 "Parent window not VCL window, or canvas out-of-process!", NULL);
 
-        bool bHasXRender = IsCairoWorking(pParentWindow);
+        bool bHasXRender = pParentWindow->IsCairoWorking();
         ENSURE_ARG_OR_THROW( bHasXRender == true,
                              "CairoSpriteCanvas::SpriteCanvas: No RENDER extension" );
 

@@ -418,6 +418,7 @@ public:
 
     virtual SystemGraphicsData
                             GetGraphicsData() const SAL_OVERRIDE;
+    virtual bool            IsCairoWorking() const SAL_OVERRIDE;
     virtual SystemFontData  GetSysFontData( int /* nFallbacklevel */ ) const SAL_OVERRIDE;
 
     virtual void            BeginPaint() SAL_OVERRIDE { };

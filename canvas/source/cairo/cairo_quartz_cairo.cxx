@@ -35,12 +35,6 @@
 
 namespace cairo
 {
-    bool IsCairoWorking( OutputDevice* )
-    {
-        // trivially true for Mac
-        return true;
-    }
-
     /**
      * QuartzSurface::Surface:     Create generic Canvas surface using given Cairo Surface
      *

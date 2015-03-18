@@ -733,4 +733,9 @@ bool SvpSalGraphics::supportsOperation( OutDevSupportType ) const
 
 #endif
 
+bool SvpSalGraphics::IsCairoWorking() const
+{
+    return false;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
