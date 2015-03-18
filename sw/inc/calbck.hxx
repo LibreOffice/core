@@ -331,7 +331,7 @@ public:
             m_pPosition = GetLeftOfPos();
         return PTR_CAST(TElementType,m_pCurrent = m_pPosition);
     }
-    bool IsChanged()          { return sw::ClientIteratorBase::IsChanged(); }
+    using sw::ClientIteratorBase::IsChanged;
 };
 
 template< typename TSource > class SwIterator<SwClient, TSource> SAL_FINAL : private sw::ClientIteratorBase
@@ -362,7 +362,7 @@ public:
         m_pPosition = GetLeftOfPos();
         return m_pCurrent = m_pPosition;
     }
-    bool IsChanged()          { return sw::ClientIteratorBase::IsChanged(); }
+    using sw::ClientIteratorBase::IsChanged;
 };
 
 SwClient::SwClient( SwModify* pToRegisterIn )
