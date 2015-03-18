@@ -313,6 +313,7 @@ template< class TElementType, class TSource > class SwIterator SAL_FINAL
 {
 
     static_assert(std::is_base_of<SwClient,TElementType>::value, "TElementType needs to be derived from SwClient");
+    static_assert(std::is_base_of<SwModify,TSource>::value, "TSource needs to be derived from SwModify");
     SwClientIter aClientIter;
 public:
 
