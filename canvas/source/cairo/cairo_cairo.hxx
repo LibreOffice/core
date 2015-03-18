@@ -81,9 +81,6 @@ namespace cairo {
     SurfaceSharedPtr createBitmapSurface( const OutputDevice&     rRefDevice,
                                           const BitmapSystemData& rData,
                                           const Size&             rSize );
-
-    /// Check whether cairo will work on given window
-    bool IsCairoWorking( OutputDevice* );
 }
 
 #endif

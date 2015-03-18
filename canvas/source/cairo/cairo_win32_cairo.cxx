@@ -36,12 +36,6 @@ namespace cairo
 
 #include <cairo-win32.h>
 
-    bool IsCairoWorking( OutputDevice* )
-    {
-        // trivially true for Windows
-        return true;
-    }
-
     /**
      * Surface::Surface:     Create generic Canvas surface using given Cairo Surface
      *

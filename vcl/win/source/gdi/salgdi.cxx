@@ -1072,6 +1072,11 @@ SystemGraphicsData WinSalGraphics::GetGraphicsData() const
     return aRes;
 }
 
+bool WinSalGraphics::SupportsCairo() const
+{
+    return true;
+}
+
 void WinSalGraphics::BeginPaint()
 {
     return mpImpl->beginPaint();

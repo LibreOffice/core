@@ -297,6 +297,17 @@ SystemGraphicsData OutputDevice::GetSystemGfxData() const
     return mpGraphics->GetGraphicsData();
 }
 
+bool OutputDevice::SupportsCairo() const
+{
+    if (!mpGraphics)
+    {
+        if (!AcquireGraphics())
+            return false;
+    }
+
+    return mpGraphics->SupportsCairo();
+}
+
 css::uno::Any OutputDevice::GetSystemGfxDataAny() const
 {
     const SystemGraphicsData aSysData = GetSystemGfxData();
