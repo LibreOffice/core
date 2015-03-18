@@ -345,13 +345,7 @@ template< typename TSource > class SwIterator<SwClient, TSource>
 public:
     SwIterator( const TSource& rSrc ) : aClientIter(rSrc) {}
     SwClient* First()
-    {
-        aClientIter.GoStart();
-        if(!aClientIter.m_pPosition)
-            return nullptr;
-        aClientIter.m_pCurrent = nullptr;
-        return Next();
-    }
+        { return aClientIter.GoStart(); }
     SwClient* Last()
     {
         if(!aClientIter.m_pPosition)
