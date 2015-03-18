@@ -36,10 +36,10 @@ DdeData::DdeData()
     pImp->hData = NULL;
     pImp->nData = 0;
     pImp->pData = NULL;
-    pImp->nFmt  = CF_TEXT;
+    pImp->nFmt = SotClipboardFormatId::STRING;
 }
 
-DdeData::DdeData( const void* p, long n, sal_uLong f )
+DdeData::DdeData(const void* p, long n, SotClipboardFormatId f)
 {
     pImp = new DdeDataImp;
     pImp->hData = NULL;
@@ -54,7 +54,7 @@ DdeData::DdeData( const OUString& s )
     pImp->hData = NULL;
     pImp->pData = (LPBYTE)s.getStr();
     pImp->nData = s.getLength()+1;
-    pImp->nFmt  = CF_TEXT;
+    pImp->nFmt = SotClipboardFormatId::STRING;
 }
 
 DdeData::DdeData( const DdeData& rData )
@@ -80,12 +80,12 @@ void DdeData::Lock()
         pImp->pData = DdeAccessData( pImp->hData, (LPDWORD) &pImp->nData );
 }
 
-sal_uLong DdeData::GetFormat() const
+SotClipboardFormatId DdeData::GetFormat() const
 {
     return pImp->nFmt;
 }
 
-void DdeData::SetFormat( sal_uLong nFmt )
+void DdeData::SetFormat(SotClipboardFormatId nFmt)
 {
     pImp->nFmt = nFmt;
 }

@@ -90,7 +90,7 @@ struct DdeDataImp
     HDDEDATA        hData;
     LPBYTE          pData;
     long            nData;
-    sal_uLong           nFmt;
+    SotClipboardFormatId nFmt;
 };
 
 class DdeConnection;
