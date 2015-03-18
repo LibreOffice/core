@@ -263,13 +263,13 @@ sw/imglst/sc20248.png cmd/sc_save.png
 sw/imglst/sc20234.png sw/imglst/sc20244.png
 sw/imglst/sr20011.png sw/imglst/nc20000.png
 sw/imglst/sr20014.png sw/imglst/sc20183.png
-sw/imglst/sr20007.png sw/imglst/nc20006.png
+sw/imglst/sr20007.png cmd/sc_insertsection.png
 sw/imglst/sr20009.png sw/imglst/nc20011.png
-sw/imglst/sr20010.png sw/imglst/nc20004.png
+sw/imglst/sr20010.png cmd/sc_insertobject.png
 sw/imglst/sr20005.png sw/imglst/sc20245.png
 sw/imglst/sr20002.png sw/imglst/nc20001.png
-sw/imglst/sr20012.png sw/imglst/nc20008.png
-sw/imglst/sr20003.png sw/imglst/nc20002.png
+sw/imglst/sr20012.png cmd/sc_insertreferencefield
+sw/imglst/sr20003.png cmd/sc_inserttextframe.png
 sw/imglst/sr20006.png cmd/sc_choosecontrols.png
 sw/imglst/sr20004.png cmd/sc_insertpage.png
 sw/imglst/sx02.png cmd/sc_dataincolumns.png
