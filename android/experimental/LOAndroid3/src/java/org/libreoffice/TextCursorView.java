@@ -51,13 +51,15 @@ public class TextCursorView extends View implements View.OnTouchListener {
     private RectF mGraphicSelection = new RectF();
     private RectF mGraphicScaledSelection = new RectF();
     private Paint mGraphicSelectionPaint = new Paint();
-    private Paint mGraphicHandleFillPaint = new Paint();
-    private float mRadius = 20.0f;
+
+
     private boolean mGraphicSelectionVisible;
     private PointF mTouchStart = new PointF();
     private PointF mDeltaPoint = new PointF();
     private boolean mGraphicSelectionMove = false;
     private LayerView mLayerView;
+
+    private DrawElementHandle mHandles[] = new DrawElementHandle[8];
 
     public TextCursorView(Context context) {
         super(context);
@@ -92,10 +94,16 @@ public class TextCursorView extends View implements View.OnTouchListener {
             mGraphicSelectionPaint.setStyle(Paint.Style.STROKE);
             mGraphicSelectionPaint.setColor(Color.BLACK);
             mGraphicSelectionPaint.setStrokeWidth(2);
-
-            mGraphicHandleFillPaint.setStyle(Paint.Style.FILL);
-            mGraphicHandleFillPaint.setColor(Color.WHITE);
             mGraphicSelectionVisible = false;
+
+            mHandles[0] = new DrawElementHandle(mGraphicSelectionPaint);
+            mHandles[1] = new DrawElementHandle(mGraphicSelectionPaint);
+            mHandles[2] = new DrawElementHandle(mGraphicSelectionPaint);
+            mHandles[3] = new DrawElementHandle(mGraphicSelectionPaint);
+            mHandles[4] = new DrawElementHandle(mGraphicSelectionPaint);
+            mHandles[5] = new DrawElementHandle(mGraphicSelectionPaint);
+            mHandles[6] = new DrawElementHandle(mGraphicSelectionPaint);
+            mHandles[7] = new DrawElementHandle(mGraphicSelectionPaint);
 
             postDelayed(cursorAnimation, CURSOR_BLINK_TIME);
 
@@ -156,6 +164,16 @@ public class TextCursorView extends View implements View.OnTouchListener {
 
         mGraphicScaledSelection = RectUtils.scale(mGraphicSelection, zoom);
         mGraphicScaledSelection.offset(-x, -y);
+
+        mHandles[0].reposition(mGraphicScaledSelection.left, mGraphicScaledSelection.top);
+        mHandles[1].reposition(mGraphicScaledSelection.centerX(), mGraphicScaledSelection.top);
+        mHandles[2].reposition(mGraphicScaledSelection.right, mGraphicScaledSelection.top);
+        mHandles[3].reposition(mGraphicScaledSelection.left, mGraphicScaledSelection.centerY());
+        mHandles[4].reposition(mGraphicScaledSelection.right, mGraphicScaledSelection.centerY());
+        mHandles[5].reposition(mGraphicScaledSelection.left, mGraphicScaledSelection.bottom);
+        mHandles[6].reposition(mGraphicScaledSelection.centerX(), mGraphicScaledSelection.bottom);
+        mHandles[7].reposition(mGraphicScaledSelection.right, mGraphicScaledSelection.bottom);
+
         invalidate();
     }
 
@@ -172,29 +190,10 @@ public class TextCursorView extends View implements View.OnTouchListener {
         }
         if (mGraphicSelectionVisible) {
             canvas.drawRect(mGraphicScaledSelection, mGraphicSelectionPaint);
-            canvas.drawCircle(mGraphicScaledSelection.left, mGraphicScaledSelection.top, mRadius, mGraphicHandleFillPaint);
-            canvas.drawCircle(mGraphicScaledSelection.left, mGraphicScaledSelection.top, mRadius, mGraphicSelectionPaint);
 
-            canvas.drawCircle(mGraphicScaledSelection.right, mGraphicScaledSelection.top, mRadius, mGraphicHandleFillPaint);
-            canvas.drawCircle(mGraphicScaledSelection.right, mGraphicScaledSelection.top, mRadius, mGraphicSelectionPaint);
-
-            canvas.drawCircle(mGraphicScaledSelection.left, mGraphicScaledSelection.bottom, mRadius, mGraphicHandleFillPaint);
-            canvas.drawCircle(mGraphicScaledSelection.left, mGraphicScaledSelection.bottom, mRadius, mGraphicSelectionPaint);
-
-            canvas.drawCircle(mGraphicScaledSelection.right, mGraphicScaledSelection.bottom, mRadius, mGraphicHandleFillPaint);
-            canvas.drawCircle(mGraphicScaledSelection.right, mGraphicScaledSelection.bottom, mRadius, mGraphicSelectionPaint);
-
-            canvas.drawCircle(mGraphicScaledSelection.left, mGraphicScaledSelection.centerY(), mRadius, mGraphicHandleFillPaint);
-            canvas.drawCircle(mGraphicScaledSelection.left, mGraphicScaledSelection.centerY(), mRadius, mGraphicSelectionPaint);
-
-            canvas.drawCircle(mGraphicScaledSelection.right, mGraphicScaledSelection.centerY(), mRadius, mGraphicHandleFillPaint);
-            canvas.drawCircle(mGraphicScaledSelection.right, mGraphicScaledSelection.centerY(), mRadius, mGraphicSelectionPaint);
-
-            canvas.drawCircle(mGraphicScaledSelection.centerX(), mGraphicScaledSelection.top, mRadius, mGraphicHandleFillPaint);
-            canvas.drawCircle(mGraphicScaledSelection.centerX(), mGraphicScaledSelection.top, mRadius, mGraphicSelectionPaint);
-
-            canvas.drawCircle(mGraphicScaledSelection.centerX(), mGraphicScaledSelection.bottom, mRadius, mGraphicHandleFillPaint);
-            canvas.drawCircle(mGraphicScaledSelection.centerX(), mGraphicScaledSelection.bottom, mRadius, mGraphicSelectionPaint);
+            for (DrawElementHandle handle : mHandles) {
+                handle.draw(canvas);
+            }
 
             if (mGraphicSelectionMove) {
                 RectF one = new RectF(mGraphicScaledSelection);
