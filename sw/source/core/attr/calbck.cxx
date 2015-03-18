@@ -152,7 +152,7 @@ void SwModify::Add( SwClient* pDepend )
         {
             for(auto& rIter : sw::ClientIteratorBase::our_pClientIters->GetRingContainer())
             {
-                OSL_ENSURE( &rIter.GetModify() != pRoot, "Client added to active ClientIter" );
+                OSL_ENSURE( &rIter.m_rRoot != pRoot, "Client added to active ClientIter" );
             }
         }
 #endif

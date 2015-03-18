@@ -247,13 +247,18 @@ namespace sw
 {
     class ClientIteratorBase SAL_FINAL : public sw::Ring< ::sw::ClientIteratorBase >
     {
-        friend SwModify;
+        friend SwClient* SwModify::Remove(SwClient*);
+        friend void SwModify::Add(SwClient*);
         template<typename E, typename S> friend class ::SwIterator; ///< for typed interation
 
         const SwModify& m_rRoot;
-
         // the current object in an iteration
         SwClient* m_pCurrent;
+        // in case the current object is already removed, the next object in the list
+        // is marked down to become the current object in the next step
+        // this is necessary because iteration requires access to members of the current object
+        SwClient* m_pPosition;
+        static SW_DLLPUBLIC ClientIteratorBase* our_pClientIters;
 
         ClientIteratorBase( const SwModify& rModify )
             : m_rRoot(rModify)
@@ -262,10 +267,6 @@ namespace sw
             our_pClientIters = this;
             m_pCurrent = m_pPosition = const_cast<SwClient*>(m_rRoot.GetDepends());
         }
-        // in case the current object is already removed, the next object in the list
-        // is marked down to become the current object in the next step
-        // this is necessary because iteration requires access to members of the current object
-        SwClient* m_pPosition;
         SwClient* GetLeftOfPos() { return static_cast<SwClient*>(m_pPosition->m_pLeft); }
         SwClient* GetRighOfPos() { return static_cast<SwClient*>(m_pPosition->m_pRight); }
         SwClient* GoStart()
@@ -275,11 +276,6 @@ namespace sw
                     m_pPosition = static_cast<SwClient*>(m_pPosition->m_pLeft);
             return m_pCurrent = m_pPosition;
         }
-        const SwModify& GetModify() const { return m_rRoot; }
-
-        static SW_DLLPUBLIC ClientIteratorBase* our_pClientIters;
-
-    public:
         ~ClientIteratorBase() SAL_OVERRIDE
         {
             assert(our_pClientIters);
