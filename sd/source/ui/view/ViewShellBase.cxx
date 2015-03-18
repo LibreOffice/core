@@ -240,7 +240,7 @@ ViewShellBase::ViewShellBase (
       mpDocument (NULL)
 {
     mpImpl.reset(new Implementation(*this));
-    mpImpl->mpViewWindow.reset(new FocusForwardingWindow(_pFrame->GetWindow(),*this));
+    mpImpl->mpViewWindow = new FocusForwardingWindow(_pFrame->GetWindow(),*this);
     mpImpl->mpViewWindow->SetBackground(Wallpaper());
 
     _pFrame->GetWindow().SetBackground(Application::GetSettings().GetStyleSettings().GetLightColor());
@@ -1028,7 +1028,7 @@ ViewShellBase::Implementation::~Implementation (void)
 {
     mpController = NULL;
     mpViewTabBar = NULL;
-    mpViewWindow.reset();
+    mpViewWindow.disposeAndClear();
     mpToolBarManager.reset();
 }
 

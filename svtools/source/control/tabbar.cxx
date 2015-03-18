@@ -338,15 +338,7 @@ struct TabBar_Impl
 
     svt::AccessibleFactoryAccess  maAccessibleFactory;
 
-    TabBar_Impl()
-        : mpSizer()
-        , mpFirstButton()
-        , mpPrevButton()
-        , mpNextButton()
-        , mpLastButton()
-        , mpEdit()
-        , mpItemList()
-    {}
+    TabBar_Impl() {}
 
     ~TabBar_Impl()
     {
@@ -366,6 +358,10 @@ struct TabBar_Impl
     sal_uInt16 getItemSize()
     {
         return static_cast<sal_uInt16>(mpItemList.size());
+    }
+    ~TabBar_Impl()
+    {
+        mpSizer.disposeAndClear();
     }
 };
 

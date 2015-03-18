@@ -508,12 +508,14 @@ void MediaWindowImpl::onURLChanged()
 {
     if( m_sMimeType == AVMEDIA_MIMETYPE_COMMON )
     {
+        mpChildWindow.disposeAndClear();
         mpChildWindow.reset(new MediaChildWindow(this) );
     }
 #if HAVE_FEATURE_GLTF
     else if ( m_sMimeType == AVMEDIA_MIMETYPE_JSON )
     {
         SystemWindowData aWinData = OpenGLContext::generateWinData(this, false);
+        mpChildWindow.disposeAndClear();
         mpChildWindow.reset(new MediaChildWindow(this,&aWinData));
         mbEventTransparent = false;
     }
