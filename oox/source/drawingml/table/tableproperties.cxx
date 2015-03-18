@@ -267,8 +267,8 @@ void TableProperties::pushToPropSet( const ::oox::core::XmlFilterBase& rFilterBa
     CreateTableColumns( xColumnRowRange->getColumns(), mvTableGrid );
     CreateTableRows( xColumnRowRange->getRows(), mvTableRows );
 
-    bool mbOwnTblStyle = false;
-    const TableStyle& rTableStyle( getUsedTableStyle( rFilterBase, mbOwnTblStyle ) );
+    bool bOwnTblStyle = false;
+    const TableStyle& rTableStyle( getUsedTableStyle( rFilterBase, bOwnTblStyle ) );
     sal_Int32 nRow = 0;
     const std::vector< TableRow >::const_iterator aTableRowEnd( mvTableRows.end() );
     for (std::vector< TableRow >::iterator aTableRowIter( mvTableRows.begin() );
@@ -293,7 +293,7 @@ void TableProperties::pushToPropSet( const ::oox::core::XmlFilterBase& rFilterBa
         }
     }
 
-    if(mbOwnTblStyle)
+    if(bOwnTblStyle)
     {
         TableStyle* pTableStyle = (TableStyle*)&rTableStyle;
         delete pTableStyle;
