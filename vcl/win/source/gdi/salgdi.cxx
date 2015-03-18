@@ -1077,6 +1077,11 @@ bool WinSalGraphics::SupportsCairo() const
     return true;
 }
 
+bool WinSalGraphics::CanResizeCairoSurface() const
+{
+    return false;
+}
+
 void WinSalGraphics::BeginPaint()
 {
     return mpImpl->beginPaint();
