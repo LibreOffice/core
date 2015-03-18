@@ -265,15 +265,6 @@ class SwClientIter SAL_FINAL : public sw::Ring<SwClientIter>
                 m_pPosition = static_cast<SwClient*>(m_pPosition->m_pLeft);
         return m_pCurrent = m_pPosition;
     }
-    SwClient* GoEnd()
-    {
-        if(!m_pPosition)
-            m_pPosition = const_cast<SwClient*>(m_rRoot.GetDepends());
-        if(m_pPosition)
-            while( m_pPosition->m_pRight )
-                m_pPosition = static_cast<SwClient*>(m_pPosition->m_pRight);
-        return m_pCurrent = m_pPosition;
-    }
 
     static SW_DLLPUBLIC SwClientIter* our_pClientIters;
 

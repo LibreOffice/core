@@ -38,11 +38,14 @@ public:
     }
     TElementType* Last()
     {
-        aClientIter.GoEnd();
         if(!aClientIter.m_pPosition)
-            return nullptr;
+            aClientIter.m_pPosition = const_cast<SwClient*>(aClientIter.m_rRoot.GetDepends());
+        if(!aClientIter.m_pPosition)
+            return PTR_CAST(TElementType,aClientIter.m_pCurrent = nullptr);
+        while(aClientIter.GetRighOfPos())
+            aClientIter.m_pPosition = aClientIter.GetRighOfPos();
         if(aClientIter.m_pPosition->IsA(TYPE(TElementType)))
-            return PTR_CAST(TElementType,aClientIter.m_pPosition);
+            return PTR_CAST(TElementType,aClientIter.m_pCurrent = aClientIter.m_pPosition);
         return Previous();
     }
     TElementType* Next()
