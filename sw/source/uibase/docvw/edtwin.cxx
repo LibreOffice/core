@@ -4887,6 +4887,23 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
 
     if (bCallBase)
         Window::MouseButtonUp(rMEvt);
+
+    if (pSdrView && rMEvt.GetClicks() == 1 && rSh.isTiledRendering())
+    {
+        // When tiled rendering, single click on a shape text starts editing already.
+        SdrViewEvent aViewEvent;
+        SdrHitKind eHit = pSdrView->PickAnything(rMEvt, SDRMOUSEBUTTONUP, aViewEvent);
+        const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
+        if (eHit == SDRHIT_TEXTEDITOBJ && rMarkList.GetMarkCount() == 1)
+        {
+            if (SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj())
+            {
+                EnterDrawTextMode(pObj->GetLogicRect().Center());
+                if (m_rView.GetCurShell()->ISA(SwDrawTextShell))
+                    static_cast<SwDrawTextShell*>(m_rView.GetCurShell())->Init();
+            }
+        }
+    }
 }
 
 /**
