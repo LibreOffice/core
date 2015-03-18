@@ -55,10 +55,10 @@ public class DrawElementHandle {
     public void reposition(float x, float y) {
         mPosition.x = x;
         mPosition.y = y;
-        mHitRect.left = mPosition.x - mRadius * 2;
-        mHitRect.right = mPosition.x + mRadius * 2;
-        mHitRect.top = mPosition.y - mRadius * 2;
-        mHitRect.bottom = mPosition.y + mRadius * 2;
+        mHitRect.left = mPosition.x - mRadius * 1.5f;
+        mHitRect.right = mPosition.x + mRadius * 1.5f;
+        mHitRect.top = mPosition.y - mRadius * 1.5f;
+        mHitRect.bottom = mPosition.y + mRadius * 1.5f;
     }
 
     public boolean contains(float x, float y) {
