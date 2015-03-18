@@ -245,127 +245,124 @@ protected:
 
 namespace sw
 {
-    class ClientIteratorBase SAL_FINAL : public sw::Ring< ::sw::ClientIteratorBase >
+    class ClientIteratorBase : public sw::Ring< ::sw::ClientIteratorBase >
     {
-        friend SwClient* SwModify::Remove(SwClient*);
-        friend void SwModify::Add(SwClient*);
-        template<typename E, typename S> friend class ::SwIterator; ///< for typed interation
+            friend SwClient* SwModify::Remove(SwClient*);
+            friend void SwModify::Add(SwClient*);
+        protected:
+            const SwModify& m_rRoot;
+            // the current object in an iteration
+            SwClient* m_pCurrent;
+            // in case the current object is already removed, the next object in the list
+            // is marked down to become the current object in the next step
+            // this is necessary because iteration requires access to members of the current object
+            SwClient* m_pPosition;
+            static SW_DLLPUBLIC ClientIteratorBase* our_pClientIters;
 
-        const SwModify& m_rRoot;
-        // the current object in an iteration
-        SwClient* m_pCurrent;
-        // in case the current object is already removed, the next object in the list
-        // is marked down to become the current object in the next step
-        // this is necessary because iteration requires access to members of the current object
-        SwClient* m_pPosition;
-        static SW_DLLPUBLIC ClientIteratorBase* our_pClientIters;
-
-        ClientIteratorBase( const SwModify& rModify )
-            : m_rRoot(rModify)
-        {
-            MoveTo(our_pClientIters);
-            our_pClientIters = this;
-            m_pCurrent = m_pPosition = const_cast<SwClient*>(m_rRoot.GetDepends());
-        }
-        SwClient* GetLeftOfPos() { return static_cast<SwClient*>(m_pPosition->m_pLeft); }
-        SwClient* GetRighOfPos() { return static_cast<SwClient*>(m_pPosition->m_pRight); }
-        SwClient* GoStart()
-        {
-            if((m_pPosition = const_cast<SwClient*>(m_rRoot.GetDepends())))
-                while( m_pPosition->m_pLeft )
-                    m_pPosition = static_cast<SwClient*>(m_pPosition->m_pLeft);
-            return m_pCurrent = m_pPosition;
-        }
-        ~ClientIteratorBase() SAL_OVERRIDE
-        {
-            assert(our_pClientIters);
-            if(our_pClientIters == this)
-                our_pClientIters = unique() ? nullptr : GetNextInRing();
-            MoveTo(nullptr);
-        }
-        // return "true" if an object was removed from a client chain in iteration
-        // adding objects to a client chain in iteration is forbidden
-        // SwModify::Add() asserts this
-        bool IsChanged() const { return m_pPosition != m_pCurrent; }
+            ClientIteratorBase( const SwModify& rModify )
+                : m_rRoot(rModify)
+            {
+                MoveTo(our_pClientIters);
+                our_pClientIters = this;
+                m_pCurrent = m_pPosition = const_cast<SwClient*>(m_rRoot.GetDepends());
+            }
+            SwClient* GetLeftOfPos() { return static_cast<SwClient*>(m_pPosition->m_pLeft); }
+            SwClient* GetRighOfPos() { return static_cast<SwClient*>(m_pPosition->m_pRight); }
+            SwClient* GoStart()
+            {
+                if((m_pPosition = const_cast<SwClient*>(m_rRoot.GetDepends())))
+                    while( m_pPosition->m_pLeft )
+                        m_pPosition = static_cast<SwClient*>(m_pPosition->m_pLeft);
+                return m_pCurrent = m_pPosition;
+            }
+            ~ClientIteratorBase() SAL_OVERRIDE
+            {
+                assert(our_pClientIters);
+                if(our_pClientIters == this)
+                    our_pClientIters = unique() ? nullptr : GetNextInRing();
+                MoveTo(nullptr);
+            }
+            // return "true" if an object was removed from a client chain in iteration
+            // adding objects to a client chain in iteration is forbidden
+            // SwModify::Add() asserts this
+            bool IsChanged() const { return m_pPosition != m_pCurrent; }
     };
 }
 
-template< typename TElementType, typename TSource > class SwIterator SAL_FINAL
+template< typename TElementType, typename TSource > class SwIterator SAL_FINAL : private sw::ClientIteratorBase
 {
     static_assert(std::is_base_of<SwClient,TElementType>::value, "TElementType needs to be derived from SwClient");
     static_assert(std::is_base_of<SwModify,TSource>::value, "TSource needs to be derived from SwModify");
-    sw::ClientIteratorBase aClientIter;
 public:
 
-    SwIterator( const TSource& rSrc ) : aClientIter(rSrc) {}
+    SwIterator( const TSource& rSrc ) : sw::ClientIteratorBase(rSrc) {}
     TElementType* First()
     {
-        aClientIter.GoStart();
-        if(!aClientIter.m_pPosition)
+        GoStart();
+        if(!m_pPosition)
             return nullptr;
-        aClientIter.m_pCurrent = nullptr;
+        m_pCurrent = nullptr;
         return Next();
     }
     TElementType* Last()
     {
-        if(!aClientIter.m_pPosition)
-            aClientIter.m_pPosition = const_cast<SwClient*>(aClientIter.m_rRoot.GetDepends());
-        if(!aClientIter.m_pPosition)
-            return PTR_CAST(TElementType,aClientIter.m_pCurrent = nullptr);
-        while(aClientIter.GetRighOfPos())
-            aClientIter.m_pPosition = aClientIter.GetRighOfPos();
-        if(aClientIter.m_pPosition->IsA(TYPE(TElementType)))
-            return PTR_CAST(TElementType,aClientIter.m_pCurrent = aClientIter.m_pPosition);
+        if(!m_pPosition)
+            m_pPosition = const_cast<SwClient*>(m_rRoot.GetDepends());
+        if(!m_pPosition)
+            return PTR_CAST(TElementType,m_pCurrent = nullptr);
+        while(GetRighOfPos())
+            m_pPosition = GetRighOfPos();
+        if(m_pPosition->IsA(TYPE(TElementType)))
+            return PTR_CAST(TElementType,m_pCurrent = m_pPosition);
         return Previous();
     }
     TElementType* Next()
     {
-        if( aClientIter.m_pPosition == aClientIter.m_pCurrent )
-            aClientIter.m_pPosition = aClientIter.GetRighOfPos();
-        while(aClientIter.m_pPosition && !aClientIter.m_pPosition->IsA( TYPE(TElementType) ) )
-            aClientIter.m_pPosition = aClientIter.GetRighOfPos();
-        return PTR_CAST(TElementType,aClientIter.m_pCurrent = aClientIter.m_pPosition);
+        if( m_pPosition == m_pCurrent )
+            m_pPosition = GetRighOfPos();
+        while(m_pPosition && !m_pPosition->IsA( TYPE(TElementType) ) )
+            m_pPosition = GetRighOfPos();
+        return PTR_CAST(TElementType,m_pCurrent = m_pPosition);
     }
     TElementType* Previous()
     {
-        aClientIter.m_pPosition = aClientIter.GetLeftOfPos();
-        while(aClientIter.m_pPosition && !aClientIter.m_pPosition->IsA( TYPE(TElementType) ) )
-            aClientIter.m_pPosition = aClientIter.GetLeftOfPos();
-        return PTR_CAST(TElementType,aClientIter.m_pCurrent = aClientIter.m_pPosition);
+        m_pPosition = GetLeftOfPos();
+        while(m_pPosition && !m_pPosition->IsA( TYPE(TElementType) ) )
+            m_pPosition = GetLeftOfPos();
+        return PTR_CAST(TElementType,m_pCurrent = m_pPosition);
     }
-    bool IsChanged()          { return aClientIter.IsChanged(); }
+    bool IsChanged()          { return sw::ClientIteratorBase::IsChanged(); }
 };
 
-template< typename TSource > class SwIterator<SwClient, TSource>
+template< typename TSource > class SwIterator<SwClient, TSource> SAL_FINAL : private sw::ClientIteratorBase
 {
     static_assert(std::is_base_of<SwModify,TSource>::value, "TSource needs to be derived from SwModify");
-    sw::ClientIteratorBase aClientIter;
 public:
-    SwIterator( const TSource& rSrc ) : aClientIter(rSrc) {}
+    SwIterator( const TSource& rSrc ) : sw::ClientIteratorBase(rSrc) {}
     SwClient* First()
-        { return aClientIter.GoStart(); }
+        { return GoStart(); }
     SwClient* Last()
     {
-        if(!aClientIter.m_pPosition)
-            aClientIter.m_pPosition = const_cast<SwClient*>(aClientIter.m_rRoot.GetDepends());
-        if(!aClientIter.m_pPosition)
-            return aClientIter.m_pCurrent = nullptr;
-        while(aClientIter.GetRighOfPos())
-            aClientIter.m_pPosition = aClientIter.GetRighOfPos();
-        return aClientIter.m_pCurrent = aClientIter.m_pPosition;
+        if(!m_pPosition)
+            m_pPosition = const_cast<SwClient*>(m_rRoot.GetDepends());
+        if(!m_pPosition)
+            return m_pCurrent = nullptr;
+        while(GetRighOfPos())
+            m_pPosition = GetRighOfPos();
+        return m_pCurrent = m_pPosition;
     }
     SwClient* Next()
     {
-        if( aClientIter.m_pPosition == aClientIter.m_pCurrent )
-            aClientIter.m_pPosition = aClientIter.GetRighOfPos();
-        return aClientIter.m_pCurrent = aClientIter.m_pPosition;
+        if( m_pPosition == m_pCurrent )
+            m_pPosition = GetRighOfPos();
+        return m_pCurrent = m_pPosition;
     }
     SwClient* Previous()
     {
-        aClientIter.m_pPosition = aClientIter.GetLeftOfPos();
-        return aClientIter.m_pCurrent = aClientIter.m_pPosition;
+        m_pPosition = GetLeftOfPos();
+        return m_pCurrent = m_pPosition;
     }
-    bool IsChanged()          { return aClientIter.IsChanged(); }
+    bool IsChanged()          { return sw::ClientIteratorBase::IsChanged(); }
 };
 
 SwClient::SwClient( SwModify* pToRegisterIn )
