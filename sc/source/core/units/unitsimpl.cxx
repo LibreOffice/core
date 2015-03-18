@@ -366,9 +366,7 @@ bool UnitsImpl::verifyFormula(ScTokenArray* pArray, const ScAddress& rFormulaAdd
 
     stack< UtUnit > aUnitStack;
 
-    FormulaToken* pToken = pArray->FirstRPN();
-
-    while (pToken != 0) {
+    for (FormulaToken* pToken = pArray->FirstRPN(); pToken != 0; pToken = pArray->NextRPN()) {
         switch (pToken->GetType()) {
         case formula::svSingleRef:
         {
@@ -409,8 +407,6 @@ bool UnitsImpl::verifyFormula(ScTokenArray* pArray, const ScAddress& rFormulaAdd
             SAL_WARN("sc.units", "Unrecognised token type " << pToken->GetType());
             return true;
         }
-
-        pToken = pArray->NextRPN();
     }
 
     // TODO: only fail if actual parsing fails?
