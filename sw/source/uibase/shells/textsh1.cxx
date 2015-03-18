@@ -202,7 +202,7 @@ void sw_CharDialog( SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot,const 
     if ( pSet)
     {
         SfxItemSet aTmpSet( *pSet );
-        ::ConvertAttrGenToChar(aTmpSet, CONV_ATTR_STD);
+        ::ConvertAttrGenToChar(aTmpSet, aCoreSet, CONV_ATTR_STD);
 
         const SfxPoolItem* pSelectionItem;
         bool bInsert = false;

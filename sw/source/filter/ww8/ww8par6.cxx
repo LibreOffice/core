@@ -19,6 +19,7 @@
 
 #include <stdlib.h>
 #include <svl/itemiter.hxx>
+#include <svl/grabbagitem.hxx>
 #include <rtl/tencinfo.h>
 
 #include <hintids.hxx>
@@ -3799,6 +3800,12 @@ void SwWW8ImplReader::Read_CharShadow(  sal_uInt16, const sal_uInt8* pData, shor
         SwWW8Shade aSh( bVer67, aSHD );
 
         NewAttr( SvxBrushItem( aSh.aColor, RES_CHRATR_BACKGROUND ));
+
+        // Add a marker to the grabbag indicating that character background was imported from MSO shading
+        SfxGrabBagItem aGrabBag = *(static_cast<const SfxGrabBagItem*>(GetFmtAttr(RES_CHRATR_GRABBAG)));
+        std::map<OUString, com::sun::star::uno::Any>& rMap = aGrabBag.GetGrabBag();
+        rMap.insert(std::pair<OUString, com::sun::star::uno::Any>("CharShadingMarker",uno::makeAny(true)));
+        NewAttr(aGrabBag);
     }
 }
 
@@ -3815,6 +3822,12 @@ void SwWW8ImplReader::Read_TxtBackColor(sal_uInt16, const sal_uInt8* pData, shor
             return;
         Color aColour(ExtractColour(pData, bVer67));
         NewAttr(SvxBrushItem(aColour, RES_CHRATR_BACKGROUND));
+
+        // Add a marker to the grabbag indicating that character background was imported from MSO shading
+        SfxGrabBagItem aGrabBag = *(static_cast<const SfxGrabBagItem*>(GetFmtAttr(RES_CHRATR_GRABBAG)));
+        std::map<OUString, com::sun::star::uno::Any>& rMap = aGrabBag.GetGrabBag();
+        rMap.insert(std::pair<OUString, com::sun::star::uno::Any>("CharShadingMarker",uno::makeAny(true)));
+        NewAttr(aGrabBag);
     }
 }
 

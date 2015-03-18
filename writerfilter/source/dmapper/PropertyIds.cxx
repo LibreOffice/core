@@ -349,6 +349,7 @@ OUString PropertyNameSupplier::GetName( PropertyIds eId ) const
             case PROP_GRAPHIC_URL: sName = "GraphicURL"; break;
             case PROP_GRAPHIC_BITMAP: sName = "GraphicBitmap"; break;
             case PROP_CHAR_SHADING_VALUE: sName = "CharShadingValue"; break;
+            case PROP_CHAR_SHADING_MARKER: sName = "CharShadingMarker"; break;
             case PROP_LABEL_CATEGORY: sName = "LabelCategory"; break;
             case PROP_FIRST_IS_SHARED : sName = "FirstIsShared"; break;
             case PROP_MIRROR_INDENTS : sName = "MirrorIndents"; break;

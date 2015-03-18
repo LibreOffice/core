@@ -1662,6 +1662,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
                 pCellColorHandler->setOutputFormat( CellColorHandler::Character );
                 pProperties->resolve(*pCellColorHandler);
                 rContext->InsertProps(pCellColorHandler->getProperties());
+                m_pImpl->GetTopContext()->Insert(PROP_CHAR_SHADING_MARKER, uno::makeAny(true), true, CHAR_GRAB_BAG );
             }
             break;
         }

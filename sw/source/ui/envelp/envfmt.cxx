@@ -265,7 +265,7 @@ IMPL_LINK( SwEnvFmtPage, EditHdl, MenuButton *, pButton )
         if (pDlg->Execute() == RET_OK)
         {
             SfxItemSet aOutputSet( *pDlg->GetOutputItemSet() );
-            ::ConvertAttrGenToChar(aOutputSet, CONV_ATTR_ENV);
+            ::ConvertAttrGenToChar(aOutputSet, aTmpSet, CONV_ATTR_ENV);
             pCollSet->Put(aOutputSet);
         }
     }

@@ -30,6 +30,7 @@ public:
     void testImageWithSpecialID();
     void testGraphicShape();
     void testCharHighlight();
+    void testCharHighlightBody();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testSwappedOutImageExport);
@@ -353,7 +354,7 @@ void Test::testGraphicShape()
     }
 }
 
-void Test::testCharHighlight()
+void Test::testCharHighlightBody()
 {
     // MS Word has two kind of character backgrounds called character shading and highlighting
     // MS filters handle these attributes separately, but ODF export merges them into one background attribute
@@ -364,9 +365,6 @@ void Test::testCharHighlight()
         "MS Word 97",
         "Office Open XML Text",
     };
-
-    SvtFilterOptions& rOpt = SvtFilterOptions::Get();
-    rOpt.SetCharBackground2Shading();
 
     for( size_t nFilter = 0; nFilter < SAL_N_ELEMENTS(aFilterNames); ++nFilter )
     {
@@ -451,6 +449,18 @@ void Test::testCharHighlight()
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(0x0000ff), getProperty<sal_Int32>(xRun,"CharBackColor"));
         }
     }
+}
+
+void Test::testCharHighlight()
+{
+    SvtFilterOptions& rOpt = SvtFilterOptions::Get();
+    rOpt.SetCharBackground2Shading();
+
+    testCharHighlightBody();
+
+    rOpt.SetCharBackground2Highlighting();
+
+    testCharHighlightBody();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
