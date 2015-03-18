@@ -308,9 +308,8 @@ public:
     bool IsChanged() const { return m_pPosition != m_pCurrent; }
 };
 
-template< class TElementType, class TSource > class SwIterator SAL_FINAL
+template< typename TElementType, typename TSource > class SwIterator SAL_FINAL
 {
-
     static_assert(std::is_base_of<SwClient,TElementType>::value, "TElementType needs to be derived from SwClient");
     static_assert(std::is_base_of<SwModify,TSource>::value, "TSource needs to be derived from SwModify");
     SwClientIter aClientIter;
@@ -351,6 +350,44 @@ public:
         while(aClientIter.m_pPosition && !aClientIter.m_pPosition->IsA( TYPE(TElementType) ) )
             aClientIter.m_pPosition = aClientIter.GetLeftOfPos();
         return PTR_CAST(TElementType,aClientIter.m_pCurrent = aClientIter.m_pPosition);
+    }
+    bool IsChanged()          { return aClientIter.IsChanged(); }
+};
+
+template< typename TSource > class SwIterator<SwClient, TSource>
+{
+    static_assert(std::is_base_of<SwModify,TSource>::value, "TSource needs to be derived from SwModify");
+    SwClientIter aClientIter;
+public:
+    SwIterator( const TSource& rSrc ) : aClientIter(rSrc) {}
+    SwClient* First()
+    {
+        aClientIter.GoStart();
+        if(!aClientIter.m_pPosition)
+            return nullptr;
+        aClientIter.m_pCurrent = nullptr;
+        return Next();
+    }
+    SwClient* Last()
+    {
+        if(!aClientIter.m_pPosition)
+            aClientIter.m_pPosition = const_cast<SwClient*>(aClientIter.m_rRoot.GetDepends());
+        if(!aClientIter.m_pPosition)
+            return aClientIter.m_pCurrent = nullptr;
+        while(aClientIter.GetRighOfPos())
+            aClientIter.m_pPosition = aClientIter.GetRighOfPos();
+        return aClientIter.m_pCurrent = aClientIter.m_pPosition;
+    }
+    SwClient* Next()
+    {
+        if( aClientIter.m_pPosition == aClientIter.m_pCurrent )
+            aClientIter.m_pPosition = aClientIter.GetRighOfPos();
+        return aClientIter.m_pCurrent = aClientIter.m_pPosition;
+    }
+    SwClient* Previous()
+    {
+        aClientIter.m_pPosition = aClientIter.GetLeftOfPos();
+        return aClientIter.m_pCurrent = aClientIter.m_pPosition;
     }
     bool IsChanged()          { return aClientIter.IsChanged(); }
 };
