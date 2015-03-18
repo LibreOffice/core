@@ -62,7 +62,7 @@ properties:
 	echo sdk.dir=$(ANDROID_SDK_HOME) >../../Bootstrap/local.properties
 	echo "# File needed by ndk-gdb" >jni/Application.mk
 	echo "APP_ABI := $(ANDROID_APP_ABI)" > jni/Application.mk
-	echo "APP_PLATFORM := android-15" >> jni/Application.mk
+	echo "APP_PLATFORM := android-21" >> jni/Application.mk
 
 install:
 	unset JAVA_HOME && $(ANT) $(if $(VERBOSE)$(verbose),,-quiet) debug install
