@@ -266,6 +266,7 @@ class SwClientIter SAL_FINAL : public sw::Ring<SwClientIter>
                 m_pPosition = static_cast<SwClient*>(m_pPosition->m_pLeft);
         return m_pCurrent = m_pPosition;
     }
+    const SwModify& GetModify() const { return m_rRoot; }
 
     static SW_DLLPUBLIC SwClientIter* our_pClientIters;
 
@@ -284,8 +285,6 @@ public:
             our_pClientIters = unique() ? nullptr : GetNextInRing();
         MoveTo(nullptr);
     }
-
-    const SwModify& GetModify() const { return m_rRoot; }
 
     SwClient* operator++()
     {
