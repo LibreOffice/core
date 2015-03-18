@@ -40,10 +40,6 @@ $(eval $(call gb_Executable_add_libs,gtktiledviewer,\
 ))
 endif
 
-$(eval $(call gb_Executable_add_cobjects,gtktiledviewer,\
-    libreofficekit/qa/lokdocview_quad/lokdocview_quad \
-))
-
 $(eval $(call gb_Executable_add_exception_objects,gtktiledviewer,\
     libreofficekit/qa/gtktiledviewer/gtktiledviewer \
 ))
