@@ -167,8 +167,8 @@ void ViewTabBar::disposing (void)
         // Set all references to the one tab page to NULL and delete the page.
         for (sal_uInt16 nIndex=0; nIndex<mpTabControl->GetPageCount(); ++nIndex)
             mpTabControl->SetTabPage(nIndex, NULL);
-        mpTabPage.reset();
-        mpTabControl.reset();
+        mpTabPage.disposeAndClear();
+        mpTabControl.disposeAndClear();
     }
 
     mxController = NULL;

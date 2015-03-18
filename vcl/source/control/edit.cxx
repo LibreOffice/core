@@ -2786,6 +2786,7 @@ Size Edit::GetMinimumEditSize()
     vcl::Window* pDefWin = ImplGetDefaultWindow();
     VclPtr<Edit> aEdit(new Edit( pDefWin, WB_BORDER ) );
     Size aSize( aEdit->CalcMinimumSize() );
+    aEdit.disposeAndClear();
     return aSize;
 }
 

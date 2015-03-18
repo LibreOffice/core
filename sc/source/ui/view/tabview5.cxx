@@ -176,7 +176,7 @@ ScTabView::~ScTabView()
     delete pSelEngine;
 
     // Delete this before the grid windows, since it's a child window of one of them.
-    mpInputHintWindow.reset();
+    mpInputHintWindow.disposeAndClear();
     for (i=0; i<4; i++)
         pGridWin[i].disposeAndClear();
 
@@ -189,6 +189,14 @@ ScTabView::~ScTabView()
         pColOutline[i].disposeAndClear();
         pRowOutline[i].disposeAndClear();
     }
+
+    aScrollBarBox.disposeAndClear();
+    aCornerButton.disposeAndClear();
+    aTopButton.disposeAndClear();
+    aHScrollLeft.disposeAndClear();
+    aHScrollRight.disposeAndClear();
+    aVScrollTop.disposeAndClear();
+    aVScrollBottom.disposeAndClear();
 
     pHSplitter.disposeAndClear();
     pVSplitter.disposeAndClear();

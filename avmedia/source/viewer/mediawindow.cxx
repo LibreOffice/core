@@ -330,6 +330,7 @@ void MediaWindow::executeFormatErrorBox( vcl::Window* pParent )
     VclPtr<MessageDialog> aErrBox(new MessageDialog( pParent, AVMEDIA_RESID( AVMEDIA_STR_ERR_URL ) ) );
 
     aErrBox->Execute();
+    aErrBox.disposeAndClear();
 }
 
 
