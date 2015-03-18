@@ -19,15 +19,18 @@
 #ifndef INCLUDED_SW_INC_SWITERATOR_HXX
 #define INCLUDED_SW_INC_SWITERATOR_HXX
 
+#include <type_traits>
 #include <calbck.hxx>
 #include <sal/log.hxx>
 
 template< class TElementType, class TSource > class SwIterator SAL_FINAL
 {
+
+    static_assert(std::is_base_of<SwClient,TElementType>::value, "TElementType needs to be derived from SwClient");
     SwClientIter aClientIter;
 public:
 
-    SwIterator( const TSource& rSrc ) : aClientIter(rSrc) { assert(TElementType::IsOf( TYPE(SwClient) )); }
+    SwIterator( const TSource& rSrc ) : aClientIter(rSrc) {}
     TElementType* First()
     {
         aClientIter.GoStart();
