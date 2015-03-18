@@ -460,7 +460,7 @@ void DocxExport::ExportDocument_Impl()
 void DocxExport::AppendSection( const SwPageDesc *pPageDesc, const SwSectionFmt* pFmt, sal_uLong nLnNum )
 {
     AttrOutput().SectionBreak( msword::PageBreak, m_pSections->CurrentSectionInfo() );
-    m_pSections->AppendSection( pPageDesc, pFmt, nLnNum );
+    m_pSections->AppendSection( pPageDesc, pFmt, nLnNum, m_pAttrOutput->IsFirstParagraph() );
 }
 
 void DocxExport::OutputEndNode( const SwEndNode& rEndNode )

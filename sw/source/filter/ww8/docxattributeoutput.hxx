@@ -974,6 +974,7 @@ public:
     void GetSdtEndBefore(const SdrObject* pSdrObj);
     void SetStartedParaSdt(bool bStartedParaSdt);
     bool IsStartedParaSdt();
+    bool IsFirstParagraph() { return m_bIsFirstParagraph; }
 
     /// Stores the table export state to the passed context and resets own state.
     void pushToTableExportContext(DocxTableExportContext& rContext);
