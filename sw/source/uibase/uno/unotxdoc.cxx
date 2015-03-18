@@ -3236,10 +3236,10 @@ void SwXTextDocument::setGraphicSelection(int nType, int nX, int nY)
     SwEditWin& rEditWin = pDocShell->GetView()->GetEditWin();
     switch (nType)
     {
-    case LOK_SETTEXTSELECTION_START:
+    case LOK_SETGRAPHICSELECTION_START:
         rEditWin.SetGraphicLogicPosition(/*bStart=*/true, Point(nX, nY));
         break;
-    case LOK_SETTEXTSELECTION_END:
+    case LOK_SETGRAPHICSELECTION_END:
         rEditWin.SetGraphicLogicPosition(/*bStart=*/false, Point(nX, nY));
         break;
     default:
