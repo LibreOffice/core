@@ -448,12 +448,23 @@ void SvpTextRender::SetTextColor( SalColor nSalColor )
     m_aTextColor = basebmp::Color( nSalColor );
 }
 
-SystemFontData SvpTextRender::GetSysFontData( int nFallbacklevel ) const
+SystemFontData SvpTextRender::GetSysFontData( int nFallbackLevel ) const
 {
     SystemFontData aSysFontData;
 
-    if (nFallbacklevel >= MAX_FALLBACK) nFallbacklevel = MAX_FALLBACK - 1;
-    if (nFallbacklevel < 0 ) nFallbacklevel = 0;
+    if (nFallbackLevel >= MAX_FALLBACK) nFallbackLevel = MAX_FALLBACK - 1;
+    if (nFallbackLevel < 0 ) nFallbackLevel = 0;
+
+    if (m_pServerFont[nFallbackLevel] != NULL)
+    {
+        ServerFont* rFont = m_pServerFont[nFallbackLevel];
+        aSysFontData.nFontId = rFont->GetFtFace();
+        aSysFontData.nFontFlags = rFont->GetLoadFlags();
+        aSysFontData.bFakeBold = rFont->NeedsArtificialBold();
+        aSysFontData.bFakeItalic = rFont->NeedsArtificialItalic();
+        aSysFontData.bAntialias = rFont->GetAntialiasAdvice();
+        aSysFontData.bVerticalCharacterType = rFont->GetFontSelData().mbVertical;
+    }
 
     return aSysFontData;
 }
