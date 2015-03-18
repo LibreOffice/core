@@ -273,7 +273,7 @@ void DdeTransaction::Execute()
     HSZ     hItem = *pName;
     void*   pData = (void*)(const void *)aDdeData;
     DWORD   nData = (DWORD)(long)aDdeData;
-    sal_uLong   nIntFmt = aDdeData.pImp->nFmt;
+    SotClipboardFormatId nIntFmt = aDdeData.pImp->nFmt;
     UINT    nExtFmt  = DdeData::GetExternalFormat( nIntFmt );
     DdeInstData* pInst = ImpGetInstData();
 

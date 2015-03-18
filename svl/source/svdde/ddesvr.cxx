@@ -565,12 +565,12 @@ bool DdeService::HasCbFormat( sal_uInt16 nFmt )
     return false;
 }
 
-bool DdeService::HasFormat( sal_uLong nFmt )
+bool DdeService::HasFormat(SotClipboardFormatId nFmt)
 {
     return HasCbFormat( (sal_uInt16)DdeData::GetExternalFormat( nFmt ));
 }
 
-void DdeService::AddFormat( sal_uLong nFmt )
+void DdeService::AddFormat(SotClipboardFormatId nFmt)
 {
     nFmt = DdeData::GetExternalFormat( nFmt );
     for ( size_t i = 0, n = aFormats.size(); i < n; ++i )
@@ -579,7 +579,7 @@ void DdeService::AddFormat( sal_uLong nFmt )
     aFormats.push_back( nFmt );
 }
 
-void DdeService::RemoveFormat( sal_uLong nFmt )
+void DdeService::RemoveFormat(SotClipboardFormatId nFmt)
 {
     nFmt = DdeData::GetExternalFormat( nFmt );
     for ( DdeFormats::iterator it = aFormats.begin(); it != aFormats.end(); ++it )

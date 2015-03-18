@@ -78,8 +78,8 @@ public:
 
     DdeData&        operator = ( const DdeData& );
 
-    static sal_uLong GetExternalFormat( sal_uLong nFmt );
-    static sal_uLong GetInternalFormat( sal_uLong nFmt );
+    static sal_uLong GetExternalFormat(SotClipboardFormatId nFmt);
+    static SotClipboardFormatId GetInternalFormat(sal_uLong nFmt);
 };
 
 
@@ -394,9 +394,9 @@ public:
     void            AddTopic( const DdeTopic& );
     void            RemoveTopic( const DdeTopic& );
 
-    void            AddFormat( sal_uLong );
-    void            RemoveFormat( sal_uLong );
-    bool            HasFormat( sal_uLong );
+    void            AddFormat(SotClipboardFormatId);
+    void            RemoveFormat(SotClipboardFormatId);
+    bool            HasFormat(SotClipboardFormatId);
 
 private:
       //              DdeService( const DdeService& );

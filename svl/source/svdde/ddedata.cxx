@@ -113,7 +113,7 @@ DdeData& DdeData::operator = ( const DdeData& rData )
     return *this;
 }
 
-sal_uLong DdeData::GetExternalFormat( sal_uLong nFmt )
+sal_uLong DdeData::GetExternalFormat(SotClipboardFormatId nFmt)
 {
     switch( nFmt )
     {
@@ -139,35 +139,29 @@ sal_uLong DdeData::GetExternalFormat( sal_uLong nFmt )
     return nFmt;
 }
 
-sal_uLong DdeData::GetInternalFormat( sal_uLong nFmt )
+SotClipboardFormatId DdeData::GetInternalFormat(sal_uLong nFmt)
 {
     switch( nFmt )
     {
     case CF_TEXT:
-        nFmt = SotClipboardFormatId::STRING;
-        break;
-
+        return SotClipboardFormatId::STRING;
     case CF_BITMAP:
-        nFmt = SotClipboardFormatId::BITMAP;
-        break;
-
+        return SotClipboardFormatId::BITMAP;
     case CF_METAFILEPICT:
-        nFmt = SotClipboardFormatId::GDIMETAFILE;
-        break;
-
+        return SotClipboardFormatId::GDIMETAFILE;
     default:
 #if defined(WNT)
         if( nFmt >= CF_MAX )
         {
             TCHAR szName[ 256 ];
 
-            if( GetClipboardFormatName( nFmt, szName, sizeof(szName) ) )
-                nFmt = SotExchange::RegisterFormatName( OUString(reinterpret_cast<const sal_Unicode*>(szName)) );
+            if(GetClipboardFormatName( nFmt, szName, sizeof(szName) ))
+                return SotExchange::RegisterFormatName( OUString(reinterpret_cast<const sal_Unicode*>(szName)) );
         }
 #endif
         break;
     }
-    return nFmt;
+    return static_cast<SotClipboardFormatId>(nFmt);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

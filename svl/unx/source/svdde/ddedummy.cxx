@@ -252,7 +252,7 @@ OUString DdeService::GetHelp()
     return OUString();
 }
 
-void DdeService::AddFormat( SAL_UNUSED_PARAMETER sal_uLong )
+void DdeService::AddFormat(SAL_UNUSED_PARAMETER SotClipboardFormatId)
 {
 }
 
