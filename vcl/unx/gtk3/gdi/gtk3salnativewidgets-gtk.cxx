@@ -1447,6 +1447,11 @@ bool GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
     return false;
 }
 
+bool GtkSalGraphics::SupportsCairo() const
+{
+    return true;
+}
+
 static GtkWidget* gCacheWindow;
 static GtkWidget* gDumbContainer;
 
