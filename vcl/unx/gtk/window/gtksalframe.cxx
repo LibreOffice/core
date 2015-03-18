@@ -2339,6 +2339,7 @@ void GtkSalFrame::SetScreen( unsigned int nNewScreen, int eType, Rectangle *pSiz
         //I wonder if we should instead leave maGeometry alone and rely on
         //configure-event to trigger signalConfigure and set it there
         AllocateFrame();
+        TriggerPaintEvent();
     }
 
     gtk_window_move( GTK_WINDOW( m_pWindow ), maGeometry.nX, maGeometry.nY );
