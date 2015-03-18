@@ -34,6 +34,7 @@ import java.util.List;
 public class TextCursorView extends View implements View.OnTouchListener {
     private static final String LOGTAG = TextCursorView.class.getSimpleName();
     private static final float CURSOR_WIDTH = 2f;
+    private static final int CURSOR_BLINK_TIME = 500;
 
     private boolean mInitialized = false;
     private RectF mCursorPosition = new RectF();
@@ -96,7 +97,7 @@ public class TextCursorView extends View implements View.OnTouchListener {
             mGraphicHandleFillPaint.setColor(Color.WHITE);
             mGraphicSelectionVisible = false;
 
-            postDelayed(cursorAnimation, 500);
+            postDelayed(cursorAnimation, CURSOR_BLINK_TIME);
 
             mInitialized = true;
         }
@@ -197,7 +198,7 @@ public class TextCursorView extends View implements View.OnTouchListener {
                 mCursorPaint.setAlpha(mCursorPaint.getAlpha() == 0 ? 0xFF : 0);
                 invalidate();
             }
-            postDelayed(cursorAnimation, 500);
+            postDelayed(cursorAnimation, CURSOR_BLINK_TIME);
         }
     };
 
