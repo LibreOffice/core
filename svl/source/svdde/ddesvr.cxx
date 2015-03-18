@@ -572,19 +572,19 @@ bool DdeService::HasFormat(SotClipboardFormatId nFmt)
 
 void DdeService::AddFormat(SotClipboardFormatId nFmt)
 {
-    nFmt = DdeData::GetExternalFormat( nFmt );
+    sal_uLong nExternalFmt = DdeData::GetExternalFormat( nFmt );
     for ( size_t i = 0, n = aFormats.size(); i < n; ++i )
-        if ( (sal_uLong) aFormats[ i ] == nFmt )
+        if ( (sal_uLong) aFormats[ i ] == nExternalFmt )
             return;
-    aFormats.push_back( nFmt );
+    aFormats.push_back( nExternalFmt );
 }
 
 void DdeService::RemoveFormat(SotClipboardFormatId nFmt)
 {
-    nFmt = DdeData::GetExternalFormat( nFmt );
+    sal_uLong nExternalFmt = DdeData::GetExternalFormat( nFmt );
     for ( DdeFormats::iterator it = aFormats.begin(); it != aFormats.end(); ++it )
     {
-        if ( (sal_uLong) *it == nFmt )
+        if ( (sal_uLong) *it == nExternalFmt )
         {
             aFormats.erase( it );
             break;
@@ -697,7 +697,7 @@ void DdeTopic::_Disconnect( sal_IntPtr nId )
     Disconnect( nId );
 }
 
-DdeData* DdeTopic::Get( sal_uIntPtr nFmt )
+DdeData* DdeTopic::Get(SotClipboardFormatId nFmt)
 {
     if ( aGetLink.IsSet() )
         return (DdeData*)aGetLink.Call( (void*)nFmt );
@@ -872,7 +872,7 @@ DdeGetPutItem::DdeGetPutItem( const DdeItem& rItem )
     nType = DDEGETPUTITEM;
 }
 
-DdeData* DdeGetPutItem::Get( sal_uLong )
+DdeData* DdeGetPutItem::Get(SotClipboardFormatId)
 {
     return 0;
 }

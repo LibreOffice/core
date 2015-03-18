@@ -118,25 +118,21 @@ sal_uLong DdeData::GetExternalFormat(SotClipboardFormatId nFmt)
     switch( nFmt )
     {
     case SotClipboardFormatId::STRING:
-        nFmt = CF_TEXT;
-        break;
+        return CF_TEXT;
     case SotClipboardFormatId::BITMAP:
-        nFmt = CF_BITMAP;
-        break;
+        return CF_BITMAP;
     case SotClipboardFormatId::GDIMETAFILE:
-        nFmt = CF_METAFILEPICT;
-        break;
-
+        return CF_METAFILEPICT;
     default:
         {
 #if defined(WNT)
             OUString aName( SotExchange::GetFormatName( nFmt ) );
             if( !aName.isEmpty() )
-                nFmt = RegisterClipboardFormat( reinterpret_cast<LPCWSTR>(aName.getStr()) );
+                return RegisterClipboardFormat( reinterpret_cast<LPCWSTR>(aName.getStr()) );
 #endif
         }
     }
-    return nFmt;
+    return static_cast<sal_uLong>(nFmt);
 }
 
 SotClipboardFormatId DdeData::GetInternalFormat(sal_uLong nFmt)

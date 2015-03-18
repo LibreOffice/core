@@ -166,7 +166,7 @@ void DdeTopic::RemoveItem( SAL_UNUSED_PARAMETER const DdeItem& )
 {
 }
 
-DdeData* DdeTopic::Get( SAL_UNUSED_PARAMETER sal_uLong )
+DdeData* DdeTopic::Get(SAL_UNUSED_PARAMETER SotClipboardFormatId)
 {
     return NULL;
 }

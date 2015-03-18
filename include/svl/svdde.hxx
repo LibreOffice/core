@@ -290,7 +290,7 @@ class SVL_DLLPUBLIC DdeTopic
 public:
     virtual void    Connect( sal_IntPtr );
     virtual void    Disconnect( sal_IntPtr );
-    virtual DdeData* Get( sal_uLong );
+    virtual DdeData* Get(SotClipboardFormatId);
     virtual bool    Put( const DdeData* );
     virtual bool    Execute( const OUString* );
     // Eventually create a new item. return 0 -> Item creation failed
