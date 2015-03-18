@@ -165,7 +165,7 @@ ImplToolItem::ImplToolItem( const ImplToolItem& rItem ) :
 
 ImplToolItem::~ImplToolItem()
 {
-    mpWindow.disposeAndClear();
+    // don't dispose mpWindow - we get copied around.
 }
 
 ImplToolItem& ImplToolItem::operator=( const ImplToolItem& rItem )

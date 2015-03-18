@@ -1346,7 +1346,8 @@ void Window::SetHelpText( const OUString& rHelpText )
 
 void Window::SetQuickHelpText( const OUString& rHelpText )
 {
-    mpWindowImpl->maQuickHelpText = rHelpText;
+    if (mpWindowImpl)
+        mpWindowImpl->maQuickHelpText = rHelpText;
 }
 
 const OUString& Window::GetQuickHelpText() const

@@ -288,11 +288,9 @@ void ScInputWindow::dispose()
 
     SfxImageManager::GetImageManager( *SC_MOD() )->ReleaseToolBox( this );
 
+    pRuntimeWindow.disposeAndClear();
     aWndPos.disposeAndClear();
 
-    pRuntimeWindow.reset();
-
-    pRuntimeWindow.disposeAndClear();
     ToolBox::dispose();
 }
 
