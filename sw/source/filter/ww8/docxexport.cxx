@@ -930,6 +930,15 @@ void DocxExport::WriteSettings()
         }
     }
 
+    // Section-specific write protection
+    if ( m_pSections->DocumentIsProtected() )
+    {
+        pFS->singleElementNS( XML_w, XML_documentProtection,
+                              FSNS( XML_w, XML_enforcement ), "true",
+                              FSNS( XML_w, XML_edit ), "forms",
+                              FSEND );
+    }
+
     pFS->endElementNS( XML_w, XML_settings );
 }
 
