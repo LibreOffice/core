@@ -57,21 +57,6 @@ namespace cairo
 #include <cairo-xlib.h>
 #include <cairo-xlib-xrender.h>
 
-    // TODO(F3): svp headless case!
-
-    bool IsCairoWorking( OutputDevice* pOutDev )
-    {
-        if( !pOutDev )
-            return false;
-
-        Display* pDisplay = (Display*)pOutDev->GetSystemGfxData().pDisplay;
-        if( !pDisplay )
-            return false;
-
-        int nDummy;
-        return XQueryExtension( pDisplay, "RENDER", &nDummy, &nDummy, &nDummy );
-    }
-
     X11SysData::X11SysData() :
         pDisplay(NULL),
         hDrawable(0),

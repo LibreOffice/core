@@ -92,8 +92,8 @@ namespace cairocanvas
         if( !pSysData || !pSysData->nSize )
             throw lang::NoSupportException( "Passed SystemGraphicsData invalid!" );
 
-        bool bHasXRender = IsCairoWorking(pOutDev);
-        ENSURE_ARG_OR_THROW( bHasXRender == true, "SpriteCanvas::SpriteCanvas: No RENDER extension" );
+        bool bHasCairo = pOutDev->SupportsCairo();
+        ENSURE_ARG_OR_THROW(bHasCairo == true, "SpriteCanvas::SpriteCanvas: No Cairo capability");
 
         // setup helper
         maDeviceHelper.init( *this, *pOutDev );

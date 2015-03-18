@@ -85,9 +85,9 @@ namespace cairocanvas
             throw lang::NoSupportException(
                 "Parent window not VCL window, or canvas out-of-process!", NULL);
 
-        bool bHasXRender = IsCairoWorking(pParentWindow);
-        ENSURE_ARG_OR_THROW( bHasXRender == true,
-                             "CairoSpriteCanvas::SpriteCanvas: No RENDER extension" );
+        bool bHasCairo = pParentWindow->SupportsCairo();
+        ENSURE_ARG_OR_THROW(bHasCairo == true,
+                            "CairoSpriteCanvas::SpriteCanvas: No Cairo capability");
 
         Size aPixelSize( pParentWindow->GetOutputSizePixel() );
         const ::basegfx::B2ISize aSize( aPixelSize.Width(),

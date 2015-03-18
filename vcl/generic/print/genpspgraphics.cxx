@@ -1209,6 +1209,11 @@ SystemGraphicsData GenPspGraphics::GetGraphicsData() const
     return SystemGraphicsData();
 }
 
+bool GenPspGraphics::SupportsCairo() const
+{
+    return false;
+}
+
 SystemFontData GenPspGraphics::GetSysFontData( int /* nFallbacklevel */ ) const
 {
     return SystemFontData();

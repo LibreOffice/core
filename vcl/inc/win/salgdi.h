@@ -445,6 +445,7 @@ public:
     virtual bool            IsNativeControlSupported( ControlType nType, ControlPart nPart ) SAL_OVERRIDE;
 
     virtual SystemGraphicsData GetGraphicsData() const SAL_OVERRIDE;
+    virtual bool               SupportsCairo() const SAL_OVERRIDE;
     virtual SystemFontData     GetSysFontData( int nFallbacklevel ) const SAL_OVERRIDE;
 
     virtual void               BeginPaint() SAL_OVERRIDE;
