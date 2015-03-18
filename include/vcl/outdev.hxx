@@ -380,6 +380,7 @@ public:
     bool                        SupportsCairo() const;
     bool                        CanResizeCairoSurface() const;
     cairo_t*                    GetCairoContext() const;
+    void                        FlushCairoContext(cairo_t *cr) const;
     css::uno::Any               GetSystemGfxDataAny() const;
 
     void                        SetRefPoint();

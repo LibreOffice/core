@@ -442,6 +442,7 @@ public:
     virtual bool                SupportsCairo() const = 0;
     virtual bool                CanResizeCairoSurface() const = 0;
     virtual cairo_t*            GetCairoContext() const = 0;
+    virtual void                FlushCairoContext(cairo_t *cr) const = 0;
 
     virtual SystemFontData      GetSysFontData( int nFallbacklevel ) const = 0;
 

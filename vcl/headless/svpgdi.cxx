@@ -748,4 +748,8 @@ cairo_t* SvpSalGraphics::GetCairoContext() const
     return NULL;
 }
 
+void SvpSalGraphics::FlushCairoContext(cairo_t *) const
+{
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -335,6 +335,7 @@ namespace cairo
      **/
     Gtk3Surface::Gtk3Surface(const OutputDevice& rRefDevice, int x, int y, int width, int height)
         : mpSurface(cairo_get_target(rRefDevice.GetCairoContext()), &cairo_surface_flush)
+        , mpDevice(&rRefDevice)
         , mnWidth(width)
         , mnHeight(height)
     {
@@ -353,6 +354,7 @@ namespace cairo
      **/
     Gtk3Surface::Gtk3Surface(const CairoSurfaceSharedPtr& pSurface, int width, int height)
         : mpSurface(pSurface)
+        , mpDevice(NULL)
         , mnWidth(width)
         , mnHeight(height)
     {
@@ -406,6 +408,8 @@ namespace cairo
     void Gtk3Surface::flush() const
     {
         cairo_surface_flush(mpSurface.get());
+        if (mpDevice)
+            mpDevice->FlushCairoContext(NULL);
     }
 
     boost::shared_ptr<VirtualDevice> Gtk3Surface::createVirtualDevice() const

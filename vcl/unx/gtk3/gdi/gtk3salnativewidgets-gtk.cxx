@@ -1561,6 +1561,12 @@ cairo_t* GtkSalGraphics::GetCairoContext() const
     return mpFrame->getCairoContext();
 }
 
+void GtkSalGraphics::FlushCairoContext(cairo_t *) const
+{
+    //request gtk to sync the entire contents
+    gtk_widget_queue_draw(mpWindow);
+}
+
 void GtkSalGraphics::clipRegion(cairo_t* cr)
 {
     if (!m_aClipRegion.IsEmpty())

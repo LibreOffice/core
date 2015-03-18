@@ -330,6 +330,17 @@ cairo_t* OutputDevice::GetCairoContext() const
     return mpGraphics->GetCairoContext();
 }
 
+void OutputDevice::FlushCairoContext(cairo_t* cr) const
+{
+    if (!mpGraphics)
+    {
+        if (!AcquireGraphics())
+            return;
+    }
+
+    mpGraphics->FlushCairoContext(cr);
+}
+
 css::uno::Any OutputDevice::GetSystemGfxDataAny() const
 {
     const SystemGraphicsData aSysData = GetSystemGfxData();

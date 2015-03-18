@@ -1224,6 +1224,10 @@ cairo_t* GenPspGraphics::GetCairoContext() const
     return NULL;
 }
 
+void GenPspGraphics::FlushCairoContext(cairo_t*) const
+{
+}
+
 SystemFontData GenPspGraphics::GetSysFontData( int /* nFallbacklevel */ ) const
 {
     return SystemFontData();

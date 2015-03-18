@@ -101,6 +101,7 @@ namespace cairo {
     class Gtk3Surface : public Surface
     {
         CairoSurfaceSharedPtr mpSurface;
+        const OutputDevice* mpDevice;
         int mnWidth;
         int mnHeight;
     public:
