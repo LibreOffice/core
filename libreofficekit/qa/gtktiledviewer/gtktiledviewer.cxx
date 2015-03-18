@@ -18,7 +18,6 @@
 #include <LibreOfficeKit/LibreOfficeKitGtk.h>
 #include <LibreOfficeKit/LibreOfficeKitInit.h>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
-#include "../lokdocview_quad/lokdocview_quad.h"
 
 #include <com/sun/star/awt/Key.hpp>
 #include <rsc/rsc-vcl-shared-types.hxx>
@@ -36,7 +35,6 @@ static int help()
 static GtkWidget* pDocView;
 static GtkToolItem* pEnableEditing;
 static GtkToolItem* pBold;
-static GtkWidget* pDocViewQuad;
 static GtkWidget* pVBox;
 // GtkComboBox requires gtk 2.24 or later
 #if ( GTK_MAJOR_VERSION == 2 && GTK_MINOR_VERSION >= 24 ) || GTK_MAJOR_VERSION > 2
@@ -58,10 +56,6 @@ void changeZoom( GtkWidget* pButton, gpointer /* pItem */ )
     if ( pDocView )
     {
         fCurrentZoom = lok_docview_get_zoom( LOK_DOCVIEW(pDocView) );
-    }
-    else if ( pDocViewQuad )
-    {
-        fCurrentZoom = lok_docview_quad_get_zoom( LOK_DOCVIEW_QUAD(pDocViewQuad) );
     }
 
     if ( strcmp(sName, "gtk-zoom-in") == 0)
@@ -100,10 +94,6 @@ void changeZoom( GtkWidget* pButton, gpointer /* pItem */ )
         {
             lok_docview_set_zoom( LOK_DOCVIEW(pDocView), fZoom );
         }
-        else if ( pDocViewQuad )
-        {
-            lok_docview_quad_set_zoom( LOK_DOCVIEW_QUAD(pDocViewQuad), fZoom );
-        }
     }
 }
 
@@ -131,34 +121,6 @@ void toggleBold(GtkWidget* /*pButton*/, gpointer /*pItem*/)
     LOKDocView* pLOKDocView = LOK_DOCVIEW(pDocView);
 
     lok_docview_post_command(pLOKDocView, ".uno:Bold");
-}
-
-void changeQuadView( GtkWidget* /*pButton*/, gpointer /* pItem */ )
-{
-    if ( pDocView )
-    {
-        const float fCurrentZoom = lok_docview_get_zoom( LOK_DOCVIEW(pDocView) );
-        gtk_widget_destroy( pDocView );
-        pDocView = 0;
-        pDocViewQuad = lok_docview_quad_new( pOffice );
-        gtk_container_add( GTK_CONTAINER(pVBox), pDocViewQuad );
-        gtk_widget_show( pDocViewQuad );
-
-        lok_docview_quad_set_zoom( LOK_DOCVIEW_QUAD(pDocViewQuad), fCurrentZoom );
-        lok_docview_quad_open_document( LOK_DOCVIEW_QUAD(pDocViewQuad), pFileName );
-    }
-    else if ( pDocViewQuad )
-    {
-        const float fCurrentZoom = lok_docview_quad_get_zoom( LOK_DOCVIEW_QUAD(pDocViewQuad) );
-        gtk_widget_destroy( pDocViewQuad );
-        pDocViewQuad = 0;
-        pDocView = lok_docview_new( pOffice );
-        gtk_container_add( GTK_CONTAINER(pVBox), pDocView );
-        gtk_widget_show( pDocView );
-
-        lok_docview_set_zoom( LOK_DOCVIEW(pDocView), fCurrentZoom );
-        lok_docview_open_document( LOK_DOCVIEW(pDocView), pFileName );
-    }
 }
 
 /// Receives a key press or release event.
@@ -253,9 +215,6 @@ void changePart( GtkWidget* pSelector, gpointer /* pItem */ )
 {
     int nPart = gtk_combo_box_get_active( GTK_COMBO_BOX(pSelector) );
 
-    // We don't really care about the quad view for now -- it's only purpose
-    // is to check that the edges of tiles aren't messed up, and no real
-    // reason to maintain it to be able to show other document parts etc.
     if ( pDocView )
     {
         lok_docview_set_part( LOK_DOCVIEW(pDocView), nPart );
@@ -359,14 +318,6 @@ int main( int argc, char* argv[] )
     g_signal_connect( G_OBJECT(pPartModeComboBox), "changed", G_CALLBACK(changePartMode), NULL );
 #endif
 
-    GtkToolItem* pSeparator3 = gtk_separator_tool_item_new();
-    gtk_toolbar_insert( GTK_TOOLBAR(pToolbar), pSeparator3, -1);
-
-    GtkToolItem* pEnableQuadView = gtk_toggle_tool_button_new();
-    gtk_tool_button_set_label( GTK_TOOL_BUTTON(pEnableQuadView), "Use Quad View" );
-    gtk_toolbar_insert( GTK_TOOLBAR(pToolbar), pEnableQuadView, -1 );
-    g_signal_connect( G_OBJECT(pEnableQuadView), "toggled", G_CALLBACK(changeQuadView), NULL );
-
     gtk_toolbar_insert( GTK_TOOLBAR(pToolbar), gtk_separator_tool_item_new(), -1);
     pEnableEditing = gtk_toggle_tool_button_new();
     gtk_tool_button_set_label(GTK_TOOL_BUTTON(pEnableEditing), "Editing");
@@ -383,7 +334,6 @@ int main( int argc, char* argv[] )
 
     // Docview
     pDocView = lok_docview_new( pOffice );
-    pDocViewQuad = 0;
     g_signal_connect(pDocView, "edit-changed", G_CALLBACK(signalEdit), NULL);
 
     // Input handling.
