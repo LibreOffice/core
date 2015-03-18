@@ -50,8 +50,7 @@
 #elif defined CAIRO_HAS_WIN32_SURFACE
 # include "cairo_win32_cairo.hxx"
 # include <cairo-win32.h>
-#elif defined CAIRO_HAS_XLIB_SURFACE
-# include "cairo_xlib_cairo.hxx"
+#elif defined CAIRO_HAS_FT_FONT
 # include <cairo-ft.h>
 #else
 # error Native API needed.
@@ -479,7 +478,7 @@ namespace cairocanvas
             // VCL always has non-zero value for lfWidth
             font_face = cairo_win32_font_face_create_for_hfont(rSysFontData.hFont);
 
-#elif defined CAIRO_HAS_XLIB_SURFACE
+#elif defined CAIRO_HAS_FT_FONT
             font_face = cairo_ft_font_face_create_for_ft_face((FT_Face)rSysFontData.nFontId,
                                                               rSysFontData.nFontFlags);
 #else
