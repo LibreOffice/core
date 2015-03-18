@@ -888,7 +888,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         rDevice.DrawRect(Rectangle(aStart, aEnd));
 
         rDevice.SetMapMode(bIsTiledRendering? aDrawMode: pViewData->GetLogicMode());
-        pEditView->Paint(PixelToLogic(Rectangle(Point(nScrX, nScrY), Size(aOutputData.GetScrW(), aOutputData.GetScrH()))), &rDevice);
+        pEditView->Paint(rDevice.PixelToLogic(Rectangle(Point(nScrX, nScrY), Size(aOutputData.GetScrW(), aOutputData.GetScrH()))), &rDevice);
         rDevice.SetMapMode(MAP_PIXEL);
     }
 
