@@ -1447,6 +1447,10 @@ class DemoWidgets : public WorkWindow
     VclBox     *mpBox;
     ToolBox    *mpToolbox;
     PushButton *mpButton;
+
+    Timer       maHelpTimer;
+    DECL_LINK  (HelpTimerCb, void *);
+
 public:
     DemoWidgets() :
         WorkWindow(NULL, WB_STDWORK),
@@ -1463,21 +1467,21 @@ public:
         mpBox->SetBackground(aWallpaper);
         mpBox->Show();
 
-        Help::EnableQuickHelp();
         Help::EnableBalloonHelp();
-        Help::EnableExtHelp();
         mpToolbox->SetHelpText("Help text");
         mpToolbox->InsertItem(0, "Toolbar item");
         mpToolbox->SetQuickHelpText(0, "This is a tooltip popup");
-        mpToolbox->SetHelpText(0, "This is a longer help text popup");
         mpToolbox->InsertSeparator();
         mpToolbox->Show();
 
         mpButton->SetText("Click me; go on");
-        mpToolbox->SetQuickHelpText("button help text");
         mpButton->Show();
 
         Show();
+
+        maHelpTimer.SetTimeoutHdl(LINK(this,DemoWidgets,HelpTimerCb));
+        maHelpTimer.SetTimeout(1000);
+        maHelpTimer.Start();
     }
     virtual ~DemoWidgets()
     {
@@ -1511,6 +1515,18 @@ public:
                    Point( 0, 0 ), aExclude.GetSize(), aDev );
     }
 };
+
+// Horrible code to manually provoke a help event
+IMPL_LINK_NOARG(DemoWidgets,HelpTimerCb)
+{
+    Point aPos = mpToolbox->GetPosPixel();
+    aPos.Move(10,10);
+    HelpEvent aHelpEvent( aPos, HelpEventMode::BALLOON );
+//    pSVData->maHelpData.mbRequestingHelp = true;
+    mpToolbox->RequestHelp( aHelpEvent );
+//    pSVData->maHelpData.mbRequestingHelp = false;
+    return 0;
+}
 
 class DemoApp : public Application
 {
