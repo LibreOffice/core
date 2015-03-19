@@ -475,12 +475,13 @@ static void impl_drawAeroToolbar( HDC hDC, RECT rc, bool bHorizontal )
 
         // and a darker horizontal line under that
         HPEN hpen = CreatePen( PS_SOLID, 1, RGB( 0xb0, 0xb0, 0xb0 ) );
-        SelectObject( hDC, hpen );
+        HPEN hOrigPen = (HPEN) SelectObject(hDC, hpen);
 
         MoveToEx( hDC, rc.left, gradient_bottom, NULL );
         LineTo( hDC, rc.right, gradient_bottom );
 
-        DeleteObject( hpen );
+        SelectObject(hDC, hOrigPen);
+        DeleteObject(hpen);
     }
     else
     {
@@ -500,12 +501,13 @@ static void impl_drawAeroToolbar( HDC hDC, RECT rc, bool bHorizontal )
             from_y = to_y = rc.top;
 
             HPEN hpen = CreatePen( PS_SOLID, 1, RGB( 0xb0, 0xb0, 0xb0 ) );
-            SelectObject( hDC, hpen );
+            HPEN hOrigPen = (HPEN) SelectObject(hDC, hpen);
 
             MoveToEx( hDC, from_x, from_y, NULL );
             LineTo( hDC, to_x, to_y );
 
-            DeleteObject( hpen );
+            SelectObject(hDC, hOrigPen);
+            DeleteObject(hpen);
         }
     }
 }
