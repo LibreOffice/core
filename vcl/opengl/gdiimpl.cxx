@@ -1529,7 +1529,7 @@ SalColor OpenGLSalGraphicsImpl::getPixel( long nX, long nY )
     char pixel[3] = { 0, 0, 0 };
 
     PreDraw();
-    nY = GetHeight() - nY;
+    nY = GetHeight() - nY - 1;
     glReadPixels( nX, nY, 1, 1, GL_RGB, GL_UNSIGNED_BYTE, pixel);
     PostDraw();
 
