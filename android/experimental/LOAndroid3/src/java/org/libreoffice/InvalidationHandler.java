@@ -3,6 +3,7 @@ package org.libreoffice;
 import android.content.Intent;
 import android.graphics.RectF;
 import android.net.Uri;
+import android.util.Log;
 
 import org.libreoffice.kit.Document;
 import org.mozilla.gecko.TextSelection;
@@ -211,7 +212,9 @@ public class InvalidationHandler implements Document.MessageCallback {
     private synchronized void cursorVisibility(String payload) {
         if (payload.equals("true")) {
             mTextCursorLayer.showCursor();
-            mTextSelection.showHandle(TextSelectionHandle.HandleType.MIDDLE);
+            if (mState != OverlayState.SELECTION) {
+                mTextSelection.showHandle(TextSelectionHandle.HandleType.MIDDLE);
+            }
         } else if (payload.equals("false")) {
             mTextCursorLayer.hideCursor();
             mTextSelection.hideHandle(TextSelectionHandle.HandleType.MIDDLE);
