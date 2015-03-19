@@ -3858,6 +3858,18 @@ else
 fi
 AC_SUBST(ENABLE_SYMBOLS)
 
+if test -n "$with_android_ndk" -a \( -n "$ENABLE_SYMBOLS" -o -n "$ENABLE_DEBUG" -o -n "$ENABLE_DBGUTIL" \) -a "$ENABLE_DEBUGINFO_FOR" = "all"; then
+    # Building on Android with full symbols: without enough memory the linker never finishes currently.
+    AC_MSG_CHECKING([whether enough memory is available for linking])
+    mem_size=$(grep -o 'MemTotal: *.\+ kB' /proc/meminfo | sed 's/MemTotal: *\(.\+\) kB/\1/')
+    # Check for 15GB, as Linux reports a bit less than the physical memory size.
+    if test -n "$mem_size" -a $mem_size -lt 15728640; then
+        AC_MSG_ERROR([building with full symbols and less than 16GB of memory is not supported])
+    else
+        AC_MSG_RESULT([yes])
+    fi
+fi
+
 # Debug information format for iOS. Running dsymutil takes a long time... you really need a separate
 # .dSYM only if running Instruments, I think. (Not for normal debugging in Xcode.) To enable a
 # separate .dSYM, either use --enable-release-build or change manually to "DWARF with DSYM" in Xcode.
