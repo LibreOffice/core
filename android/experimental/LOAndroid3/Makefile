@@ -35,4 +35,7 @@ build-ant: android_version_setup copy-stuff prepare-appcompat link-so properties
 	unset JAVA_HOME && $(ANT) $(if $(VERBOSE)$(verbose),,-quiet) $(if $(ENABLE_RELEASE_BUILD),release,debug)
 
 run:
-	adb shell am start -n $(APP_PACKAGE)/.ui.LibreOfficeUIActivity -e input /assets/test1.odt
+	adb shell am start -n $(APP_PACKAGE)/.ui.LibreOfficeUIActivity
+
+debugrun:
+	$(SYSBASE)/../../../ndk-gdb --start

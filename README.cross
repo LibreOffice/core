@@ -339,13 +339,8 @@ course need an appropriate system image for that.
 Here is an autogen.input for Android on ARM when cross-compiling
 from Linux:
 
---build=x86_64-unknown-linux-gnu
 --enable-dbgutil
---enable-debug
 --enable-werror
---with-android-ndk=/home/tml/android-ndk-r9c
---with-android-ndk-toolchain-version=4.8
---with-android-sdk=/home/tml/adt-bundle-linux/sdk
 --with-distro=LibreOfficeAndroid
 
 And here is an (quite old) autogen.input for Android on X86:
@@ -368,25 +363,9 @@ Note that none of these apps in any way are claimed to be ready for
 end-users. No "beta testing" offers needed, it is painfully obvious
 what problems they have.
 
-To run some of the apps, do "make install" followed by either "make
-run" or starting it from Android itself. You most likely want to have
-an "adb logcat" running in another window.
-
-To debug, do manually what "make run" would do and when the app has
-started, run ndk-gdb.
-
-You can also do that manually; to install:
-
-  <android-sdk-linux>/platform-tools/adb install -r android/experimental/LOAndroid3/bin/LibreOfficeViewer-debug.apk
-
-To see the log:
-
-  <android-sdk-linux>/platform-tools/adb logcat
-
-To debug, install the .apk, run it, and then:
-
-  cd android/experimental/LOAndroid3
-  <android-ndk-r9d>/ndk-gdb --adb=<android-sdk-linux>/platform-tools/adb
+To run some of the apps, do "make install" followed by either "make run" or
+starting it from Android itself. You most likely want to have an "adb logcat"
+running in another window. To debug, run "make debugrun".
 
 NB: If you happen to upgrade to Android SDK Tools 23, and the build (using
 'make verbose=t android') fails for you with:
