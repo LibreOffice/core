@@ -1297,13 +1297,13 @@ long VSeriesPlotter::calculateTimeResolutionOnXAxis()
 double VSeriesPlotter::getMinimumX()
 {
     double fMinimum, fMaximum;
-    this->getMinimumAndMaximiumX( fMinimum, fMaximum );
+    getMinimumAndMaximiumX( fMinimum, fMaximum );
     return fMinimum;
 }
 double VSeriesPlotter::getMaximumX()
 {
     double fMinimum, fMaximum;
-    this->getMinimumAndMaximiumX( fMinimum, fMaximum );
+    getMinimumAndMaximiumX( fMinimum, fMaximum );
     return fMaximum;
 }
 
