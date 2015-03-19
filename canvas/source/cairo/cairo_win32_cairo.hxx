@@ -49,8 +49,6 @@ namespace cairo {
 
         int getDepth() const;
     };
-
-    unsigned long ucs4toindex(unsigned int ucs4, HFONT hfont);
 }
 
 #endif
