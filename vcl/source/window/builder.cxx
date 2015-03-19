@@ -1664,14 +1664,15 @@ vcl::Window *VclBuilder::makeObject(vcl::Window *pParent, const OString &name, c
     }
     else
     {
+#ifndef SAL_DLLPREFIX
+#define SAL_DLLPREFIX ""
+#endif
         sal_Int32 nDelim = name.indexOf('-');
         if (nDelim != -1)
         {
 #ifndef DISABLE_DYNLOADING
             OUStringBuffer sModuleBuf;
-#ifdef SAL_DLLPREFIX
             sModuleBuf.append(SAL_DLLPREFIX);
-#endif
             sModuleBuf.append(OStringToOUString(name.copy(0, nDelim), RTL_TEXTENCODING_UTF8));
             sModuleBuf.append(SAL_DLLEXTENSION);
 #endif
@@ -1682,7 +1683,19 @@ vcl::Window *VclBuilder::makeObject(vcl::Window *pParent, const OString &name, c
             if (aI == m_aModuleMap.end())
             {
                 osl::Module* pModule = new osl::Module;
+#if ENABLE_MERGELIBS
+                sModuleBuf.append(SAL_DLLPREFIX);
+                sModuleBuf.append("mergedlo");
+                sModuleBuf.append(SAL_DLLEXTENSION);
+                OUString sMergedModule = sModuleBuf.makeStringAndClear();
+                pModule->loadRelative(&thisModule, sMergedModule);
+                if (!pModule->getFunctionSymbol(sFunction))
+                {
+                    pModule->loadRelative(&thisModule, sModule);
+                }
+#else
                 pModule->loadRelative(&thisModule, sModule);
+#endif
                 aI = m_aModuleMap.insert(sModule, pModule).first;
             }
             customMakeWidget pFunction = reinterpret_cast<customMakeWidget>(aI->second->getFunctionSymbol(sFunction));
