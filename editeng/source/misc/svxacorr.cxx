@@ -436,69 +436,79 @@ bool SvxAutoCorrect::FnCptlSttWrd( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
 
 
 bool SvxAutoCorrect::FnChgOrdinalNumber(
-                                SvxAutoCorrDoc& rDoc, const OUString& rTxt,
-                                sal_Int32 nSttPos, sal_Int32 nEndPos,
-                                LanguageType eLang )
+    SvxAutoCorrDoc& rDoc, const OUString& rTxt,
+    sal_Int32 nSttPos, sal_Int32 nEndPos,
+    LanguageType eLang)
 {
-// 1st, 2nd, 3rd, 4 - 0th
-// 201th or 201st
-// 12th or 12nd
-    CharClass& rCC = GetCharClass( eLang );
+    // 1st, 2nd, 3rd, 4 - 0th
+    // 201th or 201st
+    // 12th or 12nd
     bool bChg = false;
 
-    for( ; nSttPos < nEndPos; ++nSttPos )
-        if( !lcl_IsInAsciiArr( sImplSttSkipChars, rTxt[ nSttPos ] ))
-            break;
-    for( ; nSttPos < nEndPos; --nEndPos )
-        if( !lcl_IsInAsciiArr( sImplEndSkipChars, rTxt[ nEndPos - 1 ] ))
-            break;
-
-
-    // Get the last number in the string to check
-    sal_Int32 nNumEnd = nEndPos;
-    bool foundEnd = false;
-    bool validNumber = true;
-    sal_Int32 i = nEndPos;
-
-    while ( i > nSttPos )
+    // In some languages ordinal suffixes should never be
+    // changed to superscript. Let's break for those languages.
+    switch (eLang)
     {
-        i--;
-        bool isDigit = rCC.isDigit( rTxt, i );
-        if ( foundEnd )
-            validNumber |= isDigit;
+    case LANGUAGE_SWEDISH:
+    case LANGUAGE_SWEDISH_FINLAND:
+        break;
+    default:
+        CharClass& rCC = GetCharClass(eLang);
 
-        if ( isDigit && !foundEnd )
+        for (; nSttPos < nEndPos; ++nSttPos)
+            if (!lcl_IsInAsciiArr(sImplSttSkipChars, rTxt[nSttPos]))
+                break;
+        for (; nSttPos < nEndPos; --nEndPos)
+            if (!lcl_IsInAsciiArr(sImplEndSkipChars, rTxt[nEndPos - 1]))
+                break;
+
+
+        // Get the last number in the string to check
+        sal_Int32 nNumEnd = nEndPos;
+        bool foundEnd = false;
+        bool validNumber = true;
+        sal_Int32 i = nEndPos;
+
+        while (i > nSttPos)
         {
-            foundEnd = true;
-            nNumEnd = i;
-        }
-    }
+            i--;
+            bool isDigit = rCC.isDigit(rTxt, i);
+            if (foundEnd)
+                validNumber |= isDigit;
 
-    if ( foundEnd && validNumber ) {
-        sal_Int32 nNum = rTxt.copy( nSttPos, nNumEnd - nSttPos + 1 ).toInt32( );
-
-        // Check if the characters after that number correspond to the ordinal suffix
-        uno::Reference< i18n::XOrdinalSuffix > xOrdSuffix
-                = i18n::OrdinalSuffix::create( comphelper::getProcessComponentContext() );
-
-        uno::Sequence< OUString > aSuffixes = xOrdSuffix->getOrdinalSuffix( nNum, rCC.getLanguageTag().getLocale( ) );
-        for ( sal_Int32 nSuff = 0; nSuff < aSuffixes.getLength(); nSuff++ )
-        {
-            OUString sSuffix( aSuffixes[ nSuff ] );
-            OUString sEnd = rTxt.copy( nNumEnd + 1, nEndPos - nNumEnd - 1 );
-
-            if ( sSuffix == sEnd )
+            if (isDigit && !foundEnd)
             {
-                // Check if the ordinal suffix has to be set as super script
-                if ( rCC.isLetter( sSuffix ) )
+                foundEnd = true;
+                nNumEnd = i;
+            }
+        }
+
+        if (foundEnd && validNumber) {
+            sal_Int32 nNum = rTxt.copy(nSttPos, nNumEnd - nSttPos + 1).toInt32();
+
+            // Check if the characters after that number correspond to the ordinal suffix
+            uno::Reference< i18n::XOrdinalSuffix > xOrdSuffix
+                = i18n::OrdinalSuffix::create(comphelper::getProcessComponentContext());
+
+            uno::Sequence< OUString > aSuffixes = xOrdSuffix->getOrdinalSuffix(nNum, rCC.getLanguageTag().getLocale());
+            for (sal_Int32 nSuff = 0; nSuff < aSuffixes.getLength(); nSuff++)
+            {
+                OUString sSuffix(aSuffixes[nSuff]);
+                OUString sEnd = rTxt.copy(nNumEnd + 1, nEndPos - nNumEnd - 1);
+
+                if (sSuffix == sEnd)
                 {
-                    // Do the change
-                    SvxEscapementItem aSvxEscapementItem( DFLT_ESC_AUTO_SUPER,
-                                                        DFLT_ESC_PROP, SID_ATTR_CHAR_ESCAPEMENT );
-                    rDoc.SetAttr( nNumEnd + 1 , nEndPos,
-                                    SID_ATTR_CHAR_ESCAPEMENT,
-                                    aSvxEscapementItem);
-                    bChg = true;
+                    // Check if the ordinal suffix has to be set as super script
+                    if (rCC.isLetter(sSuffix))
+                    {
+                        // Do the change
+                        SvxEscapementItem aSvxEscapementItem(DFLT_ESC_AUTO_SUPER,
+                            DFLT_ESC_PROP, SID_ATTR_CHAR_ESCAPEMENT);
+                        rDoc.SetAttr(nNumEnd + 1, nEndPos,
+                            SID_ATTR_CHAR_ESCAPEMENT,
+                            aSvxEscapementItem);
+                        bChg = true;
+                    }
                 }
             }
         }
