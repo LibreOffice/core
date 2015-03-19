@@ -181,8 +181,8 @@ private:
     VclPtr< FixedImage >        m_spSymbol;
     VclPtr< SeriesHeaderEdit >  m_spSeriesName;
     VclPtr< FixedText >         m_spColorBar;
-    OutputDevice *                           m_pDevice;
-    Link                                     m_aChangeLink;
+    VclPtr< OutputDevice>       m_pDevice;
+    Link                        m_aChangeLink;
 
     void notifyChanges();
     DECL_LINK( SeriesNameChanged, void * );

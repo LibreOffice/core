@@ -140,7 +140,7 @@ private:
 
     //UUUU SvxPage_Impl*        pImpl;
     MarginPosition      m_nPos;
-    Printer*            mpDefPrinter;
+    VclPtr<Printer>     mpDefPrinter;
 
     bool                mbDelPrinter : 1;
 

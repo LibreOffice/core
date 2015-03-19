@@ -373,8 +373,7 @@ void SvxPageDescPage::dispose()
 {
     if(mbDelPrinter)
     {
-        delete mpDefPrinter;
-        mpDefPrinter = NULL;
+        mpDefPrinter.disposeAndClear();
         mbDelPrinter = false;
     }
     m_pPaperSizeBox.clear();
