@@ -131,13 +131,13 @@ IMPL_LINK ( TiledRenderingDialog, RenderHdl, Button *, EMPTYARG )
         // SystemGraphicsData aData;
         // [setup the aData]
         // VirtualDevice aDevice(&aData, [color depth]);
-        VirtualDevice aDevice;
+        ScopedVclPtr< VirtualDevice > pDevice(new VirtualDevice());
 
         // paint to it
-        pViewShell->PaintTile(aDevice, contextWidth, contextHeight, tilePosX, tilePosY, tileWidth, tileHeight);
+        pViewShell->PaintTile(*pDevice.get(), contextWidth, contextHeight, tilePosX, tilePosY, tileWidth, tileHeight);
 
         // copy the aDevice content to mpImage
-        Bitmap aBitmap(aDevice.GetBitmap(aDevice.PixelToLogic(Point(0,0)), aDevice.PixelToLogic(Size(contextWidth, contextHeight))));
+        Bitmap aBitmap(pDevice->GetBitmap(aDevice->PixelToLogic(Point(0,0)), pDevice->PixelToLogic(Size(contextWidth, contextHeight))));
         mpImage->SetImage(Image(aBitmap));
 
         // update the dialog size

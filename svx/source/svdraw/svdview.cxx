@@ -488,7 +488,7 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
                 // we currently don't account for ticker text
                 if(pActualOutDev && pActualOutDev->GetOutDevType() == OUTDEV_WINDOW)
                 {
-                    OutlinerView aOLV(pOutliner, const_cast<vcl::Window*>(static_cast<const vcl::Window*>(pActualOutDev)));
+                    OutlinerView aOLV(pOutliner, const_cast<vcl::Window*>(static_cast<const vcl::Window*>(pActualOutDev.get())));
                     const EditView& aEV=aOLV.GetEditView();
                     const SvxFieldItem* pItem=aEV.GetField(aTemporaryTextRelativePosition);
                     if (pItem!=NULL) {
@@ -822,7 +822,7 @@ bool SdrView::DoMouseEvent(const SdrViewEvent& rVEvt)
                     if (eHit==SDRHIT_TEXTEDIT)
                     {
                         bool bRet2(pActualOutDev && OUTDEV_WINDOW == pActualOutDev->GetOutDevType() &&
-                            SdrBeginTextEdit(rVEvt.pObj, rVEvt.pPV, const_cast<vcl::Window*>(static_cast<const vcl::Window*>(pActualOutDev)), false, (SdrOutliner*)0L));
+                            SdrBeginTextEdit(rVEvt.pObj, rVEvt.pPV, const_cast<vcl::Window*>(static_cast<const vcl::Window*>(pActualOutDev.get())), false, (SdrOutliner*)0L));
 
                         if(bRet2)
                         {
@@ -906,7 +906,7 @@ bool SdrView::DoMouseEvent(const SdrViewEvent& rVEvt)
             } else bRet=BegCreateObj(aLogicPos);
         } break;
         case SDREVENT_BEGMACROOBJ: {
-            bRet=BegMacroObj(aLogicPos,nHitTolLog,rVEvt.pObj,rVEvt.pPV,const_cast<vcl::Window*>(static_cast<const vcl::Window*>(pActualOutDev)));
+            bRet=BegMacroObj(aLogicPos,nHitTolLog,rVEvt.pObj,rVEvt.pPV,const_cast<vcl::Window*>(static_cast<const vcl::Window*>(pActualOutDev.get())));
         } break;
         case SDREVENT_BEGTEXTEDIT: {
             if (!IsObjMarked(rVEvt.pObj)) {
@@ -915,7 +915,7 @@ bool SdrView::DoMouseEvent(const SdrViewEvent& rVEvt)
             }
 
             bRet = pActualOutDev && OUTDEV_WINDOW == pActualOutDev->GetOutDevType()&&
-                 SdrBeginTextEdit(rVEvt.pObj, rVEvt.pPV, const_cast<vcl::Window*>(static_cast<const vcl::Window*>(pActualOutDev)), false, (SdrOutliner*)0L);
+                 SdrBeginTextEdit(rVEvt.pObj, rVEvt.pPV, const_cast<vcl::Window*>(static_cast<const vcl::Window*>(pActualOutDev.get())), false, (SdrOutliner*)0L);
 
             if(bRet)
             {
@@ -927,8 +927,8 @@ bool SdrView::DoMouseEvent(const SdrViewEvent& rVEvt)
         } break;
         default: break;
     } // switch
-    if (bRet && pActualOutDev!=NULL && pActualOutDev->GetOutDevType()==OUTDEV_WINDOW) {
-        vcl::Window* pWin=const_cast<vcl::Window*>(static_cast<const vcl::Window*>(pActualOutDev));
+    if (bRet && pActualOutDev && pActualOutDev->GetOutDevType()==OUTDEV_WINDOW) {
+        vcl::Window* pWin=const_cast<vcl::Window*>(static_cast<const vcl::Window*>(pActualOutDev.get()));
         // left mouse button pressed?
         bool bLeftDown=(rVEvt.nMouseCode&MOUSE_LEFT)!=0 && rVEvt.bMouseDown;
         // left mouse button released?
@@ -970,7 +970,7 @@ Pointer SdrView::GetPreferredPointer(const Point& rMousePos, const OutputDevice*
         aHitRec.nTol=nMacroTol;
         aHitRec.pVisiLayer=&pMacroPV->GetVisibleLayers();
         aHitRec.pPageView=pMacroPV;
-        aHitRec.pOut=pMacroWin;
+        aHitRec.pOut=pMacroWin.get();
         aHitRec.bDown=bMacroDown;
         return pMacroObj->GetMacroPointer(aHitRec);
     }

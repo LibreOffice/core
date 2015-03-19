@@ -135,8 +135,8 @@ protected:
 #ifdef DBG_UTIL
     VclPtr<SdrItemBrowser>      pItemBrowser;
 #endif
-    const OutputDevice*         pActualOutDev; // Nur zum vergleichen
-    OutputDevice*               pDragWin;
+    VclPtr<OutputDevice>        pActualOutDev; // Nur zum vergleichen
+    VclPtr<OutputDevice>        pDragWin;
     SfxStyleSheet*              pDefaultStyleSheet;
 
     OUString                    aAktLayer;     // Aktueller Zeichenlayer

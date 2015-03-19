@@ -250,27 +250,27 @@ sal_uInt16 XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileNam
                     {
                         if( pMtfSize_100TH_MM && ( rGraphic.GetType() != GRAPHIC_BITMAP ) )
                         {
-                            VirtualDevice aVDev;
-                            const Size    aSize( aVDev.LogicToPixel( *pMtfSize_100TH_MM, MAP_100TH_MM ) );
+                            ScopedVclPtr< VirtualDevice > pVDev(new VirtualDevice());
+                            const Size    aSize( pVDev->LogicToPixel( *pMtfSize_100TH_MM, MAP_100TH_MM ) );
 
-                            if( aVDev.SetOutputSizePixel( aSize ) )
+                            if( pVDev->SetOutputSizePixel( aSize ) )
                             {
-                                const Wallpaper aWallpaper( aVDev.GetBackground() );
+                                const Wallpaper aWallpaper( pVDev->GetBackground() );
                                 const Point     aPt;
 
-                                aVDev.SetBackground( Wallpaper( Color( COL_BLACK ) ) );
-                                aVDev.Erase();
-                                rGraphic.Draw( &aVDev, aPt, aSize );
+                                pVDev->SetBackground( Wallpaper( Color( COL_BLACK ) ) );
+                                pVDev->Erase();
+                                rGraphic.Draw( pVDev.get(), aPt, aSize );
 
-                                const Bitmap aBitmap( aVDev.GetBitmap( aPt, aSize ) );
+                                const Bitmap aBitmap( pVDev->GetBitmap( aPt, aSize ) );
 
-                                aVDev.SetBackground( aWallpaper );
-                                aVDev.Erase();
-                                rGraphic.Draw( &aVDev, aPt, aSize );
+                                pVDev->SetBackground( aWallpaper );
+                                pVDev->Erase();
+                                rGraphic.Draw( pVDev.get(), aPt, aSize );
 
-                                aVDev.SetRasterOp( ROP_XOR );
-                                aVDev.DrawBitmap( aPt, aSize, aBitmap );
-                                aGraphic = BitmapEx( aBitmap, aVDev.GetBitmap( aPt, aSize ) );
+                                pVDev->SetRasterOp( ROP_XOR );
+                                pVDev->DrawBitmap( aPt, aSize, aBitmap );
+                                aGraphic = BitmapEx( aBitmap, pVDev->GetBitmap( aPt, aSize ) );
                             }
                             else
                                 aGraphic = rGraphic.GetBitmapEx();
@@ -283,13 +283,13 @@ sal_uInt16 XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileNam
                 {
                     if( pMtfSize_100TH_MM && ( rGraphic.GetType() != GRAPHIC_BITMAP ) )
                     {
-                        VirtualDevice   aVDev;
-                        const Size      aSize( aVDev.LogicToPixel( *pMtfSize_100TH_MM, MAP_100TH_MM ) );
+                        ScopedVclPtr< VirtualDevice > pVDev(new VirtualDevice());
+                        const Size      aSize( pVDev->LogicToPixel( *pMtfSize_100TH_MM, MAP_100TH_MM ) );
 
-                        if( aVDev.SetOutputSizePixel( aSize ) )
+                        if( pVDev->SetOutputSizePixel( aSize ) )
                         {
-                            rGraphic.Draw( &aVDev, Point(), aSize );
-                            aGraphic =  aVDev.GetBitmap( Point(), aSize );
+                            rGraphic.Draw( pVDev.get(), Point(), aSize );
+                            aGraphic = pVDev->GetBitmap( Point(), aSize );
                         }
                         else
                             aGraphic = rGraphic.GetBitmap();

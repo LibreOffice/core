@@ -7640,21 +7640,21 @@ Graphic SwFlyFrmFmt::MakeGraphic( ImageMap* pMap )
         SwFlyFrm *pFly = static_cast<SwFlyFrm*>(pFirst);
 
         OutputDevice *pOld = pSh->GetOut();
-        VirtualDevice aDev( *pOld );
-        aDev.EnableOutput( false );
+        ScopedVclPtr< VirtualDevice > pDev( new VirtualDevice( *pOld ) );
+        pDev->EnableOutput( false );
 
         GDIMetaFile aMet;
         MapMode aMap( pOld->GetMapMode().GetMapUnit() );
-        aDev.SetMapMode( aMap );
+        pDev->SetMapMode( aMap );
         aMet.SetPrefMapMode( aMap );
 
         ::SwCalcPixStatics( pSh->GetOut() );
         aMet.SetPrefSize( pFly->Frm().SSize() );
 
-        aMet.Record( &aDev );
-        aDev.SetLineColor();
-        aDev.SetFillColor();
-        aDev.SetFont( pOld->GetFont() );
+        aMet.Record( pDev.get() );
+        pDev->SetLineColor();
+        pDev->SetFillColor();
+        pDev->SetFont( pOld->GetFont() );
 
         //Enlarge the rectangle if needed, so the border is painted too.
         SwRect aOut( pFly->Frm() );

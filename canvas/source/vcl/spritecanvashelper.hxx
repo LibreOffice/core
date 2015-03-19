@@ -41,7 +41,7 @@ namespace vclcanvas
     {
     public:
         SpriteCanvasHelper();
-        ~SpriteCanvasHelper()
+        ~SpriteCanvasHelper();
 
         void init( const OutDevProviderSharedPtr& rOutDev,
                    SpriteCanvas&                  rOwningSpriteCanvas,

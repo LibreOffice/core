@@ -142,11 +142,11 @@ Bitmap XHatchList::CreateBitmapForUI( long nIndex )
                 aBlack));
 
         // prepare VirtualDevice
-        VirtualDevice aVirtualDevice;
+        ScopedVclPtr< VirtualDevice > pVirtualDevice(new VirtualDevice());
         const drawinglayer::geometry::ViewInformation2D aNewViewInformation2D;
 
-        aVirtualDevice.SetOutputSizePixel(rSize);
-        aVirtualDevice.SetDrawMode(rStyleSettings.GetHighContrastMode()
+        pVirtualDevice->SetOutputSizePixel(rSize);
+        pVirtualDevice->SetDrawMode(rStyleSettings.GetHighContrastMode()
             ? DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT
             : DRAWMODE_DEFAULT);
 
@@ -156,17 +156,17 @@ Bitmap XHatchList::CreateBitmapForUI( long nIndex )
             static const sal_uInt32 nLen(8);
             static const Color aW(COL_WHITE);
             static const Color aG(0xef, 0xef, 0xef);
-            aVirtualDevice.DrawCheckered(aNull, rSize, nLen, aW, aG);
+            pVirtualDevice->DrawCheckered(aNull, rSize, nLen, aW, aG);
         }
         else
         {
-            aVirtualDevice.SetBackground(rStyleSettings.GetFieldColor());
-            aVirtualDevice.Erase();
+            pVirtualDevice->SetBackground(rStyleSettings.GetFieldColor());
+            pVirtualDevice->Erase();
         }
 
         // create processor and draw primitives
         boost::scoped_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor2D(drawinglayer::processor2d::createPixelProcessor2DFromOutputDevice(
-            aVirtualDevice,
+            *pVirtualDevice.get(),
             aNewViewInformation2D));
 
         if(pProcessor2D)
@@ -180,7 +180,7 @@ Bitmap XHatchList::CreateBitmapForUI( long nIndex )
         }
 
         // get result bitmap and scale
-        aRetval = aVirtualDevice.GetBitmap(Point(0, 0), aVirtualDevice.GetOutputSizePixel());
+        aRetval = pVirtualDevice->GetBitmap(Point(0, 0), pVirtualDevice->GetOutputSizePixel());
     }
 
     return aRetval;

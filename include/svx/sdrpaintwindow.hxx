@@ -50,10 +50,10 @@ PaintTransparentChildren(vcl::Window & rWindow, Rectangle const& rPixelRect);
 class SdrPreRenderDevice
 {
     // The original OutputDevice
-    OutputDevice&                                       mrOutputDevice;
+    OutputDevice&          mrOutputDevice;
 
     // The VirtualDevice for PreRendering
-    VirtualDevice                                       maPreRenderDevice;
+    VclPtr<VirtualDevice>  mpPreRenderDevice;
 
 public:
     explicit SdrPreRenderDevice(OutputDevice& rOriginal);
@@ -63,7 +63,7 @@ public:
     void OutputPreRenderDevice(const vcl::Region& rExpandedRegion);
 
     OutputDevice& GetOriginalOutputDevice() const { return mrOutputDevice; }
-    OutputDevice& GetPreRenderDevice() { return maPreRenderDevice; }
+    OutputDevice& GetPreRenderDevice() { return *mpPreRenderDevice.get(); }
 };
 
 

@@ -324,7 +324,7 @@ namespace vclcanvas
             mpRedrawManager->forEachSprite(
                 ::boost::bind(
                     &spriteRedraw,
-                    ::boost::ref( maVDev.get() ),
+                    ::boost::ref( *maVDev.get() ),
                     _1 ) );
 
             // flush to screen
@@ -582,7 +582,7 @@ namespace vclcanvas
         ::std::for_each( rSortedUpdateSprites.begin(),
                          rSortedUpdateSprites.end(),
                          ::boost::bind( &spriteRedrawStub2,
-                                        ::boost::ref( maVDev.get() ),
+                                        ::boost::ref( *maVDev.get() ),
                                         ::vcl::unotools::b2DPointFromPoint(
                                             aOutputPosition),
                                         _1 ) );

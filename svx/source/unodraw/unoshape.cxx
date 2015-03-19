@@ -670,13 +670,13 @@ uno::Any SvxShape::GetBitmap( bool bMetaFile /* = false */ ) const
     if( !mpObj.is() || mpModel == NULL || !mpObj->IsInserted() || NULL == mpObj->GetPage() )
         return aAny;
 
-    VirtualDevice aVDev;
-    aVDev.SetMapMode(MapMode(MAP_100TH_MM));
+    ScopedVclPtr<VirtualDevice> pVDev( new VirtualDevice() );
+    pVDev->SetMapMode(MapMode(MAP_100TH_MM));
 
     SdrModel* pModel = mpObj->GetModel();
     SdrPage* pPage = mpObj->GetPage();
 
-    boost::scoped_ptr<E3dView> pView(new E3dView( pModel, &aVDev ));
+    boost::scoped_ptr<E3dView> pView(new E3dView( pModel, pVDev.get() ));
     pView->hideMarkHandles();
     SdrPageView* pPageView = pView->ShowSdrPage(pPage);
 

@@ -624,7 +624,7 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
     if( !pPage )
         return false;
 
-    VirtualDevice       aVDev;
+    ScopedVclPtr<VirtualDevice> aVDev( new VirtualDevice() );
     const MapMode       aMap( mpDoc->GetScaleUnit(), Point(), rSettings.maScaleX, rSettings.maScaleY );
 
     SdrOutliner& rOutl=mpDoc->GetDrawOutliner(NULL);
@@ -704,15 +704,15 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
                 boost::scoped_ptr< SdrView > pLocalView;
                 if( PTR_CAST( FmFormModel, mpDoc ) )
                 {
-                    pLocalView.reset( new FmFormView( PTR_CAST( FmFormModel, mpDoc ), &aVDev ) );
+                    pLocalView.reset( new FmFormView( PTR_CAST( FmFormModel, mpDoc ), aVDev ) );
                 }
                 else
                 {
-                    pLocalView.reset( new SdrView( mpDoc, &aVDev ) );
+                    pLocalView.reset( new SdrView( mpDoc, aVDev ) );
                 }
 
 
-                boost::scoped_ptr<VirtualDevice> pVDev(CreatePageVDev( pPage, nWidthPix, nHeightPix ));
+                ScopedVclPtr<VirtualDevice> pVDev(CreatePageVDev( pPage, nWidthPix, nHeightPix ));
 
                 if( pVDev )
                 {
@@ -726,22 +726,22 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
             {
                 GDIMetaFile aMtf;
 
-                aVDev.SetMapMode( aMap );
+                aVDev->SetMapMode( aMap );
                 if( rSettings.mbUseHighContrast )
-                    aVDev.SetDrawMode( aVDev.GetDrawMode() | DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT );
-                aVDev.EnableOutput( false );
-                aMtf.Record( &aVDev );
+                    aVDev->SetDrawMode( aVDev->GetDrawMode() | DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT );
+                aVDev->EnableOutput( false );
+                aMtf.Record( aVDev );
                 Size aNewSize;
 
                 // create a view
                 boost::scoped_ptr< SdrView > pView;
                 if( PTR_CAST( FmFormModel, mpDoc ) )
                 {
-                    pView.reset(new FmFormView( PTR_CAST( FmFormModel, mpDoc ), &aVDev ));
+                    pView.reset(new FmFormView( PTR_CAST( FmFormModel, mpDoc ), aVDev ));
                 }
                 else
                 {
-                    pView.reset(new SdrView( mpDoc, &aVDev ));
+                    pView.reset(new SdrView( mpDoc, aVDev ));
                 }
 
                 pView->SetBordVisible( false );
@@ -754,17 +754,17 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
                 const Rectangle aClipRect( aNewOrg, aNewSize );
                 MapMode         aVMap( aMap );
 
-                aVDev.Push();
+                aVDev->Push();
                 aVMap.SetOrigin( Point( -aNewOrg.X(), -aNewOrg.Y() ) );
-                aVDev.SetRelativeMapMode( aVMap );
-                aVDev.IntersectClipRegion( aClipRect );
+                aVDev->SetRelativeMapMode( aVMap );
+                aVDev->IntersectClipRegion( aClipRect );
 
                 // Use new StandardCheckVisisbilityRedirector
                 ImplExportCheckVisisbilityRedirector aRedirector( mpCurrentPage );
 
-                pView->CompleteRedraw(&aVDev, vcl::Region(Rectangle(aNewOrg, aNewSize)), &aRedirector);
+                pView->CompleteRedraw(aVDev, vcl::Region(Rectangle(aNewOrg, aNewSize)), &aRedirector);
 
-                aVDev.Pop();
+                aVDev->Pop();
 
                 aMtf.Stop();
                 aMtf.WindStart();
@@ -907,7 +907,7 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
         if( !bSingleGraphic )
         {
             // create a metafile for all shapes
-            VirtualDevice   aOut;
+            ScopedVclPtr<VirtualDevice> aOut;
 
             // calculate bound rect for all shapes
             Rectangle aBound;
@@ -927,18 +927,18 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
                 }
             }
 
-            aOut.EnableOutput( false );
-            aOut.SetMapMode( aMap );
+            aOut->EnableOutput( false );
+            aOut->SetMapMode( aMap );
             if( rSettings.mbUseHighContrast )
-                aOut.SetDrawMode( aOut.GetDrawMode() | DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT );
+                aOut->SetDrawMode( aOut->GetDrawMode() | DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT );
 
             GDIMetaFile aMtf;
             aMtf.Clear();
-            aMtf.Record( &aOut );
+            aMtf.Record( aOut );
 
             MapMode aOutMap( aMap );
             aOutMap.SetOrigin( Point( -aBound.TopLeft().X(), -aBound.TopLeft().Y() ) );
-            aOut.SetRelativeMapMode( aOutMap );
+            aOut->SetRelativeMapMode( aOutMap );
 
             sdr::contact::DisplayInfo aDisplayInfo;
 
@@ -956,7 +956,7 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
             {
                 // more effective way to paint a vector of SdrObjects. Hand over the processed page
                 // to have it in the
-                sdr::contact::ObjectContactOfObjListPainter aMultiObjectPainter(aOut, aShapes, mpCurrentPage);
+                sdr::contact::ObjectContactOfObjListPainter aMultiObjectPainter(*aOut.get(), aShapes, mpCurrentPage);
                 ImplExportCheckVisisbilityRedirector aCheckVisibilityRedirector(mpCurrentPage);
                 aMultiObjectPainter.SetViewObjectContactRedirector(&aCheckVisibilityRedirector);
 
@@ -966,7 +966,7 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
             aMtf.Stop();
             aMtf.WindStart();
 
-            const Size  aExtSize( aOut.PixelToLogic( Size( 0, 0  ) ) );
+            const Size  aExtSize( aOut->PixelToLogic( Size( 0, 0  ) ) );
             Size        aBoundSize( aBound.GetWidth() + ( aExtSize.Width() ),
                                     aBound.GetHeight() + ( aExtSize.Height() ) );
 

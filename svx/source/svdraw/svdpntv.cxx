@@ -406,7 +406,7 @@ sal_uInt16 SdrPaintView::ImpGetHitTolLogic(short nHitTol, const OutputDevice* pO
 
 void SdrPaintView::TheresNewMapMode()
 {
-    if (pActualOutDev!=NULL) {
+    if (pActualOutDev) {
         nHitTolLog=(sal_uInt16)pActualOutDev->PixelToLogic(Size(nHitTolPix,0)).Width();
         nMinMovLog=(sal_uInt16)pActualOutDev->PixelToLogic(Size(nMinMovPix,0)).Width();
     }
@@ -414,7 +414,7 @@ void SdrPaintView::TheresNewMapMode()
 
 void SdrPaintView::SetActualWin(const OutputDevice* pWin)
 {
-    pActualOutDev=pWin;
+    pActualOutDev = const_cast<OutputDevice *>(pWin);
     TheresNewMapMode();
 }
 
