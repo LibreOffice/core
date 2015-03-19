@@ -162,7 +162,10 @@ public:
     sal_Int32 GetStartColumn() const { return m_nStartCol;}
     sal_Int32 GetEndColumn() const { return m_nEndCol;}
 
-    static sal_Int32 GetRelativeAppFontXPosForNameField();
+    static const sal_Int32 nSymbolHeight = 10;
+    static const sal_Int32 nSymbolDistance = 2;
+
+    static sal_Int32 GetRelativeAppFontXPosForNameField() { return nSymbolHeight + nSymbolDistance; }
 
     void Show();
     void Hide();
@@ -237,14 +240,6 @@ void SeriesHeader::applyChanges()
 void SeriesHeader::SetColor( const Color & rCol )
 {
     m_spColorBar->SetControlBackground( rCol );
-}
-
-const sal_Int32 nSymbolHeight = 10;
-const sal_Int32 nSymbolDistance = 2;
-
-sal_Int32 SeriesHeader::GetRelativeAppFontXPosForNameField()
-{
-    return nSymbolHeight + nSymbolDistance;
 }
 
 void SeriesHeader::SetPos( const Point & rPos )

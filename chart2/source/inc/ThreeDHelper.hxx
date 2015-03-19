@@ -83,8 +83,9 @@ public:
             , bool bRightAngledAxes, bool bRotateLights=true );
 
     static void adaptRadAnglesForRightAngledAxes( double& rfXAngleRad, double& rfYAngleRad );
-    static double getXDegreeAngleLimitForRightAngledAxes();
-    static double getYDegreeAngleLimitForRightAngledAxes();
+    static double getXDegreeAngleLimitForRightAngledAxes() { return 90.0; }
+    static double getYDegreeAngleLimitForRightAngledAxes() { return 45.0; }
+
     static double getValueClippedToRange( double fValue, const double& fPositivLimit );
 
     static void convertElevationRotationDegToXYZAngleRad(

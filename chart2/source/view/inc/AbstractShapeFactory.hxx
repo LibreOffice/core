@@ -151,7 +151,7 @@ public:
         createArea2D( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget
                     , const ::com::sun::star::drawing::PolyPolygonShape3D& rPolyPolygon) = 0;
 
-    static sal_Int32 getSymbolCount();
+    static sal_Int32 getSymbolCount() { return Symbol_COUNT; }
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
         createSymbol2D( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget

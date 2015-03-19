@@ -43,11 +43,6 @@ using ::osl::MutexGuard;
 namespace
 {
 
-void lcl_AddPropertiesToVector(
-    ::std::vector< Property > & /*rOutProperties*/ )
-{
-}
-
 struct StaticBubbleChartTypeTemplateDefaults_Initializer
 {
     ::chart::tPropertyValueMap* operator()()
@@ -73,7 +68,6 @@ private:
     Sequence< Property > lcl_GetPropertySequence()
     {
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
-        lcl_AddPropertiesToVector( aProperties );
 
         ::std::sort( aProperties.begin(), aProperties.end(),
                      ::chart::PropertyNameLess() );

@@ -898,16 +898,6 @@ double ThreeDHelper::getValueClippedToRange( double fAngle, const double& fPosit
     return fAngle;
 }
 
-double ThreeDHelper::getXDegreeAngleLimitForRightAngledAxes()
-{
-    return 90.0;
-}
-
-double ThreeDHelper::getYDegreeAngleLimitForRightAngledAxes()
-{
-    return 45.0;
-}
-
 void ThreeDHelper::adaptRadAnglesForRightAngledAxes( double& rfXAngleRad, double& rfYAngleRad )
 {
     rfXAngleRad = ThreeDHelper::getValueClippedToRange(rfXAngleRad, BaseGFXHelper::Deg2Rad(ThreeDHelper::getXDegreeAngleLimitForRightAngledAxes()) );
