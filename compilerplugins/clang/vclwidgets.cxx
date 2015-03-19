@@ -54,7 +54,7 @@ static bool startsWith(const std::string& s, const char* other)
 }
 
 bool BaseCheckNotWindowSubclass(const CXXRecordDecl *BaseDefinition, void *) {
-    if (BaseDefinition && BaseDefinition->getQualifiedNameAsString().compare("vcl::Window") == 0) {
+    if (BaseDefinition && BaseDefinition->getQualifiedNameAsString() == "OutputDevice") {
         return false;
     }
     return true;
@@ -63,7 +63,7 @@ bool BaseCheckNotWindowSubclass(const CXXRecordDecl *BaseDefinition, void *) {
 bool isDerivedFromWindow(const CXXRecordDecl *decl) {
     if (!decl)
         return false;
-    if (decl->getQualifiedNameAsString() == "vcl::Window")
+    if (decl->getQualifiedNameAsString() == "OutputDevice")
         return true;
     if (!decl->hasDefinition()) {
         return false;
@@ -85,6 +85,12 @@ bool containsWindowSubclass(const QualType& qType) {
     if (startsWith(qType.getAsString(), "class VclPtr"))
         return false;
     if (startsWith(qType.getAsString(), "const class VclPtr"))
+        return false;
+    if (startsWith(qType.getAsString(), "ScopedVclPtr"))
+        return false;
+    if (startsWith(qType.getAsString(), "class ScopedVclPtr"))
+        return false;
+    if (startsWith(qType.getAsString(), "const class ScopedVclPtr"))
         return false;
     return containsWindowSubclass(qType.getTypePtr());
 }
@@ -130,8 +136,8 @@ bool VCLWidgets::VisitCXXDestructorDecl(const CXXDestructorDecl* pCXXDestructorD
         return true;
     }
     const CXXRecordDecl * pRecordDecl = pCXXDestructorDecl->getParent();
-    // ignore vcl::Window class
-    if (pRecordDecl->getQualifiedNameAsString().compare("vcl::Window") == 0) {
+    // ignore OutputDevice class
+    if (pRecordDecl->getQualifiedNameAsString() == "OutputDevice") {
         return true;
     }
     // check if this class is derived from Window
@@ -164,12 +170,12 @@ bool VCLWidgets::VisitCXXDestructorDecl(const CXXDestructorDecl* pCXXDestructorD
     if (foundVclPtrField && pCompoundStatement && pCompoundStatement->size() == 0) {
         report(
             DiagnosticsEngine::Warning,
-            "vcl::Window subclass with VclPtr field must call dispose() from it's destructor.",
+            "OutputDevice subclass with VclPtr field must call dispose() from it's destructor.",
             pCXXDestructorDecl->getLocStart())
           << pCXXDestructorDecl->getSourceRange();
         return true;
     }
-    // check that the destructor for a vcl::Window subclass does nothing except call into the dispose() method
+    // check that the destructor for a OutputDevice subclass does nothing except call into the dispose() method
     bool ok = false;
     if (pCompoundStatement && pCompoundStatement->size() == 1) {
         const CXXMemberCallExpr *pCallExpr = dyn_cast<CXXMemberCallExpr>(*pCompoundStatement->body_begin());
@@ -183,12 +189,18 @@ bool VCLWidgets::VisitCXXDestructorDecl(const CXXDestructorDecl* pCXXDestructorD
         }
     }
     if (!ok) {
-        report(
-            DiagnosticsEngine::Warning,
-            "vcl::Window subclass should have nothing in it's destructor but a call to disposeOnce().",
-            pCXXDestructorDecl->getLocStart())
-          << pCXXDestructorDecl->getSourceRange();
-        return true;
+        SourceLocation spellingLocation = compiler.getSourceManager().getSpellingLoc(
+                              pCXXDestructorDecl->getLocStart());
+        StringRef filename = compiler.getSourceManager().getFilename(spellingLocation);
+        if (   !(filename.startswith(SRCDIR "/vcl/source/window/window.cxx"))
+            && !(filename.startswith(SRCDIR "/vcl/source/gdi/virdev.cxx")) )
+        {
+            report(
+                DiagnosticsEngine::Warning,
+                "OutputDevice subclass should have nothing in it's destructor but a call to disposeOnce().",
+                pCXXDestructorDecl->getLocStart())
+              << pCXXDestructorDecl->getSourceRange();
+        }
     }
     return true;
 }
@@ -211,7 +223,7 @@ bool VCLWidgets::VisitVarDecl(const VarDecl * pVarDecl) {
     if (isDerivedFromWindow(recordDecl)) {
         report(
             DiagnosticsEngine::Warning,
-            "vcl::Window subclass allocated on stack, should be allocated via VclPtr or via *.",
+            "OutputDevice subclass allocated on stack, should be allocated via VclPtr or via *.",
             pVarDecl->getLocation())
           << pVarDecl->getSourceRange();
     }
@@ -235,7 +247,7 @@ bool VCLWidgets::VisitVarDecl(const VarDecl * pVarDecl) {
     {
         report(
             DiagnosticsEngine::Warning,
-            "vcl::Window subclass should be wrapped in VclPtr. " + pVarDecl->getType().getAsString(),
+            "OutputDevice subclass should be wrapped in VclPtr. " + pVarDecl->getType().getAsString(),
             pVarDecl->getLocation())
           << pVarDecl->getSourceRange();
     }
@@ -252,7 +264,7 @@ bool VCLWidgets::VisitFieldDecl(const FieldDecl * fieldDecl) {
     if (containsWindowSubclass(fieldDecl->getType())) {
         report(
             DiagnosticsEngine::Warning,
-            "vcl::Window subclass declared as a pointer field, should be wrapped in VclPtr." + fieldDecl->getType().getAsString(),
+            "OutputDevice subclass declared as a pointer field, should be wrapped in VclPtr." + fieldDecl->getType().getAsString(),
             fieldDecl->getLocation())
           << fieldDecl->getSourceRange();
         return true;
@@ -270,7 +282,7 @@ bool VCLWidgets::VisitFieldDecl(const FieldDecl * fieldDecl) {
     if (isDerivedFromWindow(recordDecl)) {
         report(
             DiagnosticsEngine::Warning,
-            "vcl::Window subclass allocated as a class member, should be allocated via VclPtr.",
+            "OutputDevice subclass allocated as a class member, should be allocated via VclPtr.",
             fieldDecl->getLocation())
           << fieldDecl->getSourceRange();
     }
@@ -290,14 +302,14 @@ bool VCLWidgets::VisitFieldDecl(const FieldDecl * fieldDecl) {
         if (!foundDispose) {
             report(
                 DiagnosticsEngine::Warning,
-                "vcl::Window subclass with a VclPtr field MUST have a dispose() method.",
+                "OutputDevice subclass with a VclPtr field MUST have a dispose() method.",
                 fieldDecl->getLocation())
               << fieldDecl->getSourceRange();
         }
         if (!pParentRecordDecl->hasUserDeclaredDestructor()) {
             report(
                 DiagnosticsEngine::Warning,
-                "vcl::Window subclass with a VclPtr field MUST have an explicit destructor.",
+                "OutputDevice subclass with a VclPtr field MUST have an explicit destructor.",
                 fieldDecl->getLocation())
               << fieldDecl->getSourceRange();
         }
@@ -328,25 +340,24 @@ bool VCLWidgets::VisitParmVarDecl(ParmVarDecl const * pvDecl)
     return true;
 }
 
-static void findDisposeAndClearStatements2(std::vector<std::string>& aVclPtrFields, const Stmt *pStmt);
-
-static void findDisposeAndClearStatements(std::vector<std::string>& aVclPtrFields, const CompoundStmt *pCompoundStatement)
+static void findDisposeAndClearStatements(std::vector<std::string>& aVclPtrFields, const Stmt *pStmt)
 {
-    for(const Stmt* pStmt : pCompoundStatement->body()) {
-        findDisposeAndClearStatements2(aVclPtrFields, pStmt);
-    }
-}
-
-static void findDisposeAndClearStatements2(std::vector<std::string>& aVclPtrFields, const Stmt *pStmt)
-{
+    if (!pStmt)
+        return;
     if (isa<CompoundStmt>(pStmt)) {
-        findDisposeAndClearStatements(aVclPtrFields, dyn_cast<CompoundStmt>(pStmt));
+        const CompoundStmt *pCompoundStatement = dyn_cast<CompoundStmt>(pStmt);
+        for(const Stmt* pStmt : pCompoundStatement->body()) {
+            findDisposeAndClearStatements(aVclPtrFields, pStmt);
+        }
         return;
     }
     if (isa<ForStmt>(pStmt)) {
-        const CompoundStmt *pBody = dyn_cast<CompoundStmt>(dyn_cast<ForStmt>(pStmt)->getBody());
-        if (pBody)
-            findDisposeAndClearStatements(aVclPtrFields, pBody);
+        findDisposeAndClearStatements(aVclPtrFields, dyn_cast<ForStmt>(pStmt)->getBody());
+        return;
+    }
+    if (isa<IfStmt>(pStmt)) {
+        findDisposeAndClearStatements(aVclPtrFields, dyn_cast<IfStmt>(pStmt)->getThen());
+        findDisposeAndClearStatements(aVclPtrFields, dyn_cast<IfStmt>(pStmt)->getElse());
         return;
     }
     if (!isa<CallExpr>(pStmt)) return;
@@ -382,9 +393,9 @@ bool VCLWidgets::VisitFunctionDecl( const FunctionDecl* functionDecl )
         && pMethodDecl->getParent()->getQualifiedNameAsString() == "VclPtr") {
         return true;
     }
-    // ignore the vcl::Window::dispose() method
+    // ignore the OutputDevice::dispose() method
     if (pMethodDecl
-        && pMethodDecl->getParent()->getQualifiedNameAsString() == "vcl::Window") {
+        && pMethodDecl->getParent()->getQualifiedNameAsString() == "OutputDevice") {
         return true;
     }
     if (functionDecl->hasBody() && pMethodDecl && isDerivedFromWindow(pMethodDecl->getParent())) {
@@ -393,22 +404,20 @@ bool VCLWidgets::VisitFunctionDecl( const FunctionDecl* functionDecl )
             if (!isDisposeCallingSuperclassDispose(pMethodDecl)) {
                 report(
                     DiagnosticsEngine::Warning,
-                    "vcl::Window subclass dispose() method MUST call it's superclass dispose() as the last thing it does",
+                    "OutputDevice subclass dispose() method MUST call it's superclass dispose() as the last thing it does",
                     functionDecl->getLocStart())
                   << functionDecl->getSourceRange();
            }
         }
     }
     // check dispose method to make sure we are actually disposing all of the VclPtr fields
-    /*
-       Now that we are in the debugging phase this is no longer useful, since we have to break this rule on
-       occassion to make the destruction process work cleanly.
     if (pMethodDecl && pMethodDecl->isInstance() && pMethodDecl->getBody()
         && pMethodDecl->param_size()==0
         && pMethodDecl->getNameAsString() == "dispose"
         && isDerivedFromWindow(pMethodDecl->getParent()) )
     {
         // exclude a couple of methods with hard-to-parse code
+        /*
         if (pMethodDecl->getQualifiedNameAsString() == "SvxRubyDialog::dispose")
             return true;
         if (pMethodDecl->getQualifiedNameAsString() == "SvxPersonalizationTabPage::dispose")
@@ -439,6 +448,10 @@ bool VCLWidgets::VisitFunctionDecl( const FunctionDecl* functionDecl )
             return true;
         if (pMethodDecl->getQualifiedNameAsString() == "sd::CustomAnimationCreateDialog::dispose")
             return true;
+*/
+
+        if (pMethodDecl->getQualifiedNameAsString() == "VirtualDevice::dispose")
+            return true;
 
         std::vector<std::string> aVclPtrFields;
         for(auto fieldDecl : pMethodDecl->getParent()->fields()) {
@@ -447,11 +460,11 @@ bool VCLWidgets::VisitFunctionDecl( const FunctionDecl* functionDecl )
             }
         }
         if (!aVclPtrFields.empty()) {
-            if (pMethodDecl->getBody() && isa<CompoundStmt>(pMethodDecl->getBody()))
-                findDisposeAndClearStatements( aVclPtrFields, dyn_cast<CompoundStmt>(pMethodDecl->getBody()) );
+            if (pMethodDecl->getBody())
+                findDisposeAndClearStatements( aVclPtrFields, pMethodDecl->getBody() );
             if (!aVclPtrFields.empty()) {
                 //pMethodDecl->dump();
-                std::string aMessage = "vcl::Window subclass dispose() method does not call disposeAndClear() on the following field(s) ";
+                std::string aMessage = "OutputDevice subclass dispose() method does not call disposeAndClear() on the following field(s) ";
                 for(auto s : aVclPtrFields)
                     aMessage += "\n    " + s + ".clear();";
                 report(
@@ -462,7 +475,6 @@ bool VCLWidgets::VisitFunctionDecl( const FunctionDecl* functionDecl )
            }
        }
     }
-    */
     return true;
 }
 
@@ -473,11 +485,17 @@ bool VCLWidgets::VisitCXXDeleteExpr(const CXXDeleteExpr *pCXXDeleteExpr)
     }
     const CXXRecordDecl *pPointee = pCXXDeleteExpr->getArgument()->getType()->getPointeeCXXRecordDecl();
     if (pPointee && isDerivedFromWindow(pPointee)) {
-        report(
-            DiagnosticsEngine::Warning,
-            "calling delete on instance of vcl::Window subclass, must rather call disposeAndClear()",
-            pCXXDeleteExpr->getLocStart())
-          << pCXXDeleteExpr->getSourceRange();
+        SourceLocation spellingLocation = compiler.getSourceManager().getSpellingLoc(
+                              pCXXDeleteExpr->getLocStart());
+        StringRef filename = compiler.getSourceManager().getFilename(spellingLocation);
+        if ( !(filename.startswith(SRCDIR "/include/vcl/outdev.hxx")))
+        {
+            report(
+                DiagnosticsEngine::Warning,
+                "calling delete on instance of OutputDevice subclass, must rather call disposeAndClear()",
+                pCXXDeleteExpr->getLocStart())
+              << pCXXDeleteExpr->getSourceRange();
+        }
     }
     const ImplicitCastExpr* pImplicitCastExpr = dyn_cast<ImplicitCastExpr>(pCXXDeleteExpr->getArgument());
     if (!pImplicitCastExpr) {
