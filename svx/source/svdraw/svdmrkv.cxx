@@ -686,6 +686,9 @@ void SdrMarkView::SetMarkHandles()
 
                 if(pSdrTextObj && pSdrTextObj->IsInEditMode())
                 {
+                    if (GetModel()->isTiledRendering())
+                        // Suppress handles -> empty graphic selection.
+                        GetModel()->libreOfficeKitCallback(LOK_CALLBACK_GRAPHIC_SELECTION, "EMPTY");
                     return;
                 }
             }
