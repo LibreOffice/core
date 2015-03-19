@@ -76,7 +76,7 @@ public:
     bool IsDMLAndVMLDrawingOpen();
     bool IsParagraphHasDrawing();
     void setParagraphHasDrawing(bool bParagraphHasDrawing);
-    sax_fastparser::FastAttributeList*& getFlyFillAttrList();
+    std::unique_ptr<sax_fastparser::FastAttributeList>& getFlyFillAttrList();
     sax_fastparser::FastAttributeList* getFlyWrapAttrList();
     void setFlyWrapAttrList(sax_fastparser::FastAttributeList* pAttrList);
     /// Attributes of <wps:bodyPr>, used during DML export of text frames.

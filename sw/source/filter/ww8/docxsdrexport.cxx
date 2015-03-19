@@ -140,7 +140,7 @@ struct DocxSdrExport::Impl
     bool m_bParagraphSdtOpen;
     bool m_bParagraphHasDrawing; ///Flag for checking drawing in a paragraph.
     bool m_bFlyFrameGraphic;
-    sax_fastparser::FastAttributeList* m_pFlyFillAttrList;
+    std::unique_ptr<sax_fastparser::FastAttributeList> m_pFlyFillAttrList;
     sax_fastparser::FastAttributeList* m_pFlyWrapAttrList;
     sax_fastparser::FastAttributeList* m_pBodyPrAttrList;
     sax_fastparser::FastAttributeList* m_pDashLineStyleAttr;
@@ -166,7 +166,6 @@ struct DocxSdrExport::Impl
           m_bParagraphSdtOpen(false),
           m_bParagraphHasDrawing(false),
           m_bFlyFrameGraphic(false),
-          m_pFlyFillAttrList(0),
           m_pFlyWrapAttrList(0),
           m_pBodyPrAttrList(0),
           m_pDashLineStyleAttr(0),
@@ -263,7 +262,7 @@ void DocxSdrExport::setParagraphHasDrawing(bool bParagraphHasDrawing)
     m_pImpl->m_bParagraphHasDrawing = bParagraphHasDrawing;
 }
 
-sax_fastparser::FastAttributeList*& DocxSdrExport::getFlyFillAttrList()
+std::unique_ptr<sax_fastparser::FastAttributeList>& DocxSdrExport::getFlyFillAttrList()
 {
     return m_pImpl->m_pFlyFillAttrList;
 }
@@ -1618,8 +1617,7 @@ void DocxSdrExport::writeVMLTextFrame(sw::Frame* pParentFrame, bool bTextBoxOnly
         m_pImpl->textFrameShadow(rFrmFmt);
         if (m_pImpl->m_pFlyFillAttrList)
         {
-            sax_fastparser::XFastAttributeListRef xFlyFillAttrList(m_pImpl->m_pFlyFillAttrList);
-            m_pImpl->m_pFlyFillAttrList = NULL;
+            sax_fastparser::XFastAttributeListRef xFlyFillAttrList(m_pImpl->m_pFlyFillAttrList.release());
             pFS->singleElementNS(XML_v, XML_fill, xFlyFillAttrList);
         }
         if (m_pImpl->m_pDashLineStyleAttr)
