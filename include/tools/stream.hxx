@@ -269,7 +269,7 @@ public:
                     SvStream( SvLockBytes *pLockBytes);
     virtual         ~SvStream();
 
-    SvLockBytes*    GetLockBytes() const { return xLockBytes; }
+    SvLockBytes*    GetLockBytes() const { return xLockBytes.get(); }
 
     sal_uInt32      GetError() const { return ERRCODE_TOERROR(nError); }
     sal_uInt32      GetErrorCode() const { return nError; }

@@ -243,7 +243,7 @@ public:
     const OUString& GetDocumentName() const { return m_aDocName; }
     void  SetDocumentName (const OUString& rName) { m_aDocName = rName; }
 
-    SvLockBytes* GetDocumentLB() const { return m_xDocLB; }
+    SvLockBytes* GetDocumentLB() const { return m_xDocLB.get(); }
     void         SetDocumentLB (SvLockBytes *pDocLB) { m_xDocLB = pDocLB; }
 
     static bool ParseDateField (
