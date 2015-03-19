@@ -161,13 +161,11 @@ protected:
     void                    Codepage( void );               // 0x42
     void                    Ixfe( void );                   // 0x44
     void                    DefColWidth( void );            // 0x55
-    void                    Builtinfmtcnt( void );          // 0x56
     void                    Colinfo( void );                // 0x7D
     void                    Wsbool( void );                 // 0x81
     void                    Boundsheet( void );             // 0x85
     void                    Country( void );                // 0x8C
     void                    Hideobj( void );                // 0x8D
-    void                    Bundleheader( void );           // 0x8F
     void                    Standardwidth( void );          // 0x99
     void                    Shrfmla( void );                // 0xBC
     void                    Mulrk( void );                  // 0xBD
@@ -181,7 +179,6 @@ protected:
     void                    Row34( void );                  // 0x0208
     void                    Bof3( void );                   // 0x0209
     void                    Array34( void );                // 0x0221
-    void                    Externname34( void );           // 0x0223
     void                    Defrowheight345( void );        // 0x0225
     void                    TableOp( void );                // 0x0236
     //void                  Rk( void );                     // 0x027E -> 0x7E

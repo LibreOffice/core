@@ -51,7 +51,6 @@ public:
     virtual ~ScNamePasteDlg();
 
     std::vector<OUString> GetSelectedNames() const;
-    bool            IsAllSelected() const;
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_NAMEPAST_HXX

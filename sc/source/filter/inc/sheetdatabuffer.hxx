@@ -82,9 +82,6 @@ public:
     /** Sets column span information for a row. */
     void                setColSpans( sal_Int32 nRow, const ValueRangeSet& rColSpans );
 
-    /** Inserts all cells of all open cell blocks into the Calc document. */
-    void                finalizeImport();
-
 private:
     typedef ::std::map< sal_Int32, ValueRangeVector >   ColSpanVectorMap;
 

@@ -19,23 +19,4 @@
 
 #include "drawview.hxx"
 
-// STATIC DATA -----------------------------------------------------------
-
-// UpdateBrowser in MarkListHasChanged gerufen
-
-void ScDrawView::UpdateBrowser()
-{
-    //  VC's und den Browser dazu gibts nicht mehr...
-}
-
-void ScDrawView::VCAddWin( vcl::Window* /* pWin */ )
-{
-    //  GetSbxForm gibt's nicht mehr, muss auch nichts mehr angemeldet werden
-}
-
-void ScDrawView::VCRemoveWin( vcl::Window* /* pWin */ )
-{
-    //  GetSbxForm gibt's nicht mehr, muss auch nichts mehr angemeldet werden
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

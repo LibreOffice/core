@@ -73,7 +73,7 @@
 
 namespace ValidListType = css::sheet::TableValidationVisibility;
 
-static const sal_uInt16 pValueRanges[] =
+const sal_uInt16 ScTPValidationValue::pValueRanges[] =
 {
     FID_VALID_MODE, FID_VALID_ERRTEXT,
     FID_VALID_LISTTYPE, FID_VALID_LISTTYPE,
@@ -369,11 +369,6 @@ void ScTPValidationValue::Init()
 SfxTabPage* ScTPValidationValue::Create( vcl::Window* pParent, const SfxItemSet* rArgSet )
 {
     return( new ScTPValidationValue( pParent, *rArgSet ) );
-}
-
-const sal_uInt16* ScTPValidationValue::GetRanges()
-{
-    return pValueRanges;
 }
 
 void ScTPValidationValue::Reset( const SfxItemSet* rArgSet )

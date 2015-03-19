@@ -58,7 +58,6 @@ void ScNavigatorControllerItem::StateChanged( sal_uInt16 /* nSID */, SfxItemStat
 
                     rNavigatorDlg.UpdateColumn( &nCol );
                     rNavigatorDlg.UpdateRow   ( &nRow );
-                    rNavigatorDlg.CursorPosChanged();
                 }
             }
             break;
@@ -78,7 +77,6 @@ void ScNavigatorControllerItem::StateChanged( sal_uInt16 /* nSID */, SfxItemStat
                     rNavigatorDlg.UpdateTable( &nTab );
                     rNavigatorDlg.UpdateColumn();
                     rNavigatorDlg.UpdateRow();
-                    rNavigatorDlg.CursorPosChanged();
                 }
             }
             break;

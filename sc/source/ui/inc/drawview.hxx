@@ -44,7 +44,6 @@ class ScDrawView: public FmFormView
     bool                    bInConstruct;
 
     void            Construct();
-    void            UpdateBrowser();
 
 protected:
     virtual void    ModelHasChanged() SAL_OVERRIDE;
@@ -105,12 +104,9 @@ public:
     void            SetCellAnchored();
     ScAnchorType    GetAnchorType() const;
 
-    void            VCAddWin( vcl::Window* pWin );
-    void            VCRemoveWin( vcl::Window* pWin );
-
     void            UpdateIMap( SdrObject* pObj );
 
-    sal_uInt16          GetPopupMenuId();
+    sal_uInt16      GetPopupMenuId();
     void            UpdateUserViewOptions();
 
     void            SetMarkedOriginalSize();

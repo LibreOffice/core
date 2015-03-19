@@ -29,7 +29,7 @@
 
 // STATIC DATA -----------------------------------------------------------
 
-static const sal_uInt16 pProtectionRanges[] =
+const sal_uInt16 ScTabPageProtection::pProtectionRanges[] =
 {
     SID_SCATTR_PROTECTION,
     SID_SCATTR_PROTECTION,
@@ -57,11 +57,6 @@ ScTabPageProtection::ScTabPageProtection(vcl::Window* pParent, const SfxItemSet&
     m_pBtnHideCell->SetClickHdl(    LINK( this, ScTabPageProtection, ButtonClickHdl ) );
     m_pBtnHideFormula->SetClickHdl( LINK( this, ScTabPageProtection, ButtonClickHdl ) );
     m_pBtnHidePrint->SetClickHdl(   LINK( this, ScTabPageProtection, ButtonClickHdl ) );
-}
-
-const sal_uInt16* ScTabPageProtection::GetRanges()
-{
-    return pProtectionRanges;
 }
 
 SfxTabPage* ScTabPageProtection::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )

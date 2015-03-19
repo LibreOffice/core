@@ -117,10 +117,6 @@ void CellBlockBuffer::setColSpans( sal_Int32 nRow, const ValueRangeSet& rColSpan
         maColSpans[ nRow ] = rColSpans.getRanges();
 }
 
-void CellBlockBuffer::finalizeImport()
-{
-}
-
 SheetDataBuffer::SheetDataBuffer( const WorksheetHelper& rHelper ) :
     WorksheetHelper( rHelper ),
     maCellBlocks( rHelper ),
@@ -421,9 +417,6 @@ void SheetDataBuffer::addColXfStyle( sal_Int32 nXfId, sal_Int32 nFormatId, const
 }
 void SheetDataBuffer::finalizeImport()
 {
-    // insert all cells of all open cell blocks
-    maCellBlocks.finalizeImport();
-
     // create all array formulas
     for( ArrayFormulaList::iterator aIt = maArrayFormulas.begin(), aEnd = maArrayFormulas.end(); aIt != aEnd; ++aIt )
         finalizeArrayFormula( aIt->first, aIt->second );

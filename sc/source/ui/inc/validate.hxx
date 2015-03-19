@@ -82,11 +82,12 @@ class ScValidationDlg;
 /** The tab page "Criteria" from the Validation dialog. */
 class ScTPValidationValue : public ScRefHandlerCaller, public SfxTabPage
 {
+    static const sal_uInt16 pValueRanges[];
 public:
     explicit                    ScTPValidationValue( vcl::Window* pParent, const SfxItemSet& rArgSet );
 
     static SfxTabPage*          Create( vcl::Window* pParent, const SfxItemSet* rArgSet );
-    static const sal_uInt16*              GetRanges();
+    static const sal_uInt16*    GetRanges() { return pValueRanges; }
 
     virtual bool                FillItemSet( SfxItemSet* rArgSet ) SAL_OVERRIDE;
     virtual void                Reset( const SfxItemSet* rArgSet ) SAL_OVERRIDE;

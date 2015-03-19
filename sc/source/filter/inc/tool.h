@@ -34,8 +34,6 @@ void        PutFormString(LotusContext& rContext, SCCOL nCol, SCROW nRow, SCTAB 
 
 void        SetFormat(LotusContext& rContext, SCCOL nCol, SCROW nRow, SCTAB nTab, sal_uInt8 nFormat, sal_uInt8 nSt);
 
-void        InitPage( void );
-
 OUString    DosToSystem( sal_Char *pSource );
 
 double      SnumToDouble( sal_Int16 nVal );

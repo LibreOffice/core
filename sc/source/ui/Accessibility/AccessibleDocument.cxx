@@ -1844,8 +1844,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
         pStateSet->AddState(AccessibleStateType::DEFUNC);
     else
     {
-        if (IsEditable(xParentStates))
-            pStateSet->AddState(AccessibleStateType::EDITABLE);
+        pStateSet->AddState(AccessibleStateType::EDITABLE);
         pStateSet->AddState(AccessibleStateType::ENABLED);
         pStateSet->AddState(AccessibleStateType::OPAQUE);
         if (isShowing())
@@ -2295,13 +2294,6 @@ bool ScAccessibleDocument::IsDefunc(
 {
     return ScAccessibleContextBase::IsDefunc() || (mpViewShell == NULL) || !getAccessibleParent().is() ||
         (rxParentStates.is() && rxParentStates->contains(AccessibleStateType::DEFUNC));
-}
-
-bool ScAccessibleDocument::IsEditable(
-    const uno::Reference<XAccessibleStateSet>& /* rxParentStates */)
-{
-    // what is with document protection or readonly documents?
-    return true;
 }
 
 void ScAccessibleDocument::AddChild(const uno::Reference<XAccessible>& xAcc, bool bFireEvent)

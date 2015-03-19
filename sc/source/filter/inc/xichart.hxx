@@ -1338,7 +1338,7 @@ public:
     /** Returns true, if the plot area has benn moved and/or resized manually. */
     bool                IsManualPlotArea() const;
     /** Returns the number of units on the progress bar needed for the chart. */
-    inline sal_Size     GetProgressSize() const { return 2 * EXC_CHART_PROGRESS_SIZE; }
+    static inline sal_Size  GetProgressSize() { return 2 * EXC_CHART_PROGRESS_SIZE; }
 
     /** Converts and writes all properties to the passed chart. */
     void                Convert(

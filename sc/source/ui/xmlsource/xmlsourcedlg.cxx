@@ -102,9 +102,6 @@ ScXMLSourceDlg::ScXMLSourceDlg(
     Link aLink = LINK(this, ScXMLSourceDlg, GetFocusHdl);
     mpRefEdit->SetGetFocusHdl(aLink);
     mpRefBtn->SetGetFocusHdl(aLink);
-    aLink = LINK(this, ScXMLSourceDlg, LoseFocusHdl);
-    mpRefEdit->SetLoseFocusHdl(aLink);
-    mpRefBtn->SetLoseFocusHdl(aLink);
 
     aLink = LINK(this, ScXMLSourceDlg, TreeItemSelectHdl);
     mpLbTree->SetSelectHdl(aLink);
@@ -218,10 +215,6 @@ void ScXMLSourceDlg::HandleGetFocus(Control* pCtrl)
 
     if (mpActiveEdit)
         mpActiveEdit->SetSelection(Selection(0, SELECTION_MAX));
-}
-
-void ScXMLSourceDlg::HandleLoseFocus(Control* /*pCtrl*/)
-{
 }
 
 namespace {
@@ -656,12 +649,6 @@ void ScXMLSourceDlg::RefEditModified()
 IMPL_LINK(ScXMLSourceDlg, GetFocusHdl, Control*, pCtrl)
 {
     HandleGetFocus(pCtrl);
-    return 0;
-}
-
-IMPL_LINK(ScXMLSourceDlg, LoseFocusHdl, Control*, pCtrl)
-{
-    HandleLoseFocus(pCtrl);
     return 0;
 }
 

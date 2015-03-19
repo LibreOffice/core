@@ -415,7 +415,6 @@ public:
     sal_uInt16 getFunction() const { return nFunction;}
     void setFunction(sal_uInt16 nNew);       // for data dimension
     long getUsedHierarchy() const { return nUsedHier;}
-    void setUsedHierarchy(long nNew);
 
     bool                        HasSelectedPage() const     { return bHasSelectedPage; }
     const ScDPItemData&         GetSelectedData();

@@ -202,9 +202,7 @@ private:
     void                    SetZoomType(sal_Int16 ZoomType);
 
     com::sun::star::uno::Reference< com::sun::star::uno::XInterface > GetClickedObject(const Point& rPoint) const;
-    void                    StartMouseListening();
     void                    EndMouseListening();
-    void                    StartActivationListening();
     void                    EndActivationListening();
     bool                    mbLeftMousePressed;
     bool                    mbPendingSelectionChanged;

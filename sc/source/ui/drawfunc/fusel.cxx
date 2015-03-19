@@ -450,9 +450,6 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
             {
                   SdrMark* pMark = rMarkList.GetMark(0);
                   pObj = pMark->GetMarkedSdrObj();
-                  FuPoor* pPoor = pViewShell->GetViewData().GetView()->GetDrawFuncPtr();
-                  FuText* pText = static_cast<FuText*>(pPoor);
-                pText->StopDragMode(pObj );
             }
             bReturn = true;
         }

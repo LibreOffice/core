@@ -434,15 +434,6 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
     if ( pView->IsDragObj() )
     {
         pView->EndDragObj( rMEvt.IsShift() );
-        const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
-        if (rMarkList.GetMarkCount() == 1)
-        {
-              SdrMark* pMark = rMarkList.GetMark(0);
-              SdrObject* pObj = pMark->GetMarkedSdrObj();
-              FuPoor* pPoor = pViewShell->GetViewData().GetView()->GetDrawFuncPtr();
-              FuText* pText = static_cast<FuText*>(pPoor);
-            pText->StopDragMode(pObj );
-        }
         pView->ForceMarkedToAnotherPage();
     }
     else if ( pView->IsCreateObj() )

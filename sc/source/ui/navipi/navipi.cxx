@@ -896,14 +896,6 @@ void ScNavigatorDlg::SetDropMode(sal_uInt16 nNew)
     rCfg.SetDragMode(nDropMode);
 }
 
-void ScNavigatorDlg::CursorPosChanged()
-{
-    //! select entries ???
-
-//  if ( GetDBAtCursor( aStrDbName ) )
-//  if ( GetAreaAtCursor( aStrAreaName ) )
-}
-
 void ScNavigatorDlg::SetCurrentCell( SCCOL nColNo, SCROW nRowNo )
 {
     if ( (nColNo+1 != nCurCol) || (nRowNo+1 != nCurRow) )

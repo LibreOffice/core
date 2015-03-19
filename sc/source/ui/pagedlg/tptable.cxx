@@ -32,7 +32,7 @@
 
 // Static Data
 
-static const sal_uInt16 pPageTableRanges[] =
+const sal_uInt16 ScTablePage::pPageTableRanges[] =
 {
     ATTR_PAGE_NOTES, ATTR_PAGE_FIRSTPAGENO,
     0
@@ -125,11 +125,6 @@ void ScTablePage::ShowImage()
 
 ScTablePage::~ScTablePage()
 {
-}
-
-const sal_uInt16* ScTablePage::GetRanges()
-{
-    return pPageTableRanges;
 }
 
 SfxTabPage* ScTablePage::Create( vcl::Window* pParent, const SfxItemSet* rCoreSet )

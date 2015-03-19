@@ -1332,10 +1332,6 @@ bool ScTabViewObj::MouseReleased( const awt::MouseEvent& e )
 
 // XEnhancedMouseClickBroadcaster
 
-void ScTabViewObj::StartMouseListening()
-{
-}
-
 void ScTabViewObj::EndMouseListening()
 {
     lang::EventObject aEvent;
@@ -1351,10 +1347,6 @@ void ScTabViewObj::EndMouseListening()
         }
     }
     aMouseClickHandlers.clear();
-}
-
-void ScTabViewObj::StartActivationListening()
-{
 }
 
 void ScTabViewObj::EndActivationListening()
@@ -1381,13 +1373,9 @@ void SAL_CALL ScTabViewObj::addEnhancedMouseClickHandler( const uno::Reference< 
 
     if (aListener.is())
     {
-        sal_uInt16 nCount = aMouseClickHandlers.size();
         uno::Reference<awt::XEnhancedMouseClickHandler> *pObj =
                 new uno::Reference<awt::XEnhancedMouseClickHandler>( aListener );
         aMouseClickHandlers.push_back( pObj );
-
-        if (aMouseClickHandlers.size() == 1 && nCount == 0) // only if a listener added
-            StartMouseListening();
     }
 }
 
@@ -1416,13 +1404,9 @@ void SAL_CALL ScTabViewObj::addActivationEventListener( const uno::Reference< sh
 
     if (aListener.is())
     {
-        sal_uInt16 nCount = aActivationListeners.size();
         uno::Reference<sheet::XActivationEventListener> *pObj =
                 new uno::Reference<sheet::XActivationEventListener>( aListener );
         aActivationListeners.push_back( pObj );
-
-        if (aActivationListeners.size() == 1 && nCount == 0) // only if a listener added
-            StartActivationListening();
     }
 }
 

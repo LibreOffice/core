@@ -574,7 +574,6 @@ public:
     void setSubtotals(const com::sun::star::uno::Sequence< com::sun::star::sheet::GeneralFunction >& rFunctions);
     OUString getCurrentPage() const;
     void setCurrentPage(const OUString& sPage);
-    bool getUseCurrentPage() const;
     void setUseCurrentPage(bool bUse);
     const com::sun::star::sheet::DataPilotFieldAutoShowInfo* getAutoShowInfo();
     void setAutoShowInfo(const com::sun::star::sheet::DataPilotFieldAutoShowInfo* pInfo);

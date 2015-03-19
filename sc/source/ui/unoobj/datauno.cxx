@@ -158,13 +158,6 @@ sheet::GeneralFunction  ScDataUnoConversion::SubTotalToGeneral( ScSubTotalFunc e
     return eGeneral;
 }
 
-//  ScImportDescriptor: alles static
-
-long ScImportDescriptor::GetPropertyCount()
-{
-    return 4;
-}
-
 void ScImportDescriptor::FillProperties( uno::Sequence<beans::PropertyValue>& rSeq, const ScImportParam& rParam )
 {
     OSL_ENSURE( rSeq.getLength() == GetPropertyCount(), "falscher Count" );
@@ -262,15 +255,6 @@ void ScImportDescriptor::FillImportParam( ScImportParam& rParam, const uno::Sequ
             }
         }
     }
-}
-
-//  ScSortDescriptor: alles static
-
-//! SortAscending muss aus der SheetSortDescriptor service-Beschreibung raus
-
-long ScSortDescriptor::GetPropertyCount()
-{
-    return 9;       // TableSortDescriptor and SheetSortDescriptor
 }
 
 void ScSortDescriptor::FillProperties( uno::Sequence<beans::PropertyValue>& rSeq, const ScSortParam& rParam )

@@ -351,8 +351,6 @@ void ScDrawView::MarkListHasChanged()
 {
     FmFormView::MarkListHasChanged();
 
-    UpdateBrowser();
-
     ScTabViewShell* pViewSh = pViewData->GetViewShell();
 
     // #i110829# remove the cell selection only if drawing objects are selected

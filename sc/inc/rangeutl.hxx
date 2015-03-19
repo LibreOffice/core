@@ -68,13 +68,6 @@ public:
                                   ScRefAddress* pEndPos      = 0,
                                   ScAddress::Details const & rDetails = ScAddress::detailsOOOa1 ) const;
 
-    bool    IsRefArea           ( const OUString&,
-                                  ScDocument*,
-                                  SCTAB,
-                                  OUString* = 0,
-                                  ScRefAddress* = 0 ) const
-                                      { return false; }
-
     bool    IsAbsPos            ( const OUString& rPosStr,
                                   ScDocument*   pDoc,
                                   SCTAB     nTab,

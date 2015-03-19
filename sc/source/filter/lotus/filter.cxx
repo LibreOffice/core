@@ -174,9 +174,11 @@ FltError ScImportLotus123old(LotusContext& rContext, SvStream& aStream, ScDocume
     if( !MemNew(rContext) )
         return eERR_NOMEM;
 
-    InitPage(); // initialize page format (only Tab 0!)
+    // initialize page format (only Tab 0!)
+    // initialize page format; meaning: get defaults from SC TODO:
+    //scGetPageFormat( 0, &aPage );
 
-        // start progressbar
+    // start progressbar
     ScfStreamProgressBar aPrgrsBar( aStream, pDocument->GetDocumentShell() );
 
     // detect file type

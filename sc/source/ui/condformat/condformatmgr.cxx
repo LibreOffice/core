@@ -137,10 +137,6 @@ ScCondFormatManagerDlg::~ScCondFormatManagerDlg()
     delete mpFormatList;
 }
 
-bool ScCondFormatManagerDlg::IsInRefMode() const
-{
-    return true;
-}
 
 ScConditionalFormatList* ScCondFormatManagerDlg::GetConditionalFormatList()
 {

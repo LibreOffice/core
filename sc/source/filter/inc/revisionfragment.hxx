@@ -38,7 +38,6 @@ protected:
     virtual void finalizeImport() SAL_OVERRIDE;
 
 private:
-    void importHeaders( const AttributeList& rAttribs );
     void importHeader( const AttributeList& rAttribs );
 };
 

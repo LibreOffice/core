@@ -201,8 +201,6 @@ private:
     void                AddStdFields( const ScDPObject& rDPObj );
     /** Adds all grouping pivot cache fields. */
     void                AddGroupFields( const ScDPObject& rDPObj );
-    /** Adds all calculated pivot cache fields. */
-    void                AddCalcFields( const ScDPObject& rDPObj );
 
     /** Writes the DCONREF record containing the source range. */
     void                WriteDconref( XclExpStream& rStrm ) const;

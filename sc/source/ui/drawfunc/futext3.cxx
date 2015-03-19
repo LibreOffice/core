@@ -182,9 +182,4 @@ void FuText::StopEditMode(bool /*bTextDirection*/)
     }
 }
 
-// Called following an EndDragObj() to update the new note rectangle position
-void FuText::StopDragMode(SdrObject* /*pObject*/)
-{
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
