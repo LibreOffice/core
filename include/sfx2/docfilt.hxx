@@ -32,8 +32,6 @@
 #include <sfx2/dllapi.h>
 #include <tools/wldcrd.hxx>
 
-#define SFX_FILTER_STARTPRESENTATION 0x20000000L
-
 class SfxFilterContainer;
 class SotStorage;
 
