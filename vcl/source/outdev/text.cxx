@@ -2738,8 +2738,8 @@ bool OutputDevice::GetTextOutlines( ::basegfx::B2DPolyPolygonVector& rVector,
     if (pSalLayout == 0)
         return false;
     long nWidth = pSalLayout->GetTextWidth();
-    long nHeight = ((OutputDevice*)&aVDev)->mpFontEntry->mnLineHeight + ((OutputDevice*)&aVDev)->mnEmphasisAscent
-        + ((OutputDevice*)&aVDev)->mnEmphasisDescent;
+    long nHeight = aVDev->mpFontEntry->mnLineHeight + aVDev->mnEmphasisAscent +
+                   aVDev->mnEmphasisDescent;
     pSalLayout->Release();
 
     if( !nWidth || !nHeight )
@@ -2788,8 +2788,8 @@ bool OutputDevice::GetTextOutlines( ::basegfx::B2DPolyPolygonVector& rVector,
             // draw glyph into virtual device
             aVDev->Erase();
             pSalLayout->DrawBase() += aOffset;
-            pSalLayout->DrawBase() += Point( ((OutputDevice*)&aVDev)->mnTextOffX, ((OutputDevice*)&aVDev)->mnTextOffY );
-            pSalLayout->DrawText( *((OutputDevice*)&aVDev)->mpGraphics );
+            pSalLayout->DrawBase() += Point( aVDev->mnTextOffX, aVDev->mnTextOffY );
+            pSalLayout->DrawText( *aVDev->mpGraphics );
             pSalLayout->Release();
 
             // convert character image into outline
