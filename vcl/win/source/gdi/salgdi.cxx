@@ -582,13 +582,14 @@ OpenGLCompatibleDC::OpenGLCompatibleDC(SalGraphics &rGraphics, int x, int y, int
 
     mhBitmap = WinSalVirtualDevice::ImplCreateVirDevBitmap(mhCompatibleDC, width, height, 32, reinterpret_cast<void **>(&mpData));
 
-    SelectObject(mhCompatibleDC, mhBitmap);
+    mhOrigBitmap = (HBITMAP) SelectObject(mhCompatibleDC, mhBitmap);
 }
 
 OpenGLCompatibleDC::~OpenGLCompatibleDC()
 {
     if (mpImpl)
     {
+        SelectObject(mhCompatibleDC, mhOrigBitmap);
         DeleteObject(mhBitmap);
         DeleteDC(mhCompatibleDC);
     }

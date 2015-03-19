@@ -155,6 +155,9 @@ private:
     /// DIBSection that we use for the GDI drawing, and later obtain.
     HBITMAP mhBitmap;
 
+    /// Return the previous bitmap to undo the SelectObject.
+    HBITMAP mhOrigBitmap;
+
     /// DIBSection data.
     sal_uInt32 *mpData;
 
