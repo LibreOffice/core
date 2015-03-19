@@ -197,7 +197,7 @@ class SVT_DLLPUBLIC ValueSet : public Control
 {
 private:
 
-    VirtualDevice   maVirDev;
+    ScopedVclPtr<VirtualDevice>   maVirDev;
     Timer           maTimer;
     ValueItemList   mItemList;
     ValueSetItemPtr mpNoneItem;

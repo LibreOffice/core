@@ -35,9 +35,9 @@ namespace drawinglayer
     class impBufferDevice
     {
         OutputDevice&                       mrOutDev;
-        VirtualDevice*                      mpContent;
-        VirtualDevice*                      mpMask;
-        VirtualDevice*                      mpAlpha;
+        VclPtr<VirtualDevice>               mpContent;
+        VclPtr<VirtualDevice>               mpMask;
+        VclPtr<VirtualDevice>               mpAlpha;
         Rectangle                           maDestPixel;
 
     public:

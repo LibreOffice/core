@@ -156,7 +156,7 @@ struct ImpTextView
 
     TextDDInfo*         mpDDInfo;
 
-    VirtualDevice*      mpVirtDev;
+    VclPtr<VirtualDevice>  mpVirtDev;
 
     SelectionEngine*    mpSelEngine;
     TextSelFunctionSet* mpSelFuncSet;
@@ -235,7 +235,7 @@ TextView::~TextView()
 {
     delete mpImpl->mpSelEngine;
     delete mpImpl->mpSelFuncSet;
-    delete mpImpl->mpVirtDev;
+    mpImpl->mpVirtDev.disposeAndClear();
 
     if ( mpImpl->mpWindow->GetCursor() == mpImpl->mpCursor )
         mpImpl->mpWindow->SetCursor( 0 );
@@ -541,8 +541,7 @@ VirtualDevice* TextView::GetVirtualDevice()
 
 void TextView::EraseVirtualDevice()
 {
-    delete mpImpl->mpVirtDev;
-    mpImpl->mpVirtDev = 0;
+    mpImpl->mpVirtDev.disposeAndClear();
 }
 
 bool TextView::KeyInput( const KeyEvent& rKeyEvent )

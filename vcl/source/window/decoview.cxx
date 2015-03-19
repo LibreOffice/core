@@ -1050,7 +1050,7 @@ void DecorationView::DrawSeparator( const Point& rStart, const Point& rStop, boo
 {
     Point aStart( rStart ), aStop( rStop );
     const StyleSettings& rStyleSettings = mpOutDev->GetSettings().GetStyleSettings();
-    vcl::Window *const pWin = (mpOutDev->GetOutDevType()==OUTDEV_WINDOW) ? static_cast<vcl::Window*>(mpOutDev) : NULL;
+    vcl::Window *const pWin = (mpOutDev->GetOutDevType()==OUTDEV_WINDOW) ? static_cast<vcl::Window*>(mpOutDev.get()) : NULL;
     if(pWin)
     {
         ControlPart nPart = ( bVertical ? PART_SEPARATOR_VERT : PART_SEPARATOR_HORZ );

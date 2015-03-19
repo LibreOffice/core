@@ -58,7 +58,7 @@ private:
     com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > xStatusIndicator;
 
     SvStream*               pWMF;
-    VirtualDevice*          pVirDev;
+    VclPtr<VirtualDevice>   pVirDev;
     MapMode                 aTargetMapMode;
     Size                    aTargetSize;
 

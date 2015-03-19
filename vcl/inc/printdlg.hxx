@@ -51,7 +51,7 @@ namespace vcl
             GDIMetaFile         maMtf;
             Size                maOrigSize;
             Size                maPreviewSize;
-            VirtualDevice       maPageVDev;
+            VclPtr<VirtualDevice> maPageVDev;
             Bitmap              maPreviewBitmap;
             OUString            maReplacementString;
             OUString            maToolTipString;

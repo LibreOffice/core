@@ -200,10 +200,10 @@ class SvxIconChoiceCtrl_Impl
     SvxIconChoiceCtrlEntry* pPrevDropTarget;
     SvxIconChoiceCtrlEntry* pHdlEntry;
     SvxIconChoiceCtrlEntry* pDDRefEntry;
-    VirtualDevice*          pDDDev;
-    VirtualDevice*          pDDBufDev;
-    VirtualDevice*          pDDTempDev;
-    VirtualDevice*          pEntryPaintDev;
+    VclPtr<VirtualDevice>   pDDDev;
+    VclPtr<VirtualDevice>   pDDBufDev;
+    VclPtr<VirtualDevice>   pDDTempDev;
+    VclPtr<VirtualDevice>   pEntryPaintDev;
     SvxIconChoiceCtrlEntry* pAnchor;                    // for selection
     LocalFocus              aFocus;                             // Data for focusrect
     ::svt::AccessibleFactoryAccess aAccFactory;

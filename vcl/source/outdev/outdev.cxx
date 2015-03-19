@@ -215,7 +215,7 @@ void OutputDevice::dispose()
         mpUnoGraphicsList = NULL;
     }
 
-    delete mpOutDevData->mpRotateDev;
+    mpOutDevData->mpRotateDev.disposeAndClear();
 
     // #i75163#
     ImplInvalidateViewTransform();
@@ -264,7 +264,7 @@ void OutputDevice::dispose()
         mpFontCollection = NULL;
     }
 
-    delete mpAlphaVDev;
+    mpAlphaVDev.disposeAndClear();
 }
 
 SalGraphics* OutputDevice::GetGraphics()

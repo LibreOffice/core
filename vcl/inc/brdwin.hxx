@@ -175,7 +175,7 @@ public:
 struct ImplBorderFrameData
 {
     VclPtr<ImplBorderWindow> mpBorderWindow;
-    OutputDevice*           mpOutDev;
+    VclPtr<OutputDevice>     mpOutDev;
     Rectangle               maTitleRect;
     Rectangle               maPinRect;
     Rectangle               maCloseRect;
@@ -254,7 +254,7 @@ public:
 class ImplSmallBorderWindowView : public ImplBorderWindowView
 {
     VclPtr<ImplBorderWindow> mpBorderWindow;
-    OutputDevice*           mpOutDev;
+    VclPtr<OutputDevice>     mpOutDev;
     long                    mnWidth;
     long                    mnHeight;
     sal_Int32               mnLeftBorder;
@@ -276,8 +276,8 @@ public:
 class ImplStdBorderWindowView : public ImplBorderWindowView
 {
     ImplBorderFrameData     maFrameData;
-    VirtualDevice*          mpATitleVirDev;
-    VirtualDevice*          mpDTitleVirDev;
+    VclPtr<VirtualDevice>   mpATitleVirDev;
+    VclPtr<VirtualDevice>   mpDTitleVirDev;
 
 public:
                             ImplStdBorderWindowView( ImplBorderWindow* pBorderWindow );

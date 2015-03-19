@@ -1623,12 +1623,12 @@ OUString makeRepresentativeTextForFont(sal_Int16 nScriptType, const vcl::Font &r
 {
     OUString sRet(makeRepresentativeTextForLanguage(rFont.GetLanguage()));
 
-    VirtualDevice aDevice;
-    if (sRet.isEmpty() || (-1 != aDevice.HasGlyphs(rFont, sRet)))
+    ScopedVclPtr<VirtualDevice> aDevice = new VirtualDevice;
+    if (sRet.isEmpty() || (-1 != aDevice->HasGlyphs(rFont, sRet)))
     {
-        aDevice.SetFont(rFont);
+        aDevice->SetFont(rFont);
         vcl::FontCapabilities aFontCapabilities;
-        if (aDevice.GetFontCapabilities(aFontCapabilities))
+        if (aDevice->GetFontCapabilities(aFontCapabilities))
         {
 #if OSL_DEBUG_LEVEL > 2
             lcl_dump_unicode_coverage(aFontCapabilities.maUnicodeRange);
@@ -1655,7 +1655,7 @@ OUString makeRepresentativeTextForFont(sal_Int16 nScriptType, const vcl::Font &r
             UScriptCode eScript = getScript(aFontCapabilities);
 
             if (nScriptType == com::sun::star::i18n::ScriptType::ASIAN)
-                eScript = attemptToDisambiguateHan(eScript, aDevice);
+                eScript = attemptToDisambiguateHan(eScript, *aDevice.get());
 
             sRet = makeRepresentativeTextForScript(eScript);
         }
@@ -1665,10 +1665,10 @@ OUString makeRepresentativeTextForFont(sal_Int16 nScriptType, const vcl::Font &r
             if (nScriptType == com::sun::star::i18n::ScriptType::COMPLEX)
             {
                 sRet = makeRepresentativeTextForScript(USCRIPT_HEBREW);
-                if (-1 != aDevice.HasGlyphs(rFont, sRet))
+                if (-1 != aDevice->HasGlyphs(rFont, sRet))
                 {
                     sRet = makeMinimalTextForScript(USCRIPT_HEBREW);
-                    if (-1 != aDevice.HasGlyphs(rFont, sRet))
+                    if (-1 != aDevice->HasGlyphs(rFont, sRet))
                         sRet = makeRepresentativeTextForScript(USCRIPT_ARABIC);
                 }
             }

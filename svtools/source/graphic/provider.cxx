@@ -634,7 +634,7 @@ void ImplApplyFilterData( ::Graphic& rGraphic, uno::Sequence< beans::PropertyVal
     }
     else if ( ( rGraphic.GetType() == GRAPHIC_GDIMETAFILE ) && nImageResolution )
     {
-        VirtualDevice aDummyVDev;
+        ScopedVclPtr<VirtualDevice> aDummyVDev = new VirtualDevice;
         GDIMetaFile aMtf( rGraphic.GetGDIMetaFile() );
         Size aMtfSize( OutputDevice::LogicToLogic( aMtf.GetPrefSize(), aMtf.GetPrefMapMode(), MAP_100TH_MM ) );
         if ( aMtfSize.Width() && aMtfSize.Height() )
@@ -642,8 +642,8 @@ void ImplApplyFilterData( ::Graphic& rGraphic, uno::Sequence< beans::PropertyVal
             MapMode aNewMapMode( MAP_100TH_MM );
             aNewMapMode.SetScaleX( static_cast< double >( aLogicalSize.Width ) / static_cast< double >( aMtfSize.Width() ) );
             aNewMapMode.SetScaleY( static_cast< double >( aLogicalSize.Height ) / static_cast< double >( aMtfSize.Height() ) );
-            aDummyVDev.EnableOutput( false );
-            aDummyVDev.SetMapMode( aNewMapMode );
+            aDummyVDev->EnableOutput( false );
+            aDummyVDev->SetMapMode( aNewMapMode );
 
             for( size_t i = 0, nObjCount = aMtf.GetActionSize(); i < nObjCount; i++ )
             {
@@ -653,18 +653,18 @@ void ImplApplyFilterData( ::Graphic& rGraphic, uno::Sequence< beans::PropertyVal
                     // only optimizing common bitmap actions:
                     case( META_MAPMODE_ACTION ):
                     {
-                        const_cast< MetaAction* >( pAction )->Execute( &aDummyVDev );
+                        const_cast< MetaAction* >( pAction )->Execute( aDummyVDev.get() );
                         break;
                     }
                     case( META_PUSH_ACTION ):
                     {
                         const MetaPushAction* pA = static_cast<const MetaPushAction*>(pAction);
-                        aDummyVDev.Push( pA->GetFlags() );
+                        aDummyVDev->Push( pA->GetFlags() );
                         break;
                     }
                     case( META_POP_ACTION ):
                     {
-                        aDummyVDev.Pop();
+                        aDummyVDev->Pop();
                         break;
                     }
                     case( META_BMPSCALE_ACTION ):
@@ -688,8 +688,8 @@ void ImplApplyFilterData( ::Graphic& rGraphic, uno::Sequence< beans::PropertyVal
                             aSize = pScaleAction->GetSize();
                         }
                         ::Graphic aGraphic( aBmpEx );
-                        const Size aSize100thmm( aDummyVDev.LogicToPixel( aSize ) );
-                        Size aSize100thmm2( aDummyVDev.PixelToLogic( aSize100thmm, MAP_100TH_MM ) );
+                        const Size aSize100thmm( aDummyVDev->LogicToPixel( aSize ) );
+                        Size aSize100thmm2( aDummyVDev->PixelToLogic( aSize100thmm, MAP_100TH_MM ) );
 
                         ImplApplyBitmapResolution( aGraphic, nImageResolution,
                             aGraphic.GetSizePixel(), awt::Size( aSize100thmm2.Width(), aSize100thmm2.Height() ) );

@@ -242,10 +242,10 @@ namespace cppcanvas
 
                     // render our content into an appropriately sized
                     // VirtualDevice with alpha channel
-                    VirtualDevice aVDev(
-                        *::Application::GetDefaultDevice(), 0, 0 );
-                    aVDev.SetOutputSizePixel( aBitmapSizePixel );
-                    aVDev.SetMapMode();
+                    ScopedVclPtr<VirtualDevice> aVDev(new VirtualDevice(
+                        *::Application::GetDefaultDevice(), 0, 0 ));
+                    aVDev->SetOutputSizePixel( aBitmapSizePixel );
+                    aVDev->SetMapMode();
 
                     if( rSubset.mnSubsetBegin != 0 ||
                         rSubset.mnSubsetEnd != -1 )
@@ -334,7 +334,7 @@ namespace cppcanvas
                             }
                         }
 
-                        aVDev.DrawTransparent( aMtf,
+                        aVDev->DrawTransparent( aMtf,
                                                aEmptyPoint,
                                                aOutputSizePixel,
                                                *mpAlphaGradient );
@@ -342,7 +342,7 @@ namespace cppcanvas
                     else
                     {
                         // no subsetting - render whole mtf
-                        aVDev.DrawTransparent( *mpGroupMtf,
+                        aVDev->DrawTransparent( *mpGroupMtf,
                                                aEmptyPoint,
                                                aOutputSizePixel,
                                                *mpAlphaGradient );
@@ -352,7 +352,7 @@ namespace cppcanvas
                     // update buffered bitmap and transformation
                     BitmapSharedPtr aBmp( VCLFactory::getInstance().createBitmap(
                                               mpCanvas,
-                                              aVDev.GetBitmapEx(
+                                              aVDev->GetBitmapEx(
                                                   aEmptyPoint,
                                                   aBitmapSizePixel ) ) );
                     mxBufferBitmap = aBmp->getUNOBitmap();

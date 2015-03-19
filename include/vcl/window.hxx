@@ -418,7 +418,7 @@ private:
 
     // This is a first attempt to start to remove the dependency of Window on
     // OutputDevice
-    ::OutputDevice* mpOutputDevice;
+    VclPtr<::OutputDevice> mpOutputDevice;
 
 #ifdef DBG_UTIL
     friend const char* ::ImplDbgCheckWindow( const void* pObj );

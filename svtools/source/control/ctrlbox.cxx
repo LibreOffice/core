@@ -670,8 +670,8 @@ void LineListBox::ImpGetLine( long nLine1, long nLine2, long nDistance,
     }
 
     // Linien malen
-    aSize = aVirDev.PixelToLogic( aSize );
-    long nPix = aVirDev.PixelToLogic( Size( 0, 1 ) ).Height();
+    aSize = aVirDev->PixelToLogic( aSize );
+    long nPix = aVirDev->PixelToLogic( Size( 0, 1 ) ).Height();
     sal_uInt32 n1 = nLine1;
     sal_uInt32 n2 = nLine2;
     long nDist  = nDistance;
@@ -690,24 +690,24 @@ void LineListBox::ImpGetLine( long nLine1, long nLine2, long nDistance,
     // negative width should not be drawn
     if ( aSize.Width() > 0 )
     {
-        Size aVirSize = aVirDev.LogicToPixel( aSize );
-        if ( aVirDev.GetOutputSizePixel() != aVirSize )
-            aVirDev.SetOutputSizePixel( aVirSize );
-        aVirDev.SetFillColor( aColorDist );
-        aVirDev.DrawRect( Rectangle( Point(), aSize ) );
+        Size aVirSize = aVirDev->LogicToPixel( aSize );
+        if ( aVirDev->GetOutputSizePixel() != aVirSize )
+            aVirDev->SetOutputSizePixel( aVirSize );
+        aVirDev->SetFillColor( aColorDist );
+        aVirDev->DrawRect( Rectangle( Point(), aSize ) );
 
-        aVirDev.SetFillColor( aColor1 );
+        aVirDev->SetFillColor( aColor1 );
 
         double y1 = double( n1 ) / 2;
-        svtools::DrawLine( aVirDev, basegfx::B2DPoint( 0, y1 ), basegfx::B2DPoint( aSize.Width( ), y1 ), n1, nStyle );
+        svtools::DrawLine( *aVirDev.get(), basegfx::B2DPoint( 0, y1 ), basegfx::B2DPoint( aSize.Width( ), y1 ), n1, nStyle );
 
         if ( n2 )
         {
             double y2 =  n1 + nDist + double( n2 ) / 2;
-            aVirDev.SetFillColor( aColor2 );
-            svtools::DrawLine( aVirDev, basegfx::B2DPoint( 0, y2 ), basegfx::B2DPoint( aSize.Width(), y2 ), n2, table::BorderLineStyle::SOLID );
+            aVirDev->SetFillColor( aColor2 );
+            svtools::DrawLine( *aVirDev.get(), basegfx::B2DPoint( 0, y2 ), basegfx::B2DPoint( aSize.Width(), y2 ), n2, table::BorderLineStyle::SOLID );
         }
-        rBmp = aVirDev.GetBitmap( Point(), Size( aSize.Width(), n1+nDist+n2 ) );
+        rBmp = aVirDev->GetBitmap( Point(), Size( aSize.Width(), n1+nDist+n2 ) );
     }
 }
 
@@ -719,8 +719,8 @@ void LineListBox::ImplInit()
     eUnit       = FUNIT_POINT;
     eSourceUnit = FUNIT_POINT;
 
-    aVirDev.SetLineColor();
-    aVirDev.SetMapMode( MapMode( MAP_TWIP ) );
+    aVirDev->SetLineColor();
+    aVirDev->SetMapMode( MapMode( MAP_TWIP ) );
 
     UpdatePaintLineColor();
 }
@@ -729,6 +729,7 @@ LineListBox::LineListBox( vcl::Window* pParent, WinBits nWinStyle ) :
     ListBox( pParent, nWinStyle ),
     m_nWidth( 5 ),
     m_sNone( ),
+    aVirDev( new VirtualDevice ),
     aColor( COL_BLACK ),
     maPaintCol( COL_BLACK )
 {

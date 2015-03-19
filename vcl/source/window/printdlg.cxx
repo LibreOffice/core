@@ -64,7 +64,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeShowNupOrderWindow(vcl
 PrintDialog::PrintPreviewWindow::PrintPreviewWindow( vcl::Window* i_pParent )
     : Window( i_pParent, 0 )
     , maOrigSize( 10, 10 )
-    , maPageVDev( *this )
+    , maPageVDev( new VirtualDevice(*this) )
     , maToolTipString(VclResId( SV_PRINT_PRINTPREVIEW_TXT).toString())
     , mbGreyscale( false )
     , maHorzDim(new FixedLine(this, WB_HORZ | WB_CENTER))
@@ -72,7 +72,7 @@ PrintDialog::PrintPreviewWindow::PrintPreviewWindow( vcl::Window* i_pParent )
 {
     SetPaintTransparent( true );
     SetBackground();
-    maPageVDev.SetBackground( Color( COL_WHITE ) );
+    maPageVDev->SetBackground( Color( COL_WHITE ) );
     maHorzDim->Show();
     maVertDim->Show();
 
@@ -87,8 +87,9 @@ PrintDialog::PrintPreviewWindow::~PrintPreviewWindow()
 
 void PrintDialog::PrintPreviewWindow::dispose()
 {
-    maHorzDim.clear();
-    maVertDim.clear();
+    maHorzDim.disposeAndClear();
+    maVertDim.disposeAndClear();
+    maPageVDev.disposeAndClear();
     Window::dispose();
 }
 
@@ -99,7 +100,7 @@ void PrintDialog::PrintPreviewWindow::DataChanged( const DataChangedEvent& i_rDC
     // react on settings changed
     if( i_rDCEvt.GetType() == DataChangedEventType::SETTINGS )
     {
-        maPageVDev.SetBackground( Color( COL_WHITE ) );
+        maPageVDev->SetBackground( Color( COL_WHITE ) );
     }
     Window::DataChanged( i_rDCEvt );
 }
@@ -148,7 +149,7 @@ void PrintDialog::PrintPreviewWindow::Resize()
     aScaledSize.Width()  = PREVIEW_BITMAP_WIDTH;
     aScaledSize.Height() = PREVIEW_BITMAP_WIDTH * aAspectRatio;
 
-    maPageVDev.SetOutputSizePixel( aScaledSize, false );
+    maPageVDev->SetOutputSizePixel( aScaledSize, false );
 
     // position dimension lines
     Point aRef( nTextHeight + (aNewSize.Width() - maPreviewSize.Width())/2,
@@ -226,8 +227,8 @@ void PrintDialog::PrintPreviewWindow::setPreview( const GDIMetaFile& i_rNewPrevi
     maOrigSize = i_rOrigSize;
     maReplacementString = i_rReplacement;
     mbGreyscale = i_bGreyscale;
-    maPageVDev.SetReferenceDevice( i_nDPIX, i_nDPIY );
-    maPageVDev.EnableOutput( true );
+    maPageVDev->SetReferenceDevice( i_nDPIX, i_nDPIY );
+    maPageVDev->EnableOutput( true );
 
     // use correct measurements
     const LocaleDataWrapper& rLocWrap( GetSettings().GetLocaleDataWrapper() );
@@ -266,8 +267,8 @@ void PrintDialog::PrintPreviewWindow::preparePreviewBitmap()
 {
     GDIMetaFile aMtf( maMtf );
 
-    Size aVDevSize( maPageVDev.GetOutputSizePixel() );
-    const Size aLogicSize( maPageVDev.PixelToLogic( aVDevSize, MapMode( MAP_100TH_MM ) ) );
+    Size aVDevSize( maPageVDev->GetOutputSizePixel() );
+    const Size aLogicSize( maPageVDev->PixelToLogic( aVDevSize, MapMode( MAP_100TH_MM ) ) );
     Size aOrigSize( maOrigSize );
     if( aOrigSize.Width() < 1 )
         aOrigSize.Width() = aLogicSize.Width();
@@ -275,31 +276,31 @@ void PrintDialog::PrintPreviewWindow::preparePreviewBitmap()
         aOrigSize.Height() = aLogicSize.Height();
     double fScale = double(aLogicSize.Width())/double(aOrigSize.Width());
 
-    maPageVDev.Erase();
-    maPageVDev.Push();
-    maPageVDev.SetMapMode( MAP_100TH_MM );
-    sal_uLong nOldDrawMode = maPageVDev.GetDrawMode();
+    maPageVDev->Erase();
+    maPageVDev->Push();
+    maPageVDev->SetMapMode( MAP_100TH_MM );
+    sal_uLong nOldDrawMode = maPageVDev->GetDrawMode();
     if( mbGreyscale )
-        maPageVDev.SetDrawMode( maPageVDev.GetDrawMode() |
+        maPageVDev->SetDrawMode( maPageVDev->GetDrawMode() |
                                 ( DRAWMODE_GRAYLINE | DRAWMODE_GRAYFILL | DRAWMODE_GRAYTEXT |
                                   DRAWMODE_GRAYBITMAP | DRAWMODE_GRAYGRADIENT ) );
     aMtf.WindStart();
     aMtf.Scale( fScale, fScale );
     aMtf.WindStart();
 
-    const sal_uInt16 nOriginalAA(maPageVDev.GetAntialiasing());
-    maPageVDev.SetAntialiasing(nOriginalAA | ANTIALIASING_ENABLE_B2DDRAW);
-    aMtf.Play( &maPageVDev, Point( 0, 0 ), aLogicSize );
-    maPageVDev.SetAntialiasing(nOriginalAA);
+    const sal_uInt16 nOriginalAA(maPageVDev->GetAntialiasing());
+    maPageVDev->SetAntialiasing(nOriginalAA | ANTIALIASING_ENABLE_B2DDRAW);
+    aMtf.Play( maPageVDev.get(), Point( 0, 0 ), aLogicSize );
+    maPageVDev->SetAntialiasing(nOriginalAA);
 
-    maPageVDev.Pop();
+    maPageVDev->Pop();
 
     SetMapMode( MAP_PIXEL );
-    maPageVDev.SetMapMode( MAP_PIXEL );
+    maPageVDev->SetMapMode( MAP_PIXEL );
 
-    maPreviewBitmap = Bitmap(maPageVDev.GetBitmap(Point(0, 0), aVDevSize));
+    maPreviewBitmap = Bitmap(maPageVDev->GetBitmap(Point(0, 0), aVDevSize));
 
-    maPageVDev.SetDrawMode( nOldDrawMode );
+    maPageVDev->SetDrawMode( nOldDrawMode );
 }
 
 PrintDialog::ShowNupOrderWindow::ShowNupOrderWindow( vcl::Window* i_pParent )

@@ -66,7 +66,7 @@ namespace vclcanvas
         void updateVDev() const;
 
         ::canvas::vcltools::VCLObject<BitmapEx> maBitmap;
-        mutable VirtualDevice*                  mpVDev; // created only on demand
+        mutable VclPtr<VirtualDevice>           mpVDev; // created only on demand
 
         const OutputDevice&                     mrRefDevice;
 

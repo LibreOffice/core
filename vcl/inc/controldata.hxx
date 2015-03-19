@@ -30,7 +30,7 @@ namespace vcl
     struct ImplControlData
     {
         mutable ControlLayoutData*  mpLayoutData;
-        OutputDevice*               mpReferenceDevice;
+        VclPtr<OutputDevice>        mpReferenceDevice;
 
         ImplControlData()
             :mpLayoutData( NULL )

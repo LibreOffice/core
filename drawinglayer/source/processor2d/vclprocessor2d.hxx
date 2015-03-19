@@ -26,6 +26,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/color/bcolormodifier.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
+#include <vcl/vclptr.hxx>
 
 
 // predefines
@@ -70,7 +71,7 @@ namespace drawinglayer
         {
         protected:
             // the destination OutDev
-            OutputDevice*                                           mpOutputDevice;
+            VclPtr<OutputDevice>                                    mpOutputDevice;
 
             // the modifiedColorPrimitive stack
             basegfx::BColorModifierStack                            maBColorModifierStack;

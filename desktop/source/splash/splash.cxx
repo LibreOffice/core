@@ -63,7 +63,7 @@ private:
 
     static osl::Mutex _aMutex;
 
-    VirtualDevice   _vdev;
+    ScopedVclPtr<VirtualDevice> _vdev;
     BitmapEx        _aIntroBmp;
     Color           _cProgressFrameColor;
     Color           _cProgressBarColor;
@@ -120,7 +120,7 @@ public:
 
 SplashScreen::SplashScreen()
     : IntroWindow()
-    , _vdev(*((IntroWindow*)this))
+    , _vdev(new VirtualDevice(*((IntroWindow*)this)))
     , _cProgressFrameColor(sal::static_int_cast< ColorData >(NOT_LOADED))
     , _cProgressBarColor(sal::static_int_cast< ColorData >(NOT_LOADED))
     , _cProgressTextColor(sal::static_int_cast< ColorData >(NOT_LOADED))

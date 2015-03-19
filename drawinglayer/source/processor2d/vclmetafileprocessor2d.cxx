@@ -252,20 +252,20 @@ namespace drawinglayer
             const Rectangle aPrimitiveRectangle(
                 basegfx::fround(aPrimitiveRange.getMinX()), basegfx::fround(aPrimitiveRange.getMinY()),
                 basegfx::fround(aPrimitiveRange.getMaxX()), basegfx::fround(aPrimitiveRange.getMaxY()));
-            VirtualDevice aContentVDev;
+            ScopedVclPtr<VirtualDevice> aContentVDev = new VirtualDevice;
             MapMode aNewMapMode(pLastOutputDevice->GetMapMode());
 
-            mpOutputDevice = &aContentVDev;
+            mpOutputDevice = aContentVDev.get();
             mpMetaFile = &o_rContentMetafile;
-            aContentVDev.EnableOutput(false);
-            aContentVDev.SetMapMode(pLastOutputDevice->GetMapMode());
-            o_rContentMetafile.Record(&aContentVDev);
-            aContentVDev.SetLineColor(pLastOutputDevice->GetLineColor());
-            aContentVDev.SetFillColor(pLastOutputDevice->GetFillColor());
-            aContentVDev.SetFont(pLastOutputDevice->GetFont());
-            aContentVDev.SetDrawMode(pLastOutputDevice->GetDrawMode());
-            aContentVDev.SetSettings(pLastOutputDevice->GetSettings());
-            aContentVDev.SetRefPoint(pLastOutputDevice->GetRefPoint());
+            aContentVDev->EnableOutput(false);
+            aContentVDev->SetMapMode(pLastOutputDevice->GetMapMode());
+            o_rContentMetafile.Record(aContentVDev.get());
+            aContentVDev->SetLineColor(pLastOutputDevice->GetLineColor());
+            aContentVDev->SetFillColor(pLastOutputDevice->GetFillColor());
+            aContentVDev->SetFont(pLastOutputDevice->GetFont());
+            aContentVDev->SetDrawMode(pLastOutputDevice->GetDrawMode());
+            aContentVDev->SetSettings(pLastOutputDevice->GetSettings());
+            aContentVDev->SetRefPoint(pLastOutputDevice->GetRefPoint());
 
             // dump to MetaFile
             process(rContent);
@@ -2016,7 +2016,7 @@ namespace drawinglayer
                             const Rectangle aRectPixel(mpOutputDevice->LogicToPixel(aRectLogic));
                             Size aSizePixel(aRectPixel.GetSize());
                             const Point aEmptyPoint;
-                            VirtualDevice aBufferDevice;
+                            ScopedVclPtr<VirtualDevice> aBufferDevice = new VirtualDevice;
                             const sal_uInt32 nMaxQuadratPixels(500000);
                             const sal_uInt32 nViewVisibleArea(aSizePixel.getWidth() * aSizePixel.getHeight());
                             double fReduceFactor(1.0);
@@ -2029,20 +2029,20 @@ namespace drawinglayer
                                     basegfx::fround((double)aSizePixel.getHeight() * fReduceFactor));
                             }
 
-                            if(aBufferDevice.SetOutputSizePixel(aSizePixel))
+                            if(aBufferDevice->SetOutputSizePixel(aSizePixel))
                             {
                                 // create and set MapModes for target devices
                                 MapMode aNewMapMode(mpOutputDevice->GetMapMode());
                                 aNewMapMode.SetOrigin(Point(-aRectLogic.Left(), -aRectLogic.Top()));
-                                aBufferDevice.SetMapMode(aNewMapMode);
+                                aBufferDevice->SetMapMode(aNewMapMode);
 
                                 // prepare view transformation for target renderers
                                 // ATTENTION! Need to apply another scaling because of the potential DPI differences
                                 // between Printer and VDev (mpOutputDevice and aBufferDevice here).
                                 // To get the DPI, LogicToPixel from (1,1) from MAP_INCH needs to be used.
-                                basegfx::B2DHomMatrix aViewTransform(aBufferDevice.GetViewTransformation());
+                                basegfx::B2DHomMatrix aViewTransform(aBufferDevice->GetViewTransformation());
                                 const Size aDPIOld(mpOutputDevice->LogicToPixel(Size(1, 1), MAP_INCH));
-                                const Size aDPINew(aBufferDevice.LogicToPixel(Size(1, 1), MAP_INCH));
+                                const Size aDPINew(aBufferDevice->LogicToPixel(Size(1, 1), MAP_INCH));
                                 const double fDPIXChange((double)aDPIOld.getWidth() / (double)aDPINew.getWidth());
                                 const double fDPIYChange((double)aDPIOld.getHeight() / (double)aDPINew.getHeight());
 
@@ -2067,16 +2067,16 @@ namespace drawinglayer
                                     getViewInformation2D().getViewTime(),
                                     getViewInformation2D().getExtendedInformationSequence());
 
-                                VclPixelProcessor2D aBufferProcessor(aViewInfo, aBufferDevice);
+                                VclPixelProcessor2D aBufferProcessor(aViewInfo, *aBufferDevice.get());
 
                                 // draw content using pixel renderer
                                 aBufferProcessor.process(rContent);
-                                const Bitmap aBmContent(aBufferDevice.GetBitmap(aEmptyPoint, aSizePixel));
+                                const Bitmap aBmContent(aBufferDevice->GetBitmap(aEmptyPoint, aSizePixel));
 
                                 // draw transparence using pixel renderer
-                                aBufferDevice.Erase();
+                                aBufferDevice->Erase();
                                 aBufferProcessor.process(rTransparence);
-                                const AlphaMask aBmAlpha(aBufferDevice.GetBitmap(aEmptyPoint, aSizePixel));
+                                const AlphaMask aBmAlpha(aBufferDevice->GetBitmap(aEmptyPoint, aSizePixel));
 
                                 // paint
                                 mpOutputDevice->DrawBitmapEx(

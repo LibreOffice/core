@@ -1015,6 +1015,11 @@ Printer::Printer( const OUString& rPrinterName )
 
 Printer::~Printer()
 {
+    disposeOnce();
+}
+
+void Printer::dispose()
+{
     DBG_ASSERT( !IsPrinting(), "Printer::~Printer() - Job is printing" );
     DBG_ASSERT( !IsJobActive(), "Printer::~Printer() - Job is active" );
 
@@ -1024,7 +1029,7 @@ Printer::~Printer()
     if ( mpInfoPrinter )
         ImplGetSVData()->mpDefInst->DestroyInfoPrinter( mpInfoPrinter );
     if ( mpDisplayDev )
-        delete mpDisplayDev;
+        mpDisplayDev.disposeAndClear();
     else
     {
         // OutputDevice Dtor is tryig the same thing; that why we need to set
@@ -1060,6 +1065,10 @@ Printer::~Printer()
         mpNext->mpPrev = mpPrev;
     else
         pSVData->maGDIData.mpLastPrinter = mpPrev;
+
+    mpPrev.disposeAndClear();
+    mpNext.disposeAndClear();
+    OutputDevice::dispose();
 }
 
 sal_uLong Printer::GetCapabilities( sal_uInt16 nType ) const
@@ -1215,8 +1224,7 @@ bool Printer::SetPrinterProps( const Printer* pPrinter )
         ReleaseGraphics();
         if ( mpDisplayDev )
         {
-            delete mpDisplayDev;
-            mpDisplayDev = NULL;
+            mpDisplayDev.disposeAndClear();
         }
         else
         {

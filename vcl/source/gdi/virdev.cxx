@@ -400,8 +400,7 @@ bool VirtualDevice::ImplSetOutputSizePixel( const Size& rNewSize, bool bErase,
             // #110958# Setup alpha bitmap
             if(mpAlphaVDev && mpAlphaVDev->GetOutputSizePixel() != rNewSize)
             {
-                delete mpAlphaVDev;
-                mpAlphaVDev = 0L;
+                mpAlphaVDev.disposeAndClear();
             }
 
             if( !mpAlphaVDev )

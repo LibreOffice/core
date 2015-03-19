@@ -73,7 +73,7 @@ Printer* ImplPrnDlgListBoxSelect( ListBox* pBox, PushButton* pPropBtn,
                 if ( (pTempPrinter->GetName() != pInfo->GetPrinterName()) ||
                      (pTempPrinter->GetDriverName() != pInfo->GetDriver()) )
                 {
-                    delete pTempPrinter;
+                    VclPtr<Printer>(pTempPrinter).disposeAndClear();
                     pTempPrinter = new Printer( *pInfo );
                 }
             }
@@ -101,8 +101,7 @@ Printer* ImplPrnDlgUpdatePrinter( Printer* pPrinter, Printer* pTempPrinter )
 
     if ( ! Printer::GetQueueInfo( aPrnName, false ) )
     {
-        if ( pTempPrinter )
-            delete pTempPrinter;
+        VclPtr<Printer>(pTempPrinter).disposeAndClear();
         pTempPrinter = new Printer;
     }
 
@@ -251,8 +250,6 @@ PrinterSetupDialog::~PrinterSetupDialog()
 void PrinterSetupDialog::dispose()
 {
     ImplFreePrnDlgListBox(m_pLbName, false);
-    delete mpTempPrinter;
-    mpTempPrinter = NULL;
     m_pLbName.clear();
     m_pBtnProperties.clear();
     m_pBtnOptions.clear();
@@ -260,10 +257,10 @@ void PrinterSetupDialog::dispose()
     m_pFiType.clear();
     m_pFiLocation.clear();
     m_pFiComment.clear();
+    mpTempPrinter.disposeAndClear();
+    mpPrinter.clear();
     ModalDialog::dispose();
 }
-
-
 
 void PrinterSetupDialog::SetOptionsHdl( const Link& rLink )
 {

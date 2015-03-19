@@ -23,6 +23,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/timer.hxx>
 #include <vcl/bitmapex.hxx>
+#include <vcl/vclptr.hxx>
 
 #define ANIMATION_TIMEOUT_ON_CLICK 2147483647L
 
@@ -108,17 +109,13 @@ struct AInfo
     Point           aLastSavePoint;
     Point           aStartOrg;
     Size            aStartSize;
-    OutputDevice*   pOutDev;
+    VclPtr<OutputDevice>   pOutDev;
     void*           pViewData;
     long            nExtraData;
     bool            bWithSize;
     bool            bPause;
 
-                    AInfo() : pOutDev( NULL ),
-                              pViewData( NULL ),
-                              nExtraData( 0L ),
-                              bWithSize( false ),
-                              bPause( false ) {}
+    AInfo();
 };
 
 class ImplAnimView;

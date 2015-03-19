@@ -163,7 +163,7 @@ OUString SvxFont::CalcCaseMap(const OUString &rTxt) const
 class SvxDoCapitals
 {
 protected:
-    OutputDevice *pOut;
+    VclPtr<OutputDevice> pOut;
     const OUString &rTxt;
     const sal_Int32 nIdx;
     const sal_Int32 nLen;

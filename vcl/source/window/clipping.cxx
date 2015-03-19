@@ -863,8 +863,7 @@ void Window::ImplSaveOverlapBackground()
                 }
                 else
                 {
-                    delete mpWindowImpl->mpOverlapData->mpSaveBackDev;
-                    mpWindowImpl->mpOverlapData->mpSaveBackDev = NULL;
+                    mpWindowImpl->mpOverlapData->mpSaveBackDev.disposeAndClear();
                 }
             }
         }
@@ -915,8 +914,7 @@ void Window::ImplDeleteOverlapBackground()
     if ( mpWindowImpl->mpOverlapData->mpSaveBackDev )
     {
         mpWindowImpl->mpFrameData->mnAllSaveBackSize -= mpWindowImpl->mpOverlapData->mnSaveBackSize;
-        delete mpWindowImpl->mpOverlapData->mpSaveBackDev;
-        mpWindowImpl->mpOverlapData->mpSaveBackDev = NULL;
+        mpWindowImpl->mpOverlapData->mpSaveBackDev.disposeAndClear();
         if ( mpWindowImpl->mpOverlapData->mpSaveBackRgn )
         {
             delete mpWindowImpl->mpOverlapData->mpSaveBackRgn;

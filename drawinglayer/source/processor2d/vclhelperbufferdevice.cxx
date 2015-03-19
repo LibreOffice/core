@@ -32,7 +32,7 @@
 
 namespace
 {
-    typedef ::std::vector< VirtualDevice* > aBuffers;
+    typedef ::std::vector< VclPtr<VirtualDevice> > aBuffers;
 
     class VDevBuffer : public Timer, protected comphelper::OBaseMutex
     {
@@ -69,13 +69,13 @@ namespace
 
         while(!maFreeBuffers.empty())
         {
-            delete *(maFreeBuffers.end() - 1);
+            (*(maFreeBuffers.end() - 1)).disposeAndClear();
             maFreeBuffers.pop_back();
         }
 
         while(!maUsedBuffers.empty())
         {
-            delete *(maUsedBuffers.end() - 1);
+            (*(maUsedBuffers.end() - 1)).disposeAndClear();
             maUsedBuffers.pop_back();
         }
     }
@@ -197,7 +197,7 @@ namespace
 
         while(!maFreeBuffers.empty())
         {
-            delete *(maFreeBuffers.end() - 1);
+            (*(maFreeBuffers.end() - 1)).disposeAndClear();
             maFreeBuffers.pop_back();
         }
     }

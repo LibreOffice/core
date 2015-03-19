@@ -45,7 +45,7 @@ public:
     ImplData();
     ~ImplData();
 
-    VirtualDevice*      mpVirDev;
+    VclPtr<VirtualDevice> mpVirDev;
     long                mnItemBorderWidth;
     bool                mbDrawItemFrames:1;
 };
@@ -163,7 +163,7 @@ void StatusBar::dispose()
     delete mpItemList;
 
     // delete VirtualDevice
-    delete mpImplData->mpVirDev;
+    mpImplData->mpVirDev.disposeAndClear();
     delete mpImplData;
     Window::dispose();
 }

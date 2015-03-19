@@ -35,8 +35,8 @@ class VCL_DLLPUBLIC VirtualDevice : public OutputDevice
 
 private:
     SalVirtualDevice*   mpVirDev;
-    VirtualDevice*      mpPrev;
-    VirtualDevice*      mpNext;
+    VclPtr<VirtualDevice>  mpPrev;
+    VclPtr<VirtualDevice>  mpNext;
     sal_uInt16          mnBitCount;
     bool                mbScreenComp;
     sal_Int8            mnAlphaDepth;

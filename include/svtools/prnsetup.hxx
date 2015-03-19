@@ -47,9 +47,9 @@ private:
     VclPtr<FixedText>      m_pFiType;
     VclPtr<FixedText>      m_pFiLocation;
     VclPtr<FixedText>      m_pFiComment;
-    AutoTimer       maStatusTimer;
-    Printer*        mpPrinter;
-    Printer*        mpTempPrinter;
+    AutoTimer              maStatusTimer;
+    VclPtr<Printer>        mpPrinter;
+    VclPtr<Printer>        mpTempPrinter;
 
     SVT_DLLPRIVATE void         ImplSetInfo();
 

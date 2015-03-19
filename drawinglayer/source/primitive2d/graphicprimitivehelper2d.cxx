@@ -96,16 +96,16 @@ namespace
         // with a step count of zero
         if(maAnimation.Count())
         {
-            VirtualDevice aVirtualDevice(*Application::GetDefaultDevice());
-            VirtualDevice aVirtualDeviceMask(*Application::GetDefaultDevice(), 1L);
+            ScopedVclPtr<VirtualDevice> aVirtualDevice(new VirtualDevice(*Application::GetDefaultDevice()));
+            ScopedVclPtr<VirtualDevice> aVirtualDeviceMask(new VirtualDevice(*Application::GetDefaultDevice(), 1L));
 
             // Prepare VirtualDevices and their states
-            aVirtualDevice.EnableMapMode(false);
-            aVirtualDeviceMask.EnableMapMode(false);
-            aVirtualDevice.SetOutputSizePixel(maAnimation.GetDisplaySizePixel());
-            aVirtualDeviceMask.SetOutputSizePixel(maAnimation.GetDisplaySizePixel());
-            aVirtualDevice.Erase();
-            aVirtualDeviceMask.Erase();
+            aVirtualDevice->EnableMapMode(false);
+            aVirtualDeviceMask->EnableMapMode(false);
+            aVirtualDevice->SetOutputSizePixel(maAnimation.GetDisplaySizePixel());
+            aVirtualDeviceMask->SetOutputSizePixel(maAnimation.GetDisplaySizePixel());
+            aVirtualDevice->Erase();
+            aVirtualDeviceMask->Erase();
 
             for(sal_uInt16 a(0L); a < maAnimation.Count(); a++)
             {
@@ -119,20 +119,20 @@ namespace
                 {
                     case DISPOSE_NOT:
                     {
-                        aVirtualDevice.DrawBitmapEx(rAnimBitmap.aPosPix, rAnimBitmap.aBmpEx);
+                        aVirtualDevice->DrawBitmapEx(rAnimBitmap.aPosPix, rAnimBitmap.aBmpEx);
                         Bitmap aMask = rAnimBitmap.aBmpEx.GetMask();
 
                         if(aMask.IsEmpty())
                         {
                             const Point aEmpty;
-                            const Rectangle aRect(aEmpty, aVirtualDeviceMask.GetOutputSizePixel());
+                            const Rectangle aRect(aEmpty, aVirtualDeviceMask->GetOutputSizePixel());
                             const Wallpaper aWallpaper(COL_BLACK);
-                            aVirtualDeviceMask.DrawWallpaper(aRect, aWallpaper);
+                            aVirtualDeviceMask->DrawWallpaper(aRect, aWallpaper);
                         }
                         else
                         {
                             BitmapEx aExpandVisibilityMask = BitmapEx(aMask, aMask);
-                            aVirtualDeviceMask.DrawBitmapEx(rAnimBitmap.aPosPix, aExpandVisibilityMask);
+                            aVirtualDeviceMask->DrawBitmapEx(rAnimBitmap.aPosPix, aExpandVisibilityMask);
                         }
 
                         break;
@@ -143,42 +143,42 @@ namespace
                         const Bitmap aMask(rAnimBitmap.aBmpEx.GetMask());
                         const Bitmap aContent(rAnimBitmap.aBmpEx.GetBitmap());
 
-                        aVirtualDeviceMask.Erase();
-                        aVirtualDevice.DrawBitmap(rAnimBitmap.aPosPix, aContent);
+                        aVirtualDeviceMask->Erase();
+                        aVirtualDevice->DrawBitmap(rAnimBitmap.aPosPix, aContent);
 
                         if(aMask.IsEmpty())
                         {
                             const Rectangle aRect(rAnimBitmap.aPosPix, aContent.GetSizePixel());
-                            aVirtualDeviceMask.SetFillColor(COL_BLACK);
-                            aVirtualDeviceMask.SetLineColor();
-                            aVirtualDeviceMask.DrawRect(aRect);
+                            aVirtualDeviceMask->SetFillColor(COL_BLACK);
+                            aVirtualDeviceMask->SetLineColor();
+                            aVirtualDeviceMask->DrawRect(aRect);
                         }
                         else
                         {
-                            aVirtualDeviceMask.DrawBitmap(rAnimBitmap.aPosPix, aMask);
+                            aVirtualDeviceMask->DrawBitmap(rAnimBitmap.aPosPix, aMask);
                         }
 
                         break;
                     }
                     case DISPOSE_FULL:
                     {
-                        aVirtualDevice.DrawBitmapEx(rAnimBitmap.aPosPix, rAnimBitmap.aBmpEx);
+                        aVirtualDevice->DrawBitmapEx(rAnimBitmap.aPosPix, rAnimBitmap.aBmpEx);
                         break;
                     }
                     case DISPOSE_PREVIOUS :
                     {
-                        aVirtualDevice.DrawBitmapEx(rAnimBitmap.aPosPix, rAnimBitmap.aBmpEx);
-                        aVirtualDeviceMask.DrawBitmap(rAnimBitmap.aPosPix, rAnimBitmap.aBmpEx.GetMask());
+                        aVirtualDevice->DrawBitmapEx(rAnimBitmap.aPosPix, rAnimBitmap.aBmpEx);
+                        aVirtualDeviceMask->DrawBitmap(rAnimBitmap.aPosPix, rAnimBitmap.aBmpEx.GetMask());
                         break;
                     }
                 }
 
                 // create BitmapEx
-                Bitmap aMainBitmap = aVirtualDevice.GetBitmap(Point(), aVirtualDevice.GetOutputSizePixel());
+                Bitmap aMainBitmap = aVirtualDevice->GetBitmap(Point(), aVirtualDevice->GetOutputSizePixel());
 #if defined(MACOSX) || defined(IOS)
-                AlphaMask aMaskBitmap( aVirtualDeviceMask.GetBitmap( Point(), aVirtualDeviceMask.GetOutputSizePixel()));
+                AlphaMask aMaskBitmap( aVirtualDeviceMask->GetBitmap( Point(), aVirtualDeviceMask->GetOutputSizePixel()));
 #else
-                Bitmap aMaskBitmap = aVirtualDeviceMask.GetBitmap( Point(), aVirtualDeviceMask.GetOutputSizePixel());
+                Bitmap aMaskBitmap = aVirtualDeviceMask->GetBitmap( Point(), aVirtualDeviceMask->GetOutputSizePixel());
 #endif
                 aNextStep.maBitmapEx = BitmapEx(aMainBitmap, aMaskBitmap);
 

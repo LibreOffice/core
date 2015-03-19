@@ -116,15 +116,15 @@ namespace drawinglayer
                     if(nSizeX > 0 && nSizeY > 0)
                     {
                         // prepare VirtualDevice
-                        VirtualDevice aVirtualDevice(*Application::GetDefaultDevice());
+                        ScopedVclPtr<VirtualDevice> aVirtualDevice(new VirtualDevice(*Application::GetDefaultDevice()));
                         const Size aSizePixel(nSizeX, nSizeY);
-                        aVirtualDevice.SetOutputSizePixel(aSizePixel);
+                        aVirtualDevice->SetOutputSizePixel(aSizePixel);
 
                         // set size at control
                         xControlWindow->setPosSize(0, 0, nSizeX, nSizeY, awt::PosSize::POSSIZE);
 
                         // get graphics and view
-                        uno::Reference< awt::XGraphics > xGraphics(aVirtualDevice.CreateUnoGraphics());
+                        uno::Reference< awt::XGraphics > xGraphics(aVirtualDevice->CreateUnoGraphics());
                         uno::Reference< awt::XView > xControlView(rXControl, uno::UNO_QUERY);
 
                         if(xGraphics.is() && xControlView.is())
@@ -190,7 +190,7 @@ namespace drawinglayer
                                 xControlView->draw(0, 0);
 
                                 // get bitmap
-                                const Bitmap aContent(aVirtualDevice.GetBitmap(Point(), aSizePixel));
+                                const Bitmap aContent(aVirtualDevice->GetBitmap(Point(), aSizePixel));
 
                                 // to avoid scaling, use the Bitmap pixel size as primitive size
                                 const Size aBitmapSize(aContent.GetSizePixel());

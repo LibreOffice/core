@@ -161,23 +161,23 @@ namespace
         // in pixel mode for alpha channel painting (black is transparent,
         // white to paint 100% opacity)
         const Size aSizePixel(rBitmapEx.GetSizePixel());
-        VirtualDevice aVDev;
+        ScopedVclPtr<VirtualDevice> aVDev = new VirtualDevice;
 
-        aVDev.SetOutputSizePixel(aSizePixel);
-        aVDev.EnableMapMode(false);
-        aVDev.SetFillColor(COL_WHITE);
-        aVDev.SetLineColor();
+        aVDev->SetOutputSizePixel(aSizePixel);
+        aVDev->EnableMapMode(false);
+        aVDev->SetFillColor(COL_WHITE);
+        aVDev->SetLineColor();
 
         if(rBitmapEx.IsTransparent())
         {
             // use given alpha channel
-            aVDev.DrawBitmap(Point(0, 0), rBitmapEx.GetAlpha().GetBitmap());
+            aVDev->DrawBitmap(Point(0, 0), rBitmapEx.GetAlpha().GetBitmap());
         }
         else
         {
             // reset alpha channel
-            aVDev.SetBackground(Wallpaper(Color(COL_BLACK)));
-            aVDev.Erase();
+            aVDev->SetBackground(Wallpaper(Color(COL_BLACK)));
+            aVDev->Erase();
         }
 
         // transform polygon from clipping to pixel coordinates
@@ -203,11 +203,11 @@ namespace
         aInvertPixelPoly.append(aPixelPoly);
 
         // paint as alpha
-        aVDev.DrawPolyPolygon(aInvertPixelPoly);
+        aVDev->DrawPolyPolygon(aInvertPixelPoly);
 
         // get created alpha mask and set defaults
         AlphaMask aAlpha(
-            aVDev.GetBitmap(
+            aVDev->GetBitmap(
                 Point(0, 0),
                 aSizePixel));
 

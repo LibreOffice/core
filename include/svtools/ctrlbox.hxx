@@ -280,7 +280,7 @@ class SVT_DLLPUBLIC LineListBox : public ListBox
     long            m_nWidth;
     OUString        m_sNone;
 
-    VirtualDevice   aVirDev;
+    ScopedVclPtr<VirtualDevice>   aVirDev;
     Size            aTxtSize;
     Color           aColor;
     Color           maPaintCol;

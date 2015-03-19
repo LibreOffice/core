@@ -129,11 +129,11 @@ void OutputDevice::DrawBitmapWallpaper( long nX, long nY,
         {
             if( !pCached && !rWallpaper.GetColor().GetTransparency() )
             {
-                VirtualDevice aVDev( *this );
-                aVDev.SetBackground( rWallpaper.GetColor() );
-                aVDev.SetOutputSizePixel( Size( nBmpWidth, nBmpHeight ) );
-                aVDev.DrawBitmapEx( Point(), aBmpEx );
-                aBmpEx = aVDev.GetBitmap( Point(), aVDev.GetOutputSizePixel() );
+                ScopedVclPtr<VirtualDevice> aVDev = new VirtualDevice( *this );
+                aVDev->SetBackground( rWallpaper.GetColor() );
+                aVDev->SetOutputSizePixel( Size( nBmpWidth, nBmpHeight ) );
+                aVDev->DrawBitmapEx( Point(), aBmpEx );
+                aBmpEx = aVDev->GetBitmap( Point(), aVDev->GetOutputSizePixel() );
             }
 
             bDrawColorBackground = true;

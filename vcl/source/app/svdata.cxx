@@ -37,6 +37,8 @@
 #include "vcl/layout.hxx"
 #include "vcl/button.hxx"
 #include "vcl/dockwin.hxx"
+#include "vcl/print.hxx"
+#include "vcl/virdev.hxx"
 #include "salinst.hxx"
 #include "salframe.hxx"
 #include "salgdi.hxx"

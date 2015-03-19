@@ -164,10 +164,10 @@ SvxIconChoiceCtrl_Impl::~SvxIconChoiceCtrl_Impl()
     delete pZOrderList;
     delete pImpCursor;
     delete pGridMap;
-    delete pDDDev;
-    delete pDDBufDev;
-    delete pDDTempDev;
-    delete pEntryPaintDev;
+    pDDDev.disposeAndClear();
+    pDDBufDev.disposeAndClear();
+    pDDTempDev.disposeAndClear();
+    pEntryPaintDev.disposeAndClear();
     ClearSelectedRectList();
     ClearColumnList();
     aVerSBar.disposeAndClear();
@@ -261,10 +261,10 @@ IMPL_LINK_NOARG(SvxIconChoiceCtrl_Impl, EndScrollHdl)
 void SvxIconChoiceCtrl_Impl::FontModified()
 {
     StopEditTimer();
-    DELETEZ(pDDDev);
-    DELETEZ(pDDBufDev);
-    DELETEZ(pDDTempDev);
-    DELETEZ(pEntryPaintDev);
+    pDDDev.disposeAndClear();
+    pDDBufDev.disposeAndClear();
+    pDDTempDev.disposeAndClear();
+    pEntryPaintDev.disposeAndClear();
     SetDefaultTextSize();
     ShowCursor( false );
     ShowCursor( true );

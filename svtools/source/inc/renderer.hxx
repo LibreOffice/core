@@ -70,7 +70,7 @@ private:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice > mxDevice;
 
-    OutputDevice*               mpOutDev;
+    VclPtr<OutputDevice>        mpOutDev;
     Rectangle                   maDestRect;
     ::com::sun::star::uno::Any  maRenderData;
 };

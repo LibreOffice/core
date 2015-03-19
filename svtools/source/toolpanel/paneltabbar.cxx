@@ -415,7 +415,7 @@ namespace svt
         TabAlignment                m_eTabAlignment;
         IToolPanelDeck&             m_rPanelDeck;
 
-        VirtualDevice               m_aRenderDevice;
+        ScopedVclPtr<VirtualDevice> m_aRenderDevice;
         PTabBarRenderer             m_pRenderer;
 
         ::boost::optional< size_t > m_aHoveredItem;
@@ -499,7 +499,7 @@ namespace svt
         ,m_aNormalizer()
         ,m_eTabAlignment( i_eAlignment )
         ,m_rPanelDeck( i_rPanelDeck )
-        ,m_aRenderDevice( i_rTabBar )
+        ,m_aRenderDevice( new VirtualDevice(i_rTabBar) )
         ,m_pRenderer()
         ,m_aHoveredItem()
         ,m_aFocusedItem()
@@ -511,19 +511,19 @@ namespace svt
         ,m_nScrollPosition( 0 )
     {
 #ifdef WNT
-        if ( m_aRenderDevice.IsNativeControlSupported( CTRL_TAB_ITEM, PART_ENTIRE_CONTROL ) )
+        if ( m_aRenderDevice->IsNativeControlSupported( CTRL_TAB_ITEM, PART_ENTIRE_CONTROL ) )
             // this mode requires the NWF framework to be able to render those items onto a virtual
             // device. For some frameworks (some GTK themes, in particular), this is known to fail.
             // So, be on the safe side for the moment.
             m_pRenderer.reset( new NWFTabItemRenderer( m_aRenderDevice ) );
         else
 #endif
-        if ( m_aRenderDevice.IsNativeControlSupported( CTRL_TOOLBAR, PART_BUTTON ) )
-            m_pRenderer.reset( new NWFToolboxItemRenderer( m_aRenderDevice ) );
+        if ( m_aRenderDevice->IsNativeControlSupported( CTRL_TOOLBAR, PART_BUTTON ) )
+            m_pRenderer.reset( new NWFToolboxItemRenderer( *m_aRenderDevice.get() ) );
         else
-            m_pRenderer.reset( new VCLItemRenderer( m_aRenderDevice ) );
+            m_pRenderer.reset( new VCLItemRenderer( *m_aRenderDevice.get() ) );
 
-        m_aRenderDevice.SetLineColor();
+        m_aRenderDevice->SetLineColor();
 
         m_rPanelDeck.AddListener( *this );
 
@@ -710,7 +710,7 @@ namespace svt
 
     void PanelTabBar_Impl::CopyFromRenderDevice( const Rectangle& i_rLogicalRect ) const
     {
-        BitmapEx aBitmap( m_aRenderDevice.GetBitmapEx(
+        BitmapEx aBitmap( m_aRenderDevice->GetBitmapEx(
             i_rLogicalRect.TopLeft(),
             Size(
                 i_rLogicalRect.GetSize().Width(),
@@ -833,7 +833,7 @@ namespace svt
         const Size aLogicalOutputSize( m_aNormalizer.getReferenceSize() );
 
         // forward actual output size to our render device
-        m_aRenderDevice.SetOutputSizePixel( aLogicalOutputSize );
+        m_aRenderDevice->SetOutputSizePixel( aLogicalOutputSize );
 
         // re-calculate the size of the scroll buttons and of the items
         m_aGeometry.relayout( aLogicalOutputSize, m_aItems );
@@ -1050,10 +1050,10 @@ namespace svt
 
         // background
         const Rectangle aNormalizedPaintArea( m_pImpl->m_aNormalizer.getNormalized( i_rRect, m_pImpl->m_eTabAlignment ) );
-        m_pImpl->m_aRenderDevice.Push( PushFlags::CLIPREGION );
-        m_pImpl->m_aRenderDevice.SetClipRegion(vcl::Region(aNormalizedPaintArea));
+        m_pImpl->m_aRenderDevice->Push( PushFlags::CLIPREGION );
+        m_pImpl->m_aRenderDevice->SetClipRegion(vcl::Region(aNormalizedPaintArea));
         m_pImpl->m_pRenderer->renderBackground();
-        m_pImpl->m_aRenderDevice.Pop();
+        m_pImpl->m_aRenderDevice->Pop();
         m_pImpl->CopyFromRenderDevice( aNormalizedPaintArea );
 
         // ensure the items really paint into their own playground only

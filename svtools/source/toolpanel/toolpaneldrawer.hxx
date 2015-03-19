@@ -97,7 +97,7 @@ namespace svt
         using Window::Paint;
 
     private:
-        ::std::unique_ptr< VirtualDevice >  m_pPaintDevice;
+        ScopedVclPtr< VirtualDevice >       m_pPaintDevice;
         VclPtr<DrawerVisualization>         m_aVisualization;
         bool                                m_bFocused;
         bool                                m_bExpanded;

@@ -467,8 +467,8 @@ Bitmap ImpGraphic::ImplGetBitmap(const GraphicConversionParameters& rParameters)
         if(maEx.IsEmpty())
         {
             // calculate size
-            VirtualDevice aVDev;
-            Size aDrawSize(aVDev.LogicToPixel(maMetaFile.GetPrefSize(), maMetaFile.GetPrefMapMode()));
+            ScopedVclPtr<VirtualDevice> aVDev = new VirtualDevice;
+            Size aDrawSize(aVDev->LogicToPixel(maMetaFile.GetPrefSize(), maMetaFile.GetPrefMapMode()));
 
             if(rParameters.getSizePixel().Width() && rParameters.getSizePixel().Height())
             {
@@ -502,7 +502,7 @@ Bitmap ImpGraphic::ImplGetBitmap(const GraphicConversionParameters& rParameters)
             {
                 // get hairline and full bound rect
                 Rectangle aHairlineRect;
-                const Rectangle aRect(maMetaFile.GetBoundRect(aVDev, &aHairlineRect));
+                const Rectangle aRect(maMetaFile.GetBoundRect(*aVDev.get(), &aHairlineRect));
 
                 if(!aRect.IsEmpty() && !aHairlineRect.IsEmpty())
                 {
@@ -519,22 +519,22 @@ Bitmap ImpGraphic::ImplGetBitmap(const GraphicConversionParameters& rParameters)
                 }
             }
 
-            if(aVDev.SetOutputSizePixel(aPixelSize))
+            if(aVDev->SetOutputSizePixel(aPixelSize))
             {
                 if(rParameters.getAntiAliase())
                 {
-                    aVDev.SetAntialiasing(aVDev.GetAntialiasing() | ANTIALIASING_ENABLE_B2DDRAW);
+                    aVDev->SetAntialiasing(aVDev->GetAntialiasing() | ANTIALIASING_ENABLE_B2DDRAW);
                 }
 
                 if(rParameters.getSnapHorVerLines())
                 {
-                    aVDev.SetAntialiasing(aVDev.GetAntialiasing() | ANTIALIASING_PIXELSNAPHAIRLINE);
+                    aVDev->SetAntialiasing(aVDev->GetAntialiasing() | ANTIALIASING_PIXELSNAPHAIRLINE);
                 }
 
-                ImplDraw( &aVDev, Point(), aDrawSize );
+                ImplDraw( aVDev.get(), Point(), aDrawSize );
 
                 // use maEx as local buffer for rendered metafile
-                const_cast< ImpGraphic* >(this)->maEx = aVDev.GetBitmap( Point(), aVDev.GetOutputSizePixel() );
+                const_cast< ImpGraphic* >(this)->maEx = aVDev->GetBitmap( Point(), aVDev->GetOutputSizePixel() );
             }
         }
 

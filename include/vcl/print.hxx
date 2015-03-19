@@ -203,9 +203,9 @@ private:
     SalInfoPrinter*             mpInfoPrinter;
     SalPrinter*                 mpPrinter;
     SalGraphics*                mpJobGraphics;
-    Printer*                    mpPrev;
-    Printer*                    mpNext;
-    VirtualDevice*              mpDisplayDev;
+    VclPtr<Printer>             mpPrev;
+    VclPtr<Printer>             mpNext;
+    VclPtr<VirtualDevice>       mpDisplayDev;
     PrinterOptions*             mpPrinterOptions;
     OUString                    maPrinterName;
     OUString                    maDriver;
@@ -299,6 +299,7 @@ public:
                                 Printer( const QueueInfo& rQueueInfo );
                                 Printer( const OUString& rPrinterName );
     virtual                     ~Printer();
+    virtual void                dispose() SAL_OVERRIDE;
 
     static const std::vector< OUString >& GetPrinterQueues();
     static const QueueInfo*     GetQueueInfo( const OUString& rPrinterName, bool bStatusUpdate );
@@ -309,7 +310,7 @@ public:
     const OUString&             GetName() const             { return maPrinterName; }
     const OUString&             GetDriverName() const       { return maDriver; }
     bool                        IsDefPrinter() const        { return mbDefPrinter; }
-    bool                        IsDisplayPrinter() const    { return mpDisplayDev != NULL; }
+    bool                        IsDisplayPrinter() const    { return mpDisplayDev != nullptr; }
     bool                        IsValid() const             { return !IsDisplayPrinter(); }
 
     sal_uLong                   GetCapabilities( sal_uInt16 nType ) const;

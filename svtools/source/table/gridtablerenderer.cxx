@@ -86,17 +86,17 @@ namespace svt { namespace table
 
             Point const aBitmapPos( 0, 0 );
             Size const aBitmapSize( nSortIndicatorWidth, nSortIndicatorHeight );
-            VirtualDevice aDevice( i_device, 0, 0 );
-            aDevice.SetOutputSizePixel( aBitmapSize );
+            ScopedVclPtr<VirtualDevice> aDevice = new VirtualDevice( i_device, 0, 0 );
+            aDevice->SetOutputSizePixel( aBitmapSize );
 
-            DecorationView aDecoView( &aDevice );
+            DecorationView aDecoView( aDevice.get() );
             aDecoView.DrawSymbol(
                 Rectangle( aBitmapPos, aBitmapSize ),
                 i_sortAscending ? SymbolType::SPIN_UP : SymbolType::SPIN_DOWN,
                 i_style.GetActiveColor()
             );
 
-            rBitmap = aDevice.GetBitmapEx( aBitmapPos, aBitmapSize );
+            rBitmap = aDevice->GetBitmapEx( aBitmapPos, aBitmapSize );
             m_lastHeaderHeight = i_headerHeight;
             m_lastArrowColor = i_style.GetActiveColor();
         }

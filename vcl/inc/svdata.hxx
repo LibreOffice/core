@@ -153,18 +153,18 @@ struct ImplSVAppData
 
 struct ImplSVGDIData
 {
-    OutputDevice*           mpFirstWinGraphics;             // First OutputDevice with a Frame Graphics
-    OutputDevice*           mpLastWinGraphics;              // Last OutputDevice with a Frame Graphics
-    OutputDevice*           mpFirstVirGraphics;             // First OutputDevice with a VirtualDevice Graphics
-    OutputDevice*           mpLastVirGraphics;              // Last OutputDevice with a VirtualDevice Graphics
-    OutputDevice*           mpFirstPrnGraphics;             // First OutputDevice with a InfoPrinter Graphics
-    OutputDevice*           mpLastPrnGraphics;              // Last OutputDevice with a InfoPrinter Graphics
-    VirtualDevice*          mpFirstVirDev;                  // First VirtualDevice
-    VirtualDevice*          mpLastVirDev;                   // Last VirtualDevice
+    VclPtr<OutputDevice>    mpFirstWinGraphics;             // First OutputDevice with a Frame Graphics
+    VclPtr<OutputDevice>    mpLastWinGraphics;              // Last OutputDevice with a Frame Graphics
+    VclPtr<OutputDevice>    mpFirstVirGraphics;             // First OutputDevice with a VirtualDevice Graphics
+    VclPtr<OutputDevice>    mpLastVirGraphics;              // Last OutputDevice with a VirtualDevice Graphics
+    VclPtr<OutputDevice>    mpFirstPrnGraphics;             // First OutputDevice with a InfoPrinter Graphics
+    VclPtr<OutputDevice>    mpLastPrnGraphics;              // Last OutputDevice with a InfoPrinter Graphics
+    VclPtr<VirtualDevice>   mpFirstVirDev;                  // First VirtualDevice
+    VclPtr<VirtualDevice>   mpLastVirDev;                   // Last VirtualDevice
     OpenGLContext*          mpFirstContext;                 // First OpenGLContext
     OpenGLContext*          mpLastContext;                  // Last OpenGLContext
-    Printer*                mpFirstPrinter;                 // First Printer
-    Printer*                mpLastPrinter;                  // Last Printer
+    VclPtr<Printer>         mpFirstPrinter;                 // First Printer
+    VclPtr<Printer>         mpLastPrinter;                  // Last Printer
     ImplPrnQueueList*       mpPrinterQueueList;             // List of all printer queue
     PhysicalFontCollection* mpScreenFontList;               // Screen-Font-List
     ImplFontCache*          mpScreenFontCache;              // Screen-Font-Cache

@@ -497,6 +497,7 @@ void Window::dispose()
     // release SalGraphics
     OutputDevice *pOutDev = GetOutDev();
     pOutDev->ReleaseGraphics();
+    mpOutputDevice.disposeAndClear();
 
     // notify ImplDelData subscribers of this window about the window deletion
     ImplDelData* pDelData = mpWindowImpl->mpFirstDel;

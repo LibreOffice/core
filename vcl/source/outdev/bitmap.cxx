@@ -410,11 +410,11 @@ Bitmap OutputDevice::GetBitmap( const Point& rSrcPt, const Size& rSize ) const
                 // If the visible part has been clipped, we have to create a
                 // Bitmap with the correct size in which we copy the clipped
                 // Bitmap to the correct position.
-                VirtualDevice aVDev( *this );
+                ScopedVclPtr<VirtualDevice> aVDev = new VirtualDevice( *this );
 
-                if ( aVDev.SetOutputSizePixel( aRect.GetSize() ) )
+                if ( aVDev->SetOutputSizePixel( aRect.GetSize() ) )
                 {
-                    if ( ((OutputDevice*)&aVDev)->mpGraphics || ((OutputDevice*)&aVDev)->AcquireGraphics() )
+                    if ( ((OutputDevice*)aVDev.get())->mpGraphics || ((OutputDevice*)aVDev.get())->AcquireGraphics() )
                     {
                         if ( (nWidth > 0) && (nHeight > 0) )
                         {
@@ -422,14 +422,14 @@ Bitmap OutputDevice::GetBitmap( const Point& rSrcPt, const Size& rSize ) const
                                               (aRect.Left() < mnOutOffX) ? (mnOutOffX - aRect.Left()) : 0L,
                                               (aRect.Top() < mnOutOffY) ? (mnOutOffY - aRect.Top()) : 0L,
                                               nWidth, nHeight);
-                            (((OutputDevice*)&aVDev)->mpGraphics)->CopyBits( aPosAry, mpGraphics, this, this );
+                            (((OutputDevice*)aVDev.get())->mpGraphics)->CopyBits( aPosAry, mpGraphics, this, this );
                         }
                         else
                         {
                             OSL_ENSURE(false, "CopyBits with negative width or height (!)");
                         }
 
-                        aBmp = aVDev.GetBitmap( Point(), aVDev.GetOutputSizePixel() );
+                        aBmp = aVDev->GetBitmap( Point(), aVDev->GetOutputSizePixel() );
                      }
                      else
                         bClipped = false;

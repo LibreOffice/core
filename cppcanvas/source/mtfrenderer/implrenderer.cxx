@@ -2908,16 +2908,16 @@ namespace cppcanvas
 
             VectorOfOutDevStates    aStateStack;
 
-            VirtualDevice aVDev;
-            aVDev.EnableOutput( false );
+            ScopedVclPtr<VirtualDevice> aVDev = new VirtualDevice;
+            aVDev->EnableOutput( false );
 
             // Setup VDev for state tracking and mapping
             // =========================================
 
-            aVDev.SetMapMode( rMtf.GetPrefMapMode() );
+            aVDev->SetMapMode( rMtf.GetPrefMapMode() );
 
             const Size aMtfSize( rMtf.GetPrefSize() );
-            const Size aMtfSizePixPre( aVDev.LogicToPixel( aMtfSize,
+            const Size aMtfSizePixPre( aVDev->LogicToPixel( aMtfSize,
                                                            rMtf.GetPrefMapMode() ) );
 
             // #i44110# correct null-sized output - there are shapes
@@ -2928,7 +2928,7 @@ namespace cppcanvas
             sal_Int32 nCurrActions(0);
             ActionFactoryParameters aParms(aStateStack,
                                            rCanvas,
-                                           aVDev,
+                                           *aVDev.get(),
                                            rParams,
                                            nCurrActions );
 
@@ -2942,7 +2942,7 @@ namespace cppcanvas
                                                      1.0 / aMtfSizePix.Height() );
 
             tools::calcLogic2PixelAffineTransform( aStateStack.getState().mapModeTransform,
-                                                   aVDev );
+                                                   *aVDev.get() );
 
             ColorSharedPtr pColor( getCanvas()->createColor() );
 
