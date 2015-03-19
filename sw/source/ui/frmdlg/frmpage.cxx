@@ -362,14 +362,14 @@ static FrmMap aVAsCharHtmlMap[] =
     {SwFPos::CENTER_VERT,   SwFPos::CENTER_VERT,    text::VertOrientation::LINE_CENTER,   LB_REL_ROW}
 };
 
-static const sal_uInt16 aPageRg[] = {
+const sal_uInt16 SwFrmPage::aPageRg[] = {
     RES_FRM_SIZE, RES_FRM_SIZE,
     RES_VERT_ORIENT, RES_ANCHOR,
     RES_COL, RES_COL,
     RES_FOLLOW_TEXT_FLOW, RES_FOLLOW_TEXT_FLOW,
     0
 };
-static const sal_uInt16 aAddPgRg[] = {
+const sal_uInt16 SwFrmAddPage::aAddPgRg[] = {
     RES_PROTECT,            RES_PROTECT,
     RES_PRINT,              RES_PRINT,
     FN_SET_FRM_NAME,        FN_SET_FRM_NAME,
@@ -2319,11 +2319,6 @@ void SwFrmPage::Init(const SfxItemSet& rSet, bool bReset)
         m_pRelHeightRelationLB->SelectEntryPos(0);
 }
 
-const sal_uInt16* SwFrmPage::GetRanges()
-{
-    return aPageRg;
-}
-
 void SwFrmPage::SetFormatUsed(bool bFmt)
 {
     bFormat = bFmt;
@@ -3116,11 +3111,6 @@ bool SwFrmAddPage::FillItemSet(SfxItemSet *rSet)
     }
 
     return bRet;
-}
-
-const sal_uInt16* SwFrmAddPage::GetRanges()
-{
-    return aAddPgRg;
 }
 
 IMPL_LINK_NOARG(SwFrmAddPage, EditModifyHdl)

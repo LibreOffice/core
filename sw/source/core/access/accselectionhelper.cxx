@@ -178,11 +178,6 @@ bool SwAccessibleSelectionHelper::isAccessibleChildSelected(
     return bRet;
 }
 
-void SwAccessibleSelectionHelper::clearAccessibleSelection(  )
-    throw ( RuntimeException )
-{
-}
-
 void SwAccessibleSelectionHelper::selectAllAccessibleChildren(  )
     throw ( RuntimeException )
 {

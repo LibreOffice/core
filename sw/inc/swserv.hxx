@@ -64,9 +64,6 @@ public:
                             const OUString & rMimeType,
                             bool bSynchron = false ) SAL_OVERRIDE;
 
-    bool SetData( const OUString & rMimeType,
-                    const ::com::sun::star::uno::Any& rData );
-
     void SendDataChanged( const SwPosition& rPos );
     void SendDataChanged( const SwPaM& rRange );
 

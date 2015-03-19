@@ -2466,12 +2466,12 @@ static void lcl_SavePrintUIOptionsToDocumentPrintData(
     SwPrintData aDocPrintData( rDoc.getIDocumentDeviceAccess().getPrintData() );
 
     aDocPrintData.SetPrintGraphic( rPrintUIOptions.IsPrintGraphics() );
-    aDocPrintData.SetPrintTable( rPrintUIOptions.IsPrintTables() );
+    aDocPrintData.SetPrintTable( true ); // for now it was decided that tables should always be printed
     aDocPrintData.SetPrintDraw( rPrintUIOptions.IsPrintDrawings() );
     aDocPrintData.SetPrintControl( rPrintUIOptions.IsPrintFormControls() );
     aDocPrintData.SetPrintLeftPage( rPrintUIOptions.IsPrintLeftPages() );
     aDocPrintData.SetPrintRightPage( rPrintUIOptions.IsPrintRightPages() );
-    aDocPrintData.SetPrintReverse( rPrintUIOptions.IsPrintReverse() );
+    aDocPrintData.SetPrintReverse( false ); /*handled by print dialog now*/
     aDocPrintData.SetPaperFromSetup( rPrintUIOptions.IsPaperFromSetup() );
     aDocPrintData.SetPrintEmptyPages( rPrintUIOptions.IsPrintEmptyPages( bIsPDFEXport ) );
     aDocPrintData.SetPrintPostIts( rPrintUIOptions.GetPrintPostItsType() );

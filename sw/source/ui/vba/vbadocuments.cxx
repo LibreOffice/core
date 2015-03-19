@@ -122,7 +122,6 @@ SwVbaDocuments::Add( const uno::Any& Template, const uno::Any& /*NewTemplate*/, 
 void SAL_CALL
 SwVbaDocuments::Close( const uno::Any& /*SaveChanges*/, const uno::Any& /*OriginalFormat*/, const uno::Any& /*RouteDocument*/ ) throw (uno::RuntimeException, std::exception)
 {
-    closeDocuments();
 }
 
 // #TODO# #FIXME# can any of the unused params below be used?

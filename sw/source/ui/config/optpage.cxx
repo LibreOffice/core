@@ -315,8 +315,6 @@ SwAddPrinterTabPage::SwAddPrinterTabPage(vcl::Window* pParent,
     get(m_pPaperFromSetupCB, "papertray");
     get(m_pFaxLB, "fax");
 
-    Init();
-
     Link aLk = LINK( this, SwAddPrinterTabPage, AutoClickHdl);
     m_pGrfCB->SetClickHdl( aLk );
     m_pRightPageCB->SetClickHdl( aLk );
@@ -446,11 +444,6 @@ void    SwAddPrinterTabPage::Reset( const SfxItemSet*  )
     }
     else
         m_pProspectCB_RTL->Enable( false );
-}
-
-void    SwAddPrinterTabPage::Init()
-{
-
 }
 
 IMPL_LINK_NOARG_INLINE_START(SwAddPrinterTabPage, AutoClickHdl)

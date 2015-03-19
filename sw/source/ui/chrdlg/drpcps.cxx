@@ -55,7 +55,7 @@ using namespace css;
 using namespace css::uno;
 using namespace css::lang;
 
-static const sal_uInt16 aPageRg[] = {
+const sal_uInt16 SwDropCapsPage::aPageRg[] = {
     RES_PARATR_DROP, RES_PARATR_DROP,
     0
 };
@@ -739,11 +739,6 @@ IMPL_LINK_NOARG_INLINE_START(SwDropCapsPage, SelectHdl)
     return 0;
 }
 IMPL_LINK_NOARG_INLINE_END(SwDropCapsPage, SelectHdl)
-
-const sal_uInt16*  SwDropCapsPage::GetRanges()
-{
-    return aPageRg;
-}
 
 void SwDropCapsPage::FillSet( SfxItemSet &rSet )
 {

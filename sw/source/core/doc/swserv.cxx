@@ -105,13 +105,6 @@ bool SwServerObject::GetData( uno::Any & rData,
     return bRet;
 }
 
-bool SwServerObject::SetData( const OUString & ,
-                    const uno::Any& )
-{
-    // set new data into the "server" -> at first nothing to do
-    return false;
-}
-
 void SwServerObject::SendDataChanged( const SwPosition& rPos )
 {
     // Is someone interested in our changes?

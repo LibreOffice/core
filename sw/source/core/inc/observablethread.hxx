@@ -78,8 +78,6 @@ class ObservableThread : public osl::Thread,
         */
         virtual void SAL_CALL onTerminated() SAL_OVERRIDE;
 
-        void threadFinished();
-
     private:
 
         oslInterlockedCount mnThreadID;

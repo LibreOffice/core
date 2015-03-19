@@ -169,11 +169,13 @@ class SwColumnPage : public SfxTabPage
 
     bool isLineNotNone() const;
 
+    static const sal_uInt16 aPageRg[];
+
 public:
     virtual ~SwColumnPage();
 
     static SfxTabPage *Create(vcl::Window *pParent, const SfxItemSet *rSet);
-    static const sal_uInt16* GetRanges();
+    static const sal_uInt16* GetRanges() { return aPageRg; }
 
     virtual bool    FillItemSet(SfxItemSet *rSet) SAL_OVERRIDE;
     virtual void    Reset(const SfxItemSet *rSet) SAL_OVERRIDE;

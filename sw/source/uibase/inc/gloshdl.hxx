@@ -46,8 +46,7 @@ class SW_DLLPUBLIC SwGlossaryHdl
                     SwTextBlocks *pGlossary );
 
 public:
-    bool    ConvertToNew(SwTextBlocks& rOld);
-    void    GlossaryDlg();
+    void        GlossaryDlg();
 
     size_t      GetGroupCnt() const;
     OUString    GetGroupName( size_t, OUString* pTitle = 0 );

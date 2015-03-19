@@ -126,7 +126,7 @@ void SwRenderData::MakeSwPrtOptions(
 
     // get print options to use from provided properties
     rOptions.bPrintGraphic          = pOpt->IsPrintGraphics();
-    rOptions.bPrintTable            = pOpt->IsPrintTables();
+    rOptions.bPrintTable            = true; // for now it was decided that tables should always be printed
     rOptions.bPrintDraw             = pOpt->IsPrintDrawings();
     rOptions.bPrintControl          = pOpt->IsPrintFormControls();
     rOptions.bPrintLeftPages        = pOpt->IsPrintLeftPages();
@@ -135,7 +135,7 @@ void SwRenderData::MakeSwPrtOptions(
     rOptions.bPrintEmptyPages       = pOpt->IsPrintEmptyPages( bIsPDFExport );
     // bUpdateFieldsInPrinting  <-- not set here; mail merge only
     rOptions.bPaperFromSetup        = pOpt->IsPaperFromSetup();
-    rOptions.bPrintReverse          = pOpt->IsPrintReverse();
+    rOptions.bPrintReverse          = false; /*handled by print dialog now*/
     rOptions.bPrintProspect         = pOpt->IsPrintProspect();
     rOptions.bPrintProspectRTL      = pOpt->IsPrintProspectRTL();
     // bPrintSingleJobs         <-- not set here; mail merge and or configuration
@@ -441,15 +441,6 @@ bool SwPrintUIOptions::IsPrintEmptyPages( bool bIsPDFExport ) const
             !getBoolValue( "IsSkipEmptyPages", true ) :
             getBoolValue( "PrintEmptyPages", true );
     return bRes;
-}
-
-bool SwPrintUIOptions::IsPrintTables() const
-{
-    // take care of different property names currently in use for this option.
-    // for compatibility the old name should win (may still be used for PDF export or via Uno API)
-
-    // for now it was decided that tables should always be printed
-    return true;
 }
 
 bool SwPrintUIOptions::IsPrintGraphics() const

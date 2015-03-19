@@ -276,8 +276,8 @@ bool DocumentLinksAdministrationManager::GetData( const OUString& rItem, const O
     return false;
 }
 
-bool DocumentLinksAdministrationManager::SetData( const OUString& rItem, const OUString& rMimeType,
-                     const uno::Any & rValue )
+bool DocumentLinksAdministrationManager::SetData( const OUString& rItem, const OUString& ,
+                     const uno::Any &  )
 {
     // search for bookmarks and sections case sensitive at first. If nothing is found then try again case insensitive
     bool bCaseSensitive = true;
@@ -285,7 +285,9 @@ bool DocumentLinksAdministrationManager::SetData( const OUString& rItem, const O
     {
         ::sw::mark::DdeBookmark* const pBkmk = lcl_FindDdeBookmark(*m_rDoc.getIDocumentMarkAccess(), rItem, bCaseSensitive);
         if(pBkmk)
-            return SwServerObject(*pBkmk).SetData(rMimeType, rValue);
+        {
+            return false;
+        }
 
         // Do we already have the Item?
         OUString sItem( bCaseSensitive ? rItem : GetAppCharClass().lowercase(rItem));
@@ -298,7 +300,7 @@ bool DocumentLinksAdministrationManager::SetData( const OUString& rItem, const O
         if( aPara.pSectNd )
         {
             // found, so get the data
-            return SwServerObject( *aPara.pSectNd ).SetData( rMimeType, rValue );
+            return false;
         }
         if( !bCaseSensitive )
             break;
@@ -311,10 +313,6 @@ bool DocumentLinksAdministrationManager::SetData( const OUString& rItem, const O
     {
         if (!(lcl_FindTable(pFmt, &aPara)))
             break;
-    }
-    if( aPara.pTblNd )
-    {
-        return SwServerObject( *aPara.pTblNd ).SetData( rMimeType, rValue );
     }
 
     return false;

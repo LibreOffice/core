@@ -755,10 +755,8 @@ IMPL_LINK_NOARG_INLINE_START(SwGlossaryDlg, EditHdl)
     if (m_pEditBtn->GetCurItemIdent() == "edit")
     {
         SwTextBlocks *pGroup = ::GetGlossaries()->GetGroupDoc (  GetCurrGrpName () );
-        bool bRet = pGlossaryHdl->ConvertToNew ( *pGroup );
         delete pGroup;
-        if ( bRet )
-            EndDialog(RET_EDIT);
+        EndDialog(RET_EDIT);
     }
     return 0;
 }

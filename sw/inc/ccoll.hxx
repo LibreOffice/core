@@ -61,7 +61,7 @@ public:
     virtual SfxPoolItem*        Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
     virtual bool                operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
 
-    static const CommandStruct* GetCmds();
+    static inline const CommandStruct* GetCmds() { return aCmds; }
 
     OUString            GetStyle(sal_uInt16 nPos) const;
     void                SetStyle(const OUString* pStyle, sal_uInt16 nPos);

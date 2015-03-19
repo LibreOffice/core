@@ -531,7 +531,6 @@ sal_Bool SwAccessibleDocument::isAccessibleChildSelected(
 void SwAccessibleDocument::clearAccessibleSelection(  )
     throw ( uno::RuntimeException, std::exception )
 {
-    maSelectionHelper.clearAccessibleSelection();
 }
 
 void SwAccessibleDocument::selectAllAccessibleChildren(  )

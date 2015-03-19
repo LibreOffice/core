@@ -182,10 +182,12 @@ class SwFrmPage: public SfxTabPage
     using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;
 
+    static const sal_uInt16 aPageRg[];
+
 public:
 
     static SfxTabPage *Create(vcl::Window *pParent, const SfxItemSet *rSet);
-    static const sal_uInt16* GetRanges();
+    static const sal_uInt16* GetRanges() { return aPageRg; }
 
     virtual bool FillItemSet(SfxItemSet *rSet) SAL_OVERRIDE;
     virtual void Reset(const SfxItemSet *rSet) SAL_OVERRIDE;
@@ -305,10 +307,12 @@ class SwFrmAddPage : public SfxTabPage
     SwFrmAddPage(vcl::Window *pParent, const SfxItemSet &rSet);
     virtual ~SwFrmAddPage();
 
+    static const sal_uInt16 aAddPgRg[];
+
 public:
 
     static SfxTabPage*  Create(vcl::Window *pParent, const SfxItemSet *rSet);
-    static const sal_uInt16*      GetRanges();
+    static const sal_uInt16*  GetRanges() { return aAddPgRg; }
 
     virtual bool FillItemSet(SfxItemSet *rSet) SAL_OVERRIDE;
     virtual void Reset(const SfxItemSet *rSet) SAL_OVERRIDE;

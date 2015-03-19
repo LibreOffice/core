@@ -56,6 +56,8 @@ class SwParagraphNumTabPage : public SfxTabPage
     DECL_LINK( StyleHdl_Impl, ListBox* );
     DECL_LINK(LineCountHdl_Impl, void *);
 
+    static const sal_uInt16 aPageRg[];
+
 protected:
         SwParagraphNumTabPage(vcl::Window* pParent, const SfxItemSet& rSet );
     void aCountParaFL();
@@ -65,7 +67,7 @@ public:
 
     static SfxTabPage*  Create( vcl::Window* pParent,
                                 const SfxItemSet* rSet );
-    static const sal_uInt16*      GetRanges();
+    static const sal_uInt16* GetRanges() { return aPageRg; }
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;

@@ -539,7 +539,7 @@ bool SwNoTxtFrm::GetCrsrOfst(SwPosition* pPos, Point& ,
     return true;
 }
 
-#define CLEARCACHE( pNd ) {\
+#define CLEARCACHE {\
     SwFlyFrm* pFly = FindFlyFrm();\
     if( pFly && pFly->GetFmt()->GetSurround().IsContour() )\
     {\
@@ -604,7 +604,7 @@ void SwNoTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         }
         // fall through
     case RES_FMT_CHG:
-        CLEARCACHE( static_cast<SwGrfNode*>( GetNode()) )
+        CLEARCACHE
         break;
 
     case RES_ATTRSET_CHG:
@@ -614,7 +614,7 @@ void SwNoTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
                 if( SfxItemState::SET == static_cast<const SwAttrSetChg*>(pOld)->GetChgSet()->
                                 GetItemState( n, false ))
                 {
-                    CLEARCACHE( static_cast<SwGrfNode*>( GetNode()) )
+                    CLEARCACHE
                     break;
                 }
             if( RES_GRFATR_END == n )           // not found
@@ -631,7 +631,7 @@ void SwNoTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
             bComplete = false;
             SwGrfNode* pNd = static_cast<SwGrfNode*>( GetNode());
 
-            CLEARCACHE( pNd )
+            CLEARCACHE
 
             SwRect aRect( Frm() );
 

@@ -190,33 +190,6 @@ Reader* SwDocShell::StartConvertFrom(SfxMedium& rMedium, SwReader** ppRdr,
     else
         return 0;
 
-    // Check password
-    OUString aPasswd;
-    if ((*ppRdr)->NeedsPasswd( *pRead ))
-    {
-        if(!bAPICall)
-        {
-            SfxPasswordDialog* pPasswdDlg =
-                    new SfxPasswordDialog( 0 );
-                if(RET_OK == pPasswdDlg->Execute())
-                    aPasswd = pPasswdDlg->GetPassword();
-        }
-        else
-        {
-            const SfxItemSet* pSet = rMedium.GetItemSet();
-            const SfxPoolItem *pPassItem;
-            if(pSet && SfxItemState::SET == pSet->GetItemState(SID_PASSWORD, true, &pPassItem))
-                aPasswd = static_cast<const SfxStringItem *>(pPassItem)->GetValue();
-        }
-
-        if (!(*ppRdr)->CheckPasswd( aPasswd, *pRead ))
-        {
-            MessageDialog( 0, SW_RES(STR_ERROR_PASSWD), VCL_MESSAGE_INFO).Execute();
-                delete *ppRdr;
-            return 0;
-        }
-    }
-
     // #i30171# set the UpdateDocMode at the SwDocShell
     SFX_ITEMSET_ARG( rMedium.GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE, false);
     mnUpdateDocMode = pUpdateDocItem ? pUpdateDocItem->GetValue() : document::UpdateDocMode::NO_UPDATE;

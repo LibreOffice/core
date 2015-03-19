@@ -44,7 +44,7 @@
 
 using namespace ::com::sun::star;
 
-static const sal_uInt16 aWrapPageRg[] = {
+const sal_uInt16 SwWrapTabPage::aWrapPageRg[] = {
     RES_LR_SPACE, RES_UL_SPACE,
     RES_PROTECT, RES_SURROUND,
     RES_PRINT, RES_PRINT,
@@ -621,11 +621,6 @@ IMPL_LINK_NOARG(SwWrapTabPage, ContourHdl)
     }
 
     return 0;
-}
-
-const sal_uInt16* SwWrapTabPage::GetRanges()
-{
-    return aWrapPageRg;
 }
 
 void SwWrapTabPage::DataChanged( const DataChangedEvent& rDCEvt )

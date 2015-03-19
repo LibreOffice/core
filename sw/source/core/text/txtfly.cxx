@@ -519,8 +519,7 @@ bool SwTxtFly::DrawTextOpaque( SwDrawTextInfo &rInf )
                     const SwFmtSurround &rSur = pFmt->GetSurround();
                     const SwFmtAnchor& rAnchor = pFmt->GetAnchor();
                     // Only the ones who are opaque and more to the top
-                    if( !( rFly.IsBackgroundTransparent()
-                           || rFly.IsShadowTransparent() ) &&
+                    if( ! rFly.IsBackgroundTransparent() &&
                         SURROUND_THROUGHT == rSur.GetSurround() &&
                         ( !rSur.IsAnchorOnly() ||
                           // #i68520#
@@ -618,7 +617,6 @@ void SwTxtFly::DrawFlyRect( OutputDevice* pOut, const SwRect &rRect,
                           ? (pAnchoredObjTmp->GetDrawObj()->GetLayer() != nHellId)
                           : !rSur.IsContour() ) &&
                         !pFly->IsBackgroundTransparent() &&
-                        !pFly->IsShadowTransparent() &&
                         ( !pFly->Lower() ||
                           !pFly->Lower()->IsNoTxtFrm() ||
                           !static_cast<const SwNoTxtFrm*>(pFly->Lower())->IsTransparent() );

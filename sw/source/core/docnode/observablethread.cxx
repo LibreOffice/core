@@ -50,8 +50,6 @@ void SAL_CALL ObservableThread::run()
 
 void SAL_CALL ObservableThread::onTerminated()
 {
-    threadFinished();
-
     // notify observer
     boost::shared_ptr< IFinishedThreadListener > pThreadListener = mpThreadListener.lock();
     if ( pThreadListener )
@@ -60,11 +58,6 @@ void SAL_CALL ObservableThread::onTerminated()
     }
 
     release();
-}
-
-void ObservableThread::threadFinished()
-{
-    // empty default implementation
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

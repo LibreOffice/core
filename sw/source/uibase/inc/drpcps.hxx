@@ -80,10 +80,13 @@ friend class SwDropCapsPict;
     using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;
 
+    static const sal_uInt16 aPageRg[];
+
 public:
 
     static SfxTabPage *Create(vcl::Window *pParent, const SfxItemSet *rSet);
-    static const sal_uInt16* GetRanges();
+    static const sal_uInt16* GetRanges() { return aPageRg; }
+
 
     virtual bool FillItemSet(      SfxItemSet *rSet) SAL_OVERRIDE;
     virtual void Reset      (const SfxItemSet *rSet) SAL_OVERRIDE;

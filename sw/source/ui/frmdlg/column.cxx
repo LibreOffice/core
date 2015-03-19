@@ -375,7 +375,7 @@ sal_uInt16 GetMaxWidth( SwColMgr* pColMgr, sal_uInt16 nCols )
     return nMax;
 }
 
-static sal_uInt16 aPageRg[] = {
+const sal_uInt16 SwColumnPage::aPageRg[] = {
     RES_COL, RES_COL,
     0
 };
@@ -1258,11 +1258,6 @@ int SwColumnPage::DeactivatePage(SfxItemSet *_pSet)
         FillItemSet(_pSet);
 
     return sal_True;
-}
-
-const sal_uInt16* SwColumnPage::GetRanges()
-{
-    return aPageRg;
 }
 
 IMPL_LINK( SwColumnPage, SetDefaultsHdl, ValueSet *, pVS )

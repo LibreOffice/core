@@ -776,19 +776,6 @@ bool SwFmt::IsBackgroundTransparent() const
     return false;
 }
 
-/** SwFmt::IsShadowTransparent
-
-    Virtual method to determine, if shadow of format is transparent.
-    Default implementation returns false. Thus, subclasses have to override
-    method, if the specific subclass can have a transparent shadow.
-
-    @return false, default implementation
-*/
-bool SwFmt::IsShadowTransparent() const
-{
-    return false;
-}
-
 /*
  * Document Interface Access
  */

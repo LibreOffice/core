@@ -108,10 +108,9 @@ class SwAddPrinterTabPage : public SfxTabPage
 
     OUString        sNone;
 
-    bool        bAttrModified;
-    bool        bPreview;
+    bool            bAttrModified;
+    bool            bPreview;
 
-    void        Init();
                 DECL_LINK(AutoClickHdl, void *);
                 DECL_LINK(SelectHdl, void *);
 

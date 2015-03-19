@@ -45,7 +45,7 @@
 
 using namespace ::com::sun::star;
 
-static const sal_uInt16 aPageRg[] = {
+const sal_uInt16 SwFootNotePage::aPageRg[] = {
     FN_PARAM_FTN_INFO, FN_PARAM_FTN_INFO,
     0
 };
@@ -356,11 +356,6 @@ int SwFootNotePage::DeactivatePage( SfxItemSet* _pSet)
         FillItemSet(_pSet);
 
     return sal_True;
-}
-
-const sal_uInt16* SwFootNotePage::GetRanges()
-{
-    return aPageRg;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -302,11 +302,6 @@ bool SwGlossaryHdl::HasShortName(const OUString& rShortName) const
     return bRet;
 }
 
-bool SwGlossaryHdl::ConvertToNew(SwTextBlocks& /*rOld*/)
-{
-    return true;
-}
-
 // Create autotext
 bool SwGlossaryHdl::NewGlossary(const OUString& rName, const OUString& rShortName,
                                 bool bCreateGroup, bool bNoAttr)
@@ -315,8 +310,6 @@ bool SwGlossaryHdl::NewGlossary(const OUString& rName, const OUString& rShortNam
         pCurGrp ? pCurGrp: rStatGlossaries.GetGroupDoc( aCurGrp, bCreateGroup );
     //pTmp == 0 if the AutoText path setting is wrong
     if(!pTmp)
-        return false;
-    if(!ConvertToNew(*pTmp))
         return false;
 
     OUString sOnlyTxt;
@@ -347,7 +340,7 @@ bool SwGlossaryHdl::DelGlossary(const OUString &rShortName)
     SwTextBlocks *pGlossary = pCurGrp ? pCurGrp
                                     : rStatGlossaries.GetGroupDoc(aCurGrp);
     //pTmp == 0 if the AutoText path setting is wrong
-    if(!pGlossary || !ConvertToNew(*pGlossary))
+    if(!pGlossary)
         return false;
 
     sal_uInt16 nIdx = pGlossary->GetIndex( rShortName );
@@ -652,9 +645,6 @@ bool SwGlossaryHdl::Rename(const OUString& rOldShort, const OUString& rNewShortN
                                     : rStatGlossaries.GetGroupDoc(aCurGrp);
     if(pGlossary)
     {
-        if(!ConvertToNew(*pGlossary))
-            return false;
-
         sal_uInt16 nIdx = pGlossary->GetIndex( rOldShort );
         sal_uInt16 nOldLongIdx = pGlossary->GetLongIndex( rNewName );
         sal_uInt16 nOldIdx = pGlossary->GetIndex( rNewShortName );
