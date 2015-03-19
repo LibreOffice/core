@@ -46,7 +46,7 @@
 #include "cairo_spritecanvas.hxx"
 
 #ifdef CAIRO_HAS_QUARTZ_SURFACE
-# include "cairo_quartz_cairo.hxx"
+#include <cairo-quartz.h>
 #elif defined CAIRO_HAS_WIN32_SURFACE
 # include "cairo_win32_cairo.hxx"
 # include <cairo-win32.h>

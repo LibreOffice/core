@@ -31,12 +31,12 @@
 #include <basegfx/tools/unopolypolygon.hxx>
 
 #include <vcl/syschild.hxx>
+#include <vcl/cairo.hxx>
 #include <vcl/canvastools.hxx>
 
 #include "cairo_spritecanvas.hxx"
 #include "cairo_canvasbitmap.hxx"
 #include "cairo_devicehelper.hxx"
-#include "cairo_cairo.hxx"
 
 using namespace ::cairo;
 using namespace ::com::sun::star;
@@ -134,7 +134,7 @@ namespace cairocanvas
         return DeviceHelper::getSurface();
     }
 
-    SurfaceSharedPtr SpriteDeviceHelper::createSurface( const ::basegfx::B2ISize& rSize, Content aContent )
+    SurfaceSharedPtr SpriteDeviceHelper::createSurface( const ::basegfx::B2ISize& rSize, int aContent )
     {
         if( mpBufferSurface )
             return mpBufferSurface->getSimilar( aContent, rSize.getX(), rSize.getY() );
@@ -144,12 +144,11 @@ namespace cairocanvas
 
     SurfaceSharedPtr SpriteDeviceHelper::createSurface( BitmapSystemData& rData, const Size& rSize )
     {
-        if( getOutputDevice() )
-            return createBitmapSurface( *getOutputDevice(), rData, rSize );
-
+        OutputDevice *pDevice = getOutputDevice();
+        if (pDevice)
+            return pDevice->CreateBitmapSurface(rData, rSize);
         return SurfaceSharedPtr();
     }
-
 
     /** SpriteDeviceHelper::flush  Flush the platform native window
      *

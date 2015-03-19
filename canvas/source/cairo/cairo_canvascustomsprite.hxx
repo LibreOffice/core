@@ -36,8 +36,9 @@
 #include <canvas/base/basemutexhelper.hxx>
 #include <canvas/base/canvascustomspritebase.hxx>
 
+#include <vcl/cairo.hxx>
+
 #include "cairo_sprite.hxx"
-#include "cairo_cairo.hxx"
 #include "cairo_canvashelper.hxx"
 #include "cairo_repainttarget.hxx"
 #include "cairo_spritehelper.hxx"
@@ -130,7 +131,7 @@ namespace cairocanvas
 
         // SurfaceProvider
         virtual ::cairo::SurfaceSharedPtr getSurface() SAL_OVERRIDE;
-        virtual ::cairo::SurfaceSharedPtr createSurface( const ::basegfx::B2ISize& rSize, ::cairo::Content aContent = CAIRO_CONTENT_COLOR_ALPHA ) SAL_OVERRIDE;
+        virtual ::cairo::SurfaceSharedPtr createSurface( const ::basegfx::B2ISize& rSize, int aContent = CAIRO_CONTENT_COLOR_ALPHA ) SAL_OVERRIDE;
         virtual ::cairo::SurfaceSharedPtr createSurface( ::Bitmap& rBitmap ) SAL_OVERRIDE;
         virtual ::cairo::SurfaceSharedPtr changeSurface( bool bHasAlpha, bool bCopyContent ) SAL_OVERRIDE;
         virtual OutputDevice* getOutputDevice() SAL_OVERRIDE;
