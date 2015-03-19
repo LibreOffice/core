@@ -60,6 +60,7 @@
 #include "scriptinfo.hxx"
 #include "IMark.hxx"
 #include "ring.hxx"
+#include "calbck.hxx"
 
 typedef tools::SvRef<SwDocShell> SwDocShellRef;
 
@@ -105,8 +106,10 @@ public:
     void testTransliterate();
     void testMarkMove();
     void testIntrusiveRing();
+    void testClientModify();
 
     CPPUNIT_TEST_SUITE(SwDocTest);
+
     CPPUNIT_TEST(testTransliterate);
     CPPUNIT_TEST(randomTest);
     CPPUNIT_TEST(testPageDescName);
@@ -134,6 +137,7 @@ public:
     CPPUNIT_TEST(testGraphicAnchorDeletion);
     CPPUNIT_TEST(testMarkMove);
     CPPUNIT_TEST(testIntrusiveRing);
+    CPPUNIT_TEST(testClientModify);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1382,6 +1386,97 @@ void SwDocTest::testIntrusiveRing()
     CPPUNIT_ASSERT_EQUAL(&bar, bar.GetPrev());
     CPPUNIT_ASSERT_EQUAL(&foo, foo.GetNext());
     CPPUNIT_ASSERT_EQUAL(&foo, foo.GetPrev());
+}
+
+namespace
+{
+    struct TestModify : SwModify
+    {
+        TYPEINFO();
+    };
+    TYPEINIT1( TestModify, SwModify );
+    struct TestClient : SwClient
+    {
+        TYPEINFO();
+        int m_nModifyCount;
+        TestClient() : m_nModifyCount(0) {};
+        virtual void Modify( const SfxPoolItem*, const SfxPoolItem*)
+        {
+            ShowReg();
+            ++m_nModifyCount;
+        }
+
+        void ShowReg()
+        {
+            if(GetRegisteredIn())
+            {
+                std::cout << "TestClient " << this << " registered  in " << GetRegisteredIn() << std::endl;
+            }
+            else
+                std::cout << "TestClient " << this << " not registered " << std::endl;
+        }
+    };
+    TYPEINIT1( TestClient, SwClient );
+    struct OtherTestClient : SwClient
+        { TYPEINFO(); };
+    TYPEINIT1( OtherTestClient, SwClient );
+}
+void SwDocTest::testClientModify()
+{
+    TestModify aMod;
+    TestClient aClient1, aClient2;
+    aMod.Add(&aClient1);
+    aMod.Add(&aClient2);
+    CPPUNIT_ASSERT_EQUAL(aClient1.GetRegisteredIn(),static_cast<SwModify*>(&aMod));
+    CPPUNIT_ASSERT_EQUAL(aClient2.GetRegisteredIn(),static_cast<SwModify*>(&aMod));
+    aMod.ModifyBroadcast(nullptr, nullptr);
+    CPPUNIT_ASSERT_EQUAL(aClient1.m_nModifyCount,1);
+    CPPUNIT_ASSERT_EQUAL(aClient2.m_nModifyCount,1);
+    aMod.ModifyBroadcast(nullptr, nullptr);
+    CPPUNIT_ASSERT_EQUAL(aClient1.m_nModifyCount,2);
+    CPPUNIT_ASSERT_EQUAL(aClient2.m_nModifyCount,2);
+    CPPUNIT_ASSERT(!aClient1.IsA(TYPE(OtherTestClient)));
+    {
+        SwIterator<OtherTestClient,SwModify> aIter(aMod);
+        for(OtherTestClient* pClient = aIter.First(); pClient ; pClient = aIter.Next())
+            CPPUNIT_ASSERT(false);
+    }
+    {
+        int nCount = 0;
+        SwIterator<TestClient,SwModify> aIter(aMod);
+        for(TestClient* pClient = aIter.First(); pClient ; pClient = aIter.Next())
+        {
+            CPPUNIT_ASSERT_EQUAL(pClient->m_nModifyCount,2);
+            ++nCount;
+        }
+        CPPUNIT_ASSERT_EQUAL(nCount,2);
+    }
+    CPPUNIT_ASSERT_EQUAL(aClient1.GetRegisteredIn(),static_cast<SwModify*>(&aMod));
+    CPPUNIT_ASSERT_EQUAL(aClient2.GetRegisteredIn(),static_cast<SwModify*>(&aMod));
+    {
+        int nCount = 0;
+        SwIterator<TestClient,SwModify> aIter(aMod);
+        for(TestClient* pClient = aIter.First(); pClient ; pClient = aIter.Next())
+        {
+            aMod.Remove(pClient);
+            ++nCount;
+        }
+        CPPUNIT_ASSERT_EQUAL(nCount,2);
+    }
+    CPPUNIT_ASSERT_EQUAL(aClient1.GetRegisteredIn(), static_cast<SwModify*>(nullptr));
+    CPPUNIT_ASSERT_EQUAL(aClient2.GetRegisteredIn(), static_cast<SwModify*>(nullptr));
+    {
+        int nCount = 0;
+        SwIterator<TestClient,SwModify> aIter(aMod);
+        for(TestClient* pClient = aIter.First(); pClient ; pClient = aIter.Next())
+        {
+            CPPUNIT_ASSERT(false);
+        }
+        CPPUNIT_ASSERT_EQUAL(nCount,0);
+    }
+    aMod.ModifyBroadcast(nullptr, nullptr);
+    CPPUNIT_ASSERT_EQUAL(aClient1.m_nModifyCount,2);
+    CPPUNIT_ASSERT_EQUAL(aClient2.m_nModifyCount,2);
 }
 
 void SwDocTest::setUp()
