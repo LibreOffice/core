@@ -110,7 +110,7 @@ namespace cairocanvas
         mpCairo = pSurface->getCairo();
     }
 
-    static void setColor( Cairo* pCairo,
+    static void setColor( cairo_t* pCairo,
                           const uno::Sequence<double>& rColor )
     {
         if( rColor.getLength() > 3 )
@@ -132,9 +132,9 @@ namespace cairocanvas
                                   const rendering::RenderState& renderState,
                                   bool bSetColor )
     {
-        Matrix aViewMatrix;
-        Matrix aRenderMatrix;
-        Matrix aCombinedMatrix;
+        cairo_matrix_t aViewMatrix;
+        cairo_matrix_t aRenderMatrix;
+        cairo_matrix_t aCombinedMatrix;
 
         cairo_matrix_init( &aViewMatrix,
                            viewState.AffineTransform.m00, viewState.AffineTransform.m10, viewState.AffineTransform.m01,
@@ -643,7 +643,7 @@ namespace cairocanvas
                 if( pAlphaReadAcc )
                     aAlpha.ReleaseAccess( pAlphaReadAcc );
 
-                SurfaceSharedPtr pImageSurface = createSurface(
+                SurfaceSharedPtr pImageSurface = rSurfaceProvider->getOutputDevice()->CreateSurface(
                     CairoSurfaceSharedPtr(
                         cairo_image_surface_create_for_data(
                             data,
@@ -661,7 +661,7 @@ namespace cairocanvas
         return pSurface;
     }
 
-    static void addColorStops( Pattern* pPattern, const uno::Sequence< uno::Sequence< double > >& rColors, const uno::Sequence< double >& rStops, bool bReverseStops = false )
+    static void addColorStops( cairo_pattern_t* pPattern, const uno::Sequence< uno::Sequence< double > >& rColors, const uno::Sequence< double >& rStops, bool bReverseStops = false )
     {
         int i;
 
@@ -705,9 +705,9 @@ namespace cairocanvas
         return uno::Sequence<double>();
     }
 
-    static Pattern* patternFromParametricPolyPolygon( ::canvas::ParametricPolyPolygon& rPolygon )
+    static cairo_pattern_t* patternFromParametricPolyPolygon( ::canvas::ParametricPolyPolygon& rPolygon )
     {
-        Pattern* pPattern = NULL;
+        cairo_pattern_t* pPattern = NULL;
         const ::canvas::ParametricPolyPolygon::Values aValues = rPolygon.getValues();
         double x0, x1, y0, y1, cx, cy, r0, r1;
 
@@ -739,7 +739,7 @@ namespace cairocanvas
     }
 
     static void doOperation( Operation aOperation,
-                             Cairo* pCairo,
+                             cairo_t* pCairo,
                              const uno::Sequence< rendering::Texture >* pTextures,
                              const SurfaceProviderRef& pDevice,
                              const basegfx::B2DRange& rBounds )
@@ -764,7 +764,7 @@ namespace cairocanvas
                             cairo_save( pCairo );
 
                             ::com::sun::star::geometry::AffineMatrix2D aTransform( aTexture.AffineTransform );
-                            Matrix aScaleMatrix, aTextureMatrix, aScaledTextureMatrix;
+                            cairo_matrix_t aScaleMatrix, aTextureMatrix, aScaledTextureMatrix;
 
                             cairo_matrix_init( &aTextureMatrix,
                                                aTransform.m00, aTransform.m10, aTransform.m01,
@@ -827,7 +827,7 @@ namespace cairocanvas
 
                             ::canvas::ParametricPolyPolygon* pPolyImpl = static_cast< ::canvas::ParametricPolyPolygon* >( aTexture.Gradient.get() );
                             ::com::sun::star::geometry::AffineMatrix2D aTransform( aTexture.AffineTransform );
-                            Matrix aTextureMatrix;
+                            cairo_matrix_t aTextureMatrix;
 
                             cairo_matrix_init( &aTextureMatrix,
                                                aTransform.m00, aTransform.m10, aTransform.m01,
@@ -882,7 +882,7 @@ namespace cairocanvas
                             }
                             else
                             {
-                                Pattern* pPattern = patternFromParametricPolyPolygon( *pPolyImpl );
+                                cairo_pattern_t* pPattern = patternFromParametricPolyPolygon( *pPolyImpl );
 
                                 if( pPattern )
                                 {
@@ -916,10 +916,10 @@ namespace cairocanvas
         }
     }
 
-    static void clipNULL( Cairo *pCairo )
+    static void clipNULL( cairo_t *pCairo )
     {
         SAL_INFO( "canvas.cairo", "clipNULL");
-        Matrix aOrigMatrix, aIdentityMatrix;
+        cairo_matrix_t aOrigMatrix, aIdentityMatrix;
 
         /* we set identity matrix here to overcome bug in cairo 0.9.2
            where XCreatePixmap is called with zero width and height.
@@ -942,7 +942,7 @@ namespace cairocanvas
 
     void doPolyPolygonImplementation( ::basegfx::B2DPolyPolygon aPolyPolygon,
                                       Operation aOperation,
-                                      Cairo* pCairo,
+                                      cairo_t* pCairo,
                                       const uno::Sequence< rendering::Texture >* pTextures,
                                       const SurfaceProviderRef& pDevice,
                                       rendering::FillRule eFillrule )
@@ -952,7 +952,7 @@ namespace cairocanvas
                                  "CanvasHelper::fillTexturedPolyPolygon: empty texture sequence");
 
         bool bOpToDo = false;
-        Matrix aOrigMatrix, aIdentityMatrix;
+        cairo_matrix_t aOrigMatrix, aIdentityMatrix;
         double nX, nY, nBX, nBY, nAX, nAY;
 
         cairo_get_matrix( pCairo, &aOrigMatrix );
@@ -1073,7 +1073,7 @@ namespace cairocanvas
                         Operation aOperation,
                         bool bNoLineJoin,
                         const uno::Sequence< rendering::Texture >* pTextures,
-                        Cairo* pCairo ) const
+                        cairo_t* pCairo ) const
     {
         const ::basegfx::B2DPolyPolygon& rPolyPoly(
             ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(xPolyPolygon) );
@@ -1172,7 +1172,7 @@ namespace cairocanvas
 
             useStates( viewState, renderState, true );
 
-            Matrix aMatrix;
+            cairo_matrix_t aMatrix;
             double w = strokeAttributes.StrokeWidth, h = 0;
             cairo_get_matrix( mpCairo.get(), &aMatrix );
             cairo_matrix_transform_distance( &aMatrix, &w, &h );
@@ -1351,7 +1351,7 @@ namespace cairocanvas
 
             useStates( viewState, renderState, true );
 
-            Matrix aMatrix;
+            cairo_matrix_t aMatrix;
 
             cairo_get_matrix( mpCairo.get(), &aMatrix );
             if( ! ::rtl::math::approxEqual( aMatrix.xx, 1 ) &&
@@ -1552,7 +1552,7 @@ namespace cairocanvas
         {
             const sal_Int32 nWidth( rect.X2 - rect.X1 );
             const sal_Int32 nHeight( rect.Y2 - rect.Y1 );
-            const Format eFormat( mbHaveAlpha ? CAIRO_FORMAT_ARGB32 : CAIRO_FORMAT_RGB24 );
+            const cairo_format_t eFormat( mbHaveAlpha ? CAIRO_FORMAT_ARGB32 : CAIRO_FORMAT_RGB24 );
             uno::Sequence< sal_Int8 > aRes( 4*nWidth*nHeight );
             sal_Int8* pData = aRes.getArray();
             cairo_surface_t* pImageSurface = cairo_image_surface_create_for_data( reinterpret_cast<unsigned char *>(pData),
@@ -2294,7 +2294,7 @@ namespace cairocanvas
 
             useStates( viewState, renderState, true );
 
-            Matrix aMatrix;
+            cairo_matrix_t aMatrix;
 
             cairo_get_matrix( mpCairo.get(), &aMatrix );
             aMatrix.xx = aMatrix.yy = 1;

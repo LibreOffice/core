@@ -64,6 +64,8 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
 
+#include <config_cairo_canvas.h>
+
 #include <numeric>
 #include <stack>
 
@@ -299,6 +301,7 @@ SystemGraphicsData OutputDevice::GetSystemGfxData() const
 
 bool OutputDevice::SupportsCairo() const
 {
+#if ENABLE_CAIRO_CANVAS
     if (!mpGraphics)
     {
         if (!AcquireGraphics())
@@ -306,6 +309,49 @@ bool OutputDevice::SupportsCairo() const
     }
 
     return mpGraphics->SupportsCairo();
+#else
+    return false;
+#endif
+}
+
+cairo::SurfaceSharedPtr OutputDevice::CreateSurface(const cairo::CairoSurfaceSharedPtr& rSurface) const
+{
+    if (!mpGraphics)
+    {
+        if (!AcquireGraphics())
+            return cairo::SurfaceSharedPtr();
+    }
+    return mpGraphics->CreateSurface(rSurface);
+}
+
+cairo::SurfaceSharedPtr OutputDevice::CreateSurface(int x, int y, int width, int height) const
+{
+    if (!mpGraphics)
+    {
+        if (!AcquireGraphics())
+            return cairo::SurfaceSharedPtr();
+    }
+    return mpGraphics->CreateSurface(*this, x, y, width, height);
+}
+
+cairo::SurfaceSharedPtr OutputDevice::CreateBitmapSurface(const BitmapSystemData& rData, const Size& rSize) const
+{
+    if (!mpGraphics)
+    {
+        if (!AcquireGraphics())
+            return cairo::SurfaceSharedPtr();
+    }
+    return mpGraphics->CreateBitmapSurface(*this, rData, rSize);
+}
+
+css::uno::Any OutputDevice::GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& rSurface, const ::basegfx::B2ISize& rSize) const
+{
+    if (!mpGraphics)
+    {
+        if (!AcquireGraphics())
+            return css::uno::Any();
+    }
+    return mpGraphics->GetNativeSurfaceHandle(rSurface, rSize);
 }
 
 css::uno::Any OutputDevice::GetSystemGfxDataAny() const
