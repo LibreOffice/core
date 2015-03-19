@@ -998,7 +998,7 @@ void SfxFilterContainer::ReadSingleFilter_Impl(
             }
             else if ( lFilterProperties[nFilterProperty].Name == "Flags" )
             {
-                sal_Int32 nTmp;
+                sal_Int32 nTmp(0);
                 lFilterProperties[nFilterProperty].Value >>= nTmp;
                 nFlags = static_cast<SfxFilterFlags>(nTmp);
             }
