@@ -97,7 +97,7 @@ struct FrameSelectorImpl : public Resource
     typedef std::vector< XAccessibleRef >               XAccessibleRefVec;
 
     FrameSelector&      mrFrameSel;     /// The control itself.
-    VirtualDevice       maVirDev;       /// For all buffered drawing operations.
+    ScopedVclPtr<VirtualDevice> mpVirDev; /// For all buffered drawing operations.
     ImageList           maILArrows;     /// Arrows in current system colors.
     Color               maBackCol;      /// Background color.
     Color               maArrowCol;     /// Selection arrow color.

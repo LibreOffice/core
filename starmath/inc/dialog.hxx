@@ -154,7 +154,7 @@ class SmFontTypeDialog : public ModalDialog
     VclPtr<MenuButton> m_pMenuButton;
     VclPtr<PushButton> m_pDefaultButton;
 
-    OutputDevice       *pFontListDev;
+    VclPtr<OutputDevice> pFontListDev;
 
     DECL_LINK(MenuSelectHdl, Menu *);
     DECL_LINK(DefaultButtonClickHdl, Button *);
@@ -359,7 +359,7 @@ class SmSymbolDialog : public ModalDialog
     OUString       aSymbolSetName;
     SymbolPtrVec_t      aSymbolSet;
 
-    OutputDevice       *pFontListDev;
+    VclPtr<OutputDevice> pFontListDev;
 
     DECL_LINK(SymbolSetChangeHdl, void*);
     DECL_LINK(SymbolChangeHdl, void*);

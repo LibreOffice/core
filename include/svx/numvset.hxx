@@ -53,7 +53,7 @@ class SVX_DLLPUBLIC SvxNumValueSet : public ValueSet
     sal_uInt16      nPageType;
     bool            bHTMLMode;
     Rectangle       aOrgRect;
-    VirtualDevice*  pVDev;
+    VclPtr<VirtualDevice> pVDev;
 
     com::sun::star::uno::Reference<com::sun::star::text::XNumberingFormatter> xFormatter;
     com::sun::star::lang::Locale aLocale;

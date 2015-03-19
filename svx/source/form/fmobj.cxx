@@ -112,7 +112,7 @@ void FmFormObj::impl_checkRefDevice_nothrow( bool _force )
         return;
 
     OutputDevice* pCurrentRefDevice = pFormModel ? pFormModel->GetRefDevice() : NULL;
-    if ( ( m_pLastKnownRefDevice == pCurrentRefDevice ) && !_force )
+    if ( ( m_pLastKnownRefDevice.get() == pCurrentRefDevice ) && !_force )
         return;
 
     Reference< XControlModel > xControlModel( GetUnoControlModel() );
@@ -120,7 +120,7 @@ void FmFormObj::impl_checkRefDevice_nothrow( bool _force )
         return;
 
     m_pLastKnownRefDevice = pCurrentRefDevice;
-    if ( m_pLastKnownRefDevice == NULL )
+    if ( !m_pLastKnownRefDevice )
         return;
 
     try

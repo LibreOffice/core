@@ -42,7 +42,7 @@ class SVX_DLLPUBLIC FmFormObj: public SdrUnoObj
     ::com::sun::star::uno::Reference< ::com::sun::star::form::XForms >                  m_xEnvironmentHistory;
     sal_Int32           m_nPos;
 
-    OutputDevice*       m_pLastKnownRefDevice;
+    VclPtr<OutputDevice>   m_pLastKnownRefDevice;
                             // the last ref device we know, as set at the model
                             // only to be used for comparison with the current ref device!
 

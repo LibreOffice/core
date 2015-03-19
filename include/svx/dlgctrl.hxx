@@ -358,8 +358,8 @@ class SdrModel;
 class SvxPreviewBase : public Control
 {
 private:
-    SdrModel*                                       mpModel;
-    VirtualDevice*                                  mpBufferDevice;
+    SdrModel*             mpModel;
+    VclPtr<VirtualDevice> mpBufferDevice;
 
 protected:
     void InitSettings(bool bForeground, bool bBackground);

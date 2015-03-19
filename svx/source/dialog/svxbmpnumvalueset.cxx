@@ -428,7 +428,7 @@ SvxNumValueSet::~SvxNumValueSet()
 
 void SvxNumValueSet::dispose()
 {
-    delete pVDev;
+    pVDev.disposeAndClear();
     ValueSet::dispose();
 }
 

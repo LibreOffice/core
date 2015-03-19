@@ -144,7 +144,7 @@ public:
     }
 private:
     SmCaretLine line;
-    OutputDevice *pDev;
+    VclPtr<OutputDevice> pDev;
     SmCaretPos pos;
 protected:
     /** Default method for computing lines for pNodes */

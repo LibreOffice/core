@@ -90,7 +90,7 @@ class SmModule : public SfxModule, utl::ConfigurationListener
     SmConfig                *pConfig;
     SmLocalizedSymbolData   *pLocSymbolData;
     SvtSysLocale            *pSysLocale;
-    VirtualDevice           *pVirtualDev;
+    VclPtr<VirtualDevice>    pVirtualDev;
 
     void _CreateSysLocale() const;
     void _CreateVirtualDev() const;

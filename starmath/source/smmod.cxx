@@ -183,7 +183,7 @@ SmModule::~SmModule()
     delete pColorConfig;
     delete pLocSymbolData;
     delete pSysLocale;
-    delete pVirtualDev;
+    pVirtualDev.disposeAndClear();
 }
 
 void SmModule::_CreateSysLocale() const

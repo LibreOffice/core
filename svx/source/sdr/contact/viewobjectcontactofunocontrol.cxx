@@ -521,7 +521,7 @@ namespace sdr { namespace contact {
         Reference< XContainer >         m_xContainer;
 
         /// the output device for which the control was created
-        const OutputDevice*             m_pOutputDeviceForWindow;
+        VclPtr<OutputDevice>            m_pOutputDeviceForWindow;
 
         /// flag indicating whether the control is currently visible
         bool                            m_bControlIsVisible;
@@ -1038,7 +1038,7 @@ namespace sdr { namespace contact {
 
         if ( m_aControl.is() )
         {
-            if ( m_pOutputDeviceForWindow == &_rDevice )
+            if ( m_pOutputDeviceForWindow.get() == const_cast<OutputDevice *>( &_rDevice ) )
                 return true;
 
             // Somebody requested a control for a new device, which means either of
@@ -1062,7 +1062,7 @@ namespace sdr { namespace contact {
         if ( !createControlForDevice( _rPageView, _rDevice, *pUnoObject, _rInitialViewTransformation, m_aZoomLevelNormalization, aControl ) )
             return false;
 
-        m_pOutputDeviceForWindow = &_rDevice;
+        m_pOutputDeviceForWindow = const_cast< OutputDevice * >( &_rDevice );
         m_aControl = aControl;
         m_xContainer.set(_rPageView.getControlContainer( _rDevice ), css::uno::UNO_QUERY);
         DBG_ASSERT( (   m_xContainer.is()                                           // either have a XControlContainer

@@ -41,7 +41,7 @@ public:
     virtual void    UserDraw( const UserDrawEvent& rUDEvt ) SAL_OVERRIDE;
 
 protected:
-    VirtualDevice*  pVDev;
+    VclPtr<VirtualDevice> pVDev;
     sal_uInt16          nSelItem;
     OUString*      strUnit;
     Image           imgCus;
