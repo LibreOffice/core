@@ -7,6 +7,6 @@
         <item name="windowActionBar">false</item>
     </style>
 
-    <style name="BrowserTheme" parent="android:Theme.Holo.Light.DarkActionBar">
+    <style name="BrowserTheme" parent="Theme.AppCompat.Light">
     </style>
 </resources>
