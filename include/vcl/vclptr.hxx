@@ -220,6 +220,54 @@ public:
     }
 }; // class VclPtr
 
+
+template <class reference_type>
+class ScopedVclPtr : public VclPtr<reference_type>
+{
+public:
+    /** Constructor...
+     */
+    inline ScopedVclPtr()
+        : VclPtr<reference_type>()
+    {}
+
+
+    /** Constructor...
+     */
+    inline ScopedVclPtr (reference_type * pBody)
+        : VclPtr<reference_type>(pBody)
+    {}
+
+
+    /** Copy constructor...
+     */
+    inline ScopedVclPtr (const VclPtr<reference_type> & handle)
+        : VclPtr<reference_type>(handle)
+    {}
+
+    /** Up-casting conversion constructor: Copies interface reference.
+
+        Does not work for up-casts to ambiguous bases.  For the special case of
+        up-casting to Reference< XInterface >, see the corresponding conversion
+        operator.
+
+        @param rRef another reference
+    */
+    template< class derived_type >
+    inline ScopedVclPtr(
+        const VclPtr< derived_type > & rRef,
+        typename ::vcl::detail::UpCast< reference_type, derived_type >::t = 0 )
+        : VclPtr<reference_type>( rRef )
+    {
+    }
+
+    ~ScopedVclPtr()
+    {
+        VclPtr<reference_type>::disposeAndClear();
+    }
+
+};
+
 #endif // INCLUDED_VCL_PTR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
