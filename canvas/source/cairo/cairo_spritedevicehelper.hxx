@@ -28,8 +28,8 @@
 
 #include <vcl/window.hxx>
 #include <vcl/bitmap.hxx>
+#include <vcl/cairo.hxx>
 
-#include "cairo_cairo.hxx"
 #include "cairo_devicehelper.hxx"
 
 /* Definition of DeviceHelper class */
@@ -64,7 +64,7 @@ namespace cairocanvas
 
         ::cairo::SurfaceSharedPtr getBufferSurface() { return mpBufferSurface; }
         ::cairo::SurfaceSharedPtr getWindowSurface();
-        ::cairo::SurfaceSharedPtr createSurface( const ::basegfx::B2ISize& rSize, ::cairo::Content aContent = CAIRO_CONTENT_COLOR_ALPHA );
+        ::cairo::SurfaceSharedPtr createSurface( const ::basegfx::B2ISize& rSize, int aContent = CAIRO_CONTENT_COLOR_ALPHA );
         ::cairo::SurfaceSharedPtr createSurface( BitmapSystemData& rData, const Size& rSize );
         const ::basegfx::B2ISize& getSizePixel() { return maSize; }
         void flush();

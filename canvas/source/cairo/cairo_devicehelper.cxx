@@ -65,12 +65,11 @@ namespace cairocanvas
     {
         implInit(rSurfaceProvider, rRefDevice);
 
-        OutputDevice* pOutDev=getOutputDevice();
-        mpSurface = cairo::createSurface( *pOutDev,
-                                          pOutDev->GetOutOffXPixel(),
-                                          pOutDev->GetOutOffYPixel(),
-                                          pOutDev->GetOutputWidthPixel(),
-                                          pOutDev->GetOutputHeightPixel() );
+        OutputDevice* pOutDev = getOutputDevice();
+        mpSurface = pOutDev->CreateSurface(pOutDev->GetOutOffXPixel(),
+                                           pOutDev->GetOutOffYPixel(),
+                                           pOutDev->GetOutputWidthPixel(),
+                                           pOutDev->GetOutputHeightPixel());
     }
 
     void DeviceHelper::disposing()
@@ -99,8 +98,7 @@ namespace cairocanvas
 
         if (!bReuseSurface)
         {
-            mpSurface = cairo::createSurface(
-                *pOutDev,
+            mpSurface = pOutDev->CreateSurface(
                 pOutDev->GetOutOffXPixel(),
                 pOutDev->GetOutOffYPixel(),
                 rSize.getX(), rSize.getY() );
@@ -260,7 +258,7 @@ namespace cairocanvas
         }
     }
 
-    SurfaceSharedPtr DeviceHelper::createSurface( const ::basegfx::B2ISize& rSize, Content aContent )
+    SurfaceSharedPtr DeviceHelper::createSurface( const ::basegfx::B2ISize& rSize, int aContent )
     {
         if( mpSurface )
             return mpSurface->getSimilar( aContent, rSize.getX(), rSize.getY() );
@@ -270,8 +268,8 @@ namespace cairocanvas
 
     SurfaceSharedPtr DeviceHelper::createSurface( BitmapSystemData& rData, const Size& rSize )
     {
-        if( mpRefDevice )
-            return createBitmapSurface( *mpRefDevice, rData, rSize );
+        if (mpRefDevice)
+            return mpRefDevice->CreateBitmapSurface(rData, rSize);
 
         return SurfaceSharedPtr();
     }

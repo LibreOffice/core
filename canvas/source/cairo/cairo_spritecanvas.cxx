@@ -151,7 +151,7 @@ namespace cairocanvas
         return maDeviceHelper.getBufferSurface();
     }
 
-    SurfaceSharedPtr SpriteCanvas::createSurface( const ::basegfx::B2ISize& rSize, Content aContent )
+    SurfaceSharedPtr SpriteCanvas::createSurface( const ::basegfx::B2ISize& rSize, int aContent )
     {
         return maDeviceHelper.createSurface( rSize, aContent );
     }
