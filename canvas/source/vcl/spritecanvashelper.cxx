@@ -189,6 +189,12 @@ namespace vclcanvas
 #endif
     }
 
+    SpriteCanvasHelper::~SpriteCanvasHelper()
+    {
+        SolarMutexGuard aGuard;
+        maVDev.disposeAndClear();
+    }
+
     void SpriteCanvasHelper::init( const OutDevProviderSharedPtr& rOutDev,
                                    SpriteCanvas&                  rOwningSpriteCanvas,
                                    ::canvas::SpriteRedrawManager& rManager,

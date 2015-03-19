@@ -43,6 +43,7 @@ namespace vclcanvas
          */
         BackBuffer( const OutputDevice& rRefDevice,
                     bool                bMonochromeBuffer=false );
+        ~BackBuffer();
 
         virtual OutputDevice&       getOutDev() SAL_OVERRIDE;
         virtual const OutputDevice& getOutDev() const SAL_OVERRIDE;
@@ -50,7 +51,7 @@ namespace vclcanvas
         void setSize( const ::Size& rNewSize );
 
     private:
-        ::canvas::vcltools::VCLObject<VirtualDevice>    maVDev;
+        VclPtr< VirtualDevice > maVDev;
     };
 
     typedef ::boost::shared_ptr< BackBuffer > BackBufferSharedPtr;

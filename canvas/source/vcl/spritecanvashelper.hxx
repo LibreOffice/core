@@ -23,6 +23,7 @@
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
 #include <com/sun/star/rendering/XIntegerBitmap.hpp>
 
+#include <vcl/vclptr.hxx>
 #include <vcl/virdev.hxx>
 
 #include <canvas/spriteredrawmanager.hxx>
@@ -40,6 +41,7 @@ namespace vclcanvas
     {
     public:
         SpriteCanvasHelper();
+        ~SpriteCanvasHelper()
 
         void init( const OutDevProviderSharedPtr& rOutDev,
                    SpriteCanvas&                  rOwningSpriteCanvas,
@@ -150,7 +152,7 @@ namespace vclcanvas
             Typically, sprites will be composited in the background,
             before pushing them to screen. This happens here.
          */
-        ::canvas::vcltools::VCLObject< VirtualDevice >  maVDev;
+        VclPtr< VirtualDevice > maVDev;
 
         /// For the frame counter timings
         ::canvas::tools::ElapsedTime                    maLastUpdate;

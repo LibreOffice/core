@@ -43,14 +43,20 @@ namespace vclcanvas
         }
     }
 
+    BackBuffer::~BackBuffer()
+    {
+        SolarMutexGuard aGuard;
+        maVDev.disposeAndClear();
+    }
+
     OutputDevice& BackBuffer::getOutDev()
     {
-        return maVDev.get();
+        return *maVDev.get();
     }
 
     const OutputDevice& BackBuffer::getOutDev() const
     {
-        return maVDev.get();
+        return *maVDev.get();
     }
 
     void BackBuffer::setSize( const ::Size& rNewSize )
