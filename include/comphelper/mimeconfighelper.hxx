@@ -113,7 +113,7 @@ public:
                         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aMediaDescr,
                         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& aObject );
 #ifdef WNT
-    sal_Int32 GetFilterFlags( const OUString& aFilterName );
+    SfxFilterFlags GetFilterFlags( const OUString& aFilterName );
 
     sal_Bool AddFilterNameCheckOwnFile(
                         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aMediaDescr );
