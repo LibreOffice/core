@@ -88,6 +88,14 @@ ImplSVData::ImplSVData()
     maNWFData.maMenuBarHighlightTextColor = Color( COL_TRANSPARENT );
 }
 
+ImplSVGDIData::~ImplSVGDIData()
+{
+    // FIXME: deliberately leak any remaining OutputDevice
+    // until we have their pGraphics reference counted, doing
+    // any disposes so late in shutdown is rather unsafe.
+    memset( this, 0, sizeof( ImplSVGDIData ) );
+}
+
 void ImplDeInitSVData()
 {
     ImplSVData* pSVData = ImplGetSVData();

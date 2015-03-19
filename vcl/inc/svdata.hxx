@@ -153,6 +153,8 @@ struct ImplSVAppData
 
 struct ImplSVGDIData
 {
+    ~ImplSVGDIData();
+
     VclPtr<OutputDevice>    mpFirstWinGraphics;             // First OutputDevice with a Frame Graphics
     VclPtr<OutputDevice>    mpLastWinGraphics;              // Last OutputDevice with a Frame Graphics
     VclPtr<OutputDevice>    mpFirstVirGraphics;             // First OutputDevice with a VirtualDevice Graphics
