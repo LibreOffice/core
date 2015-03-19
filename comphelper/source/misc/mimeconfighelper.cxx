@@ -671,9 +671,9 @@ OUString MimeConfigurationHelper::UpdateMediaDescriptorWithFilterName(
 
 #ifdef WNT
 
-sal_Int32 MimeConfigurationHelper::GetFilterFlags( const OUString& aFilterName )
+SfxFilterFlags MimeConfigurationHelper::GetFilterFlags( const OUString& aFilterName )
 {
-    sal_Int32 nFlags = 0;
+    SfxFilterFlags nFlags = SfxFilterFlags::NONE;
     try
     {
         if ( !aFilterName.isEmpty() )
@@ -687,7 +687,7 @@ sal_Int32 MimeConfigurationHelper::GetFilterFlags( const OUString& aFilterName )
             if ( aFilterAny >>= aData )
             {
                 SequenceAsHashMap aFilterHM( aData );
-                nFlags = aFilterHM.getUnpackedValueOrDefault( "Flags", (sal_Int32)0 );
+                nFlags = static_cast<SfxFilterFlags>(aFilterHM.getUnpackedValueOrDefault( "Flags", (sal_Int32)0 ));
             }
         }
     } catch( uno::Exception& )
@@ -704,7 +704,7 @@ sal_Bool MimeConfigurationHelper::AddFilterNameCheckOwnFile(
     OUString aFilterName = UpdateMediaDescriptorWithFilterName( aMediaDescr, sal_False );
     if ( !aFilterName.isEmpty() )
     {
-        sal_Int32 nFlags = GetFilterFlags( aFilterName );
+        SfxFilterFlags nFlags = GetFilterFlags( aFilterName );
         // check the OWN flag
         bResult = ( nFlags & SfxFilterFlags::OWN );
     }
