@@ -257,7 +257,7 @@ PSWriter::PSWriter()
     , mpPS(NULL)
     , pMTF(NULL)
     , pAMTF(NULL)
-    , aVDev()
+    , pVDev()
     , nBoundingX1(0)
     , nBoundingY1(0)
     , nBoundingX2(0)
@@ -419,13 +419,13 @@ bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Filter
         Bitmap aBmp( rGraphic.GetBitmap() );
         pAMTF = new GDIMetaFile();
         ScopedVclPtr<VirtualDevice> pTmpVDev(new VirtualDevice());
-        pAMTF->Record( &aTmpVDev );
+        pAMTF->Record( pTmpVDev );
         pTmpVDev->DrawBitmap( Point(), aBmp );
         pAMTF->Stop();
         pAMTF->SetPrefSize( aBmp.GetSizePixel() );
         pMTF = pAMTF;
     }
-    aVDev.SetMapMode( pMTF->GetPrefMapMode() );
+    pVDev->SetMapMode( pMTF->GetPrefMapMode() );
     nBoundingX1 = nBoundingY1 = 0;
     nBoundingX2 = pMTF->GetPrefSize().Width();
     nBoundingY2 = pMTF->GetPrefSize().Height();
@@ -454,7 +454,7 @@ bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Filter
     {
         ImplWriteProlog( ( mnPreview & EPS_PREVIEW_EPSI ) ? &rGraphic : NULL );
         mnCursorPos = 0;
-        ImplWriteActions( *pMTF, aVDev );
+        ImplWriteActions( *pMTF, *pVDev.get() );
         ImplWriteEpilog();
         if ( mnPreview & EPS_PREVIEW_TIFF )
         {
@@ -1608,7 +1608,7 @@ void PSWriter::ImplIntersect( const tools::PolyPolygon& rPolyPoly )
 
 void PSWriter::ImplWriteGradient( const tools::PolyPolygon& rPolyPoly, const Gradient& rGradient, VirtualDevice& rVDev )
 {
-    ScopedVclPtr<VirtualDevice> l_pVirDev( new VirtualDevice() );
+    ScopedVclPtr<VirtualDevice> l_pVDev( new VirtualDevice() );
     GDIMetaFile     aTmpMtf;
     l_pVDev->SetMapMode( rVDev.GetMapMode() );
     l_pVDev->AddGradientActions( rPolyPoly.GetBoundRect(), rGradient, aTmpMtf );

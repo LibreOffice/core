@@ -100,7 +100,7 @@ Writer::Writer( sal_Int32 nTWIPWidthOutput, sal_Int32 nTWIPHeightOutput, sal_Int
 
 Writer::~Writer()
 {
-    delete mpVDev;
+    mpVDev.disposeAndClear();
     delete mpSprite;
     delete mpTag;
 }

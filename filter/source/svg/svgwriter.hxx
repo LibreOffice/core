@@ -178,7 +178,7 @@ class SVGTextWriter
   private:
     SVGExport&                                  mrExport;
     SVGAttributeWriter*                         mpContext;
-    VirtualDevice*                              mpVDev;
+    VclPtr<VirtualDevice>                       mpVDev;
     bool                                    mbIsTextShapeStarted;
     Reference<XText>                            mrTextShape;
     OUString                             msShapeId;
@@ -303,7 +303,7 @@ private:
     SVGFontExport&                              mrFontExport;
     SVGAttributeWriter*                         mpContext;
     SVGTextWriter                               maTextWriter;
-    VirtualDevice*                              mpVDev;
+    VclPtr<VirtualDevice>                       mpVDev;
     MapMode                                     maTargetMapMode;
     sal_uInt32                                  mnInnerMtfCount;
     bool                                    mbClipAttrChanged;

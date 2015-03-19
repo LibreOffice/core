@@ -138,7 +138,7 @@ class CGM
                             ~CGM();
 
                             CGM( sal_uInt32 nMode, ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > const & rModel );
-        VirtualDevice*      mpVirDev;
+        VclPtr<VirtualDevice> mpVirDev;
         GDIMetaFile*        mpGDIMetaFile;
         sal_uInt32              GetBackGroundColor();
         bool                IsValid() const { return mbStatus; };

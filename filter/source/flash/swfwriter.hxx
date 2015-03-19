@@ -395,7 +395,7 @@ private:
     sal_uInt16 mnWhiteBackgroundShapeId;
     sal_uInt16 mnPageButtonId;
 
-    VirtualDevice*  mpVDev;
+    VclPtr<VirtualDevice> mpVDev;
 
     const tools::PolyPolygon* mpClipPolyPolygon;
 

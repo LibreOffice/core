@@ -169,7 +169,7 @@ class StringCalculator : public ::cppu::WeakImplHelper1< ::com::sun::star::util:
 {
     public:
         StringCalculator( const OutputDevice* pDevice )
-            : m_pDevice( pDevice )
+            : m_pDevice( const_cast< OutputDevice * >( pDevice ) )
         {
         }
 
@@ -179,7 +179,7 @@ class StringCalculator : public ::cppu::WeakImplHelper1< ::com::sun::star::util:
         }
 
     private:
-        const OutputDevice* m_pDevice;
+        VclPtr<OutputDevice> m_pDevice;
 };
 
 /*-************************************************************************************************************

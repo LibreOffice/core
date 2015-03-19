@@ -80,7 +80,7 @@ CGM::~CGM()
         mpGDIMetaFile->Stop();
         mpGDIMetaFile->SetPrefMapMode( MapMode() );
         mpGDIMetaFile->SetPrefSize( Size( static_cast< long >( mnOutdx ), static_cast< long >( mnOutdy ) ) );
-        delete mpVirDev;
+        mpVirDev.disposeAndClear();
         *mpGraphic = Graphic( *mpGDIMetaFile );
     }
     for( size_t i = 0, n = maDefRepList.size(); i < n; ++i )

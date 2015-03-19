@@ -345,7 +345,7 @@ private:
     long ErrorCode;
 
     SvStream      * pOS2MET;             // the OS2MET file to be read
-    VirtualDevice * pVirDev;             // here the drawing methods are being called
+    VclPtr<VirtualDevice> pVirDev;       // here the drawing methods are being called
                                          // While doing this a recording in the GDIMetaFile
                                          // will take place.
     sal_uLong       nOrigPos;            // initial position  in pOS2MET
@@ -2665,7 +2665,7 @@ void OS2METReader::ReadOS2MET( SvStream & rStreamOS2MET, GDIMetaFile & rGDIMetaF
     }
 
     rGDIMetaFile.Stop();
-    delete pVirDev;
+    pVirDev.disposeAndClear();
 
     rGDIMetaFile.SetPrefMapMode( aGlobMapMode );
 

@@ -157,7 +157,7 @@ private:
     sal_uInt32               nActBitmapPercent; // percentage of the next bitmap that's already written
 
     ScopedVclPtr<VirtualDevice>  apDummyVDev;
-    OutputDevice*                       pCompDev;
+    VclPtr<OutputDevice>         pCompDev;
 
     com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > xStatusIndicator;
 

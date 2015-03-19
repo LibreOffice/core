@@ -885,7 +885,7 @@ bool DXF2GDIMetaFile::Convert(const DXFRepresentation & rDXF, GDIMetaFile & rMTF
             rMTF.SetPrefMapMode( MapMode( MAP_100TH_MM ) );
     }
 
-    delete pVirDev;
+    pVirDev.disposeAndClear();
     return bStatus;
 }
 

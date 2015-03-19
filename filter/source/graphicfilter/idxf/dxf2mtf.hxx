@@ -34,7 +34,7 @@ enum BrushStyle { BRUSH_NULL, BRUSH_SOLID, BRUSH_HORZ, BRUSH_VERT,
 class DXF2GDIMetaFile {
 private:
 
-    VirtualDevice * pVirDev;
+    VclPtr<VirtualDevice> pVirDev;
     const DXFRepresentation * pDXF;
     bool bStatus;
 
