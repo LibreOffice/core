@@ -73,10 +73,6 @@ void changeZoom( GtkWidget* pButton, gpointer /* pItem */ )
     {
         fZoom = 1;
     }
-    else if ( strcmp(sName, "gtk-zoom-fit") == 0)
-    {
-        // TODO -- will need access to lokdocview internals?
-    }
     else if ( strcmp(sName, "gtk-zoom-out") == 0)
     {
         for ( unsigned int i = 0; i < sizeof( fZooms ) / sizeof( fZooms[0] ); i++ )
@@ -286,10 +282,6 @@ int main( int argc, char* argv[] )
     GtkToolItem* pZoom1 = gtk_tool_button_new_from_stock( GTK_STOCK_ZOOM_100 );
     gtk_toolbar_insert( GTK_TOOLBAR(pToolbar), pZoom1, -1);
     g_signal_connect( G_OBJECT(pZoom1), "clicked", G_CALLBACK(changeZoom), NULL );
-
-    GtkToolItem* pZoomFit = gtk_tool_button_new_from_stock( GTK_STOCK_ZOOM_FIT );
-    gtk_toolbar_insert( GTK_TOOLBAR(pToolbar), pZoomFit, -1);
-    g_signal_connect( G_OBJECT(pZoomFit), "clicked", G_CALLBACK(changeZoom), NULL );
 
     GtkToolItem* pZoomOut = gtk_tool_button_new_from_stock( GTK_STOCK_ZOOM_OUT );
     gtk_toolbar_insert( GTK_TOOLBAR(pToolbar), pZoomOut, -1);
