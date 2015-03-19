@@ -116,7 +116,7 @@ private:
     SvStream*           mpPS;
     const GDIMetaFile*  pMTF;
     GDIMetaFile*        pAMTF;              // only created if Graphics is not a Metafile
-    VirtualDevice       aVDev;
+    ScopedVclPtr<VirtualDevice> pVDev;
 
     double              nBoundingX1;        // this represents the bounding box
     double              nBoundingY1;
@@ -418,9 +418,9 @@ bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Filter
     {
         Bitmap aBmp( rGraphic.GetBitmap() );
         pAMTF = new GDIMetaFile();
-        VirtualDevice aTmpVDev;
+        ScopedVclPtr<VirtualDevice> pTmpVDev(new VirtualDevice());
         pAMTF->Record( &aTmpVDev );
-        aTmpVDev.DrawBitmap( Point(), aBmp );
+        pTmpVDev->DrawBitmap( Point(), aBmp );
         pAMTF->Stop();
         pAMTF->SetPrefSize( aBmp.GetSizePixel() );
         pMTF = pAMTF;
@@ -940,12 +940,12 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
 
             case META_HATCH_ACTION :
             {
-                VirtualDevice   l_aVDev;
+                ScopedVclPtr<VirtualDevice> l_pVirDev( new VirtualDevice() );
                 GDIMetaFile     aTmpMtf;
 
-                l_aVDev.SetMapMode( rVDev.GetMapMode() );
-                l_aVDev.AddHatchActions( static_cast<const MetaHatchAction*>(pMA)->GetPolyPolygon(),
-                                         static_cast<const MetaHatchAction*>(pMA)->GetHatch(), aTmpMtf );
+                l_pVirDev->SetMapMode( rVDev.GetMapMode() );
+                l_pVirDev->AddHatchActions( static_cast<const MetaHatchAction*>(pMA)->GetPolyPolygon(),
+                                            static_cast<const MetaHatchAction*>(pMA)->GetHatch(), aTmpMtf );
                 ImplWriteActions( aTmpMtf, rVDev );
             }
             break;
@@ -1608,10 +1608,10 @@ void PSWriter::ImplIntersect( const tools::PolyPolygon& rPolyPoly )
 
 void PSWriter::ImplWriteGradient( const tools::PolyPolygon& rPolyPoly, const Gradient& rGradient, VirtualDevice& rVDev )
 {
-    VirtualDevice   l_aVDev;
+    ScopedVclPtr<VirtualDevice> l_pVirDev( new VirtualDevice() );
     GDIMetaFile     aTmpMtf;
-    l_aVDev.SetMapMode( rVDev.GetMapMode() );
-    l_aVDev.AddGradientActions( rPolyPoly.GetBoundRect(), rGradient, aTmpMtf );
+    l_pVDev->SetMapMode( rVDev.GetMapMode() );
+    l_pVDev->AddGradientActions( rPolyPoly.GetBoundRect(), rGradient, aTmpMtf );
     ImplWriteActions( aTmpMtf, rVDev );
 }
 
@@ -2141,10 +2141,10 @@ void PSWriter::ImplText( const OUString& rUniString, const Point& rPos, const lo
         vcl::Font    aNotRotatedFont( maFont );
         aNotRotatedFont.SetOrientation( 0 );
 
-        VirtualDevice aVirDev( 1 );
-        aVirDev.SetMapMode( rVDev.GetMapMode() );
-        aVirDev.SetFont( aNotRotatedFont );
-        aVirDev.SetTextAlign( eTextAlign );
+        ScopedVclPtr<VirtualDevice> pVirDev( new VirtualDevice() );
+        pVirDev->SetMapMode( rVDev.GetMapMode() );
+        pVirDev->SetFont( aNotRotatedFont );
+        pVirDev->SetTextAlign( eTextAlign );
 
         sal_Int16 nRotation = maFont.GetOrientation();
         Polygon aPolyDummy( 1 );
@@ -2159,7 +2159,7 @@ void PSWriter::ImplText( const OUString& rUniString, const Point& rPos, const lo
         bool bOldLineColor = bLineColor;
         bLineColor = false;
         std::vector<tools::PolyPolygon> aPolyPolyVec;
-        if ( aVirDev.GetTextOutlines( aPolyPolyVec, rUniString, 0, 0, -1, true, nWidth, pDXArry ) )
+        if ( pVirDev->GetTextOutlines( aPolyPolyVec, rUniString, 0, 0, -1, true, nWidth, pDXArry ) )
         {
             // always adjust text position to match baseline alignment
             ImplWriteLine( "pum" );

@@ -1387,18 +1387,18 @@ GraphicObject lclDrawHatch( const ::com::sun::star::drawing::Hatch& rHatch, cons
     // do not create a bitmap in page size, that would explode file sizes (and have no good quality).
     // Better use a MetaFile graphic in page size; thus we have good quality due to vector format and
     // no bit file sizes.
-    VirtualDevice aOut;
+    ScopedVclPtr<VirtualDevice> pVDev(new VirtualDevice());
     GDIMetaFile aMtf;
 
-    aOut.SetOutputSizePixel(Size(2, 2));
-    aOut.EnableOutput(false);
-    aOut.SetMapMode(MapMode(MAP_100TH_MM));
+    pVDev->SetOutputSizePixel(Size(2, 2));
+    pVDev->EnableOutput(false);
+    pVDev->SetMapMode(MapMode(MAP_100TH_MM));
     aMtf.Clear();
-    aMtf.Record(&aOut);
-    aOut.SetLineColor();
-    aOut.SetFillColor(bFillBackground ? rBackColor : Color(COL_TRANSPARENT));
-    aOut.DrawRect(rRect);
-    aOut.DrawHatch(tools::PolyPolygon(rRect), Hatch((HatchStyle)rHatch.Style, Color(rHatch.Color), rHatch.Distance, (sal_uInt16)rHatch.Angle));
+    aMtf.Record(pVDev);
+    pVDev->SetLineColor();
+    pVDev->SetFillColor(bFillBackground ? rBackColor : Color(COL_TRANSPARENT));
+    pVDev->DrawRect(rRect);
+    pVDev->DrawHatch(tools::PolyPolygon(rRect), Hatch((HatchStyle)rHatch.Style, Color(rHatch.Color), rHatch.Distance, (sal_uInt16)rHatch.Angle));
     aMtf.Stop();
     aMtf.WindStart();
     aMtf.SetPrefMapMode(MapMode(MAP_100TH_MM));
