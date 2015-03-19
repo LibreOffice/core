@@ -150,7 +150,7 @@ SplashScreen::SplashScreen()
     , _yoffset(18)
 {
     loadConfig();
-    _vdev.EnableRTL(IsRTLEnabled());
+    _vdev->EnableRTL(IsRTLEnabled());
 }
 
 SplashScreen::~SplashScreen()
@@ -258,7 +258,7 @@ SplashScreen::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::sta
             SetScreenBitmap (_aIntroBmp);
         Size aSize = _aIntroBmp.GetSizePixel();
         SetOutputSizePixel( aSize );
-        _vdev.SetOutputSizePixel( aSize );
+        _vdev->SetOutputSizePixel( aSize );
         _height = aSize.Height();
         _width = aSize.Width();
         if (_width > 500)
@@ -615,7 +615,7 @@ void SplashScreen::Paint( const Rectangle&)
     //non native drawing
     // draw bitmap
     if (_bPaintBitmap)
-        _vdev.DrawBitmapEx( Point(), _aIntroBmp );
+        _vdev->DrawBitmapEx( Point(), _aIntroBmp );
 
     if (_bPaintProgress) {
         // draw progress...
@@ -623,20 +623,20 @@ void SplashScreen::Paint( const Rectangle&)
         if (length < 0) length = 0;
 
         // border
-        _vdev.SetFillColor();
-        _vdev.SetLineColor( _cProgressFrameColor );
-        _vdev.DrawRect(Rectangle(_tlx, _tly, _tlx+_barwidth, _tly+_barheight));
-        _vdev.SetFillColor( _cProgressBarColor );
-        _vdev.SetLineColor();
-        _vdev.DrawRect(Rectangle(_tlx+_barspace, _tly+_barspace, _tlx+_barspace+length, _tly+_barheight-_barspace));
+        _vdev->SetFillColor();
+        _vdev->SetLineColor( _cProgressFrameColor );
+        _vdev->DrawRect(Rectangle(_tlx, _tly, _tlx+_barwidth, _tly+_barheight));
+        _vdev->SetFillColor( _cProgressBarColor );
+        _vdev->SetLineColor();
+        _vdev->DrawRect(Rectangle(_tlx+_barspace, _tly+_barspace, _tlx+_barspace+length, _tly+_barheight-_barspace));
         vcl::Font aFont;
         aFont.SetSize(Size(0, 12));
         aFont.SetAlign(ALIGN_BASELINE);
-        _vdev.SetFont(aFont);
-        _vdev.SetTextColor(_cProgressTextColor);
-        _vdev.DrawText(Point(_tlx, _textBaseline), _sProgressText);
+        _vdev->SetFont(aFont);
+        _vdev->SetTextColor(_cProgressTextColor);
+        _vdev->DrawText(Point(_tlx, _textBaseline), _sProgressText);
     }
-    DrawOutDev(Point(), GetOutputSizePixel(), Point(), _vdev.GetOutputSizePixel(), _vdev );
+    DrawOutDev(Point(), GetOutputSizePixel(), Point(), _vdev->GetOutputSizePixel(), *_vdev.get() );
 }
 
 

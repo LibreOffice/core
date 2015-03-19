@@ -395,15 +395,15 @@ void BackingWindow::Paint( const Rectangle& )
     DrawWallpaper( Rectangle( Point( 0, 0 ), GetOutputSizePixel() ), aBack );
     Pop();
 
-    VirtualDevice aDev( *this );
-    aDev.EnableRTL( IsRTLEnabled() );
-    aDev.SetOutputSizePixel( maStartCentButtons.GetSize() );
+    ScopedVclPtr<VirtualDevice> pVDev( new VirtualDevice( *this ) );
+    pVDev->EnableRTL( IsRTLEnabled() );
+    pVDev->SetOutputSizePixel( maStartCentButtons.GetSize() );
     Point aOffset( Point( 0, 0 ) - maStartCentButtons.TopLeft());
-    aDev.DrawWallpaper( Rectangle( aOffset, GetOutputSizePixel() ), aBack );
+    pVDev->DrawWallpaper( Rectangle( aOffset, GetOutputSizePixel() ), aBack );
 
     DrawOutDev( maStartCentButtons.TopLeft(), maStartCentButtons.GetSize(),
                 Point( 0, 0 ), maStartCentButtons.GetSize(),
-                aDev );
+                *pVDev.get() );
 }
 
 bool BackingWindow::PreNotify( NotifyEvent& rNEvt )

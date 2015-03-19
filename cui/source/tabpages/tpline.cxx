@@ -360,8 +360,8 @@ void SvxLineTabPage::InitSymbols(MenuButton* pButton)
 
     if(!pButton->GetPopupMenu()->GetPopupMenu( MN_SYMBOLS ) && pSymbolList)
     {
-        VirtualDevice aVDev;
-        aVDev.SetMapMode(MapMode(MAP_100TH_MM));
+        ScopedVclPtr<VirtualDevice> pVDev( new VirtualDevice() );
+        pVDev->SetMapMode(MapMode(MAP_100TH_MM));
         boost::scoped_ptr<SdrModel> pModel(new SdrModel);
         pModel->GetItemPool().FreezeIdRanges();
         // Page
@@ -370,7 +370,7 @@ void SvxLineTabPage::InitSymbols(MenuButton* pButton)
         pModel->InsertPage( pPage, 0 );
         {
         // 3D View
-        boost::scoped_ptr<SdrView> pView(new SdrView( pModel.get(), &aVDev ));
+        boost::scoped_ptr<SdrView> pView(new SdrView( pModel.get(), pVDev ));
         pView->hideMarkHandles();
         pView->ShowSdrPage(pPage);
 
