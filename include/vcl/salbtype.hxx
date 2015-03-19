@@ -406,7 +406,7 @@ inline BitmapColor& BitmapColor::Invert()
 inline sal_uInt8 BitmapColor::GetLuminance() const
 {
     DBG_ASSERT( !mbIndex, "Pixel represents index into colortable!" );
-    return( (sal_uInt8) ( ( mcBlueOrIndex * 28UL + mcGreen * 151UL + mcRed * 77UL ) >> 8UL ) );
+    return (static_cast<unsigned long>(mcBlueOrIndex) * 28UL + static_cast<unsigned long>(mcGreen) * 151UL + static_cast<unsigned long>(mcRed) * 77UL) >> 8;
 }
 
 inline BitmapColor& BitmapColor::IncreaseLuminance( sal_uInt8 cGreyInc )
