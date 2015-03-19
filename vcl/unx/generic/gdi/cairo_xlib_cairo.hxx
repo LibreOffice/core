@@ -24,8 +24,9 @@
 
 #include <sal/types.h>
 
-#include "cairo_cairo.hxx"
+#include <vcl/cairo.hxx>
 
+class BitmapSystemData;
 struct SystemEnvData;
 struct SystemGraphicsData;
 
@@ -84,7 +85,7 @@ namespace cairo {
         // Surface interface
         virtual CairoSharedPtr getCairo() const SAL_OVERRIDE;
         virtual CairoSurfaceSharedPtr getCairoSurface() const SAL_OVERRIDE { return mpSurface; }
-        virtual SurfaceSharedPtr getSimilar( Content aContent, int width, int height ) const SAL_OVERRIDE;
+        virtual SurfaceSharedPtr getSimilar(int cairo_content_type, int width, int height) const SAL_OVERRIDE;
 
         virtual boost::shared_ptr<VirtualDevice> createVirtualDevice() const SAL_OVERRIDE;
 

@@ -738,4 +738,24 @@ bool SvpSalGraphics::SupportsCairo() const
     return false;
 }
 
+cairo::SurfaceSharedPtr SvpSalGraphics::CreateSurface(const cairo::CairoSurfaceSharedPtr& /*rSurface*/) const
+{
+    return cairo::SurfaceSharedPtr();
+}
+
+cairo::SurfaceSharedPtr SvpSalGraphics::CreateSurface(const OutputDevice& /*rRefDevice*/, int /*x*/, int /*y*/, int /*width*/, int /*height*/) const
+{
+    return cairo::SurfaceSharedPtr();
+}
+
+cairo::SurfaceSharedPtr SvpSalGraphics::CreateBitmapSurface(const OutputDevice& /*rRefDevice*/, const BitmapSystemData& /*rData*/, const Size& /*rSize*/) const
+{
+    return cairo::SurfaceSharedPtr();
+}
+
+css::uno::Any SvpSalGraphics::GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& /*rSurface*/, const basegfx::B2ISize& /*rSize*/) const
+{
+    return css::uno::Any();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

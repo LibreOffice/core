@@ -39,6 +39,8 @@
 #include <vcl/sysdata.hxx>
 #endif
 
+#include "cairo_quartz_cairo.hxx"
+
 #if defined(IOS) && defined(DBG_UTIL)
 
 // Variables in TiledView.m
@@ -1448,6 +1450,86 @@ SystemGraphicsData AquaSalGraphics::GetGraphicsData() const
 bool AquaSalGraphics::SupportsCairo() const
 {
     return true;
+}
+
+/**
+ * cairo::createSurface:     Create generic Canvas surface using given Cairo Surface
+ *
+ * @param rSurface Cairo Surface
+ *
+ * @return new Surface
+ */
+cairo::SurfaceSharedPtr AquaSalGraphics::createSurface(const CairoSurfaceSharedPtr& rSurface) const
+{
+    return cairo::SurfaceSharedPtr(new QuartzSurface(rSurface));
+}
+
+/**
+ * cairo::createSurface:     Create Canvas surface using given VCL Window or Virtualdevice
+ *
+ * @param rSurface Cairo Surface
+ *
+ *  For VCL Window, use platform native system environment data (struct SystemEnvData in vcl/inc/sysdata.hxx)
+ *  For VCL Virtualdevice, use platform native system graphics data (struct SystemGraphicsData in vcl/inc/sysdata.hxx)
+ *
+ * @return new Surface
+ */
+cairo::SurfaceSharedPtr AquaSalGraphics::createSurface( const OutputDevice& rRefDevice,
+                                int x, int y, int width, int height ) const
+{
+    SurfaceSharedPtr surf;
+
+    if( rRefDevice.GetOutDevType() == OUTDEV_WINDOW )
+    {
+        const vcl::Window &rWindow = (const vcl::Window &) rRefDevice;
+        const SystemEnvData* pSysData = GetSysData(&rWindow);
+        if (pSysData)
+            surf = cairo::SurfaceSharedPtr(new cairo::QuartzSurface(pSysData->pView, x, y, width, height));
+    }
+    else if( rRefDevice.GetOutDevType() == OUTDEV_VIRDEV )
+    {
+        SystemGraphicsData aSysData = ((const VirtualDevice&) rRefDevice).GetSystemGfxData();
+
+        if (aSysData.rCGContext)
+            surf = cairo::SurfaceSharedPtr(new cairo::QuartzSurface(aSysData.rCGContext, x, y, width, height));
+    }
+    return surf;
+}
+
+/**
+ * cairo::createBitmapSurface:   Create platform native Canvas surface from BitmapSystemData
+ * @param OutputDevice (not used)
+ * @param rData Platform native image data (struct BitmapSystemData in vcl/inc/bitmap.hxx)
+ * @param rSize width and height of the new surface
+ *
+ * Create a surface based on image data on rData
+ *
+ * @return new surface or empty surface
+ **/
+cairo::SurfaceSharedPtr AquaSalGraphics::createBitmapSurface( const OutputDevice&     /* rRefDevice */,
+                                      const BitmapSystemData& rData,
+                                      const Size&             rSize ) const
+{
+    OSL_TRACE( "requested size: %d x %d available size: %d x %d",
+               rSize.Width(), rSize.Height(), rData.mnWidth, rData.mnHeight );
+
+    if ( rData.mnWidth == rSize.Width() && rData.mnHeight == rSize.Height() )
+    {
+        CGContextRef rContext = (CGContextRef)rData.rImageContext;
+        OSL_TRACE("Canvas::cairo::createBitmapSurface(): New native image surface, context = %p.", rData.rImageContext);
+
+        return cairo::SurfaceSharedPtr(new cairo::QuartzSurface(rContext, 0, 0, rData.mnWidth, rData.mnHeight));
+    }
+    return cairo::SurfaceSharedPtr();
+}
+
+css::uno::Any AquaSalGraphics::GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& rSurface, const ::basegfx::B2ISize& /*rSize*/) const
+{
+    QuartzSurface* pQuartzSurface = dynamic_cast<QuartzSurface*>(rSurface.get());
+    OSL_ASSERT(pQuartzSurface);
+    css::uno::Sequence< css::uno::Any > args( 1 );
+    args[0] = css::uno::Any( sal_IntPtr (pQuartzSurface->getCGContext()) );
+    return css::uno::Any( args );
 }
 
 long AquaSalGraphics::GetGraphicsWidth() const

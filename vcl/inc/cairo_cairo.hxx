@@ -17,34 +17,31 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CANVAS_SOURCE_CAIRO_CAIRO_REPAINTTARGET_HXX
-#define INCLUDED_CANVAS_SOURCE_CAIRO_CAIRO_REPAINTTARGET_HXX
+#ifndef INCLUDED_CANVAS_SOURCE_CAIRO_CAIRO_CAIRO_HXX
+#define INCLUDED_CANVAS_SOURCE_CAIRO_CAIRO_CAIRO_HXX
 
-#include <rtl/ref.hxx>
-
+#include <sal/config.h>
+#include <boost/shared_ptr.hpp>
 #include <vcl/cairo.hxx>
+#include "vcl/dllapi.h"
+#include <cairo.h>
 
-namespace cairocanvas
-{
-    /* Definition of RepaintTarget interface */
+struct SystemEnvData;
+struct BitmapSystemData;
+class  OutputDevice;
+namespace vcl { class Window; }
+class  Size;
 
-    /** Target interface for XCachedPrimitive implementations
+namespace cairo {
+    typedef cairo_t Cairo;
+    typedef cairo_matrix_t Matrix;
+    typedef cairo_format_t Format;
+    typedef cairo_content_t Content;
+    typedef cairo_pattern_t Pattern;
 
-        This interface must be implemented on all canvas
-        implementations that hand out XCachedPrimitives
-     */
-    class RepaintTarget
-    {
-    public:
-        virtual ~RepaintTarget() {}
-
-        // call this when a bitmap is repainted
-        virtual bool repaint( const ::cairo::SurfaceSharedPtr&                pSurface,
-                              const ::com::sun::star::rendering::ViewState&   viewState,
-                              const ::com::sun::star::rendering::RenderState& renderState ) = 0;
-    };
+    VCL_PLUGIN_PUBLIC const SystemEnvData* GetSysData(const vcl::Window *pOutputWindow);
 }
 
-#endif // INCLUDED_CANVAS_SOURCE_CAIRO_CAIRO_REPAINTTARGET_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
