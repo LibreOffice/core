@@ -115,7 +115,7 @@ public:
 #ifdef WNT
     SfxFilterFlags GetFilterFlags( const OUString& aFilterName );
 
-    sal_Bool AddFilterNameCheckOwnFile(
+    bool AddFilterNameCheckOwnFile(
                         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aMediaDescr );
 #endif
 

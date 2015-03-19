@@ -696,23 +696,21 @@ SfxFilterFlags MimeConfigurationHelper::GetFilterFlags( const OUString& aFilterN
     return nFlags;
 }
 
-sal_Bool MimeConfigurationHelper::AddFilterNameCheckOwnFile(
+bool MimeConfigurationHelper::AddFilterNameCheckOwnFile(
                         uno::Sequence< beans::PropertyValue >& aMediaDescr )
 {
-    sal_Bool bResult = sal_False;
-
     OUString aFilterName = UpdateMediaDescriptorWithFilterName( aMediaDescr, sal_False );
     if ( !aFilterName.isEmpty() )
     {
         SfxFilterFlags nFlags = GetFilterFlags( aFilterName );
         // check the OWN flag
-        bResult = ( nFlags & SfxFilterFlags::OWN );
+        return bool(nFlags & SfxFilterFlags::OWN);
     }
 
-    return bResult;
+    return false;
 }
-#endif
 
+#endif
 
 OUString MimeConfigurationHelper::GetDefaultFilterFromServiceName( const OUString& aServiceName, sal_Int32 nVersion )
 {
