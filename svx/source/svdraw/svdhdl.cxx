@@ -744,9 +744,23 @@ BitmapEx SdrHdl::ImpGetBitmapEx( BitmapMarkerKind eKindOfMarker, sal_uInt16 nInd
     else
     {
         // create normal handle: use ImpGetBitmapEx(...) now
-
-        sal_Int32 nScaleFactor = rOutDev.GetDPIScaleFactor();
         BitmapEx aBmpEx = ImpGetBitmapEx(eKindOfMarker, (sal_uInt16)eColIndex);
+
+        // When the image with handles is not found, the bitmap returned is
+        // empty. This is a problem when we use LibreOffice as a library
+        // (through LOKit - for example on Android) even when we don't show
+        // the handles, beacuse the hit test would always return false.
+        //
+        // This HACK replaces the empty bitmap with a black 13x13 bitmap handle
+        // so that the hit test works for this case.
+        if (aBmpEx.IsEmpty())
+        {
+            aBmpEx = BitmapEx(Bitmap(Size(13, 13), 24));
+            aBmpEx.Erase(COL_BLACK);
+        }
+
+        // Scale the handle with the DPI scale factor
+        sal_Int32 nScaleFactor = rOutDev.GetDPIScaleFactor();
         aBmpEx.Scale(nScaleFactor, nScaleFactor);
 
         if(eKindOfMarker == Anchor || eKindOfMarker == AnchorPressed)
