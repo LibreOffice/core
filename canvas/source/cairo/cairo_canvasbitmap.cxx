@@ -27,45 +27,8 @@
 #include <vcl/bmpacc.hxx>
 #include <vcl/bitmapex.hxx>
 
-#ifdef CAIRO_HAS_XLIB_SURFACE
-# include "cairo_xlib_cairo.hxx"
-#elif defined CAIRO_HAS_QUARTZ_SURFACE
-# include "cairo_quartz_cairo.hxx"
-#elif defined CAIRO_HAS_WIN32_SURFACE
-# include "cairo_win32_cairo.hxx"
-# include <cairo-win32.h>
-#else
-# error Native API needed.
-#endif
-
 using namespace ::cairo;
 using namespace ::com::sun::star;
-
-#ifdef CAIRO_HAS_WIN32_SURFACE
-namespace
-{
-    HBITMAP surface2HBitmap( const SurfaceSharedPtr& rSurface, const basegfx::B2ISize& rSize )
-    {
-        // can't seem to retrieve HBITMAP from cairo. copy content then
-        HDC hScreenDC=GetDC(NULL);
-        HBITMAP hBmpBitmap = CreateCompatibleBitmap( hScreenDC,
-                                                     rSize.getX(),
-                                                     rSize.getY() );
-
-        HDC     hBmpDC = CreateCompatibleDC( 0 );
-        HBITMAP hBmpOld = (HBITMAP) SelectObject( hBmpDC, hBmpBitmap );
-
-        BitBlt( hBmpDC, 0, 0, rSize.getX(), rSize.getX(),
-                cairo_win32_surface_get_dc(rSurface->getCairoSurface().get()),
-                0, 0, SRCCOPY );
-
-        SelectObject( hBmpDC, hBmpOld );
-        DeleteDC( hBmpDC );
-
-        return hBmpBitmap;
-    }
-}
-#endif
 
 namespace cairocanvas
 {
@@ -112,7 +75,7 @@ namespace cairocanvas
         return mpBufferSurface;
     }
 
-    SurfaceSharedPtr CanvasBitmap::createSurface( const ::basegfx::B2ISize& rSize, Content aContent )
+    SurfaceSharedPtr CanvasBitmap::createSurface( const ::basegfx::B2ISize& rSize, int aContent )
     {
         return mpSurfaceProvider->createSurface(rSize,aContent);
     }
@@ -222,31 +185,7 @@ namespace cairocanvas
             }
             case 1:
             {
-#ifdef CAIRO_HAS_XLIB_SURFACE
-                X11Surface& rXlibSurface=dynamic_cast<X11Surface&>(*mpBufferSurface.get());
-                uno::Sequence< uno::Any > args( 3 );
-                args[0] = uno::Any( false );  // do not call XFreePixmap on it
-                args[1] = uno::Any( rXlibSurface.getPixmap()->mhDrawable );
-                args[2] = uno::Any( sal_Int32( rXlibSurface.getDepth() ) );
-
-                aRV = uno::Any( args );
-#elif defined CAIRO_HAS_QUARTZ_SURFACE
-                QuartzSurface* pQuartzSurface = dynamic_cast<QuartzSurface*>(mpBufferSurface.get());
-                OSL_ASSERT(pQuartzSurface);
-                uno::Sequence< uno::Any > args( 1 );
-                args[0] = uno::Any( sal_IntPtr (pQuartzSurface->getCGContext()) );
-                aRV = uno::Any( args );
-#elif defined CAIRO_HAS_WIN32_SURFACE
-                // TODO(F2): check whether under all circumstances,
-                // the alpha channel is ignored here.
-                uno::Sequence< uno::Any > args( 1 );
-                args[1] = uno::Any( sal_Int64(surface2HBitmap(mpBufferSurface,maSize)) );
-
-                aRV = uno::Any( args );
-                // caller frees the bitmap
-#else
-# error Please define fast prop retrieval for your platform!
-#endif
+                aRV = getOutputDevice()->GetNativeSurfaceHandle(mpBufferSurface, maSize);
                 break;
             }
             case 2:

@@ -32,7 +32,7 @@
 
 #include <boost/utility.hpp>
 
-#include "cairo_cairo.hxx"
+#include <vcl/cairo.hxx>
 #include "cairo_canvasfont.hxx"
 
 
