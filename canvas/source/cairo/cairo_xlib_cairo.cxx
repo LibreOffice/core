@@ -281,9 +281,10 @@ namespace cairo
      *
      * @return The new surface or NULL
      **/
-    void X11Surface::Resize( int width, int height )
+    bool X11Surface::Resize(int width, int height)
     {
-        cairo_xlib_surface_set_size( mpSurface.get(), width, height );
+        cairo_xlib_surface_set_size(mpSurface.get(), width, height);
+        return true;
     }
 
     void X11Surface::flush() const

@@ -308,17 +308,6 @@ bool OutputDevice::SupportsCairo() const
     return mpGraphics->SupportsCairo();
 }
 
-bool OutputDevice::CanResizeCairoSurface() const
-{
-    if (!mpGraphics)
-    {
-        if (!AcquireGraphics())
-            return false;
-    }
-
-    return mpGraphics->CanResizeCairoSurface();
-}
-
 css::uno::Any OutputDevice::GetSystemGfxDataAny() const
 {
     const SystemGraphicsData aSysData = GetSystemGfxData();

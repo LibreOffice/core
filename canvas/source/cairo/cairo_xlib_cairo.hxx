@@ -88,7 +88,7 @@ namespace cairo {
 
         virtual boost::shared_ptr<VirtualDevice> createVirtualDevice() const SAL_OVERRIDE;
 
-        virtual void Resize( int width, int height ) SAL_OVERRIDE;
+        virtual bool Resize( int width, int height ) SAL_OVERRIDE;
 
         virtual void flush() const SAL_OVERRIDE;
 
