@@ -109,7 +109,7 @@ namespace cairocanvas
         return mpBufferSurface;
     }
 
-    SurfaceSharedPtr CanvasCustomSprite::createSurface( const ::basegfx::B2ISize& rSize, Content aContent )
+    SurfaceSharedPtr CanvasCustomSprite::createSurface( const ::basegfx::B2ISize& rSize, int aContent )
     {
         return mpSpriteCanvas->createSurface(rSize,aContent);
     }
