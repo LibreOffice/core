@@ -403,9 +403,9 @@ void SfxSaveTabPage::Reset( const SfxItemSet* )
                     sal_IntPtr nData = reinterpret_cast<sal_IntPtr>(aDocTypeLB->GetEntryData(n));
                     OUString sCommand;
                     sCommand = "matchByDocumentService=%1:iflags=" +
-                               OUString::number(static_cast<sal_Int32>(SfxFilterFlags::IMPORT|SfxFilterFlags::EXPORT)) +
+                               OUString::number(static_cast<int>(SfxFilterFlags::IMPORT|SfxFilterFlags::EXPORT)) +
                                ":eflags=" +
-                               OUString::number(static_cast<sal_Int32>(SfxFilterFlags::NOTINFILEDLG)) +
+                               OUString::number(static_cast<int>(SfxFilterFlags::NOTINFILEDLG)) +
                                ":default_first";
                     OUString sReplace;
                     switch(nData)
