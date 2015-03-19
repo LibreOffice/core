@@ -28,6 +28,7 @@
 
 #include <rtl/ustring.hxx>
 #include <vector>
+#include <vcl/vclptr.hxx>
 #include "cgmtypes.hxx"
 
 class   Graphic;

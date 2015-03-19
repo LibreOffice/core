@@ -1248,7 +1248,7 @@ bool SwFEShell::GetDrawObjGraphic( SotClipboardFormatId nFmt, Graphic& rGrf ) co
 
                             GDIMetaFile aMtf;
                             aMtf.Record( pVirtDev.get() );
-                            aGrf.Draw( &aVirtDev, aPt, aSz );
+                            aGrf.Draw( pVirtDev, aPt, aSz );
                             aMtf.Stop();
                             aMtf.SetPrefMapMode( aTmp );
                             aMtf.SetPrefSize( aSz );

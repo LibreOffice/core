@@ -7671,7 +7671,7 @@ Graphic SwFlyFrmFmt::MakeGraphic( ImageMap* pMap )
 
         vcl::Window *pWin = pSh->GetWin();
         sal_uInt16 nZoom = pSh->GetViewOptions()->GetZoom();
-        ::SetOutDevAndWin( pSh, &aDev, 0, 100 );
+        ::SetOutDevAndWin( pSh, pDev, 0, 100 );
         gProp.bSFlyMetafile = true;
         gProp.pSFlyMetafileOut = pWin;
 
@@ -7689,15 +7689,15 @@ Graphic SwFlyFrmFmt::MakeGraphic( ImageMap* pMap )
         pImp->PaintLayer( pIDDMA->GetHellId(), 0, aOut, &aPageBackgrdColor,
                           pFlyPage->IsRightToLeft(),
                           &aSwRedirector );
-        gProp.pSLines->PaintLines( &aDev, gProp );
+        gProp.pSLines->PaintLines( pDev, gProp );
         if ( pFly->IsFlyInCntFrm() )
             pFly->Paint( aOut );
-        gProp.pSLines->PaintLines( &aDev, gProp );
+        gProp.pSLines->PaintLines( pDev, gProp );
         // OD 30.08.2002 #102450# - add 3rd parameter
         pImp->PaintLayer( pIDDMA->GetHeavenId(), 0, aOut, &aPageBackgrdColor,
                           pFlyPage->IsRightToLeft(),
                           &aSwRedirector );
-        gProp.pSLines->PaintLines( &aDev, gProp );
+        gProp.pSLines->PaintLines( pDev, gProp );
         DELETEZ( gProp.pSLines );
         gProp.pSFlyOnlyDraw = 0;
 

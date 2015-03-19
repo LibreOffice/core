@@ -947,18 +947,18 @@ public:
             // Compositing onto 2x colors beyond our control
             ScopedVclPtr< VirtualDevice > aWhite(new VirtualDevice());
             ScopedVclPtr< VirtualDevice > aBlack(new VirtualDevice());
-            aWhite.SetOutputSizePixel(aSrc.GetSizePixel());
-            aWhite.SetBackground(Wallpaper(COL_WHITE));
-            aWhite.Erase();
-            aBlack.SetOutputSizePixel(aSrc.GetSizePixel());
-            aBlack.SetBackground(Wallpaper(COL_BLACK));
-            aBlack.Erase();
-            aWhite.DrawBitmapEx(Point(), aSrc);
-            aBlack.DrawBitmapEx(Point(), aSrc);
+            aWhite->SetOutputSizePixel(aSrc.GetSizePixel());
+            aWhite->SetBackground(Wallpaper(COL_WHITE));
+            aWhite->Erase();
+            aBlack->SetOutputSizePixel(aSrc.GetSizePixel());
+            aBlack->SetBackground(Wallpaper(COL_BLACK));
+            aBlack->Erase();
+            aWhite->DrawBitmapEx(Point(), aSrc);
+            aBlack->DrawBitmapEx(Point(), aSrc);
 
             // Now recover that alpha...
-            Bitmap aWhiteBmp = aWhite.GetBitmap(Point(),aSrc.GetSizePixel());
-            Bitmap aBlackBmp = aBlack.GetBitmap(Point(),aSrc.GetSizePixel());
+            Bitmap aWhiteBmp = aWhite->GetBitmap(Point(),aSrc.GetSizePixel());
+            Bitmap aBlackBmp = aBlack->GetBitmap(Point(),aSrc.GetSizePixel());
             AlphaMask aMask(aSrc.GetSizePixel());
             Bitmap aRecovered(aSrc.GetSizePixel(), 24);
             {
@@ -1504,16 +1504,16 @@ public:
         DrawWallpaper(aWholeSize, aWallpaper);
         Pop();
 
-        ScopedVclPtr< VirtualDevice > aDev(new VirtualDevice(*this));
-        aDev.EnableRTL(IsRTLEnabled());
-        aDev.SetOutputSizePixel(aExclude.GetSize());
+        ScopedVclPtr< VirtualDevice > pDev(new VirtualDevice(*this));
+        pDev->EnableRTL(IsRTLEnabled());
+        pDev->SetOutputSizePixel(aExclude.GetSize());
 
         Rectangle aSubRect(aWholeSize);
         aSubRect.Move(-aExclude.Left(), -aExclude.Top());
-        aDev.DrawWallpaper(aSubRect, aWallpaper );
+        pDev->DrawWallpaper(aSubRect, aWallpaper );
 
         DrawOutDev(aExclude.TopLeft(), aExclude.GetSize(),
-                   Point( 0, 0 ), aExclude.GetSize(), aDev );
+                   Point( 0, 0 ), aExclude.GetSize(), *pDev.get() );
     }
 };
 
