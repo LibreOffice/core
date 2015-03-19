@@ -453,11 +453,6 @@ bool SwDBManager::MergeNew( const SwMergeDescriptor& rMergeDesc )
 
     DELETEZ( pImpl->pMergeData );
 
-    // Recalculate original section visibility states, as field changes aren't
-    // tracked (not undo-able).  Has to be done, after pImpl->pMergeData is
-    //  gone, otherwise merge data is used for calculation!
-    rMergeDesc.rSh.SwViewShell::UpdateFlds();
-
     bInMerge = false;
 
     return bRet;
