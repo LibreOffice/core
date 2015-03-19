@@ -9,7 +9,6 @@
 
 package org.libreoffice.ui;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
@@ -23,6 +22,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -61,7 +62,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-public class LibreOfficeUIActivity extends Activity implements ActionBar.OnNavigationListener {
+public class LibreOfficeUIActivity extends ActionBarActivity implements ActionBar.OnNavigationListener {
     private String LOGTAG = LibreOfficeUIActivity.class.getSimpleName();
     private SharedPreferences prefs;
     private int filterMode = FileUtilities.ALL;
@@ -111,7 +112,7 @@ public class LibreOfficeUIActivity extends Activity implements ActionBar.OnNavig
 
     public void createUI() {
 
-        ActionBar actionBar = getActionBar();
+        ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowTitleEnabled(false); //This should show current directory if anything
 
         //make the navigation spinner
@@ -165,9 +166,9 @@ public class LibreOfficeUIActivity extends Activity implements ActionBar.OnNavig
     private void refreshView() {
         // enable home icon as "up" if required
         if (!currentDirectory.equals(homeDirectory)) {
-            getActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         } else {
-            getActionBar().setDisplayHomeAsUpEnabled(false);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         }
         // refresh view
         if (viewMode == GRID_VIEW) {
