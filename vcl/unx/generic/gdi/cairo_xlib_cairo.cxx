@@ -24,6 +24,7 @@
 #include <X11/Xlib.h>
 #include <postx.h>
 
+#include "cairo_cairo.hxx"
 #include "cairo_xlib_cairo.hxx"
 
 #include <vcl/sysdata.hxx>
@@ -193,18 +194,18 @@ namespace cairo
 
     /**
      * Surface::getSimilar:  Create new similar Canvas surface
-     * @param aContent format of the new surface (cairo_content_t from cairo/src/cairo.h)
+     * @param cairo_content_type format of the new surface (cairo_content_t from cairo/src/cairo.h)
      * @param width width of the new surface
      * @param height height of the new surface
      *
      * Creates a new Canvas surface. This normally creates platform native surface, even though
      * generic function is used.
      *
-     * Cairo surface from aContent (cairo_content_t)
+     * Cairo surface from cairo_content_type (cairo_content_t)
      *
      * @return new surface or NULL
      **/
-    SurfaceSharedPtr X11Surface::getSimilar( Content aContent, int width, int height ) const
+    SurfaceSharedPtr X11Surface::getSimilar(int cairo_content_type, int width, int height ) const
     {
         Pixmap hPixmap;
 
@@ -213,7 +214,7 @@ namespace cairo
             XRenderPictFormat* pFormat;
             int nFormat;
 
-            switch (aContent)
+            switch (cairo_content_type)
             {
                 case CAIRO_CONTENT_ALPHA:
                     nFormat = PictStandardA8;
@@ -251,7 +252,8 @@ namespace cairo
                 new X11Surface( maSysData,
                                 X11PixmapSharedPtr(),
                                 CairoSurfaceSharedPtr(
-                                    cairo_surface_create_similar( mpSurface.get(), aContent, width, height ),
+                                    cairo_surface_create_similar( mpSurface.get(),
+                                        static_cast<cairo_content_t>(cairo_content_type), width, height ),
                                     &cairo_surface_destroy )));
     }
 
@@ -303,59 +305,6 @@ namespace cairo
             return ((XRenderPictFormat*) maSysData.pRenderFormat)->depth;
 
         return -1;
-    }
-
-    SurfaceSharedPtr createSurface( const CairoSurfaceSharedPtr& rSurface )
-    {
-        return SurfaceSharedPtr(new X11Surface(rSurface));
-    }
-
-    static X11SysData getSysData( const vcl::Window& rWindow )
-    {
-        const SystemEnvData* pSysData = GetSysData(&rWindow);
-
-        if( !pSysData )
-            return X11SysData();
-        else
-            return X11SysData(*pSysData);
-    }
-
-    static X11SysData getSysData( const VirtualDevice& rVirDev )
-    {
-        return X11SysData( rVirDev.GetSystemGfxData() );
-    }
-
-    SurfaceSharedPtr createSurface( const OutputDevice& rRefDevice,
-                                    int x, int y, int width, int height )
-    {
-        if( rRefDevice.GetOutDevType() == OUTDEV_WINDOW )
-            return SurfaceSharedPtr(new X11Surface(getSysData(static_cast<const vcl::Window&>(rRefDevice)),
-                                                   x,y,width,height));
-        else if( rRefDevice.GetOutDevType() == OUTDEV_VIRDEV )
-            return SurfaceSharedPtr(new X11Surface(getSysData(static_cast<const VirtualDevice&>(rRefDevice)),
-                                                   x,y,width,height));
-        else
-            return SurfaceSharedPtr();
-    }
-
-    SurfaceSharedPtr createBitmapSurface( const OutputDevice&     rRefDevice,
-                                          const BitmapSystemData& rData,
-                                          const Size&             rSize )
-    {
-        SAL_INFO(
-            "canvas.cairo",
-            "requested size: " << rSize.Width() << " x " << rSize.Height()
-                << " available size: " << rData.mnWidth << " x "
-                << rData.mnHeight);
-        if ( rData.mnWidth == rSize.Width() && rData.mnHeight == rSize.Height() )
-        {
-            if( rRefDevice.GetOutDevType() == OUTDEV_WINDOW )
-                return SurfaceSharedPtr(new X11Surface(getSysData(static_cast<const vcl::Window&>(rRefDevice)), rData ));
-            else if( rRefDevice.GetOutDevType() == OUTDEV_VIRDEV )
-                return SurfaceSharedPtr(new X11Surface(getSysData(static_cast<const VirtualDevice&>(rRefDevice)), rData ));
-        }
-
-        return SurfaceSharedPtr();
     }
 }
 

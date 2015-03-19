@@ -47,7 +47,6 @@ $(eval $(call gb_Library_use_libraries,cairocanvas,\
 
 $(eval $(call gb_Library_add_exception_objects,cairocanvas,\
 	canvas/source/cairo/cairo_cachedbitmap \
-	canvas/source/cairo/cairo_cairo \
 	canvas/source/cairo/cairo_canvas \
 	canvas/source/cairo/cairo_canvasbitmap \
 	canvas/source/cairo/cairo_canvascustomsprite \
@@ -67,36 +66,5 @@ $(eval $(call gb_Library_use_externals,cairocanvas,\
 	boost_headers \
 	cairo \
 ))
-
-ifeq ($(OS),WNT)
-
-$(eval $(call gb_Library_add_exception_objects,cairocanvas,\
-	canvas/source/cairo/cairo_win32_cairo \
-))
-$(eval $(call gb_Library_use_libraries,cairocanvas,\
-	gdi32 \
-))
-
-else
-
-ifneq (,$(filter MACOSX IOS,$(OS)))
-$(eval $(call gb_Library_add_exception_objects,cairocanvas,\
-	canvas/source/cairo/cairo_quartz_cairo \
-))
-else ifeq ($(GUIBASE),unx)
-$(eval $(call gb_Library_add_exception_objects,cairocanvas,\
-	canvas/source/cairo/cairo_xlib_cairo \
-))
-
-# freetype? fontconfig? -> test on Solaris
-$(eval $(call gb_Library_add_libs,cairocanvas,\
-	-lX11 \
-))
-$(eval $(call gb_Library_use_externals,cairocanvas,\
-	Xrender \
-))
-endif
-
-endif
 
 # vim: set noet sw=4 ts=4:

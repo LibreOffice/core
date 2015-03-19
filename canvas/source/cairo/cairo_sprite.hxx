@@ -22,7 +22,7 @@
 
 #include <canvas/base/sprite.hxx>
 
-#include "cairo_cairo.hxx"
+#include <vcl/cairo.hxx>
 
 namespace cairocanvas
 {

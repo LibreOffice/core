@@ -17,33 +17,21 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CANVAS_SOURCE_CAIRO_CAIRO_CAIRO_HXX
-#define INCLUDED_CANVAS_SOURCE_CAIRO_CAIRO_CAIRO_HXX
+#ifndef INCLUDED_VCL_CAIRO_HXX
+#define INCLUDED_VCL_CAIRO_HXX
 
 #include <sal/config.h>
 #include <boost/shared_ptr.hpp>
 
-struct SystemEnvData;
-struct BitmapSystemData;
-struct SystemGraphicsData;
-class  VirtualDevice;
-class  OutputDevice;
-namespace vcl { class Window; }
-class  Size;
+typedef struct _cairo_surface cairo_surface_t;
+typedef struct _cairo cairo_t;
 
-#include <cairo.h>
+class VirtualDevice;
 
 namespace cairo {
-    typedef cairo_t Cairo;
-    typedef cairo_matrix_t Matrix;
-    typedef cairo_format_t Format;
-    typedef cairo_content_t Content;
-    typedef cairo_pattern_t Pattern;
 
     typedef boost::shared_ptr<cairo_surface_t> CairoSurfaceSharedPtr;
-    typedef boost::shared_ptr<Cairo>           CairoSharedPtr;
-
-    const SystemEnvData* GetSysData(const vcl::Window *pOutputWindow);
+    typedef boost::shared_ptr<cairo_t>         CairoSharedPtr;
 
     /** Cairo surface interface
 
@@ -58,13 +46,13 @@ namespace cairo {
         // Query methods
         virtual CairoSharedPtr getCairo() const = 0;
         virtual CairoSurfaceSharedPtr getCairoSurface() const = 0;
-        virtual boost::shared_ptr<Surface> getSimilar( Content aContent, int width, int height ) const = 0;
+        virtual boost::shared_ptr<Surface> getSimilar(int cairo_content_type, int width, int height) const = 0;
 
         /// factory for VirDev on this surface
         virtual boost::shared_ptr<VirtualDevice> createVirtualDevice() const = 0;
 
         /// Resize the surface (possibly destroying content), only possible for X11 typically
-        /// so on failure create a new surface instead
+        /// so on failure caller must create a new surface instead
         virtual bool Resize( int /*width*/, int /*height*/ ) { return false; }
 
         /// Flush all pending output to surface
@@ -72,16 +60,6 @@ namespace cairo {
     };
 
     typedef boost::shared_ptr<Surface> SurfaceSharedPtr;
-
-    /// Create Surface from given cairo surface
-    SurfaceSharedPtr createSurface( const CairoSurfaceSharedPtr& rSurface );
-    /// Create surface with given dimensions
-    SurfaceSharedPtr createSurface( const OutputDevice& rRefDevice,
-                                    int x, int y, int width, int height );
-    /// Create Surface for given bitmap data
-    SurfaceSharedPtr createBitmapSurface( const OutputDevice&     rRefDevice,
-                                          const BitmapSystemData& rData,
-                                          const Size&             rSize );
 }
 
 #endif
