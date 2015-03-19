@@ -136,14 +136,14 @@ struct _LibreOfficeKitDocumentClass
 
   /// @see lok::Document::setTextSelection
   void (*setTextSelection)(LibreOfficeKitDocument* pThis,
-                         int nType,
-                         int nX,
-                         int nY);
+                           int nType,
+                           int nX,
+                           int nY);
   /// @see lok::Document::setGraphicSelection
   void (*setGraphicSelection)(LibreOfficeKitDocument* pThis,
-                         int nType,
-                         int nX,
-                         int nY);
+                              int nType,
+                              int nX,
+                              int nY);
   /// @see lok::Document::resetSelection
   void (*resetSelection)(LibreOfficeKitDocument* pThis);
 #endif // LOK_USE_UNSTABLE_API
