@@ -1355,7 +1355,7 @@ void SfxTabDialog::SetInputSet( const SfxItemSet* pInSet )
     delete pSet;
     pSet = pInSet ? new SfxItemSet(*pInSet) : 0;
 
-    if ( !bSet && !pExampleSet && !pOutSet )
+    if (!bSet && !pExampleSet && !pOutSet && pSet)
     {
         pExampleSet = new SfxItemSet( *pSet );
         pOutSet = new SfxItemSet( *pSet->GetPool(), pSet->GetRanges() );
