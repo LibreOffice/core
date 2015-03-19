@@ -18,7 +18,6 @@ $(eval $(call gb_Executable_add_defs,tdefilepicker,\
 $(eval $(call gb_Executable_set_include,tdefilepicker,\
     $$(INCLUDE) \
     -I$(SRCDIR)/vcl/inc \
-    -I$(SRCDIR)/solenv/inc \
     -I$(SRCDIR)/vcl/inc/unx/kde \
 ))
 

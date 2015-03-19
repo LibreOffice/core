@@ -20,7 +20,6 @@ $(eval $(call gb_Executable_use_external,svptest,boost_headers))
 $(eval $(call gb_Executable_set_include,svptest,\
     $$(INCLUDE) \
     -I$(SRCDIR)/vcl/inc \
-    -I$(SRCDIR)/solenv/inc \
 ))
 
 $(eval $(call gb_Executable_use_libraries,svptest,\
