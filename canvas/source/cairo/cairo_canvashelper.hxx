@@ -30,7 +30,7 @@
 
 #include <boost/utility.hpp>
 
-#include "cairo_cairo.hxx"
+#include <vcl/cairo.hxx>
 #include "cairo_surfaceprovider.hxx"
 
 class VirtualDevice;
@@ -236,7 +236,7 @@ namespace cairocanvas
                                 Operation aOperation,
                                 bool bNoLineJoin = false,
                                 const ::com::sun::star::uno::Sequence< ::com::sun::star::rendering::Texture >* pTextures=NULL,
-                                ::cairo::Cairo* pCairo=NULL ) const;
+                                cairo_t* pCairo=NULL ) const;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCachedPrimitive > implDrawBitmapSurface(
                    const ::com::sun::star::rendering::XCanvas*      pCanvas,
@@ -291,7 +291,7 @@ namespace cairocanvas
     /// also needed from SpriteHelper
     void doPolyPolygonImplementation( ::basegfx::B2DPolyPolygon aPolyPolygon,
                                       Operation aOperation,
-                                      ::cairo::Cairo* pCairo,
+                                      cairo_t* pCairo,
                                       const ::com::sun::star::uno::Sequence< ::com::sun::star::rendering::Texture >* pTextures,
                                       const SurfaceProviderRef& pDevice,
                                       ::com::sun::star::rendering::FillRule eFillrule );

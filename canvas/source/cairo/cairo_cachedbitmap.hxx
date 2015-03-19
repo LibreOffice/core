@@ -22,7 +22,7 @@
 
 #include <canvas/base/cachedprimitivebase.hxx>
 
-#include "cairo_cairo.hxx"
+#include <vcl/cairo.hxx>
 
 /* Definition of CachedBitmap class */
 
