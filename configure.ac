@@ -10159,6 +10159,7 @@ ENABLE_CAIRO_CANVAS=""
 if test "$enable_cairo_canvas" = "yes"; then
     test_cairo=yes
     ENABLE_CAIRO_CANVAS="TRUE"
+    AC_DEFINE(ENABLE_CAIRO_CANVAS)
 fi
 AC_SUBST(ENABLE_CAIRO_CANVAS)
 
@@ -12901,6 +12902,7 @@ AC_CONFIG_FILES([config_host.mk
 AC_CONFIG_HEADERS([config_host/config_buildid.h])
 AC_CONFIG_HEADERS([config_host/config_clang.h])
 AC_CONFIG_HEADERS([config_host/config_eot.h])
+AC_CONFIG_HEADERS([config_host/config_cairo_canvas.h])
 AC_CONFIG_HEADERS([config_host/config_cups.h])
 AC_CONFIG_HEADERS([config_host/config_features.h])
 AC_CONFIG_HEADERS([config_host/config_folders.h])

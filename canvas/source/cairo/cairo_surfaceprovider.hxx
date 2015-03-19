@@ -23,7 +23,8 @@
 #include <rtl/ref.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
 
-#include "cairo_cairo.hxx"
+#include <vcl/cairo.hxx>
+#include <cairo.h>
 
 class OutputDevice;
 class Bitmap;
@@ -52,7 +53,7 @@ namespace cairocanvas
 
         /// create new surface in given size
         virtual ::cairo::SurfaceSharedPtr createSurface( const ::basegfx::B2ISize& rSize,
-                                                         ::cairo::Content aContent = CAIRO_CONTENT_COLOR_ALPHA ) = 0;
+                                                         int aContent = CAIRO_CONTENT_COLOR_ALPHA ) = 0;
         /// create new surface from given bitmap
         virtual ::cairo::SurfaceSharedPtr createSurface( ::Bitmap& rBitmap ) = 0;
 
