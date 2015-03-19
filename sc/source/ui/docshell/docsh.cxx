@@ -1457,7 +1457,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
         Fraction aZoom( 1, 1 );
         double nPPTX = ScGlobal::nScreenPPTX * (double) aZoom / GetOutputFactor(); // Factor is printer display ratio
         double nPPTY = ScGlobal::nScreenPPTY * (double) aZoom;
-        VirtualDevice aVirtDev;
+        ScopedVclPtr<VirtualDevice> pVirtDev( new VirtualDevice() );
         //  all sheets (for Excel import)
         SCTAB nTabCount = aDocument.GetTableCount();
         for (SCTAB nTab=0; nTab<nTabCount; nTab++)
@@ -1480,7 +1480,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                         aColWidthParam[nCol].mbSimpleText = false;
 
                     sal_uInt16 nWidth = aDocument.GetOptimalColWidth(
-                        nCol, nTab, &aVirtDev, nPPTX, nPPTY, aZoom, aZoom, false, &aMark,
+                        nCol, nTab, pVirtDev, nPPTX, nPPTY, aZoom, aZoom, false, &aMark,
                         &aColWidthParam[nCol] );
                     aDocument.SetColWidth( nCol, nTab,
                         nWidth + (sal_uInt16)ScGlobal::nLastColWidthExtra );

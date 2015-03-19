@@ -504,18 +504,18 @@ void ShowWindow::DrawPauseScene( bool bTimeoutOnly )
     if( SLIDE_NO_TIMEOUT != mnPauseTimeout )
     {
         MapMode         aVMap( rMap );
-        VirtualDevice   aVDev( *this );
+        ScopedVclPtr<VirtualDevice> pVDev( new VirtualDevice( *this ) );
 
         aVMap.SetOrigin( Point() );
-        aVDev.SetMapMode( aVMap );
-        aVDev.SetBackground( Wallpaper( Color( COL_BLACK ) ) );
+        pVDev->SetMapMode( aVMap );
+        pVDev->SetBackground( Wallpaper( Color( COL_BLACK ) ) );
 
         // set font first, to determine real output height
-        aVDev.SetFont( aFont );
+        pVDev->SetFont( aFont );
 
-        const Size aVDevSize( aOutSize.Width(), aVDev.GetTextHeight() );
+        const Size aVDevSize( aOutSize.Width(), pVDev->GetTextHeight() );
 
-        if( aVDev.SetOutputSize( aVDevSize ) )
+        if( pVDev->SetOutputSize( aVDevSize ) )
         {
             // Note: if performance gets an issue here, we can use NumberFormatter directly
             SvtSysLocale                aSysLocale;
@@ -524,8 +524,8 @@ void ShowWindow::DrawPauseScene( bool bTimeoutOnly )
             aText += " ( ";
             aText += aLocaleData.getDuration( ::tools::Time( 0, 0, mnPauseTimeout ) );
             aText += " )";
-            aVDev.DrawText( Point( aOffset.Width(), 0 ), aText );
-            DrawOutDev( Point( aOutOrg.X(), aOffset.Height() ), aVDevSize, Point(), aVDevSize, aVDev );
+            pVDev->DrawText( Point( aOffset.Width(), 0 ), aText );
+            DrawOutDev( Point( aOutOrg.X(), aOffset.Height() ), aVDevSize, Point(), aVDevSize, *pVDev.get() );
             bDrawn = true;
         }
     }

@@ -257,7 +257,7 @@ bool ScBlockUndo::AdjustHeight()
 {
     ScDocument& rDoc = pDocShell->GetDocument();
 
-    VirtualDevice aVirtDev;
+    ScopedVclPtr<VirtualDevice> pVirtDev( new VirtualDevice() );
     Fraction aZoomX( 1, 1 );
     Fraction aZoomY = aZoomX;
     double nPPTX, nPPTY;
@@ -277,7 +277,7 @@ bool ScBlockUndo::AdjustHeight()
         nPPTY = ScGlobal::nScreenPPTY;
     }
 
-    sc::RowHeightContext aCxt(nPPTX, nPPTY, aZoomX, aZoomY, &aVirtDev);
+    sc::RowHeightContext aCxt(nPPTX, nPPTY, aZoomX, aZoomY, pVirtDev);
     bool bRet = rDoc.SetOptimalHeight(
         aCxt, aBlockRange.aStart.Row(), aBlockRange.aEnd.Row(), aBlockRange.aStart.Tab());
 
@@ -355,7 +355,7 @@ void ScMultiBlockUndo::AdjustHeight()
 {
     ScDocument& rDoc = pDocShell->GetDocument();
 
-    VirtualDevice aVirtDev;
+    ScopedVclPtr<VirtualDevice> pVirtDev( new VirtualDevice() );
     Fraction aZoomX( 1, 1 );
     Fraction aZoomY = aZoomX;
     double nPPTX, nPPTY;
@@ -375,7 +375,7 @@ void ScMultiBlockUndo::AdjustHeight()
         nPPTY = ScGlobal::nScreenPPTY;
     }
 
-    sc::RowHeightContext aCxt(nPPTX, nPPTY, aZoomX, aZoomY, &aVirtDev);
+    sc::RowHeightContext aCxt(nPPTX, nPPTY, aZoomX, aZoomY, pVirtDev);
     for (size_t i = 0, n = maBlockRanges.size(); i < n; ++i)
     {
         const ScRange& r = *maBlockRanges[i];

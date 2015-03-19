@@ -548,23 +548,23 @@ void AnimationWindow::UpdateControl(bool const bDisableCtrls)
             static_cast<SdrObject*>(pPage->GetObj(m_nCurrentFrame));
         if( pObject )
         {
-            VirtualDevice   aVD;
+            ScopedVclPtr<VirtualDevice> pVD(new VirtualDevice());
             Rectangle       aObjRect( pObject->GetCurrentBoundRect() );
             Size            aObjSize( aObjRect.GetSize() );
             Point           aOrigin( Point( -aObjRect.Left(), -aObjRect.Top() ) );
-            MapMode         aMap( aVD.GetMapMode() );
+            MapMode         aMap( pVD->GetMapMode() );
             aMap.SetMapUnit( MAP_100TH_MM );
             aMap.SetOrigin( aOrigin );
-            aVD.SetMapMode( aMap );
-            aVD.SetOutputSize( aObjSize );
+            pVD->SetMapMode( aMap );
+            pVD->SetOutputSize( aObjSize );
             const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
-            aVD.SetBackground( Wallpaper( rStyles.GetFieldColor() ) );
-            aVD.SetDrawMode( rStyles.GetHighContrastMode()
+            pVD->SetBackground( Wallpaper( rStyles.GetFieldColor() ) );
+            pVD->SetDrawMode( rStyles.GetHighContrastMode()
                 ? ViewShell::OUTPUT_DRAWMODE_CONTRAST
                 : ViewShell::OUTPUT_DRAWMODE_COLOR );
-            aVD.Erase();
-            pObject->SingleObjectPainter( aVD );
-            aBmp = BitmapEx( aVD.GetBitmap( aObjRect.TopLeft(), aObjSize ) );
+            pVD->Erase();
+            pObject->SingleObjectPainter( *pVD.get() );
+            aBmp = BitmapEx( pVD->GetBitmap( aObjRect.TopLeft(), aObjSize ) );
         }
 
         m_pCtlDisplay->SetBitmapEx(&aBmp);

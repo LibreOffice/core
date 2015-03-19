@@ -1403,9 +1403,9 @@ void ScViewFunc::RemoveStyleSheetInUse( const SfxStyleSheetBase* pStyleSheet )
 
     ScDocShellModificator aModificator( *pDocSh );
 
-    VirtualDevice aVirtDev;
-    aVirtDev.SetMapMode(MAP_PIXEL);
-    pDoc->StyleSheetChanged( pStyleSheet, true, &aVirtDev,
+    ScopedVclPtr<VirtualDevice> pVirtDev( new VirtualDevice() );
+    pVirtDev->SetMapMode(MAP_PIXEL);
+    pDoc->StyleSheetChanged( pStyleSheet, true, pVirtDev,
                                 rViewData.GetPPTX(),
                                 rViewData.GetPPTY(),
                                 rViewData.GetZoomX(),
@@ -1429,9 +1429,9 @@ void ScViewFunc::UpdateStyleSheetInUse( const SfxStyleSheetBase* pStyleSheet )
 
     ScDocShellModificator aModificator( *pDocSh );
 
-    VirtualDevice aVirtDev;
-    aVirtDev.SetMapMode(MAP_PIXEL);
-    pDoc->StyleSheetChanged( pStyleSheet, false, &aVirtDev,
+    ScopedVclPtr<VirtualDevice> pVirtDev( new VirtualDevice() );
+    pVirtDev->SetMapMode(MAP_PIXEL);
+    pDoc->StyleSheetChanged( pStyleSheet, false, pVirtDev,
                                 rViewData.GetPPTX(),
                                 rViewData.GetPPTY(),
                                 rViewData.GetZoomX(),

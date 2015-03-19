@@ -2764,7 +2764,6 @@ bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
     if ( !bIncludeFiltered && pClipDoc->HasClipFilteredRows() )
         UnmergeCells( aPasteDest, false );
 
-    VirtualDevice aVirtDev;
     bool bDestHeight = AdjustRowHeight(
                             ScRange( 0,nDestRow,nDestTab, MAXCOL,nDestEndRow,nDestEndTab ),
                             false );

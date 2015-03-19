@@ -368,11 +368,11 @@ void ScDocShell::CalcOutputFactor()
     pRefDev->SetFont(aOldFont);
     pRefDev->SetMapMode(aOldMode);
 
-    VirtualDevice aVirtWindow( *Application::GetDefaultDevice() );
-    aVirtWindow.SetMapMode(MAP_PIXEL);
-    pPattern->GetFont(aDefFont, SC_AUTOCOL_BLACK, &aVirtWindow);    // font color doesn't matter here
-    aVirtWindow.SetFont(aDefFont);
-    nWindowWidth = aVirtWindow.GetTextWidth(aTestString);
+    ScopedVclPtr<VirtualDevice> pVirtWindow( new VirtualDevice( *Application::GetDefaultDevice() ) );
+    pVirtWindow->SetMapMode(MAP_PIXEL);
+    pPattern->GetFont(aDefFont, SC_AUTOCOL_BLACK, pVirtWindow);    // font color doesn't matter here
+    pVirtWindow->SetFont(aDefFont);
+    nWindowWidth = pVirtWindow->GetTextWidth(aTestString);
     nWindowWidth = (long) ( nWindowWidth / ScGlobal::nScreenPPTX * HMM_PER_TWIPS );
 
     if (nPrinterWidth && nWindowWidth)

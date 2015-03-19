@@ -193,26 +193,26 @@ Bitmap DrawDocShell::GetPagePreviewBitmap(SdPage* pPage, sal_uInt16 nMaxEdgePixe
     MapMode         aMapMode( MAP_100TH_MM );
     const Size      aSize( pPage->GetSize() );
     const Point     aNullPt;
-    VirtualDevice   aVDev( *Application::GetDefaultDevice() );
+    ScopedVclPtr<VirtualDevice> pVDev( new VirtualDevice( *Application::GetDefaultDevice() ) );
 
-    aVDev.SetMapMode( aMapMode );
+    pVDev->SetMapMode( aMapMode );
 
-    const Size  aPixSize( aVDev.LogicToPixel( aSize ) );
+    const Size  aPixSize( pVDev->LogicToPixel( aSize ) );
     const sal_uLong nMaxEdgePix = std::max( aPixSize.Width(), aPixSize.Height() );
     Fraction    aFrac( nMaxEdgePixel, nMaxEdgePix );
 
     aMapMode.SetScaleX( aFrac );
     aMapMode.SetScaleY( aFrac );
-    aVDev.SetMapMode( aMapMode );
-    aVDev.SetOutputSize( aSize );
+    pVDev->SetMapMode( aMapMode );
+    pVDev->SetOutputSize( aSize );
 
     // that we also get the dark lines at the right and bottom page margin
     aFrac = Fraction( nMaxEdgePixel - 1, nMaxEdgePix );
     aMapMode.SetScaleX( aFrac );
     aMapMode.SetScaleY( aFrac );
-    aVDev.SetMapMode( aMapMode );
+    pVDev->SetMapMode( aMapMode );
 
-    ClientView* pView = new ClientView( this, &aVDev, NULL );
+    ClientView* pView = new ClientView( this, pVDev, NULL );
     FrameView*      pFrameView = GetFrameView();
     pView->ShowSdrPage( pPage );
 
@@ -263,14 +263,14 @@ Bitmap DrawDocShell::GetPagePreviewBitmap(SdPage* pPage, sal_uInt16 nMaxEdgePixe
             pView->SetActiveLayer( pFrameView->GetActiveLayer() );
     }
 
-    pView->CompleteRedraw( &aVDev, vcl::Region(Rectangle(aNullPt, aSize)) );
+    pView->CompleteRedraw( pVDev, vcl::Region(Rectangle(aNullPt, aSize)) );
 
     // IsRedrawReady() always gives sal_True while ( !pView->IsRedrawReady() ) {}
     delete pView;
 
-    aVDev.SetMapMode( MapMode() );
+    pVDev->SetMapMode( MapMode() );
 
-    Bitmap aPreview( aVDev.GetBitmap( aNullPt, aVDev.GetOutputSizePixel() ) );
+    Bitmap aPreview( pVDev->GetBitmap( aNullPt, pVDev->GetOutputSizePixel() ) );
 
     DBG_ASSERT(!!aPreview, "Preview-Bitmap could not be generated");
 

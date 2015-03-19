@@ -286,14 +286,14 @@ bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
     // normalize animations to n bitmaps of same size. An Animation,
     // though, can contain bitmaps of varying sizes and different
     // update modes)
-    VirtualDevice aVDev;
-    aVDev.SetOutputSizePixel( aAnimSize );
-    aVDev.EnableMapMode( false );
+    ScopedVclPtr<VirtualDevice> pVDev( new VirtualDevice() );
+    pVDev->SetOutputSizePixel( aAnimSize );
+    pVDev->EnableMapMode( false );
 
     // setup mask VDev (alpha VDev is currently rather slow)
-    VirtualDevice aVDevMask;
-    aVDevMask.SetOutputSizePixel( aAnimSize );
-    aVDevMask.EnableMapMode( false );
+    ScopedVclPtr<VirtualDevice> pVDevMask( new VirtualDevice() );
+    pVDevMask->SetOutputSizePixel( aAnimSize );
+    pVDevMask->EnableMapMode( false );
 
     switch( aAnimation.GetCycleMode() )
     {
@@ -329,23 +329,23 @@ bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
         {
             case DISPOSE_NOT:
             {
-                aVDev.DrawBitmapEx(rAnimBmp.aPosPix,
+                pVDev->DrawBitmapEx(rAnimBmp.aPosPix,
                                    rAnimBmp.aBmpEx);
                 Bitmap aMask = rAnimBmp.aBmpEx.GetMask();
 
                 if( aMask.IsEmpty() )
                 {
                     const Rectangle aRect(aEmptyPoint,
-                                          aVDevMask.GetOutputSizePixel());
+                                          pVDevMask->GetOutputSizePixel());
                     const Wallpaper aWallpaper(COL_BLACK);
-                    aVDevMask.DrawWallpaper(aRect,
+                    pVDevMask->DrawWallpaper(aRect,
                                             aWallpaper);
                 }
                 else
                 {
                     BitmapEx aTmpMask = BitmapEx(aMask,
                                                  aMask);
-                    aVDevMask.DrawBitmapEx(rAnimBmp.aPosPix,
+                    pVDevMask->DrawBitmapEx(rAnimBmp.aPosPix,
                                            aTmpMask );
                 }
                 break;
@@ -357,35 +357,35 @@ bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
                 const Bitmap aMask(rAnimBmp.aBmpEx.GetMask());
                 const Bitmap aContent(rAnimBmp.aBmpEx.GetBitmap());
 
-                aVDevMask.Erase();
-                aVDev.DrawBitmap(rAnimBmp.aPosPix, aContent);
+                pVDevMask->Erase();
+                pVDev->DrawBitmap(rAnimBmp.aPosPix, aContent);
 
                 if(aMask.IsEmpty())
                 {
                     const Rectangle aRect(rAnimBmp.aPosPix, aContent.GetSizePixel());
-                    aVDevMask.SetFillColor(COL_BLACK);
-                    aVDevMask.SetLineColor();
-                    aVDevMask.DrawRect(aRect);
+                    pVDevMask->SetFillColor(COL_BLACK);
+                    pVDevMask->SetLineColor();
+                    pVDevMask->DrawRect(aRect);
                 }
                 else
                 {
-                    aVDevMask.DrawBitmap(rAnimBmp.aPosPix, aMask);
+                    pVDevMask->DrawBitmap(rAnimBmp.aPosPix, aMask);
                 }
                 break;
             }
 
             case DISPOSE_FULL:
             {
-                aVDev.DrawBitmapEx(rAnimBmp.aPosPix,
+                pVDev->DrawBitmapEx(rAnimBmp.aPosPix,
                                    rAnimBmp.aBmpEx);
                 break;
             }
 
             case DISPOSE_PREVIOUS :
             {
-                aVDev.DrawBitmapEx(rAnimBmp.aPosPix,
+                pVDev->DrawBitmapEx(rAnimBmp.aPosPix,
                                    rAnimBmp.aBmpEx);
-                aVDevMask.DrawBitmap(rAnimBmp.aPosPix,
+                pVDevMask->DrawBitmap(rAnimBmp.aPosPix,
                                      rAnimBmp.aBmpEx.GetMask());
                 break;
             }
@@ -397,10 +397,10 @@ bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
         pMtf->AddAction(
             new MetaBmpExAction( aEmptyPoint,
                                  BitmapEx(
-                                     aVDev.GetBitmap(
+                                     pVDev->GetBitmap(
                                          aEmptyPoint,
                                          aAnimSize ),
-                                     aVDevMask.GetBitmap(
+                                     pVDevMask->GetBitmap(
                                          aEmptyPoint,
                                          aAnimSize ))));
 

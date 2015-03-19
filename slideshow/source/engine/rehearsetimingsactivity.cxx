@@ -159,13 +159,13 @@ RehearseTimingsActivity::RehearseTimingsActivity( const SlideShowContext& rConte
     maFont.SetColor( COL_BLACK );
 
     // determine sprite size (in pixel):
-    VirtualDevice blackHole;
-    blackHole.EnableOutput(false);
-    blackHole.SetFont( maFont );
-    blackHole.SetMapMode( MAP_PIXEL );
+    ScopedVclPtr<VirtualDevice> blackHole( new VirtualDevice() );
+    blackHole->EnableOutput(false);
+    blackHole->SetFont( maFont );
+    blackHole->SetMapMode( MAP_PIXEL );
     Rectangle rect;
-    const FontMetric metric( blackHole.GetFontMetric() );
-    blackHole.GetTextBoundRect( rect, OUString("XX:XX:XX") );
+    const FontMetric metric( blackHole->GetFontMetric() );
+    blackHole->GetTextBoundRect( rect, OUString("XX:XX:XX") );
     maSpriteSizePixel.setX( rect.getWidth() * 12 / 10 );
     maSpriteSizePixel.setY( metric.GetLineHeight() * 11 / 10 );
     mnYOffset = (metric.GetAscent() + (metric.GetLineHeight() / 20));
@@ -444,30 +444,30 @@ void RehearseTimingsActivity::paint( cppcanvas::CanvasSharedPtr const & canvas )
 
     // create the MetaFile:
     GDIMetaFile metaFile;
-    VirtualDevice blackHole;
-    metaFile.Record( &blackHole );
+    ScopedVclPtr<VirtualDevice> blackHole( new VirtualDevice() );
+    metaFile.Record( blackHole );
     metaFile.SetPrefSize( Size( 1, 1 ) );
-    blackHole.EnableOutput(false);
-    blackHole.SetMapMode( MAP_PIXEL );
-    blackHole.SetFont( maFont );
+    blackHole->EnableOutput(false);
+    blackHole->SetMapMode( MAP_PIXEL );
+    blackHole->SetFont( maFont );
     Rectangle rect = Rectangle( 0,0,
                                 maSpriteSizePixel.getX(),
                                 maSpriteSizePixel.getY());
     if (mbDrawPressed)
     {
-        blackHole.SetTextColor( COL_BLACK );
-        blackHole.SetFillColor( COL_LIGHTGRAY );
-        blackHole.SetLineColor( COL_GRAY );
+        blackHole->SetTextColor( COL_BLACK );
+        blackHole->SetFillColor( COL_LIGHTGRAY );
+        blackHole->SetLineColor( COL_GRAY );
     }
     else
     {
-        blackHole.SetTextColor( COL_BLACK );
-        blackHole.SetFillColor( COL_WHITE );
-        blackHole.SetLineColor( COL_GRAY );
+        blackHole->SetTextColor( COL_BLACK );
+        blackHole->SetFillColor( COL_WHITE );
+        blackHole->SetLineColor( COL_GRAY );
     }
-    blackHole.DrawRect( rect );
-    blackHole.GetTextBoundRect( rect, time );
-    blackHole.DrawText(
+    blackHole->DrawRect( rect );
+    blackHole->GetTextBoundRect( rect, time );
+    blackHole->DrawText(
         Point( (maSpriteSizePixel.getX() - rect.getWidth()) / 2,
                mnYOffset ), time );
 

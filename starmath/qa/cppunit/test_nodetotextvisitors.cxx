@@ -519,12 +519,12 @@ void Test::testBinomInBinHor()
     pTree->Prepare(xDocShRef->GetFormat(), *xDocShRef);
 
     SmCursor aCursor(pTree, xDocShRef);
-    VirtualDevice aOutputDevice;
+    ScopedVclPtr<VirtualDevice> pOutputDevice( new VirtualDevice() );
 
     // move forward (more than) enough places to be at the end
     int i;
     for (i = 0; i < 8; ++i)
-        aCursor.Move(&aOutputDevice, MoveRight);
+        aCursor.Move(pOutputDevice, MoveRight);
 
     // tack +d on the end, which will put the binom into an SmBinHorNode
     aCursor.InsertElement(PlusElement);
@@ -547,18 +547,18 @@ void Test::testBinVerInUnary()
     pTree->Prepare(xDocShRef->GetFormat(), *xDocShRef);
 
     SmCursor aCursor(pTree, xDocShRef);
-    VirtualDevice aOutputDevice;
+    ScopedVclPtr<VirtualDevice> pOutputDevice( new VirtualDevice() );
 
     // move forward (more than) enough places to be at the end
     int i;
     for (i = 0; i < 3; ++i)
-        aCursor.Move(&aOutputDevice, MoveRight);
+        aCursor.Move(pOutputDevice, MoveRight);
 
     // select the operand
-    aCursor.Move(&aOutputDevice, MoveLeft, false);
+    aCursor.Move(pOutputDevice, MoveLeft, false);
     // set up a fraction
     aCursor.InsertFraction();
-    aCursor.Move(&aOutputDevice, MoveDown);
+    aCursor.Move(pOutputDevice, MoveDown);
     aCursor.InsertText("2");
 
     sExpected += " - { 1 over 2 } ";
@@ -576,7 +576,7 @@ void Test::testBinHorInSubSup()
     pTree->Prepare(xDocShRef->GetFormat(), *xDocShRef);
 
     SmCursor aCursor(pTree, xDocShRef);
-    VirtualDevice aOutputDevice;
+    ScopedVclPtr<VirtualDevice> pOutputDevice( new VirtualDevice() );
 
     // Insert an RSup expression with a BinHor for the exponent
     aCursor.InsertText("a");
@@ -586,7 +586,7 @@ void Test::testBinHorInSubSup()
     aCursor.InsertText("c");
 
     // Move to the end and add d to the expression
-    aCursor.Move(&aOutputDevice, MoveRight);
+    aCursor.Move(pOutputDevice, MoveRight);
     aCursor.InsertElement(PlusElement);
     aCursor.InsertText("d");
 
@@ -604,30 +604,30 @@ void Test::testUnaryInMixedNumberAsNumerator()
     pTree->Prepare(xDocShRef->GetFormat(), *xDocShRef);
 
     SmCursor aCursor(pTree, xDocShRef);
-    VirtualDevice aOutputDevice;
+    ScopedVclPtr<VirtualDevice> pOutputDevice( new VirtualDevice() );
 
     // move forward (more than) enough places to be at the end
     for (size_t i = 0; i < 3; ++i)
-        aCursor.Move(&aOutputDevice, MoveRight);
+        aCursor.Move(pOutputDevice, MoveRight);
 
     // Select the whole Unary Horizontal Node
-    aCursor.Move(&aOutputDevice, MoveLeft, false);
-    aCursor.Move(&aOutputDevice, MoveLeft, false);
+    aCursor.Move(pOutputDevice, MoveLeft, false);
+    aCursor.Move(pOutputDevice, MoveLeft, false);
 
     // Set up a fraction
     aCursor.InsertFraction();
-    aCursor.Move(&aOutputDevice, MoveDown);
+    aCursor.Move(pOutputDevice, MoveDown);
     aCursor.InsertText("2");
 
     // Move left and turn this into a mixed number
     // (bad form, but this could happen right?)
-    aCursor.Move(&aOutputDevice, MoveLeft);
-    aCursor.Move(&aOutputDevice, MoveLeft);
+    aCursor.Move(pOutputDevice, MoveLeft);
+    aCursor.Move(pOutputDevice, MoveLeft);
     aCursor.InsertText("2");
 
     // move forward (more than) enough places to be at the end
     for (size_t i = 0; i < 8; ++i)
-        aCursor.Move(&aOutputDevice, MoveRight);
+        aCursor.Move(pOutputDevice, MoveRight);
 
     // add 4 to the end
     aCursor.InsertElement(PlusElement);

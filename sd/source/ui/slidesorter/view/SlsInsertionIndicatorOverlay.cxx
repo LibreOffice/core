@@ -134,19 +134,19 @@ void InsertionIndicatorOverlay::Create (
 
     // Create virtual devices for bitmap and mask whose bitmaps later be
     // combined to form the BitmapEx of the icon.
-    VirtualDevice aContent (
+    ScopedVclPtr<VirtualDevice> pContent( new VirtualDevice (
         *mrSlideSorter.GetContentWindow(),
         0,
-        0);
-    aContent.SetOutputSizePixel(aIconSize);
+        0) );
+    pContent->SetOutputSizePixel(aIconSize);
 
-    aContent.SetFillColor();
-    aContent.SetLineColor(pTheme->GetColor(Theme::Color_PreviewBorder));
-    const Point aOffset = PaintRepresentatives(aContent, aPreviewSize, nOffset, rRepresentatives);
+    pContent->SetFillColor();
+    pContent->SetLineColor(pTheme->GetColor(Theme::Color_PreviewBorder));
+    const Point aOffset = PaintRepresentatives(*pContent.get(), aPreviewSize, nOffset, rRepresentatives);
 
-    PaintPageCount(aContent, nSelectionCount, aPreviewSize, aOffset);
+    PaintPageCount(*pContent.get(), nSelectionCount, aPreviewSize, aOffset);
 
-    maIcon = aContent.GetBitmapEx(Point(0,0), aIconSize);
+    maIcon = pContent->GetBitmapEx(Point(0,0), aIconSize);
     maIcon.Scale(aIconSize);
 }
 

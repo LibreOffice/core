@@ -841,7 +841,7 @@ void ScUndoAutoFormat::Redo()
 
     if (bSize)
     {
-        VirtualDevice aVirtDev;
+        ScopedVclPtr<VirtualDevice> pVirtDev( new VirtualDevice() );
         Fraction aZoomX(1,1);
         Fraction aZoomY = aZoomX;
         double nPPTX,nPPTY;
@@ -863,7 +863,7 @@ void ScUndoAutoFormat::Redo()
 
         bool bFormula = false;  // remember
 
-        sc::RowHeightContext aCxt(nPPTX, nPPTY, aZoomX, aZoomY, &aVirtDev);
+        sc::RowHeightContext aCxt(nPPTX, nPPTY, aZoomX, aZoomY, pVirtDev);
         for (SCTAB nTab=nStartZ; nTab<=nEndZ; nTab++)
         {
             ScMarkData aDestMark;
@@ -886,7 +886,7 @@ void ScUndoAutoFormat::Redo()
                 if (!rDoc.ColHidden(nCol, nTab))
                 {
                     sal_uInt16 nThisSize = STD_EXTRA_WIDTH + rDoc.GetOptimalColWidth( nCol, nTab,
-                                                &aVirtDev, nPPTX, nPPTY, aZoomX, aZoomY, bFormula,
+                                                pVirtDev, nPPTX, nPPTY, aZoomX, aZoomY, bFormula,
                                                 &aDestMark );
                     rDoc.SetColWidth( nCol, nTab, nThisSize );
                     rDoc.ShowCol( nCol, nTab, true );

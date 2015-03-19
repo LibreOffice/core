@@ -197,8 +197,8 @@ bool ButtonSetImpl::getPreview( int nSet, const std::vector< OUString >& rButton
 
         std::vector< Graphic > aGraphics;
 
-        VirtualDevice aDev;
-        aDev.SetMapMode(MapMode(MAP_PIXEL));
+        ScopedVclPtr<VirtualDevice> pDev( new VirtualDevice() );
+        pDev->SetMapMode(MapMode(MAP_PIXEL));
 
         Size aSize;
         std::vector< OUString >::const_iterator aIter( rButtons.begin() );
@@ -210,7 +210,7 @@ bool ButtonSetImpl::getPreview( int nSet, const std::vector< OUString >& rButton
 
             aGraphics.push_back(aGraphic);
 
-            Size aGraphicSize( aGraphic.GetSizePixel( &aDev ) );
+            Size aGraphicSize( aGraphic.GetSizePixel( pDev ) );
             aSize.Width() += aGraphicSize.Width();
 
             if( aSize.Height() < aGraphicSize.Height() )
@@ -220,7 +220,7 @@ bool ButtonSetImpl::getPreview( int nSet, const std::vector< OUString >& rButton
                 aSize.Width() += 3;
         }
 
-        aDev.SetOutputSizePixel( aSize );
+        pDev->SetOutputSizePixel( aSize );
 
         Point aPos;
 
@@ -229,12 +229,12 @@ bool ButtonSetImpl::getPreview( int nSet, const std::vector< OUString >& rButton
         {
             Graphic aGraphic( (*aGraphIter++) );
 
-            aGraphic.Draw( &aDev, aPos );
+            aGraphic.Draw( pDev, aPos );
 
             aPos.X() += aGraphic.GetSizePixel().Width() + 3;
         }
 
-        rImage = Image( aDev.GetBitmapEx( Point(), aSize ) );
+        rImage = Image( pDev->GetBitmapEx( Point(), aSize ) );
         return true;
     }
     return false;

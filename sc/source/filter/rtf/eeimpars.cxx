@@ -433,8 +433,8 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
         // Factor is printer to display ratio
         double nPPTX = ScGlobal::nScreenPPTX * (double) aZoom / nOutputFactor;
         double nPPTY = ScGlobal::nScreenPPTY * (double) aZoom;
-        VirtualDevice aVirtDev;
-        sc::RowHeightContext aCxt(nPPTX, nPPTY, aZoom, aZoom, &aVirtDev);
+        ScopedVclPtr<VirtualDevice> pVirtDev( new VirtualDevice() );
+        sc::RowHeightContext aCxt(nPPTX, nPPTY, aZoom, aZoom, pVirtDev);
         aCxt.setExtraHeight(ScGlobal::nLastRowHeightExtra);
         mpDoc->SetOptimalHeight(aCxt, 0, nEndRow, 0);
 
