@@ -22,6 +22,7 @@
 
 #include <sal/config.h>
 #include <boost/shared_ptr.hpp>
+#include <vcl/vclptr.hxx>
 
 typedef struct _cairo_surface cairo_surface_t;
 typedef struct _cairo cairo_t;
@@ -49,7 +50,7 @@ namespace cairo {
         virtual boost::shared_ptr<Surface> getSimilar(int cairo_content_type, int width, int height) const = 0;
 
         /// factory for VirDev on this surface
-        virtual boost::shared_ptr<VirtualDevice> createVirtualDevice() const = 0;
+        virtual VclPtr<VirtualDevice> createVirtualDevice() const = 0;
 
         /// Resize the surface (possibly destroying content), only possible for X11 typically
         /// so on failure caller must create a new surface instead

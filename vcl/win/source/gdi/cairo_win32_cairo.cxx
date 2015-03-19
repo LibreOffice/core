@@ -170,13 +170,13 @@ namespace cairo
      *
      * @return The new virtual device
      **/
-    boost::shared_ptr<VirtualDevice> Win32Surface::createVirtualDevice() const
+    VclPtr<VirtualDevice> Win32Surface::createVirtualDevice() const
     {
         SystemGraphicsData aSystemGraphicsData;
         aSystemGraphicsData.nSize = sizeof(SystemGraphicsData);
         aSystemGraphicsData.hDC = cairo_win32_surface_get_dc( mpSurface.get() );
 
-        return boost::shared_ptr<VirtualDevice>(
+        return VclPtr<VirtualDevice>(
             new VirtualDevice( &aSystemGraphicsData, Size(1, 1), sal::static_int_cast<USHORT>(getDepth()) ));
     }
 

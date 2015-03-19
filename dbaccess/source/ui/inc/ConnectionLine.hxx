@@ -73,7 +73,7 @@ namespace dbaui
     /// draws a connectionline object on outputdevice
     struct TConnectionLineDrawFunctor : ::std::unary_function<OConnectionLine*,void>
     {
-        OutputDevice* pDevice;
+        VclPtr<OutputDevice> pDevice;
         TConnectionLineDrawFunctor(OutputDevice* _pDevice)
         {
             pDevice = _pDevice;

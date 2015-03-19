@@ -83,7 +83,7 @@ namespace cairocanvas
     {
         mpSurface.reset();
         mpCairo.reset();
-        mpVirtualDevice.reset();
+        mpVirtualDevice.disposeAndClear();
         mpDevice = NULL;
         mpSurfaceProvider = NULL;
     }
@@ -105,7 +105,7 @@ namespace cairocanvas
     void CanvasHelper::setSurface( const SurfaceSharedPtr& pSurface, bool bHasAlpha )
     {
         mbHaveAlpha = bHasAlpha;
-        mpVirtualDevice.reset();
+        mpVirtualDevice.disposeAndClear();
         mpSurface = pSurface;
         mpCairo = pSurface->getCairo();
     }

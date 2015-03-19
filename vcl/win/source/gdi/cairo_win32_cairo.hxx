@@ -43,7 +43,7 @@ namespace cairo {
         virtual CairoSurfaceSharedPtr getCairoSurface() const { return mpSurface; }
         virtual SurfaceSharedPtr getSimilar( int aContent, int width, int height ) const;
 
-        virtual boost::shared_ptr<VirtualDevice> createVirtualDevice() const;
+        virtual VclPtr<VirtualDevice> createVirtualDevice() const;
 
         virtual void flush() const;
 

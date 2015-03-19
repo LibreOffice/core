@@ -33,7 +33,7 @@ namespace basctl
 
 class DocShell: public SfxObjectShell
 {
-    boost::scoped_ptr<SfxPrinter> pPrinter;
+    ScopedVclPtr<SfxPrinter> pPrinter;
 
 protected:
     virtual void    Draw( OutputDevice *, const JobSetup & rSetup,
