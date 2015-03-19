@@ -25,7 +25,7 @@
 
 #include <canvas/spriteredrawmanager.hxx>
 
-#include "cairo_cairo.hxx"
+#include <vcl/cairo.hxx>
 #include "cairo_canvashelper.hxx"
 
 namespace basegfx

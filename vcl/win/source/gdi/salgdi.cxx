@@ -36,8 +36,11 @@
 #include "salgdiimpl.hxx"
 #include "gdiimpl.hxx"
 #include "opengl/win/gdiimpl.hxx"
+#include "cairo_win32_cairo.cxx"
 
 #include <vcl/opengl/OpenGLHelper.hxx>
+
+#include <config_cairo_canvas.h>
 
 #define DITHER_PAL_DELTA                51
 #define DITHER_PAL_STEPS                6
@@ -1075,7 +1078,136 @@ SystemGraphicsData WinSalGraphics::GetGraphicsData() const
 
 bool WinSalGraphics::SupportsCairo() const
 {
+#if ENABLE_CAIRO_CANVAS
     return true;
+#else
+    return false;
+#endif
+}
+
+/**
+ * cairo::createSurface:     Create generic Canvas surface using given Cairo Surface
+ *
+ * @param rSurface Cairo Surface
+ *
+ * @return new Surface
+ */
+cairo::SurfaceSharedPtr WinSalGraphics::createSurface(const CairoSurfaceSharedPtr& rSurface) const
+{
+#if ENABLE_CAIRO_CANVAS
+    return cairo::SurfaceSharedPtr(new cairo::Win32Surface(rSurface));
+#else
+    (void)rSurface;
+    return cairo::SurfaceSharedPtr();
+#endif
+}
+
+/**
+ * cairo::createSurface:     Create Canvas surface using given VCL Window or Virtualdevice
+ *
+ * @param rSurface Cairo Surface
+ *
+ *  For VCL Window, use platform native system environment data (struct SystemEnvData in vcl/inc/sysdata.hxx)
+ *  For VCL Virtualdevice, use platform native system graphics data (struct SystemGraphicsData in vcl/inc/sysdata.hxx)
+ *
+ * @return new Surface
+ */
+cairo::SurfaceSharedPtr WinSalGraphics::createSurface( const OutputDevice& rRefDevice,
+                                int x, int y, int /* width */, int /* height */) const
+{
+    cairo::SurfaceSharedPtr surf;
+
+#if ENABLE_CAIRO_CANVAS
+    if( rRefDevice.GetOutDevType() == OUTDEV_WINDOW )
+    {
+        const vcl::Window &rWindow = (const vcl::Window &) rRefDevice;
+        const SystemEnvData* pSysData = GetSysData(&rWindow);
+        if (pSysData && pSysData->hWnd)
+            surf = cairo::SurfaceSharedPtr(new cairo::Win32Surface(GetDC((HWND) pSysData->hWnd), x, y));
+    }
+    else if( rRefDevice.GetOutDevType() == OUTDEV_VIRDEV )
+    {
+        SystemGraphicsData aSysData = ((const VirtualDevice&) rRefDevice).GetSystemGfxData();
+        if (aSysData.hDC)
+            surf = cairo::SurfaceSharedPtr(new cairo::Win32Surface((HDC) aSysData.hDC, x, y));
+    }
+#else
+    (void)x;
+    (void)y;
+#endif
+
+    return surf;
+}
+
+/**
+ * cairo::createBitmapSurface:   Create platform native Canvas surface from BitmapSystemData
+ * @param OutputDevice (not used)
+ * @param rData Platform native image data (struct BitmapSystemData in vcl/inc/bitmap.hxx)
+ * @param rSize width and height of the new surface
+ *
+ * Create a surface based on image data on rData
+ *
+ * @return new surface or empty surface
+ **/
+cairo::SurfaceSharedPtr WinSalGraphics::createBitmapSurface( const OutputDevice&     /* rRefDevice */,
+                                      const BitmapSystemData& rData,
+                                      const Size&             rSize ) const
+{
+    OSL_TRACE( "requested size: %d x %d available size: %d x %d",
+               rSize.Width(), rSize.Height(), rData.mnWidth, rData.mnHeight );
+
+#if ENABLE_CAIRO_CANVAS
+    if ( rData.mnWidth == rSize.Width() && rData.mnHeight == rSize.Height() )
+        return cairo::SurfaceSharedPtr(new cairo::Win32Surface( rData ));
+#else
+    (void)rData;
+    (void)rSize;
+#endif
+    return cairo::SurfaceSharedPtr();
+}
+
+#if ENABLE_CAIRO_CANVAS
+namespace
+{
+    HBITMAP surface2HBitmap( const SurfaceSharedPtr& rSurface, const basegfx::B2ISize& rSize )
+    {
+        // can't seem to retrieve HBITMAP from cairo. copy content then
+        HDC hScreenDC=GetDC(NULL);
+        HBITMAP hBmpBitmap = CreateCompatibleBitmap( hScreenDC,
+                                                     rSize.getX(),
+                                                     rSize.getY() );
+
+        HDC     hBmpDC = CreateCompatibleDC( 0 );
+        HBITMAP hBmpOld = (HBITMAP) SelectObject( hBmpDC, hBmpBitmap );
+
+        BitBlt( hBmpDC, 0, 0, rSize.getX(), rSize.getX(),
+                cairo_win32_surface_get_dc(rSurface->getCairoSurface().get()),
+                0, 0, SRCCOPY );
+
+        SelectObject( hBmpDC, hBmpOld );
+        DeleteDC( hBmpDC );
+
+        return hBmpBitmap;
+    }
+}
+#endif
+
+css::uno::Any WinSalGraphics::GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& rSurface, const ::basegfx::B2ISize& rSize) const
+{
+    // TODO(F2): check whether under all circumstances,
+    // the alpha channel is ignored here.
+    css::uno::Sequence< uno::Any > args( 1 );
+    sal_Int64 nHandle;
+#if ENABLE_CAIRO_CANVAS
+    nHandle = sal_Int64(surface2HBitmap(rSurface, rSize));
+#else
+    (void)rSurface;
+    (void)rSize;
+    nHandle = 0;
+#endif
+    args[1] = css::uno::Any(nHandle);
+    // caller frees the bitmap
+    return css::uno::Any( args );
 }
 
 void WinSalGraphics::BeginPaint()
