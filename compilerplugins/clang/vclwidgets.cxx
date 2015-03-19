@@ -340,48 +340,6 @@ bool VCLWidgets::VisitParmVarDecl(ParmVarDecl const * pvDecl)
     return true;
 }
 
-static void findDisposeAndClearStatements(std::vector<std::string>& aVclPtrFields, const Stmt *pStmt)
-{
-    if (!pStmt)
-        return;
-    if (isa<CompoundStmt>(pStmt)) {
-        const CompoundStmt *pCompoundStatement = dyn_cast<CompoundStmt>(pStmt);
-        for(const Stmt* pStmt : pCompoundStatement->body()) {
-            findDisposeAndClearStatements(aVclPtrFields, pStmt);
-        }
-        return;
-    }
-    if (isa<ForStmt>(pStmt)) {
-        findDisposeAndClearStatements(aVclPtrFields, dyn_cast<ForStmt>(pStmt)->getBody());
-        return;
-    }
-    if (isa<IfStmt>(pStmt)) {
-        findDisposeAndClearStatements(aVclPtrFields, dyn_cast<IfStmt>(pStmt)->getThen());
-        findDisposeAndClearStatements(aVclPtrFields, dyn_cast<IfStmt>(pStmt)->getElse());
-        return;
-    }
-    if (!isa<CallExpr>(pStmt)) return;
-    const CallExpr *pCallExpr = dyn_cast<CallExpr>(pStmt);
-
-    if (!pCallExpr->getDirectCallee()) return;
-    if (!isa<CXXMethodDecl>(pCallExpr->getDirectCallee())) return;
-    const CXXMethodDecl *pCalleeMethodDecl = dyn_cast<CXXMethodDecl>(pCallExpr->getDirectCallee());
-    if (pCalleeMethodDecl->getNameAsString() != "disposeAndClear") return;
-
-    if (!pCallExpr->getCallee()) return;
-
-    if (!isa<MemberExpr>(pCallExpr->getCallee())) return;
-    const MemberExpr *pCalleeMemberExpr = dyn_cast<MemberExpr>(pCallExpr->getCallee());
-
-    if (!pCalleeMemberExpr->getBase()) return;
-    if (!isa<MemberExpr>(pCalleeMemberExpr->getBase())) return;
-    const MemberExpr *pCalleeMemberExprBase = dyn_cast<MemberExpr>(pCalleeMemberExpr->getBase());
-
-    std::string xxx = pCalleeMemberExprBase->getMemberDecl()->getNameAsString();
-    aVclPtrFields.erase(std::remove(aVclPtrFields.begin(), aVclPtrFields.end(), xxx), aVclPtrFields.end());
-}
-
-
 bool VCLWidgets::VisitFunctionDecl( const FunctionDecl* functionDecl )
 {
     if (ignoreLocation(functionDecl)) {
@@ -410,71 +368,7 @@ bool VCLWidgets::VisitFunctionDecl( const FunctionDecl* functionDecl )
            }
         }
     }
-    // check dispose method to make sure we are actually disposing all of the VclPtr fields
-    if (pMethodDecl && pMethodDecl->isInstance() && pMethodDecl->getBody()
-        && pMethodDecl->param_size()==0
-        && pMethodDecl->getNameAsString() == "dispose"
-        && isDerivedFromWindow(pMethodDecl->getParent()) )
-    {
-        // exclude a couple of methods with hard-to-parse code
-        /*
-        if (pMethodDecl->getQualifiedNameAsString() == "SvxRubyDialog::dispose")
-            return true;
-        if (pMethodDecl->getQualifiedNameAsString() == "SvxPersonalizationTabPage::dispose")
-            return true;
-        if (pMethodDecl->getQualifiedNameAsString() == "SelectPersonaDialog::dispose")
-            return true;
-        if (pMethodDecl->getQualifiedNameAsString() == "MappingDialog_Impl::dispose")
-            return true;
-        if (pMethodDecl->getQualifiedNameAsString() == "BibGeneralPage::dispose")
-            return true;
-        if (pMethodDecl->getQualifiedNameAsString() == "SwCreateAuthEntryDlg_Impl::dispose")
-            return true;
-        if (pMethodDecl->getQualifiedNameAsString() == "SwTableColumnPage::dispose")
-            return true;
-        if (pMethodDecl->getQualifiedNameAsString() == "SwAssignFieldsControl::dispose")
-            return true;
-        if (pMethodDecl->getQualifiedNameAsString() == "ScOptSolverDlg::dispose")
-            return true;
-        if (pMethodDecl->getQualifiedNameAsString() == "ScPivotFilterDlg::dispose")
-            return true;
-        if (pMethodDecl->getQualifiedNameAsString() == "SmToolBoxWindow::dispose")
-            return true;
-        if (pMethodDecl->getQualifiedNameAsString() == "dbaui::DlgOrderCrit::dispose")
-            return true;
-        if (pMethodDecl->getQualifiedNameAsString() == "SvxStyleBox_Impl::dispose")
-            return true;
-        if (pMethodDecl->getQualifiedNameAsString() == "dbaui::OAppDetailPageHelper::dispose")
-            return true;
-        if (pMethodDecl->getQualifiedNameAsString() == "sd::CustomAnimationCreateDialog::dispose")
-            return true;
-*/
 
-        if (pMethodDecl->getQualifiedNameAsString() == "VirtualDevice::dispose")
-            return true;
-
-        std::vector<std::string> aVclPtrFields;
-        for(auto fieldDecl : pMethodDecl->getParent()->fields()) {
-            if (startsWith(fieldDecl->getType().getAsString(), "VclPtr")) {
-                aVclPtrFields.push_back(fieldDecl->getNameAsString());
-            }
-        }
-        if (!aVclPtrFields.empty()) {
-            if (pMethodDecl->getBody())
-                findDisposeAndClearStatements( aVclPtrFields, pMethodDecl->getBody() );
-            if (!aVclPtrFields.empty()) {
-                //pMethodDecl->dump();
-                std::string aMessage = "OutputDevice subclass dispose() method does not call disposeAndClear() on the following field(s) ";
-                for(auto s : aVclPtrFields)
-                    aMessage += "\n    " + s + ".clear();";
-                report(
-                    DiagnosticsEngine::Warning,
-                    aMessage,
-                    functionDecl->getLocStart())
-                  << functionDecl->getSourceRange();
-           }
-       }
-    }
     return true;
 }
 
