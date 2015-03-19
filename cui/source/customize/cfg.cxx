@@ -4593,28 +4593,28 @@ void SvxToolbarEntriesListBox::BuildCheckBoxButtonImages( SvLBoxButtonData* pDat
     // in all color modes, like high contrast.
     const AllSettings& rSettings = Application::GetSettings();
 
-    VirtualDevice   aDev;
+    ScopedVclPtr<VirtualDevice> pVDev( new VirtualDevice() );
     Size            aSize( 26, 20 );
 
-    aDev.SetOutputSizePixel( aSize );
+    pVDev->SetOutputSizePixel( aSize );
 
-    Image aImage = GetSizedImage( aDev, aSize,
+    Image aImage = GetSizedImage( *pVDev.get(), aSize,
         CheckBox::GetCheckImage( rSettings, BUTTON_DRAW_DEFAULT ));
 
     // Fill button data struct with new images
     pData->SetImage(SvBmp::UNCHECKED,     aImage);
-    pData->SetImage(SvBmp::CHECKED,       GetSizedImage( aDev, aSize, CheckBox::GetCheckImage( rSettings, BUTTON_DRAW_CHECKED )) );
-    pData->SetImage(SvBmp::HICHECKED,     GetSizedImage( aDev, aSize, CheckBox::GetCheckImage( rSettings, BUTTON_DRAW_CHECKED | BUTTON_DRAW_PRESSED )) );
-    pData->SetImage(SvBmp::HIUNCHECKED,   GetSizedImage( aDev, aSize, CheckBox::GetCheckImage( rSettings, BUTTON_DRAW_DEFAULT | BUTTON_DRAW_PRESSED)) );
-    pData->SetImage(SvBmp::TRISTATE,      GetSizedImage( aDev, aSize, Image() ) ); // Use tristate bitmaps to have no checkbox for separator entries
-    pData->SetImage(SvBmp::HITRISTATE,    GetSizedImage( aDev, aSize, Image() ) );
+    pData->SetImage(SvBmp::CHECKED,       GetSizedImage( *pVDev.get(), aSize, CheckBox::GetCheckImage( rSettings, BUTTON_DRAW_CHECKED )) );
+    pData->SetImage(SvBmp::HICHECKED,     GetSizedImage( *pVDev.get(), aSize, CheckBox::GetCheckImage( rSettings, BUTTON_DRAW_CHECKED | BUTTON_DRAW_PRESSED )) );
+    pData->SetImage(SvBmp::HIUNCHECKED,   GetSizedImage( *pVDev.get(), aSize, CheckBox::GetCheckImage( rSettings, BUTTON_DRAW_DEFAULT | BUTTON_DRAW_PRESSED)) );
+    pData->SetImage(SvBmp::TRISTATE,      GetSizedImage( *pVDev.get(), aSize, Image() ) ); // Use tristate bitmaps to have no checkbox for separator entries
+    pData->SetImage(SvBmp::HITRISTATE,    GetSizedImage( *pVDev.get(), aSize, Image() ) );
 
     // Get image size
     m_aCheckBoxImageSizePixel = aImage.GetSizePixel();
 }
 
 Image SvxToolbarEntriesListBox::GetSizedImage(
-    VirtualDevice& aDev, const Size& aNewSize, const Image& aImage )
+    VirtualDevice& rVDev, const Size& aNewSize, const Image& aImage )
 {
     // Create new checkbox images for treelistbox. They must have a
     // decent width to have a clear column for the visibility checkbox.
@@ -4628,18 +4628,18 @@ Image SvxToolbarEntriesListBox::GetSizedImage(
     sal_uInt16  nPosX = std::max( (sal_uInt16) (((( aNewSize.Width() - 2 ) - aImage.GetSizePixel().Width() ) / 2 ) - 1), (sal_uInt16) 0 );
     sal_uInt16  nPosY = std::max( (sal_uInt16) (((( aNewSize.Height() - 2 ) - aImage.GetSizePixel().Height() ) / 2 ) + 1), (sal_uInt16) 0 );
     Point   aPos( nPosX > 0 ? nPosX : 0, nPosY > 0 ? nPosY : 0 );
-    aDev.SetFillColor( aFillColor );
-    aDev.SetLineColor( aFillColor );
-    aDev.DrawRect( Rectangle( Point(), aNewSize ));
-    aDev.DrawImage( aPos, aImage );
+    rVDev.SetFillColor( aFillColor );
+    rVDev.SetLineColor( aFillColor );
+    rVDev.DrawRect( Rectangle( Point(), aNewSize ));
+    rVDev.DrawImage( aPos, aImage );
 
     // Draw separator line 2 pixels left from the right border
     Color aLineColor = GetDisplayBackground().GetColor().IsDark() ? Color( COL_WHITE ) : Color( COL_BLACK );
-    aDev.SetLineColor( aLineColor );
-    aDev.DrawLine( Point( aNewSize.Width()-3, 0 ), Point( aNewSize.Width()-3, aNewSize.Height()-1 ));
+    rVDev.SetLineColor( aLineColor );
+    rVDev.DrawLine( Point( aNewSize.Width()-3, 0 ), Point( aNewSize.Width()-3, aNewSize.Height()-1 ));
 
     // Create new image that uses the fillcolor as transparent
-    return Image( aDev.GetBitmap( Point(), aNewSize ), aFillColor );
+    return Image( rVDev.GetBitmap( Point(), aNewSize ), aFillColor );
 }
 
 void SvxToolbarEntriesListBox::DataChanged( const DataChangedEvent& rDCEvt )

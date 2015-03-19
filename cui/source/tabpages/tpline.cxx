@@ -1155,8 +1155,8 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
     }
     else if(nSymType >= 0)
     {
-        VirtualDevice aVDev;
-        aVDev.SetMapMode(MapMode(MAP_100TH_MM));
+        ScopedVclPtr<VirtualDevice> pVDev( new VirtualDevice() );
+        pVDev->SetMapMode(MapMode(MAP_100TH_MM));
 
         boost::scoped_ptr<SdrModel> pModel(new SdrModel);
         pModel->GetItemPool().FreezeIdRanges();
@@ -1164,7 +1164,7 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
         pPage->SetSize(Size(1000,1000));
         pModel->InsertPage( pPage, 0 );
         {
-        boost::scoped_ptr<SdrView> pView(new SdrView( pModel.get(), &aVDev ));
+        boost::scoped_ptr<SdrView> pView(new SdrView( pModel.get(), pVDev ));
         pView->hideMarkHandles();
         pView->ShowSdrPage(pPage);
         SdrObject *pObj=NULL;

@@ -625,19 +625,19 @@ int OpenGLRender::RenderRectangleShape(bool bBorder, bool bFill)
 
 int OpenGLRender::CreateTextTexture(::rtl::OUString const &textValue, vcl::Font aFont, long , awt::Point aPos, awt::Size aSize, long rotation)
 {
-    VirtualDevice aDevice(*Application::GetDefaultDevice(), 0, 0);
-    aDevice.Erase();
+    ScopedVclPtr<VirtualDevice> pDevice(new VirtualDevice(*Application::GetDefaultDevice(), 0, 0));
+    pDevice->Erase();
     Rectangle aRect;
-    aDevice.SetFont(aFont);
-    aDevice.GetTextBoundRect(aRect, textValue);
+    pDevice->SetFont(aFont);
+    pDevice->GetTextBoundRect(aRect, textValue);
     int screenWidth = (aRect.BottomRight().X() + 3) & ~3;
     int screenHeight = (aRect.BottomRight().Y() + 3) & ~3;
-    aDevice.SetOutputSizePixel(Size(screenWidth * 3, screenHeight));
-    aDevice.SetBackground(Wallpaper(COL_TRANSPARENT));
-    aDevice.DrawText(Point(0, 0), textValue);
+    pDevice->SetOutputSizePixel(Size(screenWidth * 3, screenHeight));
+    pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
+    pDevice->DrawText(Point(0, 0), textValue);
     int bmpWidth = (aRect.Right() - aRect.Left() + 3) & ~3;
     int bmpHeight = (aRect.Bottom() - aRect.Top() + 3) & ~3;
-    BitmapEx aBitmap = BitmapEx(aDevice.GetBitmapEx(aRect.TopLeft(), Size(bmpWidth, bmpHeight)));
+    BitmapEx aBitmap = BitmapEx(pDevice->GetBitmapEx(aRect.TopLeft(), Size(bmpWidth, bmpHeight)));
 
     sal_Int32 nXPos = aPos.X;
     sal_Int32 nYPos = aPos.Y;

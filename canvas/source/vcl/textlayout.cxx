@@ -104,10 +104,10 @@ namespace vclcanvas
         SolarMutexGuard aGuard;
 
         OutputDevice& rOutDev = mpOutDevProvider->getOutDev();
-        VirtualDevice aVDev( rOutDev );
-        aVDev.SetFont( mpFont->getVCLFont() );
+        ScopedVclPtr<VirtualDevice> pVDev( new VirtualDevice( rOutDev ) );
+        pVDev->SetFont( mpFont->getVCLFont() );
 
-        setupLayoutMode( aVDev, mnTextDirection );
+        setupLayoutMode( *pVDev.get(), mnTextDirection );
 
         const rendering::ViewState aViewState(
             geometry::AffineMatrix2D(1,0,0, 0,1,0),
@@ -124,7 +124,7 @@ namespace vclcanvas
 
         uno::Sequence< uno::Reference< rendering::XPolyPolygon2D> > aOutlineSequence;
         ::basegfx::B2DPolyPolygonVector aOutlines;
-        if (aVDev.GetTextOutlines(
+        if (pVDev->GetTextOutlines(
             aOutlines,
             maText.Text,
             maText.StartPosition,
@@ -157,10 +157,10 @@ namespace vclcanvas
 
 
         OutputDevice& rOutDev = mpOutDevProvider->getOutDev();
-        VirtualDevice aVDev( rOutDev );
-        aVDev.SetFont( mpFont->getVCLFont() );
+        ScopedVclPtr<VirtualDevice> pVDev( new VirtualDevice( rOutDev ) );
+        pVDev->SetFont( mpFont->getVCLFont() );
 
-        setupLayoutMode( aVDev, mnTextDirection );
+        setupLayoutMode( *pVDev.get(), mnTextDirection );
 
         const rendering::ViewState aViewState(
             geometry::AffineMatrix2D(1,0,0, 0,1,0),
@@ -177,7 +177,7 @@ namespace vclcanvas
 
         MetricVector aMetricVector;
         uno::Sequence<geometry::RealRectangle2D> aBoundingBoxes;
-        if (aVDev.GetGlyphBoundRects(
+        if (pVDev->GetGlyphBoundRects(
             Point(0,0),
             maText.Text,
             ::canvas::tools::numeric_cast<sal_uInt16>(maText.StartPosition),
@@ -237,14 +237,14 @@ namespace vclcanvas
 
         OutputDevice& rOutDev = mpOutDevProvider->getOutDev();
 
-        VirtualDevice aVDev( rOutDev );
-        aVDev.SetFont( mpFont->getVCLFont() );
+        ScopedVclPtr<VirtualDevice> pVDev( new VirtualDevice( rOutDev ) );
+        pVDev->SetFont( mpFont->getVCLFont() );
 
         // need metrics for Y offset, the XCanvas always renders
         // relative to baseline
-        const ::FontMetric& aMetric( aVDev.GetFontMetric() );
+        const ::FontMetric& aMetric( pVDev->GetFontMetric() );
 
-        setupLayoutMode( aVDev, mnTextDirection );
+        setupLayoutMode( *pVDev.get(), mnTextDirection );
 
         const sal_Int32 nAboveBaseline( /*-aMetric.GetIntLeading()*/ - aMetric.GetAscent() );
         const sal_Int32 nBelowBaseline( aMetric.GetDescent() );
@@ -258,7 +258,7 @@ namespace vclcanvas
         else
         {
             return geometry::RealRectangle2D( 0, nAboveBaseline,
-                                              aVDev.GetTextWidth(
+                                              pVDev->GetTextWidth(
                                                   maText.Text,
                                                   ::canvas::tools::numeric_cast<sal_uInt16>(maText.StartPosition),
                                                   ::canvas::tools::numeric_cast<sal_uInt16>(maText.Length) ),

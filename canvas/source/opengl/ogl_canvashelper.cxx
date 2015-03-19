@@ -725,8 +725,8 @@ namespace oglcanvas
 
         if( mpDevice )
         {
-            VirtualDevice aVDev;
-            aVDev.EnableOutput(false);
+            ScopedVclPtr<VirtualDevice> pVDev(new VirtualDevice());
+            pVDev->EnableOutput(false);
 
             CanvasFont* pFont=dynamic_cast<CanvasFont*>(xLayoutetText->getFont().get());
             const rendering::StringContext& rTxt=xLayoutetText->getText();
@@ -749,7 +749,7 @@ namespace oglcanvas
                 // adjust to stretched font
                 if(!::rtl::math::approxEqual(rFontMatrix.m00, rFontMatrix.m11))
                 {
-                    const Size aSize = aVDev.GetFontMetric( aFont ).GetSize();
+                    const Size aSize = pVDev->GetFontMetric( aFont ).GetSize();
                     const double fDividend( rFontMatrix.m10 + rFontMatrix.m11 );
                     double fStretch = (rFontMatrix.m00 + rFontMatrix.m01);
 
@@ -762,7 +762,7 @@ namespace oglcanvas
                 }
 
                 // set font
-                aVDev.SetFont(aFont);
+                pVDev->SetFont(aFont);
 
                 mpRecordedActions->push_back( Action() );
                 Action& rAct=mpRecordedActions->back();
@@ -780,7 +780,7 @@ namespace oglcanvas
                         pDXArray[i] = basegfx::fround( aLogicalAdvancements[i] );
 
                     // get the glyphs
-                    aVDev.GetTextOutlines(rAct.maPolyPolys,
+                    pVDev->GetTextOutlines(rAct.maPolyPolys,
                                           rTxt.Text,
                                           0,
                                           rTxt.StartPosition,
@@ -792,7 +792,7 @@ namespace oglcanvas
                 else
                 {
                     // get the glyphs
-                    aVDev.GetTextOutlines(rAct.maPolyPolys,
+                    pVDev->GetTextOutlines(rAct.maPolyPolys,
                                           rTxt.Text,
                                           0,
                                           rTxt.StartPosition,

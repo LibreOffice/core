@@ -76,26 +76,26 @@ const TextCacheItem& TextCache::getText(OUString const & rText, bool bIs3dText)
     if(itr != maTextCache.end())
         return *itr->second;
 
-    VirtualDevice aDevice(*Application::GetDefaultDevice(), 0, 0);
+    ScopedVclPtr<VirtualDevice> pDevice(new VirtualDevice(*Application::GetDefaultDevice(), 0, 0));
     vcl::Font aFont;
     if(bIs3dText)
         aFont = vcl::Font("Brillante St",Size(0,0));
     else
-        aFont = aDevice.GetFont();
+        aFont = pDevice->GetFont();
     aFont.SetSize(Size(0, 96));
     static bool bOldRender = getenv("OLDRENDER");
     if (bOldRender)
         aFont.SetColor(COL_BLACK);
     else
         aFont.SetColor(COL_GREEN); // RGB_COLORDATA(0xf0, 0xf0, 0xf0));
-    aDevice.SetFont(aFont);
-    aDevice.Erase();
+    pDevice->SetFont(aFont);
+    pDevice->Erase();
 
-    aDevice.SetOutputSize(Size(aDevice.GetTextWidth(rText), aDevice.GetTextHeight()));
-    aDevice.SetBackground(Wallpaper(COL_TRANSPARENT));
-    aDevice.DrawText(Point(0,0), rText);
+    pDevice->SetOutputSize(Size(pDevice->GetTextWidth(rText), pDevice->GetTextHeight()));
+    pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
+    pDevice->DrawText(Point(0,0), rText);
 
-    BitmapEx aText(aDevice.GetBitmapEx(Point(0,0), aDevice.GetOutputSize()));
+    BitmapEx aText(pDevice->GetBitmapEx(Point(0,0), pDevice->GetOutputSize()));
 //    TextCacheItem *pItem = new TextCacheItem(OpenGLHelper::ConvertBitmapExToRGBABuffer(aText), aText.GetSizePixel());
     Bitmap aBitmap (aText.GetBitmap());
     BitmapReadAccess *pAcc = aBitmap.AcquireReadAccess();

@@ -1026,8 +1026,8 @@ namespace vclcanvas
                             // cannot do direct XOR, but have to
                             // prepare the filled polygon within a
                             // VDev
-                            VirtualDevice aVDev( rOutDev );
-                            aVDev.SetOutputSizePixel( aPolygonDeviceRect.GetSize() );
+                            ScopedVclPtr<VirtualDevice> pVDev( new VirtualDevice( rOutDev ) );
+                            pVDev->SetOutputSizePixel( aPolygonDeviceRect.GetSize() );
 
                             // shift output to origin of VDev
                             const ::Point aOutPos( aPt - aPolygonDeviceRect.TopLeft() );
@@ -1036,8 +1036,8 @@ namespace vclcanvas
 
                             const vcl::Region aPolyClipRegion( aPolyPoly );
 
-                            aVDev.SetClipRegion( aPolyClipRegion );
-                            textureFill( aVDev,
+                            pVDev->SetClipRegion( aPolyClipRegion );
+                            textureFill( *pVDev.get(),
                                          *pGrfObj,
                                          aOutPos,
                                          aIntegerNextTileX,
@@ -1051,12 +1051,12 @@ namespace vclcanvas
                             // target position.
                             const ::Point aEmptyPoint;
                             Bitmap aContentBmp(
-                                aVDev.GetBitmap( aEmptyPoint,
-                                                 aVDev.GetOutputSizePixel() ) );
+                                pVDev->GetBitmap( aEmptyPoint,
+                                                 pVDev->GetOutputSizePixel() ) );
 
                             sal_uInt8 nCol( static_cast< sal_uInt8 >(
                                            ::basegfx::fround( 255.0*( 1.0 - textures[0].Alpha ) ) ) );
-                            AlphaMask aAlpha( aVDev.GetOutputSizePixel(),
+                            AlphaMask aAlpha( pVDev->GetOutputSizePixel(),
                                               &nCol );
 
                             BitmapEx aOutputBmpEx( aContentBmp, aAlpha );

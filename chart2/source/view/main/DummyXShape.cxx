@@ -836,19 +836,19 @@ DummyText::DummyText(const OUString& rText, const tNameSequence& rNames,
     {
         vcl::Font aFont;
         std::for_each(maProperties.begin(), maProperties.end(), FontAttribSetter(aFont));
-        VirtualDevice aDevice(*Application::GetDefaultDevice(), 0, 0);
-        aDevice.Erase();
+        ScopedVclPtr<VirtualDevice> pDevice(new VirtualDevice(*Application::GetDefaultDevice(), 0, 0));
+        pDevice->Erase();
         Rectangle aRect;
-        aDevice.SetFont(aFont);
-        aDevice.GetTextBoundRect(aRect, rText);
+        pDevice->SetFont(aFont);
+        pDevice->GetTextBoundRect(aRect, rText);
         int screenWidth = (aRect.BottomRight().X());
         int screenHeight = (aRect.BottomRight().Y());
-        aDevice.SetOutputSizePixel(Size(screenWidth * 3, screenHeight));
-        aDevice.SetBackground(Wallpaper(COL_TRANSPARENT));
-        aDevice.DrawText(Point(0, 0), rText);
+        pDevice->SetOutputSizePixel(Size(screenWidth * 3, screenHeight));
+        pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
+        pDevice->DrawText(Point(0, 0), rText);
         bmpWidth = aRect.Right() - aRect.Left();
         bmpHeight = aRect.Bottom() - aRect.Top();
-        maBitmap = BitmapEx(aDevice.GetBitmapEx(aRect.TopLeft(), Size(bmpWidth, bmpHeight)));
+        maBitmap = BitmapEx(pDevice->GetBitmapEx(aRect.TopLeft(), Size(bmpWidth, bmpHeight)));
         rCache.insertBitmap(aKey, maBitmap);
     }
 
