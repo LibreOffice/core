@@ -17,7 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifdef WNT
+#include <config_cairo_canvas.h>
+
+#if ENABLE_CAIRO_CANVAS
 /************************************************************************
  * Win32 surface backend for LibreOffice Cairo Canvas                   *
  ************************************************************************/
@@ -28,8 +30,6 @@
 #include <vcl/sysdata.hxx>
 
 #include "cairo_win32_cairo.hxx"
-
-#ifdef CAIRO_HAS_WIN32_SURFACE
 
 namespace cairo
 {
@@ -130,7 +130,7 @@ namespace cairo
      *
      * @return new surface or NULL
      **/
-    SurfaceSharedPtr Win32Surface::getSimilar( Content aContent, int width, int height ) const
+    SurfaceSharedPtr Win32Surface::getSimilar( int aContent, int width, int height ) const
     {
         return SurfaceSharedPtr(
             new Win32Surface(
@@ -180,79 +180,8 @@ namespace cairo
             new VirtualDevice( &aSystemGraphicsData, Size(1, 1), sal::static_int_cast<USHORT>(getDepth()) ));
     }
 
-
-    /**
-     * cairo::createSurface:     Create generic Canvas surface using given Cairo Surface
-     *
-     * @param rSurface Cairo Surface
-     *
-     * @return new Surface
-     */
-    SurfaceSharedPtr createSurface( const CairoSurfaceSharedPtr& rSurface )
-    {
-        return SurfaceSharedPtr(new Win32Surface(rSurface));
-    }
-
-
-    /**
-     * cairo::createSurface:     Create Canvas surface using given VCL Window or Virtualdevice
-     *
-     * @param rSurface Cairo Surface
-     *
-     *  For VCL Window, use platform native system environment data (struct SystemEnvData in vcl/inc/sysdata.hxx)
-     *  For VCL Virtualdevice, use platform native system graphics data (struct SystemGraphicsData in vcl/inc/sysdata.hxx)
-     *
-     * @return new Surface
-     */
-    SurfaceSharedPtr createSurface( const OutputDevice& rRefDevice,
-                                    int x, int y, int /* width */, int /* height */)
-    {
-        SurfaceSharedPtr surf;
-
-        if( rRefDevice.GetOutDevType() == OUTDEV_WINDOW )
-        {
-            const vcl::Window &rWindow = (const vcl::Window &) rRefDevice;
-            const SystemEnvData* pSysData = GetSysData(&rWindow);
-            if (pSysData && pSysData->hWnd)
-                surf = SurfaceSharedPtr(new Win32Surface(GetDC((HWND) pSysData->hWnd), x, y));
-        }
-        else if( rRefDevice.GetOutDevType() == OUTDEV_VIRDEV )
-        {
-            SystemGraphicsData aSysData = ((const VirtualDevice&) rRefDevice).GetSystemGfxData();
-            if (aSysData.hDC)
-                surf = SurfaceSharedPtr(new Win32Surface((HDC) aSysData.hDC, x, y));
-        }
-        return surf;
-    }
-
-
-    /**
-     * cairo::createBitmapSurface:   Create platform native Canvas surface from BitmapSystemData
-     * @param OutputDevice (not used)
-     * @param rData Platform native image data (struct BitmapSystemData in vcl/inc/bitmap.hxx)
-     * @param rSize width and height of the new surface
-     *
-     * Create a surface based on image data on rData
-     *
-     * @return new surface or empty surface
-     **/
-    SurfaceSharedPtr createBitmapSurface( const OutputDevice&     /* rRefDevice */,
-                                          const BitmapSystemData& rData,
-                                          const Size&             rSize )
-    {
-        OSL_TRACE( "requested size: %d x %d available size: %d x %d",
-                   rSize.Width(), rSize.Height(), rData.mnWidth, rData.mnHeight );
-
-        if ( rData.mnWidth == rSize.Width() && rData.mnHeight == rSize.Height() )
-            return SurfaceSharedPtr(new Win32Surface( rData ));
-        else
-            return SurfaceSharedPtr();
-    }
-
 }  // namespace cairo
 
-#endif   // CAIRO_HAS_WIN32_SURFACE
-
-#endif   // WNT
+#endif   // #ENABLE_CAIRO_CANVAS
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
