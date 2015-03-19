@@ -90,15 +90,14 @@ namespace cairocanvas
         if( !mpRefDevice )
             return; // disposed
 
-        OutputDevice* pOutDev=getOutputDevice();
+        OutputDevice* pOutDev = getOutputDevice();
 
-        if (mpSurface && pOutDev->CanResizeCairoSurface())
-        {
-            // X11 only
-            mpSurface->Resize( rSize.getX() + pOutDev->GetOutOffXPixel(),
-                               rSize.getY() + pOutDev->GetOutOffYPixel() );
-        }
-        else
+        // X11 only
+        bool bReuseSurface = mpSurface &&
+                             mpSurface->Resize(rSize.getX() + pOutDev->GetOutOffXPixel(),
+                                               rSize.getY() + pOutDev->GetOutOffYPixel());
+
+        if (!bReuseSurface)
         {
             mpSurface = cairo::createSurface(
                 *pOutDev,

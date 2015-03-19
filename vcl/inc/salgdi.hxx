@@ -440,7 +440,6 @@ public:
 
     /// Check whether cairo will work
     virtual bool                SupportsCairo() const = 0;
-    virtual bool                CanResizeCairoSurface() const = 0;
 
     virtual SystemFontData      GetSysFontData( int nFallbacklevel ) const = 0;
 
