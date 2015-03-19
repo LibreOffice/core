@@ -43,18 +43,30 @@
  <toolbar:toolbaritem xlink:href=".uno:SpellDialog" toolbar:helpid="20622"/>
  <toolbar:toolbaritem xlink:href=".uno:SpellOnline" toolbar:visible="false" toolbar:helpid="12021"/>
  <toolbar:toolbaritem xlink:href=".uno:ZoomMode"/>
- <toolbar:toolbaritem xlink:href=".uno:ZoomObjects"/>
+ <toolbar:toolbaritem xlink:href=".uno:ZoomObjects" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:ZoomToolBox" toolbar:visible="false" toolbar:helpid="10096"/>
- <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:InsertGraphic"/>
- <toolbar:toolbaritem xlink:href=".uno:InsertObjectChart" toolbar:helpid="10140"/>
- <toolbar:toolbaritem xlink:href=".uno:HyperlinkDialog" toolbar:helpid="5678"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:GridVisible"/>
  <toolbar:toolbaritem xlink:href=".uno:HelplinesMove"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertGraphic"/>
+ <toolbar:toolbaritem xlink:href=".uno:FontworkGalleryFloater"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertTable" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertObjectChart" toolbar:helpid="10140" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:HyperlinkDialog" toolbar:helpid="5678" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Window3D" toolbar:style="auto" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:HelpIndex" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:ExtendedHelp" toolbar:visible="false"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:AdvancedMode" toolbar:style="radio dropdown"/>
+ <toolbar:toolbaritem xlink:href=".uno:Mirror" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:TransformDialog" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:ObjectAlign" toolbar:style="dropdown"/>
+ <toolbar:toolbaritem xlink:href=".uno:ObjectPosition" toolbar:style="dropdown"/>
+ <toolbar:toolbaritem xlink:href=".uno:DistributeSelection" toolbar:visible="false"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:FillShadow" toolbar:helpid="10299"/>
+ <toolbar:toolbaritem xlink:href=".uno:ImageMapDialog" toolbar:visible="false" toolbar:helpid="10371"/>
 </toolbar:toolbar>
