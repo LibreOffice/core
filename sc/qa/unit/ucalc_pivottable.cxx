@@ -2166,7 +2166,8 @@ void Test::testFuncGETPIVOTDATA()
         pDPObj = createDPFromRange(m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false);
     }
 
-    pDPs->InsertNewTable(pDPObj);
+    bSuccess = pDPs->InsertNewTable(pDPObj);
+    CPPUNIT_ASSERT_MESSAGE("InsertNewTable failed", bSuccess);
     aOutRange = refresh(pDPObj);
 
     {
