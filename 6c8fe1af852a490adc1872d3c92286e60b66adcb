@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a29b11f_ae40cb08",
+        "filename": "xmloff/source/style/xmlnumfe.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 672,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-03-19T17:01:09Z",
+      "side": 1,
+      "message": "Which namespace to write (\u0027number\u0027 or \u0027loext\u0027) would depend on which ODF version is selected, ODF1.3 or ODF1.2+, for this we\u0027d need to add a new version to SvtSaveOptions, but I suggest that should be implemented in a follow-up commit.\n\nAs long as we can\u0027t differentiate, we need to write the XML_NAMESPACE_LO_EXT namespace instead of XML_NAMESPACE_NUMBER. Actually if strict ODF1.0/1.1 is selected the attribute can\u0027t be written at all.",
+      "revId": "6c8fe1af852a490adc1872d3c92286e60b66adcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a29b11f_4ebb370f",
+        "filename": "xmloff/source/style/xmlnumfi.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 576,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-03-19T17:01:09Z",
+      "side": 1,
+      "message": "We actually need to support two namespaces here, \u0027number\u0027 (XML_NAMESPACE_NUMBER) and \u0027loext\u0027 (XML_NAMESPACE_LO_EXT), because the new XML_EXPONENT_INTERVAL attribute is valid only as of ODF1.3 (proposed ODF1.2+), not in ODF1.2 or older. Reading both must be supported.",
+      "revId": "6c8fe1af852a490adc1872d3c92286e60b66adcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a29b11f_4ee4973a",
+        "filename": "xmloff/source/style/xmlnumfi.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1810,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-03-19T17:01:09Z",
+      "side": 1,
+      "message": "Why only if bGrouping?",
+      "revId": "6c8fe1af852a490adc1872d3c92286e60b66adcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
