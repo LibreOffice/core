@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a29b11f_4e0017ab",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2303,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-03-19T19:20:14Z",
+      "side": 1,
+      "message": "This crashes (SIGFPE, Arithmetic exception) if rInfo.nCntPre is 0, which can be forced with a number format code of .00E0",
+      "revId": "de44c651fe860345186392d1fd249995c268ed3e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
