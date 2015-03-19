@@ -805,7 +805,7 @@ void SwUndoAttr::UndoImpl(::sw::UndoRedoContext & rContext)
             aPam.GetPoint()->nNode = m_nNodeIndex;
             aPam.GetPoint()->nContent.Assign( aPam.GetCntntNode(), nSttCntnt );
             aPam.SetMark();
-            aPam.GetPoint()->nContent++;
+            ++aPam.GetPoint()->nContent;
             pDoc->getIDocumentRedlineAccess().DeleteRedline(aPam, false, USHRT_MAX);
         }
         else

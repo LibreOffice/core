@@ -180,7 +180,7 @@ sal_uLong SwReader::Read( const Reader& rOptions )
 
         if( !IsError( nError ))     // set the End position already
         {
-            aEndPos--;
+            --aEndPos;
             pCNd = aEndPos.GetNode().GetCntntNode();
             if( !pCNd && 0 == ( pCNd = pDoc->GetNodes().GoPrevious( &aEndPos ) ))
                 pCNd = pDoc->GetNodes().GoNext( &aEndPos );
@@ -207,7 +207,7 @@ sal_uLong SwReader::Read( const Reader& rOptions )
         if( pCrsr )
         {
             *pUndoPam->GetMark() = *pPam->GetPoint();
-            pUndoPam->GetPoint()->nNode++;
+            ++pUndoPam->GetPoint()->nNode;
             SwNode& rNd = pUndoPam->GetNode();
             if( rNd.IsCntntNode() )
                 pUndoPam->GetPoint()->nContent.Assign(

@@ -414,9 +414,9 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
                         aSectData.SetLinkFileName(sFileName);
                         aSectData.SetProtectFlag(true);
 
-                        aEndIdx--;  // in the InsertSection the end is inclusive
+                        --aEndIdx;  // in the InsertSection the end is inclusive
                         while( aEndIdx.GetNode().IsStartNode() )
-                            aEndIdx--;
+                            --aEndIdx;
 
                         // If any Section ends or starts in the new sectionrange,
                         // they must end or start before or after the range!
@@ -431,7 +431,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
                                 bool bMvIdx = aEndIdx == *pSectEnd;
                                 DelSectionFmt( pSectNd->GetSection().GetFmt() );
                                 if( bMvIdx )
-                                    aEndIdx--;
+                                    --aEndIdx;
                             }
                             else
                             {

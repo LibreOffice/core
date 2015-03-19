@@ -210,7 +210,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
             OSL_ENSURE( pPrvNd, "The SectionNode is missing" );
             SwNodeIndex aStt( pSttPos->nNode ), aEnd( pEndPos->nNode, +1 );
             while( pPrvNd != aStt.GetNode().StartOfSectionNode() )
-                aStt--;
+                --aStt;
             while( pPrvNd != aEnd.GetNode().StartOfSectionNode() )
                 ++aEnd;
 
@@ -271,15 +271,15 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
                     SwTxtNode* pTNd;
                     if( pEndPos->nNode.GetIndex() == pSttPos->nNode.GetIndex() )
                     {
-                        pSttPos->nNode--;
-                        pEndPos->nNode--;
+                        --pSttPos->nNode;
+                        --pEndPos->nNode;
                         pTNd = pSttPos->nNode.GetNode().GetTxtNode();
                         pSttPos->nContent.Assign( pTNd, nCntnt );
                     }
                     else
                     {
                         // Set to the end of the previous
-                        pEndPos->nNode--;
+                        --pEndPos->nNode;
                         pTNd = pEndPos->nNode.GetNode().GetTxtNode();
                     }
                     nCntnt = (pTNd) ? pTNd->GetTxt().getLength() : 0;
@@ -416,7 +416,7 @@ sal_uInt16 SwDoc::IsInsRegionAvailable( const SwPaM& rRange,
                     !( aIdx.GetIndex() < nCmp &&
                         nCmp < pPrvNd->EndOfSectionIndex() ) )
                 {
-                    aIdx--;
+                    --aIdx;
                 }
                 if( !pPrvNd )
                     pPrvNd = pNd->IsStartNode() ? static_cast<const SwStartNode*>(pNd)
@@ -462,7 +462,7 @@ sal_uInt16 SwDoc::IsInsRegionAvailable( const SwPaM& rRange,
                         nRet = 2;
                         if( ppSttNd )
                         {
-                            aIdx--;
+                            --aIdx;
                             *ppSttNd = &aIdx.GetNode();
                         }
                     }
@@ -480,7 +480,7 @@ sal_uInt16 SwDoc::IsInsRegionAvailable( const SwPaM& rRange,
                 if( aIdx.GetNode().IsSectionNode() )
                 {
                     do {
-                        aIdx--;
+                        --aIdx;
                     } while( aIdx.GetNode().IsSectionNode() );
                     if( !aIdx.GetNode().IsSectionNode() )
                     {
@@ -802,7 +802,7 @@ SwSectionNode* SwNodes::InsertTextSection(SwNodeIndex const& rNdIdx,
             if (!lcl_IsTOXSection(rSectionData))
             {
                 do {
-                    aInsPos--;
+                    --aInsPos;
                 } while( aInsPos.GetNode().IsSectionNode() );
                 ++aInsPos;
             }

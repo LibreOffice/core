@@ -937,7 +937,7 @@ SwXText::setString(const OUString& rString) throw (uno::RuntimeException, std::e
         SwPosition aStartPos(*pStartNode);
         const SwEndNode* pEnd = pStartNode->EndOfSectionNode();
         SwNodeIndex aEndIdx(*pEnd);
-        aEndIdx--;
+        --aEndIdx;
         //the inserting of nodes should only be done if really necessary
         //to prevent #97924# (removes paragraph attributes when setting the text
         //e.g. of a table cell
@@ -1766,7 +1766,7 @@ SwXText::convertToTextFrame(
                 // In case the frame has a table only, the cursor points to the end of the first cell of the table.
                 SwPaM aPaM(*pFrameCursor->GetPaM()->GetNode().FindSttNodeByType(SwFlyStartNode)->EndOfSectionNode());
                 // Now we have the end of the frame -- the node before that will be the paragraph we want to remove.
-                aPaM.GetPoint()->nNode--;
+                --aPaM.GetPoint()->nNode;
                 m_pImpl->m_pDoc->getIDocumentContentOperations().DelFullPara(aPaM);
             }
         }

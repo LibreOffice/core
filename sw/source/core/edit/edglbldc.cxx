@@ -160,7 +160,7 @@ bool SwEditShell::InsertGlobalDocContent( const SwGlblDocContent& rInsPos,
     {
         bEndUndo = true;
         pMyDoc->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
-        rPos.nNode--;
+        --rPos.nNode;
         pMyDoc->getIDocumentContentOperations().AppendTxtNode( rPos );
         pCrsr->SetMark();
     }
@@ -202,7 +202,7 @@ bool SwEditShell::InsertGlobalDocContent( const SwGlblDocContent& rInsPos,
     {
         bEndUndo = true;
         pMyDoc->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
-        rPos.nNode--;
+        --rPos.nNode;
         pMyDoc->getIDocumentContentOperations().AppendTxtNode( rPos );
     }
 
@@ -278,7 +278,7 @@ bool SwEditShell::DeleteGlobalDocContent( const SwGlblDocContents& rArr ,
                 rPos.nNode = rArr[ nDelPos ]->GetDocPos();
             else
                 rPos.nNode = pMyDoc->GetNodes().GetEndOfContent();
-            rPos.nNode--;
+            --rPos.nNode;
             if( !pMyDoc->getIDocumentContentOperations().DelFullPara( *pCrsr ) )
                 Delete();
         }

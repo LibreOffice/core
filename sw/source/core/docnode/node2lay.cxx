@@ -111,7 +111,7 @@ SwNode* GoPreviousWithFrm(SwNodeIndex *pIdx)
         }
         if ( bFound )
                 break;
-        aTmp--;
+        --aTmp;
     }
 
     if( !aTmp.GetIndex() )

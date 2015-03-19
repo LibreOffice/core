@@ -736,7 +736,7 @@ bool SwPaM::HasReadonlySel( bool bFormView, bool bAnnotationMode ) const
             // the previous character, to also get the fieldmark, if we're
             // exactly at the end.
             SwPosition aPrevChar(*GetPoint());
-            aPrevChar.nContent--;
+            --aPrevChar.nContent;
             pFieldmark = pMarksAccess->getFieldmarkFor(aPrevChar);
             if (pFieldmark && pFieldmark->GetMarkEnd() == *GetPoint())
                 bRet = true;

@@ -298,7 +298,7 @@ sal_uInt16 SwWW8ImplReader::End_Ftn()
     {
         sChar += OUString(pTxt->GetTxt()[--nPos]);
         pPaM->SetMark();
-        pPaM->GetMark()->nContent--;
+        --pPaM->GetMark()->nContent;
         rDoc.getIDocumentContentOperations().DeleteRange( *pPaM );
         pPaM->DeleteMark();
         SwFmtFtn aFtn(rDesc.meType == MAN_EDN);
@@ -351,8 +351,8 @@ sal_uInt16 SwWW8ImplReader::End_Ftn()
                 pPaM->SetMark();
                 // Strip out tabs we may have inserted on export #i24762#
                 if (rTxt.getLength() > 1 && rTxt[1] == 0x09)
-                    pPaM->GetMark()->nContent++;
-                pPaM->GetMark()->nContent++;
+                    ++pPaM->GetMark()->nContent;
+                ++pPaM->GetMark()->nContent;
                 pReffingStck->Delete(*pPaM);
                 rDoc.getIDocumentContentOperations().DeleteRange( *pPaM );
                 pPaM->DeleteMark();

@@ -2658,7 +2658,7 @@ void MSWordExportBase::WriteText()
         if (pNextNode != NULL)
             pCurPam->GetPoint()->nNode = SwNodeIndex(*pNextNode);
         else
-            pCurPam->GetPoint()->nNode++;
+            ++pCurPam->GetPoint()->nNode;
 
         sal_uLong nPos = pCurPam->GetPoint()->nNode.GetIndex();
         ::SetProgressState( nPos, pCurPam->GetDoc()->GetDocShell() );
