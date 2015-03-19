@@ -122,15 +122,6 @@ public class LibreOfficeUIActivity extends Activity implements ActionBar.OnNavig
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
         actionBar.setListNavigationCallbacks(list, this);
 
-        //make striped actionbar
-        BitmapDrawable bg = (BitmapDrawable)getResources().getDrawable(R.drawable.bg_striped);
-        bg.setTileModeXY(Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
-        actionBar.setBackgroundDrawable(bg);
-
-        BitmapDrawable bgSplit = (BitmapDrawable)getResources().getDrawable(R.drawable.bg_striped_split_img);
-        bgSplit.setTileModeXY(Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
-        actionBar.setSplitBackgroundDrawable(bgSplit);
-
         if( viewMode == GRID_VIEW){
             // code to make a grid view
             setContentView(R.layout.file_grid);
