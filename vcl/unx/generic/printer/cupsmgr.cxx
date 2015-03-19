@@ -183,7 +183,8 @@ CUPSManager::CUPSManager() :
         m_nDests( 0 ),
         m_pDests( NULL ),
         m_bNewDests( false ),
-        m_bPPDThreadRunning( false )
+        m_bPPDThreadRunning( false ),
+        batchMode( false )
 {
     m_aDestThread = osl_createThread( run_dest_thread_stub, this );
 }
