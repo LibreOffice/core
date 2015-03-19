@@ -40,7 +40,8 @@
 #include "basegfx/polygon/b2dpolypolygoncutter.hxx"
 #include "basegfx/polygon/b2dtrapezoid.hxx"
 
-#include "vcl/jobdata.hxx"
+#include <vcl/jobdata.hxx>
+#include <vcl/virdev.hxx>
 
 #include "unx/salunx.h"
 #include "unx/saldata.hxx"
@@ -61,6 +62,8 @@
 
 #include "generic/printergfx.hxx"
 #include "xrender_peer.hxx"
+#include "cairo_cairo.hxx"
+#include "cairo_xlib_cairo.hxx"
 
 #include <vcl/opengl/OpenGLHelper.hxx>
 
@@ -454,6 +457,71 @@ bool X11SalGraphics::SupportsCairo() const
     Display *pDisplay = GetXDisplay();
     int nDummy;
     return XQueryExtension(pDisplay, "RENDER", &nDummy, &nDummy, &nDummy);
+}
+
+cairo::SurfaceSharedPtr X11SalGraphics::CreateSurface(const cairo::CairoSurfaceSharedPtr& rSurface) const
+{
+    return cairo::SurfaceSharedPtr(new cairo::X11Surface(rSurface));
+}
+
+namespace
+{
+    static cairo::X11SysData getSysData( const vcl::Window& rWindow )
+    {
+        const SystemEnvData* pSysData = cairo::GetSysData(&rWindow);
+
+        if( !pSysData )
+            return cairo::X11SysData();
+        else
+            return cairo::X11SysData(*pSysData);
+    }
+
+    static cairo::X11SysData getSysData( const VirtualDevice& rVirDev )
+    {
+        return cairo::X11SysData( rVirDev.GetSystemGfxData() );
+    }
+}
+
+cairo::SurfaceSharedPtr X11SalGraphics::CreateSurface( const OutputDevice& rRefDevice,
+                                int x, int y, int width, int height ) const
+{
+    if( rRefDevice.GetOutDevType() == OUTDEV_WINDOW )
+        return cairo::SurfaceSharedPtr(new cairo::X11Surface(getSysData(static_cast<const vcl::Window&>(rRefDevice)),
+                                               x,y,width,height));
+    if( rRefDevice.GetOutDevType() == OUTDEV_VIRDEV )
+        return cairo::SurfaceSharedPtr(new cairo::X11Surface(getSysData(static_cast<const VirtualDevice&>(rRefDevice)),
+                                               x,y,width,height));
+    return cairo::SurfaceSharedPtr();
+}
+
+cairo::SurfaceSharedPtr X11SalGraphics::CreateBitmapSurface( const OutputDevice&     rRefDevice,
+                                      const BitmapSystemData& rData,
+                                      const Size&             rSize ) const
+{
+    SAL_INFO(
+        "canvas.cairo",
+        "requested size: " << rSize.Width() << " x " << rSize.Height()
+            << " available size: " << rData.mnWidth << " x "
+            << rData.mnHeight);
+    if ( rData.mnWidth == rSize.Width() && rData.mnHeight == rSize.Height() )
+    {
+        if( rRefDevice.GetOutDevType() == OUTDEV_WINDOW )
+            return cairo::SurfaceSharedPtr(new cairo::X11Surface(getSysData(static_cast<const vcl::Window&>(rRefDevice)), rData ));
+        else if( rRefDevice.GetOutDevType() == OUTDEV_VIRDEV )
+            return cairo::SurfaceSharedPtr(new cairo::X11Surface(getSysData(static_cast<const VirtualDevice&>(rRefDevice)), rData ));
+    }
+
+    return cairo::SurfaceSharedPtr();
+}
+
+css::uno::Any X11SalGraphics::GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& rSurface) const
+{
+    cairo::X11Surface& rXlibSurface=dynamic_cast<cairo::X11Surface&>(*rSurface.get());
+    css::uno::Sequence< css::uno::Any > args( 3 );
+    args[0] = css::uno::Any( false );  // do not call XFreePixmap on it
+    args[1] = css::uno::Any( rXlibSurface.getPixmap()->mhDrawable );
+    args[2] = css::uno::Any( sal_Int32( rXlibSurface.getDepth() ) );
+    return css::uno::Any(args);
 }
 
 // draw a poly-polygon
