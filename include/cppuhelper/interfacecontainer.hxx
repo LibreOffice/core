@@ -69,7 +69,7 @@ inline ::com::sun::star::uno::Sequence< key > OMultiTypeInterfaceContainerHelper
             if( static_cast<OInterfaceContainerHelper*>((*iter).second)->getLength() )
                 // yes, put the type in the array
                 pArray[i++] = (*iter).first;
-            iter++;
+            ++iter;
         }
         if( i != nSize ) {
             // may be empty container, reduce the sequence to the right size

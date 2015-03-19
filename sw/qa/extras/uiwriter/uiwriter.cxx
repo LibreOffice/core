@@ -337,7 +337,7 @@ void SwUiWriterTest::testFdo74981()
     aIdx = SwNodeIndex(pDoc->GetNodes().GetEndOfContent(), -1);
     pTxtNode = aIdx.GetNode().GetTxtNode();
     CPPUNIT_ASSERT(pTxtNode->HasHints());
-    aIdx--;
+    --aIdx;
     pTxtNode = aIdx.GetNode().GetTxtNode();
     CPPUNIT_ASSERT(!pTxtNode->HasHints());
 }

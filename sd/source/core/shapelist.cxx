@@ -133,7 +133,7 @@ void ShapeList::seekShape( sal_uInt32 nIndex )
 {
     maIter = maShapeList.begin();
     while( nIndex-- && (maIter != maShapeList.end()) )
-        maIter++;
+        ++maIter;
 }
 
 bool ShapeList::hasMore() const

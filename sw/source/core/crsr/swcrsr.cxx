@@ -666,7 +666,7 @@ SetPrevCrsr:
                              nsSwCursorSelOverFlags::SELOVER_CHANGEPOS );
         }
         // at the beginning of a table, so go to next node
-        aCellStt--;
+        --aCellStt;
         if( ( pNd = &aCellStt.GetNode())->IsStartNode() || HasMark() )
         {
             // if only table in FlyFrame or SSelection then stay on old position
@@ -1351,7 +1351,7 @@ bool SwCursor::SelectWordWT( SwViewShell* pViewShell, sal_Int16 nWordType, const
             const SwPosition rStart = pMark->GetMarkStart();
             GetPoint()->nNode = rStart.nNode;
             GetPoint()->nContent = rStart.nContent;
-            GetPoint()->nContent++; // Don't select the start delimiter
+            ++GetPoint()->nContent; // Don't select the start delimiter
 
             const SwPosition rEnd = pMark->GetMarkEnd();
 
@@ -1360,7 +1360,7 @@ bool SwCursor::SelectWordWT( SwViewShell* pViewShell, sal_Int16 nWordType, const
                 SetMark();
                 GetMark()->nNode = rEnd.nNode;
                 GetMark()->nContent = rEnd.nContent;
-                GetMark()->nContent--; //Don't select the end delimiter
+                --GetMark()->nContent; //Don't select the end delimiter
             }
             bRet = true;
         }
@@ -1401,7 +1401,7 @@ bool SwCursor::SelectWordWT( SwViewShell* pViewShell, sal_Int16 nWordType, const
                         bool bEndMatch = GetPoint()->nNode == pAnnotationMark->GetMarkEnd().nNode &&
                             GetPoint()->nContent.GetIndex() + 1 == pAnnotationMark->GetMarkEnd().nContent.GetIndex();
                         if (bStartMatch && bEndMatch)
-                            GetPoint()->nContent++;
+                            ++GetPoint()->nContent;
                     }
                     if( !IsSelOvr() )
                         bRet = true;
@@ -1894,7 +1894,7 @@ bool SwCursor::IsAtLeftRightMargin( bool bLeft, bool bAPI ) const
     {
         SwPaM aPam( *GetPoint() );
         if( !bLeft && aPam.GetPoint()->nContent.GetIndex() )
-            aPam.GetPoint()->nContent--;
+            --aPam.GetPoint()->nContent;
         bRet = (bLeft ? pFrm->LeftMargin( &aPam )
                       : pFrm->RightMargin( &aPam, bAPI ))
                 && *aPam.GetPoint() == *GetPoint();

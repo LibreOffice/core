@@ -127,7 +127,7 @@ bool UnoInterfaceToUniqueIdentifierMapper::findReference( const Reference< XInte
         if( (*rIter).second.get() == xRef.get() )
             return true;
 
-        rIter++;
+        ++rIter;
     }
 
     return false;

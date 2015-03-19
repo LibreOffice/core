@@ -365,7 +365,7 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
     }
     if( pEnd->nContent.GetIndex() == pEnd->nNode.GetNode().GetCntntNode()->Len() )
          // set up a later, and all CharFmtAttr -> TxtFmtAttr
-        aTmpEnd++, bAdd = false;
+        ++aTmpEnd, bAdd = false;
     else if( pStt->nNode != pEnd->nNode || !pStt->nContent.GetIndex() )
     {
         SwTxtNode* pTNd = aTmpEnd.GetNode().GetTxtNode();

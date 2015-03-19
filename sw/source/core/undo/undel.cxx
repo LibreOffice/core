@@ -208,7 +208,7 @@ SwUndoDelete::SwUndoDelete(
         rPam.Exchange();
 
     if( !pSttTxtNd && !pEndTxtNd )
-        rPam.GetPoint()->nNode--;
+        --rPam.GetPoint()->nNode;
     rPam.DeleteMark();          // the SPoint is in the selection
 
     if( !pEndTxtNd )
@@ -227,7 +227,7 @@ SwUndoDelete::SwUndoDelete(
         {
             SwNode* pNode = aRg.aEnd.GetNode().StartOfSectionNode();
             if( pNode->GetIndex() >= nSttNode - nNdDiff )
-                aRg.aEnd++; // Deletion of a complete table
+                ++aRg.aEnd; // Deletion of a complete table
         }
         SwNode* pTmpNd;
         // Step 2: Expand selection if necessary
@@ -239,11 +239,11 @@ SwUndoDelete::SwUndoDelete(
                 ( (pTmpNd = rDocNds[ aRg.aEnd.GetIndex()+1 ])->IsEndNode() &&
                 pTmpNd->StartOfSectionNode()->IsSectionNode() &&
                 pTmpNd->StartOfSectionNode()->GetIndex() >= aRg.aStart.GetIndex() ) )
-                aRg.aEnd++;
+                ++aRg.aEnd;
             nReplaceDummy = aRg.aEnd.GetIndex() + nNdDiff - nEndNode;
             if( nReplaceDummy )
             {   // The selection has been expanded, because
-                aRg.aEnd++;
+                ++aRg.aEnd;
                 if( pEndTxtNd )
                 {
                     // The end text node has to leave the (expanded) selection
@@ -255,7 +255,7 @@ SwUndoDelete::SwUndoDelete(
                     ::sw::UndoGuard const ug(pDoc->GetIDocumentUndoRedo());
                     pDoc->getIDocumentContentOperations().SplitNode( aSplitPos, false );
                     rDocNds._MoveNodes( aMvRg, rDocNds, aRg.aEnd, true );
-                    aRg.aEnd--;
+                    --aRg.aEnd;
                 }
                 else
                     nReplaceDummy = 0;
@@ -268,7 +268,7 @@ SwUndoDelete::SwUndoDelete(
             while( 1 < aRg.aStart.GetIndex() &&
                 ( (pTmpNd = rDocNds[ aRg.aStart.GetIndex()-1 ])->IsSectionNode() &&
                 pTmpNd->EndOfSectionIndex() < aRg.aEnd.GetIndex() ) )
-                aRg.aStart--;
+                --aRg.aStart;
             if( pSttTxtNd )
             {
                 nReplaceDummy = nSttNode - nNdDiff - aRg.aStart.GetIndex();
@@ -279,7 +279,7 @@ SwUndoDelete::SwUndoDelete(
                     ::sw::UndoGuard const ug(pDoc->GetIDocumentUndoRedo());
                     pDoc->getIDocumentContentOperations().SplitNode( aSplitPos, false );
                     rDocNds._MoveNodes( aMvRg, rDocNds, aRg.aStart, true );
-                    aRg.aStart--;
+                    --aRg.aStart;
                 }
             }
         }
@@ -289,13 +289,13 @@ SwUndoDelete::SwUndoDelete(
             if( !pEndTxtNd )
             {
                 if( pSttTxtNd )
-                    aRg.aStart++;
+                    ++aRg.aStart;
                 else if( !bFullPara && !aRg.aEnd.GetNode().IsCntntNode() )
-                    aRg.aEnd--;
+                    --aRg.aEnd;
             }
         }
         else if (pSttTxtNd && (pEndTxtNd || pSttTxtNd->GetTxt().getLength()))
-            aRg.aStart++;
+            ++aRg.aStart;
 
         // Step 3: Moving into UndoArray...
         nNode = rNds.GetEndOfContent().GetIndex();
@@ -760,7 +760,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
             {
                 pInsNd = pDoc->GetNodes().MakeTxtNode( aIdx,
                         (SwTxtFmtColl*)pDoc->GetDfltTxtFmtColl() );
-                aIdx--;
+                --aIdx;
                 aPos.nNode = aIdx;
                 aPos.nContent.Assign( pInsNd->GetCntntNode(), nSttCntnt );
             }
@@ -823,7 +823,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
                         lcl_ReAnchorAtCntntFlyFrames( *pDoc->GetSpzFrmFmts(), aPos, nOldIdx );
                 }
                 else
-                    aPos.nNode++;
+                    ++aPos.nNode;
             }
         }
         SwNode* pMovedNode = NULL;
@@ -843,11 +843,11 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
             }
             SwNodeIndex aMvIdx( pDoc->GetNodes(), nMoveIndex );
             SwNodeRange aRg( aPos.nNode, 0 - nDiff, aPos.nNode, 1 - nDiff );
-            aPos.nNode--;
+            --aPos.nNode;
             if( !bJoinNext )
                 pMovedNode = &aPos.nNode.GetNode();
             pDoc->GetNodes()._MoveNodes( aRg, pDoc->GetNodes(), aMvIdx, true );
-            aPos.nNode++;
+            ++aPos.nNode;
         }
 
         if( bNodeMove )
@@ -1063,7 +1063,7 @@ void SwUndoDelete::RedoImpl(::sw::UndoRedoContext & rContext)
     {
         // The Pam was incremented by one at Point (== end) to provide space
         // for UNDO. This now needs to be reverted!
-        rPam.End()->nNode--;
+        --rPam.End()->nNode;
         if( rPam.GetPoint()->nNode == rPam.GetMark()->nNode )
             *rPam.GetMark() = *rPam.GetPoint();
         rDoc.getIDocumentContentOperations().DelFullPara( rPam );

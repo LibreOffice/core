@@ -1375,7 +1375,7 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                             mapTemp.insert( SwAccessibleContextMap_Impl::value_type( pFrm, xAcc ) );
                         }
                     }
-                    nStartIndex++;
+                    ++nStartIndex;
                 }
             }
         }

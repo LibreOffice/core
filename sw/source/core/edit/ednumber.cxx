@@ -702,7 +702,7 @@ const SwNumRule* SwEditShell::GetNumRuleAtCurrentSelection() const
     {
         const SwNodeIndex aEndNode = rCurrentCrsr.End()->nNode;
 
-        for ( SwNodeIndex aNode = rCurrentCrsr.Start()->nNode; aNode <= aEndNode; aNode++ )
+        for ( SwNodeIndex aNode = rCurrentCrsr.Start()->nNode; aNode <= aEndNode; ++aNode )
         {
             const SwNumRule* pNumRule = GetDoc()->GetNumRuleAtPos( SwPosition( aNode ) );
             if ( pNumRule == NULL )

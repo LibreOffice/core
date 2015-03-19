@@ -1239,12 +1239,12 @@ static void ImplDateIncrementDay( Date& rDate, bool bUp )
     if ( bUp )
     {
         if ( (rDate.GetDay() != 31) || (rDate.GetMonth() != 12) || (rDate.GetYear() != 9999) )
-            rDate++;
+            ++rDate;
     }
     else
     {
         if ( (rDate.GetDay() != 1 ) || (rDate.GetMonth() != 1) || (rDate.GetYear() != 0) )
-            rDate--;
+            --rDate;
     }
 }
 

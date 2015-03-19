@@ -190,7 +190,7 @@ namespace basegfx
                         }
                         else
                         {
-                            aCurrAggregate++;
+                            ++aCurrAggregate;
                         }
                     }
                 }

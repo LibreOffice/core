@@ -300,7 +300,7 @@ OUString SwAutoFormat::GoNextPara()
             return OUString();
         }
 
-        m_aNdIdx++;
+        ++m_aNdIdx;
         if( m_aNdIdx.GetIndex() >= m_aEndNdIdx.GetIndex() )
         {
             m_bEnd = true;
@@ -1000,7 +1000,7 @@ bool SwAutoFormat::HasSelBlanks( SwPaM& rPam ) const
     SwTxtNode* pTxtNd = pPos->nNode.GetNode().GetTxtNode();
     if (nBlnkPos && nBlnkPos-- < pTxtNd->GetTxt().getLength() &&
         (' ' == pTxtNd->GetTxt()[nBlnkPos]))
-        pPos->nContent--;
+        --pPos->nContent;
     else
     {
         pPos = rPam.GetPoint() == pPos ? rPam.GetMark() : rPam.GetPoint();
@@ -1008,7 +1008,7 @@ bool SwAutoFormat::HasSelBlanks( SwPaM& rPam ) const
         pTxtNd = pPos->nNode.GetNode().GetTxtNode();
         if (nBlnkPos < pTxtNd->GetTxt().getLength() &&
             (' ' == pTxtNd->GetTxt()[nBlnkPos]))
-            pPos->nContent++;
+            ++pPos->nContent;
         else
             return false;
     }
@@ -1116,12 +1116,12 @@ bool SwAutoFormat::DeleteCurNxtPara( const OUString& rNxtPara )
                     GetTrailingBlanks( m_pCurTxtNd->GetTxt() ) );
     m_aDelPam.SetMark();
 
-    m_aDelPam.GetPoint()->nNode++;
+    ++m_aDelPam.GetPoint()->nNode;
     SwTxtNode* pTNd = m_aDelPam.GetNode().GetTxtNode();
     if( !pTNd )
     {
         // then delete only up to end of the paragraph
-        m_aDelPam.GetPoint()->nNode--;
+        --m_aDelPam.GetPoint()->nNode;
         m_aDelPam.GetPoint()->nContent = m_pCurTxtNd->GetTxt().getLength();
     }
     else
@@ -1149,7 +1149,7 @@ void SwAutoFormat::DelEmptyLine( bool bTstNextPara )
             m_pCurTxtNd, m_pCurTxtNd->GetTxt().getLength() );
     m_aDelPam.SetMark();
 
-    m_aDelPam.GetMark()->nNode--;
+    --m_aDelPam.GetMark()->nNode;
     SwTxtNode* pTNd = m_aDelPam.GetNode( false ).GetTxtNode();
     if( pTNd )
         // first use the previous text node
@@ -1221,7 +1221,7 @@ void SwAutoFormat::DelPrevPara()
     m_aDelPam.GetPoint()->nContent.Assign( m_pCurTxtNd, 0 );
     m_aDelPam.SetMark();
 
-    m_aDelPam.GetPoint()->nNode--;
+    --m_aDelPam.GetPoint()->nNode;
     SwTxtNode* pTNd = m_aDelPam.GetNode().GetTxtNode();
     if( pTNd )
     {
@@ -1571,7 +1571,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
             if( m_aFlags.bAFmtByInput )
             {
                 m_aDelPam.SetMark();
-                m_aDelPam.GetMark()->nNode++;
+                ++m_aDelPam.GetMark()->nNode;
                 m_aDelPam.GetNode(false).GetTxtNode()->SetAttrListLevel( nLvl );
             }
 
@@ -2097,9 +2097,9 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
     if( pSttNd )
     {
         m_aNdIdx = *pSttNd;
-        m_aNdIdx--;           // for GoNextPara, one paragraph prior to that
+        --m_aNdIdx;           // for GoNextPara, one paragraph prior to that
         m_aEndNdIdx = *pEndNd;
-        m_aEndNdIdx++;
+        ++m_aEndNdIdx;
 
         // check the previous TextNode
         pNxtNd = m_aNdIdx.GetNode().GetTxtNode();
@@ -2167,7 +2167,7 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
                     DelEmptyLine();
                     // Was there really a deletion of a node?
                     if( nOldCnt != m_pDoc->GetNodes().Count() )
-                        m_aNdIdx--;       // do not skip the next paragraph
+                        --m_aNdIdx;       // do not skip the next paragraph
                 }
                 m_eStat = READ_NEXT_PARA;
             }
