@@ -144,10 +144,8 @@ void DrawDocShell::SetPrinter(SfxPrinter *pNewPrinter)
             pView->SdrEndTextEdit();
     }
 
-    if ( mpPrinter && mbOwnPrinter && (mpPrinter != pNewPrinter) )
-    {
+    if ( mpPrinter && mbOwnPrinter && (mpPrinter.get() != pNewPrinter) )
         mpPrinter.disposeAndClear();
-    }
 
     mpPrinter = pNewPrinter;
     mbOwnPrinter = true;
@@ -221,7 +219,7 @@ void DrawDocShell::UpdateRefDevice()
                 // as a fall-back.
                 DBG_ASSERT(false, "DrawDocShell::UpdateRefDevice(): Unexpected printer layout mode");
 
-                pRefDevice = mpPrinter;
+                pRefDevice = mpPrinter.get();
                 break;
         }
         mpDoc->SetRefDevice( pRefDevice.get() );
