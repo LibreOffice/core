@@ -12,7 +12,6 @@ $(eval $(call gb_Library_Library,tdeabdrv1))
 
 $(eval $(call gb_Library_set_include,tdeabdrv1,\
 	-I$(SRCDIR)/connectivity/source/inc \
-	-I$(SRCDIR)/include/shell \
 	$$(INCLUDE) \
 	-I$(WORKDIR)/YaccTarget/connectivity/source/parse \
 ))

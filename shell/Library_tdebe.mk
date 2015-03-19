@@ -9,11 +9,6 @@
 
 $(eval $(call gb_Library_Library,tdebe1))
 
-$(eval $(call gb_Library_set_include,tdebe1,\
-    $$(INCLUDE) \
-    -I$(SRCDIR)/include/shell \
-))
-
 $(eval $(call gb_Library_use_sdk_api,tdebe1))
 
 $(eval $(call gb_Library_use_externals,tdebe1,\

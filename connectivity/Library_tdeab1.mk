@@ -18,7 +18,6 @@ $(eval $(call gb_Library_set_componentfile,tdeab1,connectivity/source/drivers/ka
 
 $(eval $(call gb_Library_set_include,tdeab1,\
 	-I$(SRCDIR)/connectivity/source/inc \
-        -I$(SRCDIR)/include/shell \
 	$$(INCLUDE) \
 ))
 
