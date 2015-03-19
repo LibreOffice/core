@@ -876,11 +876,6 @@ Assembly ^ TypeEmitter::type_resolve(
              MethodAttributes::Virtual |
              MethodAttributes::NewSlot |
              MethodAttributes::HideBySig);
-//#if defined(_MSC_VER) && (_MSC_VER < 1400)
-//             MethodAttributes::Instance);
-//#else
-//       Instance);
-//#endif
 
         if (TypeClass_INTERFACE_METHOD == xMember->getTypeClass())
         {

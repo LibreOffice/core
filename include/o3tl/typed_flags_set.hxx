@@ -58,15 +58,9 @@ struct is_typed_flags {
 
         operator E() { return static_cast<E>(value_); }
 
-#if !defined _MSC_VER || _MSC_VER > 1700
-        explicit
-#endif
-        operator typename underlying_type<E>::type() { return value_; }
+        explicit operator typename underlying_type<E>::type() { return value_; }
 
-#if !defined _MSC_VER || _MSC_VER > 1700
-        explicit
-#endif
-        operator bool() { return value_ != 0; }
+        explicit operator bool() { return value_ != 0; }
 
     private:
         typename underlying_type<E>::type value_;

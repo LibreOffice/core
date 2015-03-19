@@ -19,7 +19,7 @@
 #ifndef INCLUDED_PYUNO_SOURCE_MODULE_PYUNO_IMPL_HXX
 #define INCLUDED_PYUNO_SOURCE_MODULE_PYUNO_IMPL_HXX
 
-#if defined(_MSC_VER) && (_MSC_VER >= 1600)
+#if defined(_MSC_VER)
 // Workaround for some horrible hypot() mess
 #include <math.h>
 #endif

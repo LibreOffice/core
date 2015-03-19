@@ -74,27 +74,18 @@ template< typename T > inline StreamIgnore operator <<(
     SAL_UNUSED_PARAMETER StreamStart const &, SAL_UNUSED_PARAMETER T const &)
 {
     std::abort();
-#if defined _MSC_VER && _MSC_VER < 1700
-    return StreamIgnore();
-#endif
 }
 
 template< typename T > inline StreamIgnore operator <<(
     SAL_UNUSED_PARAMETER StreamString const &, SAL_UNUSED_PARAMETER T const &)
 {
     std::abort();
-#if defined _MSC_VER && _MSC_VER < 1700
-    return StreamIgnore();
-#endif
 }
 
 template< typename T > inline StreamIgnore operator <<(
     SAL_UNUSED_PARAMETER StreamIgnore const &, SAL_UNUSED_PARAMETER T const &)
 {
     std::abort();
-#if defined _MSC_VER && _MSC_VER < 1700
-    return StreamIgnore();
-#endif
 }
 
 template< typename T > typename T::Result getResult(T const &);
@@ -103,9 +94,6 @@ inline char const * unwrapStream(StreamString const & s) { return s.string; }
 
 inline char const * unwrapStream(SAL_UNUSED_PARAMETER StreamIgnore const &) {
     std::abort();
-#if defined _MSC_VER && _MSC_VER < 1700
-    return 0;
-#endif
 }
 
 } }
