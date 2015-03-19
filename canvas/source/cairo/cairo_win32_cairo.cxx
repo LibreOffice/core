@@ -139,20 +139,6 @@ namespace cairo
                     &cairo_surface_destroy )));
     }
 
-    /**
-     * Surface::Resize:  Resizes the Canvas surface.
-     * @param width new width of the surface
-     * @param height new height of the surface
-     *
-     * Only used on X11.
-     *
-     * @return The new surface or NULL
-     **/
-    void Win32Surface::Resize( int /*width*/, int /*height*/ )
-    {
-        OSL_FAIL("not supposed to be called!");
-    }
-
     void Win32Surface::flush() const
     {
         GdiFlush();

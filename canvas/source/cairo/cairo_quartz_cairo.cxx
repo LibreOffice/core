@@ -163,21 +163,6 @@ namespace cairo
     }
 
     /**
-     * QuartzSurface::Resize:  Resizes the Canvas surface.
-     * @param width new width of the surface
-     * @param height new height of the surface
-     *
-     * Only used on X11.
-     *
-     * @return The new surface or NULL
-     **/
-    void QuartzSurface::Resize( int /* width */, int /* height */ )
-    {
-        OSL_FAIL("not supposed to be called!");
-    }
-
-
-    /**
      * QuartzSurface::flush:  Draw the data to screen
      **/
     void QuartzSurface::flush() const

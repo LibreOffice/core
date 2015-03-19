@@ -45,8 +45,6 @@ namespace cairo {
 
         virtual boost::shared_ptr<VirtualDevice> createVirtualDevice() const;
 
-        virtual void Resize( int width, int height );
-
         virtual void flush() const;
 
         int getDepth() const;

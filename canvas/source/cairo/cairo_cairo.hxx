@@ -63,8 +63,9 @@ namespace cairo {
         /// factory for VirDev on this surface
         virtual boost::shared_ptr<VirtualDevice> createVirtualDevice() const = 0;
 
-        /// Resize the surface (possibly destroying content)
-        virtual void Resize( int width, int height ) = 0;
+        /// Resize the surface (possibly destroying content), only possible for X11 typically
+        /// so on failure create a new surface instead
+        virtual bool Resize( int /*width*/, int /*height*/ ) { return false; }
 
         /// Flush all pending output to surface
         virtual void flush() const = 0;
