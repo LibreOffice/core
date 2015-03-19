@@ -97,7 +97,7 @@ const SfxFilter* impl_lookupExportFilterForUrl( const rtl::OUString& rUrl, const
     sQuery.append(":iflags=");
     sQuery.append(OUString::number(static_cast<sal_Int32>(SfxFilterFlags::EXPORT)));
     sQuery.append(":eflags=");
-    sQuery.append(OUString::number(static_cast<sal_Int32>(SFX_FILTER_NOTINSTALLED)));
+    sQuery.append(OUString::number(static_cast<int>(SFX_FILTER_NOTINSTALLED)));
 
     const Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
     const Reference< XContainerQuery > xFilterFactory(
