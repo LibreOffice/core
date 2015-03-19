@@ -312,7 +312,8 @@ static void lcl_ChangeFtnRef( SwTxtNode &rNode )
             {
                 if( !pFrm )
                 {
-                    if(!SwIterator<SwCntntFrm,SwTxtNode>( rNode ).First())
+                    pFrm = SwIterator<SwCntntFrm,SwTxtNode>(rNode).First();
+                    if (!pFrm)
                         return;
                 }
                 SwTxtFtn *pAttr = static_cast<SwTxtFtn*>(pHt);
