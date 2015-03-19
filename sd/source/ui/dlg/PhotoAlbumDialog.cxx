@@ -659,6 +659,44 @@ awt::Size SdPhotoAlbumDialog::createASRSize(const awt::Size& aPicSize, const awt
     return awt::Size(resizeWidth, resizeHeight);
 }
 
+awt::Size SdPhotoAlbumDialog::createCropSize(const awt::Size& aPicSize, const awt::Size& aMaxSize)
+{
+    double resizeWidth = aPicSize.Width;
+    double resizeHeight = aPicSize.Height;
+    double resizeAspect = resizeWidth/resizeHeight;
+    double aMaxAspect = static_cast<double>(aMaxSize.Width)/static_cast<double>(aMaxSize.Height);
+
+    if( resizeWidth < aMaxSize.Width )
+    {
+        resizeWidth = aMaxSize.Width;
+        resizeHeight = resizeWidth / resizeAspect;
+    }
+
+    if( resizeHeight < aMaxSize.Height )
+    {
+        resizeHeight = aMaxSize.Height;
+        resizeWidth = resizeHeight * resizeAspect;
+    }
+
+    if( resizeWidth > aMaxSize.Width && resizeHeight > aMaxSize.Height)
+    {
+
+        if( aMaxAspect > resizeAspect )
+        {
+            resizeWidth = aMaxSize.Width;
+            resizeHeight = resizeWidth / resizeAspect;
+        }
+
+        else
+        {
+            resizeHeight = aMaxSize.Height;
+            resizeWidth = resizeHeight * resizeAspect;
+        }
+    }
+
+    return awt::Size(resizeWidth, resizeHeight);
+}
+
 void SdPhotoAlbumDialog::createCaption(const awt::Size& aPageSize )
 {
     Point CapPos;
