@@ -277,15 +277,15 @@ void SvxColorDockingWindow::FillValueSet()
         const Size aColorSize(aColorSet->getEntryEdgeLength(), aColorSet->getEntryEdgeLength());
         long nPtX = aColorSize.Width() - 1;
         long nPtY = aColorSize.Height() - 1;
-        VirtualDevice aVD;
+        ScopedVclPtr<VirtualDevice> pVD(new VirtualDevice());
 
-        aVD.SetOutputSizePixel( aColorSize );
-        aVD.SetLineColor( Color( COL_BLACK ) );
-        aVD.SetBackground( Wallpaper( Color( COL_WHITE ) ) );
-        aVD.DrawLine( Point(), Point( nPtX, nPtY ) );
-        aVD.DrawLine( Point( 0, nPtY ), Point( nPtX, 0 ) );
+        pVD->SetOutputSizePixel( aColorSize );
+        pVD->SetLineColor( Color( COL_BLACK ) );
+        pVD->SetBackground( Wallpaper( Color( COL_WHITE ) ) );
+        pVD->DrawLine( Point(), Point( nPtX, nPtY ) );
+        pVD->DrawLine( Point( 0, nPtY ), Point( nPtX, 0 ) );
 
-        Bitmap aBmp( aVD.GetBitmap( Point(), aColorSize ) );
+        Bitmap aBmp( pVD->GetBitmap( Point(), aColorSize ) );
 
         aColorSet->InsertItem( (sal_uInt16)1, Image(aBmp), SVX_RESSTR( RID_SVXSTR_INVISIBLE ) );
 

@@ -165,9 +165,9 @@ void CalculateHorizontalScalingFactor( const SdrObject* pCustomShape,
     aFont.SetOrientation( 0 );
     // initializing virtual device
 
-    VirtualDevice aVirDev( 1 );
-    aVirDev.SetMapMode( MAP_100TH_MM );
-    aVirDev.SetFont( aFont );
+    ScopedVclPtr<VirtualDevice> pVirDev( new VirtualDevice( 1 ) );
+    pVirDev->SetMapMode( MAP_100TH_MM );
+    pVirDev->SetFont( aFont );
 
     if ( nOutlinesCount2d & 1 )
         bSingleLineMode = true;
@@ -187,7 +187,7 @@ void CalculateHorizontalScalingFactor( const SdrObject* pCustomShape,
         std::vector< FWParagraphData >::const_iterator aParagraphIEnd( aTextAreaIter->vParagraphs.end() );
         while( aParagraphIter != aParagraphIEnd )
         {
-            double fTextWidth = aVirDev.GetTextWidth( aParagraphIter->aString );
+            double fTextWidth = pVirDev->GetTextWidth( aParagraphIter->aString );
             if ( fTextWidth > 0.0 )
             {
                 double fScale = fWidth / fTextWidth;
@@ -259,12 +259,12 @@ void GetTextAreaOutline( const FWData& rFWData, const SdrObject* pCustomShape, F
             aFont.SetWeight( rWeightItem.GetWeight() );
 
             // initializing virtual device
-            VirtualDevice aVirDev( 1 );
-            aVirDev.SetMapMode( MAP_100TH_MM );
-            aVirDev.SetFont( aFont );
-            aVirDev.EnableRTL( true );
+            ScopedVclPtr<VirtualDevice> pVirDev( new VirtualDevice( 1 ) );
+            pVirDev->SetMapMode( MAP_100TH_MM );
+            pVirDev->SetFont( aFont );
+            pVirDev->EnableRTL( true );
             if ( aParagraphIter->nFrameDirection == FRMDIR_HORI_RIGHT_TOP )
-                aVirDev.SetLayoutMode( TEXT_LAYOUT_BIDI_RTL );
+                pVirDev->SetLayoutMode( TEXT_LAYOUT_BIDI_RTL );
 
             const SvxCharScaleWidthItem& rCharScaleWidthItem = static_cast<const SvxCharScaleWidthItem&>(pCustomShape->GetMergedItem( EE_CHAR_FONTWIDTH ));
             sal_uInt16 nCharScaleWidth = rCharScaleWidthItem.GetValue();
@@ -282,9 +282,9 @@ void GetTextAreaOutline( const FWData& rFWData, const SdrObject* pCustomShape, F
                 {
                     FWCharacterData aCharacterData;
                     OUString aCharText( (sal_Unicode)rText[ i ] );
-                    if ( aVirDev.GetTextOutlines( aCharacterData.vOutlines, aCharText, 0, 0, -1, true, nWidth, pDXArry ) )
+                    if ( pVirDev->GetTextOutlines( aCharacterData.vOutlines, aCharText, 0, 0, -1, true, nWidth, pDXArry ) )
                     {
-                        sal_Int32 nTextWidth = aVirDev.GetTextWidth( aCharText);
+                        sal_Int32 nTextWidth = pVirDev->GetTextWidth( aCharText);
                         std::vector< tools::PolyPolygon >::iterator aOutlineIter = aCharacterData.vOutlines.begin();
                         std::vector< tools::PolyPolygon >::iterator aOutlineIEnd = aCharacterData.vOutlines.end();
                         if ( aOutlineIter == aOutlineIEnd )
@@ -334,13 +334,13 @@ void GetTextAreaOutline( const FWData& rFWData, const SdrObject* pCustomShape, F
                 if ( ( nCharScaleWidth != 100 ) && nCharScaleWidth )
                 {   // applying character spacing
                     pDXArry = new long[ rText.getLength() ];
-                    aVirDev.GetTextArray( rText, pDXArry);
-                    FontMetric aFontMetric( aVirDev.GetFontMetric() );
+                    pVirDev->GetTextArray( rText, pDXArry);
+                    FontMetric aFontMetric( pVirDev->GetFontMetric() );
                     aFont.SetWidth( (sal_Int32)( (double)aFontMetric.GetWidth() * ( (double)100 / (double)nCharScaleWidth ) ) );
-                    aVirDev.SetFont( aFont );
+                    pVirDev->SetFont( aFont );
                 }
                 FWCharacterData aCharacterData;
-                if ( aVirDev.GetTextOutlines( aCharacterData.vOutlines, rText, 0, 0, -1, true, nWidth, pDXArry ) )
+                if ( pVirDev->GetTextOutlines( aCharacterData.vOutlines, rText, 0, 0, -1, true, nWidth, pDXArry ) )
                 {
                     aParagraphIter->vCharacters.push_back( aCharacterData );
                 }

@@ -124,7 +124,7 @@ void FontWorkGalleryDialog::initFavorites(sal_uInt16 nThemeId)
 
         if (GalleryExplorer::GetSdrObj(nThemeId, nModelPos, pModel, &aThumb) && !!aThumb)
         {
-            VirtualDevice aVDev;
+            ScopedVclPtr<VirtualDevice> pVDev(new VirtualDevice());
             const Point aNull(0, 0);
 
             if (GetDPIScaleFactor() > 1)
@@ -132,7 +132,7 @@ void FontWorkGalleryDialog::initFavorites(sal_uInt16 nThemeId)
 
             const Size aSize(aThumb.GetSizePixel());
 
-            aVDev.SetOutputSizePixel(aSize);
+            pVDev->SetOutputSizePixel(aSize);
 
             if(rStyleSettings.GetPreviewUsesCheckeredBackground())
             {
@@ -140,16 +140,16 @@ void FontWorkGalleryDialog::initFavorites(sal_uInt16 nThemeId)
                 static const Color aW(COL_WHITE);
                 static const Color aG(0xef, 0xef, 0xef);
 
-                aVDev.DrawCheckered(aNull, aSize, nLen, aW, aG);
+                pVDev->DrawCheckered(aNull, aSize, nLen, aW, aG);
             }
             else
             {
-                aVDev.SetBackground(rStyleSettings.GetFieldColor());
-                aVDev.Erase();
+                pVDev->SetBackground(rStyleSettings.GetFieldColor());
+                pVDev->Erase();
             }
 
-            aVDev.DrawBitmapEx(aNull, aThumb);
-            maFavoritesHorizontal.push_back(aVDev.GetBitmap(aNull, aSize));
+            pVDev->DrawBitmapEx(aNull, aThumb);
+            maFavoritesHorizontal.push_back(pVDev->GetBitmap(aNull, aSize));
         }
     }
 

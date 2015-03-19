@@ -484,8 +484,8 @@ bool SgaObjectSvDraw::CreateThumb( const FmFormModel& rModel )
 
             if(aObjRect.GetWidth() && aObjRect.GetHeight())
             {
-                VirtualDevice aVDev;
-                FmFormView aView(const_cast< FmFormModel* >(&rModel), &aVDev);
+                ScopedVclPtr<VirtualDevice> pVDev( new VirtualDevice() );
+                FmFormView aView(const_cast< FmFormModel* >(&rModel), pVDev);
 
                 aView.ShowSdrPage(const_cast< FmFormPage* >(pPage));
                 aView.MarkAllObj();

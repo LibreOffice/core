@@ -553,16 +553,16 @@ GDIMetaFile SdrExchangeView::GetMarkedObjMetaFile(bool bNoVDevIfOneMtfMarked) co
 
         if( !aMtf.GetActionSize() )
         {
-            VirtualDevice aOut;
+            ScopedVclPtr<VirtualDevice> pOut(new VirtualDevice());
             const Size aDummySize(2, 2);
 
-            aOut.SetOutputSizePixel(aDummySize);
-            aOut.EnableOutput(false);
-            aOut.SetMapMode(aMap);
+            pOut->SetOutputSizePixel(aDummySize);
+            pOut->EnableOutput(false);
+            pOut->SetMapMode(aMap);
             aMtf.Clear();
-            aMtf.Record(&aOut);
+            aMtf.Record(pOut);
 
-            DrawMarkedObj(aOut);
+            DrawMarkedObj(*pOut.get());
 
             aMtf.Stop();
             aMtf.WindStart();
@@ -640,7 +640,7 @@ Graphic SdrExchangeView::GetObjGraphic( const SdrModel* pModel, const SdrObject*
         // if graphic could not be retrieved => go the hard way and create a MetaFile
         if( ( GRAPHIC_NONE == aRet.GetType() ) || ( GRAPHIC_DEFAULT == aRet.GetType() ) )
         {
-            VirtualDevice   aOut;
+            ScopedVclPtr<VirtualDevice> pOut(new VirtualDevice());
             GDIMetaFile     aMtf;
             const Rectangle aBoundRect( pObj->GetCurrentBoundRect() );
             const MapMode   aMap( pModel->GetScaleUnit(),
@@ -648,10 +648,10 @@ Graphic SdrExchangeView::GetObjGraphic( const SdrModel* pModel, const SdrObject*
                                   pModel->GetScaleFraction(),
                                   pModel->GetScaleFraction() );
 
-            aOut.EnableOutput( false );
-            aOut.SetMapMode( aMap );
-            aMtf.Record( &aOut );
-            pObj->SingleObjectPainter( aOut );
+            pOut->EnableOutput( false );
+            pOut->SetMapMode( aMap );
+            aMtf.Record( pOut );
+            pObj->SingleObjectPainter( *pOut.get() );
             aMtf.Stop();
             aMtf.WindStart();
 

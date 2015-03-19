@@ -401,7 +401,7 @@ void SvxLineEndWindow::FillValueSet()
     if( pLineEndList.is() )
     {
         XLineEndEntry*      pEntry  = NULL;
-        VirtualDevice       aVD;
+        ScopedVclPtr<VirtualDevice> pVD(new VirtualDevice());
 
         long nCount = pLineEndList->Count();
 
@@ -414,14 +414,14 @@ void SvxLineEndWindow::FillValueSet()
         OSL_ENSURE( !aBmp.IsEmpty(), "UI bitmap was not created" );
 
         aBmpSize = aBmp.GetSizePixel();
-        aVD.SetOutputSizePixel( aBmpSize, false );
+        pVD->SetOutputSizePixel( aBmpSize, false );
         aBmpSize.Width() = aBmpSize.Width() / 2;
         Point aPt0( 0, 0 );
         Point aPt1( aBmpSize.Width(), 0 );
 
-        aVD.DrawBitmap( Point(), aBmp );
-        aLineEndSet->InsertItem(1, Image(aVD.GetBitmap(aPt0, aBmpSize)), pEntry->GetName());
-        aLineEndSet->InsertItem(2, Image(aVD.GetBitmap(aPt1, aBmpSize)), pEntry->GetName());
+        pVD->DrawBitmap( Point(), aBmp );
+        aLineEndSet->InsertItem(1, Image(pVD->GetBitmap(aPt0, aBmpSize)), pEntry->GetName());
+        aLineEndSet->InsertItem(2, Image(pVD->GetBitmap(aPt1, aBmpSize)), pEntry->GetName());
 
         delete pLineEndList->Remove( nCount );
 
@@ -432,11 +432,11 @@ void SvxLineEndWindow::FillValueSet()
             aBmp = pLineEndList->GetUiBitmap( i );
             OSL_ENSURE( !aBmp.IsEmpty(), "UI bitmap was not created" );
 
-            aVD.DrawBitmap( aPt0, aBmp );
+            pVD->DrawBitmap( aPt0, aBmp );
             aLineEndSet->InsertItem((sal_uInt16)((i+1L)*2L+1L),
-                    Image(aVD.GetBitmap(aPt0, aBmpSize)), pEntry->GetName());
+                    Image(pVD->GetBitmap(aPt0, aBmpSize)), pEntry->GetName());
             aLineEndSet->InsertItem((sal_uInt16)((i+2L)*2L),
-                    Image(aVD.GetBitmap(aPt1, aBmpSize)), pEntry->GetName());
+                    Image(pVD->GetBitmap(aPt1, aBmpSize)), pEntry->GetName());
         }
         nLines = std::min( (sal_uInt16)(nCount + 1), (sal_uInt16) MAX_LINES );
         aLineEndSet->SetLineCount( nLines );

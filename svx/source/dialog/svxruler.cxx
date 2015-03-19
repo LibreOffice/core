@@ -3457,23 +3457,23 @@ void SvxRuler::Command( const CommandEvent& rCommandEvent )
         {
             PopupMenu aMenu;
             aMenu.SetSelectHdl(LINK(this, SvxRuler, TabMenuSelect));
-            VirtualDevice aDev;
+            ScopedVclPtrInstance<VirtualDevice()
             const Size aSz(ruler_tab_svx.width + 2, ruler_tab_svx.height + 2);
-            aDev.SetOutputSize(aSz);
-            aDev.SetBackground(Wallpaper(Color(COL_WHITE)));
-            Color aFillColor(aDev.GetSettings().GetStyleSettings().GetShadowColor());
+            pDev->SetOutputSize(aSz);
+            pDev->SetBackground(Wallpaper(Color(COL_WHITE)));
+            Color aFillColor(pDev->GetSettings().GetStyleSettings().GetShadowColor());
             const Point aPt(aSz.Width() / 2, aSz.Height() / 2);
 
             for ( sal_uInt16 i = RULER_TAB_LEFT; i < RULER_TAB_DEFAULT; ++i )
             {
                 sal_uInt16 nStyle = bRTL ? i|RULER_TAB_RTL : i;
                 nStyle |= static_cast<sal_uInt16>(bHorz ? WB_HORZ : WB_VERT);
-                DrawTab(&aDev, aFillColor, aPt, nStyle);
+                DrawTab(pDev, aFillColor, aPt, nStyle);
                 aMenu.InsertItem(i + 1,
                                  ResId(RID_SVXSTR_RULER_START + i, DIALOG_MGR()).toString(),
-                                 Image(aDev.GetBitmap(Point(), aSz), Color(COL_WHITE)));
+                                 Image(pDev->GetBitmap(Point(), aSz), Color(COL_WHITE)));
                 aMenu.CheckItem(i + 1, i == mpTabs[mxRulerImpl->nIdx + TAB_GAP].nStyle);
-                aDev.SetOutputSize(aSz); // delete device
+                pDev->SetOutputSize(aSz); // delete device
             }
             aMenu.Execute( this, rCommandEvent.GetMousePosPixel() );
         }

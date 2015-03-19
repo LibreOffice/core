@@ -1558,12 +1558,12 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaFloatTransparentAction& rAct)
         else
         {
             // gradient transparence
-            VirtualDevice aVDev;
+            ScopedVclPtr<VirtualDevice> pVDev( new VirtualDevice() );
 
-            aVDev.SetOutputSizePixel(aBitmapEx.GetBitmap().GetSizePixel());
-            aVDev.DrawGradient(Rectangle(Point(0, 0), aVDev.GetOutputSizePixel()), rGradient);
+            pVDev->SetOutputSizePixel(aBitmapEx.GetBitmap().GetSizePixel());
+            pVDev->DrawGradient(Rectangle(Point(0, 0), pVDev->GetOutputSizePixel()), rGradient);
 
-            aNewMask = AlphaMask(aVDev.GetBitmap(Point(0, 0), aVDev.GetOutputSizePixel()));
+            aNewMask = AlphaMask(pVDev->GetBitmap(Point(0, 0), pVDev->GetOutputSizePixel()));
             bHasNewMask = true;
         }
 

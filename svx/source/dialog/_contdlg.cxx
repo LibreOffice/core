@@ -113,16 +113,16 @@ tools::PolyPolygon SvxContourDlg::CreateAutoContour( const Graphic& rGraphic,
     {
         if( rGraphic.IsAnimated() )
         {
-            VirtualDevice       aVDev;
+            ScopedVclPtr<VirtualDevice> pVDev( new VirtualDevice() );
             MapMode             aTransMap;
             const Animation     aAnim( rGraphic.GetAnimation() );
             const Size&         rSizePix = aAnim.GetDisplaySizePixel();
             const sal_uInt16        nCount = aAnim.Count();
 
-            if ( aVDev.SetOutputSizePixel( rSizePix ) )
+            if ( pVDev->SetOutputSizePixel( rSizePix ) )
             {
-                aVDev.SetLineColor( Color( COL_BLACK ) );
-                aVDev.SetFillColor( Color( COL_BLACK ) );
+                pVDev->SetLineColor( Color( COL_BLACK ) );
+                pVDev->SetFillColor( Color( COL_BLACK ) );
 
                 for( sal_uInt16 i = 0; i < nCount; i++ )
                 {
@@ -131,13 +131,13 @@ tools::PolyPolygon SvxContourDlg::CreateAutoContour( const Graphic& rGraphic,
                     // Push Polygon output to the right place; this is the
                     // offset of the sub-image within the total animation
                     aTransMap.SetOrigin( Point( rStepBmp.aPosPix.X(), rStepBmp.aPosPix.Y() ) );
-                    aVDev.SetMapMode( aTransMap );
-                    aVDev.DrawPolyPolygon( CreateAutoContour( rStepBmp.aBmpEx, pRect, nFlags ) );
+                    pVDev->SetMapMode( aTransMap );
+                    pVDev->DrawPolyPolygon( CreateAutoContour( rStepBmp.aBmpEx, pRect, nFlags ) );
                 }
 
                 aTransMap.SetOrigin( Point() );
-                aVDev.SetMapMode( aTransMap );
-                aBmp = aVDev.GetBitmap( Point(), rSizePix );
+                pVDev->SetMapMode( aTransMap );
+                aBmp = pVDev->GetBitmap( Point(), rSizePix );
                 aBmp.Convert( BMP_CONVERSION_1BIT_THRESHOLD );
             }
         }
@@ -152,8 +152,8 @@ tools::PolyPolygon SvxContourDlg::CreateAutoContour( const Graphic& rGraphic,
     else if( rGraphic.GetType() != GRAPHIC_NONE )
     {
         const Graphic   aTmpGrf( rGraphic.GetGDIMetaFile().GetMonochromeMtf( Color( COL_BLACK ) ) );
-        VirtualDevice   aVDev;
-        Size            aSizePix( aVDev.LogicToPixel( aTmpGrf.GetPrefSize(), aTmpGrf.GetPrefMapMode() ) );
+        ScopedVclPtr<VirtualDevice> pVDev( new VirtualDevice() );
+        Size            aSizePix( pVDev->LogicToPixel( aTmpGrf.GetPrefSize(), aTmpGrf.GetPrefMapMode() ) );
 
         if( aSizePix.Width() && aSizePix.Height() && ( aSizePix.Width() > 512 || aSizePix.Height() > 512 ) )
         {
@@ -165,11 +165,11 @@ tools::PolyPolygon SvxContourDlg::CreateAutoContour( const Graphic& rGraphic,
                 aSizePix.Height() = FRound( ( aSizePix.Width() = 512 ) / fWH );
         }
 
-        if( aVDev.SetOutputSizePixel( aSizePix ) )
+        if( pVDev->SetOutputSizePixel( aSizePix ) )
         {
             const Point aPt;
-            aTmpGrf.Draw( &aVDev, aPt, aSizePix );
-            aBmp = aVDev.GetBitmap( aPt, aSizePix );
+            aTmpGrf.Draw( pVDev, aPt, aSizePix );
+            aBmp = pVDev->GetBitmap( aPt, aSizePix );
         }
 
         nContourFlags |= XOUTBMP_CONTOUR_EDGEDETECT;

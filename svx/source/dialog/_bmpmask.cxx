@@ -1006,22 +1006,22 @@ Animation SvxBmpMask::ImpReplaceTransparency( const Animation& rAnim, const Colo
 
 GDIMetaFile SvxBmpMask::ImpReplaceTransparency( const GDIMetaFile& rMtf, const Color& rColor )
 {
-    VirtualDevice   aVDev;
+    ScopedVclPtr<VirtualDevice> pVDev( new VirtualDevice() );
     GDIMetaFile     aMtf;
     const MapMode&  rPrefMap = rMtf.GetPrefMapMode();
     const Size&     rPrefSize = rMtf.GetPrefSize();
     const size_t    nActionCount = rMtf.GetActionSize();
 
-    aVDev.EnableOutput( false );
-    aMtf.Record( &aVDev );
+    pVDev->EnableOutput( false );
+    aMtf.Record( pVDev );
     aMtf.SetPrefSize( rPrefSize );
     aMtf.SetPrefMapMode( rPrefMap );
-    aVDev.SetLineColor( rColor );
-    aVDev.SetFillColor( rColor );
+    pVDev->SetLineColor( rColor );
+    pVDev->SetFillColor( rColor );
 
     // retrieve one action at the time; first
     // set the whole area to the replacement color.
-    aVDev.DrawRect( Rectangle( rPrefMap.GetOrigin(), rPrefSize ) );
+    pVDev->DrawRect( Rectangle( rPrefMap.GetOrigin(), rPrefSize ) );
     for ( size_t i = 0; i < nActionCount; i++ )
     {
         MetaAction* pAct = rMtf.GetAction( i );

@@ -1026,14 +1026,14 @@ GDIMetaFile SdrGrafObj::getMetafileFromEmbeddedSvg() const
 
     if(isEmbeddedSvg() && GetModel())
     {
-        VirtualDevice aOut;
+        ScopedVclPtr<VirtualDevice> pOut( new VirtualDevice() );
         const Rectangle aBoundRect(GetCurrentBoundRect());
         const MapMode aMap(GetModel()->GetScaleUnit(), Point(), GetModel()->GetScaleFraction(), GetModel()->GetScaleFraction());
 
-        aOut.EnableOutput(false);
-        aOut.SetMapMode(aMap);
-        aRetval.Record(&aOut);
-        SingleObjectPainter(aOut);
+        pOut->EnableOutput(false);
+        pOut->SetMapMode(aMap);
+        aRetval.Record(pOut);
+        SingleObjectPainter(*pOut.get());
         aRetval.Stop();
         aRetval.WindStart();
         aRetval.Move(-aBoundRect.Left(), -aBoundRect.Top());

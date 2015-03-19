@@ -1439,8 +1439,8 @@ namespace
     {
         if(!rBitmapEx.IsEmpty() && rSize.Width() > 0 && rSize.Height() > 0)
         {
-            VirtualDevice aVirtualDevice;
-            aVirtualDevice.SetOutputSizePixel(rSize);
+            ScopedVclPtr<VirtualDevice> pVirtualDevice( new VirtualDevice() );
+            pVirtualDevice->SetOutputSizePixel(rSize);
 
             if(rBitmapEx.IsTransparent())
             {
@@ -1453,19 +1453,19 @@ namespace
                     static const Color aW(COL_WHITE);
                     static const Color aG(0xef, 0xef, 0xef);
 
-                    aVirtualDevice.DrawCheckered(aNull, rSize, nLen, aW, aG);
+                    pVirtualDevice->DrawCheckered(aNull, rSize, nLen, aW, aG);
                 }
                 else
                 {
-                    aVirtualDevice.SetBackground(rStyleSettings.GetFieldColor());
-                    aVirtualDevice.Erase();
+                    pVirtualDevice->SetBackground(rStyleSettings.GetFieldColor());
+                    pVirtualDevice->Erase();
                 }
             }
 
             if(rBitmapEx.GetSizePixel().Width() >= rSize.Width() && rBitmapEx.GetSizePixel().Height() >= rSize.Height())
             {
                 rBitmapEx.Scale(rSize, BMP_SCALE_DEFAULT);
-                aVirtualDevice.DrawBitmapEx(Point(0, 0), rBitmapEx);
+                pVirtualDevice->DrawBitmapEx(Point(0, 0), rBitmapEx);
             }
             else
             {
@@ -1475,14 +1475,14 @@ namespace
                 {
                     for(sal_Int32 x(0); x < rSize.Width(); x += aBitmapSize.Width())
                     {
-                        aVirtualDevice.DrawBitmapEx(
+                        pVirtualDevice->DrawBitmapEx(
                             Point(x, y),
                             rBitmapEx);
                     }
                 }
             }
 
-            rBitmapEx = aVirtualDevice.GetBitmap(Point(0, 0), rSize);
+            rBitmapEx = pVirtualDevice->GetBitmap(Point(0, 0), rSize);
         }
     }
 } // end of anonymous namespace
@@ -1710,7 +1710,7 @@ void LineEndLB::Fill( const XLineEndListRef &pList, bool bStart )
         return;
 
     long nCount = pList->Count();
-    VirtualDevice aVD;
+    ScopedVclPtrInstance<VirtualDevice> pVD;
     SetUpdateMode( false );
 
     for( long i = 0; i < nCount; i++ )
@@ -1720,10 +1720,10 @@ void LineEndLB::Fill( const XLineEndListRef &pList, bool bStart )
         if( !aBitmap.IsEmpty() )
         {
             Size aBmpSize( aBitmap.GetSizePixel() );
-            aVD.SetOutputSizePixel( aBmpSize, false );
-            aVD.DrawBitmap( Point(), aBitmap );
+            pVD->SetOutputSizePixel( aBmpSize, false );
+            pVD->DrawBitmap( Point(), aBitmap );
             InsertEntry( pEntry->GetName(),
-                Image(aVD.GetBitmap(
+                Image(pVD->GetBitmap(
                     (bStart) ? Point() : Point(aBmpSize.Width() / 2, 0),
                     Size(aBmpSize.Width() / 2, aBmpSize.Height()))));
             //delete pBitmap;
@@ -1740,14 +1740,14 @@ void LineEndLB::Append( const XLineEndEntry& rEntry, const Bitmap& rBitmap, bool
 {
     if(!rBitmap.IsEmpty())
     {
-        VirtualDevice aVD;
+        ScopedVclPtr<VirtualDevice> pVD( new VirtualDevice() );
         const Size aBmpSize(rBitmap.GetSizePixel());
 
-        aVD.SetOutputSizePixel(aBmpSize, false);
-        aVD.DrawBitmap(Point(), rBitmap);
+        pVD->SetOutputSizePixel(aBmpSize, false);
+        pVD->DrawBitmap(Point(), rBitmap);
         InsertEntry(
             rEntry.GetName(),
-            Image(aVD.GetBitmap(
+            Image(pVD->GetBitmap(
                 (bStart) ? Point() : Point(aBmpSize.Width() / 2, 0),
                 Size(aBmpSize.Width() / 2, aBmpSize.Height()))));
     }
@@ -1765,14 +1765,14 @@ void LineEndLB::Modify( const XLineEndEntry& rEntry, sal_Int32 nPos, const Bitma
 
     if(!rBitmap.IsEmpty())
     {
-        VirtualDevice aVD;
+        ScopedVclPtr<VirtualDevice> pVD( new VirtualDevice() );
         const Size aBmpSize(rBitmap.GetSizePixel());
 
-        aVD.SetOutputSizePixel(aBmpSize, false);
-        aVD.DrawBitmap(Point(), rBitmap);
+        pVD->SetOutputSizePixel(aBmpSize, false);
+        pVD->DrawBitmap(Point(), rBitmap);
         InsertEntry(
             rEntry.GetName(),
-            Image(aVD.GetBitmap(
+            Image(pVD->GetBitmap(
                     (bStart) ? Point() : Point(aBmpSize.Width() / 2, 0),
                     Size(aBmpSize.Width() / 2, aBmpSize.Height()))),
             nPos);
