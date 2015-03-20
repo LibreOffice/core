@@ -859,6 +859,20 @@ void Window::Invalidate( sal_uInt16 nFlags )
     LogicInvalidate(0);
 }
 
+/// Converts rRegion from MM100 to twips based on the map mode of rWindow.
+void lcl_toTwips(Window& rWindow, vcl::Region& rRegion)
+{
+    if (rWindow.IsMapModeEnabled() && rWindow.GetMapMode().GetMapUnit() == MAP_100TH_MM)
+    {
+        Rectangle aRectangle = rRegion.GetBoundRect();
+        aRectangle.Left() = convertMm100ToTwip(aRectangle.Left());
+        aRectangle.Top() = convertMm100ToTwip(aRectangle.Top());
+        aRectangle.Right() = convertMm100ToTwip(aRectangle.Right());
+        aRectangle.Bottom() = convertMm100ToTwip(aRectangle.Bottom());
+        rRegion = aRectangle;
+    }
+}
+
 void Window::Invalidate( const Rectangle& rRect, sal_uInt16 nFlags )
 {
 
@@ -872,6 +886,7 @@ void Window::Invalidate( const Rectangle& rRect, sal_uInt16 nFlags )
         vcl::Region aRegion( aRect );
         ImplInvalidate( &aRegion, nFlags );
         vcl::Region aLogicRegion(rRect);
+        lcl_toTwips(*this, aLogicRegion);
         LogicInvalidate(&aLogicRegion);
     }
 }
@@ -894,6 +909,7 @@ void Window::Invalidate( const vcl::Region& rRegion, sal_uInt16 nFlags )
         {
             ImplInvalidate( &aRegion, nFlags );
             vcl::Region aLogicRegion(rRegion);
+            lcl_toTwips(*this, aLogicRegion);
             LogicInvalidate(&aLogicRegion);
         }
     }

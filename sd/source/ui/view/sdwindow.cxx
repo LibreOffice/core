@@ -996,18 +996,7 @@ void Window::LogicInvalidate(const ::vcl::Region* pRegion)
     if (!pRegion)
         sRectangle = "EMPTY";
     else
-    {
-        Rectangle aRectangle = pRegion->GetBoundRect();
-        if (GetMapMode().GetMapUnit() == MAP_100TH_MM)
-        {
-            // Conversion to twips is necessary.
-            aRectangle.Left() = convertMm100ToTwip(aRectangle.Left());
-            aRectangle.Top() = convertMm100ToTwip(aRectangle.Top());
-            aRectangle.Right() = convertMm100ToTwip(aRectangle.Right());
-            aRectangle.Bottom() = convertMm100ToTwip(aRectangle.Bottom());
-        }
-        sRectangle = aRectangle.toString();
-    }
+        sRectangle = pRegion->GetBoundRect().toString();
     mpViewShell->GetDoc()->libreOfficeKitCallback(LOK_CALLBACK_INVALIDATE_TILES, sRectangle.getStr());
 }
 
