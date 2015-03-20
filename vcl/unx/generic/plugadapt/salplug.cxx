@@ -26,6 +26,7 @@
 #include "salinst.hxx"
 #include "generic/gensys.h"
 #include "generic/gendata.hxx"
+#include "headless/svpinst.hxx"
 #include "unx/desktops.hxx"
 #include "vcl/printerinfomanager.hxx"
 #include <config_vclplug.h>
@@ -63,6 +64,9 @@ static oslModule pCloseModule = NULL;
 
 static SalInstance* tryInstance( const OUString& rModuleBase, bool bForce = false )
 {
+    if (rModuleBase == "svp")
+        return svp_create_SalInstance();
+
     SalInstance* pInst = NULL;
     // Disable gtk3 plugin for now unless explicitly requested via
     // SAL_USE_VCLPLUGIN=gtk3 (would ideally depend on experimental mode, but
@@ -77,9 +81,6 @@ static SalInstance* tryInstance( const OUString& rModuleBase, bool bForce = fals
             SAL_DLLPREFIX
 #endif
             "vclplug_" + rModuleBase + "lo" SAL_DLLEXTENSION );
-    // vclplug_svp is in libmerged
-    if (rModuleBase == "svp")
-        aModule = VCLPLUG_SVP_DLL_NAME;
 
     oslModule aMod = osl_loadModuleRelative(
         reinterpret_cast< oslGenericFunction >( &tryInstance ), aModule.pData,

@@ -57,6 +57,8 @@ public:
 class SvpSalFrame;
 class GenPspGraphics;
 
+extern "C" SalInstance* svp_create_SalInstance();
+
 class VCL_DLLPUBLIC SvpSalInstance : public SalGenericInstance
 {
     timeval                 m_aTimeout;

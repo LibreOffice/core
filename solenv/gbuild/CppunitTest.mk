@@ -168,7 +168,6 @@ $(call gb_CppunitTest_get_target,$(1)) : $(call gb_Library_get_target,vclbootstr
 ifeq ($(GUIBASE),unx)
 $(call gb_CppunitTest_get_target,$(1)) : $(call gb_Library_get_target,desktop_detector)
 $(call gb_CppunitTest_get_target,$(1)) : $(if $(filter $(2),$(true)), \
-    $(call gb_Library_get_target,vclplug_svp), \
     $(call gb_Library_get_target,vclplug_gen) \
         $(if $(ENABLE_GTK),$(call gb_Library_get_target,vclplug_gtk)) \
         $(if $(ENABLE_GTK3),$(call gb_Library_get_target,vclplug_gtk3)) \

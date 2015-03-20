@@ -3813,9 +3813,6 @@ $(call gb_Executable_add_runtime_dependencies,gengal,\
 	,$(call gb_ComponentTarget_get_target_for_build,$(component))) \
 	$(call gb_AllLangResTarget_get_target,ofa) \
 	$(call gb_Library_get_target,$(gb_CPPU_ENV)_uno) \
-	$(if $(filter-out MACOSX WNT,$(OS_FOR_BUILD)),$(if $(ENABLE_HEADLESS),, \
-		$(call gb_Library_get_target,vclplug_svp) \
-	)) \
 	$(call gb_Package_get_target_for_build,postprocess_images) \
 	$(call gb_Package_get_target_for_build,postprocess_registry) \
 	$(call gb_Rdb_get_target_for_build,ure/services) \

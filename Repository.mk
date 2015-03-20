@@ -450,7 +450,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	$(if $(and $(filter unx,$(GUIBASE)),$(filter-out MACOSX,$(OS))), \
 		vclplug_gen \
 		$(if $(ENABLE_TDE),vclplug_tde) \
-		$(if $(ENABLE_HEADLESS),,vclplug_svp) \
 	) \
 	writerperfect \
 	xmlscript \
