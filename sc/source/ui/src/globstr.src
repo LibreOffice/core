@@ -2081,6 +2081,14 @@ Resource RID_GLOBSTR
     {
         Text [ en-US ] = "Convert Formula To Value";
     };
+    String STR_UNQUOTED_STRING
+    {
+        Text [ en-US ] = "Strings must be quoted, otherwise they might be interpreted as an address or col/row name!";
+    };
+    String STR_ENTER_VALUE
+    {
+        Text[ en-US ] = "Enter a value!";
+    };
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
