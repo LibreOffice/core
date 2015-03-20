@@ -82,6 +82,8 @@ bool containsWindowSubclass(const Type* pType0);
 bool containsWindowSubclass(const QualType& qType) {
     if (startsWith(qType.getAsString(), "VclPtr"))
         return false;
+    if (startsWith(qType.getAsString(), "const VclPtr"))
+        return false;
     if (startsWith(qType.getAsString(), "class VclPtr"))
         return false;
     if (startsWith(qType.getAsString(), "const class VclPtr"))

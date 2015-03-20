@@ -636,9 +636,7 @@ void SwStdFontTabPage::dispose()
 {
     delete pFontList;
     if (bDeletePrinter)
-    {
-        delete pPrt;
-    }
+        pPrt.disposeAndClear();
     pLabelFT.clear();
     pStandardBox.clear();
     pStandardHeightLB.clear();
@@ -833,7 +831,7 @@ void SwStdFontTabPage::Reset( const SfxItemSet* rSet)
 
     if (bDeletePrinter)
     {
-        delete pPrt;
+        pPrt.disposeAndClear();
     }
 
     if(SfxItemState::SET == rSet->GetItemState(FN_PARAM_PRINTER, false, &pItem))

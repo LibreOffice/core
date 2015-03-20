@@ -160,7 +160,7 @@ Bitmap PageObjectPainter::CreateMarkedPreview (
     const BitmapEx& rOverlay,
     const OutputDevice* pReferenceDevice) const
 {
-    ::boost::scoped_ptr<VirtualDevice> pDevice;
+    ScopedVclPtr<VirtualDevice> pDevice;
     if (pReferenceDevice != NULL)
         pDevice.reset(new VirtualDevice(*pReferenceDevice));
     else

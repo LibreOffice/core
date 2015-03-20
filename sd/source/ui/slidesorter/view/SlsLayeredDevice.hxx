@@ -75,7 +75,7 @@ private:
     VclPtr<sd::Window> mpTargetWindow;
     class LayerContainer;
     ::boost::scoped_ptr<LayerContainer> mpLayers;
-    ::boost::scoped_ptr<VirtualDevice> mpBackBuffer;
+    ScopedVclPtr<VirtualDevice> mpBackBuffer;
     MapMode maSavedMapMode;
 
     void RepaintRectangle (const Rectangle& rRepaintRectangle);

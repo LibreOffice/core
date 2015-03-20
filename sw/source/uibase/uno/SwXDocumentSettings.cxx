@@ -388,7 +388,7 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
                     SfxPrinter* pPrinter = mpDoc->getIDocumentDeviceAccess().getPrinter( true );
                     if ( OUString ( pPrinter->GetName()) != sPrinterName )
                     {
-                        SfxPrinter *pNewPrinter = new SfxPrinter ( pPrinter->GetOptions().Clone(), sPrinterName );
+                        VclPtr<SfxPrinter> pNewPrinter = new SfxPrinter ( pPrinter->GetOptions().Clone(), sPrinterName );
                         if( pNewPrinter->IsKnown() )
                         {
                             // set printer only once; in _postSetValues
@@ -396,7 +396,7 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
                         }
                         else
                         {
-                            delete pNewPrinter;
+                            pNewPrinter.disposeAndClear();
                         }
                     }
                 }
@@ -428,7 +428,7 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
                     SfxPrinter *pPrinter = SfxPrinter::Create ( aStream, pItemSet );
 
                     // set printer only once; in _postSetValues
-                    delete mpPrinter;
+                    mpPrinter.disposeAndClear();
                     mpPrinter = pPrinter;
                 }
             }
@@ -826,7 +826,7 @@ void SwXDocumentSettings::_postSetValues ()
         throw(beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException )
 {
     // set printer only once, namely here!
-    if( mpPrinter != NULL )
+    if( mpPrinter != nullptr )
     {
         // #i86352# the printer is also used as container for options by sfx
         // when setting a printer it should have decent default options

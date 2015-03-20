@@ -61,7 +61,7 @@ protected:
 
 private:
     SwTableAutoFmt          aCurData;
-    VirtualDevice           aVD;
+    ScopedVclPtr<VirtualDevice> aVD;
     SvtScriptedTextHelper   aScriptedText;
     svx::frame::Array       maArray;            /// Implementation to draw the frame borders.
     bool                    bFitWidth;
@@ -517,8 +517,8 @@ IMPL_LINK_NOARG_INLINE_END(SwAutoFormatDlg, OkHdl)
 AutoFmtPreview::AutoFmtPreview(vcl::Window* pParent, WinBits nStyle) :
         Window          ( pParent, nStyle ),
         aCurData        ( OUString() ),
-        aVD             ( *this ),
-        aScriptedText   ( aVD ),
+        aVD             ( new VirtualDevice(*this) ),
+        aScriptedText   ( *aVD.get() ),
         bFitWidth       ( false ),
         mbRTL           ( false ),
         aStrJan         ( SW_RES( STR_JAN ) ),
@@ -796,11 +796,11 @@ void AutoFmtPreview::DrawBackground()
         {
             SvxBrushItem aBrushItem( aCurData.GetBoxFmt( GetFormatIndex( nCol, nRow ) ).GetBackground() );
 
-            aVD.Push( PushFlags::LINECOLOR | PushFlags::FILLCOLOR );
-            aVD.SetLineColor();
-            aVD.SetFillColor( aBrushItem.GetColor() );
-            aVD.DrawRect( maArray.GetCellRect( nCol, nRow ) );
-            aVD.Pop();
+            aVD->Push( PushFlags::LINECOLOR | PushFlags::FILLCOLOR );
+            aVD->SetLineColor();
+            aVD->SetFillColor( aBrushItem.GetColor() );
+            aVD->DrawRect( maArray.GetCellRect( nCol, nRow ) );
+            aVD->Pop();
         }
     }
 }
@@ -816,7 +816,7 @@ void AutoFmtPreview::PaintCells()
 
     // 3) border
     if ( aCurData.IsFrame() )
-        maArray.DrawArray( aVD );
+        maArray.DrawArray( *aVD.get() );
 }
 
 void AutoFmtPreview::Init()
@@ -885,9 +885,9 @@ void AutoFmtPreview::NotifyChange( const SwTableAutoFmt& rNewData )
 
 void AutoFmtPreview::DoPaint( const Rectangle& /*rRect*/ )
 {
-    sal_uInt32 nOldDrawMode = aVD.GetDrawMode();
+    sal_uInt32 nOldDrawMode = aVD->GetDrawMode();
     if( GetSettings().GetStyleSettings().GetHighContrastMode() )
-        aVD.SetDrawMode( DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT );
+        aVD->SetDrawMode( DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT );
 
     Bitmap  thePreview;
     Point   aCenterPos;
@@ -895,36 +895,36 @@ void AutoFmtPreview::DoPaint( const Rectangle& /*rRect*/ )
     Color   oldColor;
     vcl::Font aFont;
 
-    aFont = aVD.GetFont();
+    aFont = aVD->GetFont();
     aFont.SetTransparent( true );
 
-    aVD.SetFont          ( aFont );
-    aVD.SetLineColor     ();
+    aVD->SetFont          ( aFont );
+    aVD->SetLineColor     ();
     const Color& rWinColor = GetSettings().GetStyleSettings().GetWindowColor();
-    aVD.SetBackground    ( Wallpaper(rWinColor) );
-    aVD.SetFillColor     ( rWinColor );
-    aVD.SetOutputSizePixel  ( aPrvSize );
+    aVD->SetBackground    ( Wallpaper(rWinColor) );
+    aVD->SetFillColor     ( rWinColor );
+    aVD->SetOutputSizePixel  ( aPrvSize );
 
     // Draw cells on virtual device
     // and save the result
     PaintCells();
-    thePreview = aVD.GetBitmap( Point(0,0), aPrvSize );
+    thePreview = aVD->GetBitmap( Point(0,0), aPrvSize );
 
     // Draw the Frame and center the preview:
     // (virtual Device for window output)
-    aVD.SetOutputSizePixel( theWndSize );
-    oldColor = aVD.GetLineColor();
-    aVD.SetLineColor();
-    aVD.DrawRect( Rectangle( Point(0,0), theWndSize ) );
+    aVD->SetOutputSizePixel( theWndSize );
+    oldColor = aVD->GetLineColor();
+    aVD->SetLineColor();
+    aVD->DrawRect( Rectangle( Point(0,0), theWndSize ) );
     SetLineColor( oldColor );
     aCenterPos  = Point( (theWndSize.Width()  - aPrvSize.Width() ) / 2,
                          (theWndSize.Height() - aPrvSize.Height()) / 2 );
-    aVD.DrawBitmap( aCenterPos, thePreview );
+    aVD->DrawBitmap( aCenterPos, thePreview );
 
     // Output in the preview window:
-    DrawBitmap( Point(0,0), aVD.GetBitmap( Point(0,0), theWndSize ) );
+    DrawBitmap( Point(0,0), aVD->GetBitmap( Point(0,0), theWndSize ) );
 
-    aVD.SetDrawMode( nOldDrawMode );
+    aVD->SetDrawMode( nOldDrawMode );
 }
 
 void AutoFmtPreview::Paint( const Rectangle& rRect )

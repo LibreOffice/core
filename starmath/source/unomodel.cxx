@@ -607,11 +607,11 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
                         {
                             if ( !sPrinterName.isEmpty() )
                             {
-                                SfxPrinter *pNewPrinter = new SfxPrinter ( pPrinter->GetOptions().Clone(), sPrinterName );
+                                VclPtr<SfxPrinter> pNewPrinter = new SfxPrinter ( pPrinter->GetOptions().Clone(), sPrinterName );
                                 if (pNewPrinter->IsKnown())
                                     pDocSh->SetPrinter ( pNewPrinter );
                                 else
-                                    delete pNewPrinter;
+                                    pNewPrinter.disposeAndClear();
                             }
                         }
                         else

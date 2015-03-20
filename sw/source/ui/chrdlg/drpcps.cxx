@@ -72,7 +72,7 @@ class SwDropCapsPict : public Control
     long            mnLineH;
     long            mnTextH;
     sal_uInt16      mnDistance;
-    Printer*        mpPrinter;
+    VclPtr<Printer> mpPrinter;
     bool            mbDelPrinter;
     /// The _ScriptInfo structure holds information on where we change from one
     /// script to another.
@@ -209,7 +209,7 @@ SwDropCapsPict::~SwDropCapsPict()
 void SwDropCapsPict::dispose()
 {
      if( mbDelPrinter )
-         delete mpPrinter;
+         mpPrinter.disposeAndClear();
      mpPage.clear();
      Control::dispose();
 }

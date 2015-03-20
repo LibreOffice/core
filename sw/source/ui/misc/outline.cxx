@@ -931,7 +931,7 @@ void NumberingPreview::Paint( const Rectangle& /*rRect*/ )
 {
     const Size aSize(PixelToLogic(GetOutputSizePixel()));
 
-    boost::scoped_ptr<VirtualDevice> pVDev(new VirtualDevice(*this));
+    ScopedVclPtr<VirtualDevice> pVDev(new VirtualDevice(*this));
     pVDev->SetMapMode(GetMapMode());
     pVDev->SetOutputSize( aSize );
 

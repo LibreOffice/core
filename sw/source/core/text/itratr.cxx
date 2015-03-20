@@ -338,7 +338,7 @@ sal_Int32 SwAttrIter::GetNextAttr( ) const
 class SwMinMaxArgs
 {
 public:
-    OutputDevice* pOut;
+    VclPtr<OutputDevice> pOut;
     SwViewShell const * pSh;
     sal_uLong &rMin;
     sal_uLong &rMax;

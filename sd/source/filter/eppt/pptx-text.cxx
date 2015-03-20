@@ -1396,7 +1396,7 @@ void FontCollectionEntry::ImplInit( const OUString& rName )
 
 FontCollection::~FontCollection()
 {
-    delete pVDev;
+    pVDev.disposeAndClear();
     xPPTBreakIter = NULL;
 }
 

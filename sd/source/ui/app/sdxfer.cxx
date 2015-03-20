@@ -141,7 +141,7 @@ SdTransferable::~SdTransferable()
     delete mpBookmark;
     delete mpImageMap;
 
-    delete mpVDev;
+    mpVDev.disposeAndClear();
     delete mpObjDesc;
 
     //call explicitly at end of dtor to be covered by above SolarMutex

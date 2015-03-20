@@ -41,7 +41,7 @@ SwCommentRuler::SwCommentRuler( SwViewShell* pViewSh, vcl::Window* pParent, SwEd
 , mpSwWin(pWin)
 , mbIsHighlighted(false)
 , mnFadeRate(0)
-, maVirDev( *this )
+, maVirDev( new VirtualDevice(*this) )
 {
     // Set fading timeout: 5 x 40ms = 200ms
     maFadeTimer.SetTimeout(40);
@@ -75,25 +75,25 @@ void SwCommentRuler::DrawCommentControl()
     bool bIsCollapsed = ! mpViewShell->GetPostItMgr()->ShowNotes();
 
     Rectangle aControlRect = GetCommentControlRegion();
-    maVirDev.SetOutputSizePixel( aControlRect.GetSize() );
+    maVirDev->SetOutputSizePixel( aControlRect.GetSize() );
 
     // Paint comment control background
     // TODO Check if these are best colors to be used
     Color aBgColor = GetFadedColor( rStyleSettings.GetDarkShadowColor(), rStyleSettings.GetWorkspaceColor() );
-    maVirDev.SetFillColor( aBgColor );
+    maVirDev->SetFillColor( aBgColor );
 
     if ( mbIsHighlighted || !bIsCollapsed )
     {
         // Draw borders
-        maVirDev.SetLineColor( rStyleSettings.GetShadowColor() );
+        maVirDev->SetLineColor( rStyleSettings.GetShadowColor() );
     }
     else
     {
         // No borders
-        maVirDev.SetLineColor();
+        maVirDev->SetLineColor();
     }
 
-    maVirDev.DrawRect( Rectangle( Point(), aControlRect.GetSize() ) );
+    maVirDev->DrawRect( Rectangle( Point(), aControlRect.GetSize() ) );
 
     // Label and arrow tip
     OUString aLabel( SW_RESSTR ( STR_COMMENTS_LABEL ) );
@@ -142,9 +142,9 @@ void SwCommentRuler::DrawCommentControl()
 
     // Draw label
     Color aTextColor = GetFadedColor( rStyleSettings.GetButtonTextColor(), rStyleSettings.GetDarkShadowColor() );
-    maVirDev.SetTextColor( aTextColor );
+    maVirDev->SetTextColor( aTextColor );
     // FIXME Expected font size?
-    maVirDev.DrawText( aLabelPos, aLabel );
+    maVirDev->DrawText( aLabelPos, aLabel );
 
     // Draw arrow
     // FIXME consistence of button colors. http://opengrok.libreoffice.org/xref/core/vcl/source/control/button.cxx#785
@@ -152,26 +152,26 @@ void SwCommentRuler::DrawCommentControl()
     ImplDrawArrow ( aArrowPos.X(), aArrowPos.Y(), aArrowColor, bArrowToRight );
 
     // Blit comment control
-    DrawOutDev( aControlRect.TopLeft(), aControlRect.GetSize(), Point(), aControlRect.GetSize(), maVirDev );
+    DrawOutDev( aControlRect.TopLeft(), aControlRect.GetSize(), Point(), aControlRect.GetSize(), *maVirDev.get() );
 }
 
 void SwCommentRuler::ImplDrawArrow(long nX, long nY, const Color& rColor, bool bPointRight)
 {
-    maVirDev.SetLineColor();
-    maVirDev.SetFillColor( rColor );
+    maVirDev->SetLineColor();
+    maVirDev->SetFillColor( rColor );
     if ( bPointRight )
     {
-        maVirDev.DrawRect( Rectangle( nX+0, nY+0, nX+0, nY+6 ) );
-        maVirDev.DrawRect( Rectangle( nX+1, nY+1, nX+1, nY+5 ) );
-        maVirDev.DrawRect( Rectangle( nX+2, nY+2, nX+2, nY+4 ) );
-        maVirDev.DrawRect( Rectangle( nX+3, nY+3, nX+3, nY+3 ) );
+        maVirDev->DrawRect( Rectangle( nX+0, nY+0, nX+0, nY+6 ) );
+        maVirDev->DrawRect( Rectangle( nX+1, nY+1, nX+1, nY+5 ) );
+        maVirDev->DrawRect( Rectangle( nX+2, nY+2, nX+2, nY+4 ) );
+        maVirDev->DrawRect( Rectangle( nX+3, nY+3, nX+3, nY+3 ) );
     }
     else
     {
-        maVirDev.DrawRect( Rectangle( nX+0, nY+3, nX+0, nY+3 ) );
-        maVirDev.DrawRect( Rectangle( nX+1, nY+2, nX+1, nY+4 ) );
-        maVirDev.DrawRect( Rectangle( nX+2, nY+1, nX+2, nY+5 ) );
-        maVirDev.DrawRect( Rectangle( nX+3, nY+0, nX+3, nY+6 ) );
+        maVirDev->DrawRect( Rectangle( nX+0, nY+3, nX+0, nY+3 ) );
+        maVirDev->DrawRect( Rectangle( nX+1, nY+2, nX+1, nY+4 ) );
+        maVirDev->DrawRect( Rectangle( nX+2, nY+1, nX+2, nY+5 ) );
+        maVirDev->DrawRect( Rectangle( nX+3, nY+0, nX+3, nY+6 ) );
     }
 }
 

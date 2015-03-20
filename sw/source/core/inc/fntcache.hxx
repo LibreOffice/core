@@ -21,6 +21,7 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_FNTCACHE_HXX
 
 #include <vcl/font.hxx>
+#include <vcl/vclptr.hxx>
 #include <tools/mempool.hxx>
 #include "swtypes.hxx"
 #include "swcache.hxx"
