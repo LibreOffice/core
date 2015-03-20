@@ -727,7 +727,7 @@ sal_Int32 Cell::getMinimumHeight()
         pEditOutliner->SetMaxAutoPaperSize(aSize);
         nMinimumHeight = pEditOutliner->GetTextHeight()+1;
     }
-    else /*if ( hasText() )*/
+    else if ( hasText() )
     {
         Outliner& rOutliner=rTableObj.ImpGetDrawOutliner();
         rOutliner.SetPaperSize(aSize);
