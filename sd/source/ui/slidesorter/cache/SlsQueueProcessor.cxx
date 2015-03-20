@@ -98,10 +98,6 @@ void QueueProcessor::Resume (void)
         Start(mrQueue.GetFrontPriorityClass());
 }
 
-void QueueProcessor::Terminate (void)
-{
-}
-
 void QueueProcessor::SetPreviewSize (
     const Size& rPreviewSize,
     const bool bDoSuperSampling)

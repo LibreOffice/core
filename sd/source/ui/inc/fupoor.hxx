@@ -75,7 +75,6 @@ public:
 
     virtual bool Command(const CommandEvent& rCEvt);
     virtual bool RequestHelp(const HelpEvent& rHEvt);
-    void Paint(const Rectangle&, ::sd::Window* );
     virtual void ReceiveRequest(SfxRequest& rReq);
 
     virtual void Activate();        ///< activates the function

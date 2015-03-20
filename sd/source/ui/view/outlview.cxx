@@ -236,10 +236,6 @@ void OutlineView::Paint(const Rectangle& rRect, ::sd::Window* pWin)
     }
 }
 
-void OutlineView::InvalidateSlideNumberArea()
-{
-}
-
 void OutlineView::AddWindowToPaintView(OutputDevice* pWin)
 {
     bool bAdded = false;
@@ -385,7 +381,6 @@ IMPL_LINK( OutlineView, ParagraphInsertedHdl, ::Outliner *, pOutliner )
         if( (nAbsPos == 0) || mrOutliner.HasParaFlag(pPara,ParaFlag::ISPAGE) || mrOutliner.HasParaFlag(mrOutliner.GetParagraph( nAbsPos-1 ), ParaFlag::ISPAGE) )
         {
             InsertSlideForParagraph( pPara );
-            InvalidateSlideNumberArea();
         }
     }
 
@@ -560,8 +555,6 @@ IMPL_LINK( OutlineView, ParagraphRemovingHdl, ::Outliner *, pOutliner )
         }
         pOutliner->UpdateFields();
     }
-
-    InvalidateSlideNumberArea();
 
     return 0;
 }
@@ -782,8 +775,6 @@ IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner *, pOutliner )
         }
     }
 
-    InvalidateSlideNumberArea();
-
     return 0;
 }
 
@@ -811,7 +802,6 @@ IMPL_LINK_NOARG(OutlineView, StatusEventHdl)
         mrOutlineViewShell.UpdateScrollBars();
     }
 
-    InvalidateSlideNumberArea();
     return 0;
 }
 
@@ -826,7 +816,6 @@ IMPL_LINK_NOARG(OutlineView, BeginDropHdl)
 IMPL_LINK_NOARG(OutlineView, EndDropHdl)
 {
     maDragAndDropModelGuard.reset(0);
-    InvalidateSlideNumberArea();
     return 0;
 }
 
@@ -936,8 +925,6 @@ IMPL_LINK( OutlineView, EndMovingHdl, ::Outliner *, pOutliner )
 
     maSelectedParas.clear();
     maOldParaOrder.clear();
-
-    InvalidateSlideNumberArea();
 
     return 0;
 }
@@ -1214,8 +1201,6 @@ IMPL_LINK_NOARG(OutlineView, RemovingPagesHdl)
     }
     mrOutliner.UpdateFields();
 
-    InvalidateSlideNumberArea();
-
     return 1;
 }
 
@@ -1472,7 +1457,6 @@ IMPL_LINK(OutlineView, EventMultiplexerListener, ::sd::tools::EventMultiplexerEv
         {
             case tools::EventMultiplexerEvent::EID_CURRENT_PAGE:
                 SetActualPage(mrOutlineViewShell.GetActualPage());
-                InvalidateSlideNumberArea();
                 break;
 
             case tools::EventMultiplexerEvent::EID_PAGE_ORDER:

@@ -145,7 +145,6 @@ public:
         cursor position.
     */
     void IgnoreCurrentPageChanges (bool bIgnore);
-    void InvalidateSlideNumberArea();
 
     /** creates and inserts an empty slide for the given paragraph. */
     SdPage* InsertSlideForParagraph( Paragraph* pPara );

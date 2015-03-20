@@ -431,11 +431,6 @@ void ClientBox::RecalcAll()
     m_bNeedsRecalc = false;
 }
 
-bool ClientBox::HandleTabKey( bool )
-{
-    return false;
-}
-
 bool ClientBox::HandleCursorKey( sal_uInt16 nKeyCode )
 {
     if ( m_vEntries.empty() )
@@ -601,9 +596,7 @@ bool ClientBox::Notify( NotifyEvent& rNEvt )
         vcl::KeyCode    aKeyCode = pKEvt->GetKeyCode();
         sal_uInt16      nKeyCode = aKeyCode.GetCode();
 
-        if ( nKeyCode == KEY_TAB )
-            bHandled = HandleTabKey( aKeyCode.IsShift() );
-        else if ( aKeyCode.GetGroup() == KEYGROUP_CURSOR )
+        if ( aKeyCode.GetGroup() == KEYGROUP_CURSOR )
             bHandled = HandleCursorKey( nKeyCode );
     }
 

@@ -196,8 +196,6 @@ public:
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
 
-    void                    SetOptions( SdOptions* pOpts ) const;
-
     SdOptionsContents&      GetOptionsContents() { return maOptionsContents; }
 private:
     SdOptionsContents       maOptionsContents;

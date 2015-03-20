@@ -1038,10 +1038,6 @@ bool FuPoor::RequestHelp(const HelpEvent& rHEvt)
     return bReturn;
 }
 
-void FuPoor::Paint(const Rectangle&, ::sd::Window* )
-{
-}
-
 void FuPoor::ReceiveRequest(SfxRequest& rReq)
 {
     const SfxItemSet* pSet = rReq.GetArgs();

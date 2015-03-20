@@ -69,10 +69,6 @@ public:
 
     ~ScrollBarManager (void);
 
-    /** Call this method after constructing a new object of this class.
-    */
-    void LateInitialization (void);
-
     /** Register listeners at the scroll bars.  This method is called after
         startup of a new slide sorter object or after a reactivation of a
         slide sorter that for example is taken from a cache.

@@ -400,10 +400,6 @@ bool SdOptionsContentsItem::operator==( const SfxPoolItem& rAttr ) const
     return bSameType && ( maOptionsContents == static_cast<const SdOptionsContentsItem&>( rAttr ).maOptionsContents );
 }
 
-void SdOptionsContentsItem::SetOptions(SdOptions*) const
-{
-}
-
 /*************************************************************************
 |*
 |* SdOptionsMisc

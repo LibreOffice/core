@@ -259,7 +259,6 @@ void SlideSorter::Paint (const Rectangle& rRepaintArea)
 void SlideSorter::SetupControls (::vcl::Window* )
 {
     GetVerticalScrollBar()->Show();
-    mpSlideSorterController->GetScrollBarManager().LateInitialization();
 }
 
 void SlideSorter::SetupListeners (void)
@@ -330,7 +329,6 @@ void SlideSorter::CreateModelViewController (void)
 
     // Now that model, view, and controller are constructed, do the
     // initialization that relies on all three being in place.
-    mpSlideSorterModel->Init();
     mpSlideSorterController->Init();
     mpSlideSorterView->Init();
 }

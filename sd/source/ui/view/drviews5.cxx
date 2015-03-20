@@ -426,15 +426,6 @@ void DrawViewShell::Paint(const Rectangle& rRect, ::sd::Window* pWin)
     GetDoc()->GetDrawOutliner( NULL ).SetDefaultLanguage( Application::GetSettings().GetLanguageTag().getLanguageType() );
 
     mpDrawView->CompleteRedraw( pWin, vcl::Region( rRect ) );
-
-    if( pWin )
-    {
-        if( GetDocSh()->GetDocShellFunction().is() )
-            GetDocSh()->GetDocShellFunction()->Paint( rRect, pWin );
-
-        if( HasCurrentFunction() )
-            GetCurrentFunction()->Paint( rRect, pWin );
-    }
 }
 
 /**

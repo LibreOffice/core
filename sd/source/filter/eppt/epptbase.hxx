@@ -320,7 +320,7 @@ class PPTExStyleSheet
                                                 FontCollection& rFontCollection, int nInstance, int nLevel );
                 bool        IsHardAttribute( sal_uInt32 nInstance, sal_uInt32 nLevel, PPTExTextAttr eAttr, sal_uInt32 nValue );
 
-                sal_uInt32      SizeOfTxCFStyleAtom() const;
+                static sal_uInt32 SizeOfTxCFStyleAtom() { return 24; }
                 void            WriteTxCFStyleAtom( SvStream& rSt );
 };
 
