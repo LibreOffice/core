@@ -520,9 +520,9 @@ bool sw_HideObj( const SwTxtFrm& _rFrm,
               pIDSA->get(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION) &&
              _rFrm.IsInDocBody() && !_rFrm.FindNextCnt() )
         {
-            const sal_Unicode cAnchorChar =
-                        _rFrm.GetTxtNode()->GetTxt()[_nObjAnchorPos];
-            if ( cAnchorChar == CH_TXTATR_BREAKWORD )
+            const OUString &rStr = _rFrm.GetTxtNode()->GetTxt();
+            const sal_Unicode cAnchorChar = _nObjAnchorPos < rStr.getLength() ? rStr[_nObjAnchorPos] : 0;
+            if (cAnchorChar == CH_TXTATR_BREAKWORD)
             {
                 const SwTxtAttr* const pHint(
                     _rFrm.GetTxtNode()->GetTxtAttrForCharAt(_nObjAnchorPos,
