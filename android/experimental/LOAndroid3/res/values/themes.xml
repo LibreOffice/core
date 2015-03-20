@@ -7,6 +7,6 @@
         <item name="windowActionBar">false</item>
     </style>
 
-    <style name="BrowserTheme" parent="Theme.AppCompat.Light">
+    <style name="BrowserTheme" parent="Theme.AppCompat.Light.NoActionBar">
     </style>
 </resources>
