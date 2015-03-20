@@ -765,6 +765,7 @@ SfxCommonTemplateDialog_Impl::~SfxCommonTemplateDialog_Impl()
     if ( pStyleSheetPool )
         EndListening(*pStyleSheetPool);
     pStyleSheetPool = NULL;
+    pTreeBox.disposeAndClear();
     delete pIdle;
     if ( m_pDeletionWatcher )
         m_pDeletionWatcher->signal();

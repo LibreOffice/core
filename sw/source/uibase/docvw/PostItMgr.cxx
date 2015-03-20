@@ -193,6 +193,7 @@ void SwPostItMgr::CheckForRemovedPostIts()
             mvPostItFlds.remove(*it);
             if (GetActiveSidebarWin() == p->pPostIt)
                 SetActiveSidebarWin(0);
+            p->pPostIt.disposeAndClear();
             delete p;
             bRemoved = true;
         }
@@ -241,6 +242,7 @@ void SwPostItMgr::RemoveItem( SfxBroadcaster* pBroadcast )
             SwSidebarItem* p = (*i);
             if (GetActiveSidebarWin() == p->pPostIt)
                 SetActiveSidebarWin(0);
+            p->pPostIt.disposeAndClear();
             mvPostItFlds.erase(i);
             delete p;
             break;
@@ -1174,6 +1176,7 @@ void SwPostItMgr::RemoveSidebarWin()
         for(std::list<SwSidebarItem*>::iterator i = mvPostItFlds.begin(); i != mvPostItFlds.end() ; ++i)
         {
             EndListening( *(const_cast<SfxBroadcaster*>((*i)->GetBroadCaster())) );
+            (*i)->pPostIt.disposeAndClear();
             delete (*i);
         }
         mvPostItFlds.clear();

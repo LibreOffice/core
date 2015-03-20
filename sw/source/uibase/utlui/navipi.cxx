@@ -895,6 +895,7 @@ IMPL_LINK_NOARG(SwNavigationPI, PopupModeEndHdl)
     {
         // Replace floating window with popup window and destroy
         // floating window instance.
+        pFloatingWindow.disposeAndClear();
         pFloatingWindow = pPopupWindow;
         pPopupWindow    = 0;
     }

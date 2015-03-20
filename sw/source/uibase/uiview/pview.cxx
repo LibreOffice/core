@@ -1238,6 +1238,12 @@ SwPagePreview::~SwPagePreview()
     SwViewShell* pVShell =  pViewWin->GetViewShell();
     pVShell->SetWin(0);
     delete pVShell;
+
+    pViewWin.disposeAndClear();
+
+    pScrollFill.disposeAndClear();
+    pHScrollbar.disposeAndClear();
+    pVScrollbar.disposeAndClear();
 }
 
 SwDocShell* SwPagePreview::GetDocShell()

@@ -117,6 +117,7 @@ ThumbnailViewItem::ThumbnailViewItem(ThumbnailView &rView, sal_uInt16 nId)
 
 ThumbnailViewItem::~ThumbnailViewItem()
 {
+    mpTitleED.disposeAndClear();
     if( mpxAcc )
     {
         static_cast< ThumbnailViewItemAcc* >( mpxAcc->get() )->ParentDestroyed();

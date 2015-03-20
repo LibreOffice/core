@@ -328,13 +328,13 @@ IMPL_LINK_NOARG(TabBarEdit, ImplEndTimerHdl)
 
 struct TabBar_Impl
 {
-    VclPtr<ImplTabSizer>  mpSizer;
-    VclPtr<ImplTabButton> mpFirstButton;
-    VclPtr<ImplTabButton> mpPrevButton;
-    VclPtr<ImplTabButton> mpNextButton;
-    VclPtr<ImplTabButton> mpLastButton;
-    VclPtr<TabBarEdit>    mpEdit;
-    ImplTabBarList        mpItemList;
+    ScopedVclPtr<ImplTabSizer>  mpSizer;
+    ScopedVclPtr<ImplTabButton> mpFirstButton;
+    ScopedVclPtr<ImplTabButton> mpPrevButton;
+    ScopedVclPtr<ImplTabButton> mpNextButton;
+    ScopedVclPtr<ImplTabButton> mpLastButton;
+    ScopedVclPtr<TabBarEdit>    mpEdit;
+    ImplTabBarList              mpItemList;
 
     svt::AccessibleFactoryAccess  maAccessibleFactory;
 
@@ -347,21 +347,11 @@ struct TabBar_Impl
             delete mpItemList[i];
         }
         mpItemList.clear();
-
-        mpPrevBtn.disposeAndClear();
-        mpNextBtn.disposeAndClear();
-        mpFirstBtn.disposeAndClear();
-        mpLastBtn.disposeAndClear();
-        mpEdit.disposeAndClear();
     }
 
     sal_uInt16 getItemSize()
     {
         return static_cast<sal_uInt16>(mpItemList.size());
-    }
-    ~TabBar_Impl()
-    {
-        mpSizer.disposeAndClear();
     }
 };
 

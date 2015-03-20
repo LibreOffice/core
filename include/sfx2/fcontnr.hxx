@@ -57,7 +57,7 @@ public:
 
 class SfxFrameWindow
 {
-    VclPtr<vcl::Window>     pWindow;
+    ScopedVclPtr<vcl::Window> pWindow;
 public:
                 SfxFrameWindow( vcl::Window *pWin )
                  : pWindow( pWin )

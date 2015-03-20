@@ -595,6 +595,7 @@ void AbstractSwWordCountFloatDlg_Impl::SetCounts(const SwDocStat &rCurrCnt, cons
 
 AbstractMailMergeWizard_Impl::~AbstractMailMergeWizard_Impl()
 {
+    pDlg.disposeAndClear();
 }
 
 void AbstractMailMergeWizard_Impl::StartExecuteModal( const Link& rEndDialogHdl )

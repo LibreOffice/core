@@ -55,7 +55,7 @@ namespace svt
 
     struct RoadmapWizardImpl : public RoadmapWizardTypes
     {
-        VclPtr<ORoadmap>    pRoadmap;
+        ScopedVclPtr<ORoadmap> pRoadmap;
         Paths               aPaths;
         PathId              nActivePath;
         StateDescriptions   aStateDescriptors;

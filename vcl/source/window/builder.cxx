@@ -3286,6 +3286,7 @@ void VclBuilder::delete_by_name(const OString& sID)
     {
         if (aI->m_sID.equals(sID))
         {
+            aI->m_pWindow.disposeAndClear();
             m_aChildren.erase(aI);
             break;
         }

@@ -242,7 +242,7 @@ void IconChoiceDialog::dispose()
 
             if ( pData->bOnDemand )
                 delete &pData->pPage->GetItemSet();
-            delete pData->pPage;
+            pData->pPage.disposeAndClear();
         }
         delete pData;
     }

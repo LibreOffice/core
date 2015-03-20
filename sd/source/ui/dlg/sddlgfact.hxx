@@ -23,7 +23,7 @@
 #include <sfx2/basedlgs.hxx>
 
 #define DECL_ABSTDLG_BASE(Class,DialogClass)        \
-    VclPtr<DialogClass> pDlg;                       \
+    ScopedVclPtr<DialogClass> pDlg;                 \
 public:                                             \
                     Class( DialogClass* p)          \
                      : pDlg(p)                      \

@@ -48,7 +48,7 @@ class DropDownFieldDialog;
 
 #define DECL_ABSTDLG_BASE(Class,DialogClass)        \
 protected:                                          \
-    VclPtr<DialogClass> pDlg;                       \
+    ScopedVclPtr<DialogClass> pDlg;                 \
 public:                                             \
                     Class( DialogClass* p)          \
                      : pDlg(p)                      \

@@ -78,7 +78,7 @@ public:
 struct TabEntry
 {
     sal_Int32           m_nIndex;
-    VclPtr<FwkTabPage>  m_pPage;
+    ScopedVclPtr<FwkTabPage>  m_pPage;
     OUString            m_sPageURL;
     css::uno::Reference< css::awt::XContainerWindowEventHandler > m_xEventHdl;
 

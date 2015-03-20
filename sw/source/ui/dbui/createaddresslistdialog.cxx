@@ -119,7 +119,11 @@ SwAddressControl_Impl::~SwAddressControl_Impl()
 
 void SwAddressControl_Impl::dispose()
 {
+    for(auto aTextIter = m_aFixedTexts.begin(); aTextIter != m_aFixedTexts.end(); ++aTextIter)
+        aTextIter->disposeAndClear();
     m_aFixedTexts.clear();
+    for(auto aEditIter = m_aEdits.begin(); aEditIter != m_aEdits.end(); ++aEditIter)
+        aEditIter->disposeAndClear();
     m_aEdits.clear();
     m_pScrollBar.clear();
     m_pWindow.clear();
@@ -132,7 +136,11 @@ void SwAddressControl_Impl::SetData(SwCSVData& rDBData)
     //when the address data is updated then remove the controls an build again
     if(m_aFixedTexts.size())
     {
+        for(auto aTextIter = m_aFixedTexts.begin(); aTextIter != m_aFixedTexts.end(); ++aTextIter)
+            aTextIter->disposeAndClear();
         m_aFixedTexts.clear();
+        for(auto aEditIter = m_aEdits.begin(); aEditIter != m_aEdits.end(); ++aEditIter)
+            aEditIter->disposeAndClear();
         m_aEdits.clear();
         m_bNoDataSet = true;
     }

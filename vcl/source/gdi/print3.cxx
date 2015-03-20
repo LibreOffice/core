@@ -191,6 +191,7 @@ public:
         mnDefaultPaperBin( -1 ),
         mnFixedPaperBin( -1 )
     {}
+    ~ImplPrinterControllerData() { mpProgress.disposeAndClear(); }
 
     Size getRealPaperSize( const Size& i_rPageSize, bool bNoNUP ) const
     {

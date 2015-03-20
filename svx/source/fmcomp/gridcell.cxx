@@ -643,8 +643,10 @@ DbCellControl::~DbCellControl()
 {
     lcl_clearBroadCaster(m_pModelChangeBroadcaster);
     lcl_clearBroadCaster(m_pFieldChangeBroadcaster);
-}
 
+    m_pWindow.disposeAndClear();
+    m_pPainter.disposeAndClear();
+}
 
 void DbCellControl::implValuePropertyChanged( )
 {

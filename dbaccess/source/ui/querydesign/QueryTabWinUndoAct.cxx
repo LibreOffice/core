@@ -56,6 +56,7 @@ OQueryTabWinUndoAct::~OQueryTabWinUndoAct()
 
         if ( m_pTabWin )
             m_pTabWin->clearListBox();
+        m_pTabWin.disposeAndClear();
 
         // and of course the corresponding connections
         auto aIter = m_vTableConnection.begin();
@@ -63,6 +64,7 @@ OQueryTabWinUndoAct::~OQueryTabWinUndoAct()
         for(;aIter != aEnd;++aIter)
         {
             m_pOwner->DeselectConn(*aIter);
+            aIter->disposeAndClear();
         }
         m_vTableConnection.clear();
     }

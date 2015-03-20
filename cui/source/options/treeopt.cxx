@@ -465,7 +465,7 @@ static bool lcl_isOptionHidden( sal_uInt16 _nPageId, const SvtOptionsDialogOptio
 
 struct OptionsPageInfo
 {
-    VclPtr<SfxTabPage>  m_pPage;
+    ScopedVclPtr<SfxTabPage> m_pPage;
     sal_uInt16          m_nPageId;
     OUString       m_sPageURL;
     OUString       m_sEventHdl;

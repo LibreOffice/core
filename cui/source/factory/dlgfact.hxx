@@ -81,7 +81,7 @@ short Class::Execute()                              \
 
 class VclAbstractDialog2_Impl : public VclAbstractDialog2
 {
-    VclPtr<Dialog>         m_pDlg;
+    ScopedVclPtr<Dialog> m_pDlg;
     Link            m_aEndDlgHdl;
 public:
                     VclAbstractDialog2_Impl( Dialog* p ) : m_pDlg( p ) {}

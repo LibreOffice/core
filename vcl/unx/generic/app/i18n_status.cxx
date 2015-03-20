@@ -523,6 +523,7 @@ I18NStatus::I18NStatus() :
 
 I18NStatus::~I18NStatus()
 {
+    m_pStatusWindow.disposeAndClear();
     if( pInstance == this )
         pInstance = NULL;
 }

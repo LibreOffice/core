@@ -204,6 +204,8 @@ void TabControl::dispose()
     ImplFreeLayoutData();
 
     // delete TabCtrl data
+    if (mpTabCtrlData)
+        mpTabCtrlData->mpListBox.disposeAndClear();
     delete mpTabCtrlData;
     mpTabCtrlData = NULL;
     Control::dispose();

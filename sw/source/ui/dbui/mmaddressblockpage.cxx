@@ -989,6 +989,13 @@ SwAssignFieldsControl::~SwAssignFieldsControl()
 
 void SwAssignFieldsControl::dispose()
 {
+    for(auto aFIIter = m_aFieldNames.begin(); aFIIter != m_aFieldNames.end(); ++aFIIter)
+        aFIIter->disposeAndClear();
+    for(auto aLBIter = m_aMatches.begin(); aLBIter != m_aMatches.end(); ++aLBIter)
+        aLBIter->disposeAndClear();
+    for(auto aFIIter = m_aPreviews.begin(); aFIIter != m_aPreviews.end(); ++aFIIter)
+        aFIIter->disposeAndClear();
+
     m_aFieldNames.clear();
     m_aMatches.clear();
     m_aPreviews.clear();

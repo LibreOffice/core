@@ -1535,6 +1535,10 @@ void OJoinTableView::clearLayoutInformation()
 
     m_aTableMap.clear();
 
+    for(auto i = m_vTableConnection.begin();
+             i != m_vTableConnection.end(); ++i)
+        i->disposeAndClear();
+
     m_vTableConnection.clear();
 }
 

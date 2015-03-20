@@ -98,6 +98,8 @@ TheExtensionManager::TheExtensionManager( vcl::Window *pParent,
 
 TheExtensionManager::~TheExtensionManager()
 {
+    m_pUpdReqDialog.disposeAndClear();
+    m_pExtMgrDialog.disposeAndClear();
     delete m_pExecuteCmdQueue;
 }
 

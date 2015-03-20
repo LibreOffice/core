@@ -33,6 +33,7 @@ OQueryTabConnUndoAction::~OQueryTabConnUndoAction()
     if (m_bOwnerOfConn)
     {   // I have the connection -> delete
         m_pOwner->DeselectConn(m_pConnection);
+        m_pConnection.disposeAndClear();
     }
 }
 
