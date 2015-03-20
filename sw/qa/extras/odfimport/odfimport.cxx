@@ -319,6 +319,11 @@ DECLARE_ODFIMPORT_TEST(testCalcFtnCntnt, "ooo32780-1.odt")
     //this was a CalcFtnCntnt crash
 }
 
+DECLARE_ODFIMPORT_TEST(testMoveSubTree, "ooo77837-1.odt")
+{
+    //this was a MoveSubTree crash
+}
+
 DECLARE_ODFIMPORT_TEST(testFdo75872_ooo33, "fdo75872_ooo33.odt")
 {
     // graphics default style: line color and fill color changed
