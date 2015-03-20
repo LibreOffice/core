@@ -1,1 +1,113 @@
-android specific code, wrapper logic and tests
+Android-specific notes
+
+Note that this document has not necessarily been updated to match
+reality...
+
+For instructions on how to build for Android, see README.cross.
+
+* Getting something running on an emulated device
+
+	Create an AVD in the android UI, don't even try to get
+the data partition size right in the GUI, that is doomed to producing
+an AVD that doesn't work. Instead start it from the console:
+
+	LD_LIBRARY_PATH=$(pwd)/lib emulator-arm -avd <Name> -partition-size 500
+
+In order to have proper acceleration, you need the 32-bit libGL.so:
+
+        sudo zypper in Mesa-libGL-devel-32bit
+
+	Where <Name> is the literal name of the AVD that you entered.
+
+	Then:
+
+	cd android/experimental/LOAndroid3
+	ant debug install
+	adb logcat
+
+	And if all goes well - you should have some nice debug output to enjoy
+when you start the app. After a while of this loop you might find that you have
+lost a lot of space on your emulator's or device's /data volume. If using the
+emulator, you can do:
+
+	adb shell stop; adb shell start
+
+but on a (non-rooted) device you probably just need to reboot it. On the other
+hand, this phenomenon might not happen on actual devices.
+
+* What about using a real device?
+
+	That works fine, too.
+
+* Debugging
+
+	First of all, you need to configure the build with --enable-debug or
+--enable-dbgutil.  You may want to provide --enable-selective-debuginfo too,
+like --enable-selective-debuginfo="sw/" or so, in order to fit into the memory
+during linking.
+
+	Building with all symbols is also possible but the linking is currently
+slow (around 10 to 15 minutes) and you need lots of memory (around 16GB + some
+swap).
+
+	You also want to avoid --with-android-package-name (or when you use
+that, you must set it to "org.libreoffice"), otherwise ndk-gdb will complain
+that
+
+ERROR: Could not extract package's data directory. Are you sure that
+       your installed application is debuggable?
+
+	When you have all this, install the .apk to the device, and:
+
+	cd android/experimental/LOAndroid3
+	<android-ndk-r10d>/ndk-gdb --adb=<android-sdk-linux>/platform-tools/adb --start
+
+	Pretty printers aren't loaded automatically due to the single shared
+	object, but you can still load them manually. E.g. to have a pretty-printer for
+	rtl::OString, you need:
+
+	(gdb) python sys.path.insert(0, "/master/solenv/gdb")
+	(gdb) source /master/instdir/program/libuno_sal.so.3-gdb.py
+
+* Common Errors / Gotchas
+
+lo_dlneeds: Could not read ELF header of /data/data/org.libreoffice...libfoo.so
+	This (most likely) means that the install quietly failed, and that
+the file is truncated; check it out with adb shell ls -l /data/data/....
+
+
+* Detailed explanation
+
+Note: the below talk about unit tests is obsolete; we no longer have
+any makefilery etc to build unit tests for Android.
+
+Unit tests are the first thing we want to run on Android, to get some
+idea how well, if at all, the basic LO libraries work. We want to
+build even unit tests as normal Android apps, i.e. packaged as .apk
+files, so that they run in a sandboxed environment like that of
+whatever eventual end-user Android apps there will be that use LO
+code.
+
+Sure, we could quite easily build unit tests as plain Linux
+executables (built against the Android libraries, of course, not
+GNU/Linux ones), push them to the device or emulator with adb and run
+them from adb shell, but that would not be a good test as the
+environment such processs run in is completely different from that in
+which real end-user apps with GUI etc run. We have no intent to
+require LibreOffice code to be used only on "rooted" devices etc.
+
+All Android apps are basically Java programs. They run "in" a Dalvik
+virtual machine. Yes, you can also have apps where all *your* code is
+native code, written in a compiled language like C or C++. But also
+also such apps are actually started by system-provided Java
+bootstrapping code (NativeActivity) running in a Dalvik VM.
+
+Such a native app (or actually, "activity") is not built as a
+executable program, but as a shared object. The Java NativeActivity
+bootstrapper loads that shared object with dlopen.
+
+Anyway, our current "experimental" apps (DocumentLoader,
+LibreOffice4Android and LibreOfficeDesktop) are not based on
+NativeActivity any more. They have normal Java code for the activity,
+and just call out to a single, app-specific native library (called
+liblo-native-code.so) to do all the heavy lifting.
