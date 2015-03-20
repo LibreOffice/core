@@ -198,7 +198,7 @@ void WinLayout::DrawText(SalGraphics& rGraphics) const
 
         // setup the hidden DC with black color and white background, we will
         // use the result of the text drawing later as a mask only
-        SelectFont(aDC.getCompatibleHDC(), mhFont);
+        HFONT hOrigFont = SelectFont(aDC.getCompatibleHDC(), mhFont);
 
         SetTextColor(aDC.getCompatibleHDC(), RGB(0, 0, 0));
         SetBkColor(aDC.getCompatibleHDC(), RGB(255, 255, 255));
@@ -223,6 +223,8 @@ void WinLayout::DrawText(SalGraphics& rGraphics) const
 
             pImpl->PostDraw();
         }
+
+        SelectFont(aDC.getCompatibleHDC(), hOrigFont);
     }
 }
 
