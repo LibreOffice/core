@@ -59,8 +59,8 @@ protected:
 
     DECL_LINK( EdModifyHdl, Edit* );
 
-    void Select();
-    void Deselect();
+    virtual void Select();
+    virtual void Deselect();
 
     virtual OUString GetExpressionString() = 0;
 
@@ -88,6 +88,7 @@ class ScConditionFrmtEntry : public ScCondFrmtEntry, public SfxListener
     ListBox maLbCondType;
     formula::RefEdit maEdVal1;
     formula::RefEdit maEdVal2;
+    FixedText maFtVal;
     FixedText maFtStyle;
     ListBox maLbStyle;
     SvxFontPrevWindow maWdPreview;
@@ -103,6 +104,7 @@ class ScConditionFrmtEntry : public ScCondFrmtEntry, public SfxListener
     void Init(ScCondFormatDlg* pDialogParent);
     DECL_LINK( StyleSelectHdl, void* );
     DECL_LINK( ConditionTypeSelectHdl, void* );
+    DECL_LINK( OnEdChanged, Edit* );
 
     // Searches the lookup table for the entry position, given condition mode
     sal_Int32 ConditionModeToEntryPos( ScConditionMode eMode ) const;
@@ -110,6 +112,10 @@ class ScConditionFrmtEntry : public ScCondFrmtEntry, public SfxListener
     ScConditionMode EntryPosToConditionMode( sal_Int32 aEntryPos ) const;
     // Returns the number of edit fields used for a given condition mode
     sal_Int32 GetNumberEditFields( ScConditionMode eMode ) const;
+
+protected:
+    void Select() SAL_OVERRIDE;
+    void Deselect() SAL_OVERRIDE;
 
 public:
     ScConditionFrmtEntry( vcl::Window* pParent, ScDocument* pDoc, ScCondFormatDlg* pDialogParent,

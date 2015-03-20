@@ -23,9 +23,11 @@
 #include <svx/drawitem.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
+#include <formula/token.hxx>
 #include "tokenarray.hxx"
 #include "stlpool.hxx"
 #include "tabvwsh.hxx"
+#include "simpleformulacalc.hxx"
 
 #include "colorformat.hxx"
 
@@ -124,23 +126,6 @@ void ScCondFrmtEntry::Deselect()
     SetHeight();
 }
 
-IMPL_LINK(ScCondFrmtEntry, EdModifyHdl, Edit*, pEdit)
-{
-    OUString aFormula = pEdit->GetText();
-    ScCompiler aComp( mpDoc, maPos );
-    aComp.SetGrammar( mpDoc->GetGrammar() );
-    boost::scoped_ptr<ScTokenArray> mpCode(aComp.CompileString(aFormula));
-    if(mpCode->GetCodeError())
-    {
-        pEdit->SetControlBackground(COL_LIGHTRED);
-    }
-    else
-    {
-        pEdit->SetControlBackground(GetSettings().GetStyleSettings().GetWindowColor());
-    }
-    return 0;
-}
-
 //condition
 
 namespace {
@@ -197,6 +182,7 @@ ScConditionFrmtEntry::ScConditionFrmtEntry( vcl::Window* pParent, ScDocument* pD
     maLbCondType( this, ScResId( LB_CELLIS_TYPE ) ),
     maEdVal1( this, NULL, NULL, ScResId( ED_VAL1 ) ),
     maEdVal2( this, NULL, NULL, ScResId( ED_VAL2 ) ),
+    maFtVal( this, ScResId( FT_VAL ) ),
     maFtStyle( this, ScResId( FT_STYLE ) ),
     maLbStyle( this, ScResId( LB_STYLE ) ),
     maWdPreview( this, ScResId( WD_PREVIEW ) ),
@@ -256,8 +242,8 @@ void ScConditionFrmtEntry::Init(ScCondFormatDlg* pDialogParent)
     maEdVal1.SetStyle( maEdVal1.GetStyle() | WB_FORCECTRLBACKGROUND );
     maEdVal2.SetStyle( maEdVal2.GetStyle() | WB_FORCECTRLBACKGROUND );
 
-    maEdVal1.SetModifyHdl( LINK( this, ScCondFrmtEntry, EdModifyHdl ) );
-    maEdVal2.SetModifyHdl( LINK( this, ScCondFrmtEntry, EdModifyHdl ) );
+    maEdVal1.SetModifyHdl( LINK( this, ScConditionFrmtEntry, OnEdChanged ) );
+    maEdVal2.SetModifyHdl( LINK( this, ScConditionFrmtEntry, OnEdChanged ) );
 
     FillStyleListBox( mpDoc, maLbStyle );
     maLbStyle.SetSelectHdl( LINK( this, ScConditionFrmtEntry, StyleSelectHdl ) );
@@ -282,6 +268,54 @@ ScFormatEntry* ScConditionFrmtEntry::createConditionEntry() const
     ScFormatEntry* pEntry = new ScCondFormatEntry(eMode, aExpr1, aExpr2, mpDoc, maPos, maLbStyle.GetSelectEntry());
     return pEntry;
 }
+
+IMPL_LINK(ScConditionFrmtEntry, OnEdChanged, Edit*, pEdit)
+{
+    OUString aFormula = pEdit->GetText();
+
+    if( aFormula.isEmpty() )
+    {
+        maFtVal.SetText("Enter a value!");
+        return 0;
+    }
+
+    // Let's see what we have here
+    ScSimpleFormulaCalculator calculator( mpDoc, maPos, aFormula );
+    calculator.Calculate();
+
+    ScTokenArray *ta = calculator.GetCode();
+    formula::FormulaToken *token = ta->First();
+    formula::StackVar t = token->GetType();
+
+    // If it's recognized as a Number or a string, we're OK
+    if( ( token->GetOpCode() == ocPush ) && ( ( t == formula::svDouble ) || ( t == formula::svString ) ) )
+    {
+        pEdit->SetControlBackground(GetSettings().GetStyleSettings().GetWindowColor());
+        maFtVal.SetText("");
+    }
+    // otherwise warn the user
+    else
+    {
+        pEdit->SetControlBackground(COL_LIGHTRED);
+        maFtVal.SetText("Strings must be quoted, otherwise they might be interpreted as an address or col/row name!");
+    }
+
+
+    return 0;
+}
+
+void ScConditionFrmtEntry::Select()
+{
+    maFtVal.Show();
+    ScCondFrmtEntry::Select();
+}
+
+void ScConditionFrmtEntry::Deselect()
+{
+    maFtVal.Hide();
+    ScCondFrmtEntry::Deselect();
+}
+
 
 sal_Int32 ScConditionFrmtEntry::ConditionModeToEntryPos( ScConditionMode eMode ) const
 {

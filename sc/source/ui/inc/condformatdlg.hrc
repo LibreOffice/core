@@ -55,4 +55,6 @@
 #define FT_ICON_SET_ENTRY_TEXT 49
 #define ED_ICON_SET_ENTRY_VALUE 50
 
+#define FT_VAL 51
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
