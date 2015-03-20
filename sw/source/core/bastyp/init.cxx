@@ -109,6 +109,7 @@
 #include <init.hxx>
 #include <pam.hxx>
 #include <paratr.hxx>
+#include <proofreadingiterator.hxx>
 #include <rtl/instance.hxx>
 #include <svl/macitem.hxx>
 #include <svx/dialogs.hrc>
@@ -749,6 +750,7 @@ void _FinitCore()
     _FrmFinit();
     _TextFinit();
 
+    sw::proofreadingiterator::dispose();
     SwBreakIt::_Delete();
     delete pCheckIt;
     delete pAppCharClass;

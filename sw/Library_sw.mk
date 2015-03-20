@@ -130,6 +130,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/core/bastyp/checkit \
     sw/source/core/bastyp/index \
     sw/source/core/bastyp/init \
+    sw/source/core/bastyp/proofreadingiterator \
     sw/source/core/bastyp/swcache \
     sw/source/core/bastyp/swrect \
     sw/source/core/bastyp/swregion \

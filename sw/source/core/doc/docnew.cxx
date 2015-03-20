@@ -21,10 +21,10 @@
 
 #include <doc.hxx>
 #include <dcontact.hxx>
+#include <proofreadingiterator.hxx>
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
-#include <com/sun/star/linguistic2/ProofreadingIterator.hpp>
 #include <com/sun/star/text/XFlatParagraphIteratorProvider.hpp>
 
 #include <comphelper/processfactory.hxx>
@@ -140,7 +140,7 @@ const sal_Char sGrfCollStr[] = "Graphikformatvorlage";
         uno::Reference< uno::XComponentContext >  xContext( comphelper::getProcessComponentContext() );
         try
         {
-            m_xGCIterator = linguistic2::ProofreadingIterator::create( xContext );
+            m_xGCIterator = sw::proofreadingiterator::get( xContext );
         }
         catch (const uno::Exception &)
         {

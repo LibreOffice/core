@@ -22,7 +22,6 @@
 #include <com/sun/star/linguistic2/XDictionaryList.hpp>
 #include <com/sun/star/linguistic2/LinguServiceManager.hpp>
 #include <com/sun/star/linguistic2/XLinguServiceEventBroadcaster.hpp>
-#include <com/sun/star/linguistic2/ProofreadingIterator.hpp>
 #include <com/sun/star/linguistic2/LinguServiceEventFlags.hpp>
 
 #include <unotools/lingucfg.hxx>
@@ -32,6 +31,7 @@
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include "dlelstnr.hxx"
+#include <proofreadingiterator.hxx>
 #include <swmodule.hxx>
 #include <wrtsh.hxx>
 #include <view.hxx>
@@ -56,7 +56,7 @@ SwLinguServiceEventListener::SwLinguServiceEventListener()
 
         if (SvtLinguConfig().HasGrammarChecker())
         {
-            xGCIterator = ProofreadingIterator::create(xContext);
+            xGCIterator = sw::proofreadingiterator::get(xContext);
             Reference< XLinguServiceEventBroadcaster > xBC( xGCIterator, UNO_QUERY );
             if (xBC.is())
                 xBC->addLinguServiceEventListener( (XLinguServiceEventListener *) this );
