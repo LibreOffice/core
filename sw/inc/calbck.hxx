@@ -120,13 +120,13 @@ public:
     virtual void Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue )
         { CheckRegistration( pOldValue, pNewValue ); }
     // when overriding this, you MUST call SwClient::SwClientModify() in the override!
-    virtual void SwClientNotify( const SwModify&, const SfxHint& rHint)
-        SAL_OVERRIDE
+    virtual void SwClientNotify( const SwModify&, const SfxHint& rHint) SAL_OVERRIDE
     {
-        // assuming the compiler to realize that a dynamic_cast to a final class is just a pointer compare ...
-        auto pLegacyHint(dynamic_cast<const sw::LegacyModifyHint*>(&rHint));
-        if(pLegacyHint)
+        if(typeid(rHint) == typeid(sw::LegacyModifyHint))
+        {
+            auto pLegacyHint(static_cast<const sw::LegacyModifyHint*>(&rHint));
             Modify(pLegacyHint->m_pOld, pLegacyHint->m_pNew);
+        }
     };
 
     // in case an SwModify object is destroyed that itself is registered in another SwModify,
