@@ -190,7 +190,7 @@ void ScAnalysisOfVarianceDialog::AnovaSingleFactor(AddressWalkerWriter& output, 
     output.newLine();
 
     double aAlphaValue = mpAlphaField->GetValue() / 100.0;
-    output.writeString("Alpha");
+    output.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_LABEL_ALPHA));
     output.nextColumn();
     output.writeValue(aAlphaValue);
     aTemplate.autoReplaceAddress("%ALPHA%", output.current());
