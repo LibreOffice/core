@@ -1400,26 +1400,19 @@ namespace
         TYPEINFO_OVERRIDE();
         int m_nModifyCount;
         TestClient() : m_nModifyCount(0) {};
-        virtual void Modify( const SfxPoolItem*, const SfxPoolItem*)
-            SAL_OVERRIDE
-        {
-            ShowReg();
-            ++m_nModifyCount;
-        }
-
-        void ShowReg()
-        {
-            if(GetRegisteredIn())
-            {
-                std::cout << "TestClient " << this << " registered  in " << GetRegisteredIn() << std::endl;
-            }
-            else
-                std::cout << "TestClient " << this << " not registered " << std::endl;
-        }
+        virtual void Modify( const SfxPoolItem*, const SfxPoolItem*) SAL_OVERRIDE
+        { ++m_nModifyCount; }
     };
     TYPEINIT1( TestClient, SwClient );
+    // sad copypasta as tools/rtti.hxxs little brain cant cope with templates
     struct OtherTestClient : SwClient
-        { TYPEINFO_OVERRIDE(); };
+    {
+        TYPEINFO_OVERRIDE();
+        int m_nModifyCount;
+        OtherTestClient() : m_nModifyCount(0) {};
+        virtual void Modify( const SfxPoolItem*, const SfxPoolItem*) SAL_OVERRIDE
+        { ++m_nModifyCount; }
+    };
     TYPEINIT1( OtherTestClient, SwClient );
 }
 void SwDocTest::testClientModify()
