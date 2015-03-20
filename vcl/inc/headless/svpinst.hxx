@@ -57,7 +57,7 @@ public:
 class SvpSalFrame;
 class GenPspGraphics;
 
-extern "C" SalInstance* svp_create_SalInstance();
+SalInstance* svp_create_SalInstance();
 
 class VCL_DLLPUBLIC SvpSalInstance : public SalGenericInstance
 {

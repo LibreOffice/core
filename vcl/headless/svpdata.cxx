@@ -19,14 +19,11 @@ public:
 };
 
 // plugin factory function
-extern "C"
+SalInstance* svp_create_SalInstance()
 {
-    SalInstance* svp_create_SalInstance()
-    {
-        SvpSalInstance* pInstance = new SvpSalInstance( new SalYieldMutex() );
-        new SvpSalData( pInstance );
-        return pInstance;
-    }
+    SvpSalInstance* pInstance = new SvpSalInstance( new SalYieldMutex() );
+    new SvpSalData( pInstance );
+    return pInstance;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
