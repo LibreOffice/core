@@ -39,7 +39,7 @@ CellLineStyleValueSet::~CellLineStyleValueSet()
 
 void CellLineStyleValueSet::dispose()
 {
-    delete pVDev;
+    pVDev.disposeAndClear();
     ValueSet::dispose();
 }
 

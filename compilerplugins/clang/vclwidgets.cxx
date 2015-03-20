@@ -243,6 +243,8 @@ bool VCLWidgets::VisitVarDecl(const VarDecl * pVarDecl) {
         && !startsWith(pVarDecl->getType().getAsString(), "::std::multimap<sal_Int32, class OTableWindow *>")
         && !startsWith(pVarDecl->getType().getAsString(), "::dbp::OMultiInstanceAutoRegistration< ::dbp::OUnoAutoPilot<")
         && !startsWith(pVarDecl->getType().getAsString(), "SwSidebarWin_iterator")
+        && !startsWith(pVarDecl->getType().getAsString(), "functor_vector_type")
+        && !startsWith(pVarDecl->getType().getAsString(), "const functor_vector_type")
         && containsWindowSubclass(pVarDecl->getType()))
     {
         report(

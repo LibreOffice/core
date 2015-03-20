@@ -90,8 +90,8 @@ private:
 public:
 
     EMFWriter(SvStream &rStream)
-        : m_rStm(rStream)
-        , maVDev( new VirtualDevice() )
+        : maVDev( new VirtualDevice() )
+        , m_rStm(rStream)
         , mpHandlesUsed(NULL)
         , mnHandleCount(0)
         , mnRecordCount(0)

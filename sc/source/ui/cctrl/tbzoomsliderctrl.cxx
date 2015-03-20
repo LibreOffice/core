@@ -401,7 +401,7 @@ void ScZoomSliderWnd::DoPaint( const Rectangle& /*rRect*/ )
     Size aSliderWindowSize = GetOutputSizePixel();
     Rectangle aRect( Point( 0, 0 ), aSliderWindowSize );
 
-    VirtualDevice* pVDev = new VirtualDevice( *this );
+    ScopedVclPtr<VirtualDevice> pVDev = new VirtualDevice( *this );
     pVDev->SetOutputSizePixel( aSliderWindowSize );
 
     Rectangle   aSlider = aRect;
@@ -484,9 +484,6 @@ void ScZoomSliderWnd::DoPaint( const Rectangle& /*rRect*/ )
     pVDev->DrawImage( aImagePoint, mpImpl->maIncreaseButton );
 
     DrawOutDev( Point(0, 0), aSliderWindowSize, Point(0, 0), aSliderWindowSize, *pVDev );
-
-    delete pVDev;
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

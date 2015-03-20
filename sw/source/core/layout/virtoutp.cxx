@@ -133,8 +133,7 @@ bool SwLayVout::DoesFit( const Size &rNew )
         aSize.Width() = rNew.Width();
         if( !pVirDev->SetOutputSizePixel( aSize ) )
         {
-            delete pVirDev;
-            pVirDev = NULL;
+            pVirDev.disposeAndClear();
             aSize.Width() = 0;
             return false;
         }

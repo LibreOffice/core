@@ -109,7 +109,7 @@ SwTxtAttr *SwAttrIter::GetAttr( const sal_Int32 nPosition ) const
 bool SwAttrIter::SeekAndChgAttrIter( const sal_Int32 nNewPos, OutputDevice* pOut )
 {
     bool bChg = nStartIndex && nNewPos == nPos ? pFnt->IsFntChg() : Seek( nNewPos );
-    if ( pLastOut != pOut )
+    if ( pLastOut.get() != pOut )
     {
         pLastOut = pOut;
         pFnt->SetFntChg( true );
@@ -174,7 +174,7 @@ bool SwAttrIter::SeekStartAndChgAttrIter( OutputDevice* pOut, const bool bParaFo
     }
 
     bool bChg = pFnt->IsFntChg();
-    if ( pLastOut != pOut )
+    if ( pLastOut.get() != pOut )
     {
         pLastOut = pOut;
         pFnt->SetFntChg( true );

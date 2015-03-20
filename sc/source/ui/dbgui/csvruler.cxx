@@ -93,8 +93,8 @@ ScCsvRuler::ScCsvRuler( ScCsvControl& rParent ) :
     EnableRTL( false ); // RTL
     InitColors();
     InitSizeData();
-    maBackgrDev.SetFont( GetFont() );
-    maRulerDev.SetFont( GetFont() );
+    maBackgrDev->SetFont( GetFont() );
+    maRulerDev->SetFont( GetFont() );
 
     load_FixedWidthList( maSplits );
 }
@@ -165,8 +165,8 @@ void ScCsvRuler::InitSizeData()
     maActiveRect.SetPos( Point( GetFirstX(), (GetHeight() - nActiveHeight - 1) / 2 ) );
     maActiveRect.SetSize( Size( nActiveWidth, nActiveHeight ) );
 
-    maBackgrDev.SetOutputSizePixel( maWinSize );
-    maRulerDev.SetOutputSizePixel( maWinSize );
+    maBackgrDev->SetOutputSizePixel( maWinSize );
+    maRulerDev->SetOutputSizePixel( maWinSize );
 
     InvalidateGfx();
 }
@@ -533,30 +533,30 @@ void ScCsvRuler::ImplRedraw()
             ImplDrawBackgrDev();
             ImplDrawRulerDev();
         }
-        DrawOutDev( Point(), maWinSize, Point(), maWinSize, maRulerDev );
+        DrawOutDev( Point(), maWinSize, Point(), maWinSize, *maRulerDev.get() );
         ImplDrawTrackingRect();
     }
 }
 
 void ScCsvRuler::ImplDrawArea( sal_Int32 nPosX, sal_Int32 nWidth )
 {
-    maBackgrDev.SetLineColor();
+    maBackgrDev->SetLineColor();
     Rectangle aRect( Point( nPosX, 0 ), Size( nWidth, GetHeight() ) );
-    maBackgrDev.SetFillColor( maBackColor );
-    maBackgrDev.DrawRect( aRect );
+    maBackgrDev->SetFillColor( maBackColor );
+    maBackgrDev->DrawRect( aRect );
 
     aRect = maActiveRect;
     aRect.Left() = std::max( GetFirstX(), nPosX );
     aRect.Right() = std::min( std::min( GetX( GetPosCount() ), GetLastX() ), nPosX + nWidth - sal_Int32( 1 ) );
     if( aRect.Left() <= aRect.Right() )
     {
-        maBackgrDev.SetFillColor( maActiveColor );
-        maBackgrDev.DrawRect( aRect );
+        maBackgrDev->SetFillColor( maActiveColor );
+        maBackgrDev->DrawRect( aRect );
     }
 
-    maBackgrDev.SetLineColor( maTextColor );
+    maBackgrDev->SetLineColor( maTextColor );
     sal_Int32 nY = GetHeight() - 1;
-    maBackgrDev.DrawLine( Point( nPosX, nY ), Point( nPosX + nWidth - 1, nY ) );
+    maBackgrDev->DrawLine( Point( nPosX, nY ), Point( nPosX + nWidth - 1, nY ) );
 }
 
 void ScCsvRuler::ImplDrawBackgrDev()
@@ -564,8 +564,8 @@ void ScCsvRuler::ImplDrawBackgrDev()
     ImplDrawArea( 0, GetWidth() );
 
     // scale
-    maBackgrDev.SetLineColor( maTextColor );
-    maBackgrDev.SetFillColor();
+    maBackgrDev->SetLineColor( maTextColor );
+    maBackgrDev->SetFillColor();
     sal_Int32 nPos;
 
     sal_Int32 nFirstPos = std::max( GetPosFromX( 0 ) - (sal_Int32)(1L), (sal_Int32)(0L) );
@@ -575,21 +575,21 @@ void ScCsvRuler::ImplDrawBackgrDev()
     {
         sal_Int32 nX = GetX( nPos );
         if( nPos % 5 )
-            maBackgrDev.DrawPixel( Point( nX, nY ) );
+            maBackgrDev->DrawPixel( Point( nX, nY ) );
         else
-            maBackgrDev.DrawLine( Point( nX, nY - 1 ), Point( nX, nY + 1 ) );
+            maBackgrDev->DrawLine( Point( nX, nY - 1 ), Point( nX, nY + 1 ) );
     }
 
     // texts
-    maBackgrDev.SetTextColor( maTextColor );
-    maBackgrDev.SetTextFillColor();
+    maBackgrDev->SetTextColor( maTextColor );
+    maBackgrDev->SetTextFillColor();
     for( nPos = ((nFirstPos + 9) / 10) * 10; nPos <= nLastPos; nPos += 10 )
     {
         OUString aText( OUString::number( nPos ) );
-        sal_Int32 nTextWidth = maBackgrDev.GetTextWidth( aText );
+        sal_Int32 nTextWidth = maBackgrDev->GetTextWidth( aText );
         sal_Int32 nTextX = GetX( nPos ) - nTextWidth / 2;
         ImplDrawArea( nTextX - 1, nTextWidth + 2 );
-        maBackgrDev.DrawText( Point( nTextX, maActiveRect.Top() ), aText );
+        maBackgrDev->DrawText( Point( nTextX, maActiveRect.Top() ), aText );
     }
 }
 
@@ -599,10 +599,10 @@ void ScCsvRuler::ImplDrawSplit( sal_Int32 nPos )
     {
         Point aPos( GetX( nPos ) - mnSplitSize / 2, GetHeight() - mnSplitSize - 2 );
         Size aSize( mnSplitSize, mnSplitSize );
-        maRulerDev.SetLineColor( maTextColor );
-        maRulerDev.SetFillColor( maSplitColor );
-        maRulerDev.DrawEllipse( Rectangle( aPos, aSize ) );
-        maRulerDev.DrawPixel( Point( GetX( nPos ), GetHeight() - 2 ) );
+        maRulerDev->SetLineColor( maTextColor );
+        maRulerDev->SetFillColor( maSplitColor );
+        maRulerDev->DrawEllipse( Rectangle( aPos, aSize ) );
+        maRulerDev->DrawPixel( Point( GetX( nPos ), GetHeight() - 2 ) );
     }
 }
 
@@ -613,14 +613,14 @@ void ScCsvRuler::ImplEraseSplit( sal_Int32 nPos )
         ImplInvertCursor( GetRulerCursorPos() );
         Point aPos( GetX( nPos ) - mnSplitSize / 2, 0 );
         Size aSize( mnSplitSize, GetHeight() );
-        maRulerDev.DrawOutDev( aPos, aSize, aPos, aSize, maBackgrDev );
+        maRulerDev->DrawOutDev( aPos, aSize, aPos, aSize, *maBackgrDev.get() );
         ImplInvertCursor( GetRulerCursorPos() );
     }
 }
 
 void ScCsvRuler::ImplDrawRulerDev()
 {
-    maRulerDev.DrawOutDev( Point(), maWinSize, Point(), maWinSize, maBackgrDev );
+    maRulerDev->DrawOutDev( Point(), maWinSize, Point(), maWinSize, *maBackgrDev.get() );
     ImplInvertCursor( GetRulerCursorPos() );
 
     sal_uInt32 nFirst = maSplits.LowerBound( GetFirstVisPos() );
@@ -634,7 +634,7 @@ void ScCsvRuler::ImplInvertCursor( sal_Int32 nPos )
 {
     if( IsVisibleSplitPos( nPos ) )
     {
-        ImplInvertRect( maRulerDev, Rectangle( Point( GetX( nPos ) - 1, 0 ), Size( 3, GetHeight() - 1 ) ) );
+        ImplInvertRect( *maRulerDev.get(), Rectangle( Point( GetX( nPos ) - 1, 0 ), Size( 3, GetHeight() - 1 ) ) );
         if( HasSplit( nPos ) )
             ImplDrawSplit( nPos );
     }

@@ -1854,24 +1854,24 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
 
             case META_GRADIENT_ACTION:
             {
-                VirtualDevice               aVDev;
+                ScopedVclPtr<VirtualDevice> aVDev;
                 GDIMetaFile                 aTmpMtf;
                 const MetaGradientAction*   pA = static_cast<const MetaGradientAction*>(pMA);
 
-                aVDev.SetMapMode( aTargetMapMode );
-                aVDev.AddGradientActions( pA->GetRect(), pA->GetGradient(), aTmpMtf );
+                aVDev->SetMapMode( aTargetMapMode );
+                aVDev->AddGradientActions( pA->GetRect(), pA->GetGradient(), aTmpMtf );
                 WriteOpcodes( aTmpMtf );
             }
             break;
 
             case META_HATCH_ACTION:
             {
-                VirtualDevice           aVDev;
+                ScopedVclPtr<VirtualDevice> aVDev;
                 GDIMetaFile             aTmpMtf;
                 const MetaHatchAction*  pA = static_cast<const MetaHatchAction*>(pMA);
 
-                aVDev.SetMapMode( aTargetMapMode );
-                aVDev.AddHatchActions( pA->GetPolyPolygon(), pA->GetHatch(), aTmpMtf );
+                aVDev->SetMapMode( aTargetMapMode );
+                aVDev->AddHatchActions( pA->GetPolyPolygon(), pA->GetHatch(), aTmpMtf );
                 WriteOpcodes( aTmpMtf );
             }
             break;

@@ -240,7 +240,7 @@ struct SwPaintProperties {
     // Only repaint the Fly content as well as the background of the Fly content if
     // a metafile is taken of the Fly.
     bool                bSFlyMetafile;
-    OutputDevice       *pSFlyMetafileOut;
+    VclPtr<OutputDevice> pSFlyMetafileOut;
     SwViewShell        *pSGlobalShell;
 
     // Retouch for transparent Flys is done by the background of the Flys.
@@ -1247,7 +1247,7 @@ void SwAlignRect( SwRect &rRect, const SwViewShell *pSh )
     }
 
     const OutputDevice *pOut = gProp.bSFlyMetafile ?
-                        gProp.pSFlyMetafileOut : pSh->GetOut();
+                        gProp.pSFlyMetafileOut.get() : pSh->GetOut();
 
     // Hold original rectangle in pixel
     const Rectangle aOrgPxRect = pOut->LogicToPixel( rRect.SVRect() );
