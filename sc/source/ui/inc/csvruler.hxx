@@ -32,8 +32,8 @@ class ScAccessibleCsvControl;
 class SC_DLLPUBLIC ScCsvRuler : public ScCsvControl
 {
 private:
-    VirtualDevice               maBackgrDev;        /// Ruler background, scaling.
-    VirtualDevice               maRulerDev;         /// Ruler with splits and cursor.
+    ScopedVclPtr<VirtualDevice>  maBackgrDev;        /// Ruler background, scaling.
+    ScopedVclPtr<VirtualDevice>  maRulerDev;         /// Ruler with splits and cursor.
 
     Color                       maBackColor;        /// Background color.
     Color                       maActiveColor;      /// Color for active part of ruler.

@@ -60,7 +60,7 @@ private:
                           bool              bState );
 
 protected:
-    OutputDevice* pOut;
+    VclPtr<OutputDevice> pOut;
     Point   aBtnPos;
     Size    aBtnSize;
 };

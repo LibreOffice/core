@@ -588,7 +588,7 @@ private:
 
 private:
     ScDocument& mrDoc;
-    OutputDevice* mpOutDev;
+    VclPtr<OutputDevice> mpOutDev;
     double mfPPTX;
     double mfPPTY;
     const ::std::vector<TabRanges>* mpTabRangesArray;

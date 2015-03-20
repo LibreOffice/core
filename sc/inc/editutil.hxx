@@ -41,7 +41,7 @@ class ScEditUtil
     SCROW           nRow;
     SCTAB           nTab;
     Point           aScrPos;
-    OutputDevice*   pDev;           // MapMode has to be set
+    VclPtr<OutputDevice>   pDev;           // MapMode has to be set
     double          nPPTX;
     double          nPPTY;
     Fraction        aZoomX;
@@ -80,10 +80,7 @@ public:
                 ScEditUtil( ScDocument* pDocument, SCCOL nX, SCROW nY, SCTAB nZ,
                             const Point& rScrPosPixel,
                             OutputDevice* pDevice, double nScaleX, double nScaleY,
-                            const Fraction& rX, const Fraction& rY ) :
-                    pDoc(pDocument),nCol(nX),nRow(nY),nTab(nZ),
-                    aScrPos(rScrPosPixel),pDev(pDevice),
-                    nPPTX(nScaleX),nPPTY(nScaleY),aZoomX(rX),aZoomY(rY) {}
+                            const Fraction& rX, const Fraction& rY );
 
     Rectangle   GetEditArea( const ScPatternAttr* pPattern, bool bForceToTop );
 };

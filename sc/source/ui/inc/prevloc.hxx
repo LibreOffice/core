@@ -82,7 +82,7 @@ public:
 
 class ScPreviewLocationData
 {
-    OutputDevice* pWindow;
+    VclPtr<OutputDevice> pWindow;
     ScDocument* pDoc;
     MapMode     aCellMapMode;
     MapMode     aDrawMapMode[SC_PREVIEW_MAXRANGES];

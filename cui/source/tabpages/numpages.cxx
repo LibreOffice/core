@@ -2379,7 +2379,7 @@ void    SvxNumberingPreview::Paint( const Rectangle& /*rRect*/ )
     const Color aBackColor = rStyleSettings.GetFieldColor();
     const Color aTextColor = rStyleSettings.GetFieldTextColor();
 
-    boost::scoped_ptr<VirtualDevice> pVDev(new VirtualDevice(*this));
+    ScopedVclPtr<VirtualDevice> pVDev(new VirtualDevice(*this));
     pVDev->EnableRTL( IsRTLEnabled() );
     pVDev->SetMapMode(GetMapMode());
     pVDev->SetOutputSize( aSize );
