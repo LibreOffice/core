@@ -32,8 +32,8 @@ class SwLayVout
     friend void _FrmFinit();    //deletes Vout
 private:
     SwViewShell*      pSh;
-    OutputDevice*   pOut;
-    VirtualDevice*  pVirDev;
+    VclPtr<OutputDevice>  pOut;
+    VclPtr<VirtualDevice> pVirDev;
     SwRect          aRect;
     SwRect          aOrgRect;
     Size            aSize;

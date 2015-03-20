@@ -156,7 +156,7 @@ class SwStdFontTabPage : public SfxTabPage
     OUString        sShellLabel;
     OUString        sShellIndex;
 
-    SfxPrinter*         pPrt;
+    VclPtr<SfxPrinter>  pPrt;
     FontList*           pFontList;
     SwStdFontConfig*    pFontConfig;
     SwWrtShell*         pWrtShell;

@@ -22,6 +22,7 @@
 
 #include <tools/gen.hxx>
 #include <tools/color.hxx>
+#include <vcl/vclptr.hxx>
 
 class OutputDevice;
 

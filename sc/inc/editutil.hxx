@@ -41,7 +41,7 @@ class ScEditUtil
     SCROW           nRow;
     SCTAB           nTab;
     Point           aScrPos;
-    VclPtr<OutputDevice>   pDev;           // MapMode has to be set
+    VclPtr<OutputDevice> pDev; // MapMode has to be set
     double          nPPTX;
     double          nPPTY;
     Fraction        aZoomX;

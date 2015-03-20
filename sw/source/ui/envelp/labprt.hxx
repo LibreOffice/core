@@ -31,7 +31,7 @@ class SwLabItem;
 
 class SwLabPrtPage : public SfxTabPage
 {
-    Printer*      pPrinter;             // for the shaft setting - unfortunately
+    VclPtr<Printer>      pPrinter; // for the shaft setting - unfortunately
 
     VclPtr<RadioButton>  m_pPageButton;
     VclPtr<RadioButton>  m_pSingleButton;

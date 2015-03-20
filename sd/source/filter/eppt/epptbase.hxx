@@ -197,7 +197,7 @@ public :
 
 private:
 
-    VirtualDevice* pVDev;
+    VclPtr<VirtualDevice> pVDev;
     boost::ptr_vector<FontCollectionEntry> maFonts;
 };
 

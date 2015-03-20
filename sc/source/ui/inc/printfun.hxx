@@ -130,7 +130,7 @@ class ScPrintFunc
 private:
     ScDocShell*         pDocShell;
     ScDocument*         pDoc;
-    SfxPrinter*         pPrinter;
+    VclPtr<SfxPrinter>   pPrinter;
     VclPtr<OutputDevice> pDev;
     FmFormView*         pDrawView;
 

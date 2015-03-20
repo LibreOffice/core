@@ -62,7 +62,7 @@ friend class SwEnvPreview;
 
     SwEnvItem       aEnvItem;
     SwWrtShell      *pSh;
-    Printer         *pPrinter;
+    VclPtr<Printer> pPrinter;
     SfxItemSet      *pAddresseeSet;
     SfxItemSet      *pSenderSet;
     sal_uInt16      m_nEnvPrintId;

@@ -29,7 +29,7 @@ class SwSaveClip
     const bool     bOn;
           bool     bChg;
 protected:
-    OutputDevice* pOut;
+    VclPtr<OutputDevice> pOut;
     void _ChgClip( const SwRect &rRect, const SwTxtFrm* pFrm,
                    bool bEnlargeRect );
 public:
@@ -60,7 +60,7 @@ inline SwSaveClip::~SwSaveClip()
 class SwDbgOut
 {
 protected:
-        OutputDevice* pOut;
+        VclPtr<OutputDevice> pOut;
 public:
         inline SwDbgOut( OutputDevice* pOutDev, const bool bOn = true );
 };

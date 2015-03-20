@@ -105,7 +105,7 @@ namespace dxcanvas
          */
         com::sun::star::rendering::XGraphicDevice* mpDevice;
         HDC                                        mnHDC;
-        OutputDevice* mpOutDev;
+        VclPtr<OutputDevice> mpOutDev;
     };
 
     typedef ::rtl::Reference< com::sun::star::rendering::XGraphicDevice > DeviceRef;

@@ -100,7 +100,7 @@ class SwMailMergeOutputPage : public svt::OWizardPage
     VclPtr<SwMailMergeWizard>  m_pWizard;
 
     //some dialog data
-    Printer*        m_pTempPrinter;
+    VclPtr<Printer> m_pTempPrinter;
     OUString        m_sCC;
     OUString        m_sBCC;
 

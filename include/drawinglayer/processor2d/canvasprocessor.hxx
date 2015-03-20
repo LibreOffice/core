@@ -71,7 +71,7 @@ namespace drawinglayer
         {
         private:
             // the (current) destination OutDev and canvas
-            OutputDevice*                                           mpOutputDevice;
+            VclPtr<OutputDevice>                                    mpOutputDevice;
             com::sun::star::uno::Reference< com::sun::star::rendering::XCanvas >    mxCanvas;
             com::sun::star::rendering::ViewState                    maViewState;
             com::sun::star::rendering::RenderState                  maRenderState;

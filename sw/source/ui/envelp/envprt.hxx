@@ -45,7 +45,7 @@ class SwEnvPrtPage : public SfxTabPage
 
     sal_uInt16 m_aIds[ENV_VER_RGHT-ENV_HOR_LEFT+1];
 
-    Printer* pPrt;
+    VclPtr<Printer>     pPrt;
 
     SwEnvPrtPage(vcl::Window* pParent, const SfxItemSet& rSet);
 

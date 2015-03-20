@@ -29,7 +29,7 @@ namespace sc { namespace sidebar {
 class CellLineStyleValueSet : public ValueSet
 {
 private:
-    VirtualDevice*  pVDev;
+    VclPtr<VirtualDevice> pVDev;
     sal_uInt16      nSelItem;
     OUString        maStrUnit[CELL_LINE_STYLE_ENTRIES];
 public:
