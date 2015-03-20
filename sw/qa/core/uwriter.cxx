@@ -1390,6 +1390,7 @@ void SwDocTest::testIntrusiveRing()
 
 namespace
 {
+    struct TestHint SAL_FINAL : SfxHint {};
     struct TestModify : SwModify
     {
         TYPEINFO_OVERRIDE();
@@ -1399,9 +1400,17 @@ namespace
     {
         TYPEINFO_OVERRIDE();
         int m_nModifyCount;
-        TestClient() : m_nModifyCount(0) {};
+        int m_nNotifyCount;
+        TestClient() : m_nModifyCount(0), m_nNotifyCount(0) {};
         virtual void Modify( const SfxPoolItem*, const SfxPoolItem*) SAL_OVERRIDE
         { ++m_nModifyCount; }
+        virtual void SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
+        {
+            if(typeid(TestHint) == typeid(rHint))
+                ++m_nNotifyCount;
+            else
+                SwClient::SwClientNotify(rModify, rHint);
+        }
     };
     TYPEINIT1( TestClient, SwClient );
     // sad copypasta as tools/rtti.hxxs little brain cant cope with templates
@@ -1420,16 +1429,35 @@ void SwDocTest::testClientModify()
     (void) OtherTestClient(); // avoid loplugin:unreffun
     TestModify aMod;
     TestClient aClient1, aClient2;
+    OtherTestClient aOtherClient1;
+    // test client registration
+    CPPUNIT_ASSERT_EQUAL(aClient1.GetRegisteredIn(),static_cast<SwModify*>(nullptr));
+    CPPUNIT_ASSERT_EQUAL(aClient2.GetRegisteredIn(),static_cast<SwModify*>(nullptr));
     aMod.Add(&aClient1);
     aMod.Add(&aClient2);
     CPPUNIT_ASSERT_EQUAL(aClient1.GetRegisteredIn(),static_cast<SwModify*>(&aMod));
     CPPUNIT_ASSERT_EQUAL(aClient2.GetRegisteredIn(),static_cast<SwModify*>(&aMod));
+    // test broadcast
     aMod.ModifyBroadcast(nullptr, nullptr);
     CPPUNIT_ASSERT_EQUAL(aClient1.m_nModifyCount,1);
     CPPUNIT_ASSERT_EQUAL(aClient2.m_nModifyCount,1);
+    CPPUNIT_ASSERT_EQUAL(aClient1.m_nNotifyCount,0);
+    CPPUNIT_ASSERT_EQUAL(aClient2.m_nNotifyCount,0);
     aMod.ModifyBroadcast(nullptr, nullptr);
     CPPUNIT_ASSERT_EQUAL(aClient1.m_nModifyCount,2);
     CPPUNIT_ASSERT_EQUAL(aClient2.m_nModifyCount,2);
+    CPPUNIT_ASSERT_EQUAL(aClient1.m_nNotifyCount,0);
+    CPPUNIT_ASSERT_EQUAL(aClient2.m_nNotifyCount,0);
+    // test notify
+    {
+        TestHint aHint;
+        aMod.CallSwClientNotify(aHint);
+        CPPUNIT_ASSERT_EQUAL(aClient1.m_nModifyCount,2);
+        CPPUNIT_ASSERT_EQUAL(aClient2.m_nModifyCount,2);
+        CPPUNIT_ASSERT_EQUAL(aClient1.m_nNotifyCount,1);
+        CPPUNIT_ASSERT_EQUAL(aClient2.m_nNotifyCount,1);
+    }
+    // test typed iteration
     CPPUNIT_ASSERT(!aClient1.IsA(TYPE(OtherTestClient)));
     {
         SwIterator<OtherTestClient,SwModify> aIter(aMod);
@@ -1446,8 +1474,24 @@ void SwDocTest::testClientModify()
         }
         CPPUNIT_ASSERT_EQUAL(nCount,2);
     }
+    aMod.Add(&aOtherClient1);
+    CPPUNIT_ASSERT_EQUAL(aOtherClient1.m_nModifyCount,0);
+    {
+        int nCount = 0;
+        SwIterator<TestClient,SwModify> aIter(aMod);
+        for(TestClient* pClient = aIter.First(); pClient ; pClient = aIter.Next())
+        {
+            CPPUNIT_ASSERT_EQUAL(pClient->m_nModifyCount,2);
+            ++nCount;
+        }
+        CPPUNIT_ASSERT_EQUAL(nCount,2);
+    }
+    CPPUNIT_ASSERT_EQUAL(aOtherClient1.m_nModifyCount,0);
+    aMod.Remove(&aOtherClient1);
     CPPUNIT_ASSERT_EQUAL(aClient1.GetRegisteredIn(),static_cast<SwModify*>(&aMod));
     CPPUNIT_ASSERT_EQUAL(aClient2.GetRegisteredIn(),static_cast<SwModify*>(&aMod));
+    CPPUNIT_ASSERT_EQUAL(aOtherClient1.GetRegisteredIn(),static_cast<SwModify*>(nullptr));
+    // test client self-deregistration during iteration
     {
         int nCount = 0;
         SwIterator<TestClient,SwModify> aIter(aMod);
@@ -1472,6 +1516,8 @@ void SwDocTest::testClientModify()
     aMod.ModifyBroadcast(nullptr, nullptr);
     CPPUNIT_ASSERT_EQUAL(aClient1.m_nModifyCount,2);
     CPPUNIT_ASSERT_EQUAL(aClient2.m_nModifyCount,2);
+    CPPUNIT_ASSERT_EQUAL(aClient1.m_nNotifyCount,1);
+    CPPUNIT_ASSERT_EQUAL(aClient2.m_nNotifyCount,1);
 }
 
 void SwDocTest::setUp()
