@@ -50,6 +50,24 @@
       "revId": "6c8fe1af852a490adc1872d3c92286e60b66adcb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a29b11f_2e491bd1",
+        "filename": "xmloff/source/style/xmlnumfi.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1810,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2015-03-20T11:14:32Z",
+      "side": 1,
+      "message": "if !bGrouping is previously treated line 1230 in SvXMLNumFmtDefaults::GetDefaultDateFormat",
+      "parentUuid": "3a29b11f_4ee4973a",
+      "revId": "6c8fe1af852a490adc1872d3c92286e60b66adcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
