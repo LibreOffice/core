@@ -317,7 +317,7 @@ public:
     }
     TElementType* Next()
     {
-        if( m_pPosition == m_pCurrent )
+        if(!IsChanged())
             m_pPosition = GetRightOfPos();
         while(m_pPosition && !m_pPosition->IsA( TYPE(TElementType) ) )
             m_pPosition = GetRightOfPos();
@@ -352,7 +352,7 @@ public:
     }
     SwClient* Next()
     {
-        if( m_pPosition == m_pCurrent )
+        if(!IsChanged())
             m_pPosition = GetRightOfPos();
         return Sync();
     }
