@@ -67,10 +67,6 @@ public:
 
     static bool isValidPosition( const ::com::sun::star::drawing::Position3D& rPos );
 
-private: //methods
-    //no default constructor
-    PlotterBase();
-
 protected: //methods
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >
         createGroupShape( const ::com::sun::star::uno::Reference<
