@@ -1,0 +1,181 @@
+** Understanding transitional VCL lifecycle **
+
+---------- How it used to look ----------
+
+	All VCL classes were explicitly lifecycle managed; so you would
+do:
+	Dialog aDialog(...);   // old - on stack allocation
+	aDialog.Execute(...);
+or:
+	Dialog *pDialog = new Dialog(...);  // old - manual heap allocation
+	pDialog->Execute(...);
+	delete pDialog;
+or:
+	boost::shared_ptr<Dialog> xDialog(new pDialog()); // old
+	xDialog->Execute(...);
+	// depending who shared the ptr this would be freed sometime
+
+	In several cases this lead to rather unpleasant code, when
+various shared_ptr wrappers were used, the lifecycle was far less than
+obvious. Where controls were wrapped by other ref-counted classes -
+such as UNO interfaces, which were also used by native Window
+pointers, the lifecycle became extremely opaque. In addition VCL had
+significant issues with re-enterancy and event emission - adding
+various means such as DogTags to try to detect destruction of a window
+between calls:
+
+	ImplDelData aDogTag( this );	// 'orrible old code
+	Show( true, SHOW_NOACTIVATE );
+	if( !aDogTag.IsDead() )         // did 'this' go invalid yet ?
+		Update();
+
+	Unfortunately use of such protection is/was ad-hoc, and far
+from uniform, despite the prevelance of such potential problems.
+
+	When a lifecycle problem was hit, typically it would take the
+form of accessing memory that had been freed, and contained garbage due
+to lingering pointers to freed objects.
+
+
+---------- Where we are now: ----------
+
+	To fix this situation we now have a VclPtr - which is a smart
+	reference-counting pointer (include/vcl/vclptr.hxx) which is
+	designed to look and behave -very- much like a normal pointer
+	to reduce code-thrash. VclPtr is used to wrap all OutputDevice
+	derived classes thus:
+
+	VclPtr<Dialog> pDialog( new Dialog( ... ) );
+	// gotcha - this is not a good idea ...
+
+	However - while the VclPtr reference count controls the
+	lifecycle of the Dialog object, it is necessary to be able to
+	break reference count cycles. These are extremely common in
+	widget hierarchies as each widget holds (smart) pointers to
+	its parents and also its children.
+
+	Thus - all previous 'delete' calls are replaced with 'dispose'
+	method calls:
+
+** What is dispose ?
+
+	Dispose is defined to be a method that releases all references
+	that an object holds - thus allowing their underlying
+	resources to be released. However - in this specific case it
+	also releases all backing graphical resources. In practical
+	terms, all destructor functionality has been moved into
+	'dispose' methods, in order to provide a minimal initial
+	behavioral change.
+
+** ScopedVclPtr - making disposes easier
+
+	While replacing existing code with new, it can be a bit
+	tiresome to have to manually add 'disposeAndClear()'
+	calls to VclPtr<> instances.
+
+	Luckily it is easy to avoid that with a ScopedVclPtr which
+	does this for you when it goes out of scope.
+
+** How does my familiar code change ?
+
+	Lets tweak the exemplary code above to fit the new model:
+
+-	Dialog aDialog(...);
+-	aDialog.Execute(...);
++	ScopedVclPtr<Dialog> pDialog(new Dialog(...));
++	pDialog->Execute(...); // VclPtr behaves much like a pointer
+
+or:
+-	Dialog *pDialog = new Dialog(...);
++	VclPtr<Dialog> pDialog(newDialog(...));
+	pDialog->Execute(...);
+-	delete pDialog;
++	pDialog.disposeAndClear(); // done manually - replaces a delete
+or:
+-	boost::shared_ptr<Dialog> xDialog(new pDialog());
++	ScopedVclPtr<Dialog> xDialog(new Dialog(...));
+	xDialog->Execute(...);
++	// depending how shared_ptr was shared perhaps
++	// someone else gets a VclPtr to xDialog
+or:
+-	VirtualDevice aDev;
++	ScopedVclPtr<VirtualDevice> pDev(new VirtualDevice());
+
+** Why are these 'disposeOnce' calls in destructors ?
+
+	This is an interim measure while we are migrating, such that
+	it is possible to delete an object conventionally and ensure
+	that its dispose method gets called. In the 'end' we would
+	instead assert that a Window has been disposed in it's
+	destructor, and elide these calls.
+
+	As the object's vtable is altered as we go down the
+	destruction process, and we want to call the correct dispose
+	methods we need this disposeOnce(); call for the interim in
+	every destructor. This is enforced by a clang plugin.
+
+	The plus side of disposeOnce is that the mechanics behind it
+	ensure that a dispose() method is only called a single time,
+	simplifying their implementation.
+
+
+---------- Who owns & disposes what ? ----------
+
+** referencing / ownership inheritance / hierarchy.
+
+** VclBuilder
+	+ and it's magic dispose method.
+
+
+---------- What remains to be done ? ----------
+
+	* Expand the VclPtr pattern to many other less
+	  than safe VCL types.
+
+	* create factory functions for VclPtr<> types and privatize
+	  their constructors.
+
+	* Pass 'const VclPtr<> &' instead of pointers everywhere
+
+	* Cleanup common existing methods such that they continue to
+	  work post-dispose.
+
+	* Dispose functions shoudl be audited to:
+		+ not leave dangling pointsr
+		+ shrink them - some work should incrementally
+		  migrate back to destructors.
+
+---------- FAQ / debugging hints ----------
+
+** Compile with dbgutil
+
+	This is by far the best way to turn on debugging and
+	assertions that help you find problems. In particular
+	there are a few that are really helpful:
+
+	vcl/source/window/window.cxx (Window::dispose)
+		"Window ( N4sfx27sidebar20SidebarDockingWindowE (Properties))
+		          ^^^ class name                 window title ^^^
+		 with live children destroyed:  N4sfx27sidebar6TabBarE ()
+		 N4sfx27sidebar4DeckE () 10FixedImage ()"
+
+	You can de-mangle these names if you can't read them thus:
+
+	$ c++filt -t N4sfx27sidebar20SidebarDockingWindowE
+	sfx2::sidebar::SidebarDockingWindow
+
+	In the above case - it is clear that the children have not been
+	disposed before their parents. As an aside, having a dispose chain
+	separate from destructors allows us to emit real type names for
+	parents here.
+
+	To fix this, we will need to get the dispose ordering right,
+	occasionally in the conversion we re-ordered destruction, or
+	omitted a disposeAndClear() in a ::dispose() method.
+
+	=> If you see this, check the order of disposeAndClear() in
+	   the sfx2::Sidebar::SidebarDockingWindow::dispose() method
+
+	=> also worth git grepping for 'new sfx::sidebar::TabBar' to
+	   see where those children were added.
+
