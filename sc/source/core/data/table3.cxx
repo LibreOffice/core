@@ -2749,7 +2749,7 @@ void ScTable::TopTenQuery( ScQueryParam& rParam )
                 QuickSort( pArray.get(), nRow1, rParam.nRow2 );
                 ScSortInfo** ppInfo = pArray->GetFirstArray();
                 SCSIZE nValidCount = nCount;
-                // Don't count note or blank cells, they are sorted at the end
+                // Don't count note or blank cells, they are sorted to the end
                 while (nValidCount > 0 && ppInfo[nValidCount-1]->maCell.isEmpty())
                     nValidCount--;
                 // Don't count Strings, they are between Value and blank
@@ -2758,7 +2758,7 @@ void ScTable::TopTenQuery( ScQueryParam& rParam )
                 if ( nValidCount > 0 )
                 {
                     if ( rItem.meType == ScQueryEntry::ByString )
-                    {   // this will be nothing
+                    {   // by string ain't going to work
                         rItem.meType = ScQueryEntry::ByValue;
                         rItem.mfVal = 10;   // 10 and 10% respectively
                     }
@@ -3037,7 +3037,7 @@ bool ScTable::CreateExcelQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow
     SCTAB   nDBTab = (rQueryParam.nTab == SCTAB_MAX ? nTab : rQueryParam.nTab);
     SCROW   nDBRow1 = rQueryParam.nRow1;
     SCCOL   nDBCol2 = rQueryParam.nCol2;
-    // First row must be column header
+    // First row must be column headers
     while (bValid && (nCol <= nCol2))
     {
         OUString aQueryStr;
@@ -3200,7 +3200,7 @@ bool ScTable::CreateStarQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2
                 rEntry.eOp = SC_EQUAL;
 
         }
-        // Forth column values
+        // Fourth column values
         if (bValid)
         {
             OUString aStr;
@@ -3225,9 +3225,9 @@ bool ScTable::CreateQueryParam(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow
     for (i=0; i < nCount; i++)
         rQueryParam.GetEntry(i).Clear();
 
-    // Standard query tabel
+    // Standard query table
     bool bValid = CreateStarQuery(nCol1, nRow1, nCol2, nRow2, rQueryParam);
-    // Excel Query tabel
+    // Excel Query table
     if (!bValid)
         bValid = CreateExcelQuery(nCol1, nRow1, nCol2, nRow2, rQueryParam);
 
