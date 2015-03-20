@@ -174,15 +174,15 @@ void SdTabTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 
 void SdTabTemplateDlg::RefreshInputSet()
 {
-    SfxItemSet* pRet = GetInputSetImpl();
+    SfxItemSet* pInputSet = GetInputSetImpl();
 
-    if( pRet )
+    if( pInputSet )
     {
-        pRet->ClearItem();
-        pRet->SetParent( GetStyleSheet().GetItemSet().GetParent() );
+        pInputSet->ClearItem();
+        pInputSet->SetParent( GetStyleSheet().GetItemSet().GetParent() );
     }
     else
-        pRet = new SfxItemSet( GetStyleSheet().GetItemSet() );
+        SetInputSet(&GetStyleSheet().GetItemSet());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
