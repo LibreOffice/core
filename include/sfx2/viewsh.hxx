@@ -20,6 +20,7 @@
 #define INCLUDED_SFX2_VIEWSH_HXX
 
 #include <sal/config.h>
+#include <memory>
 #include <sfx2/dllapi.h>
 #include <sal/types.h>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
@@ -35,7 +36,6 @@
 #include <tools/gen.hxx>
 #include <tools/errcode.hxx>
 #include <vcl/jobset.hxx>
-#include <boost/shared_ptr.hpp>
 
 class SfxBaseController;
 class Size;
