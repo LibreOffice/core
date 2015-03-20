@@ -314,6 +314,11 @@ DECLARE_ODFIMPORT_TEST(testFdo56272, "fdo56272.odt")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(422), xShape->getPosition().Y); // Was -2371
 }
 
+DECLARE_ODFIMPORT_TEST(testCalcFtnCntnt, "ooo32780-1.odt")
+{
+    //this was a CalcFtnCntnt crash
+}
+
 DECLARE_ODFIMPORT_TEST(testFdo75872_ooo33, "fdo75872_ooo33.odt")
 {
     // graphics default style: line color and fill color changed

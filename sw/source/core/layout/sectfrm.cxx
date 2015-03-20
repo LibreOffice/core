@@ -2497,11 +2497,6 @@ long SwSectionFrm::Undersize( bool bOverSize )
     return nRet;
 }
 
-/// OD 01.04.2003 #108446# - determine next frame for footnote/endnote formatting
-/// before format of current one, because current one can move backward.
-/// After moving backward to a previous page method <FindNext()> will return
-/// the text frame presenting the first page footnote, if it exists. Thus, the
-/// rest of the footnote/endnote container would not be formatted.
 void SwSectionFrm::CalcFtnCntnt()
 {
     SwFtnContFrm* pCont = ContainsFtnCont();
@@ -2515,20 +2510,17 @@ void SwSectionFrm::CalcFtnCntnt()
             SwFtnFrm* pFtn = pFrm->FindFtnFrm();
             if( pFtn )
                 pFtn->Calc();
-            // OD 01.04.2003 #108446# - determine next frame before format current frame.
-            SwFrm* pNextFrm = 0;
+            pFrm->Calc();
+            if( pFrm->IsSctFrm() )
             {
-                if( pFrm->IsSctFrm() )
+                SwFrm *pTmp = static_cast<SwSectionFrm*>(pFrm)->ContainsAny();
+                if( pTmp )
                 {
-                    pNextFrm = static_cast<SwSectionFrm*>(pFrm)->ContainsAny();
-                }
-                if( !pNextFrm )
-                {
-                    pNextFrm = pFrm->FindNext();
+                    pFrm = pTmp;
+                    continue;
                 }
             }
-            pFrm->Calc();
-            pFrm = pNextFrm;
+            pFrm = pFrm->FindNext();
         }
     }
 }
