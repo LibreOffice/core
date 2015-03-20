@@ -21,7 +21,7 @@ cat << EOF
 
 Error: a unit test failed, please do one of:
 
-export DEBUGCPPUNIT=TRUE            # for exception catching
+export DEBUGCPPUNIT=TRUE            # for exception catching (not for windows)
 EOF
 if [ "$3" = "WNT" ]; then
 cat << EOF
