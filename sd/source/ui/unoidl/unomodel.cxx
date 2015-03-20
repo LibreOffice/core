@@ -90,6 +90,7 @@
 #include "ClientView.hxx"
 #include "DrawViewShell.hxx"
 #include "ViewShell.hxx"
+#include "Window.hxx"
 #include "app.hrc"
 #include <vcl/pdfextoutdevdata.hxx>
 #include <com/sun/star/presentation/AnimationEffect.hpp>
@@ -2359,6 +2360,16 @@ void SdXImpressDocument::initializeForTiledRendering()
         mpDocShell->GetViewShell()->GetViewFrame()->GetDispatcher()->Execute(SID_VIEWSHELL0, SfxCallMode::SYNCHRON | SfxCallMode::RECORD);
 
     mpDoc->setTiledRendering(true);
+
+    // Disable map mode, so that it's possible to send mouse event coordinates
+    // in logic units.
+    if (DrawViewShell* pViewShell = GetViewShell())
+    {
+        if (sd::Window* pWindow = pViewShell->GetActiveWindow())
+        {
+            pWindow->EnableMapMode(false);
+        }
+    }
 }
 
 void SdXImpressDocument::registerCallback(LibreOfficeKitCallback pCallback, void* pData)

@@ -510,15 +510,12 @@ void ViewShell::LogicMouseButtonDown(const MouseEvent& rMouseEvent)
     // When we're not doing tiled rendering, then positions must be passed as pixels.
     assert(GetDoc()->isTiledRendering());
 
-    bool bMap = mpActiveWindow->IsMapModeEnabled();
-    mpActiveWindow->EnableMapMode(false);
     Point aPoint = mpActiveWindow->GetPointerPosPixel();
     mpActiveWindow->SetLastMousePos(rMouseEvent.GetPosPixel());
 
     MouseButtonDown(rMouseEvent, 0);
 
     mpActiveWindow->SetPointerPosPixel(aPoint);
-    mpActiveWindow->EnableMapMode(bMap);
 }
 
 void ViewShell::LogicMouseButtonUp(const MouseEvent& rMouseEvent)
@@ -526,15 +523,12 @@ void ViewShell::LogicMouseButtonUp(const MouseEvent& rMouseEvent)
     // When we're not doing tiled rendering, then positions must be passed as pixels.
     assert(GetDoc()->isTiledRendering());
 
-    bool bMap = mpActiveWindow->IsMapModeEnabled();
-    mpActiveWindow->EnableMapMode(false);
     Point aPoint = mpActiveWindow->GetPointerPosPixel();
     mpActiveWindow->SetPointerPosPixel(rMouseEvent.GetPosPixel());
 
     MouseButtonUp(rMouseEvent, 0);
 
     mpActiveWindow->SetPointerPosPixel(aPoint);
-    mpActiveWindow->EnableMapMode(bMap);
 }
 
 void ViewShell::MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin)

@@ -392,8 +392,10 @@ void ViewShell::SetZoomRect(const Rectangle& rZoomRect)
         mpContentWindow->SetWinViewPos(aNewPos);
         mpContentWindow->UpdateMapOrigin();
 
-        // #i74769# see above
-        mpContentWindow->Invalidate(INVALIDATE_CHILDREN);
+        // When tiled rendering, UpdateMapOrigin() doesn't touch the map mode.
+        if (!GetDoc()->isTiledRendering())
+            // #i74769# see above
+            mpContentWindow->Invalidate(INVALIDATE_CHILDREN);
     }
 
     Size aVisSizePixel = GetActiveWindow()->GetOutputSizePixel();

@@ -324,10 +324,13 @@ long Window::SetZoomFactor(long nZoom)
         nZoom = mnMinZoom;
 
     // Set the zoom factor at the window's map mode.
-    MapMode aMap(GetMapMode());
-    aMap.SetScaleX(Fraction(nZoom, 100));
-    aMap.SetScaleY(Fraction(nZoom, 100));
-    SetMapMode(aMap);
+    if (!mpViewShell || !mpViewShell->GetDoc()->isTiledRendering())
+    {
+        MapMode aMap(GetMapMode());
+        aMap.SetScaleX(Fraction(nZoom, 100));
+        aMap.SetScaleY(Fraction(nZoom, 100));
+        SetMapMode(aMap);
+    }
 
     // invalidate previous size - it was relative to the old scaling
     maPrevSize = Size(-1,-1);
@@ -559,7 +562,8 @@ void Window::UpdateMapOrigin(bool bInvalidate)
 
     maPrevSize = aWinSize;
 
-    if (bChanged && bInvalidate)
+    // When tiled rendering, the above UpdateMapMode() call doesn't touch the map mode.
+    if (bChanged && bInvalidate && (!mpViewShell || !mpViewShell->GetDoc()->isTiledRendering()))
         Invalidate();
 }
 
@@ -599,9 +603,12 @@ void Window::UpdateMapMode (void)
     Point aNewOrigin (-maWinPos.X(), -maWinPos.Y());
     maWinPos += maViewOrigin;
 
-    MapMode aMap(GetMapMode());
-    aMap.SetOrigin(aNewOrigin);
-    SetMapMode(aMap);
+    if (!mpViewShell || !mpViewShell->GetDoc()->isTiledRendering())
+    {
+        MapMode aMap(GetMapMode());
+        aMap.SetOrigin(aNewOrigin);
+        SetMapMode(aMap);
+    }
 }
 
 /**
