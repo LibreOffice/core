@@ -858,7 +858,7 @@ SfxMailModel::SendMailResult SfxMailModel::Send( const css::uno::Reference< css:
                     SolarMutexGuard aGuard;
                     vcl::Window* pParentWindow = VCLUnoHelper::GetWindow( xParentWindow );
 
-                    VclPtr<MessageDialog> aBox(new MessageDialog(pParentWindow, "ErrorFindEmailDialog", "sfx/ui/errorfindemaildialog.ui"));
+                    ScopedVclPtr<MessageDialog> aBox(new MessageDialog(pParentWindow, "ErrorFindEmailDialog", "sfx/ui/errorfindemaildialog.ui"));
                     aBox->Execute();
                     eResult = SEND_MAIL_CANCELLED;
                 }

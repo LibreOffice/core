@@ -387,7 +387,7 @@ void ScViewFunc::DoThesaurus( bool bRecord )
         LanguageType eLnge = ScViewUtil::GetEffLanguage( &rDoc, ScAddress( nCol, nRow, nTab ) );
         OUString aErr = SvtLanguageTable::GetLanguageString(eLnge);
         aErr += ScGlobal::GetRscString( STR_SPELLING_NO_LANG );
-        VclPtr<InfoBox> aBox(new InfoBox( GetViewData().GetDialogParent(), aErr ) );
+        ScopedVclPtr<InfoBox> aBox(new InfoBox( GetViewData().GetDialogParent(), aErr ) );
         aBox->Execute();
     }
     if (pThesaurusEngine->IsModified())

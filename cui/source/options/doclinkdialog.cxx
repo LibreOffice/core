@@ -130,7 +130,7 @@ namespace svx
         {
             OUString sMsg = CUI_RES(STR_LINKEDDOC_DOESNOTEXIST);
             sMsg = sMsg.replaceFirst("$file$", m_pURL->GetText());
-            VclPtr<MessageDialog> aError(new MessageDialog(this, sMsg));
+            ScopedVclPtr<MessageDialog> aError(new MessageDialog(this, sMsg));
             aError->Execute();
             return 0L;
         } // if (!bFileExists)
@@ -139,7 +139,7 @@ namespace svx
         {
             OUString sMsg = CUI_RES(STR_LINKEDDOC_NO_SYSTEM_FILE);
             sMsg = sMsg.replaceFirst("$file$", m_pURL->GetText());
-            VclPtr<MessageDialog> aError(new MessageDialog(this, sMsg));
+            ScopedVclPtr<MessageDialog> aError(new MessageDialog(this, sMsg));
             aError->Execute();
             return 0L;
         }
@@ -151,7 +151,7 @@ namespace svx
             {
                 OUString sMsg = CUI_RES(STR_NAME_CONFLICT);
                 sMsg = sMsg.replaceFirst("$file$", sCurrentText);
-                VclPtr<MessageDialog> aError(new MessageDialog(this, sMsg, VCL_MESSAGE_INFO));
+                ScopedVclPtr<MessageDialog> aError(new MessageDialog(this, sMsg, VCL_MESSAGE_INFO));
                 aError->Execute();
 
                 m_pName->SetSelection(Selection(0,sCurrentText.getLength()));

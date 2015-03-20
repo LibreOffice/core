@@ -278,7 +278,7 @@ IMPL_LINK_NOARG(DbRegistrationOptionsPage, DeleteHdl)
     SvTreeListEntry* pEntry = pPathBox->FirstSelected();
     if ( pEntry )
     {
-        VclPtr<MessageDialog> aQuery(new MessageDialog(this, CUI_RES(RID_SVXSTR_QUERY_DELETE_CONFIRM), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO));
+        ScopedVclPtr<MessageDialog> aQuery(new MessageDialog(this, CUI_RES(RID_SVXSTR_QUERY_DELETE_CONFIRM), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO));
         if ( aQuery->Execute() == RET_YES )
             pPathBox->GetModel()->Remove(pEntry);
     }
@@ -414,7 +414,7 @@ void DbRegistrationOptionsPage::insertNewEntry( const OUString& _sName,const OUS
 
 void DbRegistrationOptionsPage::openLinkDialog(const OUString& _sOldName,const OUString& _sOldLocation,SvTreeListEntry* _pEntry)
 {
-    VclPtr<ODocumentLinkDialog> aDlg(new ODocumentLinkDialog(this,_pEntry == NULL));
+    ScopedVclPtr<ODocumentLinkDialog> aDlg(new ODocumentLinkDialog(this,_pEntry == NULL));
 
     aDlg->setLink(_sOldName,_sOldLocation);
     aDlg->setNameValidator(LINK( this, DbRegistrationOptionsPage, NameValidator ) );

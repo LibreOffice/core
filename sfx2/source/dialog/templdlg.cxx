@@ -1618,7 +1618,7 @@ void SfxCommonTemplateDialog_Impl::ActionSelect(sal_uInt16 nEntry)
                     nFilter=pStyleSheetPool->GetSearchMask();
                 pStyleSheetPool->SetSearchMask( eFam, SFXSTYLEBIT_USERDEF );
 
-                VclPtr<SfxNewStyleDlg> pDlg(new SfxNewStyleDlg(pWindow, *pStyleSheetPool));
+                ScopedVclPtr<SfxNewStyleDlg> pDlg(new SfxNewStyleDlg(pWindow, *pStyleSheetPool));
                     // why? : FloatingWindow must not be parent of a modal dialog
                 if(RET_OK == pDlg->Execute())
                 {
@@ -1817,10 +1817,10 @@ void SfxCommonTemplateDialog_Impl::DeleteHdl(void *)
         if ( bUsedStyle )
         {
         #if defined UNX
-            VclPtr<MessageDialog> aBox(new MessageDialog(SfxGetpApp()->GetTopWindow(), aMsg,
+            ScopedVclPtr<MessageDialog> aBox(new MessageDialog(SfxGetpApp()->GetTopWindow(), aMsg,
                                VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO));
         #else
-            VclPtr<MessageDialog> aBox(new MessageDialog(GetWindow(), aMsg,
+            ScopedVclPtr<MessageDialog> aBox(new MessageDialog(GetWindow(), aMsg,
                                VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO));
         #endif
             aApproved = aBox->Execute() == RET_YES;

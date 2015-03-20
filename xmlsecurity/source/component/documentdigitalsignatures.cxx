@@ -222,7 +222,7 @@ bool DocumentDigitalSignatures::ImplViewSignatures(
     DocumentSignatureMode eMode, bool bReadOnly ) throw (RuntimeException, std::exception)
 {
     bool bChanges = false;
-    VclPtr<DigitalSignaturesDialog> aSignaturesDialog(new DigitalSignaturesDialog(
+    ScopedVclPtr<DigitalSignaturesDialog> aSignaturesDialog(new DigitalSignaturesDialog(
         NULL, mxCtx, eMode, bReadOnly, m_sODFVersion, m_bHasDocumentSignature));
     bool bInit = aSignaturesDialog->Init();
     DBG_ASSERT( bInit, "Error initializing security context!" );
@@ -246,7 +246,7 @@ bool DocumentDigitalSignatures::ImplViewSignatures(
     }
     else
     {
-        VclPtr<MessageDialog> aBox(new MessageDialog(NULL, XMLSEC_RES(RID_XMLSECWB_NO_MOZILLA_PROFILE), VCL_MESSAGE_WARNING));
+        ScopedVclPtr<MessageDialog> aBox(new MessageDialog(NULL, XMLSEC_RES(RID_XMLSECWB_NO_MOZILLA_PROFILE), VCL_MESSAGE_WARNING));
         aBox->Execute();
     }
 
@@ -386,7 +386,7 @@ void DocumentDigitalSignatures::manageTrustedSources(  ) throw (RuntimeException
     if ( aSignatureHelper.Init() )
         xSecEnv = aSignatureHelper.GetSecurityEnvironment();
 
-    VclPtr<MacroSecurity> aDlg(new MacroSecurity( NULL, mxCtx, xSecEnv ) );
+    ScopedVclPtr<MacroSecurity> aDlg(new MacroSecurity( NULL, mxCtx, xSecEnv ) );
     aDlg->Execute();
 }
 
@@ -401,7 +401,7 @@ void DocumentDigitalSignatures::showCertificate(
 
     if ( bInit )
     {
-        VclPtr<CertificateViewer> aViewer(new CertificateViewer( NULL, aSignatureHelper.GetSecurityEnvironment(), _Certificate, false ) );
+        ScopedVclPtr<CertificateViewer> aViewer(new CertificateViewer( NULL, aSignatureHelper.GetSecurityEnvironment(), _Certificate, false ) );
         aViewer->Execute();
     }
 
@@ -441,7 +441,7 @@ Reference< css::security::XCertificate > DocumentDigitalSignatures::chooseCertif
     if ( aSignatureHelper.Init() )
         xSecEnv = aSignatureHelper.GetSecurityEnvironment();
 
-    VclPtr<CertificateChooser> aChooser(new CertificateChooser( NULL, mxCtx, xSecEnv, aSignatureHelper.GetSignatureInformations()) );
+    ScopedVclPtr<CertificateChooser> aChooser(new CertificateChooser( NULL, mxCtx, xSecEnv, aSignatureHelper.GetSignatureInformations()) );
 
     if (aChooser->Execute() != RET_OK)
         return Reference< css::security::XCertificate >(0);

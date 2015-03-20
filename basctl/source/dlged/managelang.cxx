@@ -146,7 +146,7 @@ void ManageLanguageDialog::ClearLanguageBox()
 
 IMPL_LINK_NOARG(ManageLanguageDialog, AddHdl)
 {
-    VclPtr<SetDefaultLanguageDialog> aDlg(new SetDefaultLanguageDialog( this, m_xLocalizationMgr ));
+    ScopedVclPtr<SetDefaultLanguageDialog> aDlg(new SetDefaultLanguageDialog( this, m_xLocalizationMgr ));
     if ( RET_OK == aDlg->Execute() )
     {
         // add new locales
@@ -164,7 +164,7 @@ IMPL_LINK_NOARG(ManageLanguageDialog, AddHdl)
 
 IMPL_LINK_NOARG(ManageLanguageDialog, DeleteHdl)
 {
-    VclPtr<MessageDialog> aQBox(new MessageDialog(this, "DeleteLangDialog", "modules/BasicIDE/ui/deletelang.ui"));
+    ScopedVclPtr<MessageDialog> aQBox(new MessageDialog(this, "DeleteLangDialog", "modules/BasicIDE/ui/deletelang.ui"));
     if ( aQBox->Execute() == RET_OK )
     {
         sal_uInt16 i, nCount = m_pLanguageLB->GetSelectEntryCount();

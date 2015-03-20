@@ -476,7 +476,7 @@ void SvxPersonalizationTabPage::LoadExtensionThemes()
 
 IMPL_LINK( SvxPersonalizationTabPage, SelectPersona, PushButton*, /*pButton*/ )
 {
-    VclPtr<SelectPersonaDialog> aDialog( new SelectPersonaDialog(NULL) );
+    ScopedVclPtr<SelectPersonaDialog> aDialog( new SelectPersonaDialog(NULL) );
 
     if ( aDialog->Execute() == RET_OK )
     {

@@ -205,7 +205,7 @@ void ORelationController::impl_initialize()
         {
             OUString sTitle(ModuleRes(STR_RELATIONDESIGN));
             sTitle = sTitle.copy(3);
-            VclPtr<OSQLMessageBox> aDlg(new OSQLMessageBox(NULL,sTitle,ModuleRes(STR_RELATIONDESIGN_NOT_AVAILABLE)));
+            ScopedVclPtr<OSQLMessageBox> aDlg(new OSQLMessageBox(NULL,sTitle,ModuleRes(STR_RELATIONDESIGN_NOT_AVAILABLE)));
             aDlg->Execute();
         }
         disconnect();
@@ -255,7 +255,7 @@ short ORelationController::saveModified()
     short nSaved = RET_YES;
     if(haveDataSource() && isModified())
     {
-        VclPtr<MessageDialog> aQry(new MessageDialog(getView(), "DesignSaveModifiedDialog",
+        ScopedVclPtr<MessageDialog> aQry(new MessageDialog(getView(), "DesignSaveModifiedDialog",
                                       "dbaccess/ui/designsavemodifieddialog.ui"));
         nSaved = aQry->Execute();
         if(nSaved == RET_YES)

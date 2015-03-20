@@ -1012,7 +1012,7 @@ SdDrawDocument* SdPageObjsTLB::GetBookmarkDoc(SfxMedium* pMed)
 
         if ( !mpBookmarkDoc )
         {
-            VclPtr<MessageDialog> aErrorBox(new MessageDialog(this, SD_RESSTR(STR_READ_DATA_ERROR)));
+            ScopedVclPtr<MessageDialog> aErrorBox(new MessageDialog(this, SD_RESSTR(STR_READ_DATA_ERROR)));
             aErrorBox->Execute();
             mpMedium = 0; //On failure the SfxMedium is invalid
         }

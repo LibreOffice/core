@@ -712,7 +712,7 @@ void OSQLMessageBox::dispose()
 
 IMPL_LINK( OSQLMessageBox, ButtonClickHdl, Button *, /*pButton*/ )
 {
-    VclPtr<OExceptionChainDialog> aDlg(new OExceptionChainDialog( this, m_pImpl->aDisplayInfo ) );
+    ScopedVclPtr<OExceptionChainDialog> aDlg(new OExceptionChainDialog( this, m_pImpl->aDisplayInfo ) );
     aDlg->Execute();
     return 0;
 }

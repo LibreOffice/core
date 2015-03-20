@@ -144,7 +144,7 @@ namespace
     int QueryFaxNumber(OUString& rNumber)
     {
         OUString aTmpString(VclResId(SV_PRINT_QUERYFAXNUMBER_TXT));
-        VclPtr<QueryString> aQuery(new QueryString(NULL, aTmpString, rNumber));
+        ScopedVclPtr<QueryString> aQuery(new QueryString(NULL, aTmpString, rNumber));
         return aQuery->Execute();
     }
 }

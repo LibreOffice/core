@@ -731,7 +731,7 @@ IMPL_LINK_NOARG(OfaSwAutoFmtOptionsPage, EditHdl)
     if( nSelEntryPos == REPLACE_BULLETS ||
         nSelEntryPos == APPLY_NUMBERING)
     {
-        VclPtr<SvxCharacterMap> pMapDlg(new SvxCharacterMap(this));
+        ScopedVclPtr<SvxCharacterMap> pMapDlg(new SvxCharacterMap(this));
         ImpUserData* pUserData = (ImpUserData*)m_pCheckLB->FirstSelected()->GetUserData();
         pMapDlg->SetCharFont(*pUserData->pFont);
         pMapDlg->SetChar( (*pUserData->pString)[0] );
@@ -748,7 +748,7 @@ IMPL_LINK_NOARG(OfaSwAutoFmtOptionsPage, EditHdl)
     else if( MERGE_SINGLE_LINE_PARA == nSelEntryPos )
     {
         // dialog for per cent settings
-        VclPtr<OfaAutoFmtPrcntSet> aDlg(new OfaAutoFmtPrcntSet(this));
+        ScopedVclPtr<OfaAutoFmtPrcntSet> aDlg(new OfaAutoFmtPrcntSet(this));
         aDlg->GetPrcntFld().SetValue(nPercent);
         if(RET_OK == aDlg->Execute())
         {
@@ -2061,7 +2061,7 @@ IMPL_LINK( OfaQuoteTabPage, QuoteHdl, PushButton*, pBtn )
     else if (pBtn == m_pDblEndQuotePB)
         nMode = DBL_END;
     // start character selection dialog
-    VclPtr<SvxCharacterMap> pMap(new SvxCharacterMap( this, true ));
+    ScopedVclPtr<SvxCharacterMap> pMap(new SvxCharacterMap( this, true ));
     pMap->SetCharFont( OutputDevice::GetDefaultFont(DEFAULTFONT_LATIN_TEXT,
                         LANGUAGE_ENGLISH_US, DEFAULTFONT_FLAGS_ONLYONE, 0 ));
     pMap->SetText(nMode < SGL_END ? m_sStartQuoteDlg  : m_sEndQuoteDlg );

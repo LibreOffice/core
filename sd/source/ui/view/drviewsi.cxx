@@ -164,7 +164,7 @@ void DrawViewShell::AssignFrom3DWindow()
             }
             else
             {
-                VclPtr<InfoBox> aInfoBox (new InfoBox(
+                ScopedVclPtr<InfoBox> aInfoBox (new InfoBox(
                     GetActiveWindow(),
                     SD_RESSTR(STR_ACTION_NOTPOSSIBLE)));
                 aInfoBox->Execute();

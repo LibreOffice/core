@@ -287,7 +287,7 @@ sal_Int32 Clipboard::GetInsertionPosition (::vcl::Window* pWindow)
     else if (mrController.GetFocusManager().IsFocusShowing())
     {
         // Use the focus to determine the insertion position.
-        VclPtr<SdInsertPasteDlg> aDialog (new SdInsertPasteDlg(pWindow));
+        ScopedVclPtr<SdInsertPasteDlg> aDialog (new SdInsertPasteDlg(pWindow));
         if (aDialog->Execute() == RET_OK)
         {
             nInsertPosition = mrController.GetFocusManager().GetFocusedPageIndex();

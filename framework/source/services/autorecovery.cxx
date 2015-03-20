@@ -4205,7 +4205,7 @@ void AutoRecovery::impl_showFullDiscError()
     if (sBackupPath.getLength() < 1)
         sBackupPath = sBackupURL;
 
-    VclPtr<ErrorBox> dlgError(new ErrorBox(
+    ScopedVclPtr<ErrorBox> dlgError(new ErrorBox(
         0, WB_OK,
         sMsg.replaceAll("%PATH", sBackupPath)));
     dlgError->SetButtonText(dlgError->GetButtonId(0), sBtn);

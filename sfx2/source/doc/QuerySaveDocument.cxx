@@ -29,7 +29,7 @@ short ExecuteQuerySaveDocument(vcl::Window* _pParent, const OUString& _rTitle)
         return RET_NO;
     }
 
-    VclPtr<MessageDialog> aQBox(new MessageDialog(_pParent, "QuerySaveDialog", "sfx/ui/querysavedialog.ui"));
+    ScopedVclPtr<MessageDialog> aQBox(new MessageDialog(_pParent, "QuerySaveDialog", "sfx/ui/querysavedialog.ui"));
     aQBox->set_primary_text(aQBox->get_primary_text().replaceFirst("$(DOC)", _rTitle));
     return aQBox->Execute();
 }

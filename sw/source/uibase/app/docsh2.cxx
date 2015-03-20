@@ -500,7 +500,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 if ( aFileName.isEmpty() )
                 {
                     SvtPathOptions aPathOpt;
-                    VclPtr<SfxNewFileDialog> pNewFileDlg(
+                    ScopedVclPtr<SfxNewFileDialog> pNewFileDlg(
                         new SfxNewFileDialog(&GetView()->GetViewFrame()->GetWindow(), SFXWB_LOAD_TEMPLATE));
                     pNewFileDlg->SetTemplateFlags(nFlags);
 
@@ -608,7 +608,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         const SfxFilter* pFlt = GetMedium()->GetFilter();
                         if(!pFlt || pFlt->GetUserData() != pHtmlFlt->GetUserData())
                         {
-                            VclPtr<MessageDialog> aQuery(new MessageDialog(&pViewFrm->GetWindow(),
+                            ScopedVclPtr<MessageDialog> aQuery(new MessageDialog(&pViewFrm->GetWindow(),
                                 "SaveAsHTMLDialog", "modules/swriter/ui/saveashtmldialog.ui"));
 
                             if(RET_YES == aQuery->Execute())

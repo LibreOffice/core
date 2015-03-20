@@ -681,7 +681,7 @@ IMPL_STATIC_LINK( SvtFileDialog, NewFolderHdl_Impl, PushButton*, EMPTYARG )
     SmartContent aContent( pThis->_pFileView->GetViewURL( ) );
     OUString aTitle;
     aContent.getTitle( aTitle );
-    VclPtr<QueryFolderNameDialog> aDlg(new QueryFolderNameDialog(pThis, aTitle, SVT_RESSTR(STR_SVT_NEW_FOLDER)) );
+    ScopedVclPtr<QueryFolderNameDialog> aDlg(new QueryFolderNameDialog(pThis, aTitle, SVT_RESSTR(STR_SVT_NEW_FOLDER)) );
     bool bHandled = false;
 
     while ( !bHandled )
@@ -1065,7 +1065,7 @@ IMPL_STATIC_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
                     "$filename$",
                     aFileObj.getName(INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET)
                 );
-                VclPtr<MessageDialog> aBox(new MessageDialog(pThis, aMsg, VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO));
+                ScopedVclPtr<MessageDialog> aBox(new MessageDialog(pThis, aMsg, VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO));
                 if ( aBox->Execute() != RET_YES )
                     return 0;
             }
@@ -1110,7 +1110,7 @@ IMPL_STATIC_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
                     }
                     sError = sError.replaceFirst( "$name$", sInvalidFile );
 
-                    VclPtr<MessageDialog> aError(new MessageDialog(pThis, sError));
+                    ScopedVclPtr<MessageDialog> aError(new MessageDialog(pThis, sError));
                     aError->Execute();
                     return 0;
                 }
@@ -1263,7 +1263,7 @@ IMPL_STATIC_LINK ( SvtFileDialog, ConnectToServerPressed_Hdl, void*, EMPTYARG )
 {
     pThis->_pFileView->EndInplaceEditing( false );
 
-    VclPtr<PlaceEditDialog> aDlg(new PlaceEditDialog(pThis));
+    ScopedVclPtr<PlaceEditDialog> aDlg(new PlaceEditDialog(pThis));
     short aRetCode = aDlg->Execute();
 
     switch (aRetCode) {
@@ -1899,7 +1899,7 @@ short SvtFileDialog::PrepareExecute()
 
                 if ( bEmpty )
                 {
-                    VclPtr<MessageDialog> aBox(new MessageDialog(this, SVT_RESSTR(STR_SVT_NOREMOVABLEDEVICE)));
+                    ScopedVclPtr<MessageDialog> aBox(new MessageDialog(this, SVT_RESSTR(STR_SVT_NOREMOVABLEDEVICE)));
                     aBox->Execute();
                     return 0;
                 }

@@ -584,7 +584,7 @@ IMPL_LINK( SwNewUserIdxDlg, ModifyHdl, Edit*, pEdit)
 
 IMPL_LINK_NOARG(SwIndexMarkPane, NewUserIdxHdl)
 {
-    VclPtr<SwNewUserIdxDlg> pDlg(new SwNewUserIdxDlg(this));
+    ScopedVclPtr<SwNewUserIdxDlg> pDlg(new SwNewUserIdxDlg(this));
     if(RET_OK == pDlg->Execute())
     {
         OUString sNewName(pDlg->GetName());
@@ -1208,7 +1208,7 @@ IMPL_LINK_NOARG(SwAuthorMarkPane, InsertHdl)
                 bDifferent |= m_sFields[i] != pEntry->GetAuthorField((ToxAuthorityField)i);
             if(bDifferent)
             {
-                VclPtr<MessageDialog> aQuery(new MessageDialog(&m_rDialog, SW_RES(STR_QUERY_CHANGE_AUTH_ENTRY), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO));
+                ScopedVclPtr<MessageDialog> aQuery(new MessageDialog(&m_rDialog, SW_RES(STR_QUERY_CHANGE_AUTH_ENTRY), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO));
                 if(RET_YES != aQuery->Execute())
                     return 0;
             }
@@ -1248,7 +1248,7 @@ IMPL_LINK(SwAuthorMarkPane, CreateEntryHdl, PushButton*, pButton)
     OUString sOldId = m_sCreatedEntry[0];
     for(int i = 0; i < AUTH_FIELD_END; i++)
         m_sCreatedEntry[i] = bCreate ? OUString() : m_sFields[i];
-    VclPtr<SwCreateAuthEntryDlg_Impl> aDlg(new SwCreateAuthEntryDlg_Impl(pButton,
+    ScopedVclPtr<SwCreateAuthEntryDlg_Impl> aDlg(new SwCreateAuthEntryDlg_Impl(pButton,
                 bCreate ? m_sCreatedEntry : m_sFields,
                 *pSh, bNewEntry, bCreate));
     if(bNewEntry)

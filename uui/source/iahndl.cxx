@@ -1024,7 +1024,7 @@ executeMessageBox(
 {
     SolarMutexGuard aGuard;
 
-    VclPtr<MessBox> xBox(new MessBox(pParent, nButtonMask, rTitle, rMessage));
+    ScopedVclPtr<MessBox> xBox(new MessBox(pParent, nButtonMask, rTitle, rMessage));
 
     sal_uInt16 aResult = xBox->Execute();
     switch( aResult )
@@ -1059,7 +1059,7 @@ NameClashResolveDialogResult executeSimpleNameClashResolveDialog( vcl::Window *p
     if ( !xManager.get() )
         return ABORT;
 
-    VclPtr<NameClashDialog> aDialog(new NameClashDialog(pParent, xManager.get(), rTargetFolderURL,
+    ScopedVclPtr<NameClashDialog> aDialog(new NameClashDialog(pParent, xManager.get(), rTargetFolderURL,
                              rClashingName, rProposedNewName, bAllowOverwrite) );
 
     NameClashResolveDialogResult eResult = (NameClashResolveDialogResult) aDialog->Execute();
@@ -1207,7 +1207,7 @@ UUIInteractionHelper::handleMacroConfirmRequest(
     if ( pResMgr.get() )
     {
         bool bShowSignatures = aSignInfo.getLength() > 0;
-        VclPtr<MacroWarning> aWarning(new MacroWarning(
+        ScopedVclPtr<MacroWarning> aWarning(new MacroWarning(
             getParentProperty(), bShowSignatures, *pResMgr.get()) );
 
         aWarning->SetDocumentURL( aDocumentURL );

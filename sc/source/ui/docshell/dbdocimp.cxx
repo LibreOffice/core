@@ -635,7 +635,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
                 nErrStringId = STR_MSSG_IMPORTDATA_0;
             aErrorMessage = ScGlobal::GetRscString( nErrStringId );
         }
-        VclPtr<InfoBox> aInfoBox(new InfoBox( rDocShell.GetActiveDialogParent(), aErrorMessage ) );
+        ScopedVclPtr<InfoBox> aInfoBox(new InfoBox( rDocShell.GetActiveDialogParent(), aErrorMessage ) );
         aInfoBox->Execute();
     }
 

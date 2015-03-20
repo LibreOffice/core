@@ -155,7 +155,7 @@ bool RenameDialog (
 
     if ( rDocument.hasDialog( rLibName, rNewName ) )
     {
-        VclPtr<MessageDialog> aError(new MessageDialog(pErrorParent, IDE_RESSTR(RID_STR_SBXNAMEALLREADYUSED2)));
+        ScopedVclPtr<MessageDialog> aError(new MessageDialog(pErrorParent, IDE_RESSTR(RID_STR_SBXNAMEALLREADYUSED2)));
         aError->Execute();
         return false;
     }
@@ -163,7 +163,7 @@ bool RenameDialog (
     // #i74440
     if ( rNewName.isEmpty() )
     {
-        VclPtr<MessageDialog> aError(new MessageDialog(pErrorParent, IDE_RESSTR(RID_STR_BADSBXNAME)));
+        ScopedVclPtr<MessageDialog> aError(new MessageDialog(pErrorParent, IDE_RESSTR(RID_STR_BADSBXNAME)));
         aError->Execute();
         return false;
     }

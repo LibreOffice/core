@@ -825,7 +825,7 @@ void ObjectPage::NewDialog()
     {
         aDocument.getOrCreateLibrary( E_DIALOGS, aLibName );
 
-        VclPtr<NewObjectDialog> aNewDlg(new NewObjectDialog(this, ObjectMode::Dialog, true));
+        ScopedVclPtr<NewObjectDialog> aNewDlg(new NewObjectDialog(this, ObjectMode::Dialog, true));
         aNewDlg->SetObjectName( aDocument.createObjectName( E_DIALOGS, aLibName ) );
 
         if (aNewDlg->Execute() != 0)
@@ -983,7 +983,7 @@ SbModule* createModImpl( vcl::Window* pWin, const ScriptDocument& rDocument,
     if ( aModName.isEmpty() )
         aModName = rDocument.createObjectName( E_SCRIPTS, aLibName );
 
-    VclPtr<NewObjectDialog> aNewDlg(new NewObjectDialog(pWin, ObjectMode::Module, true));
+    ScopedVclPtr<NewObjectDialog> aNewDlg(new NewObjectDialog(pWin, ObjectMode::Module, true));
     aNewDlg->SetObjectName( aModName );
 
     if (aNewDlg->Execute() != 0)

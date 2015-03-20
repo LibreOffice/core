@@ -490,7 +490,7 @@ IMPL_LINK_NOARG( SwMultiTOXTabDialog, ShowPreviewHdl )
                 OUString sInfo(SW_RESSTR(STR_FILE_NOT_FOUND));
                 sInfo = sInfo.replaceFirst( "%1", sTemplate );
                 sInfo = sInfo.replaceFirst( "%2", aOpt.GetTemplatePath() );
-                VclPtr<InfoBox> aInfo(new InfoBox(GetParent(), sInfo));
+                ScopedVclPtr<InfoBox> aInfo(new InfoBox(GetParent(), sInfo));
                 aInfo->Execute();
             }
             else

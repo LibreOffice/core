@@ -990,7 +990,7 @@ void SwSvxNumBulletTabDialog::PageCreated(sal_uInt16 nPageId, SfxTabPage& rPage)
         aSet.Put (SfxStringItem(SID_NUM_CHAR_FMT,sNumCharFmt));
         aSet.Put (SfxStringItem(SID_BULLET_CHAR_FMT,sBulletCharFmt));
         // collect char styles
-        VclPtr<ListBox> rCharFmtLB(new ListBox(this));
+        ScopedVclPtr<ListBox> rCharFmtLB(new ListBox(this));
         rCharFmtLB->Clear();
         rCharFmtLB->InsertEntry( SwViewShell::GetShellRes()->aStrNone );
         SwDocShell* pDocShell = rWrtSh.GetView().GetDocShell();

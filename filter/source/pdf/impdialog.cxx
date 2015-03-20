@@ -844,7 +844,7 @@ IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleExportPDFAHdl)
     // if a password was set, inform the user that this will not be used in PDF/A case
     if( mpCbPDFA1b->IsChecked() && pSecPage && pSecPage->hasPassword() )
     {
-        VclPtr<MessageDialog> aBox(new MessageDialog(this, PDFFilterResId(STR_WARN_PASSWORD_PDFA), VCL_MESSAGE_WARNING));
+        ScopedVclPtr<MessageDialog> aBox(new MessageDialog(this, PDFFilterResId(STR_WARN_PASSWORD_PDFA), VCL_MESSAGE_WARNING));
         aBox->Execute();
     }
 
@@ -1291,7 +1291,7 @@ void ImpPDFTabSecurityPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParen
 
 IMPL_LINK_NOARG(ImpPDFTabSecurityPage, ClickmaPbSetPwdHdl)
 {
-    VclPtr<SfxPasswordDialog> aPwdDialog(new SfxPasswordDialog( this, &msUserPwdTitle ) );
+    ScopedVclPtr<SfxPasswordDialog> aPwdDialog(new SfxPasswordDialog( this, &msUserPwdTitle ) );
     aPwdDialog->SetMinLen( 0 );
     aPwdDialog->ShowMinLengthText(false);
     aPwdDialog->ShowExtras( SHOWEXTRAS_CONFIRM | SHOWEXTRAS_PASSWORD2 | SHOWEXTRAS_CONFIRM2 );

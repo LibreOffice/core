@@ -1269,7 +1269,7 @@ bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
         // OutRange of pOldObj (pDestObj) is still old area
         if (!lcl_EmptyExcept(&rDoc, aNewOut, pOldObj->GetOutRange()))
         {
-            VclPtr<QueryBox> aBox(new QueryBox( rDocShell.GetActiveDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
+            ScopedVclPtr<QueryBox> aBox(new QueryBox( rDocShell.GetActiveDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
                              ScGlobal::GetRscString(STR_PIVOT_NOTEMPTY) ) );
             if (aBox->Execute() == RET_NO)
             {
@@ -1421,7 +1421,7 @@ bool ScDBDocFunc::CreatePivotTable(const ScDPObject& rDPObj, bool bRecord, bool 
 
         if (!bEmpty)
         {
-            VclPtr<QueryBox> aBox(new QueryBox(
+            ScopedVclPtr<QueryBox> aBox(new QueryBox(
                 rDocShell.GetActiveDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
                 ScGlobal::GetRscString(STR_PIVOT_NOTEMPTY)));
 
@@ -1495,7 +1495,7 @@ bool ScDBDocFunc::UpdatePivotTable(ScDPObject& rDPObj, bool bRecord, bool bApi)
     {
         if (!lcl_EmptyExcept(&rDoc, aNewOut, rDPObj.GetOutRange()))
         {
-            VclPtr<QueryBox> aBox(new QueryBox( rDocShell.GetActiveDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
+            ScopedVclPtr<QueryBox> aBox(new QueryBox( rDocShell.GetActiveDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
                              ScGlobal::GetRscString(STR_PIVOT_NOTEMPTY) ) );
             if (aBox->Execute() == RET_NO)
             {
@@ -1593,7 +1593,7 @@ void ScDBDocFunc::UpdateImport( const OUString& rTarget, const svx::ODataAccessD
     const ScDBData* pData = rDBColl.getNamedDBs().findByUpperName(ScGlobal::pCharClass->uppercase(rTarget));
     if (!pData)
     {
-        VclPtr<InfoBox> aInfoBox(new InfoBox(rDocShell.GetActiveDialogParent(),
+        ScopedVclPtr<InfoBox> aInfoBox(new InfoBox(rDocShell.GetActiveDialogParent(),
                     ScGlobal::GetRscString( STR_TARGETNOTFOUND ) ));
         aInfoBox->Execute();
         return;

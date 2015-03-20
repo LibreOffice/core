@@ -312,7 +312,7 @@ IMPL_LINK(ListEntryDialog, EditModifiedHdl, Edit*, pEdit)
 
 void openListDialog(SvxOpenCLTabPage* pTabPage, OpenCLConfig::ImplMatcher& rEntry, const OString& rTag)
 {
-    VclPtr<ListEntryDialog> aDlg(new ListEntryDialog(pTabPage, rEntry, rTag));
+    ScopedVclPtr<ListEntryDialog> aDlg(new ListEntryDialog(pTabPage, rEntry, rTag));
 
     if (aDlg->Execute() == RET_OK)
         rEntry = aDlg->maEntry;

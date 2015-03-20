@@ -1520,7 +1520,7 @@ void BreakPointWindow::Command( const CommandEvent& rCEvt )
                 break;
                 case RID_BRKPROPS:
                 {
-                    VclPtr<BreakPointDialog> aBrkDlg(new BreakPointDialog( this, GetBreakPoints() ));
+                    ScopedVclPtr<BreakPointDialog> aBrkDlg(new BreakPointDialog( this, GetBreakPoints() ));
                     aBrkDlg->SetCurrentBreakPoint( pBrk );
                     aBrkDlg->Execute();
                     Invalidate();
@@ -1535,7 +1535,7 @@ void BreakPointWindow::Command( const CommandEvent& rCEvt )
             {
                 case RID_BRKDLG:
                 {
-                    VclPtr<BreakPointDialog> aBrkDlg(new BreakPointDialog( this, GetBreakPoints() ));
+                    ScopedVclPtr<BreakPointDialog> aBrkDlg(new BreakPointDialog( this, GetBreakPoints() ));
                     aBrkDlg->Execute();
                     Invalidate();
                 }

@@ -206,7 +206,7 @@ void SvxLineEndDefTabPage::CheckChanges_Impl()
 
         if( aString != m_pLbLineEnds->GetSelectEntry() )
         {
-            VclPtr<MessageDialog> aQueryBox(new MessageDialog( GetParentDialog()
+            ScopedVclPtr<MessageDialog> aQueryBox(new MessageDialog( GetParentDialog()
                                     ,"AskChangeLineEndDialog"
                                     ,"cui/ui/querychangelineenddialog.ui"));
 
@@ -343,7 +343,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickModifyHdl_Impl)
         // if yes, repeat and demand a new name
         if ( !bDifferent )
         {
-            VclPtr<MessageDialog> aWarningBox(new MessageDialog( GetParentDialog()
+            ScopedVclPtr<MessageDialog> aWarningBox(new MessageDialog( GetParentDialog()
                                       ,"DuplicateNameDialog"
                                       ,"cui/ui/queryduplicatedialog.ui"));
             aWarningBox->Execute();
@@ -497,7 +497,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickAddHdl_Impl)
             }
             else
             {
-                VclPtr<MessageDialog> aBox(new MessageDialog( GetParentDialog()
+                ScopedVclPtr<MessageDialog> aBox(new MessageDialog( GetParentDialog()
                                    ,"DuplicateNameDialog"
                                    ,"cui/ui/queryduplicatedialog.ui"));
                 aBox->Execute();
@@ -525,7 +525,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickDeleteHdl_Impl)
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        VclPtr<MessageDialog> aQueryBox(new MessageDialog( GetParentDialog()
+        ScopedVclPtr<MessageDialog> aQueryBox(new MessageDialog( GetParentDialog()
                                 ,"AskDelLineEndDialog"
                                 ,"cui/ui/querydeletelineenddialog.ui"));
 

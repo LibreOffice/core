@@ -1024,7 +1024,7 @@ bool implImportDialog( vcl::Window* pWin, const OUString& rCurPath, const Script
                 OUString aQueryBoxText(IDE_RESSTR(RID_STR_DLGIMP_CLASH_TEXT));
                 aQueryBoxText = aQueryBoxText.replaceAll("$(ARG1)", aXmlDlgName);
 
-                VclPtr<NameClashQueryBox> aQueryBox(new NameClashQueryBox( pWin, aQueryBoxTitle, aQueryBoxText ));
+                ScopedVclPtr<NameClashQueryBox> aQueryBox(new NameClashQueryBox( pWin, aQueryBoxTitle, aQueryBoxText ));
                 sal_uInt16 nRet = aQueryBox->Execute();
                 if( RET_YES == nRet )
                 {
@@ -1086,7 +1086,7 @@ bool implImportDialog( vcl::Window* pWin, const OUString& rCurPath, const Script
             {
                 OUString aQueryBoxTitle(IDE_RESSTR(RID_STR_DLGIMP_MISMATCH_TITLE));
                 OUString aQueryBoxText(IDE_RESSTR(RID_STR_DLGIMP_MISMATCH_TEXT));
-                VclPtr<LanguageMismatchQueryBox> aQueryBox(new LanguageMismatchQueryBox( pWin, aQueryBoxTitle, aQueryBoxText ));
+                ScopedVclPtr<LanguageMismatchQueryBox> aQueryBox(new LanguageMismatchQueryBox( pWin, aQueryBoxTitle, aQueryBoxText ));
                 sal_uInt16 nRet = aQueryBox->Execute();
                 if( RET_YES == nRet )
                 {

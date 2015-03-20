@@ -314,7 +314,7 @@ bool SvxSuperContourDlg::Close()
 
     if (m_pTbx1->IsItemEnabled(mnApplyId))
     {
-        VclPtr<MessageDialog> aQBox(new MessageDialog( this,"QuerySaveContourChangesDialog","svx/ui/querysavecontchangesdialog.ui") );
+        ScopedVclPtr<MessageDialog> aQBox(new MessageDialog( this,"QuerySaveContourChangesDialog","svx/ui/querysavecontchangesdialog.ui") );
         const long  nRet = aQBox->Execute();
 
         if ( nRet == RET_YES )
@@ -446,7 +446,7 @@ IMPL_LINK( SvxSuperContourDlg, Tbx1ClickHdl, ToolBox*, pTbx )
     {
         if (m_pTbx1->IsItemChecked(mnWorkSpaceId))
         {
-            VclPtr<MessageDialog> aQBox(new MessageDialog( this,"QueryDeleteContourDialog","svx/ui/querydeletecontourdialog.ui" ));
+            ScopedVclPtr<MessageDialog> aQBox(new MessageDialog( this,"QueryDeleteContourDialog","svx/ui/querydeletecontourdialog.ui" ));
 
             if ( !m_pContourWnd->IsContourChanged() || ( aQBox->Execute() == RET_YES ) )
                 m_pContourWnd->SetWorkplaceMode( true );
@@ -520,7 +520,7 @@ IMPL_LINK( SvxSuperContourDlg, Tbx1ClickHdl, ToolBox*, pTbx )
             m_pStbStatus->Invalidate();
         else if ( bGraphicLinked )
         {
-            VclPtr<MessageDialog> aQBox(new MessageDialog(this, "QueryUnlinkGraphicsDialog",
+            ScopedVclPtr<MessageDialog> aQBox(new MessageDialog(this, "QueryUnlinkGraphicsDialog",
                 "svx/ui/queryunlinkgraphicsdialog.ui"));
 
             if (aQBox->Execute() != RET_YES)
@@ -714,7 +714,7 @@ IMPL_LINK( SvxSuperContourDlg, PipetteClickHdl, ContourWindow*, pWnd )
 
             if( !!aMask )
             {
-                VclPtr<MessageDialog> aQBox(new MessageDialog( this,"QueryNewContourDialog","svx/ui/querynewcontourdialog.ui" ));
+                ScopedVclPtr<MessageDialog> aQBox(new MessageDialog( this,"QueryNewContourDialog","svx/ui/querynewcontourdialog.ui" ));
                 bool        bNewContour;
 
                 aRedoGraphic = Graphic();

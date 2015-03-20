@@ -1065,7 +1065,7 @@ void Dialog::GrabFocusToFirstControl()
 
 void Dialog::GetDrawWindowBorder( sal_Int32& rLeftBorder, sal_Int32& rTopBorder, sal_Int32& rRightBorder, sal_Int32& rBottomBorder ) const
 {
-    VclPtr<ImplBorderWindow> aImplWin( new ImplBorderWindow( (vcl::Window*)this, WB_BORDER|WB_STDWORK, BORDERWINDOW_STYLE_OVERLAP ) );
+    ScopedVclPtr<ImplBorderWindow> aImplWin( new ImplBorderWindow( (vcl::Window*)this, WB_BORDER|WB_STDWORK, BORDERWINDOW_STYLE_OVERLAP ) );
     aImplWin->GetBorder( rLeftBorder, rTopBorder, rRightBorder, rBottomBorder );
 }
 
@@ -1092,7 +1092,7 @@ void Dialog::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal
 
     if (!( GetStyle() & WB_NOBORDER ))
     {
-        VclPtr<ImplBorderWindow> aImplWin( new ImplBorderWindow(this, WB_BORDER|WB_STDWORK, BORDERWINDOW_STYLE_OVERLAP) );
+        ScopedVclPtr<ImplBorderWindow> aImplWin( new ImplBorderWindow(this, WB_BORDER|WB_STDWORK, BORDERWINDOW_STYLE_OVERLAP) );
         aImplWin->SetText( GetText() );
         aImplWin->setPosSizePixel( aPos.X(), aPos.Y(), aSize.Width(), aSize.Height() );
         aImplWin->SetDisplayActive( true );

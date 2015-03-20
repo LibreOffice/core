@@ -1960,7 +1960,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                     if(!pCondFormatDlg && bContainsExistingCondFormat)
                     {
-                        VclPtr<QueryBox> aBox(new QueryBox( pTabViewShell->GetDialogParent(), WinBits( WB_YES_NO | WB_DEF_YES ),
+                        ScopedVclPtr<QueryBox> aBox(new QueryBox( pTabViewShell->GetDialogParent(), WinBits( WB_YES_NO | WB_DEF_YES ),
                                ScGlobal::GetRscString(STR_EDIT_EXISTING_COND_FORMATS) ) );
                         bool bEditExisting = aBox->Execute() == RET_YES;
                         if(bEditExisting)
@@ -2652,7 +2652,7 @@ void ScCellShell::ExecuteDataPilotDialog()
                     {
                         //  confirm selection if it contains SubTotal cells
 
-                        VclPtr<QueryBox> aBox(new QueryBox( pTabViewShell->GetDialogParent(),
+                        ScopedVclPtr<QueryBox> aBox(new QueryBox( pTabViewShell->GetDialogParent(),
                                         WinBits(WB_YES_NO | WB_DEF_YES),
                                         ScGlobal::GetRscString(STR_DATAPILOT_SUBTOTAL) ) );
                         if (aBox->Execute() == RET_NO)
@@ -2682,7 +2682,7 @@ void ScCellShell::ExecuteDataPilotDialog()
         if (nSrcErrorId)
         {
             // Error occurred during data creation.  Launch an error and bail out.
-            VclPtr<InfoBox> aBox(new InfoBox(pTabViewShell->GetDialogParent(), ScGlobal::GetRscString(nSrcErrorId)));
+            ScopedVclPtr<InfoBox> aBox(new InfoBox(pTabViewShell->GetDialogParent(), ScGlobal::GetRscString(nSrcErrorId)));
             aBox->Execute();
             return;
         }

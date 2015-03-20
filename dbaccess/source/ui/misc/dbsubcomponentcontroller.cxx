@@ -308,7 +308,7 @@ namespace dbaui
         bool bReConnect = true;
         if ( _bUI )
         {
-            VclPtr<MessageDialog> aQuery(new MessageDialog(getView(), ModuleRes(STR_QUERY_CONNECTION_LOST), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO));
+            ScopedVclPtr<MessageDialog> aQuery(new MessageDialog(getView(), ModuleRes(STR_QUERY_CONNECTION_LOST), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO));
             bReConnect = ( RET_YES == aQuery->Execute() );
         }
 

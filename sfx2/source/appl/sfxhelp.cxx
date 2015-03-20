@@ -605,7 +605,7 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow, const
         if ( impl_showOnlineHelp( aHelpURL ) )
             return true;
 
-        VclPtr<NoHelpErrorBox> aErrBox(new NoHelpErrorBox(const_cast< vcl::Window* >( pWindow )) );
+        ScopedVclPtr<NoHelpErrorBox> aErrBox(new NoHelpErrorBox(const_cast< vcl::Window* >( pWindow )) );
         aErrBox->Execute();
         return false;
     }

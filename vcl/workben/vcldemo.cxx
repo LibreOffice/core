@@ -1617,7 +1617,7 @@ public:
                 }
             }
 
-            VclPtr<DemoWin> aMainWin(new DemoWin(aRenderer, bThreads));
+            ScopedVclPtrInstance<DemoWin> aMainWin(aRenderer, bThreads);
             VclPtr<DemoWidgets> aWidgets;
             VclPtr<DemoPopup> xPopup;
 

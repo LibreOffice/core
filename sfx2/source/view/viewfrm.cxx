@@ -495,7 +495,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     if ( nOpenMode == SFX_STREAM_READWRITE && !rReq.IsAPI() )
                     {
                         // ::com::sun::star::sdbcx::User offering to open it as a template
-                        VclPtr<MessageDialog> aBox(new MessageDialog(&GetWindow(), SfxResId(STR_QUERY_OPENASTEMPLATE),
+                        ScopedVclPtr<MessageDialog> aBox(new MessageDialog(&GetWindow(), SfxResId(STR_QUERY_OPENASTEMPLATE),
                                            VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO));
                         if ( RET_YES == aBox->Execute() )
                         {
@@ -579,7 +579,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
             if ( bDo && GetFrame().DocIsModified_Impl() &&
                  !rReq.IsAPI() && ( !pSilentItem || !pSilentItem->GetValue() ) )
             {
-                VclPtr<MessageDialog> aBox(new MessageDialog(&GetWindow(), SfxResId(STR_QUERY_LASTVERSION),
+                ScopedVclPtr<MessageDialog> aBox(new MessageDialog(&GetWindow(), SfxResId(STR_QUERY_LASTVERSION),
                                    VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO));
                 bDo = ( RET_YES == aBox->Execute() );
             }
@@ -756,7 +756,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     if ( bForEdit && SID_EDITDOC == rReq.GetSlot() )
                     {
                         // ask user for opening as template
-                        VclPtr<MessageDialog> aBox(new MessageDialog(&GetWindow(), SfxResId(STR_QUERY_OPENASTEMPLATE),
+                        ScopedVclPtr<MessageDialog> aBox(new MessageDialog(&GetWindow(), SfxResId(STR_QUERY_OPENASTEMPLATE),
                                            VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO));
                         if ( RET_YES == aBox->Execute() )
                         {

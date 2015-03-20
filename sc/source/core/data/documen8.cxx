@@ -158,11 +158,10 @@ void ScDocument::SetPrinter( SfxPrinter* pNewPrinter )
     }
     else
     {
-        VclPtr<SfxPrinter> pOld = pPrinter;
+        ScopedVclPtr<SfxPrinter> pOld = pPrinter;
         pPrinter = pNewPrinter;
         UpdateDrawPrinter();
         pPrinter->SetDigitLanguage( SC_MOD()->GetOptDigitLanguage() );
-        pOld.disposeAndClear();
     }
     InvalidateTextWidth(NULL, NULL, false);     // in both cases
 }
@@ -844,7 +843,7 @@ void ScDocument::UpdateExternalRefLinks(vcl::Window* pWin)
         aBuf.append(OUString(ScResId(SCSTR_EXTDOC_NOT_LOADED)));
         aBuf.appendAscii("\n\n");
         aBuf.append(aFile);
-        VclPtr<MessageDialog> aBox(new MessageDialog(pWin, aBuf.makeStringAndClear()));
+        ScopedVclPtr<MessageDialog> aBox(new MessageDialog(pWin, aBuf.makeStringAndClear()));
         aBox->Execute();
     }
 

@@ -313,7 +313,7 @@ bool DigitalSignaturesDialog::canAddRemove()
     if ( (!bSave1_1  && bDoc1_1) || (bSave1_1 && bDoc1_1) )
     {
         //#4
-        VclPtr<MessageDialog> err(new MessageDialog(NULL, XMLSEC_RES(STR_XMLSECDLG_OLD_ODF_FORMAT)));
+        ScopedVclPtr<MessageDialog> err(new MessageDialog(NULL, XMLSEC_RES(STR_XMLSECDLG_OLD_ODF_FORMAT)));
         err->Execute();
         ret = false;
     }
@@ -432,7 +432,7 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, AddButtonHdl)
 
         uno::Reference<com::sun::star::security::XSerialNumberAdapter> xSerialNumberAdapter =
             ::com::sun::star::security::SerialNumberAdapter::create(mxCtx);
-        VclPtr<CertificateChooser> aChooser(new CertificateChooser( this, mxCtx, xSecEnv, maCurrentSignatureInformations ));
+        ScopedVclPtr<CertificateChooser> aChooser(new CertificateChooser( this, mxCtx, xSecEnv, maCurrentSignatureInformations ));
         if ( aChooser->Execute() == RET_OK )
         {
             uno::Reference< ::com::sun::star::security::XCertificate > xCert = aChooser->GetSelectedCertificate();
@@ -767,7 +767,7 @@ void DigitalSignaturesDialog::ImplShowSignaturesDetails()
         DBG_ASSERT( xCert.is(), "Error getting cCertificate!" );
         if ( xCert.is() )
         {
-            VclPtr<CertificateViewer> aViewer(new CertificateViewer( this, maSignatureHelper.GetSecurityEnvironment(), xCert, false ));
+            ScopedVclPtr<CertificateViewer> aViewer(new CertificateViewer( this, maSignatureHelper.GetSecurityEnvironment(), xCert, false ));
             aViewer->Execute();
         }
     }

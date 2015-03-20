@@ -354,7 +354,7 @@ IMPL_LINK( DbgDialog, ClickHdl, Button*, pButton )
         }
         if( (aData.nTestFlags & ~IMMEDIATE_FLAGS) != (pData->nTestFlags & ~IMMEDIATE_FLAGS) )
         {
-            VclPtr<MessageDialog> aBox(new MessageDialog(this, OUString(
+            ScopedVclPtr<MessageDialog> aBox(new MessageDialog(this, OUString(
                 "Some of the changed settings will only be active after "
                 "restarting the process"), VCL_MESSAGE_INFO));
             aBox->Execute();
@@ -369,7 +369,7 @@ void DbgDialog::RequestHelp( const HelpEvent& rHEvt )
 {
     if ( rHEvt.GetMode() & HelpEventMode::CONTEXT )
     {
-        VclPtr<DbgInfoDialog> aInfoDialog(new DbgInfoDialog( this, true ) );
+        ScopedVclPtr<DbgInfoDialog> aInfoDialog(new DbgInfoDialog( this, true ) );
         OUString aHelpText;
         const sal_Char** pHelpStrs = pDbgHelpText;
         while ( *pHelpStrs )
@@ -833,7 +833,7 @@ void DbgGUIStart()
 
     if ( pData )
     {
-        VclPtr<DbgDialog> pDialog(new DbgDialog);
+        ScopedVclPtr<DbgDialog> pDialog(new DbgDialog);
         // we switch off dialog tests for the debug dialog
         sal_uLong nOldFlags = pData->nTestFlags;
         pData->nTestFlags &= ~DBG_TEST_DIALOG;

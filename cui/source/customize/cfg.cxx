@@ -2393,7 +2393,7 @@ short SvxMenuConfigPage::QueryReset()
 
     OUString label = replaceSaveInName( msg, saveInName );
 
-    VclPtr<QueryBox> qbox(new QueryBox( this, WB_YES_NO, label ));
+    ScopedVclPtr<QueryBox> qbox(new QueryBox( this, WB_YES_NO, label ));
 
     return qbox->Execute();
 }
@@ -3045,7 +3045,7 @@ bool SvxToolbarConfigPage::DeleteSelectedContent()
         if ( m_pContentsListBox->GetEntryCount() == 0 &&
              GetTopLevelSelection()->IsDeletable() )
         {
-            VclPtr<MessageDialog> qbox(new MessageDialog(this,
+            ScopedVclPtr<MessageDialog> qbox(new MessageDialog(this,
                 CUI_RES(RID_SXVSTR_CONFIRM_DELETE_TOOLBAR), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO));
 
             if ( qbox->Execute() == RET_YES )
@@ -3125,7 +3125,7 @@ IMPL_LINK( SvxToolbarConfigPage, ToolbarSelectHdl, MenuButton *, pButton )
         }
         case ID_DEFAULT_STYLE:
         {
-            VclPtr<MessageDialog> qbox(new MessageDialog(this,
+            ScopedVclPtr<MessageDialog> qbox(new MessageDialog(this,
                 CUI_RES(RID_SVXSTR_CONFIRM_RESTORE_DEFAULT), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO));
 
             if ( qbox->Execute() == RET_YES )
@@ -4356,7 +4356,7 @@ short SvxToolbarConfigPage::QueryReset()
 
     OUString label = replaceSaveInName( msg, saveInName );
 
-    VclPtr<QueryBox> qbox(new QueryBox( this, WB_YES_NO, label ));
+    ScopedVclPtr<QueryBox> qbox(new QueryBox( this, WB_YES_NO, label ));
 
     return qbox->Execute();
 }
@@ -5298,7 +5298,7 @@ void SvxIconSelectorDialog::ImportGraphics(
             message += newLine;
         }
 
-        VclPtr<SvxIconChangeDialog> aDialog(new SvxIconChangeDialog(this, message));
+        ScopedVclPtr<SvxIconChangeDialog> aDialog(new SvxIconChangeDialog(this, message));
         aDialog->Execute();
     }
 }

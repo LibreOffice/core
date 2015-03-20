@@ -101,7 +101,7 @@ IMPL_LINK( PasswordToOpenModifyDialog_Impl, OkBtnClickHdl, OKButton *, EMPTYARG 
             m_pPasswdToModifyED->GetText().isEmpty();
     if (bInvalidState)
     {
-        VclPtr<MessageDialog> aErrorBox(new MessageDialog(m_pParent,
+        ScopedVclPtr<MessageDialog> aErrorBox(new MessageDialog(m_pParent,
             m_bIsPasswordToModify? m_aInvalidStateForOkButton : m_aInvalidStateForOkButton_v2));
         aErrorBox->Execute();
     }
@@ -112,7 +112,7 @@ IMPL_LINK( PasswordToOpenModifyDialog_Impl, OkBtnClickHdl, OKButton *, EMPTYARG 
         const int nMismatch = (bToOpenMatch? 0 : 1) + (bToModifyMatch? 0 : 1);
         if (nMismatch > 0)
         {
-            VclPtr<MessageDialog> aErrorBox(new MessageDialog(m_pParent, nMismatch == 1 ? m_aOneMismatch : m_aTwoMismatch));
+            ScopedVclPtr<MessageDialog> aErrorBox(new MessageDialog(m_pParent, nMismatch == 1 ? m_aOneMismatch : m_aTwoMismatch));
             aErrorBox->Execute();
 
             Edit* pEdit = !bToOpenMatch ? m_pPasswdToOpenED : m_pPasswdToModifyED;

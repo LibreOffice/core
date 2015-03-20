@@ -54,7 +54,7 @@ void ChartController::executeDispatch_EditData()
             UndoLiveUpdateGuardWithData aUndoGuard = UndoLiveUpdateGuardWithData(
                 SCH_RESSTR( STR_ACTION_EDIT_CHART_DATA ),
                 m_xUndoManager );
-            VclPtr<DataEditor> aDataEditorDialog(new DataEditor( nullptr, xChartDoc, m_xCC ));
+            ScopedVclPtrInstance<DataEditor> aDataEditorDialog( nullptr, xChartDoc, m_xCC );
             if (aDataEditorDialog->Execute() == RET_OK)
                 aDataEditorDialog->ApplyChangesToModel();
             aUndoGuard.commit();

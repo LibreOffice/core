@@ -3756,7 +3756,7 @@ bool ScDocFunc::Unprotect( SCTAB nTab, const OUString& rPassword, bool bApi )
         {
             if (!bApi)
             {
-                VclPtr<InfoBox> aBox(new InfoBox( rDocShell.GetActiveDialogParent(), OUString( ScResId( SCSTR_WRONGPASSWORD ) ) ) );
+                ScopedVclPtr<InfoBox> aBox(new InfoBox( rDocShell.GetActiveDialogParent(), OUString( ScResId( SCSTR_WRONGPASSWORD ) ) ) );
                 aBox->Execute();
             }
             return false;
@@ -3786,7 +3786,7 @@ bool ScDocFunc::Unprotect( SCTAB nTab, const OUString& rPassword, bool bApi )
         {
             if (!bApi)
             {
-                VclPtr<InfoBox> aBox(new InfoBox( rDocShell.GetActiveDialogParent(), OUString( ScResId( SCSTR_WRONGPASSWORD ) ) ) );
+                ScopedVclPtr<InfoBox> aBox(new InfoBox( rDocShell.GetActiveDialogParent(), OUString( ScResId( SCSTR_WRONGPASSWORD ) ) ) );
                 aBox->Execute();
             }
             return false;

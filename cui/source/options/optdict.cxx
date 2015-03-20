@@ -477,7 +477,7 @@ IMPL_LINK_NOARG(SvxEditDictionaryDialog, SelectLangHdl_Impl)
 
     if ( nLang != nOldLang )
     {
-        VclPtr<MessageDialog> aBox(new MessageDialog(this, CUI_RES( RID_SVXSTR_CONFIRM_SET_LANGUAGE), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO));
+        ScopedVclPtr<MessageDialog> aBox(new MessageDialog(this, CUI_RES( RID_SVXSTR_CONFIRM_SET_LANGUAGE), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO));
         OUString sTxt(aBox->get_primary_text());
         sTxt = sTxt.replaceFirst( "%1", pAllDictsLB->GetSelectEntry() );
         aBox->set_primary_text(sTxt);

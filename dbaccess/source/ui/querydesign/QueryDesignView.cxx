@@ -158,7 +158,7 @@ namespace
                 }
             }
 
-            VclPtr<OQueryTableConnection> aInfo(new OQueryTableConnection(pTableView, aInfoData));
+            ScopedVclPtr<OQueryTableConnection> aInfo(new OQueryTableConnection(pTableView, aInfoData));
             // Because OQueryTableConnection never takes ownership of the data passed to it, but only remembers the pointer,
             // this pointer to a local variable is not critical, as aInfoData and aInfo have the same lifetime
             pTableView->NotifyTabConnection( *aInfo.get() );

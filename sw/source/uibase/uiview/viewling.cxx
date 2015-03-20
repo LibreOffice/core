@@ -459,7 +459,7 @@ void SwView::HyphenateDocument()
         // turned on no special area
         {
             // I want also in special areas hyphenation
-            VclPtr<MessageDialog> aBox(new MessageDialog(&GetEditWin(), SW_RES(STR_QUERY_SPECIAL_FORCED), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO));
+            ScopedVclPtr<MessageDialog> aBox(new MessageDialog(&GetEditWin(), SW_RES(STR_QUERY_SPECIAL_FORCED), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO));
             if( aBox->Execute() == RET_YES )
             {
                 bOther = true;

@@ -712,7 +712,7 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
         lcl_CharPropertiesToItems( _rxReportControlFormat, *pDescriptor );
 
         {   // want the dialog to be destroyed before our set
-            VclPtr<ORptPageDialog> aDlg(new ORptPageDialog(pParent, pDescriptor.get(), "CharDialog"));
+            ScopedVclPtr<ORptPageDialog> aDlg(new ORptPageDialog(pParent, pDescriptor.get(), "CharDialog"));
             uno::Reference< report::XShape > xShape( _rxReportControlFormat, uno::UNO_QUERY );
             if ( xShape.is() )
                 aDlg->RemoveTabPage("background");
@@ -1027,7 +1027,7 @@ bool openDialogFormula_nothrow( OUString& _in_out_rFormula
             CharClass aCC(_xContext, aLangTag);
             svl::SharedStringPool aStringPool(&aCC);
 
-            VclPtr<FormulaDialog> aDlg(new FormulaDialog(
+            ScopedVclPtr<FormulaDialog> aDlg(new FormulaDialog(
                 pParent, xServiceFactory, pFormulaManager, aFormula.getUndecoratedContent(), _xRowSet, aStringPool));
 
             bSuccess = aDlg->Execute() == RET_OK;

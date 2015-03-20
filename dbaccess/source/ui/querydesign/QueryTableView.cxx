@@ -118,7 +118,7 @@ namespace
     {
         OQueryTableConnectionData* pData = static_cast< OQueryTableConnectionData*>(_pConnectionData.get());
 
-        VclPtr<DlgQryJoin> aDlg(new DlgQryJoin(_pView,_pConnectionData,&_pView->GetTabWinMap(),_pView->getDesignView()->getController().getConnection(),_bSelectableTables));
+        ScopedVclPtr<DlgQryJoin> aDlg(new DlgQryJoin(_pView,_pConnectionData,&_pView->GetTabWinMap(),_pView->getDesignView()->getController().getConnection(),_bSelectableTables));
         bool bOk = aDlg->Execute() == RET_OK;
         if( bOk )
         {
@@ -208,7 +208,7 @@ namespace
             pNewConnData->AppendConnLine(*pIter,sRelatedColumn);
 
             // now add the Conn itself
-            VclPtr<OQueryTableConnection> aNewConn(new OQueryTableConnection(_pView, aNewConnData));
+            ScopedVclPtr<OQueryTableConnection> aNewConn(new OQueryTableConnection(_pView, aNewConnData));
             // referring to the local variable is not important, as NotifyQueryTabConn creates a new copy
             // to add me (if not existent)
             _pView->NotifyTabConnection(*aNewConn.get(), false);
@@ -621,7 +621,7 @@ void OQueryTableView::AddConnection(const OJoinExchangeData& jxdSource, const OJ
 
         pNewConnectionData->AppendConnLine( aSourceFieldName,aDestFieldName );
 
-        VclPtr<OQueryTableConnection> aNewConnection(new OQueryTableConnection(this, aNewConnectionData));
+        ScopedVclPtr<OQueryTableConnection> aNewConnection(new OQueryTableConnection(this, aNewConnectionData));
         NotifyTabConnection(*aNewConnection.get());
         // As usual with NotifyTabConnection, using a local variable is fine because a copy is made
     }

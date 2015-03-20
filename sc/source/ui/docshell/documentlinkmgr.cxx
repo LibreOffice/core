@@ -165,7 +165,7 @@ bool DocumentLinkManager::updateDdeLinks( vcl::Window* pWin )
             aBuf.append(aElem);
             aBuf.appendAscii("\nType : ");
             aBuf.append(aType);
-            VclPtr<MessageDialog> aBox(new MessageDialog(pWin, aBuf.makeStringAndClear()));
+            ScopedVclPtr<MessageDialog> aBox(new MessageDialog(pWin, aBuf.makeStringAndClear()));
             aBox->Execute();
         }
     }

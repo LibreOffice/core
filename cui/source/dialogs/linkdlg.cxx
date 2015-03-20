@@ -444,7 +444,7 @@ IMPL_LINK( SvBaseLinksDlg, BreakLinkClickHdl, PushButton *, pPushButton )
         if( !xLink.Is() )
             return 0;
 
-        VclPtr<QueryBox> aBox(new QueryBox( this, WB_YES_NO | WB_DEF_YES, Closelinkmsg() ));
+        ScopedVclPtr<QueryBox> aBox(new QueryBox( this, WB_YES_NO | WB_DEF_YES, Closelinkmsg() ));
 
         if( RET_YES == aBox->Execute() )
         {
@@ -475,7 +475,7 @@ IMPL_LINK( SvBaseLinksDlg, BreakLinkClickHdl, PushButton *, pPushButton )
     }
     else
     {
-        VclPtr<QueryBox> aBox(new QueryBox( this, WB_YES_NO | WB_DEF_YES, CloselinkmsgMulti() ));
+        ScopedVclPtr<QueryBox> aBox(new QueryBox( this, WB_YES_NO | WB_DEF_YES, CloselinkmsgMulti() ));
 
         if( RET_YES == aBox->Execute() )
         {

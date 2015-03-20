@@ -805,7 +805,7 @@ void Edit::ShowTruncationWarning( vcl::Window* pParent )
     ResMgr* pResMgr = ImplGetResMgr();
     if( pResMgr )
     {
-        VclPtr<MessageDialog> aBox(new MessageDialog(pParent, ResId(SV_EDIT_WARNING_STR, *pResMgr), VCL_MESSAGE_WARNING));
+        ScopedVclPtr<MessageDialog> aBox(new MessageDialog(pParent, ResId(SV_EDIT_WARNING_STR, *pResMgr), VCL_MESSAGE_WARNING));
         aBox->Execute();
     }
 }
@@ -2784,9 +2784,8 @@ Size Edit::CalcMinimumSize() const
 Size Edit::GetMinimumEditSize()
 {
     vcl::Window* pDefWin = ImplGetDefaultWindow();
-    VclPtr<Edit> aEdit(new Edit( pDefWin, WB_BORDER ) );
+    ScopedVclPtr<Edit> aEdit(new Edit( pDefWin, WB_BORDER ) );
     Size aSize( aEdit->CalcMinimumSize() );
-    aEdit.disposeAndClear();
     return aSize;
 }
 

@@ -269,7 +269,7 @@ bool FmFormShell::PrepareClose(bool bUI)
 
                     if ( bModified && bUI )
                     {
-                        VclPtr<MessageDialog> aQry(new MessageDialog(NULL, "SaveModifiedDialog",
+                        ScopedVclPtr<MessageDialog> aQry(new MessageDialog(NULL, "SaveModifiedDialog",
                                            "svx/ui/savemodifieddialog.ui"));
                         switch (aQry->Execute())
                         {

@@ -127,7 +127,7 @@ namespace dbaui
             xParamCallback = Reference< XInteractionSupplyParameters >(_rContinuations[nParamPos], UNO_QUERY);
         OSL_ENSURE(xParamCallback.is(), "BasicInteractionHandler::implHandle(ParametersRequest): can't set the parameters without an appropriate interaction handler!s");
 
-        VclPtr<OParameterDialog> aDlg(new OParameterDialog(NULL, _rParamRequest.Parameters, _rParamRequest.Connection, m_xContext));
+        ScopedVclPtr<OParameterDialog> aDlg(new OParameterDialog(NULL, _rParamRequest.Parameters, _rParamRequest.Connection, m_xContext));
         sal_Int16 nResult = aDlg->Execute();
         try
         {
@@ -182,7 +182,7 @@ namespace dbaui
         }
 
         // execute the dialog
-        VclPtr<OSQLMessageBox> aDialog(new OSQLMessageBox(NULL, _rSqlInfo, nDialogStyle));
+        ScopedVclPtr<OSQLMessageBox> aDialog(new OSQLMessageBox(NULL, _rSqlInfo, nDialogStyle));
         // TODO: need a way to specify the parent window
         sal_Int16 nResult = aDialog->Execute();
         try
@@ -256,7 +256,7 @@ namespace dbaui
                 Reference< XInteractionDocumentSave > xCallback(_rContinuations[nDocuPos], UNO_QUERY);
                 OSL_ENSURE(xCallback.is(), "BasicInteractionHandler::implHandle(DocumentSaveRequest): can't save document without an appropriate interaction handler!s");
 
-                VclPtr<OCollectionView> aDlg(new OCollectionView(NULL, _rDocuRequest.Content, _rDocuRequest.Name, m_xContext));
+                ScopedVclPtr<OCollectionView> aDlg(new OCollectionView(NULL, _rDocuRequest.Content, _rDocuRequest.Name, m_xContext));
                 sal_Int16 nResult = aDlg->Execute();
                 try
                 {

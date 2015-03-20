@@ -408,7 +408,7 @@ void ExtBoxWithBtns_Impl::MouseButtonDown( const MouseEvent& rMEvt )
                                 break;
             case CMD_SHOW_LICENSE:
                 {
-                    VclPtr<ShowLicenseDialog> aLicenseDlg(new ShowLicenseDialog( m_pParent, GetEntryData( nPos )->m_xPackage ));
+                    ScopedVclPtr<ShowLicenseDialog> aLicenseDlg(new ShowLicenseDialog( m_pParent, GetEntryData( nPos )->m_xPackage ));
                     aLicenseDlg->Execute();
                     break;
                 }
@@ -595,7 +595,7 @@ bool DialogHelper::continueOnSharedExtension( const uno::Reference< deployment::
     if ( !bHadWarning && IsSharedPkgMgr( xPackage ) )
     {
         const SolarMutexGuard guard;
-        VclPtr<MessageDialog> aInfoBox(new MessageDialog(pParent, getResId(nResID),
+        ScopedVclPtr<MessageDialog> aInfoBox(new MessageDialog(pParent, getResId(nResID),
                                VCL_MESSAGE_WARNING, VCL_BUTTONS_OK_CANCEL));
 
         bHadWarning = true;
@@ -627,7 +627,7 @@ void DialogHelper::openWebBrowser( const OUString & sURL, const OUString &sTitle
         uno::Any exc( ::cppu::getCaughtException() );
         OUString msg( ::comphelper::anyToString( exc ) );
         const SolarMutexGuard guard;
-        VclPtr<MessageDialog> aErrorBox(new MessageDialog(NULL, msg));
+        ScopedVclPtr<MessageDialog> aErrorBox(new MessageDialog(NULL, msg));
         aErrorBox->SetText( sTitle );
         aErrorBox->Execute();
     }
@@ -636,7 +636,7 @@ void DialogHelper::openWebBrowser( const OUString & sURL, const OUString &sTitle
 bool DialogHelper::installExtensionWarn( const OUString &rExtensionName ) const
 {
     const SolarMutexGuard guard;
-    VclPtr<MessageDialog> aInfo(new MessageDialog(m_pVCLWindow, getResId(RID_STR_WARNING_INSTALL_EXTENSION),
+    ScopedVclPtr<MessageDialog> aInfo(new MessageDialog(m_pVCLWindow, getResId(RID_STR_WARNING_INSTALL_EXTENSION),
                         VCL_MESSAGE_WARNING, VCL_BUTTONS_OK_CANCEL));
 
     OUString sText(aInfo->get_primary_text());
@@ -649,7 +649,7 @@ bool DialogHelper::installExtensionWarn( const OUString &rExtensionName ) const
 bool DialogHelper::installForAllUsers( bool &bInstallForAll ) const
 {
     const SolarMutexGuard guard;
-    VclPtr<MessageDialog> aQuery(new MessageDialog(m_pVCLWindow, "InstallForAllDialog",
+    ScopedVclPtr<MessageDialog> aQuery(new MessageDialog(m_pVCLWindow, "InstallForAllDialog",
                          "desktop/ui/installforalldialog.ui"));
 
     short nRet = aQuery->Execute();
@@ -794,7 +794,7 @@ void ExtMgrDialog::checkEntries()
 bool ExtMgrDialog::removeExtensionWarn( const OUString &rExtensionName ) const
 {
     const SolarMutexGuard guard;
-    VclPtr<MessageDialog> aInfo(new MessageDialog(const_cast<ExtMgrDialog*>(this), getResId(RID_STR_WARNING_REMOVE_EXTENSION),
+    ScopedVclPtr<MessageDialog> aInfo(new MessageDialog(const_cast<ExtMgrDialog*>(this), getResId(RID_STR_WARNING_REMOVE_EXTENSION),
                         VCL_MESSAGE_WARNING, VCL_BUTTONS_OK_CANCEL));
 
     OUString sText(aInfo->get_primary_text());

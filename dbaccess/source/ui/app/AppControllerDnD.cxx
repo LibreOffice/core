@@ -175,7 +175,7 @@ void OApplicationController::deleteTables(const ::std::vector< OUString>& _rList
         else
         {
             OUString sMessage(ModuleRes(STR_MISSING_TABLES_XDROP));
-            VclPtr<MessageDialog> aError(new MessageDialog(getView(), sMessage));
+            ScopedVclPtr<MessageDialog> aError(new MessageDialog(getView(), sMessage));
             aError->Execute();
         }
     }
@@ -210,7 +210,7 @@ void OApplicationController::deleteObjects( ElementType _eType, const ::std::vec
 
             if ( eResult != svtools::QUERYDELETE_ALL )
             {
-                VclPtr<svtools::QueryDeleteDlg_Impl> aDlg( new svtools::QueryDeleteDlg_Impl(getView(), *aThisRound) );
+                ScopedVclPtr<svtools::QueryDeleteDlg_Impl> aDlg( new svtools::QueryDeleteDlg_Impl(getView(), *aThisRound) );
 
                 if ( !sDialogPosition.isEmpty() )
                     aDlg->SetWindowState( sDialogPosition );
@@ -686,7 +686,7 @@ bool OApplicationController::paste( ElementType _eType, const ::svx::ODataAccess
                                                 has a /table/ with that name) */
                 if ( bNeedAskForName )
                 {
-                    VclPtr<OSaveAsDlg> aAskForName(new OSaveAsDlg( getView(),
+                    ScopedVclPtr<OSaveAsDlg> aAskForName(new OSaveAsDlg( getView(),
                                             CommandType::QUERY,
                                             getORB(),
                                             getConnection(),

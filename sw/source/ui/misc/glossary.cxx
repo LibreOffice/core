@@ -503,7 +503,7 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
     else if (sItemIdent == "rename")
     {
         m_pShortNameEdit->SetText(pGlossaryHdl->GetGlossaryShortName(m_pNameED->GetText()));
-        VclPtr<SwNewGlosNameDlg> pNewNameDlg(new SwNewGlosNameDlg(this, m_pNameED->GetText(),
+        ScopedVclPtr<SwNewGlosNameDlg> pNewNameDlg(new SwNewGlosNameDlg(this, m_pNameED->GetText(),
                                                                              m_pShortNameEdit->GetText() ));
         if( RET_OK == pNewNameDlg->Execute() &&
             pGlossaryHdl->Rename( m_pShortNameEdit->GetText(),
@@ -523,7 +523,7 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
     }
     else if (sItemIdent == "delete")
     {
-        VclPtr<MessageDialog> aQuery(new MessageDialog(this, SW_RES(STR_QUERY_DELETE), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO));
+        ScopedVclPtr<MessageDialog> aQuery(new MessageDialog(this, SW_RES(STR_QUERY_DELETE), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO));
         if (RET_YES == aQuery->Execute())
         {
             const OUString aShortName(m_pShortNameEdit->GetText());
@@ -651,7 +651,7 @@ IMPL_LINK_NOARG(SwGlossaryDlg, BibHdl)
         if(bIsWritable)
         {
 
-            VclPtr<SwGlossaryGroupDlg> pDlg(new SwGlossaryGroupDlg( this, pGloss->GetPathArray(), pGlossaryHdl ));
+            ScopedVclPtr<SwGlossaryGroupDlg> pDlg(new SwGlossaryGroupDlg( this, pGloss->GetPathArray(), pGlossaryHdl ));
             if ( RET_OK == pDlg->Execute() )
             {
                 Init();
@@ -681,7 +681,7 @@ IMPL_LINK_NOARG(SwGlossaryDlg, BibHdl)
         }
         else
         {
-            VclPtr<MessageDialog> aBox(new MessageDialog(this, sReadonlyPath, VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO));
+            ScopedVclPtr<MessageDialog> aBox(new MessageDialog(this, sReadonlyPath, VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO));
 
             if(RET_YES == aBox->Execute())
                 PathHdl(m_pPathBtn);

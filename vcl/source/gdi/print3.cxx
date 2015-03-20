@@ -304,7 +304,7 @@ void Printer::PreparePrintJob(std::shared_ptr<PrinterController> xController,
     {
         if (xController->isShowDialogs())
         {
-            VclPtr<MessageDialog> aBox(new MessageDialog(NULL, "ErrorNoPrinterDialog",
+            ScopedVclPtr<MessageDialog> aBox(new MessageDialog(NULL, "ErrorNoPrinterDialog",
                 "vcl/ui/errornoprinterdialog.ui"));
             aBox->Execute();
         }
@@ -453,7 +453,7 @@ void Printer::PreparePrintJob(std::shared_ptr<PrinterController> xController,
     {
         if( xController->getFilteredPageCount() == 0 )
         {
-            VclPtr<MessageDialog> aBox(new MessageDialog(NULL, "ErrorNoContentDialog",
+            ScopedVclPtr<MessageDialog> aBox(new MessageDialog(NULL, "ErrorNoContentDialog",
                 "vcl/ui/errornocontentdialog.ui"));
             aBox->Execute();
             return;
@@ -469,7 +469,7 @@ void Printer::PreparePrintJob(std::shared_ptr<PrinterController> xController,
     {
         try
         {
-            VclPtr<PrintDialog> aDlg(new PrintDialog( NULL, xController ));
+            ScopedVclPtrInstance<PrintDialog> aDlg( nullptr, xController );
             if( ! aDlg->Execute() )
             {
                 xController->abortJob();

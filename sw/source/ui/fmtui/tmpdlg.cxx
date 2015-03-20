@@ -540,7 +540,7 @@ void SwTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
         aSet.Put (SfxStringItem(SID_NUM_CHAR_FMT,sNumCharFmt));
         aSet.Put (SfxStringItem(SID_BULLET_CHAR_FMT,sBulletCharFmt));
         // collect character styles
-        VclPtr<ListBox> rCharFmtLB(new ListBox(this));
+        ScopedVclPtr<ListBox> rCharFmtLB(new ListBox(this));
         rCharFmtLB->Clear();
         rCharFmtLB->InsertEntry( SwViewShell::GetShellRes()->aStrNone );
         SwDocShell* pDocShell = ::GetActiveWrtShell()->GetView().GetDocShell();

@@ -451,7 +451,7 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
             verExc.Deployed->getDisplayName());
         {
             SolarMutexGuard guard;
-            VclPtr<MessageDialog> box(new MessageDialog(m_pDialogHelper? m_pDialogHelper->getWindow() : NULL,
+            ScopedVclPtr<MessageDialog> box(new MessageDialog(m_pDialogHelper? m_pDialogHelper->getWindow() : NULL,
                 ResId(id, *DeploymentGuiResMgr::get()), VCL_MESSAGE_WARNING, VCL_BUTTONS_OK_CANCEL));
             OUString s;
             if (bEqualNames)
@@ -506,7 +506,7 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
         SolarMutexGuard guard;
         OUString sMsg(ResId(RID_STR_UNSUPPORTED_PLATFORM, *DeploymentGuiResMgr::get()).toString());
         sMsg = sMsg.replaceAll("%Name", platExc.package->getDisplayName());
-        VclPtr<MessageDialog> box(new MessageDialog(m_pDialogHelper? m_pDialogHelper->getWindow() : NULL, sMsg));
+        ScopedVclPtr<MessageDialog> box(new MessageDialog(m_pDialogHelper? m_pDialogHelper->getWindow() : NULL, sMsg));
         box->Execute();
         approve = true;
     }
@@ -571,7 +571,7 @@ void ProgressCmdEnv::update_( uno::Any const & rStatus )
             text = ::comphelper::anyToString( rStatus ); // fallback
 
         const SolarMutexGuard aGuard;
-        VclPtr<MessageDialog> aBox(new MessageDialog(m_pDialogHelper? m_pDialogHelper->getWindow() : NULL, text));
+        ScopedVclPtr<MessageDialog> aBox(new MessageDialog(m_pDialogHelper? m_pDialogHelper->getWindow() : NULL, text));
         aBox->Execute();
     }
     ++m_nCurrentProgress;
@@ -813,7 +813,7 @@ void ExtensionCmdQueue::Thread::execute()
                     msg = ::comphelper::anyToString(exc);
 
                 const SolarMutexGuard guard;
-                VclPtr<MessageDialog> box(
+                ScopedVclPtr<MessageDialog> box(
                     new MessageDialog(currentCmdEnv->activeDialog(), msg));
                 if ( m_pDialogHelper )
                     box->SetText( m_pDialogHelper->getWindow()->GetText() );
@@ -923,7 +923,7 @@ void ExtensionCmdQueue::Thread::_removeExtension( ::rtl::Reference< ProgressCmdE
 void ExtensionCmdQueue::Thread::_checkForUpdates(
     const std::vector<uno::Reference<deployment::XPackage > > &vExtensionList )
 {
-    VclPtr<UpdateDialog> pUpdateDialog;
+    ScopedVclPtr<UpdateDialog> pUpdateDialog;
     std::vector< UpdateData > vData;
 
     const SolarMutexGuard guard;

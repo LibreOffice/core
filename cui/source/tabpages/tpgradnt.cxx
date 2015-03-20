@@ -291,7 +291,7 @@ long SvxGradientTabPage::CheckChanges_Impl()
         {
             ResMgr& rMgr = CUI_MGR();
             Image aWarningBoxImage = WarningBox::GetStandardImage();
-            VclPtr<SvxMessDialog> aMessDlg(new SvxMessDialog(GetParentDialog(),
+            ScopedVclPtr<SvxMessDialog> aMessDlg(new SvxMessDialog(GetParentDialog(),
                                                         SVX_RESSTR( RID_SVXSTR_GRADIENT ),
                                                         CUI_RESSTR( RID_SVXSTR_ASK_CHANGE_GRADIENT ),
                                                         &aWarningBoxImage ));
@@ -457,7 +457,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickAddHdl_Impl)
     DBG_ASSERT(pFact, "Dialog creation failed!");
     boost::scoped_ptr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc ));
     DBG_ASSERT(pDlg, "Dialog creation failed!");
-    VclPtr<MessageDialog> pWarnBox;
+    ScopedVclPtr<MessageDialog> pWarnBox;
     sal_uInt16         nError   = 1;
 
     while( pDlg->Execute() == RET_OK )
@@ -589,7 +589,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickModifyHdl_Impl)
             }
             else
             {
-                VclPtr<MessageDialog> aBox( new MessageDialog( GetParentDialog()
+                ScopedVclPtr<MessageDialog> aBox( new MessageDialog( GetParentDialog()
                                     ,"DuplicateNameDialog"
                                     ,"cui/ui/queryduplicatedialog.ui") );
                 aBox->Execute();
@@ -608,7 +608,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickDeleteHdl_Impl)
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        VclPtr<MessageDialog> aQueryBox(new MessageDialog( GetParentDialog(),"AskDelGradientDialog","cui/ui/querydeletegradientdialog.ui"));
+        ScopedVclPtr<MessageDialog> aQueryBox(new MessageDialog( GetParentDialog(),"AskDelGradientDialog","cui/ui/querydeletegradientdialog.ui"));
 
         if ( aQueryBox->Execute() == RET_YES )
         {

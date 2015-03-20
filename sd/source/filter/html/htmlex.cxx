@@ -3113,7 +3113,7 @@ bool HtmlExport::checkForExistingFiles()
                 OUString aSystemPath;
                 osl::FileBase::getSystemPathFromFileURL( maExportPath, aSystemPath );
                 aMsg = aMsg.replaceFirst( "%FILENAME", aSystemPath );
-                VclPtr<WarningBox> aWarning(new WarningBox( 0, WB_YES_NO | WB_DEF_YES, aMsg ));
+                ScopedVclPtr<WarningBox> aWarning(new WarningBox( 0, WB_YES_NO | WB_DEF_YES, aMsg ));
                 aWarning->SetImage( WarningBox::GetStandardImage() );
                 bFound = ( RET_NO == aWarning->Execute() );
 

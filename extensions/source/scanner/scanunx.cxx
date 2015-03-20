@@ -299,7 +299,7 @@ sal_Bool ScannerManager::configureScannerAndScan( ScannerContext& scanner_contex
             );
 
         pHolder->m_bBusy = true;
-        VclPtr<SaneDlg> aDlg(new SaneDlg(NULL, pHolder->m_aSane, listener.is()) );
+        ScopedVclPtr<SaneDlg> aDlg(new SaneDlg(NULL, pHolder->m_aSane, listener.is()) );
         bRet = aDlg->Execute();
         bScan = aDlg->getDoScan();
         pHolder->m_bBusy = false;

@@ -357,7 +357,7 @@ namespace pcr
             ,m_bUpdate(true)
             ,m_pControlContextImpl( new PropertyControlContext_Impl( *this ) )
     {
-        VclPtr<ListBox> aListBox(new ListBox(this,WB_DROPDOWN));
+        ScopedVclPtr<ListBox> aListBox(new ListBox(this,WB_DROPDOWN));
         aListBox->SetPosSizePixel(Point(0,0),Size(100,100));
         m_nRowHeight = aListBox->GetSizePixel().Height()+2;
         SetBackground( pParent->GetBackground() );

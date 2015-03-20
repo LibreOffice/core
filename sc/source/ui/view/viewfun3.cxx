@@ -832,7 +832,7 @@ bool checkDestRangeForOverwrite(const ScRangeList& rDestRanges, const ScDocument
 
     if (!bIsEmpty)
     {
-        VclPtr<ScReplaceWarnBox> aBox(new ScReplaceWarnBox(pParentWnd));
+        ScopedVclPtr<ScReplaceWarnBox> aBox(new ScReplaceWarnBox(pParentWnd));
         if (aBox->Execute() != RET_YES)
         {
             //  changing the configuration is within the ScReplaceWarnBox
@@ -1041,7 +1041,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
         {
             ScWaitCursorOff aWaitOff( GetFrameWin() );
             OUString aMessage = ScGlobal::GetRscString( STR_PASTE_BIGGER );
-            VclPtr<QueryBox> aBox(new QueryBox( GetViewData().GetDialogParent(),
+            ScopedVclPtr<QueryBox> aBox(new QueryBox( GetViewData().GetDialogParent(),
                             WinBits(WB_YES_NO | WB_DEF_NO), aMessage ) );
             if ( aBox->Execute() != RET_YES )
             {

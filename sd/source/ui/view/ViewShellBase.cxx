@@ -533,7 +533,7 @@ sal_uInt16 ViewShellBase::SetPrinter (
         bool bScaleAll = false;
         if ( bIsAPI )
         {
-            VclPtr<WarningBox> aWarnBox (new WarningBox(
+            ScopedVclPtr<WarningBox> aWarnBox (new WarningBox(
                 GetWindow(),
                 (WinBits)(WB_YES_NO | WB_DEF_YES),
                 SD_RESSTR(STR_SCALE_OBJS_TO_PAGE)));

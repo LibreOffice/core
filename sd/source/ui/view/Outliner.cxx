@@ -1068,7 +1068,7 @@ void Outliner::ShowEndOfSearchDialog (void)
 
     // Show the message in an info box that is modal with respect to the
     // whole application.
-    VclPtr<MessageDialog> aInfoBox(new MessageDialog(NULL, aString, VCL_MESSAGE_INFO));
+    ScopedVclPtr<MessageDialog> aInfoBox(new MessageDialog(NULL, aString, VCL_MESSAGE_INFO));
 
     ShowModalMessageBox (*aInfoBox.get());
 
@@ -1109,7 +1109,7 @@ bool Outliner::ShowWrapArroundDialog (void)
 
         // Pop up question box that asks the user whether to wrap around.
         // The dialog is made modal with respect to the whole application.
-        VclPtr<QueryBox> aQuestionBox (new QueryBox(
+        ScopedVclPtr<QueryBox> aQuestionBox (new QueryBox(
             NULL,
             WB_YES_NO | WB_DEF_YES,
             SD_RESSTR(nStringId)));
@@ -1157,7 +1157,7 @@ void Outliner::PrepareSpellCheck (void)
     {
         mbError = true;
         mbEndOfSearch = true;
-        VclPtr<MessageDialog> aErrorBox (new MessageDialog(NULL,
+        ScopedVclPtr<MessageDialog> aErrorBox (new MessageDialog(NULL,
             SD_RESSTR(STR_NOLANGUAGE)));
         ShowModalMessageBox (*aErrorBox.get());
     }
@@ -1376,7 +1376,7 @@ bool Outliner::HandleFailedSearch (void)
         if (HasNoPreviousMatch ())
         {
             // No match found in the whole presentation.  Tell the user.
-            VclPtr<InfoBox> aInfoBox (new InfoBox(NULL, SD_RESSTR(STR_SAR_NOT_FOUND)));
+            ScopedVclPtr<InfoBox> aInfoBox (new InfoBox(NULL, SD_RESSTR(STR_SAR_NOT_FOUND)));
             ShowModalMessageBox (*aInfoBox.get());
         }
 

@@ -122,7 +122,7 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
            // No suitable JRE found
             SolarMutexGuard aSolarGuard;
             m_bJavaNotFound_Handled = true;
-            VclPtr<MessageDialog> aWarningBox(new MessageDialog(NULL, SvtResId(STR_WARNING_JAVANOTFOUND), VCL_MESSAGE_WARNING));
+            ScopedVclPtr<MessageDialog> aWarningBox(new MessageDialog(NULL, SvtResId(STR_WARNING_JAVANOTFOUND), VCL_MESSAGE_WARNING));
             aWarningBox->SetText(SvtResId(STR_WARNING_JAVANOTFOUND_TITLE));
             nResult = aWarningBox->Execute();
         }
@@ -139,9 +139,9 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
             SolarMutexGuard aSolarGuard;
             m_bInvalidSettings_Handled = true;
 #ifdef MACOSX
-            VclPtr<MessageDialog> aWarningBox(new MessageDialog(NULL, SvtResId(STR_WARNING_INVALIDJAVASETTINGS_MAC), VCL_MESSAGE_WARNING));
+            ScopedVclPtr<MessageDialog> aWarningBox(new MessageDialog(NULL, SvtResId(STR_WARNING_INVALIDJAVASETTINGS_MAC), VCL_MESSAGE_WARNING));
 #else
-            VclPtr<MessageDialog> aWarningBox(new MessageDialog(NULL, SvtResId(STR_WARNING_INVALIDJAVASETTINGS), VCL_MESSAGE_WARNING));
+            ScopedVclPtr<MessageDialog> aWarningBox(new MessageDialog(NULL, SvtResId(STR_WARNING_INVALIDJAVASETTINGS), VCL_MESSAGE_WARNING));
 #endif
             aWarningBox->SetText(SvtResId(STR_WARNING_INVALIDJAVASETTINGS_TITLE));
             nResult = aWarningBox->Execute();
@@ -158,7 +158,7 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
             SolarMutexGuard aSolarGuard;
             m_bJavaDisabled_Handled = true;
             // Java disabled. Give user a chance to enable Java inside Office.
-            VclPtr<MessageDialog> aQueryBox(new MessageDialog(NULL, "JavaDisabledDialog",
+            ScopedVclPtr<MessageDialog> aQueryBox(new MessageDialog(NULL, "JavaDisabledDialog",
                                     "svt/ui/javadisableddialog.ui"));
             nResult = aQueryBox->Execute();
             if ( nResult == RET_YES )
@@ -182,9 +182,9 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
             SolarMutexGuard aSolarGuard;
             m_bVMCreationFailure_Handled = true;
 #ifdef MACOSX
-            VclPtr<MessageDialog> aErrorBox(new MessageDialog(NULL, SvtResId(STR_ERROR_JVMCREATIONFAILED_MAC)));
+            ScopedVclPtr<MessageDialog> aErrorBox(new MessageDialog(NULL, SvtResId(STR_ERROR_JVMCREATIONFAILED_MAC)));
 #else
-            VclPtr<MessageDialog> aErrorBox(new MessageDialog(NULL, SvtResId(STR_ERROR_JVMCREATIONFAILED)));
+            ScopedVclPtr<MessageDialog> aErrorBox(new MessageDialog(NULL, SvtResId(STR_ERROR_JVMCREATIONFAILED)));
 #endif
             aErrorBox->SetText(SvtResId(STR_ERROR_JVMCREATIONFAILED_TITLE));
             nResult = aErrorBox->Execute();

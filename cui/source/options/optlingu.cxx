@@ -1596,7 +1596,7 @@ IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, PushButton *, pBtn )
             pLinguData = new SvxLinguData_Impl;
 
         SvxLinguData_Impl   aOldLinguData( *pLinguData );
-        VclPtr<SvxEditModulesDlg>   aDlg(new SvxEditModulesDlg( this, *pLinguData ));
+        ScopedVclPtr<SvxEditModulesDlg>   aDlg(new SvxEditModulesDlg( this, *pLinguData ));
         if (aDlg->Execute() != RET_OK)
             *pLinguData = aOldLinguData;
 
@@ -1673,7 +1673,7 @@ IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, PushButton *, pBtn )
     }
     else if (m_pLinguDicsDelPB == pBtn)
     {
-        VclPtr<MessageDialog> aQuery(new MessageDialog(this, "QueryDeleteDictionaryDialog",
+        ScopedVclPtr<MessageDialog> aQuery(new MessageDialog(this, "QueryDeleteDictionaryDialog",
             "cui/ui/querydeletedictionarydialog.ui"));
         if (RET_NO == aQuery->Execute())
             return 0;
@@ -1745,7 +1745,7 @@ IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, PushButton *, pBtn )
             if(aData.HasNumericValue())
             {
                 sal_uInt16 nRID = aData.GetEntryId();
-                VclPtr<OptionsBreakSet> aDlg( new OptionsBreakSet(this, nRID) );
+                ScopedVclPtr<OptionsBreakSet> aDlg( new OptionsBreakSet(this, nRID) );
                 aDlg->GetNumericFld().SetValue( aData.GetNumericValue() );
                 if (RET_OK == aDlg->Execute() )
                 {

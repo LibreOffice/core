@@ -180,7 +180,7 @@ IMPL_LINK_NOARG(OCollectionView, Save_Click)
             Reference< XContent> xContent;
             if ( xNameContainer->hasByName(sName) )
             {
-                VclPtr<QueryBox> aBox(new QueryBox( this, WB_YES_NO, ModuleRes( STR_ALREADYEXISTOVERWRITE ) ) );
+                ScopedVclPtr<QueryBox> aBox(new QueryBox( this, WB_YES_NO, ModuleRes( STR_ALREADYEXISTOVERWRITE ) ) );
                 if ( aBox->Execute() != RET_YES )
                     return 0;
             }

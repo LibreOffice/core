@@ -436,7 +436,7 @@ IMPL_LINK_NOARG_INLINE_END(SwLabPage, TypeHdl)
 
 void SwLabPage::DisplayFormat()
 {
-    VclPtr<MetricField> aField(new MetricField(this, WinBits(0)));
+    ScopedVclPtr<MetricField> aField(new MetricField(this, WinBits(0)));
     FieldUnit aMetric = ::GetDfltMetric(false);
     SetMetric(*aField.get(), aMetric);
     aField->SetDecimalDigits(2);

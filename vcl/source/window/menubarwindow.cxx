@@ -60,7 +60,7 @@ void DecoToolBox::DataChanged( const DataChangedEvent& rDCEvt )
 
 void DecoToolBox::calcMinSize()
 {
-    VclPtr<ToolBox> aTbx( new ToolBox(GetParent()) );
+    ScopedVclPtr<ToolBox> aTbx( new ToolBox(GetParent()) );
     if( GetItemCount() == 0 )
     {
         ResMgr* pResMgr = ImplGetResMgr();

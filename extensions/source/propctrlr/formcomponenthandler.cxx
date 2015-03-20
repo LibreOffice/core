@@ -2608,7 +2608,7 @@ namespace pcr
         OSL_PRECOND( m_pInfoService.get(), "FormComponentPropertyHandler::impl_dialogListSelection_nothrow: no property meta data!" );
 
         OUString sPropertyUIName( m_pInfoService->getPropertyTranslation( m_pInfoService->getPropertyId( _rProperty ) ) );
-        VclPtr<ListSelectionDialog> aDialog(new ListSelectionDialog( impl_getDefaultDialogParent_nothrow(), m_xComponent, _rProperty, sPropertyUIName ) );
+        ScopedVclPtr<ListSelectionDialog> aDialog(new ListSelectionDialog( impl_getDefaultDialogParent_nothrow(), m_xComponent, _rProperty, sPropertyUIName ) );
         _rClearBeforeDialog.clear();
         return ( RET_OK == aDialog->Execute() );
     }
@@ -2685,7 +2685,7 @@ namespace pcr
             return false;
 
 
-        VclPtr<FormLinkDialog> aDialog(new FormLinkDialog( impl_getDefaultDialogParent_nothrow(), m_xComponent, xMasterProp, m_xContext ) );
+        ScopedVclPtr<FormLinkDialog> aDialog(new FormLinkDialog( impl_getDefaultDialogParent_nothrow(), m_xComponent, xMasterProp, m_xContext ) );
         _rClearBeforeDialog.clear();
         return ( RET_OK == aDialog->Execute() );
     }
@@ -2722,7 +2722,7 @@ namespace pcr
             aCoreSet.Put( aFormatter );
 
             // a tab dialog with a single page
-            VclPtr< SfxSingleTabDialog > xDialog(new SfxSingleTabDialog(
+            ScopedVclPtr< SfxSingleTabDialog > xDialog(new SfxSingleTabDialog(
                 impl_getDefaultDialogParent_nothrow(), aCoreSet,
                 "FormatNumberDialog", "cui/ui/formatnumberdialog.ui"));
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
@@ -2871,7 +2871,7 @@ namespace pcr
 
         {   // do this in an own block. The dialog needs to be destroyed before we call
             // destroyItemSet
-            VclPtr<ControlCharacterDialog> aDlg(new ControlCharacterDialog( impl_getDefaultDialogParent_nothrow(), *pSet ) );
+            ScopedVclPtr<ControlCharacterDialog> aDlg(new ControlCharacterDialog( impl_getDefaultDialogParent_nothrow(), *pSet ) );
             _rClearBeforeDialog.clear();
             if ( RET_OK == aDlg->Execute() )
             {
@@ -2942,7 +2942,7 @@ namespace pcr
 
     bool FormComponentPropertyHandler::impl_dialogChooseLabelControl_nothrow( Any& _out_rNewValue, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const
     {
-        VclPtr<OSelectLabelDialog> dlgSelectLabel(new OSelectLabelDialog( impl_getDefaultDialogParent_nothrow(), m_xComponent ) );
+        ScopedVclPtr<OSelectLabelDialog> dlgSelectLabel(new OSelectLabelDialog( impl_getDefaultDialogParent_nothrow(), m_xComponent ) );
         _rClearBeforeDialog.clear();
         bool bSuccess = ( RET_OK == dlgSelectLabel->Execute() );
         if ( bSuccess )
@@ -2965,7 +2965,7 @@ namespace pcr
         OSL_PRECOND( impl_getContextControlContainer_nothrow().is(), "FormComponentPropertyHandler::impl_dialogChangeTabOrder_nothrow: invalid control context!" );
 
         Reference< XTabControllerModel > xTabControllerModel( impl_getRowSet_nothrow(), UNO_QUERY );
-        VclPtr<TabOrderDialog> aDialog(new TabOrderDialog(
+        ScopedVclPtr<TabOrderDialog> aDialog(new TabOrderDialog(
             impl_getDefaultDialogParent_nothrow(),
             xTabControllerModel,
             impl_getContextControlContainer_nothrow(),

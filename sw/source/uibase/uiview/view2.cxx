@@ -240,7 +240,7 @@ int SwView::InsertGraphic( const OUString &rPath, const OUString &rFilter,
             const sal_uInt16 aRotation = aMetadata.getRotation();
             if (aRotation != 0)
             {
-                VclPtr<MessageDialog> aQueryBox(new MessageDialog( GetWindow(),"QueryRotateIntoStandardOrientationDialog","modules/swriter/ui/queryrotateintostandarddialog.ui") );
+                ScopedVclPtr<MessageDialog> aQueryBox(new MessageDialog( GetWindow(),"QueryRotateIntoStandardOrientationDialog","modules/swriter/ui/queryrotateintostandarddialog.ui") );
                 if (aQueryBox->Execute() == RET_YES)
                 {
                     GraphicNativeTransform aTransform( aGraphic );
@@ -439,7 +439,7 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
             // really store as link only?
             if( bAsLink && SvtMiscOptions().ShowLinkWarningDialog() )
             {
-                VclPtr<SvxLinkWarningDialog> aWarnDlg(new SvxLinkWarningDialog(GetWindow(),pFileDlg->GetPath()));
+                ScopedVclPtr<SvxLinkWarningDialog> aWarnDlg(new SvxLinkWarningDialog(GetWindow(),pFileDlg->GetPath()));
                 if( aWarnDlg->Execute() != RET_OK )
                     bAsLink=false; // don't store as link
             }
@@ -504,7 +504,7 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
         {
             if( bShowError )
             {
-                VclPtr<MessageDialog> aInfoBox(new MessageDialog( GetWindow(), SW_RESSTR( nResId ), VCL_MESSAGE_INFO) );
+                ScopedVclPtr<MessageDialog> aInfoBox(new MessageDialog( GetWindow(), SW_RESSTR( nResId ), VCL_MESSAGE_INFO) );
                 aInfoBox->Execute();
             }
             rReq.Ignore();
@@ -585,7 +585,7 @@ void SwView::Execute(SfxRequest &rReq)
                         pParent = static_cast<const XWindowItem*>( pParentItem )->GetWindowPtr();
                     else
                         pParent = &GetViewFrame()->GetWindow();
-                    VclPtr<SfxPasswordDialog> aPasswdDlg(new SfxPasswordDialog( pParent ));
+                    ScopedVclPtr<SfxPasswordDialog> aPasswdDlg(new SfxPasswordDialog( pParent ));
                     aPasswdDlg->SetMinLen( 1 );
                     //#i69751# the result of Execute() can be ignored
                     (void)aPasswdDlg->Execute();
@@ -623,7 +623,7 @@ void SwView::Execute(SfxRequest &rReq)
                 pParent = static_cast<const XWindowItem*>( pParentItem )->GetWindowPtr();
             else
                 pParent = &GetViewFrame()->GetWindow();
-            VclPtr<SfxPasswordDialog> aPasswdDlg(new SfxPasswordDialog( pParent ));
+            ScopedVclPtr<SfxPasswordDialog> aPasswdDlg(new SfxPasswordDialog( pParent ));
             aPasswdDlg->SetMinLen( 1 );
             if(!aPasswd.getLength())
                 aPasswdDlg->ShowExtras(SHOWEXTRAS_CONFIRM);
@@ -2287,7 +2287,7 @@ void SwView::GenerateFormLetter(bool bUseCurrentDocument)
             if ( lcl_NeedAdditionalDataSource( xDBContext ) )
             {
                 // no data sources are available - create a new one
-                VclPtr<MessageDialog> aQuery(new MessageDialog(&GetViewFrame()->GetWindow(),
+                ScopedVclPtr<MessageDialog> aQuery(new MessageDialog(&GetViewFrame()->GetWindow(),
                     "DataSourcesUnavailableDialog",
                     "modules/swriter/ui/datasourcesunavailabledialog.ui"));
                 // no cancel allowed
@@ -2336,7 +2336,7 @@ void SwView::GenerateFormLetter(bool bUseCurrentDocument)
             OUString sSource;
             if(!GetWrtShell().IsFieldDataSourceAvailable(sSource))
             {
-                VclPtr<MessageDialog> aWarning(new MessageDialog(&GetViewFrame()->GetWindow(),
+                ScopedVclPtr<MessageDialog> aWarning(new MessageDialog(&GetViewFrame()->GetWindow(),
                     "WarnDataSourceDialog",
                     "modules/swriter/ui/warndatasourcedialog.ui"));
                 OUString sTmp(aWarning->get_primary_text());
@@ -2390,7 +2390,7 @@ void SwView::GenerateFormLetter(bool bUseCurrentDocument)
         SfxApplication* pSfxApp = SfxGetpApp();
         vcl::Window* pTopWin = pSfxApp->GetTopWindow();
 
-        VclPtr<SfxTemplateManagerDlg> aDocTemplDlg(new SfxTemplateManagerDlg);
+        ScopedVclPtr<SfxTemplateManagerDlg> aDocTemplDlg(new SfxTemplateManagerDlg);
         int nRet = aDocTemplDlg->Execute();
         bool bNewWin = false;
         if ( nRet == RET_OK )

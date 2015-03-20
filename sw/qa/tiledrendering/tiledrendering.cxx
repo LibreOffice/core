@@ -197,7 +197,7 @@ int TiledRenderingApp::Main()
     Help::EnableQuickHelp();
     try
     {
-        VclPtr<TiledRenderingDialog> pDialog(new TiledRenderingDialog(this));
+        ScopedVclPtr<TiledRenderingDialog> pDialog(new TiledRenderingDialog(this));
         pDialog->Execute();
     }
     catch (const uno::Exception &e)

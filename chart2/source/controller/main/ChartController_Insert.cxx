@@ -109,7 +109,7 @@ void ChartController::executeDispatch_InsertAxes()
         AxisHelper::getAxisOrGridPossibilities( aDialogInput.aPossibilityList, xDiagram, true );
 
         SolarMutexGuard aGuard;
-        VclPtr<SchAxisDlg> aDlg(new SchAxisDlg( m_pChartWindow, aDialogInput ));
+        ScopedVclPtr<SchAxisDlg> aDlg(new SchAxisDlg( m_pChartWindow, aDialogInput ));
         if( aDlg->Execute() == RET_OK )
         {
             // lock controllers till end of block
@@ -147,7 +147,7 @@ void ChartController::executeDispatch_InsertGrid()
         AxisHelper::getAxisOrGridPossibilities( aDialogInput.aPossibilityList, xDiagram, false );
 
         SolarMutexGuard aGuard;
-        VclPtr<SchGridDlg> aDlg(new SchGridDlg( m_pChartWindow, aDialogInput ));//aItemSet, b3D, bNet, bSecondaryX, bSecondaryY );
+        ScopedVclPtr<SchGridDlg> aDlg(new SchGridDlg( m_pChartWindow, aDialogInput ));//aItemSet, b3D, bNet, bSecondaryX, bSecondaryY );
         if( aDlg->Execute() == RET_OK )
         {
             // lock controllers till end of block
@@ -179,7 +179,7 @@ void ChartController::executeDispatch_InsertTitles()
         aDialogInput.readFromModel( getModel() );
 
         SolarMutexGuard aGuard;
-        VclPtr<SchTitleDlg> aDlg(new SchTitleDlg( m_pChartWindow, aDialogInput ));
+        ScopedVclPtr<SchTitleDlg> aDlg(new SchTitleDlg( m_pChartWindow, aDialogInput ));
         if( aDlg->Execute() == RET_OK )
         {
             // lock controllers till end of block
@@ -232,7 +232,7 @@ void ChartController::executeDispatch_OpenLegendDialog()
     {
         //prepare and open dialog
         SolarMutexGuard aGuard;
-        VclPtr<SchLegendDlg> aDlg(new SchLegendDlg( m_pChartWindow, m_xCC ));
+        ScopedVclPtr<SchLegendDlg> aDlg(new SchLegendDlg( m_pChartWindow, m_xCC ));
         aDlg->init( getModel() );
         if( aDlg->Execute() == RET_OK )
         {
@@ -292,7 +292,7 @@ void ChartController::executeDispatch_InsertMenu_DataLabels()
         NumberFormatterWrapper aNumberFormatterWrapper( xNumberFormatsSupplier );
         SvNumberFormatter* pNumberFormatter = aNumberFormatterWrapper.getSvNumberFormatter();
 
-        VclPtr<DataLabelsDialog> aDlg(new DataLabelsDialog( m_pChartWindow, aItemSet, pNumberFormatter));
+        ScopedVclPtr<DataLabelsDialog> aDlg(new DataLabelsDialog( m_pChartWindow, aItemSet, pNumberFormatter));
 
         if( aDlg->Execute() == RET_OK )
         {
@@ -397,7 +397,7 @@ void ChartController::executeDispatch_InsertTrendline()
     aDialogParameter.init( getModel() );
     ViewElementListProvider aViewElementListProvider( m_pDrawModelWrapper.get());
     SolarMutexGuard aGuard;
-    VclPtr<SchAttribTabDlg> aDialog(new SchAttribTabDlg( m_pChartWindow, &aItemSet, &aDialogParameter, &aViewElementListProvider,
+    ScopedVclPtr<SchAttribTabDlg> aDialog(new SchAttribTabDlg( m_pChartWindow, &aItemSet, &aDialogParameter, &aViewElementListProvider,
                           uno::Reference< util::XNumberFormatsSupplier >( getModel(), uno::UNO_QUERY )));
 
     // note: when a user pressed "OK" but didn't change any settings in the
@@ -452,7 +452,7 @@ void ChartController::executeDispatch_InsertErrorBars( bool bYError )
         aDialogParameter.init( getModel() );
         ViewElementListProvider aViewElementListProvider( m_pDrawModelWrapper.get());
         SolarMutexGuard aGuard;
-        VclPtr<SchAttribTabDlg> aDlg(new SchAttribTabDlg( m_pChartWindow, &aItemSet, &aDialogParameter, &aViewElementListProvider,
+        ScopedVclPtr<SchAttribTabDlg> aDlg(new SchAttribTabDlg( m_pChartWindow, &aItemSet, &aDialogParameter, &aViewElementListProvider,
                               uno::Reference< util::XNumberFormatsSupplier >( getModel(), uno::UNO_QUERY )));
         aDlg->SetAxisMinorStepWidthForErrorBarDecimals(
             InsertErrorBarsDialog::getAxisMinorStepWidthForErrorBarDecimals( getModel(),
@@ -489,7 +489,7 @@ void ChartController::executeDispatch_InsertErrorBars( bool bYError )
 
             //prepare and open dialog
             SolarMutexGuard aGuard;
-            VclPtr<InsertErrorBarsDialog> aDlg(new InsertErrorBarsDialog(
+            ScopedVclPtr<InsertErrorBarsDialog> aDlg(new InsertErrorBarsDialog(
                 m_pChartWindow, aItemSet,
                 uno::Reference< chart2::XChartDocument >( getModel(), uno::UNO_QUERY ),
                 bYError ? ErrorBarResources::ERROR_BAR_Y : ErrorBarResources::ERROR_BAR_X));

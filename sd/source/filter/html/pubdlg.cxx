@@ -1162,7 +1162,7 @@ IMPL_LINK_NOARG(SdPublishingDlg, FinishHdl)
         {
             bRetry = false;
 
-            VclPtr<SdDesignNameDlg> aDlg(new SdDesignNameDlg(this, aName ));
+            ScopedVclPtr<SdDesignNameDlg> aDlg(new SdDesignNameDlg(this, aName ));
 
             if ( aDlg->Execute() == RET_OK )
             {
@@ -1177,7 +1177,7 @@ IMPL_LINK_NOARG(SdPublishingDlg, FinishHdl)
 
                 if (iter != m_aDesignList.end())
                 {
-                    VclPtr<MessageDialog> aErrorBox(new MessageDialog(this, SD_RESSTR(STR_PUBDLG_SAMENAME),
+                    ScopedVclPtr<MessageDialog> aErrorBox(new MessageDialog(this, SD_RESSTR(STR_PUBDLG_SAMENAME),
                         VCL_MESSAGE_ERROR, VCL_BUTTONS_YES_NO));
                     bRetry = aErrorBox->Execute() == RET_NO;
 

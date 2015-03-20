@@ -225,7 +225,7 @@ void CertificateChooser::ImplShowCertificateDetails()
     uno::Reference< css::security::XCertificate > xCert = GetSelectedCertificate();
     if( xCert.is() )
     {
-        VclPtr<CertificateViewer> aViewer(new CertificateViewer( this, mxSecurityEnvironment, xCert, true ));
+        ScopedVclPtr<CertificateViewer> aViewer(new CertificateViewer( this, mxSecurityEnvironment, xCert, true ));
         aViewer->Execute();
     }
 }

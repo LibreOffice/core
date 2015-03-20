@@ -446,7 +446,7 @@ long SvxBitmapTabPage::CheckChanges_Impl()
         {
             ResMgr& rMgr = CUI_MGR();
             Image aWarningBoxImage = WarningBox::GetStandardImage();
-            VclPtr<SvxMessDialog> aMessDlg(new SvxMessDialog(GetParentDialog(),
+            ScopedVclPtr<SvxMessDialog> aMessDlg(new SvxMessDialog(GetParentDialog(),
                                                         SVX_RES( RID_SVXSTR_BITMAP ),
                                                         CUI_RES( RID_SVXSTR_ASK_CHANGE_BITMAP ),
                                                         &aWarningBoxImage  ));
@@ -510,7 +510,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickAddHdl_Impl)
     DBG_ASSERT(pFact, "Dialog creation failed!");
     boost::scoped_ptr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc ));
     DBG_ASSERT(pDlg, "Dialog creation failed!");
-    VclPtr<MessageDialog> pWarnBox;
+    ScopedVclPtr<MessageDialog> pWarnBox;
     sal_uInt16         nError(1);
 
     while( pDlg->Execute() == RET_OK )
@@ -610,7 +610,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl_Impl)
         if( !nError )
         {
             OUString aDesc( ResId(RID_SVXSTR_DESC_EXT_BITMAP, rMgr) );
-            VclPtr<MessageDialog> pWarnBox;
+            ScopedVclPtr<MessageDialog> pWarnBox;
 
             // convert file URL to UI name
             OUString        aName;
@@ -728,7 +728,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickModifyHdl_Impl)
             }
             else
             {
-                VclPtr<MessageDialog> aBox( new MessageDialog(GetParentDialog()
+                ScopedVclPtr<MessageDialog> aBox( new MessageDialog(GetParentDialog()
                                    ,"DuplicateNameDialog"
                                    ,"cui/ui/queryduplicatedialog.ui"));
                 aBox->Execute();
@@ -746,7 +746,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickDeleteHdl_Impl)
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        VclPtr<MessageDialog> aQueryBox(new MessageDialog( GetParentDialog(),"AskDelBitmapDialog","cui/ui/querydeletebitmapdialog.ui" ));
+        ScopedVclPtr<MessageDialog> aQueryBox(new MessageDialog( GetParentDialog(),"AskDelBitmapDialog","cui/ui/querydeletebitmapdialog.ui" ));
 
         if( aQueryBox->Execute() == RET_YES )
         {

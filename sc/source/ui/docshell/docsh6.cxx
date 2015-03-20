@@ -531,7 +531,7 @@ void ScDocShell::CheckConfigOptions()
         if (pViewShell)
         {
             vcl::Window* pParent = pViewShell->GetFrameWin();
-            VclPtr<InfoBox> aBox(new InfoBox(pParent, ScGlobal::GetRscString(STR_OPTIONS_WARN_SEPARATORS)));
+            ScopedVclPtr<InfoBox> aBox(new InfoBox(pParent, ScGlobal::GetRscString(STR_OPTIONS_WARN_SEPARATORS)));
             aBox->Execute();
         }
 

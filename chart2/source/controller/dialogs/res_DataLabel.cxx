@@ -205,7 +205,7 @@ IMPL_LINK( DataLabelResources, NumberFormatDialogHdl, PushButton *, pButton )
         aNumberSet.Put( SfxUInt32Item( SID_ATTR_NUMBERFORMAT_VALUE, rnFormatKey ));
     aNumberSet.Put( SfxBoolItem( SID_ATTR_NUMBERFORMAT_SOURCE, rUseSourceFormat ));
 
-    VclPtr<NumberFormatDialog> aDlg(new NumberFormatDialog(m_pWindow, aNumberSet));
+    ScopedVclPtr<NumberFormatDialog> aDlg(new NumberFormatDialog(m_pWindow, aNumberSet));
     if( bPercent )
         aDlg->SetText( m_pFT_NumberFormatForPercent->GetText());
     if( RET_OK == aDlg->Execute() )

@@ -1567,7 +1567,7 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
                 uno::Reference< report::XFormattedField> xFormattedField(getDesignView()->getCurrentControlModel(),uno::UNO_QUERY);
                 if ( xFormattedField.is() )
                 {
-                    VclPtr<ConditionalFormattingDialog> aDlg(new ConditionalFormattingDialog( getView(), xFormattedField.get(), *this ));
+                    ScopedVclPtr<ConditionalFormattingDialog> aDlg(new ConditionalFormattingDialog( getView(), xFormattedField.get(), *this ));
                     aDlg->Execute();
                 }
             }
@@ -1577,7 +1577,7 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
             {
                 if ( !aArgs.getLength() )
                 {
-                    VclPtr<ODateTimeDialog> aDlg(new ODateTimeDialog(getView(),getDesignView()->getCurrentSection(),this));
+                    ScopedVclPtr<ODateTimeDialog> aDlg(new ODateTimeDialog(getView(),getDesignView()->getCurrentSection(),this));
                     aDlg->Execute();
                 }
                 else
@@ -1589,7 +1589,7 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
             {
                 if ( !aArgs.getLength() )
                 {
-                    VclPtr<OPageNumberDialog> aDlg(new OPageNumberDialog(getView(),m_xReportDefinition,this));
+                    ScopedVclPtr<OPageNumberDialog> aDlg(new OPageNumberDialog(getView(),m_xReportDefinition,this));
                     aDlg->Execute();
                 }
                 else
@@ -2480,7 +2480,7 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
         }
 
         {   // want the dialog to be destroyed before our set
-            VclPtr<ORptPageDialog> aDlg(new ORptPageDialog(getView(), pDescriptor.get(),_xSection.is()
+            ScopedVclPtr<ORptPageDialog> aDlg(new ORptPageDialog(getView(), pDescriptor.get(),_xSection.is()
                 ? OUString("BackgroundDialog")
                 : OUString("PageDialog")));
             if (RET_OK == aDlg->Execute())

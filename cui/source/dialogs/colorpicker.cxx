@@ -1541,7 +1541,7 @@ void SAL_CALL ColorPicker::setTitle( const OUString& sTitle ) throw (RuntimeExce
 
 sal_Int16 SAL_CALL ColorPicker::execute(  ) throw (RuntimeException, std::exception)
 {
-    VclPtr<ColorPickerDialog> aDlg(new ColorPickerDialog( VCLUnoHelper::GetWindow( mxParent ), mnColor, mnMode ));
+    ScopedVclPtr<ColorPickerDialog> aDlg(new ColorPickerDialog( VCLUnoHelper::GetWindow( mxParent ), mnColor, mnMode ));
     sal_Int16 ret = aDlg->Execute();
     if( ret )
         mnColor = aDlg->GetColor();

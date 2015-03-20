@@ -738,7 +738,7 @@ namespace dbaui
             if ( aFileDlg.GetCurrentFilter() != pFilter->GetUIName() || !pFilter->GetWildcard().Matches(sPath) )
             {
                 OUString sMessage(ModuleRes(STR_ERR_USE_CONNECT_TO));
-                VclPtr<InfoBox> aError(new InfoBox(this, sMessage));
+                ScopedVclPtr<InfoBox> aError(new InfoBox(this, sMessage));
                 aError->Execute();
                 m_pRB_ConnectDatabase->Check();
                 OnSetupModeSelected( m_pRB_ConnectDatabase );

@@ -336,7 +336,7 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, ParameterHdl_Impl)
             (void)eErr;
             if ( bRunning )
             {
-                VclPtr<MessageDialog> aWarnBox(new MessageDialog( this, CUI_RES( RID_SVXSTR_OPTIONS_RESTART ), VCL_MESSAGE_INFO ));
+                ScopedVclPtr<MessageDialog> aWarnBox(new MessageDialog( this, CUI_RES( RID_SVXSTR_OPTIONS_RESTART ), VCL_MESSAGE_INFO ));
                 aWarnBox->Execute();
             }
         }
@@ -381,7 +381,7 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, ClassPathHdl_Impl)
             (void)eErr;
             if ( bRunning )
             {
-                VclPtr<MessageDialog> aWarnBox(new MessageDialog( this, CUI_RES( RID_SVXSTR_OPTIONS_RESTART ), VCL_MESSAGE_INFO ));
+                ScopedVclPtr<MessageDialog> aWarnBox(new MessageDialog( this, CUI_RES( RID_SVXSTR_OPTIONS_RESTART ), VCL_MESSAGE_INFO ));
                 aWarnBox->Execute();
             }
         }
@@ -437,7 +437,7 @@ IMPL_LINK( SvxJavaOptionsPage, DialogClosedHdl, DialogClosedEvent*, pEvt )
 
 IMPL_LINK_NOARG( SvxJavaOptionsPage, ExpertConfigHdl_Impl )
 {
-    VclPtr<CuiAboutConfigTabPage> m_pExpertConfigDlg = new CuiAboutConfigTabPage(this);
+    ScopedVclPtr<CuiAboutConfigTabPage> m_pExpertConfigDlg = new CuiAboutConfigTabPage(this);
     m_pExpertConfigDlg->Reset();//initialize and reset function
 
     if( RET_OK == m_pExpertConfigDlg->Execute() )
@@ -630,12 +630,12 @@ void SvxJavaOptionsPage::AddFolder( const OUString& _rFolder )
     }
     else if ( JFW_E_NOT_RECOGNIZED == eErr )
     {
-        VclPtr<MessageDialog> aErrBox(new MessageDialog( this, CUI_RES( RID_SVXSTR_JRE_NOT_RECOGNIZED ) ));
+        ScopedVclPtr<MessageDialog> aErrBox(new MessageDialog( this, CUI_RES( RID_SVXSTR_JRE_NOT_RECOGNIZED ) ));
         aErrBox->Execute();
     }
     else if ( JFW_E_FAILED_VERSION == eErr )
     {
-        VclPtr<MessageDialog> aErrBox(new MessageDialog( this, CUI_RES( RID_SVXSTR_JRE_FAILED_VERSION ) ));
+        ScopedVclPtr<MessageDialog> aErrBox(new MessageDialog( this, CUI_RES( RID_SVXSTR_JRE_FAILED_VERSION ) ));
         aErrBox->Execute();
     }
 

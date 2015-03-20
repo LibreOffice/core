@@ -39,7 +39,7 @@ void ShowServiceNotAvailableError(vcl::Window* pParent,
 {
     OUString aText  = GetStandardText(STANDARD_TEXT_SERVICE_NOT_AVAILABLE).
         replaceAll("%s", rServiceName);
-    VclPtr<MessageDialog> aBox(new MessageDialog(pParent, aText, bError ? VCL_MESSAGE_ERROR : VCL_MESSAGE_WARNING));
+    ScopedVclPtr<MessageDialog> aBox(new MessageDialog(pParent, aText, bError ? VCL_MESSAGE_ERROR : VCL_MESSAGE_WARNING));
     aBox->Execute();
 }
 

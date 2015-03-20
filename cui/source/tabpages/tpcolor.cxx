@@ -539,7 +539,7 @@ long SvxColorTabPage::CheckChanges_Impl()
         {
             ResMgr& rMgr = CUI_MGR();
             Image aWarningBoxImage = WarningBox::GetStandardImage();
-            VclPtr<SvxMessDialog> aMessDlg(new SvxMessDialog(GetParentDialog(),
+            ScopedVclPtr<SvxMessDialog> aMessDlg(new SvxMessDialog(GetParentDialog(),
                                                         SVX_RESSTR( RID_SVXSTR_COLOR ),
                                                         ResId( RID_SVXSTR_ASK_CHANGE_COLOR, rMgr ),
                                                         &aWarningBoxImage ));
@@ -705,7 +705,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickAddHdl_Impl)
     // if yes, it is repeated and a new name is demanded
     if ( !bDifferent )
     {
-        VclPtr<MessageDialog> aWarningBox(new MessageDialog( GetParentDialog()
+        ScopedVclPtr<MessageDialog> aWarningBox(new MessageDialog( GetParentDialog()
                                    ,"DuplicateNameDialog"
                                    ,"cui/ui/queryduplicatedialog.ui"));
         aWarningBox->Execute();
@@ -776,7 +776,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickModifyHdl_Impl)
         // if yes, it is repeated and a new name is demanded
         if ( !bDifferent )
         {
-            VclPtr<MessageDialog> aWarningBox(new MessageDialog( GetParentDialog()
+            ScopedVclPtr<MessageDialog> aWarningBox(new MessageDialog( GetParentDialog()
                                       ,"DuplicateNameDialog"
                                       ,"cui/ui/queryduplicatedialog.ui"));
             aWarningBox->Execute();
@@ -872,7 +872,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickDeleteHdl_Impl)
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        VclPtr<MessageDialog> aQueryBox(new MessageDialog( GetParentDialog(),"AskDelColorDialog","cui/ui/querydeletecolordialog.ui"));
+        ScopedVclPtr<MessageDialog> aQueryBox(new MessageDialog( GetParentDialog(),"AskDelColorDialog","cui/ui/querydeletecolordialog.ui"));
 
         if( aQueryBox->Execute() == RET_YES )
         {

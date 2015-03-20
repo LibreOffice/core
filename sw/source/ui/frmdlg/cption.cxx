@@ -285,7 +285,7 @@ IMPL_LINK_INLINE_START( SwCaptionDialog, OptionHdl, Button*, pButton )
     OUString sFldTypeName = m_pCategoryBox->GetText();
     if(sFldTypeName == m_sNone)
         sFldTypeName = OUString();
-    VclPtr<SwSequenceOptionDialog> aDlg( pButton, rView, sFldTypeName );
+    ScopedVclPtrInstance<SwSequenceOptionDialog> aDlg( pButton, rView, sFldTypeName );
     aDlg->SetApplyBorderAndShadow(bCopyAttributes);
     aDlg->SetCharacterStyle( sCharacterStyle );
     aDlg->SetOrderNumberingFirst( bOrderNumberingFirst );
@@ -339,7 +339,7 @@ IMPL_LINK_NOARG(SwCaptionDialog, ModifyHdl)
 IMPL_LINK_NOARG(SwCaptionDialog, CaptionHdl)
 {
     SfxItemSet  aSet( rView.GetDocShell()->GetDoc()->GetAttrPool() );
-    VclPtr<SwCaptionOptDlg> aDlg(new SwCaptionOptDlg( this, aSet ) );
+    ScopedVclPtr<SwCaptionOptDlg> aDlg(new SwCaptionOptDlg( this, aSet ) );
     aDlg->Execute();
 
     return 0;

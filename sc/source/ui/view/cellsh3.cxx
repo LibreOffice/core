@@ -422,7 +422,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     }
                     else if( ! rReq.IsAPI() )
                     {
-                        VclPtr<MessageDialog> aErrorBox(new MessageDialog(pTabViewShell->GetDialogParent(),
+                        ScopedVclPtr<MessageDialog> aErrorBox(new MessageDialog(pTabViewShell->GetDialogParent(),
                                             ScGlobal::GetRscString(STR_NOAREASELECTED)));
                         aErrorBox->Execute();
                     }

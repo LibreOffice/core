@@ -579,7 +579,7 @@ IMPL_LINK_NOARG(SwLabFmtPage, SaveHdl)
     aRec.lPWidth  = static_cast< long >(GETFLDVAL(*m_pPWidthField ));
     aRec.lPHeight = static_cast< long >(GETFLDVAL(*m_pPHeightField));
     aRec.bCont = aItem.bCont;
-    VclPtr<SwSaveLabelDlg> pSaveDlg(new SwSaveLabelDlg(this, aRec));
+    ScopedVclPtr<SwSaveLabelDlg> pSaveDlg(new SwSaveLabelDlg(this, aRec));
     pSaveDlg->SetLabel(aItem.aLstMake, aItem.aLstType);
     pSaveDlg->Execute();
     if(pSaveDlg->GetLabel(aItem))
@@ -649,7 +649,7 @@ IMPL_LINK_NOARG(SwSaveLabelDlg, OkHdl)
             return 0;
         }
 
-        VclPtr<MessageDialog> aQuery(new MessageDialog(this, "QuerySaveLabelDialog",
+        ScopedVclPtr<MessageDialog> aQuery(new MessageDialog(this, "QuerySaveLabelDialog",
             "modules/swriter/ui/querysavelabeldialog.ui"));
 
         aQuery->set_primary_text(aQuery->get_primary_text().

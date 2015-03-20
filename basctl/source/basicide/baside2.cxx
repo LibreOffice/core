@@ -619,7 +619,7 @@ void ModulWindow::BasicToggleBreakPointEnabled()
 void ModulWindow::ManageBreakPoints()
 {
     BreakPointWindow& rBrkWin = GetBreakPointWindow();
-    VclPtr<BreakPointDialog> aBrkDlg(new BreakPointDialog( &rBrkWin, GetBreakPoints() ));
+    ScopedVclPtr<BreakPointDialog> aBrkDlg(new BreakPointDialog( &rBrkWin, GetBreakPoints() ));
     aBrkDlg->Execute();
     rBrkWin.Invalidate();
 }
@@ -1043,7 +1043,7 @@ void ModulWindow::ExecuteCommand (SfxRequest& rReq)
             break;
         case SID_GOTOLINE:
         {
-            VclPtr<GotoLineDialog> aGotoDlg(new GotoLineDialog(this));
+            ScopedVclPtr<GotoLineDialog> aGotoDlg(new GotoLineDialog(this));
             if (aGotoDlg->Execute())
                 if (sal_Int32 const nLine = aGotoDlg->GetLineNumber())
                 {

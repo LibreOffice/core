@@ -91,7 +91,7 @@ public:
 
 void Main()
 {
-    VclPtr<MyWin> aMainWin(new MyWin(NULL, WB_APP | WB_STDWORK) );
+    ScopedVclPtr<MyWin> aMainWin(new MyWin(NULL, WB_APP | WB_STDWORK) );
     aMainWin->SetText( OUString( "VCL - Workbench" ) );
     aMainWin->Show();
 

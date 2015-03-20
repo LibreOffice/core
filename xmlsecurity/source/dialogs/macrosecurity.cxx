@@ -238,7 +238,7 @@ IMPL_LINK_NOARG(MacroSecurityTrustedSourcesTP, ViewCertPBHdl)
 
         if ( xCert.is() )
         {
-            VclPtr<CertificateViewer> aViewer(new CertificateViewer( this, mpDlg->mxSecurityEnvironment, xCert, false ));
+            ScopedVclPtr<CertificateViewer> aViewer(new CertificateViewer( this, mpDlg->mxSecurityEnvironment, xCert, false ));
             aViewer->Execute();
         }
     }

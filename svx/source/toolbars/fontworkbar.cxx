@@ -432,7 +432,7 @@ void FontworkBar::execute( SdrView* pSdrView, SfxRequest& rReq, SfxBindings& rBi
     {
         case SID_FONTWORK_GALLERY_FLOATER:
         {
-            VclPtr<FontWorkGalleryDialog> aDlg(new FontWorkGalleryDialog( pSdrView, ImpGetViewWin(pSdrView), nSID ) );
+            ScopedVclPtr<FontWorkGalleryDialog> aDlg(new FontWorkGalleryDialog( pSdrView, ImpGetViewWin(pSdrView), nSID ) );
             aDlg->Execute();
         }
         break;
@@ -491,7 +491,7 @@ void FontworkBar::execute( SdrView* pSdrView, SfxRequest& rReq, SfxBindings& rBi
             if( rReq.GetArgs() && ( rReq.GetArgs()->GetItemState( SID_FONTWORK_CHARACTER_SPACING ) == SfxItemState::SET ) )
             {
                 sal_Int32 nCharSpacing = static_cast<const SfxInt32Item*>(rReq.GetArgs()->GetItem(SID_FONTWORK_CHARACTER_SPACING))->GetValue();
-                VclPtr<FontworkCharacterSpacingDialog> aDlg(new FontworkCharacterSpacingDialog( 0L, nCharSpacing ) );
+                ScopedVclPtr<FontworkCharacterSpacingDialog> aDlg(new FontworkCharacterSpacingDialog( 0L, nCharSpacing ) );
                 sal_uInt16 nRet = aDlg->Execute();
                 if( nRet != 0 )
                 {

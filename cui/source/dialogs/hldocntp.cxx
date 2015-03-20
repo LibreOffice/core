@@ -271,7 +271,7 @@ bool SvxHyperlinkNewDocTp::AskApply()
     bool bRet = ImplGetURLObject( m_pCbbPath->GetText(), m_pCbbPath->GetBaseURL(), aINetURLObject );
     if ( !bRet )
     {
-        VclPtr<WarningBox> aWarning(new WarningBox( this, WB_OK, CUI_RESSTR(RID_SVXSTR_HYPDLG_NOVALIDFILENAME) ) );
+        ScopedVclPtr<WarningBox> aWarning(new WarningBox( this, WB_OK, CUI_RESSTR(RID_SVXSTR_HYPDLG_NOVALIDFILENAME) ) );
         aWarning->Execute();
     }
     return bRet;
@@ -321,7 +321,7 @@ void SvxHyperlinkNewDocTp::DoApply ()
 
                 if( bOk )
                 {
-                    VclPtr<WarningBox> aWarning(new WarningBox( this, WB_YES_NO, CUI_RESSTR(RID_SVXSTR_HYPERDLG_QUERYOVERWRITE) ));
+                    ScopedVclPtrInstance<WarningBox> aWarning( this, WB_YES_NO, CUI_RESSTR(RID_SVXSTR_HYPERDLG_QUERYOVERWRITE) );
                     bCreate = aWarning->Execute() == RET_YES;
                 }
             }

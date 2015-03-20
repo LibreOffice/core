@@ -309,7 +309,7 @@ namespace dbaui
                     aProfiles.insert(pArray[index]);
 
                 // execute the select dialog
-                VclPtr<ODatasourceSelectDialog> aSelector(new ODatasourceSelectDialog(GetParent(), aProfiles));
+                ScopedVclPtr<ODatasourceSelectDialog> aSelector(new ODatasourceSelectDialog(GetParent(), aProfiles));
                 OUString sOldProfile=getURLNoPrefix();
 
                 if (!sOldProfile.isEmpty())
@@ -479,7 +479,7 @@ namespace dbaui
             sQuery = sQuery.replaceFirst("$path$", aTransformer.get(OFileNotation::N_SYSTEM));
 
             m_bUserGrabFocus = false;
-            VclPtr<QueryBox> aQuery(new QueryBox(GetParent(), WB_YES_NO | WB_DEF_YES, sQuery));
+            ScopedVclPtr<QueryBox> aQuery(new QueryBox(GetParent(), WB_YES_NO | WB_DEF_YES, sQuery));
             sal_Int32 nQueryResult = aQuery->Execute();
             m_bUserGrabFocus = true;
 
@@ -496,7 +496,7 @@ namespace dbaui
                             sQuery = sQuery.replaceFirst("$name$", aTransformer.get(OFileNotation::N_SYSTEM));
 
                             m_bUserGrabFocus = false;
-                            VclPtr<QueryBox> aWhatToDo(new QueryBox(GetParent(), WB_RETRY_CANCEL | WB_DEF_RETRY, sQuery));
+                            ScopedVclPtr<QueryBox> aWhatToDo(new QueryBox(GetParent(), WB_RETRY_CANCEL | WB_DEF_RETRY, sQuery));
                             nQueryResult = aWhatToDo->Execute();
                             m_bUserGrabFocus = true;
 

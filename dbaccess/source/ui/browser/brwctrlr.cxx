@@ -1271,7 +1271,7 @@ IMPL_LINK( SbaXDataBrowserController, OnAsyncDisplayError, void*, /* _pNotIntere
 {
     if ( m_aCurrentError.isValid() )
     {
-        VclPtr<OSQLMessageBox> aDlg(new OSQLMessageBox( getBrowserView(), m_aCurrentError ));
+        ScopedVclPtr<OSQLMessageBox> aDlg(new OSQLMessageBox( getBrowserView(), m_aCurrentError ));
         aDlg->Execute();
     }
     return 0L;
@@ -1764,14 +1764,14 @@ void SbaXDataBrowserController::ExecuteFilterSortCrit(bool bFilter)
         Reference< XConnection> xCon(xFormSet->getPropertyValue(PROPERTY_ACTIVE_CONNECTION),UNO_QUERY);
         if(bFilter)
         {
-            VclPtr<DlgFilterCrit> aDlg(new DlgFilterCrit( getBrowserView(), getORB(), xCon, xParser, xSup->getColumns() ) );
+            ScopedVclPtr<DlgFilterCrit> aDlg(new DlgFilterCrit( getBrowserView(), getORB(), xCon, xParser, xSup->getColumns() ) );
             if ( !aDlg->Execute() )
                 return; // if so we don't need to update the grid
             aDlg->BuildWherePart();
         }
         else
         {
-            VclPtr<DlgOrderCrit> aDlg(new DlgOrderCrit( getBrowserView(),xCon,xParser,xSup->getColumns() ) );
+            ScopedVclPtr<DlgOrderCrit> aDlg(new DlgOrderCrit( getBrowserView(),xCon,xParser,xSup->getColumns() ) );
             if(!aDlg->Execute())
             {
                 return; // if so we don't need to actualize the grid
@@ -2172,7 +2172,7 @@ bool SbaXDataBrowserController::SaveModified(bool bAskFor)
     {
         getBrowserView()->getVclControl()->GrabFocus();
 
-        VclPtr<MessageDialog> aQry(new MessageDialog(getBrowserView()->getVclControl(),
+        ScopedVclPtr<MessageDialog> aQry(new MessageDialog(getBrowserView()->getVclControl(),
                            "SaveModifiedDialog",
                            "dbaccess/ui/savemodifieddialog.ui"));
 

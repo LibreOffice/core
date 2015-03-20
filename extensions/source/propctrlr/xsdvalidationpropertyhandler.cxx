@@ -496,7 +496,7 @@ namespace pcr
         ::std::vector< OUString > aExistentNames;
         m_pHelper->getAvailableDataTypeNames( aExistentNames );
 
-        VclPtr<NewDataTypeDialog> aDialog(new NewDataTypeDialog( NULL, pType->getName(), aExistentNames ) );  // TODO/eForms: proper parent
+        ScopedVclPtr<NewDataTypeDialog> aDialog(new NewDataTypeDialog( NULL, pType->getName(), aExistentNames ) );  // TODO/eForms: proper parent
         if ( aDialog->Execute() != RET_OK )
             return false;
 
@@ -535,7 +535,7 @@ namespace pcr
         // confirmation message
         OUString sConfirmation( PcrRes( RID_STR_CONFIRM_DELETE_DATA_TYPE ).toString() );
         sConfirmation = sConfirmation.replaceFirst( "#type#", pType->getName() );
-        VclPtr<QueryBox> aQuery(new QueryBox( NULL, WB_YES_NO, sConfirmation ) ); // TODO/eForms: proper parent
+        ScopedVclPtr<QueryBox> aQuery(new QueryBox( NULL, WB_YES_NO, sConfirmation ) ); // TODO/eForms: proper parent
         if ( aQuery->Execute() != RET_YES )
             return false;
 

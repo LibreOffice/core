@@ -271,7 +271,7 @@ FuInsertGraphic::FuInsertGraphic( ScTabViewShell*   pViewSh,
                 // really store as link only?
                 if( bAsLink && SvtMiscOptions().ShowLinkWarningDialog() )
                 {
-                    VclPtr<SvxLinkWarningDialog> aWarnDlg(new SvxLinkWarningDialog(pWin,aFileName));
+                    ScopedVclPtr<SvxLinkWarningDialog> aWarnDlg(new SvxLinkWarningDialog(pWin,aFileName));
                     if( aWarnDlg->Execute() != RET_OK )
                         bAsLink = false; // don't store as link
                 }

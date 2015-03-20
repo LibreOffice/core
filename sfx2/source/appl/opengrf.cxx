@@ -158,7 +158,7 @@ short SvxOpenGraphicDialog::Execute()
             // could not load?
             if ( nFound == USHRT_MAX )
             {
-                VclPtr<WarningBox> aWarningBox(new WarningBox(NULL, WB_3DLOOK | WB_RETRY_CANCEL, SfxResId( SvxOpenGrfErr2ResId(nImpRet) ).toString()) );
+                ScopedVclPtr<WarningBox> aWarningBox(new WarningBox(NULL, WB_3DLOOK | WB_RETRY_CANCEL, SfxResId( SvxOpenGrfErr2ResId(nImpRet) ).toString()) );
                 bQuitLoop = aWarningBox->Execute() != RET_RETRY;
             }
             else

@@ -136,7 +136,7 @@ void Shell::ExecuteCurrent( SfxRequest& rReq )
                             SfxViewFrame* pViewFrame = GetViewFrame();
                             SfxChildWindow* pChildWin = pViewFrame ? pViewFrame->GetChildWindow( SID_SEARCH_DLG ) : NULL;
                             vcl::Window* pParent = pChildWin ? pChildWin->GetWindow() : NULL;
-                            VclPtr<QueryBox> aQuery(new QueryBox(pParent, WB_YES_NO|WB_DEF_YES, IDE_RESSTR(RID_STR_SEARCHFROMSTART)));
+                            ScopedVclPtr<QueryBox> aQuery(new QueryBox(pParent, WB_YES_NO|WB_DEF_YES, IDE_RESSTR(RID_STR_SEARCHFROMSTART)));
                             if ( aQuery->Execute() == RET_YES )
                             {
                                 it = aWindowTable.begin();
@@ -676,7 +676,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
 
         case SID_BASICIDE_MANAGE_LANG:
         {
-            VclPtr<ManageLanguageDialog> aDlg(new ManageLanguageDialog(pCurWin, m_pCurLocalizationMgr));
+            ScopedVclPtr<ManageLanguageDialog> aDlg(new ManageLanguageDialog(pCurWin, m_pCurLocalizationMgr));
             aDlg->Execute();
             rReq.Done();
         }

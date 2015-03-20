@@ -246,7 +246,7 @@ void SvxLineDefTabPage::CheckChanges_Impl()
     {
         ResMgr& rMgr = CUI_MGR();
         Image aWarningBoxImage = WarningBox::GetStandardImage();
-        VclPtr<SvxMessDialog> aMessDlg(new SvxMessDialog(GetParentDialog(),
+        ScopedVclPtr<SvxMessDialog> aMessDlg(new SvxMessDialog(GetParentDialog(),
                                                     SVX_RESSTR( RID_SVXSTR_LINESTYLE ),
                                                     OUString( ResId( RID_SVXSTR_ASK_CHANGE_LINESTYLE, rMgr ) ),
                                                     &aWarningBoxImage ));
@@ -619,7 +619,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickAddHdl_Impl)
         else
         {
 
-            VclPtr<MessageDialog> aBox(new MessageDialog( GetParentDialog()
+            ScopedVclPtr<MessageDialog> aBox(new MessageDialog( GetParentDialog()
                                 ,"DuplicateNameDialog"
                                 ,"cui/ui/queryduplicatedialog.ui"));
             aBox->Execute();
@@ -697,7 +697,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickModifyHdl_Impl)
             }
             else
             {
-                VclPtr<MessageDialog> aBox(new MessageDialog( GetParentDialog()
+                ScopedVclPtr<MessageDialog> aBox(new MessageDialog( GetParentDialog()
                                    ,"DuplicateNameDialog"
                                    ,"cui/ui/queryduplicatedialog.ui") );
                 aBox->Execute();
@@ -715,7 +715,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickDeleteHdl_Impl)
 
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        VclPtr<MessageDialog> aQueryBox(new MessageDialog( GetParentDialog()
+        ScopedVclPtr<MessageDialog> aQueryBox(new MessageDialog( GetParentDialog()
                                 ,"AskDelLineStyleDialog"
                                 ,"cui/ui/querydeletelinestyledialog.ui"));
 

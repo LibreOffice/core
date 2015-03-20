@@ -987,7 +987,7 @@ void OQueryController::impl_initialize()
                 OUString aTitle( ModuleRes( STR_QUERYDESIGN_NO_VIEW_SUPPORT ) );
                 OUString aMessage( ModuleRes( STR_QUERYDESIGN_NO_VIEW_ASK ) );
                 ODataView* pWindow = getView();
-                VclPtr<OSQLMessageBox> aDlg(new OSQLMessageBox( pWindow, aTitle, aMessage, WB_YES_NO | WB_DEF_YES, OSQLMessageBox::Query ));
+                ScopedVclPtr<OSQLMessageBox> aDlg(new OSQLMessageBox( pWindow, aTitle, aMessage, WB_YES_NO | WB_DEF_YES, OSQLMessageBox::Query ));
                 bClose = aDlg->Execute() == RET_NO;
             }
             if ( bClose )
@@ -1238,7 +1238,7 @@ void OQueryController::loadViewSettings( const ::comphelper::NamedValueCollectio
 
 void OQueryController::execute_QueryPropDlg()
 {
-    VclPtr<QueryPropertiesDialog> aQueryPropDlg(new QueryPropertiesDialog(
+    ScopedVclPtr<QueryPropertiesDialog> aQueryPropDlg(new QueryPropertiesDialog(
         getContainer(), m_bDistinct, m_nLimit ));
 
     if( aQueryPropDlg->Execute() == RET_OK )
@@ -1398,7 +1398,7 @@ bool OQueryController::askForNewName(const Reference<XNameAccess>& _xElements, b
         }
 
         DynamicTableOrQueryNameCheck aNameChecker( getConnection(), CommandType::QUERY );
-        VclPtr<OSaveAsDlg> aDlg(new OSaveAsDlg(
+        ScopedVclPtr<OSaveAsDlg> aDlg(new OSaveAsDlg(
                 getView(),
                 m_nCommandType,
                 getORB(),
@@ -1802,7 +1802,7 @@ short OQueryController::saveModified()
         )
     {
         OUString sMessageText( lcl_getObjectResourceString( STR_QUERY_SAVEMODIFIED, m_nCommandType ) );
-        VclPtr<QueryBox> aQry(new QueryBox( getView(), WB_YES_NO_CANCEL | WB_DEF_YES, sMessageText ) );
+        ScopedVclPtr<QueryBox> aQry(new QueryBox( getView(), WB_YES_NO_CANCEL | WB_DEF_YES, sMessageText ) );
 
         nRet = aQry->Execute();
         if  (   ( nRet == RET_YES )
@@ -1914,7 +1914,7 @@ void OQueryController::impl_reset( const bool i_bForceCurrentControllerSettings 
                     if ( !i_bForceCurrentControllerSettings && !editingView() )
                     {
                         OUString aTitle(ModuleRes(STR_SVT_SQL_SYNTAX_ERROR));
-                        VclPtr<OSQLMessageBox> aDlg(new OSQLMessageBox(getView(),aTitle,aErrorMsg));
+                        ScopedVclPtr<OSQLMessageBox> aDlg(new OSQLMessageBox(getView(),aTitle,aErrorMsg));
                         aDlg->Execute();
                     }
                     bError = true;

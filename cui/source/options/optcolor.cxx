@@ -553,8 +553,8 @@ void ColorConfigWindow_Impl::CreateEntries()
     long nCheckBoxLabelOffset = 0;
     {
         OUString sSampleText("X");
-        VclPtr<CheckBox> aCheckBox(new CheckBox(this));
-        VclPtr<FixedText> aFixedText(new FixedText(this));
+        ScopedVclPtr<CheckBox> aCheckBox(new CheckBox(this));
+        ScopedVclPtr<FixedText> aFixedText(new FixedText(this));
         aCheckBox->SetText(sSampleText);
         aFixedText->SetText(sSampleText);
         Size aCheckSize(aCheckBox->CalcMinimumSize(0x7fffffff));
@@ -628,7 +628,7 @@ void ColorConfigWindow_Impl::SetAppearance ()
     OSL_ENSURE( vEntries.size() >= sizeof vEntryInfo / sizeof vEntryInfo[0], "wrong number of helpIDs for color listboxes" );
 
     // creating a sample color listbox with the color entries
-    VclPtr<ColorListBox> aSampleColorList(new ColorListBox(this));
+    ScopedVclPtr<ColorListBox> aSampleColorList(new ColorListBox(this));
     {
         XColorListRef const xColorTable = XColorList::CreateStdColorList();
         for (sal_Int32 i = 0; i != xColorTable->Count(); ++i)
@@ -1205,7 +1205,7 @@ IMPL_LINK(SvxColorOptionsTabPage, SaveDeleteHdl_Impl, PushButton*, pButton )
     else
     {
         DBG_ASSERT(m_pColorSchemeLB->GetEntryCount() > 1, "don't delete the last scheme");
-        VclPtr<MessageDialog> aQuery(new MessageDialog(pButton, CUI_RES(RID_SVXSTR_COLOR_CONFIG_DELETE), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO));
+        ScopedVclPtr<MessageDialog> aQuery(new MessageDialog(pButton, CUI_RES(RID_SVXSTR_COLOR_CONFIG_DELETE), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO));
         aQuery->SetText(CUI_RES(RID_SVXSTR_COLOR_CONFIG_DELETE_TITLE));
         if(RET_YES == aQuery->Execute())
         {

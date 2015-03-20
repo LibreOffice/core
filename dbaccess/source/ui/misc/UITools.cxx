@@ -852,7 +852,7 @@ bool callColumnFormatDialog(vcl::Window* _pParent,
     }
 
     {   // want the dialog to be destroyed before our set
-        VclPtr<SbaSbAttrDlg> aDlg(new SbaSbAttrDlg(_pParent, pFormatDescriptor, _pFormatter, _bHasFormat));
+        ScopedVclPtr<SbaSbAttrDlg> aDlg(new SbaSbAttrDlg(_pParent, pFormatDescriptor, _pFormatter, _bHasFormat));
         if (RET_OK == aDlg->Execute())
         {
             // ItemSet->UNO
@@ -997,7 +997,7 @@ void adjustBrowseBoxColumnWidth( ::svt::EditBrowseBox* _pBox, sal_uInt16 _nColId
 
     Size aDefaultMM = _pBox->PixelToLogic( Size( nDefaultWidth, 0 ), MapMode( MAP_MM ) );
 
-    VclPtr<DlgSize> aColumnSizeDlg(new DlgSize( _pBox, nColSize, false, aDefaultMM.Width() * 10 ) );
+    ScopedVclPtr<DlgSize> aColumnSizeDlg(new DlgSize( _pBox, nColSize, false, aDefaultMM.Width() * 10 ) );
     if ( aColumnSizeDlg->Execute() )
     {
         sal_Int32 nValue = aColumnSizeDlg->GetValue();
@@ -1286,7 +1286,7 @@ sal_Int32 askForUserAction(vcl::Window* _pParent,sal_uInt16 _nTitle,sal_uInt16 _
     SolarMutexGuard aGuard;
     OUString aMsg = ModuleRes(_nText);
     aMsg = aMsg.replaceFirst("%1", _sName);
-    VclPtr<OSQLMessageBox> aAsk(new OSQLMessageBox(_pParent, ModuleRes(_nTitle ), aMsg,WB_YES_NO | WB_DEF_YES,OSQLMessageBox::Query));
+    ScopedVclPtr<OSQLMessageBox> aAsk(new OSQLMessageBox(_pParent, ModuleRes(_nTitle ), aMsg,WB_YES_NO | WB_DEF_YES,OSQLMessageBox::Query));
     if ( _bAll )
     {
         aAsk->AddButton(ModuleRes(STR_BUTTON_TEXT_ALL), RET_ALL, 0);
@@ -1431,7 +1431,7 @@ bool insertHierachyElement( vcl::Window* _pParent, const Reference< XComponentCo
             // here we have everything needed to create a new query object ...
             HierarchicalNameCheck aNameChecker( _xNames.get(), sName );
             // ... ehm, except a new name
-            VclPtr<OSaveAsDlg> aAskForName(new OSaveAsDlg( _pParent,
+            ScopedVclPtr<OSaveAsDlg> aAskForName(new OSaveAsDlg( _pParent,
                                     _rxContext,
                                     sTargetName,
                                     sLabel,

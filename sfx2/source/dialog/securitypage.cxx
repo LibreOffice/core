@@ -99,7 +99,7 @@ static bool lcl_GetPassword(
     /*out*/OUString &rPassword )
 {
     bool bRes = false;
-    VclPtr<SfxPasswordDialog> aPasswdDlg(new SfxPasswordDialog(pParent));
+    ScopedVclPtr<SfxPasswordDialog> aPasswdDlg(new SfxPasswordDialog(pParent));
     aPasswdDlg->SetMinLen( 1 );
     if (bProtect)
         aPasswdDlg->ShowExtras( SHOWEXTRAS_CONFIRM );
@@ -335,7 +335,7 @@ IMPL_LINK_NOARG(SfxSecurityPage_Impl, RecordChangesCBToggleHdl)
         bool bAlreadyDone = false;
         if (!m_bEndRedliningWarningDone)
         {
-            VclPtr<WarningBox> aBox(new WarningBox(m_rMyTabPage.GetParent(), WinBits(WB_YES_NO | WB_DEF_NO),
+            ScopedVclPtr<WarningBox> aBox(new WarningBox(m_rMyTabPage.GetParent(), WinBits(WB_YES_NO | WB_DEF_NO),
                     m_aEndRedliningWarning ));
             if (aBox->Execute() != RET_YES)
                 bAlreadyDone = true;

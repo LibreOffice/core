@@ -98,7 +98,7 @@ namespace pcr
         if ( !m_pControlWindow )
             return;
 
-        VclPtr<ComboBox> aComboBox(new ComboBox(m_pControlWindow, WB_DROPDOWN));
+        ScopedVclPtr<ComboBox> aComboBox(new ComboBox(m_pControlWindow, WB_DROPDOWN));
         aComboBox->SetPosSizePixel(Point(0,0), Size(100,100));
         m_pControlWindow->SetSizePixel(aComboBox->GetSizePixel());
 

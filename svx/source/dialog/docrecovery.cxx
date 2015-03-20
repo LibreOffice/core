@@ -682,7 +682,7 @@ void SaveDialog::dispose()
 IMPL_LINK_NOARG(SaveDialog, OKButtonHdl)
 {
     // start crash-save with progress
-    VclPtr<SaveProgressDialog> pProgress(new SaveProgressDialog(this, m_pCore));
+    ScopedVclPtr<SaveProgressDialog> pProgress(new SaveProgressDialog(this, m_pCore));
     short nResult = pProgress->Execute();
     pProgress.reset();
 
@@ -855,7 +855,7 @@ void RecovDocList::InitEntry(SvTreeListEntry* pEntry,
 
 short impl_askUserForWizardCancel(vcl::Window* pParent, sal_Int16 nRes)
 {
-    VclPtr<MessageDialog> aQuery(new MessageDialog(pParent, SVX_RES(nRes), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO));
+    ScopedVclPtr<MessageDialog> aQuery(new MessageDialog(pParent, SVX_RES(nRes), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO));
     if (aQuery->Execute() == RET_YES)
         return DLG_RET_OK;
     else
@@ -988,7 +988,7 @@ short RecoveryDialog::execute()
                  // failed recovery documents. They must be saved to
                  // a user selected directrory.
                  short                 nRet                  = DLG_RET_UNKNOWN;
-                 VclPtr<BrokenRecoveryDialog> pBrokenRecoveryDialog(new BrokenRecoveryDialog(this, m_pCore, !m_bWasRecoveryStarted));
+                 ScopedVclPtr<BrokenRecoveryDialog> pBrokenRecoveryDialog(new BrokenRecoveryDialog(this, m_pCore, !m_bWasRecoveryStarted));
                  OUString              sSaveDir              = pBrokenRecoveryDialog->getSaveDirURL(); // get the default dir
                  if (pBrokenRecoveryDialog->isExecutionNeeded())
                  {
@@ -1057,7 +1057,7 @@ short RecoveryDialog::execute()
                  // If no temp files exists or user decided to ignore it ...
                  // we have to remove all recovery/session data anyway!
                  short                 nRet                  = DLG_RET_UNKNOWN;
-                 VclPtr<BrokenRecoveryDialog> pBrokenRecoveryDialog(new BrokenRecoveryDialog(this, m_pCore, !m_bWasRecoveryStarted));
+                 ScopedVclPtr<BrokenRecoveryDialog> pBrokenRecoveryDialog(new BrokenRecoveryDialog(this, m_pCore, !m_bWasRecoveryStarted));
                  OUString              sSaveDir              = pBrokenRecoveryDialog->getSaveDirURL(); // get the default save location
 
                  // dialog itself checks if there is a need to copy files for this mode.

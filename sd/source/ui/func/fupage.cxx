@@ -351,7 +351,7 @@ const SfxItemSet* FuPage::ExecuteDialog( ::vcl::Window* pParent )
                 // notice-masterpage (at the moment)
                 if( ePageKind != PK_NOTES )
                 {
-                    VclPtr<MessBox> aQuestionBox (new MessBox(
+                    ScopedVclPtr<MessBox> aQuestionBox (new MessBox(
                         pParent,
                         WB_YES_NO | WB_DEF_YES,
                         SD_RESSTR(STR_PAGE_BACKGROUND_TITLE),

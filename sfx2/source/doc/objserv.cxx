@@ -335,7 +335,7 @@ void SfxObjectShell::CheckOut( )
     }
     catch ( const uno::RuntimeException& e )
     {
-        VclPtr<MessageDialog> pErrorBox(new MessageDialog( &GetFrame()->GetWindow(), e.Message ));
+        ScopedVclPtr<MessageDialog> pErrorBox(new MessageDialog( &GetFrame()->GetWindow(), e.Message ));
         pErrorBox->Execute( );
     }
 }
@@ -353,7 +353,7 @@ void SfxObjectShell::CancelCheckOut( )
     }
     catch ( const uno::RuntimeException& e )
     {
-        VclPtr<MessageDialog> pErrorBox(new MessageDialog(&GetFrame()->GetWindow(), e.Message));
+        ScopedVclPtr<MessageDialog> pErrorBox(new MessageDialog(&GetFrame()->GetWindow(), e.Message));
         pErrorBox->Execute( );
     }
 }
@@ -364,7 +364,7 @@ void SfxObjectShell::CheckIn( )
     {
         uno::Reference< document::XCmisDocument > xCmisDoc( GetModel(), uno::UNO_QUERY_THROW );
         // Pop up dialog to ask for comment and major
-        VclPtr<SfxCheckinDialog> checkinDlg(new SfxCheckinDialog(&GetFrame( )->GetWindow( )));
+        ScopedVclPtr<SfxCheckinDialog> checkinDlg(new SfxCheckinDialog(&GetFrame( )->GetWindow( )));
         if ( checkinDlg->Execute( ) == RET_OK )
         {
             OUString sComment = checkinDlg->GetComment( );
@@ -377,7 +377,7 @@ void SfxObjectShell::CheckIn( )
     }
     catch ( const uno::RuntimeException& e )
     {
-        VclPtr<MessageDialog> pErrorBox(new MessageDialog(&GetFrame()->GetWindow(), e.Message));
+        ScopedVclPtr<MessageDialog> pErrorBox(new MessageDialog(&GetFrame()->GetWindow(), e.Message));
         pErrorBox->Execute( );
     }
 }
@@ -391,7 +391,7 @@ uno::Sequence< document::CmisVersion > SfxObjectShell::GetCmisVersions( )
     }
     catch ( const uno::RuntimeException& e )
     {
-        VclPtr<MessageDialog> pErrorBox(new MessageDialog(&GetFrame()->GetWindow(), e.Message));
+        ScopedVclPtr<MessageDialog> pErrorBox(new MessageDialog(&GetFrame()->GetWindow(), e.Message));
         pErrorBox->Execute( );
     }
     return uno::Sequence< document::CmisVersion > ( );
@@ -439,7 +439,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             if ( !IsOwnStorageFormat_Impl( *GetMedium() ) )
                 return;
 
-            VclPtr<SfxVersionDialog> pDlg(new SfxVersionDialog( pFrame, IsSaveVersionOnClose() ));
+            ScopedVclPtr<SfxVersionDialog> pDlg(new SfxVersionDialog( pFrame, IsSaveVersionOnClose() ));
             pDlg->Execute();
             SetSaveVersionOnClose( pDlg->IsSaveVersionOnClose() );
             rReq.Done();
@@ -499,7 +499,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
                 // creating dialog is done via virtual method; application will
                 // add its own statistics page
-                VclPtr<SfxDocumentInfoDialog> pDlg(CreateDocumentInfoDialog(0, aSet));
+                ScopedVclPtr<SfxDocumentInfoDialog> pDlg(CreateDocumentInfoDialog(0, aSet));
                 if ( RET_OK == pDlg->Execute() )
                 {
                     SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pDocInfoItem, SfxDocumentInfoItem, SID_DOCINFO, false);
@@ -857,7 +857,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
         case SID_DOCTEMPLATE:
         {
             // save as document templates
-            VclPtr<SfxTemplateManagerDlg> aDlg(new SfxTemplateManagerDlg);
+            ScopedVclPtr<SfxTemplateManagerDlg> aDlg(new SfxTemplateManagerDlg);
             aDlg->setDocumentModel(GetModel());
             aDlg->setSaveMode();
             aDlg->Execute();

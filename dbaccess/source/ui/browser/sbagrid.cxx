@@ -792,7 +792,7 @@ void SbaGridControl::SetColWidth(sal_uInt16 nColId)
         Any aWidth = xAffectedCol->getPropertyValue(PROPERTY_WIDTH);
         sal_Int32 nCurWidth = aWidth.hasValue() ? ::comphelper::getINT32(aWidth) : -1;
 
-        VclPtr<DlgSize> aDlgColWidth(new DlgSize(this, nCurWidth, false));
+        ScopedVclPtr<DlgSize> aDlgColWidth(new DlgSize(this, nCurWidth, false));
         if (aDlgColWidth->Execute())
         {
             sal_Int32 nValue = aDlgColWidth->GetValue();
@@ -821,7 +821,7 @@ void SbaGridControl::SetRowHeight()
     Any aHeight = xCols->getPropertyValue(PROPERTY_ROW_HEIGHT);
     sal_Int32 nCurHeight = aHeight.hasValue() ? ::comphelper::getINT32(aHeight) : -1;
 
-    VclPtr<DlgSize> aDlgRowHeight(new DlgSize(this, nCurHeight, true));
+    ScopedVclPtr<DlgSize> aDlgRowHeight(new DlgSize(this, nCurHeight, true));
     if (aDlgRowHeight->Execute())
     {
         sal_Int32 nValue = aDlgRowHeight->GetValue();

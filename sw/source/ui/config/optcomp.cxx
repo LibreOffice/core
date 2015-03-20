@@ -319,7 +319,7 @@ IMPL_LINK_NOARG(SwCompatibilityOptPage, SelectHdl)
 
 IMPL_LINK_NOARG(SwCompatibilityOptPage, UseAsDefaultHdl)
 {
-    VclPtr<MessageDialog> aQuery(new MessageDialog(this, "QueryDefaultCompatDialog",
+    ScopedVclPtr<MessageDialog> aQuery(new MessageDialog(this, "QueryDefaultCompatDialog",
         "modules/swriter/ui/querydefaultcompatdialog.ui"));
     if (aQuery->Execute() == RET_YES)
     {

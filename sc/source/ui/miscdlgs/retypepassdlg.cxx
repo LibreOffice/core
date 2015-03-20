@@ -293,7 +293,7 @@ IMPL_LINK( ScRetypePassDlg, RetypeBtnHdl, PushButton*, pBtn )
         // What the ... !?
         return 0;
 
-    VclPtr<ScRetypePassInputDlg> aDlg(new ScRetypePassInputDlg(this, pProtected));
+    ScopedVclPtr<ScRetypePassInputDlg> aDlg(new ScRetypePassInputDlg(this, pProtected));
     if (aDlg->Execute() == RET_OK)
     {
         // OK is pressed.  Update the protected item.

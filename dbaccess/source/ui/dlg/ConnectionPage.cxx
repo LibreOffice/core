@@ -308,7 +308,7 @@ namespace dbaui
 
         const sal_uInt16 nMessage = bSuccess ? STR_JDBCDRIVER_SUCCESS : STR_JDBCDRIVER_NO_SUCCESS;
         const OSQLMessageBox::MessageType mt = bSuccess ? OSQLMessageBox::Info : OSQLMessageBox::Error;
-        VclPtr<OSQLMessageBox> aMsg(new OSQLMessageBox( this, OUString( ModuleRes( nMessage ) ), OUString(), WB_OK | WB_DEF_OK, mt ) );
+        ScopedVclPtr<OSQLMessageBox> aMsg(new OSQLMessageBox( this, OUString( ModuleRes( nMessage ) ), OUString(), WB_OK | WB_DEF_OK, mt ) );
         aMsg->Execute();
         return 0L;
     }

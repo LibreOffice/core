@@ -687,7 +687,7 @@ bool ODatabaseExport::executeWizard(const OUString& _rTableName, const Any& _aTe
 {
     bool bHaveDefaultTable =  !m_sDefaultTableName.isEmpty();
     OUString sTableName( bHaveDefaultTable ? m_sDefaultTableName : _rTableName );
-    VclPtr<OCopyTableWizard> aWizard(new OCopyTableWizard(
+    ScopedVclPtr<OCopyTableWizard> aWizard(new OCopyTableWizard(
         NULL,
         sTableName,
         bHaveDefaultTable ? CopyTableOperation::AppendData : CopyTableOperation::CopyDefinitionAndData,
@@ -754,7 +754,7 @@ void ODatabaseExport::showErrorDialog(const ::com::sun::star::sdbc::SQLException
         OUString aMsg(e.Message);
         aMsg += "\n";
         aMsg += ModuleRes( STR_QRY_CONTINUE );
-        VclPtr<OSQLWarningBox> aBox(new OSQLWarningBox( NULL, aMsg, WB_YES_NO | WB_DEF_NO ) );
+        ScopedVclPtr<OSQLWarningBox> aBox(new OSQLWarningBox( NULL, aMsg, WB_YES_NO | WB_DEF_NO ) );
 
         if (aBox->Execute() == RET_YES)
             m_bDontAskAgain = true;

@@ -922,7 +922,7 @@ void SvxScriptOrgDialog::createEntry( SvTreeListEntry* pEntry )
                         bValid = false;
                         OUString aError( m_createErrStr );
                         aError += m_createDupStr;
-                        VclPtr<MessageDialog> aErrorBox(new MessageDialog(static_cast<vcl::Window*>(this), aError));
+                        ScopedVclPtr<MessageDialog> aErrorBox(new MessageDialog(static_cast<vcl::Window*>(this), aError));
                         aErrorBox->SetText( m_createErrTitleStr );
                         aErrorBox->Execute();
                         xNewDlg->SetObjectName( aNewName );
@@ -1004,7 +1004,7 @@ void SvxScriptOrgDialog::createEntry( SvTreeListEntry* pEntry )
     {
         //ISSUE L10N & message from exception?
         OUString aError( m_createErrStr );
-        VclPtr<MessageDialog> aErrorBox(new MessageDialog(static_cast<vcl::Window*>(this), aError));
+        ScopedVclPtr<MessageDialog> aErrorBox(new MessageDialog(static_cast<vcl::Window*>(this), aError));
         aErrorBox->SetText( m_createErrTitleStr );
         aErrorBox->Execute();
     }
@@ -1080,7 +1080,7 @@ void SvxScriptOrgDialog::renameEntry( SvTreeListEntry* pEntry )
     {
         //ISSUE L10N & message from exception?
         OUString aError( m_renameErrStr );
-        VclPtr<MessageDialog> aErrorBox(new MessageDialog(static_cast<vcl::Window*>(this), aError));
+        ScopedVclPtr<MessageDialog> aErrorBox(new MessageDialog(static_cast<vcl::Window*>(this), aError));
         aErrorBox->SetText( m_renameErrTitleStr );
         aErrorBox->Execute();
     }
@@ -1126,7 +1126,7 @@ void SvxScriptOrgDialog::deleteEntry( SvTreeListEntry* pEntry )
     else
     {
         //ISSUE L10N & message from exception?
-        VclPtr<MessageDialog> aErrorBox(new MessageDialog(static_cast<vcl::Window*>(this), m_delErrStr));
+        ScopedVclPtr<MessageDialog> aErrorBox(new MessageDialog(static_cast<vcl::Window*>(this), m_delErrStr));
         aErrorBox->SetText( m_delErrTitleStr );
         aErrorBox->Execute();
     }
