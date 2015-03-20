@@ -40,7 +40,7 @@
 
 // static ----------------------------------------------------------------
 
-static const sal_uInt16 pPosSizeRanges[] =
+const sal_uInt16 SvxPositionSizeTabPage::pPosSizeRanges[] =
 {
     SID_ATTR_TRANSFORM_POS_X,
     SID_ATTR_TRANSFORM_POS_Y,
@@ -59,7 +59,7 @@ static const sal_uInt16 pPosSizeRanges[] =
     0
 };
 
-static const sal_uInt16 pAngleRanges[] =
+const sal_uInt16 SvxAngleTabPage::pAngleRanges[] =
 {
     SID_ATTR_TRANSFORM_ROT_X,
     SID_ATTR_TRANSFORM_ANGLE,
@@ -68,7 +68,7 @@ static const sal_uInt16 pAngleRanges[] =
     0
 };
 
-static const sal_uInt16 pSlantRanges[] =
+const sal_uInt16 SvxSlantTabPage::pSlantRanges[] =
 {
     SDRATTR_ECKENRADIUS,
     SDRATTR_ECKENRADIUS,
@@ -320,13 +320,6 @@ SfxTabPage* SvxAngleTabPage::Create( vcl::Window* pWindow, const SfxItemSet* rSe
 
 
 
-const sal_uInt16* SvxAngleTabPage::GetRanges()
-{
-    return pAngleRanges;
-}
-
-
-
 void SvxAngleTabPage::ActivatePage(const SfxItemSet& /*rSet*/)
 {
 }
@@ -550,13 +543,6 @@ void SvxSlantTabPage::Reset(const SfxItemSet* rAttrs)
 SfxTabPage* SvxSlantTabPage::Create( vcl::Window* pWindow, const SfxItemSet* rOutAttrs )
 {
     return new SvxSlantTabPage( pWindow, *rOutAttrs );
-}
-
-
-
-const sal_uInt16* SvxSlantTabPage::GetRanges()
-{
-    return pSlantRanges;
 }
 
 
@@ -989,13 +975,6 @@ void SvxPositionSizeTabPage::Reset( const SfxItemSet*  )
 SfxTabPage* SvxPositionSizeTabPage::Create( vcl::Window* pWindow, const SfxItemSet* rOutAttrs )
 {
     return new SvxPositionSizeTabPage( pWindow, *rOutAttrs );
-}
-
-
-
-const sal_uInt16* SvxPositionSizeTabPage::GetRanges()
-{
-    return pPosSizeRanges;
 }
 
 

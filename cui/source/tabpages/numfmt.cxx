@@ -52,7 +52,7 @@ using ::com::sun::star::uno::UNO_QUERY;
 
 // static ----------------------------------------------------------------
 
-static const sal_uInt16 pRanges[] =
+const sal_uInt16 SvxNumberFormatTabPage::pRanges[] =
 {
     SID_ATTR_NUMBERFORMAT_VALUE,
     SID_ATTR_NUMBERFORMAT_INFO,
@@ -346,23 +346,6 @@ void SvxNumberFormatTabPage::Init_Impl()
             m_pLbLanguage->InsertLanguage( xLang[i] );
     }
 }
-
-/*************************************************************************
-#*  Method:        GetRanges
-#*------------------------------------------------------------------------
-#*
-#*  Class:      SvxNumberFormatTabPage
-#*  Function:   Returns area information.
-#*  Input:      ---
-#*  Output:     area
-#*
-#************************************************************************/
-
-const sal_uInt16* SvxNumberFormatTabPage::GetRanges()
-{
-    return pRanges;
-}
-
 
 /*************************************************************************
 #*  Method:        Create

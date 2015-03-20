@@ -87,7 +87,7 @@ using namespace ::com::sun::star;
 
 // static ----------------------------------------------------------------
 
-static const sal_uInt16 pNameRanges[] =
+const sal_uInt16 SvxCharNamePage::pNameRanges[] =
 {
     SID_ATTR_CHAR_FONT,
     SID_ATTR_CHAR_WEIGHT,
@@ -104,7 +104,7 @@ static const sal_uInt16 pNameRanges[] =
     0
 };
 
-static const sal_uInt16 pEffectsRanges[] =
+const sal_uInt16 SvxCharEffectsPage::pEffectsRanges[] =
 {
     SID_ATTR_CHAR_SHADOWED,
     SID_ATTR_CHAR_UNDERLINE,
@@ -125,7 +125,7 @@ static const sal_uInt16 pEffectsRanges[] =
     0
 };
 
-static const sal_uInt16 pPositionRanges[] =
+const sal_uInt16 SvxCharPositionPage::pPositionRanges[] =
 {
     SID_ATTR_CHAR_KERNING,
     SID_ATTR_CHAR_KERNING,
@@ -140,7 +140,7 @@ static const sal_uInt16 pPositionRanges[] =
     0
 };
 
-static const sal_uInt16 pTwoLinesRanges[] =
+const sal_uInt16 SvxCharTwoLinesPage::pTwoLinesRanges[] =
 {
     SID_ATTR_CHAR_TWO_LINES,
     SID_ATTR_CHAR_TWO_LINES,
@@ -1187,13 +1187,6 @@ SfxTabPage* SvxCharNamePage::Create( vcl::Window* pParent, const SfxItemSet* rSe
 
 
 
-const sal_uInt16* SvxCharNamePage::GetRanges()
-{
-    return pNameRanges;
-}
-
-
-
 void SvxCharNamePage::Reset( const SfxItemSet* rSet )
 {
     Reset_Impl( *rSet, Western );
@@ -1730,13 +1723,6 @@ int SvxCharEffectsPage::DeactivatePage( SfxItemSet* _pSet )
 SfxTabPage* SvxCharEffectsPage::Create( vcl::Window* pParent, const SfxItemSet* rSet )
 {
     return new SvxCharEffectsPage( pParent, *rSet );
-}
-
-
-
-const sal_uInt16* SvxCharEffectsPage::GetRanges()
-{
-    return pEffectsRanges;
 }
 
 
@@ -2908,12 +2894,6 @@ SfxTabPage* SvxCharPositionPage::Create( vcl::Window* pParent, const SfxItemSet*
 
 
 
-const sal_uInt16* SvxCharPositionPage::GetRanges()
-{
-    return pPositionRanges;
-}
-
-
 void SvxCharPositionPage::Reset( const SfxItemSet* rSet )
 {
     OUString sUser = GetUserData();
@@ -3475,15 +3455,6 @@ SfxTabPage* SvxCharTwoLinesPage::Create( vcl::Window* pParent, const SfxItemSet*
 {
     return new SvxCharTwoLinesPage( pParent, *rSet );
 }
-
-
-
-const sal_uInt16* SvxCharTwoLinesPage::GetRanges()
-{
-    return pTwoLinesRanges;
-}
-
-
 
 void SvxCharTwoLinesPage::Reset( const SfxItemSet* rSet )
 {

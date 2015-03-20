@@ -42,10 +42,12 @@ class SvxBorderTabPage : public SfxTabPage
 {
     using TabPage::DeactivatePage;
 
+    static const sal_uInt16 pRanges[];
+
 public:
     static SfxTabPage*  Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet);
-    static const sal_uInt16*      GetRanges();
+    static const sal_uInt16*      GetRanges() { return pRanges; }
 
     virtual bool        FillItemSet( SfxItemSet* rCoreAttrs ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* ) SAL_OVERRIDE;

@@ -46,6 +46,7 @@ class SvxLineSpacingItem;
 class SvxStdParagraphTabPage: public SfxTabPage
 {
     using TabPage::DeactivatePage;
+    static const sal_uInt16 pStdRanges[];
 
 private:
     SvxStdParagraphTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
@@ -100,7 +101,7 @@ public:
     DECL_LINK(ELRLoseFocusHdl, void *);
 
     static SfxTabPage*      Create( vcl::Window* pParent, const SfxItemSet* rSet );
-    static const sal_uInt16*      GetRanges();
+    static const sal_uInt16* GetRanges() { return pStdRanges; }
 
     virtual bool            FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void            Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -123,6 +124,7 @@ public:
 class SvxParaAlignTabPage : public SfxTabPage
 {
     using TabPage::DeactivatePage;
+    static const sal_uInt16 pAlignRanges[];
 
     // alignment
     RadioButton*             m_pLeft;
@@ -161,7 +163,7 @@ protected:
 
 public:
     static SfxTabPage*      Create( vcl::Window* pParent, const SfxItemSet* rSet );
-    static const sal_uInt16*      GetRanges();
+    static const sal_uInt16* GetRanges() { return pAlignRanges; }
 
     virtual bool            FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void            Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -187,13 +189,14 @@ public:
 class SvxExtParagraphTabPage: public SfxTabPage
 {
     using TabPage::DeactivatePage;
+    static const sal_uInt16 pExtRanges[];
 
 public:
     virtual             ~SvxExtParagraphTabPage();
 
     static SfxTabPage*  Create( vcl::Window* pParent,
                                 const SfxItemSet* rSet );
-    static const sal_uInt16*      GetRanges();
+    static const sal_uInt16* GetRanges() { return pExtRanges; }
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;

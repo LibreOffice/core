@@ -112,8 +112,6 @@ public :
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
     void                SetUserData(const OUString& rString)  { aUserString = rString; }
     OUString            GetUserData() { return aUserString; }
-    void                FillUserData();
-    bool                IsReadOnly() const;
     virtual bool        QueryClose();
 
     void                StateChanged( StateChangedType nType ) SAL_OVERRIDE;

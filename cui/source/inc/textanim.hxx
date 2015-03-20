@@ -37,6 +37,7 @@ class SdrView;
 class SvxTextAnimationPage : public SfxTabPage
 {
 private:
+    static const sal_uInt16 pRanges[];
     ListBox*             m_pLbEffect;
     VclBox*              m_pBoxDirection;
     PushButton*          m_pBtnUp;
@@ -77,7 +78,7 @@ public:
     virtual ~SvxTextAnimationPage();
 
     static SfxTabPage*  Create( vcl::Window*, const SfxItemSet* );
-    static  const sal_uInt16*     GetRanges();
+    static const sal_uInt16* GetRanges() { return pRanges; }
 
     virtual bool        FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet * ) SAL_OVERRIDE;

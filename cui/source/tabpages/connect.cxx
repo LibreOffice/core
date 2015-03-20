@@ -37,7 +37,7 @@
 #include "connect.hxx"
 #include "paragrph.hrc"
 
-static const sal_uInt16 pRanges[] =
+const sal_uInt16 SvxConnectionPage::pRanges[] =
 {
     SDRATTR_EDGE_FIRST,
     SDRATTR_EDGE_LAST,
@@ -392,11 +392,6 @@ SfxTabPage* SvxConnectionPage::Create( vcl::Window* pWindow,
                 const SfxItemSet* rAttrs )
 {
     return new SvxConnectionPage( pWindow, *rAttrs );
-}
-
-const sal_uInt16* SvxConnectionPage::GetRanges()
-{
-    return pRanges;
 }
 
 IMPL_LINK( SvxConnectionPage, ChangeAttrHdl_Impl, void *, p )

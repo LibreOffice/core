@@ -78,6 +78,7 @@ class SvxPositionSizeTabPage : public SvxTabPage
 {
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
+    static const sal_uInt16 pPosSizeRanges[];
 
 private:
     // position
@@ -148,7 +149,7 @@ public:
     SvxPositionSizeTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs  );
 
     static SfxTabPage* Create( vcl::Window*, const SfxItemSet* );
-    static const sal_uInt16*     GetRanges();
+    static const sal_uInt16* GetRanges() {  return pPosSizeRanges; }
 
     virtual bool FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
     virtual void Reset( const SfxItemSet * ) SAL_OVERRIDE;
@@ -178,6 +179,7 @@ class SvxAngleTabPage : public SvxTabPage
 {
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
+    static const sal_uInt16 pAngleRanges[];
 
 private:
     VclFrame*            m_pFlPosition;
@@ -203,7 +205,7 @@ public:
          SvxAngleTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs  );
 
     static SfxTabPage* Create( vcl::Window*, const SfxItemSet* );
-    static const sal_uInt16*     GetRanges();
+    static const sal_uInt16*  GetRanges() { return pAngleRanges; }
 
     virtual bool FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
     virtual void Reset( const SfxItemSet * ) SAL_OVERRIDE;
@@ -226,6 +228,7 @@ class SvxSlantTabPage : public SvxTabPage
 {
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
+    static const sal_uInt16 pSlantRanges[];
 
 private:
     VclFrame*            m_pFlRadius;
@@ -247,7 +250,7 @@ public:
          SvxSlantTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs  );
 
     static SfxTabPage* Create( vcl::Window*, const SfxItemSet* );
-    static const sal_uInt16*     GetRanges();
+    static const sal_uInt16* GetRanges() {  return pSlantRanges; }
 
     virtual bool FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
     virtual void Reset( const SfxItemSet * ) SAL_OVERRIDE;

@@ -72,6 +72,7 @@ class SvxPageDescPage : public SfxTabPage
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
 
+    static const sal_uInt16 pRanges[];
 private:
     // paper format
     ListBox*             m_pPaperSizeBox;
@@ -188,7 +189,8 @@ protected:
 
 public:
     static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rSet );
-    static const sal_uInt16*      GetRanges();
+    // returns the range of the Which values
+    static const sal_uInt16* GetRanges() { return pRanges; }
 
     virtual bool        FillItemSet( SfxItemSet* rOutSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;

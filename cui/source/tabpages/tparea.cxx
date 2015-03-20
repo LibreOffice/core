@@ -49,7 +49,7 @@ using namespace com::sun::star;
 
 // static ----------------------------------------------------------------
 
-static const sal_uInt16 pAreaRanges[] =
+const sal_uInt16 SvxAreaTabPage::pAreaRanges[] =
 {
     XATTR_GRADIENTSTEPCOUNT,
     XATTR_GRADIENTSTEPCOUNT,
@@ -58,7 +58,7 @@ static const sal_uInt16 pAreaRanges[] =
     0
 };
 
-static const sal_uInt16 pTransparenceRanges[] =
+const sal_uInt16 SvxTransparenceTabPage::pTransparenceRanges[] =
 {
     XATTR_FILLTRANSPARENCE,
     XATTR_FILLTRANSPARENCE,
@@ -287,18 +287,9 @@ SvxTransparenceTabPage::SvxTransparenceTabPage(vcl::Window* pParent, const SfxIt
     SetExchangeSupport();
 }
 
-void SvxTransparenceTabPage::Construct()
-{
-}
-
 SfxTabPage* SvxTransparenceTabPage::Create(vcl::Window* pWindow, const SfxItemSet* rAttrs)
 {
     return new SvxTransparenceTabPage(pWindow, *rAttrs);
-}
-
-const sal_uInt16* SvxTransparenceTabPage::GetRanges()
-{
-    return pTransparenceRanges;
 }
 
 bool SvxTransparenceTabPage::FillItemSet(SfxItemSet* rAttrs)
@@ -573,8 +564,8 @@ void SvxTransparenceTabPage::PageCreated(const SfxAllItemSet& aSet)
         SetPageType(pPageTypeItem->GetValue());
     if (pDlgTypeItem)
         SetDlgType(pDlgTypeItem->GetValue());
-    Construct();
 }
+
 /*************************************************************************
 |*
 |*  Dialog to modify fill-attributes
@@ -1764,12 +1755,6 @@ SfxTabPage* SvxAreaTabPage::Create( vcl::Window* pWindow,
     return new SvxAreaTabPage( pWindow, *rAttrs );
 }
 
-
-
-const sal_uInt16* SvxAreaTabPage::GetRanges()
-{
-    return pAreaRanges;
-}
 
 
 IMPL_LINK_NOARG(SvxAreaTabPage, SelectDialogTypeHdl_Impl)

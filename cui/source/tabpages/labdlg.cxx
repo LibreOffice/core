@@ -55,7 +55,7 @@
 
 // static ----------------------------------------------------------------
 
-static const sal_uInt16 pCaptionRanges[] =
+const sal_uInt16 SvxCaptionTabPage::pCaptionRanges[] =
 {
     SDRATTR_CAPTIONTYPE,
     SDRATTR_CAPTIONFIXEDANGLE,
@@ -340,13 +340,6 @@ SfxTabPage* SvxCaptionTabPage::Create( vcl::Window* pWindow,
                 const SfxItemSet* rOutAttrs )
 {
     return new SvxCaptionTabPage( pWindow, *rOutAttrs );
-}
-
-
-
-const sal_uInt16* SvxCaptionTabPage::GetRanges()
-{
-    return pCaptionRanges;
 }
 
 

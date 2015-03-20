@@ -36,7 +36,7 @@
 
 using namespace com::sun::star;
 
-static const sal_uInt16 pShadowRanges[] =
+const sal_uInt16 SvxShadowTabPage::pShadowRanges[] =
 {
     SDRATTR_SHADOWCOLOR,
     SDRATTR_SHADOWTRANSPARENCE,
@@ -459,13 +459,6 @@ SfxTabPage* SvxShadowTabPage::Create( vcl::Window* pWindow,
                 const SfxItemSet* rAttrs )
 {
     return new SvxShadowTabPage( pWindow, *rAttrs );
-}
-
-
-
-const sal_uInt16* SvxShadowTabPage::GetRanges()
-{
-    return pShadowRanges;
 }
 
 

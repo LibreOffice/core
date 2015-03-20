@@ -289,8 +289,6 @@ IMPL_STATIC_LINK( _SfxMacroTabPage, SelectGroup_Impl, ListBox*, EMPTYARG )
 
 IMPL_STATIC_LINK( _SfxMacroTabPage, SelectMacro_Impl, ListBox*, EMPTYARG )
 {
-    _SfxMacroTabPage_Impl*  pImpl = pThis->mpImpl;
-    pImpl->pMacroLB->FunctionSelected();
     pThis->EnableButtons();
     return 0;
 }

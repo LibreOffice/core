@@ -90,6 +90,7 @@ class SvxLineTabPage : public SvxTabPage
 {
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
+    static const sal_uInt16 pLineRanges[];
 private:
     VclBox*             m_pBoxColor;
     LineLB*             m_pLbLineStyle;
@@ -208,7 +209,7 @@ public:
     void    Construct();
 
     static  SfxTabPage* Create( vcl::Window*, const SfxItemSet* );
-    static  const sal_uInt16*    GetRanges();
+    static const sal_uInt16* GetRanges() { return pLineRanges; }
 
     virtual bool FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
     virtual void Reset( const SfxItemSet* ) SAL_OVERRIDE;

@@ -66,7 +66,7 @@ using namespace ::editeng;
 
 // static ----------------------------------------------------------------
 
-static const sal_uInt16 pRanges[] =
+const sal_uInt16 SvxBorderTabPage::pRanges[] =
 {
     SID_ATTR_BORDER_INNER,      SID_ATTR_BORDER_SHADOW,
     SID_ATTR_ALIGN_MARGIN,      SID_ATTR_ALIGN_MARGIN,
@@ -338,13 +338,6 @@ SvxBorderTabPage::SvxBorderTabPage(vcl::Window* pParent, const SfxItemSet& rCore
 
 SvxBorderTabPage::~SvxBorderTabPage()
 {
-}
-
-
-
-const sal_uInt16* SvxBorderTabPage::GetRanges()
-{
-    return pRanges;
 }
 
 

@@ -53,7 +53,7 @@
 #include <svl/intitem.hxx>
 #include <boost/scoped_ptr.hpp>
 
-static const sal_uInt16 pStdRanges[] =
+const sal_uInt16 SvxStdParagraphTabPage::pStdRanges[] =
 {
     SID_ATTR_PARA_LINESPACE,        // 10033
     SID_ATTR_PARA_LINESPACE,
@@ -64,14 +64,14 @@ static const sal_uInt16 pStdRanges[] =
     0
 };
 
-static const sal_uInt16 pAlignRanges[] =
+const sal_uInt16 SvxParaAlignTabPage::pAlignRanges[] =
 {
     SID_ATTR_PARA_ADJUST,           // 10027
     SID_ATTR_PARA_ADJUST,
     0
 };
 
-static const sal_uInt16 pExtRanges[] =
+const sal_uInt16 SvxExtParagraphTabPage::pExtRanges[] =
 {
     SID_ATTR_PARA_PAGEBREAK,        // 10037 -
     SID_ATTR_PARA_WIDOWS,           // 10041
@@ -667,11 +667,6 @@ void SvxStdParagraphTabPage::EnableNegativeMode()
     bNegativeIndents = true;
 }
 
-const sal_uInt16* SvxStdParagraphTabPage::GetRanges()
-{
-    return pStdRanges;
-}
-
 void SvxStdParagraphTabPage::SetLineSpacing_Impl
 (
     const SvxLineSpacingItem &rAttr
@@ -1035,11 +1030,6 @@ int SvxParaAlignTabPage::DeactivatePage( SfxItemSet* _pSet )
 SfxTabPage* SvxParaAlignTabPage::Create( vcl::Window* pParent, const SfxItemSet* rSet )
 {
     return new SvxParaAlignTabPage(pParent, *rSet);
-}
-
-const sal_uInt16* SvxParaAlignTabPage::GetRanges()
-{
-    return pAlignRanges;
 }
 
 bool SvxParaAlignTabPage::FillItemSet( SfxItemSet* rOutSet )
@@ -1911,11 +1901,6 @@ SvxExtParagraphTabPage::SvxExtParagraphTabPage( vcl::Window* pParent, const SfxI
 
 SvxExtParagraphTabPage::~SvxExtParagraphTabPage()
 {
-}
-
-const sal_uInt16* SvxExtParagraphTabPage::GetRanges()
-{
-    return pExtRanges;
 }
 
 IMPL_LINK_NOARG(SvxExtParagraphTabPage, PageBreakHdl_Impl)

@@ -66,7 +66,7 @@ using namespace com::sun::star;
 
 // static ----------------------------------------------------------------
 
-static const sal_uInt16 pLineRanges[] =
+const sal_uInt16 SvxLineTabPage::pLineRanges[] =
 {
     XATTR_LINETRANSPARENCE,
     XATTR_LINETRANSPARENCE,
@@ -1492,13 +1492,6 @@ SfxTabPage* SvxLineTabPage::Create( vcl::Window* pWindow,
                 const SfxItemSet* rAttrs )
 {
     return new SvxLineTabPage( pWindow, *rAttrs );
-}
-
-
-
-const sal_uInt16* SvxLineTabPage::GetRanges()
-{
-    return pLineRanges;
 }
 
 

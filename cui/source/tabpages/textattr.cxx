@@ -39,7 +39,7 @@
 #include <svx/ofaitem.hxx>
 #include <editeng/writingmodeitem.hxx>
 
-static const sal_uInt16 pRanges[] =
+const sal_uInt16 SvxTextAttrPage::pRanges[] =
 {
       SDRATTR_MISC_FIRST
     , SDRATTR_TEXT_HORZADJUST
@@ -524,11 +524,6 @@ SfxTabPage* SvxTextAttrPage::Create( vcl::Window* pWindow,
                 const SfxItemSet* rAttrs )
 {
     return new SvxTextAttrPage( pWindow, *rAttrs );
-}
-
-const sal_uInt16* SvxTextAttrPage::GetRanges()
-{
-    return pRanges;
 }
 
 /** Check whether we have to uncheck the "Full width" check box.

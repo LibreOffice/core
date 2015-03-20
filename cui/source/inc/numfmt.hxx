@@ -66,13 +66,15 @@ public:
 class SvxNumberFormatTabPage : public SfxTabPage
 {
     using SfxTabPage::DeactivatePage;
+    static const sal_uInt16 pRanges[];
 
 public:
     virtual ~SvxNumberFormatTabPage();
 
     static SfxTabPage*      Create( vcl::Window* pParent,
                                     const SfxItemSet* rAttrSet );
-    static const sal_uInt16*      GetRanges();
+    // Returns area information.
+    static const sal_uInt16* GetRanges() { return pRanges; }
 
     virtual bool            FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void            Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;

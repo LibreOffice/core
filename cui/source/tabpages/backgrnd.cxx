@@ -61,7 +61,7 @@
 using namespace ::com::sun::star;
 // static ----------------------------------------------------------------
 
-static const sal_uInt16 pRanges[] =
+const sal_uInt16 SvxBackgroundTabPage::pPageRanges[] =
 {
     SID_VIEW_FLD_PIC, SID_VIEW_FLD_PIC,
     SID_ATTR_BRUSH, SID_ATTR_BRUSH,
@@ -440,19 +440,6 @@ SvxBackgroundTabPage::~SvxBackgroundTabPage()
         delete pParaBck_Impl->pCharBrush;
         delete pParaBck_Impl;
     }
-}
-
-
-
-const sal_uInt16* SvxBackgroundTabPage::GetRanges()
-
-/*  [Description]
-
-    returns the area of the which-values
-*/
-
-{
-    return pRanges;
 }
 
 

@@ -37,6 +37,7 @@ class SdrView;
 class SvxTextAttrPage : public SvxTabPage
 {
 private:
+    static const sal_uInt16 pRanges[];
     TriStateBox*         m_pTsbAutoGrowWidth;
     TriStateBox*         m_pTsbAutoGrowHeight;
     TriStateBox*         m_pTsbFitToSize;
@@ -78,7 +79,7 @@ public:
     virtual ~SvxTextAttrPage();
 
     static SfxTabPage*  Create( vcl::Window*, const SfxItemSet* );
-    static  const sal_uInt16*     GetRanges();
+    static const sal_uInt16*  GetRanges() { return pRanges; }
 
     virtual bool        FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet * ) SAL_OVERRIDE;
