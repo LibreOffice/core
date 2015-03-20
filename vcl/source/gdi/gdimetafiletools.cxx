@@ -161,7 +161,7 @@ namespace
         // in pixel mode for alpha channel painting (black is transparent,
         // white to paint 100% opacity)
         const Size aSizePixel(rBitmapEx.GetSizePixel());
-        ScopedVclPtr<VirtualDevice> aVDev = new VirtualDevice;
+        ScopedVclPtr<VirtualDevice> aVDev( new VirtualDevice() );
 
         aVDev->SetOutputSizePixel(aSizePixel);
         aVDev->EnableMapMode(false);

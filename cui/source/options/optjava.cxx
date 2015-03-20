@@ -437,7 +437,7 @@ IMPL_LINK( SvxJavaOptionsPage, DialogClosedHdl, DialogClosedEvent*, pEvt )
 
 IMPL_LINK_NOARG( SvxJavaOptionsPage, ExpertConfigHdl_Impl )
 {
-    ScopedVclPtr<CuiAboutConfigTabPage> m_pExpertConfigDlg = new CuiAboutConfigTabPage(this);
+    ScopedVclPtr<CuiAboutConfigTabPage> m_pExpertConfigDlg( new CuiAboutConfigTabPage(this) );
     m_pExpertConfigDlg->Reset();//initialize and reset function
 
     if( RET_OK == m_pExpertConfigDlg->Execute() )

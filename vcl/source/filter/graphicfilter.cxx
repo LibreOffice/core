@@ -1892,7 +1892,7 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString
         {
             Size aSizePixel;
             sal_uLong nColorCount,nBitsPerPixel,nNeededMem,nMaxMem;
-            ScopedVclPtr<VirtualDevice> aVirDev = new VirtualDevice;
+            ScopedVclPtr<VirtualDevice> aVirDev( new VirtualDevice() );
 
             nMaxMem = 1024;
             nMaxMem *= 1024; // In Bytes

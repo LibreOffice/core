@@ -794,7 +794,7 @@ bool SgfFilterSDrw( SvStream& rInp, SgfHeader&, SgfEntry&, GDIMetaFile& rMtf )
 {
     bool          bRet = false;
     PageType      aPage;
-    ScopedVclPtr<VirtualDevice> aOutDev = new VirtualDevice;
+    ScopedVclPtr<VirtualDevice> aOutDev( new VirtualDevice() );
     OutputDevice* pOutDev;
     sal_uLong         nStdPos;
     sal_uLong         nCharPos;

@@ -1755,7 +1755,7 @@ SvxFont EditEngine::GetStandardSvxFont( sal_Int32 nPara )
 
 void EditEngine::StripPortions()
 {
-    ScopedVclPtr<VirtualDevice> aTmpDev = new VirtualDevice;
+    ScopedVclPtr<VirtualDevice> aTmpDev( new VirtualDevice() );
     Rectangle aBigRect( Point( 0, 0 ), Size( 0x7FFFFFFF, 0x7FFFFFFF ) );
     if ( IsVertical() )
     {

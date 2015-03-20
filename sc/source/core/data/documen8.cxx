@@ -158,7 +158,7 @@ void ScDocument::SetPrinter( SfxPrinter* pNewPrinter )
     }
     else
     {
-        ScopedVclPtr<SfxPrinter> pOld = pPrinter;
+        ScopedVclPtr<SfxPrinter> pOld( pPrinter );
         pPrinter = pNewPrinter;
         UpdateDrawPrinter();
         pPrinter->SetDigitLanguage( SC_MOD()->GetOptDigitLanguage() );

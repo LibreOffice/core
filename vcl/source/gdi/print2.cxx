@@ -728,7 +728,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
         ConnectedComponents aBackgroundComponent;
 
         // create an OutputDevice to record mapmode changes and the like
-        ScopedVclPtr<VirtualDevice> aMapModeVDev = new VirtualDevice;
+        ScopedVclPtr<VirtualDevice> aMapModeVDev( new VirtualDevice() );
         aMapModeVDev->mnDPIX = mnDPIX;
         aMapModeVDev->mnDPIY = mnDPIY;
         aMapModeVDev->EnableOutput(false);
@@ -1155,10 +1155,10 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
                         Point           aDstPtPix( aBoundRect.TopLeft() );
                         Size            aDstSzPix;
 
-                        ScopedVclPtr<VirtualDevice> aMapVDev = new VirtualDevice;   // here, we record only mapmode information
+                        ScopedVclPtr<VirtualDevice> aMapVDev( new VirtualDevice() );   // here, we record only mapmode information
                         aMapVDev->EnableOutput(false);
 
-                        ScopedVclPtr<VirtualDevice> aPaintVDev = new VirtualDevice; // into this one, we render.
+                        ScopedVclPtr<VirtualDevice> aPaintVDev( new VirtualDevice() ); // into this one, we render.
                         aPaintVDev->SetBackground( aBackgroundComponent.aBgColor );
 
                         rOutMtf.AddAction( new MetaPushAction( PushFlags::MAPMODE ) );

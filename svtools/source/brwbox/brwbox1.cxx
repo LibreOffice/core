@@ -58,8 +58,6 @@ namespace
     }
 }
 
-
-
 void BrowseBox::ConstructImpl( BrowserMode nMode )
 {
     OSL_TRACE( "BrowseBox: %p->ConstructImpl", this );

@@ -1894,7 +1894,7 @@ bool GraphicObject::ImplDrawTiled( OutputDevice* pOut, const Rectangle& rArea, c
         // First combine very small bitmaps into a larger tile
 
 
-        ScopedVclPtr<VirtualDevice>   aVDev = new VirtualDevice;
+        ScopedVclPtr<VirtualDevice> aVDev( new VirtualDevice() );
         const int       nNumTilesInCacheX( (nTileCacheSize1D + rSizePixel.Width()-1) / rSizePixel.Width() );
         const int       nNumTilesInCacheY( (nTileCacheSize1D + rSizePixel.Height()-1) / rSizePixel.Height() );
 

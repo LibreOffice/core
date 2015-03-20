@@ -390,7 +390,7 @@ Color Hpgl2SvFarbe( sal_uInt8 nFarb )
 
 bool SgfFilterVect(SvStream& rInp, SgfHeader& rHead, SgfEntry&, GDIMetaFile& rMtf)
 {
-    ScopedVclPtr<VirtualDevice> aOutDev = new VirtualDevice;
+    ScopedVclPtr<VirtualDevice> aOutDev( new VirtualDevice() );
     SgfVector aVect;
     sal_uInt8      nFarb;
     sal_uInt8      nFrb0=7;

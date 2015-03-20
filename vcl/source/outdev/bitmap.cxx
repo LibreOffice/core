@@ -410,7 +410,7 @@ Bitmap OutputDevice::GetBitmap( const Point& rSrcPt, const Size& rSize ) const
                 // If the visible part has been clipped, we have to create a
                 // Bitmap with the correct size in which we copy the clipped
                 // Bitmap to the correct position.
-                ScopedVclPtr<VirtualDevice> aVDev = new VirtualDevice( *this );
+                ScopedVclPtr<VirtualDevice> aVDev( new VirtualDevice( *this ) );
 
                 if ( aVDev->SetOutputSizePixel( aRect.GetSize() ) )
                 {

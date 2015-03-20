@@ -401,7 +401,7 @@ void ScZoomSliderWnd::DoPaint( const Rectangle& /*rRect*/ )
     Size aSliderWindowSize = GetOutputSizePixel();
     Rectangle aRect( Point( 0, 0 ), aSliderWindowSize );
 
-    ScopedVclPtr<VirtualDevice> pVDev = new VirtualDevice( *this );
+    ScopedVclPtr<VirtualDevice> pVDev( new VirtualDevice( *this ) );
     pVDev->SetOutputSizePixel( aSliderWindowSize );
 
     Rectangle   aSlider = aRect;

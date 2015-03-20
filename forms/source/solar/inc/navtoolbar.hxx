@@ -61,7 +61,7 @@ namespace frm
                                         m_pDescriptionProvider;
         ImageSize                       m_eImageSize;
         VclPtr<ImplNavToolBar>          m_pToolbar;
-        ::std::vector< ScopedVclPtr<vcl::Window> > m_aChildWins;
+        ::std::vector< VclPtr<vcl::Window> > m_aChildWins;
 
     public:
         NavigationToolBar(

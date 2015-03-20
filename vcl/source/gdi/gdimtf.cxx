@@ -723,7 +723,7 @@ void GDIMetaFile::Move( long nX, long nY )
 {
     const Size      aBaseOffset( nX, nY );
     Size            aOffset( aBaseOffset );
-    ScopedVclPtr<VirtualDevice>   aMapVDev = new VirtualDevice;
+    ScopedVclPtr<VirtualDevice> aMapVDev( new VirtualDevice() );
 
     aMapVDev->EnableOutput( false );
     aMapVDev->SetMapMode( GetPrefMapMode() );
@@ -757,7 +757,7 @@ void GDIMetaFile::Move( long nX, long nY, long nDPIX, long nDPIY )
 {
     const Size      aBaseOffset( nX, nY );
     Size            aOffset( aBaseOffset );
-    ScopedVclPtr<VirtualDevice>   aMapVDev = new VirtualDevice;
+    ScopedVclPtr<VirtualDevice> aMapVDev( new VirtualDevice() );
 
     aMapVDev->EnableOutput( false );
     aMapVDev->SetReferenceDevice( nDPIX, nDPIY );
@@ -825,7 +825,7 @@ void GDIMetaFile::Scale( const Fraction& rScaleX, const Fraction& rScaleY )
 void GDIMetaFile::Clip( const Rectangle& i_rClipRect )
 {
     Rectangle aCurRect( i_rClipRect );
-    ScopedVclPtr<VirtualDevice>   aMapVDev = new VirtualDevice;
+    ScopedVclPtr<VirtualDevice> aMapVDev( new VirtualDevice() );
 
     aMapVDev->EnableOutput( false );
     aMapVDev->SetMapMode( GetPrefMapMode() );
@@ -892,7 +892,7 @@ void GDIMetaFile::ImplAddGradientEx( GDIMetaFile&         rMtf,
                                      const Gradient&      rGrad     )
 {
     // Generate comment, GradientEx and Gradient actions (within DrawGradient)
-    ScopedVclPtr<VirtualDevice> aVDev = new VirtualDevice( rMapDev, 0 );
+    ScopedVclPtr<VirtualDevice> aVDev( new VirtualDevice( rMapDev, 0 ) );
     aVDev->EnableOutput( false );
     GDIMetaFile aGradMtf;
 
@@ -917,7 +917,7 @@ void GDIMetaFile::Rotate( long nAngle10 )
     if( nAngle10 )
     {
         GDIMetaFile     aMtf;
-        ScopedVclPtr<VirtualDevice>   aMapVDev = new VirtualDevice;
+        ScopedVclPtr<VirtualDevice> aMapVDev( new VirtualDevice() );
         const double    fAngle = F_PI1800 * nAngle10;
         const double    fSin = sin( fAngle );
         const double    fCos = cos( fAngle );
@@ -1400,7 +1400,7 @@ static void ImplActionBounds( Rectangle& o_rOutBounds,
 Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, Rectangle* pHairline ) const
 {
     GDIMetaFile     aMtf;
-    ScopedVclPtr<VirtualDevice> aMapVDev = new VirtualDevice( i_rReference );
+    ScopedVclPtr<VirtualDevice> aMapVDev( new VirtualDevice( i_rReference ) );
 
     aMapVDev->EnableOutput( false );
     aMapVDev->SetMapMode( GetPrefMapMode() );
@@ -2890,7 +2890,7 @@ SvStream& GDIMetaFile::Write( SvStream& rOStm )
 bool GDIMetaFile::CreateThumbnail(BitmapEx& rBitmapEx, sal_uInt32 nMaximumExtent, BmpConversion eColorConversion, long nScaleFlag) const
 {
     // initialization seems to be complicated but is used to avoid rounding errors
-    ScopedVclPtr<VirtualDevice>  aVDev = new VirtualDevice;
+    ScopedVclPtr<VirtualDevice> aVDev( new VirtualDevice() );
     const Point     aNullPt;
     const Point     aTLPix( aVDev->LogicToPixel( aNullPt, GetPrefMapMode() ) );
     const Point     aBRPix( aVDev->LogicToPixel( Point( GetPrefSize().Width() - 1, GetPrefSize().Height() - 1 ), GetPrefMapMode() ) );

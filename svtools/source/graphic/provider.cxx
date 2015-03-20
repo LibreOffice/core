@@ -634,7 +634,7 @@ void ImplApplyFilterData( ::Graphic& rGraphic, uno::Sequence< beans::PropertyVal
     }
     else if ( ( rGraphic.GetType() == GRAPHIC_GDIMETAFILE ) && nImageResolution )
     {
-        ScopedVclPtr<VirtualDevice> aDummyVDev = new VirtualDevice;
+        ScopedVclPtr<VirtualDevice> aDummyVDev( new VirtualDevice() );
         GDIMetaFile aMtf( rGraphic.GetGDIMetaFile() );
         Size aMtfSize( OutputDevice::LogicToLogic( aMtf.GetPrefSize(), aMtf.GetPrefMapMode(), MAP_100TH_MM ) );
         if ( aMtfSize.Width() && aMtfSize.Height() )

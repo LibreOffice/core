@@ -73,7 +73,7 @@ namespace drawinglayer
                 const Point aEmptyPoint;
                 const Size aSizePixel(nDiscreteWidth, nDiscreteHeight);
                 geometry::ViewInformation2D aViewInformation2D(rViewInformation2D);
-                ScopedVclPtr<VirtualDevice> maContent = new VirtualDevice;
+                ScopedVclPtr<VirtualDevice> maContent(new VirtualDevice());
 
                 // prepare vdev
                 maContent->SetOutputSizePixel(aSizePixel, false);
