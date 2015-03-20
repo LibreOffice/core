@@ -240,7 +240,7 @@ STDMETHODIMP CAccActionBase::get_keyBinding(
 }
 
 /**
- * Overide of IUNOXWrapper.
+ * Override of IUNOXWrapper.
  *
  * @param    pXInterface    the pointer of UNO interface.
  */

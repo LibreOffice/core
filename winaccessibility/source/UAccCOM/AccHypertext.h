@@ -141,7 +141,7 @@ public:
     // character index.
     STDMETHOD(get_hyperlinkIndex)(long charIndex, long *hyperlinkIndex);
 
-    // Overide of IUNOXWrapper.
+    // Override of IUNOXWrapper.
     STDMETHOD(put_XInterface)(hyper pXInterface);
 
 private:

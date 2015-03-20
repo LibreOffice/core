@@ -816,7 +816,7 @@ STDMETHODIMP CAccTable::unselectColumn(long column)
 }
 
 /**
- * Overide of IUNOXWrapper.
+ * Override of IUNOXWrapper.
  *
  * @param    pXInterface    the pointer of UNO interface.
  */

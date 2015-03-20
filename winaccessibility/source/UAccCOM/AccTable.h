@@ -156,7 +156,7 @@ public:
 
     STDMETHOD(get_modelChange)(IA2TableModelChange  *modelChange);
 
-    // Overide of IUNOXWrapper.
+    // Override of IUNOXWrapper.
     STDMETHOD(put_XInterface)(hyper pXInterface);
 
 private:

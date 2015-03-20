@@ -79,7 +79,7 @@ public:
     // Returns the minimal value that can be represented by this object.
     STDMETHOD(get_minimumValue)(VARIANT *mininumValue);
 
-    // Overide of IUNOXWrapper.
+    // Override of IUNOXWrapper.
     STDMETHOD(put_XInterface)(hyper pXInterface);
 
 private:

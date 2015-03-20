@@ -90,7 +90,7 @@ public:
     // Sets attributes of range of text.
     STDMETHOD(setAttributes)(long startOffset, long endOffset, BSTR * attributes);
 
-    // Overide of IUNOXWrapper.
+    // Override of IUNOXWrapper.
     STDMETHOD(put_XInterface)(hyper pXInterface);
 
 private:

@@ -558,7 +558,7 @@ ds_device getDeviceSelection(const char* sProfilePath, bool bForceSelection)
         int bestDeviceIdx;
         pickBestDevice(profile, &bestDeviceIdx);
 
-        /* Overide if necessary */
+        /* Override if necessary */
         char* overrideDeviceStr = getenv("SC_OPENCL_DEVICE_OVERRIDE");
         if (NULL != overrideDeviceStr)
         {

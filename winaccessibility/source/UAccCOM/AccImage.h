@@ -77,7 +77,7 @@ public:
         long __RPC_FAR *height,
         long __RPC_FAR *width);
 
-    // Overide of IUNOXWrapper.
+    // Override of IUNOXWrapper.
     STDMETHOD(put_XInterface)(hyper pXInterface);
 
 private:

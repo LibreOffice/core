@@ -51,7 +51,7 @@ public:
     */
     virtual SfxItemPool* getModelPool( bool bReadOnly ) throw();
 
-    // overiden helpers from comphelper::PropertySetHelper
+    // overriden helpers from comphelper::PropertySetHelper
     virtual void _setPropertyValues( const comphelper::PropertyMapEntry** ppEntries, const ::com::sun::star::uno::Any* pValues ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException ) SAL_OVERRIDE;
     virtual void _getPropertyValues( const comphelper::PropertyMapEntry** ppEntries, ::com::sun::star::uno::Any* pValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException ) SAL_OVERRIDE;
 

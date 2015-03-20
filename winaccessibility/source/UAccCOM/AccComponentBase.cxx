@@ -175,7 +175,7 @@ STDMETHODIMP CAccComponentBase::get_background(IA2Color * background)
 }
 
 /**
- * Overide of IUNOXWrapper.
+ * Override of IUNOXWrapper.
  *
  * @param    pXInterface    the pointer of UNO interface.
  */

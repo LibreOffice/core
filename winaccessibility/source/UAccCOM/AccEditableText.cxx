@@ -471,7 +471,7 @@ void CAccEditableText::get_AnyFromOLECHAR(const ::rtl::OUString &ouName, const :
 }
 
 /**
- * Overide of IUNOXWrapper.
+ * Override of IUNOXWrapper.
  *
  * @param    pXInterface    the pointer of UNO interface.
  */

@@ -52,7 +52,7 @@ public:
     // Returns the background color of this object.
     STDMETHOD(get_background)(IA2Color * background);
 
-    // Overide of IUNOXWrapper.
+    // Override of IUNOXWrapper.
     STDMETHOD(put_XInterface)(hyper pXInterface);
 
 protected:

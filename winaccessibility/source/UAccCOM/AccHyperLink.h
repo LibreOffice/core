@@ -113,10 +113,10 @@ public:
     // Returns whether the document referenced by this links is still valid.
     STDMETHOD(get_valid)(/* [retval][out] */ boolean __RPC_FAR *valid);
 
-    // Overide of IUNOXWrapper.
+    // Override of IUNOXWrapper.
     STDMETHOD(put_XInterface)(hyper pXInterface);
 
-    // Overide of IUNOXWrapper.
+    // Override of IUNOXWrapper.
     STDMETHOD(put_XSubInterface)(hyper pXSubInterface);
 
 private:

@@ -81,7 +81,7 @@ public:
 
     SvMacroTableEventDescriptor* mpEvents;
 
-    // overiden helpers from PropertySetHelper
+    // overriden helpers from PropertySetHelper
     virtual void _setPropertyValues( const PropertyMapEntry** ppEntries, const Any* pValues ) throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException ) SAL_OVERRIDE;
     virtual void _getPropertyValues( const PropertyMapEntry** ppEntries, Any* pValue ) throw(UnknownPropertyException, WrappedTargetException ) SAL_OVERRIDE;
 
@@ -408,7 +408,7 @@ OUString SAL_CALL SvUnoImageMapObject::getImplementationName() throw(RuntimeExce
     }
 }
 
-// overiden helpers from PropertySetHelper
+// overriden helpers from PropertySetHelper
 void SvUnoImageMapObject::_setPropertyValues( const PropertyMapEntry** ppEntries, const Any* pValues )
     throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException )
 {

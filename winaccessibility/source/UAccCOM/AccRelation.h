@@ -71,7 +71,7 @@ public:
     // Gets multiple accessible relation targets.
     STDMETHOD(get_targets)(long maxTargets, IUnknown * * target, long * nTargets);
 
-    // Overide of IUNOXWrapper.
+    // Override of IUNOXWrapper.
     STDMETHOD(put_XSubInterface)(hyper pXSubInterface);
 
     //static OLECHAR* getRelationTypeOLECHAR(int type);

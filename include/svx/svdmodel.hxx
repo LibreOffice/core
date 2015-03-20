@@ -579,7 +579,7 @@ public:
     void SetSdrUndoManager( SfxUndoManager* pUndoManager );
     SfxUndoManager* GetSdrUndoManager() const;
 
-    /** applications can set their own undo factory to overide creation of
+    /** applications can set their own undo factory to override creation of
         undo actions. The SdrModel will become owner of the given SdrUndoFactory
         and delete it upon its destruction. */
     void SetSdrUndoFactory( SdrUndoFactory* pUndoFactory );
