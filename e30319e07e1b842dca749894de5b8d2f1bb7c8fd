@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a29b11f_4eaa5772",
+        "filename": "sc/source/ui/condformat/condformatdlgentry.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-03-20T07:04:24Z",
+      "side": 0,
+      "message": "We still need the handling for errors in the compiled string.",
+      "revId": "e30319e07e1b842dca749894de5b8d2f1bb7c8fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a29b11f_8ea06f92",
+        "filename": "sc/source/ui/condformat/condformatdlgentry.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-03-20T07:04:24Z",
+      "side": 1,
+      "message": "Please put the * at the other side. So ScTokenArray* ta and not ScTokenArray *ta.",
+      "revId": "e5db8f83d1dcf7c5942d8c71de75c3d9eb254148",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a29b11f_6ea3939f",
+        "filename": "sc/source/ui/condformat/condformatdlgentry.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-03-20T07:04:24Z",
+      "side": 1,
+      "message": "That is wrong. We are only interested in the case column label vs string. A range would be correct here.",
+      "revId": "e5db8f83d1dcf7c5942d8c71de75c3d9eb254148",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a29b11f_2ead9b88",
+        "filename": "sc/source/ui/condformat/condformatdlgentry.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 299,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-03-20T07:04:24Z",
+      "side": 1,
+      "message": "We need texts that are translatable.",
+      "revId": "e5db8f83d1dcf7c5942d8c71de75c3d9eb254148",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a29b11f_aeaf6b7c",
+        "filename": "sc/source/ui/inc/condformatdlgentry.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-03-20T07:04:24Z",
+      "side": 1,
+      "message": "please add the virtual as well here.",
+      "revId": "e5db8f83d1dcf7c5942d8c71de75c3d9eb254148",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a29b11f_ceb427d3",
+        "filename": "sc/source/ui/src/condformatdlg.src",
+        "patchSetId": 2
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-03-20T07:04:24Z",
+      "side": 1,
+      "message": "Please don\u0027t add random whitespace changes.",
+      "revId": "e5db8f83d1dcf7c5942d8c71de75c3d9eb254148",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
