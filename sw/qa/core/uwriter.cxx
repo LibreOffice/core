@@ -1392,15 +1392,16 @@ namespace
 {
     struct TestModify : SwModify
     {
-        TYPEINFO();
+        TYPEINFO_OVERRIDE();
     };
     TYPEINIT1( TestModify, SwModify );
     struct TestClient : SwClient
     {
-        TYPEINFO();
+        TYPEINFO_OVERRIDE();
         int m_nModifyCount;
         TestClient() : m_nModifyCount(0) {};
         virtual void Modify( const SfxPoolItem*, const SfxPoolItem*)
+            SAL_OVERRIDE
         {
             ShowReg();
             ++m_nModifyCount;
@@ -1418,11 +1419,12 @@ namespace
     };
     TYPEINIT1( TestClient, SwClient );
     struct OtherTestClient : SwClient
-        { TYPEINFO(); };
+        { TYPEINFO_OVERRIDE(); };
     TYPEINIT1( OtherTestClient, SwClient );
 }
 void SwDocTest::testClientModify()
 {
+    (void) OtherTestClient(); // avoid loplugin:unreffun
     TestModify aMod;
     TestClient aClient1, aClient2;
     aMod.Add(&aClient1);
