@@ -143,7 +143,7 @@ struct DocxSdrExport::Impl
     std::unique_ptr<sax_fastparser::FastAttributeList> m_pFlyFillAttrList;
     sax_fastparser::FastAttributeList* m_pFlyWrapAttrList;
     sax_fastparser::FastAttributeList* m_pBodyPrAttrList;
-    sax_fastparser::FastAttributeList* m_pDashLineStyleAttr;
+    std::unique_ptr<sax_fastparser::FastAttributeList> m_pDashLineStyleAttr;
     sal_Int32 m_nId ;
     sal_Int32 m_nSeq ;
     bool m_bDMLAndVMLDrawingOpen;
@@ -168,7 +168,6 @@ struct DocxSdrExport::Impl
           m_bFlyFrameGraphic(false),
           m_pFlyWrapAttrList(0),
           m_pBodyPrAttrList(0),
-          m_pDashLineStyleAttr(0),
           m_nId(0),
           m_nSeq(0),
           m_bDMLAndVMLDrawingOpen(false),
@@ -277,7 +276,7 @@ sax_fastparser::FastAttributeList* DocxSdrExport::getBodyPrAttrList()
     return m_pImpl->m_pBodyPrAttrList;
 }
 
-sax_fastparser::FastAttributeList*& DocxSdrExport::getDashLineStyle()
+std::unique_ptr<sax_fastparser::FastAttributeList>& DocxSdrExport::getDashLineStyle()
 {
     return m_pImpl->m_pDashLineStyleAttr;
 }
@@ -1622,8 +1621,7 @@ void DocxSdrExport::writeVMLTextFrame(sw::Frame* pParentFrame, bool bTextBoxOnly
         }
         if (m_pImpl->m_pDashLineStyleAttr)
         {
-            sax_fastparser::XFastAttributeListRef xDashLineStyleAttr(m_pImpl->m_pDashLineStyleAttr);
-            m_pImpl->m_pDashLineStyleAttr = NULL;
+            sax_fastparser::XFastAttributeListRef xDashLineStyleAttr(m_pImpl->m_pDashLineStyleAttr.release());
             pFS->singleElementNS(XML_v, XML_stroke, xDashLineStyleAttr);
         }
         pFS->startElementNS(XML_v, XML_textbox, xTextboxAttrList);

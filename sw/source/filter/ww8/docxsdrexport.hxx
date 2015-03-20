@@ -81,7 +81,7 @@ public:
     void setFlyWrapAttrList(sax_fastparser::FastAttributeList* pAttrList);
     /// Attributes of <wps:bodyPr>, used during DML export of text frames.
     sax_fastparser::FastAttributeList* getBodyPrAttrList();
-    sax_fastparser::FastAttributeList*& getDashLineStyle();
+    std::unique_ptr<sax_fastparser::FastAttributeList>& getDashLineStyle();
 
     void startDMLAnchorInline(const SwFrmFmt* pFrmFmt, const Size& rSize);
     void endDMLAnchorInline(const SwFrmFmt* pFrmFmt);
