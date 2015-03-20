@@ -40,6 +40,7 @@
 #include <com/sun/star/ucb/XUniversalContentBroker.hpp>
 
 #include <vcl/svapp.hxx>
+#include <vcl/svpforlokit.hxx>
 #include <tools/resmgr.hxx>
 #include <tools/fract.hxx>
 #include <vcl/graphicfilter.hxx>
@@ -51,15 +52,6 @@
 #include <osl/module.hxx>
 
 #include <app.hxx>
-
-#if defined(UNX) && !defined(MACOSX) && !defined(ENABLE_HEADLESS)
-// Let's grab the SvpSalInstance and SvpSalVirtualDevice
-#include <headless/svpinst.hxx>
-#include <headless/svpframe.hxx>
-#include <headless/svpvd.hxx>
-
-#include <basebmp/bitmapdevice.hxx>
-#endif
 
 #include "../app/cmdlineargs.hxx"
 // We also need to hackily be able to start the main libreoffice thread:
@@ -613,9 +605,7 @@ void doc_paintTile (LibreOfficeKitDocument* pThis,
 #if defined(UNX) && !defined(MACOSX) && !defined(ENABLE_HEADLESS)
 
 #ifndef IOS
-    ImplSVData* pSVData = ImplGetSVData();
-    SvpSalInstance* pSalInstance = static_cast< SvpSalInstance* >(pSVData->mpDefInst);
-    pSalInstance->setBitCountFormatMapping( 32, ::basebmp::FORMAT_THIRTYTWO_BIT_TC_MASK_RGBA );
+    InitSvpForLibreOfficeKit();
 
     VirtualDevice aDevice(0, Size(1, 1), (sal_uInt16)32);
     boost::shared_array< sal_uInt8 > aBuffer( pBuffer, NoDelete< sal_uInt8 >() );
@@ -626,10 +616,7 @@ void doc_paintTile (LibreOfficeKitDocument* pThis,
     pDoc->paintTile(aDevice, nCanvasWidth, nCanvasHeight,
                     nTilePosX, nTilePosY, nTileWidth, nTileHeight);
 
-    SvpSalVirtualDevice* pSalDev = static_cast< SvpSalVirtualDevice* >(aDevice.getSalVirtualDevice());
-    basebmp::BitmapDeviceSharedPtr pBmpDev = pSalDev->getBitmapDevice();
-
-    *pRowStride = pBmpDev->getScanlineStride();
+    *pRowStride = GetRowStrideForLibreOfficeKit(aDevice.getSalVirtualDevice());
 #else
     SystemGraphicsData aData;
     aData.rCGContext = reinterpret_cast<CGContextRef>(pBuffer);
@@ -710,16 +697,16 @@ static void doc_registerCallback(LibreOfficeKitDocument* pThis,
 static void doc_postKeyEvent(LibreOfficeKitDocument* /*pThis*/, int nType, int nCharCode, int nKeyCode)
 {
 #if defined(UNX) && !defined(MACOSX) && !defined(ENABLE_HEADLESS)
-    if (SalFrame *pFocus = SvpSalFrame::GetFocusFrame())
+    if (SalFrame *pFocus = GetSvpFocusFrameForLibreOfficeKit())
     {
         KeyEvent aEvent(nCharCode, nKeyCode, 0);
         switch (nType)
         {
         case LOK_KEYEVENT_KEYINPUT:
-            Application::PostKeyEvent(VCLEVENT_WINDOW_KEYINPUT, pFocus->GetWindow(), &aEvent);
+            Application::PostKeyEvent(VCLEVENT_WINDOW_KEYINPUT, GetSalFrameWindowForLibreOfficeKit(pFocus), &aEvent);
             break;
         case LOK_KEYEVENT_KEYUP:
-            Application::PostKeyEvent(VCLEVENT_WINDOW_KEYUP, pFocus->GetWindow(), &aEvent);
+            Application::PostKeyEvent(VCLEVENT_WINDOW_KEYUP, GetSalFrameWindowForLibreOfficeKit(pFocus), &aEvent);
             break;
         }
     }

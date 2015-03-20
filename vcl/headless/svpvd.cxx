@@ -19,6 +19,8 @@
 
 #ifndef IOS
 
+#include <vcl/svpforlokit.hxx>
+
 #include "headless/svpbmp.hxx"
 #include "headless/svpinst.hxx"
 #include "headless/svpvd.hxx"
@@ -93,6 +95,21 @@ bool SvpSalVirtualDevice::SetSizeUsingBuffer( long nNewDX, long nNewDY,
 
     }
     return true;
+}
+
+void InitSvpForLibreOfficeKit()
+{
+    ImplSVData* pSVData = ImplGetSVData();
+    SvpSalInstance* pSalInstance = static_cast< SvpSalInstance* >(pSVData->mpDefInst);
+    pSalInstance->setBitCountFormatMapping( 32, ::basebmp::FORMAT_THIRTYTWO_BIT_TC_MASK_RGBA );
+}
+
+int GetRowStrideForLibreOfficeKit(SalVirtualDevice* pVD)
+{
+    SvpSalVirtualDevice* pSalDev = static_cast< SvpSalVirtualDevice* >(pVD);
+    basebmp::BitmapDeviceSharedPtr pBmpDev = pSalDev->getBitmapDevice();
+
+    return pBmpDev->getScanlineStride();
 }
 
 #endif
