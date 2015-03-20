@@ -592,6 +592,12 @@ private:
                                       sal_Int32 & nDigitCount,
                                       utl::DigitGroupingIterator & );
 
+    SVL_DLLPRIVATE bool ImpDecimalFill( OUStringBuffer& sStr,
+                                 double& rNumber,
+                                 sal_uInt16 j,
+                                 sal_uInt16 nIx,
+                                 bool bInteger );
+
     SVL_DLLPRIVATE bool ImpGetFractionOutput(double fNumber,
                                              sal_uInt16 nIx,
                                              OUStringBuffer& OutString);
