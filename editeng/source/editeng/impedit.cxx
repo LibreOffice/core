@@ -920,6 +920,13 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor, sal_uInt16
         {
             const Point& rPos = GetCursor()->GetPos();
             Rectangle aRect(rPos.getX(), rPos.getY(), rPos.getX() + GetCursor()->GetWidth(), rPos.getY() + GetCursor()->GetHeight());
+
+            // LOK output is always in twips, convert from mm100 if necessary.
+            if (pOutWin->IsMapModeEnabled() && pOutWin->GetMapMode().GetMapUnit() == MAP_100TH_MM)
+                aRect = OutputDevice::LogicToLogic(aRect, MAP_100TH_MM, MAP_TWIP);
+            // Let the LOK client decide the cursor width.
+            aRect.setWidth(0);
+
             OString sRect = aRect.toString();
             libreOfficeKitCallback(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, sRect.getStr());
         }
