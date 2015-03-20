@@ -107,6 +107,8 @@ extern void sw_GetTblBoxColStr( sal_uInt16 nCol, OUString& rNm );
 static void lcl_SendChartEvent(::cppu::OWeakObject & rSource,
                                ::cppu::OInterfaceContainerHelper & rListeners)
 {
+    if (!rListeners.getLength())
+        return;
     //TODO: find appropriate settings of the Event
     chart::ChartDataChangeEvent event;
     event.Source = & rSource;
