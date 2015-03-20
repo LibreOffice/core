@@ -514,13 +514,13 @@ void VCoordinateSystem::createAxesShapes()
                 if( aFullAxisIndex.first == 0 )
                 {
                     if( AxisType::CATEGORY!=m_aExplicitScales[1].AxisType )
-                        pVAxis->setExrtaLinePositionAtOtherAxis(
+                        pVAxis->setExtraLinePositionAtOtherAxis(
                             m_aExplicitScales[1].Origin );
                 }
                 else if( aFullAxisIndex.first == 1 )
                 {
                     if( AxisType::CATEGORY!=m_aExplicitScales[0].AxisType )
-                        pVAxis->setExrtaLinePositionAtOtherAxis(
+                        pVAxis->setExtraLinePositionAtOtherAxis(
                             m_aExplicitScales[0].Origin );
                 }
             }
