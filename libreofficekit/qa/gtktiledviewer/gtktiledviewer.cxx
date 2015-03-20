@@ -126,7 +126,7 @@ static void signalKey(GtkWidget* /*pWidget*/, GdkEventKey* pEvent, gpointer /*pD
     int nCharCode = 0;
     int nKeyCode = 0;
 
-    if (!pLOKDocView->m_bEdit)
+    if (!lok_docview_get_edit(pLOKDocView))
     {
         g_info("signalKey: not in edit mode, ignore");
         return;
@@ -171,10 +171,11 @@ static void signalKey(GtkWidget* /*pWidget*/, GdkEventKey* pEvent, gpointer /*pD
     if (pEvent->state & GDK_SHIFT_MASK)
         nKeyCode |= KEY_SHIFT;
 
+    LibreOfficeKitDocument* pDocument = lok_docview_get_document(pLOKDocView);
     if (pEvent->type == GDK_KEY_RELEASE)
-        pLOKDocView->pDocument->pClass->postKeyEvent(pLOKDocView->pDocument, LOK_KEYEVENT_KEYUP, nCharCode, nKeyCode);
+        pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYUP, nCharCode, nKeyCode);
     else
-        pLOKDocView->pDocument->pClass->postKeyEvent(pLOKDocView->pDocument, LOK_KEYEVENT_KEYINPUT, nCharCode, nKeyCode);
+        pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, nCharCode, nKeyCode);
 }
 
 // GtkComboBox requires gtk 2.24 or later
@@ -340,7 +341,7 @@ int main( int argc, char* argv[] )
     int bOpened = lok_docview_open_document( LOK_DOCVIEW(pDocView), argv[2] );
     if (!bOpened)
         g_error("main: lok_docview_open_document() failed with '%s'", pOffice->pClass->getError(pOffice));
-    assert( LOK_DOCVIEW(pDocView)->pDocument );
+    assert(lok_docview_get_document(LOK_DOCVIEW(pDocView)));
 
     // GtkComboBox requires gtk 2.24 or later
 #if ( GTK_MAJOR_VERSION == 2 && GTK_MINOR_VERSION >= 24 ) || GTK_MAJOR_VERSION > 2

@@ -30,68 +30,8 @@ typedef struct _LOKDocViewClass  LOKDocViewClass;
 
 struct _LOKDocView
 {
-    GtkScrolledWindow scrollWindow;
-
-    GtkWidget* pEventBox;
-    GtkWidget* pTable;
-    GtkWidget** pCanvas;
-
-    float fZoom;
-
-    LibreOfficeKit* pOffice;
-    LibreOfficeKitDocument* pDocument;
-    /// View or edit mode.
-    gboolean m_bEdit;
-    /// Position and size of the visible cursor.
-    GdkRectangle m_aVisibleCursor;
-    /// Cursor overlay is visible or hidden (for blinking).
-    gboolean m_bCursorOverlayVisible;
-    /// Cursor is visible or hidden (e.g. for graphic selection).
-    gboolean m_bCursorVisible;
-    /// Time of the last button press.
-    guint32 m_nLastButtonPressTime;
-    /// Time of the last button release.
-    guint32 m_nLastButtonReleaseTime;
-    /// Rectangles of the current text selection.
-    GList* m_pTextSelectionRectangles;
-    /// Position and size of the selection start (as if there would be a cursor caret there).
-    GdkRectangle m_aTextSelectionStart;
-    /// Position and size of the selection end.
-    GdkRectangle m_aTextSelectionEnd;
-    GdkRectangle m_aGraphicSelection;
-    gboolean m_bInDragGraphicSelection;
-
-    /// @name Start/middle/end handle.
-    ///@{
-    /// Bitmap of the text selection start handle.
-    cairo_surface_t* m_pHandleStart;
-    /// Rectangle of the text selection start handle, to know if the user clicked on it or not
-    GdkRectangle m_aHandleStartRect;
-    /// If we are in the middle of a drag of the text selection end handle.
-    gboolean m_bInDragStartHandle;
-    /// Bitmap of the text selection middle handle.
-    cairo_surface_t* m_pHandleMiddle;
-    /// Rectangle of the text selection middle handle, to know if the user clicked on it or not
-    GdkRectangle m_aHandleMiddleRect;
-    /// If we are in the middle of a drag of the text selection middle handle.
-    gboolean m_bInDragMiddleHandle;
-    /// Bitmap of the text selection end handle.
-    cairo_surface_t* m_pHandleEnd;
-    /// Rectangle of the text selection end handle, to know if the user clicked on it or not
-    GdkRectangle m_aHandleEndRect;
-    /// If we are in the middle of a drag of the text selection end handle.
-    gboolean m_bInDragEndHandle;
-    ///@}
-
-    /// @name Graphic handles.
-    ///@{
-    /// Bitmap of a graphic selection handle.
-    cairo_surface_t* m_pGraphicHandle;
-    /// Rectangle of a graphic selection handle, to know if the user clicked on it or not.
-    GdkRectangle m_aGraphicHandleRects[8];
-    /// If we are in the middle of a drag of a graphic selection handle.
-    gboolean m_bInDragGraphicHandles[8];
-    ///@}
+    GtkScrolledWindow aScrollWindow;
+    struct LOKDocView_Impl* m_pImpl;
 };
 
 struct _LOKDocViewClass
@@ -104,6 +44,10 @@ guint           lok_docview_get_type        (void);
 GtkWidget*      lok_docview_new             ( LibreOfficeKit* pOffice );
 gboolean        lok_docview_open_document   (LOKDocView* pDocView,
                                              char* pPath);
+
+/// Gets the document the viewer displays.
+LibreOfficeKitDocument* lok_docview_get_document(LOKDocView* pDocView);
+
 void            lok_docview_set_zoom        (LOKDocView* pDocView,
                                              float fZoom);
 float           lok_docview_get_zoom        (LOKDocView* pDocView);
