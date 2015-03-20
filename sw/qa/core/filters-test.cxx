@@ -135,7 +135,7 @@ bool SwFiltersTest::filter(const OUString &rFilter, const OUString &rURL,
 
 void SwFiltersTest::testCVEs()
 {
-    testDir(OUString("Staroffice XML (Writer)"),
+    testDir(OUString("StarOffice XML (Writer)"),
             getURLFromSrc("/sw/qa/core/data/xml/"),
             OUString(FILTER_XML),
             SfxFilterFlags::IMPORT | SfxFilterFlags::OWN | SfxFilterFlags::DEFAULT,
