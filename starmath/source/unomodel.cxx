@@ -642,7 +642,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
                     SfxItemSet *pItemSet = new SfxItemSet( pDocSh->GetPool(), nRange );
                     SmModule *pp = SM_MOD();
                     pp->GetConfig()->ConfigToItemSet(*pItemSet);
-                    SfxPrinter *pPrinter = SfxPrinter::Create ( aStream, pItemSet );
+                    VclPtr<SfxPrinter> pPrinter = SfxPrinter::Create ( aStream, pItemSet );
 
                     pDocSh->SetPrinter( pPrinter );
                 }

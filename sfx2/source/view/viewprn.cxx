@@ -637,7 +637,7 @@ Printer* SfxViewShell::GetActivePrinter() const
 void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
 {
     sal_uInt16              nDialogRet = RET_CANCEL;
-    SfxPrinter*             pPrinter = 0;
+    VclPtr<SfxPrinter>      pPrinter;
     bool                    bSilent = false;
 
     // does the function have been called by the user interface or by an API call
@@ -774,7 +774,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
 
                 // if printer is unknown, it can't be used - now printer from document will be used
                 if ( !pPrinter->IsKnown() )
-                    DELETEZ(pPrinter);
+                    pPrinter.disposeAndClear();
             }
 
             if ( SID_PRINTER_NAME == nId )
@@ -816,7 +816,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
             if ( !bIsAPI )
             {
                 // PrinterDialog needs a temporary printer
-                SfxPrinter* pDlgPrinter = pPrinter->Clone();
+                VclPtr<SfxPrinter> pDlgPrinter = pPrinter->Clone();
                 nDialogRet = 0;
 
                 // execute PrinterSetupDialog
@@ -868,13 +868,12 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
 
                     // forget new printer, it was taken over (as pPrinter) or deleted
                     pDlgPrinter = NULL;
-
                 }
                 else
                 {
                     // PrinterDialog is used to transfer information on printing,
                     // so it will only be deleted here if dialog was cancelled
-                    DELETEZ( pDlgPrinter );
+                    pDlgPrinter.disposeAndClear();
                     rReq.Ignore();
                 }
             }

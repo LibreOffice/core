@@ -51,7 +51,9 @@ DocShell::DocShell()
 }
 
 DocShell::~DocShell()
-{ }
+{
+    pPrinter.disposeAndClear();
+}
 
 SfxPrinter* DocShell::GetPrinter( bool bCreate )
 {

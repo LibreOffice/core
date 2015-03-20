@@ -425,7 +425,7 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
                         0
                     };
                     SfxItemSet *pItemSet = new SfxItemSet( mpDoc->GetAttrPool(), nRange );
-                    SfxPrinter *pPrinter = SfxPrinter::Create ( aStream, pItemSet );
+                    VclPtr<SfxPrinter> pPrinter = SfxPrinter::Create ( aStream, pItemSet );
 
                     // set printer only once; in _postSetValues
                     mpPrinter.disposeAndClear();
