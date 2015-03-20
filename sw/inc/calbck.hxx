@@ -267,7 +267,7 @@ namespace sw
                 m_pCurrent = m_pPosition = const_cast<SwClient*>(m_rRoot.GetDepends());
             }
             SwClient* GetLeftOfPos() { return static_cast<SwClient*>(m_pPosition->m_pLeft); }
-            SwClient* GetRighOfPos() { return static_cast<SwClient*>(m_pPosition->m_pRight); }
+            SwClient* GetRightOfPos() { return static_cast<SwClient*>(m_pPosition->m_pRight); }
             SwClient* GoStart()
             {
                 if((m_pPosition = const_cast<SwClient*>(m_rRoot.GetDepends())))
@@ -310,8 +310,8 @@ public:
             m_pPosition = const_cast<SwClient*>(m_rRoot.GetDepends());
         if(!m_pPosition)
             return PTR_CAST(TElementType,m_pCurrent = nullptr);
-        while(GetRighOfPos())
-            m_pPosition = GetRighOfPos();
+        while(GetRightOfPos())
+            m_pPosition = GetRightOfPos();
         if(m_pPosition->IsA(TYPE(TElementType)))
             return PTR_CAST(TElementType,m_pCurrent = m_pPosition);
         return Previous();
@@ -319,9 +319,9 @@ public:
     TElementType* Next()
     {
         if( m_pPosition == m_pCurrent )
-            m_pPosition = GetRighOfPos();
+            m_pPosition = GetRightOfPos();
         while(m_pPosition && !m_pPosition->IsA( TYPE(TElementType) ) )
-            m_pPosition = GetRighOfPos();
+            m_pPosition = GetRightOfPos();
         return PTR_CAST(TElementType,m_pCurrent = m_pPosition);
     }
     TElementType* Previous()
@@ -347,14 +347,14 @@ public:
             m_pPosition = const_cast<SwClient*>(m_rRoot.GetDepends());
         if(!m_pPosition)
             return m_pCurrent = nullptr;
-        while(GetRighOfPos())
-            m_pPosition = GetRighOfPos();
+        while(GetRightOfPos())
+            m_pPosition = GetRightOfPos();
         return m_pCurrent = m_pPosition;
     }
     SwClient* Next()
     {
         if( m_pPosition == m_pCurrent )
-            m_pPosition = GetRighOfPos();
+            m_pPosition = GetRightOfPos();
         return m_pCurrent = m_pPosition;
     }
     SwClient* Previous()
