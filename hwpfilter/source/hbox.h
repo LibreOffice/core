@@ -437,7 +437,7 @@ struct Columns
                      return;
                 }
           }
-          // last postion.
+          // last position.
           if( nCount == nTotal )
                 AddColumnsSize();
           data[nCount++] = pos;
@@ -498,7 +498,7 @@ struct Rows
                      return;
                 }
           }
-          // last postion.
+          // last position.
           if( nCount == nTotal )
                 AddRowsSize();
           data[nCount++] = pos;
