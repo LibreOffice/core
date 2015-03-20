@@ -2375,10 +2375,9 @@ bool SvNumberformat::ImpGetScientificOutput(double fNumber,
     }
     else
     {
-        k = sStr.getLength(); // After last figure
-        bRes |= ImpNumberFillWithThousands(sStr, fNumber, k, j, nIx,
-                                           rInfo.nCntPre + rInfo.nCntPost);
+        bRes |= ImpDecimalFill(sStr, fNumber, j, nIx, false);
     }
+
     if (bSign)
     {
         sStr.insert(0, '-');
@@ -3868,7 +3867,6 @@ bool SvNumberformat::ImpGetNumberOutput(double fNumber,
         }
     }
     sal_uInt16 i, j;
-    sal_Int32 k;
     bool bInteger = false;
     if ( rInfo.nThousand != FLAG_STANDARD_IN_FORMAT )
     {
@@ -3940,8 +3938,26 @@ bool SvNumberformat::ImpGetNumberOutput(double fNumber,
     }                                   // End of != FLAG_STANDARD_IN_FORMAT
 
                                         // Edit backwards:
-    k = sStr.getLength();               // After last figure
     j = NumFor[nIx].GetCount()-1;       // Last symbol
+                                        // Decimal places:
+    bRes |= ImpDecimalFill( sStr, fNumber, j, nIx, bInteger );
+    if (bSign)
+    {
+        sStr.insert(0, '-');
+    }
+    impTransliterate(sStr, NumFor[nIx].GetNatNum());
+    return bRes;
+}
+
+bool SvNumberformat::ImpDecimalFill( OUStringBuffer& sStr,  // number string
+                                   double& rNumber,       // number
+                                   sal_uInt16 j,          // symbol index within format code
+                                   sal_uInt16 nIx,        // subformat index
+                                   bool bInteger)         // is integer
+{
+    bool bRes = false;
+    const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
+    sal_Int32 k = sStr.getLength();     // After last figure
                                         // Decimal places:
     if (rInfo.nCntPost > 0)
     {
@@ -4020,7 +4036,7 @@ bool SvNumberformat::ImpGetNumberOutput(double fNumber,
             case NF_KEY_GENERAL: // Standard in the String
             {
                 OUStringBuffer sNum;
-                ImpGetOutputStandard(fNumber, sNum);
+                ImpGetOutputStandard(rNumber, sNum);
                 sNum.stripStart('-');
                 sStr.insert(k, sNum.makeStringAndClear());
                 break;
@@ -4032,7 +4048,7 @@ bool SvNumberformat::ImpGetNumberOutput(double fNumber,
         } // of while
     } // of decimal places
 
-    bRes |= ImpNumberFillWithThousands(sStr, fNumber, k, j, nIx, // Fill with . if needed
+    bRes |= ImpNumberFillWithThousands(sStr, rNumber, k, j, nIx, // Fill with . if needed
                                        rInfo.nCntPre);
     if ( rInfo.nCntPost > 0 )
     {
@@ -4043,11 +4059,7 @@ bool SvNumberformat::ImpGetNumberOutput(double fNumber,
             sStr.truncate( sStr.getLength() - nLen ); // no decimals => strip DecSep
         }
     }
-    if (bSign)
-    {
-        sStr.insert(0, '-');
-    }
-    impTransliterate(sStr, NumFor[nIx].GetNatNum());
+
     return bRes;
 }
 
