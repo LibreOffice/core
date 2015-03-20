@@ -296,12 +296,8 @@ public:
 
     SwEditWin(vcl::Window *pParent, SwView &);
     virtual ~SwEditWin();
-    /**
-     * Notification about some region of the output device got invalidated.
-     *
-     * @param pRegion If 0, that means the whole area, otherwise the area in logic coordinates.
-     */
-    void LogicInvalidate(const vcl::Region* pRegion) SAL_OVERRIDE;
+    /// @see OutputDevice::LogicInvalidate().
+    void LogicInvalidate(const Rectangle* pRectangle) SAL_OVERRIDE;
     /// Same as MouseButtonDown(), but coordinates are in logic unit.
     void LogicMouseButtonDown(const MouseEvent& rMouseEvent);
     /// Same as MouseButtonUp(), but coordinates are in logic unit.

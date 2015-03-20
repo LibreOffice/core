@@ -990,13 +990,13 @@ Selection Window::GetSurroundingTextSelection() const
     }
 }
 
-void Window::LogicInvalidate(const ::vcl::Region* pRegion)
+void Window::LogicInvalidate(const Rectangle* pRectangle)
 {
     OString sRectangle;
-    if (!pRegion)
+    if (!pRectangle)
         sRectangle = "EMPTY";
     else
-        sRectangle = pRegion->GetBoundRect().toString();
+        sRectangle = pRectangle->toString();
     mpViewShell->GetDoc()->libreOfficeKitCallback(LOK_CALLBACK_INVALIDATE_TILES, sRectangle.getStr());
 }
 

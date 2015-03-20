@@ -1732,11 +1732,11 @@ public:
 
 protected:
     /**
-     * Notification about some region of the output device got invalidated.
+     * Notification about some rectangle of the output device got invalidated.
      *
-     * @param pRegion If 0, that means the whole area, otherwise the area in logic coordinates.
+     * @param pRectangle If 0, that means the whole area, otherwise the area in logic coordinates.
      */
-    virtual void LogicInvalidate(const vcl::Region* /*pRegion*/) { }
+    virtual void LogicInvalidate(const Rectangle* /*pRectangle*/) { }
 
 private:
 

@@ -6248,13 +6248,13 @@ Selection SwEditWin::GetSurroundingTextSelection() const
     }
 }
 
-void SwEditWin::LogicInvalidate(const vcl::Region* pRegion)
+void SwEditWin::LogicInvalidate(const Rectangle* pRectangle)
 {
     OString sRectangle;
-    if (!pRegion)
+    if (!pRectangle)
         sRectangle = "EMPTY";
     else
-        sRectangle = pRegion->GetBoundRect().toString();
+        sRectangle = pRectangle->toString();
     m_rView.GetWrtShell().libreOfficeKitCallback(LOK_CALLBACK_INVALIDATE_TILES, sRectangle.getStr());
 }
 

@@ -322,7 +322,7 @@ public:
                                long nTileWidth, long nTileHeight );
 
     /// @see OutputDevice::LogicInvalidate().
-    void LogicInvalidate(const ::vcl::Region* pRegion) SAL_OVERRIDE;
+    void LogicInvalidate(const Rectangle* pRectangle) SAL_OVERRIDE;
 
     /// Same as MouseButtonDown(), but coordinates are in logic unit.
     void LogicMouseButtonDown(const MouseEvent& rMouseEvent);

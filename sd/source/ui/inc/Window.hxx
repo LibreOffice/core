@@ -193,7 +193,7 @@ protected:
     OUString GetSurroundingText() const SAL_OVERRIDE;
     Selection GetSurroundingTextSelection() const SAL_OVERRIDE;
     /// @see OutputDevice::LogicInvalidate().
-    void LogicInvalidate(const ::vcl::Region* pRegion) SAL_OVERRIDE;
+    void LogicInvalidate(const Rectangle* pRectangle) SAL_OVERRIDE;
 };
 
 } // end of namespace sd

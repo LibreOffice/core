@@ -978,13 +978,13 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
     pSdrPageView->RemovePaintWindowFromPageView(aTemporaryPaintWindow);
 }
 
-void ScGridWindow::LogicInvalidate(const ::vcl::Region* pRegion)
+void ScGridWindow::LogicInvalidate(const Rectangle* pRectangle)
 {
     OString sRectangle;
-    if (!pRegion)
+    if (!pRectangle)
         sRectangle = "EMPTY";
     else
-        sRectangle = pRegion->GetBoundRect().toString();
+        sRectangle = pRectangle->toString();
 
     pViewData->GetDocument()->GetDrawLayer()->libreOfficeKitCallback(LOK_CALLBACK_INVALIDATE_TILES, sRectangle.getStr());
 }
