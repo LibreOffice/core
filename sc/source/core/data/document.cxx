@@ -3214,19 +3214,56 @@ bool ScDocument::SetString( SCCOL nCol, SCROW nRow, SCTAB nTab, const OUString& 
     if (!pTab)
         return false;
 
-    // In case setting this string affects an existing formula group, record
-    // its above and below position for later listening.
+    bool bFormulaGroup = false;
 
-    std::vector<ScAddress> aGroupPos;
-    sc::EndListeningContext aCxt(*this);
     ScAddress aPos(nCol, nRow, nTab);
-    EndListeningIntersectedGroup(aCxt, aPos, &aGroupPos);
-    aCxt.purgeEmptyBroadcasters();
+    ScFormulaCell* pCurCellFormula = GetFormulaCell(aPos);
 
-    bool bNumFmtSet = pTab->SetString(nCol, nRow, nTab, rString, pParam);
+    if (pCurCellFormula)
+    {
+        if(pCurCellFormula->GetCellGroup())
+            bFormulaGroup = true;
 
-    SetNeedsListeningGroups(aGroupPos);
-    StartNeededListeners();
+        if (!bFormulaGroup)
+        {
+            ScAddress aNextPos(nCol, nRow + 1, nTab);
+            ScFormulaCell* pNextCellFormula = GetFormulaCell(aNextPos);
+            if (pNextCellFormula)
+                if (pNextCellFormula->GetCellGroup())
+                    bFormulaGroup = true;
+        }
+        if (!bFormulaGroup && nRow > 0)
+        {
+            ScAddress aPreviousPos(nCol, nRow - 1, nTab);
+            ScFormulaCell* pPreviousCellFormula = GetFormulaCell(aPreviousPos);
+            if (pPreviousCellFormula)
+                if (pPreviousCellFormula->GetCellGroup())
+                    bFormulaGroup = true;
+        }
+    }
+
+    bool bNumFmtSet = false;
+
+    if (bFormulaGroup)
+    {
+        // In case setting this string affects an existing formula group, record
+        // its above and below position for later listening.
+
+        std::vector<ScAddress> aGroupPos;
+        sc::EndListeningContext aCxt(*this);
+        //ScAddress aPos(nCol, nRow, nTab);
+        EndListeningIntersectedGroup(aCxt, aPos, &aGroupPos);
+        aCxt.purgeEmptyBroadcasters();
+
+        bNumFmtSet = pTab->SetString(nCol, nRow, nTab, rString, pParam);
+
+        SetNeedsListeningGroups(aGroupPos);
+        StartNeededListeners();
+    }
+    else
+    {
+        bNumFmtSet = pTab->SetString(nCol, nRow, nTab, rString, pParam);
+    }
 
     return bNumFmtSet;
 }
