@@ -1024,6 +1024,7 @@ void Printer::dispose()
     DBG_ASSERT( !IsJobActive(), "Printer::~Printer() - Job is active" );
 
     delete mpPrinterOptions;
+    mpPrinterOptions = NULL;
 
     ReleaseGraphics();
     if ( mpInfoPrinter )

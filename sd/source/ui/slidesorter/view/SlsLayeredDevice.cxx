@@ -121,7 +121,7 @@ public:
     void Dispose (void);
 
 private:
-    ::boost::shared_ptr<VirtualDevice> mpLayerDevice;
+    ScopedVclPtr<VirtualDevice> mpLayerDevice;
     ::std::vector<SharedILayerPainter> maPainters;
     vcl::Region maInvalidationRegion;
 

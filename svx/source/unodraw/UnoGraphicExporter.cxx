@@ -907,7 +907,7 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
         if( !bSingleGraphic )
         {
             // create a metafile for all shapes
-            ScopedVclPtr<VirtualDevice> aOut;
+            ScopedVclPtr<VirtualDevice> aOut(new VirtualDevice());
 
             // calculate bound rect for all shapes
             Rectangle aBound;

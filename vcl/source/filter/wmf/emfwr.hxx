@@ -33,7 +33,7 @@ class EMFWriter
 {
 private:
 
-    ScopedVclPtr<VirtualDevice>       maVDev;
+    ScopedVclPtr<VirtualDevice> maVDev;
     MapMode             maDestMapMode;
     SvStream& m_rStm;
     bool*               mpHandlesUsed;
@@ -91,6 +91,7 @@ public:
 
     EMFWriter(SvStream &rStream)
         : m_rStm(rStream)
+        , maVDev( new VirtualDevice() )
         , mpHandlesUsed(NULL)
         , mnHandleCount(0)
         , mnRecordCount(0)

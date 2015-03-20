@@ -221,6 +221,7 @@ void OutputDevice::dispose()
     ImplInvalidateViewTransform();
 
     delete mpOutDevData;
+    mpOutDevData = NULL;
 
     // for some reason, we haven't removed state from the stack properly
     if ( !mpOutDevStateStack->empty() )
@@ -232,6 +233,7 @@ void OutputDevice::dispose()
         }
     }
     delete mpOutDevStateStack;
+    mpOutDevStateStack = NULL;
 
     // release the active font instance
     if( mpFontEntry )
@@ -240,8 +242,10 @@ void OutputDevice::dispose()
     // remove cached results of GetDevFontList/GetDevSizeList
     // TODO: use smart pointers for them
     delete mpGetDevFontList;
+    mpGetDevFontList = NULL;
 
     delete mpGetDevSizeList;
+    mpGetDevSizeList = NULL;
 
     // release ImplFontCache specific to this OutputDevice
     // TODO: refcount ImplFontCache
