@@ -158,28 +158,6 @@ gb_MERGEDLIBS := \
 	xstor \
 	$(if $(filter ALL,$(MERGELIBS)),$(gb_EXTRAMERGEDLIBS))
 
-ifneq (,$(URELIBS))
-gb_URELIBS := \
-	bootstrap \
-	cppu \
-	cppuhelper \
-	introspection \
-	$(if $(ENABLE_JAVA),jvmaccess) \
-	$(if $(ENABLE_JAVA),jvmfwk) \
-	reflection \
-	reg \
-	sal \
-	salhelper \
-	stocservices \
-	store \
-	unoidl \
-	xmlreader \
-	$(if $(filter ALL,$(MERGELIBS)), \
-		purpenvhelper \
-	)
-
-endif
-
 endif
 
 # vim: set noet sw=4 ts=4:

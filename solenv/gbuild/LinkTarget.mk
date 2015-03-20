@@ -483,7 +483,7 @@ define gb_LinkTarget__command_impl
 		$(if $(findstring concat-deps,$(2)),,\
 			$(call gb_LinkTarget__command_dep,$(call gb_LinkTarget_get_dep_target,$(2)).tmp,$(2)) \
 			mv $(call gb_LinkTarget_get_dep_target,$(2)).tmp $(call gb_LinkTarget_get_dep_target,$(2))))
-	$(if $(filter $(2),$(foreach lib,$(gb_MERGEDLIBS) $(gb_URELIBS),$(call gb_Library__get_workdir_linktargetname,$(lib)))),\
+	$(if $(filter $(2),$(foreach lib,$(gb_MERGEDLIBS),$(call gb_Library__get_workdir_linktargetname,$(lib)))),\
 		$(if $(filter $(true),$(call gb_LinkTarget__is_build_lib,$(2))),\
 			$(call gb_LinkTarget__command,$(1),$(2)),\
 			mkdir -p $(dir $(1)) && echo invalid > $(1) \
@@ -796,8 +796,8 @@ define gb_LinkTarget__use_libraries
 
 # used by bin/module-deps.pl
 ifneq ($(ENABLE_PRINT_DEPS),)
-# exclude libraries in Library_merged Librery_urelibs
-ifeq ($(filter $(1),$(foreach lib,$(gb_MERGEDLIBS) $(gb_URELIBS),$(call gb_Library_get_linktarget,$(lib)))),)
+# exclude libraries in Library_merged
+ifeq ($(filter $(1),$(foreach lib,$(gb_MERGEDLIBS),$(call gb_Library_get_linktarget,$(lib)))),)
 $$(eval $$(call gb_PrintDeps_info,$(4),$(3)))
 endif
 endif
@@ -869,10 +869,7 @@ $(call gb_LinkTarget__use_libraries,$(1),$(2),$(strip \
 	$(if $(filter $(gb_MERGEDLIBS),$(2)), \
 		$(if $(call gb_LinkTarget__is_merged,$(1)), \
 			$(filter $(gb_MERGEDLIBS),$(2)), merged)) \
-	$(if $(filter $(gb_URELIBS),$(2)), \
-		$(if $(filter $(1),$(foreach lib,$(gb_URELIBS),$(call gb_Library_get_linktarget,$(lib)))), \
-		$(filter $(gb_URELIBS),$(2)), urelibs)) \
-	$(filter-out $(gb_MERGEDLIBS) $(gb_URELIBS),$(2)) \
+	$(filter-out $(gb_MERGEDLIBS),$(2)) \
 	),$(4))
 endif
 

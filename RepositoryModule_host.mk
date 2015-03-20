@@ -17,7 +17,6 @@ $(eval $(call gb_Module_Module,libreoffice))
 ifneq ($(MERGELIBS),)
 $(eval $(call gb_Module_add_targets,libreoffice,\
 	Library_merged \
-	$(if $(URELIBS),Library_urelibs) \
 ))
 endif
 

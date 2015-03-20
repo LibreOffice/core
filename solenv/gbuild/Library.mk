@@ -136,7 +136,7 @@ $(call gb_Library_get_clean_target,$(gb_Library__get_name)) : \
 	$(call gb_ComponentTarget_get_clean_target,$(2))
 endef
 
-gb_Library__get_name = $(if $(filter $(1),$(gb_MERGEDLIBS)),merged,$(if $(filter $(1),$(gb_URELIBS)),urelibs,$(1)))
+gb_Library__get_name = $(if $(filter $(1),$(gb_MERGEDLIBS)),merged,$(1))
 
 gb_Library__get_componentprefix = \
 	$(call gb_Library__get_layer_componentprefix,$(call \

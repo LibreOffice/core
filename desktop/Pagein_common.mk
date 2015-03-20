@@ -12,7 +12,6 @@ $(eval $(call gb_Pagein_Pagein,common))
 # sorted in approx. reverse load order (ld.so.1)
 $(eval $(call gb_Pagein_add_objects,common,\
     $(if $(MERGELIBS),merged) \
-    $(if $(URELIBS),urelibs) \
     i18nlangtag \
     $(if $(SYSTEM_ICU),,\
         libicui18n$(gb_Library_DLLEXT).$(ICU_MAJOR) \

@@ -166,7 +166,6 @@ sub create_lib_module_map()
     my %l2m;
     # hardcode the libs that don't have a directory
     $l2m{'merged'} = 'merged';
-    $l2m{'urelibs'} = 'urelibs';
 
     for (glob($src_root."/*/Library_*.mk"))
     {

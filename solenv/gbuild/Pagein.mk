@@ -47,7 +47,7 @@ $(call gb_Helper_install_final, \
 endef
 
 define gb_Pagein_add_object
-$(call gb_Pagein_get_target,$(1)) : OBJECTS += $(filter-out $(gb_URELIBS) $(gb_MERGEDLIBS),$(2))
+$(call gb_Pagein_get_target,$(1)) : OBJECTS += $(filter-out $(gb_MERGEDLIBS),$(2))
 
 endef
 

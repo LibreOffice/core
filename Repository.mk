@@ -547,7 +547,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_URE,ure, \
 	) \
 	log_uno_uno \
 	unsafe_uno_uno \
-	$(if $(URELIBS),urelibs) \
 	$(if $(filter MSC,$(COM)),$(if $(filter INTEL,$(CPUNAME)),msci,mscx),gcc3)_uno \
 	$(if $(filter $(OS),WNT), \
 		uwinapi \
