@@ -31,7 +31,7 @@ namespace sd {
 
 //===== LeftImpressPaneShell ==================================================
 
-SFX_SLOTMAP(LeftImpressPaneShell)
+static SfxSlot aLeftImpressPaneShellSlots_Impl[] =
 {
     { 0, 0, 0, SfxSlotMode::NONE, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
 };
@@ -57,7 +57,7 @@ LeftImpressPaneShell::~LeftImpressPaneShell (void)
 
 //===== LeftDrawPaneShell =====================================================
 
-SFX_SLOTMAP(LeftDrawPaneShell)
+static SfxSlot aLeftDrawPaneShellSlots_Impl[] =
 {
     { 0, 0, 0, SfxSlotMode::NONE, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
 };

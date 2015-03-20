@@ -49,7 +49,7 @@ using namespace ::com::sun::star::uno;
 
 // Standardinterface deklarieren (Die Slotmap darf nicht leer sein, also
 // tragen wir etwas ein, was hier (hoffentlich) nie vorkommt).
-SFX_SLOTMAP(ExtrusionBar)
+static SfxSlot aExtrusionBarSlots_Impl[] =
 {
     { 0, 0, 0, SfxSlotMode::NONE, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
 };

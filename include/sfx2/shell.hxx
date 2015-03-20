@@ -537,8 +537,6 @@ inline void SfxShell::SetPool
     pPool = pNewPool;
 }
 
-#define SFX_SLOTMAP(ShellClass) static SfxSlot a##ShellClass##Slots_Impl[] =
-
 #define SFX_DECL_INTERFACE(nId)                                             \
             static SfxInterface*                pInterface;                 \
             static SfxInterface*                GetStaticInterface();       \
