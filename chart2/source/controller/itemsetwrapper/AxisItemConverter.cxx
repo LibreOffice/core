@@ -805,7 +805,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
 
                     sal_Int32 nDimensionIndex=0;
                     sal_Int32 nAxisIndex=0;
-                    if( AxisHelper::getIndicesForAxis( m_xAxis, xCooSys, nDimensionIndex, nAxisIndex ) && nAxisIndex==0 && nDimensionIndex==0 )
+                    if( AxisHelper::getIndicesForAxis( m_xAxis, xCooSys, nDimensionIndex, nAxisIndex ) && nAxisIndex==0 )
                     {
                         Reference< chart2::XAxis > xCrossingMainAxis( AxisHelper::getCrossingMainAxis( m_xAxis, xCooSys ) );
                         if( xCrossingMainAxis.is() )
