@@ -3214,19 +3214,29 @@ bool ScDocument::SetString( SCCOL nCol, SCROW nRow, SCTAB nTab, const OUString& 
     if (!pTab)
         return false;
 
-    // In case setting this string affects an existing formula group, record
-    // its above and below position for later listening.
+    bool bNumFmtSet = false;
 
-    std::vector<ScAddress> aGroupPos;
-    sc::EndListeningContext aCxt(*this);
-    ScAddress aPos(nCol, nRow, nTab);
-    EndListeningIntersectedGroup(aCxt, aPos, &aGroupPos);
-    aCxt.purgeEmptyBroadcasters();
+    const ScFormulaCell* pCurCellFormula = pTab->GetFormulaCell(nCol, nRow);
+    if (pCurCellFormula && pCurCellFormula->IsShared())
+    {
+        // In case setting this string affects an existing formula group, record
+        // its above and below position for later listening.
 
-    bool bNumFmtSet = pTab->SetString(nCol, nRow, nTab, rString, pParam);
+        std::vector<ScAddress> aGroupPos;
+        sc::EndListeningContext aCxt(*this);
+        ScAddress aPos(nCol, nRow, nTab);
+        EndListeningIntersectedGroup(aCxt, aPos, &aGroupPos);
+        aCxt.purgeEmptyBroadcasters();
 
-    SetNeedsListeningGroups(aGroupPos);
-    StartNeededListeners();
+        bNumFmtSet = pTab->SetString(nCol, nRow, nTab, rString, pParam);
+
+        SetNeedsListeningGroups(aGroupPos);
+        StartNeededListeners();
+    }
+    else
+    {
+        bNumFmtSet = pTab->SetString(nCol, nRow, nTab, rString, pParam);
+    }
 
     return bNumFmtSet;
 }
