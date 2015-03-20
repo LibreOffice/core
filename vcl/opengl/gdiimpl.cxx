@@ -455,6 +455,8 @@ void OpenGLSalGraphicsImpl::DrawPoint( long nX, long nY )
 
     mpProgram->SetVertices( pPoint );
     glDrawArrays( GL_POINTS, 0, 1 );
+
+    CHECK_GL_ERROR();
 }
 
 void OpenGLSalGraphicsImpl::DrawLine( double nX1, double nY1, double nX2, double nY2 )
@@ -468,6 +470,8 @@ void OpenGLSalGraphicsImpl::DrawLine( double nX1, double nY1, double nX2, double
 
     mpProgram->SetVertices( pPoints );
     glDrawArrays( GL_LINES, 0, 2 );
+
+    CHECK_GL_ERROR();
 }
 
 void OpenGLSalGraphicsImpl::DrawLineAA( double nX1, double nY1, double nX2, double nY2 )
@@ -493,6 +497,8 @@ void OpenGLSalGraphicsImpl::DrawLineAA( double nX1, double nY1, double nX2, doub
         return;
     }
     ImplDrawLineAA( nX1, nY1, nX2, nY2 );
+
+    CHECK_GL_ERROR();
 }
 
 void OpenGLSalGraphicsImpl::ImplDrawLineAA( double nX1, double nY1, double nX2, double nY2, bool edge )
@@ -632,6 +638,8 @@ void OpenGLSalGraphicsImpl::ImplDrawLineAA( double nX1, double nY1, double nX2, 
     mpProgram->SetTextureCoord( aTexCoord );
     mpProgram->SetVertices( vertices );
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 8);
+
+    CHECK_GL_ERROR();
 }
 
 void OpenGLSalGraphicsImpl::DrawLines( sal_uInt32 nPoints, const SalPoint* pPtAry, bool bClose )
@@ -694,6 +702,8 @@ void OpenGLSalGraphicsImpl::DrawConvexPolygon( sal_uInt32 nPoints, const SalPoin
             UseSolid( lastSolidColor, lastSolidTransparency );
         }
     }
+
+    CHECK_GL_ERROR();
 }
 
 void OpenGLSalGraphicsImpl::DrawConvexPolygon( const Polygon& rPolygon, bool blockAA )
@@ -734,6 +744,8 @@ void OpenGLSalGraphicsImpl::DrawConvexPolygon( const Polygon& rPolygon, bool blo
             UseSolid( lastSolidColor, lastSolidTransparency );
         }
     }
+
+    CHECK_GL_ERROR();
 }
 
 void OpenGLSalGraphicsImpl::DrawTrapezoid( const basegfx::B2DTrapezoid& trapezoid, bool blockAA )
@@ -775,6 +787,8 @@ void OpenGLSalGraphicsImpl::DrawTrapezoid( const basegfx::B2DTrapezoid& trapezoi
             UseSolid( lastSolidColor, lastSolidTransparency );
         }
     }
+
+    CHECK_GL_ERROR();
 }
 
 void OpenGLSalGraphicsImpl::DrawRect( long nX, long nY, long nWidth, long nHeight )
@@ -863,6 +877,8 @@ void OpenGLSalGraphicsImpl::DrawRegionBand( const RegionBand& rRegion )
 
     mpProgram->SetVertices( &aVertices[0] );
     glDrawArrays( GL_TRIANGLES, 0, aVertices.size() / 2 );
+
+    CHECK_GL_ERROR();
 }
 
 void OpenGLSalGraphicsImpl::DrawTextureRect( OpenGLTexture& rTexture, const SalTwoRect& rPosAry, bool bInverted )
@@ -970,6 +986,8 @@ void OpenGLSalGraphicsImpl::DrawTransformedTexture(
     mpProgram->SetVertices( &aVertices[0] );
     glDrawArrays( GL_TRIANGLE_FAN, 0, 4 );
     mpProgram->Clean();
+
+    CHECK_GL_ERROR();
 }
 
 void OpenGLSalGraphicsImpl::DrawAlphaTexture( OpenGLTexture& rTexture, const SalTwoRect& rPosAry, bool bInverted, bool bPremultiplied )
@@ -1800,6 +1818,8 @@ void OpenGLSalGraphicsImpl::endPaint()
         mpContext->AcquireDefaultFramebuffer();
         glFlush();
     }
+
+    CHECK_GL_ERROR();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
