@@ -24,6 +24,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -41,6 +42,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -112,6 +114,10 @@ public class LibreOfficeUIActivity extends ActionBarActivity implements ActionBa
 
     public void createUI() {
 
+        setContentView(R.layout.activity_document_browser);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowTitleEnabled(false); //This should show current directory if anything
 
@@ -123,9 +129,11 @@ public class LibreOfficeUIActivity extends ActionBarActivity implements ActionBa
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
         actionBar.setListNavigationCallbacks(list, this);
 
+        LinearLayout content = (LinearLayout) findViewById(R.id.browser_main_content);
+
         if( viewMode == GRID_VIEW){
             // code to make a grid view
-            setContentView(R.layout.file_grid);
+            getLayoutInflater().inflate(R.layout.file_grid, content);
             gv = (GridView)findViewById(R.id.file_explorer_grid_view);
             gv.setOnItemClickListener(new OnItemClickListener() {
                 public void onItemClick(AdapterView<?> parent, View view,
@@ -136,7 +144,7 @@ public class LibreOfficeUIActivity extends ActionBarActivity implements ActionBa
             actionBar.setSelectedNavigationItem( filterMode + 1 );//This triggers the listener which modifies the view.
             registerForContextMenu(gv);
         }else{
-            setContentView(R.layout.file_list);
+            getLayoutInflater().inflate(R.layout.file_list, content);
             lv = (ListView)findViewById( R.id.file_explorer_list_view);
             lv.setClickable(true);
             actionBar.setSelectedNavigationItem( filterMode + 1 );
