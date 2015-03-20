@@ -1,0 +1,8 @@
+Verified+1: Jenkins <ci@libreoffice.org>
+Verified+1: David Tardon <dtardon@redhat.com>
+Code-Review+2: David Tardon <dtardon@redhat.com>
+Submitted-by: David Tardon <dtardon@redhat.com>
+Submitted-at: Fri, 20 Mar 2015 08:24:26 +0000
+Reviewed-on: https://gerrit.libreoffice.org/14890
+Project: core
+Branch: refs/heads/master
