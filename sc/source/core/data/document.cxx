@@ -3214,19 +3214,47 @@ bool ScDocument::SetString( SCCOL nCol, SCROW nRow, SCTAB nTab, const OUString& 
     if (!pTab)
         return false;
 
-    // In case setting this string affects an existing formula group, record
-    // its above and below position for later listening.
+    bool bIsFormulaShared = false;
 
-    std::vector<ScAddress> aGroupPos;
-    sc::EndListeningContext aCxt(*this);
-    ScAddress aPos(nCol, nRow, nTab);
-    EndListeningIntersectedGroup(aCxt, aPos, &aGroupPos);
-    aCxt.purgeEmptyBroadcasters();
+    ScFormulaCell* pCurCellFormula = pTab->GetFormulaCell(nCol, nRow);
+    if (pCurCellFormula && pCurCellFormula->IsShared())
+        bIsFormulaShared = true;
 
-    bool bNumFmtSet = pTab->SetString(nCol, nRow, nTab, rString, pParam);
+    if (!bIsFormulaShared)
+    {
+        ScFormulaCell* pNextCellFormula = pTab->GetFormulaCell(nCol, nRow + 1);
+        if (pNextCellFormula && pNextCellFormula->IsShared())
+            bIsFormulaShared = true;
+    }
+    if (!bIsFormulaShared && nRow > 0)
+    {
+        ScFormulaCell* pPreviousCellFormula = pTab->GetFormulaCell(nCol, nRow - 1);
+        if (pPreviousCellFormula && pPreviousCellFormula->IsShared())
+            bIsFormulaShared = true;
+    }
 
-    SetNeedsListeningGroups(aGroupPos);
-    StartNeededListeners();
+    bool bNumFmtSet = false;
+
+    if (bIsFormulaShared)
+    {
+        // In case setting this string affects an existing formula group, record
+        // its above and below position for later listening.
+
+        std::vector<ScAddress> aGroupPos;
+        sc::EndListeningContext aCxt(*this);
+        ScAddress aPos(nCol, nRow, nTab);
+        EndListeningIntersectedGroup(aCxt, aPos, &aGroupPos);
+        aCxt.purgeEmptyBroadcasters();
+
+        bNumFmtSet = pTab->SetString(nCol, nRow, nTab, rString, pParam);
+
+        SetNeedsListeningGroups(aGroupPos);
+        StartNeededListeners();
+    }
+    else
+    {
+        bNumFmtSet = pTab->SetString(nCol, nRow, nTab, rString, pParam);
+    }
 
     return bNumFmtSet;
 }
