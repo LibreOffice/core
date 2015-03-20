@@ -190,6 +190,12 @@ Control RID_COND_ENTRY
         Text [ en-US ] = "Example";
         Border = TRUE;
     };
+    FixedText FT_VAL
+    {
+        Pos = MAP_APPFONT( 5, 48 );
+        Size = MAP_APPFONT( 300, 12 );
+        Text[ en-US ] = "Enter a value!";
+    };
     Edit ED_COL_SCALE_MIN
     {
         Pos = MAP_APPFONT( 5, 48 );
