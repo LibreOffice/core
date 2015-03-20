@@ -176,10 +176,8 @@ extern const char *ptyl_test_encryption_pathname;
 
     if (!getenv("DRAW_ONLY_TILE") || tileMatches(getenv("DRAW_ONLY_TILE"), bb)) {
         fprintf(stderr, "+++ rendering to context %p\n", ctx);
-        int rowStride;
         loDocument->pClass->paintTile(loDocument, (unsigned char *)ctx,
                                       tileSize.width, tileSize.height,
-                                      &rowStride,
                                       bb.origin.x/self.scale, bb.origin.y/self.scale,
                                       bb.size.width/self.scale, bb.size.height/self.scale);
     } else {

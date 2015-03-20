@@ -97,7 +97,6 @@ struct _LibreOfficeKitDocumentClass
                            unsigned char* pBuffer,
                            const int nCanvasWidth,
                            const int nCanvasHeight,
-                           int* pRowStride,
                            const int nTilePosX,
                            const int nTilePosY,
                            const int nTileWidth,

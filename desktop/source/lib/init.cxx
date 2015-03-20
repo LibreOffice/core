@@ -185,7 +185,6 @@ static void doc_setPartMode(LibreOfficeKitDocument* pThis, int nPartMode);
 void        doc_paintTile(LibreOfficeKitDocument* pThis,
                           unsigned char* pBuffer,
                           const int nCanvasWidth, const int nCanvasHeight,
-                          int* pRowStride,
                           const int nTilePosX, const int nTilePosY,
                           const int nTileWidth, const int nTileHeight);
 static void doc_getDocumentSize(LibreOfficeKitDocument* pThis,
@@ -585,7 +584,6 @@ static void doc_setPartMode(LibreOfficeKitDocument* pThis,
 void doc_paintTile (LibreOfficeKitDocument* pThis,
                     unsigned char* pBuffer,
                     const int nCanvasWidth, const int nCanvasHeight,
-                    int* pRowStride,
                     const int nTilePosX, const int nTilePosY,
                     const int nTileWidth, const int nTileHeight)
 {
@@ -615,8 +613,6 @@ void doc_paintTile (LibreOfficeKitDocument* pThis,
 
     pDoc->paintTile(aDevice, nCanvasWidth, nCanvasHeight,
                     nTilePosX, nTilePosY, nTileWidth, nTileHeight);
-
-    *pRowStride = GetRowStrideForLibreOfficeKit(aDevice.getSalVirtualDevice());
 #else
     SystemGraphicsData aData;
     aData.rCGContext = reinterpret_cast<CGContextRef>(pBuffer);
@@ -625,8 +621,6 @@ void doc_paintTile (LibreOfficeKitDocument* pThis,
 
     pDoc->paintTile(aDevice, nCanvasWidth, nCanvasHeight,
                     nTilePosX, nTilePosY, nTileWidth, nTileHeight);
-
-    (void) pRowStride;
 #endif
 
     static bool bDebug = getenv("LOK_DEBUG") != 0;
@@ -646,7 +640,6 @@ void doc_paintTile (LibreOfficeKitDocument* pThis,
     (void) pBuffer;
     (void) nCanvasWidth;
     (void) nCanvasHeight;
-    (void) pRowStride;
     (void) nTilePosX;
     (void) nTilePosY;
     (void) nTileWidth;

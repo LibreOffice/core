@@ -697,17 +697,14 @@ void renderDocument(LOKDocView* pDocView, GdkRectangle* pPartial)
                 GdkPixbuf* pPixBuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8, aTileRectanglePixels.width, aTileRectanglePixels.height);
                 unsigned char* pBuffer = gdk_pixbuf_get_pixels(pPixBuf);
                 g_info("renderDocument: paintTile(%d, %d)", nRow, nColumn);
-                int nRowStride;
                 pDocView->pDocument->pClass->paintTile(pDocView->pDocument,
                                                        // Buffer and its size, depends on the position only.
                                                        pBuffer,
                                                        aTileRectanglePixels.width, aTileRectanglePixels.height,
-                                                       &nRowStride,
                                                        // Position of the tile.
                                                        aTileRectangleTwips.x, aTileRectangleTwips.y,
                                                        // Size of the tile, depends on the zoom factor and the tile position only.
                                                        aTileRectangleTwips.width, aTileRectangleTwips.height);
-                (void) nRowStride;
 
                 if (pDocView->pCanvas[nTile])
                     gtk_widget_destroy(GTK_WIDGET(pDocView->pCanvas[nTile]));

@@ -109,7 +109,6 @@ void renderDocument( LOKDocViewQuad* pDocView )
 {
     long nWidth, nHeight;
     int nRenderWidth, nRenderHeight;
-    int nRowStride;
     int x, y;
     GdkPixbuf* pTempBuf;
 
@@ -145,7 +144,6 @@ void renderDocument( LOKDocViewQuad* pDocView )
     pDocView->pDocument->pClass->paintTile( pDocView->pDocument,
                                             gdk_pixbuf_get_pixels( pDocView->pPixBuf[0][0] ),
                                             nRenderWidth / 2, nRenderHeight / 2,
-                                            &nRowStride,
                                             0, 0, // origin
                                             nWidth / 2, nHeight / 2 );
 
@@ -155,7 +153,6 @@ void renderDocument( LOKDocViewQuad* pDocView )
     pDocView->pDocument->pClass->paintTile( pDocView->pDocument,
                                             gdk_pixbuf_get_pixels( pDocView->pPixBuf[1][0] ),
                                             nRenderWidth, nRenderHeight,
-                                            &nRowStride,
                                             nWidth / 2, 0,
                                             nWidth / 2, nHeight / 2 );
     pTempBuf = gdk_pixbuf_scale_simple( GDK_PIXBUF( pDocView->pPixBuf[1][0] ),
@@ -172,7 +169,6 @@ void renderDocument( LOKDocViewQuad* pDocView )
     pDocView->pDocument->pClass->paintTile( pDocView->pDocument,
                                             gdk_pixbuf_get_pixels( pDocView->pPixBuf[0][1] ),
                                             nRenderWidth / 4, nRenderHeight / 4,
-                                            &nRowStride,
                                             0, nHeight / 2,
                                             nWidth / 2, nHeight / 2 );
     pTempBuf = gdk_pixbuf_scale_simple( GDK_PIXBUF( pDocView->pPixBuf[0][1] ),
@@ -188,7 +184,6 @@ void renderDocument( LOKDocViewQuad* pDocView )
     pDocView->pDocument->pClass->paintTile( pDocView->pDocument,
                                             gdk_pixbuf_get_pixels( pDocView->pPixBuf[1][1] ),
                                             nRenderWidth / 8, nRenderHeight / 8,
-                                            &nRowStride,
                                             nWidth / 2, nHeight / 2,
                                             nWidth / 2, nHeight / 2 );
     pTempBuf = gdk_pixbuf_scale_simple( GDK_PIXBUF( pDocView->pPixBuf[1][1] ),
@@ -199,11 +194,6 @@ void renderDocument( LOKDocViewQuad* pDocView )
     pDocView->pPixBuf[1][1] = pTempBuf;
 
 
-
-    // TODO: double check that the rowstride really matches what we expected,
-    // although presumably we'd already be crashing by now if things were
-    // wrong.
-    (void) nRowStride;
 
     //    gtk_image_set_from_pixbuf( GTK_IMAGE( pDocView->pCanvas ), pDocView->pPixBuf );
     for ( x = 0; x < 2; x++ )

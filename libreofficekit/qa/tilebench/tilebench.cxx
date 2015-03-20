@@ -98,8 +98,7 @@ int main( int argc, char* argv[] )
 
             { // whole document
                 aTimes.push_back(TimeRecord("render whole document"));
-                int nRowStride = 256;
-                pDocument->paintTile(pPixels, 256, 256, &nRowStride,
+                pDocument->paintTile(pPixels, 256, 256,
                                      0, 0, nWidth, nHeight); // not square
                 aTimes.push_back(TimeRecord());
             }
@@ -112,10 +111,9 @@ int main( int argc, char* argv[] )
                 {
                     for (int nY = 0; nY < nHeight / nSplit; nY++)
                     {
-                        int nRowStride = 256;
                         int nTilePosX = nX * nSplit;
                         int nTilePosY = nY * nSplit;
-                        pDocument->paintTile(pPixels, 256, 256, &nRowStride,
+                        pDocument->paintTile(pPixels, 256, 256,
                                              nTilePosX, nTilePosY, 256, 256);
                         nTiles++;
                         fprintf (stderr, "   rendered tile %d at %d, %d\n",
@@ -133,10 +131,9 @@ int main( int argc, char* argv[] )
                 {
                     for (int nY = 0; nY < nHeight / nSplit; nY++)
                     {
-                        int nRowStride = 256;
                         int nTilePosX = nX * nSplit;
                         int nTilePosY = nY * nSplit;
-                        pDocument->paintTile(pPixels, 256, 256, &nRowStride,
+                        pDocument->paintTile(pPixels, 256, 256,
                                              nTilePosX, nTilePosY, nSplit, nSplit);
                         nTiles++;
                         fprintf (stderr, "   rendered tile %d at %d, %d\n",

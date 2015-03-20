@@ -73,13 +73,12 @@ public:
                           unsigned char* pBuffer,
                           const int nCanvasWidth,
                           const int nCanvasHeight,
-                          int* pRowStride,
                           const int nTilePosX,
                           const int nTilePosY,
                           const int nTileWidth,
                           const int nTileHeight)
     {
-        return mpDoc->pClass->paintTile(mpDoc, pBuffer, nCanvasWidth, nCanvasHeight, pRowStride,
+        return mpDoc->pClass->paintTile(mpDoc, pBuffer, nCanvasWidth, nCanvasHeight,
                                 nTilePosX, nTilePosY, nTileWidth, nTileHeight);
     }
 

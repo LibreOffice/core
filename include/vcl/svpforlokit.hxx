@@ -18,7 +18,6 @@
 class SalFrame;
 
 VCL_DLLPUBLIC void InitSvpForLibreOfficeKit();
-VCL_DLLPUBLIC int GetRowStrideForLibreOfficeKit(SalVirtualDevice* pVD);
 VCL_DLLPUBLIC SalFrame* GetSvpFocusFrameForLibreOfficeKit();
 VCL_DLLPUBLIC vcl::Window* GetSalFrameWindowForLibreOfficeKit(SalFrame *pSF);
 

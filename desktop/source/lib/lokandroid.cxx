@@ -220,9 +220,7 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_paintTi
     LibreOfficeKitDocument* pDocument = getHandle<LibreOfficeKitDocument>(pEnv, aObject);
 
     unsigned char* buffer = (unsigned char*) pEnv->GetDirectBufferAddress(aByteBuffer);
-    int nStride = 0;
-    pDocument->pClass->paintTile(pDocument, buffer, nCanvasWidth, nCanvasHeight, &nStride, nTilePosX, nTilePosY, nTileWidth, nTileHeight);
-    (void) nStride;
+    pDocument->pClass->paintTile(pDocument, buffer, nCanvasWidth, nCanvasHeight, nTilePosX, nTilePosY, nTileWidth, nTileHeight);
 }
 
 extern "C" SAL_JNI_EXPORT jlong JNICALL Java_org_libreoffice_kit_Document_getDocumentHeight

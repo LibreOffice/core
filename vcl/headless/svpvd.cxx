@@ -104,14 +104,6 @@ void InitSvpForLibreOfficeKit()
     pSalInstance->setBitCountFormatMapping( 32, ::basebmp::FORMAT_THIRTYTWO_BIT_TC_MASK_RGBA );
 }
 
-int GetRowStrideForLibreOfficeKit(SalVirtualDevice* pVD)
-{
-    SvpSalVirtualDevice* pSalDev = static_cast< SvpSalVirtualDevice* >(pVD);
-    basebmp::BitmapDeviceSharedPtr pBmpDev = pSalDev->getBitmapDevice();
-
-    return pBmpDev->getScanlineStride();
-}
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
