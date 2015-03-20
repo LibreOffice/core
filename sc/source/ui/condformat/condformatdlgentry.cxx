@@ -285,7 +285,7 @@ IMPL_LINK(ScConditionFrmtEntry, OnEdChanged, Edit*, pEdit)
 
     ScTokenArray *ta = calculator.GetCode();
     formula::FormulaToken *token = ta->First();
-    formula::StackVarEnum t = token->GetType();
+    formula::StackVar t = token->GetType();
 
     // If it's recognized as a Number or a string, we're OK
     if( ( token->GetOpCode() == ocPush ) && ( ( t == formula::svDouble ) || ( t == formula::svString ) ) )
