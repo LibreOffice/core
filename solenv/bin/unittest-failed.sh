@@ -21,23 +21,27 @@ cat << EOF
 
 Error: a unit test failed, please do one of:
 
-export DEBUGCPPUNIT=TRUE            # for exception catching
 EOF
+
 if [ "$3" = "WNT" ]; then
 cat << EOF
-export CPPUNITTRACE="\"[full path to devenv.exe]\" /debugexe" # for interactive debugging in Visual Studio
+Interactive debugging in Visual Studio
+export CPPUNITTRACE="\"[full path to devenv.exe]\" /debugexe"
 EOF
 elif [ "$3" = "MACOSX" ]; then
 cat << EOF
-export CPPUNITTRACE="lldb --" # for interactive debugging on OS X
+export DEBUGCPPUNIT=TRUE            # for exception catching
+export CPPUNITTRACE="lldb --"       # for interactive debugging on OS X
+export VALGRIND=memcheck            # for memory checking
 EOF
 else
 cat << EOF
+export DEBUGCPPUNIT=TRUE            # for exception catching
 export CPPUNITTRACE="gdb --args"    # for interactive debugging on Linux
+export VALGRIND=memcheck            # for memory checking
 EOF
 fi
 cat << EOF
-export VALGRIND=memcheck            # for memory checking
 
 and retry using: make $1Test_$2
 
