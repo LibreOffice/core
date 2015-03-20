@@ -81,7 +81,6 @@ namespace vcl { class Window; }
 template <class reference_type>
 class VclPtr
 {
-
     ::rtl::Reference<reference_type> m_rInnerRef;
 
 public:
@@ -211,7 +210,6 @@ public:
         return (m_rInnerRef < handle.m_rInnerRef);
     }
 
-
     /** Needed to place VclPtr's into STL collection.
      */
     inline bool SAL_CALL operator> (const VclPtr<reference_type> & handle) const
@@ -231,19 +229,27 @@ public:
         : VclPtr<reference_type>()
     {}
 
-
-    /** Constructor...
+    /** Constructor
      */
     inline ScopedVclPtr (reference_type * pBody)
         : VclPtr<reference_type>(pBody)
     {}
-
 
     /** Copy constructor...
      */
     inline ScopedVclPtr (const VclPtr<reference_type> & handle)
         : VclPtr<reference_type>(handle)
     {}
+
+    /**
+       Assignment that releases the last reference.
+     */
+    inline ScopedVclPtr<reference_type>& SAL_CALL operator= (reference_type * pBody)
+    {
+        VclPtr<reference_type>::disposeAndClear();
+        VclPtr<reference_type>::set(pBody);
+        return *this;
+    }
 
     /** Up-casting conversion constructor: Copies interface reference.
 
@@ -265,7 +271,11 @@ public:
     {
         VclPtr<reference_type>::disposeAndClear();
     }
-
+private:
+    // Most likely we don't want this default copy-construtor.
+    ScopedVclPtr (const ScopedVclPtr<reference_type> &) SAL_DELETED_FUNCTION;
+    // And certainly we don't want a default assignment operator.
+    ScopedVclPtr<reference_type>& SAL_CALL operator= (const ScopedVclPtr<reference_type> &) SAL_DELETED_FUNCTION;
 };
 
 #endif // INCLUDED_VCL_PTR_HXX

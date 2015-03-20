@@ -67,6 +67,14 @@ to lingering pointers to freed objects.
 	'dispose' methods, in order to provide a minimal initial
 	behavioral change.
 
+	As such a VclPtr can have three states:
+
+	VclPtr<PushButton> pButton;
+	...
+	assert (pButton == nullptr || !pButton);    // null
+	assert (pButton && !pButton->IsDisposed()); // alive
+	assert (pButton &&  pButton->IsDisposed()); // disposed
+
 ** ScopedVclPtr - making disposes easier
 
 	While replacing existing code with new, it can be a bit

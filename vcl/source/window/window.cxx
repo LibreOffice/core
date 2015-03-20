@@ -2264,8 +2264,7 @@ vcl::Font Window::GetPointFont() const
 
 void Window::Show( bool bVisible, sal_uInt16 nFlags )
 {
-
-    if ( mpWindowImpl->mbVisible == bVisible )
+    if ( IsDisposed() || mpWindowImpl->mbVisible == bVisible )
         return;
 
     ImplDelData aDogTag( this );
