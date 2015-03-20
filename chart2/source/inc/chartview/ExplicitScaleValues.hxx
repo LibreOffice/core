@@ -33,7 +33,6 @@ namespace chart
 /** This structure contains the explicit values for a scale like Minimum and Maximum.
     See also ::com::sun::star::chart2::ScaleData.
 */
-
 struct OOO_DLLPUBLIC_CHARTVIEW ExplicitScaleData
 {
     ExplicitScaleData();
