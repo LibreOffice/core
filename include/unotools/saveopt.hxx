@@ -60,6 +60,7 @@ public:
         DO_NOT_USE = 3,         // Do not use this, only here for compatibility with pre OOo 3.2 configuration
         ODFVER_012 = 4,         // ODF 1.2
         ODFVER_012_EXT_COMPAT = 8, // ODF 1.2 extended, but with compatibility fallbacks
+        ODFVER_013 = 9,         // ODF 1.3
 
         ODFVER_LATEST = SAL_MAX_ENUM,      // ODF latest version with enhancements
     };
