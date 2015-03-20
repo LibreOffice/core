@@ -51,7 +51,6 @@
 #include <osl/module.hxx>
 
 #include <app.hxx>
-#include <salinst.hxx>
 
 #if defined(UNX) && !defined(MACOSX) && !defined(ENABLE_HEADLESS)
 // Let's grab the SvpSalInstance and SvpSalVirtualDevice
