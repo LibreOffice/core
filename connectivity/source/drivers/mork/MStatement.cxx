@@ -140,54 +140,6 @@ void SAL_CALL OCommonStatement::close(  ) throw(SQLException, RuntimeException, 
 }
 
 
-
-void OCommonStatement::createTable( ) throw ( SQLException, RuntimeException )
-{
-/*
-    if(m_pParseTree)
-    {
-        ::rtl::Reference<connectivity::OSQLColumns> xCreateColumn;
-        if (m_pSQLIterator->getStatementType() == SQL_STATEMENT_CREATE_TABLE)
-        {
-            const OSQLTables& xTabs = m_pSQLIterator->getTables();
-            OSL_ENSURE( !xTabs.empty(), "Need a Table");
-            OUString ouTableName=xTabs.begin()->first;
-            xCreateColumn     = m_pSQLIterator->getCreateColumns();
-            OSL_ENSURE(xCreateColumn.is(), "Need the Columns!!");
-
-            const OColumnAlias& aColumnAlias = m_pConnection->getColumnAlias();
-
-            OSQLColumns::Vector::const_iterator aIter = xCreateColumn->get().begin();
-            const OUString sProprtyName = OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME);
-            OUString sName;
-            for (sal_Int32 i = 1; aIter != xCreateColumn->get().end();++aIter, i++)
-            {
-                (*aIter)->getPropertyValue(sProprtyName) >>= sName;
-                if ( !aColumnAlias.hasAlias( sName ) )
-                {
-
-                    const OUString sError( getOwnConnection()->getResources().getResourceStringWithSubstitution(
-                            STR_INVALID_COLUMNNAME,
-                            "$columnname$", sName
-                         ) );
-                    ::dbtools::throwGenericSQLException(sError,*this);
-                }
-            }
-            MDatabaseMetaDataHelper     _aDbHelper;
-            if (!_aDbHelper.NewAddressBook(m_pConnection,ouTableName))
-            {
-                getOwnConnection()->throwSQLException( _aDbHelper.getError(), *this );
-            }
-            m_pSQLIterator.reset( new ::connectivity::OSQLParseTreeIterator(
-                m_pConnection, m_pConnection->createCatalog()->getTables(), m_aParser, NULL ) );
-        }
-
-    }
-    else
-        getOwnConnection()->throwSQLException( STR_QUERY_TOO_COMPLEX, *this );
-*/
-}
-
 OCommonStatement::StatementType OCommonStatement::parseSql( const OUString& sql , bool bAdjusted)
     throw ( SQLException, RuntimeException )
 {
@@ -242,7 +194,6 @@ OCommonStatement::StatementType OCommonStatement::parseSql( const OUString& sql 
             return eSelect;
 
         case SQL_STATEMENT_CREATE_TABLE:
-            createTable();
             return eCreateTable;
 
         default:

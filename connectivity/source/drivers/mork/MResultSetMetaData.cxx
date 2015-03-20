@@ -176,7 +176,7 @@ sal_Bool SAL_CALL OResultSetMetaData::isReadOnly( sal_Int32 column ) throw(SQLEx
     bool bReadOnly = (m_xColumns->get())[column-1]->getPropertySetInfo()->hasPropertyByName(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FUNCTION)) &&
         ::cppu::any2bool((m_xColumns->get())[column-1]->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FUNCTION)));
 
-    return m_bReadOnly || bReadOnly || m_pTable->isReadOnly();
+    return m_bReadOnly || bReadOnly;
 }
 
 

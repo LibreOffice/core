@@ -332,35 +332,6 @@ bool OResultSet::fetchCurrentRow( ) throw(SQLException, RuntimeException)
 }
 
 
-bool OResultSet::pushCard(sal_uInt32 /*cardNumber*/) throw(SQLException, RuntimeException)
-{
-    return true;
-/*
-    if (cardNumber == 0)
-        return sal_True;
-    // Check whether we are storing the updated row
-    if ( (m_aRow->get())[0].isNull() || (sal_Int32)(m_aRow->get())[0] != (sal_Int32)cardNumber )
-        return sal_False;
-
-    sal_Int32 nCount = m_aColumnNames.getLength();
-    m_aQuery.setRowStates(cardNumber,m_RowStates);
-    for( sal_Int32 i = 1; i <= nCount; i++ )
-    {
-        if ( (m_aRow->get())[i].isBound() )
-        {
-
-            // Everything in the addressbook is a string!
-
-            if ( !m_aQuery.setRowValue( (m_aRow->get())[i], cardNumber, m_aColumnNames[i-1], DataType::VARCHAR ))
-            {
-                m_pStatement->getOwnConnection()->throwSQLException( m_aQuery.getError(), *this );
-            }
-        }
-    }
-    return sal_True;
-*/
-}
-
 bool OResultSet::fetchRow(sal_Int32 cardNumber,bool bForceReload) throw(SQLException, RuntimeException)
 {
     SAL_INFO("connectivity.mork", "cardNumber = " << cardNumber);
@@ -369,13 +340,6 @@ bool OResultSet::fetchRow(sal_Int32 cardNumber,bool bForceReload) throw(SQLExcep
         // Check whether we've already fetched the row...
         if ( !(m_aRow->get())[0].isNull() && (sal_Int32)(m_aRow->get())[0] == (sal_Int32)cardNumber )
             return true;
-        //Check whether the old row has been changed
-        if (cardNumber == m_nUpdatedRow)
-        {
-            //write back the changes first
-            if (!pushCard(cardNumber))  //error write back the changes
-                throw SQLException();
-        }
     }
 //    else
 //        m_aQuery.resyncRow(cardNumber);
@@ -466,7 +430,7 @@ sal_Bool SAL_CALL OResultSet::isAfterLast(  ) throw(SQLException, RuntimeExcepti
 
     OSL_TRACE("In/Out: OResultSet::isAfterLast" );
 //    return sal_True;
-    return m_nRowPos > currentRowCount() && m_aQueryHelper.queryComplete();
+    return m_nRowPos > currentRowCount();
 }
 
 sal_Bool SAL_CALL OResultSet::isFirst(  ) throw(SQLException, RuntimeException, std::exception)
@@ -484,7 +448,7 @@ sal_Bool SAL_CALL OResultSet::isLast(  ) throw(SQLException, RuntimeException, s
 
     OSL_TRACE("In/Out: OResultSet::isLast" );
 //    return sal_True;
-    return m_nRowPos == currentRowCount() && m_aQueryHelper.queryComplete();
+    return m_nRowPos == currentRowCount();
 }
 
 void SAL_CALL OResultSet::beforeFirst(  ) throw(SQLException, RuntimeException, std::exception)
@@ -1258,8 +1222,6 @@ void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLExcep
 
                     OSL_TRACE("Query is to be sorted");
 
-                    OSL_ENSURE( m_aQueryHelper.queryComplete(), "Query not complete!!");
-
                     OSortIndex aSortIndex(eKeyType,m_aOrderbyAscending);
 
                     OSL_TRACE("OrderbyColumnNumber->size() = %zu",m_aOrderbyColumnNumber.size());
@@ -1445,28 +1407,26 @@ bool OResultSet::validRow( sal_uInt32 nRow)
 {
     sal_Int32  nNumberOfRecords = m_aQueryHelper.getResultCount();
 
-    while ( nRow > (sal_uInt32)nNumberOfRecords && !m_aQueryHelper.queryComplete() ) {
 #if OSL_DEBUG_LEVEL > 0
-            OSL_TRACE("validRow: waiting...");
+    OSL_TRACE("validRow: waiting...");
 #endif
-            if (m_aQueryHelper.checkRowAvailable( nRow ) == false)
-            {
-                SAL_INFO(
-                    "connectivity.mork",
-                    "validRow(" << nRow << "): return False");
-                return false;
-            }
-
-            if ( m_aQueryHelper.hadError() )
-            {
-                m_pStatement->getOwnConnection()->throwSQLException( m_aQueryHelper.getError(), *this );
-            }
-
-            nNumberOfRecords = m_aQueryHelper.getResultCount();
+    if (m_aQueryHelper.checkRowAvailable( nRow ) == false)
+    {
+        SAL_INFO(
+            "connectivity.mork",
+            "validRow(" << nRow << "): return False");
+        return false;
     }
 
+    if ( m_aQueryHelper.hadError() )
+    {
+        m_pStatement->getOwnConnection()->throwSQLException( m_aQueryHelper.getError(), *this );
+    }
+
+    nNumberOfRecords = m_aQueryHelper.getResultCount();
+
     if (( nRow == 0 ) ||
-        ( nRow > (sal_uInt32)nNumberOfRecords && m_aQueryHelper.queryComplete()) ){
+        ( nRow > (sal_uInt32)nNumberOfRecords) ){
         SAL_INFO("connectivity.mork", "validRow(" << nRow << "): return False");
         return false;
     }
