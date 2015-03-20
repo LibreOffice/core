@@ -58,6 +58,7 @@
 #include <com/sun/star/chart2/data/XNumericalDataSequence.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
+#include <com/sun/star/table/XTableRows.hpp>
 
 #include <stlpool.hxx>
 
@@ -102,6 +103,7 @@ public:
 #endif
     void testBulletSuffix();
     void testBnc910045();
+    void testRowHeight();
 
     CPPUNIT_TEST_SUITE(SdImportTest);
 
@@ -140,6 +142,7 @@ public:
 #endif
     CPPUNIT_TEST(testBulletSuffix);
     CPPUNIT_TEST(testBnc910045);
+    CPPUNIT_TEST(testRowHeight);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -1171,6 +1174,28 @@ void SdImportTest::testBnc910045()
     xCell.set(xTable->getCellByPosition(0, 0), uno::UNO_QUERY_THROW);
     xCell->getPropertyValue("FillColor") >>= nColor;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(5210557), nColor);
+}
+
+void SdImportTest::testRowHeight()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/pptx/n80340.pptx"), PPTX );
+
+    SdDrawDocument *pDoc = xDocShRef->GetDoc();
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+
+    const SdrPage *pPage = pDoc->GetPage(1);
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+
+    sdr::table::SdrTableObj *pTableObj = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(0));
+    CPPUNIT_ASSERT( pTableObj );
+
+    sal_Int32 nHeight;
+    const OUString sHeight("Height");
+    uno::Reference< com::sun::star::table::XTable > xTable(pTableObj->getTable(), uno::UNO_QUERY_THROW);
+    uno::Reference< com::sun::star::table::XTableRows > xRows( xTable->getRows(), uno::UNO_QUERY_THROW);
+    uno::Reference< beans::XPropertySet > xRefRow( xRows->getByIndex(0), uno::UNO_QUERY_THROW );
+    xRefRow->getPropertyValue( sHeight ) >>= nHeight;
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(508), nHeight);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdImportTest);
