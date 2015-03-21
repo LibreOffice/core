@@ -16,6 +16,24 @@
       "revId": "e30319e07e1b842dca749894de5b8d2f1bb7c8fd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a29b11f_c95bc12d",
+        "filename": "sc/source/ui/condformat/condformatdlgentry.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000918
+      },
+      "writtenOn": "2015-03-21T04:43:37Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "3a29b11f_4eaa5772",
+      "revId": "e30319e07e1b842dca749894de5b8d2f1bb7c8fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
