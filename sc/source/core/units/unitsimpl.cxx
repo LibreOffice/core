@@ -422,6 +422,18 @@ bool UnitsImpl::verifyFormula(ScTokenArray* pArray, const ScAddress& rFormulaAdd
 
             break;
         }
+        // As far as I can tell this is only used for an actual numerical value
+        // in which case we just want to use it as scaling factor
+        // (for example [m] + [cm]/100 would be a valid operation)
+        case formula::svDouble:
+        {
+            UtUnit aScale;
+            UtUnit::createUnit("", aScale, mpUnitSystem); // Get the dimensionless unit 1
+            aScale = aScale*(pToken->GetDouble());
+
+            aUnitStack.push(aScale);
+            break;
+        }
         default:
             // We can't parse any other types of tokens yet, so assume that the formula
             // was correct.
