@@ -443,7 +443,7 @@ private:
      * Translate an ico value to the corresponding HighlightColorValues enumaration item
      *
      * @param[in]   nIco      ico value [0..16]
-     * @return      color name (e.g. "red"), if color is inside the enumeration's range
+     * @return      color name (e.g. "red"), if color is inside [1..16] range
      *              empty string, otherwise
     **/
     static OString TransHighlightColor( sal_uInt8 nIco );
