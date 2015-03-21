@@ -3745,8 +3745,6 @@ long X11SalFrame::HandleReparentEvent( XReparentEvent *pEvent )
     ::Window        hWM_Parent;
     ::Window        hRoot, *Children, hDummy;
     unsigned int    nChildren;
-    bool            bNone = false;
-    bool            bAccessParentWindow = true;
 
     static const char* pDisableStackingCheck = getenv( "SAL_DISABLE_STACKING_CHECK" );
 
@@ -3784,11 +3782,7 @@ long X11SalFrame::HandleReparentEvent( XReparentEvent *pEvent )
         if( hDummy == hWM_Parent )
             hDummy = hRoot;
         if( hDummy != hRoot )
-        {
             hWM_Parent = hDummy;
-            if( bAccessParentWindow && bNone )
-                XSetWindowBackgroundPixmap( pDisplay, hWM_Parent, None );
-        }
         if( Children )
             XFree( Children );
     } while( hDummy != hRoot );
@@ -3800,8 +3794,7 @@ long X11SalFrame::HandleReparentEvent( XReparentEvent *pEvent )
         )
     {
         mhStackingWindow = hWM_Parent;
-        if (bAccessParentWindow)
-            XSelectInput( pDisplay, GetStackingWindow(), StructureNotifyMask );
+        XSelectInput( pDisplay, GetStackingWindow(), StructureNotifyMask );
     }
 
     if(     hWM_Parent == pDisplay_->GetRootWindow( pDisplay_->GetDefaultXScreen() )
