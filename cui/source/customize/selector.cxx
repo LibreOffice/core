@@ -162,6 +162,7 @@ OUString SvxConfigFunctionListBox::GetHelpText( SvTreeListEntry *pEntry )
         }
         else if ( pInfo->nKind == SVX_CFGFUNCTION_SCRIPT )
         {
+            pInfo->sHelpText = "HELP?";
             return pInfo->sHelpText;
         }
     }
