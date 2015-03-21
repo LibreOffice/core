@@ -1160,7 +1160,7 @@ void SfxTemplateManagerDlg::OnTemplateDelete ()
 {
     MessageDialog aQueryDlg(this, SfxResId(STR_QMSG_SEL_TEMPLATE_DELETE), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
 
-    if ( aQueryDlg.Execute() == RET_NO )
+    if ( aQueryDlg.Execute() != RET_YES )
         return;
 
     OUString aTemplateList;
@@ -1245,7 +1245,7 @@ void SfxTemplateManagerDlg::OnFolderDelete()
 {
     MessageDialog aQueryDlg(this, SfxResId(STR_QMSG_SEL_FOLDER_DELETE), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
 
-    if ( aQueryDlg.Execute() == RET_NO )
+    if ( aQueryDlg.Execute() != RET_YES )
         return;
 
     OUString aFolderList;
