@@ -90,6 +90,19 @@ public:
         return UtUnit(ut_multiply(this->get(), rUnit.get()));
     }
 
+    /**
+     * Multiply a unit by a given constant.
+     * This scales the unit by the inverse of that constant,
+     * e.g. 100*m is equivalent to cm, hence
+     * the unit needs to be scaled by 1/100.
+     * (This is implemented in this way so that we can simply
+     * multiply units by any constants present in a formula
+     * in a natural way.)
+     */
+    UtUnit operator*(const double nMultiplier) {
+        return UtUnit(ut_scale(1/nMultiplier, this->get()));
+    }
+
     UtUnit operator/(const UtUnit& rUnit) {
         // the parameter is the right hand side value in the operation,
         // i.e. we are working with this / rUnit.
