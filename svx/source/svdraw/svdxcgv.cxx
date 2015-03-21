@@ -289,14 +289,14 @@ bool SdrExchangeView::Paste(
         Point aDist(aPos-aR.Center());
         Size  aSiz(aDist.X(),aDist.Y());
         size_t nCloneErrCnt = 0;
-        const size_t nObAnz = pSrcPg->GetObjCount();
+        const size_t nObjCount = pSrcPg->GetObjCount();
         bool bMark=pMarkPV!=NULL && !IsTextEdit() && (nOptions&SDRINSERT_DONTMARK)==0;
 
         // #i13033#
         // New mechanism to re-create the connections of cloned connectors
         CloneList aCloneList;
 
-        for (size_t nOb=0; nOb<nObAnz; ++nOb)
+        for (size_t nOb=0; nOb<nObjCount; ++nOb)
         {
             const SdrObject* pSrcOb=pSrcPg->GetObj(nOb);
 
