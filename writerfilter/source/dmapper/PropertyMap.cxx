@@ -1317,71 +1317,66 @@ void SectionPropertyMap::_ApplyProperties(
     uno::Reference<beans::XMultiPropertySet> const xMultiSet(xStyle,
             uno::UNO_QUERY);
 
-    uno::Sequence<OUString> vNames;
-    uno::Sequence<uno::Any> vValues;
+    std::vector<OUString> vNames;
+    std::vector<uno::Any> vValues;
     { //Convert GetPropertyValues() value into something useful
         uno::Sequence<beans::PropertyValue> vPropVals = GetPropertyValues();
-        int nProperties = vPropVals.getLength();
 
         //Temporarily store the items that are in grab bags
         uno::Sequence<beans::PropertyValue> vCharVals;
         uno::Sequence<beans::PropertyValue> vParaVals;
         beans::PropertyValue* pCharGrabBag = std::find_if(vPropVals.begin(),vPropVals.end(),NamedPropertyValue("CharInteropGrabBag") );
-        if (pCharGrabBag!=vPropVals.end()) {
+        if (pCharGrabBag!=vPropVals.end())
             (pCharGrabBag->Value)>>=vCharVals;
-            nProperties += vCharVals.getLength()-1; //-1 to accommodate for grab bag property in vPropVals
-        }
         beans::PropertyValue* pParaGrabBag = std::find_if(vPropVals.begin(),vPropVals.end(),NamedPropertyValue("ParaInteropGrabBag") );
-        if (pParaGrabBag!=vPropVals.end()) {
+        if (pParaGrabBag!=vPropVals.end())
             (pParaGrabBag->Value)>>=vParaVals;
-            nProperties += vParaVals.getLength()-1;
-        }
 
-        //Allocate enough space to store the properties
-        vNames.realloc(nProperties);
-        vValues.realloc(nProperties);
-
-        int i = 0;
-        for (beans::PropertyValue* pIter = vPropVals.begin(); pIter!=vPropVals.end(); ++pIter, ++i) {
-            if(pIter!=pCharGrabBag && pIter!=pParaGrabBag) {
-                vNames[i] = pIter->Name;
-                vValues[i] = pIter->Value;
+        for (beans::PropertyValue* pIter = vPropVals.begin(); pIter!=vPropVals.end(); ++pIter)
+        {
+            if(pIter!=pCharGrabBag && pIter!=pParaGrabBag)
+            {
+                vNames.push_back(pIter->Name);
+                vValues.push_back(pIter->Value);
             }
         }
-        for (beans::PropertyValue* iter = vCharVals.begin(); iter!=vCharVals.end(); ++iter, ++i) {
-            vNames[i] = iter->Name;
-            vValues[i] = iter->Value;
+        for (beans::PropertyValue* iter = vCharVals.begin(); iter!=vCharVals.end(); ++iter)
+        {
+            vNames.push_back(iter->Name);
+            vValues.push_back(iter->Value);
         }
-        for (beans::PropertyValue* iter = vParaVals.begin(); iter!=vParaVals.end(); ++iter, ++i) {
-            vNames[i] = iter->Name;
-            vValues[i] = iter->Value;
+        for (beans::PropertyValue* iter = vParaVals.begin(); iter!=vParaVals.end(); ++iter)
+        {
+            vNames.push_back(iter->Name);
+            vValues.push_back(iter->Value);
         }
     }
     if (xMultiSet.is())
     {
         try
         {
-            xMultiSet->setPropertyValues(vNames, vValues);
+            xMultiSet->setPropertyValues(comphelper::containerToSequence(vNames), comphelper::containerToSequence(vValues));
         }
         catch( const uno::Exception& )
         {
-            OSL_FAIL( "Exception in <PageStyle>::setPropertyValue");
+            OSL_FAIL( "Exception in SectionPropertyMap::_ApplyProperties");
         }
         return;
     }
-    for (int i=0; i<vNames.getLength(); ++i)
+    for (size_t i = 0; i < vNames.size(); ++i)
     {
         try
         {
             if (xStyle.is())
-                xStyle->setPropertyValue( vNames[i], vValues[i] );
+                xStyle->setPropertyValue(vNames[i], vValues[i]);
         }
         catch( const uno::Exception& )
         {
-            OSL_FAIL( "Exception in <PageStyle>::setPropertyValue");
+            OSL_FAIL( "Exception in SectionPropertyMap::_ApplyProperties");
         }
     }
 }
+
 sal_Int32 lcl_AlignPaperBin( sal_Int32 nSet )
 {
     //default tray numbers are above 0xff
