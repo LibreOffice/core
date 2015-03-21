@@ -76,7 +76,31 @@ private:
     UtUnit getOutputUnitsForOpCode(std::stack< UtUnit >& rUnitStack, const OpCode& rOpCode);
     OUString extractUnitStringFromFormat(const OUString& rFormatString);
     OUString extractUnitStringForCell(const ScAddress& rAddress, ScDocument* pDoc);
-    bool extractUnitFromHeaderString(const OUString& rString, UtUnit& aUnit, OUString& sUnitString);
+
+    /**
+     * Find and extract a Unit in the standard header notation,
+     * i.e. a unit enclose within square brackets (e.g. "length [cm]".
+     *
+     * @return true if such a unit is found.
+     */
+    bool findUnitInStandardHeader(const OUString& rHeader, UtUnit& aUnit, OUString& sUnitString);
+    /**
+     * Find and extract a freestanding Unit from a header string.
+     * This includes strings such as "speed m/s", "speed m / s",
+     * "speed (m/s)" etc.
+     * This is (for now) only a fallback for the case that the user hasn't defined
+     * units in the standard notation, and can only handle a limited number
+     * of ways in which units could be written in a string.
+     * It may turn out that in practice this method should be extended to support
+     * more permutations of the same unit, but this should at least cover the most
+     * obvious cases.
+     *
+     * @ return true if a unit is found.
+     */
+    bool findFreestandingUnitInHeader(const OUString& rHeader, UtUnit& aUnit, OUString& sUnitString);
+
+    bool extractUnitFromHeaderString(const OUString& rHeader, UtUnit& aUnit, OUString& sUnitString);
+
     UtUnit getUnitForRef(formula::FormulaToken* pToken,
                          const ScAddress& rFormulaAddress,
                          ScDocument* pDoc);
