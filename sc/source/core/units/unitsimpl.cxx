@@ -208,7 +208,10 @@ OUString UnitsImpl::extractUnitStringForCell(const ScAddress& rAddress, ScDocume
     return extractUnitStringFromFormat(rFormatString);
 }
 
-bool UnitsImpl::extractUnitFromHeaderString(const OUString& rString, UtUnit& aUnit, OUString& sUnitString) {
+bool UnitsImpl::findUnitInStandardHeader(const OUString& rsHeader, UtUnit& aUnit, OUString& sUnitString) {
+    // TODO: we should do a sanity check that there's only one such unit though (and fail if there are multiple).
+    //       Since otherwise there's no way for us to know which unit is the intended one, hence we need to get
+    //       the user to deconfuse us by correcting their header to only contain the intended unit.
     com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
 
     uno::Reference<lang::XMultiServiceFactory> xFactory(xContext->getServiceManager(), uno::UNO_QUERY_THROW);
@@ -222,18 +225,14 @@ bool UnitsImpl::extractUnitFromHeaderString(const OUString& rString, UtUnit& aUn
     aOptions.algorithmType = util::SearchAlgorithms_REGEXP ;
     aOptions.searchFlag = util::SearchFlags::ALL_IGNORE_CASE;
 
-    // 1. We try to check for units contained within square brackets
-    // TODO: we should do a sanity check that there's only one such unit though (and fail if there are multiple).
-    //       Since otherwise there's no way for us to know which unit is the intended one, hence we need to get
-    //       the user to deconfuse us by correcting their header to only contain the intended unit.
     aOptions.searchString = "\\[([^\\]]+)\\]"; // Grab the contents between [ and ].
     xSearch->setOptions( aOptions );
 
     util::SearchResult aResult;
-    sal_Int32 nStartPosition = rString.getLength();
+    sal_Int32 nStartPosition = rsHeader.getLength();
     while (nStartPosition) {
         // Search from the back since units are more likely to be at the end of the header.
-        aResult = xSearch->searchBackward(rString, nStartPosition, 0);
+        aResult = xSearch->searchBackward(rsHeader, nStartPosition, 0);
 
         // We have either 0 items (no match), or 2 (matched string + the group within)
         if (aResult.subRegExpressions != 2) {
@@ -243,7 +242,7 @@ bool UnitsImpl::extractUnitFromHeaderString(const OUString& rString, UtUnit& aUn
             // i.e. startOffset is the last character of the intended substring, endOffset the first character.
             // We specifically grab the offsets for the first actual regex group, which are stored in [1], the indexes
             // at [0] represent the whole matched string (i.e. including square brackets).
-            sUnitString = rString.copy(aResult.endOffset[1], aResult.startOffset[1] - aResult.endOffset[1]);
+            sUnitString = rsHeader.copy(aResult.endOffset[1], aResult.startOffset[1] - aResult.endOffset[1]);
 
             if (UtUnit::createUnit(sUnitString, aUnit, mpUnitSystem)) {
                 return true;
@@ -252,17 +251,26 @@ bool UnitsImpl::extractUnitFromHeaderString(const OUString& rString, UtUnit& aUn
             nStartPosition = aResult.endOffset[0];
         }
     }
+    sUnitString.clear();
+    return false;
+}
 
-    // 2. We try to check for any free-standing units by splitting the string and testing each split
-    const sal_Int32 nTokenCount = comphelper::string::getTokenCount(rString, ' ');
+
+bool UnitsImpl::findFreestandingUnitInHeader(const OUString& rsHeader, UtUnit& aUnit, OUString& sUnitString) {
+    // We just split the string and test whether each token is either a valid unit in it's own right,
+    // or is an operator that could glue together multiple units (i.e. multiplication/division).
+    // This is sufficient for when there are spaces between elements composing the unit, and none
+    // of the individual elements starts or begins with an operator.
     // There's an inherent limit to how well we can cope with various spacing issues here without
     // a ton of computational complexity.
-    // E.g. by parsing in this way we might end up with unmatched parentheses which udunits won't like.
-    // for now operators have to be completely freestanding i.e. "cm / kg" or completely within a valid unit string e.g. "cm/kg"
+    // E.g. by parsing in this way we might end up with unmatched parentheses which udunits won't like
+    // (thus rejecting the unit) etc.
+
+    const sal_Int32 nTokenCount = comphelper::string::getTokenCount(rsHeader, ' ');
     const OUString sOperators = "/*"; // valid
     sUnitString.clear();
     for (sal_Int32 nToken = 0; nToken < nTokenCount; nToken++) {
-        OUString sToken = rString.getToken(nToken, ' ');
+        OUString sToken = rsHeader.getToken(nToken, ' ');
         UtUnit aTestUnit;
         if (UtUnit::createUnit(sToken, aTestUnit, mpUnitSystem) ||
             // Only test for a separator character if we have already got something in our string, as
@@ -283,6 +291,20 @@ bool UnitsImpl::extractUnitFromHeaderString(const OUString& rString, UtUnit& aUn
     // We test the length to make sure we don't return the dimensionless unit 1 if we haven't found any units
     // in the header.
     if (sUnitString.getLength() && UtUnit::createUnit(sUnitString, aUnit, mpUnitSystem)) {
+        return true;
+    }
+    sUnitString.clear();
+    return false;
+}
+
+bool UnitsImpl::extractUnitFromHeaderString(const OUString& rsHeader, UtUnit& aUnit, OUString& sUnitString) {
+    // 1. Ideally we have units in a 'standard' format, i.e. enclose in square brackets:
+    if (findUnitInStandardHeader(rsHeader, aUnit, sUnitString)) {
+        return true;
+    }
+
+    // 2. But if not we check for free-standing units
+    if (findFreestandingUnitInHeader(rsHeader, aUnit, sUnitString)) {
         return true;
     }
 
