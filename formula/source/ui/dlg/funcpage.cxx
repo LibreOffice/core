@@ -62,15 +62,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeFormulaListBox(vcl::Wi
     return new FormulaListBox(pParent, WB_BORDER | WB_SORT);
 }
 
-inline sal_uInt16 Lb2Cat( sal_uInt16 nLbPos )
-{
-    // Category 0 == LRU, otherwise Categories == LbPos-1
-    if ( nLbPos > 0 )
-        nLbPos -= 1;
-
-    return nLbPos;
-}
-
 FuncPage::FuncPage(vcl::Window* pParent,const IFunctionManager* _pFunctionManager):
     TabPage(pParent, "FunctionPage", "formula/ui/functionpage.ui"),
     m_pFunctionManager(_pFunctionManager)
@@ -115,10 +106,6 @@ void FuncPage::UpdateFunctionList()
 {
     sal_Int32  nSelPos   = m_pLbCategory->GetSelectEntryPos();
     const IFunctionCategory* pCategory = static_cast<const IFunctionCategory*>(m_pLbCategory->GetEntryData(nSelPos));
-    sal_Int32  nCategory = ( LISTBOX_ENTRY_NOTFOUND != nSelPos )
-                            ? Lb2Cat( nSelPos ) : 0;
-
-    (void)nCategory;
 
     m_pLbFunction->Clear();
     m_pLbFunction->SetUpdateMode( false );
