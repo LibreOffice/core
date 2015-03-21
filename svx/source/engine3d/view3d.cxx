@@ -410,9 +410,9 @@ SdrModel* E3dView::GetMarkedObjModel() const
         for(sal_uInt16 nPg(0); nPg < pNewModel->GetPageCount(); nPg++)
         {
             const SdrPage* pSrcPg=pNewModel->GetPage(nPg);
-            const size_t nObAnz(pSrcPg->GetObjCount());
+            const size_t nObjCount(pSrcPg->GetObjCount());
 
-            for(size_t nOb = 0; nOb < nObAnz; ++nOb)
+            for(size_t nOb = 0; nOb < nObjCount; ++nOb)
             {
                 const SdrObject* pSrcOb=pSrcPg->GetObj(nOb);
 
@@ -465,14 +465,14 @@ bool E3dView::Paste(
         for(sal_uInt16 nPg(0); nPg < rMod.GetPageCount(); nPg++)
         {
             const SdrPage* pSrcPg=rMod.GetPage(nPg);
-            const size_t nObAnz(pSrcPg->GetObjCount());
+            const size_t nObjCount(pSrcPg->GetObjCount());
 
             // calculate offset for paste
             Rectangle aR = pSrcPg->GetAllObjBoundRect();
             Point aDist(aPos - aR.Center());
 
             // Insert sub-objects for scenes
-            for(size_t nOb = 0; nOb < nObAnz; ++nOb)
+            for(size_t nOb = 0; nOb < nObjCount; ++nOb)
             {
                 const SdrObject* pSrcOb = pSrcPg->GetObj(nOb);
                 if(pSrcOb->ISA(E3dScene))
