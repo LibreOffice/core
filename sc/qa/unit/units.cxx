@@ -125,7 +125,7 @@ void UnitsTest::testUnitVerification() {
     mpDoc->EnsureTable(0);
 
     SvNumberFormatter* pFormatter = mpDoc->GetFormatTable();
-    sal_uInt32 nKeyCM, nKeyKG, nKeyS, nKeyCM_S;
+    sal_uInt32 nKeyCM, nKeyM, nKeyKG, nKeyS, nKeyCM_S;
 
     // Used to return position of error in input string for PutEntry
     // -- not needed here.
@@ -133,6 +133,8 @@ void UnitsTest::testUnitVerification() {
 
     short nType = css::util::NumberFormat::DEFINED;
 
+    OUString sM = "#\"m\"";
+    pFormatter->PutEntry(sM, nCheckPos, nType, nKeyM);
     OUString sCM = "#\"cm\"";
     pFormatter->PutEntry(sCM, nCheckPos, nType, nKeyCM);
     OUString sKG = "#\"kg\"";
@@ -186,6 +188,11 @@ void UnitsTest::testUnitVerification() {
     mpDoc->SetNumberFormat(address, nKeyCM_S);
     mpDoc->SetValue(address, 5);
 
+    // 5th column: 1m
+    address = ScAddress(4, 0, 0);
+    mpDoc->SetNumberFormat(address, nKeyM);
+    mpDoc->SetValue(address, 1);
+
     ScFormulaCell* pCell;
     ScTokenArray* pTokens;
 
@@ -223,6 +230,37 @@ void UnitsTest::testUnitVerification() {
     pCell = mpDoc->GetFormulaCell(address);
     pTokens = pCell->GetCode();
     CPPUNIT_ASSERT(!mpUnitsImpl->verifyFormula(pTokens, address, mpDoc));
+
+    // Test that addition of scaled units works (cm + 100*m)
+    address = ScAddress(0, 10, 0);
+    mpDoc->SetFormula(address, "=A1+100*E1");
+    pCell = mpDoc->GetFormulaCell(address);
+    pTokens = pCell->GetCode();
+    CPPUNIT_ASSERT(mpUnitsImpl->verifyFormula(pTokens, address, mpDoc));
+    // 10cm + 100*1m = 110cm
+    CPPUNIT_ASSERT(mpDoc->GetValue(address) == 110);
+
+    // But addition of them unscaled fails (cm + m)
+    address = ScAddress(0, 11, 0);
+    mpDoc->SetFormula(address, "=A1+E1");
+    pCell = mpDoc->GetFormulaCell(address);
+    pTokens = pCell->GetCode();
+    CPPUNIT_ASSERT(!mpUnitsImpl->verifyFormula(pTokens, address, mpDoc));
+
+    // As does wrong scaling (cm+m/50)
+    address = ScAddress(0, 12, 0);
+    mpDoc->SetFormula(address, "=A1+E1/50");
+    pCell = mpDoc->GetFormulaCell(address);
+    pTokens = pCell->GetCode();
+    CPPUNIT_ASSERT(!mpUnitsImpl->verifyFormula(pTokens, address, mpDoc));
+
+    // And scaling doesn't help when adding incompatible units (kg + 100*m)
+    address = ScAddress(0, 13, 0);
+    mpDoc->SetFormula(address, "=B1+100E1");
+    pCell = mpDoc->GetFormulaCell(address);
+    pTokens = pCell->GetCode();
+    CPPUNIT_ASSERT(!mpUnitsImpl->verifyFormula(pTokens, address, mpDoc));
+
 }
 
 void UnitsTest::testUnitFromFormatStringExtraction() {
