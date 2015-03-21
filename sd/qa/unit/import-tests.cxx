@@ -1133,6 +1133,7 @@ void SdImportTest::testBulletSuffix()
     CPPUNIT_ASSERT_MESSAGE( "no text object", pTxtObj != NULL);
     const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
     const SvxNumBulletItem *pNumFmt = dynamic_cast<const SvxNumBulletItem *>(aEdit.GetParaAttribs(1).GetItem(EE_PARA_NUMBULLET));
+    CPPUNIT_ASSERT(pNumFmt);
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Bullet's suffix is wrong!", OUString(pNumFmt->GetNumRule()->GetLevel(0).GetSuffix()), OUString("") );
     xDocShRef->DoClose();
 }
