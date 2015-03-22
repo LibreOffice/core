@@ -893,6 +893,16 @@ void Slider::EndSlide()
     maEndSlideHdl.Call( this );
 }
 
+void Slider::SetRangeMin(long nNewRange)
+{
+    SetRange(Range(nNewRange, GetRangeMax()));
+}
+
+void Slider::SetRangeMax(long nNewRange)
+{
+    SetRange(Range(GetRangeMin(), nNewRange));
+}
+
 void Slider::SetRange( const Range& rRange )
 {
     // adjust Range

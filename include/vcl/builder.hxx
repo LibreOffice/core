@@ -33,6 +33,7 @@ class ListBox;
 class NumericFormatter;
 class PopupMenu;
 class ScrollBar;
+class Slider;
 class DateField;
 class TimeField;
 class VclExpander;
@@ -236,6 +237,7 @@ private:
     static void     mungeAdjustment(DateField &rTarget, const Adjustment &rAdjustment);
     static void     mungeAdjustment(TimeField &rTarget, const Adjustment &rAdjustment);
     static void     mungeAdjustment(ScrollBar &rTarget, const Adjustment &rAdjustment);
+    static void     mungeAdjustment(Slider &rTarget, const Adjustment &rAdjustment);
 
     typedef std::map<OString, OString> WidgetTranslations;
     typedef std::map<OString, WidgetTranslations> Translations;
@@ -276,6 +278,8 @@ private:
         std::vector<WidgetAdjustmentMap> m_aTimeFormatterAdjustmentMaps;
         std::vector<WidgetAdjustmentMap> m_aDateFormatterAdjustmentMaps;
         std::vector<WidgetAdjustmentMap> m_aScrollAdjustmentMaps;
+        std::vector<WidgetAdjustmentMap> m_aSliderAdjustmentMaps;
+
         std::map<OString, Adjustment> m_aAdjustments;
 
         std::vector<ButtonImageWidgetMap> m_aButtonImageWidgetMaps;
@@ -350,7 +354,7 @@ private:
     bool        extractGroup(const OString &id, stringmap &rVec);
     bool        extractModel(const OString &id, stringmap &rVec);
     bool        extractBuffer(const OString &id, stringmap &rVec);
-    bool        extractScrollAdjustment(const OString &id, stringmap &rVec);
+    bool        extractAdjustmentToMap(const OString &id, stringmap &rVec, std::vector<WidgetAdjustmentMap>& rAdjustmentMap);
     bool        extractButtonImage(const OString &id, stringmap &rMap, bool bRadio);
     bool        extractStock(const OString &id, stringmap &rMap);
     void        extractMnemonicWidget(const OString &id, stringmap &rMap);

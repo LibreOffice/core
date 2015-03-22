@@ -42,6 +42,7 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/vclmedit.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/slider.hxx>
 #include <svdata.hxx>
 #include <svids.hrc>
 #include <window.h>
@@ -334,6 +335,20 @@ VclBuilder::VclBuilder(vcl::Window *pParent, const OUString& sUIDir, const OUStr
             mungeAdjustment(*pTarget, *pAdjustment);
     }
 
+    //Set Scale(Slider) adjustments
+    std::vector<WidgetAdjustmentMap>::iterator aIterator;
+    for (aIterator  = m_pParserState->m_aSliderAdjustmentMaps.begin();
+         aIterator != m_pParserState->m_aSliderAdjustmentMaps.end(); ++aIterator)
+    {
+        Slider* pTarget = dynamic_cast<Slider*>(get<vcl::Window>(aIterator->m_sID));
+        const Adjustment* pAdjustment = get_adjustment_by_name(aIterator->m_sValue);
+        SAL_WARN_IF(!pTarget || !pAdjustment, "vcl", "missing elements of scale(slider)/adjustment");
+        if (pTarget && pAdjustment)
+        {
+            mungeAdjustment(*pTarget, *pAdjustment);
+        }
+    }
+
     //Set size-groups when all widgets have been imported
     for (std::vector<SizeGroup>::iterator aI = m_pParserState->m_aSizeGroups.begin(),
         aEnd = m_pParserState->m_aSizeGroups.end(); aI != aEnd; ++aI)
@@ -586,6 +601,30 @@ OString VclBuilder::extractCustomProperty(VclBuilder::stringmap &rMap)
 
 namespace
 {
+    bool extractDrawValue(VclBuilder::stringmap& rMap)
+    {
+        bool bDrawValue = true;
+        VclBuilder::stringmap::iterator aFind = rMap.find(OString("draw_value"));
+        if (aFind != rMap.end())
+        {
+            bDrawValue = toBool(aFind->second);
+            rMap.erase(aFind);
+        }
+        return bDrawValue;
+    }
+
+    OString extractValuePos(VclBuilder::stringmap& rMap)
+    {
+        OString sRet("top");
+        VclBuilder::stringmap::iterator aFind = rMap.find(OString("value_pos"));
+        if (aFind != rMap.end())
+        {
+            sRet = aFind->second;
+            rMap.erase(aFind);
+        }
+        return sRet;
+    }
+
     OString extractTypeHint(VclBuilder::stringmap &rMap)
     {
         OString sRet("normal");
@@ -1054,12 +1093,12 @@ void VclBuilder::connectDateFormatterAdjustment(const OString &id, const OString
         m_pParserState->m_aDateFormatterAdjustmentMaps.push_back(WidgetAdjustmentMap(id, rAdjustment));
 }
 
-bool VclBuilder::extractScrollAdjustment(const OString &id, VclBuilder::stringmap &rMap)
+bool VclBuilder::extractAdjustmentToMap(const OString& id, VclBuilder::stringmap& rMap, std::vector<WidgetAdjustmentMap>& rAdjustmentMap)
 {
     VclBuilder::stringmap::iterator aFind = rMap.find(OString("adjustment"));
     if (aFind != rMap.end())
     {
-        m_pParserState->m_aScrollAdjustmentMaps.push_back(WidgetAdjustmentMap(id, aFind->second));
+        rAdjustmentMap.push_back(WidgetAdjustmentMap(id, aFind->second));
         rMap.erase(aFind);
         return true;
     }
@@ -1540,7 +1579,7 @@ vcl::Window *VclBuilder::makeObject(vcl::Window *pParent, const OString &name, c
     }
     else if (name == "GtkScrollbar")
     {
-        extractScrollAdjustment(id, rMap);
+        extractAdjustmentToMap(id, rMap, m_pParserState->m_aScrollAdjustmentMaps);
         bVertical = extractOrientation(rMap);
         if (bVertical)
             pWindow = new ScrollBar(pParent, WB_VERT);
@@ -1549,7 +1588,7 @@ vcl::Window *VclBuilder::makeObject(vcl::Window *pParent, const OString &name, c
     }
     else if (name == "GtkProgressBar")
     {
-        extractScrollAdjustment(id, rMap);
+        extractAdjustmentToMap(id, rMap, m_pParserState->m_aScrollAdjustmentMaps);
         bVertical = extractOrientation(rMap);
         if (bVertical)
             pWindow = new ProgressBar(pParent, WB_VERT);
@@ -1597,6 +1636,21 @@ vcl::Window *VclBuilder::makeObject(vcl::Window *pParent, const OString &name, c
     else if (name == "GtkSpinner")
     {
         pWindow = new Throbber(pParent, WB_3DLOOK);
+    }
+    else if (name == "GtkScale")
+    {
+        extractAdjustmentToMap(id, rMap, m_pParserState->m_aSliderAdjustmentMaps);
+        bool bDrawValue = extractDrawValue(rMap);
+        if (bDrawValue)
+        {
+            OString sValuePos = extractValuePos(rMap);
+            (void)sValuePos;
+        }
+        bVertical = extractOrientation(rMap);
+
+        WinBits nWinStyle = bVertical ? WB_VERT : WB_HORZ;
+
+        pWindow = new Slider(pParent, nWinStyle);
     }
     else if (name == "GtkToolbar")
     {
@@ -3434,6 +3488,30 @@ void VclBuilder::mungeAdjustment(DateField &rTarget, const Adjustment &rAdjustme
 }
 
 void VclBuilder::mungeAdjustment(ScrollBar &rTarget, const Adjustment &rAdjustment)
+{
+    for (stringmap::const_iterator aI = rAdjustment.begin(), aEnd = rAdjustment.end(); aI != aEnd; ++aI)
+    {
+        const OString &rKey = aI->first;
+        const OString &rValue = aI->second;
+
+        if (rKey == "upper")
+            rTarget.SetRangeMax(rValue.toInt32());
+        else if (rKey == "lower")
+            rTarget.SetRangeMin(rValue.toInt32());
+        else if (rKey == "value")
+            rTarget.SetThumbPos(rValue.toInt32());
+        else if (rKey == "step-increment")
+            rTarget.SetLineSize(rValue.toInt32());
+        else if (rKey == "page-increment")
+            rTarget.SetPageSize(rValue.toInt32());
+        else
+        {
+            SAL_INFO("vcl.layout", "unhandled property :" << rKey.getStr());
+        }
+    }
+}
+
+void VclBuilder::mungeAdjustment(Slider& rTarget, const Adjustment& rAdjustment)
 {
     for (stringmap::const_iterator aI = rAdjustment.begin(), aEnd = rAdjustment.end(); aI != aEnd; ++aI)
     {

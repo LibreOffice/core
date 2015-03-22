@@ -90,7 +90,9 @@ public:
                         { mbFullDrag = bEnable; }
     bool            IsDragEnabled() const { return mbFullDrag; }
 
+    void            SetRangeMin(long nNewRange);
     long            GetRangeMin() const { return mnMinRange; }
+    void            SetRangeMax(long nNewRange);
     long            GetRangeMax() const { return mnMaxRange; }
     void            SetRange( const Range& rRange );
     Range           GetRange() const { return Range( GetRangeMin(), GetRangeMax() ); }
