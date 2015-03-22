@@ -42,19 +42,23 @@ class ListBox;
 class ToolBox;
 class FloatingWindow;
 
-namespace {
-    #define SIDEBAR_LINE_WIDTH_GLOBAL_VALUE "PopupPanel_LineWidth"
+namespace
+{
+
+#define SIDEBAR_LINE_WIDTH_GLOBAL_VALUE "PopupPanel_LineWidth"
+
 } //end of anonymous namespace
 
-namespace svx { namespace sidebar {
+namespace svx
+{
+namespace sidebar
+{
 
 class PopupContainer;
 class LineWidthControl;
 
-
-class LinePropertyPanel
-:   public PanelLayout,
-    public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
+class LinePropertyPanel : public PanelLayout,
+                          public sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
 {
 public:
     static LinePropertyPanel* Create(
@@ -81,53 +85,54 @@ public:
 
 private:
     //ui controls
-    FixedText*                        mpFTWidth;
-    ToolBox*                          mpTBWidth;
-    FixedText*                        mpFTStyle;
-    ListBox*                          mpLBStyle;
-    FixedText*                        mpFTTrancparency;
-    MetricField*                      mpMFTransparent;
-    FixedText*                        mpFTArrow;
-    ListBox*                          mpLBStart;
-    ListBox*                          mpLBEnd;
-    FixedText*                        mpFTEdgeStyle;
-    ListBox*                          mpLBEdgeStyle;
-    FixedText*                        mpFTCapStyle;
-    ListBox*                          mpLBCapStyle;
+    FixedText*   mpFTWidth;
+    ToolBox*     mpTBWidth;
+    FixedText*   mpFTStyle;
+    ListBox*     mpLBStyle;
+    FixedText*   mpFTTrancparency;
+    MetricField* mpMFTransparent;
+    FixedText*   mpFTArrow;
+    ListBox*     mpLBStart;
+    ListBox*     mpLBEnd;
+    FixedText*   mpFTEdgeStyle;
+    ListBox*     mpLBEdgeStyle;
+    FixedText*   mpFTCapStyle;
+    ListBox*     mpLBCapStyle;
 
     //ControllerItem
-    ::sfx2::sidebar::ControllerItem                         maStyleControl;
-    ::sfx2::sidebar::ControllerItem                         maDashControl;
-    ::sfx2::sidebar::ControllerItem                         maWidthControl;
-    ::sfx2::sidebar::ControllerItem                         maStartControl;
-    ::sfx2::sidebar::ControllerItem                         maEndControl;
-    ::sfx2::sidebar::ControllerItem                         maLineEndListControl;
-    ::sfx2::sidebar::ControllerItem                         maLineStyleListControl;
-    ::sfx2::sidebar::ControllerItem                         maTransControl;
-    ::sfx2::sidebar::ControllerItem                         maEdgeStyle;
-    ::sfx2::sidebar::ControllerItem                         maCapStyle;
+    sfx2::sidebar::ControllerItem maStyleControl;
+    sfx2::sidebar::ControllerItem maDashControl;
+    sfx2::sidebar::ControllerItem maWidthControl;
+    sfx2::sidebar::ControllerItem maStartControl;
+    sfx2::sidebar::ControllerItem maEndControl;
+    sfx2::sidebar::ControllerItem maLineEndListControl;
+    sfx2::sidebar::ControllerItem maLineStyleListControl;
+    sfx2::sidebar::ControllerItem maTransControl;
+    sfx2::sidebar::ControllerItem maEdgeStyle;
+    sfx2::sidebar::ControllerItem maCapStyle;
 
-    ::boost::scoped_ptr< XLineStyleItem >                   mpStyleItem;
-    ::boost::scoped_ptr< XLineDashItem >                    mpDashItem;
-    sal_uInt16                                              mnTrans;
-    SfxMapUnit                                              meMapUnit;
-    sal_Int32                                               mnWidthCoreValue;
-    XLineEndListRef                                         mxLineEndList;
-    XDashListRef                                            mxLineStyleList;
-    ::boost::scoped_ptr< XLineStartItem >                   mpStartItem;
-    ::boost::scoped_ptr< XLineEndItem >                     mpEndItem;
+    boost::scoped_ptr<XLineStyleItem> mpStyleItem;
+    boost::scoped_ptr<XLineDashItem>  mpDashItem;
+
+    sal_uInt16      mnTrans;
+    SfxMapUnit      meMapUnit;
+    sal_Int32       mnWidthCoreValue;
+    XLineEndListRef mxLineEndList;
+    XDashListRef    mxLineStyleList;
+    boost::scoped_ptr<XLineStartItem> mpStartItem;
+    boost::scoped_ptr<XLineEndItem>   mpEndItem;
 
     //popup windows
     LineWidthPopup maLineWidthPopup;
 
     // images from resource
-    Image                                                   maIMGNone;
+    Image maIMGNone;
 
     // multi-images
-    ::boost::scoped_array<Image>                            mpIMGWidthIcon;
+    boost::scoped_array<Image> mpIMGWidthIcon;
 
-    css::uno::Reference< css::frame::XFrame >                   mxFrame;
-    SfxBindings*                                            mpBindings;
+    css::uno::Reference<css::frame::XFrame> mxFrame;
+    SfxBindings* mpBindings;
 
     /// bitfield
     bool                mbWidthValuable : 1;

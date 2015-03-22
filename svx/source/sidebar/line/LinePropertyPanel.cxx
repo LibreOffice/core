@@ -53,104 +53,102 @@
 
 using namespace css;
 using namespace css::uno;
-using ::sfx2::sidebar::Theme;
+using sfx2::sidebar::Theme;
 
 const char UNO_SELECTWIDTH[] = ".uno:SelectWidth";
 
-namespace {
-    void FillLineEndListBox(ListBox& rListBoxStart, ListBox& rListBoxEnd, const XLineEndList& rList)
+namespace
+{
+
+void FillLineEndListBox(ListBox& rListBoxStart, ListBox& rListBoxEnd, const XLineEndList& rList)
+{
+    const sal_uInt32 nCount(rList.Count());
+    const OUString sNone(SVX_RESSTR(RID_SVXSTR_NONE));
+
+    rListBoxStart.SetUpdateMode(false);
+    rListBoxEnd.SetUpdateMode(false);
+
+    rListBoxStart.Clear();
+    rListBoxEnd.Clear();
+
+    // add 'none' entries
+    rListBoxStart.InsertEntry(sNone);
+    rListBoxEnd.InsertEntry(sNone);
+
+    for(sal_uInt32 i(0); i < nCount; i++)
     {
-        const sal_uInt32 nCount(rList.Count());
-        const OUString sNone(SVX_RESSTR(RID_SVXSTR_NONE));
+        XLineEndEntry* pEntry = rList.GetLineEnd(i);
+        const Bitmap aBitmap = const_cast< XLineEndList& >(rList).GetUiBitmap(i);
 
-        rListBoxStart.SetUpdateMode(false);
-        rListBoxEnd.SetUpdateMode(false);
-
-        rListBoxStart.Clear();
-        rListBoxEnd.Clear();
-
-        // add 'none' entries
-        rListBoxStart.InsertEntry(sNone);
-        rListBoxEnd.InsertEntry(sNone);
-
-        for(sal_uInt32 i(0); i < nCount; i++)
+        if(!aBitmap.IsEmpty())
         {
-            XLineEndEntry* pEntry = rList.GetLineEnd(i);
-            const Bitmap aBitmap = const_cast< XLineEndList& >(rList).GetUiBitmap(i);
+            Bitmap aCopyStart(aBitmap);
+            Bitmap aCopyEnd(aBitmap);
 
-            if(!aBitmap.IsEmpty())
-            {
-                Bitmap aCopyStart(aBitmap);
-                Bitmap aCopyEnd(aBitmap);
-                // delete pBitmap;
-                const Size aBmpSize(aCopyStart.GetSizePixel());
-                const Rectangle aCropRectStart(Point(), Size(aBmpSize.Width() / 2, aBmpSize.Height()));
-                const Rectangle aCropRectEnd(Point(aBmpSize.Width() / 2, 0), Size(aBmpSize.Width() / 2, aBmpSize.Height()));
+            const Size aBmpSize(aCopyStart.GetSizePixel());
+            const Rectangle aCropRectStart(Point(), Size(aBmpSize.Width() / 2, aBmpSize.Height()));
+            const Rectangle aCropRectEnd(Point(aBmpSize.Width() / 2, 0), Size(aBmpSize.Width() / 2, aBmpSize.Height()));
 
-                aCopyStart.Crop(aCropRectStart);
-                rListBoxStart.InsertEntry(
-                    pEntry->GetName(),
-                    Image(aCopyStart));
+            aCopyStart.Crop(aCropRectStart);
+            rListBoxStart.InsertEntry(
+                pEntry->GetName(),
+                Image(aCopyStart));
 
-                aCopyEnd.Crop(aCropRectEnd);
-                rListBoxEnd.InsertEntry(
-                    pEntry->GetName(),
-                    Image(aCopyEnd));
-            }
-            else
-            {
-                rListBoxStart.InsertEntry(pEntry->GetName());
-                rListBoxEnd.InsertEntry(pEntry->GetName());
-            }
+            aCopyEnd.Crop(aCropRectEnd);
+            rListBoxEnd.InsertEntry(
+                pEntry->GetName(),
+                Image(aCopyEnd));
         }
-
-        rListBoxStart.SetUpdateMode(true);
-        rListBoxEnd.SetUpdateMode(true);
+        else
+        {
+            rListBoxStart.InsertEntry(pEntry->GetName());
+            rListBoxEnd.InsertEntry(pEntry->GetName());
+        }
     }
 
-    void FillLineStyleListBox(ListBox& rListBox, const XDashList& rList)
+    rListBoxStart.SetUpdateMode(true);
+    rListBoxEnd.SetUpdateMode(true);
+}
+
+void FillLineStyleListBox(ListBox& rListBox, const XDashList& rList)
+{
+    const sal_uInt32 nCount(rList.Count());
+    rListBox.SetUpdateMode(false);
+
+    rListBox.Clear();
+
+    // entry for 'none'
+    rListBox.InsertEntry(rList.GetStringForUiNoLine());
+
+    // entry for solid line
+    rListBox.InsertEntry(rList.GetStringForUiSolidLine(),
+            Image( rList.GetBitmapForUISolidLine()));
+
+    for(sal_uInt32 i(0); i < nCount; i++)
     {
-        const sal_uInt32 nCount(rList.Count());
-        rListBox.SetUpdateMode(false);
+        XDashEntry* pEntry = rList.GetDash(i);
+        const Bitmap aBitmap = const_cast< XDashList& >(rList).GetUiBitmap(i);
 
-        rListBox.Clear();
-
-        // entry for 'none'
-        rListBox.InsertEntry(rList.GetStringForUiNoLine());
-
-        // entry for solid line
-        rListBox.InsertEntry(rList.GetStringForUiSolidLine(),
-                Image( rList.GetBitmapForUISolidLine()));
-
-        for(sal_uInt32 i(0); i < nCount; i++)
+        if(!aBitmap.IsEmpty())
         {
-            XDashEntry* pEntry = rList.GetDash(i);
-            const Bitmap aBitmap = const_cast< XDashList& >(rList).GetUiBitmap(i);
-
-            if(!aBitmap.IsEmpty())
-            {
-                rListBox.InsertEntry(
-                    pEntry->GetName(),
-                    Image(aBitmap));
-                // delete pBitmap;
-            }
-            else
-            {
-                rListBox.InsertEntry(pEntry->GetName());
-            }
+            rListBox.InsertEntry(pEntry->GetName(), Image(aBitmap));
         }
-
-        rListBox.SetUpdateMode(true);
+        else
+        {
+            rListBox.InsertEntry(pEntry->GetName());
+        }
     }
+
+    rListBox.SetUpdateMode(true);
+}
+
 } // end of anonymous namespace
-
-// namespace open
 
 namespace svx { namespace sidebar {
 
 LinePropertyPanel::LinePropertyPanel(
     vcl::Window* pParent,
-    const css::uno::Reference<css::frame::XFrame>& rxFrame,
+    const uno::Reference<frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
 :   PanelLayout(pParent, "LinePropertyPanel", "svx/ui/sidebarline.ui", rxFrame),
     maStyleControl(SID_ATTR_LINE_STYLE, *pBindings, *this),
@@ -194,13 +192,9 @@ LinePropertyPanel::LinePropertyPanel(
     Initialize();
 }
 
-
-
 LinePropertyPanel::~LinePropertyPanel()
 {
 }
-
-
 
 void LinePropertyPanel::Initialize()
 {
@@ -235,16 +229,16 @@ void LinePropertyPanel::Initialize()
     SelectEndStyle(false);
     aLink = LINK( this, LinePropertyPanel, ChangeStartHdl );
     mpLBStart->SetSelectHdl( aLink );
-    mpLBStart->SetAccessibleName(OUString( "Beginning Style")); //wj acc
+    mpLBStart->SetAccessibleName(OUString("Beginning Style")); //wj acc
     mpLBStart->AdaptDropDownLineCountToMaximum();
     aLink = LINK( this, LinePropertyPanel, ChangeEndHdl );
     mpLBEnd->SetSelectHdl( aLink );
-    mpLBEnd->SetAccessibleName(OUString( "Ending Style"));  //wj acc
+    mpLBEnd->SetAccessibleName(OUString("Ending Style"));  //wj acc
     mpLBEnd->AdaptDropDownLineCountToMaximum();
 
     aLink = LINK(this, LinePropertyPanel, ChangeTransparentHdl);
     mpMFTransparent->SetModifyHdl(aLink);
-    mpMFTransparent->SetAccessibleName(OUString( "Transparency"));  //wj acc
+    mpMFTransparent->SetAccessibleName(OUString("Transparency"));  //wj acc
 
     mpTBWidth->SetAccessibleRelationLabeledBy(mpFTWidth);
     mpLBStyle->SetAccessibleRelationLabeledBy(mpFTStyle);
@@ -254,14 +248,12 @@ void LinePropertyPanel::Initialize()
 
     aLink = LINK( this, LinePropertyPanel, ChangeEdgeStyleHdl );
     mpLBEdgeStyle->SetSelectHdl( aLink );
-    mpLBEdgeStyle->SetAccessibleName(OUString( "Corner Style"));
+    mpLBEdgeStyle->SetAccessibleName(OUString("Corner Style"));
 
     aLink = LINK( this, LinePropertyPanel, ChangeCapStyleHdl );
     mpLBCapStyle->SetSelectHdl( aLink );
-    mpLBCapStyle->SetAccessibleName(OUString( "Cap Style"));
+    mpLBCapStyle->SetAccessibleName(OUString("Cap Style"));
 }
-
-
 
 void LinePropertyPanel::SetupIcons(void)
 {
@@ -275,11 +267,9 @@ void LinePropertyPanel::SetupIcons(void)
     }
 }
 
-
-
 LinePropertyPanel* LinePropertyPanel::Create (
     vcl::Window* pParent,
-    const css::uno::Reference<css::frame::XFrame>& rxFrame,
+    const uno::Reference<frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
 {
     if (pParent == NULL)
@@ -289,33 +279,20 @@ LinePropertyPanel* LinePropertyPanel::Create (
     if (pBindings == NULL)
         throw lang::IllegalArgumentException("no SfxBindings given to LinePropertyPanel::Create", NULL, 2);
 
-    return new LinePropertyPanel(
-        pParent,
-        rxFrame,
-        pBindings);
+    return new LinePropertyPanel(pParent, rxFrame, pBindings);
 }
 
-
-
-
-void LinePropertyPanel::DataChanged(
-    const DataChangedEvent& rEvent)
+void LinePropertyPanel::DataChanged(const DataChangedEvent& /*rEvent*/)
 {
-    (void)rEvent;
-
     SetupIcons();
 }
-
-
-
 
 void LinePropertyPanel::NotifyItemUpdate(
     sal_uInt16 nSID,
     SfxItemState eState,
     const SfxPoolItem* pState,
-    const bool bIsEnabled)
+    const bool /*bIsEnabled*/)
 {
-    (void)bIsEnabled;
     const bool bDisabled(SfxItemState::DISABLED == eState);
 
     switch(nSID)
@@ -523,23 +500,23 @@ void LinePropertyPanel::NotifyItemUpdate(
 
                     switch(pItem->GetValue())
                     {
-                        case com::sun::star::drawing::LineJoint_MIDDLE:
-                        case com::sun::star::drawing::LineJoint_ROUND:
+                        case drawing::LineJoint_MIDDLE:
+                        case drawing::LineJoint_ROUND:
                         {
                             nEntryPos = 1;
                             break;
                         }
-                        case com::sun::star::drawing::LineJoint_NONE:
+                        case drawing::LineJoint_NONE:
                         {
                             nEntryPos = 2;
                             break;
                         }
-                        case com::sun::star::drawing::LineJoint_MITER:
+                        case drawing::LineJoint_MITER:
                         {
                             nEntryPos = 3;
                             break;
                         }
-                        case com::sun::star::drawing::LineJoint_BEVEL:
+                        case drawing::LineJoint_BEVEL:
                         {
                             nEntryPos = 4;
                             break;
@@ -583,17 +560,17 @@ void LinePropertyPanel::NotifyItemUpdate(
 
                     switch(pItem->GetValue())
                     {
-                        case com::sun::star::drawing::LineCap_BUTT:
+                        case drawing::LineCap_BUTT:
                         {
                             nEntryPos = 1;
                             break;
                         }
-                        case com::sun::star::drawing::LineCap_ROUND:
+                        case drawing::LineCap_ROUND:
                         {
                             nEntryPos = 2;
                             break;
                         }
-                        case com::sun::star::drawing::LineCap_SQUARE:
+                        case drawing::LineCap_SQUARE:
                         {
                             nEntryPos = 3;
                             break;
@@ -616,12 +593,6 @@ void LinePropertyPanel::NotifyItemUpdate(
         }
     }
 }
-
-
-
-
-
-
 
 IMPL_LINK_NOARG(LinePropertyPanel, ChangeLineStyleHdl)
 {
@@ -661,8 +632,6 @@ IMPL_LINK_NOARG(LinePropertyPanel, ChangeLineStyleHdl)
     return 0;
 }
 
-
-
 IMPL_LINK(LinePropertyPanel, ChangeStartHdl, void*, EMPTYARG)
 {
     sal_Int32  nPos = mpLBStart->GetSelectEntryPos();
@@ -677,9 +646,6 @@ IMPL_LINK(LinePropertyPanel, ChangeStartHdl, void*, EMPTYARG)
     }
     return 0;
 }
-
-
-
 
 IMPL_LINK(LinePropertyPanel, ChangeEndHdl, void*, EMPTYARG)
 {
@@ -696,9 +662,6 @@ IMPL_LINK(LinePropertyPanel, ChangeEndHdl, void*, EMPTYARG)
     return 0;
 }
 
-
-
-
 IMPL_LINK(LinePropertyPanel, ChangeEdgeStyleHdl, void*, EMPTYARG)
 {
     const sal_Int32 nPos(mpLBEdgeStyle->GetSelectEntryPos());
@@ -711,22 +674,22 @@ IMPL_LINK(LinePropertyPanel, ChangeEdgeStyleHdl, void*, EMPTYARG)
         {
             case 0: // rounded
             {
-                pItem.reset(new XLineJointItem(com::sun::star::drawing::LineJoint_ROUND));
+                pItem.reset(new XLineJointItem(drawing::LineJoint_ROUND));
                 break;
             }
             case 1: // none
             {
-                pItem.reset(new XLineJointItem(com::sun::star::drawing::LineJoint_NONE));
+                pItem.reset(new XLineJointItem(drawing::LineJoint_NONE));
                 break;
             }
             case 2: // mitered
             {
-                pItem.reset(new XLineJointItem(com::sun::star::drawing::LineJoint_MITER));
+                pItem.reset(new XLineJointItem(drawing::LineJoint_MITER));
                 break;
             }
             case 3: // beveled
             {
-                pItem.reset(new XLineJointItem(com::sun::star::drawing::LineJoint_BEVEL));
+                pItem.reset(new XLineJointItem(drawing::LineJoint_BEVEL));
                 break;
             }
         }
@@ -735,9 +698,6 @@ IMPL_LINK(LinePropertyPanel, ChangeEdgeStyleHdl, void*, EMPTYARG)
     }
     return 0;
 }
-
-
-
 
 IMPL_LINK(LinePropertyPanel, ChangeCapStyleHdl, void*, EMPTYARG)
 {
@@ -751,17 +711,17 @@ IMPL_LINK(LinePropertyPanel, ChangeCapStyleHdl, void*, EMPTYARG)
         {
             case 0: // flat
             {
-                pItem.reset(new XLineCapItem(com::sun::star::drawing::LineCap_BUTT));
+                pItem.reset(new XLineCapItem(drawing::LineCap_BUTT));
                 break;
             }
             case 1: // round
             {
-                pItem.reset(new XLineCapItem(com::sun::star::drawing::LineCap_ROUND));
+                pItem.reset(new XLineCapItem(drawing::LineCap_ROUND));
                 break;
             }
             case 2: // square
             {
-                pItem.reset(new XLineCapItem(com::sun::star::drawing::LineCap_SQUARE));
+                pItem.reset(new XLineCapItem(drawing::LineCap_SQUARE));
                 break;
             }
         }
@@ -770,9 +730,6 @@ IMPL_LINK(LinePropertyPanel, ChangeCapStyleHdl, void*, EMPTYARG)
     }
     return 0;
 }
-
-
-
 
 IMPL_LINK(LinePropertyPanel, ToolboxWidthSelectHdl,ToolBox*, pToolBox)
 {
@@ -784,9 +741,6 @@ IMPL_LINK(LinePropertyPanel, ToolboxWidthSelectHdl,ToolBox*, pToolBox)
     return 0;
 }
 
-
-
-
 IMPL_LINK( LinePropertyPanel, ChangeTransparentHdl, void *, EMPTYARG )
 {
     sal_uInt16 nVal = (sal_uInt16)mpMFTransparent->GetValue();
@@ -796,35 +750,24 @@ IMPL_LINK( LinePropertyPanel, ChangeTransparentHdl, void *, EMPTYARG )
     return 0L;
 }
 
-
-
-
 PopupControl* LinePropertyPanel::CreateLineWidthPopupControl (PopupContainer* pParent)
 {
     return new LineWidthControl(pParent, *this);
 }
-
-
-
 
 void LinePropertyPanel::EndLineWidthPopupMode (void)
 {
     maLineWidthPopup.Hide();
 }
 
-
-
-
 void LinePropertyPanel::SetWidthIcon(int n)
 {
     const sal_uInt16 nIdWidth = mpTBWidth->GetItemId(UNO_SELECTWIDTH);
-    if(n==0)
+    if (n == 0)
         mpTBWidth->SetItemImage( nIdWidth, maIMGNone);
     else
         mpTBWidth->SetItemImage( nIdWidth, mpIMGWidthIcon[n-1]);
 }
-
-
 
 void LinePropertyPanel::SetWidthIcon()
 {
@@ -857,15 +800,11 @@ void LinePropertyPanel::SetWidthIcon()
 
 }
 
-
-
 void LinePropertyPanel::SetWidth(long nWidth)
 {
     mnWidthCoreValue = nWidth;
     mbWidthValuable = true;
 }
-
-
 
 void  LinePropertyPanel::FillLineEndList()
 {
@@ -891,8 +830,6 @@ void  LinePropertyPanel::FillLineEndList()
     }
 }
 
-
-
 void  LinePropertyPanel::FillLineStyleList()
 {
     SfxObjectShell* pSh = SfxObjectShell::Current();
@@ -914,8 +851,6 @@ void  LinePropertyPanel::FillLineStyleList()
         mpLBStyle->Disable();
     }
 }
-
-
 
 void LinePropertyPanel::SelectLineStyle()
 {
@@ -1023,7 +958,6 @@ void LinePropertyPanel::SelectEndStyle(bool bStart)
     }
 }
 
-
-} } // end of namespace svx::sidebar
+}} // end of namespace svx::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
