@@ -34,6 +34,7 @@
 #include <osl/diagnose.h>
 #include <rtl/instance.hxx>
 #include <rtl/uri.hxx>
+#include <memory>
 #include <set>
 
 #include "oox/core/filterbase.hxx"
@@ -118,10 +119,10 @@ enum FilterDirection
 
 struct FilterBaseImpl
 {
-    typedef ::boost::shared_ptr< GraphicHelper >        GraphicHelperRef;
-    typedef ::boost::shared_ptr< ModelObjectHelper >    ModelObjHelperRef;
-    typedef ::boost::shared_ptr< OleObjectHelper >      OleObjHelperRef;
-    typedef ::boost::shared_ptr< VbaProject >           VbaProjectRef;
+    typedef std::shared_ptr< GraphicHelper >        GraphicHelperRef;
+    typedef std::shared_ptr< ModelObjectHelper >    ModelObjHelperRef;
+    typedef std::shared_ptr< OleObjectHelper >      OleObjHelperRef;
+    typedef std::shared_ptr< VbaProject >           VbaProjectRef;
 
     FilterDirection     meDirection;
     SequenceAsHashMap   maArguments;
