@@ -166,8 +166,8 @@ LinePropertyPanel::LinePropertyPanel(
     mnTrans(0),
     meMapUnit(SFX_MAPUNIT_MM),
     mnWidthCoreValue(0),
-    mpStartItem(0),
-    mpEndItem(0),
+    mpStartItem(),
+    mpEndItem(),
     maLineWidthPopup(this, ::boost::bind(&LinePropertyPanel::CreateLineWidthPopupControl, this, _1)),
     maIMGNone(SVX_RES(IMG_NONE_ICON)),
     mpIMGWidthIcon(),
@@ -637,7 +637,7 @@ IMPL_LINK(LinePropertyPanel, ChangeStartHdl, void*, EMPTYARG)
     sal_Int32  nPos = mpLBStart->GetSelectEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND && mpLBStart->IsValueChangedFromSaved() )
     {
-        boost::scoped_ptr<XLineStartItem> pItem;
+        std::unique_ptr<XLineStartItem> pItem;
         if( nPos == 0 )
             pItem.reset(new XLineStartItem());
         else if( mxLineEndList.is() && mxLineEndList->Count() > (long) ( nPos - 1 ) )
@@ -652,7 +652,7 @@ IMPL_LINK(LinePropertyPanel, ChangeEndHdl, void*, EMPTYARG)
     sal_Int32  nPos = mpLBEnd->GetSelectEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND && mpLBEnd->IsValueChangedFromSaved() )
     {
-        boost::scoped_ptr<XLineEndItem> pItem;
+        std::unique_ptr<XLineEndItem> pItem;
         if( nPos == 0 )
             pItem.reset(new XLineEndItem());
         else if( mxLineEndList.is() && mxLineEndList->Count() > (long) ( nPos - 1 ) )
@@ -668,7 +668,7 @@ IMPL_LINK(LinePropertyPanel, ChangeEdgeStyleHdl, void*, EMPTYARG)
 
     if(LISTBOX_ENTRY_NOTFOUND != nPos && mpLBEdgeStyle->IsValueChangedFromSaved())
     {
-        boost::scoped_ptr<XLineJointItem> pItem;
+        std::unique_ptr<XLineJointItem> pItem;
 
         switch(nPos)
         {
@@ -705,7 +705,7 @@ IMPL_LINK(LinePropertyPanel, ChangeCapStyleHdl, void*, EMPTYARG)
 
     if(LISTBOX_ENTRY_NOTFOUND != nPos && mpLBCapStyle->IsValueChangedFromSaved())
     {
-        boost::scoped_ptr<XLineCapItem> pItem;
+        std::unique_ptr<XLineCapItem> pItem;
 
         switch(nPos)
         {

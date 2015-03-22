@@ -25,7 +25,6 @@
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/field.hxx>
-#include <boost/scoped_ptr.hpp>
 #include <boost/scoped_array.hpp>
 #include <svx/sidebar/PanelLayout.hxx>
 #include <svx/xtable.hxx>
@@ -111,16 +110,16 @@ private:
     sfx2::sidebar::ControllerItem maEdgeStyle;
     sfx2::sidebar::ControllerItem maCapStyle;
 
-    boost::scoped_ptr<XLineStyleItem> mpStyleItem;
-    boost::scoped_ptr<XLineDashItem>  mpDashItem;
+    std::unique_ptr<XLineStyleItem> mpStyleItem;
+    std::unique_ptr<XLineDashItem>  mpDashItem;
 
     sal_uInt16      mnTrans;
     SfxMapUnit      meMapUnit;
     sal_Int32       mnWidthCoreValue;
     XLineEndListRef mxLineEndList;
     XDashListRef    mxLineStyleList;
-    boost::scoped_ptr<XLineStartItem> mpStartItem;
-    boost::scoped_ptr<XLineEndItem>   mpEndItem;
+    std::unique_ptr<XLineStartItem> mpStartItem;
+    std::unique_ptr<XLineEndItem>   mpEndItem;
 
     //popup windows
     LineWidthPopup maLineWidthPopup;
