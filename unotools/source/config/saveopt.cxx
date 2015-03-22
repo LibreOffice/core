@@ -1005,6 +1005,30 @@ SvtSaveOptions::ODFDefaultVersion SvtSaveOptions::GetODFDefaultVersion() const
     return pImp->pSaveOpt->GetODFDefaultVersion();
 }
 
+SvtSaveOptions::ODFSaneDefaultVersion SvtSaveOptions::GetODFSaneDefaultVersion() const
+{
+    const ODFSaneDefaultVersion NOW_CURRENT_LATEST = ODFSVER_012_EXTENDED;
+
+    switch (pImp->pSaveOpt->GetODFDefaultVersion())
+    {
+        default:
+            assert(!"map new ODFDefaultVersion to ODFSaneDefaultVersion");
+            break;
+        case ODFVER_UNKNOWN:
+        case ODFVER_LATEST:
+            return NOW_CURRENT_LATEST;
+        case ODFVER_010:
+            return ODFSVER_010;
+        case ODFVER_011:
+            return ODFSVER_011;
+        case ODFVER_012:
+            return ODFSVER_012;
+        case ODFVER_012_EXT_COMPAT:
+            return ODFSVER_012_EXT_COMPAT;
+    }
+    return NOW_CURRENT_LATEST;
+}
+
 bool SvtSaveOptions::IsUseSHA1InODF12() const
 {
     return pImp->pSaveOpt->IsUseSHA1InODF12();

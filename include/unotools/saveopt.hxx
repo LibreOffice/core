@@ -51,7 +51,14 @@ public:
         E_USERAUTOSAVE,
     };
 
-    // keep enum values sorted that a less or greater compare maps to older and newer versions!
+    /** Keep enum values sorted that a less or greater compare maps to older
+        and newer versions.
+        Do not change values, they are stored in the configuration.
+        ODFVER_LATEST designates the "current greatest and latest".
+        When adding a new value or ODFVER_LATEST designates a new real version
+        (plus extensions) adjust the mapping in
+        SvtSaveOptions::GetODFSaneDefaultVersion().
+     */
     enum ODFDefaultVersion
     {
         ODFVER_UNKNOWN = 0, // unknown
@@ -60,9 +67,21 @@ public:
         DO_NOT_USE = 3,         // Do not use this, only here for compatibility with pre OOo 3.2 configuration
         ODFVER_012 = 4,         // ODF 1.2
         ODFVER_012_EXT_COMPAT = 8, // ODF 1.2 extended, but with compatibility fallbacks
-        ODFVER_013 = 9,         // ODF 1.3
 
         ODFVER_LATEST = SAL_MAX_ENUM,      // ODF latest version with enhancements
+    };
+
+    /// Enums that allow a sane comparison of versions, without LATEST.
+    enum ODFSaneDefaultVersion
+    {
+        ODFSVER_EXTENDED = 1,       // bit designating extensions are allowed
+        ODFSVER_010 = 2,            // ODF 1.0
+        ODFSVER_011 = 4,            // ODF 1.1
+        ODFSVER_012 = 6,            // ODF 1.2
+        ODFSVER_012_EXT_COMPAT = 9, // ODF 1.2 extended, but with compatibility fallbacks
+        ODFSVER_012_EXTENDED = 11,  // ODF 1.2 extended
+        ODFSVER_013 = 12,           // ODF 1.3
+        ODFSVER_013_EXTENDED = 13   // ODF 1.3 extended
     };
 
     SvtSaveOptions();
@@ -117,6 +136,7 @@ public:
 
     void                    SetODFDefaultVersion( ODFDefaultVersion eVersion );
     ODFDefaultVersion       GetODFDefaultVersion() const;
+    ODFSaneDefaultVersion   GetODFSaneDefaultVersion() const;
 
     bool                IsUseSHA1InODF12() const;
 
