@@ -779,7 +779,7 @@ Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getTableTypes(  ) throw(SQ
     Reference< XResultSet > xRef = pResult;
 
     static ODatabaseMetaDataResultSet::ORows aRows;
-    static const OUString aTable("TABLE");
+    static const char aTable[]="TABLE";
 
     if (aRows.empty())
     {
