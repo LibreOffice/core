@@ -1298,7 +1298,9 @@ void XclExpDataBar::SaveXml( XclExpXmlStream& rStrm )
             XML_priority, OString::number( mnPriority + 1 ).getStr(),
             FSEND );
 
-    rWorksheet->startElement( XML_dataBar, FSEND );
+    rWorksheet->startElement( XML_dataBar,
+                                XML_showValue, OString::number(!mrFormat.GetDataBarData()->mbOnlyBar),
+            FSEND );
 
     mpCfvoLowerLimit->SaveXml(rStrm);
     mpCfvoUpperLimit->SaveXml(rStrm);
