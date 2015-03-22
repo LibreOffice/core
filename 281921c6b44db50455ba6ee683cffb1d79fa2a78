@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a29b11f_a998c56b",
+        "filename": "svx/source/svdraw/svdcrtv.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 581,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2015-03-22T20:51:55Z",
+      "side": 1,
+      "message": "CheckMinMoved can change the value of bMinMoved and IsMinMoved returns that value, so this change here isn\u0027t safe because the old code has bMerk with the old bMinMoved value and the new with the new bMinMoved value",
+      "revId": "281921c6b44db50455ba6ee683cffb1d79fa2a78",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
