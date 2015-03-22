@@ -3138,7 +3138,7 @@ bool SdrObjCustomShape::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegf
             // mirror polygon and move it a bit
             Polygon aPol0(aPol);
             aPol[0]=aPol0[1]; // This was WRONG for vertical (!)
-            aPol[1]=aPol0[0]; // #i121932# Despite my own coment above
+            aPol[1]=aPol0[0]; // #i121932# Despite my own comment above
             aPol[2]=aPol0[3]; // it was *not* wrong even when the reordering
             aPol[3]=aPol0[2]; // *seems* to be specific for X-Mirrorings. Oh
             aPol[4]=aPol0[1]; // will I be happy when this old stuff is |gone| with aw080 (!)
