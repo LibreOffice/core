@@ -91,7 +91,7 @@ OUString SAL_CALL SmFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
         // 200 should be enough for the XML
         // version, encoding and !DOCTYPE
         // stuff I hope?
-        const sal_uInt16 nBufferSize = 200;
+        static const sal_uInt16 nBufferSize = 200;
         char aBuffer[nBufferSize+1];
         aBuffer[nBufferSize] = 0;
         pInStrm->Seek( STREAM_SEEK_TO_BEGIN );

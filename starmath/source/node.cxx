@@ -1217,7 +1217,7 @@ bool IsPointInLine(const Point &rPoint1,
     OSL_ENSURE(rHeading2 != Point(), "Sm : 0 vector");
 
     bool bRes = false;
-    const double eps = 5.0 * DBL_EPSILON;
+    static const double eps = 5.0 * DBL_EPSILON;
 
     double fLambda;
     if (labs(rHeading2.X()) > labs(rHeading2.Y()))
@@ -1243,7 +1243,7 @@ sal_uInt16 GetLineIntersectionPoint(Point &rResult,
     OSL_ENSURE(rHeading2 != Point(), "Sm : 0 vector");
 
     sal_uInt16 nRes = 1;
-    const double eps = 5.0 * DBL_EPSILON;
+    static const double eps = 5.0 * DBL_EPSILON;
 
     // are the direction vectors linearly dependent?
     double  fDet = Det(rHeading1, rHeading2);
