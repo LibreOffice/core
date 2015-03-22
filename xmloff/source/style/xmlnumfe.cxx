@@ -669,7 +669,7 @@ void SvXMLNumFmtExport::WriteScientificElement_Impl(
     if ( nExpInterval >= 0 )
     {
         // Export only for 1.2 with extensions or 1.3 and later.
-        SvtSaveOptions::ODFDefaultVersion eVersion = SvtSaveOptions().GetODFDefaultVersion();
+        SvtSaveOptions::ODFDefaultVersion eVersion = rExport.getDefaultVersion();
         if (eVersion > SvtSaveOptions::ODFVER_012)
         {
             // TODO: change this once the fouled up ODFVER_LATEST is a real
@@ -1589,7 +1589,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                     break;
                 case NF_SYMBOLTYPE_STAR :
                     // export only if ODF 1.2 extensions are enabled
-                    if( SvtSaveOptions().GetODFDefaultVersion() > SvtSaveOptions::ODFVER_012 )
+                    if( rExport.getDefaultVersion() > SvtSaveOptions::ODFVER_012 )
                     {
                         if ( pElemStr && pElemStr->getLength() > 1 )
                             WriteRepeatedElement_Impl( (*pElemStr)[1] );
