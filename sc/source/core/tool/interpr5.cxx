@@ -1758,14 +1758,8 @@ void ScInterpreter::ScSumXMY2()
     }
     else
     {
-        double fVal, fSum = 0.0;
-        SCSIZE nCount = pResMat->GetElementCount();
-        for (SCSIZE i = 0; i < nCount; i++)
-            if (!pResMat->IsString(i))
-            {
-                fVal = pResMat->GetDouble(i);
-                fSum += fVal * fVal;
-            }
+        ScMatrix::IterateResult aRes = pResMat->SumSquare(false);
+        double fSum = aRes.mfRest;
         PushDouble(fSum);
     }
 }
