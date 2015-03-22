@@ -31,5 +31,5 @@
  <toolbar:toolbaritem xlink:href=".uno:RotateLeft" toolbar:helpid=""/>
  <toolbar:toolbaritem xlink:href=".uno:RotateRight" toolbar:helpid=""/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:FrameDialog" toolbar:helpid="20458"/>
+ <toolbar:toolbaritem xlink:href=".uno:GraphicDialog" toolbar:visible="false"/>
 </toolbar:toolbar>
