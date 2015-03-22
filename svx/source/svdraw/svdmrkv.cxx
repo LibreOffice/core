@@ -558,10 +558,10 @@ void SdrMarkView::showMarkHandles()
 
 bool SdrMarkView::ImpIsFrameHandles() const
 {
-    const size_t nMarkAnz=GetMarkedObjectCount();
-    bool bFrmHdl=nMarkAnz>static_cast<size_t>(nFrameHandlesLimit) || bForceFrameHandles;
+    const size_t nMarkCount=GetMarkedObjectCount();
+    bool bFrmHdl=nMarkCount>static_cast<size_t>(nFrameHandlesLimit) || bForceFrameHandles;
     bool bStdDrag=eDragMode==SDRDRAG_MOVE;
-    if (nMarkAnz==1 && bStdDrag && bFrmHdl)
+    if (nMarkCount==1 && bStdDrag && bFrmHdl)
     {
         const SdrObject* pObj=GetMarkedObjectByIndex(0);
         if (pObj->GetObjInventor()==SdrInventor)
@@ -578,7 +578,7 @@ bool SdrMarkView::ImpIsFrameHandles() const
         bFrmHdl=true;
         if (eDragMode==SDRDRAG_ROTATE) {
             // when rotating, use ObjOwn drag, if there's at least 1 PolyObj
-            for (size_t nMarkNum=0; nMarkNum<nMarkAnz && bFrmHdl; ++nMarkNum) {
+            for (size_t nMarkNum=0; nMarkNum<nMarkCount && bFrmHdl; ++nMarkNum) {
                 const SdrMark* pM=GetSdrMarkByIndex(nMarkNum);
                 const SdrObject* pObj=pM->GetMarkedSdrObj();
                 bFrmHdl=!pObj->IsPolyObj();
@@ -587,7 +587,7 @@ bool SdrMarkView::ImpIsFrameHandles() const
     }
     if (!bFrmHdl) {
         // FrameHandles, if at least 1 Obj can't do SpecialDrag
-        for (size_t nMarkNum=0; nMarkNum<nMarkAnz && !bFrmHdl; ++nMarkNum) {
+        for (size_t nMarkNum=0; nMarkNum<nMarkCount && !bFrmHdl; ++nMarkNum) {
             const SdrMark* pM=GetSdrMarkByIndex(nMarkNum);
             const SdrObject* pObj=pM->GetMarkedSdrObj();
             bFrmHdl=!pObj->hasSpecialDrag();
@@ -634,11 +634,11 @@ void SdrMarkView::SetMarkHandles()
     // are handles enabled at all? Create only then
     if(!areMarkHandlesHidden())
     {
-        const size_t nMarkAnz=GetMarkedObjectCount();
+        const size_t nMarkCount=GetMarkedObjectCount();
         bool bStdDrag=eDragMode==SDRDRAG_MOVE;
         bool bSingleTextObjMark=false;
 
-        if (nMarkAnz==1)
+        if (nMarkCount==1)
         {
             pMarkedObj=GetMarkedObjectByIndex(0);
             bSingleTextObjMark =
@@ -649,11 +649,11 @@ void SdrMarkView::SetMarkHandles()
 
         bool bFrmHdl=ImpIsFrameHandles();
 
-        if (nMarkAnz>0)
+        if (nMarkCount>0)
         {
             pMarkedPV=GetSdrPageViewOfMarkedByIndex(0);
 
-            for (size_t nMarkNum=0; nMarkNum<nMarkAnz && (pMarkedPV!=NULL || !bFrmHdl); ++nMarkNum)
+            for (size_t nMarkNum=0; nMarkNum<nMarkCount && (pMarkedPV!=NULL || !bFrmHdl); ++nMarkNum)
             {
                 const SdrMark* pM=GetSdrMarkByIndex(nMarkNum);
 
@@ -761,7 +761,7 @@ void SdrMarkView::SetMarkHandles()
             bool bDone(false);
 
             // moved crop handling to non-frame part and the handle creation to SdrGrafObj
-            if(1 == nMarkAnz && pMarkedObj && SDRDRAG_CROP == eDragMode)
+            if(1 == nMarkCount && pMarkedObj && SDRDRAG_CROP == eDragMode)
             {
                 const SdrGrafObj* pSdrGrafObj = dynamic_cast< const SdrGrafObj* >(pMarkedObj);
 
@@ -774,7 +774,7 @@ void SdrMarkView::SetMarkHandles()
 
             if(!bDone)
             {
-                for (size_t nMarkNum=0; nMarkNum<nMarkAnz; ++nMarkNum)
+                for (size_t nMarkNum=0; nMarkNum<nMarkCount; ++nMarkNum)
                 {
                     const SdrMark* pM=GetSdrMarkByIndex(nMarkNum);
                     SdrObject* pObj=pM->GetMarkedSdrObj();
@@ -819,7 +819,7 @@ void SdrMarkView::SetMarkHandles()
         }
 
         // GluePoint handles
-        for (size_t nMarkNum=0; nMarkNum<nMarkAnz; ++nMarkNum)
+        for (size_t nMarkNum=0; nMarkNum<nMarkCount; ++nMarkNum)
         {
             const SdrMark* pM=GetSdrMarkByIndex(nMarkNum);
             SdrObject* pObj=pM->GetMarkedSdrObj();
@@ -932,8 +932,8 @@ void SdrMarkView::AddDragModeHdl(SdrDragMode eMode)
         case SDRDRAG_TRANSPARENCE:
         {
             // add interactive transparency handle
-            const size_t nMarkAnz = GetMarkedObjectCount();
-            if(nMarkAnz == 1)
+            const size_t nMarkCount = GetMarkedObjectCount();
+            if(nMarkCount == 1)
             {
                 SdrObject* pObj = GetMarkedObjectByIndex(0);
                 SdrModel* pModel = GetModel();
@@ -996,8 +996,8 @@ void SdrMarkView::AddDragModeHdl(SdrDragMode eMode)
         case SDRDRAG_GRADIENT:
         {
             // add interactive gradient handle
-            const size_t nMarkAnz = GetMarkedObjectCount();
-            if(nMarkAnz == 1)
+            const size_t nMarkCount = GetMarkedObjectCount();
+            if(nMarkCount == 1)
             {
                 SdrObject* pObj = GetMarkedObjectByIndex(0);
                 const SfxItemSet& rSet = pObj->GetMergedItemSet();
@@ -1351,11 +1351,11 @@ bool SdrMarkView::MarkNextObj(bool bPrev)
     }
 
     SortMarkedObjects();
-    const size_t nMarkAnz=GetMarkedObjectCount();
+    const size_t nMarkCount=GetMarkedObjectCount();
     size_t nChgMarkNum = SAL_MAX_SIZE; // number of the MarkEntry we want to replace
     size_t nSearchObjNum = bPrev ? 0 : SAL_MAX_SIZE;
-    if (nMarkAnz!=0) {
-        nChgMarkNum=bPrev ? 0 : nMarkAnz-1;
+    if (nMarkCount!=0) {
+        nChgMarkNum=bPrev ? 0 : nMarkCount-1;
         SdrMark* pM=GetSdrMarkByIndex(nChgMarkNum);
         OSL_ASSERT(pM!=NULL);
         if (pM->GetMarkedSdrObj() != NULL)
@@ -1406,8 +1406,8 @@ bool SdrMarkView::MarkNextObj(const Point& rPnt, short nTol, bool bPrev)
     size_t nTopMarkHit=0;
     size_t nBtmMarkHit=0;
     // find topmost of the selected objects that is hit by rPnt
-    const size_t nMarkAnz=GetMarkedObjectCount();
-    for (size_t nm=nMarkAnz; nm>0 && pTopMarkHit==NULL;) {
+    const size_t nMarkCount=GetMarkedObjectCount();
+    for (size_t nm=nMarkCount; nm>0 && pTopMarkHit==NULL;) {
         --nm;
         SdrMark* pM=GetSdrMarkByIndex(nm);
         if(CheckSingleSdrObjectHit(aPt,sal_uInt16(nTol),pM->GetMarkedSdrObj(),pM->GetPageView(),0,0))
@@ -1424,7 +1424,7 @@ bool SdrMarkView::MarkNextObj(const Point& rPnt, short nTol, bool bPrev)
     SdrPageView* pPV=pTopMarkHit->GetPageView();
     // find lowermost of the selected objects that is hit by rPnt
     // and is placed on the same PageView as pTopMarkHit
-    for (size_t nm=0; nm<nMarkAnz && pBtmMarkHit==NULL; ++nm) {
+    for (size_t nm=0; nm<nMarkCount && pBtmMarkHit==NULL; ++nm) {
         SdrMark* pM=GetSdrMarkByIndex(nm);
         SdrPageView* pPV2=pM->GetPageView();
         if (pPV2==pPV && CheckSingleSdrObjectHit(aPt,sal_uInt16(nTol),pM->GetMarkedSdrObj(),pPV2,0,0))
@@ -1834,8 +1834,8 @@ bool SdrMarkView::PickMarkedObj(const Point& rPnt, SdrObject*& rpObj, SdrPageVie
     Point aPt(rPnt);
     sal_uInt16 nTol=(sal_uInt16)nHitTolLog;
     bool bFnd=false;
-    const size_t nMarkAnz=GetMarkedObjectCount();
-    for (size_t nMarkNum=nMarkAnz; nMarkNum>0 && !bFnd;) {
+    const size_t nMarkCount=GetMarkedObjectCount();
+    for (size_t nMarkNum=nMarkCount; nMarkNum>0 && !bFnd;) {
         --nMarkNum;
         SdrMark* pM=GetSdrMarkByIndex(nMarkNum);
         SdrPageView* pPV=pM->GetPageView();
@@ -1850,7 +1850,7 @@ bool SdrMarkView::PickMarkedObj(const Point& rPnt, SdrObject*& rpObj, SdrPageVie
         SdrObject* pBestObj=NULL;
         SdrPageView* pBestPV=NULL;
         sal_uIntPtr nBestDist=ULONG_MAX;
-        for (size_t nMarkNum=nMarkAnz; nMarkNum>0 && !bFnd;) {
+        for (size_t nMarkNum=nMarkCount; nMarkNum>0 && !bFnd;) {
             --nMarkNum;
             SdrMark* pM=GetSdrMarkByIndex(nMarkNum);
             SdrPageView* pPV=pM->GetPageView();

@@ -1305,12 +1305,12 @@ SdrViewContext SdrView::GetContext() const
     if( IsGluePointEditMode() )
         return SDRCONTEXT_GLUEPOINTEDIT;
 
-    const size_t nMarkAnz = GetMarkedObjectCount();
+    const size_t nMarkCount = GetMarkedObjectCount();
 
     if( HasMarkablePoints() && !IsFrameHandles() )
     {
         bool bPath=true;
-        for( size_t nMarkNum = 0; nMarkNum < nMarkAnz && bPath; ++nMarkNum )
+        for( size_t nMarkNum = 0; nMarkNum < nMarkCount && bPath; ++nMarkNum )
             if (!GetMarkedObjectByIndex(nMarkNum)->ISA(SdrPathObj))
                 bPath=false;
 
@@ -1322,7 +1322,7 @@ SdrViewContext SdrView::GetContext() const
     {
         bool bGraf = true, bMedia = true, bTable = true;
 
-        for( size_t nMarkNum = 0; nMarkNum < nMarkAnz && ( bGraf || bMedia ); ++nMarkNum )
+        for( size_t nMarkNum = 0; nMarkNum < nMarkCount && ( bGraf || bMedia ); ++nMarkNum )
         {
             const SdrObject* pMarkObj = GetMarkedObjectByIndex( nMarkNum );
             DBG_ASSERT( pMarkObj, "SdrView::GetContext(), null pointer in mark list!" );
