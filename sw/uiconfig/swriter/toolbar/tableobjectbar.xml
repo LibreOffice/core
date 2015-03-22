@@ -39,8 +39,8 @@
  <toolbar:toolbaritem xlink:href=".uno:CellVertCenter" toolbar:style="radio"/>
  <toolbar:toolbaritem xlink:href=".uno:CellVertBottom" toolbar:style="radio"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:AutoFormat"/>
  <toolbar:toolbaritem xlink:href=".uno:BackgroundColor" toolbar:style="dropdown"/>
+ <toolbar:toolbaritem xlink:href=".uno:AutoFormat"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:SetBorderStyle"/>
  <toolbar:toolbaritem xlink:href=".uno:LineStyle"/>
