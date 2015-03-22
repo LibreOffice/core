@@ -580,11 +580,10 @@ void SvxRectCtlAccessibleContext::FireChildFocus( RECT_POINT eButton )
     if( nNew < nNumOfChildren )
     {
         // select new child
-        SvxRectCtlChildAccessibleContext*   pChild;
         mnSelectedChild = nNew;
         if( nNew != NOCHILDSELECTED )
         {
-            pChild = mpChildren[ nNew ];
+            SvxRectCtlChildAccessibleContext* pChild = mpChildren[ nNew ];
             if( pChild )
             {
                 pChild->FireFocusEvent();
