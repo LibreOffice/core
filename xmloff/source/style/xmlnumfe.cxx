@@ -667,9 +667,25 @@ void SvXMLNumFmtExport::WriteScientificElement_Impl(
 
     //  exponent interval for engineering notation
     if ( nExpInterval >= 0 )
-    {        // when exponent-interval will be part of ODF 1.3, change to XML_NAMESPACE_NUMBER
-         rExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_EXPONENT_INTERVAL,
-                              OUString::number( nExpInterval ) );
+    {
+        // Export only for 1.2 with extensions or 1.3 and later.
+        SvtSaveOptions::ODFDefaultVersion eVersion = SvtSaveOptions().GetODFDefaultVersion();
+        if (eVersion > SvtSaveOptions::ODFVER_012)
+        {
+            // TODO: change this once the fouled up ODFVER_LATEST is a real
+            // 1.2+ or 1.3 or 1.3+ ... and only in configuration means latest.
+#if 1
+            // Currently 1.2+ is ODFVER_LATEST which is >ODFVER_012 and
+            // >ODFVER_013 and prevents correct handling..
+            rExport.AddAttribute( XML_NAMESPACE_LO_EXT,
+                    XML_EXPONENT_INTERVAL, OUString::number( nExpInterval ) );
+#else
+            // For 1.2+ use loext namespace, for 1.3 use number namespace.
+            rExport.AddAttribute(
+                    ((eVersion < SvtSaveOptions::ODFVER_013) ? XML_NAMESPACE_LO_EXT : XML_NAMESPACE_NUMBER),
+                    XML_EXPONENT_INTERVAL, OUString::number( nExpInterval ) );
+#endif
+        }
     }
 
     SvXMLElementExport aElem( rExport,
