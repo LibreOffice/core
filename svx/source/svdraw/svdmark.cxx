@@ -598,12 +598,12 @@ const OUString& SdrMarkList::GetPointMarkDescription(bool bGlue) const
 {
     bool& rNameOk = (bool&)(bGlue ? mbGluePointNameOk : mbPointNameOk);
     OUString& rName = const_cast<OUString&>(bGlue ? maGluePointName : maPointName);
-    const size_t nMarkAnz(GetMarkCount());
+    const size_t nMarkCount(GetMarkCount());
     size_t nMarkPtAnz(0);
     size_t nMarkPtObjAnz(0);
     size_t n1stMarkNum(SAL_MAX_SIZE);
 
-    for(size_t nMarkNum = 0; nMarkNum < nMarkAnz; ++nMarkNum)
+    for(size_t nMarkNum = 0; nMarkNum < nMarkCount; ++nMarkNum)
     {
         const SdrMark* pMark = GetMark(nMarkNum);
         const SdrUShortCont* pPts = bGlue ? pMark->GetMarkedGluePoints() : pMark->GetMarkedPoints();
@@ -851,9 +851,9 @@ namespace sdr
             maAllMarkedObjects.clear();
 
             // GetMarkCount after ForceSort
-            const size_t nMarkAnz(maMarkedObjectList.GetMarkCount());
+            const size_t nMarkCount(maMarkedObjectList.GetMarkCount());
 
-            for(size_t a = 0; a < nMarkAnz; ++a)
+            for(size_t a = 0; a < nMarkCount; ++a)
             {
                 SdrObject* pCandidate = maMarkedObjectList.GetMark(a)->GetMarkedSdrObj();
 

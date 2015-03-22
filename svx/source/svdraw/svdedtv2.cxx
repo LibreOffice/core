@@ -426,8 +426,8 @@ void SdrEditView::PutMarkedBehindObj(const SdrObject* pRefObj)
 void SdrEditView::ReverseOrderOfMarked()
 {
     SortMarkedObjects();
-    const size_t nMarkAnz=GetMarkedObjectCount();
-    if (nMarkAnz>0)
+    const size_t nMarkCount=GetMarkedObjectCount();
+    if (nMarkCount>0)
     {
         bool bChg=false;
 
@@ -439,7 +439,7 @@ void SdrEditView::ReverseOrderOfMarked()
         do {
             // take into account selection across multiple PageViews
             size_t b=a+1;
-            while (b<nMarkAnz && GetSdrPageViewOfMarkedByIndex(b) == GetSdrPageViewOfMarkedByIndex(a)) ++b;
+            while (b<nMarkCount && GetSdrPageViewOfMarkedByIndex(b) == GetSdrPageViewOfMarkedByIndex(a)) ++b;
             --b;
             SdrObjList* pOL=GetSdrPageViewOfMarkedByIndex(a)->GetObjList();
             size_t c=b;
@@ -465,7 +465,7 @@ void SdrEditView::ReverseOrderOfMarked()
                 bChg=true;
             }
             a=b+1;
-        } while (a<nMarkAnz);
+        } while (a<nMarkCount);
 
         if(bUndo)
             EndUndo();
@@ -1904,11 +1904,11 @@ void SdrEditView::ImpConvertTo(bool bPath, bool bLineToArea)
 {
     if (AreObjectsMarked()) {
         bool bMrkChg = false;
-        const size_t nMarkAnz=GetMarkedObjectCount();
+        const size_t nMarkCount=GetMarkedObjectCount();
         sal_uInt16 nDscrID=0;
         if(bLineToArea)
         {
-            if(nMarkAnz == 1)
+            if(nMarkCount == 1)
                 nDscrID = STR_EditConvToContour;
             else
                 nDscrID = STR_EditConvToContours;
@@ -1918,16 +1918,16 @@ void SdrEditView::ImpConvertTo(bool bPath, bool bLineToArea)
         else
         {
             if (bPath) {
-                if (nMarkAnz==1) nDscrID=STR_EditConvToCurve;
+                if (nMarkCount==1) nDscrID=STR_EditConvToCurve;
                 else nDscrID=STR_EditConvToCurves;
                 BegUndo(ImpGetResStr(nDscrID),GetDescriptionOfMarkedObjects(),SDRREPFUNC_OBJ_CONVERTTOPATH);
             } else {
-                if (nMarkAnz==1) nDscrID=STR_EditConvToPoly;
+                if (nMarkCount==1) nDscrID=STR_EditConvToPoly;
                 else nDscrID=STR_EditConvToPolys;
                 BegUndo(ImpGetResStr(nDscrID),GetDescriptionOfMarkedObjects(),SDRREPFUNC_OBJ_CONVERTTOPOLY);
             }
         }
-        for (size_t nm=nMarkAnz; nm>0;) {
+        for (size_t nm=nMarkCount; nm>0;) {
             --nm;
             SdrMark* pM=GetSdrMarkByIndex(nm);
             SdrObject* pObj=pM->GetMarkedSdrObj();

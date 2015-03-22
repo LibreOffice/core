@@ -472,14 +472,14 @@ void SdrEditView::CheckPossibilities()
     if (bPossibilitiesDirty) {
         ImpResetPossibilityFlags();
         SortMarkedObjects();
-        const size_t nMarkAnz=GetMarkedObjectCount();
-        if (nMarkAnz!=0) {
-            bReverseOrderPossible=nMarkAnz>=2;
+        const size_t nMarkCount=GetMarkedObjectCount();
+        if (nMarkCount!=0) {
+            bReverseOrderPossible=nMarkCount>=2;
 
             size_t nMovableCount=0;
-            bGroupPossible=nMarkAnz>=2;
-            bCombinePossible=nMarkAnz>=2;
-            if (nMarkAnz==1) {
+            bGroupPossible=nMarkCount>=2;
+            bCombinePossible=nMarkCount>=2;
+            if (nMarkCount==1) {
                 // check bCombinePossible more thoroughly
                 // still missing ...
                 const SdrObject* pObj=GetMarkedObjectByIndex(0);
@@ -507,8 +507,8 @@ void SdrEditView::CheckPossibilities()
             bCanConvToContour = true;
 
             // these ones are only allowed when single object is selected
-            bTransparenceAllowed = (nMarkAnz == 1);
-            bGradientAllowed = (nMarkAnz == 1);
+            bTransparenceAllowed = (nMarkCount == 1);
+            bGradientAllowed = (nMarkCount == 1);
             if(bGradientAllowed)
             {
                 // gradient depends on fill style
@@ -534,7 +534,7 @@ void SdrEditView::CheckPossibilities()
             bool bNoMovRotFound=false;
             const SdrPageView* pPV0=NULL;
 
-            for (size_t nm=0; nm<nMarkAnz; ++nm) {
+            for (size_t nm=0; nm<nMarkCount; ++nm) {
                 const SdrMark* pM=GetSdrMarkByIndex(nm);
                 const SdrObject* pObj=pM->GetMarkedSdrObj();
                 const SdrPageView* pPV=pM->GetPageView();
@@ -618,7 +618,7 @@ void SdrEditView::CheckPossibilities()
                 }
             }
 
-            bMoreThanOneNotMovable=nMovableCount<nMarkAnz-1;
+            bMoreThanOneNotMovable=nMovableCount<nMarkCount-1;
             bOneOrMoreMovable=nMovableCount!=0;
             bGrpEnterPossible=bUnGroupPossible;
         }
@@ -635,7 +635,7 @@ void SdrEditView::CheckPossibilities()
         if (bMoveAllowed) {
             // Don't allow moving glued connectors.
             // Currently only implemented for single selection.
-            if (nMarkAnz==1) {
+            if (nMarkCount==1) {
                 SdrObject* pObj=GetMarkedObjectByIndex(0);
                 SdrEdgeObj* pEdge=PTR_CAST(SdrEdgeObj,pObj);
                 if (pEdge!=NULL) {
@@ -692,15 +692,15 @@ void SdrEditView::DeleteMarkedList(const SdrMarkList& rMark)
         const bool bUndo = IsUndoEnabled();
         if( bUndo )
             BegUndo();
-        const size_t nMarkAnz(rMark.GetMarkCount());
+        const size_t nMarkCount(rMark.GetMarkCount());
 
-        if(nMarkAnz)
+        if(nMarkCount)
         {
             std::vector< E3DModifySceneSnapRectUpdater* > aUpdaters;
 
             if( bUndo )
             {
-                for(size_t nm = nMarkAnz; nm > 0;)
+                for(size_t nm = nMarkCount; nm > 0;)
                 {
                     --nm;
                     SdrMark* pM = rMark.GetMark(nm);
@@ -719,7 +719,7 @@ void SdrEditView::DeleteMarkedList(const SdrMarkList& rMark)
 
             std::vector< SdrObject* > aRemoved3DObjects;
 
-            for(size_t nm = nMarkAnz; nm > 0;)
+            for(size_t nm = nMarkCount; nm > 0;)
             {
                 --nm;
                 SdrMark* pM = rMark.GetMark(nm);
@@ -895,8 +895,8 @@ void SdrEditView::CopyMarkedObj()
 
     GetMarkedObjectListWriteAccess().Clear();
     size_t nCloneErrCnt=0;
-    const size_t nMarkAnz=aSourceObjectsForCopy.GetMarkCount();
-    for (size_t nm=0; nm<nMarkAnz; ++nm) {
+    const size_t nMarkCount=aSourceObjectsForCopy.GetMarkCount();
+    for (size_t nm=0; nm<nMarkCount; ++nm) {
         SdrMark* pM=aSourceObjectsForCopy.GetMark(nm);
         SdrObject* pO=pM->GetMarkedSdrObj()->Clone();
         if (pO!=NULL) {
