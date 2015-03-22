@@ -25,9 +25,8 @@
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:XLineStyle" toolbar:visible="false" toolbar:helpid="10169"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:LineWidth" toolbar:visible="false" toolbar:helpid="10171"/>
- <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:XLineColor" toolbar:style="dropdown" toolbar:helpid="10172"/>
+ <toolbar:toolbaritem xlink:href=".uno:LineWidth" toolbar:helpid="10171"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:FormatArea" toolbar:visible="false" toolbar:helpid="10142"/>
  <toolbar:toolbarseparator/>
