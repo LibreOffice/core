@@ -634,7 +634,7 @@ void SvXMLNumFmtExport::WriteNumberElement_Impl(
 
 void SvXMLNumFmtExport::WriteScientificElement_Impl(
                             sal_Int32 nDecimals, sal_Int32 nInteger,
-                            bool bGrouping, sal_Int32 nExp, sal_Int32 nExpInterval )
+                            bool bGrouping, sal_Int32 nExp, sal_Int32 nExpInterval, bool bExpSign )
 {
     FinishTextElement_Impl();
 
@@ -677,6 +677,16 @@ void SvXMLNumFmtExport::WriteScientificElement_Impl(
                     ((eVersion < SvtSaveOptions::ODFSVER_013) ? XML_NAMESPACE_LO_EXT : XML_NAMESPACE_NUMBER),
                     XML_EXPONENT_INTERVAL, OUString::number( nExpInterval ) );
         }
+    }
+
+    //  exponent sign
+    if ( bExpSign )
+    {
+        rExport.AddAttribute( XML_NAMESPACE_LO_EXT, XML_EXPONENT_SIGN, XML_TRUE );
+    }
+    else
+    {
+        rExport.AddAttribute( XML_NAMESPACE_LO_EXT, XML_EXPONENT_SIGN, XML_FALSE );
     }
 
     SvXMLElementExport aElem( rExport,
@@ -1162,6 +1172,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
         bool bExpFound   = false;
         bool bCurrFound  = false;
         bool bInInteger  = true;
+        bool bExpSign = true;
         sal_Int32 nExpDigits = 0;
         sal_Int32 nIntegerSymbols = 0;          // for embedded-text, including "#"
         sal_Int32 nTrailingThousands = 0;       // thousands-separators after all digits
@@ -1204,6 +1215,8 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                 case NF_SYMBOLTYPE_EXP:
                     bExpFound = true;           // following digits are exponent digits
                     bInInteger = false;
+                    if ( pElemStr && pElemStr->getLength() == 1 )
+                        bExpSign = false;       // for 0.00E0
                     break;
                 case NF_SYMBOLTYPE_CURRENCY:
                     bCurrFound = true;
@@ -1415,7 +1428,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                                 // #i43959# for scientific numbers, count all integer symbols ("0" and "#")
                                 // as integer digits: use nIntegerSymbols instead of nLeading
                                 // nIntegerSymbols represents exponent interval (for engineering notation)
-                                WriteScientificElement_Impl( nPrecision, nLeading, bThousand, nExpDigits, nIntegerSymbols );
+                                WriteScientificElement_Impl( nPrecision, nLeading, bThousand, nExpDigits, nIntegerSymbols, bExpSign );
                                 bAnyContent = true;
                                 break;
                             case css::util::NumberFormat::FRACTION:

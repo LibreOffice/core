@@ -117,6 +117,7 @@ struct SvXMLNumberInfo
     bool        bGrouping;
     bool        bDecReplace;
     bool        bVarDecimals;
+    bool        bExpSign;
     double      fDisplayFactor;
     SvXMLEmbeddedElementArr aEmbeddedElements;
 
@@ -124,6 +125,7 @@ struct SvXMLNumberInfo
     {
         nDecimals = nInteger = nExpDigits = nExpInterval = nNumerDigits = nDenomDigits = nFracDenominator = -1;
         bGrouping = bDecReplace = bVarDecimals = false;
+        bExpSign = true;
         fDisplayFactor = 1.0;
     }
 };
@@ -278,6 +280,7 @@ enum SvXMLStyleElemAttrTokens
     XML_TOK_ELEM_ATTR_DENOMINATOR_VALUE,
     XML_TOK_ELEM_ATTR_MIN_EXPONENT_DIGITS,
     XML_TOK_ELEM_ATTR_EXPONENT_INTERVAL,
+    XML_TOK_ELEM_ATTR_EXPONENT_SIGN,
     XML_TOK_ELEM_ATTR_MIN_NUMERATOR_DIGITS,
     XML_TOK_ELEM_ATTR_MIN_DENOMINATOR_DIGITS,
     XML_TOK_ELEM_ATTR_RFC_LANGUAGE_TAG,
@@ -575,6 +578,7 @@ const SvXMLTokenMap& SvXMLNumImpData::GetStyleElemAttrTokenMap()
             { XML_NAMESPACE_NUMBER, XML_MIN_EXPONENT_DIGITS,     XML_TOK_ELEM_ATTR_MIN_EXPONENT_DIGITS  },
             { XML_NAMESPACE_LO_EXT, XML_EXPONENT_INTERVAL,       XML_TOK_ELEM_ATTR_EXPONENT_INTERVAL    },
             { XML_NAMESPACE_NUMBER, XML_EXPONENT_INTERVAL,       XML_TOK_ELEM_ATTR_EXPONENT_INTERVAL    },
+            { XML_NAMESPACE_LO_EXT, XML_EXPONENT_SIGN,           XML_TOK_ELEM_ATTR_EXPONENT_SIGN        },
             { XML_NAMESPACE_NUMBER, XML_MIN_NUMERATOR_DIGITS,    XML_TOK_ELEM_ATTR_MIN_NUMERATOR_DIGITS },
             { XML_NAMESPACE_NUMBER, XML_MIN_DENOMINATOR_DIGITS,  XML_TOK_ELEM_ATTR_MIN_DENOMINATOR_DIGITS },
             { XML_NAMESPACE_NUMBER, XML_RFC_LANGUAGE_TAG,        XML_TOK_ELEM_ATTR_RFC_LANGUAGE_TAG     },
@@ -966,6 +970,10 @@ SvXMLNumFmtElementContext::SvXMLNumFmtElementContext( SvXMLImport& rImport,
                 if (::sax::Converter::convertNumber( nAttrVal, sValue, 0 ))
                     aNumInfo.nExpInterval = nAttrVal;
                 break;
+            case XML_TOK_ELEM_ATTR_EXPONENT_SIGN:
+                if (::sax::Converter::convertBool( bAttrBool, sValue ))
+                    aNumInfo.bExpSign = bAttrBool;
+                break;
             case XML_TOK_ELEM_ATTR_MIN_NUMERATOR_DIGITS:
                 if (::sax::Converter::convertNumber( nAttrVal, sValue, 0 ))
                     aNumInfo.nNumerDigits = nAttrVal;
@@ -1237,7 +1245,10 @@ void SvXMLNumFmtElementContext::EndElement()
                 }
                 rParent.AddNumber( aNumInfo );      // simple number
 
-                rParent.AddToCode( OUString("E+") );
+                if ( aNumInfo.bExpSign )
+                    rParent.AddToCode( OUString("E+") );
+                else
+                    rParent.AddToCode( OUString("E") );
                 for (sal_Int32 i=0; i<aNumInfo.nExpDigits; i++)
                 {
                     rParent.AddToCode( '0' );
