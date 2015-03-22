@@ -18,7 +18,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
- <toolbar:toolbaritem xlink:href=".uno:StyleApply"/>
+ <toolbar:toolbaritem xlink:href=".uno:StyleApply" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ToggleAnchorType" toolbar:style="dropdown"/>
  <toolbar:toolbarseparator/>
@@ -50,8 +50,8 @@
  <toolbar:toolbaritem xlink:href=".uno:FrameLineColor"/>
  <toolbar:toolbaritem xlink:href=".uno:BackgroundColor" toolbar:style="dropdown"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:ChainFrames"/>
+ <toolbar:toolbaritem xlink:href=".uno:ChainFrames">
  <toolbar:toolbaritem xlink:href=".uno:UnhainFrames"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:FrameDialog"/>
+ <toolbar:toolbaritem xlink:href=".uno:FrameDialog" toolbar:helpid="20458" toolbar:visible="false"/>
 </toolbar:toolbar>
