@@ -2829,10 +2829,10 @@ void lcl_MergeBorderLine(
     const sal_uInt16 nInnerLine(bBorder ? 0 : ((nValidFlag & VALID_HORI) ? BOXINFO_LINE_HORI : BOXINFO_LINE_VERT));
     BoxItemWrapper aBoxItem(rLinesState.rBoxItem, rLinesState.rBoxInfoItem, nLine, nInnerLine, bBorder);
     bool& rbSet(bBorder ? rLinesState.aBorderSet[nLine] : rLinesState.aInnerLineSet[nInnerLine]);
-    bool& rbIndeterminate(bBorder ? rLinesState.aBorderIndeterminate[nLine] : rLinesState.aInnerLineIndeterminate[nInnerLine]);
 
     if (rbSet)
     {
+        bool& rbIndeterminate(bBorder ? rLinesState.aBorderIndeterminate[nLine] : rLinesState.aInnerLineIndeterminate[nInnerLine]);
         if (!rbIndeterminate)
         {
             const SvxBorderLine* const pMergedLine(aBoxItem.getLine());

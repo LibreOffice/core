@@ -1218,14 +1218,13 @@ void HatchingLB::Fill( const XHatchListRef &pList )
         return;
 
     mpList = pList;
-    XHatchEntry* pEntry;
     long nCount = pList->Count();
 
     SetUpdateMode( false );
 
     for( long i = 0; i < nCount; i++ )
     {
-        pEntry = pList->GetHatch( i );
+        XHatchEntry* pEntry = pList->GetHatch( i );
         const Bitmap aBitmap = pList->GetUiBitmap( i );
         if( !aBitmap.IsEmpty() )
             InsertEntry(pEntry->GetName(), Image(aBitmap));
