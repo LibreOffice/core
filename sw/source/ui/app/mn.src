@@ -729,7 +729,7 @@
     {\
         Identifier = FN_FORMAT_ALL_NOTES ;\
         HelpId = CMD_FN_FORMAT_ALL_NOTES ;\
-        Text [ en-US ] = "~Format All Comments" ;\
+        Text [ en-US ] = "~Format All Comments..." ;\
     };\
     /*
     MenuItem\
