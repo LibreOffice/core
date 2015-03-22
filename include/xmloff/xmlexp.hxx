@@ -566,6 +566,9 @@ public:
     /// returns the currently configured default version for odf export
     SvtSaveOptions::ODFDefaultVersion getDefaultVersion() const;
 
+    /// returns the deterministic version for odf export
+    SvtSaveOptions::ODFSaneDefaultVersion getSaneDefaultVersion() const;
+
     /// name of stream in package, e.g., "content.xml"
     OUString GetStreamName() const;
 

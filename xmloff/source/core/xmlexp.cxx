@@ -2428,6 +2428,15 @@ SvtSaveOptions::ODFDefaultVersion SvXMLExport::getDefaultVersion() const
     return SvtSaveOptions::ODFVER_012;
 }
 
+SvtSaveOptions::ODFSaneDefaultVersion SvXMLExport::getSaneDefaultVersion() const
+{
+    if( mpImpl )
+        return mpImpl->maSaveOptions.GetODFSaneDefaultVersion();
+
+    // fatal error, use current version as default
+    return SvtSaveOptions::ODFSVER_012;
+}
+
 OUString SvXMLExport::GetStreamName() const
 {
     return mpImpl->mStreamName;
