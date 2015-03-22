@@ -123,7 +123,7 @@ void MSAAServiceImpl::handleWindowOpened(sal_Int64 nAcc)
 
 OUString MSAAServiceImpl::getImplementationName() throw (RuntimeException)
 {
-    return OUString( "com.sun.star.accessibility.my_sc_impl.MSAAService" );
+    return getImplementationName_MSAAServiceImpl();
 }
 
 /**
