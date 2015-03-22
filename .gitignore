@@ -63,7 +63,7 @@
 # make etags
 /TAGS
 
-# backup and temporary editor files: the only convinience rules allowed here.
+# backup and temporary editor files: the only convenience rules allowed here.
 *~
 .*sw?
 \#*
