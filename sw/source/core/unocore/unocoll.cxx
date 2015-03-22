@@ -147,7 +147,6 @@ public:
             uno::Reference< drawing::XDrawPageSupplier > xSupplier( mpDocShell->GetModel(), uno::UNO_QUERY_THROW );
             uno::Reference< container::XIndexAccess > xIndex( xSupplier->getDrawPage(), uno::UNO_QUERY_THROW );
 
-            bool bMatched = false;
             try
             {
                 uno::Reference< form::XFormsSupplier >  xFormSupplier( xIndex, uno::UNO_QUERY_THROW );
@@ -158,7 +157,7 @@ public:
                 for( sal_Int32 cIndex = 0; cIndex < nCntrls; ++cIndex )
                 {
                     uno::Reference< uno::XInterface > xControl( xFormControls->getByIndex( cIndex ), uno::UNO_QUERY_THROW );
-                    bMatched = ( xControl == xIf );
+                    bool bMatched = ( xControl == xIf );
                     if ( bMatched )
                     {
                         sCodeName = msThisDocumentCodeName;

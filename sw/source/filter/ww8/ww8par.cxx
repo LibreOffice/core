@@ -1971,11 +1971,11 @@ void SwWW8ImplReader::ImportDop()
         {
             uno::Reference<beans::XPropertySetInfo> xInfo =
                 xDocProps->getPropertySetInfo();
-            bool bValue = false;
             if (xInfo.is())
             {
                 if (xInfo->hasPropertyByName("ApplyFormDesignMode"))
                 {
+                    bool bValue = false;
                     xDocProps->setPropertyValue("ApplyFormDesignMode", css::uno::makeAny(bValue));
                 }
             }

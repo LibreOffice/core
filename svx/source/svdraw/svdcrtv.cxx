@@ -576,9 +576,9 @@ void SdrCreateView::MovCreateObj(const Point& rPnt)
         }
 
         if (aPnt==aDragStat.GetNow()) return;
-        bool bMerk(aDragStat.IsMinMoved());
         if (aDragStat.CheckMinMoved(aPnt))
         {
+            bool bMerk(aDragStat.IsMinMoved());
             if (!bMerk) aDragStat.NextPoint();
             aDragStat.NextMove(aPnt);
             pAktCreate->MovCreate(aDragStat);
