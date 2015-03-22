@@ -742,11 +742,10 @@ void SdrObjList::UnGroupObj( size_t nObjNum )
             // the position at which we insert the members of rUngroupGroup
             size_t nInsertPos( pUngroupGroup->GetOrdNum() );
 
-            SdrObject* pObj;
             const size_t nCount = pSrcLst->GetObjCount();
             for( size_t i=0; i<nCount; ++i )
             {
-                pObj = pSrcLst->RemoveObject(0);
+                SdrObject* pObj = pSrcLst->RemoveObject(0);
                 SdrInsertReason aReason(SDRREASON_VIEWCALL, pUngroupGroup);
                 InsertObject(pObj, nInsertPos, &aReason);
                 ++nInsertPos;

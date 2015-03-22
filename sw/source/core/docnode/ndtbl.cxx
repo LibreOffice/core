@@ -2945,10 +2945,9 @@ const SwTableBox* SwCollectTblLineBoxes::GetBoxOfPos( const SwTableBox& rBox )
 
 bool SwCollectTblLineBoxes::Resize( sal_uInt16 nOffset, sal_uInt16 nOldWidth )
 {
-    size_t n;
-
     if( !aPosArr.empty() )
     {
+        size_t n;
         for( n = 0; n < aPosArr.size(); ++n )
         {
             if( aPosArr[ n ] == nOffset )

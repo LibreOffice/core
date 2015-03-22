@@ -110,12 +110,12 @@ void SwDoc::DoUpdateAllCharts()
 void SwDoc::_UpdateCharts( const SwTable& rTbl, SwViewShell const & rVSh ) const
 {
     OUString aName( rTbl.GetFrmFmt()->GetName() );
-    SwOLENode *pONd;
     SwStartNode *pStNd;
     SwNodeIndex aIdx( *GetNodes().GetEndOfAutotext().StartOfSectionNode(), 1 );
     while( 0 != (pStNd = aIdx.GetNode().GetStartNode()) )
     {
         ++aIdx;
+        SwOLENode *pONd;
         if( 0 != ( pONd = aIdx.GetNode().GetOLENode() ) &&
             aName == pONd->GetChartTblName() &&
             pONd->getLayoutFrm( rVSh.GetLayout() ) )
