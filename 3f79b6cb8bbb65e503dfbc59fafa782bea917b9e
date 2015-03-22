@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a29b11f_e9047dc7",
+        "filename": "sc/source/ui/src/globstr.src",
+        "patchSetId": 6
+      },
+      "lineNbr": 590,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2015-03-22T07:57:49Z",
+      "side": 0,
+      "message": "Be sure to have the latest checkout locally.",
+      "revId": "3f79b6cb8bbb65e503dfbc59fafa782bea917b9e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
