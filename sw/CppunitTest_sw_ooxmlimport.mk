@@ -42,6 +42,18 @@ $(eval $(call gb_CppunitTest_set_include,sw_ooxmlimport,\
     $$(INCLUDE) \
 ))
 
+ifeq ($(OS),MACOSX)
+
+$(eval $(call gb_CppunitTest_add_cxxflags,sw_ooxmlimport,\
+    $(gb_OBJCXXFLAGS) \
+))
+
+$(eval $(call gb_CppunitTest_use_system_darwin_frameworks,sw_ooxmlimport,\
+	AppKit \
+))
+
+endif
+
 $(eval $(call gb_CppunitTest_use_api,sw_ooxmlimport,\
     offapi \
     udkapi \
