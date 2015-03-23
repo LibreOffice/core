@@ -31,7 +31,7 @@ int ReleaseSolarMutexOnMainThreadContext(unsigned nThreadId)
     {
         comphelper::SolarMutex& rMutex = Application::GetSolarMutex();
         if ( rMutex.tryToAcquire() )
-            nAcquireCount = Application::ReleaseSolarMutex() - 1;
+            nAcquireCount = SolarMutexReleaser::ReleaseSolarMutex() - 1;
     }
 
     return nAcquireCount;
