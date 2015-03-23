@@ -30,24 +30,24 @@ Function verify_ByteArrayString() As String
     Dim x() As Byte
     Dim count As Integer
     testName = "Test the conversion between bytearray and string"
-    
-    
+
+
     On Error GoTo errorHandler
-    
+
     MyString = "abc"
     x = MyString ' string -> byte array
-    
+
     result = "Test Results" & Chr$(10) & "============" & Chr$(10)
 
     count = UBound(x) ' 6 byte
-    
+
     ' test bytes in string
     result = result + updateResultString("test1 numbytes ", (count), 5)
 
-    
+
     MyString = x 'byte array -> string
     result = result + updateResultString("test assign byte array to string", MyString, "abc")
-       
+
     result = result & Chr$(10) & "Tests passed: " & passCount & Chr$(10) & "Tests failed: " & failCount & Chr$(10)
     verify_ByteArrayString = result
     Exit Function

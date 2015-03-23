@@ -26,9 +26,9 @@ Function verify_testDateSerial() as String
 
     testName = "Test DateSerial function"
     date2 = 36326
-    
+
     On Error GoTo errorHandler
-    
+
     date1 = DateSerial(1999, 6, 15)   '6/15/1999
     TestLog_ASSERT date1 = date2, "the return date is: " & date1
     date1 = DateSerial(2000, 1 - 7, 15) '6/15/1999
@@ -36,7 +36,7 @@ Function verify_testDateSerial() as String
     date1 = DateSerial(1999, 1, 166)  '6/15/1999
     TestLog_ASSERT date1 = date2, "the return date is: " & date1
     result = result & Chr$(10) & "Tests passed: " & passCount & Chr$(10) & "Tests failed: " & failCount & Chr$(10)
-    
+
     verify_testDateSerial = result
 
     Exit Function
@@ -60,6 +60,6 @@ Sub TestLog_ASSERT(assertion As Boolean, Optional testId As String, Optional tes
         result = result & Chr$(10) & " Failed: " & testMsg
         failCount = failCount + 1
     End If
-    
+
 End Sub
 

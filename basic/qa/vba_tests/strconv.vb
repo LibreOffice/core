@@ -25,43 +25,43 @@ Function verify_testStrConv() as String
     srcStr = "abc EFG hij"
     testName = "Test StrConv function"
     On Error GoTo errorHandler
-    
+
     retStr = StrConv(srcStr, vbUpperCase)
     'MsgBox retStr
     TestLog_ASSERT retStr = "ABC EFG HIJ", "Converts the string to uppercase characters:" & retStr
-    
+
     retStr = StrConv(srcStr, vbLowerCase)
     'MsgBox retStr
     TestLog_ASSERT retStr = "abc efg hij", "Converts the string to lowercase characters:" & retStr
-    
+
     retStr = StrConv(srcStr, vbProperCase)
     'MsgBox retStr
     TestLog_ASSERT retStr = "Abc Efg Hij", "Converts the first letter of every word in string to uppercase:" & retStr
-    
+
     'retStr = StrConv("ABCDEVB¥ì¥¹¥­¥å©`", vbWide)
     'MsgBox retStr
     'TestLog_ASSERT retStr = "£Á£Â£Ã£Ä£ÅVB¥ì¥¹¥­¥å©`", "Converts narrow (single-byte) characters in string to wide"
-    
+
     'retStr = StrConv("£Á£Â£Ã£Ä£ÅVB¥ì¥¹¥­¥å©`", vbNarrow)
     'MsgBox retStr
     'TestLog_ASSERT retStr = "ABCDEVB¥ì¥¹¥­¥å©`", "Converts wide (double-byte) characters in string to narrow (single-byte) characters." & retStr
-    
+
     'retStr = StrConv("¤Ï¤Ê¤Á¤ã¤ó", vbKatakana)
     'MsgBox retStr
     'TestLog_ASSERT retStr = "¥Ï¥Ê¥Á¥ã¥ó", "Converts Hiragana characters in string to Katakana characters.." & retStr
-    
+
    ' retStr = StrConv("¥Ï¥Ê¥Á¥ã¥ó", vbHiragana)
     'MsgBox retStr
    ' TestLog_ASSERT retStr = "¤Ï¤Ê¤Á¤ã¤ó", "Converts Katakana characters in string to Hiragana characters.." & retStr
-    
+
     'x = StrConv("ÉÏº£ÊÐABC", vbFromUnicode)
     'MsgBox retStr
     'TestLog_ASSERT UBound(x) = 8, "Converts the string from Unicode, the length is : " & UBound(x) + 1
-    
+
    ' retStr = StrConv(x, vbUnicode)
     'MsgBox retStr
    ' TestLog_ASSERT retStr = "ÉÏº£ÊÐABC", "Converts the string to Unicode: " & retStr
-    
+
     result = result & Chr$(10) & "Tests passed: " & passCount & Chr$(10) & "Tests failed: " & failCount & Chr$(10)
     verify_testStrConv = result
 
@@ -86,5 +86,5 @@ Sub TestLog_ASSERT(assertion As Boolean, Optional testId As String, Optional tes
         result = result & Chr$(10) & " Failed: " & testMsg
         failCount = failCount + 1
     End If
-    
+
 End Sub

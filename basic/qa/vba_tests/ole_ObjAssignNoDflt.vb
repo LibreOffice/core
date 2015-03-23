@@ -17,13 +17,13 @@ objCmd.ActiveConnection = cn
 If objCmd.ActiveConnection.CommandTimeout <> modifiedTimeout Then
     Rem if we copied the object by reference then we should have the
     Rem modified timeout ( because we should be just pointing as cn )
-    doUnitTest = "FAIL expected modified timeout " & modifiedTimeout & " but got " &  objCmd.ActiveConnection.CommandTimeout 
+    doUnitTest = "FAIL expected modified timeout " & modifiedTimeout & " but got " &  objCmd.ActiveConnection.CommandTimeout
     Exit Function
 End If
 cn.CommandTimeout = origTimeout ' restore timeout
 Rem Double check objCmd.ActiveConnection is pointing to objCmd.ActiveConnection
 If objCmd.ActiveConnection.CommandTimeout <> origTimeout Then
-    doUnitTest = "FAIL expected orignal timeout " & origTimeout & " but got " &  objCmd.ActiveConnection.CommandTimeout 
+    doUnitTest = "FAIL expected orignal timeout " & origTimeout & " but got " &  objCmd.ActiveConnection.CommandTimeout
     Exit Function
 End If
 doUnitTest = "OK" ' no error

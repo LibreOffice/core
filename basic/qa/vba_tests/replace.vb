@@ -44,7 +44,7 @@ Function verify_testReplace() as String
     TestLog_ASSERT retStr = "abcbcdBc", "start = 1, count = 0, not support in Unix: " & retStr
     result = result & Chr$(10) & "Tests passed: " & passCount & Chr$(10) & "Tests failed: " & failCount & Chr$(10)
     verify_testReplace = result
-    
+
     Exit Function
 errorHandler:
     TestLog_ASSERT (False), testName & ": hit error handler"
@@ -66,5 +66,5 @@ Sub TestLog_ASSERT(assertion As Boolean, Optional testId As String, Optional tes
         result = result & Chr$(10) & " Failed: " & testMsg
         failCount = failCount + 1
     End If
-    
+
 End Sub
