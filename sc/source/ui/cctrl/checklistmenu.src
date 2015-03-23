@@ -50,6 +50,11 @@ Resource RID_POPUP_FILTER
     {
         Text [ en-US ] = "Hide only the current item." ;
     };
+
+    String STR_EDIT_SEARCH_ITEMS
+    {
+        Text [ en-US ] = "Search items..." ;
+    };
 };
 
 Image RID_IMG_SELECT_CURRENT

@@ -62,16 +62,18 @@ Reference<XAccessible> ScAccessibleFilterTopWindow::getAccessibleChild(
     switch (nIndex)
     {
         case 0:
-            return mxAccListBox;
+            return mxAccEditSearchBox;
         case 1:
-            return mxAccToggleAll;
+            return mxAccListBox;
         case 2:
-            return mxAccSingleOnBtn;
+            return mxAccToggleAll;
         case 3:
-            return mxAccSingleOffBtn;
+            return mxAccSingleOnBtn;
         case 4:
-            return mxAccOkBtn;
+            return mxAccSingleOffBtn;
         case 5:
+            return mxAccOkBtn;
+        case 6:
             return mxAccCancelBtn;
         default:
             ;
@@ -90,6 +92,8 @@ void ScAccessibleFilterTopWindow::setAccessibleChild(
 {
     switch (eType)
     {
+        case EDIT_SEARCH_BOX:
+            mxAccEditSearchBox = rAccessible;
         case LISTBOX:
             mxAccListBox = rAccessible;
         break;
