@@ -464,7 +464,7 @@ static bool IterateNumrulePiece( const SwNodeIndex& rEnd,
            && ( rTmpEnd.GetNode().IsTxtNode() ) )       // look for valid end + 1
         ++rTmpEnd;
 
-    rTmpEnd--;                                      // valid end
+    --rTmpEnd;                                      // valid end
 
     return rTmpStart <= rTmpEnd;                    // valid ?
 }

@@ -1308,7 +1308,7 @@ bool SwTxtNode::InsertHint( SwTxtAttr * const pAttr, const SetAttrMode nMode )
                         pAnchor->GetCntntAnchor()->nContent == aIdx )
                     {
                         const_cast<SwIndex&>(
-                            pAnchor->GetCntntAnchor()->nContent)--;
+                            --pAnchor->GetCntntAnchor()->nContent);
                     }
                 }
                 pFly->SetAnchor( this );

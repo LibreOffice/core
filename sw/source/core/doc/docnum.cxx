@@ -475,26 +475,26 @@ bool SwDoc::MoveOutlinePara( const SwPaM& rPam, short nOffset )
     // which ends inside the range => The complete section will be moved.
     // The range will be shrunk if the last position is a start node.
     // The range will be shrunk if the last node is an end node which starts before the range.
-    aSttRg--;
+    --aSttRg;
     while( aSttRg.GetNode().IsStartNode() )
     {
         pNd = aSttRg.GetNode().EndOfSectionNode();
         if( pNd->GetIndex() >= aEndRg.GetIndex() )
             break;
-        aSttRg--;
+        --aSttRg;
     }
     ++aSttRg;
 
     aEndRg--;
     while( aEndRg.GetNode().IsStartNode() )
-        aEndRg--;
+        --aEndRg;
 
     while( aEndRg.GetNode().IsEndNode() )
     {
         pNd = aEndRg.GetNode().StartOfSectionNode();
         if( pNd->GetIndex() >= aSttRg.GetIndex() )
             break;
-        aEndRg--;
+        --aEndRg;
     }
     ++aEndRg;
 
@@ -522,7 +522,7 @@ bool SwDoc::MoveOutlinePara( const SwPaM& rPam, short nOffset )
             if( pNd->GetIndex() >= aEndRg.GetIndex() )
                 break;
         }
-        aInsertPos--;
+        --aInsertPos;
         --nNewPos;
     }
 
@@ -537,7 +537,7 @@ bool SwDoc::MoveOutlinePara( const SwPaM& rPam, short nOffset )
             pNd = aInsertPos.GetNode().StartOfSectionNode();
             if( pNd->GetIndex() >= aSttRg.GetIndex() )
                 break;
-            aInsertPos--;
+            --aInsertPos;
             --nNewPos;
         }
     }
@@ -1404,7 +1404,7 @@ static bool lcl_GotoNextPrevNum( SwPosition& rPos, bool bNext,
         // If NO_NUMLEVEL is switched on, we search the preceding Node with Numbering
         bool bError = false;
         do {
-            aIdx--;
+            --aIdx;
             if( aIdx.GetNode().IsTxtNode() )
             {
                 pNd = aIdx.GetNode().GetTxtNode();
@@ -1435,9 +1435,9 @@ static bool lcl_GotoNextPrevNum( SwPosition& rPos, bool bNext,
 
     const SwTxtNode* pLast;
     if( bNext )
-        aIdx++, pLast = pNd;
+        ++aIdx, pLast = pNd;
     else
-        aIdx--, pLast = 0;
+        --aIdx, pLast = 0;
 
     while( bNext ? ( aIdx.GetIndex() < aIdx.GetNodes().Count() - 1 )
                  : aIdx.GetIndex() != 0 )
@@ -1528,7 +1528,7 @@ const SwNumRule *  SwDoc::SearchNumRule(const SwPosition & rPos,
                 if (bForward)
                     ++aIdx;
                 else
-                    aIdx--;
+                    --aIdx;
             }
 
             if (aIdx.GetNode().IsTxtNode())
@@ -1566,7 +1566,7 @@ const SwNumRule *  SwDoc::SearchNumRule(const SwPosition & rPos,
                 if (bForward)
                     ++aIdx;
                 else
-                    aIdx--;
+                    --aIdx;
             }
 
             pNode = &aIdx.GetNode();
@@ -1929,12 +1929,12 @@ bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, bool bIsOutlMv )
                     SwPosition* pPos;
                     if( ( pPos = &pTmp->GetBound(true))->nNode == aIdx )
                     {
-                        pPos->nNode++;
+                        ++pPos->nNode;
                         pPos->nContent.Assign( pPos->nNode.GetNode().GetCntntNode(),0);
                     }
                     if( ( pPos = &pTmp->GetBound(false))->nNode == aIdx )
                     {
-                        pPos->nNode++;
+                        ++pPos->nNode;
                         pPos->nContent.Assign( pPos->nNode.GetNode().GetCntntNode(),0);
                     }
                 }
@@ -1944,7 +1944,7 @@ bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, bool bIsOutlMv )
                     pCNd->JoinNext();
             }
 
-            rOrigPam.GetPoint()->nNode++;
+            ++rOrigPam.GetPoint()->nNode;
             rOrigPam.GetPoint()->nContent.Assign( rOrigPam.GetCntntNode(), 0 );
 
             RedlineMode_t eOld = getIDocumentRedlineAccess().GetRedlineMode();

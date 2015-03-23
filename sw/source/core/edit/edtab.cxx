@@ -68,7 +68,7 @@ void    ConvertNestedTablesToText( const SwTableLines &rTableLines, sal_Unicode 
             {
                 SwNodeIndex nodeIndex( *pTableBox->GetSttNd(), 1 );
                 SwNodeIndex endNodeIndex( *pTableBox->GetSttNd()->EndOfSectionNode() );
-                for( ; nodeIndex < endNodeIndex ; nodeIndex++ )
+                for( ; nodeIndex < endNodeIndex ; ++nodeIndex )
                 {
                     if ( SwTableNode* pTableNode = nodeIndex.GetNode().GetTableNode() )
                         ConvertTableToText( pTableNode, cCh );

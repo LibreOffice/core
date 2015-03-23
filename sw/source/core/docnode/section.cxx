@@ -1229,13 +1229,13 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
             pVSh->StartAction();
 
         SwPosition aPos( aIdx, SwIndex( pNewNd, 0 ));
-        aPos.nNode--;
+        --aPos.nNode;
         pDoc->CorrAbs( aIdx, aEndIdx, aPos, true );
 
         pPam = new SwPaM( aPos );
 
         // Delete everything succeeding it
-        aIdx--;
+        --aIdx;
         DelFlyInRange( aIdx, aEndIdx );
         _DelBookmarks(aIdx, aEndIdx);
         ++aIdx;

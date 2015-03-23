@@ -983,7 +983,7 @@ SwNodeIndex SwDoc::AppendDoc(const SwDoc& rSource, sal_uInt16 const nStartPageNu
         {
             SwNodeIndex aIndexBefore(rInsPos.nNode);
 
-            aIndexBefore--;
+            --aIndexBefore;
 #ifdef DBG_UTIL
     SAL_INFO( "sw.docappend", "CopyRange In: " << CNTNT_DOC( this ) );
 #endif
@@ -1025,7 +1025,7 @@ SwNodeIndex SwDoc::AppendDoc(const SwDoc& rSource, sal_uInt16 const nStartPageNu
 
                 // find the first node allowed to contain a RES_PAGEDESC
                 while (true) {
-                    aFixupIdx++;
+                    ++aFixupIdx;
 
                     SwNode &node = aFixupIdx.GetNode();
                     if ( node.IsTxtNode() ) {

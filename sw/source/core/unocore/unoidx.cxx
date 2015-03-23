@@ -1806,7 +1806,7 @@ throw (uno::RuntimeException, std::exception)
             aPam.GetPoint()->nContent = *pTxtMark->End();
         }
         else
-            aPam.GetPoint()->nContent++;
+            ++aPam.GetPoint()->nContent;
 
         m_pImpl->ReplaceTOXMark(*pType, aMark, aPam);
     }
@@ -2058,7 +2058,7 @@ SwXDocumentIndexMark::getAnchor() throw (uno::RuntimeException, std::exception)
     }
     else
     {
-        aPam.GetPoint()->nContent++;
+        ++aPam.GetPoint()->nContent;
     }
     const uno::Reference< frame::XModel > xModel =
         m_pImpl->m_pDoc->GetDocShell()->GetBaseModel();
@@ -2200,7 +2200,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
         }
         else
         {
-            aPam.GetPoint()->nContent++;
+            ++aPam.GetPoint()->nContent;
         }
 
         m_pImpl->ReplaceTOXMark(*pType, aMark, aPam);
