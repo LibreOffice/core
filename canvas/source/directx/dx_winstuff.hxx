@@ -176,7 +176,8 @@ namespace dxcanvas
 #endif
 
 #undef DELETE
-#undef PolyPolygon
+#undef GradientStyle_RECT
+#undef Polygon
 
 #endif // INCLUDED_CANVAS_SOURCE_DIRECTX_DX_WINSTUFF_HXX
 
