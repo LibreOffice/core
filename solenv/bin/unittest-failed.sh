@@ -17,18 +17,20 @@
 #   except in compliance with the License. You may obtain a copy of
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 
-ECHECKING='export DEBUGCPPUNIT=TRUE            # for exception catching'
+ECHECKING=
 DEBUGGING=
-MCHECKING='export VALGRIND=memcheck            # for memory checking'
+MCHECKING=
 
 if [ "$3" = "WNT" ]; then
-    ECHECKING='export DEBUGCPPUNIT=TRUE                                      # for exception catching'
     DEBUGGING='export CPPUNITTRACE="\"[full path to devenv.exe]\" /debugexe" # for interactive debugging in Visual Studio'
     MCHECKING='export CPPUNITTRACE="drmemory -free_max_frames 20"            # for memory checking (install Dr.Memory first)'
 elif [ "$3" = "MACOSX" ]; then
     DEBUGGING='export CPPUNITTRACE="lldb --"       # for interactive debugging on OS X'
+    MCHECKING='export VALGRIND=memcheck            # for memory checking'
 else
+    ECHECKING='export DEBUGCPPUNIT=TRUE            # for exception catching'
     DEBUGGING='export CPPUNITTRACE="gdb --args"    # for interactive debugging on Linux'
+    MCHECKING='export VALGRIND=memcheck            # for memory checking'
 fi
 
 # print the actual error message
