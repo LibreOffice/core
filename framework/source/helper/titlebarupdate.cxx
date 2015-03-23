@@ -139,25 +139,17 @@ void TitleBarUpdate::impl_updateApplicationID(const css::uno::Reference< css::fr
 
         OUString sDesktopName;
         OUString aModuleId = xModuleManager->identify(xFrame);
-        if ( aModuleId == "com.sun.star.text.TextDocument" ||
-             aModuleId == "com.sun.star.text.GlobalDocument" ||
-             aModuleId == "com.sun.star.text.WebDocument" ||
-             aModuleId == "com.sun.star.xforms.XMLFormDocument" )
+        if ( aModuleId.startsWith("com.sun.star.text.") || aModuleId.startsWith("com.sun.star.xforms.") )
             sDesktopName = "Writer";
-        else if ( aModuleId == "com.sun.star.sheet.SpreadsheetDocument" )
+        else if ( aModuleId.startsWith("com.sun.star.sheet.") )
             sDesktopName = "Calc";
-        else if ( aModuleId == "com.sun.star.presentation.PresentationDocument" )
+        else if ( aModuleId.startsWith("com.sun.star.presentation.") )
             sDesktopName = "Impress";
-        else if ( aModuleId == "com.sun.star.drawing.DrawingDocument" )
+        else if ( aModuleId.startsWith("com.sun.star.drawing." ) )
             sDesktopName = "Draw";
-        else if ( aModuleId == "com.sun.star.formula.FormulaProperties" )
+        else if ( aModuleId.startsWith("com.sun.star.formula." ) )
             sDesktopName = "Math";
-        else if ( aModuleId == "com.sun.star.sdb.DatabaseDocument" ||
-                  aModuleId == "com.sun.star.sdb.OfficeDatabaseDocument" ||
-                  aModuleId == "com.sun.star.sdb.RelationDesign" ||
-                  aModuleId == "com.sun.star.sdb.QueryDesign" ||
-                  aModuleId == "com.sun.star.sdb.TableDesign" ||
-                  aModuleId == "com.sun.star.sdb.DataSourceBrowser" )
+        else if ( aModuleId.startsWith("com.sun.star.sdb.") )
             sDesktopName = "Base";
         else
             sDesktopName = "Startcenter";
