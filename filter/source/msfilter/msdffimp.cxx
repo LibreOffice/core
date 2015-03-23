@@ -4278,9 +4278,11 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
 
             if ( bGraphic )
             {
-                pRet = ImportGraphic( rSt, aSet, aObjData );        // SJ: #68396# is no longer true (fixed in ppt2000)
-                ApplyAttributes( rSt, aSet, aObjData );
-                pRet->SetMergedItemSet(aSet);
+                if (!mbSkipImages) {
+                    pRet = ImportGraphic( rSt, aSet, aObjData );        // SJ: #68396# is no longer true (fixed in ppt2000)
+                    ApplyAttributes( rSt, aSet, aObjData );
+                    pRet->SetMergedItemSet(aSet);
+                }
             }
             else if ( aObjData.eShapeType == mso_sptLine && !( GetPropertyValue( DFF_Prop_fc3DLightFace ) & 8 ) )
             {
@@ -5527,7 +5529,8 @@ SvxMSDffManager::SvxMSDffManager(SvStream& rStCtrl_,
                                  long      nApplicationScale,
                                  ColorData mnDefaultColor_,
                                  sal_uLong     nDefaultFontHeight_,
-                                 SvStream* pStData2_ )
+                                 SvStream* pStData2_,
+                                 bool bSkipImages )
     :DffPropertyReader( *this ),
      pFormModel( NULL ),
      pBLIPInfos( new SvxMSDffBLIPInfos  ),
@@ -5550,7 +5553,8 @@ SvxMSDffManager::SvxMSDffManager(SvStream& rStCtrl_,
      nSvxMSDffOLEConvFlags( 0 ),
      pSecPropSet( NULL ),
      mnDefaultColor( mnDefaultColor_),
-     mbTracing( false )
+     mbTracing( false ),
+     mbSkipImages (bSkipImages)
 {
     SetModel( pSdrModel_, nApplicationScale );
 

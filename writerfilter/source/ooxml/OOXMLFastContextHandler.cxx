@@ -1826,9 +1826,12 @@ OOXMLFastContextHandlerWrapper::lcl_createFastChildContext
     // filter out a single token. Just hardwire the wrap token here till we
     // need a more generic solution.
     bool bIsWrap = Element == static_cast<sal_Int32>(NMSP_vmlWord | XML_wrap);
+    bool bSkipImages = getDocument()->IsSkipImages() && oox::getNamespace(Element) == static_cast<sal_Int32>(NMSP_dml) &&
+        !((oox::getBaseToken(Element) == XML_linkedTxbx) || (oox::getBaseToken(Element) == XML_txbx));
+
     if ( bInNamespaces && (!bIsWrap || static_cast<OOXMLFastContextHandlerShape*>(mpParent)->isShapeSent()) )
         xResult.set(OOXMLFactory::getInstance()->createFastChildContextFromStart(this, Element));
-    else if (mxContext.is())
+    else if (mxContext.is()  && !bSkipImages)
     {
         OOXMLFastContextHandlerWrapper * pWrapper =
             new OOXMLFastContextHandlerWrapper

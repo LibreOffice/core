@@ -526,6 +526,7 @@ public:
     ColorData           mnDefaultColor;
 
     bool                mbTracing;
+    bool                mbSkipImages;
 
     Color MSO_TEXT_CLR_ToColor( sal_uInt32 nColorCode ) const;
     Color MSO_CLR_ToColor( sal_uInt32 nColorCode,
@@ -574,6 +575,7 @@ public:
         @param mnDefaultColor_     ???
         @param nDefaultFontHeight_ ???
         @param pStData2_           ???
+        @param bSkipImages         skipping images for text extraction/indexing
     */
     SvxMSDffManager( SvStream& rStCtrl,
                      const OUString& rBaseURL,
@@ -583,7 +585,8 @@ public:
                      long      nApplicationScale    =  0,
                      ColorData mnDefaultColor_      =  COL_DEFAULT,
                      sal_uLong nDefaultFontHeight_  = 24,
-                     SvStream* pStData2_            =  0 );
+                     SvStream* pStData2_            =  0,
+                     bool bSkipImages               =  false );
 
     // in PPT the parameters DGGContainerOffset and PicStream are provided by an
     // init method

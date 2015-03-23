@@ -515,7 +515,7 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
 
             WW8PicDesc aPD( aPic );
             if (!pMSDffManager)
-                pMSDffManager = new SwMSDffManager(*this);
+                pMSDffManager = new SwMSDffManager(*this, mbSkipImages);
             /*
             ##835##
             Disable use of main stream as fallback stream for inline direct

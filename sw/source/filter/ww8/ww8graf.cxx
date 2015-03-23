@@ -3040,7 +3040,7 @@ void SwWW8ImplReader::GrafikCtor()  // Fuer SVDraw und VCControls und Escher
         OSL_ENSURE(pDrawModel, "Kann DrawModel nicht anlegen");
         pDrawPg = pDrawModel->GetPage(0);
 
-        pMSDffManager = new SwMSDffManager(*this);
+        pMSDffManager = new SwMSDffManager(*this, mbSkipImages);
         pMSDffManager->SetModel(pDrawModel, 1440);
         /*
          Now the dff manager always needs a controls // converter as well, but a

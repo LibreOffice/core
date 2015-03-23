@@ -192,6 +192,7 @@ public:
     OUString            GetBaseURL( bool bForSaving=false );
     void                SetInCheckIn( bool bInCheckIn );
     bool                IsInCheckIn( );
+    bool                IsSkipImages( );
 
     SAL_DLLPRIVATE bool HasStorage_Impl() const;
 

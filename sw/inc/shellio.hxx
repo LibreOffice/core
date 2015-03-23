@@ -154,6 +154,7 @@ class SW_DLLPUBLIC SwReader: public SwDocFac
     SwPaM* pCrsr;
     OUString aFileName;
     OUString sBaseURL;
+    bool mbSkipImages;
 
 public:
 
@@ -181,6 +182,7 @@ public:
 
 protected:
     void                SetBaseURL( const OUString& rURL ) { sBaseURL = rURL; }
+    void                SetSkipImages( bool bSkipImages ) { mbSkipImages = bSkipImages; }
 };
 
 // Special Readers can be both!! (Excel, W4W, .. ).
@@ -211,6 +213,7 @@ protected:
     bool bOrganizerMode : 1;
     bool bHasAskTemplateName : 1;
     bool bIgnoreHTMLComments : 1;
+    bool bSkipImages : 1;
 
     virtual OUString GetTemplateName() const;
 
