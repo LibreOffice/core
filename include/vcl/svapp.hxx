@@ -1668,19 +1668,22 @@ class SolarMutexTryAndBuyGuard
 } // namespace vcl
 
 /**
- A helper class that calls Application::ReleaseSolarMutex() in its constructor
- and restores the mutex in its destructor.
+ A helper class that releases solar mutex in its constructor and restores the
+ mutex in its destructor.
 */
 class SolarMutexReleaser
 {
     sal_uLong mnReleased;
 
 public:
-    SolarMutexReleaser(): mnReleased(Application::ReleaseSolarMutex()) {}
+    static sal_uLong ReleaseSolarMutex();
+    static void AcquireSolarMutex(sal_uLong nCount);
+
+    SolarMutexReleaser(): mnReleased (ReleaseSolarMutex) { }
 
     ~SolarMutexReleaser()
     {
-        Application::AcquireSolarMutex( mnReleased );
+        AcquireSolarMutex (mnReleased);
     }
 };
 

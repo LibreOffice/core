@@ -404,18 +404,6 @@ oslThreadIdentifier Application::GetMainThreadIdentifier()
     return ImplGetSVData()->mnMainThreadId;
 }
 
-sal_uLong Application::ReleaseSolarMutex()
-{
-    ImplSVData* pSVData = ImplGetSVData();
-    return pSVData->mpDefInst->ReleaseYieldMutex();
-}
-
-void Application::AcquireSolarMutex( sal_uLong nCount )
-{
-    ImplSVData* pSVData = ImplGetSVData();
-    pSVData->mpDefInst->AcquireYieldMutex( nCount );
-}
-
 bool Application::IsInMain()
 {
     return ImplGetSVData()->maAppData.mbInAppMain;
@@ -1646,6 +1634,18 @@ ImplDelData::~ImplDelData()
         const_cast<vcl::Window*>(mpWindow)->ImplRemoveDel( this );
         mpWindow = NULL;
     }
+}
+
+static sal_uLong SolarMutexReleaser::ReleaseSolarMutex()
+{
+    ImplSVData* pSVData = ImplGetSVData();
+    return pSVData->mpDefInst->ReleaseYieldMutex();
+}
+
+static void SolarMutexReleaser::AcquireSolarMutex(sal_uLong nCount)
+{
+    ImplSVData* pSVData = ImplGetSVData();
+    pSVData->mpDefInst->AcquireYieldMutex (nCount);
 }
 
 
