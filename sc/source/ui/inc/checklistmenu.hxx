@@ -12,6 +12,7 @@
 
 #include <vcl/popupmenuwindow.hxx>
 #include <vcl/button.hxx>
+#include <vcl/edit.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/timer.hxx>
 #include <svx/checklbx.hxx>
@@ -306,6 +307,7 @@ private:
         BTN_SINGLE_UNSELECT,
         BTN_OK,               // OK button
         BTN_CANCEL,           // Cancel button
+        EDIT_SEARCH,          // Search box
     };
     void getSectionPosSize(Point& rPos, Size& rSize, SectionType eType) const;
 
@@ -321,9 +323,12 @@ private:
     DECL_LINK( ButtonHdl, Button* );
     DECL_LINK( TriStateHdl, void* );
     DECL_LINK( CheckHdl, SvTreeListBox* );
+    DECL_LINK( EdModifyHdl, void* );
 
 private:
     SvTreeListEntry* findEntry(  SvTreeListEntry* pParent, const OUString& rText );
+
+    Edit maEdSearch;
 
     ScCheckListBox maChecks;
 
