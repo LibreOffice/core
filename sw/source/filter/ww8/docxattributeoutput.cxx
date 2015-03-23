@@ -326,12 +326,11 @@ void DocxAttributeOutput::StartParagraph( ww8::WW8TableNodeInfo::Pointer_t pText
     m_bIsFirstParagraph = false;
 }
 
-static void lcl_deleteAndResetTheLists( ::sax_fastparser::FastAttributeList* &pSdtPrTokenChildren, ::sax_fastparser::FastAttributeList* &pSdtPrDataBindingAttrs, OUString& rSdtPrAlias)
+static void lcl_deleteAndResetTheLists( std::unique_ptr<sax_fastparser::FastAttributeList> &pSdtPrTokenChildren, ::sax_fastparser::FastAttributeList* &pSdtPrDataBindingAttrs, OUString& rSdtPrAlias)
 {
     if( pSdtPrTokenChildren )
     {
-        delete pSdtPrTokenChildren ;
-        pSdtPrTokenChildren = NULL;
+        pSdtPrTokenChildren.reset(0);
     }
     if( pSdtPrDataBindingAttrs )
     {
@@ -602,7 +601,7 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
 }
 
 void DocxAttributeOutput::WriteSdtBlock( sal_Int32& nSdtPrToken,
-                                         ::sax_fastparser::FastAttributeList*& pSdtPrTokenChildren,
+                                         std::unique_ptr<sax_fastparser::FastAttributeList>& pSdtPrTokenChildren,
                                          ::sax_fastparser::FastAttributeList*& pSdtPrTokenAttributes,
                                          ::sax_fastparser::FastAttributeList*& pSdtPrDataBindingAttrs,
                                          OUString& rSdtPrAlias,
@@ -692,7 +691,7 @@ void DocxAttributeOutput::WriteSdtBlock( sal_Int32& nSdtPrToken,
 
         // clear sdt status
         nSdtPrToken = 0;
-        delete pSdtPrTokenChildren; pSdtPrTokenChildren = NULL;
+        pSdtPrTokenChildren.reset(0);
         if( pSdtPrDataBindingAttrs )
         {
             // do not delete yet; it's in xAttrList inside the parser
@@ -8326,12 +8325,10 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_nParaAfterSpacing(0),
       m_setFootnote(false)
     , m_nParagraphSdtPrToken(0)
-    , m_pParagraphSdtPrTokenChildren(NULL)
     , m_pParagraphSdtPrTokenAttributes(NULL)
     , m_pParagraphSdtPrDataBindingAttrs(NULL)
     , m_nRunSdtPrToken(0)
     , m_nStateOfFlyFrame( FLY_NOT_PROCESSED )
-    , m_pRunSdtPrTokenChildren(NULL)
     , m_pRunSdtPrDataBindingAttrs(NULL)
     , m_bParagraphSdtHasId(false)
 {
@@ -8340,10 +8337,8 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
 DocxAttributeOutput::~DocxAttributeOutput()
 {
     delete m_pTableWrt, m_pTableWrt = NULL;
-    delete m_pParagraphSdtPrTokenChildren; m_pParagraphSdtPrTokenChildren = NULL;
     delete m_pParagraphSdtPrTokenAttributes; m_pParagraphSdtPrTokenAttributes = NULL;
     delete m_pParagraphSdtPrDataBindingAttrs; m_pParagraphSdtPrDataBindingAttrs = NULL;
-    delete m_pRunSdtPrTokenChildren; m_pRunSdtPrTokenChildren = NULL;
     delete m_pRunSdtPrDataBindingAttrs; m_pRunSdtPrDataBindingAttrs = NULL;
 }
 
