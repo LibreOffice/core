@@ -1676,11 +1676,23 @@ class SolarMutexReleaser
     sal_uLong mnReleased;
 
 public:
-    SolarMutexReleaser(): mnReleased(Application::ReleaseSolarMutex()) {}
+    static sal_uLong ReleaseSolarMutex()
+    {
+        ImplSVData* pSVData = ImplGetSVData();
+        return pSVData->mpDefInst->ReleaseYieldMutex();
+    }
+
+    static void AcquireSolarMutex(sal_uLong nCount)
+    {
+        ImplSVData* pSVData = ImplGetSVData();
+        pSVData->mpDefInst->AcquireYieldMutex (nCount);
+    }
+
+    SolarMutexReleaser(): mnReleased (ReleaseSolarMutex) { }
 
     ~SolarMutexReleaser()
     {
-        Application::AcquireSolarMutex( mnReleased );
+        AcquireSolarMutex (mnReleased);
     }
 };
 
