@@ -30,7 +30,8 @@
 #include <stack>
 #include <vcl/mapmod.hxx>
 #include <vcl/print.hxx>
-#include <vcl/ITiledRenderable.hxx>
+#define LOK_USE_UNSTABLE_API
+#include <LibreOfficeKit/LibreOfficeKitTypes.h>
 
 namespace com { namespace sun { namespace star { namespace accessibility {
            class XAccessible; } } } }
