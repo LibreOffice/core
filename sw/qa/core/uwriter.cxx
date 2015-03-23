@@ -1404,7 +1404,7 @@ namespace
         TestClient() : m_nModifyCount(0), m_nNotifyCount(0) {};
         virtual void Modify( const SfxPoolItem*, const SfxPoolItem*) SAL_OVERRIDE
         { ++m_nModifyCount; }
-        virtual void SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
+        virtual void SwClientNotify(const SwModify& rModify, const SfxHint& rHint) SAL_OVERRIDE
         {
             if(typeid(TestHint) == typeid(rHint))
                 ++m_nNotifyCount;
