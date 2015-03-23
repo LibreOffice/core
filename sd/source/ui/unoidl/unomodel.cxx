@@ -2402,6 +2402,32 @@ void SdXImpressDocument::postMouseEvent(int nType, int nX, int nY, int nCount)
     }
 }
 
+void SdXImpressDocument::setTextSelection(int nType, int nX, int nY)
+{
+    SolarMutexGuard aGuard;
+
+    DrawViewShell* pViewShell = GetViewShell();
+    if (!pViewShell)
+        return;
+
+    Point aPoint(convertTwipToMm100(nX), convertTwipToMm100(nY));
+    switch (nType)
+    {
+    case LOK_SETTEXTSELECTION_START:
+        pViewShell->SetCursorLogicPosition(aPoint, /*bPoint=*/false, /*bClearMark=*/false);
+        break;
+    case LOK_SETTEXTSELECTION_END:
+        pViewShell->SetCursorLogicPosition(aPoint, /*bPoint=*/true, /*bClearMark=*/false);
+        break;
+    case LOK_SETTEXTSELECTION_RESET:
+        pViewShell->SetCursorLogicPosition(aPoint, /*bPoint=*/true, /*bClearMark=*/true);
+        break;
+    default:
+        assert(false);
+        break;
+    }
+}
+
 uno::Reference< i18n::XForbiddenCharacters > SdXImpressDocument::getForbiddenCharsTable()
 {
     uno::Reference< i18n::XForbiddenCharacters > xForb(mxForbidenCharacters);
