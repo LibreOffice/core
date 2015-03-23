@@ -115,23 +115,23 @@ typedef sal_uInt16 WindowType;
 typedef sal_Int64 WinBits;
 
 // Window-Bits for Window
-#define WB_CLIPCHILDREN         ((WinBits)0x00000001)
-#define WB_DIALOGCONTROL        ((WinBits)0x00000002)
-#define WB_NODIALOGCONTROL      ((WinBits)0x00000004)
-#define WB_BORDER               ((WinBits)0x00000008)
-#define WB_NOBORDER             ((WinBits)0x00000010)
-#define WB_SIZEABLE             ((WinBits)0x00000020)
-#define WB_3DLOOK               ((WinBits)0x00000040)
-#define WB_AUTOSIZE             ((WinBits)0x00000080)
+WinBits const WB_CLIPCHILDREN =         0x00000001;
+WinBits const WB_DIALOGCONTROL =        0x00000002;
+WinBits const WB_NODIALOGCONTROL =      0x00000004;
+WinBits const WB_BORDER =               0x00000008;
+WinBits const WB_NOBORDER =             0x00000010;
+WinBits const WB_SIZEABLE =             0x00000020;
+WinBits const WB_3DLOOK =               0x00000040;
+WinBits const WB_AUTOSIZE =             0x00000080;
 
 // Window-Bits for SystemWindows
-#define WB_MOVEABLE             ((WinBits)0x00000100)
-#define WB_ROLLABLE             ((WinBits)0x00000200)
-#define WB_CLOSEABLE            ((WinBits)0x00000400)
-#define WB_STANDALONE           ((WinBits)0x00000800)
-#define WB_APP                  ((WinBits)0x00001000)
-#define WB_PINABLE              ((WinBits)0x00002000)
-#define WB_SYSTEMWINDOW         ((WinBits)SAL_CONST_INT64(0x40000000))
+WinBits const WB_MOVEABLE =             0x00000100;
+WinBits const WB_ROLLABLE =             0x00000200;
+WinBits const WB_CLOSEABLE =            0x00000400;
+WinBits const WB_STANDALONE =           0x00000800;
+WinBits const WB_APP =                  0x00001000;
+WinBits const WB_PINABLE =              0x00002000;
+WinBits const WB_SYSTEMWINDOW =         SAL_CONST_INT64(0x40000000);
 // warning: do not confuse WB_SYSTEMCHILDWINDOW with the SystemChildWindow class
 //
 // the SystemChildWindow class was there first and is a very specialized
@@ -141,148 +141,148 @@ typedef sal_Int64 WinBits;
 // WB_SYSTEMCHILDWINDOW on the other hand is to be used on system windows
 // which should be created as system child windows with (more or less)
 // normal event handling
-#define WB_SYSTEMCHILDWINDOW    ((WinBits)SAL_CONST_INT64(0x8000000000))
-#define WB_SIZEMOVE             (WB_SIZEABLE | WB_MOVEABLE)
+WinBits const WB_SYSTEMCHILDWINDOW =    SAL_CONST_INT64(0x8000000000);
+WinBits const WB_SIZEMOVE =             (WB_SIZEABLE | WB_MOVEABLE);
 
 // Standard-Window-Bits for ChildWindows
-#define WB_TABSTOP              ((WinBits)0x00000100)
-#define WB_NOTABSTOP            ((WinBits)0x00000200)
-#define WB_GROUP                ((WinBits)0x00000400)
-#define WB_NOGROUP              ((WinBits)0x00000800)
-#define WB_HORZ                 ((WinBits)0x00001000)
-#define WB_VERT                 ((WinBits)0x00002000)
-#define WB_LEFT                 ((WinBits)0x00004000)
-#define WB_CENTER               ((WinBits)0x00008000)
-#define WB_RIGHT                ((WinBits)0x00010000)
-#define WB_TOP                  ((WinBits)0x00020000)
-#define WB_VCENTER              ((WinBits)0x00040000)
-#define WB_BOTTOM               ((WinBits)0x00080000)
-#define WB_DRAG                 ((WinBits)0x00100000)
-#define WB_SPIN                 ((WinBits)0x00200000)
-#define WB_REPEAT               ((WinBits)0x00400000)
-#define WB_NOPOINTERFOCUS       ((WinBits)0x00800000)
-#define WB_WORDBREAK            ((WinBits)0x01000000)
-#define WB_NOLABEL              ((WinBits)0x02000000)
-#define WB_SORT                 ((WinBits)0x04000000)
-#define WB_DROPDOWN             ((WinBits)0x08000000)
-#define WB_HIDE                 ((WinBits)SAL_CONST_INT64(0x80000000))
-#define WB_AUTOHSCROLL          ((WinBits)SAL_CONST_INT64(0x10000000))
-#define WB_DOCKABLE             ((WinBits)SAL_CONST_INT64(0x20000000))
-#define WB_AUTOVSCROLL          ((WinBits)SAL_CONST_INT64(0x40000000))
-#define WB_HYPHENATION          (((WinBits)SAL_CONST_INT64(0x800000000)) | WB_WORDBREAK)
-#define WB_CHILDDLGCTRL         ((WinBits)SAL_CONST_INT64(0x100000000000))
-#define WB_REFMODE              ((WinBits)SAL_CONST_INT64(0x200000000000))
+WinBits const WB_TABSTOP =              0x00000100;
+WinBits const WB_NOTABSTOP =            0x00000200;
+WinBits const WB_GROUP =                0x00000400;
+WinBits const WB_NOGROUP =              0x00000800;
+WinBits const WB_HORZ =                 0x00001000;
+WinBits const WB_VERT =                 0x00002000;
+WinBits const WB_LEFT =                 0x00004000;
+WinBits const WB_CENTER =               0x00008000;
+WinBits const WB_RIGHT =                0x00010000;
+WinBits const WB_TOP =                  0x00020000;
+WinBits const WB_VCENTER =              0x00040000;
+WinBits const WB_BOTTOM =               0x00080000;
+WinBits const WB_DRAG =                 0x00100000;
+WinBits const WB_SPIN =                 0x00200000;
+WinBits const WB_REPEAT =               0x00400000;
+WinBits const WB_NOPOINTERFOCUS =       0x00800000;
+WinBits const WB_WORDBREAK =            0x01000000;
+WinBits const WB_NOLABEL =              0x02000000;
+WinBits const WB_SORT =                 0x04000000;
+WinBits const WB_DROPDOWN =             0x08000000;
+WinBits const WB_HIDE =                 SAL_CONST_INT64(0x80000000);
+WinBits const WB_AUTOHSCROLL =          SAL_CONST_INT64(0x10000000);
+WinBits const WB_DOCKABLE =             SAL_CONST_INT64(0x20000000);
+WinBits const WB_AUTOVSCROLL =          SAL_CONST_INT64(0x40000000);
+WinBits const WB_HYPHENATION =          SAL_CONST_INT64(0x800000000) | WB_WORDBREAK;
+WinBits const WB_CHILDDLGCTRL =         SAL_CONST_INT64(0x100000000000);
+WinBits const WB_REFMODE =              SAL_CONST_INT64(0x200000000000);
 
 // system floating window
-#define WB_SYSTEMFLOATWIN       ((WinBits)SAL_CONST_INT64(0x100000000))
-#define WB_INTROWIN             ((WinBits)SAL_CONST_INT64(0x200000000))
-#define WB_NOSHADOW             ((WinBits)SAL_CONST_INT64(0x400000000))
-#define WB_TOOLTIPWIN           ((WinBits)SAL_CONST_INT64(0x800000000))
-#define WB_OWNERDRAWDECORATION  ((WinBits)SAL_CONST_INT64(0x2000000000))
-#define WB_DEFAULTWIN           ((WinBits)SAL_CONST_INT64(0x4000000000))
-#define WB_NEEDSFOCUS           ((WinBits)SAL_CONST_INT64(0x1000000000))
-#define WB_POPUP                ((WinBits)SAL_CONST_INT64(0x20000000))
+WinBits const WB_SYSTEMFLOATWIN =       SAL_CONST_INT64(0x100000000);
+WinBits const WB_INTROWIN =             SAL_CONST_INT64(0x200000000);
+WinBits const WB_NOSHADOW =             SAL_CONST_INT64(0x400000000);
+WinBits const WB_TOOLTIPWIN =           SAL_CONST_INT64(0x800000000);
+WinBits const WB_OWNERDRAWDECORATION =  SAL_CONST_INT64(0x2000000000);
+WinBits const WB_DEFAULTWIN =           SAL_CONST_INT64(0x4000000000);
+WinBits const WB_NEEDSFOCUS =           SAL_CONST_INT64(0x1000000000);
+WinBits const WB_POPUP =                SAL_CONST_INT64(0x20000000);
 
-#define WB_HSCROLL              WB_HORZ
-#define WB_VSCROLL              WB_VERT
-#define WB_TOPIMAGE             WB_TOP
+WinBits const WB_HSCROLL =              WB_HORZ;
+WinBits const WB_VSCROLL =              WB_VERT;
+WinBits const WB_TOPIMAGE =             WB_TOP;
 
 // Window-Bits for PushButtons
-#define WB_DEFBUTTON            ((WinBits)0x10000000)
-#define WB_NOLIGHTBORDER        ((WinBits)0x20000000)
-#define WB_RECTSTYLE            ((WinBits)0x08000000)
-#define WB_SMALLSTYLE           ((WinBits)0x04000000)
-#define WB_TOGGLE               ((WinBits)SAL_CONST_INT64(0x1000000000))
-#define WB_BEVELBUTTON          ((WinBits)SAL_CONST_INT64(0x2000000000))
-#define WB_FLATBUTTON           ((WinBits)SAL_CONST_INT64(0x4000000000))
+WinBits const WB_DEFBUTTON =            0x10000000;
+WinBits const WB_NOLIGHTBORDER =        0x20000000;
+WinBits const WB_RECTSTYLE =            0x08000000;
+WinBits const WB_SMALLSTYLE =           0x04000000;
+WinBits const WB_TOGGLE =               SAL_CONST_INT64(0x1000000000);
+WinBits const WB_BEVELBUTTON =          SAL_CONST_INT64(0x2000000000);
+WinBits const WB_FLATBUTTON =           SAL_CONST_INT64(0x4000000000);
 
 // Window-Bits for FixedText
-#define WB_PATHELLIPSIS         ((WinBits)0x00100000)
-#define WB_EXTRAOFFSET          ((WinBits)0x02000000)
-#define WB_NOMULTILINE          ((WinBits)0x10000000)
-#define WB_INFO                 ((WinBits)0x20000000)
+WinBits const WB_PATHELLIPSIS =         0x00100000;
+WinBits const WB_EXTRAOFFSET =          0x02000000;
+WinBits const WB_NOMULTILINE =          0x10000000;
+WinBits const WB_INFO =                 0x20000000;
 
 // Window-Bits for CheckBox
-#define WB_CBLINESTYLE          ((WinBits)SAL_CONST_INT64(0x2000000000))
-#define WB_EARLYTOGGLE          ((WinBits)SAL_CONST_INT64(0x4000000000))
+WinBits const WB_CBLINESTYLE =          SAL_CONST_INT64(0x2000000000);
+WinBits const WB_EARLYTOGGLE =          SAL_CONST_INT64(0x4000000000);
 
 // Window-Bits for Edit
-#define WB_PASSWORD             ((WinBits)0x01000000)
-#define WB_READONLY             ((WinBits)0x02000000)
-#define WB_NOHIDESELECTION      ((WinBits)SAL_CONST_INT64(0x1000000000))
-#define WB_FORCECTRLBACKGROUND  ((WinBits)0x80000000)
+WinBits const WB_PASSWORD =             0x01000000;
+WinBits const WB_READONLY =             0x02000000;
+WinBits const WB_NOHIDESELECTION =      SAL_CONST_INT64(0x1000000000);
+WinBits const WB_FORCECTRLBACKGROUND =  0x80000000;
 
 // Window-Bits for MultiLineEdit
-#define WB_IGNORETAB            ((WinBits)0x20000000)
+WinBits const WB_IGNORETAB =            0x20000000;
 
 // Window-Bits for ListBox and MultiListBox
-#define WB_SIMPLEMODE           ((WinBits)0x20000000)
+WinBits const WB_SIMPLEMODE =           0x20000000;
 
 // Window-Bits for FixedBitmap
-#define WB_FAST                 ((WinBits)0x04000000)
-#define WB_SCALE                ((WinBits)0x08000000)
-#define WB_TOPLEFTVISIBLE       ((WinBits)0x10000000)
+WinBits const WB_FAST =                 0x04000000;
+WinBits const WB_SCALE =                0x08000000;
+WinBits const WB_TOPLEFTVISIBLE =       0x10000000;
 
 // Window-Bits for ToolBox
-#define WB_LINESPACING          ((WinBits)0x01000000)
-#define WB_SCROLL               ((WinBits)0x02000000)
-#define WB_FORCETABCYCLE        ((WinBits)0x04000000)
+WinBits const WB_LINESPACING =          0x01000000;
+WinBits const WB_SCROLL =               0x02000000;
+WinBits const WB_FORCETABCYCLE =        0x04000000;
 
 // Window-Bits for DockingWindows
-#define WB_DOCKBORDER           ((WinBits)0x00001000)
+WinBits const WB_DOCKBORDER =           0x00001000;
 
 // Window-Bits for SplitWindow
-#define WB_NOSPLITDRAW          ((WinBits)0x01000000)
-#define WB_FLATSPLITDRAW        ((WinBits)0x02000000)
+WinBits const WB_NOSPLITDRAW =          0x01000000;
+WinBits const WB_FLATSPLITDRAW =        0x02000000;
 
 // Window-Bits for MessageBoxen
-#define WB_OK                   ((WinBits)0x00100000)
-#define WB_OK_CANCEL            ((WinBits)0x00200000)
-#define WB_YES_NO               ((WinBits)0x00400000)
-#define WB_YES_NO_CANCEL        ((WinBits)0x00800000)
-#define WB_RETRY_CANCEL         ((WinBits)0x01000000)
-#define WB_DEF_OK               ((WinBits)0x02000000)
-#define WB_DEF_CANCEL           ((WinBits)0x04000000)
-#define WB_DEF_RETRY            ((WinBits)0x08000000)
-#define WB_DEF_YES              ((WinBits)SAL_CONST_INT64(0x10000000))
-#define WB_DEF_NO               ((WinBits)SAL_CONST_INT64(0x20000000))
-#define WB_ABORT_RETRY_IGNORE  ((WinBits)SAL_CONST_INT64(0x1000000000))
-#define WB_DEF_IGNORE          ((WinBits)SAL_CONST_INT64(0x2000000000))
+WinBits const WB_OK =                   0x00100000;
+WinBits const WB_OK_CANCEL =            0x00200000;
+WinBits const WB_YES_NO =               0x00400000;
+WinBits const WB_YES_NO_CANCEL =        0x00800000;
+WinBits const WB_RETRY_CANCEL =         0x01000000;
+WinBits const WB_DEF_OK =               0x02000000;
+WinBits const WB_DEF_CANCEL =           0x04000000;
+WinBits const WB_DEF_RETRY =            0x08000000;
+WinBits const WB_DEF_YES =              SAL_CONST_INT64(0x10000000);
+WinBits const WB_DEF_NO =               SAL_CONST_INT64(0x20000000);
+WinBits const WB_ABORT_RETRY_IGNORE =   SAL_CONST_INT64(0x1000000000);
+WinBits const WB_DEF_IGNORE =           SAL_CONST_INT64(0x2000000000);
 
 // Standard-WinBits
-#define WB_STDWORK              (WB_SIZEMOVE | WB_CLOSEABLE)
-#define WB_STDDOCKWIN           (WB_DOCKABLE | WB_MOVEABLE | WB_CLOSEABLE)
-#define WB_STDFLOATWIN          (WB_SIZEMOVE | WB_CLOSEABLE | WB_ROLLABLE)
-#define WB_STDDIALOG            (WB_MOVEABLE | WB_CLOSEABLE)
-#define WB_STDMODELESS          (WB_STDDIALOG)
-#define WB_STDMODAL             (WB_STDDIALOG)
-#define WB_STDTABDIALOG         (WB_STDDIALOG)
-#define WB_STDTABCONTROL        0
-#define WB_STDPOPUP             (WB_BORDER | WB_POPUP | WB_SYSTEMWINDOW | WB_3DLOOK | WB_DIALOGCONTROL)
+WinBits const WB_STDWORK =              WB_SIZEMOVE | WB_CLOSEABLE;
+WinBits const WB_STDDOCKWIN =           WB_DOCKABLE | WB_MOVEABLE | WB_CLOSEABLE;
+WinBits const WB_STDFLOATWIN =          WB_SIZEMOVE | WB_CLOSEABLE | WB_ROLLABLE;
+WinBits const WB_STDDIALOG =            WB_MOVEABLE | WB_CLOSEABLE;
+WinBits const WB_STDMODELESS =          WB_STDDIALOG;
+WinBits const WB_STDMODAL =             WB_STDDIALOG;
+WinBits const WB_STDTABDIALOG =         WB_STDDIALOG;
+WinBits const WB_STDTABCONTROL =        0;
+WinBits const WB_STDPOPUP =             WB_BORDER | WB_POPUP | WB_SYSTEMWINDOW | WB_3DLOOK | WB_DIALOGCONTROL;
 
 // For TreeListBox
-#define WB_HASBUTTONS           ((WinBits)SAL_CONST_INT64(0x000100000000))
-#define WB_HASLINES             ((WinBits)SAL_CONST_INT64(0x000200000000))
-#define WB_HASLINESATROOT       ((WinBits)SAL_CONST_INT64(0x000400000000))
-#define WB_HASBUTTONSATROOT     ((WinBits)SAL_CONST_INT64(0x000800000000))
-#define WB_NOINITIALSELECTION   ((WinBits)SAL_CONST_INT64(0x001000000000))
-#define WB_HIDESELECTION        ((WinBits)SAL_CONST_INT64(0x002000000000))
-#define WB_FORCE_MAKEVISIBLE    ((WinBits)SAL_CONST_INT64(0x004000000000))
+WinBits const WB_HASBUTTONS =           SAL_CONST_INT64(0x000100000000);
+WinBits const WB_HASLINES =             SAL_CONST_INT64(0x000200000000);
+WinBits const WB_HASLINESATROOT =       SAL_CONST_INT64(0x000400000000);
+WinBits const WB_HASBUTTONSATROOT =     SAL_CONST_INT64(0x000800000000);
+WinBits const WB_NOINITIALSELECTION =   SAL_CONST_INT64(0x001000000000);
+WinBits const WB_HIDESELECTION =        SAL_CONST_INT64(0x002000000000);
+WinBits const WB_FORCE_MAKEVISIBLE =    SAL_CONST_INT64(0x004000000000);
 // DO NOT USE: 0x008000000000, that's WB_SYSTEMCHILDWINDOW
-#define WB_QUICK_SEARCH         ((WinBits)SAL_CONST_INT64(0x010000000000))
+WinBits const WB_QUICK_SEARCH =         SAL_CONST_INT64(0x010000000000);
 
 // For FileOpen Dialog
-#define WB_PATH                 ((WinBits)0x00100000)
-#define WB_OPEN                 ((WinBits)0x00200000)
-#define WB_SAVEAS               ((WinBits)0x00400000)
+WinBits const WB_PATH =                 0x00100000;
+WinBits const WB_OPEN =                 0x00200000;
+WinBits const WB_SAVEAS =               0x00400000;
 
 // For Slider
 // Window-Bits for TabControl
-#define WB_SLIDERSET            ((WinBits)0x02000000)
+WinBits const WB_SLIDERSET =            0x02000000;
 
 // extended WinBits
-#define WB_EXT_DOCUMENT         ((WinBits)0x00000001)
-#define WB_EXT_DOCMODIFIED      ((WinBits)0x00000002)
+WinBits const WB_EXT_DOCUMENT =         0x00000001;
+WinBits const WB_EXT_DOCMODIFIED =      0x00000002;
 
 // WindowAlign
 
