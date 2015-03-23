@@ -32,6 +32,7 @@
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <svtools/fmtfield.hxx>
+#include <svtools/treelistentry.hxx>
 #include "document.hxx"
 
 using namespace com::sun::star;
@@ -855,6 +856,7 @@ void ScCheckListMenuWindow::CancelButton::Click()
 
 ScCheckListMenuWindow::ScCheckListMenuWindow(vcl::Window* pParent, ScDocument* pDoc) :
     ScMenuFloatingWindow(pParent, pDoc),
+    maEdSearch(this),
     maChecks(this,  WB_HASBUTTONS | WB_HASLINES | WB_HASLINESATROOT | WB_HASBUTTONSATROOT ),
     maChkToggleAll(this, 0),
     maBtnSelectSingle  (this, 0),
@@ -872,8 +874,9 @@ ScCheckListMenuWindow::ScCheckListMenuWindow(vcl::Window* pParent, ScDocument* p
 
     maWndSize = Size(200 * nScaleFactor, 330 * nScaleFactor);
 
-    maTabStopCtrls.reserve(7);
+    maTabStopCtrls.reserve(8);
     maTabStopCtrls.push_back(this);
+    maTabStopCtrls.push_back(&maEdSearch);
     maTabStopCtrls.push_back(&maChecks);
     maTabStopCtrls.push_back(&maChkToggleAll);
     maTabStopCtrls.push_back(&maBtnSelectSingle);
@@ -895,6 +898,7 @@ void ScCheckListMenuWindow::getSectionPosSize(
     sal_Int32 nScaleFactor = GetDPIScaleFactor();
 
     // constant parameters.
+    const long nSearchBoxMargin = 10 *nScaleFactor;
     const long nListBoxMargin = 5 * nScaleFactor;            // horizontal distance from the side of the dialog to the listbox border.
     const long nListBoxInnerPadding = 5 * nScaleFactor;
     const long nTopMargin = 5 * nScaleFactor;
@@ -906,13 +910,14 @@ void ScCheckListMenuWindow::getSectionPosSize(
     const long nBtnHeight = nLabelHeight * 2;
     const long nBottomMargin = 10 * nScaleFactor;
     const long nMenuListMargin = 5 * nScaleFactor;
+    const long nSearchBoxHeight = nLabelHeight * 2;
 
     // parameters calculated from constants.
     const long nListBoxWidth = maWndSize.Width() - nListBoxMargin*2;
     const long nListBoxHeight = maWndSize.Height() - nTopMargin - nMenuHeight -
-        nMenuListMargin - nSingleItemBtnAreaHeight - nBottomBtnAreaHeight;
+        nMenuListMargin - nSearchBoxHeight - nSearchBoxMargin - nSingleItemBtnAreaHeight - nBottomBtnAreaHeight;
 
-    const long nSingleBtnAreaY = nTopMargin + nMenuHeight + nListBoxHeight + nMenuListMargin - 1;
+    const long nSingleBtnAreaY = nTopMargin + nMenuHeight + nListBoxHeight + nMenuListMargin + nSearchBoxHeight + nSearchBoxMargin - 1;
 
     switch (eType)
     {
@@ -922,15 +927,21 @@ void ScCheckListMenuWindow::getSectionPosSize(
             rSize = maWndSize;
         }
         break;
+        case EDIT_SEARCH:
+        {
+            rPos = Point(nSearchBoxMargin, nTopMargin + nMenuHeight + nMenuListMargin);
+            rSize = Size(maWndSize.Width() - 2*nSearchBoxMargin, nSearchBoxHeight);
+        }
+        break;
         case LISTBOX_AREA_OUTER:
         {
-            rPos = Point(nListBoxMargin, nTopMargin + nMenuHeight + nMenuListMargin);
+            rPos = Point(nListBoxMargin, nTopMargin + nMenuHeight + nMenuListMargin + nSearchBoxHeight + nSearchBoxMargin);
             rSize = Size(nListBoxWidth, nListBoxHeight);
         }
         break;
         case LISTBOX_AREA_INNER:
         {
-            rPos = Point(nListBoxMargin, nTopMargin + nMenuHeight + nMenuListMargin);
+            rPos = Point(nListBoxMargin, nTopMargin + nMenuHeight + nMenuListMargin + nSearchBoxHeight + nSearchBoxMargin);
             rPos.X() += nListBoxInnerPadding;
             rPos.Y() += nListBoxInnerPadding;
 
@@ -1028,6 +1039,14 @@ void ScCheckListMenuWindow::packWindow()
     maBtnCancel.SetFont(getLabelFont());
     maBtnCancel.Show();
 
+    getSectionPosSize(aPos, aSize, EDIT_SEARCH);
+    maEdSearch.SetPosSizePixel(aPos, aSize);
+    maEdSearch.SetFont(getLabelFont());
+    maEdSearch.SetControlBackground(rStyle.GetFieldColor());
+    maEdSearch.SetPlaceholderText(SC_STRLOAD(RID_POPUP_FILTER, STR_EDIT_SEARCH_ITEMS));
+    maEdSearch.SetModifyHdl( LINK(this, ScCheckListMenuWindow, EdModifyHdl) );
+    maEdSearch.Show();
+
     getSectionPosSize(aPos, aSize, LISTBOX_AREA_INNER);
     maChecks.SetPosSizePixel(aPos, aSize);
     maChecks.SetFont(getLabelFont());
@@ -1084,7 +1103,7 @@ void ScCheckListMenuWindow::setAllMemberState(bool bSet)
         aLabel = maMembers[i].maName;
         if (aLabel.isEmpty())
             aLabel = ScGlobal::GetRscString(STR_EMPTYDATA);
-        maChecks.CheckEntry( aLabel, maMembers[i].mpParent, bSet);
+        maChecks.ShowCheckEntry( aLabel, maMembers[i].mpParent, true, bSet);
     }
 
     if (!maConfig.mbAllowEmptySet)
@@ -1162,6 +1181,49 @@ IMPL_LINK_NOARG(ScCheckListMenuWindow, TriStateHdl)
     }
 
     mePrevToggleAllState = maChkToggleAll.GetState();
+    return 0;
+}
+
+IMPL_LINK_NOARG(ScCheckListMenuWindow, EdModifyHdl)
+{
+    OUString aSearchText = maEdSearch.GetText();
+    aSearchText = aSearchText.toAsciiLowerCase();
+    bool bSearchTextEmpty = aSearchText.isEmpty();
+    size_t n = maMembers.size();
+    size_t nSelCount = 0;
+    OUString aLabelDisp;
+
+    for (size_t i = 0; i < n; ++i)
+    {
+        aLabelDisp = maMembers[i].maName;
+
+        if ( aLabelDisp.isEmpty() )
+            aLabelDisp = ScGlobal::GetRscString( STR_EMPTYDATA );
+
+        if ( bSearchTextEmpty )
+        {
+            maChecks.ShowCheckEntry( aLabelDisp, maMembers[i].mpParent, true, maMembers[i].mbVisible );
+            if ( maMembers[i].mbVisible )
+                ++nSelCount;
+            continue;
+        }
+
+        if ( aLabelDisp.toAsciiLowerCase().indexOf( aSearchText ) != -1 )
+        {
+            maChecks.ShowCheckEntry( aLabelDisp, maMembers[i].mpParent, true, true );
+            ++nSelCount;
+        }
+        else
+            maChecks.ShowCheckEntry( aLabelDisp, maMembers[i].mpParent, false, false );
+    }
+
+    if ( nSelCount == n )
+        maChkToggleAll.SetState( TRISTATE_TRUE );
+    else if ( nSelCount == 0 )
+        maChkToggleAll.SetState( TRISTATE_FALSE );
+    else
+        maChkToggleAll.SetState( TRISTATE_INDET );
+
     return 0;
 }
 
@@ -1252,6 +1314,8 @@ Reference<XAccessible> ScCheckListMenuWindow::CreateAccessible()
         ScAccessibleFilterTopWindow* pAccTop = static_cast<ScAccessibleFilterTopWindow*>(mxAccessible.get());
         fillMenuItemsToAccessible(pAccTop);
 
+        pAccTop->setAccessibleChild(
+            maEdSearch.CreateAccessible(), ScAccessibleFilterTopWindow::EDIT_SEARCH_BOX);
         pAccTop->setAccessibleChild(
             maChecks.CreateAccessible(), ScAccessibleFilterTopWindow::LISTBOX);
         pAccTop->setAccessibleChild(
@@ -1446,6 +1510,27 @@ void ScCheckListBox::CheckEntry( SvTreeListEntry* pParent, bool bCheck )
             pAncestor = GetParent(pAncestor);
         }
     }
+}
+
+void ScCheckListBox::ShowCheckEntry( const OUString& sName, SvTreeListEntry* pParent, bool bShow, bool bCheck )
+{
+    SvTreeListEntry* pEntry = FindEntry( pParent, sName );
+    if ( bShow )
+    {
+        if ( !pEntry )
+        {
+            pEntry = InsertEntry(
+                sName, NULL, false, TREELIST_APPEND, NULL,
+                SvLBoxButtonKind_enabledCheckbox);
+
+            SetCheckButtonState(
+                pEntry, bCheck ? SV_BUTTON_CHECKED : SV_BUTTON_UNCHECKED);
+        }
+        else
+            CheckEntry( pEntry, bCheck );
+    }
+    else if ( pEntry )
+        RemoveParentKeepChildren( pEntry );
 }
 
 SvTreeListEntry* ScCheckListBox::CountCheckedEntries( SvTreeListEntry* pParent, sal_uLong& nCount ) const

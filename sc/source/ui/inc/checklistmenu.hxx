@@ -12,6 +12,7 @@
 
 #include <vcl/popupmenuwindow.hxx>
 #include <vcl/button.hxx>
+#include <vcl/edit.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/timer.hxx>
 #include <svx/checklbx.hxx>
@@ -199,6 +200,7 @@ class ScCheckListBox : public SvTreeListBox
     void Init();
     void CheckEntry( const OUString& sName, SvTreeListEntry* pParent, bool bCheck = true );
     void CheckEntry( SvTreeListEntry* pEntry, bool bCheck = true );
+    void ShowCheckEntry( const OUString& sName, SvTreeListEntry* pParent, bool bShow = true, bool bCheck = true );
     bool IsChecked( const OUString& sName, SvTreeListEntry* pParent );
     SvTreeListEntry* FindEntry( SvTreeListEntry* pParent, const OUString& sNode );
     sal_uInt16 GetCheckedEntryCount() const;
@@ -306,6 +308,7 @@ private:
         BTN_SINGLE_UNSELECT,
         BTN_OK,               // OK button
         BTN_CANCEL,           // Cancel button
+        EDIT_SEARCH,          // Search box
     };
     void getSectionPosSize(Point& rPos, Size& rSize, SectionType eType) const;
 
@@ -321,9 +324,12 @@ private:
     DECL_LINK( ButtonHdl, Button* );
     DECL_LINK( TriStateHdl, void* );
     DECL_LINK( CheckHdl, SvTreeListBox* );
+    DECL_LINK( EdModifyHdl, void* );
 
 private:
     SvTreeListEntry* findEntry(  SvTreeListEntry* pParent, const OUString& rText );
+
+    Edit maEdSearch;
 
     ScCheckListBox maChecks;
 

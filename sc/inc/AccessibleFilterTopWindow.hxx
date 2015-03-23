@@ -49,7 +49,7 @@ public:
     // Non-UNO Methods
 
     enum ChildControlType {
-        LISTBOX, TOGGLE_ALL, SINGLE_ON_BTN, SINGLE_OFF_BTN, OK_BTN, CANCEL_BTN
+        EDIT_SEARCH_BOX, LISTBOX, TOGGLE_ALL, SINGLE_ON_BTN, SINGLE_OFF_BTN, OK_BTN, CANCEL_BTN
     };
     void setAccessibleChild(
         const ::com::sun::star::uno::Reference<
@@ -61,6 +61,9 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
         mxAccMenu;
 
+    /** Edit search box for searching field members */
+    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+        mxAccEditSearchBox;
     /** check list box for field member visibility */
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
         mxAccListBox;
