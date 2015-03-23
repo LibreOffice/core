@@ -139,14 +139,6 @@ namespace connectivity
             /** Statements owned by this connection. */
             OWeakRefArray       m_aStatements;
 
-            /**
-             * Firebird stores binary collations for indexes on Character based
-             * columns, these can be binary-incompatible between different icu
-             * version, hence we need to rebuild the indexes when switching icu
-             * versions.
-             */
-            void rebuildIndexes()
-                throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception);
             void buildTypeInfo()
                 throw (css::sdbc::SQLException);
 
