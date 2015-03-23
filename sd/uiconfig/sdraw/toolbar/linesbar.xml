@@ -1,4 +1,4 @@
-u<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE toolbar:toolbar PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "toolbar.dtd">
 <!--
  * This file is part of the LibreOffice project.
@@ -28,3 +28,4 @@ u<?xml version="1.0" encoding="UTF-8"?>
  <toolbar:toolbaritem xlink:href=".uno:Polygon_Diagonal_Unfilled" toolbar:style="radio"/>
  <toolbar:toolbaritem xlink:href=".uno:Freeline_Unfilled" toolbar:style="radio"/>
 </toolbar:toolbar>
+
