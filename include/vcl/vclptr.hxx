@@ -270,6 +270,7 @@ public:
     ~ScopedVclPtr()
     {
         VclPtr<reference_type>::disposeAndClear();
+        assert(VclPtr<reference_type>::get() == nullptr); // make sure there are no lingering references
     }
 private:
     // Most likely we don't want this default copy-construtor.
