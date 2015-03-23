@@ -268,6 +268,9 @@ namespace connectivity
             operator=(_rRH);
         }
 
+        // Avoid accidental uses of ORowSetValue(bool const &):
+        template<typename T> ORowSetValue(T const *) = delete;
+
         ~ORowSetValue()
         {
             free();
