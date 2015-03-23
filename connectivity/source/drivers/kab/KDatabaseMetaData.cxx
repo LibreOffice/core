@@ -779,13 +779,12 @@ Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getTableTypes(  ) throw(SQ
     Reference< XResultSet > xRef = pResult;
 
     static ODatabaseMetaDataResultSet::ORows aRows;
-    static const char aTable[]="TABLE";
 
     if (aRows.empty())
     {
         ODatabaseMetaDataResultSet::ORow aRow(2);
         aRow[0] = ODatabaseMetaDataResultSet::getEmptyValue();
-        aRow[1] = new ORowSetValueDecorator(aTable);
+        aRow[1] = new ORowSetValueDecorator(OUString("TABLE"));
         aRows.push_back(aRow);
     }
     pResult->setRows(aRows);
