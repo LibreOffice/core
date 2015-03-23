@@ -31,13 +31,13 @@
 
 class SfxDocumentTemplates;
 
-enum FILTER_APPLICATION
+enum class FILTER_APPLICATION
 {
-    FILTER_APP_NONE,
-    FILTER_APP_WRITER,
-    FILTER_APP_CALC,
-    FILTER_APP_IMPRESS,
-    FILTER_APP_DRAW
+    NONE,
+    WRITER,
+    CALC,
+    IMPRESS,
+    DRAW
 };
 
 // Display template items depending on the generator application

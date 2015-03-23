@@ -136,19 +136,19 @@ public:
         INetURLObject aUrl(rItem.aPath);
         OUString aExt = aUrl.getExtension();
 
-        if (meApp == FILTER_APP_WRITER)
+        if (meApp == FILTER_APPLICATION::WRITER)
         {
             bRet = aExt == "ott" || aExt == "stw" || aExt == "oth" || aExt == "dot" || aExt == "dotx";
         }
-        else if (meApp == FILTER_APP_CALC)
+        else if (meApp == FILTER_APPLICATION::CALC)
         {
             bRet = aExt == "ots" || aExt == "stc" || aExt == "xlt" || aExt == "xltm" || aExt == "xltx";
         }
-        else if (meApp == FILTER_APP_IMPRESS)
+        else if (meApp == FILTER_APPLICATION::IMPRESS)
         {
             bRet = aExt == "otp" || aExt == "sti" || aExt == "pot" || aExt == "potm" || aExt == "potx";
         }
-        else if (meApp == FILTER_APP_DRAW)
+        else if (meApp == FILTER_APPLICATION::DRAW)
         {
             bRet = aExt == "otg" || aExt == "std";
         }
@@ -289,7 +289,7 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(vcl::Window *parent)
     createDefaultTemplateMenu();
 
     mpLocalView->Populate();
-    mpCurView->filterItems(ViewFilter_Application(FILTER_APP_WRITER));
+    mpCurView->filterItems(ViewFilter_Application(FILTER_APPLICATION::WRITER));
 
     readSettings();
 
@@ -330,7 +330,7 @@ void SfxTemplateManagerDlg::setSaveMode()
     while (mpTabControl->GetPageCount() > 1)
         mpTabControl->RemovePage(mpTabControl->GetPageId(1));
 
-    mpCurView->filterItems(ViewFilter_Application(FILTER_APP_NONE));
+    mpCurView->filterItems(ViewFilter_Application(FILTER_APPLICATION::NONE));
 
     mpViewBar->ShowItem(VIEWBAR_SAVE);
     mpViewBar->HideItem(VIEWBAR_IMPORT);
@@ -356,15 +356,15 @@ FILTER_APPLICATION SfxTemplateManagerDlg::getCurrentFilter()
     const sal_uInt16 nCurPageId = mpTabControl->GetCurPageId();
 
     if (nCurPageId == mpTabControl->GetPageId(FILTER_DOCS))
-        return FILTER_APP_WRITER;
+        return FILTER_APPLICATION::WRITER;
     else if (nCurPageId == mpTabControl->GetPageId(FILTER_PRESENTATIONS))
-        return FILTER_APP_IMPRESS;
+        return FILTER_APPLICATION::IMPRESS;
     else if (nCurPageId == mpTabControl->GetPageId(FILTER_SHEETS))
-        return FILTER_APP_CALC;
+        return FILTER_APPLICATION::CALC;
     else if (nCurPageId == mpTabControl->GetPageId(FILTER_DRAWINGS))
-        return FILTER_APP_DRAW;
+        return FILTER_APPLICATION::DRAW;
 
-    return FILTER_APP_NONE;
+    return FILTER_APPLICATION::NONE;
 }
 
 IMPL_LINK_NOARG(SfxTemplateManagerDlg,ActivatePageHdl)
@@ -386,24 +386,25 @@ void SfxTemplateManagerDlg::readSettings ()
 
     if ( aViewSettings.Exists() )
     {
-        sal_uInt16 nFilter = 0;
+        sal_uInt16 nTmp = 0;
         aViewSettings.GetUserItem(TM_SETTING_LASTFOLDER) >>= aLastFolder;
-        aViewSettings.GetUserItem(TM_SETTING_FILTER) >>= nFilter;
-
+        aViewSettings.GetUserItem(TM_SETTING_FILTER) >>= nTmp;
+        FILTER_APPLICATION nFilter = static_cast<FILTER_APPLICATION>(nTmp);
         switch (nFilter)
         {
-            case FILTER_APP_WRITER:
+            case FILTER_APPLICATION::WRITER:
                 nPageId = mpTabControl->GetPageId(FILTER_DOCS);
                 break;
-            case FILTER_APP_IMPRESS:
+            case FILTER_APPLICATION::IMPRESS:
                 nPageId = mpTabControl->GetPageId(FILTER_PRESENTATIONS);
                 break;
-            case FILTER_APP_CALC:
+            case FILTER_APPLICATION::CALC:
                 nPageId = mpTabControl->GetPageId(FILTER_SHEETS);
                 break;
-            case FILTER_APP_DRAW:
+            case FILTER_APPLICATION::DRAW:
                 nPageId = mpTabControl->GetPageId(FILTER_DRAWINGS);
                 break;
+            default: break;
         }
     }
 

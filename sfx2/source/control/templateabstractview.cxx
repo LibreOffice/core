@@ -38,19 +38,19 @@ bool ViewFilter_Application::isFilteredExtension(FILTER_APPLICATION filter, cons
 {
     bool bRet = true;
 
-    if (filter == FILTER_APP_WRITER)
+    if (filter == FILTER_APPLICATION::WRITER)
     {
         bRet = rExt == "ott" || rExt == "stw" || rExt == "oth" || rExt == "dot" || rExt == "dotx" || rExt == "otm";
     }
-    else if (filter == FILTER_APP_CALC)
+    else if (filter == FILTER_APPLICATION::CALC)
     {
         bRet = rExt == "ots" || rExt == "stc" || rExt == "xlt" || rExt == "xltm" || rExt == "xltx";
     }
-    else if (filter == FILTER_APP_IMPRESS)
+    else if (filter == FILTER_APPLICATION::IMPRESS)
     {
         bRet = rExt == "otp" || rExt == "sti" || rExt == "pot" || rExt == "potm" || rExt == "potx";
     }
-    else if (filter == FILTER_APP_DRAW)
+    else if (filter == FILTER_APPLICATION::DRAW)
     {
         bRet = rExt == "otg" || rExt == "std";
     }
@@ -249,13 +249,13 @@ BitmapEx TemplateAbstractView::getDefaultThumbnail( const OUString& rPath )
     INetURLObject aUrl(rPath);
     OUString aExt = aUrl.getExtension();
 
-    if ( ViewFilter_Application::isFilteredExtension( FILTER_APP_WRITER, aExt) )
+    if ( ViewFilter_Application::isFilteredExtension( FILTER_APPLICATION::WRITER, aExt) )
         aImg = BitmapEx ( SfxResId( SFX_THUMBNAIL_TEXT ) );
-    else if ( ViewFilter_Application::isFilteredExtension( FILTER_APP_CALC, aExt) )
+    else if ( ViewFilter_Application::isFilteredExtension( FILTER_APPLICATION::CALC, aExt) )
         aImg = BitmapEx ( SfxResId( SFX_THUMBNAIL_SHEET ) );
-    else if ( ViewFilter_Application::isFilteredExtension( FILTER_APP_IMPRESS, aExt) )
+    else if ( ViewFilter_Application::isFilteredExtension( FILTER_APPLICATION::IMPRESS, aExt) )
         aImg = BitmapEx ( SfxResId( SFX_THUMBNAIL_PRESENTATION ) );
-    else if ( ViewFilter_Application::isFilteredExtension( FILTER_APP_DRAW, aExt) )
+    else if ( ViewFilter_Application::isFilteredExtension( FILTER_APPLICATION::DRAW, aExt) )
         aImg = BitmapEx ( SfxResId( SFX_THUMBNAIL_DRAWING ) );
 
     return aImg;

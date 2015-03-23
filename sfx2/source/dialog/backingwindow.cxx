@@ -322,7 +322,7 @@ void BackingWindow::initializeLocalView()
         mbLocalViewInitialized = true;
         mpLocalView->Populate();
         mpLocalView->showRootRegion();
-        mpLocalView->filterItems(ViewFilter_Application(FILTER_APP_NONE));
+        mpLocalView->filterItems(ViewFilter_Application(FILTER_APPLICATION::NONE));
     }
 }
 
@@ -564,7 +564,7 @@ IMPL_LINK( BackingWindow, ClickHdl, Button*, pButton )
     {
         mpAllRecentThumbnails->Hide();
         initializeLocalView();
-        mpLocalView->filterItems(ViewFilter_Application(FILTER_APP_NONE));
+        mpLocalView->filterItems(ViewFilter_Application(FILTER_APPLICATION::NONE));
         mpLocalView->Show();
         mpLocalView->reload();
         mpLocalView->GrabFocus();
@@ -580,19 +580,19 @@ IMPL_LINK( BackingWindow, MenuSelectHdl, MenuButton*, pButton )
 
     if( sId == "filter_writer" )
     {
-        mpLocalView->filterItems(ViewFilter_Application(FILTER_APP_WRITER));
+        mpLocalView->filterItems(ViewFilter_Application(FILTER_APPLICATION::WRITER));
     }
     else if( sId == "filter_calc" )
     {
-        mpLocalView->filterItems(ViewFilter_Application(FILTER_APP_CALC));
+        mpLocalView->filterItems(ViewFilter_Application(FILTER_APPLICATION::CALC));
     }
     else if( sId == "filter_impress" )
     {
-        mpLocalView->filterItems(ViewFilter_Application(FILTER_APP_IMPRESS));
+        mpLocalView->filterItems(ViewFilter_Application(FILTER_APPLICATION::IMPRESS));
     }
     else if( sId == "filter_draw" )
     {
-        mpLocalView->filterItems(ViewFilter_Application(FILTER_APP_DRAW));
+        mpLocalView->filterItems(ViewFilter_Application(FILTER_APPLICATION::DRAW));
     }
     else if( sId == "edit" )
     {
