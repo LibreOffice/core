@@ -48,14 +48,16 @@ public class TextCursorView extends View implements View.OnTouchListener {
     private Paint mSelectionPaint = new Paint();
     private boolean mSelectionsVisible;
 
-    private RectF mGraphicSelection = new RectF();
-    private RectF mGraphicScaledSelection = new RectF();
     private Paint mGraphicSelectionPaint = new Paint();
 
-    private boolean mGraphicSelectionVisible;
+    private DrawElementGraphicSelection mGraphicSelection;
+
     private PointF mTouchStart = new PointF();
     private PointF mDeltaPoint = new PointF();
+
+    private boolean mGraphicSelectionVisible;
     private boolean mGraphicSelectionMove = false;
+
     private LayerView mLayerView;
 
     private DrawElementHandle mHandles[] = new DrawElementHandle[8];
@@ -94,6 +96,9 @@ public class TextCursorView extends View implements View.OnTouchListener {
             mGraphicSelectionPaint.setStyle(Paint.Style.STROKE);
             mGraphicSelectionPaint.setColor(Color.BLACK);
             mGraphicSelectionPaint.setStrokeWidth(2);
+
+            mGraphicSelection = new DrawElementGraphicSelection(mGraphicSelectionPaint);
+
             mGraphicSelectionVisible = false;
 
             mHandles[0] = new DrawElementHandle(mGraphicSelectionPaint);
@@ -144,37 +149,41 @@ public class TextCursorView extends View implements View.OnTouchListener {
             return;
         }
 
-        mGraphicSelection = rectangle;
+        mGraphicSelection.mRectangle = rectangle;
 
         ImmutableViewportMetrics metrics = layerView.getViewportMetrics();
         repositionWithViewport(metrics.viewportRectLeft, metrics.viewportRectTop, metrics.zoomFactor);
     }
 
     public void repositionWithViewport(float x, float y, float zoom) {
-        mCursorScaledPosition = RectUtils.scale(mCursorPosition, zoom);
-        mCursorScaledPosition.offset(-x, -y);
+        mCursorScaledPosition = convertPosition(mCursorPosition, x, y, zoom);
         mCursorScaledPosition.right = mCursorScaledPosition.left + CURSOR_WIDTH;
 
         mScaledSelections.clear();
         for (RectF selection : mSelections) {
-            RectF scaledSelection = RectUtils.scale(selection, zoom);
-            scaledSelection.offset(-x, -y);
+            RectF scaledSelection = convertPosition(selection, x, y, zoom);
             mScaledSelections.add(scaledSelection);
         }
 
-        mGraphicScaledSelection = RectUtils.scale(mGraphicSelection, zoom);
-        mGraphicScaledSelection.offset(-x, -y);
+        RectF scaledGraphicSelection = convertPosition(mGraphicSelection.mRectangle, x, y, zoom);
+        mGraphicSelection.reposition(scaledGraphicSelection);
 
-        mHandles[0].reposition(mGraphicScaledSelection.left, mGraphicScaledSelection.top);
-        mHandles[1].reposition(mGraphicScaledSelection.centerX(), mGraphicScaledSelection.top);
-        mHandles[2].reposition(mGraphicScaledSelection.right, mGraphicScaledSelection.top);
-        mHandles[3].reposition(mGraphicScaledSelection.left, mGraphicScaledSelection.centerY());
-        mHandles[4].reposition(mGraphicScaledSelection.right, mGraphicScaledSelection.centerY());
-        mHandles[5].reposition(mGraphicScaledSelection.left, mGraphicScaledSelection.bottom);
-        mHandles[6].reposition(mGraphicScaledSelection.centerX(), mGraphicScaledSelection.bottom);
-        mHandles[7].reposition(mGraphicScaledSelection.right, mGraphicScaledSelection.bottom);
+        mHandles[0].reposition(scaledGraphicSelection.left, scaledGraphicSelection.top);
+        mHandles[1].reposition(scaledGraphicSelection.centerX(), scaledGraphicSelection.top);
+        mHandles[2].reposition(scaledGraphicSelection.right, scaledGraphicSelection.top);
+        mHandles[3].reposition(scaledGraphicSelection.left, scaledGraphicSelection.centerY());
+        mHandles[4].reposition(scaledGraphicSelection.right, scaledGraphicSelection.centerY());
+        mHandles[5].reposition(scaledGraphicSelection.left, scaledGraphicSelection.bottom);
+        mHandles[6].reposition(scaledGraphicSelection.centerX(), scaledGraphicSelection.bottom);
+        mHandles[7].reposition(scaledGraphicSelection.right, scaledGraphicSelection.bottom);
 
         invalidate();
+    }
+
+    private RectF convertPosition(RectF cursorPosition, float x, float y, float zoom) {
+        RectF cursor = RectUtils.scale(cursorPosition, zoom);
+        cursor.offset(-x, -y);
+        return cursor;
     }
 
     @Override
@@ -189,6 +198,8 @@ public class TextCursorView extends View implements View.OnTouchListener {
             }
         }
         if (mGraphicSelectionVisible) {
+            mGraphicSelection.draw(canvas);
+
             if (mGraphicSelectionMove) {
                 for (DrawElementHandle handle : mHandles) {
                     if (mDragHandle == handle) {
@@ -197,20 +208,7 @@ public class TextCursorView extends View implements View.OnTouchListener {
                         handle.draw(canvas);
                     }
                 }
-
-                RectF selectionRect = new RectF(mGraphicScaledSelection);
-                if (mDragHandle != null) {
-                    PointF dragPosition = new PointF(mDragHandle.mPosition.x, mDragHandle.mPosition.y);
-                    dragPosition.offset(mDeltaPoint.x, mDeltaPoint.y);
-                    selectionRect.union(dragPosition.x, dragPosition.y);
-                    canvas.drawRect(selectionRect, mGraphicSelectionPaint);
-                } else {
-                    selectionRect.offset(mDeltaPoint.x, mDeltaPoint.y);
-                    canvas.drawRect(selectionRect, mGraphicSelectionPaint);
-                }
             } else {
-                canvas.drawRect(mGraphicScaledSelection, mGraphicSelectionPaint);
-
                 for (DrawElementHandle handle : mHandles) {
                     handle.draw(canvas);
                 }
@@ -286,6 +284,7 @@ public class TextCursorView extends View implements View.OnTouchListener {
                 if (mGraphicSelectionVisible && mGraphicSelectionMove) {
                     mDeltaPoint.x = event.getX() - mTouchStart.x;
                     mDeltaPoint.y = event.getY() - mTouchStart.y;
+                    mGraphicSelection.dragging(new PointF(event.getX(), event.getY()));
                     invalidate();
                     return true;
                 }
@@ -301,13 +300,15 @@ public class TextCursorView extends View implements View.OnTouchListener {
             if (handle.contains(mTouchStart.x, mTouchStart.y)) {
                 mDragHandle = handle;
                 mGraphicSelectionMove = true;
+                mGraphicSelection.dragStart(DrawElementGraphicSelection.DragType.EXTEND, mTouchStart);
                 sendGraphicSelectionStart(handle.mPosition);
                 return true;
             }
         }
         // Check if inside graphic selection was hit
-        if (mGraphicScaledSelection.contains(mTouchStart.x, mTouchStart.y)) {
+        if (mGraphicSelection.contains(mTouchStart.x, mTouchStart.y)) {
             mGraphicSelectionMove = true;
+            mGraphicSelection.dragStart(DrawElementGraphicSelection.DragType.MOVE, mTouchStart);
             sendGraphicSelectionStart(mTouchStart);
             return true;
         }
@@ -316,6 +317,7 @@ public class TextCursorView extends View implements View.OnTouchListener {
 
     private boolean stopGraphicSelection() {
         mGraphicSelectionMove = false;
+
         PointF point = new PointF();
         if (mDragHandle != null) {
             point.x = mDragHandle.mPosition.x;
@@ -326,6 +328,8 @@ public class TextCursorView extends View implements View.OnTouchListener {
         }
         point.offset(mDeltaPoint.x, mDeltaPoint.y);
         sendGraphicSelectionEnd(point);
+
+        mGraphicSelection.dragEnd();
         invalidate();
         return true;
     }
