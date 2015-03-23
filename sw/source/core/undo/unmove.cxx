@@ -305,7 +305,7 @@ void SwUndoMove::RedoImpl(::sw::UndoRedoContext & rContext)
         aIdx = aPam.Start()->nNode;
         bool bJoinTxt = aIdx.GetNode().IsTxtNode();
 
-        aIdx--;
+        --aIdx;
         rDoc.getIDocumentContentOperations().MoveRange( aPam, aMvPos,
             SwMoveFlags::DEFAULT );
 

@@ -493,7 +493,7 @@ bool GotoPrevTable( SwPaM& rCurCrsr, SwPosTable fnPosTbl,
         SwNodeIndex aTmpIdx( aIdx );
         while( aTmpIdx.GetIndex() &&
                 0 == ( pInnerTblNd = aTmpIdx.GetNode().StartOfSectionNode()->GetTableNode()) )
-            aTmpIdx--;
+            --aTmpIdx;
 
         if( pInnerTblNd == pTblNd )
             aIdx.Assign( *pTblNd, - 1 );
@@ -502,7 +502,7 @@ bool GotoPrevTable( SwPaM& rCurCrsr, SwPosTable fnPosTbl,
     do {
         while( aIdx.GetIndex() &&
             0 == ( pTblNd = aIdx.GetNode().StartOfSectionNode()->GetTableNode()) )
-            aIdx--;
+            --aIdx;
 
         if( pTblNd ) // any further table node?
         {

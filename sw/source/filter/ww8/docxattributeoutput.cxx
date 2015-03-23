@@ -3579,7 +3579,7 @@ void DocxAttributeOutput::TableVerticalCell( ww8::WW8TableNodeInfoInner::Pointer
     {
         // Undo the text direction mangling done by the btLr handler in writerfilter::dmapper::DomainMapperTableManager::sprm()
         SwPaM aPam(*pTabBox->GetSttNd(), 0);
-        aPam.GetPoint()->nNode++;
+        ++aPam.GetPoint()->nNode;
         if (aPam.GetPoint()->nNode.GetNode().IsTxtNode())
         {
             const SwTxtNode& rTxtNode = static_cast<const SwTxtNode&>(aPam.GetPoint()->nNode.GetNode());

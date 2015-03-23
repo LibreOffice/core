@@ -433,7 +433,7 @@ void SwUndoCompDoc::UndoImpl(::sw::UndoRedoContext & rContext)
             if (&rTmp != pEnd)
             {
                 pPam->SetMark();
-                pPam->GetPoint()->nNode++;
+                ++pPam->GetPoint()->nNode;
                 pPam->GetBound( true ).nContent.Assign( 0, 0 );
                 pPam->GetBound( false ).nContent.Assign( 0, 0 );
                 pUnDel2 = new SwUndoDelete( *pPam, true );

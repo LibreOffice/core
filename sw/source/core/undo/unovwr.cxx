@@ -70,7 +70,7 @@ SwUndoOverwrite::SwUndoOverwrite( SwDoc* pDoc, SwPosition& rPos,
         SwRegHistory aRHst( *pTxtNd, pHistory );
         pHistory->CopyAttr( pTxtNd->GetpSwpHints(), nSttNode, 0,
                             nTxtNdLen, false );
-        rPos.nContent++;
+        ++rPos.nContent;
         bInsChar = false;
     }
 
@@ -145,7 +145,7 @@ bool SwUndoOverwrite::CanGrouping( SwDoc* pDoc, SwPosition& rPos,
         if (rPos.nContent.GetIndex() < pDelTxtNd->GetTxt().getLength())
         {
             aDelStr += OUString( pDelTxtNd->GetTxt()[rPos.nContent.GetIndex()] );
-            rPos.nContent++;
+            ++rPos.nContent;
         }
         else
             bInsChar = true;
@@ -217,7 +217,7 @@ void SwUndoOverwrite::UndoImpl(::sw::UndoRedoContext & rContext)
             rIdx += 2;
         }
         pTxtNd->SetIgnoreDontExpand( bOldExpFlg );
-        rIdx--;
+        --rIdx;
     }
 
     if( pHistory )

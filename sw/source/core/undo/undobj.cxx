@@ -323,7 +323,7 @@ void SwUndoSaveCntnt::MoveToUndoNds( SwPaM& rPaM, SwNodeIndex* pNodeIdx,
         SwNodeRange aRg( pStt->nNode, 0, pEnd->nNode, 1 );
         rDoc.GetNodes()._MoveNodes( aRg, rNds, aPos.nNode, false );
         aPos.nContent = 0;
-        aPos.nNode--;
+        --aPos.nNode;
     }
     else
     {
@@ -413,7 +413,7 @@ bool SwUndoSaveCntnt::MovePtBackward( SwPaM& rPam )
 
     // If there is no content onwards, set Point simply to the previous position
     // (Node and Content, so that Content will be detached!)
-    rPam.GetPoint()->nNode--;
+    --rPam.GetPoint()->nNode;
     rPam.GetPoint()->nContent.Assign( 0, 0 );
     return false;
 }
@@ -425,7 +425,7 @@ void SwUndoSaveCntnt::MovePtForward( SwPaM& rPam, bool bMvBkwrd )
         rPam.Move( fnMoveForward );
     else
     {
-        rPam.GetPoint()->nNode++;
+        ++rPam.GetPoint()->nNode;
         SwCntntNode* pCNd = rPam.GetCntntNode();
         if( pCNd )
             pCNd->MakeStartIndex( &rPam.GetPoint()->nContent );
@@ -829,8 +829,8 @@ void SwUndoSaveSection::SaveSection(
 
     nStartPos = rRange.aStart.GetIndex();
 
-    aPam.GetPoint()->nNode--;
-    aPam.GetMark()->nNode++;
+    --aPam.GetPoint()->nNode;
+    ++aPam.GetMark()->nNode;
 
     SwCntntNode* pCNd = aPam.GetCntntNode( false );
     if( pCNd )

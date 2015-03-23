@@ -1374,7 +1374,7 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                             SwFmtFlyCnt aFmt( pFlyFmt );
                             pNd->InsertItem(aFmt,
                                 aPam.GetPoint()->nContent.GetIndex(), 0 );
-                            aPam.GetPoint()->nContent--; // InsertItem moved it
+                            --aPam.GetPoint()->nContent; // InsertItem moved it
                             SwFmtAnchor aNewAnchor(
                                 dynamic_cast<const SwFmtAnchor&>(
                                     aSet.Get(RES_ANCHOR)));

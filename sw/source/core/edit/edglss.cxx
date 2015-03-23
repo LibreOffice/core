@@ -171,7 +171,7 @@ bool SwEditShell::_CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pSttNd )
     if( pSttNd )
     {
         *pSttNd = aPos.nNode;
-        (*pSttNd)--;
+        --(*pSttNd);
     }
 
     bool bRet = false;

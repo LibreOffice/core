@@ -116,7 +116,7 @@ void SwUndoSplitNode::UndoImpl(::sw::UndoRedoContext & rContext)
             if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ))
             {
                 rPam.SetMark();
-                rPam.GetMark()->nNode++;
+                ++rPam.GetMark()->nNode;
                 rPam.GetMark()->nContent.Assign( rPam.GetMark()->
                                     nNode.GetNode().GetCntntNode(), 0 );
                 pDoc->getIDocumentRedlineAccess().DeleteRedline( rPam, true, USHRT_MAX );

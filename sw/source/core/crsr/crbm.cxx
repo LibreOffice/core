@@ -237,8 +237,8 @@ bool SwCrsrShell::GotoFieldmark(::sw::mark::IFieldmark const * const pMark)
     // watch Crsr-Moves
     CrsrStateHelper aCrsrSt(*this);
     aCrsrSt.SetCrsrToMark(pMark);
-    aCrsrSt.m_pCrsr->GetPoint()->nContent++;
-    aCrsrSt.m_pCrsr->GetMark()->nContent--;
+    ++aCrsrSt.m_pCrsr->GetPoint()->nContent;
+    ++aCrsrSt.m_pCrsr->GetMark()->nContent;
 
     if(aCrsrSt.RollbackIfIllegal()) return false;
 

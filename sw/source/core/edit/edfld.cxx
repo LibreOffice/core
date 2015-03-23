@@ -330,7 +330,7 @@ void SwEditShell::UpdateFlds( SwField &rFld )
                                                            pMsgHnt, false);
                     }
                     // The search area is reduced by the found area:
-                    pCurStt->nContent++;
+                    ++pCurStt->nContent;
                 }
             }
 
