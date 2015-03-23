@@ -294,12 +294,6 @@ void Connection::construct(const ::rtl::OUString& url, const Sequence< PropertyV
 
         if (m_bIsEmbedded) // Add DocumentEventListener to save the .fdb as needed
         {
-            // TODO: this is only needed when we change icu versions, so ideally
-            // we somehow keep track of which icu version we have. There might
-            // be something db internal that we can check, or we might have to store
-            // it in the .odb.
-            rebuildIndexes();
-
             // We need to attach as a document listener in order to be able to store
             // the temporary db back into the .odb when saving
             uno::Reference<XDocumentEventBroadcaster> xBroadcaster(m_xParentDocument, UNO_QUERY);
@@ -822,81 +816,4 @@ uno::Reference< XTablesSupplier > Connection::createCatalog()
 
 }
 
-void Connection::rebuildIndexes() throw (SQLException, RuntimeException, std::exception)
-{
-    MutexGuard aGuard(m_aMutex);
-
-    try
-    {
-        // We only need to do this for character based columns on user-created tables.
-
-        // Ideally we'd use a FOR SELECT ... INTO .... DO ..., but that seems to
-        // only be possible using PSQL, i.e. using a stored procedure.
-        OUString sSql(
-            // multiple columns possible per index, only select once
-            "SELECT DISTINCT indices.RDB$INDEX_NAME "
-            "FROM RDB$INDICES indices "
-            "JOIN RDB$INDEX_SEGMENTS index_segments "
-            "ON (indices.RDB$INDEX_NAME = index_segments.RDB$INDEX_NAME) "
-            "JOIN RDB$RELATION_FIELDS relation_fields "
-            "ON (index_segments.RDB$FIELD_NAME = relation_fields.RDB$FIELD_NAME) "
-            "JOIN RDB$FIELDS fields "
-            "ON (relation_fields.RDB$FIELD_SOURCE = fields.RDB$FIELD_NAME) "
-
-            "WHERE (indices.RDB$SYSTEM_FLAG = 0) "
-            // TODO: what about blr_text2 etc. ?
-            "AND ((fields.RDB$FIELD_TYPE = " + OUString::number((int) blr_text) + ") "
-            "     OR (fields.RDB$FIELD_TYPE = " + OUString::number((int) blr_varying) + ")) "
-            "AND (indices.RDB$INDEX_INACTIVE IS NULL OR indices.RDB$INDEX_INACTIVE = 0) "
-        );
-
-        uno::Reference< XStatement > xCharIndicesStatement = createStatement();
-        uno::Reference< XResultSet > xCharIndices =
-                                        xCharIndicesStatement->executeQuery(sSql);
-        uno::Reference< XRow > xRow(xCharIndices, UNO_QUERY_THROW);
-
-        uno::Reference< XStatement > xAlterIndexStatement = createStatement();
-
-        // ALTER is a DDL statement, hence using Statement will cause a commit
-        // after every alter -- in this case this is inappropriate (xCharIndicesStatement
-        // and its ResultSet become invalidated) hence we use the native api.
-        while (xCharIndices->next())
-        {
-            OUString sIndexName(sanitizeIdentifier(xRow->getString(1)));
-            SAL_INFO("connectivity.firebird", "rebuilding index " + sIndexName);
-            OString sAlterIndex = "ALTER INDEX \""
-                                   + OUStringToOString(sIndexName, RTL_TEXTENCODING_UTF8)
-                                   + "\" ACTIVE";
-
-            ISC_STATUS_ARRAY aStatusVector;
-            ISC_STATUS aErr;
-
-            aErr = isc_dsql_execute_immediate(aStatusVector,
-                                              &getDBHandle(),
-                                              &getTransaction(),
-                                              0, // Length: 0 for null terminated
-                                              sAlterIndex.getStr(),
-                                              FIREBIRD_SQL_DIALECT,
-                                              nullptr);
-            if (aErr)
-                evaluateStatusVector(aStatusVector,
-                                     "rebuildIndexes:isc_dsql_execute_immediate",
-                                     *this);
-        }
-        commit();
-    }
-    catch (const Exception&)
-    {
-        throw;
-    }
-    catch (const std::exception&)
-    {
-        throw;
-    }
-    catch (...) // const Firebird::Exception& firebird throws this, but doesn't install the fb_exception.h that declares it
-    {
-        throw std::runtime_error("Generic Firebird::Exception");
-    }
-
-}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
