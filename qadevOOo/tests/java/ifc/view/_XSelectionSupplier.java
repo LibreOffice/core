@@ -87,7 +87,7 @@ public class _XSelectionSupplier extends MultiMethodTest {
     /**
      * Test adds listener to the object, then selects first and
      * then second instances to be sure that selection was changed.<p>
-     * Has <b>OK</b> status if selection lisener was called.
+     * Has <b>OK</b> status if selection listener was called.
      */
     public void _addSelectionChangeListener(){
         boolean res = true;
@@ -155,7 +155,7 @@ public class _XSelectionSupplier extends MultiMethodTest {
     /**
      * Test removes listener, then selects first and
      * then second instances to be sure that selection was changed.<p>
-     * Has <b>OK</b> status if selection lisener was not called.
+     * Has <b>OK</b> status if selection listener was not called.
      * The following method tests are to be completed successfully before :
      * <ul>
      *  <li> <code> addSelectionChangeListener() </code> : to have

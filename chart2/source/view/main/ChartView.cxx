@@ -2908,7 +2908,7 @@ void SAL_CALL ChartView::update() throw (uno::RuntimeException, std::exception)
     //Although in general it is a bad idea to change the model from within the view this is exceptionally the best place to do this special conversion.
     //When a view update is requested (what happens for creating the metafile or displaying
     //the chart in edit mode or printing) it is most likely that all necessary information are available - like the underlying spreadsheet data for example.
-    //Those data is important for the correct axis lable sizes which are needed during conversion.
+    //Those data are important for the correct axis label sizes which are needed during conversion.
     if( DiagramHelper::switchDiagramPositioningToExcludingPositioning( mrChartModel, true, false ) )
         impl_updateView();
 }

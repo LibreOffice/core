@@ -46,7 +46,7 @@ static vcl::Window* ImplGetLabelFor( vcl::Window* pFrameWindow, WindowType nMyTy
         nMyType == WINDOW_FIXEDLINE     ||
         nMyType == WINDOW_GROUPBOX )
     {
-        // #i100833# MT 2010/02: Group box and fixed lines can also lable a fixed text.
+        // #i100833# MT 2010/02: Group box and fixed lines can also label a fixed text.
         // See tools/options/print for example.
         bool bThisIsAGroupControl = (nMyType == WINDOW_GROUPBOX) || (nMyType == WINDOW_FIXEDLINE);
         // get index, form start and form end
@@ -201,7 +201,7 @@ Window* Window::getLegacyNonLayoutAccessibleRelationLabeledBy() const
 //    if( ! ( GetType() == WINDOW_FIXEDTEXT     ||
 //            GetType() == WINDOW_FIXEDLINE     ||
 //            GetType() == WINDOW_GROUPBOX ) )
-    // #i100833# MT 2010/02: Group box and fixed lines can also lable a fixed text.
+    // #i100833# MT 2010/02: Group box and fixed lines can also label a fixed text.
     // See tools/options/print for example.
 
     pWindow = ImplGetLabeledBy( pFrameWindow, GetType(), const_cast<Window*>(this) );

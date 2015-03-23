@@ -122,7 +122,7 @@ protected:
 };
 
 
-/** interface for an implementation of a table control's Accesible component
+/** interface for an implementation of a table control's Accessible component
 */
 class IAccessibleTableControl
 {

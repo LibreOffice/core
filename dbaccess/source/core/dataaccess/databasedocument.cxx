@@ -643,7 +643,7 @@ sal_Bool SAL_CALL ODatabaseDocument::wasModifiedSinceLastSave() throw ( RuntimeE
     // auto recovery is an "UI feature", it is to restore the UI the user knows. Thus,
     // we ask our connected controllers, not simply our existing form/report definitions.
     // (There is some information which even cannot be obtained without asking the controller.
-    // For instance, newly created, but not yet saved, forms/reports are acessible via the
+    // For instance, newly created, but not yet saved, forms/reports are accessible via the
     // controller only, but not via the model.)
 
     try

@@ -67,7 +67,7 @@
 /**
  * @brief
  * Foot note object.
- * Foot note has a lable, which is used in page content, and footnote contents in the footnote section.
+ * Foot note has a label, which is used in page content, and footnote contents in the footnote section.
  */
 class XFFootNote : public XFContentContainer
 {

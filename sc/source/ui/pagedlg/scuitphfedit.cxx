@@ -111,7 +111,7 @@ ScHFEditPage::ScHFEditPage( vcl::Window*             pParent,
     m_pFtDefinedHF->Show();
     m_pFtCustomHF->Show();
 
-    //swap left/right areas and their lables in RTL mode
+    //swap left/right areas and their labels in RTL mode
     if( Application::GetSettings().GetLayoutRTL() )
     {
         vcl::Window *pLeft = get<vcl::Window>("labelFT_LEFT");

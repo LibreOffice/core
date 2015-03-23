@@ -43,7 +43,7 @@ enum XMLPropOOOTransformerAction
     XML_ATACTION_MOVE_PROTECT,
     XML_ATACTION_SIZE_PROTECT,
     XML_ATACTION_PROTECT,
-    // No image transparancy info in lable document (#i50322#)
+    // No image transparency info in label document (#i50322#)
     XML_ATACTION_WRITER_BACK_GRAPHIC_TRANSPARENCY,
     XML_PTACTION_END=XML_TACTION_END
 };
