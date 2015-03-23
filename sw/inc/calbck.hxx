@@ -308,11 +308,11 @@ public:
         if(!m_pPosition)
             m_pPosition = const_cast<SwClient*>(m_rRoot.GetDepends());
         if(!m_pPosition)
-            return PTR_CAST(TElementType,Sync());
+            return static_cast<TElementType*>(Sync());
         while(GetRightOfPos())
             m_pPosition = GetRightOfPos();
         if(m_pPosition->IsA(TYPE(TElementType)))
-            return PTR_CAST(TElementType,Sync());
+            return static_cast<TElementType*>(Sync());
         return Previous();
     }
     TElementType* Next()
@@ -321,14 +321,14 @@ public:
             m_pPosition = GetRightOfPos();
         while(m_pPosition && !m_pPosition->IsA( TYPE(TElementType) ) )
             m_pPosition = GetRightOfPos();
-        return PTR_CAST(TElementType,Sync());
+        return static_cast<TElementType*>(Sync());
     }
     TElementType* Previous()
     {
         m_pPosition = GetLeftOfPos();
         while(m_pPosition && !m_pPosition->IsA( TYPE(TElementType) ) )
             m_pPosition = GetLeftOfPos();
-        return PTR_CAST(TElementType,Sync());
+        return static_cast<TElementType*>(Sync());
     }
     using sw::ClientIteratorBase::IsChanged;
 };
