@@ -1134,6 +1134,7 @@ cairo::SurfaceSharedPtr WinSalGraphics::CreateSurface( const OutputDevice& rRefD
             surf = cairo::SurfaceSharedPtr(new cairo::Win32Surface((HDC) aSysData.hDC, x, y));
     }
 #else
+    (void)rRefDevice;
     (void)x;
     (void)y;
 #endif
