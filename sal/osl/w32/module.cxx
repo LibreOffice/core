@@ -47,7 +47,7 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *strModuleName, sal_Int32 /*nRtldM
     oslModule ret = 0;
     oslFileError    nError;
 
-    SAL_INFO( "sal.osl", "{ osl_loadModule start: " << (LPTSTR)&strModuleName->buffer );
+    SAL_INFO( "sal.osl", "osl_loadModule: " << OUString((sal_Unicode*)strModuleName->buffer, wcslen(strModuleName->buffer)) );
     OSL_ASSERT(strModuleName);
 
     nError = osl_getSystemPathFromFileURL(strModuleName, &Module);
@@ -87,7 +87,6 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *strModuleName, sal_Int32 /*nRtldM
     SetErrorMode(errorMode);
 #endif
 
-    SAL_INFO( "sal.osl", "} osl_loadModule end: " << (LPTSTR)&strModuleName->buffer );
     return ret;
 }
 
@@ -102,7 +101,7 @@ oslModule SAL_CALL osl_loadModuleAscii(const sal_Char *pModuleName, sal_Int32 nR
     UINT errorMode = SetErrorMode(SEM_NOOPENFILEERRORBOX | SEM_FAILCRITICALERRORS);
     oslModule ret = 0;
 
-    SAL_INFO( "sal.osl", "{ osl_loadModule start: " << pModuleName );
+    SAL_INFO( "sal.osl", "osl_loadModule: " << pModuleName );
     OSL_ASSERT(pModuleName);
 
     h = LoadLibrary(pModuleName);
@@ -113,7 +112,6 @@ oslModule SAL_CALL osl_loadModuleAscii(const sal_Char *pModuleName, sal_Int32 nR
     ret = (oslModule) h;
     SetErrorMode(errorMode);
 
-    SAL_INFO( "sal.osl", "} osl_loadModule end: " << pModuleName );
     return ret;
 }
 
