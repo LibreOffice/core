@@ -9674,6 +9674,7 @@ void PDFWriterImpl::drawStraightTextLine( OStringBuffer& aLine, long nWidth, Fon
                 nLinePos    = HCONV( pFontEntry->maMetric.mnDUnderlineOffset1 );
                 nLinePos2   = HCONV( pFontEntry->maMetric.mnDUnderlineOffset2 );
             }
+            break;
         default:
             break;
     }
@@ -11010,6 +11011,7 @@ bool PDFWriterImpl::writeGradientFunction( GradientEmit& rObject )
             aCol[1] = rObject.m_aGradient.GetEndColor().GetGreen();
             aCol[2] = rObject.m_aGradient.GetEndColor().GetBlue();
             CHECK_RETURN( writeBuffer( aCol, 3 ) );
+            // fall-through
         case GradientStyle_LINEAR:
         {
             aCol[0] = rObject.m_aGradient.GetStartColor().GetRed();
