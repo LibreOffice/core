@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a29b11f_e9623d16",
+        "filename": "sc/source/ui/view/gridwin.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2110,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-03-23T14:25:43Z",
+      "side": 1,
+      "message": "As this is in ScGridWindow::MouseButtonUp() it won\u0027t catch the Ctrl+D case described in the bug, or would it? Shouldn\u0027t this go somewhere where FID_FILL_AUTO is actually executed respectively its subroutines?\n\nI also somewhat dislike mixing this functionality into the MouseButtonUp() function, as it isn\u0027t directly related and makes things even less overseeable.",
+      "revId": "aeb482ff6c0292f7fbbb9e46c7a33f4838c9518b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a29b11f_89adc933",
+        "filename": "sc/source/ui/view/gridwin.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2128,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-03-23T14:25:43Z",
+      "side": 1,
+      "message": "As this can be repeating ranges, it would be more efficient to remember all pRanges for one run of nRowRepeatSize in a vector, and reuse those on subsequent sets of rows. The worst case is if only one row is copied, in which for each row mpSpellCheckCxt-\u003egetMisspellRanges() would be executed again and again on the same row.\n\nAlso, setting the misspell ranges should be done only for the visible area, otherwise you could end up with setting ranges for a million rows..",
+      "revId": "aeb482ff6c0292f7fbbb9e46c7a33f4838c9518b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
