@@ -76,7 +76,7 @@ namespace
         {
             SwPaM aStartPaM(rStart);
             io_pDoc->getIDocumentContentOperations().InsertString(aStartPaM, OUString(aStartMark));
-            rStart.nContent--;
+            --rStart.nContent;
             pField->SetMarkStartPos( rStart );
         }
 
@@ -89,7 +89,7 @@ namespace
         {
             SwPaM aEndPaM(rEnd);
             io_pDoc->getIDocumentContentOperations().InsertString(aEndPaM, OUString(aEndMark));
-            rEnd.nContent++;
+            ++rEnd.nContent;
         }
 
         io_pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_UI_REPLACE, NULL);
@@ -110,7 +110,7 @@ namespace
         if( ch_start == aStartMark )
         {
             SwPaM aStart(rStart, rStart);
-            aStart.End()->nContent++;
+            ++aStart.End()->nContent;
             io_pDoc->getIDocumentContentOperations().DeleteRange(aStart);
         }
 
@@ -123,7 +123,7 @@ namespace
         if ( ch_end == aEndMark )
         {
             SwPaM aEnd(rEnd, rEnd);
-            aEnd.Start()->nContent--;
+            --aEnd.Start()->nContent;
             io_pDoc->getIDocumentContentOperations().DeleteRange(aEnd);
         }
 
@@ -420,7 +420,7 @@ namespace sw { namespace mark
         // For some reason the end mark is moved from 1 by the Insert: we don't
         // want this for checkboxes
         SwPosition aNewEndPos = this->GetMarkEnd();
-        aNewEndPos.nContent--;
+        --aNewEndPos.nContent;
         SetMarkEndPos( aNewEndPos );
     }
 

@@ -225,7 +225,7 @@ sal_uLong SwASCIIParser::CallParser()
             {
                 // then set over the insert range the defined attributes
                 *pInsPam->GetMark() = *pPam->GetPoint();
-                pInsPam->GetPoint()->nNode++;
+                ++pInsPam->GetPoint()->nNode;
                 pInsPam->GetPoint()->nContent.Assign(
                                     pInsPam->GetCntntNode(), nSttCntnt );
 

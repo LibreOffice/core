@@ -670,21 +670,21 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTblOpts,
             || pEnd->nNode.GetIndex() >= GetNodes().GetEndOfContent().GetIndex()-1 )
         {
             getIDocumentContentOperations().SplitNode( *pEnd, false );
-            ((SwNodeIndex&)pEnd->nNode)--;
+            --((SwNodeIndex&)pEnd->nNode);
             ((SwIndex&)pEnd->nContent).Assign(
                                 pEnd->nNode.GetNode().GetCntntNode(), 0 );
             // A Node and at the End?
             if( pStt->nNode.GetIndex() >= pEnd->nNode.GetIndex() )
-                aRg.aStart--;
+                --aRg.aStart;
         }
         else
-            aRg.aEnd++;
+            ++aRg.aEnd;
     }
 
     if( aRg.aEnd.GetIndex() == aRg.aStart.GetIndex() )
     {
         OSL_FAIL( "empty range" );
-        aRg.aEnd++;
+        ++aRg.aEnd;
     }
 
     // We always use Upper to insert the Table
@@ -1161,21 +1161,21 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
             || pEnd->nNode.GetIndex() >= GetNodes().GetEndOfContent().GetIndex()-1 )
         {
             getIDocumentContentOperations().SplitNode( *pEnd, false );
-            ((SwNodeIndex&)pEnd->nNode)--;
+            --((SwNodeIndex&)pEnd->nNode);
             ((SwIndex&)pEnd->nContent).Assign(
                                 pEnd->nNode.GetNode().GetCntntNode(), 0 );
             // A Node and at the End?
             if( pStt->nNode.GetIndex() >= pEnd->nNode.GetIndex() )
-                aRg.aStart--;
+                --aRg.aStart;
         }
         else
-            aRg.aEnd++;
+            ++aRg.aEnd;
     }
 
     if( aRg.aEnd.GetIndex() == aRg.aStart.GetIndex() )
     {
         OSL_FAIL( "empty range" );
-        aRg.aEnd++;
+        ++aRg.aEnd;
     }
 
     // We always use Upper to insert the Table
@@ -1439,8 +1439,8 @@ bool SwDoc::TableToText( const SwTableNode* pTblNd, sal_Unicode cCh )
     bool bRet = GetNodes().TableToText( aRg, cCh, pUndo );
     if( pUndoRg )
     {
-        pUndoRg->aStart++;
-        pUndoRg->aEnd--;
+        ++pUndoRg->aStart;
+        --pUndoRg->aEnd;
         pUndo->SetRange( *pUndoRg );
         GetIDocumentUndoRedo().AppendUndo(pUndo);
         delete pUndoRg;
@@ -1508,7 +1508,7 @@ static void lcl_DelBox( SwTableBox* pBox, _DelTabPara* pDelPara )
         {
             // Join the current text node with the last from the previous box if possible
             sal_uLong nNdIdx = aDelRg.aStart.GetIndex();
-            aDelRg.aStart--;
+            --aDelRg.aStart;
             if( pDelPara->pLastNd == &aDelRg.aStart.GetNode() )
             {
                 // Inserting the separator
@@ -1531,13 +1531,13 @@ static void lcl_DelBox( SwTableBox* pBox, _DelTabPara* pDelPara )
             }
             else if( pDelPara->pUndo )
             {
-                aDelRg.aStart++;
+                ++aDelRg.aStart;
                 pDelPara->pUndo->AddBoxPos( *pDoc, nNdIdx, aDelRg.aEnd.GetIndex() );
             }
         }
         else if( pDelPara->pUndo )
             pDelPara->pUndo->AddBoxPos( *pDoc, aDelRg.aStart.GetIndex(), aDelRg.aEnd.GetIndex() );
-        aDelRg.aEnd--;
+        --aDelRg.aEnd;
         pDelPara->pLastNd = aDelRg.aEnd.GetNode().GetTxtNode();
 
         // Do not take over the NumberFormatting's adjustment
@@ -1634,7 +1634,7 @@ bool SwNodes::TableToText( const SwNodeRange& rRange, sal_Unicode cCh,
                 }
                 aDelRg.aStart = *pSNd->EndOfSectionNode();
             }
-            aDelRg.aStart++;
+            ++aDelRg.aStart;
         }
     }
 

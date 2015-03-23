@@ -279,12 +279,12 @@ OUString const* SwAutoCorrDoc::GetPrevPara(bool const bAtNormalPos)
     if( bAtNormalPos || !pIdx )
         pIdx = new SwNodeIndex( rCrsr.GetPoint()->nNode, -1 );
     else
-        (*pIdx)--;
+        --(*pIdx);
 
     SwTxtNode* pTNd = pIdx->GetNode().GetTxtNode();
     while (pTNd && !pTNd->GetTxt().getLength())
     {
-        (*pIdx)--;
+        --(*pIdx);
         pTNd = pIdx->GetNode().GetTxtNode();
     }
     if( pTNd && 0 == pTNd->GetAttrOutlineLevel() )

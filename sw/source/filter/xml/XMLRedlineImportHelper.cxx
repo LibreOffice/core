@@ -123,7 +123,7 @@ void XTextRangeOrNodeIndexPosition::Set( SwNodeIndex& rIndex )
         delete pIndex;
 
     pIndex = new SwNodeIndex(rIndex);
-    (*pIndex)-- ;   // previous node!!!
+    --(*pIndex) ;   // previous node!!!
     xRange = NULL;
 }
 
@@ -171,7 +171,7 @@ XTextRangeOrNodeIndexPosition::CopyPositionInto(SwPosition& rPos, SwDoc & rDoc)
     else
     {
         rPos.nNode = *pIndex;
-        rPos.nNode++;           // pIndex points to previous index !!!
+        ++rPos.nNode;           // pIndex points to previous index !!!
         rPos.nContent.Assign( rPos.nNode.GetNode().GetCntntNode(), 0 );
     }
 }

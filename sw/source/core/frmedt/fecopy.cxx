@@ -98,7 +98,7 @@ bool SwFEShell::Copy( SwDoc* pClpDoc, const OUString* pNewClpTxt )
             pClpDoc->GetNodes().GetEndOfContent().GetIndex() - aSttIdx.GetIndex() );
         pTxtNd = pClpDoc->GetNodes().MakeTxtNode( aSttIdx,
                             (SwTxtFmtColl*)pClpDoc->GetDfltTxtFmtColl() );
-        aSttIdx--;
+        --aSttIdx;
     }
 
     // also delete surrounding FlyFrames if any
@@ -797,7 +797,7 @@ bool SwFEShell::Paste( SwDoc* pClpDoc, bool bIncludingPageFrames )
             }
             {
                 SwNodeIndex aIndexBefore(rInsPos.nNode);
-                aIndexBefore--;
+                --aIndexBefore;
                 pClpDoc->getIDocumentContentOperations().CopyRange( rCopy, rInsPos, false );
                 {
                     ++aIndexBefore;
@@ -1042,7 +1042,7 @@ bool SwFEShell::Paste( SwDoc* pClpDoc, bool bIncludingPageFrames )
                 {
                     SwNodeIndex aIndexBefore(rInsPos.nNode);
 
-                    aIndexBefore--;
+                    --aIndexBefore;
 
                     pClpDoc->getIDocumentContentOperations().CopyRange( aCpyPam, rInsPos, false );
                     // Note: aCpyPam is invalid now
