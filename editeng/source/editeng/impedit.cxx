@@ -324,6 +324,7 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, vcl::Region* pRegion, Ou
 
         if (isTiledRendering())
         {
+            bool bMm100ToTwip = pOutWin->GetMapMode().GetMapUnit() == MAP_100TH_MM;
             OString sRectangle;
             // If we are not in selection mode, then the exported selection should be empty.
             if (pEditEngine->pImpEditEngine->IsInSelectionMode())
@@ -335,19 +336,25 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, vcl::Region* pRegion, Ou
                 {
                     Rectangle& rStart = aRectangles.front();
                     Rectangle aStart = Rectangle(rStart.Left(), rStart.Top(), rStart.Left() + 1, rStart.Bottom());
+                    if (bMm100ToTwip)
+                        aStart = OutputDevice::LogicToLogic(aStart, MAP_100TH_MM, MAP_TWIP);
                     libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION_START, aStart.toString().getStr());
 
                     Rectangle& rEnd = aRectangles.back();
                     Rectangle aEnd = Rectangle(rEnd.Right() - 1, rEnd.Top(), rEnd.Right(), rEnd.Bottom());
+                    if (bMm100ToTwip)
+                        aEnd = OutputDevice::LogicToLogic(aEnd, MAP_100TH_MM, MAP_TWIP);
                     libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION_END, aEnd.toString().getStr());
                 }
 
                 std::stringstream ss;
                 for (size_t i = 0; i < aRectangles.size(); ++i)
                 {
-                    const Rectangle& rRectangle = aRectangles[i];
+                    Rectangle& rRectangle = aRectangles[i];
                     if (i)
                         ss << "; ";
+                    if (bMm100ToTwip)
+                        rRectangle = OutputDevice::LogicToLogic(rRectangle, MAP_100TH_MM, MAP_TWIP);
                     ss << rRectangle.toString().getStr();
                 }
                 sRectangle = ss.str().c_str();
