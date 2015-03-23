@@ -1279,10 +1279,10 @@ void OutlineViewShell::GetStatusBarState(SfxItemSet& rSet)
         boost::scoped_ptr<SvxZoomItem> pZoomItem(new SvxZoomItem( SvxZoomType::PERCENT, nZoom ));
 
         // limit area
-        sal_uInt16 nZoomValues = SVX_ZOOM_ENABLE_ALL;
-        nZoomValues &= ~SVX_ZOOM_ENABLE_OPTIMAL;
-        nZoomValues &= ~SVX_ZOOM_ENABLE_WHOLEPAGE;
-        nZoomValues &= ~SVX_ZOOM_ENABLE_PAGEWIDTH;
+        SvxZoomEnableFlags nZoomValues = SvxZoomEnableFlags::ALL;
+        nZoomValues &= ~SvxZoomEnableFlags::OPTIMAL;
+        nZoomValues &= ~SvxZoomEnableFlags::WHOLEPAGE;
+        nZoomValues &= ~SvxZoomEnableFlags::PAGEWIDTH;
 
         pZoomItem->SetValueSet( nZoomValues );
         rSet.Put( *pZoomItem );

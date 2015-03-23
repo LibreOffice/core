@@ -640,16 +640,16 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     SvxZoomItem     aZoomItem( eOldZoomType, nOldZoom, SID_ATTR_ZOOM );
                     boost::scoped_ptr<AbstractSvxZoomDialog> pDlg;
                     ScMarkData&     rMark = GetViewData().GetMarkData();
-                    sal_uInt16          nBtnFlags =   SVX_ZOOM_ENABLE_50
-                                                | SVX_ZOOM_ENABLE_75
-                                                | SVX_ZOOM_ENABLE_100
-                                                | SVX_ZOOM_ENABLE_150
-                                                | SVX_ZOOM_ENABLE_200
-                                                | SVX_ZOOM_ENABLE_WHOLEPAGE
-                                                | SVX_ZOOM_ENABLE_PAGEWIDTH;
+                    SvxZoomEnableFlags nBtnFlags = SvxZoomEnableFlags::N50
+                                                | SvxZoomEnableFlags::N75
+                                                | SvxZoomEnableFlags::N100
+                                                | SvxZoomEnableFlags::N150
+                                                | SvxZoomEnableFlags::N200
+                                                | SvxZoomEnableFlags::WHOLEPAGE
+                                                | SvxZoomEnableFlags::PAGEWIDTH;
 
                     if ( rMark.IsMarked() || rMark.IsMultiMarked() )
-                        nBtnFlags = nBtnFlags | SVX_ZOOM_ENABLE_OPTIMAL;
+                        nBtnFlags = nBtnFlags | SvxZoomEnableFlags::OPTIMAL;
 
                     aZoomItem.SetValueSet( nBtnFlags );
                     aSet.Put( aZoomItem );

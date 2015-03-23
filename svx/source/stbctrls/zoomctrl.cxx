@@ -39,7 +39,7 @@ SFX_IMPL_STATUSBAR_CONTROL(SvxZoomStatusBarControl,SvxZoomItem);
 class ZoomPopup_Impl : public PopupMenu
 {
 public:
-    ZoomPopup_Impl( sal_uInt16 nZ, sal_uInt16 nValueSet );
+    ZoomPopup_Impl( sal_uInt16 nZ, SvxZoomEnableFlags nValueSet );
 
     sal_uInt16          GetZoom() const { return nZoom; }
     sal_uInt16          GetCurId() const { return nCurId; }
@@ -53,25 +53,25 @@ private:
 
 
 
-ZoomPopup_Impl::ZoomPopup_Impl( sal_uInt16 nZ, sal_uInt16 nValueSet )
+ZoomPopup_Impl::ZoomPopup_Impl( sal_uInt16 nZ, SvxZoomEnableFlags nValueSet )
     : PopupMenu(ResId(RID_SVXMNU_ZOOM, DIALOG_MGR()))
     , nZoom(nZ)
     , nCurId(0)
 {
-    static const sal_uInt16 aTable[] =
-    {
-        SVX_ZOOM_ENABLE_50,         ZOOM_50,
-        SVX_ZOOM_ENABLE_100,        ZOOM_100,
-        SVX_ZOOM_ENABLE_150,        ZOOM_150,
-        SVX_ZOOM_ENABLE_200,        ZOOM_200,
-        SVX_ZOOM_ENABLE_OPTIMAL,    ZOOM_OPTIMAL,
-        SVX_ZOOM_ENABLE_WHOLEPAGE,  ZOOM_WHOLE_PAGE,
-        SVX_ZOOM_ENABLE_PAGEWIDTH,  ZOOM_PAGE_WIDTH
-    };
-
-    for ( sal_uInt16 nPos = 0; nPos < SAL_N_ELEMENTS(aTable); nPos += 2 )
-        if ( ( aTable[nPos] != ( aTable[nPos] & nValueSet ) ) )
-            EnableItem( aTable[nPos+1], false );
+    if ( !(SvxZoomEnableFlags::N50 & nValueSet) )
+            EnableItem( ZOOM_50, false );
+    if ( !(SvxZoomEnableFlags::N100 & nValueSet) )
+            EnableItem( ZOOM_100, false );
+    if ( !(SvxZoomEnableFlags::N150 & nValueSet) )
+            EnableItem( ZOOM_150, false );
+    if ( !(SvxZoomEnableFlags::N200 & nValueSet) )
+            EnableItem( ZOOM_200, false );
+    if ( !(SvxZoomEnableFlags::OPTIMAL & nValueSet) )
+            EnableItem( ZOOM_OPTIMAL, false );
+    if ( !(SvxZoomEnableFlags::WHOLEPAGE & nValueSet) )
+            EnableItem( ZOOM_WHOLE_PAGE, false );
+    if ( !(SvxZoomEnableFlags::PAGEWIDTH & nValueSet) )
+            EnableItem( ZOOM_PAGE_WIDTH, false );
 }
 
 
@@ -101,7 +101,7 @@ SvxZoomStatusBarControl::SvxZoomStatusBarControl( sal_uInt16 _nSlotId,
 
     SfxStatusBarControl( _nSlotId, _nId, rStb ),
     nZoom( 100 ),
-    nValueSet( SVX_ZOOM_ENABLE_ALL )
+    nValueSet( SvxZoomEnableFlags::ALL )
 {
     GetStatusBar().SetQuickHelpText(GetId(), SVX_RESSTR(RID_SVXSTR_ZOOMTOOL_HINT));
 }
@@ -112,7 +112,7 @@ void SvxZoomStatusBarControl::StateChanged( sal_uInt16, SfxItemState eState,
     if( SfxItemState::DEFAULT != eState )
     {
         GetStatusBar().SetItemText( GetId(), "" );
-        nValueSet = 0;
+        nValueSet = SvxZoomEnableFlags::NONE;
     }
     else if ( pState->ISA( SfxUInt16Item) )
     {
@@ -129,7 +129,7 @@ void SvxZoomStatusBarControl::StateChanged( sal_uInt16, SfxItemState eState,
         else
         {
             DBG_WARNING( "use SfxZoomItem for SID_ATTR_ZOOM" );
-            nValueSet = SVX_ZOOM_ENABLE_ALL;
+            nValueSet = SvxZoomEnableFlags::ALL;
         }
     }
 }
@@ -142,7 +142,7 @@ void SvxZoomStatusBarControl::Paint( const UserDrawEvent& )
 
 void SvxZoomStatusBarControl::Command( const CommandEvent& rCEvt )
 {
-    if ( COMMAND_CONTEXTMENU & rCEvt.GetCommand() && 0 != nValueSet )
+    if ( COMMAND_CONTEXTMENU & rCEvt.GetCommand() && bool(nValueSet) )
     {
         ZoomPopup_Impl aPop( nZoom, nValueSet );
         StatusBar& rStatusbar = GetStatusBar();

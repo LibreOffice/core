@@ -1403,11 +1403,11 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                     if( pVOpt->getBrowseMode() )
                     {
                         aZoom.SetValueSet(
-                                SVX_ZOOM_ENABLE_50|
-                                SVX_ZOOM_ENABLE_75|
-                                SVX_ZOOM_ENABLE_100|
-                                SVX_ZOOM_ENABLE_150|
-                                SVX_ZOOM_ENABLE_200);
+                                SvxZoomEnableFlags::N50|
+                                SvxZoomEnableFlags::N75|
+                                SvxZoomEnableFlags::N100|
+                                SvxZoomEnableFlags::N150|
+                                SvxZoomEnableFlags::N200);
                     }
                     rSet.Put( aZoom );
                 }
@@ -1690,11 +1690,11 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
                     if( bBrowseMode )
                     {
                         aZoom.SetValueSet(
-                                SVX_ZOOM_ENABLE_50|
-                                SVX_ZOOM_ENABLE_75|
-                                SVX_ZOOM_ENABLE_100|
-                                SVX_ZOOM_ENABLE_150|
-                                SVX_ZOOM_ENABLE_200);
+                                SvxZoomEnableFlags::N50|
+                                SvxZoomEnableFlags::N75|
+                                SvxZoomEnableFlags::N100|
+                                SvxZoomEnableFlags::N150|
+                                SvxZoomEnableFlags::N200);
                     }
                     aCoreSet.Put( aZoom );
 

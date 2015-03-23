@@ -22,7 +22,7 @@
 #include <svl/intitem.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/dllapi.h>
-
+#include <o3tl/typed_flags_set.hxx>
 
 
 enum class SvxZoomType
@@ -34,11 +34,27 @@ enum class SvxZoomType
     PAGEWIDTH_NOBORDER  // GetValue() pagewidth without border
 };
 
-
+enum class SvxZoomEnableFlags
+{
+    NONE         = 0x0000,
+    N50          = 0x0001,
+    N75          = 0x0002,
+    N100         = 0x0004,
+    N150         = 0x0008,
+    N200         = 0x0010,
+    OPTIMAL      = 0x1000,
+    WHOLEPAGE    = 0x2000,
+    PAGEWIDTH    = 0x4000,
+    ALL          = 0x701F
+};
+namespace o3tl
+{
+    template<> struct typed_flags<SvxZoomEnableFlags> : is_typed_flags<SvxZoomEnableFlags, 0x701f> {};
+}
 
 class SFX2_DLLPUBLIC SvxZoomItem: public SfxUInt16Item
 {
-    sal_uInt16              nValueSet;  // allowed values (see #defines below)
+    SvxZoomEnableFlags      nValueSet;  // allowed values (see #defines below)
     SvxZoomType             eType;
 
 public:
@@ -49,14 +65,13 @@ public:
     SvxZoomItem( const SvxZoomItem& );
     virtual ~SvxZoomItem();
 
-    void                    SetValueSet( sal_uInt16 nValues ) { nValueSet = nValues; }
-    sal_uInt16              GetValueSet() const { return nValueSet; }
-    bool                    IsValueAllowed( sal_uInt16 nValue ) const
-                            { return nValue == ( nValue & nValueSet ); }
+    void                    SetValueSet( SvxZoomEnableFlags nValues ) { nValueSet = nValues; }
+    SvxZoomEnableFlags      GetValueSet() const { return nValueSet; }
+    bool                    IsValueAllowed( SvxZoomEnableFlags nValue ) const
+                            { return bool( nValue & nValueSet ); }
 
     SvxZoomType             GetType() const { return eType; }
-    void                    SetType( SvxZoomType eNewType )
-                            { eType = eNewType; }
+    void                    SetType( SvxZoomType eNewType ) { eType = eNewType; }
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
     virtual SfxPoolItem*    Create( SvStream& rStrm, sal_uInt16 nVersion ) const SAL_OVERRIDE;
@@ -67,16 +82,6 @@ public:
 };
 
 
-
-#define SVX_ZOOM_ENABLE_50          0x0001
-#define SVX_ZOOM_ENABLE_75          0x0002
-#define SVX_ZOOM_ENABLE_100         0x0004
-#define SVX_ZOOM_ENABLE_150         0x0008
-#define SVX_ZOOM_ENABLE_200         0x0010
-#define SVX_ZOOM_ENABLE_OPTIMAL     0x1000
-#define SVX_ZOOM_ENABLE_WHOLEPAGE   0x2000
-#define SVX_ZOOM_ENABLE_PAGEWIDTH   0x4000
-#define SVX_ZOOM_ENABLE_ALL         0x701F
 
 #endif
 

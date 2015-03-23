@@ -942,7 +942,7 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
             aReturn.bEnabled = true;
             {
                 SvxZoomItem aZoom(m_eZoomType,m_nZoomValue);
-                aZoom.SetValueSet(SVX_ZOOM_ENABLE_50|SVX_ZOOM_ENABLE_75|SVX_ZOOM_ENABLE_100|SVX_ZOOM_ENABLE_200);
+                aZoom.SetValueSet(SvxZoomEnableFlags::N50|SvxZoomEnableFlags::N75|SvxZoomEnableFlags::N100|SvxZoomEnableFlags::N200);
                 aZoom.QueryValue(aReturn.aValue);
             }
             break;
@@ -4275,7 +4275,7 @@ void OReportController::openZoomDialog()
             ::std::unique_ptr<SfxItemSet> pDescriptor(new SfxItemSet(*pPool, pRanges));
             // fill it
             SvxZoomItem aZoomItem( m_eZoomType, m_nZoomValue, SID_ATTR_ZOOM );
-            aZoomItem.SetValueSet(SVX_ZOOM_ENABLE_100|SVX_ZOOM_ENABLE_WHOLEPAGE|SVX_ZOOM_ENABLE_PAGEWIDTH);
+            aZoomItem.SetValueSet(SvxZoomEnableFlags::N100|SvxZoomEnableFlags::WHOLEPAGE|SvxZoomEnableFlags::PAGEWIDTH);
             pDescriptor->Put(aZoomItem);
 
             ::std::unique_ptr<AbstractSvxZoomDialog> pDlg( pFact->CreateSvxZoomDialog(NULL, *pDescriptor.get()) );

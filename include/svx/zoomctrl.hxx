@@ -21,13 +21,14 @@
 
 #include <sfx2/stbitem.hxx>
 #include <svx/svxdllapi.h>
+#include <sfx2/zoomitem.hxx>
 #include <vcl/image.hxx>
 
 class SVX_DLLPUBLIC SvxZoomStatusBarControl : public SfxStatusBarControl
 {
 private:
-    sal_uInt16  nZoom;
-    sal_uInt16  nValueSet;
+    sal_uInt16         nZoom;
+    SvxZoomEnableFlags nValueSet;
 
 public:
     virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,

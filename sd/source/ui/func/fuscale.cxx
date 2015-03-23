@@ -72,7 +72,7 @@ void FuScale::DoExecute( SfxRequest& rReq )
     {
         SfxItemSet aNewAttr( mpDoc->GetPool(), SID_ATTR_ZOOM, SID_ATTR_ZOOM );
         boost::scoped_ptr<SvxZoomItem> pZoomItem;
-        sal_uInt16 nZoomValues = SVX_ZOOM_ENABLE_ALL;
+        SvxZoomEnableFlags nZoomValues = SvxZoomEnableFlags::ALL;
 
         nValue = (sal_Int16) mpWindow->GetZoom();
 
@@ -96,14 +96,14 @@ void FuScale::DoExecute( SfxRequest& rReq )
                 if( ( pPageView && pPageView->GetObjList()->GetObjCount() == 0 ) )
                     // || ( mpView->GetMarkedObjectList().GetMarkCount() == 0 ) )
                 {
-                    nZoomValues &= ~SVX_ZOOM_ENABLE_OPTIMAL;
+                    nZoomValues &= ~SvxZoomEnableFlags::OPTIMAL;
                 }
             }
             else if( mpViewShell->ISA( OutlineViewShell ) )
             {
-                nZoomValues &= ~SVX_ZOOM_ENABLE_OPTIMAL;
-                nZoomValues &= ~SVX_ZOOM_ENABLE_WHOLEPAGE;
-                nZoomValues &= ~SVX_ZOOM_ENABLE_PAGEWIDTH;
+                nZoomValues &= ~SvxZoomEnableFlags::OPTIMAL;
+                nZoomValues &= ~SvxZoomEnableFlags::WHOLEPAGE;
+                nZoomValues &= ~SvxZoomEnableFlags::PAGEWIDTH;
             }
         }
 

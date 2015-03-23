@@ -43,7 +43,7 @@ SvxZoomItem::SvxZoomItem
     sal_uInt16      _nWhich
 )
 :   SfxUInt16Item( _nWhich, nVal ),
-    nValueSet( SVX_ZOOM_ENABLE_ALL ),
+    nValueSet( SvxZoomEnableFlags::ALL ),
     eType( eZoomType )
 {
 }
@@ -79,7 +79,7 @@ SfxPoolItem* SvxZoomItem::Create( SvStream& rStrm, sal_uInt16 /*nVersion*/ ) con
     sal_Int8 nType;
     rStrm.ReadUInt16( nValue ).ReadUInt16( nValSet ).ReadSChar( nType );
     SvxZoomItem* pNew = new SvxZoomItem( (SvxZoomType)nType, nValue, Which() );
-    pNew->SetValueSet( nValSet );
+    pNew->SetValueSet( static_cast<SvxZoomEnableFlags>(nValSet) );
     return pNew;
 }
 
@@ -88,7 +88,7 @@ SfxPoolItem* SvxZoomItem::Create( SvStream& rStrm, sal_uInt16 /*nVersion*/ ) con
 SvStream& SvxZoomItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) const
 {
     rStrm.WriteUInt16( GetValue() )
-         .WriteUInt16( nValueSet )
+         .WriteUInt16( static_cast<sal_uInt16>(nValueSet) )
          .WriteSChar( static_cast<int>(eType) );
     return rStrm;
 }
@@ -172,8 +172,8 @@ bool SvxZoomItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMem
                 if ( bAllConverted && nConvertedCount == ZOOM_PARAMS )
                 {
                     SetValue( (sal_uInt16)nValueTmp );
-                    nValueSet = nValueSetTmp;
-                    eType = SvxZoomType( nTypeTmp );
+                    nValueSet = static_cast<SvxZoomEnableFlags>(nValueSetTmp);
+                    eType = static_cast<SvxZoomType>(nTypeTmp);
                     return true;
                 }
             }
@@ -194,13 +194,13 @@ bool SvxZoomItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMem
         case MID_VALUESET:
         case MID_TYPE:
         {
-            sal_Int16 nVal = sal_Int16();
+            sal_Int16 nVal;
             if ( rVal >>= nVal )
             {
                 if ( nMemberId == MID_VALUESET )
-                    nValueSet = (sal_Int16) nVal;
+                    nValueSet = static_cast<SvxZoomEnableFlags>(nVal);
                 else if ( nMemberId == MID_TYPE )
-                    eType = SvxZoomType( (sal_Int16) nVal );
+                    eType = static_cast<SvxZoomType>(nVal);
                 return true;
             }
             else

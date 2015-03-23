@@ -750,12 +750,12 @@ void  SwPagePreview::Execute( SfxRequest &rReq )
                 SvxZoomItem aZoom( (SvxZoomType)pVOpt->GetZoomType(),
                                             pVOpt->GetZoom() );
                 aZoom.SetValueSet(
-                        SVX_ZOOM_ENABLE_50|
-                        SVX_ZOOM_ENABLE_75|
-                        SVX_ZOOM_ENABLE_100|
-                        SVX_ZOOM_ENABLE_150|
-                        SVX_ZOOM_ENABLE_200|
-                        SVX_ZOOM_ENABLE_WHOLEPAGE);
+                        SvxZoomEnableFlags::N50|
+                        SvxZoomEnableFlags::N75|
+                        SvxZoomEnableFlags::N100|
+                        SvxZoomEnableFlags::N150|
+                        SvxZoomEnableFlags::N200|
+                        SvxZoomEnableFlags::WHOLEPAGE);
                 aCoreSet.Put( aZoom );
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
@@ -992,11 +992,11 @@ void  SwPagePreview::GetState( SfxItemSet& rSet )
                     SvxZoomItem aZoom((SvxZoomType)pVOpt->GetZoomType(),
                                         pVOpt->GetZoom());
                     aZoom.SetValueSet(
-                            SVX_ZOOM_ENABLE_50|
-                            SVX_ZOOM_ENABLE_75|
-                            SVX_ZOOM_ENABLE_100|
-                            SVX_ZOOM_ENABLE_150|
-                            SVX_ZOOM_ENABLE_200);
+                            SvxZoomEnableFlags::N50|
+                            SvxZoomEnableFlags::N75|
+                            SvxZoomEnableFlags::N100|
+                            SvxZoomEnableFlags::N150|
+                            SvxZoomEnableFlags::N200);
                     rSet.Put( aZoom );
             }
         break;

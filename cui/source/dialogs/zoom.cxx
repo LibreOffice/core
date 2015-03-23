@@ -207,7 +207,7 @@ SvxZoomDialog::SvxZoomDialog( vcl::Window* pParent, const SfxItemSet& rCoreSet )
         const SvxZoomItem& rZoomItem = static_cast<const SvxZoomItem&>(rItem);
         const sal_uInt16 nZoom = rZoomItem.GetValue();
         const SvxZoomType eType = rZoomItem.GetType();
-        const sal_uInt16 nValSet = rZoomItem.GetValueSet();
+        const SvxZoomEnableFlags nValSet = rZoomItem.GetValueSet();
         sal_uInt16 nButtonId = 0;
 
         switch (eType)
@@ -227,13 +227,13 @@ SvxZoomDialog::SvxZoomDialog( vcl::Window* pParent, const SfxItemSet& rCoreSet )
                 break;
         }
 
-        if (!(SVX_ZOOM_ENABLE_100 & nValSet))
+        if (!(SvxZoomEnableFlags::N100 & nValSet))
             m_p100Btn->Disable();
-        if (!(SVX_ZOOM_ENABLE_OPTIMAL & nValSet))
+        if (!(SvxZoomEnableFlags::OPTIMAL & nValSet))
             m_pOptimalBtn->Disable();
-        if (!(SVX_ZOOM_ENABLE_PAGEWIDTH & nValSet))
+        if (!(SvxZoomEnableFlags::PAGEWIDTH & nValSet))
             m_pPageWidthBtn->Disable();
-        if (!(SVX_ZOOM_ENABLE_WHOLEPAGE & nValSet))
+        if (!(SvxZoomEnableFlags::WHOLEPAGE & nValSet))
             m_pWholePageBtn->Disable();
 
         SetFactor(nZoom, nButtonId);

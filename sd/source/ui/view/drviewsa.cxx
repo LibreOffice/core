@@ -590,13 +590,13 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
                 pZoomItem.reset(new SvxZoomItem( SvxZoomType::PERCENT, nZoom ));
 
             // constrain area
-            sal_uInt16 nZoomValues = SVX_ZOOM_ENABLE_ALL;
+            SvxZoomEnableFlags nZoomValues = SvxZoomEnableFlags::ALL;
             SdrPageView* pPageView = mpDrawView->GetSdrPageView();
 
             if( ( pPageView && pPageView->GetObjList()->GetObjCount() == 0 ) )
                 // || ( mpDrawView->GetMarkedObjectList().GetMarkCount() == 0 ) )
             {
-                nZoomValues &= ~SVX_ZOOM_ENABLE_OPTIMAL;
+                nZoomValues &= ~SvxZoomEnableFlags::OPTIMAL;
             }
 
             pZoomItem->SetValueSet( nZoomValues );
