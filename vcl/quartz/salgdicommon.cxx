@@ -1736,6 +1736,13 @@ void AquaSalGraphics::initResolution( NSWindow* )
         {
             mnRealDPIX = mnRealDPIY = nMinDPI;
         }
+        // Note that on a Retina display, the "mnRealDPIX" as
+        // calculated above is not the true resolution of the display,
+        // but the "logical" one, or whatever the correct terminology
+        // is. (For instance on a 5K 27in iMac, it's 108.)  So at
+        // least currently, it won't be over 200. I don't know whether
+        // this test is a "sanity check", or whether there is some
+        // real reason to limit this to 200.
         static const int nMaxDPI = 200;
         if( (mnRealDPIX > nMaxDPI) || (mnRealDPIY > nMaxDPI) )
         {
