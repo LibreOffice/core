@@ -85,13 +85,6 @@ inline SfxCallMode& operator&= (SfxCallMode& lhs, SfxCallMode rhs)
 }
 
 
-enum SfxPopupAction
-{
-    SFX_POPUP_DELETE,
-    SFX_POPUP_HIDE,
-    SFX_POPUP_SHOW
-};
-
 class SFX2_DLLPUBLIC SfxBindings: public SfxBroadcaster
 
 /*  [Description]

@@ -194,6 +194,14 @@ IMPL_LINK(SfxAsyncExec_Impl, TimerHdl, Timer*, pTimer)
     return 0L;
 }
 
+enum class SfxPopupAction
+{
+    DELETE,
+    HIDE,
+    SHOW
+};
+
+
 class SfxBindings_Impl
 {
 public:
@@ -209,15 +217,15 @@ public:
     sal_uInt16              nCachedFunc2;   // index for the second last called
     sal_uInt16              nMsgPos;        // Message-Position relative the one to be updated
     SfxPopupAction          ePopupAction;   // Checked in DeleteFloatinWindow()
-    bool                bContextChanged;
-    bool                bMsgDirty;      // Has a MessageServer been invalidated?
-    bool                bAllMsgDirty;   //  Has a MessageServer been invalidated?
-    bool                bAllDirty;      // After InvalidateAll
-    bool                bCtrlReleased;  // while EnterRegistrations
+    bool                    bContextChanged;
+    bool                    bMsgDirty;      // Has a MessageServer been invalidated?
+    bool                    bAllMsgDirty;   //  Has a MessageServer been invalidated?
+    bool                    bAllDirty;      // After InvalidateAll
+    bool                    bCtrlReleased;  // while EnterRegistrations
     AutoTimer               aTimer;         // for volatile Slots
-    bool                bInUpdate;      // for Assertions
-    bool                bInNextJob;     // for Assertions
-    bool                bFirstRound;    // First round in Update
+    bool                    bInUpdate;      // for Assertions
+    bool                    bInNextJob;     // for Assertions
+    bool                    bFirstRound;    // First round in Update
     sal_uInt16              nFirstShell;    // Shell, the first round is preferred
     sal_uInt16              nOwnRegLevel;   // Counts the real Locks, except those of the Super Bindings
     InvalidateSlotMap       m_aInvalidateSlots; // store slots which are invalidated while in update
@@ -233,7 +241,7 @@ SfxBindings::SfxBindings()
     pImp->bContextChanged = false;
     pImp->bMsgDirty = true;
     pImp->bAllDirty = true;
-    pImp->ePopupAction = SFX_POPUP_DELETE;
+    pImp->ePopupAction = SfxPopupAction::DELETE;
     pImp->nCachedFunc1 = 0;
     pImp->nCachedFunc2 = 0;
     pImp->bCtrlReleased = false;
@@ -374,15 +382,15 @@ void SfxBindings::HidePopupCtrls_Impl( bool bHide )
     if ( bHide )
     {
         // Hide SfxPopupWindows
-        pImp->ePopupAction = SFX_POPUP_HIDE;
+        pImp->ePopupAction = SfxPopupAction::HIDE;
     }
     else
     {
         // Show SfxPopupWindows
-        pImp->ePopupAction = SFX_POPUP_SHOW;
+        pImp->ePopupAction = SfxPopupAction::SHOW;
     }
 
-    pImp->ePopupAction = SFX_POPUP_DELETE;
+    pImp->ePopupAction = SfxPopupAction::DELETE;
 }
 
 
