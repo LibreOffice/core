@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a29b11f_a934454a",
+        "filename": "sc/source/core/tool/scmatrix.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2715,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-03-23T09:08:45Z",
+      "side": 1,
+      "message": "This is not equivalent of the original code, because it does not intern the resulting string.",
+      "revId": "854a9b860219a2f6a8c624e141c1141fe1cf84d8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
