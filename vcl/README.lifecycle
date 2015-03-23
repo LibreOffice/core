@@ -144,11 +144,13 @@ or:
 	  their constructors.
 
 	* Pass 'const VclPtr<> &' instead of pointers everywhere
+		+ add 'explicit' keywords to VclPtr constructors to
+		  accelerate compilation etc.
 
 	* Cleanup common existing methods such that they continue to
 	  work post-dispose.
 
-	* Dispose functions shoudl be audited to:
+	* Dispose functions should be audited to:
 		+ not leave dangling pointsr
 		+ shrink them - some work should incrementally
 		  migrate back to destructors.
