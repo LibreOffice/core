@@ -179,7 +179,7 @@ bool LinkManager::Insert( SvBaseLink* pLink )
 
 bool LinkManager::InsertLink( SvBaseLink * pLink,
                                 sal_uInt16 nObjType,
-                                sal_uInt16 nUpdateMode,
+                                SfxLinkUpdateMode nUpdateMode,
                                 const OUString* pName )
 {
     // This First
@@ -454,7 +454,7 @@ void LinkManager::LinkServerShell(const OUString& rPath, SfxObjectShell& rServer
         rLink.SetObj(pSrvSrc);
         pSrvSrc->AddDataAdvise(
             &rLink, aFl.MimeType,
-            sfx2::LINKUPDATE_ONCALL == rLink.GetUpdateMode() ? ADVISEMODE_ONLYONCE : 0);
+            SfxLinkUpdateMode::ONCALL == rLink.GetUpdateMode() ? ADVISEMODE_ONLYONCE : 0);
     }
 }
 
@@ -479,7 +479,7 @@ bool LinkManager::InsertFileLink(
     }
 
     OUString aCmd = aBuf.makeStringAndClear();
-    return InsertLink(&rLink, nFileType, sfx2::LINKUPDATE_ONCALL, &aCmd);
+    return InsertLink(&rLink, nFileType, SfxLinkUpdateMode::ONCALL, &aCmd);
 }
 
 // A transfer is aborted, so cancel all download media
@@ -645,7 +645,7 @@ bool SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
 
             pLink->SetObj( pNewSrc );
             pNewSrc->AddDataAdvise( pLink, aFl.MimeType,
-                                sfx2::LINKUPDATE_ONCALL == pLink->GetUpdateMode()
+                                SfxLinkUpdateMode::ONCALL == pLink->GetUpdateMode()
                                     ? ADVISEMODE_ONLYONCE
                                     : 0 );
             return true;

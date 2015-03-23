@@ -421,9 +421,8 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
         {
             pRet->CreateLink(CREATE_CONNECT);
         }
-        pRet->SetUpdateType( static_cast< sal_uInt16 >(
-            (m_pImpl->m_pProps->m_bUpdateType) ?
-                sfx2::LINKUPDATE_ALWAYS : sfx2::LINKUPDATE_ONCALL) );
+        pRet->SetUpdateType( m_pImpl->m_pProps->m_bUpdateType ?
+                SfxLinkUpdateMode::ALWAYS : SfxLinkUpdateMode::ONCALL );
     }
 
     // Undo-Klammerung hier beenden
@@ -506,8 +505,8 @@ lcl_UpdateLinkType(SwSection & rSection, bool const bLinkUpdateAlways = true)
         {
             rSection.CreateLink(CREATE_CONNECT);
         }
-        rSection.SetUpdateType( static_cast< sal_uInt16 >((bLinkUpdateAlways)
-            ? sfx2::LINKUPDATE_ALWAYS : sfx2::LINKUPDATE_ONCALL) );
+        rSection.SetUpdateType( bLinkUpdateAlways
+            ? SfxLinkUpdateMode::ALWAYS : SfxLinkUpdateMode::ONCALL );
     }
 }
 
@@ -1010,7 +1009,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                 if (pSect && pSect->IsLinkType() && pSect->IsConnected())  // #i73247#
                 {
                     const bool bTemp =
-                        (pSect->GetUpdateType() == sfx2::LINKUPDATE_ALWAYS);
+                        (pSect->GetUpdateType() == SfxLinkUpdateMode::ALWAYS);
                     pRet[nProperty] <<= bTemp;
                 }
             }

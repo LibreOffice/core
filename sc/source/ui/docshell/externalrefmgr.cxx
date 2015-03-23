@@ -1274,7 +1274,7 @@ ScExternalRefCache::DocItem* ScExternalRefCache::getDocItem(sal_uInt16 nFileId) 
 }
 
 ScExternalRefLink::ScExternalRefLink(ScDocument* pDoc, sal_uInt16 nFileId, const OUString& rFilter) :
-    ::sfx2::SvBaseLink(::sfx2::LINKUPDATE_ONCALL, SotClipboardFormatId::SIMPLE_FILE),
+    ::sfx2::SvBaseLink(::SfxLinkUpdateMode::ONCALL, SotClipboardFormatId::SIMPLE_FILE),
     mnFileId(nFileId),
     maFilterName(rFilter),
     mpDoc(pDoc),

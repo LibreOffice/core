@@ -70,7 +70,7 @@ struct ImplBaseLinkData
         SotClipboardFormatId nCntntType; // Update Format
         // Not Ole-Links
         bool                 bIntrnlLnk;  // It is an internal link
-        sal_uInt16           nUpdateMode; // UpdateMode
+        SfxLinkUpdateMode    nUpdateMode; // UpdateMode
     };
 
     struct tDDEType
@@ -86,7 +86,7 @@ struct ImplBaseLinkData
     {
         ClientType.nCntntType = SotClipboardFormatId::NONE;
         ClientType.bIntrnlLnk = false;
-        ClientType.nUpdateMode = 0;
+        ClientType.nUpdateMode = SfxLinkUpdateMode::NONE;
         DDEType.pItem = NULL;
     }
 };
@@ -135,7 +135,7 @@ SvBaseLink::SvBaseLink()
 
 
 
-SvBaseLink::SvBaseLink( sal_uInt16 nUpdateMode, SotClipboardFormatId nContentType )
+SvBaseLink::SvBaseLink( SfxLinkUpdateMode nUpdateMode, SotClipboardFormatId nContentType )
     : m_bIsReadOnly(false)
 {
     pImpl = new BaseLink_Impl();
@@ -311,7 +311,7 @@ void SvBaseLink::SetLinkSourceName( const OUString & rLnkNm )
 
 
 
-void SvBaseLink::SetUpdateMode( sal_uInt16 nMode )
+void SvBaseLink::SetUpdateMode( SfxLinkUpdateMode nMode )
 {
     if( ( OBJECT_CLIENT_SO & nObjType ) &&
         pImplData->ClientType.nUpdateMode != nMode )
@@ -357,7 +357,7 @@ bool SvBaseLink::Update()
                 bool bSuccess = eRes == SUCCESS;
                 //for manual Updates there is no need to hold the ServerObject
                 if( OBJECT_CLIENT_DDE == nObjType &&
-                    LINKUPDATE_ONCALL == GetUpdateMode() && xObj.Is() )
+                    SfxLinkUpdateMode::ONCALL == GetUpdateMode() && xObj.Is() )
                     xObj->RemoveAllDataAdvise( this );
                 return bSuccess;
             }
@@ -378,11 +378,11 @@ bool SvBaseLink::Update()
 }
 
 
-sal_uInt16 SvBaseLink::GetUpdateMode() const
+SfxLinkUpdateMode SvBaseLink::GetUpdateMode() const
 {
     return ( OBJECT_CLIENT_SO & nObjType )
             ? pImplData->ClientType.nUpdateMode
-            : sal::static_int_cast< sal_uInt16 >( LINKUPDATE_ONCALL );
+            : SfxLinkUpdateMode::ONCALL;
 }
 
 

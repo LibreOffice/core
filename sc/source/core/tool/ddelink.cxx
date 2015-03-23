@@ -42,7 +42,7 @@ bool ScDdeLink::bIsInUpdate = false;
 
 ScDdeLink::ScDdeLink( ScDocument* pD, const OUString& rA, const OUString& rT, const OUString& rI,
                         sal_uInt8 nM ) :
-    ::sfx2::SvBaseLink(sfx2::LINKUPDATE_ALWAYS,SotClipboardFormatId::STRING),
+    ::sfx2::SvBaseLink(SfxLinkUpdateMode::ALWAYS,SotClipboardFormatId::STRING),
     pDoc( pD ),
     aAppl( rA ),
     aTopic( rT ),
@@ -61,7 +61,7 @@ ScDdeLink::~ScDdeLink()
 }
 
 ScDdeLink::ScDdeLink( ScDocument* pD, const ScDdeLink& rOther ) :
-    ::sfx2::SvBaseLink(sfx2::LINKUPDATE_ALWAYS,SotClipboardFormatId::STRING),
+    ::sfx2::SvBaseLink(SfxLinkUpdateMode::ALWAYS,SotClipboardFormatId::STRING),
     pDoc    ( pD ),
     aAppl   ( rOther.aAppl ),
     aTopic  ( rOther.aTopic ),
@@ -75,7 +75,7 @@ ScDdeLink::ScDdeLink( ScDocument* pD, const ScDdeLink& rOther ) :
 }
 
 ScDdeLink::ScDdeLink( ScDocument* pD, SvStream& rStream, ScMultipleReadHeader& rHdr ) :
-    ::sfx2::SvBaseLink(sfx2::LINKUPDATE_ALWAYS,SotClipboardFormatId::STRING),
+    ::sfx2::SvBaseLink(SfxLinkUpdateMode::ALWAYS,SotClipboardFormatId::STRING),
     pDoc( pD ),
     bNeedUpdate( false ),
     pResult( NULL )

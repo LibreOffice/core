@@ -666,8 +666,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
             case RES_DDEFLD :
             {
                 SwDDEFieldType aType(sTypeName, m_pImpl->m_sParam1,
-                    sal::static_int_cast<sal_uInt16>((m_pImpl->m_bParam1)
-                        ? sfx2::LINKUPDATE_ALWAYS : sfx2::LINKUPDATE_ONCALL));
+                    m_pImpl->m_bParam1 ? SfxLinkUpdateMode::ALWAYS : SfxLinkUpdateMode::ONCALL);
                 pType2 = m_pImpl->m_pDoc->getIDocumentFieldsAccess().InsertFldType(aType);
             }
             break;

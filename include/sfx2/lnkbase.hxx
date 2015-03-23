@@ -32,6 +32,13 @@ namespace com { namespace sun { namespace star { namespace uno
     class Any;
 }}}}
 
+enum class SfxLinkUpdateMode {
+    NONE   = 0,
+    // Ole2 compatible and persistent
+    ALWAYS = 1,
+    ONCALL = 3
+};
+
 namespace sfx2
 {
 
@@ -53,14 +60,6 @@ class FileDialogHelper;
 #define OBJECT_CLIENT_FILE          0x90
 #define OBJECT_CLIENT_GRF           0x91
 #define OBJECT_CLIENT_OLE           0x92 // embedded link
-
-enum sfxlink {
-    // Ole2 compatibel and persistent
-    LINKUPDATE_ALWAYS = 1,
-    LINKUPDATE_ONCALL = 3,
-
-    LINKUPDATE_END      // dummy!
-};
 
 struct BaseLink_Impl;
 
@@ -96,7 +95,7 @@ protected:
                         m_xInputStreamToLoadFrom;
 
                     SvBaseLink();
-                    SvBaseLink( sal_uInt16 nLinkType, SotClipboardFormatId nContentType = SotClipboardFormatId::STRING );
+                    SvBaseLink( SfxLinkUpdateMode nLinkType, SotClipboardFormatId nContentType = SotClipboardFormatId::STRING );
     virtual         ~SvBaseLink();
 
     void            _GetRealObject( bool bConnect = true );
@@ -134,14 +133,14 @@ public:
     virtual UpdateResult DataChanged(
         const OUString & rMimeType, const ::com::sun::star::uno::Any & rValue );
 
-    void            SetUpdateMode( sal_uInt16 );
-    sal_uInt16          GetUpdateMode() const;
+    void                 SetUpdateMode( SfxLinkUpdateMode );
+    SfxLinkUpdateMode    GetUpdateMode() const;
     SotClipboardFormatId GetContentType() const;
     bool                 SetContentType( SotClipboardFormatId nType );
 
     LinkManager*          GetLinkManager();
     const LinkManager*    GetLinkManager() const;
-    void                    SetLinkManager( LinkManager* _pMgr );
+    void                  SetLinkManager( LinkManager* _pMgr );
 
     bool            Update();
     void            Disconnect();

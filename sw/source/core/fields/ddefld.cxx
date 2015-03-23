@@ -43,7 +43,7 @@ class SwIntrnlRefLink : public SwBaseLink
 {
     SwDDEFieldType& rFldType;
 public:
-    SwIntrnlRefLink( SwDDEFieldType& rType, sal_uInt16 nUpdateType, SotClipboardFormatId nFmt )
+    SwIntrnlRefLink( SwDDEFieldType& rType, SfxLinkUpdateMode nUpdateType, SotClipboardFormatId nFmt )
         : SwBaseLink( nUpdateType, nFmt ),
         rFldType( rType )
     {}
@@ -228,7 +228,7 @@ bool SwIntrnlRefLink::IsInRange( sal_uLong nSttNd, sal_uLong nEndNd,
 }
 
 SwDDEFieldType::SwDDEFieldType(const OUString& rName,
-                               const OUString& rCmd, sal_uInt16 nUpdateType )
+                               const OUString& rCmd, SfxLinkUpdateMode nUpdateType )
     : SwFieldType( RES_DDEFLD ),
     aName( rName ), pDoc( 0 ), nRefCnt( 0 )
 {
@@ -319,7 +319,7 @@ bool SwDDEFieldType::QueryValue( uno::Any& rVal, sal_uInt16 nWhichId ) const
     case FIELD_PROP_PAR4:      nPart = 1; break;
     case FIELD_PROP_SUBTYPE:   nPart = 0; break;
     case FIELD_PROP_BOOL1:
-        rVal <<= GetType() == sfx2::LINKUPDATE_ALWAYS;
+        rVal <<= GetType() == SfxLinkUpdateMode::ALWAYS;
         break;
     case FIELD_PROP_PAR5:
         rVal <<= aExpansion;
@@ -341,9 +341,9 @@ bool SwDDEFieldType::PutValue( const uno::Any& rVal, sal_uInt16 nWhichId )
     case FIELD_PROP_PAR4:      nPart = 1; break;
     case FIELD_PROP_SUBTYPE:   nPart = 0; break;
     case FIELD_PROP_BOOL1:
-        SetType( static_cast<sal_uInt16>(*(sal_Bool*)rVal.getValue() ?
-                                     sfx2::LINKUPDATE_ALWAYS :
-                                     sfx2::LINKUPDATE_ONCALL ) );
+        SetType( *(sal_Bool*)rVal.getValue() ?
+                 SfxLinkUpdateMode::ALWAYS :
+                 SfxLinkUpdateMode::ONCALL );
         break;
     case FIELD_PROP_PAR5:
         rVal >>= aExpansion;

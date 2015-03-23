@@ -701,8 +701,8 @@ sal_uInt16 SwFldMgr::GetFormatId(sal_uInt16 nTypeId, sal_uLong nFormatId) const
     case TYP_DDEFLD:
         switch ( aSwFlds[ GetPos( nTypeId ) ].nFmtBegin + nFormatId )
         {
-        case FMT_DDE_NORMAL:    nId = sfx2::LINKUPDATE_ONCALL; break;
-        case FMT_DDE_HOT:       nId = sfx2::LINKUPDATE_ALWAYS; break;
+        case FMT_DDE_NORMAL:    nId = static_cast<sal_uInt16>(SfxLinkUpdateMode::ONCALL); break;
+        case FMT_DDE_HOT:       nId = static_cast<sal_uInt16>(SfxLinkUpdateMode::ALWAYS); break;
         }
         break;
     }
@@ -958,7 +958,7 @@ bool SwFldMgr::InsertFld(
                 sCmd = sCmd.replaceFirst(OUString(' '), OUString(sfx2::cTokenSeparator), &nIndex);
             }
 
-            SwDDEFieldType aType( rData.sPar1, sCmd, (sal_uInt16) nFormatId );
+            SwDDEFieldType aType( rData.sPar1, sCmd, static_cast<SfxLinkUpdateMode>(nFormatId) );
             SwDDEFieldType* pTyp = static_cast<SwDDEFieldType*>( pCurShell->InsertFldType( aType ) );
             pFld = new SwDDEField( pTyp );
             break;

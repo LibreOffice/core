@@ -697,7 +697,7 @@ bool SwGrfNode::RestorePersistentData()
 
 void SwGrfNode::InsertLink( const OUString& rGrfName, const OUString& rFltName )
 {
-    refLink = new SwBaseLink( sfx2::LINKUPDATE_ONCALL, SotClipboardFormatId::GDIMETAFILE, this );
+    refLink = new SwBaseLink( SfxLinkUpdateMode::ONCALL, SotClipboardFormatId::GDIMETAFILE, this );
 
     IDocumentLinksAdministration* pIDLA = getIDocumentLinksAdministration();
     if( GetNodes().IsDocNodes() )

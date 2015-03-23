@@ -42,7 +42,7 @@ class SW_DLLPUBLIC SwDDEFieldType : public SwFieldType
 
 public:
     SwDDEFieldType( const OUString& rName, const OUString& rCmd,
-                    sal_uInt16 = sfx2::LINKUPDATE_ONCALL );
+                    SfxLinkUpdateMode = SfxLinkUpdateMode::ONCALL );
     virtual ~SwDDEFieldType();
 
     OUString GetExpansion() const               { return aExpansion; }
@@ -58,8 +58,8 @@ public:
     OUString GetCmd() const;
     void SetCmd( const OUString& aStr );
 
-    sal_uInt16 GetType() const          { return refLink->GetUpdateMode();  }
-    void SetType( sal_uInt16 nType )    { refLink->SetUpdateMode( nType );  }
+    SfxLinkUpdateMode GetType() const          { return refLink->GetUpdateMode();  }
+    void SetType( SfxLinkUpdateMode nType )    { refLink->SetUpdateMode( nType );  }
 
     bool IsDeleted() const          { return bDeleted; }
     void SetDeleted( bool b )       { bDeleted = b; }

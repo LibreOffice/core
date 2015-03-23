@@ -59,7 +59,7 @@ class SFX2_DLLPUBLIC LinkManager
 
     SfxObjectShell *pPersist; // LinkMgr must be release before SfxObjectShell
 protected:
-    bool        InsertLink( SvBaseLink* pLink, sal_uInt16 nObjType, sal_uInt16 nUpdateType,
+    bool        InsertLink( SvBaseLink* pLink, sal_uInt16 nObjType, SfxLinkUpdateMode nUpdateType,
                             const OUString* pName = 0 );
 public:
 

@@ -1176,10 +1176,9 @@ static SwDDEFieldType* lcl_GetDDEFieldType(SwXMLDDETableContext_Impl* pContext,
         + OUString(sfx2::cTokenSeparator)
         + pContext->GetDDETopic());
 
-    const sal_uInt16 nType = static_cast< sal_uInt16 >(
-        pContext->GetIsAutomaticUpdate()
-        ? sfx2::LINKUPDATE_ALWAYS
-        : sfx2::LINKUPDATE_ONCALL);
+    const SfxLinkUpdateMode nType = pContext->GetIsAutomaticUpdate()
+        ? SfxLinkUpdateMode::ALWAYS
+        : SfxLinkUpdateMode::ONCALL;
 
     OUString sName(pContext->GetConnectionName());
 

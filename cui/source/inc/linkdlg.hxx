@@ -38,6 +38,8 @@ namespace sfx2
     class SvBaseLink;
 }
 
+enum class SfxLinkUpdateMode;
+
 class SvBaseLinksDlg : public ModalDialog
 {
     using Window::SetType;
@@ -76,7 +78,7 @@ class SvBaseLinksDlg : public ModalDialog
     DECL_LINK( EndEditHdl, sfx2::SvBaseLink* );
     sfx2::SvBaseLink* GetSelEntry( sal_uLong* pPos );
     OUString ImplGetStateStr( const sfx2::SvBaseLink& );
-    void SetType( sfx2::SvBaseLink& rLink, sal_uLong nPos, sal_uInt16 nType );
+    void SetType( sfx2::SvBaseLink& rLink, sal_uLong nPos, SfxLinkUpdateMode nType );
     void InsertEntry( const sfx2::SvBaseLink& rLink, sal_uLong nPos = TREELIST_APPEND, bool bSelect = false);
 
     void StartUpdateTimer()         { aUpdateIdle.Start(); }

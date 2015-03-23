@@ -218,7 +218,7 @@ IMPL_LINK( SvBaseLinksDlg, LinksSelectHdl, SvTabListBox *, pSvTabListBox )
             m_pRbAutomatic->Enable();
             m_pRbManual->Enable();
 
-            if( LINKUPDATE_ALWAYS == pLink->GetUpdateMode() )
+            if( SfxLinkUpdateMode::ALWAYS == pLink->GetUpdateMode() )
                 m_pRbAutomatic->Check();
             else
                 m_pRbManual->Check();
@@ -250,8 +250,8 @@ IMPL_LINK_INLINE_START( SvBaseLinksDlg, AutomaticClickHdl, RadioButton *, pRadio
     sal_uLong nPos;
     SvBaseLink* pLink = GetSelEntry( &nPos );
     if( pLink && !( FILEOBJECT & pLink->GetObjType() ) &&
-        LINKUPDATE_ALWAYS != pLink->GetUpdateMode() )
-        SetType( *pLink, nPos, LINKUPDATE_ALWAYS );
+        SfxLinkUpdateMode::ALWAYS != pLink->GetUpdateMode() )
+        SetType( *pLink, nPos, SfxLinkUpdateMode::ALWAYS );
     return 0;
 }
 IMPL_LINK_INLINE_END( SvBaseLinksDlg, AutomaticClickHdl, RadioButton *, pRadioButton )
@@ -263,8 +263,8 @@ IMPL_LINK_INLINE_START( SvBaseLinksDlg, ManualClickHdl, RadioButton *, pRadioBut
     sal_uLong nPos;
     SvBaseLink* pLink = GetSelEntry( &nPos );
     if( pLink && !( FILEOBJECT & pLink->GetObjType() ) &&
-        LINKUPDATE_ONCALL != pLink->GetUpdateMode())
-        SetType( *pLink, nPos, LINKUPDATE_ONCALL );
+        SfxLinkUpdateMode::ONCALL != pLink->GetUpdateMode())
+        SetType( *pLink, nPos, SfxLinkUpdateMode::ONCALL );
     return 0;
 }
 IMPL_LINK_INLINE_END( SvBaseLinksDlg, ManualClickHdl, RadioButton *, pRadioButton )
@@ -579,7 +579,7 @@ OUString SvBaseLinksDlg::ImplGetStateStr( const SvBaseLink& rLnk )
         sRet = Waitinglink();
         StartUpdateTimer();
     }
-    else if( LINKUPDATE_ALWAYS == rLnk.GetUpdateMode() )
+    else if( SfxLinkUpdateMode::ALWAYS == rLnk.GetUpdateMode() )
         sRet = Autolink();
     else
         sRet = Manuallink();
@@ -684,7 +684,7 @@ SvBaseLink* SvBaseLinksDlg::GetSelEntry( sal_uLong* pPos )
 
 void SvBaseLinksDlg::SetType( SvBaseLink& rLink,
                                     sal_uLong nSelPos,
-                                    sal_uInt16 nType )
+                                    SfxLinkUpdateMode nType )
 {
     rLink.SetUpdateMode( nType );
     rLink.Update();

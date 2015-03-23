@@ -60,7 +60,7 @@ ScAreaLink::ScAreaLink( SfxObjectShell* pShell, const OUString& rFile,
                         const OUString& rFilter, const OUString& rOpt,
                         const OUString& rArea, const ScRange& rDest,
                         sal_uLong nRefresh ) :
-    ::sfx2::SvBaseLink(sfx2::LINKUPDATE_ONCALL,SotClipboardFormatId::SIMPLE_FILE),
+    ::sfx2::SvBaseLink(SfxLinkUpdateMode::ONCALL,SotClipboardFormatId::SIMPLE_FILE),
     ScRefreshTimer  ( nRefresh ),
     pImpl           ( new AreaLink_Impl() ),
     aFileName       (rFile),

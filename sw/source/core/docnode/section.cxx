@@ -72,7 +72,7 @@ class SwIntrnlSectRefLink : public SwBaseLink
 {
     SwSectionFmt& rSectFmt;
 public:
-    SwIntrnlSectRefLink( SwSectionFmt& rFmt, sal_uInt16 nUpdateType, SotClipboardFormatId nFmt )
+    SwIntrnlSectRefLink( SwSectionFmt& rFmt, SfxLinkUpdateMode nUpdateType, SotClipboardFormatId nFmt )
         : SwBaseLink( nUpdateType, nFmt ),
         rSectFmt( rFmt )
     {}
@@ -1506,7 +1506,7 @@ void SwSection::CreateLink( LinkCreateType eCreateType )
     if (!pFmt || (CONTENT_SECTION == m_Data.GetType()))
         return ;
 
-    sal_uInt16 nUpdateType = sfx2::LINKUPDATE_ALWAYS;
+    SfxLinkUpdateMode nUpdateType = SfxLinkUpdateMode::ALWAYS;
 
     if (!m_RefLink.Is())
     {

@@ -186,13 +186,13 @@ bool SvDDEObject::GetData( ::com::sun::star::uno::Any & rData /*out param*/,
 
 bool SvDDEObject::Connect( SvBaseLink * pSvLink )
 {
-    sal_uInt16 nLinkType = pSvLink->GetUpdateMode();
+    SfxLinkUpdateMode nLinkType = pSvLink->GetUpdateMode();
     if( pConnection )           // Connection is already made
     {
         // well, then just add it as dependent
         AddDataAdvise( pSvLink,
                 SotExchange::GetFormatMimeType( pSvLink->GetContentType()),
-                LINKUPDATE_ONCALL == nLinkType
+                SfxLinkUpdateMode::ONCALL == nLinkType
                         ? ADVISEMODE_ONLYONCE
                         : 0 );
         AddConnectAdvise( pSvLink );
@@ -230,7 +230,7 @@ bool SvDDEObject::Connect( SvBaseLink * pSvLink )
         nError = DDELINK_ERROR_APP;
     }
 
-    if( LINKUPDATE_ALWAYS == nLinkType && !pLink && !pConnection->GetError() )
+    if( SfxLinkUpdateMode::ALWAYS == nLinkType && !pLink && !pConnection->GetError() )
     {
         // Setting up Hot Link, Data will be available at some point later on
         pLink = new DdeHotLink( *pConnection, sItem );
@@ -245,7 +245,7 @@ bool SvDDEObject::Connect( SvBaseLink * pSvLink )
 
     AddDataAdvise( pSvLink,
                 SotExchange::GetFormatMimeType( pSvLink->GetContentType()),
-                LINKUPDATE_ONCALL == nLinkType
+                SfxLinkUpdateMode::ONCALL == nLinkType
                         ? ADVISEMODE_ONLYONCE
                         : 0 );
     AddConnectAdvise( pSvLink );

@@ -451,7 +451,7 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
                         sCmd = sCmd.replaceFirst( OUString(sfx2::cTokenSeparator), " ", &nTmpPos );
 
                         m_pValueED->SetText( sCmd );
-                        m_pFormatLB->SelectEntryPos(pType->GetType());
+                        m_pFormatLB->SelectEntryPos(static_cast<int>(pType->GetType()));
                     }
                 }
             }
@@ -1023,7 +1023,7 @@ IMPL_LINK( SwFldVarPage, TBClickHdl, ToolBox *, pBox )
                         sValue = sValue.replaceFirst( " ", OUString(sfx2::cTokenSeparator), &nTmpPos );
                         sValue = sValue.replaceFirst( " ", OUString(sfx2::cTokenSeparator), &nTmpPos );
                         static_cast<SwDDEFieldType*>(pType)->SetCmd(sValue);
-                        static_cast<SwDDEFieldType*>(pType)->SetType((sal_uInt16)nFormat);
+                        static_cast<SwDDEFieldType*>(pType)->SetType(static_cast<SfxLinkUpdateMode>(nFormat));
                     }
                 }
                 pType->UpdateFlds();
@@ -1062,7 +1062,7 @@ IMPL_LINK( SwFldVarPage, TBClickHdl, ToolBox *, pBox )
                     sValue = sValue.replaceFirst( " ", OUString(sfx2::cTokenSeparator), &nTmpPos );
                     sValue = sValue.replaceFirst( " ", OUString(sfx2::cTokenSeparator), &nTmpPos );
 
-                    SwDDEFieldType aType(sName, sValue, (sal_uInt16)nFormat);
+                    SwDDEFieldType aType(sName, sValue, static_cast<SfxLinkUpdateMode>(nFormat));
                     m_pSelectionLB->InsertEntry(sName);
                     m_pSelectionLB->SelectEntry(sName);
                     GetFldMgr().InsertFldType(aType);   // DDE-Field new

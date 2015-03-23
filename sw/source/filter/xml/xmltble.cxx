@@ -1099,7 +1099,7 @@ void SwXMLExport::ExportTable( const SwTableNode& rTblNd )
                           sCmd.getToken(2, sfx2::cTokenSeparator) );
 
             // auto update
-            if (pDDEFldType->GetType() == sfx2::LINKUPDATE_ALWAYS)
+            if (pDDEFldType->GetType() == SfxLinkUpdateMode::ALWAYS)
             {
                 AddAttribute( XML_NAMESPACE_OFFICE,
                               XML_AUTOMATIC_UPDATE, XML_TRUE );

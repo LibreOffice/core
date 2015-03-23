@@ -2123,7 +2123,7 @@ bool SwTransferable::_PasteDDE( TransferableDataHelper& rData,
             {
                 OUString sTmp( static_cast<SwDDEFieldType*>(pTyp)->GetCmd() );
                 if( rColl.isEqual( sTmp, aCmd ) &&
-                    sfx2::LINKUPDATE_ALWAYS == static_cast<SwDDEFieldType*>(pTyp)->GetType() )
+                    SfxLinkUpdateMode::ALWAYS == static_cast<SwDDEFieldType*>(pTyp)->GetType() )
                 {
                     aName = pTyp->GetName();
                     bDoublePaste = true;
@@ -2145,7 +2145,7 @@ bool SwTransferable::_PasteDDE( TransferableDataHelper& rData,
 
     if( !bDoublePaste )
     {
-        SwDDEFieldType aType( aName, aCmd, sfx2::LINKUPDATE_ALWAYS );
+        SwDDEFieldType aType( aName, aCmd, SfxLinkUpdateMode::ALWAYS );
         pTyp = rWrtShell.InsertFldType( aType );
     }
 

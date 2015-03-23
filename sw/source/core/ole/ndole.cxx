@@ -159,7 +159,7 @@ public:
 };
 
 SwEmbedObjectLink::SwEmbedObjectLink(SwOLENode* pNode):
-    ::sfx2::SvBaseLink( ::sfx2::LINKUPDATE_ONCALL, SotClipboardFormatId::SVXB ),
+    ::sfx2::SvBaseLink( ::SfxLinkUpdateMode::ONCALL, SotClipboardFormatId::SVXB ),
     pOleNode(pNode)
 {
     SetSynchron( false );

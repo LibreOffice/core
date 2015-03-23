@@ -223,8 +223,8 @@ public:
     bool IsServer() const                   {  return m_RefObj.Is(); }
 
     // Methods for linked ranges.
-    sal_uInt16 GetUpdateType() const    { return m_RefLink->GetUpdateMode(); }
-    void SetUpdateType(sal_uInt16 const nType )
+    SfxLinkUpdateMode GetUpdateType() const    { return m_RefLink->GetUpdateMode(); }
+    void SetUpdateType(SfxLinkUpdateMode nType )
         { m_RefLink->SetUpdateMode(nType); }
 
     bool IsConnected() const        { return m_RefLink.Is(); }
