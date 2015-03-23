@@ -41,7 +41,9 @@ typedef struct CGContext *CGContextRef;
 #endif
 
 #if defined( WNT )
+#include <prewin.h>
 #include <windef.h>
+#include <postwin.h>
 #endif
 
 struct SystemEnvData

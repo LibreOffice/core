@@ -678,7 +678,7 @@ static const sal_uInt16 aImplTranslateKeyTab[KEY_TAB_SIZE] =
 static UINT ImplSalGetWheelScrollLines()
 {
     UINT nScrLines = 0;
-    HWND hWndMsWheel = WIN_FindWindow( MSH_WHEELMODULE_CLASS, MSH_WHEELMODULE_TITLE );
+    HWND hWndMsWheel = FindWindowA( MSH_WHEELMODULE_CLASS, MSH_WHEELMODULE_TITLE );
     if ( hWndMsWheel )
     {
         UINT nGetScrollLinesMsgId = RegisterWindowMessage( MSH_SCROLL_LINES );

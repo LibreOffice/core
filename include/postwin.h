@@ -37,160 +37,33 @@
 
 #undef GetObject
 
-#ifdef SetPrinter
 #undef SetPrinter
-#ifdef UNICODE
-#define WIN_SetPrinter  SetPrinterW
-#else
-#define WIN_SetPrinter  SetPrinterA
-#endif
-#else
-#define WIN_SetPrinter  SetPrinter
-#endif
 
-#ifdef GetPrinter
 #undef GetPrinter
-#ifdef UNICODE
-#define WIN_GetPrinter  GetPrinterW
-#else
-#define WIN_GetPrinter  GetPrinterA
-#endif
-#else
-#define WIN_GetPrinter  GetPrinter
-#endif
 
-#ifdef DrawText
 #undef DrawText
-#ifdef UNICODE
-#define WIN_DrawText    DrawTextW
-#else
-#define WIN_DrawText    DrawTextA
-#endif
-#else
-#define WIN_DrawText    DrawText
-#endif
 
-#ifdef mciSetCommand
 #undef mciSetCommand
-#ifdef UNICODE
-#define WIN_mciSetCommand   mciSetCommandW
-#else
-#define WIN_mciSetCommand   mciSetCommandA
-#endif
-#else
-#define mciSetCommand   mciSetCommand
-#endif
 
-#ifdef SetPort
 #undef SetPort
-#ifdef UNICODE
-#define WIN_SetPort     SetPortW
-#else
-#define WIN_SetPort     SetPortA
-#endif
-#else
-#define WIN_SetPort     SetPort
-#endif
 
-#ifdef CopyFile
 #undef CopyFile
-#ifdef UNICODE
-#define WIN_CopyFile    CopyFileW
-#else
-#define WIN_CopyFile    CopyFileA
-#endif
-#else
-#define WIN_CopyFile    CopyFile
-#endif
 
-
-#ifdef GetUserName
 #undef GetUserName
-#ifdef UNICODE
-#define WIN_GetUserName GetUserNameW
-#else
-#define WIN_GetUserName GetUserNameA
-#endif
-#else
-#define WIN_GetUserName GetUserName
-#endif
 
-#ifdef GetClassName
 #undef GetClassName
-#ifdef UNICODE
-#define WIN_GetClassName GetClassNameW
-#else
-#define WIN_GetClassName GetClassNameA
-#endif
-#else
-#define WIN_GetClassName GetClassName
-#endif
 
-#ifdef GetCharWidth
 #undef GetCharWidth
-#ifdef UNICODE
-#define WIN_GetCharWidth GetCharWidthW
-#else
-#define WIN_GetCharWidth GetCharWidthA
-#endif
-#else
-#define WIN_GetCharWidth GetCharWidth
-#endif
 
-#ifdef GetMetaFile
 #undef GetMetaFile
-#ifdef UNICODE
-#define WIN_GetMetaFile GetMetaFileW
-#else
-#define WIN_GetMetaFile GetMetaFileA
-#endif
-#else
-#define WIN_GetMetaFile GetMetaFile
-#endif
 
-#ifdef GetNumberFormat
 #undef GetNumberFormat
-#ifdef UNICODE
-#define WIN_GetNumberFormat GetNumberFormatW
-#else
-#define WIN_GetNumberFormat GetNumberFormatA
-#endif
-#else
-#define WIN_GetNumberFormat GetNumberFormat
-#endif
 
-#ifdef GetGlyphOutline
 #undef GetGlyphOutline
-#ifdef UNICODE
-#define WIN_GetGlyphOutline GetGlyphOutlineW
-#else
-#define WIN_GetGlyphOutline GetGlyphOutlineA
-#endif
-#else
-#define WIN_GetGlyphOutline GetGlyphOutline
-#endif
 
-#ifdef GetKerningPairs
 #undef GetKerningPairs
-#ifdef UNICODE
-#define WIN_GetKerningPairs GetKerningPairsW
-#else
-#define WIN_GetKerningPairs GetKerningPairsA
-#endif
-#else
-#define WIN_GetKerningPairs GetKerningPairs
-#endif
 
-#ifdef FindWindow
 #undef FindWindow
-#ifdef UNICODE
-#define WIN_FindWindow FindWindowW
-#else
-#define WIN_FindWindow FindWindowA
-#endif
-#else
-#define WIN_FindWindow FindWindow
-#endif
 
 #undef Yield
 
