@@ -166,7 +166,7 @@ SvxFontWorkChildWindow::SvxFontWorkChildWindow
     SvxFontWorkDialog* pDlg = new SvxFontWorkDialog(pBindings, this, _pParent);
     pWindow = pDlg;
 
-    eChildAlignment = SFX_ALIGN_NOALIGNMENT;
+    eChildAlignment = SfxChildAlignment::NOALIGNMENT;
 
     pDlg->Initialize( pInfo );
 }
@@ -299,23 +299,23 @@ SfxChildAlignment SvxFontWorkDialog::CheckAlignment( SfxChildAlignment eActAlign
 
     switch ( eAlign )
     {
-        case SFX_ALIGN_TOP:
-        case SFX_ALIGN_HIGHESTTOP:
-        case SFX_ALIGN_LOWESTTOP:
-        case SFX_ALIGN_BOTTOM:
-        case SFX_ALIGN_LOWESTBOTTOM:
-        case SFX_ALIGN_HIGHESTBOTTOM:
+        case SfxChildAlignment::TOP:
+        case SfxChildAlignment::HIGHESTTOP:
+        case SfxChildAlignment::LOWESTTOP:
+        case SfxChildAlignment::BOTTOM:
+        case SfxChildAlignment::LOWESTBOTTOM:
+        case SfxChildAlignment::HIGHESTBOTTOM:
         {
             eAlignment = eActAlign;
         }
         break;
 
-        case SFX_ALIGN_LEFT:
-        case SFX_ALIGN_RIGHT:
-        case SFX_ALIGN_FIRSTLEFT:
-        case SFX_ALIGN_LASTLEFT:
-        case SFX_ALIGN_FIRSTRIGHT:
-        case SFX_ALIGN_LASTRIGHT:
+        case SfxChildAlignment::LEFT:
+        case SfxChildAlignment::RIGHT:
+        case SfxChildAlignment::FIRSTLEFT:
+        case SfxChildAlignment::LASTLEFT:
+        case SfxChildAlignment::FIRSTRIGHT:
+        case SfxChildAlignment::LASTRIGHT:
         {
             eAlignment = eAlign;
         }

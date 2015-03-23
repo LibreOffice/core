@@ -367,7 +367,7 @@ SvxBmpMaskChildWindow::SvxBmpMaskChildWindow(vcl::Window* pParent_, sal_uInt16 n
 
     pWindow = pDlg;
 
-    eChildAlignment = SFX_ALIGN_NOALIGNMENT;
+    eChildAlignment = SfxChildAlignment::NOALIGNMENT;
 
     pDlg->Initialize( pInfo );
 }

@@ -312,7 +312,7 @@ SfxInfoBarContainerChild::SfxInfoBarContainerChild( vcl::Window* _pParent, sal_u
     pWindow->SetPosSizePixel(Point(0, 0), Size(_pParent->GetSizePixel().getWidth(), 0));
     pWindow->Show();
 
-    eChildAlignment = SFX_ALIGN_LOWESTTOP;
+    eChildAlignment = SfxChildAlignment::LOWESTTOP;
 }
 
 SfxInfoBarContainerChild::~SfxInfoBarContainerChild()

@@ -2228,7 +2228,7 @@ SvxSearchDialogWrapper::SvxSearchDialogWrapper( vcl::Window* _pParent, sal_uInt1
     pBindings->Update( SID_SEARCH_OPTIONS );
     pBindings->Update( SID_SEARCH_SEARCHSET );
     pBindings->Update( SID_SEARCH_REPLACESET );
-    eChildAlignment = SFX_ALIGN_NOALIGNMENT;
+    eChildAlignment = SfxChildAlignment::NOALIGNMENT;
     dialog->bConstruct = false;
 }
 

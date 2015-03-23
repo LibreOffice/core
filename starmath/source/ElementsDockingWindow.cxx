@@ -687,7 +687,7 @@ void SmElementsDockingWindow::ToggleFloatingMode()
 void SmElementsDockingWindow::EndDocking( const Rectangle& rReactangle, bool bFloatMode)
 {
     SfxDockingWindow::EndDocking(rReactangle, bFloatMode);
-    bool bVertical = ( GetAlignment() == SFX_ALIGN_TOP || GetAlignment() == SFX_ALIGN_BOTTOM );
+    bool bVertical = ( GetAlignment() == SfxChildAlignment::TOP || GetAlignment() == SfxChildAlignment::BOTTOM );
     mpElementsControl->setVerticalMode(bVertical);
 }
 
@@ -726,7 +726,7 @@ SmViewShell* SmElementsDockingWindow::GetView()
 
 void SmElementsDockingWindow::Resize()
 {
-    bool bVertical = ( GetAlignment() == SFX_ALIGN_TOP || GetAlignment() == SFX_ALIGN_BOTTOM );
+    bool bVertical = ( GetAlignment() == SfxChildAlignment::TOP || GetAlignment() == SfxChildAlignment::BOTTOM );
     mpElementsControl->setVerticalMode(bVertical);
 #if 0
     sal_uInt32 aWidth  = GetOutputSizePixel().Width();
@@ -760,7 +760,7 @@ SmElementsDockingWindowWrapper::SmElementsDockingWindowWrapper(
     pDialog->SetPosSizePixel(Point(0, 0), Size(300, 0));
     pDialog->Show();
 
-    eChildAlignment = SFX_ALIGN_LEFT;
+    eChildAlignment = SfxChildAlignment::LEFT;
 
     pDialog->Initialize( pInfo );
 }

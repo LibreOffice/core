@@ -349,7 +349,7 @@ SmToolBoxWrapper::SmToolBoxWrapper(vcl::Window *pParentWindow,
                                    SfxChildWinInfo *pInfo) :
     SfxChildWindow(pParentWindow, nId)
 {
-    eChildAlignment = SFX_ALIGN_NOALIGNMENT;
+    eChildAlignment = SfxChildAlignment::NOALIGNMENT;
 
     pWindow = new SmToolBoxWindow(pBindings, this, pParentWindow);
     static_cast<SfxFloatingWindow *>(pWindow)->Initialize(pInfo);

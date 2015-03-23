@@ -37,7 +37,7 @@ SvxColorChildWindow::SvxColorChildWindow( vcl::Window* _pParent,
                                         _pParent );
     pWindow = pWin;
 
-    eChildAlignment = SFX_ALIGN_BOTTOM;
+    eChildAlignment = SfxChildAlignment::BOTTOM;
 
     pWin->Initialize( pInfo );
 }

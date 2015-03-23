@@ -213,16 +213,16 @@ SfxSplitWindow::SfxSplitWindow( vcl::Window* pParent, SfxChildAlignment eAl,
     WindowAlign eTbxAlign;
     switch ( eAlign )
     {
-        case SFX_ALIGN_LEFT:
+        case SfxChildAlignment::LEFT:
             eTbxAlign = WINDOWALIGN_LEFT;
             break;
-        case SFX_ALIGN_RIGHT:
+        case SfxChildAlignment::RIGHT:
             eTbxAlign = WINDOWALIGN_RIGHT;
             break;
-        case SFX_ALIGN_TOP:
+        case SfxChildAlignment::TOP:
             eTbxAlign = WINDOWALIGN_TOP;
             break;
-        case SFX_ALIGN_BOTTOM:
+        case SfxChildAlignment::BOTTOM:
             eTbxAlign = WINDOWALIGN_BOTTOM;
             bPinned = true;
             break;

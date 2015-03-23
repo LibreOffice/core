@@ -36,7 +36,7 @@ SfxNavigatorWrapper::SfxNavigatorWrapper( vcl::Window* pParentWnd ,
 {
     pWindow = new SfxNavigator( pBindings, this, pParentWnd,
         WB_STDDOCKWIN | WB_CLIPCHILDREN | WB_SIZEABLE | WB_3DLOOK | WB_ROLLABLE);
-    eChildAlignment = SFX_ALIGN_NOALIGNMENT;
+    eChildAlignment = SfxChildAlignment::NOALIGNMENT;
 
     pWindow->SetHelpId ( HID_NAVIGATOR_WINDOW );
     pWindow->SetOutputSizePixel( Size( 270, 240 ) );

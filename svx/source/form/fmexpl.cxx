@@ -564,7 +564,7 @@ namespace svxform
 
     Size NavigatorFrame::CalcDockingSize( SfxChildAlignment eAlign )
     {
-        if ( ( eAlign == SFX_ALIGN_TOP ) || ( eAlign == SFX_ALIGN_BOTTOM ) )
+        if ( ( eAlign == SfxChildAlignment::TOP ) || ( eAlign == SfxChildAlignment::BOTTOM ) )
             return Size();
 
         return SfxDockingWindow::CalcDockingSize( eAlign );
@@ -573,7 +573,7 @@ namespace svxform
 
     SfxChildAlignment NavigatorFrame::CheckAlignment( SfxChildAlignment _eActAlign, SfxChildAlignment _eAlign )
     {
-        if ( ( _eAlign == SFX_ALIGN_LEFT ) || ( _eAlign == SFX_ALIGN_RIGHT ) || ( _eAlign == SFX_ALIGN_NOALIGNMENT ) )
+        if ( ( _eAlign == SfxChildAlignment::LEFT ) || ( _eAlign == SfxChildAlignment::RIGHT ) || ( _eAlign == SfxChildAlignment::NOALIGNMENT ) )
             return _eAlign;
         return _eActAlign;
     }
@@ -608,7 +608,7 @@ namespace svxform
                      :SfxChildWindow( _pParent, _nId )
     {
         pWindow = new NavigatorFrame( _pBindings, this, _pParent );
-        eChildAlignment = SFX_ALIGN_NOALIGNMENT;
+        eChildAlignment = SfxChildAlignment::NOALIGNMENT;
         static_cast<SfxDockingWindow*>(pWindow)->Initialize( _pInfo );
     }
 

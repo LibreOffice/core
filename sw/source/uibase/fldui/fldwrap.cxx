@@ -88,7 +88,7 @@ SwFldDlgWrapper::SwFldDlgWrapper( vcl::Window* _pParent, sal_uInt16 nId,
     pDlgInterface = pDlg;
     pWindow = pDlg->GetWindow();
     pDlg->Start();
-    eChildAlignment = SFX_ALIGN_NOALIGNMENT;
+    eChildAlignment = SfxChildAlignment::NOALIGNMENT;
 }
 
 // newly initialise dialog after Doc switch
@@ -136,7 +136,7 @@ SwFldDataOnlyDlgWrapper::SwFldDataOnlyDlgWrapper( vcl::Window* _pParent, sal_uIn
     pDlg->ActivateDatabasePage();
     pDlg->Start();
     pDlg->Initialize( pInfo );
-    eChildAlignment = SFX_ALIGN_NOALIGNMENT;
+    eChildAlignment = SfxChildAlignment::NOALIGNMENT;
 }
 
 // re-init after doc activation

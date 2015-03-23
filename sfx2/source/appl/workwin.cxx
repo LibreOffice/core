@@ -402,55 +402,55 @@ sal_uInt16 ChildAlignValue(SfxChildAlignment eAlign)
 
     switch (eAlign)
     {
-        case SFX_ALIGN_HIGHESTTOP:
+        case SfxChildAlignment::HIGHESTTOP:
             ret = 1;
             break;
-        case SFX_ALIGN_LOWESTBOTTOM:
+        case SfxChildAlignment::LOWESTBOTTOM:
             ret = 2;
             break;
-        case SFX_ALIGN_FIRSTLEFT:
+        case SfxChildAlignment::FIRSTLEFT:
             ret = 3;
             break;
-        case SFX_ALIGN_LASTRIGHT:
+        case SfxChildAlignment::LASTRIGHT:
             ret = 4;
             break;
-        case SFX_ALIGN_LEFT:
+        case SfxChildAlignment::LEFT:
             ret = 5;
             break;
-        case SFX_ALIGN_RIGHT:
+        case SfxChildAlignment::RIGHT:
             ret = 6;
             break;
-        case SFX_ALIGN_FIRSTRIGHT:
+        case SfxChildAlignment::FIRSTRIGHT:
             ret = 7;
             break;
-        case SFX_ALIGN_LASTLEFT:
+        case SfxChildAlignment::LASTLEFT:
             ret = 8;
             break;
-        case SFX_ALIGN_TOP:
+        case SfxChildAlignment::TOP:
             ret = 9;
             break;
-        case SFX_ALIGN_BOTTOM:
+        case SfxChildAlignment::BOTTOM:
             ret = 10;
             break;
-        case SFX_ALIGN_TOOLBOXTOP:
+        case SfxChildAlignment::TOOLBOXTOP:
             ret = 11;
             break;
-        case SFX_ALIGN_TOOLBOXBOTTOM:
+        case SfxChildAlignment::TOOLBOXBOTTOM:
             ret = 12;
             break;
-        case SFX_ALIGN_LOWESTTOP:
+        case SfxChildAlignment::LOWESTTOP:
             ret = 13;
             break;
-        case SFX_ALIGN_HIGHESTBOTTOM:
+        case SfxChildAlignment::HIGHESTBOTTOM:
             ret = 14;
             break;
-        case SFX_ALIGN_TOOLBOXLEFT:
+        case SfxChildAlignment::TOOLBOXLEFT:
             ret = 15;
             break;
-        case SFX_ALIGN_TOOLBOXRIGHT:
+        case SfxChildAlignment::TOOLBOXRIGHT:
             ret = 16;
             break;
-        case SFX_ALIGN_NOALIGNMENT:
+        case SfxChildAlignment::NOALIGNMENT:
             break;  // -Wall not handled...
     }
 
@@ -463,55 +463,55 @@ sal_uInt16 ChildTravelValue( SfxChildAlignment eAlign )
 
     switch (eAlign)
     {
-        case SFX_ALIGN_FIRSTLEFT:
+        case SfxChildAlignment::FIRSTLEFT:
             ret = 1;
             break;
-        case SFX_ALIGN_LEFT:
+        case SfxChildAlignment::LEFT:
             ret = 2;
             break;
-        case SFX_ALIGN_LASTLEFT:
+        case SfxChildAlignment::LASTLEFT:
             ret = 3;
             break;
-        case SFX_ALIGN_TOOLBOXLEFT:
+        case SfxChildAlignment::TOOLBOXLEFT:
             ret = 4;
             break;
-        case SFX_ALIGN_HIGHESTTOP:
+        case SfxChildAlignment::HIGHESTTOP:
             ret = 5;
             break;
-        case SFX_ALIGN_TOP:
+        case SfxChildAlignment::TOP:
             ret = 6;
             break;
-        case SFX_ALIGN_TOOLBOXTOP:
+        case SfxChildAlignment::TOOLBOXTOP:
             ret = 7;
             break;
-        case SFX_ALIGN_LOWESTTOP:
+        case SfxChildAlignment::LOWESTTOP:
             ret = 8;
             break;
-        case SFX_ALIGN_HIGHESTBOTTOM:
+        case SfxChildAlignment::HIGHESTBOTTOM:
             ret = 9;
             break;
-        case SFX_ALIGN_TOOLBOXBOTTOM:
+        case SfxChildAlignment::TOOLBOXBOTTOM:
             ret = 10;
             break;
-        case SFX_ALIGN_BOTTOM:
+        case SfxChildAlignment::BOTTOM:
             ret = 11;
             break;
-        case SFX_ALIGN_LOWESTBOTTOM:
+        case SfxChildAlignment::LOWESTBOTTOM:
             ret = 12;
             break;
-        case SFX_ALIGN_TOOLBOXRIGHT:
+        case SfxChildAlignment::TOOLBOXRIGHT:
             ret = 13;
             break;
-        case SFX_ALIGN_FIRSTRIGHT:
+        case SfxChildAlignment::FIRSTRIGHT:
             ret = 14;
             break;
-        case SFX_ALIGN_RIGHT:
+        case SfxChildAlignment::RIGHT:
             ret = 15;
             break;
-        case SFX_ALIGN_LASTRIGHT:
+        case SfxChildAlignment::LASTRIGHT:
             ret = 16;
             break;
-        case SFX_ALIGN_NOALIGNMENT:
+        case SfxChildAlignment::NOALIGNMENT:
             break;  // -Wall not handled.
     }
 
@@ -565,10 +565,10 @@ SfxFrameWorkWin_Impl::SfxFrameWorkWin_Impl( vcl::Window *pWin, SfxFrame *pFrm, S
         // and receives the docked window.
 
         SfxChildAlignment eAlign =
-                        ( n == SFX_SPLITWINDOWS_LEFT ? SFX_ALIGN_LEFT :
-                            n == SFX_SPLITWINDOWS_RIGHT ? SFX_ALIGN_RIGHT :
-                            n == SFX_SPLITWINDOWS_TOP ? SFX_ALIGN_TOP :
-                                SFX_ALIGN_BOTTOM );
+                        ( n == SFX_SPLITWINDOWS_LEFT ? SfxChildAlignment::LEFT :
+                            n == SFX_SPLITWINDOWS_RIGHT ? SfxChildAlignment::RIGHT :
+                            n == SFX_SPLITWINDOWS_TOP ? SfxChildAlignment::TOP :
+                                SfxChildAlignment::BOTTOM );
         SfxSplitWindow *pSplitWin = new SfxSplitWindow(pWorkWin, eAlign, this, pParent==0 );
         pSplit[n] = pSplitWin;
     }
@@ -847,10 +847,10 @@ SvBorder SfxWorkWindow::Arrange_Impl()
         bool bAllowHiding = true;
         switch ( pCli->eAlign )
         {
-            case SFX_ALIGN_HIGHESTTOP:
-            case SFX_ALIGN_TOP:
-            case SFX_ALIGN_TOOLBOXTOP:
-            case SFX_ALIGN_LOWESTTOP:
+            case SfxChildAlignment::HIGHESTTOP:
+            case SfxChildAlignment::TOP:
+            case SfxChildAlignment::TOOLBOXTOP:
+            case SfxChildAlignment::LOWESTTOP:
                 aSize.Width() = aTmp.GetWidth();
                 if ( pCli->pWin->GetType() == WINDOW_SPLITWINDOW )
                     aSize = static_cast<SplitWindow *>(pCli->pWin)->CalcLayoutSizePixel( aSize );
@@ -858,14 +858,14 @@ SvBorder SfxWorkWindow::Arrange_Impl()
                 aBorder.Top() += aSize.Height();
                 aPos = aTmp.TopLeft();
                 aTmp.Top() += aSize.Height();
-                if ( pCli->eAlign == SFX_ALIGN_HIGHESTTOP )
+                if ( pCli->eAlign == SfxChildAlignment::HIGHESTTOP )
                     aUpperClientArea.Top() += aSize.Height();
                 break;
 
-            case SFX_ALIGN_LOWESTBOTTOM:
-            case SFX_ALIGN_BOTTOM:
-            case SFX_ALIGN_TOOLBOXBOTTOM:
-            case SFX_ALIGN_HIGHESTBOTTOM:
+            case SfxChildAlignment::LOWESTBOTTOM:
+            case SfxChildAlignment::BOTTOM:
+            case SfxChildAlignment::TOOLBOXBOTTOM:
+            case SfxChildAlignment::HIGHESTBOTTOM:
                 aSize.Width() = aTmp.GetWidth();
                 if ( pCli->pWin->GetType() == WINDOW_SPLITWINDOW )
                     aSize = static_cast<SplitWindow *>(pCli->pWin)->CalcLayoutSizePixel( aSize );
@@ -873,14 +873,14 @@ SvBorder SfxWorkWindow::Arrange_Impl()
                 aPos = aTmp.BottomLeft();
                 aPos.Y() -= (aSize.Height()-1);
                 aTmp.Bottom() -= aSize.Height();
-                if ( pCli->eAlign == SFX_ALIGN_LOWESTBOTTOM )
+                if ( pCli->eAlign == SfxChildAlignment::LOWESTBOTTOM )
                     aUpperClientArea.Bottom() -= aSize.Height();
                 break;
 
-            case SFX_ALIGN_FIRSTLEFT:
-            case SFX_ALIGN_LEFT:
-            case SFX_ALIGN_LASTLEFT:
-            case SFX_ALIGN_TOOLBOXLEFT:
+            case SfxChildAlignment::FIRSTLEFT:
+            case SfxChildAlignment::LEFT:
+            case SfxChildAlignment::LASTLEFT:
+            case SfxChildAlignment::TOOLBOXLEFT:
                 aSize.Height() = aTmp.GetHeight();
                 if ( pCli->pWin->GetType() == WINDOW_SPLITWINDOW )
                     aSize = static_cast<SplitWindow *>(pCli->pWin)->CalcLayoutSizePixel( aSize );
@@ -888,14 +888,14 @@ SvBorder SfxWorkWindow::Arrange_Impl()
                 aBorder.Left() += aSize.Width();
                 aPos = aTmp.TopLeft();
                 aTmp.Left() += aSize.Width();
-                if ( pCli->eAlign != SFX_ALIGN_TOOLBOXLEFT )
+                if ( pCli->eAlign != SfxChildAlignment::TOOLBOXLEFT )
                     aUpperClientArea.Left() += aSize.Width();
                 break;
 
-            case SFX_ALIGN_FIRSTRIGHT:
-            case SFX_ALIGN_RIGHT:
-            case SFX_ALIGN_LASTRIGHT:
-            case SFX_ALIGN_TOOLBOXRIGHT:
+            case SfxChildAlignment::FIRSTRIGHT:
+            case SfxChildAlignment::RIGHT:
+            case SfxChildAlignment::LASTRIGHT:
+            case SfxChildAlignment::TOOLBOXRIGHT:
                 aSize.Height() = aTmp.GetHeight();
                 if ( pCli->pWin->GetType() == WINDOW_SPLITWINDOW )
                     aSize = static_cast<SplitWindow *>(pCli->pWin)->CalcLayoutSizePixel( aSize );
@@ -903,7 +903,7 @@ SvBorder SfxWorkWindow::Arrange_Impl()
                 aPos = aTmp.TopRight();
                 aPos.X() -= (aSize.Width()-1);
                 aTmp.Right() -= aSize.Width();
-                if ( pCli->eAlign != SFX_ALIGN_TOOLBOXRIGHT )
+                if ( pCli->eAlign != SfxChildAlignment::TOOLBOXRIGHT )
                     aUpperClientArea.Right() -= aSize.Width();
                 break;
 
@@ -1439,7 +1439,7 @@ void SfxWorkWindow::UpdateChildWindows_Impl()
                     // In Presentation mode or FullScreen only FloatingWindows
                     SfxChildAlignment eAlign;
                     if ( pCW->aInfo.GetExtraData_Impl( &eAlign ) )
-                        bCreate = ( eAlign == SFX_ALIGN_NOALIGNMENT );
+                        bCreate = ( eAlign == SfxChildAlignment::NOALIGNMENT );
                 }
                 else
                     bCreate = true;
@@ -1461,7 +1461,7 @@ void SfxWorkWindow::UpdateChildWindows_Impl()
             else if ( pChildWin )
             {
                 // Window already exists, it should also be visible?
-                if ( ( !bIsFullScreen || pChildWin->GetAlignment() == SFX_ALIGN_NOALIGNMENT ) && bAllChildrenVisible )
+                if ( ( !bIsFullScreen || pChildWin->GetAlignment() == SfxChildAlignment::NOALIGNMENT ) && bAllChildrenVisible )
                 {
                     // Update Mode is compatible; definitely enable it
                     bCreate = AllowChildWindowCreation_Impl( *pCW );
@@ -1470,7 +1470,7 @@ void SfxWorkWindow::UpdateChildWindows_Impl()
                         if ( pCW->pCli )
                         {
                             // The window is a direct Child
-                            if ( bAllChildrenVisible && ( (IsDockingAllowed() && bInternalDockingAllowed) || pCW->pCli->eAlign == SFX_ALIGN_NOALIGNMENT ) )
+                            if ( bAllChildrenVisible && ( (IsDockingAllowed() && bInternalDockingAllowed) || pCW->pCli->eAlign == SfxChildAlignment::NOALIGNMENT ) )
                                 pCW->pCli->nVisible |= SfxChildVisibility::NOT_HIDDEN;
                         }
                         else
@@ -1542,13 +1542,13 @@ void SfxWorkWindow::CreateChildWin_Impl( SfxChildWin_Impl *pCW, bool bSetFocus )
 
         pCW->pWin = pChildWin;
 
-        if ( pChildWin->GetAlignment() == SFX_ALIGN_NOALIGNMENT || pChildWin->GetWindow()->GetParent() == pWorkWin)
+        if ( pChildWin->GetAlignment() == SfxChildAlignment::NOALIGNMENT || pChildWin->GetWindow()->GetParent() == pWorkWin)
         {
             // The window is not docked or docked outside of one split windows
             // and must therefore be registered explicitly as a Child
             pCW->pCli = RegisterChild_Impl(*(pChildWin->GetWindow()), pChildWin->GetAlignment(), pChildWin->CanGetFocus());
             pCW->pCli->nVisible = SfxChildVisibility::VISIBLE;
-            if ( pChildWin->GetAlignment() != SFX_ALIGN_NOALIGNMENT && bIsFullScreen )
+            if ( pChildWin->GetAlignment() != SfxChildAlignment::NOALIGNMENT && bIsFullScreen )
                 pCW->pCli->nVisible ^= SfxChildVisibility::ACTIVE;
             pCW->pCli->bSetFocus = bSetFocus;
         }
@@ -1661,7 +1661,7 @@ void SfxWorkWindow::HidePopups_Impl(bool bHide, bool bParent, sal_uInt16 nId )
     for ( sal_uInt16 n = 0; n < aChildWins.size(); ++n )
     {
         SfxChildWindow *pCW = aChildWins[n]->pWin;
-        if (pCW && pCW->GetAlignment() == SFX_ALIGN_NOALIGNMENT && pCW->GetType() != nId)
+        if (pCW && pCW->GetAlignment() == SfxChildAlignment::NOALIGNMENT && pCW->GetType() != nId)
         {
             vcl::Window *pWin = pCW->GetWindow();
             SfxChild_Impl *pChild = FindChild_Impl(*pWin);
@@ -1718,7 +1718,7 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
 
     if ( pDockWin )
     {
-        if ( eChild == SfxChildIdentifier::DOCKINGWINDOW || pDockWin->GetAlignment() == SFX_ALIGN_NOALIGNMENT )
+        if ( eChild == SfxChildIdentifier::DOCKINGWINDOW || pDockWin->GetAlignment() == SfxChildAlignment::NOALIGNMENT )
         {
             if ( eChild == SfxChildIdentifier::SPLITWINDOW && eConfig == SfxDockingConfig::TOGGLEFLOATMODE)
             {
@@ -1793,65 +1793,65 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
                 {
                     switch ( pCli->eAlign )
                     {
-                        case SFX_ALIGN_TOP:
+                        case SfxChildAlignment::TOP:
                             // Objekt-Toolboxes come always last
                                 aInnerRect.Top() += pCli->aSize.Height();
                             break;
 
-                        case SFX_ALIGN_HIGHESTTOP:
+                        case SfxChildAlignment::HIGHESTTOP:
                             // Always performed first
                             aInnerRect.Top() += pCli->aSize.Height();
                             break;
 
-                        case SFX_ALIGN_LOWESTTOP:
+                        case SfxChildAlignment::LOWESTTOP:
                             // Is only counted if it is the current window
                             if ( i == nPos )
                                 aInnerRect.Top() += pCli->aSize.Height();
                             break;
 
-                        case SFX_ALIGN_BOTTOM:
+                        case SfxChildAlignment::BOTTOM:
                             // Objekt-Toolboxes come always last
                                 aInnerRect.Bottom() -= pCli->aSize.Height();
                             break;
 
-                        case SFX_ALIGN_LOWESTBOTTOM:
+                        case SfxChildAlignment::LOWESTBOTTOM:
                             // Always performed first
                             aInnerRect.Bottom() -= pCli->aSize.Height();
                             break;
 
-                        case SFX_ALIGN_HIGHESTBOTTOM:
+                        case SfxChildAlignment::HIGHESTBOTTOM:
                             // Is only counted if it is the current window
                             if ( i == nPos )
                                 aInnerRect.Bottom() -= pCli->aSize.Height();
                             break;
 
-                        case SFX_ALIGN_LEFT:
+                        case SfxChildAlignment::LEFT:
                             // Toolboxes come always last
                                 aInnerRect.Left() += pCli->aSize.Width();
                             break;
 
-                        case SFX_ALIGN_FIRSTLEFT:
+                        case SfxChildAlignment::FIRSTLEFT:
                             // Always performed first
                             aInnerRect.Left() += pCli->aSize.Width();
                             break;
 
-                        case SFX_ALIGN_LASTLEFT:
+                        case SfxChildAlignment::LASTLEFT:
                             // Is only counted if it is the current window
                             if (i == nPos)
                                 aInnerRect.Left() += pCli->aSize.Width();
 
-                        case SFX_ALIGN_RIGHT:
+                        case SfxChildAlignment::RIGHT:
                             // Toolboxes come always last
                                 aInnerRect.Right() -= pCli->aSize.Width();
                             break;
 
-                        case SFX_ALIGN_FIRSTRIGHT:
+                        case SfxChildAlignment::FIRSTRIGHT:
                             // Is only counted if it is the current window
                             if (i == nPos)
                                 aInnerRect.Right() -= pCli->aSize.Width();
                             break;
 
-                        case SFX_ALIGN_LASTRIGHT:
+                        case SfxChildAlignment::LASTRIGHT:
                             // Always performed first
                             aInnerRect.Right() -= pCli->aSize.Width();
                             break;
@@ -1873,12 +1873,12 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
             if ( nPos == USHRT_MAX && !pCW )
                 return;
 
-            SfxChildAlignment eAlign = SFX_ALIGN_NOALIGNMENT;
+            SfxChildAlignment eAlign = SfxChildAlignment::NOALIGNMENT;
             SfxChild_Impl *pCli = ( nPos != USHRT_MAX ) ? aChildren[nPos] : 0;
             if ( pCli && pDockWin )
             {
                 eAlign = pDockWin->GetAlignment();
-                if ( eChild == SfxChildIdentifier::DOCKINGWINDOW || eAlign == SFX_ALIGN_NOALIGNMENT)
+                if ( eChild == SfxChildIdentifier::DOCKINGWINDOW || eAlign == SfxChildAlignment::NOALIGNMENT)
                 {
                     // configuration inside the SplitWindow, no change for the SplitWindows' configuration
                     pCli->bResize = true;
@@ -2159,7 +2159,7 @@ bool SfxWorkWindow::IsFloating( sal_uInt16 nId )
 
     SfxChildAlignment eAlign;
     if ( pCW->aInfo.GetExtraData_Impl( &eAlign ) )
-        return( eAlign == SFX_ALIGN_NOALIGNMENT );
+        return( eAlign == SfxChildAlignment::NOALIGNMENT );
     else
         return true;
 }
@@ -2484,16 +2484,16 @@ SfxSplitWindow* SfxWorkWindow::GetSplitWindow_Impl( SfxChildAlignment eAlign )
 {
     switch ( eAlign )
     {
-        case SFX_ALIGN_TOP:
+        case SfxChildAlignment::TOP:
             return pSplit[2];
 
-        case SFX_ALIGN_BOTTOM:
+        case SfxChildAlignment::BOTTOM:
             return pSplit[3];
 
-        case SFX_ALIGN_LEFT:
+        case SfxChildAlignment::LEFT:
             return pSplit[0];
 
-        case SFX_ALIGN_RIGHT:
+        case SfxChildAlignment::RIGHT:
             return pSplit[1];
 
         default:
@@ -2514,7 +2514,7 @@ void SfxWorkWindow::MakeChildrenVisible_Impl( bool bVis )
         for ( sal_uInt16 n=0; n<aSortedList.size(); ++n )
         {
             SfxChild_Impl* pCli = aChildren[aSortedList[n]];
-            if ( (pCli->eAlign == SFX_ALIGN_NOALIGNMENT) || (IsDockingAllowed() && bInternalDockingAllowed) )
+            if ( (pCli->eAlign == SfxChildAlignment::NOALIGNMENT) || (IsDockingAllowed() && bInternalDockingAllowed) )
                 pCli->nVisible |= SfxChildVisibility::ACTIVE;
         }
     }
@@ -2747,7 +2747,7 @@ bool SfxWorkWindow::ActivateNextChild_Impl( bool bForward )
     if ( aList.empty() )
         return false;
 
-    sal_uInt16 nTopValue  = ChildTravelValue( SFX_ALIGN_LOWESTTOP );
+    sal_uInt16 nTopValue  = ChildTravelValue( SfxChildAlignment::LOWESTTOP );
     for ( sal_uInt16 i=0; i<aList.size(); i++ )
     {
         SfxChild_Impl* pCli = aChildren[aList[i]];

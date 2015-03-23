@@ -73,7 +73,7 @@ SvxContourDlgChildWindow::SvxContourDlgChildWindow( vcl::Window* _pParent, sal_u
     if ( pInfo->nFlags & SfxChildWindowFlags::ZOOMIN )
         pDlg->RollUp();
 
-    eChildAlignment = SFX_ALIGN_NOALIGNMENT;
+    eChildAlignment = SfxChildAlignment::NOALIGNMENT;
 
     pDlg->Initialize( pInfo );
 }

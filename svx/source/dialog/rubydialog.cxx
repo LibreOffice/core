@@ -70,7 +70,7 @@ SvxRubyChildWindow::SvxRubyChildWindow( vcl::Window* _pParent, sal_uInt16 nId,
     if ( pInfo->nFlags & SfxChildWindowFlags::ZOOMIN )
         pDlg->RollUp();
 
-    eChildAlignment = SFX_ALIGN_NOALIGNMENT;
+    eChildAlignment = SfxChildAlignment::NOALIGNMENT;
 
     pDlg->Initialize( pInfo );
 }

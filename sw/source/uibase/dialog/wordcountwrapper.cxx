@@ -27,7 +27,7 @@ SwWordCountWrapper::SwWordCountWrapper(   vcl::Window *pParentWindow,
     assert(pAbstDlg && "Dialog construction failed!");
     pWindow = pAbstDlg->GetWindow();
 
-    eChildAlignment = SFX_ALIGN_NOALIGNMENT;
+    eChildAlignment = SfxChildAlignment::NOALIGNMENT;
 }
 
 SfxChildWinInfo SwWordCountWrapper::GetInfo() const

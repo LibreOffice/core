@@ -765,8 +765,8 @@ Size SmCmdBoxWindow::CalcDockingSize(SfxChildAlignment eAlign)
 {
     switch (eAlign)
     {
-        case SFX_ALIGN_LEFT:
-        case SFX_ALIGN_RIGHT:
+        case SfxChildAlignment::LEFT:
+        case SfxChildAlignment::RIGHT:
             return Size();
         default:
             break;
@@ -779,9 +779,9 @@ SfxChildAlignment SmCmdBoxWindow::CheckAlignment(SfxChildAlignment eActual,
 {
     switch (eWish)
     {
-        case SFX_ALIGN_TOP:
-        case SFX_ALIGN_BOTTOM:
-        case SFX_ALIGN_NOALIGNMENT:
+        case SfxChildAlignment::TOP:
+        case SfxChildAlignment::BOTTOM:
+        case SfxChildAlignment::NOALIGNMENT:
             return eWish;
         default:
             break;
@@ -892,7 +892,7 @@ SmCmdBoxWrapper::SmCmdBoxWrapper(vcl::Window *pParentWindow, sal_uInt16 nId,
     pWindow = new SmCmdBoxWindow(pBindings, this, pParentWindow);
 
     // make window docked to the bottom initially (after first start)
-    eChildAlignment = SFX_ALIGN_BOTTOM;
+    eChildAlignment = SfxChildAlignment::BOTTOM;
     static_cast<SfxDockingWindow *>(pWindow)->Initialize(pInfo);
 }
 

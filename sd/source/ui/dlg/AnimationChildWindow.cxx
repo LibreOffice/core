@@ -42,7 +42,7 @@ AnimationChildWindow::AnimationChildWindow(
     AnimationWindow* pAnimWin = new AnimationWindow(pBindings, this, _pParent);
     pWindow = pAnimWin;
 
-    eChildAlignment = SFX_ALIGN_NOALIGNMENT;
+    eChildAlignment = SfxChildAlignment::NOALIGNMENT;
 
     pAnimWin->Initialize( pInfo );
 

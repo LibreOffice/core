@@ -1930,7 +1930,7 @@ void FmFilterNavigatorWin::FillInfo( SfxChildWinInfo& rInfo ) const
 
 Size FmFilterNavigatorWin::CalcDockingSize( SfxChildAlignment eAlign )
 {
-    if ( ( eAlign == SFX_ALIGN_TOP ) || ( eAlign == SFX_ALIGN_BOTTOM ) )
+    if ( ( eAlign == SfxChildAlignment::TOP ) || ( eAlign == SfxChildAlignment::BOTTOM ) )
         return Size();
 
     return SfxDockingWindow::CalcDockingSize( eAlign );
@@ -1941,9 +1941,9 @@ SfxChildAlignment FmFilterNavigatorWin::CheckAlignment( SfxChildAlignment eActAl
 {
     switch (eAlign)
     {
-        case SFX_ALIGN_LEFT:
-        case SFX_ALIGN_RIGHT:
-        case SFX_ALIGN_NOALIGNMENT:
+        case SfxChildAlignment::LEFT:
+        case SfxChildAlignment::RIGHT:
+        case SfxChildAlignment::NOALIGNMENT:
             return eAlign;
         default:
             break;
@@ -1983,7 +1983,7 @@ FmFilterNavigatorWinMgr::FmFilterNavigatorWinMgr( vcl::Window *_pParent, sal_uIn
                  :SfxChildWindow( _pParent, _nId )
 {
     pWindow = new FmFilterNavigatorWin( _pBindings, this, _pParent );
-    eChildAlignment = SFX_ALIGN_NOALIGNMENT;
+    eChildAlignment = SfxChildAlignment::NOALIGNMENT;
     static_cast<SfxDockingWindow*>(pWindow)->Initialize( _pInfo );
 }
 

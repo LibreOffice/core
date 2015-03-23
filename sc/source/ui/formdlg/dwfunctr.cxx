@@ -67,7 +67,7 @@ ScFunctionChildWindow::ScFunctionChildWindow( vcl::Window* pParentP,
                                         pParentP, ScResId( FID_FUNCTION_BOX ) );
     pWindow = pWin;
 
-    eChildAlignment = SFX_ALIGN_RIGHT;
+    eChildAlignment = SfxChildAlignment::RIGHT;
 
     pWin->Initialize( pInfo );
 }
@@ -109,7 +109,7 @@ ScFunctionDockWin::ScFunctionDockWin( SfxBindings* pBindingsP,
     if (pCW != NULL)
         eSfxNewAlignment=GetAlignment();
     else
-        eSfxNewAlignment=SFX_ALIGN_RIGHT;
+        eSfxNewAlignment=SfxChildAlignment::RIGHT;
     eSfxOldAlignment=eSfxNewAlignment;
     aFiFuncDesc.SetUpdateMode(true);
     pAllFuncList=&aFuncList;
@@ -242,13 +242,13 @@ void ScFunctionDockWin::SetSize()
     short nNewDockMode;
     switch(aChildAlign)
     {
-        case SFX_ALIGN_HIGHESTTOP:
-        case SFX_ALIGN_TOP:
-        case SFX_ALIGN_LOWESTTOP:
-        case SFX_ALIGN_LOWESTBOTTOM:
-        case SFX_ALIGN_BOTTOM:
-        case SFX_ALIGN_TOOLBOXTOP:
-        case SFX_ALIGN_TOOLBOXBOTTOM:
+        case SfxChildAlignment::HIGHESTTOP:
+        case SfxChildAlignment::TOP:
+        case SfxChildAlignment::LOWESTTOP:
+        case SfxChildAlignment::LOWESTBOTTOM:
+        case SfxChildAlignment::BOTTOM:
+        case SfxChildAlignment::TOOLBOXTOP:
+        case SfxChildAlignment::TOOLBOXBOTTOM:
 
                         nNewDockMode=1;
                         if(nDockMode!=nNewDockMode)
@@ -656,20 +656,20 @@ SfxChildAlignment ScFunctionDockWin::CheckAlignment(SfxChildAlignment /* abla */
 
     switch(eSfxOldAlignment)
     {
-        case SFX_ALIGN_HIGHESTTOP:
-        case SFX_ALIGN_TOP:
-        case SFX_ALIGN_LOWESTTOP:
-        case SFX_ALIGN_LOWESTBOTTOM:
-        case SFX_ALIGN_BOTTOM:
-        case SFX_ALIGN_TOOLBOXTOP:
-        case SFX_ALIGN_TOOLBOXBOTTOM:
+        case SfxChildAlignment::HIGHESTTOP:
+        case SfxChildAlignment::TOP:
+        case SfxChildAlignment::LOWESTTOP:
+        case SfxChildAlignment::LOWESTBOTTOM:
+        case SfxChildAlignment::BOTTOM:
+        case SfxChildAlignment::TOOLBOXTOP:
+        case SfxChildAlignment::TOOLBOXBOTTOM:
 
                         nMinWidth= 0;
                         nMinHeight=0;
 
                         break;
 
-        case SFX_ALIGN_NOALIGNMENT:
+        case SfxChildAlignment::NOALIGNMENT:
 
                         aString = aCatBox.GetEntry(0);
                         aString += "www";

@@ -725,7 +725,7 @@ void SfxDispatcher::DoDeactivate_Impl(bool bMDI, SfxViewFrame* pNew)
                 for (size_t n=0; n<xImp->aChildWins.size();)
                 {
                     SfxChildWindow *pWin = pWorkWin->GetChildWindow_Impl( (sal_uInt16) ( xImp->aChildWins[n] & 0xFFFF ) );
-                    if (!pWin || (pWin && pWin->GetAlignment() == SFX_ALIGN_NOALIGNMENT))
+                    if (!pWin || (pWin && pWin->GetAlignment() == SfxChildAlignment::NOALIGNMENT))
                         xImp->aChildWins.erase(xImp->aChildWins.begin()+n);
                     else
                         n++;

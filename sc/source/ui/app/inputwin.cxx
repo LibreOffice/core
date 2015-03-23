@@ -131,7 +131,7 @@ ScInputWindowWrapper::ScInputWindowWrapper( vcl::Window*          pParentP,
 
     pWin->SetSizePixel( pWin->CalcWindowSizePixel() );
 
-    eChildAlignment = SFX_ALIGN_LOWESTTOP;
+    eChildAlignment = SfxChildAlignment::LOWESTTOP;
     pBindings->Invalidate( FID_TOGGLEINPUTLINE );
 }
 

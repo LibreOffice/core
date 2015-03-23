@@ -95,7 +95,7 @@ LeftPaneImpressChildWindow::LeftPaneImpressChildWindow (
         pBindings,
         pInfo,
         STR_LEFT_PANE_IMPRESS_TITLE,
-        SFX_ALIGN_LEFT)
+        SfxChildAlignment::LEFT)
 {
 }
 
@@ -111,7 +111,7 @@ LeftPaneDrawChildWindow::LeftPaneDrawChildWindow (
         pBindings,
         pInfo,
         STR_LEFT_PANE_DRAW_TITLE,
-        SFX_ALIGN_LEFT)
+        SfxChildAlignment::LEFT)
 {
 }
 

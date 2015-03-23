@@ -2169,7 +2169,7 @@ namespace svxform
 
     Size DataNavigator::CalcDockingSize( SfxChildAlignment eAlign )
     {
-        if ( ( eAlign == SFX_ALIGN_TOP ) || ( eAlign == SFX_ALIGN_BOTTOM ) )
+        if ( ( eAlign == SfxChildAlignment::TOP ) || ( eAlign == SfxChildAlignment::BOTTOM ) )
             return Size();
 
         return SfxDockingWindow::CalcDockingSize( eAlign );
@@ -2180,9 +2180,9 @@ namespace svxform
     {
         switch ( eAlign )
         {
-            case SFX_ALIGN_LEFT:
-            case SFX_ALIGN_RIGHT:
-            case SFX_ALIGN_NOALIGNMENT:
+            case SfxChildAlignment::LEFT:
+            case SfxChildAlignment::RIGHT:
+            case SfxChildAlignment::NOALIGNMENT:
                 return eAlign;
             default:
                 break;
@@ -2222,7 +2222,7 @@ namespace svxform
 
     {
         pWindow = new DataNavigator( _pBindings, this, _pParent );
-        eChildAlignment = SFX_ALIGN_RIGHT;
+        eChildAlignment = SfxChildAlignment::RIGHT;
         pWindow->SetSizePixel( Size( 250, 400 ) );
         static_cast<SfxDockingWindow*>(pWindow)->Initialize( _pInfo );
     }

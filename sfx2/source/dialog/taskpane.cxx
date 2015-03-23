@@ -240,7 +240,7 @@ namespace sfx2
     {
         pWindow = new TaskPaneDockingWindow( i_pBindings, *this, i_pParent,
             WB_STDDOCKWIN | WB_CLIPCHILDREN | WB_SIZEABLE | WB_3DLOOK | WB_ROLLABLE);
-        eChildAlignment = SFX_ALIGN_RIGHT;
+        eChildAlignment = SfxChildAlignment::RIGHT;
 
         pWindow->SetHelpId( HID_TASKPANE_WINDOW );
         pWindow->SetOutputSizePixel( Size( 300, 450 ) );
@@ -775,11 +775,11 @@ namespace sfx2
         {
             switch ( i_eAlignment )
             {
-            case SFX_ALIGN_LEFT:
+            case SfxChildAlignment::LEFT:
                 return LAYOUT_TABS_LEFT;
-            case SFX_ALIGN_TOP:
+            case SfxChildAlignment::TOP:
                 return LAYOUT_TABS_TOP;
-            case SFX_ALIGN_BOTTOM:
+            case SfxChildAlignment::BOTTOM:
                 return LAYOUT_TABS_BOTTOM;
             default:
                 return LAYOUT_TABS_RIGHT;
