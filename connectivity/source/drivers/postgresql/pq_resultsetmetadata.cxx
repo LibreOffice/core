@@ -333,6 +333,7 @@ sal_Int32 ResultSetMetaData::getColumnDisplaySize( sal_Int32 column )
     throw (SQLException, RuntimeException, std::exception)
 {
     MutexGuard guard( m_refMutex->mutex );
+    checkClosed();
     checkColumnIndex( column );
     return m_colDesc[column-1].displaySize;
 }
@@ -346,6 +347,7 @@ OUString ResultSetMetaData::getColumnLabel( sal_Int32 column )
 OUString ResultSetMetaData::getColumnName( sal_Int32 column ) throw (SQLException, RuntimeException, std::exception)
 {
     MutexGuard guard( m_refMutex->mutex );
+    checkClosed();
     checkColumnIndex( column );
 
     return m_colDesc[column-1].name;
@@ -361,6 +363,7 @@ sal_Int32 ResultSetMetaData::getPrecision( sal_Int32 column )
     throw (SQLException, RuntimeException, std::exception)
 {
     MutexGuard guard( m_refMutex->mutex );
+    checkClosed();
     checkColumnIndex( column );
     return m_colDesc[column-1].precision;
 }
@@ -369,6 +372,7 @@ sal_Int32 ResultSetMetaData::getScale( sal_Int32 column )
     throw (SQLException, RuntimeException, std::exception)
 {
     MutexGuard guard( m_refMutex->mutex );
+    checkClosed();
     checkColumnIndex( column );
     return m_colDesc[column-1].scale;
 }
@@ -452,6 +456,12 @@ OUString ResultSetMetaData::getColumnServiceName( sal_Int32 column )
 {
     (void) column;
     return OUString();
+}
+
+void ResultSetMetaData::checkClosed()
+    throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+{
+    // we never close
 }
 
 void ResultSetMetaData::checkColumnIndex(sal_Int32 columnIndex)
