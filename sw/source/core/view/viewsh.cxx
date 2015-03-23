@@ -1865,11 +1865,12 @@ void touch_lo_draw_tile(void *context, int contextWidth, int contextHeight, MLOD
         sleep(1);
     }
 
-    // Creation, use and destruction of a VirtualDevice needs to be
-    // protected by the SolarMutex, it seems.
-    Application::AcquireSolarMutex(1);
     if (pViewShell)
     {
+        // Creation, use and destruction of a VirtualDevice needs to be
+        // protected by the SolarMutex, it seems.
+        SolarMutexReleaser aReleaser;
+
         SystemGraphicsData aData;
         aData.rCGContext = (CGContextRef) context;
         // the Size argument is irrelevant, I hope
@@ -1877,7 +1878,7 @@ void touch_lo_draw_tile(void *context, int contextWidth, int contextHeight, MLOD
         // paint to it
         pViewShell->PaintTile(aDevice, contextWidth, contextHeight, tilePosX, tilePosY, tileWidth, tileHeight);
     }
-    Application::ReleaseSolarMutex();
+
     SAL_INFO("sw.tiled", "touch_lo_draw_tile(" << contextWidth << "x" << contextHeight << ", (" << tileDpxPosition.x << "," << tileDpxPosition.y << "), " << tileDpxSize.width << "x" << tileDpxSize.height << ") return");
 #else
     (void) context;
