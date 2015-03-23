@@ -6,7 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-package org.libreoffice;
+package org.libreoffice.canvas;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -14,14 +14,12 @@ import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.RectF;
 
-import org.mozilla.gecko.gfx.RectUtils;
-
 /**
  * This class is responsible to draw the selection handles, track the handle
  * position and perform a hit test to determine if the selection handle was
  * touched.
  */
-public class DrawElementHandle {
+public class GraphicSelectionHandleCanvasElement {
     public PointF mPosition = new PointF();
     private float mRadius = 20.0f;
     private Paint mGraphicHandleFillPaint = new Paint();
@@ -29,7 +27,7 @@ public class DrawElementHandle {
     private Paint mGraphicHandleSelectedFillPaint = new Paint();
     private RectF mHitRect = new RectF();
 
-    public DrawElementHandle(Paint graphicSelectionPaint) {
+    public GraphicSelectionHandleCanvasElement(Paint graphicSelectionPaint) {
         mGraphicSelectionPaint = graphicSelectionPaint;
 
         mGraphicHandleFillPaint.setStyle(Paint.Style.FILL);

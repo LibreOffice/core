@@ -6,13 +6,14 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-package org.libreoffice;
+package org.libreoffice.overlay;
 
 import android.app.Activity;
 import android.graphics.RectF;
 import android.util.Log;
-import android.view.View;
 
+import org.libreoffice.LOKitShell;
+import org.libreoffice.R;
 import org.mozilla.gecko.gfx.Layer;
 import org.mozilla.gecko.gfx.LayerView;
 import org.mozilla.gecko.util.FloatUtils;

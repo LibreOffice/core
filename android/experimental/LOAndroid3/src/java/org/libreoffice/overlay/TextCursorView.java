@@ -6,21 +6,22 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-package org.libreoffice;
+package org.libreoffice.overlay;
 
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.RelativeLayout;
 
+import org.libreoffice.LOKitShell;
+import org.libreoffice.canvas.GraphicSelectionCanvasElement;
+import org.libreoffice.canvas.GraphicSelectionHandleCanvasElement;
 import org.mozilla.gecko.gfx.ImmutableViewportMetrics;
 import org.mozilla.gecko.gfx.LayerView;
 import org.mozilla.gecko.gfx.RectUtils;
@@ -50,7 +51,7 @@ public class TextCursorView extends View implements View.OnTouchListener {
 
     private Paint mGraphicSelectionPaint = new Paint();
 
-    private DrawElementGraphicSelection mGraphicSelection;
+    private GraphicSelectionCanvasElement mGraphicSelection;
 
     private PointF mTouchStart = new PointF();
     private PointF mDeltaPoint = new PointF();
@@ -60,8 +61,8 @@ public class TextCursorView extends View implements View.OnTouchListener {
 
     private LayerView mLayerView;
 
-    private DrawElementHandle mHandles[] = new DrawElementHandle[8];
-    private DrawElementHandle mDragHandle = null;
+    private GraphicSelectionHandleCanvasElement mHandles[] = new GraphicSelectionHandleCanvasElement[8];
+    private GraphicSelectionHandleCanvasElement mDragHandle = null;
 
     public TextCursorView(Context context) {
         super(context);
@@ -97,18 +98,18 @@ public class TextCursorView extends View implements View.OnTouchListener {
             mGraphicSelectionPaint.setColor(Color.BLACK);
             mGraphicSelectionPaint.setStrokeWidth(2);
 
-            mGraphicSelection = new DrawElementGraphicSelection(mGraphicSelectionPaint);
+            mGraphicSelection = new GraphicSelectionCanvasElement(mGraphicSelectionPaint);
 
             mGraphicSelectionVisible = false;
 
-            mHandles[0] = new DrawElementHandle(mGraphicSelectionPaint);
-            mHandles[1] = new DrawElementHandle(mGraphicSelectionPaint);
-            mHandles[2] = new DrawElementHandle(mGraphicSelectionPaint);
-            mHandles[3] = new DrawElementHandle(mGraphicSelectionPaint);
-            mHandles[4] = new DrawElementHandle(mGraphicSelectionPaint);
-            mHandles[5] = new DrawElementHandle(mGraphicSelectionPaint);
-            mHandles[6] = new DrawElementHandle(mGraphicSelectionPaint);
-            mHandles[7] = new DrawElementHandle(mGraphicSelectionPaint);
+            mHandles[0] = new GraphicSelectionHandleCanvasElement(mGraphicSelectionPaint);
+            mHandles[1] = new GraphicSelectionHandleCanvasElement(mGraphicSelectionPaint);
+            mHandles[2] = new GraphicSelectionHandleCanvasElement(mGraphicSelectionPaint);
+            mHandles[3] = new GraphicSelectionHandleCanvasElement(mGraphicSelectionPaint);
+            mHandles[4] = new GraphicSelectionHandleCanvasElement(mGraphicSelectionPaint);
+            mHandles[5] = new GraphicSelectionHandleCanvasElement(mGraphicSelectionPaint);
+            mHandles[6] = new GraphicSelectionHandleCanvasElement(mGraphicSelectionPaint);
+            mHandles[7] = new GraphicSelectionHandleCanvasElement(mGraphicSelectionPaint);
 
             postDelayed(cursorAnimation, CURSOR_BLINK_TIME);
 
@@ -201,7 +202,7 @@ public class TextCursorView extends View implements View.OnTouchListener {
             mGraphicSelection.draw(canvas);
 
             if (mGraphicSelectionMove) {
-                for (DrawElementHandle handle : mHandles) {
+                for (GraphicSelectionHandleCanvasElement handle : mHandles) {
                     if (mDragHandle == handle) {
                         handle.drawSelected(canvas);
                     } else {
@@ -209,7 +210,7 @@ public class TextCursorView extends View implements View.OnTouchListener {
                     }
                 }
             } else {
-                for (DrawElementHandle handle : mHandles) {
+                for (GraphicSelectionHandleCanvasElement handle : mHandles) {
                     handle.draw(canvas);
                 }
             }
@@ -296,11 +297,11 @@ public class TextCursorView extends View implements View.OnTouchListener {
     private boolean checkIfGraphicSelectionWasHit() {
         // Check if handle was hit
         mDragHandle = null;
-        for (DrawElementHandle handle : mHandles) {
+        for (GraphicSelectionHandleCanvasElement handle : mHandles) {
             if (handle.contains(mTouchStart.x, mTouchStart.y)) {
                 mDragHandle = handle;
                 mGraphicSelectionMove = true;
-                mGraphicSelection.dragStart(DrawElementGraphicSelection.DragType.EXTEND, mTouchStart);
+                mGraphicSelection.dragStart(GraphicSelectionCanvasElement.DragType.EXTEND, mTouchStart);
                 sendGraphicSelectionStart(handle.mPosition);
                 return true;
             }
@@ -308,7 +309,7 @@ public class TextCursorView extends View implements View.OnTouchListener {
         // Check if inside graphic selection was hit
         if (mGraphicSelection.contains(mTouchStart.x, mTouchStart.y)) {
             mGraphicSelectionMove = true;
-            mGraphicSelection.dragStart(DrawElementGraphicSelection.DragType.MOVE, mTouchStart);
+            mGraphicSelection.dragStart(GraphicSelectionCanvasElement.DragType.MOVE, mTouchStart);
             sendGraphicSelectionStart(mTouchStart);
             return true;
         }

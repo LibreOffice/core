@@ -1,4 +1,12 @@
-package org.libreoffice;
+/* -*- Mode: Java; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+package org.libreoffice.canvas;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -9,7 +17,7 @@ import android.graphics.RectF;
  * This class is responsible to draw and reposition the selection
  * rectangle.
  */
-public class DrawElementGraphicSelection {
+public class GraphicSelectionCanvasElement {
     private final Paint mGraphicSelectionPaint;
     public RectF mRectangle = new RectF();
     public RectF mScaledRectangle = new RectF();
@@ -17,7 +25,7 @@ public class DrawElementGraphicSelection {
     private DragType mType = DragType.NONE;
     private PointF mStartDragPosition;
 
-    public DrawElementGraphicSelection(Paint graphicSelectionPaint) {
+    public GraphicSelectionCanvasElement(Paint graphicSelectionPaint) {
         mGraphicSelectionPaint = graphicSelectionPaint;
     }
 
@@ -58,9 +66,10 @@ public class DrawElementGraphicSelection {
         mDrawRectangle = mScaledRectangle;
     }
 
-    enum DragType {
+    public enum DragType {
         NONE,
         MOVE,
         EXTEND
     }
 }
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

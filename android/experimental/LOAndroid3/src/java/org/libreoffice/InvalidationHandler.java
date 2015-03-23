@@ -5,6 +5,7 @@ import android.graphics.RectF;
 import android.net.Uri;
 
 import org.libreoffice.kit.Document;
+import org.libreoffice.overlay.TextCursorLayer;
 import org.mozilla.gecko.TextSelection;
 import org.mozilla.gecko.TextSelectionHandle;
 

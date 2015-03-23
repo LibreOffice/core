@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -17,9 +16,8 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
 
+import org.libreoffice.overlay.TextCursorLayer;
 import org.mozilla.gecko.TextSelection;
 import org.mozilla.gecko.ZoomConstraints;
 import org.mozilla.gecko.gfx.GeckoLayerClient;
