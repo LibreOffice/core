@@ -211,7 +211,7 @@ bool WW8Glossary::Load( SwTextBlocks &rBlocks, bool bSaveRelFile )
             {
                 SwDoc *pD =  static_cast<SwDocShell*>((&xDocSh))->GetDoc();
                 SwWW8ImplReader* pRdr = new SwWW8ImplReader(pGlossary->nVersion,
-                    xStg, &rStrm, *pD, rBlocks.GetBaseURL(), true);
+                    xStg, &rStrm, *pD, rBlocks.GetBaseURL(), true, false);
 
                 SwNodeIndex aIdx(
                     *pD->GetNodes().GetEndOfContent().StartOfSectionNode(), 1);

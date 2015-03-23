@@ -443,7 +443,6 @@ Reference < XContent > SfxMedium::GetContent() const
     return pImp->aContent.get();
 }
 
-
 OUString SfxMedium::GetBaseURL( bool bForSaving )
 {
     OUString aBaseURL;
@@ -476,6 +475,11 @@ OUString SfxMedium::GetBaseURL( bool bForSaving )
     return aBaseURL;
 }
 
+bool SfxMedium::IsSkipImages()
+{
+    const SfxStringItem* pSkipImagesItem = static_cast<const SfxStringItem*>( GetItemSet()->GetItem(SID_FILE_FILTEROPTIONS) );
+    return pSkipImagesItem && pSkipImagesItem->GetValue() == "SkipImages";
+}
 
 SvStream* SfxMedium::GetInStream()
 {

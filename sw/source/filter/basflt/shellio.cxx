@@ -69,6 +69,7 @@ sal_uLong SwReader::Read( const Reader& rOptions )
     po->pStg  = pStg;
     po->xStg  = xStg;
     po->bInsertMode = 0 != pCrsr;
+    po->bSkipImages = mbSkipImages;
 
     // if a Medium is selected, get its Stream
     if( 0 != (po->pMedium = pMedium ) &&
@@ -400,6 +401,7 @@ SwReader::SwReader(SfxMedium& rMedium, const OUString& rFileName, SwDoc *pDocume
     aFileName(rFileName)
 {
     SetBaseURL( rMedium.GetBaseURL() );
+    SetSkipImages( rMedium.IsSkipImages() );
 }
 
 
@@ -430,7 +432,7 @@ Reader::Reader()
     aChkDateTime( DateTime::EMPTY ),
     pStrm(0), pMedium(0), bInsertMode(false),
     bTmplBrowseMode(false), bReadUTF8(false), bBlockMode(false), bOrganizerMode(false),
-    bHasAskTemplateName(false), bIgnoreHTMLComments(false)
+    bHasAskTemplateName(false), bIgnoreHTMLComments(false), bSkipImages(false)
 {
 }
 

@@ -525,9 +525,9 @@ Sttb::getStringAtIndex( sal_uInt32 index )
 
 }
 
-SwMSDffManager::SwMSDffManager( SwWW8ImplReader& rRdr )
+SwMSDffManager::SwMSDffManager( SwWW8ImplReader& rRdr, bool bSkipImages )
     : SvxMSDffManager(*rRdr.pTableStream, rRdr.GetBaseURL(), rRdr.pWwFib->fcDggInfo,
-        rRdr.pDataStream, 0, 0, COL_WHITE, 12, rRdr.pStrm),
+        rRdr.pDataStream, 0, 0, COL_WHITE, 12, rRdr.pStrm, bSkipImages),
     rReader(rRdr), pFallbackStream(0)
 {
     SetSvxMSDffSettings( GetSvxMSDffSettings() );
@@ -4107,7 +4107,7 @@ bool SwWW8ImplReader::ReadText(long nStartCp, long nTextLen, ManTypes nType)
 }
 
 SwWW8ImplReader::SwWW8ImplReader(sal_uInt8 nVersionPara, SvStorage* pStorage,
-    SvStream* pSt, SwDoc& rD, const OUString& rBaseURL, bool bNewDoc)
+    SvStream* pSt, SwDoc& rD, const OUString& rBaseURL, bool bNewDoc, bool bSkipImages)
     : mpDocShell(rD.GetDocShell())
     , pStg(pStorage)
     , pStrm(pSt)
@@ -4190,6 +4190,7 @@ SwWW8ImplReader::SwWW8ImplReader(sal_uInt8 nVersionPara, SvStorage* pStorage,
     , nPgChpDelim(0)
     , nPgChpLevel(0)
     , mbNewDoc(bNewDoc)
+    , mbSkipImages(bSkipImages)
     , bReadNoTbl(false)
     , bPgSecBreak(false)
     , bSpec(false)
@@ -6091,7 +6092,7 @@ sal_uLong WW8Reader::Read(SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPam, co
             Reader::ResetFrmFmts( rDoc );
         }
         SwWW8ImplReader* pRdr = new SwWW8ImplReader(nVersion, pStg, pIn, rDoc,
-            rBaseURL, bNew);
+            rBaseURL, bNew, bSkipImages);
         try
         {
             nRet = pRdr->LoadDoc( rPam );

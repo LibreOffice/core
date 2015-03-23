@@ -48,13 +48,14 @@ namespace writerfilter {
 namespace ooxml
 {
 
-OOXMLDocumentImpl::OOXMLDocumentImpl(OOXMLStream::Pointer_t pStream, const uno::Reference<task::XStatusIndicator>& xStatusIndicator)
+OOXMLDocumentImpl::OOXMLDocumentImpl(OOXMLStream::Pointer_t pStream, const uno::Reference<task::XStatusIndicator>& xStatusIndicator, bool bSkipImages)
     : mpStream(pStream)
     , mxStatusIndicator(xStatusIndicator)
     , mnXNoteId(0)
     , mXNoteType(0)
     , mxThemeDom(nullptr)
     , mbIsSubstream(false)
+    , mbSkipImages(bSkipImages)
     , mnPercentSize(0)
     , mnProgressLastPos(0)
     , mnProgressCurrentPos(0)
@@ -268,7 +269,7 @@ OOXMLDocumentImpl::getSubStream(const OUString & rId)
 
     OOXMLDocumentImpl * pTemp;
     // Do not pass status indicator to sub-streams: they are typically marginal in size, so we just track the main document for now.
-    writerfilter::Reference<Stream>::Pointer_t pRet( pTemp = new OOXMLDocumentImpl(pStream, uno::Reference<task::XStatusIndicator>()) );
+    writerfilter::Reference<Stream>::Pointer_t pRet( pTemp = new OOXMLDocumentImpl(pStream, uno::Reference<task::XStatusIndicator>(), mbSkipImages ));
     pTemp->setModel(mxModel);
     pTemp->setDrawPage(mxDrawPage);
     pTemp->setIsSubstream( true );
@@ -282,7 +283,7 @@ OOXMLDocumentImpl::getXNoteStream(OOXMLStream::StreamType_t nType, const Id & rT
     OOXMLStream::Pointer_t pStream =
         (OOXMLDocumentFactory::createStream(mpStream, nType));
     // See above, no status indicator for the note stream, either.
-    OOXMLDocumentImpl * pDocument = new OOXMLDocumentImpl(pStream, uno::Reference<task::XStatusIndicator>());
+    OOXMLDocumentImpl * pDocument = new OOXMLDocumentImpl(pStream, uno::Reference<task::XStatusIndicator>(), mbSkipImages);
     pDocument->setXNoteId(nId);
     pDocument->setXNoteType(rType);
 
@@ -950,9 +951,9 @@ uno::Sequence<beans::PropertyValue > OOXMLDocumentImpl::getEmbeddingsList( )
 
 OOXMLDocument *
 OOXMLDocumentFactory::createDocument
-(OOXMLStream::Pointer_t pStream, const uno::Reference<task::XStatusIndicator>& xStatusIndicator)
+(OOXMLStream::Pointer_t pStream, const uno::Reference<task::XStatusIndicator>& xStatusIndicator, bool mbSkipImages)
 {
-    return new OOXMLDocumentImpl(pStream, xStatusIndicator);
+    return new OOXMLDocumentImpl(pStream, xStatusIndicator, mbSkipImages);
 }
 
 }}

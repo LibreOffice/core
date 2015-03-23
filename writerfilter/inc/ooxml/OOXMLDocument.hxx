@@ -260,7 +260,9 @@ public:
     createStream(OOXMLStream::Pointer_t pStream, const OUString & rId);
 
     static OOXMLDocument *
-    createDocument(OOXMLStream::Pointer_t pStream, const css::uno::Reference<css::task::XStatusIndicator>& xStatusIndicator);
+    createDocument(OOXMLStream::Pointer_t pStream,
+                 const css::uno::Reference<css::task::XStatusIndicator>& xStatusIndicator,
+                 bool bSkipImage);
 
 };
 

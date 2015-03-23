@@ -778,7 +778,7 @@ public:
     static sal_uInt32 GetFilterFlags();
     static sal_Int32 GetEscherLineMatch(MSO_LineStyle eStyle, MSO_SPT eShapeType,
         sal_Int32 &rThick);
-    SwMSDffManager( SwWW8ImplReader& rRdr );
+    SwMSDffManager( SwWW8ImplReader& rRdr, bool bSkipImages );
     void DisableFallbackStream();
     void EnableFallbackStream();
 protected:
@@ -1302,6 +1302,7 @@ private:
     sal_uInt8 nPgChpLevel;           // ChapterLevel of Heading from PageNum
 
     bool mbNewDoc;          // Neues Dokument ?
+    bool mbSkipImages;      // skip images for text extraction/indexing
     bool bReadNoTbl;        // Keine Tabellen
     bool bPgSecBreak;       // Page- oder Sectionbreak ist noch einzufuegen
     bool bSpec;             // Special-Char im Text folgt
@@ -1892,7 +1893,7 @@ public:     // eigentlich private, geht aber leider nur public
     static ColorData GetCol(sal_uInt8 nIco);
 
     SwWW8ImplReader( sal_uInt8 nVersionPara, SvStorage* pStorage, SvStream* pSt,
-        SwDoc& rD, const OUString& rBaseURL, bool bNewDoc );
+        SwDoc& rD, const OUString& rBaseURL, bool bNewDoc, bool bSkipImages );
 
     const OUString& GetBaseURL() const { return sBaseURL; }
     // Laden eines kompletten DocFiles
