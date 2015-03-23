@@ -81,6 +81,8 @@ class ResultSetMetaData :
 
     sal_Int32 m_colCount;
 
+    void checkClosed()
+        throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
     void checkColumnIndex( sal_Int32 columnIndex )
         throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
     void checkTable();

@@ -144,6 +144,11 @@ sal_Int32 MQueryHelper::getResultCount() const
 
 
 
+bool MQueryHelper::queryComplete() const
+{
+    return true;
+}
+
 bool MQueryHelper::checkRowAvailable( sal_Int32 nDBRow )
 {
 /*

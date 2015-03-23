@@ -698,6 +698,27 @@ Any SAL_CALL ODatabaseMetaDataResultSet::getWarnings(  ) throw(SQLException, Run
     return Any();
 }
 
+sal_Int32 ODatabaseMetaDataResultSet::getResultSetConcurrency() const throw(SQLException, RuntimeException)
+{
+    return ResultSetConcurrency::READ_ONLY;
+}
+
+sal_Int32 ODatabaseMetaDataResultSet::getResultSetType() const throw(SQLException, RuntimeException)
+{
+    return ResultSetType::FORWARD_ONLY;
+}
+
+sal_Int32 ODatabaseMetaDataResultSet::getFetchDirection() const throw(SQLException, RuntimeException)
+{
+    return FetchDirection::FORWARD;
+}
+
+sal_Int32 ODatabaseMetaDataResultSet::getFetchSize() const throw(SQLException, RuntimeException)
+{
+    sal_Int32 nValue=1;
+    return nValue;
+}
+
 OUString ODatabaseMetaDataResultSet::getCursorName() const throw(SQLException, RuntimeException)
 {
     return OUString();

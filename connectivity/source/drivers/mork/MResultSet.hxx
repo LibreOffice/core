@@ -266,6 +266,8 @@ protected:
                                                           ::com::sun::star::uno::RuntimeException);
             bool fetchCurrentRow() throw( ::com::sun::star::sdbc::SQLException,
                                                           ::com::sun::star::uno::RuntimeException);
+            bool pushCard(sal_uInt32 rowIndex) throw( ::com::sun::star::sdbc::SQLException,
+                                                          ::com::sun::star::uno::RuntimeException);
             bool validRow( sal_uInt32 nRow );
             bool seekRow( eRowPosition pos, sal_Int32 nOffset = 0 );
             sal_Int32 deletedCount();

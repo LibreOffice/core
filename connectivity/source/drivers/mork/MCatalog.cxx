@@ -92,7 +92,8 @@ Reference< XNameAccess > SAL_CALL OCatalog::getTables(  ) throw(RuntimeException
 
     try
     {
-        refreshTables();
+        if(!m_pTables || m_pConnection->getForceLoadTables())
+            refreshTables();
     }
     catch( const RuntimeException& )
     {
