@@ -26,7 +26,7 @@ $(eval $(call gb_Module_add_targets,smoketest,\
 endif
 endif
 
-ifeq ($(OS),LINUX)
+ifneq ($(filter LINUX WNT,$(OS)),)
 $(eval $(call gb_Module_add_check_targets,smoketest,\
 	Executable_libtest \
 ))
