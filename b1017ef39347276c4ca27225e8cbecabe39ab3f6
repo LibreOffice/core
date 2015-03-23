@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a29b11f_29fcb53d",
+        "filename": "unotools/source/misc/mediadescriptor.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-03-23T11:43:17Z",
+      "side": 1,
+      "message": "this code now returns a reference to a temporary object",
+      "revId": "b1017ef39347276c4ca27225e8cbecabe39ab3f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
