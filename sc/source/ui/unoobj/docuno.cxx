@@ -469,6 +469,11 @@ void ScModelObj::paintTile( VirtualDevice& rDevice,
     ScViewData* pViewData = ScDocShell::GetViewData();
     ScGridWindow* pGridWindow = pViewData->GetActiveWin();
 
+    // Set the viewport size to document size
+    const MapMode aMapTwip( MAP_TWIP );
+    Size aDocSize = getDocumentSize();
+    pGridWindow->SetOutputSizePixel( pGridWindow->LogicToPixel(aDocSize, aMapTwip) );
+
     pGridWindow->PaintTile( rDevice, nOutputWidth, nOutputHeight,
                             nTilePosX, nTilePosY, nTileWidth, nTileHeight );
 }
