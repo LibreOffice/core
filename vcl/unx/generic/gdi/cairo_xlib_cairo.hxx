@@ -26,7 +26,7 @@
 
 #include <vcl/cairo.hxx>
 
-class BitmapSystemData;
+struct BitmapSystemData;
 struct SystemEnvData;
 struct SystemGraphicsData;
 
