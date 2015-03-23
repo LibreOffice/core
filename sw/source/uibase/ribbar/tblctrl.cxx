@@ -49,7 +49,7 @@ SfxPopupWindow* SwTableOptimizeCtrl::CreatePopupWindow()
 
 SfxPopupWindowType  SwTableOptimizeCtrl::GetPopupWindowType() const
 {
-    return SFX_POPUPWINDOW_ONCLICK;
+    return SfxPopupWindowType::ONCLICK;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

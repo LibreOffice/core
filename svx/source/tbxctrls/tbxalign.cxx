@@ -52,7 +52,7 @@ SvxTbxCtlAlign::SvxTbxCtlAlign( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTb
 
 SfxPopupWindowType SvxTbxCtlAlign::GetPopupWindowType() const
 {
-    return SFX_POPUPWINDOW_ONCLICK;
+    return SfxPopupWindowType::ONCLICK;
 }
 
 /*

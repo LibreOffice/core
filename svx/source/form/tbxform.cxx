@@ -198,7 +198,7 @@ void SvxFmTbxCtlConfig::StateChanged(sal_uInt16 nSID, SfxItemState eState, const
 
 SfxPopupWindowType SvxFmTbxCtlConfig::GetPopupWindowType() const
 {
-    return( nLastSlot == 0 ? SFX_POPUPWINDOW_ONCLICK : SFX_POPUPWINDOW_ONTIMEOUT );
+    return( nLastSlot == 0 ? SfxPopupWindowType::ONCLICK : SfxPopupWindowType::ONTIMEOUT );
 }
 
 

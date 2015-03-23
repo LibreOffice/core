@@ -976,7 +976,7 @@ void SfxToolBoxControl::Click()
 
 SfxPopupWindowType SfxToolBoxControl::GetPopupWindowType() const
 {
-    return SFX_POPUPWINDOW_NONE;
+    return SfxPopupWindowType::NONE;
 }
 
 

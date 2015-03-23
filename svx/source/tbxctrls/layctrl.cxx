@@ -717,7 +717,7 @@ SvxTableToolBoxControl::~SvxTableToolBoxControl()
 
 SfxPopupWindowType SvxTableToolBoxControl::GetPopupWindowType() const
 {
-    return SFX_POPUPWINDOW_ONTIMEOUTANDMOVE;
+    return SfxPopupWindowType::ONTIMEOUTANDMOVE;
 }
 
 
@@ -782,7 +782,7 @@ SvxColumnsToolBoxControl::~SvxColumnsToolBoxControl()
 
 SfxPopupWindowType SvxColumnsToolBoxControl::GetPopupWindowType() const
 {
-    return SFX_POPUPWINDOW_ONTIMEOUTANDMOVE;
+    return SfxPopupWindowType::ONTIMEOUTANDMOVE;
 }
 
 

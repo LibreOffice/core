@@ -70,7 +70,7 @@ void SvxTbxCtlDraw::StateChanged( sal_uInt16 nSID, SfxItemState eState,
 
 SfxPopupWindowType SvxTbxCtlDraw::GetPopupWindowType() const
 {
-    return SFX_POPUPWINDOW_ONCLICK;
+    return SfxPopupWindowType::ONCLICK;
 }
 
 

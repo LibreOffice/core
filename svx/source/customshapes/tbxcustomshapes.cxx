@@ -97,7 +97,7 @@ void SvxTbxCtlCustomShapes::StateChanged( sal_uInt16 nSID, SfxItemState eState,
 // when one wants to create a popup window
 SfxPopupWindowType SvxTbxCtlCustomShapes::GetPopupWindowType() const
 {
-    return( m_aCommand.isEmpty() ? SFX_POPUPWINDOW_ONCLICK : SFX_POPUPWINDOW_ONTIMEOUT);
+    return( m_aCommand.isEmpty() ? SfxPopupWindowType::ONCLICK : SfxPopupWindowType::ONTIMEOUT);
 }
 
 // Here is the window created

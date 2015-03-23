@@ -446,7 +446,7 @@ void SvxGrafFilterToolBoxControl::StateChanged( sal_uInt16, SfxItemState eState,
 
 SfxPopupWindowType SvxGrafFilterToolBoxControl::GetPopupWindowType() const
 {
-    return SFX_POPUPWINDOW_ONCLICK;
+    return SfxPopupWindowType::ONCLICK;
 }
 
 SfxPopupWindow* SvxGrafFilterToolBoxControl::CreatePopupWindow()

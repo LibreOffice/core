@@ -619,7 +619,7 @@ SvxLineEndToolBoxControl::~SvxLineEndToolBoxControl()
 
 SfxPopupWindowType SvxLineEndToolBoxControl::GetPopupWindowType() const
 {
-    return SFX_POPUPWINDOW_ONCLICK;
+    return SfxPopupWindowType::ONCLICK;
 }
 
 

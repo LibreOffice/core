@@ -135,7 +135,7 @@ SfxPopupWindow* SwTbxInsertCtrl::CreatePopupWindow()
 
 SfxPopupWindowType  SwTbxInsertCtrl::GetPopupWindowType() const
 {
-    return nLastSlotId ? SFX_POPUPWINDOW_ONTIMEOUT : SFX_POPUPWINDOW_ONCLICK;
+    return nLastSlotId ? SfxPopupWindowType::ONTIMEOUT : SfxPopupWindowType::ONCLICK;
 }
 
 void SwTbxInsertCtrl::Select( sal_uInt16 /*nSelectModifier*/ )
@@ -224,7 +224,7 @@ SfxPopupWindow* SwTbxAutoTextCtrl::CreatePopupWindow()
 
 SfxPopupWindowType SwTbxAutoTextCtrl::GetPopupWindowType() const
 {
-    return SFX_POPUPWINDOW_ONTIMEOUT;
+    return SfxPopupWindowType::ONTIMEOUT;
 }
 
 void SwTbxAutoTextCtrl::StateChanged( sal_uInt16,
@@ -321,7 +321,7 @@ SfxPopupWindow* SwTbxFieldCtrl::CreatePopupWindow()
 
 SfxPopupWindowType SwTbxFieldCtrl::GetPopupWindowType() const
 {
-    return SFX_POPUPWINDOW_ONTIMEOUT;
+    return SfxPopupWindowType::ONTIMEOUT;
 }
 
 void SwTbxFieldCtrl::StateChanged( sal_uInt16,

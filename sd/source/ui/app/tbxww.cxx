@@ -53,7 +53,7 @@ SdTbxControl::SdTbxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) 
 
 SfxPopupWindowType SdTbxControl::GetPopupWindowType() const
 {
-    return SFX_POPUPWINDOW_ONTIMEOUT;
+    return SfxPopupWindowType::ONTIMEOUT;
 }
 
 /**

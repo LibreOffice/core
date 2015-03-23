@@ -273,7 +273,7 @@ FontWorkShapeTypeControl::~FontWorkShapeTypeControl()
 
 SfxPopupWindowType FontWorkShapeTypeControl::GetPopupWindowType() const
 {
-    return SFX_POPUPWINDOW_ONCLICK; //( aLastAction.getLength() == 0 ? SFX_POPUPWINDOW_ONCLICK : SFX_POPUPWINDOW_ONTIMEOUT );
+    return SfxPopupWindowType::ONCLICK; //( aLastAction.getLength() == 0 ? SfxPopupWindowType::ONCLICK : SfxPopupWindowType::ONTIMEOUT );
 }
 
 

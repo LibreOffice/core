@@ -39,7 +39,7 @@ ParaLineSpacingPopup::~ParaLineSpacingPopup()
 
 SfxPopupWindowType ParaLineSpacingPopup::GetPopupWindowType() const
 {
-    return SFX_POPUPWINDOW_ONTIMEOUT;
+    return SfxPopupWindowType::ONTIMEOUT;
 }
 
 SfxPopupWindow* ParaLineSpacingPopup::CreatePopupWindow()

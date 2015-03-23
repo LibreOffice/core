@@ -2492,7 +2492,7 @@ SvxColorToolBoxControl::~SvxColorToolBoxControl()
 
 SfxPopupWindowType SvxColorToolBoxControl::GetPopupWindowType() const
 {
-    return SFX_POPUPWINDOW_ONTIMEOUT;
+    return SfxPopupWindowType::ONTIMEOUT;
 }
 
 SfxPopupWindow* SvxColorToolBoxControl::CreatePopupWindow()
@@ -2670,7 +2670,7 @@ SvxFrameToolBoxControl::SvxFrameToolBoxControl(
 
 SfxPopupWindowType SvxFrameToolBoxControl::GetPopupWindowType() const
 {
-    return SFX_POPUPWINDOW_ONCLICK;
+    return SfxPopupWindowType::ONCLICK;
 }
 
 SfxPopupWindow* SvxFrameToolBoxControl::CreatePopupWindow()
@@ -2712,7 +2712,7 @@ SvxFrameLineStyleToolBoxControl::SvxFrameLineStyleToolBoxControl(
 
 SfxPopupWindowType SvxFrameLineStyleToolBoxControl::GetPopupWindowType() const
 {
-    return SFX_POPUPWINDOW_ONCLICK;
+    return SfxPopupWindowType::ONCLICK;
 }
 
 SfxPopupWindow* SvxFrameLineStyleToolBoxControl::CreatePopupWindow()

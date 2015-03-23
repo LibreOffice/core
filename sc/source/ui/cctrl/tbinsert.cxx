@@ -95,7 +95,7 @@ SfxPopupWindow* ScTbxInsertCtrl::CreatePopupWindow()
 
 SfxPopupWindowType ScTbxInsertCtrl::GetPopupWindowType() const
 {
-    return nLastSlotId ? SFX_POPUPWINDOW_ONTIMEOUT : SFX_POPUPWINDOW_ONCLICK;
+    return nLastSlotId ? SfxPopupWindowType::ONTIMEOUT : SfxPopupWindowType::ONCLICK;
 }
 
 void ScTbxInsertCtrl::Select( bool /* bMod1 */ )

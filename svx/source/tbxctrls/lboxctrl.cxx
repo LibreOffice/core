@@ -153,7 +153,7 @@ SfxPopupWindow* SvxListBoxControl::CreatePopupWindow()
 
 SfxPopupWindowType SvxListBoxControl::GetPopupWindowType() const
 {
-    return SFX_POPUPWINDOW_ONTIMEOUT;
+    return SfxPopupWindowType::ONTIMEOUT;
 }
 
 

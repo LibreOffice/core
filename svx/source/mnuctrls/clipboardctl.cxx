@@ -110,7 +110,7 @@ SfxPopupWindow* SvxClipBoardControl::CreatePopupWindow()
 
 SfxPopupWindowType SvxClipBoardControl::GetPopupWindowType() const
 {
-    return SFX_POPUPWINDOW_ONTIMEOUT;
+    return SfxPopupWindowType::ONTIMEOUT;
 }
 
 
