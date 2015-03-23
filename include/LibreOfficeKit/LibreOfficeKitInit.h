@@ -35,7 +35,7 @@ extern "C"
         #define TARGET_LIB        "lib" "sofficeapp" ".so"
         #define TARGET_MERGED_LIB "lib" "mergedlo" ".so"
     #endif
-    #define SEPERATOR         '/'
+    #define SEPARATOR         '/'
 
     void *_dlopen(const char *pFN)
     {
@@ -69,7 +69,7 @@ extern "C"
     #include <windows.h>
     #define TARGET_LIB        "sofficeapp" ".dll"
     #define TARGET_MERGED_LIB "mergedlo" ".dll"
-    #define SEPERATOR         '\\'
+    #define SEPARATOR         '\\'
     #define UNOPATH           "\\..\\URE\\bin"
 
     void *_dlopen(const char *pFN)
@@ -151,7 +151,7 @@ static LibreOfficeKit *lok_init( const char *install_path )
 
     extendUnoPath(install_path);
 
-    imp_lib[partial_length++] = SEPERATOR;
+    imp_lib[partial_length++] = SEPARATOR;
     strcpy(imp_lib + partial_length, TARGET_LIB);
 
     dlhandle = _dlopen(imp_lib);
@@ -185,6 +185,8 @@ static LibreOfficeKit *lok_init( const char *install_path )
     free( imp_lib );
     return pSym( install_path );
 }
+
+#undef SEPARATOR // It is used at least in enum class MenuItemType
 
 #endif // defined(__linux__) || defined (__FreeBSD_kernel__) || defined(_AIX) || defined(_WIN32) || defined(__APPLE__)
 
