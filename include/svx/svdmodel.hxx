@@ -37,7 +37,8 @@
 #include <svx/xtable.hxx>
 #include <svx/pageitem.hxx>
 #include <vcl/field.hxx>
-#include <vcl/ITiledRenderable.hxx>
+#define LOK_USE_UNSTABLE_API
+#include <LibreOfficeKit/LibreOfficeKitTypes.h>
 
 class OutputDevice;
 #include <svx/svdtypes.hxx>
