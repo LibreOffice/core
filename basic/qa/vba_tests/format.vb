@@ -296,8 +296,48 @@ Sub Custom_Number_Format_Sample()
     TestLog_ASSERT TestStr = "1,000,000", "#,###: " & TestStr
     'MsgBox TestStr
     
-    TestStr = Format(1.09837555, "######E-###") '109838E-5 => 1E0 with engineering notation
-    TestLog_ASSERT TestStr = "1E0", "######E-###: " & TestStr
+    TestStr = Format(1.09837555, "#.#####E+###") '1.09838E+000
+    TestLog_ASSERT TestStr = "1.09838E+000", "#.#####E+###: " & TestStr
+    'MsgBox TestStr
+    
+    TestStr = Format(1.09837555, "###.####E#") '1.0984E0 with engineering notation
+    TestLog_ASSERT TestStr = "1.0984E0", "###.####E#: " & TestStr
+    'MsgBox TestStr
+    
+    TestStr = Format(1098.37555, "###.####E#") '1.0984E3 with engineering notation
+    TestLog_ASSERT TestStr = "1.0984E3", "###.####E#: " & TestStr
+    'MsgBox TestStr
+    
+    TestStr = Format(1098375.55, "###.####E#") '1.0984E6 with engineering notation
+    TestLog_ASSERT TestStr = "1.0984E6", "###.####E#: " & TestStr
+    'MsgBox TestStr
+    
+    TestStr = Format(1.09837555, "######E#") '1E0 with engineering notation
+    TestLog_ASSERT TestStr = "1E0", "######E#: " & TestStr
+    'MsgBox TestStr
+    
+    TestStr = Format(123456.789, "###E0") '123E3 with engineering notation
+    TestLog_ASSERT TestStr = "123E3", "###E0: " & TestStr
+    'MsgBox TestStr
+    
+    TestStr = Format(123567.89, "###E0") '124E3 with engineering notation
+    TestLog_ASSERT TestStr = "124E3", "###E0: " & TestStr
+    'MsgBox TestStr
+    
+    TestStr = Format(12, "###E0") '12E0 with engineering notation
+    TestLog_ASSERT TestStr = "12E0", "###E0: " & TestStr
+    'MsgBox TestStr
+    
+    TestStr = Format(12, "000E0") '012E0 with engineering notation
+    TestLog_ASSERT TestStr = "012E0", "000E0: " & TestStr
+    'MsgBox TestStr
+    
+    TestStr = Format(0.12345, "###E0") '123E-3 with engineering notation
+    TestLog_ASSERT TestStr = "123E-3", "###E0: " & TestStr
+    'MsgBox TestStr
+    
+    TestStr = Format(123456, "####E0") '12E4 with interval-4 notation
+    TestLog_ASSERT TestStr = "12E4", "####E0: " & TestStr
     'MsgBox TestStr
     
     TestStr = Format(2345.25, "$#,###.##") '$2.345.25
