@@ -45,8 +45,7 @@ namespace vclcanvas
         // are supposed to be called with already locked solar mutex)
         SolarMutexGuard aGuard;
 
-        if( mpVDev )
-            delete mpVDev;
+        mpVDev.disposeAndClear();
     }
 
     OutputDevice& BitmapBackBuffer::getOutDev()
