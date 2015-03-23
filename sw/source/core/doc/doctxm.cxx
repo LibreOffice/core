@@ -366,7 +366,7 @@ SwTOXBaseSection* SwDoc::InsertTableOf( const SwPosition& rPos,
 
             SwSectionData headerData( TOX_HEADER_SECTION, sNm );
 
-            SwNodeIndex aStt( *pHeadNd ); aIdx--;
+            SwNodeIndex aStt( *pHeadNd ); --aIdx;
             SwSectionFmt* pSectFmt = MakeSectionFmt( 0 );
             GetNodes().InsertTextSection(
                     aStt, *pSectFmt, headerData, 0, &aIdx, true, false);
@@ -879,7 +879,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
                     pFirstEmptyNd->SetAttr( aBrkSet );
             }
         }
-        aEndIdx--;
+        --aEndIdx;
         SwPosition aPos( aEndIdx, SwIndex( pFirstEmptyNd, 0 ));
         pDoc->CorrAbs( aSttIdx, aEndIdx, aPos, true );
 
@@ -907,7 +907,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
 
         SwSectionData headerData( TOX_HEADER_SECTION, sNm );
 
-        SwNodeIndex aStt( *pHeadNd ); aIdx--;
+        SwNodeIndex aStt( *pHeadNd ); --aIdx;
         SwSectionFmt* pSectFmt = pDoc->MakeSectionFmt( 0 );
         pDoc->GetNodes().InsertTextSection(
                 aStt, *pSectFmt, headerData, 0, &aIdx, true, false);

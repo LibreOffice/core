@@ -1227,7 +1227,7 @@ bool SwCntntNode::GoPrevious(SwIndex * pIdx, sal_uInt16 nMode ) const
     if( pIdx->GetIndex() > 0 )
     {
         if( !IsTxtNode() )
-            (*pIdx)--;
+            --(*pIdx);
         else
         {
             const SwTxtNode& rTNd = *GetTxtNode();
@@ -1258,7 +1258,7 @@ bool SwCntntNode::GoPrevious(SwIndex * pIdx, sal_uInt16 nMode ) const
                     bRet = false;
             }
             else if( nPos )
-                (*pIdx)--;
+                --(*pIdx);
             else
                 bRet = false;
         }

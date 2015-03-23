@@ -356,10 +356,10 @@ static const SwNode* lcl_SpecialInsertNode(const SwPosition* pCurrentPos)
         SwNodeIndex aBegin( pCurrentPos->nNode );
         if( rCurrentNode.IsCntntNode() &&
             (pCurrentPos->nContent.GetIndex() == 0))
-            aBegin--;
+            --aBegin;
         while( (aBegin != pInnermostNode->GetIndex()) &&
                aBegin.GetNode().IsStartNode() )
-            aBegin--;
+            --aBegin;
         bool bStart = ( aBegin == pInnermostNode->GetIndex() );
 
         // we found an end if

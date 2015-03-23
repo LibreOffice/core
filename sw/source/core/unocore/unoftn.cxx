@@ -362,7 +362,7 @@ SwXFootnote::getAnchor() throw (uno::RuntimeException, std::exception)
     SwPaM aPam( pTxtFtn->GetTxtNode(), pTxtFtn->GetStart() );
     SwPosition aMark( *aPam.Start() );
     aPam.SetMark();
-    aPam.GetMark()->nContent++;
+    ++aPam.GetMark()->nContent;
     const uno::Reference< text::XTextRange > xRet =
         SwXTextRange::CreateXTextRange(*GetDoc(), *aPam.Start(), aPam.End());
     return xRet;

@@ -391,7 +391,7 @@ bool SwRedlineTbl::InsertWithValidRanges( SwRangeRedline* p, sal_uInt16* pInsPos
                         }
                         else if( rCurNd.IsCntntNode() )
                             pC = rCurNd.GetCntntNode();
-                        aNewStt.nNode++;
+                        ++aNewStt.nNode;
                     } while( aNewStt.nNode.GetIndex() < pEnd->nNode.GetIndex() );
 
                 if( aNewStt.nNode == pEnd->nNode )
@@ -1407,7 +1407,7 @@ void SwRangeRedline::MoveFromSection(size_t nMyPos)
             if( pCNd )
                 aPam.GetPoint()->nContent.Assign( pCNd, pCNd->Len() );
             else
-                aPam.GetPoint()->nNode++;
+                ++aPam.GetPoint()->nNode;
 
             SwFmtColl* pColl = pCNd && pCNd->Len() && aPam.GetPoint()->nNode !=
                                         aPam.GetMark()->nNode
@@ -1419,7 +1419,7 @@ void SwRangeRedline::MoveFromSection(size_t nMyPos)
             SwPosition aPos( *GetPoint() );
             if( bDelLastPara && *aPam.GetPoint() == *aPam.GetMark() )
             {
-                aPos.nNode--;
+                --aPos.nNode;
 
                 pDoc->getIDocumentContentOperations().AppendTxtNode( aPos );
             }
@@ -1437,7 +1437,7 @@ void SwRangeRedline::MoveFromSection(size_t nMyPos)
 
             if( bDelLastPara )
             {
-                GetPoint()->nNode++;
+                ++GetPoint()->nNode;
                 GetPoint()->nContent.Assign( pCNd = GetCntntNode(), 0 );
                 bDelLastPara = false;
             }

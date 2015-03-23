@@ -1668,7 +1668,7 @@ void CompareData::SetRedlinesToDoc( bool bUseDocInfo )
             // #i65201#: Expand again, see comment above.
             if( pTmp->GetPoint()->nContent == 0 )
             {
-                pTmp->GetPoint()->nNode++;
+                ++pTmp->GetPoint()->nNode;
                 pTmp->GetPoint()->nContent.Assign( pTmp->GetCntntNode(), 0 );
             }
             // #i101009#
@@ -1676,7 +1676,7 @@ void CompareData::SetRedlinesToDoc( bool bUseDocInfo )
             if (& GetEndOfContent() ==
                 & pTmp->GetPoint()->nNode.GetNode())
             {
-                pTmp->GetPoint()->nNode--;
+                --pTmp->GetPoint()->nNode;
                 SwCntntNode *const pContentNode( pTmp->GetCntntNode() );
                 pTmp->GetPoint()->nContent.Assign( pContentNode,
                         (pContentNode) ? pContentNode->Len() : 0 );
@@ -1700,7 +1700,7 @@ void CompareData::SetRedlinesToDoc( bool bUseDocInfo )
         do {
             if( pTmp->GetPoint()->nContent == 0 )
             {
-                pTmp->GetPoint()->nNode++;
+                ++pTmp->GetPoint()->nNode;
                 pTmp->GetPoint()->nContent.Assign( pTmp->GetCntntNode(), 0 );
             }
             // #i101009#
@@ -1708,7 +1708,7 @@ void CompareData::SetRedlinesToDoc( bool bUseDocInfo )
             if (& GetEndOfContent() ==
                 & pTmp->GetPoint()->nNode.GetNode())
             {
-                pTmp->GetPoint()->nNode--;
+                --pTmp->GetPoint()->nNode;
                 SwCntntNode *const pContentNode( pTmp->GetCntntNode() );
                 pTmp->GetPoint()->nContent.Assign( pContentNode,
                         (pContentNode) ? pContentNode->Len() : 0 );

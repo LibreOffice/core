@@ -804,7 +804,7 @@ void SwHTMLWriter::Out_SwDoc( SwPaM* pPam )
             else if( &rNd == &pDoc->GetNodes().GetEndOfContent() )
                 break;
 
-            pCurPam->GetPoint()->nNode++;   // Bewegen
+            ++pCurPam->GetPoint()->nNode;   // Bewegen
             sal_uInt32 nPos = pCurPam->GetPoint()->nNode.GetIndex();
 
             if( bShowProgress )

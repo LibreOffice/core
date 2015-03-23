@@ -39,7 +39,7 @@ bool GotoPrevRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
     do {
         while( aIdx.GetIndex() &&
             0 == ( pNd = aIdx.GetNode().StartOfSectionNode()->GetSectionNode()) )
-            aIdx--;
+            --aIdx;
 
         if( pNd ) // is there another section node?
         {
@@ -57,7 +57,7 @@ bool GotoPrevRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
                                                 true, !bInReadOnly );
                 if( !pCNd )
                 {
-                    aIdx--;
+                    --aIdx;
                     continue;
                 }
                 rCurCrsr.GetPoint()->nContent.Assign( pCNd, 0 );
