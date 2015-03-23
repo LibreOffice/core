@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a29b11f_294ef5c1",
+        "filename": "sd/source/ui/slidesorter/controller/SlsSlotManager.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 858,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-03-23T09:59:03Z",
+      "side": 1,
+      "message": "Please build and test your changes. This wouldn\u0027t work.",
+      "revId": "2c6f512e23b5841d472b9a49b5fb45fb1a5a431f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a29b11f_494b31b1",
+        "filename": "sd/source/ui/view/drviewsa.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 708,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-03-23T09:59:03Z",
+      "side": 1,
+      "message": "Again, this wouldn\u0027t work. Please build and test your changes.",
+      "revId": "2c6f512e23b5841d472b9a49b5fb45fb1a5a431f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

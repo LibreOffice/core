@@ -16,6 +16,24 @@
       "revId": "3f79b6cb8bbb65e503dfbc59fafa782bea917b9e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a29b11f_497491fc",
+        "filename": "sc/source/ui/src/globstr.src",
+        "patchSetId": 6
+      },
+      "lineNbr": 590,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-03-23T09:59:03Z",
+      "side": 0,
+      "message": "What Adolfo meant is, this string change is unrelated and was introduced with commit 6a3c5af4eb96d03110fcbc856c6920bfcf4063c7 that somehow you\u0027re merging into this change here again. This change doesn\u0027t apply now.",
+      "parentUuid": "3a29b11f_e9047dc7",
+      "revId": "3f79b6cb8bbb65e503dfbc59fafa782bea917b9e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
