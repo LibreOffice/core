@@ -416,15 +416,19 @@ void SvpSalGraphics::drawRect( long nX, long nY, long nWidth, long nHeight )
 {
     if ((m_bUseLineColor || m_bUseFillColor) && m_aDevice)
     {
-        basegfx::B2DPolygon aRect = basegfx::tools::createPolygonFromRect( basegfx::B2DRectangle( nX, nY, nX+nWidth, nY+nHeight ) );
         ensureClip(); // FIXME: for ...
         if( m_bUseFillColor )
         {
+            basegfx::B2DPolygon aRect = basegfx::tools::createPolygonFromRect( basegfx::B2DRectangle( nX, nY, nX+nWidth, nY+nHeight ) );
             basegfx::B2DPolyPolygon aPolyPoly( aRect );
             m_aDevice->fillPolyPolygon( aPolyPoly, m_aFillColor, m_aDrawMode, m_aClipMap );
         }
         if( m_bUseLineColor )
+        {
+            // need same -1 hack as X11SalGraphicsImpl::drawRect
+            basegfx::B2DPolygon aRect = basegfx::tools::createPolygonFromRect( basegfx::B2DRectangle( nX, nY, nX+nWidth-1, nY+nHeight-1 ) );
             m_aDevice->drawPolygon( aRect, m_aLineColor, m_aDrawMode, m_aClipMap );
+        }
     }
     dbgOut( m_aDevice );
 }
