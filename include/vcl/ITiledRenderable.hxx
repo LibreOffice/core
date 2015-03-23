@@ -89,9 +89,7 @@ public:
      * Setup various document properties that are needed for the document to
      * be renderable via tiled rendering.
      */
-    virtual void initializeForTiledRendering()
-    {
-    }
+    virtual void initializeForTiledRendering() = 0;
 
     /**
      * Registers a callback that will be invoked whenever the tiled renderer
@@ -100,14 +98,14 @@ public:
      * @param pCallBack is the callback function
      * @param pData is private data of the client that will be sent back when the callback is invoked
      */
-    virtual void registerCallback(LibreOfficeKitCallback /*pCallback*/, void* /*pData*/) { }
+    virtual void registerCallback(LibreOfficeKitCallback pCallback, void* pData) = 0;
 
     /**
      * Posts a mouse event on the document.
      *
      * @see lok::Document::postMouseEvent().
      */
-    virtual void postMouseEvent(int /*nType*/, int /*nX*/, int /*nY*/, int /*nCount*/) { }
+    virtual void postMouseEvent(int nType, int nX, int nY, int nCount) = 0;
 
     /**
      * Sets the start or end of a text selection.
