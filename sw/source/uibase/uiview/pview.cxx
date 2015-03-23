@@ -772,7 +772,7 @@ void  SwPagePreview::Execute( SfxRequest &rReq )
             }
             if( pArgs )
             {
-                enum SvxZoomType eType = SVX_ZOOM_PERCENT;
+                enum SvxZoomType eType = SvxZoomType::PERCENT;
                 sal_uInt16 nZoomFactor = USHRT_MAX;
                 if(SfxItemState::SET == pArgs->GetItemState(SID_ATTR_ZOOM, true, &pItem))
                 {
@@ -794,14 +794,14 @@ void  SwPagePreview::Execute( SfxRequest &rReq )
             if ( pArgs && SfxItemState::SET == pArgs->GetItemState(SID_ATTR_ZOOMSLIDER, true, &pItem ) )
             {
                 const sal_uInt16 nCurrentZoom = static_cast<const SvxZoomSliderItem *>(pItem)->GetValue();
-                SetZoom( SVX_ZOOM_PERCENT, nCurrentZoom );
+                SetZoom( SvxZoomType::PERCENT, nCurrentZoom );
             }
         }
         break;
         case SID_ZOOM_IN:
         case SID_ZOOM_OUT:
         {
-            enum SvxZoomType eType = SVX_ZOOM_PERCENT;
+            enum SvxZoomType eType = SvxZoomType::PERCENT;
             const SwViewOption* pVOpt = GetViewShell()->GetViewOptions();
             SetZoom(eType,
                     lcl_GetNextZoomStep(pVOpt->GetZoom(), SID_ZOOM_IN == rReq.GetSlot()));
@@ -1726,7 +1726,7 @@ void SwPagePreviewWin::AdjustPreviewToNewZoom( const sal_uInt16 _nZoomFactor,
                                                const SvxZoomType _eZoomType )
 {
     // #i19975# consider zoom type
-    if ( _eZoomType == SVX_ZOOM_WHOLEPAGE )
+    if ( _eZoomType == SvxZoomType::WHOLEPAGE )
     {
         mnRow = 1;
         mnCol = 1;
@@ -1798,7 +1798,7 @@ bool SwPagePreview::HandleWheelCommands( const CommandEvent& rCEvt )
                 if(nFactor > MAX_PREVIEW_ZOOM)
                     nFactor = MAX_PREVIEW_ZOOM;
             }
-            SetZoom(SVX_ZOOM_PERCENT, nFactor);
+            SetZoom(SvxZoomType::PERCENT, nFactor);
         }
         bOk = true;
     }

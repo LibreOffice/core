@@ -470,7 +470,7 @@ sal_Int16 SdUnoDrawView::GetZoom(void) const
 
 void SdUnoDrawView::SetZoom( sal_Int16 nZoom )
 {
-    SvxZoomItem aZoomItem( SVX_ZOOM_PERCENT, nZoom );
+    SvxZoomItem aZoomItem( SvxZoomType::PERCENT, nZoom );
 
     SfxViewFrame* pViewFrame = mrDrawViewShell.GetViewFrame();
     if( pViewFrame )
@@ -512,16 +512,16 @@ void SdUnoDrawView::SetZoomType ( sal_Int16 nType )
             switch( nType )
             {
                 case com::sun::star::view::DocumentZoomType::OPTIMAL:
-                    eZoomType = SVX_ZOOM_OPTIMAL;
+                    eZoomType = SvxZoomType::OPTIMAL;
                     break;
 
                 case com::sun::star::view::DocumentZoomType::PAGE_WIDTH:
                 case com::sun::star::view::DocumentZoomType::PAGE_WIDTH_EXACT:
-                    eZoomType = SVX_ZOOM_PAGEWIDTH;
+                    eZoomType = SvxZoomType::PAGEWIDTH;
                     break;
 
                 case com::sun::star::view::DocumentZoomType::ENTIRE_PAGE:
-                    eZoomType = SVX_ZOOM_WHOLEPAGE;
+                    eZoomType = SvxZoomType::WHOLEPAGE;
                     break;
 
                 default:

@@ -184,7 +184,7 @@ void SwDocShell::ToggleBrowserMode(bool bSet, SwView* _pView )
         if( bSet )
         {
             const SvxZoomType eType = (SvxZoomType)rViewOptions.GetZoomType();
-            if ( SVX_ZOOM_PERCENT != eType)
+            if ( SvxZoomType::PERCENT != eType)
                 static_cast<SwView*>(GetView())->SetZoom( eType );
         }
         pTempView->InvalidateBorder();

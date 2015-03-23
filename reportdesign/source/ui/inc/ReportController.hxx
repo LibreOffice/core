@@ -445,7 +445,7 @@ namespace rptui
 
         inline ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >  getContext() const { return m_xContext; }
         inline sal_Int16   getZoomValue() const     { return m_nZoomValue; }
-        inline void         resetZoomType()         { m_eZoomType = SVX_ZOOM_PERCENT; }
+        inline void         resetZoomType()         { m_eZoomType = SvxZoomType::PERCENT; }
 
         // com::sun::star::beans::XPropertySet
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE

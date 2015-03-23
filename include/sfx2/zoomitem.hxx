@@ -25,32 +25,32 @@
 
 
 
-enum SvxZoomType
+enum class SvxZoomType
 {
-    SVX_ZOOM_PERCENT,       // GetValue() is no special percentage value
-    SVX_ZOOM_OPTIMAL,       // GetValue() corresponds to the optimal size
-    SVX_ZOOM_WHOLEPAGE,     // GetValue() corresponds to the whole page
-    SVX_ZOOM_PAGEWIDTH,      // GetValue() corresponds to the page width
-    SVX_ZOOM_PAGEWIDTH_NOBORDER  // GetValue() pagewidth without border
+    PERCENT,       // GetValue() is no special percentage value
+    OPTIMAL,       // GetValue() corresponds to the optimal size
+    WHOLEPAGE,     // GetValue() corresponds to the whole page
+    PAGEWIDTH,      // GetValue() corresponds to the page width
+    PAGEWIDTH_NOBORDER  // GetValue() pagewidth without border
 };
 
 
 
 class SFX2_DLLPUBLIC SvxZoomItem: public SfxUInt16Item
 {
-    sal_uInt16                  nValueSet;  // allowed values (see #defines below)
+    sal_uInt16              nValueSet;  // allowed values (see #defines below)
     SvxZoomType             eType;
 
 public:
     TYPEINFO_OVERRIDE();
 
-    SvxZoomItem( SvxZoomType eZoomType = SVX_ZOOM_PERCENT,
+    SvxZoomItem( SvxZoomType eZoomType = SvxZoomType::PERCENT,
                  sal_uInt16 nVal = 0, sal_uInt16 nWhich = SID_ATTR_ZOOM );
     SvxZoomItem( const SvxZoomItem& );
     virtual ~SvxZoomItem();
 
     void                    SetValueSet( sal_uInt16 nValues ) { nValueSet = nValues; }
-    sal_uInt16                  GetValueSet() const { return nValueSet; }
+    sal_uInt16              GetValueSet() const { return nValueSet; }
     bool                    IsValueAllowed( sal_uInt16 nValue ) const
                             { return nValue == ( nValue & nValueSet ); }
 

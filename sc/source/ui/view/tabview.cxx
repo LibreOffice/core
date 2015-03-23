@@ -750,7 +750,7 @@ void ScTabView::UpdateVarZoom()
     //  update variable zoom types
 
     SvxZoomType eZoomType = GetZoomType();
-    if ( eZoomType != SVX_ZOOM_PERCENT && !bInZoomUpdate )
+    if ( eZoomType != SvxZoomType::PERCENT && !bInZoomUpdate )
     {
         bInZoomUpdate = true;
         const Fraction& rOldX = GetViewData().GetZoomX();
@@ -998,7 +998,7 @@ bool ScTabView::ScrollCommand( const CommandEvent& rCEvt, ScSplitPos ePos )
                 // scroll wheel doesn't set the AppOptions default
 
                 bool bSyncZoom = SC_MOD()->GetAppOptions().GetSynchronizeZoom();
-                SetZoomType( SVX_ZOOM_PERCENT, bSyncZoom );
+                SetZoomType( SvxZoomType::PERCENT, bSyncZoom );
                 Fraction aFract( nNew, 100 );
                 SetZoom( aFract, aFract, bSyncZoom );
                 PaintGrid();

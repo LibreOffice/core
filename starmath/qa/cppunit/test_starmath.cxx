@@ -262,14 +262,14 @@ void Test::viewZoom()
 
     {
         SfxItemSet aSet(m_xDocShRef->GetPool(), SID_ATTR_ZOOM, SID_ATTR_ZOOM);
-        aSet.Put(SvxZoomItem(SVX_ZOOM_OPTIMAL, 0));
+        aSet.Put(SvxZoomItem(SvxZoomType::OPTIMAL, 0));
         SfxRequest aZoom(SID_ATTR_ZOOM, SfxCallMode::SYNCHRON, aSet);
         m_pViewShell->Execute(aZoom);
         nFinalZoom = rGraphicWindow.GetZoom();
         CPPUNIT_ASSERT_MESSAGE("Should be optimal zoom", nFinalZoom == nOptimalZoom);
     }
 
-//To-Do: investigate GetPrinter logic of SVX_ZOOM_PAGEWIDTH/SVX_ZOOM_WHOLEPAGE to ensure
+//To-Do: investigate GetPrinter logic of SvxZoomType::PAGEWIDTH/SvxZoomType::WHOLEPAGE to ensure
 //consistent value regardless of
 #if 0
     {
@@ -279,7 +279,7 @@ void Test::viewZoom()
         CPPUNIT_ASSERT_MESSAGE("Should not be optimal zoom", nFinalZoom != nOptimalZoom);
 
         SfxItemSet aSet(m_xDocShRef->GetPool(), SID_ATTR_ZOOM, SID_ATTR_ZOOM);
-        aSet.Put(SvxZoomItem(SVX_ZOOM_PAGEWIDTH, 0));
+        aSet.Put(SvxZoomItem(SvxZoomType::PAGEWIDTH, 0));
         SfxRequest aZoom(SID_ATTR_ZOOM, SfxCallMode::SYNCHRON, aSet);
         m_pViewShell->Execute(aZoom);
         nFinalZoom = rGraphicWindow.GetZoom();
@@ -293,7 +293,7 @@ void Test::viewZoom()
         CPPUNIT_ASSERT_MESSAGE("Should not be optimal zoom", nFinalZoom != nOptimalZoom);
 
         SfxItemSet aSet(m_xDocShRef->GetPool(), SID_ATTR_ZOOM, SID_ATTR_ZOOM);
-        aSet.Put(SvxZoomItem(SVX_ZOOM_WHOLEPAGE, 0));
+        aSet.Put(SvxZoomItem(SvxZoomType::WHOLEPAGE, 0));
         SfxRequest aZoom(SID_ATTR_ZOOM, SfxCallMode::SYNCHRON, aSet);
         m_pViewShell->Execute(aZoom);
         nFinalZoom = rGraphicWindow.GetZoom();
@@ -308,7 +308,7 @@ void Test::viewZoom()
         CPPUNIT_ASSERT_MESSAGE("Should not be optimal zoom", nFinalZoom != nOptimalZoom);
 
         SfxItemSet aSet(m_xDocShRef->GetPool(), SID_ATTR_ZOOM, SID_ATTR_ZOOM);
-        aSet.Put(SvxZoomItem(SVX_ZOOM_PERCENT, 50));
+        aSet.Put(SvxZoomItem(SvxZoomType::PERCENT, 50));
         SfxRequest aZoom(SID_ATTR_ZOOM, SfxCallMode::SYNCHRON, aSet);
         m_pViewShell->Execute(aZoom);
         nFinalZoom = rGraphicWindow.GetZoom();
@@ -317,7 +317,7 @@ void Test::viewZoom()
 
     {
         SfxItemSet aSet(m_xDocShRef->GetPool(), SID_ATTR_ZOOM, SID_ATTR_ZOOM);
-        aSet.Put(SvxZoomItem(SVX_ZOOM_PERCENT, 5));
+        aSet.Put(SvxZoomItem(SvxZoomType::PERCENT, 5));
         SfxRequest aZoom(SID_ATTR_ZOOM, SfxCallMode::SYNCHRON, aSet);
         m_pViewShell->Execute(aZoom);
         nFinalZoom = rGraphicWindow.GetZoom();
@@ -326,7 +326,7 @@ void Test::viewZoom()
 
     {
         SfxItemSet aSet(m_xDocShRef->GetPool(), SID_ATTR_ZOOM, SID_ATTR_ZOOM);
-        aSet.Put(SvxZoomItem(SVX_ZOOM_PERCENT, 1000));
+        aSet.Put(SvxZoomItem(SvxZoomType::PERCENT, 1000));
         SfxRequest aZoom(SID_ATTR_ZOOM, SfxCallMode::SYNCHRON, aSet);
         m_pViewShell->Execute(aZoom);
         nFinalZoom = rGraphicWindow.GetZoom();

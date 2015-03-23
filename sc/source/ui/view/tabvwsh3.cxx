@@ -681,7 +681,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
 
                 if ( !bCancel )
                 {
-                    if ( eNewZoomType == SVX_ZOOM_PERCENT )
+                    if ( eNewZoomType == SvxZoomType::PERCENT )
                     {
                         if ( nZoom < MINZOOM )  nZoom = MINZOOM;
                         if ( nZoom > MAXZOOM )  nZoom = MAXZOOM;
@@ -694,13 +694,13 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
 
                     switch ( eNewZoomType )
                     {
-                        case SVX_ZOOM_WHOLEPAGE:
-                        case SVX_ZOOM_PAGEWIDTH:
+                        case SvxZoomType::WHOLEPAGE:
+                        case SvxZoomType::PAGEWIDTH:
                             SetZoomType( eNewZoomType, bSyncZoom );
                             break;
 
                         default:
-                            SetZoomType( SVX_ZOOM_PERCENT, bSyncZoom );
+                            SetZoomType( SvxZoomType::PERCENT, bSyncZoom );
                     }
                 }
 
@@ -734,7 +734,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     const sal_uInt16 nCurrentZoom = static_cast<const SvxZoomSliderItem *>(pItem)->GetValue();
                     if( nCurrentZoom )
                     {
-                        SetZoomType( SVX_ZOOM_PERCENT, bSyncZoom );
+                        SetZoomType( SvxZoomType::PERCENT, bSyncZoom );
                         if (!GetViewData().IsPagebreakMode())
                         {
                             ScAppOptions aNewOpt = pScMod->GetAppOptions();

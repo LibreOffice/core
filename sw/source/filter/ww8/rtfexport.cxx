@@ -504,7 +504,7 @@ void RtfExport::ExportDocument_Impl()
     Strm().WriteCharPtr(m_pAttrOutput->m_aTabStop.makeStringAndClear().getStr()).WriteCharPtr(SAL_NEWLINE_STRING);
     // Zoom
     SwViewShell* pViewShell(pDoc->getIDocumentLayoutAccess().GetCurrentViewShell());
-    if (pViewShell && pViewShell->GetViewOptions()->GetZoomType() == SVX_ZOOM_PERCENT)
+    if (pViewShell && pViewShell->GetViewOptions()->GetZoomType() == SvxZoomType::PERCENT)
     {
         Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_VIEWSCALE);
         OutULong(pViewShell->GetViewOptions()->GetZoom());

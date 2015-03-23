@@ -117,7 +117,7 @@ void ScPreviewShell::Construct( vcl::Window* pParent )
     if (mpFrameWindow)
         mpFrameWindow->SetCloseHdl(LINK(this, ScPreviewShell, CloseHdl));
 
-    eZoom = SVX_ZOOM_WHOLEPAGE;
+    eZoom = SvxZoomType::WHOLEPAGE;
 
     pCorner = new ScrollBarBox( pParent, WB_SIZEABLE );
 
@@ -215,9 +215,9 @@ void ScPreviewShell::AdjustPosSizePixel( const Point &rPos, const Size &rSize )
     Size aOutSize( rSize );
     pPreview->SetPosSizePixel( rPos, aOutSize );
 
-    if ( SVX_ZOOM_WHOLEPAGE == eZoom )
+    if ( SvxZoomType::WHOLEPAGE == eZoom )
         pPreview->SetZoom( pPreview->GetOptimalZoom(false) );
-    else if ( SVX_ZOOM_PAGEWIDTH == eZoom )
+    else if ( SvxZoomType::PAGEWIDTH == eZoom )
         pPreview->SetZoom( pPreview->GetOptimalZoom(true) );
 
     UpdateNeededScrollBars();
@@ -502,7 +502,7 @@ bool ScPreviewShell::ScrollCommand( const CommandEvent& rCEvt )
 
         if ( nNew != nOld )
         {
-            eZoom = SVX_ZOOM_PERCENT;
+            eZoom = SvxZoomType::PERCENT;
             pPreview->SetZoom( (sal_uInt16)nNew );
         }
 
@@ -627,7 +627,7 @@ void ScPreviewShell::Execute( SfxRequest& rReq )
                 sal_uInt16      nZoom       = 100;
                 bool        bCancel     = false;
 
-                eZoom = SVX_ZOOM_PERCENT;
+                eZoom = SvxZoomType::PERCENT;
 
                 if ( pReqArgs )
                 {
@@ -641,7 +641,7 @@ void ScPreviewShell::Execute( SfxRequest& rReq )
                 else
                 {
                     SfxItemSet      aSet     ( GetPool(), SID_ATTR_ZOOM, SID_ATTR_ZOOM );
-                    SvxZoomItem     aZoomItem( SVX_ZOOM_PERCENT, pPreview->GetZoom(), SID_ATTR_ZOOM );
+                    SvxZoomItem     aZoomItem( SvxZoomType::PERCENT, pPreview->GetZoom(), SID_ATTR_ZOOM );
 
                     aSet.Put( aZoomItem );
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
@@ -669,11 +669,11 @@ void ScPreviewShell::Execute( SfxRequest& rReq )
                 {
                     switch ( eZoom )
                     {
-                        case SVX_ZOOM_OPTIMAL:
-                        case SVX_ZOOM_WHOLEPAGE:
+                        case SvxZoomType::OPTIMAL:
+                        case SvxZoomType::WHOLEPAGE:
                             nZoom = pPreview->GetOptimalZoom(false);
                             break;
-                        case SVX_ZOOM_PAGEWIDTH:
+                        case SvxZoomType::PAGEWIDTH:
                             nZoom = pPreview->GetOptimalZoom(true);
                             break;
                         default:
@@ -692,7 +692,7 @@ void ScPreviewShell::Execute( SfxRequest& rReq )
                 sal_uInt16 nNew = pPreview->GetZoom() + 20 ;
                 nNew -= nNew % 20;
                 pPreview->SetZoom( nNew );
-                eZoom = SVX_ZOOM_PERCENT;
+                eZoom = SvxZoomType::PERCENT;
                 rReq.Done();
             }
             break;
@@ -701,7 +701,7 @@ void ScPreviewShell::Execute( SfxRequest& rReq )
                 sal_uInt16 nNew = pPreview->GetZoom() - 1;
                 nNew -= nNew % 20;
                 pPreview->SetZoom( nNew );
-                eZoom = SVX_ZOOM_PERCENT;
+                eZoom = SvxZoomType::PERCENT;
                 rReq.Done();
             }
             break;
@@ -716,7 +716,7 @@ void ScPreviewShell::Execute( SfxRequest& rReq )
         case SID_ATTR_ZOOMSLIDER:
             {
                 const SfxPoolItem* pItem;
-                eZoom = SVX_ZOOM_PERCENT;
+                eZoom = SvxZoomType::PERCENT;
                 if( pReqArgs && SfxItemState::SET == pReqArgs->GetItemState( SID_ATTR_ZOOMSLIDER, true, &pItem ) )
                 {
                     const sal_uInt16 nCurrentZoom = static_cast<const SvxZoomSliderItem*>(pItem)->GetValue();
@@ -933,7 +933,7 @@ void ScPreviewShell::ReadUserData(const OUString& rData, bool /* bBrowse */)
         sal_Int32 nIndex = 0;
         pPreview->SetZoom((sal_uInt16)rData.getToken(0, SC_USERDATA_SEP, nIndex).toInt32());
         pPreview->SetPageNo(rData.getToken(0, SC_USERDATA_SEP, nIndex).toInt32());
-        eZoom = SVX_ZOOM_PERCENT;
+        eZoom = SvxZoomType::PERCENT;
     }
 }
 

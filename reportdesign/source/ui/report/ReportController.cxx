@@ -298,7 +298,7 @@ OReportController::OReportController(Reference< XComponentContext > const & xCon
     ,m_nSelectionCount(0)
     ,m_nAspect(0)
     ,m_nZoomValue(100)
-    ,m_eZoomType(SVX_ZOOM_PERCENT)
+    ,m_eZoomType(SvxZoomType::PERCENT)
     ,m_bShowRuler(true)
     ,m_bGridVisible(true)
     ,m_bGridUse(true)
@@ -1645,7 +1645,7 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
                 SvxZoomSliderItem aZoomSlider;
                 aZoomSlider.PutValue(aArgs[0].Value);
                 m_nZoomValue = aZoomSlider.GetValue();
-                m_eZoomType = SVX_ZOOM_PERCENT;
+                m_eZoomType = SvxZoomType::PERCENT;
                 impl_zoom_nothrow();
             }
             break;
@@ -4287,7 +4287,7 @@ void OReportController::openZoomDialog()
                 const SvxZoomItem&  rZoomItem = static_cast<const SvxZoomItem&>(pDlg->GetOutputItemSet()->Get( SID_ATTR_ZOOM ));
                 m_eZoomType = rZoomItem.GetType();
                 m_nZoomValue = rZoomItem.GetValue();
-                if ( m_eZoomType != SVX_ZOOM_PERCENT )
+                if ( m_eZoomType != SvxZoomType::PERCENT )
                     m_nZoomValue = getDesignView()->getZoomFactor( m_eZoomType );
 
                 impl_zoom_nothrow();

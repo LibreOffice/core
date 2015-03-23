@@ -76,7 +76,7 @@ static bool bMoveArea = false;                  // Member?
 sal_uInt16 nEditAdjust = SVX_ADJUST_LEFT;       // Member!
 
 ScViewDataTable::ScViewDataTable() :
-                eZoomType( SVX_ZOOM_PERCENT ),
+                eZoomType( SvxZoomType::PERCENT ),
                 aZoomX( 1,1 ),
                 aZoomY( 1,1 ),
                 aPageZoomX( 3,5 ),              // Page-Default: 60%
@@ -301,7 +301,7 @@ ScViewData::ScViewData( ScDocShell* pDocSh, ScTabViewShell* pViewSh ) :
         pOptions    ( new ScViewOptions ),
         pSpellingView ( NULL ),
         aLogicMode  ( MAP_100TH_MM ),
-        eDefZoomType( SVX_ZOOM_PERCENT ),
+        eDefZoomType( SvxZoomType::PERCENT ),
         aDefZoomX   ( 1,1 ),
         aDefZoomY   ( 1,1 ),
         aDefPageZoomX( 3,5 ),

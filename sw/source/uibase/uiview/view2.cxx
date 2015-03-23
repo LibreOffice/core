@@ -1769,7 +1769,7 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
                 if ( SfxItemState::SET == pArgs->GetItemState(SID_ATTR_ZOOMSLIDER, true, &pItem ))
                 {
                     const sal_uInt16 nCurrentZoom = static_cast<const SvxZoomSliderItem *>(pItem)->GetValue();
-                    SetZoom( SVX_ZOOM_PERCENT, nCurrentZoom );
+                    SetZoom( SvxZoomType::PERCENT, nCurrentZoom );
                 }
 
                 bUp = true;

@@ -150,13 +150,13 @@ void SvxZoomStatusBarControl::Command( const CommandEvent& rCEvt )
         if ( aPop.Execute( &rStatusbar, rCEvt.GetMousePosPixel() ) && ( nZoom != aPop.GetZoom() || !nZoom ) )
         {
             nZoom = aPop.GetZoom();
-            SvxZoomItem aZoom( SVX_ZOOM_PERCENT, nZoom, GetId() );
+            SvxZoomItem aZoom( SvxZoomType::PERCENT, nZoom, GetId() );
 
             switch( aPop.GetCurId() )
             {
-            case ZOOM_OPTIMAL:      aZoom.SetType( SVX_ZOOM_OPTIMAL ); break;
-            case ZOOM_PAGE_WIDTH:   aZoom.SetType( SVX_ZOOM_PAGEWIDTH ); break;
-            case ZOOM_WHOLE_PAGE:   aZoom.SetType( SVX_ZOOM_WHOLEPAGE ); break;
+            case ZOOM_OPTIMAL:      aZoom.SetType( SvxZoomType::OPTIMAL ); break;
+            case ZOOM_PAGE_WIDTH:   aZoom.SetType( SvxZoomType::PAGEWIDTH ); break;
+            case ZOOM_WHOLE_PAGE:   aZoom.SetType( SvxZoomType::WHOLEPAGE ); break;
             }
 
             ::com::sun::star::uno::Any a;
@@ -194,7 +194,7 @@ void SvxZoomPageStatusBarControl::Paint(const UserDrawEvent& rUsrEvt)
 
 bool SvxZoomPageStatusBarControl::MouseButtonDown(const MouseEvent&)
 {
-    SvxZoomItem aZoom( SVX_ZOOM_WHOLEPAGE, 0, GetId() );
+    SvxZoomItem aZoom( SvxZoomType::WHOLEPAGE, 0, GetId() );
 
     ::com::sun::star::uno::Any a;
     INetURLObject aObj( m_aCommandURL );

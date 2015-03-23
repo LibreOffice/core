@@ -680,19 +680,19 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
             switch (nZoom)
             {
                 case view::DocumentZoomType::OPTIMAL:
-                    eZoom = SVX_ZOOM_OPTIMAL;
+                    eZoom = SvxZoomType::OPTIMAL;
                 break;
                 case view::DocumentZoomType::PAGE_WIDTH:
-                    eZoom = SVX_ZOOM_PAGEWIDTH;
+                    eZoom = SvxZoomType::PAGEWIDTH;
                 break;
                 case view::DocumentZoomType::ENTIRE_PAGE:
-                    eZoom = SVX_ZOOM_WHOLEPAGE;
+                    eZoom = SvxZoomType::WHOLEPAGE;
                 break;
                 case view::DocumentZoomType::BY_VALUE:
-                    eZoom = SVX_ZOOM_PERCENT;
+                    eZoom = SvxZoomType::PERCENT;
                 break;
                 case view::DocumentZoomType::PAGE_WIDTH_EXACT:
-                    eZoom = SVX_ZOOM_PAGEWIDTH_NOBORDER;
+                    eZoom = SvxZoomType::PAGEWIDTH_NOBORDER;
                 break;
                 default:
                     throw IllegalArgumentException(
@@ -882,19 +882,19 @@ void SwXViewSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, u
             sal_Int16 nRet(0);
             switch (mpConstViewOption->GetZoomType())
             {
-                case SVX_ZOOM_OPTIMAL:
+                case SvxZoomType::OPTIMAL:
                     nRet = view::DocumentZoomType::OPTIMAL;
                 break;
-                case SVX_ZOOM_PAGEWIDTH:
+                case SvxZoomType::PAGEWIDTH:
                     nRet = view::DocumentZoomType::PAGE_WIDTH;
                 break;
-                case SVX_ZOOM_WHOLEPAGE:
+                case SvxZoomType::WHOLEPAGE:
                     nRet = view::DocumentZoomType::ENTIRE_PAGE;
                 break;
-                case SVX_ZOOM_PERCENT:
+                case SvxZoomType::PERCENT:
                     nRet = view::DocumentZoomType::BY_VALUE;
                 break;
-                case SVX_ZOOM_PAGEWIDTH_NOBORDER:
+                case SvxZoomType::PAGEWIDTH_NOBORDER:
                     nRet = view::DocumentZoomType::PAGE_WIDTH_EXACT;
                 break;
                 default:

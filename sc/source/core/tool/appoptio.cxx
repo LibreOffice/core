@@ -60,7 +60,7 @@ void ScAppOptions::SetDefaults()
         eMetric     = FUNIT_INCH;           // default for others
 
     nZoom           = 100;
-    eZoomType       = SVX_ZOOM_PERCENT;
+    eZoomType       = SvxZoomType::PERCENT;
     bSynchronizeZoom = true;
     nStatusFunc     = SUBTOTAL_FUNC_SUM;
     bAutoComplete   = true;

@@ -1718,7 +1718,7 @@ ScTabViewShell::ScTabViewShell( SfxViewFrame* pViewFrame,
     if ( GetViewData().GetDocShell()->IsPreview() )
     {
         //  preview for template dialog: always show whole page
-        SetZoomType( SVX_ZOOM_WHOLEPAGE, true );    // zoom value is recalculated at next Resize
+        SetZoomType( SvxZoomType::WHOLEPAGE, true );    // zoom value is recalculated at next Resize
     }
     else
     {

@@ -1472,19 +1472,19 @@ sal_Int16 ScTabViewObj::GetZoomType(void) const
         SvxZoomType eZoomType = pViewSh->GetViewData().GetView()->GetZoomType();
         switch (eZoomType)
         {
-        case SVX_ZOOM_PERCENT:
+        case SvxZoomType::PERCENT:
             aZoomType = view::DocumentZoomType::BY_VALUE;
             break;
-        case SVX_ZOOM_OPTIMAL:
+        case SvxZoomType::OPTIMAL:
             aZoomType = view::DocumentZoomType::OPTIMAL;
             break;
-        case SVX_ZOOM_WHOLEPAGE:
+        case SvxZoomType::WHOLEPAGE:
             aZoomType = view::DocumentZoomType::ENTIRE_PAGE;
             break;
-        case SVX_ZOOM_PAGEWIDTH:
+        case SvxZoomType::PAGEWIDTH:
             aZoomType = view::DocumentZoomType::PAGE_WIDTH;
             break;
-        case SVX_ZOOM_PAGEWIDTH_NOBORDER:
+        case SvxZoomType::PAGEWIDTH_NOBORDER:
             aZoomType = view::DocumentZoomType::PAGE_WIDTH_EXACT;
             break;
         }
@@ -1504,26 +1504,26 @@ void ScTabViewObj::SetZoomType(sal_Int16 aZoomType)
             switch (aZoomType)
             {
             case view::DocumentZoomType::BY_VALUE:
-                eZoomType = SVX_ZOOM_PERCENT;
+                eZoomType = SvxZoomType::PERCENT;
                 break;
             case view::DocumentZoomType::OPTIMAL:
-                eZoomType = SVX_ZOOM_OPTIMAL;
+                eZoomType = SvxZoomType::OPTIMAL;
                 break;
             case view::DocumentZoomType::ENTIRE_PAGE:
-                eZoomType = SVX_ZOOM_WHOLEPAGE;
+                eZoomType = SvxZoomType::WHOLEPAGE;
                 break;
             case view::DocumentZoomType::PAGE_WIDTH:
-                eZoomType = SVX_ZOOM_PAGEWIDTH;
+                eZoomType = SvxZoomType::PAGEWIDTH;
                 break;
             case view::DocumentZoomType::PAGE_WIDTH_EXACT:
-                eZoomType = SVX_ZOOM_PAGEWIDTH_NOBORDER;
+                eZoomType = SvxZoomType::PAGEWIDTH_NOBORDER;
                 break;
             default:
-                eZoomType = SVX_ZOOM_OPTIMAL;
+                eZoomType = SvxZoomType::OPTIMAL;
             }
             sal_Int16 nZoom(GetZoom());
             sal_Int16 nOldZoom(nZoom);
-            if ( eZoomType == SVX_ZOOM_PERCENT )
+            if ( eZoomType == SvxZoomType::PERCENT )
             {
                 if ( nZoom < MINZOOM )  nZoom = MINZOOM;
                 if ( nZoom > MAXZOOM )  nZoom = MAXZOOM;
@@ -1533,13 +1533,13 @@ void ScTabViewObj::SetZoomType(sal_Int16 aZoomType)
 
             switch ( eZoomType )
             {
-                case SVX_ZOOM_WHOLEPAGE:
-                case SVX_ZOOM_PAGEWIDTH:
+                case SvxZoomType::WHOLEPAGE:
+                case SvxZoomType::PAGEWIDTH:
                     pView->SetZoomType( eZoomType, true );
                     break;
 
                 default:
-                    pView->SetZoomType( SVX_ZOOM_PERCENT, true );
+                    pView->SetZoomType( SvxZoomType::PERCENT, true );
             }
             SetZoom( nZoom );
         }

@@ -1901,10 +1901,10 @@ void SwWW8ImplReader::ImportDop()
         aViewProps[2].Name = "ZoomType";
         //Import zoom type
         switch (pWDop->zkSaved) {
-            case 1:  aViewProps[2].Value <<= sal_Int16(SVX_ZOOM_WHOLEPAGE); break;
-            case 2:  aViewProps[2].Value <<= sal_Int16(SVX_ZOOM_PAGEWIDTH); break;
-            case 3:  aViewProps[2].Value <<= sal_Int16(SVX_ZOOM_OPTIMAL);   break;
-            default: aViewProps[2].Value <<= sal_Int16(SVX_ZOOM_PERCENT);   break;
+            case 1:  aViewProps[2].Value <<= sal_Int16(SvxZoomType::WHOLEPAGE); break;
+            case 2:  aViewProps[2].Value <<= sal_Int16(SvxZoomType::PAGEWIDTH); break;
+            case 3:  aViewProps[2].Value <<= sal_Int16(SvxZoomType::OPTIMAL);   break;
+            default: aViewProps[2].Value <<= sal_Int16(SvxZoomType::PERCENT);   break;
         }
 
         uno::Reference< uno::XComponentContext > xComponentContext(comphelper::getProcessComponentContext());

@@ -89,7 +89,7 @@ SvStream& SvxZoomItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) con
 {
     rStrm.WriteUInt16( GetValue() )
          .WriteUInt16( nValueSet )
-         .WriteSChar( eType );
+         .WriteSChar( static_cast<int>(eType) );
     return rStrm;
 }
 

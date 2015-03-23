@@ -582,27 +582,27 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                                             Get( SID_ATTR_ZOOM ) ).GetType();
                 switch( eZT )
                 {
-                    case SVX_ZOOM_PERCENT:
+                    case SvxZoomType::PERCENT:
                         SetZoom( (long) static_cast<const SvxZoomItem&>( pArgs->
                                             Get( SID_ATTR_ZOOM ) ).GetValue() );
                         break;
 
-                    case SVX_ZOOM_OPTIMAL:
+                    case SvxZoomType::OPTIMAL:
                         GetViewFrame()->GetDispatcher()->Execute( SID_SIZE_ALL,
                                     SfxCallMode::ASYNCHRON | SfxCallMode::RECORD );
                         break;
 
-                    case SVX_ZOOM_PAGEWIDTH:
+                    case SvxZoomType::PAGEWIDTH:
                         GetViewFrame()->GetDispatcher()->Execute( SID_SIZE_PAGE_WIDTH,
                                     SfxCallMode::ASYNCHRON | SfxCallMode::RECORD );
                         break;
 
-                    case SVX_ZOOM_WHOLEPAGE:
+                    case SvxZoomType::WHOLEPAGE:
                         GetViewFrame()->GetDispatcher()->Execute( SID_SIZE_PAGE,
                                     SfxCallMode::ASYNCHRON | SfxCallMode::RECORD );
                         break;
-                    case SVX_ZOOM_PAGEWIDTH_NOBORDER:
-                        OSL_FAIL("sd::DrawViewShell::FuTemporary(), SVX_ZOOM_PAGEWIDTH_NOBORDER not handled!" );
+                    case SvxZoomType::PAGEWIDTH_NOBORDER:
+                        OSL_FAIL("sd::DrawViewShell::FuTemporary(), SvxZoomType::PAGEWIDTH_NOBORDER not handled!" );
                         break;
                 }
                 rReq.Ignore ();

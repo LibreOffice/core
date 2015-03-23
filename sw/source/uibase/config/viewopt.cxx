@@ -166,7 +166,7 @@ SwViewOption::SwViewOption() :
     mbViewLayoutBookMode(false),
     bShowPlaceHolderFields( true ),
     nZoom( 100 ),
-    eZoom( SVX_ZOOM_PERCENT ),
+    eZoom( SvxZoomType::PERCENT ),
     nTblDest(TBL_DEST_CELL)
 {
     // Initialisation is a little simpler now

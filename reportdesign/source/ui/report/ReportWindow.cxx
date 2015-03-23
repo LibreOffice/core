@@ -407,12 +407,12 @@ sal_uInt16 OReportWindow::getZoomFactor(SvxZoomType _eType) const
     const Size aSize( GetSizePixel() );
     switch( _eType)
     {
-        case SVX_ZOOM_PERCENT:
+        case SvxZoomType::PERCENT:
             nZoom = m_pView->getController().getZoomValue();
             break;
-        case SVX_ZOOM_OPTIMAL:
+        case SvxZoomType::OPTIMAL:
             break;
-        case SVX_ZOOM_WHOLEPAGE:
+        case SvxZoomType::WHOLEPAGE:
             {
                 nZoom = (sal_uInt16)(long)Fraction(aSize.Width()*100,impl_getRealPixelWidth());
                 MapMode aMap( MAP_100TH_MM );
@@ -420,7 +420,7 @@ sal_uInt16 OReportWindow::getZoomFactor(SvxZoomType _eType) const
                 nZoom = ::std::min(nZoom,(sal_uInt16)(long)Fraction(aSize.Height()*100,aHeight.Height()));
             }
             break;
-        case SVX_ZOOM_PAGEWIDTH:
+        case SvxZoomType::PAGEWIDTH:
             nZoom = (sal_uInt16)(long)Fraction(aSize.Width()*100,impl_getRealPixelWidth());
             break;
         default:

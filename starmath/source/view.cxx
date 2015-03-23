@@ -1743,7 +1743,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
                 if ( !pSet )
                 {
                     SfxItemSet aSet( GetDoc()->GetPool(), SID_ATTR_ZOOM, SID_ATTR_ZOOM);
-                    aSet.Put( SvxZoomItem( SVX_ZOOM_PERCENT, aGraphic.GetZoom()));
+                    aSet.Put( SvxZoomItem( SvxZoomType::PERCENT, aGraphic.GetZoom()));
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                     if(pFact)
                     {
@@ -1759,16 +1759,16 @@ void SmViewShell::Execute(SfxRequest& rReq)
                     const SvxZoomItem &rZoom = static_cast<const SvxZoomItem &>(pSet->Get(SID_ATTR_ZOOM));
                     switch( rZoom.GetType() )
                     {
-                        case SVX_ZOOM_PERCENT:
+                        case SvxZoomType::PERCENT:
                             aGraphic.SetZoom((sal_uInt16)rZoom.GetValue ());
                             break;
 
-                        case SVX_ZOOM_OPTIMAL:
+                        case SvxZoomType::OPTIMAL:
                             aGraphic.ZoomToFitInWindow();
                             break;
 
-                        case SVX_ZOOM_PAGEWIDTH:
-                        case SVX_ZOOM_WHOLEPAGE:
+                        case SvxZoomType::PAGEWIDTH:
+                        case SvxZoomType::WHOLEPAGE:
                         {
                             const MapMode aMap( MAP_100TH_MM );
                             SfxPrinter *pPrinter = GetPrinter( true );
@@ -1871,7 +1871,7 @@ void SmViewShell::GetState(SfxItemSet &rSet)
             break;
 
         case SID_ATTR_ZOOM:
-            rSet.Put(SvxZoomItem( SVX_ZOOM_PERCENT, aGraphic.GetZoom()));
+            rSet.Put(SvxZoomItem( SvxZoomType::PERCENT, aGraphic.GetZoom()));
             /* no break here */
         case SID_ZOOMIN:
         case SID_ZOOMOUT:

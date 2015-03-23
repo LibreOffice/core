@@ -585,9 +585,9 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
             sal_uInt16 nZoom = (sal_uInt16) GetActiveWindow()->GetZoom();
 
             if( mbZoomOnPage )
-                pZoomItem.reset(new SvxZoomItem( SVX_ZOOM_WHOLEPAGE, nZoom ));
+                pZoomItem.reset(new SvxZoomItem( SvxZoomType::WHOLEPAGE, nZoom ));
             else
-                pZoomItem.reset(new SvxZoomItem( SVX_ZOOM_PERCENT, nZoom ));
+                pZoomItem.reset(new SvxZoomItem( SvxZoomType::PERCENT, nZoom ));
 
             // constrain area
             sal_uInt16 nZoomValues = SVX_ZOOM_ENABLE_ALL;

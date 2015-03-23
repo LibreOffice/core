@@ -595,7 +595,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 
             // make sure aZoom is initialized with a proper value if SetType
             // doesn't work
-            SvxZoomItem aZoom( SVX_ZOOM_PERCENT, 100 );
+            SvxZoomItem aZoom( SvxZoomType::PERCENT, 100 );
 
             switch (rReq.GetSlot())
             {
@@ -615,13 +615,13 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                     aZoom.SetValue(200);
                     break;
                 case SID_ZOOM_OPTIMAL:
-                    aZoom.SetType( SVX_ZOOM_OPTIMAL );
+                    aZoom.SetType( SvxZoomType::OPTIMAL );
                     break;
                 case SID_ZOOM_ENTIRE_PAGE:
-                    aZoom.SetType( SVX_ZOOM_WHOLEPAGE );
+                    aZoom.SetType( SvxZoomType::WHOLEPAGE );
                     break;
                 case SID_ZOOM_PAGE_WIDTH:
-                    aZoom.SetType( SVX_ZOOM_PAGEWIDTH );
+                    aZoom.SetType( SvxZoomType::PAGEWIDTH );
                     break;
             }
 

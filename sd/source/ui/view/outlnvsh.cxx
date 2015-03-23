@@ -1276,7 +1276,7 @@ void OutlineViewShell::GetStatusBarState(SfxItemSet& rSet)
     {
         sal_uInt16 nZoom = (sal_uInt16) GetActiveWindow()->GetZoom();
 
-        boost::scoped_ptr<SvxZoomItem> pZoomItem(new SvxZoomItem( SVX_ZOOM_PERCENT, nZoom ));
+        boost::scoped_ptr<SvxZoomItem> pZoomItem(new SvxZoomItem( SvxZoomType::PERCENT, nZoom ));
 
         // limit area
         sal_uInt16 nZoomValues = SVX_ZOOM_ENABLE_ALL;

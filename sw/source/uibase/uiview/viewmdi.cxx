@@ -88,7 +88,7 @@ void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
     const SwViewOption *pOpt = m_pWrtShell->GetViewOptions();
     long lLeftMargin = 0;
 
-    if( eZoomType != SVX_ZOOM_PERCENT )
+    if( eZoomType != SvxZoomType::PERCENT )
     {
         const bool bAutomaticViewLayout = 0 == pOpt->GetViewLayoutColumns();
 
@@ -111,14 +111,14 @@ void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
             aPageSize.Width() += std::abs( long(rLeftLRSpace.GetLeft()) - long(rLRSpace.GetLeft()) );
         }
 
-        if( SVX_ZOOM_OPTIMAL == eZoomType )
+        if( SvxZoomType::OPTIMAL == eZoomType )
         {
             if (!pPostItMgr->HasNotes() || !pPostItMgr->ShowNotes())
                 aPageSize.Width() -= ( rLRSpace.GetLeft() + rLRSpace.GetRight() + nLeftOfst * 2 );
             lLeftMargin = long(rLRSpace.GetLeft()) + DOCUMENTBORDER + nLeftOfst;
             nFac = aWindowSize.Width() * 100 / aPageSize.Width();
         }
-        else if(SVX_ZOOM_WHOLEPAGE == eZoomType || SVX_ZOOM_PAGEWIDTH == eZoomType )
+        else if(SvxZoomType::WHOLEPAGE == eZoomType || SvxZoomType::PAGEWIDTH == eZoomType )
         {
             const long nOf = DOCUMENTBORDER * 2L;
             long nTmpWidth = bAutomaticViewLayout ? aPageSize.Width() : aRootSize.Width();
@@ -126,7 +126,7 @@ void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
             aPageSize.Height() += nOf;
             nFac = aWindowSize.Width() * 100 / nTmpWidth;
 
-            if ( SVX_ZOOM_WHOLEPAGE == eZoomType )
+            if ( SvxZoomType::WHOLEPAGE == eZoomType )
             {
                 long nVisPercent = aWindowSize.Height() * 100 / aPageSize.Height();
                 nFac = std::min( nFac, nVisPercent );
@@ -161,11 +161,11 @@ void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
             aOpt.SetReadonly(pOpt->IsReadonly());
             m_pWrtShell->ApplyViewOptions( aOpt );
         }
-        if ( eZoomType != SVX_ZOOM_PERCENT )
+        if ( eZoomType != SvxZoomType::PERCENT )
         {
             Point aPos;
 
-            if ( eZoomType == SVX_ZOOM_WHOLEPAGE )
+            if ( eZoomType == SvxZoomType::WHOLEPAGE )
                 aPos.Y() = m_pWrtShell->GetAnyCurRect(RECT_PAGE).Top() - DOCUMENTBORDER;
             else
             {

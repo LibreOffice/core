@@ -229,7 +229,7 @@ void SwView::RecheckBrowseMode()
     CheckVisArea();
 
     SvxZoomType eType;
-    if( GetWrtShell().GetViewOptions()->getBrowseMode() && SVX_ZOOM_PERCENT != (eType = (SvxZoomType)
+    if( GetWrtShell().GetViewOptions()->getBrowseMode() && SvxZoomType::PERCENT != (eType = (SvxZoomType)
         GetWrtShell().GetViewOptions()->GetZoomType()) )
         SetZoom( eType );
     InvalidateBorder();

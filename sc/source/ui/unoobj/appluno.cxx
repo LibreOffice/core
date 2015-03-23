@@ -455,19 +455,19 @@ void SAL_CALL ScSpreadsheetSettings::setPropertyValue(
         short nVal = ScUnoHelpFunctions::GetInt16FromAny( aValue );
         if ( nVal < 0 )
         {
-            SvxZoomType eType = SVX_ZOOM_PERCENT;
+            SvxZoomType eType = SvxZoomType::PERCENT;
             switch (nVal)
             {
-                case SC_ZOOMVAL_OPTIMAL:    eType = SVX_ZOOM_OPTIMAL;   break;
-                case SC_ZOOMVAL_WHOLEPAGE:  eType = SVX_ZOOM_WHOLEPAGE; break;
-                case SC_ZOOMVAL_PAGEWIDTH:  eType = SVX_ZOOM_PAGEWIDTH; break;
+                case SC_ZOOMVAL_OPTIMAL:    eType = SvxZoomType::OPTIMAL;   break;
+                case SC_ZOOMVAL_WHOLEPAGE:  eType = SvxZoomType::WHOLEPAGE; break;
+                case SC_ZOOMVAL_PAGEWIDTH:  eType = SvxZoomType::PAGEWIDTH; break;
             }
             aAppOpt.SetZoomType( eType );
         }
         else if ( nVal >= MINZOOM && nVal <= MAXZOOM )
         {
             aAppOpt.SetZoom( nVal );
-            aAppOpt.SetZoomType( SVX_ZOOM_PERCENT );
+            aAppOpt.SetZoomType( SvxZoomType::PERCENT );
         }
         bSaveApp = true;
     }
@@ -549,10 +549,10 @@ uno::Any SAL_CALL ScSpreadsheetSettings::getPropertyValue( const OUString& aProp
         sal_Int16 nZoomVal = 0;
         switch ( aAppOpt.GetZoomType() )
         {
-            case SVX_ZOOM_PERCENT:   nZoomVal = aAppOpt.GetZoom();    break;
-            case SVX_ZOOM_OPTIMAL:   nZoomVal = SC_ZOOMVAL_OPTIMAL;   break;
-            case SVX_ZOOM_WHOLEPAGE: nZoomVal = SC_ZOOMVAL_WHOLEPAGE; break;
-            case SVX_ZOOM_PAGEWIDTH: nZoomVal = SC_ZOOMVAL_PAGEWIDTH; break;
+            case SvxZoomType::PERCENT:   nZoomVal = aAppOpt.GetZoom();    break;
+            case SvxZoomType::OPTIMAL:   nZoomVal = SC_ZOOMVAL_OPTIMAL;   break;
+            case SvxZoomType::WHOLEPAGE: nZoomVal = SC_ZOOMVAL_WHOLEPAGE; break;
+            case SvxZoomType::PAGEWIDTH: nZoomVal = SC_ZOOMVAL_PAGEWIDTH; break;
             default:
             {
                 // added to avoid warnings

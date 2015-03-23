@@ -212,18 +212,18 @@ SvxZoomDialog::SvxZoomDialog( vcl::Window* pParent, const SfxItemSet& rCoreSet )
 
         switch (eType)
         {
-            case SVX_ZOOM_OPTIMAL:
+            case SvxZoomType::OPTIMAL:
                 nButtonId = ZOOMBTN_OPTIMAL;
                 break;
-            case SVX_ZOOM_PAGEWIDTH:
+            case SvxZoomType::PAGEWIDTH:
                 nButtonId = ZOOMBTN_PAGEWIDTH;
                 break;
-            case SVX_ZOOM_WHOLEPAGE:
+            case SvxZoomType::WHOLEPAGE:
                 nButtonId = ZOOMBTN_WHOLEPAGE;
                 break;
-            case SVX_ZOOM_PERCENT:
+            case SvxZoomType::PERCENT:
                 break;
-            case SVX_ZOOM_PAGEWIDTH_NOBORDER:
+            case SvxZoomType::PAGEWIDTH_NOBORDER:
                 break;
         }
 
@@ -380,7 +380,7 @@ IMPL_LINK(SvxZoomDialog, OKHdl, Button*, pButton)
 {
     if (mbModified || m_pOKBtn != pButton)
     {
-        SvxZoomItem aZoomItem(SVX_ZOOM_PERCENT, 0, mrSet.GetPool()->GetWhich(SID_ATTR_ZOOM));
+        SvxZoomItem aZoomItem(SvxZoomType::PERCENT, 0, mrSet.GetPool()->GetWhich(SID_ATTR_ZOOM));
         SvxViewLayoutItem aViewLayoutItem(0, false, mrSet.GetPool()->GetWhich(SID_ATTR_VIEWLAYOUT));
 
         if (m_pOKBtn == pButton)
@@ -390,11 +390,11 @@ IMPL_LINK(SvxZoomDialog, OKHdl, Button*, pButton)
             if (SPECIAL_FACTOR == nFactor)
             {
                 if (m_pOptimalBtn->IsChecked())
-                    aZoomItem.SetType(SVX_ZOOM_OPTIMAL);
+                    aZoomItem.SetType(SvxZoomType::OPTIMAL);
                 else if (m_pPageWidthBtn->IsChecked())
-                    aZoomItem.SetType(SVX_ZOOM_PAGEWIDTH);
+                    aZoomItem.SetType(SvxZoomType::PAGEWIDTH);
                 else if (m_pWholePageBtn->IsChecked())
-                    aZoomItem.SetType(SVX_ZOOM_WHOLEPAGE);
+                    aZoomItem.SetType(SvxZoomType::WHOLEPAGE);
             }
             else
             {

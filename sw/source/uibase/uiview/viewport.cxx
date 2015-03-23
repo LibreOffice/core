@@ -69,15 +69,15 @@ bool SwView::IsDocumentBorder()
         return false;
 
     return m_pWrtShell->GetViewOptions()->getBrowseMode() ||
-           SVX_ZOOM_PAGEWIDTH_NOBORDER == (SvxZoomType)m_pWrtShell->GetViewOptions()->GetZoomType();
+           SvxZoomType::PAGEWIDTH_NOBORDER == (SvxZoomType)m_pWrtShell->GetViewOptions()->GetZoomType();
 }
 
 inline long GetLeftMargin( SwView &rView )
 {
     SvxZoomType eType = (SvxZoomType)rView.GetWrtShell().GetViewOptions()->GetZoomType();
     long lRet = rView.GetWrtShell().GetAnyCurRect(RECT_PAGE_PRT).Left();
-    return eType == SVX_ZOOM_PERCENT   ? lRet + DOCUMENTBORDER :
-           eType == SVX_ZOOM_PAGEWIDTH || eType == SVX_ZOOM_PAGEWIDTH_NOBORDER ? 0 :
+    return eType == SvxZoomType::PERCENT   ? lRet + DOCUMENTBORDER :
+           eType == SvxZoomType::PAGEWIDTH || eType == SvxZoomType::PAGEWIDTH_NOBORDER ? 0 :
                                          lRet + DOCUMENTBORDER + nLeftOfst;
 }
 
@@ -1103,7 +1103,7 @@ void SwView::OuterResizePixel( const Point &rOfst, const Size &rSize )
         if ( pDocSh->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
             pDocSh->SetVisArea(
                             pDocSh->SfxInPlaceObject::GetVisArea() );*/
-        if ( m_pWrtShell->GetViewOptions()->GetZoomType() != SVX_ZOOM_PERCENT &&
+        if ( m_pWrtShell->GetViewOptions()->GetZoomType() != SvxZoomType::PERCENT &&
              !m_pWrtShell->GetViewOptions()->getBrowseMode() )
             _SetZoom( aEditSz, (SvxZoomType)m_pWrtShell->GetViewOptions()->GetZoomType(), 100, true );
         m_pWrtShell->EndAction();
@@ -1139,7 +1139,7 @@ void SwView::OuterResizePixel( const Point &rOfst, const Size &rSize )
 void SwView::SetZoomFactor( const Fraction &rX, const Fraction &rY )
 {
     const Fraction &rFrac = rX < rY ? rX : rY;
-    SetZoom( SVX_ZOOM_PERCENT, (short) long(rFrac * Fraction( 100, 1 )) );
+    SetZoom( SvxZoomType::PERCENT, (short) long(rFrac * Fraction( 100, 1 )) );
 
     // To minimize rounding errors we also adjust the odd values
     // of the base class if necessary.
@@ -1202,7 +1202,7 @@ bool SwView::HandleWheelCommands( const CommandEvent& rCEvt )
         else
             nFact = std::min( (long) 600, basegfx::zoomtools::zoomIn( nFact ));
 
-        SetZoom( SVX_ZOOM_PERCENT, nFact );
+        SetZoom( SvxZoomType::PERCENT, nFact );
         bOk = true;
     }
     else if (pWData && CommandWheelMode::ZOOM_SCALE == pWData->GetMode())
@@ -1228,7 +1228,7 @@ bool SwView::HandleWheelCommands( const CommandEvent& rCEvt )
         if(zoomTarget!=preZoomByVCL)
         {
 
-            SetZoom( SVX_ZOOM_PERCENT, zoomTarget );
+            SetZoom( SvxZoomType::PERCENT, zoomTarget );
         }
         // we move to the center, and add additional tilt from center
         const Point & postZoomTargetCenterInPixels = GetEditWin().LogicToPixel(preZoomTargetCenterInLogic);

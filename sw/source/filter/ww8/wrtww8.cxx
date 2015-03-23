@@ -340,9 +340,9 @@ static void WriteDop( WW8Export& rWrt )
     {
         switch ( pViewShell->GetViewOptions()->GetZoomType() )
         {
-            case SVX_ZOOM_WHOLEPAGE: rDop.zkSaved = 1; break;
-            case SVX_ZOOM_PAGEWIDTH: rDop.zkSaved = 2; break;
-            case SVX_ZOOM_OPTIMAL:   rDop.zkSaved = 3; break;
+            case SvxZoomType::WHOLEPAGE: rDop.zkSaved = 1; break;
+            case SvxZoomType::PAGEWIDTH: rDop.zkSaved = 2; break;
+            case SvxZoomType::OPTIMAL:   rDop.zkSaved = 3; break;
             default:                 rDop.zkSaved = 0;
                 rDop.wScaleSaved = pViewShell->GetViewOptions()->GetZoom();
                 break;

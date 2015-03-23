@@ -80,11 +80,11 @@ void FuScale::DoExecute( SfxRequest& rReq )
         if( mpViewShell && mpViewShell->ISA( DrawViewShell ) &&
             static_cast<DrawViewShell*>(mpViewShell)->IsZoomOnPage() )
         {
-            pZoomItem.reset(new SvxZoomItem( SVX_ZOOM_WHOLEPAGE, nValue ));
+            pZoomItem.reset(new SvxZoomItem( SvxZoomType::WHOLEPAGE, nValue ));
         }
         else
         {
-            pZoomItem.reset(new SvxZoomItem( SVX_ZOOM_PERCENT, nValue ));
+            pZoomItem.reset(new SvxZoomItem( SvxZoomType::PERCENT, nValue ));
         }
 
         // limit range
@@ -144,7 +144,7 @@ void FuScale::DoExecute( SfxRequest& rReq )
 
             switch (static_cast<const SvxZoomItem &>( aArgs.Get (SID_ATTR_ZOOM)).GetType ())
             {
-                case SVX_ZOOM_PERCENT:
+                case SvxZoomType::PERCENT:
                 {
                     nValue = static_cast<const SvxZoomItem &>( aArgs.Get (SID_ATTR_ZOOM)).GetValue ();
 
@@ -154,7 +154,7 @@ void FuScale::DoExecute( SfxRequest& rReq )
                 }
                 break;
 
-                case SVX_ZOOM_OPTIMAL:
+                case SvxZoomType::OPTIMAL:
                 {
                     if( mpViewShell->ISA( DrawViewShell ) )
                     {
@@ -165,11 +165,11 @@ void FuScale::DoExecute( SfxRequest& rReq )
                 }
                 break;
 
-                case SVX_ZOOM_PAGEWIDTH:
+                case SvxZoomType::PAGEWIDTH:
                     mpViewShell->GetViewFrame()->GetDispatcher()->Execute( SID_SIZE_PAGE_WIDTH, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
                     break;
 
-                case SVX_ZOOM_WHOLEPAGE:
+                case SvxZoomType::WHOLEPAGE:
                     mpViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_SIZE_PAGE, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
                     break;
                 default:

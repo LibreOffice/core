@@ -811,14 +811,14 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
             aUsrPref.setBrowseMode( rDoc.getIDocumentSettingAccess().get(DocumentSettingId::BROWSE_MODE) );
 
         //For the BrowseMode we do not assume a factor.
-        if( aUsrPref.getBrowseMode() && aUsrPref.GetZoomType() != SVX_ZOOM_PERCENT )
+        if( aUsrPref.getBrowseMode() && aUsrPref.GetZoomType() != SvxZoomType::PERCENT )
         {
-            aUsrPref.SetZoomType( SVX_ZOOM_PERCENT );
+            aUsrPref.SetZoomType( SvxZoomType::PERCENT );
             aUsrPref.SetZoom( 100 );
         }
         if(pDocSh->IsPreview())
         {
-            aUsrPref.SetZoomType( SVX_ZOOM_WHOLEPAGE );
+            aUsrPref.SetZoomType( SvxZoomType::WHOLEPAGE );
             aUsrPref.SetViewLayoutBookMode( false );
             aUsrPref.SetViewLayoutColumns( 1 );
         }
@@ -1159,7 +1159,7 @@ void SwView::ReadUserData( const OUString &rUserData, bool bBrowse )
                 eZoom = (SvxZoomType) (sal_uInt16)rUserData.getToken(nOff, ';', nPos ).toInt32();
             else
             {
-                eZoom = SVX_ZOOM_PERCENT;
+                eZoom = SvxZoomType::PERCENT;
                 ++nOff;
             }
 
@@ -1342,7 +1342,7 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
                     eZoom = static_cast < SvxZoomType > ( nZoomType );
                 else
                 {
-                    eZoom = SVX_ZOOM_PERCENT;
+                    eZoom = SvxZoomType::PERCENT;
                 }
                 if (bGotIsSelectedFrame)
                 {
@@ -1405,7 +1405,7 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
                 const bool bZoomNeedsViewLayout = bSetViewLayoutSettings &&
                                                   1 < nViewLayoutColumns &&
                                                   bSetViewSettings &&
-                                                  eZoom != SVX_ZOOM_PERCENT;
+                                                  eZoom != SvxZoomType::PERCENT;
 
                 if ( !bZoomNeedsViewLayout )
                     m_pWrtShell->StartAction();

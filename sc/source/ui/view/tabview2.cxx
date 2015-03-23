@@ -1174,11 +1174,11 @@ sal_uInt16 ScTabView::CalcZoom( SvxZoomType eType, sal_uInt16 nOldZoom )
 
     switch ( eType )
     {
-        case SVX_ZOOM_PERCENT: // rZoom ist kein besonderer prozentualer Wert
+        case SvxZoomType::PERCENT: // rZoom ist kein besonderer prozentualer Wert
             nZoom = nOldZoom;
             break;
 
-        case SVX_ZOOM_OPTIMAL:  // nZoom entspricht der optimalen Gr"o\se
+        case SvxZoomType::OPTIMAL:  // nZoom entspricht der optimalen Gr"o\se
             {
                 ScMarkData& rMark = aViewData.GetMarkData();
                 ScDocument* pDoc = aViewData.GetDocument();
@@ -1272,8 +1272,8 @@ sal_uInt16 ScTabView::CalcZoom( SvxZoomType eType, sal_uInt16 nOldZoom )
             }
             break;
 
-            case SVX_ZOOM_WHOLEPAGE:    // nZoom entspricht der ganzen Seite oder
-            case SVX_ZOOM_PAGEWIDTH:    // nZoom entspricht der Seitenbreite
+            case SvxZoomType::WHOLEPAGE:    // nZoom entspricht der ganzen Seite oder
+            case SvxZoomType::PAGEWIDTH:    // nZoom entspricht der Seitenbreite
                 {
                     SCTAB               nCurTab     = aViewData.GetTabNo();
                     ScDocument*         pDoc        = aViewData.GetDocument();
@@ -1340,7 +1340,7 @@ sal_uInt16 ScTabView::CalcZoom( SvxZoomType eType, sal_uInt16 nOldZoom )
                                                ( aPageSize.Height() * nPPTY ) );
                         long nNew = nZoomX;
 
-                        if (eType == SVX_ZOOM_WHOLEPAGE && nZoomY < nNew)
+                        if (eType == SvxZoomType::WHOLEPAGE && nZoomY < nNew)
                             nNew = nZoomY;
 
                         nZoom = (sal_uInt16) nNew;
