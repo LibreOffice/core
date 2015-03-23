@@ -359,7 +359,7 @@ namespace
 
         void damagedPixel( const basegfx::B2IPoint& rDamagePoint ) const
         {
-            if( !mpDamage )
+            if (!mpDamage)
                 return;
 
             sal_Int32 nX(rDamagePoint.getX());
@@ -499,9 +499,25 @@ namespace
                                col,
                                begin,
                                rawAcc );
+
+            if (!mpDamage)
+                return;
+
             // TODO(P2): perhaps this needs pushing up the stack a bit
             // to make more complex polygons more efficient ...
-            damaged( basegfx::B2IBox( rPt1, rPt2 ) );
+            basegfx::B2IBox aBounds(rPt1, rPt2 );
+
+            const basegfx::B2IPoint& rEnd = aBounds.getMaximum();
+
+            sal_Int32 nX(rEnd.getX());
+            sal_Int32 nY(rEnd.getY());
+            if (nX < SAL_MAX_INT32)
+                ++nX;
+            if (nY < SAL_MAX_INT32)
+                ++nY;
+
+            basegfx::B2IBox aDamagedBox(aBounds.getMinimum(), basegfx::B2IPoint(nX, nY));
+            damaged(aDamagedBox);
         }
 
         template< typename Iterator, typename Accessor, typename RawAcc >
