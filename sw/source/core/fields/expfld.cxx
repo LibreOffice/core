@@ -528,7 +528,7 @@ sal_uLong SwSetExpFieldType::GetSeqFormat()
     if( !GetDepends() )
         return SVX_NUM_ARABIC;
 
-    const SwField *pFld = static_cast<const SwFmtFld*>(GetDepends())->GetField();
+    const SwField *pFld = SwIterator<SwFmtFld,SwSetExpFieldType>(*this).First()->GetField();
     return pFld->GetFormat();
 }
 

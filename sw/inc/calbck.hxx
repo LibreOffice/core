@@ -98,6 +98,7 @@ class SW_DLLPUBLIC SwClient : ::sw::WriterListener
     // avoids making the details of the linked list and the callback method public
     friend class SwModify;
     friend class sw::ClientIteratorBase;
+    template<typename E, typename S> friend class SwIterator;
 
     SwModify *pRegisteredIn;        ///< event source
 
@@ -192,7 +193,7 @@ public:
 
     void Add(SwClient *pDepend);
     SwClient* Remove(SwClient *pDepend);
-    const SwClient* GetDepends() const  { return static_cast<SwClient*>(pRoot); }
+    const sw::WriterListener* GetDepends() const  { return pRoot; }
 
     // get information about attribute
     virtual bool GetInfo( SfxPoolItem& ) const SAL_OVERRIDE;
@@ -250,11 +251,11 @@ namespace sw
         protected:
             const SwModify& m_rRoot;
             // the current object in an iteration
-            SwClient* m_pCurrent;
+            WriterListener* m_pCurrent;
             // in case the current object is already removed, the next object in the list
             // is marked down to become the current object in the next step
             // this is necessary because iteration requires access to members of the current object
-            SwClient* m_pPosition;
+            WriterListener* m_pPosition;
             static SW_DLLPUBLIC ClientIteratorBase* our_pClientIters;
 
             ClientIteratorBase( const SwModify& rModify )
@@ -262,15 +263,15 @@ namespace sw
             {
                 MoveTo(our_pClientIters);
                 our_pClientIters = this;
-                m_pCurrent = m_pPosition = const_cast<SwClient*>(m_rRoot.GetDepends());
+                m_pCurrent = m_pPosition = const_cast<WriterListener*>(m_rRoot.GetDepends());
             }
-            SwClient* GetLeftOfPos() { return static_cast<SwClient*>(m_pPosition->m_pLeft); }
-            SwClient* GetRightOfPos() { return static_cast<SwClient*>(m_pPosition->m_pRight); }
-            SwClient* GoStart()
+            WriterListener* GetLeftOfPos() { return m_pPosition->m_pLeft; }
+            WriterListener* GetRightOfPos() { return m_pPosition->m_pRight; }
+            WriterListener* GoStart()
             {
-                if((m_pPosition = const_cast<SwClient*>(m_rRoot.GetDepends())))
+                if((m_pPosition = const_cast<WriterListener*>(m_rRoot.GetDepends())))
                     while( m_pPosition->m_pLeft )
-                        m_pPosition = static_cast<SwClient*>(m_pPosition->m_pLeft);
+                        m_pPosition = m_pPosition->m_pLeft;
                 return m_pCurrent = m_pPosition;
             }
             ~ClientIteratorBase() SAL_OVERRIDE
@@ -285,7 +286,7 @@ namespace sw
             // SwModify::Add() asserts this
             bool IsChanged() const { return m_pPosition != m_pCurrent; }
             // ensures the iterator to point at a current client
-            SwClient* Sync() { return m_pCurrent = m_pPosition; }
+            WriterListener* Sync() { return m_pCurrent = m_pPosition; }
     };
 }
 
@@ -306,12 +307,12 @@ public:
     TElementType* Last()
     {
         if(!m_pPosition)
-            m_pPosition = const_cast<SwClient*>(m_rRoot.GetDepends());
+            m_pPosition = const_cast<sw::WriterListener*>(m_rRoot.GetDepends());
         if(!m_pPosition)
             return static_cast<TElementType*>(Sync());
         while(GetRightOfPos())
             m_pPosition = GetRightOfPos();
-        if(m_pPosition->IsA(TYPE(TElementType)))
+        if(static_cast<SwClient*>(m_pPosition)->IsA(TYPE(TElementType)))
             return static_cast<TElementType*>(Sync());
         return Previous();
     }
@@ -319,14 +320,14 @@ public:
     {
         if(!IsChanged())
             m_pPosition = GetRightOfPos();
-        while(m_pPosition && !m_pPosition->IsA( TYPE(TElementType) ) )
+        while(m_pPosition && !static_cast<SwClient*>(m_pPosition)->IsA( TYPE(TElementType) ) )
             m_pPosition = GetRightOfPos();
         return static_cast<TElementType*>(Sync());
     }
     TElementType* Previous()
     {
         m_pPosition = GetLeftOfPos();
-        while(m_pPosition && !m_pPosition->IsA( TYPE(TElementType) ) )
+        while(m_pPosition && !static_cast<SwClient*>(m_pPosition)->IsA( TYPE(TElementType) ) )
             m_pPosition = GetLeftOfPos();
         return static_cast<TElementType*>(Sync());
     }
@@ -339,27 +340,27 @@ template< typename TSource > class SwIterator<SwClient, TSource> SAL_FINAL : pri
 public:
     SwIterator( const TSource& rSrc ) : sw::ClientIteratorBase(rSrc) {}
     SwClient* First()
-        { return GoStart(); }
+        { return static_cast<SwClient*>(GoStart()); }
     SwClient* Last()
     {
         if(!m_pPosition)
-            m_pPosition = const_cast<SwClient*>(m_rRoot.GetDepends());
+            m_pPosition = const_cast<sw::WriterListener*>(m_rRoot.GetDepends());
         if(!m_pPosition)
             return m_pCurrent = nullptr;
         while(GetRightOfPos())
             m_pPosition = GetRightOfPos();
-        return Sync();
+        return static_cast<SwClient*>(Sync());
     }
     SwClient* Next()
     {
         if(!IsChanged())
             m_pPosition = GetRightOfPos();
-        return Sync();
+        return static_cast<SwClient*>(Sync());
     }
     SwClient* Previous()
     {
         m_pPosition = GetLeftOfPos();
-        return Sync();
+        return static_cast<SwClient*>(Sync());
     }
     using sw::ClientIteratorBase::IsChanged;
 };
