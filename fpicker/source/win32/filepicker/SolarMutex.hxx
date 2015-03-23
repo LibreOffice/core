@@ -22,8 +22,6 @@
 
 int ReleaseSolarMutexOnMainThreadContext(unsigned nThreadId);
 
-void AcquireSolarMutex(int nAcquireCount);
-
 #endif // INCLUDED_FPICKER_SOURCE_WIN32_FILEPICKER_SOLARMUTEX_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

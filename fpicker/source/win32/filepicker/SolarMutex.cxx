@@ -37,10 +37,4 @@ int ReleaseSolarMutexOnMainThreadContext(unsigned nThreadId)
     return nAcquireCount;
 }
 
-void AcquireSolarMutex(int nAcquireCount)
-{
-    if ( nAcquireCount )
-        Application::AcquireSolarMutex( nAcquireCount );
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
