@@ -42,7 +42,7 @@ class XMLSignature_MSCryptImpl : public ::cppu::WeakImplHelper2<
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceManager ;
 
     public :
-        XMLSignature_MSCryptImpl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& aFactory ) ;
+        explicit XMLSignature_MSCryptImpl(const css::uno::Reference<css::lang::XMultiServiceFactory >& rFactory);
         virtual ~XMLSignature_MSCryptImpl() ;
 
         //Methods from XXMLSignature

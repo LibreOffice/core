@@ -41,7 +41,7 @@ protected:
     {}
 
 public:
-    ONSSInitializer( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rxContext );
+    explicit ONSSInitializer(const css::uno::Reference<css::uno::XComponentContext> &rxContext);
     virtual ~ONSSInitializer();
 
     bool initNSS( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rxContext );

@@ -36,7 +36,7 @@ class SEInitializer_NssImpl : public cppu::ImplInheritanceHelper1
 >
 {
 public:
-    SEInitializer_NssImpl( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rxContext );
+    explicit SEInitializer_NssImpl(const css::uno::Reference<css::uno::XComponentContext > &rxContext);
     virtual ~SEInitializer_NssImpl();
 
     /* XSEInitializer */

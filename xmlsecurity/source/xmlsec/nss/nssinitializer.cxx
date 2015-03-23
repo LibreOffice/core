@@ -79,8 +79,8 @@ struct InitNSSInitialize
 {
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
-    InitNSSInitialize( const css::uno::Reference< css::uno::XComponentContext > &rxContext )
-    : m_xContext( rxContext )
+    explicit InitNSSInitialize(const css::uno::Reference<css::uno::XComponentContext> &rxContext)
+        : m_xContext(rxContext)
     {
     }
 
