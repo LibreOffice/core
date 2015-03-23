@@ -110,9 +110,4 @@ rtl_TextEncoding LwpCharSetMgr::GetTextCharEncoding(sal_uInt16 wordproCode)
     return GetTextCharEncoding();
 }
 
-rtl_TextEncoding LwpCharSetMgr::GetTextCharEncoding()
-{
-    return RTL_TEXTENCODING_MS_1252;//here should be a default value,1252 or get from platform,  1-18
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -961,7 +961,4 @@ void LwpNotifyListPersistent::Read(LwpObjectStream* pObjStrm)
     pObjStrm->SkipExtra();
 }
 
-void LwpPara::Release()
-{}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

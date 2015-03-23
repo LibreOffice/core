@@ -183,13 +183,6 @@ sal_uInt32 LwpObjectID::DiskSizeIndexed() const
         + sizeof(m_nHigh);
 }
 /**
- * @descr       return the size of object id with format: low(4bytes)+high(2bytes)
-*/
-sal_uInt32 LwpObjectID::DiskSize() const
-{
-    return sizeof(m_nLow) + sizeof(m_nHigh);
-}
-/**
  * @descr       get object from object factory per the object id
 */
 rtl::Reference<LwpObject> LwpObjectID::obj(VO_TYPE tag) const

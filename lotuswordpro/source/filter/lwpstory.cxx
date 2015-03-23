@@ -125,7 +125,6 @@ void LwpStory::XFConvert(XFContentContainer* pCont)
     LwpPara* pNext;
     while(pCur)
     {
-        pCur->Release();
         pNext = dynamic_cast<LwpPara*> ( pCur->GetNext().obj().get() );
         LwpGlobalMgr* pGlobal = LwpGlobalMgr::GetInstance();
         LwpObjectFactory* pObjMgr = pGlobal->GetLwpObjFactory();
