@@ -23,7 +23,7 @@ MCHECKING=
 
 if [ "$3" = "WNT" ]; then
     DEBUGGING='export CPPUNITTRACE="\"[full path to devenv.exe]\" /debugexe" # for interactive debugging in Visual Studio'
-    MCHECKING='export CPPUNITTRACE="drmemory -free_max_frames 20"            # for memory checking (install Dr.Memory first)'
+    MCHECKING='export CPPUNITTRACE="drmemory -free_max_frames 20"            # for memory checking (install Dr.Memory first, and put it to your PATH)'
 elif [ "$3" = "MACOSX" ]; then
     DEBUGGING='export CPPUNITTRACE="lldb --"       # for interactive debugging on OS X'
     MCHECKING='export VALGRIND=memcheck            # for memory checking'
