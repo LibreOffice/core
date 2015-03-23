@@ -189,8 +189,14 @@ SfxPrinter* SfxPrinter::Clone() const
 
 SfxPrinter::~SfxPrinter()
 {
+    disposeOnce();
+}
+
+void SfxPrinter::dispose()
+{
     delete pOptions;
     delete pImpl;
+    Printer::dispose();
 }
 
 

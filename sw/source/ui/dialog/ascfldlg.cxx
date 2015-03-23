@@ -174,7 +174,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( vcl::Window* pParent, SwDocShell& rDocSh,
 
         {
             bool bDelPrinter = false;
-            SfxPrinter* pPrt = pDoc ? pDoc->getIDocumentDeviceAccess().getPrinter(false) : 0;
+            VclPtr<SfxPrinter> pPrt = pDoc ? pDoc->getIDocumentDeviceAccess().getPrinter(false) : 0;
             if( !pPrt )
             {
                 SfxItemSet* pSet = new SfxItemSet( rDocSh.GetPool(),
@@ -211,7 +211,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( vcl::Window* pParent, SwDocShell& rDocSh,
             m_pFontLB->SelectEntry( aOpt.GetFontName() );
 
             if( bDelPrinter )
-                delete pPrt;
+                pPrt.disposeAndClear();
         }
 
     }

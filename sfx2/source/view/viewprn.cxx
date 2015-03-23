@@ -469,7 +469,7 @@ IMPL_LINK_NOARG(SfxDialogExecutor_Impl, Execute)
    Internal method for setting the differences between 'pNewPrinter' to the
    current printer. pNewPrinter is either taken over or deleted.
 */
-SfxPrinter* SfxViewShell::SetPrinter_Impl( SfxPrinter *pNewPrinter )
+SfxPrinter* SfxViewShell::SetPrinter_Impl( VclPtr<SfxPrinter>& pNewPrinter )
 {
     // get current Printer
     SfxPrinter *pDocPrinter = GetPrinter();
@@ -558,7 +558,7 @@ SfxPrinter* SfxViewShell::SetPrinter_Impl( SfxPrinter *pNewPrinter )
 
         // Keep old changed Printer.
         pDocPrinter->SetPrinterProps( pNewPrinter );
-        delete pNewPrinter;
+        pNewPrinter.disposeAndClear();
     }
 
     if ( SfxPrinterChangeFlags::NONE != nChangedFlags )

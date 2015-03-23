@@ -51,6 +51,7 @@ public:
                                         const JobSetup &rTheOrigJobSetup );
                             SfxPrinter( const SfxPrinter &rPrinter );
                             virtual ~SfxPrinter();
+    virtual void            dispose() SAL_OVERRIDE;
 
     SfxPrinter*             Clone() const;
 

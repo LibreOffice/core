@@ -290,7 +290,7 @@ public:
     SAL_DLLPRIVATE void ResetAllClients_Impl( SfxInPlaceClient *pIP );
     SAL_DLLPRIVATE void DiscardClients_Impl();
 
-    SAL_DLLPRIVATE SfxPrinter* SetPrinter_Impl( SfxPrinter *pNewPrinter );
+    SAL_DLLPRIVATE SfxPrinter* SetPrinter_Impl( VclPtr<SfxPrinter>& pNewPrinter );
     SAL_DLLPRIVATE bool IsShowView_Impl() const;
 
     SAL_DLLPRIVATE bool HandleNotifyEvent_Impl( NotifyEvent& rEvent );

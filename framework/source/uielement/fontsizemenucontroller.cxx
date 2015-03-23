@@ -135,7 +135,7 @@ void FontSizeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
     if ( pVCLPopupMenu )
     {
         boost::scoped_ptr<FontList> pFontList;
-        boost::scoped_ptr<Printer>  pInfoPrinter;
+        ScopedVclPtr<Printer>  pInfoPrinter;
         OUString   aPrinterName;
 
         SolarMutexGuard aSolarMutexGuard;
