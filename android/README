@@ -69,6 +69,29 @@ ERROR: Could not extract package's data directory. Are you sure that
 	(gdb) python sys.path.insert(0, "/master/solenv/gdb")
 	(gdb) source /master/instdir/program/libuno_sal.so.3-gdb.py
 
+* Debuggint the Java part
+
+At the moment the code is not organized in a way that would make Eclipse or
+Android Studio happy as-is, so the quickest way is to use the jdb command-line
+debugger. Steps to use it:
+
+1) Find out the JDWP ID of a debuggable application:
+
+	adb jdwp
+
+From the list of currently active JDWP processes, the last number is the just
+started debuggable application.
+
+2) Forward the remote JDWP port/process ID to a local port:
+
+	adb forward tcp:7777 jdwp:31739
+
+3) Connect to the running application:
+
+	jdb -sourcepath src/java/ -attach localhost:7777
+
+Assuming that you're already in the LOAndroid3 directory in your shell.
+
 * Common Errors / Gotchas
 
 lo_dlneeds: Could not read ELF header of /data/data/org.libreoffice...libfoo.so
