@@ -77,6 +77,7 @@
 
 #include <editeng/numitem.hxx>
 #include <editeng/eeitem.hxx>
+#include <editeng/editview.hxx>
 #include <svl/poolitem.hxx>
 #include <glob.hrc>
 #include "AccessibleDocumentViewBase.hxx"
@@ -529,6 +530,18 @@ void ViewShell::LogicMouseButtonUp(const MouseEvent& rMouseEvent)
     MouseButtonUp(rMouseEvent, 0);
 
     mpActiveWindow->SetPointerPosPixel(aPoint);
+}
+
+void ViewShell::SetCursorLogicPosition(const Point& rPosition, bool bPoint, bool bClearMark)
+{
+    if (SdrView* pSdrView = GetView())
+    {
+        if (pSdrView->GetTextEditObject())
+        {
+            EditView& rEditView = pSdrView->GetTextEditOutlinerView()->GetEditView();
+            rEditView.SetCursorLogicPosition(rPosition, bPoint, bClearMark);
+        }
+    }
 }
 
 void ViewShell::MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin)

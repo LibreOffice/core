@@ -447,6 +447,8 @@ public:
     void LogicMouseButtonDown(const MouseEvent& rMouseEvent);
     /// Same as MouseButtonUp(), but coordinates are in logic unit.
     void LogicMouseButtonUp(const MouseEvent& rMouseEvent);
+    /// Allows adjusting the point or mark of the selection to a document coordinate.
+    void SetCursorLogicPosition(const Point& rPosition, bool bPoint, bool bClearMark);
 
     class Implementation;
 
