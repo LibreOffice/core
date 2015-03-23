@@ -93,7 +93,7 @@ bool SalGraphics::drawTransformedBitmap(
     const SalBitmap& /* rSourceBitmap */,
     const SalBitmap* /* pAlphaBitmap */)
 {
-    // here direct support for transformed bitmaps can be impemented
+    // here direct support for transformed bitmaps can be implemented
     return false;
 }
 

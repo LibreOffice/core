@@ -290,7 +290,7 @@ class WWD_Startup(WWD_General):
             self.settings.configure(self.xMSF)
             # set resource needed for web page.
             # sort the styles alphabetically
-            #COMMENTED - FIXME: to be impemented
+            #COMMENTED - FIXME: to be implemented
             #self.settings.cp_Styles.sort(None)
             self.prepareSessionLists()
             if self.proxies:
