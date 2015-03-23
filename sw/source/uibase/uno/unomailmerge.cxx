@@ -573,6 +573,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
                         *pTranslated <<= xCurResultSet->getRow();
                     else
                         bEverythingsFine = false;
+                    ++pTranslated;
                 }
                 if ( bEverythingsFine )
                     bValid = true;
