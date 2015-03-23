@@ -36,6 +36,8 @@ cmd/sc_spellingandgrammardialog.png cmd/sc_spelling.png
 # Calc
 cmd/lc_numberformatcurrency.png cmd/lc_insertcurrencyfield.png
 cmd/sc_numberformatcurrency.png cmd/sc_insertcurrencyfield.png
+cmd/lc_linestyle.png cmd/lc_borderdialog.png
+cmd/sc_linestyle.png cmd/sc_borderdialog.png
 
 # Date Icons
 cmd/lc_adddatefield.png cmd/lc_datefield.png
@@ -59,3 +61,10 @@ cmd/sc_linespacing.png cmd/sc_spacepara15.png
 # image icon duplicates
 cmd/sc_graphicdialog.png cmd/sc_insertgraphic.png
 
+# Impress
+cmd/lc_insertavmedia.png cmd/lc_avmediaplayer.png
+cmd/sc_insertavmedia.png cmd/sc_avmediaplayer.png
+cmd/lc_insertmath.png cmd/lc_insertobjectstarmath.png
+cmd/sc_insertmath.png cmd/sc_insertobjectstarmath.png
+cmd/lc_arrowtoolbox.png cmd/lc_linearrowend.png
+cmd/sc_arrowtoolbox.png cmd/sc_linearrowend.png
