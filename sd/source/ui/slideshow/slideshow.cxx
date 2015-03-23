@@ -1059,6 +1059,11 @@ bool SlideShow::isDrawingPossible()
     return mxController.is() && mxController->getUsePen();
 }
 
+bool SlideShow::swipe(const CommandSwipeData& rSwipeData)
+{
+    return mxController.is() && mxController->swipe(rSwipeData);
+}
+
 void SlideShow::StartInPlacePresentationConfigurationCallback()
 {
     if( mnInPlaceConfigEvent != 0 )

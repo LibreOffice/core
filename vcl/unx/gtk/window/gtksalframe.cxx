@@ -989,6 +989,13 @@ void GtkSalFrame::InitCommon()
     g_signal_connect( G_OBJECT(m_pWindow), "button-release-event", G_CALLBACK(signalButton), this );
 #if GTK_CHECK_VERSION(3,0,0)
     g_signal_connect( G_OBJECT(m_pWindow), "draw", G_CALLBACK(signalDraw), this );
+#if GTK_CHECK_VERSION(3,14,0)
+    GtkGesture *pSwipe = gtk_gesture_swipe_new(m_pWindow);
+    g_signal_connect(pSwipe, "swipe", G_CALLBACK(gestureSwipe), this);
+    gtk_event_controller_set_propagation_phase(GTK_EVENT_CONTROLLER (pSwipe), GTK_PHASE_TARGET);
+    g_object_weak_ref(G_OBJECT(m_pWindow), (GWeakNotify)g_object_unref, pSwipe);
+#endif
+
 #else
     g_signal_connect( G_OBJECT(m_pWindow), "expose-event", G_CALLBACK(signalExpose), this );
 #endif
@@ -3170,6 +3177,7 @@ bool GtkSalFrame::Dispatch( const XEvent* pEvent )
 gboolean GtkSalFrame::signalButton( GtkWidget*, GdkEventButton* pEvent, gpointer frame )
 {
     GtkSalFrame* pThis = (GtkSalFrame*)frame;
+
     SalMouseEvent aEvent;
     sal_uInt16 nEventType = 0;
     switch( pEvent->type )
@@ -3296,6 +3304,28 @@ gboolean GtkSalFrame::signalScroll( GtkWidget*, GdkEvent* pEvent, gpointer frame
 
     return true;
 }
+
+#if GTK_CHECK_VERSION(3,14,0)
+void GtkSalFrame::gestureSwipe(GtkGestureSwipe* gesture, gdouble velocity_x, gdouble velocity_y, gpointer frame)
+{
+    GtkSalFrame* pThis = (GtkSalFrame*)frame;
+
+    SalSwipeEvent aEvent;
+    aEvent.mnVelocityX = velocity_x;
+    aEvent.mnVelocityY = velocity_y;
+
+    gdouble x, y;
+    GdkEventSequence *sequence = gtk_gesture_single_get_current_sequence(GTK_GESTURE_SINGLE(gesture));
+    //I feel I want the first point of the sequence, not the last point which
+    //the docs say this gives, but for the moment assume we start and end
+    //within the same vcl window
+    gtk_gesture_get_point(GTK_GESTURE(gesture), sequence, &x, &y);
+    aEvent.mnX = x;
+    aEvent.mnY = y;
+
+    pThis->CallCallback(SALEVENT_SWIPE, &aEvent);
+}
+#endif
 
 gboolean GtkSalFrame::signalMotion( GtkWidget*, GdkEventMotion* pEvent, gpointer frame )
 {

@@ -1109,6 +1109,7 @@ bool SlideshowImpl::startShowImpl( const Sequence< beans::PropertyValue >& aProp
     try
     {
         mxShow = Reference< XSlideShow >( createSlideShow(), UNO_QUERY_THROW );
+
         mxView = new SlideShowView(
                                              *mpShowWindow,
                                              mpDoc,
@@ -1230,6 +1231,26 @@ void SlideshowImpl::slideEnded(const bool bReverse)
         gotoPreviousSlide(true);
     else
         gotoNextSlide();
+}
+
+bool SlideshowImpl::swipe(const CommandSwipeData &rSwipeData)
+{
+    if (mbUsePen)
+        return false;
+
+    double nVelocityX = rSwipeData.getVelocityX();
+    if (nVelocityX > 0)
+    {
+        gotoPreviousSlide();
+    }
+    else
+    {
+        gotoNextEffect();
+    }
+    //a swipe is followed by a mouse up, tell the view to ignore that mouse up as we've reacted
+    //to the swipe instead
+    mxView->ignoreNextMouseReleased();
+    return true;
 }
 
 void SlideshowImpl::removeShapeEvents()

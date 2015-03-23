@@ -78,6 +78,7 @@ class FontSelectPattern;
 #define SALEVENT_EXTERNALZOOM           ((sal_uInt16)46)
 #define SALEVENT_EXTERNALSCROLL         ((sal_uInt16)47)
 #define SALEVENT_QUERYCHARPOSITION      ((sal_uInt16)48)
+#define SALEVENT_SWIPE                  ((sal_uInt16)49)
 
 // MOUSELEAVE must send, when the pointer leave the client area and
 // the mouse is not captured
@@ -277,6 +278,15 @@ struct SalInputContext
     LanguageType           meLanguage;
     sal_uLong              mnOptions;
 };
+
+struct SalSwipeEvent
+{
+    double mnVelocityX;
+    double mnVelocityY;
+    long mnX;
+    long mnY;
+};
+
 
 typedef void (*SALTIMERPROC)( bool idle );
 

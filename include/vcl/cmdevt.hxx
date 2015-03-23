@@ -336,10 +336,26 @@ inline CommandSelectionChangeData::CommandSelectionChangeData( sal_uLong nStart,
     mnEnd = nEnd;
 }
 
+class VCL_DLLPUBLIC CommandSwipeData
+{
+    double mnVelocityX;
+    double mnVelocityY;
+public:
+    CommandSwipeData()
+        : mnVelocityX(0)
+        , mnVelocityY(0)
+    {
+    }
+    CommandSwipeData(double nVelocityX, double nVelocityY)
+        : mnVelocityX(nVelocityX)
+        , mnVelocityY(nVelocityY)
+    {
+    }
+    double getVelocityX() const { return mnVelocityX; }
+    double getVelocityY() const { return mnVelocityY; }
+};
 
 // - CommandEvent -
-
-
 #define COMMAND_CONTEXTMENU             ((sal_uInt16)1)
 #define COMMAND_STARTDRAG               ((sal_uInt16)2)
 #define COMMAND_WHEEL                   ((sal_uInt16)3)
@@ -359,7 +375,7 @@ inline CommandSelectionChangeData::CommandSelectionChangeData( sal_uLong nStart,
 #define COMMAND_SELECTIONCHANGE         ((sal_uInt16)18)
 #define COMMAND_PREPARERECONVERSION     ((sal_uInt16)19)
 #define COMMAND_QUERYCHARPOSITION       ((sal_uInt16)20)
-
+#define COMMAND_SWIPE                   ((sal_uInt16)21)
 
 class VCL_DLLPUBLIC CommandEvent
 {
@@ -387,6 +403,7 @@ public:
     const CommandDialogData*            GetDialogData() const;
           CommandMediaData*             GetMediaData() const;
     const CommandSelectionChangeData*   GetSelectionChangeData() const;
+    const CommandSwipeData*             GetSwipeData() const;
 };
 
 inline CommandEvent::CommandEvent()
@@ -469,6 +486,13 @@ inline const CommandSelectionChangeData* CommandEvent::GetSelectionChangeData() 
     return NULL;
 }
 
+inline const CommandSwipeData* CommandEvent::GetSwipeData() const
+{
+    if( mnCommand == COMMAND_SWIPE )
+        return (const CommandSwipeData*)(mpData);
+    else
+        return NULL;
+}
 
 #endif // INCLUDED_VCL_CMDEVT_HXX
 

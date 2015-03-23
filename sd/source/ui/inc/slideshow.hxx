@@ -52,6 +52,7 @@ class Rectangle;
 namespace vcl { class Window; }
 class SfxRequest;
 class WorkWindow;
+class CommandSwipeData;
 struct ImplSVEvent;
 
 // TODO: Remove
@@ -154,6 +155,7 @@ public:
     /** sets or clears the pause state of the running slideshow.
         !!!! This should only be called by the SdShowWindow !!!!*/
     bool pause( bool bPause );
+    bool swipe(const CommandSwipeData &rSwipeData);
 
     // settings
     bool isFullScreen();                                // a.k.a. FuSlideShow::IsFullScreen()

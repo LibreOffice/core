@@ -641,6 +641,16 @@ bool ViewShell::HandleScrollCommand(const CommandEvent& rCEvt, ::sd::Window* pWi
 
     switch( rCEvt.GetCommand() )
     {
+        case COMMAND_SWIPE:
+            {
+                rtl::Reference< SlideShow > xSlideShow( SlideShow::GetSlideShow( GetViewShellBase() ) );
+                if (xSlideShow.is())
+                {
+                    const CommandSwipeData* pSwipeData = rCEvt.GetSwipeData();
+                    bDone = xSlideShow->swipe(*pSwipeData);
+                }
+            }
+            break;
         case COMMAND_WHEEL:
             {
                 Reference< XSlideShowController > xSlideShowController( SlideShow::GetSlideShowController(GetViewShellBase() ) );

@@ -218,6 +218,7 @@ public:
     void slideEnded(const bool bReverse);
     void hyperLinkClicked(const OUString & hyperLink) throw (css::uno::RuntimeException);
     void click(const css::uno::Reference< css::drawing::XShape > & xShape, const css::awt::MouseEvent & aOriginalEvent);
+    bool swipe(const CommandSwipeData &rSwipeData);
 
     /// ends the presentation async
     void endPresentation();
