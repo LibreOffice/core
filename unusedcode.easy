@@ -19,7 +19,6 @@ Primitive2dXmlDump::filterActionType(unsigned short, bool)
 Primitive2dXmlDump::filterAllActionTypes()
 Printer::Error()
 SalGraphics::drawTransformedBitmap(basegfx::B2DPoint const&, basegfx::B2DPoint const&, basegfx::B2DPoint const&, SalBitmap const&, SalBitmap const*)
-ScBroadcastAreaSlot::AreaBroadcastInRange(ScRange const&, ScHint const&)
 ScCellValue::set(ScRefCellValue const&)
 ScCondFormatManagerDlg::IsInRefMode() const
 ScDocument::CreateFormatTable() const

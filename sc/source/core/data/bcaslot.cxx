@@ -412,57 +412,6 @@ bool ScBroadcastAreaSlot::AreaBroadcast( const ScHint& rHint)
     return bIsBroadcasted;
 }
 
-bool ScBroadcastAreaSlot::AreaBroadcastInRange( const ScRange& rRange,
-        const ScHint& rHint)
-{
-    if (aBroadcastAreaTbl.empty())
-        return false;
-    bool bInBroadcast = mbInBroadcastIteration;
-    mbInBroadcastIteration = true;
-    bool bIsBroadcasted = false;
-
-    mbHasErasedArea = false;
-
-    for (ScBroadcastAreas::const_iterator aIter( aBroadcastAreaTbl.begin()),
-            aIterEnd( aBroadcastAreaTbl.end()); aIter != aIterEnd; ++aIter )
-    {
-        if (mbHasErasedArea && isMarkedErased( aIter))
-            continue;
-
-        ScBroadcastArea* pArea = (*aIter).mpArea;
-        const ScRange& rAreaRange = pArea->GetRange();
-        if (rAreaRange.Intersects( rRange ))
-        {
-            if (pArea->IsGroupListening())
-            {
-                if (pBASM->IsInBulkBroadcast())
-                {
-                    pBASM->InsertBulkGroupArea(pArea, rRange);
-                }
-                else
-                {
-                    pArea->GetBroadcaster().Broadcast( rHint);
-                    bIsBroadcasted = true;
-                }
-            }
-            else if (!pBASM->IsInBulkBroadcast() || pBASM->InsertBulkArea( pArea))
-            {
-                pArea->GetBroadcaster().Broadcast( rHint);
-                bIsBroadcasted = true;
-            }
-        }
-    }
-
-    mbInBroadcastIteration = bInBroadcast;
-
-    // A Notify() during broadcast may call EndListeningArea() and thus dispose
-    // an area if it was the last listener, which would invalidate an iterator
-    // pointing to it, hence the real erase is done afterwards.
-    FinallyEraseAreas();
-
-    return bIsBroadcasted;
-}
-
 void ScBroadcastAreaSlot::DelBroadcastAreasInRange( const ScRange& rRange )
 {
     if (aBroadcastAreaTbl.empty())
