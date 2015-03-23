@@ -217,7 +217,7 @@ double SwTableBox::GetValue( SwTblCalcPara& rCalcPara ) const
 
             SvNumberFormatter* pNumFmtr = pDoc->GetNumberFormatter();
 
-            if( css::util::NumberFormat::TEXT == nFmtIndex )
+            if( static_cast<sal_uInt32>(css::util::NumberFormat::TEXT) == nFmtIndex )
                 nFmtIndex = 0;
             // JP 22.04.98: Bug 49659 - special treatment for percentages
             else if( !sTxt.isEmpty() &&

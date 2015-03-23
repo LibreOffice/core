@@ -393,7 +393,7 @@ bool SwEditShell::IsTableBoxTextFormat() const
     {
         nFmt = static_cast<const SwTblBoxNumFormat*>(pItem)->GetValue();
         return GetDoc()->GetNumberFormatter()->IsTextFormat( nFmt ) ||
-                css::util::NumberFormat::TEXT == nFmt;
+                static_cast<sal_uInt32>(css::util::NumberFormat::TEXT) == nFmt;
     }
 
     sal_uLong nNd = pBox->IsValidNumTxtNd();
