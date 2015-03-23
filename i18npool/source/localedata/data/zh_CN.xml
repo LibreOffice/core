@@ -428,7 +428,7 @@
     <NumberingLevel Prefix=" " NumType="0" Suffix="." /> <!-- A. B. C. -->
     <NumberingLevel Prefix=" " NumType="0" Suffix=")" /> <!-- A) B) C) -->
     <NumberingLevel Prefix=" " NumType="1" Suffix="." /> <!-- a. b. c. -->
-    <NumberingLevel Prefix=" " NumType="1" Suffix="." /> <!-- a) b) c) -->
+    <NumberingLevel Prefix=" " NumType="1" Suffix=")" /> <!-- a) b) c) -->
     <NumberingLevel Prefix=" " NumType="2" Suffix="." /> <!-- I. II. III. -->
     <NumberingLevel Prefix=" " NumType="3" Suffix="." /> <!-- i. ii. iii. -->
     <NumberingLevel Prefix=" " NumType="15" Suffix="、" /> <!-- Chinese &#19968;,&#20108;,&#19977;... -->
