@@ -92,6 +92,42 @@ struct LOKDocView_Impl
     /// If we are in the middle of a drag of a graphic selection handle.
     bool m_bInDragGraphicHandles[8];
     ///@}
+
+    LOKDocView_Impl()
+        : m_pEventBox(gtk_event_box_new()),
+        m_pTable(0),
+        m_pCanvas(0),
+        m_fZoom(1),
+        m_pOffice(0),
+        m_pDocument(0),
+        m_bEdit(false),
+        m_aVisibleCursor({0, 0, 0, 0}),
+        m_bCursorOverlayVisible(false),
+        m_bCursorVisible(true),
+        m_nLastButtonPressTime(0),
+        m_nLastButtonReleaseTime(0),
+        m_pTextSelectionRectangles(0),
+        m_aTextSelectionStart({0, 0, 0, 0}),
+        m_aTextSelectionEnd({0, 0, 0, 0}),
+        m_aGraphicSelection({0, 0, 0, 0}),
+        m_bInDragGraphicSelection(false),
+
+        // Start/middle/end handle.
+        m_pHandleStart(0),
+        m_aHandleStartRect({0, 0, 0, 0}),
+        m_bInDragStartHandle(false),
+        m_pHandleMiddle(0),
+        m_aHandleMiddleRect({0, 0, 0, 0}),
+        m_bInDragMiddleHandle(false),
+        m_pHandleEnd(0),
+        m_aHandleEndRect({0, 0, 0, 0}),
+        m_bInDragEndHandle(false),
+
+        m_pGraphicHandle(0)
+    {
+        memset(&m_aGraphicHandleRects, 0, sizeof(m_aGraphicHandleRects));
+        memset(&m_bInDragGraphicHandles, 0, sizeof(m_bInDragGraphicHandles));
+    }
 };
 
 static void lok_docview_class_init( gpointer );
@@ -412,7 +448,6 @@ static void lok_docview_init( GTypeInstance* pInstance, gpointer )
     gtk_scrolled_window_set_vadjustment( GTK_SCROLLED_WINDOW( pDocView ), NULL );
 
     pDocView->m_pImpl = new LOKDocView_Impl();
-    pDocView->m_pImpl->m_pEventBox = gtk_event_box_new();
     gtk_scrolled_window_add_with_viewport( GTK_SCROLLED_WINDOW(pDocView),
                                            pDocView->m_pImpl->m_pEventBox );
 
@@ -422,40 +457,6 @@ static void lok_docview_init( GTypeInstance* pInstance, gpointer )
     gtk_signal_connect(GTK_OBJECT(pDocView->m_pImpl->m_pEventBox), "motion-notify-event", GTK_SIGNAL_FUNC(lcl_signalMotion), pDocView);
 
     gtk_widget_show( pDocView->m_pImpl->m_pEventBox );
-
-    pDocView->m_pImpl->m_pTable = 0;
-    pDocView->m_pImpl->m_pCanvas = 0;
-
-    pDocView->m_pImpl->m_pOffice = 0;
-    pDocView->m_pImpl->m_pDocument = 0;
-
-    pDocView->m_pImpl->m_fZoom = 1;
-    pDocView->m_pImpl->m_bEdit = false;
-    memset(&pDocView->m_pImpl->m_aVisibleCursor, 0, sizeof(pDocView->m_pImpl->m_aVisibleCursor));
-    pDocView->m_pImpl->m_bCursorOverlayVisible = false;
-    pDocView->m_pImpl->m_bCursorVisible = true;
-    pDocView->m_pImpl->m_nLastButtonPressTime = 0;
-    pDocView->m_pImpl->m_nLastButtonReleaseTime = 0;
-    pDocView->m_pImpl->m_pTextSelectionRectangles = 0;
-    memset(&pDocView->m_pImpl->m_aTextSelectionStart, 0, sizeof(pDocView->m_pImpl->m_aTextSelectionStart));
-    memset(&pDocView->m_pImpl->m_aTextSelectionEnd, 0, sizeof(pDocView->m_pImpl->m_aTextSelectionEnd));
-    memset(&pDocView->m_pImpl->m_aGraphicSelection, 0, sizeof(pDocView->m_pImpl->m_aGraphicSelection));
-    pDocView->m_pImpl->m_bInDragGraphicSelection = false;
-
-    // Start/middle/end handle.
-    pDocView->m_pImpl->m_pHandleStart = 0;
-    memset(&pDocView->m_pImpl->m_aHandleStartRect, 0, sizeof(pDocView->m_pImpl->m_aHandleStartRect));
-    pDocView->m_pImpl->m_bInDragStartHandle = false;
-    pDocView->m_pImpl->m_pHandleMiddle = 0;
-    memset(&pDocView->m_pImpl->m_aHandleMiddleRect, 0, sizeof(pDocView->m_pImpl->m_aHandleMiddleRect));
-    pDocView->m_pImpl->m_bInDragMiddleHandle = false;
-    pDocView->m_pImpl->m_pHandleEnd = 0;
-    memset(&pDocView->m_pImpl->m_aHandleEndRect, 0, sizeof(pDocView->m_pImpl->m_aHandleEndRect));
-    pDocView->m_pImpl->m_bInDragEndHandle = false;
-
-    pDocView->m_pImpl->m_pGraphicHandle = 0;
-    memset(&pDocView->m_pImpl->m_aGraphicHandleRects, 0, sizeof(pDocView->m_pImpl->m_aGraphicHandleRects));
-    memset(&pDocView->m_pImpl->m_bInDragGraphicHandles, 0, sizeof(pDocView->m_pImpl->m_bInDragGraphicHandles));
 
     gtk_signal_connect( GTK_OBJECT(pDocView), "destroy",
                         GTK_SIGNAL_FUNC(lcl_onDestroy), NULL );
