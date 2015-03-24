@@ -43,7 +43,7 @@ PaneDockingWindow::PaneDockingWindow(
         : TitledDockingWindow(_pBindings, pChildWindow, pParent, WB_MOVEABLE|WB_CLOSEABLE|WB_HIDE|WB_3DLOOK)
 {
     SetTitle(rsTitle);
-    SetSizePixel(LogicToPixel(Size(100,200), MAP_APPFONT));
+    SetSizePixel(LogicToPixel(Size(80,200), MAP_APPFONT));
 }
 
 PaneDockingWindow::~PaneDockingWindow (void)
