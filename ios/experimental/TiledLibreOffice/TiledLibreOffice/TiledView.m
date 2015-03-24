@@ -164,16 +164,6 @@ extern const char *ptyl_test_encryption_pathname;
 
     NSLog(@"bb:%.0fx%.0f@(%.0f,%.0f) zoomScale:%.0f tile:%.0fx%.0f at:(%.0f,%.0f) size:%.0fx%.0f", bb.size.width, bb.size.height, bb.origin.x, bb.origin.y, [((View *) [self superview]) zoomScale], tileSize.width, tileSize.height, bb.origin.x/self.scale, bb.origin.y/self.scale, bb.size.width/self.scale, bb.size.height/self.scale);
 
-    // I don't really claim to fully understand all this. It did at
-    // first seem a bit weird to be passing in a "context width x
-    // height" (in the terminology of touch_lo_draw_tile) of 64x64,
-    // for instance, even if that tile is actually going to be
-    // rendered to 128x128 on-screen pixels. But what I tend to forget
-    // is that this 64x64 is in the coordinate space of the initial
-    // view of the document; the CGContext keeps track of scaling it
-    // as needed at the current zoom levels. I keep thinking about
-    // "pixels" incorrectly.
-
     if (!getenv("DRAW_ONLY_TILE") || tileMatches(getenv("DRAW_ONLY_TILE"), bb)) {
         fprintf(stderr, "+++ rendering to context %p\n", ctx);
         loDocument->pClass->paintTile(loDocument, (unsigned char *)ctx,
