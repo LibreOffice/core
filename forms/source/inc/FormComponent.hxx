@@ -197,11 +197,6 @@ public:
         const bool _bSetDelegator = true
     );
 
-    /** initializes the given peer with various settings necessary for form controls
-    */
-    static  void    initFormControlPeer(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& _rxPeer );
-
 protected:
     virtual ~OControl();
 
@@ -914,9 +909,6 @@ protected:
         @see m_xExternalBinding
     */
     virtual void            onConnectedExternalValue( );
-    /** called whenever a connection to an external supplier of values (XValueBinding) has been suspended
-    */
-    void                    onDisconnectedExternalValue();
 
     /** called whenever an external validator has been registered
     */

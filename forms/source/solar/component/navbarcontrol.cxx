@@ -160,8 +160,6 @@ namespace frm
             peerCreated();
 
             mbCreatingPeer = false;
-
-            OControl::initFormControlPeer( getPeer() );
         }
     }
 

@@ -236,8 +236,6 @@ namespace frm
                 break;
             }
 
-            OControl::initFormControlPeer( getPeer() );
-
             // filter controls are _never_ readonly
             Reference< XPropertySet > xModel( getModel(), UNO_QUERY_THROW );
             Reference< XPropertySetInfo > xModelPSI( xModel->getPropertySetInfo(), UNO_SET_THROW );

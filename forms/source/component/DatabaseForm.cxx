@@ -1309,7 +1309,6 @@ void ODatabaseForm::disposing()
     EventObject aEvt(static_cast<XWeak*>(this));
     m_aLoadListeners.disposeAndClear(aEvt);
     m_aRowSetApproveListeners.disposeAndClear(aEvt);
-    m_aParameterManager.disposing( aEvt );
     m_aResetListeners.disposing();
     m_aSubmitListeners.disposeAndClear(aEvt);
     m_aErrorListeners.disposeAndClear(aEvt);
