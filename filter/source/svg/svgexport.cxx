@@ -823,8 +823,8 @@ bool SVGFilter::implExportDocument()
             mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "clipPathUnits", "userSpaceOnUse" );
             SvXMLElementExport aClipPathElem( *mpSVGExport, XML_NAMESPACE_NONE, "clipPath", true, true );
             {
-                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "x", OUString::number( 0 ) );
-                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "y", OUString::number( 0 ) );
+                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "x", OUString::number( nDocX ) );
+                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "y", OUString::number( nDocY ) );
                 mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "width", OUString::number( nDocWidth ) );
                 mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "height", OUString::number( nDocHeight ) );
                 SvXMLElementExport aRectElem( *mpSVGExport, XML_NAMESPACE_NONE, "rect", true, true );
