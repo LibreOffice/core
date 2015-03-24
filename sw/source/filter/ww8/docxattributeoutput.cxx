@@ -326,17 +326,12 @@ void DocxAttributeOutput::StartParagraph( ww8::WW8TableNodeInfo::Pointer_t pText
     m_bIsFirstParagraph = false;
 }
 
-static void lcl_deleteAndResetTheLists( std::unique_ptr<sax_fastparser::FastAttributeList> &pSdtPrTokenChildren, ::sax_fastparser::FastAttributeList* &pSdtPrDataBindingAttrs, OUString& rSdtPrAlias)
+static void lcl_deleteAndResetTheLists( std::unique_ptr<sax_fastparser::FastAttributeList>& pSdtPrTokenChildren, std::unique_ptr<sax_fastparser::FastAttributeList>& pSdtPrDataBindingAttrs, OUString& rSdtPrAlias)
 {
     if( pSdtPrTokenChildren )
-    {
         pSdtPrTokenChildren.reset(0);
-    }
     if( pSdtPrDataBindingAttrs )
-    {
-        delete pSdtPrDataBindingAttrs;
-        pSdtPrDataBindingAttrs = NULL;
-    }
+        pSdtPrDataBindingAttrs.reset(0);
     if (!rSdtPrAlias.isEmpty())
         rSdtPrAlias.clear();
 }
@@ -603,7 +598,7 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
 void DocxAttributeOutput::WriteSdtBlock( sal_Int32& nSdtPrToken,
                                          std::unique_ptr<sax_fastparser::FastAttributeList>& pSdtPrTokenChildren,
                                          ::sax_fastparser::FastAttributeList*& pSdtPrTokenAttributes,
-                                         ::sax_fastparser::FastAttributeList*& pSdtPrDataBindingAttrs,
+                                         std::unique_ptr<sax_fastparser::FastAttributeList>& pSdtPrDataBindingAttrs,
                                          OUString& rSdtPrAlias,
                                          bool bPara )
 {
@@ -659,7 +654,7 @@ void DocxAttributeOutput::WriteSdtBlock( sal_Int32& nSdtPrToken,
 
         if(( pSdtPrDataBindingAttrs ) && !m_rExport.SdrExporter().IsParagraphHasDrawing())
         {
-            XFastAttributeListRef xAttrList( pSdtPrDataBindingAttrs );
+            XFastAttributeListRef xAttrList( pSdtPrDataBindingAttrs.release() );
             m_pSerializer->singleElementNS( XML_w, XML_dataBinding, xAttrList );
         }
 
@@ -693,10 +688,7 @@ void DocxAttributeOutput::WriteSdtBlock( sal_Int32& nSdtPrToken,
         nSdtPrToken = 0;
         pSdtPrTokenChildren.reset(0);
         if( pSdtPrDataBindingAttrs )
-        {
-            // do not delete yet; it's in xAttrList inside the parser
-            pSdtPrDataBindingAttrs = NULL;
-        }
+            pSdtPrDataBindingAttrs.reset(0);
         rSdtPrAlias.clear();
     }
 }
@@ -8226,7 +8218,7 @@ void DocxAttributeOutput::CharGrabBag( const SfxGrabBagItem& rItem )
                                            OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
                     }
                 }
-                else if (aPropertyValue.Name == "ooxml:CT_SdtPr_dataBinding" && m_pRunSdtPrDataBindingAttrs == NULL)
+                else if (aPropertyValue.Name == "ooxml:CT_SdtPr_dataBinding" && !m_pRunSdtPrDataBindingAttrs)
                 {
                     uno::Sequence<beans::PropertyValue> aGrabBag;
                     aPropertyValue.Value >>= aGrabBag;
@@ -8326,10 +8318,8 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_setFootnote(false)
     , m_nParagraphSdtPrToken(0)
     , m_pParagraphSdtPrTokenAttributes(NULL)
-    , m_pParagraphSdtPrDataBindingAttrs(NULL)
     , m_nRunSdtPrToken(0)
     , m_nStateOfFlyFrame( FLY_NOT_PROCESSED )
-    , m_pRunSdtPrDataBindingAttrs(NULL)
     , m_bParagraphSdtHasId(false)
 {
 }
@@ -8338,8 +8328,6 @@ DocxAttributeOutput::~DocxAttributeOutput()
 {
     delete m_pTableWrt, m_pTableWrt = NULL;
     delete m_pParagraphSdtPrTokenAttributes; m_pParagraphSdtPrTokenAttributes = NULL;
-    delete m_pParagraphSdtPrDataBindingAttrs; m_pParagraphSdtPrDataBindingAttrs = NULL;
-    delete m_pRunSdtPrDataBindingAttrs; m_pRunSdtPrDataBindingAttrs = NULL;
 }
 
 DocxExport& DocxAttributeOutput::GetExport()

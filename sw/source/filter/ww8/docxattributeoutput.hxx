@@ -706,7 +706,7 @@ private:
     void WriteSdtBlock(sal_Int32& nSdtPrToken,
                        std::unique_ptr<sax_fastparser::FastAttributeList>& pSdtPrTokenChildren,
                        ::sax_fastparser::FastAttributeList*& pSdtPrTokenAttributes,
-                       ::sax_fastparser::FastAttributeList*& pSdtPrDataBindingAttrs,
+                       std::unique_ptr<sax_fastparser::FastAttributeList>& pSdtPrDataBindingAttrs,
                        OUString& rSdtPrAlias,
                        bool bPara);
     /// Closes a currently open SDT block.
@@ -911,13 +911,13 @@ private:
     sal_Int32 m_nParagraphSdtPrToken;
     std::unique_ptr<sax_fastparser::FastAttributeList> m_pParagraphSdtPrTokenChildren;
     ::sax_fastparser::FastAttributeList *m_pParagraphSdtPrTokenAttributes;
-    ::sax_fastparser::FastAttributeList *m_pParagraphSdtPrDataBindingAttrs;
+    std::unique_ptr<sax_fastparser::FastAttributeList> m_pParagraphSdtPrDataBindingAttrs;
     /// members to control the existence of grabbagged SDT properties in the text run
     sal_Int32 m_nRunSdtPrToken;
     /// State of the Fly at current position
     FlyProcessingState m_nStateOfFlyFrame;
     std::unique_ptr<sax_fastparser::FastAttributeList> m_pRunSdtPrTokenChildren;
-    ::sax_fastparser::FastAttributeList *m_pRunSdtPrDataBindingAttrs;
+    std::unique_ptr<sax_fastparser::FastAttributeList> m_pRunSdtPrDataBindingAttrs;
     /// Value of the <w:alias> paragraph SDT element.
     OUString m_aParagraphSdtPrAlias;
     /// Same as m_aParagraphSdtPrAlias, but its content is aviailable till the SDT is closed.
