@@ -1507,20 +1507,12 @@ void SwDoc::CopyPageDesc( const SwPageDesc& rSrcDesc, SwPageDesc& rDstDesc,
     // If foot notes change the pages have to be triggered
     if( !(rDstDesc.GetFtnInfo() == rSrcDesc.GetFtnInfo()) )
     {
+        sw::PageFootnoteHint aHint;
         rDstDesc.SetFtnInfo( rSrcDesc.GetFtnInfo() );
-        SwMsgPoolItem  aInfo( RES_PAGEDESC_FTNINFO );
-        {
-            rDstDesc.GetMaster().ModifyBroadcast( &aInfo, 0, TYPE(SwFrm) );
-        }
-        {
-            rDstDesc.GetLeft().ModifyBroadcast( &aInfo, 0, TYPE(SwFrm) );
-        }
-        {
-            rDstDesc.GetFirstMaster().ModifyBroadcast( &aInfo, 0, TYPE(SwFrm) );
-        }
-        {
-            rDstDesc.GetFirstLeft().ModifyBroadcast( &aInfo, 0, TYPE(SwFrm) );
-        }
+        rDstDesc.GetMaster().CallSwClientNotify(aHint);
+        rDstDesc.GetLeft().CallSwClientNotify(aHint);
+        rDstDesc.GetFirstMaster().CallSwClientNotify(aHint);
+        rDstDesc.GetFirstLeft().CallSwClientNotify(aHint);
     }
 }
 

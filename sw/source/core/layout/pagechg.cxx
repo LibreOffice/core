@@ -525,6 +525,24 @@ void SwPageFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
     }
 }
 
+
+void SwPageFrm::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
+{
+    if(typeid(sw::PageFootnoteHint) == typeid(rHint))
+    {
+        // currently the savest way:
+        static_cast<SwRootFrm*>(GetUpper())->SetSuperfluous();
+        SetMaxFtnHeight(pDesc->GetFtnInfo().GetHeight());
+        if(!GetMaxFtnHeight())
+            SetMaxFtnHeight(LONG_MAX);
+        SetColMaxFtnHeight();
+        // here, the page might be destroyed:
+        static_cast<SwRootFrm*>(GetUpper())->RemoveFtns(0, false, true);
+    }
+    else
+        SwClient::SwClientNotify(rModify, rHint);
+}
+
 void SwPageFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                              sal_uInt8 &rInvFlags,
                              SwAttrSetChg *pOldSet, SwAttrSetChg *pNewSet )
@@ -631,17 +649,6 @@ void SwPageFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
             break;
         case RES_TEXTGRID:
             rInvFlags |= 0x60;
-            break;
-
-        case RES_PAGEDESC_FTNINFO:
-            // currently the savest way:
-            static_cast<SwRootFrm*>(GetUpper())->SetSuperfluous();
-            SetMaxFtnHeight( pDesc->GetFtnInfo().GetHeight() );
-            if ( !GetMaxFtnHeight() )
-                SetMaxFtnHeight( LONG_MAX );
-            SetColMaxFtnHeight();
-            // here, the page might be destroyed:
-            static_cast<SwRootFrm*>(GetUpper())->RemoveFtns( 0, false, true );
             break;
         case RES_FRAMEDIR :
             CheckDirChange();

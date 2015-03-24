@@ -341,6 +341,10 @@ public:
     operator SwPageDesc() const; // #i7983#
 };
 
+namespace sw {
+    class PageFootnoteHint SAL_FINAL : public SfxHint {};
+}
+
 #endif // INCLUDED_SW_INC_PAGEDESC_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

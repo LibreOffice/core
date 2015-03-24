@@ -509,19 +509,11 @@ void SwDoc::ChgPageDesc( sal_uInt16 i, const SwPageDesc &rChged )
     if( !(rDesc.GetFtnInfo() == rChged.GetFtnInfo()) )
     {
         rDesc.SetFtnInfo( rChged.GetFtnInfo() );
-        SwMsgPoolItem  aInfo( RES_PAGEDESC_FTNINFO );
-        {
-            rDesc.GetMaster().ModifyBroadcast( &aInfo, 0, TYPE(SwFrm) );
-        }
-        {
-            rDesc.GetLeft().ModifyBroadcast( &aInfo, 0, TYPE(SwFrm) );
-        }
-        {
-            rDesc.GetFirstMaster().ModifyBroadcast( &aInfo, 0, TYPE(SwFrm) );
-        }
-        {
-            rDesc.GetFirstLeft().ModifyBroadcast( &aInfo, 0, TYPE(SwFrm) );
-        }
+        sw::PageFootnoteHint aHint;
+        rDesc.GetMaster().CallSwClientNotify(aHint);
+        rDesc.GetLeft().CallSwClientNotify(aHint);
+        rDesc.GetFirstMaster().CallSwClientNotify(aHint);
+        rDesc.GetFirstLeft().CallSwClientNotify(aHint);
     }
     getIDocumentState().SetModified();
 
