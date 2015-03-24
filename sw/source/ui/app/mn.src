@@ -48,99 +48,6 @@
         Text [ en-US ] = "Pa~ge..." ; \
     };
 
-#define MN_TEXT_ATTR\
-    MenuItem\
-    {\
-        Identifier = MN_FORMAT_STYLE ; \
-        Command = ".uno:StyleMenu" ; \
-        Text [ en-US ] = "St~yle" ; \
-        SubMenu = Menu\
-        {\
-            ItemList = \
-            {\
-                MenuItem\
-                {\
-                    ITEM_FORMAT_ATTR_CHAR_WEIGHT\
-                    Checkable = TRUE ; \
-                };\
-                MenuItem\
-                {\
-                    ITEM_FORMAT_ATTR_CHAR_POSTURE\
-                    Checkable = TRUE ; \
-                };\
-                MenuItem\
-                {\
-                    ITEM_FORMAT_ATTR_CHAR_OVERLINE\
-                    Checkable = TRUE ; \
-                };\
-                MenuItem\
-                {\
-                    ITEM_FORMAT_ATTR_CHAR_UNDERLINE\
-                    Checkable = TRUE ; \
-                };\
-                MenuItem\
-                {\
-                    ITEM_FORMAT_ATTR_CHAR_STRIKEOUT\
-                    Checkable = TRUE ; \
-                };\
-                SEPARATOR ; \
-                MenuItem\
-                {\
-                    ITEM_FORMAT_ATTR_CHAR_SHADOWED\
-                    Checkable = TRUE ; \
-                };\
-                MenuItem\
-                {\
-                    ITEM_FORMAT_ATTR_CHAR_CONTOUR\
-                    Checkable = TRUE ; \
-                };\
-                SEPARATOR ; \
-                MenuItem\
-                {\
-                    Identifier = FN_SET_SUPER_SCRIPT ; \
-                    HelpId = CMD_FN_SET_SUPER_SCRIPT ; \
-                    Text [ en-US ] = "Superscript" ; \
-                    Checkable = TRUE ; \
-                };\
-                MenuItem\
-                {\
-                    Identifier = FN_SET_SUB_SCRIPT ; \
-                    HelpId = CMD_FN_SET_SUB_SCRIPT ; \
-                    Text [ en-US ] = "Subscript" ; \
-                    Checkable = TRUE ; \
-                };\
-            };\
-        };\
-    };\
-    MenuItem\
-    {\
-        Identifier = MN_FORMAT_LINESPACE ; \
-        Command = ".uno:LineSpacingMenu" ; \
-        Text [ en-US ] = "Line Spacing" ; \
-        _MenuItemFlags = MIB_RADIOCHECK ; \
-        SubMenu = Menu\
-        {\
-            ItemList = \
-            {\
-                MenuItem\
-                {\
-                    RadioCheck = TRUE ; \
-                    ITEM_FORMAT_PARA_LINESPACE_10\
-                };\
-                MenuItem\
-                {\
-                    RadioCheck = TRUE ; \
-                    ITEM_FORMAT_PARA_LINESPACE_15\
-                };\
-                MenuItem\
-                {\
-                    RadioCheck = TRUE ; \
-                    ITEM_FORMAT_PARA_LINESPACE_20\
-                };\
-            };\
-        };\
-    };
-
 /* --------------------- D O C U M E N T -------------------------- */
 
 #define _MN_EDIT_FIELD                                                      \
@@ -287,7 +194,6 @@
         _NUMBERING_RELATED_MENU                                             \
         SEPARATOR ;                                                         \
         MN_RESET                                                            \
-        MN_TEXT_ATTR                                                        \
         SEPARATOR ;                                                         \
         MN_TXT                                                              \
         MN_NUMBERING                                                        \
@@ -775,7 +681,6 @@ Menu MN_TAB_POPUPMENU
         MN_TAB2
         SEPARATOR ;
         MN_RESET
-        MN_TEXT_ATTR
         SEPARATOR ;
         MenuItem
         {
@@ -1089,7 +994,6 @@ Menu MN_DRWTXT_POPUPMENU
         MENU_PASTE_SPECIAL
         SEPARATOR ;
         MN_RESET
-        MN_TEXT_ATTR
         SEPARATOR ;
         ITEM_TRANSLITERATE_MENU
         SEPARATOR ;
