@@ -653,9 +653,9 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
     }
 
     // remove the default formats from the object again
-    SwClient* pDep;
-    while( 0 != ( pDep = (SwClient*)aCallMod.GetDepends()) )
-        aCallMod.Remove( pDep );
+    SwIterator<SwClient, SwModify> aClientIter(aCallMod);
+    for(SwClient* pClient = aClientIter.First(); pClient; pClient = aClientIter.Next())
+        aCallMod.Remove( pClient );
 
     getIDocumentState().SetModified();
 }

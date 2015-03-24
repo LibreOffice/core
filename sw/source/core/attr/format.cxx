@@ -238,13 +238,13 @@ SwFmt::~SwFmt()
         }
         else
         {
-            while( GetDepends() && pParentFmt)
+            SwIterator<SwClient,SwFmt> aIter(*this);
+            for(SwClient* pClient = aIter.First(); pClient && pParentFmt; pClient = aIter.Next())
             {
                 SwFmtChg aOldFmt( this );
                 SwFmtChg aNewFmt( pParentFmt );
-                SwClient* pDepend = (SwClient*)GetDepends();
-                pParentFmt->Add( pDepend );
-                pDepend->ModifyNotification( &aOldFmt, &aNewFmt );
+                pParentFmt->Add( pClient );
+                pClient->ModifyNotification( &aOldFmt, &aNewFmt );
             }
         }
     }
