@@ -1431,12 +1431,19 @@ void SwDocTest::testClientModify()
     TestClient aClient1, aClient2;
     OtherTestClient aOtherClient1;
     // test client registration
+    CPPUNIT_ASSERT(!aMod.HasWriterListeners());
+    CPPUNIT_ASSERT(!aMod.HasOnlyOneListener());
     CPPUNIT_ASSERT_EQUAL(aClient1.GetRegisteredIn(),static_cast<SwModify*>(nullptr));
     CPPUNIT_ASSERT_EQUAL(aClient2.GetRegisteredIn(),static_cast<SwModify*>(nullptr));
+    CPPUNIT_ASSERT_EQUAL(aClient2.GetRegisteredIn(),static_cast<SwModify*>(nullptr));
     aMod.Add(&aClient1);
+    CPPUNIT_ASSERT(aMod.HasWriterListeners());
+    CPPUNIT_ASSERT(aMod.HasOnlyOneListener());
     aMod.Add(&aClient2);
     CPPUNIT_ASSERT_EQUAL(aClient1.GetRegisteredIn(),static_cast<SwModify*>(&aMod));
     CPPUNIT_ASSERT_EQUAL(aClient2.GetRegisteredIn(),static_cast<SwModify*>(&aMod));
+    CPPUNIT_ASSERT(aMod.HasWriterListeners());
+    CPPUNIT_ASSERT(!aMod.HasOnlyOneListener());
     // test broadcast
     aMod.ModifyBroadcast(nullptr, nullptr);
     CPPUNIT_ASSERT_EQUAL(aClient1.m_nModifyCount,1);
