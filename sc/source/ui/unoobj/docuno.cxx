@@ -20,6 +20,7 @@
 #include <config_features.h>
 
 #include "scitems.hxx"
+#include <editeng/editview.hxx>
 #include <svx/fmdpage.hxx>
 #include <svx/fmview.hxx>
 #include <svx/svditer.hxx>
@@ -81,6 +82,7 @@
 #include "formulagroup.hxx"
 #include "gridwin.hxx"
 #include "hints.hxx"
+#include <inputhdl.hxx>
 #include <inputopt.hxx>
 #include "interpre.hxx"
 #include "linkuno.hxx"
@@ -548,6 +550,38 @@ void ScModelObj::postMouseEvent(int nType, int nX, int nY, int nCount)
         break;
     case LOK_MOUSEEVENT_MOUSEBUTTONUP:
         pGridWindow->LogicMouseButtonUp(aEvent);
+        break;
+    default:
+        assert(false);
+        break;
+    }
+}
+
+void ScModelObj::setTextSelection(int nType, int nX, int nY)
+{
+    SolarMutexGuard aGuard;
+
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    ScInputHandler* pInputHandler = SC_MOD()->GetInputHdl(pViewData->GetViewShell());
+
+    if (!pInputHandler)
+        return;
+
+    EditView* pTableView = pInputHandler->GetTableView();
+    if (!pTableView)
+        return;
+
+    Point aPoint(convertTwipToMm100(nX), convertTwipToMm100(nY));
+    switch (nType)
+    {
+    case LOK_SETTEXTSELECTION_START:
+        pTableView->SetCursorLogicPosition(aPoint, /*bPoint=*/false, /*bClearMark=*/false);
+        break;
+    case LOK_SETTEXTSELECTION_END:
+        pTableView->SetCursorLogicPosition(aPoint, /*bPoint=*/true, /*bClearMark=*/false);
+        break;
+    case LOK_SETTEXTSELECTION_RESET:
+        pTableView->SetCursorLogicPosition(aPoint, /*bPoint=*/true, /*bClearMark=*/true);
         break;
     default:
         assert(false);
