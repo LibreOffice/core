@@ -544,6 +544,24 @@ void ViewShell::SetCursorLogicPosition(const Point& rPosition, bool bPoint, bool
     }
 }
 
+void ViewShell::SetGraphicLogicPosition(bool bStart, const Point& rPosition)
+{
+    if (bStart)
+    {
+        MouseEvent aClickEvent(rPosition, 1, MouseEventModifiers::SIMPLECLICK, MOUSE_LEFT);
+        MouseButtonDown(aClickEvent, 0);
+        MouseEvent aMoveEvent(Point(rPosition.getX() + FuPoor::DRGLOG + 1, rPosition.getY()), 0, MouseEventModifiers::SIMPLEMOVE, MOUSE_LEFT);
+        MouseMove(aMoveEvent, 0);
+    }
+    else
+    {
+        MouseEvent aMoveEvent(Point(rPosition.getX() - FuPoor::DRGLOG - 1, rPosition.getY()), 0, MouseEventModifiers::SIMPLEMOVE, MOUSE_LEFT);
+        MouseMove(aMoveEvent, 0);
+        MouseEvent aClickEvent(rPosition, 1, MouseEventModifiers::SIMPLECLICK, MOUSE_LEFT);
+        MouseButtonUp(aClickEvent, 0);
+    }
+}
+
 void ViewShell::MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin)
 {
     if (rMEvt.IsLeaveWindow())
