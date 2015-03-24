@@ -772,7 +772,7 @@ void  SwPagePreview::Execute( SfxRequest &rReq )
             }
             if( pArgs )
             {
-                enum SvxZoomType eType = SvxZoomType::PERCENT;
+                SvxZoomType eType = SvxZoomType::PERCENT;
                 sal_uInt16 nZoomFactor = USHRT_MAX;
                 if(SfxItemState::SET == pArgs->GetItemState(SID_ATTR_ZOOM, true, &pItem))
                 {
@@ -801,7 +801,7 @@ void  SwPagePreview::Execute( SfxRequest &rReq )
         case SID_ZOOM_IN:
         case SID_ZOOM_OUT:
         {
-            enum SvxZoomType eType = SvxZoomType::PERCENT;
+            SvxZoomType eType = SvxZoomType::PERCENT;
             const SwViewOption* pVOpt = GetViewShell()->GetViewOptions();
             SetZoom(eType,
                     lcl_GetNextZoomStep(pVOpt->GetZoom(), SID_ZOOM_IN == rReq.GetSlot()));

@@ -1728,7 +1728,7 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
 
                 if ( pSet && SfxItemState::SET == pSet->GetItemState(SID_ATTR_ZOOM, true, &pItem))
                 {
-                    enum SvxZoomType eType = static_cast<const SvxZoomItem *>(pItem)->GetType();
+                    SvxZoomType eType = static_cast<const SvxZoomItem *>(pItem)->GetType();
                     SetZoom( eType, static_cast<const SvxZoomItem *>(pItem)->GetValue() );
                 }
                 bUp = true;
