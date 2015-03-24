@@ -141,9 +141,16 @@ void SdrDragView::TakeActionRect(Rectangle& rRect) const
             {
                 // #i95646# is this used..?
                 const basegfx::B2DRange aBoundRange(mpCurrentSdrDragMethod->getCurrentRange());
-                rRect = Rectangle(
-                    basegfx::fround(aBoundRange.getMinX()), basegfx::fround(aBoundRange.getMinY()),
-                    basegfx::fround(aBoundRange.getMaxX()), basegfx::fround(aBoundRange.getMaxY()));
+                if (aBoundRange.isEmpty())
+                {
+                    rRect.SetEmpty();
+                }
+                else
+                {
+                    rRect = Rectangle(
+                        basegfx::fround(aBoundRange.getMinX()), basegfx::fround(aBoundRange.getMinY()),
+                        basegfx::fround(aBoundRange.getMaxX()), basegfx::fround(aBoundRange.getMaxY()));
+                }
             }
         }
         if (rRect.IsEmpty())
