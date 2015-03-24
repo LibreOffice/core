@@ -51,7 +51,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star;
 
-static const sal_Int32 COMPLEX_TRANS_MASK_TMP =
+const sal_Int32 COMPLEX_TRANS_MASK =
     TransliterationModules_ignoreBaFa_ja_JP |
     TransliterationModules_ignoreIterationMark_ja_JP |
     TransliterationModules_ignoreTiJi_ja_JP |
@@ -61,22 +61,48 @@ static const sal_Int32 COMPLEX_TRANS_MASK_TMP =
     TransliterationModules_ignoreKiKuFollowedBySa_ja_JP |
     TransliterationModules_ignoreProlongedSoundMark_ja_JP;
 
-// These 2 transliterations are simple but need to take effect in
-// complex transliteration.
-static const sal_Int32 COMPLEX_TRANS_MASK =
-    COMPLEX_TRANS_MASK_TMP |
-    TransliterationModules_IGNORE_KANA |
-    TransliterationModules_FULLWIDTH_HALFWIDTH;
+namespace
+{
+sal_Int32 maskComplexTrans( sal_Int32 n )
+{
+    // IGNORE_KANA and FULLWIDTH_HALFWIDTH are simple but need to take effect
+    // in complex transliteration.
+    return
+        (n & COMPLEX_TRANS_MASK) |                      // all set ignore bits
+        TransliterationModules_IGNORE_KANA |            // plus IGNORE_KANA bit
+        TransliterationModules_FULLWIDTH_HALFWIDTH;     // and the FULLWIDTH_HALFWIDTH value
+}
 
-static const sal_Int32 SIMPLE_TRANS_MASK = ~COMPLEX_TRANS_MASK;
+bool isComplexTrans( sal_Int32 n )
+{
+    return n & COMPLEX_TRANS_MASK;
+}
+
+sal_Int32 maskSimpleTrans( sal_Int32 n )
+{
+    return n & ~COMPLEX_TRANS_MASK;
+}
+
+bool isSimpleTrans( sal_Int32 n )
+{
+    return maskSimpleTrans(n) != 0;
+}
 
 // Regex patterns are case sensitive.
-static const sal_Int32 SIMPLE_TRANS_MASK_REPATTERN =
-    ~(COMPLEX_TRANS_MASK |
-            TransliterationModules_IGNORE_CASE |
-            TransliterationModules_UPPERCASE_LOWERCASE |
-            TransliterationModules_LOWERCASE_UPPERCASE);
+sal_Int32 maskSimpleRegexTrans( sal_Int32 n )
+{
+    sal_Int32 m = (n & TransliterationModules_IGNORE_MASK) & ~TransliterationModules_IGNORE_CASE;
+    sal_Int32 v = n & TransliterationModules_NON_IGNORE_MASK;
+    if (v == TransliterationModules_UPPERCASE_LOWERCASE || v == TransliterationModules_LOWERCASE_UPPERCASE)
+        v = 0;
+    return (m | v) & ~COMPLEX_TRANS_MASK;
+}
 
+bool isSimpleRegexTrans( sal_Int32 n )
+{
+    return maskSimpleRegexTrans(n) != 0;
+}
+};
 
 TextSearch::TextSearch(const Reference < XComponentContext > & rxContext)
         : m_xContext( rxContext )
@@ -110,25 +136,25 @@ void TextSearch::setOptions( const SearchOptions& rOptions ) throw( RuntimeExcep
     delete pJumpTable2, pJumpTable2 = 0;
 
     // Create Transliteration class
-    if( aSrchPara.transliterateFlags & SIMPLE_TRANS_MASK )
+    if( isSimpleTrans( aSrchPara.transliterateFlags) )
     {
         if( !xTranslit.is() )
             xTranslit.set( Transliteration::create( m_xContext ) );
         xTranslit->loadModule(
-             (TransliterationModules)( aSrchPara.transliterateFlags & SIMPLE_TRANS_MASK ),
+             (TransliterationModules) maskSimpleTrans( aSrchPara.transliterateFlags),
              aSrchPara.Locale);
     }
     else if( xTranslit.is() )
         xTranslit = 0;
 
     // Create Transliteration for 2<->1, 2<->2 transliteration
-    if ( aSrchPara.transliterateFlags & COMPLEX_TRANS_MASK )
+    if ( isComplexTrans( aSrchPara.transliterateFlags) )
     {
         if( !xTranslit2.is() )
             xTranslit2.set( Transliteration::create( m_xContext ) );
         // Load transliteration module
         xTranslit2->loadModule(
-             (TransliterationModules)( aSrchPara.transliterateFlags & COMPLEX_TRANS_MASK ),
+             (TransliterationModules) maskComplexTrans( aSrchPara.transliterateFlags),
              aSrchPara.Locale);
     }
 
@@ -140,17 +166,17 @@ void TextSearch::setOptions( const SearchOptions& rOptions ) throw( RuntimeExcep
     // Transliterate search string.
     if (aSrchPara.algorithmType == SearchAlgorithms_REGEXP)
     {
-        if (aSrchPara.transliterateFlags & SIMPLE_TRANS_MASK_REPATTERN)
+        if (isSimpleRegexTrans( aSrchPara.transliterateFlags))
         {
-            if ((aSrchPara.transliterateFlags & SIMPLE_TRANS_MASK_REPATTERN) !=
-                    (aSrchPara.transliterateFlags & SIMPLE_TRANS_MASK))
+            if (maskSimpleRegexTrans( aSrchPara.transliterateFlags) !=
+                    maskSimpleTrans( aSrchPara.transliterateFlags))
             {
                 com::sun::star::uno::Reference< XExtendedTransliteration > xTranslitPattern(
                          Transliteration::create( m_xContext ));
                 if (xTranslitPattern.is())
                 {
                     xTranslitPattern->loadModule(
-                            (TransliterationModules)( aSrchPara.transliterateFlags & SIMPLE_TRANS_MASK_REPATTERN ),
+                            (TransliterationModules) maskSimpleRegexTrans( aSrchPara.transliterateFlags),
                             aSrchPara.Locale);
                     sSrchStr = xTranslitPattern->transliterateString2String(
                             aSrchPara.searchString, 0, aSrchPara.searchString.getLength());
@@ -169,11 +195,11 @@ void TextSearch::setOptions( const SearchOptions& rOptions ) throw( RuntimeExcep
     }
     else
     {
-        if ( xTranslit.is() && aSrchPara.transliterateFlags & SIMPLE_TRANS_MASK )
+        if ( xTranslit.is() && isSimpleTrans( aSrchPara.transliterateFlags) )
             sSrchStr = xTranslit->transliterateString2String(
                     aSrchPara.searchString, 0, aSrchPara.searchString.getLength());
 
-        if ( xTranslit2.is() && aSrchPara.transliterateFlags & COMPLEX_TRANS_MASK )
+        if ( xTranslit2.is() && isComplexTrans( aSrchPara.transliterateFlags) )
             sSrchStr2 = xTranslit2->transliterateString2String(
                     aSrchPara.searchString, 0, aSrchPara.searchString.getLength());
     }
@@ -739,8 +765,8 @@ void TextSearch::RESrchPrepare( const ::com::sun::star::util::SearchOptions& rOp
 {
     // select the transliterated pattern string
     const OUString& rPatternStr =
-        (rOptions.transliterateFlags & SIMPLE_TRANS_MASK) ? sSrchStr
-        : ((rOptions.transliterateFlags & COMPLEX_TRANS_MASK) ? sSrchStr2 : rOptions.searchString);
+        (isSimpleTrans( rOptions.transliterateFlags) ? sSrchStr
+        : (isComplexTrans( rOptions.transliterateFlags) ? sSrchStr2 : rOptions.searchString));
 
     sal_uInt32 nIcuSearchFlags = UREGEX_UWORD; // request UAX#29 unicode capability
     // map com::sun::star::util::SearchFlags to ICU uregex.h flags
