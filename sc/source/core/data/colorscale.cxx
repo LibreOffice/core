@@ -838,6 +838,8 @@ ScDataBarInfo* ScDataBarFormat::GetDataBarInfo(const ScAddress& rAddr) const
     double nValMax = getMaxValue();
     double nMin = getMin(nValMin, nValMax);
     double nMax = getMax(nValMin, nValMax);
+    double nMinLength = mpFormatData->mnMinLength;
+    double nMaxLength = mpFormatData->mnMaxLength;
 
     double nValue = mpDoc->GetValue(rAddr);
 
@@ -846,16 +848,16 @@ ScDataBarInfo* ScDataBarFormat::GetDataBarInfo(const ScAddress& rAddr) const
     {
         if(nValue <= nMin)
         {
-            pInfo->mnLength = 0;
+            pInfo->mnLength = nMinLength;
         }
         else if(nValue >= nMax)
         {
-            pInfo->mnLength = 100;
+            pInfo->mnLength = nMaxLength;
         }
         else
         {
             double nDiff = nMax - nMin;
-            pInfo->mnLength = (nValue - nMin)/nDiff*100.0;
+            pInfo->mnLength = nMinLength + (nValue - nMin)/nDiff * (nMaxLength-nMinLength);
         }
         pInfo->mnZero = 0;
     }

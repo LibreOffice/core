@@ -1300,6 +1300,8 @@ void XclExpDataBar::SaveXml( XclExpXmlStream& rStrm )
 
     rWorksheet->startElement( XML_dataBar,
                                 XML_showValue, OString::number(!mrFormat.GetDataBarData()->mbOnlyBar),
+                                XML_minLength, OString::number(sal_uInt32(mrFormat.GetDataBarData()->mnMinLength)),
+                                XML_maxLength, OString::number(sal_uInt32(mrFormat.GetDataBarData()->mnMaxLength)),
             FSEND );
 
     mpCfvoLowerLimit->SaveXml(rStrm);

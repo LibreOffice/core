@@ -273,6 +273,8 @@ void DataBarRule::importCfvo( const AttributeList& rAttribs )
 void DataBarRule::importAttribs( const AttributeList& rAttribs )
 {
     mxFormat->mbOnlyBar = !rAttribs.getBool( XML_showValue, true );
+    mxFormat->mnMinLength = rAttribs.getUnsigned( XML_minLength, 10);
+    mxFormat->mnMaxLength = rAttribs.getUnsigned( XML_maxLength, 90);
 }
 
 void DataBarRule::SetData( ScDataBarFormat* pFormat, ScDocument* pDoc, const ScAddress& rAddr )

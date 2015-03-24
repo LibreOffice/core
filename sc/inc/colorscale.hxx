@@ -101,6 +101,8 @@ struct SC_DLLPUBLIC ScDataBarFormatData
         mbGradient(true),
         mbNeg(true),
         meAxisPosition(databar::AUTOMATIC),
+        mnMinLength(0),
+        mnMaxLength(100),
         mbOnlyBar(false){}
 
     ScDataBarFormatData(const ScDataBarFormatData& r):
@@ -109,6 +111,8 @@ struct SC_DLLPUBLIC ScDataBarFormatData
         mbGradient(r.mbGradient),
         mbNeg(r.mbNeg),
         meAxisPosition(r.meAxisPosition),
+        mnMinLength(r.mnMinLength),
+        mnMaxLength(r.mnMaxLength),
         mbOnlyBar(r.mbOnlyBar)
     {
         if(r.mpNegativeColor)
@@ -157,6 +161,16 @@ struct SC_DLLPUBLIC ScDataBarFormatData
      * Default is false
      */
     databar::ScAxisPosition meAxisPosition;
+    /**
+     * Minimal length of a databar in percent of cell length
+     * Value has to be in the range [0, 100)
+     */
+    double mnMinLength;
+    /**
+     * Maximal length of a databar in percent of cell length
+     * Value has to be in the range (0, 100]
+     */
+    double mnMaxLength;
 
     /**
      * If TRUE we only show the bar and not the value
