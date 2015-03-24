@@ -155,6 +155,13 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
     sal_uInt16 nDrgLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
     sal_uInt16 nHitLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(HITPIX,0)).Width() );
 
+    if (mpDoc->isTiledRendering())
+    {
+        // When tiled rendering, we always work in logic units, use the non-pixel constants.
+        nDrgLog = DRGLOG;
+        nHitLog = HITLOG;
+    }
+
     // The following code is executed for right clicks as well as for left
     // clicks in order to modify the selection for the right button as a
     // preparation for the context menu.  The functions BegMarkObject() and
