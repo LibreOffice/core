@@ -23,33 +23,42 @@
 #include <rtl/ustring.hxx>
 #include <tools/solar.h>
 #include <i18nlangtag/lang.h>
+#include <o3tl/typed_flags_set.hxx>
 
-#define EE_CNTRL_USECHARATTRIBS     0x00000001  // Use of hard character attributes
-#define EE_CNTRL_USEPARAATTRIBS     0x00000002  // Using paragraph attributes.
-#define EE_CNTRL_CRSRLEFTPARA       0x00000004  // Cursor is moved to another paragraph
-#define EE_CNTRL_DOIDLEFORMAT       0x00000008  // Formatting idle
-#define EE_CNTRL_PASTESPECIAL       0x00000010  // Allow PasteSpecial
-#define EE_CNTRL_AUTOINDENTING      0x00000020  // Automatic indenting
-#define EE_CNTRL_UNDOATTRIBS        0x00000040  // Undo for Attributes....
-#define EE_CNTRL_ONECHARPERLINE     0x00000080  // One character per line
-#define EE_CNTRL_NOCOLORS           0x00000100  // Engine: No Color
-#define EE_CNTRL_OUTLINER           0x00000200  // Special treatment Outliner/Outline mode
-#define EE_CNTRL_OUTLINER2          0x00000400  // Special treatment Outliner/Page
-#define EE_CNTRL_ALLOWBIGOBJS       0x00000800  // Portion info in text object
-#define EE_CNTRL_ONLINESPELLING     0x00001000  // During the edit Spelling
-#define EE_CNTRL_STRETCHING         0x00002000  // Stretch mode
-#define EE_CNTRL_MARKFIELDS         0x00004000  // Mark Fields with color
-#define EE_CNTRL_RESTOREFONT        0x00010000  // Restore Font in OutDev
-#define EE_CNTRL_RTFSTYLESHEETS     0x00020000  // Use Stylesheets when imported
-#define EE_CNTRL_AUTOCORRECT        0x00080000  // AutoCorrect
-#define EE_CNTRL_AUTOCOMPLETE       0x00100000  // AutoComplete
-#define EE_CNTRL_AUTOPAGESIZEX      0x00200000  // Adjust paper width to Text
-#define EE_CNTRL_AUTOPAGESIZEY      0x00400000  // Adjust paper height to Text
-#define EE_CNTRL_AUTOPAGESIZE       (EE_CNTRL_AUTOPAGESIZEX|EE_CNTRL_AUTOPAGESIZEY)
-#define EE_CNTRL_TABINDENTING       0x00800000  // Indent with tab
-#define EE_CNTRL_FORMAT100          0x01000000  // Always format to 100%
-#define EE_CNTRL_ULSPACESUMMATION   0x02000000  // MS Compat: sum SA and SB, not maximum value
-#define EE_CNTRL_ULSPACEFIRSTPARA   0x04000000  // MS Compat: evaluate also at the first paragraph
+enum class EEControlBits
+{
+    NONE               = 0x00000000,
+    USECHARATTRIBS     = 0x00000001,  // Use of hard character attributes
+    USEPARAATTRIBS     = 0x00000002,  // Using paragraph attributes.
+    CRSRLEFTPARA       = 0x00000004,  // Cursor is moved to another paragraph
+    DOIDLEFORMAT       = 0x00000008,  // Formatting idle
+    PASTESPECIAL       = 0x00000010,  // Allow PasteSpecial
+    AUTOINDENTING      = 0x00000020,  // Automatic indenting
+    UNDOATTRIBS        = 0x00000040,  // Undo for Attributes....
+    ONECHARPERLINE     = 0x00000080,  // One character per line
+    NOCOLORS           = 0x00000100,  // Engine: No Color
+    OUTLINER           = 0x00000200,  // Special treatment Outliner/Outline mode
+    OUTLINER2          = 0x00000400,  // Special treatment Outliner/Page
+    ALLOWBIGOBJS       = 0x00000800,  // Portion info in text object
+    ONLINESPELLING     = 0x00001000,  // During the edit Spelling
+    STRETCHING         = 0x00002000,  // Stretch mode
+    MARKFIELDS         = 0x00004000,  // Mark Fields with color
+    RESTOREFONT        = 0x00010000,  // Restore Font in OutDev
+    RTFSTYLESHEETS     = 0x00020000,  // Use Stylesheets when imported
+    AUTOCORRECT        = 0x00080000,  // AutoCorrect
+    AUTOCOMPLETE       = 0x00100000,  // AutoComplete
+    AUTOPAGESIZEX      = 0x00200000,  // Adjust paper width to Text
+    AUTOPAGESIZEY      = 0x00400000,  // Adjust paper height to Text
+    AUTOPAGESIZE       = (AUTOPAGESIZEX | AUTOPAGESIZEY),
+    TABINDENTING       = 0x00800000,  // Indent with tab
+    FORMAT100          = 0x01000000,  // Always format to 100%
+    ULSPACESUMMATION   = 0x02000000,  // MS Compat: sum SA and SB, not maximum value
+    ULSPACEFIRSTPARA   = 0x04000000,  // MS Compat: evaluate also at the first paragraph
+};
+namespace o3tl
+{
+    template<> struct typed_flags<EEControlBits> : is_typed_flags<EEControlBits, 0x07ffffff> {};
+}
 
 #define EV_CNTRL_AUTOSCROLL         0x00000001  // Auto scrolling horizontally
 #define EV_CNTRL_BIGSCROLL          0x00000002  // Scroll further to the cursor
@@ -74,6 +83,14 @@
     EE_STAT_CRSRLEFTPARA at the time cursor movement and the enter.
 */
 
+inline void SetFlags( EEControlBits& rBits, EEControlBits nMask, bool bOn )
+{
+    if ( bOn )
+        rBits |= nMask;
+    else
+        rBits &= ~nMask;
+}
+
 inline void SetFlags( sal_uLong& rBits, const sal_uInt32 nMask, bool bOn )
 {
     if ( bOn )
@@ -85,22 +102,22 @@ inline void SetFlags( sal_uLong& rBits, const sal_uInt32 nMask, bool bOn )
 class EditStatus
 {
 protected:
-    sal_uLong   nStatusBits;
-    sal_uLong   nControlBits;
-    sal_Int32   nPrevPara;                  // for EE_STAT_CRSRLEFTPARA
+    sal_uLong     nStatusBits;
+    EEControlBits nControlBits;
+    sal_Int32     nPrevPara;                  // for EE_STAT_CRSRLEFTPARA
 
 public:
-            EditStatus()                { nStatusBits = 0; nControlBits = 0; nPrevPara = -1; }
+            EditStatus()                { nStatusBits = 0; nControlBits = EEControlBits::NONE; nPrevPara = -1; }
 
     void    Clear()                     { nStatusBits = 0; }
-    void    SetControlBits( sal_uLong nMask, bool bOn )
+    void    SetControlBits( EEControlBits nMask, bool bOn )
                 { SetFlags( nControlBits, nMask, bOn ); }
 
     sal_uLong   GetStatusWord() const       { return nStatusBits; }
     sal_uLong&  GetStatusWord()             { return nStatusBits; }
 
-    sal_uLong   GetControlWord() const      { return nControlBits; }
-    sal_uLong&  GetControlWord()            { return nControlBits; }
+    EEControlBits  GetControlWord() const      { return nControlBits; }
+    EEControlBits& GetControlWord()            { return nControlBits; }
 
     sal_Int32   GetPrevParagraph() const    { return nPrevPara; }
     sal_Int32&  GetPrevParagraph()          { return nPrevPara; }

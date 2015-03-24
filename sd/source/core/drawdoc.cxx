@@ -279,22 +279,22 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
         SetLinkManager( new sfx2::LinkManager(mpDocSh) );
     }
 
-    sal_uLong nCntrl = rOutliner.GetControlWord();
-    nCntrl |= EE_CNTRL_ALLOWBIGOBJS;
+    EEControlBits nCntrl = rOutliner.GetControlWord();
+    nCntrl |= EEControlBits::ALLOWBIGOBJS;
 
     if (mbOnlineSpell)
-        nCntrl |= EE_CNTRL_ONLINESPELLING;
+        nCntrl |= EEControlBits::ONLINESPELLING;
     else
-        nCntrl &= ~EE_CNTRL_ONLINESPELLING;
+        nCntrl &= ~EEControlBits::ONLINESPELLING;
 
-    nCntrl &= ~ EE_CNTRL_ULSPACESUMMATION;
+    nCntrl &= ~ EEControlBits::ULSPACESUMMATION;
     if ( meDocType != DOCUMENT_TYPE_IMPRESS )
         SetSummationOfParagraphs( false );
     else
     {
         SetSummationOfParagraphs( pOptions->IsSummationOfParagraphs() );
         if ( pOptions->IsSummationOfParagraphs() )
-            nCntrl |= EE_CNTRL_ULSPACESUMMATION;
+            nCntrl |= EEControlBits::ULSPACESUMMATION;
     }
     rOutliner.SetControlWord(nCntrl);
 
@@ -326,13 +326,13 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
 
     pHitTestOutliner->SetDefaultLanguage( Application::GetSettings().GetLanguageTag().getLanguageType() );
 
-    sal_uLong nCntrl2 = pHitTestOutliner->GetControlWord();
-    nCntrl2 |= EE_CNTRL_ALLOWBIGOBJS;
-    nCntrl2 &= ~EE_CNTRL_ONLINESPELLING;
+    EEControlBits nCntrl2 = pHitTestOutliner->GetControlWord();
+    nCntrl2 |= EEControlBits::ALLOWBIGOBJS;
+    nCntrl2 &= ~EEControlBits::ONLINESPELLING;
 
-    nCntrl2 &= ~ EE_CNTRL_ULSPACESUMMATION;
+    nCntrl2 &= ~ EEControlBits::ULSPACESUMMATION;
     if ( pOptions->IsSummationOfParagraphs() )
-        nCntrl2 |= EE_CNTRL_ULSPACESUMMATION;
+        nCntrl2 |= EEControlBits::ULSPACESUMMATION;
 
     pHitTestOutliner->SetControlWord( nCntrl2 );
 
@@ -613,11 +613,11 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
     // StyleRequestHandler are.
     ::Outliner& rDrawOutliner = GetDrawOutliner();
     rDrawOutliner.SetStyleSheetPool(static_cast<SfxStyleSheetPool*>(GetStyleSheetPool()));
-    sal_uLong nCntrl = rDrawOutliner.GetControlWord();
+    EEControlBits nCntrl = rDrawOutliner.GetControlWord();
     if (mbOnlineSpell)
-        nCntrl |= EE_CNTRL_ONLINESPELLING;
+        nCntrl |= EEControlBits::ONLINESPELLING;
     else
-        nCntrl &= ~EE_CNTRL_ONLINESPELLING;
+        nCntrl &= ~EEControlBits::ONLINESPELLING;
     rDrawOutliner.SetControlWord(nCntrl);
 
     // Initialize HitTestOutliner and DocumentOutliner, but don't initialize the
@@ -831,16 +831,16 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
 void SdDrawDocument::SetOnlineSpell(bool bIn)
 {
     mbOnlineSpell = bIn;
-    sal_uLong nCntrl = 0;
+    EEControlBits nCntrl;
 
     if(mpOutliner)
     {
         nCntrl = mpOutliner->GetControlWord();
 
         if(mbOnlineSpell)
-            nCntrl |= EE_CNTRL_ONLINESPELLING;
+            nCntrl |= EEControlBits::ONLINESPELLING;
         else
-            nCntrl &= ~EE_CNTRL_ONLINESPELLING;
+            nCntrl &= ~EEControlBits::ONLINESPELLING;
 
         mpOutliner->SetControlWord(nCntrl);
     }
@@ -850,9 +850,9 @@ void SdDrawDocument::SetOnlineSpell(bool bIn)
         nCntrl = mpInternalOutliner->GetControlWord();
 
         if (mbOnlineSpell)
-            nCntrl |= EE_CNTRL_ONLINESPELLING;
+            nCntrl |= EEControlBits::ONLINESPELLING;
         else
-            nCntrl &= ~EE_CNTRL_ONLINESPELLING;
+            nCntrl &= ~EEControlBits::ONLINESPELLING;
 
         mpInternalOutliner->SetControlWord(nCntrl);
     }
@@ -862,9 +862,9 @@ void SdDrawDocument::SetOnlineSpell(bool bIn)
     nCntrl = rOutliner.GetControlWord();
 
     if (mbOnlineSpell)
-        nCntrl |= EE_CNTRL_ONLINESPELLING;
+        nCntrl |= EEControlBits::ONLINESPELLING;
     else
-        nCntrl &= ~EE_CNTRL_ONLINESPELLING;
+        nCntrl &= ~EEControlBits::ONLINESPELLING;
 
     rOutliner.SetControlWord(nCntrl);
 

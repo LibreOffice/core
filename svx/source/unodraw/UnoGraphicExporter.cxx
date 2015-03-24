@@ -633,8 +633,8 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
     rOutl.SetBackgroundColor( pPage->GetPageBackgroundColor() );
 
     // #i102251#
-    const sal_uInt32 nOldCntrl(rOutl.GetControlWord());
-    sal_uInt32 nCntrl = nOldCntrl & ~EE_CNTRL_ONLINESPELLING;
+    const EEControlBits nOldCntrl(rOutl.GetControlWord());
+    EEControlBits nCntrl = nOldCntrl & ~EEControlBits::ONLINESPELLING;
     rOutl.SetControlWord(nCntrl);
 
     SdrObject* pTempBackgroundShape = 0;

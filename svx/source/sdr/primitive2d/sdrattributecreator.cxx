@@ -558,7 +558,7 @@ namespace drawinglayer
 
                 // #i107346#
                 const SdrOutliner& rDrawTextOutliner = rText.GetModel()->GetDrawOutliner(&rTextObj);
-                const bool bWrongSpell(rDrawTextOutliner.GetControlWord() & EE_CNTRL_ONLINESPELLING);
+                const bool bWrongSpell(rDrawTextOutliner.GetControlWord() & EEControlBits::ONLINESPELLING);
 
                 return attribute::SdrTextAttribute(
                     rText,

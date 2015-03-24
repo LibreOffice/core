@@ -1371,12 +1371,12 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
 
             if (pOL)
             {
-                sal_uLong nCntrl = pOL->GetControlWord();
+                EEControlBits nCntrl = pOL->GetControlWord();
 
                 if (bOnlineSpell)
-                    nCntrl |= EE_CNTRL_ONLINESPELLING;
+                    nCntrl |= EEControlBits::ONLINESPELLING;
                 else
-                    nCntrl &= ~EE_CNTRL_ONLINESPELLING;
+                    nCntrl &= ~EEControlBits::ONLINESPELLING;
 
                 pOL->SetControlWord(nCntrl);
             }

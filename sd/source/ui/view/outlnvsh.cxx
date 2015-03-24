@@ -785,9 +785,9 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
     else
     {
         // Enable color view?
-        sal_uLong nCntrl = rOutl.GetControlWord();
+        EEControlBits nCntrl = rOutl.GetControlWord();
         bool bNoColor = false;
-        if (nCntrl & EE_CNTRL_NOCOLORS)
+        if (nCntrl & EEControlBits::NOCOLORS)
             bNoColor = true;
 
         rSet.Put( SfxBoolItem( SID_COLORVIEW, bNoColor ) );
@@ -1231,12 +1231,12 @@ void OutlineViewShell::ReadFrameViewData(FrameView* pView)
 
     rOutl.SetFlatMode( pView->IsNoAttribs() );
 
-    sal_uLong nCntrl = rOutl.GetControlWord();
+    EEControlBits nCntrl = rOutl.GetControlWord();
 
     if ( pView->IsNoColors() )
-        rOutl.SetControlWord(nCntrl | EE_CNTRL_NOCOLORS);
+        rOutl.SetControlWord(nCntrl | EEControlBits::NOCOLORS);
     else
-        rOutl.SetControlWord(nCntrl & ~EE_CNTRL_NOCOLORS);
+        rOutl.SetControlWord(nCntrl & ~EEControlBits::NOCOLORS);
 
     sal_uInt16 nPage = mpFrameView->GetSelectedPage();
     pLastPage = GetDoc()->GetSdPage( nPage, PK_STANDARD );
@@ -1250,9 +1250,9 @@ void OutlineViewShell::WriteFrameViewData()
 {
     ::Outliner& rOutl = pOlView->GetOutliner();
 
-    sal_uLong nCntrl = rOutl.GetControlWord();
+    EEControlBits nCntrl = rOutl.GetControlWord();
     bool bNoColor = false;
-    if (nCntrl & EE_CNTRL_NOCOLORS)
+    if (nCntrl & EEControlBits::NOCOLORS)
         bNoColor = true;
     mpFrameView->SetNoColors(bNoColor);
     mpFrameView->SetNoAttribs( rOutl.IsFlatMode() );

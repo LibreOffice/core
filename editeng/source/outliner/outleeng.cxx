@@ -46,7 +46,7 @@ OutlinerEditEng::~OutlinerEditEng()
 
 void OutlinerEditEng::PaintingFirstLine( sal_Int32 nPara, const Point& rStartPos, long nBaseLineY, const Point& rOrigin, short nOrientation, OutputDevice* pOutDev )
 {
-    if( GetControlWord() & EE_CNTRL_OUTLINER )
+    if( GetControlWord() & EEControlBits::OUTLINER )
     {
         PaintFirstLineInfo aInfo( nPara, rStartPos, nBaseLineY, rOrigin, nOrientation, pOutDev );
         pOwner->maPaintFirstLineHdl.Call( &aInfo );

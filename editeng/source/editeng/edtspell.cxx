@@ -702,7 +702,7 @@ OUString const* EdtAutoCorrDoc::GetPrevPara(bool const)
     const SfxBoolItem& rBulletState = static_cast<const SfxBoolItem&>(
             mpEditEngine->GetParaAttrib( nPos, EE_PARA_BULLETSTATE ));
     bool bBullet = rBulletState.GetValue() ? true : false;
-    if ( !bBullet && (mpEditEngine->GetControlWord() & EE_CNTRL_OUTLINER) )
+    if ( !bBullet && (mpEditEngine->GetControlWord() & EEControlBits::OUTLINER) )
     {
         // The Outliner has still a Bullet at Level 0.
         const SfxInt16Item& rLevel = static_cast<const SfxInt16Item&>(

@@ -2703,10 +2703,10 @@ void SdrObjCustomShape::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRe
     TakeTextAnchorRect(aAnkRect);
     SdrTextVertAdjust eVAdj=GetTextVerticalAdjust();
     SdrTextHorzAdjust eHAdj=GetTextHorizontalAdjust();
-    sal_uIntPtr nStat0=rOutliner.GetControlWord();
+    EEControlBits nStat0=rOutliner.GetControlWord();
     Size aNullSize;
 
-    rOutliner.SetControlWord(nStat0|EE_CNTRL_AUTOPAGESIZE);
+    rOutliner.SetControlWord(nStat0|EEControlBits::AUTOPAGESIZE);
     rOutliner.SetMinAutoPaperSize(aNullSize);
     sal_Int32 nMaxAutoPaperWidth = 1000000;
     sal_Int32 nMaxAutoPaperHeight= 1000000;

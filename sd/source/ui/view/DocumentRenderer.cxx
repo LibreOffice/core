@@ -1428,10 +1428,10 @@ private:
             mpPrinter->SetMapMode(aMap);
 
             ::Outliner& rOutliner = mrBase.GetDocument()->GetDrawOutliner();
-            const sal_uLong nSavedControlWord (rOutliner.GetControlWord());
-            sal_uLong nCntrl = nSavedControlWord;
-            nCntrl &= ~EE_CNTRL_MARKFIELDS;
-            nCntrl &= ~EE_CNTRL_ONLINESPELLING;
+            const EEControlBits nSavedControlWord (rOutliner.GetControlWord());
+            EEControlBits nCntrl = nSavedControlWord;
+            nCntrl &= ~EEControlBits::MARKFIELDS;
+            nCntrl &= ~EEControlBits::ONLINESPELLING;
             rOutliner.SetControlWord( nCntrl );
 
             // When in outline view then apply all pending changes to the model.

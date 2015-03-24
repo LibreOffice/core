@@ -594,11 +594,11 @@ void ScInputHandler::UpdateRefDevice()
 
     bool bTextWysiwyg = SC_MOD()->GetInputOptions().GetTextWysiwyg();
     bool bInPlace = pActiveViewSh && pActiveViewSh->GetViewFrame()->GetFrame().IsInPlace();
-    sal_uLong nCtrl = pEngine->GetControlWord();
+    EEControlBits nCtrl = pEngine->GetControlWord();
     if ( bTextWysiwyg || bInPlace )
-        nCtrl |= EE_CNTRL_FORMAT100;    // EditEngine default: always format for 100%
+        nCtrl |= EEControlBits::FORMAT100;    // EditEngine default: always format for 100%
     else
-        nCtrl &= ~EE_CNTRL_FORMAT100;   // when formatting for screen, use the actual MapMode
+        nCtrl &= ~EEControlBits::FORMAT100;   // when formatting for screen, use the actual MapMode
     pEngine->SetControlWord( nCtrl );
     if ( bTextWysiwyg && pActiveViewSh )
         pEngine->SetRefDevice( pActiveViewSh->GetViewData().GetDocument()->GetPrinter() );
@@ -632,7 +632,7 @@ void ScInputHandler::ImplCreateEditEngine()
         pEngine->SetPaperSize( Size( 1000000, 1000000 ) );
         pEditDefaults = new SfxItemSet( pEngine->GetEmptyItemSet() );
 
-        pEngine->SetControlWord( pEngine->GetControlWord() | EE_CNTRL_AUTOCORRECT );
+        pEngine->SetControlWord( pEngine->GetControlWord() | EEControlBits::AUTOCORRECT );
         pEngine->SetModifyHdl( LINK( this, ScInputHandler, ModifyHdl ) );
     }
 
@@ -648,15 +648,15 @@ void ScInputHandler::ImplCreateEditEngine()
 
 void ScInputHandler::UpdateAutoCorrFlag()
 {
-    sal_uLong nCntrl = pEngine->GetControlWord();
-    sal_uLong nOld = nCntrl;
+    EEControlBits nCntrl = pEngine->GetControlWord();
+    EEControlBits nOld = nCntrl;
 
     // Don't use pLastPattern here (may be invalid because of AutoStyle)
     bool bDisable = bLastIsSymbol || bFormulaMode;
     if ( bDisable )
-        nCntrl &= ~EE_CNTRL_AUTOCORRECT;
+        nCntrl &= ~EEControlBits::AUTOCORRECT;
     else
-        nCntrl |= EE_CNTRL_AUTOCORRECT;
+        nCntrl |= EEControlBits::AUTOCORRECT;
 
     if ( nCntrl != nOld )
         pEngine->SetControlWord(nCntrl);
@@ -680,17 +680,17 @@ void ScInputHandler::UpdateSpellSettings( bool bFromStartTab )
 
         if ( bFromStartTab || eMode != SC_INPUT_NONE )
         {
-            sal_uLong nCntrl = pEngine->GetControlWord();
-            sal_uLong nOld = nCntrl;
+            EEControlBits nCntrl = pEngine->GetControlWord();
+            EEControlBits nOld = nCntrl;
             if( bOnlineSpell )
-                nCntrl |= EE_CNTRL_ONLINESPELLING;
+                nCntrl |= EEControlBits::ONLINESPELLING;
             else
-                nCntrl &= ~EE_CNTRL_ONLINESPELLING;
+                nCntrl &= ~EEControlBits::ONLINESPELLING;
             // No AutoCorrect for Symbol Font (EditEngine does no evaluate Default)
             if ( pLastPattern && pLastPattern->IsSymbolFont() )
-                nCntrl &= ~EE_CNTRL_AUTOCORRECT;
+                nCntrl &= ~EEControlBits::AUTOCORRECT;
             else
-                nCntrl |= EE_CNTRL_AUTOCORRECT;
+                nCntrl |= EEControlBits::AUTOCORRECT;
             if ( nCntrl != nOld )
                 pEngine->SetControlWord(nCntrl);
 
@@ -3512,9 +3512,9 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
                     //  Online spelling is turned back on in StartTable, after setting
                     //  the right language from cell attributes.
 
-                    sal_uLong nCntrl = pEngine->GetControlWord();
-                    if ( nCntrl & EE_CNTRL_ONLINESPELLING )
-                        pEngine->SetControlWord( nCntrl & ~EE_CNTRL_ONLINESPELLING );
+                    EEControlBits nCntrl = pEngine->GetControlWord();
+                    if ( nCntrl & EEControlBits::ONLINESPELLING )
+                        pEngine->SetControlWord( nCntrl & ~EEControlBits::ONLINESPELLING );
 
                     bModified = false;
                     bSelIsRef = false;

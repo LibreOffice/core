@@ -5369,7 +5369,7 @@ bool ScGridWindow::IsSpellErrorAtPos( const Point& rPos, SCCOL nCol1, SCROW nRow
     if (!aLogicEdit.IsInside(aLogicClick))
         return false;
 
-    pEngine->SetControlWord(pEngine->GetControlWord() | EE_CNTRL_ONLINESPELLING);
+    pEngine->SetControlWord(pEngine->GetControlWord() | EEControlBits::ONLINESPELLING);
     pEngine->SetAllMisspellRanges(*pRanges);
 
     EditView aTempView(pEngine.get(), this);
@@ -5536,7 +5536,7 @@ bool ScGridWindow::ContinueOnlineSpelling()
                 //  because MapMode must be set for some old documents
                 pEngine.reset(new ScTabEditEngine(pDoc));
                 pEngine->SetControlWord(
-                    pEngine->GetControlWord() | (EE_CNTRL_ONLINESPELLING | EE_CNTRL_ALLOWBIGOBJS));
+                    pEngine->GetControlWord() | (EEControlBits::ONLINESPELLING | EEControlBits::ALLOWBIGOBJS));
                 pEngine->SetStatusEventHdl(LINK(&aStatus, SpellCheckStatus, EventHdl));
                 //  Delimiters hier wie in inputhdl.cxx !!!
                 pEngine->SetWordDelimiters(

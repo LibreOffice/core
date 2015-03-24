@@ -942,8 +942,8 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
 
     //  bei IdleFormat wird manchmal ein Cursor gemalt, wenn die View schon weg ist (23576)
 
-    sal_uLong nEC = pNewEngine->GetControlWord();
-    pNewEngine->SetControlWord(nEC & ~EE_CNTRL_DOIDLEFORMAT);
+    EEControlBits nEC = pNewEngine->GetControlWord();
+    pNewEngine->SetControlWord(nEC & ~EEControlBits::DOIDLEFORMAT);
 
     sal_uLong nVC = pEditView[eWhich]->GetControlWord();
     pEditView[eWhich]->SetControlWord(nVC & ~EV_CNTRL_AUTOSCROLL);
@@ -3013,13 +3013,13 @@ void ScViewData::UpdateOutlinerFlags( Outliner& rOutl ) const
     ScDocument* pLocalDoc = GetDocument();
     bool bOnlineSpell = pLocalDoc->GetDocOptions().IsAutoSpell();
 
-    sal_uLong nCntrl = rOutl.GetControlWord();
-    nCntrl |= EE_CNTRL_MARKFIELDS;
-    nCntrl |= EE_CNTRL_AUTOCORRECT;
+    EEControlBits nCntrl = rOutl.GetControlWord();
+    nCntrl |= EEControlBits::MARKFIELDS;
+    nCntrl |= EEControlBits::AUTOCORRECT;
     if( bOnlineSpell )
-        nCntrl |= EE_CNTRL_ONLINESPELLING;
+        nCntrl |= EEControlBits::ONLINESPELLING;
     else
-        nCntrl &= ~EE_CNTRL_ONLINESPELLING;
+        nCntrl &= ~EEControlBits::ONLINESPELLING;
     rOutl.SetControlWord(nCntrl);
 
     rOutl.SetCalcFieldValueHdl( LINK( SC_MOD(), ScModule, CalcFieldValueHdl ) );

@@ -518,7 +518,7 @@ void ScViewFunc::DoSheetConversion( const ScConversionParam& rConvParam, bool bR
     rViewData.SetSpellingView( pEditView );
     Rectangle aRect( Point( 0, 0 ), Point( 0, 0 ) );
     pEditView->SetOutputArea( aRect );
-    pEngine->SetControlWord( EE_CNTRL_USECHARATTRIBS );
+    pEngine->SetControlWord( EEControlBits::USECHARATTRIBS );
     pEngine->EnableUndo( false );
     pEngine->SetPaperSize( aRect.GetSize() );
     pEngine->SetText( EMPTY_OUSTRING );

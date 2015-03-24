@@ -746,13 +746,13 @@ void SdrTextObj::impDecomposeAutoFitTextPrimitive(
     SdrOutliner& rOutliner = ImpGetDrawOutliner();
     SdrTextVertAdjust eVAdj = GetTextVerticalAdjust(rTextItemSet);
     SdrTextHorzAdjust eHAdj = GetTextHorizontalAdjust(rTextItemSet);
-    const sal_uInt32 nOriginalControlWord(rOutliner.GetControlWord());
+    const EEControlBits nOriginalControlWord(rOutliner.GetControlWord());
     const Size aNullSize;
 
     // set visualizing page at Outliner; needed e.g. for PageNumberField decomposition
     rOutliner.setVisualizedPage(GetSdrPageFromXDrawPage(aViewInformation.getVisualizedPage()));
 
-    rOutliner.SetControlWord(nOriginalControlWord|EE_CNTRL_AUTOPAGESIZE|EE_CNTRL_STRETCHING);
+    rOutliner.SetControlWord(nOriginalControlWord|EEControlBits::AUTOPAGESIZE|EEControlBits::STRETCHING);
     rOutliner.SetMinAutoPaperSize(aNullSize);
     rOutliner.SetMaxAutoPaperSize(Size(1000000,1000000));
 
@@ -880,13 +880,13 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
     SdrOutliner& rOutliner = ImpGetDrawOutliner();
     SdrTextHorzAdjust eHAdj = rSdrBlockTextPrimitive.getSdrTextHorzAdjust();
     SdrTextVertAdjust eVAdj = rSdrBlockTextPrimitive.getSdrTextVertAdjust();
-    const sal_uInt32 nOriginalControlWord(rOutliner.GetControlWord());
+    const EEControlBits nOriginalControlWord(rOutliner.GetControlWord());
     const Size aNullSize;
 
     // set visualizing page at Outliner; needed e.g. for PageNumberField decomposition
     rOutliner.setVisualizedPage(GetSdrPageFromXDrawPage(aViewInformation.getVisualizedPage()));
     rOutliner.SetFixedCellHeight(rSdrBlockTextPrimitive.isFixedCellHeight());
-    rOutliner.SetControlWord(nOriginalControlWord|EE_CNTRL_AUTOPAGESIZE);
+    rOutliner.SetControlWord(nOriginalControlWord|EEControlBits::AUTOPAGESIZE);
     rOutliner.SetMinAutoPaperSize(aNullSize);
     rOutliner.SetMaxAutoPaperSize(Size(1000000,1000000));
 
@@ -1119,10 +1119,10 @@ void SdrTextObj::impDecomposeStretchTextPrimitive(
 
     // prepare outliner
     SdrOutliner& rOutliner = ImpGetDrawOutliner();
-    const sal_uInt32 nOriginalControlWord(rOutliner.GetControlWord());
+    const EEControlBits nOriginalControlWord(rOutliner.GetControlWord());
     const Size aNullSize;
 
-    rOutliner.SetControlWord(nOriginalControlWord|EE_CNTRL_STRETCHING|EE_CNTRL_AUTOPAGESIZE);
+    rOutliner.SetControlWord(nOriginalControlWord|EEControlBits::STRETCHING|EEControlBits::AUTOPAGESIZE);
     rOutliner.SetFixedCellHeight(rSdrStretchTextPrimitive.isFixedCellHeight());
     rOutliner.SetMinAutoPaperSize(aNullSize);
     rOutliner.SetMaxAutoPaperSize(Size(1000000,1000000));

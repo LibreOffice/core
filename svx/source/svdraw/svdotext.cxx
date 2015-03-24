@@ -714,11 +714,11 @@ void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, boo
     bool bContourFrame=IsContourTextFrame();
 
     bool bFrame=IsTextFrame();
-    sal_uIntPtr nStat0=rOutliner.GetControlWord();
+    EEControlBits nStat0=rOutliner.GetControlWord();
     Size aNullSize;
     if (!bContourFrame)
     {
-        rOutliner.SetControlWord(nStat0|EE_CNTRL_AUTOPAGESIZE);
+        rOutliner.SetControlWord(nStat0|EEControlBits::AUTOPAGESIZE);
         rOutliner.SetMinAutoPaperSize(aNullSize);
         rOutliner.SetMaxAutoPaperSize(Size(1000000,1000000));
     }
@@ -1226,8 +1226,8 @@ void SdrTextObj::ImpInitDrawOutliner( SdrOutliner& rOutl ) const
     rOutl.Init( nOutlinerMode );
 
     rOutl.SetGlobalCharStretching(100,100);
-    sal_uIntPtr nStat=rOutl.GetControlWord();
-    nStat&=~(EE_CNTRL_STRETCHING|EE_CNTRL_AUTOPAGESIZE);
+    EEControlBits nStat=rOutl.GetControlWord();
+    nStat &= ~EEControlBits(EEControlBits::STRETCHING|EEControlBits::AUTOPAGESIZE);
     rOutl.SetControlWord(nStat);
     Size aNullSize;
     Size aMaxSize(100000,100000);
@@ -1260,8 +1260,8 @@ void SdrTextObj::ImpSetupDrawOutlinerForPaint( bool             bContourFrame,
         // FitToSize can't be used together with ContourFrame for now
         if (IsFitToSize() || IsAutoFit())
         {
-            sal_uIntPtr nStat=rOutliner.GetControlWord();
-            nStat|=EE_CNTRL_STRETCHING|EE_CNTRL_AUTOPAGESIZE;
+            EEControlBits nStat=rOutliner.GetControlWord();
+            nStat|=EEControlBits::STRETCHING|EEControlBits::AUTOPAGESIZE;
             rOutliner.SetControlWord(nStat);
         }
     }

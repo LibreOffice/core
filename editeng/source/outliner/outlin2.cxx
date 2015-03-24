@@ -274,12 +274,12 @@ bool Outliner::IsInSelectionMode() const
     return pEditEngine->IsInSelectionMode();
 }
 
-void Outliner::SetControlWord( sal_uLong nWord )
+void Outliner::SetControlWord( EEControlBits nWord )
 {
     pEditEngine->SetControlWord( nWord );
 }
 
-sal_uLong Outliner::GetControlWord() const
+EEControlBits Outliner::GetControlWord() const
 {
     return pEditEngine->GetControlWord();
 }

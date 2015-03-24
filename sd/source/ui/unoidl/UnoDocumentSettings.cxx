@@ -786,24 +786,24 @@ throw (UnknownPropertyException, PropertyVetoException,
                     bChanged = true;
                     if ( pDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS )
                     {
-                        sal_uInt32 nSum = bIsSummationOfParagraphs ? EE_CNTRL_ULSPACESUMMATION : 0;
-                        sal_uInt32 nCntrl;
+                        EEControlBits nSum = bIsSummationOfParagraphs ? EEControlBits::ULSPACESUMMATION : EEControlBits::NONE;
+                        EEControlBits nCntrl;
 
                         pDoc->SetSummationOfParagraphs( bIsSummationOfParagraphs );
                         SdDrawDocument* pDocument = pDocSh->GetDoc();
                         SdrOutliner& rOutl = pDocument->GetDrawOutliner();
-                        nCntrl = rOutl.GetControlWord() &~ EE_CNTRL_ULSPACESUMMATION;
+                        nCntrl = rOutl.GetControlWord() &~ EEControlBits::ULSPACESUMMATION;
                         rOutl.SetControlWord( nCntrl | nSum );
                         ::sd::Outliner* pOutl = pDocument->GetOutliner( false );
                         if( pOutl )
                         {
-                            nCntrl = pOutl->GetControlWord() &~ EE_CNTRL_ULSPACESUMMATION;
+                            nCntrl = pOutl->GetControlWord() &~ EEControlBits::ULSPACESUMMATION;
                             pOutl->SetControlWord( nCntrl | nSum );
                         }
                         pOutl = pDocument->GetInternalOutliner( false );
                         if( pOutl )
                         {
-                            nCntrl = pOutl->GetControlWord() &~ EE_CNTRL_ULSPACESUMMATION;
+                            nCntrl = pOutl->GetControlWord() &~ EEControlBits::ULSPACESUMMATION;
                             pOutl->SetControlWord( nCntrl | nSum );
                         }
                     }

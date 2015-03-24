@@ -28,8 +28,9 @@
 
 #include <rsc/rscsfx.hxx>
 #include <editeng/editdata.hxx>
-#include <i18nlangtag/lang.h>
+#include <editeng/editstat.hxx>
 #include <editeng/editengdllapi.h>
+#include <i18nlangtag/lang.h>
 
 #include <tools/lineend.hxx>
 #include <tools/rtti.hxx>
@@ -370,8 +371,8 @@ public:
     bool            IsFlatMode() const;
     void            SetFlatMode( bool bFlat );
 
-    void            SetControlWord( sal_uInt32 nWord );
-    sal_uInt32      GetControlWord() const;
+    void            SetControlWord( EEControlBits nWord );
+    EEControlBits   GetControlWord() const;
 
     void            QuickSetAttribs( const SfxItemSet& rSet, const ESelection& rSel );
     void            QuickMarkInvalid( const ESelection& rSel );

@@ -193,9 +193,9 @@ OutlineView::~OutlineView()
     {
         // uninitialize Outliner: enable color display
         ResetLinks();
-        sal_uLong nCntrl = mrOutliner.GetControlWord();
+        EEControlBits nCntrl = mrOutliner.GetControlWord();
         mrOutliner.SetUpdateMode(false); // otherwise there will be drawn on SetControlWord
-        mrOutliner.SetControlWord(nCntrl & ~EE_CNTRL_NOCOLORS);
+        mrOutliner.SetControlWord(nCntrl & ~EEControlBits::NOCOLORS);
         SvtAccessibilityOptions aOptions;
         mrOutliner.ForceAutoColor( aOptions.GetIsAutomaticFontColor() );
         mrOutliner.Clear();

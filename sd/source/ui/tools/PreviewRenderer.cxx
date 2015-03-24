@@ -297,12 +297,12 @@ void PreviewRenderer::PaintPage (
 
     // Turn off online spelling and redlining.
     SdrOutliner* pOutliner = NULL;
-    sal_uLong nSavedControlWord (0);
+    EEControlBits nSavedControlWord;
     if (mpDocShellOfView!=NULL && mpDocShellOfView->GetDoc()!=NULL)
     {
         pOutliner = &mpDocShellOfView->GetDoc()->GetDrawOutliner();
         nSavedControlWord = pOutliner->GetControlWord();
-        pOutliner->SetControlWord((nSavedControlWord & ~EE_CNTRL_ONLINESPELLING));
+        pOutliner->SetControlWord((nSavedControlWord & ~EEControlBits::ONLINESPELLING));
     }
 
     // Use a special redirector to prevent PresObj shapes from being painted.

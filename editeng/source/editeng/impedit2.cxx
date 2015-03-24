@@ -135,10 +135,10 @@ ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
     eDefaultHorizontalTextDirection = EE_HTEXTDIR_DEFAULT;
 
 
-    aStatus.GetControlWord() =  EE_CNTRL_USECHARATTRIBS | EE_CNTRL_DOIDLEFORMAT |
-                                EE_CNTRL_PASTESPECIAL | EE_CNTRL_UNDOATTRIBS |
-                                EE_CNTRL_ALLOWBIGOBJS | EE_CNTRL_RTFSTYLESHEETS |
-                                EE_CNTRL_FORMAT100;
+    aStatus.GetControlWord() =  EEControlBits::USECHARATTRIBS | EEControlBits::DOIDLEFORMAT |
+                                EEControlBits::PASTESPECIAL | EEControlBits::UNDOATTRIBS |
+                                EEControlBits::ALLOWBIGOBJS | EEControlBits::RTFSTYLESHEETS |
+                                EEControlBits::FORMAT100;
 
     aSelEngine.SetFunctionSet( &aSelFuncSet );
 

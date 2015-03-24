@@ -629,14 +629,14 @@ bool View::SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr)
 /**
  * Start text input
  */
-static void SetSpellOptions( const SdDrawDocument& rDoc, sal_uLong& rCntrl )
+static void SetSpellOptions( const SdDrawDocument& rDoc, EEControlBits& rCntrl )
 {
     bool bOnlineSpell = rDoc.GetOnlineSpell();
 
     if( bOnlineSpell )
-        rCntrl |= EE_CNTRL_ONLINESPELLING;
+        rCntrl |= EEControlBits::ONLINESPELLING;
     else
-        rCntrl &= ~EE_CNTRL_ONLINESPELLING;
+        rCntrl &= ~EEControlBits::ONLINESPELLING;
 }
 
 void OutlinerMasterViewFilter::Start(SdrOutliner *pOutl)
@@ -677,14 +677,14 @@ bool View::SdrBeginTextEdit(
     {
         pOutl->SetStyleSheetPool(static_cast<SfxStyleSheetPool*>( mrDoc.GetStyleSheetPool() ));
         pOutl->SetCalcFieldValueHdl(LINK(SD_MOD(), SdModule, CalcFieldValueHdl));
-        sal_uLong nCntrl = pOutl->GetControlWord();
-        nCntrl |= EE_CNTRL_ALLOWBIGOBJS;
-        nCntrl |= EE_CNTRL_MARKFIELDS;
-        nCntrl |= EE_CNTRL_AUTOCORRECT;
+        EEControlBits nCntrl = pOutl->GetControlWord();
+        nCntrl |= EEControlBits::ALLOWBIGOBJS;
+        nCntrl |= EEControlBits::MARKFIELDS;
+        nCntrl |= EEControlBits::AUTOCORRECT;
 
-        nCntrl &= ~EE_CNTRL_ULSPACESUMMATION;
+        nCntrl &= ~EEControlBits::ULSPACESUMMATION;
         if ( mrDoc.IsSummationOfParagraphs() )
-            nCntrl |= EE_CNTRL_ULSPACESUMMATION;
+            nCntrl |= EEControlBits::ULSPACESUMMATION;
 
         SetSpellOptions( mrDoc, nCntrl );
 

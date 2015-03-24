@@ -443,14 +443,14 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
 //!! JP 16.03.2001: why??           pSdrView = rSh.GetDrawView();
 //!! JP 16.03.2001: why??           pOutliner = pSdrView->GetTextEditOutliner();
             SdrOutliner * pOutliner = pSdrView->GetTextEditOutliner();
-            sal_uInt32 nCtrl = pOutliner->GetControlWord();
+            EEControlBits nCtrl = pOutliner->GetControlWord();
 
             bool bSet = static_cast<const SfxBoolItem&>(rReq.GetArgs()->Get(
                                                     nSlot)).GetValue();
             if(bSet)
-                nCtrl |= EE_CNTRL_ONLINESPELLING|EE_CNTRL_ALLOWBIGOBJS;
+                nCtrl |= EEControlBits::ONLINESPELLING|EEControlBits::ALLOWBIGOBJS;
             else
-                nCtrl &= ~EE_CNTRL_ONLINESPELLING;
+                nCtrl &= ~EEControlBits::ONLINESPELLING;
             pOutliner->SetControlWord(nCtrl);
 
             rView.ExecuteSlot(rReq);

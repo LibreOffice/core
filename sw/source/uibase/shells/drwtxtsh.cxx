@@ -103,8 +103,8 @@ void SwDrawTextShell::Init()
     if( !pOutliner )
         return ;
     OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
-    sal_uLong nCtrl = pOutliner->GetControlWord();
-    nCtrl |= EE_CNTRL_AUTOCORRECT;
+    EEControlBits nCtrl = pOutliner->GetControlWord();
+    nCtrl |= EEControlBits::AUTOCORRECT;
 
     SetUndoManager(&pOutliner->GetUndoManager());
 
@@ -113,10 +113,10 @@ void SwDrawTextShell::Init()
     const SwViewOption* pVOpt = rSh.GetViewOptions();
     if(pVOpt->IsOnlineSpell())
     {
-        nCtrl |= EE_CNTRL_ONLINESPELLING|EE_CNTRL_ALLOWBIGOBJS;
+        nCtrl |= EEControlBits::ONLINESPELLING|EEControlBits::ALLOWBIGOBJS;
     }
     else
-        nCtrl &= ~(EE_CNTRL_ONLINESPELLING);
+        nCtrl &= ~(EEControlBits::ONLINESPELLING);
 
     pOutliner->SetControlWord(nCtrl);
     pOLV->ShowCursor();

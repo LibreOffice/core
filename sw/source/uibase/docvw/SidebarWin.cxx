@@ -418,17 +418,17 @@ void SwSidebarWin::InitControls()
     mpVScrollbar->AddEventListener( LINK( this, SwSidebarWin, WindowEventListener ) );
 
     const SwViewOption* pVOpt = mrView.GetWrtShellPtr()->GetViewOptions();
-    sal_uLong nCntrl = mpOutliner->GetControlWord();
+    EEControlBits nCntrl = mpOutliner->GetControlWord();
     // TODO: crash when AUTOCOMPLETE enabled
-    nCntrl |= EE_CNTRL_MARKFIELDS | EE_CNTRL_PASTESPECIAL | EE_CNTRL_AUTOCORRECT  | EV_CNTRL_AUTOSCROLL; // | EE_CNTRL_AUTOCOMPLETE;
+    nCntrl |= EEControlBits::MARKFIELDS | EEControlBits::PASTESPECIAL | EEControlBits::AUTOCORRECT | EEControlBits::USECHARATTRIBS; // | EEControlBits::AUTOCOMPLETE;
     if (SwViewOption::IsFieldShadings())
-        nCntrl |= EE_CNTRL_MARKFIELDS;
+        nCntrl |= EEControlBits::MARKFIELDS;
     else
-        nCntrl &= ~EE_CNTRL_MARKFIELDS;
+        nCntrl &= ~EEControlBits::MARKFIELDS;
     if (pVOpt->IsOnlineSpell())
-        nCntrl |= EE_CNTRL_ONLINESPELLING;
+        nCntrl |= EEControlBits::ONLINESPELLING;
     else
-        nCntrl &= ~EE_CNTRL_ONLINESPELLING;
+        nCntrl &= ~EEControlBits::ONLINESPELLING;
     mpOutliner->SetControlWord(nCntrl);
 
     sal_uInt16 aIndex = SW_MOD()->InsertRedlineAuthor(GetAuthor());
@@ -930,16 +930,16 @@ void SwSidebarWin::SetLanguage(const SvxLanguageItem& rNewItem)
     Engine()->SetModifyHdl( pLink );
 
     const SwViewOption* pVOpt = mrView.GetWrtShellPtr()->GetViewOptions();
-    sal_uLong nCntrl = Engine()->GetControlWord();
+    EEControlBits nCntrl = Engine()->GetControlWord();
     // turn off
-    nCntrl &= ~EE_CNTRL_ONLINESPELLING;
+    nCntrl &= ~EEControlBits::ONLINESPELLING;
     Engine()->SetControlWord(nCntrl);
 
     //turn back on
     if (pVOpt->IsOnlineSpell())
-        nCntrl |= EE_CNTRL_ONLINESPELLING;
+        nCntrl |= EEControlBits::ONLINESPELLING;
     else
-        nCntrl &= ~EE_CNTRL_ONLINESPELLING;
+        nCntrl &= ~EEControlBits::ONLINESPELLING;
     Engine()->SetControlWord(nCntrl);
 
     Engine()->CompleteOnlineSpelling();
@@ -1235,11 +1235,11 @@ sal_Int32 SwSidebarWin::GetMinimumSizeWithoutMeta()
 void SwSidebarWin::SetSpellChecking()
 {
     const SwViewOption* pVOpt = mrView.GetWrtShellPtr()->GetViewOptions();
-    sal_uLong nCntrl = mpOutliner->GetControlWord();
+    EEControlBits nCntrl = mpOutliner->GetControlWord();
     if (pVOpt->IsOnlineSpell())
-        nCntrl |= EE_CNTRL_ONLINESPELLING;
+        nCntrl |= EEControlBits::ONLINESPELLING;
     else
-        nCntrl &= ~EE_CNTRL_ONLINESPELLING;
+        nCntrl &= ~EEControlBits::ONLINESPELLING;
     mpOutliner->SetControlWord(nCntrl);
 
     mpOutliner->CompleteOnlineSpelling();

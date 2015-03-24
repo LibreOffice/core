@@ -126,8 +126,8 @@ namespace frm
         {
             m_pEngine->SetModifyHdl( LINK( this, ORichTextModel, OnEngineContentModified ) );
 
-            sal_uLong nEngineControlWord = m_pEngine->GetControlWord();
-            nEngineControlWord = nEngineControlWord & ~EE_CNTRL_AUTOPAGESIZE;
+            EEControlBits nEngineControlWord = m_pEngine->GetControlWord();
+            nEngineControlWord = nEngineControlWord & ~EEControlBits::AUTOPAGESIZE;
             m_pEngine->SetControlWord( nEngineControlWord );
 
             VCLXDevice* pUnoRefDevice = new VCLXDevice;

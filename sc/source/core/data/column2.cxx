@@ -353,11 +353,11 @@ long ScColumn::GetNeededSize(
 
         pEngine->SetUpdateMode( false );
         bool bTextWysiwyg = ( pDev->GetOutDevType() == OUTDEV_PRINTER );
-        sal_uLong nCtrl = pEngine->GetControlWord();
+        EEControlBits nCtrl = pEngine->GetControlWord();
         if ( bTextWysiwyg )
-            nCtrl |= EE_CNTRL_FORMAT100;
+            nCtrl |= EEControlBits::FORMAT100;
         else
-            nCtrl &= ~EE_CNTRL_FORMAT100;
+            nCtrl &= ~EEControlBits::FORMAT100;
         pEngine->SetControlWord( nCtrl );
         MapMode aOld = pDev->GetMapMode();
         pDev->SetMapMode( aHMMMode );
@@ -504,7 +504,7 @@ long ScColumn::GetNeededSize(
             if ( !bTextWysiwyg && ( rZoomY.GetNumerator() != 1 || rZoomY.GetDenominator() != 1 ) &&
                  ( pEngine->GetParagraphCount() > 1 || ( bBreak && pEngine->GetLineCount(0) > 1 ) ) )
             {
-                pEngine->SetControlWord( nCtrl | EE_CNTRL_FORMAT100 );
+                pEngine->SetControlWord( nCtrl | EEControlBits::FORMAT100 );
                 pEngine->QuickFormatDoc( true );
                 long nSecondValue = pDev->LogicToPixel(Size( 0, pEngine->GetTextHeight() ), aHMMMode).Height();
                 if ( nSecondValue > nValue )
@@ -1056,8 +1056,8 @@ public:
         if (!mpEngine)
         {
             mpEngine.reset(new ScFieldEditEngine(mpDoc, mpDoc->GetEditPool()));
-            //  EE_CNTRL_ONLINESPELLING if there are errors already
-            mpEngine->SetControlWord(mpEngine->GetControlWord() | EE_CNTRL_ONLINESPELLING);
+            //  EEControlBits::ONLINESPELLING if there are errors already
+            mpEngine->SetControlWord(mpEngine->GetControlWord() | EEControlBits::ONLINESPELLING);
             mpDoc->ApplyAsianEditSettings(*mpEngine);
         }
         mpEngine->SetText(*pObj);
@@ -1081,10 +1081,10 @@ public:
 
         if (bNeedObject)                                      // remains edit cell
         {
-            sal_uInt32 nCtrl = mpEngine->GetControlWord();
-            sal_uInt32 nWantBig = bSpellErrors ? EE_CNTRL_ALLOWBIGOBJS : 0;
-            if ( ( nCtrl & EE_CNTRL_ALLOWBIGOBJS ) != nWantBig )
-                mpEngine->SetControlWord( (nCtrl & ~EE_CNTRL_ALLOWBIGOBJS) | nWantBig );
+            EEControlBits nCtrl = mpEngine->GetControlWord();
+            EEControlBits nWantBig = bSpellErrors ? EEControlBits::ALLOWBIGOBJS : EEControlBits::NONE;
+            if ( ( nCtrl & EEControlBits::ALLOWBIGOBJS ) != nWantBig )
+                mpEngine->SetControlWord( (nCtrl & ~EEControlBits::ALLOWBIGOBJS) | nWantBig );
 
             // Overwrite the existing object.
             delete pObj;

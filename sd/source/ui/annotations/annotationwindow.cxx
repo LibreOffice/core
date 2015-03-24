@@ -338,8 +338,8 @@ void AnnotationWindow::InitControls()
     mpVScrollbar->SetScrollHdl(LINK(this, AnnotationWindow, ScrollHdl));
     mpVScrollbar->EnableDrag();
 
-    sal_uLong nCntrl = mpOutliner->GetControlWord();
-    nCntrl |= EE_CNTRL_PASTESPECIAL | EE_CNTRL_AUTOCORRECT  | EV_CNTRL_AUTOSCROLL | EE_CNTRL_NOCOLORS;
+    EEControlBits nCntrl = mpOutliner->GetControlWord();
+    nCntrl |= EEControlBits::PASTESPECIAL | EEControlBits::AUTOCORRECT | EEControlBits::USECHARATTRIBS | EEControlBits::NOCOLORS;
     mpOutliner->SetControlWord(nCntrl);
 
     Engine()->SetModifyHdl( Link() );

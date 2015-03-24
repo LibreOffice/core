@@ -198,8 +198,8 @@ void Outliner::Init( sal_uInt16 nMode )
 
     Clear();
 
-    sal_uLong nCtrl = pEditEngine->GetControlWord();
-    nCtrl &= ~(EE_CNTRL_OUTLINER|EE_CNTRL_OUTLINER2);
+    EEControlBits nCtrl = pEditEngine->GetControlWord();
+    nCtrl &= ~EEControlBits(EEControlBits::OUTLINER|EEControlBits::OUTLINER2);
 
     SetMaxDepth( 9 );
 
@@ -210,10 +210,10 @@ void Outliner::Init( sal_uInt16 nMode )
             break;
 
         case OUTLINERMODE_OUTLINEOBJECT:
-            nCtrl |= EE_CNTRL_OUTLINER2;
+            nCtrl |= EEControlBits::OUTLINER2;
             break;
         case OUTLINERMODE_OUTLINEVIEW:
-            nCtrl |= EE_CNTRL_OUTLINER;
+            nCtrl |= EEControlBits::OUTLINER;
             break;
 
         default: OSL_FAIL( "Outliner::Init - Invalid Mode!" );
@@ -905,7 +905,7 @@ vcl::Font Outliner::ImpCalcBulletFont( sal_Int32 nPara ) const
     aBulletFont.SetOrientation( bVertical ? 2700 : 0 );
 
     Color aColor( COL_AUTO );
-    if( !pEditEngine->IsFlatMode() && !( pEditEngine->GetControlWord() & EE_CNTRL_NOCOLORS ) )
+    if( !pEditEngine->IsFlatMode() && !( pEditEngine->GetControlWord() & EEControlBits::NOCOLORS ) )
     {
         aColor = pFmt->GetBulletColor();
     }
@@ -1572,7 +1572,7 @@ Rectangle Outliner::ImpCalcBulletArea( sal_Int32 nPara, bool bAdjust, bool bRetu
         Point aTopLeft;
         Size aBulletSize( ImplGetBulletSize( nPara ) );
 
-        bool bOutlineMode = ( pEditEngine->GetControlWord() & EE_CNTRL_OUTLINER ) != 0;
+        bool bOutlineMode = bool( pEditEngine->GetControlWord() & EEControlBits::OUTLINER );
 
         // the ODF attribute text:space-before which holds the spacing to add to the left of the label
         const short nSpaceBefore = pFmt->GetAbsLSpace() + pFmt->GetFirstLineOffset();

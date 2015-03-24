@@ -1676,7 +1676,7 @@ void ScPrintFunc::MakeEditEngine()
         pEditEngine->SetRefDevice(pPrinter ? pPrinter : pDoc->GetRefDevice());
         pEditEngine->SetWordDelimiters(
                 ScEditUtil::ModifyDelimiters( pEditEngine->GetWordDelimiters() ) );
-        pEditEngine->SetControlWord( pEditEngine->GetControlWord() & ~EE_CNTRL_RTFSTYLESHEETS );
+        pEditEngine->SetControlWord( pEditEngine->GetControlWord() & ~EEControlBits::RTFSTYLESHEETS );
         pDoc->ApplyAsianEditSettings( *pEditEngine );
         pEditEngine->EnableAutoColor( bUseStyleColor );
 

@@ -206,12 +206,12 @@ void SdrObjEditView::ModelHasChanged()
                     pTextEditOutliner->SetPaperSize(Size(0,0)); // re-format Outliner
                     if (!bContourFrame) {
                         pTextEditOutliner->ClearPolygon();
-                        sal_uIntPtr nStat=pTextEditOutliner->GetControlWord();
-                        nStat|=EE_CNTRL_AUTOPAGESIZE;
+                        EEControlBits nStat=pTextEditOutliner->GetControlWord();
+                        nStat|=EEControlBits::AUTOPAGESIZE;
                         pTextEditOutliner->SetControlWord(nStat);
                     } else {
-                        sal_uIntPtr nStat=pTextEditOutliner->GetControlWord();
-                        nStat&=~EE_CNTRL_AUTOPAGESIZE;
+                        EEControlBits nStat=pTextEditOutliner->GetControlWord();
+                        nStat&=~EEControlBits::AUTOPAGESIZE;
                         pTextEditOutliner->SetControlWord(nStat);
                         Rectangle aAnchorRect;
                         pTextObj->TakeTextAnchorRect(aAnchorRect);
@@ -323,7 +323,7 @@ void SdrObjEditView::ImpPaintOutlinerView(OutlinerView& rOutlView, const Rectang
 {
     const SdrTextObj* pText = PTR_CAST(SdrTextObj,GetTextEditObject());
     bool bTextFrame(pText && pText->IsTextFrame());
-    bool bFitToSize(0 != (pTextEditOutliner->GetControlWord() & EE_CNTRL_STRETCHING));
+    bool bFitToSize(pTextEditOutliner->GetControlWord() & EEControlBits::STRETCHING);
     bool bModifyMerk(pTextEditOutliner->IsModified()); // #43095#
     Rectangle aBlankRect(rOutlView.GetOutputArea());
     aBlankRect.Union(aMinTextEditArea);

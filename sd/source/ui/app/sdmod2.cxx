@@ -672,23 +672,23 @@ void SdModule::ApplyItemSet( sal_uInt16 nSlot, const SfxItemSet& rSet )
         if ( bMiscOptions )
         {
             pDoc->SetSummationOfParagraphs( pMiscItem->GetOptionsMisc().IsSummationOfParagraphs() );
-            sal_uInt32 nSum = pMiscItem->GetOptionsMisc().IsSummationOfParagraphs() ? EE_CNTRL_ULSPACESUMMATION : 0;
-            sal_uInt32 nCntrl;
+            EEControlBits nSum = pMiscItem->GetOptionsMisc().IsSummationOfParagraphs() ? EEControlBits::ULSPACESUMMATION : EEControlBits::NONE;
+            EEControlBits nCntrl;
 
             SdDrawDocument* pDocument = pDocSh->GetDoc();
             SdrOutliner& rOutl = pDocument->GetDrawOutliner();
-            nCntrl = rOutl.GetControlWord() &~ EE_CNTRL_ULSPACESUMMATION;
+            nCntrl = rOutl.GetControlWord() &~ EEControlBits::ULSPACESUMMATION;
             rOutl.SetControlWord( nCntrl | nSum );
             ::sd::Outliner* pOutl = pDocument->GetOutliner( false );
             if( pOutl )
             {
-                nCntrl = pOutl->GetControlWord() &~ EE_CNTRL_ULSPACESUMMATION;
+                nCntrl = pOutl->GetControlWord() &~ EEControlBits::ULSPACESUMMATION;
                 pOutl->SetControlWord( nCntrl | nSum );
             }
             pOutl = pDocument->GetInternalOutliner( false );
             if( pOutl )
             {
-                nCntrl = pOutl->GetControlWord() &~ EE_CNTRL_ULSPACESUMMATION;
+                nCntrl = pOutl->GetControlWord() &~ EEControlBits::ULSPACESUMMATION;
                 pOutl->SetControlWord( nCntrl | nSum );
             }
 

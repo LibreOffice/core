@@ -351,10 +351,10 @@ public:
     void            ShowCursor( bool bGotoCursor, bool bForceVisCursor, sal_uInt16 nShowCursorFlags = 0 );
     Pair            Scroll( long ndX, long ndY, sal_uInt8 nRangeCheck = RGCHK_NEG );
 
-    void            SetInsertMode( bool bInsert );
+    void        SetInsertMode( bool bInsert );
     bool        IsInsertMode() const            { return ( ( nControl & EV_CNTRL_OVERWRITE ) == 0 ); }
 
-    void            EnablePaste( bool bEnable )     { SetFlags( nControl, EV_CNTRL_ENABLEPASTE, bEnable ); }
+    void        EnablePaste( bool bEnable )     { SetFlags( nControl, EV_CNTRL_ENABLEPASTE, bEnable ); }
     bool        IsPasteEnabled() const          { return ( ( nControl & EV_CNTRL_ENABLEPASTE ) != 0 ); }
 
     bool        DoSingleLinePaste() const       { return ( ( nControl & EV_CNTRL_SINGLELINEPASTE ) != 0 ); }

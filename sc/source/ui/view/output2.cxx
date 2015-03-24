@@ -2095,13 +2095,13 @@ ScFieldEditEngine* ScOutputData::CreateOutputEditEngine()
     pEngine->SetUpdateMode( false );
     // a RefDevice always has to be set, otherwise EditEngine would create a VirtualDevice
     pEngine->SetRefDevice( pFmtDevice );
-    sal_uLong nCtrl = pEngine->GetControlWord();
+    EEControlBits nCtrl = pEngine->GetControlWord();
     if ( bShowSpellErrors )
-        nCtrl |= EE_CNTRL_ONLINESPELLING;
+        nCtrl |= EEControlBits::ONLINESPELLING;
     if ( eType == OUTTYPE_PRINTER )
-        nCtrl &= ~EE_CNTRL_MARKFIELDS;
+        nCtrl &= ~EEControlBits::MARKFIELDS;
     if ( eType == OUTTYPE_WINDOW && mpRefDevice == pFmtDevice )
-        nCtrl &= ~EE_CNTRL_FORMAT100;       // use the actual MapMode
+        nCtrl &= ~EEControlBits::FORMAT100;       // use the actual MapMode
     pEngine->SetControlWord( nCtrl );
     mpDoc->ApplyAsianEditSettings( *pEngine );
     pEngine->EnableAutoColor( mbUseStyleColor );
@@ -2405,11 +2405,11 @@ void ScOutputData::DrawEditParam::setPatternToEngine(bool bUseStyleColor)
     mpOldCondSet = mpCondSet;
     mpOldPreviewFontSet = mpPreviewFontSet;
 
-    sal_uLong nControl = mpEngine->GetControlWord();
+    EEControlBits nControl = mpEngine->GetControlWord();
     if (meOrient == SVX_ORIENTATION_STACKED)
-        nControl |= EE_CNTRL_ONECHARPERLINE;
+        nControl |= EEControlBits::ONECHARPERLINE;
     else
-        nControl &= ~EE_CNTRL_ONECHARPERLINE;
+        nControl &= ~EEControlBits::ONECHARPERLINE;
     mpEngine->SetControlWord( nControl );
 
     if ( !mbHyphenatorSet && static_cast<const SfxBoolItem&>(pSet->Get(EE_PARA_HYPHENATE)).GetValue() )
@@ -3764,7 +3764,7 @@ void ScOutputData::DrawEditStacked(DrawEditParam& rParam)
 
     if ( rParam.mbAsianVertical )
     {
-        // in asian mode, use EditEngine::SetVertical instead of EE_CNTRL_ONECHARPERLINE
+        // in asian mode, use EditEngine::SetVertical instead of EEControlBits::ONECHARPERLINE
         rParam.meOrient = SVX_ORIENTATION_STANDARD;
         DrawEditAsianVertical(rParam);
         return;
@@ -4764,11 +4764,11 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                 pOldPattern = pPattern;
                                 pOldCondSet = pCondSet;
 
-                                sal_uLong nControl = pEngine->GetControlWord();
+                                EEControlBits nControl = pEngine->GetControlWord();
                                 if (eOrient==SVX_ORIENTATION_STACKED)
-                                    nControl |= EE_CNTRL_ONECHARPERLINE;
+                                    nControl |= EEControlBits::ONECHARPERLINE;
                                 else
-                                    nControl &= ~EE_CNTRL_ONECHARPERLINE;
+                                    nControl &= ~EEControlBits::ONECHARPERLINE;
                                 pEngine->SetControlWord( nControl );
 
                                 if ( !bHyphenatorSet && static_cast<const SfxBoolItem&>(pSet->Get(EE_PARA_HYPHENATE)).GetValue() )

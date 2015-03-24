@@ -1794,30 +1794,30 @@ bool EditEngine::IsFlatMode() const
     return !( pImpEditEngine->aStatus.UseCharAttribs() );
 }
 
-void EditEngine::SetControlWord( sal_uInt32 nWord )
+void EditEngine::SetControlWord( EEControlBits nWord )
 {
 
     if ( nWord != pImpEditEngine->aStatus.GetControlWord() )
     {
-        sal_uInt32 nPrev = pImpEditEngine->aStatus.GetControlWord();
+        EEControlBits nPrev = pImpEditEngine->aStatus.GetControlWord();
         pImpEditEngine->aStatus.GetControlWord() = nWord;
 
-        sal_uInt32 nChanges = nPrev ^ nWord;
+        EEControlBits nChanges = nPrev ^ nWord;
         if ( pImpEditEngine->IsFormatted() )
         {
             // possibly reformat:
-            if ( ( nChanges & EE_CNTRL_USECHARATTRIBS ) ||
-                 ( nChanges & EE_CNTRL_USEPARAATTRIBS ) ||
-                 ( nChanges & EE_CNTRL_ONECHARPERLINE ) ||
-                 ( nChanges & EE_CNTRL_STRETCHING ) ||
-                 ( nChanges & EE_CNTRL_OUTLINER ) ||
-                 ( nChanges & EE_CNTRL_NOCOLORS ) ||
-                 ( nChanges & EE_CNTRL_OUTLINER2 ) )
+            if ( ( nChanges & EEControlBits::USECHARATTRIBS ) ||
+                 ( nChanges & EEControlBits::USEPARAATTRIBS ) ||
+                 ( nChanges & EEControlBits::ONECHARPERLINE ) ||
+                 ( nChanges & EEControlBits::STRETCHING ) ||
+                 ( nChanges & EEControlBits::OUTLINER ) ||
+                 ( nChanges & EEControlBits::NOCOLORS ) ||
+                 ( nChanges & EEControlBits::OUTLINER2 ) )
             {
-                if ( ( nChanges & EE_CNTRL_USECHARATTRIBS ) ||
-                     ( nChanges & EE_CNTRL_USEPARAATTRIBS ) )
+                if ( ( nChanges & EEControlBits::USECHARATTRIBS ) ||
+                     ( nChanges & EEControlBits::USEPARAATTRIBS ) )
                 {
-                    bool bUseCharAttribs = ( nWord & EE_CNTRL_USECHARATTRIBS );
+                    bool bUseCharAttribs = bool( nWord & EEControlBits::USECHARATTRIBS );
                     pImpEditEngine->GetEditDoc().CreateDefFont( bUseCharAttribs );
                 }
 
@@ -1826,12 +1826,12 @@ void EditEngine::SetControlWord( sal_uInt32 nWord )
             }
         }
 
-        bool bSpellingChanged = nChanges & EE_CNTRL_ONLINESPELLING;
+        bool bSpellingChanged = bool(nChanges & EEControlBits::ONLINESPELLING);
 
         if ( bSpellingChanged )
         {
             pImpEditEngine->StopOnlineSpellTimer();
-            if (nWord & EE_CNTRL_ONLINESPELLING)
+            if (nWord & EEControlBits::ONLINESPELLING)
             {
                 // Create WrongList, start timer...
                 sal_Int32 nNodes = pImpEditEngine->GetEditDoc().Count();
@@ -1870,7 +1870,7 @@ void EditEngine::SetControlWord( sal_uInt32 nWord )
     }
 }
 
-sal_uInt32 EditEngine::GetControlWord() const
+EEControlBits EditEngine::GetControlWord() const
 {
     return pImpEditEngine->aStatus.GetControlWord();
 }

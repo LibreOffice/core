@@ -28,10 +28,10 @@ class InternalEditStatus : public EditStatus
 public:
             InternalEditStatus() { ; }
 
-    void    TurnOnFlags( sal_uLong nFlags )
+    void    TurnOnFlags( EEControlBits nFlags )
                 { nControlBits |= nFlags; }
 
-    void    TurnOffFlags( sal_uLong nFlags )
+    void    TurnOffFlags( EEControlBits nFlags )
                 { nControlBits &= ~nFlags; }
 
     void    TurnOnStatusBits( sal_uLong nBits )
@@ -42,80 +42,80 @@ public:
 
 
     bool    UseCharAttribs() const
-                { return ( ( nControlBits & EE_CNTRL_USECHARATTRIBS ) != 0 ); }
+                { return bool( nControlBits & EEControlBits::USECHARATTRIBS ); }
 
     bool    NotifyCursorMovements() const
-                { return ( ( nControlBits & EE_CNTRL_CRSRLEFTPARA ) != 0 ); }
+                { return bool( nControlBits & EEControlBits::CRSRLEFTPARA ); }
 
     bool    UseIdleFormatter() const
-                { return ( ( nControlBits & EE_CNTRL_DOIDLEFORMAT) != 0 ); }
+                { return bool( nControlBits & EEControlBits::DOIDLEFORMAT); }
 
     bool    AllowPasteSpecial() const
-                { return ( ( nControlBits & EE_CNTRL_PASTESPECIAL ) != 0 ); }
+                { return bool( nControlBits & EEControlBits::PASTESPECIAL ); }
 
     bool    DoAutoIndenting() const
-                { return ( ( nControlBits & EE_CNTRL_AUTOINDENTING ) != 0 ); }
+                { return bool( nControlBits & EEControlBits::AUTOINDENTING ); }
 
     bool    DoUndoAttribs() const
-                { return ( ( nControlBits & EE_CNTRL_UNDOATTRIBS ) != 0 ); }
+                { return bool( nControlBits & EEControlBits::UNDOATTRIBS ); }
 
     bool    OneCharPerLine() const
-                { return ( ( nControlBits & EE_CNTRL_ONECHARPERLINE ) != 0 ); }
+                { return bool( nControlBits & EEControlBits::ONECHARPERLINE ); }
 
     bool    IsOutliner() const
-                { return ( ( nControlBits & EE_CNTRL_OUTLINER ) != 0 ); }
+                { return bool( nControlBits & EEControlBits::OUTLINER ); }
 
     bool    IsOutliner2() const
-                { return ( ( nControlBits & EE_CNTRL_OUTLINER2 ) != 0 ); }
+                { return bool( nControlBits & EEControlBits::OUTLINER2 ); }
 
     bool    IsAnyOutliner() const
                 { return IsOutliner() || IsOutliner2(); }
 
     bool    DoNotUseColors() const
-                { return ( ( nControlBits & EE_CNTRL_NOCOLORS ) != 0 ); }
+                { return bool( nControlBits & EEControlBits::NOCOLORS ); }
 
     bool    AllowBigObjects() const
-                { return ( ( nControlBits & EE_CNTRL_ALLOWBIGOBJS ) != 0 ); }
+                { return bool( nControlBits & EEControlBits::ALLOWBIGOBJS ); }
 
     bool    DoOnlineSpelling() const
-                { return ( ( nControlBits & EE_CNTRL_ONLINESPELLING ) != 0 ); }
+                { return bool( nControlBits & EEControlBits::ONLINESPELLING ); }
 
     bool    DoStretch() const
-                { return ( ( nControlBits & EE_CNTRL_STRETCHING ) != 0 ); }
+                { return bool( nControlBits & EEControlBits::STRETCHING ); }
 
     bool    AutoPageSize() const
-                { return ( ( nControlBits & EE_CNTRL_AUTOPAGESIZE ) != 0 ); }
+                { return bool( nControlBits & EEControlBits::AUTOPAGESIZE ); }
     bool    AutoPageWidth() const
-                { return ( ( nControlBits & EE_CNTRL_AUTOPAGESIZEX ) != 0 ); }
+                { return bool( nControlBits & EEControlBits::AUTOPAGESIZEX ); }
     bool    AutoPageHeight() const
-                { return ( ( nControlBits & EE_CNTRL_AUTOPAGESIZEY ) != 0 ); }
+                { return bool( nControlBits & EEControlBits::AUTOPAGESIZEY ); }
 
     bool    MarkFields() const
-                { return ( ( nControlBits & EE_CNTRL_MARKFIELDS ) != 0 ); }
+                { return bool( nControlBits & EEControlBits::MARKFIELDS ); }
 
     bool    DoRestoreFont() const
-                { return ( ( nControlBits & EE_CNTRL_RESTOREFONT ) != 0 ); }
+                { return bool( nControlBits & EEControlBits::RESTOREFONT ); }
 
     bool    DoImportRTFStyleSheets() const
-                { return ( ( nControlBits & EE_CNTRL_RTFSTYLESHEETS ) != 0 ); }
+                { return bool( nControlBits & EEControlBits::RTFSTYLESHEETS ); }
 
     bool    DoAutoCorrect() const
-                { return ( ( nControlBits & EE_CNTRL_AUTOCORRECT ) != 0 ); }
+                { return bool( nControlBits & EEControlBits::AUTOCORRECT ); }
 
     bool    DoAutoComplete() const
-                { return ( ( nControlBits & EE_CNTRL_AUTOCOMPLETE ) != 0 ); }
+                { return bool( nControlBits & EEControlBits::AUTOCOMPLETE ); }
 
     bool    DoTabIndenting() const
-                { return ( ( nControlBits & EE_CNTRL_TABINDENTING ) != 0 ); }
+                { return bool( nControlBits & EEControlBits::TABINDENTING ); }
 
     bool    DoFormat100() const
-                { return ( ( nControlBits & EE_CNTRL_FORMAT100 ) != 0 ); }
+                { return bool( nControlBits & EEControlBits::FORMAT100 ); }
 
     bool    ULSpaceSummation() const
-                { return ( ( nControlBits & EE_CNTRL_ULSPACESUMMATION ) != 0 ); }
+                { return bool( nControlBits & EEControlBits::ULSPACESUMMATION ); }
 
     bool    ULSpaceFirstParagraph() const
-                { return ( ( nControlBits & EE_CNTRL_ULSPACEFIRSTPARA ) != 0 ); }
+                { return bool( nControlBits & EEControlBits::ULSPACEFIRSTPARA ); }
 };
 
 #endif // INCLUDED_EDITENG_SOURCE_EDITENG_EDITSTT2_HXX

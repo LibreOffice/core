@@ -53,12 +53,12 @@ bool SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
     ImpSetTextEditParams();
 
     if (!bContourFrame) {
-        sal_uIntPtr nStat=rOutl.GetControlWord();
-        nStat|=EE_CNTRL_AUTOPAGESIZE;
+        EEControlBits nStat=rOutl.GetControlWord();
+        nStat|=EEControlBits::AUTOPAGESIZE;
         if (bFitToSize || IsAutoFit())
-            nStat|=EE_CNTRL_STRETCHING;
+            nStat|=EEControlBits::STRETCHING;
         else
-            nStat&=~EE_CNTRL_STRETCHING;
+            nStat&=~EEControlBits::STRETCHING;
         rOutl.SetControlWord(nStat);
     }
 
@@ -270,8 +270,8 @@ void SdrTextObj::EndTextEdit(SdrOutliner& rOutl)
 
     pEdtOutl = NULL;
     rOutl.Clear();
-    sal_uInt32 nStat = rOutl.GetControlWord();
-    nStat &= ~EE_CNTRL_AUTOPAGESIZE;
+    EEControlBits nStat = rOutl.GetControlWord();
+    nStat &= ~EEControlBits::AUTOPAGESIZE;
     rOutl.SetControlWord(nStat);
 
     mbInEditMode = false;

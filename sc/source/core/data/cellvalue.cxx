@@ -349,8 +349,8 @@ void ScCellValue::assign( const ScCellValue& rOther, ScDocument& rDestDoc, int n
             ScFieldEditEngine& rEngine = rDestDoc.GetEditEngine();
             if (rOther.mpEditText->HasOnlineSpellErrors())
             {
-                sal_uLong nControl = rEngine.GetControlWord();
-                const sal_uLong nSpellControl = EE_CNTRL_ONLINESPELLING | EE_CNTRL_ALLOWBIGOBJS;
+                EEControlBits nControl = rEngine.GetControlWord();
+                const EEControlBits nSpellControl = EEControlBits::ONLINESPELLING | EEControlBits::ALLOWBIGOBJS;
                 bool bNewControl = ((nControl & nSpellControl) != nSpellControl);
                 if (bNewControl)
                     rEngine.SetControlWord(nControl | nSpellControl);

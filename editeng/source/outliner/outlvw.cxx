@@ -448,7 +448,7 @@ void OutlinerView::Indent( short nDiff )
     if( !nDiff || ( ( nDiff > 0 ) && ImpCalcSelectedPages( true ) && !pOwner->ImpCanIndentSelectedPages( this ) ) )
         return;
 
-    const bool bOutlinerView = pOwner->pEditEngine->GetControlWord() & EE_CNTRL_OUTLINER;
+    const bool bOutlinerView = bool(pOwner->pEditEngine->GetControlWord() & EEControlBits::OUTLINER);
     bool bUpdate = pOwner->pEditEngine->GetUpdateMode();
     pOwner->pEditEngine->SetUpdateMode( false );
 

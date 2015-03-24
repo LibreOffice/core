@@ -577,7 +577,7 @@ void WorkbookGlobals::initialize( bool bWorkbookFile )
     mxEditEngine->SetEditTextObjectPool( rDoc.GetEditPool() );
     mxEditEngine->SetUpdateMode( false );
     mxEditEngine->EnableUndo( false );
-    mxEditEngine->SetControlWord( mxEditEngine->GetControlWord() & ~EE_CNTRL_ALLOWBIGOBJS );
+    mxEditEngine->SetControlWord( mxEditEngine->GetControlWord() & ~EEControlBits::ALLOWBIGOBJS );
 
     // set some document properties needed during import
     if( mrBaseFilter.isImportFilter() )

@@ -171,10 +171,10 @@ Outliner::Outliner( SdDrawDocument* pDoc, sal_uInt16 nMode )
     SetCalcFieldValueHdl(LINK(SD_MOD(), SdModule, CalcFieldValueHdl));
     SetForbiddenCharsTable( pDoc->GetForbiddenCharsTable() );
 
-    sal_uLong nCntrl = GetControlWord();
-    nCntrl |= EE_CNTRL_ALLOWBIGOBJS;
-    nCntrl |= EE_CNTRL_MARKFIELDS;
-    nCntrl |= EE_CNTRL_AUTOCORRECT;
+    EEControlBits nCntrl = GetControlWord();
+    nCntrl |= EEControlBits::ALLOWBIGOBJS;
+    nCntrl |= EEControlBits::MARKFIELDS;
+    nCntrl |= EEControlBits::AUTOCORRECT;
 
     bool bOnlineSpell = false;
 
@@ -203,9 +203,9 @@ Outliner::Outliner( SdDrawDocument* pDoc, sal_uInt16 nMode )
     }
 
     if (bOnlineSpell)
-        nCntrl |= EE_CNTRL_ONLINESPELLING;
+        nCntrl |= EEControlBits::ONLINESPELLING;
     else
-        nCntrl &= ~EE_CNTRL_ONLINESPELLING;
+        nCntrl &= ~EEControlBits::ONLINESPELLING;
 
     SetControlWord(nCntrl);
 

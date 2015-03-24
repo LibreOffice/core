@@ -327,10 +327,9 @@ EditEngine* PresenterTextView::Implementation::CreateEditEngine (void)
             Application::GetDefaultDevice()->GetTextWidth(OUString("XXXX"))));
 
         pEditEngine->SetControlWord(
-                (pEditEngine->GetControlWord()
-                    | EE_CNTRL_AUTOINDENTING) &
-                (~EE_CNTRL_UNDOATTRIBS) &
-                (~EE_CNTRL_PASTESPECIAL));
+                EEControlBits(pEditEngine->GetControlWord() | EEControlBits::AUTOINDENTING) &
+                EEControlBits(~EEControlBits::UNDOATTRIBS) &
+                EEControlBits(~EEControlBits::PASTESPECIAL) );
 
         pEditEngine->SetWordDelimiters (" .=+-*/(){}[];\"");
         pEditEngine->SetRefMapMode (MAP_PIXEL);

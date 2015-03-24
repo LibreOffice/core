@@ -51,8 +51,8 @@ void SdrOutliner::SetTextObj( const SdrTextObj* pObj )
 
         SetGlobalCharStretching(100,100);
 
-        sal_uIntPtr nStat = GetControlWord();
-        nStat &= ~( EE_CNTRL_STRETCHING | EE_CNTRL_AUTOPAGESIZE );
+        EEControlBits nStat = GetControlWord();
+        nStat &= ~EEControlBits( EEControlBits::STRETCHING | EEControlBits::AUTOPAGESIZE );
         SetControlWord(nStat);
 
         Size aNullSize;

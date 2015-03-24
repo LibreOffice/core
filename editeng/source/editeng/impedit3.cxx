@@ -2526,7 +2526,7 @@ void ImpEditEngine::SetVertical( bool bVertical )
     if ( IsVertical() != bVertical )
     {
         GetEditDoc().SetVertical( bVertical );
-        bool bUseCharAttribs = ( aStatus.GetControlWord() & EE_CNTRL_USECHARATTRIBS ) ? sal_True : sal_False;
+        bool bUseCharAttribs = ( aStatus.GetControlWord() & EEControlBits::USECHARATTRIBS ) ? sal_True : sal_False;
         GetEditDoc().CreateDefFont( bUseCharAttribs );
         if ( IsFormatted() )
         {
@@ -4178,9 +4178,9 @@ void ImpEditEngine::SetFlatMode( bool bFlat )
         return;
 
     if ( !bFlat )
-        aStatus.TurnOnFlags( EE_CNTRL_USECHARATTRIBS );
+        aStatus.TurnOnFlags( EEControlBits::USECHARATTRIBS );
     else
-        aStatus.TurnOffFlags( EE_CNTRL_USECHARATTRIBS );
+        aStatus.TurnOffFlags( EEControlBits::USECHARATTRIBS );
 
     aEditDoc.CreateDefFont( !bFlat );
 

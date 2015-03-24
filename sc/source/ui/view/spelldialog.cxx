@@ -251,7 +251,7 @@ void ScSpellDialogChildWindow::Init()
     mpViewData->SetSpellingView( pEditView );
     Rectangle aRect( Point( 0, 0 ), Point( 0, 0 ) );
     pEditView->SetOutputArea( aRect );
-    mxEngine->SetControlWord( EE_CNTRL_USECHARATTRIBS );
+    mxEngine->SetControlWord( EEControlBits::USECHARATTRIBS );
     mxEngine->EnableUndo( false );
     mxEngine->SetPaperSize( aRect.GetSize() );
     mxEngine->SetText( EMPTY_OUSTRING );

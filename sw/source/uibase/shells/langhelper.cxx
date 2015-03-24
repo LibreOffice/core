@@ -193,16 +193,16 @@ namespace SwLangHelper
                 if (bForSelection)
                 {
                     const SwViewOption* pVOpt = rView.GetWrtShellPtr()->GetViewOptions();
-                    sal_uLong nCntrl = pEditEngine->GetControlWord();
+                    EEControlBits nCntrl = pEditEngine->GetControlWord();
                     // turn off
-                    nCntrl &= ~EE_CNTRL_ONLINESPELLING;
+                    nCntrl &= ~EEControlBits::ONLINESPELLING;
                     pEditEngine->SetControlWord(nCntrl);
 
                     //turn back on
                     if (pVOpt->IsOnlineSpell())
-                        nCntrl |= EE_CNTRL_ONLINESPELLING;
+                        nCntrl |= EEControlBits::ONLINESPELLING;
                     else
-                        nCntrl &= ~EE_CNTRL_ONLINESPELLING;
+                        nCntrl &= ~EEControlBits::ONLINESPELLING;
                     pEditEngine->SetControlWord(nCntrl);
 
                     pEditEngine->CompleteOnlineSpelling();

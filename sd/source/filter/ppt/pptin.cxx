@@ -238,9 +238,9 @@ bool ImplSdPPTImport::Import()
     pSdrModel->EnableUndo(false);
 
     SdrOutliner& rOutl = mpDoc->GetDrawOutliner();
-    sal_uInt32 nControlWord = rOutl.GetEditEngine().GetControlWord();
-    nControlWord |=  EE_CNTRL_ULSPACESUMMATION;
-    nControlWord &=~ EE_CNTRL_ULSPACEFIRSTPARA;
+    EEControlBits nControlWord = rOutl.GetEditEngine().GetControlWord();
+    nControlWord |=  EEControlBits::ULSPACESUMMATION;
+    nControlWord &= ~EEControlBits::ULSPACEFIRSTPARA;
     ((EditEngine&)rOutl.GetEditEngine()).SetControlWord( nControlWord );
 
     SdrLayerAdmin& rAdmin = mpDoc->GetLayerAdmin();

@@ -387,9 +387,9 @@ bool DrawDocShell::ImportFrom(SfxMedium &rMedium,
         // in. We need to tell both the edit engine of the draw outliner,
         // and the document, to do "summation of paragraphs".
         SdrOutliner& rOutl = mpDoc->GetDrawOutliner();
-        sal_uInt32 nControlWord = rOutl.GetEditEngine().GetControlWord();
-        nControlWord |=  EE_CNTRL_ULSPACESUMMATION;
-        nControlWord &=~ EE_CNTRL_ULSPACEFIRSTPARA;
+        EEControlBits nControlWord = rOutl.GetEditEngine().GetControlWord();
+        nControlWord |=  EEControlBits::ULSPACESUMMATION;
+        nControlWord &=~ EEControlBits::ULSPACEFIRSTPARA;
         ((EditEngine&)rOutl.GetEditEngine()).SetControlWord( nControlWord );
 
         mpDoc->SetSummationOfParagraphs( true );

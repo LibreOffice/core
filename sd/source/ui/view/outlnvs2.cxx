@@ -251,17 +251,17 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
         case SID_COLORVIEW:
         {
             ::Outliner* pOutl = pOutlinerView->GetOutliner();
-            sal_uLong nCntrl = pOutl->GetControlWord();
+            EEControlBits nCntrl = pOutl->GetControlWord();
 
-            if ( !(nCntrl & EE_CNTRL_NOCOLORS) )
+            if ( !(nCntrl & EEControlBits::NOCOLORS) )
             {
                 // color view is enabled: disable
-                pOutl->SetControlWord(nCntrl | EE_CNTRL_NOCOLORS);
+                pOutl->SetControlWord(nCntrl | EEControlBits::NOCOLORS);
             }
             else
             {
                 // color view is disabled: enable
-                pOutl->SetControlWord(nCntrl & ~EE_CNTRL_NOCOLORS);
+                pOutl->SetControlWord(nCntrl & ~EEControlBits::NOCOLORS);
             }
 
             InvalidateWindows();

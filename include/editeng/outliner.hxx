@@ -20,6 +20,7 @@
 #define INCLUDED_EDITENG_OUTLINER_HXX
 
 #include <editeng/editdata.hxx>
+#include <editeng/editstat.hxx>
 #include <editeng/numitem.hxx>
 #include <i18nlangtag/lang.h>
 #include <rtl/ustring.hxx>
@@ -893,8 +894,8 @@ public:
     Link            GetWidthArrReqHdl() const{ return aWidthArrReqHdl; }
     void            SetWidthArrReqHdl(const Link& rLink){aWidthArrReqHdl=rLink; }
 
-    void            SetControlWord( sal_uLong nWord );
-    sal_uLong           GetControlWord() const;
+    void            SetControlWord( EEControlBits nWord );
+    EEControlBits   GetControlWord() const;
 
     Link            GetBeginMovingHdl() const { return aBeginMovingHdl; }
     void            SetBeginMovingHdl(const Link& rLink) {aBeginMovingHdl=rLink;}

@@ -94,7 +94,7 @@ ScEditWindow::ScEditWindow( vcl::Window* pParent, WinBits nBits, ScEditWindowLoc
 
         //  Feldbefehle:
     pEdEngine->SetData( aData );
-    pEdEngine->SetControlWord( pEdEngine->GetControlWord() | EE_CNTRL_MARKFIELDS );
+    pEdEngine->SetControlWord( pEdEngine->GetControlWord() | EEControlBits::MARKFIELDS );
     mbRTL = ScGlobal::IsSystemRTL();
     if (mbRTL)
         pEdEngine->SetDefaultHorizontalTextDirection(EE_HTEXTDIR_R2L);

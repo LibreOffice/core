@@ -352,7 +352,7 @@ ScEditEngineDefaulter& XclRoot::GetEditEngine() const
         rEE.SetEditTextObjectPool( GetDoc().GetEditPool() );
         rEE.SetUpdateMode( false );
         rEE.EnableUndo( false );
-        rEE.SetControlWord( rEE.GetControlWord() & ~EE_CNTRL_ALLOWBIGOBJS );
+        rEE.SetControlWord( rEE.GetControlWord() & ~EEControlBits::ALLOWBIGOBJS );
     }
     return *mrData.mxEditEngine;
 }
@@ -366,7 +366,7 @@ ScHeaderEditEngine& XclRoot::GetHFEditEngine() const
         rEE.SetRefMapMode( MAP_TWIP );  // headers/footers use twips as default metric
         rEE.SetUpdateMode( false );
         rEE.EnableUndo( false );
-        rEE.SetControlWord( rEE.GetControlWord() & ~EE_CNTRL_ALLOWBIGOBJS );
+        rEE.SetControlWord( rEE.GetControlWord() & ~EEControlBits::ALLOWBIGOBJS );
 
         // set Calc header/footer defaults
         SfxItemSet* pEditSet = new SfxItemSet( rEE.GetEmptyItemSet() );
@@ -390,7 +390,7 @@ EditEngine& XclRoot::GetDrawEditEngine() const
         rEE.SetRefMapMode( MAP_100TH_MM );
         rEE.SetUpdateMode( false );
         rEE.EnableUndo( false );
-        rEE.SetControlWord( rEE.GetControlWord() & ~EE_CNTRL_ALLOWBIGOBJS );
+        rEE.SetControlWord( rEE.GetControlWord() & ~EEControlBits::ALLOWBIGOBJS );
     }
     return *mrData.mxDrawEditEng;
 }

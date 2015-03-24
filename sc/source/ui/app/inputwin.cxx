@@ -1691,12 +1691,12 @@ void ScTextWnd::UpdateAutoCorrFlag()
 {
     if ( pEditEngine )
     {
-        sal_uLong nControl = pEditEngine->GetControlWord();
-        sal_uLong nOld = nControl;
+        EEControlBits nControl = pEditEngine->GetControlWord();
+        EEControlBits nOld = nControl;
         if ( bFormulaMode )
-            nControl &= ~EE_CNTRL_AUTOCORRECT; // No AutoCorrect in Formulas
+            nControl &= ~EEControlBits::AUTOCORRECT; // No AutoCorrect in Formulas
         else
-            nControl |= EE_CNTRL_AUTOCORRECT; // Else do enable it
+            nControl |= EEControlBits::AUTOCORRECT; // Else do enable it
 
         if ( nControl != nOld )
             pEditEngine->SetControlWord( nControl );

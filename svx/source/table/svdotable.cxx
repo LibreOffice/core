@@ -1438,9 +1438,9 @@ void SdrTableObj::TakeTextRect( const CellPos& rPos, SdrOutliner& rOutliner, Rec
 
     SdrTextVertAdjust eVAdj=xCell->GetTextVerticalAdjust();
 
-    sal_uIntPtr nStat0=rOutliner.GetControlWord();
+    EEControlBits nStat0=rOutliner.GetControlWord();
     Size aNullSize;
-    nStat0 |= EE_CNTRL_AUTOPAGESIZE;
+    nStat0 |= EEControlBits::AUTOPAGESIZE;
     rOutliner.SetControlWord(nStat0);
     rOutliner.SetMinAutoPaperSize(aNullSize);
     rOutliner.SetMaxAutoPaperSize(aAnkRect.GetSize());
@@ -1841,9 +1841,9 @@ bool SdrTableObj::BegTextEdit(SdrOutliner& rOutl)
 
         if (bUpdMerk) rOutl.SetUpdateMode(true);
 
-    sal_uIntPtr nStat=rOutl.GetControlWord();
-    nStat   |= EE_CNTRL_AUTOPAGESIZE;
-    nStat   &=~EE_CNTRL_STRETCHING;
+    EEControlBits nStat=rOutl.GetControlWord();
+    nStat   |= EEControlBits::AUTOPAGESIZE;
+    nStat   &=~EEControlBits::STRETCHING;
     rOutl.SetControlWord(nStat);
 
     OutlinerParaObject* pPara = GetOutlinerParaObject();
@@ -1896,8 +1896,8 @@ void SdrTableObj::EndTextEdit(SdrOutliner& rOutl)
 
     pEdtOutl = 0;
     rOutl.Clear();
-    sal_uInt32 nStat = rOutl.GetControlWord();
-    nStat &= ~EE_CNTRL_AUTOPAGESIZE;
+    EEControlBits nStat = rOutl.GetControlWord();
+    nStat &= ~EEControlBits::AUTOPAGESIZE;
     rOutl.SetControlWord(nStat);
 
     mbInEditMode = false;

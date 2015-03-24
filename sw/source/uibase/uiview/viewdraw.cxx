@@ -521,20 +521,20 @@ bool SwView::BeginTextEdit(SdrObject* pObj, SdrPageView* pPV, vcl::Window* pWin,
         pOutliner->SetHyphenator( xHyphenator );
         pSh->SetCalcFieldValueHdl(pOutliner);
 
-        sal_uInt32 nCntrl = pOutliner->GetControlWord();
-        nCntrl |= EE_CNTRL_ALLOWBIGOBJS;
+        EEControlBits nCntrl = pOutliner->GetControlWord();
+        nCntrl |= EEControlBits::ALLOWBIGOBJS;
 
         const SwViewOption *pOpt = pSh->GetViewOptions();
 
         if (SwViewOption::IsFieldShadings())
-            nCntrl |= EE_CNTRL_MARKFIELDS;
+            nCntrl |= EEControlBits::MARKFIELDS;
         else
-            nCntrl &= ~EE_CNTRL_MARKFIELDS;
+            nCntrl &= ~EEControlBits::MARKFIELDS;
 
         if (pOpt->IsOnlineSpell())
-            nCntrl |= EE_CNTRL_ONLINESPELLING;
+            nCntrl |= EEControlBits::ONLINESPELLING;
         else
-            nCntrl &= ~EE_CNTRL_ONLINESPELLING;
+            nCntrl &= ~EEControlBits::ONLINESPELLING;
 
         pOutliner->SetControlWord(nCntrl);
         const SfxPoolItem& rItem = pSh->GetDoc()->GetDefault(RES_CHRATR_LANGUAGE);

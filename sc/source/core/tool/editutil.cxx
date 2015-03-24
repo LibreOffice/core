@@ -164,8 +164,8 @@ EditTextObject* ScEditUtil::Clone( const EditTextObject& rObj, ScDocument& rDest
     EditEngine& rEngine = rDestDoc.GetEditEngine();
     if (rObj.HasOnlineSpellErrors())
     {
-        sal_uLong nControl = rEngine.GetControlWord();
-        const sal_uLong nSpellControl = EE_CNTRL_ONLINESPELLING | EE_CNTRL_ALLOWBIGOBJS;
+        EEControlBits nControl = rEngine.GetControlWord();
+        const EEControlBits nSpellControl = EEControlBits::ONLINESPELLING | EEControlBits::ALLOWBIGOBJS;
         bool bNewControl = ( (nControl & nSpellControl) != nSpellControl );
         if (bNewControl)
             rEngine.SetControlWord(nControl | nSpellControl);
@@ -709,7 +709,7 @@ void ScTabEditEngine::Init( const ScPatternAttr& rPattern )
     rPattern.FillEditItemSet( pEditDefaults );
     SetDefaults( pEditDefaults );
     // wir haben keine StyleSheets fuer Text
-    SetControlWord( GetControlWord() & ~EE_CNTRL_RTFSTYLESHEETS );
+    SetControlWord( GetControlWord() & ~EEControlBits::RTFSTYLESHEETS );
 }
 
 //      Feldbefehle fuer Kopf- und Fusszeilen
@@ -850,7 +850,7 @@ ScFieldEditEngine::ScFieldEditEngine(
 {
     if ( pTextObjectPool )
         SetEditTextObjectPool( pTextObjectPool );
-    SetControlWord( (GetControlWord() | EE_CNTRL_MARKFIELDS) & ~EE_CNTRL_RTFSTYLESHEETS );
+    SetControlWord( EEControlBits(GetControlWord() | EEControlBits::MARKFIELDS) & ~EEControlBits::RTFSTYLESHEETS );
 }
 
 OUString ScFieldEditEngine::CalcFieldValue( const SvxFieldItem& rField,
@@ -882,7 +882,7 @@ ScNoteEditEngine::ScNoteEditEngine( SfxItemPool* pEnginePoolP,
 {
     if ( pTextObjectPool )
         SetEditTextObjectPool( pTextObjectPool );
-    SetControlWord( (GetControlWord() | EE_CNTRL_MARKFIELDS) & ~EE_CNTRL_RTFSTYLESHEETS );
+    SetControlWord( EEControlBits(GetControlWord() | EEControlBits::MARKFIELDS) & ~EEControlBits::RTFSTYLESHEETS );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

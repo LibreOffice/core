@@ -3418,7 +3418,7 @@ ScEditEngineDefaulter* ScXMLImport::GetEditEngine()
         mpEditEngine->SetEditTextObjectPool(pDoc->GetEditPool());
         mpEditEngine->SetUpdateMode(false);
         mpEditEngine->EnableUndo(false);
-        mpEditEngine->SetControlWord(mpEditEngine->GetControlWord() & ~EE_CNTRL_ALLOWBIGOBJS);
+        mpEditEngine->SetControlWord(mpEditEngine->GetControlWord() & ~EEControlBits::ALLOWBIGOBJS);
     }
     return mpEditEngine.get();
 }
