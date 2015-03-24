@@ -706,9 +706,10 @@ void SdrMarkView::SetMarkHandles()
 
         if (GetModel()->isTiledRendering())
         {
-            OString sRectangle;
-            if (aRect.IsEmpty())
-                sRectangle = "EMPTY";
+            Rectangle aSelection(aRect);
+            OString sSelection;
+            if (aSelection.IsEmpty())
+                sSelection = "EMPTY";
             else
             {
                 // In case the map mode is in 100th MM, then need to convert the coordinates over to twips for LOK.
@@ -717,13 +718,13 @@ void SdrMarkView::SetMarkHandles()
                     if (OutputDevice* pOutputDevice = pMarkedPV->GetView().GetFirstOutputDevice())
                     {
                         if (pOutputDevice->GetMapMode().GetMapUnit() == MAP_100TH_MM)
-                            aRect = OutputDevice::LogicToLogic(aRect, MAP_100TH_MM, MAP_TWIP);
+                            aSelection = OutputDevice::LogicToLogic(aSelection, MAP_100TH_MM, MAP_TWIP);
                     }
                 }
 
-                sRectangle = aRect.toString();
+                sSelection = aSelection.toString();
             }
-            GetModel()->libreOfficeKitCallback(LOK_CALLBACK_GRAPHIC_SELECTION, sRectangle.getStr());
+            GetModel()->libreOfficeKitCallback(LOK_CALLBACK_GRAPHIC_SELECTION, sSelection.getStr());
         }
 
         if (bFrmHdl)
