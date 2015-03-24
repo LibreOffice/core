@@ -180,10 +180,6 @@ bool SbxObject::IsClass( const OUString& rName ) const
 
 SbxVariable* SbxObject::FindUserData( sal_uInt32 nData )
 {
-    if( !GetAll( SbxCLASS_DONTCARE ) )
-    {
-        return NULL;
-    }
     SbxVariable* pRes = pMethods->FindUserData( nData );
     if( !pRes )
     {
@@ -228,10 +224,6 @@ SbxVariable* SbxObject::Find( const OUString& rName, SbxClassType t )
     ++nLvl;
 #endif
 
-    if( !GetAll( t ) )
-    {
-        return NULL;
-    }
     SbxVariable* pRes = NULL;
     pObjs->SetFlag( SBX_EXTSEARCH );
     if( t == SbxCLASS_DONTCARE )
@@ -742,11 +734,6 @@ void SbxObject::Dump( SvStream& rStrm, bool bFill )
     for ( sal_uInt16 n = 1; n < nLevel; ++n )
     {
         aIndent += "    ";
-    }
-    // if necessary complete the object
-    if ( bFill )
-    {
-        GetAll( SbxCLASS_DONTCARE );
     }
     // Output the data of the object itself
     OString aNameStr(OUStringToOString(GetName(), RTL_TEXTENCODING_ASCII_US));
