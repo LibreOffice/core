@@ -274,7 +274,6 @@ private:
 
     inline void acquire() const
     {
-        assert(!mbDisposed);
         mnRefCnt++;
     }
 
