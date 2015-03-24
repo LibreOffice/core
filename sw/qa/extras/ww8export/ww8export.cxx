@@ -508,12 +508,12 @@ DECLARE_WW8EXPORT_TEST(testCommentExport, "comment-export.odt")
         uno::Reference<beans::XPropertySet> xPropertySet(xRun, uno::UNO_QUERY);
         CPPUNIT_ASSERT_EQUAL(sKind, getProperty<OUString>(xPropertySet, "TextPortionType"));
 
-        if (sKind == OUString("Text"))
+        if (sKind == "Text")
         {
             // Check if textportion has the correct text
             CPPUNIT_ASSERT_EQUAL(aTextPortions[i].sText, xRun->getString());
         }
-        else if (sKind == OUString("Annotation"))
+        else if (sKind == "Annotation")
         {
             // Check if the comment text is correct and save the name of the comment
             uno::Reference<beans::XPropertySet> xComment(getProperty< uno::Reference<beans::XPropertySet> >(xRun, "TextField"), uno::UNO_QUERY);
