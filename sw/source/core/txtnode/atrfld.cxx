@@ -123,7 +123,7 @@ SwFmtFld::~SwFmtFld()
     delete mpField;
 
     // bei einige FeldTypen muessen wir den FeldTypen noch loeschen
-    if( pType && pType->IsLastDepend() )
+    if( pType && pType->HasOnlyOneListener() )
     {
         bool bDel = false;
         switch( pType->Which() )

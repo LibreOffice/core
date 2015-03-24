@@ -45,7 +45,7 @@ SwColumnFrm::~SwColumnFrm()
 {
     SwFrmFmt *pFmt = GetFmt();
     SwDoc *pDoc;
-    if ( !(pDoc = pFmt->GetDoc())->IsInDtor() && pFmt->IsLastDepend() )
+    if ( !(pDoc = pFmt->GetDoc())->IsInDtor() && pFmt->HasOnlyOneListener() )
     {
         //I'm the only one, delete the format.
         //Get default format before, so the base class can cope with it.

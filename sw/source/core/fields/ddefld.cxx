@@ -378,7 +378,7 @@ SwDDEField::SwDDEField( SwDDEFieldType* pInitType )
 
 SwDDEField::~SwDDEField()
 {
-    if( GetTyp()->IsLastDepend() )
+    if( GetTyp()->HasOnlyOneListener() )
         static_cast<SwDDEFieldType*>(GetTyp())->Disconnect();
 }
 

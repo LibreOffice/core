@@ -71,7 +71,7 @@ SwDDETable::~SwDDETable()
         pFldTyp->DecRefCnt();
 
     // If it is the last dependent of the "deleted field" than delete it finally
-    if( pFldTyp->IsDeleted() && pFldTyp->IsLastDepend() )
+    if( pFldTyp->IsDeleted() && pFldTyp->HasOnlyOneListener() )
     {
         pFldTyp->Remove( &aDepend );
         delete pFldTyp;

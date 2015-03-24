@@ -4449,7 +4449,7 @@ void SwShareBoxFmts::ChangeFrmFmt( SwTableBox* pBox, SwTableLine* pLn,
         pOld->Add( &aCl );
         pLn->ChgFrmFmt( static_cast<SwTableLineFmt*>(&rFmt) );
     }
-    if( pOld && pOld->IsLastDepend() )
+    if( pOld && pOld->HasOnlyOneListener() )
     {
         RemoveFormat( *pOld );
         delete pOld;

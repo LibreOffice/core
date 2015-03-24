@@ -208,7 +208,7 @@ public:
     bool IsInSwFntCache() const     { return m_bInSwFntCache;  }
 
     void CheckCaching( const sal_uInt16 nWhich );
-    bool IsLastDepend() { return m_pWriterListeners && m_pWriterListeners->IsLast(); }
+    bool HasOnlyOneListener() { return m_pWriterListeners && m_pWriterListeners->IsLast(); }
 };
 
 // SwDepend
