@@ -5603,7 +5603,8 @@ SvxMSDffManager::SvxMSDffManager( SvStream& rStCtrl_, const OUString& rBaseURL )
      nSvxMSDffOLEConvFlags( 0 ),
      pSecPropSet( NULL ),
      mnDefaultColor( COL_DEFAULT ),
-     mbTracing( false )
+     mbTracing( false ),
+     mbSkipImages(false)
 {
     SetModel( NULL, 0 );
 }
