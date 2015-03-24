@@ -192,12 +192,12 @@ private:
     Outliner*   pOwner;
     EditView*   pEditView;
 
-    enum MouseTarget {
-        MouseText = 0,
-        MouseBullet = 1,
-        MouseHypertext = 2,  // Outside OutputArea
-        MouseOutside = 3,    // Outside OutputArea
-        MouseDontKnow = 4
+    enum class MouseTarget {
+        Text = 0,
+        Bullet = 1,
+        Hypertext = 2,  // Outside OutputArea
+        Outside = 3,    // Outside OutputArea
+        DontKnow = 4
     };
 
     EDITENG_DLLPRIVATE void         ImplExpandOrCollaps( sal_Int32 nStartPara, sal_Int32 nEndPara, bool bExpand );

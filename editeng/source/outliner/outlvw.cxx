@@ -248,11 +248,11 @@ sal_Int32 OutlinerView::ImpCheckMousePos(const Point& rPosPix, MouseTarget& reTa
     Point aMousePosWin = pEditView->GetWindow()->PixelToLogic( rPosPix );
     if( !pEditView->GetOutputArea().IsInside( aMousePosWin ) )
     {
-        reTarget = MouseOutside;
+        reTarget = MouseTarget::Outside;
     }
     else
     {
-        reTarget = MouseText;
+        reTarget = MouseTarget::Text;
 
         Point aPaperPos( aMousePosWin );
         Rectangle aOutArea = pEditView->GetOutputArea();
@@ -270,14 +270,14 @@ sal_Int32 OutlinerView::ImpCheckMousePos(const Point& rPosPix, MouseTarget& reTa
 
             if ( bBullet )
             {
-                reTarget = MouseBullet;
+                reTarget = MouseTarget::Bullet;
             }
             else
             {
                 // Check for hyperlink
                 const SvxFieldItem* pFieldItem = pEditView->GetField( aMousePosWin );
                 if ( pFieldItem && pFieldItem->GetField() && pFieldItem->GetField()->ISA( SvxURLField ) )
-                    reTarget = MouseHypertext;
+                    reTarget = MouseTarget::Hypertext;
             }
         }
     }
@@ -313,7 +313,7 @@ bool OutlinerView::MouseButtonDown( const MouseEvent& rMEvt )
 
     MouseTarget eTarget;
     sal_Int32 nPara = ImpCheckMousePos( rMEvt.GetPosPixel(), eTarget );
-    if ( eTarget == MouseBullet )
+    if ( eTarget == MouseTarget::Bullet )
     {
         Paragraph* pPara = pOwner->pParaList->GetParagraph( nPara );
         bool bHasChildren = (pPara && pOwner->pParaList->HasChildren(pPara));
@@ -333,7 +333,7 @@ bool OutlinerView::MouseButtonDown( const MouseEvent& rMEvt )
     }
 
     // special case for outliner view in impress, check if double click hits the page icon for toggle
-    if( (nPara == EE_PARA_NOT_FOUND) && (pOwner->ImplGetOutlinerMode() == OUTLINERMODE_OUTLINEVIEW) && (eTarget == MouseText) && (rMEvt.GetClicks() == 2) )
+    if( (nPara == EE_PARA_NOT_FOUND) && (pOwner->ImplGetOutlinerMode() == OUTLINERMODE_OUTLINEVIEW) && (eTarget == MouseTarget::Text) && (rMEvt.GetClicks() == 2) )
     {
         ESelection aSel( pEditView->GetSelection() );
         nPara = aSel.nStartPara;
@@ -735,15 +735,15 @@ Pointer OutlinerView::GetPointer( const Point& rPosPixel )
     ImpCheckMousePos( rPosPixel, eTarget );
 
     PointerStyle ePointerStyle = POINTER_ARROW;
-    if ( eTarget == MouseText )
+    if ( eTarget == MouseTarget::Text )
     {
         ePointerStyle = GetOutliner()->IsVertical() ? POINTER_TEXT_VERTICAL : POINTER_TEXT;
     }
-    else if ( eTarget == MouseHypertext )
+    else if ( eTarget == MouseTarget::Hypertext )
     {
         ePointerStyle = POINTER_REFHAND;
     }
-    else if ( eTarget == MouseBullet )
+    else if ( eTarget == MouseTarget::Bullet )
     {
         ePointerStyle = POINTER_MOVE;
     }
