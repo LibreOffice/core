@@ -49,10 +49,6 @@
 
 #include <iostream>
 
-#if !HAVE_FEATURE_DESKTOP
-#include <touch/touch.h>
-#endif
-
 static OString ImplGetDialogText( Dialog* pDialog )
 {
     OStringBuffer aErrorStr(OUStringToOString(

@@ -19,7 +19,6 @@
 #include <osl/detail/android-bootstrap.h>
 #include <rtl/strbuf.hxx>
 #include <basebmp/scanlineformats.hxx>
-#include <touch/touch.h>
 #include <vcl/settings.hxx>
 
 #define LOGTAG "LibreOffice/androidinst"
@@ -541,22 +540,6 @@ Java_org_libreoffice_android_AppSupport_scroll(JNIEnv * /* env */,
     }
     else
         LOGW("No focused frame to emit event on");
-}
-
-extern "C" void
-touch_ui_show_keyboard()
-{
-}
-
-extern "C" void
-touch_ui_hide_keyboard()
-{
-}
-
-extern "C" bool
-touch_ui_keyboard_visible()
-{
-    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

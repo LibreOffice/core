@@ -1038,7 +1038,6 @@
 #include <tools/stream.hxx>
 #include <tools/time.hxx>
 #include <tools/urlobj.hxx>
-#include <touch/touch-impl.h>
 #include <touch/touch.h>
 #include <ucbhelper/content.hxx>
 #include <ucbhelper/contentidentifier.hxx>

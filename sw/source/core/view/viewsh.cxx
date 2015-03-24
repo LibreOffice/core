@@ -19,8 +19,6 @@
 
 #include <config_features.h>
 
-#include <touch/touch.h>
-
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/progress.hxx>
@@ -1832,56 +1830,6 @@ void SwViewShell::PaintTile(VirtualDevice &rDevice, int contextWidth, int contex
     mbInLibreOfficeKitCallback = false;
     setTiledRendering(bTiledRendering);
 }
-
-#if !HAVE_FEATURE_DESKTOP
-extern "C"
-MLODpxSize touch_lo_get_content_size()
-{
-#ifdef IOS
-    SwWrtShell *pViewShell;
-    // FIXME: make sure this is not called before we have a document...
-    while (!(pViewShell = GetActiveWrtShell()))
-    {
-        sleep(1);
-    }
-
-    if (pViewShell)
-    {
-        static const MLORip WIDTH_ADDITION  = 6L * DOCUMENTBORDER;
-        static const MLORip HEIGHT_ADDITION = 2L * DOCUMENTBORDER;
-        Size documentSize =pViewShell->GetView().GetDocSz();
-        return MLODpxSizeByRips(((MLORip)documentSize.Width()) + WIDTH_ADDITION,
-                               ((MLORip)documentSize.Height()) + HEIGHT_ADDITION);
-    }
-    return MLODpxSizeByDpxes(0,0);
-#else
-    return MLODpxSize();
-#endif
-}
-
-extern "C"
-MLORipPoint MLORipPointByDpxPoint(MLODpxPoint mloDpxPoint)
-{
-#ifdef IOS
-    //MLODpxSize contentSize = touch_lo_get_content_size();
-    MLORip x = MLORipByDpx(mloDpxPoint.x /*- (contentSize.width/2.0f)*/);
-    MLORip y = MLORipByDpx(mloDpxPoint.y);
-    return MLORipPointByRips(x,y);
-#else
-    (void) mloDpxPoint;
-    return MLORipPoint();
-#endif
-}
-
-extern "C"
-MLODpxPoint MLODpxPointByRipPoint(MLORipPoint mloRipPoint)
-{
-    //MLODpxSize contentSize = touch_lo_get_content_size();
-    MLODpx x = MLODpxByRip(mloRipPoint.x)/* + (contentSize.width/2.0f)*/;
-    MLODpx y = MLODpxByRip(mloRipPoint.y);
-    return MLODpxPointByDpxes(x,y);
-}
-#endif
 
 void SwViewShell::SetBrowseBorder( const Size& rNew )
 {

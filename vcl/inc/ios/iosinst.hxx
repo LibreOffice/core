@@ -44,21 +44,6 @@ public:
     SalFrame* CreateChildFrame( SystemParentData* pParent, sal_uLong nStyle );
 
     SalFrame *getFocusFrame() const;
-
-    // Functions scheduled to be run as "user events" in the LO thread
-    DECL_LINK( DisplayConfigurationChanged, void* );
-
-    typedef struct {
-        const void *documentHandle;
-        int x, y;
-    } SelectionStartMoveArg;
-    DECL_LINK( SelectionStartMove, SelectionStartMoveArg* );
-
-    typedef struct {
-        const void *documentHandle;
-        int x, y;
-    } SelectionEndMoveArg;
-    DECL_LINK( SelectionEndMove, SelectionEndMoveArg* );
 };
 
 #endif // INCLUDED_VCL_INC_IOS_IOSINST_HXX

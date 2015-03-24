@@ -64,10 +64,6 @@
 #include <IDocumentLayoutAccess.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
-#if defined(IOS)
-#include <touch/touch.h>
-#endif
-
 using namespace com::sun::star;
 using namespace util;
 

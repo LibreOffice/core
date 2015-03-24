@@ -53,7 +53,6 @@
 
 #include <boost/scoped_ptr.hpp>
 
-#include <touch/touch.h>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <paintfrm.hxx>
 
@@ -384,16 +383,6 @@ void SwSelPaintRects::Show()
 #endif
     }
 }
-
-#if !HAVE_FEATURE_DESKTOP
-
-extern "C" void touch_lo_selection_attempt_resize(const void * /* documentHandle */,
-                                                  MLORect * /* selectedRectangles */,
-                                                  int /* numberOfRectangles */)
-{
-}
-
-#endif
 
 void SwSelPaintRects::HighlightInputFld()
 {

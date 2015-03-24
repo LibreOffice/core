@@ -68,7 +68,6 @@
 #include <basegfx/color/bcolortools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 
-#include <touch/touch-impl.h>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #include <editeng/acorrcfg.hxx>
@@ -2702,87 +2701,6 @@ static bool lcl_urlOverBackground(SwWrtShell& rSh, const Point& rDocPos)
 
     return rSh.GetContentAtPos(rDocPos, aSwContentAtPos) && pSelectableObj->GetLayer() == rSh.GetDoc()->getIDocumentDrawModelAccess().GetHellId();
 }
-
-#if !HAVE_FEATURE_DESKTOP
-
-// As such these two functions could be more or less anywhere, I have
-// them now in this source file because the act of moving a selection
-// end point is somewhat the same as what happens when one
-// shift-clicks on either side of an existing selection.
-
-void touch_lo_selection_start_move_impl(const void *documentHandle,
-                                        int x,
-                                        int y)
-{
-    SwWrtShell *pWrtShell = reinterpret_cast<SwWrtShell*>(const_cast<void*>(documentHandle));
-
-    if (!pWrtShell)
-        return;
-
-    const OutputDevice *pOut = pWrtShell->GetWin();
-    if (!pOut)
-        pOut = pWrtShell->GetOut();
-
-    const Point aDocPos( pOut->PixelToLogic( Point(x, y) ) );
-
-    // Don't allow moving the start of the selection beyond the end
-    // (point) of the selection.
-
-    SwRect startCharRect;
-    pWrtShell->GetCharRectAt(startCharRect, pWrtShell->GetCrsr()->GetPoint());
-    const Point startCharPos = startCharRect.Center();
-
-    if (startCharPos.Y() < aDocPos.Y() ||
-        (startCharPos.Y() == aDocPos.Y() && startCharPos.X() - startCharRect.Width() <= aDocPos.X()))
-        return;
-
-    pWrtShell->ChgCurrPam( aDocPos );
-
-    // Keep mark normally at the start and point at the end,
-    // just exchange for the duration of moving the start.
-    pWrtShell->GetCrsr()->Exchange();
-    {
-        SwMvContext aMvContext( pWrtShell );
-        pWrtShell->SwCrsrShell::SetCrsr( aDocPos );
-    }
-    pWrtShell->GetCrsr()->Exchange();
-}
-
-void touch_lo_selection_end_move_impl(const void *documentHandle,
-                                      int x,
-                                      int y)
-{
-    SwWrtShell *pWrtShell = reinterpret_cast<SwWrtShell*>(const_cast<void*>(documentHandle));
-
-    if (!pWrtShell)
-        return;
-
-    const OutputDevice *pOut = pWrtShell->GetWin();
-    if (!pOut)
-        pOut = pWrtShell->GetOut();
-
-    const Point aDocPos( pOut->PixelToLogic( Point(x, y) ) );
-
-    // Don't allow moving the end of the selection beyond the start
-    // (mark) of the selection.
-
-    SwRect endCharRect;
-    pWrtShell->GetCharRectAt(endCharRect, pWrtShell->GetCrsr()->GetMark());
-    const Point endCharPos = endCharRect.Center();
-
-    if (endCharPos.Y() > aDocPos.Y() ||
-        (endCharPos.Y() == aDocPos.Y() && endCharPos.X() + endCharRect.Width() >= aDocPos.X()))
-        return;
-
-    pWrtShell->ChgCurrPam( aDocPos );
-
-    {
-        SwMvContext aMvContext( pWrtShell );
-        pWrtShell->SwCrsrShell::SetCrsr( aDocPos );
-    }
-}
-
-#endif
 
 void SwEditWin::MoveCursor( SwWrtShell &rSh, const Point& rDocPos,
                             const bool bOnlyText, bool bLockView )
