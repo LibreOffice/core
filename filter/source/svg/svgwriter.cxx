@@ -2641,7 +2641,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                                         const Reference< XShape >* pxShape,
                                         const GDIMetaFile* pTextEmbeddedBitmapMtf )
 {
-    // need a counter fo rthe actions written per shape to avoid double ID
+    // need a counter for the actions written per shape to avoid double ID
     // generation
     sal_Int32 nEntryCount(0);
 

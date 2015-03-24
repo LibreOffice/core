@@ -53,21 +53,21 @@ namespace svgio
             SvgDocument(const OUString& rAbsolutePath);
             ~SvgDocument();
 
-            /// append anopther root node, ownership changes
+            /// append another root node, ownership changes
             void appendNode(SvgNode* pNode);
 
             /// add/remove nodes with Id to mapper
             void addSvgNodeToMapper(const OUString& rStr, const SvgNode& rNode);
             void removeSvgNodeFromMapper(const OUString& rStr);
 
-            /// find a node by it's Id
+            /// find a node by its Id
             bool hasSvgNodesById() const { return !maIdTokenMapperList.empty(); }
             const SvgNode* findSvgNodeById(const OUString& rStr) const;
 
             /// add/remove styles to mapper
             void addSvgStyleAttributesToMapper(const OUString& rStr, const SvgStyleAttributes& rSvgStyleAttributes);
 
-            /// find a style by it's Id
+            /// find a style by its Id
             bool hasGlobalCssStyleAttributes() const { return !maIdStyleTokenMapperList.empty(); }
             const SvgStyleAttributes* findGlobalCssStyleAttributes(const OUString& rStr) const;
 
