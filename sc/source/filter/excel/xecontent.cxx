@@ -1299,7 +1299,7 @@ void XclExpDataBar::SaveXml( XclExpXmlStream& rStrm )
             FSEND );
 
     rWorksheet->startElement( XML_dataBar,
-                                XML_showValue, OString::number(!mrFormat.GetDataBarData()->mbOnlyBar),
+                                XML_showValue, OString::number(int(!mrFormat.GetDataBarData()->mbOnlyBar)),
                                 XML_minLength, OString::number(sal_uInt32(mrFormat.GetDataBarData()->mnMinLength)),
                                 XML_maxLength, OString::number(sal_uInt32(mrFormat.GetDataBarData()->mnMaxLength)),
             FSEND );
