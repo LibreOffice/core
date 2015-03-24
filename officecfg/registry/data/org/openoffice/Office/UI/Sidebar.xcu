@@ -189,7 +189,7 @@
           <value>ManageChangesDeck</value>
         </prop>
         <prop oor:name="IconURL" oor:type="xs:string">
-          <value>private:graphicrepository/cmd/lc_accepttrackedchanges.png</value>
+          <value>private:graphicrepository/cmd/lc_trackedchangesbar.png</value>
         </prop>
         <prop oor:name="ContextList">
           <value oor:separator=";">
