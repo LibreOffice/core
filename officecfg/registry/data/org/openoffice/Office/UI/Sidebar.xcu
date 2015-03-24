@@ -475,6 +475,58 @@
         </prop>
       </node>
 
+      <node oor:name="Impress6" oor:op="replace">
+        <prop oor:name="Title" oor:type="xs:string">
+          <value xml:lang="en-US">Slide Transition</value>
+        </prop>
+        <prop oor:name="TitleBarIsOptional" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="Id" oor:type="xs:string">
+          <value>SlideTransitionPanel</value>
+        </prop>
+        <prop oor:name="DeckId" oor:type="xs:string">
+          <value>SlideTransitionDeck</value>
+        </prop>
+        <prop oor:name="ContextList">
+          <value oor:separator=";">
+            Impress, any, visible   ;
+          </value>
+        </prop>
+        <prop oor:name="ImplementationURL" oor:type="xs:string">
+          <value>private:resource/toolpanel/SdPanelFactory/SlideTransitions</value>
+        </prop>
+        <prop oor:name="OrderIndex" oor:type="xs:int">
+          <value>100</value>
+        </prop>
+      </node>
+
+      <node oor:name="Impress5" oor:op="replace">
+        <prop oor:name="Title" oor:type="xs:string">
+          <value xml:lang="en-US">Custom Animation</value>
+        </prop>
+        <prop oor:name="TitleBarIsOptional" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="Id" oor:type="xs:string">
+          <value>CustomAnimationPanel</value>
+        </prop>
+        <prop oor:name="DeckId" oor:type="xs:string">
+          <value>CustomAnimationDeck</value>
+        </prop>
+        <prop oor:name="ContextList">
+          <value oor:separator=";">
+            Impress, any, visible   ;
+          </value>
+        </prop>
+        <prop oor:name="ImplementationURL" oor:type="xs:string">
+          <value>private:resource/toolpanel/SdPanelFactory/CustomAnimations</value>
+        </prop>
+        <prop oor:name="OrderIndex" oor:type="xs:int">
+          <value>100</value>
+        </prop>
+      </node>
+
       <node oor:name="Impress2" oor:op="replace">
         <prop oor:name="Title" oor:type="xs:string">
           <value xml:lang="en-US">Used in This Presentation</value>
@@ -550,58 +602,6 @@
         </prop>
         <prop oor:name="OrderIndex" oor:type="xs:int">
           <value>300</value>
-        </prop>
-      </node>
-
-      <node oor:name="Impress5" oor:op="replace">
-        <prop oor:name="Title" oor:type="xs:string">
-          <value xml:lang="en-US">Custom Animation</value>
-        </prop>
-        <prop oor:name="TitleBarIsOptional" oor:type="xs:boolean">
-          <value>true</value>
-        </prop>
-        <prop oor:name="Id" oor:type="xs:string">
-          <value>CustomAnimationPanel</value>
-        </prop>
-        <prop oor:name="DeckId" oor:type="xs:string">
-          <value>CustomAnimationDeck</value>
-        </prop>
-        <prop oor:name="ContextList">
-          <value oor:separator=";">
-            Impress, any, visible   ;
-          </value>
-        </prop>
-        <prop oor:name="ImplementationURL" oor:type="xs:string">
-          <value>private:resource/toolpanel/SdPanelFactory/CustomAnimations</value>
-        </prop>
-        <prop oor:name="OrderIndex" oor:type="xs:int">
-          <value>100</value>
-        </prop>
-      </node>
-
-      <node oor:name="Impress6" oor:op="replace">
-        <prop oor:name="Title" oor:type="xs:string">
-          <value xml:lang="en-US">Slide Transition</value>
-        </prop>
-        <prop oor:name="TitleBarIsOptional" oor:type="xs:boolean">
-          <value>true</value>
-        </prop>
-        <prop oor:name="Id" oor:type="xs:string">
-          <value>SlideTransitionPanel</value>
-        </prop>
-        <prop oor:name="DeckId" oor:type="xs:string">
-          <value>SlideTransitionDeck</value>
-        </prop>
-        <prop oor:name="ContextList">
-          <value oor:separator=";">
-            Impress, any, visible   ;
-          </value>
-        </prop>
-        <prop oor:name="ImplementationURL" oor:type="xs:string">
-          <value>private:resource/toolpanel/SdPanelFactory/SlideTransitions</value>
-        </prop>
-        <prop oor:name="OrderIndex" oor:type="xs:int">
-          <value>100</value>
         </prop>
       </node>
 
