@@ -388,7 +388,6 @@ void EditView::Command( const CommandEvent& rCEvt )
 
 void EditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
 {
-
     if ( pImpEditView->pEditEngine->HasView( this ) )
     {
         // The control word is more important:
