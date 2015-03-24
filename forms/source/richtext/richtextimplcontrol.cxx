@@ -72,8 +72,8 @@ namespace frm
         m_pEngine->registerEngineStatusListener( this );
 
         {
-            sal_uLong nViewControlWord = m_pView->GetControlWord();
-            nViewControlWord |= EV_CNTRL_AUTOSCROLL;
+            EVControlBits nViewControlWord = m_pView->GetControlWord();
+            nViewControlWord |= EVControlBits::AUTOSCROLL;
             m_pView->SetControlWord( nViewControlWord );
         }
 

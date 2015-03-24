@@ -1313,12 +1313,12 @@ void OutlinerView::Scroll( long nHorzScroll, long nVertScroll )
     pEditView->Scroll( nHorzScroll, nVertScroll );
 }
 
-void OutlinerView::SetControlWord( sal_uLong nWord )
+void OutlinerView::SetControlWord( EVControlBits nWord )
 {
     pEditView->SetControlWord( nWord );
 }
 
-sal_uLong OutlinerView::GetControlWord() const
+EVControlBits OutlinerView::GetControlWord() const
 {
     return pEditView->GetControlWord();
 }

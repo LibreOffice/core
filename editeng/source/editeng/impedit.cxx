@@ -90,7 +90,7 @@ ImpEditView::ImpEditView( EditView* pView, EditEngine* pEng, vcl::Window* pWindo
     eAnchorMode         = ANCHOR_TOP_LEFT;
     nInvMore            = 1;
     nTravelXPos         = TRAVEL_X_DONTKNOW;
-    nControl            = EV_CNTRL_AUTOSCROLL | EV_CNTRL_ENABLEPASTE;
+    nControl            = EVControlBits::AUTOSCROLL | EVControlBits::ENABLEPASTE;
     bActiveDragAndDropListener = false;
 
     aEditSelection.Min() = pEng->GetEditDoc().GetStartPaM();
@@ -1180,7 +1180,7 @@ void ImpEditView::SetInsertMode( bool bInsert )
 {
     if ( bInsert != IsInsertMode() )
     {
-        SetFlags( nControl, EV_CNTRL_OVERWRITE, !bInsert );
+        SetFlags( nControl, EVControlBits::OVERWRITE, !bInsert );
         ShowCursor( DoAutoScroll(), false );
     }
 }

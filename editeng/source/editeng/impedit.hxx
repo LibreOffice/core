@@ -230,14 +230,14 @@ private:
 
 
     long                nInvMore;
-    sal_uLong               nControl;
+    EVControlBits       nControl;
     sal_uInt32          nTravelXPos;
     sal_uInt16          nExtraCursorFlags;
     sal_uInt16          nCursorBidiLevel;
     sal_uInt16          nScrollDiffX;
-    bool            bReadOnly;
-    bool            bClickedInSelection;
-    bool            bActiveDragAndDropListener;
+    bool                bReadOnly;
+    bool                bClickedInSelection;
+    bool                bActiveDragAndDropListener;
 
     Point               aAnchorPoint;
     Rectangle           aOutArea;
@@ -352,18 +352,18 @@ public:
     Pair            Scroll( long ndX, long ndY, sal_uInt8 nRangeCheck = RGCHK_NEG );
 
     void        SetInsertMode( bool bInsert );
-    bool        IsInsertMode() const            { return ( ( nControl & EV_CNTRL_OVERWRITE ) == 0 ); }
+    bool        IsInsertMode() const            { return !( nControl & EVControlBits::OVERWRITE ); }
 
-    void        EnablePaste( bool bEnable )     { SetFlags( nControl, EV_CNTRL_ENABLEPASTE, bEnable ); }
-    bool        IsPasteEnabled() const          { return ( ( nControl & EV_CNTRL_ENABLEPASTE ) != 0 ); }
+    void        EnablePaste( bool bEnable )     { SetFlags( nControl, EVControlBits::ENABLEPASTE, bEnable ); }
+    bool        IsPasteEnabled() const          { return bool( nControl & EVControlBits::ENABLEPASTE ); }
 
-    bool        DoSingleLinePaste() const       { return ( ( nControl & EV_CNTRL_SINGLELINEPASTE ) != 0 ); }
-    bool        DoAutoScroll() const            { return ( ( nControl & EV_CNTRL_AUTOSCROLL ) != 0 ); }
-    bool        DoBigScroll() const             { return ( ( nControl & EV_CNTRL_BIGSCROLL ) != 0 ); }
-    bool        DoAutoSize() const              { return ( ( nControl & EV_CNTRL_AUTOSIZE ) != 0 ); }
-    bool        DoAutoWidth() const             { return ( ( nControl & EV_CNTRL_AUTOSIZEX) != 0 ); }
-    bool        DoAutoHeight() const            { return ( ( nControl & EV_CNTRL_AUTOSIZEY) != 0 ); }
-    bool        DoInvalidateMore() const        { return ( ( nControl & EV_CNTRL_INVONEMORE ) != 0 ); }
+    bool        DoSingleLinePaste() const       { return bool( nControl & EVControlBits::SINGLELINEPASTE ); }
+    bool        DoAutoScroll() const            { return bool( nControl & EVControlBits::AUTOSCROLL ); }
+    bool        DoBigScroll() const             { return bool( nControl & EVControlBits::BIGSCROLL ); }
+    bool        DoAutoSize() const              { return bool( nControl & EVControlBits::AUTOSIZE ); }
+    bool        DoAutoWidth() const             { return bool( nControl & EVControlBits::AUTOSIZEX); }
+    bool        DoAutoHeight() const            { return bool( nControl & EVControlBits::AUTOSIZEY); }
+    bool        DoInvalidateMore() const        { return bool( nControl & EVControlBits::INVONEMORE ); }
 
     void            SetBackgroundColor( const Color& rColor );
     const Color&    GetBackgroundColor() const {

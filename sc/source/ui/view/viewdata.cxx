@@ -945,8 +945,8 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
     EEControlBits nEC = pNewEngine->GetControlWord();
     pNewEngine->SetControlWord(nEC & ~EEControlBits::DOIDLEFORMAT);
 
-    sal_uLong nVC = pEditView[eWhich]->GetControlWord();
-    pEditView[eWhich]->SetControlWord(nVC & ~EV_CNTRL_AUTOSCROLL);
+    EVControlBits nVC = pEditView[eWhich]->GetControlWord();
+    pEditView[eWhich]->SetControlWord(nVC & ~EVControlBits::AUTOSCROLL);
 
     bEditActive[eWhich] = true;
 
@@ -1315,8 +1315,8 @@ void ScViewData::EditGrowY( bool bInitial )
     if ( !pCurView || !bEditActive[eWhich])
         return;
 
-    sal_uLong nControl = pEditView[eWhich]->GetControlWord();
-    if ( nControl & EV_CNTRL_AUTOSCROLL )
+    EVControlBits nControl = pEditView[eWhich]->GetControlWord();
+    if ( nControl & EVControlBits::AUTOSCROLL )
     {
         //  if end of screen had already been reached and scrolling enabled,
         //  don't further try to grow the edit area
@@ -1377,8 +1377,8 @@ void ScViewData::EditGrowY( bool bInitial )
 
         if (nEditEndRow >= nBottom || bMaxReached)
         {
-            if ((nControl & EV_CNTRL_AUTOSCROLL) == 0)
-                pCurView->SetControlWord( nControl | EV_CNTRL_AUTOSCROLL );
+            if (!(nControl & EVControlBits::AUTOSCROLL))
+                pCurView->SetControlWord( nControl | EVControlBits::AUTOSCROLL );
         }
 
         aArea.Top() = nOldBottom;

@@ -284,8 +284,8 @@ public:
     const SfxStyleSheet*  GetStyleSheet() const;
     SfxStyleSheet*  GetStyleSheet();
 
-    void        SetControlWord( sal_uLong nWord );
-    sal_uLong       GetControlWord() const;
+    void            SetControlWord( EVControlBits nWord );
+    EVControlBits   GetControlWord() const;
 
     void            SetAnchorMode( EVAnchorMode eMode );
     EVAnchorMode    GetAnchorMode() const;

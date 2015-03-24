@@ -1665,8 +1665,8 @@ void Outliner::Implementation::ProvideOutlinerView (
                 }
                 else
                     mpOutlineView->SetWindow(pWindow);
-                sal_uLong nStat = mpOutlineView->GetControlWord();
-                nStat &= ~EV_CNTRL_AUTOSCROLL;
+                EVControlBits nStat = mpOutlineView->GetControlWord();
+                nStat &= ~EVControlBits::AUTOSCROLL;
                 mpOutlineView->SetControlWord(nStat);
                 if (bInsert)
                     rOutliner.InsertView( mpOutlineView );

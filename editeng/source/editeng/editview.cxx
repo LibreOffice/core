@@ -593,12 +593,12 @@ void EditView::registerLibreOfficeKitCallback(LibreOfficeKitCallback pCallback, 
     pImpEditView->registerLibreOfficeKitCallback(pCallback, pLibreOfficeKitData);
 }
 
-void EditView::SetControlWord( sal_uInt32 nWord )
+void EditView::SetControlWord( EVControlBits nWord )
 {
     pImpEditView->nControl = nWord;
 }
 
-sal_uInt32 EditView::GetControlWord() const
+EVControlBits EditView::GetControlWord() const
 {
     return pImpEditView->nControl;
 }

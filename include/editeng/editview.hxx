@@ -27,6 +27,7 @@
 #include <tools/color.hxx>
 #include <tools/gen.hxx>
 #include <vcl/cursor.hxx>
+#include <editeng/editstat.hxx>
 #define LOK_USE_UNSTABLE_API
 #include <LibreOfficeKit/LibreOfficeKitTypes.h>
 
@@ -176,8 +177,8 @@ public:
     /// @see vcl::ITiledRenderable::registerCallback().
     void registerLibreOfficeKitCallback(LibreOfficeKitCallback pCallback, void* pLibreOfficeKitData);
 
-    void            SetControlWord( sal_uInt32 nWord );
-    sal_uInt32      GetControlWord() const;
+    void            SetControlWord( EVControlBits nWord );
+    EVControlBits   GetControlWord() const;
 
     EditTextObject* CreateTextObject();
     void            InsertText( const EditTextObject& rTextObject );

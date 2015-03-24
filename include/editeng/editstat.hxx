@@ -60,15 +60,22 @@ namespace o3tl
     template<> struct typed_flags<EEControlBits> : is_typed_flags<EEControlBits, 0x07ffffff> {};
 }
 
-#define EV_CNTRL_AUTOSCROLL         0x00000001  // Auto scrolling horizontally
-#define EV_CNTRL_BIGSCROLL          0x00000002  // Scroll further to the cursor
-#define EV_CNTRL_ENABLEPASTE        0x00000004  // Enable Paste
-#define EV_CNTRL_SINGLELINEPASTE    0x00000008  // View: Paste in input line ...
-#define EV_CNTRL_OVERWRITE          0x00000010  // Overwrite mode
-#define EV_CNTRL_INVONEMORE         0x00000020  // Invalidate one pixel more
-#define EV_CNTRL_AUTOSIZEX          0x00000040  // Automatically adapt to text width
-#define EV_CNTRL_AUTOSIZEY          0x00000080  // Automatically adapt to Text width
-#define EV_CNTRL_AUTOSIZE           (EV_CNTRL_AUTOSIZEX|EV_CNTRL_AUTOSIZEY)
+enum class EVControlBits
+{
+    AUTOSCROLL         = 0x0001,  // Auto scrolling horizontally
+    BIGSCROLL          = 0x0002,  // Scroll further to the cursor
+    ENABLEPASTE        = 0x0004,  // Enable Paste
+    SINGLELINEPASTE    = 0x0008,  // View: Paste in input line ...
+    OVERWRITE          = 0x0010,  // Overwrite mode
+    INVONEMORE         = 0x0020,  // Invalidate one pixel more
+    AUTOSIZEX          = 0x0040,  // Automatically adapt to text width
+    AUTOSIZEY          = 0x0080,  // Automatically adapt to Text width
+    AUTOSIZE           = (AUTOSIZEX|AUTOSIZEY)
+};
+namespace o3tl
+{
+    template<> struct typed_flags<EVControlBits> : is_typed_flags<EVControlBits, 0xff> {};
+}
 
 #define EE_STAT_HSCROLL             0x00000001
 #define EE_STAT_VSCROLL             0x00000002
@@ -91,7 +98,7 @@ inline void SetFlags( EEControlBits& rBits, EEControlBits nMask, bool bOn )
         rBits &= ~nMask;
 }
 
-inline void SetFlags( sal_uLong& rBits, const sal_uInt32 nMask, bool bOn )
+inline void SetFlags( EVControlBits& rBits, EVControlBits nMask, bool bOn )
 {
     if ( bOn )
         rBits |= nMask;

@@ -1389,8 +1389,8 @@ void ScMultiTextWnd::InitEditEngine()
     pEditView->SetInsertMode(bIsInsertMode);
 
     // Text from Clipboard is taken over as ASCII in a single row
-    sal_uLong n = pEditView->GetControlWord();
-    pEditView->SetControlWord( n | EV_CNTRL_SINGLELINEPASTE );
+    EVControlBits n = pEditView->GetControlWord();
+    pEditView->SetControlWord( n | EVControlBits::SINGLELINEPASTE );
 
     pEditEngine->InsertView( pEditView, EE_APPEND );
 
@@ -1762,8 +1762,8 @@ void ScTextWnd::StartEditEngine()
         pEditView->SetInsertMode(bIsInsertMode);
 
         // The text from the Clipboard is taken over as ASCII in a single row
-        sal_uLong n = pEditView->GetControlWord();
-        pEditView->SetControlWord( n | EV_CNTRL_SINGLELINEPASTE );
+        EVControlBits n = pEditView->GetControlWord();
+        pEditView->SetControlWord( n | EVControlBits::SINGLELINEPASTE );
 
         pEditEngine->InsertView( pEditView, EE_APPEND );
 

@@ -219,11 +219,11 @@ void SdrObjEditView::ModelHasChanged()
                     }
                     for (sal_uIntPtr nOV=0; nOV<nOutlViewAnz; nOV++) {
                         OutlinerView* pOLV=pTextEditOutliner->GetView(nOV);
-                        sal_uIntPtr nStat0=pOLV->GetControlWord();
-                        sal_uIntPtr nStat=nStat0;
+                        EVControlBits nStat0=pOLV->GetControlWord();
+                        EVControlBits nStat=nStat0;
                         // AutoViewSize only if not ContourFrame.
-                        if (!bContourFrame) nStat|=EV_CNTRL_AUTOSIZE;
-                        else nStat&=~EV_CNTRL_AUTOSIZE;
+                        if (!bContourFrame) nStat|=EVControlBits::AUTOSIZE;
+                        else nStat&=~EVControlBits::AUTOSIZE;
                         if (nStat!=nStat0) pOLV->SetControlWord(nStat);
                     }
                     pTextEditOutliner->SetUpdateMode(true);
@@ -435,13 +435,13 @@ OutlinerView* SdrObjEditView::ImpMakeOutlinerView(vcl::Window* pWin, bool /*bNoP
     if (pOutlView==NULL) pOutlView = new OutlinerView(pTextEditOutliner,pWin);
     else pOutlView->SetWindow(pWin);
     // disallow scrolling
-    sal_uIntPtr nStat=pOutlView->GetControlWord();
-    nStat&=~EV_CNTRL_AUTOSCROLL;
+    EVControlBits nStat=pOutlView->GetControlWord();
+    nStat&=~EVControlBits::AUTOSCROLL;
     // AutoViewSize only if not ContourFrame.
-    if (!bContourFrame) nStat|=EV_CNTRL_AUTOSIZE;
+    if (!bContourFrame) nStat|=EVControlBits::AUTOSIZE;
     if (bTextFrame) {
         sal_uInt16 nPixSiz=maHdlList.GetHdlSize()*2+1;
-        nStat|=EV_CNTRL_INVONEMORE;
+        nStat|=EVControlBits::INVONEMORE;
         pOutlView->SetInvalidateMore(nPixSiz);
     }
     pOutlView->SetControlWord(nStat);
