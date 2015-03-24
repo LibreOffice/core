@@ -2080,10 +2080,7 @@
       </node>
       <node oor:name=".uno:Graphic" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Images On/Off</value>
-        </prop>
-        <prop oor:name="ContextLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Images</value>
+          <value xml:lang="en-US">Hide ~Images</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
