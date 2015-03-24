@@ -178,7 +178,7 @@ public:
 
     // virtual sal_uInt16           Print( SfxProgress &rProgress, sal_Bool bIsAPI, PrintDialog *pPrintDialog = 0 );
     virtual SfxPrinter*     GetPrinter( bool bCreate ) SAL_OVERRIDE;
-    virtual sal_uInt16      SetPrinter( SfxPrinter *pNewPrinter, sal_uInt16 nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false ) SAL_OVERRIDE;
+    virtual sal_uInt16      SetPrinter( SfxPrinter *pNewPrinter, SfxPrinterChangeFlags nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false ) SAL_OVERRIDE;
     virtual OUString        GetSelectionText( bool bCompleteWords ) SAL_OVERRIDE;
     virtual bool            HasSelection( bool bText ) const SAL_OVERRIDE;
 

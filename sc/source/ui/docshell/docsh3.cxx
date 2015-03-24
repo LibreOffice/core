@@ -450,13 +450,13 @@ OutputDevice* ScDocShell::GetRefDevice()
     return aDocument.GetRefDevice();
 }
 
-sal_uInt16 ScDocShell::SetPrinter( SfxPrinter* pNewPrinter, sal_uInt16 nDiffFlags )
+sal_uInt16 ScDocShell::SetPrinter( SfxPrinter* pNewPrinter, SfxPrinterChangeFlags nDiffFlags )
 {
     SfxPrinter *pOld = aDocument.GetPrinter( false );
     if ( pOld && pOld->IsPrinting() )
         return SFX_PRINTERROR_BUSY;
 
-    if (nDiffFlags & SFX_PRINTER_PRINTER)
+    if (nDiffFlags & SfxPrinterChangeFlags::PRINTER)
     {
         if ( aDocument.GetPrinter() != pNewPrinter )
         {
@@ -491,7 +491,7 @@ sal_uInt16 ScDocShell::SetPrinter( SfxPrinter* pNewPrinter, sal_uInt16 nDiffFlag
             }
         }
     }
-    else if (nDiffFlags & SFX_PRINTER_JOBSETUP)
+    else if (nDiffFlags & SfxPrinterChangeFlags::JOBSETUP)
     {
         SfxPrinter* pOldPrinter = aDocument.GetPrinter();
         if (pOldPrinter)
@@ -506,12 +506,12 @@ sal_uInt16 ScDocShell::SetPrinter( SfxPrinter* pNewPrinter, sal_uInt16 nDiffFlag
         }
     }
 
-    if (nDiffFlags & SFX_PRINTER_OPTIONS)
+    if (nDiffFlags & SfxPrinterChangeFlags::OPTIONS)
     {
         aDocument.SetPrintOptions();        //! aus neuem Printer ???
     }
 
-    if (nDiffFlags & (SFX_PRINTER_CHG_ORIENTATION | SFX_PRINTER_CHG_SIZE))
+    if (nDiffFlags & (SfxPrinterChangeFlags::CHG_ORIENTATION | SfxPrinterChangeFlags::CHG_SIZE))
     {
         OUString aStyle = aDocument.GetPageStyle( GetCurTab() );
         ScStyleSheetPool* pStPl = aDocument.GetStyleSheetPool();
@@ -520,7 +520,7 @@ sal_uInt16 ScDocShell::SetPrinter( SfxPrinter* pNewPrinter, sal_uInt16 nDiffFlag
         {
             SfxItemSet& rSet = pStyleSheet->GetItemSet();
 
-            if (nDiffFlags & SFX_PRINTER_CHG_ORIENTATION)
+            if (nDiffFlags & SfxPrinterChangeFlags::CHG_ORIENTATION)
             {
                 const SvxPageItem& rOldItem = static_cast<const SvxPageItem&>(rSet.Get(ATTR_PAGE));
                 bool bWasLand = rOldItem.IsLandscape();
@@ -538,7 +538,7 @@ sal_uInt16 ScDocShell::SetPrinter( SfxPrinter* pNewPrinter, sal_uInt16 nDiffFlag
                     rSet.Put( aNewSItem );
                 }
             }
-            if (nDiffFlags & SFX_PRINTER_CHG_SIZE)
+            if (nDiffFlags & SfxPrinterChangeFlags::CHG_SIZE)
             {
                 SvxSizeItem aPaperSizeItem( ATTR_PAGE_SIZE, SvxPaperInfo::GetPaperSize(pNewPrinter) );
                 rSet.Put( aPaperSizeItem );

@@ -36,6 +36,7 @@
 #include <tools/gen.hxx>
 #include <tools/errcode.hxx>
 #include <vcl/jobset.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 class SfxBaseController;
 class Size;
@@ -62,13 +63,21 @@ class NotifyEvent;
 class SfxInPlaceClient;
 namespace vcl { class PrinterController; }
 
-#define SFX_PRINTER_PRINTER               1  // without JOB SETUP => Temporary
-#define SFX_PRINTER_JOBSETUP         2
-#define SFX_PRINTER_OPTIONS          4
-#define SFX_PRINTER_CHG_ORIENTATION  8
-#define SFX_PRINTER_CHG_SIZE        16
-#define SFX_PRINTER_ALL             31
 
+enum class SfxPrinterChangeFlags
+{
+    NONE             = 0,
+    PRINTER          = 1,  // without JOB SETUP => Temporary
+    JOBSETUP         = 2,
+    OPTIONS          = 4,
+    CHG_ORIENTATION  = 8,
+    CHG_SIZE         = 16
+};
+namespace o3tl
+{
+    template<> struct typed_flags<SfxPrinterChangeFlags> : is_typed_flags<SfxPrinterChangeFlags, 31> {};
+}
+#define SFX_PRINTER_ALL             (SfxPrinterChangeFlags::PRINTER | SfxPrinterChangeFlags::JOBSETUP | SfxPrinterChangeFlags::OPTIONS | SfxPrinterChangeFlags::CHG_ORIENTATION | SfxPrinterChangeFlags::CHG_SIZE)
 
 #define SFX_PRINTERROR_BUSY          1
 
@@ -217,7 +226,7 @@ public:
 
     // Printing Interface
     virtual SfxPrinter*         GetPrinter( bool bCreate = false );
-    virtual sal_uInt16          SetPrinter( SfxPrinter *pNewPrinter, sal_uInt16 nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false );
+    virtual sal_uInt16          SetPrinter( SfxPrinter *pNewPrinter, SfxPrinterChangeFlags nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false );
     virtual bool                HasPrintOptionsPage() const;
     virtual SfxTabPage*         CreatePrintOptionsPage( vcl::Window *pParent, const SfxItemSet &rOptions );
     JobSetup                    GetJobSetup() const;

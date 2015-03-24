@@ -661,20 +661,20 @@ sal_uInt16 SwSrcView::StartSearchAndReplace(const SvxSearchItem& rSearchItem,
     return nFound;
 }
 
-sal_uInt16 SwSrcView::SetPrinter(SfxPrinter* pNew, sal_uInt16 nDiffFlags, bool )
+sal_uInt16 SwSrcView::SetPrinter(SfxPrinter* pNew, SfxPrinterChangeFlags nDiffFlags, bool )
 {
     SwDocShell* pDocSh = GetDocShell();
-    if ( (SFX_PRINTER_JOBSETUP | SFX_PRINTER_PRINTER) & nDiffFlags )
+    if ( (SfxPrinterChangeFlags::JOBSETUP | SfxPrinterChangeFlags::PRINTER) & nDiffFlags )
     {
         pDocSh->GetDoc()->getIDocumentDeviceAccess().setPrinter( pNew, true, true );
-        if ( nDiffFlags & SFX_PRINTER_PRINTER )
+        if ( nDiffFlags & SfxPrinterChangeFlags::PRINTER )
             pDocSh->SetModified();
     }
-    if ( nDiffFlags & SFX_PRINTER_OPTIONS )
+    if ( nDiffFlags & SfxPrinterChangeFlags::OPTIONS )
         ::SetPrinter( pDocSh->getIDocumentDeviceAccess(), pNew, true );
 
-    const bool bChgOri = nDiffFlags & SFX_PRINTER_CHG_ORIENTATION;
-    const bool bChgSize= nDiffFlags & SFX_PRINTER_CHG_SIZE;
+    const bool bChgOri  = bool(nDiffFlags & SfxPrinterChangeFlags::CHG_ORIENTATION);
+    const bool bChgSize = bool(nDiffFlags & SfxPrinterChangeFlags::CHG_SIZE);
     if ( bChgOri || bChgSize )
     {
         pDocSh->SetModified();

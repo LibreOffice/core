@@ -130,12 +130,12 @@ SfxPrinter* ScDocument::GetPrinter(bool bCreateIfNotExist)
                             NULL );
 
         ::utl::MiscCfg aMisc;
-        sal_uInt16 nFlags = 0;
+        SfxPrinterChangeFlags nFlags = SfxPrinterChangeFlags::NONE;
         if ( aMisc.IsPaperOrientationWarning() )
-            nFlags |= SFX_PRINTER_CHG_ORIENTATION;
+            nFlags |= SfxPrinterChangeFlags::CHG_ORIENTATION;
         if ( aMisc.IsPaperSizeWarning() )
-            nFlags |= SFX_PRINTER_CHG_SIZE;
-        pSet->Put( SfxFlagItem( SID_PRINTER_CHANGESTODOC, nFlags ) );
+            nFlags |= SfxPrinterChangeFlags::CHG_SIZE;
+        pSet->Put( SfxFlagItem( SID_PRINTER_CHANGESTODOC, static_cast<int>(nFlags) ) );
         pSet->Put( SfxBoolItem( SID_PRINTER_NOTFOUND_WARN, aMisc.IsNotFoundWarning() ) );
 
         pPrinter = new SfxPrinter( pSet );
@@ -177,12 +177,12 @@ void ScDocument::SetPrintOptions()
         ::utl::MiscCfg aMisc;
         SfxItemSet aOptSet( pPrinter->GetOptions() );
 
-        sal_uInt16 nFlags = 0;
+        SfxPrinterChangeFlags nFlags = SfxPrinterChangeFlags::NONE;
         if ( aMisc.IsPaperOrientationWarning() )
-            nFlags |= SFX_PRINTER_CHG_ORIENTATION;
+            nFlags |= SfxPrinterChangeFlags::CHG_ORIENTATION;
         if ( aMisc.IsPaperSizeWarning() )
-            nFlags |= SFX_PRINTER_CHG_SIZE;
-        aOptSet.Put( SfxFlagItem( SID_PRINTER_CHANGESTODOC, nFlags ) );
+            nFlags |= SfxPrinterChangeFlags::CHG_SIZE;
+        aOptSet.Put( SfxFlagItem( SID_PRINTER_CHANGESTODOC, static_cast<int>(nFlags) ) );
         aOptSet.Put( SfxBoolItem( SID_PRINTER_NOTFOUND_WARN, aMisc.IsNotFoundWarning() ) );
 
         pPrinter->SetOptions( aOptSet );

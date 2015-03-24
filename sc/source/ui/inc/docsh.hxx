@@ -234,7 +234,7 @@ public:
     void            SetDocFunc( ScDocFunc *pDF ) { pDocFunc = pDF; }
 
     SfxPrinter*     GetPrinter( bool bCreateIfNotExist = true );
-    sal_uInt16          SetPrinter( SfxPrinter* pNewPrinter, sal_uInt16 nDiffFlags = SFX_PRINTER_ALL );
+    sal_uInt16      SetPrinter( SfxPrinter* pNewPrinter, SfxPrinterChangeFlags nDiffFlags = SFX_PRINTER_ALL );
 
     void            UpdateFontList();
 

@@ -513,15 +513,15 @@ SfxPrinter* ViewShellBase::GetPrinter (bool bCreate)
 
 sal_uInt16 ViewShellBase::SetPrinter (
     SfxPrinter* pNewPrinter,
-    sal_uInt16 nDiffFlags,
+    SfxPrinterChangeFlags nDiffFlags,
     bool bIsAPI)
 {
     OSL_ASSERT(mpImpl.get()!=NULL);
 
     GetDocShell()->SetPrinter(pNewPrinter);
 
-    if ( (nDiffFlags & SFX_PRINTER_CHG_ORIENTATION ||
-          nDiffFlags & SFX_PRINTER_CHG_SIZE) && pNewPrinter  )
+    if ( (nDiffFlags & SfxPrinterChangeFlags::CHG_ORIENTATION ||
+          nDiffFlags & SfxPrinterChangeFlags::CHG_SIZE) && pNewPrinter  )
     {
         MapMode aMap = pNewPrinter->GetMapMode();
         aMap.SetMapUnit(MAP_100TH_MM);

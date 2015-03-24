@@ -165,7 +165,7 @@ void SwDocShell::ToggleBrowserMode(bool bSet, SwView* _pView )
     {
         pTempView->GetViewFrame()->GetBindings().Invalidate(FN_SHADOWCURSOR);
         if( !GetDoc()->getIDocumentDeviceAccess().getPrinter( false ) )
-            pTempView->SetPrinter( GetDoc()->getIDocumentDeviceAccess().getPrinter( false ), SFX_PRINTER_PRINTER | SFX_PRINTER_JOBSETUP );
+            pTempView->SetPrinter( GetDoc()->getIDocumentDeviceAccess().getPrinter( false ), SfxPrinterChangeFlags::PRINTER | SfxPrinterChangeFlags::JOBSETUP );
         GetDoc()->CheckDefaultPageFmt();
         SfxViewFrame *pTmpFrm = SfxViewFrame::GetFirst(this, false);
         while (pTmpFrm)

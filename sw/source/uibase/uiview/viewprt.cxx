@@ -104,25 +104,25 @@ void SetPrinter( IDocumentDeviceAccess* pIDDA, SfxPrinter* pNew, bool bWeb )
     }
 }
 
-sal_uInt16 SwView::SetPrinter(SfxPrinter* pNew, sal_uInt16 nDiffFlags, bool  )
+sal_uInt16 SwView::SetPrinter(SfxPrinter* pNew, SfxPrinterChangeFlags nDiffFlags, bool  )
 {
     SwWrtShell &rSh = GetWrtShell();
     SfxPrinter* pOld = rSh.getIDocumentDeviceAccess()->getPrinter( false );
     if ( pOld && pOld->IsPrinting() )
         return SFX_PRINTERROR_BUSY;
 
-    if ( (SFX_PRINTER_JOBSETUP | SFX_PRINTER_PRINTER) & nDiffFlags )
+    if ( (SfxPrinterChangeFlags::JOBSETUP | SfxPrinterChangeFlags::PRINTER) & nDiffFlags )
     {
         rSh.getIDocumentDeviceAccess()->setPrinter( pNew, true, true );
-        if ( nDiffFlags & SFX_PRINTER_PRINTER )
+        if ( nDiffFlags & SfxPrinterChangeFlags::PRINTER )
             rSh.SetModified();
     }
     bool bWeb = this->ISA(SwWebView);
-    if ( nDiffFlags & SFX_PRINTER_OPTIONS )
+    if ( nDiffFlags & SfxPrinterChangeFlags::OPTIONS )
         ::SetPrinter( rSh.getIDocumentDeviceAccess(), pNew, bWeb );
 
-    const bool bChgOri = nDiffFlags & SFX_PRINTER_CHG_ORIENTATION;
-    const bool bChgSize= nDiffFlags & SFX_PRINTER_CHG_SIZE;
+    const bool bChgOri  = bool(nDiffFlags & SfxPrinterChangeFlags::CHG_ORIENTATION);
+    const bool bChgSize = bool(nDiffFlags & SfxPrinterChangeFlags::CHG_SIZE);
     if ( bChgOri || bChgSize )
     {
         rSh.StartAllAction();
@@ -295,8 +295,8 @@ void SetAppPrintOptions( SwViewShell* pSh, bool bWeb )
                         aMisc.IsNotFoundWarning() ));
         aSet.Put(aAddPrinterItem);
         aSet.Put( SfxFlagItem( SID_PRINTER_CHANGESTODOC,
-            (aMisc.IsPaperSizeWarning() ? SFX_PRINTER_CHG_SIZE : 0)   |
-            (aMisc.IsPaperOrientationWarning()  ? SFX_PRINTER_CHG_ORIENTATION : 0 )));
+            static_cast<int>(aMisc.IsPaperSizeWarning() ? SfxPrinterChangeFlags::CHG_SIZE : SfxPrinterChangeFlags::NONE)   |
+            static_cast<int>(aMisc.IsPaperOrientationWarning()  ? SfxPrinterChangeFlags::CHG_ORIENTATION : SfxPrinterChangeFlags::NONE )));
 
         pIDDA->getPrinter( true )->SetOptions( aSet );
     }

@@ -1635,7 +1635,7 @@ SfxPrinter*  SwPagePreview::GetPrinter( bool bCreate )
     return pViewWin->GetViewShell()->getIDocumentDeviceAccess()->getPrinter( bCreate );
 }
 
-sal_uInt16  SwPagePreview::SetPrinter( SfxPrinter *pNew, sal_uInt16 nDiffFlags, bool )
+sal_uInt16  SwPagePreview::SetPrinter( SfxPrinter *pNew, SfxPrinterChangeFlags nDiffFlags, bool )
 {
     SwViewShell &rSh = *GetViewShell();
     SfxPrinter* pOld = rSh.getIDocumentDeviceAccess()->getPrinter( false );
@@ -1643,17 +1643,17 @@ sal_uInt16  SwPagePreview::SetPrinter( SfxPrinter *pNew, sal_uInt16 nDiffFlags, 
         return SFX_PRINTERROR_BUSY;
 
     SwEditShell &rESh = static_cast<SwEditShell&>(rSh);  //Buh...
-    if( ( SFX_PRINTER_PRINTER | SFX_PRINTER_JOBSETUP ) & nDiffFlags )
+    if( ( SfxPrinterChangeFlags::PRINTER | SfxPrinterChangeFlags::JOBSETUP ) & nDiffFlags )
     {
         rSh.getIDocumentDeviceAccess()->setPrinter( pNew, true, true );
-        if( nDiffFlags & SFX_PRINTER_PRINTER )
+        if( nDiffFlags & SfxPrinterChangeFlags::PRINTER )
             rESh.SetModified();
     }
-    if ( ( nDiffFlags & SFX_PRINTER_OPTIONS ) == SFX_PRINTER_OPTIONS )
+    if ( ( nDiffFlags & SfxPrinterChangeFlags::OPTIONS ) == SfxPrinterChangeFlags::OPTIONS )
         ::SetPrinter( rSh.getIDocumentDeviceAccess(), pNew, false );
 
-    const bool bChgOri = nDiffFlags & SFX_PRINTER_CHG_ORIENTATION;
-    const bool bChgSize= nDiffFlags & SFX_PRINTER_CHG_SIZE;
+    const bool bChgOri  = bool(nDiffFlags & SfxPrinterChangeFlags::CHG_ORIENTATION);
+    const bool bChgSize = bool(nDiffFlags & SfxPrinterChangeFlags::CHG_SIZE);
     if ( bChgOri || bChgSize )
     {
         rESh.StartAllAction();

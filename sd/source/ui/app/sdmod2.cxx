@@ -635,11 +635,10 @@ void SdModule::ApplyItemSet( sal_uInt16 nSlot, const SfxItemSet& rSet )
         // set PrintOptionsSet
         SdOptionsPrintItem aPrintItem( ATTR_OPTIONS_PRINT, pOptions );
         SfxFlagItem aFlagItem( SID_PRINTER_CHANGESTODOC );
-        sal_uInt16      nFlags = 0;
-
-        nFlags =  (aPrintItem.GetOptionsPrint().IsWarningSize() ? SFX_PRINTER_CHG_SIZE : 0) |
-                (aPrintItem.GetOptionsPrint().IsWarningOrientation() ? SFX_PRINTER_CHG_ORIENTATION : 0);
-        aFlagItem.SetValue( nFlags );
+        SfxPrinterChangeFlags nFlags =
+                (aPrintItem.GetOptionsPrint().IsWarningSize() ? SfxPrinterChangeFlags::CHG_SIZE : SfxPrinterChangeFlags::NONE) |
+                (aPrintItem.GetOptionsPrint().IsWarningOrientation() ? SfxPrinterChangeFlags::CHG_ORIENTATION : SfxPrinterChangeFlags::NONE);
+        aFlagItem.SetValue( static_cast<int>(nFlags) );
 
         aPrintSet.Put( aPrintItem );
         aPrintSet.Put( SfxBoolItem( SID_PRINTER_NOTFOUND_WARN, aPrintItem.GetOptionsPrint().IsWarningPrinter() ) );

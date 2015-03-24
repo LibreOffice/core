@@ -404,7 +404,7 @@ public:
     virtual ErrCode         DoVerb( long nVerb ) SAL_OVERRIDE;
 
     virtual sal_uInt16          SetPrinter( SfxPrinter* pNew,
-                                        sal_uInt16 nDiff = SFX_PRINTER_ALL, bool bIsAPI=false) SAL_OVERRIDE;
+                                        SfxPrinterChangeFlags nDiff = SFX_PRINTER_ALL, bool bIsAPI=false) SAL_OVERRIDE;
     ShellModes              GetShellMode();
 
     com::sun::star::view::XSelectionSupplier*       GetUNOObject();

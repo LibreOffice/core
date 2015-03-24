@@ -262,7 +262,7 @@ protected:
 
     virtual SfxPrinter *GetPrinter(bool bCreate = false) SAL_OVERRIDE;
     virtual sal_uInt16 SetPrinter(SfxPrinter *pNewPrinter,
-                              sal_uInt16     nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false) SAL_OVERRIDE;
+                              SfxPrinterChangeFlags nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false) SAL_OVERRIDE;
 
     void Insert( SfxMedium& rMedium );
     void InsertFrom(SfxMedium &rMedium);

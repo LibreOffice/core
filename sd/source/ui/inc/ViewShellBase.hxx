@@ -139,7 +139,7 @@ public:
     /// Forwarded to the print manager.
     virtual sal_uInt16 SetPrinter (
         SfxPrinter* pNewPrinter,
-        sal_uInt16 nDiffFlags = SFX_PRINTER_ALL, bool bIsApi=false) SAL_OVERRIDE;
+        SfxPrinterChangeFlags nDiffFlags = SFX_PRINTER_ALL, bool bIsApi=false) SAL_OVERRIDE;
 
     /// Forward methods to main sub shell.
     virtual void WriteUserDataSequence (

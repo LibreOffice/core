@@ -386,7 +386,7 @@ void SfxPrinterController::jobFinished( com::sun::star::view::PrintableState nSt
                 {
                     SfxPrinter* pNewPrt = new SfxPrinter( pDocPrt->GetOptions().Clone(), getPrinter()->GetName() );
                     pNewPrt->SetJobSetup( getPrinter()->GetJobSetup() );
-                    mpViewShell->SetPrinter( pNewPrt, SFX_PRINTER_PRINTER | SFX_PRINTER_JOBSETUP );
+                    mpViewShell->SetPrinter( pNewPrt, SfxPrinterChangeFlags::PRINTER | SfxPrinterChangeFlags::JOBSETUP );
                 }
             }
         }
@@ -478,8 +478,8 @@ SfxPrinter* SfxViewShell::SetPrinter_Impl( SfxPrinter *pNewPrinter )
     sal_uInt16 nWhich = GetPool().GetWhich(SID_PRINTER_CHANGESTODOC);
     const SfxFlagItem *pFlagItem = 0;
     pDocPrinter->GetOptions().GetItemState( nWhich, false, reinterpret_cast<const SfxPoolItem**>(&pFlagItem) );
-    bool bOriToDoc = pFlagItem && (pFlagItem->GetValue() & SFX_PRINTER_CHG_ORIENTATION);
-    bool bSizeToDoc = pFlagItem && (pFlagItem->GetValue() & SFX_PRINTER_CHG_SIZE);
+    bool bOriToDoc = pFlagItem && (static_cast<SfxPrinterChangeFlags>(pFlagItem->GetValue()) & SfxPrinterChangeFlags::CHG_ORIENTATION);
+    bool bSizeToDoc = pFlagItem && (static_cast<SfxPrinterChangeFlags>(pFlagItem->GetValue()) & SfxPrinterChangeFlags::CHG_SIZE);
 
     // Determine the previous format and size
     Orientation eOldOri = pDocPrinter->GetOrientation();
@@ -499,25 +499,25 @@ SfxPrinter* SfxViewShell::SetPrinter_Impl( SfxPrinter *pNewPrinter )
 
     // Message and Flags for page format, summaries changes
     OUString aMsg;
-    sal_uInt16 nNewOpt=0;
+    SfxPrinterChangeFlags nNewOpt = SfxPrinterChangeFlags::NONE;
     if( bOriChg && bPgSzChg )
     {
         aMsg = SfxResId(STR_PRINT_NEWORISIZE).toString();
-        nNewOpt = SFX_PRINTER_CHG_ORIENTATION | SFX_PRINTER_CHG_SIZE;
+        nNewOpt = SfxPrinterChangeFlags::CHG_ORIENTATION | SfxPrinterChangeFlags::CHG_SIZE;
     }
     else if (bOriChg )
     {
         aMsg = SfxResId(STR_PRINT_NEWORI).toString();
-        nNewOpt = SFX_PRINTER_CHG_ORIENTATION;
+        nNewOpt = SfxPrinterChangeFlags::CHG_ORIENTATION;
     }
     else if (bPgSzChg)
     {
         aMsg = SfxResId(STR_PRINT_NEWSIZE).toString();
-        nNewOpt = SFX_PRINTER_CHG_SIZE;
+        nNewOpt = SfxPrinterChangeFlags::CHG_SIZE;
     }
 
     // Summaries in this variable what has been changed.
-    sal_uInt16 nChangedFlags = 0;
+    SfxPrinterChangeFlags nChangedFlags = SfxPrinterChangeFlags::NONE;
 
     // Ask if possible, if page format should be taken over from printer.
     if ( ( bOriChg  || bPgSzChg ) &&
@@ -535,7 +535,7 @@ SfxPrinter* SfxViewShell::SetPrinter_Impl( SfxPrinter *pNewPrinter )
     // or the other way around?
     if ( (aTempPrtName != aDocPrtName) || (pDocPrinter->IsDefPrinter() != pNewPrinter->IsDefPrinter()) )
     {
-        nChangedFlags |= SFX_PRINTER_PRINTER|SFX_PRINTER_JOBSETUP;
+        nChangedFlags |= SfxPrinterChangeFlags::PRINTER|SfxPrinterChangeFlags::JOBSETUP;
         pDocPrinter = pNewPrinter;
     }
     else
@@ -545,7 +545,7 @@ SfxPrinter* SfxViewShell::SetPrinter_Impl( SfxPrinter *pNewPrinter )
         {
             // Option have changed
             pDocPrinter->SetOptions( pNewPrinter->GetOptions() );
-            nChangedFlags |= SFX_PRINTER_OPTIONS;
+            nChangedFlags |= SfxPrinterChangeFlags::OPTIONS;
         }
 
         // Compare JobSetups
@@ -553,7 +553,7 @@ SfxPrinter* SfxViewShell::SetPrinter_Impl( SfxPrinter *pNewPrinter )
         JobSetup aOldJobSetup = pDocPrinter->GetJobSetup();
         if ( aNewJobSetup != aOldJobSetup )
         {
-            nChangedFlags |= SFX_PRINTER_JOBSETUP;
+            nChangedFlags |= SfxPrinterChangeFlags::JOBSETUP;
         }
 
         // Keep old changed Printer.
@@ -561,7 +561,7 @@ SfxPrinter* SfxViewShell::SetPrinter_Impl( SfxPrinter *pNewPrinter )
         delete pNewPrinter;
     }
 
-    if ( 0 != nChangedFlags )
+    if ( SfxPrinterChangeFlags::NONE != nChangedFlags )
         // SetPrinter will delete the old printer if it changes
         SetPrinter( pDocPrinter, nChangedFlags );
     return pDocPrinter;
@@ -781,7 +781,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
             {
                 // just set a recorded printer name
                 if ( pPrinter )
-                    SetPrinter( pPrinter, SFX_PRINTER_PRINTER  );
+                    SetPrinter( pPrinter, SfxPrinterChangeFlags::PRINTER  );
                 return;
             }
 
@@ -843,7 +843,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
                     else
                     {
                         pPrinter->SetOptions( *pExecutor->GetOptions() );
-                        SetPrinter( pPrinter, SFX_PRINTER_OPTIONS );
+                        SetPrinter( pPrinter, SfxPrinterChangeFlags::OPTIONS );
                     }
                 }
 
@@ -887,7 +887,7 @@ SfxPrinter* SfxViewShell::GetPrinter( bool /*bCreate*/ )
     return 0;
 }
 
-sal_uInt16 SfxViewShell::SetPrinter( SfxPrinter* /*pNewPrinter*/, sal_uInt16 /*nDiffFlags*/, bool )
+sal_uInt16 SfxViewShell::SetPrinter( SfxPrinter* /*pNewPrinter*/, SfxPrinterChangeFlags /*nDiffFlags*/, bool )
 {
     return 0;
 }

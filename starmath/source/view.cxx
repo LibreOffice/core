@@ -1327,16 +1327,16 @@ SfxPrinter* SmViewShell::GetPrinter(bool bCreate)
     return 0;
 }
 
-sal_uInt16 SmViewShell::SetPrinter(SfxPrinter *pNewPrinter, sal_uInt16 nDiffFlags, bool )
+sal_uInt16 SmViewShell::SetPrinter(SfxPrinter *pNewPrinter, SfxPrinterChangeFlags nDiffFlags, bool )
 {
     SfxPrinter *pOld = GetDoc()->GetPrinter();
     if ( pOld && pOld->IsPrinting() )
         return SFX_PRINTERROR_BUSY;
 
-    if ((nDiffFlags & SFX_PRINTER_PRINTER) == SFX_PRINTER_PRINTER)
+    if ((nDiffFlags & SfxPrinterChangeFlags::PRINTER) == SfxPrinterChangeFlags::PRINTER)
         GetDoc()->SetPrinter( pNewPrinter );
 
-    if ((nDiffFlags & SFX_PRINTER_OPTIONS) == SFX_PRINTER_OPTIONS)
+    if ((nDiffFlags & SfxPrinterChangeFlags::OPTIONS) == SfxPrinterChangeFlags::OPTIONS)
     {
         SmModule *pp = SM_MOD();
         pp->GetConfig()->ItemSetToConfig(pNewPrinter->GetOptions());

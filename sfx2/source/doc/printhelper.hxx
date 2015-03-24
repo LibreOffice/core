@@ -22,6 +22,7 @@
 
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
+#include <sfx2/viewsh.hxx>
 #include <sal/types.h>
 
 #include <com/sun/star/view/XPrintable.hpp>
@@ -60,7 +61,10 @@ private:
 
     osl::Mutex m_aMutex;
     IMPL_PrintListener_DataContainer* m_pData ;
-    void impl_setPrinter(const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rPrinter,SfxPrinter*& pPrinter,sal_uInt16& nChangeFlags,SfxViewShell*& pViewSh);
+    void impl_setPrinter(const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rPrinter,
+                         SfxPrinter*& pPrinter,
+                         SfxPrinterChangeFlags& nChangeFlags,
+                         SfxViewShell*& pViewSh);
 } ;
 
 #endif

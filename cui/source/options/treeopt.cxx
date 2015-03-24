@@ -1201,9 +1201,9 @@ SfxItemSet* OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
             // miscellaneous - Tabulator
             pRet->Put(SfxBoolItem(SID_PRINTER_NOTFOUND_WARN, aMisc.IsNotFoundWarning()));
 
-            sal_uInt16 nFlag = aMisc.IsPaperSizeWarning() ? SFX_PRINTER_CHG_SIZE : 0;
-            nFlag  |= aMisc.IsPaperOrientationWarning()  ? SFX_PRINTER_CHG_ORIENTATION : 0;
-            pRet->Put( SfxFlagItem( SID_PRINTER_CHANGESTODOC, nFlag ));
+            SfxPrinterChangeFlags nFlag = aMisc.IsPaperSizeWarning() ? SfxPrinterChangeFlags::CHG_SIZE : SfxPrinterChangeFlags::NONE;
+            nFlag  |= aMisc.IsPaperOrientationWarning()  ? SfxPrinterChangeFlags::CHG_ORIENTATION : SfxPrinterChangeFlags::NONE;
+            pRet->Put( SfxFlagItem( SID_PRINTER_CHANGESTODOC, static_cast<int>(nFlag) ));
 
         }
         break;
@@ -1346,8 +1346,8 @@ void OfaTreeOptionsDialog::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet 
             if(SfxItemState::SET == rSet.GetItemState(SID_PRINTER_CHANGESTODOC, false, &pItem))
             {
                 const SfxFlagItem* pFlag = static_cast<const SfxFlagItem*>(pItem);
-                aMisc.SetPaperSizeWarning(0 != (pFlag->GetValue() &  SFX_PRINTER_CHG_SIZE ));
-                aMisc.SetPaperOrientationWarning(0 !=  (pFlag->GetValue() & SFX_PRINTER_CHG_ORIENTATION ));
+                aMisc.SetPaperSizeWarning(bool(static_cast<SfxPrinterChangeFlags>(pFlag->GetValue()) &  SfxPrinterChangeFlags::CHG_SIZE ));
+                aMisc.SetPaperOrientationWarning(bool(static_cast<SfxPrinterChangeFlags>(pFlag->GetValue()) & SfxPrinterChangeFlags::CHG_ORIENTATION ));
             }
 
 //          evaluate help options

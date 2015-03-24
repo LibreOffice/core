@@ -312,7 +312,10 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SfxPrintHelper::getPrinter() thro
 //  XPrintable
 
 
-void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >& rPrinter,SfxPrinter*& pPrinter,sal_uInt16& nChangeFlags,SfxViewShell*& pViewSh)
+void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >& rPrinter,
+                                     SfxPrinter*& pPrinter,
+                                     SfxPrinterChangeFlags& nChangeFlags,
+                                     SfxViewShell*& pViewSh)
 
 {
     // Get old Printer
@@ -327,7 +330,7 @@ void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >
         return;
 
     // new Printer-Name available?
-    nChangeFlags = 0;
+    nChangeFlags = SfxPrinterChangeFlags::NONE;
     sal_Int32 lDummy = 0;
     for ( int n = 0; n < rPrinter.getLength(); ++n )
     {
@@ -344,7 +347,7 @@ void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >
             if ( aPrinterName != pPrinter->GetName() )
             {
                 pPrinter = new SfxPrinter( pPrinter->GetOptions().Clone(), aPrinterName );
-                nChangeFlags = SFX_PRINTER_PRINTER;
+                nChangeFlags = SfxPrinterChangeFlags::PRINTER;
             }
             break;
         }
@@ -373,7 +376,7 @@ void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >
             if ( (Orientation) eOrient != pPrinter->GetOrientation() )
             {
                 pPrinter->SetOrientation( (Orientation) eOrient );
-                nChangeFlags |= SFX_PRINTER_CHG_ORIENTATION;
+                nChangeFlags |= SfxPrinterChangeFlags::CHG_ORIENTATION;
             }
         }
 
@@ -390,7 +393,7 @@ void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >
             if ( convertToPaper(nPaperFormat) != pPrinter->GetPaper() )
             {
                 pPrinter->SetPaper( convertToPaper(nPaperFormat) );
-                nChangeFlags |= SFX_PRINTER_CHG_SIZE;
+                nChangeFlags |= SfxPrinterChangeFlags::CHG_SIZE;
             }
         }
 
@@ -437,7 +440,7 @@ void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >
         if( aSetPaperSize != pPrinter->GetPaperSizePixel() )
         {
             pPrinter->SetPaperSizeUser( pPrinter->PixelToLogic( aSetPaperSize ) );
-            nChangeFlags |= SFX_PRINTER_CHG_SIZE;
+            nChangeFlags |= SfxPrinterChangeFlags::CHG_SIZE;
         }
     }
 
@@ -455,7 +458,7 @@ void SAL_CALL SfxPrintHelper::setPrinter(const uno::Sequence< beans::PropertyVal
 
     SfxViewShell* pViewSh = NULL;
     SfxPrinter* pPrinter = NULL;
-    sal_uInt16 nChangeFlags = 0;
+    SfxPrinterChangeFlags nChangeFlags = SfxPrinterChangeFlags::NONE;
     impl_setPrinter(rPrinter,pPrinter,nChangeFlags,pViewSh);
     // set new printer
     if ( pViewSh && pPrinter )

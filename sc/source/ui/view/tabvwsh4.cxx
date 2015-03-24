@@ -1053,7 +1053,7 @@ SfxPrinter* ScTabViewShell::GetPrinter( bool bCreate )
     return GetViewData().GetDocShell()->GetPrinter(bCreate);
 }
 
-sal_uInt16 ScTabViewShell::SetPrinter( SfxPrinter *pNewPrinter, sal_uInt16 nDiffFlags, bool )
+sal_uInt16 ScTabViewShell::SetPrinter( SfxPrinter *pNewPrinter, SfxPrinterChangeFlags nDiffFlags, bool )
 {
     return GetViewData().GetDocShell()->SetPrinter( pNewPrinter, nDiffFlags );
 }

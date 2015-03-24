@@ -521,7 +521,7 @@ SfxPrinter* ScPreviewShell::GetPrinter( bool bCreate )
     return pDocShell->GetPrinter(bCreate);
 }
 
-sal_uInt16 ScPreviewShell::SetPrinter( SfxPrinter *pNewPrinter, sal_uInt16 nDiffFlags, bool )
+sal_uInt16 ScPreviewShell::SetPrinter( SfxPrinter *pNewPrinter, SfxPrinterChangeFlags nDiffFlags, bool )
 {
     return pDocShell->SetPrinter( pNewPrinter, nDiffFlags );
 }
