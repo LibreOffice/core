@@ -1835,60 +1835,6 @@ void SwViewShell::PaintTile(VirtualDevice &rDevice, int contextWidth, int contex
 
 #if !HAVE_FEATURE_DESKTOP
 extern "C"
-void touch_lo_draw_tile(void *context, int contextWidth, int contextHeight, MLODpxPoint tileDpxPosition, MLODpxSize tileDpxSize)
-{
-#ifdef IOS
-    SAL_INFO("sw.tiled", "touch_lo_draw_tile(" << contextWidth << "x" << contextHeight << ", (" << tileDpxPosition.x << "," << tileDpxPosition.y << "), " << tileDpxSize.width << "x" << tileDpxSize.height << ")");
-    MLORipPoint tileRipPosition = MLORipPointByDpxPoint(tileDpxPosition);
-    MLORipSize rileRipSize = MLORipSizeByDpxSize(tileDpxSize);
-    MLORip tileRipPosX = tileRipPosition.x;
-    MLORip tileRipPosY = tileRipPosition.y;
-    MLORip tileRipWidth = rileRipSize.width;
-    MLORip tileRipHeight = rileRipSize.height;
-    // tilePosX/Y and tileWidth/Height tell the part of the document,
-    // in twip units, to render
-    int tilePosX = tileRipPosX;
-    int tilePosY = tileRipPosY;
-    long tileWidth  = tileRipWidth;
-    long tileHeight = tileRipHeight;
-    // Currently we expect that only one document is open, so we are using the
-    // current shell.  Should it turn out that we need to have more documents
-    // open, we need to add a documentHandle that would hold the right
-    // document shell in the iOS / Android impl, and we would get it as a
-    // parameter.
-
-    SwWrtShell *pViewShell;
-
-    // FIXME: make sure this is not called before we have a document...
-    while (!(pViewShell = GetActiveWrtShell()))
-    {
-        sleep(1);
-    }
-
-    if (pViewShell)
-    {
-        // Creation, use and destruction of a VirtualDevice needs to be
-        // protected by the SolarMutex, it seems:
-        SolarMutexGuard g;
-
-        SystemGraphicsData aData;
-        aData.rCGContext = (CGContextRef) context;
-        // the Size argument is irrelevant, I hope
-        VirtualDevice aDevice(&aData, Size(1, 1), (sal_uInt16)0);
-        // paint to it
-        pViewShell->PaintTile(aDevice, contextWidth, contextHeight, tilePosX, tilePosY, tileWidth, tileHeight);
-    }
-
-    SAL_INFO("sw.tiled", "touch_lo_draw_tile(" << contextWidth << "x" << contextHeight << ", (" << tileDpxPosition.x << "," << tileDpxPosition.y << "), " << tileDpxSize.width << "x" << tileDpxSize.height << ") return");
-#else
-    (void) context;
-    (void) contextWidth;
-    (void) contextHeight;
-    (void) tileDpxPosition;
-    (void) tileDpxSize;
-#endif
-}
-extern "C"
 MLODpxSize touch_lo_get_content_size()
 {
 #ifdef IOS

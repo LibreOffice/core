@@ -230,12 +230,6 @@ void touch_lo_pan(int deltaX, int deltaY);
 void touch_lo_zoom(int x, int y, float scale);
 void touch_lo_keyboard_input(int c);
 
-/** Draw part of the document.
-
-tilePosX, tilePosY, tileWidth, tileHeight address the part of the document to be drawn.
-context, contextHeight, contextWidth specify where to draw.
-*/
-void touch_lo_draw_tile(void *context, int contextWidth, int contextHeight, MLODpxPoint tilePosition, MLODpxSize tileSize);
 void touch_lo_copy_buffer(const void * source, size_t sourceWidth, size_t sourceHeight, size_t sourceBytesPerRow, void * target, size_t targetWidth, size_t targetHeight);
 MLODpxSize touch_lo_get_content_size();
 void touch_lo_mouse_drag(int x, int y, MLOMouseButtonState state);
