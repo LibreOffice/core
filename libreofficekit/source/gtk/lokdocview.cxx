@@ -93,57 +93,66 @@ struct LOKDocView_Impl
     bool m_bInDragGraphicHandles[8];
     ///@}
 
-    LOKDocView_Impl()
-        : m_pEventBox(gtk_event_box_new()),
-        m_pTable(0),
-        m_pCanvas(0),
-        m_fZoom(1),
-        m_pOffice(0),
-        m_pDocument(0),
-        m_bEdit(false),
-        m_aVisibleCursor({0, 0, 0, 0}),
-        m_bCursorOverlayVisible(false),
-        m_bCursorVisible(true),
-        m_nLastButtonPressTime(0),
-        m_nLastButtonReleaseTime(0),
-        m_pTextSelectionRectangles(0),
-        m_aTextSelectionStart({0, 0, 0, 0}),
-        m_aTextSelectionEnd({0, 0, 0, 0}),
-        m_aGraphicSelection({0, 0, 0, 0}),
-        m_bInDragGraphicSelection(false),
-
-        // Start/middle/end handle.
-        m_pHandleStart(0),
-        m_aHandleStartRect({0, 0, 0, 0}),
-        m_bInDragStartHandle(false),
-        m_pHandleMiddle(0),
-        m_aHandleMiddleRect({0, 0, 0, 0}),
-        m_bInDragMiddleHandle(false),
-        m_pHandleEnd(0),
-        m_aHandleEndRect({0, 0, 0, 0}),
-        m_bInDragEndHandle(false),
-
-        m_pGraphicHandle(0)
-    {
-        memset(&m_aGraphicHandleRects, 0, sizeof(m_aGraphicHandleRects));
-        memset(&m_bInDragGraphicHandles, 0, sizeof(m_bInDragGraphicHandles));
-    }
+    LOKDocView_Impl();
+    ~LOKDocView_Impl();
+    /// Connected to the destroy signal of LOKDocView, deletes its LOKDocView_Impl.
+    static void destroy(LOKDocView* pDocView, gpointer pData);
 };
+
+LOKDocView_Impl::LOKDocView_Impl()
+    : m_pEventBox(gtk_event_box_new()),
+    m_pTable(0),
+    m_pCanvas(0),
+    m_fZoom(1),
+    m_pOffice(0),
+    m_pDocument(0),
+    m_bEdit(false),
+    m_aVisibleCursor({0, 0, 0, 0}),
+    m_bCursorOverlayVisible(false),
+    m_bCursorVisible(true),
+    m_nLastButtonPressTime(0),
+    m_nLastButtonReleaseTime(0),
+    m_pTextSelectionRectangles(0),
+    m_aTextSelectionStart({0, 0, 0, 0}),
+    m_aTextSelectionEnd({0, 0, 0, 0}),
+    m_aGraphicSelection({0, 0, 0, 0}),
+    m_bInDragGraphicSelection(false),
+
+    // Start/middle/end handle.
+    m_pHandleStart(0),
+    m_aHandleStartRect({0, 0, 0, 0}),
+    m_bInDragStartHandle(false),
+    m_pHandleMiddle(0),
+    m_aHandleMiddleRect({0, 0, 0, 0}),
+    m_bInDragMiddleHandle(false),
+    m_pHandleEnd(0),
+    m_aHandleEndRect({0, 0, 0, 0}),
+    m_bInDragEndHandle(false),
+
+    m_pGraphicHandle(0)
+{
+    memset(&m_aGraphicHandleRects, 0, sizeof(m_aGraphicHandleRects));
+    memset(&m_bInDragGraphicHandles, 0, sizeof(m_bInDragGraphicHandles));
+}
+
+LOKDocView_Impl::~LOKDocView_Impl()
+{
+    if (m_pDocument)
+        m_pDocument->pClass->destroy(m_pDocument);
+    m_pDocument = 0;
+}
+
+void LOKDocView_Impl::destroy(LOKDocView* pDocView, gpointer /*pData*/)
+{
+    // We specifically need to destroy the document when closing in order to ensure
+    // that lock files etc. are cleaned up.
+    delete pDocView->m_pImpl;
+}
 
 static void lok_docview_class_init( gpointer );
 static void lok_docview_init( GTypeInstance *, gpointer );
 static float pixelToTwip(float nInput);
 static gboolean renderOverlay(GtkWidget* pWidget, GdkEventExpose* pEvent, gpointer pData);
-
-// We specifically need to destroy the document when closing in order to ensure
-// that lock files etc. are cleaned up.
-void lcl_onDestroy(LOKDocView* pDocView, gpointer /*pData*/)
-{
-    if (pDocView->m_pImpl->m_pDocument)
-        pDocView->m_pImpl->m_pDocument->pClass->destroy(pDocView->m_pImpl->m_pDocument);
-    pDocView->m_pImpl->m_pDocument = 0;
-    delete pDocView->m_pImpl;
-}
 
 /**
  * The user drags the handle, which is below the cursor, but wants to move the
@@ -458,8 +467,7 @@ static void lok_docview_init( GTypeInstance* pInstance, gpointer )
 
     gtk_widget_show( pDocView->m_pImpl->m_pEventBox );
 
-    gtk_signal_connect( GTK_OBJECT(pDocView), "destroy",
-                        GTK_SIGNAL_FUNC(lcl_onDestroy), NULL );
+    gtk_signal_connect(GTK_OBJECT(pDocView), "destroy", GTK_SIGNAL_FUNC(LOKDocView_Impl::destroy), 0);
     g_signal_connect_after(pDocView->m_pImpl->m_pEventBox, "expose-event",
                            G_CALLBACK(renderOverlay), pDocView);
 }
