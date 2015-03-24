@@ -1110,7 +1110,7 @@ SwFmt* DocumentStylePoolManager::GetFmtFromPool( sal_uInt16 nId )
     OSL_ENSURE( nRCId, "invalid Id" );
 
     while( nArrCnt-- )
-        for( sal_uInt16 n = 0; n < (*pArray[nArrCnt]).GetFmtCount(); ++n )
+        for( size_t n = 0; n < (*pArray[nArrCnt]).GetFmtCount(); ++n )
             if( nId == ( pNewFmt = (*pArray[ nArrCnt ] ).GetFmt( n ) )->
                     GetPoolFmtId() )
             {
@@ -2141,7 +2141,7 @@ bool DocumentStylePoolManager::IsPoolFmtUsed( sal_uInt16 nId ) const
     {
         bFnd = false;
         while( nArrCnt-- && !bFnd )
-            for( sal_uInt16 n = 0; !bFnd && n < (*pArray[nArrCnt]).GetFmtCount(); ++n )
+            for( size_t n = 0; !bFnd && n < (*pArray[nArrCnt]).GetFmtCount(); ++n )
                 if( nId == ( pNewFmt = (*pArray[ nArrCnt ] ).GetFmt( n ) )->
                         GetPoolFmtId() )
                     bFnd = true;
