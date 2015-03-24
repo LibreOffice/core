@@ -20,8 +20,6 @@
 $(eval $(call gb_Module_Module,sw))
 
 $(eval $(call gb_Module_add_targets,sw,\
-        $(if $(ENABLE_HEADLESS),, \
-	        $(call gb_Helper_optional,DESKTOP,Executable_tiledrendering)) \
         CustomTarget_generated \
 	Library_msword \
 	Library_sw \
@@ -37,7 +35,6 @@ $(eval $(call gb_Module_add_l10n_targets,sw,\
 	UIConfig_swreport \
 	UIConfig_swriter \
 	UIConfig_swxform \
-	UIConfig_qa \
 ))
 
 ifneq ($(filter SCRIPTING,$(BUILD_TYPE)),)
