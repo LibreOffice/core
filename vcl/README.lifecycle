@@ -137,6 +137,8 @@ or:
 
 ---------- What remains to be done ? ----------
 
+	* Cleanup DogTags and LazyDelete.
+
 	* Expand the VclPtr pattern to many other less
 	  than safe VCL types.
 
