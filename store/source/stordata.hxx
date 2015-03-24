@@ -87,13 +87,6 @@ struct OStoreDataPageData : public store::OStorePageData
         if (capacity()) memset (m_pData, 0, capacity());
     }
 
-    /** guard (external representation).
-    */
-    void guard() {}
-
-    /** verify (external representation).
-    */
-    storeError verify() const { return store_E_None; }
 };
 
 /*========================================================================
@@ -467,77 +460,69 @@ struct OStoreDirectoryDataBlock
 
     /** direct.
     */
-    static sal_uInt16 directCount (void)
-    {
-        return ((sal_uInt16)(STORE_LIMIT_DATAPAGE_DIRECT));
-    }
+    static const sal_uInt16 directCount = ((sal_uInt16)(STORE_LIMIT_DATAPAGE_DIRECT));
+
     sal_uInt32 directLink (sal_uInt16 nIndex) const
     {
-        if (nIndex < directCount())
+        if (nIndex < directCount)
             return store::ntohl(m_aTable.m_pDirect[nIndex]);
         else
             return STORE_PAGE_NULL;
     }
     void directLink (sal_uInt16 nIndex, sal_uInt32 nAddr)
     {
-        if (nIndex < directCount())
+        if (nIndex < directCount)
             m_aTable.m_pDirect[nIndex] = store::htonl(nAddr);
     }
 
     /** single.
     */
-    static sal_uInt16 singleCount (void)
-    {
-        return ((sal_uInt16)(STORE_LIMIT_DATAPAGE_SINGLE));
-    }
+    static const sal_uInt16 singleCount = ((sal_uInt16)(STORE_LIMIT_DATAPAGE_SINGLE));
+
     sal_uInt32 singleLink (sal_uInt16 nIndex) const
     {
-        if (nIndex < singleCount())
+        if (nIndex < singleCount)
             return store::ntohl(m_aTable.m_pSingle[nIndex]);
         else
             return STORE_PAGE_NULL;
     }
     void singleLink (sal_uInt16 nIndex, sal_uInt32 nAddr)
     {
-        if (nIndex < singleCount())
+        if (nIndex < singleCount)
             m_aTable.m_pSingle[nIndex] = store::htonl(nAddr);
     }
 
     /** double.
     */
-    static sal_uInt16 doubleCount (void)
-    {
-        return ((sal_uInt16)(STORE_LIMIT_DATAPAGE_DOUBLE));
-    }
+    static const sal_uInt16 doubleCount = ((sal_uInt16)(STORE_LIMIT_DATAPAGE_DOUBLE));
+
     sal_uInt32 doubleLink (sal_uInt16 nIndex) const
     {
-        if (nIndex < doubleCount())
+        if (nIndex < doubleCount)
             return store::ntohl(m_aTable.m_pDouble[nIndex]);
         else
             return STORE_PAGE_NULL;
     }
     void doubleLink (sal_uInt16 nIndex, sal_uInt32 nAddr)
     {
-        if (nIndex < doubleCount())
+        if (nIndex < doubleCount)
             m_aTable.m_pDouble[nIndex] = store::htonl(nAddr);
     }
 
     /** triple.
     */
-    static sal_uInt16 tripleCount (void)
-    {
-        return ((sal_uInt16)(STORE_LIMIT_DATAPAGE_TRIPLE));
-    }
+    static const sal_uInt16 tripleCount = ((sal_uInt16)(STORE_LIMIT_DATAPAGE_TRIPLE));
+
     sal_uInt32 tripleLink (sal_uInt16 nIndex) const
     {
-        if (nIndex < tripleCount())
+        if (nIndex < tripleCount)
             return store::ntohl(m_aTable.m_pTriple[nIndex]);
         else
             return STORE_PAGE_NULL;
     }
     void tripleLink (sal_uInt16 nIndex, sal_uInt32 nAddr)
     {
-        if (nIndex < tripleCount())
+        if (nIndex < tripleCount)
             m_aTable.m_pTriple[nIndex] = store::htonl(nAddr);
     }
 };

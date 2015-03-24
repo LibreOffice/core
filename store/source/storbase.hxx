@@ -751,9 +751,7 @@ public:
             return store_E_InvalidAccess;
         pHead->guard(nAddr);
 
-        T * pImpl = dynamic_page_cast<T>(pHead);
-        OSL_PRECOND(pImpl != 0, "store::PageHolder<T>::guard(): Null pointer");
-        pImpl->guard();
+        OSL_PRECOND(dynamic_page_cast<T>(pHead) != 0, "store::PageHolder<T>::guard(): Null pointer");
 
         return store_E_None;
     }
@@ -771,7 +769,7 @@ public:
         if (!pImpl)
             return store_E_WrongVersion;
 
-        return pImpl->verify();
+        return store_E_None;
     }
 };
 
