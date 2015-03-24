@@ -84,7 +84,7 @@ static SalInstance* tryInstance( const OUString& rModuleBase, bool bForce = fals
 
     oslModule aMod = osl_loadModuleRelative(
         reinterpret_cast< oslGenericFunction >( &tryInstance ), aModule.pData,
-        SAL_LOADMODULE_DEFAULT );
+        SAL_LOADMODULE_GLOBAL );
     if( aMod )
     {
         salFactoryProc aProc = reinterpret_cast<salFactoryProc>(osl_getAsciiFunctionSymbol( aMod, "create_SalInstance" ));
