@@ -4454,6 +4454,12 @@ void ScXMLExport::ExportConditionalFormat(SCTAB nTab)
                         if(pFormatData->mbOnlyBar)
                             AddAttribute(XML_NAMESPACE_CALC_EXT, XML_SHOW_VALUE, XML_FALSE);
 
+                        if (pFormatData->mnMinLength != 0.0)
+                            AddAttribute(XML_NAMESPACE_CALC_EXT, XML_MIN_LENGTH, OUString::number(pFormatData->mnMinLength));
+
+                        if (pFormatData->mnMaxLength != 0.0)
+                            AddAttribute(XML_NAMESPACE_CALC_EXT, XML_MAX_LENGTH, OUString::number(pFormatData->mnMaxLength));
+
                         if(pFormatData->mbNeg)
                         {
                             if(pFormatData->mpNegativeColor)

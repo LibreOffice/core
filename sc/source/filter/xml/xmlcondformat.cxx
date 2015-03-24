@@ -180,6 +180,8 @@ ScXMLDataBarFormatContext::ScXMLDataBarFormatContext( ScXMLImport& rImport, sal_
     OUString sAxisPosition;
     OUString sShowValue;
     OUString sAxisColor;
+    OUString sMinLength;
+    OUString sMaxLength;
 
     sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
     const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetDataBarAttrMap();
@@ -210,6 +212,12 @@ ScXMLDataBarFormatContext::ScXMLDataBarFormatContext( ScXMLImport& rImport, sal_
                 break;
             case XML_TOK_DATABAR_AXISCOLOR:
                 sAxisColor = sValue;
+                break;
+            case XML_TOK_DATABAR_MINLENGTH:
+                sMinLength = sValue;
+                break;
+            case XML_TOK_DATABAR_MAXLENGTH:
+                sMaxLength = sValue;
                 break;
             default:
                 break;
@@ -263,6 +271,20 @@ ScXMLDataBarFormatContext::ScXMLDataBarFormatContext( ScXMLImport& rImport, sal_
         bool bShowValue = true;
         sax::Converter::convertBool( bShowValue, sShowValue );
         mpFormatData->mbOnlyBar = !bShowValue;
+    }
+
+    if (!sMinLength.isEmpty())
+    {
+        double nVal = sMinLength.toDouble();
+        mpFormatData->mnMinLength = nVal;
+    }
+
+    if (!sMaxLength.isEmpty())
+    {
+        double nVal = sMaxLength.toDouble();
+        if (nVal == 0.0)
+            nVal = 100.0;
+        mpFormatData->mnMaxLength = nVal;
     }
 
     pFormat->AddEntry(mpDataBarFormat);
