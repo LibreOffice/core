@@ -322,8 +322,8 @@ void SwFmt::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue )
             // mba: move the code that ignores this event to the clients
 
             // pass Hint only to dependent formats (no Frames)
-            ModifyBroadcast( pOldValue, pNewValue, TYPE(SwFmt) );
-            bContinue = false;
+            //ModifyBroadcast( pOldValue, pNewValue, TYPE(SwFmt) );
+            //bContinue = false;
         }
         break;
     default:
