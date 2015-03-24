@@ -254,7 +254,7 @@ void SwPagePreviewLayout::_ApplyNewZoomAtViewShell( sal_uInt8 _aNewZoom )
     {
         aNewViewOptions.SetZoom( _aNewZoom );
         //#i19975# - consider zoom type.
-        enum SvxZoomType eZoomType = SvxZoomType::PERCENT;
+        SvxZoomType eZoomType = SvxZoomType::PERCENT;
         aNewViewOptions.SetZoomType( eZoomType );
         mrParentViewShell.ApplyViewOptions( aNewViewOptions );
     }
