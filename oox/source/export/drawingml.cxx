@@ -1610,7 +1610,7 @@ void DrawingML::WriteParagraphNumbering( Reference< XPropertySet > rXPropSet, sa
     bool bHasFontDesc = false;
     OUString aGraphicURL;
     sal_Int16 nBulletRelSize = 0;
-    sal_Int32 nBulletColor;
+    sal_Int32 nBulletColor = 0;
 
     for ( sal_Int32 i = 0; i < nPropertyCount; i++ )
     {
@@ -1693,7 +1693,7 @@ void DrawingML::WriteParagraphNumbering( Reference< XPropertySet > rXPropSet, sa
     }
     else
     {
-        if(nBulletColor)
+        if (nBulletColor)
         {
                mpFS->startElementNS( XML_a, XML_buClr, FSEND );
                WriteColor( nBulletColor );
