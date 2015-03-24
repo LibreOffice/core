@@ -710,7 +710,19 @@ void SdrMarkView::SetMarkHandles()
             if (aRect.IsEmpty())
                 sRectangle = "EMPTY";
             else
+            {
+                // In case the map mode is in 100th MM, then need to convert the coordinates over to twips for LOK.
+                if (pMarkedPV)
+                {
+                    if (OutputDevice* pOutputDevice = pMarkedPV->GetView().GetFirstOutputDevice())
+                    {
+                        if (pOutputDevice->GetMapMode().GetMapUnit() == MAP_100TH_MM)
+                            aRect = OutputDevice::LogicToLogic(aRect, MAP_100TH_MM, MAP_TWIP);
+                    }
+                }
+
                 sRectangle = aRect.toString();
+            }
             GetModel()->libreOfficeKitCallback(LOK_CALLBACK_GRAPHIC_SELECTION, sRectangle.getStr());
         }
 
