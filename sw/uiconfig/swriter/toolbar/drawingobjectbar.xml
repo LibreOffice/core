@@ -46,10 +46,13 @@
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:SetObjectToForeground" toolbar:helpid="10283"/>
  <toolbar:toolbaritem xlink:href=".uno:SetObjectToBackground" toolbar:helpid="10282"/>
- <toolbar:toolbaritem xlink:href=".uno:BringToFront" toolbar:helpid="10286"/>
- <toolbar:toolbaritem xlink:href=".uno:SendToBack" toolbar:helpid="10287"/>
- <toolbar:toolbaritem xlink:href=".uno:ObjectAlign" toolbar:helpid="10130"/>
  <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:BringToFront" toolbar:helpid="10286"/>
+ <toolbar:toolbaritem xlink:href=".uno:ObjectForwardOne"/>
+ <toolbar:toolbaritem xlink:href=".uno:ObjectBackOne"/>
+ <toolbar:toolbaritem xlink:href=".uno:SendToBack" toolbar:helpid="10287"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:ObjectAlign" toolbar:helpid="10130"/>
  <toolbar:toolbaritem xlink:href=".uno:ToggleAnchorType" toolbar:helpid="20349"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:FormatUngroup" toolbar:helpid="10455"/>
