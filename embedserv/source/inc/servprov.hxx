@@ -25,29 +25,26 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/uno/XInterface.hpp>
-#include <com/sun/star/lang/XTypeProvider.hpp>
-#include <cppuhelper/weak.hxx>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <cppuhelper/implbase.hxx>
 
 
 class EmbedProviderFactory_Impl;
 
-class EmbedServer_Impl : public ::cppu::OWeakObject, ::com::sun::star::lang::XTypeProvider
+class EmbedServer_Impl: public cppu::WeakImplHelper<css::lang::XServiceInfo>
 {
 public:
     EmbedServer_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > &xFactory );
     virtual ~EmbedServer_Impl();
 
-    // XInterface
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType )
-        throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL acquire() throw ();
-    virtual void SAL_CALL release() throw ();
+    OUString SAL_CALL getImplementationName()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    // XTypeProvider
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes( )
-        throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
-        throw(::com::sun::star::uno::RuntimeException);
+    sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 protected:
 

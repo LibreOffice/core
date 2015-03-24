@@ -30,6 +30,7 @@
 #include "unoobjw.hxx"
 #include "oleobjw.hxx"
 #include <cppuhelper/queryinterface.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 using namespace cppu;
 using namespace osl;
@@ -424,6 +425,30 @@ Any SAL_CALL OleConverter_Impl2::createBridge(const Any& modelDepObject,
     return ret;
 }
 
+OUString OleConverter_Impl2::getImplementationName()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return m_nUnoWrapperClass == INTERFACE_OLE_WRAPPER_IMPL
+        ? OUString("com.sun.star.comp.ole.OleConverter2")
+        : OUString("com.sun.star.comp.ole.OleConverterVar1");
+}
+
+sal_Bool OleConverter_Impl2::supportsService(OUString const & ServiceName)
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return cppu::supportsService(this, ServiceName);
+}
+
+css::uno::Sequence<OUString> OleConverter_Impl2::getSupportedServiceNames()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return m_nUnoWrapperClass == INTERFACE_OLE_WRAPPER_IMPL
+        ? css::uno::Sequence<OUString>{
+            "com.sun.star.bridge.OleBridgeSupplier2",
+            "com.sun.star.bridge.oleautomation.BridgeSupplier"}
+        : css::uno::Sequence<OUString>{
+            "com.sun.star.bridge.OleBridgeSupplierVar1"};
+}
 
 // XInitialize ------------------------------------------------------------------------------
 // the first argument is an XMultiServiceFactory if at all
@@ -496,10 +521,24 @@ Sequence< OUString >    SAL_CALL OleClient_Impl::getAvailableServiceNames() thro
     return ret;
 }
 
-
 OUString OleClient_Impl::getImplementationName()
+    throw (css::uno::RuntimeException, std::exception)
 {
-    return OUString(reinterpret_cast<const sal_Unicode*>(L"com.sun.star.comp.ole.OleClient"));
+    return OUString("com.sun.star.comp.ole.OleClient");
+}
+
+sal_Bool OleClient_Impl::supportsService(OUString const & ServiceName)
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return cppu::supportsService(this, ServiceName);
+}
+
+css::uno::Sequence<OUString> OleClient_Impl::getSupportedServiceNames()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return css::uno::Sequence<OUString>{
+        "com.sun.star.bridge.OleObjectFactory",
+        "com.sun.star.bridge.oleautomation.Factory"};
 }
 
 Reference<XInterface> SAL_CALL OleClient_Impl::createInstance(const OUString& ServiceSpecifier) throw (Exception, RuntimeException )
@@ -612,47 +651,26 @@ OleServer_Impl::~OleServer_Impl()
         m_wrapperList.pop_front();
     }
 }
-// XInterface --------------------------------------------------
-Any SAL_CALL OleServer_Impl::queryInterface( const Type& aType ) throw(RuntimeException)
+
+OUString OleServer_Impl::getImplementationName()
+    throw (css::uno::RuntimeException, std::exception)
 {
-    Any a= ::cppu::queryInterface( aType, static_cast<XTypeProvider*>(this));
-    if( a == Any())
-        return OWeakObject::queryInterface( aType);
-    else
-        return a;
-}
-void SAL_CALL OleServer_Impl::acquire(  ) throw()
-{
-    OWeakObject::acquire();
-}
-void SAL_CALL OleServer_Impl::release(  ) throw ()
-{
-    OWeakObject::release();
+    return OUString("com.sun.star.comp.ole.OleServer");
 }
 
-
-// XTypeProvider --------------------------------------------------
-Sequence< Type > SAL_CALL OleServer_Impl::getTypes( ) throw(RuntimeException)
+sal_Bool OleServer_Impl::supportsService(OUString const & ServiceName)
+    throw (css::uno::RuntimeException, std::exception)
 {
-    static OTypeCollection *pCollection = 0;
-    if( ! pCollection )
-    {
-        MutexGuard guard( Mutex::getGlobalMutex() );
-        if( ! pCollection )
-        {
-            static OTypeCollection collection(
-                cppu::UnoType<XWeak>::get(),
-                cppu::UnoType<XTypeProvider>::get() );
-            pCollection = &collection;
-        }
-    }
-    return (*pCollection).getTypes();
-}
-Sequence< sal_Int8 > SAL_CALL OleServer_Impl::getImplementationId() throw(RuntimeException)
-{
-    return css::uno::Sequence<sal_Int8>();
+    return cppu::supportsService(this, ServiceName);
 }
 
+css::uno::Sequence<OUString> OleServer_Impl::getSupportedServiceNames()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return css::uno::Sequence<OUString>{
+        "com.sun.star.bridge.OleApplicationRegistration",
+        "com.sun.star.bridge.oleautomation.ApplicationRegistration"};
+}
 
 sal_Bool OleServer_Impl::provideService(const Reference<XSingleServiceFactory>& xSFact, GUID* guid)
 {

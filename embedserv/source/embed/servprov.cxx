@@ -24,8 +24,7 @@
 #include "servprov.hxx"
 #include "embeddoc.hxx"
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <cppuhelper/typeprovider.hxx>
-#include <cppuhelper/queryinterface.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <osl/thread.h>
@@ -121,61 +120,24 @@ EmbedServer_Impl::~EmbedServer_Impl()
     }
 }
 
-// XInterface --------------------------------------------------
-uno::Any SAL_CALL
-EmbedServer_Impl::queryInterface(
-    const uno::Type& aType )
-    throw(
-        uno::RuntimeException
-    )
+OUString EmbedServer_Impl::getImplementationName()
+    throw (css::uno::RuntimeException, std::exception)
 {
-    uno::Any a=
-        ::cppu::queryInterface(
-            aType, static_cast<lang::XTypeProvider*>(this));
-    if( a == uno::Any())
-        return OWeakObject::queryInterface( aType);
-    else
-        return a;
+    return OUString("com.sun.star.comp.ole.EmbedServer");
 }
 
-void SAL_CALL EmbedServer_Impl::acquire(  ) throw(uno::RuntimeException)
+sal_Bool EmbedServer_Impl::supportsService(OUString const & ServiceName)
+    throw (css::uno::RuntimeException, std::exception)
 {
-    OWeakObject::acquire();
+    return cppu::supportsService(this, ServiceName);
 }
 
-void SAL_CALL EmbedServer_Impl::release(  ) throw (uno::RuntimeException)
+css::uno::Sequence<OUString> EmbedServer_Impl::getSupportedServiceNames()
+    throw (css::uno::RuntimeException, std::exception)
 {
-    OWeakObject::release();
+    return css::uno::Sequence<OUString>{
+        "com.sun.star.document.OleEmbeddedServerRegistration"};
 }
-
-
-// XTypeProvider --------------------------------------------------
-uno::Sequence< uno::Type > SAL_CALL
-EmbedServer_Impl::getTypes( )
-    throw(
-        uno::RuntimeException
-    )
-{
-    static ::cppu::OTypeCollection *pCollection = 0;
-    if( ! pCollection )
-    {
-        ::osl::MutexGuard guard( ::osl::Mutex::getGlobalMutex() );
-        if( ! pCollection )
-        {
-            static ::cppu::OTypeCollection collection(
-                cppu::UnoType<uno::XWeak>::get(),
-                cppu::UnoType<lang::XTypeProvider>::get() );
-            pCollection = &collection;
-        }
-    }
-    return (*pCollection).getTypes();
-}
-
-uno::Sequence< sal_Int8 > SAL_CALL EmbedServer_Impl::getImplementationId() throw(uno::RuntimeException)
-{
-    return css::uno::Sequence<sal_Int8>();
-}
-
 
 // EmbedProviderFactory_Impl
 

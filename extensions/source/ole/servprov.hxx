@@ -21,7 +21,8 @@
 #define INCLUDED_EXTENSIONS_SOURCE_OLE_SERVPROV_HXX
 
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <cppuhelper/implbase.hxx>
 
 #include "ole2uno.hxx"
 #include "unoconversionutilities.hxx"
@@ -164,7 +165,7 @@ protected:
 // latter for OleBridgeSupplierVar1.
 // The m_nComWrapperClass specifies the class which is used as wrapper for COM interfaces.
 // Currently there is only one class available ( IUnknownWrapper_Impl).
-class OleConverter_Impl2 : public WeakImplHelper2<XBridgeSupplier2, XInitialization>,
+class OleConverter_Impl2 : public WeakImplHelper<XBridgeSupplier2, XInitialization, css::lang::XServiceInfo>,
                             public UnoConversionUtilities<OleConverter_Impl2>
 {
 public:
@@ -183,6 +184,15 @@ public:
     // XInitialization
     virtual void SAL_CALL initialize( const Sequence< Any >& aArguments ) throw(Exception, RuntimeException);
 
+    OUString SAL_CALL getImplementationName()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
     // Abstract struct UnoConversionUtilities
     virtual Reference< XInterface > createUnoWrapperInstance();
     virtual Reference< XInterface > createComWrapperInstance();
@@ -200,7 +210,7 @@ protected:
 *****************************************************************************/
 
 
-class OleClient_Impl : public WeakImplHelper1<XMultiServiceFactory>,
+class OleClient_Impl : public WeakImplHelper<XMultiServiceFactory, css::lang::XServiceInfo>,
                        public UnoConversionUtilities<OleClient_Impl>
 {
 public:
@@ -212,12 +222,19 @@ public:
     virtual Reference<XInterface> SAL_CALL createInstanceWithArguments(const OUString& ServiceSpecifier, const Sequence< Any >& Arguments) throw (Exception, RuntimeException);
     Sequence< OUString >    SAL_CALL getAvailableServiceNames() throw (RuntimeException);
 
+    OUString SAL_CALL getImplementationName()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
     // Abstract struct UnoConversionUtilities
     virtual Reference< XInterface > createUnoWrapperInstance();
     virtual Reference< XInterface > createComWrapperInstance();
 
-
-    OUString getImplementationName();
 protected:
     Reference<XBridgeSupplier2> m_bridgeSupplier;
 };
@@ -233,20 +250,20 @@ protected:
 
 *****************************************************************************/
 
-class OleServer_Impl : public OWeakObject, XTypeProvider
+class OleServer_Impl : public cppu::WeakImplHelper<css::lang::XServiceInfo>
 {
 public:
     OleServer_Impl( const Reference<XMultiServiceFactory> &smgr);
     ~OleServer_Impl();
 
-    // XInterface
-    virtual Any SAL_CALL queryInterface( const Type& aType ) throw(RuntimeException);
-    virtual void SAL_CALL acquire(  ) throw ();
-    virtual void SAL_CALL release(  ) throw ();
+    OUString SAL_CALL getImplementationName()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    // XTypeProvider
-    virtual Sequence< Type > SAL_CALL getTypes( ) throw(RuntimeException);
-    virtual Sequence< sal_Int8 > SAL_CALL getImplementationId() throw(RuntimeException);
+    sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 protected:
 

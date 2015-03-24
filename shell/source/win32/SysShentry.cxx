@@ -34,7 +34,7 @@ using namespace ::cppu                      ;
 using com::sun::star::system::XSystemShellExecute;
 
 #define SYSSHEXEC_SERVICE_NAME  "com.sun.star.system.SystemShellExecute"
-#define SYSSHEXEC_IMPL_NAME     "com.sun.star.system.SystemShellExecute"
+#define SYSSHEXEC_IMPL_NAME     "com.sun.star.sys.shell.SystemShellExecute"
 
 
 
