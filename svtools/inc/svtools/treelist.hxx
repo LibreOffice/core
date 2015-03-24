@@ -411,14 +411,14 @@ inline sal_Bool SvListView::IsSelected( SvListEntry* pEntry ) const
     DBG_ASSERT(pEntry,"IsExpanded:No Entry");
     SvViewData* pData = (SvViewData*)aDataTable.Get( (sal_uLong)pEntry );
     DBG_ASSERT(pData,"Entry not in Table");
-    return pData->IsSelected();
+    return pData && pData->IsSelected();
 }
 inline sal_Bool SvListView::HasEntryFocus( SvListEntry* pEntry ) const
 {
     DBG_ASSERT(pEntry,"IsExpanded:No Entry");
     SvViewData* pData = (SvViewData*)aDataTable.Get( (sal_uLong)pEntry );
     DBG_ASSERT(pData,"Entry not in Table");
-    return pData->HasFocus();
+    return pData && pData->HasFocus();
 }
 inline void SvListView::SetEntryFocus( SvListEntry* pEntry, sal_Bool bFocus ) const
 {

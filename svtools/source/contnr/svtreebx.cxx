@@ -2757,29 +2757,29 @@ void SvTreeListBox::FillAccessibleEntryStateSet( SvLBoxEntry* pEntry, ::utl::Acc
 {
     DBG_ASSERT( pEntry, "SvTreeListBox::FillAccessibleEntryStateSet: invalid entry" );
 
-    if ( pEntry->HasChildsOnDemand() || pEntry->HasChilds() )
+    if ( pEntry )
     {
-        rStateSet.AddState( AccessibleStateType::EXPANDABLE );
-        if ( IsExpanded( pEntry ) )
-            rStateSet.AddState( (sal_Int16)AccessibleStateType::EXPANDED );
-    }
-
-    if ( GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED )
-        rStateSet.AddState( AccessibleStateType::CHECKED );
-    if ( IsEntryVisible( pEntry ) )
-        rStateSet.AddState( AccessibleStateType::VISIBLE );
-    if ( IsSelected( pEntry ) )
-        rStateSet.AddState( AccessibleStateType::SELECTED );
-    if ( IsEnabled() )
-    {
-        rStateSet.AddState( AccessibleStateType::ENABLED );
-        rStateSet.AddState( AccessibleStateType::FOCUSABLE );
-        rStateSet.AddState( AccessibleStateType::SELECTABLE );
-        SvViewDataEntry* pViewDataNewCur = 0;
-        if( pEntry )
+        if ( pEntry->HasChildsOnDemand() || pEntry->HasChilds() )
         {
-            pViewDataNewCur= GetViewDataEntry(pEntry);
-            if(pViewDataNewCur->HasFocus())
+            rStateSet.AddState( AccessibleStateType::EXPANDABLE );
+            if ( IsExpanded( pEntry ) )
+                rStateSet.AddState( (sal_Int16)AccessibleStateType::EXPANDED );
+        }
+
+        if ( GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED )
+            rStateSet.AddState( AccessibleStateType::CHECKED );
+        if ( IsEntryVisible( pEntry ) )
+            rStateSet.AddState( AccessibleStateType::VISIBLE );
+        if ( IsSelected( pEntry ) )
+            rStateSet.AddState( AccessibleStateType::SELECTED );
+        if ( IsEnabled() )
+        {
+            rStateSet.AddState( AccessibleStateType::ENABLED );
+            rStateSet.AddState( AccessibleStateType::FOCUSABLE );
+            rStateSet.AddState( AccessibleStateType::SELECTABLE );
+            SvViewDataEntry* pViewDataNewCur = 0;
+            pViewDataNewCur = GetViewDataEntry(pEntry);
+            if( pViewDataNewCur && pViewDataNewCur->HasFocus() )
                 rStateSet.AddState( AccessibleStateType::FOCUSED );
         }
     }
