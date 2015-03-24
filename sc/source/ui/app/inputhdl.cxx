@@ -1731,6 +1731,19 @@ void ScInputHandler::UpdateActiveView()
     else
         pTableView = NULL;
 
+    // setup the pTableView editeng for tiled rendering to get cursor and selections
+    if (pActiveViewSh && pTableView)
+    {
+        ScDocShell* pDocShell = pActiveViewSh->GetViewData().GetDocShell();
+        ScDocument& rDoc = pDocShell->GetDocument();
+        if (rDoc.GetDrawLayer()->isTiledRendering())
+        {
+            ScDrawLayer *pDrawLayer = pDocShell->GetDocument().GetDrawLayer();
+            pTableView->registerLibreOfficeKitCallback(pDrawLayer->getLibreOfficeKitCallback(), pDrawLayer->getLibreOfficeKitData());
+            pTableView->setTiledRendering(true);
+        }
+    }
+
     if (pInputWin && eMode == SC_INPUT_TOP )
         pTopView = pInputWin->GetEditView();
     else
