@@ -204,7 +204,7 @@ class SVGTextWriter
     bool                                        mbIsURLField;
     OUString                                    msUrl;
     OUString                                    msHyperlinkIdList;
-    bool                                        mbIsPlacehlolderShape;
+    bool                                        mbIsPlaceholderShape;
     bool                                        mbIWS;
     vcl::Font                                   maCurrentFont;
     vcl::Font                                   maParentFont;
@@ -266,7 +266,7 @@ class SVGTextWriter
 
     void setPlaceholderShapeFlag( bool bState )
     {
-        mbIsPlacehlolderShape = bState;
+        mbIsPlaceholderShape = bState;
     }
 
   private:
@@ -307,7 +307,7 @@ private:
     MapMode                                     maTargetMapMode;
     sal_uInt32                                  mnInnerMtfCount;
     bool                                    mbClipAttrChanged;
-    bool                                    mbIsPlacehlolderShape;
+    bool                                    mbIsPlaceholderShape;
 
 
     SVGAttributeWriter*     ImplAcquireContext()

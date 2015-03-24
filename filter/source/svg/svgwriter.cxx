@@ -434,7 +434,7 @@ SVGTextWriter::SVGTextWriter( SVGExport& rExport )
         mbLineBreak( false ),
         mbIsURLField( false ),
         msUrl(),
-        mbIsPlacehlolderShape( false ),
+        mbIsPlaceholderShape( false ),
         mbIWS( false ),
         maCurrentFont(),
         maParentFont()
@@ -1029,7 +1029,7 @@ bool SVGTextWriter::nextTextPortion()
 {
     mrCurrentTextPortion.clear();
     mbIsURLField = false;
-    mbIsPlacehlolderShape = false;
+    mbIsPlaceholderShape = false;
     if( mrTextPortionEnumeration.is() && mrTextPortionEnumeration->hasMoreElements() )
     {
 #if OSL_DEBUG_LEVEL > 0
@@ -1097,7 +1097,7 @@ bool SVGTextWriter::nextTextPortion()
                         if( sFieldName == "DateTime" || sFieldName == "Header"
                                 || sFieldName == "Footer" || sFieldName == "PageNumber" )
                         {
-                            mbIsPlacehlolderShape = true;
+                            mbIsPlaceholderShape = true;
                         }
                         else
                         {
@@ -1602,10 +1602,10 @@ void SVGTextWriter::implWriteTextPortion( const Point& rPos,
         mrExport.AddAttribute( XML_NAMESPACE_NONE, "id", rTextPortionId );
     }
 
-    if( mbIsPlacehlolderShape )
+    if( mbIsPlaceholderShape )
     {
         mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", "PlaceholderText" );
-        mbIsPlacehlolderShape = false;
+        mbIsPlaceholderShape = false;
     }
 
     addFontAttributes( /* isTexTContainer: */ false );
@@ -1616,7 +1616,7 @@ void SVGTextWriter::implWriteTextPortion( const Point& rPos,
     OUString sTextContent = rText;
 
     // <a> tag for link should be the innermost tag, inside <tspan>
-    if( !mbIsPlacehlolderShape && mbIsURLField && !msUrl.isEmpty() )
+    if( !mbIsPlaceholderShape && mbIsURLField && !msUrl.isEmpty() )
     {
         mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", "UrlField" );
         mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrXLinkHRef, msUrl );
@@ -1647,7 +1647,7 @@ SVGActionWriter::SVGActionWriter( SVGExport& rExport, SVGFontExport& rFontExport
     maTextWriter( rExport ),
     mnInnerMtfCount( 0 ),
     mbClipAttrChanged( false ),
-    mbIsPlacehlolderShape( false )
+    mbIsPlaceholderShape( false )
 {
     mpVDev = new VirtualDevice;
     mpVDev->EnableOutput( false );
@@ -2456,7 +2456,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const OUString& rText,
 
     bool bIsPlaceholderField = false;
 
-    if( mbIsPlacehlolderShape )
+    if( mbIsPlaceholderShape )
     {
         OUString sTextContent = rText;
         bIsPlaceholderField = sTextContent.match( sPlaceholderTag );
@@ -2657,10 +2657,10 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
         bIsTextShape = true;
     }
 #endif
-    mbIsPlacehlolderShape = false;
+    mbIsPlaceholderShape = false;
     if( ( pElementId != NULL ) && ( *pElementId == sPlaceholderTag ) )
     {
-        mbIsPlacehlolderShape = true;
+        mbIsPlaceholderShape = true;
         // since we utilize pElementId in an improper way we reset it to NULL before to go on
         pElementId = NULL;
     }
