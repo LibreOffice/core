@@ -3082,13 +3082,11 @@ void HwpReader::make_text_p3(HWPPara * para,bool bParaStart)
                     if( !pstart ) {STARTP;}
                     if( !tstart ) {STARTT;}
                     makeChars(str);
-                    makeTocMark(static_cast<TocMark *>(para->hhstr[n]));
                     break;
                 case CH_INDEX_MARK:               // 26
                     if( !pstart ) {STARTP;}
                     if( !tstart ) {STARTT;}
                     makeChars(str);
-                    makeIndexMark(static_cast<IndexMark *>(para->hhstr[n]));
                     break;
                 case CH_OUTLINE:                  // 28
                     if( !pstart ) {STARTP;}
@@ -4746,24 +4744,6 @@ void HwpReader::makeMailMerge(MailMerge * hbox)
 {
     hchar_string const boxstr = hbox->GetString();
     rchars((hconv(boxstr.c_str())));
-}
-
-
-/**
- * Make heading contents file using toc marks
- * not support operation.
- */
-void HwpReader::makeTocMark(TocMark *  )          /*hbox */
-{
-}
-
-
-/**
- * Make search character table in automatic
- * not support operation
- */
-void HwpReader::makeIndexMark(IndexMark *  )      /*hbox */
-{
 }
 
 

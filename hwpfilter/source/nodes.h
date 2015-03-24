@@ -84,8 +84,6 @@ public:
           printf("Node count : [%d]\n",count);
 #endif
      }
-     void print(){
-     }
 public:
      static int count; /* For memory debugging */
      int id;
