@@ -176,14 +176,10 @@ public:
     // broadcasting: send notifications to all clients
     // DO NOT USE IN NEW CODE! use CallSwClientNotify instead.
     void NotifyClients( const SfxPoolItem *pOldValue, const SfxPoolItem *pNewValue );
+    // the same, but without setting m_bModifyLocked or checking for any of the flags
     // DO NOT USE IN NEW CODE! use CallSwClientNotify instead.
     void ModifyBroadcast( const SfxPoolItem *pOldValue, const SfxPoolItem *pNewValue)
         { CallSwClientNotify( sw::LegacyModifyHint{ pOldValue, pNewValue } ); };
-    // the same, but without setting m_bModifyLocked or checking for any of the flags
-    // mba: it would be interesting to know why this is necessary
-    // also allows to limit callback to certain type (HACK)
-    // DO NOT USE IN NEW CODE! use CallSwClientNotify instead.
-    inline void ModifyBroadcast( const SfxPoolItem *pOldValue, const SfxPoolItem *pNewValue, TypeId nType );
 
     // a more universal broadcasting mechanism
     inline void CallSwClientNotify( const SfxHint& rHint ) const;
@@ -369,16 +365,6 @@ SwClient::SwClient( SwModify* pToRegisterIn )
 {
     if(pToRegisterIn)
         pToRegisterIn->Add(this);
-}
-
-void SwModify::ModifyBroadcast( const SfxPoolItem *pOldValue, const SfxPoolItem *pNewValue, TypeId nType)
-{
-    SwIterator<SwClient,SwModify> aIter(*this);
-    for(SwClient* pClient = aIter.First(); pClient; pClient = aIter.Next())
-    {
-        if(pClient->IsA(nType))
-            pClient->Modify( pOldValue, pNewValue );
-    }
 }
 
 void SwModify::CallSwClientNotify( const SfxHint& rHint ) const
