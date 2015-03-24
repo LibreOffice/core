@@ -146,6 +146,10 @@ void Test::test() {
             serviceName(theServiceName),
             defaultConstructor(theDefaultConstructor)
         {}
+        Constructor(Constructor const &other):
+            serviceName(other.serviceName),
+            defaultConstructor(other.defaultConstructor)
+        {}
         OUString const serviceName;
         bool const defaultConstructor;
     };
