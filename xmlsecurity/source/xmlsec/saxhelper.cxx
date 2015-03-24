@@ -373,14 +373,4 @@ void SAXHelper::processingInstruction(
     }
 }
 
-/**
- * XDocumentHandler -- set document locator
- * In this case, locator is useless.
- */
-void SAXHelper::setDocumentLocator(
-    const cssu::Reference< cssxs::XLocator > &)
-    throw( cssxs::SAXException , cssu::RuntimeException )
-{
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
