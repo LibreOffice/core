@@ -112,7 +112,7 @@ public:
      *
      * @see lok::Document::setTextSelection().
      */
-    virtual void setTextSelection(int /*nType*/, int /*nX*/, int /*nY*/) { }
+    virtual void setTextSelection(int nType, int nX, int nY) = 0;
 
     /**
      * Adjusts the graphic selection.
