@@ -159,10 +159,6 @@ namespace rptui
 
         void resize(const OSectionWindow& _rSectionWindow);
 
-        /** late ctor
-        */
-        void initialize();
-
         inline OReportWindow*       getView()           const { return m_pParent; }
 
         /** removes the section at the given position.

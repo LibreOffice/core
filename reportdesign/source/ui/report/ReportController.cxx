@@ -1608,17 +1608,7 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
         case SID_EDITDOC:
             if(isEditable())
             { // the state should be changed to not editable
-                switch (saveModified())
-                {
-                    case RET_CANCEL:
-                        // don't change anything here so return
-                        return;
-                    case RET_NO:
-                        setModified(sal_False);     // and we are not modified yet
-                        break;
-                    default:
-                        break;
-                }
+                setModified(sal_False);     // and we are not modified yet
             }
             setEditable(!isEditable());
             InvalidateAll();
@@ -1654,12 +1644,6 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
     }
     InvalidateFeature(_nId,Reference< XStatusListener >(),bForceBroadcast);
 }
-
-short OReportController::saveModified()
-{
-    return RET_NO;
-}
-
 
 void OReportController::impl_initialize( )
 {

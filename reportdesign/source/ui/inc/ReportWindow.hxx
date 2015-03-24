@@ -68,9 +68,6 @@ namespace rptui
         OReportWindow(OScrollWindowHelper* _pParent,ODesignView* _pView);
         virtual ~OReportWindow();
 
-        /** late ctor
-        */
-        void initialize();
         // Window overrides
         virtual void Resize() SAL_OVERRIDE;
 

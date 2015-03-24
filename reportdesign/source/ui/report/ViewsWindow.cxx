@@ -189,10 +189,6 @@ OViewsWindow::~OViewsWindow()
     m_aSections.clear();
 }
 
-void OViewsWindow::initialize()
-{
-}
-
 void OViewsWindow::impl_resizeSectionWindow(OSectionWindow& _rSectionWindow,Point& _rStartPoint,bool _bSet)
 {
     const uno::Reference< report::XSection> xSection = _rSectionWindow.getReportSection().getSection();

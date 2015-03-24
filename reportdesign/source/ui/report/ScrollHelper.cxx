@@ -91,8 +91,6 @@ void OScrollWindowHelper::initialize()
 {
     uno::Reference<report::XReportDefinition> xReportDefinition = m_pParent->getController().getReportDefinition();
     m_pReportDefintionMultiPlexer = addStyleListener(xReportDefinition,this);
-
-    m_aReportWindow.initialize();
 }
 
 void OScrollWindowHelper::setTotalSize(sal_Int32 _nWidth ,sal_Int32 _nHeight)
