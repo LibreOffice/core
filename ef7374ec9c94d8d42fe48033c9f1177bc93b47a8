@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a29b11f_9ba0ac92",
+        "filename": "sc/source/ui/docshell/docsh4.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1902,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-03-24T12:37:54Z",
+      "side": 1,
+      "message": "These don\u0027t need to be static, just const. Static is used when a variable keeps it\u0027s value even when the scope is left but can be changed; using only const tells the compiler it can optimize the variable away and just insert the value where used.\n\nI\u0027ll change this in an amended commit.",
+      "revId": "ef7374ec9c94d8d42fe48033c9f1177bc93b47a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
