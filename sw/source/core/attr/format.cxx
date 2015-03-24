@@ -238,11 +238,11 @@ SwFmt::~SwFmt()
         }
         else
         {
+            SwFmtChg aOldFmt( this );
+            SwFmtChg aNewFmt( pParentFmt );
             SwIterator<SwClient,SwFmt> aIter(*this);
             for(SwClient* pClient = aIter.First(); pClient && pParentFmt; pClient = aIter.Next())
             {
-                SwFmtChg aOldFmt( this );
-                SwFmtChg aNewFmt( pParentFmt );
                 pParentFmt->Add( pClient );
                 pClient->ModifyNotification( &aOldFmt, &aNewFmt );
             }
