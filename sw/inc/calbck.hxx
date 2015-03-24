@@ -156,12 +156,12 @@ class SW_DLLPUBLIC SwModify: public SwClient
 {
     friend class sw::ClientIteratorBase;
     template<typename E, typename S> friend class SwIterator;
-    sw::WriterListener* pRoot;                // the start of the linked list of clients
-    bool bModifyLocked : 1;         // don't broadcast changes now
+    sw::WriterListener* m_pWriterListeners;                // the start of the linked list of clients
+    bool m_bModifyLocked : 1;         // don't broadcast changes now
     bool bLockClientList : 1;       // may be set when this instance notifies its clients
-    bool bInDocDTOR : 1;            // workaround for problems when a lot of objects are destroyed
-    bool bInCache   : 1;
-    bool bInSwFntCache : 1;
+    bool m_bInDocDTOR : 1;            // workaround for problems when a lot of objects are destroyed
+    bool m_bInCache   : 1;
+    bool m_bInSwFntCache : 1;
 
     // mba: IMHO this method should be pure virtual
     // DO NOT USE IN NEW CODE! use CallSwClientNotify instead.
@@ -170,10 +170,10 @@ class SW_DLLPUBLIC SwModify: public SwClient
 
 public:
     SwModify()
-        : SwClient(nullptr), pRoot(nullptr), bModifyLocked(false), bLockClientList(false), bInDocDTOR(false), bInCache(false), bInSwFntCache(false)
+        : SwClient(nullptr), m_pWriterListeners(nullptr), m_bModifyLocked(false), bLockClientList(false), m_bInDocDTOR(false), m_bInCache(false), m_bInSwFntCache(false)
     {}
     explicit SwModify( SwModify* pToRegisterIn )
-        : SwClient(pToRegisterIn), pRoot(nullptr), bModifyLocked(false), bLockClientList(false), bInDocDTOR(false), bInCache(false), bInSwFntCache(false)
+        : SwClient(pToRegisterIn), m_pWriterListeners(nullptr), m_bModifyLocked(false), bLockClientList(false), m_bInDocDTOR(false), m_bInCache(false), m_bInSwFntCache(false)
     {}
 
     // broadcasting: send notifications to all clients
@@ -182,7 +182,7 @@ public:
     // DO NOT USE IN NEW CODE! use CallSwClientNotify instead.
     void ModifyBroadcast( const SfxPoolItem *pOldValue, const SfxPoolItem *pNewValue)
         { CallSwClientNotify( sw::LegacyModifyHint{ pOldValue, pNewValue } ); };
-    // the same, but without setting bModifyLocked or checking for any of the flags
+    // the same, but without setting m_bModifyLocked or checking for any of the flags
     // mba: it would be interesting to know why this is necessary
     // also allows to limit callback to certain type (HACK)
     // DO NOT USE IN NEW CODE! use CallSwClientNotify instead.
@@ -195,23 +195,23 @@ public:
 
     void Add(SwClient *pDepend);
     SwClient* Remove(SwClient *pDepend);
-    bool HasWriterListeners() const  { return pRoot; }
+    bool HasWriterListeners() const { return m_pWriterListeners; }
 
     // get information about attribute
     virtual bool GetInfo( SfxPoolItem& ) const SAL_OVERRIDE;
 
-    void LockModify()                   { bModifyLocked = true;  }
-    void UnlockModify()                 { bModifyLocked = false; }
-    void SetInCache( bool bNew )        { bInCache = bNew;       }
-    void SetInSwFntCache( bool bNew )   { bInSwFntCache = bNew;  }
-    void SetInDocDTOR()                 { bInDocDTOR = true; }
-    bool IsModifyLocked() const     { return bModifyLocked;  }
-    bool IsInDocDTOR()    const     { return bInDocDTOR;     }
-    bool IsInCache()      const     { return bInCache;       }
-    bool IsInSwFntCache() const     { return bInSwFntCache;  }
+    void LockModify()                   { m_bModifyLocked = true;  }
+    void UnlockModify()                 { m_bModifyLocked = false; }
+    void SetInCache( bool bNew )        { m_bInCache = bNew;       }
+    void SetInSwFntCache( bool bNew )   { m_bInSwFntCache = bNew;  }
+    void SetInDocDTOR()                 { m_bInDocDTOR = true; }
+    bool IsModifyLocked() const     { return m_bModifyLocked;  }
+    bool IsInDocDTOR()    const     { return m_bInDocDTOR;     }
+    bool IsInCache()      const     { return m_bInCache;       }
+    bool IsInSwFntCache() const     { return m_bInSwFntCache;  }
 
     void CheckCaching( const sal_uInt16 nWhich );
-    bool IsLastDepend() { return pRoot && pRoot->IsLast(); }
+    bool IsLastDepend() { return m_pWriterListeners && m_pWriterListeners->IsLast(); }
 };
 
 // SwDepend
@@ -265,13 +265,13 @@ namespace sw
             {
                 MoveTo(our_pClientIters);
                 our_pClientIters = this;
-                m_pCurrent = m_pPosition = const_cast<WriterListener*>(m_rRoot.pRoot);
+                m_pCurrent = m_pPosition = const_cast<WriterListener*>(m_rRoot.m_pWriterListeners);
             }
             WriterListener* GetLeftOfPos() { return m_pPosition->m_pLeft; }
             WriterListener* GetRightOfPos() { return m_pPosition->m_pRight; }
             WriterListener* GoStart()
             {
-                if((m_pPosition = const_cast<WriterListener*>(m_rRoot.pRoot)))
+                if((m_pPosition = const_cast<WriterListener*>(m_rRoot.m_pWriterListeners)))
                     while( m_pPosition->m_pLeft )
                         m_pPosition = m_pPosition->m_pLeft;
                 return m_pCurrent = m_pPosition;
@@ -309,7 +309,7 @@ public:
     TElementType* Last()
     {
         if(!m_pPosition)
-            m_pPosition = const_cast<sw::WriterListener*>(m_rRoot.pRoot);
+            m_pPosition = const_cast<sw::WriterListener*>(m_rRoot.m_pWriterListeners);
         if(!m_pPosition)
             return static_cast<TElementType*>(Sync());
         while(GetRightOfPos())
@@ -346,7 +346,7 @@ public:
     SwClient* Last()
     {
         if(!m_pPosition)
-            m_pPosition = const_cast<sw::WriterListener*>(m_rRoot.pRoot);
+            m_pPosition = const_cast<sw::WriterListener*>(m_rRoot.m_pWriterListeners);
         if(!m_pPosition)
             return m_pCurrent = nullptr;
         while(GetRightOfPos())

@@ -66,7 +66,7 @@ SwModify::~SwModify()
     if ( IsInSwFntCache() )
         pSwFontCache->Delete( this );
 
-    if( pRoot )
+    if( m_pWriterListeners )
     {
         // there are depending objects
         if( IsInDocDTOR() )
@@ -86,8 +86,8 @@ SwModify::~SwModify()
 
             // remove all clients that have not done themselves
             // mba: possibly a hotfix for forgotten base class calls?!
-            while( pRoot )
-                static_cast<SwClient*>(pRoot)->CheckRegistration( &aDyObject, &aDyObject );
+            while( m_pWriterListeners )
+                static_cast<SwClient*>(m_pWriterListeners)->CheckRegistration( &aDyObject, &aDyObject );
         }
     }
 }
@@ -101,7 +101,7 @@ void SwModify::NotifyClients( const SfxPoolItem* pOldValue, const SfxPoolItem* p
         CheckCaching( nWhich );
     }
 
-    if ( !pRoot || IsModifyLocked() )
+    if ( !m_pWriterListeners || IsModifyLocked() )
         return;
 
     LockModify();
@@ -132,7 +132,7 @@ void SwModify::NotifyClients( const SfxPoolItem* pOldValue, const SfxPoolItem* p
 
 bool SwModify::GetInfo( SfxPoolItem& rInfo ) const
 {
-    if(!pRoot)
+    if(!m_pWriterListeners)
         return true;
     SwIterator<SwClient,SwModify> aIter(*this);
     for(SwClient* pClient = aIter.First(); pClient; pClient = aIter.Next())
@@ -152,7 +152,7 @@ void SwModify::Add( SwClient* pDepend )
         {
             for(auto& rIter : sw::ClientIteratorBase::our_pClientIters->GetRingContainer())
             {
-                OSL_ENSURE( &rIter.m_rRoot != pRoot, "Client added to active ClientIter" );
+                OSL_ENSURE( &rIter.m_rRoot != m_pWriterListeners, "Client added to active ClientIter" );
             }
         }
 #endif
@@ -160,19 +160,19 @@ void SwModify::Add( SwClient* pDepend )
         if( pDepend->pRegisteredIn != nullptr )
             pDepend->pRegisteredIn->Remove( pDepend );
 
-        if( !pRoot )
+        if( !m_pWriterListeners )
         {
             // first client added
-            pRoot = pDepend;
-            pRoot->m_pLeft = nullptr;
-            pRoot->m_pRight = nullptr;
+            m_pWriterListeners = pDepend;
+            m_pWriterListeners->m_pLeft = nullptr;
+            m_pWriterListeners->m_pRight = nullptr;
         }
         else
         {
             // append client
-            pDepend->m_pRight = pRoot->m_pRight;
-            pRoot->m_pRight = pDepend;
-            pDepend->m_pLeft = pRoot;
+            pDepend->m_pRight = m_pWriterListeners->m_pRight;
+            m_pWriterListeners->m_pRight = pDepend;
+            pDepend->m_pLeft = m_pWriterListeners;
             if( pDepend->m_pRight )
                 pDepend->m_pRight->m_pLeft = pDepend;
         }
@@ -184,7 +184,7 @@ void SwModify::Add( SwClient* pDepend )
 
 SwClient* SwModify::Remove( SwClient* pDepend )
 {
-    if ( bInDocDTOR )
+    if ( m_bInDocDTOR )
         return nullptr;
 
     if( pDepend->pRegisteredIn == this )
@@ -193,8 +193,8 @@ SwClient* SwModify::Remove( SwClient* pDepend )
         // remove it from my list
         ::sw::WriterListener* pR = pDepend->m_pRight;
         ::sw::WriterListener* pL = pDepend->m_pLeft;
-        if( pRoot == pDepend )
-            pRoot = pL ? pL : pR;
+        if( m_pWriterListeners == pDepend )
+            m_pWriterListeners = pL ? pL : pR;
 
         if( pL )
             pL->m_pRight = pR;
