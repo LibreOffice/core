@@ -245,10 +245,6 @@ void XSheetOutline::testUngroup()
 
 }
 
-void XSheetOutline::testAutoOutline()
-{
-}
-
 void XSheetOutline::testClearOutline()
 {
     uno::Reference< sheet::XSpreadsheet > aSheet(init(), UNO_QUERY_THROW);
