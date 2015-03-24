@@ -317,7 +317,7 @@ SwGrfNode::~SwGrfNode()
         // inside one document has to be implemented.
     }
     //#39289# delete frames already here since the Frms' dtor needs the graphic for its StopAnimation
-    if( GetDepends() )
+    if( HasWriterListeners() )
         DelFrms();
 }
 

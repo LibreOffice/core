@@ -223,7 +223,7 @@ SwFmt::~SwFmt()
 {
     // This happens at a ObjectDying message. Thus put all dependent
     // ones on DerivedFrom.
-    if( GetDepends() )
+    if( HasWriterListeners() )
     {
         OSL_ENSURE( DerivedFrom(), "SwFmt::~SwFmt: Def dependents!" );
 
@@ -532,7 +532,7 @@ bool SwFmt::SetFmtAttr( const SfxPoolItem& rAttr )
     // but call Modify always for FrmFmts
     const sal_uInt16 nFmtWhich = Which();
     if( IsModifyLocked() ||
-        ( !GetDepends() &&
+        ( !HasWriterListeners() &&
           (RES_GRFFMTCOLL == nFmtWhich  ||
            RES_TXTFMTCOLL == nFmtWhich ) ) )
     {
@@ -637,7 +637,7 @@ bool SwFmt::SetFmtAttr( const SfxItemSet& rSet )
     // but call Modify always for FrmFmts
     const sal_uInt16 nFmtWhich = Which();
     if ( IsModifyLocked() ||
-         ( !GetDepends() &&
+         ( !HasWriterListeners() &&
            ( RES_GRFFMTCOLL == nFmtWhich ||
              RES_TXTFMTCOLL == nFmtWhich ) ) )
     {

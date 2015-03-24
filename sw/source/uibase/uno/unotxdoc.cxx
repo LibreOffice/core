@@ -4078,11 +4078,11 @@ SwViewOptionAdjust_Impl::AdjustViewOptions(SwPrintData const*const pPrtOptions)
     // below should only change if necessary, that is if respective content is present
     const bool bContainsHiddenChars         = m_pShell->GetDoc()->ContainsHiddenChars();
     const SwFieldType* pFldType = m_pShell->GetDoc()->getIDocumentFieldsAccess().GetSysFldType( RES_HIDDENTXTFLD );
-    const bool bContainsHiddenFields        = pFldType && pFldType->GetDepends();
+    const bool bContainsHiddenFields        = pFldType && pFldType->HasWriterListeners();
     pFldType = m_pShell->GetDoc()->getIDocumentFieldsAccess().GetSysFldType( RES_HIDDENPARAFLD );
-    const bool bContainsHiddenParagraphs    = pFldType && pFldType->GetDepends();
+    const bool bContainsHiddenParagraphs    = pFldType && pFldType->HasWriterListeners();
     pFldType = m_pShell->GetDoc()->getIDocumentFieldsAccess().GetSysFldType( RES_JUMPEDITFLD );
-    const bool bContainsPlaceHolders        = pFldType && pFldType->GetDepends();
+    const bool bContainsPlaceHolders        = pFldType && pFldType->HasWriterListeners();
     const bool bContainsFields              = m_pShell->IsAnyFieldInDoc();
 
     SwViewOption aRenderViewOptions( m_aOldViewOptions );

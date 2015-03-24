@@ -261,7 +261,7 @@ void SwNumRulesWithName::_SwNumFmtGlobal::ChgNumFmt( SwWrtShell& rSh,
             else
                 pFmt = rSh.GetCharFmtFromPool( nCharPoolId );
 
-            if( !pFmt->GetDepends() )       // set attributes
+            if( !pFmt->HasWriterListeners() )       // set attributes
                 for( sal_uInt16 n = aItems.size(); n; )
                     pFmt->SetFmtAttr( aItems[ --n ] );
         }

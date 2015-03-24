@@ -3523,7 +3523,7 @@ SwRowFrm::~SwRowFrm()
     if( pMod )
     {
         pMod->Remove( this );           // remove,
-        if( !pMod->GetDepends() )
+        if( !pMod->HasWriterListeners() )
             delete pMod;                // and delete
     }
 }
@@ -4422,7 +4422,7 @@ SwCellFrm::~SwCellFrm()
         }
 
         pMod->Remove( this );           // remove,
-        if( !pMod->GetDepends() )
+        if( !pMod->HasWriterListeners() )
             delete pMod;                // and delete
     }
 }

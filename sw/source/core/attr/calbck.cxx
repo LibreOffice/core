@@ -28,8 +28,8 @@ TYPEINIT0( SwClient );
 
 SwClient::~SwClient()
 {
-    OSL_ENSURE( !pRegisteredIn || pRegisteredIn->GetDepends(), "SwModify still known, but Client already disconnected!" );
-    if( pRegisteredIn && pRegisteredIn->GetDepends() )
+    OSL_ENSURE( !pRegisteredIn || pRegisteredIn->HasWriterListeners(), "SwModify still known, but Client already disconnected!" );
+    if( pRegisteredIn && pRegisteredIn->HasWriterListeners() )
         pRegisteredIn->Remove( this );
 }
 

@@ -96,7 +96,7 @@ public:
     OSL_ENSURE( rFldType.GetDoc(), "no pDoc" );
 
     // no dependencies left?
-    if( rFldType.GetDepends() && !rFldType.IsModifyLocked() && !ChkNoDataFlag() )
+    if( rFldType.HasWriterListeners() && !rFldType.IsModifyLocked() && !ChkNoDataFlag() )
     {
         SwViewShell* pSh = rFldType.GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
         SwEditShell* pESh = rFldType.GetDoc()->GetEditShell();

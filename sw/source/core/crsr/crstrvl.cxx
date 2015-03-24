@@ -651,7 +651,7 @@ bool SwCrsrShell::MoveFldType(
 
     if ( pFldType )
     {
-        if( RES_INPUTFLD != pFldType->Which() && !pFldType->GetDepends() )
+        if( RES_INPUTFLD != pFldType->Which() && !pFldType->HasWriterListeners() )
         {
             return false;
         }

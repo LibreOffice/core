@@ -525,7 +525,7 @@ void SwSetExpFieldType::SetSeqFormat(sal_uLong nFmt)
 
 sal_uLong SwSetExpFieldType::GetSeqFormat()
 {
-    if( !GetDepends() )
+    if( !HasWriterListeners() )
         return SVX_NUM_ARABIC;
 
     const SwField *pFld = SwIterator<SwFmtFld,SwSetExpFieldType>(*this).First()->GetField();
@@ -534,7 +534,7 @@ sal_uLong SwSetExpFieldType::GetSeqFormat()
 
 sal_uInt16 SwSetExpFieldType::SetSeqRefNo( SwSetExpField& rFld )
 {
-    if( !GetDepends() || !(nsSwGetSetExpType::GSE_SEQ & nType) )
+    if( !HasWriterListeners() || !(nsSwGetSetExpType::GSE_SEQ & nType) )
         return USHRT_MAX;
 
     std::vector<sal_uInt16> aArr;

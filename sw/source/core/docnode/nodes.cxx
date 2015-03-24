@@ -365,7 +365,7 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, sal_uLong nSz,
             OSL_ENSURE( false, "here, something wrong happened" );
             aFrmNdIdx = rNds.GetEndOfContent();
             pFrmNd = rNds.GoPrevSection( &aFrmNdIdx, true, false );
-            if( pFrmNd && !static_cast<SwCntntNode*>(pFrmNd)->GetDepends() )
+            if( pFrmNd && !static_cast<SwCntntNode*>(pFrmNd)->HasWriterListeners() )
                 pFrmNd = 0;
             OSL_ENSURE( pFrmNd, "ChgNode() - no FrameNode found" );
         }

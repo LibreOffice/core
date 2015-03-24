@@ -78,7 +78,7 @@ OUString SwTblField::GetFieldName() const
 /// search TextNode containing this field
 const SwNode* SwTblField::GetNodeOfFormula() const
 {
-    if( !GetTyp()->GetDepends() )
+    if( !GetTyp()->HasWriterListeners() )
         return 0;
 
     SwIterator<SwFmtFld,SwFieldType> aIter( *GetTyp() );

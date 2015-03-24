@@ -643,7 +643,7 @@ bool SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
     mpDoc->SetCopyIsMove( bCopyIsMove );
 
     // have new table formules been inserted?
-    if( pTblFldTyp->GetDepends() )
+    if( pTblFldTyp->HasWriterListeners() )
     {
         // finish old actions: the table frames are created and
         // a selection can be made
@@ -1104,7 +1104,7 @@ bool SwFEShell::Paste( SwDoc* pClpDoc, bool bIncludingPageFrames )
     GetDoc()->GetIDocumentUndoRedo().EndUndo( UNDO_INSGLOSSARY, NULL );
 
     // have new table formulas been inserted?
-    if( pTblFldTyp->GetDepends() )
+    if( pTblFldTyp->HasWriterListeners() )
     {
         // finish old action: table-frames have been created
         // a selection can be made now

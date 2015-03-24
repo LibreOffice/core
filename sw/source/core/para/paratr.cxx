@@ -92,7 +92,7 @@ void SwFmtDrop::Modify( const SfxPoolItem*, const SfxPoolItem * )
     {
         if( !pDefinedIn->ISA( SwFmt ))
             pDefinedIn->ModifyNotification( this, this );
-        else if( pDefinedIn->GetDepends() &&
+        else if( pDefinedIn->HasWriterListeners() &&
                 !pDefinedIn->IsModifyLocked() )
         {
             // Notify those who are dependent on the format on our own.

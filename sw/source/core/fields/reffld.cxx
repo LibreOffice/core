@@ -837,7 +837,7 @@ SwTxtNode* SwGetRefFieldType::FindAnchor( SwDoc* pDoc, const OUString& rRefMark,
     case REF_SEQUENCEFLD:
         {
             SwFieldType* pFldType = pDoc->getIDocumentFieldsAccess().GetFldType( RES_SETEXPFLD, rRefMark, false );
-            if( pFldType && pFldType->GetDepends() &&
+            if( pFldType && pFldType->HasWriterListeners() &&
                 nsSwGetSetExpType::GSE_SEQ & static_cast<SwSetExpFieldType*>(pFldType)->GetType() )
             {
                 SwIterator<SwFmtFld,SwFieldType> aIter( *pFldType );
@@ -1092,7 +1092,7 @@ void SwGetRefFieldType::MergeWithOtherDoc( SwDoc& rDestDoc )
         {
             // when copying _to_ clipboard, expectation is that no fields exist
             // so no re-mapping is required to avoid collisions
-            assert(!rDestDoc.getIDocumentFieldsAccess().GetSysFldType(RES_GETREFFLD)->GetDepends());
+            assert(!rDestDoc.getIDocumentFieldsAccess().GetSysFldType(RES_GETREFFLD)->HasWriterListeners());
             return; // don't modify the fields in the source doc
         }
 

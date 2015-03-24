@@ -266,7 +266,7 @@ SwTxtNode::~SwTxtNode()
 
     InitSwParaStatistics( false );
 
-    if (GetDepends())
+    if (HasWriterListeners())
     {
         DelFrms_TxtNodePart();
     }
@@ -400,7 +400,7 @@ SwCntntNode *SwTxtNode::SplitCntntNode( const SwPosition &rPos )
         ResetAttr( RES_PARATR_LIST_LEVEL );
     }
 
-    if ( GetDepends() && !m_Text.isEmpty() && (nTxtLen / 2) < nSplitPos )
+    if ( HasWriterListeners() && !m_Text.isEmpty() && (nTxtLen / 2) < nSplitPos )
     {
         // optimization for SplitNode: If a split is at the end of a node then
         // move the frames from the current to the new one and create new ones
@@ -578,7 +578,7 @@ SwCntntNode *SwTxtNode::SplitCntntNode( const SwPosition &rPos )
             SetSmartTags( pList2, false );
         }
 
-        if ( GetDepends() )
+        if ( HasWriterListeners() )
         {
             MakeFrms( *pNode );     // neue Frames anlegen.
         }
@@ -591,7 +591,7 @@ SwCntntNode *SwTxtNode::SplitCntntNode( const SwPosition &rPos )
         //zu weiteren Folgefehlern, die mit Laufzeitkosten geloest werden
         //muesten. #56977# #55001# #56135#
         const SfxPoolItem *pItem;
-        if( GetDepends() && SfxItemState::SET == pNode->GetSwAttrSet().
+        if( HasWriterListeners() && SfxItemState::SET == pNode->GetSwAttrSet().
             GetItemState( RES_PAGEDESC, true, &pItem ) )
         {
             pNode->ModifyNotification( (SfxPoolItem*)pItem, (SfxPoolItem*)pItem );
@@ -2009,7 +2009,7 @@ OUString SwTxtNode::InsertText( const OUString & rStr, const SwIndex & rIdx,
         TryDeleteSwpHints();
     }
 
-    if ( GetDepends() )
+    if ( HasWriterListeners() )
     {
         SwInsTxt aHint( aPos, nLen );
         NotifyClients( 0, &aHint );
@@ -2779,7 +2779,7 @@ SwCntntNode* SwTxtNode::AppendNode( const SwPosition & rPos )
         AddToList();
     }
 
-    if( GetDepends() )
+    if( HasWriterListeners() )
         MakeFrms( *pNew );
     return pNew;
 }

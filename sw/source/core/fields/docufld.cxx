@@ -2057,7 +2057,7 @@ SwFieldType* SwRefPageGetFieldType::Copy() const
 void SwRefPageGetFieldType::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
     // update all GetReference fields
-    if( !pNew && !pOld && GetDepends() )
+    if( !pNew && !pOld && HasWriterListeners() )
     {
         // first collect all SetPageRefFields
         _SetGetExpFlds aTmpLst;

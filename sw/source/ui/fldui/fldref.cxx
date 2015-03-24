@@ -192,7 +192,7 @@ void SwFldRefPage::Reset(const SfxItemSet* )
     {
         SwSetExpFieldType* pType = static_cast<SwSetExpFieldType*>(pSh->GetFldType(n, RES_SETEXPFLD));
 
-        if ((nsSwGetSetExpType::GSE_SEQ & pType->GetType()) && pType->GetDepends() && pSh->IsUsed(*pType))
+        if ((nsSwGetSetExpType::GSE_SEQ & pType->GetType()) && pType->HasWriterListeners() && pSh->IsUsed(*pType))
         {
             nPos = m_pTypeLB->InsertEntry(pType->GetName());
             m_pTypeLB->SetEntryData(nPos, reinterpret_cast<void*>((sal_uIntPtr)(REFFLDFLAG | n)));

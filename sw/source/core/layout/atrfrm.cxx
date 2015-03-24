@@ -145,7 +145,7 @@ void DelHFFormat( SwClient *pToRemove, SwFrmFmt *pFmt )
                 while ( aIdx < nEnd )
                 {
                     if ( pNode->IsCntntNode() &&
-                         static_cast<SwCntntNode*>(pNode)->GetDepends() )
+                         static_cast<SwCntntNode*>(pNode)->HasWriterListeners() )
                     {
                         SwCrsrShell *pShell = SwIterator<SwCrsrShell,SwCntntNode>( *static_cast<SwCntntNode*>(pNode) ).First();
                         if( pShell )

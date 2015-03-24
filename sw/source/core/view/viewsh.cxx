@@ -2019,7 +2019,7 @@ void SwViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
     {
         SwHiddenParaFieldType* pFldType = static_cast<SwHiddenParaFieldType*>(GetDoc()->
                                           getIDocumentFieldsAccess().GetSysFldType(RES_HIDDENPARAFLD));
-        if( pFldType && pFldType->GetDepends() )
+        if( pFldType && pFldType->HasWriterListeners() )
         {
             SwMsgPoolItem aHnt( RES_HIDDENPARA_PRINT );
             pFldType->ModifyNotification( &aHnt, 0);

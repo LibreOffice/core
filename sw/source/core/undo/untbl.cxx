@@ -1126,7 +1126,7 @@ void _SaveTable::NewFrmFmt( const SwTableLine* pTblLn, const SwTableBox* pTblBx,
             pFmt->ModifyNotification( (SfxPoolItem*)&rOld, (SfxPoolItem*)&rNew );
     }
 
-    if( !pOldFmt->GetDepends() )
+    if( !pOldFmt->HasWriterListeners() )
         delete pOldFmt;
 }
 
@@ -1345,7 +1345,7 @@ void _SaveBox::CreateNew( SwTable& rTbl, SwTableLine& rParent, _SaveTable& rSTbl
         {
             SwFrmFmt* pOld = pBox->GetFrmFmt();
             pBox->RegisterToFormat( *pFmt );
-            if( !pOld->GetDepends() )
+            if( !pOld->HasWriterListeners() )
                 delete pOld;
 
             pBox->setRowSpan( nRowSpan );

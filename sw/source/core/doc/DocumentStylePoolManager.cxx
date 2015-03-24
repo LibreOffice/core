@@ -2104,7 +2104,7 @@ bool DocumentStylePoolManager::IsPoolTxtCollUsed( sal_uInt16 nId ) const
             bFnd = true;
     }
 
-    if( !bFnd || !pNewColl->GetDepends() )
+    if( !bFnd || !pNewColl->HasWriterListeners() )
         return false;
 
     SwAutoFmtGetDocNode aGetHt( &m_rDoc.GetNodes() );
@@ -2148,7 +2148,7 @@ bool DocumentStylePoolManager::IsPoolFmtUsed( sal_uInt16 nId ) const
     }
 
     // Not found or no dependencies?
-    if( bFnd && pNewFmt->GetDepends() )
+    if( bFnd && pNewFmt->HasWriterListeners() )
     {
         // Check if we have dependent ContentNodes in the Nodes array
         // (also indirect ones for derived Formats)
@@ -2176,7 +2176,7 @@ bool DocumentStylePoolManager::IsPoolPageDescUsed( sal_uInt16 nId ) const
     }
 
     // Not found or no dependencies?
-    if( !bFnd || !pNewPgDsc->GetDepends() )     // ??????
+    if( !bFnd || !pNewPgDsc->HasWriterListeners() )     // ??????
         return false;
 
     // Check if we have dependent ContentNodes in the Nodes array

@@ -760,7 +760,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
                               const bool        _bNewTOX )
 {
     const SwSectionNode* pSectNd;
-    if( !SwTOXBase::GetRegisteredIn()->GetDepends() ||
+    if( !SwTOXBase::GetRegisteredIn()->HasWriterListeners() ||
         !GetFmt() || 0 == (pSectNd = GetFmt()->GetSectionNode() ) ||
         !pSectNd->GetNodes().IsDocNodes() ||
         IsHiddenFlag() )
@@ -1141,7 +1141,7 @@ void SwTOXBaseSection::UpdateMarks( const SwTOXInternational& rIntl,
                                     const SwTxtNode* pOwnChapterNode )
 {
     const SwTOXType* pType = static_cast<SwTOXType*>( SwTOXBase::GetRegisteredIn() );
-    if( !pType->GetDepends() )
+    if( !pType->HasWriterListeners() )
         return;
 
     SwDoc* pDoc = (SwDoc*)GetFmt()->GetDoc();
@@ -1163,7 +1163,7 @@ void SwTOXBaseSection::UpdateMarks( const SwTOXInternational& rIntl,
 
             // If selected use marks from the same chapter only
             if( pTOXSrc->GetNodes().IsDocNodes() &&
-                pTOXSrc->GetTxt().getLength() && pTOXSrc->GetDepends() &&
+                pTOXSrc->GetTxt().getLength() && pTOXSrc->HasWriterListeners() &&
                 pTOXSrc->getLayoutFrm( pDoc->getIDocumentLayoutAccess().GetCurrentLayout() ) &&
                (!IsFromChapter() || ::lcl_FindChapterNode( *pTOXSrc, 0 ) == pOwnChapterNode ) &&
                !pTOXSrc->HasHiddenParaField() &&
@@ -1220,7 +1220,7 @@ void SwTOXBaseSection::UpdateOutline( const SwTxtNode* pOwnChapterNode )
     {
         ::SetProgressState( 0, pDoc->GetDocShell() );
         SwTxtNode* pTxtNd = rOutlNds[ n ]->GetTxtNode();
-        if( pTxtNd && pTxtNd->Len() && pTxtNd->GetDepends() &&
+        if( pTxtNd && pTxtNd->Len() && pTxtNd->HasWriterListeners() &&
             sal_uInt16( pTxtNd->GetAttrOutlineLevel()) <= GetLevel() &&
             pTxtNd->getLayoutFrm( pDoc->getIDocumentLayoutAccess().GetCurrentLayout() ) &&
            !pTxtNd->HasHiddenParaField() &&

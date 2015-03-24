@@ -310,7 +310,7 @@ void DocumentFieldsManager::RemoveFldType(sal_uInt16 nFld)
             mpUpdtFlds->RemoveFldType( *pTmp );
             // no break;
         case RES_DDEFLD:
-            if( pTmp->GetDepends() && !m_rDoc.IsUsed( *pTmp ) )
+            if( pTmp->HasWriterListeners() && !m_rDoc.IsUsed( *pTmp ) )
             {
                 if( RES_SETEXPFLD == nWhich )
                     static_cast<SwSetExpFieldType*>(pTmp)->SetDeleted( true );
@@ -325,7 +325,7 @@ void DocumentFieldsManager::RemoveFldType(sal_uInt16 nFld)
 
         if( nWhich )
         {
-            OSL_ENSURE( !pTmp->GetDepends(), "Dependent fields present!" );
+            OSL_ENSURE( !pTmp->HasWriterListeners(), "Dependent fields present!" );
             // delete field type
             delete pTmp;
         }
@@ -1567,7 +1567,7 @@ bool DocumentFieldsManager::containsUpdatableFields()
 void DocumentFieldsManager::GCFieldTypes()
 {
     for( sal_uInt16 n = mpFldTypes->size(); n > INIT_FLDTYPES; )
-        if( !(*mpFldTypes)[ --n ]->GetDepends() )
+        if( !(*mpFldTypes)[ --n ]->HasWriterListeners() )
             RemoveFldType( n );
 }
 

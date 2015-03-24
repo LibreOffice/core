@@ -2462,7 +2462,7 @@ void SAL_CALL SwChartDataSequence::dispose(  )
             //SwChartDataSequence::Dispose(), release the relationship
             //here...
             SwModify* pLclRegisteredIn = GetRegisteredInNonConst();
-            if (pLclRegisteredIn && pLclRegisteredIn->GetDepends())
+            if (pLclRegisteredIn && pLclRegisteredIn->HasWriterListeners())
             {
                 pLclRegisteredIn->Remove(this);
                 pTblCrsr = NULL;

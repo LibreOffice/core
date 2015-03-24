@@ -171,7 +171,7 @@ void SwEditShell::RemoveFldType(sal_uInt16 nResId, const OUString& rStr)
 
 void SwEditShell::FieldToText( SwFieldType* pType )
 {
-    if( !pType->GetDepends() )
+    if( !pType->HasWriterListeners() )
         return;
 
     SET_CURR_SHELL( this );

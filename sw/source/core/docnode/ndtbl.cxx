@@ -523,7 +523,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTblOpts,
                 nWidth = (*pColArr)[ i + 1 ] - (*pColArr)[ i ];
                 if( pBoxF->GetFrmSize().GetWidth() != nWidth )
                 {
-                    if( pBoxF->GetDepends() ) // Create new Format
+                    if( pBoxF->HasWriterListeners() ) // Create new Format
                     {
                         SwTableBoxFmt *pNewFmt = MakeTableBoxFmt();
                         *pNewFmt = *pBoxF;
@@ -732,7 +732,7 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTblOpts,
     rNdTbl.SetRowsToRepeat(nRowsToRepeat);
 
     bool bUseBoxFmt = false;
-    if( !pBoxFmt->GetDepends() )
+    if( !pBoxFmt->HasWriterListeners() )
     {
         // The Box's Formats already have the right size, we must only set
         // the right Border/AutoFmt.
@@ -976,7 +976,7 @@ lcl_SetTableBoxWidths(SwTable & rTable, size_t const nMaxBoxes,
         }
 
         // propagate size upwards from format, so the table gets the right size
-        SAL_WARN_IF(rBoxFmt.GetDepends(), "sw.core",
+        SAL_WARN_IF(rBoxFmt.HasWriterListeners(), "sw.core",
                 "who is still registered in the format?");
         rBoxFmt.SetFmtAttr( SwFmtFrmSize( ATT_VAR_SIZE, nLastPos ));
     }
@@ -1214,7 +1214,7 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
 
     SwTable& rNdTbl = pTblNd->GetTable();
 
-    if( !pBoxFmt->GetDepends() )
+    if( !pBoxFmt->HasWriterListeners() )
     {
         // The Box's Formats already have the right size, we must only set
         // the right Border/AutoFmt.
@@ -2330,7 +2330,7 @@ SwTabFrm *SwTableNode::MakeFrm( SwFrm* pSib )
  */
 void SwTableNode::MakeFrms(const SwNodeIndex & rIdx )
 {
-    if( !GetTable().GetFrmFmt()->GetDepends()) // Do we actually have Frame?
+    if( !GetTable().GetFrmFmt()->HasWriterListeners()) // Do we actually have Frame?
         return;
 
     SwFrm *pFrm;

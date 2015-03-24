@@ -3187,7 +3187,7 @@ bool SwpHints::TryInsertHint(
             CHECK;
 #endif
         // ... und die Abhaengigen benachrichtigen
-        if(rNode.GetDepends())
+        if(rNode.HasWriterListeners())
         {
             SwUpdateAttr aHint(
                 nHtStart,
@@ -3271,7 +3271,7 @@ bool SwpHints::TryInsertHint(
     }
 
     // ... und die Abhaengigen benachrichtigen
-    if ( rNode.GetDepends() )
+    if ( rNode.HasWriterListeners() )
     {
         SwUpdateAttr aHint(
             nHtStart,

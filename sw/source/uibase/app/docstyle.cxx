@@ -1360,7 +1360,7 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
                 SwCondCollCondChg aMsg( pColl );
                 pColl->ModifyNotification( &aMsg, &aMsg );
             }
-            else if( pCondItem && !pColl->GetDepends() )
+            else if( pCondItem && !pColl->HasWriterListeners() )
             {
                 // no conditional template, then first create and adopt
                 // all important values

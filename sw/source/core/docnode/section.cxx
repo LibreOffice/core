@@ -257,7 +257,7 @@ SwSection::~SwSection()
         // If the Section is the last Client in the Format we can delete it
         SwPtrMsgPoolItem aMsgHint( RES_REMOVE_UNO_OBJECT, pFmt );
         pFmt->ModifyNotification( &aMsgHint, &aMsgHint );
-        if( !pFmt->GetDepends() )
+        if( !pFmt->HasWriterListeners() )
         {
             // Do not add to the Undo. This should've happened earlier.
             ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
@@ -744,7 +744,7 @@ void SwSectionFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
     switch( nWhich )
     {
     case RES_ATTRSET_CHG:
-        if (GetDepends() && pOld && pNew)
+        if (HasWriterListeners() && pOld && pNew)
         {
             SfxItemSet* pNewSet = const_cast<SwAttrSetChg*>(static_cast<const SwAttrSetChg*>(pNew))->GetChgSet();
             SfxItemSet* pOldSet = const_cast<SwAttrSetChg*>(static_cast<const SwAttrSetChg*>(pOld))->GetChgSet();
@@ -804,7 +804,7 @@ void SwSectionFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
     case RES_PROTECT:
     case RES_EDIT_IN_READONLY: // edit in readonly sections
         // Pass through these Messages until the End of the tree!
-        if( GetDepends() )
+        if( HasWriterListeners() )
         {
             ModifyBroadcast( pOld, pNew );
         }
@@ -902,7 +902,7 @@ sal_uInt16 SwSectionFmt::GetChildSections( SwSections& rArr,
 {
     rArr.clear();
 
-    if( GetDepends() )
+    if( HasWriterListeners() )
     {
         SwIterator<SwSectionFmt,SwSectionFmt> aIter(*this);
         const SwNodeIndex* pIdx;
@@ -942,7 +942,7 @@ bool SwSectionFmt::IsInNodesArr() const
 // Parent was changed
 void SwSectionFmt::UpdateParent()
 {
-    if( !GetDepends() )
+    if( !HasWriterListeners() )
         return;
 
     SwSection* pSection = 0;

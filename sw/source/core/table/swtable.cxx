@@ -291,7 +291,7 @@ SwTable::~SwTable()
     SwTableFmt* pFmt = static_cast<SwTableFmt*>(GetFrmFmt());
     pFmt->Remove( this );               // remove
 
-    if( !pFmt->GetDepends() )
+    if( !pFmt->HasWriterListeners() )
         pFmt->GetDoc()->DelTblFrmFmt( pFmt );   // and delete
 
     // Delete the pointers from the SortArray of the boxes. The objects
@@ -1523,7 +1523,7 @@ SwTableLine::~SwTableLine()
     // the TabelleLine can be deleted if it's the last client of the FrameFormat
     SwModify* pMod = GetFrmFmt();
     pMod->Remove( this );               // remove,
-    if( !pMod->GetDepends() )
+    if( !pMod->HasWriterListeners() )
         delete pMod;    // and delete
 }
 
@@ -1600,7 +1600,7 @@ void SwTableLine::ChgFrmFmt( SwTableLineFmt *pNewFmt )
     // Now, re-register self.
     pNewFmt->Add( this );
 
-    if ( !pOld->GetDepends() )
+    if ( !pOld->HasWriterListeners() )
         delete pOld;
 }
 
@@ -1717,7 +1717,7 @@ SwTableBox::~SwTableBox()
     // the TabelleBox can be deleted if it's the last client of the FrameFormat
     SwModify* pMod = GetFrmFmt();
     pMod->Remove( this );               // remove,
-    if( !pMod->GetDepends() )
+    if( !pMod->HasWriterListeners() )
         delete pMod;    // and delete
 
     delete pImpl;
@@ -1817,7 +1817,7 @@ void SwTableBox::ChgFrmFmt( SwTableBoxFmt* pNewFmt )
     // Now, re-register self.
     pNewFmt->Add( this );
 
-    if( !pOld->GetDepends() )
+    if( !pOld->HasWriterListeners() )
         delete pOld;
 }
 

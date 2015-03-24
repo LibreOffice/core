@@ -553,7 +553,7 @@ bool sw_GetPostIts(
     SwFieldType* pFldType = pIDFA->GetSysFldType( RES_POSTITFLD );
     OSL_ENSURE( pFldType, "no PostItType ? ");
 
-    if( pFldType->GetDepends() )
+    if( pFldType->HasWriterListeners() )
     {
         // Found modify object; insert all fields into the array
         SwIterator<SwFmtFld,SwFieldType> aIter( *pFldType );

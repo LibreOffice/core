@@ -270,7 +270,7 @@ sal_uLong SwReader::Read( const Reader& rOptions )
                                 pDoc->GetIDocumentUndoRedo().DoUndo(false);
                                 pDoc->getIDocumentRedlineAccess().SetRedlineMode_intern( nsRedlineMode_t::REDLINE_IGNORE );
                             }
-                            if( pFrmFmt->GetDepends() )
+                            if( pFrmFmt->HasWriterListeners() )
                             {
                                 // Draw-Objects create a Frame when being inserted; thus delete them
                                 pFrmFmt->DelFrms();

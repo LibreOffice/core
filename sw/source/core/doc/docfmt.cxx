@@ -608,7 +608,7 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
         pItem = aIter.NextItem();
     }
 
-    if( aNew.Count() && aCallMod.GetDepends() )
+    if( aNew.Count() && aCallMod.HasWriterListeners() )
     {
         if (GetIDocumentUndoRedo().DoesUndo())
         {
@@ -645,7 +645,7 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
         }
     }
 
-    if( aNew.Count() && aCallMod.GetDepends() )
+    if( aNew.Count() && aCallMod.HasWriterListeners() )
     {
         SwAttrSetChg aChgOld( aOld, aOld );
         SwAttrSetChg aChgNew( aNew, aNew );

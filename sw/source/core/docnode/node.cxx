@@ -1277,7 +1277,7 @@ void SwCntntNode::MakeFrms( SwCntntNode& rNode )
     OSL_ENSURE( &rNode != this,
             "No ContentNode or CopyNode and new Node identical." );
 
-    if( !GetDepends() || &rNode == this )   // Do we actually have Frames?
+    if( !HasWriterListeners() || &rNode == this )   // Do we actually have Frames?
         return;
 
     SwFrm *pFrm;
@@ -1318,7 +1318,7 @@ void SwCntntNode::MakeFrms( SwCntntNode& rNode )
  */
 void SwCntntNode::DelFrms( bool bIsDisposeAccTable )
 {
-    if( !GetDepends() )
+    if( !HasWriterListeners() )
         return;
 
     SwIterator<SwCntntFrm,SwCntntNode> aIter( *this );
@@ -1437,7 +1437,7 @@ bool SwCntntNode::SetAttr(const SfxPoolItem& rAttr )
     bool bRet = false;
     // If Modify is locked, we do not send any Modifys
     if( IsModifyLocked() ||
-        ( !GetDepends() &&  RES_PARATR_NUMRULE != rAttr.Which() ))
+        ( !HasWriterListeners() &&  RES_PARATR_NUMRULE != rAttr.Which() ))
     {
         bRet = 0 != AttrSetHandleHelper::Put( mpAttrSet, *this, rAttr );
     }
@@ -1511,7 +1511,7 @@ bool SwCntntNode::SetAttr( const SfxItemSet& rSet )
     bool bRet = false;
     // If Modify is locked, do not send any Modifys
     if ( IsModifyLocked() ||
-         ( !GetDepends() &&
+         ( !HasWriterListeners() &&
            SfxItemState::SET != rSet.GetItemState( RES_PARATR_NUMRULE, false ) ) )
     {
         // Some special treatment for Attributes
