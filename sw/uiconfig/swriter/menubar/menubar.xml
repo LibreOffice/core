@@ -145,15 +145,15 @@
       <menu:menuitem menu:id=".uno:TableBoundaries"/>
       <menu:menuitem menu:id=".uno:Marks"/>
       <menu:menuitem menu:id=".uno:Fieldnames"/>
-      <menu:menuitem menu:id=".uno:ControlCodes"/>
       <menu:menuitem menu:id=".uno:ShowHiddenParagraphs"/>
+      <menu:menuitem menu:id=".uno:ControlCodes"/>
       <menu:menuitem menu:id=".uno:ShowAnnotations"/>
       <menu:menuitem menu:id=".uno:Graphic"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:ViewDataSourceBrowser"/>
-      <menu:menuitem menu:id=".uno:Navigator"/>
-      <menu:menuitem menu:id=".uno:Gallery"/>
       <menu:menuitem menu:id=".uno:Sidebar"/>
+      <menu:menuitem menu:id=".uno:Gallery"/>
+      <menu:menuitem menu:id=".uno:Navigator"/>
+      <menu:menuitem menu:id=".uno:ViewDataSourceBrowser"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:FullScreen"/>
       <menu:menu menu:id=".uno:ZoomMenu">
