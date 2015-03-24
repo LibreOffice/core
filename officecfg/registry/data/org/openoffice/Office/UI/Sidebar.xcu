@@ -77,7 +77,7 @@
           </value>
         </prop>
         <prop oor:name="OrderIndex" oor:type="xs:int">
-          <value>120</value>
+          <value>160</value>
         </prop>
       </node>
 
@@ -117,7 +117,7 @@
           </value>
         </prop>
         <prop oor:name="OrderIndex" oor:type="xs:int">
-          <value>160</value>
+          <value>120</value>
         </prop>
       </node>
 
