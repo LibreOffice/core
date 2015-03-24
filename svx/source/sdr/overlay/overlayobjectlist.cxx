@@ -76,9 +76,13 @@ namespace sdr
                         Size aSizeLogic(pManager->getOutputDevice().PixelToLogic(
                             Size(DEFAULT_VALUE_FOR_HITTEST_PIXEL, DEFAULT_VALUE_FOR_HITTEST_PIXEL)));
 
-                        // When tiled rendering, we always work in twips, use the non-pixel default.
+                        // When tiled rendering, we always work in logic units, use the non-pixel default.
                         if (pManager->getModel()->isTiledRendering())
+                        {
                             aSizeLogic = Size(DEFAULT_VALUE_FOR_HITTEST_TWIP, DEFAULT_VALUE_FOR_HITTEST_TWIP);
+                            if (pManager->getOutputDevice().GetMapMode().GetMapUnit() == MAP_100TH_MM)
+                                aSizeLogic = OutputDevice::LogicToLogic(aSizeLogic, MAP_TWIP, MAP_100TH_MM);
+                        }
 
                         fLogicTolerance = aSizeLogic.Width();
                     }
