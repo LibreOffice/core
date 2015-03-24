@@ -68,3 +68,12 @@ cmd/lc_insertmath.png cmd/lc_insertobjectstarmath.png
 cmd/sc_insertmath.png cmd/sc_insertobjectstarmath.png
 cmd/lc_arrowtoolbox.png cmd/lc_linearrowend.png
 cmd/sc_arrowtoolbox.png cmd/sc_linearrowend.png
+
+# Writer - Table toolbar
+cmd/lc_tablesort.png cmd/lc_datasort.png
+cmd/sc_tablesort.png cmd/sc_datasort.png
+
+# Draw - Line and Filling Toolbar
+cmd/lc_advancedmode.png cmd/lc_toggleobjectrotatemode.png
+cmd/sc_advancedmode.png cmd/sc_toggleobjectrotatemode.png
+
