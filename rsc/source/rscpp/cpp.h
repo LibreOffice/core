@@ -256,10 +256,7 @@ int rscpp_main( int argc, char **argv );
 
 
 void InitCpp1( void );
-void InitCpp2( void );
-void InitCpp3( void );
 void InitCpp4( void );
-void InitCpp5( void );
 void InitCpp6( void );
 
 #define HELLO()   fprintf( stderr, "[Hello at %s, %d] ", __FILE__, __LINE__ )

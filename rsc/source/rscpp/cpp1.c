@@ -244,10 +244,7 @@ int MAIN(int argc, char** argv)
 
     nRunde++;
     InitCpp1();
-    InitCpp2();
-    InitCpp3();
     InitCpp4();
-    InitCpp5();
     InitCpp6();
 
     initdefines();                          /* O.S. specific def's  */
