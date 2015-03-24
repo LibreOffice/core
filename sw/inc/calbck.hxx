@@ -51,14 +51,11 @@ class SfxHint;
     SwClient objects. The SwDepend class allows to handle their notifications in the same
     notification callback as it forwards the Modify() calls it receives to a "master"
     SwClient implementation.
-    The SwClientIter class allows to iterate over the SwClient objects registered at an
+    The SwIterator class allows to iterate over the SwClient objects registered at an
     SwModify. For historical reasons its ability to use TypeInfo to restrict this iteration
     to objects of a particular type created a lot of code that misuses SwClient-SwModify
-    relationships that basically should be used only for Modify() callbacks.
+    relationships that basically should be used only for Modify/Notify callbacks.
     This is still subject to refactoring.
-    Until this gets resolved, new SwClientIter base code should be reduced to the absolute
-    minimum and it also should be wrapped by SwIterator templates that prevent that the
-    code gets polluted by pointer casts (see switerator.hxx).
  */
 
 class SwModify;
