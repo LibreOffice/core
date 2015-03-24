@@ -2426,11 +2426,7 @@ void ScGridWindow::LogicMouseButtonDown(const MouseEvent& rMouseEvent)
     (void)rDoc;
     assert(rDoc.GetDrawLayer()->isTiledRendering());
 
-    // Don't allow events outside of our viewport size.
-    // FIXME this will likely cause trouble when we allow extending the
-    // document size; but for now this is necessary to workaround a problem
-    if ( rMouseEvent.GetPosPixel().X() < GetOutputSizePixel().Width() && rMouseEvent.GetPosPixel().Y() < GetOutputSizePixel().Height())
-        MouseButtonDown(rMouseEvent);
+    MouseButtonDown(rMouseEvent);
 }
 
 void ScGridWindow::LogicMouseButtonUp(const MouseEvent& rMouseEvent)
