@@ -126,7 +126,9 @@ const SfxFilter* impl_lookupExportFilterForUrl( const rtl::OUString& rUrl, const
     return pBestMatch;
 }
 
-const SfxFilter* impl_getExportFilterFromUrl( const rtl::OUString& rUrl, const rtl::OUString& rFactory ) try
+const SfxFilter* impl_getExportFilterFromUrl( const rtl::OUString& rUrl, const rtl::OUString& rFactory )
+{
+try
 {
     const Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
     const Reference< document::XTypeDetection > xTypeDetector(
@@ -153,6 +155,7 @@ const SfxFilter* impl_getExportFilterFromUrl( const rtl::OUString& rUrl, const r
 catch ( const Exception& )
 {
     return 0;
+}
 }
 
 OUString impl_GuessFilter( const OUString& rUrlOut, const OUString& rDocService )

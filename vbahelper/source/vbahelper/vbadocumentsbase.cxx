@@ -266,19 +266,6 @@ uno::Any VbaDocumentsBase::createDocument() throw (uno::RuntimeException, std::e
     return uno::makeAny( xComponent );
 }
 
-void VbaDocumentsBase::closeDocuments() throw (uno::RuntimeException)
-{
-// #FIXME this *MUST* be wrong documents::close surely closes ALL documents
-// in the collection, use of getCurrentDocument here is totally wrong
-/*
-    uno::Reference< lang::XMultiComponentFactory > xSMgr(
-        mxContext->getServiceManager(), uno::UNO_QUERY_THROW );
-    uno::Reference< frame::XModel > xModel( getCurrentDocument(), uno::UNO_QUERY_THROW );
-    OUString url = ".uno:CloseDoc";
-    dispatchRequests(xModel,url);
-*/
-}
-
 // #TODO# #FIXME# can any of the unused params below be used?
 uno::Any VbaDocumentsBase::openDocument( const OUString& rFileName, const uno::Any& ReadOnly, const uno::Sequence< beans::PropertyValue >& rProps ) throw (uno::RuntimeException)
 {

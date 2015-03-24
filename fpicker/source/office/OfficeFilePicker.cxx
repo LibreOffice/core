@@ -914,7 +914,7 @@ void SAL_CALL SvtFilePicker::setImage( sal_Int16 aImageFormat, const Any& rImage
 }
 
 
-sal_Bool SAL_CALL SvtFilePicker::setShowState( sal_Bool bShowState )
+sal_Bool SAL_CALL SvtFilePicker::setShowState( sal_Bool )
     throw ( RuntimeException, std::exception )
 {
     checkAlive();
@@ -923,7 +923,21 @@ sal_Bool SAL_CALL SvtFilePicker::setShowState( sal_Bool bShowState )
     bool bRet = false;
 
     if ( getDialog() )
-        bRet = getDialog()->setShowState( bShowState );
+    {
+    // #97633 for the system filedialog it's
+    // useful to make the preview switchable
+    // because the preview occupies
+    // half of the size of the file listbox
+    // which is not the case here,
+    // so we (TRA/FS) decided not to make
+    // the preview window switchable because
+    // else we would have to change the layout
+    // of the file dialog dynamically
+    // support for set/getShowState is opionally
+    // see com::sun::star::ui::dialogs::XFilePreview
+
+        bRet = false;
+    }
 
     return bRet;
 }

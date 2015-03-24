@@ -1242,11 +1242,6 @@ bool EventMultiplexer::notifyHyperlinkClicked(
                     boost::cref(hyperLink)) );
 }
 
-bool EventMultiplexer::notifySlideTransitionStarted()
-{
-    return true;
-}
-
 } // namespace internal
 } // namespace presentation
 

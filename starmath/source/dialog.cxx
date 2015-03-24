@@ -63,7 +63,7 @@ class SmFontStyles
 public:
     SmFontStyles();
 
-    sal_uInt16          GetCount() const    { return 4; }
+    static sal_uInt16 GetCount() { return 4; }
     const OUString&  GetStyleName( const vcl::Font &rFont ) const;
     const OUString&  GetStyleName( sal_uInt16 nIdx ) const;
 };
@@ -133,7 +133,7 @@ void SetFontStyle(const OUString &rStyleName, vcl::Font &rFont)
     {
         sal_uInt16 i;
         const SmFontStyles &rStyles = GetFontStyles();
-        for (i = 0;  i < rStyles.GetCount(); ++i)
+        for (i = 0;  i < SmFontStyles::GetCount(); ++i)
             if (rStyleName == rStyles.GetStyleName(i))
                 break;
 #if OSL_DEBUG_LEVEL > 1
@@ -1688,7 +1688,7 @@ void SmSymDefineDialog::FillStyles(bool bDeleteText)
     {
         // use own StyleNames
         const SmFontStyles &rStyles = GetFontStyles();
-        for (sal_uInt16 i = 0;  i < rStyles.GetCount();  i++)
+        for (sal_uInt16 i = 0;  i < SmFontStyles::GetCount();  i++)
             pStyles->InsertEntry( rStyles.GetStyleName(i) );
 
 #if OSL_DEBUG_LEVEL > 1

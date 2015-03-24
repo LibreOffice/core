@@ -612,10 +612,6 @@ public:
     */
     bool notifyNextEffect();
 
-    /** Notify that a new slide is about to be displayed
-    */
-    bool notifySlideTransitionStarted();
-
     /** Notify that a new slide has started
 
         This method is to be used from the Presentation object

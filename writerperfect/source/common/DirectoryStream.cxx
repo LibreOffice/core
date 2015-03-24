@@ -115,7 +115,9 @@ DirectoryStream::~DirectoryStream()
     delete m_pImpl;
 }
 
-DirectoryStream *DirectoryStream::createForParent(const com::sun::star::uno::Reference<com::sun::star::ucb::XContent> &xContent) try
+DirectoryStream *DirectoryStream::createForParent(const com::sun::star::uno::Reference<com::sun::star::ucb::XContent> &xContent)
+{
+try
 {
     if (!xContent.is())
         return 0;
@@ -143,8 +145,11 @@ catch (...)
 {
     return 0;
 }
+}
 
-bool DirectoryStream::isDirectory(const com::sun::star::uno::Reference<com::sun::star::ucb::XContent> &xContent) try
+bool DirectoryStream::isDirectory(const com::sun::star::uno::Reference<com::sun::star::ucb::XContent> &xContent)
+{
+try
 {
     if (!xContent.is())
         return false;
@@ -155,6 +160,7 @@ bool DirectoryStream::isDirectory(const com::sun::star::uno::Reference<com::sun:
 catch (...)
 {
     return false;
+}
 }
 
 bool DirectoryStream::isStructured()

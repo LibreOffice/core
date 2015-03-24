@@ -51,7 +51,6 @@ private:
     virtual void notifyDeactivating( AnimationNodeSharedPtr const& rNotifier ) SAL_OVERRIDE;
 
     void skipEffect( AnimationNodeSharedPtr const& pChildNode );
-    void rewindEffect( AnimationNodeSharedPtr const& pChildNode );
 
 private:
     bool resolveChild( AnimationNodeSharedPtr const& pChildNode );

@@ -703,12 +703,6 @@ void ExtensionBox_Impl::RecalcAll()
 }
 
 
-bool ExtensionBox_Impl::HandleTabKey( bool )
-{
-    return false;
-}
-
-
 bool ExtensionBox_Impl::HandleCursorKey( sal_uInt16 nKeyCode )
 {
     if ( m_vEntries.empty() )
@@ -886,7 +880,7 @@ bool ExtensionBox_Impl::Notify( NotifyEvent& rNEvt )
         sal_uInt16 nKeyCode = aKeyCode.GetCode();
 
         if ( nKeyCode == KEY_TAB )
-            bHandled = HandleTabKey( aKeyCode.IsShift() );
+             ;
         else if ( aKeyCode.GetGroup() == KEYGROUP_CURSOR )
             bHandled = HandleCursorKey( nKeyCode );
     }

@@ -86,12 +86,6 @@ void SequentialTimeContainer::skipEffect(
         OSL_FAIL( "unknown notifier!" );
 }
 
-void SequentialTimeContainer::rewindEffect(
-    AnimationNodeSharedPtr const& /*pChildNode*/ )
-{
-    // xxx todo: ...
-}
-
 bool SequentialTimeContainer::resolveChild(
     AnimationNodeSharedPtr const& pChildNode )
 {
@@ -109,20 +103,11 @@ bool SequentialTimeContainer::resolveChild(
                          boost::dynamic_pointer_cast<SequentialTimeContainer>( getSelf() ),
                          pChildNode ),
             "SequentialTimeContainer::skipEffect, resolveChild");
-        // event that will reresolve the resolved/activated child:
-        mpCurrentRewindEvent = makeEvent(
-            boost::bind( &SequentialTimeContainer::rewindEffect,
-                         boost::dynamic_pointer_cast<SequentialTimeContainer>( getSelf() ),
-                         pChildNode ),
-            "SequentialTimeContainer::rewindEffect, resolveChild");
 
         // deactivate child node when skip event occurs:
         getContext().mrUserEventQueue.registerSkipEffectEvent(
             mpCurrentSkipEvent,
             mnFinishedChildren+1<maChildren.size());
-        // rewind to previous child:
-        getContext().mrUserEventQueue.registerRewindEffectEvent(
-            mpCurrentRewindEvent );
     }
     return bResolved;
 }
