@@ -61,3 +61,6 @@ cmd/sc_linespacing.png cmd/sc_spacepara15.png
 # image icon duplicates
 cmd/sc_graphicdialog.png cmd/sc_insertgraphic.png
 
+# Writer - Table toolbar
+cmd/lc_tablesort.png cmd/lc_datasort.png
+cmd/sc_tablesort.png cmd/sc_datasort.png
