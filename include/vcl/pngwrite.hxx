@@ -26,33 +26,28 @@
 #include <vcl/bitmapex.hxx>
 #include <vector>
 
-
-// - PNGWriter -
-
-
 namespace vcl
 {
     class PNGWriterImpl;
 
     class VCL_DLLPUBLIC PNGWriter
     {
-        PNGWriterImpl*          mpImpl;
+        const std::unique_ptr<PNGWriterImpl> mpImpl;
 
     public:
 
-        explicit PNGWriter( const BitmapEx&,
-            const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >* pFilterData = NULL );
+        explicit PNGWriter(const BitmapEx&, const css::uno::Sequence<css::beans::PropertyValue>* pFilterData = NULL);
         ~PNGWriter();
 
-        bool Write( SvStream& rStm );
+        bool Write(SvStream& rStream);
 
         // additional method to be able to modify all chunk before they are stored
         struct ChunkData
         {
             sal_uInt32                  nType;
-            std::vector< sal_uInt8 >    aData;
+            std::vector<sal_uInt8>    aData;
         };
-        std::vector< vcl::PNGWriter::ChunkData >& GetChunks();
+        std::vector<vcl::PNGWriter::ChunkData>& GetChunks();
     };
 }
 
