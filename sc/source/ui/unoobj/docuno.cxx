@@ -507,10 +507,14 @@ Size ScModelObj::getDocumentSize()
         return aSize;
 
     SCTAB nTab = pViewData->GetTabNo();
+    SCCOL nEndCol = 0;
+    SCROW nEndRow = 0;
     const ScDocument& rDoc = pDocShell->GetDocument();
-    ScAddress aPos = rDoc.GetLastDataPos(nTab);
-    if (!aPos.IsValid())
+
+    if (!rDoc.GetPrintArea( nTab, nEndCol, nEndRow, false ))
         return aSize;
+
+    ScAddress aPos( nEndCol, nEndRow, nTab );
 
     // TWIPS
     sal_uLong nH = rDoc.GetRowHeight(0, aPos.Row(), nTab, true);
