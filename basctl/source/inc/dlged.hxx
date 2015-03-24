@@ -202,7 +202,6 @@ public:
     void            ShowProperties();
     void            UpdatePropertyBrowserDelayed();
 
-    sal_Int32       countPages( Printer* pPrinter );
     void            printPage( sal_Int32 nPage, Printer* pPrinter, const OUString& );
 
     bool            AdjustPageSize();

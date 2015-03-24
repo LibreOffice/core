@@ -1212,12 +1212,6 @@ OUString ModulWindow::GetTitle()
     return GetSbModuleName();
 }
 
-void ModulWindow::FrameWindowMoved()
-{
-}
-
-
-
 void ModulWindow::ShowCursor( bool bOn )
 {
     if ( GetEditEngine() )

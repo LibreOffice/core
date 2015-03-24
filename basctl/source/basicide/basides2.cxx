@@ -216,8 +216,6 @@ ModulWindow* Shell::FindBasWin (
 
 void Shell::Move()
 {
-    if (ModulWindow* pMCurWin = dynamic_cast<ModulWindow*>(pCurWin))
-        pMCurWin->FrameWindowMoved();
 }
 
 void Shell::ShowCursor( bool bOn )

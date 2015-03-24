@@ -381,7 +381,6 @@ public:
     virtual bool    IsModified () SAL_OVERRIDE;
     virtual bool    IsPasteAllowed () SAL_OVERRIDE;
 
-    void            FrameWindowMoved();
     void            ShowCursor( bool bOn );
 
     virtual sal_uInt16  GetSearchOptions() SAL_OVERRIDE;
