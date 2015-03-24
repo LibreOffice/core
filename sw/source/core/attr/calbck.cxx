@@ -184,45 +184,38 @@ void SwModify::Add( SwClient* pDepend )
 
 SwClient* SwModify::Remove( SwClient* pDepend )
 {
-    if ( m_bInDocDTOR )
+    if(m_bInDocDTOR)
         return nullptr;
 
-    if( pDepend->pRegisteredIn == this )
+    assert(pDepend->pRegisteredIn == this);
+
+    // SwClient is my listener
+    // remove it from my list
+    ::sw::WriterListener* pR = pDepend->m_pRight;
+    ::sw::WriterListener* pL = pDepend->m_pLeft;
+    if( m_pWriterListeners == pDepend )
+        m_pWriterListeners = pL ? pL : pR;
+
+    if( pL )
+        pL->m_pRight = pR;
+    if( pR )
+        pR->m_pLeft = pL;
+
+    // update ClientIterators
+    if(sw::ClientIteratorBase::our_pClientIters)
     {
-        // SwClient is my listener
-        // remove it from my list
-        ::sw::WriterListener* pR = pDepend->m_pRight;
-        ::sw::WriterListener* pL = pDepend->m_pLeft;
-        if( m_pWriterListeners == pDepend )
-            m_pWriterListeners = pL ? pL : pR;
-
-        if( pL )
-            pL->m_pRight = pR;
-        if( pR )
-            pR->m_pLeft = pL;
-
-        // update ClientIterators
-        if(sw::ClientIteratorBase::our_pClientIters)
+        for(auto& rIter : sw::ClientIteratorBase::our_pClientIters->GetRingContainer())
         {
-            for(auto& rIter : sw::ClientIteratorBase::our_pClientIters->GetRingContainer())
+            if( rIter.m_pCurrent == pDepend || rIter.m_pPosition == pDepend )
             {
-                if( rIter.m_pCurrent == pDepend || rIter.m_pPosition == pDepend )
-                {
-                    // if object being removed is the current or next object in an
-                    // iterator, advance this iterator
-                    rIter.m_pPosition = static_cast<SwClient*>(pR);
-                }
+                // if object being removed is the current or next object in an
+                // iterator, advance this iterator
+                rIter.m_pPosition = static_cast<SwClient*>(pR);
             }
         }
-        pDepend->m_pLeft = nullptr;
-        pDepend->m_pRight = nullptr;
     }
-    else
-    {
-        OSL_FAIL( "SwModify::Remove(): could not find pDepend" );
-    }
-
-    // disconnect client from me
+    pDepend->m_pLeft = nullptr;
+    pDepend->m_pRight = nullptr;
     pDepend->pRegisteredIn = nullptr;
     return pDepend;
 }
