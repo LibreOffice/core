@@ -1327,11 +1327,6 @@ sal_Int32 OResultSet::getResultSetType() const
     return nValue;
 }
 
-sal_Int32 OResultSet::getFetchDirection() const
-{
-    return FetchDirection::FORWARD;
-}
-
 sal_Int32 OResultSet::getFetchSize() const
 {
     return getStmtOption<SQLULEN, SQL_IS_UINTEGER>(SQL_ATTR_ROW_ARRAY_SIZE);

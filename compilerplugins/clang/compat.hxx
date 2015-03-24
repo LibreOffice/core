@@ -23,6 +23,7 @@
 #include "clang/Basic/Linkage.h"
 #include "clang/Basic/SourceManager.h"
 #include "clang/Basic/Visibility.h"
+#include "clang/Frontend/CompilerInstance.h"
 #include "clang/Lex/PPCallbacks.h"
 #include "clang/Lex/Preprocessor.h"
 #include "llvm/ADT/StringRef.h"
@@ -209,6 +210,17 @@ inline void addPPCallbacks(
     preprocessor.addPPCallbacks(C);
 #endif
 }
+
+inline bool isMacroBodyExpansion(clang::CompilerInstance& compiler, clang::SourceLocation location)
+{
+#if (__clang_major__ == 3 && __clang_minor__ >= 3) || __clang_major__ > 3
+    return compiler.getSourceManager().isMacroBodyExpansion(location);
+#else
+    return location.isMacroID()
+        && !compiler.getSourceManager().isMacroArgExpansion(location);
+#endif
+}
+
 
 }
 

@@ -20,6 +20,9 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_ODBC_ODATABASEMETADATARESULTSET_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_ODBC_ODATABASEMETADATARESULTSET_HXX
 
+#include <com/sun/star/sdbc/ResultSetType.hpp>
+#include <com/sun/star/sdbc/FetchDirection.hpp>
+#include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
@@ -80,9 +83,9 @@ namespace connectivity
 
             // set the columncount of the driver
             void checkColumnCount();
-            sal_Int32 getResultSetConcurrency() const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            sal_Int32 getResultSetType()        const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            sal_Int32 getFetchDirection()       const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            static sal_Int32 getResultSetConcurrency() { return css::sdbc::ResultSetConcurrency::READ_ONLY; }
+            static sal_Int32 getResultSetType()        { return css::sdbc::ResultSetType::FORWARD_ONLY; }
+            static sal_Int32 getFetchDirection()       { return css::sdbc::FetchDirection::FORWARD; }
             sal_Int32 getFetchSize()            const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             OUString getCursorName()     const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             SWORD                               impl_getColumnType_nothrow(sal_Int32 columnIndex);

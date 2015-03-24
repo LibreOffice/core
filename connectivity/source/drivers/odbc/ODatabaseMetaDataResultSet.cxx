@@ -26,9 +26,6 @@
 #include <com/sun/star/sdbc/IndexType.hpp>
 #include <comphelper/property.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
-#include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
-#include <com/sun/star/sdbc/ResultSetType.hpp>
-#include <com/sun/star/sdbc/FetchDirection.hpp>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/sequence.hxx>
 #include "odbc/OResultSetMetaData.hxx"
@@ -696,21 +693,6 @@ void SAL_CALL ODatabaseMetaDataResultSet::clearWarnings(  ) throw(SQLException, 
 Any SAL_CALL ODatabaseMetaDataResultSet::getWarnings(  ) throw(SQLException, RuntimeException, std::exception)
 {
     return Any();
-}
-
-sal_Int32 ODatabaseMetaDataResultSet::getResultSetConcurrency() const throw(SQLException, RuntimeException)
-{
-    return ResultSetConcurrency::READ_ONLY;
-}
-
-sal_Int32 ODatabaseMetaDataResultSet::getResultSetType() const throw(SQLException, RuntimeException)
-{
-    return ResultSetType::FORWARD_ONLY;
-}
-
-sal_Int32 ODatabaseMetaDataResultSet::getFetchDirection() const throw(SQLException, RuntimeException)
-{
-    return FetchDirection::FORWARD;
 }
 
 sal_Int32 ODatabaseMetaDataResultSet::getFetchSize() const throw(SQLException, RuntimeException)

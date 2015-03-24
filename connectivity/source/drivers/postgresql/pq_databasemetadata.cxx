@@ -124,11 +124,6 @@ std::vector
 #define DEFERRABILITY_INITIALLY_IMMEDIATE 6
 #define DEFERRABILITY_NONE                7
 
-void DatabaseMetaData::checkClosed()
-        throw (SQLException, RuntimeException)
-{
-}
-
 DatabaseMetaData::DatabaseMetaData(
     const ::rtl::Reference< RefCountedMutex > & refMutex,
     const ::com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection >  & origin,
@@ -1110,7 +1105,6 @@ sal_Bool DatabaseMetaData::dataDefinitionIgnoredInTransactions(  ) throw (SQLExc
 // LEM TODO: implement
 // LEM TODO: at least fake the columns, even if no row.
     MutexGuard guard( m_refMutex->mutex );
-    checkClosed();
     return new SequenceResultSet(
         m_refMutex, *this, Sequence< OUString >(), Sequence< Sequence< Any > > (), m_pSettings->tc );
 }
@@ -1123,7 +1117,6 @@ sal_Bool DatabaseMetaData::dataDefinitionIgnoredInTransactions(  ) throw (SQLExc
 {
     (void) catalog; (void) schemaPattern; (void) procedureNamePattern; (void) columnNamePattern;
     MutexGuard guard( m_refMutex->mutex );
-    checkClosed();
 // LEM TODO: implement
 // LEM TODO: at least fake the columns, even if no row.
     return new SequenceResultSet(
@@ -1141,7 +1134,6 @@ sal_Bool DatabaseMetaData::dataDefinitionIgnoredInTransactions(  ) throw (SQLExc
     Statics &statics = getStatics();
 
     MutexGuard guard( m_refMutex->mutex );
-    checkClosed();
 
     if( isLog( m_pSettings, LogLevel::INFO ) )
     {
@@ -1259,7 +1251,6 @@ struct SortInternalSchemasLastAndPublicFirst
     throw (SQLException, RuntimeException, std::exception)
 {
     MutexGuard guard( m_refMutex->mutex );
-    checkClosed();
 
     if( isLog( m_pSettings, LogLevel::INFO ) )
     {
@@ -1297,7 +1288,6 @@ struct SortInternalSchemasLastAndPublicFirst
     // LEM TODO: return the current catalog like JDBC driver?
     //           at least fake the columns, even if no content
     MutexGuard guard( m_refMutex->mutex );
-    checkClosed();
     return new SequenceResultSet(
         m_refMutex, *this, Sequence< OUString >(), Sequence< Sequence< Any > > (), m_pSettings->tc );
 }
@@ -1307,7 +1297,6 @@ struct SortInternalSchemasLastAndPublicFirst
 {
     // LEM TODO: this can be made dynamic, see JDBC driver
     MutexGuard guard( m_refMutex->mutex );
-    checkClosed();
     return new SequenceResultSet(
         m_refMutex, *this, getStatics().tableTypeNames, getStatics().tableTypeData,
         m_pSettings->tc );
@@ -1471,7 +1460,6 @@ static void columnMetaData2DatabaseTypeDescription(
 
     // continue !
     MutexGuard guard( m_refMutex->mutex );
-    checkClosed();
 
     if( isLog( m_pSettings, LogLevel::INFO ) )
     {
@@ -1655,7 +1643,6 @@ static void columnMetaData2DatabaseTypeDescription(
     (void) catalog;
 
     MutexGuard guard( m_refMutex->mutex );
-    checkClosed();
 
     if( isLog( m_pSettings, LogLevel::INFO ) )
     {
@@ -1680,13 +1667,11 @@ static void columnMetaData2DatabaseTypeDescription(
 }
 
 ::com::sun::star::uno::Reference< XResultSet > DatabaseMetaData::getTablePrivileges(
-    const ::com::sun::star::uno::Any& catalog,
+    const ::com::sun::star::uno::Any&,
     const OUString& schemaPattern,
     const OUString& tableNamePattern ) throw (SQLException, RuntimeException, std::exception)
 {
-    (void) catalog;
     MutexGuard guard( m_refMutex->mutex );
-    checkClosed();
 
     if( isLog( m_pSettings, LogLevel::INFO ) )
     {
@@ -1708,42 +1693,36 @@ static void columnMetaData2DatabaseTypeDescription(
 }
 
 ::com::sun::star::uno::Reference< XResultSet > DatabaseMetaData::getBestRowIdentifier(
-    const ::com::sun::star::uno::Any& catalog,
-    const OUString& schema,
-    const OUString& table,
-    sal_Int32 scope,
-    sal_Bool nullable ) throw (SQLException, RuntimeException, std::exception)
+    const ::com::sun::star::uno::Any&,
+    const OUString&,
+    const OUString&,
+    sal_Int32,
+    sal_Bool ) throw (SQLException, RuntimeException, std::exception)
 {
-    (void) catalog; (void) schema; (void) table; (void) scope; (void) nullable;
     //LEM TODO: implement! See JDBC driver
     MutexGuard guard( m_refMutex->mutex );
-    checkClosed();
     return new SequenceResultSet(
         m_refMutex, *this, Sequence< OUString >(), Sequence< Sequence< Any > > (), m_pSettings->tc );
 }
 
 ::com::sun::star::uno::Reference< XResultSet > DatabaseMetaData::getVersionColumns(
-    const ::com::sun::star::uno::Any& catalog,
-    const OUString& schema,
-    const OUString& table ) throw (SQLException, RuntimeException, std::exception)
+    const ::com::sun::star::uno::Any&,
+    const OUString&,
+    const OUString& ) throw (SQLException, RuntimeException, std::exception)
 {
-    (void) catalog; (void) schema; (void) table;
     //LEM TODO: implement! See JDBC driver
     MutexGuard guard( m_refMutex->mutex );
-    checkClosed();
     return new SequenceResultSet(
         m_refMutex, *this, Sequence< OUString >(), Sequence< Sequence< Any > > (), m_pSettings->tc );
 }
 
 ::com::sun::star::uno::Reference< XResultSet > DatabaseMetaData::getPrimaryKeys(
-    const ::com::sun::star::uno::Any& catalog,
+    const ::com::sun::star::uno::Any&,
     const OUString& schema,
     const OUString& table ) throw (SQLException, RuntimeException, std::exception)
 {
-    (void) catalog;
     //LEM TODO: review
     MutexGuard guard( m_refMutex->mutex );
-    checkClosed();
 
 //        1.  TABLE_CAT string =&gt; table catalog (may be NULL )
 //        2. TABLE_SCHEM string =&gt; table schema (may be NULL )
@@ -2307,7 +2286,6 @@ static void pgTypeInfo2ResultSet(
 {
     // Note: Indexes start at 0 (in the API doc, they start at 1)
     MutexGuard guard( m_refMutex->mutex );
-    checkClosed();
 
     if( isLog( m_pSettings, LogLevel::INFO ) )
     {
@@ -2367,16 +2345,14 @@ static sal_Int32 seqContains( const Sequence< sal_Int32 > &seq, sal_Int32 value 
 }
 
 ::com::sun::star::uno::Reference< XResultSet > DatabaseMetaData::getIndexInfo(
-    const ::com::sun::star::uno::Any& catalog,
+    const ::com::sun::star::uno::Any& ,
     const OUString& schema,
     const OUString& table,
     sal_Bool unique,
-    sal_Bool approximate ) throw (SQLException, RuntimeException, std::exception)
+    sal_Bool ) throw (SQLException, RuntimeException, std::exception)
 {
-    (void) catalog; (void) approximate;
     //LEM TODO: review
     MutexGuard guard( m_refMutex->mutex );
-    checkClosed();
 
     /*
        1. TABLE_CAT string -> table catalog (may be NULL )
@@ -2562,12 +2538,10 @@ sal_Bool DatabaseMetaData::supportsBatchUpdates(  ) throw (SQLException, Runtime
     return sal_True;
 }
 
-::com::sun::star::uno::Reference< XResultSet > DatabaseMetaData::getUDTs( const ::com::sun::star::uno::Any& catalog, const OUString& schemaPattern, const OUString& typeNamePattern, const ::com::sun::star::uno::Sequence< sal_Int32 >& types ) throw (SQLException, RuntimeException, std::exception)
+css::uno::Reference< XResultSet > DatabaseMetaData::getUDTs( const ::com::sun::star::uno::Any&, const OUString&, const OUString&, const ::com::sun::star::uno::Sequence< sal_Int32 >& ) throw (SQLException, RuntimeException, std::exception)
 {
-    (void) catalog; (void) schemaPattern; (void) typeNamePattern; (void) types;
     //LEM TODO: implement! See JDBC driver
     MutexGuard guard( m_refMutex->mutex );
-    checkClosed();
     return new SequenceResultSet(
         m_refMutex, *this, Sequence< OUString >(), Sequence< Sequence< Any > > (), m_pSettings->tc );
 }

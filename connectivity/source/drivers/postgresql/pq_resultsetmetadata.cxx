@@ -333,7 +333,6 @@ sal_Int32 ResultSetMetaData::getColumnDisplaySize( sal_Int32 column )
     throw (SQLException, RuntimeException, std::exception)
 {
     MutexGuard guard( m_refMutex->mutex );
-    checkClosed();
     checkColumnIndex( column );
     return m_colDesc[column-1].displaySize;
 }
@@ -347,7 +346,6 @@ OUString ResultSetMetaData::getColumnLabel( sal_Int32 column )
 OUString ResultSetMetaData::getColumnName( sal_Int32 column ) throw (SQLException, RuntimeException, std::exception)
 {
     MutexGuard guard( m_refMutex->mutex );
-    checkClosed();
     checkColumnIndex( column );
 
     return m_colDesc[column-1].name;
@@ -363,7 +361,6 @@ sal_Int32 ResultSetMetaData::getPrecision( sal_Int32 column )
     throw (SQLException, RuntimeException, std::exception)
 {
     MutexGuard guard( m_refMutex->mutex );
-    checkClosed();
     checkColumnIndex( column );
     return m_colDesc[column-1].precision;
 }
@@ -372,23 +369,20 @@ sal_Int32 ResultSetMetaData::getScale( sal_Int32 column )
     throw (SQLException, RuntimeException, std::exception)
 {
     MutexGuard guard( m_refMutex->mutex );
-    checkClosed();
     checkColumnIndex( column );
     return m_colDesc[column-1].scale;
 }
 
-OUString ResultSetMetaData::getTableName( sal_Int32 column )
+OUString ResultSetMetaData::getTableName( sal_Int32 )
     throw (SQLException, RuntimeException, std::exception)
 {
-    (void) column;
 // LEM TODO This is very fishy.. Should probably return the table to which that column belongs!
     return m_tableName;
 }
 
-OUString ResultSetMetaData::getCatalogName( sal_Int32 column )
+OUString ResultSetMetaData::getCatalogName( sal_Int32 )
     throw (SQLException, RuntimeException, std::exception)
 {
-    (void) column;
     // can do this through XConnection.getCatalog() !
     return OUString();
 }
@@ -456,12 +450,6 @@ OUString ResultSetMetaData::getColumnServiceName( sal_Int32 column )
 {
     (void) column;
     return OUString();
-}
-
-void ResultSetMetaData::checkClosed()
-    throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
-{
-    // we never close
 }
 
 void ResultSetMetaData::checkColumnIndex(sal_Int32 columnIndex)

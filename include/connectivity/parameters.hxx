@@ -198,13 +198,6 @@ namespace dbtools
         */
         void    resetParameterValues();
 
-        /** tells the object that it's database component is being disposed
-
-            The object then fires the <member>XEventListener::disposing</member> notification to
-            the parameter listeners
-        */
-        void    disposing( const ::com::sun::star::lang::EventObject& _rDisposingEvent );
-
         /** adds the given listener to the list of parameter listeners
         */
         void    addParameterListener(

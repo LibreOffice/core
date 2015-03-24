@@ -332,35 +332,6 @@ bool OResultSet::fetchCurrentRow( ) throw(SQLException, RuntimeException)
 }
 
 
-bool OResultSet::pushCard(sal_uInt32 /*cardNumber*/) throw(SQLException, RuntimeException)
-{
-    return true;
-/*
-    if (cardNumber == 0)
-        return sal_True;
-    // Check whether we are storing the updated row
-    if ( (m_aRow->get())[0].isNull() || (sal_Int32)(m_aRow->get())[0] != (sal_Int32)cardNumber )
-        return sal_False;
-
-    sal_Int32 nCount = m_aColumnNames.getLength();
-    m_aQuery.setRowStates(cardNumber,m_RowStates);
-    for( sal_Int32 i = 1; i <= nCount; i++ )
-    {
-        if ( (m_aRow->get())[i].isBound() )
-        {
-
-            // Everything in the addressbook is a string!
-
-            if ( !m_aQuery.setRowValue( (m_aRow->get())[i], cardNumber, m_aColumnNames[i-1], DataType::VARCHAR ))
-            {
-                m_pStatement->getOwnConnection()->throwSQLException( m_aQuery.getError(), *this );
-            }
-        }
-    }
-    return sal_True;
-*/
-}
-
 bool OResultSet::fetchRow(sal_Int32 cardNumber,bool bForceReload) throw(SQLException, RuntimeException)
 {
     SAL_INFO("connectivity.mork", "cardNumber = " << cardNumber);
@@ -466,7 +437,7 @@ sal_Bool SAL_CALL OResultSet::isAfterLast(  ) throw(SQLException, RuntimeExcepti
 
     OSL_TRACE("In/Out: OResultSet::isAfterLast" );
 //    return sal_True;
-    return m_nRowPos > currentRowCount() && m_aQueryHelper.queryComplete();
+    return m_nRowPos > currentRowCount() && MQueryHelper::queryComplete();
 }
 
 sal_Bool SAL_CALL OResultSet::isFirst(  ) throw(SQLException, RuntimeException, std::exception)
@@ -484,7 +455,7 @@ sal_Bool SAL_CALL OResultSet::isLast(  ) throw(SQLException, RuntimeException, s
 
     OSL_TRACE("In/Out: OResultSet::isLast" );
 //    return sal_True;
-    return m_nRowPos == currentRowCount() && m_aQueryHelper.queryComplete();
+    return m_nRowPos == currentRowCount() && MQueryHelper::queryComplete();
 }
 
 void SAL_CALL OResultSet::beforeFirst(  ) throw(SQLException, RuntimeException, std::exception)
@@ -1258,7 +1229,7 @@ void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLExcep
 
                     OSL_TRACE("Query is to be sorted");
 
-                    OSL_ENSURE( m_aQueryHelper.queryComplete(), "Query not complete!!");
+                    OSL_ENSURE( MQueryHelper::queryComplete(), "Query not complete!!");
 
                     OSortIndex aSortIndex(eKeyType,m_aOrderbyAscending);
 
@@ -1445,7 +1416,7 @@ bool OResultSet::validRow( sal_uInt32 nRow)
 {
     sal_Int32  nNumberOfRecords = m_aQueryHelper.getResultCount();
 
-    while ( nRow > (sal_uInt32)nNumberOfRecords && !m_aQueryHelper.queryComplete() ) {
+    while ( nRow > (sal_uInt32)nNumberOfRecords && !MQueryHelper::queryComplete() ) {
 #if OSL_DEBUG_LEVEL > 0
             OSL_TRACE("validRow: waiting...");
 #endif
@@ -1466,7 +1437,7 @@ bool OResultSet::validRow( sal_uInt32 nRow)
     }
 
     if (( nRow == 0 ) ||
-        ( nRow > (sal_uInt32)nNumberOfRecords && m_aQueryHelper.queryComplete()) ){
+        ( nRow > (sal_uInt32)nNumberOfRecords && MQueryHelper::queryComplete()) ){
         SAL_INFO("connectivity.mork", "validRow(" << nRow << "): return False");
         return false;
     }
