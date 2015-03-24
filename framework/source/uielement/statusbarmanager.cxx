@@ -544,10 +544,6 @@ void StatusBarManager::FillStatusBar( const uno::Reference< container::XIndexAcc
     UpdateControllers();
 }
 
-void StatusBarManager::StateChanged( StateChangedType )
-{
-}
-
 void StatusBarManager::DataChanged( const DataChangedEvent& rDCEvt )
 {
     SolarMutexClearableGuard aGuard;

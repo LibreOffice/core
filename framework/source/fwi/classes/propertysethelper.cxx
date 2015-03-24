@@ -63,10 +63,6 @@ void SAL_CALL PropertySetHelper::impl_addPropertyInfo(const css::beans::Property
     m_lProps[aProperty.Name] = aProperty;
 }
 
-void SAL_CALL PropertySetHelper::impl_enablePropertySet()
-{
-}
-
 void SAL_CALL PropertySetHelper::impl_disablePropertySet()
 {
     TransactionGuard aTransaction(m_rTransactionManager, E_SOFTEXCEPTIONS);

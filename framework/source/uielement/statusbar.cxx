@@ -56,10 +56,8 @@ void FrameworkStatusBar::Command( const CommandEvent& rEvt )
         m_pMgr->Command( rEvt );
 }
 
-void FrameworkStatusBar::StateChanged( StateChangedType nType )
+void FrameworkStatusBar::StateChanged( StateChangedType )
 {
-    if ( m_pMgr )
-        m_pMgr->StateChanged( nType );
 }
 
 void FrameworkStatusBar::DataChanged( const DataChangedEvent& rDCEvt )
