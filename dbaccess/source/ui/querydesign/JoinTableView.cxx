@@ -1500,10 +1500,6 @@ void OJoinTableView::dragFinished( )
 {
 }
 
-void OJoinTableView::StartDrag( sal_Int8 /*nAction*/, const Point& /*rPosPixel*/ )
-{
-}
-
 void OJoinTableView::clearLayoutInformation()
 {
     m_pLastFocusTabWin  = NULL;

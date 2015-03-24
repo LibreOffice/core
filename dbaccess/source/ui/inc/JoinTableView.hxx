@@ -226,7 +226,6 @@ namespace dbaui
         virtual bool PreNotify(NotifyEvent& rNEvt) SAL_OVERRIDE;
 
         // DnD stuff
-        void StartDrag( sal_Int8 nAction, const Point& rPosPixel );
         virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt ) SAL_OVERRIDE;
         virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt ) SAL_OVERRIDE;
 

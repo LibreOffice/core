@@ -512,33 +512,6 @@ sal_Int32 OAppDetailPageHelper::getElementCount()
     return nCount;
 }
 
-bool OAppDetailPageHelper::isCutAllowed()
-{
-    return false;
-}
-
-bool OAppDetailPageHelper::isCopyAllowed()
-{
-    return true;
-}
-
-bool OAppDetailPageHelper::isPasteAllowed()
-{
-    return true;
-}
-
-void OAppDetailPageHelper::copy()
-{
-}
-
-void OAppDetailPageHelper::cut()
-{
-}
-
-void OAppDetailPageHelper::paste()
-{
-}
-
 bool OAppDetailPageHelper::isLeaf(SvTreeListEntry* _pEntry) const
 {
     if ( !_pEntry )

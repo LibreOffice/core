@@ -36,8 +36,6 @@ namespace dbaui
         virtual void GetFocus() SAL_OVERRIDE;
 
         bool isCutAllowed();
-        bool isPasteAllowed();
-        bool isCopyAllowed();
         void copy();
         void cut();
         void paste();
@@ -45,8 +43,6 @@ namespace dbaui
         void clear();
         // set the view readonly or not
         void setReadOnly(bool _bReadOnly);
-        // check if the statement is correct when not returning false
-        bool checkStatement();
         // set the statement for representation
         void setStatement(const OUString& _rsStatement);
         OUString getStatement();

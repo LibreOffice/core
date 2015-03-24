@@ -77,7 +77,7 @@ void OQueryViewSwitch::resizeDocumentView(Rectangle& _rPlayground)
 bool OQueryViewSwitch::checkStatement()
 {
     if(m_pTextView->IsVisible())
-        return m_pTextView->checkStatement();
+        return true;
     return m_pDesignView->checkStatement();
 }
 
@@ -138,14 +138,14 @@ bool OQueryViewSwitch::isCutAllowed()
 bool OQueryViewSwitch::isCopyAllowed()
 {
     if(m_pTextView->IsVisible())
-        return m_pTextView->isCopyAllowed();
+        return true;
     return m_pDesignView->isCopyAllowed();
 }
 
 bool OQueryViewSwitch::isPasteAllowed()
 {
     if(m_pTextView->IsVisible())
-        return m_pTextView->isPasteAllowed();
+        return true;
     return m_pDesignView->isPasteAllowed();
 }
 

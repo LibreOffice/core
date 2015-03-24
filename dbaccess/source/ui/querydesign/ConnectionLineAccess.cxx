@@ -144,14 +144,6 @@ namespace dbaui
         ::osl::MutexGuard aGuard( m_aMutex  );
         return m_pLine ? m_pLine->GetParent()->GetWindowRegionPixel().IsInside(m_pLine->GetBoundingRect()) : sal_False;
     }
-    bool SAL_CALL OConnectionLineAccess::isVisible(  ) throw (RuntimeException)
-    {
-        return true;
-    }
-    bool SAL_CALL OConnectionLineAccess::isFocusTraversable(  ) throw (RuntimeException)
-    {
-        return true;
-    }
     // XAccessibleRelationSet
     sal_Int32 SAL_CALL OConnectionLineAccess::getRelationCount(  ) throw (RuntimeException, std::exception)
     {

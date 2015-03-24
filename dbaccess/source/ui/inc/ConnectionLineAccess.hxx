@@ -86,8 +86,6 @@ namespace dbaui
         virtual ::com::sun::star::awt::Point SAL_CALL getLocationOnScreen(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual ::com::sun::star::awt::Size SAL_CALL getSize(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         bool SAL_CALL isShowing(  ) throw (::com::sun::star::uno::RuntimeException);
-        bool SAL_CALL isVisible(  ) throw (::com::sun::star::uno::RuntimeException);
-        bool SAL_CALL isFocusTraversable(  ) throw (::com::sun::star::uno::RuntimeException);
 
         // XAccessibleRelationSet
         virtual sal_Int32 SAL_CALL getRelationCount(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

@@ -818,24 +818,21 @@ SvTreeListEntry* OApplicationDetailView::getEntry( const Point& _aPoint ) const
 
 bool OApplicationDetailView::isCutAllowed()
 {
-    return m_pControlHelper->isCutAllowed();
+    return false;
 }
 
 bool OApplicationDetailView::isCopyAllowed()
 {
-    return m_pControlHelper->isCopyAllowed();
+    return true;
 }
 
-bool OApplicationDetailView::isPasteAllowed()   { return m_pControlHelper->isPasteAllowed(); }
+bool OApplicationDetailView::isPasteAllowed() { return true; }
 
-void OApplicationDetailView::copy() { m_pControlHelper->copy(); }
+void OApplicationDetailView::copy() { }
 
-void OApplicationDetailView::cut()  { m_pControlHelper->cut(); }
+void OApplicationDetailView::cut()  { }
 
-void OApplicationDetailView::paste()
-{
-    m_pControlHelper->paste();
-}
+void OApplicationDetailView::paste() { }
 
 SvTreeListEntry*  OApplicationDetailView::elementAdded(ElementType _eType,const OUString& _rName, const Any& _rObject )
 {
