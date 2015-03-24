@@ -416,10 +416,6 @@ private:
 
     WindowImpl* mpWindowImpl;
 
-    // This is a first attempt to start to remove the dependency of Window on
-    // OutputDevice
-    VclPtr<::OutputDevice> mpOutputDevice;
-
 #ifdef DBG_UTIL
     friend const char* ::ImplDbgCheckWindow( const void* pObj );
 #endif
@@ -695,8 +691,8 @@ public:
                                         Window( vcl::Window* pParent, const ResId& rResId );
     virtual                             ~Window();
 
-    ::OutputDevice const*               GetOutDev() const { return mpOutputDevice; };
-    ::OutputDevice*                     GetOutDev()       { return mpOutputDevice; };
+    ::OutputDevice const*               GetOutDev() const;
+    ::OutputDevice*                     GetOutDev();
 
     virtual void                        EnableRTL ( bool bEnable = true ) SAL_OVERRIDE;
     virtual void                        MouseMove( const MouseEvent& rMEvt );

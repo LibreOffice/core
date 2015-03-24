@@ -581,6 +581,22 @@ Window::~Window()
     disposeOnce();
 }
 
+// We will eventually being removing the inheritance of OutputDevice
+// from Window. It will be replaced with a transient relationship such
+// that the OutputDevice is only live for the scope of the Paint method.
+// In the meantime this can help move us towards a Window use an
+// OutputDevice, not being one.
+
+::OutputDevice const* Window::GetOutDev() const
+{
+    return this;
+}
+
+::OutputDevice* Window::GetOutDev()
+{
+    return this;
+}
+
 } /* namespace vcl */
 
 WindowImpl::WindowImpl( WindowType nType )
@@ -1195,11 +1211,6 @@ void Window::ImplInitAppFontData( vcl::Window* pWindow )
 
 void Window::ImplInitWindowData( WindowType nType )
 {
-    // We will eventually being removing the inheritance of OutputDevice from Window.
-    // It will be replaced with a composition relationship. A Window will use an OutputDevice,
-    // it will not *be* an OutputDevice
-    mpOutputDevice = (OutputDevice*)this;
-
     mnRefCnt = 0;
     mpWindowImpl = new WindowImpl( nType );
 
