@@ -88,7 +88,7 @@ private:
     sal_uInt8 m_nIndex;
     bool m_bIsCompressed;
 public:
-    sal_uInt32  Read( LwpSvStream *pStrm );
+    sal_uInt32 Read( LwpSvStream *pStrm );
     sal_uInt32 Read( LwpObjectStream *pStrm );
     sal_uInt32 ReadIndexed( LwpSvStream* pStrm );
     sal_uInt32 ReadIndexed( LwpObjectStream *pStrm );
@@ -97,7 +97,7 @@ public:
     /**
      * @descr       return the size of object id with format: low(4bytes)+high(2bytes)
     */
-    static sal_uInt32 DiskSize() { return sizeof(m_nLow) + sizeof(m_nHigh); }
+    static sal_uInt32 DiskSize() { return sizeof(sal_uInt32) + sizeof(sal_uInt16); } // sizeof(m_nLow) + sizeof(m_nHigh)
     sal_uInt32 DiskSizeIndexed() const;
     bool IsNull() const;
     bool IsCompressed();
