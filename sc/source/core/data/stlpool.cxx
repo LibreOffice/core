@@ -373,11 +373,11 @@ void ScStyleSheetPool::CreateStandardStyles()
     aBoxItem.SetLine( &aBorderLine, BOX_LINE_LEFT );
     aBoxItem.SetLine( &aBorderLine, BOX_LINE_RIGHT );
     aBoxItem.SetDistance( 10 ); // 0.2mm
-    aBoxInfoItem.SetValid( VALID_TOP, true );
-    aBoxInfoItem.SetValid( VALID_BOTTOM, true );
-    aBoxInfoItem.SetValid( VALID_LEFT, true );
-    aBoxInfoItem.SetValid( VALID_RIGHT, true );
-    aBoxInfoItem.SetValid( VALID_DISTANCE, true );
+    aBoxInfoItem.SetValid( SvxBoxInfoItemValidFlags::TOP, true );
+    aBoxInfoItem.SetValid( SvxBoxInfoItemValidFlags::BOTTOM, true );
+    aBoxInfoItem.SetValid( SvxBoxInfoItemValidFlags::LEFT, true );
+    aBoxInfoItem.SetValid( SvxBoxInfoItemValidFlags::RIGHT, true );
+    aBoxInfoItem.SetValid( SvxBoxInfoItemValidFlags::DISTANCE, true );
     aBoxInfoItem.SetTable( false );
     aBoxInfoItem.SetDist ( true );
 

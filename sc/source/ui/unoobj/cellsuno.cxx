@@ -966,13 +966,13 @@ void lcl_fillBoxItems( SvxBoxItem& rOuter, SvxBoxInfoItem& rInner, const TableBo
     rOuter.SetLine( ScHelperFunctions::GetBorderLine( aLine, rBorder.RightLine ),       BOX_LINE_RIGHT );
     rInner.SetLine( ScHelperFunctions::GetBorderLine( aLine, rBorder.HorizontalLine ),  BOXINFO_LINE_HORI );
     rInner.SetLine( ScHelperFunctions::GetBorderLine( aLine, rBorder.VerticalLine ),    BOXINFO_LINE_VERT );
-    rInner.SetValid( VALID_TOP,      rBorder.IsTopLineValid );
-    rInner.SetValid( VALID_BOTTOM,   rBorder.IsBottomLineValid );
-    rInner.SetValid( VALID_LEFT,     rBorder.IsLeftLineValid );
-    rInner.SetValid( VALID_RIGHT,    rBorder.IsRightLineValid );
-    rInner.SetValid( VALID_HORI,     rBorder.IsHorizontalLineValid );
-    rInner.SetValid( VALID_VERT,     rBorder.IsVerticalLineValid );
-    rInner.SetValid( VALID_DISTANCE, rBorder.IsDistanceValid );
+    rInner.SetValid( SvxBoxInfoItemValidFlags::TOP,      rBorder.IsTopLineValid );
+    rInner.SetValid( SvxBoxInfoItemValidFlags::BOTTOM,   rBorder.IsBottomLineValid );
+    rInner.SetValid( SvxBoxInfoItemValidFlags::LEFT,     rBorder.IsLeftLineValid );
+    rInner.SetValid( SvxBoxInfoItemValidFlags::RIGHT,    rBorder.IsRightLineValid );
+    rInner.SetValid( SvxBoxInfoItemValidFlags::HORI,     rBorder.IsHorizontalLineValid );
+    rInner.SetValid( SvxBoxInfoItemValidFlags::VERT,     rBorder.IsVerticalLineValid );
+    rInner.SetValid( SvxBoxInfoItemValidFlags::DISTANCE, rBorder.IsDistanceValid );
     rInner.SetTable( true );
 }
 }
@@ -1012,13 +1012,13 @@ void lcl_fillTableBorder( TableBorderItem& rBorder, const SvxBoxItem& rOuter, co
     ScHelperFunctions::FillBorderLine( rBorder.VerticalLine,    rInner.GetVert() );
 
     rBorder.Distance                = rOuter.GetDistance();
-    rBorder.IsTopLineValid          = rInner.IsValid(VALID_TOP);
-    rBorder.IsBottomLineValid       = rInner.IsValid(VALID_BOTTOM);
-    rBorder.IsLeftLineValid         = rInner.IsValid(VALID_LEFT);
-    rBorder.IsRightLineValid        = rInner.IsValid(VALID_RIGHT);
-    rBorder.IsHorizontalLineValid   = !bInvalidateHorVerDist && rInner.IsValid(VALID_HORI);
-    rBorder.IsVerticalLineValid     = !bInvalidateHorVerDist && rInner.IsValid(VALID_VERT);
-    rBorder.IsDistanceValid         = !bInvalidateHorVerDist && rInner.IsValid(VALID_DISTANCE);
+    rBorder.IsTopLineValid          = rInner.IsValid(SvxBoxInfoItemValidFlags::TOP);
+    rBorder.IsBottomLineValid       = rInner.IsValid(SvxBoxInfoItemValidFlags::BOTTOM);
+    rBorder.IsLeftLineValid         = rInner.IsValid(SvxBoxInfoItemValidFlags::LEFT);
+    rBorder.IsRightLineValid        = rInner.IsValid(SvxBoxInfoItemValidFlags::RIGHT);
+    rBorder.IsHorizontalLineValid   = !bInvalidateHorVerDist && rInner.IsValid(SvxBoxInfoItemValidFlags::HORI);
+    rBorder.IsVerticalLineValid     = !bInvalidateHorVerDist && rInner.IsValid(SvxBoxInfoItemValidFlags::VERT);
+    rBorder.IsDistanceValid         = !bInvalidateHorVerDist && rInner.IsValid(SvxBoxInfoItemValidFlags::DISTANCE);
 }
 }
 

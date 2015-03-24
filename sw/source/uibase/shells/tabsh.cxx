@@ -195,7 +195,7 @@ static SwTableRep*  lcl_TableParamToItemSet( SfxItemSet& rSet, SwWrtShell &rSh )
     // Always set the default spacing.
     aBoxInfo.SetDefDist        (MIN_BORDER_DIST);
     // Individual lines can have DontCare status only in tables.
-    aBoxInfo.SetValid( VALID_DISABLE, !bTableSel || !rSh.IsTableMode() );
+    aBoxInfo.SetValid( SvxBoxInfoItemValidFlags::DISABLE, !bTableSel || !rSh.IsTableMode() );
 
     rSet.Put(aBoxInfo);
     rSh.GetTabBorders( rSet );
@@ -499,7 +499,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
             }
 
             aInfo.SetTable( true );
-            aInfo.SetValid( VALID_DISABLE, false );
+            aInfo.SetValid( SvxBoxInfoItemValidFlags::DISABLE, false );
 
 // The attributes of all lines will be read and the strongest wins.
             const SvxBorderLine* pBorderLine;

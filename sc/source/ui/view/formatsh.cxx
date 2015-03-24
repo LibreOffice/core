@@ -2072,12 +2072,12 @@ void ScFormatShell::GetAttrState( SfxItemSet& rSet )
                     }
                 }
 
-                if( !aInfoItem.IsValid( VALID_VERT )
-                    || !aInfoItem.IsValid( VALID_HORI )
-                    || !aInfoItem.IsValid( VALID_LEFT )
-                    || !aInfoItem.IsValid( VALID_RIGHT )
-                    || !aInfoItem.IsValid( VALID_TOP )
-                    || !aInfoItem.IsValid( VALID_BOTTOM ) )
+                if( !aInfoItem.IsValid( SvxBoxInfoItemValidFlags::VERT )
+                    || !aInfoItem.IsValid( SvxBoxInfoItemValidFlags::HORI )
+                    || !aInfoItem.IsValid( SvxBoxInfoItemValidFlags::LEFT )
+                    || !aInfoItem.IsValid( SvxBoxInfoItemValidFlags::RIGHT )
+                    || !aInfoItem.IsValid( SvxBoxInfoItemValidFlags::TOP )
+                    || !aInfoItem.IsValid( SvxBoxInfoItemValidFlags::BOTTOM ) )
                 {
                     bColDisable = true;
                     bStyleDisable = true;

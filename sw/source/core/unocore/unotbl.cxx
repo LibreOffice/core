@@ -3222,25 +3222,25 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName, const uno::An
                     SvxBoxInfoItem aBoxInfo( SID_ATTR_BORDER_INNER );
 
                     aBox.SetLine(aTopLine.isEmpty() ? 0 : &aTopLine, BOX_LINE_TOP);
-                    aBoxInfo.SetValid(VALID_TOP, aBorder.IsTopLineValid);
+                    aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::TOP, aBorder.IsTopLineValid);
 
                     aBox.SetLine(aBottomLine.isEmpty() ? 0 : &aBottomLine, BOX_LINE_BOTTOM);
-                    aBoxInfo.SetValid(VALID_BOTTOM, aBorder.IsBottomLineValid);
+                    aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::BOTTOM, aBorder.IsBottomLineValid);
 
                     aBox.SetLine(aLeftLine.isEmpty() ? 0 : &aLeftLine, BOX_LINE_LEFT);
-                    aBoxInfo.SetValid(VALID_LEFT, aBorder.IsLeftLineValid);
+                    aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::LEFT, aBorder.IsLeftLineValid);
 
                     aBox.SetLine(aRightLine.isEmpty() ? 0 : &aRightLine, BOX_LINE_RIGHT);
-                    aBoxInfo.SetValid(VALID_RIGHT, aBorder.IsRightLineValid);
+                    aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::RIGHT, aBorder.IsRightLineValid);
 
                     aBoxInfo.SetLine(aHoriLine.isEmpty() ? 0 : &aHoriLine, BOXINFO_LINE_HORI);
-                    aBoxInfo.SetValid(VALID_HORI, aBorder.IsHorizontalLineValid);
+                    aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::HORI, aBorder.IsHorizontalLineValid);
 
                     aBoxInfo.SetLine(aVertLine.isEmpty() ? 0 : &aVertLine, BOXINFO_LINE_VERT);
-                    aBoxInfo.SetValid(VALID_VERT, aBorder.IsVerticalLineValid);
+                    aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::VERT, aBorder.IsVerticalLineValid);
 
                     aBox.SetDistance((sal_uInt16)convertMm100ToTwip(aBorder.Distance));
-                    aBoxInfo.SetValid(VALID_DISTANCE, aBorder.IsDistanceValid);
+                    aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::DISTANCE, aBorder.IsDistanceValid);
 
                     aSet.Put(aBox);
                     aSet.Put(aBoxInfo);
@@ -3423,38 +3423,38 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName)
                     {
                         table::TableBorder aTableBorder;
                         aTableBorder.TopLine                = SvxBoxItem::SvxLineToLine(rBox.GetTop(), true);
-                        aTableBorder.IsTopLineValid         = rBoxInfoItem.IsValid(VALID_TOP);
+                        aTableBorder.IsTopLineValid         = rBoxInfoItem.IsValid(SvxBoxInfoItemValidFlags::TOP);
                         aTableBorder.BottomLine             = SvxBoxItem::SvxLineToLine(rBox.GetBottom(), true);
-                        aTableBorder.IsBottomLineValid      = rBoxInfoItem.IsValid(VALID_BOTTOM);
+                        aTableBorder.IsBottomLineValid      = rBoxInfoItem.IsValid(SvxBoxInfoItemValidFlags::BOTTOM);
                         aTableBorder.LeftLine               = SvxBoxItem::SvxLineToLine(rBox.GetLeft(), true);
-                        aTableBorder.IsLeftLineValid        = rBoxInfoItem.IsValid(VALID_LEFT);
+                        aTableBorder.IsLeftLineValid        = rBoxInfoItem.IsValid(SvxBoxInfoItemValidFlags::LEFT);
                         aTableBorder.RightLine              = SvxBoxItem::SvxLineToLine(rBox.GetRight(), true);
-                        aTableBorder.IsRightLineValid       = rBoxInfoItem.IsValid(VALID_RIGHT );
+                        aTableBorder.IsRightLineValid       = rBoxInfoItem.IsValid(SvxBoxInfoItemValidFlags::RIGHT );
                         aTableBorder.HorizontalLine         = SvxBoxItem::SvxLineToLine(rBoxInfoItem.GetHori(), true);
-                        aTableBorder.IsHorizontalLineValid  = rBoxInfoItem.IsValid(VALID_HORI);
+                        aTableBorder.IsHorizontalLineValid  = rBoxInfoItem.IsValid(SvxBoxInfoItemValidFlags::HORI);
                         aTableBorder.VerticalLine           = SvxBoxItem::SvxLineToLine(rBoxInfoItem.GetVert(), true);
-                        aTableBorder.IsVerticalLineValid    = rBoxInfoItem.IsValid(VALID_VERT);
+                        aTableBorder.IsVerticalLineValid    = rBoxInfoItem.IsValid(SvxBoxInfoItemValidFlags::VERT);
                         aTableBorder.Distance               = convertTwipToMm100( rBox.GetDistance() );
-                        aTableBorder.IsDistanceValid        = rBoxInfoItem.IsValid(VALID_DISTANCE);
+                        aTableBorder.IsDistanceValid        = rBoxInfoItem.IsValid(SvxBoxInfoItemValidFlags::DISTANCE);
                         aRet <<= aTableBorder;
                     }
                     else
                     {
                         table::TableBorder2 aTableBorder;
                         aTableBorder.TopLine                = SvxBoxItem::SvxLineToLine(rBox.GetTop(), true);
-                        aTableBorder.IsTopLineValid         = rBoxInfoItem.IsValid(VALID_TOP);
+                        aTableBorder.IsTopLineValid         = rBoxInfoItem.IsValid(SvxBoxInfoItemValidFlags::TOP);
                         aTableBorder.BottomLine             = SvxBoxItem::SvxLineToLine(rBox.GetBottom(), true);
-                        aTableBorder.IsBottomLineValid      = rBoxInfoItem.IsValid(VALID_BOTTOM);
+                        aTableBorder.IsBottomLineValid      = rBoxInfoItem.IsValid(SvxBoxInfoItemValidFlags::BOTTOM);
                         aTableBorder.LeftLine               = SvxBoxItem::SvxLineToLine(rBox.GetLeft(), true);
-                        aTableBorder.IsLeftLineValid        = rBoxInfoItem.IsValid(VALID_LEFT);
+                        aTableBorder.IsLeftLineValid        = rBoxInfoItem.IsValid(SvxBoxInfoItemValidFlags::LEFT);
                         aTableBorder.RightLine              = SvxBoxItem::SvxLineToLine(rBox.GetRight(), true);
-                        aTableBorder.IsRightLineValid       = rBoxInfoItem.IsValid(VALID_RIGHT );
+                        aTableBorder.IsRightLineValid       = rBoxInfoItem.IsValid(SvxBoxInfoItemValidFlags::RIGHT );
                         aTableBorder.HorizontalLine         = SvxBoxItem::SvxLineToLine(rBoxInfoItem.GetHori(), true);
-                        aTableBorder.IsHorizontalLineValid  = rBoxInfoItem.IsValid(VALID_HORI);
+                        aTableBorder.IsHorizontalLineValid  = rBoxInfoItem.IsValid(SvxBoxInfoItemValidFlags::HORI);
                         aTableBorder.VerticalLine           = SvxBoxItem::SvxLineToLine(rBoxInfoItem.GetVert(), true);
-                        aTableBorder.IsVerticalLineValid    = rBoxInfoItem.IsValid(VALID_VERT);
+                        aTableBorder.IsVerticalLineValid    = rBoxInfoItem.IsValid(SvxBoxInfoItemValidFlags::VERT);
                         aTableBorder.Distance               = convertTwipToMm100( rBox.GetDistance() );
-                        aTableBorder.IsDistanceValid        = rBoxInfoItem.IsValid(VALID_DISTANCE);
+                        aTableBorder.IsDistanceValid        = rBoxInfoItem.IsValid(SvxBoxInfoItemValidFlags::DISTANCE);
                         aRet <<= aTableBorder;
                     }
                     delete pUnoCrsr;
@@ -3954,19 +3954,19 @@ void SwXCellRange::setPropertyValue(const OUString& rPropertyName, const uno::An
                                     SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER,
                                     0);
                     SvxBoxInfoItem aBoxInfo( SID_ATTR_BORDER_INNER );
-                    aBoxInfo.SetValid(0xff, false);
-                    sal_uInt8 nValid = 0;
+                    aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::ALL, false);
+                    SvxBoxInfoItemValidFlags nValid = SvxBoxInfoItemValidFlags::NONE;
                     switch(pEntry->nMemberId & ~CONVERT_TWIPS)
                     {
-                        case  LEFT_BORDER :             nValid = VALID_LEFT; break;
-                        case  RIGHT_BORDER:             nValid = VALID_RIGHT; break;
-                        case  TOP_BORDER  :             nValid = VALID_TOP; break;
-                        case  BOTTOM_BORDER:            nValid = VALID_BOTTOM; break;
+                        case  LEFT_BORDER :             nValid = SvxBoxInfoItemValidFlags::LEFT; break;
+                        case  RIGHT_BORDER:             nValid = SvxBoxInfoItemValidFlags::RIGHT; break;
+                        case  TOP_BORDER  :             nValid = SvxBoxInfoItemValidFlags::TOP; break;
+                        case  BOTTOM_BORDER:            nValid = SvxBoxInfoItemValidFlags::BOTTOM; break;
                         case  LEFT_BORDER_DISTANCE :
                         case  RIGHT_BORDER_DISTANCE:
                         case  TOP_BORDER_DISTANCE  :
                         case  BOTTOM_BORDER_DISTANCE:
-                            nValid = VALID_DISTANCE;
+                            nValid = SvxBoxInfoItemValidFlags::DISTANCE;
                         break;
                     }
                     aBoxInfo.SetValid(nValid, true);

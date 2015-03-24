@@ -351,22 +351,22 @@ void CellAppearancePropertyPanel::NotifyItemUpdate(
 
                 mbVer = false, mbHor = false;
 
-                if(!pBoxInfoItem->IsValid( VALID_VERT )  || pBoxInfoItem->GetVert())
+                if(!pBoxInfoItem->IsValid( SvxBoxInfoItemValidFlags::VERT )  || pBoxInfoItem->GetVert())
                     mbVer = true;
 
-                if(!pBoxInfoItem->IsValid( VALID_HORI )  || pBoxInfoItem->GetHori())
+                if(!pBoxInfoItem->IsValid( SvxBoxInfoItemValidFlags::HORI )  || pBoxInfoItem->GetHori())
                     mbHor = true;
 
-                if(!pBoxInfoItem->IsValid( VALID_LEFT ) || mbLeft)
+                if(!pBoxInfoItem->IsValid( SvxBoxInfoItemValidFlags::LEFT ) || mbLeft)
                     bLeft = true;
 
-                if(!pBoxInfoItem->IsValid( VALID_RIGHT ) || mbRight)
+                if(!pBoxInfoItem->IsValid( SvxBoxInfoItemValidFlags::RIGHT ) || mbRight)
                     bRight = true;
 
-                if(!pBoxInfoItem->IsValid( VALID_TOP ) || mbTop)
+                if(!pBoxInfoItem->IsValid( SvxBoxInfoItemValidFlags::TOP ) || mbTop)
                     bTop = true;
 
-                if(!pBoxInfoItem->IsValid( VALID_BOTTOM ) || mbBottom)
+                if(!pBoxInfoItem->IsValid( SvxBoxInfoItemValidFlags::BOTTOM ) || mbBottom)
                     bBottom = true;
 
                 if(!Application::GetSettings().GetLayoutRTL())

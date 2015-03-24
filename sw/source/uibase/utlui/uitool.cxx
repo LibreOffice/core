@@ -116,7 +116,7 @@ void PrepareBoxInfo(SfxItemSet& rSet, const SwWrtShell& rSh)
         // Set always the default distance
     aBoxInfo.SetDefDist        (MIN_BORDER_DIST);
         // Single lines can have only in tables DontCare-Status
-    aBoxInfo.SetValid(VALID_DISABLE, !rSh.IsTableMode());
+    aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::DISABLE, !rSh.IsTableMode());
 
     rSet.Put(aBoxInfo);
 }
@@ -466,7 +466,7 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
         // Set always the default distance
     aBoxInfo.SetDefDist( MIN_BORDER_DIST );
         // Single lines can have only in tables DontCare-Status
-    aBoxInfo.SetValid( VALID_DISABLE );
+    aBoxInfo.SetValid( SvxBoxInfoItemValidFlags::DISABLE );
     rSet.Put( aBoxInfo );
 
     SfxStringItem aFollow(SID_ATTR_PAGE_EXT1, OUString());

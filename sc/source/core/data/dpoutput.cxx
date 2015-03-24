@@ -260,16 +260,16 @@ void ScDPOutputImpl::OutputBlockFrame ( SCCOL nStartCol, SCROW nStartRow, SCCOL 
         aBox.SetLine(&aLine,  BOX_LINE_BOTTOM);
 
     SvxBoxInfoItem aBoxInfo( ATTR_BORDER_INNER );
-    aBoxInfo.SetValid(VALID_VERT,false );
+    aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::VERT,false );
     if ( bHori )
     {
-        aBoxInfo.SetValid(VALID_HORI,true);
+        aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::HORI,true);
         aBoxInfo.SetLine( &aLine, BOXINFO_LINE_HORI );
     }
     else
-        aBoxInfo.SetValid(VALID_HORI,false );
+        aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::HORI,false );
 
-    aBoxInfo.SetValid(VALID_DISTANCE,false);
+    aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::DISTANCE,false);
 
     mpDoc->ApplyFrameAreaTab( ScRange(  nStartCol, nStartRow, mnTab, nEndCol, nEndRow , mnTab ), &aBox, &aBoxInfo );
 
@@ -316,9 +316,9 @@ void lcl_SetFrame( ScDocument* pDoc, SCTAB nTab,
     aBox.SetLine(&aLine, BOX_LINE_RIGHT);
     aBox.SetLine(&aLine, BOX_LINE_BOTTOM);
     SvxBoxInfoItem aBoxInfo( ATTR_BORDER_INNER );
-    aBoxInfo.SetValid(VALID_HORI,false);
-    aBoxInfo.SetValid(VALID_VERT,false);
-    aBoxInfo.SetValid(VALID_DISTANCE,false);
+    aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::HORI,false);
+    aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::VERT,false);
+    aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::DISTANCE,false);
 
     pDoc->ApplyFrameAreaTab( ScRange( nCol1, nRow1, nTab, nCol2, nRow2, nTab ), &aBox, &aBoxInfo );
 }

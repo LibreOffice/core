@@ -244,7 +244,7 @@ SvxBorderTabPage::SvxBorderTabPage(vcl::Window* pParent, const SfxItemSet& rCore
         {
             m_pSpacingFrame->Hide();
         }
-        bIsDontCare = !pBoxInfo->IsValid( VALID_DISABLE );
+        bIsDontCare = !pBoxInfo->IsValid( SvxBoxInfoItemValidFlags::DISABLE );
     }
     if(!mbUseMarginItem && eFUnit == FUNIT_MM && SFX_MAPUNIT_TWIP == rCoreAttrs.GetPool()->GetMetric( GetWhich( SID_ATTR_BORDER_INNER ) ))
     {
@@ -389,12 +389,12 @@ void SvxBorderTabPage::Reset( const SfxItemSet* rSet )
 
     if ( pBoxItem && pBoxInfoItem ) // -> Don't Care
     {
-        ResetFrameLine_Impl( svx::FRAMEBORDER_LEFT,   pBoxItem->GetLeft(),     pBoxInfoItem->IsValid( VALID_LEFT ) );
-        ResetFrameLine_Impl( svx::FRAMEBORDER_RIGHT,  pBoxItem->GetRight(),    pBoxInfoItem->IsValid( VALID_RIGHT ) );
-        ResetFrameLine_Impl( svx::FRAMEBORDER_TOP,    pBoxItem->GetTop(),      pBoxInfoItem->IsValid( VALID_TOP ) );
-        ResetFrameLine_Impl( svx::FRAMEBORDER_BOTTOM, pBoxItem->GetBottom(),   pBoxInfoItem->IsValid( VALID_BOTTOM ) );
-        ResetFrameLine_Impl( svx::FRAMEBORDER_VER,    pBoxInfoItem->GetVert(), pBoxInfoItem->IsValid( VALID_VERT ) );
-        ResetFrameLine_Impl( svx::FRAMEBORDER_HOR,    pBoxInfoItem->GetHori(), pBoxInfoItem->IsValid( VALID_HORI ) );
+        ResetFrameLine_Impl( svx::FRAMEBORDER_LEFT,   pBoxItem->GetLeft(),     pBoxInfoItem->IsValid( SvxBoxInfoItemValidFlags::LEFT ) );
+        ResetFrameLine_Impl( svx::FRAMEBORDER_RIGHT,  pBoxItem->GetRight(),    pBoxInfoItem->IsValid( SvxBoxInfoItemValidFlags::RIGHT ) );
+        ResetFrameLine_Impl( svx::FRAMEBORDER_TOP,    pBoxItem->GetTop(),      pBoxInfoItem->IsValid( SvxBoxInfoItemValidFlags::TOP ) );
+        ResetFrameLine_Impl( svx::FRAMEBORDER_BOTTOM, pBoxItem->GetBottom(),   pBoxInfoItem->IsValid( SvxBoxInfoItemValidFlags::BOTTOM ) );
+        ResetFrameLine_Impl( svx::FRAMEBORDER_VER,    pBoxInfoItem->GetVert(), pBoxInfoItem->IsValid( SvxBoxInfoItemValidFlags::VERT ) );
+        ResetFrameLine_Impl( svx::FRAMEBORDER_HOR,    pBoxInfoItem->GetHori(), pBoxInfoItem->IsValid( SvxBoxInfoItemValidFlags::HORI ) );
 
 
         // distance inside
@@ -661,7 +661,7 @@ bool SvxBorderTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
                         nMinValue == m_pRightMF->GetValue() ||
                         nMinValue == m_pTopMF->GetValue() ||
                         nMinValue == m_pBottomMF->GetValue() ||
-                        (pOldBoxInfoItem && !pOldBoxInfoItem->IsValid(VALID_DISTANCE))
+                        (pOldBoxInfoItem && !pOldBoxInfoItem->IsValid(SvxBoxInfoItemValidFlags::DISTANCE))
                        )
                     {
                         aBoxItem.SetDistance( (sal_uInt16)GetCoreValue(*m_pLeftMF, eCoreUnit ), BOX_LINE_LEFT  );
@@ -676,10 +676,10 @@ bool SvxBorderTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
                         aBoxItem.SetDistance(pOldBoxItem->GetDistance(BOX_LINE_TOP  ), BOX_LINE_TOP);
                         aBoxItem.SetDistance(pOldBoxItem->GetDistance(BOX_LINE_BOTTOM), BOX_LINE_BOTTOM);
                     }
-                    aBoxInfoItem.SetValid( VALID_DISTANCE, true );
+                    aBoxInfoItem.SetValid( SvxBoxInfoItemValidFlags::DISTANCE, true );
                 }
                 else
-                    aBoxInfoItem.SetValid( VALID_DISTANCE, false );
+                    aBoxInfoItem.SetValid( SvxBoxInfoItemValidFlags::DISTANCE, false );
             }
         }
     }
@@ -687,12 +687,12 @@ bool SvxBorderTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
 
     // note Don't Care Status in the Info-Item:
 
-    aBoxInfoItem.SetValid( VALID_TOP,    m_pFrameSel->GetFrameBorderState( svx::FRAMEBORDER_TOP )    != svx::FRAMESTATE_DONTCARE );
-    aBoxInfoItem.SetValid( VALID_BOTTOM, m_pFrameSel->GetFrameBorderState( svx::FRAMEBORDER_BOTTOM ) != svx::FRAMESTATE_DONTCARE );
-    aBoxInfoItem.SetValid( VALID_LEFT,   m_pFrameSel->GetFrameBorderState( svx::FRAMEBORDER_LEFT )   != svx::FRAMESTATE_DONTCARE );
-    aBoxInfoItem.SetValid( VALID_RIGHT,  m_pFrameSel->GetFrameBorderState( svx::FRAMEBORDER_RIGHT )  != svx::FRAMESTATE_DONTCARE );
-    aBoxInfoItem.SetValid( VALID_HORI,   m_pFrameSel->GetFrameBorderState( svx::FRAMEBORDER_HOR )    != svx::FRAMESTATE_DONTCARE );
-    aBoxInfoItem.SetValid( VALID_VERT,   m_pFrameSel->GetFrameBorderState( svx::FRAMEBORDER_VER )    != svx::FRAMESTATE_DONTCARE );
+    aBoxInfoItem.SetValid( SvxBoxInfoItemValidFlags::TOP,    m_pFrameSel->GetFrameBorderState( svx::FRAMEBORDER_TOP )    != svx::FRAMESTATE_DONTCARE );
+    aBoxInfoItem.SetValid( SvxBoxInfoItemValidFlags::BOTTOM, m_pFrameSel->GetFrameBorderState( svx::FRAMEBORDER_BOTTOM ) != svx::FRAMESTATE_DONTCARE );
+    aBoxInfoItem.SetValid( SvxBoxInfoItemValidFlags::LEFT,   m_pFrameSel->GetFrameBorderState( svx::FRAMEBORDER_LEFT )   != svx::FRAMESTATE_DONTCARE );
+    aBoxInfoItem.SetValid( SvxBoxInfoItemValidFlags::RIGHT,  m_pFrameSel->GetFrameBorderState( svx::FRAMEBORDER_RIGHT )  != svx::FRAMESTATE_DONTCARE );
+    aBoxInfoItem.SetValid( SvxBoxInfoItemValidFlags::HORI,   m_pFrameSel->GetFrameBorderState( svx::FRAMEBORDER_HOR )    != svx::FRAMESTATE_DONTCARE );
+    aBoxInfoItem.SetValid( SvxBoxInfoItemValidFlags::VERT,   m_pFrameSel->GetFrameBorderState( svx::FRAMEBORDER_VER )    != svx::FRAMESTATE_DONTCARE );
 
 
     // Put or Clear of the border?
@@ -1124,29 +1124,29 @@ IMPL_LINK_NOARG(SvxBorderTabPage, LinesChanged_Impl)
             }
         }
         // for tables everything is allowed
-        sal_uInt16 nValid = VALID_TOP|VALID_BOTTOM|VALID_LEFT|VALID_RIGHT;
+        SvxBoxInfoItemValidFlags nValid = SvxBoxInfoItemValidFlags::TOP|SvxBoxInfoItemValidFlags::BOTTOM|SvxBoxInfoItemValidFlags::LEFT|SvxBoxInfoItemValidFlags::RIGHT;
 
         // for other objects (paragraph, page, frame, character) the edit is disabled, if there's no border set
         if(!(nSWMode & SW_BORDER_MODE_TABLE))
         {
             if(bLineSet)
             {
-                nValid  = (m_pFrameSel->GetFrameBorderState( svx::FRAMEBORDER_TOP)    == svx::FRAMESTATE_SHOW) ? VALID_TOP : 0;
-                nValid |= (m_pFrameSel->GetFrameBorderState( svx::FRAMEBORDER_BOTTOM) == svx::FRAMESTATE_SHOW) ? VALID_BOTTOM : 0;
-                nValid |= (m_pFrameSel->GetFrameBorderState( svx::FRAMEBORDER_LEFT)   == svx::FRAMESTATE_SHOW) ? VALID_LEFT : 0;
-                nValid |= (m_pFrameSel->GetFrameBorderState( svx::FRAMEBORDER_RIGHT ) == svx::FRAMESTATE_SHOW) ? VALID_RIGHT : 0;
+                nValid  = (m_pFrameSel->GetFrameBorderState( svx::FRAMEBORDER_TOP)    == svx::FRAMESTATE_SHOW) ? SvxBoxInfoItemValidFlags::TOP : SvxBoxInfoItemValidFlags::NONE;
+                nValid |= (m_pFrameSel->GetFrameBorderState( svx::FRAMEBORDER_BOTTOM) == svx::FRAMESTATE_SHOW) ? SvxBoxInfoItemValidFlags::BOTTOM : SvxBoxInfoItemValidFlags::NONE;
+                nValid |= (m_pFrameSel->GetFrameBorderState( svx::FRAMEBORDER_LEFT)   == svx::FRAMESTATE_SHOW) ? SvxBoxInfoItemValidFlags::LEFT : SvxBoxInfoItemValidFlags::NONE;
+                nValid |= (m_pFrameSel->GetFrameBorderState( svx::FRAMEBORDER_RIGHT ) == svx::FRAMESTATE_SHOW) ? SvxBoxInfoItemValidFlags::RIGHT : SvxBoxInfoItemValidFlags::NONE;
             }
             else
-                nValid = 0;
+                nValid = SvxBoxInfoItemValidFlags::NONE;
         }
-        m_pLeftFT->Enable(0 != (nValid&VALID_LEFT));
-        m_pRightFT->Enable(0 != (nValid&VALID_RIGHT));
-        m_pTopFT->Enable(0 != (nValid&VALID_TOP));
-        m_pBottomFT->Enable(0 != (nValid&VALID_BOTTOM));
-        m_pLeftMF->Enable(0 != (nValid&VALID_LEFT));
-        m_pRightMF->Enable(0 != (nValid&VALID_RIGHT));
-        m_pTopMF->Enable(0 != (nValid&VALID_TOP));
-        m_pBottomMF->Enable(0 != (nValid&VALID_BOTTOM));
+        m_pLeftFT->Enable( bool(nValid & SvxBoxInfoItemValidFlags::LEFT) );
+        m_pRightFT->Enable( bool(nValid & SvxBoxInfoItemValidFlags::RIGHT) );
+        m_pTopFT->Enable( bool(nValid & SvxBoxInfoItemValidFlags::TOP) );
+        m_pBottomFT->Enable( bool(nValid & SvxBoxInfoItemValidFlags::BOTTOM) );
+        m_pLeftMF->Enable( bool(nValid & SvxBoxInfoItemValidFlags::LEFT) );
+        m_pRightMF->Enable( bool(nValid & SvxBoxInfoItemValidFlags::RIGHT) );
+        m_pTopMF->Enable( bool(nValid & SvxBoxInfoItemValidFlags::TOP) );
+        m_pBottomMF->Enable( bool(nValid & SvxBoxInfoItemValidFlags::BOTTOM) );
         m_pSynchronizeCB->Enable( m_pRightMF->IsEnabled() || m_pTopMF->IsEnabled() ||
                                m_pBottomMF->IsEnabled() || m_pLeftMF->IsEnabled() );
     }

@@ -2709,7 +2709,7 @@ SfxPoolItem* SvxBoxInfoItem::Create( SvStream& rStrm, sal_uInt16 ) const
 
 void SvxBoxInfoItem::ResetFlags()
 {
-    nValidFlags = 0x7F; // all valid except Disable
+    nValidFlags = static_cast<SvxBoxInfoItemValidFlags>(0x7F); // all valid except Disable
 }
 
 bool SvxBoxInfoItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId  ) const
@@ -2734,8 +2734,7 @@ bool SvxBoxInfoItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId  ) const
             if ( IsMinDist() )
                 nVal |= 0x04;
             aSeq[2] = ::com::sun::star::uno::makeAny( nVal );
-            nVal = nValidFlags;
-            aSeq[3] = ::com::sun::star::uno::makeAny( nVal );
+            aSeq[3] = ::com::sun::star::uno::makeAny( static_cast<sal_Int16>(nValidFlags) );
             aSeq[4] = ::com::sun::star::uno::makeAny( (sal_Int32)(bConvert ? convertTwipToMm100(GetDefDist()) : GetDefDist()) );
             rVal = ::com::sun::star::uno::makeAny( aSeq );
             return true;
@@ -2759,8 +2758,7 @@ bool SvxBoxInfoItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId  ) const
             break;
         case MID_VALIDFLAGS:
             bIntMember = true;
-            nVal = nValidFlags;
-            rVal <<= nVal;
+            rVal <<= static_cast<sal_Int16>(nValidFlags);
             break;
         case MID_DISTANCE:
             bIntMember = true;
@@ -2806,7 +2804,7 @@ bool SvxBoxInfoItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 else
                     return false;
                 if ( aSeq[3] >>= nFlags )
-                    nValidFlags = (sal_uInt8)nFlags;
+                    nValidFlags = static_cast<SvxBoxInfoItemValidFlags>(nFlags);
                 else
                     return false;
                 if (( aSeq[4] >>= nVal ) && ( nVal >= 0 ))
@@ -2919,7 +2917,7 @@ bool SvxBoxInfoItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             sal_Int16 nFlags = sal_Int16();
             bRet = (rVal >>= nFlags);
             if ( bRet )
-                nValidFlags = (sal_uInt8)nFlags;
+                nValidFlags = static_cast<SvxBoxInfoItemValidFlags>(nFlags);
             break;
         }
         case MID_DISTANCE:

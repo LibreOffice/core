@@ -662,7 +662,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, TblFmtHdl, PushButton*, pButton )
             // always set default-gap
         aBoxInfo.SetDefDist( MIN_BORDER_DIST );
             // Single lines can have DontCare-status only in tables
-        aBoxInfo.SetValid( VALID_DISABLE, true );
+        aBoxInfo.SetValid( SvxBoxInfoItemValidFlags::DISABLE, true );
         pTblSet->Put( aBoxInfo );
 
         SwGetCurColNumPara aPara;

@@ -447,7 +447,7 @@ void SwHeaderFooterWin::ExecuteCommand( sal_uInt16 nSlot )
                 aBoxInfo.SetDist( true);
                 aBoxInfo.SetMinDist( false );
                 aBoxInfo.SetDefDist( MIN_BORDER_DIST );
-                aBoxInfo.SetValid( VALID_DISABLE );
+                aBoxInfo.SetValid( SvxBoxInfoItemValidFlags::DISABLE );
                 aSet.Put( aBoxInfo );
 
                 if ( svx::ShowBorderBackgroundDlg( this, &aSet, true ) )

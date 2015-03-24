@@ -24,6 +24,7 @@
 #include <editeng/borderline.hxx>
 #include <editeng/editengdllapi.h>
 #include <com/sun/star/table/BorderLine2.hpp>
+#include <o3tl/typed_flags_set.hxx>
 
 
 // class SvxBoxItem ------------------------------------------------------
@@ -129,14 +130,23 @@ inline void SvxBoxItem::SetDistance( sal_uInt16 nNew )
 #define BOXINFO_LINE_HORI   ((sal_uInt16)0)
 #define BOXINFO_LINE_VERT   ((sal_uInt16)1)
 
-#define VALID_TOP           0x01
-#define VALID_BOTTOM        0x02
-#define VALID_LEFT          0x04
-#define VALID_RIGHT         0x08
-#define VALID_HORI          0x10
-#define VALID_VERT          0x20
-#define VALID_DISTANCE      0x40
-#define VALID_DISABLE       0x80
+enum class SvxBoxInfoItemValidFlags
+{
+    NONE          = 0x00,
+    TOP           = 0x01,
+    BOTTOM        = 0x02,
+    LEFT          = 0x04,
+    RIGHT         = 0x08,
+    HORI          = 0x10,
+    VERT          = 0x20,
+    DISTANCE      = 0x40,
+    DISABLE       = 0x80,
+    ALL           = 0xff
+};
+namespace o3tl
+{
+    template<> struct typed_flags<SvxBoxInfoItemValidFlags> : is_typed_flags<SvxBoxInfoItemValidFlags, 0xff> {};
+}
 
 class EDITENG_DLLPUBLIC SvxBoxInfoItem : public SfxPoolItem
 {
@@ -159,16 +169,7 @@ class EDITENG_DLLPUBLIC SvxBoxInfoItem : public SfxPoolItem
     bool        bDist      :1;  // TRUE, Unlock Distance.
     bool        bMinDist   :1;  // TRUE, Going below minimum Distance is prohibited
 
-    sal_uInt8   nValidFlags;    // 0000 0000
-                                // 0000 0001 VALID_TOP
-                                // 0000 0010 VALID_BOTTOM
-                                // 0000 0100 VALID_LEFT
-                                // 0000 1000 VALID_RIGHT
-                                // 0001 0000 VALID_HORI
-                                // 0010 0000 VALID_VERT
-                                // 0100 0000 VALID_DIST
-                                // 1000 0000 VALID_DISABLE
-
+    SvxBoxInfoItemValidFlags nValidFlags;
     sal_uInt16  nDefDist;       // The default or minimum distance.
 
 public:
@@ -191,8 +192,8 @@ public:
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
     virtual SfxPoolItem*    Create(SvStream &, sal_uInt16) const SAL_OVERRIDE;
     virtual SvStream&       Store(SvStream &, sal_uInt16 nItemVersion ) const SAL_OVERRIDE;
-    virtual bool             ScaleMetrics( long nMult, long nDiv ) SAL_OVERRIDE;
-    virtual bool             HasMetrics() const SAL_OVERRIDE;
+    virtual bool            ScaleMetrics( long nMult, long nDiv ) SAL_OVERRIDE;
+    virtual bool            HasMetrics() const SAL_OVERRIDE;
 
     const editeng::SvxBorderLine*   GetHori() const { return pHori; }
     const editeng::SvxBorderLine*   GetVert() const { return pVert; }
@@ -212,12 +213,12 @@ public:
     void    SetDist( bool bNew )        { bDist = bNew; }
     bool    IsMinDist() const           { return bMinDist; }
     void    SetMinDist( bool bNew )     { bMinDist = bNew; }
-    sal_uInt16  GetDefDist() const          { return nDefDist; }
-    void    SetDefDist( sal_uInt16 nNew )   { nDefDist = nNew; }
+    sal_uInt16  GetDefDist() const            { return nDefDist; }
+    void        SetDefDist( sal_uInt16 nNew ) { nDefDist = nNew; }
 
-    bool                    IsValid( sal_uInt8 nValid ) const
-                                { return ( nValidFlags & nValid ) == nValid; }
-    void                    SetValid( sal_uInt8 nValid, bool bValid = true )
+    bool                    IsValid( SvxBoxInfoItemValidFlags nValid ) const
+                                { return bool( nValidFlags & nValid ); }
+    void                    SetValid( SvxBoxInfoItemValidFlags nValid, bool bValid = true )
                                 { bValid ? ( nValidFlags |= nValid )
                                          : ( nValidFlags &= ~nValid ); }
     void                    ResetFlags();

@@ -950,12 +950,12 @@ void ScViewFunc::ApplyAttributes( const SfxItemSet* pDialogSet,
     if ( pNewInner )
     {
         bFrame =   bFrame
-                && (   pNewInner->IsValid(VALID_LEFT)
-                    || pNewInner->IsValid(VALID_RIGHT)
-                    || pNewInner->IsValid(VALID_TOP)
-                    || pNewInner->IsValid(VALID_BOTTOM)
-                    || pNewInner->IsValid(VALID_HORI)
-                    || pNewInner->IsValid(VALID_VERT) );
+                && (   pNewInner->IsValid(SvxBoxInfoItemValidFlags::LEFT)
+                    || pNewInner->IsValid(SvxBoxInfoItemValidFlags::RIGHT)
+                    || pNewInner->IsValid(SvxBoxInfoItemValidFlags::TOP)
+                    || pNewInner->IsValid(SvxBoxInfoItemValidFlags::BOTTOM)
+                    || pNewInner->IsValid(SvxBoxInfoItemValidFlags::HORI)
+                    || pNewInner->IsValid(SvxBoxInfoItemValidFlags::VERT) );
     }
     else
         bFrame = false;

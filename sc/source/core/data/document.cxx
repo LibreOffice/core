@@ -4913,12 +4913,12 @@ void ScDocument::GetSelectionFrame( const ScMarkData& rMark,
 
         // Evaluate don't care Status
 
-    rLineInner.SetValid( VALID_LEFT,   ( aFlags.nLeft != SC_LINE_DONTCARE ) );
-    rLineInner.SetValid( VALID_RIGHT,  ( aFlags.nRight != SC_LINE_DONTCARE ) );
-    rLineInner.SetValid( VALID_TOP,    ( aFlags.nTop != SC_LINE_DONTCARE ) );
-    rLineInner.SetValid( VALID_BOTTOM, ( aFlags.nBottom != SC_LINE_DONTCARE ) );
-    rLineInner.SetValid( VALID_HORI,   ( aFlags.nHori != SC_LINE_DONTCARE ) );
-    rLineInner.SetValid( VALID_VERT,   ( aFlags.nVert != SC_LINE_DONTCARE ) );
+    rLineInner.SetValid( SvxBoxInfoItemValidFlags::LEFT,   ( aFlags.nLeft != SC_LINE_DONTCARE ) );
+    rLineInner.SetValid( SvxBoxInfoItemValidFlags::RIGHT,  ( aFlags.nRight != SC_LINE_DONTCARE ) );
+    rLineInner.SetValid( SvxBoxInfoItemValidFlags::TOP,    ( aFlags.nTop != SC_LINE_DONTCARE ) );
+    rLineInner.SetValid( SvxBoxInfoItemValidFlags::BOTTOM, ( aFlags.nBottom != SC_LINE_DONTCARE ) );
+    rLineInner.SetValid( SvxBoxInfoItemValidFlags::HORI,   ( aFlags.nHori != SC_LINE_DONTCARE ) );
+    rLineInner.SetValid( SvxBoxInfoItemValidFlags::VERT,   ( aFlags.nVert != SC_LINE_DONTCARE ) );
 }
 
 bool ScDocument::HasAttrib( SCCOL nCol1, SCROW nRow1, SCTAB nTab1,

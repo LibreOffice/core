@@ -1188,7 +1188,7 @@ SfxItemSet&   SwDocStyleSheet::GetItemSet()
                 aBoxInfo.SetMinDist( true );// set minimum size in tables and paragraphs
                 aBoxInfo.SetDefDist( MIN_BORDER_DIST );// always set Default-Gap
                     // Single lines can only have DontCare-Status in tables
-                aBoxInfo.SetValid( VALID_DISABLE, true );
+                aBoxInfo.SetValid( SvxBoxInfoItemValidFlags::DISABLE, true );
 
                 if( nFamily == SFX_STYLE_FAMILY_CHAR )
                 {
