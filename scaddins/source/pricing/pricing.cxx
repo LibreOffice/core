@@ -45,33 +45,6 @@ using namespace sca::pricing;
 
 #define STR_FROM_ANSI( s )      OUString( s, strlen( s ), RTL_TEXTENCODING_MS_1252 )
 
-const sal_uInt32 ScaList::nStartSize = 16;
-const sal_uInt32 ScaList::nIncrSize = 16;
-
-ScaList::ScaList() :
-    pData( new void*[ nStartSize ] ),
-    nSize( nStartSize ),
-    nCount( 0 ),
-    nCurr( 0 )
-{
-}
-
-ScaList::~ScaList()
-{
-    delete[] pData;
-}
-
-void ScaList::_Grow()
-{
-    nSize += nIncrSize;
-
-    void** pNewData = new void*[ nSize ];
-    memcpy( pNewData, pData, nCount * sizeof( void* ) );
-
-    delete[] pData;
-    pData = pNewData;
-}
-
 ScaStringList::~ScaStringList()
 {
     for( OUString* pStr = First(); pStr; pStr = Next() )

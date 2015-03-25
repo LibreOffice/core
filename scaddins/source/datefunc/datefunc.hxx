@@ -35,47 +35,9 @@
 #include <tools/rc.hxx>
 #include <tools/resary.hxx>
 
-class ScaList
-{
-private:
-    static const sal_uInt32     nStartSize;
-    static const sal_uInt32     nIncrSize;
-
-    void**                      pData;          // pointer array
-    sal_uInt32                  nSize;          // array size
-    sal_uInt32                  nCount;         // next index to be inserted at
-    sal_uInt32                  nCurr;          // current pos for iterations
-
-    void                        _Grow();
-    inline void                 Grow();
-
-public:
-                                ScaList();
-    virtual                     ~ScaList();
-
-    inline sal_uInt32           Count() const       { return nCount; }
-
-    inline const void*          GetObject( sal_uInt32 nIndex ) const
-                                    { return (nIndex < nCount) ? pData[ nIndex ] : NULL; }
-
-    inline void*                First() { return nCount ? pData[ nCurr = 0 ] : NULL; }
-    inline void*                Next()  { return (nCurr + 1 < nCount) ? pData[ ++nCurr ] : NULL; }
-
-    inline void                 Append( void* pNew );
-};
 
 
-inline void ScaList::Grow()
-{
-    if( nCount >= nSize )
-        _Grow();
-}
-
-inline void ScaList::Append( void* pNew )
-{
-    Grow();
-    pData[ nCount++ ] = pNew;
-}
+#include "../scaList.hxx"
 
 
 class ScaStringList : protected ScaList
@@ -278,8 +240,6 @@ inline ScaFuncData* ScaFuncDataList::Next()
 {
     return static_cast< ScaFuncData* >( ScaList::Next() );
 }
-
-
 
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL DateFunctionAddIn_CreateInstance(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
