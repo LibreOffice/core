@@ -451,6 +451,8 @@ enum ConvertDataClass
 
 class ConvertDataList;
 
+namespace comp {
+
 class ConvertData
 {
 protected:
@@ -486,7 +488,9 @@ public:
     inline bool         IsPrefixSupport( void ) const;
 };
 
-class ConvertDataLinear : public ConvertData
+}
+
+class ConvertDataLinear : public comp::ConvertData
 {
 protected:
     double                  fOffs;
@@ -500,7 +504,7 @@ public:
 
     virtual                 ~ConvertDataLinear();
 
-    virtual double          Convert( double fVal, const ConvertData& rTo,
+    virtual double          Convert( double fVal, const comp::ConvertData& rTo,
                                 sal_Int16 nMatchLevelFrom, sal_Int16 nMatchLevelTo ) const throw( css::uno::RuntimeException, css::lang::IllegalArgumentException ) SAL_OVERRIDE;
                                     // for cases where f(x) = a + bx applies (e.g. Temperatures)
 
@@ -512,7 +516,7 @@ public:
 class ConvertDataList
 {
 private:
-    std::vector<ConvertData*> maVector;
+    std::vector<comp::ConvertData*> maVector;
 public:
                             ConvertDataList( void );
     virtual                 ~ConvertDataList();
@@ -685,19 +689,19 @@ inline void ComplexList::Append( Complex* p )
 }
 
 
-inline ConvertDataClass ConvertData::Class( void ) const
+inline ConvertDataClass comp::ConvertData::Class( void ) const
 {
     return eClass;
 }
 
-inline bool ConvertData::IsPrefixSupport( void ) const
+inline bool comp::ConvertData::IsPrefixSupport( void ) const
 {
     return bPrefixSupport;
 }
 
 inline ConvertDataLinear::ConvertDataLinear( const sal_Char* p, double fC, double fO, ConvertDataClass e,
         bool bPrefSupport ) :
-    ConvertData( p, fC, e, bPrefSupport ),
+    comp::ConvertData( p, fC, e, bPrefSupport ),
     fOffs( fO )
 {
 }

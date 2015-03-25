@@ -31,6 +31,7 @@
 
 using namespace                 ::com::sun::star;
 using namespace sca::analysis;
+using namespace sca::analysis::comp;
 
 #define UNIQUE              false   // function name does not exist in Calc
 #define DOUBLE              true    // function name exists in Calc
