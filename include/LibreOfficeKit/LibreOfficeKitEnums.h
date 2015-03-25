@@ -63,21 +63,23 @@ typedef enum
      */
     LOK_CALLBACK_TEXT_SELECTION,
     /**
-     * The size and/or the position of the cursor rectangle at the text
-     * selection start changed.
+     * The position and size of the cursor rectangle at the text
+     * selection start. It is used to draw the selection handles.
      *
-     * If this callback is emitted, it's always followed by a
-     * LOK_CALLBACK_TEXT_SELECTION one. Rectangle format is the same as
-     * LOK_CALLBACK_INVALIDATE_TILES.
+     * This callback must be called prior to LOK_CALLBACK_TEXT_SELECTION every
+     * time the selection is updated.
+     *
+     * Rectangle format is the same as LOK_CALLBACK_INVALIDATE_TILES.
      */
     LOK_CALLBACK_TEXT_SELECTION_START,
     /**
-     * The size and/or the position of the cursor rectangle at the text
-     * selection end changed.
+     * The position and size of the cursor rectangle at the text
+     * selection end. It is used to draw the selection handles.
      *
-     * If this callback is emitted, it's always followed by a
-     * LOK_CALLBACK_TEXT_SELECTION one. Rectangle format is the same as
-     * LOK_CALLBACK_INVALIDATE_TILES.
+     * This callback must be called prior to LOK_CALLBACK_TEXT_SELECTION every
+     * time the selection is updated.
+     *
+     * Rectangle format is the same as LOK_CALLBACK_INVALIDATE_TILES.
      */
     LOK_CALLBACK_TEXT_SELECTION_END,
     /**
