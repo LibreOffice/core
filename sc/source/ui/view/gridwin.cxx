@@ -5936,10 +5936,9 @@ void ScGridWindow::UpdateCursorOverlay()
             // notify the LibreOfficeKit too, but only if there's no
             // selection yet, to avoid setting the LOK selection twice
             // (once for the cell only, and then for the selection)
-            ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
-            if (pDrawLayer->isTiledRendering() && !pViewData->GetMarkData().IsMarked() && !pViewData->GetMarkData().IsMultiMarked())
+            if (!pViewData->GetMarkData().IsMarked() && !pViewData->GetMarkData().IsMultiMarked())
             {
-                updateLibreOfficeKitSelection(pDrawLayer, aRanges);
+                updateLibreOfficeKitSelection(pDoc->GetDrawLayer(), aRanges);
             }
         }
     }
