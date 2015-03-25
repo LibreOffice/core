@@ -336,11 +336,6 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     SW_DLLPRIVATE void          SpellKontext(sal_Bool bOn = sal_True)
                             { m_bCenterCrsr = bOn; m_bAlwaysShowSel = bOn; }
 
-    // methods for printing
-    SW_DLLPRIVATE virtual   SfxPrinter*     GetPrinter( sal_Bool bCreate = sal_False );
-    SW_DLLPRIVATE virtual bool  HasPrintOptionsPage() const;
-    SW_DLLPRIVATE virtual SfxTabPage*       CreatePrintOptionsPage( Window* pParent,
-                                                    const SfxItemSet& rSet);
     // for readonly switching
     SW_DLLPRIVATE virtual void  Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
     SW_DLLPRIVATE void          _CheckReadonlyState();
@@ -663,6 +658,12 @@ public:
     void UpdateDocStats();
     /// Where is the real cursor: in the annotation or in the main document?
     void SetAnnotationMode(bool bMode);
+
+    // methods for printing
+    SW_DLLPRIVATE virtual   SfxPrinter*     GetPrinter( sal_Bool bCreate = sal_False );
+    SW_DLLPRIVATE virtual bool  HasPrintOptionsPage() const;
+    SW_DLLPRIVATE virtual SfxTabPage*       CreatePrintOptionsPage( Window* pParent,
+                                                    const SfxItemSet& rSet);
 };
 
 // ----------------- inline Methoden ----------------------

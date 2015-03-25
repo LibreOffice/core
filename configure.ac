@@ -4348,7 +4348,7 @@ if test "$test_cups" = "yes"; then
     if test "$ac_cv_lib_cups_cupsPrintFiles" != "yes" -a "$ac_cv_header_cups_cups_h" != "yes"; then
         AC_MSG_ERROR([Could not find CUPS. Install libcupsys2-dev or cups-devel.])
     fi
-
+    AC_DEFINE(ENABLE_CUPS)
 else
     AC_MSG_RESULT([no])
 fi
@@ -12066,6 +12066,7 @@ fi
 AC_CONFIG_FILES([config_host.mk Makefile lo.xcent instsetoo_native/util/openoffice.lst])
 AC_CONFIG_HEADERS([config_host/config_buildid.h])
 AC_CONFIG_HEADERS([config_host/config_clang.h])
+AC_CONFIG_HEADERS([config_host/config_cups.h])
 AC_CONFIG_HEADERS([config_host/config_features.h])
 AC_CONFIG_HEADERS([config_host/config_gcc.h])
 AC_CONFIG_HEADERS([config_host/config_global.h])
