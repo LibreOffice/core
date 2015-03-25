@@ -514,14 +514,9 @@ Size ScModelObj::getDocumentSize()
     if (!rDoc.GetPrintArea( nTab, nEndCol, nEndRow, false ))
         return aSize;
 
-    ScAddress aPos( nEndCol, nEndRow, nTab );
-
-    // TWIPS
-    sal_uLong nH = rDoc.GetRowHeight(0, aPos.Row(), nTab, true);
-    sal_uLong nW = rDoc.GetColWidth(0, aPos.Col(), nTab, true);
-
-    aSize.setWidth(nW);
-    aSize.setHeight(nH);
+    // convert to twips
+    aSize.setWidth(rDoc.GetColWidth(0, nEndCol, nTab, true));
+    aSize.setHeight(rDoc.GetRowHeight(0, nEndRow, nTab, true));
 
     return aSize;
 }
