@@ -297,7 +297,7 @@ void PreviewRenderer::PaintPage (
 
     // Turn off online spelling and redlining.
     SdrOutliner* pOutliner = NULL;
-    EEControlBits nSavedControlWord;
+    EEControlBits nSavedControlWord = EEControlBits::NONE;
     if (mpDocShellOfView!=NULL && mpDocShellOfView->GetDoc()!=NULL)
     {
         pOutliner = &mpDocShellOfView->GetDoc()->GetDrawOutliner();
