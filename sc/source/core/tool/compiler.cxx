@@ -4780,26 +4780,53 @@ bool ScCompiler::HandleTableRef()
         pDBData->GetArea(aRange);
         aRange.aEnd.SetTab(aRange.aStart.Tab());
         ScTokenArray* pNew = new ScTokenArray();
-        ScTableRefToken::Item eItem = pTR->GetItem();
         bool bGotToken = false;
-        if (eItem == ScTableRefToken::TABLE || eItem == ScTableRefToken::ALL)
+        bool bAddRange = true;
+        bool bForwardToClose = false;
+        ScTableRefToken::Item eItem = pTR->GetItem();
+        switch (eItem)
+        {
+            case ScTableRefToken::TABLE:
+            case ScTableRefToken::ALL:
+                {
+                    // Optional [] (or [#All]) may follow.
+                    if ((bGotToken = GetToken()) && mpToken->GetOpCode() == ocTableRefOpen)
+                    {
+                        bool bAll = ((bGotToken = GetToken()) && mpToken->GetOpCode() == ocTableRefItemAll);
+                        if (bGotToken && (!bAll || (bGotToken = GetToken())) && mpToken->GetOpCode() == ocTableRefClose)
+                            bGotToken = false;  // get next token below
+                    }
+                }
+                break;
+            case ScTableRefToken::HEADERS:
+                {
+                    aRange.aEnd.SetRow( aRange.aStart.Row());
+                    bForwardToClose = true;
+                }
+                break;
+            case ScTableRefToken::TOTALS:
+                {
+                    aRange.aStart.SetRow( aRange.aEnd.Row());
+                    bForwardToClose = true;
+                }
+                break;
+            default:
+                /* TODO: implement all other cases. */
+                SetError(errUnknownToken);
+                bAddRange = false;
+        }
+        if (bAddRange)
         {
             ScComplexRefData aRefData;
             aRefData.InitFlags();
-            aRefData.SetRange(aRange, aPos);
+            aRefData.SetRange( aRange, aPos);
             pNew->AddDoubleReference( aRefData );
-            // Optional [] (or [#All]) may follow.
-            if ((bGotToken = GetToken()) && mpToken->GetOpCode() == ocTableRefOpen)
-            {
-                bool bAll = ((bGotToken = GetToken()) && mpToken->GetOpCode() == ocTableRefItemAll);
-                if (bGotToken && (!bAll || (bGotToken = GetToken())) && mpToken->GetOpCode() == ocTableRefClose)
-                    bGotToken = false;  // get next token below
-            }
         }
-        else
+        if (bForwardToClose)
         {
-            /* TODO: implement all other cases. */
-            SetError(errUnknownToken);
+            while ((bGotToken = GetToken()) && mpToken->GetOpCode() != ocTableRefClose)
+                ;
+            bGotToken = false;  // get next token below
         }
         PushTokenArray( pNew, true );
         pNew->Reset();
