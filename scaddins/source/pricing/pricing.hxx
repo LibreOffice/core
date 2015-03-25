@@ -40,55 +40,12 @@
 #include <tools/rc.hxx>
 #include <tools/resary.hxx>
 
+#include "../scaList.hxx"
+
 #define RETURN_FINITE(d)    if( ::rtl::math::isFinite( d ) ) return d; else throw css::lang::IllegalArgumentException()
-
-
 
 namespace sca {
 namespace pricing {
-
-class ScaList
-{
-private:
-    static const sal_uInt32     nStartSize;
-    static const sal_uInt32     nIncrSize;
-
-    void**                      pData;          // pointer array
-    sal_uInt32                  nSize;          // array size
-    sal_uInt32                  nCount;         // next index to be inserted at
-    sal_uInt32                  nCurr;          // current pos for iterations
-
-    void                        _Grow();
-    inline void                 Grow();
-
-public:
-                                ScaList();
-    virtual                     ~ScaList();
-
-    inline sal_uInt32           Count() const       { return nCount; }
-
-    inline const void*          GetObject( sal_uInt32 nIndex ) const
-                                    { return (nIndex < nCount) ? pData[ nIndex ] : NULL; }
-
-    inline void*                First() { return nCount ? pData[ nCurr = 0 ] : NULL; }
-    inline void*                Next()  { return (nCurr + 1 < nCount) ? pData[ ++nCurr ] : NULL; }
-
-    inline void                 Append( void* pNew );
-};
-
-
-inline void ScaList::Grow()
-{
-    if( nCount >= nSize )
-        _Grow();
-}
-
-inline void ScaList::Append( void* pNew )
-{
-    Grow();
-    pData[ nCount++ ] = pNew;
-}
-
 
 class ScaStringList : protected ScaList
 {
@@ -293,9 +250,6 @@ inline ScaFuncData* ScaFuncDataList::Next()
 
 } // namespace pricing
 } // namespace sca
-
-
-
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL PricingFunctionAddIn_CreateInstance(
     const css::uno::Reference< css::lang::XMultiServiceFactory >& );
