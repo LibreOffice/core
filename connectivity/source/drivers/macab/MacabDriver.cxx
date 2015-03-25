@@ -211,7 +211,7 @@ void MacabDriver::disposing()
 
 OUString MacabDriver::getImplementationName_Static(  ) throw(RuntimeException)
 {
-    return OUString::createFromAscii( impl_getAsciiImplementationName() );
+    return OUString("com.sun.star.comp.sdbc.macab.Driver");
 }
 
 Sequence< OUString > MacabDriver::getSupportedServiceNames_Static(  ) throw (RuntimeException)
@@ -303,13 +303,6 @@ void SAL_CALL MacabDriver::notifyTermination( const EventObject& ) throw (Runtim
 void SAL_CALL MacabDriver::disposing( const EventObject& ) throw (RuntimeException)
 {
     // not interested in (this is the disposing of the desktop, if any)
-}
-
-const sal_Char* MacabDriver::impl_getAsciiImplementationName()
-{
-    return "com.sun.star.comp.sdbc.macab.Driver";
-        // this name is referenced in the configuration and in the macab.xml
-        // Please be careful when changing it.
 }
 
 OUString MacabDriver::impl_getConfigurationSettingsPath()

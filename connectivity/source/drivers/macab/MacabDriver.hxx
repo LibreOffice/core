@@ -136,10 +136,6 @@ namespace connectivity
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
             getComponentContext() const { return m_xContext; }
 
-            /** returns the driver's implementation name (being pure ASCII) for reference in various places
-            */
-            static const sal_Char*  impl_getAsciiImplementationName();
-
             /** returns the path of our configuration settings
             */
             static OUString  impl_getConfigurationSettingsPath();
