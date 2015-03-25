@@ -487,7 +487,7 @@ com::sun::star::uno::Reference< com::sun::star::container::XIndexReplace > SvxCr
     }
     else
     {
-        SvxNumRule aDefaultRule( NUM_BULLET_REL_SIZE|NUM_BULLET_COLOR|NUM_CHAR_TEXT_DISTANCE, SVX_MAX_NUM, false);
+        SvxNumRule aDefaultRule( SvxNumRuleFlags::BULLET_REL_SIZE | SvxNumRuleFlags::BULLET_COLOR | SvxNumRuleFlags::CHAR_TEXT_DISTANCE, SVX_MAX_NUM, false);
         return new SvxUnoNumberingRules( aDefaultRule );
     }
 }
@@ -546,7 +546,7 @@ Reference< XAnyCompare > SvxCreateNumRuleCompare() throw()
 
 ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexReplace > SvxCreateNumRule() throw()
 {
-    SvxNumRule aTempRule( 0, 10, false );
+    SvxNumRule aTempRule( SvxNumRuleFlags::NONE, 10, false );
     return SvxCreateNumRule( &aTempRule );
 }
 

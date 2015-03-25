@@ -32,6 +32,7 @@
 #include <com/sun/star/style/NumberingType.hpp>
 #include <unotools/fontcvt.hxx>
 #include <editeng/editengdllapi.h>
+#include <o3tl/typed_flags_set.hxx>
 
 class SvxBrushItem;
 namespace vcl { class Font; }
@@ -43,17 +44,6 @@ namespace com{namespace sun{ namespace star{
     }
 }}}
 
-
-//Feature-Flags (only sal_uInt16!)
-#define NUM_CONTINUOUS          0x0001 // consecutive numbers possible?
-#define NUM_CHAR_TEXT_DISTANCE  0x0002 // Distance Symbol<->Text?
-#define NUM_CHAR_STYLE          0x0004 // Character styles?
-#define NUM_BULLET_REL_SIZE     0x0008 // relative bullet size?
-#define NUM_BULLET_COLOR        0x0010 // Bullet color
-#define NUM_SYMBOL_ALIGNMENT    0x0040 // alignment to be shown in the options
-#define NUM_NO_NUMBERS          0x0080 // Numbering are not allowed
-#define NUM_ENABLE_LINKED_BMP   0x0100 // linked bitmaps are available
-#define NUM_ENABLE_EMBEDDED_BMP 0x0200 // embedded bitmaps are available
 
 #define SVX_NO_NUM              200 // Marker for no numbering
 #define SVX_NO_NUMLEVEL         0x20
@@ -221,6 +211,25 @@ public:
     static OUString CreateRomanString( sal_uLong nNo, bool bUpper );
 };
 
+//Feature-Flags (only sal_uInt16!)
+enum class SvxNumRuleFlags
+{
+    NONE                = 0x0000,
+    CONTINUOUS          = 0x0001, // consecutive numbers possible?
+    CHAR_TEXT_DISTANCE  = 0x0002, // Distance Symbol<->Text?
+    CHAR_STYLE          = 0x0004, // Character styles?
+    BULLET_REL_SIZE     = 0x0008, // relative bullet size?
+    BULLET_COLOR        = 0x0010, // Bullet color
+    SYMBOL_ALIGNMENT    = 0x0040, // alignment to be shown in the options
+    NO_NUMBERS          = 0x0080, // Numbering are not allowed
+    ENABLE_LINKED_BMP   = 0x0100, // linked bitmaps are available
+    ENABLE_EMBEDDED_BMP = 0x0200  // embedded bitmaps are available
+};
+namespace o3tl
+{
+    template<> struct typed_flags<SvxNumRuleFlags> : is_typed_flags<SvxNumRuleFlags, 0x03df> {};
+}
+
 enum SvxNumRuleType
 {
     SVX_RULETYPE_NUMBERING,
@@ -232,7 +241,7 @@ enum SvxNumRuleType
 class EDITENG_DLLPUBLIC SvxNumRule
 {
     sal_uInt16          nLevelCount;            // Number of supported levels
-    sal_uInt32          nFeatureFlags;          // What is supported?
+    SvxNumRuleFlags     nFeatureFlags;          // What is supported?
     SvxNumRuleType      eNumberingType;         // Type of numbering
     bool                bContinuousNumbering;   // sequential numbering
 
@@ -242,7 +251,7 @@ class EDITENG_DLLPUBLIC SvxNumRule
     static sal_Int32    nRefCount;
     com::sun::star::lang::Locale aLocale;
 public:
-    SvxNumRule( sal_uLong nFeatures,
+    SvxNumRule( SvxNumRuleFlags nFeatures,
                 sal_uInt16 nLevels,
                 bool bCont,
                 SvxNumRuleType eType = SVX_RULETYPE_NUMBERING,
@@ -270,10 +279,10 @@ public:
                                             {bContinuousNumbering = bSet;}
 
     sal_uInt16              GetLevelCount() const {return nLevelCount;}
-    bool                    IsFeatureSupported(sal_uInt32 nFeature) const
-                                            {return 0 != (nFeatureFlags & nFeature);}
-    sal_uInt32              GetFeatureFlags() const {return nFeatureFlags;}
-    void                    SetFeatureFlag( sal_uInt32 nFlag, bool bSet = true ) { if(bSet) nFeatureFlags |= nFlag; else nFeatureFlags &= ~nFlag; }
+    bool                    IsFeatureSupported(SvxNumRuleFlags nFeature) const
+                                            { return bool(nFeatureFlags & nFeature); }
+    SvxNumRuleFlags         GetFeatureFlags() const {return nFeatureFlags;}
+    void                    SetFeatureFlag( SvxNumRuleFlags nFlag, bool bSet = true ) { if(bSet) nFeatureFlags |= nFlag; else nFeatureFlags &= ~nFlag; }
 
     OUString                MakeNumString( const SvxNodeNum&, bool bInclStrings = true ) const;
 

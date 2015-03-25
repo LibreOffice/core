@@ -857,13 +857,10 @@ void SwNumRule::SetSvxRule(const SvxNumRule& rNumRule, SwDoc* pDoc)
 
 SvxNumRule SwNumRule::MakeSvxNumRule() const
 {
-    SvxNumRule aRule(NUM_CONTINUOUS|NUM_CHAR_TEXT_DISTANCE|NUM_CHAR_STYLE|
-                        NUM_ENABLE_LINKED_BMP|NUM_ENABLE_EMBEDDED_BMP,
-                        MAXLEVEL, mbContinusNum,
-                        meRuleType ==
-                            NUM_RULE ?
-                                SVX_RULETYPE_NUMBERING :
-                                    SVX_RULETYPE_OUTLINE_NUMBERING );
+    SvxNumRule aRule(SvxNumRuleFlags::CONTINUOUS | SvxNumRuleFlags::CHAR_TEXT_DISTANCE | SvxNumRuleFlags::CHAR_STYLE |
+                     SvxNumRuleFlags::ENABLE_LINKED_BMP | SvxNumRuleFlags::ENABLE_EMBEDDED_BMP,
+                     MAXLEVEL, mbContinusNum,
+                     meRuleType == NUM_RULE ? SVX_RULETYPE_NUMBERING : SVX_RULETYPE_OUTLINE_NUMBERING );
     for( sal_uInt16 n = 0; n < MAXLEVEL; ++n )
     {
         SwNumFmt aNumFmt = Get(n);

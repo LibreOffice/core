@@ -734,7 +734,7 @@ com::sun::star::uno::Reference< com::sun::star::container::XIndexReplace > SvxCr
     }
     else
     {
-        SvxNumRule aTempRule( 0, 10, false );
+        SvxNumRule aTempRule( SvxNumRuleFlags::NONE, 10, false );
         return SvxCreateNumRule( &aTempRule );
     }
 }

@@ -1278,7 +1278,7 @@ void    SvxNumOptionsTabPage::Reset( const SfxItemSet* rSet )
     m_pSameLevelCB->Check(pActNum->IsContinuousNumbering());
 
     // fill ColorListBox as needed
-    if ( pActNum->IsFeatureSupported( NUM_BULLET_COLOR ) )
+    if ( pActNum->IsFeatureSupported( SvxNumRuleFlags::BULLET_COLOR ) )
     {
         SfxObjectShell* pDocSh = SfxObjectShell::Current();
         DBG_ASSERT( pDocSh, "DocShell not found!" );
@@ -1311,11 +1311,11 @@ void    SvxNumOptionsTabPage::Reset( const SfxItemSet* rSet )
         bHTMLMode = 0 != (nHtmlMode&HTMLMODE_ON);
     }
 
-    bool bCharFmt = pActNum->IsFeatureSupported(NUM_CHAR_STYLE);
+    bool bCharFmt = pActNum->IsFeatureSupported(SvxNumRuleFlags::CHAR_STYLE);
     m_pCharFmtFT->Show(bCharFmt);
     m_pCharFmtLB->Show(bCharFmt);
 
-    bool bContinuous = pActNum->IsFeatureSupported(NUM_CONTINUOUS);
+    bool bContinuous = pActNum->IsFeatureSupported(SvxNumRuleFlags::CONTINUOUS);
 
     bool bAllLevel = bContinuous && !bHTMLMode;
     m_pAllLevelFT->Show(bAllLevel);
@@ -1338,21 +1338,21 @@ void    SvxNumOptionsTabPage::Reset( const SfxItemSet* rSet )
         }
     }
     //one must be enabled
-    if(!pActNum->IsFeatureSupported(NUM_ENABLE_LINKED_BMP))
+    if(!pActNum->IsFeatureSupported(SvxNumRuleFlags::ENABLE_LINKED_BMP))
     {
         sal_IntPtr nData = SVX_NUM_BITMAP|LINK_TOKEN;
         sal_Int32 nPos = m_pFmtLB->GetEntryPos(reinterpret_cast<void*>(nData));
         if(LISTBOX_ENTRY_NOTFOUND != nPos)
             m_pFmtLB->RemoveEntry(nPos);
     }
-    else if(!pActNum->IsFeatureSupported(NUM_ENABLE_EMBEDDED_BMP))
+    else if(!pActNum->IsFeatureSupported(SvxNumRuleFlags::ENABLE_EMBEDDED_BMP))
     {
         sal_IntPtr nData = SVX_NUM_BITMAP;
         sal_Int32 nPos = m_pFmtLB->GetEntryPos(reinterpret_cast<void*>(nData));
         if(LISTBOX_ENTRY_NOTFOUND != nPos)
             m_pFmtLB->RemoveEntry(nPos);
     }
-    if(pActNum->IsFeatureSupported(NUM_SYMBOL_ALIGNMENT))
+    if(pActNum->IsFeatureSupported(SvxNumRuleFlags::SYMBOL_ALIGNMENT))
     {
         m_pAlignFT->Show();
         m_pAlignLB->Show();
@@ -1366,7 +1366,7 @@ void    SvxNumOptionsTabPage::Reset( const SfxItemSet* rSet )
 
     // MegaHack: because of a not-fixable 'design mistake/error' in Impress
     // delete all kinds of numeric enumerations
-    if(pActNum->IsFeatureSupported(NUM_NO_NUMBERS))
+    if(pActNum->IsFeatureSupported(SvxNumRuleFlags::NO_NUMBERS))
     {
         sal_Int32 nFmtCount = m_pFmtLB->GetEntryCount();
         for(sal_Int32 i = nFmtCount; i; i--)
@@ -1407,8 +1407,8 @@ void SvxNumOptionsTabPage::InitControls()
     sal_uInt16 nHighestLevel = 0;
     OUString aEmptyStr;
 
-    bool bBullColor = pActNum->IsFeatureSupported(NUM_BULLET_COLOR);
-    bool bBullRelSize = pActNum->IsFeatureSupported(NUM_BULLET_REL_SIZE);
+    bool bBullColor = pActNum->IsFeatureSupported(SvxNumRuleFlags::BULLET_COLOR);
+    bool bBullRelSize = pActNum->IsFeatureSupported(SvxNumRuleFlags::BULLET_REL_SIZE);
     for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
     {
         if(nActNumLvl & nMask)
@@ -1588,13 +1588,13 @@ void SvxNumOptionsTabPage::SwitchNumberType( sal_uInt8 nType, bool )
     m_pSuffixFT->Show(bNumeric);
     m_pSuffixED->Show(bNumeric);
 
-    bool bCharFmt = pActNum->IsFeatureSupported(NUM_CHAR_STYLE);
+    bool bCharFmt = pActNum->IsFeatureSupported(SvxNumRuleFlags::CHAR_STYLE);
     m_pCharFmtFT->Show(!bBitmap && bCharFmt);
     m_pCharFmtLB->Show(!bBitmap && bCharFmt);
 
     // this is rather misusage, as there is no own flag
     // for complete numeration
-    bool bAllLevelFeature = pActNum->IsFeatureSupported(NUM_CONTINUOUS);
+    bool bAllLevelFeature = pActNum->IsFeatureSupported(SvxNumRuleFlags::CONTINUOUS);
     bool bAllLevel = bNumeric && bAllLevelFeature && !bHTMLMode;
     m_pAllLevelFT->Show(bAllLevel);
     m_pAllLevelNF->Show(bAllLevel);
@@ -1604,10 +1604,10 @@ void SvxNumOptionsTabPage::SwitchNumberType( sal_uInt8 nType, bool )
 
     m_pBulletFT->Show(bBullet);
     m_pBulletPB->Show(bBullet);
-    bool bBullColor = pActNum->IsFeatureSupported(NUM_BULLET_COLOR);
+    bool bBullColor = pActNum->IsFeatureSupported(SvxNumRuleFlags::BULLET_COLOR);
     m_pBulColorFT->Show(!bBitmap && bBullColor);
     m_pBulColLB->Show(!bBitmap && bBullColor);
-    bool bBullResSize = pActNum->IsFeatureSupported(NUM_BULLET_REL_SIZE);
+    bool bBullResSize = pActNum->IsFeatureSupported(SvxNumRuleFlags::BULLET_REL_SIZE);
     m_pBulRelSizeFT->Show(!bBitmap && bBullResSize);
     m_pBulRelSizeMF->Show(!bBitmap && bBullResSize);
 
@@ -1762,7 +1762,7 @@ IMPL_LINK( SvxNumOptionsTabPage, NumberTypeSelectHdl_Impl, ListBox *, pBox )
         }
         nMask <<= 1;
     }
-    bool bAllLevelFeature = pActNum->IsFeatureSupported(NUM_CONTINUOUS);
+    bool bAllLevelFeature = pActNum->IsFeatureSupported(SvxNumRuleFlags::CONTINUOUS);
     if(bShowOrient && bAllLevelFeature)
     {
         m_pOrientFT->Show();
@@ -3090,9 +3090,9 @@ void SvxNumPositionTabPage::ShowControlsDependingOnPosAndSpaceMode()
     m_pIndentFT->Show( !bLabelAlignmentPosAndSpaceModeActive );
     m_pIndentMF->Show( !bLabelAlignmentPosAndSpaceModeActive );
     m_pDistNumFT->Show( !bLabelAlignmentPosAndSpaceModeActive &&
-                     pActNum->IsFeatureSupported(NUM_CONTINUOUS) );
+                     pActNum->IsFeatureSupported(SvxNumRuleFlags::CONTINUOUS) );
     m_pDistNumMF->Show( !bLabelAlignmentPosAndSpaceModeActive &&
-                     pActNum->IsFeatureSupported(NUM_CONTINUOUS));
+                     pActNum->IsFeatureSupported(SvxNumRuleFlags::CONTINUOUS));
     m_pAlignFT->Show( !bLabelAlignmentPosAndSpaceModeActive );
     m_pAlignLB->Show( !bLabelAlignmentPosAndSpaceModeActive );
 

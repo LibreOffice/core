@@ -133,7 +133,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
                 }
             }
             if(bHtml)
-                aRule.SetFeatureFlag(NUM_ENABLE_EMBEDDED_BMP, false);
+                aRule.SetFeatureFlag(SvxNumRuleFlags::ENABLE_EMBEDDED_BMP, false);
 
             aSet.Put(SvxNumBulletItem(aRule));
             OSL_ENSURE( GetShell().GetNumLevel() < MAXLEVEL,
@@ -171,7 +171,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
                     }
                     aSvxRule.SetLevel( n, aFmt, false );
                 }
-                aSvxRule.SetFeatureFlag(NUM_ENABLE_EMBEDDED_BMP, false);
+                aSvxRule.SetFeatureFlag(SvxNumRuleFlags::ENABLE_EMBEDDED_BMP, false);
             }
             aSet.Put( SvxNumBulletItem( aSvxRule ) );
         }

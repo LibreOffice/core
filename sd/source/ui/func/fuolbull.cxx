@@ -366,7 +366,7 @@ const SfxPoolItem* FuOutlineBullet::GetNumBulletItem(SfxItemSet& aNewAttr, sal_u
                 if(pLclRule)
                 {
                     SvxNumRule aNewRule( *pLclRule );
-                    aNewRule.SetFeatureFlag( NUM_NO_NUMBERS, true );
+                    aNewRule.SetFeatureFlag( SvxNumRuleFlags::NO_NUMBERS, true );
 
                     SvxNumBulletItem aNewItem( aNewRule, EE_PARA_NUMBULLET );
                     aNewAttr.Put(aNewItem);

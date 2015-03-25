@@ -573,7 +573,7 @@ OUString SvxNumberFormat::GetCharFmtName()const
 sal_Int32 SvxNumRule::nRefCount = 0;
 static SvxNumberFormat* pStdNumFmt = 0;
 static SvxNumberFormat* pStdOutlineNumFmt = 0;
-SvxNumRule::SvxNumRule( sal_uLong nFeatures,
+SvxNumRule::SvxNumRule( SvxNumRuleFlags nFeatures,
                         sal_uInt16 nLevels,
                         bool bCont,
                         SvxNumRuleType eType,
@@ -591,7 +591,7 @@ SvxNumRule::SvxNumRule( sal_uLong nFeatures,
         {
             aFmts[i] = new SvxNumberFormat(SVX_NUM_CHARS_UPPER_LETTER);
             // It is a distinction between writer and draw
-            if(nFeatures & NUM_CONTINUOUS)
+            if(nFeatures & SvxNumRuleFlags::CONTINUOUS)
             {
                 if ( eDefaultNumberFormatPositionAndSpaceMode ==
                                     SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
@@ -653,7 +653,7 @@ SvxNumRule::SvxNumRule( SvStream &rStream )
     rStream.ReadUInt16( nLevelCount );
 
     // first nFeatureFlags of old Versions
-    rStream.ReadUInt16( nTmp16 ); nFeatureFlags = nTmp16;
+    rStream.ReadUInt16( nTmp16 ); nFeatureFlags = static_cast<SvxNumRuleFlags>(nTmp16);
     rStream.ReadUInt16( nTmp16 ); bContinuousNumbering = nTmp16;
     rStream.ReadUInt16( nTmp16 ); eNumberingType = ( SvxNumRuleType )nTmp16;
 
@@ -672,7 +672,7 @@ SvxNumRule::SvxNumRule( SvStream &rStream )
         }
     }
     //second nFeatureFlags for new versions
-    rStream.ReadUInt16( nTmp16 ); nFeatureFlags = nTmp16;
+    rStream.ReadUInt16( nTmp16 ); nFeatureFlags = static_cast<SvxNumRuleFlags>(nTmp16);
 }
 
 SvStream& SvxNumRule::Store( SvStream &rStream )
@@ -680,7 +680,7 @@ SvStream& SvxNumRule::Store( SvStream &rStream )
     rStream.WriteUInt16( NUMITEM_VERSION_03 );
     rStream.WriteUInt16( nLevelCount );
     //first save of nFeatureFlags for old versions
-    rStream.WriteUInt16( nFeatureFlags );
+    rStream.WriteUInt16( static_cast<sal_uInt16>(nFeatureFlags) );
     rStream.WriteUInt16( sal_uInt16(bContinuousNumbering) );
     rStream.WriteUInt16( eNumberingType );
 
@@ -705,7 +705,7 @@ SvStream& SvxNumRule::Store( SvStream &rStream )
             rStream.WriteUInt16( 0 | nSetFlag );
     }
     //second save of nFeatureFlags for new versions
-    rStream.WriteUInt16( nFeatureFlags );
+    rStream.WriteUInt16( static_cast<sal_uInt16>(nFeatureFlags) );
     if(pConverter)
         DestroyFontToSubsFontConverter(pConverter);
 
