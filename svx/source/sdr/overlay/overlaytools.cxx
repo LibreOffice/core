@@ -33,6 +33,95 @@
 #include <vcl/settings.hxx>
 
 
+namespace drawinglayer
+{
+namespace primitive2d
+{
+
+OverlayStaticRectanglePrimitive::OverlayStaticRectanglePrimitive(
+                                    const basegfx::B2DPoint& rPosition,
+                                    const basegfx::B2DSize& rSize,
+                                    const basegfx::BColor& rStrokeColor,
+                                    const basegfx::BColor& rFillColor,
+                                    double fTransparence,
+                                    double fRotation)
+    : DiscreteMetricDependentPrimitive2D()
+    , maPosition(rPosition)
+    , maSize(rSize)
+    , maStrokeColor(rStrokeColor)
+    , maFillColor(rFillColor)
+    , mfTransparence(fTransparence)
+    , mfRotation(fRotation)
+{}
+
+Primitive2DSequence OverlayStaticRectanglePrimitive::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+{
+    Primitive2DSequence aPrimitive2DSequence;
+    const double fHalfWidth = maSize.getX() * getDiscreteUnit() / 2.0;
+    const double fHalfHeight = maSize.getY() * getDiscreteUnit() / 2.0;
+
+    basegfx::B2DRange aRange(
+        maPosition.getX() - fHalfWidth, maPosition.getY() - fHalfHeight,
+        maPosition.getX() + fHalfWidth, maPosition.getY() + fHalfHeight);
+
+    if (basegfx::fTools::more(getDiscreteUnit(), 0.0) && mfTransparence <= 1.0)
+    {
+        basegfx::B2DPolygon aPolygon(
+            basegfx::tools::createPolygonFromRect(aRange));
+
+        // create filled primitive
+        basegfx::B2DPolyPolygon aPolyPolygon;
+        aPolyPolygon.append(aPolygon);
+
+        const attribute::LineAttribute aLineAttribute(maStrokeColor, 1.0);
+
+        // create data
+        const Primitive2DReference aStroke(
+            new PolyPolygonStrokePrimitive2D(aPolyPolygon, aLineAttribute));
+
+        // create fill primitive
+        const Primitive2DReference aFill(
+            new PolyPolygonColorPrimitive2D(aPolyPolygon, maFillColor));
+
+        aPrimitive2DSequence = Primitive2DSequence(2);
+        aPrimitive2DSequence[0] = aFill;
+        aPrimitive2DSequence[1] = aStroke;
+
+        // embed filled to transparency (if used)
+        if (mfTransparence > 0.0)
+        {
+            const Primitive2DReference aFillTransparent(
+                new UnifiedTransparencePrimitive2D(
+                    aPrimitive2DSequence,
+                    mfTransparence));
+
+            aPrimitive2DSequence = Primitive2DSequence(&aFillTransparent, 1);
+        }
+    }
+
+    return aPrimitive2DSequence;
+}
+
+bool OverlayStaticRectanglePrimitive::operator==(const BasePrimitive2D& rPrimitive) const
+{
+    if (DiscreteMetricDependentPrimitive2D::operator==(rPrimitive))
+    {
+        const OverlayStaticRectanglePrimitive& rCompare = static_cast<const OverlayStaticRectanglePrimitive&>(rPrimitive);
+
+        return (maPosition == rCompare.maPosition
+            && maSize == rCompare.maSize
+            && maStrokeColor == rCompare.maStrokeColor
+            && maFillColor == rCompare.maFillColor
+            && mfTransparence == rCompare.mfTransparence
+            && mfRotation == rCompare.mfRotation);
+    }
+
+    return false;
+}
+
+ImplPrimitive2DIDBlock(OverlayStaticRectanglePrimitive, PRIMITIVE2D_ID_OVERLAYRECTANGLEPRIMITIVE)
+
+}} // end of namespace drawinglayer::primitive2d
 
 namespace drawinglayer
 {

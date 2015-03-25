@@ -22,7 +22,43 @@
 
 #include <drawinglayer/primitive2d/primitivetools2d.hxx>
 #include <vcl/bitmapex.hxx>
+#include <basegfx/vector/b2dsize.hxx>
 
+namespace drawinglayer { namespace primitive2d {
+
+class OverlayStaticRectanglePrimitive : public DiscreteMetricDependentPrimitive2D
+{
+private:
+    basegfx::B2DPoint maPosition;
+    basegfx::B2DSize maSize;
+
+    // the graphic definition
+    basegfx::BColor maStrokeColor;
+    basegfx::BColor maFillColor;
+    double mfTransparence;
+
+    // the rotation of the primitive itself
+    double mfRotation;
+
+protected:
+    virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const SAL_OVERRIDE;
+
+public:
+    OverlayStaticRectanglePrimitive(
+        const basegfx::B2DPoint& rPosition,
+        const basegfx::B2DSize& rSize,
+        const basegfx::BColor& rStrokeColor,
+        const basegfx::BColor& rFillColor,
+        double fTransparence,
+        double fRotation);
+
+    // compare operator
+    virtual bool operator==( const BasePrimitive2D& rPrimitive ) const SAL_OVERRIDE;
+
+    DeclPrimitive2DIDBlock()
+};
+
+}} // end of namespace drawinglayer::primitive2d
 
 // Overlay helper class which holds a BotmapEx which is to be visualized
 // at the given logic position with the Bitmap's pixel size, unscaled and

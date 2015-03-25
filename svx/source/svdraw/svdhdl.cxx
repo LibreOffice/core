@@ -50,6 +50,7 @@
 #include <svx/sdr/overlay/overlaybitmapex.hxx>
 #include <sdr/overlay/overlayline.hxx>
 #include <svx/sdr/overlay/overlaytriangle.hxx>
+#include <sdr/overlay/overlayhandle.hxx>
 #include <sdr/overlay/overlayrectangle.hxx>
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdrpaintwindow.hxx>
@@ -577,13 +578,54 @@ void SdrHdl::CreateB2dIAObject()
                     if (xManager.is())
                     {
                         basegfx::B2DPoint aPosition(aPos.X(), aPos.Y());
-                        sdr::overlay::OverlayObject* pNewOverlayObject = CreateOverlayObject(
-                            aPosition,
-                            eColIndex,
-                            eKindOfMarker,
-                            rOutDev,
-                            aMoveOutsideOffset);
+                        sdr::overlay::OverlayObject* pNewOverlayObject = NULL;
+                        if (getenv ("SVX_DRAW_HANDLES") && (eKindOfMarker == Rect_7x7 || eKindOfMarker == Rect_9x9 || eKindOfMarker == Rect_11x11))
+                        {
+                            double fSize = 7.0;
+                            switch (eKindOfMarker)
+                            {
+                                case Rect_9x9:
+                                    fSize = 9.0;
+                                    break;
+                                case Rect_11x11:
+                                    fSize = 11.0;
+                                    break;
+                                default:
+                                    break;
+                            }
+                            sal_Int32 nScaleFactor = rOutDev.GetDPIScaleFactor();
+                            basegfx::B2DSize aB2DSize(fSize * nScaleFactor, fSize * nScaleFactor);
 
+                            Color aHandleStrokeColor(COL_BLACK);
+                            Color aHandleFillColor(COL_LIGHTGREEN);
+                            switch (eColIndex)
+                            {
+                                case Cyan:
+                                    aHandleFillColor = Color(COL_CYAN);
+                                    break;
+                                case LightCyan:
+                                    aHandleFillColor = Color(COL_LIGHTCYAN);
+                                    break;
+                                case Red:
+                                    aHandleFillColor = Color(COL_RED);
+                                    break;
+                                case LightRed:
+                                    aHandleFillColor = Color(COL_LIGHTRED);
+                                    break;
+                                case Yellow:
+                                    aHandleFillColor = Color(COL_YELLOW);
+                                    break;
+                                default:
+                                    break;
+                            }
+                            pNewOverlayObject = new sdr::overlay::OverlayHandle(aPosition, aB2DSize, aHandleStrokeColor, aHandleFillColor);
+                        }
+                        else
+                        {
+                            pNewOverlayObject = CreateOverlayObject(
+                                                    aPosition, eColIndex, eKindOfMarker,
+                                                    rOutDev, aMoveOutsideOffset);
+                        }
                         // OVERLAYMANAGER
                         if (pNewOverlayObject)
                         {

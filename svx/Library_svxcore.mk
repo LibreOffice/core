@@ -227,6 +227,7 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/sdr/overlay/overlayobject \
     svx/source/sdr/overlay/overlaymanager \
     svx/source/sdr/overlay/overlayobjectlist \
+    svx/source/sdr/overlay/overlayhandle \
     svx/source/sdr/primitive2d/sdrellipseprimitive2d \
     svx/source/sdr/primitive2d/sdrprimitivetools \
     svx/source/sdr/primitive2d/sdrtextprimitive2d \
