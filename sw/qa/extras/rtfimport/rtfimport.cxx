@@ -2273,6 +2273,13 @@ DECLARE_RTFIMPORT_TEST(testFdo49893_2, "fdo49893-2.rtf")
     CPPUNIT_ASSERT_EQUAL(OUString("HEADER"),  parseDump("/root/page[3]/header/txt/text()"));
 }
 
+DECLARE_RTFIMPORT_TEST(testFdo89496, "fdo89496.rtf")
+{
+    // Just ensure that document is loaded and shape exists
+    uno::Reference<drawing::XShape> xShape(getShape(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xShape.is());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

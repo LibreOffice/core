@@ -791,6 +791,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
         {
             m_xShape = xShape; // store it for later resolvePict call
         }
+        return;
     }
 
     if (bCustom && xShape.is() && !bPib)
