@@ -32,10 +32,7 @@ public:
     }
     virtual void SAL_CALL run() SAL_OVERRIDE
     {
-        TimeValue aWait;
-        aWait.Seconds = mnSeconds;
-        aWait.Nanosec = 1000000; // +1ms
-        osl::Thread::wait( aWait );
+        osl::Thread::sleepMicroseconds( mnSeconds*1000000 + 1000 );//1ms
         CPPUNIT_ASSERT_MESSAGE("watchdog triggered", false);
     }
 };
@@ -73,10 +70,7 @@ public:
 void TimerTest::testWatchdog()
 {
     // out-wait the watchdog.
-    TimeValue aWait;
-    aWait.Seconds = 12;
-    aWait.Nanosec = 0;
-    osl::Thread::wait( aWait );
+    osl::Thread::sleepMicroseconds( 12000000 );//12s
 }
 #endif
 
@@ -213,10 +207,7 @@ public:
     }
     virtual void Invoke() SAL_OVERRIDE
     {
-        TimeValue aWait;
-        aWait.Seconds = 1;
-        aWait.Nanosec = 0;
-        osl::Thread::wait( aWait );
+        osl::Thread::sleepMicroseconds( 1000000 );//1s
         mbSlow = true;
     }
 };

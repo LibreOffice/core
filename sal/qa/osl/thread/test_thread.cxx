@@ -62,8 +62,7 @@ public:
         // terminates:
         global.set();
         // Give the spawned threads enough time to terminate:
-        TimeValue const twentySeconds = { 20, 0 };
-        osl::Thread::wait(twentySeconds);
+        osl::Thread::sleepMicroseconds(20000000);//20s
     }
 
     CPPUNIT_TEST_SUITE(Test);
