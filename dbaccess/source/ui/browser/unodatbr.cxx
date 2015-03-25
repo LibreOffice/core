@@ -2193,7 +2193,7 @@ IMPL_LINK(SbaTableQueryBrowser, OnExpandEntry, SvTreeListEntry*, _pParent)
 
                 // first insert the views because the tables can also include
                 // views but that time the bitmap is the wrong one
-                // the nameaccess will be overwriten in populateTree
+                // the nameaccess will be overwritten in populateTree
                 Reference<XViewsSupplier> xViewSup(xConnection,UNO_QUERY);
                 if(xViewSup.is())
                     populateTree( xViewSup->getViews(), _pParent, etTableOrView );

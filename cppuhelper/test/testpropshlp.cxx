@@ -223,7 +223,7 @@ void test_PropertyArrayHelper()
         try
         {
             a1.getPropertyByName( OUString("never exist") );
-            OSL_FAIL( "exeption not thrown" );
+            OSL_FAIL( "exception not thrown" );
         }
         catch( UnknownPropertyException & )
         {
@@ -823,7 +823,7 @@ void test_PropertySetHelper()
             try
             {
                 xPS->addPropertyChangeListener( OUString("Does not exist"), xPS_L );
-                OSL_FAIL( "PropertySetHelper: exeption not thrown" );
+                OSL_FAIL( "PropertySetHelper: exception not thrown" );
             }
             catch( UnknownPropertyException & /*e*/ )
             {
@@ -833,7 +833,7 @@ void test_PropertySetHelper()
             try
             {
                 xPS->addVetoableChangeListener( OUString("Does not exist"), x2 );
-                OSL_FAIL( "PropertySetHelper: exeption not thrown" );
+                OSL_FAIL( "PropertySetHelper: exception not thrown" );
             }
             catch( UnknownPropertyException & /*e*/ )
             {
@@ -873,7 +873,7 @@ void test_PropertySetHelper()
                 Any aBool;
                 aBool.setValue( &b , getCppuBooleanType() );
                 xPS->setPropertyValue("BOOL", aBool );
-                OSL_FAIL( "PropertySetHelper: exeption not thrown" );
+                OSL_FAIL( "PropertySetHelper: exception not thrown" );
             }
             catch( PropertyVetoException & /*e*/ )
             {
@@ -887,7 +887,7 @@ void test_PropertySetHelper()
                 aBool.setValue( &b , getCppuBooleanType() );
                 // BOOL i s0
                 pPS->setFastPropertyValue( PROPERTY_BOOL, aBool );
-                OSL_FAIL( "PropertySetHelper: exeption not thrown" );
+                OSL_FAIL( "PropertySetHelper: exception not thrown" );
             }
             catch( PropertyVetoException & /*e*/ )
             {
@@ -900,7 +900,7 @@ void test_PropertySetHelper()
                 Any aBool;
                 aBool.setValue( &b , getCppuBooleanType() );
                 xPS->setPropertyValue("Does not exist", aBool );
-                OSL_FAIL( "PropertySetHelper: exeption not thrown" );
+                OSL_FAIL( "PropertySetHelper: exception not thrown" );
             }
             catch( UnknownPropertyException & /*e*/ )
             {
@@ -912,7 +912,7 @@ void test_PropertySetHelper()
                 Any aBool;
                 aBool.setValue( &b , getCppuBooleanType() );
                 pPS->setFastPropertyValue( 3, aBool );
-                OSL_FAIL( "PropertySetHelper: exeption not thrown" );
+                OSL_FAIL( "PropertySetHelper: exception not thrown" );
             }
             catch( UnknownPropertyException & /*e*/ )
             {
@@ -923,7 +923,7 @@ void test_PropertySetHelper()
             {
                 Any aBool;
                 aBool = xPS->getPropertyValue("Does not exist");
-                OSL_FAIL( "PropertySetHelper: exeption not thrown" );
+                OSL_FAIL( "PropertySetHelper: exception not thrown" );
             }
             catch( UnknownPropertyException & /*e*/ )
             {
@@ -933,7 +933,7 @@ void test_PropertySetHelper()
             {
                 Any aBool;
                 aBool = ((XFastPropertySet *)pPS)->getFastPropertyValue( 3 );
-                OSL_FAIL( "PropertySetHelper: exeption not thrown" );
+                OSL_FAIL( "PropertySetHelper: exception not thrown" );
             }
             catch( UnknownPropertyException & /*e*/ )
             {
@@ -944,7 +944,7 @@ void test_PropertySetHelper()
             {
                 Any aBool;
                 xPS->setPropertyValue("INT32", aBool );
-                OSL_FAIL( "PropertySetHelper: exeption not thrown" );
+                OSL_FAIL( "PropertySetHelper: exception not thrown" );
             }
             catch( IllegalArgumentException & /*e*/ )
             {
@@ -954,7 +954,7 @@ void test_PropertySetHelper()
             {
                 Any aBool;
                 pPS->setFastPropertyValue( PROPERTY_INT32, aBool );
-                OSL_FAIL( "PropertySetHelper: exeption not thrown" );
+                OSL_FAIL( "PropertySetHelper: exception not thrown" );
             }
             catch( IllegalArgumentException & /*e*/ )
             {
@@ -966,7 +966,7 @@ void test_PropertySetHelper()
                 Any aINT32;
                 aINT32 <<= (sal_Int32 ) 16;
                 xPS->setPropertyValue("INT16", aINT32 );
-                OSL_FAIL( "PropertySetHelper: exeption not thrown" );
+                OSL_FAIL( "PropertySetHelper: exception not thrown" );
             }
             catch( IllegalArgumentException & /*e*/ )
             {
@@ -978,7 +978,7 @@ void test_PropertySetHelper()
                 Any aINT32;
                 aINT32 <<= (sal_Int32) 16;
                 pPS->setFastPropertyValue( PROPERTY_INT16, aINT32 );
-                OSL_FAIL( "PropertySetHelper: exeption not thrown" );
+                OSL_FAIL( "PropertySetHelper: exception not thrown" );
             }
             catch( IllegalArgumentException & /*e*/ )
             {
@@ -1071,7 +1071,7 @@ void test_PropertySetHelper()
             try
             {
                 ((XFastPropertySet *)pPS)->setFastPropertyValue( PROPERTY_INT16, aValue );
-                OSL_FAIL( "PropertySetHelper: exeption not thrown" );
+                OSL_FAIL( "PropertySetHelper: exception not thrown" );
             }
             catch( PropertyVetoException & /*e*/ )
             {
@@ -1151,7 +1151,7 @@ void test_PropertySetHelper()
                 aValues.getArray()[0] <<= (sal_Int16)44;
                 aValues.getArray()[1] <<= (sal_Int16)100;
                 pPS->setPropertyValues( szPN, aValues );
-                OSL_FAIL( "PropertySetHelper: exeption not thrown" );
+                OSL_FAIL( "PropertySetHelper: exception not thrown" );
             }
             catch ( PropertyVetoException & /*e*/ )
             {

@@ -331,7 +331,7 @@ public class CalcRTL
      * @param oldValue : the value of the property before it has been changed
      * @param newValue : the value the property has been set to
      * @param resValue : the value getPropertyValue returned for the property
-     * @param exception : the exeption thrown during the change of the property
+     * @param exception : the exception thrown during the change of the property
      */
     protected boolean checkResult(XPropertySet set, String propName,
                                   Object oldValue, Object newValue,

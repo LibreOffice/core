@@ -1057,7 +1057,7 @@ sal_Int32 OGroupsSortingDialog::getColumnDataType(const OUString& _sColumnName)
     }
     catch(uno::Exception&)
     {
-        OSL_FAIL("Eception caught while getting the type of a column");
+        OSL_FAIL("Exception caught while getting the type of a column");
     }
 
     return nDataType;

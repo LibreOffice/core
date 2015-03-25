@@ -2722,7 +2722,7 @@ SbxVariable* SbUnoObject::Find( const OUString& rName, SbxClassType t )
                 }
                 catch( const Exception& )
                 {
-                    // Establish so that the exeption error will not be overwriten
+                    // Establish so that the exception error will not be overwritten
                     if( !pRes )
                         pRes = new SbxVariable( SbxVARIANT );
 
@@ -2771,7 +2771,7 @@ SbxVariable* SbUnoObject::Find( const OUString& rName, SbxClassType t )
             }
             catch( const RuntimeException& e )
             {
-                // Establish so that the exeption error will not be overwriten
+                // Establish so that the exception error will not be overwritten
                 if( !pRes )
                     pRes = new SbxVariable( SbxVARIANT );
 
