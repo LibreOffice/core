@@ -29,8 +29,6 @@ public:
 
 private:
     bool isFromCIncludeFile(SourceLocation spellingLocation) const;
-
-    bool isMacroBodyExpansion(SourceLocation location) const;
 };
 
 bool LiteralToBoolConversion::VisitImplicitCastExpr(
@@ -64,7 +62,7 @@ bool LiteralToBoolConversion::VisitImplicitCastExpr(
         while (compiler.getSourceManager().isMacroArgExpansion(loc)) {
             loc = compiler.getSourceManager().getImmediateMacroCallerLoc(loc);
         }
-        if (isMacroBodyExpansion(loc)) {
+        if (isMacroBodyExpansion(compiler, loc)) {
             StringRef name { Lexer::getImmediateMacroName(
                 loc, compiler.getSourceManager(), compiler.getLangOpts()) };
             if (name == "sal_False" || name == "sal_True") {
@@ -164,17 +162,6 @@ bool LiteralToBoolConversion::isFromCIncludeFile(
                 compiler.getSourceManager().getPresumedLoc(spellingLocation)
                 .getFilename())
             .endswith(".h"));
-}
-
-bool LiteralToBoolConversion::isMacroBodyExpansion(SourceLocation location)
-    const
-{
-#if (__clang_major__ == 3 && __clang_minor__ >= 3) || __clang_major__ > 3
-    return compiler.getSourceManager().isMacroBodyExpansion(location);
-#else
-    return location.isMacroID()
-        && !compiler.getSourceManager().isMacroArgExpansion(location);
-#endif
 }
 
 loplugin::Plugin::Registration<LiteralToBoolConversion> X(

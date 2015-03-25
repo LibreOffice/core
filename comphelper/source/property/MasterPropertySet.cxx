@@ -370,9 +370,13 @@ PropertyState SAL_CALL MasterPropertySet::getPropertyState( const OUString& Prop
         if (pSlave->mpMutex)
             xMutexGuard.reset( new osl::Guard< comphelper::SolarMutex >(pSlave->mpMutex) );
 
-        pSlave->_preGetPropertyState();
-        pSlave->_getPropertyState( *((*aIter).second->mpInfo), aState );
-        pSlave->_postGetPropertyState();
+        // FIXME: Each of these three methods does OSL_FAIL( "you have
+        // to implement this yourself!") and nothing else, so this
+        // can't make much sense. Is this whole else branch in fact
+        // dead code?
+        ChainablePropertySet::_preGetPropertyState();
+        ChainablePropertySet::_getPropertyState( *((*aIter).second->mpInfo), aState );
+        ChainablePropertySet::_postGetPropertyState();
     }
 
     return aState;
@@ -404,10 +408,10 @@ Sequence< PropertyState > SAL_CALL MasterPropertySet::getPropertyStates( const S
                 SlaveData * pSlave = maSlaveMap [ (*aIter).second->mnMapId ];
                 if (!pSlave->IsInit())
                 {
-                    pSlave->mpSlave->_preGetPropertyState();
+                    comphelper::ChainablePropertySet::_preGetPropertyState();
                     pSlave->SetInit ( true );
                 }
-                pSlave->mpSlave->_getPropertyState( *((*aIter).second->mpInfo), *pState );
+                comphelper::ChainablePropertySet::_getPropertyState( *((*aIter).second->mpInfo), *pState );
             }
         }
         _postGetPropertyState();
@@ -416,7 +420,7 @@ Sequence< PropertyState > SAL_CALL MasterPropertySet::getPropertyStates( const S
         {
             if ( (*aSlaveIter).second->IsInit())
             {
-                (*aSlaveIter).second->mpSlave->_postGetPropertyState();
+                comphelper::ChainablePropertySet::_postGetPropertyState();
                 (*aSlaveIter).second->SetInit ( false );
             }
             ++aSlaveIter;

@@ -224,6 +224,16 @@ inline bool isMacroBodyExpansion(clang::CompilerInstance& compiler, clang::Sourc
 
 }
 
+inline bool isMacroBodyExpansion(clang::CompilerInstance& compiler, clang::SourceLocation location)
+{
+#if (__clang_major__ == 3 && __clang_minor__ >= 3) || __clang_major__ > 3
+    return compiler.getSourceManager().isMacroBodyExpansion(location);
+#else
+    return location.isMacroID()
+        && !compiler.getSourceManager().isMacroArgExpansion(location);
+#endif
+}
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
