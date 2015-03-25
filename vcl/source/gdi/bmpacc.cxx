@@ -171,22 +171,102 @@ bool BitmapReadAccess::ImplSetAccessPointers( sal_uLong nFormat )
 
     switch( nFormat )
     {
-        CASE_FORMAT( _1BIT_MSB_PAL )
-        CASE_FORMAT( _1BIT_LSB_PAL )
-        CASE_FORMAT( _4BIT_MSN_PAL )
-        CASE_FORMAT( _4BIT_LSN_PAL )
-        CASE_FORMAT( _8BIT_PAL )
-        CASE_FORMAT( _8BIT_TC_MASK )
-        CASE_FORMAT( _16BIT_TC_MSB_MASK )
-        CASE_FORMAT( _16BIT_TC_LSB_MASK )
-        CASE_FORMAT( _24BIT_TC_BGR )
-        CASE_FORMAT( _24BIT_TC_RGB )
-        CASE_FORMAT( _24BIT_TC_MASK )
-        CASE_FORMAT( _32BIT_TC_ABGR )
-        CASE_FORMAT( _32BIT_TC_ARGB )
-        CASE_FORMAT( _32BIT_TC_BGRA )
-        CASE_FORMAT( _32BIT_TC_RGBA )
-        CASE_FORMAT( _32BIT_TC_MASK )
+        case BMP_FORMAT_1BIT_MSB_PAL:
+        {
+            mFncGetPixel = GetPixelFor_1BIT_MSB_PAL;
+            mFncSetPixel = SetPixelFor_1BIT_MSB_PAL;
+        }
+        break;
+        case BMP_FORMAT_1BIT_LSB_PAL:
+        {
+            mFncGetPixel = GetPixelFor_1BIT_LSB_PAL;
+            mFncSetPixel = SetPixelFor_1BIT_LSB_PAL;
+        }
+        break;
+        case BMP_FORMAT_4BIT_MSN_PAL:
+        {
+            mFncGetPixel = GetPixelFor_4BIT_MSN_PAL;
+            mFncSetPixel = SetPixelFor_4BIT_MSN_PAL;
+        }
+        break;
+        case BMP_FORMAT_4BIT_LSN_PAL:
+        {
+            mFncGetPixel = GetPixelFor_4BIT_LSN_PAL;
+            mFncSetPixel = SetPixelFor_4BIT_LSN_PAL;
+        }
+        break;
+        case BMP_FORMAT_8BIT_PAL:
+        {
+            mFncGetPixel = GetPixelFor_8BIT_PAL;
+            mFncSetPixel = SetPixelFor_8BIT_PAL;
+        }
+        break;
+        case BMP_FORMAT_8BIT_TC_MASK:
+        {
+            mFncGetPixel = GetPixelFor_8BIT_TC_MASK;
+            mFncSetPixel = SetPixelFor_8BIT_TC_MASK;
+        }
+        break;
+        case BMP_FORMAT_16BIT_TC_MSB_MASK:
+        {
+            mFncGetPixel = GetPixelFor_16BIT_TC_MSB_MASK;
+            mFncSetPixel = SetPixelFor_16BIT_TC_MSB_MASK;
+        }
+        break;
+        case BMP_FORMAT_16BIT_TC_LSB_MASK:
+        {
+            mFncGetPixel = GetPixelFor_16BIT_TC_LSB_MASK;
+            mFncSetPixel = SetPixelFor_16BIT_TC_LSB_MASK;
+        }
+        break;
+        case BMP_FORMAT_24BIT_TC_BGR:
+        {
+            mFncGetPixel = GetPixelFor_24BIT_TC_BGR;
+            mFncSetPixel = SetPixelFor_24BIT_TC_BGR;
+        }
+        break;
+        case BMP_FORMAT_24BIT_TC_RGB:
+        {
+            mFncGetPixel = GetPixelFor_24BIT_TC_RGB;
+            mFncSetPixel = SetPixelFor_24BIT_TC_RGB;
+        }
+        break;
+        case BMP_FORMAT_24BIT_TC_MASK:
+        {
+            mFncGetPixel = GetPixelFor_24BIT_TC_MASK;
+            mFncSetPixel = SetPixelFor_24BIT_TC_MASK;
+        }
+        break;
+        case BMP_FORMAT_32BIT_TC_ABGR:
+        {
+            mFncGetPixel = GetPixelFor_32BIT_TC_ABGR;
+            mFncSetPixel = SetPixelFor_32BIT_TC_ABGR;
+        }
+        break;
+        case BMP_FORMAT_32BIT_TC_ARGB:
+        {
+            mFncGetPixel = GetPixelFor_32BIT_TC_ARGB;
+            mFncSetPixel = SetPixelFor_32BIT_TC_ARGB;
+        }
+        break;
+        case BMP_FORMAT_32BIT_TC_BGRA:
+        {
+            mFncGetPixel = GetPixelFor_32BIT_TC_BGRA;
+            mFncSetPixel = SetPixelFor_32BIT_TC_BGRA;
+        }
+        break;
+        case BMP_FORMAT_32BIT_TC_RGBA:
+        {
+            mFncGetPixel = GetPixelFor_32BIT_TC_RGBA;
+            mFncSetPixel = SetPixelFor_32BIT_TC_RGBA;
+        }
+        break;
+        case BMP_FORMAT_32BIT_TC_MASK:
+        {
+            mFncGetPixel = GetPixelFor_32BIT_TC_MASK;
+            mFncSetPixel = SetPixelFor_32BIT_TC_MASK;
+        }
+        break;
 
         default:
             bRet = false;
