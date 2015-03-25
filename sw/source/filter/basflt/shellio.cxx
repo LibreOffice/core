@@ -398,7 +398,7 @@ sal_uLong SwReader::Read( const Reader& rOptions )
 
 SwReader::SwReader(SfxMedium& rMedium, const OUString& rFileName, SwDoc *pDocument)
     : SwDocFac(pDocument), pStrm(0), pMedium(&rMedium), pCrsr(0),
-    aFileName(rFileName)
+    aFileName(rFileName), mbSkipImages(false)
 {
     SetBaseURL( rMedium.GetBaseURL() );
     SetSkipImages( rMedium.IsSkipImages() );
@@ -408,20 +408,20 @@ SwReader::SwReader(SfxMedium& rMedium, const OUString& rFileName, SwDoc *pDocume
 // Read into an existing document
 SwReader::SwReader(SvStream& rStrm, const OUString& rFileName, const OUString& rBaseURL, SwPaM& rPam)
     : SwDocFac(rPam.GetDoc()), pStrm(&rStrm), pMedium(0), pCrsr(&rPam),
-    aFileName(rFileName)
+    aFileName(rFileName), mbSkipImages(false)
 {
     SetBaseURL( rBaseURL );
 }
 
 SwReader::SwReader(SfxMedium& rMedium, const OUString& rFileName, SwPaM& rPam)
     : SwDocFac(rPam.GetDoc()), pStrm(0), pMedium(&rMedium),
-    pCrsr(&rPam), aFileName(rFileName)
+    pCrsr(&rPam), aFileName(rFileName), mbSkipImages(false)
 {
     SetBaseURL( rMedium.GetBaseURL() );
 }
 
 SwReader::SwReader( const uno::Reference < embed::XStorage > &rStg, const OUString& rFilename, SwPaM &rPam )
-    : SwDocFac(rPam.GetDoc()), pStrm(0), xStg( rStg ), pMedium(0), pCrsr(&rPam), aFileName(rFilename)
+    : SwDocFac(rPam.GetDoc()), pStrm(0), xStg( rStg ), pMedium(0), pCrsr(&rPam), aFileName(rFilename), mbSkipImages(false)
 {
 }
 
