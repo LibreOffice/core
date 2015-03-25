@@ -1624,7 +1624,7 @@ OUString FormulaProcessorBase::generateApiString( const OUString& rString )
     sal_Int32 nQuotePos = aRetString.getLength();
     while( (nQuotePos = aRetString.lastIndexOf( '"', nQuotePos )) >= 0 )
         aRetString = aRetString.replaceAt( nQuotePos, 1, OUString( "\"\"" ) );
-    return OUStringBuffer().append( '"' ).append( aRetString ).append( '"' ).makeStringAndClear();
+    return "\"" + aRetString + "\"";
 }
 
 OUString FormulaProcessorBase::generateApiArray( const Matrix< Any >& rMatrix )
