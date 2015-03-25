@@ -58,8 +58,15 @@ cmd/lc_basicshapes.ellipse.png cmd/lc_ellipse.png
 cmd/lc_basicshapes.rectangle.png cmd/lc_rect.png
 cmd/lc_linetoolbox.png cmd/lc_freeline.png
 cmd/lc_ellipsetoolbox.png cmd/lc_ellipse.png
+cmd/sc_basicshapes.png cmd/sc_basicshapes.diamond.png
+cmd/sc_basicshapes.ellipse.png cmd/sc_ellipse.png
+cmd/sc_basicshapes.rectangle.png cmd/sc_rect.png
+cmd/sc_rectangletoolbox.png cmd/sc_rect.png
+cmd/sc_linetoolbox.png cmd/sc_freeline.png
+cmd/sc_ellipsetoolbox.png cmd/sc_ellipse.png
 
 # File Menu
+cmd/lc_exporttopdf.png cmd/lc_exportdirecttopdf.png
 cmd/sc_exporttopdf.png cmd/sc_exportdirecttopdf.png
 
 # Number Formats
@@ -71,3 +78,25 @@ cmd/lc_scrolltonext.png cmd/lc_downsearch.png
 cmd/sc_scrolltonext.png cmd/sc_downsearch.png
 cmd/lc_scrolltoprevious.png cmd/lc_upsearch.png
 cmd/sc_scrolltoprevious.png cmd/sc_upsearch.png
+
+# sort
+cmd/lc_datasort.png cmd/lc_sortascending.png
+cmd/lc_sortdown.png cmd/lc_sortdescending.png
+cmd/lc_sortup.png cmd/lc_sortascending.png
+cmd/lc_tablesort.png cmd/lc_sortascending.png
+cmd/sc_datasort.png cmd/sc_sortascending.png
+cmd/sc_sortdown.png cmd/sc_sortdescending.png
+cmd/sc_sortup.png cmd/sc_sortascending.png
+cmd/sc_tablesort.png cmd/sc_sortascending.png
+
+# browse
+cmd/lc_browsebackward cmd/lc_pageup.png
+cmd/lc_browseforward.png cmd/lc_pagedown.png
+cmd/sc_browsebackward cmd/sc_pageup.png
+cmd/sc_browseforward.png cmd/sc_pagedown.png
+
+# database
+database/linked_text_table.png cmd/sc_dataimport.png
+
+# track changes
+cmd/lc_trackchangesbar.png cmd/lc_trackchanges.png
