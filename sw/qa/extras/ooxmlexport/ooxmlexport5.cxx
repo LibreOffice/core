@@ -741,6 +741,21 @@ DECLARE_OOXMLEXPORT_TEST(testTdf89774, "tdf89774.fodt")
         assertXPathContent(pXmlDoc, "/extended-properties:Properties/extended-properties:TotalTime", "1");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testSectionProtection, "sectionprot.odt")
+{
+    if (xmlDocPtr pXmlDoc = parseExport("word/document.xml"))
+    {
+        assertXPath(pXmlDoc, "//w:formProt[1]", "val", "true");
+        assertXPath(pXmlDoc, "//w:formProt[2]", "val", "false");
+    }
+
+    if (xmlDocPtr pXmlSettings = parseExport("word/settings.xml"))
+    {
+        assertXPath(pXmlSettings, "/w:settings/w:documentProtection", "enforcement", "true");
+        assertXPath(pXmlSettings, "/w:settings/w:documentProtection", "edit", "forms");
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
