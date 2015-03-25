@@ -221,38 +221,24 @@ gboolean lcl_signalMotion(GtkWidget* /*pEventBox*/, GdkEventButton* pEvent, LOKD
         g_info("lcl_signalMotion: dragging the graphic selection");
         return FALSE;
     }
+
+    GdkRectangle aMotionInTwipsInTwips;
+    aMotionInTwipsInTwips.x = pixelToTwip(pEvent->x) / pDocView->m_pImpl->m_fZoom;
+    aMotionInTwipsInTwips.y = pixelToTwip(pEvent->y) / pDocView->m_pImpl->m_fZoom;
+    aMotionInTwipsInTwips.width = 1;
+    aMotionInTwipsInTwips.height = 1;
+    if (gdk_rectangle_intersect(&aMotionInTwipsInTwips, &pDocView->m_pImpl->m_aGraphicSelection, 0))
+    {
+        g_info("lcl_signalMotion: start of drag graphic selection");
+        pDocView->m_pImpl->m_bInDragGraphicSelection = true;
+        pDocView->m_pImpl->m_pDocument->pClass->setGraphicSelection(
+            pDocView->m_pImpl->m_pDocument, LOK_SETGRAPHICSELECTION_START,
+            pixelToTwip(pEvent->x) / pDocView->m_pImpl->m_fZoom,
+            pixelToTwip(pEvent->y) / pDocView->m_pImpl->m_fZoom);
+        return FALSE;
+    }
+
     return FALSE;
-}
-
-/// Is pClick on the border of pDocView->m_aGraphicSelection?
-bool lcl_isOnBorders(LOKDocView* pDocView, GdkPoint* pClick)
-{
-    // Handles are on the corners / edges of the shape:
-    // Let aSelection be the bounding box of all handles (a bit larger than the graphic selection).
-    int nHandleWidth = pixelToTwip(pDocView->m_pImpl->m_aGraphicHandleRects[0].width) / pDocView->m_pImpl->m_fZoom;
-    int nHandleHeight = pixelToTwip(pDocView->m_pImpl->m_aGraphicHandleRects[0].height) / pDocView->m_pImpl->m_fZoom;
-    GdkRectangle aSelection;
-    aSelection.x = pDocView->m_pImpl->m_aGraphicSelection.x - nHandleWidth / 2;
-    aSelection.y = pDocView->m_pImpl->m_aGraphicSelection.y - nHandleHeight / 2;
-    aSelection.width = pDocView->m_pImpl->m_aGraphicSelection.width + nHandleWidth;
-    aSelection.height = pDocView->m_pImpl->m_aGraphicSelection.height + nHandleHeight;
-    GdkRegion* pSelection = gdk_region_rectangle(&aSelection);
-
-    // Let aInsideBorder be the shape without the handles (a bit smaller than the graphic selection).
-    GdkRectangle aInsideBorder;
-    aInsideBorder.x = pDocView->m_pImpl->m_aGraphicSelection.x + nHandleWidth / 2;
-    aInsideBorder.y = pDocView->m_pImpl->m_aGraphicSelection.y + nHandleHeight / 2;
-    aInsideBorder.width = pDocView->m_pImpl->m_aGraphicSelection.width - nHandleWidth;
-    aInsideBorder.height = pDocView->m_pImpl->m_aGraphicSelection.height - nHandleHeight;
-    GdkRegion* pInsideBorder = gdk_region_rectangle(&aInsideBorder);
-
-    // Did we click on the border?
-    gdk_region_subtract(pSelection, pInsideBorder);
-    bool bRet = gdk_region_point_in(pSelection, pClick->x, pClick->y);
-
-    gdk_region_destroy(pInsideBorder);
-    gdk_region_destroy(pSelection);
-    return bRet;
 }
 
 /// Receives a button press event.
@@ -346,20 +332,6 @@ gboolean lcl_signalButton(GtkWidget* /*pEventBox*/, GdkEventButton* pEvent, LOKD
                         pixelToTwip(pDocView->m_pImpl->m_aGraphicHandleRects[i].y + pDocView->m_pImpl->m_aGraphicHandleRects[i].height / 2) / pDocView->m_pImpl->m_fZoom);
                     return FALSE;
                 }
-            }
-
-            GdkPoint aClickInTwips;
-            aClickInTwips.x = pixelToTwip(pEvent->x) / pDocView->m_pImpl->m_fZoom;
-            aClickInTwips.y = pixelToTwip(pEvent->y) / pDocView->m_pImpl->m_fZoom;
-            if (lcl_isOnBorders(pDocView, &aClickInTwips))
-            {
-                g_info("lcl_signalButton: start of drag graphic selection");
-                pDocView->m_pImpl->m_bInDragGraphicSelection = true;
-                pDocView->m_pImpl->m_pDocument->pClass->setGraphicSelection(
-                    pDocView->m_pImpl->m_pDocument, LOK_SETGRAPHICSELECTION_START,
-                    pixelToTwip(pEvent->x) / pDocView->m_pImpl->m_fZoom,
-                    pixelToTwip(pEvent->y) / pDocView->m_pImpl->m_fZoom);
-                return FALSE;
             }
         }
     }
