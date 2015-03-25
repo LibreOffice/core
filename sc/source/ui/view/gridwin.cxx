@@ -5745,38 +5745,44 @@ void ScGridWindow::UpdateCopySourceOverlay()
         SetMapMode( aOldMode );
 }
 
-/// Turn the selection ranges rRanges into the LibreOfficeKit selection, and call the callback.
-static void updateLibreOfficeKitSelection(ScDrawLayer* pDrawLayer, const std::vector<basegfx::B2DRange>& rRanges)
+/// Turn the selection ranges rRectangles into the LibreOfficeKit selection, and call the callback.
+static void updateLibreOfficeKitSelection(ScViewData* pViewData, ScDrawLayer* pDrawLayer, const std::vector<Rectangle>& rRectangles)
 {
     if (!pDrawLayer->isTiledRendering())
         return;
 
-    basegfx::B2DRange aBoundingBox;
+    double nPPTX = pViewData->GetPPTX();
+    double nPPTY = pViewData->GetPPTY();
+
+    Rectangle aBoundingBox;
     std::stringstream ss;
 
     bool bIsFirst = true;
-    for (const auto& rRange : rRanges)
+    for (auto aRectangle : rRectangles)
     {
-        aBoundingBox.expand(rRange);
+        aRectangle.Right() += 1;
+        aRectangle.Bottom() += 1;
+
+        aBoundingBox.Union(aRectangle);
 
         if (bIsFirst)
             bIsFirst = false;
         else
             ss << "; ";
 
-        Rectangle aRect(rRange.getMinX() / HMM_PER_TWIPS, rRange.getMinY() / HMM_PER_TWIPS,
-                rRange.getMaxX() / HMM_PER_TWIPS, rRange.getMaxY() / HMM_PER_TWIPS);
+        Rectangle aRect(aRectangle.Left() / nPPTX, aRectangle.Top() / nPPTY,
+                aRectangle.Right() / nPPTX, aRectangle.Bottom() / nPPTY);
         ss << aRect.toString().getStr();
     }
 
     // selection start handle
-    Rectangle aStart(aBoundingBox.getMinX() / HMM_PER_TWIPS, aBoundingBox.getMinY() / HMM_PER_TWIPS,
-            aBoundingBox.getMinX() / HMM_PER_TWIPS, (aBoundingBox.getMinY() / HMM_PER_TWIPS) + 256);
+    Rectangle aStart(aBoundingBox.Left() / nPPTX, aBoundingBox.Top() / nPPTY,
+            aBoundingBox.Left() / nPPTX, (aBoundingBox.Top() / nPPTY) + 256);
     pDrawLayer->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION_START, aStart.toString().getStr());
 
     // selection end handle
-    Rectangle aEnd(aBoundingBox.getMaxX() / HMM_PER_TWIPS, (aBoundingBox.getMaxY() / HMM_PER_TWIPS) - 256,
-            aBoundingBox.getMaxX() / HMM_PER_TWIPS, aBoundingBox.getMaxY() / HMM_PER_TWIPS);
+    Rectangle aEnd(aBoundingBox.Right() / nPPTX, (aBoundingBox.Bottom() / nPPTY) - 256,
+            aBoundingBox.Right() / nPPTX, aBoundingBox.Bottom() / nPPTY);
     pDrawLayer->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION_END, aEnd.toString().getStr());
 
     // the selection itself
@@ -5938,7 +5944,7 @@ void ScGridWindow::UpdateCursorOverlay()
             // (once for the cell only, and then for the selection)
             if (!pViewData->GetMarkData().IsMarked() && !pViewData->GetMarkData().IsMultiMarked())
             {
-                updateLibreOfficeKitSelection(pDoc->GetDrawLayer(), aRanges);
+                updateLibreOfficeKitSelection(pViewData, pDoc->GetDrawLayer(), aPixelRects);
             }
         }
     }
@@ -6008,7 +6014,7 @@ void ScGridWindow::UpdateSelectionOverlay()
             mpOOSelection->append(*pOverlay);
 
             // notify the LibreOfficeKit too
-            updateLibreOfficeKitSelection(pDoc->GetDrawLayer(), aRanges);
+            updateLibreOfficeKitSelection(pViewData, pDoc->GetDrawLayer(), aPixelRects);
         }
     }
 
