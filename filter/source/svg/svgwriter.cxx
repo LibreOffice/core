@@ -1540,7 +1540,7 @@ void SVGTextWriter::implWriteTextPortion( const Point& rPos,
     else
         aPos = rPos;
 
-    if( mbPositioningNeeded )
+    if( mbPositioningNeeded || bApplyMapping )
     {
         mbPositioningNeeded = false;
         maTextPos.setX( aPos.X() );
@@ -3509,7 +3509,9 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                         }
                         else
                         {
+                            maTextWriter.startTextShape();
                             maTextWriter.writeTextPortion( pA->GetPoint(), aText );
+                            maTextWriter.endTextShape();
                         }
                     }
                 }
