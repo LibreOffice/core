@@ -682,7 +682,7 @@ SvStream& SvxNumRule::Store( SvStream &rStream )
     //first save of nFeatureFlags for old versions
     rStream.WriteUInt16( static_cast<sal_uInt16>(nFeatureFlags) );
     rStream.WriteUInt16( sal_uInt16(bContinuousNumbering) );
-    rStream.WriteUInt16( eNumberingType );
+    rStream.WriteUInt16( static_cast<sal_uInt16>(eNumberingType) );
 
     FontToSubsFontConverter pConverter = 0;
     bool bConvertBulletFont = ( rStream.GetVersion() <= SOFFICE_FILEFORMAT_50 ) && ( rStream.GetVersion() );
@@ -782,7 +782,7 @@ const SvxNumberFormat&  SvxNumRule::GetLevel(sal_uInt16 nLevel)const
     DBG_ASSERT(nLevel < SVX_MAX_NUM, "Wrong Level" );
 
     return ( ( nLevel < SVX_MAX_NUM ) && aFmts[nLevel] ) ?
-            *aFmts[nLevel] :  eNumberingType == SVX_RULETYPE_NUMBERING ?
+            *aFmts[nLevel] :  eNumberingType == SvxNumRuleType::NUMBERING ?
                                                         *pStdNumFmt : *pStdOutlineNumFmt;
 }
 

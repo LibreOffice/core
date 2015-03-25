@@ -4271,24 +4271,24 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
             case TSS_TYPE_PAGETITLE :
             case TSS_TYPE_TITLE :
                 nLevels = 1;
-                eNumRuleType = SVX_RULETYPE_NUMBERING;
+                eNumRuleType = SvxNumRuleType::NUMBERING;
             break;
             case TSS_TYPE_SUBTITLE :
                 nLevels = SVX_MAX_NUM;
-                eNumRuleType = SVX_RULETYPE_NUMBERING;
+                eNumRuleType = SvxNumRuleType::NUMBERING;
             break;
             case TSS_TYPE_BODY :
             case TSS_TYPE_HALFBODY :
             case TSS_TYPE_QUARTERBODY :
                 nLevels = SVX_MAX_NUM;
-                eNumRuleType = SVX_RULETYPE_PRESENTATION_NUMBERING;
+                eNumRuleType = SvxNumRuleType::PRESENTATION_NUMBERING;
             break;
             default :
             case TSS_TYPE_NOTES :
             case TSS_TYPE_UNUSED :
             case TSS_TYPE_TEXT_IN_SHAPE :
                 nLevels = SVX_MAX_NUM;
-                eNumRuleType = SVX_RULETYPE_NUMBERING;
+                eNumRuleType = SvxNumRuleType::NUMBERING;
             break;
         }
         SvxNumRule aRule( SvxNumRuleFlags::BULLET_REL_SIZE | SvxNumRuleFlags::BULLET_COLOR |
@@ -4306,7 +4306,7 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
             {
                 for ( ;nDepth < nLevels; nDepth++ )
                     aRule.SetLevel( nDepth, aNumberFormat );
-                if ( eNumRuleType == SVX_RULETYPE_PRESENTATION_NUMBERING )
+                if ( eNumRuleType == SvxNumRuleType::PRESENTATION_NUMBERING )
                     aRule.SetLevel( 0, aNumberFormat );
             }
         }

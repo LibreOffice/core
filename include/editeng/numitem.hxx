@@ -230,12 +230,12 @@ namespace o3tl
     template<> struct typed_flags<SvxNumRuleFlags> : is_typed_flags<SvxNumRuleFlags, 0x03df> {};
 }
 
-enum SvxNumRuleType
+enum class SvxNumRuleType
 {
-    SVX_RULETYPE_NUMBERING,
-    SVX_RULETYPE_OUTLINE_NUMBERING,
-    SVX_RULETYPE_PRESENTATION_NUMBERING,
-    SVX_RULETYPE_END
+    NUMBERING,
+    OUTLINE_NUMBERING,
+    PRESENTATION_NUMBERING,
+    END
 };
 
 class EDITENG_DLLPUBLIC SvxNumRule
@@ -254,7 +254,7 @@ public:
     SvxNumRule( SvxNumRuleFlags nFeatures,
                 sal_uInt16 nLevels,
                 bool bCont,
-                SvxNumRuleType eType = SVX_RULETYPE_NUMBERING,
+                SvxNumRuleType eType = SvxNumRuleType::NUMBERING,
                 SvxNumberFormat::SvxNumPositionAndSpaceMode
                         eDefaultNumberFormatPositionAndSpaceMode
                                 = SvxNumberFormat::LABEL_WIDTH_AND_POSITION );

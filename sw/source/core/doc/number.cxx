@@ -860,7 +860,7 @@ SvxNumRule SwNumRule::MakeSvxNumRule() const
     SvxNumRule aRule(SvxNumRuleFlags::CONTINUOUS | SvxNumRuleFlags::CHAR_TEXT_DISTANCE | SvxNumRuleFlags::CHAR_STYLE |
                      SvxNumRuleFlags::ENABLE_LINKED_BMP | SvxNumRuleFlags::ENABLE_EMBEDDED_BMP,
                      MAXLEVEL, mbContinusNum,
-                     meRuleType == NUM_RULE ? SVX_RULETYPE_NUMBERING : SVX_RULETYPE_OUTLINE_NUMBERING );
+                     meRuleType == NUM_RULE ? SvxNumRuleType::NUMBERING : SvxNumRuleType::OUTLINE_NUMBERING );
     for( sal_uInt16 n = 0; n < MAXLEVEL; ++n )
     {
         SwNumFmt aNumFmt = Get(n);

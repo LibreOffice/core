@@ -209,7 +209,7 @@ void NBOTypeMgrBase::ImplStore(const OUString& filename)
                 SvxNumRule aDefNumRule( SvxNumRuleFlags::BULLET_REL_SIZE | SvxNumRuleFlags::CONTINUOUS | SvxNumRuleFlags::BULLET_COLOR |
                     SvxNumRuleFlags::CHAR_TEXT_DISTANCE | SvxNumRuleFlags::SYMBOL_ALIGNMENT,
                     10, false,
-                    SVX_RULETYPE_NUMBERING,SvxNumberFormat::LABEL_ALIGNMENT);
+                    SvxNumRuleType::NUMBERING, SvxNumberFormat::LABEL_ALIGNMENT);
                 sal_uInt16 mLevel = 0x1;
                 xOStm->WriteInt32( nItem );
                 ApplyNumRule(aDefNumRule,nItem,mLevel,false,true);
@@ -1514,7 +1514,7 @@ void OutlineTypeMgr::Init()
         SvxNumRule aDefNumRule( SvxNumRuleFlags::BULLET_REL_SIZE | SvxNumRuleFlags::CONTINUOUS | SvxNumRuleFlags::BULLET_COLOR |
             SvxNumRuleFlags::CHAR_TEXT_DISTANCE | SvxNumRuleFlags::SYMBOL_ALIGNMENT,
             10, false,
-            SVX_RULETYPE_NUMBERING,SvxNumberFormat::LABEL_ALIGNMENT);
+            SvxNumRuleType::NUMBERING, SvxNumberFormat::LABEL_ALIGNMENT);
 
         for(sal_Int32 nItem = 0;
             nItem < aOutlineAccess.getLength() && nItem < DEFAULT_NUM_VALUSET_COUNT;

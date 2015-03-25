@@ -3450,7 +3450,7 @@ IMPL_LINK_NOARG(SvxNumPositionTabPage, StandardHdl_Impl)
     SvxNumRule aTmpNumRule( pActNum->GetFeatureFlags(),
                             pActNum->GetLevelCount(),
                             pActNum->IsContinuousNumbering(),
-                            SVX_RULETYPE_NUMBERING,
+                            SvxNumRuleType::NUMBERING,
                             pActNum->GetLevel( 0 ).GetPositionAndSpaceMode() );
     for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
     {
