@@ -6394,6 +6394,12 @@
         </info>
         <value/>
       </prop>
+      <prop oor:name="Hidden" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Specifies whether invisible content should be hidden or not.</desc>
+        </info>
+        <value>true</value>
+     </prop>
     </group>
     <group oor:name="I18N">
       <info>
