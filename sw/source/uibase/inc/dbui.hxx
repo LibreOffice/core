@@ -24,19 +24,24 @@
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 
-class SW_DLLPUBLIC CancelableModelessDialog : public ModelessDialog
+class SW_DLLPUBLIC CancelableDialog : public Dialog
 {
+    bool mbModal;
+
 protected:
     CancelButton* m_pCancelButton;
-    CancelableModelessDialog( vcl::Window *pParent, const OUString& rID,
-                              const OUString& rUIXMLDescription );
+    CancelableDialog( vcl::Window *pParent, bool modal, const OUString& rID,
+                      const OUString& rUIXMLDescription );
+
+    DECL_LINK(DlgClosedHdl, void *);
 
 public:
-    virtual ~CancelableModelessDialog() {};
+    virtual ~CancelableDialog() {};
     void SetCancelHdl( const Link& rLink );
+    void Show();
 };
 
-class SW_DLLPUBLIC PrintMonitor: public CancelableModelessDialog
+class SW_DLLPUBLIC PrintMonitor: public CancelableDialog
 {
 public:
     enum PrintMonitorType
@@ -50,13 +55,13 @@ public:
     FixedText* m_pPrinter;
     FixedText* m_pPrintInfo;
 
-    PrintMonitor( vcl::Window *pParent, PrintMonitorType eType );
+    PrintMonitor( vcl::Window *pParent, bool modal, PrintMonitorType eType );
 };
 
-class CreateMonitor : public CancelableModelessDialog
+class CreateMonitor : public CancelableDialog
 {
 public:
-    CreateMonitor( vcl::Window *pParent );
+    CreateMonitor( vcl::Window *pParent, bool modal );
 
     void SetTotalCount( sal_Int32 nTotal );
     void SetCurrentPosition( sal_Int32 nCurrent );
