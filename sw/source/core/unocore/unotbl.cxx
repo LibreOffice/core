@@ -604,20 +604,23 @@ static void lcl_InspectLines(SwTableLines& rLines, std::vector<OUString*>& rAllN
     }
 }
 
-static void lcl_FormatTable(SwFrmFmt* pTblFmt)
+static bool lcl_FormatTable(SwFrmFmt* pTblFmt)
 {
+    bool bHasFrames = false;
     SwIterator<SwFrm,SwFmt> aIter( *pTblFmt );
-    for( SwFrm* pFrm = aIter.First(); pFrm; pFrm = aIter.Next() )
+    for(SwFrm* pFrm = aIter.First(); pFrm; pFrm = aIter.Next())
     {
         // mba: no TYPEINFO for SwTabFrm
-        if( pFrm->IsTabFrm() )
-        {
-            if(pFrm->IsValid())
-                pFrm->InvalidatePos();
-            static_cast<SwTabFrm*>(pFrm)->SetONECalcLowers();
-            static_cast<SwTabFrm*>(pFrm)->Calc();
-        }
+        if(!pFrm->IsTabFrm())
+            continue;
+        SwTabFrm* pTabFrm = static_cast<SwTabFrm*>(pFrm);
+        if(pTabFrm->IsValid())
+            pTabFrm->InvalidatePos();
+        pTabFrm->SetONECalcLowers();
+        pTabFrm->Calc();
+        bHasFrames = true;
     }
+    return bHasFrames;
 }
 
 static void lcl_CrsrSelect(SwPaM& rCrsr, bool bExpand)
@@ -3180,13 +3183,8 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName, const uno::An
                         break; // something else
                     }
                     SwDoc* pDoc = pFmt->GetDoc();
-                    SwFrm* pFrm = SwIterator<SwFrm,SwFmt>( *pFmt ).First();
-                    // tables without layout (invisible header/footer?)
-                    if (!pFrm)
-                    {
+                    if(!lcl_FormatTable(pFmt))
                         break;
-                    }
-                    lcl_FormatTable(pFmt);
                     SwTable* pTable = SwTable::FindTable( pFmt );
                     SwTableLines &rLines = pTable->GetTabLines();
 
@@ -3374,13 +3372,9 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName)
                 case FN_UNO_TABLE_BORDER2:
                 {
                     SwDoc* pDoc = pFmt->GetDoc();
-                    SwFrm* pFrm = SwIterator<SwFrm,SwFmt>( *pFmt ).First();
                     // tables without layout (invisible header/footer?)
-                    if (!pFrm)
-                    {
+                    if(!lcl_FormatTable(pFmt))
                         break;
-                    }
-                    lcl_FormatTable(pFmt);
                     SwTable* pTable = SwTable::FindTable( pFmt );
                     SwTableLines &rLines = pTable->GetTabLines();
 
