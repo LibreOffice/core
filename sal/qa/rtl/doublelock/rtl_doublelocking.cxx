@@ -48,36 +48,6 @@ struct Gregorian : public rtl::StaticWithInit<rtl::OUString, Gregorian> {
 };
 }
 
-namespace ThreadHelper
-{
-    // typedef enum {
-    //     QUIET=1,
-    //     VERBOSE
-    // } eSleepVerboseMode;
-
-    void thread_sleep_tenth_sec(sal_Int32 _nTenthSec/*, eSleepVerboseMode nVerbose = VERBOSE*/)
-    {
-        // if (nVerbose == VERBOSE)
-        // {
-        //     printf("wait %d tenth seconds. ", _nTenthSec );
-        //     fflush(stdout);
-        // }
-#ifdef WNT      //Windows
-        Sleep(_nTenthSec * 100 );
-#endif
-#if ( defined UNX )
-        TimeValue nTV;
-        nTV.Seconds = static_cast<sal_uInt32>( _nTenthSec/10 );
-        nTV.Nanosec = ( (_nTenthSec%10 ) * 100000000 );
-        osl_waitThread(&nTV);
-#endif
-        // if (nVerbose == VERBOSE)
-        // {
-        //     printf("done\n");
-        // }
-    }
-}
-
 /** Simple thread for testing Thread-create.
  * Just add 1 of value 0, and after running, result is 1.
  */
@@ -117,7 +87,7 @@ protected:
                 {
                     m_nFails++;
                 }
-                ThreadHelper::thread_sleep_tenth_sec(1);
+                osl::Thread::sleepMicroseconds(100);
             }
         }
 
@@ -185,7 +155,7 @@ namespace rtl_DoubleLocking
                 pThread->create();
                 p2Thread->create();
 
-                ThreadHelper::thread_sleep_tenth_sec(5);
+                osl::Thread::sleepMicroseconds(500);
 
                 pThread->terminate();
                 p2Thread->terminate();
