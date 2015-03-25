@@ -166,10 +166,6 @@ namespace connectivity
             static OUString getImplementationName_Static(  ) throw(::com::sun::star::uno::RuntimeException);
             static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static(  ) throw (::com::sun::star::uno::RuntimeException);
 
-            /** returns the driver's implementation name (being pure ASCII) for reference in various places
-            */
-            static const sal_Char*  impl_getAsciiImplementationName();
-
             /** returns the path of our configuration settings
             */
             static OUString  impl_getConfigurationSettingsPath();

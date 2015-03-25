@@ -355,7 +355,7 @@ void KabDriver::disposing()
 
 OUString KabDriver::getImplementationName_Static(  ) throw(RuntimeException)
 {
-    return OUString::createFromAscii( impl_getAsciiImplementationName() );
+    return OUString("com.sun.star.comp.sdbc." KAB_SERVICE_NAME ".Driver");
 }
 
 Sequence< OUString > KabDriver::getSupportedServiceNames_Static(  ) throw (RuntimeException)
@@ -442,13 +442,6 @@ void SAL_CALL KabDriver::notifyTermination( const EventObject& ) throw (RuntimeE
 void SAL_CALL KabDriver::disposing( const EventObject& ) throw (RuntimeException, std::exception)
 {
     // not interested in (this is the disposing of the desktop, if any)
-}
-
-const sal_Char* KabDriver::impl_getAsciiImplementationName()
-{
-    return "com.sun.star.comp.sdbc." KAB_SERVICE_NAME ".Driver";
-        // this name is referenced in the configuration and in the kab.xml
-        // Please be careful when changing it.
 }
 
 OUString KabDriver::impl_getConfigurationSettingsPath()
