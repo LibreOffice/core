@@ -238,7 +238,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     // BulletItem and BulletFont for title and outline
     SvxBulletItem aBulletItem(EE_PARA_BULLET);
                             // Identical in all layers
-    aBulletItem.SetStyle(BS_BULLET);
+    aBulletItem.SetStyle(SvxBulletStyle::BULLET);
     aBulletItem.SetStart(1);
     aBulletItem.SetScale(45);           // In percent
 
@@ -1206,7 +1206,7 @@ void SdDrawDocument::SetTextDefaults() const
     vcl::Font aBulletFont( SdStyleSheetPool::GetBulletFont() );
     aBulletFont.SetSize(Size(0,846));       // 24 pt
     aBulletItem.SetFont(aBulletFont);
-    aBulletItem.SetStyle(BS_BULLET);
+    aBulletItem.SetStyle(SvxBulletStyle::BULLET);
     aBulletItem.SetStart(1);
     aBulletItem.SetScale(45);               // In percent
     aBulletItem.SetSymbol( 0x25CF );                // In points

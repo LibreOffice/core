@@ -25,14 +25,17 @@
 // define ----------------------------------------------------------------
 
 // Styles
-#define BS_ABC_BIG          0
-#define BS_ABC_SMALL        1
-#define BS_ROMAN_BIG        2
-#define BS_ROMAN_SMALL      3
-#define BS_123              4
-#define BS_NONE             5
-#define BS_BULLET           6
-#define BS_BMP              128
+enum class SvxBulletStyle
+{
+    ABC_BIG          = 0,
+    ABC_SMALL        = 1,
+    ROMAN_BIG        = 2,
+    ROMAN_SMALL      = 3,
+    N123             = 4,
+    NONE             = 5,
+    BULLET           = 6,
+    BMP              = 128
+};
 
 // Justification
 #define BJ_HLEFT            0x01
@@ -66,7 +69,7 @@ class EDITENG_DLLPUBLIC SvxBulletItem : public SfxPoolItem
     OUString        aPrevText;
     OUString        aFollowText;
     sal_uInt16      nStart;
-    sal_uInt16      nStyle;
+    SvxBulletStyle  nStyle;
     long            nWidth;
     sal_uInt16      nScale;
     sal_Unicode     cSymbol;
@@ -96,7 +99,7 @@ public:
 
     sal_uInt16          GetStart() const { return nStart; }
     long                GetWidth() const { return nWidth; }
-    sal_uInt16          GetStyle() const { return nStyle; }
+    SvxBulletStyle      GetStyle() const { return nStyle; }
     sal_uInt8           GetJustification() const { return nJustify; }
     vcl::Font           GetFont() const { return aFont; }
     sal_uInt16          GetScale() const { return nScale; }
@@ -110,7 +113,7 @@ public:
 
     void                SetStart( sal_uInt16 nNew ) { nStart = nNew; }
     void                SetWidth( long nNew ) { nWidth = nNew; }
-    void                SetStyle( sal_uInt16 nNew ) { nStyle = nNew; }
+    void                SetStyle( SvxBulletStyle nNew ) { nStyle = nNew; }
     void                SetJustification( sal_uInt8 nNew ) { nJustify = nNew; }
     void                SetFont( const vcl::Font& rNew) { aFont = rNew; }
     void                SetScale( sal_uInt16 nNew ) { nScale = nNew; }

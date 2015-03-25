@@ -112,13 +112,15 @@ SvxBulletItem::SvxBulletItem( SvStream& rStrm, sal_uInt16 _nWhich )
     : SfxPoolItem(_nWhich)
     , pGraphicObject(NULL)
     , nStart(0)
-    , nStyle(0)
+    , nStyle(SvxBulletStyle::ABC_BIG)
     , nScale(0)
     , nJustify(0)
 {
-    rStrm.ReadUInt16( nStyle );
+    sal_uInt16 nTmp1;
+    rStrm.ReadUInt16( nTmp1 );
+    nStyle = static_cast<SvxBulletStyle>(nTmp1);
 
-    if( nStyle != BS_BMP )
+    if( nStyle != SvxBulletStyle::BMP )
         aFont = CreateFont( rStrm, BULITEM_VERSION );
     else
     {
@@ -138,7 +140,7 @@ SvxBulletItem::SvxBulletItem( SvStream& rStrm, sal_uInt16 _nWhich )
         if( aBmp.IsEmpty() )
         {
             rStrm.Seek( nOldPos );
-            nStyle = BS_NONE;
+            nStyle = SvxBulletStyle::NONE;
         }
         else
             pGraphicObject = new GraphicObject( aBmp );
@@ -218,7 +220,7 @@ void SvxBulletItem::SetDefaults_Impl()
     pGraphicObject  = NULL;
     nWidth          = 1200;  // 1.2cm
     nStart          = 1;
-    nStyle          = BS_123;
+    nStyle          = SvxBulletStyle::N123;
     nJustify        = BJ_HLEFT | BJ_VCENTER;
     cSymbol         = ' ';
     nScale          = 75;
@@ -283,10 +285,10 @@ bool SvxBulletItem::operator==( const SfxPoolItem& rItem ) const
         aFollowText != rBullet.aFollowText )
             return false;
 
-    if( ( nStyle != BS_BMP ) && ( aFont != rBullet.aFont ) )
+    if( ( nStyle != SvxBulletStyle::BMP ) && ( aFont != rBullet.aFont ) )
         return false;
 
-    if( nStyle == BS_BMP )
+    if( nStyle == SvxBulletStyle::BMP )
     {
         if( ( pGraphicObject && !rBullet.pGraphicObject ) || ( !pGraphicObject && rBullet.pGraphicObject ) )
             return false;
@@ -307,7 +309,7 @@ bool SvxBulletItem::operator==( const SfxPoolItem& rItem ) const
 SvStream& SvxBulletItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) const
 {
     // Correction for empty bitmap
-    if( ( nStyle == BS_BMP ) &&
+    if( ( nStyle == SvxBulletStyle::BMP ) &&
         ( !pGraphicObject || ( GRAPHIC_NONE == pGraphicObject->GetType() ) || ( GRAPHIC_DEFAULT == pGraphicObject->GetType() ) ) )
     {
         if( pGraphicObject )
@@ -316,12 +318,12 @@ SvStream& SvxBulletItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) c
             const_cast< SvxBulletItem* >( this )->pGraphicObject = NULL;
         }
 
-        const_cast< SvxBulletItem* >( this )->nStyle = BS_NONE;
+        const_cast< SvxBulletItem* >( this )->nStyle = SvxBulletStyle::NONE;
     }
 
-    rStrm.WriteUInt16( nStyle );
+    rStrm.WriteUInt16( static_cast<sal_uInt16>(nStyle) );
 
-    if( nStyle != BS_BMP )
+    if( nStyle != SvxBulletStyle::BMP )
         StoreFont( rStrm, aFont );
     else
     {
