@@ -75,7 +75,7 @@ namespace comphelper
 
         void firePropertyChange(sal_Int32 nHandle, const ::com::sun::star::uno::Any& aNewValue, const ::com::sun::star::uno::Any& aOldValue);
 
-        css::uno::Sequence<css::uno::Type> getTypes();
+        static css::uno::Sequence<css::uno::Type> getTypes();
     };
 
 

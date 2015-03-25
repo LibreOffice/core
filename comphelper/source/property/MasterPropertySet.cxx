@@ -404,10 +404,10 @@ Sequence< PropertyState > SAL_CALL MasterPropertySet::getPropertyStates( const S
                 SlaveData * pSlave = maSlaveMap [ (*aIter).second->mnMapId ];
                 if (!pSlave->IsInit())
                 {
-                    pSlave->mpSlave->_preGetPropertyState();
+                    comphelper::ChainablePropertySet::_preGetPropertyState();
                     pSlave->SetInit ( true );
                 }
-                pSlave->mpSlave->_getPropertyState( *((*aIter).second->mpInfo), *pState );
+                comphelper::ChainablePropertySet::_getPropertyState( *((*aIter).second->mpInfo), *pState );
             }
         }
         _postGetPropertyState();
@@ -416,7 +416,7 @@ Sequence< PropertyState > SAL_CALL MasterPropertySet::getPropertyStates( const S
         {
             if ( (*aSlaveIter).second->IsInit())
             {
-                (*aSlaveIter).second->mpSlave->_postGetPropertyState();
+                comphelper::ChainablePropertySet::_postGetPropertyState();
                 (*aSlaveIter).second->SetInit ( false );
             }
             ++aSlaveIter;

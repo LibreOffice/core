@@ -100,8 +100,8 @@ namespace comphelper
 
             The default implementation returns <NULL/>.
         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-                getComponent() const;
+        static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+                getComponent();
 
     private:
         ::cppu::OBroadcastHelper&   m_rBHelper;
