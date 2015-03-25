@@ -54,7 +54,7 @@ Sub Init
 			oDocInfo.Read(completPath)
 			sDocTitle = oDocInfo.Title
 			if(not isNull(sDocTitle) And len(sDocTitle) &gt; 0) Then
-				oListbox.additem(sDocTitle,0)
+				oListbox.addItem(sDocTitle,0)
 				tempFiles(tempCount) = completPath
 				tempCount = tempCount + 1
 			End If

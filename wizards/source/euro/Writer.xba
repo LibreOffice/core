@@ -74,7 +74,7 @@ Dim MaxIndex as Integer
 					End If
 				ElseIf oTextField.TextFieldMaster.PropertySetInfo.HasPropertyByName(&quot;Value&quot;) Then
 					CurInstanceName = oTextField.TextFieldMaster.InstanceName
-					If Not FieldinArray(InstanceNames(), MaxIndex, CurInstanceName) Then
+					If Not FieldInArray(InstanceNames(), MaxIndex, CurInstanceName) Then
 						oTextField.TextFieldMaster.Content = CStr(Round(oTextField.TextFieldMaster.Value/CurrFactor,2))
 						InstanceNames(MaxIndex) = CurInstanceName
 						MaxIndex = MaxIndex + 1

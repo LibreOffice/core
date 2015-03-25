@@ -286,7 +286,7 @@ End Sub
 
 &apos; Checks if a Field (LocField) is already defined in an Array
 &apos; Returns &apos;True&apos; or &apos;False&apos;
-Function FieldinList(LocList(), MaxIndex as integer, ByVal LocField ) As Boolean
+Function FieldInList(LocList(), MaxIndex as integer, ByVal LocField ) As Boolean
 Dim i as integer
 	LocField = Ucase(LocField)
 	For i = Lbound(LocList()) to MaxIndex
