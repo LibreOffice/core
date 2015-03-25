@@ -31,11 +31,7 @@
 
 static void impl_sleep( sal_uInt32 nSec )
 {
-    TimeValue aTime;
-    aTime.Seconds = nSec;
-    aTime.Nanosec = 0;
-
-    osl::Thread::wait( aTime );
+    osl::Thread::sleepMicroseconds( nSec * 1000000);
 }
 HelpCompiler::HelpCompiler(StreamTable &in_streamTable, const fs::path &in_inputFile,
     const fs::path &in_src, const fs::path &in_zipdir, const fs::path &in_resCompactStylesheet,

@@ -211,8 +211,7 @@ Reference< XComponentContext > SAL_CALL bootstrap()
             catch ( connection::NoConnectException & )
             {
                 // wait 500 ms, then try to connect again
-                TimeValue tv = { 0 /* secs */, 500000000 /* nanosecs */ };
-                ::osl::Thread::wait( tv );
+                ::osl::Thread::sleepMicroseconds( 500000 );//0,5s
             }
         }
     }

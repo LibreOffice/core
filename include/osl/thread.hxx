@@ -28,6 +28,10 @@
 #include <osl/thread.h>
 #include <rtl/alloc.h>
 
+#ifdef WNT
+#include <windows.h>
+#endif
+
 namespace osl
 {
 /** threadFunc is the function which is executed by the threads
@@ -38,11 +42,11 @@ namespace osl
 extern "C" inline void SAL_CALL threadFunc( void* param);
 
 /**
-   A thread abstraction.
+    A thread abstraction.
 
-   @deprecated use ::salhelper::Thread instead.  Only the static member
-   functions ::osl::Thread::getCurrentIdentifier, ::osl::Thread::wait, and
-   ::osl::Thread::yield are not deprecated.
+    @deprecated use ::salhelper::Thread instead.  Only the static member
+    functions ::osl::Thread::getCurrentIdentifier, ::osl::Thread::wait,
+    ::osl::Thread::sleepMicroseconds and ::osl::Thread::yield are not deprecated.
  */
 class Thread
 {
@@ -142,6 +146,25 @@ public:
         osl_waitThread(&Delay);
     }
 
+    /** Suspends execution of the current thread for time specified in
+        Delay. The suspension time might be longer due to scheduling
+        or other system activities.
+
+        @param Delay - the time specified should be less than 1000000 microsec
+    */
+    static void SAL_CALL sleepMicroseconds(sal_Int32 Delay)
+    {
+#ifdef WNT
+        Sleep(Delay * 1000);
+#endif
+#if ( defined UNX )
+        TimeValue nTV;
+        nTV.Seconds = static_cast<sal_uInt32>( Delay/1000 );
+        nTV.Nanosec = ( ( Delay%1000 ) * 1000000 );
+        osl_waitThread(&nTV);
+#endif
+    }
+
     static void SAL_CALL yield()
     {
         osl_yieldThread();
@@ -228,7 +251,11 @@ private:
     oslThreadKey m_hKey;
 };
 
+
+
 } // end namespace osl
+
+
 
 #endif
 

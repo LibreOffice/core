@@ -75,11 +75,7 @@ void TickerThread::execute()
             m_rLockStore.refreshLocks();
             nCount = nNth;
         }
-
-        TimeValue aTV;
-        aTV.Seconds = 0;
-        aTV.Nanosec = 1000000000 / nNth;
-        salhelper::Thread::wait( aTV );
+        salhelper::Thread::sleepMicroseconds( 1000000 / nNth );
     }
 
     OSL_TRACE( "TickerThread: stop." );

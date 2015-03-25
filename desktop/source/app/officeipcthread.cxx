@@ -540,10 +540,7 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
             else
             {
                 // Pipe connection failed (other office exited or crashed)
-                TimeValue tval;
-                tval.Seconds = 0;
-                tval.Nanosec = 500000000;
-                salhelper::Thread::wait( tval );
+                salhelper::Thread::sleepMicroseconds( 500000 );//0,5s
             }
         }
         else
@@ -553,10 +550,7 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
                 return IPC_STATUS_PIPE_ERROR;
 
             // Wait for second office to be ready
-            TimeValue aTimeValue;
-            aTimeValue.Seconds = 0;
-            aTimeValue.Nanosec = 10000000; // 10ms
-            salhelper::Thread::wait( aTimeValue );
+            salhelper::Thread::sleepMicroseconds( 10000 );//10ms
         }
 
     } while ( nPipeMode == PIPEMODE_DONTKNOW );
@@ -959,10 +953,7 @@ void OfficeIPCThread::execute()
 #if (OSL_DEBUG_LEVEL > 1) || defined DBG_UTIL
             fprintf( stderr, "Error on accept: %d\n", (int)nError );
 #endif
-            TimeValue tval;
-            tval.Seconds = 1;
-            tval.Nanosec = 0;
-            salhelper::Thread::wait( tval );
+            salhelper::Thread::sleepMicroseconds( 1000000 );//1s
         }
     } while( schedule() );
 #else
@@ -973,10 +964,7 @@ void OfficeIPCThread::execute()
     // Android, but in this case ANDROID is handled like DESKTOP, see
     // above) an app never exits voluntarily, but is always killed by
     // the system when its resources are needed.)
-    TimeValue tval;
-    tval.Seconds = 100000;
-    tval.Nanosec = 0;
-    salhelper::Thread::wait( tval );
+    salhelper::Thread::sleepMicroseconds( 1000000000 );
 #endif
 
 #endif
