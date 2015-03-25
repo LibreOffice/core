@@ -460,8 +460,7 @@ Reference<XInterface> resolveUnoURL(
         catch (const connection::NoConnectException &) {
             if (i < 20)
             {
-                TimeValue tv = { 0 /* secs */, 500000000 /* nanosecs */ };
-                ::osl::Thread::wait( tv );
+                ::osl::Thread::sleepMicroseconds( 500 );
             }
             else throw;
         }

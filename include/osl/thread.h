@@ -124,8 +124,12 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_isThreadRunning(const oslThread Thread);
 */
 SAL_DLLPUBLIC void SAL_CALL osl_joinWithThread(oslThread Thread);
 
-/** Blocks the calling thread at least for the given number
-    of time.
+/** Suspends execution of the current thread for time specified in
+    pDelay. The suspension time might be longer due to scheduling
+    or other system activities.
+
+    @param pDelay - the time specified by pDelay should be less than
+    1000000 milisec
 */
 SAL_DLLPUBLIC void SAL_CALL osl_waitThread(const TimeValue* pDelay);
 
