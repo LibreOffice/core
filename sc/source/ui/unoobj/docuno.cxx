@@ -563,28 +563,33 @@ void ScModelObj::setTextSelection(int nType, int nX, int nY)
     ScViewData* pViewData = ScDocShell::GetViewData();
     ScInputHandler* pInputHandler = SC_MOD()->GetInputHdl(pViewData->GetViewShell());
 
-    if (!pInputHandler)
-        return;
-
-    EditView* pTableView = pInputHandler->GetTableView();
-    if (!pTableView)
-        return;
-
-    Point aPoint(convertTwipToMm100(nX), convertTwipToMm100(nY));
-    switch (nType)
+    if (pInputHandler && pInputHandler->IsInputMode())
     {
-    case LOK_SETTEXTSELECTION_START:
-        pTableView->SetCursorLogicPosition(aPoint, /*bPoint=*/false, /*bClearMark=*/false);
-        break;
-    case LOK_SETTEXTSELECTION_END:
-        pTableView->SetCursorLogicPosition(aPoint, /*bPoint=*/true, /*bClearMark=*/false);
-        break;
-    case LOK_SETTEXTSELECTION_RESET:
-        pTableView->SetCursorLogicPosition(aPoint, /*bPoint=*/true, /*bClearMark=*/true);
-        break;
-    default:
-        assert(false);
-        break;
+        // forwarding to editeng - we are editing a cell content
+        EditView* pTableView = pInputHandler->GetTableView();
+        assert(pTableView);
+
+        Point aPoint(convertTwipToMm100(nX), convertTwipToMm100(nY));
+        switch (nType)
+        {
+            case LOK_SETTEXTSELECTION_START:
+                pTableView->SetCursorLogicPosition(aPoint, /*bPoint=*/false, /*bClearMark=*/false);
+                break;
+            case LOK_SETTEXTSELECTION_END:
+                pTableView->SetCursorLogicPosition(aPoint, /*bPoint=*/true, /*bClearMark=*/false);
+                break;
+            case LOK_SETTEXTSELECTION_RESET:
+                pTableView->SetCursorLogicPosition(aPoint, /*bPoint=*/true, /*bClearMark=*/true);
+                break;
+            default:
+                assert(false);
+                break;
+        }
+    }
+    else
+    {
+        // moving the cell selection handles
+        // TODO
     }
 }
 
