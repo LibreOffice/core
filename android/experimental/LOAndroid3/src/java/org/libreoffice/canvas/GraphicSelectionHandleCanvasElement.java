@@ -53,10 +53,10 @@ public class GraphicSelectionHandleCanvasElement {
     public void reposition(float x, float y) {
         mPosition.x = x;
         mPosition.y = y;
-        mHitRect.left = mPosition.x - mRadius * 1.5f;
-        mHitRect.right = mPosition.x + mRadius * 1.5f;
-        mHitRect.top = mPosition.y - mRadius * 1.5f;
-        mHitRect.bottom = mPosition.y + mRadius * 1.5f;
+        mHitRect.left = mPosition.x - mRadius * 1.75f;
+        mHitRect.right = mPosition.x + mRadius * 1.75f;
+        mHitRect.top = mPosition.y - mRadius * 1.75f;
+        mHitRect.bottom = mPosition.y + mRadius * 1.75f;
     }
 
     public boolean contains(float x, float y) {
