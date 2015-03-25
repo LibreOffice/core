@@ -71,13 +71,13 @@ $(call gb_Extension__get_preparation_target,%) :
 		mkdir -p $(dir $@) && touch $@)
 
 ifeq ($(strip $(gb_WITH_LANG)),)
-$(call gb_Extension_get_workdir,%)/description.xml :
+$(call gb_Extension_get_workdir,%)/description.xml : $(gb_Helper_LANGSTARGET)
 	$(call gb_Output_announce,$*/description.xml,$(true),CPY,3)
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(call gb_Extension_get_workdir,$*) && \
 		cp -f $(LOCATION)/description.xml $@)
 else
-$(call gb_Extension_get_workdir,%)/description.xml : $(gb_Extension_XRMEXDEPS)
+$(call gb_Extension_get_workdir,%)/description.xml : $(gb_Extension_XRMEXDEPS) $(gb_Helper_LANGSTARGET)
 	$(call gb_Output_announce,$*/description.xml,$(true),XRM,3)
 	MERGEINPUT=$(call var2file,$(shell $(gb_MKTEMP)),100,$(POFILES)) && \
 	$(call gb_Helper_abbreviate_dirs,\
