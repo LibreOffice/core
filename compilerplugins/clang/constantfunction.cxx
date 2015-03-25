@@ -450,8 +450,9 @@ bool ConstantFunction::VisitFunctionDecl(const FunctionDecl * pFunctionDecl) {
                 // && !pReturnStmt->getRetValue()->isEvaluatable(compiler.getASTContext())) {
                 bool aBoolResult;
                 llvm::APSInt aIntResult;
-                if (!pReturnStmt->getRetValue()->EvaluateAsBooleanCondition(aBoolResult, compiler.getASTContext())
-                    && !pReturnStmt->getRetValue()->EvaluateAsInt(aIntResult, compiler.getASTContext()))
+                if (pReturnStmt->getRetValue()->isTypeDependent()
+                    || (!pReturnStmt->getRetValue()->EvaluateAsBooleanCondition(aBoolResult, compiler.getASTContext())
+                        && !pReturnStmt->getRetValue()->EvaluateAsInt(aIntResult, compiler.getASTContext())))
                 {
                     return true;
                 }
