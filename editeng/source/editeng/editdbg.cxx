@@ -455,7 +455,7 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, bool bInfoBox )
     fprintf( fp, "\n\n================================================================================" );
     fprintf( fp, "\n==================   EditEngine & Views   ======================================" );
     fprintf( fp, "\n================================================================================" );
-    fprintf( fp, "\nControl: %" SAL_PRIxUINT32, unsigned( pEE->GetControlWord() ) );
+    fprintf( fp, "\nControl: %x", unsigned( pEE->GetControlWord() ) );
     fprintf( fp, "\nRefMapMode: %i", pEE->pImpEditEngine->pRefDev->GetMapMode().GetMapUnit() );
     fprintf( fp, "\nPaperSize: %li x %li", pEE->GetPaperSize().Width(), pEE->GetPaperSize().Height() );
     fprintf( fp, "\nMaxAutoPaperSize: %li x %li", pEE->GetMaxAutoPaperSize().Width(), pEE->GetMaxAutoPaperSize().Height() );
