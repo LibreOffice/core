@@ -928,7 +928,7 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
 
     if(bIsCell)
     {
-        // cell text is formated neither like a text object nor like a object
+        // cell text is formatted neither like a text object nor like a object
         // text, so use a special setup here
         rOutliner.SetMaxAutoPaperSize(aAnchorTextSize);
 

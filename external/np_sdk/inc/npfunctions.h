@@ -227,8 +227,8 @@ enum
 typedef struct _BPSupportedMIMETypes
 {
  SInt32    structVersion;      /* struct version */
- Handle    typeStrings;        /* STR# formated handle, allocated by plug-in */
- Handle    infoStrings;        /* STR# formated handle, allocated by plug-in */
+ Handle    typeStrings;        /* STR# formatted handle, allocated by plug-in */
+ Handle    infoStrings;        /* STR# formatted handle, allocated by plug-in */
 } BPSupportedMIMETypes;
 OSErr BP_GetSupportedMIMETypes(BPSupportedMIMETypes *mimeInfo, UInt32 flags);
 #define NP_GETMIMEDESCRIPTION_NAME "NP_GetMIMEDescription"

@@ -150,7 +150,7 @@ public:
             const ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessible>&rxParent);
 
-    /** Add a listener that will be informated in the future about state
+    /** Add a listener that will be informatted in the future about state
         changes of the tree node.  This includes adding and removing
         children as well as focus, visibility, and expansion state.
         Multiple calls are ignored.  Each listener is added only once.

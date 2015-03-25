@@ -121,7 +121,7 @@ enum ObjCntType
 enum CurRectType
 {
     RECT_PAGE,                  ///< Rect of current page.
-    RECT_PAGE_CALC,             ///< ... page will be formated if required.
+    RECT_PAGE_CALC,             ///< ... page will be formatted if required.
     RECT_PAGE_PRT,              ///< Rect of current PrtArea of page.
     RECT_FRM,                   ///< Rect of current frame.
     RECT_FLY_EMBEDDED,          ///< Rect of current FlyFrm.

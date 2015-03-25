@@ -130,7 +130,7 @@ public class HardFormatting {
                 + xPropertySet.getPropertyValue("CharWeight").toString() );
 
             // the PropertyState contains information where the attribute is set,
-            // is a text part hard formated or not.
+            // is a text part hard formatted or not.
             com.sun.star.beans.XPropertyState xPropertyState = null;
             xPropertyState = UnoRuntime.queryInterface(
                 com.sun.star.beans.XPropertyState.class, xWordCursor);
@@ -175,21 +175,21 @@ public class HardFormatting {
             case com.sun.star.beans.PropertyState.DIRECT_VALUE_value:  {
                 System.out.println( "-> The selection '"
                                     + xWordCursor.getString()
-                                    + "' completely hard formated" );
+                                    + "' completely hard formatted" );
                 break;
             }
 
             case com.sun.star.beans.PropertyState.DEFAULT_VALUE_value: {
                 System.out.println( "-> The selection '"
                                     + xWordCursor.getString()
-                                    + "' isn't hard formated" );
+                                    + "' isn't hard formatted" );
                 break;
             }
 
             case com.sun.star.beans.PropertyState.AMBIGUOUS_VALUE_value: {
                 System.out.println( "-> The selection '"
                                     + xWordCursor.getString()
-                                    + "' isn't completely hard formated" );
+                                    + "' isn't completely hard formatted" );
                 break;
             }
 

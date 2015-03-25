@@ -2006,7 +2006,7 @@
 									</xsl:variable>
 									<!-- Numbering is being done by this transformation creating a HTML span representing the number label
 										 The html:span represents the list item/header label (e.g. 1.A.III)
-										 As the html:span is usually a inline element is formated by CSS as block element to use width upon it,
+										 As the html:span is usually a inline element is formatted by CSS as block element to use width upon it,
 										 to disable the caridge return float:left is used and later neglected -->
 									<xsl:element name="span">
 										<xsl:if test="$listLevelStyle/@text:style-name">

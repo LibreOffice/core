@@ -163,24 +163,24 @@ private:
     */
     bool mbIsFirstProperty;
 
-    /** Add a property value formated as color to the description string.
+    /** Add a property value formatted as color to the description string.
     */
     SVX_DLLPRIVATE void AddColor (const OUString& sPropertyName,
         const OUString& sLocalizedName);
 
-    /** Add a property value formated as integer to the description string.
+    /** Add a property value formatted as integer to the description string.
     */
     SVX_DLLPRIVATE void AddInteger (const OUString& sPropertyName,
         const OUString& sLocalizedName);
 
-    /** Add a property value formated as string to the description string.
+    /** Add a property value formatted as string to the description string.
         @param sPropertyName
             Name of the property.
     */
     SVX_DLLPRIVATE void AddString (const OUString& sPropertyName,
         const OUString& sLocalizedName, long nWhichId = -1);
 
-    /** Add a property value formated as fill style to the description
+    /** Add a property value formatted as fill style to the description
         string.  If the fill style is <const>HATCH</const>,
         <const>GRADIENT</const>, or <const>BITMAP</const>, then the of the
         hatch, gradient, or bitmap is appended as well.

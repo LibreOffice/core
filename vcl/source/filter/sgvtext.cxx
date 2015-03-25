@@ -150,7 +150,7 @@ extern SgfFontLst* pSgfFonts;
 #define  THJustCenter   0x01
 #define  THJustRight    0x02
 #define  THJustBlock    0x03
-#define  THJustDrvOut   0x04   /* Justified         formated */
+#define  THJustDrvOut   0x04   /* Justified         formatted */
 #define  THJustLocked   0x05   /* J u s t   l  o  c  k  e  d */
 
 #define  MaxCharSlant   4200   /* maximum 42deg italic ! */

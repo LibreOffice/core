@@ -32,7 +32,7 @@
 
 namespace framework{
 
-/* Throws a SaxException in case a wrong formated XML
+/* Throws a SaxException in case a wrong formatted XML
    structure was detected.
 
    This macro combined the given comment with a generic

@@ -99,7 +99,7 @@ SwTxtFrmBreak::SwTxtFrmBreak( SwTxtFrm *pNewFrm, const SwTwips nRst )
  * Master- and Follow-Frame:
  * Example: If the first column is 3cm and the second is 4cm and
  * Widows is set to 3, the decision if the Widows rule matches can not
- * be done until the Follow is formated. Unfortunately this is crucial
+ * be done until the Follow is formatted. Unfortunately this is crucial
  * to decide if the whole paragraph goes to the next page or not.
  */
 bool SwTxtFrmBreak::IsInside( SwTxtMargin &rLine ) const

@@ -580,13 +580,13 @@ class FilterCFGAccess : public ::utl::ConfigItem
         void                        write           (       DataContainer&   rData                                  ,
                                                             DataContainer::ECFGType         eType                   ); // write values from given struct to configuration
 
-        static   OUString    encodeTypeData  ( const FileType&        aType                                  ); // build own formated string of type properties
+        static   OUString    encodeTypeData  ( const FileType&        aType                                  ); // build own formatted string of type properties
         static   void               decodeTypeData  ( const OUString& sData                                  ,
                                                             FileType&        aType                                  );
-        static   OUString    encodeFilterData( const Filter&          aFilter                                ); // build own formated string of filter properties
+        static   OUString    encodeFilterData( const Filter&          aFilter                                ); // build own formatted string of filter properties
         static   void               decodeFilterData( const OUString& sData                                  ,
                                                             Filter&          aFilter                                );
-        static   OUString    encodeStringList( const OUStringList&    lList                                  ); // build own formated string of OUStringList
+        static   OUString    encodeStringList( const OUStringList&    lList                                  ); // build own formatted string of OUStringList
         static   OUStringList       decodeStringList( const OUString& sValue                                 );
 
         void             setProductName                             (       OUStringHashMap&                                       lUINames        );

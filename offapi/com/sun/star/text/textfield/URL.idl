@@ -33,7 +33,7 @@ published service URL
 {
     service  com::sun::star::text::TextField;
 
-    /** Specifies how the URL is formated on output.
+    /** Specifies how the URL is formatted on output.
     */
     [property] short Format;
 

@@ -513,7 +513,7 @@ void JobURL::impldbg_checkURL( /*IN*/ const sal_Char*  pURL                 ,
     @descr      It returns a representation of the internal object state
                 as string notation.
 
-    @returns    The formated string representation.
+    @returns    The formatted string representation.
 */
 OUString JobURL::impldbg_toString() const
 {

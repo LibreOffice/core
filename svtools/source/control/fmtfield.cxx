@@ -924,7 +924,7 @@ bool FormattedField::ImplGetValue(double& dNewVal)
     sal_uInt32 nFormatKey = m_nFormatKey; // IsNumberFormat changes the FormatKey!
 
     if (ImplGetFormatter()->IsTextFormat(nFormatKey) && m_bTreatAsNumber)
-        // for detection of values like "1,1" in fields that are formated as text
+        // for detection of values like "1,1" in fields that are formatted as text
         nFormatKey = 0;
 
     // special treatment for percentage formatting

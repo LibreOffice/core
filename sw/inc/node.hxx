@@ -262,7 +262,7 @@ public:
         table cells ... including anchor in case of frames or footnotes)? */
     bool IsProtect() const;
 
-    /** Search PageDesc with which this node is formated. If layout is existent
+    /** Search PageDesc with which this node is formatted. If layout is existent
        search over layout, else only the hard way is left: search over the nodes
        to the front!! */
     const SwPageDesc* FindPageDesc( bool bCalcLay, sal_uInt32* pPgDescNdIdx = 0 ) const;

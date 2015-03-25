@@ -119,7 +119,7 @@ static SdPage* GetCurrentPage( sd::ViewShell* pViewSh, EditFieldInfo* pInfo, boo
         // which all use the new possibility of setting the visualized page at the SdrOutliner.
 
         // if all else failed, geht the current page from the object that is
-        // currently formated from the document
+        // currently formatted from the document
         if(!pPage)
         {
             const SdrTextObj* pTextObj = (pViewSh && pViewSh->GetDoc()) ? pViewSh->GetDoc()->GetFormattingTextObj() : NULL;

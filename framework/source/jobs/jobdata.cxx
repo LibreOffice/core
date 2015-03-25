@@ -457,7 +457,7 @@ bool isEnabled( const OUString& sAdminTime ,
     bool bValidUser  = aISOPattern.Matches(sUserTime );
 
     // We check for "isEnabled()" here only.
-    // Note further: ISO8601 formated strings can be compared as strings directly!
+    // Note further: ISO8601 formatted strings can be compared as strings directly!
     //               FIXME: this is not true! "T1215" is the same time as "T12:15" or "T121500"
     return (
             (!bValidAdmin && !bValidUser                         ) ||

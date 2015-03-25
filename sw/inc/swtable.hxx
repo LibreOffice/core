@@ -436,7 +436,7 @@ public:
 
     bool IsInHeadline( const SwTable* pTbl = 0 ) const;
 
-    // Contains box contents, that can be formated as a number?
+    // Contains box contents, that can be formatted as a number?
     bool HasNumCntnt( double& rNum, sal_uInt32& rFmtIndex,
                     bool& rIsEmptyTxtNd ) const;
     sal_uLong IsValidNumTxtNd( bool bCheckAttr = true ) const;

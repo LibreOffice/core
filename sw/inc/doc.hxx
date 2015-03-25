@@ -759,7 +759,7 @@ public:
     void SetAllUniqueFlyNames();
 
     /** Reset attributes. All TxtHints and (if completely selected) all hard-
-     formated stuff (auto-formats) are removed.
+     formatted stuff (auto-formats) are removed.
      Introduce new optional parameter <bSendDataChangedEvents> in order to
      control, if the side effect "send data changed events" is triggered or not. */
     void ResetAttrs( const SwPaM &rRg,

@@ -54,7 +54,7 @@ public:
 };
 
 // Classes derived from SwFields. They overlay the expand-function.
-// Content is formated according to the format (if available).
+// Content is formatted according to the format (if available).
 class SW_DLLPUBLIC SwDBField : public SwValueField
 {
     OUString aContent;

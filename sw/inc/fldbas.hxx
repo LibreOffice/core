@@ -378,7 +378,7 @@ inline sal_uInt32 SwField::GetFormat() const
 inline sal_uInt16 SwField::GetLanguage() const
     { return nLang;     }
 
- /// Fields containing values that have to be formated via number formatter.
+ /// Fields containing values that have to be formatted via number formatter.
 class SwValueFieldType : public SwFieldType
 {
     SwDoc*  pDoc;

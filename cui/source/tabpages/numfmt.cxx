@@ -265,7 +265,7 @@ SvxNumberFormatTabPage::SvxNumberFormatTabPage(vcl::Window* pParent,
     get(m_pEdLeadZeroes, "leadzerosed");
     get(m_pBtnThousand, "thousands");
     get(m_pFormatCodeFrame, "formatcode");
-    get(m_pEdFormat, "formated");
+    get(m_pEdFormat, "formatted");
     get(m_pIbAdd, "add");
     get(m_pIbInfo, "edit");
     get(m_pIbRemove, "delete");

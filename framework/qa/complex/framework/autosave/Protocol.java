@@ -405,7 +405,7 @@ public class Protocol extends JComponent
         }
 
         /**
-         * create a colored table cell formated as HTML.
+         * create a colored table cell formatted as HTML.
          *
          * @param   sCell
          *          an outside string buffer, which can be
@@ -662,7 +662,7 @@ public class Protocol extends JComponent
     /**
      * returns a generic html header for generating html log files
      *
-     * It's used from the method finish() to generate a valid html formated file.
+     * It's used from the method finish() to generate a valid html formatted file.
      * For that its necessary to open some special html targets like e.g. <html>.
      *
      * @return  A string, which includes the whole header.

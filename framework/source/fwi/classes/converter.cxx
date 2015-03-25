@@ -65,7 +65,7 @@ OUString Converter::convert_DateTime2ISO8601( const DateTime& aSource )
     sal_Int32 nMin   = aSource.GetMin();
     sal_Int32 nSec   = aSource.GetSec();
 
-    // write year formated as "YYYY"
+    // write year formatted as "YYYY"
     if (nYear<10)
         sBuffer.appendAscii("000");
     else if (nYear<100)
@@ -75,31 +75,31 @@ OUString Converter::convert_DateTime2ISO8601( const DateTime& aSource )
     sBuffer.append( (sal_Int32)nYear );
 
     sBuffer.appendAscii("-");
-    // write month formated as "MM"
+    // write month formatted as "MM"
     if (nMonth<10)
         sBuffer.appendAscii("0");
     sBuffer.append( (sal_Int32)nMonth );
 
     sBuffer.appendAscii("-");
-    // write day formated as "DD"
+    // write day formatted as "DD"
     if (nDay<10)
         sBuffer.appendAscii("0");
     sBuffer.append( (sal_Int32)nDay );
 
     sBuffer.appendAscii("T");
-    // write hours formated as "hh"
+    // write hours formatted as "hh"
     if (nHour<10)
         sBuffer.appendAscii("0");
     sBuffer.append( (sal_Int32)nHour );
 
     sBuffer.appendAscii(":");
-    // write min formated as "mm"
+    // write min formatted as "mm"
     if (nMin<10)
         sBuffer.appendAscii("0");
     sBuffer.append( (sal_Int32)nMin );
 
     sBuffer.appendAscii(":");
-    // write sec formated as "ss"
+    // write sec formatted as "ss"
     if (nSec<10)
         sBuffer.appendAscii("0");
     sBuffer.append( (sal_Int32)nSec );

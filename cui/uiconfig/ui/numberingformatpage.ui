@@ -100,7 +100,7 @@
                 <property name="row_spacing">6</property>
                 <property name="column_spacing">6</property>
                 <child>
-                  <object class="GtkEntry" id="formated">
+                  <object class="GtkEntry" id="formatted">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="valign">center</property>
@@ -194,7 +194,7 @@
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">_Format code</property>
             <property name="use_underline">True</property>
-            <property name="mnemonic_widget">formated</property>
+            <property name="mnemonic_widget">formatted</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

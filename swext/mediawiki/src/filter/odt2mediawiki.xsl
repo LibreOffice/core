@@ -481,7 +481,7 @@
 	 -->
 
     <!--
-       Make sure to join sibling node that are all formated with WikiMath style without repeating
+       Make sure to join sibling node that are all formatted with WikiMath style without repeating
        the <math>..</math> markup.
 
        Do not apply any transformation to the contents marked as WikiMath.

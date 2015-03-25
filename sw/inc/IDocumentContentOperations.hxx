@@ -188,11 +188,11 @@ public:
         attribute is split, provided it makes sense.
         Nodes, where this attribute does not make sense are ignored.
         In nodes completely enclosed in the selection the attribute
-        becomes hard-formated, in all other (text-) nodes the attribute
+        becomes hard-formatted, in all other (text-) nodes the attribute
         is inserted into the attribute array.
         For a character attribute, in cases where no selection exists
         an "empty" hint is inserted. If there is a selection the attribute
-        is hard-formated and added to the node at rRg.Start().
+        is hard-formatted and added to the node at rRg.Start().
         If the attribute could not be inserted, the method returns
         false.
     */

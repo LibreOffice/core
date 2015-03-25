@@ -1446,7 +1446,7 @@ void SwPageFrm::GetCntntPosition( const Point &rPt, SwPosition &rPos ) const
 
     if( !pAct->IsValid() )
     {
-        // CntntFrm not formated -> always on node-beginning
+        // CntntFrm not formatted -> always on node-beginning
         SwCntntNode* pCNd = (SwCntntNode*)pAct->GetNode();
         OSL_ENSURE( pCNd, "Where is my CntntNode?" );
         rPos.nNode = *pCNd;
