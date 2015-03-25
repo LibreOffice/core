@@ -39,6 +39,7 @@ static const int DPI = 96;
 /// Holds data used by LOKDocView only.
 struct LOKDocView_Impl
 {
+    LOKDocView* m_pDocView;
     GtkWidget* m_pEventBox;
     GtkWidget* m_pTable;
     GtkWidget** m_pCanvas;
@@ -100,7 +101,7 @@ struct LOKDocView_Impl
     bool m_bInDragGraphicHandles[8];
     ///@}
 
-    LOKDocView_Impl();
+    LOKDocView_Impl(LOKDocView* pDocView);
     ~LOKDocView_Impl();
     /// Connected to the destroy signal of LOKDocView, deletes its LOKDocView_Impl.
     static void destroy(LOKDocView* pDocView, gpointer pData);
@@ -110,10 +111,24 @@ struct LOKDocView_Impl
     float twipToPixel(float fInput);
     /// Receives a key press or release event.
     void signalKey(GdkEventKey* pEvent);
+    /**
+     * The user drags the handle, which is below the cursor, but wants to move the
+     * cursor accordingly.
+     *
+     * @param pHandle the rectangle of the handle
+     * @param pEvent the motion event
+     * @param pPoint the computed point (output parameter)
+     */
+    static void getDragPoint(GdkRectangle* pHandle, GdkEventButton* pEvent, GdkPoint* pPoint);
+    /// Receives a button press event.
+    static gboolean signalButton(GtkWidget* /*pEventBox*/, GdkEventButton* pEvent, LOKDocView* pDocView);
+    /// Implementation of button press event handler, invoked by signalButton().
+    gboolean signalButtonImpl(GdkEventButton* pEvent);
 };
 
-LOKDocView_Impl::LOKDocView_Impl()
-    : m_pEventBox(gtk_event_box_new()),
+LOKDocView_Impl::LOKDocView_Impl(LOKDocView* pDocView)
+    : m_pDocView(pDocView),
+    m_pEventBox(gtk_event_box_new()),
     m_pTable(0),
     m_pCanvas(0),
     m_fZoom(1),
@@ -228,20 +243,131 @@ void LOKDocView_Impl::signalKey(GdkEventKey* pEvent)
         m_pDocument->pClass->postKeyEvent(m_pDocument, LOK_KEYEVENT_KEYINPUT, nCharCode, nKeyCode);
 }
 
+gboolean LOKDocView_Impl::signalButton(GtkWidget* /*pEventBox*/, GdkEventButton* pEvent, LOKDocView* pDocView)
+{
+    return pDocView->m_pImpl->signalButtonImpl(pEvent);
+}
 
-static void lok_docview_class_init( gpointer );
-static void lok_docview_init( GTypeInstance *, gpointer );
-static gboolean renderOverlay(GtkWidget* pWidget, GdkEventExpose* pEvent, gpointer pData);
+/// Receives a button press event.
+gboolean LOKDocView_Impl::signalButtonImpl(GdkEventButton* pEvent)
+{
+    g_info("LOKDocView_Impl::ssignalButton: %d, %d (in twips: %d, %d)", (int)pEvent->x, (int)pEvent->y, (int)pixelToTwip(pEvent->x), (int)pixelToTwip(pEvent->y));
 
-/**
- * The user drags the handle, which is below the cursor, but wants to move the
- * cursor accordingly.
- *
- * @param pHandle the rectangle of the handle
- * @param pEvent the motion event
- * @param pPoint the computed point (output parameter)
- */
-void lcl_getDragPoint(GdkRectangle* pHandle, GdkEventButton* pEvent, GdkPoint* pPoint)
+    if (pEvent->type == GDK_BUTTON_RELEASE)
+    {
+        if (m_bInDragStartHandle)
+        {
+            g_info("LOKDocView_Impl::signalButton: end of drag start handle");
+            m_bInDragStartHandle = false;
+            return FALSE;
+        }
+        else if (m_bInDragMiddleHandle)
+        {
+            g_info("LOKDocView_Impl::signalButton: end of drag middle handle");
+            m_bInDragMiddleHandle = false;
+            return FALSE;
+        }
+        else if (m_bInDragEndHandle)
+        {
+            g_info("LOKDocView_Impl::signalButton: end of drag end handle");
+            m_bInDragEndHandle = false;
+            return FALSE;
+        }
+
+        for (int i = 0; i < GRAPHIC_HANDLE_COUNT; ++i)
+        {
+            if (m_bInDragGraphicHandles[i])
+            {
+                g_info("LOKDocView_Impl::signalButton: end of drag graphic handle #%d", i);
+                m_bInDragGraphicHandles[i] = false;
+                m_pDocument->pClass->setGraphicSelection(m_pDocument, LOK_SETGRAPHICSELECTION_END, pixelToTwip(pEvent->x), pixelToTwip(pEvent->y));
+                return FALSE;
+            }
+        }
+
+        if (m_bInDragGraphicSelection)
+        {
+            g_info("LOKDocView_Impl::signalButton: end of drag graphic selection");
+            m_bInDragGraphicSelection = false;
+            m_pDocument->pClass->setGraphicSelection(m_pDocument, LOK_SETGRAPHICSELECTION_END, pixelToTwip(pEvent->x), pixelToTwip(pEvent->y));
+            return FALSE;
+        }
+    }
+
+    if (m_bEdit)
+    {
+        GdkRectangle aClick;
+        aClick.x = pEvent->x;
+        aClick.y = pEvent->y;
+        aClick.width = 1;
+        aClick.height = 1;
+        if (pEvent->type == GDK_BUTTON_PRESS)
+        {
+            if (gdk_rectangle_intersect(&aClick, &m_aHandleStartRect, NULL))
+            {
+                g_info("LOKDocView_Impl::signalButton: start of drag start handle");
+                m_bInDragStartHandle = true;
+                return FALSE;
+            }
+            else if (gdk_rectangle_intersect(&aClick, &m_aHandleMiddleRect, NULL))
+            {
+                g_info("LOKDocView_Impl::signalButton: start of drag middle handle");
+                m_bInDragMiddleHandle = true;
+                return FALSE;
+            }
+            else if (gdk_rectangle_intersect(&aClick, &m_aHandleEndRect, NULL))
+            {
+                g_info("LOKDocView_Impl::signalButton: start of drag end handle");
+                m_bInDragEndHandle = true;
+                return FALSE;
+            }
+
+            for (int i = 0; i < GRAPHIC_HANDLE_COUNT; ++i)
+            {
+                if (gdk_rectangle_intersect(&aClick, &m_aGraphicHandleRects[i], NULL))
+                {
+                    g_info("LOKDocView_Impl::signalButton: start of drag graphic handle #%d", i);
+                    m_bInDragGraphicHandles[i] = true;
+                    m_pDocument->pClass->setGraphicSelection(m_pDocument,
+                                                             LOK_SETGRAPHICSELECTION_START,
+                                                             pixelToTwip(m_aGraphicHandleRects[i].x + m_aGraphicHandleRects[i].width / 2),
+                                                             pixelToTwip(m_aGraphicHandleRects[i].y + m_aGraphicHandleRects[i].height / 2));
+                    return FALSE;
+                }
+            }
+        }
+    }
+
+    if (!m_bEdit)
+        lok_docview_set_edit(m_pDocView, TRUE);
+
+    switch (pEvent->type)
+    {
+    case GDK_BUTTON_PRESS:
+    {
+        int nCount = 1;
+        if ((pEvent->time - m_nLastButtonPressTime) < 250)
+            nCount++;
+        m_nLastButtonPressTime = pEvent->time;
+        m_pDocument->pClass->postMouseEvent(m_pDocument, LOK_MOUSEEVENT_MOUSEBUTTONDOWN, pixelToTwip(pEvent->x), pixelToTwip(pEvent->y), nCount);
+        break;
+    }
+    case GDK_BUTTON_RELEASE:
+    {
+        int nCount = 1;
+        if ((pEvent->time - m_nLastButtonReleaseTime) < 250)
+            nCount++;
+        m_nLastButtonReleaseTime = pEvent->time;
+        m_pDocument->pClass->postMouseEvent(m_pDocument, LOK_MOUSEEVENT_MOUSEBUTTONUP, pixelToTwip(pEvent->x), pixelToTwip(pEvent->y), nCount);
+        break;
+    }
+    default:
+        break;
+    }
+    return FALSE;
+}
+
+void LOKDocView_Impl::getDragPoint(GdkRectangle* pHandle, GdkEventButton* pEvent, GdkPoint* pPoint)
 {
     GdkPoint aCursor, aHandle;
 
@@ -256,6 +382,10 @@ void lcl_getDragPoint(GdkRectangle* pHandle, GdkEventButton* pEvent, GdkPoint* p
     pPoint->y = aCursor.y + (pEvent->y - aHandle.y);
 }
 
+static void lok_docview_class_init( gpointer );
+static void lok_docview_init( GTypeInstance *, gpointer );
+static gboolean renderOverlay(GtkWidget* pWidget, GdkEventExpose* pEvent, gpointer pData);
+
 gboolean lcl_signalMotion(GtkWidget* /*pEventBox*/, GdkEventButton* pEvent, LOKDocView* pDocView)
 {
     GdkPoint aPoint;
@@ -263,7 +393,7 @@ gboolean lcl_signalMotion(GtkWidget* /*pEventBox*/, GdkEventButton* pEvent, LOKD
     if (pDocView->m_pImpl->m_bInDragMiddleHandle)
     {
         g_info("lcl_signalMotion: dragging the middle handle");
-        lcl_getDragPoint(&pDocView->m_pImpl->m_aHandleMiddleRect, pEvent, &aPoint);
+        LOKDocView_Impl::getDragPoint(&pDocView->m_pImpl->m_aHandleMiddleRect, pEvent, &aPoint);
         pDocView->m_pImpl->m_pDocument->pClass->setTextSelection(
                 pDocView->m_pImpl->m_pDocument, LOK_SETTEXTSELECTION_RESET,
                 pDocView->m_pImpl->pixelToTwip(aPoint.x), pDocView->m_pImpl->pixelToTwip(aPoint.y));
@@ -272,7 +402,7 @@ gboolean lcl_signalMotion(GtkWidget* /*pEventBox*/, GdkEventButton* pEvent, LOKD
     if (pDocView->m_pImpl->m_bInDragStartHandle)
     {
         g_info("lcl_signalMotion: dragging the start handle");
-        lcl_getDragPoint(&pDocView->m_pImpl->m_aHandleStartRect, pEvent, &aPoint);
+        LOKDocView_Impl::getDragPoint(&pDocView->m_pImpl->m_aHandleStartRect, pEvent, &aPoint);
         pDocView->m_pImpl->m_pDocument->pClass->setTextSelection(
                 pDocView->m_pImpl->m_pDocument, LOK_SETTEXTSELECTION_START,
                 pDocView->m_pImpl->pixelToTwip(aPoint.x), pDocView->m_pImpl->pixelToTwip(aPoint.y));
@@ -281,7 +411,7 @@ gboolean lcl_signalMotion(GtkWidget* /*pEventBox*/, GdkEventButton* pEvent, LOKD
     if (pDocView->m_pImpl->m_bInDragEndHandle)
     {
         g_info("lcl_signalMotion: dragging the end handle");
-        lcl_getDragPoint(&pDocView->m_pImpl->m_aHandleEndRect, pEvent, &aPoint);
+        LOKDocView_Impl::getDragPoint(&pDocView->m_pImpl->m_aHandleEndRect, pEvent, &aPoint);
         pDocView->m_pImpl->m_pDocument->pClass->setTextSelection(
                 pDocView->m_pImpl->m_pDocument, LOK_SETTEXTSELECTION_END,
                 pDocView->m_pImpl->pixelToTwip(aPoint.x), pDocView->m_pImpl->pixelToTwip(aPoint.y));
@@ -317,136 +447,6 @@ gboolean lcl_signalMotion(GtkWidget* /*pEventBox*/, GdkEventButton* pEvent, LOKD
         return FALSE;
     }
 
-    return FALSE;
-}
-
-/// Receives a button press event.
-gboolean lcl_signalButton(GtkWidget* /*pEventBox*/, GdkEventButton* pEvent, LOKDocView* pDocView)
-{
-    g_info("lcl_signalButton: %d, %d (in twips: %d, %d)", (int)pEvent->x, (int)pEvent->y, (int)pDocView->m_pImpl->pixelToTwip(pEvent->x), (int)pDocView->m_pImpl->pixelToTwip(pEvent->y));
-
-    if (pEvent->type == GDK_BUTTON_RELEASE)
-    {
-        if (pDocView->m_pImpl->m_bInDragStartHandle)
-        {
-            g_info("lcl_signalButton: end of drag start handle");
-            pDocView->m_pImpl->m_bInDragStartHandle = false;
-            return FALSE;
-        }
-        else if (pDocView->m_pImpl->m_bInDragMiddleHandle)
-        {
-            g_info("lcl_signalButton: end of drag middle handle");
-            pDocView->m_pImpl->m_bInDragMiddleHandle = false;
-            return FALSE;
-        }
-        else if (pDocView->m_pImpl->m_bInDragEndHandle)
-        {
-            g_info("lcl_signalButton: end of drag end handle");
-            pDocView->m_pImpl->m_bInDragEndHandle = false;
-            return FALSE;
-        }
-
-        for (int i = 0; i < GRAPHIC_HANDLE_COUNT; ++i)
-        {
-            if (pDocView->m_pImpl->m_bInDragGraphicHandles[i])
-            {
-                g_info("lcl_signalButton: end of drag graphic handle #%d", i);
-                pDocView->m_pImpl->m_bInDragGraphicHandles[i] = false;
-                pDocView->m_pImpl->m_pDocument->pClass->setGraphicSelection(
-                    pDocView->m_pImpl->m_pDocument, LOK_SETGRAPHICSELECTION_END,
-                    pDocView->m_pImpl->pixelToTwip(pEvent->x), pDocView->m_pImpl->pixelToTwip(pEvent->y));
-                return FALSE;
-            }
-        }
-
-        if (pDocView->m_pImpl->m_bInDragGraphicSelection)
-        {
-            g_info("lcl_signalButton: end of drag graphic selection");
-            pDocView->m_pImpl->m_bInDragGraphicSelection = false;
-            pDocView->m_pImpl->m_pDocument->pClass->setGraphicSelection(
-                pDocView->m_pImpl->m_pDocument, LOK_SETGRAPHICSELECTION_END,
-                pDocView->m_pImpl->pixelToTwip(pEvent->x),
-                pDocView->m_pImpl->pixelToTwip(pEvent->y));
-            return FALSE;
-        }
-    }
-
-    if (pDocView->m_pImpl->m_bEdit)
-    {
-        GdkRectangle aClick;
-        aClick.x = pEvent->x;
-        aClick.y = pEvent->y;
-        aClick.width = 1;
-        aClick.height = 1;
-        if (pEvent->type == GDK_BUTTON_PRESS)
-        {
-            if (gdk_rectangle_intersect(&aClick, &pDocView->m_pImpl->m_aHandleStartRect, NULL))
-            {
-                g_info("lcl_signalButton: start of drag start handle");
-                pDocView->m_pImpl->m_bInDragStartHandle = true;
-                return FALSE;
-            }
-            else if (gdk_rectangle_intersect(&aClick, &pDocView->m_pImpl->m_aHandleMiddleRect, NULL))
-            {
-                g_info("lcl_signalButton: start of drag middle handle");
-                pDocView->m_pImpl->m_bInDragMiddleHandle = true;
-                return FALSE;
-            }
-            else if (gdk_rectangle_intersect(&aClick, &pDocView->m_pImpl->m_aHandleEndRect, NULL))
-            {
-                g_info("lcl_signalButton: start of drag end handle");
-                pDocView->m_pImpl->m_bInDragEndHandle = true;
-                return FALSE;
-            }
-
-            for (int i = 0; i < GRAPHIC_HANDLE_COUNT; ++i)
-            {
-                if (gdk_rectangle_intersect(&aClick, &pDocView->m_pImpl->m_aGraphicHandleRects[i], NULL))
-                {
-                    g_info("lcl_signalButton: start of drag graphic handle #%d", i);
-                    pDocView->m_pImpl->m_bInDragGraphicHandles[i] = true;
-                    pDocView->m_pImpl->m_pDocument->pClass->setGraphicSelection(
-                        pDocView->m_pImpl->m_pDocument, LOK_SETGRAPHICSELECTION_START,
-                        pDocView->m_pImpl->pixelToTwip(pDocView->m_pImpl->m_aGraphicHandleRects[i].x + pDocView->m_pImpl->m_aGraphicHandleRects[i].width / 2),
-                        pDocView->m_pImpl->pixelToTwip(pDocView->m_pImpl->m_aGraphicHandleRects[i].y + pDocView->m_pImpl->m_aGraphicHandleRects[i].height / 2));
-                    return FALSE;
-                }
-            }
-        }
-    }
-
-    if (!pDocView->m_pImpl->m_bEdit)
-        lok_docview_set_edit(pDocView, TRUE);
-
-    switch (pEvent->type)
-    {
-    case GDK_BUTTON_PRESS:
-    {
-        int nCount = 1;
-        if ((pEvent->time - pDocView->m_pImpl->m_nLastButtonPressTime) < 250)
-            nCount++;
-        pDocView->m_pImpl->m_nLastButtonPressTime = pEvent->time;
-        pDocView->m_pImpl->m_pDocument->pClass->postMouseEvent(
-                pDocView->m_pImpl->m_pDocument, LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
-                pDocView->m_pImpl->pixelToTwip(pEvent->x),
-                pDocView->m_pImpl->pixelToTwip(pEvent->y), nCount);
-        break;
-    }
-    case GDK_BUTTON_RELEASE:
-    {
-        int nCount = 1;
-        if ((pEvent->time - pDocView->m_pImpl->m_nLastButtonReleaseTime) < 250)
-            nCount++;
-        pDocView->m_pImpl->m_nLastButtonReleaseTime = pEvent->time;
-        pDocView->m_pImpl->m_pDocument->pClass->postMouseEvent(
-                pDocView->m_pImpl->m_pDocument, LOK_MOUSEEVENT_MOUSEBUTTONUP,
-                pDocView->m_pImpl->pixelToTwip(pEvent->x),
-                pDocView->m_pImpl->pixelToTwip(pEvent->y), nCount);
-        break;
-    }
-    default:
-        break;
-    }
     return FALSE;
 }
 
@@ -507,13 +507,13 @@ static void lok_docview_init( GTypeInstance* pInstance, gpointer )
     gtk_scrolled_window_set_hadjustment( GTK_SCROLLED_WINDOW( pDocView ), NULL );
     gtk_scrolled_window_set_vadjustment( GTK_SCROLLED_WINDOW( pDocView ), NULL );
 
-    pDocView->m_pImpl = new LOKDocView_Impl();
+    pDocView->m_pImpl = new LOKDocView_Impl(pDocView);
     gtk_scrolled_window_add_with_viewport( GTK_SCROLLED_WINDOW(pDocView),
                                            pDocView->m_pImpl->m_pEventBox );
 
     gtk_widget_set_events(pDocView->m_pImpl->m_pEventBox, GDK_BUTTON_PRESS_MASK); // So that drag doesn't try to move the whole window.
-    gtk_signal_connect(GTK_OBJECT(pDocView->m_pImpl->m_pEventBox), "button-press-event", GTK_SIGNAL_FUNC(lcl_signalButton), pDocView);
-    gtk_signal_connect(GTK_OBJECT(pDocView->m_pImpl->m_pEventBox), "button-release-event", GTK_SIGNAL_FUNC(lcl_signalButton), pDocView);
+    gtk_signal_connect(GTK_OBJECT(pDocView->m_pImpl->m_pEventBox), "button-press-event", GTK_SIGNAL_FUNC(LOKDocView_Impl::signalButton), pDocView);
+    gtk_signal_connect(GTK_OBJECT(pDocView->m_pImpl->m_pEventBox), "button-release-event", GTK_SIGNAL_FUNC(LOKDocView_Impl::signalButton), pDocView);
     gtk_signal_connect(GTK_OBJECT(pDocView->m_pImpl->m_pEventBox), "motion-notify-event", GTK_SIGNAL_FUNC(lcl_signalMotion), pDocView);
 
     gtk_widget_show( pDocView->m_pImpl->m_pEventBox );
