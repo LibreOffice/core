@@ -991,6 +991,64 @@ void ScGridWindow::LogicInvalidate(const Rectangle* pRectangle)
     pViewData->GetDocument()->GetDrawLayer()->libreOfficeKitCallback(LOK_CALLBACK_INVALIDATE_TILES, sRectangle.getStr());
 }
 
+void ScGridWindow::SetCellSelection(int nType, int nX, int nY)
+{
+    ScTabView* pTabView = pViewData->GetView();
+
+    if (nType == LOK_SETTEXTSELECTION_RESET)
+    {
+        pTabView->DoneBlockMode();
+        return;
+    }
+
+    // obtain the current selection
+    ScRangeList aRangeList = pViewData->GetMarkData().GetMarkedRanges();
+
+    SCCOL nCol1, nCol2;
+    SCROW nRow1, nRow2;
+    SCTAB nTab1, nTab2;
+
+    if (aRangeList.empty())
+    {
+        nCol1 = nCol2 = pViewData->GetCurX();
+        nRow1 = nRow2 = pViewData->GetCurY();
+    }
+    else
+        aRangeList.Combine().GetVars(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
+
+    // convert the coordinates to column/row
+    SCsCOL nNewPosX;
+    SCsROW nNewPosY;
+    SCTAB nTab = pViewData->GetTabNo();
+    pViewData->GetPosFromPixel(nX * pViewData->GetPPTX(), nY * pViewData->GetPPTY(), eWhich, nNewPosX, nNewPosY);
+
+    // change the selection
+    switch (nType)
+    {
+        case LOK_SETTEXTSELECTION_START:
+            if (nNewPosX != nCol1 || nNewPosY != nRow1)
+            {
+                pTabView->SetCursor(nNewPosX, nNewPosY);
+                pTabView->DoneBlockMode();
+                pTabView->InitBlockMode(nNewPosX, nNewPosY, nTab, true);
+                pTabView->MarkCursor(nCol2, nRow2, nTab);
+            }
+            break;
+        case LOK_SETTEXTSELECTION_END:
+            if (nNewPosX != nCol2 || nNewPosY != nRow2)
+            {
+                pTabView->SetCursor(nCol1, nRow1);
+                pTabView->DoneBlockMode();
+                pTabView->InitBlockMode(nCol1, nRow1, nTab, true);
+                pTabView->MarkCursor(nNewPosX, nNewPosY, nTab);
+            }
+            break;
+        default:
+            assert(false);
+            break;
+    }
+}
+
 void ScGridWindow::CheckNeedsRepaint()
 {
     //  called at the end of painting, and from timer after background text width calculation

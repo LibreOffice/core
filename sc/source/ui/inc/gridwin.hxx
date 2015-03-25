@@ -330,6 +330,11 @@ public:
     /// Same as MouseButtonUp(), but coordinates are in logic unit.
     void LogicMouseButtonUp(const MouseEvent& rMouseEvent);
 
+    /// Update the cell selection according to what handles have been dragged.
+    /// Uses the same parameteres as vcl::ITiledRenderable::setTextSelection()
+    /// (ie. they are in twips here).
+    void SetCellSelection(int nType, int nX, int nY);
+
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
 
     void            FakeButtonUp();

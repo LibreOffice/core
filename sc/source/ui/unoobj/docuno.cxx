@@ -589,7 +589,16 @@ void ScModelObj::setTextSelection(int nType, int nX, int nY)
     else
     {
         // moving the cell selection handles
-        // TODO
+
+        // There seems to be no clear way of getting the grid window for this
+        // particular document, hence we need to hope we get the right window.
+        ScViewData* pViewData = ScDocShell::GetViewData();
+        ScGridWindow* pGridWindow = pViewData->GetActiveWin();
+
+        if (!pGridWindow)
+            return;
+
+        pGridWindow->SetCellSelection(nType, nX, nY);
     }
 }
 
