@@ -25,6 +25,9 @@ gb_Helper_PHONY := $(gb_Helper_MISC)/PHONY
 # general purpose empty dummy target
 gb_Helper_MISCDUMMY := $(gb_Helper_MISC)/DUMMY
 
+# target for reacting to changes in the list of configured languages
+gb_Helper_LANGSTARGET := $(BUILDDIR)/config_$(gb_Side)_lang.mk.stamp
+
 .PHONY : $(WORKDIR)/Misc/PHONY
 $(gb_Helper_MISCDUMMY) :
 	@mkdir -p $(dir $@) && touch $@

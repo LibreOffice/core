@@ -4448,6 +4448,7 @@ if test "$cross_compiling" = "yes"; then
         solenv/bin/getcompver.awk \
         solenv/inc/langlist.mk \
         config_host.mk.in \
+        config_host_lang.mk.in \
         Makefile.in \
         lo.xcent.in \
         instsetoo_native/util/openoffice.lst.in \
@@ -4499,6 +4500,7 @@ if test "$cross_compiling" = "yes"; then
         2>&1 | sed -e 's/^/    /'
     test -f ./config_host.mk 2>/dev/null || exit
     cp config_host.mk ../config_build.mk
+    cp config_host_lang.mk ../config_build_lang.mk
     mv config.log ../config.Build.log
     mkdir -p ../config_build
     mv config_host/*.h ../config_build
@@ -12902,8 +12904,12 @@ AC_SUBST(LO_PATH)
 if test -f config_host.mk; then
     config_md5=`$MD5SUM config_host.mk | sed "s/ .*//"`
 fi
+if test -f config_host_lang.mk; then
+    config_lang_md5=`$MD5SUM config_host_lang.mk | sed "s/ .*//"`
+fi
 
 AC_CONFIG_FILES([config_host.mk
+                 config_host_lang.mk
                  Makefile
                  lo.xcent
                  instsetoo_native/util/openoffice.lst
@@ -12947,6 +12953,15 @@ elif test "$config_md5" = `$MD5SUM config_host.mk | sed "s/ .*//"`; then
     echo "Configuration unchanged - avoiding scp2 stamp update"
 else
     echo > config_host.mk.stamp
+fi
+
+# touch the config lang timestamp file
+if test ! -f config_host_lang.mk.stamp; then
+    echo > config_host_lang.mk.stamp
+elif test "$config_lang_md5" = `$MD5SUM config_host_lang.mk | sed "s/ .*//"`; then
+    echo "Configuration unchanged - avoiding scp2 stamp update"
+else
+    echo > config_host_lang.mk.stamp
 fi
 
 

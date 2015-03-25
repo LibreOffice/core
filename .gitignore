@@ -45,8 +45,12 @@
 /config_host.mk
 /config_host.mk.last
 /config_host.mk.stamp
+/config_host_lang.mk
+/config_host_lang.mk.last
+/config_host_lang.mk.stamp
 /config_build
 /config_build.mk
+/config_build_lang.mk
 /configure
 /lo.xcent
 /Makefile

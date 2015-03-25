@@ -1,0 +1,8 @@
+ # language-related config variables for LibreOffice
+ # this file is intended to be able to be included in a Makefile
+ # and not to be sourced in a shell session
+ #
+
+export ALL_LANGS=@ALL_LANGS@
+export WITH_LANG=@WITH_LANG@
+export WITH_LANG_LIST=@WITH_LANG_LIST@
