@@ -29,41 +29,6 @@ namespace connectivity
 {
 namespace mysqlc
 {
-    class OPropertyMap
-    {
-        ::std::map<sal_Int32 , rtl_uString*> m_aPropertyMap;
-
-        rtl::OUString fillValue(sal_Int32 _nIndex);
-    public:
-        OPropertyMap()
-        {
-        }
-        ~OPropertyMap();
-        rtl::OUString getNameByIndex(sal_Int32 _nIndex) const;
-
-        static OPropertyMap& getPropMap()
-        {
-            static OPropertyMap s_aPropMap;
-            return s_aPropMap;
-        }
-    };
-
-
-    typedef const sal_Char* (*PVFN)();
-
-    struct UStringDescription
-    {
-        const sal_Char* pZeroTerminatedName;
-        sal_Int32 nLength;
-
-        UStringDescription(PVFN _fCharFkt);
-        operator rtl::OUString() const { return rtl::OUString(pZeroTerminatedName,nLength,RTL_TEXTENCODING_ASCII_US); }
-        ~UStringDescription();
-    private:
-        UStringDescription();
-    };
-
-
 enum
 {
     PROPERTY_ID_FIRST = 0,

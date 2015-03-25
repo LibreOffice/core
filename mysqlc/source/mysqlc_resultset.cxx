@@ -1105,13 +1105,13 @@ IPropertyArrayHelper * OResultSet::createArrayHelper() const
     Sequence< Property > aProps(5);
     Property* pProperties = aProps.getArray();
     sal_Int32 nPos = 0;
-    pProperties[nPos++] = Property(OPropertyMap::getPropMap().getNameByIndex(PROPERTY_ID_FETCHDIRECTION), PROPERTY_ID_FETCHDIRECTION, cppu::UnoType<sal_Int32>::get(), 0);
-    pProperties[nPos++] = Property(OPropertyMap::getPropMap().getNameByIndex(PROPERTY_ID_FETCHSIZE), PROPERTY_ID_FETCHSIZE, cppu::UnoType<sal_Int32>::get(), 0);
-    pProperties[nPos++] = Property(OPropertyMap::getPropMap().getNameByIndex(PROPERTY_ID_ISBOOKMARKABLE),
+    pProperties[nPos++] = Property("FetchDirection", PROPERTY_ID_FETCHDIRECTION, cppu::UnoType<sal_Int32>::get(), 0);
+    pProperties[nPos++] = Property("FetchSize", PROPERTY_ID_FETCHSIZE, cppu::UnoType<sal_Int32>::get(), 0);
+    pProperties[nPos++] = Property("IsBookmarkable",
         PROPERTY_ID_ISBOOKMARKABLE, ::getBooleanCppuType(), PropertyAttribute::READONLY);
-    pProperties[nPos++] = Property(OPropertyMap::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETCONCURRENCY),
+    pProperties[nPos++] = Property("ResultSetConcurrency",
         PROPERTY_ID_RESULTSETCONCURRENCY, cppu::UnoType<sal_Int32>::get(), PropertyAttribute::READONLY);
-    pProperties[nPos++] = Property(OPropertyMap::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETTYPE),
+    pProperties[nPos++] = Property("ResultSetType",
         PROPERTY_ID_RESULTSETTYPE, cppu::UnoType<sal_Int32>::get(), PropertyAttribute::READONLY);
 
     return new OPropertyArrayHelper(aProps);

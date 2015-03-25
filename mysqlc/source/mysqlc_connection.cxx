@@ -103,7 +103,7 @@ void OConnection::construct(const rtl::OUString& url, const Sequence< PropertyVa
     sal_Int32 nPort = 3306;
     rtl::OUString aDbName;
 
-    m_settings.encoding = m_rDriver.getDefaultEncoding();
+    m_settings.encoding = MysqlCDriver::getDefaultEncoding();
     m_settings.quoteIdentifier.clear();
 
     // parse url. Url has the following format:

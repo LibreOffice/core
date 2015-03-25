@@ -102,7 +102,7 @@ namespace connectivity
 
             inline Reference< ::com::sun::star::lang::XMultiServiceFactory > getFactory() const { return m_xFactory; }
 
-            rtl_TextEncoding getDefaultEncoding() { return RTL_TEXTENCODING_UTF8; }
+            static rtl_TextEncoding getDefaultEncoding() { return RTL_TEXTENCODING_UTF8; }
 
         private:
             void    impl_initCppConn_lck_throw();
