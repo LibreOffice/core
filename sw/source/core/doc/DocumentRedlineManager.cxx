@@ -1971,7 +1971,7 @@ bool DocumentRedlineManager::DeleteRedline( const SwPaM& rRange, bool bSaveInUnd
                     if( !pRedl->HasValidRange() )
                     {
                         // re-insert
-                        mpRedlineTbl->Remove( pRedl );
+                        mpRedlineTbl->Remove( n );
                         mpRedlineTbl->Insert( pRedl );
                         --n;
                     }
