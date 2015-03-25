@@ -134,6 +134,9 @@
 #include <vcl/svapp.hxx>
 #include <svx/sdr/overlay/overlayselection.hxx>
 
+#define LOK_USE_UNSTABLE_API
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+
 #include <vector>
 #include <boost/shared_ptr.hpp>
 
@@ -5742,6 +5745,44 @@ void ScGridWindow::UpdateCopySourceOverlay()
         SetMapMode( aOldMode );
 }
 
+/// Turn the selection ranges rRanges into the LibreOfficeKit selection, and call the callback.
+static void updateLibreOfficeKitSelection(ScDrawLayer* pDrawLayer, const std::vector<basegfx::B2DRange>& rRanges)
+{
+    if (!pDrawLayer->isTiledRendering())
+        return;
+
+    basegfx::B2DRange aBoundingBox;
+    std::stringstream ss;
+
+    bool bIsFirst = true;
+    for (const auto& rRange : rRanges)
+    {
+        aBoundingBox.expand(rRange);
+
+        if (bIsFirst)
+            bIsFirst = false;
+        else
+            ss << "; ";
+
+        Rectangle aRect(rRange.getMinX() / HMM_PER_TWIPS, rRange.getMinY() / HMM_PER_TWIPS,
+                rRange.getMaxX() / HMM_PER_TWIPS, rRange.getMaxY() / HMM_PER_TWIPS);
+        ss << aRect.toString().getStr();
+    }
+
+    // selection start handle
+    Rectangle aStart(aBoundingBox.getMinX() / HMM_PER_TWIPS, aBoundingBox.getMinY() / HMM_PER_TWIPS,
+            aBoundingBox.getMinX() / HMM_PER_TWIPS, (aBoundingBox.getMinY() / HMM_PER_TWIPS) + 256);
+    pDrawLayer->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION_START, aStart.toString().getStr());
+
+    // selection end handle
+    Rectangle aEnd(aBoundingBox.getMaxX() / HMM_PER_TWIPS, (aBoundingBox.getMaxY() / HMM_PER_TWIPS) - 256,
+            aBoundingBox.getMaxX() / HMM_PER_TWIPS, aBoundingBox.getMaxY() / HMM_PER_TWIPS);
+    pDrawLayer->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION_END, aEnd.toString().getStr());
+
+    // the selection itself
+    pDrawLayer->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION, ss.str().c_str());
+}
+
 void ScGridWindow::UpdateCursorOverlay()
 {
     MapMode aDrawMode = GetDrawMapMode();
@@ -5891,6 +5932,15 @@ void ScGridWindow::UpdateCursorOverlay()
             xOverlayManager->add(*pOverlay);
             mpOOCursors.reset(new sdr::overlay::OverlayObjectList);
             mpOOCursors->append(*pOverlay);
+
+            // notify the LibreOfficeKit too, but only if there's no
+            // selection yet, to avoid setting the LOK selection twice
+            // (once for the cell only, and then for the selection)
+            ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
+            if (pDrawLayer->isTiledRendering() && !pViewData->GetMarkData().IsMarked() && !pViewData->GetMarkData().IsMultiMarked())
+            {
+                updateLibreOfficeKitSelection(pDrawLayer, aRanges);
+            }
         }
     }
 
@@ -5957,6 +6007,9 @@ void ScGridWindow::UpdateSelectionOverlay()
             xOverlayManager->add(*pOverlay);
             mpOOSelection.reset(new sdr::overlay::OverlayObjectList);
             mpOOSelection->append(*pOverlay);
+
+            // notify the LibreOfficeKit too
+            updateLibreOfficeKitSelection(pDoc->GetDrawLayer(), aRanges);
         }
     }
 
