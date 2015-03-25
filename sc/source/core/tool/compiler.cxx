@@ -4804,6 +4804,23 @@ bool ScCompiler::HandleTableRef()
                     bForwardToClose = true;
                 }
                 break;
+            case ScTableRefToken::DATA:
+                {
+                    if (pDBData->HasHeader())
+                        aRange.aStart.IncRow();
+                    /* TODO: this assumes totals to be present, they need to
+                     * be implemented at the table. */
+                    if (aRange.aEnd.Row() - aRange.aStart.Row() >= 1)
+                        aRange.aEnd.IncRow(-1);
+                    if (aRange.aEnd.Row() < aRange.aStart.Row())
+                    {
+                        /* TODO: add RefData with deleted rows to generate
+                         * #REF! error? */
+                        bAddRange = false;
+                    }
+                    bForwardToClose = true;
+                }
+                break;
             case ScTableRefToken::TOTALS:
                 {
                     aRange.aStart.SetRow( aRange.aEnd.Row());
