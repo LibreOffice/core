@@ -1918,9 +1918,9 @@ void SdrTextObj::SetTextAnimationAllowed(bool bNew)
 /** called from the SdrObjEditView during text edit when the status of the edit outliner changes */
 void SdrTextObj::onEditOutlinerStatusEvent( EditStatus* pEditStatus )
 {
-    const sal_uInt32 nStat = pEditStatus->GetStatusWord();
-    const bool bGrowX=(nStat & EE_STAT_TEXTWIDTHCHANGED) !=0;
-    const bool bGrowY=(nStat & EE_STAT_TEXTHEIGHTCHANGED) !=0;
+    const EditStatusFlags nStat = pEditStatus->GetStatusWord();
+    const bool bGrowX = bool(nStat & EditStatusFlags::TEXTWIDTHCHANGED);
+    const bool bGrowY = bool(nStat & EditStatusFlags::TEXTHEIGHTCHANGED);
     if(bTextFrame && (bGrowX || bGrowY))
     {
         if ((bGrowX && IsAutoGrowWidth()) || (bGrowY && IsAutoGrowHeight()))

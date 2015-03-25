@@ -1108,13 +1108,13 @@ IMPL_LINK_NOARG_INLINE_END(ScViewData, EmptyEditHdl)
 
 IMPL_LINK( ScViewData, EditEngineHdl, EditStatus *, pStatus )
 {
-    sal_uLong nStatus = pStatus->GetStatusWord();
-    if (nStatus & (EE_STAT_HSCROLL | EE_STAT_TEXTHEIGHTCHANGED | EE_STAT_TEXTWIDTHCHANGED | EE_STAT_CURSOROUT))
+    EditStatusFlags nStatus = pStatus->GetStatusWord();
+    if (nStatus & (EditStatusFlags::HSCROLL | EditStatusFlags::TEXTHEIGHTCHANGED | EditStatusFlags::TEXTWIDTHCHANGED | EditStatusFlags::CURSOROUT))
     {
         EditGrowY();
         EditGrowX();
 
-        if (nStatus & EE_STAT_CURSOROUT)
+        if (nStatus & EditStatusFlags::CURSOROUT)
         {
             ScSplitPos eWhich = GetActivePart();
             if (pEditView[eWhich])

@@ -274,22 +274,22 @@ namespace frm
 
     void RichTextControlImpl::EditEngineStatusChanged( const EditStatus& _rStatus )
     {
-        sal_uLong nStatusWord( _rStatus.GetStatusWord() );
-        if  (   ( nStatusWord & EE_STAT_TEXTWIDTHCHANGED )
-            ||  ( nStatusWord & EE_STAT_TEXTHEIGHTCHANGED )
+        EditStatusFlags nStatusWord( _rStatus.GetStatusWord() );
+        if  (   ( nStatusWord & EditStatusFlags::TEXTWIDTHCHANGED )
+            ||  ( nStatusWord & EditStatusFlags::TEXTHEIGHTCHANGED )
             )
         {
-            if ( ( nStatusWord & EE_STAT_TEXTHEIGHTCHANGED ) && windowHasAutomaticLineBreak() )
+            if ( ( nStatusWord & EditStatusFlags::TEXTHEIGHTCHANGED ) && windowHasAutomaticLineBreak() )
                 m_pEngine->SetPaperSize( Size( m_pEngine->GetPaperSize().Width(), m_pEngine->GetTextHeight() ) );
 
             updateScrollbars();
         }
 
-        bool bHScroll = 0 != ( nStatusWord & EE_STAT_HSCROLL );
-        bool bVScroll = 0 != ( nStatusWord & EE_STAT_VSCROLL );
+        bool bHScroll = bool( nStatusWord & EditStatusFlags::HSCROLL );
+        bool bVScroll = bool( nStatusWord & EditStatusFlags::VSCROLL );
 
         // In case of *no* automatic line breaks, we also need to check for the *range* here.
-        // Normally, we would do this only after a EE_STAT_TEXTWIDTHCHANGED. However, due to a bug
+        // Normally, we would do this only after a EditStatusFlags::TEXTWIDTHCHANGED. However, due to a bug
         // in the EditEngine (I believe so) this is not fired when the engine does not have
         // the AutoPaperSize bits set.
         // So in order to be properly notified, we would need the AutoPaperSize. But, with

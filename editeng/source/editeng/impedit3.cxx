@@ -428,7 +428,7 @@ void ImpEditEngine::FormatDoc()
         sal_uInt32 nNewHeight = CalcTextHeight( &nNewHeightNTP );
         long nDiff = nNewHeight - nCurTextHeight;
         if ( nDiff )
-            aStatus.GetStatusWord() |= !IsVertical() ? EE_STAT_TEXTHEIGHTCHANGED : EE_STAT_TEXTWIDTHCHANGED;
+            aStatus.GetStatusWord() |= !IsVertical() ? EditStatusFlags::TEXTHEIGHTCHANGED : EditStatusFlags::TEXTWIDTHCHANGED;
         if ( nNewHeight < nCurTextHeight )
         {
             aInvalidRect.Bottom() = (long)std::max( nNewHeight, nCurTextHeight );
@@ -520,7 +520,7 @@ void ImpEditEngine::CheckAutoPageSize()
              || ( IsVertical() && ( aPaperSize.Height() != aPrevPaperSize.Height() ) ) )
         {
             // If ahead is centered / right or tabs ...
-            aStatus.GetStatusWord() |= !IsVertical() ? EE_STAT_TEXTWIDTHCHANGED : EE_STAT_TEXTHEIGHTCHANGED;
+            aStatus.GetStatusWord() |= !IsVertical() ? EditStatusFlags::TEXTWIDTHCHANGED : EditStatusFlags::TEXTHEIGHTCHANGED;
             for ( sal_Int32 nPara = 0; nPara < GetParaPortions().Count(); nPara++ )
             {
                 // Only paragraphs which are not aligned to the left need to be
@@ -4026,7 +4026,7 @@ IMPL_LINK_NOARG_INLINE_END(ImpEditEngine, StatusTimerHdl)
 
 void ImpEditEngine::CallStatusHdl()
 {
-    if ( aStatusHdlLink.IsSet() && aStatus.GetStatusWord() )
+    if ( aStatusHdlLink.IsSet() && bool(aStatus.GetStatusWord()) )
     {
         // The Status has to be reset before the Call,
         // since other Flags might be set in the handler...

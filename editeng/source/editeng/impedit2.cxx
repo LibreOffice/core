@@ -886,12 +886,12 @@ EditSelection ImpEditEngine::MoveCursor( const KeyEvent& rKeyEvent, EditView* pE
         CursorMoved( aOldPaM.GetNode() );
         if ( aStatus.NotifyCursorMovements() && ( aOldPaM.GetNode() != aPaM.GetNode() ) )
         {
-            aStatus.GetStatusWord() = aStatus.GetStatusWord() | EE_STAT_CRSRLEFTPARA;
+            aStatus.GetStatusWord() = aStatus.GetStatusWord() | EditStatusFlags::CRSRLEFTPARA;
             aStatus.GetPrevParagraph() = aEditDoc.GetPos( aOldPaM.GetNode() );
         }
     }
     else
-        aStatus.GetStatusWord() = aStatus.GetStatusWord() | EE_STAT_CRSRMOVEFAIL;
+        aStatus.GetStatusWord() = aStatus.GetStatusWord() | EditStatusFlags::CRSRMOVEFAIL;
 
     // May cause, an CreateAnchor or deselection all
     aSelEngine.SetCurView( pEditView );

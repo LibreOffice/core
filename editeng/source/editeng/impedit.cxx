@@ -860,9 +860,9 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor, sal_uInt16
             }
 
             if ( nDiffX )
-                pEditEngine->GetInternalEditStatus().GetStatusWord() = pEditEngine->GetInternalEditStatus().GetStatusWord() | EE_STAT_HSCROLL;
+                pEditEngine->GetInternalEditStatus().GetStatusWord() = pEditEngine->GetInternalEditStatus().GetStatusWord() | EditStatusFlags::HSCROLL;
             if ( nDiffY )
-                pEditEngine->GetInternalEditStatus().GetStatusWord() = pEditEngine->GetInternalEditStatus().GetStatusWord() | EE_STAT_VSCROLL;
+                pEditEngine->GetInternalEditStatus().GetStatusWord() = pEditEngine->GetInternalEditStatus().GetStatusWord() | EditStatusFlags::VSCROLL;
             Scroll( -nDiffX, -nDiffY );
             pEditEngine->pImpEditEngine->DelayedCallStatusHdl();
         }
@@ -956,7 +956,7 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor, sal_uInt16
     }
     else
     {
-        pEditEngine->pImpEditEngine->GetStatus().GetStatusWord() = pEditEngine->pImpEditEngine->GetStatus().GetStatusWord() | EE_STAT_CURSOROUT;
+        pEditEngine->pImpEditEngine->GetStatus().GetStatusWord() = pEditEngine->pImpEditEngine->GetStatus().GetStatusWord() | EditStatusFlags::CURSOROUT;
         GetCursor()->Hide();
         GetCursor()->SetPos( Point( -1, -1 ) );
         GetCursor()->SetSize( Size( 0, 0 ) );
@@ -1123,7 +1123,7 @@ bool ImpEditView::MouseButtonUp( const MouseEvent& rMouseEvent )
     {
         if ( pEditEngine->GetInternalEditStatus().GetPrevParagraph() != pEditEngine->GetEditDoc().GetPos( GetEditSelection().Max().GetNode() ) )
         {
-            pEditEngine->GetInternalEditStatus().GetStatusWord() = pEditEngine->GetInternalEditStatus().GetStatusWord() | EE_STAT_CRSRLEFTPARA;
+            pEditEngine->GetInternalEditStatus().GetStatusWord() = pEditEngine->GetInternalEditStatus().GetStatusWord() | EditStatusFlags::CRSRLEFTPARA;
             pEditEngine->pImpEditEngine->CallStatusHdl();
         }
     }

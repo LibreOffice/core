@@ -1338,7 +1338,7 @@ bool SdrTableObj::IsTextEditActive( const CellPos& rPos )
 
 void SdrTableObj::onEditOutlinerStatusEvent( EditStatus* pEditStatus )
 {
-    if( (pEditStatus->GetStatusWord() & EE_STAT_TEXTHEIGHTCHANGED) && mpImpl && mpImpl->mpLayouter )
+    if( (pEditStatus->GetStatusWord() & EditStatusFlags::TEXTHEIGHTCHANGED) && mpImpl && mpImpl->mpLayouter )
     {
         Rectangle aRect0( maRect );
         maRect = maLogicRect;

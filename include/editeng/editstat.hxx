@@ -77,17 +77,25 @@ namespace o3tl
     template<> struct typed_flags<EVControlBits> : is_typed_flags<EVControlBits, 0xff> {};
 }
 
-#define EE_STAT_HSCROLL             0x00000001
-#define EE_STAT_VSCROLL             0x00000002
-#define EE_STAT_CURSOROUT           0x00000004
-#define EE_STAT_CRSRMOVEFAIL        0x00000008
-#define EE_STAT_CRSRLEFTPARA        0x00000010
-#define EE_STAT_TEXTWIDTHCHANGED    0x00000020
-#define EE_STAT_TEXTHEIGHTCHANGED   0x00000040
-#define EE_STAT_WRONGWORDCHANGED    0x00000080
+enum class EditStatusFlags
+{
+    NONE                = 0x0000,
+    HSCROLL             = 0x0001,
+    VSCROLL             = 0x0002,
+    CURSOROUT           = 0x0004,
+    CRSRMOVEFAIL        = 0x0008,
+    CRSRLEFTPARA        = 0x0010,
+    TEXTWIDTHCHANGED    = 0x0020,
+    TEXTHEIGHTCHANGED   = 0x0040,
+    WRONGWORDCHANGED    = 0x0080
+};
+namespace o3tl
+{
+    template<> struct typed_flags<EditStatusFlags> : is_typed_flags<EditStatusFlags, 0xff> {};
+}
 
 /*
-    EE_STAT_CRSRLEFTPARA at the time cursor movement and the enter.
+    EditStatusFlags::CRSRLEFTPARA at the time cursor movement and the enter.
 */
 
 inline void SetFlags( EEControlBits& rBits, EEControlBits nMask, bool bOn )
@@ -109,19 +117,19 @@ inline void SetFlags( EVControlBits& rBits, EVControlBits nMask, bool bOn )
 class EditStatus
 {
 protected:
-    sal_uLong     nStatusBits;
-    EEControlBits nControlBits;
-    sal_Int32     nPrevPara;                  // for EE_STAT_CRSRLEFTPARA
+    EditStatusFlags nStatusBits;
+    EEControlBits   nControlBits;
+    sal_Int32       nPrevPara;                  // for EditStatusFlags::CRSRLEFTPARA
 
 public:
-            EditStatus()                { nStatusBits = 0; nControlBits = EEControlBits::NONE; nPrevPara = -1; }
+            EditStatus()                { nStatusBits = EditStatusFlags::NONE; nControlBits = EEControlBits::NONE; nPrevPara = -1; }
 
-    void    Clear()                     { nStatusBits = 0; }
+    void    Clear()                     { nStatusBits = EditStatusFlags::NONE; }
     void    SetControlBits( EEControlBits nMask, bool bOn )
                 { SetFlags( nControlBits, nMask, bOn ); }
 
-    sal_uLong   GetStatusWord() const       { return nStatusBits; }
-    sal_uLong&  GetStatusWord()             { return nStatusBits; }
+    EditStatusFlags  GetStatusWord() const       { return nStatusBits; }
+    EditStatusFlags& GetStatusWord()             { return nStatusBits; }
 
     EEControlBits  GetControlWord() const      { return nControlBits; }
     EEControlBits& GetControlWord()            { return nControlBits; }

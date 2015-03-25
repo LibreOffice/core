@@ -959,8 +959,8 @@ void SdDrawDocument::RemoveObject(SdrObject* pObj, SdPage* /*pPage*/)
 // Callback for ExecuteSpellPopup()
 IMPL_LINK(SdDrawDocument, OnlineSpellEventHdl, EditStatus*, pEditStat)
 {
-    sal_uLong nStat = pEditStat->GetStatusWord();
-    mbHasOnlineSpellErrors = (nStat & EE_STAT_WRONGWORDCHANGED) != 0;
+    EditStatusFlags nStat = pEditStat->GetStatusWord();
+    mbHasOnlineSpellErrors = bool(nStat & EditStatusFlags::WRONGWORDCHANGED);
 
     return 0;
 }

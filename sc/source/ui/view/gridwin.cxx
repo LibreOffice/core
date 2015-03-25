@@ -5463,8 +5463,8 @@ struct SpellCheckStatus
 
 IMPL_LINK(SpellCheckStatus, EventHdl, EditStatus*, pStatus)
 {
-    sal_uLong nStatus = pStatus->GetStatusWord();
-    if (nStatus & EE_STAT_WRONGWORDCHANGED)
+    EditStatusFlags nStatus = pStatus->GetStatusWord();
+    if (nStatus & EditStatusFlags::WRONGWORDCHANGED)
         mbModified = true;
 
     return 0;

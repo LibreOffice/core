@@ -34,10 +34,10 @@ public:
     void    TurnOffFlags( EEControlBits nFlags )
                 { nControlBits &= ~nFlags; }
 
-    void    TurnOnStatusBits( sal_uLong nBits )
+    void    TurnOnStatusBits( EditStatusFlags nBits )
                 { nStatusBits |= nBits; }
 
-    void    TurnOffStatusBits( sal_uLong nBits )
+    void    TurnOffStatusBits( EditStatusFlags nBits )
                 { nStatusBits &= ~nBits; }
 
 

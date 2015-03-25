@@ -2378,7 +2378,7 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, bool bSpellAtC
             // Invalidate?
             if ( nPaintFrom>=0 )
             {
-                aStatus.GetStatusWord() |= EE_STAT_WRONGWORDCHANGED;
+                aStatus.GetStatusWord() |= EditStatusFlags::WRONGWORDCHANGED;
                 CallStatusHdl();
 
                 if (!aEditViews.empty())
