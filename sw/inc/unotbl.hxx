@@ -307,6 +307,8 @@ class SwXTextTable : public cppu::WeakImplHelper10
 private:
     class Impl;
     ::sw::UnoImplPtr<Impl> m_pImpl;
+    ::com::sun::star::uno::WeakReference< ::com::sun::star::table::XTableRows > m_xRows;
+    ::com::sun::star::uno::WeakReference< ::com::sun::star::table::XTableColumns > m_xColumns;
 
     const SfxItemPropertySet*       m_pPropSet;
 

@@ -2258,33 +2258,27 @@ void SwXTextTable::initialize(sal_Int32 nR, sal_Int32 nC) throw( uno::RuntimeExc
 uno::Reference< table::XTableRows >  SwXTextTable::getRows(void) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    uno::Reference< table::XTableRows >  xRet;
-    if (SwFrmFmt* pFmt = GetFrmFmt())
-    {
-        SwXTableRows* pRows = SwIterator<SwXTableRows,SwFmt>(*pFmt).First();
-        if (!pRows)
-            pRows = new SwXTableRows(*pFmt);
-        xRet = pRows;
-    }
-    if (!xRet.is())
+    uno::Reference<table::XTableRows> xResult(m_xRows);
+    if(xResult.is())
+        return xResult;
+    if(SwFrmFmt* pFmt = GetFrmFmt())
+        m_xRows = xResult = new SwXTableRows(*pFmt);
+    if(!xResult.is())
         throw uno::RuntimeException();
-    return xRet;
+    return xResult;
 }
 
 uno::Reference< table::XTableColumns >  SwXTextTable::getColumns(void) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    uno::Reference< table::XTableColumns >  xRet;
-    if (SwFrmFmt* pFmt = GetFrmFmt())
-    {
-        SwXTableColumns* pCols = SwIterator<SwXTableColumns,SwFmt>(*pFmt).First();
-        if (!pCols)
-            pCols = new SwXTableColumns(*pFmt);
-        xRet = pCols;
-    }
-    if (!xRet.is())
+    uno::Reference<table::XTableColumns> xResult(m_xColumns);
+    if(xResult.is())
+        return xResult;
+    if(SwFrmFmt* pFmt = GetFrmFmt())
+        m_xColumns = xResult = new SwXTableColumns(*pFmt);
+    if(!xResult.is())
         throw uno::RuntimeException();
-    return xRet;
+    return xResult;
 }
 
 uno::Reference< table::XCell > SwXTextTable::getCellByName(const OUString& sCellName) throw( uno::RuntimeException, std::exception )
