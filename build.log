@@ -1,0 +1,142 @@
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -j 4  -rs -f /Volumes/Macintosh-HDD/Users/austinchen88/lo/core/Makefile.gbuild    all
+[build PRL] CustomTarget/postprocess/images/sorted.lst
+[build PRL] CustomTarget/postprocess/images/commandimagelist.ilst
+[build ECH] CustomTarget/instsetoo_native/setup/versionrc
+[build MOD] sc
+[build BIN] ure
+[build LOC] top level modules: libreoffice
+[build LOC] loaded modules: UnoControls accessibility accessories android animations apple_remote avmedia basctl basebmp basegfx basic bean binaryurp boost bridges canvas chart2 clew cli_ure clucene codemaker coinmp collada2gltf comphelper configmgr connectivity cppcanvas cppu cppuhelper cppunit cpputools cui curl dbaccess desktop drawinglayer dtrans editeng embeddedobj embedserv eventattacher expat extensions external extras filter firebird forms formula fpicker framework glew glm helpcompiler hunspell hwpfilter hyphen i18nlangtag i18npool i18nutil icu idl idlc instsetoo_native io javaunohelper jpeg jurt jvmaccess jvmfwk l10ntools lcms2 libabw libcdr libcmis libebook libetonyek libexttextcat libfreehand libgltf liblangtag libmspub libmwaw libodfgen liborcus libpagemaker libpng librelogo libreoffice libreofficekit librevenge libvisio libwpd libwpg libwps libxmlsec lingucomponent linguistic lotuswordpro lpsolve mdds more_fonts mythes neon nss o3tl offapi officecfg oovbaapi oox opencl opencollada openldap openssl package poppler postgresql postprocess python3 pyuno readlicense_oo redland registry remotebridges reportbuilder reportdesign ridljar rsc sal salhelper sax sc scaddins sccomp scp2 scripting sd sdext setup_native sfx2 shell slideshow smoketest solenv soltools sot starmath stoc store svgio svl svtools svx sw swext sysui test testtools toolkit tools tubes ucb ucbhelper ucpp udkapi unodevtools unoidl unoil unotest unotools unoxml ure uui vbahelper vcl vigra winaccessibility wizards writerfilter writerperfect xmerge xmlhelp xmloff xmlreader xmlscript xmlsecurity
+[build CUT] basebmp
+[build CUT] basegfx
+[build CUT] basic_scanner
+[build CUT] basic_enable
+[build CUT] basic_nested_struct
+[build CUT] basic_coverage
+[build CUT] basic_vba
+[build CUT] binaryurp_test-cache
+[build CUT] binaryurp_test-unmarshal
+[build CUT] comphelper_syntaxhighlight_test
+[build CUT] comphelper_test
+[build CUT] configmgr_unit
+[build CUT] connectivity_mork
+[build CUT] connectivity_commontools
+[build CUT] cppu_qa_any
+[build CUT] cppu_qa_recursion
+[build CUT] cppu_qa_reference
+[build CUT] cppu_qa_unotype
+[build CUT] cppu_test_cppumaker
+[build CUT] cppuhelper_cppu_ifcontainer
+[build CUT] cppuhelper_cppu_unourl
+[build CUT] dbaccess_firebird_test
+[build CUT] dbaccess_macros_test
+[build CUT] editeng_core
+[build CUT] editeng_borderline
+[build CUT] editeng_lookuptree
+[build CUT] extensions_test_update
+[build CUT] filter_xslt
+[build CUT] filter_priority
+[build CUT] filter_dxf_test
+[build CUT] filter_eps_test
+[build CUT] filter_met_test
+[build CUT] filter_pcd_test
+[build CUT] filter_pcx_test
+[build CUT] filter_pict_test
+[build CUT] filter_ppm_test
+[build CUT] filter_psd_test
+[build CUT] filter_ras_test
+[build CUT] filter_tiff_test
+[build CUT] filter_tga_test
+[build CUT] hwpfilter_test_hwpfilter
+[build CUT] i18nlangtag_test_languagetag
+[build CUT] i18npool_test_breakiterator
+[build CUT] i18npool_test_characterclassification
+[build CUT] i18npool_test_ordinalsuffix
+[build CUT] i18npool_test_textsearch
+[build CUT] lotuswordpro_test_lotuswordpro
+[build CUT] o3tl_tests
+[build CUT] oox_tokenmap
+[build CUT] package2_test
+[build CUT] sal_osl_process
+[build CUT] Module_DLL
+[build CUT] sal_bytesequence
+[build CUT] sal_osl_condition
+[build CUT] sal_osl_file
+[build CUT] sal_osl_module
+[build CUT] sal_osl_old_test_file
+[build CUT] sal_osl_security
+[build CUT] sal_osl_thread
+[build CUT] sal_rtl_alloc
+[build CUT] sal_rtl_process
+[build CUT] sal_rtl_bootstrap
+[build CUT] sal_rtl_cipher
+[build CUT] sal_rtl_crc32
+[build CUT] sal_rtl_digest
+[build CUT] sal_rtl_doublelock
+[build CUT] sal_rtl_locale
+[build CUT] sal_rtl_ostringbuffer
+[build CUT] sal_rtl_oustringbuffer
+[build CUT] sal_rtl_oustring
+[build CUT] sal_rtl_textenc
+[build CUT] sal_rtl_uri
+[build CUT] sal_rtl_strings
+[build CUT] sal_rtl_uuid
+[build CUT] sal_tcwf
+[build CUT] sal_types
+[build CUT] sal_osl_mutex
+[build CUT] sal_osl_profile
+[build CUT] sal_osl_setthreadname
+[build CUT] sal_rtl_math
+[build CUT] salhelper_testapi
+[build CUT] sax
+[build CUT] sax_attributes
+[build CUT] sax_parser
+[build CUT] sc_ucalc
+[build CUT] sc_filters_test
+[build CUT] sc_rangelst_test
+[build CUT] sccomp_lpsolver
+[build CUT] sd_uimpress
+[build CUT] sd_import_tests
+[build CUT] sd_export_tests
+[build CUT] sd_filters_test
+[build CUT] sd_html_export_tests
+[build CUT] sdext_pdfimport
+[build CUT] sfx2_metadatable
+[build CUT] sot_test_sot
+[build CUT] starmath_import
+[build CUT] starmath_qa_cppunit
+[build CUT] svgio
+[build CUT] svl_lngmisc
+[build CUT] svl_qa_cppunit
+[build CUT] svl_inetcontenttype
+[build CUT] svl_items
+[build CUT] svl_itempool
+[build CUT] svl_notify
+[build CUT] svtools_graphic
+[build CUT] svtools_html
+[build CUT] svx_unit
+[build CUT] tools_test
+/Volumes/Macintosh-HDD/Users/austinchen88/lo/core/sd/qa/unit/export-tests.cxx:641:SdExportTest::testLinkedGraphicRT
+assertion failed
+- Expression: pObject != NULL
+- Failed on filter: MS PowerPoint 97
+
+/Volumes/Macintosh-HDD/Users/austinchen88/lo/core/sd/qa/unit/export-tests.cxx:641: Assertion
+Test name: SdExportTest::testLinkedGraphicRT
+assertion failed
+- Expression: pObject != NULL
+- Failed on filter: MS PowerPoint 97
+
+Failures !!!
+Run: 19   Failure total: 1   Failures: 1   Errors: 0
+2015-03-25 00:24:21.515 cppunittester[12163:71816] *** -[NSAutoreleasePool release]: This pool has already been released, do not drain it (double release).
+
+Error: a unit test failed, please do one of:
+
+export CPPUNITTRACE="lldb --"       # for interactive debugging on OS X
+export VALGRIND=memcheck            # for memory checking
+
+and retry using: make CppunitTest_sd_export_tests
+
+make[1]: *** [/Volumes/Macintosh-HDD/Users/austinchen88/lo/core/workdir/CppunitTest/sd_export_tests.test] Error 1
+make[1]: *** Waiting for unfinished jobs....
+make: *** [build] Error 2
