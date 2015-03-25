@@ -938,7 +938,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
             OUString aWord = pImpEditView->SpellIgnoreOrAddWord( false );
             if ( pCallBack )
             {
-                SpellCallbackInfo aInf( SPELLCMD_IGNOREWORD, aWord );
+                SpellCallbackInfo aInf( SpellCallbackCommand::IGNOREWORD, aWord );
                 pCallBack->Call( &aInf );
             }
             SetSelection( aOldSel );
@@ -967,7 +967,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
 
             if ( pCallBack )
             {
-                SpellCallbackInfo aInf( ( nId == MN_WORDLANGUAGE ) ? SPELLCMD_WORDLANGUAGE : SPELLCMD_PARALANGUAGE, nLangToUse );
+                SpellCallbackInfo aInf( ( nId == MN_WORDLANGUAGE ) ? SpellCallbackCommand::WORDLANGUAGE : SpellCallbackCommand::PARALANGUAGE, nLangToUse );
                 pCallBack->Call( &aInf );
             }
             SetSelection( aOldSel );
@@ -986,7 +986,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
             }
             else
             {
-                SpellCallbackInfo aInf( SPELLCMD_STARTSPELLDLG, OUString() );
+                SpellCallbackInfo aInf( SpellCallbackCommand::STARTSPELLDLG, OUString() );
                 pCallBack->Call( &aInf );
             }
         }
@@ -1014,7 +1014,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
 
             if ( pCallBack )
             {
-                SpellCallbackInfo aInf( SPELLCMD_ADDTODICTIONARY, aSelected );
+                SpellCallbackInfo aInf( SpellCallbackCommand::ADDTODICTIONARY, aSelected );
                 pCallBack->Call( &aInf );
             }
             SetSelection( aOldSel );

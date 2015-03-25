@@ -138,26 +138,29 @@ public:
     sal_Int32&  GetPrevParagraph()          { return nPrevPara; }
 };
 
-#define SPELLCMD_IGNOREWORD         0x0001
-#define SPELLCMD_STARTSPELLDLG      0x0002
-#define SPELLCMD_ADDTODICTIONARY    0x0003
-#define SPELLCMD_WORDLANGUAGE       0x0004
-#define SPELLCMD_PARALANGUAGE       0x0005
+enum class SpellCallbackCommand
+{
+    IGNOREWORD         = 0x0001,
+    STARTSPELLDLG      = 0x0002,
+    ADDTODICTIONARY    = 0x0003,
+    WORDLANGUAGE       = 0x0004,
+    PARALANGUAGE       = 0x0005,
+};
 
 struct SpellCallbackInfo
 {
-    sal_uInt16      nCommand;
+    SpellCallbackCommand nCommand;
     OUString        aWord;
     LanguageType    eLanguage;
 
-    SpellCallbackInfo( sal_uInt16 nCMD, const OUString& rWord )
-    : aWord( rWord )
+    SpellCallbackInfo( SpellCallbackCommand nCMD, const OUString& rWord )
+        : aWord( rWord )
     {
         nCommand = nCMD;
         eLanguage = LANGUAGE_DONTKNOW;
     }
 
-    SpellCallbackInfo( sal_uInt16 nCMD, LanguageType eLang )
+    SpellCallbackInfo( SpellCallbackCommand nCMD, LanguageType eLang )
     {
         nCommand = nCMD;
         eLanguage = eLang;

@@ -973,11 +973,11 @@ void SdDrawDocument::ImpOnlineSpellCallback(SpellCallbackInfo* pInfo, SdrObject*
     delete mpOnlineSearchItem;
     mpOnlineSearchItem = NULL;
 
-    sal_uInt16 nCommand = pInfo->nCommand;
+    SpellCallbackCommand nCommand = pInfo->nCommand;
 
-    if (nCommand == SPELLCMD_IGNOREWORD
+    if (nCommand == SpellCallbackCommand::IGNOREWORD
         // restart when add to dictionary takes place, too.
-        || nCommand == SPELLCMD_ADDTODICTIONARY)
+        || nCommand == SpellCallbackCommand::ADDTODICTIONARY)
     {
         if(pObj && pOutl && pObj->ISA(SdrTextObj))
         {
@@ -991,7 +991,7 @@ void SdDrawDocument::ImpOnlineSpellCallback(SpellCallbackInfo* pInfo, SdrObject*
         mpOnlineSearchItem->SetSearchString(pInfo->aWord);
         StartOnlineSpelling();
     }
-    else if (nCommand == SPELLCMD_STARTSPELLDLG)
+    else if (nCommand == SpellCallbackCommand::STARTSPELLDLG)
     {
         SfxViewFrame::Current()->GetDispatcher()->Execute( SID_SPELL_DIALOG,
             SfxCallMode::ASYNCHRON );

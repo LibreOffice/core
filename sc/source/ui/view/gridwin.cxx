@@ -554,7 +554,7 @@ IMPL_LINK_NOARG(ScGridWindow, PopupModeEndHdl)
 
 IMPL_LINK( ScGridWindow, PopupSpellingHdl, SpellCallbackInfo*, pInfo )
 {
-    if( pInfo->nCommand == SPELLCMD_STARTSPELLDLG )
+    if( pInfo->nCommand == SpellCallbackCommand::STARTSPELLDLG )
         pViewData->GetDispatcher().Execute( SID_SPELL_DIALOG, SfxCallMode::ASYNCHRON );
     return 0;
 }

@@ -321,7 +321,7 @@ void SidebarTxtControl::MouseButtonUp( const MouseEvent& rMEvt )
 
 IMPL_LINK( SidebarTxtControl, OnlineSpellCallback, SpellCallbackInfo*, pInfo )
 {
-    if ( pInfo->nCommand == SPELLCMD_STARTSPELLDLG )
+    if ( pInfo->nCommand == SpellCallbackCommand::STARTSPELLDLG )
     {
         mrDocView.GetViewFrame()->GetDispatcher()->Execute( FN_SPELL_GRAMMAR_DIALOG, SfxCallMode::ASYNCHRON);
     }
