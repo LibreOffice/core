@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a29b11f_fefe6e04",
+        "filename": "sw/inc/dbmgr.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2015-03-25T18:21:18Z",
+      "side": 1,
+      "message": "In general its good practice to get used to C++11s nullptr instead good ol\u0027 NULL.",
+      "revId": "103865c5ee24940f33ab9f20e87cd2a0a9e9c8d7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
