@@ -158,7 +158,7 @@ End Sub
 
 &apos; Checks if a Field (LocField) is already defined in an Array
 &apos; Returns &apos;True&apos; or &apos;False&apos;
-Function FieldinArray(LocArray(), MaxIndex as integer, LocField as String) As Boolean
+Function FieldInArray(LocArray(), MaxIndex as integer, LocField as String) As Boolean
 Dim i as integer
 	For i = Lbound(LocArray()) to MaxIndex
 		If Ucase(LocArray(i)) = Ucase(LocField) Then
@@ -172,7 +172,7 @@ End Function
 
 &apos; Checks if a Field (LocField) is already defined in an Array
 &apos; Returns &apos;True&apos; or &apos;False&apos;
-Function FieldinList(LocField, BigList()) As Boolean
+Function FieldInList(LocField, BigList()) As Boolean
 Dim i as integer
 	For i = Lbound(BigList()) to Ubound(BigList())
 		If LocField = BigList(i) Then
@@ -186,15 +186,15 @@ End Function
 
 &apos; Retrieves the Index of the delivered String &apos;SearchString&apos; in
 &apos; the Array LocList()&apos;
-Function IndexinArray(SearchString as String, LocList()) as Integer
+Function IndexInArray(SearchString as String, LocList()) as Integer
 Dim i as integer
 	For i = Lbound(LocList(),1) to Ubound(LocList(),1)
 		If Ucase(LocList(i,0)) = Ucase(SearchString) Then
-			IndexinArray = i
+			IndexInArray = i
 			Exit Function
 		End if
 	Next
-	IndexinArray = -1
+	IndexInArray = -1
 End Function
 
 
@@ -356,7 +356,7 @@ Dim LocFileName as String
 End Function
 
 
-Function CountCharsinString(BigString, LocChar as String, ByVal StartPos as Integer) as Integer
+Function CountCharsInString(BigString, LocChar as String, ByVal StartPos as Integer) as Integer
 Dim LocCount%, LocPos%
 	LocCount = 0
 	Do

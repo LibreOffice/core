@@ -125,7 +125,7 @@ Sub	CreateUserDatafield(oCursor, sFoundContent as String)
 	oUserfield = oDocAuto.CreateInstance(&quot;com.sun.star.text.TextField.ExtendedUser&quot;)
 	sFoundList() = ArrayoutofString(sFoundContent,&quot;:&quot;,MaxIndex)
 	UserInfo = UCase(LTrim(sFoundList(1)))
-	UserIndex = IndexinArray(UserInfo, UserfieldDatatype())
+	UserIndex = IndexInArray(UserInfo, UserfieldDatatype())
 	If UserIndex &lt;&gt; -1 Then
 		oUserField.UserDatatype = UserIndex
 		oCursor.Text.InsertTextContent(oCursor,oUserField,True)

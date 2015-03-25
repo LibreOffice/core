@@ -172,10 +172,10 @@ Dim iOldSourceSelect as Integer
 		m = 0
 		For n = 0 To MaxOriginalIndex
 			SearchString = OriginalList(n)
-			If IndexinArray(SearchString, SelList()) &lt;&gt; -1 Then
+			If IndexInArray(SearchString, SelList()) &lt;&gt; -1 Then
 				NewSourceList(m) =  SearchString
 				m = m + 1
-			ElseIf IndexinArray(SearchString, SourceList()) &lt;&gt; -1 Then
+			ElseIf IndexInArray(SearchString, SourceList()) &lt;&gt; -1 Then
 				NewSourceList(m) =  SearchString
 				m = m + 1
 			End If

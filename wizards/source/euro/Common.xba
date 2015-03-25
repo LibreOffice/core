@@ -159,7 +159,7 @@ Dim oFormatofObject() as Object
 		CheckFormatType = False
 		Exit Function
 	End If
-	If FieldinArray(CurrSymbolList(),2,oFormatofObject.CurrencySymbol) Then
+	If FieldInArray(CurrSymbolList(),2,oFormatofObject.CurrencySymbol) Then
 		&apos; If the Currencysymbol of the object is the one needed, then check the Currency extension
 		sFormatCurrExt = oFormatofObject.CurrencyExtension
 
