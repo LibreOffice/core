@@ -68,6 +68,9 @@ gboolean        lok_docview_get_edit        (LOKDocView* pDocView);
 
 /// Posts the .uno: command to the LibreOfficeKit.
 void            lok_docview_post_command    (LOKDocView* pDocView, const char* pCommand);
+
+/// Posts a keyboard event to LibreOfficeKit.
+void            lok_docview_post_key    (GtkWidget* pWidget, GdkEventKey* pEvent, gpointer pData);
 #ifdef __cplusplus
 }
 #endif

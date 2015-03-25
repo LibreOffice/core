@@ -11,10 +11,14 @@
 #include <math.h>
 #include <string.h>
 
+#include <gdk/gdkkeysyms.h>
+
+#include <com/sun/star/awt/Key.hpp>
 #define LOK_USE_UNSTABLE_API
 #include <LibreOfficeKit/LibreOfficeKit.h>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <LibreOfficeKit/LibreOfficeKitGtk.h>
+#include <rsc/rsc-vcl-shared-types.hxx>
 
 #if !GLIB_CHECK_VERSION(2,32,0)
 #define G_SOURCE_REMOVE FALSE
@@ -104,6 +108,8 @@ struct LOKDocView_Impl
     float pixelToTwip(float fInput);
     /// Converts from document coordinates to screen pixels.
     float twipToPixel(float fInput);
+    /// Receives a key press or release event.
+    void signalKey(GdkEventKey* pEvent);
 };
 
 LOKDocView_Impl::LOKDocView_Impl()
@@ -165,6 +171,63 @@ float LOKDocView_Impl::twipToPixel(float fInput)
 {
     return fInput / 1440.0f * DPI * m_fZoom;
 }
+
+void LOKDocView_Impl::signalKey(GdkEventKey* pEvent)
+{
+    int nCharCode = 0;
+    int nKeyCode = 0;
+
+    if (!m_bEdit)
+    {
+        g_info("signalKey: not in edit mode, ignore");
+        return;
+    }
+
+    switch (pEvent->keyval)
+    {
+    case GDK_BackSpace:
+        nKeyCode = com::sun::star::awt::Key::BACKSPACE;
+        break;
+    case GDK_Return:
+        nKeyCode = com::sun::star::awt::Key::RETURN;
+        break;
+    case GDK_Escape:
+        nKeyCode = com::sun::star::awt::Key::ESCAPE;
+        break;
+    case GDK_Tab:
+        nKeyCode = com::sun::star::awt::Key::TAB;
+        break;
+    case GDK_Down:
+        nKeyCode = com::sun::star::awt::Key::DOWN;
+        break;
+    case GDK_Up:
+        nKeyCode = com::sun::star::awt::Key::UP;
+        break;
+    case GDK_Left:
+        nKeyCode = com::sun::star::awt::Key::LEFT;
+        break;
+    case GDK_Right:
+        nKeyCode = com::sun::star::awt::Key::RIGHT;
+        break;
+    default:
+        if (pEvent->keyval >= GDK_F1 && pEvent->keyval <= GDK_F26)
+            nKeyCode = com::sun::star::awt::Key::F1 + (pEvent->keyval - GDK_F1);
+        else
+            nCharCode = gdk_keyval_to_unicode(pEvent->keyval);
+    }
+
+    // rsc is not public API, but should be good enough for debugging purposes.
+    // If this is needed for real, then probably a new param of type
+    // css::awt::KeyModifier is needed in postKeyEvent().
+    if (pEvent->state & GDK_SHIFT_MASK)
+        nKeyCode |= KEY_SHIFT;
+
+    if (pEvent->type == GDK_KEY_RELEASE)
+        m_pDocument->pClass->postKeyEvent(m_pDocument, LOK_KEYEVENT_KEYUP, nCharCode, nKeyCode);
+    else
+        m_pDocument->pClass->postKeyEvent(m_pDocument, LOK_KEYEVENT_KEYINPUT, nCharCode, nKeyCode);
+}
+
 
 static void lok_docview_class_init( gpointer );
 static void lok_docview_init( GTypeInstance *, gpointer );
@@ -1049,6 +1112,12 @@ SAL_DLLPUBLIC_EXPORT gboolean lok_docview_get_edit(LOKDocView* pDocView)
 SAL_DLLPUBLIC_EXPORT void lok_docview_post_command(LOKDocView* pDocView, const char* pCommand)
 {
     pDocView->m_pImpl->m_pDocument->pClass->postUnoCommand(pDocView->m_pImpl->m_pDocument, pCommand);
+}
+
+SAL_DLLPUBLIC_EXPORT void lok_docview_post_key(GtkWidget* /*pWidget*/, GdkEventKey* pEvent, gpointer pData)
+{
+    LOKDocView* pDocView = static_cast<LOKDocView *>(pData);
+    pDocView->m_pImpl->signalKey(pEvent);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

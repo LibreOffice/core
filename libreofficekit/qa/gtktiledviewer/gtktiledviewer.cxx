@@ -12,15 +12,11 @@
 #include <string.h>
 
 #include <gdk/gdk.h>
-#include <gdk/gdkkeysyms.h>
 #include <gtk/gtk.h>
 
 #include <LibreOfficeKit/LibreOfficeKitGtk.h>
 #include <LibreOfficeKit/LibreOfficeKitInit.h>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
-
-#include <com/sun/star/awt/Key.hpp>
-#include <rsc/rsc-vcl-shared-types.hxx>
 
 #ifndef g_info
 #define g_info(...) g_log(G_LOG_DOMAIN, G_LOG_LEVEL_INFO, __VA_ARGS__)
@@ -117,65 +113,6 @@ void toggleBold(GtkWidget* /*pButton*/, gpointer /*pItem*/)
     LOKDocView* pLOKDocView = LOK_DOCVIEW(pDocView);
 
     lok_docview_post_command(pLOKDocView, ".uno:Bold");
-}
-
-/// Receives a key press or release event.
-static void signalKey(GtkWidget* /*pWidget*/, GdkEventKey* pEvent, gpointer /*pData*/)
-{
-    LOKDocView* pLOKDocView = LOK_DOCVIEW(pDocView);
-    int nCharCode = 0;
-    int nKeyCode = 0;
-
-    if (!lok_docview_get_edit(pLOKDocView))
-    {
-        g_info("signalKey: not in edit mode, ignore");
-        return;
-    }
-
-    switch (pEvent->keyval)
-    {
-    case GDK_BackSpace:
-        nKeyCode = com::sun::star::awt::Key::BACKSPACE;
-        break;
-    case GDK_Return:
-        nKeyCode = com::sun::star::awt::Key::RETURN;
-        break;
-    case GDK_Escape:
-        nKeyCode = com::sun::star::awt::Key::ESCAPE;
-        break;
-    case GDK_Tab:
-        nKeyCode = com::sun::star::awt::Key::TAB;
-        break;
-    case GDK_Down:
-        nKeyCode = com::sun::star::awt::Key::DOWN;
-        break;
-    case GDK_Up:
-        nKeyCode = com::sun::star::awt::Key::UP;
-        break;
-    case GDK_Left:
-        nKeyCode = com::sun::star::awt::Key::LEFT;
-        break;
-    case GDK_Right:
-        nKeyCode = com::sun::star::awt::Key::RIGHT;
-        break;
-    default:
-        if (pEvent->keyval >= GDK_F1 && pEvent->keyval <= GDK_F26)
-            nKeyCode = com::sun::star::awt::Key::F1 + (pEvent->keyval - GDK_F1);
-        else
-            nCharCode = gdk_keyval_to_unicode(pEvent->keyval);
-    }
-
-    // rsc is not public API, but should be good enough for debugging purposes.
-    // If this is needed for real, then probably a new param of type
-    // css::awt::KeyModifier is needed in postKeyEvent().
-    if (pEvent->state & GDK_SHIFT_MASK)
-        nKeyCode |= KEY_SHIFT;
-
-    LibreOfficeKitDocument* pDocument = lok_docview_get_document(pLOKDocView);
-    if (pEvent->type == GDK_KEY_RELEASE)
-        pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYUP, nCharCode, nKeyCode);
-    else
-        pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, nCharCode, nKeyCode);
 }
 
 // GtkComboBox requires gtk 2.24 or later
@@ -330,8 +267,8 @@ int main( int argc, char* argv[] )
     g_signal_connect(pDocView, "edit-changed", G_CALLBACK(signalEdit), NULL);
 
     // Input handling.
-    g_signal_connect(pWindow, "key-press-event", G_CALLBACK(signalKey), NULL);
-    g_signal_connect(pWindow, "key-release-event", G_CALLBACK(signalKey), NULL);
+    g_signal_connect(pWindow, "key-press-event", G_CALLBACK(lok_docview_post_key), pDocView);
+    g_signal_connect(pWindow, "key-release-event", G_CALLBACK(lok_docview_post_key), pDocView);
 
     gtk_container_add( GTK_CONTAINER(pVBox), pDocView );
 

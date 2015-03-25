@@ -9,6 +9,7 @@
 
 $(eval $(call gb_Library_Library,libreofficekitgtk))
 
+$(eval $(call gb_Library_use_sdk_api,libreofficekitgtk))
 
 $(eval $(call gb_Library_use_externals,libreofficekitgtk,\
     gtk \
