@@ -873,7 +873,7 @@ uno::Reference< XSpellAlternatives >
 
             if ( xSpellAlt.is() )   // error found?
             {
-                // save the start and end positons of the line and the starting point
+                // save the start and end positions of the line and the starting point
                 Push();
                 LeftMargin();
                 const sal_Int32 nLineStart = GetCrsr()->GetPoint()->nContent.GetIndex();
@@ -997,7 +997,7 @@ bool SwEditShell::GetGrammarCorrection(
 
             if (rResult.aErrors.getLength() > 0)    // error found?
             {
-                // save the start and end positons of the line and the starting point
+                // save the start and end positions of the line and the starting point
                 Push();
                 LeftMargin();
                 const sal_Int32 nLineStart = GetCrsr()->GetPoint()->nContent.GetIndex();

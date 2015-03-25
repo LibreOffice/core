@@ -7752,8 +7752,8 @@
 		<xsl:param name="series-generate-type"/>
 		<xsl:for-each select="表:数据系列">
 			<style:style style:family="chart">
-				<xsl:variable name="current-positon" select="position()"/>
-				<xsl:attribute name="style:name"><xsl:value-of select="concat('data-series',$current-positon)"/></xsl:attribute>
+				<xsl:variable name="current-position" select="position()"/>
+				<xsl:attribute name="style:name"><xsl:value-of select="concat('data-series',$current-position)"/></xsl:attribute>
 				<xsl:call-template name="表:数据点类型">
 					<xsl:with-param name="table-name" select="$table-name"/>
 					<xsl:with-param name="table-type" select="$table-type"/>
@@ -7824,8 +7824,8 @@
 		<xsl:param name="series-generate-type"/>
 		<xsl:for-each select="表:系列">
 			<style:style style:family="chart">
-				<xsl:variable name="current-positon" select="position()"/>
-				<xsl:attribute name="style:name"><xsl:value-of select="concat('data-source',$current-positon)"/></xsl:attribute>
+				<xsl:variable name="current-position" select="position()"/>
+				<xsl:attribute name="style:name"><xsl:value-of select="concat('data-source',$current-position)"/></xsl:attribute>
 			</style:style>
 		</xsl:for-each>
 	</xsl:template>

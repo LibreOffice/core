@@ -990,7 +990,7 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
         nEditStartCol = nEditCol;
 
         //  For growing use only the alignment value from the attribute, numbers
-        //  (existing or started) with default aligment extend to the right.
+        //  (existing or started) with default alignment extend to the right.
         bool bGrowCentered = ( eJust == SVX_HOR_JUSTIFY_CENTER );
         bool bGrowToLeft = ( eJust == SVX_HOR_JUSTIFY_RIGHT );      // visual left
         bool bGrowBackwards = bGrowToLeft;                          // logical left

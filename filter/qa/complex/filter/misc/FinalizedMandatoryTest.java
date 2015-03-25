@@ -270,7 +270,7 @@ public class FinalizedMandatoryTest
     }
 
     /**
-     * print all propeties with its values to <CODE>logger</CODE>. For debug purposes.
+     * print all properties with its values to <CODE>logger</CODE>. For debug purposes.
      * @see stats.SimpleLogWriter
      * @see com.sun.star.beans.PropertyValue
      * @param props Sequenze of PropertyValue

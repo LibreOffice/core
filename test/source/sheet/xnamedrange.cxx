@@ -106,7 +106,7 @@ void XNamedRange::testGetReferencePosition()
     uno::Reference< sheet::XNamedRange > xNamedRange = getNamedRange(aTestedNamedRangeString);
 
     table::CellAddress xCellAddress = xNamedRange->getReferencePosition();
-    // the expeted address is on B1, as it was the active cell when intial2 created
+    // the expected address is on B1, as it was the active cell when intial2 created
     CPPUNIT_ASSERT_MESSAGE("Wrong SHEET reference position", xCellAddress.Sheet == 0);
     CPPUNIT_ASSERT_MESSAGE("Wrong COLUMN reference position", xCellAddress.Column == 1);
     CPPUNIT_ASSERT_MESSAGE("Wrong ROW reference position", xCellAddress.Row == 0);

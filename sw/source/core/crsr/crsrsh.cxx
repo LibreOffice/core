@@ -3451,7 +3451,7 @@ void SwCrsrShell::GetSmartTagTerm( const Point& rPt, SwRect& rSelectRect,
             // get smarttag word
             OUString aText( pNode->GetTxt().copy(nBegin, nLen) );
 
-            //save the start and end positons of the line and the starting point
+            //save the start and end positions of the line and the starting point
             Push();
             LeftMargin();
             const sal_Int32 nLineStart = GetCrsr()->GetPoint()->nContent.GetIndex();

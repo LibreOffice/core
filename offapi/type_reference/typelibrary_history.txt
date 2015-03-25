@@ -42,8 +42,8 @@
   the cli interfaces from type library.
 
 11/19/2004 (JSC/TL): BugID=i36687
-  adjust ChainedTextFrame service. Remove XChainable interface and insert propeties.
-  Interface was never implmented and the functionality was supported by properties.
+  adjust ChainedTextFrame service. Remove XChainable interface and insert properties.
+  Interface was never implemented and the functionality was supported by properties.
 
 01/20/2005 (JSC): BugID=i40985
   change const value com.sun.star.configuration.backend.NodeAttribute:MASK to

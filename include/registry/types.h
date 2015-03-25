@@ -112,7 +112,7 @@ enum RTTypeClass {
 /** specifies the type for the field access.
 
     Fields in a type blob are used for different types.  Among others they were
-    used for properties of services and these poperties can have several flags.
+    used for properties of services and these properties can have several flags.
 
     @see RT_ACCESS_INVALID
     @see RT_ACCESS_READONLY

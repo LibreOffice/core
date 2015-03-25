@@ -54,7 +54,7 @@ public class _XObjectInspectorModel extends MultiMethodTest {
     }
 
     /**
-     * Call the method <CODE>getPropertyOrderIndex()</CODE> with an invalid propety name.
+     * Call the method <CODE>getPropertyOrderIndex()</CODE> with an invalid property name.
      * Has <CODE>OK</CODE> status if the returned index is "0".
      */
     public void _getPropertyOrderIndex() {

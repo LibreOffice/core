@@ -85,7 +85,7 @@ public:
 // A simple file preview class to preview some
 // common picture formats like *.gif, *jpg, etc.
 // This class is not thread-safe and is
-// implmented as singleton, because the class
+// implemented as singleton, because the class
 // has only one static member to reconnect
 // from callback functions
 // we use a singleton-destroyer to get rid off

@@ -170,7 +170,7 @@ void Scheduler::ProcessTaskScheduling( bool bTimer )
 
 sal_uInt64 Scheduler::UpdateMinPeriod( sal_uInt64 nMinPeriod, sal_uInt64 nTime )
 {
-    // this period is only usefull for timer
+    // this period is only useful for timer
     // so in this implementation it' only a pass through
     (void)nTime;
     return nMinPeriod;

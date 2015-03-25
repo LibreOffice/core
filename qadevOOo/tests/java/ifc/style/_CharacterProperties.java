@@ -340,7 +340,7 @@ public class _CharacterProperties extends MultiPropertyTest {
      * changed and set.
      * @param get PropertySet where property value is checked after
      * setting.
-     * @param name Propety name to test.
+     * @param name Property name to test.
      * @param newVal Value used to set as new property value if
      * the value get is null.
      */

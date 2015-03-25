@@ -814,7 +814,7 @@ Reference< chart2::data::XDataSequence > SAL_CALL InternalDataProvider::createDa
 {
     if( aRangeRepresentation.match( lcl_aCategoriesRangeName ))
     {
-        OSL_ASSERT( aRangeRepresentation == lcl_aCategoriesRangeName );//it is not expected nor implmented that only parts of the categories are really requested
+        OSL_ASSERT( aRangeRepresentation == lcl_aCategoriesRangeName );//it is not expected nor implemented that only parts of the categories are really requested
 
         // categories
         return createDataSequenceAndAddToMap( lcl_aCategoriesRangeName, lcl_aCategoriesRoleName );
@@ -864,7 +864,7 @@ sal_Bool SAL_CALL InternalDataProvider::hasDataByRangeRepresentation( const OUSt
 
     if( aRange.match( lcl_aCategoriesRangeName ))
     {
-        OSL_ASSERT( aRange == lcl_aCategoriesRangeName );//it is not expected nor implmented that only parts of the categories are really requested
+        OSL_ASSERT( aRange == lcl_aCategoriesRangeName );//it is not expected nor implemented that only parts of the categories are really requested
         bResult = true;
     }
     else if( aRange.match( lcl_aLabelRangePrefix ))
@@ -1186,7 +1186,7 @@ OUString SAL_CALL InternalDataProvider::convertRangeToXML( const OUString& aRang
     // @todo: add this information in the range representation strings
     if( aRangeRepresentation.match( lcl_aCategoriesRangeName ))
     {
-        OSL_ASSERT( aRangeRepresentation == lcl_aCategoriesRangeName );//it is not expected nor implmented that only parts of the categories are really requested
+        OSL_ASSERT( aRangeRepresentation == lcl_aCategoriesRangeName );//it is not expected nor implemented that only parts of the categories are really requested
         aRange.aUpperLeft.bIsEmpty = false;
         if( m_bDataInColumns )
         {

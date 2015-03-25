@@ -83,7 +83,7 @@ void SwTiledRenderingTest::testRegisterCallback()
     SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
     pXTextDocument->registerCallback(&SwTiledRenderingTest::callback, this);
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
-    // Insert a character at the begining of the document.
+    // Insert a character at the beginning of the document.
     pWrtShell->Insert("x");
 
     // Check that the top left 256x256px tile would be invalidated.

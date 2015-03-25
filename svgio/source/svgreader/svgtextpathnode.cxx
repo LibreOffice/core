@@ -166,7 +166,7 @@ namespace svgio
                         // create representation for this snippet
                         bRetval = true;
 
-                        // get target position and tangent in that pint
+                        // get target position and tangent in that point
                         basegfx::B2DPoint aPosition(0.0, 0.0);
                         basegfx::B2DVector aTangent(0.0, 1.0);
 

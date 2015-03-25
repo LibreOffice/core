@@ -1080,7 +1080,7 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
 
                         // Left-to-right direction if not already set
                         pEntry->pProperties->Insert(PROP_WRITING_MODE, uno::makeAny( sal_Int16(text::WritingMode_LR_TB) ), false);
-                        // Left aligment if not already set
+                        // Left alignment if not already set
                         pEntry->pProperties->Insert(PROP_PARA_ADJUST, uno::makeAny( sal_Int16(style::ParagraphAdjust_LEFT) ), false);
                     }
 
