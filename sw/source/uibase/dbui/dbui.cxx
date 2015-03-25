@@ -22,8 +22,8 @@
 #include "dbui.hrc"
 #include "dbui.hxx"
 
-PrintMonitor::PrintMonitor(vcl::Window *pParent, PrintMonitorType eType )
-    : CancelableModelessDialog(pParent, "PrintMonitorDialog",
+PrintMonitor::PrintMonitor(vcl::Window *pParent, bool modal, PrintMonitorType eType )
+    : CancelableDialog(pParent, modal, "PrintMonitorDialog",
         "modules/swriter/ui/printmonitordialog.ui")
 {
     get(m_pDocName, "docname");
@@ -43,8 +43,8 @@ PrintMonitor::PrintMonitor(vcl::Window *pParent, PrintMonitorType eType )
 }
 
 // Progress Indicator for Creation of personalized Mail Merge documents:
-CreateMonitor::CreateMonitor( vcl::Window *pParent )
-    : CancelableModelessDialog(pParent, "MMCreatingDialog",
+CreateMonitor::CreateMonitor( vcl::Window *pParent, bool modal )
+    : CancelableDialog(pParent, modal, "MMCreatingDialog",
         "modules/swriter/ui/mmcreatingdialog.ui")
     , m_sCountingPattern()
     , m_sVariable_Total("%Y")
@@ -77,16 +77,36 @@ void CreateMonitor::SetCurrentPosition( sal_Int32 nCurrent )
     UpdateCountingText();
 }
 
-CancelableModelessDialog::CancelableModelessDialog( vcl::Window *pParent,
+CancelableDialog::CancelableDialog( vcl::Window *pParent, bool modal,
         const OUString& rID, const OUString& rUIXMLDescription )
-    : ModelessDialog( pParent , rID, rUIXMLDescription )
+    : Dialog( pParent , rID, rUIXMLDescription,
+              modal ? WINDOW_MODALDIALOG : WINDOW_MODELESSDIALOG )
+    , mbModal( modal )
 {
     get(m_pCancelButton, "cancel");
 }
 
-void CancelableModelessDialog::SetCancelHdl( const Link& rLink )
+CancelableDialog::~CancelableDialog()
+{
+    EndDialog( 0 );
+}
+
+void CancelableDialog::SetCancelHdl( const Link& rLink )
 {
     m_pCancelButton->SetClickHdl( rLink );
+}
+
+void CancelableDialog::Show()
+{
+   if (mbModal)
+       StartExecuteModal( LINK(this, CancelableDialog, DlgClosedHdl) );
+   else
+       Dialog::Show();
+}
+
+IMPL_LINK_NOARG(CancelableDialog, DlgClosedHdl)
+{
+    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

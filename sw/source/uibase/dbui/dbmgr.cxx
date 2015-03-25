@@ -323,7 +323,7 @@ static bool lcl_GetColumnCnt(SwDSParam* pParam, const OUString& rColumnName,
 };
 
 // import data
-bool SwDBManager::MergeNew( const SwMergeDescriptor& rMergeDesc )
+bool SwDBManager::MergeNew( const SwMergeDescriptor& rMergeDesc, vcl::Window* pParent )
 {
     OSL_ENSURE(!bInMerge && !pImpl->pMergeData, "merge already activated!");
 
@@ -441,7 +441,7 @@ bool SwDBManager::MergeNew( const SwMergeDescriptor& rMergeDesc )
         case DBMGR_MERGE_SHELL:
             // save files and send them as e-Mail if required
             bRet = MergeMailFiles(&rMergeDesc.rSh,
-                    rMergeDesc);
+                    rMergeDesc, pParent);
             break;
 
         default:
@@ -813,7 +813,8 @@ static void lcl_SaveDoc( SfxObjectShell *xTargetDocShell,
 }
 
 bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
-                                 const SwMergeDescriptor& rMergeDescriptor)
+                                 const SwMergeDescriptor& rMergeDescriptor,
+                                 vcl::Window* pParent)
 {
     //check if the doc is synchronized and contains at least one linked section
     bool bSynchronizedDoc = pSourceShell->IsLabelDoc() && pSourceShell->GetSectionFmtCount() > 1;
@@ -941,14 +942,16 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
             bool bPageStylesWithHeaderFooter = false;
 
             vcl::Window *pSourceWindow = 0;
-            CancelableModelessDialog *pProgressDlg = 0;
+            CancelableDialog *pProgressDlg = 0;
 
             if (!IsMergeSilent()) {
                 pSourceWindow = &pSourceShell->GetView().GetEditWin();
+                if( ! pParent )
+                    pParent = pSourceWindow;
                 if( bMergeShell )
-                    pProgressDlg = new CreateMonitor( pSourceWindow );
+                    pProgressDlg = new CreateMonitor( pParent, pParent != pSourceWindow );
                 else {
-                    pProgressDlg = new PrintMonitor( pSourceWindow, PrintMonitor::MONITOR_TYPE_PRINT );
+                    pProgressDlg = new PrintMonitor( pParent, pParent != pSourceWindow, PrintMonitor::MONITOR_TYPE_PRINT );
                     static_cast<PrintMonitor*>( pProgressDlg )->SetText(pSourceShell->GetView().GetDocShell()->GetTitle(22));
                 }
                 pProgressDlg->SetCancelHdl( LINK(this, SwDBManager, PrtCancelHdl) );

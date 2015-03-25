@@ -63,6 +63,10 @@ struct SwDBFormatData
     com::sun::star::lang::Locale aLocale;
 };
 
+namespace vcl {
+    class Window;
+}
+
 class SwView;
 class SwWrtShell;
 class SfxProgress;
@@ -211,7 +215,7 @@ friend class SwConnectionDisposedListener_Impl;
 
     /// merge to file _and_ merge to e-Mail
     SAL_DLLPRIVATE bool          MergeMailFiles(SwWrtShell* pSh,
-                                        const SwMergeDescriptor& rMergeDescriptor );
+                                        const SwMergeDescriptor& rMergeDescriptor, vcl::Window* pParent );
     SAL_DLLPRIVATE bool          ToNextRecord(SwDSParam* pParam);
 
 public:
@@ -236,7 +240,7 @@ public:
     inline void     SetMergeSilent( bool bVal )     { bMergeSilent = bVal; }
 
     /// Merging of data records into fields.
-    bool            MergeNew( const SwMergeDescriptor& rMergeDesc );
+    bool            MergeNew( const SwMergeDescriptor& rMergeDesc, vcl::Window* pParent = NULL );
     bool            Merge(SwWrtShell* pSh);
     void            MergeCancel();
 

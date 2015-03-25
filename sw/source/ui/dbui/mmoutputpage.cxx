@@ -689,7 +689,7 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
         }
 
         SwView* pSourceView = rConfigItem.GetSourceView();
-        PrintMonitor aSaveMonitor(this, PrintMonitor::MONITOR_TYPE_SAVE);
+        PrintMonitor aSaveMonitor(this, false, PrintMonitor::MONITOR_TYPE_SAVE);
         aSaveMonitor.m_pDocName->SetText(pSourceView->GetDocShell()->GetTitle(22));
         aSaveMonitor.SetCancelHdl(LINK(this, SwMailMergeOutputPage, SaveCancelHdl_Impl));
         aSaveMonitor.m_pPrinter->SetText( INetURLObject( sPath ).getFSysPath( INetURLObject::FSYS_DETECT ) );
