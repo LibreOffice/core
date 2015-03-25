@@ -952,19 +952,21 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
 
     SCTAB nTab = pViewData->GetTabNo();
     ScDocument* pDoc = pViewData->GetDocument();
-    ScAddress aLastPos = pDoc->GetLastDataPos(nTab);
 
-    SCCOL nCol1 = 0, nCol2 = aLastPos.Col();
-    SCROW nRow1 = 0, nRow2 = aLastPos.Row();
+    SCCOL nStartCol = 0, nEndCol = 0;
+    SCROW nStartRow = 0, nEndRow = 0;
+
+    // size of the document including drawings, charts, etc.
+    pDoc->GetPrintArea(nTab, nEndCol, nEndRow, false);
 
     double fPPTX = pViewData->GetPPTX();
     double fPPTY = pViewData->GetPPTY();
 
     ScTableInfo aTabInfo;
-    pDoc->FillInfo(aTabInfo, nCol1, nRow1, nCol2, nRow2, nTab, fPPTX, fPPTY, false, false, NULL);
+    pDoc->FillInfo(aTabInfo, nStartCol, nStartRow, nEndCol, nEndRow, nTab, fPPTX, fPPTY, false, false, NULL);
 
     ScOutputData aOutputData(&rDevice, OUTTYPE_WINDOW, aTabInfo, pDoc, nTab,
-            -fTilePosXPixel, -fTilePosYPixel, nCol1, nRow1, nCol2, nRow2,
+            -fTilePosXPixel, -fTilePosYPixel, nStartCol, nStartRow, nEndCol, nEndRow,
             fPPTX, fPPTY);
 
     // create a temporary SdrPaintWindow to avoid warnings
