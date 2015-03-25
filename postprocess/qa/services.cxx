@@ -150,8 +150,8 @@ void Test::test() {
             serviceName(other.serviceName),
             defaultConstructor(other.defaultConstructor)
         {}
-        OUString const serviceName;
-        bool const defaultConstructor;
+        OUString serviceName;
+        bool defaultConstructor;
     };
     struct Implementation {
         Implementation(
