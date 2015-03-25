@@ -152,8 +152,8 @@ class COMPHELPER_DLLPUBLIC NumberedCollection : private ::cppu::BaseMutex
          */
         ::sal_Int32 impl_searchFreeNumber ();
 
-        void impl_cleanUpDeadItems (      TNumberedItemHash& lItems    ,
-                                    const TDeadItemList&     lDeadItems);
+        static void impl_cleanUpDeadItems (      TNumberedItemHash& lItems    ,
+                                           const TDeadItemList&     lDeadItems);
 
 
     // member

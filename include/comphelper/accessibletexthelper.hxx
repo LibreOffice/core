@@ -52,9 +52,9 @@ namespace comphelper
 
         ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XBreakIterator >             implGetBreakIterator();
         ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XCharacterClassification >   implGetCharacterClassification();
-        bool                             implIsValidBoundary( ::com::sun::star::i18n::Boundary& rBoundary, sal_Int32 nLength );
-        bool                             implIsValidIndex( sal_Int32 nIndex, sal_Int32 nLength );
-        bool                             implIsValidRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex, sal_Int32 nLength );
+        static bool                      implIsValidBoundary( ::com::sun::star::i18n::Boundary& rBoundary, sal_Int32 nLength );
+        static bool                      implIsValidIndex( sal_Int32 nIndex, sal_Int32 nLength );
+        static bool                      implIsValidRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex, sal_Int32 nLength );
         virtual OUString                 implGetText() = 0;
         virtual ::com::sun::star::lang::Locale  implGetLocale() = 0;
         virtual void                     implGetSelection( sal_Int32& nStartIndex, sal_Int32& nEndIndex ) = 0;
