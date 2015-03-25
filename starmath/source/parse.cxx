@@ -557,6 +557,16 @@ void SmParser::NextToken()
 
                             rnEndPos = nRealStart + 2;
                         }
+                        else if (m_aBufferString.match("<-", nRealStart))
+                        {
+                            m_aCurToken.eType    = TLEFTARROW;
+                            m_aCurToken.cMathChar = MS_LEFTARROW;
+                            m_aCurToken.nGroup       = TGSTANDALONE;
+                            m_aCurToken.nLevel       = 5;
+                            m_aCurToken.aText = "<-";
+
+                            rnEndPos = nRealStart + 2;
+                        }
                         else if (m_aBufferString.match("<>", nRealStart))
                         {
                             m_aCurToken.eType    = TNEQ;
@@ -851,6 +861,16 @@ void SmParser::NextToken()
                             m_aCurToken.nGroup       = TGUNOPER | TGSUM;
                             m_aCurToken.nLevel       = 5;
                             m_aCurToken.aText = "-+";
+
+                            rnEndPos = nRealStart + 2;
+                        }
+                        else if (m_aBufferString.match("->", nRealStart))
+                        {
+                            m_aCurToken.eType    = TRIGHTARROW;
+                            m_aCurToken.cMathChar = MS_RIGHTARROW;
+                            m_aCurToken.nGroup       = TGSTANDALONE;
+                            m_aCurToken.nLevel       = 5;
+                            m_aCurToken.aText = "->";
 
                             rnEndPos = nRealStart + 2;
                         }
