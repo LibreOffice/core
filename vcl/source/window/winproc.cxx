@@ -1374,63 +1374,100 @@ static bool shouldReusePreviousMouseWindow(const SalWheelMouseEvent& rPrevEvt, c
     return (rEvt.mnX == rPrevEvt.mnX && rEvt.mnY == rPrevEvt.mnY && rEvt.mnTime-rPrevEvt.mnTime < 500/*ms*/);
 }
 
-static bool ImplHandleWheelEvent( vcl::Window* pWindow, const SalWheelMouseEvent& rEvt, bool scaleDirectly = false )
+class HandleWheelEvent
 {
-    static SalWheelMouseEvent aPreviousEvent;
-    static vcl::Window *pPreviousWindow;
+private:
+    ImplSVData* m_pSVData;
+    vcl::Window *m_pWindow;
+    Point m_aMousePos;
+    CommandWheelData m_aWheelData;
 
-    ImplDelData aDogTag( pWindow );
+public:
 
-    ImplSVData* pSVData = ImplGetSVData();
-    if ( pSVData->maWinData.mpAutoScrollWin )
-        pSVData->maWinData.mpAutoScrollWin->EndAutoScroll();
-    if ( pSVData->maHelpData.mpHelpWin )
-        ImplDestroyHelpWindow( true );
-    if( aDogTag.IsDead() )
-        return false;
-
-    CommandWheelMode nMode;
-    sal_uInt16 nCode = rEvt.mnCode;
-    bool bHorz = rEvt.mbHorz;
-    bool bPixel = rEvt.mbDeltaIsPixel;
-    if ( scaleDirectly )
-        nMode = CommandWheelMode::ZOOM_SCALE;
-    else if ( nCode & KEY_MOD1 )
-        nMode = CommandWheelMode::ZOOM;
-    else if ( nCode & KEY_MOD2 )
-        nMode = CommandWheelMode::DATAZOOM;
-    else
+    struct WindowDescription
     {
-        nMode = CommandWheelMode::SCROLL;
-        // #i85450# interpret shift-wheel as horizontal wheel action
-        if( (nCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_MOD3)) == KEY_SHIFT )
-            bHorz = true;
+        vcl::Window *m_pMouseWindow;
+        bool m_bIsFloat;
+        WindowDescription(vcl::Window *pMouseWindow, bool bIsFloat)
+            : m_pMouseWindow(pMouseWindow)
+            , m_bIsFloat(bIsFloat)
+        {
+        }
+    };
+
+    HandleWheelEvent(vcl::Window *pWindow, const SalWheelMouseEvent& rEvt, bool bScaleDirectly)
+        : m_pSVData(ImplGetSVData())
+        , m_pWindow(pWindow)
+        , m_aMousePos(rEvt.mnX, rEvt.mnY)
+    {
+        CommandWheelMode nMode;
+        sal_uInt16 nCode = rEvt.mnCode;
+        bool bHorz = rEvt.mbHorz;
+        bool bPixel = rEvt.mbDeltaIsPixel;
+        if (bScaleDirectly)
+            nMode = CommandWheelMode::ZOOM_SCALE;
+        else if ( nCode & KEY_MOD1 )
+            nMode = CommandWheelMode::ZOOM;
+        else if ( nCode & KEY_MOD2 )
+            nMode = CommandWheelMode::DATAZOOM;
+        else
+        {
+            nMode = CommandWheelMode::SCROLL;
+            // #i85450# interpret shift-wheel as horizontal wheel action
+            if( (nCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_MOD3)) == KEY_SHIFT )
+                bHorz = true;
+        }
+
+        m_aWheelData = CommandWheelData(rEvt.mnDelta, rEvt.mnNotchDelta, rEvt.mnScrollLines, nMode, nCode, bHorz, bPixel);
+
     }
+    bool Setup();
+    WindowDescription FindTarget();
+    vcl::Window *Dispatch(const WindowDescription& rTarget);
+    bool CallCommand(vcl::Window *pWindow, const Point &rMousePos)
+    {
+        return ImplCallWheelCommand(pWindow, rMousePos, &m_aWheelData);
+    }
+    bool HandleEvent(const SalWheelMouseEvent& rEvt);
+    void Teardown(const WindowDescription& rTarget);
+};
 
-    CommandWheelData    aWheelData( rEvt.mnDelta, rEvt.mnNotchDelta, rEvt.mnScrollLines, nMode, nCode, bHorz, bPixel );
-    Point               aMousePos( rEvt.mnX, rEvt.mnY );
-    bool                bRet = true;
+bool HandleWheelEvent::Setup()
+{
+    ImplDelData aDogTag( m_pWindow );
 
+    if (m_pSVData->maWinData.mpAutoScrollWin)
+        m_pSVData->maWinData.mpAutoScrollWin->EndAutoScroll();
+    if (m_pSVData->maHelpData.mpHelpWin)
+        ImplDestroyHelpWindow( true );
+    if (aDogTag.IsDead())
+        return false;
+    return true;
+}
+
+HandleWheelEvent::WindowDescription HandleWheelEvent::FindTarget()
+{
     // first check any floating window ( eg. drop down listboxes)
     bool bIsFloat = false;
     vcl::Window *pMouseWindow = NULL;
-    if ( pSVData->maWinData.mpFirstFloat && !pSVData->maWinData.mpCaptureWin &&
-         !pSVData->maWinData.mpFirstFloat->ImplIsFloatPopupModeWindow( pWindow ) )
+
+    if (m_pSVData->maWinData.mpFirstFloat && !m_pSVData->maWinData.mpCaptureWin &&
+         !m_pSVData->maWinData.mpFirstFloat->ImplIsFloatPopupModeWindow( m_pWindow ) )
     {
         HitTest nHitTest = HITTEST_OUTSIDE;
-        pMouseWindow = pSVData->maWinData.mpFirstFloat->ImplFloatHitTest( pWindow, aMousePos, nHitTest );
+        pMouseWindow = m_pSVData->maWinData.mpFirstFloat->ImplFloatHitTest( m_pWindow, m_aMousePos, nHitTest );
     }
     // then try the window directly beneath the mouse
     if( !pMouseWindow )
-        pMouseWindow = pWindow->ImplFindWindow( aMousePos );
+        pMouseWindow = m_pWindow->ImplFindWindow( m_aMousePos );
     else
     {
         // transform coordinates to float window frame coordinates
         pMouseWindow = pMouseWindow->ImplFindWindow(
                  pMouseWindow->OutputToScreenPixel(
                   pMouseWindow->AbsoluteScreenToOutputPixel(
-                   pWindow->OutputToAbsoluteScreenPixel(
-                    pWindow->ScreenToOutputPixel( aMousePos ) ) ) ) );
+                   m_pWindow->OutputToAbsoluteScreenPixel(
+                    m_pWindow->ScreenToOutputPixel( m_aMousePos ) ) ) ) );
         bIsFloat = true;
     }
 
@@ -1442,34 +1479,33 @@ static bool ImplHandleWheelEvent( vcl::Window* pWindow, const SalWheelMouseEvent
         pMouseWindow = pMouseWindow->GetParent();
     }
 
-    // avoid the problem that scrolling via wheel to this point brings a widget
-    // under the mouse that also accepts wheel commands, so stick with the old
-    // widget if the time gap is very small
-    if (shouldReusePreviousMouseWindow(aPreviousEvent, rEvt) && acceptableWheelScrollTarget(pPreviousWindow))
-    {
-        pMouseWindow = pPreviousWindow;
-    }
+    return WindowDescription(pMouseWindow, bIsFloat);
+}
 
-    aPreviousEvent = rEvt;
+vcl::Window *HandleWheelEvent::Dispatch(const WindowDescription& rTarget)
+{
+    vcl::Window *pMouseWindow = rTarget.m_pMouseWindow;
+
+    vcl::Window *pDispatchedTo = NULL;
 
     if (acceptableWheelScrollTarget(pMouseWindow) && pMouseWindow->IsEnabled())
     {
         // transform coordinates to float window frame coordinates
         Point aRelMousePos( pMouseWindow->OutputToScreenPixel(
                              pMouseWindow->AbsoluteScreenToOutputPixel(
-                              pWindow->OutputToAbsoluteScreenPixel(
-                               pWindow->ScreenToOutputPixel( aMousePos ) ) ) ) );
-        bRet = ImplCallWheelCommand( pMouseWindow, aRelMousePos, &aWheelData );
+                              m_pWindow->OutputToAbsoluteScreenPixel(
+                               m_pWindow->ScreenToOutputPixel( m_aMousePos ) ) ) ) );
+        bool bPropogate = CallCommand(pMouseWindow, aRelMousePos);
+        if (!bPropogate)
+            pDispatchedTo = pMouseWindow;
     }
 
-    pPreviousWindow = !bRet ? pMouseWindow : NULL;
-
     // if the command was not handled try the focus window
-    if ( bRet )
+    if (!pDispatchedTo)
     {
-        vcl::Window* pFocusWindow = pWindow->ImplGetWindowImpl()->mpFrameData->mpFocusWin;
+        vcl::Window* pFocusWindow = m_pWindow->ImplGetWindowImpl()->mpFrameData->mpFocusWin;
         if ( pFocusWindow && (pFocusWindow != pMouseWindow) &&
-             (pFocusWindow == pSVData->maWinData.mpFocusWin) )
+             (pFocusWindow == m_pSVData->maWinData.mpFocusWin) )
         {
             // no wheel-messages to disabled windows
             if ( pFocusWindow->IsEnabled() && pFocusWindow->IsInputEnabled() && ! pFocusWindow->IsInModalMode() )
@@ -1477,17 +1513,23 @@ static bool ImplHandleWheelEvent( vcl::Window* pWindow, const SalWheelMouseEvent
                 // transform coordinates to focus window frame coordinates
                 Point aRelMousePos( pFocusWindow->OutputToScreenPixel(
                                      pFocusWindow->AbsoluteScreenToOutputPixel(
-                                      pWindow->OutputToAbsoluteScreenPixel(
-                                       pWindow->ScreenToOutputPixel( aMousePos ) ) ) ) );
-                bRet = ImplCallWheelCommand( pFocusWindow, aRelMousePos, &aWheelData );
+                                      m_pWindow->OutputToAbsoluteScreenPixel(
+                                       m_pWindow->ScreenToOutputPixel( m_aMousePos ) ) ) ) );
+                bool bPropogate = CallCommand(pFocusWindow, aRelMousePos);
+                if (!bPropogate)
+                    pDispatchedTo = pMouseWindow;
             }
         }
     }
+    return pDispatchedTo;
+}
 
+void HandleWheelEvent::Teardown(const WindowDescription& rTarget)
+{
     // close floaters
-    if( ! bIsFloat && pSVData->maWinData.mpFirstFloat )
+    if (!rTarget.m_bIsFloat && m_pSVData->maWinData.mpFirstFloat)
     {
-        FloatingWindow* pLastLevelFloat = pSVData->maWinData.mpFirstFloat->ImplFindLastLevelFloat();
+        FloatingWindow* pLastLevelFloat = m_pSVData->maWinData.mpFirstFloat->ImplFindLastLevelFloat();
         if( pLastLevelFloat )
         {
             sal_uLong nPopupFlags = pLastLevelFloat->GetPopupModeFlags();
@@ -1497,8 +1539,39 @@ static bool ImplHandleWheelEvent( vcl::Window* pWindow, const SalWheelMouseEvent
             }
         }
     }
+}
 
-    return !bRet;
+bool HandleWheelEvent::HandleEvent(const SalWheelMouseEvent& rEvt)
+{
+    static SalWheelMouseEvent aPreviousEvent;
+    static vcl::Window *pPreviousWindow;
+
+    if (!Setup())
+        return false;
+
+    WindowDescription aTarget = FindTarget();
+
+    // avoid the problem that scrolling via wheel to this point brings a widget
+    // under the mouse that also accepts wheel commands, so stick with the old
+    // widget if the time gap is very small
+    if (shouldReusePreviousMouseWindow(aPreviousEvent, rEvt) && acceptableWheelScrollTarget(pPreviousWindow))
+    {
+        aTarget.m_pMouseWindow = pPreviousWindow;
+    }
+
+    aPreviousEvent = rEvt;
+
+    pPreviousWindow = Dispatch(aTarget);
+
+    Teardown(aTarget);
+
+    return pPreviousWindow != NULL;
+}
+
+static bool ImplHandleWheelEvent( vcl::Window* pWindow, const SalWheelMouseEvent& rEvt, bool scaleDirectly = false )
+{
+    HandleWheelEvent aHandler(pWindow, rEvt, scaleDirectly);
+    return aHandler.HandleEvent(rEvt);
 }
 
 #define IMPL_PAINT_CHECKRTL         ((sal_uInt16)0x0020)
