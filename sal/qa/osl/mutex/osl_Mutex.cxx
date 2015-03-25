@@ -32,20 +32,13 @@ using namespace osl;
 */
 namespace ThreadHelper
 {
-    void thread_sleep_tenth_sec(sal_uInt32 _nTenthSec)
-    {
-        TimeValue nTV;
-        nTV.Seconds = _nTenthSec/10;
-        nTV.Nanosec = ( (_nTenthSec%10 ) * 100000000 );
-        osl_waitThread(&nTV);
-    }
     void thread_sleep( sal_uInt32 _nSec )
     {
         /// print statement in thread process must use fflush() to force display.
         // t_print("# wait %d seconds. ", _nSec );
         fflush(stdout);
 
-        thread_sleep_tenth_sec( _nSec * 10 );
+        Thread::sleepMicroseconds( _nSec * 1000000 );
         // printf("# done\n" );
     }
 }
@@ -203,7 +196,7 @@ protected:
     {
         // block here if the mutex has been acquired
         pMyMutex->acquire( );
-        ThreadHelper::thread_sleep_tenth_sec( 2 );
+        Thread::sleepMicroseconds(200000);//0,2s
         pMyMutex->release( );
     }
 };
@@ -347,13 +340,13 @@ namespace osl_Mutex
             HoldThread myThread( &aMutex );
             myThread.create( );
 
-            ThreadHelper::thread_sleep_tenth_sec( 2 );
+            Thread::sleepMicroseconds(200000);//0,2s
             // if acquire in myThread does not work, 2 secs is long enough,
             // myThread should terminate now, and bRes1 should be sal_False
             bool bRes1 = myThread.isRunning( );
 
             aMutex.release( );
-            ThreadHelper::thread_sleep_tenth_sec( 1 );
+            Thread::sleepMicroseconds(100000);//0,1s
             // after release mutex, myThread stops blocking and will terminate immediately
             bool bRes2 = myThread.isRunning( );
             myThread.join( );
@@ -398,7 +391,7 @@ namespace osl_Mutex
             myThread.create();
 
             // ensure the child thread acquire the mutex
-            ThreadHelper::thread_sleep_tenth_sec(1);
+            Thread::sleepMicroseconds(100000);//0,1s
 
             bool bRes1 = aMutex.tryToAcquire();
 
@@ -435,7 +428,7 @@ namespace osl_Mutex
             myThread.create( );
 
             // ensure the child thread acquire the mutex
-            ThreadHelper::thread_sleep_tenth_sec( 1 );
+            Thread::sleepMicroseconds(100000);//0,1s
 
             bool bRunning = myThread.isRunning( );
             bool bRes1 = aMutex.tryToAcquire( );
@@ -478,11 +471,11 @@ namespace osl_Mutex
             GlobalMutexThread myThread;
             myThread.create();
 
-            ThreadHelper::thread_sleep_tenth_sec(1);
+            Thread::sleepMicroseconds(100000);//0,1s
             bool bRes1 = myThread.isRunning();
 
             pGlobalMutex->release();
-            ThreadHelper::thread_sleep_tenth_sec(1);
+            Thread::sleepMicroseconds(100000);//0,1s
             // after release mutex, myThread stops blocking and will terminate immediately
             bool bRes2 = myThread.isRunning();
 
@@ -538,7 +531,7 @@ protected:
     {
         // block here if the mutex has been acquired
         MutexGuard aGuard( pMyMutex );
-        ThreadHelper::thread_sleep_tenth_sec( 2 );
+        Thread::sleepMicroseconds(200000);//0,2s
     }
 };
 
@@ -554,7 +547,7 @@ namespace osl_Guard
             GuardThread myThread(&aMutex);
             myThread.create();
 
-            ThreadHelper::thread_sleep_tenth_sec(1);
+            Thread::sleepMicroseconds(100000);//0,1s
             bool bRes = aMutex.tryToAcquire();
             // after 1 second, the mutex has been guarded, and the child thread should be running
             bool bRes1 = myThread.isRunning();
@@ -578,7 +571,7 @@ namespace osl_Guard
             myThread.create( );
 
             /// is it still blocking?
-            ThreadHelper::thread_sleep_tenth_sec( 2 );
+            Thread::sleepMicroseconds(200000);//0,2s
             bool bRes = myThread.isRunning( );
 
             /// oh, release him.
@@ -713,7 +706,7 @@ namespace osl_ClearableGuard
             myThread.create( );
 
             /// is it blocking?
-            ThreadHelper::thread_sleep_tenth_sec( 4 );
+            Thread::sleepMicroseconds( 400000 );//0,4s
             bool bRes = myThread.isRunning( );
 
             /// use clear to release.
@@ -759,7 +752,7 @@ protected:
         ResettableMutexGuard aGuard( pMyMutex );
         // release the mutex
         aGuard.clear( );
-        ThreadHelper::thread_sleep_tenth_sec( 2 );
+        Thread::sleepMicroseconds(200000);//0,2s
     }
 };
 
@@ -815,7 +808,7 @@ namespace osl_ResettableGuard
             /// is it running? and clear done?
             bool bRes = myThread.isRunning( );
             myMutexGuard.clear( );
-            ThreadHelper::thread_sleep_tenth_sec( 1 );
+            Thread::sleepMicroseconds(100000);//0,1s
 
             /// if reset is not success, the release will return sal_False
             myMutexGuard.reset( );

@@ -38,11 +38,11 @@ namespace osl
 extern "C" inline void SAL_CALL threadFunc( void* param);
 
 /**
-   A thread abstraction.
+    A thread abstraction.
 
-   @deprecated use ::salhelper::Thread instead.  Only the static member
-   functions ::osl::Thread::getCurrentIdentifier, ::osl::Thread::wait, and
-   ::osl::Thread::yield are not deprecated.
+    @deprecated use ::salhelper::Thread instead.  Only the static member
+    functions ::osl::Thread::getCurrentIdentifier, ::osl::Thread::wait,
+    ::osl::Thread::sleepMicroseconds and ::osl::Thread::yield are not deprecated.
  */
 class Thread
 {
@@ -142,6 +142,20 @@ public:
         osl_waitThread(&Delay);
     }
 
+    /** Suspends execution of the current thread for time specified in
+        Delay. The suspension time might be longer due to scheduling
+        or other system activities.
+
+        @param Delay - the time specified should be less than 1000000 microsec
+    */
+    static void SAL_CALL sleepMicroseconds(sal_Int32 Delay)
+    {
+        TimeValue nTV;
+        nTV.Seconds = static_cast<sal_uInt32>( Delay/1000000 );
+        nTV.Nanosec = ( ( Delay%1000000 ) * 1000 );
+        osl_waitThread(&nTV);
+    }
+
     static void SAL_CALL yield()
     {
         osl_yieldThread();
@@ -228,7 +242,11 @@ private:
     oslThreadKey m_hKey;
 };
 
+
+
 } // end namespace osl
+
+
 
 #endif
 

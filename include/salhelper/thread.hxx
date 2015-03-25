@@ -60,6 +60,7 @@ public:
     // prefixed with ::osl::Thread):
     using osl::Thread::getCurrentIdentifier;
     using osl::Thread::wait;
+    using osl::Thread::sleepMicroseconds;
     using osl::Thread::yield;
 
     static inline void * operator new(std::size_t size)
