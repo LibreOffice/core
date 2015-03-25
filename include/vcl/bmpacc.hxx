@@ -221,8 +221,8 @@ public:
 
 private:
 
-    BitmapColor* mpLineColor;
-    BitmapColor* mpFillColor;
+    std::unique_ptr<BitmapColor> mpLineColor;
+    std::unique_ptr<BitmapColor> mpFillColor;
 
     BitmapWriteAccess()
     {}

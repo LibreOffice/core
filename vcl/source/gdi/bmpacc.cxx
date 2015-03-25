@@ -491,17 +491,15 @@ BitmapColor BitmapReadAccess::GetColorWithFallback( double fY, double fX, const 
     return rFallback;
 }
 
-BitmapWriteAccess::BitmapWriteAccess( Bitmap& rBitmap ) :
-            BitmapReadAccess( rBitmap, BITMAP_WRITE_ACCESS ),
-            mpLineColor     ( NULL ),
-            mpFillColor     ( NULL )
+BitmapWriteAccess::BitmapWriteAccess(Bitmap& rBitmap)
+    : BitmapReadAccess(rBitmap, BITMAP_WRITE_ACCESS)
+    , mpLineColor()
+    , mpFillColor()
 {
 }
 
 BitmapWriteAccess::~BitmapWriteAccess()
 {
-    delete mpLineColor;
-    delete mpFillColor;
 }
 
 void BitmapWriteAccess::CopyScanline( long nY, const BitmapReadAccess& rReadAcc )
