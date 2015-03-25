@@ -669,6 +669,9 @@ void SdrMarkView::SetMarkHandles()
         // correct position )
         Point aGridOff = GetGridOffset();
 
+        // There can be multiple mark views, but we're only interested in the one that has a window associated.
+        const bool bTiledRendering = GetModel()->isTiledRendering() && GetFirstOutputDevice() && GetFirstOutputDevice()->GetOutDevType() == OUTDEV_WINDOW;
+
         // check if text edit or ole is active and handles need to be suppressed. This may be the case
         // when a single object is selected
         // Using a strict return statement is okay here; no handles means *no* handles.
@@ -686,7 +689,7 @@ void SdrMarkView::SetMarkHandles()
 
                 if(pSdrTextObj && pSdrTextObj->IsInEditMode())
                 {
-                    if (GetModel()->isTiledRendering())
+                    if (bTiledRendering)
                         // Suppress handles -> empty graphic selection.
                         GetModel()->libreOfficeKitCallback(LOK_CALLBACK_GRAPHIC_SELECTION, "EMPTY");
                     return;
@@ -704,7 +707,7 @@ void SdrMarkView::SetMarkHandles()
 
         Rectangle aRect(GetMarkedObjRect());
 
-        if (GetModel()->isTiledRendering())
+        if (bTiledRendering)
         {
             Rectangle aSelection(aRect);
             OString sSelection;
