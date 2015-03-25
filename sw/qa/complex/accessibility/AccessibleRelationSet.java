@@ -169,10 +169,25 @@ public class AccessibleRelationSet {
 
         XModel aModel = UnoRuntime.queryInterface(XModel.class, xTextDoc);
 
-        XWindow xWindow = AccessibilityTools.getCurrentWindow(aModel);
-        XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
-
-        XAccessibleContext ctx = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.DOCUMENT_TEXT);
+        XAccessibleContext ctx;
+        for (int i = 0;; ++i) {
+            XWindow xWindow = AccessibilityTools.getCurrentWindow(aModel);
+            XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
+            ctx = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.DOCUMENT_TEXT);
+            if (ctx != null) {
+                break;
+            }
+            if (i == 20) { // give up after 10 sec
+                throw new RuntimeException(
+                    "Couldn't get AccessibleRole.DOCUMENT_TEXT object");
+            }
+            System.out.println("No DOCUMENT_TEXT found yet, retrying");
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
 
         para1 = ctx.getAccessibleChild(0);
         para2 = ctx.getAccessibleChild(1);
