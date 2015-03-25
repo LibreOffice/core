@@ -51,7 +51,7 @@ namespace comphelper
     }
 
 
-    Reference< XInterface > ComponentBase::getComponent() const
+    Reference< XInterface > ComponentBase::getComponent()
     {
         return NULL;
     }
