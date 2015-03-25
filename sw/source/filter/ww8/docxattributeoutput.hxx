@@ -705,7 +705,7 @@ private:
 
     void WriteSdtBlock(sal_Int32& nSdtPrToken,
                        std::unique_ptr<sax_fastparser::FastAttributeList>& pSdtPrTokenChildren,
-                       ::sax_fastparser::FastAttributeList*& pSdtPrTokenAttributes,
+                       std::unique_ptr<sax_fastparser::FastAttributeList>& pSdtPrTokenAttributes,
                        std::unique_ptr<sax_fastparser::FastAttributeList>& pSdtPrDataBindingAttrs,
                        OUString& rSdtPrAlias,
                        bool bPara);
@@ -910,7 +910,7 @@ private:
     /// members to control the existence of grabbagged SDT properties in the paragraph
     sal_Int32 m_nParagraphSdtPrToken;
     std::unique_ptr<sax_fastparser::FastAttributeList> m_pParagraphSdtPrTokenChildren;
-    ::sax_fastparser::FastAttributeList *m_pParagraphSdtPrTokenAttributes;
+    std::unique_ptr<sax_fastparser::FastAttributeList> m_pParagraphSdtPrTokenAttributes;
     std::unique_ptr<sax_fastparser::FastAttributeList> m_pParagraphSdtPrDataBindingAttrs;
     /// members to control the existence of grabbagged SDT properties in the text run
     sal_Int32 m_nRunSdtPrToken;

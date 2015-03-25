@@ -597,7 +597,7 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
 
 void DocxAttributeOutput::WriteSdtBlock( sal_Int32& nSdtPrToken,
                                          std::unique_ptr<sax_fastparser::FastAttributeList>& pSdtPrTokenChildren,
-                                         ::sax_fastparser::FastAttributeList*& pSdtPrTokenAttributes,
+                                         std::unique_ptr<sax_fastparser::FastAttributeList>& pSdtPrTokenAttributes,
                                          std::unique_ptr<sax_fastparser::FastAttributeList>& pSdtPrDataBindingAttrs,
                                          OUString& rSdtPrAlias,
                                          bool bPara )
@@ -618,9 +618,8 @@ void DocxAttributeOutput::WriteSdtBlock( sal_Int32& nSdtPrToken,
                 m_pSerializer->startElement( nSdtPrToken, FSEND );
             else
             {
-                XFastAttributeListRef xAttrList(pSdtPrTokenAttributes);
+                XFastAttributeListRef xAttrList(pSdtPrTokenAttributes.release());
                 m_pSerializer->startElement(nSdtPrToken, xAttrList);
-                pSdtPrTokenAttributes = 0;
             }
 
             if (nSdtPrToken ==  FSNS( XML_w, XML_date ) || nSdtPrToken ==  FSNS( XML_w, XML_docPartObj ) || nSdtPrToken ==  FSNS( XML_w, XML_docPartList ) || nSdtPrToken ==  FSNS( XML_w14, XML_checkbox )) {
@@ -640,9 +639,8 @@ void DocxAttributeOutput::WriteSdtBlock( sal_Int32& nSdtPrToken,
                 m_pSerializer->singleElement( nSdtPrToken, FSEND );
             else
             {
-                XFastAttributeListRef xAttrList(pSdtPrTokenAttributes);
+                XFastAttributeListRef xAttrList(pSdtPrTokenAttributes.release());
                 m_pSerializer->singleElement(nSdtPrToken, xAttrList);
-                pSdtPrTokenAttributes = 0;
             }
         }
 
@@ -1175,7 +1173,7 @@ void DocxAttributeOutput::EndRun()
     // (so on export sdt blocks are never nested ATM)
     if ( !m_bAnchorLinkedToNode && !m_bStartedCharSdt )
     {
-        ::sax_fastparser::FastAttributeList* pRunSdtPrTokenAttributes = 0;
+        std::unique_ptr<sax_fastparser::FastAttributeList> pRunSdtPrTokenAttributes;
         WriteSdtBlock( m_nRunSdtPrToken, m_pRunSdtPrTokenChildren, pRunSdtPrTokenAttributes, m_pRunSdtPrDataBindingAttrs, m_aRunSdtPrAlias, /*bPara=*/false );
     }
     else
@@ -8317,7 +8315,6 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_nParaAfterSpacing(0),
       m_setFootnote(false)
     , m_nParagraphSdtPrToken(0)
-    , m_pParagraphSdtPrTokenAttributes(NULL)
     , m_nRunSdtPrToken(0)
     , m_nStateOfFlyFrame( FLY_NOT_PROCESSED )
     , m_bParagraphSdtHasId(false)
@@ -8327,7 +8324,6 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
 DocxAttributeOutput::~DocxAttributeOutput()
 {
     delete m_pTableWrt, m_pTableWrt = NULL;
-    delete m_pParagraphSdtPrTokenAttributes; m_pParagraphSdtPrTokenAttributes = NULL;
 }
 
 DocxExport& DocxAttributeOutput::GetExport()
