@@ -645,8 +645,8 @@ ImplGroupData* Config::ImplGetGroup() const
 
         // Always inherit group names and upate cache members
         pGroup->maGroupName             = maGroupName;
-        ((Config*)this)->mnDataUpdateId = mpData->mnDataUpdateId;
-        ((Config*)this)->mpActGroup     = pGroup;
+        const_cast<Config*>(this)->mnDataUpdateId = mpData->mnDataUpdateId;
+        const_cast<Config*>(this)->mpActGroup     = pGroup;
     }
 
     return mpActGroup;

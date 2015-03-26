@@ -402,7 +402,7 @@ int INetMessageOStream::PutMsgLine(const sal_Char* pData, sal_uIntPtr nSize)
         sal_Size nDocSiz = pTargetMsg->GetDocumentSize();
         sal_Size nWrite  = 0;
 
-        pLB->FillAppend((sal_Char*)pData, nSize, &nWrite);
+        pLB->FillAppend(pData, nSize, &nWrite);
         pTargetMsg->SetDocumentSize(nDocSiz + nWrite);
 
         if (nWrite < nSize) return INETSTREAM_STATUS_ERROR;
