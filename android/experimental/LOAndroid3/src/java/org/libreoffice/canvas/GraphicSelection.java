@@ -64,6 +64,7 @@ public class GraphicSelection implements CanvasElement {
         mHandles[7].reposition(scaledRectangle.right, scaledRectangle.bottom);
     }
 
+    @Override
     public boolean contains(float x, float y) {
         // Check if handle was hit
         for (GraphicSelectionHandle handle : mHandles) {

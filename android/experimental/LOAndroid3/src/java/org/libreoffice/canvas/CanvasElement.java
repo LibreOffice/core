@@ -21,5 +21,12 @@ public interface CanvasElement {
      * @param canvas - the canvas
      */
     void draw(Canvas canvas);
+
+    /**
+     * Hit test - returns true if the object has been hit
+     * @param x - x coordinate of the
+     * @param y - y coordinate of the
+     */
+    boolean contains(float x, float y);
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

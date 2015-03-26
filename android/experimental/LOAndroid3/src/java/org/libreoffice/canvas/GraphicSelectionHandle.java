@@ -73,6 +73,7 @@ public class GraphicSelectionHandle implements CanvasElement {
         mHitRect.bottom = mPosition.y + mRadius * 1.75f;
     }
 
+    @Override
     public boolean contains(float x, float y) {
         return mHitRect.contains(x, y);
     }
