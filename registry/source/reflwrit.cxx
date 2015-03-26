@@ -90,7 +90,7 @@ sal_uInt32 readString(const sal_uInt8* buffer, sal_Unicode* v, sal_uInt32 maxSiz
 {
     sal_uInt32 len = UINT16StringLen(buffer) + 1;
     sal_uInt32 i;
-    sal_uInt8* buff = (sal_uInt8*)buffer;
+    sal_uInt8* buff = const_cast<sal_uInt8*>(buffer);
 
     if(len > maxSize / 2)
     {
@@ -108,7 +108,7 @@ sal_uInt32 readString(const sal_uInt8* buffer, sal_Unicode* v, sal_uInt32 maxSiz
 
     v[len - 1] = L'\0';
 
-    return (buff - ((sal_uInt8*)buffer));
+    return (buff - buffer);
 }
 
 sal_uInt32 writeFloat(sal_uInt8* buffer, float v)
@@ -364,7 +364,7 @@ FieldEntry::~FieldEntry()
         (m_constValue.aString != NULL_WSTRING)
        )
     {
-        delete[] (sal_Unicode*)m_constValue.aString;
+        delete[] m_constValue.aString;
     }
 }
 
@@ -394,7 +394,7 @@ void FieldEntry::setData(const OString&    name,
         (m_constValue.aString != NULL_WSTRING)
        )
     {
-        delete[] (sal_Unicode*)m_constValue.aString;
+        delete[] m_constValue.aString;
     }
 
     m_access = access;

@@ -171,7 +171,7 @@ BlopObject::~BlopObject()
 {
     if (m_isCopied)
     {
-        delete[] const_cast<sal_uInt8*>(m_pBuffer);
+        delete[] m_pBuffer;
     }
 }
 
