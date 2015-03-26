@@ -181,7 +181,7 @@ bool SvxEditSourceHelper::GetAttributeRun( sal_Int32& nStartIndex, sal_Int32& nE
         //need to find closest index in front of nIndex in the previous paragraphs
         if ( aStartPos.nIndex == 0 )
         {
-            SfxItemSet aCrrntSet = rEE.GetAttribs( nPara, 0, 1, GETATTRIBS_CHARATTRIBS );
+            SfxItemSet aCrrntSet = rEE.GetAttribs( nPara, 0, 1, GetAttribsFlags::CHARATTRIBS );
             for ( sal_Int32 nParaIdx = nPara-1; nParaIdx >= 0; nParaIdx-- )
             {
                 sal_uInt32 nLen = rEE.GetTextLen(nParaIdx);
@@ -189,7 +189,7 @@ bool SvxEditSourceHelper::GetAttributeRun( sal_Int32& nStartIndex, sal_Int32& nE
                 {
                     sal_Int32 nStartIdx, nEndIdx;
                     GetAttributeRun( nStartIdx, nEndIdx, rEE, nParaIdx, nLen, false );
-                    SfxItemSet aSet = rEE.GetAttribs( nParaIdx, nLen-1, nLen, GETATTRIBS_CHARATTRIBS );
+                    SfxItemSet aSet = rEE.GetAttribs( nParaIdx, nLen-1, nLen, GetAttribsFlags::CHARATTRIBS );
                     if ( aSet == aCrrntSet )
                     {
                         aStartPos.nPara = nParaIdx;
@@ -205,7 +205,7 @@ bool SvxEditSourceHelper::GetAttributeRun( sal_Int32& nStartIndex, sal_Int32& nE
         //need find closest index behind nIndex in the following paragrphs
         if ( aEndPos.nIndex == nCrrntParaLen )
         {
-            SfxItemSet aCrrntSet = rEE.GetAttribs( nPara, nCrrntParaLen-1, nCrrntParaLen, GETATTRIBS_CHARATTRIBS );
+            SfxItemSet aCrrntSet = rEE.GetAttribs( nPara, nCrrntParaLen-1, nCrrntParaLen, GetAttribsFlags::CHARATTRIBS );
             for ( sal_Int32 nParaIdx = nPara+1; nParaIdx < nParaCount; nParaIdx++ )
             {
                 sal_Int32 nLen = rEE.GetTextLen( nParaIdx );
@@ -213,7 +213,7 @@ bool SvxEditSourceHelper::GetAttributeRun( sal_Int32& nStartIndex, sal_Int32& nE
                 {
                     sal_Int32 nStartIdx, nEndIdx;
                     GetAttributeRun( nStartIdx, nEndIdx, rEE, nParaIdx, 0, false );
-                    SfxItemSet aSet = rEE.GetAttribs( nParaIdx, 0, 1, GETATTRIBS_CHARATTRIBS );
+                    SfxItemSet aSet = rEE.GetAttribs( nParaIdx, 0, 1, GetAttribsFlags::CHARATTRIBS );
                     if ( aSet == aCrrntSet )
                     {
                         aEndPos.nPara = nParaIdx;

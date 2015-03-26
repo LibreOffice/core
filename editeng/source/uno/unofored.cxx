@@ -66,17 +66,17 @@ SfxItemSet SvxEditEngineForwarder::GetAttribs( const ESelection& rSel, EditEngin
 {
     if( rSel.nStartPara == rSel.nEndPara )
     {
-        sal_uInt8 nFlags = 0;
+        GetAttribsFlags nFlags = GetAttribsFlags::NONE;
         switch( nOnlyHardAttrib )
         {
         case EditEngineAttribs_All:
-            nFlags = GETATTRIBS_ALL;
+            nFlags = GetAttribsFlags::ALL;
             break;
         case EditEngineAttribs_HardAndPara:
-            nFlags = GETATTRIBS_PARAATTRIBS|GETATTRIBS_CHARATTRIBS;
+            nFlags = GetAttribsFlags::PARAATTRIBS|GetAttribsFlags::CHARATTRIBS;
             break;
         case EditEngineAttribs_OnlyHard:
-            nFlags = GETATTRIBS_CHARATTRIBS;
+            nFlags = GetAttribsFlags::CHARATTRIBS;
             break;
         default:
             OSL_FAIL("unknown flags for SvxOutlinerForwarder::GetAttribs");

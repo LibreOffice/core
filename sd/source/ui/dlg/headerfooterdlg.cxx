@@ -642,7 +642,7 @@ void HeaderFooterTabPage::GetOrSetDateTimeLanguage( LanguageType &rLanguage, boo
             {
                 if( bSet )
                 {
-                    SfxItemSet aSet( pEdit->GetAttribs( aFieldInfo.aPosition.nPara, aFieldInfo.aPosition.nIndex, aFieldInfo.aPosition.nIndex+1, GETATTRIBS_CHARATTRIBS ) );
+                    SfxItemSet aSet( pEdit->GetAttribs( aFieldInfo.aPosition.nPara, aFieldInfo.aPosition.nIndex, aFieldInfo.aPosition.nIndex+1, GetAttribsFlags::CHARATTRIBS ) );
 
                     SvxLanguageItem aItem( rLanguage, EE_CHAR_LANGUAGE );
                     aSet.Put( aItem );

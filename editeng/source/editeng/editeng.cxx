@@ -1728,7 +1728,7 @@ SfxItemSet EditEngine::GetAttribs( const ESelection& rSel, EditEngineAttribs nOn
     return pImpEditEngine->GetAttribs( aSel, nOnlyHardAttrib );
 }
 
-SfxItemSet EditEngine::GetAttribs( sal_Int32 nPara, sal_Int32 nStart, sal_Int32 nEnd, sal_uInt8 nFlags ) const
+SfxItemSet EditEngine::GetAttribs( sal_Int32 nPara, sal_Int32 nStart, sal_Int32 nEnd, GetAttribsFlags nFlags ) const
 {
     return pImpEditEngine->GetAttribs( nPara, nStart, nEnd, nFlags );
 }

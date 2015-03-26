@@ -36,6 +36,7 @@
 #include <tools/rtti.hxx>
 
 #include <editeng/eedata.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 namespace com { namespace sun { namespace star {
   namespace linguistic2 {
@@ -122,10 +123,18 @@ enum EditEngineAttribs {
 /** values for:
        SfxItemSet  GetAttribs( sal_Int32 nPara, sal_Int32 nStart, sal_Int32 nEnd, sal_uInt8 nFlags = 0xFF ) const;
 */
-#define GETATTRIBS_STYLESHEET   (sal_uInt8)0x01
-#define GETATTRIBS_PARAATTRIBS  (sal_uInt8)0x02
-#define GETATTRIBS_CHARATTRIBS  (sal_uInt8)0x04
-#define GETATTRIBS_ALL          (sal_uInt8)0xFF
+enum class GetAttribsFlags
+{
+    NONE         = 0x00,
+    STYLESHEET   = 0x01,
+    PARAATTRIBS  = 0x02,
+    CHARATTRIBS  = 0x04,
+    ALL          = 0x07,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<GetAttribsFlags> : is_typed_flags<GetAttribsFlags, 0x07> {};
+}
 
 class SdrObject;
 class EDITENG_DLLPUBLIC EditEngine
@@ -303,7 +312,7 @@ public:
 
     void            GetCharAttribs( sal_Int32 nPara, std::vector<EECharAttrib>& rLst ) const;
 
-    SfxItemSet      GetAttribs( sal_Int32 nPara, sal_Int32 nStart, sal_Int32 nEnd, sal_uInt8 nFlags = 0xFF ) const;
+    SfxItemSet      GetAttribs( sal_Int32 nPara, sal_Int32 nStart, sal_Int32 nEnd, GetAttribsFlags nFlags = GetAttribsFlags::ALL ) const;
     SfxItemSet      GetAttribs( const ESelection& rSel, EditEngineAttribs nOnlyHardAttrib = EditEngineAttribs_All );
 
     bool            HasParaAttrib( sal_Int32 nPara, sal_uInt16 nWhich ) const;

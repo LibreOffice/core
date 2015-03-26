@@ -391,7 +391,7 @@ SfxItemSet ImpEditEngine::GetAttribs( EditSelection aSel, EditEngineAttribs nOnl
 }
 
 
-SfxItemSet ImpEditEngine::GetAttribs( sal_Int32 nPara, sal_Int32 nStart, sal_Int32 nEnd, sal_uInt8 nFlags ) const
+SfxItemSet ImpEditEngine::GetAttribs( sal_Int32 nPara, sal_Int32 nStart, sal_Int32 nEnd, GetAttribsFlags nFlags ) const
 {
     // Optimized function with less Puts(), which cause unnecessary cloning from default items.
     // If this works, change GetAttribs( EditSelection ) to use this for each paragraph and merge the results!
@@ -413,15 +413,15 @@ SfxItemSet ImpEditEngine::GetAttribs( sal_Int32 nPara, sal_Int32 nStart, sal_Int
 
         // StyleSheet / Parattribs...
 
-        if ( pNode->GetStyleSheet() && ( nFlags & GETATTRIBS_STYLESHEET ) )
+        if ( pNode->GetStyleSheet() && ( nFlags & GetAttribsFlags::STYLESHEET ) )
             aAttribs.Set(pNode->GetStyleSheet()->GetItemSet(), true);
 
-        if ( nFlags & GETATTRIBS_PARAATTRIBS )
+        if ( nFlags & GetAttribsFlags::PARAATTRIBS )
             aAttribs.Put( pNode->GetContentAttribs().GetItems() );
 
         // CharAttribs...
 
-        if ( nFlags & GETATTRIBS_CHARATTRIBS )
+        if ( nFlags & GetAttribsFlags::CHARATTRIBS )
         {
             // Make testing easier...
             const SfxItemPool& rPool = GetEditDoc().GetItemPool();
@@ -461,7 +461,7 @@ SfxItemSet ImpEditEngine::GetAttribs( sal_Int32 nPara, sal_Int32 nStart, sal_Int
                         {
                             // OptimizeRagnge() assures that not the same attr can follow for full coverage
                             // only partial, check with current, when using para/styhe, otherwise invalid.
-                            if ( !( nFlags & (GETATTRIBS_PARAATTRIBS|GETATTRIBS_STYLESHEET) ) ||
+                            if ( !( nFlags & (GetAttribsFlags::PARAATTRIBS|GetAttribsFlags::STYLESHEET) ) ||
                                 ( *rAttr.GetItem() != aAttribs.Get( rAttr.Which() ) ) )
                             {
                                 aAttribs.InvalidateItem( rAttr.Which() );
