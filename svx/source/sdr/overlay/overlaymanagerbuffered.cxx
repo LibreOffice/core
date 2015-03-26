@@ -146,34 +146,6 @@ namespace sdr
                     maBufferDevice);
             }
 
-            //Region aRegionPixel(rRegionPixel);
-            //RegionHandle aRegionHandle(aRegionPixel.BeginEnumRects());
-            //Rectangle aRegionRectanglePixel;
-
-            //while(aRegionPixel.GetEnumRects(aRegionHandle, aRegionRectanglePixel))
-            //{
-#ifdef DBG_U//TIL
-            //  // #i72754# possible graphical region test only with non-pro
-            //  static bool bDoPaintForVisualControl(false);
-            //  if(bDoPaintForVisualControl)
-            //  {
-            //      getOutputDevice().SetLineColor(COL_LIGHTGREEN);
-            //      getOutputDevice().SetFillColor();
-            //      getOutputDevice().DrawRect(aRegionRectanglePixel);
-            //  }
-#endif
-            //  // restore the area
-            //  const Point aTopLeft(aRegionRectanglePixel.TopLeft());
-            //  const Size aSize(aRegionRectanglePixel.GetSize());
-
-            //  getOutputDevice().DrawOutDev(
-            //      aTopLeft, aSize, // destination
-            //      aTopLeft, aSize, // source
-            //      maBufferDevice);
-            //}
-
-            //aRegionPixel.EndEnumRects(aRegionHandle);
-
             // restore MapModes
             getOutputDevice().EnableMapMode(bMapModeWasEnabledDest);
             ((OverlayManagerBuffered*)this)->maBufferDevice.EnableMapMode(bMapModeWasEnabledSource);
@@ -228,24 +200,6 @@ namespace sdr
                     aTopLeft, aSize, // source
                     rSource);
             }
-
-            //RegionHandle aRegionHandle(aRegion.BeginEnumRects());
-            //Rectangle aRegionRectanglePixel;
-
-            //while(aRegion.GetEnumRects(aRegionHandle, aRegionRectanglePixel))
-            //{
-            //  // for each rectangle, save the area
-            //  Point aTopLeft(aRegionRectanglePixel.TopLeft());
-            //  Size aSize(aRegionRectanglePixel.GetSize());
-
-            //  maBufferDevice.DrawOutDev(
-            //      aTopLeft, aSize, // destination
-            //      aTopLeft, aSize, // source
-            //      rSource);
-
-            //}
-
-            //aRegion.EndEnumRects(aRegionHandle);
 
             // restore MapModes
             rSource.EnableMapMode(bMapModeWasEnabledDest);
