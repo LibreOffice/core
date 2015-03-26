@@ -384,11 +384,11 @@ Reference< XNameAccess >  BibliographyLoader::GetDataColumns() const
             xRowSet = NULL;
         }
         else
-            ((BibliographyLoader*)this)->m_xCursor = xRowSet.get();
+            const_cast<BibliographyLoader*>(this)->m_xCursor = xRowSet.get();
 
         Reference< sdbcx::XColumnsSupplier >  xSupplyCols(m_xCursor, UNO_QUERY);
         if (xSupplyCols.is())
-            ((BibliographyLoader*)this)->m_xColumns = xSupplyCols->getColumns();
+            const_cast<BibliographyLoader*>(this)->m_xColumns = xSupplyCols->getColumns();
     }
 
     return m_xColumns;

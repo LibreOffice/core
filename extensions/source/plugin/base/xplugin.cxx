@@ -559,8 +559,8 @@ void XPlugin_Impl::loadPlugin()
     }
 
     getPluginComm()->
-        NPP_New( (char*)OUStringToOString( m_aDescription.Mimetype,
-                                                  m_aEncoding).getStr(),
+        NPP_New( const_cast<char*>(OUStringToOString( m_aDescription.Mimetype,
+                                                  m_aEncoding).getStr()),
                  &getNPPInstance(),
                  m_aPluginMode == PluginMode::FULL ? NP_FULL : NP_EMBED,
                  ::sal::static_int_cast< int16_t, int >( m_nArgs ),
@@ -767,7 +767,7 @@ sal_Bool XPlugin_Impl::provideNewStream(const OUString& mimetype,
 
 #endif
     if( ! m_pPluginComm->NPP_NewStream( &m_aInstance,
-                                        (char*)aMIME.getStr(),
+                                        const_cast<char*>(aMIME.getStr()),
                                         &pStream->getStream(), isfile,
                                         &stype ) )
     {

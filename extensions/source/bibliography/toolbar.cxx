@@ -306,7 +306,7 @@ void BibToolBar::Select()
     else
     {
         Sequence<PropertyValue> aPropVal(2);
-        PropertyValue* pPropertyVal = (PropertyValue*)aPropVal.getConstArray();
+        PropertyValue* pPropertyVal = const_cast<PropertyValue*>(aPropVal.getConstArray());
         pPropertyVal[0].Name="QueryText";
         OUString aSelection = aEdQuery.GetText();
         pPropertyVal[0].Value <<= aSelection;
@@ -434,7 +434,7 @@ bool BibToolBar::PreNotify( NotifyEvent& rNEvt )
         if(nKey == KEY_RETURN)
         {
             Sequence<PropertyValue> aPropVal(2);
-            PropertyValue* pPropertyVal = (PropertyValue*)aPropVal.getConstArray();
+            PropertyValue* pPropertyVal = const_cast<PropertyValue*>(aPropVal.getConstArray());
             pPropertyVal[0].Name = "QueryText";
             OUString aSelection = aEdQuery.GetText();
             pPropertyVal[0].Value <<= aSelection;
@@ -460,7 +460,7 @@ IMPL_LINK( BibToolBar, SelHdl, ListBox*, /*pLb*/ )
 IMPL_LINK( BibToolBar, SendSelHdl, Timer*,/*pT*/)
 {
     Sequence<PropertyValue> aPropVal(1);
-    PropertyValue* pPropertyVal = (PropertyValue*)aPropVal.getConstArray();
+    PropertyValue* pPropertyVal = const_cast<PropertyValue*>(aPropVal.getConstArray());
     pPropertyVal[0].Name = "DataSourceName";
     OUString aEntry( MnemonicGenerator::EraseAllMnemonicChars( aLBSource.GetSelectEntry() ) );
     OUString aSelection = aEntry;
@@ -488,7 +488,7 @@ IMPL_LINK( BibToolBar, MenuHdl, ToolBox*, /*pToolbox*/)
             nSelMenuItem=nId;
             aQueryField = MnemonicGenerator::EraseAllMnemonicChars( aPopupMenu.GetItemText(nId) );
             Sequence<PropertyValue> aPropVal(2);
-            PropertyValue* pPropertyVal = (PropertyValue*)aPropVal.getConstArray();
+            PropertyValue* pPropertyVal = const_cast<PropertyValue*>(aPropVal.getConstArray());
             pPropertyVal[0].Name = "QueryText";
             OUString aSelection = aEdQuery.GetText();
             pPropertyVal[0].Value <<= aSelection;

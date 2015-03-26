@@ -276,8 +276,7 @@ void Sane::ReloadOptions()
     mppOptions = new const SANE_Option_Descriptor*[ mnOptions ];
     mppOptions[ 0 ] = pZero;
     for( int i = 1; i < mnOptions; i++ )
-        mppOptions[ i ] =  (SANE_Option_Descriptor*)
-            p_get_option_descriptor( maHandle, i );
+        mppOptions[ i ] = p_get_option_descriptor( maHandle, i );
 
     CheckConsistency( NULL, true );
 
@@ -312,7 +311,7 @@ bool Sane::Open( int n )
     if( n >= 0 && n < nDevices )
     {
         mnDevice = n;
-        return Open( (char*)ppDevices[n]->name );
+        return Open( ppDevices[n]->name );
     }
     return false;
 }

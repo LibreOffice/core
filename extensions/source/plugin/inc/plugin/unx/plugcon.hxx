@@ -203,7 +203,8 @@ enum CommandAtoms
 
 const char* GetCommandName( CommandAtoms );
 
-#define POST_STRING( x ) x ? x : const_cast<char*>(""), x ? strlen(x) : 1
+#define POST_NONCONST_STRING( x ) x ? x : const_cast<char*>(""), x ? strlen(x) : 1
+#define POST_STRING( x ) x ? x : "", x ? strlen(x) : 1
 
 #endif // INCLUDED_EXTENSIONS_SOURCE_PLUGIN_INC_PLUGIN_UNX_PLUGCON_HXX
 

@@ -127,9 +127,9 @@ public:
         { return ppDevices[n]->type ? OUString( ppDevices[n]->type, strlen(ppDevices[n]->type), osl_getThreadTextEncoding() ) : OUString(); }
 
     OUString        GetOptionName( int n )
-        { return mppOptions[n]->name ? OUString( (char*)mppOptions[n]->name, strlen((char*)mppOptions[n]->name), osl_getThreadTextEncoding() ) : OUString(); }
+        { return mppOptions[n]->name ? OUString( mppOptions[n]->name, strlen(mppOptions[n]->name), osl_getThreadTextEncoding() ) : OUString(); }
     OUString        GetOptionTitle( int n )
-        { return mppOptions[n]->title ? OUString( (char*)mppOptions[n]->title, strlen((char*)mppOptions[n]->title), osl_getThreadTextEncoding() ) : OUString(); }
+        { return mppOptions[n]->title ? OUString( mppOptions[n]->title, strlen(mppOptions[n]->title), osl_getThreadTextEncoding() ) : OUString(); }
     SANE_Value_Type GetOptionType( int n )
         { return mppOptions[n]->type; }
     SANE_Unit       GetOptionUnit( int n )
@@ -140,7 +140,7 @@ public:
     SANE_Constraint_Type GetOptionConstraintType( int n )
         { return mppOptions[n]->constraint_type; }
     const char**    GetStringConstraint( int n )
-        { return (const char**)mppOptions[n]->constraint.string_list; }
+        { return const_cast<const char**>(mppOptions[n]->constraint.string_list); }
     int             GetRange( int, double*& );
 
     inline int      GetOptionElements( int n );

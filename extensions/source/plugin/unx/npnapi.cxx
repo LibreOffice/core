@@ -886,7 +886,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
                         osl_getAsciiFunctionSymbol( pPluginLib, "NPP_GetMIMEDescription" ));
                 char* pMIME = pNPP_GetMIMEDescription();
                 Respond( pMessage->m_nID,
-                         POST_STRING( pMIME ),
+                         POST_NONCONST_STRING( pMIME ),
                          NULL );
             }
             break;

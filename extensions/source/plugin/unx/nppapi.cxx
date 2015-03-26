@@ -310,7 +310,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
                 NPP instance        = m_aInstances[ nInstance ]->instance;
                 const char* pAnswer = NPN_UserAgent( instance );
                 Respond( pMessage->m_nID,
-                         (char*)pAnswer, strlen( pAnswer ),
+                         const_cast<char*>(pAnswer), strlen( pAnswer ),
                          NULL );
             }
             break;
@@ -607,7 +607,7 @@ char* UnxPluginComm::NPP_GetMIMEDescription()
         Transact( eNPP_GetMIMEDescription,
                   NULL );
     if( ! pMes )
-        return (char*)"";
+        return const_cast<char*>("");
 
     if( pDesc )
         delete [] pDesc;
