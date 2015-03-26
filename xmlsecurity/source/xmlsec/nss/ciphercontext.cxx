@@ -157,7 +157,7 @@ uno::Sequence< ::sal_Int8 > SAL_CALL OCipherContext::convertWithCipherContext( c
     {
         int nResultLen = 0;
         aResult.realloc( aToConvert.getLength() + m_nBlockSize );
-        if ( PK11_CipherOp( m_pContext, reinterpret_cast< unsigned char* >( aResult.getArray() ), &nResultLen, aResult.getLength(), const_cast< unsigned char* >( reinterpret_cast< const unsigned char* >( aToConvert.getConstArray() ) ), aToConvert.getLength() ) != SECSuccess )
+        if ( PK11_CipherOp( m_pContext, reinterpret_cast< unsigned char* >( aResult.getArray() ), &nResultLen, aResult.getLength(), reinterpret_cast< const unsigned char* >( aToConvert.getConstArray() ), aToConvert.getLength() ) != SECSuccess )
         {
             m_bBroken = true;
             Dispose();
@@ -221,7 +221,7 @@ uno::Sequence< ::sal_Int8 > SAL_CALL OCipherContext::finalizeCipherContextAndDis
     {
         int nPrefResLen = 0;
         aResult.realloc( m_aLastBlock.getLength() + m_nBlockSize );
-        if ( PK11_CipherOp( m_pContext, reinterpret_cast< unsigned char* >( aResult.getArray() ), &nPrefResLen, aResult.getLength(), const_cast< unsigned char* >( reinterpret_cast< const unsigned char* >( m_aLastBlock.getConstArray() ) ), m_aLastBlock.getLength() ) != SECSuccess )
+        if ( PK11_CipherOp( m_pContext, reinterpret_cast< unsigned char* >( aResult.getArray() ), &nPrefResLen, aResult.getLength(), reinterpret_cast< const unsigned char* >( m_aLastBlock.getConstArray() ), m_aLastBlock.getLength() ) != SECSuccess )
         {
             m_bBroken = true;
             Dispose();

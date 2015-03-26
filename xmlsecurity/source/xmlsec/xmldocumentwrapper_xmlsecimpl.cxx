@@ -271,12 +271,12 @@ void XMLDocumentWrapper_XmlSecImpl::sendStartElement(
     if (xHandler.is())
     {
         xHandler->startElement(
-            OUString(C2U ( ((sal_Char*)(sNodeName.getStr())) )),
+            OUString(C2U ( sNodeName.getStr() )),
             xAttrList);
     }
 
     xHandler2->startElement(
-        OUString(C2U ( ((sal_Char*)(sNodeName.getStr())) )),
+        OUString(C2U ( sNodeName.getStr() )),
         xAttrList);
 }
 
@@ -318,10 +318,10 @@ void XMLDocumentWrapper_XmlSecImpl::sendEndElement(
 
     if (xHandler.is())
     {
-        xHandler->endElement(OUString(C2U ( ((sal_Char*)(sNodeName.getStr())) )));
+        xHandler->endElement(OUString(C2U ( sNodeName.getStr() )));
     }
 
-    xHandler2->endElement(OUString(C2U ( ((sal_Char*)(sNodeName.getStr())) )));
+    xHandler2->endElement(OUString(C2U ( sNodeName.getStr() )));
 }
 
 void XMLDocumentWrapper_XmlSecImpl::sendNode(

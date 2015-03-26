@@ -273,7 +273,7 @@ void SAXHelper::startElement(
 
     if( fullName != NULL )
     {
-        xmlFree( ( xmlChar* )fullName ) ;
+        xmlFree( const_cast<xmlChar*>(fullName) ) ;
         fullName = NULL ;
     }
 
@@ -281,7 +281,7 @@ void SAXHelper::startElement(
     {
         for( int i = 0 ; attrs[i] != NULL ; ++i )
         {
-            xmlFree( ( xmlChar* )attrs[i] ) ;
+            xmlFree( const_cast<xmlChar*>(attrs[i]) ) ;
             attrs[i] = NULL ;
         }
 
@@ -322,7 +322,7 @@ void SAXHelper::characters( const OUString& aChars )
 
     if( chars != NULL )
     {
-        xmlFree( ( xmlChar* )chars ) ;
+        xmlFree( const_cast<xmlChar*>(chars) ) ;
     }
 }
 
@@ -340,7 +340,7 @@ void SAXHelper::ignorableWhitespace( const OUString& aWhitespaces )
 
     if( chars != NULL )
     {
-        xmlFree( ( xmlChar* )chars ) ;
+        xmlFree( const_cast<xmlChar*>(chars) ) ;
     }
 }
 

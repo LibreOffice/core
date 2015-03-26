@@ -242,7 +242,7 @@ ElementMark* SAXEventKeeperImpl::findElementMarkBuffer(sal_Int32 nId) const
     {
         if ( nId == (*ii)->getBufferId())
         {
-            pElementMark = (ElementMark*)*ii;
+            pElementMark = const_cast<ElementMark*>(*ii);
             break;
         }
     }
@@ -365,7 +365,7 @@ OUString SAXEventKeeperImpl::printBufferNode(
     rc += OUString( " " );
     rc += m_xXMLDocument->getNodeName(pBufferNode->getXMLElement());
 
-    BufferNode* pParent = (BufferNode*)pBufferNode->getParent();
+    BufferNode* pParent = const_cast<BufferNode*>(pBufferNode->getParent());
     if (pParent != NULL)
     {
         rc += OUString( "[" );
@@ -392,7 +392,7 @@ OUString SAXEventKeeperImpl::printBufferNode(
     std::vector< const BufferNode* >::const_iterator jj = vChildren->begin();
     for( ; jj != vChildren->end(); ++jj )
     {
-        rc += printBufferNode((BufferNode *)*jj, nIndent+4);
+        rc += printBufferNode(const_cast<BufferNode *>(*jj), nIndent+4);
     }
 
     delete vChildren;
@@ -485,7 +485,7 @@ void SAXEventKeeperImpl::smashBufferNode(
 {
     if (!pBufferNode->hasAnything())
     {
-        BufferNode* pParent = (BufferNode*)pBufferNode->getParent();
+        BufferNode* pParent = const_cast<BufferNode*>(pBufferNode->getParent());
 
             /*
              * delete the XML data
@@ -584,7 +584,7 @@ void SAXEventKeeperImpl::smashBufferNode(
         std::vector< const BufferNode * >::const_iterator ii = vChildren->begin();
         for( ; ii != vChildren->end(); ++ii )
         {
-            ((BufferNode *)(*ii))->setParent(pParent);
+            const_cast<BufferNode *>(*ii)->setParent(pParent);
             pParent->addChild(*ii, nIndex);
             nIndex++;
         }
@@ -631,7 +631,7 @@ BufferNode* SAXEventKeeperImpl::findNextBlockingBufferNode(
     {
         pNext = pStartBufferNode;
 
-        while (NULL != (pNext = (BufferNode*)pNext->getNextNodeByTreeOrder()))
+        while (NULL != (pNext = const_cast<BufferNode*>(pNext->getNextNodeByTreeOrder())))
         {
             if (pNext->getBlocker() != NULL)
             {
@@ -674,7 +674,7 @@ void SAXEventKeeperImpl::diffuse(BufferNode* pBufferNode) const
     while(pParent->isAllReceived())
     {
         pParent->elementCollectorNotify();
-        pParent = (BufferNode*)pParent->getParent();
+        pParent = const_cast<BufferNode*>(pParent->getParent());
     }
 }
 
@@ -1267,7 +1267,7 @@ void SAL_CALL SAXEventKeeperImpl::endElement( const OUString& aName )
            if (bIsCurrent && (m_pCurrentBufferNode != m_pRootBufferNode))
         {
             BufferNode* pOldCurrentBufferNode = m_pCurrentBufferNode;
-            m_pCurrentBufferNode = (BufferNode*)m_pCurrentBufferNode->getParent();
+            m_pCurrentBufferNode = const_cast<BufferNode*>(m_pCurrentBufferNode->getParent());
 
             pOldCurrentBufferNode->setReceivedAll();
 

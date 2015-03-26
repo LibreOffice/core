@@ -437,7 +437,7 @@ Reference< XCertificate > SecurityEnvironment_NssImpl :: getCertificate( const O
 
         // Create cert info from issue and serial
         OString ostr = OUStringToOString( issuerName , RTL_TEXTENCODING_UTF8 ) ;
-        chIssuer = PL_strndup( ( char* )ostr.getStr(), ( int )ostr.getLength() ) ;
+        chIssuer = PL_strndup( ostr.getStr(), ( int )ostr.getLength() ) ;
         nmIssuer = CERT_AsciiToName( chIssuer ) ;
         if( nmIssuer == NULL ) {
             PL_strfree( chIssuer ) ;
@@ -508,7 +508,7 @@ Sequence< Reference < XCertificate > > SecurityEnvironment_NssImpl :: buildCerti
         //Get the system clock time
         timeboundary = PR_Now() ;
 
-        certChain = CERT_GetCertChainFromCert( ( CERTCertificate* )cert, timeboundary, certUsageAnyCA ) ;
+        certChain = CERT_GetCertChainFromCert( const_cast<CERTCertificate*>(cert), timeboundary, certUsageAnyCA ) ;
     } else {
         certChain = NULL ;
     }
@@ -844,13 +844,13 @@ sal_Int32 SecurityEnvironment_NssImpl::getCertificateCharacters(
 
     if (cert->slot != NULL)
     {
-        priKey = PK11_FindPrivateKeyFromCert( cert->slot, ( CERTCertificate* )cert, NULL ) ;
+        priKey = PK11_FindPrivateKeyFromCert( cert->slot, const_cast<CERTCertificate*>(cert), NULL ) ;
     }
     if(priKey == NULL)
     {
         for (CIT_SLOTS is = m_Slots.begin(); is != m_Slots.end(); is++)
         {
-            priKey = PK11_FindPrivateKeyFromCert(*is, (CERTCertificate*)cert, NULL);
+            priKey = PK11_FindPrivateKeyFromCert(*is, const_cast<CERTCertificate*>(cert), NULL);
             if (priKey)
                 break;
         }

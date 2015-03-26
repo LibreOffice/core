@@ -61,7 +61,7 @@ ElementMark::ElementMark(sal_Int32 nSecurityId, sal_Int32 nBufferId)
 
 void ElementMark::setBufferNode(const BufferNode* pBufferNode)
 {
-    m_pBufferNode = (BufferNode*)pBufferNode;
+    m_pBufferNode = const_cast<BufferNode*>(pBufferNode);
 }
 
 
