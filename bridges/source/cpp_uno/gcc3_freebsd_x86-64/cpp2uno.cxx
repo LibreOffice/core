@@ -24,9 +24,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_bridges.hxx"
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <hash_map>
+#include <typeinfo>
+#include <exception>
+#include <cstddef>
+#include <cxxabi.h>
 
 #include <rtl/alloc.h>
 #include <osl/mutex.hxx>
