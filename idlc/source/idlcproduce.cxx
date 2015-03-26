@@ -69,7 +69,7 @@ static bool checkOutputPath(const OString& completeName)
         if ( !buffer.isEmpty() && nIndex != -1 )
         {
 #if defined(SAL_UNX)
-            if (mkdir((char*)buffer.getStr(), 0777) == -1)
+            if (mkdir(buffer.getStr(), 0777) == -1)
 #else
             if (mkdir((char*)buffer.getStr()) == -1)
 #endif
@@ -103,7 +103,7 @@ static bool cleanPath()
 //#ifdef SAL_UNX
 //          if (rmdir((char*)(*iter).getStr(), 0777) == -1)
 //#else
-            if (rmdir((char*)(*iter).getStr()) == -1)
+            if (rmdir((*iter).getStr()) == -1)
 //#endif
             {
                 fprintf(stderr, "%s: cannot remove directory '%s'\n",
