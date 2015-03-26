@@ -40,6 +40,7 @@
 #include <unotools/transliterationwrapper.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/logfile.hxx>
+#include <rtl/random.h>
 #include <unicode/uchar.h>
 
 #include "interpre.hxx"
@@ -70,9 +71,6 @@
 #include "externalrefmgr.hxx"
 #include "doubleref.hxx"
 #include "queryparam.hxx"
-
-#include <boost/random/mersenne_twister.hpp>
-#include <boost/random/uniform_01.hpp>
 
 #include <boost/math/special_functions/acosh.hpp>
 #include <boost/math/special_functions/asinh.hpp>
@@ -1545,17 +1543,47 @@ void ScInterpreter::ScPi()
     PushDouble(F_PI);
 }
 
+#define SCRANDOMQ_SIZE 4194304
+static sal_uInt32 nScRandomQ[SCRANDOMQ_SIZE], nScCarry = 0;
+
+// Multiply with Carry
+sal_uInt32
+b32MWC(void)
+{
+        sal_uInt32 t, x;
+    static int j = (SCRANDOMQ_SIZE - 1);
+
+    j = (j + 1) & (SCRANDOMQ_SIZE - 1);
+    x = nScRandomQ[j];
+    t = (x << 28) + nScCarry;
+    nScCarry = (x >> 4) - (t < x);
+    return (nScRandomQ[j] = t - x);
+}
+
+// Congruential
+#define CNG ( cng = 69069 * cng + 13579 )
+// Xorshift
+#define XS ( xs ^= (xs << 13), xs ^= (xs >> 17), xs ^= (xs << 5) )
+
+#define KISS (b32MWC() + CNG + XS)
 
 void ScInterpreter::ScRandom()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "bst", "ScInterpreter::ScRandom" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "pfg", "ScInterpreter::ScRandom" );
 
-    boost::random::mt19937 ScGen(static_cast<unsigned int>(std::time(0)));
-    static boost::uniform_01<boost::mt19937> ScZeroOne(ScGen);
+    static rtlRandomPool aPool = rtl_random_createPool();
+    static sal_Bool SqSeeded = sal_False;
+    static sal_uInt32 i, x, cng, xs = 362436069;
 
-    PushDouble(ScZeroOne());
+    // Seeding for the PRNG
+    if (SqSeeded == sal_False) {
+        rtl_random_getBytes(aPool, &cng, sizeof(cng));
+        rtl_random_getBytes(aPool, &nScRandomQ,
+                            sizeof(nScRandomQ[0]) * SCRANDOMQ_SIZE);
+        SqSeeded = sal_True;
+        }
+    PushDouble(static_cast<double>(KISS) / SAL_MAX_UINT32);
 }
-
 
 void ScInterpreter::ScTrue()
 {
