@@ -114,7 +114,7 @@ namespace pdfi
 
         bool operator==(const FontAttributes& rFont) const
         {
-            return const_cast<GooString*>(&familyName)->cmp(
+            return familyName.cmp(
                 const_cast<GooString*>(&rFont.familyName))==0 &&
                 isEmbedded == rFont.isEmbedded &&
                 isBold == rFont.isBold &&
