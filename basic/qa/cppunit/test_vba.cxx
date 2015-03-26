@@ -137,6 +137,9 @@ void VBATest::testMiscOLEStuff()
         CPPUNIT_ASSERT_MESSAGE("No return variable huh?", pReturn != NULL );
         CPPUNIT_ASSERT_MESSAGE("Result not as expected", pReturn->GetOUString() == "OK" );
     }
+#else
+    // Avoid "this method is empty and should be removed" warning
+    (void) 42;
 #endif
 }
 
