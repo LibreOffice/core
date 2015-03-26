@@ -286,7 +286,7 @@ OString XRMResParser::GetAttribute( const OString &rToken, const OString &rAttri
 
 void XRMResParser::Error( const OString &rError )
 {
-    yyerror(( char * ) rError.getStr());
+    yyerror(rError.getStr());
 }
 
 
