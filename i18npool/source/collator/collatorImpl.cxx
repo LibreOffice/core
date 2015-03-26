@@ -52,8 +52,8 @@ CollatorImpl::compareSubstring( const OUString& str1, sal_Int32 off1, sal_Int32 
     if (cachedItem)
         return cachedItem->xC->compareSubstring(str1, off1, len1, str2, off2, len2);
 
-    sal_Unicode *unistr1 = (sal_Unicode*) str1.getStr() + off1;
-    sal_Unicode *unistr2 = (sal_Unicode*) str2.getStr() + off2;
+    sal_Unicode *unistr1 = const_cast<sal_Unicode*>(str1.getStr()) + off1;
+    sal_Unicode *unistr2 = const_cast<sal_Unicode*>(str2.getStr()) + off2;
     for (int i = 0; i < len1 && i < len2; i++)
         if (unistr1[i] != unistr2[i])
             return unistr1[i] < unistr2[i] ? -1 : 1;

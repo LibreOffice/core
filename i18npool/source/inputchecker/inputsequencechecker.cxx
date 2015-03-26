@@ -95,10 +95,10 @@ InputSequenceCheckerImpl::getLanguageByScripType(sal_Unicode cChar, sal_Unicode 
     if (type != UnicodeScript_kScriptCount &&
             type == unicode::getUnicodeScriptType( nChar, typeList, UnicodeScript_kScriptCount )) {
         switch(type) {
-            case UnicodeScript_kThai:           return (sal_Char*)"th";
+            case UnicodeScript_kThai:           return const_cast<sal_Char*>("th");
                                                 //case UnicodeScript_kArabic:       return (sal_Char*)"ar";
                                                 //case UnicodeScript_kHebrew:       return (sal_Char*)"he";
-            case UnicodeScript_kDevanagari:   return (sal_Char*)"hi";
+            case UnicodeScript_kDevanagari:   return const_cast<sal_Char*>("hi");
         }
     }
     return NULL;

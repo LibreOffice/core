@@ -121,8 +121,8 @@ Transliteration_caseignore::compare(
     const OUString& str2, sal_Int32 pos2, sal_Int32 nCount2, sal_Int32& nMatch2)
     throw(RuntimeException)
 {
-    const sal_Unicode *unistr1 = (sal_Unicode*) str1.getStr() + pos1;
-    const sal_Unicode *unistr2 = (sal_Unicode*) str2.getStr() + pos2;
+    const sal_Unicode *unistr1 = const_cast<sal_Unicode*>(str1.getStr()) + pos1;
+    const sal_Unicode *unistr2 = const_cast<sal_Unicode*>(str2.getStr()) + pos2;
     sal_Unicode c1, c2;
     MappingElement e1, e2;
     nMatch1 = nMatch2 = 0;
