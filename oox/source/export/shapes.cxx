@@ -1028,7 +1028,19 @@ void ShapeExport::WriteTable( Reference< XShape > rXShape  )
 
 void ShapeExport::WriteTableCellProperties(Reference< XPropertySet> xCellPropSet)
 {
-    mpFS->startElementNS( XML_a, XML_tcPr, FSEND );
+    sal_Int32 nLeftMargin(0), nRightMargin(0);
+
+    Any aLeftMargin = xCellPropSet->getPropertyValue("TextLeftDistance");
+    aLeftMargin >>= nLeftMargin;
+
+    Any aRightMargin = xCellPropSet->getPropertyValue("TextRightDistance");
+    aRightMargin >>= nRightMargin;
+
+    mpFS->startElementNS( XML_a, XML_tcPr,
+    XML_marL, nLeftMargin > 0 ? I32S( oox::drawingml::convertHmmToEmu( nLeftMargin ) ) : NULL,
+    XML_marR, nRightMargin > 0 ? I32S( oox::drawingml::convertHmmToEmu( nRightMargin ) ): NULL,
+    FSEND );
+
     // Write background fill for table cell.
     DrawingML::WriteFill(xCellPropSet);
     // TODO
