@@ -705,7 +705,7 @@ void XclExpChTrAction::AddDependentContents(
     ScChangeActionMap aActionMap;
     ScChangeActionMap::iterator itChangeAction;
 
-    rChangeTrack.GetDependents( (ScChangeAction*)(&rAction), aActionMap );
+    rChangeTrack.GetDependents( const_cast<ScChangeAction*>(&rAction), aActionMap );
     for( itChangeAction = aActionMap.begin(); itChangeAction != aActionMap.end(); ++itChangeAction )
         if( itChangeAction->second->GetType() == SC_CAT_CONTENT )
             SetAddAction( new XclExpChTrCellContent(

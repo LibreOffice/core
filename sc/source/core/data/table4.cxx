@@ -359,7 +359,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         if(bAllSame && nCount > 1)
             return;
 
-        rListData = (ScUserListData*)(ScGlobal::GetUserList()->GetData(aStr));
+        rListData = const_cast<ScUserListData*>(ScGlobal::GetUserList()->GetData(aStr));
         if (rListData)
         {
             (void)rListData->GetSubIndex(aStr, rListIndex);

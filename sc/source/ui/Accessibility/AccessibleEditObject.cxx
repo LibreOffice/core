@@ -74,7 +74,7 @@ ScAccessibleEditObject::ScAccessibleEditObject(
     SetDescription(rDescription);
     if( meObjectType == CellInEditMode)
     {
-        const ScAccessibleDocument *pAccDoc = const_cast<ScAccessibleDocument*>(static_cast<ScAccessibleDocument*>(rxParent.get())) ;
+        const ScAccessibleDocument *pAccDoc = static_cast<ScAccessibleDocument*>(rxParent.get());
         if (pAccDoc)
         {
             m_pScDoc = pAccDoc->GetDocument();

@@ -625,7 +625,7 @@ void ScRangeStringConverter::GetStringFromAddress(
 {
     if (pDocument && pDocument->HasTable(rAddress.Tab()))
     {
-        OUString sAddress(rAddress.Format(nFormatFlags, (ScDocument*) pDocument, eConv));
+        OUString sAddress(rAddress.Format(nFormatFlags, pDocument, eConv));
         AssignString( rString, sAddress, bAppendStr, cSeparator );
     }
 }
@@ -643,8 +643,8 @@ void ScRangeStringConverter::GetStringFromRange(
     {
         ScAddress aStartAddress( rRange.aStart );
         ScAddress aEndAddress( rRange.aEnd );
-        OUString sStartAddress(aStartAddress.Format(nFormatFlags, (ScDocument*) pDocument, eConv));
-        OUString sEndAddress(aEndAddress.Format(nFormatFlags, (ScDocument*) pDocument, eConv));
+        OUString sStartAddress(aStartAddress.Format(nFormatFlags, pDocument, eConv));
+        OUString sEndAddress(aEndAddress.Format(nFormatFlags, pDocument, eConv));
         OUString sOUStartAddress( sStartAddress );
         sOUStartAddress += OUString(':');
         sOUStartAddress += OUString( sEndAddress );

@@ -885,7 +885,7 @@ ScLinkListener::~ScLinkListener()
 
 void ScLinkListener::Notify( const SfxHint& rHint )
 {
-    aLink.Call( (SfxHint*)&rHint );
+    aLink.Call( const_cast<SfxHint*>(&rHint) );
 }
 
 static void lcl_CopyProperties( beans::XPropertySet& rDest, beans::XPropertySet& rSource )

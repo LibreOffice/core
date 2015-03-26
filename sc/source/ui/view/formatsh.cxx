@@ -179,8 +179,8 @@ void ScFormatShell::GetStyleState( SfxItemSet& rSet )
 
             case SID_STYLE_FAMILY2:     // cell style sheets
             {
-                SfxStyleSheet* pStyleSheet = (SfxStyleSheet*)
-                                             pTabViewShell->GetStyleSheetFromMarked();
+                SfxStyleSheet* pStyleSheet = const_cast<SfxStyleSheet*>(
+                                             pTabViewShell->GetStyleSheetFromMarked());
 
                 if ( pStyleSheet )
                     rSet.Put( SfxTemplateItem( nSlotId, pStyleSheet->GetName() ) );
@@ -572,8 +572,8 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                             }
 
                             bool bConvertBack = false;
-                            SfxStyleSheet*  pSheetInUse = (SfxStyleSheet*)
-                                                          pTabViewShell->GetStyleSheetFromMarked();
+                            SfxStyleSheet*  pSheetInUse = const_cast<SfxStyleSheet*>(
+                                                          pTabViewShell->GetStyleSheetFromMarked());
 
                             // wenn neuer Style vorhanden und in der Selektion
                             // verwendet wird, so darf der Parent nicht uebernommen
@@ -620,7 +620,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                         }
                         else // ( nSlotId == SID_STYLE_UPDATE_BY_EXAMPLE )
                         {
-                            pStyleSheet = (SfxStyleSheet*)pTabViewShell->GetStyleSheetFromMarked();
+                            pStyleSheet = const_cast<SfxStyleSheet*>(pTabViewShell->GetStyleSheetFromMarked());
 
                             if ( pStyleSheet )
                             {

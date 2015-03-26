@@ -432,7 +432,7 @@ void ScTabViewShell::QueryObjAreaPixel( Rectangle& rRect ) const
     //  auf ganze Zellen anpassen (in 1/100 mm)
 
     Size aPixelSize = rRect.GetSize();
-    vcl::Window* pWin = ((ScTabViewShell*)this)->GetActiveWin();
+    vcl::Window* pWin = const_cast<ScTabViewShell*>(this)->GetActiveWin();
     Size aLogicSize = pWin->PixelToLogic( aPixelSize );
 
     const ScViewData& rViewData = GetViewData();
@@ -996,7 +996,7 @@ SfxShell* ScTabViewShell::GetMySubShell() const
     //  GetSubShell() war frueher const, und GetSubShell(sal_uInt16) sollte es auch sein...
 
     sal_uInt16 nPos = 0;
-    SfxShell* pSub = ((ScTabViewShell*)this)->GetSubShell(nPos);
+    SfxShell* pSub = const_cast<ScTabViewShell*>(this)->GetSubShell(nPos);
     while (pSub)
     {
         if ( pSub == pDrawShell  || pSub == pDrawTextShell || pSub == pEditShell ||
@@ -1005,7 +1005,7 @@ SfxShell* ScTabViewShell::GetMySubShell() const
              pSub == pGraphicShell || pSub == pMediaShell || pSub == pPageBreakShell)
             return pSub;    // gefunden
 
-        pSub = ((ScTabViewShell*)this)->GetSubShell(++nPos);
+        pSub = const_cast<ScTabViewShell*>(this)->GetSubShell(++nPos);
     }
     return NULL;        // keine von meinen dabei
 }

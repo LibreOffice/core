@@ -680,7 +680,7 @@ bool ScValidationData::GetSelectionFromFormula(
     bool bRef = false;
     ScRange aRange;
 
-    ScTokenArray* pArr = (ScTokenArray*) &rTokArr;
+    ScTokenArray* pArr = const_cast<ScTokenArray*>(&rTokArr);
     pArr->Reset();
     formula::FormulaToken* t = NULL;
     if (pArr->GetLen() == 1 && (t = pArr->GetNextReferenceOrName()) != NULL)

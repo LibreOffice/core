@@ -1313,7 +1313,7 @@ const ScRangeList* ScTable::GetScenarioRanges() const
 
     if (!pScenarioRanges)
     {
-        ((ScTable*)this)->pScenarioRanges = new ScRangeList;
+        const_cast<ScTable*>(this)->pScenarioRanges = new ScRangeList;
         ScMarkData aMark;
         MarkScenarioIn( aMark, 0 );     // always
         aMark.FillRangeListWithMarks( pScenarioRanges, false );

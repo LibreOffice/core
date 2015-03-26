@@ -1921,7 +1921,7 @@ Rectangle ScDocShell::GetVisArea( sal_uInt16 nAspect ) const
         if (!aDocument.HasTable(nVisTab))
         {
             nVisTab = 0;
-            ((ScDocShell*)this)->aDocument.SetVisibleTab(nVisTab);
+            const_cast<ScDocShell*>(this)->aDocument.SetVisibleTab(nVisTab);
         }
         SCCOL nStartCol;
         SCROW nStartRow;
@@ -1936,7 +1936,7 @@ Rectangle ScDocShell::GetVisArea( sal_uInt16 nAspect ) const
         Rectangle aNewArea = ((ScDocument&)aDocument)
                                 .GetMMRect( nStartCol,nStartRow, nEndCol,nEndRow, nVisTab );
         //TODO/LATER: different methods for setting VisArea?!
-        ((ScDocShell*)this)->SfxObjectShell::SetVisArea( aNewArea );
+        const_cast<ScDocShell*>(this)->SfxObjectShell::SetVisArea( aNewArea );
         return aNewArea;
     }
     else

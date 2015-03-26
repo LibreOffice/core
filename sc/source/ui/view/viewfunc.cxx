@@ -2522,7 +2522,7 @@ void ScViewFunc::ChangeNumFmtDecimals( bool bIncrement )
         //  the ways of the Numberformatters are unfathomable, so try:
         OUString aOut;
         Color* pCol;
-        ((SvNumberformat*)pOldEntry)->GetOutputString( nVal, aOut, &pCol );
+        const_cast<SvNumberformat*>(pOldEntry)->GetOutputString( nVal, aOut, &pCol );
 
         nPrecision = 0;
         // 'E' for exponential is fixed in Numberformatter

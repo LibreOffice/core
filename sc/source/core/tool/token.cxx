@@ -350,7 +350,7 @@ FormulaToken* ScRawToken::CreateToken() const
                 return new ScExternalNameToken( extname.nFileId, aName );
             }
         case svJump :
-            return new FormulaJumpToken( eOp, (short*) nJump );
+            return new FormulaJumpToken( eOp, const_cast<short*>(nJump) );
         case svExternal :
             return new FormulaExternalToken( eOp, sbyte.cByte, OUString( cStr+1 ) );
         case svFAP :

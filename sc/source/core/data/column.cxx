@@ -552,14 +552,14 @@ void ScColumn::ApplyStyle( SCROW nRow, const ScStyleSheet& rStyle )
     boost::scoped_ptr<ScPatternAttr> pNewPattern(new ScPatternAttr(*pPattern));
     if (pNewPattern)
     {
-        pNewPattern->SetStyleSheet((ScStyleSheet*)&rStyle);
+        pNewPattern->SetStyleSheet(const_cast<ScStyleSheet*>(&rStyle));
         pAttrArray->SetPattern(nRow, pNewPattern.get(), true);
     }
 }
 
 void ScColumn::ApplyStyleArea( SCROW nStartRow, SCROW nEndRow, const ScStyleSheet& rStyle )
 {
-    pAttrArray->ApplyStyleArea(nStartRow, nEndRow, (ScStyleSheet*)&rStyle);
+    pAttrArray->ApplyStyleArea(nStartRow, nEndRow, const_cast<ScStyleSheet*>(&rStyle));
 }
 
 void ScColumn::ApplySelectionStyle(const ScStyleSheet& rStyle, const ScMarkData& rMark)
@@ -571,7 +571,7 @@ void ScColumn::ApplySelectionStyle(const ScStyleSheet& rStyle, const ScMarkData&
     {
         ScMarkArrayIter aMarkIter( rMark.GetArray() + nCol );
         while (aMarkIter.Next( nTop, nBottom ))
-            pAttrArray->ApplyStyleArea(nTop, nBottom, (ScStyleSheet*)&rStyle);
+            pAttrArray->ApplyStyleArea(nTop, nBottom, const_cast<ScStyleSheet*>(&rStyle));
     }
 }
 
@@ -1658,7 +1658,7 @@ void ScColumn::CopyToColumn(
                     rColumn.pAttrArray->GetPattern( nRow )->GetStyleSheet();
                 const ScPatternAttr* pPattern = pAttrArray->GetPattern( nRow );
                 boost::scoped_ptr<ScPatternAttr> pNewPattern(new ScPatternAttr( *pPattern ));
-                pNewPattern->SetStyleSheet( (ScStyleSheet*)pStyle );
+                pNewPattern->SetStyleSheet( const_cast<ScStyleSheet*>(pStyle) );
                 rColumn.pAttrArray->SetPattern( nRow, pNewPattern.get(), true );
             }
         }

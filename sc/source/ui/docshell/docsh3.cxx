@@ -599,7 +599,7 @@ ScChangeAction* ScDocShell::GetChangeAction( const ScAddress& rPos )
         pAction = pAction->GetNext();
     }
 
-    return (ScChangeAction*)pFound;
+    return const_cast<ScChangeAction*>(pFound);
 }
 
 void ScDocShell::SetChangeComment( ScChangeAction* pAction, const OUString& rComment )
@@ -825,7 +825,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
 
     sal_uLong nLastMergeAction = pSourceTrack->GetLast()->GetActionNumber();
     // UpdateReference-Undo, gueltige Referenzen fuer den letzten gemeinsamen Zustand
-    pSourceTrack->MergePrepare( (ScChangeAction*) pFirstMergeAction, bShared );
+    pSourceTrack->MergePrepare( const_cast<ScChangeAction*>(pFirstMergeAction), bShared );
 
     //  MergeChangeData an alle noch folgenden Aktionen in diesem Dokument anpassen
     //  -> Referenzen gueltig fuer dieses Dokument
@@ -1083,7 +1083,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                 }
 
                 // Referenzen anpassen
-                pSourceTrack->MergeOwn( (ScChangeAction*) pSourceAction, nFirstNewNumber, bShared );
+                pSourceTrack->MergeOwn( const_cast<ScChangeAction*>(pSourceAction), nFirstNewNumber, bShared );
 
                 // merge action state
                 if ( bShared && !pSourceAction->IsRejected() )

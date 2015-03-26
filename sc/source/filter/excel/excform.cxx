@@ -1743,9 +1743,9 @@ const ScTokenArray* ExcelToSc::GetBoolErr( XclBoolError eType )
 
     const ScTokenArray*     pErgebnis = aPool[ aStack.Get() ];
     if( nError )
-        ( ( ScTokenArray* ) pErgebnis )->SetCodeError( nError );
+        const_cast<ScTokenArray*>(pErgebnis)->SetCodeError( nError );
 
-    ( ( ScTokenArray* ) pErgebnis )->SetExclusiveRecalcModeNormal();
+    const_cast<ScTokenArray*>(pErgebnis)->SetExclusiveRecalcModeNormal();
 
     return pErgebnis;
 }

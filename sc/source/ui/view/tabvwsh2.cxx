@@ -51,7 +51,7 @@
 
 SdrView* ScTabViewShell::GetDrawView() const
 {
-    return ((ScTabViewShell*)this)->GetScDrawView();    // GetScDrawView ist nicht-const
+    return const_cast<ScTabViewShell*>(this)->GetScDrawView();    // GetScDrawView ist nicht-const
 }
 
 void ScTabViewShell::WindowChanged()

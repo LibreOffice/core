@@ -1245,7 +1245,7 @@ bool ScConditionEntry::IsValidStr( const OUString& rArg, const ScAddress& rPos )
 
 bool ScConditionEntry::IsCellValid( ScRefCellValue& rCell, const ScAddress& rPos ) const
 {
-    ((ScConditionEntry*)this)->Interpret(rPos); // Evaluate formula
+    const_cast<ScConditionEntry*>(this)->Interpret(rPos); // Evaluate formula
 
     double nArg = 0.0;
     OUString aArgStr;

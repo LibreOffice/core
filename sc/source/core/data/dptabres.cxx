@@ -2026,7 +2026,7 @@ void ScDPDataMember::FillDataRow(
     const ScDPDataDimension* pDataChild = GetChildDimension();
     const ScDPResultDimension* pRefChild = pRefMember->GetChildDimension();
 
-    const ScDPLevel* pRefParentLevel = const_cast<ScDPResultMember*>(pRefMember)->GetParentLevel();
+    const ScDPLevel* pRefParentLevel = pRefMember->GetParentLevel();
 
     long nExtraSpace = 0;
     if ( pRefParentLevel && pRefParentLevel->IsAddEmpty() )

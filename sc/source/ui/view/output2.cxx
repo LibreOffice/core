@@ -4532,7 +4532,7 @@ void ScOutputData::DrawEdit(bool bPixelToLogic)
                             {
                                 pPreviewPattr.reset( new ScPatternAttr(*pPattern) );
                                 pPreviewPattr->SetStyleSheet(pPreviewStyle);
-                                pPattern = const_cast<ScPatternAttr*>(pPreviewPattr.get());
+                                pPattern = pPreviewPattr.get();
                             }
                         }
                         SfxItemSet* pPreviewFontSet = mpDoc->GetPreviewFont( nCellX, nCellY, nTab );

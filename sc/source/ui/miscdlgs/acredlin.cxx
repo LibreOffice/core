@@ -1022,7 +1022,7 @@ void ScAcceptChgDlg::RejectFiltered()
     {
         if(pScChangeAction->IsDialogRoot())
             if(IsValidAction(pScChangeAction))
-                pChanges->Reject((ScChangeAction*)pScChangeAction);
+                pChanges->Reject(const_cast<ScChangeAction*>(pScChangeAction));
 
         pScChangeAction=pScChangeAction->GetPrev();
     }
@@ -1040,7 +1040,7 @@ void ScAcceptChgDlg::AcceptFiltered()
     {
         if(pScChangeAction->IsDialogRoot())
             if(IsValidAction(pScChangeAction))
-                pChanges->Accept((ScChangeAction*)pScChangeAction);
+                pChanges->Accept(const_cast<ScChangeAction*>(pScChangeAction));
 
         pScChangeAction=pScChangeAction->GetPrev();
     }
@@ -1123,14 +1123,14 @@ void ScAcceptChgDlg::GetDependents(  const ScChangeAction* pScChangeAction,
         ScChangeAction* pParentAction=(ScChangeAction*) pParentData->pData;
 
         if(pParentAction!=pScChangeAction)
-            pChanges->GetDependents((ScChangeAction*) pScChangeAction,
+            pChanges->GetDependents(const_cast<ScChangeAction*>(pScChangeAction),
                         aActionMap,pScChangeAction->IsMasterDelete());
         else
-            pChanges->GetDependents( (ScChangeAction*) pScChangeAction,
+            pChanges->GetDependents( const_cast<ScChangeAction*>(pScChangeAction),
                         aActionMap );
     }
     else
-        pChanges->GetDependents((ScChangeAction*) pScChangeAction,
+        pChanges->GetDependents(const_cast<ScChangeAction*>(pScChangeAction),
                     aActionMap, pScChangeAction->IsMasterDelete() );
 }
 
@@ -1874,8 +1874,8 @@ IMPL_LINK( ScAcceptChgDlg, ColCompareHdl, SvSortData*, pSortData )
 
     if(pSortData)
     {
-        SvTreeListEntry* pLeft = (SvTreeListEntry*)(pSortData->pLeft );
-        SvTreeListEntry* pRight = (SvTreeListEntry*)(pSortData->pRight );
+        SvTreeListEntry* pLeft = const_cast<SvTreeListEntry*>(pSortData->pLeft );
+        SvTreeListEntry* pRight = const_cast<SvTreeListEntry*>(pSortData->pRight );
 
         if(CALC_DATE==nSortCol)
         {

@@ -1320,7 +1320,7 @@ ScDPDimension* ScDPDimensions::getByIndex(long nIndex) const
     {
         if ( !ppDims )
         {
-            ((ScDPDimensions*)this)->ppDims = new ScDPDimension*[nDimCount];
+            const_cast<ScDPDimensions*>(this)->ppDims = new ScDPDimension*[nDimCount];
             for (long i=0; i<nDimCount; i++)
                 ppDims[i] = NULL;
         }
@@ -1777,7 +1777,7 @@ ScDPHierarchy* ScDPHierarchies::getByIndex(long nIndex) const
     {
         if ( !ppHiers )
         {
-            ((ScDPHierarchies*)this)->ppHiers = new ScDPHierarchy*[nHierCount];
+            const_cast<ScDPHierarchies*>(this)->ppHiers = new ScDPHierarchy*[nHierCount];
             for (long i=0; i<nHierCount; i++)
                 ppHiers[i] = NULL;
         }
@@ -1953,7 +1953,7 @@ ScDPLevel* ScDPLevels::getByIndex(long nIndex) const
     {
         if ( !ppLevs )
         {
-            ((ScDPLevels*)this)->ppLevs = new ScDPLevel*[nLevCount];
+            const_cast<ScDPLevels*>(this)->ppLevs = new ScDPLevel*[nLevCount];
             for (long i=0; i<nLevCount; i++)
                 ppLevs[i] = NULL;
         }

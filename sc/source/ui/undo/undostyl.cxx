@@ -75,7 +75,7 @@ void ScStyleSaveData::InitFromStyle( const SfxStyleSheetBase* pSource )
         aName   = pSource->GetName();
         aParent = pSource->GetParent();
         delete pItems;
-        pItems = new SfxItemSet( ((SfxStyleSheetBase*)pSource)->GetItemSet() );
+        pItems = new SfxItemSet( const_cast<SfxStyleSheetBase*>(pSource)->GetItemSet() );
     }
     else
         *this = ScStyleSaveData();      // empty

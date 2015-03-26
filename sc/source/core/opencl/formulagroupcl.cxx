@@ -3993,7 +3993,7 @@ DynamicKernel* DynamicKernel::create( const ScCalcConfig& rConfig, ScTokenArray&
     std::list<FormulaToken*> aTokenList;
     std::map<FormulaToken*, FormulaTreeNodeRef> aHashMap;
     FormulaToken*  pCur;
-    while ((pCur = (FormulaToken*)(aCode.Next())) != NULL)
+    while ((pCur = const_cast<FormulaToken*>(aCode.Next())) != NULL)
     {
         OpCode eOp = pCur->GetOpCode();
         if (eOp != ocPush)

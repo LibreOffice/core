@@ -3889,7 +3889,7 @@ bool ScDocFunc::ChangeIndent( const ScMarkData& rMark, bool bIncrement, bool bAp
         ScRange aCopyRange = aMarkRange;
         aCopyRange.aStart.SetTab(0);
         aCopyRange.aEnd.SetTab(nTabCount-1);
-        rDoc.CopyToDocument( aCopyRange, IDF_ATTRIB, true, pUndoDoc, (ScMarkData*)&rMark );
+        rDoc.CopyToDocument( aCopyRange, IDF_ATTRIB, true, pUndoDoc, &rMark );
 
         rDocShell.GetUndoManager()->AddUndoAction(
             new ScUndoIndent( &rDocShell, rMark, pUndoDoc, bIncrement ) );

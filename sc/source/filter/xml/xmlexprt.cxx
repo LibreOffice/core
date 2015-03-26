@@ -512,10 +512,10 @@ ScXMLExport::ScXMLExport(
     // document is not set here - create ScChangeTrackingExportHelper later
 
     xScPropHdlFactory = new XMLScPropHdlFactory;
-    xCellStylesPropertySetMapper = new XMLPropertySetMapper((XMLPropertyMapEntry*)aXMLScCellStylesProperties, xScPropHdlFactory, true);
-    xColumnStylesPropertySetMapper = new XMLPropertySetMapper((XMLPropertyMapEntry*)aXMLScColumnStylesProperties, xScPropHdlFactory, true);
-    xRowStylesPropertySetMapper = new XMLPropertySetMapper((XMLPropertyMapEntry*)aXMLScRowStylesProperties, xScPropHdlFactory, true);
-    xTableStylesPropertySetMapper = new XMLPropertySetMapper((XMLPropertyMapEntry*)aXMLScTableStylesProperties, xScPropHdlFactory, true);
+    xCellStylesPropertySetMapper = new XMLPropertySetMapper(aXMLScCellStylesProperties, xScPropHdlFactory, true);
+    xColumnStylesPropertySetMapper = new XMLPropertySetMapper(aXMLScColumnStylesProperties, xScPropHdlFactory, true);
+    xRowStylesPropertySetMapper = new XMLPropertySetMapper(aXMLScRowStylesProperties, xScPropHdlFactory, true);
+    xTableStylesPropertySetMapper = new XMLPropertySetMapper(aXMLScTableStylesProperties, xScPropHdlFactory, true);
     xCellStylesExportPropertySetMapper = new ScXMLCellExportPropertyMapper(xCellStylesPropertySetMapper);
     xCellStylesExportPropertySetMapper->ChainExportMapper(XMLTextParagraphExport::CreateParaExtPropMapper(*this));
     xColumnStylesExportPropertySetMapper = new ScXMLColumnExportPropertyMapper(xColumnStylesPropertySetMapper);
@@ -5034,7 +5034,7 @@ sal_uInt32 ScXMLExport::exportDoc( enum XMLTokenEnum eClass )
                 SfxObjectShell* pFoundShell = reinterpret_cast<SfxObjectShell*>( xObjShellTunnel.is() ? xObjShellTunnel->getSomething(SfxObjectShell::getUnoTunnelId()) : 0 );
                 if ( pFoundShell && ooo::vba::isAlienExcelDoc( *pFoundShell ) )
                 {
-                    xRowStylesPropertySetMapper = new XMLPropertySetMapper((XMLPropertyMapEntry*)aXMLScFromXLSRowStylesProperties, xScPropHdlFactory, true);
+                    xRowStylesPropertySetMapper = new XMLPropertySetMapper(aXMLScFromXLSRowStylesProperties, xScPropHdlFactory, true);
                     xRowStylesExportPropertySetMapper = new ScXMLRowExportPropertyMapper(xRowStylesPropertySetMapper);
                     GetAutoStylePool()->SetFamilyPropSetMapper( XML_STYLE_FAMILY_TABLE_ROW,
                         xRowStylesExportPropertySetMapper );

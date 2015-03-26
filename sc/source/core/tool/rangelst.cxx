@@ -261,7 +261,7 @@ void ScRangeList::Join( const ScRange& r, bool bIsInList )
         }
     }
 
-    ScRange* pOver = (ScRange*) &r;     // fies aber wahr wenn bInList
+    ScRange* pOver = const_cast<ScRange*>(&r);     // fies aber wahr wenn bInList
     size_t nOldPos = 0;
     if ( bIsInList )
     {
@@ -1479,7 +1479,7 @@ void ScRangePairList::Join( const ScRangePair& r, bool bIsInList )
     SCCOL nCol2 = r1.aEnd.Col();
     SCROW nRow2 = r1.aEnd.Row();
     SCTAB nTab2 = r1.aEnd.Tab();
-    ScRangePair* pOver = (ScRangePair*) &r;     // fies aber wahr wenn bInList
+    ScRangePair* pOver = const_cast<ScRangePair*>(&r);     // fies aber wahr wenn bInList
     size_t nOldPos = 0;
     if ( bIsInList )
     {

@@ -255,7 +255,7 @@ void testFormats(ScBootstrapFixture* pTest, ScDocument* pDoc, sal_Int32 nFormat)
         if ( nFormat == XLSX )
         {
             pPattern = pDoc->GetPattern(1,1,3);
-            ScStyleSheet* pStyleSheet = (ScStyleSheet*)pPattern->GetStyleSheet();
+            ScStyleSheet* pStyleSheet = const_cast<ScStyleSheet*>(pPattern->GetStyleSheet());
             // check parent style name
             OUString sExpected("Excel Built-in Date");
             OUString sResult = pStyleSheet->GetName();

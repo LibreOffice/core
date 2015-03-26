@@ -185,7 +185,7 @@ bool ScChangeAction::IsClickable() const
                 static_cast<const ScChangeActionContent*>(this)->GetFirstDependentEntry();
             while ( pL )
             {
-                ScChangeAction* p = (ScChangeAction*) pL->GetAction();
+                ScChangeAction* p = const_cast<ScChangeAction*>(pL->GetAction());
                 if ( p && p->IsDeletedIn() )
                     return false;
                 pL = pL->GetNext();
@@ -1361,7 +1361,7 @@ ScChangeActionContent* ScChangeActionContent::GetTopContent() const
             pContent = pContent->pNextContent;
         return pContent;
     }
-    return (ScChangeActionContent*) this;
+    return const_cast<ScChangeActionContent*>(this);
 }
 
 ScChangeActionLinkEntry* ScChangeActionContent::GetDeletedIn() const
@@ -1565,7 +1565,7 @@ bool ScChangeActionContent::Select( ScDocument* pDoc, ScChangeTrack* pTrack,
         const ScChangeActionLinkEntry* pL = pContent->GetFirstDependentEntry();
         while ( pL )
         {
-            ScChangeAction* p = (ScChangeAction*) pL->GetAction();
+            ScChangeAction* p = const_cast<ScChangeAction*>(pL->GetAction());
             if ( p )
                 p->SetRejected();
             pL = pL->GetNext();
@@ -3790,7 +3790,7 @@ void ScChangeTrack::UpdateReference( ScChangeAction** ppFirstAction,
                 const ScChangeActionLinkEntry* pLink = pAct->GetFirstDependentEntry();
                 while ( pLink )
                 {
-                    ScChangeAction* p = (ScChangeAction*) pLink->GetAction();
+                    ScChangeAction* p = const_cast<ScChangeAction*>(pLink->GetAction());
                     if ( p )
                         p->SetDeletedIn( pAct );
                     pLink = pLink->GetNext();
@@ -3840,7 +3840,7 @@ void ScChangeTrack::UpdateReference( ScChangeAction** ppFirstAction,
                 const ScChangeActionLinkEntry* pLink = pAct->GetFirstDependentEntry();
                 while ( pLink )
                 {
-                    ScChangeAction* p = (ScChangeAction*) pLink->GetAction();
+                    ScChangeAction* p = const_cast<ScChangeAction*>(pLink->GetAction());
                     if ( p )
                         p->RemoveDeletedIn( pAct );
                     pLink = pLink->GetNext();
@@ -3915,7 +3915,7 @@ void ScChangeTrack::GetDependents( ScChangeAction* pAct,
             const ScChangeActionLinkEntry* pL = pCur->GetFirstDependentEntry();
             while ( pL )
             {
-                ScChangeAction* p = (ScChangeAction*) pL->GetAction();
+                ScChangeAction* p = const_cast<ScChangeAction*>(pL->GetAction());
                 if ( p != pAct )
                 {
                     if ( bAllFlat )
@@ -3961,7 +3961,7 @@ void ScChangeTrack::GetDependents( ScChangeAction* pAct,
                     const ScChangeActionLinkEntry* pL = pCur->GetFirstDeletedEntry();
                     while ( pL )
                     {
-                        ScChangeAction* p = (ScChangeAction*) pL->GetAction();
+                        ScChangeAction* p = const_cast<ScChangeAction*>(pL->GetAction());
                         if ( p != pAct )
                         {
                             if ( bAllFlat )
@@ -3995,7 +3995,7 @@ void ScChangeTrack::GetDependents( ScChangeAction* pAct,
             const ScChangeActionLinkEntry* pL = pCur->GetFirstDeletedEntry();
             while ( pL )
             {
-                ScChangeAction* p = (ScChangeAction*) pL->GetAction();
+                ScChangeAction* p = const_cast<ScChangeAction*>(pL->GetAction());
                 if ( p != pAct && rMap.insert( ::std::make_pair( p->GetActionNumber(), p ) ).second )
                 {
                     // Only one TopContent of a chain is in LinkDeleted
@@ -4010,7 +4010,7 @@ void ScChangeTrack::GetDependents( ScChangeAction* pAct,
             pL = pCur->GetFirstDependentEntry();
             while ( pL )
             {
-                ScChangeAction* p = (ScChangeAction*) pL->GetAction();
+                ScChangeAction* p = const_cast<ScChangeAction*>(pL->GetAction());
                 if ( p != pAct )
                 {
                     if ( bAllFlat )
@@ -4054,7 +4054,7 @@ void ScChangeTrack::GetDependents( ScChangeAction* pAct,
             const ScChangeActionLinkEntry* pL = pCur->GetFirstDependentEntry();
             while ( pL )
             {
-                ScChangeAction* p = (ScChangeAction*) pL->GetAction();
+                ScChangeAction* p = const_cast<ScChangeAction*>(pL->GetAction());
                 if ( p != pAct )
                 {
                     if ( bAllFlat )
@@ -4127,7 +4127,7 @@ bool ScChangeTrack::SelectContent( ScChangeAction* pAct, bool bOldest )
         const ScChangeActionLinkEntry* pL = pContent->GetFirstDependentEntry();
         while ( pL )
         {
-            ScChangeAction* p = (ScChangeAction*) pL->GetAction();
+            ScChangeAction* p = const_cast<ScChangeAction*>(pL->GetAction());
             if ( p != pContent )
             {
                 if ( p->GetType() == SC_CAT_CONTENT )

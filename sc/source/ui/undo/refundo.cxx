@@ -93,7 +93,7 @@ void ScRefUndoData::DeleteUnchanged( const ScDocument* pDoc )
     }
     if (pRangeName)
     {
-        ScRangeName* pNewRanges = ((ScDocument*)pDoc)->GetRangeName();      //! const
+        ScRangeName* pNewRanges = pDoc->GetRangeName();
         if ( pNewRanges && *pRangeName == *pNewRanges )
             DELETEZ(pRangeName);
     }
@@ -108,7 +108,7 @@ void ScRefUndoData::DeleteUnchanged( const ScDocument* pDoc )
 
     if (pDPCollection)
     {
-        ScDPCollection* pNewDP = ((ScDocument*)pDoc)->GetDPCollection();    //! const
+        ScDPCollection* pNewDP = const_cast<ScDocument*>(pDoc)->GetDPCollection();    //! const
         if ( pNewDP && pDPCollection->RefsEqual(*pNewDP) )
             DELETEZ(pDPCollection);
     }

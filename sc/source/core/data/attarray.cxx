@@ -640,13 +640,13 @@ void ScAttrArray::ApplyStyleArea( SCROW nStartRow, SCROW nEndRow, ScStyleSheet* 
 #define SET_LINECOLOR(dest,c)                    \
     if ((dest))                                  \
     {                                            \
-        ((SvxBorderLine*)(dest))->SetColor((c)); \
+        const_cast<SvxBorderLine*>(dest)->SetColor((c)); \
     }
 
 #define SET_LINE(dest,src)                             \
     if ((dest))                                        \
     {                                                  \
-        SvxBorderLine* pCast = (SvxBorderLine*)(dest); \
+        SvxBorderLine* pCast = const_cast<SvxBorderLine*>(dest); \
         pCast->SetBorderLineStyle( (src)->GetBorderLineStyle() ); \
         pCast->SetWidth( (src)->GetWidth( ) );         \
     }
@@ -1071,7 +1071,7 @@ void ScAttrArray::MergeBlockFrame( SvxBoxItem* pLineOuter, SvxBoxInfoItem* pLine
         Search( nEndRow-1, nEndIndex );
         for (SCSIZE i=nStartIndex; i<=nEndIndex; i++)
         {
-            pPattern = (ScPatternAttr*) pData[i].pPattern;
+            pPattern = pData[i].pPattern;
             lcl_MergeToFrame( pLineOuter, pLineInner, rFlags, pPattern, bLeft, nDistRight, false,
                             nEndRow - std::min( pData[i].nRow, (SCROW)(nEndRow-1) ) );
             // nDistBottom here always > 0

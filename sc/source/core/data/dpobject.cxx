@@ -2199,7 +2199,7 @@ void lcl_FillOldFields( ScPivotFieldVector& rFields,
 
 bool ScDPObject::FillOldParam(ScPivotParam& rParam) const
 {
-    ((ScDPObject*)this)->CreateObjects();       // xSource is needed for field numbers
+    const_cast<ScDPObject*>(this)->CreateObjects();       // xSource is needed for field numbers
 
     if (!xSource.is())
         return false;

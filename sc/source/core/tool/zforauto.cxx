@@ -70,7 +70,7 @@ void ScNumFormatAbbrev::PutFormatIndex(sal_uLong nFormat,
     {
         eSysLnge = Application::GetSettings().GetLanguageTag().getLanguageType();
         eLnge = pFormat->GetLanguage();
-        sFormatstring = ((SvNumberformat*)pFormat)->GetFormatstring();
+        sFormatstring = pFormat->GetFormatstring();
     }
     else
     {

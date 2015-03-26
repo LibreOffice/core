@@ -743,7 +743,7 @@ rtl::Reference < SvXMLImportPropertyMapper >
             {
                 if( !xCellImpPropMapper.is() )
                 {
-                    ((XMLTableStylesContext *)this)->xCellImpPropMapper =
+                    const_cast<XMLTableStylesContext *>(this)->xCellImpPropMapper =
                         new ScXMLCellImportPropertyMapper( GetScImport().GetCellStylesPropertySetMapper(), const_cast<SvXMLImport&>(GetImport()) );
                     xCellImpPropMapper->ChainImportMapper(XMLTextImportHelper::CreateParaExtPropMapper(const_cast<SvXMLImport&>(GetImport())));
                 }
@@ -753,7 +753,7 @@ rtl::Reference < SvXMLImportPropertyMapper >
             case XML_STYLE_FAMILY_TABLE_COLUMN:
             {
                 if( !xColumnImpPropMapper.is() )
-                    ((XMLTableStylesContext *)this)->xColumnImpPropMapper =
+                    const_cast<XMLTableStylesContext *>(this)->xColumnImpPropMapper =
                         new SvXMLImportPropertyMapper( GetScImport().GetColumnStylesPropertySetMapper(), const_cast<SvXMLImport&>(GetImport()) );
                 xMapper = xColumnImpPropMapper;
             }
@@ -761,7 +761,7 @@ rtl::Reference < SvXMLImportPropertyMapper >
             case XML_STYLE_FAMILY_TABLE_ROW:
             {
                 if( !xRowImpPropMapper.is() )
-                    ((XMLTableStylesContext *)this)->xRowImpPropMapper =
+                    const_cast<XMLTableStylesContext *>(this)->xRowImpPropMapper =
                         new ScXMLRowImportPropertyMapper( GetScImport().GetRowStylesPropertySetMapper(), const_cast<SvXMLImport&>(GetImport()) );
                 xMapper = xRowImpPropMapper;
             }
@@ -769,7 +769,7 @@ rtl::Reference < SvXMLImportPropertyMapper >
             case XML_STYLE_FAMILY_TABLE_TABLE:
             {
                 if( !xTableImpPropMapper.is() )
-                    ((XMLTableStylesContext *)this)->xTableImpPropMapper =
+                    const_cast<XMLTableStylesContext *>(this)->xTableImpPropMapper =
                         new SvXMLImportPropertyMapper( GetScImport().GetTableStylesPropertySetMapper(), const_cast<SvXMLImport&>(GetImport()) );
                 xMapper = xTableImpPropMapper;
             }
@@ -847,16 +847,16 @@ uno::Reference < XNameContainer >
                 switch( nFamily )
                 {
                 case XML_STYLE_FAMILY_TABLE_TABLE:
-                    ((XMLTableStylesContext *)this)->xTableStyles.set(xStyles);
+                    const_cast<XMLTableStylesContext *>(this)->xTableStyles.set(xStyles);
                     break;
                 case XML_STYLE_FAMILY_TABLE_CELL:
-                    ((XMLTableStylesContext *)this)->xCellStyles.set(xStyles);
+                    const_cast<XMLTableStylesContext *>(this)->xCellStyles.set(xStyles);
                     break;
                 case XML_STYLE_FAMILY_TABLE_COLUMN:
-                    ((XMLTableStylesContext *)this)->xColumnStyles.set(xStyles);
+                    const_cast<XMLTableStylesContext *>(this)->xColumnStyles.set(xStyles);
                     break;
                 case XML_STYLE_FAMILY_TABLE_ROW:
-                    ((XMLTableStylesContext *)this)->xRowStyles.set(xStyles);
+                    const_cast<XMLTableStylesContext *>(this)->xRowStyles.set(xStyles);
                     break;
                 }
             }

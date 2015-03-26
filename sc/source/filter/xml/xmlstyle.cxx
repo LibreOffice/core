@@ -859,7 +859,7 @@ const XMLPropertyHandler* XMLScPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
 {
     nType &= MID_FLAG_MASK;
 
-    XMLPropertyHandler* pHdl((XMLPropertyHandler*)XMLPropertyHandlerFactory::GetPropertyHandler( nType ));
+    XMLPropertyHandler* pHdl(const_cast<XMLPropertyHandler*>(XMLPropertyHandlerFactory::GetPropertyHandler( nType )));
     if(!pHdl)
     {
         switch(nType)
