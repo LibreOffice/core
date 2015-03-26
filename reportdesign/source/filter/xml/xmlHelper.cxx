@@ -131,7 +131,7 @@ rtl::Reference < XMLPropertySetMapper > OXMLHelper::GetCellStylePropertyMap(bool
             MAP_CONST_C_ASCII(      "BorderBottom",     FO,     BORDER_BOTTOM,         XML_TYPE_BORDER, 0 ),
             MAP_END()
         };
-        return new XMLPropertySetMapper((XMLPropertyMapEntry*)s_aXMLCellStylesProperties,new OPropertyHandlerFactory(), bForExport);
+        return new XMLPropertySetMapper(s_aXMLCellStylesProperties,new OPropertyHandlerFactory(), bForExport);
     }
     else
     {
@@ -151,7 +151,7 @@ rtl::Reference < XMLPropertySetMapper > OXMLHelper::GetCellStylePropertyMap(bool
             MAP_CONST_C_ASCII(      "BorderBottom",     FO,     BORDER_BOTTOM,         XML_TYPE_BORDER, 0 ),
             MAP_END()
         };
-        return new XMLPropertySetMapper((XMLPropertyMapEntry*)s_aXMLCellStylesProperties,new OPropertyHandlerFactory(), bForExport);
+        return new XMLPropertySetMapper(s_aXMLCellStylesProperties,new OPropertyHandlerFactory(), bForExport);
     }
 }
 

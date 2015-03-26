@@ -160,7 +160,7 @@ namespace rptui
     {
         uno::Reference<awt::XVclWindowPeer> xVclWindowPeer;
 
-        ::boost::shared_ptr<OReportModel> pModel = const_cast< OReportController& >( m_rReportController ).getSdrModel();
+        ::boost::shared_ptr<OReportModel> pModel = m_rReportController.getSdrModel();
 
         uno::Reference<report::XSection> xSection(_xComponent->getSection());
         if ( xSection.is() )

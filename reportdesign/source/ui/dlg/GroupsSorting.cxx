@@ -548,7 +548,7 @@ bool OFieldExpressionControl::SeekRow( long _nRow )
 
 void OFieldExpressionControl::PaintCell( OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColumnId ) const
 {
-    OUString aText  =const_cast< OFieldExpressionControl*>(this)->GetCellText( m_nCurrentPos, nColumnId );
+    OUString aText  =GetCellText( m_nCurrentPos, nColumnId );
 
     Point aPos( rRect.TopLeft() );
     Size aTextSize( GetDataWindow().GetTextWidth( aText ), GetDataWindow().GetTextHeight() );

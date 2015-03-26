@@ -157,7 +157,7 @@ namespace rptui
     {
 
         uno::Reference<awt::XControl> xControl;
-        OReportController *pController = (OReportController *)&m_rReportController;
+        OReportController *pController = const_cast<OReportController *>(&m_rReportController);
 
         ::boost::shared_ptr<OReportModel> pModel = pController->getSdrModel();
 

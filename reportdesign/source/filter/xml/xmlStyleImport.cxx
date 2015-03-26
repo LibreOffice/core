@@ -336,7 +336,7 @@ Reference < XNameContainer >
             }
             break;
             case XML_STYLE_FAMILY_SD_GRAPHICS_ID:
-                xStyles = ((SvXMLImport *)&GetImport())->GetTextImport()->GetFrameStyles();
+                xStyles = const_cast<SvXMLImport *>(&GetImport())->GetTextImport()->GetFrameStyles();
                 break;
             default:
                 OSL_FAIL("OReportStylesContext::CreateStyleStyleChildContext: Unknown style family. PLease check.");
