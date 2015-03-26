@@ -196,7 +196,7 @@ namespace xmloff
                 new OGridColumnPropertyTranslator( Reference< XMultiPropertySet >( m_xElement, UNO_QUERY ) );
             const_cast< XMLTextStyleContext* >( m_pStyleElement )->FillPropertySet( xPropTranslation );
 
-            const OUString sNumberStyleName = const_cast< XMLTextStyleContext* >( m_pStyleElement )->GetDataStyleName( );
+            const OUString sNumberStyleName = m_pStyleElement->GetDataStyleName( );
             if ( !sNumberStyleName.isEmpty() )
                 // the style also has a number (sub) style
                 m_rContext.applyControlNumberStyle( m_xElement, sNumberStyleName );

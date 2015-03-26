@@ -131,7 +131,7 @@ void SvXMLAutoStylePoolP::exportStyleAttributes(
                         pProp->maValue >>= xNumRule;
                         if( xNumRule.is() && (xNumRule->getCount() > 0 ) )
                         {
-                            const OUString sName(((XMLTextListAutoStylePool*)&GetExport().GetTextParagraphExport()->GetListAutoStylePool())->Add( xNumRule ));
+                            const OUString sName(const_cast<XMLTextListAutoStylePool*>(&GetExport().GetTextParagraphExport()->GetListAutoStylePool())->Add( xNumRule ));
 
                             GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_LIST_STYLE_NAME, GetExport().EncodeStyleName( sName ) );
                         }

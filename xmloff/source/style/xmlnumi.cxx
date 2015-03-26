@@ -1227,13 +1227,13 @@ void SvxXMLListStyleContext::CreateAndInsertAuto() const
     const OUString& rName = GetName();
     if( bOutline || xNumRules.is() || rName.isEmpty() )
     {
-        ((SvxXMLListStyleContext *)this)->SetValid( false );
+        const_cast<SvxXMLListStyleContext *>(this)->SetValid( false );
         return;
     }
 
-    ((SvxXMLListStyleContext *)this)->xNumRules = CreateNumRule(
+    const_cast<SvxXMLListStyleContext *>(this)->xNumRules = CreateNumRule(
         GetImport().GetModel() );
-    ((SvxXMLListStyleContext *)this)->nLevels = xNumRules->getCount();
+    const_cast<SvxXMLListStyleContext *>(this)->nLevels = xNumRules->getCount();
 
     FillUnoNumRule(xNumRules);
 }

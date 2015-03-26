@@ -165,7 +165,7 @@ XMLShapeImportHelper::XMLShapeImportHelper(
     mpPropertySetMapper->ChainImportMapper(XMLTextImportHelper::CreateParaDefaultExtPropMapper(rImporter));
 
     // construct PresPagePropsMapper
-    xMapper = new XMLPropertySetMapper((XMLPropertyMapEntry*)aXMLSDPresPageProps, mpSdPropHdlFactory, false);
+    xMapper = new XMLPropertySetMapper(aXMLSDPresPageProps, mpSdPropHdlFactory, false);
     mpPresPagePropsMapper = new SvXMLImportPropertyMapper( xMapper, rImporter );
     // set lock to avoid deletion
     mpPresPagePropsMapper->acquire();

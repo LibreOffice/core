@@ -613,7 +613,7 @@ rtl::Reference < SvXMLImportPropertyMapper > SvXMLStylesContext::GetImportProper
     case XML_STYLE_FAMILY_TEXT_PARAGRAPH:
         if( !mxParaImpPropMapper.is() )
         {
-            SvXMLStylesContext * pThis = (SvXMLStylesContext *)this;
+            SvXMLStylesContext * pThis = const_cast<SvXMLStylesContext *>(this);
             pThis->mxParaImpPropMapper =
                 pThis->GetImport().GetTextImport()
                      ->GetParaImportPropertySetMapper();
@@ -623,7 +623,7 @@ rtl::Reference < SvXMLImportPropertyMapper > SvXMLStylesContext::GetImportProper
     case XML_STYLE_FAMILY_TEXT_TEXT:
         if( !mxTextImpPropMapper.is() )
         {
-            SvXMLStylesContext * pThis = (SvXMLStylesContext *)this;
+            SvXMLStylesContext * pThis = const_cast<SvXMLStylesContext *>(this);
             pThis->mxTextImpPropMapper =
                 pThis->GetImport().GetTextImport()
                      ->GetTextImportPropertySetMapper();
@@ -635,7 +635,7 @@ rtl::Reference < SvXMLImportPropertyMapper > SvXMLStylesContext::GetImportProper
         // don't cache section mapper, as it's rarely used
         // *sigh*, cast to non-const, because this is a const method,
         // but SvXMLImport::GetTextImport() isn't.
-        xMapper = ((SvXMLStylesContext*)this)->GetImport().GetTextImport()->
+        xMapper = const_cast<SvXMLStylesContext*>(this)->GetImport().GetTextImport()->
             GetSectionImportPropertySetMapper();
         break;
 
@@ -643,7 +643,7 @@ rtl::Reference < SvXMLImportPropertyMapper > SvXMLStylesContext::GetImportProper
         // don't cache section mapper, as it's rarely used
         // *sigh*, cast to non-const, because this is a const method,
         // but SvXMLImport::GetTextImport() isn't.
-        xMapper = ((SvXMLStylesContext*)this)->GetImport().GetTextImport()->
+        xMapper = const_cast<SvXMLStylesContext*>(this)->GetImport().GetTextImport()->
             GetRubyImportPropertySetMapper();
         break;
 
@@ -653,7 +653,7 @@ rtl::Reference < SvXMLImportPropertyMapper > SvXMLStylesContext::GetImportProper
         if(!mxShapeImpPropMapper.is())
         {
             rtl::Reference< XMLShapeImportHelper > aImpHelper = ((SvXMLImport&)GetImport()).GetShapeImport();
-            ((SvXMLStylesContext*)this)->mxShapeImpPropMapper =
+            const_cast<SvXMLStylesContext*>(this)->mxShapeImpPropMapper =
                 aImpHelper->GetPropertySetMapper();
         }
         xMapper = mxShapeImpPropMapper;
@@ -673,7 +673,7 @@ rtl::Reference < SvXMLImportPropertyMapper > SvXMLStylesContext::GetImportProper
                 new XMLPageMasterPropSetMapper( false );
             mxPageImpPropMapper =
                 new PageMasterImportPropertyMapper( pPropMapper,
-                                    ((SvXMLStylesContext*)this)->GetImport() );
+                                    const_cast<SvXMLStylesContext*>(this)->GetImport() );
         }
         xMapper = mxPageImpPropMapper;
         break;
@@ -703,9 +703,9 @@ Reference < XAutoStyleFamily > SvXMLStylesContext::GetAutoStyles( sal_uInt16 nFa
                 Any aAny = xAutoStyleFamilies->getByName( sName );
                 xAutoStyles = *(Reference<XAutoStyleFamily>*)aAny.getValue();
                 if( bPara )
-                    ((SvXMLStylesContext *)this)->mxParaAutoStyles = xAutoStyles;
+                    const_cast<SvXMLStylesContext *>(this)->mxParaAutoStyles = xAutoStyles;
                 else
-                    ((SvXMLStylesContext *)this)->mxTextAutoStyles = xAutoStyles;
+                    const_cast<SvXMLStylesContext *>(this)->mxTextAutoStyles = xAutoStyles;
             }
         }
     }
@@ -747,11 +747,11 @@ Reference < XNameContainer > SvXMLStylesContext::GetStylesContainer(
                 switch( nFamily )
                 {
                 case XML_STYLE_FAMILY_TEXT_PARAGRAPH:
-                    ((SvXMLStylesContext *)this)->mxParaStyles = xStyles;
+                    const_cast<SvXMLStylesContext *>(this)->mxParaStyles = xStyles;
                     break;
 
                 case XML_STYLE_FAMILY_TEXT_TEXT:
-                    ((SvXMLStylesContext *)this)->mxTextStyles = xStyles;
+                    const_cast<SvXMLStylesContext *>(this)->mxTextStyles = xStyles;
                     break;
                 }
             }

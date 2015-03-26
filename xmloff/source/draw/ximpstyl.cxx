@@ -1102,7 +1102,7 @@ rtl::Reference< SvXMLImportPropertyMapper > SdXMLStylesContext::GetImportPropert
         if(!xPresImpPropMapper.is())
         {
             rtl::Reference< XMLShapeImportHelper > aImpHelper = ((SvXMLImport&)GetImport()).GetShapeImport();
-            ((SdXMLStylesContext*)this)->xPresImpPropMapper =
+            const_cast<SdXMLStylesContext*>(this)->xPresImpPropMapper =
                 aImpHelper->GetPresPagePropsMapper();
         }
         xMapper = xPresImpPropMapper;
@@ -1305,7 +1305,7 @@ void SdXMLStylesContext::ImpSetGraphicStyles( uno::Reference< container::XNameAc
 
         if(nFamily == pStyle->GetFamily() && pStyle->IsDefaultStyle())
         {
-            ((SvXMLStyleContext*)pStyle)->SetDefaults();
+            const_cast<SvXMLStyleContext*>(pStyle)->SetDefaults();
         }
     }
 
@@ -1428,7 +1428,7 @@ void SdXMLStylesContext::ImpSetGraphicStyles( uno::Reference< container::XNameAc
             if(xStyle.is())
             {
                 // set parent style name
-                OUString sParentStyleDisplayName( const_cast< SvXMLImport& >( GetImport() ).GetStyleDisplayName( pStyle->GetFamily(), pStyle->GetParentName() ) );
+                OUString sParentStyleDisplayName( GetImport().GetStyleDisplayName( pStyle->GetFamily(), pStyle->GetParentName() ) );
                 if( nPrefLen )
                 {
                     sal_Int32 nStylePrefLen = sParentStyleDisplayName.lastIndexOf( '-' ) + 1;

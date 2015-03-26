@@ -69,7 +69,7 @@ const XMLPropertyHandler* XMLPageMasterPropHdlFactory::GetPropertyHandler( sal_I
 {
     nType &= MID_FLAG_MASK;
 
-    XMLPropertyHandler* pHdl = (XMLPropertyHandler*) XMLPropertyHandlerFactory::GetPropertyHandler( nType );
+    XMLPropertyHandler* pHdl = const_cast<XMLPropertyHandler*>(XMLPropertyHandlerFactory::GetPropertyHandler( nType ));
     if( !pHdl )
     {
         switch( nType )
