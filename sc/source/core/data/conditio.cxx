@@ -322,6 +322,11 @@ ScConditionEntry::~ScConditionEntry()
     delete pFormula2;
 }
 
+void ScConditionEntry::SetOperation(ScConditionMode eMode)
+{
+    eOp = eMode;
+}
+
 void ScConditionEntry::Compile( const OUString& rExpr1, const OUString& rExpr2,
         const OUString& rExprNmsp1, const OUString& rExprNmsp2,
         FormulaGrammar::Grammar eGrammar1, FormulaGrammar::Grammar eGrammar2, bool bTextToReal )
