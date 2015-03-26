@@ -109,7 +109,7 @@ public:
 
     PyObject * getAcquired() const
     {
-        Py_XINCREF( const_cast< PyObject*> (m) );
+        Py_XINCREF( m );
         return m;
     }
 
