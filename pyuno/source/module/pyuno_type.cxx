@@ -97,7 +97,7 @@ const char *typeClassToString( TypeClass t )
 
 static PyRef getClass( const Runtime & r , const char * name)
 {
-    return PyRef( PyDict_GetItemString( r.getImpl()->cargo->getUnoModule().get(), (char*) name ) );
+    return PyRef( PyDict_GetItemString( r.getImpl()->cargo->getUnoModule().get(), name ) );
 }
 
 PyRef getTypeClass( const Runtime & r )
@@ -236,7 +236,7 @@ Type PyType2Type( PyObject * o ) throw(RuntimeException )
 
 static PyObject* callCtor( const Runtime &r , const char * clazz, const PyRef & args )
 {
-    PyRef code( PyDict_GetItemString( r.getImpl()->cargo->getUnoModule().get(), (char*)clazz ) );
+    PyRef code( PyDict_GetItemString( r.getImpl()->cargo->getUnoModule().get(), clazz ) );
     if( ! code.is() )
     {
         OStringBuffer buf;

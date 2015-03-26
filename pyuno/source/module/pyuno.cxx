@@ -365,7 +365,7 @@ PyObject *PyUNO_invoke( PyObject *object, const char *name , PyObject *args )
                 }
                 PyTuple_SetItem( paras.get(), i , element );
             }
-            callable = PyRef( PyObject_GetAttrString( object , (char*)name ), SAL_NO_ACQUIRE );
+            callable = PyRef( PyObject_GetAttrString( object , name ), SAL_NO_ACQUIRE );
             if( !callable.is() )
                 return 0;
         }

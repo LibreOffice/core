@@ -223,7 +223,7 @@ Any Adapter::invoke( const OUString &aFunctionName,
         }
 
         // get callable
-        PyRef method(PyObject_GetAttrString( mWrappedObject.get(), (char*)TO_ASCII(aFunctionName)),
+        PyRef method(PyObject_GetAttrString( mWrappedObject.get(), TO_ASCII(aFunctionName)),
                      SAL_NO_ACQUIRE);
         raiseInvocationTargetExceptionWhenNeeded( runtime);
         if( !method.is() )
@@ -359,7 +359,7 @@ void Adapter::setValue( const OUString & aPropertyName, const Any & value )
         PyRef obj = runtime.any2PyObject( value );
 
         PyObject_SetAttrString(
-            mWrappedObject.get(), (char*)TO_ASCII(aPropertyName), obj.get() );
+            mWrappedObject.get(), TO_ASCII(aPropertyName), obj.get() );
         raiseInvocationTargetExceptionWhenNeeded( runtime);
 
     }
@@ -377,7 +377,7 @@ Any Adapter::getValue( const OUString & aPropertyName )
     {
         Runtime runtime;
         PyRef pyRef(
-            PyObject_GetAttrString( mWrappedObject.get(), (char*)TO_ASCII(aPropertyName) ),
+            PyObject_GetAttrString( mWrappedObject.get(), TO_ASCII(aPropertyName) ),
             SAL_NO_ACQUIRE );
 
         if (!pyRef.is() || PyErr_Occurred())
@@ -405,7 +405,7 @@ sal_Bool Adapter::hasProperty( const OUString & aPropertyName )
     PyThreadAttach guard( mInterpreter );
     {
         bRet = PyObject_HasAttrString(
-            mWrappedObject.get() , (char*) TO_ASCII( aPropertyName ));
+            mWrappedObject.get() , TO_ASCII( aPropertyName ));
     }
     return bRet;
 }

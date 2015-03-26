@@ -94,7 +94,7 @@ static PyRef getLoaderModule() throw( RuntimeException )
 static PyRef getObjectFromLoaderModule( const char * func )
     throw ( RuntimeException )
 {
-    PyRef object( PyDict_GetItemString(getLoaderModule().get(), (char*)func ) );
+    PyRef object( PyDict_GetItemString(getLoaderModule().get(), func ) );
     if( !object.is() )
     {
         OUStringBuffer buf;
@@ -215,7 +215,7 @@ Reference< XInterface > CreateInstance( const Reference< XComponentContext > & c
 #endif
 
 #if PY_MAJOR_VERSION >= 3
-        PyImport_AppendInittab( (char*)"pyuno", PyInit_pyuno );
+        PyImport_AppendInittab( "pyuno", PyInit_pyuno );
 #else
         PyImport_AppendInittab( (char*)"pyuno", initpyuno );
 #endif
