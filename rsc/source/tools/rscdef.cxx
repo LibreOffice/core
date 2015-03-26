@@ -548,7 +548,7 @@ bool RscFileTab::TestDef( sal_uLong lFileKey, size_t lPos,
     if( lFileKey == pDefDec->GetFileKey() )
     {
         RscFile * pFile = GetFile( pDefDec->GetFileKey() );
-        if( pFile && (lPos <= pFile->aDefLst.GetPos( (RscDefine *)pDefDec ))
+        if( pFile && (lPos <= pFile->aDefLst.GetPos( const_cast<RscDefine *>(pDefDec) ))
             && (lPos != ULONG_MAX ) )
         {
             return false;

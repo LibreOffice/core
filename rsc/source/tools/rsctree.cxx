@@ -39,7 +39,7 @@ void BiNode::EnumNodes( Link aLink ) const
 {
     if( Left() )
         Left()->EnumNodes( aLink );
-    aLink.Call( (BiNode *)this );
+    aLink.Call( const_cast<BiNode *>(this) );
     if( Right() )
         Right()->EnumNodes( aLink );
 }
@@ -185,7 +185,7 @@ NameNode* NameNode::SearchParent( const NameNode * pSearch ) const
         if( Left() )
         {
             if( ((NameNode *)Left())->Compare( pSearch ) == EQUAL )
-                return (NameNode *)this;
+                return const_cast<NameNode *>(this);
             return ((NameNode *)Left())->SearchParent( pSearch );
         }
     }
@@ -194,7 +194,7 @@ NameNode* NameNode::SearchParent( const NameNode * pSearch ) const
         if( Right() )
         {
             if( ((NameNode *)Right())->Compare( pSearch ) == EQUAL )
-                return (NameNode *)this;
+                return const_cast<NameNode *>(this);
             return ((NameNode *)Right())->SearchParent( pSearch );
         }
     }
@@ -219,7 +219,7 @@ NameNode* NameNode::Search( const NameNode * pSearch ) const
             return ((NameNode *)Right())->Search( pSearch );
     }
     else
-        return (NameNode *)this;
+        return const_cast<NameNode *>(this);
 
     return NULL;
 }
@@ -242,7 +242,7 @@ NameNode* NameNode::Search( const void * pSearch ) const
             return ((NameNode *)Right())->Search( pSearch );
     }
     else
-        return (NameNode *)this;
+        return const_cast<NameNode *>(this);
 
     return NULL;
 }
