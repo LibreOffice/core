@@ -276,12 +276,22 @@ void ChildrenManagerImpl::Update (bool bCreateNewObjectsOnDemand)
 
     // 6. If children have to be created immediately and not on demand then
     // create the missing accessible objects now.
-    if ( ! bCreateNewObjectsOnDemand)
-        CreateAccessibilityObjects (maVisibleChildren);
+    if (!bCreateNewObjectsOnDemand)
+    {
+        //operate on a copy of the list and restore it afterwards to guard
+        //against the pathological case where maVisibleChildren gets modified
+        //by other calls to this object while CreateAccessibilityObjects
+        //executes which can happen when java is disabled and the "enable-java"
+        //dialog appears during the instantiation of the linguistic components
+        //triggered by the creation of shapes belonging to the a11y objects
+        //
+        //i.e. launch start-center, launch impress with java disabled and
+        //a java-using linguistic component installed
+        maVisibleChildren.swap(aChildList);
+        CreateAccessibilityObjects(aChildList);
+        maVisibleChildren.swap(aChildList);
+    }
 }
-
-
-
 
 void ChildrenManagerImpl::CreateListOfVisibleShapes (
     ChildDescriptorListType& raDescriptorList)
