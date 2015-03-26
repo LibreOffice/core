@@ -1357,6 +1357,7 @@ bool ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
     bool bCtrl  = aKeyCode.IsMod1() || aKeyCode.IsMod3();
     bool bMod2 = aKeyCode.IsMod2();
     bool bDone = false;
+    bool bHandleKey = false;
 
     switch( aKeyCode.GetCode() )
     {
@@ -1572,7 +1573,7 @@ bool ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
                 }
                 bDone = true;
             }
-            maQuickSelectionEngine.Reset();
+            bHandleKey = true;
         }
         break;
 
@@ -1595,18 +1596,21 @@ bool ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
                 maQuickSelectionEngine.Reset();
 
                 bDone = true;
-                break;
+            }
+            else
+            {
+                bHandleKey = true;
             }
         }
-        // fall through intentional
-        default:
-        {
-            if ( !IsReadOnly() )
-            {
-                bDone = maQuickSelectionEngine.HandleKeyEvent( rKEvt );
-            }
-          }
         break;
+
+        default:
+            bHandleKey = true;
+            break;
+    }
+    if (bHandleKey && !IsReadOnly())
+    {
+        bDone = maQuickSelectionEngine.HandleKeyEvent( rKEvt );
     }
 
     if  (   ( nSelect != LISTBOX_ENTRY_NOTFOUND )
