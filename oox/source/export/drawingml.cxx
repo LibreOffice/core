@@ -1720,6 +1720,60 @@ void DrawingML::WriteParagraphNumbering( Reference< XPropertySet > rXPropSet, sa
     }
 }
 
+sal_Int32 DrawingML::getBulletMarginIndentation (Reference< XPropertySet > rXPropSet,sal_Int16 nLevel, const OUString& propName)
+{
+    if( nLevel < 0 || !GETA( NumberingRules ) )
+        return 0;
+
+    Reference< XIndexAccess > rXIndexAccess;
+
+    if (!(mAny >>= rXIndexAccess) || nLevel >= rXIndexAccess->getCount())
+        return 0;
+
+    DBG(fprintf (stderr, "numbering rules\n"));
+
+    Sequence<PropertyValue> aPropertySequence;
+    rXIndexAccess->getByIndex(nLevel) >>= aPropertySequence;
+
+    if (!aPropertySequence.hasElements())
+        return 0;
+
+    sal_Int32 nPropertyCount = aPropertySequence.getLength();
+
+    const PropertyValue* pPropValue = aPropertySequence.getArray();
+
+    sal_Int16 nNumberingType = SVX_NUM_NUMBER_NONE;
+    sal_Int32 nBulletLeftMargin = 0;
+    sal_Int32 nFirstLineOffset = 0;
+
+    for ( sal_Int32 i = 0; i < nPropertyCount; i++ )
+    {
+        const void* pValue = pPropValue[ i ].Value.getValue();
+        if ( pValue )
+        {
+            OUString aPropName( pPropValue[ i ].Name );
+            DBG(fprintf (stderr, "pro name: %s\n", OUStringToOString( aPropName, RTL_TEXTENCODING_UTF8 ).getStr()));
+            if ( aPropName == "LeftMargin" )
+            {
+                nBulletLeftMargin = *( (sal_Int32*)pValue );
+            }
+            else if ( aPropName == "FirstLineOffset" )
+            {
+                nFirstLineOffset = *( (sal_Int32*)pValue );
+            }
+        }
+    }
+    if (propName == "LeftMargin")
+        return nBulletLeftMargin;
+    else if (propName == "FirstLineOffset")
+        return nFirstLineOffset;
+
+    if (nNumberingType == SVX_NUM_NUMBER_NONE)
+        return 0;
+
+    return 0;
+}
+
 const char* DrawingML::GetAlignment( sal_Int32 nAlignment )
 {
     const char* sAlignment = NULL;
@@ -1778,15 +1832,33 @@ void DrawingML::WriteParagraphProperties( Reference< XTextContent > rParagraph )
     if( GETAD( ParaLineSpacing ) )
         bHasLinespacing = ( mAny >>= aLineSpacing );
 
+    sal_Int32 nParaLeftMargin = 0;
+    sal_Int32 nParaFirstLineIndent = 0;
+
+    GET( nParaLeftMargin, ParaLeftMargin );
+    GET( nParaFirstLineIndent,ParaFirstLineIndent);
+
+    sal_Int32 nLeftMargin =  getBulletMarginIndentation ( rXPropSet, nLevel,"LeftMargin");
+    sal_Int32 nLineIndentation = getBulletMarginIndentation ( rXPropSet, nLevel,"FirstLineOffset");
+
     if( nLevel != -1
         || nAlignment != style::ParagraphAdjust_LEFT
         || bHasLinespacing )
     {
-        mpFS->startElementNS( XML_a, XML_pPr,
-                              XML_lvl, nLevel > 0 ? I32S( nLevel ) : NULL,
-                              XML_marL, NULL,
-                              XML_algn, GetAlignment( nAlignment ),
-                              FSEND );
+        if (nParaLeftMargin) // For Paraghraph
+            mpFS->startElementNS( XML_a, XML_pPr,
+                               XML_lvl, nLevel > 0 ? I32S( nLevel ) : NULL,
+                               XML_marL, nParaLeftMargin > 0 ? I32S( oox::drawingml::convertHmmToEmu( nParaLeftMargin ) ) : NULL,
+                               XML_indent, nParaFirstLineIndent ? I32S( oox::drawingml::convertHmmToEmu( nParaFirstLineIndent ) ) : NULL,
+                               XML_algn, GetAlignment( nAlignment ),
+                               FSEND );
+        else
+            mpFS->startElementNS( XML_a, XML_pPr,
+                               XML_lvl, nLevel > 0 ? I32S( nLevel ) : NULL,
+                               XML_marL, nLeftMargin > 0 ? I32S( oox::drawingml::convertHmmToEmu( nLeftMargin ) ) : NULL,
+                               XML_indent, nLineIndentation ? I32S( oox::drawingml::convertHmmToEmu( nLineIndentation ) ) : NULL,
+                               XML_algn, GetAlignment( nAlignment ),
+                               FSEND );
 
         if( bHasLinespacing )
         {
