@@ -98,9 +98,9 @@ ErrCode ImgProdLockBytes::ReadAt(sal_uInt64 const nPos,
 {
     if( GetStream() )
     {
-        ( (SvStream*) GetStream() )->ResetError();
+        const_cast<SvStream*>(GetStream())->ResetError();
         const ErrCode nErr = SvLockBytes::ReadAt( nPos, pBuffer, nCount, pRead );
-        ( (SvStream*) GetStream() )->ResetError();
+        const_cast<SvStream*>(GetStream())->ResetError();
         return nErr;
     }
     else
