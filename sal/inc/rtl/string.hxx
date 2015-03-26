@@ -234,8 +234,9 @@ private:
       @return a pointer to a (not necessarily null-terminated) byte string
       representing the characters of this string object.
     */
-    operator const sal_Char *() const SAL_THROW(()) { return pData->buffer; }
+
 public:
+    operator const sal_Char *() const SAL_THROW(()) { return pData->buffer; }
     /** Returns a reference to a character of this string. */
     sal_Char& operator[]( int n ) { return pData->buffer[n]; }
     /** Returns a const reference to a character of this string. */
