@@ -54,10 +54,14 @@ void SAL_CALL OCommonEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const
     bool bBackToLoaded = false;
     if ( m_nObjectState == embed::EmbedStates::LOADED )
     {
-        changeState( embed::EmbedStates::RUNNING );
+        //attempt an optimization for chart components
+        if (!IsChartComponent())
+        {
+            changeState( embed::EmbedStates::RUNNING );
 
-        // the links should be switched back to loaded state for now to avoid locking problems
-        bBackToLoaded = m_bIsLink;
+            // the links should be switched back to loaded state for now to avoid locking problems
+            bBackToLoaded = m_bIsLink;
+        }
     }
 
     bool bSuccess = m_pDocHolder->SetExtent( nAspect, aSize );
@@ -133,10 +137,14 @@ sal_Int32 SAL_CALL OCommonEmbeddedObject::getMapUnit( sal_Int64 nAspect )
     bool bBackToLoaded = false;
     if ( m_nObjectState == embed::EmbedStates::LOADED )
     {
-        changeState( embed::EmbedStates::RUNNING );
+        //attempt an optimization for chart components
+        if (!IsChartComponent())
+        {
+            changeState( embed::EmbedStates::RUNNING );
 
-        // the links should be switched back to loaded state for now to avoid locking problems
-        bBackToLoaded = m_bIsLink;
+            // the links should be switched back to loaded state for now to avoid locking problems
+            bBackToLoaded = m_bIsLink;
+        }
     }
 
     sal_Int32 nResult = m_pDocHolder->GetMapUnit( nAspect );
