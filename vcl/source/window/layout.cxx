@@ -2034,13 +2034,13 @@ void MessageDialog::dispose()
         m_aOwnedButtons[i].disposeAndClear();
     m_aOwnedButtons.clear();
 
-    m_pSecondaryMessage.clear();
-    m_pSecondaryMessage.clear();
-    m_pImage.clear();
+    m_pPrimaryMessage.disposeAndClear();
+    m_pSecondaryMessage.disposeAndClear();
+    m_pSecondaryMessage.disposeAndClear();
+    m_pImage.disposeAndClear();
     m_pGrid.disposeAndClear();
     m_pOwnedActionArea.disposeAndClear();
     m_pOwnedContentArea.disposeAndClear();
-    m_pPrimaryMessage.clear();
     Dialog::dispose();
 }
 
