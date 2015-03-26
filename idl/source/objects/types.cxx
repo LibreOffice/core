@@ -270,7 +270,7 @@ SvMetaType::~SvMetaType() {
 SvMetaAttributeMemberList & SvMetaType::GetAttrList() const
 {
     if( !pAttrList )
-        ((SvMetaType *)this)->pAttrList = new SvMetaAttributeMemberList();
+        const_cast<SvMetaType *>(this)->pAttrList = new SvMetaAttributeMemberList();
     return *pAttrList;
 }
 
@@ -293,7 +293,7 @@ SvMetaType * SvMetaType::GetBaseType() const
 {
     if( GetRef() && GetType() == TYPE_BASE )
         return static_cast<SvMetaType *>(GetRef())->GetBaseType();
-    return (SvMetaType *)this;
+    return const_cast<SvMetaType *>(this);
 }
 
 SvMetaType * SvMetaType::GetReturnType() const
