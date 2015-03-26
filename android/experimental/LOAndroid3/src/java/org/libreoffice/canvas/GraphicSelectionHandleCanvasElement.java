@@ -20,29 +20,39 @@ import android.graphics.RectF;
  * touched.
  */
 public class GraphicSelectionHandleCanvasElement {
+    private final HandlePosition mHandlePosition;
     public PointF mPosition = new PointF();
     private float mRadius = 20.0f;
-    private Paint mGraphicHandleFillPaint = new Paint();
-    private Paint mGraphicSelectionPaint = new Paint();
-    private Paint mGraphicHandleSelectedFillPaint = new Paint();
+    private Paint mStrokePaint = new Paint();
+    private Paint mFillPaint = new Paint();
+    private Paint mSelectedFillPaint = new Paint();
     private RectF mHitRect = new RectF();
+    private boolean mSelected = false;
 
-    public GraphicSelectionHandleCanvasElement(Paint graphicSelectionPaint) {
-        mGraphicSelectionPaint = graphicSelectionPaint;
+    public GraphicSelectionHandleCanvasElement(HandlePosition position) {
+        mHandlePosition = position;
 
-        mGraphicHandleFillPaint.setStyle(Paint.Style.FILL);
-        mGraphicHandleFillPaint.setColor(Color.WHITE);
+        mStrokePaint.setStyle(Paint.Style.STROKE);
+        mStrokePaint.setColor(Color.BLACK);
+        mStrokePaint.setStrokeWidth(3);
 
-        mGraphicHandleSelectedFillPaint.setStyle(Paint.Style.FILL);
-        mGraphicHandleSelectedFillPaint.setColor(Color.BLACK);
+        mFillPaint.setStyle(Paint.Style.FILL);
+        mFillPaint.setColor(Color.WHITE);
+
+        mSelectedFillPaint.setStyle(Paint.Style.FILL);
+        mSelectedFillPaint.setColor(Color.BLUE);
+    }
+
+    public HandlePosition getHandlePosition() {
+        return mHandlePosition;
     }
 
     public void draw(Canvas canvas) {
-        drawFilledCircle(canvas, mPosition.x, mPosition.y, mRadius, mGraphicSelectionPaint, mGraphicHandleFillPaint);
-    }
-
-    public void drawSelected(Canvas canvas) {
-        drawFilledCircle(canvas, mPosition.x, mPosition.y, mRadius, mGraphicSelectionPaint, mGraphicHandleSelectedFillPaint);
+        if (mSelected) {
+            drawFilledCircle(canvas, mPosition.x, mPosition.y, mRadius, mStrokePaint, mSelectedFillPaint);
+        } else {
+            drawFilledCircle(canvas, mPosition.x, mPosition.y, mRadius, mStrokePaint, mFillPaint);
+        }
     }
 
     private void drawFilledCircle(Canvas canvas, float x, float y, float radius, Paint strokePaint, Paint fillPaint) {
@@ -61,6 +71,25 @@ public class GraphicSelectionHandleCanvasElement {
 
     public boolean contains(float x, float y) {
         return mHitRect.contains(x, y);
+    }
+
+    public void select() {
+        mSelected = true;
+    }
+
+    public void reset() {
+        mSelected = false;
+    }
+
+    public enum HandlePosition {
+        TOP_LEFT,
+        TOP,
+        TOP_RIGHT,
+        RIGHT,
+        BOTTOM_RIGHT,
+        BOTTOM,
+        BOTTOM_LEFT,
+        LEFT
     }
 }
 

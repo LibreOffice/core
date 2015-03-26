@@ -49,8 +49,6 @@ public class TextCursorView extends View implements View.OnTouchListener {
     private Paint mSelectionPaint = new Paint();
     private boolean mSelectionsVisible;
 
-    private Paint mGraphicSelectionPaint = new Paint();
-
     private GraphicSelectionCanvasElement mGraphicSelection;
 
     private boolean mGraphicSelectionVisible;
@@ -88,11 +86,7 @@ public class TextCursorView extends View implements View.OnTouchListener {
             mSelectionPaint.setAlpha(50);
             mSelectionsVisible = false;
 
-            mGraphicSelectionPaint.setStyle(Paint.Style.STROKE);
-            mGraphicSelectionPaint.setColor(Color.BLACK);
-            mGraphicSelectionPaint.setStrokeWidth(2);
-
-            mGraphicSelection = new GraphicSelectionCanvasElement(mGraphicSelectionPaint);
+            mGraphicSelection = new GraphicSelectionCanvasElement();
 
             mGraphicSelectionVisible = false;
 
@@ -211,6 +205,8 @@ public class TextCursorView extends View implements View.OnTouchListener {
 
     public void showGraphicSelection() {
         mGraphicSelectionVisible = true;
+        mGraphicSelectionMove = false;
+        mGraphicSelection.reset();
         invalidate();
     }
 
