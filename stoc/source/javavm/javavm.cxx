@@ -731,7 +731,7 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
             else
                 arPropStrings[index] = sOption;
 
-            arOptions[index].optionString = (sal_Char*)arPropStrings[index].getStr();
+            arOptions[index].optionString = const_cast<sal_Char*>(arPropStrings[index].getStr());
             arOptions[index].extraInfo = 0;
             index ++;
         }

@@ -275,7 +275,7 @@ IntrospectionAccessStatic_Impl::IntrospectionAccessStatic_Impl( Reference< XIdlR
 sal_Int32 IntrospectionAccessStatic_Impl::getPropertyIndex( const OUString& aPropertyName ) const
 {
     sal_Int32 iHashResult = -1;
-    IntrospectionAccessStatic_Impl* pThis = (IntrospectionAccessStatic_Impl*)this;
+    IntrospectionAccessStatic_Impl* pThis = const_cast<IntrospectionAccessStatic_Impl*>(this);
     IntrospectionNameMap::iterator aIt = pThis->maPropertyNameMap.find( aPropertyName );
     if( !( aIt == pThis->maPropertyNameMap.end() ) )
         iHashResult = (*aIt).second;
@@ -285,7 +285,7 @@ sal_Int32 IntrospectionAccessStatic_Impl::getPropertyIndex( const OUString& aPro
 sal_Int32 IntrospectionAccessStatic_Impl::getMethodIndex( const OUString& aMethodName ) const
 {
     sal_Int32 iHashResult = -1;
-    IntrospectionAccessStatic_Impl* pThis = (IntrospectionAccessStatic_Impl*)this;
+    IntrospectionAccessStatic_Impl* pThis = const_cast<IntrospectionAccessStatic_Impl*>(this);
     IntrospectionNameMap::iterator aIt = pThis->maMethodNameMap.find( aMethodName );
     if( !( aIt == pThis->maMethodNameMap.end() ) )
     {
