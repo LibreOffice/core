@@ -93,35 +93,35 @@ namespace treeview {
 
         void setApplication( const char* appl )
         {
-            application = OUString( (sal_Char*)(appl),
+            application = OUString( appl,
                                          strlen( appl ),
                                          RTL_TEXTENCODING_UTF8 );
         }
 
         void setTitle( const char* itle )
         {
-            title += OUString( (sal_Char*)(itle),
+            title += OUString( itle,
                                     strlen( itle ),
                                     RTL_TEXTENCODING_UTF8 );
         }
 
         void setTitle( const XML_Char* itle,int len )
         {
-            title += OUString( (sal_Char*)(itle),
+            title += OUString( itle,
                                     len,
                                     RTL_TEXTENCODING_UTF8 );
         }
 
         void setId( const char* d )
         {
-            id = OUString( (sal_Char*)(d),
+            id = OUString( d,
                                 strlen( d ),
                                 RTL_TEXTENCODING_UTF8 );
         }
 
         void setAnchor( const char* nchor )
         {
-            anchor = OUString( (sal_Char*)(nchor),
+            anchor = OUString( nchor,
                                     strlen( nchor ),
                                     RTL_TEXTENCODING_UTF8 );
         }
