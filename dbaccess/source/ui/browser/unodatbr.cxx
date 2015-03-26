@@ -1942,7 +1942,7 @@ void SbaTableQueryBrowser::Execute(sal_uInt16 nId, const Sequence< PropertyValue
 
                     // first fill the selection
                     SbaGridControl* pGrid = getBrowserView()->getVclControl();
-                    MultiSelection* pSelection = (MultiSelection*)pGrid->GetSelection();
+                    MultiSelection* pSelection = const_cast<MultiSelection*>(pGrid->GetSelection());
                     Sequence< Any > aSelection;
                     if ( !pGrid->IsAllSelected() )
                     {   // transfer the selected rows only if not all rows are selected

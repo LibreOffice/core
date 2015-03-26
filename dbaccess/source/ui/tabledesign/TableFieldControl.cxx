@@ -124,22 +124,22 @@ TOTypeInfoSP OTableFieldControl::getTypeInfo(sal_Int32 _nPos)
 
 const OTypeInfoMap* OTableFieldControl::getTypeInfo() const
 {
-    return &const_cast<OTableFieldControl*>(this)->GetCtrl()->GetView()->getController().getTypeInfo();
+    return &GetCtrl()->GetView()->getController().getTypeInfo();
 }
 
 Locale OTableFieldControl::GetLocale() const
 {
-    return const_cast<OTableFieldControl*>(this)->GetCtrl()->GetView()->getLocale();
+    return GetCtrl()->GetView()->getLocale();
 }
 
 bool OTableFieldControl::isAutoIncrementValueEnabled() const
 {
-    return const_cast<OTableFieldControl*>(this)->GetCtrl()->GetView()->getController().isAutoIncrementValueEnabled();
+    return GetCtrl()->GetView()->getController().isAutoIncrementValueEnabled();
 }
 
 OUString OTableFieldControl::getAutoIncrementValue() const
 {
-    return const_cast<OTableFieldControl*>(this)->GetCtrl()->GetView()->getController().getAutoIncrementValue();
+    return GetCtrl()->GetView()->getController().getAutoIncrementValue();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

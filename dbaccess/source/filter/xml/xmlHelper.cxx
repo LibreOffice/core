@@ -78,7 +78,7 @@ rtl::Reference < XMLPropertySetMapper > OXMLHelper::GetTableStylesPropertySetMap
         MAP_END()
     };
     rtl::Reference < XMLPropertyHandlerFactory> xFac = new ::xmloff::OControlPropertyHandlerFactory();
-    return new XMLPropertySetMapper((XMLPropertyMapEntry*)s_aTableStylesProperties, xFac, bForExport);
+    return new XMLPropertySetMapper(s_aTableStylesProperties, xFac, bForExport);
 }
 
 rtl::Reference < XMLPropertySetMapper > OXMLHelper::GetColumnStylesPropertySetMapper( bool bForExport )
@@ -92,7 +92,7 @@ rtl::Reference < XMLPropertySetMapper > OXMLHelper::GetColumnStylesPropertySetMa
         MAP_END()
     };
     rtl::Reference < XMLPropertyHandlerFactory> xFac = new OPropertyHandlerFactory();
-    return new XMLPropertySetMapper((XMLPropertyMapEntry*)s_aColumnStylesProperties, xFac, bForExport);
+    return new XMLPropertySetMapper(s_aColumnStylesProperties, xFac, bForExport);
 }
 
 rtl::Reference < XMLPropertySetMapper > OXMLHelper::GetCellStylesPropertySetMapper( bool bForExport )
@@ -133,7 +133,7 @@ rtl::Reference < XMLPropertySetMapper > OXMLHelper::GetCellStylesPropertySetMapp
         MAP_END()
     };
     rtl::Reference < XMLPropertyHandlerFactory> xFac = new /*OPropertyHandlerFactory*/::xmloff::OControlPropertyHandlerFactory();
-    return new XMLPropertySetMapper((XMLPropertyMapEntry*)s_aCellStylesProperties, xFac, bForExport);
+    return new XMLPropertySetMapper(s_aCellStylesProperties, xFac, bForExport);
 }
 
 rtl::Reference < XMLPropertySetMapper > OXMLHelper::GetRowStylesPropertySetMapper( bool bForExport )
@@ -145,7 +145,7 @@ rtl::Reference < XMLPropertySetMapper > OXMLHelper::GetRowStylesPropertySetMappe
         MAP_END()
     };
     rtl::Reference < XMLPropertyHandlerFactory> xFac = new OPropertyHandlerFactory();
-    return new XMLPropertySetMapper((XMLPropertyMapEntry*)s_aStylesProperties, xFac, bForExport);
+    return new XMLPropertySetMapper(s_aStylesProperties, xFac, bForExport);
 }
 
 }

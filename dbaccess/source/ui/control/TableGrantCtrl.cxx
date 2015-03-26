@@ -400,7 +400,7 @@ void OTableGrantControl::PaintCell( OutputDevice& rDev, const Rectangle& rRect, 
     }
     else
     {
-        OUString aText(((OTableGrantControl*)this)->GetCellText( m_nDataPos, nColumnId ));
+        OUString aText(GetCellText( m_nDataPos, nColumnId ));
         Point aPos( rRect.TopLeft() );
         sal_Int32 nWidth = GetDataWindow().GetTextWidth( aText );
         sal_Int32 nHeight = GetDataWindow().GetTextHeight();

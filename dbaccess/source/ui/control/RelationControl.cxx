@@ -345,7 +345,7 @@ namespace dbaui
 
     void ORelationControl::PaintCell( OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColumnId ) const
     {
-        OUString aText = const_cast< ORelationControl*>(this)->GetCellText( m_nDataPos, nColumnId );
+        OUString aText = GetCellText( m_nDataPos, nColumnId );
 
         Point aPos( rRect.TopLeft() );
         Size aTextSize( GetDataWindow().GetTextWidth( aText ), GetDataWindow().GetTextHeight() );
