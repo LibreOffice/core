@@ -100,6 +100,8 @@ public:
     void testRightToLeftParaghraph();
     void testTableCellBorder();
     void testBulletColor();
+    void testBulletMarginAndIndentation();
+    void testParaMarginAndindentation();
 
 #if !defined WNT
     void testBnc822341();
@@ -130,6 +132,8 @@ public:
     CPPUNIT_TEST(testRightToLeftParaghraph);
     CPPUNIT_TEST(testTableCellBorder);
     CPPUNIT_TEST(testBulletColor);
+    CPPUNIT_TEST(testBulletMarginAndIndentation);
+    CPPUNIT_TEST(testParaMarginAndindentation);
 
 #if !defined WNT
     CPPUNIT_TEST(testBnc822341);
@@ -945,6 +949,70 @@ void SdExportTest::testBnc822341()
 }
 
 #endif
+
+void SdExportTest::testBulletMarginAndIndentation()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/pptx/bulletMarginAndIndent.pptx"), PPTX );
+
+    xDocShRef = saveAndReload( xDocShRef, PPTX );
+
+    uno::Reference< drawing::XDrawPagesSupplier > xDoc(
+    xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW );
+    uno::Reference< drawing::XDrawPage > xPage(
+    xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW );
+    SdDrawDocument *pDoc = xDocShRef->GetDoc();
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+
+    const SdrPage *pPage = pDoc->GetPage(1);
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+
+    SdrTextObj *pTxtObj = dynamic_cast<SdrTextObj *>( pPage->GetObj(0) );
+    CPPUNIT_ASSERT_MESSAGE( "no text object", pTxtObj != NULL);
+
+    const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
+    const SvxNumBulletItem *pNumFmt = dynamic_cast<const SvxNumBulletItem *>(aEdit.GetParaAttribs(0).GetItem(EE_PARA_NUMBULLET));
+    CPPUNIT_ASSERT(pNumFmt);
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Bullet's left margin is wrong!", sal_uInt32(1000),sal_uInt32(pNumFmt->GetNumRule()->GetLevel(0).GetAbsLSpace()) ); // left margin is 0.79 cm
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Bullet's indentation is wrong!", sal_Int32(-998),sal_Int32(pNumFmt->GetNumRule()->GetLevel(0). GetFirstLineOffset()));
+}
+
+void SdExportTest::testParaMarginAndindentation()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/paraMarginAndIndentation.pptx"), PPTX);
+
+    xDocShRef = saveAndReload( xDocShRef, PPTX );
+
+    uno::Reference< drawing::XDrawPagesSupplier > xDoc(
+    xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW );
+
+    uno::Reference< drawing::XDrawPage > xPage(
+    xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW );
+
+    uno::Reference< beans::XPropertySet > xShape(
+    xPage->getByIndex(0), uno::UNO_QUERY );
+    CPPUNIT_ASSERT_MESSAGE( "no shape", xShape.is() );
+
+    // Get first paragraph
+    uno::Reference<text::XText> xText = uno::Reference<text::XTextRange>(xShape, uno::UNO_QUERY)->getText();
+    CPPUNIT_ASSERT_MESSAGE( "not a text shape", xText.is() );
+    uno::Reference<container::XEnumerationAccess> paraEnumAccess;
+    paraEnumAccess.set(xText, uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> paraEnum = paraEnumAccess->createEnumeration();
+    uno::Reference<text::XTextRange> const xParagraph(paraEnum->nextElement(),
+                uno::UNO_QUERY_THROW);
+    uno::Reference< beans::XPropertySet > xPropSet( xParagraph, uno::UNO_QUERY_THROW );
+
+    sal_Int32 nParaLeftMargin = 0;
+    xPropSet->getPropertyValue( "ParaLeftMargin" ) >>= nParaLeftMargin;
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(1000), sal_uInt32(nParaLeftMargin));
+
+    sal_Int32 nParaFirstLineIndent = 0;
+    xPropSet->getPropertyValue( "ParaFirstLineIndent" ) >>= nParaFirstLineIndent;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1268), sal_Int32(nParaFirstLineIndent));
+
+    xDocShRef->DoClose();
+}
 
 void SdExportTest::testCellLeftAndRightMargin()
 {
