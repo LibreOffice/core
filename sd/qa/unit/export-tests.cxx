@@ -24,6 +24,8 @@
 #include <editeng/postitem.hxx>
 #include <editeng/bulletitem.hxx>
 
+#include <oox/drawingml/drawingmltypes.hxx>
+
 #include <rsc/rscsfx.hxx>
 
 #include <svx/svdoutl.hxx>
@@ -57,6 +59,8 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <svx/svdotable.hxx>
+#include <com/sun/star/table/XTable.hpp>
+#include <com/sun/star/table/XMergeableCell.hpp>
 
 #include <config_features.h>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
@@ -86,6 +90,8 @@ public:
     void testTableCellFillProperties();
     void testBulletStartNumber();
     void testLineStyle();
+    void testCellLeftAndRightMargin();
+
 #if !defined WNT
     void testBnc822341();
 #endif
@@ -111,6 +117,7 @@ public:
     CPPUNIT_TEST(testTableCellFillProperties);
     CPPUNIT_TEST(testBulletStartNumber);
     CPPUNIT_TEST(testLineStyle);
+    CPPUNIT_TEST(testCellLeftAndRightMargin);
 #if !defined WNT
     CPPUNIT_TEST(testBnc822341);
 #endif
@@ -867,6 +874,45 @@ void SdExportTest::testBnc822341()
 }
 
 #endif
+
+void SdExportTest::testCellLeftAndRightMargin()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("sd/qa/unit/data/pptx/n90223.pptx"), PPTX);
+    xDocShRef = saveAndReload( xDocShRef, PPTX );
+    sal_Int32 nLeftMargin, nRightMargin;
+
+    uno::Reference< drawing::XDrawPagesSupplier > xDoc(
+        xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW );
+
+    uno::Reference< drawing::XDrawPage > xPage(xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW );
+    SdDrawDocument *pDoc = xDocShRef->GetDoc();
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+
+    const SdrPage *pPage = pDoc->GetPage(1);
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+
+    sdr::table::SdrTableObj *pTableObj = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(0));
+    CPPUNIT_ASSERT( pTableObj );
+
+    uno::Reference< com::sun::star::table::XTable > xTable (pTableObj->getTable(), uno::UNO_QUERY_THROW);
+    uno::Reference< com::sun::star::table::XMergeableCell > xCell( xTable->getCellByPosition(0, 0), uno::UNO_QUERY_THROW );
+    uno::Reference< beans::XPropertySet > xCellPropSet(xCell, uno::UNO_QUERY_THROW);
+
+    uno::Any aLeftMargin = xCellPropSet->getPropertyValue("TextLeftDistance");
+    aLeftMargin >>= nLeftMargin ;
+
+    uno::Any aRightMargin = xCellPropSet->getPropertyValue("TextRightDistance");
+    aRightMargin >>= nRightMargin ;
+
+    // Convert values to EMU
+    nLeftMargin  =  oox::drawingml::convertHmmToEmu( nLeftMargin );
+    nRightMargin =  oox::drawingml::convertHmmToEmu( nRightMargin );
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(45720), nLeftMargin);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(45720), nRightMargin);
+
+    xDocShRef->DoClose();
+}
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdExportTest);
 
