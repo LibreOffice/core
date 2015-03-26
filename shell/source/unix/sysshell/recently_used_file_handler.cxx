@@ -40,6 +40,7 @@
 #include <algorithm>
 #include <functional>
 #include <string.h>
+#include <time.h>
 
 namespace /* private */ {
     //########################################
