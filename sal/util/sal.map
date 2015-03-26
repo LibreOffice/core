@@ -629,6 +629,8 @@ UDK_3.12 { # AOO 3.5
     global:
         osl_loadAsciiModule;
         osl_loadAsciiModuleRelative;
+
+        rtl_math_powr;
 } UDK_3.11;
 
 PRIVATE_1.0 {
