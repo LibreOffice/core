@@ -524,7 +524,7 @@ ImplListBoxWindow::ImplListBoxWindow( vcl::Window* pParent, WinBits nWinStyle ) 
     mnCurrentPos            = LISTBOX_ENTRY_NOTFOUND;
     mnTrackingSaveSelection = LISTBOX_ENTRY_NOTFOUND;
     mnSeparatorPos          = LISTBOX_ENTRY_NOTFOUND;
-    meProminentType         = PROMINENT_TOP;
+    meProminentType         = ProminentEntry::TOP;
 
     SetLineColor();
     SetTextFillColor();
@@ -1992,7 +1992,7 @@ void ImplListBoxWindow::SetTopEntry( sal_Int32 nTop )
 
 void ImplListBoxWindow::ShowProminentEntry( sal_Int32 nEntryPos )
 {
-    if( meProminentType == PROMINENT_MIDDLE )
+    if( meProminentType == ProminentEntry::MIDDLE )
     {
         sal_Int32 nPos = nEntryPos;
         long nWHeight = PixelToLogic( GetSizePixel() ).Height();

@@ -312,7 +312,7 @@ typedef sal_uInt16 StandardButtonType;
 
 // prominent place for ListBox window types
 
-enum ProminentEntry { PROMINENT_TOP, PROMINENT_MIDDLE };
+enum class ProminentEntry { TOP, MIDDLE };
 
 #endif
 

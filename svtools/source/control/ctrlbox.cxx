@@ -1530,7 +1530,7 @@ void FontSizeBox::ImplInit()
     SetDecimalDigits( 1 );
     SetMin( 20 );
     SetMax( 9999 );
-    SetProminentEntryType( PROMINENT_MIDDLE );
+    SetProminentEntryType( ProminentEntry::MIDDLE );
 }
 
 void FontSizeBox::Reformat()
