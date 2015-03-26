@@ -45,23 +45,23 @@ inline const sal_Int16& SAL_CALL shell::MyProperty::getAttributes() const
 }
 inline void SAL_CALL shell::MyProperty::setHandle( const sal_Int32& __Handle ) const
 {
-    (( MyProperty* )this )->Handle = __Handle;
+    const_cast<MyProperty*>(this)->Handle = __Handle;
 }
 inline void SAL_CALL shell::MyProperty::setType( const com::sun::star::uno::Type& __Typ ) const
 {
-    (( MyProperty* )this )->Typ = __Typ;
+    const_cast<MyProperty*>(this)->Typ = __Typ;
 }
 inline void SAL_CALL shell::MyProperty::setValue( const com::sun::star::uno::Any& __Value ) const
 {
-    (( MyProperty* )this )->Value = __Value;
+    const_cast<MyProperty*>(this)->Value = __Value;
 }
 inline void SAL_CALL shell::MyProperty::setState( const com::sun::star::beans::PropertyState& __State ) const
 {
-    (( MyProperty* )this )->State = __State;
+    const_cast<MyProperty*>(this)->State = __State;
 }
 inline void SAL_CALL shell::MyProperty::setAttributes( const sal_Int16& __Attributes ) const
 {
-    (( MyProperty* )this )->Attributes = __Attributes;
+    const_cast<MyProperty*>(this)->Attributes = __Attributes;
 }
 
 

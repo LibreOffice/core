@@ -86,8 +86,8 @@ sal_Int64 SAL_CALL Seekable::getLength() throw( io::IOException, uno::RuntimeExc
     sal_uInt64 nSize = 0;
 
     GFileInfo* pInfo = G_IS_FILE_INPUT_STREAM(mpStream)
-        ? g_file_input_stream_query_info(G_FILE_INPUT_STREAM(mpStream), const_cast<char*>(G_FILE_ATTRIBUTE_STANDARD_SIZE), NULL, NULL)
-        : g_file_output_stream_query_info(G_FILE_OUTPUT_STREAM(mpStream), const_cast<char*>(G_FILE_ATTRIBUTE_STANDARD_SIZE), NULL, NULL);
+        ? g_file_input_stream_query_info(G_FILE_INPUT_STREAM(mpStream), G_FILE_ATTRIBUTE_STANDARD_SIZE, NULL, NULL)
+        : g_file_output_stream_query_info(G_FILE_OUTPUT_STREAM(mpStream), G_FILE_ATTRIBUTE_STANDARD_SIZE, NULL, NULL);
 
     if (pInfo)
     {
