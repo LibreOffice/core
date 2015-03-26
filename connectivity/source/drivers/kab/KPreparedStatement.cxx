@@ -74,7 +74,7 @@ void KabPreparedStatement::getNextParameter(OUString &rParameter) const throw(SQ
         const OUString sError( aResources.getResourceString(
                 STR_INVALID_PARA_COUNT
              ) );
-        ::dbtools::throwGenericSQLException(sError,*(KabPreparedStatement *) this);
+        ::dbtools::throwGenericSQLException(sError,*const_cast<KabPreparedStatement *>(this));
     } // if (m_nParameterIndex >= (sal_Int32) (*m_aParameterRow).size())
 
     rParameter = (m_aParameterRow->get())[m_nParameterIndex];

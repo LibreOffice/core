@@ -107,7 +107,7 @@ void bufferEscapeConstant( OUStringBuffer & buf, const OUString & value, Connect
     OString y = iOUStringToOString( value, settings );
     OStringBuffer strbuf( y.getLength() * 2 + 2 );
     int error;
-    int len = PQescapeStringConn(settings->pConnection, ((char*)strbuf.getStr()), y.getStr() , y.getLength(), &error );
+    int len = PQescapeStringConn(settings->pConnection, const_cast<char*>(strbuf.getStr()), y.getStr() , y.getLength(), &error );
     if ( error )
     {
         char *errstr = PQerrorMessage(settings->pConnection);

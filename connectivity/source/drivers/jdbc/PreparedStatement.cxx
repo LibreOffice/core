@@ -434,7 +434,7 @@ void SAL_CALL java_sql_PreparedStatement::setBytes( sal_Int32 parameterIndex, co
         static jmethodID mID(NULL);
         obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
         jbyteArray pByteArray = t.pEnv->NewByteArray(x.getLength());
-        t.pEnv->SetByteArrayRegion(pByteArray,0,x.getLength(),(jbyte*)x.getConstArray());
+        t.pEnv->SetByteArrayRegion(pByteArray,0,x.getLength(),x.getConstArray());
         t.pEnv->CallVoidMethod( object, mID, parameterIndex,pByteArray);
         t.pEnv->DeleteLocalRef(pByteArray);
         ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
@@ -466,7 +466,7 @@ void SAL_CALL java_sql_PreparedStatement::setCharacterStream( sal_Int32 paramete
 
         jvalue args2[3];
         jbyteArray pByteArray = t.pEnv->NewByteArray( actualLength );
-        t.pEnv->SetByteArrayRegion(pByteArray,0,actualLength,(jbyte*)aSeq.getConstArray());
+        t.pEnv->SetByteArrayRegion(pByteArray,0,actualLength,aSeq.getConstArray());
         args2[0].l =  pByteArray;
         args2[1].i =  0;
         args2[2].i =  actualLength;
@@ -516,7 +516,7 @@ void SAL_CALL java_sql_PreparedStatement::setBinaryStream( sal_Int32 parameterIn
 
             jvalue args2[3];
             jbyteArray pByteArray = t.pEnv->NewByteArray(actualLength);
-            t.pEnv->SetByteArrayRegion(pByteArray,0,actualLength,(jbyte*)aSeq.getConstArray());
+            t.pEnv->SetByteArrayRegion(pByteArray,0,actualLength,aSeq.getConstArray());
             args2[0].l =  pByteArray;
             args2[1].i =  0;
             args2[2].i =  (sal_Int32)actualLength;

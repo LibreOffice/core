@@ -559,7 +559,7 @@ void PreparedStatement::setString( sal_Int32 parameterIndex, const OUString& x )
     buf.append( "'" );
     OString y = OUStringToOString( x, m_pSettings->encoding );
     buf.ensureCapacity( y.getLength() * 2 + 2 );
-    int len = PQescapeString( ((char*)buf.getStr())+1, y.getStr() , y.getLength() );
+    int len = PQescapeString( const_cast<char*>(buf.getStr())+1, y.getStr() , y.getLength() );
     buf.setLength( 1 + len );
     buf.append( "'" );
     m_vars[parameterIndex-1] = buf.makeStringAndClear();

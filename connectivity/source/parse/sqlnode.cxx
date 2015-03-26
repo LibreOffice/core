@@ -1782,7 +1782,7 @@ OSQLParseNode* OSQLParseNode::getByRule(OSQLParseNode::Rule eRule) const
 {
     OSQLParseNode* pRetNode = 0;
     if (isRule() && OSQLParser::RuleID(eRule) == getRuleID())
-        pRetNode = (OSQLParseNode*)this;
+        pRetNode = const_cast<OSQLParseNode*>(this);
     else
     {
         for (OSQLParseNodes::const_iterator i = m_aChildren.begin();

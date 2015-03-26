@@ -56,7 +56,7 @@ namespace connectivity
             {
                 OSL_ENSURE(s_pKApplication == NULL, "KDEInit::Init: inconsistency in the application pointers!");
 
-                char *kabargs[1] = {(char*)"libkab1"};
+                char *kabargs[1] = {const_cast<char*>("libkab1")};
                 KCmdLineArgs::init(1, kabargs, "KAddressBook", *kabargs, "Address Book driver", KAB_DRIVER_VERSION);
 
                 s_pKApplication = new KApplication(false, false);

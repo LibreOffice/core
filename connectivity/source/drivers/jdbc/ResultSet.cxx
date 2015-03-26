@@ -665,7 +665,7 @@ void SAL_CALL java_sql_ResultSet::updateBytes( sal_Int32 columnIndex, const ::co
 
         {
             jbyteArray aArray = t.pEnv->NewByteArray(x.getLength());
-            t.pEnv->SetByteArrayRegion(aArray,0,x.getLength(),(jbyte*)x.getConstArray());
+            t.pEnv->SetByteArrayRegion(aArray,0,x.getLength(),x.getConstArray());
             // convert parameter
             t.pEnv->CallVoidMethod( object, mID,columnIndex,aArray);
             t.pEnv->DeleteLocalRef(aArray);

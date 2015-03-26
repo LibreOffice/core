@@ -214,7 +214,7 @@ namespace connectivity
 
         if( pSpec )
         {
-            aName = OStringToOUString( g_param_spec_get_name( ( GParamSpec * )pSpec ),
+            aName = OStringToOUString( g_param_spec_get_name( const_cast<GParamSpec *>(pSpec) ),
                                             RTL_TEXTENCODING_UTF8 );
             aName = aName.replace( '-', '_' );
         }

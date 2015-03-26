@@ -114,7 +114,7 @@ sal_Int64 SAL_CALL java_sql_Blob::position( const ::com::sun::star::uno::Sequenc
         obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
         // convert Parameter
         jbyteArray pByteArray = t.pEnv->NewByteArray(pattern.getLength());
-        t.pEnv->SetByteArrayRegion(pByteArray,0,pattern.getLength(),(jbyte*)pattern.getConstArray());
+        t.pEnv->SetByteArrayRegion(pByteArray,0,pattern.getLength(),pattern.getConstArray());
         out = t.pEnv->CallLongMethod( object, mID, pByteArray,start );
         t.pEnv->DeleteLocalRef(pByteArray);
         ThrowSQLException(t.pEnv,*this);
