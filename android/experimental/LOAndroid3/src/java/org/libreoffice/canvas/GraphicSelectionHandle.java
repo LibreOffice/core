@@ -19,7 +19,7 @@ import android.graphics.RectF;
  * position and perform a hit test to determine if the selection handle was
  * touched.
  */
-public class GraphicSelectionHandleCanvasElement implements CanvasElement {
+public class GraphicSelectionHandle implements CanvasElement {
     private final HandlePosition mHandlePosition;
     public PointF mPosition = new PointF();
     private float mRadius = 20.0f;
@@ -29,7 +29,7 @@ public class GraphicSelectionHandleCanvasElement implements CanvasElement {
     private RectF mHitRect = new RectF();
     private boolean mSelected = false;
 
-    public GraphicSelectionHandleCanvasElement(HandlePosition position) {
+    public GraphicSelectionHandle(HandlePosition position) {
         mHandlePosition = position;
 
         mStrokePaint.setStyle(Paint.Style.STROKE);

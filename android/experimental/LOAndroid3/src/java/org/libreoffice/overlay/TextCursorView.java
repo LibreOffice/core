@@ -20,8 +20,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import org.libreoffice.LOKitShell;
-import org.libreoffice.canvas.GraphicSelectionCanvasElement;
-import org.libreoffice.canvas.GraphicSelectionHandleCanvasElement;
+import org.libreoffice.canvas.GraphicSelection;
 import org.mozilla.gecko.gfx.ImmutableViewportMetrics;
 import org.mozilla.gecko.gfx.LayerView;
 import org.mozilla.gecko.gfx.RectUtils;
@@ -49,7 +48,7 @@ public class TextCursorView extends View implements View.OnTouchListener {
     private Paint mSelectionPaint = new Paint();
     private boolean mSelectionsVisible;
 
-    private GraphicSelectionCanvasElement mGraphicSelection;
+    private GraphicSelection mGraphicSelection;
 
     private boolean mGraphicSelectionVisible;
     private boolean mGraphicSelectionMove = false;
@@ -86,7 +85,7 @@ public class TextCursorView extends View implements View.OnTouchListener {
             mSelectionPaint.setAlpha(50);
             mSelectionsVisible = false;
 
-            mGraphicSelection = new GraphicSelectionCanvasElement();
+            mGraphicSelection = new GraphicSelection();
 
             mGraphicSelectionVisible = false;
 

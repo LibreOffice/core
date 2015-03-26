@@ -17,13 +17,13 @@ import android.graphics.RectF;
 import org.libreoffice.LOKitShell;
 import org.mozilla.gecko.gfx.LayerView;
 
-import static org.libreoffice.canvas.GraphicSelectionHandleCanvasElement.HandlePosition;
+import static org.libreoffice.canvas.GraphicSelectionHandle.HandlePosition;
 
 /**
  * This class is responsible to draw and reposition the selection
  * rectangle.
  */
-public class GraphicSelectionCanvasElement implements CanvasElement {
+public class GraphicSelection implements CanvasElement {
     private final Paint mPaint;
     public RectF mRectangle = new RectF();
     public RectF mScaledRectangle = new RectF();
@@ -31,23 +31,23 @@ public class GraphicSelectionCanvasElement implements CanvasElement {
     private DragType mType = DragType.NONE;
     private PointF mStartDragPosition;
 
-    private GraphicSelectionHandleCanvasElement mHandles[] = new GraphicSelectionHandleCanvasElement[8];
-    private GraphicSelectionHandleCanvasElement mDragHandle = null;
+    private GraphicSelectionHandle mHandles[] = new GraphicSelectionHandle[8];
+    private GraphicSelectionHandle mDragHandle = null;
 
-    public GraphicSelectionCanvasElement() {
+    public GraphicSelection() {
         mPaint = new Paint();
         mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setColor(Color.BLACK);
         mPaint.setStrokeWidth(2);
 
-        mHandles[0] = new GraphicSelectionHandleCanvasElement(HandlePosition.TOP_LEFT);
-        mHandles[1] = new GraphicSelectionHandleCanvasElement(HandlePosition.TOP);
-        mHandles[2] = new GraphicSelectionHandleCanvasElement(HandlePosition.TOP_RIGHT);
-        mHandles[3] = new GraphicSelectionHandleCanvasElement(HandlePosition.LEFT);
-        mHandles[4] = new GraphicSelectionHandleCanvasElement(HandlePosition.RIGHT);
-        mHandles[5] = new GraphicSelectionHandleCanvasElement(HandlePosition.BOTTOM_LEFT);
-        mHandles[6] = new GraphicSelectionHandleCanvasElement(HandlePosition.BOTTOM);
-        mHandles[7] = new GraphicSelectionHandleCanvasElement(HandlePosition.BOTTOM_RIGHT);
+        mHandles[0] = new GraphicSelectionHandle(HandlePosition.TOP_LEFT);
+        mHandles[1] = new GraphicSelectionHandle(HandlePosition.TOP);
+        mHandles[2] = new GraphicSelectionHandle(HandlePosition.TOP_RIGHT);
+        mHandles[3] = new GraphicSelectionHandle(HandlePosition.LEFT);
+        mHandles[4] = new GraphicSelectionHandle(HandlePosition.RIGHT);
+        mHandles[5] = new GraphicSelectionHandle(HandlePosition.BOTTOM_LEFT);
+        mHandles[6] = new GraphicSelectionHandle(HandlePosition.BOTTOM);
+        mHandles[7] = new GraphicSelectionHandle(HandlePosition.BOTTOM_RIGHT);
     }
 
     public void reposition(RectF scaledRectangle) {
@@ -66,7 +66,7 @@ public class GraphicSelectionCanvasElement implements CanvasElement {
 
     public boolean contains(float x, float y) {
         // Check if handle was hit
-        for (GraphicSelectionHandleCanvasElement handle : mHandles) {
+        for (GraphicSelectionHandle handle : mHandles) {
             if (handle.contains(x, y)) {
                 return true;
             }
@@ -80,7 +80,7 @@ public class GraphicSelectionCanvasElement implements CanvasElement {
     @Override
     public void draw(Canvas canvas) {
         canvas.drawRect(mDrawRectangle, mPaint);
-        for (GraphicSelectionHandleCanvasElement handle : mHandles) {
+        for (GraphicSelectionHandle handle : mHandles) {
             handle.draw(canvas);
         }
     }
@@ -88,7 +88,7 @@ public class GraphicSelectionCanvasElement implements CanvasElement {
     public void dragStart(PointF position) {
         mDragHandle = null;
         mType = DragType.NONE;
-        for (GraphicSelectionHandleCanvasElement handle : mHandles) {
+        for (GraphicSelectionHandle handle : mHandles) {
             if (handle.contains(position.x, position.y)) {
                 mDragHandle = handle;
                 mDragHandle.select();
@@ -189,7 +189,7 @@ public class GraphicSelectionCanvasElement implements CanvasElement {
 
     public void reset() {
         mDragHandle = null;
-        for (GraphicSelectionHandleCanvasElement handle : mHandles) {
+        for (GraphicSelectionHandle handle : mHandles) {
             handle.reset();
         }
     }
