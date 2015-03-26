@@ -180,7 +180,7 @@ void VCLXPrinterPropertySet::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle
 
 void VCLXPrinterPropertySet::getFastPropertyValue( ::com::sun::star::uno::Any& rValue, sal_Int32 nHandle ) const
 {
-    ::osl::MutexGuard aGuard( ((VCLXPrinterPropertySet*)this)->Mutex );
+    ::osl::MutexGuard aGuard( const_cast<VCLXPrinterPropertySet*>(this)->Mutex );
 
     switch( nHandle )
     {

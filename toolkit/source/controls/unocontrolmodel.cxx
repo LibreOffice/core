@@ -252,7 +252,7 @@ bool UnoControlModel::ImplHasProperty( sal_uInt16 nPropId ) const
             case BASEPROPERTY_SPINVALUE_MIN:        aDefault <<= (sal_Int32)   0;   break;
             case BASEPROPERTY_SPINVALUE_MAX:        aDefault <<= (sal_Int32) 100;   break;
             case BASEPROPERTY_REPEAT_DELAY:         aDefault <<= (sal_Int32)  50;   break;    // 50 milliseconds
-            case BASEPROPERTY_DEFAULTCONTROL:       aDefault <<= ((UnoControlModel*)this)->getServiceName();    break;
+            case BASEPROPERTY_DEFAULTCONTROL:       aDefault <<= const_cast<UnoControlModel*>(this)->getServiceName();    break;
 
             case BASEPROPERTY_AUTOHSCROLL:
             case BASEPROPERTY_AUTOVSCROLL:
@@ -1180,7 +1180,7 @@ void UnoControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nPropId, const
 
 void UnoControlModel::getFastPropertyValue( ::com::sun::star::uno::Any& rValue, sal_Int32 nPropId ) const
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( ((UnoControlModel*)this)->GetMutex() );
+    ::osl::Guard< ::osl::Mutex > aGuard( const_cast<UnoControlModel*>(this)->GetMutex() );
 
     ImplPropertyTable::const_iterator it = maData.find( nPropId );
     const ::com::sun::star::uno::Any* pProp = it == maData.end() ? NULL : &(it->second);
