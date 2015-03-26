@@ -922,7 +922,7 @@ IMPL_LINK_NOARG(PrintFontManager, autoInstallFontLangSupport)
     gchar **fonts = (gchar**)g_malloc((m_aCurrentRequests.size() + 1) * sizeof(gchar*));
     gchar **font = fonts;
     for (std::vector<OString>::const_iterator aI = m_aCurrentRequests.begin(); aI != m_aCurrentRequests.end(); ++aI)
-        *font++ = (gchar*)aI->getStr();
+        *font++ = const_cast<gchar*>(aI->getStr());
     *font = NULL;
     gboolean res = dbus_g_proxy_call(proxy, "InstallFontconfigResources", &error,
                  G_TYPE_UINT, xid, /* xid */

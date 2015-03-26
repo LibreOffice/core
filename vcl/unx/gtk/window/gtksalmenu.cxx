@@ -159,7 +159,7 @@ bool GtkSalMenu::PrepUpdate()
     const GtkSalFrame* pFrame = GetFrame();
     if (pFrame)
     {
-        GtkSalFrame* pNonConstFrame = ( GtkSalFrame* ) pFrame;
+        GtkSalFrame* pNonConstFrame = const_cast<GtkSalFrame*>(pFrame);
         GtkSalMenu* pSalMenu = ((GtkSalMenu*) this);
 
         if ( !pNonConstFrame->GetMenu() )
@@ -718,7 +718,7 @@ GtkSalMenu* GtkSalMenu::GetMenuForItemCommand( gchar* aCommand, gboolean bGetSub
         // immediately, and the gchar* pointed to by aItemCommandStr will be
         // freed before it can be used - fdo#69090
         OString aItemCommandOStr = OUStringToOString( aItemCommand, RTL_TEXTENCODING_UTF8 );
-        gchar* aItemCommandStr = (gchar*) aItemCommandOStr.getStr();
+        gchar* aItemCommandStr = const_cast<gchar*>(aItemCommandOStr.getStr());
 
         if ( g_strcmp0( aItemCommandStr, aCommand ) == 0 )
         {
@@ -745,7 +745,7 @@ void GtkSalMenu::DispatchCommand( gint itemId, const gchar *aCommand )
     if ( !mbMenuBar )
         return;
 
-    GtkSalMenu* pSalSubMenu = GetMenuForItemCommand( (gchar*) aCommand, FALSE );
+    GtkSalMenu* pSalSubMenu = GetMenuForItemCommand( const_cast<gchar*>(aCommand), FALSE );
     Menu* pSubMenu = ( pSalSubMenu != NULL ) ? pSalSubMenu->GetMenu() : NULL;
 
     MenuBar* pMenuBar = static_cast< MenuBar* >( mpVCLMenu );
@@ -778,7 +778,7 @@ void GtkSalMenu::Deactivate( const gchar* aMenuCommand )
     if ( !mbMenuBar )
         return;
 
-    GtkSalMenu* pSalSubMenu = GetMenuForItemCommand( (gchar*) aMenuCommand, TRUE );
+    GtkSalMenu* pSalSubMenu = GetMenuForItemCommand( const_cast<gchar*>(aMenuCommand), TRUE );
 
     if ( pSalSubMenu != NULL ) {
         MenuBar* pMenuBar = static_cast< MenuBar* >( mpVCLMenu );

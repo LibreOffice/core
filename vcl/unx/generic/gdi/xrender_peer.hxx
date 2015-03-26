@@ -145,7 +145,7 @@ inline void XRenderPeer::AddGlyph( GlyphSet aGS, XRenderGlyph nXRGlyph,
     const XGlyphInfo& rGI, const char* pBuffer, int nBufSize ) const
 {
     XRenderAddGlyphs( mpDisplay, aGS, &nXRGlyph, &rGI, 1,
-                      const_cast<char*>(pBuffer), nBufSize );
+                      pBuffer, nBufSize );
 }
 
 inline void XRenderPeer::FreeGlyph( GlyphSet aGS, XRenderGlyph nXRGlyph ) const

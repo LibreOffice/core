@@ -899,7 +899,7 @@ void EMFWriter::ImplWriteTextRecord( const Point& rPos, const OUString& rText, c
         if( pDXArray )
         {
             nNormWidth = maVDev.GetTextWidth( rText );
-            pDX = (long*) pDXArray;
+            pDX = const_cast<long*>(pDXArray);
         }
         else
         {
@@ -1405,14 +1405,14 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
 
             case( META_LINECOLOR_ACTION ):
             {
-                ( (MetaAction*) pAction )->Execute( &maVDev );
+                const_cast<MetaAction*>(pAction)->Execute( &maVDev );
                 mbLineChanged = true;
             }
             break;
 
             case( META_FILLCOLOR_ACTION ):
             {
-                ( (MetaAction*) pAction )->Execute( &maVDev );
+                const_cast<MetaAction*>(pAction)->Execute( &maVDev );
                 mbFillChanged = true;
             }
             break;
@@ -1423,14 +1423,14 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
             case( META_TEXTALIGN_ACTION ):
             case( META_FONT_ACTION ):
             {
-                ( (MetaAction*) pAction )->Execute( &maVDev );
+                const_cast<MetaAction*>(pAction)->Execute( &maVDev );
                 mbTextChanged = true;
             }
             break;
 
             case( META_ISECTRECTCLIPREGION_ACTION ):
             {
-                ( (MetaAction*) pAction )->Execute( &maVDev );
+                const_cast<MetaAction*>(pAction)->Execute( &maVDev );
 
                 ImplBeginRecord( WIN_EMR_INTERSECTCLIPRECT );
                 ImplWriteRect( static_cast<const MetaISectRectClipRegionAction*>(pAction)->GetRect() );
@@ -1442,18 +1442,18 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
             case( META_ISECTREGIONCLIPREGION_ACTION ):
             case( META_MOVECLIPREGION_ACTION ):
             {
-                ( (MetaAction*) pAction )->Execute( &maVDev );
+                const_cast<MetaAction*>(pAction)->Execute( &maVDev );
             }
             break;
 
             case( META_REFPOINT_ACTION ):
             case( META_MAPMODE_ACTION ):
-                ( (MetaAction*) pAction )->Execute( &maVDev );
+                const_cast<MetaAction*>(pAction)->Execute( &maVDev );
             break;
 
             case( META_PUSH_ACTION ):
             {
-                ( (MetaAction*) pAction )->Execute( &maVDev );
+                const_cast<MetaAction*>(pAction)->Execute( &maVDev );
 
                 ImplBeginRecord( WIN_EMR_SAVEDC );
                 ImplEndRecord();
@@ -1462,7 +1462,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
 
             case( META_POP_ACTION ):
             {
-                ( (MetaAction*) pAction )->Execute( &maVDev );
+                const_cast<MetaAction*>(pAction)->Execute( &maVDev );
 
                 ImplBeginRecord( WIN_EMR_RESTOREDC );
                 m_rStm.WriteInt32( -1 );
@@ -1475,7 +1475,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
 
             case( META_RASTEROP_ACTION ):
             {
-                ( (MetaAction*) pAction )->Execute( &maVDev );
+                const_cast<MetaAction*>(pAction)->Execute( &maVDev );
                 ImplWriteRasterOp( static_cast<const MetaRasterOpAction*>(pAction)->GetRasterOp() );
             }
             break;

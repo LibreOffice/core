@@ -1363,7 +1363,7 @@ SalLayout* OutputDevice::ImplLayout(const OUString& rOrigStr,
                 pDXPixelArray[i] = pDXArray[i];
             }
 #else /* !VCL_FLOAT_DEVICE_PIXEL */
-            pDXPixelArray = (DeviceCoordinate*)pDXArray;
+            pDXPixelArray = const_cast<DeviceCoordinate*>(pDXArray);
 #endif /* !VCL_FLOAT_DEVICE_PIXEL */
         }
     }

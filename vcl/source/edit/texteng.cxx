@@ -1149,7 +1149,7 @@ sal_uLong TextEngine::GetTextHeight() const
     DBG_ASSERT( GetUpdateMode(), "GetTextHeight: GetUpdateMode()" );
 
     if ( !IsFormatted() && !IsFormatting() )
-        ((TextEngine*)this)->FormatAndUpdate();
+        const_cast<TextEngine*>(this)->FormatAndUpdate();
 
     return mnCurTextHeight;
 }
@@ -1159,7 +1159,7 @@ sal_uLong TextEngine::GetTextHeight( sal_uLong nParagraph ) const
     DBG_ASSERT( GetUpdateMode(), "GetTextHeight: GetUpdateMode()" );
 
       if ( !IsFormatted() && !IsFormatting() )
-        ((TextEngine*)this)->FormatAndUpdate();
+        const_cast<TextEngine*>(this)->FormatAndUpdate();
 
     return CalcParaHeight( nParagraph );
 }

@@ -435,7 +435,7 @@ void OutputDevice::ImplDrawPolyPolygon( const tools::PolyPolygon& rPolyPoly, con
     }
     else
     {
-        pPolyPoly = (tools::PolyPolygon*) &rPolyPoly;
+        pPolyPoly = const_cast<tools::PolyPolygon*>(&rPolyPoly);
     }
     if( pPolyPoly->Count() == 1 )
     {

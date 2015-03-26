@@ -54,7 +54,7 @@ inline sal_uInt16 NEXT_UShort( const unsigned char* &p )
 bool ReadGSUB( struct _TrueTypeFont* pTTFile,
     int nRequestedScript, int nRequestedLangsys )
 {
-    const FT_Byte* pGsubBase = (FT_Byte*)pTTFile->tables[ O_gsub ];
+    const FT_Byte* pGsubBase = pTTFile->tables[ O_gsub ];
     if( !pGsubBase )
         return false;
 

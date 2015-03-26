@@ -111,7 +111,7 @@ JPEGWriter::JPEGWriter( SvStream& rStream, const css::uno::Sequence< css::beans:
     mbNative     ( false ),
     mpExpWasGrey ( pExportWasGrey )
 {
-    FilterConfigItem aConfigItem( (css::uno::Sequence< css::beans::PropertyValue >*) pFilterData );
+    FilterConfigItem aConfigItem( const_cast<css::uno::Sequence< css::beans::PropertyValue >*>(pFilterData) );
     mbGreys = aConfigItem.ReadInt32( "ColorMode", 0 ) != 0;
     mnQuality = aConfigItem.ReadInt32( "Quality", 75 );
     maChromaSubsampling = aConfigItem.ReadInt32( "ChromaSubsamplingMode", 0 );

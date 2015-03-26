@@ -120,12 +120,12 @@ vcl::Region Window::GetWindowClipRegionPixel( sal_uInt16 nFlags ) const
     if ( nFlags & WINDOW_GETCLIPREGION_NOCHILDREN )
     {
         if ( mpWindowImpl->mbInitWinClipRegion )
-            ((vcl::Window*)this)->ImplInitWinClipRegion();
+            const_cast<vcl::Window*>(this)->ImplInitWinClipRegion();
         aWinClipRegion = mpWindowImpl->maWinClipRegion;
     }
     else
     {
-        vcl::Region* pWinChildClipRegion = ((vcl::Window*)this)->ImplGetWinChildClipRegion();
+        vcl::Region* pWinChildClipRegion = const_cast<vcl::Window*>(this)->ImplGetWinChildClipRegion();
         aWinClipRegion = *pWinChildClipRegion;
         // --- RTL --- remirror clip region before passing it to somebody
         if( ImplIsAntiparallel() )

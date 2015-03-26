@@ -60,7 +60,7 @@ char* strtok_wrapper(const char* aDelims, char** aStr)
         return nullptr;
     }
 
-    char* ret = (char*)strspnp_wrapper(aDelims, *aStr);
+    char* ret = const_cast<char*>(strspnp_wrapper(aDelims, *aStr));
 
     if (!*ret) {
         *aStr = ret;

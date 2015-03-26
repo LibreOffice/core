@@ -1875,7 +1875,7 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString
     if( nFormat >= nFormatCount )
         return (sal_uInt16) ImplSetError( GRFILTER_FORMATERROR );
 
-    FilterConfigItem aConfigItem( (uno::Sequence< beans::PropertyValue >*)pFilterData );
+    FilterConfigItem aConfigItem( const_cast<uno::Sequence< beans::PropertyValue >*>(pFilterData) );
     OUString aFilterName( pConfig->GetExportFilterName( nFormat ) );
 
     bAbort              = false;

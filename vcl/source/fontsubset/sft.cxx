@@ -300,7 +300,7 @@ _inline int XUnits(int unitsPerEm, int n)
 
 _inline const sal_uInt8* getTable( TrueTypeFont *ttf, sal_uInt32 ord)
 {
-    return (sal_uInt8*)ttf->tables[ord];
+    return ttf->tables[ord];
 }
 
 _inline sal_uInt32 getTableSize(TrueTypeFont *ttf, sal_uInt32 ord)
@@ -1633,7 +1633,7 @@ static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
 
     /* Fixup offsets when only a TTC extract was provided */
     if( facenum == (sal_uInt32)~0 ) {
-        sal_uInt8* pHead = (sal_uInt8*)t->tables[O_head];
+        sal_uInt8* pHead = const_cast<sal_uInt8*>(t->tables[O_head]);
         if( !pHead )
             return SF_TTFORMAT;
         /* limit Head candidate to TTC extract's limits */
@@ -1663,7 +1663,7 @@ static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
          * Try to fix tables, so we can cope with minor problems.
          */
 
-        if( (sal_uInt8*)t->tables[i] < t->ptr )
+        if( t->tables[i] < t->ptr )
         {
 #if OSL_DEBUG_LEVEL > 1
             if( t->tables[i] )
@@ -1672,9 +1672,9 @@ static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
             t->tlens[i] = 0;
             t->tables[i] = NULL;
         }
-        else if( (sal_uInt8*)t->tables[i] + t->tlens[i] > t->ptr + t->fsize )
+        else if( const_cast<sal_uInt8*>(t->tables[i]) + t->tlens[i] > t->ptr + t->fsize )
         {
-            int nMaxLen = (t->ptr + t->fsize) - (sal_uInt8*)t->tables[i];
+            int nMaxLen = (t->ptr + t->fsize) - t->tables[i];
             if( nMaxLen < 0 )
                 nMaxLen = 0;
             t->tlens[i] = nMaxLen;
@@ -2010,7 +2010,7 @@ int  CreateTTFromTTGlyphs(TrueTypeFont  *ttf,
         const sal_uInt8 ptr[] = {0,'T',0,'r',0,'u',0,'e',0,'T',0,'y',0,'p',0,'e',0,'S',0,'u',0,'b',0,'s',0,'e',0,'t'};
         NameRecord n1 = {1, 0, 0, 6, 14, const_cast<sal_uInt8 *>(reinterpret_cast<sal_uInt8 const *>("TrueTypeSubset"))};
         NameRecord n2 = {3, 1, 1033, 6, 28, 0};
-        n2.sptr = (sal_uInt8 *) ptr;
+        n2.sptr = const_cast<sal_uInt8 *>(ptr);
         name = TrueTypeTableNew_name(0, 0);
         nameAdd(name, &n1);
         nameAdd(name, &n2);

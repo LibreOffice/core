@@ -643,7 +643,7 @@ bool Window::IsTopWindow() const
     if( mpWindowImpl->mpWinData->mnIsTopWindow == (sal_uInt16)~0)    // still uninitialized
     {
         // #113722#, cache result of expensive queryInterface call
-        vcl::Window *pThisWin = (vcl::Window*)this;
+        vcl::Window *pThisWin = const_cast<vcl::Window*>(this);
         uno::Reference< XTopWindow > xTopWindow( pThisWin->GetComponentInterface(), UNO_QUERY );
         pThisWin->mpWindowImpl->mpWinData->mnIsTopWindow = xTopWindow.is() ? 1 : 0;
     }
@@ -654,7 +654,7 @@ vcl::Window* Window::FindWindow( const Point& rPos ) const
 {
 
     Point aPos = OutputToScreenPixel( rPos );
-    return ((vcl::Window*)this)->ImplFindWindow( aPos );
+    return const_cast<vcl::Window*>(this)->ImplFindWindow( aPos );
 }
 
 vcl::Window* Window::ImplFindWindow( const Point& rFramePos )
@@ -1079,7 +1079,7 @@ vcl::Window* Window::GetWindow( sal_uInt16 nType ) const
 
         case WINDOW_OVERLAP:
             if ( ImplIsOverlapWindow() )
-                return (vcl::Window*)this;
+                return const_cast<vcl::Window*>(this);
             else
                 return mpWindowImpl->mpOverlapWindow;
 
@@ -1090,7 +1090,7 @@ vcl::Window* Window::GetWindow( sal_uInt16 nType ) const
                 return mpWindowImpl->mpOverlapWindow->mpWindowImpl->mpOverlapWindow;
 
         case WINDOW_CLIENT:
-            return ((vcl::Window*)this)->ImplGetWindow();
+            return const_cast<vcl::Window*>(this)->ImplGetWindow();
 
         case WINDOW_REALPARENT:
             return ImplGetParent();
@@ -1101,7 +1101,7 @@ vcl::Window* Window::GetWindow( sal_uInt16 nType ) const
         case WINDOW_BORDER:
             if ( mpWindowImpl->mpBorderWindow )
                 return mpWindowImpl->mpBorderWindow->GetWindow( WINDOW_BORDER );
-            return (vcl::Window*)this;
+            return const_cast<vcl::Window*>(this);
 
         case WINDOW_FIRSTTOPWINDOWCHILD:
             return ImplGetWinData()->maTopWindowChildren.empty() ? NULL : *ImplGetWinData()->maTopWindowChildren.begin();

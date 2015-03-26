@@ -2729,7 +2729,7 @@ SalColor SalColormap::GetColor( Pixel nPixel ) const
             && m_hColormap
             && m_aVisual.GetDepth() <= 12
             && m_aVisual.GetClass() == PseudoColor )
-            ((SalColormap*)this)->GetPalette();
+            const_cast<SalColormap*>(this)->GetPalette();
     }
 
     if( !m_aPalette.empty() && nPixel < m_nUsed )
@@ -2789,7 +2789,7 @@ Pixel SalColormap::GetPixel( SalColor nSalColor ) const
             && m_hColormap
             && m_aVisual.GetDepth() <= 12
             && m_aVisual.GetClass() == PseudoColor ) // what else ???
-            ((SalColormap*)this)->GetPalette();
+            const_cast<SalColormap*>(this)->GetPalette();
 
         if( !m_aPalette.empty() )
             for( Pixel i = 0; i < m_nUsed; i++ )
@@ -2850,7 +2850,7 @@ Pixel SalColormap::GetPixel( SalColor nSalColor ) const
             return nSalColor;
         }
 
-        ((SalColormap*)this)->GetLookupTable();
+        const_cast<SalColormap*>(this)->GetLookupTable();
     }
 
     // Colormatching ueber Palette

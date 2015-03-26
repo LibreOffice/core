@@ -1611,7 +1611,7 @@ void TabControl::SetTabPageSizePixel( const Size& rSize )
 
 Size TabControl::GetTabPageSizePixel() const
 {
-    Rectangle aRect = ((TabControl*)this)->ImplGetTabRect( TAB_PAGERECT );
+    Rectangle aRect = const_cast<TabControl*>(this)->ImplGetTabRect( TAB_PAGERECT );
     return aRect.GetSize();
 }
 
@@ -1779,7 +1779,7 @@ sal_uInt16 TabControl::GetPageId( const Point& rPos ) const
 {
     for( size_t i = 0; i < mpTabCtrlData->maItemList.size(); ++i )
     {
-        if ( ((TabControl*)this)->ImplGetTabRect( static_cast<sal_uInt16>(i) ).IsInside( rPos ) )
+        if ( const_cast<TabControl*>(this)->ImplGetTabRect( static_cast<sal_uInt16>(i) ).IsInside( rPos ) )
             return mpTabCtrlData->maItemList[ i ].mnId;
     }
 

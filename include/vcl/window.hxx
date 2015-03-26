@@ -506,7 +506,7 @@ private:
     inline void release() const
     {
         if (!--mnRefCnt)
-            delete const_cast<Window*>(this);
+            delete this;
     }
 
 protected:

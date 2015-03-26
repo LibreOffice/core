@@ -320,10 +320,10 @@ g_lo_action_group_insert_stateful (GLOActionGroup     *group,
         action->submenu = submenu;
 
         if (parameter_type)
-            action->parameter_type = (GVariantType*) parameter_type;
+            action->parameter_type = const_cast<GVariantType*>(parameter_type);
 
         if (state_type)
-            action->state_type = (GVariantType*) state_type;
+            action->state_type = const_cast<GVariantType*>(state_type);
 
         if (state_hint)
             action->state_hint = g_variant_ref_sink (state_hint);

@@ -153,7 +153,7 @@ void VclBuilder::loadTranslations(const LanguageTag &rLanguageTag, const OUStrin
                     break;
             }
 
-            xmlreader::XmlReader reader(const_cast<char *>(sStr.getStr()), sStr.getLength());
+            xmlreader::XmlReader reader(sStr.getStr(), sStr.getLength());
             handleTranslations(reader);
             break;
         }

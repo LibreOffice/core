@@ -64,8 +64,8 @@ utl::TransliterationWrapper& vcl::I18nHelper::ImplGetTransliterationWrapper() co
         if ( mbTransliterateIgnoreCase )
             nModules |= i18n::TransliterationModules_IGNORE_CASE;
 
-        ((vcl::I18nHelper*)this)->mpTransliterationWrapper = new utl::TransliterationWrapper( m_xContext, (i18n::TransliterationModules)nModules );
-        ((vcl::I18nHelper*)this)->mpTransliterationWrapper->loadModuleIfNeeded( maLanguageTag.getLanguageType() );
+        const_cast<vcl::I18nHelper*>(this)->mpTransliterationWrapper = new utl::TransliterationWrapper( m_xContext, (i18n::TransliterationModules)nModules );
+        const_cast<vcl::I18nHelper*>(this)->mpTransliterationWrapper->loadModuleIfNeeded( maLanguageTag.getLanguageType() );
     }
     return *mpTransliterationWrapper;
 }
@@ -74,7 +74,7 @@ LocaleDataWrapper& vcl::I18nHelper::ImplGetLocaleDataWrapper() const
 {
     if ( !mpLocaleDataWrapper )
     {
-        ((vcl::I18nHelper*)this)->mpLocaleDataWrapper = new LocaleDataWrapper( m_xContext, maLanguageTag );
+        const_cast<vcl::I18nHelper*>(this)->mpLocaleDataWrapper = new LocaleDataWrapper( m_xContext, maLanguageTag );
     }
     return *mpLocaleDataWrapper;
 }
@@ -112,15 +112,15 @@ OUString vcl::I18nHelper::filterFormattingChars( const OUString& rStr )
 
 sal_Int32 vcl::I18nHelper::CompareString( const OUString& rStr1, const OUString& rStr2 ) const
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( ((vcl::I18nHelper*)this)->maMutex );
+    ::osl::Guard< ::osl::Mutex > aGuard( const_cast<vcl::I18nHelper*>(this)->maMutex );
 
     if ( mbTransliterateIgnoreCase )
     {
         // Change mbTransliterateIgnoreCase and destroy the wrapper, next call to
         // ImplGetTransliterationWrapper() will create a wrapper with the correct bIgnoreCase
-        ((vcl::I18nHelper*)this)->mbTransliterateIgnoreCase = false;
-        delete ((vcl::I18nHelper*)this)->mpTransliterationWrapper;
-        ((vcl::I18nHelper*)this)->mpTransliterationWrapper = NULL;
+        const_cast<vcl::I18nHelper*>(this)->mbTransliterateIgnoreCase = false;
+        delete const_cast<vcl::I18nHelper*>(this)->mpTransliterationWrapper;
+        const_cast<vcl::I18nHelper*>(this)->mpTransliterationWrapper = NULL;
     }
 
     OUString aStr1( filterFormattingChars(rStr1) );
@@ -130,15 +130,15 @@ sal_Int32 vcl::I18nHelper::CompareString( const OUString& rStr1, const OUString&
 
 bool vcl::I18nHelper::MatchString( const OUString& rStr1, const OUString& rStr2 ) const
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( ((vcl::I18nHelper*)this)->maMutex );
+    ::osl::Guard< ::osl::Mutex > aGuard( const_cast<vcl::I18nHelper*>(this)->maMutex );
 
     if ( !mbTransliterateIgnoreCase )
     {
         // Change mbTransliterateIgnoreCase and destroy the wrapper, next call to
         // ImplGetTransliterationWrapper() will create a wrapper with the correct bIgnoreCase
-        ((vcl::I18nHelper*)this)->mbTransliterateIgnoreCase = true;
-        delete ((vcl::I18nHelper*)this)->mpTransliterationWrapper;
-        ((vcl::I18nHelper*)this)->mpTransliterationWrapper = NULL;
+        const_cast<vcl::I18nHelper*>(this)->mbTransliterateIgnoreCase = true;
+        delete const_cast<vcl::I18nHelper*>(this)->mpTransliterationWrapper;
+        const_cast<vcl::I18nHelper*>(this)->mpTransliterationWrapper = NULL;
     }
 
     OUString aStr1( filterFormattingChars(rStr1) );
@@ -148,7 +148,7 @@ bool vcl::I18nHelper::MatchString( const OUString& rStr1, const OUString& rStr2 
 
 bool vcl::I18nHelper::MatchMnemonic( const OUString& rString, sal_Unicode cMnemonicChar ) const
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( ((vcl::I18nHelper*)this)->maMutex );
+    ::osl::Guard< ::osl::Mutex > aGuard( const_cast<vcl::I18nHelper*>(this)->maMutex );
 
     bool bEqual = false;
     sal_Int32 n = rString.indexOf( '~' );

@@ -2364,7 +2364,7 @@ void Menu::ImplSetSalMenu( SalMenu *pSalMenu )
 
 bool Menu::GetSystemMenuData( SystemMenuData* pData ) const
 {
-    Menu* pMenu = (Menu*)this;
+    Menu* pMenu = const_cast<Menu*>(this);
     if( pData && pMenu->ImplGetSalMenu() )
     {
         pMenu->ImplGetSalMenu()->GetSystemMenuData( pData );

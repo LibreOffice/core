@@ -368,7 +368,7 @@ BitmapBuffer* X11SalBitmap::ImplCreateDIB(
 
             nDstFormat = aSrcBuf.mnFormat;
             pDIB = StretchAndConvert( aSrcBuf, aTwoRect, nDstFormat,
-                const_cast<BitmapPalette*>(pDstPal), &aSrcBuf.maColorMask );
+                pDstPal, &aSrcBuf.maColorMask );
             XDestroyImage( pImage );
         }
     }

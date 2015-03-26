@@ -387,7 +387,7 @@ LocaleDataWrapper& FormatterBase::ImplGetLocaleDataWrapper() const
 {
     if ( !mpLocaleDataWrapper )
     {
-        ((FormatterBase*)this)->mpLocaleDataWrapper = new LocaleDataWrapper( GetLanguageTag() );
+        const_cast<FormatterBase*>(this)->mpLocaleDataWrapper = new LocaleDataWrapper( GetLanguageTag() );
     }
     return *mpLocaleDataWrapper;
 }

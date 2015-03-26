@@ -87,7 +87,7 @@ bool OpenGLProgram::Clean()
 void OpenGLProgram::SetVertexAttrib( GLuint& rAttrib, const OString& rName, const GLvoid* pData )
 {
     if( rAttrib == SAL_MAX_UINT32 )
-        rAttrib = glGetAttribLocation( mnId, (char*) rName.getStr() );
+        rAttrib = glGetAttribLocation( mnId, rName.getStr() );
     if( (mnEnabledAttribs & ( 1 << rAttrib )) == 0 )
     {
         glEnableVertexAttribArray( rAttrib );
@@ -116,7 +116,7 @@ GLuint OpenGLProgram::GetUniformLocation( const OString& rName )
     auto it = maUniformLocations.find( rName );
     if( it == maUniformLocations.end() )
     {
-        GLuint nLocation = glGetUniformLocation( mnId, (char*) rName.getStr() );
+        GLuint nLocation = glGetUniformLocation( mnId, rName.getStr() );
         maUniformLocations[rName] = nLocation;
         return nLocation;
     }

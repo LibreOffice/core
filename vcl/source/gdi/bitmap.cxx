@@ -118,7 +118,7 @@ Bitmap::Bitmap( const Size& rSizePixel, sal_uInt16 nBitCount, const BitmapPalett
                 }
             }
             else
-                pRealPal = (BitmapPalette*) pPal;
+                pRealPal = const_cast<BitmapPalette*>(pPal);
         }
 
         mpImpBmp = new ImpBitmap;
@@ -275,12 +275,12 @@ bool Bitmap::HasGreyPalette() const
     const sal_uInt16    nBitCount = GetBitCount();
     bool            bRet = nBitCount == 1;
 
-    BitmapInfoAccess* pIAcc = ( (Bitmap*) this )->AcquireInfoAccess();
+    BitmapInfoAccess* pIAcc = const_cast<Bitmap*>(this)->AcquireInfoAccess();
 
     if( pIAcc )
     {
         bRet = pIAcc->HasPalette() && pIAcc->GetPalette().IsGreyPalette();
-        ( (Bitmap*) this )->ReleaseAccess( pIAcc );
+        const_cast<Bitmap*>(this)->ReleaseAccess( pIAcc );
     }
 
     return bRet;
@@ -296,7 +296,7 @@ sal_uLong Bitmap::GetChecksum() const
 
         if( !nRet )
         {
-            BitmapReadAccess* pRAcc = ( (Bitmap*) this )->AcquireReadAccess();
+            BitmapReadAccess* pRAcc = const_cast<Bitmap*>(this)->AcquireReadAccess();
 
             if( pRAcc && pRAcc->Width() && pRAcc->Height() )
             {
@@ -334,7 +334,7 @@ sal_uLong Bitmap::GetChecksum() const
                 mpImpBmp->ImplSetChecksum( nRet = nCrc );
             }
 
-            if (pRAcc) ( (Bitmap*) this )->ReleaseAccess( pRAcc );
+            if (pRAcc) const_cast<Bitmap*>(this)->ReleaseAccess( pRAcc );
         }
     }
 
@@ -846,7 +846,7 @@ bool Bitmap::CopyPixel( const Rectangle& rRectDst,
     {
         if( pBmpSrc && ( *pBmpSrc != *this ) )
         {
-            Bitmap*         pSrc = (Bitmap*) pBmpSrc;
+            Bitmap*         pSrc = const_cast<Bitmap*>(pBmpSrc);
             const Size      aCopySizePix( pSrc->GetSizePixel() );
             Rectangle       aRectSrc( rRectSrc );
             const sal_uInt16    nSrcBitCount = pBmpSrc->GetBitCount();
@@ -1031,7 +1031,7 @@ bool Bitmap::CopyPixel_AlphaOptimized( const Rectangle& rRectDst, const Rectangl
     {
         if( pBmpSrc && ( *pBmpSrc != *this ) )
         {
-            Bitmap*         pSrc = (Bitmap*) pBmpSrc;
+            Bitmap*         pSrc = const_cast<Bitmap*>(pBmpSrc);
             const Size      aCopySizePix( pSrc->GetSizePixel() );
             Rectangle       aRectSrc( rRectSrc );
 
@@ -1191,7 +1191,7 @@ Bitmap Bitmap::CreateMask( const Color& rTransColor, sal_uLong nTol ) const
 
     if( pWriteAcc )
     {
-        BitmapReadAccess* pReadAcc = ( (Bitmap*) this )->AcquireReadAccess();
+        BitmapReadAccess* pReadAcc = const_cast<Bitmap*>(this)->AcquireReadAccess();
 
         if( pReadAcc )
         {
@@ -1355,7 +1355,7 @@ Bitmap Bitmap::CreateMask( const Color& rTransColor, sal_uLong nTol ) const
                 }
             }
 
-            ( (Bitmap*) this )->ReleaseAccess( pReadAcc );
+            const_cast<Bitmap*>(this)->ReleaseAccess( pReadAcc );
             bRet = true;
         }
 
@@ -1377,7 +1377,7 @@ vcl::Region Bitmap::CreateRegion( const Color& rColor, const Rectangle& rRect ) 
 {
     vcl::Region              aRegion;
     Rectangle           aRect( rRect );
-    BitmapReadAccess*   pReadAcc = ( (Bitmap*) this )->AcquireReadAccess();
+    BitmapReadAccess*   pReadAcc = const_cast<Bitmap*>(this)->AcquireReadAccess();
 
     aRect.Intersection( Rectangle( Point(), GetSizePixel() ) );
     aRect.Justify();
@@ -1470,7 +1470,7 @@ vcl::Region Bitmap::CreateRegion( const Color& rColor, const Rectangle& rRect ) 
         //aRegion.ImplEndAddRect();
         //aRegion.SetRegionRectangles(aRectangles);
 
-        ( (Bitmap*) this )->ReleaseAccess( pReadAcc );
+        const_cast<Bitmap*>(this)->ReleaseAccess( pReadAcc );
     }
     else
         aRegion = aRect;

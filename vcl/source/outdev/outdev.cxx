@@ -394,7 +394,7 @@ sal_uInt16 OutputDevice::GetBitCount() const
     // we need a graphics instance
     if ( !mpGraphics )
     {
-        if ( !((OutputDevice*)this)->AcquireGraphics() )
+        if ( !AcquireGraphics() )
             return 0;
     }
 
@@ -656,7 +656,7 @@ void OutputDevice::drawOutDevDirect( const OutputDevice* pSrcDev, SalTwoRect& rP
         {
             if ( !pSrcDev->mpGraphics )
             {
-                if ( !((OutputDevice*)pSrcDev)->AcquireGraphics() )
+                if ( !pSrcDev->AcquireGraphics() )
                     return;
             }
             pSrcGraphics = pSrcDev->mpGraphics;
@@ -669,7 +669,7 @@ void OutputDevice::drawOutDevDirect( const OutputDevice* pSrcDev, SalTwoRect& rP
             {
                 if ( !pSrcDev->mpGraphics )
                 {
-                    if ( !((OutputDevice*)pSrcDev)->AcquireGraphics() )
+                    if ( !pSrcDev->AcquireGraphics() )
                         return;
                 }
                 pSrcGraphics = pSrcDev->mpGraphics;
@@ -814,7 +814,7 @@ bool OutputDevice::DrawEPS( const Point& rPoint, const Size& rSize,
 
             aRect.Justify();
             bDrawn = mpGraphics->DrawEPS( aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight(),
-                         (sal_uInt8*) rGfxLink.GetData(), rGfxLink.GetDataSize(), this );
+                         const_cast<sal_uInt8*>(rGfxLink.GetData()), rGfxLink.GetDataSize(), this );
         }
 
         // else draw the substitution graphics

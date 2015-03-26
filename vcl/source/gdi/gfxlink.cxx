@@ -140,7 +140,7 @@ bool GfxLink::IsNative() const
 const sal_uInt8* GfxLink::GetData() const
 {
     if( IsSwappedOut() )
-        ( (GfxLink*) this )->SwapIn();
+        const_cast<GfxLink*>(this)->SwapIn();
 
     return( mpBuf ? mpBuf->mpBuffer : NULL );
 }

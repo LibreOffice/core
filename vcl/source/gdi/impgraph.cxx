@@ -891,9 +891,9 @@ void ImpGraphic::ImplDraw( OutputDevice* pOutDev,
 
             default:
             {
-                ( (ImpGraphic*) this )->maMetaFile.WindStart();
-                ( (ImpGraphic*) this )->maMetaFile.Play( pOutDev, rDestPt, rDestSize );
-                ( (ImpGraphic*) this )->maMetaFile.WindStart();
+                const_cast<ImpGraphic*>(this)->maMetaFile.WindStart();
+                const_cast<ImpGraphic*>(this)->maMetaFile.Play( pOutDev, rDestPt, rDestSize );
+                const_cast<ImpGraphic*>(this)->maMetaFile.WindStart();
             }
             break;
         }

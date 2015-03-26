@@ -753,7 +753,7 @@ namespace
     {
         bool bResult = false;
         TrueTypeFont* pTTF = NULL;
-        if( OpenTTFontBuffer( const_cast<void*>(i_pBuffer), i_nSize, 0, &pTTF ) == SF_OK )
+        if( OpenTTFontBuffer( i_pBuffer, i_nSize, 0, &pTTF ) == SF_OK )
         {
             TTGlobalFontInfo aInfo;
             GetTTGlobalFontInfo( pTTF, &aInfo );

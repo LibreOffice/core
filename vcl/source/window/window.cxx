@@ -1247,7 +1247,7 @@ ImplWinData* Window::ImplGetWinData() const
     {
         static const char* pNoNWF = getenv( "SAL_NO_NWF" );
 
-        ((vcl::Window*)this)->mpWindowImpl->mpWinData = new ImplWinData;
+        const_cast<vcl::Window*>(this)->mpWindowImpl->mpWinData = new ImplWinData;
         mpWindowImpl->mpWinData->mpExtOldText     = NULL;
         mpWindowImpl->mpWinData->mpExtOldAttrAry  = NULL;
         mpWindowImpl->mpWinData->mpCursorRect     = NULL;
@@ -2131,9 +2131,9 @@ long Window::CalcTitleWidth() const
         // border of external dialogs
         const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
         vcl::Font aFont = GetFont();
-        ((vcl::Window*)this)->SetPointFont( rStyleSettings.GetTitleFont() );
+        const_cast<vcl::Window*>(this)->SetPointFont( rStyleSettings.GetTitleFont() );
         long nTitleWidth = GetTextWidth( GetText() );
-        ((vcl::Window*)this)->SetFont( aFont );
+        const_cast<vcl::Window*>(this)->SetFont( aFont );
         nTitleWidth += rStyleSettings.GetTitleHeight() * 3;
         nTitleWidth += rStyleSettings.GetBorderSize() * 2;
         nTitleWidth += 10;
@@ -2973,14 +2973,14 @@ long Window::ImplGetUnmirroredOutOffX()
 Point Window::OutputToNormalizedScreenPixel( const Point& rPos ) const
 {
     // relative to top level parent
-    long offx = ((vcl::Window*) this)->ImplGetUnmirroredOutOffX();
+    long offx = const_cast<vcl::Window*>(this)->ImplGetUnmirroredOutOffX();
     return Point( rPos.X()+offx, rPos.Y()+mnOutOffY );
 }
 
 Point Window::NormalizedScreenToOutputPixel( const Point& rPos ) const
 {
     // relative to top level parent
-    long offx = ((vcl::Window*) this)->ImplGetUnmirroredOutOffX();
+    long offx = const_cast<vcl::Window*>(this)->ImplGetUnmirroredOutOffX();
     return Point( rPos.X()-offx, rPos.Y()-mnOutOffY );
 }
 

@@ -114,7 +114,7 @@ ImplJobSetup* JobSetup::ImplGetConstData()
 const ImplJobSetup* JobSetup::ImplGetConstData() const
 {
     if ( !mpData )
-        ((JobSetup*)this)->mpData = new ImplJobSetup;
+        const_cast<JobSetup*>(this)->mpData = new ImplJobSetup;
     return mpData;
 }
 

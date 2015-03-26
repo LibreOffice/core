@@ -637,7 +637,7 @@ bool BitmapEx::Replace( const Color& rSearchColor, const Color& rReplaceColor, s
 
 bool BitmapEx::Replace( const Color* pSearchColors, const Color* pReplaceColors, sal_uLong nColorCount, const sal_uLong* pTols )
 {
-    return !!aBitmap && aBitmap.Replace( pSearchColors, pReplaceColors, nColorCount, (sal_uLong*) pTols );
+    return !!aBitmap && aBitmap.Replace( pSearchColors, pReplaceColors, nColorCount, const_cast<sal_uLong*>(pTols) );
 }
 
 bool BitmapEx::Adjust( short nLuminancePercent, short nContrastPercent,

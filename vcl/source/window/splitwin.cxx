@@ -3051,7 +3051,7 @@ long SplitWindow::GetItemSize( sal_uInt16 nId, SplitWindowItemBits nBits ) const
             return pSet->mpItems[nPos].mnSize;
         else
         {
-            ((SplitWindow*)this)->ImplCalcLayout();
+            const_cast<SplitWindow*>(this)->ImplCalcLayout();
 
             long                nRelSize = 0;
             long                nPerSize = 0;

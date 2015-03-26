@@ -1005,7 +1005,7 @@ Point ToolBox::GetItemPopupPosition( sal_uInt16 nItemId, const Size& rSize ) con
 Rectangle ToolBox::GetItemRect( sal_uInt16 nItemId ) const
 {
     if ( mbCalc || mbFormat )
-        ((ToolBox*)this)->ImplFormat();
+        const_cast<ToolBox*>(this)->ImplFormat();
 
     sal_uInt16 nPos = GetItemPos( nItemId );
     return GetItemPosRect( nPos );
@@ -1014,7 +1014,7 @@ Rectangle ToolBox::GetItemRect( sal_uInt16 nItemId ) const
 Rectangle ToolBox::GetItemPosRect( sal_uInt16 nPos ) const
 {
     if ( mbCalc || mbFormat )
-        ((ToolBox*)this)->ImplFormat();
+        const_cast<ToolBox*>(this)->ImplFormat();
 
     if ( nPos < mpData->m_aItems.size() )
         return mpData->m_aItems[nPos].maRect;
@@ -1025,7 +1025,7 @@ Rectangle ToolBox::GetItemPosRect( sal_uInt16 nPos ) const
 Size ToolBox::GetItemContentSize( sal_uInt16 nItemId ) const
 {
     if ( mbCalc || mbFormat )
-        ((ToolBox*)this)->ImplFormat();
+        const_cast<ToolBox*>(this)->ImplFormat();
 
     sal_uInt16 nPos = GetItemPos( nItemId );
     if ( nPos < mpData->m_aItems.size() )

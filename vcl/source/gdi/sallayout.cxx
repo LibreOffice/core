@@ -668,7 +668,7 @@ void SalLayout::Release() const
     if( --mnRefCount > 0 )
         return;
     // const_cast because some compilers violate ANSI C++ spec
-    delete const_cast<SalLayout*>(this);
+    delete this;
 }
 
 Point SalLayout::GetDrawPosition( const Point& rRelative ) const

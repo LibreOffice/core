@@ -173,7 +173,7 @@ PNGReaderImpl::PNGReaderImpl( SvStream& rPNGStream )
     mpScanPrior     ( NULL ),
     mpTransTab      ( NULL ),
     mpScanCurrent   ( NULL ),
-    mpColorTable    ( (sal_uInt8*) mpDefaultColorTable ),
+    mpColorTable    ( const_cast<sal_uInt8*>(mpDefaultColorTable) ),
     mnChunkType     ( 0 ),
     mnChunkLen      ( 0 ),
     mnBPP           ( 0 ),

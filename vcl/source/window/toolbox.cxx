@@ -212,7 +212,7 @@ void ToolBox::ImplCalcBorder( WindowAlign eAlign, long& rLeft, long& rTop,
     ImplDockingWindowWrapper *pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper( pThis );
 
     // reserve dragarea only for dockable toolbars
-    int    dragwidth = ( pWrapper && !pWrapper->IsLocked() ) ? ImplGetDragWidth( (ToolBox*)pThis ) : 0;
+    int    dragwidth = ( pWrapper && !pWrapper->IsLocked() ) ? ImplGetDragWidth( const_cast<ToolBox*>(pThis) ) : 0;
 
     // no shadow border for dockable toolbars
     int    borderwidth = pWrapper ? 0: 2;
@@ -682,39 +682,39 @@ Size ToolBox::ImplCalcSize( const ToolBox* pThis, sal_uInt16 nCalcLines, sal_uIn
         {
             pThis->mpData->mbAssumeDocked = true;   // force non-floating mode during calculation
             ImplCalcBorder( WINDOWALIGN_TOP, nLeft, nTop, nRight, nBottom, pThis );
-            ((ToolBox*)pThis)->mbHorz = true;
+            const_cast<ToolBox*>(pThis)->mbHorz = true;
             if ( pThis->mbHorz != bOldHorz )
-                ((ToolBox*)pThis)->meAlign = WINDOWALIGN_TOP;
+                const_cast<ToolBox*>(pThis)->meAlign = WINDOWALIGN_TOP;
         }
         else if ( nCalcMode == TB_CALCMODE_VERT )
         {
             pThis->mpData->mbAssumeDocked = true;   // force non-floating mode during calculation
             ImplCalcBorder( WINDOWALIGN_LEFT, nLeft, nTop, nRight, nBottom, pThis );
-            ((ToolBox*)pThis)->mbHorz = false;
+            const_cast<ToolBox*>(pThis)->mbHorz = false;
             if ( pThis->mbHorz != bOldHorz )
-                ((ToolBox*)pThis)->meAlign = WINDOWALIGN_LEFT;
+                const_cast<ToolBox*>(pThis)->meAlign = WINDOWALIGN_LEFT;
         }
         else if ( nCalcMode == TB_CALCMODE_FLOAT )
         {
             pThis->mpData->mbAssumeFloating = true;   // force non-floating mode during calculation
             nLeft = nTop = nRight = nBottom = 0;
-            ((ToolBox*)pThis)->mbHorz = true;
+            const_cast<ToolBox*>(pThis)->mbHorz = true;
             if ( pThis->mbHorz != bOldHorz )
-                ((ToolBox*)pThis)->meAlign = WINDOWALIGN_TOP;
+                const_cast<ToolBox*>(pThis)->meAlign = WINDOWALIGN_TOP;
         }
 
         if ( (pThis->meAlign != eOldAlign) || (pThis->mbHorz != bOldHorz) ||
              (pThis->ImplIsFloatingMode() != bOldFloatingMode ) )
-            ((ToolBox*)pThis)->mbCalc = true;
+            const_cast<ToolBox*>(pThis)->mbCalc = true;
     }
     else
         ImplCalcBorder( pThis->meAlign, nLeft, nTop, nRight, nBottom, pThis );
 
-    ((ToolBox*)pThis)->ImplCalcItem();
+    const_cast<ToolBox*>(pThis)->ImplCalcItem();
 
     if( !nCalcMode && pThis->ImplIsFloatingMode() )
     {
-        aSize = ImplCalcFloatSize( ((ToolBox*)pThis), nCalcLines );
+        aSize = ImplCalcFloatSize( const_cast<ToolBox*>(pThis), nCalcLines );
     }
     else
     {
@@ -732,7 +732,7 @@ Size ToolBox::ImplCalcSize( const ToolBox* pThis, sal_uInt16 nCalcLines, sal_uIn
                 aSize.Height() += (TB_BORDER_OFFSET2*2) + nTop + nBottom;
 
             nMax = 0;
-            ((ToolBox*)pThis)->ImplCalcBreaks( TB_MAXNOSCROLL, &nMax, pThis->mbHorz );
+            const_cast<ToolBox*>(pThis)->ImplCalcBreaks( TB_MAXNOSCROLL, &nMax, pThis->mbHorz );
             if ( nMax )
                 aSize.Width() += nMax;
 
@@ -750,7 +750,7 @@ Size ToolBox::ImplCalcSize( const ToolBox* pThis, sal_uInt16 nCalcLines, sal_uIn
                 aSize.Width() += (TB_BORDER_OFFSET2*2) + nLeft + nRight;
 
             nMax = 0;
-            ((ToolBox*)pThis)->ImplCalcBreaks( TB_MAXNOSCROLL, &nMax, pThis->mbHorz );
+            const_cast<ToolBox*>(pThis)->ImplCalcBreaks( TB_MAXNOSCROLL, &nMax, pThis->mbHorz );
             if ( nMax )
                 aSize.Height() += nMax;
 
@@ -765,9 +765,9 @@ Size ToolBox::ImplCalcSize( const ToolBox* pThis, sal_uInt16 nCalcLines, sal_uIn
         pThis->mpData->mbAssumeFloating = bOldAssumeFloating;
         if ( (pThis->meAlign != eOldAlign) || (pThis->mbHorz != bOldHorz) )
         {
-            ((ToolBox*)pThis)->meAlign  = eOldAlign;
-            ((ToolBox*)pThis)->mbHorz   = bOldHorz;
-            ((ToolBox*)pThis)->mbCalc   = true;
+            const_cast<ToolBox*>(pThis)->meAlign  = eOldAlign;
+            const_cast<ToolBox*>(pThis)->mbHorz   = bOldHorz;
+            const_cast<ToolBox*>(pThis)->mbCalc   = true;
         }
     }
 
@@ -4757,8 +4757,8 @@ sal_uInt16 ToolBox::ImplCountLineBreaks( const ToolBox *pThis )
 {
     sal_uInt16 nLines = 0;
 
-    std::vector< ImplToolItem >::const_iterator it = ((ToolBox*)pThis)->mpData->m_aItems.begin();
-    while ( it != ((ToolBox*)pThis)->mpData->m_aItems.end() )
+    std::vector< ImplToolItem >::const_iterator it = const_cast<ToolBox*>(pThis)->mpData->m_aItems.begin();
+    while ( it != const_cast<ToolBox*>(pThis)->mpData->m_aItems.end() )
     {
         if( it->meType == ToolBoxItemType::BREAK )
             ++nLines;
@@ -4781,7 +4781,7 @@ Size ToolBox::CalcPopupWindowSizePixel() const
     }
 
     bool bPopup = mpData->mbAssumePopupMode;
-    ToolBox *pThis = (ToolBox*) this;
+    ToolBox *pThis = const_cast<ToolBox*>(this);
     pThis->mpData->mbAssumePopupMode = true;
 
     Size aSize = CalcFloatingWindowSizePixel( nLines );
@@ -4803,11 +4803,11 @@ Size ToolBox::CalcFloatingWindowSizePixel( sal_uInt16 nCalcLines ) const
     bool bDocking = mpData->mbAssumeDocked;
 
     // simulate floating mode and force reformat before calculating
-    ToolBox *pThis = (ToolBox*) this;
+    ToolBox *pThis = const_cast<ToolBox*>(this);
     pThis->mpData->mbAssumeFloating = true;
     pThis->mpData->mbAssumeDocked = false;
 
-    Size aSize = ImplCalcFloatSize( (ToolBox*) this, nCalcLines );
+    Size aSize = ImplCalcFloatSize( const_cast<ToolBox*>(this), nCalcLines );
 
     pThis->mbFormat = true;
     pThis->mpData->mbAssumeFloating = bFloat;

@@ -1449,7 +1449,7 @@ CalendarWrapper& DateFormatter::GetCalendarWrapper() const
 {
     if ( !mpCalendarWrapper )
     {
-        ((DateFormatter*)this)->mpCalendarWrapper = new CalendarWrapper( comphelper::getProcessComponentContext() );
+        const_cast<DateFormatter*>(this)->mpCalendarWrapper = new CalendarWrapper( comphelper::getProcessComponentContext() );
         mpCalendarWrapper->loadDefaultCalendar( GetLocale() );
     }
 

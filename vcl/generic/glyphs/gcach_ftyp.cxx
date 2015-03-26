@@ -262,7 +262,7 @@ FT_FaceRec_* FtFontInfo::GetFaceFT()
     if (!maFaceFT && mpFontFile->Map())
     {
         FT_Error rc = FT_New_Memory_Face( aLibFT,
-            (FT_Byte*)mpFontFile->GetBuffer(),
+            mpFontFile->GetBuffer(),
             mpFontFile->GetFileSize(), mnFaceNum, &maFaceFT );
         if( (rc != FT_Err_Ok) || (maFaceFT->num_glyphs <= 0) )
             maFaceFT = NULL;

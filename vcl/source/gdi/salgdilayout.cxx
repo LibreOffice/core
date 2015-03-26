@@ -105,7 +105,7 @@ void SalGraphics::mirror( long& x, const OutputDevice *pOutDev, bool bBack ) con
     {
         if( pOutDev && pOutDev->ImplIsAntiparallel() )
         {
-            OutputDevice *pOutDevRef = (OutputDevice*) pOutDev;
+            OutputDevice *pOutDevRef = const_cast<OutputDevice*>(pOutDev);
             // mirror this window back
             if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) )
             {
@@ -137,7 +137,7 @@ void SalGraphics::mirror( long& x, long& nWidth, const OutputDevice *pOutDev, bo
     {
         if( pOutDev && pOutDev->ImplIsAntiparallel() )
         {
-            OutputDevice *pOutDevRef = (OutputDevice*) pOutDev;
+            OutputDevice *pOutDevRef = const_cast<OutputDevice*>(pOutDev);
             // mirror this window back
             if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) )
             {
@@ -172,7 +172,7 @@ bool SalGraphics::mirror( sal_uInt32 nPoints, const SalPoint *pPtAry, SalPoint *
 
         if( pOutDev && pOutDev->ImplIsAntiparallel() )
         {
-            OutputDevice *pOutDevRef = (OutputDevice*) pOutDev;
+            OutputDevice *pOutDevRef = const_cast<OutputDevice*>(pOutDev);
             // mirror this window back
             if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) )
             {
@@ -295,7 +295,7 @@ basegfx::B2DPoint SalGraphics::mirror( const basegfx::B2DPoint& i_rPoint, const 
     {
         if( i_pOutDev && !i_pOutDev->IsRTLEnabled() )
         {
-            OutputDevice *pOutDevRef = (OutputDevice*)i_pOutDev;
+            OutputDevice *pOutDevRef = const_cast<OutputDevice*>(i_pOutDev);
             // mirror this window back
             double devX = w-pOutDevRef->GetOutputWidthPixel()-pOutDevRef->GetOutOffXPixel();   // re-mirrored mnOutOffX
             if( i_bBack )

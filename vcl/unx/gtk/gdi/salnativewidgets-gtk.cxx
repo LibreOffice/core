@@ -1940,8 +1940,8 @@ bool GtkSalGraphics::NWPaintGTKScrollbar( ControlType, ControlPart nPart,
     Rectangle        button21BoundRect = rScrollbarVal.maButton2Rect;   // secondary backward
     GtkArrowType    button1Type;                                        // backward
     GtkArrowType    button2Type;                                        // forward
-    gchar *        scrollbarTagH = (gchar *) "hscrollbar";
-    gchar *        scrollbarTagV = (gchar *) "vscrollbar";
+    gchar *        scrollbarTagH = const_cast<gchar *>("hscrollbar");
+    gchar *        scrollbarTagV = const_cast<gchar *>("vscrollbar");
     gchar *        scrollbarTag = NULL;
     Rectangle        arrowRect;
     gint            slider_width = 0;
@@ -2876,7 +2876,7 @@ bool GtkSalGraphics::NWPaintGTKTabItem( ControlType nType, ControlPart,
 
             case CTRL_TAB_PANE:
                 gtk_paint_box_gap( gWidgetData[m_nXScreen].gNotebookWidget->style, gdkPixmap, GTK_STATE_NORMAL, GTK_SHADOW_OUT, NULL, gWidgetData[m_nXScreen].gNotebookWidget,
-                    (char *)"notebook", 0, 0, pixmapRect.GetWidth(), pixmapRect.GetHeight(), GTK_POS_TOP, 0, 0 );
+                    "notebook", 0, 0, pixmapRect.GetWidth(), pixmapRect.GetHeight(), GTK_POS_TOP, 0, 0 );
                 break;
 
             case CTRL_TAB_ITEM:
@@ -2896,7 +2896,7 @@ bool GtkSalGraphics::NWPaintGTKTabItem( ControlType nType, ControlPart,
                     g_object_set_data(G_OBJECT(gdkPixmap),tabPrelitDataName,reinterpret_cast<gpointer>(TRUE));
 
                 gtk_paint_extension( gWidgetData[m_nXScreen].gNotebookWidget->style, gdkPixmap, stateType, GTK_SHADOW_OUT, NULL, gWidgetData[m_nXScreen].gNotebookWidget,
-                    (char *)"tab", (tabRect.Left() - pixmapRect.Left()), (tabRect.Top() - pixmapRect.Top()),
+                    "tab", (tabRect.Left() - pixmapRect.Left()), (tabRect.Top() - pixmapRect.Top()),
                     tabRect.GetWidth(), tabRect.GetHeight(), GTK_POS_BOTTOM );
 
                 g_object_steal_data(G_OBJECT(gdkPixmap),tabPrelitDataName);

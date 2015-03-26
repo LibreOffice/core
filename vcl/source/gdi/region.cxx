@@ -1537,8 +1537,8 @@ bool vcl::Region::operator==( const vcl::Region& rRegion ) const
     {
         // one of both has a B2DPolyPolygon based region, ensure both have it
         // by evtl. conversion
-        const_cast< vcl::Region* >(this)->GetAsB2DPolyPolygon();
-        const_cast< vcl::Region& >(rRegion).GetAsB2DPolyPolygon();
+        GetAsB2DPolyPolygon();
+        rRegion.GetAsB2DPolyPolygon();
 
         return *rRegion.getB2DPolyPolygon() == *getB2DPolyPolygon();
     }
@@ -1547,8 +1547,8 @@ bool vcl::Region::operator==( const vcl::Region& rRegion ) const
     {
         // one of both has a B2DPolyPolygon based region, ensure both have it
         // by evtl. conversion
-        const_cast< vcl::Region* >(this)->GetAsPolyPolygon();
-        const_cast< vcl::Region& >(rRegion).GetAsPolyPolygon();
+        GetAsPolyPolygon();
+        rRegion.GetAsPolyPolygon();
 
         return *rRegion.getPolyPolygon() == *getPolyPolygon();
     }
