@@ -60,9 +60,7 @@ bool ImplCallPreNotify( NotifyEvent& rEvt )
         || rEvt.GetWindow()->PreNotify( rEvt );
 }
 
-
-enum ENUM_IHMFM {IHMFM_FALSE = 0, IHMFM_TRUE = 1, IHMFM_FLOAT = 2};
-static sal_uInt16 ImplHandleMouseFloatMode( vcl::Window* pChild, const Point& rMousePos,
+static bool ImplHandleMouseFloatMode( vcl::Window* pChild, const Point& rMousePos,
                                       sal_uInt16 nCode, MouseNotifyEvent nSVEvent,
                                       bool bMouseLeave )
 {
@@ -82,14 +80,14 @@ static sal_uInt16 ImplHandleMouseFloatMode( vcl::Window* pChild, const Point& rM
         if ( nSVEvent == MouseNotifyEvent::MOUSEMOVE )
         {
             if ( bMouseLeave )
-                return IHMFM_TRUE;
+                return true;
 
             if ( !pFloat || (nHitTest == HITTEST_RECT) )
             {
                 if ( pSVData->maHelpData.mpHelpWin && !pSVData->maHelpData.mbKeyboardHelp )
                     ImplDestroyHelpWindow( true );
                 pChild->ImplGetFrame()->SetPointer( POINTER_ARROW );
-                return IHMFM_TRUE;
+                return true;
             }
         }
         else
@@ -103,13 +101,13 @@ static sal_uInt16 ImplHandleMouseFloatMode( vcl::Window* pChild, const Point& rM
                         pLastLevelFloat = pSVData->maWinData.mpFirstFloat->ImplFindLastLevelFloat();
                         nPopupFlags = pLastLevelFloat->GetPopupModeFlags();
                         pLastLevelFloat->EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL | FLOATWIN_POPUPMODEEND_CLOSEALL );
-                        return IHMFM_FLOAT | IHMFM_TRUE;   // don't stop the handling  fdo#84795
+                        return true;
                     }
                     else if ( nHitTest == HITTEST_RECT )
                     {
                         if ( !(pFloat->GetPopupModeFlags() & FLOATWIN_POPUPMODE_NOMOUSERECTCLOSE) )
                             pFloat->ImplSetMouseDown();
-                        return IHMFM_TRUE;
+                        return true;
                     }
                 }
                 else
@@ -120,7 +118,7 @@ static sal_uInt16 ImplHandleMouseFloatMode( vcl::Window* pChild, const Point& rM
                         {
                             if ( pFloat->ImplIsMouseDown() )
                                 pFloat->EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL );
-                            return IHMFM_TRUE;
+                            return true;
                         }
                     }
                     else
@@ -130,7 +128,7 @@ static sal_uInt16 ImplHandleMouseFloatMode( vcl::Window* pChild, const Point& rM
                         if ( !(nPopupFlags & FLOATWIN_POPUPMODE_NOMOUSEUPCLOSE) )
                         {
                             pLastLevelFloat->EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL | FLOATWIN_POPUPMODEEND_CLOSEALL );
-                            return IHMFM_TRUE;
+                            return true;
                         }
                     }
                 }
@@ -145,21 +143,21 @@ static sal_uInt16 ImplHandleMouseFloatMode( vcl::Window* pChild, const Point& rM
                     {
                         if ( (nPopupFlags & FLOATWIN_POPUPMODE_NOMOUSEUPCLOSE) &&
                              (nSVEvent == MouseNotifyEvent::MOUSEBUTTONUP) )
-                            return IHMFM_TRUE;
+                            return true;
                         pLastLevelFloat->EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL | FLOATWIN_POPUPMODEEND_CLOSEALL );
                         if ( nPopupFlags & FLOATWIN_POPUPMODE_PATHMOUSECANCELCLICK )
-                            return IHMFM_FLOAT | IHMFM_FALSE;
+                            return false;
                         else
-                            return IHMFM_TRUE;
+                            return true;
                     }
                     else
-                        return IHMFM_TRUE;
+                        return true;
                 }
             }
         }
     }
 
-    return IHMFM_FALSE;
+    return false;
 }
 
 static void ImplHandleMouseHelpRequest( vcl::Window* pChild, const Point& rMousePos )
@@ -384,7 +382,7 @@ bool ImplHandleMouseEvent( vcl::Window* pWindow, MouseNotifyEvent nSVEvent, bool
         // #106845# if the window was disabed during capturing we have to pass the mouse events to release capturing
         if ( pSVData->maWinData.mpCaptureWin != pChild && (!pChild->IsEnabled() || !pChild->IsInputEnabled() || pChild->IsInModalNonRefMode() ) )
         {
-            sal_uInt16 FloatHdl = (ImplHandleMouseFloatMode( pChild, aMousePos, nCode, nSVEvent, bMouseLeave ) & IHMFM_FLOAT);
+            ImplHandleMouseFloatMode( pChild, aMousePos, nCode, nSVEvent, bMouseLeave );
             if ( nSVEvent == MouseNotifyEvent::MOUSEMOVE )
             {
                 ImplHandleMouseHelpRequest( pChild, aMousePos );
@@ -404,18 +402,15 @@ bool ImplHandleMouseEvent( vcl::Window* pWindow, MouseNotifyEvent nSVEvent, bool
                 pChild->ImplNotifyKeyMouseCommandEventListeners( aNEvt );
             }
 
-            if(FloatHdl != IHMFM_FLOAT) // mouse-button left: don't stop the handling for the click fdo#84795
+            if ( nSVEvent == MouseNotifyEvent::MOUSEBUTTONDOWN )
+                return true;
+            else
             {
-                if ( nSVEvent == MouseNotifyEvent::MOUSEBUTTONDOWN )
-                    return true;
-                else
-                {
-                    // Set normal MousePointer for disabled windows
-                    if ( nSVEvent == MouseNotifyEvent::MOUSEMOVE )
-                        ImplSetMousePointer( pChild );
+                // Set normal MousePointer for disabled windows
+                if ( nSVEvent == MouseNotifyEvent::MOUSEMOVE )
+                    ImplSetMousePointer( pChild );
 
-                    return false;
-                }
+                return false;
             }
         }
 
@@ -643,7 +638,7 @@ bool ImplHandleMouseEvent( vcl::Window* pWindow, MouseNotifyEvent nSVEvent, bool
     {
         ImplDelData aDelData;
         pChild->ImplAddDel( &aDelData );
-        if ( (ImplHandleMouseFloatMode( pChild, aMousePos, nCode, nSVEvent, bMouseLeave ) & ~IHMFM_FLOAT) == IHMFM_TRUE )
+        if ( ImplHandleMouseFloatMode( pChild, aMousePos, nCode, nSVEvent, bMouseLeave ) )
         {
             if ( !aDelData.IsDead() )
             {
