@@ -207,9 +207,9 @@ void SotStorageStream::SetSize(sal_uInt64 const nNewSize)
 sal_uInt32 SotStorageStream::GetSize() const
 {
     sal_uLong nPos = Tell();
-    ((SotStorageStream *)this)->Seek( STREAM_SEEK_TO_END );
+    const_cast<SotStorageStream *>(this)->Seek( STREAM_SEEK_TO_END );
     sal_uLong nSize = Tell();
-    ((SotStorageStream *)this)->Seek( nPos );
+    const_cast<SotStorageStream *>(this)->Seek( nPos );
     return nSize;
 }
 
@@ -600,7 +600,7 @@ const OUString & SotStorage::GetName() const
     {
         DBG_ASSERT( Owner(), "must be owner" );
         if( m_pOwnStg )
-            ((SotStorage *)this)->m_aName = m_pOwnStg->GetName();
+            const_cast<SotStorage *>(this)->m_aName = m_pOwnStg->GetName();
     }
     return m_aName;
 }

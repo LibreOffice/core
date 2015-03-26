@@ -65,19 +65,19 @@ StorageBase::~StorageBase()
 sal_uLong StorageBase::GetError() const
 {
     sal_uLong n = m_nError;
-    ((StorageBase*) this)->m_nError = SVSTREAM_OK;
+    const_cast<StorageBase*>(this)->m_nError = SVSTREAM_OK;
     return n;
 }
 
 void StorageBase::SetError( sal_uLong n ) const
 {
     if( !m_nError )
-        ((StorageBase*) this)->m_nError = n;
+        const_cast<StorageBase*>(this)->m_nError = n;
 }
 
 void StorageBase::ResetError() const
 {
-    ((StorageBase*) this)->m_nError = SVSTREAM_OK;
+    const_cast<StorageBase*>(this)->m_nError = SVSTREAM_OK;
 }
 
 // Retrieve the underlying SvStream for info purposes
@@ -542,7 +542,7 @@ Storage::~Storage()
 const OUString& Storage::GetName() const
 {
     if( !bIsRoot && Validate() )
-        pEntry->aEntry.GetName( ((Storage*) this)->aName );
+        pEntry->aEntry.GetName( const_cast<Storage*>(this)->aName );
     return aName;
 }
 
@@ -794,7 +794,7 @@ bool Storage::CopyTo( BaseStorage* pDest ) const
         SetError( SVSTREAM_ACCESS_DENIED );
         return false;
     }
-    Storage* pThis = (Storage*) this;
+    Storage* pThis = const_cast<Storage*>(this);
     pDest->SetClassId( GetClassId() );
     pDest->SetDirty();
     SvStorageInfoList aList;
