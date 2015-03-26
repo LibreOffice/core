@@ -658,7 +658,7 @@ bool SdTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pObject, So
 void SdTransferable::DragFinished( sal_Int8 nDropAction )
 {
     if( mpSdView )
-        const_cast<::sd::View*>(mpSdView)->DragFinished( nDropAction );
+        const_cast< ::sd::View* >(mpSdView)->DragFinished( nDropAction );
 }
 
 void SdTransferable::ObjectReleased()
