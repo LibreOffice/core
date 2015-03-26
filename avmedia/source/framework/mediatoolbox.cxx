@@ -115,7 +115,7 @@ void MediaToolBoxControl::StateChanged( sal_uInt16 /* nSID */, SfxItemState eSta
         pCtrl->Enable( false, false );
         pCtrl->SetText( OUString() );
 
-        const MediaItem aEmptyMediaItem( 0, AVMEDIA_SETMASK_ALL );
+        const MediaItem aEmptyMediaItem( 0, AVMediaSetMask::ALL );
         pCtrl->setState( aEmptyMediaItem );
     }
     else

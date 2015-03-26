@@ -64,7 +64,7 @@ namespace avmedia
 MediaControl::MediaControl( vcl::Window* pParent, MediaControlStyle eControlStyle ) :
     Control( pParent ),
     maImageList( SvtMiscOptions().AreCurrentSymbolsLarge() ? AVMEDIA_RESID( AVMEDIA_IMGLST_L ) : AVMEDIA_RESID( AVMEDIA_IMGLST ) ),
-    maItem( 0, AVMEDIA_SETMASK_ALL ),
+    maItem( 0, AVMediaSetMask::ALL ),
     maPlayToolBox( this, WB_3DLOOK ),
     maTimeSlider( this, WB_HORZ | WB_DRAG | WB_3DLOOK | WB_SLIDERSET ),
     maMuteToolBox( this, WB_3DLOOK ),
@@ -549,7 +549,7 @@ IMPL_LINK( MediaControl, implSelectHdl, ToolBox*, p )
             break;
         }
 
-        if( aExecItem.getMaskSet() != AVMEDIA_SETMASK_NONE )
+        if( aExecItem.getMaskSet() != AVMediaSetMask::NONE )
             execute( aExecItem );
     }
 

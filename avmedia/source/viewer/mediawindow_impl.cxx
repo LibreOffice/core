@@ -369,33 +369,33 @@ void MediaWindowImpl::updateMediaItem( MediaItem& rItem ) const
 
 void MediaWindowImpl::executeMediaItem( const MediaItem& rItem )
 {
-    const sal_uInt32 nMaskSet = rItem.getMaskSet();
+    const AVMediaSetMask nMaskSet = rItem.getMaskSet();
 
     // set URL first
-    if( nMaskSet & AVMEDIA_SETMASK_URL )
+    if( nMaskSet & AVMediaSetMask::URL )
     {
         m_sMimeType = rItem.getMimeType();
         setURL( rItem.getURL(), rItem.getTempURL(), rItem.getReferer() );
     }
 
     // set different states next
-    if( nMaskSet & AVMEDIA_SETMASK_TIME )
+    if( nMaskSet & AVMediaSetMask::TIME )
         setMediaTime( ::std::min( rItem.getTime(), getDuration() ) );
 
-    if( nMaskSet & AVMEDIA_SETMASK_LOOP )
+    if( nMaskSet & AVMediaSetMask::LOOP )
         setPlaybackLoop( rItem.isLoop() );
 
-    if( nMaskSet & AVMEDIA_SETMASK_MUTE )
+    if( nMaskSet & AVMediaSetMask::MUTE )
         setMute( rItem.isMute() );
 
-    if( nMaskSet & AVMEDIA_SETMASK_VOLUMEDB )
+    if( nMaskSet & AVMediaSetMask::VOLUMEDB )
         setVolumeDB( rItem.getVolumeDB() );
 
-    if( nMaskSet & AVMEDIA_SETMASK_ZOOM )
+    if( nMaskSet & AVMediaSetMask::ZOOM )
         setZoom( rItem.getZoom() );
 
     // set play state at last
-    if( nMaskSet & AVMEDIA_SETMASK_STATE )
+    if( nMaskSet & AVMediaSetMask::STATE )
     {
         switch( rItem.getState() )
         {

@@ -420,13 +420,13 @@ static bool lcl_HandlePackageURL(
 void SdrMediaObj::mediaPropertiesChanged( const ::avmedia::MediaItem& rNewProperties )
 {
     bool bBroadcastChanged = false;
-    const sal_uInt32 nMaskSet = rNewProperties.getMaskSet();
+    const AVMediaSetMask nMaskSet = rNewProperties.getMaskSet();
 
     // use only a subset of MediaItem properties for own own properties
-    if( AVMEDIA_SETMASK_MIME_TYPE & nMaskSet )
+    if( AVMediaSetMask::MIME_TYPE & nMaskSet )
         m_xImpl->m_MediaProperties.setMimeType( rNewProperties.getMimeType() );
 
-    if( ( AVMEDIA_SETMASK_URL & nMaskSet ) &&
+    if( ( AVMediaSetMask::URL & nMaskSet ) &&
         ( rNewProperties.getURL() != getURL() ))
     {
         m_xImpl->m_xCachedSnapshot.clear();
@@ -475,16 +475,16 @@ void SdrMediaObj::mediaPropertiesChanged( const ::avmedia::MediaItem& rNewProper
         bBroadcastChanged = true;
     }
 
-    if( AVMEDIA_SETMASK_LOOP & nMaskSet )
+    if( AVMediaSetMask::LOOP & nMaskSet )
         m_xImpl->m_MediaProperties.setLoop( rNewProperties.isLoop() );
 
-    if( AVMEDIA_SETMASK_MUTE & nMaskSet )
+    if( AVMediaSetMask::MUTE & nMaskSet )
         m_xImpl->m_MediaProperties.setMute( rNewProperties.isMute() );
 
-    if( AVMEDIA_SETMASK_VOLUMEDB & nMaskSet )
+    if( AVMediaSetMask::VOLUMEDB & nMaskSet )
         m_xImpl->m_MediaProperties.setVolumeDB( rNewProperties.getVolumeDB() );
 
-    if( AVMEDIA_SETMASK_ZOOM & nMaskSet )
+    if( AVMediaSetMask::ZOOM & nMaskSet )
         m_xImpl->m_MediaProperties.setZoom( rNewProperties.getZoom() );
 
     if( bBroadcastChanged )

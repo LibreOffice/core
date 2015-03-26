@@ -52,7 +52,7 @@ struct MediaItem::Impl
     OUString                m_TempFileURL;
     OUString                m_Referer;
     OUString                m_sMimeType;
-    sal_uInt32              m_nMaskSet;
+    AVMediaSetMask          m_nMaskSet;
     MediaState              m_eState;
     double                  m_fTime;
     double                  m_fDuration;
@@ -61,7 +61,7 @@ struct MediaItem::Impl
     bool                    m_bMute;
     ::com::sun::star::media::ZoomLevel m_eZoom;
 
-    Impl(sal_uInt32 const nMaskSet)
+    Impl(AVMediaSetMask nMaskSet)
         : m_nMaskSet( nMaskSet )
         , m_eState( MEDIASTATE_STOP )
         , m_fTime( 0.0 )
@@ -89,7 +89,7 @@ struct MediaItem::Impl
     }
 };
 
-MediaItem::MediaItem( sal_uInt16 const i_nWhich, sal_uInt32 const nMaskSet )
+MediaItem::MediaItem( sal_uInt16 i_nWhich, AVMediaSetMask nMaskSet )
     : SfxPoolItem( i_nWhich )
     , m_pImpl( new Impl(nMaskSet) )
 {
@@ -142,7 +142,7 @@ bool MediaItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 ) const
     uno::Sequence< uno::Any > aSeq( 10 );
 
     aSeq[ 0 ] <<= m_pImpl->m_URL;
-    aSeq[ 1 ] <<= m_pImpl->m_nMaskSet;
+    aSeq[ 1 ] <<= static_cast<sal_uInt32>(m_pImpl->m_nMaskSet);
     aSeq[ 2 ] <<= static_cast< sal_Int32 >( m_pImpl->m_eState );
     aSeq[ 3 ] <<= m_pImpl->m_fTime;
     aSeq[ 4 ] <<= m_pImpl->m_fDuration;
@@ -167,7 +167,8 @@ bool MediaItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 )
         sal_Int32 nInt32 = 0;
 
         aSeq[ 0 ] >>= m_pImpl->m_URL;
-        aSeq[ 1 ] >>= m_pImpl->m_nMaskSet;
+        aSeq[ 1 ] >>= nInt32;
+        m_pImpl->m_nMaskSet = static_cast<AVMediaSetMask>(nInt32);
         aSeq[ 2 ] >>= nInt32;
         m_pImpl->m_eState = static_cast< MediaState >( nInt32 );
         aSeq[ 3 ] >>= m_pImpl->m_fTime;
@@ -186,44 +187,44 @@ bool MediaItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 )
 
 void MediaItem::merge( const MediaItem& rMediaItem )
 {
-    const sal_uInt32 nMaskSet = rMediaItem.getMaskSet();
+    const AVMediaSetMask nMaskSet = rMediaItem.getMaskSet();
 
-    if( AVMEDIA_SETMASK_URL & nMaskSet )
+    if( AVMediaSetMask::URL & nMaskSet )
         setURL( rMediaItem.getURL(), rMediaItem.getTempURL(), rMediaItem.getReferer() );
 
-    if( AVMEDIA_SETMASK_MIME_TYPE & nMaskSet )
+    if( AVMediaSetMask::MIME_TYPE & nMaskSet )
         setMimeType( rMediaItem.getMimeType() );
 
-    if( AVMEDIA_SETMASK_STATE & nMaskSet )
+    if( AVMediaSetMask::STATE & nMaskSet )
         setState( rMediaItem.getState() );
 
-    if( AVMEDIA_SETMASK_DURATION & nMaskSet )
+    if( AVMediaSetMask::DURATION & nMaskSet )
         setDuration( rMediaItem.getDuration() );
 
-    if( AVMEDIA_SETMASK_TIME & nMaskSet )
+    if( AVMediaSetMask::TIME & nMaskSet )
         setTime( rMediaItem.getTime() );
 
-    if( AVMEDIA_SETMASK_LOOP & nMaskSet )
+    if( AVMediaSetMask::LOOP & nMaskSet )
         setLoop( rMediaItem.isLoop() );
 
-    if( AVMEDIA_SETMASK_MUTE & nMaskSet )
+    if( AVMediaSetMask::MUTE & nMaskSet )
         setMute( rMediaItem.isMute() );
 
-    if( AVMEDIA_SETMASK_VOLUMEDB & nMaskSet )
+    if( AVMediaSetMask::VOLUMEDB & nMaskSet )
         setVolumeDB( rMediaItem.getVolumeDB() );
 
-    if( AVMEDIA_SETMASK_ZOOM & nMaskSet )
+    if( AVMediaSetMask::ZOOM & nMaskSet )
         setZoom( rMediaItem.getZoom() );
 }
 
-sal_uInt32 MediaItem::getMaskSet() const
+AVMediaSetMask MediaItem::getMaskSet() const
 {
     return m_pImpl->m_nMaskSet;
 }
 
 void MediaItem::setURL( const OUString& rURL, const OUString& rTempURL, const OUString& rReferer )
 {
-    m_pImpl->m_nMaskSet |= AVMEDIA_SETMASK_URL;
+    m_pImpl->m_nMaskSet |= AVMediaSetMask::URL;
     m_pImpl->m_URL = rURL;
     m_pImpl->m_TempFileURL = rTempURL;
     m_pImpl->m_Referer = rReferer;
@@ -246,7 +247,7 @@ const OUString& MediaItem::getReferer() const
 
 void MediaItem::setMimeType( const OUString& rMimeType )
 {
-    m_pImpl->m_nMaskSet |= AVMEDIA_SETMASK_MIME_TYPE;
+    m_pImpl->m_nMaskSet |= AVMediaSetMask::MIME_TYPE;
     m_pImpl->m_sMimeType = rMimeType;
 }
 
@@ -258,7 +259,7 @@ OUString MediaItem::getMimeType() const
 void MediaItem::setState( MediaState eState )
 {
     m_pImpl->m_eState = eState;
-    m_pImpl->m_nMaskSet |= AVMEDIA_SETMASK_STATE;
+    m_pImpl->m_nMaskSet |= AVMediaSetMask::STATE;
 }
 
 MediaState MediaItem::getState() const
@@ -269,7 +270,7 @@ MediaState MediaItem::getState() const
 void MediaItem::setDuration( double fDuration )
 {
     m_pImpl->m_fDuration = fDuration;
-    m_pImpl->m_nMaskSet |= AVMEDIA_SETMASK_DURATION;
+    m_pImpl->m_nMaskSet |= AVMediaSetMask::DURATION;
 }
 
 double MediaItem::getDuration() const
@@ -280,7 +281,7 @@ double MediaItem::getDuration() const
 void MediaItem::setTime( double fTime )
 {
     m_pImpl->m_fTime = fTime;
-    m_pImpl->m_nMaskSet |= AVMEDIA_SETMASK_TIME;
+    m_pImpl->m_nMaskSet |= AVMediaSetMask::TIME;
 }
 
 double MediaItem::getTime() const
@@ -291,7 +292,7 @@ double MediaItem::getTime() const
 void MediaItem::setLoop( bool bLoop )
 {
     m_pImpl->m_bLoop = bLoop;
-    m_pImpl->m_nMaskSet |= AVMEDIA_SETMASK_LOOP;
+    m_pImpl->m_nMaskSet |= AVMediaSetMask::LOOP;
 }
 
 bool MediaItem::isLoop() const
@@ -302,7 +303,7 @@ bool MediaItem::isLoop() const
 void MediaItem::setMute( bool bMute )
 {
     m_pImpl->m_bMute = bMute;
-    m_pImpl->m_nMaskSet |= AVMEDIA_SETMASK_MUTE;
+    m_pImpl->m_nMaskSet |= AVMediaSetMask::MUTE;
 }
 
 bool MediaItem::isMute() const
@@ -313,7 +314,7 @@ bool MediaItem::isMute() const
 void MediaItem::setVolumeDB( sal_Int16 nDB )
 {
     m_pImpl->m_nVolumeDB = nDB;
-    m_pImpl->m_nMaskSet |= AVMEDIA_SETMASK_VOLUMEDB;
+    m_pImpl->m_nMaskSet |= AVMediaSetMask::VOLUMEDB;
 }
 
 sal_Int16 MediaItem::getVolumeDB() const
@@ -324,7 +325,7 @@ sal_Int16 MediaItem::getVolumeDB() const
 void MediaItem::setZoom( ::com::sun::star::media::ZoomLevel eZoom )
 {
     m_pImpl->m_eZoom = eZoom;
-    m_pImpl->m_nMaskSet |= AVMEDIA_SETMASK_ZOOM;
+    m_pImpl->m_nMaskSet |= AVMediaSetMask::ZOOM;
 }
 
 ::com::sun::star::media::ZoomLevel MediaItem::getZoom() const

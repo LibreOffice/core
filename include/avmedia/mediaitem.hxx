@@ -27,18 +27,26 @@
 #include <com/sun/star/embed/XStorage.hpp>
 #include <avmedia/avmediadllapi.h>
 #include <memory>
+#include <o3tl/typed_flags_set.hxx>
 
-#define AVMEDIA_SETMASK_NONE        ((sal_uInt32)(0x00000000))
-#define AVMEDIA_SETMASK_STATE       ((sal_uInt32)(0x00000001))
-#define AVMEDIA_SETMASK_DURATION    ((sal_uInt32)(0x00000002))
-#define AVMEDIA_SETMASK_TIME        ((sal_uInt32)(0x00000004))
-#define AVMEDIA_SETMASK_LOOP        ((sal_uInt32)(0x00000008))
-#define AVMEDIA_SETMASK_MUTE        ((sal_uInt32)(0x00000010))
-#define AVMEDIA_SETMASK_VOLUMEDB    ((sal_uInt32)(0x00000020))
-#define AVMEDIA_SETMASK_ZOOM        ((sal_uInt32)(0x00000040))
-#define AVMEDIA_SETMASK_URL         ((sal_uInt32)(0x00000080))
-#define AVMEDIA_SETMASK_MIME_TYPE   ((sal_uInt32)(0x00000100))
-#define AVMEDIA_SETMASK_ALL         ((sal_uInt32)(0xffffffff))
+enum class AVMediaSetMask
+{
+    NONE        = 0x000,
+    STATE       = 0x001,
+    DURATION    = 0x002,
+    TIME        = 0x004,
+    LOOP        = 0x008,
+    MUTE        = 0x010,
+    VOLUMEDB    = 0x020,
+    ZOOM        = 0x040,
+    URL         = 0x080,
+    MIME_TYPE   = 0x100,
+    ALL         = 0x1ff,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<AVMediaSetMask> : is_typed_flags<AVMediaSetMask, 0x1ff> {};
+}
 
 class SvStream;
 
@@ -65,8 +73,8 @@ class AVMEDIA_DLLPUBLIC MediaItem : public SfxPoolItem
 public:
                             TYPEINFO_OVERRIDE();
 
-    explicit                MediaItem( sal_uInt16 const i_nWhich = 0,
-                            sal_uInt32 const nMaskSet = AVMEDIA_SETMASK_NONE );
+    explicit                MediaItem( sal_uInt16 i_nWhich = 0,
+                                       AVMediaSetMask nMaskSet = AVMediaSetMask::NONE );
                             MediaItem( const MediaItem& rMediaItem );
     virtual                 ~MediaItem();
 
@@ -82,7 +90,7 @@ public:
 
     void                    merge( const MediaItem& rMediaItem );
 
-    sal_uInt32              getMaskSet() const;
+    AVMediaSetMask          getMaskSet() const;
 
     void                    setState( MediaState eState );
     MediaState              getState() const;
