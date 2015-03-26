@@ -32,12 +32,13 @@ GIT_BUILD := $(if $(wildcard $(SRCDIR)/.git),T)
 ifeq (,$(MAKE_RESTARTS)$(if $(GIT_BUILD),,T)$(if $(filter-out help showmodules clean distclean,$(MAKECMDGOALS)),,T))
 
 .PHONY : force-restart
-Makefile: $(BUILDDIR)/config_host.mk force-restart
+Makefile: $(BUILDDIR)/config_host.mk $(BUILDDIR)/config_host_lang.mk force-restart
 	@touch $@
 
 # run configure in an environment not polluted by config_host.mk
 $(BUILDDIR)/config_host.mk : $(wildcard \
 		$(SRCDIR)/config_host.mk.in \
+		$(SRCDIR)/config_host_lang.mk.in \
 		$(SRCDIR)/Makefile.in \
 		$(SRCDIR)/instsetoo_native/util/openoffice.lst.in \
 		$(SRCDIR)/configure.ac \
@@ -179,6 +180,8 @@ distclean : clean compilerplugins-clean
         $(BUILDDIR)/config_build.mk \
         $(BUILDDIR)/config_host.mk \
         $(BUILDDIR)/config_host.mk.stamp \
+        $(BUILDDIR)/config_host_lang.mk \
+        $(BUILDDIR)/config_host_lang.mk.stamp \
         $(BUILDDIR)/config_host/*.h \
         $(BUILDDIR)/configure \
         $(BUILDDIR)/instsetoo_native/util/openoffice.lst \
