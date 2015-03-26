@@ -525,8 +525,15 @@ bool LayoutManager::readWindowStateData( const OUString& aName, UIElement& rElem
                     else if ( aWindowState[n].Name == WINDOWSTATE_PROPERTY_DOCKPOS )
                     {
                         awt::Point aPoint;
-                        if ( aWindowState[n].Value >>= aPoint )
+                        if (aWindowState[n].Value >>= aPoint)
+                        {
+                            //tdf#90256 repair these broken Docking positions
+                            if (aPoint.X < 0)
+                                aPoint.X = SAL_MAX_INT32;
+                            if (aPoint.Y < 0)
+                                aPoint.Y = SAL_MAX_INT32;
                             rElementData.m_aDockedData.m_aPos = aPoint;
+                        }
                     }
                     else if ( aWindowState[n].Name == WINDOWSTATE_PROPERTY_POS )
                     {
