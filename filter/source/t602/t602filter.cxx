@@ -508,9 +508,9 @@ void T602ImportFilter::wrtfnt()
     const sal_Char *style = "P1";
 
     switch(fst.nowfnt) {
-        case standard : style = (char*)(fst.uline ? "T7" : "T1"); break;
-        case fat      : style = (char*)(fst.uline ? "T8" : "T2"); break;
-        case cursive  : style = (char*)(fst.uline ? "T9" : "T3"); break;
+        case standard : style = fst.uline ? "T7" : "T1"; break;
+        case fat      : style = fst.uline ? "T8" : "T2"; break;
+        case cursive  : style = fst.uline ? "T9" : "T3"; break;
         case bold     : style = "T4"; break;
         case tall     : style = "T5"; break;
         case big      : style = "T6"; break;

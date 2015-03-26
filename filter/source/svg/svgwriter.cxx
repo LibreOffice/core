@@ -677,7 +677,7 @@ void SVGTextWriter::setTextProperties( const GDIMetaFile& rMtf, sal_uLong nCurAc
             case( META_FONT_ACTION ):
             case( META_LAYOUTMODE_ACTION ):
             {
-                ( (MetaAction*) pAction )->Execute( mpVDev );
+                const_cast<MetaAction*>(pAction)->Execute( mpVDev );
             }
             break;
 
@@ -1781,7 +1781,7 @@ OUString SVGActionWriter::GetPathString( const tools::PolyPolygon& rPolyPoly, bo
 sal_uLong SVGActionWriter::GetChecksum( const MetaAction* pAction )
 {
     GDIMetaFile aMtf;
-    MetaAction* pA = (MetaAction*)pAction;
+    MetaAction* pA = const_cast<MetaAction*>(pAction);
     pA->Duplicate();
     aMtf.AddAction( pA );
     return aMtf.GetChecksum();
@@ -3522,7 +3522,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
             case( META_ISECTREGIONCLIPREGION_ACTION ):
             case( META_MOVECLIPREGION_ACTION ):
             {
-                ( (MetaAction*) pAction )->Execute( mpVDev );
+                const_cast<MetaAction*>(pAction)->Execute( mpVDev );
                 mbClipAttrChanged = true;
             }
             break;
@@ -3540,7 +3540,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
             case( META_POP_ACTION ):
             case( META_LAYOUTMODE_ACTION ):
             {
-                ( (MetaAction*) pAction )->Execute( mpVDev );
+                const_cast<MetaAction*>(pAction)->Execute( mpVDev );
             }
             break;
 

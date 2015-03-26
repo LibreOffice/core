@@ -1163,7 +1163,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                 const GDIMetaFile aSubstitute( static_cast<const MetaEPSAction*>(pMA)->GetSubstitute() );
 
                 bool    bLevelConflict = false;
-                sal_uInt8*  pSource = (sal_uInt8*) aGfxLink.GetData();
+                sal_uInt8*  pSource = const_cast<sal_uInt8*>(aGfxLink.GetData());
                 sal_uLong   nSize = aGfxLink.GetDataSize();
                 sal_uLong   nParseThis = POSTSCRIPT_BOUNDINGSEARCH;
                 if ( nSize < 64 )                       // assuming eps is larger than 64 bytes

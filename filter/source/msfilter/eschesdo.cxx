@@ -887,7 +887,7 @@ bool ImplEscherExSdr::ImplInitPage( const SdrPage& rPage )
             ImplFlushSolverContainer();
 
             mpSdrPage = NULL;
-            mXDrawPage = pSvxDrawPage = new SvxFmDrawPage( (SdrPage*) &rPage );
+            mXDrawPage = pSvxDrawPage = new SvxFmDrawPage( const_cast<SdrPage*>(&rPage) );
             mXShapes = Reference< XShapes >::query( mXDrawPage );
             if ( !mXShapes.is() )
                 break;
@@ -1041,7 +1041,7 @@ ImplEESdrObject::ImplEESdrObject( ImplEscherExSdr& rEx,
     {
         // why not declare a const parameter if the object will
         // not be modified?
-        mXShape = uno::Reference< drawing::XShape >::query( ((SdrObject*)&rObj)->getUnoShape() );
+        mXShape = uno::Reference< drawing::XShape >::query( const_cast<SdrObject*>(&rObj)->getUnoShape() );
         Init( rEx );
     }
 }

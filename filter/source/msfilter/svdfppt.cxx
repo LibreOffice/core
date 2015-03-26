@@ -1786,16 +1786,16 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId,
 
     Graphic aGraphic( rGraf );
 
-    if ( ((SdrPowerPointImport*)this)->maShapeRecords.SeekToContent( rStCtrl, DFF_msofbtClientData, SEEK_FROM_CURRENT_AND_RESTART ) )
+    if ( const_cast<SdrPowerPointImport*>(this)->maShapeRecords.SeekToContent( rStCtrl, DFF_msofbtClientData, SEEK_FROM_CURRENT_AND_RESTART ) )
     {
         DffRecordHeader aPlaceHd;
         while ( ( rStCtrl.GetError() == 0 )
-            && ( rStCtrl.Tell() < ((SdrPowerPointImport*)this)->maShapeRecords.Current()->GetRecEndFilePos() ) )
+            && ( rStCtrl.Tell() < const_cast<SdrPowerPointImport*>(this)->maShapeRecords.Current()->GetRecEndFilePos() ) )
         {
             ReadDffRecordHeader( rStCtrl, aPlaceHd );
             if ( aPlaceHd.nRecType == PPT_PST_RecolorInfoAtom )
             {
-                ((SdrPowerPointImport*)this)->RecolorGraphic( rStCtrl, aPlaceHd.nRecLen, aGraphic );
+                const_cast<SdrPowerPointImport*>(this)->RecolorGraphic( rStCtrl, aPlaceHd.nRecLen, aGraphic );
                 break;
             }
             else
@@ -1804,9 +1804,9 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId,
     }
 
     PPTOleEntry* pOe;
-    for ( size_t i = 0; i < ((SdrPowerPointImport*)this)->aOleObjectList.size(); ++i )
+    for ( size_t i = 0; i < const_cast<SdrPowerPointImport*>(this)->aOleObjectList.size(); ++i )
     {
-        pOe = ((SdrPowerPointImport*)this)->aOleObjectList[ i ];
+        pOe = const_cast<SdrPowerPointImport*>(this)->aOleObjectList[ i ];
         if ( pOe->nId != (sal_uInt32)nOLEId )
             continue;
 
@@ -2518,7 +2518,7 @@ bool SdrPowerPointImport::GetColorFromPalette( sal_uInt16 nNum, Color& rColor ) 
             const PptSlidePersistEntry& rE = (*pPageList)[ nAktPageNum ];
             nSlideFlags = rE.aSlideAtom.nFlags;
             if ( ! ( nSlideFlags & 2 ) )
-                ((SdrPowerPointImport*)this)->aPageColors = rE.aColorScheme;
+                const_cast<SdrPowerPointImport*>(this)->aPageColors = rE.aColorScheme;
         }
         if ( nSlideFlags & 2 )      // follow master colorscheme?
         {
@@ -2551,13 +2551,13 @@ bool SdrPowerPointImport::GetColorFromPalette( sal_uInt16 nNum, Color& rColor ) 
                 }
                 if ( pMasterPersist )
                 {
-                    ((SdrPowerPointImport*)this)->aPageColors = pMasterPersist->aColorScheme;
+                    const_cast<SdrPowerPointImport*>(this)->aPageColors = pMasterPersist->aColorScheme;
                 }
             }
         }
         // resgister current color scheme
-        ((SdrPowerPointImport*)this)->nPageColorsNum = nAktPageNum;
-        ((SdrPowerPointImport*)this)->ePageColorsKind = eAktPageKind;
+        const_cast<SdrPowerPointImport*>(this)->nPageColorsNum = nAktPageNum;
+        const_cast<SdrPowerPointImport*>(this)->ePageColorsKind = eAktPageKind;
     }
     rColor = aPageColors.GetColor( nNum );
     return true;

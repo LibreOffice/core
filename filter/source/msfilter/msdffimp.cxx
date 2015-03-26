@@ -220,7 +220,7 @@ void DffPropertyReader::SetDefaultPropSet( SvStream& rStCtrl, sal_uInt32 nOffsDg
     {
         if ( rManager.SeekToRec( rStCtrl, DFF_msofbtOPT, aRecHd.GetRecEndFilePos() ) )
         {
-            ( (DffPropertyReader*) this )->pDefaultPropSet = new DffPropSet;
+            const_cast<DffPropertyReader*>(this)->pDefaultPropSet = new DffPropSet;
             ReadDffPropSet( rStCtrl, *pDefaultPropSet );
         }
     }
@@ -249,7 +249,7 @@ void DffPropertyReader::ReadPropSet( SvStream& rIn, void* pClientData ) const
         }
     }
 
-    ( (DffPropertyReader*) this )->mnFix16Angle = Fix16ToAngle( GetPropertyValue( DFF_Prop_Rotation, 0 ) );
+    const_cast<DffPropertyReader*>(this)->mnFix16Angle = Fix16ToAngle( GetPropertyValue( DFF_Prop_Rotation, 0 ) );
 
 #ifdef DBG_CUSTOMSHAPE
 

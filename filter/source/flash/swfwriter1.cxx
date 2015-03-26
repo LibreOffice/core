@@ -530,7 +530,7 @@ void Writer::Impl_writeText( const Point& rPos, const OUString& rText, const lon
         if( pDXArray )
         {
             aNormSize = Size( mpVDev->GetTextWidth( rText ), 0 );
-            pDX = (long*) pDXArray;
+            pDX = const_cast<long*>(pDXArray);
         }
         else
         {
@@ -1798,7 +1798,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
             case( META_ISECTREGIONCLIPREGION_ACTION ):
             case( META_MOVECLIPREGION_ACTION ):
             {
-                ( (MetaAction*) pAction )->Execute( mpVDev );
+                const_cast<MetaAction*>(pAction)->Execute( mpVDev );
             }
             break;
 
@@ -1819,7 +1819,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
             case( META_POP_ACTION ):
             case( META_LAYOUTMODE_ACTION ):
             {
-                ( (MetaAction*) pAction )->Execute( mpVDev );
+                const_cast<MetaAction*>(pAction)->Execute( mpVDev );
             }
             break;
 
