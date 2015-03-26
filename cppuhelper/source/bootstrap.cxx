@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <chrono>
 #include <cstring>
 
 #include <rtl/process.h>
@@ -211,8 +212,7 @@ Reference< XComponentContext > SAL_CALL bootstrap()
             catch ( connection::NoConnectException & )
             {
                 // wait 500 ms, then try to connect again
-                TimeValue tv = { 0 /* secs */, 500000000 /* nanosecs */ };
-                ::osl::Thread::wait( tv );
+                ::osl::Thread::wait( std::chrono::milliseconds(500) );
             }
         }
     }
