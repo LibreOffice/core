@@ -333,7 +333,7 @@ sal_Int16 SpellChecker::GetSpellFailure( const OUString &rWord, const Locale &rL
                     return -1;
 
                 OString aWrd(OU2ENC(nWord,eEnc));
-                int rVal = pMS->spell((char*)aWrd.getStr());
+                int rVal = pMS->spell(aWrd.getStr());
                 if (rVal != 1) {
                     if (extrachar && (eEnc != RTL_TEXTENCODING_UTF8)) {
                         OUStringBuffer mBuf(nWord);
@@ -352,7 +352,7 @@ sal_Int16 SpellChecker::GetSpellFailure( const OUString &rWord, const Locale &rL
                         }
                         OUString mWord(mBuf.makeStringAndClear());
                         OString bWrd(OU2ENC(mWord, eEnc));
-                        rVal = pMS->spell((char*)bWrd.getStr());
+                        rVal = pMS->spell(bWrd.getStr());
                         if (rVal == 1) return -1;
                     }
                     nRes = SpellFailure::SPELLING_ERROR;
