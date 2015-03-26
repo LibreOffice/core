@@ -230,7 +230,7 @@ IconChoiceDialog ::~IconChoiceDialog ()
             }
 
             if ( pData->bOnDemand )
-                delete (SfxItemSet*)&pData->pPage->GetItemSet();
+                delete &pData->pPage->GetItemSet();
             delete pData->pPage;
         }
         delete pData;
@@ -403,7 +403,7 @@ IMPL_LINK_NOARG(IconChoiceDialog, ResetHdl)
     {
         // CSet on AIS has problems here, therefore separated
         const SfxItemSet* _pSet = &( pData->pPage->GetItemSet() );
-        pData->pPage->Reset( *(SfxItemSet*)_pSet );
+        pData->pPage->Reset( *const_cast<SfxItemSet*>(_pSet) );
     }
     else
         pData->pPage->Reset( *pSet );
@@ -558,7 +558,7 @@ void IconChoiceDialog::ResetPageImpl ()
     {
         // CSet on AIS has problems here, therefore separated
         const SfxItemSet* _pSet = &pData->pPage->GetItemSet();
-        pData->pPage->Reset( *(SfxItemSet*)_pSet );
+        pData->pPage->Reset( *const_cast<SfxItemSet*>(_pSet) );
     }
     else
         pData->pPage->Reset( *pSet );

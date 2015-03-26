@@ -1610,7 +1610,7 @@ bool SvxCharEffectsPage::FillItemSetColor_Impl( SfxItemSet& rSet )
 
     if ( !bChanged && pExampleSet &&
          pExampleSet->GetItemState( nWhich, false, reinterpret_cast<const SfxPoolItem**>(&pItem) ) == SfxItemState::SET &&
-         ( (SvxColorItem*)pItem )->GetValue() != aSelectedColor )
+         pItem->GetValue() != aSelectedColor )
         bChanged = true;
 
     bool bModified = false;

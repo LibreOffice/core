@@ -539,7 +539,7 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet* rSet )
     if ( pBgdAttr )
     {
         FillControls_Impl(*pBgdAttr, aUserData);
-        aBgdColor = ( (SvxBrushItem*)pBgdAttr )->GetColor();
+        aBgdColor = const_cast<SvxBrushItem*>(pBgdAttr)->GetColor();
     }
     else
     {

@@ -369,7 +369,7 @@ SvxMacroTableDtor* SvxHyperlinkTabPageBase::GetMacroTable()
     const SvxHyperlinkItem *pHyperlinkItem = static_cast<const SvxHyperlinkItem *>(
                                        GetItemSet().GetItem (SID_HYPERLINK_GETLINK));
 
-    return ( (SvxMacroTableDtor*)pHyperlinkItem->GetMacroTbl() );
+    return const_cast<SvxMacroTableDtor*>(pHyperlinkItem->GetMacroTbl());
 }
 
 // try to detect the current protocol that is used in rStrURL

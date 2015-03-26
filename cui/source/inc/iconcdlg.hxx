@@ -165,7 +165,7 @@ protected :
 
     virtual void            PageCreated( sal_uInt16 nId, IconChoicePage& rPage );
     SfxItemSet*     CreateInputItemSet( sal_uInt16 nId );
-    inline SfxItemSet*      GetInputSetImpl() { return (SfxItemSet*)pSet; }
+    inline SfxItemSet*      GetInputSetImpl() { return const_cast<SfxItemSet*>(pSet); }
     inline IconChoicePage*  GetTabPage( sal_uInt16 nPageId )
                                 { return ( GetPageData (nPageId)->pPage?GetPageData (nPageId)->pPage:NULL); }
     void                    RefreshInputSet();

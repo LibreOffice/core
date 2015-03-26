@@ -632,7 +632,7 @@ void SvBaseLinksDlg::InsertEntry( const SvBaseLink& rLink, sal_uLong nPos, bool 
 {
     OUString aEntry, sFileNm, sLinkNm, sTypeNm, sFilter;
 
-    pLinkMgr->GetDisplayNames( (SvBaseLink*)&rLink, &sTypeNm, &sFileNm, &sLinkNm, &sFilter );
+    pLinkMgr->GetDisplayNames( &rLink, &sTypeNm, &sFileNm, &sLinkNm, &sFilter );
 
     // GetTab(0) gives the position of the bitmap which is automatically inserted by the TabListBox.
     // So the first text column's width is Tab(2)-Tab(1).

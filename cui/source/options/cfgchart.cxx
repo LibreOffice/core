@@ -65,8 +65,7 @@ ColorData SvxChartColorTable::getColorData( size_t _nIndex ) const
         return COL_BLACK;
     }
 
-    // GetColor should be const but unfortunately isn't
-    return const_cast< XColorEntry & >( m_aColorEntries[ _nIndex ] ).GetColor().GetRGBColor();
+    return m_aColorEntries[ _nIndex ].GetColor().GetRGBColor();
 }
 
 // mutators
