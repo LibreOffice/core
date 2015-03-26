@@ -4222,7 +4222,7 @@ const SvxNumberFormat* ImpEditEngine::GetNumberFormat( const ContentNode *pNode 
     if (pNode)
     {
         // get index of paragraph
-        sal_Int32 nPara = GetEditDoc().GetPos( const_cast< ContentNode * >(pNode) );
+        sal_Int32 nPara = GetEditDoc().GetPos( pNode );
         DBG_ASSERT( nPara < EE_PARA_NOT_FOUND, "node not found in array" );
         if (nPara < EE_PARA_NOT_FOUND)
         {

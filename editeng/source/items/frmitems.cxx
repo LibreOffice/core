@@ -672,7 +672,7 @@ bool SvxLRSpaceItem::GetPresentation
 SvStream& SvxLRSpaceItem::Store( SvStream& rStrm , sal_uInt16 nItemVersion ) const
 {
     short nSaveFI = nFirstLineOfst;
-    ((SvxLRSpaceItem*)this)->SetTxtFirstLineOfst( 0 );  // nLeftMargin is manipulated together with this, see Create()
+    const_cast<SvxLRSpaceItem*>(this)->SetTxtFirstLineOfst( 0 );  // nLeftMargin is manipulated together with this, see Create()
 
     sal_uInt16 nMargin = 0;
     if( nLeftMargin > 0 )
@@ -712,7 +712,7 @@ SvStream& SvxLRSpaceItem::Store( SvStream& rStrm , sal_uInt16 nItemVersion ) con
         }
     }
 
-    ((SvxLRSpaceItem*)this)->SetTxtFirstLineOfst( nSaveFI );
+    const_cast<SvxLRSpaceItem*>(this)->SetTxtFirstLineOfst( nSaveFI );
 
     return rStrm;
 }

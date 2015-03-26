@@ -1755,7 +1755,7 @@ sal_uInt16 ImpEditEngine::GetI18NScriptType( const EditPaM& rPaM, sal_Int32* pEn
         sal_Int32 nPara = GetEditDoc().GetPos( rPaM.GetNode() );
         const ParaPortion* pParaPortion = GetParaPortions().SafeGetObject( nPara );
         if ( pParaPortion->aScriptInfos.empty() )
-            ((ImpEditEngine*)this)->InitScriptTypes( nPara );
+            const_cast<ImpEditEngine*>(this)->InitScriptTypes( nPara );
 
         const ScriptTypePosInfos& rTypes = pParaPortion->aScriptInfos;
 
@@ -1785,7 +1785,7 @@ sal_uInt16 ImpEditEngine::GetItemScriptType( const EditSelection& rSel ) const
     {
         const ParaPortion* pParaPortion = GetParaPortions().SafeGetObject( nPara );
         if ( pParaPortion->aScriptInfos.empty() )
-            ((ImpEditEngine*)this)->InitScriptTypes( nPara );
+            const_cast<ImpEditEngine*>(this)->InitScriptTypes( nPara );
 
         const ScriptTypePosInfos& rTypes = pParaPortion->aScriptInfos;
 
@@ -1829,7 +1829,7 @@ bool ImpEditEngine::IsScriptChange( const EditPaM& rPaM ) const
         sal_Int32 nPara = GetEditDoc().GetPos( rPaM.GetNode() );
         const ParaPortion* pParaPortion = GetParaPortions().SafeGetObject( nPara );
         if ( pParaPortion->aScriptInfos.empty() )
-            ((ImpEditEngine*)this)->InitScriptTypes( nPara );
+            const_cast<ImpEditEngine*>(this)->InitScriptTypes( nPara );
 
         const ScriptTypePosInfos& rTypes = pParaPortion->aScriptInfos;
         const sal_Int32 nPos = rPaM.GetIndex();
@@ -1851,7 +1851,7 @@ bool ImpEditEngine::HasScriptType( sal_Int32 nPara, sal_uInt16 nType ) const
 
     const ParaPortion* pParaPortion = GetParaPortions().SafeGetObject( nPara );
     if ( pParaPortion->aScriptInfos.empty() )
-        ((ImpEditEngine*)this)->InitScriptTypes( nPara );
+        const_cast<ImpEditEngine*>(this)->InitScriptTypes( nPara );
 
     const ScriptTypePosInfos& rTypes = pParaPortion->aScriptInfos;
     for ( size_t n = rTypes.size(); n && !bTypeFound; )
@@ -1940,7 +1940,7 @@ bool ImpEditEngine::IsRightToLeft( sal_Int32 nPara ) const
             else
             {
                 // Use pool default
-                pFrameDirItem = &static_cast<const SvxFrameDirectionItem&>(((ImpEditEngine*)this)->GetEmptyItemSet().Get( EE_PARA_WRITINGDIR ));
+                pFrameDirItem = &static_cast<const SvxFrameDirectionItem&>(const_cast<ImpEditEngine*>(this)->GetEmptyItemSet().Get( EE_PARA_WRITINGDIR ));
             }
         }
     }
@@ -1953,7 +1953,7 @@ bool ImpEditEngine::IsRightToLeft( sal_Int32 nPara ) const
 
 bool ImpEditEngine::HasDifferentRTLLevels( const ContentNode* pNode )
 {
-    sal_Int32 nPara = GetEditDoc().GetPos( (ContentNode*)pNode );
+    sal_Int32 nPara = GetEditDoc().GetPos( pNode );
     ParaPortion* pParaPortion = GetParaPortions().SafeGetObject( nPara );
 
     bool bHasDifferentRTLLevels = false;

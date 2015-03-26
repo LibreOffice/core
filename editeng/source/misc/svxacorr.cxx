@@ -1548,7 +1548,7 @@ bool SvxAutoCorrect::GetPrevAutoCorrWord( SvxAutoCorrDoc& rDoc,
     if( LANGUAGE_SYSTEM == eLang )
         eLang = MsLangId::getSystemLanguage();
 
-    SvxAutoCorrect* pThis = (SvxAutoCorrect*)this;
+    SvxAutoCorrect* pThis = const_cast<SvxAutoCorrect*>(this);
     CharClass& rCC = pThis->GetCharClass( eLang );
 
     if( lcl_IsSymbolChar( rCC, rTxt, nCapLttrPos, nEnde ))

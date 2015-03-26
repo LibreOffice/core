@@ -630,7 +630,7 @@ OUString EditEngine::GetWord( sal_Int32 nPara, sal_Int32 nIndex )
 ESelection EditEngine::GetWord( const ESelection& rSelection, sal_uInt16 nWordType  ) const
 {
     // ImpEditEngine-Iteration-Methods should be const!
-    EditEngine* pE = (EditEngine*)this;
+    EditEngine* pE = const_cast<EditEngine*>(this);
 
     EditSelection aSel( pE->pImpEditEngine->CreateSel( rSelection ) );
     aSel = pE->pImpEditEngine->SelectWord( aSel, nWordType );
@@ -2350,7 +2350,7 @@ EPosition EditEngine::FindDocPosition( const Point& rDocPos ) const
 {
     EPosition aPos;
     // From the point of the API, this is const....
-    EditPaM aPaM = ((EditEngine*)this)->pImpEditEngine->GetPaM( rDocPos, false );
+    EditPaM aPaM = const_cast<EditEngine*>(this)->pImpEditEngine->GetPaM( rDocPos, false );
     if ( aPaM.GetNode() )
     {
         aPos.nPara = pImpEditEngine->aEditDoc.GetPos( aPaM.GetNode() );

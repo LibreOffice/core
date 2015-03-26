@@ -440,14 +440,14 @@ Size SvxFont::GetTxtSize( const OutputDevice *pOut, const OUString &rTxt,
     sal_Int32 nTmp = nLen;
     if ( nTmp == SAL_MAX_INT32 )   // already initialized?
         nTmp = rTxt.getLength();
-    Font aOldFont( ChgPhysFont((OutputDevice *)pOut) );
+    Font aOldFont( ChgPhysFont(const_cast<OutputDevice *>(pOut)) );
     Size aTxtSize;
     if( IsCapital() && !rTxt.isEmpty() )
     {
         aTxtSize = GetCapitalSize( pOut, rTxt, nIdx, nTmp );
     }
     else aTxtSize = GetPhysTxtSize(pOut,rTxt,nIdx,nTmp);
-    ((OutputDevice *)pOut)->SetFont( aOldFont );
+    const_cast<OutputDevice *>(pOut)->SetFont( aOldFont );
     return aTxtSize;
 }
 
@@ -592,7 +592,7 @@ public:
       SvxDoGetCapitalSize( SvxFont *_pFnt, const OutputDevice *_pOut,
                            const OUString &_rTxt, const sal_Int32 _nIdx,
                            const sal_Int32 _nLen, const short _nKrn )
-            : SvxDoCapitals( (OutputDevice*)_pOut, _rTxt, _nIdx, _nLen ),
+            : SvxDoCapitals( const_cast<OutputDevice*>(_pOut), _rTxt, _nIdx, _nLen ),
               pFont( _pFnt ),
               nKern( _nKrn )
             { }
@@ -633,7 +633,7 @@ Size SvxFont::GetCapitalSize( const OutputDevice *pOut, const OUString &rTxt,
                              const sal_Int32 nIdx, const sal_Int32 nLen) const
 {
     // Start:
-    SvxDoGetCapitalSize aDo( (SvxFont *)this, pOut, rTxt, nIdx, nLen, nKern );
+    SvxDoGetCapitalSize aDo( const_cast<SvxFont *>(this), pOut, rTxt, nIdx, nLen, nKern );
     DoOnCapitals( aDo );
     Size aTxtSize( aDo.GetSize() );
 
@@ -741,7 +741,7 @@ void SvxFont::DrawCapital( OutputDevice *pOut,
                const Point &rPos, const OUString &rTxt,
                const sal_Int32 nIdx, const sal_Int32 nLen ) const
 {
-    SvxDoDrawCapital aDo( (SvxFont *)this,pOut,rTxt,nIdx,nLen,rPos,nKern );
+    SvxDoDrawCapital aDo( const_cast<SvxFont *>(this),pOut,rTxt,nIdx,nLen,rPos,nKern );
     DoOnCapitals( aDo );
 }
 

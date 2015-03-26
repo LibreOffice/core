@@ -222,7 +222,7 @@ uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry*
         if(eState >= SfxItemState::DEFAULT && pItem)
         {
             pItem->QueryValue( aVal, nMemberId );
-            ((SvxItemPropertySet*)this)->AddUsrAnyForID(aVal, pMap->nWID);
+            const_cast<SvxItemPropertySet*>(this)->AddUsrAnyForID(aVal, pMap->nWID);
         }
     }
 
@@ -253,7 +253,7 @@ void SvxItemPropertySet::setPropertyValue( const SfxItemPropertySimpleEntry* pMa
 {
     uno::Any* pUsrAny = GetUsrAnyForID(pMap->nWID);
     if(!pUsrAny)
-        ((SvxItemPropertySet*)this)->AddUsrAnyForID(rVal, pMap->nWID);
+        const_cast<SvxItemPropertySet*>(this)->AddUsrAnyForID(rVal, pMap->nWID);
     else
         *pUsrAny = rVal;
 }

@@ -281,7 +281,7 @@ protected:
 
 public:
     // Internal
-    const ESelection&       GetSelection() const throw() { CheckSelection( ((SvxUnoTextRangeBase*)this)->maSelection, mpEditSource->GetTextForwarder() ); return maSelection; };
+    const ESelection&       GetSelection() const throw() { CheckSelection( const_cast<SvxUnoTextRangeBase*>(this)->maSelection, mpEditSource->GetTextForwarder() ); return maSelection; };
     void                    SetSelection( const ESelection& rSelection ) throw();
 
     void            CollapseToStart(void) throw();

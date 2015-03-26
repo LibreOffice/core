@@ -678,7 +678,7 @@ void SvxUnoTextRangeBase::getPropertyValue( const SfxItemPropertySimpleEntry* pM
         break;
 
     default:
-        if(!GetPropertyValueHelper( *((SfxItemSet*)(&rSet)), pMap, rAny, &maSelection, GetEditSource() ))
+        if(!GetPropertyValueHelper( *const_cast<SfxItemSet*>(&rSet), pMap, rAny, &maSelection, GetEditSource() ))
             rAny = mpPropSet->getPropertyValue(pMap, rSet, true, false );
     }
 }

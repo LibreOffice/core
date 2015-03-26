@@ -3087,7 +3087,7 @@ SvStream& EditEngineItemPool::Store( SvStream& rStream ) const
     bool b31Format = ( nVersion && ( nVersion <= SOFFICE_FILEFORMAT_31 ) )
                         ? sal_True : sal_False;
 
-    EditEngineItemPool* pThis = (EditEngineItemPool*)this;
+    EditEngineItemPool* pThis = const_cast<EditEngineItemPool*>(this);
     if ( b31Format )
         pThis->SetStoringRange( 3997, 4022 );
     else

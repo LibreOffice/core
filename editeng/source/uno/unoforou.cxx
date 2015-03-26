@@ -68,7 +68,7 @@ OUString SvxOutlinerForwarder::GetText( const ESelection& rSel ) const
 {
     //! GetText (ESelection) should probably also be in the Outliner
     // in the time being use as the hack for the EditEngine:
-    EditEngine* pEditEngine = (EditEngine*)&rOutliner.GetEditEngine();
+    EditEngine* pEditEngine = const_cast<EditEngine*>(&rOutliner.GetEditEngine());
     return pEditEngine->GetText( rSel, LINEEND_LF );
 }
 
@@ -105,7 +105,7 @@ SfxItemSet SvxOutlinerForwarder::GetAttribs( const ESelection& rSel, EditEngineA
     if( mpAttribsCache && ( EditEngineAttribs_All == nOnlyHardAttrib ) )
     {
         // have we the correct set in cache?
-        if( ((SvxOutlinerForwarder*)this)->maAttribCacheSelection.IsEqual(rSel) )
+        if( const_cast<SvxOutlinerForwarder*>(this)->maAttribCacheSelection.IsEqual(rSel) )
         {
             // yes! just return the cache
             return *mpAttribsCache;
@@ -173,12 +173,12 @@ void SvxOutlinerForwarder::SetParaAttribs( sal_Int32 nPara, const SfxItemSet& rS
 
     const SfxItemSet* pOldParent = rSet.GetParent();
     if( pOldParent )
-        ((SfxItemSet*)&rSet)->SetParent( NULL );
+        const_cast<SfxItemSet*>(&rSet)->SetParent( NULL );
 
     rOutliner.SetParaAttribs( nPara, rSet );
 
     if( pOldParent )
-        ((SfxItemSet*)&rSet)->SetParent( pOldParent );
+        const_cast<SfxItemSet*>(&rSet)->SetParent( pOldParent );
 }
 
 void SvxOutlinerForwarder::RemoveAttribs( const ESelection& rSelection, bool bRemoveParaAttribs, sal_uInt16 nWhich )
