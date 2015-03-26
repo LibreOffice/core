@@ -2870,9 +2870,6 @@ sal_uInt16 PopupMenu::ImplExecute( vcl::Window* pW, const Rectangle& rRect, sal_
     WinBits nStyle = WB_BORDER;
     if (bRealExecute)
         nPopupModeFlags |= FLOATWIN_POPUPMODE_NEWLEVEL;
-    if (!pStartedFrom || !pStartedFrom->IsMenuBar())
-        nPopupModeFlags |= FLOATWIN_POPUPMODE_PATHMOUSECANCELCLICK;
-
     nPopupModeFlags |= FLOATWIN_POPUPMODE_NOKEYCLOSE | FLOATWIN_POPUPMODE_ALLMOUSEBUTTONCLOSE;
 
     // could be useful during debugging.

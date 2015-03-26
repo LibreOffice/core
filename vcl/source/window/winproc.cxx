@@ -145,10 +145,7 @@ static bool ImplHandleMouseFloatMode( vcl::Window* pChild, const Point& rMousePo
                              (nSVEvent == MouseNotifyEvent::MOUSEBUTTONUP) )
                             return true;
                         pLastLevelFloat->EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL | FLOATWIN_POPUPMODEEND_CLOSEALL );
-                        if ( nPopupFlags & FLOATWIN_POPUPMODE_PATHMOUSECANCELCLICK )
-                            return false;
-                        else
-                            return true;
+                        return true;
                     }
                     else
                         return true;
