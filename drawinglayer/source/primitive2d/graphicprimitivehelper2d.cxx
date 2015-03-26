@@ -288,7 +288,7 @@ namespace drawinglayer
                     // at them. This is an error, but we need to work around this
                     const Size aMetaFilePrefSize(rMetafile.GetPrefSize());
                     const Size aMetaFileRealSize(
-                        const_cast< GDIMetaFile& >(rMetafile).GetBoundRect(
+                        rMetafile.GetBoundRect(
                             *Application::GetDefaultDevice()).GetSize());
 
                     if(aMetaFileRealSize.getWidth() > aMetaFilePrefSize.getWidth()
