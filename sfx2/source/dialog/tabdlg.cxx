@@ -390,7 +390,7 @@ SfxTabDialog::~SfxTabDialog()
             }
 
             if ( pDataObject->bOnDemand )
-                delete (SfxItemSet*)&pDataObject->pTabPage->GetItemSet();
+                delete &pDataObject->pTabPage->GetItemSet();
             delete pDataObject->pTabPage;
         }
         delete pDataObject;
@@ -689,7 +689,7 @@ void SfxTabDialog::RemoveTabPage( sal_uInt16 nId )
             }
 
             if ( pDataObject->bOnDemand )
-                delete (SfxItemSet*)&pDataObject->pTabPage->GetItemSet();
+                delete &pDataObject->pTabPage->GetItemSet();
             delete pDataObject->pTabPage;
         }
 

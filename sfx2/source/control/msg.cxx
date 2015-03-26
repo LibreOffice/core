@@ -46,7 +46,7 @@ SfxSlotKind SfxSlot::GetKind() const
 sal_uInt16 SfxSlot::GetWhich( const SfxItemPool &rPool ) const
 {
     if ( !nMasterSlotId || nMasterSlotId == USHRT_MAX )
-        ((SfxSlot*) this) -> nMasterSlotId = rPool.GetWhich(nSlotId);
+        const_cast<SfxSlot*>(this) -> nMasterSlotId = rPool.GetWhich(nSlotId);
     return nMasterSlotId;
 }
 

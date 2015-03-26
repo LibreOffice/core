@@ -547,7 +547,7 @@ bool SvFileObject::IsDataComplete() const
         bRet = true;
     else if( !bLoadError && !bWaitForData )
     {
-        SvFileObject* pThis = (SvFileObject*)this;
+        SvFileObject* pThis = const_cast<SvFileObject*>(this);
         if( bDataReady ||
             ( bSynchron && pThis->LoadFile_Impl() && xMed.Is() ) )
             bRet = true;

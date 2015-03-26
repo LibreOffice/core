@@ -630,7 +630,7 @@ bool SfxMedium::CloseOutStream_Impl()
 const OUString& SfxMedium::GetPhysicalName() const
 {
     if ( pImp->m_aName.isEmpty() && !pImp->m_aLogicName.isEmpty() )
-        (( SfxMedium*)this)->CreateFileStream();
+        const_cast<SfxMedium*>(this)->CreateFileStream();
 
     // return the name then
     return pImp->m_aName;

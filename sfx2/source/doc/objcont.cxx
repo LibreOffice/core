@@ -130,7 +130,7 @@ SfxObjectShell::CreatePreviewMetaFile_Impl( bool bFullContent ) const
     VirtualDevice aDevice;
     aDevice.EnableOutput( false );
 
-    MapMode aMode( ((SfxObjectShell*)this)->GetMapUnit() );
+    MapMode aMode( this->GetMapUnit() );
     aDevice.SetMapMode( aMode );
     xFile->SetPrefMapMode( aMode );
 
@@ -144,7 +144,7 @@ SfxObjectShell::CreatePreviewMetaFile_Impl( bool bFullContent ) const
     else
     {
         nAspect = ASPECT_THUMBNAIL;
-        aTmpSize = ((SfxObjectShell*)this)->GetFirstPageSize();
+        aTmpSize = const_cast<SfxObjectShell*>(this)->GetFirstPageSize();
     }
 
     xFile->SetPrefSize( aTmpSize );
@@ -166,7 +166,7 @@ SfxObjectShell::CreatePreviewMetaFile_Impl( bool bFullContent ) const
 
     {
         SAL_INFO( "sfx.doc", "PERFORMANCE SfxObjectShell::CreatePreviewMetaFile_Impl" );
-        ((SfxObjectShell*)this)->DoDraw( &aDevice, Point(0,0), aTmpSize, JobSetup(), nAspect );
+        const_cast<SfxObjectShell*>(this)->DoDraw( &aDevice, Point(0,0), aTmpSize, JobSetup(), nAspect );
     }
     xFile->Stop();
 

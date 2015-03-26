@@ -480,7 +480,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             // Evaluate Parameter
             SFX_REQUEST_ARG(rReq, pOnItem, SfxBoolItem, SID_HELPTIPS, false);
             bool bOn = pOnItem
-                            ? ((SfxBoolItem*)pOnItem)->GetValue()
+                            ? pOnItem->GetValue()
                             : !Help::IsQuickHelpEnabled();
 
             if ( bOn )
@@ -507,7 +507,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             // Evaluate Parameter
             SFX_REQUEST_ARG(rReq, pOnItem, SfxBoolItem, SID_HELPBALLOONS, false);
             bool bOn = pOnItem
-                            ? ((SfxBoolItem*)pOnItem)->GetValue()
+                            ? pOnItem->GetValue()
                             : !Help::IsBalloonHelpEnabled();
 
             if ( bOn )

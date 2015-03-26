@@ -831,7 +831,7 @@ OUString SfxObjectShell::GetTitle
         bRecur = true;
 
         OUString aTitle;
-        SfxObjectShell *pThis = (SfxObjectShell*) this;
+        SfxObjectShell *pThis = const_cast<SfxObjectShell*>(this);
 
         if ( pMed )
         {

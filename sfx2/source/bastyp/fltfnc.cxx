@@ -1101,7 +1101,7 @@ void SfxFilterContainer::ReadSingleFilter_Impl(
             sFilterName = sFilterName.copy( nStartRealName+2 );
         }
 
-        SfxFilter* pFilter = bUpdate ? (SfxFilter*) SfxFilter::GetFilterByName( sFilterName ) : 0;
+        SfxFilter* pFilter = bUpdate ? const_cast<SfxFilter*>(SfxFilter::GetFilterByName( sFilterName )) : 0;
         bool bNew = false;
         if (!pFilter)
         {

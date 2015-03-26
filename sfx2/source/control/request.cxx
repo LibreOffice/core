@@ -742,7 +742,7 @@ void SfxRequest::Done_Impl
                 {
                     // play it safe; repair the wrong flags
                     OSL_FAIL( "recursion RecordPerItem - use RecordPerSet!" );
-                    SfxSlot *pSlot = (SfxSlot*) pImp->pSlot;
+                    SfxSlot *pSlot = const_cast<SfxSlot*>(pImp->pSlot);
                     pSlot->nFlags &= ~(SfxSlotMode::RECORDPERITEM);
                     pSlot->nFlags &=  SfxSlotMode::RECORDPERSET;
                 }

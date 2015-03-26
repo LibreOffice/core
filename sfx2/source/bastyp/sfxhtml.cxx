@@ -311,7 +311,7 @@ void SfxHTMLParser::GetScriptType_Impl( SvKeyValueIterator *pHTTPHeader )
 ScriptType SfxHTMLParser::GetScriptType( SvKeyValueIterator *pHTTPHeader ) const
 {
     if( aScriptType.isEmpty() )
-        ((SfxHTMLParser *)this)->GetScriptType_Impl( pHTTPHeader );
+        const_cast<SfxHTMLParser *>(this)->GetScriptType_Impl( pHTTPHeader );
 
     return eScriptType;
 }
@@ -320,7 +320,7 @@ const OUString& SfxHTMLParser::GetScriptTypeString(
                                     SvKeyValueIterator *pHTTPHeader ) const
 {
     if( aScriptType.isEmpty() )
-        ((SfxHTMLParser *)this)->GetScriptType_Impl( pHTTPHeader );
+        const_cast<SfxHTMLParser *>(this)->GetScriptType_Impl( pHTTPHeader );
 
     return aScriptType;
 }

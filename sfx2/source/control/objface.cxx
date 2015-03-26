@@ -157,7 +157,7 @@ void SfxInterface::SetSlotMap( SfxSlot& rSlotMap, sal_uInt16 nSlotCount )
                 pIter->pLinkedSlot = GetSlot( pIter->nMasterSlotId );
                 assert( pIter->pLinkedSlot );
                 if ( !pIter->pLinkedSlot->pLinkedSlot )
-                    ( (SfxSlot*) pIter->pLinkedSlot)->pLinkedSlot = pIter;
+                    const_cast<SfxSlot*>(pIter->pLinkedSlot)->pLinkedSlot = pIter;
 
                 if ( 0 == pIter->GetNextSlot() )
                 {
