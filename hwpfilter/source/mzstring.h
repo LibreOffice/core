@@ -88,7 +88,7 @@ class MzString
 
         int       length() const;
         const char*   c_str() const;
-        operator  char*()         { return (char *)c_str(); }
+        operator  char*()         { return const_cast<char *>(c_str()); }
 
 // If it is not possible to use the constructor with an initial
 // allocation size, use the following member to set the size.
