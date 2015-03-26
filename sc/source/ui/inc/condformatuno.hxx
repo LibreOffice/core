@@ -32,7 +32,7 @@ class ScConditionalFormatList;
 class ScConditionalFormat;
 class ScIconSetFormat;
 class ScDataBarFormat;
-class ScColorScale;
+class ScColorScaleFormat;
 class ScCondFormatEntry;
 
 using namespace com::sun::star;
@@ -181,6 +181,8 @@ public:
 
     static ScConditionEntryObj* getImplementation(uno::Reference<sheet::XConditionEntry> xCondition);
 
+    ScCondFormatEntry* getCoreObject();
+
     // XConditionEntry
     virtual sal_Int32 SAL_CALL getType()
         throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -227,8 +229,9 @@ public:
                                     ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
+    ScDocShell* mpDocShell;
+    rtl::Reference<ScCondFormatObj> mxParent;
     SfxItemPropertySet maPropSet;
-    ScCondFormatEntry* pFormat;
 };
 
 class ScColorScaleFormatObj : public cppu::WeakImplHelper1<com::sun::star::beans::XPropertySet>
@@ -240,6 +243,8 @@ public:
 
     static ScColorScaleFormatObj* getImplementation(uno::Reference<beans::XPropertySet> xPropSet);
 
+    ScColorScaleFormat* getCoreObject();
+
                             // XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
                             SAL_CALL getPropertySetInfo()
@@ -282,7 +287,8 @@ public:
                                     ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
-    ScColorScale* pColorScale;
+    ScDocShell* mpDocShell;
+    rtl::Reference<ScCondFormatObj> mxParent;
     SfxItemPropertySet maPropSet;
 };
 
@@ -294,6 +300,8 @@ public:
 
     static ScDataBarFormatObj* getImplementation(uno::Reference<beans::XPropertySet> xPropSet);
 
+    ScDataBarFormat* getCoreObject();
+
                             // XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
                             SAL_CALL getPropertySetInfo()
@@ -336,7 +344,8 @@ public:
                                     ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
-    ScDataBarFormat* mpDataBar;
+    ScDocShell* mpDocShell;
+    rtl::Reference<ScCondFormatObj> mxParent;
     SfxItemPropertySet maPropSet;
 };
 
@@ -348,6 +357,8 @@ public:
 
     static ScIconSetFormatObj* getImplementation(uno::Reference<beans::XPropertySet> xPropSet);
 
+    ScIconSetFormat* getCoreObject();
+
                             // XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
                             SAL_CALL getPropertySetInfo()
@@ -390,8 +401,8 @@ public:
                                     ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
-
-    ScIconSetFormat* mpIconSet;
+    ScDocShell* mpDocShell;
+    rtl::Reference<ScCondFormatObj> mxParent;
     SfxItemPropertySet maPropSet;
 };
 
