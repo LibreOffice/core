@@ -1450,7 +1450,7 @@ const FuncData* FuncDataList::Get(  const OUString& aProgrammaticName ) const
     if( aLastName == aProgrammaticName )
         return Get( nLast );
 
-    ( ( FuncDataList* ) this )->aLastName = aProgrammaticName;
+    const_cast<FuncDataList*>(this)->aLastName = aProgrammaticName;
 
     sal_uInt32  nE = Count();
     for( sal_uInt32 n = 0 ; n < nE ; n++ )
@@ -1458,12 +1458,12 @@ const FuncData* FuncDataList::Get(  const OUString& aProgrammaticName ) const
         const FuncData* p = Get( n );
         if( p->Is( aProgrammaticName ) )
         {
-            ( ( FuncDataList* ) this )->nLast = n;
+            const_cast<FuncDataList*>(this)->nLast = n;
             return p;
         }
     }
 
-    ( ( FuncDataList* ) this )->nLast = 0xFFFFFFFF;
+    const_cast<FuncDataList*>(this)->nLast = 0xFFFFFFFF;
     return NULL;
 }
 
