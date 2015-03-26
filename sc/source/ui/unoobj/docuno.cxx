@@ -643,6 +643,20 @@ void ScModelObj::setGraphicSelection(int nType, int nX, int nY)
     }
 }
 
+void ScModelObj::resetSelection()
+{
+    SolarMutexGuard aGuard;
+
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    ScTabView* pTabView  = pViewData->GetView();
+
+    // deselect the shapes
+    pTabView->DrawDeselectAll();
+
+    // and hide the cell and text selection
+    pDocShell->GetDocument().GetDrawLayer()->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION, "");
+}
+
 void ScModelObj::initializeForTiledRendering()
 {
     SolarMutexGuard aGuard;

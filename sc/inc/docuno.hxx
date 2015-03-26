@@ -388,6 +388,9 @@ public:
     /// @see vcl::ITiledRenderable::getParts().
     virtual int getParts() SAL_OVERRIDE;
 
+    /// @see vcl::ITiledRenderable::initializeForTiledRendering().
+    virtual void initializeForTiledRendering() SAL_OVERRIDE;
+
     /// @see vcl::ITiledRenderable::registerCallback().
     virtual void registerCallback(LibreOfficeKitCallback pCallback, void* pData) SAL_OVERRIDE;
 
@@ -400,8 +403,8 @@ public:
     /// @see vcl::ITiledRenderable::setGraphicSelection().
     virtual void setGraphicSelection(int nType, int nX, int nY) SAL_OVERRIDE;
 
-    /// @see vcl::ITiledRenderable::initializeForTiledRendering().
-    virtual void initializeForTiledRendering() SAL_OVERRIDE;
+    /// @see lok::Document::resetSelection().
+    virtual void resetSelection() SAL_OVERRIDE;
 };
 
 class ScDrawPagesObj : public cppu::WeakImplHelper2<
