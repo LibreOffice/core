@@ -295,20 +295,22 @@ enum SymbolAlign { SYMBOLALIGN_LEFT, SYMBOLALIGN_RIGHT };
 
 // ButtonDialog-Types
 
-typedef sal_uInt16 StandardButtonType;
-#define BUTTON_OK           ((StandardButtonType)0)
-#define BUTTON_CANCEL       ((StandardButtonType)1)
-#define BUTTON_YES          ((StandardButtonType)2)
-#define BUTTON_NO           ((StandardButtonType)3)
-#define BUTTON_RETRY        ((StandardButtonType)4)
-#define BUTTON_HELP         ((StandardButtonType)5)
-#define BUTTON_CLOSE        ((StandardButtonType)6)
-#define BUTTON_MORE         ((StandardButtonType)7)
-#define BUTTON_IGNORE       ((StandardButtonType)8)
-#define BUTTON_ABORT        ((StandardButtonType)9)
-#define BUTTON_LESS         ((StandardButtonType)10)
-#define BUTTON_RESET        ((StandardButtonType)11)
-#define BUTTON_COUNT        12
+enum class StandardButtonType
+{
+    OK           = 0,
+    CANCEL       = 1,
+    YES          = 2,
+    NO           = 3,
+    RETRY        = 4,
+    HELP         = 5,
+    CLOSE        = 6,
+    MORE         = 7,
+    IGNORE       = 8,
+    ABORT        = 9,
+    LESS         = 10,
+    RESET        = 11,
+    COUNT        = 12,
+};
 
 // prominent place for ListBox window types
 

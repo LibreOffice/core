@@ -665,7 +665,7 @@ void ColumnsWindow::Paint( const Rectangle& )
     if ( nCol )
         aText = OUString::number(nCol);
     else
-        aText = comphelper::string::remove(Button::GetStandardText(BUTTON_CANCEL), '~');
+        aText = comphelper::string::remove(Button::GetStandardText(StandardButtonType::CANCEL), '~');
 
     Size aTextSize(GetTextWidth( aText ), GetTextHeight());
     DrawText( Point( ( aSize.Width() - aTextSize.Width() ) / 2, aSize.Height() - nTextHeight + 2 ), aText );

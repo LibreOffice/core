@@ -342,7 +342,7 @@ void ORelationTableView::lookForUiActivities()
         aDlg.RemoveButton(aDlg.GetButtonId(0));
         aDlg.AddButton( ModuleRes(STR_QUERY_REL_EDIT), RET_OK, BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_FOCUSBUTTON);
         aDlg.AddButton( ModuleRes(STR_QUERY_REL_CREATE), RET_YES, 0);
-        aDlg.AddButton(BUTTON_CANCEL,RET_CANCEL,0);
+        aDlg.AddButton( StandardButtonType::CANCEL,RET_CANCEL,0);
         sal_uInt16 nRet = aDlg.Execute();
         if( nRet == RET_CANCEL)
         {

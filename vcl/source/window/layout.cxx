@@ -2171,14 +2171,14 @@ short MessageDialog::Execute()
                 break;
             case VCL_BUTTONS_YES_NO:
                 pBtn = new PushButton(pButtonBox);
-                pBtn->SetText(Button::GetStandardText(BUTTON_YES));
+                pBtn->SetText(Button::GetStandardText(StandardButtonType::YES));
                 pBtn->Show();
                 m_aOwnedButtons.push_back(pBtn);
                 m_aResponses[pBtn] = RET_YES;
 
                 pBtn = new PushButton(pButtonBox);
                 pBtn->SetStyle(pBtn->GetStyle() & WB_DEFBUTTON);
-                pBtn->SetText(Button::GetStandardText(BUTTON_NO));
+                pBtn->SetText(Button::GetStandardText(StandardButtonType::NO));
                 pBtn->Show();
                 m_aOwnedButtons.push_back(pBtn);
                 m_aResponses[pBtn] = RET_NO;

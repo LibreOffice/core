@@ -296,18 +296,18 @@ void ButtonDialog::AddButton( StandardButtonType eType, sal_uInt16 nId,
     pItem->mbOwnButton      = true;
     pItem->mnSepSize        = nSepPixel;
 
-    if ( eType == BUTTON_OK )
+    if ( eType == StandardButtonType::OK )
         nBtnFlags |= BUTTONDIALOG_OKBUTTON;
-    else if ( eType == BUTTON_HELP )
+    else if ( eType == StandardButtonType::HELP )
         nBtnFlags |= BUTTONDIALOG_HELPBUTTON;
-    else if ( (eType == BUTTON_CANCEL) || (eType == BUTTON_CLOSE) )
+    else if ( (eType == StandardButtonType::CANCEL) || (eType == StandardButtonType::CLOSE) )
         nBtnFlags |= BUTTONDIALOG_CANCELBUTTON;
     pItem->mpPushButton = ImplCreatePushButton( nBtnFlags );
 
     // Standard-Buttons have the right text already
-    if ( !((eType == BUTTON_OK)     && (pItem->mpPushButton->GetType() == WINDOW_OKBUTTON)) ||
-         !((eType == BUTTON_CANCEL) && (pItem->mpPushButton->GetType() == WINDOW_CANCELBUTTON)) ||
-         !((eType == BUTTON_HELP)   && (pItem->mpPushButton->GetType() == WINDOW_HELPBUTTON)) )
+    if ( !((eType == StandardButtonType::OK)     && (pItem->mpPushButton->GetType() == WINDOW_OKBUTTON)) ||
+         !((eType == StandardButtonType::CANCEL) && (pItem->mpPushButton->GetType() == WINDOW_CANCELBUTTON)) ||
+         !((eType == StandardButtonType::HELP)   && (pItem->mpPushButton->GetType() == WINDOW_HELPBUTTON)) )
     {
         pItem->mpPushButton->SetText( Button::GetStandardText( eType ) );
     }

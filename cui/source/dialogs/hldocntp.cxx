@@ -311,7 +311,7 @@ void SvxHyperlinkNewDocTp::DoApply ()
                 if( bOk )
                 {
                     WarningBox aWarning( this, WB_YES_NO, CUI_RESSTR(RID_SVXSTR_HYPERDLG_QUERYOVERWRITE) );
-                    bCreate = aWarning.Execute() == BUTTON_YES;
+                    bCreate = aWarning.Execute() == RET_YES;
                 }
             }
 
