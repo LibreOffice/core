@@ -455,6 +455,11 @@ ScConditionEntryObj::~ScConditionEntryObj()
 {
 }
 
+ScCondFormatEntry* ScConditionEntryObj::getCoreObject()
+{
+    return NULL;
+}
+
 sal_Int32 ScConditionEntryObj::getType()
     throw(uno::RuntimeException, std::exception)
 {
@@ -580,6 +585,11 @@ ScColorScaleFormatObj::~ScColorScaleFormatObj()
 {
 }
 
+ScColorScaleFormat* ScColorScaleFormatObj::getCoreObject()
+{
+    return NULL;
+}
+
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScColorScaleFormatObj::getPropertySetInfo()
     throw(uno::RuntimeException, std::exception)
 {
@@ -675,6 +685,11 @@ ScDataBarFormatObj::~ScDataBarFormatObj()
 {
 }
 
+ScDataBarFormat* ScDataBarFormatObj::getCoreObject()
+{
+    return NULL;
+}
+
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDataBarFormatObj::getPropertySetInfo()
     throw(uno::RuntimeException, std::exception)
 {
@@ -708,7 +723,7 @@ void SAL_CALL ScDataBarFormatObj::setPropertyValue(
             bool bUseGradient = true;
             if (aValue >>= bUseGradient)
             {
-                mpDataBar->GetDataBarData()->mbGradient = bUseGradient;
+                getCoreObject()->GetDataBarData()->mbGradient = bUseGradient;
             }
         }
         break;
@@ -717,10 +732,10 @@ void SAL_CALL ScDataBarFormatObj::setPropertyValue(
             bool bUseNegativeColor = false;
             if (aValue >>= bUseNegativeColor)
             {
-                mpDataBar->GetDataBarData()->mbNeg = bUseNegativeColor;
-                if (bUseNegativeColor && !mpDataBar->GetDataBarData()->mpNegativeColor)
+                getCoreObject()->GetDataBarData()->mbNeg = bUseNegativeColor;
+                if (bUseNegativeColor && !getCoreObject()->GetDataBarData()->mpNegativeColor)
                 {
-                    mpDataBar->GetDataBarData()->mpNegativeColor.reset(new Color(COL_AUTO));
+                    getCoreObject()->GetDataBarData()->mpNegativeColor.reset(new Color(COL_AUTO));
                 }
             }
         }
@@ -730,7 +745,7 @@ void SAL_CALL ScDataBarFormatObj::setPropertyValue(
             bool bShowValue = true;
             if (aValue >>= bShowValue)
             {
-                mpDataBar->GetDataBarData()->mbOnlyBar = !bShowValue;
+                getCoreObject()->GetDataBarData()->mbOnlyBar = !bShowValue;
             }
         }
         break;
@@ -739,7 +754,7 @@ void SAL_CALL ScDataBarFormatObj::setPropertyValue(
             sal_Int32 nColor = COL_AUTO;
             if (aValue >>= nColor)
             {
-                mpDataBar->GetDataBarData()->maPositiveColor.SetColor(nColor);
+                getCoreObject()->GetDataBarData()->maPositiveColor.SetColor(nColor);
             }
         }
         break;
@@ -748,16 +763,16 @@ void SAL_CALL ScDataBarFormatObj::setPropertyValue(
             sal_Int32 nAxisColor = COL_AUTO;
             if (aValue >>= nAxisColor)
             {
-                mpDataBar->GetDataBarData()->maAxisColor.SetColor(nAxisColor);
+                getCoreObject()->GetDataBarData()->maAxisColor.SetColor(nAxisColor);
             }
         }
         break;
         case NegativeColor:
         {
             sal_Int32 nNegativeColor = COL_AUTO;
-            if ((aValue >>= nNegativeColor) && mpDataBar->GetDataBarData()->mbNeg)
+            if ((aValue >>= nNegativeColor) && getCoreObject()->GetDataBarData()->mbNeg)
             {
-                mpDataBar->GetDataBarData()->mpNegativeColor->SetColor(nNegativeColor);
+                getCoreObject()->GetDataBarData()->mpNegativeColor->SetColor(nNegativeColor);
             }
             else
                 throw lang::IllegalArgumentException();
@@ -786,7 +801,7 @@ uno::Any SAL_CALL ScDataBarFormatObj::getPropertyValue( const OUString& aPropert
     {
         case AxisPosition:
         {
-            databar::ScAxisPosition ePos = mpDataBar->GetDataBarData()->meAxisPosition;
+            databar::ScAxisPosition ePos = getCoreObject()->GetDataBarData()->meAxisPosition;
             sal_Int32 nApiPos = sheet::DataBarAxis::AXIS_NONE;
             for (size_t i = 0; i < SAL_N_ELEMENTS(aDataBarAxisMap); ++i)
             {
@@ -801,36 +816,36 @@ uno::Any SAL_CALL ScDataBarFormatObj::getPropertyValue( const OUString& aPropert
         break;
         case UseGradient:
         {
-           aAny <<= mpDataBar->GetDataBarData()->mbGradient;
+           aAny <<= getCoreObject()->GetDataBarData()->mbGradient;
         }
         break;
         case UseNegativeColor:
         {
-           aAny <<= mpDataBar->GetDataBarData()->mbNeg;
+           aAny <<= getCoreObject()->GetDataBarData()->mbNeg;
         }
         break;
         case DataBar_ShowValue:
         {
-            aAny <<= !mpDataBar->GetDataBarData()->mbOnlyBar;
+            aAny <<= !getCoreObject()->GetDataBarData()->mbOnlyBar;
         }
         break;
         case DataBar_Color:
         {
-            sal_Int32 nColor = mpDataBar->GetDataBarData()->maPositiveColor.GetColor();
+            sal_Int32 nColor = getCoreObject()->GetDataBarData()->maPositiveColor.GetColor();
             aAny <<= nColor;
         }
         break;
         case AxisColor:
         {
-            sal_Int32 nAxisColor = mpDataBar->GetDataBarData()->maAxisColor.GetColor();
+            sal_Int32 nAxisColor = getCoreObject()->GetDataBarData()->maAxisColor.GetColor();
             aAny <<= nAxisColor;
         }
         break;
         case NegativeColor:
         {
-            if (mpDataBar->GetDataBarData()->mbNeg && mpDataBar->GetDataBarData()->mpNegativeColor)
+            if (getCoreObject()->GetDataBarData()->mbNeg && getCoreObject()->GetDataBarData()->mpNegativeColor)
             {
-                sal_Int32 nNegativeColor = mpDataBar->GetDataBarData() ->mpNegativeColor->GetColor();
+                sal_Int32 nNegativeColor = getCoreObject()->GetDataBarData()->mpNegativeColor->GetColor();
                 aAny <<= nNegativeColor;
             }
         }
@@ -884,6 +899,11 @@ ScIconSetFormatObj::~ScIconSetFormatObj()
 {
 }
 
+ScIconSetFormat* ScIconSetFormatObj::getCoreObject()
+{
+    return NULL;
+}
+
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScIconSetFormatObj::getPropertySetInfo()
     throw(uno::RuntimeException, std::exception)
 {
@@ -912,14 +932,14 @@ void SAL_CALL ScIconSetFormatObj::setPropertyValue(
         {
             bool bShowValue = true;
             aValue >>= bShowValue;
-            mpIconSet->GetIconSetData()->mbShowValue = bShowValue;
+            getCoreObject()->GetIconSetData()->mbShowValue = bShowValue;
         }
         break;
         case Reverse:
         {
             bool bReverse = false;
             aValue >>= bReverse;
-            mpIconSet->GetIconSetData()->mbReverse = bReverse;
+            getCoreObject()->GetIconSetData()->mbReverse = bReverse;
         }
         break;
         case Icons:
@@ -943,7 +963,7 @@ void SAL_CALL ScIconSetFormatObj::setPropertyValue(
                 throw lang::IllegalArgumentException();
             }
 
-            mpIconSet->GetIconSetData()->eIconSetType = eType;
+            getCoreObject()->GetIconSetData()->eIconSetType = eType;
         }
         break;
     }
@@ -965,14 +985,14 @@ uno::Any SAL_CALL ScIconSetFormatObj::getPropertyValue( const OUString& aPropert
     switch(pEntry->nWID)
     {
         case ShowValue:
-            aAny <<= mpIconSet->GetIconSetData()->mbShowValue;
+            aAny <<= getCoreObject()->GetIconSetData()->mbShowValue;
         break;
         case Reverse:
-            aAny <<= mpIconSet->GetIconSetData()->mbReverse;
+            aAny <<= getCoreObject()->GetIconSetData()->mbReverse;
         break;
         case Icons:
         {
-            ScIconSetType eType = mpIconSet->GetIconSetData()->eIconSetType;
+            ScIconSetType eType = getCoreObject()->GetIconSetData()->eIconSetType;
             for (size_t i = 0; i < SAL_N_ELEMENTS(aIconSetApiMap); ++i)
             {
                 if (aIconSetApiMap[i].eType == eType)
@@ -985,8 +1005,8 @@ uno::Any SAL_CALL ScIconSetFormatObj::getPropertyValue( const OUString& aPropert
         break;
         case IconSetEntries:
         {
-            uno::Sequence< sheet::XIconSetEntry > aEntries(mpIconSet->size());
-            for (auto it = mpIconSet->begin(), itEnd = mpIconSet->end(); it != itEnd; ++it)
+            uno::Sequence< sheet::XIconSetEntry > aEntries(getCoreObject()->size());
+            for (auto it = getCoreObject()->begin(), itEnd = getCoreObject()->end(); it != itEnd; ++it)
             {
                 //aEntries.operator[] = ;
             }
