@@ -2421,33 +2421,6 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
     }
 }
 
-void ScGridWindow::LogicMouseButtonDown(const MouseEvent& rMouseEvent)
-{
-    // When we're not doing tiled rendering, then positions must be passed as pixels.
-    ScDocShell* pDocSh = pViewData->GetDocShell();
-    ScDocument& rDoc = pDocSh->GetDocument();
-    (void)rDoc;
-    assert(rDoc.GetDrawLayer()->isTiledRendering());
-
-    MouseButtonDown(rMouseEvent);
-}
-
-void ScGridWindow::LogicMouseButtonUp(const MouseEvent& rMouseEvent)
-{
-    // When we're not doing tiled rendering, then positions must be passed as pixels.
-    ScDocShell* pDocSh = pViewData->GetDocShell();
-    ScDocument& rDoc = pDocSh->GetDocument();
-    (void)rDoc;
-    assert(rDoc.GetDrawLayer()->isTiledRendering());
-
-    MouseButtonUp(rMouseEvent);
-
-    // sometimes MouseButtonDown captures mouse and starts tracking, and VCL
-    // will not take care of releasing that with tiled rendering
-    if (IsTracking())
-        EndTracking();
-}
-
 void ScGridWindow::FakeButtonUp()
 {
     if ( nButtonDown )

@@ -324,12 +324,6 @@ public:
     /// @see OutputDevice::LogicInvalidate().
     void LogicInvalidate(const Rectangle* pRectangle) SAL_OVERRIDE;
 
-    /// Same as MouseButtonDown(), but coordinates are in logic unit.
-    void LogicMouseButtonDown(const MouseEvent& rMouseEvent);
-
-    /// Same as MouseButtonUp(), but coordinates are in logic unit.
-    void LogicMouseButtonUp(const MouseEvent& rMouseEvent);
-
     /// Update the cell selection according to what handles have been dragged.
     /// @see vcl::ITiledRenderable::setTextSelection() for the values of nType.
     /// Coordinates are in pixels.

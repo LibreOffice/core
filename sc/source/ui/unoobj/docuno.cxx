@@ -545,10 +545,16 @@ void ScModelObj::postMouseEvent(int nType, int nX, int nY, int nCount)
     switch (nType)
     {
     case LOK_MOUSEEVENT_MOUSEBUTTONDOWN:
-        pGridWindow->LogicMouseButtonDown(aEvent);
+        pGridWindow->MouseButtonDown(aEvent);
         break;
     case LOK_MOUSEEVENT_MOUSEBUTTONUP:
-        pGridWindow->LogicMouseButtonUp(aEvent);
+        pGridWindow->MouseButtonUp(aEvent);
+
+        // sometimes MouseButtonDown captures mouse and starts tracking, and VCL
+        // will not take care of releasing that with tiled rendering
+        if (pGridWindow->IsTracking())
+            pGridWindow->EndTracking();
+
         break;
     default:
         assert(false);
