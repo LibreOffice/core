@@ -209,6 +209,7 @@ public:
     bool IsCellValid( ScRefCellValue& rCell, const ScAddress& rPos ) const;
 
     ScConditionMode GetOperation() const        { return eOp; }
+    void SetOperation(ScConditionMode eMode);
     bool            IsIgnoreBlank() const       { return ( nOptions & SC_COND_NOBLANKS ) == 0; }
     void            SetIgnoreBlank(bool bSet);
     ScAddress       GetSrcPos() const           { return aSrcPos; }

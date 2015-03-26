@@ -14,6 +14,8 @@
 #include "colorscale.hxx"
 #include "docsh.hxx"
 #include "miscuno.hxx"
+#include "compiler.hxx"
+#include "tokenarray.hxx"
 
 #include "cellsuno.hxx"
 #include "convuno.hxx"
@@ -72,11 +74,35 @@ struct ConditionEntryApiMap
     sal_Int32 nApiMode;
 };
 
-/*
 ConditionEntryApiMap aConditionEntryMap[] =
 {
+    {SC_COND_EQUAL, sheet::ConditionFormatOperator::EQUAL},
+    {SC_COND_LESS, sheet::ConditionFormatOperator::LESS},
+    {SC_COND_GREATER, sheet::ConditionFormatOperator::GREATER},
+    {SC_COND_EQLESS, sheet::ConditionFormatOperator::LESS_EQUAL},
+    {SC_COND_EQGREATER, sheet::ConditionFormatOperator::GREATER_EQUAL},
+    {SC_COND_NOTEQUAL, sheet::ConditionFormatOperator::NOT_EQUAL},
+    {SC_COND_BETWEEN, sheet::ConditionFormatOperator::BETWEEN},
+    {SC_COND_NOTBETWEEN, sheet::ConditionFormatOperator::NOT_BETWEEN},
+    {SC_COND_DUPLICATE, sheet::ConditionFormatOperator::DUPLICATE},
+    {SC_COND_NOTDUPLICATE, sheet::ConditionFormatOperator::UNIQUE},
+    {SC_COND_DIRECT, sheet::ConditionFormatOperator::EXPRESSION},
+    {SC_COND_TOP10, sheet::ConditionFormatOperator::TOP_N_ELEMENTS},
+    {SC_COND_BOTTOM10, sheet::ConditionFormatOperator::BOTTOM_N_ELEMENTS},
+    {SC_COND_TOP_PERCENT, sheet::ConditionFormatOperator::TOP_N_PERCENT},
+    {SC_COND_BOTTOM_PERCENT, sheet::ConditionFormatOperator::BOTTOM_N_PERCENT},
+    {SC_COND_ABOVE_AVERAGE, sheet::ConditionFormatOperator::ABOVE_AVERAGE},
+    {SC_COND_BELOW_AVERAGE, sheet::ConditionFormatOperator::BELOW_AVERAGE},
+    {SC_COND_ABOVE_EQUAL_AVERAGE, sheet::ConditionFormatOperator::ABOVE_EQUAL_AVERAGE},
+    {SC_COND_BELOW_EQUAL_AVERAGE, sheet::ConditionFormatOperator::BELOW_EQUAL_AVERAGE},
+    {SC_COND_ERROR, sheet::ConditionFormatOperator::ERROR},
+    {SC_COND_NOERROR, sheet::ConditionFormatOperator::NO_ERROR},
+    {SC_COND_BEGINS_WITH, sheet::ConditionFormatOperator::BEGINS_WITH},
+    {SC_COND_ENDS_WITH, sheet::ConditionFormatOperator::ENDS_WITH},
+    {SC_COND_CONTAINS_TEXT, sheet::ConditionFormatOperator::CONTAINS},
+    {SC_COND_NOT_CONTAINS_TEXT, sheet::ConditionFormatOperator::NOT_CONTAINS},
+    {SC_COND_NONE, sheet::ConditionFormatOperator::EQUAL},
 };
-*/
 
 enum ColorScaleProperties
 {
@@ -475,7 +501,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScConditionEntryObj::getPropert
 }
 
 void SAL_CALL ScConditionEntryObj::setPropertyValue(
-                        const OUString& aPropertyName, const uno::Any& /*aValue*/ )
+                        const OUString& aPropertyName, const uno::Any& aValue )
                 throw(beans::UnknownPropertyException, beans::PropertyVetoException,
                         lang::IllegalArgumentException, lang::WrappedTargetException,
                         uno::RuntimeException, std::exception)
@@ -490,12 +516,49 @@ void SAL_CALL ScConditionEntryObj::setPropertyValue(
     switch(pEntry->nWID)
     {
         case StyleName:
+        {
+            OUString aStyleName;
+            if ((aValue >>= aStyleName) && !aStyleName.isEmpty())
+                getCoreObject()->UpdateStyleName(aStyleName);
+        }
         break;
         case Formula1:
+        {
+            OUString aFormula;
+            if ((aValue >>= aFormula) && !aFormula.isEmpty())
+            {
+                ScCompiler aComp(&mpDocShell->GetDocument(), getCoreObject()->GetSrcPos());
+                boost::scoped_ptr<ScTokenArray> pArr(aComp.CompileString(aFormula));
+                getCoreObject()->SetFormula1(*pArr);
+            }
+        }
         break;
         case Formula2:
+        {
+            OUString aFormula;
+            if ((aValue >>= aFormula) && !aFormula.isEmpty())
+            {
+                ScCompiler aComp(&mpDocShell->GetDocument(), getCoreObject()->GetSrcPos());
+                boost::scoped_ptr<ScTokenArray> pArr(aComp.CompileString(aFormula));
+                getCoreObject()->SetFormula2(*pArr);
+            }
+        }
         break;
         case Operator:
+        {
+            sal_Int32 nVal;
+            if (aValue >>= nVal)
+            {
+                for (size_t i = 0; i < SAL_N_ELEMENTS(aConditionEntryMap); ++i)
+                {
+                    if (aConditionEntryMap[i].nApiMode == nVal)
+                    {
+                        getCoreObject()->SetOperation(aConditionEntryMap[i].eMode);
+                        break;
+                    }
+                }
+            }
+        }
         break;
         default:
             SAL_WARN("sc", "unsupported property");
@@ -517,25 +580,34 @@ uno::Any SAL_CALL ScConditionEntryObj::getPropertyValue( const OUString& aProper
     switch(pEntry->nWID)
     {
         case StyleName:
-            aAny <<= pFormat->GetStyle();
+            aAny <<= getCoreObject()->GetStyle();
         break;
         case Formula1:
         {
-            ScAddress aCursor = pFormat->GetSrcPos();
-            OUString aFormula = pFormat->GetExpression(aCursor, 0);
+            ScAddress aCursor = getCoreObject()->GetSrcPos();
+            OUString aFormula = getCoreObject()->GetExpression(aCursor, 0);
             aAny <<= aFormula;
         }
         break;
         case Formula2:
         {
-            ScAddress aCursor = pFormat->GetSrcPos();
-            OUString aFormula = pFormat->GetExpression(aCursor, 1);
+            ScAddress aCursor = getCoreObject()->GetSrcPos();
+            OUString aFormula = getCoreObject()->GetExpression(aCursor, 1);
             aAny <<= aFormula;
         }
         break;
         case Operator:
         {
+            ScConditionMode eMode = getCoreObject()->GetOperation();
+            for (size_t i = 0; i < SAL_N_ELEMENTS(aConditionEntryMap); ++i)
+            {
+                if (aConditionEntryMap[i].eMode == eMode)
+                {
+                    aAny <<= aConditionEntryMap[i].nApiMode;
+                    break;
 
+                }
+            }
         }
         break;
         default:
