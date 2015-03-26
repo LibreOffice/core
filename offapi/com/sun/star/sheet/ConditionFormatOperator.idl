@@ -54,11 +54,15 @@ constants ConditionFormatOperator
 
     const long NO_ERROR = 19;
 
-    const long CONTAINS = 20;
+    const long BEGINS_WITH = 20;
 
-    const long NOT_CONTAINS = 21;
+    const long ENDS_WITH = 21;
 
-    const long EXPRESSION = 22;
+    const long CONTAINS = 22;
+
+    const long NOT_CONTAINS = 23;
+
+    const long EXPRESSION = 24;
 };
 
 
