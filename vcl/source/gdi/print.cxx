@@ -1067,8 +1067,8 @@ void Printer::dispose()
     else
         pSVData->maGDIData.mpLastPrinter = mpPrev;
 
-    mpPrev.disposeAndClear();
-    mpNext.disposeAndClear();
+    mpPrev.clear();
+    mpNext.clear();
     OutputDevice::dispose();
 }
 
