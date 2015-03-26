@@ -359,7 +359,7 @@ namespace DOM
         pContext->sax->resolveEntity = resolve_func;
         // xmlSetExternalEntityLoader(external_entity_loader);
         OString oUri = OUStringToOString(sUri, RTL_TEXTENCODING_UTF8);
-        char *uri = (char*) oUri.getStr();
+        char *uri = const_cast<char*>(oUri.getStr());
         xmlDocPtr pDoc = xmlCtxtReadFile(pContext.get(), uri, 0, 0);
         if (pDoc == 0) {
             throwEx(pContext.get());
