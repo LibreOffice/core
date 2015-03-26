@@ -22,12 +22,12 @@
 
 #include <sal/config.h>
 
+#if defined LIBO_INTERNAL_ONLY && defined __cplusplus
+#include <chrono>
+#endif
+
 #include <sal/saldllapi.h>
 #include <sal/types.h>
-
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 /****************************************************************************/
 /* TimeValue                                                                */
@@ -39,15 +39,52 @@ extern "C" {
 
 /* Time since Jan-01-1970 */
 
+#if defined LIBO_INTERNAL_ONLY && defined __cplusplus
+
+struct TimeValue {
+    TimeValue() = default;
+
+    SAL_CONSTEXPR TimeValue(sal_uInt32 seconds, sal_uInt32 nanoseconds):
+        Seconds(seconds), Nanosec(nanoseconds) {}
+
+    template<typename Rep, typename Period> SAL_CONSTEXPR
+    TimeValue(std::chrono::duration<Rep, Period> const & duration):
+        Seconds(
+            std::chrono::duration_cast<std::chrono::nanoseconds>(
+                duration).count() / 1000000000),
+        Nanosec(
+            std::chrono::duration_cast<std::chrono::nanoseconds>(
+                duration).count() % 1000000000)
+    {}
+
+    sal_uInt32 Seconds;
+    sal_uInt32 Nanosec;
+};
+
+#else
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct {
     sal_uInt32 Seconds;
     sal_uInt32 Nanosec;
 } TimeValue;
 
+#ifdef __cplusplus
+}
+#endif
+
+#endif
+
 #if defined(SAL_W32)
 #   pragma pack(pop)
 #endif
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /****************************************************************************/
 /* oslDateTime */
