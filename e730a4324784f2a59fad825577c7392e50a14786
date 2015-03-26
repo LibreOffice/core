@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a29b11f_fed2ee33",
+        "filename": "scaddins/source/scaList.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-03-26T12:09:07Z",
+      "side": 1,
+      "message": "The class (and it\u0027s type-specific subclasses) should be actually _replaced_ by direct use of std::vector, not just reimplemented in terms of it.",
+      "revId": "e730a4324784f2a59fad825577c7392e50a14786",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
