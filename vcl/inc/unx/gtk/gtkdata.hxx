@@ -176,9 +176,7 @@ public:
 
     virtual void PostUserEvent() SAL_OVERRIDE;
 
-#if GTK_CHECK_VERSION(3,0,0)
-    guint32 GetLastUserEventTime( bool /* b */ ) { return GDK_CURRENT_TIME; } // horrible hack
-#else
+#if !GTK_CHECK_VERSION(3,0,0)
     virtual bool Dispatch( XEvent *pEvent ) SAL_OVERRIDE;
 #endif
 };
