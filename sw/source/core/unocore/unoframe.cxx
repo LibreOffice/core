@@ -3592,41 +3592,8 @@ void SwXTextEmbeddedObject::removeEventListener(const uno::Reference< lang::XEve
 
 uno::Reference< lang::XComponent >  SwXTextEmbeddedObject::getEmbeddedObject(void) throw( uno::RuntimeException, std::exception )
 {
-    uno::Reference< lang::XComponent >  xRet;
-    SwFrmFmt*   pFmt = GetFrmFmt();
-    if(pFmt)
-    {
-        SwDoc* pDoc = pFmt->GetDoc();
-        const SwFmtCntnt* pCnt = &pFmt->GetCntnt();
-        OSL_ENSURE( pCnt->GetCntntIdx() &&
-                       pDoc->GetNodes()[ pCnt->GetCntntIdx()->
-                                        GetIndex() + 1 ]->GetOLENode(), "kein OLE-Node?");
-
-        SwOLENode* pOleNode =  pDoc->GetNodes()[ pCnt->GetCntntIdx()
-                                        ->GetIndex() + 1 ]->GetOLENode();
-        uno::Reference < embed::XEmbeddedObject > xIP = pOleNode->GetOLEObj().GetOleRef();
-        if ( svt::EmbeddedObjectRef::TryRunningState( xIP ) )
-        {
-            // TODO/LATER: the listener registered after client creation should be able to handle scaling, after that the client is not necessary here
-            if ( pDoc->GetDocShell() )
-                pDoc->GetDocShell()->GetIPClient( svt::EmbeddedObjectRef( xIP, embed::Aspects::MSOLE_CONTENT ) );
-
-            xRet = uno::Reference < lang::XComponent >( xIP->getComponent(), uno::UNO_QUERY );
-            uno::Reference< util::XModifyBroadcaster >  xBrdcst( xRet, uno::UNO_QUERY);
-            uno::Reference< frame::XModel > xModel( xRet, uno::UNO_QUERY);
-            if( xBrdcst.is() && xModel.is() )
-            {
-                SwXOLEListener* pListener = SwIterator<SwXOLEListener,SwFmt>( *pFmt ).First();
-                //create a new one if the OLE object doesn't have one already
-                if( !pListener )
-                {
-                    uno::Reference< util::XModifyListener > xOLEListener = new SwXOLEListener(*pFmt, xModel);
-                    xBrdcst->addModifyListener( xOLEListener );
-                }
-            }
-        }
-    }
-    return xRet;
+    uno::Reference<embed::XEmbeddedObject> xObj(getExtendedControlOverEmbeddedObject());
+    return xObj.is() ? uno::Reference<lang::XComponent>(xObj->getComponent(), uno::UNO_QUERY) : nullptr;
 }
 
 uno::Reference< embed::XEmbeddedObject > SAL_CALL SwXTextEmbeddedObject::getExtendedControlOverEmbeddedObject()
