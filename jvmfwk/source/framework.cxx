@@ -313,12 +313,12 @@ javaFrameworkError SAL_CALL jfw_startVM(
             return JFW_E_ERROR;
 
         //The first argument is the classpath
-        arOpt[0].optionString= (char*) sUserClassPath.getStr();
+        arOpt[0].optionString= const_cast<char*>(sUserClassPath.getStr());
         arOpt[0].extraInfo = NULL;
         // Set a flag that this JVM has been created via the JNI Invocation API
         // (used, for example, by UNO remote bridges to share a common thread pool
         // factory among Java and native bridge implementations):
-        arOpt[1].optionString = (char *) "-Dorg.openoffice.native=";
+        arOpt[1].optionString = const_cast<char *>("-Dorg.openoffice.native=");
         arOpt[1].extraInfo = 0;
 
         //add the options set by options dialog
