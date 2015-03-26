@@ -275,7 +275,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
         {
             DBG_ASSERT( rReq.GetArgs(), "arguments expected" );
             const SfxMacroInfoItem& rInfo = static_cast<const SfxMacroInfoItem&>(rReq.GetArgs()->Get(SID_BASICIDE_ARG_MACROINFO ));
-            BasicManager* pBasMgr = (BasicManager*)rInfo.GetBasicManager();
+            BasicManager* pBasMgr = const_cast<BasicManager*>(rInfo.GetBasicManager());
             DBG_ASSERT( pBasMgr, "Nichts selektiert im Basic-Baum ?" );
 
             ScriptDocument aDocument( ScriptDocument::getDocumentForBasicManager( pBasMgr ) );
@@ -394,7 +394,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
         {
             DBG_ASSERT( rReq.GetArgs(), "arguments expected" );
             const SfxMacroInfoItem& rInfo = static_cast<const SfxMacroInfoItem&>(rReq.GetArgs()->Get(SID_BASICIDE_ARG_MACROINFO ));
-            BasicManager* pBasMgr = (BasicManager*)rInfo.GetBasicManager();
+            BasicManager* pBasMgr = const_cast<BasicManager*>(rInfo.GetBasicManager());
             DBG_ASSERT( pBasMgr, "Store source: Kein BasMgr?" );
             ScriptDocument aDocument( ScriptDocument::getDocumentForBasicManager( pBasMgr ) );
             ModulWindow* pWin = FindBasWin( aDocument, rInfo.GetLib(), rInfo.GetModule(), false, true );
