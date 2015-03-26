@@ -185,6 +185,7 @@ public:
     void WriteShape3DEffects( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet );
     void WriteArtisticEffect( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet );
     OString WriteWdpPicture( const OUString& rFileId, const ::com::sun::star::uno::Sequence< sal_Int8 >& rPictureData );
+    sal_Int32 getBulletMarginIndentation (::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet,sal_Int16 nLevel, const OUString& propName);
 
     static void ResetCounters();
 
