@@ -126,7 +126,7 @@ void SdOptionsGeneric::Commit( SdOptionsItem& rCfgItem ) const
 
     if( aNames.getLength() && ( aValues.getLength() == aNames.getLength() ) )
     {
-        if( (const_cast<SdOptionsGeneric*>(this))->WriteData( aValues.getArray() ) )
+        if( WriteData( aValues.getArray() ) )
             rCfgItem.PutProperties( aNames, aValues );
         else
         {

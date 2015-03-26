@@ -473,7 +473,7 @@ SdDrawDocument* SdDrawDocument::AllocSdDrawDocument() const
         for (sal_uInt16 i = 0; i < GetMasterSdPageCount(PK_STANDARD); i++)
         {
             // Move with all of the master page's layouts
-            OUString aOldLayoutName(((SdDrawDocument*) this)->GetMasterSdPage(i, PK_STANDARD)->GetLayoutName());
+            OUString aOldLayoutName(const_cast<SdDrawDocument*>(this)->GetMasterSdPage(i, PK_STANDARD)->GetLayoutName());
             aOldLayoutName = aOldLayoutName.copy( 0, aOldLayoutName.indexOf( SD_LT_SEPARATOR ) );
             SdStyleSheetVector aCreatedSheets;
             pNewStylePool->CopyLayoutSheets(aOldLayoutName, *pOldStylePool, aCreatedSheets );
@@ -484,7 +484,7 @@ SdDrawDocument* SdDrawDocument::AllocSdDrawDocument() const
     else if( mbAllocDocSh )
     {
         // Create a DocShell which is then returned with GetAllocedDocSh()
-        SdDrawDocument* pDoc = (SdDrawDocument*) this;
+        SdDrawDocument* pDoc = const_cast<SdDrawDocument*>(this);
         pDoc->SetAllocDocSh(false);
         pDoc->mxAllocedDocShRef = new ::sd::DrawDocShell(
             SFX_CREATE_MODE_EMBEDDED, true, meDocType);

@@ -159,7 +159,7 @@ SdNavigatorWin::~SdNavigatorWin()
 //when object is marked , fresh the corresponding entry tree .
 void SdNavigatorWin::FreshTree( const SdDrawDocument* pDoc )
 {
-    SdDrawDocument* pNonConstDoc = (SdDrawDocument*) pDoc; // const as const can...
+    SdDrawDocument* pNonConstDoc = const_cast<SdDrawDocument*>(pDoc); // const as const can...
     sd::DrawDocShell* pDocShell = pNonConstDoc->GetDocSh();
     OUString aDocShName( pDocShell->GetName() );
     OUString aDocName = pDocShell->GetMedium()->GetName();
@@ -178,7 +178,7 @@ void SdNavigatorWin::FreshEntry( )
 
 void SdNavigatorWin::InitTreeLB( const SdDrawDocument* pDoc )
 {
-    SdDrawDocument* pNonConstDoc = (SdDrawDocument*) pDoc; // const as const can...
+    SdDrawDocument* pNonConstDoc = const_cast<SdDrawDocument*>(pDoc); // const as const can...
     ::sd::DrawDocShell* pDocShell = pNonConstDoc->GetDocSh();
     OUString aDocShName( pDocShell->GetName() );
     ::sd::ViewShell* pViewShell = pDocShell->GetViewShell();

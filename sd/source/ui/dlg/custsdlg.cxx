@@ -316,7 +316,7 @@ SdDefineCustomShowDlg::SdDefineCustomShowDlg( vcl::Window* pWindow,
              it != rpCustomShow->PagesVector().end(); ++it )
         {
             SvTreeListEntry* pEntry = m_pLbCustomPages->InsertEntry( (*it)->GetName() );
-            pEntry->SetUserData( (SdPage*) (*it) );
+            pEntry->SetUserData( const_cast<SdPage*>(*it) );
         }
     }
     else

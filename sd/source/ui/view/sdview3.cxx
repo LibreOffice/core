@@ -624,7 +624,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
         }
         else
         {
-            SdDrawDocument* pWorkModel = (SdDrawDocument*) pOwnData->GetWorkDocument();
+            SdDrawDocument* pWorkModel = const_cast<SdDrawDocument*>(pOwnData->GetWorkDocument());
             SdPage*         pWorkPage = (SdPage*) pWorkModel->GetSdPage( 0, PK_STANDARD );
 
             pWorkPage->SetRectsDirty();
@@ -1192,7 +1192,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
             if( pOwnData && pOwnData->GetWorkDocument() )
             {
                 const SdDrawDocument*   pWorkModel = pOwnData->GetWorkDocument();
-                SdrPage*                pWorkPage = (SdrPage*) ( ( pWorkModel->GetPageCount() > 1 ) ?
+                SdrPage*                pWorkPage = const_cast<SdrPage*>( ( pWorkModel->GetPageCount() > 1 ) ?
                                                     pWorkModel->GetSdPage( 0, PK_STANDARD ) :
                                                     pWorkModel->GetPage( 0 ) );
 
@@ -1224,7 +1224,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
         {
             const SdDrawDocument*   pWorkModel = pOwnData->GetWorkDocument();
-            SdrPage*                pWorkPage = (SdrPage*) ( ( pWorkModel->GetPageCount() > 1 ) ?
+            SdrPage*                pWorkPage = const_cast<SdrPage*>( ( pWorkModel->GetPageCount() > 1 ) ?
                                                 pWorkModel->GetSdPage( 0, PK_STANDARD ) :
                                                 pWorkModel->GetPage( 0 ) );
 
@@ -1273,7 +1273,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
             if( pOwnData && pOwnData->GetWorkDocument() )
             {
                 const SdDrawDocument*   pWorkModel = pOwnData->GetWorkDocument();
-                SdrPage*                pWorkPage = (SdrPage*) ( ( pWorkModel->GetPageCount() > 1 ) ?
+                SdrPage*                pWorkPage = const_cast<SdrPage*>( ( pWorkModel->GetPageCount() > 1 ) ?
                                                     pWorkModel->GetSdPage( 0, PK_STANDARD ) :
                                                     pWorkModel->GetPage( 0 ) );
 

@@ -47,7 +47,7 @@ public:
     void                            SetDocShell( const SfxObjectShellRef& rRef ) { maDocShellRef = rRef; }
     const SfxObjectShellRef&        GetDocShell() const { return maDocShellRef; }
 
-    void                            SetWorkDocument( const SdDrawDocument* pWorkDoc ) { mpSdDrawDocument = mpSdDrawDocumentIntern = (SdDrawDocument*) pWorkDoc; }
+    void                            SetWorkDocument( const SdDrawDocument* pWorkDoc ) { mpSdDrawDocument = mpSdDrawDocumentIntern = const_cast<SdDrawDocument*>(pWorkDoc); }
     const SdDrawDocument*           GetWorkDocument() const { return mpSdDrawDocument; }
 
     void                            SetView(const ::sd::View* pView);

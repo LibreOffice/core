@@ -465,10 +465,10 @@ SdrPage* SdPage::Clone(SdrModel* pNewModel) const
 
 SfxStyleSheet* SdPage::GetTextStyleSheetForObject( SdrObject* pObj ) const
 {
-    const PresObjKind eKind = ((SdPage*)this)->GetPresObjKind(pObj);
+    const PresObjKind eKind = GetPresObjKind(pObj);
     if( eKind != PRESOBJ_NONE )
     {
-        return ((SdPage*)this)->GetStyleSheetForPresObj(eKind);
+        return GetStyleSheetForPresObj(eKind);
     }
 
     return FmFormPage::GetTextStyleSheetForObject( pObj );

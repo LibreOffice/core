@@ -108,7 +108,7 @@ void FuThesaurus::DoExecute( SfxRequest& )
                 pOutliner->SetDefaultLanguage( mpDoc->GetLanguage( EE_CHAR_LANGUAGE ) );
             }
 
-            EESpellState eState = ( (OutlinerView*) pOutlView)->StartThesaurus();
+            EESpellState eState = const_cast<OutlinerView*>(pOutlView)->StartThesaurus();
             DBG_ASSERT(eState != EE_SPELL_NOSPELLER, "No SpellChecker");
 
             if (eState == EE_SPELL_NOLANGUAGE)

@@ -382,7 +382,7 @@ void DrawDocShell::ApplySlotFilter() const
     while( pTestViewShell )
     {
         if( pTestViewShell->GetObjectShell()
-            == const_cast<DrawDocShell*>( this )
+            == this
             && pTestViewShell->GetViewFrame()
             && pTestViewShell->GetViewFrame()->GetDispatcher() )
         {

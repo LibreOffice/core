@@ -110,7 +110,7 @@ SdPPTImport::SdPPTImport( SdDrawDocument* pDocument, SvStream& rDocStream, SvSto
         {
             0xe0, 0x85, 0x9f, 0xf2, 0xf9, 0x4f, 0x68, 0x10, 0xab, 0x91, 0x08, 0x00, 0x2b, 0x27, 0xb3, 0xd9
         };
-        Section* pSection = (Section*)pSummaryInformation->GetSection( aPropSetGUID );
+        Section* pSection = const_cast<Section*>(pSummaryInformation->GetSection( aPropSetGUID ));
         if ( pSection )
         {
             PropItem aPropItem;
@@ -265,7 +265,7 @@ bool ImplSdPPTImport::Import()
         {
             0x02, 0xd5, 0xcd, 0xd5, 0x9c, 0x2e, 0x1b, 0x10, 0x93, 0x97, 0x08, 0x00, 0x2b, 0x2c, 0xf9, 0xae
         };
-        Section* pSection = (Section*)pDInfoSec2->GetSection( aPropSetGUID );
+        Section* pSection = const_cast<Section*>(pDInfoSec2->GetSection( aPropSetGUID ));
         if ( pSection )
         {
             if ( pSection->GetProperty( PID_SLIDECOUNT, aPropItem ) )
@@ -347,7 +347,7 @@ bool ImplSdPPTImport::Import()
             {
                 0x05, 0xd5, 0xcd, 0xd5, 0x9c, 0x2e, 0x1b, 0x10, 0x93, 0x97, 0x08, 0x00, 0x2b, 0x2c, 0xf9, 0xae
             };
-            pSection = (Section*)pDInfoSec2->GetSection( aUserPropSetGUID );
+            pSection = const_cast<Section*>(pDInfoSec2->GetSection( aUserPropSetGUID ));
             if ( pSection )
             {
                 Dictionary aDict;

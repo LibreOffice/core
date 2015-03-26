@@ -698,7 +698,7 @@ void SdPage::Changed(const SdrObject& rObj, SdrUserCallType eType, const Rectang
                 if (!pModel || pModel->isLocked())
                     break;
 
-                SdrObject* pObj = (SdrObject*) &rObj;
+                SdrObject* pObj = const_cast<SdrObject*>(&rObj);
 
                 if (pObj)
                 {

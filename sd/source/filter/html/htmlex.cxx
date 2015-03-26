@@ -1413,7 +1413,7 @@ OUString HtmlExport::ParagraphToHTMLString( SdrOutliner* pOutliner, sal_Int32 nP
         return OUString();
 
     // TODO: MALTE!!!
-    EditEngine& rEditEngine = *(EditEngine*)&pOutliner->GetEditEngine();
+    EditEngine& rEditEngine = *const_cast<EditEngine*>(&pOutliner->GetEditEngine());
     bool bOldUpdateMode = rEditEngine.GetUpdateMode();
     rEditEngine.SetUpdateMode(true);
 

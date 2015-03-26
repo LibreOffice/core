@@ -2489,7 +2489,7 @@ void SlideshowImpl::createSlideList( bool bAll, const OUString& rPresSlide )
             for( SdCustomShow::PageVec::iterator it = pCustomShow->PagesVector().begin();
                  it != pCustomShow->PagesVector().end(); ++it, nSlideIndex++ )
             {
-                const sal_uInt16 nSdSlide = ( ( (SdPage*) (*it) )->GetPageNum() - 1 ) / 2;
+                const sal_uInt16 nSdSlide = ( const_cast<SdPage*>(*it)->GetPageNum() - 1 ) / 2;
 
                 if( !( mpDoc->GetSdPage( nSdSlide, PK_STANDARD ) )->IsExcluded())
                     mpSlideController->insertSlideNumber( nSdSlide );

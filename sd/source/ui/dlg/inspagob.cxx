@@ -42,7 +42,7 @@ SdInsertPagesObjsDlg::SdInsertPagesObjsDlg(
     m_pLbTree->set_width_request(m_pLbTree->approximate_char_width() * 50);
     m_pLbTree->set_height_request(m_pLbTree->GetTextHeight() * 12);
 
-    m_pLbTree->SetViewFrame( ( (SdDrawDocument*) pInDoc )->GetDocSh()->GetViewShell()->GetViewFrame() );
+    m_pLbTree->SetViewFrame( pInDoc->GetDocSh()->GetViewShell()->GetViewFrame() );
 
     m_pLbTree->SetSelectHdl( LINK( this, SdInsertPagesObjsDlg, SelectObjectHdl ) );
 

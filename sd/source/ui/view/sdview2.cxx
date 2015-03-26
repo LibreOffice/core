@@ -250,7 +250,7 @@ void View::DoCut(vcl::Window* )
     const OutlinerView* pOLV = GetTextEditOutlinerView();
 
     if( pOLV )
-        ( (OutlinerView*) pOLV)->Cut();
+        const_cast<OutlinerView*>(pOLV)->Cut();
     else if( AreObjectsMarked() )
     {
         OUString aStr(SD_RESSTR(STR_UNDO_CUT));
@@ -267,7 +267,7 @@ void View::DoCopy (vcl::Window* pWindow)
     const OutlinerView* pOLV = GetTextEditOutlinerView();
 
     if( pOLV )
-        ( (OutlinerView*) pOLV)->Copy();
+        const_cast<OutlinerView*>(pOLV)->Copy();
     else if( AreObjectsMarked() )
     {
         BrkAction();

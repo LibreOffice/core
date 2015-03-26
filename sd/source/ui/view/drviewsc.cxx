@@ -337,7 +337,7 @@ void DrawViewShell::UpdateIMapDlg( SdrObject* pObj )
 
         if ( pIMapInfo )
         {
-            pIMap = (ImageMap*) &pIMapInfo->GetImageMap();
+            pIMap = const_cast<ImageMap*>(&pIMapInfo->GetImageMap());
             pTargetList = new TargetList;
             GetViewFrame()->GetTargetList( *pTargetList );
         }

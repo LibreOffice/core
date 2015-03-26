@@ -1000,7 +1000,7 @@ SdDrawDocument* SdPageObjsTLB::GetBookmarkDoc(SfxMedium* pMed)
             // in this mode the document is owned and controlled by the SdDrawDocument
             // it can be released by calling the corresponding CloseBookmarkDoc method
             // successful creation of a document makes this the owner of the medium
-            mpBookmarkDoc = ((SdDrawDocument*) mpDoc)->OpenBookmarkDoc(*mpMedium);
+            mpBookmarkDoc = const_cast<SdDrawDocument*>(mpDoc)->OpenBookmarkDoc(*mpMedium);
 
         if ( !mpBookmarkDoc )
         {
@@ -1032,7 +1032,7 @@ void SdPageObjsTLB::CloseBookmarkDoc()
         if ( mpDoc )
         {
             // The document owns the Medium, so the Medium will be invalid after closing the document
-            ((SdDrawDocument*) mpDoc)->CloseBookmarkDoc();
+            const_cast<SdDrawDocument*>(mpDoc)->CloseBookmarkDoc();
             mpMedium = 0;
         }
     }
