@@ -2451,6 +2451,29 @@ void SdXImpressDocument::setGraphicSelection(int nType, int nX, int nY)
     }
 }
 
+void SdXImpressDocument::resetSelection()
+{
+    SolarMutexGuard aGuard;
+
+    DrawViewShell* pViewShell = GetViewShell();
+    if (!pViewShell)
+        return;
+
+    SdrView* pSdrView = pViewShell->GetView();
+    if (!pSdrView)
+        return;
+
+    if (pSdrView->IsTextEdit())
+    {
+        // Reset the editeng selection.
+        pSdrView->UnmarkAll();
+        // Finish editing.
+        pSdrView->SdrEndTextEdit();
+    }
+    // Reset graphic selection.
+    pSdrView->UnmarkAll();
+}
+
 uno::Reference< i18n::XForbiddenCharacters > SdXImpressDocument::getForbiddenCharsTable()
 {
     uno::Reference< i18n::XForbiddenCharacters > xForb(mxForbidenCharacters);

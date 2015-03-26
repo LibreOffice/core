@@ -124,7 +124,7 @@ public:
     /**
      * @see lok::Document::resetSelection().
      */
-    virtual void resetSelection() { }
+    virtual void resetSelection() = 0;
 };
 
 } // namespace vcl
