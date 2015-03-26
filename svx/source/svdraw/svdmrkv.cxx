@@ -703,6 +703,17 @@ void SdrMarkView::SetMarkHandles()
             {
                 return;
             }
+
+            if (bTiledRendering && pMarkedObj->GetObjIdentifier() == OBJ_TABLE)
+            {
+                rtl::Reference<sdr::SelectionController> xController = static_cast<SdrView*>(this)->getSelectionController();
+                if (xController.is() && xController->hasSelectedCells())
+                {
+                    // The table shape has selected cells, which provide text selection already -> no graphic selection.
+                    GetModel()->libreOfficeKitCallback(LOK_CALLBACK_GRAPHIC_SELECTION, "EMPTY");
+                    return;
+                }
+            }
         }
 
         Rectangle aRect(GetMarkedObjRect());

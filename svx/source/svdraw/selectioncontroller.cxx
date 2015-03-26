@@ -100,6 +100,11 @@ bool SelectionController::ApplyFormatPaintBrush( SfxItemSet& /*rFormatSet*/, boo
     return false;
 }
 
+bool SelectionController::hasSelectedCells() const
+{
+    return false;
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -92,7 +92,7 @@ public:
     SVX_DLLPRIVATE virtual bool GetMarkedObjModel( SdrPage* pNewPage ) SAL_OVERRIDE;
     SVX_DLLPRIVATE virtual bool PasteObjModel( const SdrModel& rModel ) SAL_OVERRIDE;
 
-    SVX_DLLPRIVATE bool hasSelectedCells() const { return mbCellSelectionMode || mpView->IsTextEdit(); }
+    SVX_DLLPRIVATE virtual bool hasSelectedCells() const SAL_OVERRIDE { return mbCellSelectionMode || mpView->IsTextEdit(); }
 
     void getSelectedCells( CellPos& rFirstPos, CellPos& rLastPos );
     void setSelectedCells( const CellPos& rFirstPos, const CellPos& rLastPos );
