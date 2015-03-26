@@ -20,6 +20,7 @@
 #define INCLUDED_EDITENG_BULLETITEM_HXX
 
 #include <editeng/editengdllapi.h>
+#include <o3tl/typed_flags_set.hxx>
 
 
 // define ----------------------------------------------------------------
@@ -36,14 +37,6 @@ enum class SvxBulletStyle
     BULLET           = 6,
     BMP              = 128
 };
-
-// Justification
-#define BJ_HLEFT            0x01
-#define BJ_HRIGHT           0x02
-#define BJ_HCENTER          0x04
-#define BJ_VTOP             0x08
-#define BJ_VBOTTOM          0x10
-#define BJ_VCENTER          0x20
 
 // Valid-Bits
 // First, only the values that are changed by the dialogue ...
@@ -73,7 +66,6 @@ class EDITENG_DLLPUBLIC SvxBulletItem : public SfxPoolItem
     long            nWidth;
     sal_uInt16      nScale;
     sal_Unicode     cSymbol;
-    sal_uInt8       nJustify;
     sal_uInt16      nValidMask; // Only temporary for GetAttribs / setAttribs,
                                 // because of the large Bullets
 
@@ -100,7 +92,6 @@ public:
     sal_uInt16          GetStart() const { return nStart; }
     long                GetWidth() const { return nWidth; }
     SvxBulletStyle      GetStyle() const { return nStyle; }
-    sal_uInt8           GetJustification() const { return nJustify; }
     vcl::Font           GetFont() const { return aFont; }
     sal_uInt16          GetScale() const { return nScale; }
 
@@ -114,7 +105,6 @@ public:
     void                SetStart( sal_uInt16 nNew ) { nStart = nNew; }
     void                SetWidth( long nNew ) { nWidth = nNew; }
     void                SetStyle( SvxBulletStyle nNew ) { nStyle = nNew; }
-    void                SetJustification( sal_uInt8 nNew ) { nJustify = nNew; }
     void                SetFont( const vcl::Font& rNew) { aFont = rNew; }
     void                SetScale( sal_uInt16 nNew ) { nScale = nNew; }
 

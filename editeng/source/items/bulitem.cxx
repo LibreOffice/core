@@ -114,7 +114,6 @@ SvxBulletItem::SvxBulletItem( SvStream& rStrm, sal_uInt16 _nWhich )
     , nStart(0)
     , nStyle(SvxBulletStyle::ABC_BIG)
     , nScale(0)
-    , nJustify(0)
 {
     sal_uInt16 nTmp1;
     rStrm.ReadUInt16( nTmp1 );
@@ -149,7 +148,8 @@ SvxBulletItem::SvxBulletItem( SvStream& rStrm, sal_uInt16 _nWhich )
     sal_Int32 nTmp(0);
     rStrm.ReadInt32( nTmp ); nWidth = nTmp;
     rStrm.ReadUInt16( nStart );
-    rStrm.ReadUChar( nJustify );
+    sal_uInt8 nTmpInt8(0);
+    rStrm.ReadUChar( nTmpInt8 ); // used to be nJustify
 
     char cTmpSymbol(0);
     rStrm.ReadChar( cTmpSymbol );
@@ -178,7 +178,6 @@ SvxBulletItem::SvxBulletItem( const SvxBulletItem& rItem) : SfxPoolItem( rItem )
     nWidth          = rItem.nWidth;
     nScale          = rItem.nScale;
     cSymbol         = rItem.cSymbol;
-    nJustify        = rItem.nJustify;
     nValidMask      = rItem.nValidMask;
 }
 
@@ -221,7 +220,6 @@ void SvxBulletItem::SetDefaults_Impl()
     nWidth          = 1200;  // 1.2cm
     nStart          = 1;
     nStyle          = SvxBulletStyle::N123;
-    nJustify        = BJ_HLEFT | BJ_VCENTER;
     cSymbol         = ' ';
     nScale          = 75;
 }
@@ -277,7 +275,6 @@ bool SvxBulletItem::operator==( const SfxPoolItem& rItem ) const
     if( nValidMask != rBullet.nValidMask    ||
         nStyle != rBullet.nStyle            ||
         nScale != rBullet.nScale            ||
-        nJustify != rBullet.nJustify        ||
         nWidth != rBullet.nWidth            ||
         nStart != rBullet.nStart            ||
         cSymbol != rBullet.cSymbol          ||
@@ -353,7 +350,7 @@ SvStream& SvxBulletItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) c
     }
     rStrm.WriteInt32( nWidth );
     rStrm.WriteUInt16( nStart );
-    rStrm.WriteUChar( nJustify );
+    rStrm.WriteUChar( 0 ); // used to be nJustify
     rStrm.WriteChar( OUStringToOString(OUString(cSymbol), aFont.GetCharSet()).toChar() );
     rStrm.WriteUInt16( nScale );
 
