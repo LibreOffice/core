@@ -160,12 +160,16 @@ bool ConstantFunction::VisitFunctionDecl(const FunctionDecl * pFunctionDecl) {
         return true;
     }
 
-    std::string aFunctionName = pFunctionDecl->getQualifiedNameAsString();
-
-    // various places override operator== and "return false;"
-    if (aFunctionName.find("::operator==") != std::string::npos ) {
+    switch (pFunctionDecl->getOverloadedOperator()) {
+    case OO_Delete:
+    case OO_EqualEqual:
+    case OO_Call:
         return true;
+    default:
+        break;
     }
+
+    std::string aFunctionName = pFunctionDecl->getQualifiedNameAsString();
 
     // something to do with dynamic loading in sal/textenc/textenc.cxx
     if (aFunctionName == "thisModule") {
@@ -185,11 +189,6 @@ bool ConstantFunction::VisitFunctionDecl(const FunctionDecl * pFunctionDecl) {
     }
     // a pointer to this function is taken and passed to an underlying API, cppuhelper/source/exc_thrower.cxx
     if (aFunctionName == "ExceptionThrower_acquire_release_nop") {
-        return true;
-    }
-    // /store/
-    if (aFunctionName == "store::PageData::operator delete"
-        || aFunctionName == "(anonymous namespace)::Entry::operator delete") {
         return true;
     }
     // differetnt hook function is called on different platforms, /vcl/source/app/svmainhook.cxx
@@ -242,10 +241,6 @@ bool ConstantFunction::VisitFunctionDecl(const FunctionDecl * pFunctionDecl) {
     }
     // only used on Windows, basic/source/sbx/sbxdec.cxx
     if (aFunctionName == "SbxDecimal::neg" || aFunctionName == "SbxDecimal::isZero") {
-        return true;
-    }
-    // template stuff, include/sfx2/thumbnailview.hxx
-    if (aFunctionName == "ViewFilterAll::operator()") {
         return true;
     }
     // used as a callback, include/sfx2/shell.hxx
@@ -309,24 +304,12 @@ bool ConstantFunction::VisitFunctionDecl(const FunctionDecl * pFunctionDecl) {
     if (aFunctionName == "accessibility::CreateEmptyShapeReference") {
         return true;
     }
-    //  svx/source/inc/frmselimpl.hxx
-    if (aFunctionName == "svx::FrameBorderDummy_Pred::operator()") {
-        return true;
-    }
-    //  desktop/source/lib/init.cxx
-    if (aFunctionName == "NoDelete::operator()") {
-        return true;
-    }
     //  chart2/source/view/main/AbstractShapeFactory.cxx
     if (aFunctionName == "chart::(anonymous namespace)::thisModule") {
         return true;
     }
     //  chart2/source/tools/InternalData.cxx
     if (aFunctionName == "chart::InternalData::dump") {
-        return true;
-    }
-    //  chart2/source/view/main/DummyXShape.cxx
-    if (aFunctionName == "chart::dummy::(anonymous namespace)::PrintProperties::operator()") {
         return true;
     }
     //  hwpfilter/
@@ -351,10 +334,6 @@ bool ConstantFunction::VisitFunctionDecl(const FunctionDecl * pFunctionDecl) {
     }
     // callback, sw/source/filter/ww8/ww8par5.cxx
     if (aFunctionName == "SwWW8ImplReader::Read_F_Shape") {
-        return true;
-    }
-    // callback, sd/source/ui/framework/tools/FrameworkHelper.cxx
-    if (aFunctionName == "sd::framework::(anonymous namespace)::FrameworkHelperAllPassFilter::operator()") {
         return true;
     }
     // called from SDI file, I don't know what that stuff is about, sd/source/ui/slidesorter/shell/SlideSorterViewShell.cx
