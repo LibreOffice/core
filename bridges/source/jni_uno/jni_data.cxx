@@ -2307,7 +2307,7 @@ void Bridge::map_to_java(
 
             if (0 < nElements)
             {
-                char * p = (char *)seq->elements;
+                char * p = const_cast<char *>(seq->elements);
                 sal_Int32 nSize = element_info->m_td.get()->nSize;
                 for ( sal_Int32 nPos = 0; nPos < nElements; ++nPos )
                 {

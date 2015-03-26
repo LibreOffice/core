@@ -496,7 +496,7 @@ uno_Interface * Bridge::map_to_uno(
     {
         // refcount initially 1
         pUnoI = new UNO_proxy(
-            jni, const_cast< Bridge * >( this ),
+            jni, this,
             javaI, static_cast<jstring>(jo_oid.get()), oid, info );
 
         (*m_uno_env->registerProxyInterface)(
