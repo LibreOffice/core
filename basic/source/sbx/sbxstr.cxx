@@ -165,7 +165,7 @@ void ImpPutString( SbxValues* p, const OUString* n )
     // as a precaution, if a NULL-Ptr appears
     if( !n )
         n = pTmp = new OUString;
-    aTmp.pOUString = (OUString*)n;
+    aTmp.pOUString = const_cast<OUString*>(n);
     switch( +p->eType )
     {
         case SbxCHAR:

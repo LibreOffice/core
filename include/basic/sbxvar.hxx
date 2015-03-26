@@ -80,7 +80,7 @@ struct SbxValues
     SbxValues( unsigned int _nUInt ): nUInt( _nUInt ), eType(SbxUINT) {}
     SbxValues( float _nSingle ): nSingle( _nSingle ), eType(SbxSINGLE) {}
     SbxValues( double _nDouble ): nDouble( _nDouble ), eType(SbxDOUBLE) {}
-    SbxValues( const OUString* _pString ): pOUString( (OUString*)_pString ), eType(SbxSTRING) {}
+    SbxValues( const OUString* _pString ): pOUString( const_cast<OUString*>(_pString) ), eType(SbxSTRING) {}
     SbxValues( SbxBase* _pObj ): pObj( _pObj ), eType(SbxOBJECT) {}
     SbxValues( sal_Unicode* _pChar ): pChar( _pChar ), eType(SbxLPSTR) {}
     SbxValues( void* _pData ): pData( _pData ), eType(SbxPOINTER) {}

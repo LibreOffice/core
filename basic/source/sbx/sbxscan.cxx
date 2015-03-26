@@ -460,7 +460,7 @@ bool ImpConvStringExt( OUString& rSrc, SbxDataType eTargetType )
                 sal_Int32 nPos = aNewString.indexOf( cDecimalSep );
                 if( nPos != -1 )
                 {
-                    sal_Unicode* pStr = (sal_Unicode*)aNewString.getStr();
+                    sal_Unicode* pStr = const_cast<sal_Unicode*>(aNewString.getStr());
                     pStr[nPos] = (sal_Unicode)'.';
                     bChanged = true;
                 }

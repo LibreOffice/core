@@ -671,7 +671,7 @@ bool SbxObject::StoreData( SvStream& rStrm ) const
     {
         return false;
     }
-    ((SbxObject*) this)->SetModified( false );
+    const_cast<SbxObject*>(this)->SetModified( false );
     return true;
 }
 

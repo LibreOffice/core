@@ -1583,14 +1583,14 @@ StarBASIC* BasicManager::CreateLibForLibContainer( const OUString& rLibName,
 
 BasicLibInfo* BasicManager::FindLibInfo( StarBASIC* pBasic ) const
 {
-    BasicLibInfo* pInf = ((BasicManager*)this)->pLibs->First();
+    BasicLibInfo* pInf = const_cast<BasicManager*>(this)->pLibs->First();
     while ( pInf )
     {
         if ( pInf->GetLib() == pBasic )
         {
             return pInf;
         }
-        pInf = ((BasicManager*)this)->pLibs->Next();
+        pInf = const_cast<BasicManager*>(this)->pLibs->Next();
     }
     return 0;
 }

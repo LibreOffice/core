@@ -97,7 +97,7 @@ SbxValue::SbxValue( const SbxValue& r )
     }
     else
     {
-        ((SbxValue*) &r)->Broadcast( SBX_HINT_DATAWANTED );
+        const_cast<SbxValue*>(&r)->Broadcast( SBX_HINT_DATAWANTED );
         aData = r.aData;
         // Copy pointer, increment references
         switch( aData.eType )
@@ -237,7 +237,7 @@ SbxValue* SbxValue::TheRealValue() const
 
 SbxValue* SbxValue::TheRealValue( bool bObjInObjError ) const
 {
-    SbxValue* p = (SbxValue*) this;
+    SbxValue* p = const_cast<SbxValue*>(this);
     for( ;; )
     {
         SbxDataType t = SbxDataType( p->aData.eType & 0x0FFF );
@@ -412,11 +412,11 @@ const OUString& SbxValue::GetCoreString() const
     aRes.eType = SbxCoreSTRING;
     if( Get( aRes ) )
     {
-        ((SbxValue*) this)->aToolString = *aRes.pOUString;
+        const_cast<SbxValue*>(this)->aToolString = *aRes.pOUString;
     }
     else
     {
-        ((SbxValue*) this)->aToolString.clear();
+        const_cast<SbxValue*>(this)->aToolString.clear();
     }
     return aToolString;
 }
@@ -598,7 +598,7 @@ bool SbxValue::PutStringExt( const OUString& r )
     if( ImpConvStringExt( aStr, eTargetType ) )
         aRes.pOUString = (OUString*)&aStr;
     else
-        aRes.pOUString = (OUString*)&r;
+        aRes.pOUString = const_cast<OUString*>(&r);
 
     // #34939: For Strings which contain a number, and if this has a Num-Type,
     // set a Fixed flag so that the type will not be changed
@@ -677,7 +677,7 @@ bool SbxValue::PutString( const OUString& r )
 {
     SbxValues aRes;
     aRes.eType = SbxSTRING;
-    aRes.pOUString = (OUString*) &r;
+    aRes.pOUString = const_cast<OUString*>(&r);
     Put( aRes );
     return !IsError();
 }
@@ -1567,9 +1567,9 @@ bool SbxValue::LoadData( SvStream& r, sal_uInt16 )
                 r.WriteInt32( aData.nLong ); break;
             case SbxDATE:
                 // #49935: Save as double, otherwise an error during the read in
-                ((SbxValue*)this)->aData.eType = (SbxDataType)( ( nType & 0xF000 ) | SbxDOUBLE );
+                const_cast<SbxValue*>(this)->aData.eType = (SbxDataType)( ( nType & 0xF000 ) | SbxDOUBLE );
                 write_uInt16_lenPrefixed_uInt8s_FromOUString(r, GetCoreString(), RTL_TEXTENCODING_ASCII_US);
-                ((SbxValue*)this)->aData.eType = (SbxDataType)nType;
+                const_cast<SbxValue*>(this)->aData.eType = (SbxDataType)nType;
                 break;
             case SbxSINGLE:
             case SbxDOUBLE:

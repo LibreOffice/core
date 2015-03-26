@@ -226,7 +226,7 @@ const OUString& SbxVariable::GetName( SbxNameType t ) const
         return maName;
     }
     // Request parameter-information (not for objects)
-    ((SbxVariable*)this)->GetInfo();
+    const_cast<SbxVariable*>(this)->GetInfo();
     // Append nothing, if it is a simple property (no empty brackets)
     if( !pInfo || ( pInfo->aParams.empty() && GetClass() == SbxCLASS_PROPERTY ))
     {
@@ -317,7 +317,7 @@ const OUString& SbxVariable::GetName( SbxNameType t ) const
             aTmp += OUString( SbxRes( STRING_ANY ) );
         }
     }
-    ((SbxVariable*) this)->aToolString = aTmp;
+    const_cast<SbxVariable*>(this)->aToolString = aTmp;
     return aToolString;
 }
 
@@ -594,7 +594,7 @@ bool SbxVariable::StoreData( SvStream& rStrm ) const
     {
         // #50200 Avoid that objects , which during the runtime
         // as return-value are saved in the method as a value were saved
-        SbxVariable* pThis = (SbxVariable*)this;
+        SbxVariable* pThis = const_cast<SbxVariable*>(this);
         SbxFlagBits nSaveFlags = GetFlags();
         pThis->SetFlag( SBX_WRITE );
         pThis->SbxValue::Clear();

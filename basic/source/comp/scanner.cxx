@@ -275,7 +275,7 @@ bool SbiScanner::NextSym()
             aSym = aSymCopy;
 
             // HACK: modifying a potentially shared string here!
-            *((sal_Unicode*)(pLine-1)) = ' ';
+            *const_cast<sal_Unicode*>(pLine-1) = ' ';
         }
 
         // type recognition?

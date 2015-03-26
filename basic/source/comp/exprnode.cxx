@@ -73,7 +73,7 @@ SbiExprNode::SbiExprNode( SbiParser* p, const SbiSymDef& r, SbxDataType t, SbiEx
 
     eType     = ( t == SbxVARIANT ) ? r.GetType() : t;
     eNodeType = SbxVARVAL;
-    aVar.pDef = (SbiSymDef*) &r;
+    aVar.pDef = const_cast<SbiSymDef*>(&r);
     aVar.pPar = l;
     aVar.pvMorePar = NULL;
     aVar.pNext= NULL;

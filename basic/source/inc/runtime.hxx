@@ -189,7 +189,7 @@ public:
     SbiDdeControl* GetDdeControl() { return pDdeCtrl; }
     StarBASIC* GetBasic( void ) { return pBasic; }
     SbiDllMgr* GetDllMgr();
-    SbiRTLData* GetRTLData() const { return (SbiRTLData*)&aRTLData; }
+    SbiRTLData* GetRTLData() const { return const_cast<SbiRTLData*>(&aRTLData); }
 
     SvNumberFormatter* GetNumberFormatter();
     sal_uInt32 GetStdDateIdx() const { return nStdDateIdx; }

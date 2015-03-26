@@ -338,7 +338,7 @@ void SbiCodeGen::Save()
                         SbxParamInfo* pParam = NULL;
                         if( nUserData )
                         {
-                            pParam = (SbxParamInfo*)pInfo->GetParam( i );
+                            pParam = const_cast<SbxParamInfo*>(pInfo->GetParam( i ));
                         }
                         if( pParam )
                         {
