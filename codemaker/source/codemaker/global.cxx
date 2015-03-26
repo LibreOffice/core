@@ -138,7 +138,7 @@ OString createFileNameFromType( const OString& destination,
         }
 
 #if defined(SAL_UNX)
-        if (mkdir((char*)buffer.getStr(), 0777) == -1)
+        if (mkdir(buffer.getStr(), 0777) == -1)
 #else
         if (mkdir((char*)buffer.getStr()) == -1)
 #endif
