@@ -79,7 +79,7 @@ public:
 };
 
 ImplCommonButtonData::ImplCommonButtonData() : maFocusRect(), mnSeparatorX(0), mnButtonState(0),
-mbSmallSymbol(false), maImage(), meImageAlign(IMAGEALIGN_TOP), meSymbolAlign(SYMBOLALIGN_LEFT)
+mbSmallSymbol(false), maImage(), meImageAlign(IMAGEALIGN_TOP), meSymbolAlign(SymbolAlign::LEFT)
 {
 }
 
@@ -463,7 +463,7 @@ void Button::ImplDrawAlignedImage( OutputDevice* pDev, Point& rPos,
 
     if ( bHasSymbol )
     {
-        if ( mpButtonData->meSymbolAlign == SYMBOLALIGN_RIGHT )
+        if ( mpButtonData->meSymbolAlign == SymbolAlign::RIGHT )
         {
             Point aRightPos = Point( aTextPos.X() + aTextSize.Width() + aSymbolSize.Width()/2, aTextPos.Y() );
             *pSymbolRect = Rectangle( aRightPos, aSymbolSize );

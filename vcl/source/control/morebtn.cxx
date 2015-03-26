@@ -47,7 +47,7 @@ void MoreButton::ImplInit( vcl::Window* pParent, WinBits nStyle )
 
     ShowState();
 
-    SetSymbolAlign(SYMBOLALIGN_RIGHT);
+    SetSymbolAlign(SymbolAlign::RIGHT);
     SetImageAlign(IMAGEALIGN_RIGHT); //Resoves: fdo#31849 ensure button remains vertically centered
     SetSmallSymbol(true);
 
