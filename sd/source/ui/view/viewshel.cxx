@@ -651,6 +651,17 @@ bool ViewShell::HandleScrollCommand(const CommandEvent& rCEvt, ::sd::Window* pWi
                 }
             }
             break;
+        case COMMAND_LONGPRESS:
+            {
+                rtl::Reference< SlideShow > xSlideShow( SlideShow::GetSlideShow( GetViewShellBase() ) );
+                if (xSlideShow.is())
+                {
+                    const CommandLongPressData* pLongPressData = rCEvt.GetLongPressData();
+                    bDone = xSlideShow->longpress(*pLongPressData);
+                }
+            }
+            break;
+
         case COMMAND_WHEEL:
             {
                 Reference< XSlideShowController > xSlideShowController( SlideShow::GetSlideShowController(GetViewShellBase() ) );

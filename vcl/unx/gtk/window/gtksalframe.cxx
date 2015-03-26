@@ -994,6 +994,12 @@ void GtkSalFrame::InitCommon()
     g_signal_connect(pSwipe, "swipe", G_CALLBACK(gestureSwipe), this);
     gtk_event_controller_set_propagation_phase(GTK_EVENT_CONTROLLER (pSwipe), GTK_PHASE_TARGET);
     g_object_weak_ref(G_OBJECT(m_pWindow), reinterpret_cast<GWeakNotify>(g_object_unref), pSwipe);
+
+    GtkGesture *pLongPress = gtk_gesture_long_press_new(m_pWindow);
+    g_signal_connect(pLongPress, "pressed", G_CALLBACK(gestureLongPress), this);
+    gtk_event_controller_set_propagation_phase(GTK_EVENT_CONTROLLER (pLongPress), GTK_PHASE_TARGET);
+    g_object_weak_ref(G_OBJECT(m_pWindow), reinterpret_cast<GWeakNotify>(g_object_unref), pLongPress);
+
 #endif
 
 #else
@@ -3325,6 +3331,22 @@ void GtkSalFrame::gestureSwipe(GtkGestureSwipe* gesture, gdouble velocity_x, gdo
 
     pThis->CallCallback(SALEVENT_SWIPE, &aEvent);
 }
+
+void GtkSalFrame::gestureLongPress(GtkGestureLongPress* gesture, gpointer frame)
+{
+    GtkSalFrame* pThis = (GtkSalFrame*)frame;
+
+    SalLongPressEvent aEvent;
+
+    gdouble x, y;
+    GdkEventSequence *sequence = gtk_gesture_single_get_current_sequence(GTK_GESTURE_SINGLE(gesture));
+    gtk_gesture_get_point(GTK_GESTURE(gesture), sequence, &x, &y);
+    aEvent.mnX = x;
+    aEvent.mnY = y;
+
+    pThis->CallCallback(SALEVENT_LONGPRESS, &aEvent);
+}
+
 #endif
 
 gboolean GtkSalFrame::signalMotion( GtkWidget*, GdkEventMotion* pEvent, gpointer frame )

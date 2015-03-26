@@ -239,6 +239,7 @@ class GtkSalFrame : public SalFrame, public X11WindowProvider
     static gboolean     signalDraw( GtkWidget*, cairo_t *cr, gpointer );
 #if GTK_CHECK_VERSION(3,14,0)
     static void         gestureSwipe(GtkGestureSwipe* gesture, gdouble velocity_x, gdouble velocity_y, gpointer frame);
+    static void         gestureLongPress(GtkGestureLongPress* gesture, gpointer frame);
 #endif
 #else
     static gboolean     signalExpose( GtkWidget*, GdkEventExpose*, gpointer );

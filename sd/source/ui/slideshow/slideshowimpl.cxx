@@ -1235,7 +1235,7 @@ void SlideshowImpl::slideEnded(const bool bReverse)
 
 bool SlideshowImpl::swipe(const CommandSwipeData &rSwipeData)
 {
-    if (mbUsePen)
+    if (mbUsePen || mnContextMenuEvent)
         return false;
 
     double nVelocityX = rSwipeData.getVelocityX();
@@ -1250,6 +1250,17 @@ bool SlideshowImpl::swipe(const CommandSwipeData &rSwipeData)
     //a swipe is followed by a mouse up, tell the view to ignore that mouse up as we've reacted
     //to the swipe instead
     mxView->ignoreNextMouseReleased();
+    return true;
+}
+
+bool SlideshowImpl::longpress(const CommandLongPressData &rLongPressData)
+{
+    if (mnContextMenuEvent)
+        return false;
+
+    maPopupMousePos = Point(rLongPressData.getX(), rLongPressData.getY());
+    mnContextMenuEvent = Application::PostUserEvent( LINK( this, SlideshowImpl, ContextMenuHdl ) );
+
     return true;
 }
 

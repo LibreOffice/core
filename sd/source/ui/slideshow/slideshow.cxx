@@ -1064,6 +1064,11 @@ bool SlideShow::swipe(const CommandSwipeData& rSwipeData)
     return mxController.is() && mxController->swipe(rSwipeData);
 }
 
+bool SlideShow::longpress(const CommandLongPressData& rLongPressData)
+{
+    return mxController.is() && mxController->longpress(rLongPressData);
+}
+
 void SlideShow::StartInPlacePresentationConfigurationCallback()
 {
     if( mnInPlaceConfigEvent != 0 )

@@ -355,6 +355,26 @@ public:
     double getVelocityY() const { return mnVelocityY; }
 };
 
+class VCL_DLLPUBLIC CommandLongPressData
+{
+    double mnX;
+    double mnY;
+public:
+    CommandLongPressData()
+        : mnX(0)
+        , mnY(0)
+    {
+    }
+    CommandLongPressData(double nX, double nY)
+        : mnX(nX)
+        , mnY(nY)
+    {
+    }
+    double getX() const { return mnX; }
+    double getY() const { return mnY; }
+};
+
+
 // - CommandEvent -
 #define COMMAND_CONTEXTMENU             ((sal_uInt16)1)
 #define COMMAND_STARTDRAG               ((sal_uInt16)2)
@@ -376,6 +396,7 @@ public:
 #define COMMAND_PREPARERECONVERSION     ((sal_uInt16)19)
 #define COMMAND_QUERYCHARPOSITION       ((sal_uInt16)20)
 #define COMMAND_SWIPE                   ((sal_uInt16)21)
+#define COMMAND_LONGPRESS               ((sal_uInt16)22)
 
 class VCL_DLLPUBLIC CommandEvent
 {
@@ -404,6 +425,7 @@ public:
           CommandMediaData*             GetMediaData() const;
     const CommandSelectionChangeData*   GetSelectionChangeData() const;
     const CommandSwipeData*             GetSwipeData() const;
+    const CommandLongPressData*         GetLongPressData() const;
 };
 
 inline CommandEvent::CommandEvent()
@@ -490,6 +512,14 @@ inline const CommandSwipeData* CommandEvent::GetSwipeData() const
 {
     if( mnCommand == COMMAND_SWIPE )
         return (const CommandSwipeData*)(mpData);
+    else
+        return NULL;
+}
+
+inline const CommandLongPressData* CommandEvent::GetLongPressData() const
+{
+    if( mnCommand == COMMAND_LONGPRESS )
+        return (const CommandLongPressData*)(mpData);
     else
         return NULL;
 }

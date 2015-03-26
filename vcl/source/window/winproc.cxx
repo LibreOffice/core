@@ -1375,7 +1375,7 @@ static bool shouldReusePreviousMouseWindow(const SalWheelMouseEvent& rPrevEvt, c
     return (rEvt.mnX == rPrevEvt.mnX && rEvt.mnY == rPrevEvt.mnY && rEvt.mnTime-rPrevEvt.mnTime < 500/*ms*/);
 }
 
-class HandleGestureEvent
+class HandleGestureEventBase
 {
 protected:
     ImplSVData* m_pSVData;
@@ -1395,7 +1395,7 @@ public:
         }
     };
 
-    HandleGestureEvent(vcl::Window *pWindow, const Point &rMousePos)
+    HandleGestureEventBase(vcl::Window *pWindow, const Point &rMousePos)
         : m_pSVData(ImplGetSVData())
         , m_pWindow(pWindow)
         , m_aMousePos(rMousePos)
@@ -1406,46 +1406,10 @@ public:
     vcl::Window *Dispatch(const WindowDescription& rTarget);
     virtual bool CallCommand(vcl::Window *pWindow, const Point &rMousePos) = 0;
     void Teardown(const WindowDescription& rTarget);
-    virtual ~HandleGestureEvent() {}
+    virtual ~HandleGestureEventBase() {}
 };
 
-class HandleWheelEvent : public HandleGestureEvent
-{
-private:
-    CommandWheelData m_aWheelData;
-public:
-    HandleWheelEvent(vcl::Window *pWindow, const SalWheelMouseEvent& rEvt, bool bScaleDirectly)
-        : HandleGestureEvent(pWindow, Point(rEvt.mnX, rEvt.mnY))
-    {
-        CommandWheelMode nMode;
-        sal_uInt16 nCode = rEvt.mnCode;
-        bool bHorz = rEvt.mbHorz;
-        bool bPixel = rEvt.mbDeltaIsPixel;
-        if (bScaleDirectly)
-            nMode = CommandWheelMode::ZOOM_SCALE;
-        else if ( nCode & KEY_MOD1 )
-            nMode = CommandWheelMode::ZOOM;
-        else if ( nCode & KEY_MOD2 )
-            nMode = CommandWheelMode::DATAZOOM;
-        else
-        {
-            nMode = CommandWheelMode::SCROLL;
-            // #i85450# interpret shift-wheel as horizontal wheel action
-            if( (nCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_MOD3)) == KEY_SHIFT )
-                bHorz = true;
-        }
-
-        m_aWheelData = CommandWheelData(rEvt.mnDelta, rEvt.mnNotchDelta, rEvt.mnScrollLines, nMode, nCode, bHorz, bPixel);
-
-    }
-    virtual bool CallCommand(vcl::Window *pWindow, const Point &rMousePos) SAL_OVERRIDE
-    {
-        return ImplCallWheelCommand(pWindow, rMousePos, &m_aWheelData);
-    }
-    bool HandleEvent(const SalWheelMouseEvent& rEvt);
-};
-
-bool HandleGestureEvent::Setup()
+bool HandleGestureEventBase::Setup()
 {
     ImplDelData aDogTag( m_pWindow );
 
@@ -1458,7 +1422,7 @@ bool HandleGestureEvent::Setup()
     return true;
 }
 
-HandleGestureEvent::WindowDescription HandleGestureEvent::FindTarget()
+HandleGestureEventBase::WindowDescription HandleGestureEventBase::FindTarget()
 {
     // first check any floating window ( eg. drop down listboxes)
     bool bIsFloat = false;
@@ -1495,7 +1459,7 @@ HandleGestureEvent::WindowDescription HandleGestureEvent::FindTarget()
     return WindowDescription(pMouseWindow, bIsFloat);
 }
 
-vcl::Window *HandleGestureEvent::Dispatch(const WindowDescription& rTarget)
+vcl::Window *HandleGestureEventBase::Dispatch(const WindowDescription& rTarget)
 {
     vcl::Window *pMouseWindow = rTarget.m_pMouseWindow;
 
@@ -1537,7 +1501,7 @@ vcl::Window *HandleGestureEvent::Dispatch(const WindowDescription& rTarget)
     return pDispatchedTo;
 }
 
-void HandleGestureEvent::Teardown(const WindowDescription& rTarget)
+void HandleGestureEventBase::Teardown(const WindowDescription& rTarget)
 {
     // close floaters
     if (!rTarget.m_bIsFloat && m_pSVData->maWinData.mpFirstFloat)
@@ -1553,6 +1517,42 @@ void HandleGestureEvent::Teardown(const WindowDescription& rTarget)
         }
     }
 }
+
+class HandleWheelEvent : public HandleGestureEventBase
+{
+private:
+    CommandWheelData m_aWheelData;
+public:
+    HandleWheelEvent(vcl::Window *pWindow, const SalWheelMouseEvent& rEvt, bool bScaleDirectly)
+        : HandleGestureEventBase(pWindow, Point(rEvt.mnX, rEvt.mnY))
+    {
+        CommandWheelMode nMode;
+        sal_uInt16 nCode = rEvt.mnCode;
+        bool bHorz = rEvt.mbHorz;
+        bool bPixel = rEvt.mbDeltaIsPixel;
+        if (bScaleDirectly)
+            nMode = CommandWheelMode::ZOOM_SCALE;
+        else if ( nCode & KEY_MOD1 )
+            nMode = CommandWheelMode::ZOOM;
+        else if ( nCode & KEY_MOD2 )
+            nMode = CommandWheelMode::DATAZOOM;
+        else
+        {
+            nMode = CommandWheelMode::SCROLL;
+            // #i85450# interpret shift-wheel as horizontal wheel action
+            if( (nCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_MOD3)) == KEY_SHIFT )
+                bHorz = true;
+        }
+
+        m_aWheelData = CommandWheelData(rEvt.mnDelta, rEvt.mnNotchDelta, rEvt.mnScrollLines, nMode, nCode, bHorz, bPixel);
+
+    }
+    virtual bool CallCommand(vcl::Window *pWindow, const Point &rMousePos) SAL_OVERRIDE
+    {
+        return ImplCallWheelCommand(pWindow, rMousePos, &m_aWheelData);
+    }
+    bool HandleEvent(const SalWheelMouseEvent& rEvt);
+};
 
 bool HandleWheelEvent::HandleEvent(const SalWheelMouseEvent& rEvt)
 {
@@ -1581,6 +1581,30 @@ bool HandleWheelEvent::HandleEvent(const SalWheelMouseEvent& rEvt)
     return pPreviousWindow != NULL;
 }
 
+class HandleGestureEvent : public HandleGestureEventBase
+{
+public:
+    HandleGestureEvent(vcl::Window *pWindow, const Point &rMousePos)
+        : HandleGestureEventBase(pWindow, rMousePos)
+    {
+    }
+    bool HandleEvent();
+};
+
+bool HandleGestureEvent::HandleEvent()
+{
+    if (!Setup())
+        return false;
+
+    WindowDescription aTarget = FindTarget();
+
+    bool bHandled = Dispatch(aTarget) != NULL;
+
+    Teardown(aTarget);
+
+    return bHandled;
+}
+
 static bool ImplHandleWheelEvent( vcl::Window* pWindow, const SalWheelMouseEvent& rEvt, bool scaleDirectly = false )
 {
     HandleWheelEvent aHandler(pWindow, rEvt, scaleDirectly);
@@ -1601,26 +1625,33 @@ public:
     {
         return ImplCallCommand(pWindow, COMMAND_SWIPE, &m_aSwipeData);
     }
-    bool HandleEvent();
 };
-
-bool HandleSwipeEvent::HandleEvent()
-{
-    if (!Setup())
-        return false;
-
-    WindowDescription aTarget = FindTarget();
-
-    bool bHandled = Dispatch(aTarget) != NULL;
-
-    Teardown(aTarget);
-
-    return bHandled;
-}
 
 static bool ImplHandleSwipe(vcl::Window *pWindow, const SalSwipeEvent& rEvt)
 {
     HandleSwipeEvent aHandler(pWindow, rEvt);
+    return aHandler.HandleEvent();
+}
+
+class HandleLongPressEvent : public HandleGestureEvent
+{
+private:
+    CommandLongPressData m_aLongPressData;
+public:
+    HandleLongPressEvent(vcl::Window *pWindow, const SalLongPressEvent& rEvt)
+        : HandleGestureEvent(pWindow, Point(rEvt.mnX, rEvt.mnY))
+    {
+        m_aLongPressData = CommandLongPressData(rEvt.mnX, rEvt.mnY);
+    }
+    virtual bool CallCommand(vcl::Window *pWindow, const Point &/*rMousePos*/) SAL_OVERRIDE
+    {
+        return ImplCallCommand(pWindow, COMMAND_LONGPRESS, &m_aLongPressData);
+    }
+};
+
+static bool ImplHandleLongPress(vcl::Window *pWindow, const SalLongPressEvent& rEvt)
+{
+    HandleLongPressEvent aHandler(pWindow, rEvt);
     return aHandler.HandleEvent();
 }
 
@@ -2672,6 +2703,11 @@ bool ImplWindowFrameProc( vcl::Window* pWindow, SalFrame* /*pFrame*/,
         case SALEVENT_SWIPE:
             nRet = ImplHandleSwipe(pWindow, *(const SalSwipeEvent*)pEvent);
             break;
+
+        case SALEVENT_LONGPRESS:
+            nRet = ImplHandleLongPress(pWindow, *(const SalLongPressEvent*)pEvent);
+            break;
+
 
 #ifdef DBG_UTIL
         default:
