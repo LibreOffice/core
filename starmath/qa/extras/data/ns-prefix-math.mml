@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<math:math xmlns:math="http://www.w3.org/1998/Math/MathML">
+  <math:msup>
+    <math:mfenced>
+      <math:mrow>
+        <math:mi>a</math:mi>
+        <math:mo>+</math:mo>
+        <math:mi>b</math:mi>
+      </math:mrow>
+    </math:mfenced>
+    <math:mn>2</math:mn>
+  </math:msup>
+</math:math>
