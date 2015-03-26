@@ -359,7 +359,7 @@ elsif ( $platform =~ m/kfreebsd/ )
 elsif ( $platform =~ m/freebsd/ ) 
 {     $BIG_SVX        = "TRUE";
       $COM            = "GCC";
-      $COMPATH        = '@COMPATH@'; 
+      $COMPATH        = '@COMPATH@' . '/bin'; 
       $CVER           = "C300";
       $GUI            = "UNX";
       $GUIBASE        = "unx";
@@ -2617,26 +2617,37 @@ sub GetCorrectPath
 	my @originalPairs = @_;
 	my @pairs = @originalPairs;
 	my @Path = split /$ps/, $oldPath;
+	my @buildPath;
+	my @sysPath;
+	my $elem;
+
+	for $elem (@Path) {
+	    if ($elem eq '.' || $elem =~ m'^$SOLARENV/' ||
+		$elem =~ m'/solenv/') {
+		    push @buildPath, $elem;
+	    } else {
+		    push @sysPath, $elem;
+	    }
+	}
 
 	while (@pairs) {
 	    my $path = shift @pairs;
 	    my $cmd = shift @pairs;
 	    my $to_append = 1;
-	    my $elem;
 
 	    if (! -x "$path/$cmd") {
 		AddWarning ("Missing executable $path/$cmd\n");
 	    }
 
-	    for $elem (@Path) {
+	    for $elem (@sysPath) {
 		if ($elem eq $path) {
 #		    print "Hit duplicate path in path; break\n";
 		    $to_append = 0;
 		    last;
 		}
-		if (-f "$elem/$cmd") {
+		if (-f "$elem/$cmd" && ! -l "$elem/$cmd") {
 #		    print "Element already in path ...\n";
-		    unshift @Path, $path;
+		    unshift @sysPath, $path;
 		    $to_append = 0;
 		    last;
 		} else {
@@ -2644,7 +2655,7 @@ sub GetCorrectPath
 		}
 	    }
 	    if ($to_append) {
-		push @Path, $path;
+		push @sysPath, $path;
 	    }
 	}
 
@@ -2654,14 +2665,14 @@ sub GetCorrectPath
 	    my $cmd = shift @pairs;
 	    my $realpath;
 
-	    $realpath = PathLookup ($cmd, @Path);
+	    $realpath = PathLookup ($cmd, @sysPath);
 	    if (!($realpath eq $path)) {
 		AddWarning ("Path conflict for executables " .
                             "$path/$cmd against $realpath");
 	    }
 	}
 
-	return join $ps, CleanupPath (@Path);
+	return join $ps, @buildPath, CleanupPath (@sysPath);
 }
 
 #------------------------------------------------------------
