@@ -652,7 +652,7 @@ export ZLIB_CFLAGS=$(gb_SPACE)@ZLIB_CFLAGS@
 export ZLIB_LIBS=$(gb_SPACE)@ZLIB_LIBS@
 
 # lang-related stuff
-include config_$(gb_Side)_lang.mk
+include $(BUILDDIR)/config_$(gb_Side)_lang.mk
 
 # tarball names
 # does use some of the variables defined above
