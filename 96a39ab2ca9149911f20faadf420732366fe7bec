@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a29b11f_3e0386ba",
+        "filename": "cppuhelper/source/bootstrap.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-03-26T10:55:20Z",
+      "side": 1,
+      "message": "and with C++14 that can be even shortened to\n\n  osl::Thread::wait(500ms);",
+      "revId": "96a39ab2ca9149911f20faadf420732366fe7bec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
