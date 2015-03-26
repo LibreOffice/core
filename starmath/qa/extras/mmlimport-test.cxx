@@ -30,10 +30,12 @@ public:
     virtual void tearDown() SAL_OVERRIDE;
 
     void testSimple();
+    void testNsPrefixMath();
     void testMaction();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testSimple);
+    CPPUNIT_TEST(testNsPrefixMath);
     CPPUNIT_TEST(testMaction);
     CPPUNIT_TEST_SUITE_END();
 
@@ -83,6 +85,15 @@ void Test::tearDown()
 void Test::testSimple()
 {
     loadURL(getURLFromSrc("starmath/qa/extras/data/simple.mml"));
+    OUString sExpected("left ( {italic \"a\" + italic \"b\"} right )^italic \"2\"");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("loaded text", sExpected, mxDocShell->GetText());
+}
+
+void Test::testNsPrefixMath()
+{
+    loadURL(getURLFromSrc("starmath/qa/extras/data/ns-prefix-math.mml"));
+    OUString sExpected("left ( {italic \"a\" + italic \"b\"} right )^italic \"2\"");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("loaded text", sExpected, mxDocShell->GetText());
 }
 
 void Test::testMaction()
