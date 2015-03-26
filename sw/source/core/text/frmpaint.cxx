@@ -316,16 +316,16 @@ void SwTxtFrm::PaintExtraData( const SwRect &rRect ) const
 
         if( HasPara() )
         {
-            SwTxtFrmLocker aLock((SwTxtFrm*)this);
+            SwTxtFrmLocker aLock(const_cast<SwTxtFrm*>(this));
 
-            SwTxtLineAccess aAccess( (SwTxtFrm*)this );
+            SwTxtLineAccess aAccess( this );
             aAccess.GetPara();
 
-            SwTxtPaintInfo aInf( (SwTxtFrm*)this, rRect );
+            SwTxtPaintInfo aInf( const_cast<SwTxtFrm*>(this), rRect );
 
             aLayoutModeModifier.Modify( false );
 
-            SwTxtPainter  aLine( (SwTxtFrm*)this, &aInf );
+            SwTxtPainter  aLine( const_cast<SwTxtFrm*>(this), &aInf );
             bool bNoDummy = !aLine.GetNext(); // Only one empty line!
 
             while( aLine.Y() + aLine.GetLineHeight() <= rRect.Top() )
@@ -605,7 +605,7 @@ void SwTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
 
             // #i29062# pass info that we are currently
             // painting.
-            ((SwTxtFrm*)this)->GetFormatted( true );
+            const_cast<SwTxtFrm*>(this)->GetFormatted( true );
             if( IsEmpty() )
             {
                 PaintEmpty( rRect, false );
@@ -620,7 +620,7 @@ void SwTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
 
         // We don't want to be interrupted while painting.
         // Do that after thr Format()!
-        SwTxtFrmLocker aLock((SwTxtFrm*)this);
+        SwTxtFrmLocker aLock(const_cast<SwTxtFrm*>(this));
 
         // We only paint the part of the TxtFrm which changed, is within the
         // range and was requested to paint.
@@ -628,7 +628,7 @@ void SwTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
         // rRepaint is set. Indeed, we cannot avoid this problem from a formal
         // perspective. Luckily we can assume rRepaint to be empty when we need
         // paint the while Frm.
-        SwTxtLineAccess aAccess( (SwTxtFrm*)this );
+        SwTxtLineAccess aAccess( this );
         SwParaPortion *pPara = aAccess.GetPara();
 
         SwRepaint &rRepaint = pPara->GetRepaint();
@@ -656,13 +656,13 @@ void SwTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
         if ( IsRightToLeft() )
             SwitchRTLtoLTR( (SwRect&)rRect );
 
-        SwTxtPaintInfo aInf( (SwTxtFrm*)this, rRect );
-        aInf.SetWrongList( ( (SwTxtNode*)GetTxtNode() )->GetWrong() );
-        aInf.SetGrammarCheckList( ( (SwTxtNode*)GetTxtNode() )->GetGrammarCheck() );
-        aInf.SetSmartTags( ( (SwTxtNode*)GetTxtNode() )->GetSmartTags() );
+        SwTxtPaintInfo aInf( const_cast<SwTxtFrm*>(this), rRect );
+        aInf.SetWrongList( const_cast<SwTxtNode*>(GetTxtNode())->GetWrong() );
+        aInf.SetGrammarCheckList( const_cast<SwTxtNode*>(GetTxtNode())->GetGrammarCheck() );
+        aInf.SetSmartTags( const_cast<SwTxtNode*>(GetTxtNode())->GetSmartTags() );
         aInf.GetTxtFly().SetTopRule();
 
-        SwTxtPainter  aLine( (SwTxtFrm*)this, &aInf );
+        SwTxtPainter  aLine( const_cast<SwTxtFrm*>(this), &aInf );
         // Optimization: if no free flying Frm overlaps into our line, the
         // SwTxtFly just switches off
         aInf.GetTxtFly().Relax();

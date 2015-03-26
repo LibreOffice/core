@@ -112,7 +112,7 @@ inline SwCntntFrm* SwCntntFrm::GetNextCntntFrm() const
     if ( GetNext() && GetNext()->IsCntntFrm() )
         return const_cast<SwCntntFrm*>(static_cast<const SwCntntFrm*>(GetNext()));
     else
-        return (SwCntntFrm*)ImplGetNextCntntFrm( true );
+        return const_cast<SwCntntFrm*>(ImplGetNextCntntFrm( true ));
 }
 
 inline SwCntntFrm* SwCntntFrm::GetPrevCntntFrm() const
@@ -120,7 +120,7 @@ inline SwCntntFrm* SwCntntFrm::GetPrevCntntFrm() const
     if ( GetPrev() && GetPrev()->IsCntntFrm() )
         return const_cast<SwCntntFrm*>(static_cast<const SwCntntFrm*>(GetPrev()));
     else
-        return (SwCntntFrm*)ImplGetNextCntntFrm( false );
+        return const_cast<SwCntntFrm*>(ImplGetNextCntntFrm( false ));
 }
 
 inline SwCntntNode *SwCntntFrm::GetNode()

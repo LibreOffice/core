@@ -54,7 +54,7 @@ void SwTOXMgr::DeleteTOXMark()
     SwTOXMark* pNext = 0;
     if( pCurTOXMark )
     {
-        pNext = (SwTOXMark*)&pSh->GotoTOXMark( *pCurTOXMark, TOX_NXT );
+        pNext = const_cast<SwTOXMark*>(&pSh->GotoTOXMark( *pCurTOXMark, TOX_NXT ));
         if( pNext == pCurTOXMark )
             pNext = 0;
 
@@ -248,7 +248,7 @@ void SwTOXMgr::NextTOXMark(bool bSame)
     if( pCurTOXMark )
     {
         SwTOXSearch eDir = bSame ? TOX_SAME_NXT : TOX_NXT;
-        pCurTOXMark = (SwTOXMark*)&pSh->GotoTOXMark( *pCurTOXMark, eDir );
+        pCurTOXMark = const_cast<SwTOXMark*>(&pSh->GotoTOXMark( *pCurTOXMark, eDir ));
     }
 }
 
@@ -258,7 +258,7 @@ void SwTOXMgr::PrevTOXMark(bool bSame)
     if( pCurTOXMark )
     {
         SwTOXSearch eDir = bSame ? TOX_SAME_PRV : TOX_PRV;
-        pCurTOXMark = (SwTOXMark*)&pSh->GotoTOXMark(*pCurTOXMark, eDir );
+        pCurTOXMark = const_cast<SwTOXMark*>(&pSh->GotoTOXMark(*pCurTOXMark, eDir ));
     }
 }
 
@@ -284,7 +284,7 @@ bool SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
     SwWait aWait( *pSh->GetView().GetDocShell(), true );
     bool bRet = true;
     const SwTOXBase* pCurTOX = ppBase && *ppBase ? *ppBase : GetCurTOX();
-    SwTOXBase* pTOX = (SwTOXBase*)pCurTOX;
+    SwTOXBase* pTOX = const_cast<SwTOXBase*>(pCurTOX);
 
     SwTOXBase * pNewTOX = NULL;
 
@@ -394,7 +394,7 @@ bool SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
             {
                 if((!ppBase || !(*ppBase)) && pSh->HasSelection())
                     pSh->DelRight();
-                pNewTOX = (SwTOXBase*)pCurTOX;
+                pNewTOX = const_cast<SwTOXBase*>(pCurTOX);
             }
             pNewTOX->SetFromObjectNames(rDesc.IsCreateFromObjectNames());
             pNewTOX->SetOLEOptions(rDesc.GetOLEOptions());

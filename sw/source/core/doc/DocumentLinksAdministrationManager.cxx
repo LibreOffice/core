@@ -154,8 +154,8 @@ namespace
                 &pTableFmt->GetDoc()->GetNodes() == &pFBox->GetSttNd()->GetNodes() )
             {
                 // a table in the normal NodesArr
-                pItem->pTblNd = (SwTableNode*)
-                                            pFBox->GetSttNd()->FindTableNode();
+                pItem->pTblNd = const_cast<SwTableNode*>(
+                                            pFBox->GetSttNd()->FindTableNode());
                 return false;
             }
             // If the name is already correct, but not the rest then we don't have them.
@@ -471,7 +471,7 @@ bool DocumentLinksAdministrationManager::SelectServerObj( const OUString& rStr, 
             SwNode* pNd;
             const SwFlyFrmFmt* pFlyFmt = m_rDoc.FindFlyByName( sName );
             if( pFlyFmt &&
-                0 != ( pIdx = (SwNodeIndex*)pFlyFmt->GetCntnt().GetCntntIdx() ) &&
+                0 != ( pIdx = const_cast<SwNodeIndex*>(pFlyFmt->GetCntnt().GetCntntIdx()) ) &&
                 !( pNd = &pIdx->GetNode())->IsNoTxtNode() )
             {
                 rpRange = new SwNodeRange( *pNd, 1, *pNd->EndOfSectionNode() );

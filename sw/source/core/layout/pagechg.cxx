@@ -493,8 +493,8 @@ void SwPageFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
         SwAttrSetChg aNewSet( *static_cast<const SwAttrSetChg*>(pNew) );
         while( true )
         {
-            _UpdateAttr( (SfxPoolItem*)aOIter.GetCurItem(),
-                         (SfxPoolItem*)aNIter.GetCurItem(), nInvFlags,
+            _UpdateAttr( aOIter.GetCurItem(),
+                         aNIter.GetCurItem(), nInvFlags,
                          &aOldSet, &aNewSet );
             if( aNIter.IsAtEnd() )
                 break;
@@ -724,7 +724,7 @@ SwPageDesc *SwPageFrm::FindPageDesc()
             SwFrm *pFlow = pFrm;
             if ( pFlow->IsInTab() )
                 pFlow = pFlow->FindTabFrm();
-            pRet = (SwPageDesc*)pFlow->GetAttrSet()->GetPageDesc().GetPageDesc();
+            pRet = const_cast<SwPageDesc*>(pFlow->GetAttrSet()->GetPageDesc().GetPageDesc());
         }
         if ( !pRet )
             pRet = &GetFmt()->GetDoc()->GetPageDesc( 0 );
@@ -740,7 +740,7 @@ SwPageDesc *SwPageFrm::FindPageDesc()
     {
         SwFlowFrm *pTmp = SwFlowFrm::CastFlowFrm( pFlow );
         if ( !pTmp->IsFollow() )
-            pRet = (SwPageDesc*)pFlow->GetAttrSet()->GetPageDesc().GetPageDesc();
+            pRet = const_cast<SwPageDesc*>(pFlow->GetAttrSet()->GetPageDesc().GetPageDesc());
     }
 
     //3. und 3.1
@@ -1479,7 +1479,7 @@ void SwRootFrm::AssertPageFlys( SwPageFrm *pPage )
                                 nCnt != pPage->GetSortedObjs()->size(),
                                 "Object couldn't be reattached!" );
 #else
-                        rFmt.NotifyClients( 0, (SwFmtAnchor*)&rAnch );
+                        rFmt.NotifyClients( 0, const_cast<SwFmtAnchor*>(&rAnch) );
 #endif
                         // Do not increment index, in this case
                         continue;

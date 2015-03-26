@@ -1669,14 +1669,14 @@ void SwHTMLTableLayout::SetWidths( bool bCallPass2, sal_uInt16 nAbsAvail,
         // are altered again.
         // Also, we need to preserve a percent setting if it exists.
         SwFrmFmt *pFrmFmt = pSwTable->GetFrmFmt();
-        ((SwTable *)pSwTable)->LockModify();
+        const_cast<SwTable *>(pSwTable)->LockModify();
         SwFmtFrmSize aFrmSize( pFrmFmt->GetFrmSize() );
         aFrmSize.SetWidth( nRelTabWidth );
         bool bRel = bUseRelWidth &&
                     text::HoriOrientation::FULL!=pFrmFmt->GetHoriOrient().GetHoriOrient();
         aFrmSize.SetWidthPercent( (sal_uInt8)(bRel ? nWidthOption : 0) );
         pFrmFmt->SetFmtAttr( aFrmSize );
-        ((SwTable *)pSwTable)->UnlockModify();
+        const_cast<SwTable *>(pSwTable)->UnlockModify();
 
         // If the table is located in a frame, we also need to adapt the
         // frame's width.

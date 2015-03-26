@@ -149,8 +149,8 @@ bool SwTxtFrm::_GetDropRect( SwRect &rRect ) const
     SWAP_IF_NOT_SWAPPED( this )
 
     OSL_ENSURE( HasPara(), "SwTxtFrm::_GetDropRect: try again next year." );
-    SwTxtSizeInfo aInf( (SwTxtFrm*)this );
-    SwTxtMargin aLine( (SwTxtFrm*)this, &aInf );
+    SwTxtSizeInfo aInf( const_cast<SwTxtFrm*>(this) );
+    SwTxtMargin aLine( const_cast<SwTxtFrm*>(this), &aInf );
     if( aLine.GetDropLines() )
     {
         rRect.Top( aLine.Y() );

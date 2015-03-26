@@ -141,7 +141,7 @@ sal_uInt16 SwDoc::GetCurTOXMark( const SwPosition& rPos,
             // the attributes are sorted by Start!
             break;
 
-        SwTOXMark* pTMark = (SwTOXMark*) &pHt->GetTOXMark();
+        SwTOXMark* pTMark = const_cast<SwTOXMark*>(&pHt->GetTOXMark());
         rArr.push_back( pTMark );
     }
     return rArr.size();
@@ -773,7 +773,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
         maMSTOCExpression.clear();
     }
 
-    SwDoc* pDoc = (SwDoc*)pSectNd->GetDoc();
+    SwDoc* pDoc = const_cast<SwDoc*>(pSectNd->GetDoc());
 
     assert(pDoc); //Where is the document?
 
@@ -853,7 +853,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
             : 0;
 
     SwNode2Layout aN2L( *pSectNd );
-    ((SwSectionNode*)pSectNd)->DelFrms();
+    const_cast<SwSectionNode*>(pSectNd)->DelFrms();
 
     // remove old content an insert one empty textnode (to hold the layout!)
     SwTxtNode* pFirstEmptyNd;
@@ -1649,7 +1649,7 @@ void SwTOXBaseSection::UpdatePageNum()
                 const SwTxtNode* pTxtNd = pBase->pTOXNd->GetTxtNode();
                 OSL_ENSURE( pTxtNd, "no TextNode, wrong TOC" );
 
-                _UpdatePageNum( (SwTxtNode*)pTxtNd, aNums, aDescs, pMainNums,
+                _UpdatePageNum( const_cast<SwTxtNode*>(pTxtNd), aNums, aDescs, pMainNums,
                                 aIntl );
             }
             DELETEZ(pMainNums);

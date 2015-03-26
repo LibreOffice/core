@@ -160,7 +160,7 @@ void SwEditWin::DropCleanup()
     g_bNoInterrupt = false;
     if ( m_bOldIdleSet )
     {
-        const_cast<SwViewOption*>(rSh.GetViewOptions())->SetIdle( m_bOldIdle );
+        rSh.GetViewOptions()->SetIdle( m_bOldIdle );
         m_bOldIdleSet = false;
     }
     if ( m_pUserMarker )
@@ -350,7 +350,7 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
             last_tick = current_tick;
             if(!m_bOldIdleSet) {
                 m_bOldIdle = rSh.GetViewOptions()->IsIdle();
-                ((SwViewOption *)rSh.GetViewOptions())->SetIdle(false);
+                rSh.GetViewOptions()->SetIdle(false);
                 m_bOldIdleSet = true;
             }
             CleanupDropUserMarker();
@@ -365,7 +365,7 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
     }
 
     if(m_bOldIdleSet) {
-        ((SwViewOption *)rSh.GetViewOptions())->SetIdle( m_bOldIdle );
+        rSh.GetViewOptions()->SetIdle( m_bOldIdle );
         m_bOldIdleSet = false;
     }
 

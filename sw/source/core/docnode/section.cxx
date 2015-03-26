@@ -87,7 +87,7 @@ public:
 
     inline SwSectionNode* GetSectNode()
     {
-        const SwNode* pSectNd( const_cast<SwIntrnlSectRefLink*>(this)->GetAnchor() );
+        const SwNode* pSectNd( GetAnchor() );
         return const_cast<SwSectionNode*>( dynamic_cast<const SwSectionNode*>( pSectNd ) );
     }
 };
@@ -718,7 +718,7 @@ void SwSectionFmt::DelFrms()
         if( pCNd )
         {
             const SfxPoolItem& rItem = pCNd->GetSwAttrSet().Get( RES_PAGEDESC );
-            pCNd->ModifyNotification( (SfxPoolItem*)&rItem, (SfxPoolItem*)&rItem );
+            pCNd->ModifyNotification( &rItem, &rItem );
         }
     }
 }
@@ -752,7 +752,7 @@ void SwSectionFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
             if( SfxItemState::SET == pNewSet->GetItemState(
                                         RES_PROTECT, false, &pItem ))
             {
-                ModifyBroadcast( (SfxPoolItem*)pItem, (SfxPoolItem*)pItem );
+                ModifyBroadcast( pItem, pItem );
                 pNewSet->ClearItem( RES_PROTECT );
                 pOldSet->ClearItem( RES_PROTECT );
             }
@@ -761,7 +761,7 @@ void SwSectionFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
             if( SfxItemState::SET == pNewSet->GetItemState(
                         RES_EDIT_IN_READONLY, false, &pItem ) )
             {
-                ModifyBroadcast( (SfxPoolItem*)pItem, (SfxPoolItem*)pItem );
+                ModifyBroadcast( pItem, pItem );
                 pNewSet->ClearItem( RES_EDIT_IN_READONLY );
                 pOldSet->ClearItem( RES_EDIT_IN_READONLY );
             }
@@ -769,14 +769,14 @@ void SwSectionFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
             if( SfxItemState::SET == pNewSet->GetItemState(
                                     RES_FTN_AT_TXTEND, false, &pItem ))
             {
-                ModifyBroadcast( (SfxPoolItem*)&pOldSet->Get( RES_FTN_AT_TXTEND ), (SfxPoolItem*)pItem );
+                ModifyBroadcast( &pOldSet->Get( RES_FTN_AT_TXTEND ), pItem );
                 pNewSet->ClearItem( RES_FTN_AT_TXTEND );
                 pOldSet->ClearItem( RES_FTN_AT_TXTEND );
             }
             if( SfxItemState::SET == pNewSet->GetItemState(
                                     RES_END_AT_TXTEND, false, &pItem ))
             {
-                ModifyBroadcast( (SfxPoolItem*)&pOldSet->Get( RES_END_AT_TXTEND ), (SfxPoolItem*)pItem );
+                ModifyBroadcast( &pOldSet->Get( RES_END_AT_TXTEND ), pItem );
                 pNewSet->ClearItem( RES_END_AT_TXTEND );
                 pOldSet->ClearItem( RES_END_AT_TXTEND );
             }

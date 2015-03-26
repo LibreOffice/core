@@ -139,7 +139,7 @@ void SwTextShell::ExecIdx(SfxRequest &rReq)
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "Dialog creation failed!");
             boost::scoped_ptr<AbstractMultiTOXTabDialog> pDlg(pFact->CreateMultiTOXTabDialog(
-                                                        pMDI, aSet, rSh, (SwTOXBase* )pCurTOX,
+                                                        pMDI, aSet, rSh, const_cast<SwTOXBase*>(pCurTOX),
                                                         USHRT_MAX, bGlobal));
             OSL_ENSURE(pDlg, "Dialog creation failed!");
             pDlg->Execute();

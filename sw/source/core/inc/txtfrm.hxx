@@ -397,7 +397,7 @@ public:
     inline void ResetBlinkPor() const;
     inline bool HasBlinkPor() const { return bBlinkPor; }
     inline void SetAnimation() const
-        { ( (SwTxtFrm*)this )->bHasAnimation = true; }
+        { const_cast<SwTxtFrm*>(this)->bHasAnimation = true; }
     inline bool HasAnimation() const { return bHasAnimation; }
 
     inline bool IsSwapped() const { return bIsSwapped; }

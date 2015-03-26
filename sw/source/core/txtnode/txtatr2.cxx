@@ -271,7 +271,7 @@ SwCharFmt* SwTxtRuby::GetCharFmt()
         }
 
         pRet = IsPoolUserFmt( nId )
-                ? const_cast<SwDoc*>(pDoc)->FindCharFmtByName( rStr )
+                ? pDoc->FindCharFmtByName( rStr )
                 : const_cast<SwDoc*>(pDoc)->getIDocumentStylePoolAccess().GetCharFmtFromPool( nId );
 
         if( bResetMod )

@@ -1599,7 +1599,7 @@ sal_Int32 SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
                 SwFontSave aSave( aSizeInf, pPor->IsDropPortion() ?
                         static_cast<SwDropPortion*>(pPor)->GetFnt() : NULL );
 
-                SwParaPortion* pPara = (SwParaPortion*)GetInfo().GetParaPortion();
+                SwParaPortion* pPara = const_cast<SwParaPortion*>(GetInfo().GetParaPortion());
                 OSL_ENSURE( pPara, "No paragraph!" );
 
                 SwDrawTextInfo aDrawInf( aSizeInf.GetVsh(),

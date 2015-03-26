@@ -213,7 +213,7 @@ sal_Int32 SwFont::GetCapitalBreak( SwViewShell const * pSh, const OutputDevice* 
 {
     // Start:
     Point aPos( 0, 0 );
-    SwDrawTextInfo aInfo(pSh, *(OutputDevice*)pOut, pScript, rTxt, nIdx, nLen,
+    SwDrawTextInfo aInfo(pSh, *const_cast<OutputDevice*>(pOut), pScript, rTxt, nIdx, nLen,
         0, false);
     aInfo.SetPos( aPos );
     aInfo.SetSpace( 0 );

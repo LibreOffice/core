@@ -304,7 +304,7 @@ void SwAttrHandler::SwAttrStack::Insert( const SwTxtAttr& rAttr, const sal_uInt1
         memmove( pArray + nPos + 1, pArray + nPos,
                 ( nCount - nPos ) * sizeof(SwTxtAttr*)
                 );
-    pArray[ nPos ] = (SwTxtAttr*)&rAttr;
+    pArray[ nPos ] = const_cast<SwTxtAttr*>(&rAttr);
 
     nCount++;
 }

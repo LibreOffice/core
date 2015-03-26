@@ -272,7 +272,7 @@ public:
 
 inline void SwFieldType::UpdateFlds() const
 {
-    ((SwFieldType*)this)->ModifyNotification( 0, 0 );
+    const_cast<SwFieldType*>(this)->ModifyNotification( 0, 0 );
 }
 
 /** Base class of all fields.
@@ -414,7 +414,7 @@ public:
     virtual SwFieldType*    ChgTyp( SwFieldType* ) SAL_OVERRIDE;
     virtual void            SetLanguage(sal_uInt16 nLng) SAL_OVERRIDE;
 
-    inline SwDoc*           GetDoc() const          { return const_cast<SwValueFieldType*>(static_cast<const SwValueFieldType*>(GetTyp()))->GetDoc(); }
+    inline SwDoc*           GetDoc() const          { return static_cast<const SwValueFieldType*>(GetTyp())->GetDoc(); }
 
     virtual double          GetValue() const;
     virtual void            SetValue( const double& rVal );

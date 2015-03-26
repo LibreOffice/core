@@ -411,7 +411,7 @@ static bool lcl_MinMaxString( SwMinMaxArgs& rArg, SwFont* pFnt, const OUString &
 bool SwTxtNode::IsSymbol( const sal_Int32 nBegin ) const
 {
     SwScriptInfo aScriptInfo;
-    SwAttrIter aIter( *(SwTxtNode*)this, aScriptInfo );
+    SwAttrIter aIter( *const_cast<SwTxtNode*>(this), aScriptInfo );
     aIter.Seek( nBegin );
     return aIter.GetFnt()->IsSymbol(
         const_cast<SwViewShell *>(getIDocumentLayoutAccess()->GetCurrentViewShell()) );
@@ -588,7 +588,7 @@ void SwTxtNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rMa
     aNodeArgs.nRightDiff = 0;
     if( nIndex )
     {
-        SwFrmFmts* pTmp = (SwFrmFmts*)GetDoc()->GetSpzFrmFmts();
+        SwFrmFmts* pTmp = const_cast<SwFrmFmts*>(GetDoc()->GetSpzFrmFmts());
         if( pTmp )
         {
             aNodeArgs.nIndx = nIndex;
@@ -609,7 +609,7 @@ void SwTxtNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rMa
         aNodeArgs.nMaxWidth -= aNodeArgs.nRightRest;
 
     SwScriptInfo aScriptInfo;
-    SwAttrIter aIter( *(SwTxtNode*)this, aScriptInfo );
+    SwAttrIter aIter( *const_cast<SwTxtNode*>(this), aScriptInfo );
     sal_Int32 nIdx = 0;
     aIter.SeekAndChgAttrIter( nIdx, pOut );
     sal_Int32 nLen = m_Text.getLength();
@@ -665,7 +665,7 @@ void SwTxtNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rMa
             case CHAR_HARDHYPHEN:
             {
                 OUString sTmp( cChar );
-                SwDrawTextInfo aDrawInf( const_cast<SwViewShell *>(getIDocumentLayoutAccess()->GetCurrentViewShell()),
+                SwDrawTextInfo aDrawInf( getIDocumentLayoutAccess()->GetCurrentViewShell(),
                     *pOut, 0, sTmp, 0, 1, 0, false );
                 nAktWidth = aIter.GetFnt()->_GetTxtSize( aDrawInf ).Width();
                 aArg.nWordWidth += nAktWidth;
@@ -739,7 +739,7 @@ void SwTxtNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rMa
                     case RES_TXTATR_FIELD :
                     case RES_TXTATR_ANNOTATION :
                         {
-                            SwField *pFld = (SwField*)pHint->GetFmtFld().GetField();
+                            SwField *pFld = const_cast<SwField*>(pHint->GetFmtFld().GetField());
                             const OUString aTxt = pFld->ExpandField(true);
                             if( lcl_MinMaxString( aArg, aIter.GetFnt(), aTxt, 0,
                                 aTxt.getLength() ) )
@@ -813,7 +813,7 @@ sal_uInt16 SwTxtNode::GetScalingOfSelectedText( sal_Int32 nStt, sal_Int32 nEnd )
             return 100;
 
         SwScriptInfo aScriptInfo;
-        SwAttrIter aIter( *(SwTxtNode*)this, aScriptInfo );
+        SwAttrIter aIter( *const_cast<SwTxtNode*>(this), aScriptInfo );
         aIter.SeekAndChgAttrIter( nStt, pOut );
 
         Boundary aBound =
@@ -839,7 +839,7 @@ sal_uInt16 SwTxtNode::GetScalingOfSelectedText( sal_Int32 nStt, sal_Int32 nEnd )
     }
 
     SwScriptInfo aScriptInfo;
-    SwAttrIter aIter( *(SwTxtNode*)this, aScriptInfo );
+    SwAttrIter aIter( *const_cast<SwTxtNode*>(this), aScriptInfo );
 
     // We do not want scaling attributes to be considered during this
     // calculation. For this, we push a temporary scaling attribute with
@@ -937,7 +937,7 @@ sal_uInt16 SwTxtNode::GetScalingOfSelectedText( sal_Int32 nStt, sal_Int32 nEnd )
             case RES_TXTATR_FIELD :
             case RES_TXTATR_ANNOTATION :
                 {
-                    SwField *pFld = (SwField*)pHint->GetFmtFld().GetField();
+                    SwField *pFld = const_cast<SwField*>(pHint->GetFmtFld().GetField());
                     OUString const aTxt = pFld->ExpandField(true);
                     SwDrawTextInfo aDrawInf( pSh, *pOut, 0, aTxt, 0, aTxt.getLength() );
 

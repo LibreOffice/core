@@ -203,8 +203,8 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
 
     if( rRange.HasMark() )
     {
-        SwPosition *pSttPos = (SwPosition*)rRange.Start(),
-                    *pEndPos = (SwPosition*)rRange.End();
+        SwPosition *pSttPos = const_cast<SwPosition*>(rRange.Start()),
+                    *pEndPos = const_cast<SwPosition*>(rRange.End());
         if( pPrvNd && 3 == nRegionRet )
         {
             OSL_ENSURE( pPrvNd, "The SectionNode is missing" );
@@ -502,7 +502,7 @@ SwSection* SwDoc::GetCurrSection( const SwPosition& rPos ) const
 {
     const SwSectionNode* pSectNd = rPos.nNode.GetNode().FindSectionNode();
     if( pSectNd )
-        return (SwSection*)&pSectNd->GetSection();
+        return const_cast<SwSection*>(&pSectNd->GetSection());
     return 0;
 }
 

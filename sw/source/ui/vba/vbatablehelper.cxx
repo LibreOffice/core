@@ -76,7 +76,7 @@ sal_Int32 SwVbaTableHelper::getTabRowIndex( const OUString& CellName ) throw (un
 {
     sal_Int32 nRet = 0;
     OUString sCellName(CellName);
-    SwTableBox* pBox = (SwTableBox*)pTable->GetTblBox( sCellName );
+    SwTableBox* pBox = const_cast<SwTableBox*>(pTable->GetTblBox( sCellName ));
     if( !pBox )
         throw uno::RuntimeException();
 
@@ -91,7 +91,7 @@ sal_Int32 SwVbaTableHelper::getTabColIndex( const OUString& CellName ) throw (un
 {
     sal_Int32 nRet = 0;
     OUString sCellName(CellName);
-    const SwTableBox* pBox = (SwTableBox*)pTable->GetTblBox( sCellName );
+    const SwTableBox* pBox = pTable->GetTblBox( sCellName );
     if( !pBox )
         throw uno::RuntimeException();
     const SwTableBoxes* pBoxes = &pBox->GetUpper()->GetTabBoxes();

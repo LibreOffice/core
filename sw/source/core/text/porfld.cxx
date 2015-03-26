@@ -119,7 +119,7 @@ SwFldPortion::~SwFldPortion()
 sal_uInt16 SwFldPortion::GetViewWidth( const SwTxtSizeInfo &rInf ) const
 {
     // even though this is const, nViewWidth should be computed at the very end:
-    SwFldPortion* pThis = (SwFldPortion*)this;
+    SwFldPortion* pThis = const_cast<SwFldPortion*>(this);
     if( !Width() && rInf.OnWin() && !rInf.GetOpt().IsPagePreview() &&
             !rInf.GetOpt().IsReadonly() && SwViewOption::IsFieldShadings() )
     {
@@ -158,7 +158,7 @@ SwFldSlot::SwFldSlot( const SwTxtFormatInfo* pNew, const SwFldPortion *pPor )
     // The text will be replaced ...
     if( bOn )
     {
-        pInf = (SwTxtFormatInfo*)pNew;
+        pInf = const_cast<SwTxtFormatInfo*>(pNew);
         nIdx = pInf->GetIdx();
         nLen = pInf->GetLen();
         pOldTxt = &(pInf->GetTxt());
@@ -792,7 +792,7 @@ SwGrfNumPortion::~SwGrfNumPortion()
 {
     if ( IsAnimated() )
     {
-        Graphic* pGraph = ( (Graphic*) pBrush->GetGraphic() );
+        Graphic* pGraph = const_cast<Graphic*>(pBrush->GetGraphic());
         if (pGraph)
             pGraph->StopAnimation( 0, nId );
     }
@@ -803,7 +803,7 @@ void SwGrfNumPortion::StopAnimation( OutputDevice* pOut )
 {
     if ( IsAnimated() )
     {
-        Graphic* pGraph = ( (Graphic*) pBrush->GetGraphic() );
+        Graphic* pGraph = const_cast<Graphic*>(pBrush->GetGraphic());
         if (pGraph)
             pGraph->StopAnimation( pOut, nId );
     }
@@ -940,7 +940,7 @@ void SwGrfNumPortion::Paint( const SwTxtPaintInfo &rInf ) const
             if( OUTDEV_VIRDEV == rInf.GetOut()->GetOutDevType() &&
                 pViewShell && pViewShell->GetWin()  )
             {
-                Graphic* pGraph = (Graphic*)pBrush->GetGraphic();
+                Graphic* pGraph = const_cast<Graphic*>(pBrush->GetGraphic());
                 if (pGraph)
                     pGraph->StopAnimation(0,nId);
                 rInf.GetTxtFrm()->getRootFrm()->GetCurrShell()->InvalidateWindows( aTmp );
@@ -952,11 +952,11 @@ void SwGrfNumPortion::Paint( const SwTxtPaintInfo &rInf ) const
                       // #i9684# Stop animation during printing/pdf export.
                       pViewShell->GetWin() )
             {
-                Graphic* pGraph = (Graphic*)pBrush->GetGraphic();
+                Graphic* pGraph = const_cast<Graphic*>(pBrush->GetGraphic());
                 if (pGraph)
                 {
                     pGraph->StartAnimation(
-                        (OutputDevice*)rInf.GetOut(), aPos, aSize, nId );
+                        const_cast<OutputDevice*>(rInf.GetOut()), aPos, aSize, nId );
                 }
             }
 
@@ -967,7 +967,7 @@ void SwGrfNumPortion::Paint( const SwTxtPaintInfo &rInf ) const
         if( bDraw )
         {
 
-            Graphic* pGraph = (Graphic*)pBrush->GetGraphic();
+            Graphic* pGraph = const_cast<Graphic*>(pBrush->GetGraphic());
             if (pGraph)
                 pGraph->StopAnimation( 0, nId );
         }
@@ -989,7 +989,7 @@ void SwGrfNumPortion::Paint( const SwTxtPaintInfo &rInf ) const
 
     if( bDraw && aTmp.HasArea() )
     {
-        DrawGraphic( pBrush, (OutputDevice*)rInf.GetOut(),
+        DrawGraphic( pBrush, const_cast<OutputDevice*>(rInf.GetOut()),
             aTmp, aRepaint, bReplace ? GRFNUM_REPLACE : GRFNUM_YES );
     }
 }

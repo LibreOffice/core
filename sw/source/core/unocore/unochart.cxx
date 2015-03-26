@@ -2562,7 +2562,7 @@ bool SwChartDataSequence::DeleteBox( const SwTableBox &rBox )
         if (bMoveHorizontal)
             nCol += bMoveLeft ? -1 : +1;
         const OUString aNewCellName = sw_GetCellName( nCol, nRow );
-        SwTableBox* pNewBox = (SwTableBox*) pTable->GetTblBox( aNewCellName );
+        SwTableBox* pNewBox = const_cast<SwTableBox*>(pTable->GetTblBox( aNewCellName ));
 
         if (pNewBox)    // set new position (cell range) to use
         {

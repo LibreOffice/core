@@ -1591,7 +1591,7 @@ bool SwTxtNode::Hyphenate( SwInterHyphInfo &rHyphInf )
     if( pLinguNode != this )
     {
         pLinguNode = this;
-        pLinguFrm = static_cast<SwTxtFrm*>(getLayoutFrm( GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), (Point*)(rHyphInf.GetCrsrPos()) ));
+        pLinguFrm = static_cast<SwTxtFrm*>(getLayoutFrm( GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), rHyphInf.GetCrsrPos() ));
     }
     SwTxtFrm *pFrm = pLinguFrm;
     if( pFrm )

@@ -64,7 +64,7 @@ using namespace ::com::sun::star;
 sal_uLong SwReader::Read( const Reader& rOptions )
 {
     // copy variables
-    Reader* po = (Reader*) &rOptions;
+    Reader* po = const_cast<Reader*>(&rOptions);
     po->pStrm = pStrm;
     po->pStg  = pStg;
     po->xStg  = xStg;
@@ -648,7 +648,7 @@ size_t Reader::GetSectionList( SfxMedium&, std::vector<OUString*>& ) const
 bool SwReader::HasGlossaries( const Reader& rOptions )
 {
     // copy variables
-    Reader* po = (Reader*) &rOptions;
+    Reader* po = const_cast<Reader*>(&rOptions);
     po->pStrm = pStrm;
     po->pStg  = pStg;
     po->bInsertMode = false;
@@ -664,7 +664,7 @@ bool SwReader::ReadGlossaries( const Reader& rOptions,
                                 SwTextBlocks& rBlocks, bool bSaveRelFiles )
 {
     // copy variables
-    Reader* po = (Reader*) &rOptions;
+    Reader* po = const_cast<Reader*>(&rOptions);
     po->pStrm = pStrm;
     po->pStg  = pStg;
     po->bInsertMode = false;

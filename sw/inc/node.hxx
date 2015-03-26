@@ -660,15 +660,15 @@ inline bool SwNode::IsGrfNode() const
 
 inline const SwStartNode* SwNode::FindSttNodeByType( SwStartNodeType eTyp ) const
 {
-    return ((SwNode*)this)->FindSttNodeByType( eTyp );
+    return const_cast<SwNode*>(this)->FindSttNodeByType( eTyp );
 }
 inline const SwTableNode* SwNode::FindTableNode() const
 {
-    return ((SwNode*)this)->FindTableNode();
+    return const_cast<SwNode*>(this)->FindTableNode();
 }
 inline const SwSectionNode* SwNode::FindSectionNode() const
 {
-    return ((SwNode*)this)->FindSectionNode();
+    return const_cast<SwNode*>(this)->FindSectionNode();
 }
 inline sal_uLong SwNode::StartOfSectionIndex() const
 {

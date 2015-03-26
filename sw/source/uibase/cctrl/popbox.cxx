@@ -34,7 +34,7 @@ void SwHelpToolBox::MouseButtonDown(const MouseEvent &rEvt)
     if(rEvt.GetButtons() == MOUSE_RIGHT &&
         0 == GetItemId(rEvt.GetPosPixel()))
     {
-        aRightClickLink.Call((MouseEvent *)&rEvt);
+        aRightClickLink.Call(const_cast<MouseEvent *>(&rEvt));
     }
     else
         ToolBox::MouseButtonDown(rEvt);

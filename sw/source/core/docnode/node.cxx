@@ -740,8 +740,8 @@ SwTableBox* SwNode::GetTblBox() const
     SwTableBox* pBox = 0;
     const SwNode* pSttNd = FindTableBoxStartNode();
     if( pSttNd )
-        pBox = (SwTableBox*)pSttNd->FindTableNode()->GetTable().GetTblBox(
-                                                    pSttNd->GetIndex() );
+        pBox = const_cast<SwTableBox*>(pSttNd->FindTableNode()->GetTable().GetTblBox(
+                                                    pSttNd->GetIndex() ));
     return pBox;
 }
 
@@ -761,7 +761,7 @@ const SwTxtNode* SwNode::FindOutlineNodeOfLevel( sal_uInt8 nLvl ) const
     if( MAXLEVEL > nLvl && !rONds.empty() )
     {
         sal_uInt16 nPos;
-        SwNode* pNd = (SwNode*)this;
+        SwNode* pNd = const_cast<SwNode*>(this);
         bool bCheckFirst = false;
         if( !rONds.Seek_Entry( pNd, &nPos ))
         {
@@ -1877,7 +1877,7 @@ bool SwCntntNode::IsAnyCondition( SwCollCondition& rTmp ) const
         const SwOutlineNodes& rOutlNds = rNds.GetOutLineNds();
         if( !rOutlNds.empty() )
         {
-            if( !rOutlNds.Seek_Entry( (SwCntntNode*)this, &nPos ) && nPos )
+            if( !rOutlNds.Seek_Entry( const_cast<SwCntntNode*>(this), &nPos ) && nPos )
                 --nPos;
             if( nPos < rOutlNds.size() &&
                 rOutlNds[ nPos ]->GetIndex() < GetIndex() )

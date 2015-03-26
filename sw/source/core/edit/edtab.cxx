@@ -230,11 +230,11 @@ void SwEditShell::InsertDDETable( const SwInsertTableOptions& rInsTblOpts,
 
     const SwInsertTableOptions aInsTblOpts( rInsTblOpts.mnInsMode | tabopts::DEFAULT_BORDER,
                                             rInsTblOpts.mnRowsToRepeat );
-    SwTable* pTbl = (SwTable*)GetDoc()->InsertTable( aInsTblOpts, *pPos,
-                                                     nRows, nCols, eAdj );
+    SwTable* pTbl = const_cast<SwTable*>(GetDoc()->InsertTable( aInsTblOpts, *pPos,
+                                                     nRows, nCols, eAdj ));
 
-    SwTableNode* pTblNode = (SwTableNode*)pTbl->GetTabSortBoxes()[ 0 ]->
-                                                GetSttNd()->FindTableNode();
+    SwTableNode* pTblNode = const_cast<SwTableNode*>(pTbl->GetTabSortBoxes()[ 0 ]->
+                                                GetSttNd()->FindTableNode());
     SwDDETable* pDDETbl = new SwDDETable( *pTbl, pDDEType );
     pTblNode->SetNewTable( pDDETbl );       // setze die DDE-Tabelle
 
@@ -256,7 +256,7 @@ void SwEditShell::UpdateTable()
         if( DoesUndo() )
             StartUndo();
         EndAllTblBoxEdit();
-        SwTableFmlUpdate aTblUpdate( (SwTable*)&pTblNd->GetTable() );
+        SwTableFmlUpdate aTblUpdate( &pTblNd->GetTable() );
         GetDoc()->getIDocumentFieldsAccess().UpdateTblFlds( &aTblUpdate );
         if( DoesUndo() )
             EndUndo();
@@ -321,7 +321,7 @@ bool SwEditShell::GetTblBoxFormulaAttrs( SfxItemSet& rSet ) const
             // Convert formulae into external presentation
             const SwTable& rTbl = pSelBox->GetSttNd()->FindTableNode()->GetTable();
 
-            SwTableFmlUpdate aTblUpdate( (SwTable*)&rTbl );
+            SwTableFmlUpdate aTblUpdate( &rTbl );
             aTblUpdate.eFlags = TBL_BOXNAME;
             static_cast<SwDoc*>(GetDoc())->getIDocumentFieldsAccess().UpdateTblFlds( &aTblUpdate );
 

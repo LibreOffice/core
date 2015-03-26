@@ -162,7 +162,7 @@ sal_uInt16 SwDoc::CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCallEve
     case EVENT_OBJECT_URLITEM:
     case EVENT_OBJECT_IMAGE:
         {
-            const SwFrmFmt* pFmt = (SwFrmFmt*)rCallEvent.PTR.pFmt;
+            const SwFrmFmt* pFmt = rCallEvent.PTR.pFmt;
             if( bCheckPtr )
             {
                 if ( GetSpzFrmFmts()->Contains( pFmt ) )
@@ -178,7 +178,7 @@ sal_uInt16 SwDoc::CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCallEve
             const IMapObject* pIMapObj = rCallEvent.PTR.IMAP.pIMapObj;
             if( bCheckPtr )
             {
-                const SwFrmFmt* pFmt = (SwFrmFmt*)rCallEvent.PTR.IMAP.pFmt;
+                const SwFrmFmt* pFmt = rCallEvent.PTR.IMAP.pFmt;
                 const ImageMap* pIMap;
                 if( GetSpzFrmFmts()->Contains( pFmt ) &&
                     0 != (pIMap = pFmt->GetURL().GetMap()) )

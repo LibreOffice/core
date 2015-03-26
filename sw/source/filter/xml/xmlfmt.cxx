@@ -881,7 +881,7 @@ uno::Reference < container::XNameContainer > SwXMLStylesContext_Impl::GetStylesC
 {
     uno::Reference < container::XNameContainer > xStyles;
     if( XML_STYLE_FAMILY_SD_GRAPHICS_ID == nFamily )
-        xStyles = ((SvXMLImport *)&GetImport())->GetTextImport()->GetFrameStyles();
+        xStyles = const_cast<SvXMLImport *>(&GetImport())->GetTextImport()->GetFrameStyles();
     else
         xStyles = SvXMLStylesContext::GetStylesContainer( nFamily );
 

@@ -864,7 +864,7 @@ SvtUserOptions& SwModule::GetUserOptions()
 
 const SwMasterUsrPref *SwModule::GetUsrPref(bool bWeb) const
 {
-    SwModule* pNonConstModule = (SwModule*)this;
+    SwModule* pNonConstModule = const_cast<SwModule*>(this);
     if(bWeb && !pWebUsrPref)
     {
         // The SpellChecker is needed in SwMasterUsrPref's Load, but it must not

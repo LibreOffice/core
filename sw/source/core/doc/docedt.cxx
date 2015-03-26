@@ -248,7 +248,7 @@ _SaveRedlEndPosForRestore::_SaveRedlEndPosForRestore( const SwNodeIndex& rInsIdx
                 pSavArr = new std::vector<SwPosition*>;
                 pSavIdx = new SwNodeIndex( rInsIdx, -1 );
             }
-            pSavArr->push_back( (SwPosition*)pEnd );
+            pSavArr->push_back( const_cast<SwPosition*>(pEnd) );
         }
     }
 }
@@ -532,7 +532,7 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
                                 nStat = nPageNr - *pPageSt + 1;
                             else
                                 nStat = nPageNr + *pPageCnt - *pPageSt + 1;
-                            ::SetProgressState( nStat, (SwDocShell*)GetDocShell() );
+                            ::SetProgressState( nStat, const_cast<SwDocShell*>(GetDocShell()) );
                         }
                         //Spell() changes the pSpellArgs in case an error is found
                         sal_Int32 nBeginGrammarCheck = 0;

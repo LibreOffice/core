@@ -72,7 +72,7 @@ bool SwTxtFrm::_HasPara() const
             return true;
     }
     else
-        ((SwTxtFrm*)this)->nCacheIdx = USHRT_MAX;
+        const_cast<SwTxtFrm*>(this)->nCacheIdx = USHRT_MAX;
 
     return false;
 }

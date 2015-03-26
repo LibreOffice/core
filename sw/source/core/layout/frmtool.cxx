@@ -2715,7 +2715,7 @@ SwPageFrm * InsertNewPage( SwPageDesc &rDesc, SwFrm *pUpper,
 
 static void lcl_Regist( SwPageFrm *pPage, const SwFrm *pAnch )
 {
-    SwSortedObjs *pObjs = (SwSortedObjs*)pAnch->GetDrawObjs();
+    SwSortedObjs *pObjs = const_cast<SwSortedObjs*>(pAnch->GetDrawObjs());
     for ( size_t i = 0; i < pObjs->size(); ++i )
     {
         SwAnchoredObject* pObj = (*pObjs)[i];
@@ -3086,7 +3086,7 @@ const SwFrm* GetVirtualUpper( const SwFrm* pFrm, const Point& rPos )
             }
             else
             {
-                SwFlyFrm* pTmp = (SwFlyFrm*)pFrm->FindFlyFrm();
+                SwFlyFrm* pTmp = const_cast<SwFlyFrm*>(pFrm->FindFlyFrm());
                 while( pTmp )
                 {
                     if( pTmp->Frm().IsInside( rPos ) )

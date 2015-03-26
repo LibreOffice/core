@@ -522,7 +522,7 @@ void SwRootFrm::Init( SwFrmFmt* pFmt )
     if ( pTblNd )
     {
         const SwFmtPageDesc &rDesc = pTblNd->GetTable().GetFrmFmt()->GetPageDesc();
-        pDesc = (SwPageDesc*)rDesc.GetPageDesc();
+        pDesc = const_cast<SwPageDesc*>(rDesc.GetPageDesc());
         //#19104# respect the page number offset!!
         oPgNum = rDesc.GetNumOffset();
         if (oPgNum)
@@ -531,7 +531,7 @@ void SwRootFrm::Init( SwFrmFmt* pFmt )
     else if ( pNode )
     {
         const SwFmtPageDesc &rDesc = pNode->GetSwAttrSet().GetPageDesc();
-        pDesc = (SwPageDesc*)rDesc.GetPageDesc();
+        pDesc = const_cast<SwPageDesc*>(rDesc.GetPageDesc());
         //#19104# respect the page number offset!!
         oPgNum = rDesc.GetNumOffset();
         if (oPgNum)

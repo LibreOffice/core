@@ -304,7 +304,7 @@ IMPL_LINK( SwEnvFmtPage, EditHdl, MenuButton *, pButton )
         {
             // maybe relocate defaults
             const SfxPoolItem* pItem = 0;
-            SfxItemSet* pOutputSet = (SfxItemSet*)pDlg->GetOutputItemSet();
+            SfxItemSet* pOutputSet = const_cast<SfxItemSet*>(pDlg->GetOutputItemSet());
             sal_uInt16 nNewDist;
 
             if( SfxItemState::SET == pOutputSet->GetItemState( SID_ATTR_TABSTOP_DEFAULTS,

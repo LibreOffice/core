@@ -138,7 +138,7 @@ const SwLineLayout *SwTxtIter::GetNextLine() const
     {
         pNext = pNext->GetNext();
     }
-    return (SwLineLayout*)pNext;
+    return pNext;
 }
 
 const SwLineLayout *SwTxtIter::GetPrevLine()
@@ -164,7 +164,7 @@ const SwLineLayout *SwTxtIter::GetPrevLine()
     }
 
     // Wenn sich nichts getan hat, dann gibt es nur noch Dummys
-    return (SwLineLayout*)pLay;
+    return pLay;
 }
 
 const SwLineLayout *SwTxtIter::PrevLine()
@@ -179,7 +179,7 @@ const SwLineLayout *SwTxtIter::PrevLine()
         pLast = pMyPrev;
         pMyPrev = Prev();
     }
-    return (SwLineLayout*)(pMyPrev ? pMyPrev : pLast);
+    return pMyPrev ? pMyPrev : pLast;
 }
 
 void SwTxtIter::Bottom()

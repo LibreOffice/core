@@ -163,7 +163,7 @@ SwTxtNode* GetFirstTxtNode( const SwDoc& rDoc, SwPosition& rPos,
 const SwTxtNode* GetBodyTxtNode( const SwDoc& rDoc, SwPosition& rPos,
                                 const SwFrm& rFrm )
 {
-    const SwLayoutFrm* pLayout = (SwLayoutFrm*)rFrm.GetUpper();
+    const SwLayoutFrm* pLayout = rFrm.GetUpper();
     const SwTxtNode* pTxtNode = 0;
 
     while( pLayout )
@@ -328,7 +328,7 @@ void SwGetExpField::ChangeExpansion( const SwFrm& rFrm, const SwTxtFld& rFld )
 
     // determine document (or is there an easier way?)
     const SwTxtNode* pTxtNode = &rFld.GetTxtNode();
-    SwDoc& rDoc = *(SwDoc*)pTxtNode->GetDoc();
+    SwDoc& rDoc = *const_cast<SwDoc*>(pTxtNode->GetDoc());
 
     // create index for determination of the TextNode
     SwPosition aPos( SwNodeIndex( rDoc.GetNodes() ) );

@@ -672,7 +672,7 @@ const OUString&  SwDocStyleSheet::GetParent() const
             if( p && !p->IsDefault() )
                 sTmp = p->GetName();
         }
-        SwDocStyleSheet* pThis = (SwDocStyleSheet*)this;
+        SwDocStyleSheet* pThis = const_cast<SwDocStyleSheet*>(this);
         pThis->aParent = sTmp;
     }
     return aParent;
@@ -683,7 +683,7 @@ const OUString&  SwDocStyleSheet::GetFollow() const
 {
     if( !bPhysical )
     {
-        SwDocStyleSheet* pThis = (SwDocStyleSheet*)this;
+        SwDocStyleSheet* pThis = const_cast<SwDocStyleSheet*>(this);
         pThis->FillStyleSheet( FillAllInfo );
     }
     return aFollow;
@@ -2033,7 +2033,7 @@ bool  SwDocStyleSheet::IsUsed() const
 {
     if( !bPhysical )
     {
-        SwDocStyleSheet* pThis = (SwDocStyleSheet*)this;
+        SwDocStyleSheet* pThis = const_cast<SwDocStyleSheet*>(this);
         pThis->FillStyleSheet( FillOnlyName );
     }
 
@@ -2272,9 +2272,9 @@ void  SwDocStyleSheetPool::Replace( SfxStyleSheetBase& rSource,
     {
         // deal with separately!
         SwPageDesc* pDestDsc =
-            (SwPageDesc*)static_cast<SwDocStyleSheet&>(rTarget).GetPageDesc();
+            const_cast<SwPageDesc*>(static_cast<SwDocStyleSheet&>(rTarget).GetPageDesc());
         SwPageDesc* pCpyDsc =
-            (SwPageDesc*)static_cast<SwDocStyleSheet&>(rSource).GetPageDesc();
+            const_cast<SwPageDesc*>(static_cast<SwDocStyleSheet&>(rSource).GetPageDesc());
         rDoc.CopyPageDesc( *pCpyDsc, *pDestDsc );
     }
     else

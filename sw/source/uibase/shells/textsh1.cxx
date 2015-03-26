@@ -983,13 +983,13 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     pSet = &aCoreSet;
 
                 } else
-                    pSet = (SfxItemSet*) pArgs;
+                    pSet = const_cast<SfxItemSet*>(pArgs);
 
             }
             else if ( pDlg && pDlg->Execute() == RET_OK )
             {
                 // Apply defaults if necessary.
-                pSet = (SfxItemSet*)pDlg->GetOutputItemSet();
+                pSet = const_cast<SfxItemSet*>(pDlg->GetOutputItemSet());
                 sal_uInt16 nNewDist;
                 if( SfxItemState::SET == pSet->GetItemState( SID_ATTR_TABSTOP_DEFAULTS, false, &pItem ) &&
                     nDefDist != (nNewDist = static_cast<const SfxUInt16Item*>(pItem)->GetValue()) )
@@ -1788,7 +1788,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
             case FN_BUL_NUM_RULE_INDEX:
             case FN_NUM_NUM_RULE_INDEX:
         {
-            SwNumRule* pCurRule = (SwNumRule*)(GetShell().GetNumRuleAtCurrCrsrPos());
+            SwNumRule* pCurRule = const_cast<SwNumRule*>(GetShell().GetNumRuleAtCurrCrsrPos());
             sal_uInt16  nActNumLvl = USHRT_MAX;
             rSet.Put(SfxUInt16Item(FN_NUM_NUM_RULE_INDEX,DEFAULT_NONE));
             rSet.Put(SfxUInt16Item(FN_BUL_NUM_RULE_INDEX,DEFAULT_NONE));

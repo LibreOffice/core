@@ -321,7 +321,7 @@ void SwEditShell::SetGraphicPolygon( const tools::PolyPolygon *pPoly )
     pNd->SetContour( pPoly );
     SwFlyFrm *pFly = static_cast<SwFlyFrm*>(pNd->getLayoutFrm(GetLayout())->GetUpper());
     const SwFmtSurround &rSur = pFly->GetFmt()->GetSurround();
-    pFly->GetFmt()->NotifyClients( (SwFmtSurround*)&rSur, (SwFmtSurround*)&rSur );
+    pFly->GetFmt()->NotifyClients( const_cast<SwFmtSurround*>(&rSur), const_cast<SwFmtSurround*>(&rSur) );
     GetDoc()->getIDocumentState().SetModified();
     EndAllAction();
 }
@@ -336,7 +336,7 @@ void SwEditShell::ClearAutomaticContour()
         pNd->SetContour( NULL, false );
         SwFlyFrm *pFly = static_cast<SwFlyFrm*>(pNd->getLayoutFrm(GetLayout())->GetUpper());
         const SwFmtSurround &rSur = pFly->GetFmt()->GetSurround();
-        pFly->GetFmt()->NotifyClients( (SwFmtSurround*)&rSur, (SwFmtSurround*)&rSur );
+        pFly->GetFmt()->NotifyClients( const_cast<SwFmtSurround*>(&rSur), const_cast<SwFmtSurround*>(&rSur) );
         GetDoc()->getIDocumentState().SetModified();
         EndAllAction();
     }

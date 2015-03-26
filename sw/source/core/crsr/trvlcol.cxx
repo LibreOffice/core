@@ -29,7 +29,7 @@ SwLayoutFrm* GetCurrColumn( const SwLayoutFrm* pLayFrm )
 {
     while( pLayFrm && !pLayFrm->IsColumnFrm() )
         pLayFrm = pLayFrm->GetUpper();
-    return (SwLayoutFrm*)pLayFrm;
+    return const_cast<SwLayoutFrm*>(pLayFrm);
 }
 
 SwLayoutFrm* GetNextColumn( const SwLayoutFrm* pLayFrm )
@@ -46,7 +46,7 @@ SwLayoutFrm* GetPrevColumn( const SwLayoutFrm* pLayFrm )
 
 SwCntntFrm* GetColumnStt( const SwLayoutFrm* pColFrm )
 {
-    return pColFrm ? (SwCntntFrm*)pColFrm->ContainsCntnt() : 0;
+    return pColFrm ? const_cast<SwCntntFrm*>(pColFrm->ContainsCntnt()) : 0;
 }
 
 SwCntntFrm* GetColumnEnd( const SwLayoutFrm* pColFrm )

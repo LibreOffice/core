@@ -441,7 +441,7 @@ void SwHyphIter::Start( SwEditShell *pShell, SwDocPositions eStart, SwDocPositio
 
     // nothing to do (at least not in the way as in the "else" part)
     bOldIdle = pShell->GetViewOptions()->IsIdle();
-    const_cast<SwViewOption*>(pShell->GetViewOptions())->SetIdle( false );
+    pShell->GetViewOptions()->SetIdle( false );
     _Start( pShell, eStart, eEnd );
 }
 
@@ -450,7 +450,7 @@ void SwHyphIter::End()
 {
     if( !GetSh() )
         return;
-    const_cast<SwViewOption*>(GetSh()->GetViewOptions())->SetIdle( bOldIdle );
+    GetSh()->GetViewOptions()->SetIdle( bOldIdle );
     _End();
 }
 

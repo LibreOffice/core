@@ -87,7 +87,7 @@ static void lcl_GCBorder_GetLastBox_B( const SwTableBox* pBox, SwTableBoxes* pPa
             lcl_GCBorder_GetLastBox_L( pLine, pPara );
     }
     else
-        pPara->push_back( (SwTableBox*)pBox );
+        pPara->push_back( const_cast<SwTableBox*>(pBox) );
 }
 
 // Find the "end" of the passed BorderLine. Returns the "Layout"Pos!
@@ -126,7 +126,7 @@ static void lcl_GCBorder_DelBorder( const SwCollectTblLineBoxes& rCollTLB,
                                 sal_uInt16 nEndPos,
                                 SwShareBoxFmts* pShareFmts )
 {
-    SwTableBox* pBox = (SwTableBox*)&rCollTLB.GetBox( rStt );
+    SwTableBox* pBox = const_cast<SwTableBox*>(&rCollTLB.GetBox( rStt ));
     sal_uInt16 nNextPos;
     const SvxBorderLine* pLn = &rLine;
 
@@ -148,7 +148,7 @@ static void lcl_GCBorder_DelBorder( const SwCollectTblLineBoxes& rCollTLB,
         if( ++rStt >= rCollTLB.Count() )
             break;
 
-        pBox = (SwTableBox*)&rCollTLB.GetBox( rStt, &nNextPos );
+        pBox = const_cast<SwTableBox*>(&rCollTLB.GetBox( rStt, &nNextPos ));
         if( nNextPos > nEndPos )
             break;
 

@@ -99,8 +99,8 @@ SwTwips SwTxtFrmInfo::GetLineStart( const SwTxtCursor &rLine ) const
 // Where does the text start (without whitespace)? (relative in the Frame)
 SwTwips SwTxtFrmInfo::GetLineStart() const
 {
-    SwTxtSizeInfo aInf( (SwTxtFrm*)pFrm );
-    SwTxtCursor aLine( (SwTxtFrm*)pFrm, &aInf );
+    SwTxtSizeInfo aInf( const_cast<SwTxtFrm*>(pFrm) );
+    SwTxtCursor aLine( const_cast<SwTxtFrm*>(pFrm), &aInf );
     return GetLineStart( aLine ) - pFrm->Frm().Left() - pFrm->Prt().Left();
 }
 
@@ -110,8 +110,8 @@ SwTwips SwTxtFrmInfo::GetCharPos( sal_Int32 nChar, bool bCenter ) const
     SWRECTFN( pFrm )
     SwFrmSwapper aSwapper( pFrm, true );
 
-    SwTxtSizeInfo aInf( (SwTxtFrm*)pFrm );
-    SwTxtCursor aLine( (SwTxtFrm*)pFrm, &aInf );
+    SwTxtSizeInfo aInf( const_cast<SwTxtFrm*>(pFrm) );
+    SwTxtCursor aLine( const_cast<SwTxtFrm*>(pFrm), &aInf );
 
     SwTwips nStt, nNext;
     SwRect aRect;
@@ -160,7 +160,7 @@ SwPaM *AddPam( SwPaM *pPam, const SwTxtFrm* pTxtFrm,
         }
 
         SwIndex &rContent = pPam->GetPoint()->nContent;
-        rContent.Assign( (SwTxtNode*)pTxtFrm->GetTxtNode(), nPos );
+        rContent.Assign( const_cast<SwTxtNode*>(pTxtFrm->GetTxtNode()), nPos );
         pPam->SetMark();
         rContent += nLen;
     }
@@ -170,8 +170,8 @@ SwPaM *AddPam( SwPaM *pPam, const SwTxtFrm* pTxtFrm,
 // Accumulates the whitespace at line start and end in the Pam
 void SwTxtFrmInfo::GetSpaces( SwPaM &rPam, bool bWithLineBreak ) const
 {
-    SwTxtSizeInfo aInf( (SwTxtFrm*)pFrm );
-    SwTxtMargin aLine( (SwTxtFrm*)pFrm, &aInf );
+    SwTxtSizeInfo aInf( const_cast<SwTxtFrm*>(pFrm) );
+    SwTxtMargin aLine( const_cast<SwTxtFrm*>(pFrm), &aInf );
     SwPaM *pPam = &rPam;
     bool bFirstLine = true;
     do {
@@ -209,8 +209,8 @@ void SwTxtFrmInfo::GetSpaces( SwPaM &rPam, bool bWithLineBreak ) const
 // Fonts: CharSet, SYMBOL und DONTKNOW
 bool SwTxtFrmInfo::IsBullet( sal_Int32 nTxtStart ) const
 {
-    SwTxtSizeInfo aInf( (SwTxtFrm*)pFrm );
-    SwTxtMargin aLine( (SwTxtFrm*)pFrm, &aInf );
+    SwTxtSizeInfo aInf( const_cast<SwTxtFrm*>(pFrm) );
+    SwTxtMargin aLine( const_cast<SwTxtFrm*>(pFrm), &aInf );
     aInf.SetIdx( nTxtStart );
     return aLine.IsSymbol( nTxtStart );
 }
@@ -221,8 +221,8 @@ bool SwTxtFrmInfo::IsBullet( sal_Int32 nTxtStart ) const
 // We do not want to be so picky and work with a tolerance of TOLERANCE twips.
 SwTwips SwTxtFrmInfo::GetFirstIndent() const
 {
-    SwTxtSizeInfo aInf( (SwTxtFrm*)pFrm );
-    SwTxtCursor aLine( (SwTxtFrm*)pFrm, &aInf );
+    SwTxtSizeInfo aInf( const_cast<SwTxtFrm*>(pFrm) );
+    SwTxtCursor aLine( const_cast<SwTxtFrm*>(pFrm), &aInf );
     const SwTwips nFirst = GetLineStart( aLine );
     const SwTwips TOLERANCE = 20;
 
@@ -254,15 +254,15 @@ SwTwips SwTxtFrmInfo::GetFirstIndent() const
 sal_Int32 SwTxtFrmInfo::GetBigIndent( sal_Int32& rFndPos,
                                     const SwTxtFrm *pNextFrm ) const
 {
-    SwTxtSizeInfo aInf( (SwTxtFrm*)pFrm );
-    SwTxtCursor aLine( (SwTxtFrm*)pFrm, &aInf );
+    SwTxtSizeInfo aInf( const_cast<SwTxtFrm*>(pFrm) );
+    SwTxtCursor aLine( const_cast<SwTxtFrm*>(pFrm), &aInf );
     SwTwips nNextIndent = 0;
 
     if( pNextFrm )
     {
         // I'm a single line
-        SwTxtSizeInfo aNxtInf( (SwTxtFrm*)pNextFrm );
-        SwTxtCursor aNxtLine( (SwTxtFrm*)pNextFrm, &aNxtInf );
+        SwTxtSizeInfo aNxtInf( const_cast<SwTxtFrm*>(pNextFrm) );
+        SwTxtCursor aNxtLine( const_cast<SwTxtFrm*>(pNextFrm), &aNxtInf );
         nNextIndent = GetLineStart( aNxtLine );
     }
     else

@@ -236,10 +236,10 @@ void SwView::ExecTabWin( SfxRequest& rReq )
 
     const bool bVerticalWriting = rSh.IsInVerticalText();
     const SwFmtHeader& rHeaderFmt = rDesc.GetMaster().GetHeader();
-    SwFrmFmt *pHeaderFmt = (SwFrmFmt*)rHeaderFmt.GetHeaderFmt();
+    SwFrmFmt *pHeaderFmt = const_cast<SwFrmFmt*>(rHeaderFmt.GetHeaderFmt());
 
     const SwFmtFooter& rFooterFmt = rDesc.GetMaster().GetFooter();
-    SwFrmFmt *pFooterFmt = (SwFrmFmt*)rFooterFmt.GetFooterFmt();
+    SwFrmFmt *pFooterFmt = const_cast<SwFrmFmt*>(rFooterFmt.GetFooterFmt());
 
     const SwFmtFrmSize &rFrmSize = rDesc.GetMaster().GetFrmSize();
 
@@ -1095,7 +1095,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
             if ( ( nFrmType & FrmTypeFlags::HEADER || nFrmType & FrmTypeFlags::FOOTER ) &&
                  !(nFrmType & FrmTypeFlags::COLSECT) )
             {
-                SwFrmFmt *pFmt = (SwFrmFmt*) (nFrmType & FrmTypeFlags::HEADER ?
+                SwFrmFmt *pFmt = const_cast<SwFrmFmt*>(nFrmType & FrmTypeFlags::HEADER ?
                                 rDesc.GetMaster().GetHeader().GetHeaderFmt() :
                                 rDesc.GetMaster().GetFooter().GetFooterFmt());
                 if( pFmt )// #i80890# if rDesc is not the one belonging to the current page is might crash
@@ -1396,14 +1396,14 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     {
                         rMaster.GetHeader();
                         const SwFmtHeader& rHeaderFmt = rMaster.GetHeader();
-                        SwFrmFmt *pHeaderFmt = (SwFrmFmt*)rHeaderFmt.GetHeaderFmt();
+                        SwFrmFmt *pHeaderFmt = const_cast<SwFrmFmt*>(rHeaderFmt.GetHeaderFmt());
                         if( pHeaderFmt )// #i80890# if rDesc is not the one belonging to the current page is might crash
                             pBox = & (const SvxBoxItem&)pHeaderFmt->GetBox();
                     }
                     else if(nFrmType & FrmTypeFlags::FOOTER )
                     {
                         const SwFmtFooter& rFooterFmt = rMaster.GetFooter();
-                        SwFrmFmt *pFooterFmt = (SwFrmFmt*)rFooterFmt.GetFooterFmt();
+                        SwFrmFmt *pFooterFmt = const_cast<SwFrmFmt*>(rFooterFmt.GetFooterFmt());
                         if( pFooterFmt )// #i80890# if rDesc is not the one belonging to the current page is might crash
                             pBox = & (const SvxBoxItem&)pFooterFmt->GetBox();
                     }

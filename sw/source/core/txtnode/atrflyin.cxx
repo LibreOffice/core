@@ -144,9 +144,9 @@ void SwTxtFlyCnt::SetAnchor( const SwTxtNode *pNode )
 
     // Wir ermitteln den Index im Nodesarray zum Node
 
-    SwDoc* pDoc = (SwDoc*)pNode->GetDoc();
+    SwDoc* pDoc = const_cast<SwDoc*>(pNode->GetDoc());
 
-    SwIndex aIdx( (SwTxtNode*)pNode, GetStart() );
+    SwIndex aIdx( const_cast<SwTxtNode*>(pNode), GetStart() );
     SwPosition aPos( *pNode->StartOfSectionNode(), aIdx );
     SwFrmFmt* pFmt = GetFlyCnt().GetFrmFmt();
     SwFmtAnchor aAnchor( pFmt->GetAnchor() );

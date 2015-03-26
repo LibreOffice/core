@@ -371,7 +371,7 @@ void SwWrtShell::ClickToField( const SwField& rFld )
             {
                 StartAllAction();
                 const_cast<SwField&>(rFld).SetPar2( sRet );
-                const_cast<SwField&>(rFld).GetTyp()->UpdateFlds();
+                rFld.GetTyp()->UpdateFlds();
                 EndAllAction();
             }
         }
@@ -390,17 +390,17 @@ void SwWrtShell::ClickToField( const SwField& rFld )
             const SwInputField* pInputField = dynamic_cast<const SwInputField*>(&rFld);
             if ( pInputField == NULL )
             {
-                StartInputFldDlg( (SwField*)&rFld, false );
+                StartInputFldDlg( const_cast<SwField*>(&rFld), false );
             }
         }
         break;
 
     case RES_SETEXPFLD:
         if( static_cast<const SwSetExpField&>(rFld).GetInputFlag() )
-            StartInputFldDlg( (SwField*)&rFld, false );
+            StartInputFldDlg( const_cast<SwField*>(&rFld), false );
         break;
     case RES_DROPDOWN :
-        StartDropDownFldDlg( (SwField*)&rFld, false );
+        StartDropDownFldDlg( const_cast<SwField*>(&rFld), false );
     break;
     default:
         SAL_WARN_IF(rFld.IsClickable(), "sw", "unhandled clickable field!");

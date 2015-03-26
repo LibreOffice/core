@@ -451,7 +451,7 @@ SwFmtHeader::SwFmtHeader( SwFrmFmt *pHeaderFmt )
 
 SwFmtHeader::SwFmtHeader( const SwFmtHeader &rCpy )
     : SfxPoolItem( RES_HEADER ),
-    SwClient( (SwModify*)rCpy.GetRegisteredIn() ),
+    SwClient( const_cast<SwModify*>(rCpy.GetRegisteredIn()) ),
     bActive( rCpy.IsActive() )
 {
 }
@@ -496,7 +496,7 @@ SwFmtFooter::SwFmtFooter( SwFrmFmt *pFooterFmt )
 
 SwFmtFooter::SwFmtFooter( const SwFmtFooter &rCpy )
     : SfxPoolItem( RES_FOOTER ),
-    SwClient( (SwModify*)rCpy.GetRegisteredIn() ),
+    SwClient( const_cast<SwModify*>(rCpy.GetRegisteredIn()) ),
     bActive( rCpy.IsActive() )
 {
 }
@@ -582,7 +582,7 @@ void SwFmtCntnt::dumpAsXml(xmlTextWriterPtr pWriter) const
 // Partially implemented inline in hxx
 SwFmtPageDesc::SwFmtPageDesc( const SwFmtPageDesc &rCpy )
     : SfxPoolItem( RES_PAGEDESC ),
-    SwClient( (SwPageDesc*)rCpy.GetPageDesc() ),
+    SwClient( const_cast<SwPageDesc*>(rCpy.GetPageDesc()) ),
     oNumOffset( rCpy.oNumOffset ),
     nDescNameIdx( rCpy.nDescNameIdx ),
     pDefinedIn( 0 )
@@ -591,7 +591,7 @@ SwFmtPageDesc::SwFmtPageDesc( const SwFmtPageDesc &rCpy )
 
 SwFmtPageDesc::SwFmtPageDesc( const SwPageDesc *pDesc )
     : SfxPoolItem( RES_PAGEDESC ),
-    SwClient( (SwPageDesc*)pDesc ),
+    SwClient( const_cast<SwPageDesc*>(pDesc) ),
     nDescNameIdx( 0xFFFF ), // IDX_NO_VALUE
     pDefinedIn( 0 )
 {
@@ -2583,9 +2583,9 @@ void SwFrmFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         }
     }
     else if( RES_HEADER == nWhich )
-        pH = const_cast<SwFmtHeader*>(static_cast<const SwFmtHeader*>(pNew));
+        pH = static_cast<const SwFmtHeader*>(pNew);
     else if( RES_FOOTER == nWhich )
-        pF = const_cast<SwFmtFooter*>(static_cast<const SwFmtFooter*>(pNew));
+        pF = static_cast<const SwFmtFooter*>(pNew);
 
     if( pH && pH->IsActive() && !pH->GetHeaderFmt() )
     {   //If he doesn't have one, I'll add one

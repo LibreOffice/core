@@ -734,7 +734,7 @@ void SwTableAutoFmt::UpdateFromSet( sal_uInt8 nPos,
         if( SfxItemState::SET == rSet.GetItemState( RES_BOXATR_FORMAT, true,
             reinterpret_cast<const SfxPoolItem**>(&pNumFmtItem) ) && pNFmtr &&
             0 != (pNumFormat = pNFmtr->GetEntry( pNumFmtItem->GetValue() )) )
-            pFmt->SetValueFormat( const_cast<SvNumberformat*>(pNumFormat)->GetFormatstring(),
+            pFmt->SetValueFormat( pNumFormat->GetFormatstring(),
                                     pNumFormat->GetLanguage(),
                                     ::GetAppLanguage());
         else

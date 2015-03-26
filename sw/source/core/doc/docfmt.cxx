@@ -242,7 +242,7 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
                         const std::set<sal_uInt16> &rAttrs,
                         const bool bSendDataChangedEvents )
 {
-    SwPaM* pPam = (SwPaM*)&rRg;
+    SwPaM* pPam = const_cast<SwPaM*>(&rRg);
     if( !bTxtAttr && !rAttrs.empty() && RES_TXTATR_END > *(rAttrs.begin()) )
         bTxtAttr = true;
 
@@ -1119,7 +1119,7 @@ SwFmt* SwDoc::CopyFmt( const SwFmt& rFmt,
         }
 
     // Search for the "parent" first
-    SwFmt* pParent = (SwFmt*)&rDfltFmt;
+    SwFmt* pParent = const_cast<SwFmt*>(&rDfltFmt);
     if( rFmt.DerivedFrom() && pParent != rFmt.DerivedFrom() )
         pParent = CopyFmt( *rFmt.DerivedFrom(), rFmtArr,
                                 fnCopyFmt, rDfltFmt );

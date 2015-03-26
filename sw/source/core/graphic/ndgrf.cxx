@@ -947,7 +947,7 @@ SwCntntNode* SwGrfNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
 
     SwGrfNode* pGrfNd = pDoc->GetNodes().MakeGrfNode( rIdx, sFile, sFilter,
                                                     &aTmpGrf, pColl,
-                                            (SwAttrSet*)GetpSwAttrSet() );
+                                            const_cast<SwAttrSet*>(GetpSwAttrSet()) );
     pGrfNd->SetTitle( GetTitle() );
     pGrfNd->SetDescription( GetDescription() );
     pGrfNd->SetContour( HasContour(), HasAutomaticContour() );

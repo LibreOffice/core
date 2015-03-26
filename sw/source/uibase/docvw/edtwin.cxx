@@ -4839,7 +4839,7 @@ void SwEditWin::SetApplyTemplate(const SwApplyTemplate &rTempl)
               SetPointer( POINTER_FILL );//@todo #i20119# maybe better a new brush pointer here in future
               rSh.NoEdit( false );
               bIdle = rSh.GetViewOptions()->IsIdle();
-              ((SwViewOption *)rSh.GetViewOptions())->SetIdle( false );
+              rSh.GetViewOptions()->SetIdle( false );
     }
     else if(rTempl.nColor)
     {
@@ -4847,7 +4847,7 @@ void SwEditWin::SetApplyTemplate(const SwApplyTemplate &rTempl)
         SetPointer( POINTER_FILL );
         rSh.NoEdit( false );
         bIdle = rSh.GetViewOptions()->IsIdle();
-        ((SwViewOption *)rSh.GetViewOptions())->SetIdle( false );
+        rSh.GetViewOptions()->SetIdle( false );
     }
     else if( rTempl.eType )
     {
@@ -4855,14 +4855,14 @@ void SwEditWin::SetApplyTemplate(const SwApplyTemplate &rTempl)
         SetPointer( POINTER_FILL  );
         rSh.NoEdit( false );
         bIdle = rSh.GetViewOptions()->IsIdle();
-        ((SwViewOption *)rSh.GetViewOptions())->SetIdle( false );
+        rSh.GetViewOptions()->SetIdle( false );
     }
     else
     {
         SetPointer( POINTER_TEXT );
         rSh.UnSetVisCrsr();
 
-        ((SwViewOption *)rSh.GetViewOptions())->SetIdle( bIdle );
+        rSh.GetViewOptions()->SetIdle( bIdle );
         if ( !rSh.IsSelFrmMode() )
             rSh.Edit();
     }

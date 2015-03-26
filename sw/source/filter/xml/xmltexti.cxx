@@ -184,7 +184,7 @@ SvXMLImportContext *SwXMLTextImportHelper::CreateTableChildContext(
 bool SwXMLTextImportHelper::IsInHeaderFooter() const
 {
     uno::Reference<XUnoTunnel> xCrsrTunnel(
-            ((SwXMLTextImportHelper *)this)->GetCursor(), UNO_QUERY );
+            const_cast<SwXMLTextImportHelper *>(this)->GetCursor(), UNO_QUERY );
     assert(xCrsrTunnel.is() && "missing XUnoTunnel for Cursor");
     OTextCursorHelper *pTxtCrsr = reinterpret_cast< OTextCursorHelper * >(
                 sal::static_int_cast< sal_IntPtr >( xCrsrTunnel->getSomething( OTextCursorHelper::getUnoTunnelId() )));

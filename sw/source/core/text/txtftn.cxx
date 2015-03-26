@@ -257,7 +257,7 @@ SwTwips SwTxtFrm::GetFtnLine( const SwTxtFtn *pFtn ) const
     OSL_ENSURE( ! IsVertical() || ! IsSwapped(),
             "SwTxtFrm::GetFtnLine with swapped frame" );
 
-    SwTxtFrm *pThis = (SwTxtFrm*)this;
+    SwTxtFrm *pThis = const_cast<SwTxtFrm*>(this);
 
     if( !HasPara() )
     {
@@ -339,7 +339,7 @@ SwTwips SwTxtFrm::_GetFtnFrmHeight() const
             // Growth potential of the container
             if ( !pRef->IsInFtnConnect() )
             {
-                SwSaveFtnHeight aSave( (SwFtnBossFrm*)pBoss, nHeight  );
+                SwSaveFtnHeight aSave( const_cast<SwFtnBossFrm*>(pBoss), nHeight  );
                 nHeight = const_cast<SwFtnContFrm*>(static_cast<const SwFtnContFrm*>(pCont))->Grow( LONG_MAX, true );
             }
             else

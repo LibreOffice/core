@@ -155,7 +155,7 @@ void SwKernPortion::Paint( const SwTxtPaintInfo &rInf ) const
 
             SwRect aClipRect;
             rInf.CalcRect( *this, &aClipRect, 0 );
-            SwSaveClip aClip( (OutputDevice*)rInf.GetOut() );
+            SwSaveClip aClip( const_cast<OutputDevice*>(rInf.GetOut()) );
             aClip.ChgClip( aClipRect, 0 );
             rInf.DrawText( aTxtDouble, *this, 0, 2, true );
         }
@@ -459,7 +459,7 @@ void SwHiddenTextPortion::Paint( const SwTxtPaintInfo & rInf) const
 {
     (void)rInf;
 #ifdef DBG_UTIL
-    OutputDevice* pOut = (OutputDevice*)rInf.GetOut();
+    OutputDevice* pOut = const_cast<OutputDevice*>(rInf.GetOut());
     Color aCol( SwViewOption::GetFieldShadingsColor() );
     Color aOldColor( pOut->GetFillColor() );
     pOut->SetFillColor( aCol );

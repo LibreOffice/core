@@ -486,12 +486,12 @@ sal_uInt16 SwRedlineAcceptDlg::CalcDiff(sal_uInt16 nStart, bool bChild)
     if (bChild)     // should actually never happen, but just in case...
     {
         // throw away all entry's children and initialise newly
-        SwRedlineDataChild* pBackupData = (SwRedlineDataChild*)pParent->pNext;
+        SwRedlineDataChild* pBackupData = const_cast<SwRedlineDataChild*>(pParent->pNext);
         SwRedlineDataChild* pNext;
 
         while (pBackupData)
         {
-            pNext = (SwRedlineDataChild*)pBackupData->pNext;
+            pNext = const_cast<SwRedlineDataChild*>(pBackupData->pNext);
             if (pBackupData->pTLBChild)
                 pTable->RemoveEntry(pBackupData->pTLBChild);
 
@@ -664,7 +664,7 @@ void SwRedlineAcceptDlg::RemoveParents(sal_uInt16 nStart, sal_uInt16 nEnd)
     {
         if (!bChildrenRemoved && aRedlineParents[i].pNext)
         {
-            SwRedlineDataChildPtr pChildPtr = (SwRedlineDataChildPtr)aRedlineParents[i].pNext;
+            SwRedlineDataChildPtr pChildPtr = const_cast<SwRedlineDataChildPtr>(aRedlineParents[i].pNext);
             for( SwRedlineDataChildArr::iterator it = aRedlineChildren.begin();
                  it != aRedlineChildren.end(); ++it)
                 if (&*it == pChildPtr)
@@ -672,7 +672,7 @@ void SwRedlineAcceptDlg::RemoveParents(sal_uInt16 nStart, sal_uInt16 nEnd)
                     sal_uInt16 nChildren = 0;
                     while (pChildPtr)
                     {
-                        pChildPtr = (SwRedlineDataChildPtr)pChildPtr->pNext;
+                        pChildPtr = const_cast<SwRedlineDataChildPtr>(pChildPtr->pNext);
                         nChildren++;
                     }
 

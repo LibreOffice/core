@@ -1339,7 +1339,7 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
         case POR_TXT :
         case POR_PARA :
             {
-                SwTxtNode* pNd = (SwTxtNode*)pFrm->GetTxtNode();
+                SwTxtNode* pNd = const_cast<SwTxtNode*>(pFrm->GetTxtNode());
                 SwTxtAttr const*const pInetFmtAttr =
                     pNd->GetTxtAttrAt(rInf.GetIdx(), RES_TXTATR_INETFMT);
 
@@ -1411,7 +1411,7 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
                 const SwTxtAttr* pHint = mpPorInfo->mrTxtPainter.GetAttr( nIdx );
                 if ( pHint && RES_TXTATR_FIELD == pHint->Which() )
                 {
-                    const SwField* pFld = (SwField*)pHint->GetFmtFld().GetField();
+                    const SwField* pFld = pHint->GetFmtFld().GetField();
                     if ( RES_GETREFFLD == pFld->Which() )
                     {
                         nPDFType = vcl::PDFWriter::Link;

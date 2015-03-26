@@ -209,7 +209,7 @@ bool sw_ChkAndSetNewAnchor(
     if( nOld == nNew )
         return false;
 
-    SwDoc* pDoc = (SwDoc*)rFmt.GetDoc();
+    SwDoc* pDoc = const_cast<SwDoc*>(rFmt.GetDoc());
 
 #if OSL_DEBUG_LEVEL > 0
     OSL_ENSURE( !(nNew == FLY_AT_PAGE &&
@@ -1468,7 +1468,7 @@ const SwFrmFmt* SwFEShell::IsURLGrfAtPos( const Point& rPt, OUString* pURL,
     SdrObject* pObj;
     SdrPageView* pPV;
     const SwFrmFmt* pRet = 0;
-    SwDrawView *pDView = (SwDrawView*)Imp()->GetDrawView();
+    SwDrawView *pDView = const_cast<SwDrawView*>(Imp()->GetDrawView());
 
     sal_uInt16 nOld = pDView->GetHitTolerancePixel();
     pDView->SetHitTolerancePixel( 2 );
@@ -1539,7 +1539,7 @@ const Graphic *SwFEShell::GetGrfAtPos( const Point &rPt,
 
     SdrObject* pObj;
     SdrPageView* pPV;
-    SwDrawView *pDView = (SwDrawView*)Imp()->GetDrawView();
+    SwDrawView *pDView = const_cast<SwDrawView*>(Imp()->GetDrawView());
 
     if( pDView->PickObj( rPt, pDView->getHitTolLog(), pObj, pPV ) && pObj->ISA(SwVirtFlyDrawObj) )
     {
@@ -1577,7 +1577,7 @@ const SwFrmFmt* SwFEShell::GetFmtFromObj( const Point& rPt, SwRect** pRectToFill
         SdrObject* pObj;
         SdrPageView* pPView;
 
-        SwDrawView *pDView = (SwDrawView*)Imp()->GetDrawView();
+        SwDrawView *pDView = const_cast<SwDrawView*>(Imp()->GetDrawView());
 
         sal_uInt16 nOld = pDView->GetHitTolerancePixel();
         // tolerance for Drawing-SS
@@ -1701,7 +1701,7 @@ ObjCntType SwFEShell::GetObjCntType( const Point &rPt, SdrObject *&rpObj ) const
         SdrObject* pObj;
         SdrPageView* pPView;
 
-        SwDrawView *pDView = (SwDrawView*)Imp()->GetDrawView();
+        SwDrawView *pDView = const_cast<SwDrawView*>(Imp()->GetDrawView());
 
         sal_uInt16 nOld = pDView->GetHitTolerancePixel();
         // tolerance for Drawing-SS

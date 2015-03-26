@@ -1156,7 +1156,7 @@ bool SwLayAction::IsShortCut( SwPageFrm *&prPage )
                     if ( pTmp->GetPhyPageNum() < prPage->GetPhyPageNum() &&
                          pTmp->IsInvalid() )
                     {
-                        prPage = (SwPageFrm*)pTmp;
+                        prPage = const_cast<SwPageFrm*>(pTmp);
                     }
                     else
                     {

@@ -360,7 +360,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                 rSh.StartAllAction();
                 rSh.StartUndo(UNDO_START);
                 const SfxPoolItem* pItem;
-                SfxItemSet* pSet = (SfxItemSet*)pDlg->GetOutputItemSet();
+                SfxItemSet* pSet = const_cast<SfxItemSet*>(pDlg->GetOutputItemSet());
                 rReq.Done(*pSet);
                 // change the 2 frmsize SizeItems to the correct SwFrmSizeItem
                 if( SfxItemState::SET == pSet->GetItemState(

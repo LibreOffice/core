@@ -650,9 +650,9 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
                     ExportFmt( *pFrmFmt2, XML_TABLE_CELL );
 
                 Reference < XCell > xCell = SwXCell::CreateXCell(
-                                                (SwFrmFmt *)rTblInfo.GetTblFmt(),
+                                                const_cast<SwFrmFmt *>(rTblInfo.GetTblFmt()),
                                                   pBox,
-                                                 (SwTable *)rTblInfo.GetTable() );
+                                                 const_cast<SwTable *>(rTblInfo.GetTable()) );
                 if (xCell.is())
                 {
                     Reference < XText > xText( xCell, UNO_QUERY );
@@ -766,9 +766,9 @@ void SwXMLExport::ExportTableBox( const SwTableBox& rBox,
         {
             // start node -> normal cell
             // get cell range for table
-            Reference<XCell> xCell = SwXCell::CreateXCell( (SwFrmFmt *)rTblInfo.GetTblFmt(),
-                                                            (SwTableBox *)&rBox,
-                                                            (SwTable *)rTblInfo.GetTable() );
+            Reference<XCell> xCell = SwXCell::CreateXCell( const_cast<SwFrmFmt *>(rTblInfo.GetTblFmt()),
+                                                            const_cast<SwTableBox *>(&rBox),
+                                                            const_cast<SwTable *>(rTblInfo.GetTable()) );
 
             if (xCell.is())
             {

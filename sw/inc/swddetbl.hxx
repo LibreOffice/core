@@ -47,7 +47,7 @@ protected:
 
 inline const SwDDEFieldType* SwDDETable::GetDDEFldType() const
 {
-    return ((SwDDETable*)this)->GetDDEFldType();
+    return const_cast<SwDDETable*>(this)->GetDDEFldType();
 }
 
 #endif

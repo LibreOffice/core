@@ -498,7 +498,7 @@ SwRowFrm* GetRowFrm( SwTableLine& rLine )
 bool SwTable::InsertCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt, bool bBehind )
 {
     OSL_ENSURE( !rBoxes.empty() && nCnt, "No valid Box List" );
-    SwTableNode* pTblNd = (SwTableNode*)rBoxes[0]->GetSttNd()->FindTableNode();
+    SwTableNode* pTblNd = const_cast<SwTableNode*>(rBoxes[0]->GetSttNd()->FindTableNode());
     if( !pTblNd )
         return false;
 
@@ -554,7 +554,7 @@ bool SwTable::_InsertRow( SwDoc* pDoc, const SwSelBoxes& rBoxes,
                         sal_uInt16 nCnt, bool bBehind )
 {
     OSL_ENSURE( pDoc && !rBoxes.empty() && nCnt, "No valid Box List" );
-    SwTableNode* pTblNd = (SwTableNode*)rBoxes[0]->GetSttNd()->FindTableNode();
+    SwTableNode* pTblNd = const_cast<SwTableNode*>(rBoxes[0]->GetSttNd()->FindTableNode());
     if( !pTblNd )
         return false;
 
@@ -757,7 +757,7 @@ void _DeleteBox( SwTable& rTbl, SwTableBox* pBox, SwUndo* pUndo,
         }
 
         // Delete the Box first, then the Nodes!
-        SwStartNode* pSttNd = (SwStartNode*)pBox->GetSttNd();
+        SwStartNode* pSttNd = const_cast<SwStartNode*>(pBox->GetSttNd());
         if( pShareFmts )
             pShareFmts->RemoveFormat( *rTblBoxes[ nDelPos ]->GetFrmFmt() );
 
@@ -977,7 +977,7 @@ bool SwTable::DeleteSel(
     SwTableNode* pTblNd = 0;
     if( !rBoxes.empty() )
     {
-        pTblNd = (SwTableNode*)rBoxes[0]->GetSttNd()->FindTableNode();
+        pTblNd = const_cast<SwTableNode*>(rBoxes[0]->GetSttNd()->FindTableNode());
         if( !pTblNd )
             return false;
     }
@@ -1045,7 +1045,7 @@ bool SwTable::OldSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCn
                         bool bSameHeight )
 {
     OSL_ENSURE( pDoc && !rBoxes.empty() && nCnt, "No valid values" );
-    SwTableNode* pTblNd = (SwTableNode*)rBoxes[0]->GetSttNd()->FindTableNode();
+    SwTableNode* pTblNd = const_cast<SwTableNode*>(rBoxes[0]->GetSttNd()->FindTableNode());
     if( !pTblNd )
         return false;
 
@@ -1187,7 +1187,7 @@ bool SwTable::OldSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCn
 bool SwTable::SplitCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt )
 {
     OSL_ENSURE( pDoc && !rBoxes.empty() && nCnt, "No valid values" );
-    SwTableNode* pTblNd = (SwTableNode*)rBoxes[0]->GetSttNd()->FindTableNode();
+    SwTableNode* pTblNd = const_cast<SwTableNode*>(rBoxes[0]->GetSttNd()->FindTableNode());
     if( !pTblNd )
         return false;
 
@@ -1551,7 +1551,7 @@ bool SwTable::OldMerge( SwDoc* pDoc, const SwSelBoxes& rBoxes,
                         SwTableBox* pMergeBox, SwUndoTblMerge* pUndo )
 {
     OSL_ENSURE( !rBoxes.empty() && pMergeBox, "no valid values" );
-    SwTableNode* pTblNd = (SwTableNode*)rBoxes[0]->GetSttNd()->FindTableNode();
+    SwTableNode* pTblNd = const_cast<SwTableNode*>(rBoxes[0]->GetSttNd()->FindTableNode());
     if( !pTblNd )
         return false;
 
@@ -2066,10 +2066,10 @@ bool SwTable::MakeCopy( SwDoc* pInsDoc, const SwPosition& rPos,
         pInsDoc->CopyTxtColl( *pSrcDoc->getIDocumentStylePoolAccess().GetTxtCollFromPool( RES_POOLCOLL_TABLE_HDLN ) );
     }
 
-    SwTable* pNewTbl = (SwTable*)pInsDoc->InsertTable(
+    SwTable* pNewTbl = const_cast<SwTable*>(pInsDoc->InsertTable(
             SwInsertTableOptions( tabopts::HEADLINE_NO_BORDER, 1 ),
             rPos, 1, 1, GetFrmFmt()->GetHoriOrient().GetHoriOrient(),
-            0, 0, false, IsNewModel() );
+            0, 0, false, IsNewModel() ));
     if( !pNewTbl )
         return false;
 
@@ -2299,7 +2299,7 @@ SwTableBox* SwTableBox::FindNextBox( const SwTable& rTbl,
                          const SwTableBox* pSrchBox, bool bOvrTblLns ) const
 {
     if( !pSrchBox  && GetTabLines().empty() )
-        return (SwTableBox*)this;
+        return const_cast<SwTableBox*>(this);
     return GetUpper()->FindNextBox( rTbl, pSrchBox ? pSrchBox : this,
                                         bOvrTblLns );
 
@@ -2310,7 +2310,7 @@ SwTableBox* SwTableBox::FindPreviousBox( const SwTable& rTbl,
                          const SwTableBox* pSrchBox, bool bOvrTblLns ) const
 {
     if( !pSrchBox && GetTabLines().empty() )
-        return (SwTableBox*)this;
+        return const_cast<SwTableBox*>(this);
     return GetUpper()->FindPreviousBox( rTbl, pSrchBox ? pSrchBox : this,
                                         bOvrTblLns );
 }
@@ -3399,7 +3399,7 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
     SwTwips nDistStt = 0;
     CR_SetBoxWidth aParam( eType, nRelDiff, nDist, rSz.GetWidth(),
                             bLeft ? nDist : rSz.GetWidth() - nDist,
-                            (SwTableNode*)rAktBox.GetSttNd()->FindTableNode() );
+                            const_cast<SwTableNode*>(rAktBox.GetSttNd()->FindTableNode()) );
     bBigger = aParam.bBigger;
 
     FN_lcl_SetBoxWidth fnSelBox, fnOtherBox;
@@ -4131,7 +4131,7 @@ bool SwTable::SetRowHeight( SwTableBox& rAktBox, sal_uInt16 eType,
     sal_uLong nBoxIdx = rAktBox.GetSttIdx();
 
     CR_SetLineHeight aParam( eType,
-                        (SwTableNode*)rAktBox.GetSttNd()->FindTableNode() );
+                        const_cast<SwTableNode*>(rAktBox.GetSttNd()->FindTableNode()) );
     bBigger = aParam.bBigger;
 
     FN_lcl_SetLineHeight fnSelLine, fnOtherLine = lcl_SetOtherLineHeight;

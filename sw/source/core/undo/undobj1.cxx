@@ -656,7 +656,7 @@ void SwUndoSetFlyFmt::PutAttr( sal_uInt16 nWhich, const SfxPoolItem* pItem )
                 nOldCntnt = pAnchor->GetPageNum();
             }
 
-            pAnchor = (SwFmtAnchor*)&pFrmFmt->GetAnchor();
+            pAnchor = &pFrmFmt->GetAnchor();
             switch( nNewAnchorTyp = static_cast<sal_uInt16>(pAnchor->GetAnchorId()) )
             {
             case FLY_AS_CHAR:

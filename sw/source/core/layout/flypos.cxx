@@ -38,7 +38,7 @@ bool SwPosFlyFrmCmp::operator()(const SwPosFlyFrmPtr& rA, const SwPosFlyFrmPtr& 
 
 SwPosFlyFrm::SwPosFlyFrm( const SwNodeIndex& rIdx, const SwFrmFmt* pFmt,
                             sal_uInt16 nArrPos )
-    : pFrmFmt( pFmt ), pNdIdx( (SwNodeIndex*) &rIdx )
+    : pFrmFmt( pFmt ), pNdIdx( const_cast<SwNodeIndex*>(&rIdx) )
 {
     bool bFnd = false;
     const SwFmtAnchor& rAnchor = pFmt->GetAnchor();

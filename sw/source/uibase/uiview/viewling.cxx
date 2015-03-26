@@ -441,7 +441,7 @@ void SwView::HyphenateDocument()
     }
     else
     {
-        SwViewOption* pVOpt = (SwViewOption*)m_pWrtShell->GetViewOptions();
+        SwViewOption* pVOpt = const_cast<SwViewOption*>(m_pWrtShell->GetViewOptions());
         bool bOldIdle = pVOpt->IsIdle();
         pVOpt->SetIdle( false );
 
@@ -560,7 +560,7 @@ void SwView::StartThesaurus()
         return;
     }
 
-    SwViewOption* pVOpt = (SwViewOption*)m_pWrtShell->GetViewOptions();
+    SwViewOption* pVOpt = const_cast<SwViewOption*>(m_pWrtShell->GetViewOptions());
     bool bOldIdle = pVOpt->IsIdle();
     pVOpt->SetIdle( false );
 

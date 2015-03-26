@@ -477,7 +477,7 @@ bool SwDoc::SortTbl(const SwSelBoxes& rBoxes, const SwSortOptions& rOpt)
 {
     // Via SwDoc for Undo!
     OSL_ENSURE( !rBoxes.empty(), "no valid Box list" );
-    SwTableNode* pTblNd = (SwTableNode*)rBoxes[0]->GetSttNd()->FindTableNode();
+    SwTableNode* pTblNd = const_cast<SwTableNode*>(rBoxes[0]->GetSttNd()->FindTableNode());
     if( !pTblNd )
         return false;
 

@@ -490,7 +490,7 @@ void DocxExport::OutputEndNode( const SwEndNode& rEndNode )
 
             sal_uLong nRstLnNum;
             if( rNd.IsCntntNode() )
-                nRstLnNum = const_cast< SwCntntNode* >( rNd.GetCntntNode() )->GetSwAttrSet().GetLineNumber().GetStartValue();
+                nRstLnNum = rNd.GetCntntNode()->GetSwAttrSet().GetLineNumber().GetStartValue();
             else
                 nRstLnNum = 0;
 

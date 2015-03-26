@@ -445,7 +445,7 @@ SwCntntNode* SwOLENode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
 
     SwOLENode* pOLENd = pDoc->GetNodes().MakeOLENode( rIdx, aNewName, GetAspect(),
                                     (SwGrfFmtColl*)pDoc->GetDfltGrfFmtColl(),
-                                    (SwAttrSet*)GetpSwAttrSet() );
+                                    const_cast<SwAttrSet*>(GetpSwAttrSet()) );
 
     pOLENd->SetChartTblName( GetChartTblName() );
     pOLENd->SetTitle( GetTitle() );
@@ -748,7 +748,7 @@ void SwOLEObj::SetNode( SwOLENode* pNode )
         else
             xOLERef.AssignToContainer( &p->GetEmbeddedObjectContainer(), aObjName );
 
-        ( (SwOLENode*)pOLENd )->CheckFileLink_Impl(); // for this notification nonconst access is required
+        const_cast<SwOLENode*>(pOLENd)->CheckFileLink_Impl(); // for this notification nonconst access is required
 
         aName = aObjName;
     }
@@ -806,7 +806,7 @@ const uno::Reference < embed::XEmbeddedObject > SwOLEObj::GetOleRef()
             xObj->addStateChangeListener( pListener );
         }
 
-        ( (SwOLENode*)pOLENd )->CheckFileLink_Impl(); // for this notification nonconst access is required
+        const_cast<SwOLENode*>(pOLENd)->CheckFileLink_Impl(); // for this notification nonconst access is required
     }
     else if ( xOLERef->getCurrentState() == embed::EmbedStates::RUNNING )
     {

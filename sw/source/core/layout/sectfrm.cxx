@@ -2258,8 +2258,8 @@ void SwSectionFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
         SwAttrSetChg aNewSet( *static_cast<const SwAttrSetChg*>(pNew) );
         while( true )
         {
-            _UpdateAttr( (SfxPoolItem*)aOIter.GetCurItem(),
-                         (SfxPoolItem*)aNIter.GetCurItem(), nInvFlags,
+            _UpdateAttr( aOIter.GetCurItem(),
+                         aNIter.GetCurItem(), nInvFlags,
                          &aOldSet, &aNewSet );
             if( aNIter.IsAtEnd() )
                 break;

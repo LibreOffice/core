@@ -156,7 +156,7 @@ ToxTextGenerator::GenerateText(SwDoc* pDoc, const std::vector<SwTOXSortTabBase*>
         sal_uInt16 indexOfEntryToProcess, sal_uInt16 numberOfEntriesToProcess)
 {
     // pTOXNd is only set at the first mark
-    SwTxtNode* pTOXNd = (SwTxtNode*)entries.at(indexOfEntryToProcess)->pTOXNd;
+    SwTxtNode* pTOXNd = const_cast<SwTxtNode*>(entries.at(indexOfEntryToProcess)->pTOXNd);
     // FIXME this operates directly on the node text
     OUString & rTxt = const_cast<OUString&>(pTOXNd->GetTxt());
     rTxt.clear();

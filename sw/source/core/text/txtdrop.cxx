@@ -323,7 +323,7 @@ void SwDropPortion::PaintDrop( const SwTxtPaintInfo &rInf ) const
         aClipRect = SwRect( aOutPos, SvLSize() );
         aClipRect.Intersection( rInf.GetPaintRect() );
     }
-    SwSaveClip aClip( (OutputDevice*)rInf.GetOut() );
+    SwSaveClip aClip( const_cast<OutputDevice*>(rInf.GetOut()) );
     aClip.ChgClip( aClipRect, rInf.GetTxtFrm() );
 
     // Just do, what we always do ...

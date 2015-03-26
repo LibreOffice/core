@@ -227,7 +227,7 @@ void NumFormatListBox::SetFormatType(const short nFormatType)
 
             if( nFormat == pFormatter->GetFormatIndex( NF_NUMBER_STANDARD,
                                                         eCurLanguage )
-                || ((SvNumberformat*)pFmt)->GetOutputString( fVal, sValue, &pCol )
+                || const_cast<SvNumberformat*>(pFmt)->GetOutputString( fVal, sValue, &pCol )
                 || nFormatType == css::util::NumberFormat::UNDEFINED )
             {
                 sValue = pFmt->GetFormatstring();

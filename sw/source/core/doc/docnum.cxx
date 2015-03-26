@@ -1452,7 +1452,7 @@ static bool lcl_GotoNextPrevNum( SwPosition& rPos, bool bNext,
                                     static_cast<sal_uInt8>(pNd->GetActualListLevel()) ))
                 {
                     rPos.nNode = aIdx;
-                    rPos.nContent.Assign( (SwTxtNode*)pNd, 0 );
+                    rPos.nContent.Assign( const_cast<SwTxtNode*>(pNd), 0 );
                     bRet = true;
                     break;
                 }
@@ -1482,7 +1482,7 @@ static bool lcl_GotoNextPrevNum( SwPosition& rPos, bool bNext,
         else
         {
             rPos.nNode.Assign( *pLast );
-            rPos.nContent.Assign( (SwTxtNode*)pLast, 0 );
+            rPos.nContent.Assign( const_cast<SwTxtNode*>(pLast), 0 );
         }
         bRet = true;
     }

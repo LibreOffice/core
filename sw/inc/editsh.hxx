@@ -863,7 +863,7 @@ public:
     /// Query NumberFormater from document.
           SvNumberFormatter* GetNumberFormatter();
     const SvNumberFormatter* GetNumberFormatter() const
-    {   return ((SwEditShell*)this)->GetNumberFormatter();  }
+    {   return const_cast<SwEditShell*>(this)->GetNumberFormatter();  }
 
     /// Interfaces for GlobalDocument.
     bool IsGlobalDoc() const;
@@ -948,7 +948,7 @@ private:
 };
 
 inline const sfx2::LinkManager& SwEditShell::GetLinkManager() const
-{   return ((SwEditShell*)this)->GetLinkManager();  }
+{   return const_cast<SwEditShell*>(this)->GetLinkManager();  }
 
  /// Class for automated call of Start- and EndAction().
 class SwActContext {

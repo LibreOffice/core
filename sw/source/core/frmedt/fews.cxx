@@ -339,7 +339,7 @@ void SwFEShell::SetNewPageOffset( sal_uInt16 nOffset )
 {
     GetLayout()->SetVirtPageNum( true );
     const SwPageFrm *pPage = GetCurrFrm( false )->FindPageFrm();
-    lcl_SetAPageOffset( nOffset, (SwPageFrm*)pPage, this );
+    lcl_SetAPageOffset( nOffset, const_cast<SwPageFrm*>(pPage), this );
 }
 
 void SwFEShell::SetPageOffset( sal_uInt16 nOffset )
@@ -357,7 +357,7 @@ void SwFEShell::SetPageOffset( sal_uInt16 nOffset )
             if ( rPgDesc.GetNumOffset() )
             {
                 pDocLayout->SetVirtPageNum( true );
-                lcl_SetAPageOffset( nOffset, (SwPageFrm*)pPage, this );
+                lcl_SetAPageOffset( nOffset, const_cast<SwPageFrm*>(pPage), this );
                 break;
             }
         }
@@ -658,7 +658,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
     bool bWrapThrough = false;
     if ( pFly )
     {
-        SwFlyFrmFmt* pFmt = (SwFlyFrmFmt*)pFly->GetFmt();
+        SwFlyFrmFmt* pFmt = const_cast<SwFlyFrmFmt*>(pFly->GetFmt());
         const SwFmtSurround& rSurround = pFmt->GetSurround();
         bWrapThrough = rSurround.GetSurround() == SURROUND_THROUGHT;
     }

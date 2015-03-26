@@ -831,7 +831,7 @@ SwField* SwCrsrShell::GetFieldAtCrsr(
             : 1;
         if ( ( pCrsr->End()->nContent.GetIndex() - pCrsr->Start()->nContent.GetIndex() ) <= nTxtFldLength )
         {
-            pFieldAtCrsr = (SwField*)pTxtFld->GetFmtFld().GetField();
+            pFieldAtCrsr = const_cast<SwField*>(pTxtFld->GetFmtFld().GetField());
         }
     }
 
@@ -1783,7 +1783,7 @@ bool SwCrsrShell::GotoINetAttr( const SwTxtINetFmt& rAttr )
         SwCrsrSaveState aSaveState( *pCrsr );
 
         pCrsr->GetPoint()->nNode = *rAttr.GetpTxtNode();
-        pCrsr->GetPoint()->nContent.Assign( (SwTxtNode*)rAttr.GetpTxtNode(),
+        pCrsr->GetPoint()->nContent.Assign( const_cast<SwTxtNode*>(rAttr.GetpTxtNode()),
                                             rAttr.GetStart() );
         bRet = !pCrsr->IsSelOvr();
         if( bRet )

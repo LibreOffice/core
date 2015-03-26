@@ -1393,13 +1393,13 @@ bool SwFEShell::GotoObj( bool bNext, sal_uInt16 /*GOTOOBJ_...*/ eType )
     {
         const SwVirtFlyDrawObj *pO = static_cast<const SwVirtFlyDrawObj*>(pBest);
         const SwRect& rFrm = pO->GetFlyFrm()->Frm();
-        SelectObj( rFrm.Pos(), 0, (SdrObject*)pBest );
+        SelectObj( rFrm.Pos(), 0, const_cast<SdrObject*>(pBest) );
         if( !ActionPend() )
             MakeVisible( rFrm );
     }
     else
     {
-        SelectObj( Point(), 0, (SdrObject*)pBest );
+        SelectObj( Point(), 0, const_cast<SdrObject*>(pBest) );
         if( !ActionPend() )
             MakeVisible( pBest->GetCurrentBoundRect() );
     }
@@ -2511,7 +2511,7 @@ SwChainRet SwFEShell::Chainable( SwRect &rRect, const SwFrmFmt &rSource,
     {
         SdrObject* pObj;
         SdrPageView* pPView;
-        SwDrawView *pDView = (SwDrawView*)Imp()->GetDrawView();
+        SwDrawView *pDView = const_cast<SwDrawView*>(Imp()->GetDrawView());
         const sal_uInt16 nOld = pDView->GetHitTolerancePixel();
         pDView->SetHitTolerancePixel( 0 );
         if( pDView->PickObj( rPt, pDView->getHitTolLog(), pObj, pPView, SDRSEARCH_PICKMARKABLE ) &&

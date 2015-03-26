@@ -163,7 +163,7 @@ void SwFtnIdxs::UpdateAllFtn()
         return;
 
     // Get the NodesArray via the StartIndex of the first Footnote
-    SwDoc* pDoc = (SwDoc*) (*this)[ 0 ]->GetTxtNode().GetDoc();
+    SwDoc* pDoc = const_cast<SwDoc*>((*this)[ 0 ]->GetTxtNode().GetDoc());
     SwTxtFtn* pTxtFtn;
     const SwEndNoteInfo& rEndInfo = pDoc->GetEndNoteInfo();
     const SwFtnInfo& rFtnInfo = pDoc->GetFtnInfo();

@@ -548,8 +548,8 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                             if (!sPrevName.isEmpty())
                             {
                                 //needs cast - no non-const method available
-                                SwFrmFmt* pPrevFmt = (SwFrmFmt*)
-                                    lcl_GetFrmFmtByName(rSh, sPrevName);
+                                SwFrmFmt* pPrevFmt = const_cast<SwFrmFmt*>(
+                                    lcl_GetFrmFmtByName(rSh, sPrevName));
                                 SAL_WARN_IF(!pPrevFmt, "sw.ui", "No frame found!");
                                 if(pPrevFmt)
                                 {
@@ -582,13 +582,13 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                             if (!sNextName.isEmpty())
                             {
                                 //needs cast - no non-const method available
-                                SwFrmFmt* pNextFmt = (SwFrmFmt*)
-                                    lcl_GetFrmFmtByName(rSh, sNextName);
+                                SwFrmFmt* pNextFmt = const_cast<SwFrmFmt*>(
+                                    lcl_GetFrmFmtByName(rSh, sNextName));
                                 SAL_WARN_IF(!pNextFmt, "sw.ui", "No frame found!");
                                 if(pNextFmt)
                                 {
-                                    rSh.Chain(*(SwFrmFmt*)
-                                              pCurrFlyFmt, *pNextFmt);
+                                    rSh.Chain(*const_cast<SwFrmFmt*>(
+                                              pCurrFlyFmt), *pNextFmt);
                                 }
                             }
                             rSh.SetChainMarker();
@@ -1095,13 +1095,13 @@ void SwFrameShell::ExecFrameStyle(SfxRequest& rReq)
                     else
                     {
                         if ( aBoxItem.GetTop() )
-                            ((SvxBorderLine*)aBoxItem.GetTop())->SetColor( rNewColor );
+                            const_cast<SvxBorderLine*>(aBoxItem.GetTop())->SetColor( rNewColor );
                         if ( aBoxItem.GetBottom() )
-                            ((SvxBorderLine*)aBoxItem.GetBottom())->SetColor( rNewColor );
+                            const_cast<SvxBorderLine*>(aBoxItem.GetBottom())->SetColor( rNewColor );
                         if ( aBoxItem.GetLeft() )
-                            ((SvxBorderLine*)aBoxItem.GetLeft())->SetColor( rNewColor );
+                            const_cast<SvxBorderLine*>(aBoxItem.GetLeft())->SetColor( rNewColor );
                         if ( aBoxItem.GetRight() )
-                            ((SvxBorderLine*)aBoxItem.GetRight())->SetColor( rNewColor );
+                            const_cast<SvxBorderLine*>(aBoxItem.GetRight())->SetColor( rNewColor );
                     }
                 }
             }

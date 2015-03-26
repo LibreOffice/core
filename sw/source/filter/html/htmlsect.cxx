@@ -152,24 +152,24 @@ void SwHTMLParser::NewDivision( int nToken )
         sal_uInt16 nFlags = CONTEXT_FLAGS_HDRFTR;
         if( bHeader )
         {
-            pHdFtFmt = (SwFrmFmt*)rPageFmt.GetHeader().GetHeaderFmt();
+            pHdFtFmt = const_cast<SwFrmFmt*>(rPageFmt.GetHeader().GetHeaderFmt());
             if( !pHdFtFmt )
             {
                 // noch keine Header, dann erzeuge einen.
                 rPageFmt.SetFmtAttr( SwFmtHeader( true ));
-                pHdFtFmt = (SwFrmFmt*)rPageFmt.GetHeader().GetHeaderFmt();
+                pHdFtFmt = const_cast<SwFrmFmt*>(rPageFmt.GetHeader().GetHeaderFmt());
                 bNew = true;
             }
             nFlags |= HTML_CNTXT_HEADER_DIST;
         }
         else
         {
-            pHdFtFmt = (SwFrmFmt*)rPageFmt.GetFooter().GetFooterFmt();
+            pHdFtFmt = const_cast<SwFrmFmt*>(rPageFmt.GetFooter().GetFooterFmt());
             if( !pHdFtFmt )
             {
                 // noch keine Footer, dann erzeuge einen.
                 rPageFmt.SetFmtAttr( SwFmtFooter( true ));
-                pHdFtFmt = (SwFrmFmt*)rPageFmt.GetFooter().GetFooterFmt();
+                pHdFtFmt = const_cast<SwFrmFmt*>(rPageFmt.GetFooter().GetFooterFmt());
                 bNew = true;
             }
             nFlags |= HTML_CNTXT_FOOTER_DIST;
@@ -419,8 +419,8 @@ void SwHTMLParser::FixHeaderFooterDistance( bool bHeader,
     SwFrmFmt& rPageFmt = pPageDesc->GetMaster();
 
     SwFrmFmt *pHdFtFmt =
-        bHeader ? (SwFrmFmt*)rPageFmt.GetHeader().GetHeaderFmt()
-                : (SwFrmFmt*)rPageFmt.GetFooter().GetFooterFmt();
+        bHeader ? const_cast<SwFrmFmt*>(rPageFmt.GetHeader().GetHeaderFmt())
+                : const_cast<SwFrmFmt*>(rPageFmt.GetFooter().GetFooterFmt());
     OSL_ENSURE( pHdFtFmt, "Doch keine Kopf- oder Fusszeile" );
 
     const SwFmtCntnt& rFlyCntnt = pHdFtFmt->GetCntnt();

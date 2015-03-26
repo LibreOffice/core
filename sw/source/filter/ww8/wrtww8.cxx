@@ -879,7 +879,7 @@ void WW8_WrPlcPn::AppendFkpEntry(WW8_FC nEndFc,short nVarLen,const sal_uInt8* pS
     WW8_WrFkp* pF = &aFkps.back();
 
     // big sprm? build the sprmPHugePapx
-    sal_uInt8* pNewSprms = (sal_uInt8*)pSprms;
+    sal_uInt8* pNewSprms = const_cast<sal_uInt8*>(pSprms);
     sal_uInt8 aHugePapx[ 8 ];
     if( rWrt.bWrtWW8 && PAP == ePlc && 488 < nVarLen )
     {

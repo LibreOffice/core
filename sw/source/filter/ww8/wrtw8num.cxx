@@ -99,7 +99,7 @@ sal_uInt16 MSWordExportBase::GetId( const SwNumRule& rNumRule )
             pUsedNumTbl->push_back( pR );
         }
     }
-    SwNumRule* p = (SwNumRule*)&rNumRule;
+    SwNumRule* p = const_cast<SwNumRule*>(&rNumRule);
     sal_uInt16 nRet = pUsedNumTbl->GetPos(p);
 
     // Is this list now duplicated into a new list which we should use

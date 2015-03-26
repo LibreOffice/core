@@ -42,7 +42,7 @@ static sal_uLong lcl_FindFtnPos( const SwDoc *pDoc, const SwTxtFtn *pAttr )
 {
     const SwFtnIdxs &rFtnIdxs = pDoc->GetFtnIdxs();
 
-    SwTxtFtn* pBla = (SwTxtFtn*)pAttr;
+    SwTxtFtn* pBla = const_cast<SwTxtFtn*>(pAttr);
     SwFtnIdxs::const_iterator it = rFtnIdxs.find( pBla );
     if ( it != rFtnIdxs.end() )
     {
@@ -1085,7 +1085,7 @@ const SwFtnFrm *SwFtnBossFrm::FindFirstFtn( SwCntntFrm *pCnt ) const
             if ( pRet->GetNext() )
                 pRet = static_cast<const SwFtnFrm*>(pRet->GetNext());
             else
-            {   SwFtnBossFrm *pBoss = (SwFtnBossFrm*)pRet->FindFtnBossFrm();
+            {   SwFtnBossFrm *pBoss = const_cast<SwFtnBossFrm*>(pRet->FindFtnBossFrm());
                 SwPageFrm *pPage = pBoss->FindPageFrm();
                 lcl_NextFtnBoss( pBoss, pPage, false ); // next FtnBoss
                 SwFtnContFrm *pCont = pBoss ? pBoss->FindNearestFtnCont() : 0;
@@ -2346,7 +2346,7 @@ void SwPageFrm::UpdateFtnNum()
                 pCntnt = static_cast<SwSectionFrm*>(pBoss->GetUpper())->FindLastCntnt();
             else
             {
-                SwFtnFrm* pFtn = (SwFtnFrm*)pBoss->FindFirstFtn( pCntnt );
+                SwFtnFrm* pFtn = const_cast<SwFtnFrm*>(pBoss->FindFirstFtn( pCntnt ));
                 while( pFtn )
                 {
                     SwTxtFtn* pTxtFtn = pFtn->GetAttr();
@@ -2803,7 +2803,7 @@ SwCntntFrm* SwFtnFrm::GetRef()
 
 const SwCntntFrm* SwFtnFrm::GetRefFromAttr()  const
 {
-    SwFtnFrm* pThis = (SwFtnFrm*)this;
+    SwFtnFrm* pThis = const_cast<SwFtnFrm*>(this);
     return pThis->GetRefFromAttr();
 }
 

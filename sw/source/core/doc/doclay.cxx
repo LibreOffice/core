@@ -384,8 +384,8 @@ SwFlyFrmFmt* SwDoc::MakeFlyAndMove( const SwPaM& rPam, const SfxItemSet& rSet,
                 // original one and move (copy and delete) the selected boxes.
                 // The size is corrected on a percentage basis.
 
-                SwTableNode* pTblNd = (SwTableNode*)(*pSelBoxes)[0]->
-                                                GetSttNd()->FindTableNode();
+                SwTableNode* pTblNd = const_cast<SwTableNode*>((*pSelBoxes)[0]->
+                                                GetSttNd()->FindTableNode());
                 if( !pTblNd )
                     break;
 
@@ -1113,7 +1113,7 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
 #if OSL_DEBUG_LEVEL > 0
         OSL_ENSURE( pHnt && pHnt->Which() == RES_TXTATR_FLYCNT,
                     "Missing FlyInCnt-Hint." );
-        OSL_ENSURE( pHnt && const_cast<SwFmtFlyCnt&>(pHnt->GetFlyCnt()).
+        OSL_ENSURE( pHnt && pHnt->GetFlyCnt().
                     GetFrmFmt() == (SwFrmFmt*)pOldFmt,
                     "Wrong TxtFlyCnt-Hint." );
 #endif

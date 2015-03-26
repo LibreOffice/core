@@ -2211,7 +2211,7 @@ void SwRefPageGetField::ChangeExpansion( const SwFrm* pFrm,
 
     //  create index for determination of the TextNode
     SwPosition aPos( SwNodeIndex( pDoc->GetNodes() ) );
-    SwTxtNode* pTxtNode = (SwTxtNode*) GetBodyTxtNode( *pDoc, aPos, *pFrm );
+    SwTxtNode* pTxtNode = const_cast<SwTxtNode*>(GetBodyTxtNode( *pDoc, aPos, *pFrm ));
 
     // If no layout exists, ChangeExpansion is called for header and
     // footer lines via layout formatting without existing TxtNode.

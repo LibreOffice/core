@@ -475,7 +475,7 @@ bool DocumentFieldsManager::UpdateFld(SwTxtFld * pDstTxtFld, SwField & rSrcFld,
 
     bool bTblSelBreak = false;
 
-    SwFmtFld * pDstFmtFld = (SwFmtFld*)&pDstTxtFld->GetFmtFld();
+    SwFmtFld * pDstFmtFld = const_cast<SwFmtFld*>(&pDstTxtFld->GetFmtFld());
     SwField * pDstFld = pDstFmtFld->GetField();
     sal_uInt16 nFldWhich = rSrcFld.GetTyp()->Which();
     SwNodeIndex aTblNdIdx(pDstTxtFld->GetTxtNode());
@@ -906,7 +906,7 @@ void DocumentFieldsManager::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds 
     int nShownSections = 0;
     for( _SetGetExpFlds::const_iterator it = mpUpdtFlds->GetSortLst()->begin(); it != mpUpdtFlds->GetSortLst()->end(); ++it )
     {
-        SwSection* pSect = (SwSection*)(*it)->GetSection();
+        SwSection* pSect = const_cast<SwSection*>((*it)->GetSection());
         if ( pSect && !pSect->IsCondHidden())
             nShownSections++;
     }
@@ -914,7 +914,7 @@ void DocumentFieldsManager::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds 
     OUString aNew;
     for( _SetGetExpFlds::const_iterator it = mpUpdtFlds->GetSortLst()->begin(); it != mpUpdtFlds->GetSortLst()->end(); ++it )
     {
-        SwSection* pSect = (SwSection*)(*it)->GetSection();
+        SwSection* pSect = const_cast<SwSection*>((*it)->GetSection());
         if( pSect )
         {
 
@@ -947,14 +947,14 @@ void DocumentFieldsManager::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds 
             continue;
         }
 
-        SwTxtFld* pTxtFld = (SwTxtFld*)(*it)->GetTxtFld();
+        SwTxtFld* pTxtFld = const_cast<SwTxtFld*>((*it)->GetTxtFld());
         if( !pTxtFld )
         {
             OSL_ENSURE( false, "what's wrong now'" );
             continue;
         }
 
-        SwFmtFld* pFmtFld = (SwFmtFld*)&pTxtFld->GetFmtFld();
+        SwFmtFld* pFmtFld = const_cast<SwFmtFld*>(&pTxtFld->GetFmtFld());
         const SwField* pFld = pFmtFld->GetField();
 
         switch( nWhich = pFld->GetTyp()->Which() )

@@ -844,7 +844,7 @@ void SAL_CALL SwXMailMerge::cancel() throw (com::sun::star::uno::RuntimeExceptio
 
 void SwXMailMerge::LaunchMailMergeEvent( const MailMergeEvent &rEvt ) const
 {
-    cppu::OInterfaceIteratorHelper aIt( ((SwXMailMerge *) this)->aMergeListeners );
+    cppu::OInterfaceIteratorHelper aIt( const_cast<SwXMailMerge *>(this)->aMergeListeners );
     while (aIt.hasMoreElements())
     {
         Reference< XMailMergeListener > xRef( aIt.next(), UNO_QUERY );

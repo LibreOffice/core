@@ -975,10 +975,10 @@ sal_uInt16 SwDocShell::DoWaterCan(const OUString &rName, sal_uInt16 nFamily)
                 aTemplate.aColl.pFrmFmt = pStyle->GetFrmFmt();
                 break;
             case SFX_STYLE_FAMILY_PAGE:
-                aTemplate.aColl.pPageDesc = (SwPageDesc*)pStyle->GetPageDesc();
+                aTemplate.aColl.pPageDesc = const_cast<SwPageDesc*>(pStyle->GetPageDesc());
                 break;
             case SFX_STYLE_FAMILY_PSEUDO:
-                aTemplate.aColl.pNumRule = (SwNumRule*)pStyle->GetNumRule();
+                aTemplate.aColl.pNumRule = const_cast<SwNumRule*>(pStyle->GetNumRule());
                 break;
 
             default:
@@ -1180,7 +1180,7 @@ sal_uInt16 SwDocShell::MakeByExample( const OUString &rName, sal_uInt16 nFamily,
             pCurrWrtShell->StartAllAction();
             sal_uInt16 nPgDsc = pCurrWrtShell->GetCurPageDesc();
             SwPageDesc& rSrc = (SwPageDesc&)pCurrWrtShell->GetPageDesc( nPgDsc );
-            SwPageDesc& rDest = *(SwPageDesc*)pStyle->GetPageDesc();
+            SwPageDesc& rDest = *const_cast<SwPageDesc*>(pStyle->GetPageDesc());
 
             sal_uInt16 nPoolId = rDest.GetPoolFmtId();
             sal_uInt16 nHId = rDest.GetPoolHelpId();

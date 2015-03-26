@@ -218,7 +218,7 @@ void SwFmtFld::SwClientNotify( const SwModify& rModify, const SfxHint& rHint )
         SwDoc* pDoc = pPaM->GetDoc();
         const SwTxtNode& rTxtNode = mpTxtFld->GetTxtNode();
         pPaM->GetPoint()->nNode = rTxtNode;
-        pPaM->GetPoint()->nContent.Assign( (SwTxtNode*)&rTxtNode, mpTxtFld->GetStart() );
+        pPaM->GetPoint()->nContent.Assign( const_cast<SwTxtNode*>(&rTxtNode), mpTxtFld->GetStart() );
 
         OUString const aEntry( GetField()->ExpandField( pDoc->IsClipBoard() ) );
         pPaM->SetMark();
@@ -447,7 +447,7 @@ void SwTxtFld::CopyTxtFld( SwTxtFld *pDest ) const
         || nFldWhich == RES_GETEXPFLD
         || nFldWhich == RES_HIDDENTXTFLD )
     {
-        SwTxtFld* pFld = (SwTxtFld*)this;
+        SwTxtFld* pFld = const_cast<SwTxtFld*>(this);
         pDestIDFA->UpdateExpFlds( pFld, true );
     }
     // Tabellenfelder auf externe Darstellung

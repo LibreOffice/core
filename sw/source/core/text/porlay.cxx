@@ -1936,7 +1936,7 @@ SwScriptInfo* SwScriptInfo::GetScriptInfo( const SwTxtNode& rTNd,
 
     for( SwTxtFrm* pLast = aIter.First(); pLast; pLast = aIter.Next() )
     {
-        pScriptInfo = (SwScriptInfo*)pLast->GetScriptInfo();
+        pScriptInfo = const_cast<SwScriptInfo*>(pLast->GetScriptInfo());
         if ( pScriptInfo )
         {
             if ( bAllowInvalid || COMPLETE_STRING == pScriptInfo->GetInvalidityA() )

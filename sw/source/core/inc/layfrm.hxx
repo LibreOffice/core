@@ -196,17 +196,17 @@ public:
  */
 inline SwCntntFrm* SwLayoutFrm::ContainsCntnt()
 {
-    return (SwCntntFrm*)(static_cast<const SwLayoutFrm*>(this)->ContainsCntnt());
+    return const_cast<SwCntntFrm*>(static_cast<const SwLayoutFrm*>(this)->ContainsCntnt());
 }
 
 inline SwCellFrm* SwLayoutFrm::FirstCell()
 {
-    return (SwCellFrm*)(static_cast<const SwLayoutFrm*>(this)->FirstCell());
+    return const_cast<SwCellFrm*>(static_cast<const SwLayoutFrm*>(this)->FirstCell());
 }
 
 inline SwFrm* SwLayoutFrm::ContainsAny( const bool _bInvestigateFtnForSections )
 {
-    return (SwFrm*)(static_cast<const SwLayoutFrm*>(this)->ContainsAny( _bInvestigateFtnForSections ));
+    return const_cast<SwFrm*>(static_cast<const SwLayoutFrm*>(this)->ContainsAny( _bInvestigateFtnForSections ));
 }
 
 /**

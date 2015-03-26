@@ -2494,49 +2494,49 @@ static void impl_borderLine( FSHelperPtr pSerializer, sal_Int32 elementToken, co
         switch (pBorderLine->GetBorderLineStyle())
         {
             case table::BorderLineStyle::SOLID:
-                pVal = ( sal_Char* )"single";
+                pVal = "single";
                 break;
             case table::BorderLineStyle::DOTTED:
-                pVal = ( sal_Char* )"dotted";
+                pVal = "dotted";
                 break;
             case table::BorderLineStyle::DASHED:
-                pVal = ( sal_Char* )"dashed";
+                pVal = "dashed";
                 break;
             case table::BorderLineStyle::DOUBLE:
-                pVal = ( sal_Char* )"double";
+                pVal = "double";
                 break;
             case table::BorderLineStyle::THINTHICK_SMALLGAP:
-                pVal = ( sal_Char* )"thinThickSmallGap";
+                pVal = "thinThickSmallGap";
                 break;
             case table::BorderLineStyle::THINTHICK_MEDIUMGAP:
-                pVal = ( sal_Char* )"thinThickMediumGap";
+                pVal = "thinThickMediumGap";
                 break;
             case table::BorderLineStyle::THINTHICK_LARGEGAP:
-                pVal = ( sal_Char* )"thinThickLargeGap";
+                pVal = "thinThickLargeGap";
                 break;
             case table::BorderLineStyle::THICKTHIN_SMALLGAP:
-                pVal = ( sal_Char* )"thickThinSmallGap";
+                pVal = "thickThinSmallGap";
                 break;
             case table::BorderLineStyle::THICKTHIN_MEDIUMGAP:
-                pVal = ( sal_Char* )"thickThinMediumGap";
+                pVal = "thickThinMediumGap";
                 break;
             case table::BorderLineStyle::THICKTHIN_LARGEGAP:
-                pVal = ( sal_Char* )"thickThinLargeGap";
+                pVal = "thickThinLargeGap";
                 break;
             case table::BorderLineStyle::EMBOSSED:
-                pVal = ( sal_Char* )"threeDEmboss";
+                pVal = "threeDEmboss";
                 break;
             case table::BorderLineStyle::ENGRAVED:
-                pVal = ( sal_Char* )"threeDEngrave";
+                pVal = "threeDEngrave";
                 break;
             case table::BorderLineStyle::OUTSET:
-                pVal = ( sal_Char* )"outset";
+                pVal = "outset";
                 break;
             case table::BorderLineStyle::INSET:
-                pVal = ( sal_Char* )"inset";
+                pVal = "inset";
                 break;
             case table::BorderLineStyle::FINE_DASHED:
-                pVal = ( sal_Char* )"dashSmallGap";
+                pVal = "dashSmallGap";
                 break;
             case table::BorderLineStyle::NONE:
             default:
@@ -6351,13 +6351,13 @@ void DocxAttributeOutput::CharTwoLines( const SvxTwoLinesItem& rTwoLines )
 
     OString sBracket;
     if ((cStart == '{') || (cEnd == '}'))
-        sBracket = (sal_Char *)"curly";
+        sBracket = const_cast<sal_Char *>("curly");
     else if ((cStart == '<') || (cEnd == '>'))
-        sBracket = (sal_Char *)"angle";
+        sBracket = const_cast<sal_Char *>("angle");
     else if ((cStart == '[') || (cEnd == ']'))
-        sBracket = (sal_Char *)"square";
+        sBracket = const_cast<sal_Char *>("square");
     else
-        sBracket = (sal_Char *)"round";
+        sBracket = const_cast<sal_Char *>("round");
     AddToAttrList( m_pEastAsianLayoutAttrList, FSNS( XML_w, XML_combineBrackets ), sBracket.getStr() );
 }
 

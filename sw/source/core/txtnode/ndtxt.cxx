@@ -594,7 +594,7 @@ SwCntntNode *SwTxtNode::SplitCntntNode( const SwPosition &rPos )
         if( HasWriterListeners() && SfxItemState::SET == pNode->GetSwAttrSet().
             GetItemState( RES_PAGEDESC, true, &pItem ) )
         {
-            pNode->ModifyNotification( (SfxPoolItem*)pItem, (SfxPoolItem*)pItem );
+            pNode->ModifyNotification( pItem, pItem );
         }
     }
     return pNode;

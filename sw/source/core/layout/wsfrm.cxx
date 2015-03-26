@@ -226,8 +226,8 @@ void SwFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
         SfxItemIter aOIter( *static_cast<const SwAttrSetChg*>(pOld)->GetChgSet() );
         while( true )
         {
-            _UpdateAttrFrm( (SfxPoolItem*)aOIter.GetCurItem(),
-                         (SfxPoolItem*)aNIter.GetCurItem(), nInvFlags );
+            _UpdateAttrFrm( aOIter.GetCurItem(),
+                         aNIter.GetCurItem(), nInvFlags );
             if( aNIter.IsAtEnd() )
                 break;
             aNIter.NextItem();
@@ -1927,8 +1927,8 @@ void SwCntntFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
         SwAttrSetChg aNewSet( *static_cast<const SwAttrSetChg*>(pNew) );
         while( true )
         {
-            _UpdateAttr( (SfxPoolItem*)aOIter.GetCurItem(),
-                         (SfxPoolItem*)aNIter.GetCurItem(), nInvFlags,
+            _UpdateAttr( aOIter.GetCurItem(),
+                         aNIter.GetCurItem(), nInvFlags,
                          &aOldSet, &aNewSet );
             if( aNIter.IsAtEnd() )
                 break;
@@ -2930,7 +2930,7 @@ void SwLayoutFrm::Format( const SwBorderAttrs *pAttrs )
     const sal_uInt16 nLeft = (sal_uInt16)pAttrs->CalcLeft( this );
     const sal_uInt16 nUpper = pAttrs->CalcTop();
 
-    const sal_uInt16 nRight = (sal_uInt16)const_cast<SwBorderAttrs*>(pAttrs)->CalcRight( this );
+    const sal_uInt16 nRight = (sal_uInt16)pAttrs->CalcRight( this );
     const sal_uInt16 nLower = pAttrs->CalcBottom();
     bool bVert = IsVertical() && !IsPageFrm();
     SwRectFn fnRect = bVert ? ( IsVertLR() ? fnRectVertL2R : fnRectVert ) : fnRectHori;

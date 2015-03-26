@@ -561,7 +561,7 @@ bool SwEditShell::IsProtectedOutlinePara() const
     if( rNd.IsTxtNode() )
     {
         const SwOutlineNodes& rOutlNd = GetDoc()->GetNodes().GetOutLineNds();
-        SwNodePtr pNd = (SwNodePtr)&rNd;
+        SwNodePtr pNd = const_cast<SwNodePtr>(&rNd);
         bool bFirst = true;
         sal_uInt16 nPos;
         int nLvl(0);

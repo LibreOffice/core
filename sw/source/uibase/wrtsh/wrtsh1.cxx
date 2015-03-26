@@ -1791,8 +1791,8 @@ void SwWrtShell::ChangeHeaderOrFooter(
                 {
                     SvxULSpaceItem aUL(bHeader ? 0 : MM50, bHeader ? MM50 : 0, RES_UL_SPACE );
                     SwFrmFmt* pFmt = bHeader ?
-                        (SwFrmFmt*)rMaster.GetHeader().GetHeaderFmt() :
-                        (SwFrmFmt*)rMaster.GetFooter().GetFooterFmt();
+                        const_cast<SwFrmFmt*>(rMaster.GetHeader().GetHeaderFmt()) :
+                        const_cast<SwFrmFmt*>(rMaster.GetFooter().GetFooterFmt());
                     pFmt->SetFmtAttr( aUL );
                 }
             }

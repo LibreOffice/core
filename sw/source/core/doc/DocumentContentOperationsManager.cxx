@@ -2289,7 +2289,7 @@ bool DocumentContentOperationsManager::MoveAndJoin( SwPaM& rPaM, SwPosition& rPo
 
 bool DocumentContentOperationsManager::Overwrite( const SwPaM &rRg, const OUString &rStr )
 {
-    SwPosition& rPt = *(SwPosition*)rRg.GetPoint();
+    SwPosition& rPt = *const_cast<SwPosition*>(rRg.GetPoint());
     if( m_rDoc.GetAutoCorrExceptWord() )                  // Add to AutoCorrect
     {
         if( 1 == rStr.getLength() )

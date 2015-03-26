@@ -366,7 +366,7 @@ bool SwCursor::IsSelOvr( int eFlags )
                 }
             }
 
-            SwCntntNode* pCNd = (pFrm != NULL) ? (SwCntntNode*)pFrm->GetNode() : NULL;
+            SwCntntNode* pCNd = (pFrm != NULL) ? const_cast<SwCntntNode*>(pFrm->GetNode()) : NULL;
             if ( pCNd != NULL )
             {
                 // set this CntntNode as new position
@@ -2250,7 +2250,7 @@ SwCursor* SwTableCursor::MakeBoxSels( SwCursor* pAktCrsr )
 
 void SwTableCursor::InsertBox( const SwTableBox& rTblBox )
 {
-    SwTableBox* pBox = (SwTableBox*)&rTblBox;
+    SwTableBox* pBox = const_cast<SwTableBox*>(&rTblBox);
     m_SelectedBoxes.insert(pBox);
     m_bChanged = true;
 }

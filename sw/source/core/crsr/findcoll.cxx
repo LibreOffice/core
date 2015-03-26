@@ -52,7 +52,7 @@ int SwFindParaFmtColl::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion
         nRet = FIND_NOT_FOUND;
     else if( pReplColl )
     {
-        pCrsr->GetDoc()->SetTxtFmtColl( *pCrsr, (SwTxtFmtColl*)pReplColl );
+        pCrsr->GetDoc()->SetTxtFmtColl( *pCrsr, const_cast<SwTxtFmtColl*>(pReplColl) );
         nRet = FIND_NO_RING;
     }
     return nRet;

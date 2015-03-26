@@ -44,7 +44,7 @@ sal_uInt16 SwIsoRefPortion::GetViewWidth( const SwTxtSizeInfo &rInf ) const
 {
     // Although we are const, nViewWidth should be calculated in the last
     // moment possible
-    SwIsoRefPortion* pThis = (SwIsoRefPortion*)this;
+    SwIsoRefPortion* pThis = const_cast<SwIsoRefPortion*>(this);
     if( !Width() && rInf.OnWin() && SwViewOption::IsFieldShadings() &&
             !rInf.GetOpt().IsReadonly() && !rInf.GetOpt().IsPagePreview() )
     {

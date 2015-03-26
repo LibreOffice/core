@@ -522,7 +522,7 @@ void SwPagePreviewWin::MouseButtonDown( const MouseEvent& rMEvt )
 
 void SwPagePreviewWin::SetPagePreview( sal_uInt8 nRow, sal_uInt8 nCol )
 {
-    SwMasterUsrPref *pOpt = (SwMasterUsrPref *)SW_MOD()->GetUsrPref(false);
+    SwMasterUsrPref *pOpt = const_cast<SwMasterUsrPref *>(SW_MOD()->GetUsrPref(false));
 
     if (nRow != pOpt->GetPagePrevRow() || nCol != pOpt->GetPagePrevCol())
     {
@@ -709,7 +709,7 @@ void  SwPagePreview::Execute( SfxRequest &rReq )
             if( pArgs && SfxItemState::SET == pArgs->GetItemState( FN_SHOW_BOOKVIEW, false, &pItem ) )
             {
                 bBookPreview = static_cast< const SfxBoolItem* >( pItem )->GetValue();
-                ( ( SwViewOption* ) GetViewShell()->GetViewOptions() )->SetPagePrevBookview( bBookPreview );
+                const_cast<SwViewOption*>(GetViewShell()->GetViewOptions())->SetPagePrevBookview( bBookPreview );
                     // cast is not gentleman like, but it's common use in writer and in this case
             }
             if ( pViewWin->SetBookPreviewMode( bBookPreview ) )

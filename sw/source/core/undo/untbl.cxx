@@ -1123,7 +1123,7 @@ void _SaveTable::NewFrmFmt( const SwTableLine* pTblLn, const SwTableBox* pTblBx,
         const SfxPoolItem& rOld = pOldFmt->GetFmtAttr( RES_BOXATR_FORMAT ),
                          & rNew = pFmt->GetFmtAttr( RES_BOXATR_FORMAT );
         if( rOld != rNew )
-            pFmt->ModifyNotification( (SfxPoolItem*)&rOld, (SfxPoolItem*)&rNew );
+            pFmt->ModifyNotification( &rOld, &rNew );
     }
 
     if( !pOldFmt->HasWriterListeners() )
@@ -1414,7 +1414,7 @@ SwUndoTblAutoFmt::SwUndoTblAutoFmt( const SwTableNode& rTblNd,
     {
         // than also go over the ContentNodes of the EndBoxes and collect
         // all paragraph attributes
-        pSaveTbl->SaveCntntAttrs( (SwDoc*)rTblNd.GetDoc() );
+        pSaveTbl->SaveCntntAttrs( const_cast<SwDoc*>(rTblNd.GetDoc()) );
         bSaveCntntAttr = true;
     }
 }
@@ -2787,8 +2787,8 @@ SwUndo* SwUndoTblCpyTbl::PrepareRedline( SwDoc* pDoc, const SwTableBox& rBox,
 bool SwUndoTblCpyTbl::InsertRow( SwTable& rTbl, const SwSelBoxes& rBoxes,
                                 sal_uInt16 nCnt )
 {
-    SwTableNode* pTblNd = (SwTableNode*)rTbl.GetTabSortBoxes()[0]->
-                                GetSttNd()->FindTableNode();
+    SwTableNode* pTblNd = const_cast<SwTableNode*>(rTbl.GetTabSortBoxes()[0]->
+                                GetSttNd()->FindTableNode());
 
     pInsRowUndo = new SwUndoTblNdsChg( UNDO_TABLE_INSROW, rBoxes, *pTblNd,
                                        0, 0, nCnt, true, false );

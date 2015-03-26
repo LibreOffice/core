@@ -356,7 +356,7 @@ const Graphic* SwTransferable::FindOLEReplacementGraphic() const
 void SwTransferable::RemoveDDELinkFormat( const vcl::Window& rWin )
 {
     RemoveFormat( SotClipboardFormatId::LINK );
-    CopyToClipboard( (vcl::Window*)&rWin );
+    CopyToClipboard( const_cast<vcl::Window*>(&rWin) );
 }
 
 namespace
@@ -3156,7 +3156,7 @@ void SwTransferable::StartDrag( vcl::Window* pWin, const Point& rPos )
     bOldIdle = pWrtShell->GetViewOptions()->IsIdle();
     bCleanUp = true;
 
-    ((SwViewOption *)pWrtShell->GetViewOptions())->SetIdle( false );
+    pWrtShell->GetViewOptions()->SetIdle( false );
 
     if( pWrtShell->IsSelFrmMode() )
         pWrtShell->ShowCrsr();
@@ -3214,7 +3214,7 @@ void SwTransferable::DragFinished( sal_Int8 nAction )
     else
         pWrtShell->ShowCrsr();
 
-    ((SwViewOption *)pWrtShell->GetViewOptions())->SetIdle( bOldIdle );
+    pWrtShell->GetViewOptions()->SetIdle( bOldIdle );
 }
 
 bool SwTransferable::PrivatePaste( SwWrtShell& rShell )

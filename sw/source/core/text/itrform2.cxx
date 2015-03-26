@@ -1877,10 +1877,10 @@ void SwTxtFormatter::FeedInf( SwTxtFormatInfo &rInf ) const
 
     rInf.RealWidth( sal_uInt16(rInf.Right() - GetLeftMargin()) );
     rInf.Width( rInf.RealWidth() );
-    if( ((SwTxtFormatter*)this)->GetRedln() )
+    if( const_cast<SwTxtFormatter*>(this)->GetRedln() )
     {
-        ((SwTxtFormatter*)this)->GetRedln()->Clear( ((SwTxtFormatter*)this)->GetFnt() );
-        ((SwTxtFormatter*)this)->GetRedln()->Reset();
+        const_cast<SwTxtFormatter*>(this)->GetRedln()->Clear( const_cast<SwTxtFormatter*>(this)->GetFnt() );
+        const_cast<SwTxtFormatter*>(this)->GetRedln()->Reset();
     }
 }
 
@@ -2124,7 +2124,7 @@ void SwTxtFormatter::UpdatePos( SwLineLayout *pCurrent, Point aStart,
                 aSt.Y() += pLay->Height();
                 pLay = pLay->GetNext();
             } while ( pLay );
-            ((SwTxtFormatter*)this)->pMulti = NULL;
+            const_cast<SwTxtFormatter*>(this)->pMulti = NULL;
         }
         pPos->Move( aTmpInf );
         pPos = pPos->GetPortion();

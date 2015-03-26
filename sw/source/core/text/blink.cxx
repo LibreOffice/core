@@ -69,7 +69,7 @@ IMPL_LINK_NOARG(SwBlink, Blinker)
         {
             const SwBlinkPortion* pTmp = &*it;
             if( pTmp->GetRootFrm() &&
-                const_cast<SwRootFrm*>(pTmp->GetRootFrm())->GetCurrShell() )
+                pTmp->GetRootFrm()->GetCurrShell() )
             {
                 ++it;
 
@@ -104,7 +104,7 @@ IMPL_LINK_NOARG(SwBlink, Blinker)
 
                 Rectangle aRefresh( aPos, Size( nWidth, nHeight ) );
                 aRefresh.Right() += ( aRefresh.Bottom()- aRefresh.Top() ) / 8;
-                const_cast<SwRootFrm*>(pTmp->GetRootFrm())
+                pTmp->GetRootFrm()
                     ->GetCurrShell()->InvalidateWindows( aRefresh );
             }
             else // Portions without a shell can be removed from the list

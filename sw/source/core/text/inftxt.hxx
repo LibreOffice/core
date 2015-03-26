@@ -91,7 +91,7 @@ public:
     inline const SvxLineSpacingItem *GetLineSpacing() const { return pSpace; }
     inline sal_uInt16 GetDefTabStop() const { return nDefTabStop; }
     inline void SetDefTabStop( sal_uInt16 nNew ) const
-        { ( (SwLineInfo*)this )->nDefTabStop = nNew; }
+        { const_cast<SwLineInfo*>(this)->nDefTabStop = nNew; }
 
     // vertical alignment
     inline sal_uInt16 GetVertAlign() const { return nVertAlign; }

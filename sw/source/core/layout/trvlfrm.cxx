@@ -606,7 +606,7 @@ bool SwFlyFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
 /** Layout dependent cursor travelling */
 bool SwCntntFrm::LeftMargin(SwPaM *pPam) const
 {
-    if( &pPam->GetNode() != (SwCntntNode*)GetNode() )
+    if( &pPam->GetNode() != GetNode() )
         return false;
     const_cast<SwCntntNode*>(GetNode())->
         MakeStartIndex((SwIndex *) &pPam->GetPoint()->nContent);
@@ -615,7 +615,7 @@ bool SwCntntFrm::LeftMargin(SwPaM *pPam) const
 
 bool SwCntntFrm::RightMargin(SwPaM *pPam, bool) const
 {
-    if( &pPam->GetNode() != (SwCntntNode*)GetNode() )
+    if( &pPam->GetNode() != GetNode() )
         return false;
     const_cast<SwCntntNode*>(GetNode())->
         MakeEndIndex((SwIndex *) &pPam->GetPoint()->nContent);
@@ -681,7 +681,7 @@ static const SwCntntFrm * lcl_MissProtectedFrames( const SwCntntFrm *pCnt,
 static bool lcl_UpDown( SwPaM *pPam, const SwCntntFrm *pStart,
                     GetNxtPrvCnt fnNxtPrv, bool bInReadOnly )
 {
-    OSL_ENSURE( &pPam->GetNode() == (SwCntntNode*)pStart->GetNode(),
+    OSL_ENSURE( &pPam->GetNode() == pStart->GetNode(),
             "lcl_UpDown doesn't work for others." );
 
     const SwCntntFrm *pCnt = 0;
@@ -930,7 +930,7 @@ static bool lcl_UpDown( SwPaM *pPam, const SwCntntFrm *pStart,
 
     if( pCnt )
     {   // set the Point on the Content-Node
-        SwCntntNode *pCNd = (SwCntntNode*)pCnt->GetNode();
+        SwCntntNode *pCNd = const_cast<SwCntntNode*>(pCnt->GetNode());
         pPam->GetPoint()->nNode = *pCNd;
         if ( fnNxtPrv == lcl_GetPrvCnt )
             pCNd->MakeEndIndex( (SwIndex*)&pPam->GetPoint()->nContent );
@@ -1010,7 +1010,7 @@ sal_uInt16 SwRootFrm::SetCurrPage( SwCursor* pToSet, sal_uInt16 nPageNum )
             pCntnt = pCntnt->GetNextCntntFrm();
     if ( pCntnt )
     {
-        SwCntntNode* pCNd = (SwCntntNode*)pCntnt->GetNode();
+        SwCntntNode* pCNd = const_cast<SwCntntNode*>(pCntnt->GetNode());
         pToSet->GetPoint()->nNode = *pCNd;
         pCNd->MakeStartIndex( (SwIndex*)&pToSet->GetPoint()->nContent );
         pToSet->GetPoint()->nContent = static_cast<const SwTxtFrm*>(pCntnt)->GetOfst();
@@ -1051,7 +1051,7 @@ SwLayoutFrm *GetNextFrm( const SwLayoutFrm *pFrm )
 
 SwLayoutFrm *GetThisFrm( const SwLayoutFrm *pFrm )
 {
-    return (SwLayoutFrm*)pFrm;
+    return const_cast<SwLayoutFrm*>(pFrm);
 }
 
 SwLayoutFrm *GetPrevFrm( const SwLayoutFrm *pFrm )
@@ -1115,7 +1115,7 @@ bool GetFrmInPage( const SwCntntFrm *pCnt, SwWhichPage fnWhichPage,
             }
         }
 
-        SwCntntNode *pCNd = (SwCntntNode*)pCnt->GetNode();
+        SwCntntNode *pCNd = const_cast<SwCntntNode*>(pCnt->GetNode());
         pPam->GetPoint()->nNode = *pCNd;
         sal_Int32 nIdx;
         if( fnPosPage == GetFirstSub )
@@ -1447,7 +1447,7 @@ void SwPageFrm::GetCntntPosition( const Point &rPt, SwPosition &rPos ) const
     if( !pAct->IsValid() )
     {
         // CntntFrm not formatted -> always on node-beginning
-        SwCntntNode* pCNd = (SwCntntNode*)pAct->GetNode();
+        SwCntntNode* pCNd = const_cast<SwCntntNode*>(pAct->GetNode());
         OSL_ENSURE( pCNd, "Where is my CntntNode?" );
         rPos.nNode = *pCNd;
         rPos.nContent.Assign( pCNd, 0 );
@@ -1923,8 +1923,8 @@ bool SwRootFrm::MakeTblCrsrs( SwTableCursor& rTblCrsr )
                             (bReadOnlyAvailable ||
                              !pCell->GetFmt()->GetProtect().IsCntntProtected()))
                         {
-                            SwTableBox* pInsBox = (SwTableBox*)
-                                static_cast<const SwCellFrm*>(pCell)->GetTabBox();
+                            SwTableBox* pInsBox = const_cast<SwTableBox*>(
+                                static_cast<const SwCellFrm*>(pCell)->GetTabBox());
                             aNew.insert( pInsBox );
                         }
                         if ( pCell->GetNext() )

@@ -299,7 +299,7 @@ void SwDoc::CopyMasterHeader(const SwPageDesc &rChged, const SwFmtHeader &rHead,
             }
             else
                 ::lcl_DescSetAttr( *pRight,
-                               *(SwFrmFmt*)rFmtHead.GetHeaderFmt(), false );
+                               *const_cast<SwFrmFmt*>(rFmtHead.GetHeaderFmt()), false );
         }
     }
 }
@@ -371,7 +371,7 @@ void SwDoc::CopyMasterFooter(const SwPageDesc &rChged, const SwFmtFooter &rFoot,
             }
             else
                 ::lcl_DescSetAttr( *pRight,
-                               *(SwFrmFmt*)rFmtFoot.GetFooterFmt(), false );
+                               *const_cast<SwFrmFmt*>(rFmtFoot.GetFooterFmt()), false );
         }
     }
 }

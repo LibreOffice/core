@@ -935,11 +935,11 @@ inline void SwFrm::ResetRetouche() const
 
 inline SwLayoutFrm *SwFrm::GetNextLayoutLeaf()
 {
-    return (SwLayoutFrm*)static_cast<const SwFrm*>(this)->GetNextLayoutLeaf();
+    return const_cast<SwLayoutFrm*>(static_cast<const SwFrm*>(this)->GetNextLayoutLeaf());
 }
 inline SwLayoutFrm *SwFrm::GetPrevLayoutLeaf()
 {
-    return (SwLayoutFrm*)static_cast<const SwFrm*>(this)->GetPrevLayoutLeaf();
+    return const_cast<SwLayoutFrm*>(static_cast<const SwFrm*>(this)->GetPrevLayoutLeaf());
 }
 inline const SwLayoutFrm *SwFrm::GetNextLayoutLeaf() const
 {

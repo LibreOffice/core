@@ -90,7 +90,7 @@ double SwTableBox::GetValue( SwTblCalcPara& rCalcPara ) const
     rCalcPara.SetLastTblBox( this );
 
     // Does it create a recursion?
-    SwTableBox* pBox = (SwTableBox*)this;
+    SwTableBox* pBox = const_cast<SwTableBox*>(this);
     if( rCalcPara.pBoxStk->find( pBox ) != rCalcPara.pBoxStk->end() )
         return nRet;            // already on the stack: error
 
@@ -271,7 +271,7 @@ bool SwTblCalcPara::CalcWithStackOverflow()
     sal_uInt16 nCnt = 0;
     SwTableBoxes aStackOverflows;
     do {
-        SwTableBox* pBox = (SwTableBox*)pLastTblBox;
+        SwTableBox* pBox = const_cast<SwTableBox*>(pLastTblBox);
         nStackCnt = 0;
         rCalc.SetCalcError( CALC_NOERR );
         aStackOverflows.insert( aStackOverflows.begin() + nCnt++, pBox );
@@ -381,7 +381,7 @@ void SwTableFormula::RelNmsToBoxNms( const SwTable& rTbl, OUString& rNewStr,
     // relative name w.r.t. box name (external presentation)
     SwNode* pNd = (SwNode*)pPara;
     OSL_ENSURE( pNd, "Feld steht in keinem TextNode" );
-    const SwTableBox *pBox = (SwTableBox *)rTbl.GetTblBox(
+    const SwTableBox *pBox = rTbl.GetTblBox(
                     pNd->FindTableBoxStartNode()->GetIndex() );
 
     rNewStr += OUString(rFirstBox[0]); // get label for the box
@@ -414,7 +414,7 @@ void SwTableFormula::RelBoxNmsToPtr( const SwTable& rTbl, OUString& rNewStr,
     // relative name w.r.t. box name (internal presentation)
     SwNode* pNd = (SwNode*)pPara;
     OSL_ENSURE( pNd, "Field not placed in any Node" );
-    const SwTableBox *pBox = (SwTableBox*)rTbl.GetTblBox(
+    const SwTableBox *pBox = rTbl.GetTblBox(
                     pNd->FindTableBoxStartNode()->GetIndex() );
 
     rNewStr += OUString(rFirstBox[0]); // get label for the box
@@ -762,12 +762,12 @@ static const SwTableBox* lcl_RelToBox( const SwTable& rTbl,
 
         sGetName = sGetName.copy( 1 );
 
-        const SwTableLines* pLines = (SwTableLines*)&rTbl.GetTabLines();
+        const SwTableLines* pLines = &rTbl.GetTabLines();
         const SwTableBoxes* pBoxes;
         const SwTableLine* pLine;
 
         // determine starting values of the box,...
-        pBox = (SwTableBox*)pRefBox;
+        pBox = pRefBox;
         pLine = pBox->GetUpper();
         while( pLine->GetUpper() )
         {
@@ -995,18 +995,18 @@ void SwTableFormula::_HasValidBoxes( const SwTable& rTbl, OUString& ,
             {
                 const SwNode* pNd = GetNodeOfFormula();
                 const SwTableBox* pBox = !pNd ? 0
-                                               : (SwTableBox *)rTbl.GetTblBox(
-                                    pNd->FindTableBoxStartNode()->GetIndex() );
+                                               : const_cast<SwTableBox *>(rTbl.GetTblBox(
+                                    pNd->FindTableBoxStartNode()->GetIndex() ));
                 if( pLastBox )
-                    pEndBox = (SwTableBox*)lcl_RelToBox( rTbl, pBox, *pLastBox );
-                pSttBox = (SwTableBox*)lcl_RelToBox( rTbl, pBox, rFirstBox );
+                    pEndBox = const_cast<SwTableBox*>(lcl_RelToBox( rTbl, pBox, *pLastBox ));
+                pSttBox = const_cast<SwTableBox*>(lcl_RelToBox( rTbl, pBox, rFirstBox ));
             }
             break;
 
         case EXTRNL_NAME:
             if( pLastBox )
-                pEndBox = (SwTableBox*)rTbl.GetTblBox( *pLastBox );
-            pSttBox = (SwTableBox*)rTbl.GetTblBox( rFirstBox );
+                pEndBox = const_cast<SwTableBox*>(rTbl.GetTblBox( *pLastBox ));
+            pSttBox = const_cast<SwTableBox*>(rTbl.GetTblBox( rFirstBox ));
             break;
         }
 
@@ -1104,15 +1104,15 @@ void SwTableFormula::_SplitMergeBoxNm( const SwTable& rTbl, OUString& rNewStr,
             const SwTableBox* pBox = pNd ? pTbl->GetTblBox(
                             pNd->FindTableBoxStartNode()->GetIndex() ) : 0;
             if( pLastBox )
-                pEndBox = (SwTableBox*)lcl_RelToBox( *pTbl, pBox, *pLastBox );
-            pSttBox = (SwTableBox*)lcl_RelToBox( *pTbl, pBox, rFirstBox );
+                pEndBox = const_cast<SwTableBox*>(lcl_RelToBox( *pTbl, pBox, *pLastBox ));
+            pSttBox = const_cast<SwTableBox*>(lcl_RelToBox( *pTbl, pBox, rFirstBox ));
         }
         break;
 
     case EXTRNL_NAME:
         if( pLastBox )
-            pEndBox = (SwTableBox*)pTbl->GetTblBox( *pLastBox );
-        pSttBox = (SwTableBox*)pTbl->GetTblBox( rFirstBox );
+            pEndBox = const_cast<SwTableBox*>(pTbl->GetTblBox( *pLastBox ));
+        pSttBox = const_cast<SwTableBox*>(pTbl->GetTblBox( rFirstBox ));
         break;
     }
 

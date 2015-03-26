@@ -400,7 +400,7 @@ void  SwDBTreeList::RequestingChildren(SvTreeListEntry* pParent)
 
 IMPL_LINK( SwDBTreeList, DBCompare, SvSortData*, pData )
 {
-    SvTreeListEntry* pRight = (SvTreeListEntry*)(pData->pRight );
+    SvTreeListEntry* pRight = const_cast<SvTreeListEntry*>(pData->pRight);
 
     if (GetParent(pRight) && GetParent(GetParent(pRight)))
         return 1; // don't sort column names

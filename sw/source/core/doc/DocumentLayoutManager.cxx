@@ -340,7 +340,7 @@ SwFrmFmt *DocumentLayoutManager::CopyLayoutFmt(
     const bool bDraw = RES_DRAWFRMFMT == rSource.Which();
     OSL_ENSURE( bFly || bDraw, "this method only works for fly or draw" );
 
-    SwDoc* pSrcDoc = (SwDoc*)rSource.GetDoc();
+    SwDoc* pSrcDoc = const_cast<SwDoc*>(rSource.GetDoc());
 
     // May we copy this object?
     // We may, unless it's 1) it's a control (and therfore a draw)

@@ -2687,7 +2687,7 @@ static void lcl_toxMatchACSwitch(  SwWW8ImplReader& /*rReader*/,
 {
     if ( rParam.GoToTokenParam() )
     {
-        SwTOXType* pType = (SwTOXType*)rDoc.GetTOXType( TOX_ILLUSTRATIONS, 0);
+        SwTOXType* pType = const_cast<SwTOXType*>(rDoc.GetTOXType( TOX_ILLUSTRATIONS, 0));
         rBase.RegisterToTOXType( *pType );
         rBase.SetCaptionDisplay( eCaptionType );
         // Read Sequence Name and store in TOXBase

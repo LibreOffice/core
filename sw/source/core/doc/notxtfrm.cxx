@@ -116,7 +116,7 @@ static void lcl_PaintReplacement( const SwRect &rRect, const OUString &rText,
         bool bVisited = false;
         if ( rURL.GetMap() )
         {
-            ImageMap *pMap = (ImageMap*)rURL.GetMap();
+            ImageMap *pMap = const_cast<ImageMap*>(rURL.GetMap());
             for( size_t i = 0; i < pMap->GetIMapObjectCount(); ++i )
             {
                 IMapObject *pObj = pMap->GetIMapObject( i );
@@ -533,7 +533,7 @@ bool SwNoTxtFrm::GetCharRect( SwRect &rRect, const SwPosition& rPos,
 bool SwNoTxtFrm::GetCrsrOfst(SwPosition* pPos, Point& ,
                              SwCrsrMoveState*, bool ) const
 {
-    SwCntntNode* pCNd = (SwCntntNode*)GetNode();
+    SwCntntNode* pCNd = const_cast<SwCntntNode*>(GetNode());
     pPos->nNode = *pCNd;
     pPos->nContent.Assign( pCNd, 0 );
     return true;

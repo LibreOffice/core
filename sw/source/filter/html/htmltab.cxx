@@ -600,7 +600,7 @@ public:
 
     bool HasColTags() const { return bColSpec; }
 
-    sal_uInt16 IncGrfsThatResize() { return pSwTable ? ((SwTable *)pSwTable)->IncGrfsThatResize() : 0; }
+    sal_uInt16 IncGrfsThatResize() { return pSwTable ? const_cast<SwTable *>(pSwTable)->IncGrfsThatResize() : 0; }
 
     void RegisterDrawObject( SdrObject *pObj, sal_uInt8 nPrcWidth );
 
@@ -2358,7 +2358,7 @@ void HTMLTable::CloseTable()
 void HTMLTable::_MakeTable( SwTableBox *pBox )
 {
     SwTableLines& rLines = (pBox ? pBox->GetTabLines()
-                                 : ((SwTable *)pSwTable)->GetTabLines() );
+                                 : const_cast<SwTable *>(pSwTable)->GetTabLines() );
 
     // jetzt geht's richtig los ...
 
@@ -2635,8 +2635,8 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
         if( GetBGBrush() )
             pSwTable->GetFrmFmt()->SetFmtAttr( *GetBGBrush() );
 
-        ((SwTable *)pSwTable)->SetRowsToRepeat( static_cast< sal_uInt16 >(nHeadlineRepeat) );
-        ((SwTable *)pSwTable)->GCLines();
+        const_cast<SwTable *>(pSwTable)->SetRowsToRepeat( static_cast< sal_uInt16 >(nHeadlineRepeat) );
+        const_cast<SwTable *>(pSwTable)->GCLines();
 
         bool bIsInFlyFrame = pContext && pContext->GetFrmFmt();
         if( bIsInFlyFrame && !nWidth )
@@ -2688,7 +2688,7 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
 
         pLayoutInfo->SetWidths();
 
-        ((SwTable *)pSwTable)->SetHTMLTableLayout( pLayoutInfo );
+        const_cast<SwTable *>(pSwTable)->SetHTMLTableLayout( pLayoutInfo );
 
         if( pResizeDrawObjs )
         {
@@ -3785,7 +3785,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                     pPostIts = 0;
                 }
 
-                pTCntxt->SetTableNode( (SwTableNode *)pNd->FindTableNode() );
+                pTCntxt->SetTableNode( const_cast<SwTableNode *>(pNd->FindTableNode()) );
 
                 pCurTable->SetTable( pTCntxt->GetTableNode(), pTCntxt,
                                      nLeftSpace, nRightSpace,
@@ -5367,7 +5367,7 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
                 // Die Section wird jetzt nicht mehr gebraucht.
                 pPam->SetMark();
                 pPam->DeleteMark();
-                pDoc->getIDocumentContentOperations().DeleteSection( (SwStartNode *)pCapStNd );
+                pDoc->getIDocumentContentOperations().DeleteSection( const_cast<SwStartNode *>(pCapStNd) );
                 pTable->SetCaption( 0, false );
             }
 
@@ -5417,7 +5417,7 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
         {
             pPam->SetMark();
             pPam->DeleteMark();
-            pDoc->getIDocumentContentOperations().DeleteSection( (SwStartNode *)pCapStNd );
+            pDoc->getIDocumentContentOperations().DeleteSection( const_cast<SwStartNode *>(pCapStNd) );
             pCurTable->SetCaption( 0, false );
         }
     }

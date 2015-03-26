@@ -916,7 +916,7 @@ bool SwCntntFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
             // At the FixSize, the surrounding Frame enforces the size;
             // the borders are simply subtracted.
             const long nLeft = rAttrs.CalcLeft( this );
-            const long nRight = const_cast<SwBorderAttrs&>(rAttrs).CalcRight( this );
+            const long nRight = rAttrs.CalcRight( this );
             (this->*fnRect->fnSetXMargins)( nLeft, nRight );
 
             SwViewShell *pSh = getRootFrm()->GetCurrShell();

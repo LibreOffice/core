@@ -777,7 +777,7 @@ bool SwTable::InsTable( const SwTable& rCpyTbl, const SwNodeIndex& rSttBox,
             if( 0 == ( pTmp = pMyBox->FindNextBox( *this, pMyBox, false )))
                 bDelCntnt = false;  // No space left?
             else
-                pMyBox = (SwTableBox*)pTmp;
+                pMyBox = const_cast<SwTableBox*>(pTmp);
 
         } while( true );
 
@@ -1040,7 +1040,7 @@ static void _FndCntntBox( const SwTableBox* pBox, SwSelBoxes* pPara )
             _FndCntntLine( pLine, pPara );
     }
     else
-        pPara->insert( (SwTableBox*)pBox );
+        pPara->insert( const_cast<SwTableBox*>(pBox) );
 }
 
 static void _FndCntntLine( const SwTableLine* pLine, SwSelBoxes* pPara )
@@ -1053,7 +1053,7 @@ static void _FndCntntLine( const SwTableLine* pLine, SwSelBoxes* pPara )
 SwSelBoxes& SwTable::SelLineFromBox( const SwTableBox* pBox,
                                     SwSelBoxes& rBoxes, bool bToTop ) const
 {
-    SwTableLine* pLine = (SwTableLine*)pBox->GetUpper();
+    SwTableLine* pLine = const_cast<SwTableLine*>(pBox->GetUpper());
     if( bToTop )
         while( pLine->GetUpper() )
             pLine = pLine->GetUpper()->GetUpper();

@@ -679,7 +679,7 @@ void SwPageFrm::PrepareHeader()
     {   //Implant header, but remove first, if already present
         OSL_ENSURE( rH.GetHeaderFmt(), "FrmFmt for Header not found." );
 
-        if ( pLay->GetFmt() == (SwFrmFmt*)rH.GetHeaderFmt() )
+        if ( pLay->GetFmt() == rH.GetHeaderFmt() )
             return; // Header is already the correct one.
 
         if ( pLay->IsHeaderFrm() )
@@ -690,7 +690,7 @@ void SwPageFrm::PrepareHeader()
             delete pDel;
         }
         OSL_ENSURE( pLay, "Where to with the Header?" );
-        SwHeaderFrm *pH = new SwHeaderFrm( (SwFrmFmt*)rH.GetHeaderFmt(), this );
+        SwHeaderFrm *pH = new SwHeaderFrm( const_cast<SwFrmFmt*>(rH.GetHeaderFmt()), this );
         pH->Paste( this, pLay );
         if ( GetUpper() )
             ::RegistFlys( this, pH );
@@ -721,7 +721,7 @@ void SwPageFrm::PrepareFooter()
     {   //Implant footer, but remove first, if already present
         OSL_ENSURE( rF.GetFooterFmt(), "FrmFmt for Footer not found." );
 
-        if ( pLay->GetFmt() == (SwFrmFmt*)rF.GetFooterFmt() )
+        if ( pLay->GetFmt() == rF.GetFooterFmt() )
             return;  // Footer is already the correct one.
 
         if ( pLay->IsFooterFrm() )
@@ -729,7 +729,7 @@ void SwPageFrm::PrepareFooter()
             pLay->Cut();
             delete pLay;
         }
-        SwFooterFrm *pF = new SwFooterFrm( (SwFrmFmt*)rF.GetFooterFmt(), this );
+        SwFooterFrm *pF = new SwFooterFrm( const_cast<SwFrmFmt*>(rF.GetFooterFmt()), this );
         pF->Paste( this );
         if ( GetUpper() )
             ::RegistFlys( this, pF );

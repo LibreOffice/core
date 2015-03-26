@@ -193,12 +193,12 @@ inline sal_Int32 GetMinLen( const SwTxtSizeInfo &rInf )
 
 SwTxtSizeInfo::SwTxtSizeInfo( const SwTxtSizeInfo &rNew )
     : SwTxtInfo( rNew ),
-      m_pKanaComp(const_cast<SwTxtSizeInfo&>(rNew).GetpKanaComp()),
+      m_pKanaComp(rNew.GetpKanaComp()),
       m_pVsh(const_cast<SwTxtSizeInfo&>(rNew).GetVsh()),
       m_pOut(const_cast<SwTxtSizeInfo&>(rNew).GetOut()),
       m_pRef(const_cast<SwTxtSizeInfo&>(rNew).GetRefDev()),
       m_pFnt(const_cast<SwTxtSizeInfo&>(rNew).GetFont()),
-      m_pUnderFnt(const_cast<SwTxtSizeInfo&>(rNew).GetUnderFnt()),
+      m_pUnderFnt(rNew.GetUnderFnt()),
       m_pFrm(rNew.m_pFrm),
       m_pOpt(&rNew.GetOpt()),
       m_pTxt(&rNew.GetTxt()),
@@ -304,12 +304,12 @@ void SwTxtSizeInfo::CtorInitTxtSizeInfo( SwTxtFrm *pFrame, SwFont *pNewFnt,
 SwTxtSizeInfo::SwTxtSizeInfo( const SwTxtSizeInfo &rNew, const OUString* pTxt,
                               const sal_Int32 nIndex, const sal_Int32 nLength )
     : SwTxtInfo( rNew ),
-      m_pKanaComp(const_cast<SwTxtSizeInfo&>(rNew).GetpKanaComp()),
+      m_pKanaComp(rNew.GetpKanaComp()),
       m_pVsh(const_cast<SwTxtSizeInfo&>(rNew).GetVsh()),
       m_pOut(const_cast<SwTxtSizeInfo&>(rNew).GetOut()),
       m_pRef(const_cast<SwTxtSizeInfo&>(rNew).GetRefDev()),
       m_pFnt(const_cast<SwTxtSizeInfo&>(rNew).GetFont()),
-      m_pUnderFnt(const_cast<SwTxtSizeInfo&>(rNew).GetUnderFnt()),
+      m_pUnderFnt(rNew.GetUnderFnt()),
       m_pFrm( rNew.m_pFrm ),
       m_pOpt(&rNew.GetOpt()),
       m_pTxt(pTxt),
@@ -373,7 +373,7 @@ SwPosSize SwTxtSizeInfo::GetTxtSize( OutputDevice* pOutDev,
 SwPosSize SwTxtSizeInfo::GetTxtSize() const
 {
     const SwScriptInfo& rSI =
-                     ( (SwParaPortion*)GetParaPortion() )->GetScriptInfo();
+                     const_cast<SwParaPortion*>(GetParaPortion())->GetScriptInfo();
 
     // in some cases, compression is not allowed or suppressed for
     // performance reasons
@@ -410,7 +410,7 @@ sal_Int32 SwTxtSizeInfo::GetTxtBreak( const long nLineWidth,
                                        const sal_uInt16 nComp ) const
 {
     const SwScriptInfo& rScriptInfo =
-                     ( (SwParaPortion*)GetParaPortion() )->GetScriptInfo();
+                     const_cast<SwParaPortion*>(GetParaPortion())->GetScriptInfo();
 
     OSL_ENSURE( m_pRef == m_pOut, "GetTxtBreak is supposed to use the RefDev" );
     SwDrawTextInfo aDrawInf( m_pVsh, *m_pOut, &rScriptInfo,
@@ -430,7 +430,7 @@ sal_Int32 SwTxtSizeInfo::GetTxtBreak( const long nLineWidth,
                                        sal_Int32& rExtraCharPos ) const
 {
     const SwScriptInfo& rScriptInfo =
-                     ( (SwParaPortion*)GetParaPortion() )->GetScriptInfo();
+                     const_cast<SwParaPortion*>(GetParaPortion())->GetScriptInfo();
 
     OSL_ENSURE( m_pRef == m_pOut, "GetTxtBreak is supposed to use the RefDev" );
     SwDrawTextInfo aDrawInf( m_pVsh, *m_pOut, &rScriptInfo,
@@ -765,7 +765,7 @@ void SwTxtPaintInfo::CalcRect( const SwLinePortion& rPor,
 
     if( aRect.HasArea() && pIntersect )
     {
-        ::SwAlignRect( aRect, (SwViewShell*)GetVsh() );
+        ::SwAlignRect( aRect, GetVsh() );
 
         if ( GetOut()->IsClipRegion() )
         {
@@ -891,7 +891,7 @@ static void lcl_DrawSpecial( const SwTxtPaintInfo& rInf, const SwLinePortion& rP
     const_cast<SwLinePortion&>(rPor).Width( (sal_uInt16)aFontSize.Width() );
     rInf.DrawText( aTmp, rPor );
     const_cast<SwLinePortion&>(rPor).Width( nOldWidth );
-    const_cast<SwTxtPaintInfo&>(rInf).SetFont( (SwFont*)pOldFnt );
+    const_cast<SwTxtPaintInfo&>(rInf).SetFont( const_cast<SwFont*>(pOldFnt) );
     const_cast<SwTxtPaintInfo&>(rInf).SetPos( aOldPos );
 }
 
@@ -1036,7 +1036,7 @@ void SwTxtPaintInfo::DrawPostIts( const SwLinePortion&, bool bScript ) const
             GetTxtFrm()->SwitchHorizontalToVertical( aTmpRect );
 
         const Rectangle aRect( aTmpRect.SVRect() );
-        m_pOpt->PaintPostIts( (OutputDevice*)GetOut(), aRect, bScript );
+        m_pOpt->PaintPostIts( const_cast<OutputDevice*>(GetOut()), aRect, bScript );
     }
 }
 
@@ -1049,7 +1049,7 @@ void SwTxtPaintInfo::DrawCheckBox(const SwFieldFormCheckboxPortion &rPor, bool b
         if (OnWin() && SwViewOption::IsFieldShadings() &&
                 !GetOpt().IsPagePreview())
         {
-            OutputDevice* pOut = (OutputDevice*)GetOut();
+            OutputDevice* pOut = const_cast<OutputDevice*>(GetOut());
             pOut->Push( PushFlags::LINECOLOR | PushFlags::FILLCOLOR );
             pOut->SetFillColor( SwViewOption::GetFieldShadingsColor() );
             pOut->SetLineColor();
@@ -1080,7 +1080,7 @@ void SwTxtPaintInfo::DrawBackground( const SwLinePortion &rPor ) const
 
     if ( aIntersect.HasArea() )
     {
-        OutputDevice* pOut = (OutputDevice*)GetOut();
+        OutputDevice* pOut = const_cast<OutputDevice*>(GetOut());
         pOut->Push( PushFlags::LINECOLOR | PushFlags::FILLCOLOR );
 
         // For dark background we do not want to have a filled rectangle
@@ -1131,7 +1131,7 @@ void SwTxtPaintInfo::DrawBackBrush( const SwLinePortion &rPor ) const
                     SwViewOption::IsFieldShadings() &&
                     !GetOpt().IsPagePreview())
             {
-                OutputDevice* pOutDev = (OutputDevice*)GetOut();
+                OutputDevice* pOutDev = const_cast<OutputDevice*>(GetOut());
                 pOutDev->Push( PushFlags::LINECOLOR | PushFlags::FILLCOLOR );
                 pOutDev->SetFillColor( SwViewOption::GetFieldShadingsColor() );
                 pOutDev->SetLineColor( );
@@ -1146,7 +1146,7 @@ void SwTxtPaintInfo::DrawBackBrush( const SwLinePortion &rPor ) const
 
     if ( aIntersect.HasArea() )
     {
-        OutputDevice* pTmpOut = (OutputDevice*)GetOut();
+        OutputDevice* pTmpOut = const_cast<OutputDevice*>(GetOut());
 
         // #i16816# tagged pdf support
         SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, 0, *pTmpOut );
@@ -1245,7 +1245,7 @@ void SwTxtPaintInfo::_NotifyURL( const SwLinePortion &rPor ) const
 
     if( aIntersect.HasArea() )
     {
-        SwTxtNode *pNd = (SwTxtNode*)GetTxtFrm()->GetTxtNode();
+        SwTxtNode *pNd = const_cast<SwTxtNode*>(GetTxtFrm()->GetTxtNode());
         SwTxtAttr *const pAttr =
             pNd->GetTxtAttrAt(GetIdx(), RES_TXTATR_INETFMT);
         if( pAttr )
@@ -1638,7 +1638,7 @@ SwTxtSlot::SwTxtSlot(
     // The text is replaced ...
     if( bOn )
     {
-        pInf = (SwTxtSizeInfo*)pNew;
+        pInf = const_cast<SwTxtSizeInfo*>(pNew);
         nIdx = pInf->GetIdx();
         nLen = pInf->GetLen();
         pOldTxt = &(pInf->GetTxt());

@@ -103,7 +103,7 @@ void SwChapterField::ChangeExpansion(const SwFrm* pFrm,
                                       bool bSrchNum )
 {
     OSL_ENSURE( pFrm, "In which frame am I?" );
-    SwDoc* pDoc = (SwDoc*)pCntntNode->GetDoc();
+    SwDoc* pDoc = const_cast<SwDoc*>(pCntntNode->GetDoc());
 
     const SwTxtNode* pTxtNode = dynamic_cast<const SwTxtNode*>(pCntntNode);
     if ( !pTxtNode || !pFrm->IsInDocBody() )
@@ -125,7 +125,7 @@ void SwChapterField::ChangeExpansion(const SwTxtNode &rTxtNd, bool bSrchNum)
     sPost.clear();
     sPre.clear();
 
-    SwDoc* pDoc = (SwDoc*)rTxtNd.GetDoc();
+    SwDoc* pDoc = const_cast<SwDoc*>(rTxtNd.GetDoc());
     const SwTxtNode *pTxtNd = rTxtNd.FindOutlineNodeOfLevel( nLevel );
     if( pTxtNd )
     {

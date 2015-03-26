@@ -1473,7 +1473,7 @@ SwTableBox* SwTable::GetTblBox( sal_uLong nSttIdx )
         while ( pFrm && !pFrm->IsCellFrm() )
             pFrm = pFrm->GetUpper();
         if ( pFrm )
-            pRet = (SwTableBox*)static_cast<SwCellFrm*>(pFrm)->GetTabBox();
+            pRet = const_cast<SwTableBox*>(static_cast<SwCellFrm*>(pFrm)->GetTabBox());
     }
 
     // In case the layout doesn't exist yet or anything else goes wrong.
@@ -1943,7 +1943,7 @@ SwTable * SwTable::FindTable( SwFrmFmt const*const pFmt )
 SwTableNode* SwTable::GetTableNode() const
 {
     return !GetTabSortBoxes().empty() ?
-           (SwTableNode*)GetTabSortBoxes()[ 0 ]->GetSttNd()->FindTableNode() :
+           const_cast<SwTableNode*>(GetTabSortBoxes()[ 0 ]->GetSttNd()->FindTableNode()) :
            pTableNode;
 }
 

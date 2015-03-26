@@ -58,7 +58,7 @@ SwCntntNode* SwTxtNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
     // node with the collection and hard attributes. Normally is the same
     // node, but if insert a glossary without formatting, then the Attrnode
     // is the prev node of the destionation position in dest. document.
-    SwTxtNode* pCpyTxtNd = (SwTxtNode*)this;
+    SwTxtNode* pCpyTxtNd = const_cast<SwTxtNode*>(this);
     SwTxtNode* pCpyAttrNd = pCpyTxtNd;
 
     // Copy the formats to the other document

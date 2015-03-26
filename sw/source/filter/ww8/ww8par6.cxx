@@ -584,7 +584,7 @@ void wwSectionManager::SetPageULSpaceItems(SwFrmFmt &rFmt,
     if (rData.bHasHeader)               // ... und Header-Lower setzen
     {
         //Kopfzeilenhoehe minimal sezten
-        if (SwFrmFmt* pHdFmt = (SwFrmFmt*)rFmt.GetHeader().GetHeaderFmt())
+        if (SwFrmFmt* pHdFmt = const_cast<SwFrmFmt*>(rFmt.GetHeader().GetHeaderFmt()))
         {
             SvxULSpaceItem aHdUL(pHdFmt->GetULSpace());
             if (!rSection.IsFixedHeightHeader())    //normal
@@ -611,7 +611,7 @@ void wwSectionManager::SetPageULSpaceItems(SwFrmFmt &rFmt,
 
     if (rData.bHasFooter)               // ... und Footer-Upper setzen
     {
-        if (SwFrmFmt* pFtFmt = (SwFrmFmt*)rFmt.GetFooter().GetFooterFmt())
+        if (SwFrmFmt* pFtFmt = const_cast<SwFrmFmt*>(rFmt.GetFooter().GetFooterFmt()))
         {
             SvxULSpaceItem aFtUL(pFtFmt->GetULSpace());
             if (!rSection.IsFixedHeightFooter())    //normal
@@ -4002,7 +4002,7 @@ void SwWW8ImplReader::Read_LR( sal_uInt16 nId, const sal_uInt8* pData, short nLe
                             // If have not explicit left, set number format list tab position is doc default tab
                             const SvxTabStopItem *pDefaultStopItem = static_cast<const SvxTabStopItem *>(rDoc.GetAttrPool().GetPoolDefaultItem(RES_PARATR_TABSTOP));
                             if ( pDefaultStopItem &&  pDefaultStopItem->Count() > 0 )
-                                ((SwNumFmt*)(pNumFmt))->SetListtabPos( ((SvxTabStop&)(*pDefaultStopItem)[0]).GetTabPos() );
+                                const_cast<SwNumFmt*>(pNumFmt)->SetListtabPos( ((SvxTabStop&)(*pDefaultStopItem)[0]).GetTabPos() );
                         }
                     }
                 }

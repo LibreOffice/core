@@ -3163,7 +3163,7 @@ uno::Reference< XAccessibleHyperlink > SAL_CALL
     SwHyperlinkIter_Impl aHIter( pTxtFrm );
     sal_Int32 nTIndex = -1;
     SwTOXSortTabBase* pTBase = GetTOXSortTabBase();
-    SwTxtAttr* pHt = (SwTxtAttr*)(aHIter.next());
+    SwTxtAttr* pHt = const_cast<SwTxtAttr*>(aHIter.next());
     while( (nLinkIndex < getHyperLinkCount()) && nTIndex < nLinkIndex)
     {
         sal_Int32 nHStt = -1;
@@ -3227,7 +3227,7 @@ uno::Reference< XAccessibleHyperlink > SAL_CALL
         // iterate next
         if( bH )
             // iterate next hyperlink
-            pHt = (SwTxtAttr*)(aHIter.next());
+            pHt = const_cast<SwTxtAttr*>(aHIter.next());
         else if(bTOC)
             continue;
         else

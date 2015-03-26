@@ -65,7 +65,7 @@ public:
 
     inline void Clear();
 
-    void SetNumRule( const SwNumRule *pRule ) { pNumRule = (SwNumRule *)pRule; }
+    void SetNumRule( const SwNumRule *pRule ) { pNumRule = const_cast<SwNumRule *>(pRule); }
     SwNumRule *GetNumRule() { return pNumRule; }
     const SwNumRule *GetNumRule() const { return pNumRule; }
 

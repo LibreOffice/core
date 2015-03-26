@@ -284,7 +284,7 @@ sal_uInt16  SwAuthorityFieldType::GetSequencePos(sal_IntPtr nHandle)
             }
             const SwTxtNode& rFldTxtNode = pTxtFld->GetTxtNode();
             SwPosition aFldPos(rFldTxtNode);
-            SwDoc& rDoc = *(SwDoc*)rFldTxtNode.GetDoc();
+            SwDoc& rDoc = *const_cast<SwDoc*>(rFldTxtNode.GetDoc());
             SwCntntFrm *pFrm = rFldTxtNode.getLayoutFrm( rDoc.getIDocumentLayoutAccess().GetCurrentLayout() );
             const SwTxtNode* pTxtNode = 0;
             if(pFrm && !pFrm->IsInDocBody())

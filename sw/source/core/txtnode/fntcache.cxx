@@ -401,7 +401,7 @@ void SwFntObj::CreateScrFont( const SwViewShell& rSh, const OutputDevice& rOut )
         return;
 
     // any changes to the output device are reset at the end of the function
-    OutputDevice* pOut = (OutputDevice*)&rOut;
+    OutputDevice* pOut = const_cast<OutputDevice*>(&rOut);
 
     // Save old font
     vcl::Font aOldOutFont( pOut->GetFont() );

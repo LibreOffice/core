@@ -476,7 +476,7 @@ public:
 
     // DrawView may be used at UI.
           SdrView *GetDrawView();
-    const SdrView *GetDrawView() const { return ((SwViewShell*)this)->GetDrawView(); }
+    const SdrView *GetDrawView() const { return const_cast<SwViewShell*>(this)->GetDrawView(); }
 
     // Take care that MarkList is up-to-date in any case (Bug 57153).
     SdrView *GetDrawViewWithValidMarkList();
@@ -626,7 +626,7 @@ inline void SwViewShell::UnlockPaint( bool bVirDev )
 }
 inline const SfxItemPool& SwViewShell::GetAttrPool() const
 {
-    return ((SwViewShell*)this)->GetAttrPool();
+    return const_cast<SwViewShell*>(this)->GetAttrPool();
 }
 
 #endif // INCLUDED_SW_INC_VIEWSH_HXX

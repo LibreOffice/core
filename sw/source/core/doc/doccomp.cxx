@@ -1291,7 +1291,7 @@ bool SwCompareLine::ChangesInLine( const SwCompareLine& rLine,
     if( ND_TEXTNODE == rNode.GetNodeType() &&
         ND_TEXTNODE == rLine.GetNode().GetNodeType() )
     {
-        SwTxtNode& rDstNd = *(SwTxtNode*)rNode.GetTxtNode();
+        SwTxtNode& rDstNd = *const_cast<SwTxtNode*>(rNode.GetTxtNode());
         const SwTxtNode& rSrcNd = *rLine.GetNode().GetTxtNode();
         SwDoc* pDstDoc = rDstNd.GetDoc();
 

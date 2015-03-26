@@ -318,7 +318,7 @@ void SwEditShell::UpdateFlds( SwField &rFld )
 
                     if( 0 != (pTxtFld = GetTxtFldAtPos( pCurStt, true )) )
                     {
-                        pFmtFld = (SwFmtFld*)&pTxtFld->GetFmtFld();
+                        pFmtFld = const_cast<SwFmtFld*>(&pTxtFld->GetFmtFld());
                         SwField *pCurFld = pFmtFld->GetField();
 
                         // if there are mixed field types

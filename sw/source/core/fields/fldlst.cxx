@@ -93,7 +93,7 @@ SwField* SwInputFieldList::GetField(size_t nId)
 {
     const SwTxtFld* pTxtFld = (*pSrtLst)[ nId ]->GetTxtFld();
     OSL_ENSURE( pTxtFld, "no TextFld" );
-    return (SwField*)pTxtFld->GetFmtFld().GetField();
+    return const_cast<SwField*>(pTxtFld->GetFmtFld().GetField());
 }
 
 /// save cursor

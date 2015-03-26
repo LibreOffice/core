@@ -73,7 +73,7 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
 {
     SwExpandPortion *pRet = 0;
     SwFrm *pFrame = (SwFrm*)pFrm;
-    SwField *pFld = (SwField*)pHint->GetFmtFld().GetField();
+    SwField *pFld = const_cast<SwField*>(pHint->GetFmtFld().GetField());
     const bool bName = rInf.GetOpt().IsFldName();
 
     SwCharFmt* pChFmt = 0;

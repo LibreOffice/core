@@ -131,7 +131,7 @@ void GetTblSelCrs( const SwTableCursor& rTblCrsr, SwSelBoxes& rBoxes )
 
     if (rTblCrsr.IsChgd() || !rTblCrsr.GetSelectedBoxesCount())
     {
-        SwTableCursor* pTCrsr = (SwTableCursor*)&rTblCrsr;
+        SwTableCursor* pTCrsr = const_cast<SwTableCursor*>(&rTblCrsr);
         pTCrsr->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout()->MakeTblCrsrs( *pTCrsr );
     }
 
@@ -308,8 +308,8 @@ void GetTblSel( const SwLayoutFrm* pStart, const SwLayoutFrm* pEnd,
                         OSL_ENSURE( pCell->IsCellFrm(), "Frame ohne Celle" );
                         if( ::IsFrmInTblSel( pUnion->GetUnion(), pCell ) )
                         {
-                            SwTableBox* pBox = (SwTableBox*)
-                                static_cast<const SwCellFrm*>(pCell)->GetTabBox();
+                            SwTableBox* pBox = const_cast<SwTableBox*>(
+                                static_cast<const SwCellFrm*>(pCell)->GetTabBox());
                             // check for cell protection??
                             if( !bChkProtected ||
                                 !pBox->GetFrmFmt()->GetProtect().IsCntntProtected() )
@@ -924,9 +924,9 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
         return;
 
     const SwTable *pTable = aUnions.front().GetTable()->GetTable();
-    SwDoc* pDoc = (SwDoc*)pStart->GetFmt()->GetDoc();
-    SwTableNode* pTblNd = (SwTableNode*)pTable->GetTabSortBoxes()[ 0 ]->
-                                        GetSttNd()->FindTableNode();
+    SwDoc* pDoc = const_cast<SwDoc*>(pStart->GetFmt()->GetDoc());
+    SwTableNode* pTblNd = const_cast<SwTableNode*>(pTable->GetTabSortBoxes()[ 0 ]->
+                                        GetSttNd()->FindTableNode());
 
     _MergePos aPosArr;      // Sort-Array with the frame positions
     long nWidth;
@@ -1922,7 +1922,7 @@ void MakeSelUnions( SwSelUnions& rUnions, const SwLayoutFrm *pStart,
 
         if( (aUnion.*fnRect->fnGetWidth)() )
         {
-            SwSelUnion *pTmp = new SwSelUnion( aUnion, (SwTabFrm*)pTable );
+            SwSelUnion *pTmp = new SwSelUnion( aUnion, const_cast<SwTabFrm*>(pTable) );
             rUnions.push_back( pTmp );
         }
 

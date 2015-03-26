@@ -154,7 +154,7 @@ bool SwTblField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     case FIELD_PROP_PAR2:
         {
             sal_uInt16 nOldSubType = nSubType;
-            SwTblField* pThis = (SwTblField*)this;
+            SwTblField* pThis = const_cast<SwTblField*>(this);
             pThis->nSubType |= nsSwExtendedSubType::SUB_CMD;
             rAny <<= Expand();
             pThis->nSubType = nOldSubType;

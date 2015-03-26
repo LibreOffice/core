@@ -172,8 +172,8 @@ const tools::PolyPolygon *SwNoTxtNode::HasContour() const
                 }
             }
         }
-        ((SwNoTxtNode *)this)->bContourMapModeValid = true;
-        ((SwNoTxtNode *)this)->bPixelContour = false;
+        const_cast<SwNoTxtNode *>(this)->bContourMapModeValid = true;
+        const_cast<SwNoTxtNode *>(this)->bPixelContour = false;
     }
 
     return pContour;

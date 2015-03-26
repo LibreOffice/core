@@ -187,11 +187,11 @@ void SwFmt::CopyAttrs( const SwFmt& rFmt, bool bReplace )
     SetInSwFntCache( false );
 
     // special treatments for some attributes
-    SwAttrSet* pChgSet = (SwAttrSet*)&rFmt.aSet;
+    SwAttrSet* pChgSet = const_cast<SwAttrSet*>(&rFmt.aSet);
 
     if( !bReplace )     // refresh only those that are not set?
     {
-        if( pChgSet == (SwAttrSet*)&rFmt.aSet )
+        if( pChgSet == &rFmt.aSet )
             pChgSet = new SwAttrSet( rFmt.aSet );
         pChgSet->Differentiate( aSet );
     }
@@ -215,7 +215,7 @@ void SwFmt::CopyAttrs( const SwFmt& rFmt, bool bReplace )
         }
     }
 
-    if( pChgSet != (SwAttrSet*)&rFmt.aSet ) // was a Set created?
+    if( pChgSet != &rFmt.aSet ) // was a Set created?
         delete pChgSet;
 }
 

@@ -418,7 +418,7 @@ const SwAnchoredObject* SwFlyDrawContact::GetAnchoredObj( const SdrObject* _pSdr
             "<SwFlyDrawContact::GetAnchoredObj(..)> - no object provided" );
     OSL_ENSURE( _pSdrObj->ISA(SwVirtFlyDrawObj),
             "<SwFlyDrawContact::GetAnchoredObj(..)> - wrong object type object provided" );
-    OSL_ENSURE( GetUserCall( _pSdrObj ) == const_cast<SwFlyDrawContact*>(this),
+    OSL_ENSURE( GetUserCall( _pSdrObj ) == this,
             "<SwFlyDrawContact::GetAnchoredObj(..)> - provided object doesn't belongs to this contact" );
 
     const SwAnchoredObject* pRetAnchoredObj = 0L;
@@ -684,7 +684,7 @@ const SwAnchoredObject* SwDrawContact::GetAnchoredObj( const SdrObject* _pSdrObj
     OSL_ENSURE( _pSdrObj->ISA(SwDrawVirtObj) ||
             ( !_pSdrObj->ISA(SdrVirtObj) && !_pSdrObj->ISA(SwDrawVirtObj) ),
             "<SwDrawContact::GetAnchoredObj(..)> - wrong object type object provided" );
-    OSL_ENSURE( GetUserCall( _pSdrObj ) == const_cast<SwDrawContact*>(this) ||
+    OSL_ENSURE( GetUserCall( _pSdrObj ) == this ||
             _pSdrObj == GetMaster(),
             "<SwDrawContact::GetAnchoredObj(..)> - provided object doesn't belongs to this contact" );
 

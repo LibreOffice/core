@@ -285,7 +285,7 @@ public:
     // Get box, whose start index is set on nBoxStt.
           SwTableBox* GetTblBox( sal_uLong nSttIdx );
     const SwTableBox* GetTblBox( sal_uLong nSttIdx ) const
-                        {   return ((SwTable*)this)->GetTblBox( nSttIdx );  }
+                        {   return const_cast<SwTable*>(this)->GetTblBox( nSttIdx );  }
 
     // Returns true if table contains nestings.
     bool IsTblComplex() const;

@@ -500,7 +500,7 @@ SwCollCondition::SwCollCondition( SwTxtFmtColl* pColl, sal_uLong nMasterCond,
 }
 
 SwCollCondition::SwCollCondition( const SwCollCondition& rCopy )
-    : SwClient( (SwModify*)rCopy.GetRegisteredIn() ), nCondition( rCopy.nCondition )
+    : SwClient( const_cast<SwModify*>(rCopy.GetRegisteredIn()) ), nCondition( rCopy.nCondition )
 {
     if( USRFLD_EXPRESSION & rCopy.nCondition )
         aSubCondition.pFldExpression = new OUString( *rCopy.GetFldExpression() );

@@ -97,7 +97,7 @@ public:
        The UserCall knows its SdrObject. */
           SwContact *FindContactObj();
     const SwContact *FindContactObj() const
-        { return ((SwFrmFmt*)this)->FindContactObj(); }
+        { return const_cast<SwFrmFmt*>(this)->FindContactObj(); }
 
     /** @return the SdrObject, that is connected to the ContactObject.
        Only DrawFrmFmts are connected to the "real SdrObject". FlyFrmFmts
@@ -105,11 +105,11 @@ public:
        "Real SdrObject" has position and a Z-order. */
           SdrObject *FindSdrObject();
     const SdrObject *FindSdrObject() const
-        { return ((SwFrmFmt*)this)->FindSdrObject(); }
+        { return const_cast<SwFrmFmt*>(this)->FindSdrObject(); }
 
           SdrObject *FindRealSdrObject();
     const SdrObject *FindRealSdrObject() const
-        { return ((SwFrmFmt*)this)->FindRealSdrObject(); }
+        { return const_cast<SwFrmFmt*>(this)->FindRealSdrObject(); }
 
     bool IsLowerOf( const SwFrmFmt& rFmt ) const;
 

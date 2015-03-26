@@ -142,7 +142,7 @@ bool SwEditShell::IsAnySectionInDoc( bool bChkReadOnly, bool bChkHidden, bool bC
 
 sal_uInt16 SwEditShell::GetSectionFmtPos( const SwSectionFmt& rFmt ) const
 {
-    SwSectionFmt* pFmt = (SwSectionFmt*)&rFmt;
+    SwSectionFmt* pFmt = const_cast<SwSectionFmt*>(&rFmt);
     return GetDoc()->GetSections().GetPos( pFmt );
 }
 

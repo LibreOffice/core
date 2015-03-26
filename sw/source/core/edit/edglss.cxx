@@ -188,8 +188,8 @@ bool SwEditShell::_CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pSttNd )
         SwTableNode* pTblNd;
         SwSelBoxes aBoxes;
         GetTblSel( *this, aBoxes );
-        if( !aBoxes.empty() && 0 != (pTblNd = (SwTableNode*)aBoxes[0]
-            ->GetSttNd()->FindTableNode() ))
+        if( !aBoxes.empty() && 0 != (pTblNd = const_cast<SwTableNode*>(aBoxes[0]
+            ->GetSttNd()->FindTableNode()) ))
         {
             // check if the table name can be copied
             bool bCpyTblNm = aBoxes.size() == pTblNd->GetTable().GetTabSortBoxes().size();

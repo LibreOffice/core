@@ -1702,7 +1702,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
 
-                aMapEntriesArr[nPropertyId] = (SfxItemPropertyMapEntry*)aTableRowPropertyMap_Impl;
+                aMapEntriesArr[nPropertyId] = aTableRowPropertyMap_Impl;
             }
             break;
             case PROPERTY_MAP_TEXT_TABLE_CURSOR:

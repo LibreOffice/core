@@ -64,7 +64,7 @@ SwPageDesc::SwPageDesc( const SwPageDesc &rCpy ) :
     aLeft( rCpy.GetLeft() ),
     m_FirstMaster( rCpy.GetFirstMaster() ),
     m_FirstLeft( rCpy.GetFirstLeft() ),
-    aDepend( this, (SwModify*)rCpy.aDepend.GetRegisteredIn() ),
+    aDepend( this, const_cast<SwModify*>(rCpy.aDepend.GetRegisteredIn()) ),
     pFollow( rCpy.pFollow ),
     nRegHeight( rCpy.GetRegHeight() ),
     nRegAscent( rCpy.GetRegAscent() ),

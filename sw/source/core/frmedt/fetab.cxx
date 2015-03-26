@@ -1171,7 +1171,7 @@ bool SwFEShell::IsAdjustCellWidthAllowed( bool bBalance ) const
     // AutoFormat for the table/table selection
 bool SwFEShell::SetTableAutoFmt( const SwTableAutoFmt& rNew )
 {
-    SwTableNode *pTblNd = (SwTableNode*)IsCrsrInTbl();
+    SwTableNode *pTblNd = const_cast<SwTableNode*>(IsCrsrInTbl());
     if( !pTblNd || pTblNd->GetTable().IsTblComplex() )
         return false;
 
@@ -2332,7 +2332,7 @@ bool SwFEShell::IsTableRightToLeft() const
 
 bool SwFEShell::IsMouseTableRightToLeft(const Point &rPt) const
 {
-    SwFrm *pFrm = (SwFrm *)GetBox( rPt );
+    SwFrm *pFrm = const_cast<SwFrm *>(GetBox( rPt ));
     const SwTabFrm*  pTabFrm = pFrm ? pFrm->ImplFindTabFrm() : 0;
     OSL_ENSURE( pTabFrm, "Table not found" );
     return pTabFrm && pTabFrm->IsRightToLeft();

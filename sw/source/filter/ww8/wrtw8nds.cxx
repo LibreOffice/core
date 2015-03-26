@@ -218,7 +218,7 @@ SwWW8AttrIter::SwWW8AttrIter(MSWordExportBase& rWr, const SwTxtNode& rTxtNd) :
 
     if ( !m_rExport.pDoc->getIDocumentRedlineAccess().GetRedlineTbl().empty() )
     {
-        SwPosition aPosition( rNd, SwIndex( (SwTxtNode*)&rNd ) );
+        SwPosition aPosition( rNd, SwIndex( const_cast<SwTxtNode*>(&rNd) ) );
         pCurRedline = m_rExport.pDoc->getIDocumentRedlineAccess().GetRedline( aPosition, &nCurRedlinePos );
     }
 

@@ -161,7 +161,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
         return false;
 
     sal_uInt16 nOutl = 0;
-    SwOutlineNodes* pOutlNds = (SwOutlineNodes*)&GetNodes().GetOutLineNds();
+    SwOutlineNodes* pOutlNds = const_cast<SwOutlineNodes*>(&GetNodes().GetOutLineNds());
     boost::scoped_ptr<SwOutlineNodes> xTmpOutlNds;
     SwNodePtr pStartNd;
 

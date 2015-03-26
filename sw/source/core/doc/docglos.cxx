@@ -172,8 +172,8 @@ bool SwDoc::InsertGlossary( SwTextBlocks& rBlock, const OUString& rEntry,
             do {
 
                 SwPosition& rInsPos = *_pStartCrsr->GetPoint();
-                SwStartNode* pBoxSttNd = (SwStartNode*)rInsPos.nNode.GetNode().
-                                            FindTableBoxStartNode();
+                SwStartNode* pBoxSttNd = const_cast<SwStartNode*>(rInsPos.nNode.GetNode().
+                                            FindTableBoxStartNode());
 
                 if( pBoxSttNd && 2 == pBoxSttNd->EndOfSectionIndex() -
                                       pBoxSttNd->GetIndex() &&

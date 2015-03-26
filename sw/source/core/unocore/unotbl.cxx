@@ -576,7 +576,7 @@ static SwXCell* lcl_CreateXCell(SwFrmFmt* pFmt, sal_Int32 nColumn, sal_Int32 nRo
     SwXCell* pXCell = 0;
     const OUString sCellName = sw_GetCellName(nColumn, nRow);
     SwTable* pTable = SwTable::FindTable( pFmt );
-    SwTableBox* pBox = (SwTableBox*)pTable->GetTblBox( sCellName );
+    SwTableBox* pBox = const_cast<SwTableBox*>(pTable->GetTblBox( sCellName ));
     if(pBox)
     {
         pXCell = SwXCell::CreateXCell(pFmt, pBox, pTable);
@@ -872,7 +872,7 @@ const SwStartNode *SwXCell::GetStartNode() const
 {
     const SwStartNode *pSttNd = 0;
 
-    if( pStartNode || ((SwXCell *)this)->IsValid() )
+    if( pStartNode || IsValid() )
         pSttNd = pStartNode ? pStartNode : pBox->GetSttNd();
 
     return pSttNd;
@@ -2295,7 +2295,7 @@ uno::Reference< table::XCell > SwXTextTable::getCellByName(const OUString& sCell
     if(pFmt)
     {
         SwTable* pTable = SwTable::FindTable( pFmt );
-        SwTableBox* pBox = (SwTableBox*)pTable->GetTblBox( sCellName );
+        SwTableBox* pBox = const_cast<SwTableBox*>(pTable->GetTblBox( sCellName ));
         if(pBox)
         {
             xRet = SwXCell::CreateXCell(pFmt, pBox);
@@ -2338,7 +2338,7 @@ uno::Reference< text::XTextTableCursor > SwXTextTable::createCursorByCellName(co
     if(pFmt)
     {
         SwTable* pTable = SwTable::FindTable( pFmt );
-        SwTableBox* pBox = (SwTableBox*)pTable->GetTblBox( sCellName );
+        SwTableBox* pBox = const_cast<SwTableBox*>(pTable->GetTblBox( sCellName ));
         if(pBox && pBox->getRowSpan() > 0 )
         {
             xRet = new SwXTextTableCursor(pFmt, pBox);

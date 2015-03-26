@@ -1840,7 +1840,7 @@ static void lcl_DrawGraphic( const SvxBrushItem& rBrush, OutputDevice *pOut,
 
     // No Link here, we want to load the graphic synchronously!
     const_cast<SvxBrushItem&>(rBrush).SetDoneLink( Link() );
-    GraphicObject *pGrf = (GraphicObject*)rBrush.GetGraphicObject();
+    GraphicObject *pGrf = const_cast<GraphicObject*>(rBrush.GetGraphicObject());
 
     // Outsource drawing of background with a background color
     ::lcl_DrawGraphicBackgrd( rBrush, pOut, aAlignedGrfRect, *pGrf, bGrfNum, properties, bBackgrdAlreadyDrawn );
@@ -1965,7 +1965,7 @@ void DrawGraphic(
             if ( (rSh).GetViewOptions()->IsPDFExport() ||
                  rSh.GetOut()->GetOutDevType() == OUTDEV_PRINTER )
             {
-                const_cast<SvxBrushItem*>(pBrush)->PurgeMedium();
+                pBrush->PurgeMedium();
                 const_cast<SvxBrushItem*>(pBrush)->SetDoneLink( Link() );
             }
             else
@@ -2140,7 +2140,7 @@ void DrawGraphic(
              (ePos != GPOS_TILED) && (ePos != GPOS_AREA)
            )
         {
-            GraphicObject *pGrf = (GraphicObject*)pBrush->GetGraphicObject();
+            GraphicObject *pGrf = const_cast<GraphicObject*>(pBrush->GetGraphicObject());
             if ( bConsiderBackgroundTransparency )
             {
                 GraphicAttr pGrfAttr = pGrf->GetAttr();
@@ -3214,12 +3214,12 @@ void SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) c
     if ( bPerformLayoutAction )
     {
         const_cast<SwRootFrm*>(this)->ResetTurbo();
-        SwLayAction aAction( (SwRootFrm*)this, pSh->Imp() );
+        SwLayAction aAction( const_cast<SwRootFrm*>(this), pSh->Imp() );
         aAction.SetPaint( false );
         aAction.SetComplete( false );
         aAction.SetReschedule( gProp.pSProgress != nullptr );
         aAction.Action();
-        const_cast<SwRootFrm*>(this)->ResetTurboFlag();
+        ResetTurboFlag();
         if ( !pSh->ActionPend() )
             pSh->Imp()->DelRegion();
     }
@@ -6413,7 +6413,7 @@ void SwFrm::PaintBaBo( const SwRect& rRect, const SwPageFrm *pPage,
     pOut->Push( PushFlags::FILLCOLOR|PushFlags::LINECOLOR );
     pOut->SetLineColor();
 
-    SwBorderAttrAccess aAccess( SwFrm::GetCache(), (SwFrm*)this );
+    SwBorderAttrAccess aAccess( SwFrm::GetCache(), this );
     const SwBorderAttrs &rAttrs = *aAccess.Get();
 
     // OD 20.11.2002 #104598# - take care of page margin area
@@ -6671,7 +6671,7 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
             aFrmRect = pFrm->PaintArea();
             if ( aFrmRect.IsOver( aBorderRect ) )
             {
-                SwBorderAttrAccess aAccess( SwFrm::GetCache(), (SwFrm*)pFrm );
+                SwBorderAttrAccess aAccess( SwFrm::GetCache(), pFrm );
                 const SwBorderAttrs &rTmpAttrs = *aAccess.Get();
                 if ( ( pFrm->IsLayoutFrm() && bLowerBorder ) ||
                      aFrmRect.IsOver( aRect ) )
@@ -7255,7 +7255,7 @@ void SwLayoutFrm::RefreshExtraData( const SwRect &rRect ) const
              pCnt->Frm().Top() <= rRect.Bottom() &&
              pCnt->Frm().Bottom() >= rRect.Top() )
         {
-            const_cast<SwTxtFrm*>(static_cast<const SwTxtFrm*>(pCnt))->PaintExtraData( rRect );
+            static_cast<const SwTxtFrm*>(pCnt)->PaintExtraData( rRect );
         }
         if ( bLineInFly && pCnt->GetDrawObjs() )
             for ( size_t i = 0; i < pCnt->GetDrawObjs()->size(); ++i )

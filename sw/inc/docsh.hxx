@@ -225,7 +225,7 @@ public:
     /// For Core - it knows the DocShell but not the WrtShell!
           SwFEShell *GetFEShell();
     const SwFEShell *GetFEShell() const
-                { return ((SwDocShell*)this)->GetFEShell(); }
+                { return const_cast<SwDocShell*>(this)->GetFEShell(); }
 
     /// For inserting document.
     Reader* StartConvertFrom(SfxMedium& rMedium, SwReader** ppRdr,

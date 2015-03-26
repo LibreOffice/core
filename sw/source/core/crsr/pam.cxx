@@ -520,7 +520,7 @@ SwPaM* SwPaM::MakeRegion( SwMoveFn fnMove, const SwPaM * pOrigRg )
     }
     else
     {
-        pPam = new SwPaM( *(SwPaM*)pOrigRg ); // given search area
+        pPam = new SwPaM( *const_cast<SwPaM*>(pOrigRg) ); // given search area
         // make sure that SPoint is on the "real" start position
         // FORWARD: SPoint always smaller than GetMark
         // BACKWARD: SPoint always bigger than GetMark

@@ -133,8 +133,8 @@ static bool lcl_GetBoxSel( const SwCursor& rCursor, SwSelBoxes& rBoxes,
             const SwNode* pNd = pCurPam->GetNode().FindTableBoxStartNode();
             if( pNd )
             {
-                SwTableBox* pBox = (SwTableBox*)pNd->FindTableNode()->GetTable().
-                                            GetTblBox( pNd->GetIndex() );
+                SwTableBox* pBox = const_cast<SwTableBox*>(pNd->FindTableNode()->GetTable().
+                                            GetTblBox( pNd->GetIndex() ));
                 rBoxes.insert( pBox );
             }
         } while( bAllCrsr &&
@@ -775,7 +775,7 @@ void SwDoc::SetTabBorders( const SwCursor& rCursor, const SfxItemSet& rSet )
                         aBox.SetDistance( pSetBox->GetDistance( *pBrd ), *pBrd );
                 }
 
-                SwTableBox *pBox = (SwTableBox*)pCell->GetTabBox();
+                SwTableBox *pBox = const_cast<SwTableBox*>(pCell->GetTabBox());
                 SwFrmFmt *pNewFmt;
                 if ( 0 != (pNewFmt = SwTblFmtCmp::FindNewFmt( aFmtCmp, pBox->GetFrmFmt(), nType )))
                     pBox->ChgFrmFmt( static_cast<SwTableBoxFmt*>(pNewFmt) );
@@ -872,16 +872,16 @@ void SwDoc::SetTabLineStyle( const SwCursor& rCursor,
                 else
                 {
                     if ( aBox.GetTop() )
-                        ::lcl_SetLineStyle( (SvxBorderLine*)aBox.GetTop(),
+                        ::lcl_SetLineStyle( const_cast<SvxBorderLine*>(aBox.GetTop()),
                                         pColor, pBorderLine );
                     if ( aBox.GetBottom() )
-                        ::lcl_SetLineStyle( (SvxBorderLine*)aBox.GetBottom(),
+                        ::lcl_SetLineStyle( const_cast<SvxBorderLine*>(aBox.GetBottom()),
                                         pColor, pBorderLine );
                     if ( aBox.GetLeft() )
-                        ::lcl_SetLineStyle( (SvxBorderLine*)aBox.GetLeft(),
+                        ::lcl_SetLineStyle( const_cast<SvxBorderLine*>(aBox.GetLeft()),
                                         pColor, pBorderLine );
                     if ( aBox.GetRight() )
-                        ::lcl_SetLineStyle( (SvxBorderLine*)aBox.GetRight(),
+                        ::lcl_SetLineStyle( const_cast<SvxBorderLine*>(aBox.GetRight()),
                                         pColor, pBorderLine );
                 }
                 pFmt->SetFmtAttr( aBox );
@@ -941,7 +941,7 @@ void SwDoc::GetTabBorders( const SwCursor& rCursor, SfxItemSet& rSet ) const
 
             std::vector<SwCellFrm*> aCellArr;
             aCellArr.reserve(255);
-            ::lcl_CollectCells( aCellArr, rUnion, (SwTabFrm*)pTab );
+            ::lcl_CollectCells( aCellArr, rUnion, const_cast<SwTabFrm*>(pTab) );
 
             for ( sal_uInt16 j = 0; j < aCellArr.size(); ++j )
             {
@@ -1474,7 +1474,7 @@ void SwDoc::AdjustCellWidth( const SwCursor& rCursor, bool bBalance )
     // It's more robust if we calculate the minimum values for the whole Table
     const SwTabFrm *pTab = pStart->ImplFindTabFrm();
     pStart = (SwLayoutFrm*)pTab->FirstCell();
-    pEnd   = (SwLayoutFrm*)pTab->FindLastCntnt()->GetUpper();
+    pEnd   = const_cast<SwLayoutFrm*>(pTab->FindLastCntnt()->GetUpper());
     while( !pEnd->IsCellFrm() )
         pEnd = pEnd->GetUpper();
     ::lcl_CalcColValues( aMins, aTabCols, pStart, pEnd, false );

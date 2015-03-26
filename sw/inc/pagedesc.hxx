@@ -253,7 +253,7 @@ public:
 
 inline void SwPageDesc::SetFollow( const SwPageDesc* pNew )
 {
-    pFollow = pNew ? (SwPageDesc*)pNew : this;
+    pFollow = pNew ? const_cast<SwPageDesc*>(pNew) : this;
 }
 
 inline bool SwPageDesc::IsHeaderShared() const

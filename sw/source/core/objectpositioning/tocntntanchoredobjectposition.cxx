@@ -659,7 +659,7 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                                        pUpperOfOrientFrm->FindSctFrm()->IsAnFollow( pTmp->FindSctFrm() ) ) )
                                 {
                                     pUpperOfOrientFrm = pTmp;
-                                    bMoveable = rAnchorTxtFrm.IsMoveable( (SwLayoutFrm*)pUpperOfOrientFrm );
+                                    bMoveable = rAnchorTxtFrm.IsMoveable( pUpperOfOrientFrm );
                                     SWREFRESHFN( pUpperOfOrientFrm )
                                     nAvail = (pUpperOfOrientFrm->Prt().*fnRect->fnGetHeight)();
                                 }
@@ -915,7 +915,7 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                                 aRelPos.Y() = nTmpRelPosY;
                             pUpperOfOrientFrm = pNextLay;
                             SWREFRESHFN( pUpperOfOrientFrm )
-                            bMoveable = rAnchorTxtFrm.IsMoveable( (SwLayoutFrm*)pUpperOfOrientFrm );
+                            bMoveable = rAnchorTxtFrm.IsMoveable( pUpperOfOrientFrm );
                             if( bVertX )
                             {
                                 // --> OD 2009-08-31 #mongolianlayout#

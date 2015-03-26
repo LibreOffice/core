@@ -423,7 +423,7 @@ void SwSelPaintRects::HighlightInputFld()
         }
         else
         {
-            SdrView* pView = (SdrView*)GetShell()->GetDrawView();
+            SdrView* pView = const_cast<SdrView*>(GetShell()->GetDrawView());
             SdrPaintWindow* pCandidate = pView->GetPaintWindow(0);
             rtl::Reference<sdr::overlay::OverlayManager> xTargetOverlay = pCandidate->GetOverlayManager();
 

@@ -1680,7 +1680,7 @@ bool SwDoc::InsertCol( const SwCursor& rCursor, sal_uInt16 nCnt, bool bBehind )
 bool SwDoc::InsertCol( const SwSelBoxes& rBoxes, sal_uInt16 nCnt, bool bBehind )
 {
     OSL_ENSURE( !rBoxes.empty(), "No valid Box list" );
-    SwTableNode* pTblNd = (SwTableNode*)rBoxes[0]->GetSttNd()->FindTableNode();
+    SwTableNode* pTblNd = const_cast<SwTableNode*>(rBoxes[0]->GetSttNd()->FindTableNode());
     if( !pTblNd )
         return false;
 
@@ -1742,7 +1742,7 @@ bool SwDoc::InsertRow( const SwCursor& rCursor, sal_uInt16 nCnt, bool bBehind )
 bool SwDoc::InsertRow( const SwSelBoxes& rBoxes, sal_uInt16 nCnt, bool bBehind )
 {
     OSL_ENSURE( !rBoxes.empty(), "No valid Box list" );
-    SwTableNode* pTblNd = (SwTableNode*)rBoxes[0]->GetSttNd()->FindTableNode();
+    SwTableNode* pTblNd = const_cast<SwTableNode*>(rBoxes[0]->GetSttNd()->FindTableNode());
     if( !pTblNd )
         return false;
 
@@ -1927,7 +1927,7 @@ bool SwDoc::DeleteRowCol( const SwSelBoxes& rBoxes, bool bColumn )
         return false;
 
     OSL_ENSURE( !rBoxes.empty(), "No valid Box list" );
-    SwTableNode* pTblNd = (SwTableNode*)rBoxes[0]->GetSttNd()->FindTableNode();
+    SwTableNode* pTblNd = const_cast<SwTableNode*>(rBoxes[0]->GetSttNd()->FindTableNode());
     if( !pTblNd )
         return false;
 
@@ -2132,7 +2132,7 @@ bool SwDoc::SplitTbl( const SwSelBoxes& rBoxes, bool bVert, sal_uInt16 nCnt,
                       bool bSameHeight )
 {
     OSL_ENSURE( !rBoxes.empty() && nCnt, "No valid Box list" );
-    SwTableNode* pTblNd = (SwTableNode*)rBoxes[0]->GetSttNd()->FindTableNode();
+    SwTableNode* pTblNd = const_cast<SwTableNode*>(rBoxes[0]->GetSttNd()->FindTableNode());
     if( !pTblNd )
         return false;
 
@@ -2912,7 +2912,7 @@ void SwCollectTblLineBoxes::AddToUndoHistory( const SwCntntNode& rNd )
 void SwCollectTblLineBoxes::AddBox( const SwTableBox& rBox )
 {
     aPosArr.push_back(nWidth);
-    SwTableBox* p = (SwTableBox*)&rBox;
+    SwTableBox* p = const_cast<SwTableBox*>(&rBox);
     m_Boxes.push_back(p);
     nWidth = nWidth + (sal_uInt16)rBox.GetFrmFmt()->GetFrmSize().GetWidth();
 }
@@ -2986,12 +2986,12 @@ bool sw_Line_CollectBox( const SwTableLine*& rpLine, void* pPara )
 {
     SwCollectTblLineBoxes* pSplPara = (SwCollectTblLineBoxes*)pPara;
     if( pSplPara->IsGetValues() )
-        for( SwTableBoxes::iterator it = ((SwTableLine*)rpLine)->GetTabBoxes().begin();
-                 it != ((SwTableLine*)rpLine)->GetTabBoxes().end(); ++it)
+        for( SwTableBoxes::iterator it = const_cast<SwTableLine*>(rpLine)->GetTabBoxes().begin();
+                 it != const_cast<SwTableLine*>(rpLine)->GetTabBoxes().end(); ++it)
             sw_Box_CollectBox(*it, pSplPara );
     else
-        for( SwTableBoxes::iterator it = ((SwTableLine*)rpLine)->GetTabBoxes().begin();
-                 it != ((SwTableLine*)rpLine)->GetTabBoxes().end(); ++it)
+        for( SwTableBoxes::iterator it = const_cast<SwTableLine*>(rpLine)->GetTabBoxes().begin();
+                 it != const_cast<SwTableLine*>(rpLine)->GetTabBoxes().end(); ++it)
             sw_BoxSetSplitBoxFmts(*it, pSplPara );
     return true;
 }
@@ -3699,7 +3699,7 @@ static bool lcl_SetAFmtBox( _FndBox & rBox, _SetAFmtTabPara *pSetPara )
 bool SwDoc::SetTableAutoFmt( const SwSelBoxes& rBoxes, const SwTableAutoFmt& rNew )
 {
     OSL_ENSURE( !rBoxes.empty(), "No valid Box list" );
-    SwTableNode* pTblNd = (SwTableNode*)rBoxes[0]->GetSttNd()->FindTableNode();
+    SwTableNode* pTblNd = const_cast<SwTableNode*>(rBoxes[0]->GetSttNd()->FindTableNode());
     if( !pTblNd )
         return false;
 
@@ -3786,7 +3786,7 @@ bool SwDoc::SetTableAutoFmt( const SwSelBoxes& rBoxes, const SwTableAutoFmt& rNe
 bool SwDoc::GetTableAutoFmt( const SwSelBoxes& rBoxes, SwTableAutoFmt& rGet )
 {
     OSL_ENSURE( !rBoxes.empty(), "No valid Box list" );
-    SwTableNode* pTblNd = (SwTableNode*)rBoxes[0]->GetSttNd()->FindTableNode();
+    SwTableNode* pTblNd = const_cast<SwTableNode*>(rBoxes[0]->GetSttNd()->FindTableNode());
     if( !pTblNd )
         return false;
 
@@ -3930,7 +3930,7 @@ SwTableFmt* SwDoc::FindTblFmtByName( const OUString& rName, bool bAll ) const
 bool SwDoc::SetColRowWidthHeight( SwTableBox& rAktBox, sal_uInt16 eType,
                                     SwTwips nAbsDiff, SwTwips nRelDiff )
 {
-    SwTableNode* pTblNd = (SwTableNode*)rAktBox.GetSttNd()->FindTableNode();
+    SwTableNode* pTblNd = const_cast<SwTableNode*>(rAktBox.GetSttNd()->FindTableNode());
     SwUndo* pUndo = 0;
 
     if( nsTblChgWidthHeightType::WH_FLAG_INSDEL & eType && pTblNd->GetTable().ISA( SwDDETable ))
@@ -4292,7 +4292,7 @@ bool SwDoc::InsCopyOfTbl( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
             GetIDocumentUndoRedo().DoUndo(false);
         }
 
-        SwDoc* pCpyDoc = (SwDoc*)pSrcTblNd->GetDoc();
+        SwDoc* pCpyDoc = const_cast<SwDoc*>(pSrcTblNd->GetDoc());
         bool bDelCpyDoc = pCpyDoc == this;
 
         if( bDelCpyDoc )
@@ -4480,7 +4480,7 @@ bool SwDoc::UnProtectTbls( const SwPaM& rPam )
     GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, NULL);
 
     bool bChgd = false, bHasSel = rPam.HasMark() ||
-                                    rPam.GetNext() != (SwPaM*)&rPam;
+                                    rPam.GetNext() != &rPam;
     SwFrmFmts& rFmts = *GetTblFrmFmts();
     SwTable* pTbl;
     const SwTableNode* pTblNd;
@@ -4495,7 +4495,7 @@ bool SwDoc::UnProtectTbls( const SwPaM& rPam )
             if( bHasSel )
             {
                 bool bFound = false;
-                SwPaM* pTmp = (SwPaM*)&rPam;
+                SwPaM* pTmp = const_cast<SwPaM*>(&rPam);
                 do {
                     const SwPosition *pStt = pTmp->Start(),
                                     *pEnd = pTmp->End();

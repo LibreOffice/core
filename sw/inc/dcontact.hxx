@@ -51,7 +51,7 @@ class SdrTextObj;
  Implementation in dcontact.cxx. */
 SW_DLLPUBLIC SwFrmFmt *FindFrmFmt( SdrObject *pObj );
 inline const SwFrmFmt *FindFrmFmt( const SdrObject *pObj )
-{   return ::FindFrmFmt( (SdrObject*)pObj ); }
+{   return ::FindFrmFmt( const_cast<SdrObject*>(pObj) ); }
 bool HasWrap( const SdrObject* pObj );
 
 void setContextWritingMode( SdrObject* pObj, SwFrm* pAnchor );

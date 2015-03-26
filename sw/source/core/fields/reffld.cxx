@@ -97,9 +97,9 @@ bool IsFrameBehind( const SwTxtNode& rMyNd, sal_Int32 nMySttPos,
                    *pFrm = static_cast<SwTxtFrm*>(rBehindNd.getLayoutFrm( rBehindNd.GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), 0, 0, false) );
 
     while( pFrm && !pFrm->IsInside( nSttPos ) )
-        pFrm = (SwTxtFrm*)pFrm->GetFollow();
+        pFrm = pFrm->GetFollow();
     while( pMyFrm && !pMyFrm->IsInside( nMySttPos ) )
-        pMyFrm = (SwTxtFrm*)pMyFrm->GetFollow();
+        pMyFrm = pMyFrm->GetFollow();
 
     if( !pFrm || !pMyFrm || pFrm == pMyFrm )
         return false;
@@ -421,7 +421,7 @@ void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
             const SwTxtFrm* pFrm = static_cast<SwTxtFrm*>(pTxtNd->getLayoutFrm( pDoc->getIDocumentLayoutAccess().GetCurrentLayout(), 0, 0, false)),
                         *pSave = pFrm;
             while( pFrm && !pFrm->IsInside( nNumStart ) )
-                pFrm = (SwTxtFrm*)pFrm->GetFollow();
+                pFrm = pFrm->GetFollow();
 
             if( pFrm || 0 != ( pFrm = pSave ))
             {
@@ -826,7 +826,7 @@ SwTxtNode* SwGetRefFieldType::FindAnchor( SwDoc* pDoc, const OUString& rRefMark,
             const SwFmtRefMark *pRef = pDoc->GetRefMark( rRefMark );
             if( pRef && pRef->GetTxtRefMark() )
             {
-                pTxtNd = (SwTxtNode*)&pRef->GetTxtRefMark()->GetTxtNode();
+                pTxtNd = const_cast<SwTxtNode*>(&pRef->GetTxtRefMark()->GetTxtNode());
                 *pStt = pRef->GetTxtRefMark()->GetStart();
                 if( pEnd )
                     *pEnd = *pRef->GetTxtRefMark()->GetAnyEnd();

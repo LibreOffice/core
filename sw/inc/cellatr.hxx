@@ -65,13 +65,13 @@ public:
 
     inline const SwModify* GetDefinedIn() const { return pDefinedIn; }
     inline void ChgDefinedIn( const SwModify* pNew )
-                                            { pDefinedIn = (SwModify*)pNew; }
+                                            { pDefinedIn = const_cast<SwModify*>(pNew); }
     //  BoxAttribut -> BoxStartNode
     virtual const SwNode* GetNodeOfFormula() const SAL_OVERRIDE;
 
           SwTableBox* GetTableBox();
     const SwTableBox* GetTableBox() const
-        { return ((SwTblBoxFormula*)this)->GetTableBox(); }
+        { return const_cast<SwTblBoxFormula*>(this)->GetTableBox(); }
 
     void ChangeState( const SfxPoolItem* pItem );
     void Calc( SwTblCalcPara& rCalcPara, double& rValue );

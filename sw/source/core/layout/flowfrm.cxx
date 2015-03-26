@@ -823,7 +823,7 @@ bool SwFrm::WrongPageDesc( SwPageFrm* pNew )
     SwFlowFrm *pFlow = SwFlowFrm::CastFlowFrm( this );
     if ( !pFlow || !pFlow->IsFollow() )
     {
-        pDesc = (SwPageDesc*)rFmtDesc.GetPageDesc();
+        pDesc = const_cast<SwPageDesc*>(rFmtDesc.GetPageDesc());
         if( pDesc )
         {
             if( !pDesc->GetRightFmt() )

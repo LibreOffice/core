@@ -301,7 +301,7 @@ void SwNumFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
     }
 
     if( pFmt && !pFmt->GetDoc()->IsInDtor() )
-        UpdateNumNodes( (SwDoc*)pFmt->GetDoc() );
+        UpdateNumNodes( const_cast<SwDoc*>(pFmt->GetDoc()) );
     else
         CheckRegistration( pOld, pNew );
 }

@@ -44,7 +44,7 @@ sal_uInt16 SwIsoToxPortion::GetViewWidth( const SwTxtSizeInfo &rInf ) const
 {
     // Although we are const, nViewWidth should be calculated in the last
     // moment possible
-    SwIsoToxPortion* pThis = (SwIsoToxPortion*)this;
+    SwIsoToxPortion* pThis = const_cast<SwIsoToxPortion*>(this);
     // nViewWidth need to be calculated
     if( !Width() && rInf.OnWin() &&
         !rInf.GetOpt().IsPagePreview() &&

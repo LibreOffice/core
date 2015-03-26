@@ -107,7 +107,7 @@ public:
     /// Get and set Modify pointer.
     inline const SwModify* GetDefinedIn() const { return pDefinedIn; }
     inline void ChgDefinedIn( const SwModify* pNew )
-    { pDefinedIn = (SwModify*)pNew; }
+    { pDefinedIn = const_cast<SwModify*>(pNew); }
 };
 
 class SwRegisterItem : public SfxBoolItem

@@ -207,7 +207,7 @@ SwTOXType::SwTOXType( TOXTypes eTyp, const OUString& rName )
 }
 
 SwTOXType::SwTOXType(const SwTOXType& rCopy)
-    : SwModify( (SwModify*)rCopy.GetRegisteredIn() ),
+    : SwModify( const_cast<SwModify*>(rCopy.GetRegisteredIn()) ),
     aName(rCopy.aName),
     eType(rCopy.eType)
 {
@@ -460,7 +460,7 @@ void SwTOXBase::RegisterToTOXType( SwTOXType& rType )
 SwTOXBase& SwTOXBase::CopyTOXBase( SwDoc* pDoc, const SwTOXBase& rSource )
 {
     maMSTOCExpression = rSource.maMSTOCExpression;
-    SwTOXType* pType = (SwTOXType*)rSource.GetTOXType();
+    SwTOXType* pType = const_cast<SwTOXType*>(rSource.GetTOXType());
     if( pDoc && USHRT_MAX == pDoc->GetTOXTypes().GetPos( pType ))
     {
         // type not in pDoc, so create it now
@@ -472,14 +472,14 @@ SwTOXBase& SwTOXBase::CopyTOXBase( SwDoc* pDoc, const SwTOXBase& rSource )
             if( pCmp->GetType() == pType->GetType() &&
                 pCmp->GetTypeName() == pType->GetTypeName() )
             {
-                pType = (SwTOXType*)pCmp;
+                pType = const_cast<SwTOXType*>(pCmp);
                 bFound = true;
                 break;
             }
         }
 
         if( !bFound )
-            pType = (SwTOXType*)pDoc->InsertTOXType( *pType );
+            pType = const_cast<SwTOXType*>(pDoc->InsertTOXType( *pType ));
     }
     pType->Add( this );
 

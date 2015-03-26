@@ -293,7 +293,7 @@ bool SwEditShell::DeleteGlobalDocContent( const SwGlblDocContents& rArr ,
 
     case GLBLDOC_SECTION:
         {
-            SwSectionFmt* pSectFmt = (SwSectionFmt*)rDelPos.GetSection()->GetFmt();
+            SwSectionFmt* pSectFmt = const_cast<SwSectionFmt*>(rDelPos.GetSection()->GetFmt());
             pMyDoc->DelSectionFmt( pSectFmt, true );
         }
         break;

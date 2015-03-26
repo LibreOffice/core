@@ -213,7 +213,7 @@ void SwFrm::CheckDirChange()
                         MIN_VERT_CELL_HEIGHT = 1135
                     };
 
-                    SwTableLine* pLine = (SwTableLine*)static_cast<SwCellFrm*>(this)->GetTabBox()->GetUpper();
+                    SwTableLine* pLine = const_cast<SwTableLine*>(static_cast<SwCellFrm*>(this)->GetTabBox()->GetUpper());
                     SwFrmFmt* pFrmFmt = pLine->GetFrmFmt();
                     SwFmtFrmSize aNew( pFrmFmt->GetFrmSize() );
                     if ( ATT_FIX_SIZE != aNew.GetHeightSizeType() )

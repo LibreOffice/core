@@ -3000,8 +3000,8 @@ void SwTabFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
         SwAttrSetChg aNewSet( *static_cast<const SwAttrSetChg*>(pNew) );
         while( true )
         {
-            _UpdateAttr( (SfxPoolItem*)aOIter.GetCurItem(),
-                         (SfxPoolItem*)aNIter.GetCurItem(), nInvFlags,
+            _UpdateAttr( aOIter.GetCurItem(),
+                         aNIter.GetCurItem(), nInvFlags,
                          &aOldSet, &aNewSet );
             if( aNIter.IsAtEnd() )
                 break;
@@ -3836,7 +3836,7 @@ static sal_uInt16 lcl_GetTopSpace( const SwRowFrm& rRow )
             nTmpTopSpace = lcl_GetTopSpace( *static_cast<const SwRowFrm*>(pCurrLower->Lower()) );
         else
         {
-            const SwAttrSet& rSet = ((SwCellFrm*)pCurrLower)->GetFmt()->GetAttrSet();
+            const SwAttrSet& rSet = const_cast<SwCellFrm*>(pCurrLower)->GetFmt()->GetAttrSet();
             const SvxBoxItem& rBoxItem = rSet.GetBox();
             nTmpTopSpace = rBoxItem.CalcLineSpace( BOX_LINE_TOP, true );
         }
@@ -3857,7 +3857,7 @@ static sal_uInt16 lcl_GetTopLineDist( const SwRowFrm& rRow )
             nTmpTopLineDist = lcl_GetTopLineDist( *static_cast<const SwRowFrm*>(pCurrLower->Lower()) );
         else
         {
-            const SwAttrSet& rSet = ((SwCellFrm*)pCurrLower)->GetFmt()->GetAttrSet();
+            const SwAttrSet& rSet = const_cast<SwCellFrm*>(pCurrLower)->GetFmt()->GetAttrSet();
             const SvxBoxItem& rBoxItem = rSet.GetBox();
             nTmpTopLineDist = rBoxItem.GetDistance( BOX_LINE_TOP );
         }
@@ -3881,7 +3881,7 @@ static sal_uInt16 lcl_GetBottomLineSize( const SwRowFrm& rRow )
         }
         else
         {
-            const SwAttrSet& rSet = ((SwCellFrm*)pCurrLower)->GetFmt()->GetAttrSet();
+            const SwAttrSet& rSet = const_cast<SwCellFrm*>(pCurrLower)->GetFmt()->GetAttrSet();
             const SvxBoxItem& rBoxItem = rSet.GetBox();
             nTmpBottomLineSize = rBoxItem.CalcLineSpace( BOX_LINE_BOTTOM, true ) -
                                  rBoxItem.GetDistance( BOX_LINE_BOTTOM );
@@ -3906,7 +3906,7 @@ static sal_uInt16 lcl_GetBottomLineDist( const SwRowFrm& rRow )
         }
         else
         {
-            const SwAttrSet& rSet = ((SwCellFrm*)pCurrLower)->GetFmt()->GetAttrSet();
+            const SwAttrSet& rSet = const_cast<SwCellFrm*>(pCurrLower)->GetFmt()->GetAttrSet();
             const SvxBoxItem& rBoxItem = rSet.GetBox();
             nTmpBottomLineDist = rBoxItem.GetDistance( BOX_LINE_BOTTOM );
         }
@@ -5321,7 +5321,7 @@ SwTwips SwTabFrm::CalcHeightOfFirstContentLine() const
         else if ( 0 != nFirstLineHeight )
         {
             const bool bOldJoinLock = IsJoinLocked();
-            ((SwTabFrm*)this)->LockJoin();
+            const_cast<SwTabFrm*>(this)->LockJoin();
             const SwTwips nHeightOfFirstContentLine = lcl_CalcHeightOfFirstContentLine( *(SwRowFrm*)pFirstRow );
 
             // Consider minimum row height:
@@ -5332,7 +5332,7 @@ SwTwips SwTabFrm::CalcHeightOfFirstContentLine() const
             nTmpHeight += std::max( nHeightOfFirstContentLine, nMinRowHeight );
 
             if ( !bOldJoinLock )
-                ((SwTabFrm*)this)->UnlockJoin();
+                const_cast<SwTabFrm*>(this)->UnlockJoin();
         }
     }
 

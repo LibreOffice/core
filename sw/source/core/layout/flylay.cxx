@@ -559,7 +559,7 @@ void SwPageFrm::AppendFlyToPage( SwFlyFrm *pNew )
 
     SdrObject* pObj = pNew->GetVirtDrawObj();
     OSL_ENSURE( pNew->GetAnchorFrm(), "Fly without Anchor" );
-    SwFlyFrm* pFly = (SwFlyFrm*)pNew->GetAnchorFrm()->FindFlyFrm();
+    SwFlyFrm* pFly = const_cast<SwFlyFrm*>(pNew->GetAnchorFrm()->FindFlyFrm());
     if ( pFly && pObj->GetOrdNum() < pFly->GetVirtDrawObj()->GetOrdNum() )
     {
         //#i119945# set pFly's OrdNum to _rNewObj's. So when pFly is removed by Undo, the original OrdNum will not be changed.
@@ -796,7 +796,7 @@ void SwPageFrm::AppendDrawObjToPage( SwAnchoredObject& _rNewObj )
     }
 
     OSL_ENSURE( _rNewObj.GetAnchorFrm(), "anchored draw object without anchor" );
-    SwFlyFrm* pFlyFrm = (SwFlyFrm*)_rNewObj.GetAnchorFrm()->FindFlyFrm();
+    SwFlyFrm* pFlyFrm = const_cast<SwFlyFrm*>(_rNewObj.GetAnchorFrm()->FindFlyFrm());
     if ( pFlyFrm &&
          _rNewObj.GetDrawObj()->GetOrdNum() < pFlyFrm->GetVirtDrawObj()->GetOrdNum() )
     {

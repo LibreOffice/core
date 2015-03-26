@@ -2471,8 +2471,8 @@ void WW8TabDesc::UseSwTable()
     pTabLines = &pTable->GetTabLines();
     nAktRow = nAktCol = nAktBandRow = 0;
 
-    pTblNd  = (SwTableNode*)(*pTabLines)[0]->GetTabBoxes()[0]->
-        GetSttNd()->FindTableNode();
+    pTblNd  = const_cast<SwTableNode*>((*pTabLines)[0]->GetTabBoxes()[0]->
+        GetSttNd()->FindTableNode());
     OSL_ENSURE( pTblNd, "wo ist mein TabellenNode" );
 
     // #i69519# - Restrict rows to repeat to a decent value
@@ -2645,7 +2645,7 @@ void WW8TabDesc::ParkPaM()
         while (pIo->pPaM->GetNode().GetNodeType() != ND_TEXTNODE && ++nSttNd < nEndNd);
 
         pIo->pPaM->GetPoint()->nContent.Assign(pIo->pPaM->GetCntntNode(), 0);
-        pIo->rDoc.SetTxtFmtColl(*pIo->pPaM, (SwTxtFmtColl*)pIo->pDfltTxtFmtColl);
+        pIo->rDoc.SetTxtFmtColl(*pIo->pPaM, const_cast<SwTxtFmtColl*>(pIo->pDfltTxtFmtColl));
     }
 }
 
@@ -2887,7 +2887,7 @@ bool WW8TabDesc::SetPamInCell(short nWwCol, bool bPam)
             pIo->pPaM->GetPoint()->nContent.Assign(pIo->pPaM->GetCntntNode(), 0);
             // Precautionally set now, otherwise the style is not set for cells
             // that are inserted for margin balancing.
-            pIo->rDoc.SetTxtFmtColl(*pIo->pPaM, (SwTxtFmtColl*)pIo->pDfltTxtFmtColl);
+            pIo->rDoc.SetTxtFmtColl(*pIo->pPaM, const_cast<SwTxtFmtColl*>(pIo->pDfltTxtFmtColl));
             // because this cells are invisible helper constructions only to simulate
             // the frayed view of WW-tables we do NOT need SetTxtFmtCollAndListLevel()
         }
@@ -2925,7 +2925,7 @@ void WW8TabDesc::InsertCells( short nIns )
     pTabBox = (*pTabBoxes)[0];
 
     pIo->rDoc.GetNodes().InsBoxen( pTblNd, pTabLine, static_cast<SwTableBoxFmt*>(pTabBox->GetFrmFmt()),
-                            (SwTxtFmtColl*)pIo->pDfltTxtFmtColl, 0, pTabBoxes->size(), nIns );
+                            const_cast<SwTxtFmtColl*>(pIo->pDfltTxtFmtColl), 0, pTabBoxes->size(), nIns );
     // The third parameter contains the FrmFmt of the boxes.
     // Here it is possible to optimize to save (reduce) FrmFmts.
 }

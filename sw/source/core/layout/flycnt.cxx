@@ -730,7 +730,7 @@ static const SwFrm * lcl_CalcDownDist( SwDistance &rRet,
                 {
                     if ( !static_cast<const SwLayoutFrm*>(pLay)->Lower() )
                     {
-                        SwFrm *pDel = (SwFrm*)pLay;
+                        SwFrm *pDel = const_cast<SwFrm*>(pLay);
                         pDel->Cut();
                         delete pDel;
                         return pPre;
@@ -839,7 +839,7 @@ static const SwFrm * lcl_CalcDownDist( SwDistance &rRet,
                 }
                 if ( pLay->IsFtnContFrm() && !static_cast<const SwLayoutFrm*>(pLay)->Lower() )
                 {
-                    SwFrm *pDel = (SwFrm*)pLay;
+                    SwFrm *pDel = const_cast<SwFrm*>(pLay);
                     pDel->Cut();
                     delete pDel;
                     return 0;
@@ -1175,7 +1175,7 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
 
     if( ( GetAnchorFrm()->IsVertical() && !GetAnchorFrm()->IsVertLR() ) || GetAnchorFrm()->IsRightToLeft() )
         aNew.setX(aNew.getX() + Frm().Width());
-    SwCntntFrm *pCnt = (SwCntntFrm*)::FindAnchor( GetAnchorFrm(), aNew );
+    SwCntntFrm *pCnt = const_cast<SwCntntFrm*>(::FindAnchor( GetAnchorFrm(), aNew ));
     if( pCnt->IsProtected() )
         pCnt = const_cast<SwCntntFrm*>(static_cast<const SwCntntFrm*>(GetAnchorFrm()));
 

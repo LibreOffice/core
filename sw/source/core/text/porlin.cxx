@@ -133,7 +133,7 @@ void SwLinePortion::PrePaint( const SwTxtPaintInfo& rInf,
         break;
     }
 
-    SwLinePortion *pThis = (SwLinePortion*)this;
+    SwLinePortion *pThis = const_cast<SwLinePortion*>(this);
     pThis->Width( nViewWidth );
     Paint( aInf );
     pThis->Width(0);
@@ -212,7 +212,7 @@ SwLinePortion *SwLinePortion::Cut( SwLinePortion *pVictim )
 SwLinePortion *SwLinePortion::FindPrevPortion( const SwLinePortion *pRoot )
 {
     OSL_ENSURE( pRoot != this, "SwLinePortion::FindPrevPortion(): invalid root" );
-    SwLinePortion *pPos = (SwLinePortion*)pRoot;
+    SwLinePortion *pPos = const_cast<SwLinePortion*>(pRoot);
     while( pPos->GetPortion() && pPos->GetPortion() != this )
     {
         pPos = pPos->GetPortion();
