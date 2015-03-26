@@ -993,7 +993,7 @@ void GtkSalFrame::InitCommon()
     GtkGesture *pSwipe = gtk_gesture_swipe_new(m_pWindow);
     g_signal_connect(pSwipe, "swipe", G_CALLBACK(gestureSwipe), this);
     gtk_event_controller_set_propagation_phase(GTK_EVENT_CONTROLLER (pSwipe), GTK_PHASE_TARGET);
-    g_object_weak_ref(G_OBJECT(m_pWindow), (GWeakNotify)g_object_unref, pSwipe);
+    g_object_weak_ref(G_OBJECT(m_pWindow), reinterpret_cast<GWeakNotify>(g_object_unref), pSwipe);
 #endif
 
 #else
