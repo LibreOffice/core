@@ -139,7 +139,7 @@ void TransliterationWrapper::loadModuleIfNeeded( sal_uInt16 nLang )
 void TransliterationWrapper::loadModuleImpl() const
 {
     if ( bFirstCall )
-        ((TransliterationWrapper*)this)->setLanguageLocaleImpl( LANGUAGE_SYSTEM );
+        const_cast<TransliterationWrapper*>(this)->setLanguageLocaleImpl( LANGUAGE_SYSTEM );
 
     try
     {

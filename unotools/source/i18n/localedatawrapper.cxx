@@ -338,7 +338,7 @@ const OUString& LocaleDataWrapper::getOneLocaleItem( sal_Int16 nItem ) const
     if (aLocaleItem[nItem].isEmpty())
     {   // no cached content
         aGuard.changeReadToWrite();
-        ((LocaleDataWrapper*)this)->getOneLocaleItemImpl( nItem );
+        const_cast<LocaleDataWrapper*>(this)->getOneLocaleItemImpl( nItem );
     }
     return aLocaleItem[nItem];
 }
@@ -431,7 +431,7 @@ const OUString& LocaleDataWrapper::getOneReservedWord( sal_Int16 nWord ) const
     if (aReservedWord[nWord].isEmpty())
     {   // no cached content
         aGuard.changeReadToWrite();
-        ((LocaleDataWrapper*)this)->getOneReservedWordImpl( nWord );
+        const_cast<LocaleDataWrapper*>(this)->getOneReservedWordImpl( nWord );
     }
     return aReservedWord[nWord];
 }
@@ -474,7 +474,7 @@ const std::shared_ptr< ::com::sun::star::i18n::Calendar2 > LocaleDataWrapper::ge
     if (!xDefaultCalendar)
     {   // no cached content
         aGuard.changeReadToWrite();
-        ((LocaleDataWrapper*)this)->getDefaultCalendarImpl();
+        const_cast<LocaleDataWrapper*>(this)->getDefaultCalendarImpl();
     }
     return xDefaultCalendar;
 }
@@ -497,7 +497,7 @@ const OUString& LocaleDataWrapper::getCurrSymbol() const
     if (aCurrSymbol.isEmpty())
     {
         aGuard.changeReadToWrite();
-        ((LocaleDataWrapper*)this)->getCurrSymbolsImpl();
+        const_cast<LocaleDataWrapper*>(this)->getCurrSymbolsImpl();
     }
     return aCurrSymbol;
 }
@@ -508,7 +508,7 @@ const OUString& LocaleDataWrapper::getCurrBankSymbol() const
     if (aCurrBankSymbol.isEmpty())
     {
         aGuard.changeReadToWrite();
-        ((LocaleDataWrapper*)this)->getCurrSymbolsImpl();
+        const_cast<LocaleDataWrapper*>(this)->getCurrSymbolsImpl();
     }
     return aCurrBankSymbol;
 }
@@ -519,7 +519,7 @@ sal_uInt16 LocaleDataWrapper::getCurrPositiveFormat() const
     if ( nCurrPositiveFormat == nCurrFormatInvalid )
     {
         aGuard.changeReadToWrite();
-        ((LocaleDataWrapper*)this)->getCurrFormatsImpl();
+        const_cast<LocaleDataWrapper*>(this)->getCurrFormatsImpl();
     }
     return nCurrPositiveFormat;
 }
@@ -530,7 +530,7 @@ sal_uInt16 LocaleDataWrapper::getCurrNegativeFormat() const
     if ( nCurrNegativeFormat == nCurrFormatInvalid )
     {
         aGuard.changeReadToWrite();
-        ((LocaleDataWrapper*)this)->getCurrFormatsImpl();
+        const_cast<LocaleDataWrapper*>(this)->getCurrFormatsImpl();
     }
     return nCurrNegativeFormat;
 }
@@ -541,7 +541,7 @@ sal_uInt16 LocaleDataWrapper::getCurrDigits() const
     if ( nCurrDigits == nCurrFormatInvalid )
     {
         aGuard.changeReadToWrite();
-        ((LocaleDataWrapper*)this)->getCurrSymbolsImpl();
+        const_cast<LocaleDataWrapper*>(this)->getCurrSymbolsImpl();
     }
     return nCurrDigits;
 }
@@ -810,7 +810,7 @@ DateFormat LocaleDataWrapper::getDateFormat() const
     if ( nDateFormat == nDateFormatInvalid )
     {
         aGuard.changeReadToWrite();
-        ((LocaleDataWrapper*)this)->getDateFormatsImpl();
+        const_cast<LocaleDataWrapper*>(this)->getDateFormatsImpl();
     }
     return (DateFormat) nDateFormat;
 }
@@ -821,7 +821,7 @@ DateFormat LocaleDataWrapper::getLongDateFormat() const
     if ( nLongDateFormat == nDateFormatInvalid )
     {
         aGuard.changeReadToWrite();
-        ((LocaleDataWrapper*)this)->getDateFormatsImpl();
+        const_cast<LocaleDataWrapper*>(this)->getDateFormatsImpl();
     }
     return (DateFormat) nLongDateFormat;
 }
@@ -1035,7 +1035,7 @@ const ::com::sun::star::uno::Sequence< sal_Int32 > LocaleDataWrapper::getDigitGr
     if (!aGrouping.getLength() || aGrouping[0] == 0)
     {   // no cached content
         aGuard.changeReadToWrite();
-        ((LocaleDataWrapper*)this)->getDigitGroupingImpl();
+        const_cast<LocaleDataWrapper*>(this)->getDigitGroupingImpl();
     }
     return aGrouping;
 }
