@@ -66,6 +66,7 @@
 #include "tableundo.hxx"
 #include "tablelayouter.hxx"
 #include <vcl/msgbox.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <memory>
 
 using ::editeng::SvxBorderLine;
@@ -2077,18 +2078,18 @@ void SvxTableController::updateSelectionOverlay()
         {
             sdr::overlay::OverlayObjectCell::RangeVector aRanges;
 
-            Rectangle aRect;
+            Rectangle aStartRect, aEndRect;
             CellPos aStart,aEnd;
             getSelectedCells( aStart, aEnd );
-            pTableObj->getCellBounds( aStart, aRect );
+            pTableObj->getCellBounds( aStart, aStartRect );
 
-            basegfx::B2DRange a2DRange( basegfx::B2DPoint(aRect.Left(), aRect.Top()) );
-            a2DRange.expand( basegfx::B2DPoint(aRect.Right(), aRect.Bottom()) );
+            basegfx::B2DRange a2DRange( basegfx::B2DPoint(aStartRect.Left(), aStartRect.Top()) );
+            a2DRange.expand( basegfx::B2DPoint(aStartRect.Right(), aStartRect.Bottom()) );
 
             findMergeOrigin( aEnd );
-            pTableObj->getCellBounds( aEnd, aRect );
-            a2DRange.expand( basegfx::B2DPoint(aRect.Left(), aRect.Top()) );
-            a2DRange.expand( basegfx::B2DPoint(aRect.Right(), aRect.Bottom()) );
+            pTableObj->getCellBounds( aEnd, aEndRect );
+            a2DRange.expand( basegfx::B2DPoint(aEndRect.Left(), aEndRect.Top()) );
+            a2DRange.expand( basegfx::B2DPoint(aEndRect.Right(), aEndRect.Bottom()) );
             aRanges.push_back( a2DRange );
 
             ::Color aHighlight( COL_BLUE );
@@ -2116,6 +2117,27 @@ void SvxTableController::updateSelectionOverlay()
                     }
                 }
             }
+
+            // If tiled rendering, emit callbacks for sdr table selection.
+            if (pOutDev && pTableObj->GetModel()->isTiledRendering())
+            {
+                // Left edge of aStartRect.
+                Rectangle aSelectionStart(aStartRect.Left(), aStartRect.Top(), aStartRect.Left(), aStartRect.Bottom());
+                // Right edge of aEndRect.
+                Rectangle aSelectionEnd(aEndRect.Right(), aEndRect.Top(), aEndRect.Right(), aEndRect.Bottom());
+                Rectangle aSelection(a2DRange.getMinX(), a2DRange.getMinY(), a2DRange.getMaxX(), a2DRange.getMaxY());
+
+                if (pOutDev->GetMapMode().GetMapUnit() == MAP_100TH_MM)
+                {
+                    aSelectionStart = OutputDevice::LogicToLogic(aSelectionStart, MAP_100TH_MM, MAP_TWIP);
+                    aSelectionEnd = OutputDevice::LogicToLogic(aSelectionEnd, MAP_100TH_MM, MAP_TWIP);
+                    aSelection = OutputDevice::LogicToLogic(aSelection, MAP_100TH_MM, MAP_TWIP);
+                }
+
+                pTableObj->GetModel()->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION_START, aSelectionStart.toString().getStr());
+                pTableObj->GetModel()->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION_END, aSelectionEnd.toString().getStr());
+                pTableObj->GetModel()->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION, aSelection.toString().getStr());
+            }
         }
     }
 }
@@ -2128,6 +2150,14 @@ void SvxTableController::destroySelectionOverlay()
     {
         delete mpSelectionOverlay;
         mpSelectionOverlay = 0;
+
+        if (mxTableObj->GetModel()->isTiledRendering())
+        {
+            // Clear the LOK text selection so far provided by this table.
+            mxTableObj->GetModel()->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION_START, "EMPTY");
+            mxTableObj->GetModel()->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION_END, "EMPTY");
+            mxTableObj->GetModel()->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION, "EMPTY");
+        }
     }
 }
 
