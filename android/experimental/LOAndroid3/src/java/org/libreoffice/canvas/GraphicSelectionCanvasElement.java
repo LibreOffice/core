@@ -23,7 +23,7 @@ import static org.libreoffice.canvas.GraphicSelectionHandleCanvasElement.HandleP
  * This class is responsible to draw and reposition the selection
  * rectangle.
  */
-public class GraphicSelectionCanvasElement {
+public class GraphicSelectionCanvasElement implements CanvasElement {
     private final Paint mPaint;
     public RectF mRectangle = new RectF();
     public RectF mScaledRectangle = new RectF();
@@ -74,6 +74,10 @@ public class GraphicSelectionCanvasElement {
         return mScaledRectangle.contains(x, y);
     }
 
+    /**
+     * @see org.libreoffice.canvas.CanvasElement#draw(android.graphics.Canvas)
+     */
+    @Override
     public void draw(Canvas canvas) {
         canvas.drawRect(mDrawRectangle, mPaint);
         for (GraphicSelectionHandleCanvasElement handle : mHandles) {

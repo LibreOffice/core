@@ -19,7 +19,7 @@ import android.graphics.RectF;
  * position and perform a hit test to determine if the selection handle was
  * touched.
  */
-public class GraphicSelectionHandleCanvasElement {
+public class GraphicSelectionHandleCanvasElement implements CanvasElement {
     private final HandlePosition mHandlePosition;
     public PointF mPosition = new PointF();
     private float mRadius = 20.0f;
@@ -47,6 +47,10 @@ public class GraphicSelectionHandleCanvasElement {
         return mHandlePosition;
     }
 
+    /**
+     * @see org.libreoffice.canvas.CanvasElement#draw(android.graphics.Canvas)
+     */
+    @Override
     public void draw(Canvas canvas) {
         if (mSelected) {
             drawFilledCircle(canvas, mPosition.x, mPosition.y, mRadius, mStrokePaint, mSelectedFillPaint);
