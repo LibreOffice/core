@@ -899,7 +899,7 @@ sal_Int32 ZipFile::recover()
                 if ( nPos < nBufSize - 30 && pBuffer[nPos] == 'P' && pBuffer[nPos+1] == 'K' && pBuffer[nPos+2] == 3 && pBuffer[nPos+3] == 4 )
                 {
                     ZipEntry aEntry;
-                    MemoryByteGrabber aMemGrabber ( Sequence< sal_Int8 >( ((sal_Int8*)(&(pBuffer[nPos+4]))), 26 ) );
+                    MemoryByteGrabber aMemGrabber ( Sequence< sal_Int8 >( &(pBuffer[nPos+4]), 26 ) );
 
                     aEntry.nVersion = aMemGrabber.ReadInt16();
                     if ( ( aEntry.nVersion & 1 ) != 1 )
@@ -969,7 +969,7 @@ sal_Int32 ZipFile::recover()
                 else if (pBuffer[nPos] == 'P' && pBuffer[nPos+1] == 'K' && pBuffer[nPos+2] == 7 && pBuffer[nPos+3] == 8 )
                 {
                     sal_Int64 nCompressedSize, nSize;
-                    MemoryByteGrabber aMemGrabber ( Sequence< sal_Int8 >( ((sal_Int8*)(&(pBuffer[nPos+4]))), 12 ) );
+                    MemoryByteGrabber aMemGrabber ( Sequence< sal_Int8 >( &(pBuffer[nPos+4]), 12 ) );
                     sal_Int32 nCRC32 = aMemGrabber.ReadInt32();
                     sal_uInt32 nCompressedSize32 = aMemGrabber.ReadUInt32();
                     sal_uInt32 nSize32 = aMemGrabber.ReadUInt32();
