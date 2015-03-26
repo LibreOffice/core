@@ -149,7 +149,7 @@ public:
 
     void RequestApplyChanges() const
     {
-        ((SmFormat *) this)->Broadcast(SfxSimpleHint(HINT_FORMATCHANGED));
+        const_cast<SmFormat *>(this)->Broadcast(SfxSimpleHint(HINT_FORMATCHANGED));
     }
 
 };

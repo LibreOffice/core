@@ -608,7 +608,7 @@ bool SmGetGlyphBoundRect(const OutputDevice &rDev,
     // get a device where 'OutputDevice::GetTextBoundRect' will be successful
     OutputDevice *pGlyphDev;
     if (rDev.GetOutDevType() != OUTDEV_PRINTER)
-        pGlyphDev = (OutputDevice *) &rDev;
+        pGlyphDev = const_cast<OutputDevice *>(&rDev);
     else
     {
         // since we format for the printer (where GetTextBoundRect will fail)

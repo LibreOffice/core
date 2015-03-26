@@ -188,13 +188,13 @@ SmModule::~SmModule()
 
 void SmModule::_CreateSysLocale() const
 {
-    SmModule* pThis = (SmModule*)this;
+    SmModule* pThis = const_cast<SmModule*>(this);
     pThis->pSysLocale = new SvtSysLocale;
 }
 
 void SmModule::_CreateVirtualDev() const
 {
-    SmModule* pThis = (SmModule*)this;
+    SmModule* pThis = const_cast<SmModule*>(this);
     pThis->pVirtualDev = new VirtualDevice;
     pThis->pVirtualDev->SetReferenceDevice( VirtualDevice::REFDEV_MODE_MSO1 );
 }
@@ -249,7 +249,7 @@ SmSymbolManager & SmModule::GetSymbolManager()
 SmLocalizedSymbolData & SmModule::GetLocSymbolData() const
 {
     if (!pLocSymbolData)
-        ((SmModule *) this)->pLocSymbolData = new SmLocalizedSymbolData;
+        const_cast<SmModule *>(this)->pLocSymbolData = new SmLocalizedSymbolData;
     return *pLocSymbolData;
 }
 

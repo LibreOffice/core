@@ -445,7 +445,7 @@ class SmSymDefineDialog : public ModalDialog
     SmSym       * GetSymbol(const ComboBox &rComboBox);
     const SmSym * GetSymbol(const ComboBox &rComboBox) const
     {
-        return ((SmSymDefineDialog *) this)->GetSymbol(rComboBox);
+        return const_cast<SmSymDefineDialog *>(this)->GetSymbol(rComboBox);
     }
 
     void            InitColor_Impl();

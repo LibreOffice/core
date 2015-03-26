@@ -144,7 +144,7 @@ public:
     SmSym       *   GetSymbolByName(const OUString& rSymbolName);
     const SmSym *   GetSymbolByName(const OUString& rSymbolName) const
     {
-        return ((SmSymbolManager *) this)->GetSymbolByName(rSymbolName);
+        return const_cast<SmSymbolManager *>(this)->GetSymbolByName(rSymbolName);
     }
 
     bool        IsModified() const          { return m_bModified; }

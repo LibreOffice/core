@@ -1029,7 +1029,7 @@ public:
     /** Get body (Not NULL) */
     const SmNode * GetBody() const
     {
-        return ((SmSubSupNode *) this)->GetBody();
+        return const_cast<SmSubSupNode *>(this)->GetBody();
     }
 
     void  SetUseLimits(bool bVal) { bUseLimits = bVal; }
@@ -1183,7 +1183,7 @@ public:
     SmNode *       GetSymbol();
     const SmNode * GetSymbol() const
     {
-        return ((SmOperNode *) this)->GetSymbol();
+        return const_cast<SmOperNode *>(this)->GetSymbol();
     }
 
     long CalcSymbolHeight(const SmNode &rSymbol, const SmFormat &rFormat) const;
