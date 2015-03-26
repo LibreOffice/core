@@ -331,9 +331,9 @@ public:
     void LogicMouseButtonUp(const MouseEvent& rMouseEvent);
 
     /// Update the cell selection according to what handles have been dragged.
-    /// Uses the same parameteres as vcl::ITiledRenderable::setTextSelection()
-    /// (ie. they are in twips here).
-    void SetCellSelection(int nType, int nX, int nY);
+    /// @see vcl::ITiledRenderable::setTextSelection() for the values of nType.
+    /// Coordinates are in pixels.
+    void SetCellSelectionPixel(int nType, int nPixelX, int nPixelY);
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
 

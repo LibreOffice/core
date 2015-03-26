@@ -991,7 +991,7 @@ void ScGridWindow::LogicInvalidate(const Rectangle* pRectangle)
     pViewData->GetDocument()->GetDrawLayer()->libreOfficeKitCallback(LOK_CALLBACK_INVALIDATE_TILES, sRectangle.getStr());
 }
 
-void ScGridWindow::SetCellSelection(int nType, int nX, int nY)
+void ScGridWindow::SetCellSelectionPixel(int nType, int nPixelX, int nPixelY)
 {
     ScTabView* pTabView = pViewData->GetView();
 
@@ -1020,7 +1020,7 @@ void ScGridWindow::SetCellSelection(int nType, int nX, int nY)
     SCsCOL nNewPosX;
     SCsROW nNewPosY;
     SCTAB nTab = pViewData->GetTabNo();
-    pViewData->GetPosFromPixel(nX * pViewData->GetPPTX(), nY * pViewData->GetPPTY(), eWhich, nNewPosX, nNewPosY);
+    pViewData->GetPosFromPixel(nPixelX, nPixelY, eWhich, nNewPosX, nNewPosY);
 
     // change the selection
     switch (nType)

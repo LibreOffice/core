@@ -598,7 +598,7 @@ void ScModelObj::setTextSelection(int nType, int nX, int nY)
         if (!pGridWindow)
             return;
 
-        pGridWindow->SetCellSelection(nType, nX, nY);
+        pGridWindow->SetCellSelectionPixel(nType, nX * pViewData->GetPPTX(), nY * pViewData->GetPPTY());
     }
 }
 
