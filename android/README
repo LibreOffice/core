@@ -1,40 +1,136 @@
-LibreOffice Android
-*******************
+Android-specific notes
 
-Bootstrap
-*********
+Note that this document has not necessarily been updated to match
+reality...
 
-Contains common code for all projects on Android to bootstrap LibreOffice. In
-addition it is a home to LibreOfficeKit (LOK - see libreofficekit/README) JNI 
-classes.
+For instructions on how to build for Android, see README.cross.
 
-LOAndroid3 (in experimental)
-****************************
+* Getting something running on an emulated device
 
-LibreOffice Android application - the code is based on Fennec (Firefox for Android). 
-It uses OpenGL ES 2 for rendering of the document tiles which are gathered from 
-LibreOffice using LOK. The application contains the LibreOffice core in one shared 
-library: liblo-native-code.so, which is bundled together with the application. 
+	Create an AVD in the android UI, don't even try to get
+the data partition size right in the GUI, that is doomed to producing
+an AVD that doesn't work. Instead start it from the console:
 
-TiledRendering
-**************
+	LD_LIBRARY_PATH=$(pwd)/lib emulator-arm -avd <Name> -partition-size 500
 
-Tiled rendering is a technique that splits the document to bitmaps of same size 
-(typically 256x256) which are fetched on demand. 
+In order to have proper acceleration, you need the 32-bit libGL.so:
 
-Architecture and Threading
-**************************
+        sudo zypper in Mesa-libGL-devel-32bit
 
-The application implements editing support using 4 threads:
-1. The Android UI thread, we can't perform anything here that would take a considerable 
-   amount of time.
-2. An OpenGL thread which contains the OpenGL context and is responsible for drawing 
-   all layers (including tiles) to the screen.
-3. A thread (LOKitThread), that performs LibreOfficeKit calls, which may take more time
-   to complete. In addition it also receives events from the soffice thread (see below) 
-   when the callback emits an event. Events are stored in a blocking queue (thread 
-   processes events in FCFS order, goes to sleep when no more event is available and
-   awakens when there are events in queue again).
-4. A native thread created by LibreOfficeKit (we call it the soffice thread), where 
-   LibreOffice itself runs. It receives calls from LOKitThread, and may emit callback 
-   events as necessary.
+	Where <Name> is the literal name of the AVD that you entered.
+
+	Then:
+
+	cd android/experimental/LOAndroid3
+	ant debug install
+	adb logcat
+
+	And if all goes well - you should have some nice debug output to enjoy
+when you start the app. After a while of this loop you might find that you have
+lost a lot of space on your emulator's or device's /data volume. If using the
+emulator, you can do:
+
+	adb shell stop; adb shell start
+
+but on a (non-rooted) device you probably just need to reboot it. On the other
+hand, this phenomenon might not happen on actual devices.
+
+* What about using a real device?
+
+	That works fine, too.
+
+* Debugging
+
+	First of all, you need to configure the build with --enable-debug or
+--enable-dbgutil.  You may want to provide --enable-selective-debuginfo too,
+like --enable-selective-debuginfo="sw/" or so, in order to fit into the memory
+during linking.
+
+	Building with all symbols is also possible but the linking is currently
+slow (around 10 to 15 minutes) and you need lots of memory (around 16GB + some
+swap).
+
+	You also want to avoid --with-android-package-name (or when you use
+that, you must set it to "org.libreoffice"), otherwise ndk-gdb will complain
+that
+
+ERROR: Could not extract package's data directory. Are you sure that
+       your installed application is debuggable?
+
+	When you have all this, install the .apk to the device, and:
+
+	cd android/experimental/LOAndroid3
+	<android-ndk-r10d>/ndk-gdb --adb=<android-sdk-linux>/platform-tools/adb --start
+
+	Pretty printers aren't loaded automatically due to the single shared
+	object, but you can still load them manually. E.g. to have a pretty-printer for
+	rtl::OString, you need:
+
+	(gdb) python sys.path.insert(0, "/master/solenv/gdb")
+	(gdb) source /master/instdir/program/libuno_sal.so.3-gdb.py
+
+* Debuggint the Java part
+
+At the moment the code is not organized in a way that would make Eclipse or
+Android Studio happy as-is, so the quickest way is to use the jdb command-line
+debugger. Steps to use it:
+
+1) Find out the JDWP ID of a debuggable application:
+
+	adb jdwp
+
+From the list of currently active JDWP processes, the last number is the just
+started debuggable application.
+
+2) Forward the remote JDWP port/process ID to a local port:
+
+	adb forward tcp:7777 jdwp:31739
+
+3) Connect to the running application:
+
+	jdb -sourcepath src/java/ -attach localhost:7777
+
+Assuming that you're already in the LOAndroid3 directory in your shell.
+
+* Common Errors / Gotchas
+
+lo_dlneeds: Could not read ELF header of /data/data/org.libreoffice...libfoo.so
+	This (most likely) means that the install quietly failed, and that
+the file is truncated; check it out with adb shell ls -l /data/data/....
+
+
+* Detailed explanation
+
+Note: the below talk about unit tests is obsolete; we no longer have
+any makefilery etc to build unit tests for Android.
+
+Unit tests are the first thing we want to run on Android, to get some
+idea how well, if at all, the basic LO libraries work. We want to
+build even unit tests as normal Android apps, i.e. packaged as .apk
+files, so that they run in a sandboxed environment like that of
+whatever eventual end-user Android apps there will be that use LO
+code.
+
+Sure, we could quite easily build unit tests as plain Linux
+executables (built against the Android libraries, of course, not
+GNU/Linux ones), push them to the device or emulator with adb and run
+them from adb shell, but that would not be a good test as the
+environment such processs run in is completely different from that in
+which real end-user apps with GUI etc run. We have no intent to
+require LibreOffice code to be used only on "rooted" devices etc.
+
+All Android apps are basically Java programs. They run "in" a Dalvik
+virtual machine. Yes, you can also have apps where all *your* code is
+native code, written in a compiled language like C or C++. But also
+also such apps are actually started by system-provided Java
+bootstrapping code (NativeActivity) running in a Dalvik VM.
+
+Such a native app (or actually, "activity") is not built as a
+executable program, but as a shared object. The Java NativeActivity
+bootstrapper loads that shared object with dlopen.
+
+Anyway, our current "experimental" apps (DocumentLoader,
+LibreOffice4Android and LibreOfficeDesktop) are not based on
+NativeActivity any more. They have normal Java code for the activity,
+and just call out to a single, app-specific native library (called
+liblo-native-code.so) to do all the heavy lifting.
