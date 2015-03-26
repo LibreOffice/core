@@ -37,6 +37,7 @@
 #include <algorithm>
 #include <functional>
 #include <string.h>
+#include <time.h>
 
 namespace /* private */ {
     typedef std::vector<string_t> string_container_t;
