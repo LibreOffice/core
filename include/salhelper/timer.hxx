@@ -56,11 +56,9 @@ struct TTimeValue : public TimeValue
         normalize();
     }
 
-    TTimeValue( const TTimeValue& rTimeValue )
+    TTimeValue( const TTimeValue& rTimeValue ):
+        TimeValue(rTimeValue)
     {
-        Seconds = rTimeValue.Seconds;
-        Nanosec = rTimeValue.Nanosec;
-
         normalize();
     }
 
