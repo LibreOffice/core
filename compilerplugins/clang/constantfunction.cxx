@@ -405,8 +405,10 @@ bool ConstantFunction::VisitFunctionDecl(const FunctionDecl * pFunctionDecl) {
         return true;
     }
     // vcl/unx/gtk3 re-using vcl/unx/gtk:
-    if (aFunctionName == "GtkData::initNWF"
-        || aFunctionName == "GtkSalFrame::EnsureAppMenuWatch")
+    if (aFunctionName == "DeInitAtkBridge"
+        || aFunctionName == "GtkData::initNWF"
+        || aFunctionName == "GtkSalFrame::EnsureAppMenuWatch"
+        || aFunctionName == "InitAtkBridge")
     {
         return true;
     }
