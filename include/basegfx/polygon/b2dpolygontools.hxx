@@ -29,8 +29,26 @@
 #include <com/sun/star/drawing/FlagSequence.hpp>
 #include <vector>
 #include <basegfx/basegfxdllapi.h>
+#include <o3tl/typed_flags_set.hxx>
 
 
+
+// Definitions for the cut flags used from the findCut methods
+enum class CutFlagValue
+{
+    NONE        = 0x0000,
+    LINE        = 0x0001,
+    START1      = 0x0002,
+    START2      = 0x0004,
+    END1        = 0x0008,
+    END2        = 0x0010,
+    ALL         = LINE|START1|START2|END1|END2,
+    DEFAULT     = LINE|START2|END2,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<CutFlagValue> : is_typed_flags<CutFlagValue, 0x1f> {};
+}
 
 namespace basegfx
 {
@@ -123,24 +141,12 @@ namespace basegfx
         // #i37443# Subdivide all contained curves.
         BASEGFX_DLLPUBLIC B2DPolygon adaptiveSubdivideByCount(const B2DPolygon& rCandidate, sal_uInt32 nCount = 0L);
 
-        // Definitions for the cut flags used from the findCut methods
-        typedef sal_uInt16 CutFlagValue;
-
-        #define CUTFLAG_NONE            (0x0000)
-        #define CUTFLAG_LINE            (0x0001)
-        #define CUTFLAG_START1          (0x0002)
-        #define CUTFLAG_START2          (0x0004)
-        #define CUTFLAG_END1            (0x0008)
-        #define CUTFLAG_END2            (0x0010)
-        #define CUTFLAG_ALL         (CUTFLAG_LINE|CUTFLAG_START1|CUTFLAG_START2|CUTFLAG_END1|CUTFLAG_END2)
-        #define CUTFLAG_DEFAULT     (CUTFLAG_LINE|CUTFLAG_START2|CUTFLAG_END2)
-
         // This version works with two points and vectors to define the
         // edges for the cut test.
         BASEGFX_DLLPUBLIC CutFlagValue findCut(
             const B2DPoint& rEdge1Start, const B2DVector& rEdge1Delta,
             const B2DPoint& rEdge2Start, const B2DVector& rEdge2Delta,
-            CutFlagValue aCutFlags = CUTFLAG_DEFAULT,
+            CutFlagValue aCutFlags = CutFlagValue::DEFAULT,
             double* pCut1 = 0L, double* pCut2 = 0L);
 
         // test if point is on the given edge in range ]0.0..1.0[ without

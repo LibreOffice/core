@@ -332,7 +332,7 @@ namespace
 
                 if(basegfx::tools::findCut(
                     rStart, aVector,
-                    aCurrent, aEdgeVector))
+                    aCurrent, aEdgeVector) != CutFlagValue::NONE)
                 {
                     return true;
                 }

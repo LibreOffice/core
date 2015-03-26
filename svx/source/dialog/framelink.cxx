@@ -1395,7 +1395,7 @@ double lcl_GetExtent( const Style& rBorder, const Style& rSide, const Style& rOp
     double nCut = 0.0;
     basegfx::tools::findCut(
             aBasePoint, aBaseVector, aOtherPoint, aOtherVector,
-            CUTFLAG_ALL, &nCut );
+            CutFlagValue::ALL, &nCut );
 
     return nCut;
 }

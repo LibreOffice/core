@@ -359,21 +359,21 @@ namespace basegfx
                 const B2DVector aPerpendStartA(aNormalizedPerpendicularA * -fHalfLineWidth);
                 const B2DVector aPerpendEndA(aNormalizedPerpendicularB * -fHalfLineWidth);
                 double fCutA(0.0);
-                const tools::CutFlagValue aCutA(tools::findCut(
+                const CutFlagValue aCutA(tools::findCut(
                     rEdge.getStartPoint(), aPerpendStartA,
                     rEdge.getEndPoint(), aPerpendEndA,
-                    CUTFLAG_ALL, &fCutA));
-                const bool bCutA(CUTFLAG_NONE != aCutA);
+                    CutFlagValue::ALL, &fCutA));
+                const bool bCutA(CutFlagValue::NONE != aCutA);
 
                 // create lower displacement vectors and check if they cut
                 const B2DVector aPerpendStartB(aNormalizedPerpendicularA * fHalfLineWidth);
                 const B2DVector aPerpendEndB(aNormalizedPerpendicularB * fHalfLineWidth);
                 double fCutB(0.0);
-                const tools::CutFlagValue aCutB(tools::findCut(
+                const CutFlagValue aCutB(tools::findCut(
                     rEdge.getEndPoint(), aPerpendEndB,
                     rEdge.getStartPoint(), aPerpendStartB,
-                    CUTFLAG_ALL, &fCutB));
-                const bool bCutB(CUTFLAG_NONE != aCutB);
+                    CutFlagValue::ALL, &fCutB));
+                const bool bCutB(CutFlagValue::NONE != aCutB);
 
                 // check if cut happens
                 const bool bCut(bCutA || bCutB);
@@ -713,7 +713,7 @@ namespace basegfx
                     // is not needed since the same fCut will be found on the first edge.
                     // If it exists, insert it to complete the mitered fill polygon.
                     double fCutPos(0.0);
-                    tools::findCut(aStartPoint, rTangentPrev, aEndPoint, rTangentEdge, CUTFLAG_ALL, &fCutPos);
+                    tools::findCut(aStartPoint, rTangentPrev, aEndPoint, rTangentEdge, CutFlagValue::ALL, &fCutPos);
 
                     if(0.0 != fCutPos)
                     {

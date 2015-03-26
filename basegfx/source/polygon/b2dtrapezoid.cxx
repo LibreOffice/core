@@ -390,9 +390,9 @@ namespace basegfx
                 if(tools::findCut(
                     aEdgeA.getStart(), aDeltaA,
                     aEdgeB.getStart(), aDeltaB,
-                    CUTFLAG_LINE,
+                    CutFlagValue::LINE,
                     &fCutA,
-                    &fCutB))
+                    &fCutB) != CutFlagValue::NONE)
                 {
                     // use a simple metric (length criteria) for choosing the numerically
                     // better cut

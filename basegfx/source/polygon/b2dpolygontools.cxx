@@ -947,28 +947,28 @@ namespace basegfx
             CutFlagValue aCutFlags,
             double* pCut1, double* pCut2)
         {
-            CutFlagValue aRetval(CUTFLAG_NONE);
+            CutFlagValue aRetval(CutFlagValue::NONE);
             double fCut1(0.0);
             double fCut2(0.0);
-            bool bFinished(!((bool)(aCutFlags & CUTFLAG_ALL)));
+            bool bFinished(!((bool)(aCutFlags & CutFlagValue::ALL)));
 
             // test for same points?
             if(!bFinished
-                && (aCutFlags & (CUTFLAG_START1|CUTFLAG_END1))
-                && (aCutFlags & (CUTFLAG_START2|CUTFLAG_END2)))
+                && (aCutFlags & (CutFlagValue::START1|CutFlagValue::END1))
+                && (aCutFlags & (CutFlagValue::START2|CutFlagValue::END2)))
             {
                 // same startpoint?
-                if(!bFinished && (aCutFlags & (CUTFLAG_START1|CUTFLAG_START2)) == (CUTFLAG_START1|CUTFLAG_START2))
+                if(!bFinished && (aCutFlags & (CutFlagValue::START1|CutFlagValue::START2)) == (CutFlagValue::START1|CutFlagValue::START2))
                 {
                     if(rEdge1Start.equal(rEdge2Start))
                     {
                         bFinished = true;
-                        aRetval = (CUTFLAG_START1|CUTFLAG_START2);
+                        aRetval = (CutFlagValue::START1|CutFlagValue::START2);
                     }
                 }
 
                 // same endpoint?
-                if(!bFinished && (aCutFlags & (CUTFLAG_END1|CUTFLAG_END2)) == (CUTFLAG_END1|CUTFLAG_END2))
+                if(!bFinished && (aCutFlags & (CutFlagValue::END1|CutFlagValue::END2)) == (CutFlagValue::END1|CutFlagValue::END2))
                 {
                     const B2DPoint aEnd1(rEdge1Start + rEdge1Delta);
                     const B2DPoint aEnd2(rEdge2Start + rEdge2Delta);
@@ -976,63 +976,63 @@ namespace basegfx
                     if(aEnd1.equal(aEnd2))
                     {
                         bFinished = true;
-                        aRetval = (CUTFLAG_END1|CUTFLAG_END2);
+                        aRetval = (CutFlagValue::END1|CutFlagValue::END2);
                         fCut1 = fCut2 = 1.0;
                     }
                 }
 
                 // startpoint1 == endpoint2?
-                if(!bFinished && (aCutFlags & (CUTFLAG_START1|CUTFLAG_END2)) == (CUTFLAG_START1|CUTFLAG_END2))
+                if(!bFinished && (aCutFlags & (CutFlagValue::START1|CutFlagValue::END2)) == (CutFlagValue::START1|CutFlagValue::END2))
                 {
                     const B2DPoint aEnd2(rEdge2Start + rEdge2Delta);
 
                     if(rEdge1Start.equal(aEnd2))
                     {
                         bFinished = true;
-                        aRetval = (CUTFLAG_START1|CUTFLAG_END2);
+                        aRetval = (CutFlagValue::START1|CutFlagValue::END2);
                         fCut1 = 0.0;
                         fCut2 = 1.0;
                     }
                 }
 
                 // startpoint2 == endpoint1?
-                if(!bFinished&& (aCutFlags & (CUTFLAG_START2|CUTFLAG_END1)) == (CUTFLAG_START2|CUTFLAG_END1))
+                if(!bFinished&& (aCutFlags & (CutFlagValue::START2|CutFlagValue::END1)) == (CutFlagValue::START2|CutFlagValue::END1))
                 {
                     const B2DPoint aEnd1(rEdge1Start + rEdge1Delta);
 
                     if(rEdge2Start.equal(aEnd1))
                     {
                         bFinished = true;
-                        aRetval = (CUTFLAG_START2|CUTFLAG_END1);
+                        aRetval = (CutFlagValue::START2|CutFlagValue::END1);
                         fCut1 = 1.0;
                         fCut2 = 0.0;
                     }
                 }
             }
 
-            if(!bFinished && (aCutFlags & CUTFLAG_LINE))
+            if(!bFinished && (aCutFlags & CutFlagValue::LINE))
             {
-                if(!bFinished && (aCutFlags & CUTFLAG_START1))
+                if(!bFinished && (aCutFlags & CutFlagValue::START1))
                 {
                     // start1 on line 2 ?
                     if(isPointOnEdge(rEdge1Start, rEdge2Start, rEdge2Delta, &fCut2))
                     {
                         bFinished = true;
-                        aRetval = (CUTFLAG_LINE|CUTFLAG_START1);
+                        aRetval = (CutFlagValue::LINE|CutFlagValue::START1);
                     }
                 }
 
-                if(!bFinished && (aCutFlags & CUTFLAG_START2))
+                if(!bFinished && (aCutFlags & CutFlagValue::START2))
                 {
                     // start2 on line 1 ?
                     if(isPointOnEdge(rEdge2Start, rEdge1Start, rEdge1Delta, &fCut1))
                     {
                         bFinished = true;
-                        aRetval = (CUTFLAG_LINE|CUTFLAG_START2);
+                        aRetval = (CutFlagValue::LINE|CutFlagValue::START2);
                     }
                 }
 
-                if(!bFinished && (aCutFlags & CUTFLAG_END1))
+                if(!bFinished && (aCutFlags & CutFlagValue::END1))
                 {
                     // end1 on line 2 ?
                     const B2DPoint aEnd1(rEdge1Start + rEdge1Delta);
@@ -1040,11 +1040,11 @@ namespace basegfx
                     if(isPointOnEdge(aEnd1, rEdge2Start, rEdge2Delta, &fCut2))
                     {
                         bFinished = true;
-                        aRetval = (CUTFLAG_LINE|CUTFLAG_END1);
+                        aRetval = (CutFlagValue::LINE|CutFlagValue::END1);
                     }
                 }
 
-                if(!bFinished && (aCutFlags & CUTFLAG_END2))
+                if(!bFinished && (aCutFlags & CutFlagValue::END2))
                 {
                     // end2 on line 1 ?
                     const B2DPoint aEnd2(rEdge2Start + rEdge2Delta);
@@ -1052,7 +1052,7 @@ namespace basegfx
                     if(isPointOnEdge(aEnd2, rEdge1Start, rEdge1Delta, &fCut1))
                     {
                         bFinished = true;
-                        aRetval = (CUTFLAG_LINE|CUTFLAG_END2);
+                        aRetval = (CutFlagValue::LINE|CutFlagValue::END2);
                     }
                 }
 
@@ -1088,7 +1088,7 @@ namespace basegfx
                             // inside parameter range edge2, too
                             if(fTools::more(fCut2, fZero) && fTools::less(fCut2, fOne))
                             {
-                                aRetval = CUTFLAG_LINE;
+                                aRetval = CutFlagValue::LINE;
                             }
                         }
                     }
