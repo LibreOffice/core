@@ -96,12 +96,11 @@ Button::Button( WindowType nType ) :
 Button::~Button()
 {
     disposeOnce();
+    delete mpButtonData;
 }
 
 void Button::dispose()
 {
-    delete mpButtonData;
-    mpButtonData = NULL;
     Control::dispose();
 }
 
@@ -542,7 +541,7 @@ sal_uInt16& Button::ImplGetButtonState()
 
 sal_uInt16 Button::ImplGetButtonState() const
 {
-    return mpButtonData ? mpButtonData->mnButtonState : 0;
+    return mpButtonData->mnButtonState;
 }
 
 void Button::ImplSetSymbolAlign( SymbolAlign eAlign )
