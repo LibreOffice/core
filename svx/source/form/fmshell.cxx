@@ -254,7 +254,7 @@ bool FmFormShell::PrepareClose(bool bUI)
         SdrPageView* pCurPageView = m_pFormView->GetSdrPageView();
 
         // sal_uInt16 nPos = pCurPageView ? pCurPageView->GetWinList().Find((OutputDevice*)m_pFormView->GetActualOutDev()) : SDRPAGEVIEWWIN_NOTFOUND;
-        SdrPageWindow* pWindow = pCurPageView ? pCurPageView->FindPageWindow(*((OutputDevice*)m_pFormView->GetActualOutDev())) : 0L;
+        SdrPageWindow* pWindow = pCurPageView ? pCurPageView->FindPageWindow(*const_cast<OutputDevice*>(m_pFormView->GetActualOutDev())) : 0L;
 
         if(pWindow)
         {

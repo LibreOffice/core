@@ -590,13 +590,13 @@ bool ImpPathForDragAndCreate::beginPathDrag( SdrDragStat& rDrag )  const
             bMultiPointDrag = false;
     }
 
-    ((ImpPathForDragAndCreate*)this)->mpSdrPathDragData = new ImpSdrPathDragData(mrSdrPathObject,*pHdl,bMultiPointDrag,rDrag);
+    const_cast<ImpPathForDragAndCreate*>(this)->mpSdrPathDragData = new ImpSdrPathDragData(mrSdrPathObject,*pHdl,bMultiPointDrag,rDrag);
 
     if(!mpSdrPathDragData || !mpSdrPathDragData->bValid)
     {
         OSL_FAIL("ImpPathForDragAndCreate::BegDrag(): ImpSdrPathDragData is invalid.");
         delete mpSdrPathDragData;
-        ((ImpPathForDragAndCreate*)this)->mpSdrPathDragData = 0;
+        const_cast<ImpPathForDragAndCreate*>(this)->mpSdrPathDragData = 0;
         return false;
     }
 
@@ -2158,7 +2158,7 @@ bool SdrPathObj::hasSpecialDrag() const
 
 bool SdrPathObj::beginSpecialDrag(SdrDragStat& rDrag) const
 {
-    ImpPathForDragAndCreate aDragAndCreate(*((SdrPathObj*)this));
+    ImpPathForDragAndCreate aDragAndCreate(*const_cast<SdrPathObj*>(this));
 
     return aDragAndCreate.beginPathDrag(rDrag);
 }
@@ -2202,7 +2202,7 @@ OUString SdrPathObj::getSpecialDragComment(const SdrDragStat& rDrag) const
     }
     else
     {
-        ImpPathForDragAndCreate aDragAndCreate(*((SdrPathObj*)this));
+        ImpPathForDragAndCreate aDragAndCreate(*const_cast<SdrPathObj*>(this));
         bool bDidWork(aDragAndCreate.beginPathDrag((SdrDragStat&)rDrag));
 
         if(bDidWork)
@@ -2217,7 +2217,7 @@ OUString SdrPathObj::getSpecialDragComment(const SdrDragStat& rDrag) const
 basegfx::B2DPolyPolygon SdrPathObj::getSpecialDragPoly(const SdrDragStat& rDrag) const
 {
     basegfx::B2DPolyPolygon aRetval;
-    ImpPathForDragAndCreate aDragAndCreate(*((SdrPathObj*)this));
+    ImpPathForDragAndCreate aDragAndCreate(*const_cast<SdrPathObj*>(this));
     bool bDidWork(aDragAndCreate.beginPathDrag((SdrDragStat&)rDrag));
 
     if(bDidWork)
@@ -2839,7 +2839,7 @@ ImpPathForDragAndCreate& SdrPathObj::impGetDAC() const
 {
     if(!mpDAC)
     {
-        ((SdrPathObj*)this)->mpDAC = new ImpPathForDragAndCreate(*((SdrPathObj*)this));
+        const_cast<SdrPathObj*>(this)->mpDAC = new ImpPathForDragAndCreate(*const_cast<SdrPathObj*>(this));
     }
 
     return *mpDAC;
@@ -2850,7 +2850,7 @@ void SdrPathObj::impDeleteDAC() const
     if(mpDAC)
     {
         delete mpDAC;
-        ((SdrPathObj*)this)->mpDAC = 0L;
+        const_cast<SdrPathObj*>(this)->mpDAC = 0L;
     }
 }
 

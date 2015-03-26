@@ -95,8 +95,8 @@ const Rectangle& SdrAttrObj::GetSnapRect() const
 {
     if(bSnapRectDirty)
     {
-        ((SdrAttrObj*)this)->RecalcSnapRect();
-        ((SdrAttrObj*)this)->bSnapRectDirty = false;
+        const_cast<SdrAttrObj*>(this)->RecalcSnapRect();
+        const_cast<SdrAttrObj*>(this)->bSnapRectDirty = false;
     }
 
     return maSnapRect;

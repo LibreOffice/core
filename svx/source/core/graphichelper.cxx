@@ -61,7 +61,7 @@ namespace drawing = com::sun::star::drawing;
 void GraphicHelper::GetPreferredExtension( OUString& rExtension, const Graphic& rGraphic )
 {
     OUString aExtension = "png";
-    switch( const_cast<Graphic&>( rGraphic ).GetLink().GetType() )
+    switch( rGraphic.GetLink().GetType() )
     {
         case GFX_LINK_TYPE_NATIVE_GIF:
             aExtension = "gif";

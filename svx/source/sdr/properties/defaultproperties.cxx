@@ -81,8 +81,8 @@ namespace sdr
         {
             if(!mpItemSet)
             {
-                ((DefaultProperties*)this)->mpItemSet = ((DefaultProperties*)this)->CreateObjectSpecificItemSet(GetSdrObject().GetObjectItemPool());
-                ((DefaultProperties*)this)->ForceDefaultAttributes();
+                const_cast<DefaultProperties*>(this)->mpItemSet = const_cast<DefaultProperties*>(this)->CreateObjectSpecificItemSet(GetSdrObject().GetObjectItemPool());
+                const_cast<DefaultProperties*>(this)->ForceDefaultAttributes();
             }
 
             assert(mpItemSet && "Could not create an SfxItemSet(!)");

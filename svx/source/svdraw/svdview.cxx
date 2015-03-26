@@ -1003,7 +1003,7 @@ Pointer SdrView::GetPreferredPointer(const Point& rMousePos, const OutputDevice*
     aVEvt.bMouseDown=!bLeftDown; // What if ..?
     aVEvt.bMouseUp=bLeftDown;    // What if ..?
     if (pOut!=NULL)
-        ((SdrView*)this)->SetActualWin(pOut);
+        const_cast<SdrView*>(this)->SetActualWin(pOut);
     SdrHitKind eHit=PickAnything(rMousePos,aVEvt);
     SdrEventKind eEvent=aVEvt.eEvent;
     switch (eEvent)
@@ -1030,7 +1030,7 @@ Pointer SdrView::GetPreferredPointer(const Point& rMousePos, const OutputDevice*
             aHitRec.nTol=nHitTolLog;
             aHitRec.pVisiLayer=&aVEvt.pPV->GetVisibleLayers();
             aHitRec.pPageView=aVEvt.pPV;
-            aHitRec.pOut=(OutputDevice*)pOut;
+            aHitRec.pOut=const_cast<OutputDevice*>(pOut);
             return aVEvt.pObj->GetMacroPointer(aHitRec);
         }
         default: break;

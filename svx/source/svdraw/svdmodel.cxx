@@ -1870,7 +1870,7 @@ void SdrModel::MigrateItemSet( const SfxItemSet* pSourceSet, SfxItemSet* pDestSe
                 if( pResultItem )
                 {
                     pDestSet->Put(*pResultItem);
-                    delete (SfxPoolItem*)pResultItem;
+                    delete pResultItem;
                 }
                 else
                     pDestSet->Put(*pPoolItem);

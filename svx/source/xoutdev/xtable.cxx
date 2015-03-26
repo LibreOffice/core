@@ -134,8 +134,8 @@ long XPropertyList::Count() const
 {
     if( mbListDirty )
     {
-        if( !( (XPropertyList*) this )->Load() )
-            ( (XPropertyList*) this )->Create();
+        if( !const_cast<XPropertyList*>(this)->Load() )
+            const_cast<XPropertyList*>(this)->Create();
     }
     return maList.size();
 }
@@ -144,8 +144,8 @@ XPropertyEntry* XPropertyList::Get( long nIndex ) const
 {
     if( mbListDirty )
     {
-        if( !( (XPropertyList*) this )->Load() )
-            ( (XPropertyList*) this )->Create();
+        if( !const_cast<XPropertyList*>(this)->Load() )
+            const_cast<XPropertyList*>(this)->Create();
     }
     return ( (size_t)nIndex < maList.size() ) ? maList[ nIndex ] : NULL;
 }
@@ -154,8 +154,8 @@ long XPropertyList::GetIndex(const OUString& rName) const
 {
     if( mbListDirty )
     {
-        if( !( (XPropertyList*) this )->Load() )
-            ( (XPropertyList*) this )->Create();
+        if( !const_cast<XPropertyList*>(this)->Load() )
+            const_cast<XPropertyList*>(this)->Create();
     }
 
     for( long i = 0, n = maList.size(); i < n; ++i ) {

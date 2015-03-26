@@ -1972,7 +1972,7 @@ Point SdrMarkView::GetGridOffset() const
 const Rectangle& SdrMarkView::GetMarkedObjRect() const
 {
     if (bMarkedObjRectDirty) {
-        ((SdrMarkView*)this)->bMarkedObjRectDirty=false;
+        const_cast<SdrMarkView*>(this)->bMarkedObjRectDirty=false;
         Rectangle aRect;
         Rectangle aRect2;
         for (size_t nm=0; nm<GetMarkedObjectCount(); ++nm) {
@@ -1988,8 +1988,8 @@ const Rectangle& SdrMarkView::GetMarkedObjRect() const
             if (aRect.IsEmpty()) aRect=aR1;
             else aRect.Union(aR1);
         }
-        ((SdrMarkView*)this)->aMarkedObjRect=aRect;
-        ((SdrMarkView*)this)->aMarkedObjRectNoOffset=aRect2;
+        const_cast<SdrMarkView*>(this)->aMarkedObjRect=aRect;
+        const_cast<SdrMarkView*>(this)->aMarkedObjRectNoOffset=aRect2;
     }
     return aMarkedObjRect;
 }

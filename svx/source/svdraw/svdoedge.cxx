@@ -379,7 +379,7 @@ const Rectangle& SdrEdgeObj::GetCurrentBoundRect() const
 {
     if(bEdgeTrackDirty)
     {
-        ((SdrEdgeObj*)this)->ImpRecalcEdgeTrack();
+        const_cast<SdrEdgeObj*>(this)->ImpRecalcEdgeTrack();
     }
 
     return SdrTextObj::GetCurrentBoundRect();
@@ -389,7 +389,7 @@ const Rectangle& SdrEdgeObj::GetSnapRect() const
 {
     if(bEdgeTrackDirty)
     {
-        ((SdrEdgeObj*)this)->ImpRecalcEdgeTrack();
+        const_cast<SdrEdgeObj*>(this)->ImpRecalcEdgeTrack();
     }
 
     return SdrTextObj::GetSnapRect();
@@ -1672,7 +1672,7 @@ basegfx::B2DPolyPolygon SdrEdgeObj::TakeXorPoly() const
 
     if (bEdgeTrackDirty)
     {
-        ((SdrEdgeObj*)this)->ImpRecalcEdgeTrack();
+        const_cast<SdrEdgeObj*>(this)->ImpRecalcEdgeTrack();
     }
 
     if(pEdgeTrack)
@@ -1708,7 +1708,7 @@ basegfx::B2DPolyPolygon SdrEdgeObj::GetEdgeTrackPath() const
     basegfx::B2DPolyPolygon aPolyPolygon;
 
     if (bEdgeTrackDirty)
-        ((SdrEdgeObj*)this)->ImpRecalcEdgeTrack();
+        const_cast<SdrEdgeObj*>(this)->ImpRecalcEdgeTrack();
 
     aPolyPolygon.append( pEdgeTrack->getB2DPolygon() );
 
@@ -2388,7 +2388,7 @@ sal_uInt32 SdrEdgeObj::GetSnapPointCount() const
 
 Point SdrEdgeObj::GetSnapPoint(sal_uInt32 i) const
 {
-    ((SdrEdgeObj*)this)->ImpUndirtyEdgeTrack();
+    const_cast<SdrEdgeObj*>(this)->ImpUndirtyEdgeTrack();
     sal_uInt16 nCount=pEdgeTrack->GetPointCount();
     if (i==0) return (*pEdgeTrack)[0];
     else return (*pEdgeTrack)[nCount-1];
@@ -2406,7 +2406,7 @@ sal_uInt32 SdrEdgeObj::GetPointCount() const
 
 Point SdrEdgeObj::GetPoint(sal_uInt32 i) const
 {
-    ((SdrEdgeObj*)this)->ImpUndirtyEdgeTrack();
+    const_cast<SdrEdgeObj*>(this)->ImpUndirtyEdgeTrack();
     sal_uInt16 nCount=pEdgeTrack->GetPointCount();
     if (0L == i)
         return (*pEdgeTrack)[0];

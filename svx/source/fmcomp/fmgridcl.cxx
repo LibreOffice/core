@@ -1952,7 +1952,7 @@ void FmGridControl::Select()
     sal_uInt16 nSelectedColumn =
         pColumnSelection && pColumnSelection->GetSelectCount()
             ? sal::static_int_cast< sal_uInt16 >(
-                ((MultiSelection*)pColumnSelection)->FirstSelected())
+                const_cast<MultiSelection*>(pColumnSelection)->FirstSelected())
             : SAL_MAX_UINT16;
     // die HandleColumn wird nicht selektiert
     switch (nSelectedColumn)

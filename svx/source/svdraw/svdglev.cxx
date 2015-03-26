@@ -54,7 +54,7 @@ void SdrGlueEditView::ImpDoMarkedGluePoints(PGlueDoFunc pDoFunc, bool bConst, co
             SdrGluePointList* pGPL=NULL;
             if (bConst) {
                 const SdrGluePointList* pConstGPL=pObj->GetGluePointList();
-                pGPL=(SdrGluePointList*)pConstGPL;
+                pGPL=const_cast<SdrGluePointList*>(pConstGPL);
             } else {
                 pGPL=pObj->ForceGluePointList();
             }
@@ -106,7 +106,7 @@ SDR_TRISTATE SdrGlueEditView::IsMarkedGluePointsEscDir(sal_uInt16 nThisEsc) cons
     ForceUndirtyMrkPnt();
     bool bFirst=true;
     sal_uInt16 nRet=0;
-    ((SdrGlueEditView*)this)->ImpDoMarkedGluePoints(ImpGetEscDir,true,&bFirst,&nThisEsc,&nRet);
+    const_cast<SdrGlueEditView*>(this)->ImpDoMarkedGluePoints(ImpGetEscDir,true,&bFirst,&nThisEsc,&nRet);
     return (SDR_TRISTATE)nRet;
 }
 
@@ -144,7 +144,7 @@ SDR_TRISTATE SdrGlueEditView::IsMarkedGluePointsPercent() const
     ForceUndirtyMrkPnt();
     bool bFirst=true;
     sal_uInt16 nRet=sal_True;
-    ((SdrGlueEditView*)this)->ImpDoMarkedGluePoints(ImpGetPercent,true,&bFirst,&nRet);
+    const_cast<SdrGlueEditView*>(this)->ImpDoMarkedGluePoints(ImpGetPercent,true,&bFirst,&nRet);
     return (SDR_TRISTATE)nRet;
 }
 
@@ -196,7 +196,7 @@ sal_uInt16 SdrGlueEditView::GetMarkedGluePointsAlign(bool bVert) const
     bool bFirst=true;
     bool bDontCare=false;
     sal_uInt16 nRet=0;
-    ((SdrGlueEditView*)this)->ImpDoMarkedGluePoints(ImpGetAlign,true,&bFirst,&bDontCare,&bVert,&nRet);
+    const_cast<SdrGlueEditView*>(this)->ImpDoMarkedGluePoints(ImpGetAlign,true,&bFirst,&bDontCare,&bVert,&nRet);
     return nRet;
 }
 

@@ -876,7 +876,7 @@ double EnhancedCustomShape2d::GetEquationValueAsDouble( const sal_Int32 nIndex )
                 else {
                     // cast to non const, so that we can optimize by caching
                     // equation results, without changing all the const in the stack
-                    struct EquationResult &aResult = ((EnhancedCustomShape2d*)this)->vEquationResults[ nIndex ];
+                    struct EquationResult &aResult = const_cast<EnhancedCustomShape2d*>(this)->vEquationResults[ nIndex ];
 
                     fNumber = aResult.fValue = (*vNodesSharedPtr[ nIndex ])();
                     aResult.bReady = true;

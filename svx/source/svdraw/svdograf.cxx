@@ -485,7 +485,7 @@ Graphic SdrGrafObj::GetTransformedGraphic( sal_uIntPtr nTransformFlags ) const
         ( aGeo.nRotationAngle && aGeo.nRotationAngle != 18000 ) && ( GRAPHIC_NONE != eType );
 
     // Need cropping info earlier
-    ( (SdrGrafObj*) this )->ImpSetAttrToGrafInfo();
+    const_cast<SdrGrafObj*>(this)->ImpSetAttrToGrafInfo();
     GraphicAttr aActAttr;
 
     if( SDRGRAFOBJ_TRANSFORMATTR_NONE != nTransformFlags &&

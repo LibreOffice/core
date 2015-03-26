@@ -310,8 +310,8 @@ void SdrPaintView::FlushComeBackTimer() const
 {
     if (bSomeObjChgdFlag) {
         // casting to nonconst
-        ((SdrPaintView*)this)->ImpComeBackHdl(&((SdrPaintView*)this)->aComeBackIdle);
-        ((SdrPaintView*)this)->aComeBackIdle.Stop();
+        const_cast<SdrPaintView*>(this)->ImpComeBackHdl(&const_cast<SdrPaintView*>(this)->aComeBackIdle);
+        const_cast<SdrPaintView*>(this)->aComeBackIdle.Stop();
     }
 }
 
@@ -410,8 +410,8 @@ sal_uInt16 SdrPaintView::ImpGetHitTolLogic(short nHitTol, const OutputDevice* pO
 void SdrPaintView::TheresNewMapMode()
 {
     if (pActualOutDev!=NULL) {
-        nHitTolLog=(sal_uInt16)((OutputDevice*)pActualOutDev)->PixelToLogic(Size(nHitTolPix,0)).Width();
-        nMinMovLog=(sal_uInt16)((OutputDevice*)pActualOutDev)->PixelToLogic(Size(nMinMovPix,0)).Width();
+        nHitTolLog=(sal_uInt16)pActualOutDev->PixelToLogic(Size(nHitTolPix,0)).Width();
+        nMinMovLog=(sal_uInt16)pActualOutDev->PixelToLogic(Size(nMinMovPix,0)).Width();
     }
 }
 
@@ -1240,7 +1240,7 @@ void SdrPaintView::VisAreaChanged(const OutputDevice* pOut)
     {
         if (pOut)
         {
-            SdrPageWindow* pWindow = mpPageView->FindPageWindow(*((OutputDevice*)pOut));
+            SdrPageWindow* pWindow = mpPageView->FindPageWindow(*const_cast<OutputDevice*>(pOut));
 
             if(pWindow)
             {

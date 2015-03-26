@@ -1046,7 +1046,7 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
     {
         SdrHint aHint(HINT_ENDEDIT);
         aHint.SetObject(pTEObj);
-        ((SfxBroadcaster*)pTEObj->GetBroadcaster())->Broadcast(aHint);
+        const_cast<SfxBroadcaster*>(pTEObj->GetBroadcaster())->Broadcast(aHint);
     }
 
     if(pUndoEditUndoManager)

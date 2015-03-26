@@ -558,7 +558,7 @@ void ExtrusionBar::execute( SdrView* pSdrView, SfxRequest& rReq, SfxBindings& rB
                             pSdrView->BegUndo( aStr );
                             pSdrView->AddUndo( pSdrView->GetModel()->GetSdrUndoFactory().CreateUndoAttrObject( *pObj ) );
                         }
-                        SdrCustomShapeGeometryItem aGeometryItem( const_cast<SdrCustomShapeGeometryItem&>(static_cast<const SdrCustomShapeGeometryItem&>(pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ))));
+                        SdrCustomShapeGeometryItem aGeometryItem( static_cast<const SdrCustomShapeGeometryItem&>(pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY )));
                         impl_execute( pSdrView, rReq, aGeometryItem, pObj );
                         pObj->SetMergedItem( aGeometryItem );
                         pObj->BroadcastObjectChange();

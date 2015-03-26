@@ -970,7 +970,7 @@ bool GalleryTheme::InsertModel( const FmFormModel& rModel, sal_uIntPtr nInsertPo
         if( xOStm.Is() && !xOStm->GetError() )
         {
             SvMemoryStream  aMemStm( 65535, 65535 );
-            FmFormModel*    pFormModel = (FmFormModel*) &rModel;
+            FmFormModel*    pFormModel = const_cast<FmFormModel*>(&rModel);
 
             pFormModel->BurnInStyleSheetAttributes();
 

@@ -156,7 +156,7 @@ protected:
 
     // Check possibilities of all marked objects
     virtual void CheckPossibilities();
-    void ForcePossibilities() const { if (bPossibilitiesDirty || bSomeObjChgdFlag) ((SdrEditView*)this)->CheckPossibilities(); }
+    void ForcePossibilities() const { if (bPossibilitiesDirty || bSomeObjChgdFlag) const_cast<SdrEditView*>(this)->CheckPossibilities(); }
 
 protected:
     // #i71538# make constructors of SdrView sub-components protected to avoid incomplete incarnations which may get casted to SdrView

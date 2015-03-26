@@ -116,15 +116,15 @@ SdrObjList* SdrVirtObj::GetSubList() const
 
 const Rectangle& SdrVirtObj::GetCurrentBoundRect() const
 {
-    ((SdrVirtObj*)this)->aOutRect=rRefObj.GetCurrentBoundRect(); // TODO: Optimize this.
-    ((SdrVirtObj*)this)->aOutRect+=aAnchor;
+    const_cast<SdrVirtObj*>(this)->aOutRect=rRefObj.GetCurrentBoundRect(); // TODO: Optimize this.
+    const_cast<SdrVirtObj*>(this)->aOutRect+=aAnchor;
     return aOutRect;
 }
 
 const Rectangle& SdrVirtObj::GetLastBoundRect() const
 {
-    ((SdrVirtObj*)this)->aOutRect=rRefObj.GetLastBoundRect(); // TODO: Optimize this.
-    ((SdrVirtObj*)this)->aOutRect+=aAnchor;
+    const_cast<SdrVirtObj*>(this)->aOutRect=rRefObj.GetLastBoundRect(); // TODO: Optimize this.
+    const_cast<SdrVirtObj*>(this)->aOutRect+=aAnchor;
     return aOutRect;
 }
 
@@ -286,7 +286,7 @@ SdrObject* SdrVirtObj::getFullDragClone() const
     }
     else
     {
-        SdrObject& rReferencedObject = ((SdrVirtObj*)this)->ReferencedObj();
+        SdrObject& rReferencedObject = const_cast<SdrVirtObj*>(this)->ReferencedObj();
         pRetval = new SdrGrafObj(SdrDragView::GetObjGraphic(GetModel(), &rReferencedObject), GetLogicRect());
     }
 
@@ -440,8 +440,8 @@ void SdrVirtObj::RecalcSnapRect()
 
 const Rectangle& SdrVirtObj::GetSnapRect() const
 {
-    ((SdrVirtObj*)this)->aSnapRect=rRefObj.GetSnapRect();
-    ((SdrVirtObj*)this)->aSnapRect+=aAnchor;
+    const_cast<SdrVirtObj*>(this)->aSnapRect=rRefObj.GetSnapRect();
+    const_cast<SdrVirtObj*>(this)->aSnapRect+=aAnchor;
     return aSnapRect;
 }
 
@@ -469,8 +469,8 @@ void SdrVirtObj::NbcSetSnapRect(const Rectangle& rRect)
 
 const Rectangle& SdrVirtObj::GetLogicRect() const
 {
-    ((SdrVirtObj*)this)->aSnapRect=rRefObj.GetLogicRect();  // An abuse of aSnapRect!
-    ((SdrVirtObj*)this)->aSnapRect+=aAnchor;                // If there's trouble, we need another Rectangle Member (or a Heap).
+    const_cast<SdrVirtObj*>(this)->aSnapRect=rRefObj.GetLogicRect();  // An abuse of aSnapRect!
+    const_cast<SdrVirtObj*>(this)->aSnapRect+=aAnchor;                // If there's trouble, we need another Rectangle Member (or a Heap).
     return aSnapRect;
 }
 

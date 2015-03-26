@@ -1364,12 +1364,12 @@ bool CheckFrameBorderConnectable( const Style& rLBorder, const Style& rRBorder,
 double lcl_GetExtent( const Style& rBorder, const Style& rSide, const Style& rOpposite,
                       long nAngleSide = 9000, long nAngleOpposite = 9000 )
 {
-    Style aOtherBorder = const_cast< Style& >( rSide );
+    Style aOtherBorder = rSide;
     long nOtherAngle = nAngleSide;
     if ( rSide.GetWidth() == 0 && rOpposite.GetWidth() > 0 )
     {
         nOtherAngle = nAngleOpposite;
-        aOtherBorder = const_cast< Style& >( rOpposite );
+        aOtherBorder = rOpposite;
     }
     else if ( rSide.GetWidth() == 0 && rOpposite.GetWidth() == 0 )
     {

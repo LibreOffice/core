@@ -215,7 +215,7 @@ namespace sdr
                     // force ItemSet
                     mpItemSet->Put(*pResultItem);
                     // delete item if it was a generated one
-                    delete (SfxPoolItem*)pResultItem;
+                    delete pResultItem;
                 }
                 else
                     mpItemSet->Put(*pNewItem);

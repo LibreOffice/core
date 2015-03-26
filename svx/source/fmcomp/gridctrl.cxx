@@ -1582,7 +1582,7 @@ void DbGridControl::RemoveColumns()
 
 DbGridColumn* DbGridControl::CreateColumn(sal_uInt16 nId) const
 {
-    return new DbGridColumn(nId, *(DbGridControl*)this);
+    return new DbGridColumn(nId, *const_cast<DbGridControl*>(this));
 }
 
 sal_uInt16 DbGridControl::AppendColumn(const OUString& rName, sal_uInt16 nWidth, sal_uInt16 nModelPos, sal_uInt16 nId)

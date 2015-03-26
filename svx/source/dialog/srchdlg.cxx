@@ -190,7 +190,7 @@ void SearchAttrItemList::Put( const SfxItemSet& rSet )
         if( IsInvalidItem( pItem ) )
         {
             nWhich = rSet.GetWhichByPos( aIter.GetCurPos() );
-            aItem.pItem = (SfxPoolItem*)pItem;
+            aItem.pItem = const_cast<SfxPoolItem*>(pItem);
         }
         else
         {

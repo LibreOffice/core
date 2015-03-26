@@ -273,7 +273,7 @@ sal_uInt32 E3dScene::RemapOrdNum(sal_uInt32 nNewOrdNum) const
 
         if(nObjCount > 1)
         {
-            ((E3dScene*)this)->mp3DDepthRemapper = new Imp3DDepthRemapper((E3dScene&)(*this));
+            const_cast<E3dScene*>(this)->mp3DDepthRemapper = new Imp3DDepthRemapper((E3dScene&)(*this));
         }
     }
 
@@ -399,7 +399,7 @@ E3dScene* E3dScene::GetScene() const
     if(GetParentObj())
         return GetParentObj()->GetScene();
     else
-        return (E3dScene*)this;
+        return const_cast<E3dScene*>(this);
 }
 
 void E3dScene::removeAllNonSelectedObjects()

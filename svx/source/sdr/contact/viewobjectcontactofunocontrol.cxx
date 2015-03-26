@@ -391,7 +391,7 @@ namespace sdr { namespace contact {
     Reference< XControlContainer > SdrPageViewAccess::getControlContainer( const OutputDevice& _rDevice ) const
     {
         Reference< XControlContainer > xControlContainer = m_rPageView.GetControlContainer( _rDevice );
-        DBG_ASSERT( xControlContainer.is() || NULL == m_rPageView.FindPageWindow( ( const_cast< OutputDevice& >( _rDevice ) ) ),
+        DBG_ASSERT( xControlContainer.is() || NULL == m_rPageView.FindPageWindow( _rDevice ),
             "SdrPageViewAccess::getControlContainer: the output device is known, but there is no control container for it?" );
         return xControlContainer;
     }

@@ -604,8 +604,8 @@ SdrObject* SdrObjList::SetObjectOrdNum(size_t nOldObjNum, size_t nNewObjNum)
 const Rectangle& SdrObjList::GetAllObjSnapRect() const
 {
     if (bRectsDirty) {
-        ((SdrObjList*)this)->RecalcRects();
-        ((SdrObjList*)this)->bRectsDirty=false;
+        const_cast<SdrObjList*>(this)->RecalcRects();
+        const_cast<SdrObjList*>(this)->bRectsDirty=false;
     }
     return aSnapRect;
 }
@@ -619,8 +619,8 @@ const Rectangle& SdrObjList::GetAllObjBoundRect() const
     // it's a step in the right direction.
     if (bRectsDirty || aOutRect.IsEmpty())
     {
-        ((SdrObjList*)this)->RecalcRects();
-        ((SdrObjList*)this)->bRectsDirty=false;
+        const_cast<SdrObjList*>(this)->RecalcRects();
+        const_cast<SdrObjList*>(this)->bRectsDirty=false;
     }
     return aOutRect;
 }

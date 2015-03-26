@@ -832,7 +832,7 @@ Reference< drawing::XShape >  SvxDrawPage::_CreateShape( SdrObject *pObj ) const
     Reference< drawing::XShape > xShape( CreateShapeByTypeAndInventor(pObj->GetObjIdentifier(),
                                               pObj->GetObjInventor(),
                                               pObj,
-                                              (SvxDrawPage*)this));
+                                              const_cast<SvxDrawPage*>(this)));
     return xShape;
 }
 

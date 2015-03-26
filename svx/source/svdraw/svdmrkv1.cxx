@@ -301,9 +301,9 @@ void SdrMarkView::ImpSetPointsRects() const
             }
         }
     }
-    ((SdrMarkView*)this)->aMarkedPointsRect=aPnts;
-    ((SdrMarkView*)this)->aMarkedGluePointsRect=aGlue;
-    ((SdrMarkView*)this)->bMarkedPointsRectsDirty=false;
+    const_cast<SdrMarkView*>(this)->aMarkedPointsRect=aPnts;
+    const_cast<SdrMarkView*>(this)->aMarkedGluePointsRect=aGlue;
+    const_cast<SdrMarkView*>(this)->bMarkedPointsRectsDirty=false;
 }
 
 
@@ -369,8 +369,8 @@ void SdrMarkView::UndirtyMrkPnt() const
             }
         }
     }
-    if (bChg) ((SdrMarkView*)this)->bMarkedPointsRectsDirty=true;
-    ((SdrMarkView*)this)->bMrkPntDirty=false;
+    if (bChg) const_cast<SdrMarkView*>(this)->bMarkedPointsRectsDirty=true;
+    const_cast<SdrMarkView*>(this)->bMrkPntDirty=false;
 }
 
 
@@ -475,14 +475,14 @@ bool SdrMarkView::PickGluePoint(const Point& rPnt, SdrObject*& rpObj, sal_uInt16
     if (!IsGluePointEditMode()) return false;
     bool bBack=(nOptions & SDRSEARCH_BACKWARD) !=0;
     bool bNext=(nOptions & SDRSEARCH_NEXT) !=0;
-    OutputDevice* pOut=(OutputDevice*)pActualOutDev;
+    OutputDevice* pOut=const_cast<OutputDevice*>(pActualOutDev);
     if (pOut==NULL) pOut=GetFirstOutputDevice();
     if (pOut==NULL) return false;
     SortMarkedObjects();
     const size_t nMarkCount=GetMarkedObjectCount();
     size_t nMarkNum=bBack ? 0 : nMarkCount;
     if (bNext) {
-        nMarkNum=((SdrMarkView*)this)->TryToFindMarkedObject(pObj0);
+        nMarkNum=TryToFindMarkedObject(pObj0);
         if (nMarkNum==SAL_MAX_SIZE) return false;
         if (!bBack) nMarkNum++;
     }
@@ -550,7 +550,7 @@ bool SdrMarkView::IsGluePointMarked(const SdrObject* pObj, sal_uInt16 nId) const
 {
     ForceUndirtyMrkPnt();
     bool bRet=false;
-    const size_t nPos=((SdrMarkView*)this)->TryToFindMarkedObject(pObj); // casting to NonConst
+    const size_t nPos=TryToFindMarkedObject(pObj); // casting to NonConst
     if (nPos!=SAL_MAX_SIZE) {
         const SdrMark* pM=GetSdrMarkByIndex(nPos);
         const SdrUShortCont* pPts=pM->GetMarkedGluePoints();

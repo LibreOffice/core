@@ -383,7 +383,7 @@ SdrModel* E3dView::GetMarkedObjModel() const
     // scenes as selected objects
     SdrMarkList aOldML(GetMarkedObjectList());
     SdrMarkList aNewML;
-    SdrMarkList& rCurrentMarkList = ((E3dView*)this)->GetMarkedObjectListWriteAccess();
+    SdrMarkList& rCurrentMarkList = const_cast<E3dView*>(this)->GetMarkedObjectListWriteAccess();
     rCurrentMarkList = aNewML;
 
     for(size_t nObjs = 0; nObjs < nCount; ++nObjs)
@@ -396,7 +396,7 @@ SdrModel* E3dView::GetMarkedObjModel() const
 
             if(pScene && !IsObjMarked(pScene) && GetSdrPageView())
             {
-                ((E3dView*)this)->MarkObj(pScene, GetSdrPageView(), false, true);
+                const_cast<E3dView*>(this)->MarkObj(pScene, GetSdrPageView(), false, true);
             }
         }
     }

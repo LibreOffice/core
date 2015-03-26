@@ -626,7 +626,7 @@ GalleryTheme* Gallery::ImplGetCachedTheme(const GalleryThemeEntry* pThemeEntry)
                 {
                     try
                     {
-                        pTheme = new GalleryTheme( this, (GalleryThemeEntry*) pThemeEntry );
+                        pTheme = new GalleryTheme( this, const_cast<GalleryThemeEntry*>(pThemeEntry) );
                         ReadGalleryTheme( *pIStm, *pTheme );
 
                         if( pIStm->GetError() )

@@ -199,7 +199,7 @@ void GalleryBrowser1::ImplAdjustControls()
 
 void GalleryBrowser1::ImplFillExchangeData( const GalleryTheme* pThm, ExchangeData& rData )
 {
-    rData.pTheme = (GalleryTheme*) pThm;
+    rData.pTheme = const_cast<GalleryTheme*>(pThm);
     rData.aEditedTitle = pThm->GetName();
 
     try

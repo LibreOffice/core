@@ -289,8 +289,8 @@ const Size& SdrTextObj::GetTextSize() const
             rOutliner.Clear();
         }
         // casting to nonconst twice
-        ((SdrTextObj*)this)->aTextSize=aSiz;
-        ((SdrTextObj*)this)->bTextSizeDirty=false;
+        const_cast<SdrTextObj*>(this)->aTextSize=aSiz;
+        const_cast<SdrTextObj*>(this)->bTextSizeDirty=false;
     }
     return aTextSize;
 }

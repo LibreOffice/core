@@ -71,7 +71,7 @@ namespace sdr
         {
             if(!mpEmptyItemSet)
             {
-                ((EmptyProperties*)this)->mpEmptyItemSet = ((EmptyProperties*)this)->CreateObjectSpecificItemSet(GetSdrObject().GetObjectItemPool());
+                const_cast<EmptyProperties*>(this)->mpEmptyItemSet = const_cast<EmptyProperties*>(this)->CreateObjectSpecificItemSet(GetSdrObject().GetObjectItemPool());
             }
 
             DBG_ASSERT(mpEmptyItemSet, "Could not create an SfxItemSet(!)");

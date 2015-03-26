@@ -245,7 +245,7 @@ void SdrMarkList::ForceSort() const
 {
     if(!mbSorted)
     {
-        ((SdrMarkList*)this)->ImpForceSort();
+        const_cast<SdrMarkList*>(this)->ImpForceSort();
     }
 }
 
@@ -522,7 +522,7 @@ bool SdrMarkList::InsertPageView(const SdrPageView& rPV)
 
         if(bDoIt)
         {
-            SdrMark* pM = new SdrMark(pObj, (SdrPageView*)&rPV);
+            SdrMark* pM = new SdrMark(pObj, const_cast<SdrPageView*>(&rPV));
             maList.push_back(pM);
             SetNameDirty();
             bChgd = true;
@@ -544,7 +544,7 @@ const OUString& SdrMarkList::GetMarkDescription() const
 
         if(!pTextObj || !pTextObj->IsTextFrame())
         {
-            ((SdrMarkList*)(this))->mbNameOk = false;
+            const_cast<SdrMarkList*>(this)->mbNameOk = false;
         }
     }
 
@@ -790,7 +790,7 @@ namespace sdr
     {
         if(mbEdgesOfMarkedNodesDirty)
         {
-            ((ViewSelection*)this)->ImpForceEdgesOfMarkedNodes();
+            const_cast<ViewSelection*>(this)->ImpForceEdgesOfMarkedNodes();
         }
 
         return maEdgesOfMarkedNodes;
@@ -800,7 +800,7 @@ namespace sdr
     {
         if(mbEdgesOfMarkedNodesDirty)
         {
-            ((ViewSelection*)this)->ImpForceEdgesOfMarkedNodes();
+            const_cast<ViewSelection*>(this)->ImpForceEdgesOfMarkedNodes();
         }
 
         return maMarkedEdgesOfMarkedNodes;
@@ -809,7 +809,7 @@ namespace sdr
     const std::vector<SdrObject*>& ViewSelection::GetAllMarkedObjects() const
     {
         if(mbEdgesOfMarkedNodesDirty)
-            ((ViewSelection*)this)->ImpForceEdgesOfMarkedNodes();
+            const_cast<ViewSelection*>(this)->ImpForceEdgesOfMarkedNodes();
 
         return maAllMarkedObjects;
     }

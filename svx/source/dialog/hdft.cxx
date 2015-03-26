@@ -269,7 +269,7 @@ bool SvxHFPage::FillItemSet( SfxItemSet* rSet )
     }
 
     // Size
-    SvxSizeItem aSizeItem( const_cast<SvxSizeItem&>( static_cast<const SvxSizeItem&>(rOldSet.Get( nWSize )) ));
+    SvxSizeItem aSizeItem( static_cast<const SvxSizeItem&>(rOldSet.Get( nWSize )) );
     Size        aSize( aSizeItem.GetSize() );
     long        nDist = GetCoreValue( *m_pDistEdit, eUnit );
     long        nH    = GetCoreValue( *m_pHeightEdit, eUnit );

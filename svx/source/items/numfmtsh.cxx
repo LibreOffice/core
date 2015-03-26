@@ -888,7 +888,7 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( std::vector<OUString>& r
         // format (nCurFormatKey) that was set in FormatChanged() after
         // matching the format string entered in the dialog.
         bAdaptSelPos = true;
-        pCurCurrencyEntry = (NfCurrencyEntry*)pTmpCurrencyEntry;
+        pCurCurrencyEntry = const_cast<NfCurrencyEntry*>(pTmpCurrencyEntry);
         bBankingSymbol = bTmpBanking;
         nCurCurrencyEntryPos = FindCurrencyFormat(pTmpCurrencyEntry,bTmpBanking);
     }
@@ -1218,7 +1218,7 @@ void SvxNumberFormatShell::SetComment4Entry(short nEntry, const OUString& aEntSt
     SvNumberformat *pNumEntry;
     if(nEntry<0) return;
     sal_uInt32  nMyNfEntry=aCurEntryList[nEntry];
-    pNumEntry = (SvNumberformat*)pFormatter->GetEntry(nMyNfEntry);
+    pNumEntry = const_cast<SvNumberformat*>(pFormatter->GetEntry(nMyNfEntry));
     if(pNumEntry!=NULL) pNumEntry->SetComment(aEntStr);
 }
 
@@ -1512,7 +1512,7 @@ void SvxNumberFormatShell::SetCurrencySymbol(sal_uInt32 nPos)
         sal_uInt16 nCurrencyPos=aCurCurrencyList[nPos];
         if(nCurrencyPos!=(sal_uInt16)-1)
         {
-            pCurCurrencyEntry=(NfCurrencyEntry*)&rCurrencyTable[nCurrencyPos];
+            pCurCurrencyEntry=const_cast<NfCurrencyEntry*>(&rCurrencyTable[nCurrencyPos]);
             nCurCurrencyEntryPos=nPos;
         }
         else

@@ -116,7 +116,7 @@ namespace sdr
             const bool bMapModeWasEnabledDest(getOutputDevice().IsMapModeEnabled());
             const bool bMapModeWasEnabledSource(maBufferDevice.IsMapModeEnabled());
             getOutputDevice().EnableMapMode(false);
-            ((OverlayManagerBuffered*)this)->maBufferDevice.EnableMapMode(false);
+            const_cast<OverlayManagerBuffered*>(this)->maBufferDevice.EnableMapMode(false);
 
             // local region
             RectangleVector aRectangles;
@@ -148,7 +148,7 @@ namespace sdr
 
             // restore MapModes
             getOutputDevice().EnableMapMode(bMapModeWasEnabledDest);
-            ((OverlayManagerBuffered*)this)->maBufferDevice.EnableMapMode(bMapModeWasEnabledSource);
+            const_cast<OverlayManagerBuffered*>(this)->maBufferDevice.EnableMapMode(bMapModeWasEnabledSource);
         }
 
         void OverlayManagerBuffered::ImpSaveBackground(const vcl::Region& rRegion, OutputDevice* pPreRenderDevice)
@@ -415,7 +415,7 @@ namespace sdr
             if(!rRegion.IsEmpty())
             {
                 // save new background
-                ((OverlayManagerBuffered*)this)->ImpSaveBackground(rRegion, pPreRenderDevice);
+                const_cast<OverlayManagerBuffered*>(this)->ImpSaveBackground(rRegion, pPreRenderDevice);
             }
 
             // call parent

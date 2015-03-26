@@ -133,7 +133,7 @@ Bitmap XOBitmap::GetBitmap() const
 const GraphicObject& XOBitmap::GetGraphicObject() const
 {
     if( bGraphicDirty )
-        ( (XOBitmap*) this )->Array2Bitmap();
+        const_cast<XOBitmap*>(this)->Array2Bitmap();
 
     return aGraphicObject;
 }

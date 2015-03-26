@@ -278,8 +278,8 @@ void DictionaryList::sortByColumn( sal_uInt16 nSortColumnIndex, bool bSortAtoZ )
 
 IMPL_LINK( DictionaryList, CompareHdl, SvSortData*, pData )
 {
-    SvTreeListEntry* pLeft = (SvTreeListEntry*)(pData->pLeft );
-    SvTreeListEntry* pRight = (SvTreeListEntry*)(pData->pRight );
+    SvTreeListEntry* pLeft = const_cast<SvTreeListEntry*>(pData->pLeft);
+    SvTreeListEntry* pRight = const_cast<SvTreeListEntry*>(pData->pRight);
     return (long) ColumnCompare(pLeft,pRight);
 }
 

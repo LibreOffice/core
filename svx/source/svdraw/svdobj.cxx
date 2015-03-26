@@ -855,7 +855,7 @@ sal_uInt32 SdrObject::GetOrdNum() const
         if (pObjList->IsObjOrdNumsDirty()) {
             pObjList->RecalcObjOrdNums();
         }
-    } else ((SdrObject*)this)->nOrdNum=0;
+    } else const_cast<SdrObject*>(this)->nOrdNum=0;
     return nOrdNum;
 }
 

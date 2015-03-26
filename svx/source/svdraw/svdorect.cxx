@@ -160,7 +160,7 @@ const XPolygon& SdrRectObj::GetXPoly() const
 {
     if(!mpXPoly)
     {
-        ((SdrRectObj*)this)->RecalcXPoly();
+        const_cast<SdrRectObj*>(this)->RecalcXPoly();
     }
 
     return *mpXPoly;
