@@ -30,6 +30,7 @@ public:
     void testIsolatedWidgets();
     void testParentedWidgets();
     void testChildDispose();
+    void testPostDispose();
 
     CPPUNIT_TEST_SUITE(LifecycleTest);
     CPPUNIT_TEST(testCast);
@@ -38,6 +39,7 @@ public:
     CPPUNIT_TEST(testIsolatedWidgets);
     CPPUNIT_TEST(testParentedWidgets);
     CPPUNIT_TEST(testChildDispose);
+    CPPUNIT_TEST(testPostDispose);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -123,6 +125,21 @@ void LifecycleTest::testChildDispose()
     xWin->Show();
     xChild->disposeOnce();
     xWin->disposeOnce();
+}
+
+void LifecycleTest::testPostDispose()
+{
+    VclPtr<WorkWindow> xWin(new WorkWindow((vcl::Window *)NULL, WB_STDWORK));
+    xWin->disposeOnce();
+
+    // check selected methods continue to work post-dispose
+    CPPUNIT_ASSERT(!xWin->GetParent());
+    xWin->Show();
+    CPPUNIT_ASSERT(!xWin->IsReallyShown());
+    CPPUNIT_ASSERT(!xWin->IsEnabled());
+    CPPUNIT_ASSERT(!xWin->IsInputEnabled());
+    CPPUNIT_ASSERT(!xWin->GetChild(0));
+    CPPUNIT_ASSERT(!xWin->GetWindow(0));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(LifecycleTest);

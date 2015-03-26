@@ -975,27 +975,27 @@ vcl::Window* Window::ImplGetWindow()
 
 ImplFrameData* Window::ImplGetFrameData()
 {
-    return mpWindowImpl->mpFrameData;
+    return mpWindowImpl ? mpWindowImpl->mpFrameData : NULL;
 }
 
 SalFrame* Window::ImplGetFrame() const
 {
-    return mpWindowImpl->mpFrame;
+    return mpWindowImpl ? mpWindowImpl->mpFrame : NULL;
 }
 
 vcl::Window* Window::ImplGetParent() const
 {
-    return mpWindowImpl->mpParent;
+    return mpWindowImpl ? mpWindowImpl->mpParent.get() : NULL;
 }
 
 vcl::Window* Window::ImplGetClientWindow() const
 {
-    return mpWindowImpl->mpClientWindow;
+    return mpWindowImpl ? mpWindowImpl->mpClientWindow.get() : NULL;
 }
 
 vcl::Window* Window::ImplGetBorderWindow() const
 {
-    return mpWindowImpl->mpBorderWindow;
+    return mpWindowImpl ? mpWindowImpl->mpBorderWindow.get() : NULL;
 }
 
 vcl::Window* Window::ImplGetFirstOverlapWindow()
@@ -1237,7 +1237,7 @@ bool Window::IsReallyVisible() const
 
 bool Window::IsReallyShown() const
 {
-    return mpWindowImpl->mbReallyShown;
+    return mpWindowImpl ? mpWindowImpl->mbReallyShown : false;
 }
 
 bool Window::IsInInitShow() const
@@ -1247,12 +1247,12 @@ bool Window::IsInInitShow() const
 
 bool Window::IsEnabled() const
 {
-    return !mpWindowImpl->mbDisabled;
+    return mpWindowImpl ? !mpWindowImpl->mbDisabled : false;
 }
 
 bool Window::IsInputEnabled() const
 {
-    return !mpWindowImpl->mbInputDisabled;
+    return mpWindowImpl ? !mpWindowImpl->mbInputDisabled : false;
 }
 
 bool Window::IsAlwaysEnableInput() const
