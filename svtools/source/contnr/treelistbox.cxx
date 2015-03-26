@@ -921,7 +921,7 @@ sal_uLong SvTreeListBox::GetLevelChildCount( SvTreeListEntry* _pParent ) const
 
 SvViewDataEntry* SvTreeListBox::GetViewDataEntry( SvTreeListEntry* pEntry ) const
 {
-    return (SvViewDataEntry*)SvListView::GetViewData(pEntry);
+    return const_cast<SvViewDataEntry*>(SvListView::GetViewData(pEntry));
 }
 
 SvViewDataItem* SvTreeListBox::GetViewDataItem(SvTreeListEntry* pEntry, SvLBoxItem* pItem)

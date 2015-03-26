@@ -510,7 +510,7 @@ OUString FontList::GetFontMapText( const vcl::FontInfo& rInfo ) const
         if ( !bNotSynthetic )
         {
             if (maMapStyleNotAvailable.isEmpty())
-                ((FontList*)this)->maMapStyleNotAvailable = SVT_RESSTR(STR_SVT_FONTMAP_STYLENOTAVAILABLE);
+                const_cast<FontList*>(this)->maMapStyleNotAvailable = SVT_RESSTR(STR_SVT_FONTMAP_STYLENOTAVAILABLE);
             return maMapStyleNotAvailable;
         }
     }
@@ -519,7 +519,7 @@ OUString FontList::GetFontMapText( const vcl::FontInfo& rInfo ) const
     if ( (nType & (FONTLIST_FONTNAMETYPE_PRINTER | FONTLIST_FONTNAMETYPE_SCREEN)) == FONTLIST_FONTNAMETYPE_PRINTER )
     {
         if (maMapPrinterOnly.isEmpty())
-            ((FontList*)this)->maMapPrinterOnly = SVT_RESSTR(STR_SVT_FONTMAP_PRINTERONLY);
+            const_cast<FontList*>(this)->maMapPrinterOnly = SVT_RESSTR(STR_SVT_FONTMAP_PRINTERONLY);
         return maMapPrinterOnly;
     }
     // Only Screen-Font?
@@ -527,13 +527,13 @@ OUString FontList::GetFontMapText( const vcl::FontInfo& rInfo ) const
             && rInfo.GetType() == TYPE_RASTER )
     {
         if (maMapScreenOnly.isEmpty())
-            ((FontList*)this)->maMapScreenOnly = SVT_RESSTR(STR_SVT_FONTMAP_SCREENONLY);
+            const_cast<FontList*>(this)->maMapScreenOnly = SVT_RESSTR(STR_SVT_FONTMAP_SCREENONLY);
         return maMapScreenOnly;
     }
     else
     {
         if (maMapBoth.isEmpty())
-            ((FontList*)this)->maMapBoth = SVT_RESSTR(STR_SVT_FONTMAP_BOTH);
+            const_cast<FontList*>(this)->maMapBoth = SVT_RESSTR(STR_SVT_FONTMAP_BOTH);
         return maMapBoth;
     }
 }
@@ -718,8 +718,8 @@ const sal_IntPtr* FontList::GetSizeAry( const vcl::FontInfo& rInfo ) const
     // first delete Size-Array
     if ( mpSizeAry )
     {
-        delete[] ((FontList*)this)->mpSizeAry;
-        ((FontList*)this)->mpSizeAry = NULL;
+        delete[] const_cast<FontList*>(this)->mpSizeAry;
+        const_cast<FontList*>(this)->mpSizeAry = NULL;
     }
 
     // use standarad sizes if no name
@@ -744,18 +744,18 @@ const sal_IntPtr* FontList::GetSizeAry( const vcl::FontInfo& rInfo ) const
     sal_uInt16  i;
     sal_uInt16  nRealCount = 0;
     long    nOldHeight = 0;
-    ((FontList*)this)->mpSizeAry = new sal_IntPtr[nDevSizeCount+1];
+    const_cast<FontList*>(this)->mpSizeAry = new sal_IntPtr[nDevSizeCount+1];
     for ( i = 0; i < nDevSizeCount; i++ )
     {
         Size aSize = pDevice->GetDevFontSize( rInfo, i );
         if ( aSize.Height() != nOldHeight )
         {
             nOldHeight = aSize.Height();
-            ((FontList*)this)->mpSizeAry[nRealCount] = nOldHeight;
+            const_cast<FontList*>(this)->mpSizeAry[nRealCount] = nOldHeight;
             nRealCount++;
         }
     }
-    ((FontList*)this)->mpSizeAry[nRealCount] = 0;
+    const_cast<FontList*>(this)->mpSizeAry[nRealCount] = 0;
 
     pDevice->SetMapMode( aOldMapMode );
     return mpSizeAry;

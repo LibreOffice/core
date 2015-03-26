@@ -2620,7 +2620,7 @@ Size TabBar::CalcWindowSizePixel() const
 
     if (mpImpl->mpItemList.size() > 0)
     {
-        ((TabBar*)this)->ImplCalcWidth();
+        const_cast<TabBar*>(this)->ImplCalcWidth();
         for (size_t i = 0; i < mpImpl->mpItemList.size(); ++i)
         {
             ImplTabBarItem* pItem = mpImpl->mpItemList[i];

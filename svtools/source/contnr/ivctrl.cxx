@@ -231,7 +231,7 @@ SvxIconChoiceCtrlEntry* SvtIconChoiceCtrl::GetEntry( const Point& rPixPos, bool 
 {
     Point aPos( rPixPos );
     aPos -= GetMapMode().GetOrigin();
-    return ((SvtIconChoiceCtrl*)this)->_pImp->GetEntry( aPos, bHit );
+    return const_cast<SvtIconChoiceCtrl*>(this)->_pImp->GetEntry( aPos, bHit );
 }
 
 void SvtIconChoiceCtrl::SetStyle( WinBits nWinStyle )
@@ -296,7 +296,7 @@ void SvtIconChoiceCtrl::KeyInput( const KeyEvent& rKEvt )
     bool bKeyUsed = DoKeyInput( rKEvt );
     if ( !bKeyUsed )
     {
-        _pCurKeyEvent = (KeyEvent*)&rKEvt;
+        _pCurKeyEvent = const_cast<KeyEvent*>(&rKEvt);
         Control::KeyInput( rKEvt );
         _pCurKeyEvent = NULL;
     }
@@ -306,7 +306,7 @@ bool SvtIconChoiceCtrl::DoKeyInput( const KeyEvent& rKEvt )
     // under OS/2, we get key up/down even while editing
     if( IsEntryEditing() )
         return true;
-    _pCurKeyEvent = (KeyEvent*)&rKEvt;
+    _pCurKeyEvent = const_cast<KeyEvent*>(&rKEvt);
     bool bHandled = _pImp->KeyInput( rKEvt );
     _pCurKeyEvent = NULL;
     return bHandled;

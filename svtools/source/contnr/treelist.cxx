@@ -587,7 +587,7 @@ sal_uLong SvTreeList::GetVisiblePos( const SvListView* pView, SvTreeListEntry* p
     if ( !pView->bVisPositionsValid )
     {
         // to make GetVisibleCount refresh the positions
-        ((SvListView*)pView)->nVisibleCount = 0;
+        const_cast<SvListView*>(pView)->nVisibleCount = 0;
         GetVisibleCount( const_cast<SvListView*>(pView) );
     }
     const SvViewDataEntry* pViewData = pView->GetViewData( pEntry );
@@ -911,7 +911,7 @@ sal_uLong SvTreeList::Insert( SvTreeListEntry* pEntry,SvTreeListEntry* pParent,s
 sal_uLong SvTreeList::GetAbsPos( const SvTreeListEntry* pEntry) const
 {
     if ( !bAbsPositionsValid )
-        ((SvTreeList*)this)->SetAbsolutePositions();
+        const_cast<SvTreeList*>(this)->SetAbsolutePositions();
     return pEntry->nAbsPos;
 }
 

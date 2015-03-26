@@ -2079,9 +2079,9 @@ long SvxIconChoiceCtrl_Impl::CalcBoundingHeight( SvxIconChoiceCtrlEntry* pEntry 
     }
     if( nHeight > nMaxBoundHeight )
     {
-        ((SvxIconChoiceCtrl_Impl*)this)->nMaxBoundHeight = nHeight;
-        ((SvxIconChoiceCtrl_Impl*)this)->aHorSBar.SetLineSize( GetScrollBarLineSize() );
-        ((SvxIconChoiceCtrl_Impl*)this)->aVerSBar.SetLineSize( GetScrollBarLineSize() );
+        const_cast<SvxIconChoiceCtrl_Impl*>(this)->nMaxBoundHeight = nHeight;
+        const_cast<SvxIconChoiceCtrl_Impl*>(this)->aHorSBar.SetLineSize( GetScrollBarLineSize() );
+        const_cast<SvxIconChoiceCtrl_Impl*>(this)->aVerSBar.SetLineSize( GetScrollBarLineSize() );
     }
     return nHeight;
 }
@@ -2521,7 +2521,7 @@ void SvxIconChoiceCtrl_Impl::SetGrid( const Size& rSize )
     {
         const SvxIconChoiceCtrlColumnInfo* pCol = GetColumn( 0 );
         if( pCol )
-            ((SvxIconChoiceCtrlColumnInfo*)pCol)->SetWidth( nGridDX );
+            const_cast<SvxIconChoiceCtrlColumnInfo*>(pCol)->SetWidth( nGridDX );
     }
     nGridDY = aSize.Height();
     SetDefaultTextSize();
@@ -2540,8 +2540,8 @@ Rectangle SvxIconChoiceCtrl_Impl::CalcMaxTextRect( const SvxIconChoiceCtrlEntry*
     else
         aBoundRect = pEntry->aGridRect;
 
-    Rectangle aBmpRect( ((SvxIconChoiceCtrl_Impl*)this)->CalcBmpRect(
-        (SvxIconChoiceCtrlEntry*)pEntry ) );
+    Rectangle aBmpRect( const_cast<SvxIconChoiceCtrl_Impl*>(this)->CalcBmpRect(
+        const_cast<SvxIconChoiceCtrlEntry*>(pEntry) ) );
     if( nWinBits & WB_ICON )
     {
         aBoundRect.Top() = aBmpRect.Bottom();
@@ -3369,7 +3369,7 @@ void IcnViewEdit_Impl::StopEditing( bool bCancel )
 sal_uLong SvxIconChoiceCtrl_Impl::GetEntryListPos( SvxIconChoiceCtrlEntry* pEntry ) const
 {
     if( !(nFlags & F_ENTRYLISTPOS_VALID ))
-        ((SvxIconChoiceCtrl_Impl*)this)->SetListPositions();
+        const_cast<SvxIconChoiceCtrl_Impl*>(this)->SetListPositions();
     return pEntry->nPos;
 }
 

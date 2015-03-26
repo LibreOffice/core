@@ -149,7 +149,7 @@ void GraphicManager::ImplRegisterObj( const GraphicObject& rObj, Graphic& rSubst
     assert(std::find(maObjList.begin(), maObjList.end(),
                const_cast<GraphicObject*>(&rObj)) == maObjList.end());
 
-    maObjList.push_back( (GraphicObject*)&rObj );
+    maObjList.push_back( const_cast<GraphicObject*>(&rObj) );
     mpCache->AddGraphicObject( rObj, rSubstitute, pID, pCopyObj );
     if( !rObj.IsSwappedOut() )
         mnUsedSize += rObj.maGraphic.GetSizeBytes();

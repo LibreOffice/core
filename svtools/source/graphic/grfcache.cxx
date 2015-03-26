@@ -184,7 +184,7 @@ GraphicCacheEntry::GraphicCacheEntry( const GraphicObject& rObj ) :
     mbSwappedAll    ( true )
 {
     mbSwappedAll = !ImplInit( rObj );
-    maGraphicObjectList.push_back( (GraphicObject*)&rObj );
+    maGraphicObjectList.push_back( const_cast<GraphicObject*>(&rObj) );
 }
 
 GraphicCacheEntry::~GraphicCacheEntry()
@@ -314,7 +314,7 @@ void GraphicCacheEntry::AddGraphicObjectReference( const GraphicObject& rObj, Gr
         mbSwappedAll = !ImplInit( rObj );
 
     ImplFillSubstitute( rSubstitute );
-    maGraphicObjectList.push_back( (GraphicObject*) &rObj );
+    maGraphicObjectList.push_back( const_cast<GraphicObject*>(&rObj) );
 }
 
 bool GraphicCacheEntry::ReleaseGraphicObjectReference( const GraphicObject& rObj )
@@ -1053,7 +1053,7 @@ bool GraphicCache::IsInDisplayCache( OutputDevice* pOut, const Point& rPt, const
 {
     const Point                 aPtPixel( pOut->LogicToPixel( rPt ) );
     const Size                  aSzPixel( pOut->LogicToPixel( rSz ) );
-    const GraphicCacheEntry*    pCacheEntry = ( (GraphicCache*) this )->ImplGetCacheEntry( rObj );
+    const GraphicCacheEntry*    pCacheEntry = const_cast<GraphicCache*>(this)->ImplGetCacheEntry( rObj );
     bool                        bFound = false;
 
     if( pCacheEntry )
@@ -1072,14 +1072,14 @@ bool GraphicCache::IsInDisplayCache( OutputDevice* pOut, const Point& rPt, const
 OString GraphicCache::GetUniqueID( const GraphicObject& rObj ) const
 {
     OString aRet;
-    GraphicCacheEntry*  pEntry = ( (GraphicCache*) this )->ImplGetCacheEntry( rObj );
+    GraphicCacheEntry*  pEntry = const_cast<GraphicCache*>(this)->ImplGetCacheEntry( rObj );
 
     // ensure that the entry is correctly initialized (it has to be read at least once)
     if( pEntry && pEntry->GetID().IsEmpty() )
         pEntry->TryToSwapIn();
 
     // do another call to ImplGetCacheEntry in case of modified entry list
-    pEntry = ( (GraphicCache*) this )->ImplGetCacheEntry( rObj );
+    pEntry = const_cast<GraphicCache*>(this)->ImplGetCacheEntry( rObj );
 
     if( pEntry )
         aRet = pEntry->GetID().GetIDString();

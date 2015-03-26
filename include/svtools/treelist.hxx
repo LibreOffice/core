@@ -286,7 +286,7 @@ public:
                         );
 
     sal_uLong           GetVisibleCount() const
-    { return pModel->GetVisibleCount( (SvListView*)this ); }
+    { return pModel->GetVisibleCount( const_cast<SvListView*>(this) ); }
 
     SvTreeListEntry*        FirstVisible() const
     { return pModel->FirstVisible(); }
@@ -324,26 +324,26 @@ public:
     { return pModel->GetEntryAtAbsPos(nAbsPos); }
 
     SvTreeListEntry*        GetEntryAtVisPos( sal_uLong nVisPos ) const
-    { return pModel->GetEntryAtVisPos((SvListView*)this,nVisPos); }
+    { return pModel->GetEntryAtVisPos(this,nVisPos); }
 
     sal_uLong           GetAbsPos( SvTreeListEntry* pEntry ) const
     { return pModel->GetAbsPos(pEntry); }
 
     sal_uLong           GetVisiblePos( SvTreeListEntry* pEntry ) const
-    { return pModel->GetVisiblePos((SvListView*)this,pEntry); }
+    { return pModel->GetVisiblePos(this,pEntry); }
 
     sal_uLong           GetVisibleChildCount(SvTreeListEntry* pParent ) const
-    { return pModel->GetVisibleChildCount((SvListView*)this,pParent); }
+    { return pModel->GetVisibleChildCount(this,pParent); }
 
     sal_uLong           GetChildSelectionCount( SvTreeListEntry* pParent ) const
-    { return pModel->GetChildSelectionCount((SvListView*)this,pParent); }
+    { return pModel->GetChildSelectionCount(this,pParent); }
 
     // Does not call the Select Handler
     virtual void        SelectAll( bool bSelect, bool )
     { pModel->SelectAll((SvListView*)this, bSelect); }
 
     bool               IsEntryVisible( SvTreeListEntry* pEntry ) const
-    { return pModel->IsEntryVisible((SvListView*)this,pEntry); }
+    { return pModel->IsEntryVisible(this,pEntry); }
 
     bool                IsExpanded( SvTreeListEntry* pEntry ) const;
     bool                IsSelected( SvTreeListEntry* pEntry ) const;

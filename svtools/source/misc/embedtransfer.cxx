@@ -163,7 +163,7 @@ bool SvEmbedTransferHelper::GetData( const css::datatransfer::DataFlavor& rFlavo
                     aMemStm.SetVersion( SOFFICE_FILEFORMAT_CURRENT );
 
                     const GDIMetaFile& aMetaFile = m_pGraphic->GetGDIMetaFile();
-                    ((GDIMetaFile*)(&aMetaFile))->Write( aMemStm );
+                    const_cast<GDIMetaFile*>(&aMetaFile)->Write( aMemStm );
                     uno::Any aAny;
                     aAny <<= uno::Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( aMemStm.GetData() ),
                                                     aMemStm.Seek( STREAM_SEEK_TO_END ) );

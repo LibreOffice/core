@@ -244,7 +244,7 @@ protected:
         // SetFormatKey without FormatChanged notification
 
     SvNumberFormatter*  CreateFormatter() { SetFormatter(StandardFormatter()); return m_pFormatter; }
-    SvNumberFormatter*  ImplGetFormatter() const { return m_pFormatter ? m_pFormatter : ((FormattedField*)this)->CreateFormatter(); }
+    SvNumberFormatter*  ImplGetFormatter() const { return m_pFormatter ? m_pFormatter : const_cast<FormattedField*>(this)->CreateFormatter(); }
 
     bool PreNotify(NotifyEvent& rNEvt) SAL_OVERRIDE;
 

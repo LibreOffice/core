@@ -872,7 +872,7 @@ sal_uInt16 BrowseBox::ColCount() const
 long BrowseBox::ImpGetDataRowHeight() const
 {
 
-    BrowseBox *pThis = (BrowseBox*)this;
+    BrowseBox *pThis = const_cast<BrowseBox*>(this);
     pThis->nDataRowHeight = pThis->CalcReverseZoom(pDataWin->GetTextHeight() + 2);
     pThis->Resize();
     getDataWindow()->Invalidate();

@@ -3388,8 +3388,8 @@ void SvImpLBox::ShowFocusRect( const SvTreeListEntry* pEntry )
 {
     if( pEntry )
     {
-        long nY = GetEntryLine( (SvTreeListEntry*)pEntry );
-        Rectangle aRect = pView->GetFocusRect( (SvTreeListEntry*)pEntry, nY );
+        long nY = GetEntryLine( const_cast<SvTreeListEntry*>(pEntry) );
+        Rectangle aRect = pView->GetFocusRect( const_cast<SvTreeListEntry*>(pEntry), nY );
         vcl::Region aOldClip( pView->GetClipRegion());
         vcl::Region aClipRegion( GetClipRegionRect() );
         pView->SetClipRegion( aClipRegion );

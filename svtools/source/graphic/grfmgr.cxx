@@ -199,7 +199,7 @@ void GraphicObject::ImplSetGraphicManager( const GraphicManager* pMgr, const OSt
                 mpMgr = mpGlobalMgr;
             }
             else
-                mpMgr = (GraphicManager*) pMgr;
+                mpMgr = const_cast<GraphicManager*>(pMgr);
 
             mpMgr->ImplRegisterObj( *this, maGraphic, pID, pCopyObj );
         }

@@ -880,7 +880,7 @@ namespace svt
             return true;
 
         // save the cell content
-        if (IsEditing() && aController->IsModified() && !((EditBrowseBox *) this)->SaveModified())
+        if (IsEditing() && aController->IsModified() && !const_cast<EditBrowseBox *>(this)->SaveModified())
         {
             // maybe we're not visible ...
             EnableAndShow();

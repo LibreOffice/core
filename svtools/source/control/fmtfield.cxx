@@ -418,8 +418,8 @@ OUString FormattedField::GetTextValue() const
 {
     if (m_bValueDirty)
     {
-        ((FormattedField*)this)->m_sCurrentTextValue = GetText();
-        ((FormattedField*)this)->m_bValueDirty = false;
+        const_cast<FormattedField*>(this)->m_sCurrentTextValue = GetText();
+        const_cast<FormattedField*>(this)->m_bValueDirty = false;
     }
     return m_sCurrentTextValue;
 }

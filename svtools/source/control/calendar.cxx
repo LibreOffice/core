@@ -2132,9 +2132,9 @@ Size Calendar::CalcWindowSizePixel( long nCalcMonthPerLine,
     {
         vcl::Font aTempFont = aOldFont;
         ImplGetWeekFont( aTempFont );
-        ((Calendar*)this)->SetFont( aTempFont );
+        const_cast<Calendar*>(this)->SetFont( aTempFont );
         nWeekWidth = GetTextWidth( a99Text )+WEEKNUMBER_OFFX;
-        ((Calendar*)this)->SetFont( aOldFont );
+        const_cast<Calendar*>(this)->SetFont( aOldFont );
     }
     else
         nWeekWidth = 0;
@@ -2146,7 +2146,7 @@ Size Calendar::CalcWindowSizePixel( long nCalcMonthPerLine,
             aFont.SetWeight( WEIGHT_BOLD );
         else
             aFont.SetWeight( WEIGHT_NORMAL );
-        ((Calendar*)this)->SetFont( aFont );
+        const_cast<Calendar*>(this)->SetFont( aFont );
     }
 
     Size    aSize;
@@ -2154,7 +2154,7 @@ Size Calendar::CalcWindowSizePixel( long nCalcMonthPerLine,
     long    nTextHeight = GetTextHeight();
 
     if ( mnWinStyle & WB_BOLDTEXT )
-        ((Calendar*)this)->SetFont( aOldFont );
+        const_cast<Calendar*>(this)->SetFont( aOldFont );
 
     aSize.Width()  += ((n99TextWidth+DAY_OFFX)*7) + nWeekWidth;
     aSize.Width()  += MONTH_BORDERX*2;
