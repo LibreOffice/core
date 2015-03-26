@@ -109,8 +109,6 @@ void XclExpStream::StartRecord( sal_uInt16 nRecId, sal_Size nRecSize )
     DisableEncryption();
     mnMaxContSize = mnCurrMaxSize = mnMaxRecSize;
     mnPredictSize = nRecSize;
-    if ( mbInRec )
-        mrStrm.Seek( STREAM_SEEK_TO_END );
     mbInRec = true;
     InitRecord( nRecId );
     SetSliceSize( 0 );
@@ -382,7 +380,7 @@ sal_uInt64 XclExpStream::SetSvStreamPos(sal_uInt64 const nPos)
 
 void XclExpStream::InitRecord( sal_uInt16 nRecId )
 {
-    assert(mrStrm.remainingSize() == 0);    // stream must be at end position
+    mrStrm.Seek( STREAM_SEEK_TO_END );
     mrStrm.WriteUInt16( nRecId );
 
     mnLastSizePos = mrStrm.Tell();
@@ -419,7 +417,6 @@ void XclExpStream::StartContinue()
     UpdateRecSize();
     mnCurrMaxSize = mnMaxContSize;
     mnPredictSize -= mnCurrSize;
-    mrStrm.Seek( STREAM_SEEK_TO_END );
     InitRecord( EXC_ID_CONT );
 }
 
