@@ -159,7 +159,7 @@ void DdeTopic::InsertItem( SAL_UNUSED_PARAMETER DdeItem* )
 
 DdeItem* DdeTopic::AddItem( const DdeItem& rDdeItem )
 {
-    return (DdeItem*) &rDdeItem;
+    return const_cast<DdeItem*>(&rDdeItem);
 }
 
 void DdeTopic::RemoveItem( SAL_UNUSED_PARAMETER const DdeItem& )

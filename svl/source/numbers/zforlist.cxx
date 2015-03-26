@@ -1815,9 +1815,9 @@ OUString SvNumberFormatter::GetFormatDecimalSep( sal_uInt32 nFormat ) const
     else
     {
         LanguageTag aSaveLocale( xLocaleData->getLanguageTag() );
-        ((SvNumberFormatter*)this)->xLocaleData.changeLocale( LanguageTag( pFormat->GetLanguage()) );
+        const_cast<SvNumberFormatter*>(this)->xLocaleData.changeLocale( LanguageTag( pFormat->GetLanguage()) );
         aRet = xLocaleData->getNumDecimalSep();
-        ((SvNumberFormatter*)this)->xLocaleData.changeLocale( aSaveLocale );
+        const_cast<SvNumberFormatter*>(this)->xLocaleData.changeLocale( aSaveLocale );
     }
     return aRet;
 }

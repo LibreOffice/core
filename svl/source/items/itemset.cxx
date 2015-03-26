@@ -99,7 +99,7 @@ SfxItemSet::SfxItemSet
     (void) bTotalRanges; // avoid warnings
 #endif
 
-    _pWhichRanges = (sal_uInt16*) _pPool->GetFrozenIdRanges();
+    _pWhichRanges = const_cast<sal_uInt16*>(_pPool->GetFrozenIdRanges());
     assert( _pWhichRanges && "don't create ItemSets with full range before FreezeIdRanges()" );
     if ( !_pWhichRanges )
         _pPool->FillItemIdRanges_Impl( _pWhichRanges );
@@ -232,7 +232,7 @@ SfxItemSet::SfxItemSet( const SfxItemSet& rASet ):
         {
             // Just copy the pointer and increase RefCount
             *ppDst = *ppSrc;
-            ( (SfxPoolItem*) (*ppDst) )->AddRef();
+            (*ppDst)->AddRef();
         }
         else if ( !(*ppSrc)->Which() )
             *ppDst = (*ppSrc)->Clone();
@@ -258,7 +258,7 @@ SfxItemSet::~SfxItemSet()
             if( *ppFnd && !IsInvalidItem(*ppFnd) )
             {
                 if( !(*ppFnd)->Which() )
-                    delete (SfxPoolItem*) *ppFnd;
+                    delete *ppFnd;
                 else {
                     // Still multiple references present, so just alter the RefCount
                     if ( 1 < (*ppFnd)->GetRefCount() && !IsDefaultItem(*ppFnd) )
@@ -770,7 +770,7 @@ void SfxItemSet::SetRanges( const sal_uInt16 *pNewRanges )
     if( pNewRanges == GetPool()->GetFrozenIdRanges() )
     {
         delete[] _pWhichRanges;
-        _pWhichRanges = ( sal_uInt16* ) pNewRanges;
+        _pWhichRanges = const_cast<sal_uInt16*>(pNewRanges);
     }
     else
     {

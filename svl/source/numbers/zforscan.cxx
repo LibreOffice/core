@@ -131,21 +131,21 @@ void ImpSvNumberformatScan::InitSpecialKeyword( NfKeywordIndex eIdx ) const
     switch ( eIdx )
     {
     case NF_KEY_TRUE :
-        ((ImpSvNumberformatScan*)this)->sKeyword[NF_KEY_TRUE] =
+        const_cast<ImpSvNumberformatScan*>(this)->sKeyword[NF_KEY_TRUE] =
             pFormatter->GetCharClass()->uppercase( pFormatter->GetLocaleData()->getTrueWord() );
         if ( sKeyword[NF_KEY_TRUE].isEmpty() )
         {
             SAL_WARN( "svl.numbers", "InitSpecialKeyword: TRUE_WORD?" );
-            ((ImpSvNumberformatScan*)this)->sKeyword[NF_KEY_TRUE] = "TRUE";
+            const_cast<ImpSvNumberformatScan*>(this)->sKeyword[NF_KEY_TRUE] = "TRUE";
         }
         break;
     case NF_KEY_FALSE :
-        ((ImpSvNumberformatScan*)this)->sKeyword[NF_KEY_FALSE] =
+        const_cast<ImpSvNumberformatScan*>(this)->sKeyword[NF_KEY_FALSE] =
             pFormatter->GetCharClass()->uppercase( pFormatter->GetLocaleData()->getFalseWord() );
         if ( sKeyword[NF_KEY_FALSE].isEmpty() )
         {
             SAL_WARN( "svl.numbers", "InitSpecialKeyword: FALSE_WORD?" );
-            ((ImpSvNumberformatScan*)this)->sKeyword[NF_KEY_FALSE] = "FALSE";
+            const_cast<ImpSvNumberformatScan*>(this)->sKeyword[NF_KEY_FALSE] = "FALSE";
         }
         break;
     default:
@@ -155,7 +155,7 @@ void ImpSvNumberformatScan::InitSpecialKeyword( NfKeywordIndex eIdx ) const
 
 void ImpSvNumberformatScan::InitCompatCur() const
 {
-    ImpSvNumberformatScan* pThis = (ImpSvNumberformatScan*)this;
+    ImpSvNumberformatScan* pThis = const_cast<ImpSvNumberformatScan*>(this);
     // currency symbol for old style ("automatic") compatibility format codes
     pFormatter->GetCompatibilityCurrency( pThis->sCurSymbol, pThis->sCurAbbrev );
     // currency symbol upper case
@@ -167,7 +167,7 @@ void ImpSvNumberformatScan::InitKeywords() const
 {
     if ( !bKeywordsNeedInit )
         return ;
-    ((ImpSvNumberformatScan*)this)->SetDependentKeywords();
+    const_cast<ImpSvNumberformatScan*>(this)->SetDependentKeywords();
     bKeywordsNeedInit = false;
 }
 

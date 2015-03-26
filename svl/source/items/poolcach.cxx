@@ -104,7 +104,7 @@ const SfxSetItem& SfxItemPoolCache::ApplyTo( const SfxSetItem &rOrigItem, bool b
     // Add the transformation to the cache
     SfxItemModifyImpl aModify;
     aModify.pOrigItem = &rOrigItem;
-    aModify.pPoolItem = (SfxSetItem*) pNewPoolItem;
+    aModify.pPoolItem = const_cast<SfxSetItem*>(pNewPoolItem);
     pCache->push_back( aModify );
 
     DBG_ASSERT( !pItemToPut ||
