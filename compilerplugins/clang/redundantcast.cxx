@@ -15,10 +15,15 @@
 // * A static_cast<T*>(e) where e is of void pointer type and whose result is
 //   then implicitly cast to a void pointer
 //
+// * Various const_casts that are either not needed (like casting away constness
+//   in a delete expression) or are implicitly cast back afterwards
+//
 // C-style casts are ignored because it makes this plugin simpler, and they
 // should eventually be eliminated via loplugin:cstylecast and/or
 // -Wold-style-cast.  That implies that this plugin is only relevant for C++
 // code.
+
+#include "clang/Sema/Sema.h"
 
 #include "plugin.hxx"
 
@@ -42,37 +47,185 @@ public:
     }
 
     bool VisitImplicitCastExpr(ImplicitCastExpr const * expr);
+
+    bool VisitCallExpr(CallExpr const * expr);
+
+    bool VisitCXXDeleteExpr(CXXDeleteExpr const * expr);
+
+    bool VisitBinSub(BinaryOperator const * expr)
+    { return visitBinOp(expr); }
+
+    bool VisitBinLT(BinaryOperator const * expr)
+    { return visitBinOp(expr); }
+
+    bool VisitBinGT(BinaryOperator const * expr)
+    { return visitBinOp(expr); }
+
+    bool VisitBinLE(BinaryOperator const * expr)
+    { return visitBinOp(expr); }
+
+    bool VisitBinGE(BinaryOperator const * expr)
+    { return visitBinOp(expr); }
+
+    bool VisitBinEQ(BinaryOperator const * expr)
+    { return visitBinOp(expr); }
+
+    bool VisitBinNE(BinaryOperator const * expr)
+    { return visitBinOp(expr); }
+
+private:
+    bool visitBinOp(BinaryOperator const * expr);
 };
 
 bool RedundantCast::VisitImplicitCastExpr(const ImplicitCastExpr * expr) {
-    if (ignoreLocation(expr) || expr->getCastKind() != CK_BitCast
-        || !isVoidPointer(expr->getType())
-        || !expr->getSubExpr()->getType()->isPointerType())
+    if (ignoreLocation(expr)) {
+        return true;
+    }
+    switch (expr->getCastKind()) {
+    case CK_NoOp:
+        if (expr->getType()->isPointerType()
+            || expr->getType()->isObjectType())
+        {
+            auto e = dyn_cast<CXXConstCastExpr>(
+                expr->getSubExpr()->IgnoreParenImpCasts());
+            if (e != nullptr) {
+                auto t1 = e->getSubExpr()->getType().getCanonicalType();
+                auto t2 = expr->getType().getCanonicalType();
+                bool ObjCLifetimeConversion;
+                if (t1.getTypePtr() == t2.getTypePtr()
+                    || compiler.getSema().IsQualificationConversion(
+                        t1, t2, false, ObjCLifetimeConversion))
+                {
+                    report(
+                        DiagnosticsEngine::Warning,
+                        ("redundant const_cast from %0 to %1, result is"
+                         " implictly cast to %2"),
+                        e->getExprLoc())
+                        << e->getSubExprAsWritten()->getType() << e->getType()
+                        << expr->getType() << expr->getSourceRange();
+                }
+            }
+        }
+        break;
+    case CK_BitCast:
+        if (isVoidPointer(expr->getType())
+            && expr->getSubExpr()->getType()->isPointerType())
+        {
+            Expr const * e = expr->getSubExpr()->IgnoreParenImpCasts();
+            while (isa<CXXConstCastExpr>(e)) {
+                auto cc = dyn_cast<CXXConstCastExpr>(e);
+if(!cc->getSubExpr()->getType()->isPointerType()){
+    report(DiagnosticsEngine::Warning,"TODO",cc->getExprLoc())<<expr->getSourceRange();
+    return true;
+}
+                if (expr->getType()->getAs<PointerType>()->getPointeeType()
+                    .isAtLeastAsQualifiedAs(
+                        cc->getSubExpr()->getType()
+                        ->getAs<PointerType>()->getPointeeType()))
+                {
+                    report(
+                        DiagnosticsEngine::Warning,
+                        ("redundant const_cast from %0 to %1, result is"
+                         " ultimately implictly cast to %2"),
+                        cc->getExprLoc())
+                        << cc->getSubExprAsWritten()->getType() << cc->getType()
+                        << expr->getType() << expr->getSourceRange();
+                }
+                e = cc->getSubExpr()->IgnoreParenImpCasts();
+            }
+            if (isa<CXXReinterpretCastExpr>(e)) {
+                report(
+                    DiagnosticsEngine::Warning,
+                    ("redundant reinterpret_cast, result is implicitly cast to"
+                     " void pointer"),
+                    e->getExprLoc())
+                    << e->getSourceRange();
+            } else if (isa<CXXStaticCastExpr>(e)
+                       && isVoidPointer(
+                           dyn_cast<CXXStaticCastExpr>(e)->getSubExpr()
+                           ->IgnoreParenImpCasts()->getType()))
+            {
+                report(
+                    DiagnosticsEngine::Warning,
+                    ("redundant static_cast from void pointer, result is"
+                     " implicitly cast to void pointer"),
+                    e->getExprLoc())
+                    << e->getSourceRange();
+            }
+        }
+        break;
+    default:
+        break;
+    }
+    return true;
+}
+
+bool RedundantCast::VisitCallExpr(CallExpr const * expr) {
+    if (ignoreLocation(expr)) {
+        return true;
+    }
+    auto f = expr->getDirectCallee();
+    if (f == nullptr || !f->isVariadic()
+        || expr->getNumArgs() <= f->getNumParams())
     {
         return true;
     }
-    Expr const * e = expr->getSubExpr()->IgnoreParenImpCasts();
-    while (isa<CXXConstCastExpr>(e)) {
-        e = dyn_cast<CXXConstCastExpr>(e)->getSubExpr()->IgnoreParenImpCasts();
+    for (auto i = f->getNumParams(); i != expr->getNumArgs(); ++i) {
+        auto a = expr->getArg(i);
+        if (a->getType()->isPointerType()) {
+            auto e = dyn_cast<CXXConstCastExpr>(a->IgnoreParenImpCasts());
+            if (e != nullptr) {
+                report(
+                    DiagnosticsEngine::Warning,
+                    "redundant const_cast of variadic function argument",
+                    e->getExprLoc())
+                    << expr->getSourceRange();
+            }
+        }
     }
-    if (isa<CXXReinterpretCastExpr>(e)) {
+    return true;
+}
+
+bool RedundantCast::VisitCXXDeleteExpr(CXXDeleteExpr const * expr) {
+    if (ignoreLocation(expr)) {
+        return true;
+    }
+    auto e = dyn_cast<CXXConstCastExpr>(
+        expr->getArgument()->IgnoreParenImpCasts());
+    if (e != nullptr) {
         report(
             DiagnosticsEngine::Warning,
-            ("redundant reinterpret_cast, result is implicitly cast to void"
-             " pointer"),
-            e->getExprLoc())
-            << e->getSourceRange();
-    } else if (isa<CXXStaticCastExpr>(e)
-               && isVoidPointer(
-                   dyn_cast<CXXStaticCastExpr>(e)->getSubExpr()
-                   ->IgnoreParenImpCasts()->getType()))
+            "redundant const_cast in delete expression", e->getExprLoc())
+            << expr->getSourceRange();
+    }
+    return true;
+}
+
+bool RedundantCast::visitBinOp(BinaryOperator const * expr) {
+    if (ignoreLocation(expr)) {
+        return true;
+    }
+    if (expr->getLHS()->getType()->isPointerType()
+        && expr->getRHS()->getType()->isPointerType())
     {
-        report(
-            DiagnosticsEngine::Warning,
-            ("redundant static_cast from void pointer, result is implicitly"
-             " cast to void pointer"),
-            e->getExprLoc())
-            << e->getSourceRange();
+        auto e = dyn_cast<CXXConstCastExpr>(
+            expr->getLHS()->IgnoreParenImpCasts());
+        if (e != nullptr) {
+            report(
+                DiagnosticsEngine::Warning,
+                "redundant const_cast on lhs of pointer %select{comparison|subtraction}0 expression",
+                e->getExprLoc())
+                << (expr->getOpcode() == BO_Sub) << expr->getSourceRange();
+        }
+        e = dyn_cast<CXXConstCastExpr>(
+            expr->getRHS()->IgnoreParenImpCasts());
+        if (e != nullptr) {
+            report(
+                DiagnosticsEngine::Warning,
+                "redundant const_cast on rhs of pointer %select{comparison|subtraction}0 expression",
+                e->getExprLoc())
+                << (expr->getOpcode() == BO_Sub) << expr->getSourceRange();
+        }
     }
     return true;
 }

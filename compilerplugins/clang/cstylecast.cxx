@@ -53,6 +53,7 @@ private:
 
 static const char * recommendedFix(clang::CastKind ck) {
     switch(ck) {
+        case CK_NoOp: return "const_cast";
         case CK_IntegralToPointer: return "reinterpret_cast";
         case CK_PointerToIntegral: return "reinterpret_cast";
         case CK_BaseToDerived: return "static_cast";
@@ -89,7 +90,26 @@ bool CStyleCast::VisitCStyleCastExpr(const CStyleCastExpr * expr) {
         return true;
     }
     if( expr->getCastKind() == CK_NoOp ) {
-        return true;
+        QualType t1 = expr->getSubExpr()->getType();
+        QualType t2 = expr->getType();
+        if (t1->isPointerType() && t2->isPointerType()) {
+            t1 = t1->getAs<PointerType>()->getPointeeType();
+            t2 = t2->getAs<PointerType>()->getPointeeType();
+            if (t2->isVoidType()) {
+                return true;
+            }
+        } else if (t1->isLValueReferenceType() && t2->isLValueReferenceType()) {
+            t1 = t1->getAs<LValueReferenceType>()->getPointeeType();
+            t2 = t2->getAs<LValueReferenceType>()->getPointeeType();
+        } else {
+            return true;
+        }
+        if (!t1.isMoreQualifiedThan(t2)
+            || (t1.getUnqualifiedType().getCanonicalType().getTypePtr()
+                != t2.getUnqualifiedType().getCanonicalType().getTypePtr()))
+        {
+            return true;
+        }
     }
     std::string incompFrom;
     std::string incompTo;
