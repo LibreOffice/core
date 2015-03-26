@@ -20,10 +20,10 @@
 #define INCLUDED_EDITENG_BULLETITEM_HXX
 
 #include <editeng/editengdllapi.h>
-#include <o3tl/typed_flags_set.hxx>
+#include <svl/poolitem.hxx>
+#include <svtools/grfmgr.hxx>
+#include <vcl/font.hxx>
 
-
-// define ----------------------------------------------------------------
 
 // Styles
 enum class SvxBulletStyle
@@ -38,21 +38,6 @@ enum class SvxBulletStyle
     BMP              = 128
 };
 
-// Valid-Bits
-// First, only the values that are changed by the dialogue ...
-#define VALID_FONTCOLOR     0x0001
-#define VALID_FONTNAME      0x0002
-#define VALID_SYMBOL        0x0004
-#define VALID_BITMAP        0x0008
-#define VALID_SCALE         0x0010
-#define VALID_START         0x0020
-#define VALID_STYLE         0x0040
-#define VALID_PREVTEXT      0x0080
-#define VALID_FOLLOWTEXT    0x0100
-#include <svl/poolitem.hxx>
-#include <vcl/font.hxx>
-#include <svtools/grfmgr.hxx>
-
 // class SvxBulletItem ---------------------------------------------------
 
 class EDITENG_DLLPUBLIC SvxBulletItem : public SfxPoolItem
@@ -66,8 +51,6 @@ class EDITENG_DLLPUBLIC SvxBulletItem : public SfxPoolItem
     long            nWidth;
     sal_uInt16      nScale;
     sal_Unicode     cSymbol;
-    sal_uInt16      nValidMask; // Only temporary for GetAttribs / setAttribs,
-                                // because of the large Bullets
 
     void    SetDefaultFont_Impl();
     void    SetDefaults_Impl();
@@ -108,9 +91,9 @@ public:
     void                SetFont( const vcl::Font& rNew) { aFont = rNew; }
     void                SetScale( sal_uInt16 nNew ) { nScale = nNew; }
 
-    virtual sal_uInt16      GetVersion(sal_uInt16 nFileVersion) const SAL_OVERRIDE;
+    virtual sal_uInt16  GetVersion(sal_uInt16 nFileVersion) const SAL_OVERRIDE;
     virtual bool        operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
-    virtual bool GetPresentation( SfxItemPresentation ePres,
+    virtual bool        GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     OUString &rText, const IntlWrapper * = 0 ) const SAL_OVERRIDE;
@@ -118,16 +101,6 @@ public:
     static void         StoreFont( SvStream&, const vcl::Font& );
     static vcl::Font    CreateFont( SvStream&, sal_uInt16 nVer );
 
-    sal_uInt16&         GetValidMask()                  { return nValidMask;    }
-    sal_uInt16          GetValidMask() const            { return nValidMask;    }
-    sal_uInt16          IsValid( sal_uInt16 nFlag ) const   { return nValidMask & nFlag; }
-    void                SetValid( sal_uInt16 nFlag, bool bValid )
-                        {
-                            if ( bValid )
-                                nValidMask |= nFlag;
-                            else
-                                nValidMask &= ~nFlag;
-                        }
     void                CopyValidProperties( const SvxBulletItem& rCopyFrom );
 };
 

@@ -105,7 +105,6 @@ SvxBulletItem::SvxBulletItem( sal_uInt16 _nWhich ) : SfxPoolItem( _nWhich )
 {
     SetDefaultFont_Impl();
     SetDefaults_Impl();
-    nValidMask = 0xFFFF;
 }
 
 SvxBulletItem::SvxBulletItem( SvStream& rStrm, sal_uInt16 _nWhich )
@@ -163,8 +162,6 @@ SvxBulletItem::SvxBulletItem( SvStream& rStrm, sal_uInt16 _nWhich )
 
     // UNICODE: rStrm >> aFollowText;
     aFollowText = rStrm.ReadUniOrByteString(rStrm.GetStreamCharSet());
-
-    nValidMask = 0xFFFF;
 }
 
 SvxBulletItem::SvxBulletItem( const SvxBulletItem& rItem) : SfxPoolItem( rItem )
@@ -178,7 +175,6 @@ SvxBulletItem::SvxBulletItem( const SvxBulletItem& rItem) : SfxPoolItem( rItem )
     nWidth          = rItem.nWidth;
     nScale          = rItem.nScale;
     cSymbol         = rItem.cSymbol;
-    nValidMask      = rItem.nValidMask;
 }
 
 
@@ -237,29 +233,17 @@ void SvxBulletItem::CopyValidProperties( const SvxBulletItem& rCopyFrom )
 {
     vcl::Font _aFont = GetFont();
     vcl::Font aNewFont = rCopyFrom.GetFont();
-    if ( rCopyFrom.IsValid( VALID_FONTNAME ) )
-    {
-        _aFont.SetName( aNewFont.GetName() );
-        _aFont.SetFamily( aNewFont.GetFamily() );
-        _aFont.SetStyleName( aNewFont.GetStyleName() );
-    }
-    if ( rCopyFrom.IsValid( VALID_FONTCOLOR ) )
-        _aFont.SetColor( aNewFont.GetColor() );
-    if ( rCopyFrom.IsValid( VALID_SYMBOL ) )
-        SetSymbol( rCopyFrom.GetSymbol() );
-    if ( rCopyFrom.IsValid( VALID_BITMAP ) )
-        SetGraphicObject( rCopyFrom.GetGraphicObject() );
-    if ( rCopyFrom.IsValid( VALID_SCALE ) )
-        SetScale( rCopyFrom.GetScale() );
-    if ( rCopyFrom.IsValid( VALID_START ) )
-        SetStart( rCopyFrom.GetStart() );
-    if ( rCopyFrom.IsValid( VALID_STYLE ) )
-        SetStyle( rCopyFrom.GetStyle() );
-    if ( rCopyFrom.IsValid( VALID_PREVTEXT ) )
-        SetPrevText( rCopyFrom.GetPrevText() );
-    if ( rCopyFrom.IsValid( VALID_FOLLOWTEXT ) )
-        SetFollowText( rCopyFrom.GetFollowText() );
-
+    _aFont.SetName( aNewFont.GetName() );
+    _aFont.SetFamily( aNewFont.GetFamily() );
+    _aFont.SetStyleName( aNewFont.GetStyleName() );
+    _aFont.SetColor( aNewFont.GetColor() );
+    SetSymbol( rCopyFrom.GetSymbol() );
+    SetGraphicObject( rCopyFrom.GetGraphicObject() );
+    SetScale( rCopyFrom.GetScale() );
+    SetStart( rCopyFrom.GetStart() );
+    SetStyle( rCopyFrom.GetStyle() );
+    SetPrevText( rCopyFrom.GetPrevText() );
+    SetFollowText( rCopyFrom.GetFollowText() );
     SetFont( _aFont );
 }
 
@@ -272,8 +256,7 @@ bool SvxBulletItem::operator==( const SfxPoolItem& rItem ) const
     const SvxBulletItem& rBullet = static_cast<const SvxBulletItem&>(rItem);
     // Compare with ValidMask, otherwise no put possible in a AttrSet if the
     // item differs only in terms of the ValidMask from an existing one.
-    if( nValidMask != rBullet.nValidMask    ||
-        nStyle != rBullet.nStyle            ||
+    if( nStyle != rBullet.nStyle            ||
         nScale != rBullet.nScale            ||
         nWidth != rBullet.nWidth            ||
         nStart != rBullet.nStart            ||
