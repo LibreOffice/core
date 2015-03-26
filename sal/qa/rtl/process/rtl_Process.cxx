@@ -50,7 +50,7 @@ inline void printUString( const ::rtl::OUString & str, const sal_Char * msg = NU
     }
     rtl::OString aString;
     aString = ::rtl::OUStringToOString( str, RTL_TEXTENCODING_ASCII_US );
-    printf("%s\n", (char *)aString.getStr( ) );
+    printf("%s\n", aString.getStr( ) );
 }
 
 inline ::rtl::OUString getModulePath( void )

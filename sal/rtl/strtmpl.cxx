@@ -1242,7 +1242,7 @@ void SAL_CALL IMPL_RTL_STRINGNAME( new )( IMPL_RTL_STRINGDATA** ppThis )
     if ( *ppThis)
         IMPL_RTL_STRINGNAME( release )( *ppThis );
 
-    *ppThis = (IMPL_RTL_STRINGDATA*) (&IMPL_RTL_EMPTYSTRING);
+    *ppThis = const_cast<IMPL_RTL_STRINGDATA*>(&IMPL_RTL_EMPTYSTRING);
 }
 
 /* ----------------------------------------------------------------------- */

@@ -398,7 +398,7 @@ sal_Bool SAL_CALL osl_readProfileString(oslProfile Profile,
         }
         else
         {
-            pStr=(sal_Char*)pszDefault;
+            pStr=const_cast<sal_Char*>(pszDefault);
         }
 
         if ( pStr != 0 )

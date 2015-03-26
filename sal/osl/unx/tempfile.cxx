@@ -192,7 +192,7 @@ static oslFileError osl_create_temp_file_impl_(
 
     rtl_uStringbuffer_newFromStr_WithLength(
         &tmp_file_path,
-        rtl_uString_getStr((rtl_uString*)pustr_base_directory),
+        rtl_uString_getStr(const_cast<rtl_uString*>(pustr_base_directory)),
         len_base_dir);
 
     rtl_uStringbuffer_ensureCapacity(

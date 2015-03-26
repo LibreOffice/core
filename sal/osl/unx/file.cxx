@@ -315,7 +315,7 @@ oslFileError FileHandle_Impl::setSize (sal_uInt64 uSize)
         if (-1 == lseek (m_fd, (off_t)(nSize - 1), SEEK_SET))
             return result;
 
-        if (-1 == write (m_fd, (char*)"", (size_t)1))
+        if (-1 == write (m_fd, "", (size_t)1))
         {
             /* Failure. Restore saved position */
             (void) lseek (m_fd, (off_t)(nCurPos), SEEK_SET);
