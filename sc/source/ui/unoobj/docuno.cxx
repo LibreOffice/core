@@ -598,13 +598,48 @@ void ScModelObj::setTextSelection(int nType, int nX, int nY)
 
         // There seems to be no clear way of getting the grid window for this
         // particular document, hence we need to hope we get the right window.
-        ScViewData* pViewData = ScDocShell::GetViewData();
         ScGridWindow* pGridWindow = pViewData->GetActiveWin();
 
         if (!pGridWindow)
             return;
 
         pGridWindow->SetCellSelectionPixel(nType, nX * pViewData->GetPPTX(), nY * pViewData->GetPPTY());
+    }
+}
+
+void ScModelObj::setGraphicSelection(int nType, int nX, int nY)
+{
+    SolarMutexGuard aGuard;
+
+    // There seems to be no clear way of getting the grid window for this
+    // particular document, hence we need to hope we get the right window.
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    ScGridWindow* pGridWindow = pViewData->GetActiveWin();
+
+    int nPixelX = nX * pViewData->GetPPTX();
+    int nPixelY = nY * pViewData->GetPPTY();
+
+    switch (nType)
+    {
+    case LOK_SETGRAPHICSELECTION_START:
+        {
+            MouseEvent aClickEvent(Point(nPixelX, nPixelY), 1, MouseEventModifiers::SIMPLECLICK, MOUSE_LEFT);
+            pGridWindow->MouseButtonDown(aClickEvent);
+            MouseEvent aMoveEvent(Point(nPixelX + 1, nPixelY), 0, MouseEventModifiers::SIMPLEMOVE, MOUSE_LEFT);
+            pGridWindow->MouseMove(aMoveEvent);
+        }
+        break;
+    case LOK_SETGRAPHICSELECTION_END:
+        {
+            MouseEvent aMoveEvent(Point(nPixelX - 1, nPixelY), 0, MouseEventModifiers::SIMPLEMOVE, MOUSE_LEFT);
+            pGridWindow->MouseMove(aMoveEvent);
+            MouseEvent aClickEvent(Point(nPixelX, nPixelY), 1, MouseEventModifiers::SIMPLECLICK, MOUSE_LEFT);
+            pGridWindow->MouseButtonUp(aClickEvent);
+        }
+        break;
+    default:
+        assert(false);
+        break;
     }
 }
 

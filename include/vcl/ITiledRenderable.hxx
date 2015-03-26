@@ -119,7 +119,7 @@ public:
      *
      * @see lok::Document::setGraphicSelection().
      */
-    virtual void setGraphicSelection(int /*nType*/, int /*nX*/, int /*nY*/) { }
+    virtual void setGraphicSelection(int nType, int nX, int nY) = 0;
 
     /**
      * @see lok::Document::resetSelection().

@@ -397,6 +397,9 @@ public:
     /// @see vcl::ITiledRenderable::setTextSelection().
     virtual void setTextSelection(int nType, int nX, int nY) SAL_OVERRIDE;
 
+    /// @see vcl::ITiledRenderable::setGraphicSelection().
+    virtual void setGraphicSelection(int nType, int nX, int nY) SAL_OVERRIDE;
+
     /// @see vcl::ITiledRenderable::initializeForTiledRendering().
     virtual void initializeForTiledRendering() SAL_OVERRIDE;
 };
