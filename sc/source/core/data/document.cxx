@@ -3323,18 +3323,26 @@ void ScDocument::SetValue( const ScAddress& rPos, double fVal )
     if (!pTab)
         return;
 
-    // In case setting this string affects an existing formula group, record
-    // its above and below position for later listening.
+    const ScFormulaCell* pCurCellFormula = pTab->GetFormulaCell(rPos.Col(), rPos.Row());
+    if (pCurCellFormula && pCurCellFormula->IsShared())
+    {
+        // In case setting this string affects an existing formula group, record
+        // its above and below position for later listening.
 
-    std::vector<ScAddress> aGroupPos;
-    sc::EndListeningContext aCxt(*this);
-    EndListeningIntersectedGroup(aCxt, rPos, &aGroupPos);
-    aCxt.purgeEmptyBroadcasters();
+        std::vector<ScAddress> aGroupPos;
+        sc::EndListeningContext aCxt(*this);
+        EndListeningIntersectedGroup(aCxt, rPos, &aGroupPos);
+        aCxt.purgeEmptyBroadcasters();
 
-    pTab->SetValue(rPos.Col(), rPos.Row(), fVal);
+        pTab->SetValue(rPos.Col(), rPos.Row(), fVal);
 
-    SetNeedsListeningGroups(aGroupPos);
-    StartNeededListeners();
+        SetNeedsListeningGroups(aGroupPos);
+        StartNeededListeners();
+    }
+    else
+    {
+        pTab->SetValue(rPos.Col(), rPos.Row(), fVal);
+    }
 }
 
 OUString ScDocument::GetString( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
