@@ -737,6 +737,9 @@ void SdrMarkView::SetMarkHandles()
                 }
 
                 sSelection = aSelection.toString();
+
+                // hide the text selection too
+                GetModel()->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION, "");
             }
             GetModel()->libreOfficeKitCallback(LOK_CALLBACK_GRAPHIC_SELECTION, sSelection.getStr());
         }
