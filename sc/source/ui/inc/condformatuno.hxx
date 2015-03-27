@@ -93,6 +93,7 @@ public:
     virtual ~ScCondFormatObj();
 
     static ScCondFormatObj* getImplementation( uno::Reference<sheet::XConditionalFormat> XCondFormat);
+    ScDocShell* getDocShell();
 
     // XConditionalFormat
     virtual void SAL_CALL addEntry(const uno::Reference<sheet::XConditionEntry>& xEntry)
@@ -176,7 +177,7 @@ class ScConditionEntryObj : public cppu::WeakImplHelper2<com::sun::star::beans::
 {
 public:
 
-    ScConditionEntryObj();
+    ScConditionEntryObj(rtl::Reference<ScCondFormatObj> xParent);
     virtual ~ScConditionEntryObj();
 
     static ScConditionEntryObj* getImplementation(uno::Reference<sheet::XConditionEntry> xCondition);
@@ -238,7 +239,7 @@ class ScColorScaleFormatObj : public cppu::WeakImplHelper1<com::sun::star::beans
 {
 public:
 
-    ScColorScaleFormatObj();
+    ScColorScaleFormatObj(rtl::Reference<ScCondFormatObj> xParent);
     virtual ~ScColorScaleFormatObj();
 
     static ScColorScaleFormatObj* getImplementation(uno::Reference<beans::XPropertySet> xPropSet);
@@ -295,7 +296,7 @@ private:
 class ScDataBarFormatObj : public cppu::WeakImplHelper1<com::sun::star::beans::XPropertySet>
 {
 public:
-    ScDataBarFormatObj();
+    ScDataBarFormatObj(rtl::Reference<ScCondFormatObj> xParent);
     virtual ~ScDataBarFormatObj();
 
     static ScDataBarFormatObj* getImplementation(uno::Reference<beans::XPropertySet> xPropSet);
@@ -352,7 +353,7 @@ private:
 class ScIconSetFormatObj : public cppu::WeakImplHelper1<com::sun::star::beans::XPropertySet>
 {
 public:
-    ScIconSetFormatObj();
+    ScIconSetFormatObj(rtl::Reference<ScCondFormatObj> xParent);
     virtual ~ScIconSetFormatObj();
 
     static ScIconSetFormatObj* getImplementation(uno::Reference<beans::XPropertySet> xPropSet);
