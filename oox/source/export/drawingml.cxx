@@ -1611,6 +1611,7 @@ void DrawingML::WriteParagraphNumbering( Reference< XPropertySet > rXPropSet, sa
     bool bHasFontDesc = false;
     OUString aGraphicURL;
     sal_Int16 nBulletRelSize = 0;
+    sal_Int16 nStartWith = 1;
 
     for ( sal_Int32 i = 0; i < nPropertyCount; i++ )
     {
@@ -1655,6 +1656,10 @@ void DrawingML::WriteParagraphNumbering( Reference< XPropertySet > rXPropSet, sa
             else if ( aPropName == "BulletRelSize" )
             {
                 nBulletRelSize = *static_cast<sal_Int16 const *>(pValue);
+            }
+            else if ( aPropName == "StartWith" )
+            {
+                nStartWith = *( (sal_Int16*)pValue );
             }
             else if ( aPropName == "GraphicURL" )
             {
@@ -1704,6 +1709,7 @@ void DrawingML::WriteParagraphNumbering( Reference< XPropertySet > rXPropSet, sa
         {
             mpFS->singleElementNS(XML_a, XML_buAutoNum,
                                   XML_type, OUStringToOString(pAutoNumType, RTL_TEXTENCODING_UTF8).getStr(),
+                                  XML_startAt, nStartWith > 1 ? IS(nStartWith) : NULL,
                                   FSEND);
         }
         else
