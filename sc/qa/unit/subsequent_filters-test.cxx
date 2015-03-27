@@ -27,6 +27,7 @@
 #include <svx/svdoole2.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/postitem.hxx>
+#include <editeng/crossedoutitem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/borderline.hxx>
@@ -188,6 +189,7 @@ public:
     void testCopyMergedNumberFormats();
     void testVBAUserFunctionXLSM();
     void testEmbeddedImageXLS();
+    void testEditEngStrikeThroughXLSX();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testBooleanFormatXLSX);
@@ -275,6 +277,7 @@ public:
     CPPUNIT_TEST(testVBAUserFunctionXLSM);
     CPPUNIT_TEST(testEmbeddedImageXLS);
     CPPUNIT_TEST(testErrorOnExternalReferences);
+    CPPUNIT_TEST(testEditEngStrikeThroughXLSX);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -2865,6 +2868,37 @@ void ScFiltersTest::testErrorOnExternalReferences()
         CPPUNIT_FAIL("Formula changed");
 
     xDocSh->DoClose();
+}
+
+void ScFiltersTest::testEditEngStrikeThroughXLSX()
+{
+    ScDocShellRef xDocSh = loadDoc("strike-through.", XLSX);
+    CPPUNIT_ASSERT_MESSAGE("Failed to open doc", xDocSh.Is());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    const EditTextObject* pObj = rDoc.GetEditText(ScAddress(0, 0, 0));
+    CPPUNIT_ASSERT(pObj);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pObj->GetParagraphCount());
+    CPPUNIT_ASSERT_EQUAL(OUString("this is strike through  this not"), pObj->GetText(0));
+
+    std::vector<EECharAttrib> aAttribs;
+    pObj->GetCharAttribs(0, aAttribs);
+    for (std::vector<EECharAttrib>::const_iterator itr = aAttribs.begin(); itr != aAttribs.end(); ++itr)
+    {
+        if (itr->pAttr->Which() == EE_CHAR_STRIKEOUT)
+        {
+            const SvxCrossedOutItem& rItem = static_cast<const SvxCrossedOutItem&>(*itr->pAttr);
+            if (itr->nStart == 0)
+            {
+                CPPUNIT_ASSERT(rItem.GetStrikeout() != STRIKEOUT_NONE);
+            }
+            else
+            {
+                CPPUNIT_ASSERT_EQUAL(STRIKEOUT_NONE, rItem.GetStrikeout());
+            }
+        }
+    }
 }
 
 ScFiltersTest::ScFiltersTest()
