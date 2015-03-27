@@ -86,7 +86,7 @@ void MessBox::ImplInitButtons()
             nNoFlags |= BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_FOCUSBUTTON;
         nNoFlags |= BUTTONDIALOG_CANCELBUTTON;
 
-        AddButton( StandardButtonType::YES, RET_YES, nYesFlags );
+        AddButton( StandardButtonType::SB_YES, RET_YES, nYesFlags );
         AddButton( StandardButtonType::NO, RET_NO, nNoFlags );
     }
     else if ( nStyle & WB_YES_NO_CANCEL )
@@ -98,7 +98,7 @@ void MessBox::ImplInitButtons()
         else
             nCancelFlags |= BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_FOCUSBUTTON;
 
-        AddButton( StandardButtonType::YES, RET_YES, nYesFlags );
+        AddButton( StandardButtonType::SB_YES, RET_YES, nYesFlags );
         AddButton( StandardButtonType::NO, RET_NO, nNoFlags );
         AddButton( StandardButtonType::CANCEL, RET_CANCEL, nCancelFlags );
     }
@@ -126,7 +126,7 @@ void MessBox::ImplInitButtons()
 
         AddButton( StandardButtonType::ABORT, RET_CANCEL, nAbortFlags );
         AddButton( StandardButtonType::RETRY, RET_RETRY, nRetryFlags );
-        AddButton( StandardButtonType::IGNORE, RET_IGNORE, nIgnoreFlags );
+        AddButton( StandardButtonType::SB_IGNORE, RET_IGNORE, nIgnoreFlags );
     }
     else if ( nStyle & WB_OK )
     {

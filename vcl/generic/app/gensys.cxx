@@ -65,10 +65,10 @@ OUString GetNativeMessageBoxButtonText( StandardButtonType nButtonId, bool bUseR
         case StandardButtonType::RETRY:
             aText = "Retry";
             break;
-        case StandardButtonType::IGNORE:
+        case StandardButtonType::SB_IGNORE:
             aText = "Ignore";
             break;
-        case StandardButtonType::YES:
+        case StandardButtonType::SB_YES:
             aText = "Yes";
             break;
         case StandardButtonType::NO:
@@ -109,7 +109,7 @@ int SalGenericSystem::ShowNativeMessageBox( const OUString& rTitle, const OUStri
     if( nButtonCombination == SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_YES_NO_CANCEL ||
         nButtonCombination == SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_YES_NO )
     {
-        aButtons.push_back( GetNativeMessageBoxButtonText( StandardButtonType::YES, bUseResources ) );
+        aButtons.push_back( GetNativeMessageBoxButtonText( StandardButtonType::SB_YES, bUseResources ) );
         nButtonIds[nBut++] = SALSYSTEM_SHOWNATIVEMSGBOX_BTN_YES;
         aButtons.push_back( GetNativeMessageBoxButtonText( StandardButtonType::NO, bUseResources ) );
         nButtonIds[nBut++] = SALSYSTEM_SHOWNATIVEMSGBOX_BTN_NO;
@@ -136,7 +136,7 @@ int SalGenericSystem::ShowNativeMessageBox( const OUString& rTitle, const OUStri
         nButtonIds[nBut++] = SALSYSTEM_SHOWNATIVEMSGBOX_BTN_ABORT;
         aButtons.push_back( GetNativeMessageBoxButtonText( StandardButtonType::RETRY, bUseResources ) );
         nButtonIds[nBut++] = SALSYSTEM_SHOWNATIVEMSGBOX_BTN_RETRY;
-        aButtons.push_back( GetNativeMessageBoxButtonText( StandardButtonType::IGNORE, bUseResources ) );
+        aButtons.push_back( GetNativeMessageBoxButtonText( StandardButtonType::SB_IGNORE, bUseResources ) );
         nButtonIds[nBut++] = SALSYSTEM_SHOWNATIVEMSGBOX_BTN_IGNORE;
         switch( nDefaultButton )
         {

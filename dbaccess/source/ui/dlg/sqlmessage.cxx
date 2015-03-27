@@ -425,7 +425,7 @@ namespace
         sal_uInt16 nButtonID = 0;
         switch ( _eType )
         {
-        case StandardButtonType::YES:    nButtonID = RET_YES; break;
+        case StandardButtonType::SB_YES:    nButtonID = RET_YES; break;
         case StandardButtonType::NO:     nButtonID = RET_NO; break;
         case StandardButtonType::OK:     nButtonID = RET_OK; break;
         case StandardButtonType::CANCEL: nButtonID = RET_CANCEL; break;
@@ -564,7 +564,7 @@ void OSQLMessageBox::impl_createStandardButtons( WinBits _nStyle )
 {
     if ( _nStyle & WB_YES_NO_CANCEL )
     {
-        lcl_addButton( *this, StandardButtonType::YES,    ( _nStyle & WB_DEF_YES ) != 0 );
+        lcl_addButton( *this, StandardButtonType::SB_YES,    ( _nStyle & WB_DEF_YES ) != 0 );
         lcl_addButton( *this, StandardButtonType::NO,     ( _nStyle & WB_DEF_NO ) != 0 );
         lcl_addButton( *this, StandardButtonType::CANCEL, ( _nStyle & WB_DEF_CANCEL ) != 0 );
     }
@@ -575,7 +575,7 @@ void OSQLMessageBox::impl_createStandardButtons( WinBits _nStyle )
     }
     else if ( _nStyle & WB_YES_NO )
     {
-        lcl_addButton( *this, StandardButtonType::YES,    ( _nStyle & WB_DEF_YES ) != 0 );
+        lcl_addButton( *this, StandardButtonType::SB_YES,    ( _nStyle & WB_DEF_YES ) != 0 );
         lcl_addButton( *this, StandardButtonType::NO,     ( _nStyle & WB_DEF_NO ) != 0 );
     }
     else if ( _nStyle & WB_RETRY_CANCEL )

@@ -5309,7 +5309,7 @@ MessBox( pWindow, WB_DEF_YES, CUI_RES( RID_SVXSTR_REPLACE_ICON_CONFIRM ),  CUI_R
     SetImage( WarningBox::GetStandardImage() );
     SetMessText( ReplaceIconName( aMessage ) );
     RemoveButton( 1 );
-    AddButton( StandardButtonType::YES, 2, 0 );
+    AddButton( StandardButtonType::SB_YES, 2, 0 );
     AddButton( CUI_RES( RID_SVXSTR_YESTOALL ), 5, 0 );
     AddButton( StandardButtonType::NO, 3, 0 );
     AddButton( StandardButtonType::CANCEL, 4, 0 );

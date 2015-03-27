@@ -299,13 +299,13 @@ enum class StandardButtonType
 {
     OK           = 0,
     CANCEL       = 1,
-    YES          = 2,
+    SB_YES       = 2, // overlaps with YES constant on MacOS
     NO           = 3,
     RETRY        = 4,
     HELP         = 5,
     CLOSE        = 6,
     MORE         = 7,
-    IGNORE       = 8,
+    SB_IGNORE    = 8, // overlaps with IGNORE constant on Windows
     ABORT        = 9,
     LESS         = 10,
     RESET        = 11,
