@@ -105,6 +105,10 @@ bool SelectionController::hasSelectedCells() const
     return false;
 }
 
+void SelectionController::setCursorLogicPosition(const Point& /*rPosition*/, bool /*bPoint*/)
+{
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -32,6 +32,7 @@ class SfxRequest;
 class SfxStyleSheet;
 class SdrPage;
 class SdrModel;
+class Point;
 
 namespace sdr
 {
@@ -70,6 +71,8 @@ public:
     virtual bool ApplyFormatPaintBrush( SfxItemSet& rFormatSet, bool bNoCharacterFormats, bool bNoParagraphFormats );
     /// This is a table object, and one or more of its cells are selected.
     virtual bool hasSelectedCells() const;
+    /// Allows adjusting the point or mark of the selection to a document coordinate.
+    virtual void setCursorLogicPosition(const Point& rPosition, bool bPoint);
 };
 
 }

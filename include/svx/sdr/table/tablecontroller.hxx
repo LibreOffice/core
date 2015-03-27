@@ -93,6 +93,8 @@ public:
     SVX_DLLPRIVATE virtual bool PasteObjModel( const SdrModel& rModel ) SAL_OVERRIDE;
 
     SVX_DLLPRIVATE virtual bool hasSelectedCells() const SAL_OVERRIDE { return mbCellSelectionMode || mpView->IsTextEdit(); }
+    /// @see sdr::SelectionController::setCursorLogicPosition().
+    SVX_DLLPRIVATE virtual void setCursorLogicPosition(const Point& rPosition, bool bPoint) SAL_OVERRIDE;
 
     void getSelectedCells( CellPos& rFirstPos, CellPos& rLastPos );
     void setSelectedCells( const CellPos& rFirstPos, const CellPos& rLastPos );

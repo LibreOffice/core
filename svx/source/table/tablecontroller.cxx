@@ -3148,6 +3148,24 @@ bool SvxTableController::isColumnHeader()
 
     return aSettings.mbUseFirstColumn;
 }
+
+void SvxTableController::setCursorLogicPosition(const Point& rPosition, bool bPoint)
+{
+    if (mxTableObj->GetObjIdentifier() != OBJ_TABLE)
+        return;
+
+    SdrTableObj* pTableObj = static_cast<SdrTableObj*>(mxTableObj.get());
+    CellPos aCellPos;
+    if (pTableObj->CheckTableHit(rPosition, aCellPos.mnCol, aCellPos.mnRow, 0) != SDRTABLEHIT_NONE)
+    {
+        if (bPoint)
+            maCursorLastPos = aCellPos;
+        else
+            maCursorFirstPos = aCellPos;
+        mpView->MarkListHasChanged();
+    }
+}
+
 } }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
