@@ -567,7 +567,8 @@ void ScModelObj::setTextSelection(int nType, int nX, int nY)
     SolarMutexGuard aGuard;
 
     ScViewData* pViewData = ScDocShell::GetViewData();
-    ScInputHandler* pInputHandler = SC_MOD()->GetInputHdl(pViewData->GetViewShell());
+    ScTabViewShell* pViewShell = pViewData->GetViewShell();
+    ScInputHandler* pInputHandler = SC_MOD()->GetInputHdl(pViewShell);
 
     if (pInputHandler && pInputHandler->IsInputMode())
     {
@@ -594,8 +595,6 @@ void ScModelObj::setTextSelection(int nType, int nX, int nY)
     }
     else
     {
-        // moving the cell selection handles
-
         // There seems to be no clear way of getting the grid window for this
         // particular document, hence we need to hope we get the right window.
         ScGridWindow* pGridWindow = pViewData->GetActiveWin();
@@ -603,6 +602,7 @@ void ScModelObj::setTextSelection(int nType, int nX, int nY)
         if (!pGridWindow)
             return;
 
+        // move the cell selection handles
         pGridWindow->SetCellSelectionPixel(nType, nX * pViewData->GetPPTX(), nY * pViewData->GetPPTY());
     }
 }
@@ -648,10 +648,17 @@ void ScModelObj::resetSelection()
     SolarMutexGuard aGuard;
 
     ScViewData* pViewData = ScDocShell::GetViewData();
-    ScTabView* pTabView  = pViewData->GetView();
+    ScTabViewShell* pViewShell = pViewData->GetViewShell();
 
-    // deselect the shapes
-    pTabView->DrawDeselectAll();
+    // deselect the shapes & texts
+    ScDrawView* pDrawView = pViewShell->GetScDrawView();
+    if (pDrawView)
+    {
+        pDrawView->ScEndTextEdit();
+        pDrawView->UnmarkAll();
+    }
+    else
+        pViewShell->Unmark();
 
     // and hide the cell and text selection
     pDocShell->GetDocument().GetDrawLayer()->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION, "");
