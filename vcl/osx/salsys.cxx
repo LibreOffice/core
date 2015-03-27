@@ -139,13 +139,13 @@ int AquaSalSystem::ShowNativeMessageBox( const OUString& rTitle,
         {
             if( aButtonIds[nC].nDefaultButton == nDefaultButton )
             {
-                if( aButtonIds[nC].nTextIds[0] != -1 )
+                if( aButtonIds[nC].nTextIds[0] != NO_BUTTON )
                     pDefText = getStandardString(
                         aButtonIds[nC].nTextIds[0], bUseResources );
-                if( aButtonIds[nC].nTextIds[1] != -1 )
+                if( aButtonIds[nC].nTextIds[1] != NO_BUTTON )
                     pAltText = getStandardString(
                         aButtonIds[nC].nTextIds[1], bUseResources );
-                if( aButtonIds[nC].nTextIds[2] != -1 )
+                if( aButtonIds[nC].nTextIds[2] != NO_BUTTON )
                     pOthText = getStandardString(
                         aButtonIds[nC].nTextIds[2], bUseResources );
                 break;
