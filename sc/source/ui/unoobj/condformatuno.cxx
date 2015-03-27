@@ -295,6 +295,35 @@ ScConditionalFormatList* ScCondFormatsObj::getCoreObject()
     return pList;
 }
 
+namespace {
+
+uno::Reference<beans::XPropertySet> createConditionEntry(const ScFormatEntry* pEntry,
+        rtl::Reference<ScCondFormatObj> xParent)
+{
+    switch (pEntry->GetType())
+    {
+        case condformat::CONDITION:
+            return new ScConditionEntryObj(xParent);
+        break;
+        case condformat::COLORSCALE:
+            return new ScColorScaleFormatObj(xParent);
+        break;
+        case condformat::DATABAR:
+            return new ScDataBarFormatObj(xParent);
+        break;
+        case condformat::ICONSET:
+            return new ScIconSetFormatObj(xParent);
+        break;
+        case condformat::DATE:
+        break;
+        default:
+        break;
+    }
+    return uno::Reference<beans::XPropertySet>();
+}
+
+}
+
 ScCondFormatObj::ScCondFormatObj(ScDocShell* pDocShell, rtl::Reference<ScCondFormatsObj> xCondFormats,
         sal_Int32 nKey):
     mxCondFormatList(xCondFormats),
@@ -316,6 +345,11 @@ ScConditionalFormat* ScCondFormatObj::getCoreObject()
         throw uno::RuntimeException();
 
     return pFormat;
+}
+
+ScDocShell* ScCondFormatObj::getDocShell()
+{
+    return mpDocShell;
 }
 
 void ScCondFormatObj::addEntry(const uno::Reference<sheet::XConditionEntry>& /*xEntry*/)
@@ -356,10 +390,18 @@ sal_Int32 ScCondFormatObj::getCount()
     return pFormat->size();
 }
 
-uno::Any ScCondFormatObj::getByIndex(sal_Int32 /*nIndex*/)
+uno::Any ScCondFormatObj::getByIndex(sal_Int32 nIndex)
     throw(uno::RuntimeException, std::exception)
 {
+    SolarMutexGuard aGuard;
+    if (getCoreObject()->size() >= size_t(nIndex))
+        throw lang::IllegalArgumentException();
+
+    const ScFormatEntry* pEntry = getCoreObject()->GetEntry(nIndex);
+    uno::Reference<beans::XPropertySet> xCondEntry =
+        createConditionEntry(pEntry, this);
     uno::Any aAny;
+    aAny <<= xCondEntry;
     return aAny;
 }
 
@@ -477,7 +519,9 @@ void SAL_CALL ScCondFormatObj::removeVetoableChangeListener( const OUString&,
     SAL_WARN("sc", "not implemented");
 }
 
-ScConditionEntryObj::ScConditionEntryObj():
+ScConditionEntryObj::ScConditionEntryObj(rtl::Reference<ScCondFormatObj> xParent):
+    mpDocShell(xParent->getDocShell()),
+    mxParent(xParent),
     maPropSet(getConditionEntryrPropSet())
 {
 }
@@ -653,7 +697,9 @@ void SAL_CALL ScConditionEntryObj::removeVetoableChangeListener( const OUString&
     SAL_WARN("sc", "not implemented");
 }
 
-ScColorScaleFormatObj::ScColorScaleFormatObj():
+ScColorScaleFormatObj::ScColorScaleFormatObj(rtl::Reference<ScCondFormatObj> xParent):
+    mpDocShell(xParent->getDocShell()),
+    mxParent(xParent),
     maPropSet(getColorScalePropSet())
 {
 }
@@ -753,7 +799,9 @@ void SAL_CALL ScColorScaleFormatObj::removeVetoableChangeListener( const OUStrin
     SAL_WARN("sc", "not implemented");
 }
 
-ScDataBarFormatObj::ScDataBarFormatObj():
+ScDataBarFormatObj::ScDataBarFormatObj(rtl::Reference<ScCondFormatObj> xParent):
+    mpDocShell(xParent->getDocShell()),
+    mxParent(xParent),
     maPropSet(getDataBarPropSet())
 {
 }
@@ -980,7 +1028,9 @@ void SAL_CALL ScDataBarFormatObj::removeVetoableChangeListener( const OUString&,
     SAL_WARN("sc", "not implemented");
 }
 
-ScIconSetFormatObj::ScIconSetFormatObj():
+ScIconSetFormatObj::ScIconSetFormatObj(rtl::Reference<ScCondFormatObj> xParent):
+    mpDocShell(xParent->getDocShell()),
+    mxParent(xParent),
     maPropSet(getIconSetPropSet())
 {
 }
