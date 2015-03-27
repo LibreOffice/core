@@ -86,12 +86,12 @@ void checkIdentifier(::rtl::OString* id)
                 msg.append("mismatched identifier '");
                 msg.append(*id);
                 msg.append("'");
-                idlc()->error()->syntaxError(idlc()->getParseState(),
+                ErrorHandler::syntaxError(idlc()->getParseState(),
                                          idlc()->getLineNumber(),
                                          msg.getStr());
             }
             else
-                idlc()->error()->warning0(WIDL_WRONG_NAMING_CONV, id->getStr());
+                ErrorHandler::warning0(WIDL_WRONG_NAMING_CONV, id->getStr());
         }
 }
 
@@ -102,7 +102,7 @@ void reportDoubleMemberDeclarations(
              doubleMembers.begin());
          i != doubleMembers.end(); ++i)
     {
-        idlc()->error()->error2(EIDL_DOUBLE_MEMBER, i->first, i->second);
+        ErrorHandler::error2(EIDL_DOUBLE_MEMBER, i->first, i->second);
     }
 }
 
@@ -113,9 +113,9 @@ void addInheritedInterface(
     AstDeclaration * decl = ifc->lookupByName(name);
     AstDeclaration const * resolved = resolveTypedefs(decl);
     if (resolved != 0 && resolved->getNodeType() == NT_interface) {
-        if (idlc()->error()->checkPublished(decl)) {
+        if (ErrorHandler::checkPublished(decl)) {
             if (!static_cast< AstInterface const * >(resolved)->isDefined()) {
-                idlc()->error()->inheritanceError(
+                ErrorHandler::inheritanceError(
                     NT_interface, &ifc->getScopedName(), decl);
             } else {
                 AstInterface::DoubleDeclarations doubleDecls(
@@ -133,7 +133,7 @@ void addInheritedInterface(
                              doubleDecls.interfaces.begin());
                          i != doubleDecls.interfaces.end(); ++i)
                     {
-                        idlc()->error()->error1(
+                        ErrorHandler::error1(
                             EIDL_DOUBLE_INHERITANCE, *i);
                     }
                     reportDoubleMemberDeclarations(doubleDecls.members);
@@ -141,7 +141,7 @@ void addInheritedInterface(
             }
         }
     } else {
-        idlc()->error()->lookupError(
+        ErrorHandler::lookupError(
             EIDL_INTERFACEMEMBER_LOOKUP, name, scopeAsDecl(ifc));
     }
 }
@@ -153,14 +153,14 @@ AstDeclaration const * createNamedType(
         *scopedName);
     AstDeclaration const * resolved = resolveTypedefs(decl);
     if (decl == 0) {
-        idlc()->error()->lookupError(*scopedName);
-    } else if (!idlc()->error()->checkPublished(decl)) {
+        ErrorHandler::lookupError(*scopedName);
+    } else if (!ErrorHandler::checkPublished(decl)) {
         decl = 0;
     } else if (resolved->getNodeType() == NT_struct) {
         if (static_cast< AstStruct const * >(resolved)->getTypeParameterCount()
             != (typeArgs == 0 ? 0 : typeArgs->size()))
         {
-            idlc()->error()->error0(EIDL_WRONG_NUMBER_OF_TYPE_ARGUMENTS);
+            ErrorHandler::error0(EIDL_WRONG_NUMBER_OF_TYPE_ARGUMENTS);
             decl = 0;
         } else if (typeArgs != 0) {
             AstScope * global = idlc()->scopes()->bottom();
@@ -173,11 +173,11 @@ AstDeclaration const * createNamedType(
         }
     } else if (decl->isType()) {
         if (typeArgs != 0) {
-            idlc()->error()->error0(EIDL_WRONG_NUMBER_OF_TYPE_ARGUMENTS);
+            ErrorHandler::error0(EIDL_WRONG_NUMBER_OF_TYPE_ARGUMENTS);
             decl = 0;
         }
     } else {
-        idlc()->error()->noTypeError(decl);
+        ErrorHandler::noTypeError(decl);
         decl = 0;
     }
     delete scopedName;
@@ -534,7 +534,7 @@ forward_dcl :
                     delete pForward;
                 } else
                 {
-                    idlc()->error()->error2(EIDL_REDEF_SCOPE, scopeAsDecl(pScope), pDecl);
+                    ErrorHandler::error2(EIDL_REDEF_SCOPE, scopeAsDecl(pScope), pDecl);
                 }
             } else
             {
@@ -583,14 +583,14 @@ interface_dcl :
                         {
                             if ( pForward->getScopedName() != pInterface->getScopedName() )
                             {
-                                idlc()->error()->error3(EIDL_SCOPE_CONFLICT,
+                                ErrorHandler::error3(EIDL_SCOPE_CONFLICT,
                                          pInterface, pForward, scopeAsDecl(pScope));
                             }
                         }
                         else if ( !pInterface->isPublished()
                                   && pForward->isPublished() )
                         {
-                            idlc()->error()->error0(EIDL_PUBLISHED_FORWARD);
+                            ErrorHandler::error0(EIDL_PUBLISHED_FORWARD);
                         }
                         /*
                          * All OK, set full definition
@@ -728,7 +728,7 @@ attribute :
     {
         idlc()->setParseState(PS_AttrCompleted);
         if (($1 & ~(AF_BOUND | AF_READONLY)) != AF_ATTRIBUTE) {
-            idlc()->error()->flagError(EIDL_BAD_ATTRIBUTE_FLAGS, $1);
+            ErrorHandler::flagError(EIDL_BAD_ATTRIBUTE_FLAGS, $1);
         }
         AstInterface * scope = static_cast< AstInterface * >(
             idlc()->scopes()->top());
@@ -769,7 +769,7 @@ opt_attrflags :
     opt_attrflags ',' opt_attrflag
     {
         if ( ($1 & $3) == $3 )
-            idlc()->error()->flagError(EIDL_DEFINED_ATTRIBUTEFLAG, $3);
+            ErrorHandler::flagError(EIDL_DEFINED_ATTRIBUTEFLAG, $3);
 
         $$ = $1 | $3;
     }
@@ -914,7 +914,7 @@ attribute_set_raises:
         if (static_cast< AstAttribute * >(idlc()->scopes()->top())->
             isReadonly())
         {
-            idlc()->error()->error0(EIDL_READONLY_ATTRIBUTE_SET_EXCEPTIONS);
+            ErrorHandler::error0(EIDL_READONLY_ATTRIBUTE_SET_EXCEPTIONS);
         }
     }
     raises ';'
@@ -1057,10 +1057,10 @@ parameter :
             if ( pType )
             {
                 if (pScope->isConstructor() && $2 != DIR_IN) {
-                    idlc()->error()->error0(EIDL_CONSTRUCTOR_PARAMETER_NOT_IN);
+                    ErrorHandler::error0(EIDL_CONSTRUCTOR_PARAMETER_NOT_IN);
                 }
                 if (pScope->isVariadic()) {
-                    idlc()->error()->error0(EIDL_REST_PARAMETER_NOT_LAST);
+                    ErrorHandler::error0(EIDL_REST_PARAMETER_NOT_LAST);
                 }
                 if ($7) {
                     AstDeclaration const * type = resolveTypedefs(pType);
@@ -1068,17 +1068,17 @@ parameter :
                         || (static_cast< AstBaseType const * >(type)->
                             getExprType() != ET_any))
                     {
-                        idlc()->error()->error0(EIDL_REST_PARAMETER_NOT_ANY);
+                        ErrorHandler::error0(EIDL_REST_PARAMETER_NOT_ANY);
                     }
                     if (pScope->isConstructor()) {
                         if (pScope->getIteratorBegin()
                             != pScope->getIteratorEnd())
                         {
-                            idlc()->error()->error0(
+                            ErrorHandler::error0(
                                 EIDL_CONSTRUCTOR_REST_PARAMETER_NOT_FIRST);
                         }
                     } else {
-                        idlc()->error()->error0(EIDL_METHOD_HAS_REST_PARAMETER);
+                        ErrorHandler::error0(EIDL_METHOD_HAS_REST_PARAMETER);
                     }
                 }
 
@@ -1176,11 +1176,11 @@ exception_name:
         AstDeclaration * decl = idlc()->scopes()->nextToTop()->lookupByName(
             *$1);
         if (decl == 0) {
-            idlc()->error()->lookupError(*$1);
-        } else if (!idlc()->error()->checkPublished(decl)) {
+            ErrorHandler::lookupError(*$1);
+        } else if (!ErrorHandler::checkPublished(decl)) {
             decl = 0;
         } else if (decl->getNodeType() != NT_exception) {
-            idlc()->error()->error1(EIDL_ILLEGAL_RAISES, decl);
+            ErrorHandler::error1(EIDL_ILLEGAL_RAISES, decl);
             decl = 0;
         }
         delete $1;
@@ -1199,7 +1199,7 @@ interface_inheritance_decl:
         AstInterface * ifc = static_cast< AstInterface * >(
             idlc()->scopes()->top());
         if (ifc->usesSingleInheritance()) {
-            idlc()->error()->error0(EIDL_MIXED_INHERITANCE);
+            ErrorHandler::error0(EIDL_MIXED_INHERITANCE);
         } else {
             addInheritedInterface(
                 ifc, *$4, $1,
@@ -1249,7 +1249,7 @@ constants_export :
         {
             if ( !$9->coerce($3) )
             {
-                idlc()->error()->coercionError($9, $3);
+                ErrorHandler::coercionError($9, $3);
             } else
             {
                 pConstant = new AstConstant($3, $9, *$5, pScope);
@@ -1440,7 +1440,7 @@ positive_int_expr :
         $1->evaluate(EK_const);
         if ( !$1->coerce(ET_ulong) )
         {
-            idlc()->error()->coercionError($1, ET_ulong);
+            ErrorHandler::coercionError($1, ET_ulong);
             delete $1;
             $$ = NULL;
         }
@@ -1462,7 +1462,7 @@ const_type :
          * to a scalar constant type
          */
         if ( pScope && (type = pScope->lookupByName(*$1)) ) {
-            if (!idlc()->error()->checkPublished(type))
+            if (!ErrorHandler::checkPublished(type))
             {
                 type = 0;
                 $$ = ET_none;
@@ -1556,14 +1556,14 @@ property :
 
         if ( pScope->getScopeNodeType() == NT_singleton )
         {
-            idlc()->error()->error0(EIDL_ILLEGAL_ADD);
+            ErrorHandler::error0(EIDL_ILLEGAL_ADD);
         } else
         {
             if ( ($1 & AF_ATTRIBUTE) == AF_ATTRIBUTE )
-                idlc()->error()->flagError(EIDL_WRONGATTRIBUTEKEYWORD, AF_ATTRIBUTE);
+                ErrorHandler::flagError(EIDL_WRONGATTRIBUTEKEYWORD, AF_ATTRIBUTE);
 
             if ( ($1 & AF_PROPERTY) != AF_PROPERTY )
-                idlc()->error()->flagError(EIDL_MISSINGATTRIBUTEKEYWORD, AF_PROPERTY);
+                ErrorHandler::flagError(EIDL_MISSINGATTRIBUTEKEYWORD, AF_PROPERTY);
 
             /*
              * Create nodes representing attributes and add them to the
@@ -1628,7 +1628,7 @@ service_export :
 
         if ( pScope->getScopeNodeType() == NT_singleton )
         {
-            idlc()->error()->error0(EIDL_ILLEGAL_ADD);
+            ErrorHandler::error0(EIDL_ILLEGAL_ADD);
         } else
         {
             /*
@@ -1649,7 +1649,7 @@ service_export :
                          * interfaces if they are optional
                          */
                         bool bOptional = (($1 & AF_OPTIONAL) == AF_OPTIONAL);
-                        if ( idlc()->error()->checkPublished(pDecl, bOptional) )
+                        if ( ErrorHandler::checkPublished(pDecl, bOptional) )
                         {
                             pIMember = new AstInterfaceMember(
                                 $1, (AstInterface*)pDecl, *iter, pScope);
@@ -1657,8 +1657,7 @@ service_export :
                         }
                     } else
                     {
-                        idlc()->error()->
-                            lookupError(EIDL_INTERFACEMEMBER_LOOKUP, *iter, scopeAsDecl(pScope));
+                        ErrorHandler::lookupError(EIDL_INTERFACEMEMBER_LOOKUP, *iter, scopeAsDecl(pScope));
                     }
                     iter++;
                 }
@@ -1691,8 +1690,8 @@ service_export :
                 if ( pDecl && (pDecl->getNodeType() == NT_service) )
                 {
                     if ( static_cast< AstService * >(pDecl)->isSingleInterfaceBasedService() || (pScope->getScopeNodeType() == NT_singleton && pScope->nMembers() > 0) )
-                        idlc()->error()->error0(EIDL_ILLEGAL_ADD);
-                    else if ( idlc()->error()->checkPublished(pDecl) )
+                        ErrorHandler::error0(EIDL_ILLEGAL_ADD);
+                    else if ( ErrorHandler::checkPublished(pDecl) )
                     {
                         pSMember = new AstServiceMember(
                             $1, (AstService*)pDecl, *iter, pScope);
@@ -1700,8 +1699,7 @@ service_export :
                     }
                 } else
                 {
-                    idlc()->error()->
-                        lookupError(EIDL_SERVICEMEMBER_LOOKUP, *iter, scopeAsDecl(pScope));
+                    ErrorHandler::lookupError(EIDL_SERVICEMEMBER_LOOKUP, *iter, scopeAsDecl(pScope));
                 }
                 iter++;
             }
@@ -1720,7 +1718,7 @@ service_export :
 
         if ( pScope->getScopeNodeType() == NT_singleton )
         {
-            idlc()->error()->error0(EIDL_ILLEGAL_ADD);
+            ErrorHandler::error0(EIDL_ILLEGAL_ADD);
         } else
         {
             /*
@@ -1741,8 +1739,7 @@ service_export :
                         pScope->addDeclaration(pObserves);
                     } else
                     {
-                        idlc()->error()->
-                            lookupError(EIDL_INTERFACEMEMBER_LOOKUP, *iter, scopeAsDecl(pScope));
+                        ErrorHandler::lookupError(EIDL_INTERFACEMEMBER_LOOKUP, *iter, scopeAsDecl(pScope));
                     }
                     iter++;
                 }
@@ -1762,7 +1759,7 @@ service_export :
 
         if ( pScope->getScopeNodeType() == NT_singleton )
         {
-            idlc()->error()->error0(EIDL_ILLEGAL_ADD);
+            ErrorHandler::error0(EIDL_ILLEGAL_ADD);
         } else
         {
             /*
@@ -1783,8 +1780,7 @@ service_export :
                         pScope->addDeclaration(pNeeds);
                     } else
                     {
-                        idlc()->error()->
-                            lookupError(EIDL_SERVICEMEMBER_LOOKUP, *iter, scopeAsDecl(pScope));
+                        ErrorHandler::lookupError(EIDL_SERVICEMEMBER_LOOKUP, *iter, scopeAsDecl(pScope));
                     }
                     iter++;
                 }
@@ -1810,7 +1806,7 @@ service_interface_header :
     {
         idlc()->setParseState(PS_ServiceIFHeadSeen);
         if ( (AF_OPTIONAL != $1) && ( AF_INVALID != $1) )
-            idlc()->error()->flagError(EIDL_OPTIONALEXPECTED, $1);
+            ErrorHandler::flagError(EIDL_OPTIONALEXPECTED, $1);
         $$ = $1;
     }
     ;
@@ -1826,7 +1822,7 @@ service_service_header :
     {
         idlc()->setParseState(PS_ServiceSHeadSeen);
         if ( (AF_OPTIONAL != $1) && ( AF_INVALID != $1) )
-            idlc()->error()->flagError(EIDL_OPTIONALEXPECTED, $1);
+            ErrorHandler::flagError(EIDL_OPTIONALEXPECTED, $1);
         $$ = $1;
     }
     ;
@@ -1877,11 +1873,11 @@ service_interface_dfn:
             // skip the scope pushed by service_dcl
         AstDeclaration * decl = scope->lookupByName(*$2);
         if (decl != 0 && resolveTypedefs(decl)->getNodeType() == NT_interface) {
-            if (idlc()->error()->checkPublished(decl)) {
+            if (ErrorHandler::checkPublished(decl)) {
                 idlc()->scopes()->top()->addDeclaration(decl);
             }
         } else {
-            idlc()->error()->lookupError(
+            ErrorHandler::lookupError(
                 EIDL_INTERFACEMEMBER_LOOKUP, *$2, scopeAsDecl(scope));
         }
         delete $2;
@@ -1934,7 +1930,7 @@ constructor:
         if (static_cast< AstService * >(idlc()->scopes()->top())->
             checkLastConstructor())
         {
-            idlc()->error()->error0(EIDL_SIMILAR_CONSTRUCTORS);
+            ErrorHandler::error0(EIDL_SIMILAR_CONSTRUCTORS);
         }
     }
     ';'
@@ -1986,11 +1982,11 @@ singleton_interface_dfn:
             // skip the scope (needlessly) pushed by singleton_dcl
         AstDeclaration * decl = scope->lookupByName(*$2);
         if (decl != 0 && resolveTypedefs(decl)->getNodeType() == NT_interface) {
-            if (idlc()->error()->checkPublished(decl)) {
+            if (ErrorHandler::checkPublished(decl)) {
                 idlc()->scopes()->top()->addDeclaration(decl);
             }
         } else {
-            idlc()->error()->lookupError(
+            ErrorHandler::lookupError(
                 EIDL_INTERFACEMEMBER_LOOKUP, *$2, scopeAsDecl(scope));
         }
         delete $2;
@@ -2033,7 +2029,7 @@ type_declarator :
     {
         idlc()->setParseState(PS_TypeSpecSeen);
         if ($1 != 0 && $1->getNodeType() == NT_instantiated_struct) {
-            idlc()->error()->error0(EIDL_INSTANTIATED_STRUCT_TYPE_TYPEDEF);
+            ErrorHandler::error0(EIDL_INSTANTIATED_STRUCT_TYPE_TYPEDEF);
         }
     }
     at_least_one_declarator
@@ -2265,7 +2261,7 @@ type_arg:
     simple_type_spec
     {
         if ($1 != 0 && static_cast< AstType const * >($1)->isUnsigned()) {
-            idlc()->error()->error0(EIDL_UNSIGNED_TYPE_ARGUMENT);
+            ErrorHandler::error0(EIDL_UNSIGNED_TYPE_ARGUMENT);
         }
         $$ = $1;
     }
@@ -2500,7 +2496,7 @@ structure_header :
         // type bases, which might also cause problems in language bindings, are
         // already rejected on a syntactic level.)
         if ($5 != 0 && $6 != 0) {
-            idlc()->error()->error0(EIDL_STRUCT_TYPE_TEMPLATE_WITH_BASE);
+            ErrorHandler::error0(EIDL_STRUCT_TYPE_TEMPLATE_WITH_BASE);
         }
 
         $$ = new FeInheritanceHeader(NT_struct, $3, $6, $5);
@@ -2524,7 +2520,7 @@ type_params:
     | type_params ',' identifier
     {
         if (std::find($1->begin(), $1->end(), *$3) != $1->end()) {
-            idlc()->error()->error0(EIDL_IDENTICAL_TYPE_PARAMETERS);
+            ErrorHandler::error0(EIDL_IDENTICAL_TYPE_PARAMETERS);
         }
         $1->push_back(*$3);
         delete $3;
@@ -2617,7 +2613,7 @@ type_or_parameter:
         } else {
             decl = createNamedType($1, $2);
             if (scope != 0 && includes(decl, scopeAsDecl(scope))) {
-                idlc()->error()->error1(
+                ErrorHandler::error1(
                     EIDL_RECURSIVE_TYPE, scopeAsDecl(scope));
                 decl = 0;
             }
@@ -2718,7 +2714,7 @@ enumerator :
                                            pExpr, *$1, pScope);
             }
             if ( pEnum->checkValue(pEnumVal->getConstValue()) )
-                idlc()->error()->error1(EIDL_EVAL_ERROR, pEnum);
+                ErrorHandler::error1(EIDL_EVAL_ERROR, pEnum);
 
             pScope->addDeclaration(pEnumVal);
         }
@@ -2746,12 +2742,12 @@ enumerator :
                                                $3, *$1, pScope);
                 }
                 if ( pEnum->checkValue(pEnumVal->getConstValue()) )
-                    idlc()->error()->error1(EIDL_EVAL_ERROR, pEnum);
+                    ErrorHandler::error1(EIDL_EVAL_ERROR, pEnum);
 
                 pScope->addDeclaration(pEnumVal);
             } else
             {
-                idlc()->error()->coercionError($3, ET_long);
+                ErrorHandler::coercionError($3, ET_long);
                 delete $3;
             }
         }
@@ -2773,7 +2769,7 @@ identifier:
  */
 void yyerror(char const *errmsg)
 {
-    idlc()->error()->syntaxError(idlc()->getParseState(), idlc()->getLineNumber(), errmsg);
+    ErrorHandler::syntaxError(idlc()->getParseState(), idlc()->getLineNumber(), errmsg);
     idlc()->setParseState(PS_NoState);
 }
 

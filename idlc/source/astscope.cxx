@@ -48,7 +48,7 @@ AstDeclaration* AstScope::addDeclaration(AstDeclaration* pDecl)
     {
         if ( pDecl->hasAncestor(pDeclaration) )
         {
-            idlc()->error()->error2(EIDL_REDEF_SCOPE, pDecl, pDeclaration);
+            ErrorHandler::error2(EIDL_REDEF_SCOPE, pDecl, pDeclaration);
             return NULL;
         }
         if ( (pDecl->getNodeType() == pDeclaration->getNodeType()) &&
@@ -75,7 +75,7 @@ AstDeclaration* AstScope::addDeclaration(AstDeclaration* pDecl)
             return pDecl;
         }
 
-        idlc()->error()->error2(EIDL_REDEF_SCOPE, scopeAsDecl(this), pDecl);
+        ErrorHandler::error2(EIDL_REDEF_SCOPE, scopeAsDecl(this), pDecl);
         return NULL;
     }
 
@@ -221,7 +221,7 @@ AstDeclaration* AstScope::lookupInInherited(const OString& scopedName) const
     // Can't look in an interface which was not yet defined
     if ( !pInterface->getScope() )
     {
-        idlc()->error()->forwardLookupError(pInterface, scopedName);
+        ErrorHandler::forwardLookupError(pInterface, scopedName);
     }
 
     // OK, loop through inherited interfaces. Stop when you find it

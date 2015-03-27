@@ -175,7 +175,7 @@ private:
 
     void setupDataPath();
     void setup();
-    void teardown();
+    static void teardown();
 };
 
 namespace {

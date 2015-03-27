@@ -55,7 +55,7 @@ AstType const * FeDeclarator::compose(AstDeclaration const * pDecl)
     }
     if ( !pDecl->isType() )
     {
-        idlc()->error()->noTypeError(pDecl);
+        ErrorHandler::noTypeError(pDecl);
         return NULL;
     }
     pType = static_cast<const AstType*>(pDecl);
@@ -92,20 +92,20 @@ void FeInheritanceHeader::initializeInherits(OString* pInherits)
                      || static_cast< AstInterface const * >(
                          resolved)->isDefined()) )
             {
-                if ( idlc()->error()->checkPublished( pDecl ) )
+                if ( ErrorHandler::checkPublished( pDecl ) )
                 {
                     m_pInherits = pDecl;
                 }
             }
             else
             {
-                idlc()->error()->inheritanceError(
+                ErrorHandler::inheritanceError(
                     getNodeType(), getName(), pDecl);
             }
         }
         else
         {
-            idlc()->error()->lookupError(*pInherits);
+            ErrorHandler::lookupError(*pInherits);
         }
     }
 }

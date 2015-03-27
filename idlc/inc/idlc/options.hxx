@@ -47,7 +47,7 @@ public:
 
     bool initOptions(std::vector< std::string > & rArgs)
         throw(IllegalArgument);
-    bool badOption(char const * reason, std::string const & rArg)
+    static bool badOption(char const * reason, std::string const & rArg)
         throw(IllegalArgument);
     bool setOption(char const * option, std::string const & rArg);
 

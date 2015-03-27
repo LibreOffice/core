@@ -1046,7 +1046,7 @@ private:
     virtual sal_uInt32 checkInheritedMemberCount() const SAL_OVERRIDE
     { return BaseOffset(m_typeMgr, entity_).get(); }
 
-    void dumpExceptionSpecification(
+    static void dumpExceptionSpecification(
         FileStream & out, std::vector< OUString > const & exceptions,
         bool runtimeException);
 

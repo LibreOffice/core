@@ -134,11 +134,11 @@ private:
         rtl::OUString const & name,
         rtl::Reference< unoidl::Entity > const & entity);
 
-    css::uno::Any getEnumMember(
+    static css::uno::Any getEnumMember(
         rtl::Reference< unoidl::EnumTypeEntity > const & entity,
         rtl::OUString const & member);
 
-    css::uno::Any getConstant(
+    static css::uno::Any getConstant(
         rtl::OUString const & constantGroupName,
         rtl::Reference< unoidl::ConstantGroupEntity > const & entity,
         rtl::OUString const & member);

@@ -1088,7 +1088,7 @@ AstExprValue* AstExpression::eval_symbol(EvalKind ek)
      */
     if (m_pSymbolicName == NULL)
     {
-        idlc()->error()->evalError(this);
+        ErrorHandler::evalError(this);
         return NULL;
     }
     /*
@@ -1098,7 +1098,7 @@ AstExprValue* AstExpression::eval_symbol(EvalKind ek)
         pScope = idlc()->scopes()->topNonNull();
     if ( !pScope )
     {
-        idlc()->error()->lookupError(*m_pSymbolicName);
+        ErrorHandler::lookupError(*m_pSymbolicName);
         return NULL;
     }
     /*
@@ -1107,7 +1107,7 @@ AstExprValue* AstExpression::eval_symbol(EvalKind ek)
     pDecl = pScope->lookupByName(*m_pSymbolicName);
     if (pDecl == NULL)
     {
-        idlc()->error()->lookupError(*m_pSymbolicName);
+        ErrorHandler::lookupError(*m_pSymbolicName);
         return NULL;
     }
     /*
@@ -1116,10 +1116,10 @@ AstExprValue* AstExpression::eval_symbol(EvalKind ek)
     if (pDecl->getNodeType() != NT_const &&
         pDecl->getNodeType() != NT_enum_val)
     {
-        idlc()->error()->constantExpected(pDecl, *m_pSymbolicName);
+        ErrorHandler::constantExpected(pDecl, *m_pSymbolicName);
         return NULL;
     }
-    if (!idlc()->error()->checkPublished(pDecl))
+    if (!ErrorHandler::checkPublished(pDecl))
     {
         return NULL;
     }

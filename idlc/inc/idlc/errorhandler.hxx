@@ -90,41 +90,41 @@ class ErrorHandler
 {
 public:
     // Report errors with varying numbers of arguments
-    void    error0(ErrorCode e);
-    void    error1(ErrorCode e, AstDeclaration const * d);
-    void    error2(
+    static void error0(ErrorCode e);
+    static void error1(ErrorCode e, AstDeclaration const * d);
+    static void error2(
         ErrorCode e, AstDeclaration const * d1, AstDeclaration const * d2);
-    void    error3(ErrorCode e, AstDeclaration* d1, AstDeclaration* d2, AstDeclaration* d3);
+    static void error3(ErrorCode e, AstDeclaration* d1, AstDeclaration* d2, AstDeclaration* d3);
 
     // Warning
-    void    warning0(WarningCode e, const sal_Char* warningmsg);
+    static void warning0(WarningCode e, const sal_Char* warningmsg);
 
     // Report a syntax error in IDL input
-    void    syntaxError(ParseState state, sal_Int32 lineNumber, const sal_Char* errmsg);
+    static void syntaxError(ParseState state, sal_Int32 lineNumber, const sal_Char* errmsg);
 
     // Report an unsuccessful coercion attempt
-    void    coercionError(AstExpression *pExpr, ExprType et);
+    static void coercionError(AstExpression *pExpr, ExprType et);
 
     // Report a failed name lookup attempt
-    void    lookupError(const OString& n);
+    static void lookupError(const OString& n);
     // Report a failed name lookup attempt
-    void    lookupError(ErrorCode e, const OString& n, AstDeclaration* pScope);
+    static void lookupError(ErrorCode e, const OString& n, AstDeclaration* pScope);
 
 
     // Report a type error
-    void    noTypeError(AstDeclaration const * pDecl);
+    static void noTypeError(AstDeclaration const * pDecl);
 
-    void    inheritanceError(NodeType nodeType, const OString* name, AstDeclaration* pDecl);
+    static void inheritanceError(NodeType nodeType, const OString* name, AstDeclaration* pDecl);
 
-    void    flagError(ErrorCode e, sal_uInt32 flag);
+    static void flagError(ErrorCode e, sal_uInt32 flag);
 
-    void    forwardLookupError(const AstDeclaration* pForward, const OString& name);
+    static void forwardLookupError(const AstDeclaration* pForward, const OString& name);
 
-    void    constantExpected(AstDeclaration* pDecl, const OString& name);
+    static void constantExpected(AstDeclaration* pDecl, const OString& name);
 
-    void    evalError(AstExpression* pExpr);
+    static void evalError(AstExpression* pExpr);
 
-    bool checkPublished(AstDeclaration const * decl, bool bOptiional=false);
+    static bool checkPublished(AstDeclaration const * decl, bool bOptiional=false);
 };
 
 #endif // INCLUDED_IDLC_INC_IDLC_ERRORHANDLER_HXX
