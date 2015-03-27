@@ -202,21 +202,6 @@
 #define SRV_SDB_ROWSET "com.sun.star.sdb.RowSet"
 #define SRV_SDB_CONNECTION "com.sun.star.sdb.Connection"
 
-extern "C" {
-
-void SAL_CALL createRegistryInfo_CLibxml2XFormsExtension();
-void SAL_CALL createRegistryInfo_FormOperations();
-void SAL_CALL createRegistryInfo_ODatabaseForm();
-void SAL_CALL createRegistryInfo_OFilterControl();
-void SAL_CALL createRegistryInfo_ONavigationBarControl();
-void SAL_CALL createRegistryInfo_ONavigationBarModel();
-void SAL_CALL createRegistryInfo_ORichTextControl();
-void SAL_CALL createRegistryInfo_ORichTextModel();
-void SAL_CALL createRegistryInfo_OScrollBarModel();
-void SAL_CALL createRegistryInfo_OSpinButtonModel();
-
-}
-
 #endif // INCLUDED_FORMS_SOURCE_INC_SERVICES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

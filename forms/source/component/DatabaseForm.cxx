@@ -119,12 +119,6 @@ using namespace ::com::sun::star::data;
 using namespace ::com::sun::star::util;
 
 
-extern "C" void SAL_CALL createRegistryInfo_ODatabaseForm()
-{
-    static ::frm::OMultiInstanceAutoRegistration< ::frm::ODatabaseForm > aAutoRegistration;
-}
-
-
 namespace frm
 {
 

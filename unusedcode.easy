@@ -196,9 +196,6 @@ dbaui::OQueryViewSwitch::setReadOnly(bool)
 dbaui::OTableRowView::SetUpdatable(bool)
 dbaui::OTableWindowAccess::isEditable() const
 dp_registry::backend::RegisteredDb::getEntry(rtl::OUString const&)
-frm::ORichTextModel::Create(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&)
-frm::OScrollBarModel::Create(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&)
-frm::OSpinButtonModel::Create(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&)
 oglcanvas::CanvasHelper::flush() const
 oglcanvas::TextLayout::draw(com::sun::star::rendering::ViewState const&, com::sun::star::rendering::RenderState const&, com::sun::star::uno::Reference<com::sun::star::rendering::XGraphicDevice> const&) const
 oox::drawingml::TextListStyle::dump() const
