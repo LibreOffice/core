@@ -248,6 +248,16 @@ bool SvxTableController::onKeyInput(const KeyEvent& rKEvt, vcl::Window* pWindow 
 
 bool SvxTableController::onMouseButtonDown(const MouseEvent& rMEvt, vcl::Window* pWindow )
 {
+    if (mxTableObj->GetModel()->isTiledRendering() && !pWindow)
+    {
+        // Tiled rendering: get the window that has the disabled map mode.
+        if (OutputDevice* pOutputDevice = mpView->GetFirstOutputDevice())
+        {
+            if (pOutputDevice->GetOutDevType() == OUTDEV_WINDOW)
+                pWindow = static_cast<vcl::Window*>(pOutputDevice);
+        }
+    }
+
     if( !pWindow || !checkTableObject() )
         return false;
 
@@ -291,6 +301,28 @@ bool SvxTableController::onMouseButtonDown(const MouseEvent& rMEvt, vcl::Window*
             {
                 mbLeftButtonDown = false;
             }
+        }
+    }
+
+    if (mxTableObj->GetModel()->isTiledRendering() && rMEvt.GetClicks() == 2 && rMEvt.IsLeft() && eHit == SDRTABLEHIT_CELLTEXTAREA)
+    {
+        bool bEmptyOutliner = false;
+        if (Outliner* pOutliner = mpView->GetTextEditOutliner())
+        {
+            if (pOutliner->GetParagraphCount() == 1)
+            {
+                if (Paragraph* pParagraph = pOutliner->GetParagraph(0))
+                    bEmptyOutliner = pOutliner->GetText(pParagraph).isEmpty();
+            }
+        }
+        if (bEmptyOutliner)
+        {
+            // Tiled rendering: a left double-click in an empty cell: select it.
+            StartSelection(maMouseDownPos);
+            setSelectedCells(maMouseDownPos, maMouseDownPos);
+            // Update graphic selection, should be hidden now.
+            mpView->AdjustMarkHdl();
+            return true;
         }
     }
 
