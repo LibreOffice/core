@@ -261,7 +261,7 @@ private:
                     mbIsCalculatingInitialLayoutSize:1,
                     mbInitialLayoutDone:1;
 
-    VclPtr<vcl::Window>  mpDialogParent;
+    vcl::Window *mpDialogParent; // deliberately not a VclPtr
 
     SAL_DLLPRIVATE void    ImplInitDockingWindowData();
     SAL_DLLPRIVATE void setPosSizeOnContainee(Size aSize, Window &rBox);

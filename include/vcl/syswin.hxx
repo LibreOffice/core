@@ -149,7 +149,7 @@ private:
     Idle            maLayoutIdle;
 protected:
     bool            mbIsDefferedInit;
-    VclPtr<vcl::Window> mpDialogParent;
+    vcl::Window    *mpDialogParent; // deliberately not a VclPtr
 public:
     using Window::ImplIsInTaskPaneList;
     SAL_DLLPRIVATE bool ImplIsInTaskPaneList( vcl::Window* pWin );

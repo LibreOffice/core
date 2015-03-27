@@ -488,7 +488,7 @@ OUString VclBuilderContainer::getUIRootDir()
 //do the init. Find the real parent stashed in mpDialogParent.
 void Dialog::doDeferredInit(WinBits nBits)
 {
-    VclPtr<vcl::Window> pParent = mpDialogParent;
+    vcl::Window *pParent = mpDialogParent;
     mpDialogParent = NULL;
     ImplInit(pParent, nBits);
     mbIsDefferedInit = false;
