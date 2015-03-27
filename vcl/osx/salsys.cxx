@@ -73,7 +73,7 @@ OUString AquaSalSystem::GetDisplayScreenName( unsigned int nScreen )
    return aRet;
 }
 
-static NSString* getStandardString( int nButtonId, bool bUseResources )
+static NSString* getStandardString( StandardButtonType nButtonId, bool bUseResources )
 {
     OUString aText;
     if( bUseResources )
@@ -84,16 +84,19 @@ static NSString* getStandardString( int nButtonId, bool bUseResources )
     {
         switch( nButtonId )
         {
-        case BUTTON_OK:         aText = "OK";break;
-        case BUTTON_ABORT:      aText = "Abort";break;
-        case BUTTON_CANCEL:     aText = "Cancel";break;
-        case BUTTON_RETRY:      aText = "Retry";break;
-        case BUTTON_YES:        aText = "Yes";break;
-        case BUTTON_NO :        aText = "No";break;
+        case StandardButtonType::OK:         aText = "OK";break;
+        case StandardButtonType::Abort:      aText = "Abort";break;
+        case StandardButtonType::Cancel:     aText = "Cancel";break;
+        case StandardButtonType::Retry:      aText = "Retry";break;
+        case StandardButtonType::Yes:        aText = "Yes";break;
+        case StandardButtonType::No:         aText = "No";break;
+        default: break;
         }
     }
     return aText.isEmpty() ? nil : CreateNSString( aText);
 }
+
+#define NO_BUTTON static_cast<StandardButtonType>(-1)
 
 int AquaSalSystem::ShowNativeMessageBox( const OUString& rTitle,
                                         const OUString& rMessage,
@@ -107,22 +110,22 @@ int AquaSalSystem::ShowNativeMessageBox( const OUString& rTitle,
     {
         int nCombination;
         int nDefaultButton;
-        int nTextIds[3];
+        StandardButtonType nTextIds[3];
     } aButtonIds[] =
     {
-        { SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_OK, SALSYSTEM_SHOWNATIVEMSGBOX_BTN_OK, { BUTTON_OK, -1, -1 } },
-        { SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_OK_CANCEL, SALSYSTEM_SHOWNATIVEMSGBOX_BTN_OK, { BUTTON_OK, BUTTON_CANCEL, -1 } },
-        { SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_OK_CANCEL, SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL, { BUTTON_CANCEL, BUTTON_OK, -1 } },
-        { SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_ABORT_RETRY_IGNORE, SALSYSTEM_SHOWNATIVEMSGBOX_BTN_ABORT, { BUTTON_ABORT, BUTTON_IGNORE, BUTTON_RETRY } },
-        { SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_ABORT_RETRY_IGNORE, SALSYSTEM_SHOWNATIVEMSGBOX_BTN_RETRY, { BUTTON_RETRY, BUTTON_IGNORE, BUTTON_ABORT } },
-        { SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_ABORT_RETRY_IGNORE, SALSYSTEM_SHOWNATIVEMSGBOX_BTN_IGNORE, { BUTTON_IGNORE, BUTTON_IGNORE, BUTTON_ABORT } },
-        { SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_YES_NO_CANCEL, SALSYSTEM_SHOWNATIVEMSGBOX_BTN_YES, { BUTTON_YES, BUTTON_NO, BUTTON_CANCEL } },
-        { SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_YES_NO_CANCEL, SALSYSTEM_SHOWNATIVEMSGBOX_BTN_NO, { BUTTON_NO, BUTTON_YES, BUTTON_CANCEL } },
-        { SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_YES_NO_CANCEL, SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL, { BUTTON_CANCEL, BUTTON_YES, BUTTON_NO } },
-        { SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_YES_NO, SALSYSTEM_SHOWNATIVEMSGBOX_BTN_YES, { BUTTON_YES, BUTTON_NO, -1 } },
-        { SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_YES_NO, SALSYSTEM_SHOWNATIVEMSGBOX_BTN_NO, { BUTTON_NO, BUTTON_YES, -1 } },
-        { SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_RETRY_CANCEL, SALSYSTEM_SHOWNATIVEMSGBOX_BTN_RETRY, { BUTTON_RETRY, BUTTON_CANCEL, -1 } },
-        { SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_RETRY_CANCEL, SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL, { BUTTON_CANCEL, BUTTON_RETRY, -1 } }
+        { SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_OK, SALSYSTEM_SHOWNATIVEMSGBOX_BTN_OK, { StandardButtonType::OK, NO_BUTTON, NO_BUTTON } },
+        { SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_OK_CANCEL, SALSYSTEM_SHOWNATIVEMSGBOX_BTN_OK, { StandardButtonType::OK, StandardButtonType::Cancel, NO_BUTTON } },
+        { SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_OK_CANCEL, SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL, { StandardButtonType::Cancel, StandardButtonType::OK, NO_BUTTON } },
+        { SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_ABORT_RETRY_IGNORE, SALSYSTEM_SHOWNATIVEMSGBOX_BTN_ABORT, { StandardButtonType::Abort, StandardButtonType::Ignore, StandardButtonType::Retry } },
+        { SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_ABORT_RETRY_IGNORE, SALSYSTEM_SHOWNATIVEMSGBOX_BTN_RETRY, { StandardButtonType::Retry, StandardButtonType::Ignore, StandardButtonType::Abort } },
+        { SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_ABORT_RETRY_IGNORE, SALSYSTEM_SHOWNATIVEMSGBOX_BTN_IGNORE, { StandardButtonType::Ignore, StandardButtonType::Ignore, StandardButtonType::Abort } },
+        { SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_YES_NO_CANCEL, SALSYSTEM_SHOWNATIVEMSGBOX_BTN_YES, { StandardButtonType::Yes, StandardButtonType::No, StandardButtonType::Cancel } },
+        { SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_YES_NO_CANCEL, SALSYSTEM_SHOWNATIVEMSGBOX_BTN_NO, { StandardButtonType::No, StandardButtonType::Yes, StandardButtonType::Cancel } },
+        { SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_YES_NO_CANCEL, SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL, { StandardButtonType::Cancel, StandardButtonType::Yes, StandardButtonType::No } },
+        { SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_YES_NO, SALSYSTEM_SHOWNATIVEMSGBOX_BTN_YES, { StandardButtonType::Yes, StandardButtonType::No, NO_BUTTON } },
+        { SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_YES_NO, SALSYSTEM_SHOWNATIVEMSGBOX_BTN_NO, { StandardButtonType::No, StandardButtonType::Yes, NO_BUTTON } },
+        { SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_RETRY_CANCEL, SALSYSTEM_SHOWNATIVEMSGBOX_BTN_RETRY, { StandardButtonType::Retry, StandardButtonType::Cancel, NO_BUTTON } },
+        { SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_RETRY_CANCEL, SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL, { StandardButtonType::Cancel, StandardButtonType::Retry, NO_BUTTON } }
     };
 
     NSString* pDefText = nil;
@@ -168,16 +171,17 @@ int AquaSalSystem::ShowNativeMessageBox( const OUString& rTitle,
     int nRet = 0;
     if( nC < sizeof(aButtonIds)/sizeof(aButtonIds[0]) && nResult >= 1 && nResult <= 3 )
     {
-        int nPressed = aButtonIds[nC].nTextIds[nResult-1];
+        StandardButtonType nPressed = aButtonIds[nC].nTextIds[nResult-1];
         switch( nPressed )
         {
-        case BUTTON_NO:     nRet = SALSYSTEM_SHOWNATIVEMSGBOX_BTN_NO; break;
-        case BUTTON_YES:    nRet = SALSYSTEM_SHOWNATIVEMSGBOX_BTN_YES; break;
-        case BUTTON_OK:     nRet = SALSYSTEM_SHOWNATIVEMSGBOX_BTN_OK; break;
-        case BUTTON_CANCEL: nRet = SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL; break;
-        case BUTTON_ABORT:  nRet = SALSYSTEM_SHOWNATIVEMSGBOX_BTN_ABORT; break;
-        case BUTTON_RETRY:  nRet = SALSYSTEM_SHOWNATIVEMSGBOX_BTN_RETRY; break;
-        case BUTTON_IGNORE: nRet = SALSYSTEM_SHOWNATIVEMSGBOX_BTN_IGNORE; break;
+        case StandardButtonType::No:     nRet = SALSYSTEM_SHOWNATIVEMSGBOX_BTN_NO; break;
+        case StandardButtonType::Yes:    nRet = SALSYSTEM_SHOWNATIVEMSGBOX_BTN_YES; break;
+        case StandardButtonType::OK:     nRet = SALSYSTEM_SHOWNATIVEMSGBOX_BTN_OK; break;
+        case StandardButtonType::Cancel: nRet = SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL; break;
+        case StandardButtonType::Abort:  nRet = SALSYSTEM_SHOWNATIVEMSGBOX_BTN_ABORT; break;
+        case StandardButtonType::Retry:  nRet = SALSYSTEM_SHOWNATIVEMSGBOX_BTN_RETRY; break;
+        case StandardButtonType::Ignore: nRet = SALSYSTEM_SHOWNATIVEMSGBOX_BTN_IGNORE; break;
+        default: break;
         }
     }
 
