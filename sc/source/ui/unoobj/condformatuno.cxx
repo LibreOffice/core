@@ -323,9 +323,14 @@ void ScCondFormatObj::addEntry(const uno::Reference<sheet::XConditionEntry>& /*x
 {
 }
 
-void ScCondFormatObj::removeByIndex(const sal_Int32 /*nIndex*/)
+void ScCondFormatObj::removeByIndex(const sal_Int32 nIndex)
     throw(uno::RuntimeException, std::exception)
 {
+    SolarMutexGuard aGuard;
+    if (getCoreObject()->size() >= size_t(nIndex))
+        throw lang::IllegalArgumentException();
+
+    getCoreObject()->RemoveEntry(nIndex);
 }
 
 uno::Type ScCondFormatObj::getElementType()

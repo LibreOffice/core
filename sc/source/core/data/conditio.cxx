@@ -1853,6 +1853,15 @@ void ScConditionalFormat::AddEntry( ScFormatEntry* pNew )
     pNew->SetParent(this);
 }
 
+void ScConditionalFormat::RemoveEntry(size_t n)
+{
+    if (n < maEntries.size())
+    {
+        maEntries.erase(maEntries.begin() + n);
+        DoRepaint(NULL);
+    }
+}
+
 bool ScConditionalFormat::IsEmpty() const
 {
     return maEntries.empty();
