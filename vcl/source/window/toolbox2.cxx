@@ -867,7 +867,7 @@ void ToolBox::SetPageScroll( bool b )
 
 sal_uInt16 ToolBox::GetItemCount() const
 {
-    return (sal_uInt16)mpData->m_aItems.size();
+    return mpData ? (sal_uInt16)mpData->m_aItems.size() : 0;
 }
 
 ToolBoxItemType ToolBox::GetItemType( sal_uInt16 nPos ) const
@@ -877,11 +877,13 @@ ToolBoxItemType ToolBox::GetItemType( sal_uInt16 nPos ) const
 
 sal_uInt16 ToolBox::GetItemPos( sal_uInt16 nItemId ) const
 {
-    int nCount = mpData->m_aItems.size();
-    for( int nPos = 0; nPos < nCount; nPos++ )
-        if( mpData->m_aItems[nPos].mnId == nItemId )
-            return (sal_uInt16)nPos;
-
+    if (mpData)
+    {
+        int nCount = mpData->m_aItems.size();
+        for( int nPos = 0; nPos < nCount; nPos++ )
+            if( mpData->m_aItems[nPos].mnId == nItemId )
+                return (sal_uInt16)nPos;
+    }
     return TOOLBOX_ITEM_NOTFOUND;
 }
 
