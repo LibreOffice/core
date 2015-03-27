@@ -2493,7 +2493,7 @@ void Dxf::finalizeImport()
 void Dxf::fillToItemSet( SfxItemSet& rSet ) const
 {
     if (mxFont)
-        mxFont->fillToItemSet(rSet, FONT_PROPTYPE_CELL);
+        mxFont->fillToItemSet(rSet, false);
     if (mxNumFmt)
         mxNumFmt->fillToItemSet(rSet);
     if (mxAlignment)
@@ -3134,7 +3134,7 @@ OUString StylesBuffer::createDxfStyle( sal_Int32 nDxfId ) const
 void StylesBuffer::writeFontToItemSet( SfxItemSet& rItemSet, sal_Int32 nFontId, bool bSkipPoolDefs ) const
 {
     if( Font* pFont = maFonts.get( nFontId ).get() )
-        pFont->fillToItemSet( rItemSet, FONT_PROPTYPE_CELL, bSkipPoolDefs );
+        pFont->fillToItemSet( rItemSet, false, bSkipPoolDefs );
 }
 
 void StylesBuffer::writeFontToPropertyMap( PropertyMap& rPropMap, sal_Int32 nFontId ) const
