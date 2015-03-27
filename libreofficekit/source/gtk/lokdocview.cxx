@@ -128,6 +128,10 @@ struct LOKDocView_Impl
     static gboolean signalMotion(GtkWidget* pEventBox, GdkEventButton* pEvent, LOKDocView* pDocView);
     /// Implementation of motion event handler, invoked by signalMotion().
     gboolean signalMotionImpl(GdkEventButton* pEvent);
+    /// Receives an expose event.
+    static gboolean renderOverlay(GtkWidget* pWidget, GdkEventExpose* pEvent, LOKDocView* pDocView);
+    /// Implementation of expose event handler (renders cursor and selection overlay), invoked by renderOverlay().
+    gboolean renderOverlayImpl(GtkWidget* pEventBox);
 };
 
 LOKDocView_Impl::LOKDocView_Impl(LOKDocView* pDocView)
@@ -446,9 +450,95 @@ gboolean LOKDocView_Impl::signalMotionImpl(GdkEventButton* pEvent)
     return FALSE;
 }
 
+gboolean LOKDocView_Impl::renderOverlay(GtkWidget* pEventBox, GdkEventExpose* /*pEvent*/, LOKDocView* pDocView)
+{
+    return pDocView->m_pImpl->renderOverlayImpl(pEventBox);
+}
+
+static gboolean lcl_isEmptyRectangle(GdkRectangle* pRectangle);
+static void lcl_renderHandle(cairo_t* pCairo, GdkRectangle* pCursor, cairo_surface_t* pHandle,
+                             GdkRectangle* pRectangle, LOKDocView* pDocView);
+static void lcl_renderGraphicHandle(cairo_t* pCairo, GdkRectangle* pSelection, cairo_surface_t* pHandle, GdkRectangle* pGraphicHandleRects, LOKDocView* pDocView);
+
+gboolean LOKDocView_Impl::renderOverlayImpl(GtkWidget* pWidget)
+{
+#if GTK_CHECK_VERSION(2,14,0) // we need gtk_widget_get_window()
+    cairo_t* pCairo = gdk_cairo_create(gtk_widget_get_window(pWidget));
+
+    if (m_bEdit && m_bCursorVisible && m_bCursorOverlayVisible && !lcl_isEmptyRectangle(&m_aVisibleCursor))
+    {
+        if (m_aVisibleCursor.width < 30)
+            // Set a minimal width if it would be 0.
+            m_aVisibleCursor.width = 30;
+
+        cairo_set_source_rgb(pCairo, 0, 0, 0);
+        cairo_rectangle(pCairo,
+                        twipToPixel(m_aVisibleCursor.x),
+                        twipToPixel(m_aVisibleCursor.y),
+                        twipToPixel(m_aVisibleCursor.width),
+                        twipToPixel(m_aVisibleCursor.height));
+        cairo_fill(pCairo);
+    }
+
+    if (m_bEdit && m_bCursorVisible && !lcl_isEmptyRectangle(&m_aVisibleCursor) && !m_pTextSelectionRectangles)
+    {
+        // Have a cursor, but no selection: we need the middle handle.
+        if (!m_pHandleMiddle)
+            m_pHandleMiddle = cairo_image_surface_create_from_png(CURSOR_HANDLE_DIR "handle_middle.png");
+        lcl_renderHandle(pCairo, &m_aVisibleCursor, m_pHandleMiddle, &m_aHandleMiddleRect, m_pDocView);
+    }
+
+    if (m_pTextSelectionRectangles)
+    {
+        for (GList* i = m_pTextSelectionRectangles; i != NULL; i = i->next)
+        {
+            GdkRectangle* pRectangle = static_cast<GdkRectangle*>(i->data);
+            // Blue with 75% transparency.
+            cairo_set_source_rgba(pCairo, ((double)0x43)/255, ((double)0xac)/255, ((double)0xe8)/255, 0.25);
+            cairo_rectangle(pCairo,
+                            twipToPixel(pRectangle->x),
+                            twipToPixel(pRectangle->y),
+                            twipToPixel(pRectangle->width),
+                            twipToPixel(pRectangle->height));
+            cairo_fill(pCairo);
+        }
+
+        // Handles
+        if (!lcl_isEmptyRectangle(&m_aTextSelectionStart))
+        {
+            // Have a start position: we need a start handle.
+            if (!m_pHandleStart)
+                m_pHandleStart = cairo_image_surface_create_from_png(CURSOR_HANDLE_DIR "handle_start.png");
+            lcl_renderHandle(pCairo, &m_aTextSelectionStart,
+                             m_pHandleStart, &m_aHandleStartRect,
+                             m_pDocView);
+        }
+        if (!lcl_isEmptyRectangle(&m_aTextSelectionEnd))
+        {
+            // Have a start position: we need an end handle.
+            if (!m_pHandleEnd)
+                m_pHandleEnd = cairo_image_surface_create_from_png(CURSOR_HANDLE_DIR "handle_end.png");
+            lcl_renderHandle(pCairo, &m_aTextSelectionEnd,
+                             m_pHandleEnd, &m_aHandleEndRect,
+                             m_pDocView);
+        }
+    }
+
+    if (!lcl_isEmptyRectangle(&m_aGraphicSelection))
+    {
+        if (!m_pGraphicHandle)
+            m_pGraphicHandle = cairo_image_surface_create_from_png(CURSOR_HANDLE_DIR "handle_graphic.png");
+        lcl_renderGraphicHandle(pCairo, &m_aGraphicSelection, m_pGraphicHandle, m_aGraphicHandleRects, m_pDocView);
+    }
+
+    cairo_destroy(pCairo);
+#endif
+    return FALSE;
+}
+
+
 static void lok_docview_class_init( gpointer );
 static void lok_docview_init( GTypeInstance *, gpointer );
-static gboolean renderOverlay(GtkWidget* pWidget, GdkEventExpose* pEvent, gpointer pData);
 
 SAL_DLLPUBLIC_EXPORT guint lok_docview_get_type()
 {
@@ -519,8 +609,7 @@ static void lok_docview_init( GTypeInstance* pInstance, gpointer )
     gtk_widget_show( pDocView->m_pImpl->m_pEventBox );
 
     gtk_signal_connect(GTK_OBJECT(pDocView), "destroy", GTK_SIGNAL_FUNC(LOKDocView_Impl::destroy), 0);
-    g_signal_connect_after(pDocView->m_pImpl->m_pEventBox, "expose-event",
-                           G_CALLBACK(renderOverlay), pDocView);
+    g_signal_connect_after(pDocView->m_pImpl->m_pEventBox, "expose-event", G_CALLBACK(LOKDocView_Impl::renderOverlay), pDocView);
 }
 
 SAL_DLLPUBLIC_EXPORT GtkWidget* lok_docview_new( LibreOfficeKit* pOffice )
@@ -647,85 +736,6 @@ static void lcl_renderGraphicHandle(cairo_t* pCairo, GdkRectangle* pSelection, c
         cairo_paint(pCairo);
         cairo_restore(pCairo);
     }
-}
-
-static gboolean renderOverlay(GtkWidget* pWidget, GdkEventExpose* /*pEvent*/, gpointer pData)
-{
-#if GTK_CHECK_VERSION(2,14,0) // we need gtk_widget_get_window()
-    LOKDocView* pDocView = LOK_DOCVIEW(pData);
-    cairo_t* pCairo = gdk_cairo_create(gtk_widget_get_window(pWidget));
-
-    if (pDocView->m_pImpl->m_bEdit && pDocView->m_pImpl->m_bCursorVisible && pDocView->m_pImpl->m_bCursorOverlayVisible && !lcl_isEmptyRectangle(&pDocView->m_pImpl->m_aVisibleCursor))
-    {
-        if (pDocView->m_pImpl->m_aVisibleCursor.width < 30)
-            // Set a minimal width if it would be 0.
-            pDocView->m_pImpl->m_aVisibleCursor.width = 30;
-
-        cairo_set_source_rgb(pCairo, 0, 0, 0);
-        cairo_rectangle(pCairo,
-                        pDocView->m_pImpl->twipToPixel(pDocView->m_pImpl->m_aVisibleCursor.x),
-                        pDocView->m_pImpl->twipToPixel(pDocView->m_pImpl->m_aVisibleCursor.y),
-                        pDocView->m_pImpl->twipToPixel(pDocView->m_pImpl->m_aVisibleCursor.width),
-                        pDocView->m_pImpl->twipToPixel(pDocView->m_pImpl->m_aVisibleCursor.height));
-        cairo_fill(pCairo);
-    }
-
-    if (pDocView->m_pImpl->m_bEdit && pDocView->m_pImpl->m_bCursorVisible && !lcl_isEmptyRectangle(&pDocView->m_pImpl->m_aVisibleCursor) && !pDocView->m_pImpl->m_pTextSelectionRectangles)
-    {
-        // Have a cursor, but no selection: we need the middle handle.
-        if (!pDocView->m_pImpl->m_pHandleMiddle)
-            pDocView->m_pImpl->m_pHandleMiddle = cairo_image_surface_create_from_png(CURSOR_HANDLE_DIR "handle_middle.png");
-        lcl_renderHandle(pCairo, &pDocView->m_pImpl->m_aVisibleCursor,
-                         pDocView->m_pImpl->m_pHandleMiddle, &pDocView->m_pImpl->m_aHandleMiddleRect,
-                         pDocView);
-    }
-
-    if (pDocView->m_pImpl->m_pTextSelectionRectangles)
-    {
-        for (GList* i = pDocView->m_pImpl->m_pTextSelectionRectangles; i != NULL; i = i->next)
-        {
-            GdkRectangle* pRectangle = static_cast<GdkRectangle*>(i->data);
-            // Blue with 75% transparency.
-            cairo_set_source_rgba(pCairo, ((double)0x43)/255, ((double)0xac)/255, ((double)0xe8)/255, 0.25);
-            cairo_rectangle(pCairo,
-                            pDocView->m_pImpl->twipToPixel(pRectangle->x),
-                            pDocView->m_pImpl->twipToPixel(pRectangle->y),
-                            pDocView->m_pImpl->twipToPixel(pRectangle->width),
-                            pDocView->m_pImpl->twipToPixel(pRectangle->height));
-            cairo_fill(pCairo);
-        }
-
-        // Handles
-        if (!lcl_isEmptyRectangle(&pDocView->m_pImpl->m_aTextSelectionStart))
-        {
-            // Have a start position: we need a start handle.
-            if (!pDocView->m_pImpl->m_pHandleStart)
-                pDocView->m_pImpl->m_pHandleStart = cairo_image_surface_create_from_png(CURSOR_HANDLE_DIR "handle_start.png");
-            lcl_renderHandle(pCairo, &pDocView->m_pImpl->m_aTextSelectionStart,
-                             pDocView->m_pImpl->m_pHandleStart, &pDocView->m_pImpl->m_aHandleStartRect,
-                             pDocView);
-        }
-        if (!lcl_isEmptyRectangle(&pDocView->m_pImpl->m_aTextSelectionEnd))
-        {
-            // Have a start position: we need an end handle.
-            if (!pDocView->m_pImpl->m_pHandleEnd)
-                pDocView->m_pImpl->m_pHandleEnd = cairo_image_surface_create_from_png(CURSOR_HANDLE_DIR "handle_end.png");
-            lcl_renderHandle(pCairo, &pDocView->m_pImpl->m_aTextSelectionEnd,
-                             pDocView->m_pImpl->m_pHandleEnd, &pDocView->m_pImpl->m_aHandleEndRect,
-                             pDocView);
-        }
-    }
-
-    if (!lcl_isEmptyRectangle(&pDocView->m_pImpl->m_aGraphicSelection))
-    {
-        if (!pDocView->m_pImpl->m_pGraphicHandle)
-            pDocView->m_pImpl->m_pGraphicHandle = cairo_image_surface_create_from_png(CURSOR_HANDLE_DIR "handle_graphic.png");
-        lcl_renderGraphicHandle(pCairo, &pDocView->m_pImpl->m_aGraphicSelection, pDocView->m_pImpl->m_pGraphicHandle, pDocView->m_pImpl->m_aGraphicHandleRects, pDocView);
-    }
-
-    cairo_destroy(pCairo);
-#endif
-    return FALSE;
 }
 
 void renderDocument(LOKDocView* pDocView, GdkRectangle* pPartial)
