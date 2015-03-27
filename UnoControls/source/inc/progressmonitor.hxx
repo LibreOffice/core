@@ -403,8 +403,8 @@ private:
 
     #ifdef DBG_UTIL
 
-    bool impl_debug_checkParameter( const OUString& sTopic, const OUString& sText, bool bbeforeProgress );    // addText, updateText
-    bool impl_debug_checkParameter( const OUString& rTopic, bool bbeforeProgress );                              // removeText
+    static bool impl_debug_checkParameter( const OUString& sTopic, const OUString& sText, bool bbeforeProgress );    // addText, updateText
+    static bool impl_debug_checkParameter( const OUString& rTopic, bool bbeforeProgress );                              // removeText
 
     #endif
 

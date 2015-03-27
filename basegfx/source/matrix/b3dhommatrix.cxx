@@ -24,7 +24,8 @@
 
 namespace basegfx
 {
-    class Impl3DHomMatrix : public ::basegfx::internal::ImplHomMatrixTemplate< 4 >
+    typedef ::basegfx::internal::ImplHomMatrixTemplate< 4 >Impl3DHomMatrix_Base;
+    class Impl3DHomMatrix : public Impl3DHomMatrix_Base
     {
     };
 
@@ -82,7 +83,7 @@ namespace basegfx
     bool B3DHomMatrix::invert()
     {
         Impl3DHomMatrix aWork(*mpImpl);
-        sal_uInt16* pIndex = new sal_uInt16[mpImpl->getEdgeLength()];
+        sal_uInt16* pIndex = new sal_uInt16[Impl3DHomMatrix_Base::getEdgeLength()];
         sal_Int16 nParity;
 
         if(aWork.ludcmp(pIndex, nParity))

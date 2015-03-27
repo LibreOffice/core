@@ -484,7 +484,7 @@ namespace basegfx
             }
 
             /// True when sweep line hits our own active edge
-            bool metOwnEdge(const SweepLineEvent& rEvent,
+            static bool metOwnEdge(const SweepLineEvent& rEvent,
                             ActiveEdge&           rActiveEdge)
             {
                 const bool bHitOwnEdge=&rEvent.getRect() == &rActiveEdge.getRect();

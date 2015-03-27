@@ -373,7 +373,7 @@ namespace
             damaged( basegfx::B2IBox( rDamagePoint, aEnd ) );
         }
 
-        boost::shared_ptr<BitmapRenderer> getCompatibleBitmap( const BitmapDeviceSharedPtr& bmp ) const
+        static boost::shared_ptr<BitmapRenderer> getCompatibleBitmap( const BitmapDeviceSharedPtr& bmp )
         {
             return boost::dynamic_pointer_cast< BitmapRenderer >( bmp );
         }
@@ -405,7 +405,7 @@ namespace
             return boost::dynamic_pointer_cast<mask_bitmap_type>( bmp ).get() != NULL;
         }
 
-        boost::shared_ptr<alphamask_bitmap_type> getCompatibleAlphaMask( const BitmapDeviceSharedPtr& bmp ) const
+        static boost::shared_ptr<alphamask_bitmap_type> getCompatibleAlphaMask( const BitmapDeviceSharedPtr& bmp )
         {
             return boost::dynamic_pointer_cast<alphamask_bitmap_type>( bmp );
         }

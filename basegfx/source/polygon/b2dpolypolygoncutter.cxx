@@ -137,7 +137,7 @@ namespace basegfx
                 }
             }
 
-            bool impLeftOfEdges(const B2DVector& rVecA, const B2DVector& rVecB, const B2DVector& rTest)
+            static bool impLeftOfEdges(const B2DVector& rVecA, const B2DVector& rVecB, const B2DVector& rTest)
             {
                 // tests if rTest is left of both directed line segments along the line -rVecA, rVecB. Test is
                 // with border.

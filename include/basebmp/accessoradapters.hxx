@@ -208,9 +208,9 @@ public:
 
 
 
-    typename SetterFunctor::result_type setter(
+    static typename SetterFunctor::result_type setter(
         typename SetterFunctor::first_argument_type v1,
-        argument_type                               v2 ) const
+        argument_type                               v2 )
     {
         return maSetterFunctor(v1,v2);
     }
@@ -343,10 +343,10 @@ public:
 
 
 
-    typename Functor::result_type setter(
+    static typename Functor::result_type setter(
         typename Functor::first_argument_type  v1,
         typename Functor::second_argument_type v2,
-        argument_type                          v3 ) const
+        argument_type                          v3 )
     {
         return maSetterFunctor(v1,v2,v3);
     }

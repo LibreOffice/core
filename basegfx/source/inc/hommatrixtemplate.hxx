@@ -141,7 +141,7 @@ namespace basegfx
                 }
             }
 
-            sal_uInt16 getEdgeLength() const { return RowSize; }
+            static sal_uInt16 getEdgeLength() { return RowSize; }
 
             double get(sal_uInt16 nRow, sal_uInt16 nColumn) const
             {
