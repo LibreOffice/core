@@ -24,6 +24,7 @@
 #include <oox/helper/refmap.hxx>
 #include <oox/helper/refvector.hxx>
 #include "workbookhelper.hxx"
+#include "documentimport.hxx"
 
 namespace com { namespace sun { namespace star {
     namespace i18n { class XCharacterClassification; }
@@ -65,6 +66,8 @@ public:
 
     /** Returns the number of original sheets contained in the workbook. */
     sal_Int32           getWorksheetCount() const;
+    /** Returns the number of all sheets, workbook + dummy ones (pivot table cache records ) */
+    sal_Int32           getAllSheetCount() const;
     /** Returns the OOXML relation identifier of the specified worksheet. */
     OUString     getWorksheetRelId( sal_Int32 nWorksheet ) const;
 
