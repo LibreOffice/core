@@ -3553,11 +3553,11 @@
           <value>0</value>
         </prop>
         <prop oor:name="StartCenterBackgroundColor" oor:type="xs:int" oor:nillable="false">
-          <!--Default 7514196 = TDF Green-->
+          <!--Default 6045132 = Collabora purple-->
           <info>
             <desc>Specifies the background color of the start center.</desc>
           </info>
-          <value>7514196</value>
+          <value>6045132</value>
         </prop>
       </group>
     </group>
