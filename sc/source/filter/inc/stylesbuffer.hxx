@@ -258,7 +258,7 @@ public:
         needs an rich text cell for this attribute. */
     bool                needsRichTextFormat() const;
 
-    void                fillToItemSet( SfxItemSet& rItemSet, FontPropertyType ePropType, bool bSkipPoolDefs = false ) const;
+    void                fillToItemSet( SfxItemSet& rItemSet, bool bEditEngineText, bool bSkipPoolDefs = false ) const;
     /** Writes all font attributes to the passed property map. */
     void                writeToPropertyMap(
                             PropertyMap& rPropMap,

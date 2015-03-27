@@ -121,7 +121,7 @@ void RichStringPortion::convert( ScEditEngineDefaulter& rEE, ESelection& rSelect
     const Font* pFontToUse = mxFont.get() ? mxFont.get() : lclNeedsRichTextFormat( pFont ) ? pFont : NULL;
 
     if ( pFontToUse )
-        pFontToUse->fillToItemSet( aItemSet, FONT_PROPTYPE_TEXT );
+        pFontToUse->fillToItemSet( aItemSet, true );
 
     // #TODO need to manually adjust nEndPos ( and nEndPara ) to cater for any paragraphs
     sal_Int32 nLastParaLoc = -1;
