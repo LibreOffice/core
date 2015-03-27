@@ -328,7 +328,8 @@ public:
     // and false else; if true was returned the event should
     // be swallowed
     bool Dispatch( const XEvent* pEvent );
-    void grabPointer( bool bGrab, bool bOwnerEvents = false );
+    void grabPointer(bool bGrab, bool bOwnerEvents = false);
+    void grabKeyboard(bool bGrab);
 
     GtkSalDisplay*  getDisplay();
     GdkDisplay*     getGdkDisplay();

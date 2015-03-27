@@ -1864,7 +1864,13 @@ void GtkSalFrame::Show( bool bVisible, bool bNoActivate )
             {
                 m_nFloats++;
                 if( ! getDisplay()->GetCaptureFrame() && m_nFloats == 1 )
-                    grabPointer( true, true );
+                {
+                    grabPointer(true, true);
+                    GtkSalFrame *pKeyboardFrame = this;
+                    while (pKeyboardFrame->m_pParent)
+                        pKeyboardFrame = pKeyboardFrame->m_pParent;
+                    pKeyboardFrame->grabKeyboard(true);
+                }
                 // #i44068# reset parent's IM context
                 if( m_pParent )
                     m_pParent->EndExtTextInput(0);
@@ -1878,7 +1884,13 @@ void GtkSalFrame::Show( bool bVisible, bool bNoActivate )
             {
                 m_nFloats--;
                 if( ! getDisplay()->GetCaptureFrame() && m_nFloats == 0)
-                    grabPointer( false );
+                {
+                    GtkSalFrame *pKeyboardFrame = this;
+                    while (pKeyboardFrame->m_pParent)
+                        pKeyboardFrame = pKeyboardFrame->m_pParent;
+                    pKeyboardFrame->grabKeyboard(false);
+                    grabPointer(false);
+                }
             }
             gtk_widget_hide( m_pWindow );
             if( m_pIMHandler )
@@ -2762,12 +2774,35 @@ void GtkSalFrame::grabPointer( bool bGrab, bool bOwnerEvents )
         {
             // Two GdkDisplays may be open
             if( !pEnv || !*pEnv )
+            {
                 gdk_display_pointer_ungrab( getGdkDisplay(), GDK_CURRENT_TIME);
+            }
         }
     }
 #else
     (void)bGrab; (void) bOwnerEvents;
     //FIXME: No GrabPointer implementation for gtk3 ...
+#endif
+}
+
+void GtkSalFrame::grabKeyboard( bool bGrab )
+{
+#if !GTK_CHECK_VERSION(3,0,0)
+    if( m_pWindow )
+    {
+        if( bGrab )
+        {
+            gdk_keyboard_grab(widget_get_window(m_pWindow), true,
+                              GDK_CURRENT_TIME);
+        }
+        else
+        {
+            gdk_keyboard_ungrab(GDK_CURRENT_TIME);
+        }
+    }
+#else
+    (void)bGrab;
+    //FIXME: No GrabKeyboard implementation for gtk3 ...
 #endif
 }
 
