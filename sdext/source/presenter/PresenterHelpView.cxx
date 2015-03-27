@@ -89,7 +89,7 @@ namespace {
         const OUString msText;
         ::boost::shared_ptr<vector<LineDescriptor> > mpLineDescriptors;
 
-        void SplitText (const OUString& rsText, vector<OUString>& rTextParts);
+        static void SplitText (const OUString& rsText, vector<OUString>& rTextParts);
         void FormatText (
             const vector<OUString>& rTextParts,
             const css::uno::Reference<css::rendering::XCanvasFont>& rxFont,

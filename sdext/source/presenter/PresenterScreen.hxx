@@ -106,7 +106,7 @@ public:
 
     virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
 
-    bool isPresenterScreenEnabled(
+    static bool isPresenterScreenEnabled(
         const css::uno::Reference<css::uno::XComponentContext>& rxContext);
     /** Make the presenter screen visible.
     */
@@ -224,7 +224,7 @@ private:
     sal_Int32 GetPresenterScreenNumber (
                 const css::uno::Reference<css::presentation::XPresentation2>& rxPresentation) const;
 
-    sal_Int32 GetPresenterScreenFromScreen( sal_Int32 nPresentationScreen ) const;
+    static sal_Int32 GetPresenterScreenFromScreen( sal_Int32 nPresentationScreen );
 
     /** Create a resource id for the full screen background pane so that it
         is displayed on another screen than the full screen presentation.

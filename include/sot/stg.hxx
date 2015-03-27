@@ -141,7 +141,7 @@ protected:
                     OLEStorageBase( StgIo*, StgDirEntry*, StreamMode& );
                     ~OLEStorageBase();
     bool            Validate_Impl( bool=false ) const;
-    bool            ValidateMode_Impl( StreamMode, StgDirEntry* p = NULL ) const ;
+    static bool     ValidateMode_Impl( StreamMode, StgDirEntry* p = NULL );
     const SvStream* GetSvStream_Impl() const;
 public:
 };

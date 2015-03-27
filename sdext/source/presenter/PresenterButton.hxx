@@ -154,7 +154,7 @@ private:
         const SharedBitmapDescriptor& rpRight);
     css::geometry::IntegerSize2D CalculateButtonSize (void);
     void Invalidate (void);
-    css::uno::Reference<css::rendering::XBitmap> GetBitmap (
+    static css::uno::Reference<css::rendering::XBitmap> GetBitmap (
         const SharedBitmapDescriptor& mpIcon,
         const PresenterBitmapDescriptor::Mode eMode);
     void SetupButtonBitmaps (void);

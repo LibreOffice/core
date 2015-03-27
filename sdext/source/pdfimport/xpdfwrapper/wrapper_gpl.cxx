@@ -131,7 +131,7 @@ int main(int argc, char **argv)
 
     // tell the receiver early - needed for proper progress calculation
     const int nPages = rDoc.isOk()? rDoc.getNumPages(): 0;
-    aOutDev.setPageNum(nPages);
+    pdfi::PDFOutDev::setPageNum(nPages);
 
     // virtual resolution of the PDF OutputDev in dpi
     static const int PDFI_OUTDEV_RESOLUTION = 7200;

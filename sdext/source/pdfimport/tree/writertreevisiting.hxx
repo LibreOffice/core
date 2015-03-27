@@ -56,7 +56,7 @@ namespace pdfi
         StyleContainer& m_rStyleContainer;
         PDFIProcessor&  m_rProcessor;
 
-        void setFirstOnPage( ParagraphElement&    rElem,
+        static void setFirstOnPage( ParagraphElement&    rElem,
                              StyleContainer&      rStyles,
                              const OUString& rMasterPageName );
 
@@ -83,7 +83,7 @@ namespace pdfi
     {
     private:
         EmitContext& m_rEmitContext ;
-        void fillFrameProps( DrawElement&       rElem,
+        static void fillFrameProps( DrawElement&       rElem,
                              PropertyMap&       rProps,
                              const EmitContext& rEmitContext );
 

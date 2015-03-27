@@ -162,7 +162,7 @@ class Parser
     void                 readLineJoin();
     void                 readTransformation();
     rendering::ARGBColor readColor();
-    void                 parseFontFamilyName( FontAttributes& aResult );
+    static void          parseFontFamilyName( FontAttributes& aResult );
     void                 readFont();
     uno::Sequence<beans::PropertyValue> readImageImpl();
 
@@ -171,10 +171,10 @@ class Parser
     void                 readLink();
     void                 readMaskedImage();
     void                 readSoftMaskedImage();
-    sal_Int32 parseFontCheckForString(const sal_Unicode* pCopy, sal_Int32 nCopyLen,
+    static sal_Int32 parseFontCheckForString(const sal_Unicode* pCopy, sal_Int32 nCopyLen,
                                       const char* pAttrib, sal_Int32 nAttribLen,
                                       FontAttributes& rResult, bool bItalic, bool bBold);
-    sal_Int32 parseFontRemoveSuffix(const sal_Unicode* pCopy, sal_Int32 nCopyLen,
+    static sal_Int32 parseFontRemoveSuffix(const sal_Unicode* pCopy, sal_Int32 nCopyLen,
                               const char* pAttrib, sal_Int32 nAttribLen);
 
 public:

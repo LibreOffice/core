@@ -80,28 +80,25 @@ namespace pdfi
     class DrawXmlEmitter : public ElementTreeVisitor
     {
     private:
-    css::uno::Reference< css::lang::XMultiServiceFactory > xFactory;
-    css::uno::Reference< css::uno::XComponentContext > xCtx;
-    css::uno::Reference< css::i18n::XBreakIterator > mxBreakIter;
-    css::uno::Reference< css::i18n::XCharacterClassification > mxCharClass;
-
-        PDFIProcessor&  m_rProcessor;
+        css::uno::Reference< css::lang::XMultiServiceFactory > xFactory;
+        css::uno::Reference< css::uno::XComponentContext > xCtx;
+        css::uno::Reference< css::i18n::XBreakIterator > mxBreakIter;
+        css::uno::Reference< css::i18n::XCharacterClassification > mxCharClass;
 
         EmitContext& m_rEmitContext ;
         /// writes Impress doc when false
         const bool   m_bWriteDrawDocument;
 
-        void fillFrameProps( DrawElement&       rElem,
+        static void fillFrameProps( DrawElement&       rElem,
                              PropertyMap&       rProps,
                              const EmitContext& rEmitContext,
                              bool               bWasTransformed = false
                              );
 
     public:
-    const css::uno::Reference< css::i18n::XCharacterClassification >& GetCharacterClassification();
+        const css::uno::Reference< css::i18n::XCharacterClassification >& GetCharacterClassification();
         enum DocType{ DRAW_DOC, IMPRESS_DOC };
-        explicit DrawXmlEmitter(EmitContext& rEmitContext, DocType eDocType, PDFIProcessor& rProc ) :
-            m_rProcessor( rProc ),
+        explicit DrawXmlEmitter(EmitContext& rEmitContext, DocType eDocType) :
             m_rEmitContext(rEmitContext),
             m_bWriteDrawDocument(eDocType==DRAW_DOC)
         {}

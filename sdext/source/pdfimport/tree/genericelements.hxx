@@ -295,29 +295,29 @@ namespace pdfi
         ElementFactory() {}
         virtual ~ElementFactory();
 
-        HyperlinkElement* createHyperlinkElement( Element* pParent, const OUString& rURI )
+        static HyperlinkElement* createHyperlinkElement( Element* pParent, const OUString& rURI )
         { return new HyperlinkElement( pParent, rURI ); }
 
-        TextElement* createTextElement( Element* pParent, sal_Int32 nGCId, sal_Int32 nFontId )
+        static TextElement* createTextElement( Element* pParent, sal_Int32 nGCId, sal_Int32 nFontId )
         { return new TextElement( pParent, nGCId, nFontId ); }
-        ParagraphElement* createParagraphElement( Element* pParent )
+        static ParagraphElement* createParagraphElement( Element* pParent )
         { return new ParagraphElement( pParent ); }
 
-        FrameElement* createFrameElement( Element* pParent, sal_Int32 nGCId )
+        static FrameElement* createFrameElement( Element* pParent, sal_Int32 nGCId )
         { return new FrameElement( pParent, nGCId ); }
-        PolyPolyElement*
+        static PolyPolyElement*
             createPolyPolyElement( Element* pParent,
                                    sal_Int32 nGCId,
                                    const basegfx::B2DPolyPolygon& rPolyPoly,
                                    sal_Int8 nAction)
         { return new PolyPolyElement( pParent, nGCId, rPolyPoly, nAction ); }
-        ImageElement* createImageElement( Element* pParent, sal_Int32 nGCId, ImageId nImage )
+        static ImageElement* createImageElement( Element* pParent, sal_Int32 nGCId, ImageId nImage )
         { return new ImageElement( pParent, nGCId, nImage ); }
 
-        PageElement* createPageElement( Element* pParent,
+        static PageElement* createPageElement( Element* pParent,
                                                 sal_Int32 nPageNr )
         { return new PageElement( pParent, nPageNr ); }
-        DocumentElement* createDocumentElement()
+        static DocumentElement* createDocumentElement()
         { return new DocumentElement(); }
     };
 }

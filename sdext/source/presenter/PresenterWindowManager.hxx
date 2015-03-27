@@ -195,7 +195,7 @@ private:
     css::uno::Reference<css::rendering::XPolyPolygon2D> CreateClipPolyPolygon (void) const;
     void ToTop ();
 
-    void UpdateWindowList (void);
+    static void UpdateWindowList (void);
     bool ChildNeedsRepaint (
         const css::uno::Reference<css::drawing::framework::XPane>& rxPane) const;
 

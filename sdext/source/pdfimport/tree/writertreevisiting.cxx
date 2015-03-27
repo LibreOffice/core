@@ -623,7 +623,7 @@ void WriterXmlOptimizer::visit( PageElement& elem, const std::list< Element* >::
         // move element to current paragraph
         if( ! pCurPara ) // new paragraph, insert one
         {
-            pCurPara = m_rProcessor.getElementFactory()->createParagraphElement( NULL );
+            pCurPara = ElementFactory::createParagraphElement( NULL );
             // set parent
             pCurPara->Parent = &elem;
             //insert new paragraph before current element
@@ -1208,7 +1208,7 @@ void WriterXmlFinalizer::visit( PageElement& elem, const std::list< Element* >::
     // no paragraph or other elements before the first paragraph
     if( ! pFirstPara )
     {
-        pFirstPara = m_rProcessor.getElementFactory()->createParagraphElement( NULL );
+        pFirstPara = ElementFactory::createParagraphElement( NULL );
         pFirstPara->Parent = &elem;
         elem.Children.push_front( pFirstPara );
     }

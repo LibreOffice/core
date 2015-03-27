@@ -115,7 +115,7 @@ namespace {
     private:
         bool mbOn;
         rtl::Reference<PresenterController> mpPresenterController;
-        bool IsActive (const ::rtl::Reference<PresenterWindowManager>& rpWindowManager) const;
+        static bool IsActive (const ::rtl::Reference<PresenterWindowManager>& rpWindowManager);
     };
 
     class SetSlideSorterCommand : public Command
@@ -651,7 +651,7 @@ Any SetNotesViewCommand::GetState (void) const
 }
 
 bool SetNotesViewCommand::IsActive (
-    const ::rtl::Reference<PresenterWindowManager>& rpWindowManager) const
+    const ::rtl::Reference<PresenterWindowManager>& rpWindowManager)
 {
     return rpWindowManager->GetViewMode() == PresenterWindowManager::VM_Notes;
 }

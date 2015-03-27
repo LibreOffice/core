@@ -58,7 +58,7 @@ namespace pdfi
     m_xContext(xContext),
     prevCharWidth(0),
     m_pElFactory( new ElementFactory() ),
-    m_pDocument( m_pElFactory->createDocumentElement() ),
+    m_pDocument( ElementFactory::createDocumentElement() ),
     m_pCurPage(0),
     m_pCurElement(0),
     m_nNextFontId( 1 ),
@@ -238,18 +238,18 @@ void PDFIProcessor::processGlyphLine()
         spaceDetectBoundary = avgGlyphWidth * 0.2;
     }
 
-    FrameElement* frame = m_pElFactory->createFrameElement(
+    FrameElement* frame = ElementFactory::createFrameElement(
         m_GlyphsList[0].getCurElement(),
         getGCId(m_GlyphsList[0].getGC()));
     frame->ZOrder = m_nNextZOrder++;
     frame->IsForText = true;
     frame->FontSize = getFont(m_GlyphsList[0].getGC().FontId).size;
-    ParagraphElement* para = m_pElFactory->createParagraphElement(frame);
+    ParagraphElement* para = ElementFactory::createParagraphElement(frame);
 
     for (size_t i = 0; i < m_GlyphsList.size(); i++)
     {
         bool prependSpace = false;
-        TextElement* text = m_pElFactory->createTextElement(
+        TextElement* text = ElementFactory::createTextElement(
             para,
             getGCId(m_GlyphsList[i].getGC()),
             m_GlyphsList[i].getGC().FontId);
@@ -348,8 +348,8 @@ void PDFIProcessor::setupImage(ImageId nImage)
     rGC.Transformation.decompose(aScale, aTranslation, fRotate, fShearX);
 
     const sal_Int32 nGCId = getGCId(rGC);
-    FrameElement* pFrame = m_pElFactory->createFrameElement( m_pCurElement, nGCId );
-    ImageElement* pImageElement = m_pElFactory->createImageElement( pFrame, nGCId, nImage );
+    FrameElement* pFrame = ElementFactory::createFrameElement( m_pCurElement, nGCId );
+    ImageElement* pImageElement = ElementFactory::createImageElement( pFrame, nGCId, nImage );
     pFrame->x = pImageElement->x = aTranslation.getX();
     pFrame->y = pImageElement->y = aTranslation.getY();
     pFrame->w = pImageElement->w = aScale.getX();
@@ -401,7 +401,7 @@ void PDFIProcessor::strokePath( const uno::Reference< rendering::XPolyPolygon2D 
     basegfx::B2DPolyPolygon aPoly=basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(rPath);
     aPoly.transform(getCurrentContext().Transformation);
 
-    PolyPolyElement* pPoly = m_pElFactory->createPolyPolyElement(
+    PolyPolyElement* pPoly = ElementFactory::createPolyPolyElement(
         m_pCurElement,
         getGCId(getCurrentContext()),
         aPoly,
@@ -415,7 +415,7 @@ void PDFIProcessor::fillPath( const uno::Reference< rendering::XPolyPolygon2D >&
     basegfx::B2DPolyPolygon aPoly=basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(rPath);
     aPoly.transform(getCurrentContext().Transformation);
 
-    PolyPolyElement* pPoly = m_pElFactory->createPolyPolyElement(
+    PolyPolyElement* pPoly = ElementFactory::createPolyPolyElement(
         m_pCurElement,
         getGCId(getCurrentContext()),
         aPoly,
@@ -429,7 +429,7 @@ void PDFIProcessor::eoFillPath( const uno::Reference< rendering::XPolyPolygon2D 
     basegfx::B2DPolyPolygon aPoly=basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(rPath);
     aPoly.transform(getCurrentContext().Transformation);
 
-    PolyPolyElement* pPoly = m_pElFactory->createPolyPolyElement(
+    PolyPolyElement* pPoly = ElementFactory::createPolyPolyElement(
         m_pCurElement,
         getGCId(getCurrentContext()),
         aPoly,
@@ -469,7 +469,7 @@ void PDFIProcessor::hyperLink( const geometry::RealRectangle2D& rBounds,
 {
     if( !rURI.isEmpty() )
     {
-        HyperlinkElement* pLink = m_pElFactory->createHyperlinkElement(
+        HyperlinkElement* pLink = ElementFactory::createHyperlinkElement(
             &m_pCurPage->Hyperlinks,
             rURI );
         pLink->x = rBounds.X1;
@@ -536,7 +536,7 @@ void PDFIProcessor::startPage( const geometry::RealSize2D& rSize )
             startIndicator( OUString( " " ) );
         m_xStatusIndicator->setValue( nNextPageNr );
     }
-    m_pCurPage = m_pElFactory->createPageElement(m_pDocument.get(), nNextPageNr);
+    m_pCurPage = ElementFactory::createPageElement(m_pDocument.get(), nNextPageNr);
     m_pCurElement = m_pCurPage;
     m_pCurPage->w = rSize.Width;
     m_pCurPage->h = rSize.Height;
@@ -572,7 +572,7 @@ void PDFIProcessor::emit( XmlEmitter&               rEmitter,
 
     EmitContext aContext( rEmitter, aStyles, m_aImages, *this, m_xStatusIndicator, m_xContext );
     ElementTreeVisitorSharedPtr aEmittingVisitor(
-        rVisitorFactory.createEmittingVisitor(aContext, *this));
+        rVisitorFactory.createEmittingVisitor(aContext));
 
     PropertyMap aProps;
     // document prolog
@@ -722,7 +722,7 @@ void PDFIProcessor::sortElements( Element* pEle, bool bDeep )
 }
 
 // helper method: get a mirrored string
-OUString PDFIProcessor::mirrorString( const OUString& i_rString ) const
+OUString PDFIProcessor::mirrorString( const OUString& i_rString )
 {
     const sal_Int32 nLen = i_rString.getLength();
     OUStringBuffer aMirror( nLen );

@@ -133,7 +133,7 @@ bool OLEStorageBase::Validate_Impl( bool bWrite ) const
     return false;
 }
 
-bool OLEStorageBase::ValidateMode_Impl( StreamMode m, StgDirEntry* p ) const
+bool OLEStorageBase::ValidateMode_Impl( StreamMode m, StgDirEntry* p )
 {
     if( m == INTERNAL_MODE )
         return true;

@@ -262,8 +262,8 @@ void PresenterSlidePreview::Paint (const awt::Rectangle& rBoundingBox)
     bool bTransition = false;
     if( mxCurrentSlide.is() )
     {
-        bCustomAnimation = mpPresenterController->HasCustomAnimation(mxCurrentSlide);
-        bTransition = mpPresenterController->HasTransition(mxCurrentSlide);
+        bCustomAnimation = PresenterController::HasCustomAnimation(mxCurrentSlide);
+        bTransition = PresenterController::HasTransition(mxCurrentSlide);
     }
 
     if ( ! mxPreview.is() && mxCurrentSlide.is())

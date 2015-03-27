@@ -125,7 +125,7 @@ void DrawXmlEmitter::visit( TextElement& elem, const std::list< Element* >::cons
     }
 
     if (isRTL)  // If so, reverse string
-        str = m_rProcessor.mirrorString( str );
+        str = PDFIProcessor::mirrorString( str );
 
     m_rEmitContext.rEmitter.beginTag( "text:span", aProps );
 
@@ -627,7 +627,7 @@ void DrawXmlOptimizer::visit( PageElement& elem, const std::list< Element* >::co
         // move element to current paragraph
        if (! pCurPara )  // new paragraph, insert one
        {
-            pCurPara = m_rProcessor.getElementFactory()->createParagraphElement( NULL );
+            pCurPara = ElementFactory::createParagraphElement( NULL );
             // set parent
             pCurPara->Parent = &elem;
             //insert new paragraph before current element

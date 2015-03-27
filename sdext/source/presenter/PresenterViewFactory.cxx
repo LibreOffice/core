@@ -493,7 +493,7 @@ Reference<XView> PresenterViewFactory::CreateSlideSorterView(
             mpPresenterController->GetPaneContainer()->FindPaneId(rxViewId->getAnchor()));
         if (pDescriptor.get() != NULL)
             pDescriptor->maActivator = ::boost::bind(
-                &PresenterSlideSorter::SetActiveState, pView.get(), _1);
+                &PresenterSlideSorter::SetActiveState, _1);
         xView = pView.get();
     }
     catch (RuntimeException&)

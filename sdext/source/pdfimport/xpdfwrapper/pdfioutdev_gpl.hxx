@@ -142,7 +142,7 @@ namespace pdfi
 
         int  parseFont( long long nNewId, GfxFont* pFont, GfxState* state ) const;
         void writeFontFile( GfxFont* gfxFont ) const;
-        void printPath( GfxPath* pPath ) const;
+        static void printPath( GfxPath* pPath );
 
     public:
         explicit PDFOutDev( PDFDoc* pDoc );
@@ -267,7 +267,7 @@ namespace pdfi
 #endif
                                         ) SAL_OVERRIDE;
 
-        void setPageNum( int nNumPages );
+        static void setPageNum( int nNumPages );
         void setSkipImages ( bool bSkipImages );
     };
 }

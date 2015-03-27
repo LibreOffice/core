@@ -219,13 +219,13 @@ private:
     sal_Int32 mnRightFrameSize;
     sal_Int32 mnBottomFrameSize;
 
-    void PaintBitmapOnce(
+    static void PaintBitmapOnce(
         const css::uno::Reference<css::rendering::XBitmap>& rxBitmap,
         const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
         const Reference<rendering::XPolyPolygon2D>& rxClip,
         const double nX,
         const double nY);
-    void PaintBitmapTiled(
+    static void PaintBitmapTiled(
         const css::uno::Reference<css::rendering::XBitmap>& rxBitmap,
         const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
         const geometry::RealRectangle2D& rClipBox,
@@ -911,8 +911,8 @@ void PresenterSlideSorter::PaintPreview (
     Reference<container::XIndexAccess> xIndexAccess(mxSlideShowController, UNO_QUERY);
     Reference<drawing::XDrawPage> xPage = Reference<drawing::XDrawPage>(
         xIndexAccess->getByIndex(nSlideIndex), UNO_QUERY);
-    bool bTransition = mpPresenterController->HasTransition(xPage);
-    bool bCustomAnimation = mpPresenterController->HasCustomAnimation(xPage);
+    bool bTransition = PresenterController::HasTransition(xPage);
+    bool bCustomAnimation = PresenterController::HasCustomAnimation(xPage);
 
     // Create clip rectangle as intersection of the current update area and
     // the bounding box of all previews.

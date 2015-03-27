@@ -219,7 +219,7 @@ void SAL_CALL PresenterScreenListener::notifyEvent( const css::document::EventOb
     if ( Event.EventName == "OnStartPresentation" )
     {
         mpPresenterScreen = new PresenterScreen(mxComponentContext, mxModel);
-        if(mpPresenterScreen->isPresenterScreenEnabled(mxComponentContext))
+        if(PresenterScreen::isPresenterScreenEnabled(mxComponentContext))
             mpPresenterScreen->InitializePresenterScreen();
     }
     else if ( Event.EventName == "OnEndPresentation" )
@@ -524,7 +524,7 @@ sal_Int32 PresenterScreen::GetPresenterScreenNumber (
     return GetPresenterScreenFromScreen(nScreenNumber);
 }
 
-sal_Int32 PresenterScreen::GetPresenterScreenFromScreen( sal_Int32 nPresentationScreen ) const
+sal_Int32 PresenterScreen::GetPresenterScreenFromScreen( sal_Int32 nPresentationScreen )
 {
     // Setup the resource id of the full screen background pane so that
     // it is displayed on another screen than the presentation.

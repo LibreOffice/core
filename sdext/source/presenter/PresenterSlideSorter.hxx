@@ -74,7 +74,7 @@ public:
 
     virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
 
-    void SetActiveState (const bool bIsActive);
+    static void SetActiveState (const bool bIsActive);
 
     // lang::XEventListener
 

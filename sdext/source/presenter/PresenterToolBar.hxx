@@ -188,7 +188,7 @@ private:
         const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
         const SharedElementContainerPart& rpPart,
         const bool bIsHorizontal);
-    void LayoutPart (
+    static void LayoutPart (
         const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
         const SharedElementContainerPart& rpPart,
         const css::geometry::RealRectangle2D& rBoundingBox,

@@ -509,7 +509,7 @@ void PDFOutDev::writeFontFile( GfxFont* gfxFont ) const
     gfree(pBuf);
 }
 
-void PDFOutDev::printPath( GfxPath* pPath ) const
+void PDFOutDev::printPath( GfxPath* pPath )
 {
     int nSubPaths = pPath ? pPath->getNumSubpaths() : 0;
     for( int i=0; i<nSubPaths; i++ )
