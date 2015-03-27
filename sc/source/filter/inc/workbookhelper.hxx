@@ -149,6 +149,7 @@ public:
     const ScDocument& getScDocument() const;
 
     ScDocumentImport& getDocImport();
+    const ScDocumentImport& getDocImport() const;
 
     ScEditEngineDefaulter& getEditEngine() const;
     /** Returns a reference to the source/target spreadsheet document model. */
