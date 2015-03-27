@@ -59,13 +59,29 @@ namespace frm
     {
     }
 
+    OUString SAL_CALL OSpinButtonModel::getImplementationName() throw ( RuntimeException, std::exception )
+    {
+        return OUString( "com.sun.star.comp.forms.OSpinButtonModel" );
+    }
 
-    IMPLEMENT_SERVICE_REGISTRATION_2( OSpinButtonModel, OControlModel, FRM_SUN_COMPONENT_SPINBUTTON, BINDABLE_INTEGER_VALUE_RANGE )
         // note that we're passing OControlModel as "base class". This is because
         // OBoundControlModel, our real base class, claims to support the DataAwareControlModel
         // service, which isn't really true for us. We only derive from this class
         // to benefit from the functionality for binding to spreadsheet cells
+    Sequence< OUString > SAL_CALL OSpinButtonModel::getSupportedServiceNames() throw (RuntimeException, std::exception)
+    {
+        Sequence< OUString > aOwnNames( 2 );
+        aOwnNames[ 0 ] = FRM_SUN_COMPONENT_SPINBUTTON;
+        aOwnNames[ 1 ] = BINDABLE_INTEGER_VALUE_RANGE;
 
+        return ::comphelper::combineSequences(
+            getAggregateServiceNames(),
+            ::comphelper::concatSequences(
+                OControlModel::getSupportedServiceNames_Static(),
+                aOwnNames
+            )
+        );
+    }
 
     IMPLEMENT_DEFAULT_CLONING( OSpinButtonModel )
 

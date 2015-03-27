@@ -18,7 +18,6 @@
  */
 
 #include "richtextcontrol.hxx"
-#include "frm_module.hxx"
 #include "property.hrc"
 #include "services.hxx"
 

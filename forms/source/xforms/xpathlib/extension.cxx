@@ -24,7 +24,6 @@
 #include "extension.hxx"
 #include "xpathlib.hxx"
 #include "services.hxx"
-#include "frm_module.hxx"
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;

@@ -222,18 +222,30 @@ namespace frm
 
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( ORichTextModel, OControlModel, ORichTextModel_BASE )
 
+    OUString SAL_CALL ORichTextModel::getImplementationName() throw ( RuntimeException, std::exception )
+    {
+        return OUString( "com.sun.star.comp.forms.ORichTextModel" );
+    }
 
-    IMPLEMENT_SERVICE_REGISTRATION_8( ORichTextModel, OControlModel,
-        FRM_SUN_COMPONENT_RICHTEXTCONTROL,
-        "com.sun.star.text.TextRange",
-        "com.sun.star.style.CharacterProperties",
-        "com.sun.star.style.ParagraphProperties",
-        "com.sun.star.style.CharacterPropertiesAsian",
-        "com.sun.star.style.CharacterPropertiesComplex",
-        "com.sun.star.style.ParagraphPropertiesAsian",
-        "com.sun.star.style.ParagraphPropertiesComplex"
-    )
+    Sequence< OUString > SAL_CALL ORichTextModel::getSupportedServiceNames() throw (RuntimeException, std::exception)
+    {
+        Sequence< OUString > aOwnNames( 8 );
+        aOwnNames[ 0 ] = FRM_SUN_COMPONENT_RICHTEXTCONTROL;
+        aOwnNames[ 1 ] = "com.sun.star.text.TextRange";
+        aOwnNames[ 2 ] = "com.sun.star.style.CharacterProperties";
+        aOwnNames[ 3 ] = "com.sun.star.style.ParagraphProperties";
+        aOwnNames[ 4 ] = "com.sun.star.style.CharacterPropertiesAsian";
+        aOwnNames[ 5 ] = "com.sun.star.style.CharacterPropertiesComplex";
+        aOwnNames[ 6 ] = "com.sun.star.style.ParagraphPropertiesAsian";
+        aOwnNames[ 7 ] = "com.sun.star.style.ParagraphPropertiesComplex";
 
+        return ::comphelper::combineSequences(
+            getAggregateServiceNames(),
+            ::comphelper::concatSequences(
+                OControlModel::getSupportedServiceNames_Static(),
+                aOwnNames)
+        );
+    }
 
     IMPLEMENT_DEFAULT_CLONING( ORichTextModel )
 

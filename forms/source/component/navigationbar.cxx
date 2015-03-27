@@ -18,7 +18,6 @@
  */
 
 #include "navigationbar.hxx"
-#include "frm_module.hxx"
 
 #include <com/sun/star/text/WritingMode2.hpp>
 

@@ -20,7 +20,6 @@
 #define INCLUDED_FORMS_SOURCE_RICHTEXT_RICHTEXTMODEL_HXX
 
 #include "FormComponent.hxx"
-#include "frm_module.hxx"
 #include "formcontrolfont.hxx"
 #include "richtextunowrapper.hxx"
 #include <comphelper/propertycontainerhelper.hxx>
@@ -109,7 +108,8 @@ namespace frm
         virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& _rType ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XServiceInfo
-        DECLARE_SERVICE_REGISTRATION( ORichTextModel )
+        virtual OUString SAL_CALL getImplementationName() throw (::css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual ::css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (::css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XPersistObject
         DECLARE_XPERSISTOBJECT()

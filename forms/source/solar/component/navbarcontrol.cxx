@@ -20,7 +20,6 @@
 
 #include "navbarcontrol.hxx"
 #include "frm_strings.hxx"
-#include "frm_module.hxx"
 #include "FormComponent.hxx"
 #include "componenttools.hxx"
 #include "navtoolbar.hxx"

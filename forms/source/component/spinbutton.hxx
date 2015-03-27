@@ -20,7 +20,6 @@
 #define INCLUDED_FORMS_SOURCE_COMPONENT_SPINBUTTON_HXX
 
 #include "FormComponent.hxx"
-#include "frm_module.hxx"
 
 
 namespace frm
@@ -38,7 +37,8 @@ namespace frm
 
     protected:
         // XServiceInfo
-        DECLARE_SERVICE_REGISTRATION( OSpinButtonModel )
+        virtual OUString SAL_CALL getImplementationName(  ) throw (::css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual ::css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XPersistObject
         DECLARE_XPERSISTOBJECT()

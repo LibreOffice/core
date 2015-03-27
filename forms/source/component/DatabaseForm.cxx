@@ -21,7 +21,6 @@
 #include "componenttools.hxx"
 #include "DatabaseForm.hxx"
 #include "EventThread.hxx"
-#include "frm_module.hxx"
 #include "frm_resource.hrc"
 #include "frm_resource.hxx"
 #include "GroupManager.hxx"
