@@ -84,6 +84,12 @@ sal_Int32 WorksheetBuffer::getWorksheetCount() const
     return static_cast< sal_Int32 >( maSheetInfos.size() );
 }
 
+sal_Int32 WorksheetBuffer::getAllSheetCount() const
+{
+    const ScDocumentImport& rDoc = getDocImport();
+    return rDoc.getSheetCount();
+}
+
 OUString WorksheetBuffer::getWorksheetRelId( sal_Int32 nWorksheet ) const
 {
     const SheetInfo* pSheetInfo = maSheetInfos.get( nWorksheet ).get();
