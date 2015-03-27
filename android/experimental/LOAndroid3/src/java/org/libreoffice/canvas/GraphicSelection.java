@@ -34,12 +34,17 @@ public class GraphicSelection implements CanvasElement {
     private GraphicSelectionHandle mHandles[] = new GraphicSelectionHandle[8];
     private GraphicSelectionHandle mDragHandle = null;
 
+    /**
+     * Construct the graphic selection.
+     */
     public GraphicSelection() {
+        // Create the paint, which is needed at drawing
         mPaint = new Paint();
         mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setColor(Color.BLACK);
         mPaint.setStrokeWidth(2);
 
+        // Create the handles of the selection
         mHandles[0] = new GraphicSelectionHandle(HandlePosition.TOP_LEFT);
         mHandles[1] = new GraphicSelectionHandle(HandlePosition.TOP);
         mHandles[2] = new GraphicSelectionHandle(HandlePosition.TOP_RIGHT);
@@ -50,10 +55,15 @@ public class GraphicSelection implements CanvasElement {
         mHandles[7] = new GraphicSelectionHandle(HandlePosition.BOTTOM_RIGHT);
     }
 
+    /**
+     * Viewport has changed, reposition the selection to the new rectangle.
+     * @param scaledRectangle - rectangle of selection position on the document
+     */
     public void reposition(RectF scaledRectangle) {
         mScaledRectangle = scaledRectangle;
-        mDrawRectangle = scaledRectangle;
+        mDrawRectangle = scaledRectangle; // rectangle that will be draw
 
+        // reposition the handles too
         mHandles[0].reposition(scaledRectangle.left, scaledRectangle.top);
         mHandles[1].reposition(scaledRectangle.centerX(), scaledRectangle.top);
         mHandles[2].reposition(scaledRectangle.right, scaledRectangle.top);
@@ -64,6 +74,10 @@ public class GraphicSelection implements CanvasElement {
         mHandles[7].reposition(scaledRectangle.right, scaledRectangle.bottom);
     }
 
+    /**
+     * Hit test for the selection.
+     * @see org.libreoffice.canvas.CanvasElement#draw(android.graphics.Canvas)
+     */
     @Override
     public boolean contains(float x, float y) {
         // Check if handle was hit
@@ -76,6 +90,7 @@ public class GraphicSelection implements CanvasElement {
     }
 
     /**
+     * Draw the selection on the canvas.
      * @see org.libreoffice.canvas.CanvasElement#draw(android.graphics.Canvas)
      */
     @Override
@@ -86,6 +101,10 @@ public class GraphicSelection implements CanvasElement {
         }
     }
 
+    /**
+     * Dragging on the screen has started.
+     * @param position - position where the dragging started
+     */
     public void dragStart(PointF position) {
         mDragHandle = null;
         mType = DragType.NONE;
@@ -105,6 +124,10 @@ public class GraphicSelection implements CanvasElement {
         mStartDragPosition = position;
     }
 
+    /**
+     * Dragging is in process.
+     * @param position - position of the drag
+     */
     public void dragging(PointF position) {
         if (mType == DragType.MOVE) {
             float deltaX = position.x - mStartDragPosition.x;
@@ -117,6 +140,34 @@ public class GraphicSelection implements CanvasElement {
         }
     }
 
+    /**
+     * Dragging has ended.
+     * @param position - last position of the drag
+     */
+    public void dragEnd(PointF position) {
+        PointF point = new PointF();
+        if (mDragHandle != null) {
+            point.x = mDragHandle.mPosition.x;
+            point.y = mDragHandle.mPosition.y;
+            mDragHandle.reset();
+            mDragHandle = null;
+        } else {
+            point.x = mStartDragPosition.x;
+            point.y = mStartDragPosition.y;
+        }
+        float deltaX = position.x - mStartDragPosition.x;
+        float deltaY = position.y - mStartDragPosition.y;
+        point.offset(deltaX, deltaY);
+
+        sendGraphicSelectionEnd(point);
+
+        mDrawRectangle = mScaledRectangle;
+        mType = DragType.NONE;
+    }
+
+    /**
+     * Adapt the selection depending on which handle was dragged.
+     */
     private void adaptDrawRectangle(float x, float y) {
         mDrawRectangle = new RectF(mScaledRectangle);
         switch(mDragHandle.getHandlePosition()) {
@@ -151,43 +202,41 @@ public class GraphicSelection implements CanvasElement {
         }
     }
 
-    public void dragEnd(PointF position) {
-        PointF point = new PointF();
-        if (mDragHandle != null) {
-            point.x = mDragHandle.mPosition.x;
-            point.y = mDragHandle.mPosition.y;
-            mDragHandle.reset();
-            mDragHandle = null;
-        } else {
-            point.x = mStartDragPosition.x;
-            point.y = mStartDragPosition.y;
-        }
-        float deltaX = position.x - mStartDragPosition.x;
-        float deltaY = position.y - mStartDragPosition.y;
-        point.offset(deltaX, deltaY);
-
-        sendGraphicSelectionEnd(point);
-
-        mDrawRectangle = mScaledRectangle;
-        mType = DragType.NONE;
-    }
-
+    /**
+     * Send graphic selection start event to LOKitTread
+     * @param screenPosition - screen position of the selection
+     */
     private void sendGraphicSelectionStart(PointF screenPosition) {
-        LayerView layerView = LOKitShell.getLayerView();
-        if (layerView != null) {
-            PointF documentPoint = layerView.getLayerClient().convertViewPointToLayerPoint(screenPosition);
-            LOKitShell.sendTouchEvent("GraphicSelectionStart", documentPoint);
-        }
+        sendGraphicSelection("GraphicSelectionStart", screenPosition);
     }
 
+    /**
+     * Send graphic selection end event to LOKitTread
+     * @param screenPosition - screen position of the selection
+     */
     private void sendGraphicSelectionEnd(PointF screenPosition) {
+        sendGraphicSelection("GraphicSelectionEnd", screenPosition);
+    }
+
+    /**
+     * Send graphic selection event to LOKitTread
+     * @param type - type of the graphic selection
+     * @param screenPosition - screen position of the selection
+     */
+    private void sendGraphicSelection(String type, PointF screenPosition)
+    {
         LayerView layerView = LOKitShell.getLayerView();
         if (layerView != null) {
+            // Position is in screen coordinates. We need to convert them to
+            // document coordinates.
             PointF documentPoint = layerView.getLayerClient().convertViewPointToLayerPoint(screenPosition);
             LOKitShell.sendTouchEvent("GraphicSelectionEnd", documentPoint);
         }
     }
 
+    /**
+     * Reset the selection.
+     */
     public void reset() {
         mDragHandle = null;
         for (GraphicSelectionHandle handle : mHandles) {
@@ -195,6 +244,9 @@ public class GraphicSelection implements CanvasElement {
         }
     }
 
+    /**
+     * Type of the selection dragging.
+     */
     public enum DragType {
         NONE,
         MOVE,

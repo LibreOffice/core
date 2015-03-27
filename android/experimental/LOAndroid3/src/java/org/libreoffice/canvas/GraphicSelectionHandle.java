@@ -20,6 +20,11 @@ import android.graphics.RectF;
  * touched.
  */
 public class GraphicSelectionHandle implements CanvasElement {
+    /**
+     * The factor used to inflate the hit area.
+     */
+    private final float HIT_AREA_INFLATE_FACTOR = 1.75f;
+
     private final HandlePosition mHandlePosition;
     public PointF mPosition = new PointF();
     private float mRadius = 20.0f;
@@ -29,6 +34,10 @@ public class GraphicSelectionHandle implements CanvasElement {
     private RectF mHitRect = new RectF();
     private boolean mSelected = false;
 
+    /**
+     * Construct the handle - set the handle position on the selection.
+     * @param position - the handle position on the selection
+     */
     public GraphicSelectionHandle(HandlePosition position) {
         mHandlePosition = position;
 
@@ -43,11 +52,17 @@ public class GraphicSelectionHandle implements CanvasElement {
         mSelectedFillPaint.setColor(Color.BLUE);
     }
 
+    /**
+     * The position of the handle
+     * @return
+     */
     public HandlePosition getHandlePosition() {
         return mHandlePosition;
     }
 
     /**
+     * Draws the handle to the canvas.
+     *
      * @see org.libreoffice.canvas.CanvasElement#draw(android.graphics.Canvas)
      */
     @Override
@@ -59,33 +74,58 @@ public class GraphicSelectionHandle implements CanvasElement {
         }
     }
 
+    /**
+     * Draw a filled and stroked circle to the canvas
+     */
     private void drawFilledCircle(Canvas canvas, float x, float y, float radius, Paint strokePaint, Paint fillPaint) {
         canvas.drawCircle(x, y, radius, fillPaint);
         canvas.drawCircle(x, y, radius, strokePaint);
     }
 
+    /**
+     * Viewport has changed, reposition the handle to the input coordinates.
+     */
     public void reposition(float x, float y) {
         mPosition.x = x;
         mPosition.y = y;
-        mHitRect.left = mPosition.x - mRadius * 1.75f;
-        mHitRect.right = mPosition.x + mRadius * 1.75f;
-        mHitRect.top = mPosition.y - mRadius * 1.75f;
-        mHitRect.bottom = mPosition.y + mRadius * 1.75f;
+
+        // inflate the radius by HIT_AREA_INFLATE_FACTOR
+        float inflatedRadius = mRadius * HIT_AREA_INFLATE_FACTOR;
+
+        // reposition the hit area rectangle
+        mHitRect.left = mPosition.x - inflatedRadius;
+        mHitRect.right = mPosition.x + inflatedRadius;
+        mHitRect.top = mPosition.y - inflatedRadius;
+        mHitRect.bottom = mPosition.y + inflatedRadius;
     }
 
+    /**
+     * Hit test for the handle.
+     * @see org.libreoffice.canvas.CanvasElement#draw(android.graphics.Canvas)
+     */
     @Override
     public boolean contains(float x, float y) {
         return mHitRect.contains(x, y);
     }
 
+    /**
+     * Mark the handle as selected.
+     */
     public void select() {
         mSelected = true;
     }
 
+    /**
+     * Reset the selection for the handle.
+     */
     public void reset() {
         mSelected = false;
     }
 
+    /**
+     * All posible handle positions. The selection rectangle has 8 possible
+     * handles.
+     */
     public enum HandlePosition {
         TOP_LEFT,
         TOP,

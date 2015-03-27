@@ -33,6 +33,11 @@ public class TextSelection extends Layer {
     private float mViewTop;
     private float mViewZoom;
 
+    /**
+     * Construct the TextSelection. Context is needed to get the needed
+     * resources (views) to display all the handles and selections.
+     * @param context - the activity context
+     */
     public TextSelection(Activity context) {
         mStartHandle = (TextSelectionHandle) context.findViewById(R.id.start_handle);
         mMiddleHandle = (TextSelectionHandle) context.findViewById(R.id.middle_handle);

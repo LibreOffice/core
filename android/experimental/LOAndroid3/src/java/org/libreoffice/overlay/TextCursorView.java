@@ -95,6 +95,10 @@ public class TextCursorView extends View implements View.OnTouchListener {
         }
     }
 
+    /**
+     * Change the cursor position.
+     * @param position - new position of the cursor
+     */
     public void changeCursorPosition(RectF position) {
         LayerView layerView = LOKitShell.getLayerView();
         if (layerView == null) {
@@ -108,6 +112,10 @@ public class TextCursorView extends View implements View.OnTouchListener {
         repositionWithViewport(metrics.viewportRectLeft, metrics.viewportRectTop, metrics.zoomFactor);
     }
 
+    /**
+     * Change the text selection rectangles.
+     * @param selectionRects - list of text selection rectangles
+     */
     public void changeSelections(List<RectF> selectionRects) {
         LayerView layerView = LOKitShell.getLayerView();
         if (layerView == null) {
@@ -121,6 +129,10 @@ public class TextCursorView extends View implements View.OnTouchListener {
         repositionWithViewport(metrics.viewportRectLeft, metrics.viewportRectTop, metrics.zoomFactor);
     }
 
+    /**
+     * Change the graphic selection rectangle.
+     * @param rectangle - new graphic selection rectangle
+     */
     public void changeGraphicSelection(RectF rectangle) {
         LayerView layerView = LOKitShell.getLayerView();
         if (layerView == null) {
@@ -156,6 +168,9 @@ public class TextCursorView extends View implements View.OnTouchListener {
         return cursor;
     }
 
+    /**
+     * Drawing on canvas.
+     */
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
@@ -172,6 +187,9 @@ public class TextCursorView extends View implements View.OnTouchListener {
         }
     }
 
+    /**
+     * Cursor animation function. Switch the alpha between opaque and fully transparent.
+     */
     private Runnable cursorAnimation = new Runnable() {
         public void run() {
             if (mCursorVisible) {
@@ -182,26 +200,41 @@ public class TextCursorView extends View implements View.OnTouchListener {
         }
     };
 
+    /**
+     * Show the cursor on the view.
+     */
     public void showCursor() {
         mCursorVisible = true;
         invalidate();
     }
 
+    /**
+     * Hide the cursor.
+     */
     public void hideCursor() {
         mCursorVisible = false;
         invalidate();
     }
 
+    /**
+     * Show text selection rectangles.
+     */
     public void showSelections() {
         mSelectionsVisible = true;
         invalidate();
     }
 
+    /**
+     * Hide text selection rectangles.
+     */
     public void hideSelections() {
         mSelectionsVisible = false;
         invalidate();
     }
 
+    /**
+     * Show the graphic selection on the view.
+     */
     public void showGraphicSelection() {
         mGraphicSelectionVisible = true;
         mGraphicSelectionMove = false;
@@ -209,11 +242,17 @@ public class TextCursorView extends View implements View.OnTouchListener {
         invalidate();
     }
 
+    /**
+     * Hide the graphic selection.
+     */
     public void hideGraphicSelection() {
         mGraphicSelectionVisible = false;
         invalidate();
     }
 
+    /**
+     * Handle the triggered touch event.
+     */
     @Override
     public boolean onTouch(View view, MotionEvent event) {
         switch (event.getActionMasked()) {
