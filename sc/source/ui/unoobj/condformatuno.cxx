@@ -336,7 +336,7 @@ void ScCondFormatObj::removeByIndex(const sal_Int32 nIndex)
 uno::Type ScCondFormatObj::getElementType()
     throw(uno::RuntimeException, std::exception)
 {
-    return cppu::UnoType<sheet::XConditionEntry>::get();
+    return cppu::UnoType<beans::XPropertySet>::get();
 }
 
 sal_Bool ScCondFormatObj::hasElements()

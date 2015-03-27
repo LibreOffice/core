@@ -163,7 +163,7 @@ void ScConditionalFormatTest::testCondFormatXIndex()
     CPPUNIT_ASSERT(xCondFormat.is());
 
     uno::Type aType = xCondFormat->getElementType();
-    CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.sheet.XConditionEntry"), aType.getTypeName());
+    CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.beans.XPropertySet"), aType.getTypeName());
 
     CPPUNIT_ASSERT(xCondFormat->hasElements());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xCondFormat->getCount());
