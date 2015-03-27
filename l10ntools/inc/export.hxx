@@ -152,23 +152,23 @@ private:
 
     OString FullId();                    ///< creates cur. GID
 
-    OString GetPairedListID(const OString & rText);
-    OString GetPairedListString(const OString& rText);
-    OString StripList(const OString& rText);
+    static OString GetPairedListID(const OString & rText);
+    static OString GetPairedListString(const OString& rText);
+    static OString StripList(const OString& rText);
 
     void InsertListEntry(const OString &rLine);
-    void CleanValue( OString &rValue );
-    OString GetText(const OString &rSource, int nToken);
+    static void CleanValue( OString &rValue );
+    static OString GetText(const OString &rSource, int nToken);
 
     void ResData2Output( MergeEntrys *pEntry, sal_uInt16 nType, const OString& rTextType );
     void MergeRest( ResData *pResData );
-    void ConvertMergeContent( OString &rText );
-    void ConvertExportContent( OString &rText );
+    static void ConvertMergeContent( OString &rText );
+    static void ConvertExportContent( OString &rText );
 
     void WriteToMerged(const OString &rText , bool bSDFContent);
     void SetChildWithText();
 
-    void CutComment( OString &rText );
+    static void CutComment( OString &rText );
 
     void WriteUTF8ByteOrderMarkToOutput() { *aOutput.mSimple << '\xEF' << '\xBB' << '\xBF'; }
 

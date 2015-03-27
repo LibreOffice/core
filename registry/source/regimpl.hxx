@@ -131,13 +131,13 @@ private:
                                  bool bWarnings=false,
                                  bool bReport=false);
 
-    RegError    checkBlop(store::OStoreStream& rValue,
+    static RegError checkBlop(store::OStoreStream& rValue,
                           const OUString& sTargetPath,
                           sal_uInt32 srcValueSize,
                           sal_uInt8* pSrcBuffer,
                           bool bReport=false);
 
-    RegError    mergeModuleValue(store::OStoreStream& rTargetValue,
+    static RegError mergeModuleValue(store::OStoreStream& rTargetValue,
                                  RegistryTypeReader& reader,
                                  RegistryTypeReader& reader2);
 

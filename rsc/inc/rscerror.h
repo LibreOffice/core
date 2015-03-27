@@ -135,7 +135,7 @@ public:
     FILE *          GetListFile(){ return fListing; }
     RscVerbosity    GetVerbosity() const { return m_verbosity; }
     void            StdOut( const char *, const RscVerbosity _verbosityLevel = RscVerbosityNormal );
-    void            StdErr( const char * );
+    static void     StdErr( const char * );
     void            LstOut( const char * );
     void            Error( const ERRTYPE& rError, RscTop* pClass, const RscId &aId,
                            const char * pMessage = NULL );

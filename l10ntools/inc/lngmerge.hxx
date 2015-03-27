@@ -48,10 +48,10 @@ private:
     OString sSource;
     std::vector<OString> aLanguages;
 
-    bool isNextGroup(OString &sGroup_out, const OString &sLine_in);
-    void ReadLine(const OString &rLine_in,
+    static bool isNextGroup(OString &sGroup_out, const OString &sLine_in);
+    static void ReadLine(const OString &rLine_in,
         OStringHashMap &rText_inout);
-    void WritePO(PoOfstream &aPOStream, OStringHashMap &rText_inout,
+    static void WritePO(PoOfstream &aPOStream, OStringHashMap &rText_inout,
         const OString &rActFileName, const OString &rID);
 public:
     LngParser(const OString &rLngFile);

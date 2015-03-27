@@ -46,7 +46,7 @@ protected:
     sal_uInt32      nSize;      // Groesse der Instanzdaten dieser Klasse
                                 // mit Superklassen
     sal_uInt32      nOffInstData;// Offset auf eigen Instanzdaten
-    void            DestroyElements( RscBaseContInst * pClassData );
+    static void     DestroyElements( RscBaseContInst * pClassData );
     RSCINST         SearchElePos( const RSCINST & rInst, const RscId & rEleName,
                                   RscTop * pClass, sal_uInt32 nPos );
 protected:

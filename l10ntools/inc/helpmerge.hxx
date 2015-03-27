@@ -56,7 +56,7 @@ public:
 private:
     bool MergeSingleFile( XMLFile* file , MergeDataFile* pMergeDataFile , const OString& sLanguage , OString const & sPath );
 
-    void ProcessHelp( LangHashMap* aLangHM , const OString& sCur , ResData *pResData , MergeDataFile* pMergeDataFile );
+    static void ProcessHelp( LangHashMap* aLangHM , const OString& sCur , ResData *pResData , MergeDataFile* pMergeDataFile );
 };
 
 #endif // INCLUDED_L10NTOOLS_INC_HELPMERGE_HXX

@@ -89,7 +89,7 @@ void VMLExport::OpenContainer( sal_uInt16 nEscherContainer, int nRecInstance )
             fprintf( stderr, "Warning!  VMLExport::OpenContainer(): opening shape inside a shape.\n" );
 #endif
         m_nShapeType = ESCHER_ShpInst_Nil;
-        m_pShapeAttrList = m_pSerializer->createAttrList();
+        m_pShapeAttrList = FastSerializerHelper::createAttrList();
 
         if ( !m_pShapeStyle->isEmpty() )
             m_pShapeStyle->makeStringAndClear();
@@ -126,7 +126,7 @@ sal_uInt32 VMLExport::EnterGroup( const OUString& rShapeName, const Rectangle* p
     sal_uInt32 nShapeId = GenerateShapeId();
 
     OStringBuffer aStyle( 200 );
-    FastAttributeList *pAttrList = m_pSerializer->createAttrList();
+    FastAttributeList *pAttrList = FastSerializerHelper::createAttrList();
 
     pAttrList->add( XML_id, ShapeIdString( nShapeId ) );
 
@@ -560,7 +560,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
             case ESCHER_Prop_fillOpacity: // 386
                 {
                     sal_uInt32 nValue;
-                    sax_fastparser::FastAttributeList *pAttrList = m_pSerializer->createAttrList();
+                    sax_fastparser::FastAttributeList *pAttrList = FastSerializerHelper::createAttrList();
 
                     if ( rProps.GetOpt( ESCHER_Prop_fillType, nValue ) )
                     {
@@ -643,7 +643,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
             case ESCHER_Prop_lineEndCapStyle: // 471
                 {
                     sal_uInt32 nValue;
-                    sax_fastparser::FastAttributeList *pAttrList = m_pSerializer->createAttrList();
+                    sax_fastparser::FastAttributeList *pAttrList = FastSerializerHelper::createAttrList();
 
                     if ( rProps.GetOpt( ESCHER_Prop_lineColor, nValue ) )
                         impl_AddColor( pAttrList, XML_color, nValue );
@@ -748,7 +748,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
                     }
                     if ( bShadow )
                     {
-                        sax_fastparser::FastAttributeList *pAttrList = m_pSerializer->createAttrList();
+                        sax_fastparser::FastAttributeList *pAttrList = FastSerializerHelper::createAttrList();
                         impl_AddBool( pAttrList, XML_on, bShadow );
                         impl_AddBool( pAttrList, XML_obscured, bObscured );
 
@@ -777,7 +777,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
                                 XML_textpathok, "t",
                                 FSEND );
 
-                        sax_fastparser::FastAttributeList* pAttrList = m_pSerializer->createAttrList();
+                        sax_fastparser::FastAttributeList* pAttrList = FastSerializerHelper::createAttrList();
                         pAttrList->add(XML_on, "t");
                         pAttrList->add(XML_fitshape, "t");
                         pAttrList->add(XML_string, OUStringToOString(aTextPathString, RTL_TEXTENCODING_UTF8));
@@ -1168,7 +1168,7 @@ void VMLExport::EndShape( sal_Int32 nShapeElement )
         {
             uno::Reference<beans::XPropertySet> xPropertySet(const_cast<SdrObject*>(m_pSdrObject)->getUnoShape(), uno::UNO_QUERY);
             comphelper::SequenceAsHashMap aCustomShapeProperties(xPropertySet->getPropertyValue("CustomShapeGeometry"));
-            sax_fastparser::FastAttributeList* pTextboxAttrList = m_pSerializer->createAttrList();
+            sax_fastparser::FastAttributeList* pTextboxAttrList = FastSerializerHelper::createAttrList();
             if (aCustomShapeProperties.find("TextPreRotateAngle") != aCustomShapeProperties.end())
             {
                 sal_Int32 nTextRotateAngle = aCustomShapeProperties["TextPreRotateAngle"].get<sal_Int32>();

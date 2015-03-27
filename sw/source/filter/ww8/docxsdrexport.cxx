@@ -35,6 +35,7 @@
 
 using namespace com::sun::star;
 using namespace oox;
+using namespace sax_fastparser;
 
 namespace
 {
@@ -357,7 +358,7 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrmFmt* pFrmFmt, const Size& rS
 
     if (isAnchor)
     {
-        sax_fastparser::FastAttributeList* attrList = m_pImpl->m_pSerializer->createAttrList();
+        sax_fastparser::FastAttributeList* attrList = FastSerializerHelper::createAttrList();
         bool bOpaque = pFrmFmt->GetOpaque().GetValue();
         awt::Point aPos(pFrmFmt->GetHoriOrient().GetPos(), pFrmFmt->GetVertOrient().GetPos());
         const SdrObject* pObj = pFrmFmt->FindRealSdrObject();
@@ -546,7 +547,7 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrmFmt* pFrmFmt, const Size& rS
     }
     else
     {
-        sax_fastparser::FastAttributeList* aAttrList = m_pImpl->m_pSerializer->createAttrList();
+        sax_fastparser::FastAttributeList* aAttrList = FastSerializerHelper::createAttrList();
         aAttrList->add(XML_distT, OString::number(TwipsToEMU(pULSpaceItem.GetUpper())).getStr());
         aAttrList->add(XML_distB, OString::number(TwipsToEMU(pULSpaceItem.GetLower())).getStr());
         aAttrList->add(XML_distL, OString::number(TwipsToEMU(pLRSpaceItem.GetLeft())).getStr());
@@ -807,7 +808,7 @@ void DocxSdrExport::writeDMLDrawing(const SdrObject* pSdrObject, const SwFrmFmt*
     Size aSize(pSdrObject->GetLogicRect().GetWidth(), pSdrObject->GetLogicRect().GetHeight());
     startDMLAnchorInline(pFrmFmt, aSize);
 
-    sax_fastparser::FastAttributeList* pDocPrAttrList = pFS->createAttrList();
+    sax_fastparser::FastAttributeList* pDocPrAttrList = FastSerializerHelper::createAttrList();
     pDocPrAttrList->add(XML_id, OString::number(nAnchorId).getStr());
     pDocPrAttrList->add(XML_name, OUStringToOString(pSdrObject->GetName(), RTL_TEXTENCODING_UTF8).getStr());
     if (!pSdrObject->GetTitle().isEmpty())
@@ -1144,7 +1145,7 @@ void DocxSdrExport::writeDiagram(const SdrObject* sdrObject, const SwFrmFmt& rFr
     startDMLAnchorInline(&rFrmFmt, aSize);
 
     // generate an unique id
-    sax_fastparser::FastAttributeList* pDocPrAttrList = pFS->createAttrList();
+    sax_fastparser::FastAttributeList* pDocPrAttrList = FastSerializerHelper::createAttrList();
     pDocPrAttrList->add(XML_id, OString::number(nAnchorId).getStr());
     OUString sName = "Diagram" + OUString::number(nAnchorId);
     pDocPrAttrList->add(XML_name, OUStringToOString(sName, RTL_TEXTENCODING_UTF8).getStr());
@@ -1295,7 +1296,7 @@ void DocxSdrExport::writeOnlyTextOfFrame(sw::Frame* pParentFrame)
     //Save data here and restore when out of scope
     ExportDataSaveRestore aDataGuard(m_pImpl->m_rExport, nStt, nEnd, pParentFrame);
 
-    m_pImpl->m_pBodyPrAttrList = pFS->createAttrList();
+    m_pImpl->m_pBodyPrAttrList = FastSerializerHelper::createAttrList();
     m_pImpl->m_bFrameBtLr = checkFrameBtlr(m_pImpl->m_rExport.pDoc->GetNodes()[nStt], 0);
     m_pImpl->m_bFlyFrameGraphic = true;
     m_pImpl->m_rExport.WriteText();
@@ -1354,7 +1355,7 @@ void DocxSdrExport::writeDMLTextFrame(sw::Frame* pParentFrame, int nAnchorId, bo
     if (xPropertySet.is())
         xPropSetInfo = xPropertySet->getPropertySetInfo();
 
-    m_pImpl->m_pBodyPrAttrList = pFS->createAttrList();
+    m_pImpl->m_pBodyPrAttrList = FastSerializerHelper::createAttrList();
     {
         drawing::TextVerticalAdjust eAdjust = drawing::TextVerticalAdjust_TOP;
         if (xPropSetInfo.is() && xPropSetInfo->hasPropertyByName("TextVerticalAdjust"))
@@ -1366,7 +1367,7 @@ void DocxSdrExport::writeDMLTextFrame(sw::Frame* pParentFrame, int nAnchorId, bo
     {
         startDMLAnchorInline(&rFrmFmt, aSize);
 
-        sax_fastparser::FastAttributeList* pDocPrAttrList = pFS->createAttrList();
+        sax_fastparser::FastAttributeList* pDocPrAttrList = FastSerializerHelper::createAttrList();
         pDocPrAttrList->add(XML_id, OString::number(nAnchorId).getStr());
         pDocPrAttrList->add(XML_name, OUStringToOString(rFrmFmt.GetName(), RTL_TEXTENCODING_UTF8).getStr());
         sax_fastparser::XFastAttributeListRef xDocPrAttrListRef(pDocPrAttrList);
@@ -1583,8 +1584,8 @@ void DocxSdrExport::writeVMLTextFrame(sw::Frame* pParentFrame, bool bTextBoxOnly
     m_pImpl->m_pFlyFrameSize = &aSize;
 
     m_pImpl->m_bTextFrameSyntax = true;
-    m_pImpl->m_pFlyAttrList.reset(pFS->createAttrList());
-    m_pImpl->m_pTextboxAttrList = pFS->createAttrList();
+    m_pImpl->m_pFlyAttrList.reset(FastSerializerHelper::createAttrList());
+    m_pImpl->m_pTextboxAttrList = FastSerializerHelper::createAttrList();
     m_pImpl->m_aTextFrameStyle = "position:absolute";
     if (!bTextBoxOnly)
     {

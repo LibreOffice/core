@@ -84,7 +84,7 @@ XclExpSetup::XclExpSetup( const XclPageData& rPageData ) :
 
 void XclExpSetup::SaveXml( XclExpXmlStream& rStrm )
 {
-    sax_fastparser::FastAttributeList* pAttrList=rStrm.GetCurrentStream()->createAttrList();
+    sax_fastparser::FastAttributeList* pAttrList = sax_fastparser::FastSerializerHelper::createAttrList();
     if( rStrm.getVersion() != oox::core::ISOIEC_29500_2008 ||
         mrData.mnStrictPaperSize != EXC_PAPERSIZE_USER )
     {

@@ -658,7 +658,7 @@ void NodeJava::addJRELocation(rtl_uString * sLocation)
         m_JRELocations->push_back(OUString(sLocation));
 }
 
-jfw::FileStatus NodeJava::checkSettingsFileStatus(OUString const & sURL) const
+jfw::FileStatus NodeJava::checkSettingsFileStatus(OUString const & sURL)
 {
     jfw::FileStatus ret = FILE_DOES_NOT_EXIST;
 

@@ -253,7 +253,7 @@ private:
 
 public:
     /// All xml namespaces to be used at the top of any text .xml file (main doc, headers, footers,...)
-    sax_fastparser::XFastAttributeListRef MainXmlNamespaces( sax_fastparser::FSHelperPtr serializer );
+    sax_fastparser::XFastAttributeListRef MainXmlNamespaces();
 
     /// FIXME this is temporary, remotely reminding the method of the same
     /// name in WW8Export.

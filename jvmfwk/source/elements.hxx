@@ -145,7 +145,7 @@ private:
 
     /** Verifies if the respective settings file exist.
      */
-    jfw::FileStatus checkSettingsFileStatus(OUString const & sURL) const;
+    static jfw::FileStatus checkSettingsFileStatus(OUString const & sURL);
 
     /** Determines the layer for which the instance the loads and writes the
         data.

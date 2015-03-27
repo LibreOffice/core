@@ -112,7 +112,7 @@ protected:
 
     virtual void Output(const OString & rOutput)=0;
 
-    void Error(const OString &rError);
+    static void Error(const OString &rError);
 
 private:
     int ExecuteAnalyzedToken( int nToken, char *pToken );
@@ -121,7 +121,7 @@ private:
         const OString &rIsoLang,
         const OString &rResTyp );
 
-    bool IsTokenClosed(const OString &rToken);
+    static bool IsTokenClosed(const OString &rToken);
 
 public:
     CfgParser();

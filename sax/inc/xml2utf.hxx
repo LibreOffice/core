@@ -116,10 +116,10 @@ private:
     // if enough data is available to scan encoding
     // @return TRUE, when encoding is retrievable
     // @return FALSE, when more data is needed
-    bool isEncodingRecognizable( const ::com::sun::star::uno::Sequence< sal_Int8 > & seq );
+    static bool isEncodingRecognizable( const ::com::sun::star::uno::Sequence< sal_Int8 > & seq );
 
     // When encoding attribute is within the text (in the first line), it is removed.
-    void removeEncoding( ::com::sun::star::uno::Sequence<sal_Int8> &seq );
+    static void removeEncoding( ::com::sun::star::uno::Sequence<sal_Int8> &seq );
 
     // Initializes decoding depending on m_sEncoding setting
     void initializeDecoding();

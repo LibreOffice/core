@@ -39,8 +39,8 @@ private:
     OString sCurrentCloseTag;
     OString sCurrentText;
 protected:
-    OString GetAttribute( const OString &rToken, const OString &rAttribute );
-    void Error( const OString &rError );
+    static OString GetAttribute( const OString &rToken, const OString &rAttribute );
+    static void Error( const OString &rError );
 
     virtual void Output( const OString& rOutput )=0;
     virtual void WorkOnDesc(

@@ -157,7 +157,7 @@ public:
                     RscBool( Atom nId, sal_uInt32 nTypId );
     virtual RSCCLASS_TYPE   GetClassType() const SAL_OVERRIDE;
                     // Der zulaessige Bereich wird gesetzt
-    ERRTYPE         SetRange( sal_Int32, sal_Int32 ){ return ERR_UNKNOWN_METHOD; }
+    static ERRTYPE  SetRange( sal_Int32, sal_Int32 ){ return ERR_UNKNOWN_METHOD; }
     ERRTYPE         SetBool( const RSCINST & rInst, bool b ) SAL_OVERRIDE
                         {
                             return SetNumber( rInst, (sal_Int32)b );

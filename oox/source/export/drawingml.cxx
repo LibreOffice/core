@@ -93,6 +93,7 @@ using namespace ::css::text;
 using ::css::geometry::IntegerRectangle2D;
 using ::css::io::XOutputStream;
 using ::sax_fastparser::FSHelperPtr;
+using ::sax_fastparser::FastSerializerHelper;
 
 namespace oox {
 namespace drawingml {
@@ -2341,7 +2342,7 @@ void DrawingML::WriteShapeEffect( const OUString& sName, const Sequence< Propert
     sal_uInt32 nRgbClr = 0;
     sal_Int32 nAlpha = MAX_PERCENT;
     Sequence< PropertyValue > aTransformations;
-    sax_fastparser::FastAttributeList *aOuterShdwAttrList = mpFS->createAttrList();
+    sax_fastparser::FastAttributeList *aOuterShdwAttrList = FastSerializerHelper::createAttrList();
     sax_fastparser::XFastAttributeListRef xOuterShdwAttrList( aOuterShdwAttrList );
     for( sal_Int32 i=0; i < aEffectProps.getLength(); ++i )
     {
@@ -2577,9 +2578,9 @@ void DrawingML::WriteShape3DEffects( Reference< XPropertySet > xPropSet )
         return;
 
     bool bCameraRotationPresent = false;
-    sax_fastparser::FastAttributeList *aCameraAttrList = mpFS->createAttrList();
+    sax_fastparser::FastAttributeList *aCameraAttrList = FastSerializerHelper::createAttrList();
     sax_fastparser::XFastAttributeListRef xCameraAttrList( aCameraAttrList );
-    sax_fastparser::FastAttributeList *aCameraRotationAttrList = mpFS->createAttrList();
+    sax_fastparser::FastAttributeList *aCameraRotationAttrList = FastSerializerHelper::createAttrList();
     sax_fastparser::XFastAttributeListRef xRotAttrList( aCameraRotationAttrList );
     for( sal_Int32 i=0; i < aEffectProps.getLength(); ++i )
     {
@@ -2619,9 +2620,9 @@ void DrawingML::WriteShape3DEffects( Reference< XPropertySet > xPropSet )
     }
 
     bool bLightRigRotationPresent = false;
-    sax_fastparser::FastAttributeList *aLightRigAttrList = mpFS->createAttrList();
+    sax_fastparser::FastAttributeList *aLightRigAttrList = FastSerializerHelper::createAttrList();
     sax_fastparser::XFastAttributeListRef xLightAttrList( aLightRigAttrList );
-    sax_fastparser::FastAttributeList *aLightRigRotationAttrList = mpFS->createAttrList();
+    sax_fastparser::FastAttributeList *aLightRigRotationAttrList = FastSerializerHelper::createAttrList();
     sax_fastparser::XFastAttributeListRef xLightRotAttrList( aLightRigRotationAttrList );
     for( sal_Int32 i=0; i < aLightRigProps.getLength(); ++i )
     {
@@ -2692,11 +2693,11 @@ void DrawingML::WriteShape3DEffects( Reference< XPropertySet > xPropSet )
 
     bool bBevelTPresent = false, bBevelBPresent = false;
     Sequence< PropertyValue > aExtrusionColorProps, aContourColorProps;
-    sax_fastparser::FastAttributeList *aBevelTAttrList = mpFS->createAttrList();
+    sax_fastparser::FastAttributeList *aBevelTAttrList = FastSerializerHelper::createAttrList();
     sax_fastparser::XFastAttributeListRef xBevelTAttrList( aBevelTAttrList );
-    sax_fastparser::FastAttributeList *aBevelBAttrList = mpFS->createAttrList();
+    sax_fastparser::FastAttributeList *aBevelBAttrList = FastSerializerHelper::createAttrList();
     sax_fastparser::XFastAttributeListRef xBevelBAttrList( aBevelBAttrList );
-    sax_fastparser::FastAttributeList *aShape3DAttrList = mpFS->createAttrList();
+    sax_fastparser::FastAttributeList *aShape3DAttrList = FastSerializerHelper::createAttrList();
     for( sal_Int32 i=0; i < aShape3DProps.getLength(); ++i )
     {
         if( aShape3DProps[i].Name == "extrusionH" || aShape3DProps[i].Name == "contourW" || aShape3DProps[i].Name == "z" )
@@ -2853,7 +2854,7 @@ void DrawingML::WriteArtisticEffect( Reference< XPropertySet > rXPropSet )
 
     Sequence< PropertyValue > aAttrs;
     aEffect.Value >>= aAttrs;
-    sax_fastparser::FastAttributeList *aAttrList = mpFS->createAttrList();
+    sax_fastparser::FastAttributeList *aAttrList = FastSerializerHelper::createAttrList();
     OString sRelId;
     for( sal_Int32 i=0; i < aAttrs.getLength(); ++i )
     {

@@ -122,7 +122,7 @@ private:
 
     // extract the name from an environment variable
     // that is given in the form "NAME=VALUE"
-    OString env_var_name(const OString& env_var) const
+    static OString env_var_name(const OString& env_var)
     {
         sal_Int32 pos_equal_sign =
             env_var.indexOf('=');

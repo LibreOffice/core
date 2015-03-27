@@ -626,7 +626,7 @@ void DocxExport::WritePostitFields()
             m_pFilter->openFragmentStreamWithSerializer( "word/comments.xml",
                     "application/vnd.openxmlformats-officedocument.wordprocessingml.comments+xml" );
 
-        pPostitFS->startElementNS( XML_w, XML_comments, MainXmlNamespaces( pPostitFS ));
+        pPostitFS->startElementNS( XML_w, XML_comments, MainXmlNamespaces());
         m_pAttrOutput->SetSerializer( pPostitFS );
         m_pAttrOutput->WritePostitFields();
         m_pAttrOutput->SetSerializer( m_pDocumentFS );
@@ -684,7 +684,7 @@ void DocxExport::WriteHeaderFooter( const SwFmt& rFmt, bool bHeader, const char*
         pFS = m_pFilter->openFragmentStreamWithSerializer( OUStringBuffer().append("word/").append( aName ).makeStringAndClear(),
                     "application/vnd.openxmlformats-officedocument.wordprocessingml.header+xml" );
 
-        pFS->startElementNS( XML_w, XML_hdr, MainXmlNamespaces( pFS ));
+        pFS->startElementNS( XML_w, XML_hdr, MainXmlNamespaces());
     }
     else
     {
@@ -697,7 +697,7 @@ void DocxExport::WriteHeaderFooter( const SwFmt& rFmt, bool bHeader, const char*
         pFS = m_pFilter->openFragmentStreamWithSerializer( OUStringBuffer().append("word/").append( aName ).makeStringAndClear(),
                     "application/vnd.openxmlformats-officedocument.wordprocessingml.footer+xml" );
 
-        pFS->startElementNS( XML_w, XML_ftr, MainXmlNamespaces( pFS ));
+        pFS->startElementNS( XML_w, XML_ftr, MainXmlNamespaces());
     }
 
     // switch the serializer to redirect the output to word/styles.xml
@@ -1303,7 +1303,7 @@ boost::optional<SvxBrushItem> DocxExport::getBackground()
 void DocxExport::WriteMainText()
 {
     // setup the namespaces
-    m_pDocumentFS->startElementNS( XML_w, XML_document, MainXmlNamespaces( m_pDocumentFS ));
+    m_pDocumentFS->startElementNS( XML_w, XML_document, MainXmlNamespaces());
 
     // Write background page color
     if (boost::optional<SvxBrushItem> oBrush = getBackground())
@@ -1333,9 +1333,9 @@ void DocxExport::WriteMainText()
     m_pDocumentFS->endElementNS( XML_w, XML_document );
 }
 
-XFastAttributeListRef DocxExport::MainXmlNamespaces( FSHelperPtr serializer )
+XFastAttributeListRef DocxExport::MainXmlNamespaces()
 {
-    FastAttributeList* pAttr = serializer->createAttrList();
+    FastAttributeList* pAttr = FastSerializerHelper::createAttrList();
     pAttr->add( FSNS( XML_xmlns, XML_o ), "urn:schemas-microsoft-com:office:office" );
     pAttr->add( FSNS( XML_xmlns, XML_r ), "http://schemas.openxmlformats.org/officeDocument/2006/relationships" );
     pAttr->add( FSNS( XML_xmlns, XML_v ), "urn:schemas-microsoft-com:vml" );

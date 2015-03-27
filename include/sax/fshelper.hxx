@@ -135,7 +135,7 @@ public:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > getOutputStream();
 
-    FastAttributeList *createAttrList();
+    static FastAttributeList *createAttrList();
 
     void mark( const ::com::sun::star::uno::Sequence< sal_Int32 >& aOrder =
             ::com::sun::star::uno::Sequence< sal_Int32 >() );

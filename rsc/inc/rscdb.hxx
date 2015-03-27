@@ -168,8 +168,8 @@ class RscTypCont
     RscArray *  InitLangStringList( RscCont * pStrLst );
     RscTupel *  InitStringTupel();
     RscTupel *  InitStringLongTupel();
-    RscCont  *  InitStringTupelList( RscTupel * pStringTupel );
-    RscCont  *  InitStringLongTupelList( RscTupel * pStringLongTupel );
+    static RscCont  *  InitStringTupelList( RscTupel * pStringTupel );
+    static RscCont  *  InitStringLongTupelList( RscTupel * pStringLongTupel );
     RscArray *  InitLangStringTupelList( RscCont * pStrTupelLst );
     RscArray *  InitLangStringLongTupelList( RscCont * pStrLongTupelLst );
 

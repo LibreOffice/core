@@ -139,7 +139,7 @@ struct FileHandle_Impl
         sal_Sequence ** ppSequence,
         sal_uInt64 *    pBytesRead);
 
-    oslFileError writeSequence_Impl (
+    static oslFileError writeSequence_Impl (
         sal_Sequence ** ppSequence,
         size_t *        pnOffset,
         const void *    pBuffer,

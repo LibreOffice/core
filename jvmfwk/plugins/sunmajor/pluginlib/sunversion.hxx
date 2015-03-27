@@ -112,7 +112,7 @@ protected:
        "ea" is passed then Rel_EA is returned. If the string is no pre release
        then Rel_NONE is returned.
     */
-    PreRelease getPreRelease(const char *szRel);
+    static PreRelease getPreRelease(const char *szRel);
 };
 
 }

@@ -141,7 +141,7 @@ public:
     }
 
 private:
-    void printFailureLocation( const CppUnit::SourceLine &sourceLine )
+    static void printFailureLocation( const CppUnit::SourceLine &sourceLine )
     {
         if ( !sourceLine.isValid() )
             std::cerr << "unknown:0:";
@@ -149,12 +149,12 @@ private:
             std::cerr << sourceLine.fileName() << ":" << sourceLine.lineNumber() << ":";
     }
 
-    void printFailedTestName( const CppUnit::TestFailure &failure )
+    static void printFailedTestName( const CppUnit::TestFailure &failure )
     {
         std::cerr << failure.failedTestName() << std::endl;
     }
 
-    void printFailureMessage( const CppUnit::TestFailure &failure )
+    static void printFailureMessage( const CppUnit::TestFailure &failure )
     {
         std::cerr << failure.thrownException()->message().shortDescription() << std::endl;
         std::cerr << failure.thrownException()->message().details() << std::endl;
