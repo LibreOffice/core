@@ -788,6 +788,19 @@ void SAL_CALL ScDataBarFormatObj::setPropertyValue(
     {
         case AxisPosition:
         {
+            sal_Int32 nVal;
+            if (aValue >>= nVal)
+            {
+                for (size_t i = 0; i < SAL_N_ELEMENTS(aDataBarAxisMap); ++i)
+                {
+                    if (aDataBarAxisMap[i].nApiPos == nVal)
+                    {
+                        getCoreObject()->GetDataBarData()->meAxisPosition =
+                            aDataBarAxisMap[i].ePos;
+                        break;
+                    }
+                }
+            }
         }
         break;
         case UseGradient:
@@ -1037,6 +1050,10 @@ void SAL_CALL ScIconSetFormatObj::setPropertyValue(
 
             getCoreObject()->GetIconSetData()->eIconSetType = eType;
         }
+        break;
+        case IconSetEntries:
+        break;
+        default:
         break;
     }
 }
