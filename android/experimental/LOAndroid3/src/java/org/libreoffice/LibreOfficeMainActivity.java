@@ -171,7 +171,14 @@ public class LibreOfficeMainActivity extends ActionBarActivity {
         InputStream inputStream = null;
         try {
             inputStream = contentResolver.openInputStream(getIntent().getData());
-            mTempFile = File.createTempFile("LibreOffice", null, this.getCacheDir());
+
+            // CSV files need a .csv suffix to be opened in Calc.
+            String suffix = null;
+            String intentType = getIntent().getType();
+            // K-9 mail uses the first, GMail uses the second variant.
+            if ("text/comma-separated-values".equals(intentType) || "text/csv".equals(intentType))
+                suffix = ".csv";
+            mTempFile = File.createTempFile("LibreOffice", suffix, this.getCacheDir());
 
             OutputStream outputStream = new FileOutputStream(mTempFile);
             byte[] buffer = new byte[4096];
