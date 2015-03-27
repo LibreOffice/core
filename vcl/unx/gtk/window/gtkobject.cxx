@@ -50,18 +50,25 @@ GtkSalObject::GtkSalObject( GtkSalFrame* pParent, bool bShow )
         gtk_widget_set_app_paintable( m_pSocket, TRUE );
 
         // system data
-        SalDisplay* pDisp = vcl_sal::getSalDisplay(GetGenericData());
         m_aSystemData.nSize         = sizeof( SystemEnvData );
+#if !GTK_CHECK_VERSION(3,0,0)
+        SalDisplay* pDisp = vcl_sal::getSalDisplay(GetGenericData());
         m_aSystemData.pDisplay      = pDisp->GetDisplay();
-        m_aSystemData.aWindow       = GDK_WINDOW_XWINDOW(widget_get_window(m_pSocket));
-        m_aSystemData.pSalFrame     = NULL;
-        m_aSystemData.pWidget       = m_pSocket;
         m_aSystemData.pVisual       = pDisp->GetVisual(pParent->getXScreenNumber()).GetVisual();
-        m_aSystemData.nScreen       = pParent->getXScreenNumber().getXScreen();
         m_aSystemData.nDepth        = pDisp->GetVisual(pParent->getXScreenNumber()).GetDepth();
         m_aSystemData.aColormap     = pDisp->GetColormap(pParent->getXScreenNumber()).GetXColormap();
-        m_aSystemData.pAppContext   = NULL;
+        m_aSystemData.aWindow       = GDK_WINDOW_XWINDOW(widget_get_window(m_pSocket));
         m_aSystemData.aShellWindow  = GDK_WINDOW_XWINDOW(widget_get_window(GTK_WIDGET(pParent->getWindow())));
+#else
+        static int nWindow = 0;
+        m_aSystemData.aWindow       = nWindow;
+        m_aSystemData.aShellWindow  = pParent->GetSystemData()->aWindow;
+        ++nWindow;
+#endif
+        m_aSystemData.pSalFrame     = NULL;
+        m_aSystemData.pWidget       = m_pSocket;
+        m_aSystemData.nScreen       = pParent->getXScreenNumber().getXScreen();
+        m_aSystemData.pAppContext   = NULL;
         m_aSystemData.pShellWidget  = GTK_WIDGET(pParent->getWindow());
 
         g_signal_connect( G_OBJECT(m_pSocket), "button-press-event", G_CALLBACK(signalButton), this );

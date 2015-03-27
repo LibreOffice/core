@@ -1075,15 +1075,17 @@ void GtkSalFrame::InitCommon()
     m_aSystemData.nDepth        = pDisp->GetVisual( m_nXScreen ).GetDepth();
     m_aSystemData.aColormap     = pDisp->GetColormap( m_nXScreen ).GetXColormap();
     m_aSystemData.aWindow       = widget_get_xid(m_pWindow);
+    m_aSystemData.aShellWindow  = m_aSystemData.aWindow;
 #else
     static int nWindow = 0;
-    m_aSystemData.aWindow       = nWindow++;
+    m_aSystemData.aWindow       = nWindow;
+    m_aSystemData.aShellWindow  = nWindow;
+    ++nWindow;
 #endif
     m_aSystemData.pSalFrame     = this;
     m_aSystemData.pWidget       = m_pWindow;
     m_aSystemData.nScreen       = m_nXScreen.getXScreen();
     m_aSystemData.pAppContext   = NULL;
-    m_aSystemData.aShellWindow  = m_aSystemData.aWindow;
     m_aSystemData.pShellWidget  = m_aSystemData.pWidget;
 
     // fake an initial geometry, gets updated via configure event or SetPosSize
