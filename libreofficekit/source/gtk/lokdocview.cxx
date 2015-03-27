@@ -132,6 +132,15 @@ struct LOKDocView_Impl
     static gboolean renderOverlay(GtkWidget* pWidget, GdkEventExpose* pEvent, LOKDocView* pDocView);
     /// Implementation of expose event handler (renders cursor and selection overlay), invoked by renderOverlay().
     gboolean renderOverlayImpl(GtkWidget* pEventBox);
+    /// Is rRectangle empty?
+    static bool isEmptyRectangle(const GdkRectangle& rRectangle);
+    /**
+     * Renders pHandle below an rCursor rectangle on pCairo.
+     * @param rRectangle output parameter, the rectangle that contains the rendered handle.
+     */
+    void renderHandle(cairo_t* pCairo, const GdkRectangle& rCursor, cairo_surface_t* pHandle, GdkRectangle& rRectangle);
+    /// Renders pHandle around an rSelection rectangle on pCairo.
+    void renderGraphicHandle(cairo_t* pCairo, const GdkRectangle& rSelection, cairo_surface_t* pHandle);
 };
 
 LOKDocView_Impl::LOKDocView_Impl(LOKDocView* pDocView)
@@ -455,17 +464,12 @@ gboolean LOKDocView_Impl::renderOverlay(GtkWidget* pEventBox, GdkEventExpose* /*
     return pDocView->m_pImpl->renderOverlayImpl(pEventBox);
 }
 
-static gboolean lcl_isEmptyRectangle(GdkRectangle* pRectangle);
-static void lcl_renderHandle(cairo_t* pCairo, GdkRectangle* pCursor, cairo_surface_t* pHandle,
-                             GdkRectangle* pRectangle, LOKDocView* pDocView);
-static void lcl_renderGraphicHandle(cairo_t* pCairo, GdkRectangle* pSelection, cairo_surface_t* pHandle, GdkRectangle* pGraphicHandleRects, LOKDocView* pDocView);
-
 gboolean LOKDocView_Impl::renderOverlayImpl(GtkWidget* pWidget)
 {
 #if GTK_CHECK_VERSION(2,14,0) // we need gtk_widget_get_window()
     cairo_t* pCairo = gdk_cairo_create(gtk_widget_get_window(pWidget));
 
-    if (m_bEdit && m_bCursorVisible && m_bCursorOverlayVisible && !lcl_isEmptyRectangle(&m_aVisibleCursor))
+    if (m_bEdit && m_bCursorVisible && m_bCursorOverlayVisible && !isEmptyRectangle(m_aVisibleCursor))
     {
         if (m_aVisibleCursor.width < 30)
             // Set a minimal width if it would be 0.
@@ -480,12 +484,12 @@ gboolean LOKDocView_Impl::renderOverlayImpl(GtkWidget* pWidget)
         cairo_fill(pCairo);
     }
 
-    if (m_bEdit && m_bCursorVisible && !lcl_isEmptyRectangle(&m_aVisibleCursor) && !m_pTextSelectionRectangles)
+    if (m_bEdit && m_bCursorVisible && !isEmptyRectangle(m_aVisibleCursor) && !m_pTextSelectionRectangles)
     {
         // Have a cursor, but no selection: we need the middle handle.
         if (!m_pHandleMiddle)
             m_pHandleMiddle = cairo_image_surface_create_from_png(CURSOR_HANDLE_DIR "handle_middle.png");
-        lcl_renderHandle(pCairo, &m_aVisibleCursor, m_pHandleMiddle, &m_aHandleMiddleRect, m_pDocView);
+        renderHandle(pCairo, m_aVisibleCursor, m_pHandleMiddle, m_aHandleMiddleRect);
     }
 
     if (m_pTextSelectionRectangles)
@@ -504,31 +508,27 @@ gboolean LOKDocView_Impl::renderOverlayImpl(GtkWidget* pWidget)
         }
 
         // Handles
-        if (!lcl_isEmptyRectangle(&m_aTextSelectionStart))
+        if (!isEmptyRectangle(m_aTextSelectionStart))
         {
             // Have a start position: we need a start handle.
             if (!m_pHandleStart)
                 m_pHandleStart = cairo_image_surface_create_from_png(CURSOR_HANDLE_DIR "handle_start.png");
-            lcl_renderHandle(pCairo, &m_aTextSelectionStart,
-                             m_pHandleStart, &m_aHandleStartRect,
-                             m_pDocView);
+            renderHandle(pCairo, m_aTextSelectionStart, m_pHandleStart, m_aHandleStartRect);
         }
-        if (!lcl_isEmptyRectangle(&m_aTextSelectionEnd))
+        if (!isEmptyRectangle(m_aTextSelectionEnd))
         {
             // Have a start position: we need an end handle.
             if (!m_pHandleEnd)
                 m_pHandleEnd = cairo_image_surface_create_from_png(CURSOR_HANDLE_DIR "handle_end.png");
-            lcl_renderHandle(pCairo, &m_aTextSelectionEnd,
-                             m_pHandleEnd, &m_aHandleEndRect,
-                             m_pDocView);
+            renderHandle(pCairo, m_aTextSelectionEnd, m_pHandleEnd, m_aHandleEndRect);
         }
     }
 
-    if (!lcl_isEmptyRectangle(&m_aGraphicSelection))
+    if (!isEmptyRectangle(m_aGraphicSelection))
     {
         if (!m_pGraphicHandle)
             m_pGraphicHandle = cairo_image_surface_create_from_png(CURSOR_HANDLE_DIR "handle_graphic.png");
-        lcl_renderGraphicHandle(pCairo, &m_aGraphicSelection, m_pGraphicHandle, m_aGraphicHandleRects, m_pDocView);
+        renderGraphicHandle(pCairo, m_aGraphicSelection, m_pGraphicHandle);
     }
 
     cairo_destroy(pCairo);
@@ -536,6 +536,101 @@ gboolean LOKDocView_Impl::renderOverlayImpl(GtkWidget* pWidget)
     return FALSE;
 }
 
+bool LOKDocView_Impl::isEmptyRectangle(const GdkRectangle& rRectangle)
+{
+    return rRectangle.x == 0 && rRectangle.y == 0 && rRectangle.width == 0 && rRectangle.height == 0;
+}
+
+void LOKDocView_Impl::renderHandle(cairo_t* pCairo, const GdkRectangle& rCursor, cairo_surface_t* pHandle, GdkRectangle& rRectangle)
+{
+    GdkPoint aCursorBottom;
+    int nHandleWidth, nHandleHeight;
+    double fHandleScale;
+
+    nHandleWidth = cairo_image_surface_get_width(pHandle);
+    nHandleHeight = cairo_image_surface_get_height(pHandle);
+    // We want to scale down the handle, so that its height is the same as the cursor caret.
+    fHandleScale = twipToPixel(rCursor.height) / nHandleHeight;
+    // We want the top center of the handle bitmap to be at the bottom center of the cursor rectangle.
+    aCursorBottom.x = twipToPixel(rCursor.x) + twipToPixel(rCursor.width) / 2 - (nHandleWidth * fHandleScale) / 2;
+    aCursorBottom.y = twipToPixel(rCursor.y) + twipToPixel(rCursor.height);
+    cairo_save(pCairo);
+    cairo_translate(pCairo, aCursorBottom.x, aCursorBottom.y);
+    cairo_scale(pCairo, fHandleScale, fHandleScale);
+    cairo_set_source_surface(pCairo, pHandle, 0, 0);
+    cairo_paint(pCairo);
+    cairo_restore(pCairo);
+
+    rRectangle.x = aCursorBottom.x;
+    rRectangle.y = aCursorBottom.y;
+    rRectangle.width = nHandleWidth * fHandleScale;
+    rRectangle.height = nHandleHeight * fHandleScale;
+}
+
+/// Renders pHandle around an rSelection rectangle on pCairo.
+void LOKDocView_Impl::renderGraphicHandle(cairo_t* pCairo, const GdkRectangle& rSelection, cairo_surface_t* pHandle)
+{
+    int nHandleWidth, nHandleHeight;
+    GdkRectangle aSelection;
+
+    nHandleWidth = cairo_image_surface_get_width(pHandle);
+    nHandleHeight = cairo_image_surface_get_height(pHandle);
+
+    aSelection.x = twipToPixel(rSelection.x);
+    aSelection.y = twipToPixel(rSelection.y);
+    aSelection.width = twipToPixel(rSelection.width);
+    aSelection.height = twipToPixel(rSelection.height);
+
+    for (int i = 0; i < GRAPHIC_HANDLE_COUNT; ++i)
+    {
+        int x = aSelection.x, y = aSelection.y;
+        cairo_save(pCairo);
+
+        switch (i)
+        {
+        case 0: // top-left
+            break;
+        case 1: // top-middle
+            x += aSelection.width / 2;
+            break;
+        case 2: // top-right
+            x += aSelection.width;
+            break;
+        case 3: // middle-left
+            y += aSelection.height / 2;
+            break;
+        case 4: // middle-right
+            x += aSelection.width;
+            y += aSelection.height / 2;
+            break;
+        case 5: // bottom-left
+            y += aSelection.height;
+            break;
+        case 6: // bottom-middle
+            x += aSelection.width / 2;
+            y += aSelection.height;
+            break;
+        case 7: // bottom-right
+            x += aSelection.width;
+            y += aSelection.height;
+            break;
+        }
+
+        // Center the handle.
+        x -= nHandleWidth / 2;
+        y -= nHandleHeight / 2;
+
+        m_aGraphicHandleRects[i].x = x;
+        m_aGraphicHandleRects[i].y = y;
+        m_aGraphicHandleRects[i].width = nHandleWidth;
+        m_aGraphicHandleRects[i].height = nHandleHeight;
+
+        cairo_translate(pCairo, x, y);
+        cairo_set_source_surface(pCairo, pHandle, 0, 0);
+        cairo_paint(pCairo);
+        cairo_restore(pCairo);
+    }
+}
 
 static void lok_docview_class_init( gpointer );
 static void lok_docview_init( GTypeInstance *, gpointer );
@@ -619,11 +714,6 @@ SAL_DLLPUBLIC_EXPORT GtkWidget* lok_docview_new( LibreOfficeKit* pOffice )
     return GTK_WIDGET( pDocView );
 }
 
-static gboolean lcl_isEmptyRectangle(GdkRectangle* pRectangle)
-{
-    return pRectangle->x == 0 && pRectangle->y == 0 && pRectangle->width == 0 && pRectangle->height == 0;
-}
-
 /// Takes care of the blinking cursor.
 static gboolean lcl_handleTimeout(gpointer pData)
 {
@@ -639,103 +729,6 @@ static gboolean lcl_handleTimeout(gpointer pData)
     }
 
     return G_SOURCE_CONTINUE;
-}
-
-/// Renders pHandle below a pCursor rectangle on pCairo.
-static void lcl_renderHandle(cairo_t* pCairo, GdkRectangle* pCursor, cairo_surface_t* pHandle,
-                             GdkRectangle* pRectangle, LOKDocView* pDocView)
-{
-    GdkPoint aCursorBottom;
-    int nHandleWidth, nHandleHeight;
-    double fHandleScale;
-
-    nHandleWidth = cairo_image_surface_get_width(pHandle);
-    nHandleHeight = cairo_image_surface_get_height(pHandle);
-    // We want to scale down the handle, so that its height is the same as the cursor caret.
-    fHandleScale = pDocView->m_pImpl->twipToPixel(pCursor->height) / nHandleHeight;
-    // We want the top center of the handle bitmap to be at the bottom center of the cursor rectangle.
-    aCursorBottom.x = pDocView->m_pImpl->twipToPixel(pCursor->x) + pDocView->m_pImpl->twipToPixel(pCursor->width) / 2 - (nHandleWidth * fHandleScale) / 2;
-    aCursorBottom.y = pDocView->m_pImpl->twipToPixel(pCursor->y) + pDocView->m_pImpl->twipToPixel(pCursor->height);
-    cairo_save(pCairo);
-    cairo_translate(pCairo, aCursorBottom.x, aCursorBottom.y);
-    cairo_scale(pCairo, fHandleScale, fHandleScale);
-    cairo_set_source_surface(pCairo, pHandle, 0, 0);
-    cairo_paint(pCairo);
-    cairo_restore(pCairo);
-
-    if (pRectangle)
-    {
-        // Return the rectangle that contains the rendered handle.
-        pRectangle->x = aCursorBottom.x;
-        pRectangle->y = aCursorBottom.y;
-        pRectangle->width = nHandleWidth * fHandleScale;
-        pRectangle->height = nHandleHeight * fHandleScale;
-    }
-}
-
-/// Renders pHandle around a pSelection rectangle on pCairo.
-static void lcl_renderGraphicHandle(cairo_t* pCairo, GdkRectangle* pSelection, cairo_surface_t* pHandle, GdkRectangle* pGraphicHandleRects, LOKDocView* pDocView)
-{
-    int nHandleWidth, nHandleHeight;
-    GdkRectangle aSelection;
-
-    nHandleWidth = cairo_image_surface_get_width(pHandle);
-    nHandleHeight = cairo_image_surface_get_height(pHandle);
-
-    aSelection.x = pDocView->m_pImpl->twipToPixel(pSelection->x);
-    aSelection.y = pDocView->m_pImpl->twipToPixel(pSelection->y);
-    aSelection.width = pDocView->m_pImpl->twipToPixel(pSelection->width);
-    aSelection.height = pDocView->m_pImpl->twipToPixel(pSelection->height);
-
-    for (int i = 0; i < GRAPHIC_HANDLE_COUNT; ++i)
-    {
-        int x = aSelection.x, y = aSelection.y;
-        cairo_save(pCairo);
-
-        switch (i)
-        {
-        case 0: // top-left
-            break;
-        case 1: // top-middle
-            x += aSelection.width / 2;
-            break;
-        case 2: // top-right
-            x += aSelection.width;
-            break;
-        case 3: // middle-left
-            y += aSelection.height / 2;
-            break;
-        case 4: // middle-right
-            x += aSelection.width;
-            y += aSelection.height / 2;
-            break;
-        case 5: // bottom-left
-            y += aSelection.height;
-            break;
-        case 6: // bottom-middle
-            x += aSelection.width / 2;
-            y += aSelection.height;
-            break;
-        case 7: // bottom-right
-            x += aSelection.width;
-            y += aSelection.height;
-            break;
-        }
-
-        // Center the handle.
-        x -= nHandleWidth / 2;
-        y -= nHandleHeight / 2;
-
-        pGraphicHandleRects[i].x = x;
-        pGraphicHandleRects[i].y = y;
-        pGraphicHandleRects[i].width = nHandleWidth;
-        pGraphicHandleRects[i].height = nHandleHeight;
-
-        cairo_translate(pCairo, x, y);
-        cairo_set_source_surface(pCairo, pHandle, 0, 0);
-        cairo_paint(pCairo);
-        cairo_restore(pCairo);
-    }
 }
 
 void renderDocument(LOKDocView* pDocView, GdkRectangle* pPartial)
