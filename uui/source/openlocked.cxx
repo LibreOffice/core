@@ -32,7 +32,7 @@ OpenLockedQueryBox::OpenLockedQueryBox( vcl::Window* pParent, ResMgr* pResMgr, c
 
     AddButton(ResId(STR_OPENLOCKED_OPENCOPY_BTN, *pResMgr).toString(), RET_NO, 0);
 
-    AddButton( StandardButtonType::CANCEL, RET_CANCEL, BUTTONDIALOG_CANCELBUTTON );
+    AddButton( StandardButtonType::Cancel, RET_CANCEL, BUTTONDIALOG_CANCELBUTTON );
     SetButtonHelpText( RET_YES, OUString() );
     SetButtonHelpText( RET_NO, OUString() );
 

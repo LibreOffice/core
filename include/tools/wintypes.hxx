@@ -298,18 +298,18 @@ enum class SymbolAlign { LEFT, RIGHT };
 enum class StandardButtonType
 {
     OK           = 0,
-    CANCEL       = 1,
-    SB_YES       = 2, // overlaps with YES constant on MacOS
-    NO           = 3,
-    RETRY        = 4,
-    HELP         = 5,
-    CLOSE        = 6,
-    MORE         = 7,
-    SB_IGNORE    = 8, // overlaps with IGNORE constant on Windows
-    ABORT        = 9,
-    LESS         = 10,
-    RESET        = 11,
-    COUNT        = 12,
+    Cancel       = 1,
+    Yes          = 2,
+    No           = 3,
+    Retry        = 4,
+    Help         = 5,
+    Close        = 6,
+    More         = 7,
+    Ignore       = 8,
+    Abort        = 9,
+    Less         = 10,
+    Reset        = 11,
+    Count        = 12,
 };
 
 // prominent place for ListBox window types

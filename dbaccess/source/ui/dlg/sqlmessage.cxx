@@ -425,12 +425,12 @@ namespace
         sal_uInt16 nButtonID = 0;
         switch ( _eType )
         {
-        case StandardButtonType::SB_YES:    nButtonID = RET_YES; break;
-        case StandardButtonType::NO:     nButtonID = RET_NO; break;
+        case StandardButtonType::Yes:    nButtonID = RET_YES; break;
+        case StandardButtonType::No:     nButtonID = RET_NO; break;
         case StandardButtonType::OK:     nButtonID = RET_OK; break;
-        case StandardButtonType::CANCEL: nButtonID = RET_CANCEL; break;
-        case StandardButtonType::RETRY:  nButtonID = RET_RETRY; break;
-        case StandardButtonType::HELP:   nButtonID = RET_HELP; break;
+        case StandardButtonType::Cancel: nButtonID = RET_CANCEL; break;
+        case StandardButtonType::Retry:  nButtonID = RET_RETRY; break;
+        case StandardButtonType::Help:   nButtonID = RET_HELP; break;
         default:
             OSL_FAIL( "lcl_addButton: invalid button id!" );
             break;
@@ -564,24 +564,24 @@ void OSQLMessageBox::impl_createStandardButtons( WinBits _nStyle )
 {
     if ( _nStyle & WB_YES_NO_CANCEL )
     {
-        lcl_addButton( *this, StandardButtonType::SB_YES,    ( _nStyle & WB_DEF_YES ) != 0 );
-        lcl_addButton( *this, StandardButtonType::NO,     ( _nStyle & WB_DEF_NO ) != 0 );
-        lcl_addButton( *this, StandardButtonType::CANCEL, ( _nStyle & WB_DEF_CANCEL ) != 0 );
+        lcl_addButton( *this, StandardButtonType::Yes,    ( _nStyle & WB_DEF_YES ) != 0 );
+        lcl_addButton( *this, StandardButtonType::No,     ( _nStyle & WB_DEF_NO ) != 0 );
+        lcl_addButton( *this, StandardButtonType::Cancel, ( _nStyle & WB_DEF_CANCEL ) != 0 );
     }
     else if ( _nStyle & WB_OK_CANCEL )
     {
         lcl_addButton( *this, StandardButtonType::OK,     ( _nStyle & WB_DEF_OK ) != 0 );
-        lcl_addButton( *this, StandardButtonType::CANCEL, ( _nStyle & WB_DEF_CANCEL ) != 0 );
+        lcl_addButton( *this, StandardButtonType::Cancel, ( _nStyle & WB_DEF_CANCEL ) != 0 );
     }
     else if ( _nStyle & WB_YES_NO )
     {
-        lcl_addButton( *this, StandardButtonType::SB_YES,    ( _nStyle & WB_DEF_YES ) != 0 );
-        lcl_addButton( *this, StandardButtonType::NO,     ( _nStyle & WB_DEF_NO ) != 0 );
+        lcl_addButton( *this, StandardButtonType::Yes,    ( _nStyle & WB_DEF_YES ) != 0 );
+        lcl_addButton( *this, StandardButtonType::No,     ( _nStyle & WB_DEF_NO ) != 0 );
     }
     else if ( _nStyle & WB_RETRY_CANCEL )
     {
-        lcl_addButton( *this, StandardButtonType::RETRY,  ( _nStyle & WB_DEF_RETRY ) != 0 );
-        lcl_addButton( *this, StandardButtonType::CANCEL, ( _nStyle & WB_DEF_CANCEL ) != 0 );
+        lcl_addButton( *this, StandardButtonType::Retry,  ( _nStyle & WB_DEF_RETRY ) != 0 );
+        lcl_addButton( *this, StandardButtonType::Cancel, ( _nStyle & WB_DEF_CANCEL ) != 0 );
     }
     else
     {
@@ -591,7 +591,7 @@ void OSQLMessageBox::impl_createStandardButtons( WinBits _nStyle )
 
     if ( !m_sHelpURL.isEmpty() )
     {
-        lcl_addButton( *this, StandardButtonType::HELP, false );
+        lcl_addButton( *this, StandardButtonType::Help, false );
 
         OUString aTmp;
         INetURLObject aHID( m_sHelpURL );
@@ -628,7 +628,7 @@ void OSQLMessageBox::impl_addDetailsButton()
 
     if ( bMoreDetailsAvailable )
     {
-        AddButton( StandardButtonType::MORE, RET_MORE, 0 );
+        AddButton( StandardButtonType::More, RET_MORE, 0 );
         PushButton* pButton = GetPushButton( RET_MORE );
         OSL_ENSURE( pButton, "OSQLMessageBox::impl_addDetailsButton: just added this button, why isn't it there?" );
         pButton->SetClickHdl( LINK( this, OSQLMessageBox, ButtonClickHdl ) );

@@ -115,7 +115,7 @@ OUString Button::GetStandardText( StandardButtonType eButton )
     {
         sal_uInt32 nResId;
         const char* pDefText;
-    } aResIdAry[static_cast<int>(StandardButtonType::COUNT)] =
+    } aResIdAry[static_cast<int>(StandardButtonType::Count)] =
     {
         { SV_BUTTONTEXT_OK, "~OK" },
         { SV_BUTTONTEXT_CANCEL, "~Cancel" },
@@ -1698,7 +1698,7 @@ void CancelButton::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
     PushButton::ImplInit( pParent, nStyle );
 
-    SetText( Button::GetStandardText( StandardButtonType::CANCEL ) );
+    SetText( Button::GetStandardText( StandardButtonType::Cancel ) );
 }
 
 CancelButton::CancelButton( vcl::Window* pParent, WinBits nStyle ) :
@@ -1742,14 +1742,14 @@ void CancelButton::Click()
 CloseButton::CloseButton( vcl::Window* pParent, WinBits nStyle )
     : CancelButton(pParent, nStyle)
 {
-    SetText( Button::GetStandardText( StandardButtonType::CLOSE ) );
+    SetText( Button::GetStandardText( StandardButtonType::Close ) );
 }
 
 void HelpButton::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
     PushButton::ImplInit( pParent, nStyle | WB_NOPOINTERFOCUS );
 
-    SetText( Button::GetStandardText( StandardButtonType::HELP ) );
+    SetText( Button::GetStandardText( StandardButtonType::Help ) );
 }
 
 HelpButton::HelpButton( vcl::Window* pParent, WinBits nStyle ) :

@@ -42,8 +42,8 @@ void MoreButton::ImplInit( vcl::Window* pParent, WinBits nStyle )
 
     PushButton::ImplInit( pParent, nStyle );
 
-    mpMBData->maMoreText = Button::GetStandardText( StandardButtonType::MORE );
-    mpMBData->maLessText = Button::GetStandardText( StandardButtonType::LESS );
+    mpMBData->maMoreText = Button::GetStandardText( StandardButtonType::More );
+    mpMBData->maLessText = Button::GetStandardText( StandardButtonType::Less );
 
     ShowState();
 

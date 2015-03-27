@@ -30,7 +30,7 @@ LockFailedQueryBox::LockFailedQueryBox( vcl::Window* pParent, ResMgr* pResMgr ) 
     SetImage( ErrorBox::GetStandardImage() );
 
     AddButton( StandardButtonType::OK, RET_OK, BUTTONDIALOG_OKBUTTON );
-    AddButton( StandardButtonType::CANCEL, RET_CANCEL, BUTTONDIALOG_CANCELBUTTON );
+    AddButton( StandardButtonType::Cancel, RET_CANCEL, BUTTONDIALOG_CANCELBUTTON );
 
     SetMessText(ResId(STR_LOCKFAILED_MSG, *pResMgr ).toString());
     SetCheckBoxText(ResId(STR_LOCKFAILED_DONTSHOWAGAIN, *pResMgr).toString());
