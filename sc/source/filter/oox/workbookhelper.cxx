@@ -798,6 +798,11 @@ ScDocumentImport& WorkbookHelper::getDocImport()
     return mrBookGlob.getDocImport();
 }
 
+const ScDocumentImport& WorkbookHelper::getDocImport() const
+{
+    return mrBookGlob.getDocImport();
+}
+
 ScEditEngineDefaulter& WorkbookHelper::getEditEngine() const
 {
     return mrBookGlob.getEditEngine();

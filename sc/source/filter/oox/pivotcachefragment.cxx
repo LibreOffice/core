@@ -22,7 +22,9 @@
 #include <oox/helper/attributelist.hxx>
 #include "addressconverter.hxx"
 #include "biffinputstream.hxx"
+#include "formulabuffer.hxx"
 #include "pivotcachebuffer.hxx"
+#include "worksheetbuffer.hxx"
 
 namespace oox {
 namespace xls {
@@ -210,8 +212,12 @@ PivotCacheRecordsFragment::PivotCacheRecordsFragment( const WorksheetHelper& rHe
     mnRowIdx( 0 ),
     mbInRecord( false )
 {
+    sal_Int32 nSheetCount = rPivotCache.getWorksheets().getAllSheetCount();
+
     // prepare sheet: insert column header names into top row
     rPivotCache.writeSourceHeaderCells( *this );
+    // resize formula buffers since we've added a new dummy sheet
+    rHelper.getFormulaBuffer().SetSheetCount( nSheetCount );
 }
 
 ContextHandlerRef PivotCacheRecordsFragment::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
