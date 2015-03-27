@@ -994,7 +994,7 @@ void Font::fillToItemSet( SfxItemSet& rItemSet, bool bEditEngineText, bool bSkip
     // strike out style
     if( maUsedFlags.mbStrikeoutUsed )
     {
-        ScfTools::PutItem( rItemSet, SvxCrossedOutItem( maModel.mbStrikeout ? STRIKEOUT_SINGLE : STRIKEOUT_NONE, bEditEngineText ? EE_CHAR_STRIKEOUT : ATTR_FONT_CROSSEDOUT ), ATTR_FONT_CROSSEDOUT, bSkipPoolDefs );
+        ScfTools::PutItem( rItemSet, SvxCrossedOutItem( maModel.mbStrikeout ? STRIKEOUT_SINGLE : STRIKEOUT_NONE, bEditEngineText ? EE_CHAR_STRIKEOUT : ATTR_FONT_CROSSEDOUT ), bEditEngineText ? EE_CHAR_STRIKEOUT : ATTR_FONT_CROSSEDOUT, bSkipPoolDefs );
     }
 
     // outline style
