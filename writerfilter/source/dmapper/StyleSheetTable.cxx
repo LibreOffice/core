@@ -854,13 +854,12 @@ void StyleSheetTable::lcl_entry(int /*pos*/, writerfilter::Reference<Properties>
         // grab bag, as we can be sure that only a single style entry has
         // latent style info.
         uno::Reference<beans::XPropertySet> xPropertySet(m_pImpl->m_xTextDocument, uno::UNO_QUERY);
-        uno::Sequence<beans::PropertyValue> aGrabBag;
-        xPropertySet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
-        sal_Int32 nLength = aGrabBag.getLength();
-        aGrabBag.realloc(nLength + 1);
-        aGrabBag[nLength].Name = "latentStyles";
-        aGrabBag[nLength].Value = uno::makeAny(aLatentStyles);
-        xPropertySet->setPropertyValue("InteropGrabBag", uno::makeAny(aGrabBag));
+        auto aGrabBag = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(xPropertySet->getPropertyValue("InteropGrabBag").get< uno::Sequence<beans::PropertyValue> >());
+        beans::PropertyValue aValue;
+        aValue.Name = "latentStyles";
+        aValue.Value = uno::makeAny(aLatentStyles);
+        aGrabBag.push_back(aValue);
+        xPropertySet->setPropertyValue("InteropGrabBag", uno::makeAny(comphelper::containerToSequence(aGrabBag)));
     }
 
     StyleSheetEntryPtr pEmptyEntry;
