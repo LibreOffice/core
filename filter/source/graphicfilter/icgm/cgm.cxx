@@ -238,7 +238,7 @@ double CGM::ImplGetFloat( RealPrecision eRealPrecision, sal_uInt32 nRealSize )
         const int nSwitch = ( bCompatible ) ? 0 : 1 ;
         if ( nRealSize == 4 )
         {
-            sal_uInt16* pShort = (sal_uInt16*)pPtr;
+            sal_uInt16* pShort = static_cast<sal_uInt16*>(pPtr);
             nVal = pShort[ nSwitch ];
             nVal <<= 16;
             nVal |= pShort[ nSwitch ^ 1 ];
@@ -247,7 +247,7 @@ double CGM::ImplGetFloat( RealPrecision eRealPrecision, sal_uInt32 nRealSize )
         }
         else
         {
-            sal_Int32* pLong = (sal_Int32*)pPtr;
+            sal_Int32* pLong = static_cast<sal_Int32*>(pPtr);
             nRetValue = (double)abs( pLong[ nSwitch ] );
             nRetValue *= 65536;
             nVal = (sal_uInt32)( pLong[ nSwitch ^ 1 ] );

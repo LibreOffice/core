@@ -2607,7 +2607,7 @@ void SVGActionWriter::ImplWriteBmp( const BitmapEx& rBmpEx,
             {
                 Point                    aPt;
                 Size                     aSz;
-                Sequence< sal_Int8 >     aSeq( (sal_Int8*) aOStm.GetData(), aOStm.Tell() );
+                Sequence< sal_Int8 >     aSeq( static_cast<sal_Int8 const *>(aOStm.GetData()), aOStm.Tell() );
                 OUStringBuffer aBuffer( "data:image/png;base64," );
                 ::sax::Converter::encodeBase64( aBuffer, aSeq );
 

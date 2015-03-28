@@ -278,7 +278,7 @@ extern "C" {
 static void WriteFileInThread(void *wData)
 {
     sal_uInt64 nCount;
-    WriteData *wdata = (WriteData *)wData;
+    WriteData *wdata = static_cast<WriteData *>(wData);
     osl_writeFile(wdata->m_pFile, wdata->m_pBuf, wdata->m_nBytesToWrite, &nCount);
     // The number of bytes written does not matter.
     // The helper process may close its input stream before reading it all.
@@ -431,7 +431,7 @@ void CreateMtfReplacementAction( GDIMetaFile& rMtf, SvStream& rStrm, sal_uInt32 
             rStrm.Read( pBuf.get(), nSizeTIFF );
             aReplacement.Write( pBuf.get(), nSizeTIFF );
         }
-        rMtf.AddAction( (MetaAction*)( new MetaCommentAction( aComment, 0, (const sal_uInt8*)aReplacement.GetData(), aReplacement.Tell() ) ) );
+        rMtf.AddAction( (MetaAction*)( new MetaCommentAction( aComment, 0, static_cast<const sal_uInt8*>(aReplacement.GetData()), aReplacement.Tell() ) ) );
     }
     else
         rMtf.AddAction( (MetaAction*)( new MetaCommentAction( aComment, 0, NULL, 0 ) ) );

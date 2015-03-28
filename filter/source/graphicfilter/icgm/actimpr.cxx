@@ -66,7 +66,7 @@ CGMImpressOutAct::CGMImpressOutAct( CGM& rCGM, const uno::Reference< frame::XMod
                 maXMultiServiceFactory.set( rModel, uno::UNO_QUERY);
                 if( maXMultiServiceFactory.is() )
                 {
-                    maXDrawPage = *(uno::Reference< drawing::XDrawPage > *)maXDrawPages->getByIndex( 0 ).getValue();
+                    maXDrawPage = *static_cast<uno::Reference< drawing::XDrawPage > const *>(maXDrawPages->getByIndex( 0 ).getValue());
                     if ( ImplInitPage() )
                         bStatRet = true;
                 }
@@ -424,7 +424,7 @@ void CGMImpressOutAct::EndGroup()
                 uno::Reference< drawing::XShapes >  aXShapes = drawing::ShapeCollection::create(comphelper::getProcessComponentContext());
                 for ( sal_uInt32 i = mnFirstIndex; i < mnCurrentCount; i++ )
                 {
-                    uno::Reference< drawing::XShape >  aXShape = *(uno::Reference< drawing::XShape > *)maXShapes->getByIndex( i ).getValue();
+                    uno::Reference< drawing::XShape >  aXShape = *static_cast<uno::Reference< drawing::XShape > const *>(maXShapes->getByIndex( i ).getValue());
                     if (aXShape.is() )
                     {
                         aXShapes->add( aXShape );
@@ -880,7 +880,7 @@ void CGMImpressOutAct::AppendText( char* pString, sal_uInt32 /*nSize*/, FinalFla
 {
     if ( nFinalTextCount )
     {
-        uno::Reference< drawing::XShape >  aShape = *(uno::Reference< drawing::XShape > *)maXShapes->getByIndex( nFinalTextCount - 1 ).getValue();
+        uno::Reference< drawing::XShape >  aShape = *static_cast<uno::Reference< drawing::XShape > const *>(maXShapes->getByIndex( nFinalTextCount - 1 ).getValue());
         if ( aShape.is() )
         {
             uno::Reference< text::XText >  xText;

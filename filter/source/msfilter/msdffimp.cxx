@@ -4937,7 +4937,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
 {
     if( !rTextRect.IsEmpty() )
     {
-        SvxMSDffImportData& rImportData = *(SvxMSDffImportData*)pData;
+        SvxMSDffImportData& rImportData = *static_cast<SvxMSDffImportData*>(pData);
         SvxMSDffImportRec* pImpRec = new SvxMSDffImportRec;
         bool bDeleteImpRec = true;
         SvxMSDffImportRec* pTextImpRec = pImpRec;

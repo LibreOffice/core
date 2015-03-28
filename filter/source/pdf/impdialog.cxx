@@ -1513,7 +1513,7 @@ ImplErrorDialog::~ImplErrorDialog()
 {
     // free strings again
     for( sal_uInt16 n = 0; n < m_pErrors->GetEntryCount(); n++ )
-        delete (OUString*)m_pErrors->GetEntryData( n );
+        delete static_cast<OUString*>(m_pErrors->GetEntryData( n ));
 }
 
 IMPL_LINK_NOARG(ImplErrorDialog, SelectHdl)

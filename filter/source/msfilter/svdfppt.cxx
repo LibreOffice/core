@@ -725,7 +725,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
     // we are initializing our return value with the object that was imported by our escher import
     SdrObject* pRet = pOriginalObj;
 
-    ProcessData& rData = *((ProcessData*)pData);
+    ProcessData& rData = *static_cast<ProcessData*>(pData);
     PptSlidePersistEntry& rPersistEntry = rData.rPersistEntry;
 
     if ( ! ( rObjData.nSpFlags & SP_FGROUP  ) )     // sj: #114758# ...
@@ -1193,7 +1193,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
         {
             maShapeRecords.Current()->SeekToBegOfRecord( rSt );
             DffPropertyReader aSecPropSet( *this );
-            aSecPropSet.ReadPropSet( rSt, (ProcessData*)pData );
+            aSecPropSet.ReadPropSet( rSt, pData );
             sal_Int32 nTableProperties = aSecPropSet.GetPropertyValue( DFF_Prop_tableProperties, 0 );
             if ( nTableProperties & 3 )
             {
@@ -2568,7 +2568,7 @@ bool SdrPowerPointImport::SeekToShape( SvStream& rSt, void* pClientData, sal_uIn
     bool bRet = SvxMSDffManager::SeekToShape( rSt, pClientData, nId );
     if ( !bRet )
     {
-        ProcessData& rData = *( (ProcessData*)pClientData );
+        ProcessData& rData = *static_cast<ProcessData*>(pClientData);
         PptSlidePersistEntry& rPersistEntry = rData.rPersistEntry;
         if ( rPersistEntry.ePageKind == PPT_SLIDEPAGE )
         {

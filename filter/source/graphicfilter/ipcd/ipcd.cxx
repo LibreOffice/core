@@ -210,14 +210,14 @@ void PCDReader::ReadImage()
     nW2=nWidth>>1;
     nH2=nHeight>>1;
 
-    pL0 =(sal_uInt8*)rtl_allocateMemory( nWidth );
-    pL1 =(sal_uInt8*)rtl_allocateMemory( nWidth );
-    pCb =(sal_uInt8*)rtl_allocateMemory( nW2+1 );
-    pCr =(sal_uInt8*)rtl_allocateMemory( nW2+1 );
-    pL0N=(sal_uInt8*)rtl_allocateMemory( nWidth );
-    pL1N=(sal_uInt8*)rtl_allocateMemory( nWidth );
-    pCbN=(sal_uInt8*)rtl_allocateMemory( nW2+1 );
-    pCrN=(sal_uInt8*)rtl_allocateMemory( nW2+1 );
+    pL0 =static_cast<sal_uInt8*>(rtl_allocateMemory( nWidth ));
+    pL1 =static_cast<sal_uInt8*>(rtl_allocateMemory( nWidth ));
+    pCb =static_cast<sal_uInt8*>(rtl_allocateMemory( nW2+1 ));
+    pCr =static_cast<sal_uInt8*>(rtl_allocateMemory( nW2+1 ));
+    pL0N=static_cast<sal_uInt8*>(rtl_allocateMemory( nWidth ));
+    pL1N=static_cast<sal_uInt8*>(rtl_allocateMemory( nWidth ));
+    pCbN=static_cast<sal_uInt8*>(rtl_allocateMemory( nW2+1 ));
+    pCrN=static_cast<sal_uInt8*>(rtl_allocateMemory( nW2+1 ));
 
     if ( pL0 == NULL || pL1 == NULL || pCb == NULL || pCr == NULL ||
         pL0N == NULL || pL1N == NULL || pCbN == NULL || pCrN == NULL)

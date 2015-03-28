@@ -184,7 +184,7 @@ void XMLFilterSettingsDialog::updateStates()
     bool bIsDefault = false;
     if(pSelectedEntry)
     {
-        filter_info_impl* pInfo = (filter_info_impl*)pSelectedEntry->GetUserData();
+        filter_info_impl* pInfo = static_cast<filter_info_impl*>(pSelectedEntry->GetUserData());
         bIsReadonly = pInfo->mbReadonly;
 
         sal_Int32 nFact = SvtModuleOptions::E_WRITER;
@@ -244,7 +244,7 @@ void XMLFilterSettingsDialog::onEdit()
     if( pEntry )
     {
         // get its filter info
-        filter_info_impl* pOldInfo = (filter_info_impl*)pEntry->GetUserData();
+        filter_info_impl* pOldInfo = static_cast<filter_info_impl*>(pEntry->GetUserData());
 
         // execute XML Filter Dialog
         XMLFilterTabDialog aDlg( this, *getXSLTDialogResMgr(), mxContext, pOldInfo );
@@ -770,7 +770,7 @@ void XMLFilterSettingsDialog::onTest()
     SvTreeListEntry* pEntry = m_pFilterListBox->FirstSelected();
     if( pEntry )
     {
-        filter_info_impl* pInfo = (filter_info_impl*)pEntry->GetUserData();
+        filter_info_impl* pInfo = static_cast<filter_info_impl*>(pEntry->GetUserData());
 
         XMLFilterTestDialog aDlg(this, mxContext);
         aDlg.test( *pInfo );
@@ -784,7 +784,7 @@ void XMLFilterSettingsDialog::onDelete()
     SvTreeListEntry* pEntry = m_pFilterListBox->FirstSelected();
     if( pEntry )
     {
-        filter_info_impl* pInfo = (filter_info_impl*)pEntry->GetUserData();
+        filter_info_impl* pInfo = static_cast<filter_info_impl*>(pEntry->GetUserData());
 
         OUString aPlaceHolder( "%s" );
         OUString aMessage(RESIDSTR(STR_WARN_DELETE));
@@ -880,7 +880,7 @@ void XMLFilterSettingsDialog::onSave()
     SvTreeListEntry* pEntry = m_pFilterListBox->FirstSelected();
     while( pEntry )
     {
-        filter_info_impl* pInfo = (filter_info_impl*)pEntry->GetUserData();
+        filter_info_impl* pInfo = static_cast<filter_info_impl*>(pEntry->GetUserData());
         aFilters.push_back( pInfo );
         pEntry = m_pFilterListBox->NextSelected( pEntry );
         nFilters++;
@@ -1509,7 +1509,7 @@ void XMLFilterListBox::changeEntry( const filter_info_impl* pInfo )
     for( nPos = 0; nPos < nCount; nPos++ )
     {
         SvTreeListEntry* pEntry = GetEntry( nPos );
-        if( (filter_info_impl*)pEntry->GetUserData() == pInfo )
+        if( static_cast<filter_info_impl*>(pEntry->GetUserData()) == pInfo )
         {
             OUString aEntryText( getEntryString( pInfo ) );
             SetEntryText( aEntryText, pEntry );
