@@ -2276,22 +2276,19 @@ throw (uno::RuntimeException, std::exception)
             cppu::UnoType<lang::XEventListener>::get(), xListener);
 }
 
-uno::Reference< table::XCell >  SwXTextTable::getCellByPosition(sal_Int32 nColumn, sal_Int32 nRow)
+uno::Reference<table::XCell>  SwXTextTable::getCellByPosition(sal_Int32 nColumn, sal_Int32 nRow)
     throw( uno::RuntimeException, lang::IndexOutOfBoundsException, std::exception )
 {
     SolarMutexGuard aGuard;
-    uno::Reference< table::XCell >  aRef;
-    SwFrmFmt* pFmt = GetFrmFmt();
+    SwFrmFmt* pFmt(GetFrmFmt());
     // sheet is unimportant
     if(nColumn >= 0 && nRow >= 0 && nColumn < USHRT_MAX && nRow < USHRT_MAX && pFmt)
     {
-        SwXCell* pXCell = lcl_CreateXCell(pFmt, nColumn, nRow);
+        auto pXCell = lcl_CreateXCell(pFmt, nColumn, nRow);
         if(pXCell)
-            aRef = pXCell;
+            return pXCell;
     }
-    if(!aRef.is())
-        throw lang::IndexOutOfBoundsException();
-    return aRef;
+    throw lang::IndexOutOfBoundsException();
 }
 
 uno::Reference< table::XCellRange >  SwXTextTable::GetRangeByName(SwFrmFmt* pFmt, SwTable* pTable,
