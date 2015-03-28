@@ -4777,20 +4777,23 @@ AC_SUBST(HYPH_SYSTEM_DIR)
 AC_SUBST(THES_SYSTEM_DIR)
 
 dnl ===================================================================
+dnl enable pch by default on windows
+dnl enable it explicitely otherwise
 AC_MSG_CHECKING([whether to enable pch feature])
-if test -n "$enable_pch" && test "$enable_pch" != "no"; then
+ENABLE_PCH=""
+if test "$enable_pch" != "no"; then
     if test "$_os" = "WINNT" -a "$WITH_MINGW" != "yes"; then
         ENABLE_PCH="TRUE"
         AC_MSG_RESULT([yes])
-    elif test "$GCC" = "yes"; then
+    elif test -n "$enable_pch" && test "$GCC" = "yes"; then
         ENABLE_PCH="TRUE"
         AC_MSG_RESULT([yes])
-    else
-        ENABLE_PCH=""
+    elif test -n "$enable_pch"; then
         AC_MSG_ERROR([Precompiled header not yet supported for your platform/compiler])
+    else
+        AC_MSG_RESULT([no])
     fi
 else
-    ENABLE_PCH=""
     AC_MSG_RESULT([no])
 fi
 AC_SUBST(ENABLE_PCH)
