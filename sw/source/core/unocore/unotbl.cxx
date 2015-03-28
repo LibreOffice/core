@@ -1452,28 +1452,19 @@ void SwXTextTableRow::SwClientNotify(const SwModify& rModify, const SfxHint& rHi
 
 SwTableLine* SwXTextTableRow::FindLine(SwTable* pTable, SwTableLine* pLine)
 {
-    SwTableLine* pRet = 0;
-    SwTableLines &rLines = pTable->GetTabLines();
-    for(size_t i = 0; i < rLines.size(); ++i)
-        if(rLines[i] == pLine)
-        {
-            pRet = pLine;
-            break;
-        }
-    return pRet;
+    for(auto& pCurrentLine : pTable->GetTabLines())
+        if(pCurrentLine == pLine)
+            return pCurrentLine;
+    return nullptr;
 }
 
 // SwXTextTableCursor
 
 OUString SwXTextTableCursor::getImplementationName(void) throw( uno::RuntimeException, std::exception )
-{
-    return OUString("SwXTextTableCursor");
-}
+    { return OUString("SwXTextTableCursor"); }
 
 sal_Bool SwXTextTableCursor::supportsService(const OUString& rServiceName) throw( uno::RuntimeException, std::exception )
-{
-    return cppu::supportsService(this, rServiceName);
-}
+    { return cppu::supportsService(this, rServiceName); }
 
 IMPLEMENT_FORWARD_XINTERFACE2(SwXTextTableCursor,SwXTextTableCursor_Base,OTextCursorHelper)
 const SwPaM*        SwXTextTableCursor::GetPaM() const  { return GetCrsr(); }
