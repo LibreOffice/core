@@ -40,15 +40,15 @@ extern "C" {
 static int SAL_CALL
 SfxCompareSlots_qsort( const void* pSmaller, const void* pBigger )
 {
-    return ( (int) ((SfxSlot*)pSmaller)->GetSlotId() ) -
-           ( (int) ((SfxSlot*)pBigger)->GetSlotId() );
+    return ( (int) static_cast<SfxSlot const *>(pSmaller)->GetSlotId() ) -
+           ( (int) static_cast<SfxSlot const *>(pBigger)->GetSlotId() );
 }
 
 static int SAL_CALL
 SfxCompareSlots_bsearch( const void* pSmaller, const void* pBigger )
 {
-    return ( (int) *((sal_uInt16*)pSmaller) ) -
-           ( (int) ((SfxSlot*)pBigger)->GetSlotId() );
+    return ( (int) *static_cast<sal_uInt16 const *>(pSmaller) ) -
+           ( (int) static_cast<SfxSlot const *>(pBigger)->GetSlotId() );
 }
 
 }
@@ -306,7 +306,7 @@ const SfxSlot* SfxInterface::GetSlot( sal_uInt16 nFuncId ) const
     if ( !p && pGenoType )
         return pGenoType->GetSlot( nFuncId );
 
-    return p ? (const SfxSlot*)p : 0;
+    return p ? static_cast<const SfxSlot*>(p) : 0;
 }
 
 const SfxSlot* SfxInterface::GetSlot( const OUString& rCommand ) const

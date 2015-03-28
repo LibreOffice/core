@@ -173,7 +173,7 @@ bool SvFileObject::GetData( ::com::sun::star::uno::Any & rData,
                         aMeta.Write( aMemStm );
                     }
                 }
-                rData <<= css::uno::Sequence< sal_Int8 >( (sal_Int8*) aMemStm.GetData(),
+                rData <<= css::uno::Sequence< sal_Int8 >( static_cast<sal_Int8 const *>(aMemStm.GetData()),
                                         aMemStm.Seek( STREAM_SEEK_TO_END ) );
 
                 bNativFormat = bOldNativFormat;

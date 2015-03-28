@@ -418,7 +418,7 @@ SfxUnoMenuControl::~SfxUnoMenuControl()
 
 sal_IntPtr Select_Impl( void* /*pHdl*/, void* pVoid )
 {
-    Menu* pMenu = (Menu*)pVoid;
+    Menu* pMenu = static_cast<Menu*>(pVoid);
     OUString aURL( pMenu->GetItemCommand( pMenu->GetCurItemId() ) );
 
     if( aURL.isEmpty() )

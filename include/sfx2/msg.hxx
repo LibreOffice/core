@@ -117,7 +117,7 @@ struct SfxType
     const TypeId&   Type() const
                     { return aTypeId; }
     SfxPoolItem*    CreateItem() const
-                    { return (SfxPoolItem*) aTypeId(); }
+                    { return static_cast<SfxPoolItem*>(aTypeId()); }
 };
 
 struct SfxType0
@@ -128,7 +128,7 @@ struct SfxType0
     const TypeId&   Type() const
                     { return aTypeId; }
     SfxPoolItem*    CreateItem() const
-                    { return (SfxPoolItem*) aTypeId(); }
+                    { return static_cast<SfxPoolItem*>(aTypeId()); }
 };
 
 #define SFX_DECL_TYPE(n)    struct SfxType##n                   \
@@ -211,7 +211,7 @@ struct SfxFormalArgument
     const TypeId&           Type() const
                             { return pType->aTypeId; }
     SfxPoolItem*            CreateItem() const
-                            { return (SfxPoolItem*) pType->aTypeId(); }
+                            { return static_cast<SfxPoolItem*>(pType->aTypeId()); }
 };
 
 

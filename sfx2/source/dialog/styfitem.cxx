@@ -54,8 +54,8 @@ SfxStyleFamilyItem::SfxStyleFamilyItem( const ResId &rResId ) :
     }
     if(nMask & RSC_SFX_STYLE_ITEM_BITMAP)
     {
-        aBitmap = Bitmap(ResId((RSHEADER_TYPE *)GetClassRes(),*rResId.GetResMgr()));
-        IncrementRes( GetObjSizeRes( (RSHEADER_TYPE *)GetClassRes() ) );
+        aBitmap = Bitmap(ResId(static_cast<RSHEADER_TYPE *>(GetClassRes()),*rResId.GetResMgr()));
+        IncrementRes( GetObjSizeRes( static_cast<RSHEADER_TYPE *>(GetClassRes()) ) );
     }
     if(nMask & RSC_SFX_STYLE_ITEM_TEXT)
     {
@@ -73,8 +73,8 @@ SfxStyleFamilyItem::SfxStyleFamilyItem( const ResId &rResId ) :
         nFamily = SFX_STYLE_FAMILY_PARA;
     if(nMask & RSC_SFX_STYLE_ITEM_IMAGE)
     {
-        aImage = Image(ResId((RSHEADER_TYPE *)GetClassRes(),*rResId.GetResMgr()));
-        IncrementRes( GetObjSizeRes( (RSHEADER_TYPE *)GetClassRes() ) );
+        aImage = Image(ResId(static_cast<RSHEADER_TYPE *>(GetClassRes()),*rResId.GetResMgr()));
+        IncrementRes( GetObjSizeRes( static_cast<RSHEADER_TYPE *>(GetClassRes()) ) );
     }
     else
         aImage = Image(aBitmap);
@@ -101,9 +101,9 @@ SfxStyleFamilies::SfxStyleFamilies( const ResId& rResId ) :
     sal_uIntPtr nCount = ReadLongRes();
     for( sal_uIntPtr i = 0; i < nCount; i++ )
     {
-        const ResId aResId((RSHEADER_TYPE *)GetClassRes(), *rResId.GetResMgr());
+        const ResId aResId(static_cast<RSHEADER_TYPE *>(GetClassRes()), *rResId.GetResMgr());
         SfxStyleFamilyItem *pItem = new SfxStyleFamilyItem(aResId);
-        IncrementRes( GetObjSizeRes( (RSHEADER_TYPE *)GetClassRes() ) );
+        IncrementRes( GetObjSizeRes( static_cast<RSHEADER_TYPE *>(GetClassRes()) ) );
         aEntryList.push_back( pItem );
     }
 

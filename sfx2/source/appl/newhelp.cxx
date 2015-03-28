@@ -308,7 +308,7 @@ ContentListBox_Impl::~ContentListBox_Impl()
     while ( pEntry )
     {
         ClearChildren( pEntry );
-        delete (ContentEntry_Impl*)pEntry->GetUserData();
+        delete static_cast<ContentEntry_Impl*>(pEntry->GetUserData());
         pEntry = GetEntry( nPos++ );
     }
 }
@@ -341,7 +341,7 @@ void ContentListBox_Impl::ClearChildren( SvTreeListEntry* pParent )
     while ( pEntry )
     {
         ClearChildren( pEntry );
-        delete (ContentEntry_Impl*)pEntry->GetUserData();
+        delete static_cast<ContentEntry_Impl*>(pEntry->GetUserData());
         pEntry = NextSibling( pEntry );
     }
 }
@@ -356,7 +356,7 @@ void ContentListBox_Impl::RequestingChildren( SvTreeListEntry* pParent )
         {
             if ( pParent->GetUserData() )
             {
-                OUString aTmpURL( ( (ContentEntry_Impl*)pParent->GetUserData()  )->aURL );
+                OUString aTmpURL( static_cast<ContentEntry_Impl*>(pParent->GetUserData())->aURL );
                 std::vector<OUString > aList =
                     SfxContentHelper::GetHelpTreeViewContents( aTmpURL );
 
@@ -413,8 +413,8 @@ OUString ContentListBox_Impl::GetSelectEntry() const
 {
     OUString aRet;
     SvTreeListEntry* pEntry = FirstSelected();
-    if ( pEntry && !( (ContentEntry_Impl*)pEntry->GetUserData()  )->bIsFolder )
-        aRet = ( (ContentEntry_Impl*)pEntry->GetUserData() )->aURL;
+    if ( pEntry && !static_cast<ContentEntry_Impl*>(pEntry->GetUserData())->bIsFolder )
+        aRet = static_cast<ContentEntry_Impl*>(pEntry->GetUserData())->aURL;
     return aRet;
 }
 

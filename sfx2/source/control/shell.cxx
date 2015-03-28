@@ -408,7 +408,7 @@ bool SfxShell::CanExecuteSlot_Impl( const SfxSlot &rSlot )
 
 sal_IntPtr ShellCall_Impl( void* pObj, void* pArg )
 {
-    ((SfxShell* )pObj)->ExecuteSlot( *(SfxRequest*)pArg, (SfxInterface*)0L );
+    static_cast<SfxShell*>(pObj)->ExecuteSlot( *static_cast<SfxRequest*>(pArg), (SfxInterface*)0L );
     return 0;
 }
 
@@ -669,8 +669,8 @@ bool SfxShell::HasUIFeature( sal_uInt32 )
 
 sal_IntPtr DispatcherUpdate_Impl( void*, void* pArg )
 {
-    ((SfxDispatcher*) pArg)->Update_Impl( true );
-    ((SfxDispatcher*) pArg)->GetBindings()->InvalidateAll(false);
+    static_cast<SfxDispatcher*>(pArg)->Update_Impl( true );
+    static_cast<SfxDispatcher*>(pArg)->GetBindings()->InvalidateAll(false);
     return 0;
 }
 

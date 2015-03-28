@@ -73,7 +73,7 @@ GFileMonitor* pMonitor = NULL;
 
 static void open_url_cb( GtkWidget *, gpointer data )
 {
-    ShutdownIcon::OpenURL( *(OUString *)data,
+    ShutdownIcon::OpenURL( *static_cast<OUString *>(data),
                            OUString( "_default" ) );
 }
 
@@ -128,7 +128,7 @@ static GdkPixbuf * ResIdToPixbuf( sal_uInt16 nResId )
         g_return_val_if_fail( Size( pSalAlpha->Width(), pSalAlpha->Height() ) == aSize, NULL );
 
     int nX, nY;
-    guchar *pPixbufData = ( guchar * )g_malloc( 4 * aSize.Width() * aSize.Height() );
+    guchar *pPixbufData = static_cast<guchar *>(g_malloc( 4 * aSize.Width() * aSize.Height() ));
     guchar *pDestData = pPixbufData;
 
     for( nY = 0; nY < pSalBitmap->Height(); nY++ )
@@ -163,7 +163,7 @@ extern "C" {
 static void oustring_delete (gpointer  data,
                              GClosure * /* closure */)
 {
-    OUString *pURL = (OUString *) data;
+    OUString *pURL = static_cast<OUString *>(data);
     delete pURL;
 }
 }

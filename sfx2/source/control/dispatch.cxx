@@ -1610,7 +1610,7 @@ void SfxDispatcher::SetSlotFilter(SfxSlotFilterState nEnable,
 
 extern "C" int SAL_CALL SfxCompareSIDs_Impl(const void* pSmaller, const void* pBigger)
 {
-    return ( (long) *((sal_uInt16*)pSmaller) ) - ( (long) *((sal_uInt16*)pBigger) );
+    return ( (long) *static_cast<sal_uInt16 const *>(pSmaller) ) - ( (long) *static_cast<sal_uInt16 const *>(pBigger) );
 }
 
 /** Searches for 'nSID' in the Filter set by <SetSlotFilter()> and

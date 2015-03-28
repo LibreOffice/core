@@ -173,7 +173,7 @@ void SfxVersionsTabListBox_Impl::setColSizes()
 
     for (SvTreeListEntry* pEntry = First(); pEntry; pEntry = Next(pEntry))
     {
-        aAuthors.insert(((SfxVersionInfo*)pEntry->GetUserData())->aAuthor);
+        aAuthors.insert(static_cast<SfxVersionInfo*>(pEntry->GetUserData())->aAuthor);
     }
 
     long nMaxAuthorWidth = nRest/4;
@@ -412,7 +412,7 @@ IMPL_LINK( SfxVersionDialog, ButtonHdl_Impl, Button*, pButton )
     }
     if (pButton == m_pDeleteButton && pEntry)
     {
-        pObjShell->GetMedium()->RemoveVersion_Impl( ((SfxVersionInfo*) pEntry->GetUserData())->aName );
+        pObjShell->GetMedium()->RemoveVersion_Impl( static_cast<SfxVersionInfo*>(pEntry->GetUserData())->aName );
         pObjShell->SetModified( true );
         m_pVersionBox->SetUpdateMode( false );
         m_pVersionBox->Clear();
@@ -425,7 +425,7 @@ IMPL_LINK( SfxVersionDialog, ButtonHdl_Impl, Button*, pButton )
     }
     else if (pButton == m_pViewButton && pEntry)
     {
-        SfxVersionInfo* pInfo = (SfxVersionInfo*) pEntry->GetUserData();
+        SfxVersionInfo* pInfo = static_cast<SfxVersionInfo*>(pEntry->GetUserData());
         boost::scoped_ptr<SfxViewVersionDialog_Impl> pDlg(new SfxViewVersionDialog_Impl(this, *pInfo, false));
         pDlg->Execute();
     }
