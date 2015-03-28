@@ -1547,19 +1547,16 @@ OUString SwXTextTableCursor::getRangeName()
     return pEndBox->GetName();
 }
 
-sal_Bool SwXTextTableCursor::gotoCellByName(const OUString& sCellName, sal_Bool Expand)
-    throw( uno::RuntimeException, std::exception )
+sal_Bool SwXTextTableCursor::gotoCellByName(const OUString& sCellName, sal_Bool bExpand)
+    throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    bool bRet = false;
     SwUnoCrsr* pUnoCrsr = GetCrsr();
-    if(pUnoCrsr)
-    {
-        SwUnoTableCrsr& rTblCrsr = dynamic_cast<SwUnoTableCrsr&>(*pUnoCrsr);
-        lcl_CrsrSelect(rTblCrsr, Expand);
-        bRet = rTblCrsr.GotoTblBox(sCellName);
-    }
-    return bRet;
+    if(!pUnoCrsr)
+        return false;
+    auto& rTblCrsr = dynamic_cast<SwUnoTableCrsr&>(*pUnoCrsr);
+    lcl_CrsrSelect(rTblCrsr, bExpand);
+    return rTblCrsr.GotoTblBox(sCellName);
 }
 
 sal_Bool SwXTextTableCursor::goLeft(sal_Int16 Count, sal_Bool Expand) throw( uno::RuntimeException, std::exception )
