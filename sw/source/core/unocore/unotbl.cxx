@@ -4604,55 +4604,41 @@ void SwXTableRows::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount)
     SwFrmFmt* pFrmFmt = GetFrmFmt();
     if(!pFrmFmt || nIndex < 0 || nCount <=0 )
         throw uno::RuntimeException();
-    else
+    bool bSuccess = false;
+    SwTable* pTable = SwTable::FindTable( pFrmFmt );
+    if(pTable->IsTblComplex())
+        throw uno::RuntimeException("Table too complex", static_cast<cppu::OWeakObject*>(this));
+    OUString sTLName = sw_GetCellName(0, nIndex);
+    const SwTableBox* pTLBox = pTable->GetTblBox(sTLName);
+    if(!pTLBox)
+        throw uno::RuntimeException("Illegal arguments", static_cast<cppu::OWeakObject*>(this));
     {
-        bool bSuccess = false;
-        SwTable* pTable = SwTable::FindTable( pFrmFmt );
-        if(!pTable->IsTblComplex())
-        {
-            OUString sTLName = sw_GetCellName(0, nIndex);
-            const SwTableBox* pTLBox = pTable->GetTblBox( sTLName );
-            if(pTLBox)
-            {
-                {
-                    // invalidate all actions
-                    UnoActionRemoveContext aRemoveContext(pFrmFmt->GetDoc());
-                }
-                const SwStartNode* pSttNd = pTLBox->GetSttNd();
-                SwPosition aPos(*pSttNd);
-                // set cursor to the upper-left cell of the range
-                SwUnoCrsr* pUnoCrsr = pFrmFmt->GetDoc()->CreateUnoCrsr(aPos, true);
-                pUnoCrsr->Move( fnMoveForward, fnGoNode );
-                pUnoCrsr->SetRemainInSection( false );
-                const OUString sBLName = sw_GetCellName(0, nIndex + nCount - 1);
-                const SwTableBox* pBLBox = pTable->GetTblBox( sBLName );
-                if(pBLBox)
-                {
-                    pUnoCrsr->SetMark();
-                    pUnoCrsr->GetPoint()->nNode = *pBLBox->GetSttNd();
-                    pUnoCrsr->Move( fnMoveForward, fnGoNode );
-                    SwUnoTableCrsr* pCrsr =
-                        dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
-                    pCrsr->MakeBoxSels();
-                    {   // these braces are important
-                        UnoActionContext aAction(pFrmFmt->GetDoc());
-                        pFrmFmt->GetDoc()->DeleteRow(*pUnoCrsr);
-                        delete pUnoCrsr;
-                        bSuccess = true;
-                    }
-                    {
-                        // invalidate all actions
-                        UnoActionRemoveContext aRemoveContext(pFrmFmt->GetDoc());
-                    }
-                }
-            }
-        }
-        if(!bSuccess)
-        {
-            uno::RuntimeException aExcept;
-            aExcept.Message = "Illegal arguments";
-            throw aExcept;
-        }
+        // invalidate all actions
+        UnoActionRemoveContext aRemoveContext(pFrmFmt->GetDoc());
+    }
+    const SwStartNode* pSttNd = pTLBox->GetSttNd();
+    SwPosition aPos(*pSttNd);
+    // set cursor to the upper-left cell of the range
+    SwUnoCrsr* pUnoCrsr = pFrmFmt->GetDoc()->CreateUnoCrsr(aPos, true);
+    pUnoCrsr->Move(fnMoveForward, fnGoNode);
+    pUnoCrsr->SetRemainInSection( false );
+    const OUString sBLName = sw_GetCellName(0, nIndex + nCount - 1);
+    const SwTableBox* pBLBox = pTable->GetTblBox( sBLName );
+    if(!pBLBox)
+        throw uno::RuntimeException("Illegal arguments", static_cast<cppu::OWeakObject*>(this));
+    pUnoCrsr->SetMark();
+    pUnoCrsr->GetPoint()->nNode = *pBLBox->GetSttNd();
+    pUnoCrsr->Move(fnMoveForward, fnGoNode);
+    SwUnoTableCrsr* pCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
+    pCrsr->MakeBoxSels();
+    {   // these braces are important
+        UnoActionContext aAction(pFrmFmt->GetDoc());
+        pFrmFmt->GetDoc()->DeleteRow(*pUnoCrsr);
+        delete pUnoCrsr;
+    }
+    {
+        // invalidate all actions
+        UnoActionRemoveContext aRemoveContext(pFrmFmt->GetDoc());
     }
 }
 
