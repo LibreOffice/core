@@ -213,7 +213,7 @@ int INetMessageIStream::GetMsgLine(sal_Char* pData, sal_uIntPtr nSize)
                 }
             }
 
-            pMsgWrite = (sal_Char*)(pMsgBuffer->GetData());
+            pMsgWrite = const_cast<char *>(static_cast<sal_Char const *>(pMsgBuffer->GetData()));
             pMsgRead  = pMsgWrite + pMsgBuffer->Tell();
         }
 
@@ -257,7 +257,7 @@ INetMessageOStream::INetMessageOStream(void)
 INetMessageOStream::~INetMessageOStream(void)
 {
     if (pMsgBuffer->Tell() > 0)
-        PutMsgLine((const sal_Char*) pMsgBuffer->GetData(), pMsgBuffer->Tell());
+        PutMsgLine(static_cast<const sal_Char*>(pMsgBuffer->GetData()), pMsgBuffer->Tell());
     delete pMsgBuffer;
 
     if (pTargetMsg)
@@ -296,7 +296,7 @@ int INetMessageOStream::Write(const sal_Char* pData, sal_uIntPtr nSize)
                 if (pMsgBuffer->Tell() > 0)
                 {
                     pMsgBuffer->WriteChar( '\0' );
-                    int status = PutMsgLine( (const sal_Char*) pMsgBuffer->GetData(),
+                    int status = PutMsgLine( static_cast<const sal_Char*>(pMsgBuffer->GetData()),
                                              pMsgBuffer->Tell());
                     if (status != INETSTREAM_STATUS_OK) return status;
                 }
@@ -321,7 +321,7 @@ int INetMessageOStream::Write(const sal_Char* pData, sal_uIntPtr nSize)
                 {
                     // Emit buffered header field now.
                     pMsgBuffer->WriteChar( '\0' );
-                    int status = PutMsgLine((const sal_Char*) pMsgBuffer->GetData(),
+                    int status = PutMsgLine(static_cast<const sal_Char*>(pMsgBuffer->GetData()),
                                              pMsgBuffer->Tell());
                     if (status != INETSTREAM_STATUS_OK) return status;
                 }
@@ -352,7 +352,7 @@ int INetMessageOStream::Write(const sal_Char* pData, sal_uIntPtr nSize)
         else if (ascii_isWhitespace(*pData & 0x7f))
         {
             // Any <LWS> is folded into a single <SP> character.
-            sal_Char c = *((const sal_Char*) pMsgBuffer->GetData() + pMsgBuffer->Tell() - 1);
+            sal_Char c = *(static_cast<const sal_Char*>(pMsgBuffer->GetData()) + pMsgBuffer->Tell() - 1);
             if (!ascii_isWhitespace(c & 0x7f)) pMsgBuffer->WriteChar( ' ' );
 
             // Skip over this <LWS> character.
@@ -716,7 +716,7 @@ int INetMessageDecodeQPStream_Impl::PutMsgLine( const sal_Char* pData,
                 sal_Size nDocSiz = pMsg->GetDocumentSize();
                 sal_Size nWrite  = 0;
 
-                pLB->FillAppend((sal_Char*)(pMsgBuffer->GetData()), nRead, &nWrite);
+                pLB->FillAppend(pMsgBuffer->GetData(), nRead, &nWrite);
                 pMsg->SetDocumentSize(nDocSiz + nWrite);
 
                 if (nWrite < nRead) return INETSTREAM_STATUS_ERROR;
@@ -1413,7 +1413,7 @@ int INetMIMEMessageStream::PutMsgLine(const sal_Char* pData, sal_uIntPtr nSize)
                 const sal_Char* pChar;
                 const sal_Char* pOldPos;
                 int status;
-                for( pOldPos = pChar = (const sal_Char*) pMsgBuffer->GetData(); nBufSize--;
+                for( pOldPos = pChar = static_cast<const sal_Char*>(pMsgBuffer->GetData()); nBufSize--;
                      pChar++ )
                 {
                     if( *pChar == '\r' || *pChar == '\n' )

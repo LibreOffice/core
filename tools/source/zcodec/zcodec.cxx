@@ -25,7 +25,7 @@
 #include <rtl/crc.h>
 #include <osl/endian.h>
 
-#define PZSTREAM ((z_stream*) mpsC_Stream)
+#define PZSTREAM static_cast<z_stream*>(mpsC_Stream)
 
 /* gzip flag byte */
 //      GZ_ASCII_FLAG   0x01 /* bit 0 set: file probably ascii text */
@@ -57,7 +57,7 @@ ZCodec::ZCodec( sal_uIntPtr nInBufSize, sal_uIntPtr nOutBufSize )
 
 ZCodec::~ZCodec()
 {
-    delete (z_stream*) mpsC_Stream;
+    delete static_cast<z_stream*>(mpsC_Stream);
 }
 
 void ZCodec::BeginCompression( int nCompressLevel, bool updateCrc, bool gzLib )

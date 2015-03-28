@@ -74,7 +74,7 @@ EDcrData *EDcrData::GetData()
 #ifdef BOOTSTRAP
     return 0x0;
 #else
-    EDcrData **ppDat=(EDcrData **)GetAppData(SHL_ERR);
+    EDcrData **ppDat=reinterpret_cast<EDcrData **>(GetAppData(SHL_ERR));
     if(!*ppDat)
     {
         return (*ppDat=new EDcrData);

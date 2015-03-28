@@ -45,20 +45,20 @@ typedef sal_IntPtr (*PSTUB)( void*, void* );
 #define IMPL_STUB(Class, Method, ArgType) \
     sal_IntPtr Class::LinkStub##Method( void* pThis, void* pCaller) \
     { \
-        return static_cast<Class*>(pThis)->Method( (ArgType)pCaller ); \
+        return static_cast<Class*>(pThis)->Method( static_cast<ArgType>(pCaller) ); \
     }
 
 #define IMPL_STATIC_LINK( Class, Method, ArgType, ArgName ) \
     sal_IntPtr Class::LinkStub##Method( void* pThis, void* pCaller) \
     { \
-        return Method( static_cast<Class*>(pThis), (ArgType)pCaller ); \
+        return Method( static_cast<Class*>(pThis), static_cast<ArgType>(pCaller) ); \
     } \
     sal_IntPtr Class::Method( Class* pThis, ArgType ArgName )
 
 #define IMPL_STATIC_LINK_NOINSTANCE( Class, Method, ArgType, ArgName ) \
     sal_IntPtr Class::LinkStub##Method( void* pThis, void* pCaller) \
     { \
-        return Method( static_cast<Class*>(pThis), (ArgType)pCaller ); \
+        return Method( static_cast<Class*>(pThis), static_cast<ArgType>(pCaller) ); \
     } \
     sal_IntPtr Class::Method( SAL_UNUSED_PARAMETER Class*, ArgType ArgName )
 

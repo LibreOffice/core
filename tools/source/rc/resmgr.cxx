@@ -494,10 +494,10 @@ bool InternalResMgr::Create()
         lContLen = ResMgr::GetLong( &lContLen );
         pStm->SeekRel( -lContLen );
         // allocate stored ImpContent data (12 bytes per unit)
-        sal_uInt8* pContentBuf = (sal_uInt8*)rtl_allocateMemory( lContLen );
+        sal_uInt8* pContentBuf = static_cast<sal_uInt8*>(rtl_allocateMemory( lContLen ));
         pStm->Read( pContentBuf, lContLen );
         // allocate ImpContent space (sizeof(ImpContent) per unit, not necessarily 12)
-        pContent = (ImpContent *)rtl_allocateMemory( sizeof(ImpContent)*lContLen/12 );
+        pContent = static_cast<ImpContent *>(rtl_allocateMemory( sizeof(ImpContent)*lContLen/12 ));
         // Shorten to number of ImpContent
         nEntries = (sal_uInt32)lContLen / 12;
         bEqual2Content = true;
@@ -592,7 +592,7 @@ void* InternalResMgr::LoadGlobalRes( RESOURCE_TYPE nRT, sal_uInt32 nId,
                 RSHEADER_TYPE aHdr;
                 pStm->Read( &aHdr, sizeof( aHdr ) );
                 nSize = pLast->nOffset + aHdr.GetGlobOff() - nOffCorrection;
-                pStringBlock = (sal_uInt8*)rtl_allocateMemory( nSize );
+                pStringBlock = static_cast<sal_uInt8*>(rtl_allocateMemory( nSize ));
                 pStm->Seek( pFirst->nOffset );
                 pStm->Read( pStringBlock, nSize );
             }
@@ -607,7 +607,7 @@ void* InternalResMgr::LoadGlobalRes( RESOURCE_TYPE nRT, sal_uInt32 nId,
             pStm->Read( &aHeader, sizeof( RSHEADER_TYPE ) );
             void * pRes = rtl_allocateMemory( aHeader.GetGlobOff() );
             memcpy( pRes, &aHeader, sizeof( RSHEADER_TYPE ) );
-            pStm->Read( (sal_uInt8*)pRes + sizeof( RSHEADER_TYPE ),
+            pStm->Read( static_cast<sal_uInt8*>(pRes) + sizeof( RSHEADER_TYPE ),
                         aHeader.GetGlobOff() - sizeof( RSHEADER_TYPE ) );
             return pRes;
         }
@@ -1014,7 +1014,7 @@ bool ResMgr::GetResource( const ResId& rId, const Resource* pResObj )
 #endif
             pTop->Flags |= RCFlags::NOTFOUND;
             pTop->pClassRes = getEmptyBuffer();
-            pTop->pResource = (RSHEADER_TYPE*)pTop->pClassRes;
+            pTop->pResource = static_cast<RSHEADER_TYPE*>(pTop->pClassRes);
             return false;
         }
     }
@@ -1026,14 +1026,14 @@ bool ResMgr::GetResource( const ResId& rId, const Resource* pResObj )
 
     if ( pTop->pClassRes )
         // local Resource, not a system Resource
-        pTop->pResource = (RSHEADER_TYPE *)pTop->pClassRes;
+        pTop->pResource = static_cast<RSHEADER_TYPE *>(pTop->pClassRes);
     else
     {
         pTop->pClassRes = pImpRes->LoadGlobalRes( nRT, nId, &pTop->aResHandle );
         if ( pTop->pClassRes )
         {
             pTop->Flags |= RCFlags::GLOBAL;
-            pTop->pResource = (RSHEADER_TYPE *)pTop->pClassRes;
+            pTop->pResource = static_cast<RSHEADER_TYPE *>(pTop->pClassRes);
         }
         else
         {
@@ -1062,7 +1062,7 @@ bool ResMgr::GetResource( const ResId& rId, const Resource* pResObj )
                 #endif
                 pTop->Flags |= RCFlags::NOTFOUND;
                 pTop->pClassRes = getEmptyBuffer();
-                pTop->pResource = (RSHEADER_TYPE*)pTop->pClassRes;
+                pTop->pResource = static_cast<RSHEADER_TYPE*>(pTop->pClassRes);
                 return false;
             }
         }
@@ -1147,7 +1147,7 @@ RSHEADER_TYPE* ResMgr::CreateBlock( const ResId& rId )
         // Pointer is at the beginning of the resource, thus
         // class pointer points to the header, and the remaining size
         // equals to total size of allocated memory
-        pHeader = (RSHEADER_TYPE*)rtl_allocateMemory( GetRemainSize() );
+        pHeader = static_cast<RSHEADER_TYPE*>(rtl_allocateMemory( GetRemainSize() ));
         memcpy( pHeader, GetClass(), GetRemainSize() );
         Increment( pHeader->GetLocalOff() ); //ans Ende setzen
         if ( pHeader->GetLocalOff() != pHeader->GetGlobOff() )
@@ -1160,28 +1160,28 @@ RSHEADER_TYPE* ResMgr::CreateBlock( const ResId& rId )
 
 sal_Int16 ResMgr::GetShort( void * pShort )
 {
-    return ((*((sal_uInt8*)pShort + 0) << 8) |
-            (*((sal_uInt8*)pShort + 1) << 0)   );
+    return ((*(static_cast<sal_uInt8*>(pShort) + 0) << 8) |
+            (*(static_cast<sal_uInt8*>(pShort) + 1) << 0)   );
 }
 
 sal_Int32 ResMgr::GetLong( void * pLong )
 {
-    return ((*((sal_uInt8*)pLong + 0) << 24) |
-            (*((sal_uInt8*)pLong + 1) << 16) |
-            (*((sal_uInt8*)pLong + 2) <<  8) |
-            (*((sal_uInt8*)pLong + 3) <<  0)   );
+    return ((*(static_cast<sal_uInt8*>(pLong) + 0) << 24) |
+            (*(static_cast<sal_uInt8*>(pLong) + 1) << 16) |
+            (*(static_cast<sal_uInt8*>(pLong) + 2) <<  8) |
+            (*(static_cast<sal_uInt8*>(pLong) + 3) <<  0)   );
 }
 
 sal_uInt64 ResMgr::GetUInt64( void* pDatum )
 {
-    return ((sal_uInt64(*((sal_uInt8*)pDatum + 0)) << 56) |
-            (sal_uInt64(*((sal_uInt8*)pDatum + 1)) << 48) |
-            (sal_uInt64(*((sal_uInt8*)pDatum + 2)) << 40) |
-            (sal_uInt64(*((sal_uInt8*)pDatum + 3)) << 32) |
-            (sal_uInt64(*((sal_uInt8*)pDatum + 4)) << 24) |
-            (sal_uInt64(*((sal_uInt8*)pDatum + 5)) << 16) |
-            (sal_uInt64(*((sal_uInt8*)pDatum + 6)) <<  8) |
-            (sal_uInt64(*((sal_uInt8*)pDatum + 7)) <<  0)   );
+    return ((sal_uInt64(*(static_cast<sal_uInt8*>(pDatum) + 0)) << 56) |
+            (sal_uInt64(*(static_cast<sal_uInt8*>(pDatum) + 1)) << 48) |
+            (sal_uInt64(*(static_cast<sal_uInt8*>(pDatum) + 2)) << 40) |
+            (sal_uInt64(*(static_cast<sal_uInt8*>(pDatum) + 3)) << 32) |
+            (sal_uInt64(*(static_cast<sal_uInt8*>(pDatum) + 4)) << 24) |
+            (sal_uInt64(*(static_cast<sal_uInt8*>(pDatum) + 5)) << 16) |
+            (sal_uInt64(*(static_cast<sal_uInt8*>(pDatum) + 6)) <<  8) |
+            (sal_uInt64(*(static_cast<sal_uInt8*>(pDatum) + 7)) <<  0)   );
 }
 
 sal_uInt32 ResMgr::GetStringWithoutHook( OUString& rStr, const sal_uInt8* pStr )
@@ -1245,7 +1245,7 @@ void* ResMgr::Increment( sal_uInt32 nSize )
     if( (rStack.Flags & RCFlags::NOTFOUND) )
         return rStack.pClassRes;
 
-    sal_uInt8* pClassRes = (sal_uInt8*)rStack.pClassRes + nSize;
+    sal_uInt8* pClassRes = static_cast<sal_uInt8*>(rStack.pClassRes) + nSize;
 
     rStack.pClassRes = pClassRes;
 
@@ -1394,7 +1394,7 @@ OUString ResMgr::ReadStringWithoutHook()
         #endif
     }
     else
-        Increment( GetStringWithoutHook( aRet, (const sal_uInt8*)GetClass() ) );
+        Increment( GetStringWithoutHook( aRet, static_cast<const sal_uInt8*>(GetClass()) ) );
 
     return aRet;
 }
@@ -1424,7 +1424,7 @@ OString ResMgr::ReadByteString()
         #endif
     }
     else
-        Increment( GetByteString( aRet, (const sal_uInt8*)GetClass() ) );
+        Increment( GetByteString( aRet, static_cast<const sal_uInt8*>(GetClass()) ) );
 
     return aRet;
 }
@@ -1572,7 +1572,7 @@ OUString SimpleResMgr::ReadString( sal_uInt32 nId )
 
     void* pResHandle = NULL;
     InternalResMgr* pFallback = m_pResImpl;
-    RSHEADER_TYPE* pResHeader = (RSHEADER_TYPE*)m_pResImpl->LoadGlobalRes( RSC_STRING, nId, &pResHandle );
+    RSHEADER_TYPE* pResHeader = static_cast<RSHEADER_TYPE*>(m_pResImpl->LoadGlobalRes( RSC_STRING, nId, &pResHandle ));
     if ( !pResHeader )
     {
         osl::Guard<osl::Mutex> aGuard2( getResMgrMutex() );
@@ -1589,7 +1589,7 @@ OUString SimpleResMgr::ReadString( sal_uInt32 nId )
                 // handle possible recursion
                 if( pFallback->aLocale != m_pResImpl->aLocale )
                 {
-                    pResHeader = (RSHEADER_TYPE*)pFallback->LoadGlobalRes( RSC_STRING, nId, &pResHandle );
+                    pResHeader = static_cast<RSHEADER_TYPE*>(pFallback->LoadGlobalRes( RSC_STRING, nId, &pResHandle ));
                 }
                 else
                 {

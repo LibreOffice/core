@@ -61,7 +61,7 @@ TOOLS_DLLPUBLIC void* DbgFunc( sal_uInt16 nAction, void* pData = NULL );
 
 inline DbgData* DbgGetData()
 {
-    return (DbgData*)DbgFunc( DBG_FUNC_GETDATA );
+    return static_cast<DbgData*>(DbgFunc( DBG_FUNC_GETDATA ));
 }
 
 inline void DbgSaveData( const DbgData& rData )

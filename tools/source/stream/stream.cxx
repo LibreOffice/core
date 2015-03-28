@@ -1259,7 +1259,7 @@ sal_Size SvStream::Read( void* pData, sal_Size nCount )
 
     if( !pRWBuf )
     {
-        nCount = GetData( (char*)pData,nCount);
+        nCount = GetData( pData,nCount);
         if( nCryptMask )
             EncryptBuffer(pData, nCount);
         m_nBufFilePos += nCount;
@@ -1300,7 +1300,7 @@ sal_Size SvStream::Read( void* pData, sal_Size nCount )
                 SeekPos(m_nBufFilePos + nBufActualPos);
                 nBufActualLen = 0;
                 pBufPos       = pRWBuf;
-                nCount = GetData( (char*)pData, nCount );
+                nCount = GetData( pData, nCount );
                 if( nCryptMask )
                     EncryptBuffer(pData, nCount);
                 m_nBufFilePos += nCount;
@@ -1355,7 +1355,7 @@ sal_Size SvStream::Write( const void* pData, sal_Size nCount )
         if( nCryptMask )
             nCount = CryptAndWriteBuffer( pData, nCount );
         else
-            nCount = PutData( (char*)pData, nCount );
+            nCount = PutData( pData, nCount );
         m_nBufFilePos += nCount;
         return nCount;
     }
@@ -1398,7 +1398,7 @@ sal_Size SvStream::Write( const void* pData, sal_Size nCount )
             if( nCryptMask )
                 nCount = CryptAndWriteBuffer( pData, nCount );
             else
-                nCount = PutData( (char*)pData, nCount );
+                nCount = PutData( pData, nCount );
             m_nBufFilePos += nCount;
         }
         else
@@ -1527,7 +1527,7 @@ SvStream& SvStream::WriteUInt32AsString(sal_uInt32 nUInt32)
 sal_Size SvStream::CryptAndWriteBuffer( const void* pStart, sal_Size nLen)
 {
     unsigned char  pTemp[CRYPT_BUFSIZE];
-    unsigned char* pDataPtr = (unsigned char*)pStart;
+    unsigned char const * pDataPtr = static_cast<unsigned char const *>(pStart);
     sal_Size nCount = 0;
     sal_Size nBufCount;
     unsigned char nMask = nCryptMask;
@@ -1557,7 +1557,7 @@ sal_Size SvStream::CryptAndWriteBuffer( const void* pStart, sal_Size nLen)
 
 bool SvStream::EncryptBuffer(void* pStart, sal_Size nLen)
 {
-    unsigned char* pTemp = (unsigned char*)pStart;
+    unsigned char* pTemp = static_cast<unsigned char*>(pStart);
     unsigned char nMask = nCryptMask;
 
     for ( sal_Size n=0; n < nLen; n++, pTemp++ )
@@ -1682,7 +1682,7 @@ SvMemoryStream::SvMemoryStream( void* pBuffer, sal_Size bufSize,
         bIsWritable = false;
     nEndOfData  = bufSize;
     bOwnsData   = false;
-    pBuf        = (sal_uInt8 *) pBuffer;
+    pBuf        = static_cast<sal_uInt8 *>(pBuffer);
     nResize     = 0L;
     nSize       = bufSize;
     nPos        = 0L;
@@ -1750,7 +1750,7 @@ void* SvMemoryStream::SetBuffer( void* pNewBuf, sal_Size nCount,
     else
         pResult = pBuf;
 
-    pBuf        = (sal_uInt8 *) pNewBuf;
+    pBuf        = static_cast<sal_uInt8 *>(pNewBuf);
     nPos        = 0;
     nSize       = nCount;
     nResize     = 0;
