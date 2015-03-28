@@ -25,6 +25,7 @@
 
 #include "clang/Sema/Sema.h"
 
+#include "compat.hxx"
 #include "plugin.hxx"
 
 namespace {
@@ -143,7 +144,9 @@ if(!cc->getSubExpr()->getType()->isPointerType()){
             } else if (isa<CXXStaticCastExpr>(e)
                        && isVoidPointer(
                            dyn_cast<CXXStaticCastExpr>(e)->getSubExpr()
-                           ->IgnoreParenImpCasts()->getType()))
+                           ->IgnoreParenImpCasts()->getType())
+                       && !compat::isMacroBodyExpansion(
+                           compiler, e->getLocStart()))
             {
                 report(
                     DiagnosticsEngine::Warning,
