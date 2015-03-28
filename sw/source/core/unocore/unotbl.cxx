@@ -1247,44 +1247,27 @@ SwTableBox* SwXCell::FindBox(SwTable* pTable, SwTableBox* pBox2)
 
     // box not found: reset nFndPos pointer
     nFndPos = NOTFOUND;
-    return 0;
+    return nullptr;
 }
 
 OUString SwXCell::getImplementationName(void) throw( uno::RuntimeException, std::exception )
-{
-    return OUString("SwXCell");
-}
+    { return OUString("SwXCell"); }
 
 sal_Bool SwXCell::supportsService(const OUString& rServiceName) throw( uno::RuntimeException, std::exception )
-{
-    return cppu::supportsService(this, rServiceName);
-}
+    { return cppu::supportsService(this, rServiceName); }
 
 uno::Sequence< OUString > SwXCell::getSupportedServiceNames(void) throw( uno::RuntimeException, std::exception )
-{
-    uno::Sequence< OUString > aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.text.CellProperties";
-    return aRet;
-}
+    { return {"com.sun.star.text.CellProperties"}; }
 
 OUString SwXTextTableRow::getImplementationName(void) throw( uno::RuntimeException, std::exception )
-{
-    return OUString("SwXTextTableRow");
-}
+    { return OUString("SwXTextTableRow"); }
 
 sal_Bool SwXTextTableRow::supportsService(const OUString& rServiceName) throw( uno::RuntimeException, std::exception )
-{
-    return cppu::supportsService(this, rServiceName);
-}
+    { return cppu::supportsService(this, rServiceName); }
 
 uno::Sequence< OUString > SwXTextTableRow::getSupportedServiceNames(void) throw( uno::RuntimeException, std::exception )
-{
-    uno::Sequence< OUString > aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.text.TextTableRow";
-    return aRet;
-}
+    { return {"com.sun.star.text.TextTableRow"}; }
+
 TYPEINIT1(SwXTextTableRow, SwClient);
 
 SwXTextTableRow::SwXTextTableRow(SwFrmFmt* pFmt, SwTableLine* pLn) :
