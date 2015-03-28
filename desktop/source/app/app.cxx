@@ -523,7 +523,6 @@ Desktop::Desktop()
     , m_aBootstrapError(BE_OK)
     , m_aBootstrapStatus(BS_OK)
 {
-    SAL_INFO( "desktop.app", "desktop (cd100003) ::Desktop::Desktop" );
 }
 
 Desktop::~Desktop()
@@ -535,7 +534,6 @@ Desktop::~Desktop()
 
 void Desktop::Init()
 {
-    SAL_INFO( "desktop.app",  "desktop (cd100003) ::Desktop::Init" );
     SetBootstrapStatus(BS_OK);
 
 #if HAVE_FEATURE_EXTENSIONS
@@ -576,7 +574,6 @@ void Desktop::Init()
         const CommandLineArgs& rCmdLineArgs = GetCommandLineArgs();
 
         // start ipc thread only for non-remote offices
-        SAL_INFO( "desktop.app",  "desktop (cd100003) ::OfficeIPCThread::EnableOfficeIPCThread" );
         OfficeIPCThread::Status aStatus = OfficeIPCThread::EnableOfficeIPCThread();
         if ( aStatus == OfficeIPCThread::IPC_STATUS_PIPE_ERROR )
         {
@@ -621,21 +618,15 @@ void Desktop::Init()
 
 void Desktop::InitFinished()
 {
-    SAL_INFO( "desktop.app", "desktop (cd100003) ::Desktop::InitFinished" );
-
     CloseSplashScreen();
 }
 
 void Desktop::DeInit()
 {
-    SAL_INFO( "desktop.app", "desktop (cd100003) ::Desktop::DeInit" );
-
     try {
         // instead of removing of the configManager just let it commit all the changes
-        SAL_INFO( "desktop.app", "<- store config items" );
         utl::ConfigManager::storeConfigItems();
         FlushConfiguration();
-        SAL_INFO( "desktop.app", "<- store config items" );
 
         // close splashscreen if it's still open
         CloseSplashScreen();
@@ -655,17 +646,13 @@ void Desktop::DeInit()
         // someone threw an exception during shutdown
         // this will leave some garbage behind..
     }
-
-    SAL_INFO( "desktop.app", "FINISHED WITH Desktop::DeInit" );
 }
 
 bool Desktop::QueryExit()
 {
     try
     {
-        SAL_INFO( "desktop.app", "<- store config items" );
         utl::ConfigManager::storeConfigItems();
-        SAL_INFO( "desktop.app", "<- store config items" );
     }
     catch ( const RuntimeException& )
     {
@@ -1294,8 +1281,6 @@ int Desktop::Main()
 {
     pExecGlobals = new ExecuteGlobals();
 
-    SAL_INFO( "desktop.app", "desktop (cd100003) ::Desktop::Main" );
-
     // Remember current context object
     com::sun::star::uno::ContextLayer layer(
         com::sun::star::uno::getCurrentContext() );
@@ -1423,10 +1408,8 @@ int Desktop::Main()
 
         SetDisplayName( aTitle );
         SetSplashScreenProgress(35);
-        SAL_INFO( "desktop.app", "{ create SvtPathOptions and SvtLanguageOptions" );
         pExecGlobals->pPathOptions.reset( new SvtPathOptions);
         SetSplashScreenProgress(40);
-        SAL_INFO( "desktop.app", "} create SvtPathOptions and SvtLanguageOptions" );
 
         xDesktop = css::frame::Desktop::create( xContext );
 
@@ -1470,9 +1453,7 @@ int Desktop::Main()
         bool bExistsRecoveryData = false;
         bool bExistsSessionData  = false;
 
-        SAL_INFO( "desktop.app", "{ impl_checkRecoveryState" );
         impl_checkRecoveryState(bCrashed, bExistsRecoveryData, bExistsSessionData);
-        SAL_INFO( "desktop.app", "} impl_checkRecoveryState" );
 
         OUString pidfileName = rCmdLineArgs.GetPidfileName();
         if ( !pidfileName.isEmpty() )
@@ -1526,9 +1507,7 @@ int Desktop::Main()
                 (!bExistsSessionData                                                   ) &&
                 (!Application::AnyInput( VclInputFlags::APPEVENT )                          ))
             {
-                 SAL_INFO( "desktop.app", "{ create BackingComponent" );
                  ShowBackingComponent(this);
-                 SAL_INFO( "desktop.app", "} create BackingComponent" );
             }
         }
     }
@@ -1575,7 +1554,6 @@ int Desktop::Main()
              !rCmdLineArgs.IsNoQuickstart() )
             InitializeQuickstartMode( xContext );
 
-        SAL_INFO( "desktop.app", "desktop (cd100003) createInstance com.sun.star.frame.Desktop" );
         try
         {
             if ( xDesktop.is() )
@@ -1606,8 +1584,6 @@ int Desktop::Main()
         }
 
         // call Application::Execute to process messages in vcl message loop
-        SAL_INFO( "desktop.app", "PERFORMANCE - enter Application::Execute()" );
-
         try
         {
 #if HAVE_FEATURE_JAVA
@@ -1720,15 +1696,12 @@ int Desktop::doShutdown()
     }
     // be sure that path/language options gets destroyed before
     // UCB is deinitialized
-    SAL_INFO( "desktop.app", "-> dispose path/language options" );
     pExecGlobals->pLanguageOptions.reset( 0 );
     pExecGlobals->pPathOptions.reset( 0 );
-    SAL_INFO( "desktop.app", "<- dispose path/language options" );
 
     bool bRR = pExecGlobals->bRestartRequested;
     delete pExecGlobals, pExecGlobals = NULL;
 
-    SAL_INFO( "desktop.app", "FINISHED WITH Desktop::Main" );
     if ( bRR )
     {
         restartOnMac(true);
@@ -1747,7 +1720,6 @@ IMPL_LINK( Desktop, ImplInitFilterHdl, ConvertData*, pData )
 
 bool Desktop::InitializeConfiguration()
 {
-    SAL_INFO( "desktop.app",  "desktop (jb99855) ::InitConfiguration" );
     try
     {
         css::configuration::theDefaultProvider::get(
@@ -1827,7 +1799,6 @@ bool Desktop::InitializeQuickstartMode( const Reference< XComponentContext >& rx
         // the shutdown icon sits in the systray and allows the user to keep
         // the office instance running for quicker restart
         // this will only be activated if --quickstart was specified on cmdline
-        SAL_INFO( "desktop.app", "desktop (cd100003) createInstance com.sun.star.office.Quickstart" );
 
         bool bQuickstart = shouldLaunchQuickstart();
 
@@ -1916,8 +1887,6 @@ class ExitTimer : public Timer
 
 IMPL_LINK_NOARG(Desktop, OpenClients_Impl)
 {
-    SAL_INFO( "desktop.app", "PERFORMANCE - DesktopOpenClients_Impl()" );
-
     try {
         OpenClients();
 
@@ -1948,7 +1917,6 @@ IMPL_LINK_NOARG(Desktop, EnableAcceptors_Impl)
 // Registers a COM class factory of the service manager with the windows operating system.
 void Desktop::EnableOleAutomation()
 {
-      SAL_INFO( "desktop.app",  "desktop (jl97489) ::Desktop::EnableOleAutomation" );
 #ifdef WNT
     Reference< XMultiServiceFactory > xSMgr=  comphelper::getProcessServiceFactory();
     xSMgr->createInstance("com.sun.star.bridge.OleApplicationRegistration");
@@ -2421,9 +2389,6 @@ void Desktop::OpenClients()
 
 void Desktop::OpenDefault()
 {
-
-    SAL_INFO( "desktop.app",  "desktop (cd100003) ::Desktop::OpenDefault" );
-
     OUString        aName;
     SvtModuleOptions    aOpt;
 

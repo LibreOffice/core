@@ -413,7 +413,6 @@ bool Desktop::CheckExtensionDependencies()
 
 void Desktop::SynchronizeExtensionRepositories()
 {
-    SAL_INFO( "desktop.app", "desktop (jl) ::Desktop::SynchronizeExtensionRepositories");
     uno::Reference< uno::XComponentContext > context(
         comphelper::getProcessComponentContext());
     uno::Reference< ucb::XCommandEnvironment > silent(

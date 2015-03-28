@@ -69,8 +69,6 @@ namespace desktop
 
 static void configureUcb()
 {
-    SAL_INFO( "desktop.app", "desktop (sb93797) ::configureUcb" );
-
     // For backwards compatibility, in case some code still uses plain
     // createInstance w/o args directly to obtain an instance:
     UniversalContentBroker::create(comphelper::getProcessComponentContext());
@@ -105,7 +103,6 @@ static void configureUcb()
 
 void Desktop::InitApplicationServiceManager()
 {
-    SAL_INFO( "desktop.app", "desktop (cd100003) ::createApplicationServiceManager" );
     Reference<XMultiServiceFactory> sm;
 #ifdef ANDROID
     OUString aUnoRc( "file:///assets/program/unorc" );
@@ -124,8 +121,6 @@ void Desktop::RegisterServices(Reference< XComponentContext > const & context)
 {
     if( !m_bServicesRegistered )
     {
-        SAL_INFO( "desktop.app", "desktop (cd100003) ::registerServices" );
-
         // interpret command line arguments
         CommandLineArgs& rCmdLine = GetCommandLineArgs();
 
@@ -218,7 +213,6 @@ class enable
 
 void Desktop::enableAcceptors()
 {
-    SAL_INFO( "desktop.app", "enableAcceptors");
     if (!bAccept)
     {
         // from now on, all new acceptors are enabled
@@ -259,8 +253,6 @@ void Desktop::DeregisterServices()
 
 void Desktop::CreateTemporaryDirectory()
 {
-    SAL_INFO( "desktop.app", "desktop (cd100003) ::createTemporaryDirectory" );
-
     OUString aTempBaseURL;
     try
     {
@@ -312,8 +304,6 @@ void Desktop::CreateTemporaryDirectory()
 
 void Desktop::RemoveTemporaryDirectory()
 {
-    SAL_INFO( "desktop.app", "desktop (cd100003) ::removeTemporaryDirectory" );
-
     // remove current temporary directory
     OUString &rCurrentTempURL = CurrentTempURL::get();
     if ( !rCurrentTempURL.isEmpty() )

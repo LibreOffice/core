@@ -65,8 +65,6 @@ extern "C" int DESKTOP_DLLPUBLIC soffice_main()
 #endif
     tools::extendApplicationEnvironment();
 
-    SAL_INFO("desktop.app", "PERFORMANCE - enter Main()" );
-
     desktop::Desktop aDesktop;
     // This string is used during initialization of the Gtk+ VCL module
     Application::SetAppName( OUString("soffice") );

@@ -164,10 +164,8 @@ SfxObjectShell::CreatePreviewMetaFile_Impl( bool bFullContent ) const
 
     aDevice.SetDigitLanguage( eLang );
 
-    {
-        SAL_INFO( "sfx.doc", "PERFORMANCE SfxObjectShell::CreatePreviewMetaFile_Impl" );
-        const_cast<SfxObjectShell*>(this)->DoDraw( &aDevice, Point(0,0), aTmpSize, JobSetup(), nAspect );
-    }
+    const_cast<SfxObjectShell*>(this)->DoDraw( &aDevice, Point(0,0), aTmpSize, JobSetup(), nAspect );
+
     xFile->Stop();
 
     return xFile;
