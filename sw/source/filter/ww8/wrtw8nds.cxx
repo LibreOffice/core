@@ -2406,7 +2406,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
         {
             const SwTable * pTable = pTextNodeInfoInner->getTable();
 
-            const SwTableFmt * pTabFmt = pTable->GetTableFmt();
+            const SwTableFmt* pTabFmt = pTable->GetFrmFmt();
             if (pTabFmt != NULL)
             {
                 if (pTabFmt->GetBreak().GetBreak() == SVX_BREAK_PAGE_BEFORE)

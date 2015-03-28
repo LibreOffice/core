@@ -2153,7 +2153,8 @@ void WW8AttributeOutput::TableOrientation( ww8::WW8TableNodeInfoInner::Pointer_t
 void WW8AttributeOutput::TableSpacing(ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner)
 {
     const SwTable * pTable = pTableTextNodeInfoInner->getTable();
-    const SwTableFmt * pTableFmt = pTable->GetTableFmt();
+    const SwTableFmt* pTableFmt = pTable->GetFrmFmt();
+
 
     // Writing these SPRM's will make the table a floating one, so only write
     // them in case the table is already inside a frame.

@@ -184,9 +184,8 @@ public:
           SwTableLines &GetTabLines() { return aLines; }
     const SwTableLines &GetTabLines() const { return aLines; }
 
-    SwFrmFmt* GetFrmFmt()       { return static_cast<SwFrmFmt*>(GetRegisteredIn()); }
-    SwFrmFmt* GetFrmFmt() const { return const_cast<SwFrmFmt*>(static_cast<const SwFrmFmt*>(GetRegisteredIn())); }
-    SwTableFmt* GetTableFmt() const { return const_cast<SwTableFmt*>(static_cast<const SwTableFmt*>(GetRegisteredIn())); }
+    SwTableFmt* GetFrmFmt()       { return static_cast<SwTableFmt*>(GetRegisteredIn()); }
+    SwTableFmt* GetFrmFmt() const { return const_cast<SwTableFmt*>(static_cast<const SwTableFmt*>(GetRegisteredIn())); }
 
     void GetTabCols( SwTabCols &rToFill, const SwTableBox *pStart,
                      bool bHidden = false, bool bCurRowOnly = false ) const;

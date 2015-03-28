@@ -841,7 +841,7 @@ void SwTableAutoFmt::UpdateToSet(sal_uInt8 nPos, SfxItemSet& rSet,
 
 void SwTableAutoFmt::RestoreTableProperties(SwTable &table) const
 {
-    SwTableFmt *pFormat = table.GetTableFmt();
+    SwTableFmt* pFormat = table.GetFrmFmt();
     if (!pFormat)
         return;
 
@@ -868,7 +868,7 @@ void SwTableAutoFmt::RestoreTableProperties(SwTable &table) const
 
 void SwTableAutoFmt::StoreTableProperties(const SwTable &table)
 {
-    SwTableFmt *pFormat = table.GetTableFmt();
+    SwTableFmt* pFormat = table.GetFrmFmt();
     if (!pFormat)
         return;
 

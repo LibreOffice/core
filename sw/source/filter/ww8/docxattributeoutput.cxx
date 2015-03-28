@@ -3093,7 +3093,7 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
     SwFrmFmt *pTblFmt = pTable->GetFrmFmt( );
     const SwFmtFrmSize &rSize = pTblFmt->GetFrmSize();
     int nWidthPercent = rSize.GetWidthPercent();
-    uno::Reference<beans::XPropertySet> xPropertySet(SwXTextTables::GetObject(const_cast<SwFrmFmt&>(*pTable->GetFrmFmt( ))),uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(SwXTextTables::GetObject(const_cast<SwTableFmt&>(*pTable->GetFrmFmt( ))),uno::UNO_QUERY);
     bool isWidthRelative = false;
     xPropertySet->getPropertyValue("IsWidthRelative") >>= isWidthRelative;
 
