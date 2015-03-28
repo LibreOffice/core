@@ -929,32 +929,31 @@ OUString SwXCell::getFormula(void) throw( uno::RuntimeException, std::exception 
 void SwXCell::setFormula(const OUString& rFormula) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    if(IsValid())
+    if(!IsValid())
+        return;
+    // first this text (maybe) needs to be deleted
+    sal_uInt32 nNdPos = pBox->IsValidNumTxtNd( true );
+    if(USHRT_MAX == nNdPos)
+        sw_setString( *this, OUString(), true );
+    OUString sFml(comphelper::string::stripStart(rFormula, ' '));
+    if( !sFml.isEmpty() && '=' == sFml[0] )
+                sFml = sFml.copy( 1 );
+    SwTblBoxFormula aFml( sFml );
+    SwDoc* pMyDoc = GetDoc();
+    UnoActionContext aAction(pMyDoc);
+    SfxItemSet aSet(pMyDoc->GetAttrPool(), RES_BOXATR_FORMAT, RES_BOXATR_FORMULA);
+    const SfxPoolItem* pItem;
+    SwFrmFmt* pBoxFmt = pBox->GetFrmFmt();
+    if(SfxItemState::SET != pBoxFmt->GetAttrSet().GetItemState(RES_BOXATR_FORMAT, true, &pItem)
+        ||  pMyDoc->GetNumberFormatter()->IsTextFormat(static_cast<const SwTblBoxNumFormat*>(pItem)->GetValue()))
     {
-        // first this text (maybe) needs to be deleted
-        sal_uInt32 nNdPos = pBox->IsValidNumTxtNd( true );
-        if(USHRT_MAX == nNdPos)
-            sw_setString( *this, OUString(), true );
-        OUString sFml(comphelper::string::stripStart(rFormula, ' '));
-        if( !sFml.isEmpty() && '=' == sFml[0] )
-                    sFml = sFml.copy( 1 );
-        SwTblBoxFormula aFml( sFml );
-        SwDoc* pMyDoc = GetDoc();
-        UnoActionContext aAction(pMyDoc);
-        SfxItemSet aSet(pMyDoc->GetAttrPool(), RES_BOXATR_FORMAT, RES_BOXATR_FORMULA);
-        const SfxPoolItem* pItem;
-        SwFrmFmt* pBoxFmt = pBox->GetFrmFmt();
-        if(SfxItemState::SET != pBoxFmt->GetAttrSet().GetItemState(RES_BOXATR_FORMAT, true, &pItem)
-            ||  pMyDoc->GetNumberFormatter()->IsTextFormat(static_cast<const SwTblBoxNumFormat*>(pItem)->GetValue()))
-        {
-            aSet.Put(SwTblBoxNumFormat(0));
-        }
-        aSet.Put(aFml);
-        GetDoc()->SetTblBoxFormulaAttrs( *pBox, aSet );
-        // update table
-        SwTableFmlUpdate aTblUpdate( SwTable::FindTable( GetFrmFmt() ));
-        pMyDoc->getIDocumentFieldsAccess().UpdateTblFlds( &aTblUpdate );
+        aSet.Put(SwTblBoxNumFormat(0));
     }
+    aSet.Put(aFml);
+    GetDoc()->SetTblBoxFormulaAttrs( *pBox, aSet );
+    // update table
+    SwTableFmlUpdate aTblUpdate( SwTable::FindTable( GetFrmFmt() ));
+    pMyDoc->getIDocumentFieldsAccess().UpdateTblFlds( &aTblUpdate );
 }
 
 double SwXCell::getValue(void) throw( uno::RuntimeException, std::exception )
