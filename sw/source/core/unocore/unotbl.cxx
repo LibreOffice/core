@@ -917,15 +917,12 @@ bool SwXCell::IsValid() const
 OUString SwXCell::getFormula(void) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    OUString sRet;
-    if(IsValid())
-    {
-        SwTblBoxFormula aFormula( pBox->GetFrmFmt()->GetTblBoxFormula() );
-        SwTable* pTable = SwTable::FindTable( GetFrmFmt() );
-        aFormula.PtrToBoxNm( pTable );
-        sRet = aFormula.GetFormula();
-    }
-    return sRet;
+    if(!IsValid())
+        return OUString();
+    SwTblBoxFormula aFormula( pBox->GetFrmFmt()->GetTblBoxFormula() );
+    SwTable* pTable = SwTable::FindTable( GetFrmFmt() );
+    aFormula.PtrToBoxNm( pTable );
+    return aFormula.GetFormula();
 }
 
 ///@see sw_setValue (TODO: seems to be copy and paste programming here)
