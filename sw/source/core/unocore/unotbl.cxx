@@ -1869,8 +1869,8 @@ void SwTableProperties_Impl::ApplyTblAttr(const SwTable& rTbl, SwDoc& rDoc)
     const SwFrmFmt &rFrmFmt = *rTbl.GetFrmFmt();
     if(GetProperty(FN_TABLE_HEADLINE_REPEAT, 0xff, pRepHead ))
     {
-        bool bVal = *static_cast<sal_Bool const *>(pRepHead->getValue());
-        ((SwTable&)rTbl).SetRowsToRepeat( bVal ? 1 : 0 );  // TODO: MULTIHEADER
+        bool bVal(pRepHead->get<bool>());
+        const_cast<SwTable&>(rTbl).SetRowsToRepeat( bVal ? 1 : 0 );  // TODO: MULTIHEADER
     }
 
     const uno::Any* pBackColor   = 0;
@@ -1904,21 +1904,18 @@ void SwTableProperties_Impl::ApplyTblAttr(const SwTable& rTbl, SwDoc& rDoc)
     const uno::Any* pPage;
     if(GetProperty(FN_UNO_PAGE_STYLE, 0, pPage) || GetProperty(RES_PAGEDESC, 0xff, pPage))
     {
-        OUString sPageStyle;
-        (*pPage) >>= sPageStyle;
-        if (!sPageStyle.isEmpty())
+        OUString sPageStyle = pPage->get<OUString>();
+        if(!sPageStyle.isEmpty())
         {
-            SwStyleNameMapper::FillUIName(sPageStyle, sPageStyle, nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC, true );
+            SwStyleNameMapper::FillUIName(sPageStyle, sPageStyle, nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC, true);
             const SwPageDesc* pDesc = SwPageDesc::GetByName(rDoc, sPageStyle);
             if(pDesc)
             {
-                SwFmtPageDesc aDesc( pDesc );
+                SwFmtPageDesc aDesc(pDesc);
                 const uno::Any* pPgNo;
-                if(GetProperty(RES_PAGEDESC, MID_PAGEDESC_PAGENUMOFFSET, pPgNo ))
+                if(GetProperty(RES_PAGEDESC, MID_PAGEDESC_PAGENUMOFFSET, pPgNo))
                 {
-                    sal_Int16 nTmp = 0;
-                    (*pPgNo) >>= nTmp;
-                    aDesc.SetNumOffset( nTmp );
+                    aDesc.SetNumOffset(pPgNo->get<sal_Int16>());
                 }
                 aSet.Put(aDesc);
                 bPutBreak = false;
@@ -1929,14 +1926,14 @@ void SwTableProperties_Impl::ApplyTblAttr(const SwTable& rTbl, SwDoc& rDoc)
     const uno::Any* pBreak;
     if(bPutBreak && GetProperty(RES_BREAK, 0, pBreak))
     {
-        SvxFmtBreakItem aBreak ( rFrmFmt.GetBreak() );
+        SvxFmtBreakItem aBreak(rFrmFmt.GetBreak());
         aBreak.PutValue(*pBreak, 0);
         aSet.Put(aBreak);
     }
     const uno::Any* pShadow;
     if(GetProperty(RES_SHADOW, 0, pShadow))
     {
-        SvxShadowItem aShd ( rFrmFmt.GetShadow() );
+        SvxShadowItem aShd(rFrmFmt.GetShadow());
         aShd.PutValue(*pShadow, CONVERT_TWIPS);
         aSet.Put(aShd);
     }
@@ -1951,29 +1948,28 @@ void SwTableProperties_Impl::ApplyTblAttr(const SwTable& rTbl, SwDoc& rDoc)
     const uno::Any* pHOrient;
     if(GetProperty(RES_HORI_ORIENT, MID_HORIORIENT_ORIENT, pHOrient))
     {
-        SwFmtHoriOrient aOrient ( rFrmFmt.GetHoriOrient() );
-        ((SfxPoolItem&)aOrient).PutValue(*pHOrient, MID_HORIORIENT_ORIENT|CONVERT_TWIPS);
+        SwFmtHoriOrient aOrient(rFrmFmt.GetHoriOrient());
+        aOrient.PutValue(*pHOrient, MID_HORIORIENT_ORIENT|CONVERT_TWIPS);
         aSet.Put(aOrient);
     }
 
-    const uno::Any* pSzRel       = 0;
-    GetProperty(FN_TABLE_IS_RELATIVE_WIDTH, 0xff, pSzRel  );
-    const uno::Any* pRelWidth   = 0;
+    const uno::Any* pSzRel(nullptr);
+    GetProperty(FN_TABLE_IS_RELATIVE_WIDTH, 0xff, pSzRel);
+    const uno::Any* pRelWidth(nullptr);
     GetProperty(FN_TABLE_RELATIVE_WIDTH, 0xff, pRelWidth);
-    const uno::Any* pWidth      = 0;
-    GetProperty(FN_TABLE_WIDTH, 0xff, pWidth  );
+    const uno::Any* pWidth(nullptr);
+    GetProperty(FN_TABLE_WIDTH, 0xff, pWidth);
 
-    bool bPutSize = pWidth != 0;
-    SwFmtFrmSize aSz( ATT_VAR_SIZE);
+    bool bPutSize = pWidth != nullptr;
+    SwFmtFrmSize aSz(ATT_VAR_SIZE);
     if(pWidth)
     {
-        ((SfxPoolItem&)aSz).PutValue(*pWidth, MID_FRMSIZE_WIDTH);
+        aSz.PutValue(*pWidth, MID_FRMSIZE_WIDTH);
         bPutSize = true;
     }
-    bool bTemp = pSzRel && *static_cast<sal_Bool const *>(pSzRel->getValue());
-    if(pSzRel && bTemp && pRelWidth)
+    if(pSzRel && pSzRel->get<bool>() && pRelWidth)
     {
-        ((SfxPoolItem&)aSz).PutValue(*pRelWidth, MID_FRMSIZE_REL_WIDTH|CONVERT_TWIPS);
+        aSz.PutValue(*pRelWidth, MID_FRMSIZE_REL_WIDTH|CONVERT_TWIPS);
         bPutSize = true;
     }
     if(bPutSize)
@@ -1982,43 +1978,41 @@ void SwTableProperties_Impl::ApplyTblAttr(const SwTable& rTbl, SwDoc& rDoc)
             aSz.SetWidth(MINLAY);
         aSet.Put(aSz);
     }
-    const uno::Any* pL      = 0;
+    const uno::Any* pL(nullptr);
     GetProperty(RES_LR_SPACE, MID_L_MARGIN|CONVERT_TWIPS, pL);
-    const uno::Any* pR      = 0;
+    const uno::Any* pR(nullptr);
     GetProperty(RES_LR_SPACE, MID_R_MARGIN|CONVERT_TWIPS, pR);
     if(pL||pR)
     {
-        SvxLRSpaceItem aLR ( rFrmFmt.GetLRSpace() );
+        SvxLRSpaceItem aLR(rFrmFmt.GetLRSpace());
         if(pL)
-            ((SfxPoolItem&)aLR).PutValue(*pL, MID_L_MARGIN|CONVERT_TWIPS);
+            aLR.PutValue(*pL, MID_L_MARGIN|CONVERT_TWIPS);
         if(pR)
-            ((SfxPoolItem&)aLR).PutValue(*pR, MID_R_MARGIN|CONVERT_TWIPS);
+            aLR.PutValue(*pR, MID_R_MARGIN|CONVERT_TWIPS);
         aSet.Put(aLR);
     }
-    const uno::Any* pU      = 0;
+    const uno::Any* pU(nullptr);
     GetProperty(RES_UL_SPACE, MID_UP_MARGIN|CONVERT_TWIPS, pU);
-    const uno::Any* pLo     = 0;
+    const uno::Any* pLo(nullptr);
     GetProperty(RES_UL_SPACE, MID_LO_MARGIN|CONVERT_TWIPS, pLo);
     if(pU||pLo)
     {
-        SvxULSpaceItem aUL ( rFrmFmt.GetULSpace() );
+        SvxULSpaceItem aUL(rFrmFmt.GetULSpace());
         if(pU)
-            ((SfxPoolItem&)aUL).PutValue(*pU, MID_UP_MARGIN|CONVERT_TWIPS);
+            aUL.PutValue(*pU, MID_UP_MARGIN|CONVERT_TWIPS);
         if(pLo)
-            ((SfxPoolItem&)aUL).PutValue(*pLo, MID_LO_MARGIN|CONVERT_TWIPS);
+            aUL.PutValue(*pLo, MID_LO_MARGIN|CONVERT_TWIPS);
         aSet.Put(aUL);
     }
-    const::uno::Any* pSplit;
-    if(GetProperty(RES_LAYOUT_SPLIT, 0, pSplit ))
+    const::uno::Any* pSplit(nullptr);
+    if(GetProperty(RES_LAYOUT_SPLIT, 0, pSplit))
     {
-        bool bTmp = *static_cast<sal_Bool const *>(pSplit->getValue());
-        SwFmtLayoutSplit aSp(bTmp);
+        SwFmtLayoutSplit aSp(pSplit->get<bool>());
         aSet.Put(aSp);
     }
-
     if(aSet.Count())
     {
-        rDoc.SetAttr( aSet, *rTbl.GetFrmFmt() );
+        rDoc.SetAttr(aSet, *rTbl.GetFrmFmt());
     }
 }
 
