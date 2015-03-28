@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a29b11f_91488b2f",
+        "filename": "sc/source/core/data/document.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3209,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-03-28T15:46:12Z",
+      "side": 1,
+      "message": "Is it really enough to just check the current cell here? For SetValue this is obviously the case but for SetString we might append to an existing gormula group.",
+      "revId": "86eeef7e884dbe5fe524255389cab58b9f7c8956",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
