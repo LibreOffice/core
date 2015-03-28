@@ -329,7 +329,7 @@ PageCache_Impl::~PageCache_Impl()
 void PageCache_Impl::rescale_Impl (sal_Size new_size)
 {
     sal_Size new_bytes = new_size * sizeof(Entry*);
-    Entry ** new_table = (Entry**)(rtl_allocateMemory(new_bytes));
+    Entry ** new_table = static_cast<Entry**>(rtl_allocateMemory(new_bytes));
 
     if (new_table != 0)
     {

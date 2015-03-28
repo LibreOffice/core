@@ -152,7 +152,7 @@ storeError OStoreLockBytes::readAt (
 
     // Read data.
     OStoreDataPageObject aData;
-    sal_uInt8 *pData = (sal_uInt8*)pBuffer;
+    sal_uInt8 *pData = static_cast<sal_uInt8*>(pBuffer);
     while ((0 < nBytes) && (nOffset < nDataLen))
     {
         // Determine 'Offset' scope.
@@ -247,7 +247,7 @@ storeError OStoreLockBytes::writeAt (
 
     // Write data.
     OStoreDirectoryPageObject aPage (m_xNode.get());
-    const sal_uInt8 *pData = (const sal_uInt8*)pBuffer;
+    const sal_uInt8 *pData = static_cast<const sal_uInt8*>(pBuffer);
 
     storeError eErrCode = store_E_None;
     while (nBytes > 0)
