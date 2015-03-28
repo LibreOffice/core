@@ -4657,40 +4657,27 @@ void SwXTableRows::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount)
 }
 
 void SwXTableRows::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
-{
-    ClientModify(this, pOld, pNew);
-}
+    { ClientModify(this, pOld, pNew); }
 
 // SwXTableColumns
 
 OUString SwXTableColumns::getImplementationName(void) throw( uno::RuntimeException, std::exception )
-{
-    return OUString("SwXTableColumns");
-}
+    { return OUString("SwXTableColumns"); }
 
 sal_Bool SwXTableColumns::supportsService(const OUString& rServiceName) throw( uno::RuntimeException, std::exception )
-{
-    return cppu::supportsService(this, rServiceName);
-}
+    { return cppu::supportsService(this, rServiceName); }
 
 uno::Sequence< OUString > SwXTableColumns::getSupportedServiceNames(void) throw( uno::RuntimeException, std::exception )
-{
-    uno::Sequence< OUString > aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.text.TableColumns";
-    return aRet;
-}
+    { return { "com.sun.star.text.TableColumns"}; }
 
 TYPEINIT1(SwXTableColumns, SwClient);
 
 SwXTableColumns::SwXTableColumns(SwFrmFmt& rFrmFmt) :
     SwClient(&rFrmFmt)
-{
-}
+{ }
 
 SwXTableColumns::~SwXTableColumns()
-{
-}
+{ }
 
 sal_Int32 SwXTableColumns::getCount(void) throw( uno::RuntimeException, std::exception )
 {
@@ -4712,7 +4699,7 @@ uno::Any SwXTableColumns::getByIndex(sal_Int32 nIndex)
     SolarMutexGuard aGuard;
     if(nIndex < 0 || getCount() <= static_cast<size_t>(nIndex))
         throw lang::IndexOutOfBoundsException();
-    return uno::makeAny(uno::Reference<uno::XInterface()); // i#21699 not supported
+    return uno::makeAny(uno::Reference<uno::XInterface>()); // i#21699 not supported
 }
 
 uno::Type SAL_CALL SwXTableColumns::getElementType(void) throw( uno::RuntimeException, std::exception )
