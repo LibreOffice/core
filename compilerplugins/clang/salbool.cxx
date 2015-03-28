@@ -153,8 +153,6 @@ public:
 private:
     bool isInSpecialMainFile(SourceLocation spellingLocation) const;
 
-    bool isMacroBodyExpansion(SourceLocation location) const;
-
     bool rewrite(SourceLocation location);
 
     std::set<VarDecl const *> varDecls_;
@@ -274,7 +272,7 @@ bool SalBool::VisitCStyleCastExpr(CStyleCastExpr * expr) {
         while (compiler.getSourceManager().isMacroArgExpansion(loc)) {
             loc = compiler.getSourceManager().getImmediateMacroCallerLoc(loc);
         }
-        if (isMacroBodyExpansion(loc)) {
+        if (compat::isMacroBodyExpansion(compiler, loc)) {
             StringRef name { Lexer::getImmediateMacroName(
                 loc, compiler.getSourceManager(), compiler.getLangOpts()) };
             if (name == "sal_False" || name == "sal_True") {
@@ -578,15 +576,6 @@ bool SalBool::isInSpecialMainFile(SourceLocation spellingLocation) const {
     return compat::isInMainFile(compiler.getSourceManager(), spellingLocation)
         && (compiler.getSourceManager().getFilename(spellingLocation)
             == SRCDIR "/cppu/qa/test_any.cxx");
-}
-
-bool SalBool::isMacroBodyExpansion(SourceLocation location) const {
-#if (__clang_major__ == 3 && __clang_minor__ >= 3) || __clang_major__ > 3
-    return compiler.getSourceManager().isMacroBodyExpansion(location);
-#else
-    return location.isMacroID()
-        && !compiler.getSourceManager().isMacroArgExpansion(location);
-#endif
 }
 
 bool SalBool::rewrite(SourceLocation location) {
