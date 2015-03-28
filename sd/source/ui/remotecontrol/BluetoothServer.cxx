@@ -512,7 +512,7 @@ sal_Int32 OSXBluetoothWrapper::write( const void* pBuffer, sal_uInt32 n )
 {
     SAL_INFO( "sdremote.bluetooth", "OSXBluetoothWrapper::write(" << pBuffer << ", " << n << ") mpChannel=" << mpChannel );
 
-    char* ptr = (char*)pBuffer;
+    char const * ptr = static_cast<char const *>(pBuffer);
     sal_uInt32 nBytesWritten = 0;
 
     if (mpChannel == nil)
@@ -522,7 +522,7 @@ sal_Int32 OSXBluetoothWrapper::write( const void* pBuffer, sal_uInt32 n )
     {
         int toWrite = n - nBytesWritten;
         toWrite = toWrite <= mnMTU ? toWrite : mnMTU;
-        if ( [mpChannel writeSync:ptr length:toWrite] != kIOReturnSuccess )
+        if ( [mpChannel writeSync:const_cast<char *>(ptr) length:toWrite] != kIOReturnSuccess )
         {
             SAL_INFO( "sdremote.bluetooth", "  [mpChannel writeSync:" << (void *) ptr << " length:" << toWrite << "] returned error, total written " << nBytesWritten );
             return nBytesWritten;
@@ -544,7 +544,7 @@ void OSXBluetoothWrapper::appendData(void* pBuffer, size_t len)
         ::osl::MutexGuard aQueueGuard( mMutex );
         SAL_INFO( "sdremote.bluetooth", "OSXBluetoothWrapper::appendData: entered mutex" );
         mBuffer.insert(mBuffer.begin()+mBuffer.size(),
-                       (char*)pBuffer, (char *)pBuffer+len);
+                       static_cast<char*>(pBuffer), static_cast<char *>(pBuffer)+len);
         SAL_INFO( "sdremote.bluetooth", "  setting mHaveBytes" );
         mHaveBytes.set();
         SAL_INFO( "sdremote.bluetooth", "  leaving mutex" );
@@ -566,7 +566,7 @@ void incomingCallback( void *userRefCon,
 
     SAL_INFO( "sdremote.bluetooth", "incomingCallback()" );
 
-    BluetoothServer* pServer = (BluetoothServer*)userRefCon;
+    BluetoothServer* pServer = static_cast<BluetoothServer*>(userRefCon);
 
     IOBluetoothRFCOMMChannel* channel = [IOBluetoothRFCOMMChannel withRFCOMMChannelRef:(IOBluetoothRFCOMMChannelRef)objectRef];
 
