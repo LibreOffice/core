@@ -4761,49 +4761,39 @@ void SwXTableColumns::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount)
     SwFrmFmt* pFrmFmt = GetFrmFmt();
     if(!pFrmFmt)
         throw uno::RuntimeException();
-    else
+    SwTable* pTable = SwTable::FindTable( pFrmFmt );
+    if(pTable->IsTblComplex())
+        throw uno::RuntimeException("Table too complex", static_cast<cppu::OWeakObject*>(this));
+    SwTableLines& rLines = pTable->GetTabLines();
+    SwTableLine* pLine = rLines.front();
+    const size_t nColCount = pLine->GetTabBoxes().size();
+    if (nCount <= 0 || !(0 <= nIndex && static_cast<size_t>(nIndex) <= nColCount))
+        throw uno::RuntimeException("Illegal arguments", static_cast<cppu::OWeakObject*>(this));
+    const OUString sTLName = sw_GetCellName(nIndex, 0);
+    const SwTableBox* pTLBox = pTable->GetTblBox( sTLName );
+    bool bAppend = false;
+    if(!pTLBox)
     {
-        SwTable* pTable = SwTable::FindTable( pFrmFmt );
-        if(!pTable->IsTblComplex())
-        {
-            SwTableLines& rLines = pTable->GetTabLines();
-            SwTableLine* pLine = rLines.front();
-            const size_t nColCount = pLine->GetTabBoxes().size();
-            if (nCount <= 0 || !(0 <= nIndex && static_cast<size_t>(nIndex) <= nColCount))
-            {
-                uno::RuntimeException aExcept;
-                aExcept.Message = "Illegal arguments";
-                throw aExcept;
-            }
-
-            const OUString sTLName = sw_GetCellName(nIndex, 0);
-            const SwTableBox* pTLBox = pTable->GetTblBox( sTLName );
-            bool bAppend = false;
-            if(!pTLBox)
-            {
-                bAppend = true;
-                // to append at the end the cursor must be in the last line
-                SwTableBoxes& rBoxes = pLine->GetTabBoxes();
-                pTLBox = rBoxes.back();
-            }
-            if(pTLBox)
-            {
-                const SwStartNode* pSttNd = pTLBox->GetSttNd();
-                SwPosition aPos(*pSttNd);
-                UnoActionContext aAction(pFrmFmt->GetDoc());
-                SwUnoCrsr* pUnoCrsr = pFrmFmt->GetDoc()->CreateUnoCrsr(aPos, true);
-                pUnoCrsr->Move( fnMoveForward, fnGoNode );
-
-                {
-                    // remove actions
-                    UnoActionRemoveContext aRemoveContext(pUnoCrsr->GetDoc());
-                }
-
-                pFrmFmt->GetDoc()->InsertCol(*pUnoCrsr, (sal_uInt16)nCount, bAppend);
-                delete pUnoCrsr;
-            }
-        }
+        bAppend = true;
+        // to append at the end the cursor must be in the last line
+        SwTableBoxes& rBoxes = pLine->GetTabBoxes();
+        pTLBox = rBoxes.back();
     }
+    if(!pTLBox)
+        throw uno::RuntimeException("Illegal arguments", static_cast<cppu::OWeakObject*>(this));
+    const SwStartNode* pSttNd = pTLBox->GetSttNd();
+    SwPosition aPos(*pSttNd);
+    UnoActionContext aAction(pFrmFmt->GetDoc());
+    SwUnoCrsr* pUnoCrsr = pFrmFmt->GetDoc()->CreateUnoCrsr(aPos, true);
+    pUnoCrsr->Move(fnMoveForward, fnGoNode);
+
+    {
+        // remove actions
+        UnoActionRemoveContext aRemoveContext(pUnoCrsr->GetDoc());
+    }
+
+    pFrmFmt->GetDoc()->InsertCol(*pUnoCrsr, (sal_uInt16)nCount, bAppend);
+    delete pUnoCrsr;
 }
 
 ///@see SwXTableRows::removeByIndex (TODO: seems to be copy and paste programming here)
