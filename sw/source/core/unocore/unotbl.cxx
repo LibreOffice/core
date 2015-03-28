@@ -4813,64 +4813,47 @@ void SwXTableColumns::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount)
     SolarMutexGuard aGuard;
     if (nCount == 0)
         return;
-    SwFrmFmt* pFrmFmt = GetFrmFmt();
+    SwFrmFmt* pFrmFmt(GetFrmFmt());
     if(!pFrmFmt|| nIndex < 0 || nCount <=0 )
         throw uno::RuntimeException();
-    else
+    SwTable* pTable = SwTable::FindTable(pFrmFmt);
+    if(pTable->IsTblComplex())
+        throw uno::RuntimeException("Table too complex", static_cast<cppu::OWeakObject*>(this));
+    const OUString sTLName = sw_GetCellName(nIndex, 0);
+    const SwTableBox* pTLBox = pTable->GetTblBox( sTLName );
+    if(!pTLBox)
+        throw uno::RuntimeException("Cell not found", static_cast<cppu::OWeakObject*>(this));
     {
-        bool bSuccess = false;
-        SwTable* pTable = SwTable::FindTable( pFrmFmt );
-        if(!pTable->IsTblComplex())
-        {
-            const OUString sTLName = sw_GetCellName(nIndex, 0);
-            const SwTableBox* pTLBox = pTable->GetTblBox( sTLName );
-            if(pTLBox)
-            {
-                {
-                    // invalidate all actions
-                    UnoActionRemoveContext aRemoveContext(pFrmFmt->GetDoc());
-                }
-                const SwStartNode* pSttNd = pTLBox->GetSttNd();
-                SwPosition aPos(*pSttNd);
-                // set cursor to the upper-left cell of the range
-                SwUnoCrsr* pUnoCrsr = pFrmFmt->GetDoc()->CreateUnoCrsr(aPos, true);
-                pUnoCrsr->Move( fnMoveForward, fnGoNode );
-                pUnoCrsr->SetRemainInSection( false );
-                const OUString sTRName = sw_GetCellName(nIndex + nCount - 1, 0);
-                const SwTableBox* pTRBox = pTable->GetTblBox( sTRName );
-                if(pTRBox)
-                {
-                    pUnoCrsr->SetMark();
-                    pUnoCrsr->GetPoint()->nNode = *pTRBox->GetSttNd();
-                    pUnoCrsr->Move( fnMoveForward, fnGoNode );
-                    SwUnoTableCrsr* pCrsr =
-                        dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
-                    pCrsr->MakeBoxSels();
-                    {   // these braces are important
-                        UnoActionContext aAction(pFrmFmt->GetDoc());
-                        pFrmFmt->GetDoc()->DeleteCol(*pUnoCrsr);
-                        delete pUnoCrsr;
-                        bSuccess = true;
-                    }
-                    {
-                        // invalidate all actions
-                        UnoActionRemoveContext aRemoveContext(pFrmFmt->GetDoc());
-                    }
-                }
-            }
-        }
-        if(!bSuccess)
-        {
-            uno::RuntimeException aExcept;
-            aExcept.Message = "Illegal arguments";
-            throw aExcept;
-        }
+        // invalidate all actions
+        UnoActionRemoveContext aRemoveContext(pFrmFmt->GetDoc());
+    }
+    const SwStartNode* pSttNd = pTLBox->GetSttNd();
+    SwPosition aPos(*pSttNd);
+    // set cursor to the upper-left cell of the range
+    SwUnoCrsr* pUnoCrsr = pFrmFmt->GetDoc()->CreateUnoCrsr(aPos, true);
+    pUnoCrsr->Move(fnMoveForward, fnGoNode);
+    pUnoCrsr->SetRemainInSection(false);
+    const OUString sTRName = sw_GetCellName(nIndex + nCount - 1, 0);
+    const SwTableBox* pTRBox = pTable->GetTblBox(sTRName);
+    if(!pTRBox)
+        throw uno::RuntimeException("Cell not found", static_cast<cppu::OWeakObject*>(this));
+    pUnoCrsr->SetMark();
+    pUnoCrsr->GetPoint()->nNode = *pTRBox->GetSttNd();
+    pUnoCrsr->Move(fnMoveForward, fnGoNode);
+    SwUnoTableCrsr* pCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
+    pCrsr->MakeBoxSels();
+    {   // these braces are important
+        UnoActionContext aAction(pFrmFmt->GetDoc());
+        pFrmFmt->GetDoc()->DeleteCol(*pUnoCrsr);
+        delete pUnoCrsr;
+    }
+    {
+        // invalidate all actions
+        UnoActionRemoveContext aRemoveContext(pFrmFmt->GetDoc());
     }
 }
 
-void SwXTableColumns::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
-{
-    ClientModify(this, pOld, pNew);
-}
+void SwXTableColumns::Modify(const SfxPoolItem* pOld, const SfxPoolItem *pNew)
+    { ClientModify(this, pOld, pNew); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
