@@ -59,7 +59,7 @@ sal_Int32 BufferedStreamSocket::write( const void* pBuffer, sal_uInt32 n )
         return ::send(
             mSocket,
 #if defined WNT
-            static_cast<char *>(pBuffer),
+            static_cast<char const *>(pBuffer),
 #else
             pBuffer,
 #endif
