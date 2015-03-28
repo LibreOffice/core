@@ -97,7 +97,7 @@ char* GetPasswordFunction( PK11SlotInfo* pSlot, PRBool bRetry, void* /*arg*/ )
             pPasswordRequest->getPassword(),
             osl_getThreadTextEncoding()));
         sal_Int32 nLen = aPassword.getLength();
-        char* pPassword = (char*) PORT_Alloc( nLen+1 ) ;
+        char* pPassword = static_cast<char*>(PORT_Alloc( nLen+1 ) );
         pPassword[nLen] = 0;
         memcpy( pPassword, aPassword.getStr(), nLen );
         return pPassword;

@@ -116,7 +116,7 @@ int xmlStreamRead( void* context, char* buffer, int len )
     if( ( enableXmlStreamIO & XMLSTREAMIO_INITIALIZED ) &&
         ( enableXmlStreamIO & XMLSTREAMIO_REGISTERED ) ) {
         if( context != NULL ) {
-            xInputStream = ( com::sun::star::io::XInputStream* )context ;
+            xInputStream = static_cast<com::sun::star::io::XInputStream*>(context);
             if( !xInputStream.is() )
                 return 0 ;
 
@@ -137,7 +137,7 @@ int xmlStreamClose( void * context )
         ( enableXmlStreamIO & XMLSTREAMIO_REGISTERED ) ) {
         if( context != NULL ) {
             ::com::sun::star::io::XInputStream* pInputStream ;
-            pInputStream = ( ::com::sun::star::io::XInputStream* )context ;
+            pInputStream = static_cast<css::io::XInputStream*>(context);
             pInputStream->release() ;
         }
     }

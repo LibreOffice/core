@@ -67,7 +67,7 @@ const xmlChar** attrlist_to_nxmlstr( const cssu::Sequence< cssxcsax::XMLAttribut
 
     if( nLength != 0 )
     {
-        attrs = ( const xmlChar** )xmlMalloc( ( nLength * 2 + 2 ) * sizeof( xmlChar* ) ) ;
+        attrs = static_cast<const xmlChar**>(xmlMalloc( ( nLength * 2 + 2 ) * sizeof( xmlChar* ) ));
     }
     else
     {

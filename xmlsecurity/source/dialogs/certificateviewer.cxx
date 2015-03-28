@@ -158,7 +158,7 @@ void CertificateViewerDetailsTP::Clear( void )
     SvTreeListEntry*    pEntry = m_pElementsLB->GetEntry( i );
     while( pEntry )
     {
-        delete ( Details_UserDatat* ) pEntry->GetUserData();
+        delete static_cast<Details_UserDatat*>(pEntry->GetUserData());
         ++i;
         pEntry = m_pElementsLB->GetEntry( i );
     }
@@ -271,7 +271,7 @@ IMPL_LINK_NOARG(CertificateViewerDetailsTP, ElementSelectHdl)
     bool            bFixedWidthFont;
     if( pEntry )
     {
-        const Details_UserDatat*    p = ( Details_UserDatat* ) pEntry->GetUserData();
+        const Details_UserDatat*    p = static_cast<Details_UserDatat*>(pEntry->GetUserData());
         aElementText = p->maTxt;
         bFixedWidthFont = p->mbFixedWidthFont;
     }
@@ -370,7 +370,7 @@ IMPL_LINK_NOARG(CertificateViewerCertPathTP, ViewCertHdl)
     SvTreeListEntry* pEntry = mpCertPathLB->FirstSelected();
     if( pEntry )
     {
-        CertificateViewer aViewer( this, mpDlg->mxSecurityEnvironment, ((CertPath_UserData*)pEntry->GetUserData())->mxCert, false );
+        CertificateViewer aViewer( this, mpDlg->mxSecurityEnvironment, static_cast<CertPath_UserData*>(pEntry->GetUserData())->mxCert, false );
         aViewer.Execute();
     }
 
@@ -383,7 +383,7 @@ IMPL_LINK_NOARG(CertificateViewerCertPathTP, CertSelectHdl)
     SvTreeListEntry* pEntry = mpCertPathLB->FirstSelected();
     if( pEntry )
     {
-        CertPath_UserData* pData = (CertPath_UserData*) pEntry->GetUserData();
+        CertPath_UserData* pData = static_cast<CertPath_UserData*>(pEntry->GetUserData());
         if ( pData )
             sStatus = pData->mbValid ? msCertOK : msCertNotValidated;
     }
@@ -400,7 +400,7 @@ void CertificateViewerCertPathTP::Clear( void )
     SvTreeListEntry*    pEntry = mpCertPathLB->GetEntry( i );
     while( pEntry )
     {
-        delete ( CertPath_UserData* ) pEntry->GetUserData();
+        delete static_cast<CertPath_UserData*>(pEntry->GetUserData());
         ++i;
         pEntry = mpCertPathLB->GetEntry( i );
     }
