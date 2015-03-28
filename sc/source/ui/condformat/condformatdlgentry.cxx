@@ -215,12 +215,15 @@ ScConditionFrmtEntry::ScConditionFrmtEntry( vcl::Window* pParent, ScDocument* pD
                 maEdVal1.Show();
                 maEdVal1.SetText(pFormatEntry->GetExpression(maPos, 0));
                 maEdVal2.Hide();
+                OnEdChanged(&maEdVal1);
                 break;
             case 2:
                 maEdVal1.Show();
                 maEdVal1.SetText(pFormatEntry->GetExpression(maPos, 0));
+                OnEdChanged(&maEdVal1);
                 maEdVal2.Show();
                 maEdVal2.SetText(pFormatEntry->GetExpression(maPos, 1));
+                OnEdChanged(&maEdVal2);
                 break;
         }
     }
