@@ -2197,7 +2197,6 @@ std::vector< RadioButton* > RadioButton::GetRadioButtonGroup(bool bIncludeThis) 
     }
 
     //old-school
-    SAL_WARN("vcl.control", "No new-style group set on radiobutton <" << GetHelpId() << "> using old-style digging around");
 
     // go back to first in group;
     vcl::Window* pFirst = const_cast<RadioButton*>(this);
