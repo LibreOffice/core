@@ -1512,6 +1512,7 @@ bool Application::IsConsoleOnly()
 
 void Application::EnableConsoleOnly()
 {
+    EnableHeadlessMode(true);
     bConsoleOnly = true;
 }
 
