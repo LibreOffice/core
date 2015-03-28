@@ -1043,74 +1043,73 @@ void SwXCell::setPropertyValue(const OUString& rPropertyName, const uno::Any& aV
     throw( beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    if(IsValid())
+    if(!IsValid())
+        return;
+    // Hack to support hidden property to transfer textDirection
+    if(rPropertyName == "FRMDirection")
     {
-        // Hack to support hidden property to transfer textDirection
-        if  ( rPropertyName == "FRMDirection" )
+        SvxFrameDirection eDir = FRMDIR_ENVIRONMENT;
+        sal_Int16 nNum = 0;
+        aValue >>= nNum;
+        SAL_INFO("sw.uno", "FRMDirection val " << nNum);
+        switch (nNum)
         {
-            SvxFrameDirection eDir = FRMDIR_ENVIRONMENT;
-            sal_Int16 nNum = 0;
-            aValue >>= nNum;
-            SAL_INFO("sw.uno", "FRMDirection val " << nNum);
-            switch (nNum)
-            {
-                case 0:
-                    eDir = FRMDIR_HORI_LEFT_TOP;
-                    break;
-                case 1:
-                    eDir = FRMDIR_HORI_RIGHT_TOP;
-                    break;
-                case 2:
-                    eDir = FRMDIR_VERT_TOP_RIGHT;
-                    break;
-                default:
-                    OSL_FAIL( "unknown direction code, maybe it's a bitfield");
-            }
-            SvxFrameDirectionItem aItem( eDir, RES_FRAMEDIR);
-            pBox->GetFrmFmt()->SetFmtAttr(aItem);
+            case 0:
+                eDir = FRMDIR_HORI_LEFT_TOP;
+                break;
+            case 1:
+                eDir = FRMDIR_HORI_RIGHT_TOP;
+                break;
+            case 2:
+                eDir = FRMDIR_VERT_TOP_RIGHT;
+                break;
+            default:
+                OSL_FAIL("unknown direction code, maybe it's a bitfield");
         }
-        else if  ( rPropertyName == "TableRedlineParams" )
+        SvxFrameDirectionItem aItem(eDir, RES_FRAMEDIR);
+        pBox->GetFrmFmt()->SetFmtAttr(aItem);
+    }
+    else if(rPropertyName == "TableRedlineParams")
+    {
+        // Get the table row properties
+        uno::Sequence<beans::PropertyValue> tableCellProperties;
+        tableCellProperties = aValue.get< uno::Sequence< beans::PropertyValue > >();
+        comphelper::SequenceAsHashMap aPropMap(tableCellProperties);
+        OUString sRedlineType;
+        uno::Any sRedlineTypeValue;
+        sRedlineTypeValue = aPropMap.getUnpackedValueOrDefault("RedlineType", sRedlineTypeValue);
+        if(sRedlineTypeValue >>= sRedlineType)
         {
-            // Get the table row properties
-            uno::Sequence< beans::PropertyValue > tableCellProperties;
-            tableCellProperties = aValue.get< uno::Sequence< beans::PropertyValue > >();
-            comphelper::SequenceAsHashMap aPropMap( tableCellProperties );
-            OUString sRedlineType;
-            uno::Any sRedlineTypeValue;
-            sRedlineTypeValue = aPropMap.getUnpackedValueOrDefault("RedlineType", sRedlineTypeValue);
-            if( sRedlineTypeValue >>= sRedlineType )
-            {
-                // Create a 'Table Cell Redline' object
-                SwUnoCursorHelper::makeTableCellRedline( *pBox, sRedlineType, tableCellProperties);
-            }
-            else
-            {
-                throw beans::UnknownPropertyException("No redline type property: ", static_cast < cppu::OWeakObject * > ( this ) );
-            }
+            // Create a 'Table Cell Redline' object
+            SwUnoCursorHelper::makeTableCellRedline(*pBox, sRedlineType, tableCellProperties);
         }
         else
         {
-            const SfxItemPropertySimpleEntry* pEntry =
-                m_pPropSet->getPropertyMap().getByName(rPropertyName);
-            if( !pEntry )
-            {
-                beans::UnknownPropertyException aEx;
-                aEx.Message = rPropertyName;
-                throw( aEx );
-            }
-            if( pEntry->nWID == FN_UNO_CELL_ROW_SPAN )
-            {
-                sal_Int32 nRowSpan = 0;
-                if( aValue >>= nRowSpan )
-                    pBox->setRowSpan( nRowSpan );
-            }
-            else
-            {
-                SwFrmFmt* pBoxFmt = pBox->ClaimFrmFmt();
-                SwAttrSet aSet(pBoxFmt->GetAttrSet());
-                m_pPropSet->setPropertyValue(rPropertyName, aValue, aSet);
-                pBoxFmt->GetDoc()->SetAttr(aSet, *pBoxFmt);
-            }
+            throw beans::UnknownPropertyException("No redline type property: ", static_cast < cppu::OWeakObject * > ( this ) );
+        }
+    }
+    else
+    {
+        const SfxItemPropertySimpleEntry* pEntry =
+            m_pPropSet->getPropertyMap().getByName(rPropertyName);
+        if(!pEntry)
+        {
+            beans::UnknownPropertyException aEx;
+            aEx.Message = rPropertyName;
+            throw(aEx);
+        }
+        if(pEntry->nWID == FN_UNO_CELL_ROW_SPAN)
+        {
+            sal_Int32 nRowSpan = 0;
+            if(aValue >>= nRowSpan)
+                pBox->setRowSpan(nRowSpan);
+        }
+        else
+        {
+            SwFrmFmt* pBoxFmt = pBox->ClaimFrmFmt();
+            SwAttrSet aSet(pBoxFmt->GetAttrSet());
+            m_pPropSet->setPropertyValue(rPropertyName, aValue, aSet);
+            pBoxFmt->GetDoc()->SetAttr(aSet, *pBoxFmt);
         }
     }
 }
