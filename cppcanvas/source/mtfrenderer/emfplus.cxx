@@ -1136,7 +1136,7 @@ namespace cppcanvas
 
                     GraphicFilter filter;
                     // workaround buggy metafiles, which have wrong mfSize set (n#705956 for example)
-                    SvMemoryStream mfStream (((char *)s.GetData()) + s.Tell(), bUseWholeStream ? s.remainingSize() : dataSize - 16, StreamMode::READ);
+                    SvMemoryStream mfStream (const_cast<char *>(static_cast<char const *>(s.GetData()) + s.Tell()), bUseWholeStream ? s.remainingSize() : dataSize - 16, StreamMode::READ);
 
                     filter.ImportGraphic (graphic, OUString(), mfStream);
 
@@ -1179,7 +1179,7 @@ namespace cppcanvas
                 SAL_INFO("cppcanvas.emf", "EMF+\tflags: 0x" << std::hex << fontFlags << " reserved: 0x" << reserved << " length: 0x" << std::hex << length << std::dec);
 
                 if( length > 0 && length < 0x4000 ) {
-                    sal_Unicode *chars = (sal_Unicode *) alloca( sizeof( sal_Unicode ) * length );
+                    sal_Unicode *chars = static_cast<sal_Unicode *>(alloca( sizeof( sal_Unicode ) * length ));
 
                     for( sal_uInt32 i = 0; i < length; i++ )
                         s.ReadUInt16( chars[ i ] );
@@ -1836,7 +1836,7 @@ namespace cppcanvas
                     }
 
                     // 1st 4 bytes are unknown
-                    mMStream.Write (((const char *)rMF.GetData()) + rMF.Tell() + 4, dataSize - 4);
+                    mMStream.Write (static_cast<const char *>(rMF.GetData()) + rMF.Tell() + 4, dataSize - 4);
                     SAL_INFO("cppcanvas.emf", "EMF+ read next object part size: " << size << " type: " << type << " flags: " << flags << " data size: " << dataSize);
                 } else {
                     if (mbMultipart) {
