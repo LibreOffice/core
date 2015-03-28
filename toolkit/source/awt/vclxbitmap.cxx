@@ -65,7 +65,7 @@ IMPL_XTYPEPROVIDER_END
 
     SvMemoryStream aMem;
     WriteDIB(maBitmap.GetBitmap(), aMem, false, true);
-    return ::com::sun::star::uno::Sequence<sal_Int8>( (sal_Int8*) aMem.GetData(), aMem.Tell() );
+    return ::com::sun::star::uno::Sequence<sal_Int8>( static_cast<sal_Int8 const *>(aMem.GetData()), aMem.Tell() );
 }
 
 ::com::sun::star::uno::Sequence< sal_Int8 > VCLXBitmap::getMaskDIB() throw(::com::sun::star::uno::RuntimeException, std::exception)
@@ -74,7 +74,7 @@ IMPL_XTYPEPROVIDER_END
 
     SvMemoryStream aMem;
     WriteDIB(maBitmap.GetMask(), aMem, false, true);
-    return ::com::sun::star::uno::Sequence<sal_Int8>( (sal_Int8*) aMem.GetData(), aMem.Tell() );
+    return ::com::sun::star::uno::Sequence<sal_Int8>( static_cast<sal_Int8 const *>(aMem.GetData()), aMem.Tell() );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -494,7 +494,7 @@ void VCLXGraphics::drawTextArray( sal_Int32 x, sal_Int32 y, const OUString& rTex
     if( mpOutputDevice )
     {
         InitOutputDevice( INITOUTDEV_CLIPREGION|INITOUTDEV_RASTEROP|INITOUTDEV_COLORS|INITOUTDEV_FONT );
-        long* pDXA = (long*)alloca(rText.getLength() * sizeof(long));
+        long* pDXA = static_cast<long*>(alloca(rText.getLength() * sizeof(long)));
         for(int i = 0; i < rText.getLength(); i++)
         {
             pDXA[i] = rLongs[i];

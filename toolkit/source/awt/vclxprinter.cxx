@@ -244,7 +244,7 @@ void VCLXPrinterPropertySet::selectForm( const OUString& rFormDescription ) thro
     SvMemoryStream aMem;
     aMem.WriteUInt32( BINARYSETUPMARKER );
     WriteJobSetup( aMem, GetPrinter()->GetJobSetup() );
-    return ::com::sun::star::uno::Sequence<sal_Int8>( (sal_Int8*) aMem.GetData(), aMem.Tell() );
+    return ::com::sun::star::uno::Sequence<sal_Int8>( static_cast<sal_Int8 const *>(aMem.GetData()), aMem.Tell() );
 }
 
 void VCLXPrinterPropertySet::setBinarySetup( const ::com::sun::star::uno::Sequence< sal_Int8 >& data ) throw(::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception)

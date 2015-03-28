@@ -144,7 +144,7 @@ uno::Reference< accessibility::XAccessible > VCLXAccessibleComponent::GetChildAc
     // and returns its accessible
 
     // MT: Change this later, normally a show/hide event shouldn't have the vcl::Window* in pData.
-    vcl::Window* pChildWindow = (vcl::Window *) rVclWindowEvent.GetData();
+    vcl::Window* pChildWindow = static_cast<vcl::Window *>(rVclWindowEvent.GetData());
     if( pChildWindow && GetWindow() == pChildWindow->GetAccessibleParentWindow() )
         return pChildWindow->GetAccessible( rVclWindowEvent.GetId() == VCLEVENT_WINDOW_SHOW );
     else
@@ -200,7 +200,7 @@ void VCLXAccessibleComponent::ProcessWindowEvent( const VclWindowEvent& rVclWind
         break;
         case VCLEVENT_WINDOW_CHILDDESTROYED:
         {
-            vcl::Window* pWindow = (vcl::Window*) rVclWindowEvent.GetData();
+            vcl::Window* pWindow = static_cast<vcl::Window*>(rVclWindowEvent.GetData());
             DBG_ASSERT( pWindow, "VCLEVENT_WINDOW_CHILDDESTROYED - Window=?" );
             if ( pWindow->GetAccessible( false ).is() )
             {
@@ -265,7 +265,7 @@ void VCLXAccessibleComponent::ProcessWindowEvent( const VclWindowEvent& rVclWind
         break;
         case VCLEVENT_WINDOW_FRAMETITLECHANGED:
         {
-            OUString aOldName( *((OUString*) rVclWindowEvent.GetData()) );
+            OUString aOldName( *static_cast<OUString*>(rVclWindowEvent.GetData()) );
             OUString aNewName( getAccessibleName() );
             aOldValue <<= aOldName;
             aNewValue <<= aNewName;
@@ -297,7 +297,7 @@ void VCLXAccessibleComponent::ProcessWindowEvent( const VclWindowEvent& rVclWind
         break;
         case VCLEVENT_WINDOW_MENUBARADDED:
         {
-            MenuBar* pMenuBar = (MenuBar*) rVclWindowEvent.GetData();
+            MenuBar* pMenuBar = static_cast<MenuBar*>(rVclWindowEvent.GetData());
             if ( pMenuBar )
             {
                 uno::Reference< accessibility::XAccessible > xChild( pMenuBar->GetAccessible() );
@@ -311,7 +311,7 @@ void VCLXAccessibleComponent::ProcessWindowEvent( const VclWindowEvent& rVclWind
         break;
         case VCLEVENT_WINDOW_MENUBARREMOVED:
         {
-            MenuBar* pMenuBar = (MenuBar*) rVclWindowEvent.GetData();
+            MenuBar* pMenuBar = static_cast<MenuBar*>(rVclWindowEvent.GetData());
             if ( pMenuBar )
             {
                 uno::Reference< accessibility::XAccessible > xChild( pMenuBar->GetAccessible() );

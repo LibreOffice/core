@@ -480,8 +480,8 @@ extern "C"
 {
 static int SAL_CALL ComponentInfoCompare( const void* pFirst, const void* pSecond)
 {
-    return( strcmp( ((ComponentInfo*)pFirst)->pName,
-                    ((ComponentInfo*)pSecond)->pName ) );
+    return( strcmp( static_cast<ComponentInfo const *>(pFirst)->pName,
+                    static_cast<ComponentInfo const *>(pSecond)->pName ) );
 }
 }
 
@@ -505,11 +505,11 @@ sal_uInt16 ImplGetComponentType( const OUString& rServiceName )
     else
         aSearch.pName = "window";
 
-    ComponentInfo* pInf = (ComponentInfo*) bsearch( &aSearch,
+    ComponentInfo* pInf = static_cast<ComponentInfo*>(bsearch( &aSearch,
                         (void*) aComponentInfos,
                         sizeof( aComponentInfos ) / sizeof( ComponentInfo ),
                         sizeof( ComponentInfo ),
-                        ComponentInfoCompare );
+                        ComponentInfoCompare ));
 
     return pInf ? pInf->nWinType : 0;
 }
@@ -595,7 +595,7 @@ static void SAL_CALL ToolkitWorkerFunction( void* pArgs )
 {
     osl_setThreadName("VCLXToolkit VCL main thread");
 
-    VCLXToolkit * pTk = (VCLXToolkit *)pArgs;
+    VCLXToolkit * pTk = static_cast<VCLXToolkit *>(pArgs);
     bInitedByVCLToolkit = InitVCL();
     if( bInitedByVCLToolkit )
     {
