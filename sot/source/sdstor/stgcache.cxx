@@ -64,7 +64,7 @@ void StgCache::SetToPage ( const rtl::Reference< StgPage >& rPage, short nOff, s
 #ifdef OSL_BIGENDIAN
         nVal = OSL_SWAPDWORD(nVal);
 #endif
-        ((sal_Int32*) rPage->GetData() )[ nOff ] = nVal;
+        static_cast<sal_Int32*>(rPage->GetData())[ nOff ] = nVal;
         SetDirty( rPage );
     }
 }

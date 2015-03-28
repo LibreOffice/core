@@ -143,7 +143,7 @@ sal_uLong SotStorageStream::GetData( void* pData, sal_uLong nSize )
         SetError( pOwnStm->GetError() );
     }
     else
-        nRet = SvStream::GetData( (sal_Char *)pData, nSize );
+        nRet = SvStream::GetData( pData, nSize );
 
     return nRet;
 }
@@ -158,7 +158,7 @@ sal_uLong SotStorageStream::PutData( const void* pData, sal_uLong nSize )
         SetError( pOwnStm->GetError() );
     }
     else
-        nRet = SvStream::PutData( (sal_Char *)pData, nSize );
+        nRet = SvStream::PutData( pData, nSize );
     return nRet;
 }
 

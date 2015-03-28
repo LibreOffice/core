@@ -901,7 +901,7 @@ sal_uLong UCBStorageStream_Impl::GetData( void* pData, sal_uLong nSize )
         // copy this tail to the temporary stream
 
         sal_uLong aToRead = nSize - aResult;
-        pData = (void*)( (char*)pData + aResult );
+        pData = (void*)( static_cast<char*>(pData) + aResult );
 
         try
         {

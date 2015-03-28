@@ -885,7 +885,7 @@ void* StgDataStrm::GetPtr( sal_Int32 Pos, bool bForce, bool bDirty )
         {
             if( bDirty )
                 rIo.SetDirty( pPg );
-            return ((sal_uInt8 *)pPg->GetData()) + nOffset;
+            return static_cast<sal_uInt8 *>(pPg->GetData()) + nOffset;
         }
     }
     return NULL;
@@ -912,7 +912,7 @@ sal_Int32 StgDataStrm::Read( void* pBuf, sal_Int32 n )
         if( nBytes )
         {
             short nRes;
-            void *p = (sal_uInt8 *) pBuf + nDone;
+            void *p = static_cast<sal_uInt8 *>(pBuf) + nDone;
             if( nBytes == nPageSize )
             {
                 pPg = rIo.Find( nPage );
@@ -932,7 +932,7 @@ sal_Int32 StgDataStrm::Read( void* pBuf, sal_Int32 n )
                 pPg = rIo.Get( nPage, false );
                 if( !pPg.is() )
                     break;
-                memcpy( p, (sal_uInt8*)pPg->GetData() + nOffset, nBytes );
+                memcpy( p, static_cast<sal_uInt8*>(pPg->GetData()) + nOffset, nBytes );
                 nRes = nBytes;
             }
             nDone += nRes;
@@ -971,7 +971,7 @@ sal_Int32 StgDataStrm::Write( const void* pBuf, sal_Int32 n )
         if( nBytes )
         {
             short nRes;
-            const void *p = (const sal_uInt8 *) pBuf + nDone;
+            const void *p = static_cast<const sal_uInt8 *>(pBuf) + nDone;
             if( nBytes == nPageSize )
             {
                 pPg = rIo.Find( nPage );
@@ -992,7 +992,7 @@ sal_Int32 StgDataStrm::Write( const void* pBuf, sal_Int32 n )
                 pPg = rIo.Get( nPage, false );
                 if( !pPg.is() )
                     break;
-                memcpy( (sal_uInt8*)pPg->GetData() + nOffset, p, nBytes );
+                memcpy( static_cast<sal_uInt8*>(pPg->GetData()) + nOffset, p, nBytes );
                 rIo.SetDirty( pPg );
                 nRes = nBytes;
             }
@@ -1063,7 +1063,7 @@ sal_Int32 StgSmallStrm::Read( void* pBuf, sal_Int32 n )
             if( !pData || !pData->Pos2Page( nPage * nPageSize + nOffset ) )
                 break;
             // all reading through the stream
-            short nRes = (short) pData->Read( (sal_uInt8*)pBuf + nDone, nBytes );
+            short nRes = (short) pData->Read( static_cast<sal_uInt8*>(pBuf) + nDone, nBytes );
             nDone = nDone + nRes;
             nPos += nRes;
             n -= nRes;
@@ -1106,7 +1106,7 @@ sal_Int32 StgSmallStrm::Write( const void* pBuf, sal_Int32 n )
                 break;
             if( !pData->Pos2Page( nDataPos ) )
                 break;
-            short nRes = (short) pData->Write( (sal_uInt8*)pBuf + nDone, nBytes );
+            short nRes = (short) pData->Write( static_cast<sal_uInt8 const *>(pBuf) + nDone, nBytes );
             nDone = nDone + nRes;
             nPos += nRes;
             n -= nRes;
@@ -1265,7 +1265,7 @@ sal_uLong StgTmpStrm::GetData( void* pData, sal_uLong n )
         return n;
     }
     else
-        return SvMemoryStream::GetData( (sal_Char *)pData, n );
+        return SvMemoryStream::GetData( pData, n );
 }
 
 sal_uLong StgTmpStrm::PutData( const void* pData, sal_uLong n )
@@ -1284,7 +1284,7 @@ sal_uLong StgTmpStrm::PutData( const void* pData, sal_uLong n )
         SetError( pStrm->GetError() );
     }
     else
-        nNew = SvMemoryStream::PutData( (sal_Char*)pData, n );
+        nNew = SvMemoryStream::PutData( pData, n );
     return nNew;
 }
 

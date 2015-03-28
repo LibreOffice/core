@@ -48,7 +48,7 @@ namespace
                                const OUString &rStreamName,
                                sal_uLong nSize )
     {
-        unsigned char *pData = (unsigned char*)malloc( nSize );
+        unsigned char *pData = static_cast<unsigned char*>(malloc( nSize ));
         sal_uLong nReadableSize = 0;
         if( !pData )
             return true;

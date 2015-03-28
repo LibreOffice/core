@@ -119,7 +119,7 @@ inline sal_Int32 StgCache::GetFromPage ( const rtl::Reference< StgPage >& rPage,
 {
     if( ( nOff >= (short) ( rPage->GetSize() / sizeof( sal_Int32 ) ) ) || nOff < 0 )
         return -1;
-    sal_Int32 n = ((sal_Int32*) rPage->GetData() )[ nOff ];
+    sal_Int32 n = static_cast<sal_Int32*>(rPage->GetData())[ nOff ];
 #ifdef OSL_BIGENDIAN
     return OSL_SWAPDWORD(n);
 #else

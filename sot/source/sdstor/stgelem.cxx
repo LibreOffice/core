@@ -366,7 +366,7 @@ bool StgEntry::Load( const void* pFrom, sal_uInt32 nBufSize )
     if ( nBufSize < 128 )
         return false;
 
-    SvMemoryStream r( (sal_Char*) pFrom, nBufSize, StreamMode::READ );
+    SvMemoryStream r( const_cast<void *>(pFrom), nBufSize, StreamMode::READ );
     for( short i = 0; i < 32; i++ )
         r.ReadUInt16( nName[ i ] );            // 00 name as WCHAR
     r.ReadUInt16( nNameLen )                   // 40 size of name in bytes including 00H
@@ -412,7 +412,7 @@ bool StgEntry::Load( const void* pFrom, sal_uInt32 nBufSize )
 
 void StgEntry::Store( void* pTo )
 {
-    SvMemoryStream r( (sal_Char *)pTo, 128, StreamMode::WRITE );
+    SvMemoryStream r( pTo, 128, StreamMode::WRITE );
     for( short i = 0; i < 32; i++ )
         r.WriteUInt16( nName[ i ] );            // 00 name as WCHAR
     r.WriteUInt16( nNameLen )                   // 40 size of name in bytes including 00H
