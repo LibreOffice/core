@@ -896,10 +896,10 @@ bool SwXCell::IsValid() const
 {
     // FIXME: this is now a const method, to make SwXText::IsValid invisible
     // but the const_cast here are still ridiculous. TODO: find a better way.
-    SwFrmFmt* pTblFmt = pBox ? GetFrmFmt() : 0;
+    SwFrmFmt* pTblFmt = pBox ? GetFrmFmt() : nullptr;
     if(!pTblFmt)
     {
-        const_cast<SwXCell*>(this)->pBox = 0;
+        const_cast<SwXCell*>(this)->pBox = nullptr;
     }
     else
     {
@@ -908,10 +908,10 @@ bool SwXCell::IsValid() const
             const_cast<SwXCell*>(this)->FindBox(pTable, pBox);
         if (!pFoundBox)
         {
-            const_cast<SwXCell*>(this)->pBox = 0;
+            const_cast<SwXCell*>(this)->pBox = nullptr;
         }
     }
-    return 0 != pBox;
+    return nullptr != pBox;
 }
 
 OUString SwXCell::getFormula(void) throw( uno::RuntimeException, std::exception )
