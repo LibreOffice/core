@@ -167,7 +167,8 @@ class SwXTextTableRow : public cppu::WeakImplHelper2
     const SfxItemPropertySet*   m_pPropSet;
     SwTableLine*            pLine;
 
-    SwFrmFmt* GetFrmFmt() const { return const_cast<SwFrmFmt*>(static_cast<const SwFrmFmt*>(GetRegisteredIn())); }
+    SwFrmFmt* GetFrmFmt() { return static_cast<SwFrmFmt*>(GetRegisteredIn()); }
+    const SwFrmFmt* GetFrmFmt() const { return const_cast<SwXTextTableRow*>(this)->GetFrmFmt(); }
 protected:
     virtual ~SwXTextTableRow();
     //SwClient
