@@ -1000,23 +1000,18 @@ sal_Int32 SwXCell::getError(void) throw( uno::RuntimeException, std::exception )
     return sal_Int32(sContent.equals(SwViewShell::GetShellRes()->aCalc_Error));
 }
 
-uno::Reference< text::XTextCursor >  SwXCell::createTextCursor(void) throw( uno::RuntimeException, std::exception )
+uno::Reference<text::XTextCursor> SwXCell::createTextCursor(void) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    uno::Reference< text::XTextCursor >     aRef;
-    if(pStartNode || IsValid())
-    {
-        const SwStartNode* pSttNd = pStartNode ? pStartNode : pBox->GetSttNd();
-        SwPosition aPos(*pSttNd);
-        SwXTextCursor *const pXCursor =
-            new SwXTextCursor(*GetDoc(), this, CURSOR_TBLTEXT, aPos);
-        SwUnoCrsr *const pUnoCrsr = pXCursor->GetCursor();
-        pUnoCrsr->Move(fnMoveForward, fnGoNode);
-        aRef =  static_cast<text::XWordCursor*>(pXCursor);
-    }
-    else
+    if(!pStartNode && !IsValid())
         throw uno::RuntimeException();
-    return aRef;
+    const SwStartNode* pSttNd = pStartNode ? pStartNode : pBox->GetSttNd();
+    SwPosition aPos(*pSttNd);
+    SwXTextCursor* const pXCursor =
+        new SwXTextCursor(*GetDoc(), this, CURSOR_TBLTEXT, aPos);
+    SwUnoCrsr* const pUnoCrsr = pXCursor->GetCursor();
+    pUnoCrsr->Move(fnMoveForward, fnGoNode);
+    return static_cast<text::XWordCursor*>(pXCursor);
 }
 
 uno::Reference< text::XTextCursor >  SwXCell::createTextCursorByRange(const uno::Reference< text::XTextRange > & xTextPosition)
