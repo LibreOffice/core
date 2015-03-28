@@ -175,8 +175,7 @@ static void lcl_SetSpecialProperty(SwFrmFmt* pFmt,
                 UnoActionContext aAction(pFmt->GetDoc());
                 if( pEntry->nWID == FN_TABLE_HEADLINE_REPEAT)
                 {
-                    bool bVal = *static_cast<sal_Bool const *>(aValue.getValue());
-                    pFmt->GetDoc()->SetRowsToRepeat( *pTable, bVal ? 1 : 0 );
+                    pFmt->GetDoc()->SetRowsToRepeat( *pTable, aValue.get<bool>() ? 1 : 0 );
                 }
                 else
                 {
