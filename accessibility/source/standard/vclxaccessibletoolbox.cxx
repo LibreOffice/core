@@ -464,7 +464,7 @@ void VCLXAccessibleToolBox::UpdateItemEnabled_Impl( sal_Int32 _nPos )
 
 void VCLXAccessibleToolBox::HandleSubToolBarEvent( const VclWindowEvent& rVclWindowEvent, bool _bShow )
 {
-    vcl::Window* pChildWindow = (vcl::Window *) rVclWindowEvent.GetData();
+    vcl::Window* pChildWindow = static_cast<vcl::Window *>(rVclWindowEvent.GetData());
     ToolBox* pToolBox = static_cast< ToolBox* >( GetWindow() );
     if ( pChildWindow
         && pToolBox
@@ -777,7 +777,7 @@ Reference< XAccessible > SAL_CALL VCLXAccessibleToolBox::getAccessibleAtPoint( c
 Reference< XAccessible > VCLXAccessibleToolBox::GetItemWindowAccessible( const VclWindowEvent& rVclWindowEvent )
 {
     Reference< XAccessible > xReturn;
-    vcl::Window* pChildWindow = (vcl::Window *) rVclWindowEvent.GetData();
+    vcl::Window* pChildWindow = static_cast<vcl::Window *>(rVclWindowEvent.GetData());
     ToolBox* pToolBox = static_cast< ToolBox* >( GetWindow() );
     if ( pChildWindow && pToolBox )
     {

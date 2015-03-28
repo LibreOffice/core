@@ -326,7 +326,7 @@ namespace accessibility
             break;
             case VCLEVENT_TABBAR_PAGEMOVED:
             {
-                Pair* pPair = (Pair*) rVclWindowEvent.GetData();
+                Pair* pPair = static_cast<Pair*>(rVclWindowEvent.GetData());
                 if ( pPair )
                     MoveChild( pPair->A(), pPair->B() );
             }
