@@ -3348,6 +3348,42 @@ bool adjustSingleRefOnInsertedTab( ScSingleRefData& rRef, SCTAB nInsPos, SCTAB n
     return false;
 }
 
+bool adjustDoubleRefOnDeleteTab(ScComplexRefData& rRef, SCTAB nDelPos, SCTAB nSheets, const ScAddress& rOldPos, const ScAddress& rNewPos)
+{
+    ScSingleRefData& rRef1 = rRef.Ref1;
+    ScSingleRefData& rRef2 = rRef.Ref2;
+    ScAddress aStartPos = rRef1.toAbs(rOldPos);
+    ScAddress aEndPos = rRef2.toAbs(rOldPos);
+    bool bMoreThanOneTab = aStartPos.Tab() != aEndPos.Tab();
+    bool bModified = false;
+    if (bMoreThanOneTab && aStartPos.Tab() == nDelPos && nDelPos + nSheets <= aEndPos.Tab())
+    {
+        if (rRef1.IsTabRel() && aStartPos.Tab() < rOldPos.Tab())
+        {
+            rRef1.IncTab(nSheets);
+            bModified = true;
+        }
+    }
+    else
+    {
+        bModified = adjustSingleRefOnDeletedTab(rRef1, nDelPos, nSheets, rOldPos, rNewPos);
+    }
+
+    if (bMoreThanOneTab && aEndPos.Tab() == nDelPos && aStartPos.Tab() <= nDelPos - nSheets)
+    {
+        if (!rRef2.IsTabRel() || rOldPos.Tab() < aEndPos.Tab())
+        {
+            rRef2.IncTab(-nSheets);
+            bModified = true;
+        }
+    }
+    else
+    {
+        bModified |= adjustSingleRefOnDeletedTab(rRef2, nDelPos, nSheets, rOldPos, rNewPos);
+    }
+    return bModified;
+}
+
 }
 
 sc::RefUpdateResult ScTokenArray::AdjustReferenceOnDeletedTab( sc::RefUpdateDeleteTabContext& rCxt, const ScAddress& rOldPos )
@@ -3375,10 +3411,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnDeletedTab( sc::RefUpdateDele
             {
                 formula::FormulaToken* pToken = *p;
                 ScComplexRefData& rRef = *pToken->GetDoubleRef();
-                if (adjustSingleRefOnDeletedTab(rRef.Ref1, rCxt.mnDeletePos, rCxt.mnSheets, rOldPos, aNewPos))
-                    aRes.mbReferenceModified = true;
-                if (adjustSingleRefOnDeletedTab(rRef.Ref2, rCxt.mnDeletePos, rCxt.mnSheets, rOldPos, aNewPos))
-                    aRes.mbReferenceModified = true;
+                aRes.mbReferenceModified |= adjustDoubleRefOnDeleteTab(rRef, rCxt.mnDeletePos, rCxt.mnSheets, rOldPos, aNewPos);
             }
             break;
             case svIndex:
