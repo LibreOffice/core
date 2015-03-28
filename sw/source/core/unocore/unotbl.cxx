@@ -1614,16 +1614,15 @@ void SwXTextTableCursor::gotoStart(sal_Bool bExpand) throw( uno::RuntimeExceptio
     rTblCrsr.MoveTable(fnTableCurr, fnTableStart);
 }
 
-void SwXTextTableCursor::gotoEnd(sal_Bool Expand) throw( uno::RuntimeException, std::exception )
+void SwXTextTableCursor::gotoEnd(sal_Bool bExpand) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     SwUnoCrsr* pUnoCrsr = GetCrsr();
-    if(pUnoCrsr)
-    {
-        SwUnoTableCrsr& rTblCrsr = dynamic_cast<SwUnoTableCrsr&>(*pUnoCrsr);
-        lcl_CrsrSelect(rTblCrsr, Expand);
-        rTblCrsr.MoveTable(fnTableCurr, fnTableEnd);
-    }
+    if(!pUnoCrsr)
+        return;
+    SwUnoTableCrsr& rTblCrsr = dynamic_cast<SwUnoTableCrsr&>(*pUnoCrsr);
+    lcl_CrsrSelect(rTblCrsr, bExpand);
+    rTblCrsr.MoveTable(fnTableCurr, fnTableEnd);
 }
 
 sal_Bool SwXTextTableCursor::mergeRange()
