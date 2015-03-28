@@ -56,7 +56,14 @@ sal_Int32 BufferedStreamSocket::write( const void* pBuffer, sal_uInt32 n )
     if ( !usingCSocket )
         return StreamSocket::write( pBuffer, n );
     else
-        return ::send( mSocket, pBuffer, (size_t) n, 0 );
+        return ::send(
+            mSocket,
+#if defined WNT
+            static_cast<char *>(pBuffer),
+#else
+            pBuffer,
+#endif
+            (size_t) n, 0 );
 }
 
 void BufferedStreamSocket::close()
