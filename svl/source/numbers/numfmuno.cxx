@@ -971,7 +971,7 @@ void SAL_CALL SvNumberFormatSettingsObj::setPropertyValue( const OUString& aProp
         {
             //  operator >>= shouldn't be used for bool (?)
             if ( aValue.getValueTypeClass() == uno::TypeClass_BOOLEAN )
-                pFormatter->SetNoZero( *(sal_Bool*)aValue.getValue() );
+                pFormatter->SetNoZero( *static_cast<sal_Bool const *>(aValue.getValue()) );
         }
         else if (aPropertyName == PROPERTYNAME_NULLDATE)
         {

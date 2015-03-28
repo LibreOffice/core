@@ -200,7 +200,7 @@ void SfxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry& rEn
     if( rEntry.aType.getTypeClass() == TypeClass_ENUM &&
          rAny.getValueTypeClass() == TypeClass_LONG )
     {
-        sal_Int32 nTmp = *(sal_Int32*)rAny.getValue();
+        sal_Int32 nTmp = *static_cast<sal_Int32 const *>(rAny.getValue());
         rAny.setValue( &nTmp, rEntry.aType );
     }
 }

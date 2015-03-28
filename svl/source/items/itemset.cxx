@@ -46,7 +46,7 @@ static const sal_uInt16 nInitCount = 10; // Single USHORTs => 5 pairs without '0
 
 const sal_Char *DbgCheckItemSet( const void* pVoid )
 {
-    const SfxItemSet *pSet = (const SfxItemSet*) pVoid;
+    const SfxItemSet *pSet = static_cast<const SfxItemSet*>(pVoid);
     SfxWhichIter aIter( *pSet );
     sal_uInt16 nCount = 0, n = 0;
     for ( sal_uInt16 nWh = aIter.FirstWhich(); nWh; nWh = aIter.NextWhich(), ++n )

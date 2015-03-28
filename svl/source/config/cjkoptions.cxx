@@ -179,7 +179,7 @@ void SvtCJKOptions_Impl::Load()
         {
             if( pValues[nProp].hasValue() )
             {
-                bool bValue = *(sal_Bool*)pValues[nProp].getValue();
+                bool bValue = *static_cast<sal_Bool const *>(pValues[nProp].getValue());
                 switch ( nProp )
                 {
                     case 0: { bCJKFont = bValue; bROCJKFont = pROStates[nProp]; } break;

@@ -43,7 +43,7 @@ bool FStatHelper::GetModifiedDateTimeOfFile( const OUString& rURL,
         if( aAny.hasValue() )
         {
             bRet = true;
-            const util::DateTime* pDT = (util::DateTime*)aAny.getValue();
+            const util::DateTime* pDT = static_cast<util::DateTime const *>(aAny.getValue());
             if( pDate )
                 *pDate = Date( pDT->Day, pDT->Month, pDT->Year );
             if( pTime )

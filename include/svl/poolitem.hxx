@@ -62,7 +62,7 @@ inline bool Any2Bool( const ::com::sun::star::uno::Any&rValue )
     {
         if( rValue.getValueType() == ::getCppuBooleanType() )
         {
-            nValue = *(sal_Bool*)rValue.getValue();
+            nValue = *static_cast<sal_Bool const *>(rValue.getValue());
         }
         else
         {
