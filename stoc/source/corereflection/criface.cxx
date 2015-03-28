@@ -247,7 +247,7 @@ void IdlAttributeFieldImpl::set( Any & rObj, const Any & rValue )
                 getReflection() );
             if (bAssign)
             {
-                *(void **)pArg = getReflection()->getCpp2Uno().mapInterface(
+                *static_cast<void **>(pArg) = getReflection()->getCpp2Uno().mapInterface(
                     xObj.get(), reinterpret_cast<typelib_InterfaceTypeDescription *>(pTD) );
             }
         }
@@ -287,7 +287,7 @@ void IdlAttributeFieldImpl::set( Any & rObj, const Any & rValue )
 
         throw IllegalArgumentException(
             "illegal value given!",
-            *(const Reference< XInterface > *)rObj.getValue(), 1 );
+            *static_cast<const Reference< XInterface > *>(rObj.getValue()), 1 );
     }
     throw IllegalArgumentException(
         "illegal destination object given!",
@@ -586,13 +586,13 @@ Any SAL_CALL IdlInterfaceMethodImpl::invoke( const Any & rObj, Sequence< Any > &
         if (rtl_ustr_ascii_compare( getTypeDescr()->pTypeName->buffer,
                                     "com.sun.star.uno.XInterface::acquire" ) == 0)
         {
-            (*(const Reference< XInterface > *)rObj.getValue())->acquire();
+            (*static_cast<const Reference< XInterface > *>(rObj.getValue()))->acquire();
             return Any();
         }
         else if (rtl_ustr_ascii_compare( getTypeDescr()->pTypeName->buffer,
                                          "com.sun.star.uno.XInterface::release" ) == 0)
         {
-            (*(const Reference< XInterface > *)rObj.getValue())->release();
+            (*static_cast<const Reference< XInterface > *>(rObj.getValue()))->release();
             return Any();
         }
     }
@@ -608,7 +608,7 @@ Any SAL_CALL IdlInterfaceMethodImpl::invoke( const Any & rObj, Sequence< Any > &
             (*pUnoI->release)( pUnoI );
             throw IllegalArgumentException(
                 "arguments len differ!",
-                *(const Reference< XInterface > *)rObj.getValue(), 1 );
+                *static_cast<const Reference< XInterface > *>(rObj.getValue()), 1 );
         }
 
         Any * pCppArgs = rArgs.getArray();
@@ -618,8 +618,8 @@ Any SAL_CALL IdlInterfaceMethodImpl::invoke( const Any & rObj, Sequence< Any > &
             &pReturnType, getMethodTypeDescr()->pReturnTypeRef );
 
         void * pUnoReturn = alloca( pReturnType->nSize );
-        void ** ppUnoArgs = (void **)alloca( sizeof(void *) * nParams *2 );
-        typelib_TypeDescription ** ppParamTypes = (typelib_TypeDescription **)(ppUnoArgs + nParams);
+        void ** ppUnoArgs = static_cast<void **>(alloca( sizeof(void *) * nParams *2 ));
+        typelib_TypeDescription ** ppParamTypes = reinterpret_cast<typelib_TypeDescription **>(ppUnoArgs + nParams);
 
         // convert arguments
         for ( sal_Int32 nPos = 0; nPos < nParams; ++nPos )
@@ -643,7 +643,7 @@ Any SAL_CALL IdlInterfaceMethodImpl::invoke( const Any & rObj, Sequence< Any > &
                 else if (pTD->eTypeClass == typelib_TypeClass_ANY)
                 {
                     uno_type_any_constructAndConvert(
-                        (uno_Any *)ppUnoArgs[nPos], (void *)pCppArgs[nPos].getValue(),
+                        static_cast<uno_Any *>(ppUnoArgs[nPos]), (void *)pCppArgs[nPos].getValue(),
                         pCppArgs[nPos].getValueTypeRef(), getReflection()->getCpp2Uno().get() );
                     bAssign = true;
                 }
@@ -655,7 +655,7 @@ Any SAL_CALL IdlInterfaceMethodImpl::invoke( const Any & rObj, Sequence< Any > &
                         xDest, getReflection() );
                     if (bAssign)
                     {
-                        *(void **)ppUnoArgs[nPos] = getReflection()->getCpp2Uno().mapInterface(
+                        *static_cast<void **>(ppUnoArgs[nPos]) = getReflection()->getCpp2Uno().mapInterface(
                             xDest.get(), reinterpret_cast<typelib_InterfaceTypeDescription *>(pTD) );
                     }
                 }
@@ -682,7 +682,7 @@ Any SAL_CALL IdlInterfaceMethodImpl::invoke( const Any & rObj, Sequence< Any > &
                 {
                     IllegalArgumentException aExc(
                         "cannot coerce argument type during corereflection call!",
-                        *(const Reference< XInterface > *)rObj.getValue(), (sal_Int16)nPos );
+                        *static_cast<const Reference< XInterface > *>(rObj.getValue()), (sal_Int16)nPos );
 
                     // cleanup
                     while (nPos--)
@@ -719,7 +719,7 @@ Any SAL_CALL IdlInterfaceMethodImpl::invoke( const Any & rObj, Sequence< Any > &
             TYPELIB_DANGER_RELEASE( pReturnType );
 
             InvocationTargetException aExc;
-            aExc.Context = *(const Reference< XInterface > *)rObj.getValue();
+            aExc.Context = *static_cast<const Reference< XInterface > *>(rObj.getValue());
             aExc.Message = "exception occurred during invocation!";
             uno_any_destruct(
                 &aExc.TargetException,

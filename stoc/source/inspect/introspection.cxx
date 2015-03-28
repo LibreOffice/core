@@ -382,7 +382,7 @@ void IntrospectionAccessStatic_Impl::setPropertyValueByIndex(const Any& obj, sal
     Reference<XInterface> xInterface;
     if( eObjType == TypeClass_INTERFACE )
     {
-        xInterface = *( Reference<XInterface>*)obj.getValue();
+        xInterface = *static_cast<Reference<XInterface> const *>(obj.getValue());
     }
     else if( nSequenceIndex >= mnPropCount || ( eObjType != TypeClass_STRUCT && eObjType != TypeClass_EXCEPTION ) )
     {
@@ -417,7 +417,7 @@ void IntrospectionAccessStatic_Impl::setPropertyValueByIndex(const Any& obj, sal
                 //Reference<XIdlClass> xPropClass = rProp.Type;
                 if( xPropClass.is() && xPropClass->getTypeClass() == TypeClass_INTERFACE )
                 {
-                    Reference<XInterface> valInterface = *(Reference<XInterface>*)aValue.getValue();
+                    Reference<XInterface> valInterface = *static_cast<Reference<XInterface> const *>(aValue.getValue());
                     if( valInterface.is() )
                     {
                         //Any queryInterface( const Type& rType );
@@ -526,7 +526,7 @@ Any IntrospectionAccessStatic_Impl::getPropertyValueByIndex(const Any& obj, sal_
     Reference<XInterface> xInterface;
     if( eObjType == TypeClass_INTERFACE )
     {
-        xInterface = *(Reference<XInterface>*)obj.getValue();
+        xInterface = *static_cast<Reference<XInterface> const *>(obj.getValue());
     }
     else if( nSequenceIndex >= mnPropCount || ( eObjType != TypeClass_STRUCT && eObjType != TypeClass_EXCEPTION ) )
     {
@@ -735,7 +735,7 @@ ImplIntrospectionAccess::ImplIntrospectionAccess
     // Objekt als Interface merken, wenn moeglich
     TypeClass eType = maInspectedObject.getValueType().getTypeClass();
     if( eType == TypeClass_INTERFACE )
-        mxIface = *(Reference<XInterface>*)maInspectedObject.getValue();
+        mxIface = *static_cast<Reference<XInterface> const *>(maInspectedObject.getValue());
 
     mnLastPropertyConcept = -1;
     mnLastMethodConcept = -1;
@@ -869,7 +869,7 @@ ImplIntrospectionAdapter::ImplIntrospectionAdapter( ImplIntrospectionAccess* pAc
     TypeClass eType = mrInspectedObject.getValueType().getTypeClass();
     if( eType == TypeClass_INTERFACE )
     {
-        mxIface = *( Reference< XInterface >*)mrInspectedObject.getValue();
+        mxIface = *static_cast<Reference< XInterface > const *>(mrInspectedObject.getValue());
 
         mxObjElementAccess = Reference<XElementAccess>::query( mxIface );
         mxObjNameAccess = Reference<XNameAccess>::query( mxIface );
@@ -1602,7 +1602,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
     if( eType == TypeClass_INTERFACE )
     {
         // Interface aus dem Any besorgen
-        x = *(Reference<XInterface>*)aToInspectObj.getValue();
+        x = *static_cast<Reference<XInterface> const *>(aToInspectObj.getValue());
         if( !x.is() )
             return css::uno::Reference<css::beans::XIntrospectionAccess>();
     }

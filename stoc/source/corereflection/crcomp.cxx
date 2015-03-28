@@ -190,7 +190,7 @@ Any IdlCompFieldImpl::get( const Any & rObj )
             uno_any_destruct(
                 &aRet, reinterpret_cast< uno_ReleaseFunc >(cpp_release) );
             uno_any_construct(
-                &aRet, (char *)rObj.getValue() + _nOffset, getTypeDescr(),
+                &aRet, const_cast<char *>(static_cast<char const *>(rObj.getValue()) + _nOffset), getTypeDescr(),
                 reinterpret_cast< uno_AcquireFunc >(cpp_acquire) );
             return aRet;
         }
@@ -219,7 +219,7 @@ void IdlCompFieldImpl::set( const Any & rObj, const Any & rValue )
         if (pTD)
         {
             TYPELIB_DANGER_RELEASE( pObjTD );
-            if (coerce_assign( (char *)rObj.getValue() + _nOffset, getTypeDescr(), rValue, getReflection() ))
+            if (coerce_assign( const_cast<char *>(static_cast<char const *>(rObj.getValue()) + _nOffset), getTypeDescr(), rValue, getReflection() ))
             {
                 return;
             }
@@ -256,7 +256,7 @@ void IdlCompFieldImpl::set( Any & rObj, const Any & rValue )
         if (pTD)
         {
             TYPELIB_DANGER_RELEASE( pObjTD );
-            if (coerce_assign( (char *)rObj.getValue() + _nOffset, getTypeDescr(), rValue, getReflection() ))
+            if (coerce_assign( const_cast<char *>(static_cast<char const *>(rObj.getValue()) + _nOffset), getTypeDescr(), rValue, getReflection() ))
             {
                 return;
             }

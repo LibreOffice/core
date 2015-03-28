@@ -359,7 +359,7 @@ void Invocation_Impl::setMaterial( const Any& rMaterial )
     Reference<XInterface> xObj;
 
     if (rMaterial.getValueType().getTypeClass() == TypeClass_INTERFACE)
-        xObj = *(Reference<XInterface>*)rMaterial.getValue();
+        xObj = *static_cast<Reference<XInterface> const *>(rMaterial.getValue());
     _aMaterial = rMaterial;
 
     // Ersteinmal alles ausserhalb des guards machen

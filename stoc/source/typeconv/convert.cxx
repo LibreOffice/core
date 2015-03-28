@@ -299,43 +299,43 @@ sal_Int64 TypeConverter_Impl::toHyper( const Any& rAny, sal_Int64 min, sal_uInt6
     {
     // ENUM
     case TypeClass_ENUM:
-        nRet = *(sal_Int32 *)rAny.getValue();
+        nRet = *static_cast<sal_Int32 const *>(rAny.getValue());
         break;
     // BOOL
     case TypeClass_BOOLEAN:
-        nRet = (*(sal_Bool*)rAny.getValue() ? 1 : 0);
+        nRet = (*static_cast<sal_Bool const *>(rAny.getValue()) ? 1 : 0);
         break;
     // CHAR, BYTE
     case TypeClass_CHAR:
-        nRet = *(sal_Unicode *)rAny.getValue();
+        nRet = *static_cast<sal_Unicode const *>(rAny.getValue());
         break;
     case TypeClass_BYTE:
-        nRet = *(sal_Int8 *)rAny.getValue();
+        nRet = *static_cast<sal_Int8 const *>(rAny.getValue());
         break;
     // SHORT
     case TypeClass_SHORT:
-        nRet = *(sal_Int16 *)rAny.getValue();
+        nRet = *static_cast<sal_Int16 const *>(rAny.getValue());
         break;
     // UNSIGNED SHORT
     case TypeClass_UNSIGNED_SHORT:
-        nRet = *(sal_uInt16 *)rAny.getValue();
+        nRet = *static_cast<sal_uInt16 const *>(rAny.getValue());
         break;
     // LONG
     case TypeClass_LONG:
-        nRet = *(sal_Int32 *)rAny.getValue();
+        nRet = *static_cast<sal_Int32 const *>(rAny.getValue());
         break;
     // UNSIGNED LONG
     case TypeClass_UNSIGNED_LONG:
-        nRet = *(sal_uInt32 *)rAny.getValue();
+        nRet = *static_cast<sal_uInt32 const *>(rAny.getValue());
         break;
     // HYPER
     case TypeClass_HYPER:
-        nRet = *(sal_Int64 *)rAny.getValue();
+        nRet = *static_cast<sal_Int64 const *>(rAny.getValue());
         break;
     // UNSIGNED HYPER
     case TypeClass_UNSIGNED_HYPER:
     {
-        nRet = *(sal_Int64 *)rAny.getValue();
+        nRet = *static_cast<sal_Int64 const *>(rAny.getValue());
         if ((min < 0 || (sal_uInt64)nRet >= (sal_uInt64)min) && // lower bound
             (sal_uInt64)nRet <= max)                            // upper bound
         {
@@ -349,7 +349,7 @@ sal_Int64 TypeConverter_Impl::toHyper( const Any& rAny, sal_Int64 min, sal_uInt6
     // FLOAT, DOUBLE
     case TypeClass_FLOAT:
     {
-        double fVal = round( *(float *)rAny.getValue() );
+        double fVal = round( *static_cast<float const *>(rAny.getValue()) );
         nRet = (fVal > SAL_INT64_MAX ? (sal_Int64)(sal_uInt64)fVal : (sal_Int64)fVal);
         if (fVal >= min && fVal <= unsigned_int64_to_double( max ))
         {
@@ -361,7 +361,7 @@ sal_Int64 TypeConverter_Impl::toHyper( const Any& rAny, sal_Int64 min, sal_uInt6
     }
     case TypeClass_DOUBLE:
     {
-        double fVal = round( *(double *)rAny.getValue() );
+        double fVal = round( *static_cast<double const *>(rAny.getValue()) );
         nRet = (fVal > SAL_INT64_MAX ? (sal_Int64)(sal_uInt64)fVal : (sal_Int64)fVal);
         if (fVal >= min && fVal <= unsigned_int64_to_double( max ))
         {
@@ -376,7 +376,7 @@ sal_Int64 TypeConverter_Impl::toHyper( const Any& rAny, sal_Int64 min, sal_uInt6
     case TypeClass_STRING:
     {
         sal_Int64 nVal = SAL_CONST_INT64(0);
-        if (! getHyperValue( nVal, *(OUString const *)rAny.getValue() ))
+        if (! getHyperValue( nVal, *static_cast<OUString const *>(rAny.getValue()) ))
         {
             throw CannotConvertException(
                 "invalid STRING value!",
@@ -414,55 +414,55 @@ double TypeConverter_Impl::toDouble( const Any& rAny, double min, double max ) c
     {
     // ENUM
     case TypeClass_ENUM:
-        fRet = *(sal_Int32 *)rAny.getValue();
+        fRet = *static_cast<sal_Int32 const *>(rAny.getValue());
         break;
     // BOOL
     case TypeClass_BOOLEAN:
-        fRet = (*(sal_Bool*)rAny.getValue() ? 1.0 : 0.0);
+        fRet = (*static_cast<sal_Bool const *>(rAny.getValue()) ? 1.0 : 0.0);
         break;
     // CHAR, BYTE
     case TypeClass_CHAR:
-        fRet = *(sal_Unicode *)rAny.getValue();
+        fRet = *static_cast<sal_Unicode const *>(rAny.getValue());
         break;
     case TypeClass_BYTE:
-        fRet = *(sal_Int8 *)rAny.getValue();
+        fRet = *static_cast<sal_Int8 const *>(rAny.getValue());
         break;
     // SHORT
     case TypeClass_SHORT:
-        fRet = *(sal_Int16 *)rAny.getValue();
+        fRet = *static_cast<sal_Int16 const *>(rAny.getValue());
         break;
     // UNSIGNED SHORT
     case TypeClass_UNSIGNED_SHORT:
-        fRet = *(sal_uInt16 *)rAny.getValue();
+        fRet = *static_cast<sal_uInt16 const *>(rAny.getValue());
         break;
     // LONG
     case TypeClass_LONG:
-        fRet = *(sal_Int32 *)rAny.getValue();
+        fRet = *static_cast<sal_Int32 const *>(rAny.getValue());
         break;
     // UNSIGNED LONG
     case TypeClass_UNSIGNED_LONG:
-        fRet = *(sal_uInt32 *)rAny.getValue();
+        fRet = *static_cast<sal_uInt32 const *>(rAny.getValue());
         break;
     // HYPER
     case TypeClass_HYPER:
-        fRet = (double)*(sal_Int64 *)rAny.getValue();
+        fRet = (double)*static_cast<sal_Int64 const *>(rAny.getValue());
         break;
     // UNSIGNED HYPER
     case TypeClass_UNSIGNED_HYPER:
-        fRet = unsigned_int64_to_double( *(sal_uInt64 const *)rAny.getValue() );
+        fRet = unsigned_int64_to_double( *static_cast<sal_uInt64 const *>(rAny.getValue()) );
         break;
     // FLOAT, DOUBLE
     case TypeClass_FLOAT:
-        fRet = *(float *)rAny.getValue();
+        fRet = *static_cast<float const *>(rAny.getValue());
         break;
     case TypeClass_DOUBLE:
-        fRet = *(double *)rAny.getValue();
+        fRet = *static_cast<double const *>(rAny.getValue());
         break;
 
     // STRING
     case TypeClass_STRING:
     {
-        if (! getNumericValue( fRet, *(OUString *)rAny.getValue() ))
+        if (! getNumericValue( fRet, *static_cast<OUString const *>(rAny.getValue()) ))
         {
             throw CannotConvertException(
                 "invalid STRING value!",
@@ -539,13 +539,13 @@ Any SAL_CALL TypeConverter_Impl::convertTo( const Any& rVal, const Type& aDestTy
         }
 
         if (rVal.getValueTypeClass() != TypeClass_INTERFACE ||
-            !*(XInterface * const *)rVal.getValue())
+            !*static_cast<XInterface * const *>(rVal.getValue()))
         {
             throw CannotConvertException(
                 "value is no interface!",
                 Reference< XInterface >(), aDestinationClass, FailReason::NO_SUCH_INTERFACE, 0 );
         }
-        if (! (aRet = (*(XInterface * const *)rVal.getValue())->queryInterface(
+        if (! (aRet = (*static_cast<XInterface * const *>(rVal.getValue()))->queryInterface(
                    aDestType )).hasValue())
         {
             throw CannotConvertException(
@@ -573,7 +573,7 @@ Any SAL_CALL TypeConverter_Impl::convertTo( const Any& rVal, const Type& aDestTy
                 &pDestElementTD,
                 reinterpret_cast<typelib_IndirectTypeDescription *>(aDestTD.get())->pType );
 
-            sal_uInt32 nPos = (*(const uno_Sequence * const *)rVal.getValue())->nElements;
+            sal_uInt32 nPos = (*static_cast<const uno_Sequence * const *>(rVal.getValue()))->nElements;
             uno_Sequence * pRet = 0;
             uno_sequence_construct(
                 &pRet, aDestTD.get(), 0, nPos,
@@ -584,9 +584,9 @@ Any SAL_CALL TypeConverter_Impl::convertTo( const Any& rVal, const Type& aDestTy
                 reinterpret_cast< uno_ReleaseFunc >(cpp_release) );
                 // decr ref count
 
-            char * pDestElements = (*(uno_Sequence * const *)aRet.getValue())->elements;
+            char * pDestElements = (*static_cast<uno_Sequence * const *>(aRet.getValue()))->elements;
             const char * pSourceElements =
-                (*(const uno_Sequence * const *)rVal.getValue())->elements;
+                (*static_cast<const uno_Sequence * const *>(rVal.getValue()))->elements;
 
             while (nPos--)
             {
@@ -626,7 +626,7 @@ Any SAL_CALL TypeConverter_Impl::convertTo( const Any& rVal, const Type& aDestTy
         {
             for ( nPos = reinterpret_cast<typelib_EnumTypeDescription *>(aEnumTD.get())->nEnumValues; nPos--; )
             {
-                if (((const OUString *)rVal.getValue())->equalsIgnoreAsciiCase(
+                if (static_cast<const OUString *>(rVal.getValue())->equalsIgnoreAsciiCase(
                         reinterpret_cast<typelib_EnumTypeDescription *>(aEnumTD.get())->ppEnumNames[nPos] ))
                     break;
             }
@@ -739,7 +739,7 @@ Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestina
 
         case TypeClass_STRING:
         {
-            const OUString & aStr = *(const OUString *)rVal.getValue();
+            const OUString & aStr = *static_cast<const OUString *>(rVal.getValue());
             if ( aStr == "0" || aStr.equalsIgnoreAsciiCase( "false" ))
             {
                 sal_Bool bFalse = sal_False;
@@ -765,8 +765,8 @@ Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestina
     {
         if (aSourceClass==TypeClass_STRING)
         {
-            if ((*(const OUString *)rVal.getValue()).getLength() == 1)      // single char
-                aRet.setValue( (*(const OUString *)rVal.getValue()).getStr(), ::getCharCppuType() );
+            if ((*static_cast<const OUString *>(rVal.getValue())).getLength() == 1)      // single char
+                aRet.setValue( (*static_cast<const OUString *>(rVal.getValue())).getStr(), ::getCharCppuType() );
         }
         else if (aSourceClass!=TypeClass_ENUM &&        // exclude enums, chars
                  aSourceClass!=TypeClass_CHAR)
@@ -821,7 +821,7 @@ Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestina
             TypeDescription aEnumTD( aSourceType );
             aEnumTD.makeComplete();
             sal_Int32 nPos;
-            sal_Int32 nEnumValue = *(sal_Int32 *)rVal.getValue();
+            sal_Int32 nEnumValue = *static_cast<sal_Int32 const *>(rVal.getValue());
             for ( nPos = reinterpret_cast<typelib_EnumTypeDescription *>(aEnumTD.get())->nEnumValues; nPos--; )
             {
                 if (nEnumValue == reinterpret_cast<typelib_EnumTypeDescription *>(aEnumTD.get())->pEnumValues[nPos])
@@ -843,31 +843,31 @@ Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestina
         }
 
         case TypeClass_BOOLEAN:
-            aRet <<= (*(sal_Bool *)rVal.getValue()) ?
+            aRet <<= *static_cast<sal_Bool const *>(rVal.getValue()) ?
                 OUString("true") :
                 OUString("false");
             break;
         case TypeClass_CHAR:
-            aRet <<= OUString( (sal_Unicode *)rVal.getValue(), 1 );
+            aRet <<= OUString( static_cast<sal_Unicode const *>(rVal.getValue()), 1 );
             break;
 
         case TypeClass_BYTE:
-            aRet <<= OUString::number( *(sal_Int8 const *)rVal.getValue() );
+            aRet <<= OUString::number( *static_cast<sal_Int8 const *>(rVal.getValue()) );
             break;
         case TypeClass_SHORT:
-            aRet <<= OUString::number( *(sal_Int16 const *)rVal.getValue() );
+            aRet <<= OUString::number( *static_cast<sal_Int16 const *>(rVal.getValue()) );
             break;
         case TypeClass_UNSIGNED_SHORT:
-            aRet <<= OUString::number( *(sal_uInt16 const *)rVal.getValue() );
+            aRet <<= OUString::number( *static_cast<sal_uInt16 const *>(rVal.getValue()) );
             break;
         case TypeClass_LONG:
-            aRet <<= OUString::number( *(sal_Int32 const *)rVal.getValue() );
+            aRet <<= OUString::number( *static_cast<sal_Int32 const *>(rVal.getValue()) );
             break;
         case TypeClass_UNSIGNED_LONG:
-            aRet <<= OUString::number( *(sal_uInt32 const *)rVal.getValue() );
+            aRet <<= OUString::number( *static_cast<sal_uInt32 const *>(rVal.getValue()) );
             break;
         case TypeClass_HYPER:
-            aRet <<= OUString::number( *(sal_Int64 const *)rVal.getValue() );
+            aRet <<= OUString::number( *static_cast<sal_Int64 const *>(rVal.getValue()) );
             break;
 //      case TypeClass_UNSIGNED_HYPER:
 //             aRet <<= OUString::valueOf( (sal_Int64)*(sal_uInt64 const *)rVal.getValue() );

@@ -237,7 +237,7 @@ bool AdapterImpl::coerce_assign(
     if (typelib_TypeClass_ANY == pType->eTypeClass)
     {
         ::uno_type_any_assign(
-            (uno_Any *)pDest, pSource->pData, pSource->pType, 0, 0 );
+            static_cast<uno_Any *>(pDest), pSource->pData, pSource->pType, 0, 0 );
         return true;
     }
     if (::uno_type_assignData(
@@ -340,7 +340,7 @@ static void handleInvokExc( uno_Any * pDest, uno_Any * pSource )
         if (typelib_TypeClass_EXCEPTION == pSource->pType->eTypeClass)
         {
             constructRuntimeException(
-                pDest, ((Exception const *)pSource->pData)->Message );
+                pDest, static_cast<Exception const *>(pSource->pData)->Message );
         }
         else
         {
@@ -576,7 +576,7 @@ static void SAL_CALL adapter_dispatch(
             static_cast< InterfaceAdapterImpl * >( pUnoI )->m_pAdapter;
         *ppException = 0; // no exc
         typelib_TypeDescriptionReference * pDemanded =
-            *(typelib_TypeDescriptionReference **)pArgs[0];
+            *static_cast<typelib_TypeDescriptionReference **>(pArgs[0]);
         // pInterfaces[0] is XInterface
         for ( sal_Int32 nPos = 0; nPos < that->m_nInterfaces; ++nPos )
         {
@@ -588,14 +588,14 @@ static void SAL_CALL adapter_dispatch(
                 {
                     uno_Interface * pUnoI2 = &that->m_pInterfaces[nPos];
                     ::uno_any_construct(
-                        (uno_Any *)pReturn, &pUnoI2,
+                        static_cast<uno_Any *>(pReturn), &pUnoI2,
                         &pTD->aBase, 0 );
                     return;
                 }
                 pTD = pTD->pBaseTypeDescription;
             }
         }
-        ::uno_any_construct( (uno_Any *)pReturn, 0, 0, 0 ); // clear()
+        ::uno_any_construct( static_cast<uno_Any *>(pReturn), 0, 0, 0 ); // clear()
         break;
     }
     case 1: // acquire()
@@ -664,8 +664,8 @@ AdapterImpl::AdapterImpl(
     }
 
     // map receiver
-    m_pReceiver = (uno_Interface *)m_pFactory->m_aCpp2Uno.mapInterface(
-        xReceiver.get(), ::getCppuType( &xReceiver ) );
+    m_pReceiver = static_cast<uno_Interface *>(m_pFactory->m_aCpp2Uno.mapInterface(
+        xReceiver.get(), ::getCppuType( &xReceiver ) ));
     OSL_ASSERT( 0 != m_pReceiver );
     if (! m_pReceiver)
     {
@@ -698,8 +698,8 @@ FactoryImpl::FactoryImpl( Reference< XComponentContext > const & xContext )
             OUString("com.sun.star.script.Converter"),
             xContext ),
         UNO_QUERY_THROW );
-    m_pConverter = (uno_Interface *)m_aCpp2Uno.mapInterface(
-        xConverter.get(), ::getCppuType( &xConverter ) );
+    m_pConverter = static_cast<uno_Interface *>(m_aCpp2Uno.mapInterface(
+        xConverter.get(), ::getCppuType( &xConverter ) ));
     OSL_ASSERT( 0 != m_pConverter );
 
     // some type info:

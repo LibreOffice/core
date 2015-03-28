@@ -231,7 +231,7 @@ Reference< XIdlClass > IdlReflectionServiceImpl::forName( const OUString & rType
     if (aAny.hasValue())
     {
         if (aAny.getValueTypeClass() == TypeClass_INTERFACE)
-            xRet = *(const Reference< XIdlClass > *)aAny.getValue();
+            xRet = *static_cast<const Reference< XIdlClass > *>(aAny.getValue());
     }
     else
     {
@@ -261,7 +261,7 @@ Any IdlReflectionServiceImpl::getByHierarchicalName( const OUString & rName )
         if (aRet.getValueTypeClass() == TypeClass_INTERFACE)
         {
             // type retrieved from tdmgr
-            OSL_ASSERT( (*(Reference< XInterface > *)aRet.getValue())->queryInterface(
+            OSL_ASSERT( (*static_cast<Reference< XInterface > const *>(aRet.getValue()))->queryInterface(
                 cppu::UnoType<XTypeDescription>::get()).hasValue() );
 
             css::uno::Reference< css::reflection::XConstantTypeDescription >
@@ -329,7 +329,7 @@ Reference< XIdlClass > IdlReflectionServiceImpl::forType( typelib_TypeDescriptio
     if (aAny.hasValue())
     {
         if (aAny.getValueTypeClass() == TypeClass_INTERFACE)
-            xRet = *(const Reference< XIdlClass > *)aAny.getValue();
+            xRet = *static_cast<const Reference< XIdlClass > *>(aAny.getValue());
     }
     else
     {
@@ -409,7 +409,7 @@ uno_Interface * IdlReflectionServiceImpl::mapToUno(
 {
     Reference< XInterface > xObj;
     if (extract( rObj, pTo, xObj, this ))
-        return (uno_Interface *)getCpp2Uno().mapInterface( xObj.get(), pTo );
+        return static_cast<uno_Interface *>(getCpp2Uno().mapInterface( xObj.get(), pTo ));
 
     throw RuntimeException(
         "illegal object given!",

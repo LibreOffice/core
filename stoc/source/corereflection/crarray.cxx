@@ -94,7 +94,7 @@ void ArrayIdlClassImpl::realloc( Any & rArray, sal_Int32 nLen )
             (XWeak *)(OWeakObject *)this, 1 );
     }
 
-    uno_Sequence ** ppSeq = (uno_Sequence **)rArray.getValue();
+    uno_Sequence ** ppSeq = const_cast<uno_Sequence **>(static_cast<uno_Sequence * const *>(rArray.getValue()));
     uno_sequence_realloc( ppSeq, &getTypeDescr()->aBase,
                           nLen,
                           reinterpret_cast< uno_AcquireFunc >(cpp_acquire),
@@ -113,7 +113,7 @@ sal_Int32 ArrayIdlClassImpl::getLen( const Any & rArray )
             (XWeak *)(OWeakObject *)this, 0 );
     }
 
-    return (*(uno_Sequence **)rArray.getValue())->nElements;
+    return (*static_cast<uno_Sequence * const *>(rArray.getValue()))->nElements;
 }
 
 Any ArrayIdlClassImpl::get( const Any & rArray, sal_Int32 nIndex )
@@ -127,7 +127,7 @@ Any ArrayIdlClassImpl::get( const Any & rArray, sal_Int32 nIndex )
             (XWeak *)(OWeakObject *)this, 0 );
     }
 
-    uno_Sequence * pSeq = *(uno_Sequence **)rArray.getValue();
+    uno_Sequence * pSeq = *static_cast<uno_Sequence * const *>(rArray.getValue());
     if (pSeq->nElements <= nIndex)
     {
         throw ArrayIndexOutOfBoundsException(
@@ -158,7 +158,7 @@ void ArrayIdlClassImpl::set( Any & rArray, sal_Int32 nIndex, const Any & rNewVal
             (XWeak *)(OWeakObject *)this, 0 );
     }
 
-    uno_Sequence * pSeq = *(uno_Sequence **)rArray.getValue();
+    uno_Sequence * pSeq = *static_cast<uno_Sequence * const *>(rArray.getValue());
     if (pSeq->nElements <= nIndex)
     {
         throw ArrayIndexOutOfBoundsException(
@@ -166,7 +166,7 @@ void ArrayIdlClassImpl::set( Any & rArray, sal_Int32 nIndex, const Any & rNewVal
             (XWeak *)(OWeakObject *)this );
     }
 
-    uno_Sequence ** ppSeq = (uno_Sequence **)rArray.getValue();
+    uno_Sequence ** ppSeq = const_cast<uno_Sequence **>(static_cast<uno_Sequence * const *>(rArray.getValue()));
     uno_sequence_reference2One(
         ppSeq, &getTypeDescr()->aBase,
         reinterpret_cast< uno_AcquireFunc >(cpp_acquire),

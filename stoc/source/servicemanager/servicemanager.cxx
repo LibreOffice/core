@@ -1198,7 +1198,7 @@ void OServiceManager::insert( const Any & Element )
         for( sal_Int32 i = 0; i < aServiceNames.getLength(); i++ )
         {
             m_ServiceMap.insert( HashMultimap_OWString_Interface::value_type(
-                pArray[i], *(Reference<XInterface > *)Element.getValue() ) );
+                pArray[i], *static_cast<Reference<XInterface > const *>(Element.getValue()) ) );
         }
     }
     }

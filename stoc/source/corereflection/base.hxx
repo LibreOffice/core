@@ -403,11 +403,11 @@ inline bool coerce_assign(
         css::uno::Reference< css::uno::XInterface > xVal;
         if (extract( rSource, reinterpret_cast<typelib_InterfaceTypeDescription *>(pTD), xVal, pRefl ))
         {
-            if (*(css::uno::XInterface **)pDest)
-                (*(css::uno::XInterface **)pDest)->release();
-            *(css::uno::XInterface **)pDest = xVal.get();
-            if (*(css::uno::XInterface **)pDest)
-                (*(css::uno::XInterface **)pDest)->acquire();
+            if (*static_cast<css::uno::XInterface **>(pDest))
+                (*static_cast<css::uno::XInterface **>(pDest))->release();
+            *static_cast<css::uno::XInterface **>(pDest) = xVal.get();
+            if (*static_cast<css::uno::XInterface **>(pDest))
+                (*static_cast<css::uno::XInterface **>(pDest))->acquire();
             return true;
         }
         return false;
