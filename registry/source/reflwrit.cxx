@@ -1170,7 +1170,7 @@ extern "C" {
 
 static void TYPEREG_CALLTYPE acquire(TypeWriterImpl hEntry)
 {
-    TypeWriter* pEntry = (TypeWriter*) hEntry;
+    TypeWriter* pEntry = static_cast<TypeWriter*>(hEntry);
 
     if (pEntry != NULL)
         pEntry->m_refCount++;
@@ -1178,7 +1178,7 @@ static void TYPEREG_CALLTYPE acquire(TypeWriterImpl hEntry)
 
 static void TYPEREG_CALLTYPE release(TypeWriterImpl hEntry)
 {
-    TypeWriter* pEntry = (TypeWriter*) hEntry;
+    TypeWriter* pEntry = static_cast<TypeWriter*>(hEntry);
 
     if (pEntry != NULL)
     {
@@ -1189,7 +1189,7 @@ static void TYPEREG_CALLTYPE release(TypeWriterImpl hEntry)
 
 static void TYPEREG_CALLTYPE setUik(TypeWriterImpl  hEntry, const RTUik* uik)
 {
-    TypeWriter* pEntry = (TypeWriter*) hEntry;
+    TypeWriter* pEntry = static_cast<TypeWriter*>(hEntry);
 
     if (pEntry != NULL)
     {

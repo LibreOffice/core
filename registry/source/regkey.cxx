@@ -154,7 +154,7 @@ RegError REGISTRY_CALLTYPE closeSubKeys(RegKeyHandle* phSubKeys,
     if (phSubKeys == 0 || nSubKeys == 0)
         return REG_INVALID_KEY;
 
-    ORegistry* pReg = ((ORegKey*)(phSubKeys[0]))->getRegistry();
+    ORegistry* pReg = static_cast<ORegKey*>(phSubKeys[0])->getRegistry();
     for (sal_uInt32 i = 0; i < nSubKeys; i++)
     {
         (void) pReg->closeKey(phSubKeys[i]);
@@ -583,7 +583,7 @@ RegError REGISTRY_CALLTYPE freeValueList(RegValueType valueType,
             break;
         case 6:
             {
-                sal_Char** pVList = (sal_Char**)pValueList;
+                sal_Char** pVList = static_cast<sal_Char**>(pValueList);
                 for (sal_uInt32 i=0; i < len; i++)
                 {
                     rtl_freeMemory(pVList[i]);
@@ -594,7 +594,7 @@ RegError REGISTRY_CALLTYPE freeValueList(RegValueType valueType,
             break;
         case 7:
             {
-                sal_Unicode** pVList = (sal_Unicode**)pValueList;
+                sal_Unicode** pVList = static_cast<sal_Unicode**>(pValueList);
                 for (sal_uInt32 i=0; i < len; i++)
                 {
                     rtl_freeMemory(pVList[i]);
@@ -771,7 +771,7 @@ RegError REGISTRY_CALLTYPE reg_getKeyName(RegKeyHandle hKey, rtl_uString** pKeyN
 {
     if (hKey)
     {
-        rtl_uString_assign( pKeyName, ((ORegKey*)hKey)->getName().pData );
+        rtl_uString_assign( pKeyName, static_cast<ORegKey*>(hKey)->getName().pData );
         return REG_NO_ERROR;
     } else
     {

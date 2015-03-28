@@ -44,7 +44,7 @@ extern "C" {
 
 static void REGISTRY_CALLTYPE acquire(RegHandle hReg)
 {
-    ORegistry* pReg = (ORegistry*) hReg;
+    ORegistry* pReg = static_cast<ORegistry*>(hReg);
 
     if (pReg != NULL)
         pReg->acquire();
@@ -56,7 +56,7 @@ static void REGISTRY_CALLTYPE acquire(RegHandle hReg)
 
 static void REGISTRY_CALLTYPE release(RegHandle hReg)
 {
-    ORegistry* pReg = (ORegistry*) hReg;
+    ORegistry* pReg = static_cast<ORegistry*>(hReg);
 
     if (pReg)
     {
@@ -76,7 +76,7 @@ static RegError REGISTRY_CALLTYPE getName(RegHandle hReg, rtl_uString** pName)
 {
     if (hReg)
     {
-        ORegistry*  pReg = (ORegistry*)hReg;
+        ORegistry*  pReg = static_cast<ORegistry*>(hReg);
         if ( pReg->isOpen() )
         {
             rtl_uString_assign(pName, pReg->getName().pData);
@@ -99,7 +99,7 @@ static RegError REGISTRY_CALLTYPE getName(RegHandle hReg, rtl_uString** pName)
 static sal_Bool REGISTRY_CALLTYPE isReadOnly(RegHandle hReg)
 {
     if (hReg)
-        return ((ORegistry*)hReg)->isReadOnly();
+        return static_cast<ORegistry*>(hReg)->isReadOnly();
     else
         return sal_False;
 }
@@ -136,7 +136,7 @@ static RegError REGISTRY_CALLTYPE openRootKey(RegHandle hReg,
 
     if (hReg)
     {
-        pReg = (ORegistry*)hReg;
+        pReg = static_cast<ORegistry*>(hReg);
         if (!pReg->isOpen())
             return REG_REGISTRY_NOT_OPEN;
     } else
@@ -183,7 +183,7 @@ static RegError REGISTRY_CALLTYPE closeRegistry(RegHandle hReg)
 
     if (hReg)
     {
-        pReg = (ORegistry*)hReg;
+        pReg = static_cast<ORegistry*>(hReg);
         if (!pReg->isOpen())
             return REG_REGISTRY_NOT_OPEN;
 
@@ -214,7 +214,7 @@ static RegError REGISTRY_CALLTYPE destroyRegistry(RegHandle hReg,
 
     if (hReg)
     {
-        pReg = (ORegistry*)hReg;
+        pReg = static_cast<ORegistry*>(hReg);
         if (!pReg->isOpen())
             return REG_INVALID_REGISTRY;
 
@@ -456,7 +456,7 @@ RegError REGISTRY_CALLTYPE reg_loadKey(RegKeyHandle hKey,
     ORegKey *pKey;
 
     if (hKey)
-        pKey = (ORegKey*)hKey;
+        pKey = static_cast<ORegKey*>(hKey);
     else
         return REG_INVALID_KEY;
 
@@ -473,7 +473,7 @@ RegError REGISTRY_CALLTYPE reg_saveKey(RegKeyHandle hKey,
     ORegKey *pKey;
 
     if (hKey)
-        pKey = (ORegKey*)hKey;
+        pKey = static_cast<ORegKey*>(hKey);
     else
         return REG_INVALID_KEY;
 
@@ -492,7 +492,7 @@ RegError REGISTRY_CALLTYPE reg_mergeKey(RegKeyHandle hKey,
     ORegKey *pKey;
 
     if (hKey)
-        pKey = (ORegKey*)hKey;
+        pKey = static_cast<ORegKey*>(hKey);
     else
         return REG_INVALID_KEY;
 
@@ -577,7 +577,7 @@ RegError REGISTRY_CALLTYPE reg_closeRegistry(RegHandle hRegistry)
 {
     if (hRegistry)
     {
-        ORegistry* pReg = (ORegistry*)hRegistry;
+        ORegistry* pReg = static_cast<ORegistry*>(hRegistry);
         delete(pReg);
         return REG_NO_ERROR;
     } else
@@ -605,7 +605,7 @@ RegError REGISTRY_CALLTYPE reg_dumpRegistry(RegKeyHandle hKey)
     ORegKey *pKey;
 
     if (hKey)
-        pKey = (ORegKey*)hKey;
+        pKey = static_cast<ORegKey*>(hKey);
     else
         return REG_INVALID_KEY;
 
