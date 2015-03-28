@@ -2083,7 +2083,7 @@ Resource RID_GLOBSTR
     };
     String STR_UNQUOTED_STRING
     {
-        Text [ en-US ] = "Strings must be quoted, otherwise they might be interpreted as an address or col/row name!";
+        Text [ en-US ] = "Strings without quotes are interpreted as column/row labels.";
     };
     String STR_ENTER_VALUE
     {

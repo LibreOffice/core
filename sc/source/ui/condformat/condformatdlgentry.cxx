@@ -299,7 +299,7 @@ IMPL_LINK(ScConditionFrmtEntry, OnEdChanged, Edit*, pEdit)
         ( ( op == ocBad ) && ( t == formula::svString ) )
       )
     {
-        pEdit->SetControlBackground(COL_LIGHTRED);
+        pEdit->SetControlBackground(COL_YELLOW);
         maFtVal.SetText(ScGlobal::GetRscString(STR_UNQUOTED_STRING));
         return 0;
     }
