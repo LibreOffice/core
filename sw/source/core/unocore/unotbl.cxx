@@ -1156,24 +1156,16 @@ uno::Any SwXCell::getPropertyValue(const OUString& rPropertyName)
 }
 
 void SwXCell::addPropertyChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XPropertyChangeListener > & /*xListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
-{
-    OSL_FAIL("not implemented");
-}
+    { throw RuntimeException("not implemented"); }
 
 void SwXCell::removePropertyChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XPropertyChangeListener > & /*xListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
-{
-    OSL_FAIL("not implemented");
-}
+    { throw RuntimeException("not implemented"); }
 
 void SwXCell::addVetoableChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*xListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
-{
-    OSL_FAIL("not implemented");
-}
+    { throw RuntimeException("not implemented"); }
 
 void SwXCell::removeVetoableChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*xListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
-{
-    OSL_FAIL("not implemented");
-}
+    { throw RuntimeException("not implemented"); }
 
 uno::Reference< container::XEnumeration >  SwXCell::createEnumeration(void) throw( uno::RuntimeException, std::exception )
 {
