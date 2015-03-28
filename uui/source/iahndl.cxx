@@ -194,8 +194,8 @@ sal_IntPtr
 UUIInteractionHelper::getstringfromrequest(
     void* pHandleData,void* pInteractionHelper)
 {
-    HandleData* pHND = (HandleData*) pHandleData;
-    UUIInteractionHelper* pUUI = (UUIInteractionHelper*) pInteractionHelper;
+    HandleData* pHND = static_cast<HandleData*>(pHandleData);
+    UUIInteractionHelper* pUUI = static_cast<UUIInteractionHelper*>(pInteractionHelper);
     pHND->m_aResult = pUUI->getStringFromRequest_impl(pHND->m_rRequest);
     pHND->set();
     return 0;
