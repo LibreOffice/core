@@ -1442,7 +1442,7 @@ IMPL_LINK( SvtFileDialog, SelectHdl_Impl, SvTabListBox*, pBox )
 {
     SvTreeListEntry* pEntry = pBox->FirstSelected();
     DBG_ASSERT( pEntry, "SelectHandler without selected entry" );
-    SvtContentEntry* pUserData = (SvtContentEntry*)pEntry->GetUserData();
+    SvtContentEntry* pUserData = static_cast<SvtContentEntry*>(pEntry->GetUserData());
 
     if ( pUserData )
     {
