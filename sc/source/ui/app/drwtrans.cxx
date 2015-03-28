@@ -460,7 +460,7 @@ bool ScDrawTransferObj::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObj
     {
         case SCDRAWTRANS_TYPE_DRAWMODEL:
             {
-                SdrModel* pDrawModel = (SdrModel*)pUserObject;
+                SdrModel* pDrawModel = static_cast<SdrModel*>(pUserObject);
                 rxOStm->SetBufferSize( 0xff00 );
 
                 // #108584#
@@ -502,7 +502,7 @@ bool ScDrawTransferObj::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObj
         case SCDRAWTRANS_TYPE_EMBOBJ:
             {
                 // impl. for "single OLE"
-                embed::XEmbeddedObject* pEmbObj = (embed::XEmbeddedObject*) pUserObject;
+                embed::XEmbeddedObject* pEmbObj = static_cast<embed::XEmbeddedObject*>(pUserObject);
 
                 ::utl::TempFile     aTempFile;
                 aTempFile.EnableKillingFile();
@@ -546,7 +546,7 @@ bool ScDrawTransferObj::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObj
         case SCDRAWTRANS_TYPE_DOCUMENT:
             {
                 // impl. for "DocShell"
-                SfxObjectShell*   pEmbObj = (SfxObjectShell*) pUserObject;
+                SfxObjectShell*   pEmbObj = static_cast<SfxObjectShell*>(pUserObject);
 
                 try
                 {

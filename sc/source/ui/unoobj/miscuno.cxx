@@ -51,7 +51,7 @@ bool ScUnoHelpFunctions::GetBoolProperty( const uno::Reference<beans::XPropertyS
             if ( aAny.getValueTypeClass() == uno::TypeClass_BOOLEAN )
             {
                 //! safe way to get bool value from any???
-                bRet = *(sal_Bool*)aAny.getValue();
+                bRet = *static_cast<sal_Bool const *>(aAny.getValue());
             }
         }
         catch(uno::Exception&)
@@ -94,7 +94,7 @@ sal_Int32 ScUnoHelpFunctions::GetEnumProperty( const uno::Reference<beans::XProp
             if ( aAny.getValueTypeClass() == uno::TypeClass_ENUM )
             {
                 //! get enum value from any???
-                nRet = *(sal_Int32*)aAny.getValue();
+                nRet = *static_cast<sal_Int32 const *>(aAny.getValue());
             }
             else
             {
@@ -132,7 +132,7 @@ OUString ScUnoHelpFunctions::GetStringProperty(
 bool ScUnoHelpFunctions::GetBoolFromAny( const uno::Any& aAny )
 {
     if ( aAny.getValueTypeClass() == uno::TypeClass_BOOLEAN )
-        return *(sal_Bool*)aAny.getValue();
+        return *static_cast<sal_Bool const *>(aAny.getValue());
     return false;
 }
 
@@ -156,7 +156,7 @@ sal_Int32 ScUnoHelpFunctions::GetEnumFromAny( const uno::Any& aAny )
 {
     sal_Int32 nRet = 0;
     if ( aAny.getValueTypeClass() == uno::TypeClass_ENUM )
-        nRet = *(sal_Int32*)aAny.getValue();
+        nRet = *static_cast<sal_Int32 const *>(aAny.getValue());
     else
         aAny >>= nRet;
     return nRet;

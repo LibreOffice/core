@@ -73,7 +73,7 @@ ScPivotLayoutTreeListData::~ScPivotLayoutTreeListData()
 
 bool ScPivotLayoutTreeListData::DoubleClickHdl()
 {
-    ScItemValue* pCurrentItemValue = (ScItemValue*) GetCurEntry()->GetUserData();
+    ScItemValue* pCurrentItemValue = static_cast<ScItemValue*>(GetCurEntry()->GetUserData());
     ScPivotFuncData& rCurrentFunctionData = pCurrentItemValue->maFunctionData;
 
     SCCOL nCurrentColumn = rCurrentFunctionData.mnCol;
@@ -149,7 +149,7 @@ void ScPivotLayoutTreeListData::PushDataFieldNames(vector<ScDPName>& rDataFieldN
     SvTreeListEntry* pLoopEntry;
     for (pLoopEntry = First(); pLoopEntry != NULL; pLoopEntry = Next(pLoopEntry))
     {
-        ScItemValue* pEachItemValue = (ScItemValue*) pLoopEntry->GetUserData();
+        ScItemValue* pEachItemValue = static_cast<ScItemValue*>(pLoopEntry->GetUserData());
         SCCOL nColumn = pEachItemValue->maFunctionData.mnCol;
 
         ScDPLabelData* pLabelData = mpParent->GetLabelData(nColumn);
@@ -172,7 +172,7 @@ void ScPivotLayoutTreeListData::PushDataFieldNames(vector<ScDPName>& rDataFieldN
 
 void ScPivotLayoutTreeListData::InsertEntryForSourceTarget(SvTreeListEntry* pSource, SvTreeListEntry* pTarget)
 {
-    ScItemValue* pItemValue = (ScItemValue*) pSource->GetUserData();
+    ScItemValue* pItemValue = static_cast<ScItemValue*>(pSource->GetUserData());
 
     if(mpParent->IsDataElement(pItemValue->maFunctionData.mnCol))
         return;
@@ -227,7 +227,7 @@ void ScPivotLayoutTreeListData::AdjustDuplicateCount(ScItemValue* pInputItemValu
     SvTreeListEntry* pEachEntry;
     for (pEachEntry = First(); pEachEntry != NULL; pEachEntry = Next(pEachEntry))
     {
-        ScItemValue* pItemValue = (ScItemValue*) pEachEntry->GetUserData();
+        ScItemValue* pItemValue = static_cast<ScItemValue*>(pEachEntry->GetUserData());
         if (pItemValue == pInputItemValue)
             continue;
 

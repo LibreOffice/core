@@ -101,7 +101,7 @@ ScSpecialFilterDlg::~ScSpecialFilterDlg()
     sal_uInt16 i;
 
     for ( i=1; i<nEntries; i++ )
-        delete (OUString*)pLbFilterArea->GetEntryData( i );
+        delete static_cast<OUString*>(pLbFilterArea->GetEntryData( i ));
 
     delete pOptionsMgr;
 
@@ -413,7 +413,7 @@ IMPL_LINK( ScSpecialFilterDlg, FilterAreaSelHdl, ListBox*, pLb )
         sal_uInt16  nSelPos = pLbFilterArea->GetSelectEntryPos();
 
         if ( nSelPos > 0 )
-            aString = *(OUString*)pLbFilterArea->GetEntryData( nSelPos );
+            aString = *static_cast<OUString*>(pLbFilterArea->GetEntryData( nSelPos ));
 
         pEdFilterArea->SetText( aString );
     }
@@ -438,7 +438,7 @@ IMPL_LINK( ScSpecialFilterDlg, FilterAreaModHdl, formula::RefEdit*, pEd )
 
                 for ( i=1; i<nCount && !bFound; i++ )
                 {
-                    OUString* pStr = (OUString*)pLbFilterArea->GetEntryData( i );
+                    OUString* pStr = static_cast<OUString*>(pLbFilterArea->GetEntryData( i ));
                     bFound = (theCurAreaStr == *pStr);
                 }
 

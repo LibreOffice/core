@@ -72,7 +72,7 @@ ScFilterOptionsMgr::~ScFilterOptionsMgr()
     sal_uInt16 i;
 
     for ( i=2; i<nEntries; i++ )
-        delete (OUString*)pLbCopyArea->GetEntryData( i );
+        delete static_cast<OUString*>(pLbCopyArea->GetEntryData( i ));
 }
 
 void ScFilterOptionsMgr::Init()
@@ -218,7 +218,7 @@ IMPL_LINK( ScFilterOptionsMgr, LbAreaSelHdl, ListBox*, pLb )
         sal_uInt16 nSelPos = pLbCopyArea->GetSelectEntryPos();
 
         if ( nSelPos > 0 )
-            aString = *(OUString*)pLbCopyArea->GetEntryData( nSelPos );
+            aString = *static_cast<OUString*>(pLbCopyArea->GetEntryData( nSelPos ));
 
         pEdCopyArea->SetText( aString );
     }
@@ -241,7 +241,7 @@ IMPL_LINK( ScFilterOptionsMgr, EdAreaModifyHdl, Edit*, pEd )
 
             for ( i=2; i<nCount && !bFound; i++ )
             {
-                OUString* pStr = (OUString*)pLbCopyArea->GetEntryData( i );
+                OUString* pStr = static_cast<OUString*>(pLbCopyArea->GetEntryData( i ));
                 bFound = (theCurPosStr == *pStr);
             }
 

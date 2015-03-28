@@ -211,9 +211,9 @@ size_t VectorRef::Marshal( cl_kernel k, int argno, int, cl_program )
             throw OpenCLError("clCreateBuffer", err, __FILE__, __LINE__);
         SAL_INFO("sc.opencl", "Created buffer " << mpClmem << " size " << szHostBuffer);
 
-        double* pNanBuffer = (double*)clEnqueueMapBuffer(
+        double* pNanBuffer = static_cast<double*>(clEnqueueMapBuffer(
             kEnv.mpkCmdQueue, mpClmem, CL_TRUE, CL_MAP_WRITE, 0,
-            szHostBuffer, 0, NULL, NULL, &err);
+            szHostBuffer, 0, NULL, NULL, &err));
         if (CL_SUCCESS != err)
             throw OpenCLError("clEnqueueMapBuffer", err, __FILE__, __LINE__);
 
@@ -806,9 +806,9 @@ size_t DynamicKernelStringArgument::Marshal( cl_kernel k, int argno, int, cl_pro
             throw OpenCLError("clCreateBuffer", err, __FILE__, __LINE__);
         SAL_INFO("sc.opencl", "Created buffer " << mpClmem << " size " << szHostBuffer);
 
-        pHashBuffer = (cl_uint*)clEnqueueMapBuffer(
+        pHashBuffer = static_cast<cl_uint*>(clEnqueueMapBuffer(
             kEnv.mpkCmdQueue, mpClmem, CL_TRUE, CL_MAP_WRITE, 0,
-            szHostBuffer, 0, NULL, NULL, &err);
+            szHostBuffer, 0, NULL, NULL, &err));
         if (CL_SUCCESS != err)
             throw OpenCLError("clEnqueueMapBuffer", err, __FILE__, __LINE__);
 
@@ -837,9 +837,9 @@ size_t DynamicKernelStringArgument::Marshal( cl_kernel k, int argno, int, cl_pro
             throw OpenCLError("clCreateBuffer", err, __FILE__, __LINE__);
         SAL_INFO("sc.opencl", "Created buffer " << mpClmem << " size " << szHostBuffer);
 
-        pHashBuffer = (cl_uint*)clEnqueueMapBuffer(
+        pHashBuffer = static_cast<cl_uint*>(clEnqueueMapBuffer(
             kEnv.mpkCmdQueue, mpClmem, CL_TRUE, CL_MAP_WRITE, 0,
-            szHostBuffer, 0, NULL, NULL, &err);
+            szHostBuffer, 0, NULL, NULL, &err));
         if (CL_SUCCESS != err)
             throw OpenCLError("clEnqueueMapBuffer", err, __FILE__, __LINE__);
 
@@ -4086,11 +4086,11 @@ public:
         ::opencl::setKernelEnv(&kEnv);
 
         cl_int err;
-        mpResBuf = (double*)clEnqueueMapBuffer(kEnv.mpkCmdQueue,
+        mpResBuf = static_cast<double*>(clEnqueueMapBuffer(kEnv.mpkCmdQueue,
             mpCLResBuf,
             CL_TRUE, CL_MAP_READ, 0,
             mnGroupLength * sizeof(double), 0, NULL, NULL,
-            &err);
+            &err));
 
         if (err != CL_SUCCESS)
         {

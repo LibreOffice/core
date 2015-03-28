@@ -73,7 +73,7 @@ ScTpSubTotalGroup::~ScTpSubTotalGroup()
     {
         for ( sal_uLong i=0; i<nCount; i++ )
         {
-            sal_uInt16* pData = (sal_uInt16*)(mpLbColumns->GetEntryData( i ));
+            sal_uInt16* pData = static_cast<sal_uInt16*>(mpLbColumns->GetEntryData( i ));
             OSL_ENSURE( pData, "EntryData not found" );
 
             delete pData;
@@ -116,7 +116,7 @@ bool ScTpSubTotalGroup::DoReset( sal_uInt16             nGroupNo,
     for ( sal_uLong nLbEntry = 0; nLbEntry < mpLbColumns->GetEntryCount(); ++nLbEntry )
     {
         mpLbColumns->CheckEntryPos( nLbEntry, false );
-        *((sal_uInt16*)mpLbColumns->GetEntryData( nLbEntry )) = 0;
+        *static_cast<sal_uInt16*>(mpLbColumns->GetEntryData( nLbEntry )) = 0;
     }
     mpLbFunctions->SelectEntryPos( 0 );
 
@@ -137,7 +137,7 @@ bool ScTpSubTotalGroup::DoReset( sal_uInt16             nGroupNo,
         for ( sal_uInt16 i=0; i<nSubTotals; i++ )
         {
             sal_uInt16  nCheckPos = GetFieldSelPos( pSubTotals[i] );
-            sal_uInt16* pFunction = (sal_uInt16*)mpLbColumns->GetEntryData( nCheckPos );
+            sal_uInt16* pFunction = static_cast<sal_uInt16*>(mpLbColumns->GetEntryData( nCheckPos ));
 
             mpLbColumns->CheckEntryPos( nCheckPos );
             *pFunction = FuncToLbPos( pFunctions[i] );
@@ -216,7 +216,7 @@ bool ScTpSubTotalGroup::DoFillItemSet( sal_uInt16       nGroupNo,
             {
                 OSL_ENSURE( nCheck <= nCheckCount,
                             "Range error :-(" );
-                nFunction = *((sal_uInt16*)mpLbColumns->GetEntryData( i ));
+                nFunction = *static_cast<sal_uInt16*>(mpLbColumns->GetEntryData( i ));
                 pSubTotals[nCheck] = nFieldArr[i];
                 pFunctions[nCheck] = LbPosToFunc( nFunction );
                 nCheck++;
@@ -340,7 +340,7 @@ IMPL_LINK( ScTpSubTotalGroup, SelectHdl, void *, pLb )
     {
         sal_uInt16      nFunction   = mpLbFunctions->GetSelectEntryPos();
         sal_uInt16      nColumn     = mpLbColumns->GetSelectEntryPos();
-        sal_uInt16*     pFunction   = (sal_uInt16*)mpLbColumns->GetEntryData( nColumn );
+        sal_uInt16*     pFunction   = static_cast<sal_uInt16*>(mpLbColumns->GetEntryData( nColumn ));
 
         OSL_ENSURE( pFunction, "EntryData not found!" );
         if ( !pFunction )

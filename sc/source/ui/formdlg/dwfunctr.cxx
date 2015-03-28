@@ -551,8 +551,8 @@ void ScFunctionDockWin::SetDescription()
 {
     aFiFuncDesc.SetText( EMPTY_OUSTRING );
     const ScFuncDesc* pDesc =
-             (const ScFuncDesc*)pAllFuncList->GetEntryData(
-                    pAllFuncList->GetSelectEntryPos() );
+             static_cast<const ScFuncDesc*>(pAllFuncList->GetEntryData(
+                    pAllFuncList->GetSelectEntryPos() ));
     if (pDesc)
     {
         pDesc->initArgumentInfo();      // full argument info is needed
@@ -816,8 +816,8 @@ void ScFunctionDockWin::DoEnter()
                 pHdl->ClearText();
         }
         const ScFuncDesc* pDesc =
-             (const ScFuncDesc*)pAllFuncList->GetEntryData(
-                    pAllFuncList->GetSelectEntryPos() );
+             static_cast<const ScFuncDesc*>(pAllFuncList->GetEntryData(
+                    pAllFuncList->GetSelectEntryPos() ));
         if (pDesc)
         {
             pFuncDesc=pDesc;
@@ -944,8 +944,8 @@ IMPL_LINK( ScFunctionDockWin, SelHdl, ListBox*, pLb )
 
 IMPL_LINK( ScFunctionDockWin, SetSelectionHdl, void*, pCtrl )
 {
-    if ((ImageButton *)pCtrl == &aInsertButton ||
-        (ListBox *)pCtrl == &aFuncList)
+    if (static_cast<ImageButton *>(pCtrl) == &aInsertButton ||
+        static_cast<ListBox *>(pCtrl) == &aFuncList)
     {
         DoEnter();          // Uebernimmt die Eingabe
     }

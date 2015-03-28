@@ -957,7 +957,7 @@ protected:
     ValueGetter& mValueGetter;
     void processValue( sal_Int32 x, sal_Int32 y, const uno::Any& aValue )
     {
-        uno::Sequence< uno::Sequence< uno::Any > >& aMatrix = *( uno::Sequence< uno::Sequence< uno::Any > >* )( maValue.getValue() );
+        uno::Sequence< uno::Sequence< uno::Any > >& aMatrix = *const_cast<css::uno::Sequence<css::uno::Sequence<css::uno::Any>> *>(static_cast<uno::Sequence< uno::Sequence< uno::Any > > const *>(maValue.getValue()));
         aMatrix[x][y] = aValue;
     }
 

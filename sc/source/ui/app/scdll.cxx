@@ -114,7 +114,7 @@ ScResId::ScResId( sal_uInt16 nId ) :
 
 void ScDLL::Init()
 {
-    ScModule **ppShlPtr = (ScModule**) GetAppData(SHL_CALC);
+    ScModule **ppShlPtr = reinterpret_cast<ScModule**>(GetAppData(SHL_CALC));
     if ( *ppShlPtr )
         return;
 

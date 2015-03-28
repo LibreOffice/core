@@ -87,7 +87,7 @@ SC_SIMPLE_SERVICE_INFO( ScDPMember,      "ScDPMember",      "com.sun.star.sheet.
 static bool lcl_GetBoolFromAny( const uno::Any& aAny )
 {
     if ( aAny.getValueTypeClass() == uno::TypeClass_BOOLEAN )
-        return *(sal_Bool*)aAny.getValue();
+        return *static_cast<sal_Bool const *>(aAny.getValue());
     return false;
 }
 

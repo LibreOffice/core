@@ -941,11 +941,11 @@ IMPL_LINK( ScAcceptChgDlg, RejectHandle, SvxTPView*, pRef )
         SvTreeListEntry* pEntry=pTheView->FirstSelected();
         while(pEntry!=NULL)
         {
-            ScRedlinData *pEntryData=(ScRedlinData *)(pEntry->GetUserData());
+            ScRedlinData *pEntryData=static_cast<ScRedlinData *>(pEntry->GetUserData());
             if(pEntryData!=NULL)
             {
                 ScChangeAction* pScChangeAction=
-                        (ScChangeAction*) pEntryData->pData;
+                        static_cast<ScChangeAction*>(pEntryData->pData);
 
                 if(pScChangeAction->GetType()==SC_CAT_INSERT_TABS)
                     pViewData->SetTabNo(0);
@@ -978,11 +978,11 @@ IMPL_LINK( ScAcceptChgDlg, AcceptHandle, SvxTPView*, pRef )
         SvTreeListEntry* pEntry=pTheView->FirstSelected();
         while(pEntry!=NULL)
         {
-            ScRedlinData *pEntryData=(ScRedlinData *)(pEntry->GetUserData());
+            ScRedlinData *pEntryData=static_cast<ScRedlinData *>(pEntry->GetUserData());
             if(pEntryData!=NULL)
             {
                 ScChangeAction* pScChangeAction=
-                        (ScChangeAction*) pEntryData->pData;
+                        static_cast<ScChangeAction*>(pEntryData->pData);
                 if(pScChangeAction->GetType()==SC_CAT_CONTENT)
                 {
                     if(pEntryData->nInfo==RD_SPECIAL_CONTENT)
@@ -1119,8 +1119,8 @@ void ScAcceptChgDlg::GetDependents(  const ScChangeAction* pScChangeAction,
     SvTreeListEntry* pParent=pTheView->GetParent(pEntry);
     if(pParent!=NULL)
     {
-        ScRedlinData *pParentData=(ScRedlinData *)(pParent->GetUserData());
-        ScChangeAction* pParentAction=(ScChangeAction*) pParentData->pData;
+        ScRedlinData *pParentData=static_cast<ScRedlinData *>(pParent->GetUserData());
+        ScChangeAction* pParentAction=static_cast<ScChangeAction*>(pParentData->pData);
 
         if(pParentAction!=pScChangeAction)
             pChanges->GetDependents(const_cast<ScChangeAction*>(pScChangeAction),
@@ -1137,8 +1137,8 @@ void ScAcceptChgDlg::GetDependents(  const ScChangeAction* pScChangeAction,
 bool ScAcceptChgDlg::InsertContentChildren(ScChangeActionMap* pActionMap,SvTreeListEntry* pParent)
 {
     bool bTheTestFlag = true;
-    ScRedlinData *pEntryData=(ScRedlinData *)(pParent->GetUserData());
-    const ScChangeAction* pScChangeAction = (ScChangeAction*) pEntryData->pData;
+    ScRedlinData *pEntryData=static_cast<ScRedlinData *>(pParent->GetUserData());
+    const ScChangeAction* pScChangeAction = static_cast<ScChangeAction*>(pEntryData->pData);
     bool bParentInserted = false;
     // If the parent is a MatrixOrigin then place it in the right order before
     // the MatrixReferences. Also if it is the first content change at this
@@ -1172,7 +1172,7 @@ bool ScAcceptChgDlg::InsertContentChildren(ScChangeActionMap* pActionMap,SvTreeL
     if(pOriginal!=NULL)
     {
         bTheTestFlag=false;
-        ScRedlinData *pParentData=(ScRedlinData *)(pOriginal->GetUserData());
+        ScRedlinData *pParentData=static_cast<ScRedlinData *>(pOriginal->GetUserData());
         pParentData->pData=(void *)pScChangeAction;
         pParentData->nActionNo=pScChangeAction->GetActionNumber();
         pParentData->bIsAcceptable=pScChangeAction->IsRejectable(); // select old value
@@ -1200,7 +1200,7 @@ bool ScAcceptChgDlg::InsertContentChildren(ScChangeActionMap* pActionMap,SvTreeL
         if(pEntry!=NULL)
         {
             bTheTestFlag=false;
-            ScRedlinData *pParentData=(ScRedlinData *)(pEntry->GetUserData());
+            ScRedlinData *pParentData=static_cast<ScRedlinData *>(pEntry->GetUserData());
             pParentData->pData=(void *)pScChangeAction;
             pParentData->nActionNo=pScChangeAction->GetActionNumber();
             pParentData->bIsAcceptable=pScChangeAction->IsClickable();
@@ -1255,7 +1255,7 @@ bool ScAcceptChgDlg::InsertChildren(ScChangeActionMap* pActionMap,SvTreeListEntr
         {
             bTheTestFlag=false;
 
-            ScRedlinData *pEntryData=(ScRedlinData *)(pEntry->GetUserData());
+            ScRedlinData *pEntryData=static_cast<ScRedlinData *>(pEntry->GetUserData());
             pEntryData->bIsRejectable=false;
             pEntryData->bIsAcceptable=false;
             pEntryData->bDisabled=true;
@@ -1285,7 +1285,7 @@ bool ScAcceptChgDlg::InsertDeletedChildren(const ScChangeAction* pScChangeAction
 
         if(pEntry!=NULL)
         {
-            ScRedlinData *pEntryData=(ScRedlinData *)(pEntry->GetUserData());
+            ScRedlinData *pEntryData=static_cast<ScRedlinData *>(pEntry->GetUserData());
             pEntryData->bIsRejectable=false;
             pEntryData->bIsAcceptable=false;
             pEntryData->bDisabled=true;
@@ -1351,9 +1351,9 @@ IMPL_LINK( ScAcceptChgDlg, ExpandingHandle, SvxRedlinTable*, pTable )
         {
             ScChangeAction* pScChangeAction=NULL;
 
-            ScRedlinData *pEntryData=(ScRedlinData *)(pEntry->GetUserData());
+            ScRedlinData *pEntryData=static_cast<ScRedlinData *>(pEntry->GetUserData());
             if(pEntryData!=NULL)
-                pScChangeAction=(ScChangeAction*) pEntryData->pData;
+                pScChangeAction=static_cast<ScChangeAction*>(pEntryData->pData);
 
             if(pEntry->HasChildrenOnDemand())
             {
@@ -1365,7 +1365,7 @@ IMPL_LINK( ScAcceptChgDlg, ExpandingHandle, SvxRedlinTable*, pTable )
 
                 if(pEntryData!=NULL)
                 {
-                    pScChangeAction=(ScChangeAction*) pEntryData->pData;
+                    pScChangeAction=static_cast<ScChangeAction*>(pEntryData->pData);
 
                     GetDependents( pScChangeAction, aActionMap, pEntry );
 
@@ -1493,7 +1493,7 @@ void ScAcceptChgDlg::RemoveEntrys(sal_uLong nStartAction,sal_uLong nEndAction)
     ScRedlinData *pEntryData=NULL;
 
     if(pEntry!=NULL)
-        pEntryData=(ScRedlinData *)(pEntry->GetUserData());
+        pEntryData=static_cast<ScRedlinData *>(pEntry->GetUserData());
 
     sal_uLong nAction=0;
     if(pEntryData!=NULL)
@@ -1508,7 +1508,7 @@ void ScAcceptChgDlg::RemoveEntrys(sal_uLong nStartAction,sal_uLong nEndAction)
     while(pEntry!=NULL)
     {
         bool bRemove = false;
-        pEntryData=(ScRedlinData *)(pEntry->GetUserData());
+        pEntryData=static_cast<ScRedlinData *>(pEntry->GetUserData());
         if(pEntryData!=NULL)
         {
             nAction=pEntryData->nActionNo;
@@ -1540,11 +1540,11 @@ void ScAcceptChgDlg::UpdateEntrys(ScChangeTrack* pChgTrack, sal_uLong nStartActi
     while(pEntry!=NULL)
     {
         bool bRemove = false;
-        ScRedlinData *pEntryData=(ScRedlinData *)(pEntry->GetUserData());
+        ScRedlinData *pEntryData=static_cast<ScRedlinData *>(pEntry->GetUserData());
         if(pEntryData!=NULL)
         {
             ScChangeAction* pScChangeAction=
-                    (ScChangeAction*) pEntryData->pData;
+                    static_cast<ScChangeAction*>(pEntryData->pData);
 
             sal_uLong nAction=pScChangeAction->GetActionNumber();
 
@@ -1649,13 +1649,13 @@ IMPL_LINK_NOARG(ScAcceptChgDlg, UpdateSelectionHdl)
     SvTreeListEntry* pEntry = pTheView->FirstSelected();
     while( pEntry )
     {
-        ScRedlinData* pEntryData = (ScRedlinData*) pEntry->GetUserData();
+        ScRedlinData* pEntryData = static_cast<ScRedlinData*>(pEntry->GetUserData());
         if( pEntryData )
         {
             bRejectFlag &= (bool) pEntryData->bIsRejectable;
             bAcceptFlag &= (bool) pEntryData->bIsAcceptable;
 
-            const ScChangeAction* pScChangeAction = (ScChangeAction*) pEntryData->pData;
+            const ScChangeAction* pScChangeAction = static_cast<ScChangeAction*>(pEntryData->pData);
             if( pScChangeAction && (pScChangeAction->GetType() != SC_CAT_DELETE_TABS) &&
                     (!pEntryData->bDisabled || pScChangeAction->IsVisible()) )
             {
@@ -1726,11 +1726,11 @@ IMPL_LINK_NOARG(ScAcceptChgDlg, CommandHdl)
 
         if(pDoc->IsDocEditable() && pEntry!=NULL)
         {
-            ScRedlinData *pEntryData=(ScRedlinData *)(pEntry->GetUserData());
+            ScRedlinData *pEntryData=static_cast<ScRedlinData *>(pEntry->GetUserData());
             if(pEntryData!=NULL)
             {
                 ScChangeAction* pScChangeAction=
-                        (ScChangeAction*) pEntryData->pData;
+                        static_cast<ScChangeAction*>(pEntryData->pData);
                 if(pScChangeAction!=NULL && !pTheView->GetParent(pEntry))
                     aPopup.EnableItem(SC_CHANGES_COMMENT);
             }
@@ -1744,11 +1744,11 @@ IMPL_LINK_NOARG(ScAcceptChgDlg, CommandHdl)
             {
                 if(pEntry!=NULL)
                 {
-                    ScRedlinData *pEntryData=(ScRedlinData *)(pEntry->GetUserData());
+                    ScRedlinData *pEntryData=static_cast<ScRedlinData *>(pEntry->GetUserData());
                     if(pEntryData!=NULL)
                     {
                         ScChangeAction* pScChangeAction=
-                                (ScChangeAction*) pEntryData->pData;
+                                static_cast<ScChangeAction*>(pEntryData->pData);
 
                         pViewData->GetDocShell()->ExecuteChangeCommentDialog( pScChangeAction, this,false);
                     }
@@ -1879,8 +1879,8 @@ IMPL_LINK( ScAcceptChgDlg, ColCompareHdl, SvSortData*, pSortData )
 
         if(CALC_DATE==nSortCol)
         {
-            RedlinData *pLeftData=(RedlinData *)(pLeft->GetUserData());
-            RedlinData *pRightData=(RedlinData *)(pRight->GetUserData());
+            RedlinData *pLeftData=static_cast<RedlinData *>(pLeft->GetUserData());
+            RedlinData *pRightData=static_cast<RedlinData *>(pRight->GetUserData());
 
             if(pLeftData!=NULL && pRightData!=NULL)
             {
@@ -1893,8 +1893,8 @@ IMPL_LINK( ScAcceptChgDlg, ColCompareHdl, SvSortData*, pSortData )
         }
         else if(CALC_POS==nSortCol)
         {
-            ScRedlinData *pLeftData=(ScRedlinData *)(pLeft->GetUserData());
-            ScRedlinData *pRightData=(ScRedlinData *)(pRight->GetUserData());
+            ScRedlinData *pLeftData=static_cast<ScRedlinData *>(pLeft->GetUserData());
+            ScRedlinData *pRightData=static_cast<ScRedlinData *>(pRight->GetUserData());
 
             if(pLeftData!=NULL && pRightData!=NULL)
             {

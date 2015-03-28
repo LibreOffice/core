@@ -263,7 +263,7 @@ SC_DLLPUBLIC    void                    SetAppOptions   ( const ScAppOptions& rO
     void PopAnyRefDlg();
 };
 
-#define SC_MOD() ( *(ScModule**) GetAppData(SHL_CALC) )
+#define SC_MOD() ( *reinterpret_cast<ScModule**>(GetAppData(SHL_CALC)) )
 
 void global_InitAppOptions();
 

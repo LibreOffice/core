@@ -42,7 +42,7 @@ bool ScPivotLayoutTreeList::DoubleClickHdl()
     if (!pEntry)
         return false;
 
-    ScItemValue* pCurrentItemValue = (ScItemValue*) pEntry->GetUserData();
+    ScItemValue* pCurrentItemValue = static_cast<ScItemValue*>(pEntry->GetUserData());
     ScPivotFuncData& rCurrentFunctionData = pCurrentItemValue->maFunctionData;
 
     if (mpParent->IsDataElement(rCurrentFunctionData.mnCol))
@@ -85,7 +85,7 @@ void ScPivotLayoutTreeList::FillFields(ScPivotFieldVector& rFieldVector)
 
 void ScPivotLayoutTreeList::InsertEntryForSourceTarget(SvTreeListEntry* pSource, SvTreeListEntry* pTarget)
 {
-    ScItemValue* pItemValue = (ScItemValue*) pSource->GetUserData();
+    ScItemValue* pItemValue = static_cast<ScItemValue*>(pSource->GetUserData());
     ScItemValue* pOriginalItemValue = pItemValue->mpOriginalItemValue;
 
     // Don't allow to add "Data" element to page fields

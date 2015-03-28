@@ -1387,8 +1387,8 @@ struct ScRangePairNameSort
 extern "C"
 int SAL_CALL ScRangePairList_QsortNameCompare( const void* p1, const void* p2 )
 {
-    const ScRangePairNameSort* ps1 = (const ScRangePairNameSort*)p1;
-    const ScRangePairNameSort* ps2 = (const ScRangePairNameSort*)p2;
+    const ScRangePairNameSort* ps1 = static_cast<const ScRangePairNameSort*>(p1);
+    const ScRangePairNameSort* ps2 = static_cast<const ScRangePairNameSort*>(p2);
     const ScAddress& rStartPos1 = ps1->pPair->GetRange(0).aStart;
     const ScAddress& rStartPos2 = ps2->pPair->GetRange(0).aStart;
     OUString aStr1, aStr2;

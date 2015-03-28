@@ -83,7 +83,7 @@ void ScPivotLayoutTreeListBase::PushEntriesToPivotFieldVector(ScPivotFieldVector
     SvTreeListEntry* pEachEntry;
     for (pEachEntry = First(); pEachEntry != NULL; pEachEntry = Next(pEachEntry))
     {
-        ScItemValue* pItemValue = (ScItemValue*) pEachEntry->GetUserData();
+        ScItemValue* pItemValue = static_cast<ScItemValue*>(pEachEntry->GetUserData());
         ScPivotFuncData& rFunctionData = pItemValue->maFunctionData;
 
         ScPivotField aField;
@@ -107,7 +107,7 @@ void ScPivotLayoutTreeListBase::RemoveEntryForItem(ScItemValue* pItemValue)
     SvTreeListEntry* pEachEntry;
     for (pEachEntry = First(); pEachEntry != NULL; pEachEntry = Next(pEachEntry))
     {
-        ScItemValue* pEachItemValue = (ScItemValue*) pEachEntry->GetUserData();
+        ScItemValue* pEachItemValue = static_cast<ScItemValue*>(pEachEntry->GetUserData());
         if (pEachItemValue == pItemValue)
         {
             GetModel()->Remove(pEachEntry);

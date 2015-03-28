@@ -100,11 +100,11 @@ void ScAddInAsync::CallBack( sal_uLong nHandleP, void* pData )
     switch ( p->meType )
     {
         case ParamType::PTR_DOUBLE :
-            p->nVal = *(double*)pData;
+            p->nVal = *static_cast<double*>(pData);
             break;
         case ParamType::PTR_STRING :
         {
-            sal_Char* pChar = (sal_Char*)pData;
+            sal_Char* pChar = static_cast<sal_Char*>(pData);
             if ( p->pStr )
                 *p->pStr = OUString( pChar, strlen(pChar),osl_getThreadTextEncoding() );
             else

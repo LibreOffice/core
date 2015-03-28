@@ -626,7 +626,7 @@ uno::Sequence<uno::Type> SAL_CALL ScModelObj::getTypes() throw(uno::RuntimeExcep
             if(aNumProv.getValueType() == rProvType)
             {
                 uno::Reference<lang::XTypeProvider> xNumProv(
-                    *(uno::Reference<lang::XTypeProvider>*)aNumProv.getValue());
+                    *static_cast<uno::Reference<lang::XTypeProvider> const *>(aNumProv.getValue()));
                 aAggTypes = xNumProv->getTypes();
             }
         }
@@ -2216,7 +2216,7 @@ sal_Int64 SAL_CALL ScModelObj::getSomething(
         if(aNumTunnel.getValueType() == rTunnelType)
         {
             uno::Reference<lang::XUnoTunnel> xTunnelAgg(
-                *(uno::Reference<lang::XUnoTunnel>*)aNumTunnel.getValue());
+                *static_cast<uno::Reference<lang::XUnoTunnel> const *>(aNumTunnel.getValue()));
             return xTunnelAgg->getSomething( rId );
         }
     }

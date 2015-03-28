@@ -143,7 +143,7 @@ ScPrintAreasDlg::~ScPrintAreasDlg()
     {
         sal_uInt16 nCount = aLb[i]->GetEntryCount();
         for ( sal_uInt16 j=0; j<nCount; j++ )
-            delete (OUString*)aLb[i]->GetEntryData(j);
+            delete static_cast<OUString*>(aLb[i]->GetEntryData(j));
     }
 }
 
@@ -590,7 +590,7 @@ IMPL_LINK( ScPrintAreasDlg, Impl_ModifyHdl, formula::RefEdit*, pEd )
 
         for ( i=nFirstCustomPos; i<nEntryCount && !bFound; i++ )
         {
-            OUString* pSymbol = (OUString*)pLb->GetEntryData( i );
+            OUString* pSymbol = static_cast<OUString*>(pLb->GetEntryData( i ));
             bFound  = ( (*pSymbol)  ==aStrEd || (*pSymbol) == aEdUpper );
         }
 

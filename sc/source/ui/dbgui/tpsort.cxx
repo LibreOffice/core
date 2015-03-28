@@ -519,7 +519,7 @@ ScTabPageSortOptions::~ScTabPageSortOptions()
     sal_uInt16 nEntries = m_pLbOutPos->GetEntryCount();
 
     for ( sal_uInt16 i=1; i<nEntries; i++ )
-        delete (OUString*)m_pLbOutPos->GetEntryData( i );
+        delete static_cast<OUString*>(m_pLbOutPos->GetEntryData( i ));
 
     delete pColRes;
     delete pColWrap;        //! not if from document
@@ -855,7 +855,7 @@ IMPL_LINK( ScTabPageSortOptions, SelOutPosHdl, ListBox *, pLb )
         sal_uInt16  nSelPos = m_pLbOutPos->GetSelectEntryPos();
 
         if ( nSelPos > 0 )
-            aString = *(OUString*)m_pLbOutPos->GetEntryData( nSelPos );
+            aString = *static_cast<OUString*>(m_pLbOutPos->GetEntryData( nSelPos ));
 
         m_pEdOutPos->SetText( aString );
     }
@@ -890,7 +890,7 @@ void ScTabPageSortOptions::EdOutPosModHdl( Edit* pEd )
 
             for ( i=2; i<nCount && !bFound; i++ )
             {
-                OUString* pStr = (OUString*)m_pLbOutPos->GetEntryData( i );
+                OUString* pStr = static_cast<OUString*>(m_pLbOutPos->GetEntryData( i ));
                 bFound = (theCurPosStr == *pStr);
             }
 

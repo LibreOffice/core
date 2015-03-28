@@ -398,7 +398,7 @@ bool ScTransferObj::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject,
     {
         case SCTRANS_TYPE_IMPEX:
             {
-                ScImportExport* pImpEx = (ScImportExport*)pUserObject;
+                ScImportExport* pImpEx = static_cast<ScImportExport*>(pUserObject);
 
                 SotClipboardFormatId nFormat = SotExchange::GetFormat( rFlavor );
                 // mba: no BaseURL for data exchange
@@ -410,7 +410,7 @@ bool ScTransferObj::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject,
         case SCTRANS_TYPE_EDIT_RTF:
         case SCTRANS_TYPE_EDIT_BIN:
             {
-                ScTabEditEngine* pEngine = (ScTabEditEngine*)pUserObject;
+                ScTabEditEngine* pEngine = static_cast<ScTabEditEngine*>(pUserObject);
                 if ( nUserObjectId == SCTRANS_TYPE_EDIT_RTF )
                 {
                     pEngine->Write( *rxOStm, EE_FORMAT_RTF );
@@ -438,7 +438,7 @@ bool ScTransferObj::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject,
         case SCTRANS_TYPE_EMBOBJ:
             {
                 // TODO/MBA: testing
-                SfxObjectShell*   pEmbObj = (SfxObjectShell*) pUserObject;
+                SfxObjectShell*   pEmbObj = static_cast<SfxObjectShell*>(pUserObject);
                 ::utl::TempFile     aTempFile;
                 aTempFile.EnableKillingFile();
                 uno::Reference< embed::XStorage > xWorkStore =

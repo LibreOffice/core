@@ -271,7 +271,7 @@ bool ScImportExport::ExportData( const OUString& rMimeType,
     {
         aStrm.WriteUChar( 0 );
         rValue <<= ::com::sun::star::uno::Sequence< sal_Int8 >(
-                                        (sal_Int8*)aStrm.GetData(),
+                                        static_cast<sal_Int8 const *>(aStrm.GetData()),
                                         aStrm.Seek( STREAM_SEEK_TO_END ) );
         return true;
     }
@@ -323,7 +323,7 @@ bool ScImportExport::ExportString( OUString& rText, SotClipboardFormatId nFmt )
         aStrm.WriteUInt16( 0 );
         aStrm.Seek( STREAM_SEEK_TO_END );
 
-        rText = OUString( (const sal_Unicode*) aStrm.GetData() );
+        rText = OUString( static_cast<const sal_Unicode*>(aStrm.GetData()) );
         return true;
     }
     rText.clear();
@@ -351,7 +351,7 @@ bool ScImportExport::ExportByteString( OString& rText, rtl_TextEncoding eEnc, So
         aStrm.Seek( STREAM_SEEK_TO_END );
         if( aStrm.Tell() <= nSizeLimit )
         {
-            rText = (const sal_Char*) aStrm.GetData();
+            rText = static_cast<const sal_Char*>(aStrm.GetData());
             return true;
         }
     }
