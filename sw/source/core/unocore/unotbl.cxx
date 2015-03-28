@@ -1274,16 +1274,14 @@ SwXTextTableRow::SwXTextTableRow(SwFrmFmt* pFmt, SwTableLine* pLn) :
     SwClient(pFmt),
     m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_TABLE_ROW)),
     pLine(pLn)
-{
-}
+{ }
 
 SwXTextTableRow::~SwXTextTableRow()
-{
-}
+{ }
 
-uno::Reference< beans::XPropertySetInfo >  SwXTextTableRow::getPropertySetInfo(void) throw( uno::RuntimeException, std::exception )
+uno::Reference< beans::XPropertySetInfo > SwXTextTableRow::getPropertySetInfo(void) throw( uno::RuntimeException, std::exception )
 {
-    static uno::Reference< beans::XPropertySetInfo >  xRef = m_pPropSet->getPropertySetInfo();
+    static uno::Reference<beans::XPropertySetInfo> xRef = m_pPropSet->getPropertySetInfo();
     return xRef;
 }
 
