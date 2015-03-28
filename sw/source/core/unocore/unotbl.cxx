@@ -4493,16 +4493,11 @@ SwXTableRows::~SwXTableRows()
 sal_Int32 SwXTableRows::getCount(void) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    sal_Int32 nRet = 0;
     SwFrmFmt* pFrmFmt = GetFrmFmt();
     if(!pFrmFmt)
         throw uno::RuntimeException();
-    else
-    {
-        SwTable* pTable = SwTable::FindTable( pFrmFmt );
-        nRet = pTable->GetTabLines().size();
-    }
-    return nRet;
+    SwTable* pTable = SwTable::FindTable(pFrmFmt);
+    return pTable->GetTabLines().size();
 }
 
 ///@see SwXCell::CreateXCell (TODO: seems to be copy and paste programming here)
