@@ -736,7 +736,7 @@ static void unzipToBuffer( char* pBegin, unsigned int nLen,
 
     const unsigned int buf_increment_size = 16384;
 
-    *pOutBuf = (sal_uInt8*)rtl_reallocateMemory( *pOutBuf, buf_increment_size );
+    *pOutBuf = static_cast<sal_uInt8*>(rtl_reallocateMemory( *pOutBuf, buf_increment_size ));
     aZStr.next_out      = (Bytef*)*pOutBuf;
     aZStr.avail_out     = buf_increment_size;
     *pOutLen = buf_increment_size;
@@ -748,7 +748,7 @@ static void unzipToBuffer( char* pBegin, unsigned int nLen,
             if( err != Z_STREAM_END )
             {
                 const int nNewAlloc = *pOutLen + buf_increment_size;
-                *pOutBuf = (sal_uInt8*)rtl_reallocateMemory( *pOutBuf, nNewAlloc );
+                *pOutBuf = static_cast<sal_uInt8*>(rtl_reallocateMemory( *pOutBuf, nNewAlloc ));
                 aZStr.next_out = (Bytef*)(*pOutBuf + *pOutLen);
                 aZStr.avail_out = buf_increment_size;
                 *pOutLen = nNewAlloc;

@@ -52,7 +52,7 @@ class StringEmitContext : public EmitContext
     virtual ~StringEmitContext() {}
     virtual bool write( const void* pBuf, unsigned int nLen ) throw() SAL_OVERRIDE
     {
-        m_aBuf.append( (const sal_Char*)pBuf, nLen );
+        m_aBuf.append( static_cast<const sal_Char*>(pBuf), nLen );
         return true;
     }
     virtual unsigned int getCurPos() throw() SAL_OVERRIDE { return m_aBuf.getLength(); }
