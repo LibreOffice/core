@@ -220,7 +220,7 @@ OUString FuncPage::GetSelFunctionName() const
 const IFunctionDescription* FuncPage::GetFuncDesc( sal_Int32 nPos ) const
 {
     // not pretty, but hopefully rare
-    return (const IFunctionDescription*) m_pLbFunction->GetEntryData(nPos);
+    return static_cast<const IFunctionDescription*>(m_pLbFunction->GetEntryData(nPos));
 }
 
 void FuncPage::InitLRUList()

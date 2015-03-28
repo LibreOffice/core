@@ -149,7 +149,7 @@ IFormulaToken* StructPage::GetFunctionEntry(SvTreeListEntry* pEntry)
 {
     if(pEntry!=NULL)
     {
-        IFormulaToken * pToken=(IFormulaToken *)pEntry->GetUserData();
+        IFormulaToken * pToken=static_cast<IFormulaToken *>(pEntry->GetUserData());
         if(pToken!=NULL)
         {
             if ( !(pToken->isFunction() || pToken->getArgumentCount() > 1 ) )
@@ -174,7 +174,7 @@ IMPL_LINK( StructPage, SelectHdl, SvTreeListBox*, pTlb )
             SvTreeListEntry*    pCurEntry=m_pTlbStruct->GetCurEntry();
             if(pCurEntry!=NULL)
             {
-                pSelectedToken=(IFormulaToken *)pCurEntry->GetUserData();
+                pSelectedToken=static_cast<IFormulaToken *>(pCurEntry->GetUserData());
                 if(pSelectedToken!=NULL)
                 {
                     if ( !(pSelectedToken->isFunction() || pSelectedToken->getArgumentCount() > 1) )
