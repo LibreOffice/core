@@ -74,7 +74,7 @@ int rsc_stricmp( const char *string1, const char *string2 ){
 char* rsc_strdup( const char* pStr )
 {
     int nLen = strlen( pStr );
-    char* pBuffer = (char*)rtl_allocateMemory( nLen+1 );
+    char* pBuffer = static_cast<char*>(rtl_allocateMemory( nLen+1 ));
     memcpy( pBuffer, pStr, nLen+1 );
     return pBuffer;
 }
@@ -222,11 +222,11 @@ void RscPtrPtr :: Reset()
 sal_uInt32 RscPtrPtr :: Append( void * pBuffer )
 {
     if( !pMem )
-        pMem = (void **)rtl_allocateMemory( (nCount +1) * sizeof( void * ) );
+        pMem = static_cast<void **>(rtl_allocateMemory( (nCount +1) * sizeof( void * ) ));
     else
-        pMem = (void **)rtl_reallocateMemory( (void *)pMem,
+        pMem = static_cast<void **>(rtl_reallocateMemory( (void *)pMem,
                          ((nCount +1) * sizeof( void * )
-                       ) );
+                       ) ));
     pMem[ nCount ] = pBuffer;
     return nCount++;
 }
@@ -267,7 +267,7 @@ sal_uInt32 RscWriteRc :: IncSize( sal_uInt32 nSize )
     sal_uInt32 nOrigPos = nLen;
     nLen += nSize;
     if( pMem )
-        pMem = (char*)rtl_reallocateMemory( pMem, nLen );
+        pMem = static_cast<char*>(rtl_reallocateMemory( pMem, nLen ));
     if( pMem )
         memset( pMem + nOrigPos, 0, nSize );
     return nOrigPos;
@@ -277,7 +277,7 @@ char * RscWriteRc :: GetPointer( sal_uInt32 nSize )
 {
     if( !pMem )
     {
-        pMem = (char *)rtl_allocateMemory( nLen );
+        pMem = static_cast<char *>(rtl_allocateMemory( nLen ));
         memset( pMem, 0, nLen );
     }
     return pMem + nSize;

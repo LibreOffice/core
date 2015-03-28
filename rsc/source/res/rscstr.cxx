@@ -59,7 +59,7 @@ ERRTYPE RscString::SetString( const RSCINST & rInst, const char * pStr )
         if( pStr )
         {
             sal_uInt32  nLen = strlen( pStr ) +1;
-            pTmp = (char *)rtl_allocateMemory( nLen );
+            pTmp = static_cast<char *>(rtl_allocateMemory( nLen ));
             memcpy( pTmp, pStr, nLen );
         }
 
@@ -102,8 +102,8 @@ RSCINST RscString::Create( RSCINST * pInst, const RSCINST & rDflt,
     if( !pInst )
     {
         aInst.pClass = this;
-        aInst.pData = (CLASS_DATA)
-                      rtl_allocateMemory( sizeof( RscStringInst ) );
+        aInst.pData = static_cast<CLASS_DATA>(
+                      rtl_allocateMemory( sizeof( RscStringInst ) ));
     }
     else
         aInst = *pInst;

@@ -79,7 +79,7 @@ RSCINST RscBaseCont::Create( RSCINST * pInst, const RSCINST & rDflt,
     if( !pInst )
     {
         aInst.pClass = this;
-        aInst.pData = (CLASS_DATA) rtl_allocateMemory( Size() );
+        aInst.pData = static_cast<CLASS_DATA>(rtl_allocateMemory( Size() ));
     }
     else
         aInst = *pInst;
@@ -105,8 +105,8 @@ RSCINST RscBaseCont::Create( RSCINST * pInst, const RSCINST & rDflt,
         {
             *pClassData = *pDfltClassData;
             pClassData->pEntries =
-                (ENTRY_STRUCT *)rtl_allocateMemory( sizeof( ENTRY_STRUCT )
-                                                    * pClassData->nEntries );
+                static_cast<ENTRY_STRUCT *>(rtl_allocateMemory( sizeof( ENTRY_STRUCT )
+                                                    * pClassData->nEntries ));
             for (sal_uInt32 i = 0; i < pClassData->nEntries; i++ )
             {
                 pClassData->pEntries[ i ].Create();
@@ -213,14 +213,14 @@ ERRTYPE RscBaseCont::GetElement( const RSCINST & rInst, const RscId & rEleName,
         if( pClassData->pEntries )
         {
             pClassData->pEntries =
-                (ENTRY_STRUCT *)rtl_reallocateMemory( pClassData->pEntries,
-                         sizeof( ENTRY_STRUCT ) * (pClassData->nEntries +1) );
+                static_cast<ENTRY_STRUCT *>(rtl_reallocateMemory( pClassData->pEntries,
+                         sizeof( ENTRY_STRUCT ) * (pClassData->nEntries +1) ));
         }
         else
         {
             pClassData->pEntries =
-                (ENTRY_STRUCT *)rtl_allocateMemory( sizeof( ENTRY_STRUCT )
-                                                * (pClassData->nEntries +1) );
+                static_cast<ENTRY_STRUCT *>(rtl_allocateMemory( sizeof( ENTRY_STRUCT )
+                                                * (pClassData->nEntries +1) ));
         }
 
         pClassData->pEntries[ pClassData->nEntries ].Create();

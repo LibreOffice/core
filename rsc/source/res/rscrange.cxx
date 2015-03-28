@@ -90,7 +90,7 @@ RSCINST RscRange::Create( RSCINST * pInst, const RSCINST & rDflt,
     if( !pInst )
     {
         aInst.pClass = this;
-        aInst.pData = (CLASS_DATA)rtl_allocateMemory( sizeof( RscRangeInst ) );
+        aInst.pData = static_cast<CLASS_DATA>(rtl_allocateMemory( sizeof( RscRangeInst ) ));
     }
     else
         aInst = *pInst;
@@ -202,7 +202,7 @@ RSCINST RscLongRange::Create( RSCINST * pInst, const RSCINST & rDflt,
     if( !pInst )
     {
         aInst.pClass = this;
-        aInst.pData = (CLASS_DATA) rtl_allocateMemory( sizeof( RscLongRangeInst ) );
+        aInst.pData = static_cast<CLASS_DATA>(rtl_allocateMemory( sizeof( RscLongRangeInst ) ));
     }
     else
         aInst = *pInst;
@@ -278,7 +278,7 @@ RSCINST RscIdRange::Create( RSCINST * pInst, const RSCINST & rDflt, bool bOwnCla
     if( !pInst )
     {
         aInst.pClass = this;
-        aInst.pData = (CLASS_DATA)rtl_allocateMemory( sizeof( RscId ) );
+        aInst.pData = static_cast<CLASS_DATA>(rtl_allocateMemory( sizeof( RscId ) ));
     }
     else
         aInst = *pInst;

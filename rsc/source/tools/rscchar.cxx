@@ -151,7 +151,7 @@ char * RscChar::MakeUTF8( char * pStr, sal_uInt16 nTextEncoding )
 
     hConv = rtl_createUnicodeToTextConverter( RTL_TEXTENCODING_UTF8 );
     // factor of 6 is the maximum size of an UNICODE character as utf8
-    char * pUtf8 = (char *)rtl_allocateMemory( nUniSize * 6 );
+    char * pUtf8 = static_cast<char *>(rtl_allocateMemory( nUniSize * 6 ));
     rtl_convertUnicodeToText( hConv, 0,
                             pUniCode, nUniSize,
                             pUtf8, nUniSize * 6,

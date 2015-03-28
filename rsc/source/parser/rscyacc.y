@@ -1164,7 +1164,7 @@ string_multiline
       rtl::OStringBuffer aBuf( 256 );
       aBuf.append( $1 );
       aBuf.append( $2 );
-      $$ = (char*)pStringContainer->putString( aBuf.getStr() );
+      $$ = const_cast<char*>(pStringContainer->putString( aBuf.getStr() ));
   }
 ;
 

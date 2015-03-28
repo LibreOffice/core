@@ -148,7 +148,7 @@ RSCINST RscClass::Create( RSCINST * pInst,
     if( !pInst )
     {
         aInst.pClass = this;
-        aInst.pData = (CLASS_DATA) rtl_allocateMemory( Size() );
+        aInst.pData = static_cast<CLASS_DATA>(rtl_allocateMemory( Size() ));
     }
     else
         aInst = *pInst;
@@ -234,13 +234,13 @@ ERRTYPE RscClass::SetVariable( Atom nVarName,
 {
     if( pVarTypeList )
     {
-        pVarTypeList = (VARTYPE_STRUCT *) rtl_reallocateMemory( (void *)pVarTypeList,
-                                                                ((nEntries +1) * sizeof( VARTYPE_STRUCT )) );
+        pVarTypeList = static_cast<VARTYPE_STRUCT *>(rtl_reallocateMemory( (void *)pVarTypeList,
+                                                                ((nEntries +1) * sizeof( VARTYPE_STRUCT )) ));
     }
     else
     {
-        pVarTypeList = (VARTYPE_STRUCT *) rtl_allocateMemory( ((nEntries +1)
-                                                               * sizeof( VARTYPE_STRUCT )) );
+        pVarTypeList = static_cast<VARTYPE_STRUCT *>(rtl_allocateMemory( ((nEntries +1)
+                                                               * sizeof( VARTYPE_STRUCT )) ));
     }
     pVarTypeList[ nEntries ].nVarName       = nVarName;
     pVarTypeList[ nEntries ].nMask          = nMask;

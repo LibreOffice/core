@@ -94,7 +94,7 @@ RSCINST RscArray::Create( RSCINST * pInst, const RSCINST & rDflt,
     if( !pInst )
     {
         aInst.pClass = this;
-        aInst.pData = (CLASS_DATA) rtl_allocateMemory( Size() );
+        aInst.pData = static_cast<CLASS_DATA>(rtl_allocateMemory( Size() ));
     }
     else
         aInst = *pInst;

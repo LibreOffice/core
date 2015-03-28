@@ -64,7 +64,7 @@ static bool CallPrePro( const OString& rInput,
     bool bVerbose = false;
     for( i = 1; i < int(pCmdLine->GetCount() -1); i++ )
     {
-        if ( 0 == rsc_stricmp( (char *)pCmdLine->GetEntry( i ), "-verbose" ) )
+        if ( 0 == rsc_stricmp( static_cast<char *>(pCmdLine->GetEntry( i )), "-verbose" ) )
         {
             bVerbose = true;
             continue;
@@ -86,11 +86,11 @@ static bool CallPrePro( const OString& rInput,
             // ignore args starting with "-isystem"
             continue;
         }
-        if ( !rsc_strnicmp( (char *)pCmdLine->GetEntry( i ), "-u", 2 ) ||
-             !rsc_strnicmp( (char *)pCmdLine->GetEntry( i ), "-i", 2 ) ||
-             !rsc_strnicmp( (char *)pCmdLine->GetEntry( i ), "-d", 2 ))
+        if ( !rsc_strnicmp( static_cast<char *>(pCmdLine->GetEntry( i )), "-u", 2 ) ||
+             !rsc_strnicmp( static_cast<char *>(pCmdLine->GetEntry( i )), "-i", 2 ) ||
+             !rsc_strnicmp( static_cast<char *>(pCmdLine->GetEntry( i )), "-d", 2 ))
         {
-            aNewCmdL.Append( rsc_strdup( (char *)pCmdLine->GetEntry( i ) ) );
+            aNewCmdL.Append( rsc_strdup( static_cast<char *>(pCmdLine->GetEntry( i )) ) );
         }
     }
 
@@ -104,7 +104,7 @@ static bool CallPrePro( const OString& rInput,
         for( i = 0; i < (int)(pCmdL->GetCount() -1); i++ )
         {
             printf( " " );
-            printf( "%s", (const char *)pCmdL->GetEntry( i ) );
+            printf( "%s", static_cast<const char *>(pCmdL->GetEntry( i )) );
         }
         printf( "\n" );
     }
@@ -120,7 +120,7 @@ static bool CallPrePro( const OString& rInput,
         pCmdL = &aRespCmdL;
         for( i = 0; i < (int)(aNewCmdL.GetCount() -1); i++ )
         {
-            fprintf( fRspFile, "%s ", (const char *)aNewCmdL.GetEntry( i ) );
+            fprintf( fRspFile, "%s ", static_cast<const char *>(aNewCmdL.GetEntry( i )) );
         }
         fclose( fRspFile );
 
@@ -130,13 +130,13 @@ static bool CallPrePro( const OString& rInput,
             for( i = 0; i < (int)(pCmdL->GetCount() -1); i++ )
             {
                 printf( " " );
-                printf( "%s", (const char *)pCmdL->GetEntry( i ) );
+                printf( "%s", static_cast<const char *>(pCmdL->GetEntry( i )) );
             }
             printf( "\n" );
         }
     }
 
-    nRet = rscpp_main( pCmdL->GetCount()-1, (char**)pCmdL->GetBlock() );
+    nRet = rscpp_main( pCmdL->GetCount()-1, reinterpret_cast<char**>(pCmdL->GetBlock()) );
 
     if ( fRspFile )
     {
@@ -164,30 +164,30 @@ static bool CallRsc2( RscStrList * pInputList,
 
     for (int i = 1; i < (int)(pCmdLine->GetCount() -1); ++i)
     {
-        if ( !rsc_stricmp( (char *)pCmdLine->GetEntry( i ), "-verbose" ) )
+        if ( !rsc_stricmp( static_cast<char *>(pCmdLine->GetEntry( i )), "-verbose" ) )
         {
             eVerbosity = RscVerbosityVerbose;
             continue;
         }
-        if ( !rsc_stricmp( (char *)pCmdLine->GetEntry( i ), "-quiet" ) )
+        if ( !rsc_stricmp( static_cast<char *>(pCmdLine->GetEntry( i )), "-quiet" ) )
         {
             eVerbosity = RscVerbositySilent;
             continue;
         }
-        if( !rsc_strnicmp( (char *)pCmdLine->GetEntry( i ),  "-fp=", 4 ) ||
-            !rsc_strnicmp( (char *)pCmdLine->GetEntry( i ), "-fo=", 4 ) ||
-            !rsc_strnicmp( (char *)pCmdLine->GetEntry( i ), "-presponse", 10 ) ||
-            !rsc_strnicmp( (char *)pCmdLine->GetEntry( i ), "-rc", 3 ) ||
-            !rsc_stricmp( (char *)pCmdLine->GetEntry( i ), "-+" ) ||
-            !rsc_stricmp( (char *)pCmdLine->GetEntry( i ), "-br" ) ||
-            !rsc_stricmp( (char *)pCmdLine->GetEntry( i ), "-bz" ) ||
-            !rsc_stricmp( (char *)pCmdLine->GetEntry( i ), "-r" ) ||
-            ( '-' != *(char *)pCmdLine->GetEntry( i ) ) )
+        if( !rsc_strnicmp( static_cast<char *>(pCmdLine->GetEntry( i )),  "-fp=", 4 ) ||
+            !rsc_strnicmp( static_cast<char *>(pCmdLine->GetEntry( i )), "-fo=", 4 ) ||
+            !rsc_strnicmp( static_cast<char *>(pCmdLine->GetEntry( i )), "-presponse", 10 ) ||
+            !rsc_strnicmp( static_cast<char *>(pCmdLine->GetEntry( i )), "-rc", 3 ) ||
+            !rsc_stricmp( static_cast<char *>(pCmdLine->GetEntry( i )), "-+" ) ||
+            !rsc_stricmp( static_cast<char *>(pCmdLine->GetEntry( i )), "-br" ) ||
+            !rsc_stricmp( static_cast<char *>(pCmdLine->GetEntry( i )), "-bz" ) ||
+            !rsc_stricmp( static_cast<char *>(pCmdLine->GetEntry( i )), "-r" ) ||
+            ( '-' != *static_cast<char *>(pCmdLine->GetEntry( i )) ) )
         {
         }
         else
         {
-            aNewCmdL.Append( rsc_strdup( (char *)pCmdLine->GetEntry( i ) ) );
+            aNewCmdL.Append( rsc_strdup( static_cast<char *>(pCmdLine->GetEntry( i )) ) );
         }
     }
 
@@ -204,12 +204,12 @@ static bool CallRsc2( RscStrList * pInputList,
         printf( "Rsc2 commandline: " );
         for( size_t i = 0; i < (unsigned int)(aNewCmdL.GetCount() -1); i++ )
         {
-            printf( " %s", (const char *)aNewCmdL.GetEntry( i ) );
+            printf( " %s", static_cast<const char *>(aNewCmdL.GetEntry( i )) );
         }
         printf( "\n" );
     }
 
-    nRet = rsc2_main( aNewCmdL.GetCount(), (char**)aNewCmdL.GetBlock() );
+    nRet = rsc2_main( aNewCmdL.GetCount(), reinterpret_cast<char**>(aNewCmdL.GetBlock()) );
 
     if( nRet )
         return false;
@@ -238,7 +238,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         return 1;
     };
 
-    ppStr  = (char **)aCmdLine.GetBlock();
+    ppStr  = reinterpret_cast<char **>(aCmdLine.GetBlock());
     ppStr++;
     i = 1;
     bool bSetSrs = false;

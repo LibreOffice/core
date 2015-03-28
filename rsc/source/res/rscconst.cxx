@@ -47,10 +47,10 @@ RSCCLASS_TYPE RscConst::GetClassType() const
 ERRTYPE RscConst::SetConstant( Atom nVarName, sal_Int32 lValue )
 {
     if( pVarArray )
-        pVarArray = (VarEle *) rtl_reallocateMemory( (void *)pVarArray,
-                                                     ((nEntries +1) * sizeof( VarEle )) );
+        pVarArray = static_cast<VarEle *>(rtl_reallocateMemory( (void *)pVarArray,
+                                                     ((nEntries +1) * sizeof( VarEle )) ));
     else
-        pVarArray = (VarEle *) rtl_allocateMemory( ((nEntries +1) * sizeof( VarEle )) );
+        pVarArray = static_cast<VarEle *>(rtl_allocateMemory( ((nEntries +1) * sizeof( VarEle )) ));
     pVarArray[ nEntries ].nId     = nVarName;
     pVarArray[ nEntries ].lValue  = lValue;
     nEntries++;
@@ -159,8 +159,8 @@ RSCINST RscEnum::Create( RSCINST * pInst, const RSCINST & rDflt, bool bOwnClass 
     if( !pInst )
     {
         aInst.pClass = this;
-        aInst.pData = (CLASS_DATA)
-                      rtl_allocateMemory( sizeof( RscEnumInst ) );
+        aInst.pData = static_cast<CLASS_DATA>(
+                      rtl_allocateMemory( sizeof( RscEnumInst ) ));
     }
     else
         aInst = *pInst;

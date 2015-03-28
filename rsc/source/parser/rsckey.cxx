@@ -36,9 +36,9 @@ extern "C" {
 
 int SAL_CALL KeyCompare( const void * pFirst, const void * pSecond )
 {
-    if( ((KEY_STRUCT *)pFirst)->nName > ((KEY_STRUCT *)pSecond)->nName )
+    if( static_cast<KEY_STRUCT const *>(pFirst)->nName > static_cast<KEY_STRUCT const *>(pSecond)->nName )
         return 1;
-    else if( ((KEY_STRUCT *)pFirst)->nName < ((KEY_STRUCT *)pSecond)->nName )
+    else if( static_cast<KEY_STRUCT const *>(pFirst)->nName < static_cast<KEY_STRUCT const *>(pSecond)->nName )
         return -1;
     else
         return 0;
@@ -72,13 +72,13 @@ void RscNameTable::SetSort( bool bSorted )
 Atom RscNameTable::Put( Atom nName, sal_uInt32 nTyp, long nValue )
 {
     if( pTable )
-        pTable = (KEY_STRUCT *)
+        pTable = static_cast<KEY_STRUCT *>(
                  rtl_reallocateMemory( (void *)pTable,
-                 ((nEntries +1) * sizeof( KEY_STRUCT )) );
+                 ((nEntries +1) * sizeof( KEY_STRUCT )) ));
     else
-        pTable = (KEY_STRUCT *)
+        pTable = static_cast<KEY_STRUCT *>(
                  rtl_allocateMemory( ((nEntries +1)
-                                 * sizeof( KEY_STRUCT )) );
+                                 * sizeof( KEY_STRUCT )) ));
 
     pTable[ nEntries ].nName  = nName;
     pTable[ nEntries ].nTyp   = nTyp;

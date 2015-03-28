@@ -91,7 +91,7 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
         pEH->FatalError( ERR_OPENFILE, RscId(), pStr );
 
     /* check the inputted switches       */
-    ppStr  = (char **)aCmdLine.GetBlock();
+    ppStr  = reinterpret_cast<char **>(aCmdLine.GetBlock());
     ppStr++;
     i = 1;
     while( ppStr && i < (aCmdLine.GetCount() -1) )

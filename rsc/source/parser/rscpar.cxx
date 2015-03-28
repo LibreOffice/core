@@ -25,7 +25,7 @@ void RscFileInst::Init()
 {
     nLineNo = 0;
     nLineBufLen = 256;
-    pLine = (char *)rtl_allocateMemory( nLineBufLen );
+    pLine = static_cast<char *>(rtl_allocateMemory( nLineBufLen ));
     *pLine = '\0';
     nScanPos = 0;
     cLastChar = '\0';
@@ -46,7 +46,7 @@ RscFileInst::RscFileInst( RscTypCont * pTC, sal_uLong lIndexSrc,
 
     //Status: Zeiger am Ende des Lesepuffers
     nInputPos = nInputEndPos = nInputBufLen = READBUFFER_MAX;
-    pInput    = (char *)rtl_allocateMemory( nInputBufLen );
+    pInput    = static_cast<char *>(rtl_allocateMemory( nInputBufLen ));
 }
 
 RscFileInst::~RscFileInst()
@@ -96,7 +96,7 @@ void RscFileInst::GetNewLine()
             {
                 nLineBufLen += 256;
                 // einen dazu fuer '\0'
-                pLine = (char*)rtl_reallocateMemory( pLine, nLineBufLen +1 );
+                pLine = static_cast<char*>(rtl_reallocateMemory( pLine, nLineBufLen +1 ));
             }
 
             // cr lf, lf cr, lf oder cr wird '\0'

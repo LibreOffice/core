@@ -343,9 +343,9 @@ COMPARE IdNode::Compare( const NameNode * pSearch ) const
 // pSearch ist ein Zeiger auf sal_uInt32
 COMPARE IdNode::Compare( const void * pSearch ) const
 {
-    if( GetId() < *((const sal_uInt32 *)pSearch) )
+    if( GetId() < *static_cast<const sal_uInt32 *>(pSearch) )
         return LESS;
-    else if( GetId() > *((const sal_uInt32 *)pSearch) )
+    else if( GetId() > *static_cast<const sal_uInt32 *>(pSearch) )
         return GREATER;
     else
         return EQUAL;
@@ -376,7 +376,7 @@ COMPARE StringNode::Compare( const NameNode * pSearch ) const
 // pSearch ist ein Zeiger auf const char *
 COMPARE StringNode::Compare( const void * pSearch ) const
 {
-    int nCmp = strcmp( m_aName.getStr(), (const char *)pSearch );
+    int nCmp = strcmp( m_aName.getStr(), static_cast<const char *>(pSearch) );
 
     if( nCmp < 0 )
         return LESS;
