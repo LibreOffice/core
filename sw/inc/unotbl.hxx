@@ -64,7 +64,7 @@ cppu::WeakImplHelper4
     ::com::sun::star::container::XEnumerationAccess
 >
 SwXCellBaseClass;
-class SwXCell : public SwXCellBaseClass,
+class SwXCell SAL_FINAL : public SwXCellBaseClass,
     public SwXText,
     public SwClient
 {
@@ -94,7 +94,8 @@ protected:
     virtual ~SwXCell();
 
     //SwClient
-   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
+    virtual void SwClientNotify(const SwModify&, const SfxHint&) SAL_OVERRIDE;
 
 public:
     SwXCell(SwFrmFmt* pTblFmt, SwTableBox* pBox, size_t nPos = NOTFOUND);

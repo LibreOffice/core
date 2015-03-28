@@ -1244,26 +1244,42 @@ void SwXCell::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
     ClientModify(this, pOld, pNew);
 }
 
+namespace sw
+{
+    struct FindXCellHint SAL_FINAL : SfxHint
+    {
+        FindXCellHint(SwTableBox* pTableBox) : m_pTableBox(pTableBox), m_pCell(nullptr) {};
+        void SetCell(SwXCell* pCell) const { m_pCell = pCell; };
+        const SwTableBox* const m_pTableBox;
+        mutable SwXCell* m_pCell;
+    };
+}
+
+void SwXCell::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
+{
+    if(typeid(sw::FindXCellHint) == typeid(rHint))
+    {
+        auto* pFindHint(static_cast<const sw::FindXCellHint*>(&rHint));
+        if(!pFindHint->m_pCell && pFindHint->m_pTableBox == GetTblBox())
+            pFindHint->m_pCell = this;
+    }
+    else
+        SwClient::SwClientNotify(rModify, rHint);
+}
+
 SwXCell* SwXCell::CreateXCell(SwFrmFmt* pTblFmt, SwTableBox* pBox, SwTable *pTable )
 {
     if(!pTblFmt || !pBox)
         return nullptr;
-    if( !pTable )
-        pTable = SwTable::FindTable( pTblFmt );
-    SwTableSortBoxes::const_iterator it = pTable->GetTabSortBoxes().find( pBox );
-    if( it == pTable->GetTabSortBoxes().end() )
+    if(!pTable)
+        pTable = SwTable::FindTable(pTblFmt);
+    SwTableSortBoxes::const_iterator it = pTable->GetTabSortBoxes().find(pBox);
+    if(it == pTable->GetTabSortBoxes().end())
         return nullptr;
-    // if the box exists, then return a cell
-    SwIterator<SwXCell,SwFmt> aIter( *pTblFmt );
-    for(SwXCell* pXCell = aIter.First(); pXCell; pXCell = aIter.Next())
-    {
-        // is there already a proper cell?
-        if(pXCell->GetTblBox() == pBox)
-            return pXCell;
-    }
-    // otherwise create it
     size_t const nPos = it - pTable->GetTabSortBoxes().begin();
-    return new SwXCell(pTblFmt, pBox, nPos);
+    sw::FindXCellHint aHint{pBox};
+    pTblFmt->CallSwClientNotify(aHint);
+    return aHint.m_pCell ? aHint.m_pCell : new SwXCell(pTblFmt, pBox, nPos);
 }
 
 /** search if a box exists in a table
