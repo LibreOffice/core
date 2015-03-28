@@ -4695,21 +4695,15 @@ SwXTableColumns::~SwXTableColumns()
 sal_Int32 SwXTableColumns::getCount(void) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    sal_Int32 nRet = 0;
-    SwFrmFmt* pFrmFmt = GetFrmFmt();
+    SwFrmFmt* pFrmFmt(GetFrmFmt());
     if(!pFrmFmt)
         throw uno::RuntimeException();
-    else
-    {
-        SwTable* pTable = SwTable::FindTable( pFrmFmt );
-        if(!pTable->IsTblComplex())
-        {
-            SwTableLines& rLines = pTable->GetTabLines();
-            SwTableLine* pLine = rLines.front();
-            nRet = pLine->GetTabBoxes().size();
-        }
-    }
-    return nRet;
+    SwTable* pTable = SwTable::FindTable( pFrmFmt );
+    if(!pTable->IsTblComplex())
+        throw uno::RuntimeException("Table too complex", static_cast<cppu::OWeakObject*>(this));
+    SwTableLines& rLines = pTable->GetTabLines();
+    SwTableLine* pLine = rLines.front();
+    return pLine->GetTabBoxes().size();
 }
 
 uno::Any SwXTableColumns::getByIndex(sal_Int32 nIndex)
