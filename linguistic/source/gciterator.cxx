@@ -225,7 +225,7 @@ extern "C" void lcl_workerfunc (void * gci)
 {
     osl_setThreadName("GrammarCheckingIterator");
 
-    ((GrammarCheckingIterator*)gci)->DequeueAndCheck();
+    static_cast<GrammarCheckingIterator*>(gci)->DequeueAndCheck();
 }
 
 static lang::Locale lcl_GetPrimaryLanguageOfSentence(
