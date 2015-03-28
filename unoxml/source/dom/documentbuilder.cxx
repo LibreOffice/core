@@ -242,7 +242,7 @@ namespace DOM
                                 const xmlChar *systemId)
     {
         // get the CDocumentBuilder object
-        xmlParserCtxtPtr ctxt = (xmlParserCtxtPtr)ctx;
+        xmlParserCtxtPtr ctxt = static_cast<xmlParserCtxtPtr>(ctx);
         CDocumentBuilder *builder = static_cast< CDocumentBuilder* >(ctxt->_private);
         Reference< XEntityResolver > resolver = builder->getEntityResolver();
         OUString sysid;
