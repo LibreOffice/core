@@ -30,7 +30,7 @@ namespace
         // Actually write bytes to XOutputSream
         try
         {
-            uno::XInterface* pObj = ( uno::XInterface* )pContext;
+            uno::XInterface* pObj = static_cast<uno::XInterface*>(pContext);
             uno::Reference< io::XOutputStream > xOut( pObj, uno::UNO_QUERY_THROW );
 
             // Don't output the terminating \0 to the xml or the file will be invalid
@@ -51,7 +51,7 @@ namespace
         int result = 0;
         try
         {
-            uno::XInterface* pObj = ( uno::XInterface* )pContext;
+            uno::XInterface* pObj = static_cast<uno::XInterface*>(pContext);
             uno::Reference< io::XOutputStream > xOut( pObj, uno::UNO_QUERY_THROW );
             xOut->closeOutput( );
         }

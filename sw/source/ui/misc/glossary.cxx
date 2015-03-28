@@ -243,7 +243,7 @@ IMPL_LINK( SwGlossaryDlg, GrpSelect, SvTreeListBox *, pBox )
     if(!pEntry)
         return 0;
     SvTreeListEntry* pParent = pBox->GetParent(pEntry) ? pBox->GetParent(pEntry) : pEntry;
-    GroupUserData* pGroupData = (GroupUserData*)pParent->GetUserData();
+    GroupUserData* pGroupData = static_cast<GroupUserData*>(pParent->GetUserData());
     ::SetCurrGlosGroup(pGroupData->sGroupName
         + OUStringLiteral1<GLOS_DELIM>()
         + OUString::number(pGroupData->nPathIdx));
@@ -604,7 +604,7 @@ IMPL_LINK_NOARG(SwGlossaryDlg, BibHdl)
                 Any aAny = aTestContent.getPropertyValue( "IsReadOnly" );
                 if(aAny.hasValue())
                 {
-                    bIsWritable = !*(sal_Bool*)aAny.getValue();
+                    bIsWritable = !*static_cast<sal_Bool const *>(aAny.getValue());
                 }
             }
             catch (const Exception&)
@@ -627,7 +627,7 @@ IMPL_LINK_NOARG(SwGlossaryDlg, BibHdl)
                 {
                     if(!m_pCategoryBox->GetParent(pEntry))
                     {
-                        GroupUserData* pGroupData = (GroupUserData*)pEntry->GetUserData();
+                        GroupUserData* pGroupData = static_cast<GroupUserData*>(pEntry->GetUserData());
                         const OUString sGroup = pGroupData->sGroupName
                             + OUStringLiteral1<GLOS_DELIM>()
                             + OUString::number(pGroupData->nPathIdx);
@@ -711,7 +711,7 @@ void SwGlossaryDlg::Init()
         {
             if(!m_pCategoryBox->GetParent(pSearch))
             {
-                GroupUserData* pData = (GroupUserData*)pSearch->GetUserData();
+                GroupUserData* pData = static_cast<GroupUserData*>(pSearch->GetUserData());
                 if(!pData->bReadonly)
                 {
                     pSelEntry = pSearch;
@@ -832,7 +832,7 @@ void SwGlTreeListBox::Clear()
         if(GetParent(pEntry))
             delete reinterpret_cast<OUString*>(pEntry->GetUserData());
         else
-            delete (GroupUserData*)pEntry->GetUserData();
+            delete static_cast<GroupUserData*>(pEntry->GetUserData());
         pEntry = Next(pEntry);
     }
     SvTreeListBox::Clear();
@@ -860,7 +860,7 @@ void SwGlTreeListBox::RequestHelp( const HelpEvent& rHEvt )
             OUString sMsg;
             if(!GetParent(pEntry))
             {
-                GroupUserData* pData = (GroupUserData*)pEntry->GetUserData();
+                GroupUserData* pData = static_cast<GroupUserData*>(pEntry->GetUserData());
                 const std::vector<OUString> & rPathArr = ::GetGlossaries()->GetPathArray();
                 if( !rPathArr.empty() )
                 {
@@ -897,7 +897,7 @@ DragDropMode SwGlTreeListBox::NotifyStartDrag(
         SwGlossaryDlg* pDlg = static_cast<SwGlossaryDlg*>(GetParentDialog());
         SvTreeListEntry* pParent = GetParent(pEntry);
 
-        GroupUserData* pGroupData = (GroupUserData*)pParent->GetUserData();
+        GroupUserData* pGroupData = static_cast<GroupUserData*>(pParent->GetUserData());
         OUString sEntry = pGroupData->sGroupName
             + OUStringLiteral1<GLOS_DELIM>()
             + OUString::number(pGroupData->nPathIdx);
@@ -961,7 +961,7 @@ TriState SwGlTreeListBox::NotifyCopyingOrMoving(
         SwGlossaryDlg* pDlg = static_cast<SwGlossaryDlg*>(GetParentDialog());
         SwWait aWait( *pDlg->pSh->GetView().GetDocShell(), true );
 
-        GroupUserData* pGroupData = (GroupUserData*)pSrcParent->GetUserData();
+        GroupUserData* pGroupData = static_cast<GroupUserData*>(pSrcParent->GetUserData());
         OUString sSourceGroup = pGroupData->sGroupName
             + OUStringLiteral1<GLOS_DELIM>()
             + OUString::number(pGroupData->nPathIdx);
@@ -970,7 +970,7 @@ TriState SwGlTreeListBox::NotifyCopyingOrMoving(
         OUString sTitle(GetEntryText(pEntry));
         OUString sShortName(*reinterpret_cast<OUString*>(pEntry->GetUserData()));
 
-        GroupUserData* pDestData = (GroupUserData*)pDestParent->GetUserData();
+        GroupUserData* pDestData = static_cast<GroupUserData*>(pDestParent->GetUserData());
         OUString sDestName = pDestData->sGroupName
             + OUStringLiteral1<GLOS_DELIM>()
             + OUString::number(pDestData->nPathIdx);
@@ -997,7 +997,7 @@ OUString SwGlossaryDlg::GetCurrGrpName() const
     {
         pEntry =
             m_pCategoryBox->GetParent(pEntry) ? m_pCategoryBox->GetParent(pEntry) : pEntry;
-        GroupUserData* pGroupData = (GroupUserData*)pEntry->GetUserData();
+        GroupUserData* pGroupData = static_cast<GroupUserData*>(pEntry->GetUserData());
         return pGroupData->sGroupName + OUStringLiteral1<GLOS_DELIM>() + OUString::number(pGroupData->nPathIdx);
     }
     return OUString();

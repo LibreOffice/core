@@ -2229,7 +2229,7 @@ SwFntAccess::SwFntAccess( const void* &rMagic,
             if ( ( pFntObj->GetZoom( ) == nZoom ) &&
                  ( pFntObj->pPrinter == pOut ) &&
                    pFntObj->GetPropWidth() ==
-                        ((SwSubFont*)pOwn)->GetPropWidth() )
+                        static_cast<SwSubFont const *>(pOwn)->GetPropWidth() )
             {
                 return; // result of Check: Drucker+Zoom okay.
             }
@@ -2240,10 +2240,10 @@ SwFntAccess::SwFntAccess( const void* &rMagic,
         // Search by font comparison, quite expensive!
         // Look for same font and same printer
         pFntObj = pFntCache->First();
-        while ( pFntObj && !( pFntObj->aFont == *(vcl::Font *)pOwn &&
+        while ( pFntObj && !( pFntObj->aFont == *static_cast<vcl::Font const *>(pOwn) &&
                               pFntObj->GetZoom() == nZoom &&
                               pFntObj->GetPropWidth() ==
-                              ((SwSubFont*)pOwn)->GetPropWidth() &&
+                              static_cast<SwSubFont const *>(pOwn)->GetPropWidth() &&
                               ( !pFntObj->pPrinter || pFntObj->pPrinter == pOut ) ) )
             pFntObj = pFntCache->Next( pFntObj );
 
@@ -2252,10 +2252,10 @@ SwFntAccess::SwFntAccess( const void* &rMagic,
             // found one without printer, let's see if there is one with
             // the same printer as well
             SwFntObj *pTmpObj = pFntObj;
-            while( pTmpObj && !( pTmpObj->aFont == *(vcl::Font *)pOwn &&
+            while( pTmpObj && !( pTmpObj->aFont == *static_cast<vcl::Font const *>(pOwn) &&
                    pTmpObj->GetZoom()==nZoom && pTmpObj->pPrinter==pOut &&
                    pTmpObj->GetPropWidth() ==
-                        ((SwSubFont*)pOwn)->GetPropWidth() ) )
+                        static_cast<SwSubFont const *>(pOwn)->GetPropWidth() ) )
                 pTmpObj = pFntCache->Next( pTmpObj );
             if( pTmpObj )
                 pFntObj = pTmpObj;
@@ -2298,7 +2298,7 @@ SwFntAccess::SwFntAccess( const void* &rMagic,
 SwCacheObj *SwFntAccess::NewObj( )
 {
     // a new Font, a new "MagicNumber".
-    return new SwFntObj( *(SwSubFont *)pOwner, ++pMagicNo, pShell );
+    return new SwFntObj( *static_cast<SwSubFont const *>(pOwner), ++pMagicNo, pShell );
 }
 
 sal_Int32 SwFont::GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth )

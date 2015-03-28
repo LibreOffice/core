@@ -443,7 +443,7 @@ bool SwGetExpField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     switch( nWhichId )
     {
     case FIELD_PROP_DOUBLE:
-        SwValueField::SetValue(*(double*) rAny.getValue());
+        SwValueField::SetValue(*static_cast<double const *>(rAny.getValue()));
         break;
     case FIELD_PROP_FORMAT:
         rAny >>= nTmp;
@@ -466,7 +466,7 @@ bool SwGetExpField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
             SetSubType( static_cast<sal_uInt16>((GetSubType() & 0xff00) | nTmp));
         break;
     case FIELD_PROP_BOOL2:
-        if(*(sal_Bool*) rAny.getValue())
+        if(*static_cast<sal_Bool const *>(rAny.getValue()))
             nSubType |= nsSwExtendedSubType::SUB_CMD;
         else
             nSubType &= (~nsSwExtendedSubType::SUB_CMD);
@@ -967,7 +967,7 @@ bool SwSetExpField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     switch( nWhichId )
     {
     case FIELD_PROP_BOOL2:
-        if(*(sal_Bool*)rAny.getValue())
+        if(*static_cast<sal_Bool const *>(rAny.getValue()))
             nSubType &= ~nsSwExtendedSubType::SUB_INVISIBLE;
         else
             nSubType |= nsSwExtendedSubType::SUB_INVISIBLE;
@@ -1025,13 +1025,13 @@ bool SwSetExpField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         rAny >>= aPText;
         break;
     case FIELD_PROP_BOOL3:
-        if(*(sal_Bool*) rAny.getValue())
+        if(*static_cast<sal_Bool const *>(rAny.getValue()))
             nSubType |= nsSwExtendedSubType::SUB_CMD;
         else
             nSubType &= (~nsSwExtendedSubType::SUB_CMD);
         break;
     case FIELD_PROP_BOOL1:
-        SetInputFlag(*(sal_Bool*) rAny.getValue());
+        SetInputFlag(*static_cast<sal_Bool const *>(rAny.getValue()));
         break;
     case FIELD_PROP_PAR4:
         {

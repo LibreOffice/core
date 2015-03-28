@@ -257,7 +257,7 @@ void SwFilterOptions::GetValues( sal_uInt16 nCnt, const sal_Char** ppNames,
         const Any* pAnyValues = aValues.getConstArray();
         for( n = 0; n < nCnt; ++n )
             pValues[ n ] = pAnyValues[ n ].hasValue()
-                                            ? *(sal_uInt32*)pAnyValues[ n ].getValue()
+                                            ? *static_cast<sal_uInt32 const *>(pAnyValues[ n ].getValue())
                                             : 0;
     }
     else

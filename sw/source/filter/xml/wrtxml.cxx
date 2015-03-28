@@ -406,7 +406,7 @@ sal_uInt32 SwXMLWriter::_Write( const uno::Reference < task::XStatusIndicator >&
     nRedlineMode = pDoc->getIDocumentRedlineAccess().GetRedlineMode();
     nRedlineMode &= ~nsRedlineMode_t::REDLINE_SHOW_MASK;
     nRedlineMode |= nsRedlineMode_t::REDLINE_SHOW_INSERT;
-    if ( *(sal_Bool*)aAny.getValue() )
+    if ( *static_cast<sal_Bool const *>(aAny.getValue()) )
         nRedlineMode |= nsRedlineMode_t::REDLINE_SHOW_DELETE;
     pDoc->getIDocumentRedlineAccess().SetRedlineMode((RedlineMode_t)( nRedlineMode ));
 

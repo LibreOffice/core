@@ -981,7 +981,7 @@ void WW8PLCFx_PCDAttrs::GetSprms(WW8PLCFxDesc* p)
         return;
     }
 
-    const sal_uInt16 nPrm = SVBT16ToShort( ( (WW8_PCD*)pData )->prm );
+    const sal_uInt16 nPrm = SVBT16ToShort( static_cast<WW8_PCD*>(pData)->prm );
     if ( nPrm & 1 )
     {
         // PRM Variant 2
@@ -1203,7 +1203,7 @@ WW8_FC WW8PLCFx_PCD::AktPieceStartCp2Fc( WW8_CP nCp )
         nCp = nCpEnd - 1;
 
     bool bIsUnicode = false;
-    WW8_FC nFC = SVBT32ToUInt32( ((WW8_PCD*)pData)->fc );
+    WW8_FC nFC = SVBT32ToUInt32( static_cast<WW8_PCD*>(pData)->fc );
     if( !bVer67 )
         nFC = WW8PLCFx_PCD::TransformPieceAddress( nFC, bIsUnicode );
 
@@ -1231,7 +1231,7 @@ WW8_CP WW8PLCFx_PCD::AktPieceStartFc2Cp( WW8_FC nStartPos )
         return WW8_CP_MAX;
     }
     bool bIsUnicode = false;
-    sal_Int32 nFcStart  = SVBT32ToUInt32( ((WW8_PCD*)pData)->fc );
+    sal_Int32 nFcStart  = SVBT32ToUInt32( static_cast<WW8_PCD*>(pData)->fc );
     if( !bVer67 )
         nFcStart = WW8PLCFx_PCD::TransformPieceAddress( nFcStart, bIsUnicode );
 
@@ -1404,7 +1404,7 @@ WW8_CP WW8ScannerBase::WW8Fc2Cp( WW8_FC nFcPos ) const
                 OSL_ENSURE( false, "PLCFpcd-WW8Fc2Cp() went wrong" );
                 break;
             }
-            sal_Int32 nFcStart  = SVBT32ToUInt32( ((WW8_PCD*)pData)->fc );
+            sal_Int32 nFcStart  = SVBT32ToUInt32( static_cast<WW8_PCD*>(pData)->fc );
             if (pWw8Fib->nVersion >= 8)
             {
                 nFcStart = WW8PLCFx_PCD::TransformPieceAddress( nFcStart,
@@ -1503,7 +1503,7 @@ WW8_FC WW8ScannerBase::WW8Cp2Fc(WW8_CP nCpPos, bool* pIsUnicode,
         if( pNextPieceCp )
             *pNextPieceCp = nCpEnd;
 
-        WW8_FC nRet = SVBT32ToUInt32( ((WW8_PCD*)pData)->fc );
+        WW8_FC nRet = SVBT32ToUInt32( static_cast<WW8_PCD*>(pData)->fc );
         if (pWw8Fib->nVersion >= 8)
             nRet = WW8PLCFx_PCD::TransformPieceAddress( nRet, *pIsUnicode );
         else
@@ -1802,13 +1802,13 @@ static bool WW8SkipField(WW8PLCFspecial& rPLCF)
 
     rPLCF.advance();
 
-    if((((sal_uInt8*)pData)[0] & 0x1f ) != 0x13 )    // No beginning?
+    if((static_cast<sal_uInt8*>(pData)[0] & 0x1f ) != 0x13 )    // No beginning?
         return true;                            // Do not terminate on error
 
     if( !rPLCF.Get( nP, pData ) )
         return false;
 
-    while((((sal_uInt8*)pData)[0] & 0x1f ) == 0x13 )
+    while((static_cast<sal_uInt8*>(pData)[0] & 0x1f ) == 0x13 )
     {
         // still new (nested) beginnings ?
         WW8SkipField( rPLCF );              // nested Field in description
@@ -1816,7 +1816,7 @@ static bool WW8SkipField(WW8PLCFspecial& rPLCF)
             return false;
     }
 
-    if((((sal_uInt8*)pData)[0] & 0x1f ) == 0x14 )
+    if((static_cast<sal_uInt8*>(pData)[0] & 0x1f ) == 0x14 )
     {
 
         // Field Separator ?
@@ -1825,7 +1825,7 @@ static bool WW8SkipField(WW8PLCFspecial& rPLCF)
         if( !rPLCF.Get( nP, pData ) )
             return false;
 
-        while ((((sal_uInt8*)pData)[0] & 0x1f ) == 0x13)
+        while ((static_cast<sal_uInt8*>(pData)[0] & 0x1f ) == 0x13)
         {
             // still new (nested) beginnings?
             WW8SkipField( rPLCF );          // nested Field in Results
@@ -1850,10 +1850,10 @@ static bool WW8GetFieldPara(WW8PLCFspecial& rPLCF, WW8FieldDesc& rF)
 
     rPLCF.advance();
 
-    if (!pData || (((sal_uInt8*)pData)[0] & 0x1f) != 0x13)        // No beginning?
+    if (!pData || (static_cast<sal_uInt8*>(pData)[0] & 0x1f) != 0x13)        // No beginning?
         goto Err;
 
-    rF.nId = ((sal_uInt8*)pData)[1];
+    rF.nId = static_cast<sal_uInt8*>(pData)[1];
 
     if( !rPLCF.Get( rF.nLCode, pData ) )
         goto Err;
@@ -1862,7 +1862,7 @@ static bool WW8GetFieldPara(WW8PLCFspecial& rPLCF, WW8FieldDesc& rF)
     rF.nSCode++;                                    // without markers
     rF.nLCode -= rF.nSCode;                         // Pos -> length
 
-    while((((sal_uInt8*)pData)[0] & 0x1f ) == 0x13 )
+    while((static_cast<sal_uInt8*>(pData)[0] & 0x1f ) == 0x13 )
     {
         // still new (nested) beginnings ?
         WW8SkipField( rPLCF );              // nested Field in description
@@ -1871,14 +1871,14 @@ static bool WW8GetFieldPara(WW8PLCFspecial& rPLCF, WW8FieldDesc& rF)
             goto Err;
     }
 
-    if ((((sal_uInt8*)pData)[0] & 0x1f ) == 0x14 )       // Field Separator?
+    if ((static_cast<sal_uInt8*>(pData)[0] & 0x1f ) == 0x14 )       // Field Separator?
     {
         rPLCF.advance();
 
         if( !rPLCF.Get( rF.nLRes, pData ) )
             goto Err;
 
-        while((((sal_uInt8*)pData)[0] & 0x1f ) == 0x13 )
+        while((static_cast<sal_uInt8*>(pData)[0] & 0x1f ) == 0x13 )
         {
             // still new (nested) beginnings ?
             WW8SkipField( rPLCF );              // nested Field in results
@@ -1896,11 +1896,11 @@ static bool WW8GetFieldPara(WW8PLCFspecial& rPLCF, WW8FieldDesc& rF)
     }
 
     rPLCF.advance();
-    if((((sal_uInt8*)pData)[0] & 0x1f ) == 0x15 )
+    if((static_cast<sal_uInt8*>(pData)[0] & 0x1f ) == 0x15 )
     {
         // Field end ?
         // INDEX-Fld has set Bit7?
-        rF.nOpt = ((sal_uInt8*)pData)[1];                // yes -> copy flags
+        rF.nOpt = static_cast<sal_uInt8*>(pData)[1];                // yes -> copy flags
     }else{
         rF.nId = 0;                                      // no -> Field invalid
     }
@@ -2869,7 +2869,7 @@ bool WW8PLCFx_Fc_FKP::NewFkp()
         return false;                           // PLCF completely processed
     }
     pPLCF->advance();
-    long nPo = SVBT16ToShort( (sal_uInt8 *)pPage );
+    long nPo = SVBT16ToShort( static_cast<sal_uInt8 *>(pPage) );
     nPo <<= 9;                                  // shift as LONG
 
     long nAktFkpFilePos = pFkp ? pFkp->GetFilePos() : -1;
@@ -2970,7 +2970,7 @@ bool WW8PLCFx_Fc_FKP::SeekPos(WW8_FC nFcPos)
     void* pPage;
     if( pFkp && pPLCF->Get( nPLCFStart, nPLCFEnd, pPage ) )
     {
-        long nPo = SVBT16ToShort( (sal_uInt8 *)pPage );
+        long nPo = SVBT16ToShort( static_cast<sal_uInt8 *>(pPage) );
         nPo <<= 9;                                          // shift as LONG
         if (nPo != pFkp->GetFilePos())
             pFkp = 0;
@@ -3274,7 +3274,7 @@ void WW8PLCFx_Cp_FKP::GetSprms(WW8PLCFxDesc* p)
                     return;
                 }
 
-                WW8_FC nLimitFC = SVBT32ToUInt32( ((WW8_PCD*)pData)->fc );
+                WW8_FC nLimitFC = SVBT32ToUInt32( static_cast<WW8_PCD*>(pData)->fc );
                 WW8_FC nBeginLimitFC = nLimitFC;
                 if (IsEightPlus(GetFIBVersion()))
                 {
@@ -3326,7 +3326,7 @@ void WW8PLCFx_Cp_FKP::GetSprms(WW8PLCFxDesc* p)
                                 break;
                             }
                             bIsUnicode = false;
-                            sal_Int32 nFcStart=SVBT32ToUInt32(((WW8_PCD*)pData)->fc);
+                            sal_Int32 nFcStart=SVBT32ToUInt32(static_cast<WW8_PCD*>(pData)->fc);
 
                             if (IsEightPlus(GetFIBVersion()))
                             {
@@ -3456,7 +3456,7 @@ void WW8PLCFx_SEPX::GetSprms(WW8PLCFxDesc* p)
     }
     else
     {
-        sal_uInt32 nPo =  SVBT32ToUInt32( (sal_uInt8*)pData+2 );
+        sal_uInt32 nPo =  SVBT32ToUInt32( static_cast<sal_uInt8*>(pData)+2 );
         if (nPo == 0xFFFFFFFF)
         {
             p->nStartPos = p->nEndPos = WW8_CP_MAX;   // Sepx empty
@@ -3751,7 +3751,7 @@ bool WW8PLCFx_FLD::StartPosIsFieldStart()
     sal_Int32 nTest;
     if (
          (!pPLCF || !pPLCF->Get(nTest, pData) ||
-         ((((sal_uInt8*)pData)[0] & 0x1f) != 0x13))
+         ((static_cast<sal_uInt8*>(pData)[0] & 0x1f) != 0x13))
        )
         return false;
     return true;
@@ -3769,7 +3769,7 @@ bool WW8PLCFx_FLD::EndPosIsFieldEnd(WW8_CP& nCP)
 
         void* pData;
         sal_Int32 nTest;
-        if ( pPLCF->Get(nTest, pData) && ((((sal_uInt8*)pData)[0] & 0x1f) == 0x15) )
+        if ( pPLCF->Get(nTest, pData) && ((static_cast<sal_uInt8*>(pData)[0] & 0x1f) == 0x15) )
         {
             nCP = nTest;
             bRet = true;
@@ -4102,7 +4102,7 @@ void WW8PLCFx_Book::advance()
         else
         {
             const void * p = pBook[0]->GetData(pBook[0]->GetIdx());
-            long nPairFor = (p == NULL)? 0L : SVBT16ToShort(*((SVBT16*) p));
+            long nPairFor = (p == NULL)? 0L : SVBT16ToShort(*static_cast<SVBT16 const *>(p));
             if (nPairFor == pBook[1]->GetIdx())
                 nIsEnd = 0;
             else
@@ -4125,7 +4125,7 @@ long WW8PLCFx_Book::GetLen() const
         OSL_ENSURE( false, "Incorrect call (2) of PLCF_Book::GetLen()" );
         return 0;
     }
-    const sal_uInt16 nEndIdx = SVBT16ToShort( *((SVBT16*)p) );
+    const sal_uInt16 nEndIdx = SVBT16ToShort( *static_cast<SVBT16*>(p) );
     long nNum = pBook[1]->GetPos( nEndIdx );
     nNum -= nStartPos;
     return nNum;
@@ -4155,7 +4155,7 @@ long WW8PLCFx_Book::GetHandle() const
     else
     {
         if (const void* p = pBook[0]->GetData(pBook[0]->GetIdx()))
-            return SVBT16ToShort( *((SVBT16*)p) );
+            return SVBT16ToShort( *static_cast<SVBT16 const *>(p) );
         else
             return LONG_MAX;
     }
@@ -4174,7 +4174,7 @@ OUString WW8PLCFx_Book::GetBookmark(long nStart,long nEnd, sal_uInt16 &nIndex)
             sal_uInt16 nEndIdx;
 
             if( pBook[0]->GetData( i, nStartAkt, p ) && p )
-                nEndIdx = SVBT16ToShort( *((SVBT16*)p) );
+                nEndIdx = SVBT16ToShort( *static_cast<SVBT16*>(p) );
             else
             {
                 OSL_ENSURE( false, "Bookmark-EndIdx not readable" );
@@ -4347,7 +4347,7 @@ void WW8PLCFx_AtnBook::advance()
         else
         {
             const void * p = m_pBook[0]->GetData(m_pBook[0]->GetIdx());
-            long nPairFor = (p == NULL)? 0L : SVBT16ToShort(*((SVBT16*) p));
+            long nPairFor = (p == NULL)? 0L : SVBT16ToShort(*static_cast<SVBT16 const *>(p));
             if (nPairFor == m_pBook[1]->GetIdx())
                 m_bIsEnd = false;
             else

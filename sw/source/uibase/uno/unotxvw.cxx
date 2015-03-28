@@ -633,7 +633,7 @@ void SAL_CALL SwXTextView::setRubyList(
             else if(pProperties[nProp].Name == UNO_NAME_RUBY_IS_ABOVE)
             {
                 bool bValue = !pProperties[nProp].Value.hasValue() ||
-                    *(sal_Bool*)pProperties[nProp].Value.getValue();
+                    *static_cast<sal_Bool const *>(pProperties[nProp].Value.getValue());
                 pEntry->GetRubyAttr().SetPosition(bValue ? 0 : 1);
             }
         }

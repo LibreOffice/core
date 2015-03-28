@@ -313,7 +313,7 @@ SwTableFormula::~SwTableFormula()
 void SwTableFormula::_MakeFormula( const SwTable& rTbl, OUString& rNewStr,
                     OUString& rFirstBox, OUString* pLastBox, void* pPara ) const
 {
-    SwTblCalcPara* pCalcPara = (SwTblCalcPara*)pPara;
+    SwTblCalcPara* pCalcPara = static_cast<SwTblCalcPara*>(pPara);
     if( pCalcPara->rCalc.IsCalcError() )        // stop if there is already an error set
         return;
 
@@ -379,7 +379,7 @@ void SwTableFormula::RelNmsToBoxNms( const SwTable& rTbl, OUString& rNewStr,
             OUString& rFirstBox, OUString* pLastBox, void* pPara ) const
 {
     // relative name w.r.t. box name (external presentation)
-    SwNode* pNd = (SwNode*)pPara;
+    SwNode* pNd = static_cast<SwNode*>(pPara);
     OSL_ENSURE( pNd, "Feld steht in keinem TextNode" );
     const SwTableBox *pBox = rTbl.GetTblBox(
                     pNd->FindTableBoxStartNode()->GetIndex() );
@@ -412,7 +412,7 @@ void SwTableFormula::RelBoxNmsToPtr( const SwTable& rTbl, OUString& rNewStr,
             OUString& rFirstBox, OUString* pLastBox, void* pPara ) const
 {
     // relative name w.r.t. box name (internal presentation)
-    SwNode* pNd = (SwNode*)pPara;
+    SwNode* pNd = static_cast<SwNode*>(pPara);
     OSL_ENSURE( pNd, "Field not placed in any Node" );
     const SwTableBox *pBox = rTbl.GetTblBox(
                     pNd->FindTableBoxStartNode()->GetIndex() );
@@ -444,7 +444,7 @@ void SwTableFormula::BoxNmsToRelNm( const SwTable& rTbl, OUString& rNewStr,
                     OUString& rFirstBox, OUString* pLastBox, void* pPara ) const
 {
     // box name (external presentation) w.r.t. relative name
-    SwNode* pNd = (SwNode*)pPara;
+    SwNode* pNd = static_cast<SwNode*>(pPara);
     OSL_ENSURE( pNd, "Field not placed in any Node" );
     const SwTableNode* pTblNd = pNd->FindTableNode();
 
@@ -883,7 +883,7 @@ void SwTableFormula::GetBoxesOfFormula( const SwTable& rTbl,
 void SwTableFormula::_GetFmlBoxes( const SwTable& rTbl, OUString& ,
                     OUString& rFirstBox, OUString* pLastBox, void* pPara ) const
 {
-    SwSelBoxes* pBoxes = (SwSelBoxes*)pPara;
+    SwSelBoxes* pBoxes = static_cast<SwSelBoxes*>(pPara);
     SwTableBox* pEndBox = 0;
 
     rFirstBox = rFirstBox.copy(1); // delete box label
@@ -973,7 +973,7 @@ void SwTableFormula::GetBoxes( const SwTableBox& rSttBox,
 void SwTableFormula::_HasValidBoxes( const SwTable& rTbl, OUString& ,
                     OUString& rFirstBox, OUString* pLastBox, void* pPara ) const
 {
-    bool* pBValid = (bool*)pPara;
+    bool* pBValid = static_cast<bool*>(pPara);
     if( *pBValid )      // wrong is wrong
     {
         SwTableBox* pSttBox = 0, *pEndBox = 0;
@@ -1044,7 +1044,7 @@ sal_uInt16 SwTableFormula::GetLnPosInTbl( const SwTable& rTbl, const SwTableBox*
 void SwTableFormula::_SplitMergeBoxNm( const SwTable& rTbl, OUString& rNewStr,
                     OUString& rFirstBox, OUString* pLastBox, void* pPara ) const
 {
-    SwTableFmlUpdate& rTblUpd = *(SwTableFmlUpdate*)pPara;
+    SwTableFmlUpdate& rTblUpd = *static_cast<SwTableFmlUpdate*>(pPara);
 
     rNewStr += OUString(rFirstBox[0]);     // get label for the box
     rFirstBox = rFirstBox.copy(1);

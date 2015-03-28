@@ -3434,7 +3434,7 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
  */
 bool DocumentContentOperationsManager::lcl_RstTxtAttr( const SwNodePtr& rpNd, void* pArgs )
 {
-    ParaRstFmt* pPara = (ParaRstFmt*)pArgs;
+    ParaRstFmt* pPara = static_cast<ParaRstFmt*>(pArgs);
     SwTxtNode * pTxtNode = (SwTxtNode*)rpNd->GetTxtNode();
     if( pTxtNode && pTxtNode->GetpSwpHints() )
     {

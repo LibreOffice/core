@@ -789,7 +789,7 @@ void SwRedlineAcceptDlg::CallAcceptReject( bool bSelect, bool bAccept )
             if( bSelect && LONG_MAX == nPos )
                 nPos = pTable->GetModel()->GetAbsPos( pEntry );
 
-            RedlinData *pData = (RedlinData *)pEntry->GetUserData();
+            RedlinData *pData = static_cast<RedlinData *>(pEntry->GetUserData());
 
             if( !pData->bDisabled )
                 aRedlines.push_back( pEntry );
@@ -869,7 +869,7 @@ void SwRedlineAcceptDlg::CallAcceptReject( bool bSelect, bool bAccept )
 sal_uInt16 SwRedlineAcceptDlg::GetRedlinePos( const SvTreeListEntry& rEntry ) const
 {
     SwWrtShell* pSh = ::GetActiveView()->GetWrtShellPtr();
-    return pSh->FindRedlineOfData( *static_cast<SwRedlineDataParent*>(((RedlinData *)
+    return pSh->FindRedlineOfData( *static_cast<SwRedlineDataParent*>(static_cast<RedlinData *>(
                                     rEntry.GetUserData())->pData)->pData );
 }
 

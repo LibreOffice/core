@@ -731,7 +731,7 @@ static bool lcl_HyphenateNode( const SwNodePtr& rpNd, void* pArgs )
 {
     // Hyphenate returns true if there is a hyphenation point and sets pPam
     SwTxtNode *pNode = rpNd->GetTxtNode();
-    SwHyphArgs *pHyphArgs = (SwHyphArgs*)pArgs;
+    SwHyphArgs *pHyphArgs = static_cast<SwHyphArgs*>(pArgs);
     if( pNode )
     {
         SwCntntFrm* pCntFrm = pNode->getLayoutFrm( pNode->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout() );

@@ -499,7 +499,7 @@ bool SwFmtRuby::PutValue( const uno::Any& rVal,
             const uno::Type& rType = ::getBooleanCppuType();
             if(rVal.hasValue() && rVal.getValueType() == rType)
             {
-                bool bAbove = *(sal_Bool*)rVal.getValue();
+                bool bAbove = *static_cast<sal_Bool const *>(rVal.getValue());
                 nPosition = bAbove ? 0 : 1;
             }
         }

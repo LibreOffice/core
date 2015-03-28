@@ -1648,13 +1648,13 @@ void SwInsertDBColAutoPilot::Load()
             pDataSourceProps[5] >>= pNewData->sTmplNm;
             pDataSourceProps[6] >>= pNewData->sTAutoFmtNm;
             if(pDataSourceProps[7].hasValue())
-                pNewData->bIsTable = *(sal_Bool*)pDataSourceProps[7].getValue();
+                pNewData->bIsTable = *static_cast<sal_Bool const *>(pDataSourceProps[7].getValue());
             if(pDataSourceProps[8].hasValue())
-                 pNewData->bIsField = *(sal_Bool*)pDataSourceProps[8].getValue();
+                 pNewData->bIsField = *static_cast<sal_Bool const *>(pDataSourceProps[8].getValue());
             if(pDataSourceProps[9].hasValue())
-                 pNewData->bIsHeadlineOn = *(sal_Bool*)pDataSourceProps[9].getValue();
+                 pNewData->bIsHeadlineOn = *static_cast<sal_Bool const *>(pDataSourceProps[9].getValue());
             if(pDataSourceProps[10].hasValue())
-                 pNewData->bIsEmptyHeadln = *(sal_Bool*)pDataSourceProps[10].getValue();
+                 pNewData->bIsEmptyHeadln = *static_cast<sal_Bool const *>(pDataSourceProps[10].getValue());
 
             const OUString sSubNodeName(pNames[nNode] + "/ColumnSet/");
             Sequence <OUString> aSubNames = GetNodeNames(sSubNodeName);
@@ -1684,9 +1684,9 @@ void SwInsertDBColAutoPilot::Load()
                 pSubProps[1] >>= nIndex;
                 SwInsDBColumn* pInsDBColumn = new SwInsDBColumn(sColumn, nIndex);
                 if(pSubProps[2].hasValue())
-                    pInsDBColumn->bHasFmt = *(sal_Bool*)pSubProps[2].getValue();
+                    pInsDBColumn->bHasFmt = *static_cast<sal_Bool const *>(pSubProps[2].getValue());
                 if(pSubProps[3].hasValue())
-                    pInsDBColumn->bIsDBFmt = *(sal_Bool*)pSubProps[3].getValue();
+                    pInsDBColumn->bIsDBFmt = *static_cast<sal_Bool const *>(pSubProps[3].getValue());
 
                 pSubProps[4] >>= pInsDBColumn->sUsrNumFmt;
                 OUString sNumberFormatLocale;

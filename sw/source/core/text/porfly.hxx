@@ -63,12 +63,12 @@ public:
                      long nAscent, long nDescent, long nFlyAsc, long nFlyDesc,
                      objectpositioning::AsCharFlags nFlags );
     inline const Point& GetRefPoint() const { return aRef; }
-    inline SwFlyInCntFrm *GetFlyFrm() { return (SwFlyInCntFrm*)pContact; }
+    inline SwFlyInCntFrm *GetFlyFrm() { return static_cast<SwFlyInCntFrm*>(pContact); }
     inline const SwFlyInCntFrm *GetFlyFrm() const
-        { return (SwFlyInCntFrm*)pContact; }
-    inline SwDrawContact *GetDrawContact() { return (SwDrawContact*)pContact; }
+        { return static_cast<SwFlyInCntFrm*>(pContact); }
+    inline SwDrawContact *GetDrawContact() { return static_cast<SwDrawContact*>(pContact); }
     inline const SwDrawContact* GetDrawContact() const
-        { return (SwDrawContact*)pContact; }
+        { return static_cast<SwDrawContact*>(pContact); }
     inline bool IsDraw() const { return bDraw; }
     inline bool IsMax() const { return bMax; }
     inline sal_uInt8 GetAlign() const { return nAlign; }

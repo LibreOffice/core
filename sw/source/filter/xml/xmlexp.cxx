@@ -388,8 +388,8 @@ void SwXMLExport::GetViewSettings(Sequence<PropertyValue>& aProps)
         const OUString sShowChanges( "ShowChanges" );
         if( xInfoSet->getPropertySetInfo()->hasPropertyByName( sShowChanges ) )
         {
-            bShowRedlineChanges = *(sal_Bool*) xInfoSet->
-                                   getPropertyValue( sShowChanges ).getValue();
+            bShowRedlineChanges = *static_cast<sal_Bool const *>(xInfoSet->
+                                   getPropertyValue( sShowChanges ).getValue());
         }
     }
 

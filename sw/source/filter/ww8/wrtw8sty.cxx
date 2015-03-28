@@ -2115,7 +2115,7 @@ bool WW8_WrPlcAnnotations::IsNewRedlineComment( const SwRedlineData *pRedline )
 WW8_WrPlcAnnotations::~WW8_WrPlcAnnotations()
 {
     for( sal_uInt16 n=0; n < aCntnt.size(); n++ )
-        delete (WW8_Annotation*)aCntnt[n];
+        delete static_cast<WW8_Annotation const *>(aCntnt[n]);
 }
 
 bool WW8_WrPlcSubDoc::WriteGenericTxt( WW8Export& rWrt, sal_uInt8 nTTyp,
@@ -2138,7 +2138,7 @@ bool WW8_WrPlcSubDoc::WriteGenericTxt( WW8Export& rWrt, sal_uInt8 nTTyp,
                 pTxtPos->Append( rWrt.Fc2Cp( rWrt.Strm().Tell() ));
 
                 rWrt.WritePostItBegin();
-                const WW8_Annotation& rAtn = *(const WW8_Annotation*)aCntnt[i];
+                const WW8_Annotation& rAtn = *static_cast<const WW8_Annotation*>(aCntnt[i]);
                 if (rAtn.mpRichText)
                     rWrt.WriteOutliner(*rAtn.mpRichText, nTTyp);
                 else
@@ -2161,7 +2161,7 @@ bool WW8_WrPlcSubDoc::WriteGenericTxt( WW8Export& rWrt, sal_uInt8 nTTyp,
                 if( aCntnt[ i ] != NULL )
                 {
                     // is it an writer or sdr - textbox?
-                    const SdrObject& rObj = *(SdrObject*)aCntnt[ i ];
+                    const SdrObject& rObj = *static_cast<SdrObject const *>(aCntnt[ i ]);
                     if (rObj.GetObjInventor() == FmFormInventor)
                     {
                         sal_uInt8 nOldTyp = rWrt.nTxtTyp;
@@ -2230,7 +2230,7 @@ bool WW8_WrPlcSubDoc::WriteGenericTxt( WW8Export& rWrt, sal_uInt8 nTTyp,
                 pTxtPos->Append( rWrt.Fc2Cp( rWrt.Strm().Tell() ));
 
                 // Note content
-                const SwFmtFtn* pFtn = (SwFmtFtn*)aCntnt[ i ];
+                const SwFmtFtn* pFtn = static_cast<SwFmtFtn const *>(aCntnt[ i ]);
                 rWrt.WriteFtnBegin( *pFtn );
                 const SwNodeIndex* pIdx = pFtn->GetTxtFtn()->GetStartNode();
                 OSL_ENSURE( pIdx, "wo ist der StartNode der Fuss-/EndNote?" );
@@ -2295,7 +2295,7 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
                 int nIdx = 0;
                 for ( i = 0; i < nLen; ++i )
                 {
-                    const WW8_Annotation& rAtn = *(const WW8_Annotation*)aCntnt[i];
+                    const WW8_Annotation& rAtn = *static_cast<const WW8_Annotation*>(aCntnt[i]);
                     aStrArr.push_back(std::pair<OUString,OUString>(rAtn.msOwner,rAtn.m_sInitials));
                     // record start and end positions for ranges
                     if( rAtn.m_nRangeStart != rAtn.m_nRangeEnd )
@@ -2409,7 +2409,7 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
                 {
                     for( i = 0; i < nLen; ++i )
                     {
-                        const WW8_Annotation& rAtn = *(const WW8_Annotation*)aCntnt[i];
+                        const WW8_Annotation& rAtn = *static_cast<const WW8_Annotation*>(aCntnt[i]);
 
                         sal_uInt32 nDTTM = sw::ms::DateTime2DTTM(rAtn.maDateTime);
 
@@ -2439,7 +2439,7 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
                 {
                     // write textbox story - FTXBXS
                     // is it an writer or sdr - textbox?
-                    const SdrObject* pObj = (SdrObject*)aCntnt[ i ];
+                    const SdrObject* pObj = static_cast<SdrObject const *>(aCntnt[ i ]);
                     sal_Int32 nCnt = 1;
                     if (pObj && !pObj->ISA( SdrTextObj ) )
                     {
@@ -2507,7 +2507,7 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
             sal_uInt16 nlTag = 0;
             for ( i = 0; i < nLen; ++i )
             {
-                const WW8_Annotation& rAtn = *(const WW8_Annotation*)aCntnt[i];
+                const WW8_Annotation& rAtn = *static_cast<const WW8_Annotation*>(aCntnt[i]);
 
                 //aStrArr is sorted
                 myiter aIter = ::std::lower_bound(aStrArr.begin(),
@@ -2567,7 +2567,7 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
             sal_uInt16 nNo = 0;
             for ( i = 0; i < nLen; ++i )             // write Flags
             {
-                const SwFmtFtn* pFtn = (SwFmtFtn*)aCntnt[ i ];
+                const SwFmtFtn* pFtn = static_cast<SwFmtFtn const *>(aCntnt[ i ]);
                 SwWW8Writer::WriteShort( *rWrt.pTableStrm,
                         !pFtn->GetNumStr().isEmpty() ? 0 : ++nNo );
             }

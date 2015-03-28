@@ -85,11 +85,11 @@ SwPrintOptions::SwPrintOptions(bool bWeb) :
             {
                 switch(nProp)
                 {
-                    case  0: bPrintGraphic      = *(sal_Bool*)pValues[nProp].getValue(); break;
-                    case  1: bPrintTable            = *(sal_Bool*)pValues[nProp].getValue();  break;
-                    case  2: bPrintControl      = *(sal_Bool*)pValues[nProp].getValue() ;  break;
-                    case  3: bPrintPageBackground= *(sal_Bool*)pValues[nProp].getValue();  break;
-                    case  4: bPrintBlackFont        = *(sal_Bool*)pValues[nProp].getValue();  break;
+                    case  0: bPrintGraphic      = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break;
+                    case  1: bPrintTable            = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;
+                    case  2: bPrintControl      = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;
+                    case  3: bPrintPageBackground= *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;
+                    case  4: bPrintBlackFont        = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;
                     case  5:
                     {
                         sal_Int32 nTmp = 0;
@@ -97,18 +97,18 @@ SwPrintOptions::SwPrintOptions(bool bWeb) :
                         nPrintPostIts = (sal_Int16)nTmp;
                     }
                     break;
-                    case  6: bPrintReverse      = *(sal_Bool*)pValues[nProp].getValue();  break;
-                    case  7: bPrintProspect      = *(sal_Bool*)pValues[nProp].getValue();  break;
-                    case  8: bPrintProspectRTL  = *(sal_Bool*)pValues[nProp].getValue();  break;
-                    case  9: bPrintSingleJobs   = *(sal_Bool*)pValues[nProp].getValue();  break;
+                    case  6: bPrintReverse      = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;
+                    case  7: bPrintProspect      = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;
+                    case  8: bPrintProspectRTL  = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;
+                    case  9: bPrintSingleJobs   = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;
                     case 10: pValues[nProp] >>= sFaxName;  break;
-                    case 11: bPaperFromSetup    = *(sal_Bool*)pValues[nProp].getValue();  break;
-                    case 12: bPrintDraw         = *(sal_Bool*)pValues[nProp].getValue() ;  break;
-                    case 13: bPrintLeftPages    = *(sal_Bool*)pValues[nProp].getValue();  break;
-                    case 14: bPrintRightPages       = *(sal_Bool*)pValues[nProp].getValue();  break;
-                    case 15: bPrintEmptyPages       = *(sal_Bool*)pValues[nProp].getValue();  break;
-                    case 16: bPrintTextPlaceholder = *(sal_Bool*)pValues[nProp].getValue();  break;
-                    case 17: bPrintHiddenText = *(sal_Bool*)pValues[nProp].getValue();  break;
+                    case 11: bPaperFromSetup    = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;
+                    case 12: bPrintDraw         = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;
+                    case 13: bPrintLeftPages    = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;
+                    case 14: bPrintRightPages       = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;
+                    case 15: bPrintEmptyPages       = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;
+                    case 16: bPrintTextPlaceholder = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;
+                    case 17: bPrintHiddenText = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;
                 }
             }
         }

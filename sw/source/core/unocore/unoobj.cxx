@@ -2730,7 +2730,7 @@ bool SwUnoCursorHelper::ConvertSortProperties(
         {
             if (aValue.getValueType() == ::getBooleanCppuType())
             {
-                rSortOpt.bTable = *(sal_Bool*)aValue.getValue();
+                rSortOpt.bTable = *static_cast<sal_Bool const *>(aValue.getValue());
             }
             else
             {
@@ -2837,7 +2837,7 @@ bool SwUnoCursorHelper::ConvertSortProperties(
             nIndex = nIndex - '0';
             if (aValue.getValueType() == ::getBooleanCppuType() && nIndex < 3)
             {
-                bool bTemp = *(sal_Bool*)aValue.getValue();
+                bool bTemp = *static_cast<sal_Bool const *>(aValue.getValue());
                 aKeys[nIndex]->bIsNumeric = bTemp;
             }
             else
@@ -2854,7 +2854,7 @@ bool SwUnoCursorHelper::ConvertSortProperties(
             nIndex -= '0';
             if (aValue.getValueType() == ::getBooleanCppuType() && nIndex < 3)
             {
-                bool bTemp = *(sal_Bool*)aValue.getValue();
+                bool bTemp = *static_cast<sal_Bool const *>(aValue.getValue());
                 aKeys[nIndex]->eSortOrder = (bTemp)
                     ? SRT_ASCENDING : SRT_DESCENDING;
             }
@@ -2869,7 +2869,7 @@ bool SwUnoCursorHelper::ConvertSortProperties(
             bNewSortdescriptor = true;
             if (aValue.getValueType() == ::getBooleanCppuType())
             {
-                bool bTemp = *(sal_Bool*)aValue.getValue();
+                bool bTemp = *static_cast<sal_Bool const *>(aValue.getValue());
                 rSortOpt.eDirection = bTemp ? SRT_COLUMNS : SRT_ROWS;
             }
             else

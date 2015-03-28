@@ -1125,7 +1125,7 @@ void SwXTextDocument::setPagePrintSettings(const Sequence< beans::PropertyValue 
             else if(sName == "IsLandscape")
             {
                 bException =  (::getBooleanCppuType() != rVal.getValueType());
-                aData.SetLandscape(*(sal_Bool*)rVal.getValue());
+                aData.SetLandscape(*static_cast<sal_Bool const *>(rVal.getValue()));
             }
             else
                 bException = true;
@@ -1183,7 +1183,7 @@ void SwXTextDocument::printPages(const Sequence< beans::PropertyValue >& xOption
             {
                 if ( rProp.Value.getValueType() == ::getBooleanCppuType())
 
-                    aReq.AppendItem(SfxBoolItem( SID_PRINT_COLLATE, *(sal_Bool*)rProp.Value.getValue() ) );
+                    aReq.AppendItem(SfxBoolItem( SID_PRINT_COLLATE, *static_cast<sal_Bool const *>(rProp.Value.getValue()) ) );
                 else
                     throw IllegalArgumentException();
             }
@@ -1192,7 +1192,7 @@ void SwXTextDocument::printPages(const Sequence< beans::PropertyValue >& xOption
             else if ( rProp.Name == UNO_NAME_SORT )
             {
                 if ( rProp.Value.getValueType() == ::getBooleanCppuType() )
-                    aReq.AppendItem(SfxBoolItem( SID_PRINT_SORT, *(sal_Bool*)rProp.Value.getValue() ) );
+                    aReq.AppendItem(SfxBoolItem( SID_PRINT_SORT, *static_cast<sal_Bool const *>(rProp.Value.getValue()) ) );
                 else
                     throw IllegalArgumentException();
             }
@@ -1859,7 +1859,7 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName, const Any&
         case WID_DOC_CHANGES_RECORD:
         case WID_DOC_CHANGES_SHOW:
         {
-            bool bSet = *(sal_Bool*)aValue.getValue();
+            bool bSet = *static_cast<sal_Bool const *>(aValue.getValue());
             sal_uInt16 eMode = pDocShell->GetDoc()->getIDocumentRedlineAccess().GetRedlineMode();
             if(WID_DOC_CHANGES_SHOW == pEntry->nWID)
             {
@@ -1899,7 +1899,7 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName, const Any&
         }
         break;
         case WID_DOC_HIDE_TIPS :
-            SW_MOD()->GetModuleConfig()->SetHideFieldTips(*(sal_Bool*)aValue.getValue());
+            SW_MOD()->GetModuleConfig()->SetHideFieldTips(*static_cast<sal_Bool const *>(aValue.getValue()));
         break;
         case WID_DOC_REDLINE_DISPLAY:
         {
@@ -1932,7 +1932,7 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName, const Any&
         case WID_DOC_AUTOMATIC_CONTROL_FOCUS:
         {
             SwDrawModel * pDrawDoc;
-            bool bAuto = *(sal_Bool*) aValue.getValue();
+            bool bAuto = *static_cast<sal_Bool const *>(aValue.getValue());
 
             if ( 0 != ( pDrawDoc = pDocShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel() ) )
                 pDrawDoc->SetAutoControlFocus( bAuto );
@@ -1952,7 +1952,7 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName, const Any&
         case WID_DOC_APPLY_FORM_DESIGN_MODE:
         {
             SwDrawModel * pDrawDoc;
-            bool bMode = *(sal_Bool*)aValue.getValue();
+            bool bMode = *static_cast<sal_Bool const *>(aValue.getValue());
 
             if ( 0 != ( pDrawDoc = pDocShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel() ) )
                 pDrawDoc->SetOpenInDesignMode( bMode );

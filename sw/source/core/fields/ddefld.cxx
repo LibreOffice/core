@@ -341,7 +341,7 @@ bool SwDDEFieldType::PutValue( const uno::Any& rVal, sal_uInt16 nWhichId )
     case FIELD_PROP_PAR4:      nPart = 1; break;
     case FIELD_PROP_SUBTYPE:   nPart = 0; break;
     case FIELD_PROP_BOOL1:
-        SetType( *(sal_Bool*)rVal.getValue() ?
+        SetType( *static_cast<sal_Bool const *>(rVal.getValue()) ?
                  SfxLinkUpdateMode::ALWAYS :
                  SfxLinkUpdateMode::ONCALL );
         break;

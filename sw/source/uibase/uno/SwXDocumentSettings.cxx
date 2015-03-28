@@ -337,7 +337,7 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
         break;
         case HANDLE_FIELD_AUTO_UPDATE:
         {
-            bool bUpdateField = *(sal_Bool*)rValue.getValue();
+            bool bUpdateField = *static_cast<sal_Bool const *>(rValue.getValue());
             SwFldUpdateFlags nFlag = mpDoc->getIDocumentSettingAccess().getFieldUpdateFlags(true);
             mpDoc->getIDocumentSettingAccess().setFieldUpdateFlags( bUpdateField ?
                                         nFlag == AUTOUPD_FIELD_AND_CHARTS ?
@@ -348,7 +348,7 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
         break;
         case HANDLE_CHART_AUTO_UPDATE:
         {
-            bool bUpdateChart = *(sal_Bool*)rValue.getValue();
+            bool bUpdateChart = *static_cast<sal_Bool const *>(rValue.getValue());
             SwFldUpdateFlags nFlag = mpDoc->getIDocumentSettingAccess().getFieldUpdateFlags(true);
             mpDoc->getIDocumentSettingAccess().setFieldUpdateFlags( (nFlag == AUTOUPD_FIELD_ONLY || nFlag == AUTOUPD_FIELD_AND_CHARTS ) ?
                                         bUpdateChart ?
@@ -373,7 +373,7 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
         break;
         case HANDLE_ALIGN_TAB_STOP_POSITION:
         {
-            bool bAlignTab = *(sal_Bool*)rValue.getValue();
+            bool bAlignTab = *static_cast<sal_Bool const *>(rValue.getValue());
             mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::TAB_COMPAT, bAlignTab);
         }
         break;
@@ -438,7 +438,7 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
         break;
         case HANDLE_IS_KERN_ASIAN_PUNCTUATION:
         {
-            bool bIsKern = *(sal_Bool*)(rValue).getValue();
+            bool bIsKern = *static_cast<sal_Bool const *>(rValue.getValue());
             mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::KERN_ASIAN_PUNCTUATION, bIsKern);
             SwEditShell* pEditSh = mpDoc->GetEditShell();
             if(pEditSh)
@@ -463,12 +463,12 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
         break;
         case HANDLE_APPLY_USER_DATA:
         {
-            mpDocSh->SetUseUserData( *(sal_Bool*)rValue.getValue() );
+            mpDocSh->SetUseUserData( *static_cast<sal_Bool const *>(rValue.getValue()) );
         }
         break;
         case HANDLE_SAVE_GLOBAL_DOCUMENT_LINKS:
         {
-            bool bSaveGlobal = *(sal_Bool*)rValue.getValue();
+            bool bSaveGlobal = *static_cast<sal_Bool const *>(rValue.getValue());
             mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::GLOBAL_DOCUMENT_SAVE_LINKS, bSaveGlobal );
         }
         break;
@@ -503,12 +503,12 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
         break;
         case HANDLE_SAVE_VERSION_ON_CLOSE:
         {
-            mpDocSh->SetSaveVersionOnClose( *(sal_Bool*)rValue.getValue() );
+            mpDocSh->SetSaveVersionOnClose( *static_cast<sal_Bool const *>(rValue.getValue()) );
         }
         break;
         case HANDLE_UPDATE_FROM_TEMPLATE:
         {
-            mpDocSh->SetQueryLoadTemplate( *(sal_Bool*)rValue.getValue() );
+            mpDocSh->SetQueryLoadTemplate( *static_cast<sal_Bool const *>(rValue.getValue()) );
         }
         break;
         case HANDLE_PRINTER_INDEPENDENT_LAYOUT:
@@ -538,25 +538,25 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
         break;
         case HANDLE_IS_ADD_FLY_OFFSET:
         {
-            bool bTmp = *(sal_Bool*)rValue.getValue();
+            bool bTmp = *static_cast<sal_Bool const *>(rValue.getValue());
             mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::ADD_FLY_OFFSETS, bTmp);
         }
         break;
         case HANDLE_IS_ADD_EXTERNAL_LEADING:
         {
-            bool bTmp = *(sal_Bool*)rValue.getValue();
+            bool bTmp = *static_cast<sal_Bool const *>(rValue.getValue());
             mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::ADD_EXT_LEADING, bTmp);
         }
         break;
         case HANDLE_OLD_NUMBERING: // #111955#
         {
-            bool bTmp = *(sal_Bool*)rValue.getValue();
+            bool bTmp = *static_cast<sal_Bool const *>(rValue.getValue());
             mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::OLD_NUMBERING, bTmp);
         }
         break;
         case HANDLE_OUTLINELEVEL_YIELDS_NUMBERING:
         {
-            bool bTmp = *(sal_Bool*)rValue.getValue();
+            bool bTmp = *static_cast<sal_Bool const *>(rValue.getValue());
             mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::OUTLINE_LEVEL_YIELDS_OUTLINE_RULE, bTmp);
         }
         break;
@@ -570,25 +570,25 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
         break;
         case HANDLE_USE_FORMER_LINE_SPACING:
         {
-            bool bTmp = *(sal_Bool*)rValue.getValue();
+            bool bTmp = *static_cast<sal_Bool const *>(rValue.getValue());
             mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::OLD_LINE_SPACING, bTmp);
         }
         break;
         case HANDLE_ADD_PARA_SPACING_TO_TABLE_CELLS:
         {
-            bool bTmp = *(sal_Bool*)rValue.getValue();
+            bool bTmp = *static_cast<sal_Bool const *>(rValue.getValue());
             mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::ADD_PARA_SPACING_TO_TABLE_CELLS, bTmp);
         }
         break;
         case HANDLE_USE_FORMER_OBJECT_POSITIONING:
         {
-            bool bTmp = *(sal_Bool*)rValue.getValue();
+            bool bTmp = *static_cast<sal_Bool const *>(rValue.getValue());
             mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::USE_FORMER_OBJECT_POS, bTmp);
         }
         break;
         case HANDLE_USE_FORMER_TEXT_WRAPPING:
         {
-            bool bTmp = *(sal_Bool*)rValue.getValue();
+            bool bTmp = *static_cast<sal_Bool const *>(rValue.getValue());
             mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::USE_FORMER_TEXT_WRAPPING, bTmp);
         }
         break;
@@ -609,60 +609,60 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
         break;
         case HANDLE_CONSIDER_WRAP_ON_OBJPOS:
         {
-            bool bTmp = *(sal_Bool*)rValue.getValue();
+            bool bTmp = *static_cast<sal_Bool const *>(rValue.getValue());
             mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION, bTmp );
         }
         break;
         case HANDLE_IGNORE_FIRST_LINE_INDENT_IN_NUMBERING:
         {
-            bool bTmp = *(sal_Bool*)rValue.getValue();
+            bool bTmp = *static_cast<sal_Bool const *>(rValue.getValue());
             mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING, bTmp);
         }
         break;
         case HANDLE_DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK:
         {
-            bool bTmp = *(sal_Bool*)rValue.getValue();
+            bool bTmp = *static_cast<sal_Bool const *>(rValue.getValue());
             mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK, bTmp);
         }
         break;
         case HANDLE_DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT:
         {
-            bool bTmp = *(sal_Bool*)rValue.getValue();
+            bool bTmp = *static_cast<sal_Bool const *>(rValue.getValue());
             mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT, bTmp);
         }
         break;
         case HANDLE_TABLE_ROW_KEEP:
         {
-            bool bTmp = *(sal_Bool*)rValue.getValue();
+            bool bTmp = *static_cast<sal_Bool const *>(rValue.getValue());
             mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::TABLE_ROW_KEEP, bTmp);
         }
         break;
         case HANDLE_IGNORE_TABS_AND_BLANKS_FOR_LINE_CALCULATION:
         {
-            bool bTmp = *(sal_Bool*)rValue.getValue();
+            bool bTmp = *static_cast<sal_Bool const *>(rValue.getValue());
             mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::IGNORE_TABS_AND_BLANKS_FOR_LINE_CALCULATION, bTmp);
         }
         break;
         case HANDLE_LOAD_READONLY:
         {
-            mpDocSh->SetLoadReadonly( *(sal_Bool*)rValue.getValue() );
+            mpDocSh->SetLoadReadonly( *static_cast<sal_Bool const *>(rValue.getValue()) );
         }
         break;
         case HANDLE_DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE:
         {
-            bool bTmp = *(sal_Bool*)rValue.getValue();
+            bool bTmp = *static_cast<sal_Bool const *>(rValue.getValue());
             mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE, bTmp);
         }
         break;
         case HANDLE_CLIP_AS_CHARACTER_ANCHORED_WRITER_FLY_FRAMES:
         {
-            bool bTmp = *(sal_Bool*)rValue.getValue();
+            bool bTmp = *static_cast<sal_Bool const *>(rValue.getValue());
             mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::CLIP_AS_CHARACTER_ANCHORED_WRITER_FLY_FRAME, bTmp);
         }
         break;
         case HANDLE_UNIX_FORCE_ZERO_EXT_LEADING:
         {
-            bool bTmp = *(sal_Bool*)rValue.getValue();
+            bool bTmp = *static_cast<sal_Bool const *>(rValue.getValue());
             mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::UNIX_FORCE_ZERO_EXT_LEADING, bTmp);
         }
         break;
@@ -671,7 +671,7 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
         break;
         case HANDLE_TABS_RELATIVE_TO_INDENT:
         {
-            bool bTmp = *(sal_Bool*)rValue.getValue();
+            bool bTmp = *static_cast<sal_Bool const *>(rValue.getValue());
             mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::TABS_RELATIVE_TO_INDENT, bTmp);
         }
         break;
@@ -691,14 +691,14 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
         break;
         case HANDLE_PROTECT_FORM:
         {
-            bool bTmp = *(sal_Bool*)rValue.getValue();
+            bool bTmp = *static_cast<sal_Bool const *>(rValue.getValue());
             mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::PROTECT_FORM, bTmp);
         }
         break;
         // #i89181#
         case HANDLE_TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST:
         {
-            bool bTmp = *(sal_Bool*)rValue.getValue();
+            bool bTmp = *static_cast<sal_Bool const *>(rValue.getValue());
             mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST, bTmp);
         }
         break;
@@ -719,91 +719,91 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
         break;
         case HANDLE_MATH_BASELINE_ALIGNMENT:
         {
-            bool bTmp = *(sal_Bool*)rValue.getValue();
+            bool bTmp = *static_cast<sal_Bool const *>(rValue.getValue());
             mpDoc->getIDocumentSettingAccess().set( DocumentSettingId::MATH_BASELINE_ALIGNMENT, bTmp );
         }
         break;
         case HANDLE_INVERT_BORDER_SPACING:
         {
-            bool bTmp = *(sal_Bool*)rValue.getValue();
+            bool bTmp = *static_cast<sal_Bool const *>(rValue.getValue());
             mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::INVERT_BORDER_SPACING, bTmp);
         }
         break;
         case HANDLE_COLLAPSE_EMPTY_CELL_PARA:
         {
-            bool bTmp = *(sal_Bool*)rValue.getValue();
+            bool bTmp = *static_cast<sal_Bool const *>(rValue.getValue());
             mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::COLLAPSE_EMPTY_CELL_PARA, bTmp);
         }
         break;
         case HANDLE_SMALL_CAPS_PERCENTAGE_66:
         {
-            bool bTmp = *(sal_Bool*)rValue.getValue();
+            bool bTmp = *static_cast<sal_Bool const *>(rValue.getValue());
             mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::SMALL_CAPS_PERCENTAGE_66, bTmp);
         }
         break;
         case HANDLE_TAB_OVERFLOW:
         {
-            bool bTmp = *(sal_Bool*)rValue.getValue();
+            bool bTmp = *static_cast<sal_Bool const *>(rValue.getValue());
             mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::TAB_OVERFLOW, bTmp);
         }
         break;
         case HANDLE_UNBREAKABLE_NUMBERINGS:
         {
-            bool bTmp = *(sal_Bool*)rValue.getValue();
+            bool bTmp = *static_cast<sal_Bool const *>(rValue.getValue());
             mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::UNBREAKABLE_NUMBERINGS, bTmp);
         }
         break;
         case HANDLE_STYLES_NODEFAULT:
         {
-            bool bTmp = *(sal_Bool*)rValue.getValue();
+            bool bTmp = *static_cast<sal_Bool const *>(rValue.getValue());
             mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::STYLES_NODEFAULT, bTmp);
         }
         break;
         case HANDLE_FLOATTABLE_NOMARGINS:
         {
-            bool bTmp = *(sal_Bool*)rValue.getValue();
+            bool bTmp = *static_cast<sal_Bool const *>(rValue.getValue());
             mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::FLOATTABLE_NOMARGINS, bTmp);
         }
         break;
         case HANDLE_CLIPPED_PICTURES:
         {
-            bool bTmp = *(sal_Bool*)rValue.getValue();
+            bool bTmp = *static_cast<sal_Bool const *>(rValue.getValue());
             mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::CLIPPED_PICTURES, bTmp);
         }
         break;
         case HANDLE_BACKGROUND_PARA_OVER_DRAWINGS:
         {
-            bool bTmp = *(sal_Bool*)rValue.getValue();
+            bool bTmp = *static_cast<sal_Bool const *>(rValue.getValue());
             mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::BACKGROUND_PARA_OVER_DRAWINGS, bTmp);
         }
         break;
         case HANDLE_EMBED_FONTS:
         {
-            bool bTmp = *(sal_Bool*)rValue.getValue();
+            bool bTmp = *static_cast<sal_Bool const *>(rValue.getValue());
             mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::EMBED_FONTS, bTmp);
         }
         break;
         case HANDLE_EMBED_SYSTEM_FONTS:
         {
-            bool bTmp = *(sal_Bool*)rValue.getValue();
+            bool bTmp = *static_cast<sal_Bool const *>(rValue.getValue());
             mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::EMBED_SYSTEM_FONTS, bTmp);
         }
         break;
         case HANDLE_TAB_OVER_MARGIN:
         {
-            bool bTmp = *(sal_Bool*)rValue.getValue();
+            bool bTmp = *static_cast<sal_Bool const *>(rValue.getValue());
             mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::TAB_OVER_MARGIN, bTmp);
         }
         break;
         case HANDLE_SURROUND_TEXT_WRAP_SMALL:
         {
-            bool bTmp = *(sal_Bool*)rValue.getValue();
+            bool bTmp = *static_cast<sal_Bool const *>(rValue.getValue());
             mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::SURROUND_TEXT_WRAP_SMALL, bTmp);
         }
         break;
         case HANDLE_APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING:
         {
-            bool bTmp = *(sal_Bool*)rValue.getValue();
+            bool bTmp = *static_cast<sal_Bool const *>(rValue.getValue());
             mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING, bTmp);
         }
         break;

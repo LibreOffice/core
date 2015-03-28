@@ -802,13 +802,13 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFra
                     {
                     case CTF_FRAME_DISPLAY_SCROLLBAR:
                         {
-                            bool bYes = *(sal_Bool *)rProp.maValue.getValue();
+                            bool bYes = *static_cast<sal_Bool const *>(rProp.maValue.getValue());
                             eScrollMode = bYes ? ScrollingYes : ScrollingNo;
                         }
                         break;
                     case CTF_FRAME_DISPLAY_BORDER:
                         {
-                            bHasBorder = *(sal_Bool *)rProp.maValue.getValue();
+                            bHasBorder = *static_cast<sal_Bool const *>(rProp.maValue.getValue());
                             bIsBorderSet = true;
                         }
                         break;

@@ -287,7 +287,7 @@ SwLabCfgItem::SwLabCfgItem(bool bLabel) :
                     bNoConfigValues = false;
                 switch(nProperty)
                 {
-                    case  0: aItem.bCont = *(sal_Bool*)pValues[nProp].getValue(); break;// "Medium/Continuous",
+                    case  0: aItem.bCont = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break;// "Medium/Continuous",
                     case  1: pValues[nProp] >>= aItem.aMake;            break;// "Medium/Brand",
                     case  2: pValues[nProp] >>= aItem.aType;            break;// "Medium/Type",
                     case  3: pValues[nProp] >>= aItem.nCols;            break;// "Format/Column",
@@ -324,11 +324,11 @@ SwLabCfgItem::SwLabCfgItem(bool bLabel) :
                         pValues[nProp] >>= aItem.lPHeight;
                         aItem.lPHeight = convertMm100ToTwip(aItem.lPHeight);
                     break;// "Format/PageHeight",
-                    case 13: aItem.bSynchron = *(sal_Bool*)pValues[nProp].getValue(); break;// "Option/Synchronize",
-                    case 14: aItem.bPage = *(sal_Bool*)pValues[nProp].getValue(); break;// "Option/Page",
+                    case 13: aItem.bSynchron = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break;// "Option/Synchronize",
+                    case 14: aItem.bPage = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break;// "Option/Page",
                     case 15: pValues[nProp] >>= aItem.nCol;             break;// "Option/Column",
                     case 16: pValues[nProp] >>= aItem.nRow;             break;// "Option/Row"
-                    case 17: aItem.bAddr = *(sal_Bool*)pValues[nProp].getValue(); break;// "Inscription/UseAddress",
+                    case 17: aItem.bAddr = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break;// "Inscription/UseAddress",
                     case 18: pValues[nProp] >>= aItem.aWriting;         break;// "Inscription/Address",
                     case 19: pValues[nProp] >>= aItem.sDBName;          break;// "Inscription/Database"
                     case 20: pValues[nProp] >>= aItem.aPrivFirstName;   break;// "PrivateAddress/FirstName",

@@ -391,7 +391,7 @@ bool SwDBField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     switch( nWhichId )
     {
     case FIELD_PROP_BOOL1:
-        if( *(sal_Bool*)rAny.getValue() )
+        if( *static_cast<sal_Bool const *>(rAny.getValue()) )
             SetSubType(GetSubType()&~nsSwExtendedSubType::SUB_OWN_FMT);
         else
             SetSubType(GetSubType()|nsSwExtendedSubType::SUB_OWN_FMT);

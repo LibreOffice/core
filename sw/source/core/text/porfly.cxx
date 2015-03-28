@@ -207,7 +207,7 @@ void SwFlyCntPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
     if( bDraw )
     {
-        if( !((SwDrawContact*)pContact)->GetAnchorFrm() )
+        if( !static_cast<SwDrawContact*>(pContact)->GetAnchorFrm() )
         {
             // No direct positioning of the drawing object is needed
             SwDrawContact* pDrawContact = static_cast<SwDrawContact*>(pContact);

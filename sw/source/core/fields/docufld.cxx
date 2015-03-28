@@ -385,11 +385,11 @@ bool SwAuthorField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     switch( nWhichId )
     {
     case FIELD_PROP_BOOL1:
-        SetFormat( *(sal_Bool*)rAny.getValue() ? AF_NAME : AF_SHORTCUT );
+        SetFormat( *static_cast<sal_Bool const *>(rAny.getValue()) ? AF_NAME : AF_SHORTCUT );
         break;
 
     case FIELD_PROP_BOOL2:
-        if( *(sal_Bool*)rAny.getValue() )
+        if( *static_cast<sal_Bool const *>(rAny.getValue()) )
             SetFormat( GetFormat() | AF_FIXED);
         else
             SetFormat( GetFormat() & ~AF_FIXED);
@@ -561,7 +561,7 @@ bool SwFileNameField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         break;
 
     case FIELD_PROP_BOOL2:
-        if( *(sal_Bool*)rAny.getValue() )
+        if( *static_cast<sal_Bool const *>(rAny.getValue()) )
             SetFormat( GetFormat() | FF_FIXED);
         else
             SetFormat( GetFormat() & ~FF_FIXED);
@@ -1229,7 +1229,7 @@ bool SwDocInfoField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         break;
 
     case FIELD_PROP_BOOL1:
-        if(*(sal_Bool*)rAny.getValue())
+        if(*static_cast<sal_Bool const *>(rAny.getValue()))
             nSubType |= DI_SUB_FIXED;
         else
             nSubType &= ~DI_SUB_FIXED;
@@ -1247,7 +1247,7 @@ bool SwDocInfoField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         break;
     case FIELD_PROP_BOOL2:
         nSubType &= 0xf0ff;
-        if(*(sal_Bool*)rAny.getValue())
+        if(*static_cast<sal_Bool const *>(rAny.getValue()))
             nSubType |= DI_SUB_DATE;
         else
             nSubType |= DI_SUB_TIME;
@@ -1506,7 +1506,7 @@ bool SwHiddenTxtField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         rAny >>= aFALSETxt;
         break;
     case FIELD_PROP_BOOL1:
-        bIsHidden = *(sal_Bool*)rAny.getValue();
+        bIsHidden = *static_cast<sal_Bool const *>(rAny.getValue());
         break;
     case FIELD_PROP_PAR4:
         rAny >>= aContent;
@@ -1605,7 +1605,7 @@ bool SwHiddenParaField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         rAny >>= aCond;
         break;
     case FIELD_PROP_BOOL1:
-        bIsHidden = *(sal_Bool*)rAny.getValue();
+        bIsHidden = *static_cast<sal_Bool const *>(rAny.getValue());
         break;
 
     default:
@@ -1815,7 +1815,7 @@ bool SwPostItField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     case FIELD_PROP_DATE:
         if( rAny.getValueType() == ::cppu::UnoType<util::Date>::get() )
         {
-            util::Date aSetDate = *(util::Date*)rAny.getValue();
+            util::Date aSetDate = *static_cast<util::Date const *>(rAny.getValue());
             aDateTime = Date(aSetDate.Day, aSetDate.Month, aSetDate.Year);
         }
         break;
@@ -1952,7 +1952,7 @@ bool SwExtUserField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         }
         break;
     case FIELD_PROP_BOOL1:
-        if( *(sal_Bool*)rAny.getValue() )
+        if( *static_cast<sal_Bool const *>(rAny.getValue()) )
             SetFormat(GetFormat() | AF_FIXED);
         else
             SetFormat(GetFormat() & ~AF_FIXED);
@@ -2029,7 +2029,7 @@ bool SwRefPageSetField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     switch( nWhichId )
     {
     case FIELD_PROP_BOOL1:
-        bOn = *(sal_Bool*)rAny.getValue();
+        bOn = *static_cast<sal_Bool const *>(rAny.getValue());
         break;
     case FIELD_PROP_USHORT1:
         rAny >>=nOffset;

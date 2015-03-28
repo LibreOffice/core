@@ -211,7 +211,7 @@ sal_Int8 SwGlobalTree::ExecuteDrop( const ExecuteDropEvent& rEvt )
 
         OUString sFileName;
         const SwGlblDocContent* pCnt = pDropEntry ?
-                    (const SwGlblDocContent*)pDropEntry->GetUserData() :
+                    static_cast<const SwGlblDocContent*>(pDropEntry->GetUserData()) :
                             0;
         if( aData.HasFormat( SotClipboardFormatId::FILE_LIST ))
         {
@@ -458,7 +458,7 @@ void     SwGlobalTree::RequestHelp( const HelpEvent& rHEvt )
         Point aPos( ScreenToOutputPixel( rHEvt.GetMousePosPixel() ));
         SvTreeListEntry* pEntry = GetEntry( aPos );
         const SwGlblDocContent* pCont = pEntry ?
-                            (const SwGlblDocContent*)pEntry->GetUserData() : 0;
+                            static_cast<const SwGlblDocContent*>(pEntry->GetUserData()) : 0;
         if( pCont &&  GLBLDOC_SECTION == pCont->GetType())
         {
             bParent = false;
@@ -770,7 +770,7 @@ IMPL_LINK( SwGlobalTree, PopupHdl, Menu* , pMenu)
 void    SwGlobalTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry )
 {
     SvTreeListEntry* pEntry = FirstSelected();
-    SwGlblDocContent* pCont = pEntry ? (SwGlblDocContent*)pEntry->GetUserData() : 0;
+    SwGlblDocContent* pCont = pEntry ? static_cast<SwGlblDocContent*>(pEntry->GetUserData()) : 0;
     // If a RequestHelp is called during the dialogue,
     // then the content gets lost. Because of that a copy
     // is created in which only the DocPos is set correctly.
@@ -788,7 +788,7 @@ void    SwGlobalTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry 
             SvTreeListEntry* pSelEntry = FirstSelected();
             while( pSelEntry )
             {
-                SwGlblDocContent* pContent = (SwGlblDocContent*)pSelEntry->GetUserData();
+                SwGlblDocContent* pContent = static_cast<SwGlblDocContent*>(pSelEntry->GetUserData());
                 if(GLBLDOC_SECTION == pContent->GetType() &&
                     pContent->GetSection()->IsConnected())
                 {
@@ -800,7 +800,7 @@ void    SwGlobalTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry 
             pSelEntry = FirstSelected();
             while( pSelEntry )
             {
-                SwGlblDocContent* pContent = (SwGlblDocContent*)pSelEntry->GetUserData();
+                SwGlblDocContent* pContent = static_cast<SwGlblDocContent*>(pSelEntry->GetUserData());
                 if(GLBLDOC_TOXBASE == pContent->GetType())
                     pActiveShell->UpdateTableOf(*pContent->GetTOX());
                 pSelEntry = NextSelected(pSelEntry);
@@ -947,7 +947,7 @@ void    SwGlobalTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry 
                         Display();
                         Select(GetModel()->GetEntryAtAbsPos(nEntryPos));
                         pEntry = FirstSelected();
-                        pCont = pEntry ? (SwGlblDocContent*)pEntry->GetUserData() : 0;
+                        pCont = pEntry ? static_cast<SwGlblDocContent*>(pEntry->GetUserData()) : 0;
                     }
                     else
                     {
@@ -1046,8 +1046,8 @@ void    SwGlobalTree::ExecCommand(sal_uInt16 nCmd)
     OSL_ENSURE(pEntry, "It explodes in the next moment");
     if(FN_GLOBAL_EDIT == nCmd)
     {
-        const SwGlblDocContent* pCont = (const SwGlblDocContent*)
-                                                pEntry->GetUserData();
+        const SwGlblDocContent* pCont = static_cast<const SwGlblDocContent*>(
+                                                pEntry->GetUserData());
         EditContent(pCont);
     }
     else
@@ -1192,7 +1192,7 @@ void SwGlobalTree::OpenDoc(const SwGlblDocContent* pCont)
 IMPL_LINK_NOARG( SwGlobalTree, DoubleClickHdl)
 {
     SvTreeListEntry* pEntry = GetCurEntry();
-    SwGlblDocContent* pCont = (SwGlblDocContent*)pEntry->GetUserData();
+    SwGlblDocContent* pCont = static_cast<SwGlblDocContent*>(pEntry->GetUserData());
     if(pCont->GetType() == GLBLDOC_SECTION)
         OpenDoc(pCont);
     else
@@ -1233,7 +1233,7 @@ void SwLBoxString::Paint(
     const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* pView,
     const SvTreeListEntry* pEntry)
 {
-    SwGlblDocContent* pCont = (SwGlblDocContent*)pEntry->GetUserData();
+    SwGlblDocContent* pCont = static_cast<SwGlblDocContent*>(pEntry->GetUserData());
     if(pCont->GetType() == GLBLDOC_SECTION &&
         !(pCont->GetSection())->IsConnectFlag() )
     {
@@ -1269,7 +1269,7 @@ void SwGlobalTree::InsertRegion( const SwGlblDocContent* _pContent, const Sequen
         if ( !_pContent )
         {
             SvTreeListEntry* pLast = (SvTreeListEntry*)LastVisible();
-            _pContent = (SwGlblDocContent*)pLast->GetUserData();
+            _pContent = static_cast<SwGlblDocContent*>(pLast->GetUserData());
             bMove = true;
         }
         OUString sFilePassword;

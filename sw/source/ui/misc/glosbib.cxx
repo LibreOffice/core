@@ -131,7 +131,7 @@ void SwGlossaryGroupDlg::Apply()
             if(m_pGroupTLB->GetEntryCount())
             {
                 SvTreeListEntry* pFirst = m_pGroupTLB->First();
-                GlosBibUserData* pUserData = (GlosBibUserData*)pFirst->GetUserData();
+                GlosBibUserData* pUserData = static_cast<GlosBibUserData*>(pFirst->GetUserData());
                 pGlosHdl->SetCurGroup(pUserData->sGroupName);
             }
         }
@@ -177,7 +177,7 @@ IMPL_LINK( SwGlossaryGroupDlg, SelectHdl, SvTabListBox*, EMPTYARG  )
     SvTreeListEntry* pFirstEntry = m_pGroupTLB->FirstSelected();
     if(pFirstEntry)
     {
-        GlosBibUserData* pUserData = (GlosBibUserData*)pFirstEntry->GetUserData();
+        GlosBibUserData* pUserData = static_cast<GlosBibUserData*>(pFirstEntry->GetUserData());
         OUString sEntry(pUserData->sGroupName);
         OUString sName(m_pNameED->GetText());
         bool bExists = false;
@@ -185,7 +185,7 @@ IMPL_LINK( SwGlossaryGroupDlg, SelectHdl, SvTabListBox*, EMPTYARG  )
         if( 0xffffffff > nPos)
         {
             SvTreeListEntry* pEntry = m_pGroupTLB->GetEntry(nPos);
-            GlosBibUserData* pFoundData = (GlosBibUserData*)pEntry->GetUserData();
+            GlosBibUserData* pFoundData = static_cast<GlosBibUserData*>(pEntry->GetUserData());
             bExists = pFoundData->sGroupName == sEntry;
         }
 
@@ -224,7 +224,7 @@ IMPL_LINK( SwGlossaryGroupDlg, DeleteHdl, Button*, pButton  )
         pButton->Enable(false);
         return 0;
     }
-    GlosBibUserData* pUserData = (GlosBibUserData*)pEntry->GetUserData();
+    GlosBibUserData* pUserData = static_cast<GlosBibUserData*>(pEntry->GetUserData());
     OUString const sEntry(pUserData->sGroupName);
     // if the name to be deleted is among the new ones - get rid of it
     bool bDelete = true;
@@ -269,7 +269,7 @@ IMPL_LINK( SwGlossaryGroupDlg, DeleteHdl, Button*, pButton  )
 IMPL_LINK_NOARG(SwGlossaryGroupDlg, RenameHdl)
 {
     SvTreeListEntry* pEntry = m_pGroupTLB->FirstSelected();
-    GlosBibUserData* pUserData = (GlosBibUserData*)pEntry->GetUserData();
+    GlosBibUserData* pUserData = static_cast<GlosBibUserData*>(pEntry->GetUserData());
     OUString sEntry(pUserData->sGroupName);
 
     const OUString sNewTitle(m_pNameED->GetText());
@@ -297,7 +297,7 @@ IMPL_LINK_NOARG(SwGlossaryGroupDlg, RenameHdl)
                 + OUStringLiteral1<RENAME_TOKEN_DELIM>() + sNewTitle;
         m_RenamedArr.push_back(sEntry);
     }
-    delete (GlosBibUserData*)pEntry->GetUserData();
+    delete static_cast<GlosBibUserData*>(pEntry->GetUserData());
     m_pGroupTLB->GetModel()->Remove(pEntry);
     pEntry = m_pGroupTLB->InsertEntry(m_pNameED->GetText() + "\t"
                                       + m_pPathLB->GetSelectEntry());
@@ -354,7 +354,7 @@ IMPL_LINK_NOARG(SwGlossaryGroupDlg, ModifyHdl)
     SvTreeListEntry* pEntry = m_pGroupTLB->FirstSelected();
     if(pEntry)
     {
-        GlosBibUserData* pUserData = (GlosBibUserData*)pEntry->GetUserData();
+        GlosBibUserData* pUserData = static_cast<GlosBibUserData*>(pEntry->GetUserData());
         bEnableDel = IsDeleteAllowed(pUserData->sGroupName);
     }
 
@@ -418,7 +418,7 @@ void    SwGlossaryGroupTLB::RequestHelp( const HelpEvent& rHEvt )
                 aSize.Width() = GetSizePixel().Width() - aPos.X();
             aPos = OutputToScreenPixel(aPos);
             Rectangle aItemRect( aPos, aSize );
-            GlosBibUserData* pData = (GlosBibUserData*)pEntry->GetUserData();
+            GlosBibUserData* pData = static_cast<GlosBibUserData*>(pEntry->GetUserData());
             const OUString sMsg = pData->sPath + "/"
                                 + pData->sGroupName.getToken(0, GLOS_DELIM)
                                 + SwGlossaries::GetExtension();

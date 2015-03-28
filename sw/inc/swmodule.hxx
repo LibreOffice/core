@@ -262,7 +262,7 @@ inline void SwModule::SetLngSvcEvtListener(
 
 //    Access to SwModule, the View and the shell.
 
-#define SW_MOD() ( *(SwModule**) GetAppData(SHL_WRITER))
+#define SW_MOD() ( *reinterpret_cast<SwModule**>(GetAppData(SHL_WRITER)))
 
 SW_DLLPUBLIC SwView*    GetActiveView();
 SW_DLLPUBLIC SwWrtShell* GetActiveWrtShell();

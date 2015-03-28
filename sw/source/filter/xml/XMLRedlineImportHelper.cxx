@@ -273,12 +273,12 @@ XMLRedlineImportHelper::XMLRedlineImportHelper(
     }
 
     // get redline mode
-    bShowChanges = *(sal_Bool*)
+    bShowChanges = *static_cast<sal_Bool const *>(
         ( bHandleShowChanges ? xModelPropertySet : xImportInfoPropertySet )
-        ->getPropertyValue( sShowChanges ).getValue();
-    bRecordChanges = *(sal_Bool*)
+        ->getPropertyValue( sShowChanges ).getValue());
+    bRecordChanges = *static_cast<sal_Bool const *>(
         ( bHandleRecordChanges ? xModelPropertySet : xImportInfoPropertySet )
-        ->getPropertyValue( sRecordChanges ).getValue();
+        ->getPropertyValue( sRecordChanges ).getValue());
     {
         Any aAny = (bHandleProtectionKey  ? xModelPropertySet
                                           : xImportInfoPropertySet )

@@ -415,7 +415,7 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
                     nMask = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
                 if( SfxItemState::SET == pArgs->GetItemState(FN_PARAM_WRTSHELL,
                     false, &pItem ))
-                    pActShell = pShell = (SwWrtShell*)static_cast<const SwPtrItem*>(pItem)->GetValue();
+                    pActShell = pShell = static_cast<SwWrtShell*>(static_cast<const SwPtrItem*>(pItem)->GetValue());
 
                 if( nSlot == SID_STYLE_UPDATE_BY_EXAMPLE )
                 {

@@ -438,10 +438,10 @@ bool    SwAuthorityFieldType::PutValue( const Any& rAny, sal_uInt16 nWhichId )
         break;
     }
     case FIELD_PROP_BOOL1:
-        m_bIsSequence = *(sal_Bool*)rAny.getValue();
+        m_bIsSequence = *static_cast<sal_Bool const *>(rAny.getValue());
         break;
     case FIELD_PROP_BOOL2:
-        m_bSortByDocument = *(sal_Bool*)rAny.getValue();
+        m_bSortByDocument = *static_cast<sal_Bool const *>(rAny.getValue());
         break;
 
     case FIELD_PROP_LOCALE:
@@ -475,7 +475,7 @@ bool    SwAuthorityFieldType::PutValue( const Any& rAny, sal_uInt16 nWhichId )
                         }
                         else if(pValue[j].Name == UNO_NAME_IS_SORT_ASCENDING)
                         {
-                            pSortKey->bSortAscending = *(sal_Bool*)pValue[j].Value.getValue();
+                            pSortKey->bSortAscending = *static_cast<sal_Bool const *>(pValue[j].Value.getValue());
                         }
                     }
                     m_SortKeyArr.push_back(pSortKey);

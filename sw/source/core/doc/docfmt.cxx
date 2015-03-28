@@ -98,7 +98,7 @@ static void SetTxtFmtCollNext( SwTxtFmtColl* pTxtColl, const SwTxtFmtColl* pDel 
 
 static bool lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
 {
-    const sw::DocumentContentOperationsManager::ParaRstFmt* pPara = (sw::DocumentContentOperationsManager::ParaRstFmt*)pArgs;
+    const sw::DocumentContentOperationsManager::ParaRstFmt* pPara = static_cast<sw::DocumentContentOperationsManager::ParaRstFmt*>(pArgs);
     SwCntntNode* pNode = (SwCntntNode*)rpNd->GetCntntNode();
     if( pNode && pNode->HasSwAttrSet() )
     {

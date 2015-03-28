@@ -860,7 +860,7 @@ OUString SwContentTree::GetEntryAltText( SvTreeListEntry* pEntry ) const
     if( pEntry == NULL)
         return OUString();
 
-    SwContent* pCnt = (SwContent*)pEntry->GetUserData();
+    SwContent* pCnt = static_cast<SwContent*>(pEntry->GetUserData());
     if( pCnt == NULL || pCnt->GetParent() == NULL)
         return OUString();
 
@@ -953,7 +953,7 @@ OUString SwContentTree::GetEntryLongDescription( SvTreeListEntry* pEntry ) const
     if( pEntry == NULL)
         return OUString();
 
-    SwContent* pCnt = (SwContent*)pEntry->GetUserData();
+    SwContent* pCnt = static_cast<SwContent*>(pEntry->GetUserData());
     if( pCnt == NULL || pCnt->GetParent() == NULL)
         return OUString();
 
@@ -1093,7 +1093,7 @@ sal_Int8 SwContentTree::ExecuteDrop( const ExecuteDropEvent& rEvt )
     SvTreeListEntry* pEntry = pTargetEntry;
     if( pEntry && ( nRootType == CONTENT_TYPE_OUTLINE ) && lcl_IsContent( pEntry ) )
     {
-        SwOutlineContent* pOutlineContent = ( SwOutlineContent* )( pEntry->GetUserData() );
+        SwOutlineContent* pOutlineContent = static_cast<SwOutlineContent*>(pEntry->GetUserData());
         if( pOutlineContent )
         {
             void* key = lcl_GetOutlineKey(this, pOutlineContent);
@@ -1182,11 +1182,11 @@ PopupMenu* SwContentTree::CreateContextMenu( void )
     if((bIsActive || pActiveShell == pActiveView->GetWrtShellPtr())
             && 0 != (pEntry = FirstSelected()) && lcl_IsContent(pEntry))
     {
-        const SwContentType* pContType = ((SwContent*)pEntry->GetUserData())->GetParent();
+        const SwContentType* pContType = static_cast<SwContent*>(pEntry->GetUserData())->GetParent();
         const sal_uInt16 nContentType = pContType->GetType();
         bool bReadonly = pActiveShell->GetView().GetDocShell()->IsReadOnly();
-        bool bVisible = !((SwContent*)pEntry->GetUserData())->IsInvisible();
-        bool bProtected = ((SwContent*)pEntry->GetUserData())->IsProtect();
+        bool bVisible = !static_cast<SwContent*>(pEntry->GetUserData())->IsInvisible();
+        bool bProtected = static_cast<SwContent*>(pEntry->GetUserData())->IsProtect();
         bool bEditable = pContType->IsEditable() &&
             ((bVisible && !bProtected) ||CONTENT_TYPE_REGION == nContentType);
         bool bDeletable = pContType->IsDeletable() &&
@@ -1209,7 +1209,7 @@ PopupMenu* SwContentTree::CreateContextMenu( void )
                 pSubPop4->InsertItem(401, sRemoveIdx);
                 pSubPop4->InsertItem(402, sUpdateIdx);
 
-                const SwTOXBase* pBase = ((SwTOXBaseContent*)pEntry->GetUserData())->GetTOXBase();
+                const SwTOXBase* pBase = static_cast<SwTOXBaseContent*>(pEntry->GetUserData())->GetTOXBase();
                 if(!pBase->IsTOXBaseInReadonly())
                     pSubPop4->InsertItem(403, aContextStrings[ST_EDIT_ENTRY - ST_CONTEXT_FIRST]);
                 pSubPop4->InsertItem(405, sReadonlyIdx);
@@ -1223,7 +1223,7 @@ PopupMenu* SwContentTree::CreateContextMenu( void )
                 pSubPop4->InsertItem(403, aContextStrings[ST_EDIT_ENTRY - ST_CONTEXT_FIRST]);
                 pSubPop4->InsertItem(404, sUnprotTbl);
                 bool bFull = false;
-                OUString sTblName = ((SwContent*)pEntry->GetUserData())->GetName();
+                OUString sTblName = static_cast<SwContent*>(pEntry->GetUserData())->GetName();
                 bool bProt = pActiveShell->HasTblAnyProtection( &sTblName, &bFull );
                 pSubPop4->EnableItem(403, !bFull );
                 pSubPop4->EnableItem(404, bProt );
@@ -1263,7 +1263,7 @@ PopupMenu* SwContentTree::CreateContextMenu( void )
     }
     else if( pEntry )
     {
-        SwContentType* pType = (SwContentType*)pEntry->GetUserData();
+        SwContentType* pType = static_cast<SwContentType*>(pEntry->GetUserData());
         if ( (pType->GetType() == CONTENT_TYPE_POSTIT) &&  (!pActiveShell->GetView().GetDocShell()->IsReadOnly()) && ( pType->GetMemberCount() > 0) )
         {
                 pSubPop4->InsertItem(600, sPostItShow );
@@ -1289,7 +1289,7 @@ sal_IntPtr SwContentTree::GetTabPos( SvTreeListEntry* pEntry, SvLBoxTab* pTab)
     if(lcl_IsContent(pEntry))
     {
         nLevel++;
-        SwContent* pCnt = (SwContent *) pEntry->GetUserData();
+        SwContent* pCnt = static_cast<SwContent *>(pEntry->GetUserData());
         const SwContentType*    pParent;
         if(pCnt &&  0 != (pParent = pCnt->GetParent()))
         {
@@ -1313,7 +1313,7 @@ void  SwContentTree::RequestingChildren( SvTreeListEntry* pParent )
         if(!pParent->HasChildren())
         {
             OSL_ENSURE(pParent->GetUserData(), "no UserData?");
-            SwContentType* pCntType = (SwContentType*)pParent->GetUserData();
+            SwContentType* pCntType = static_cast<SwContentType*>(pParent->GetUserData());
 
             const sal_uInt16 nCount = pCntType->GetMemberCount();
              // Add for outline plus/minus
@@ -1343,7 +1343,7 @@ void  SwContentTree::RequestingChildren( SvTreeListEntry* pParent )
                                  pChild = Prev(pChild);
                                  while(pChild &&
                                          lcl_IsContent(pChild) &&
-                                         !(((SwOutlineContent*)pChild->GetUserData())->GetOutlineLevel() < nLevel)
+                                         !(static_cast<SwOutlineContent*>(pChild->GetUserData())->GetOutlineLevel() < nLevel)
                                       )
                                  {
                                      pChild = Prev(pChild);
@@ -1435,12 +1435,12 @@ SdrObject* SwContentTree::GetDrawingObjectsByContent(const SwContent *pCnt)
 
 bool  SwContentTree::Expand( SvTreeListEntry* pParent )
 {
-    if(!bIsRoot || (((SwContentType*)pParent->GetUserData())->GetType() == CONTENT_TYPE_OUTLINE) ||
+    if(!bIsRoot || (static_cast<SwContentType*>(pParent->GetUserData())->GetType() == CONTENT_TYPE_OUTLINE) ||
             (nRootType == CONTENT_TYPE_OUTLINE))
     {
         if(lcl_IsContentType(pParent))
         {
-            SwContentType* pCntType = (SwContentType*)pParent->GetUserData();
+            SwContentType* pCntType = static_cast<SwContentType*>(pParent->GetUserData());
             const sal_Int32 nOr = 1 << pCntType->GetType(); //linear -> Bitposition
             if(bIsActive || bIsConstant)
             {
@@ -1460,7 +1460,7 @@ bool  SwContentTree::Expand( SvTreeListEntry* pParent )
                 {
                     if(pChild->HasChildren())
                     {
-                        sal_Int32 nPos = ((SwContent*)pChild->GetUserData())->GetYPos();
+                        sal_Int32 nPos = static_cast<SwContent*>(pChild->GetUserData())->GetYPos();
                         void* key = (void*)pShell->getIDocumentOutlineNodesAccess()->getOutlineNode( nPos );
                         mCurrOutLineNodeMap.insert(std::map<void*, bool>::value_type( key, false ) );
                         std::map<void*, bool>::iterator iter = mOutLineNodeMap.find( key );
@@ -1480,7 +1480,7 @@ bool  SwContentTree::Expand( SvTreeListEntry* pParent )
         else if( lcl_IsContent(pParent) )
         {
             SwWrtShell* pShell = GetWrtShell();
-            sal_Int32 nPos = ((SwContent*)pParent->GetUserData())->GetYPos();
+            sal_Int32 nPos = static_cast<SwContent*>(pParent->GetUserData())->GetYPos();
             void* key = (void*)pShell->getIDocumentOutlineNodesAccess()->getOutlineNode( nPos );
             mOutLineNodeMap[key] = true;
         }
@@ -1493,14 +1493,14 @@ bool  SwContentTree::Expand( SvTreeListEntry* pParent )
 bool  SwContentTree::Collapse( SvTreeListEntry* pParent )
 {
     bool bRet(false);
-    if(!bIsRoot || (((SwContentType*)pParent->GetUserData())->GetType() == CONTENT_TYPE_OUTLINE) ||
+    if(!bIsRoot || (static_cast<SwContentType*>(pParent->GetUserData())->GetType() == CONTENT_TYPE_OUTLINE) ||
             (nRootType == CONTENT_TYPE_OUTLINE))
     {
         if(lcl_IsContentType(pParent))
         {
             if(bIsRoot)
                 return bRet = false;
-            SwContentType* pCntType = (SwContentType*)pParent->GetUserData();
+            SwContentType* pCntType = static_cast<SwContentType*>(pParent->GetUserData());
             const sal_Int32 nAnd = ~(1 << pCntType->GetType());
             if(bIsActive || bIsConstant)
             {
@@ -1513,7 +1513,7 @@ bool  SwContentTree::Collapse( SvTreeListEntry* pParent )
         else if( lcl_IsContent(pParent) )
         {
             SwWrtShell* pShell = GetWrtShell();
-            sal_Int32 nPos = ((SwContent*)pParent->GetUserData())->GetYPos();
+            sal_Int32 nPos = static_cast<SwContent*>(pParent->GetUserData())->GetYPos();
             void* key = (void*)pShell->getIDocumentOutlineNodesAccess()->getOutlineNode( nPos );
             mOutLineNodeMap[key] = false;
         }
@@ -1542,7 +1542,7 @@ IMPL_LINK_NOARG(SwContentTree, ContentDoubleClickHdl)
                 pActiveShell->GetView().GetViewFrame()->GetWindow().ToTop();
             }
             //Jump to content type:
-            SwContent* pCnt = (SwContent*)pEntry->GetUserData();
+            SwContent* pCnt = static_cast<SwContent*>(pEntry->GetUserData());
             OSL_ENSURE( pCnt, "no UserData");
             GotoContent(pCnt);
             if(pCnt->GetParent()->GetType() == CONTENT_TYPE_FRAME)
@@ -1713,7 +1713,7 @@ void SwContentTree::Display( bool bActive )
 
                 while( 0 != (pEntry = Next(pEntry)) )
                 {
-                    if(((SwOutlineContent*)pEntry->GetUserData())->GetPos() == nActPos)
+                    if(static_cast<SwOutlineContent*>(pEntry->GetUserData())->GetPos() == nActPos)
                     {
                         MakeVisible(pEntry);
                         Select(pEntry);
@@ -1780,7 +1780,7 @@ bool SwContentTree::FillTransferData( TransferDataContainer& rTransfer,
     if(!pEntry || lcl_IsContentType(pEntry) || !pWrtShell)
         return false;
     OUString sEntry;
-    SwContent* pCnt = ((SwContent*)pEntry->GetUserData());
+    SwContent* pCnt = static_cast<SwContent*>(pEntry->GetUserData());
 
     const sal_uInt16 nActType = pCnt->GetParent()->GetType();
     OUString sUrl;
@@ -1920,9 +1920,9 @@ bool SwContentTree::ToggleToRoot()
         if(pEntry)
         {
             if(lcl_IsContentType(pEntry))
-                pCntType = (SwContentType*)pEntry->GetUserData();
+                pCntType = static_cast<SwContentType*>(pEntry->GetUserData());
             else
-                pCntType = ((SwContent*)pEntry->GetUserData())->GetParent();
+                pCntType = static_cast<SwContent*>(pEntry->GetUserData())->GetParent();
             nRootType = pCntType->GetType();
             bIsRoot = true;
             Display(bIsActive || bIsConstant);
@@ -1981,7 +1981,7 @@ bool SwContentTree::HasContentChanged()
             bRepaint = true;
         else
         {
-            const sal_uInt16 nType = ((SwContentType*)pEntry->GetUserData())->GetType();
+            const sal_uInt16 nType = static_cast<SwContentType*>(pEntry->GetUserData())->GetType();
             bOutline = nRootType == CONTENT_TYPE_OUTLINE;
             SwContentType* pArrType = aActiveContentArr[nType];
             if(!pArrType)
@@ -1994,7 +1994,7 @@ bool SwContentTree::HasContentChanged()
                             lcl_IsContent(pFirstSel))
                 {
                     const sal_uInt16 nSelLevel =
-                        ((SwOutlineContent*)pFirstSel->GetUserData())->GetOutlineLevel();
+                        static_cast<SwOutlineContent*>(pFirstSel->GetUserData())->GetOutlineLevel();
                     SwWrtShell* pSh = GetWrtShell();
                     const sal_uInt16 nOutlinePos = pSh->GetOutlinePos(MAXLEVEL);
                     if (nOutlinePos != USHRT_MAX &&
@@ -2034,7 +2034,7 @@ bool SwContentTree::HasContentChanged()
 
             while( 0 != (pFirstEntry = Next(pFirstEntry)) )
             {
-                if(((SwOutlineContent*)pFirstEntry->GetUserData())->GetPos() == nActPos)
+                if(static_cast<SwOutlineContent*>(pFirstEntry->GetUserData())->GetPos() == nActPos)
                 {
                     if(FirstSelected() != pFirstEntry)
                     {
@@ -2053,7 +2053,7 @@ bool SwContentTree::HasContentChanged()
         while ( pEntry )
         {
             bool bNext = true; // at least a next must be
-            SwContentType* pTreeType = (SwContentType*)pEntry->GetUserData();
+            SwContentType* pTreeType = static_cast<SwContentType*>(pEntry->GetUserData());
             const sal_uInt16 nTreeCount = pTreeType->GetMemberCount();
             const sal_uInt16 nType = pTreeType->GetType();
             SwContentType* pArrType = aActiveContentArr[nType];
@@ -2175,7 +2175,7 @@ void SwContentTree::FindActiveTypeAndRemoveUserData()
         while(0 != (pParent = GetParent(pEntry)))
             pEntry = pParent;
         if(pEntry->GetUserData() && lcl_IsContentType(pEntry))
-            nLastSelType = ((SwContentType*)pEntry->GetUserData())->GetType();
+            nLastSelType = static_cast<SwContentType*>(pEntry->GetUserData())->GetType();
     }
     pEntry = First();
     while(pEntry)
@@ -2313,10 +2313,10 @@ void SwContentTree::ExecCommand(sal_uInt16 nCmd, bool bModifier)
             if (pFirstEntry && lcl_IsContent(pFirstEntry))
             {
                 if ( (bIsRoot && nRootType == CONTENT_TYPE_OUTLINE) ||
-                    ((SwContent*)pFirstEntry->GetUserData())->GetParent()->GetType()
+                    static_cast<SwContent*>(pFirstEntry->GetUserData())->GetParent()->GetType()
                                                 ==  CONTENT_TYPE_OUTLINE)
                 {
-                    nActPos = ((SwOutlineContent*)pFirstEntry->GetUserData())->GetPos();
+                    nActPos = static_cast<SwOutlineContent*>(pFirstEntry->GetUserData())->GetPos();
                 }
             }
             if ( nActPos < USHRT_MAX &&
@@ -2341,13 +2341,13 @@ void SwContentTree::ExecCommand(sal_uInt16 nCmd, bool bModifier)
                     {
                         sal_uInt16 nActEndPos = nActPos;
                         SvTreeListEntry* pEntry = pFirstEntry;
-                        sal_uInt16 nActLevel = ((SwOutlineContent*)
+                        sal_uInt16 nActLevel = static_cast<SwOutlineContent*>(
                                 pFirstEntry->GetUserData())->GetOutlineLevel();
                         pEntry = Next(pEntry);
                         while( pEntry && CONTENT_TYPE_OUTLINE ==
-                            ((SwTypeNumber*)pEntry->GetUserData())->GetTypeId() )
+                            static_cast<SwTypeNumber*>(pEntry->GetUserData())->GetTypeId() )
                         {
-                            if(nActLevel >= ((SwOutlineContent*)
+                            if(nActLevel >= static_cast<SwOutlineContent*>(
                                 pEntry->GetUserData())->GetOutlineLevel())
                                 break;
                             pEntry = Next(pEntry);
@@ -2357,7 +2357,7 @@ void SwContentTree::ExecCommand(sal_uInt16 nCmd, bool bModifier)
                         {
                             // If the last entry is to be moved it is over!
                             if(pEntry && CONTENT_TYPE_OUTLINE ==
-                                ((SwTypeNumber*)pEntry->GetUserData())->GetTypeId())
+                                static_cast<SwTypeNumber*>(pEntry->GetUserData())->GetTypeId())
                             {
                                 // pEntry now points to the following entry of the last
                                 // selected entry.
@@ -2369,8 +2369,8 @@ void SwContentTree::ExecCommand(sal_uInt16 nCmd, bool bModifier)
                                     pEntry = Next(pEntry);
                                     // nDest++ may only executed if pEntry != 0
                                     if(pEntry && nDest++ &&
-                                    ( nActLevel >= ((SwOutlineContent*)pEntry->GetUserData())->GetOutlineLevel()||
-                                     CONTENT_TYPE_OUTLINE != ((SwTypeNumber*)pEntry->GetUserData())->GetTypeId()))
+                                    ( nActLevel >= static_cast<SwOutlineContent*>(pEntry->GetUserData())->GetOutlineLevel()||
+                                     CONTENT_TYPE_OUTLINE != static_cast<SwTypeNumber*>(pEntry->GetUserData())->GetTypeId()))
                                     {
                                         nDest--;
                                         break;
@@ -2392,9 +2392,9 @@ void SwContentTree::ExecCommand(sal_uInt16 nCmd, bool bModifier)
                                 nDest--;
                                 pEntry = Prev(pEntry);
                                 if(pEntry &&
-                                    (nActLevel >= ((SwOutlineContent*)pEntry->GetUserData())->GetOutlineLevel()||
+                                    (nActLevel >= static_cast<SwOutlineContent*>(pEntry->GetUserData())->GetOutlineLevel()||
                                     CONTENT_TYPE_OUTLINE !=
-                                ((SwTypeNumber*)pEntry->GetUserData())->GetTypeId()))
+                                static_cast<SwTypeNumber*>(pEntry->GetUserData())->GetTypeId()))
                                 {
                                     break;
                                 }
@@ -2428,7 +2428,7 @@ void SwContentTree::ExecCommand(sal_uInt16 nCmd, bool bModifier)
 
                     while( 0 != (pFirst = Next(pFirst)) && lcl_IsContent(pFirst))
                     {
-                        if(((SwOutlineContent*)pFirst->GetUserData())->GetPos() == nCurrPos)
+                        if(static_cast<SwOutlineContent*>(pFirst->GetUserData())->GetPos() == nCurrPos)
                         {
                             Select(pFirst);
                             MakeVisible(pFirst);
@@ -2526,17 +2526,17 @@ TriState SwContentTree::NotifyMoving( SvTreeListEntry*  pTarget,
     if(!bDocChgdInDragging)
     {
         sal_uInt16 nTargetPos = 0;
-        sal_uInt16 nSourcePos = (( SwOutlineContent* )pEntry->GetUserData())->GetPos();
+        sal_uInt16 nSourcePos = static_cast<SwOutlineContent*>(pEntry->GetUserData())->GetPos();
         if(!lcl_IsContent(pTarget))
             nTargetPos = USHRT_MAX;
         else
-            nTargetPos = (( SwOutlineContent* )pTarget->GetUserData())->GetPos();
+            nTargetPos = static_cast<SwOutlineContent*>(pTarget->GetUserData())->GetPos();
         if( MAXLEVEL > nOutlineLevel && // Not all layers are displayed.
                         nTargetPos != USHRT_MAX)
         {
             SvTreeListEntry* pNext = Next(pTarget);
             if(pNext)
-                nTargetPos = (( SwOutlineContent* )pNext->GetUserData())->GetPos() -1;
+                nTargetPos = static_cast<SwOutlineContent*>(pNext->GetUserData())->GetPos() -1;
             else
                 nTargetPos = static_cast<sal_uInt16>(GetWrtShell()->getIDocumentOutlineNodesAccess()->getOutlineNodesCount())- 1;
 
@@ -2563,18 +2563,18 @@ TriState SwContentTree::NotifyCopying( SvTreeListEntry*  pTarget,
     if(!bDocChgdInDragging)
     {
         sal_uInt16 nTargetPos = 0;
-        sal_uInt16 nSourcePos = (( SwOutlineContent* )pEntry->GetUserData())->GetPos();
+        sal_uInt16 nSourcePos = static_cast<SwOutlineContent*>(pEntry->GetUserData())->GetPos();
         if(!lcl_IsContent(pTarget))
             nTargetPos = USHRT_MAX;
         else
-            nTargetPos = (( SwOutlineContent* )pTarget->GetUserData())->GetPos();
+            nTargetPos = static_cast<SwOutlineContent*>(pTarget->GetUserData())->GetPos();
 
         if( MAXLEVEL > nOutlineLevel && // Not all layers are displayed.
                         nTargetPos != USHRT_MAX)
         {
             SvTreeListEntry* pNext = Next(pTarget);
             if(pNext)
-                nTargetPos = (( SwOutlineContent* )pNext->GetUserData())->GetPos() - 1;
+                nTargetPos = static_cast<SwOutlineContent*>(pNext->GetUserData())->GetPos() - 1;
             else
                 nTargetPos = static_cast<sal_uInt16>(GetWrtShell()->getIDocumentOutlineNodesAccess()->getOutlineNodesCount()) - 1;
 
@@ -2673,7 +2673,7 @@ void  SwContentTree::KeyInput(const KeyEvent& rEvent)
         SvTreeListEntry* pEntry = FirstSelected();
         if(pEntry &&
             lcl_IsContent(pEntry) &&
-                ((SwContent*)pEntry->GetUserData())->GetParent()->IsDeletable() &&
+                static_cast<SwContent*>(pEntry->GetUserData())->GetParent()->IsDeletable() &&
                     !pActiveShell->GetView().GetDocShell()->IsReadOnly())
         {
             EditEntry(pEntry, EDIT_MODE_DELETE);
@@ -2703,7 +2703,7 @@ void  SwContentTree::KeyInput(const KeyEvent& rEvent)
                     pActiveShell->GetView().GetViewFrame()->GetWindow().ToTop();
                 }
 
-                SwContent* pCnt = (SwContent*)pEntry->GetUserData();
+                SwContent* pCnt = static_cast<SwContent*>(pEntry->GetUserData());
 
                 switch(pCnt->GetParent()->GetType())
                 {
@@ -2810,10 +2810,10 @@ void  SwContentTree::RequestHelp( const HelpEvent& rHEvt )
             bool bContent = false;
             void* pUserData = pEntry->GetUserData();
             if(lcl_IsContentType(pEntry))
-                nType = ((SwContentType*)pUserData)->GetType();
+                nType = static_cast<SwContentType*>(pUserData)->GetType();
             else
             {
-                nType = ((SwContent*)pUserData)->GetParent()->GetType();
+                nType = static_cast<SwContent*>(pUserData)->GetParent()->GetType();
                 bContent = true;
             }
             OUString sEntry;
@@ -2823,22 +2823,22 @@ void  SwContentTree::RequestHelp( const HelpEvent& rHEvt )
                 switch( nType )
                 {
                     case CONTENT_TYPE_URLFIELD:
-                        sEntry = ((SwURLFieldContent*)pUserData)->GetURL();
+                        sEntry = static_cast<SwURLFieldContent*>(pUserData)->GetURL();
                         bRet = true;
                     break;
 
                     case CONTENT_TYPE_POSTIT:
-                        sEntry = ((SwPostItContent*)pUserData)->GetName();
+                        sEntry = static_cast<SwPostItContent*>(pUserData)->GetName();
                         bRet = true;
                         if(Help::IsBalloonHelpEnabled())
                             bBalloon = true;
                     break;
                     case CONTENT_TYPE_OUTLINE:
-                        sEntry = ((SwOutlineContent*)pUserData)->GetName();
+                        sEntry = static_cast<SwOutlineContent*>(pUserData)->GetName();
                         bRet = true;
                     break;
                     case CONTENT_TYPE_GRAPHIC:
-                        sEntry = ((SwGraphicContent*)pUserData)->GetLink();
+                        sEntry = static_cast<SwGraphicContent*>(pUserData)->GetLink();
 #if OSL_DEBUG_LEVEL > 1
                         sEntry += " ";
                         sEntry += OUString::number(
@@ -2855,7 +2855,7 @@ void  SwContentTree::RequestHelp( const HelpEvent& rHEvt )
                     break;
 #endif
                 }
-                if(((SwContent*)pUserData)->IsInvisible())
+                if(static_cast<SwContent*>(pUserData)->IsInvisible())
                 {
                     if(!sEntry.isEmpty())
                         sEntry += ", ";
@@ -2865,12 +2865,12 @@ void  SwContentTree::RequestHelp( const HelpEvent& rHEvt )
             }
             else
             {
-                const sal_uInt16 nMemberCount = ((SwContentType*)pUserData)->GetMemberCount();
+                const sal_uInt16 nMemberCount = static_cast<SwContentType*>(pUserData)->GetMemberCount();
                 sEntry = OUString::number(nMemberCount);
                 sEntry += " ";
                 sEntry += nMemberCount == 1
-                            ? ((SwContentType*)pUserData)->GetSingleName()
-                            : ((SwContentType*)pUserData)->GetName();
+                            ? static_cast<SwContentType*>(pUserData)->GetSingleName()
+                            : static_cast<SwContentType*>(pUserData)->GetName();
                 bRet = true;
             }
             if(bRet)
@@ -2949,7 +2949,7 @@ void    SwContentTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry
         break;
         case 405 :
         {
-            const SwTOXBase* pBase = ((SwTOXBaseContent*)pFirst->GetUserData())
+            const SwTOXBase* pBase = static_cast<SwTOXBaseContent*>(pFirst->GetUserData())
                                                                 ->GetTOXBase();
             pActiveShell->SetTOXBaseReadonly(*pBase, !pActiveShell->IsTOXBaseReadonly(*pBase));
         }
@@ -3057,7 +3057,7 @@ bool SwContentTree::Select( SvTreeListEntry* pEntry, bool bSelect )
         {
             if ((bIsRoot && nRootType == CONTENT_TYPE_OUTLINE) ||
                 (lcl_IsContent(pEntry) &&
-                    ((SwContentType*)pParentEntry->GetUserData())->GetType() == CONTENT_TYPE_OUTLINE))
+                    static_cast<SwContentType*>(pParentEntry->GetUserData())->GetType() == CONTENT_TYPE_OUTLINE))
             {
                 bEnable = true;
             }
@@ -3094,7 +3094,7 @@ OUString SwContentType::RemoveNewline(const OUString& rEntry)
 
 void SwContentTree::EditEntry(SvTreeListEntry* pEntry, sal_uInt8 nMode)
 {
-    SwContent* pCnt = (SwContent*)pEntry->GetUserData();
+    SwContent* pCnt = static_cast<SwContent*>(pEntry->GetUserData());
     GotoContent(pCnt);
     const sal_uInt16 nType = pCnt->GetParent()->GetType();
     sal_uInt16 nSlot = 0;
@@ -3492,7 +3492,7 @@ void SwContentLBoxString::Paint(
     const SvTreeListEntry* pEntry)
 {
     if(lcl_IsContent(pEntry) &&
-            ((SwContent *)pEntry->GetUserData())->IsInvisible())
+            static_cast<SwContent *>(pEntry->GetUserData())->IsInvisible())
     {
         vcl::Font aOldFont( rDev.GetFont());
         vcl::Font aFont(aOldFont);

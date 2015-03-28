@@ -107,7 +107,7 @@ bool SwScriptField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         rAny >>= sCode;
         break;
     case FIELD_PROP_BOOL1:
-        bCodeURL = *(sal_Bool*)rAny.getValue();
+        bCodeURL = *static_cast<sal_Bool const *>(rAny.getValue());
         break;
     default:
         OSL_FAIL("illegal property");

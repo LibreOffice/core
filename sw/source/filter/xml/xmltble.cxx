@@ -816,7 +816,7 @@ void SwXMLExport::ExportTableBox( const SwTableBox& rBox,
 
                     // cell protection
                     aAny = xCellPropertySet->getPropertyValue(sIsProtected);
-                    if (*(sal_Bool*)aAny.getValue())
+                    if (*static_cast<sal_Bool const *>(aAny.getValue()))
                     {
                         AddAttribute( XML_NAMESPACE_TABLE, XML_PROTECTED,
                                         XML_TRUE );

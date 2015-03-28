@@ -164,7 +164,7 @@ static void lcl_SetSpecialProperty(SwFrmFmt* pFmt,
                 UnoActionContext aAction(pFmt->GetDoc());
                 if( pEntry->nWID == FN_TABLE_HEADLINE_REPEAT)
                 {
-                    bool bVal = *(sal_Bool*)aValue.getValue();
+                    bool bVal = *static_cast<sal_Bool const *>(aValue.getValue());
                     pFmt->GetDoc()->SetRowsToRepeat( *pTable, bVal ? 1 : 0 );
                 }
                 else
@@ -199,7 +199,7 @@ static void lcl_SetSpecialProperty(SwFrmFmt* pFmt,
             }
             else if(FN_TABLE_IS_RELATIVE_WIDTH == pEntry->nWID)
             {
-                bool bPercent = *(sal_Bool*)aValue.getValue();
+                bool bPercent = *static_cast<sal_Bool const *>(aValue.getValue());
                 if(!bPercent)
                     aSz.SetWidthPercent(0);
                 else
@@ -679,7 +679,7 @@ static void lcl_SetTblSeparators(const uno::Any& rVal, SwTable* pTable, SwTableB
         return;
 
     const uno::Sequence< text::TableColumnSeparator>* pSepSeq =
-                (uno::Sequence< text::TableColumnSeparator>*) rVal.getValue();
+                static_cast<uno::Sequence< text::TableColumnSeparator> const *>(rVal.getValue());
     if(pSepSeq && static_cast<size_t>(pSepSeq->getLength()) == nOldCount)
     {
         SwTabCols aCols(aOldCols);
@@ -1411,7 +1411,7 @@ void SwXTextTableRow::setPropertyValue(const OUString& rPropertyName, const uno:
                         SwFmtFrmSize aFrmSize(pLn->GetFrmFmt()->GetFrmSize());
                         if(FN_UNO_ROW_AUTO_HEIGHT== pEntry->nWID)
                         {
-                            bool bSet = *(sal_Bool*)aValue.getValue();
+                            bool bSet = *static_cast<sal_Bool const *>(aValue.getValue());
                             aFrmSize.SetHeightSizeType(bSet ? ATT_VAR_SIZE : ATT_FIX_SIZE);
                         }
                         else
@@ -2015,7 +2015,7 @@ void SwTableProperties_Impl::ApplyTblAttr(const SwTable& rTbl, SwDoc& rDoc)
     const SwFrmFmt &rFrmFmt = *rTbl.GetFrmFmt();
     if(GetProperty(FN_TABLE_HEADLINE_REPEAT, 0xff, pRepHead ))
     {
-        bool bVal = *(sal_Bool*)pRepHead->getValue();
+        bool bVal = *static_cast<sal_Bool const *>(pRepHead->getValue());
         ((SwTable&)rTbl).SetRowsToRepeat( bVal ? 1 : 0 );  // TODO: MULTIHEADER
     }
 
@@ -2116,7 +2116,7 @@ void SwTableProperties_Impl::ApplyTblAttr(const SwTable& rTbl, SwDoc& rDoc)
         ((SfxPoolItem&)aSz).PutValue(*pWidth, MID_FRMSIZE_WIDTH);
         bPutSize = true;
     }
-    bool bTemp = pSzRel && *(sal_Bool*)pSzRel->getValue();
+    bool bTemp = pSzRel && *static_cast<sal_Bool const *>(pSzRel->getValue());
     if(pSzRel && bTemp && pRelWidth)
     {
         ((SfxPoolItem&)aSz).PutValue(*pRelWidth, MID_FRMSIZE_REL_WIDTH|CONVERT_TWIPS);
@@ -2157,7 +2157,7 @@ void SwTableProperties_Impl::ApplyTblAttr(const SwTable& rTbl, SwDoc& rDoc)
     const::uno::Any* pSplit;
     if(GetProperty(RES_LAYOUT_SPLIT, 0, pSplit ))
     {
-        bool bTmp = *(sal_Bool*)pSplit->getValue();
+        bool bTmp = *static_cast<sal_Bool const *>(pSplit->getValue());
         SwFmtLayoutSplit aSp(bTmp);
         aSet.Put(aSp);
     }
@@ -2706,7 +2706,7 @@ void SAL_CALL SwXTextTable::setDataArray(
                 {
                     const uno::Any &rAny = pColArray[nCol];
                     if (uno::TypeClass_STRING == rAny.getValueTypeClass())
-                        sw_setString( *pXCell, *(OUString *) rAny.getValue() );
+                        sw_setString( *pXCell, *static_cast<OUString const *>(rAny.getValue()) );
                     else
                     {
                         double d = 0;
@@ -3109,7 +3109,7 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName, const uno::An
 
                 case FN_UNO_RANGE_ROW_LABEL:
                 {
-                    bool bTmp = *(sal_Bool*)aValue.getValue();
+                    bool bTmp = *static_cast<sal_Bool const *>(aValue.getValue());
                     if(bFirstRowAsLabel != bTmp)
                     {
                         lcl_SendChartEvent(*this, m_pImpl->m_Listeners);
@@ -3120,7 +3120,7 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName, const uno::An
 
                 case FN_UNO_RANGE_COL_LABEL:
                 {
-                    bool bTmp = *(sal_Bool*)aValue.getValue();
+                    bool bTmp = *static_cast<sal_Bool const *>(aValue.getValue());
                     if(bFirstColumnAsLabel != bTmp)
                     {
                         lcl_SendChartEvent(*this, m_pImpl->m_Listeners);
@@ -3978,7 +3978,7 @@ void SwXCellRange::setPropertyValue(const OUString& rPropertyName, const uno::An
                 break;
                 case FN_UNO_RANGE_ROW_LABEL:
                 {
-                    bool bTmp = *(sal_Bool*)aValue.getValue();
+                    bool bTmp = *static_cast<sal_Bool const *>(aValue.getValue());
                     if(bFirstRowAsLabel != bTmp)
                     {
                         lcl_SendChartEvent(*this, m_ChartListeners);
@@ -3988,7 +3988,7 @@ void SwXCellRange::setPropertyValue(const OUString& rPropertyName, const uno::An
                 break;
                 case FN_UNO_RANGE_COL_LABEL:
                 {
-                    bool bTmp = *(sal_Bool*)aValue.getValue();
+                    bool bTmp = *static_cast<sal_Bool const *>(aValue.getValue());
                     if(bFirstColumnAsLabel != bTmp)
                     {
                         lcl_SendChartEvent(*this, m_ChartListeners);
@@ -4359,7 +4359,7 @@ void SAL_CALL SwXCellRange::setDataArray(
                 {
                     const uno::Any &rAny = pColArray[nCol];
                     if (uno::TypeClass_STRING == rAny.getValueTypeClass())
-                        sw_setString( *pXCell, *(OUString *) rAny.getValue() );
+                        sw_setString( *pXCell, *static_cast<OUString const *>(rAny.getValue()) );
                     else
                     {
                         double d = 0;

@@ -646,7 +646,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
 {
     if( !rTextRect.IsEmpty() )
     {
-        SvxMSDffImportData& rImportData = *(SvxMSDffImportData*)pData;
+        SvxMSDffImportData& rImportData = *static_cast<SvxMSDffImportData*>(pData);
         SvxMSDffImportRec* pImpRec = new SvxMSDffImportRec;
 
         // fill Import Record with data
@@ -2165,7 +2165,7 @@ long SwWW8ImplReader::Read_And(WW8PLCFManResult* pRes)
     OUString sInitials;
     if( bVer67 )
     {
-        const WW67_ATRD* pDescri = (const WW67_ATRD*)pSD->GetData();
+        const WW67_ATRD* pDescri = static_cast<const WW67_ATRD*>(pSD->GetData());
         const OUString* pA = GetAnnotationAuthor(SVBT16ToShort(pDescri->ibst));
         if (pA)
             sAuthor = *pA;
@@ -2175,7 +2175,7 @@ long SwWW8ImplReader::Read_And(WW8PLCFManResult* pRes)
     }
     else
     {
-        const WW8_ATRD* pDescri = (const WW8_ATRD*)pSD->GetData();
+        const WW8_ATRD* pDescri = static_cast<const WW8_ATRD*>(pSD->GetData());
 
         {
             const sal_uInt16 nLen = SVBT16ToShort(pDescri->xstUsrInitl[0]);
@@ -3643,7 +3643,7 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
                     WW8_FC nPos;
                     void *pData;
                     pTest->Get(nPos, pData);
-                    sal_uInt32 nData = SVBT32ToUInt32(*(SVBT32*)pData);
+                    sal_uInt32 nData = SVBT32ToUInt32(*static_cast<SVBT32*>(pData));
                     if (nData & 0x2) // Might be how it works
                     {
                         TabCellEnd();

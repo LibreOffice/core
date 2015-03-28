@@ -390,13 +390,13 @@ long SwWW8ImplReader::Read_Ftn(WW8PLCFManResult* pRes)
     {
         aDesc.meType = MAN_EDN;
         if (pPlcxMan->GetEdn())
-            aDesc.mbAutoNum = 0 != *(short*)pPlcxMan->GetEdn()->GetData();
+            aDesc.mbAutoNum = 0 != *static_cast<short const *>(pPlcxMan->GetEdn()->GetData());
     }
     else
     {
         aDesc.meType = MAN_FTN;
         if (pPlcxMan->GetFtn())
-            aDesc.mbAutoNum = 0 != *(short*)pPlcxMan->GetFtn()->GetData();
+            aDesc.mbAutoNum = 0 != *static_cast<short const *>(pPlcxMan->GetFtn()->GetData());
     }
 
     aDesc.mnStartCp = pRes->nCp2OrIdx;

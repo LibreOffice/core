@@ -343,7 +343,7 @@ sal_Int32 ReadThroughComponent(
         Any aAny = xProps->getPropertyValue("Encrypted");
 
         bool bEncrypted = aAny.getValueType() == ::getBooleanCppuType() &&
-                *(sal_Bool *)aAny.getValue();
+                *static_cast<sal_Bool const *>(aAny.getValue());
 
         uno::Reference <io::XInputStream> xInputStream = xStream->getInputStream();
 
@@ -905,10 +905,10 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, c
     // restore redline mode from import info property set
     sal_Int16 nRedlineMode = nsRedlineMode_t::REDLINE_SHOW_INSERT;
     aAny = xInfoSet->getPropertyValue( sShowChanges );
-    if ( *(sal_Bool*)aAny.getValue() )
+    if ( *static_cast<sal_Bool const *>(aAny.getValue()) )
         nRedlineMode |= nsRedlineMode_t::REDLINE_SHOW_DELETE;
     aAny = xInfoSet->getPropertyValue( sRecordChanges );
-    if ( *(sal_Bool*)aAny.getValue() || (aKey.getLength() > 0) )
+    if ( *static_cast<sal_Bool const *>(aAny.getValue()) || (aKey.getLength() > 0) )
         nRedlineMode |= nsRedlineMode_t::REDLINE_ON;
     else
         nRedlineMode |= nsRedlineMode_t::REDLINE_NONE;

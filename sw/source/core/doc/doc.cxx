@@ -1089,7 +1089,7 @@ sal_uInt16 SwDoc::GetRefMarks( std::vector<OUString>* pNames ) const
 static bool lcl_SpellAndGrammarAgain( const SwNodePtr& rpNd, void* pArgs )
 {
     SwTxtNode *pTxtNode = (SwTxtNode*)rpNd->GetTxtNode();
-    bool bOnlyWrong = *(sal_Bool*)pArgs;
+    bool bOnlyWrong = *static_cast<sal_Bool*>(pArgs);
     if( pTxtNode )
     {
         if( bOnlyWrong )

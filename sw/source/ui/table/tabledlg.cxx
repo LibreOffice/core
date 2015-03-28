@@ -453,7 +453,7 @@ void  SwFormatTablePage::Reset( const SfxItemSet* )
 
     if(SfxItemState::SET == rSet.GetItemState( FN_TABLE_REP, false, &pItem ))
     {
-        pTblData = (SwTableRep*)static_cast<const SwPtrItem*>( pItem)->GetValue();
+        pTblData = static_cast<SwTableRep*>(static_cast<const SwPtrItem*>( pItem)->GetValue());
         nMinTableWidth = pTblData->GetColCount() * MINLAY;
 
         if(pTblData->GetWidthPercent())
@@ -767,7 +767,7 @@ void  SwTableColumnPage::Reset( const SfxItemSet* )
     const SfxPoolItem* pItem;
     if(SfxItemState::SET == rSet.GetItemState( FN_TABLE_REP, false, &pItem ))
     {
-        pTblData = (SwTableRep*)static_cast<const SwPtrItem*>( pItem)->GetValue();
+        pTblData = static_cast<SwTableRep*>(static_cast<const SwPtrItem*>( pItem)->GetValue());
         nNoOfVisibleCols = pTblData->GetColCount();
         nNoOfCols = pTblData->GetAllColCount();
         nTableWidth = pTblData->GetAlign() != text::HoriOrientation::FULL &&

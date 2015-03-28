@@ -292,9 +292,9 @@ void SwBasicEscherEx::PreWriteHyperlinkWithinFly(const SwFrmFmt& rFmt,EscherProp
         {
             SvMemoryStream *rStrm = new SvMemoryStream ;
             WriteHyperlinkWithinFly( *rStrm, pINetFmt );
-            sal_uInt8* pBuf = (sal_uInt8*) rStrm->GetData();
+            sal_uInt8 const * pBuf = static_cast<sal_uInt8 const *>(rStrm->GetData());
             sal_uInt32 nSize = rStrm->Seek( STREAM_SEEK_TO_END );
-            rPropOpt.AddOpt( ESCHER_Prop_pihlShape, true, nSize, pBuf, nSize );
+            rPropOpt.AddOpt( ESCHER_Prop_pihlShape, true, nSize, const_cast<sal_uInt8 *>(pBuf), nSize );
             sal_uInt32 nValue;
             OUString aNamestr = pINetFmt->GetName();
             if (!aNamestr.isEmpty())
@@ -400,7 +400,7 @@ void WW8Export::DoComboBox(uno::Reference<beans::XPropertySet> xPropSet)
     if (nNoStrings)
     {
         uno::Any aTmp = xPropSet->getPropertyValue("DefaultText");
-        const OUString *pStr = (const OUString *)aTmp.getValue();
+        const OUString *pStr = static_cast<const OUString *>(aTmp.getValue());
         if (pStr)
             sSelected = *pStr;
     }
@@ -408,7 +408,7 @@ void WW8Export::DoComboBox(uno::Reference<beans::XPropertySet> xPropSet)
     OUString sName;
     {
         uno::Any aTmp = xPropSet->getPropertyValue("Name");
-        const OUString *pStr = (const OUString *)aTmp.getValue();
+        const OUString *pStr = static_cast<const OUString *>(aTmp.getValue());
         if (pStr)
             sName = *pStr;
     }
@@ -419,7 +419,7 @@ void WW8Export::DoComboBox(uno::Reference<beans::XPropertySet> xPropSet)
         try
         {
             uno::Any aTmp = xPropSet->getPropertyValue("HelpText");
-            const OUString *pStr = (const OUString *)aTmp.getValue();
+            const OUString *pStr = static_cast<const OUString *>(aTmp.getValue());
             if (pStr)
                 sHelp = *pStr;
         }
@@ -430,7 +430,7 @@ void WW8Export::DoComboBox(uno::Reference<beans::XPropertySet> xPropSet)
     OUString sToolTip;
     {
         uno::Any aTmp = xPropSet->getPropertyValue("Name");
-        const OUString *pStr = (const OUString *)aTmp.getValue();
+        const OUString *pStr = static_cast<const OUString *>(aTmp.getValue());
         if (pStr)
             sToolTip = *pStr;
     }

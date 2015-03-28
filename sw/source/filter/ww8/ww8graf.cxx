@@ -1372,7 +1372,7 @@ void SwWW8ImplReader::ReadGrafLayer1( WW8PLCFspecial* pPF, long nGrafAnchorCp )
         OSL_ENSURE( false, "+Wo ist die Grafik (2) ?" );
         return;
     }
-    WW8_FDOA* pF = (WW8_FDOA*)pF0;
+    WW8_FDOA* pF = static_cast<WW8_FDOA*>(pF0);
     if( !SVBT32ToUInt32( pF->fc ) )
     {
         OSL_ENSURE( false, "+Wo ist die Grafik (3) ?" );
@@ -2407,7 +2407,7 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
         return 0;
     }
 
-    WW8_FSPA_SHADOW* pFS = (WW8_FSPA_SHADOW*)pF0;
+    WW8_FSPA_SHADOW* pFS = static_cast<WW8_FSPA_SHADOW*>(pF0);
     WW8_FSPA*        pF;
     WW8_FSPA aFSFA;
     pF = &aFSFA;

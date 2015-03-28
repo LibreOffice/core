@@ -2262,7 +2262,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
             if(rValue.getValueType() != ::cppu::UnoType<util::Date>::get())
                 throw lang::IllegalArgumentException();
 
-            util::Date aTemp = *(const util::Date*)rValue.getValue();
+            util::Date aTemp = *static_cast<const util::Date*>(rValue.getValue());
             m_pImpl->m_pProps->aDate = Date(aTemp.Day, aTemp.Month, aTemp.Year);
         }
         break;
@@ -2301,7 +2301,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
         if (pBool)
         {
             if( rValue.getValueType() == getCppuBooleanType() )
-                *pBool = *(sal_Bool*)rValue.getValue();
+                *pBool = *static_cast<sal_Bool const *>(rValue.getValue());
             else
                 throw lang::IllegalArgumentException();
         }

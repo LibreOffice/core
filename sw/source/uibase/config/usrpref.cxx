@@ -177,7 +177,7 @@ void SwContentViewConfig::Load()
         {
             if(pValues[nProp].hasValue())
             {
-                bool bSet = nProp != 16 && *(sal_Bool*)pValues[nProp].getValue();
+                bool bSet = nProp != 16 && *static_cast<sal_Bool const *>(pValues[nProp].getValue());
                 switch(nProp)
                 {
                     case  0: rParent.SetGraphic(bSet);  break;// "Display/GraphicObject",
@@ -430,7 +430,7 @@ void SwGridConfig::Load()
         {
             if(pValues[nProp].hasValue())
             {
-                bool bSet = nProp < 3 && *(sal_Bool*)pValues[nProp].getValue();
+                bool bSet = nProp < 3 && *static_cast<sal_Bool const *>(pValues[nProp].getValue());
                 sal_Int32 nSet = 0;
                 if(nProp >= 3)
                     pValues[nProp] >>= nSet;
@@ -514,7 +514,7 @@ void SwCursorConfig::Load()
                 bool bSet = false;
                 sal_Int32 nSet = 0;
                 if(nProp != 1 )
-                    bSet = *(sal_Bool*)pValues[nProp].getValue();
+                    bSet = *static_cast<sal_Bool const *>(pValues[nProp].getValue());
                 else
                     pValues[nProp] >>= nSet;
                 switch(nProp)

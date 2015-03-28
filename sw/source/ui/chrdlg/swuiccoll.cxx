@@ -125,7 +125,7 @@ SwCondCollPage::SwCondCollPage(vcl::Window *pParent, const SfxItemSet &rSet)
 SwCondCollPage::~SwCondCollPage()
 {
     for(sal_Int32 i = 0; i < m_pFilterLB->GetEntryCount(); ++i)
-        delete (sal_uInt16*)m_pFilterLB->GetEntryData(i);
+        delete static_cast<sal_uInt16*>(m_pFilterLB->GetEntryData(i));
 
 }
 
@@ -247,7 +247,7 @@ IMPL_LINK( SwCondCollPage, SelectHdl, ListBox*, pBox)
     {
         m_pStyleLB->Clear();
         const sal_Int32 nSelPos = pBox->GetSelectEntryPos();
-        const sal_uInt16 nSearchFlags = *(sal_uInt16*)m_pFilterLB->GetEntryData(nSelPos);
+        const sal_uInt16 nSearchFlags = *static_cast<sal_uInt16*>(m_pFilterLB->GetEntryData(nSelPos));
         SfxStyleSheetBasePool* pPool = rSh.GetView().GetDocShell()->GetStyleSheetPool();
         pPool->SetSearchMask(SFX_STYLE_FAMILY_PARA, nSearchFlags);
         const SfxStyleSheetBase* pBase = pPool->First();

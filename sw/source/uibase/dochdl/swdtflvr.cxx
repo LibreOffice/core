@@ -620,7 +620,7 @@ bool SwTransferable::WriteObject( SotStorageStreamRef& xStream,
     case SWTRANSFER_OBJECTTYPE_DRAWMODEL:
         {
             // don't change the sequence of commands
-            SdrModel *pModel = (SdrModel*)pObject;
+            SdrModel *pModel = static_cast<SdrModel*>(pObject);
             xStream->SetBufferSize( 16348 );
 
             // for the changed pool defaults from drawing layer pool set those
@@ -660,7 +660,7 @@ bool SwTransferable::WriteObject( SotStorageStreamRef& xStream,
 
     case SWTRANSFER_OBJECTTYPE_SWOLE:
         {
-            SfxObjectShell*   pEmbObj = (SfxObjectShell*) pObject;
+            SfxObjectShell*   pEmbObj = static_cast<SfxObjectShell*>(pObject);
             try
             {
                 ::utl::TempFile     aTempFile;
@@ -704,7 +704,7 @@ bool SwTransferable::WriteObject( SotStorageStreamRef& xStream,
     case SWTRANSFER_OBJECTTYPE_DDE:
         {
             xStream->SetBufferSize( 1024 );
-            SwTrnsfrDdeLink* pDdeLnk = (SwTrnsfrDdeLink*)pObject;
+            SwTrnsfrDdeLink* pDdeLnk = static_cast<SwTrnsfrDdeLink*>(pObject);
             if( pDdeLnk->WriteData( *xStream ) )
             {
                 xStream->Commit();
@@ -738,7 +738,7 @@ bool SwTransferable::WriteObject( SotStorageStreamRef& xStream,
 
     if( xWrt.Is() )
     {
-        SwDoc* pDoc = (SwDoc*)pObject;
+        SwDoc* pDoc = static_cast<SwDoc*>(pObject);
         xWrt->bWriteClipboardDoc = true;
         xWrt->bWriteOnlyFirstTable = 0 != (TRNSFR_TABELLE & eBufferType);
         xWrt->SetShowProgress( false );

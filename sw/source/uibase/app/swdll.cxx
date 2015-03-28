@@ -81,7 +81,7 @@ namespace SwGlobals
 SwDLL::SwDLL()
 {
     // the SdModule must be created
-    SwModule** ppShlPtr = (SwModule**) GetAppData(SHL_WRITER);
+    SwModule** ppShlPtr = reinterpret_cast<SwModule**>(GetAppData(SHL_WRITER));
     if ( *ppShlPtr )
         return;
 

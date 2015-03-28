@@ -1231,7 +1231,7 @@ void SwFrmPage::InitPos(RndStdIds eId,
 
         nPos = m_pVertRelationLB->GetSelectEntryPos();
         if (nPos != LISTBOX_ENTRY_NOTFOUND)
-            nOldVRel = ((RelationMap *)m_pVertRelationLB->GetEntryData(nPos))->nRelation;
+            nOldVRel = static_cast<RelationMap *>(m_pVertRelationLB->GetEntryData(nPos))->nRelation;
     }
 
     nPos = m_pHorizontalDLB->GetSelectEntryPos();
@@ -1241,7 +1241,7 @@ void SwFrmPage::InitPos(RndStdIds eId,
 
         nPos = m_pHoriRelationLB->GetSelectEntryPos();
         if (nPos != LISTBOX_ENTRY_NOTFOUND)
-            nOldHRel = ((RelationMap *)m_pHoriRelationLB->GetEntryData(nPos))->nRelation;
+            nOldHRel = static_cast<RelationMap *>(m_pHoriRelationLB->GetEntryData(nPos))->nRelation;
     }
 
     bool bEnable = true;
@@ -1464,7 +1464,7 @@ sal_uLong SwFrmPage::FillRelLB( const FrmMap* _pMap,
                 {
                     for (sal_Int32 i = 0; i < _rLB.GetEntryCount(); i++)
                     {
-                        RelationMap *pEntry = (RelationMap *)_rLB.GetEntryData(i);
+                        RelationMap *pEntry = static_cast<RelationMap *>(_rLB.GetEntryData(i));
                         if (pEntry->nLBRelation == LB_REL_CHAR) // default
                         {
                             _rLB.SelectEntryPos(i);
@@ -1554,7 +1554,7 @@ sal_uLong SwFrmPage::FillRelLB( const FrmMap* _pMap,
                     default:
                         if (_rLB.GetEntryCount())
                         {
-                            RelationMap *pEntry = (RelationMap *)_rLB.GetEntryData(_rLB.GetEntryCount() - 1);
+                            RelationMap *pEntry = static_cast<RelationMap *>(_rLB.GetEntryData(_rLB.GetEntryCount() - 1));
                             nSimRel = pEntry->nRelation;
                         }
                         break;
@@ -1562,7 +1562,7 @@ sal_uLong SwFrmPage::FillRelLB( const FrmMap* _pMap,
 
                 for (sal_Int32 i = 0; i < _rLB.GetEntryCount(); i++)
                 {
-                    RelationMap *pEntry = (RelationMap *)_rLB.GetEntryData(i);
+                    RelationMap *pEntry = static_cast<RelationMap *>(_rLB.GetEntryData(i));
                     if (pEntry->nRelation == nSimRel)
                     {
                         _rLB.SelectEntryPos(i);
@@ -1592,7 +1592,7 @@ sal_Int16 SwFrmPage::GetRelation(FrmMap * /*pMap*/, ListBox &rRelationLB)
 
     if (nPos != LISTBOX_ENTRY_NOTFOUND)
     {
-        RelationMap *pEntry = (RelationMap *)rRelationLB.GetEntryData(nPos);
+        RelationMap *pEntry = static_cast<RelationMap *>(rRelationLB.GetEntryData(nPos));
         return pEntry->nRelation;
     }
 
@@ -1618,8 +1618,8 @@ sal_Int16 SwFrmPage::GetAlignment(FrmMap *pMap, sal_Int32 nMapPos,
     if (rRelationLB.GetSelectEntryPos() == LISTBOX_ENTRY_NOTFOUND)
         return 0;
 
-    const RelationMap *const pRelationMap = (const RelationMap *const )
-        rRelationLB.GetSelectEntryData();
+    const RelationMap *const pRelationMap = static_cast<const RelationMap *>(
+        rRelationLB.GetSelectEntryData());
     const sal_uLong nRel = pRelationMap->nLBRelation;
     const SvxSwFramePosString::StringId eStrId = pMap[nMapPos].eStrId;
 
@@ -1937,7 +1937,7 @@ IMPL_LINK( SwFrmPage, PosHdl, ListBox *, pLB )
     {
 
         if (pRelLB->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND)
-            nRel = ((RelationMap *)pRelLB->GetSelectEntryData())->nRelation;
+            nRel = static_cast<RelationMap *>(pRelLB->GetSelectEntryData())->nRelation;
 
         FillRelLB(pMap, nMapPos, nAlign, nRel, *pRelLB, *pRelFT);
     }

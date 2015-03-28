@@ -78,8 +78,8 @@ SwNavigationConfig::SwNavigationConfig() :
                     case 2: pValues[nProp] >>= nOutlineLevel;  break;
                     case 3: pValues[nProp] >>= nRegionMode;    break;
                     case 4: pValues[nProp] >>= nActiveBlock;    break;
-                    case 5: bIsSmall        = *(sal_Bool*)pValues[nProp].getValue();  break;
-                    case 6: bIsGlobalActive = *(sal_Bool*)pValues[nProp].getValue();  break;
+                    case 5: bIsSmall        = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;
+                    case 6: bIsGlobalActive = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;
                 }
             }
         }

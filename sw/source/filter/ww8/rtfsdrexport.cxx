@@ -459,7 +459,7 @@ void RtfSdrExport::impl_writeGraphic()
     GraphicConverter::Export(aStream, aGraphic, CVT_PNG);
     aStream.Seek(STREAM_SEEK_TO_END);
     sal_uInt32 nSize = aStream.Tell();
-    const sal_uInt8* pGraphicAry = (sal_uInt8*)aStream.GetData();
+    const sal_uInt8* pGraphicAry = static_cast<sal_uInt8 const *>(aStream.GetData());
 
     Size aMapped(aGraphic.GetPrefSize());
 

@@ -2984,7 +2984,7 @@ bool SwCollectTblLineBoxes::Resize( sal_uInt16 nOffset, sal_uInt16 nOldWidth )
 
 bool sw_Line_CollectBox( const SwTableLine*& rpLine, void* pPara )
 {
-    SwCollectTblLineBoxes* pSplPara = (SwCollectTblLineBoxes*)pPara;
+    SwCollectTblLineBoxes* pSplPara = static_cast<SwCollectTblLineBoxes*>(pPara);
     if( pSplPara->IsGetValues() )
         for( SwTableBoxes::iterator it = const_cast<SwTableLine*>(rpLine)->GetTabBoxes().begin();
                  it != const_cast<SwTableLine*>(rpLine)->GetTabBoxes().end(); ++it)

@@ -34,7 +34,7 @@ SwTxtLine::~SwTxtLine()
 
 SwCacheObj *SwTxtLineAccess::NewObj()
 {
-    return new SwTxtLine( (SwTxtFrm*)pOwner );
+    return new SwTxtLine( const_cast<SwTxtFrm *>(static_cast<SwTxtFrm const *>(pOwner)) );
 }
 
 SwParaPortion *SwTxtLineAccess::GetPara()
@@ -45,7 +45,7 @@ SwParaPortion *SwTxtLineAccess::GetPara()
     else
     {
         pRet = static_cast<SwTxtLine*>(Get());
-        ((SwTxtFrm*)pOwner)->SetCacheIdx( pRet->GetCachePos() );
+        const_cast<SwTxtFrm *>(static_cast<SwTxtFrm const *>(pOwner))->SetCacheIdx( pRet->GetCachePos() );
     }
     if ( !pRet->GetPara() )
         pRet->SetPara( new SwParaPortion );

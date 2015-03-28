@@ -178,11 +178,11 @@ _CalcOp* FindOperator( const OUString& rSrch )
     aSrch.pUName = &rSrch;
     aSrch.eOp = CALC_NAME;
 
-    return (_CalcOp*)bsearch( (void*) &aSrch,
+    return static_cast<_CalcOp*>(bsearch( (void*) &aSrch,
                               (void*) aOpTable,
                               sizeof( aOpTable ) / sizeof( _CalcOp ),
                               sizeof( _CalcOp ),
-                              OperatorCompare );
+                              OperatorCompare ));
 }
 
 SwHash* Find( const OUString& rStr, SwHash* const * ppTable,

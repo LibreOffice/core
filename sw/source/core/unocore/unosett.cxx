@@ -392,7 +392,7 @@ void SwXFootnoteProperties::setPropertyValue(const OUString& rPropertyName, cons
                 break;
                 case WID_POSITION_END_OF_DOC:
                 {
-                    bool bVal = *(sal_Bool*)aValue.getValue();
+                    bool bVal = *static_cast<sal_Bool const *>(aValue.getValue());
                     aFtnInfo.ePos = bVal ? FTNPOS_CHAPTER : FTNPOS_PAGE;
                 }
                 break;
@@ -844,7 +844,7 @@ void SwXLineNumberingProperties::setPropertyValue(
             {
                 case WID_NUM_ON:
                 {
-                    bool bVal = *(sal_Bool*)aValue.getValue();
+                    bool bVal = *static_cast<sal_Bool const *>(aValue.getValue());
                     aInfo.SetPaintLineNumbers(bVal);
                 }
                 break;
@@ -920,19 +920,19 @@ void SwXLineNumberingProperties::setPropertyValue(
                 break;
                 case WID_COUNT_EMPTY_LINES :
                 {
-                    bool bVal = *(sal_Bool*)aValue.getValue();
+                    bool bVal = *static_cast<sal_Bool const *>(aValue.getValue());
                     aInfo.SetCountBlankLines(bVal);
                 }
                 break;
                 case WID_COUNT_LINES_IN_FRAMES :
                 {
-                    bool bVal = *(sal_Bool*)aValue.getValue();
+                    bool bVal = *static_cast<sal_Bool const *>(aValue.getValue());
                     aInfo.SetCountInFlys(bVal);
                 }
                 break;
                 case WID_RESTART_AT_EACH_PAGE :
                 {
-                    bool bVal = *(sal_Bool*)aValue.getValue();
+                    bool bVal = *static_cast<sal_Bool const *>(aValue.getValue());
                     aInfo.SetRestartEachPage(bVal);
                 }
                 break;
@@ -1184,7 +1184,7 @@ void SwXNumberingRules::replaceByIndex(sal_Int32 nIndex, const uno::Any& rElemen
     if(rElement.getValueType().getTypeClass() != uno::TypeClass_SEQUENCE)
         throw lang::IllegalArgumentException();
     const uno::Sequence<beans::PropertyValue>& rProperties =
-                    *(const uno::Sequence<beans::PropertyValue>*)rElement.getValue();
+                    *static_cast<const uno::Sequence<beans::PropertyValue>*>(rElement.getValue());
     SwNumRule* pRule = 0;
     if(pNumRule)
         SwXNumberingRules::SetNumberingRuleByIndex( *pNumRule,
@@ -2136,13 +2136,13 @@ void SwXNumberingRules::setPropertyValue( const OUString& rPropertyName, const A
 
     if(rPropertyName == UNO_NAME_IS_AUTOMATIC)
     {
-        bool bVal = *(sal_Bool*)rValue.getValue();
+        bool bVal = *static_cast<sal_Bool const *>(rValue.getValue());
         if(!pCreatedRule)
             pDocRule ? pDocRule->SetAutoRule(bVal) : pNumRule->SetAutoRule(bVal);
     }
     else if(rPropertyName == UNO_NAME_IS_CONTINUOUS_NUMBERING)
     {
-        bool bVal = *(sal_Bool*)rValue.getValue();
+        bool bVal = *static_cast<sal_Bool const *>(rValue.getValue());
         pDocRule ? pDocRule->SetContinusNum(bVal) :
             pCreatedRule ? pCreatedRule->SetContinusNum(bVal) : pNumRule->SetContinusNum(bVal);
     }
@@ -2153,13 +2153,13 @@ void SwXNumberingRules::setPropertyValue( const OUString& rPropertyName, const A
     }
     else if(rPropertyName == UNO_NAME_IS_ABSOLUTE_MARGINS)
     {
-        bool bVal = *(sal_Bool*)rValue.getValue();
+        bool bVal = *static_cast<sal_Bool const *>(rValue.getValue());
         pDocRule ? pDocRule->SetAbsSpaces(bVal) :
             pCreatedRule ? pCreatedRule->SetAbsSpaces(bVal) : pNumRule->SetAbsSpaces(bVal);
     }
     else if(rPropertyName == UNO_NAME_NUMBERING_IS_OUTLINE)
     {
-        bool bVal = *(sal_Bool*)rValue.getValue();
+        bool bVal = *static_cast<sal_Bool const *>(rValue.getValue());
         SwNumRuleType eNumRuleType = bVal ? OUTLINE_RULE : NUM_RULE;
         pDocRule ? pDocRule->SetRuleType(eNumRuleType) :
             pCreatedRule ? pCreatedRule->SetRuleType(eNumRuleType) : pNumRule->SetRuleType(eNumRuleType);
@@ -2514,7 +2514,7 @@ void SwXTextColumns::setPropertyValue( const OUString& rPropertyName, const Any&
         }
         break;
         case WID_TXTCOL_LINE_IS_ON:
-            bSepLineIsOn = *(sal_Bool*)aValue.getValue();
+            bSepLineIsOn = *static_cast<sal_Bool const *>(aValue.getValue());
         break;
         case WID_TXTCOL_AUTO_DISTANCE:
         {

@@ -414,8 +414,8 @@ uno::Any SwConvIter::Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt )
 bool SwHyphIter::IsAuto()
 {
     uno::Reference< beans::XPropertySet >  xProp( ::GetLinguPropertySet() );
-    return xProp.is() && *(sal_Bool*)xProp->getPropertyValue(
-                                OUString(UPN_IS_HYPH_AUTO) ).getValue();
+    return xProp.is() && *static_cast<sal_Bool const *>(xProp->getPropertyValue(
+                                OUString(UPN_IS_HYPH_AUTO) ).getValue());
 }
 
 void SwHyphIter::ShowSelection()

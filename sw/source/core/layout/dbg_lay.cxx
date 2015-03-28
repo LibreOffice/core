@@ -549,7 +549,7 @@ void SwImplProtocol::_Record( const SwFrm* pFrm, sal_uLong nFunction, sal_uLong 
                             if( pParam )
                             {
                                 aOut.append(' ');
-                                aOut.append(static_cast<sal_Int32>(*((sal_uInt16*)pParam)));
+                                aOut.append(static_cast<sal_Int32>(*static_cast<sal_uInt16*>(pParam)));
                             }
                             break;
         case PROT_GROW_TST: if( ACT_START != nAct )
@@ -576,7 +576,7 @@ void SwImplProtocol::_Record( const SwFrm* pFrm, sal_uLong nFunction, sal_uLong 
                             if( pParam )
                             {
                                 aOut.append(' ');
-                                aOut.append(static_cast<sal_Int64>(*((long*)pParam)));
+                                aOut.append(static_cast<sal_Int64>(*static_cast<long*>(pParam)));
                             }
                             break;
         case PROT_POS:      break;
@@ -594,7 +594,7 @@ void SwImplProtocol::_Record( const SwFrm* pFrm, sal_uLong nFunction, sal_uLong 
                             if( pParam )
                             {
                                 aOut.append(' ');
-                                aOut.append(static_cast<sal_Int64>(lcl_GetFrameId((SwFrm*)pParam)));
+                                aOut.append(static_cast<sal_Int64>(lcl_GetFrameId(static_cast<SwFrm*>(pParam))));
                             }
                             break;
         case PROT_FILE_INIT: FileInit();
@@ -608,7 +608,7 @@ void SwImplProtocol::_Record( const SwFrm* pFrm, sal_uLong nFunction, sal_uLong 
                                 aOut.append("Cut from ");
                             else
                                 aOut.append("Paste to ");
-                            aOut.append(static_cast<sal_Int64>(lcl_GetFrameId((SwFrm*)pParam)));
+                            aOut.append(static_cast<sal_Int64>(lcl_GetFrameId(static_cast<SwFrm*>(pParam))));
                             break;
         case PROT_TESTFORMAT:
                             aOut.append("Test");
@@ -620,7 +620,7 @@ void SwImplProtocol::_Record( const SwFrm* pFrm, sal_uLong nFunction, sal_uLong 
                             break;
         case PROT_FRMCHANGES:
                             {
-                                SwRect& rFrm = *((SwRect*)pParam);
+                                SwRect& rFrm = *static_cast<SwRect*>(pParam);
                                 if( pFrm->Frm().Pos() != rFrm.Pos() )
                                 {
                                     aOut.append("PosChg: (");
@@ -666,7 +666,7 @@ void SwImplProtocol::SectFunc(OStringBuffer &rOut, const SwFrm* , sal_uLong nAct
     switch( nAct )
     {
         case ACT_MERGE:         rOut.append("Merge Section ");
-                                rOut.append(static_cast<sal_Int64>(lcl_GetFrameId((SwFrm*)pParam)));
+                                rOut.append(static_cast<sal_Int64>(lcl_GetFrameId(static_cast<SwFrm*>(pParam))));
                                 break;
         case ACT_CREATE_MASTER: bTmp = true; // NoBreak
         case ACT_CREATE_FOLLOW: rOut.append("Create Section ");
@@ -674,7 +674,7 @@ void SwImplProtocol::SectFunc(OStringBuffer &rOut, const SwFrm* , sal_uLong nAct
                                     rOut.append("Master to ");
                                 else
                                     rOut.append("Follow from ");
-                                rOut.append(static_cast<sal_Int64>(lcl_GetFrameId((SwFrm*)pParam)));
+                                rOut.append(static_cast<sal_Int64>(lcl_GetFrameId(static_cast<SwFrm*>(pParam))));
                                 break;
         case ACT_DEL_MASTER:    bTmp = true; // NoBreak
         case ACT_DEL_FOLLOW:    rOut.append("Delete Section ");
@@ -682,7 +682,7 @@ void SwImplProtocol::SectFunc(OStringBuffer &rOut, const SwFrm* , sal_uLong nAct
                                     rOut.append("Master to ");
                                 else
                                     rOut.append("Follow from ");
-                                rOut.append(static_cast<sal_Int64>(lcl_GetFrameId((SwFrm*)pParam)));
+                                rOut.append(static_cast<sal_Int64>(lcl_GetFrameId(static_cast<SwFrm*>(pParam))));
                                 break;
     }
 }

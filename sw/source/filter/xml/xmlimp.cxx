@@ -1044,13 +1044,13 @@ void SwXMLImport::SetViewSettings(const Sequence < PropertyValue > & aViewProps)
         }
         else if ( pValue->Name == "ShowRedlineChanges" )
         {
-            bShowRedlineChanges = *(sal_Bool *)(pValue->Value.getValue());
+            bShowRedlineChanges = *static_cast<sal_Bool const *>(pValue->Value.getValue());
             bChangeShowRedline = true;
         }
 // Headers and footers are not displayed in BrowseView anymore
         else if ( pValue->Name == "InBrowseMode" )
         {
-            bBrowseMode = *(sal_Bool *)(pValue->Value.getValue());
+            bBrowseMode = *static_cast<sal_Bool const *>(pValue->Value.getValue());
             bChangeBrowseMode = true;
         }
         pValue++;

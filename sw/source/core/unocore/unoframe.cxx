@@ -1460,7 +1460,7 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
                 }
                 else if(pEntry->nWID == FN_UNO_IS_AUTOMATIC_CONTOUR )
                 {
-                    pNoTxt->SetAutomaticContour( *(sal_Bool *)aValue.getValue() );
+                    pNoTxt->SetAutomaticContour( *static_cast<sal_Bool const *>(aValue.getValue()) );
                 }
                 else if(pEntry->nWID == FN_UNO_IS_PIXEL_CONTOUR )
                 {
@@ -1470,7 +1470,7 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
                     // used already).
                     if( !pNoTxt->_HasContour() ||
                         !pNoTxt->IsContourMapModeValid() )
-                        pNoTxt->SetPixelContour( *(sal_Bool *)aValue.getValue() );
+                        pNoTxt->SetPixelContour( *static_cast<sal_Bool const *>(aValue.getValue()) );
                     else
                         throw lang::IllegalArgumentException();
                 }
@@ -3064,7 +3064,7 @@ void SwXFrame::setPosition(const awt::Point& /*aPosition*/) throw( uno::RuntimeE
 awt::Size SwXFrame::getSize(void) throw( uno::RuntimeException, std::exception )
 {
     const ::uno::Any aVal = getPropertyValue("Size");
-    awt::Size* pRet =  (awt::Size*)aVal.getValue();
+    awt::Size const * pRet =  static_cast<awt::Size const *>(aVal.getValue());
     return *pRet;
 }
 

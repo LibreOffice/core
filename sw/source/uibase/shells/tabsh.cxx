@@ -358,7 +358,7 @@ void ItemSetToTableParam( const SfxItemSet& rSet,
     SfxItemSet aSet( rSh.GetAttrPool(), RES_FRMATR_BEGIN, RES_FRMATR_END-1 );
     if(SfxItemState::SET == rSet.GetItemState( FN_TABLE_REP, false, &pItem ))
     {
-        pRep = (SwTableRep*)static_cast<const SwPtrItem*>(pItem)->GetValue();
+        pRep = static_cast<SwTableRep*>(static_cast<const SwPtrItem*>(pItem)->GetValue());
 
         const SwTwips nWidth = pRep->GetWidth();
         if ( text::HoriOrientation::FULL == pRep->GetAlign() )

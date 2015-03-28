@@ -149,7 +149,7 @@ bool UCB_IsReadOnlyFileName( const OUString& rURL )
         ucbhelper::Content aCnt( rURL, ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
         ::com::sun::star::uno::Any aAny = aCnt.getPropertyValue("IsReadOnly");
         if(aAny.hasValue())
-            bIsReadOnly = *(sal_Bool*)aAny.getValue();
+            bIsReadOnly = *static_cast<sal_Bool const *>(aAny.getValue());
     }
     catch( ::com::sun::star::uno::Exception& )
     {

@@ -546,7 +546,7 @@ void SwVisitingCardPage::ClearUserData()
     SvTreeListEntry* pEntry = m_pAutoTextLB->First();
     while(pEntry)
     {
-        delete (OUString*)pEntry->GetUserData();
+        delete static_cast<OUString*>(pEntry->GetUserData());
         pEntry = m_pAutoTextLB->Next(pEntry);
     }
 }
@@ -587,7 +587,7 @@ SwVisitingCardPage::SwVisitingCardPage(vcl::Window* pParent, const SfxItemSet& r
 SwVisitingCardPage::~SwVisitingCardPage()
 {
     for(sal_Int32 i = 0; i < m_pAutoTextGroupLB->GetEntryCount(); ++i)
-        delete (OUString*)m_pAutoTextGroupLB->GetEntryData( i );
+        delete static_cast<OUString*>(m_pAutoTextGroupLB->GetEntryData( i ));
     m_xAutoText = 0;
 
     ClearUserData();
@@ -614,7 +614,7 @@ int  SwVisitingCardPage::DeactivatePage(SfxItemSet* _pSet)
 
 bool SwVisitingCardPage::FillItemSet(SfxItemSet* rSet)
 {
-    const OUString* pGroup = (const OUString*)m_pAutoTextGroupLB->GetSelectEntryData();
+    const OUString* pGroup = static_cast<const OUString*>(m_pAutoTextGroupLB->GetSelectEntryData());
     OSL_ENSURE(pGroup, "no group selected?");
 
     if (pGroup)
@@ -622,7 +622,7 @@ bool SwVisitingCardPage::FillItemSet(SfxItemSet* rSet)
 
     SvTreeListEntry* pSelEntry = m_pAutoTextLB->FirstSelected();
     if(pSelEntry)
-        aLabItem.sGlossaryBlockName = *(OUString*)pSelEntry->GetUserData();
+        aLabItem.sGlossaryBlockName = *static_cast<OUString*>(pSelEntry->GetUserData());
     rSet->Put(aLabItem);
     return true;
 }
@@ -632,7 +632,7 @@ static void lcl_SelectBlock(SvTreeListBox& rAutoTextLB, const OUString& rBlockNa
     SvTreeListEntry* pEntry = rAutoTextLB.First();
     while(pEntry)
     {
-        if(*(OUString*)pEntry->GetUserData() == rBlockName)
+        if(*static_cast<OUString*>(pEntry->GetUserData()) == rBlockName)
         {
             rAutoTextLB.Select(pEntry);
             rAutoTextLB.MakeVisible(pEntry);
@@ -647,7 +647,7 @@ static bool lcl_FindBlock(SvTreeListBox& rAutoTextLB, const OUString& rBlockName
     SvTreeListEntry* pEntry = rAutoTextLB.First();
     while(pEntry)
     {
-        if(*(OUString*)pEntry->GetUserData() == rBlockName)
+        if(*static_cast<OUString*>(pEntry->GetUserData()) == rBlockName)
         {
             rAutoTextLB.Select(pEntry);
             return true;
@@ -664,7 +664,7 @@ void SwVisitingCardPage::Reset(const SfxItemSet* rSet)
     bool bFound = false;
     sal_Int32 i;
     for(i = 0; i < m_pAutoTextGroupLB->GetEntryCount(); i++)
-        if( aLabItem.sGlossaryGroup == *(const OUString*)m_pAutoTextGroupLB->GetEntryData( i ))
+        if( aLabItem.sGlossaryGroup == *static_cast<const OUString*>(m_pAutoTextGroupLB->GetEntryData( i )))
         {
             bFound = true;
             break;
@@ -675,7 +675,7 @@ void SwVisitingCardPage::Reset(const SfxItemSet* rSet)
         // initially search for a group starting with "crd" which is the name of the
         // business card AutoTexts
         for(i = 0; i < m_pAutoTextGroupLB->GetEntryCount(); i++)
-            if (((const OUString*)m_pAutoTextGroupLB->GetEntryData(i))->startsWith("crd"))
+            if (static_cast<const OUString*>(m_pAutoTextGroupLB->GetEntryData(i))->startsWith("crd"))
             {
                 bFound = true;
                 break;
@@ -692,7 +692,7 @@ void SwVisitingCardPage::Reset(const SfxItemSet* rSet)
         {
             SvTreeListEntry* pSelEntry = m_pAutoTextLB->FirstSelected();
             if( pSelEntry &&
-                *(OUString*)pSelEntry->GetUserData() != aLabItem.sGlossaryBlockName)
+                *static_cast<OUString*>(pSelEntry->GetUserData()) != aLabItem.sGlossaryBlockName)
             {
                 lcl_SelectBlock(*m_pAutoTextLB, aLabItem.sGlossaryBlockName);
                 AutoTextSelectHdl(m_pAutoTextLB);

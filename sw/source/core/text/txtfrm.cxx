@@ -1539,12 +1539,12 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
             if( pPara->IsPrepMustFit() )
                 return;
             // see comment in WidowsAndOrphans::FindOrphans and CalcPreps()
-            PrepWidows( *(const sal_uInt16 *)pVoid, bNotify );
+            PrepWidows( *static_cast<const sal_uInt16 *>(pVoid), bNotify );
             break;
 
         case PREP_FTN :
         {
-            SwTxtFtn *pFtn = (SwTxtFtn *)pVoid;
+            SwTxtFtn const *pFtn = static_cast<SwTxtFtn const *>(pVoid);
             if( IsInFtn() )
             {
                 // Am I the first TxtFrm of a footnote?
@@ -1764,7 +1764,7 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
         {
             if( pVoid )
             {
-                sal_Int32 nWhere = CalcFlyPos( (SwFrmFmt*)pVoid );
+                sal_Int32 nWhere = CalcFlyPos( const_cast<SwFrmFmt *>(static_cast<SwFrmFmt const *>(pVoid)) );
                 OSL_ENSURE( COMPLETE_STRING != nWhere, "Prepare: Why me?" );
                 InvalidateRange( SwCharRange( nWhere, 1 ) );
                 return;

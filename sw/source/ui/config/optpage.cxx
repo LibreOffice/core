@@ -763,7 +763,7 @@ void SwStdFontTabPage::Reset( const SfxItemSet* rSet)
 
     if(SfxItemState::SET == rSet->GetItemState(FN_PARAM_PRINTER, false, &pItem))
     {
-        pPrt = (SfxPrinter*)static_cast<const SwPtrItem*>(pItem)->GetValue();
+        pPrt = static_cast<SfxPrinter*>(static_cast<const SwPtrItem*>(pItem)->GetValue());
     }
     else
     {
@@ -800,12 +800,12 @@ void SwStdFontTabPage::Reset( const SfxItemSet* rSet)
     }
     if(SfxItemState::SET == rSet->GetItemState(FN_PARAM_STDFONTS, false, &pItem))
     {
-         pFontConfig = (SwStdFontConfig*)static_cast<const SwPtrItem*>(pItem)->GetValue();
+         pFontConfig = static_cast<SwStdFontConfig*>(static_cast<const SwPtrItem*>(pItem)->GetValue());
     }
 
     if(SfxItemState::SET == rSet->GetItemState(FN_PARAM_WRTSHELL, false, &pItem))
     {
-        pWrtShell = (SwWrtShell*)static_cast<const SwPtrItem*>(pItem)->GetValue();
+        pWrtShell = static_cast<SwWrtShell*>(static_cast<const SwPtrItem*>(pItem)->GetValue());
     }
     OUString sStdBackup;
     OUString sOutBackup;
@@ -1745,7 +1745,7 @@ bool SwRedlineOptionsTabPage::FillItemSet( SfxItemSet* )
     sal_Int32 nPos = pInsertLB->GetSelectEntryPos();
     if (nPos != LISTBOX_ENTRY_NOTFOUND)
     {
-        pAttr = (CharAttr *)pInsertLB->GetEntryData(nPos);
+        pAttr = static_cast<CharAttr *>(pInsertLB->GetEntryData(nPos));
         aInsertedAttr.nItemId = pAttr->nItemId;
         aInsertedAttr.nAttr = pAttr->nAttr;
 
@@ -1771,7 +1771,7 @@ bool SwRedlineOptionsTabPage::FillItemSet( SfxItemSet* )
     nPos = pDeletedLB->GetSelectEntryPos();
     if (nPos != LISTBOX_ENTRY_NOTFOUND)
     {
-        pAttr = (CharAttr *)pDeletedLB->GetEntryData(nPos);
+        pAttr = static_cast<CharAttr *>(pDeletedLB->GetEntryData(nPos));
         aDeletedAttr.nItemId = pAttr->nItemId;
         aDeletedAttr.nAttr = pAttr->nAttr;
 
@@ -1797,7 +1797,7 @@ bool SwRedlineOptionsTabPage::FillItemSet( SfxItemSet* )
     nPos = pChangedLB->GetSelectEntryPos();
     if (nPos != LISTBOX_ENTRY_NOTFOUND)
     {
-        pAttr = (CharAttr *)pChangedLB->GetEntryData(nPos);
+        pAttr = static_cast<CharAttr *>(pChangedLB->GetEntryData(nPos));
         aChangedAttr.nItemId = pAttr->nItemId;
         aChangedAttr.nAttr = pAttr->nAttr;
 
@@ -2028,7 +2028,7 @@ IMPL_LINK( SwRedlineOptionsTabPage, AttribHdl, ListBox *, pLB )
     if( nPos == LISTBOX_ENTRY_NOTFOUND )
         nPos = 0;
 
-    CharAttr*   pAttr = ( CharAttr* ) pLB->GetEntryData( nPos );
+    CharAttr*   pAttr = static_cast<CharAttr*>(pLB->GetEntryData( nPos ));
     //switch off preview background color
     pPrev->ResetColor();
     switch (pAttr->nItemId)
@@ -2104,7 +2104,7 @@ IMPL_LINK( SwRedlineOptionsTabPage, ColorHdl, ColorListBox *, pColorLB )
     if( nPos == LISTBOX_ENTRY_NOTFOUND )
         nPos = 0;
 
-    CharAttr*   pAttr = ( CharAttr* ) pLB->GetEntryData( nPos );
+    CharAttr*   pAttr = static_cast<CharAttr*>(pLB->GetEntryData( nPos ));
 
     if( pAttr->nItemId == SID_ATTR_BRUSH )
     {

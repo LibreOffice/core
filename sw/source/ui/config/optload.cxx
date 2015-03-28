@@ -252,7 +252,7 @@ void SwLoadOptPage::Reset( const SfxItemSet* rSet)
     const SfxPoolItem* pItem;
 
     if(SfxItemState::SET == rSet->GetItemState(FN_PARAM_WRTSHELL, false, &pItem))
-        m_pWrtShell = (SwWrtShell*)static_cast<const SwPtrItem*>(pItem)->GetValue();
+        m_pWrtShell = static_cast<SwWrtShell*>(static_cast<const SwPtrItem*>(pItem)->GetValue());
 
     SwFldUpdateFlags eFldFlags = AUTOUPD_GLOBALSETTING;
     m_nOldLinkMode = GLOBALSETTING;
@@ -538,7 +538,7 @@ bool SwCaptionOptPage::FillItemSet( SfxItemSet*  )
 
     while (pEntry)
     {
-        InsCaptionOpt* pData = (InsCaptionOpt*)pEntry->GetUserData();
+        InsCaptionOpt* pData = static_cast<InsCaptionOpt*>(pEntry->GetUserData());
         bRet |= pModOpt->SetCapOption(bHTMLMode, pData);
         pEntry = m_pCheckLB->Next(pEntry);
     }
@@ -621,7 +621,7 @@ void SwCaptionOptPage::DelUserData()
 
     while (pEntry)
     {
-        delete (InsCaptionOpt*)pEntry->GetUserData();
+        delete static_cast<InsCaptionOpt*>(pEntry->GetUserData());
         pEntry->SetUserData(0);
         pEntry = m_pCheckLB->Next(pEntry);
     }
@@ -646,7 +646,7 @@ IMPL_LINK_NOARG(SwCaptionOptPage, ShowEntryHdl)
 
         SwWrtShell *pSh = ::GetActiveWrtShell();
 
-        InsCaptionOpt* pOpt = (InsCaptionOpt*)pSelEntry->GetUserData();
+        InsCaptionOpt* pOpt = static_cast<InsCaptionOpt*>(pSelEntry->GetUserData());
 
         m_pCategoryBox->Clear();
         m_pCategoryBox->InsertEntry(m_sNone);
@@ -752,7 +752,7 @@ void SwCaptionOptPage::SaveEntry(SvTreeListEntry* pEntry)
 {
     if (pEntry)
     {
-        InsCaptionOpt* pOpt = (InsCaptionOpt*)pEntry->GetUserData();
+        InsCaptionOpt* pOpt = static_cast<InsCaptionOpt*>(pEntry->GetUserData());
 
         pOpt->UseCaption() = m_pCheckLB->IsChecked(m_pCheckLB->GetModel()->GetAbsPos(pEntry));
         const OUString aName( m_pCategoryBox->GetText() );

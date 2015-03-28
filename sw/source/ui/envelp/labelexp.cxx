@@ -79,7 +79,7 @@ void SwVisitingCardPage::InitFrameControl()
         if(LISTBOX_ENTRY_NOTFOUND == m_pAutoTextGroupLB->GetSelectEntryPos())
             m_pAutoTextGroupLB->SelectEntryPos(0);
         const OUString *pCurGroupName(
-            (const OUString*)m_pAutoTextGroupLB->GetSelectEntryData());
+            static_cast<const OUString*>(m_pAutoTextGroupLB->GetSelectEntryData()));
         if(m_xAutoText->hasByName(*pCurGroupName))
         {
             uno::Any aGroup = m_xAutoText->getByName(*pCurGroupName);
@@ -106,13 +106,13 @@ IMPL_LINK_NOARG(SwVisitingCardPage, FrameControlInitializedHdl)
     SvTreeListEntry* pSel = m_pAutoTextLB->FirstSelected();
     OUString sEntry;
     if( pSel )
-        sEntry = *(OUString*)pSel->GetUserData();
+        sEntry = *static_cast<OUString*>(pSel->GetUserData());
     uno::Reference< text::XTextCursor > & xCrsr = pExampleFrame->GetTextCursor();
     OUString uEntry(sEntry);
 
     if(LISTBOX_ENTRY_NOTFOUND != m_pAutoTextGroupLB->GetSelectEntryPos())
     {
-        const OUString *pGroup( (const OUString*)m_pAutoTextGroupLB->GetSelectEntryData() );
+        const OUString *pGroup( static_cast<const OUString*>(m_pAutoTextGroupLB->GetSelectEntryData()) );
         uno::Any aGroup = m_xAutoText->getByName(*pGroup);
         uno::Reference< text::XAutoTextGroup >  xGroup;
         aGroup >>= xGroup;
@@ -139,7 +139,7 @@ IMPL_LINK( SwVisitingCardPage, AutoTextSelectHdl, void*, pBox )
     {
         if (m_pAutoTextGroupLB == pBox)
         {
-            const OUString *pGroup( (const OUString*)m_pAutoTextGroupLB->GetSelectEntryData());
+            const OUString *pGroup( static_cast<const OUString*>(m_pAutoTextGroupLB->GetSelectEntryData()));
             uno::Any aGroup = m_xAutoText->getByName(*pGroup);
             uno::Reference< text::XAutoTextGroup >  xGroup;
             aGroup >>= xGroup;

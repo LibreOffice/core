@@ -328,7 +328,7 @@ bool SwFmtFrmSize::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         break;
         case MID_FRMSIZE_IS_SYNC_HEIGHT_TO_WIDTH:
         {
-            bool bSet = *(sal_Bool*)rVal.getValue();
+            bool bSet = *static_cast<sal_Bool const *>(rVal.getValue());
             if(bSet)
                 SetHeightPercent(0xff);
             else if( 0xff == GetHeightPercent() )
@@ -337,7 +337,7 @@ bool SwFmtFrmSize::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         break;
         case MID_FRMSIZE_IS_SYNC_WIDTH_TO_HEIGHT:
         {
-            bool bSet = *(sal_Bool*)rVal.getValue();
+            bool bSet = *static_cast<sal_Bool const *>(rVal.getValue());
             if(bSet)
                 SetWidthPercent(0xff);
             else if( 0xff == GetWidthPercent() )
@@ -387,7 +387,7 @@ bool SwFmtFrmSize::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         break;
         case MID_FRMSIZE_IS_AUTO_HEIGHT:
         {
-            bool bSet = *(sal_Bool*)rVal.getValue();
+            bool bSet = *static_cast<sal_Bool const *>(rVal.getValue());
             SetHeightSizeType(bSet ? ATT_VAR_SIZE : ATT_FIX_SIZE);
         }
         break;
@@ -1270,13 +1270,13 @@ bool SwFmtSurround::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         break;
 
         case MID_SURROUND_ANCHORONLY:
-            SetAnchorOnly( *(sal_Bool*)rVal.getValue() );
+            SetAnchorOnly( *static_cast<sal_Bool const *>(rVal.getValue()) );
             break;
         case MID_SURROUND_CONTOUR:
-            SetContour( *(sal_Bool*)rVal.getValue() );
+            SetContour( *static_cast<sal_Bool const *>(rVal.getValue()) );
             break;
         case MID_SURROUND_CONTOUROUTSIDE:
-            SetOutside( *(sal_Bool*)rVal.getValue() );
+            SetOutside( *static_cast<sal_Bool const *>(rVal.getValue()) );
             break;
         default:
             OSL_ENSURE( false, "unknown MemberId" );
@@ -1506,7 +1506,7 @@ bool SwFmtHoriOrient::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         }
         break;
         case MID_HORIORIENT_PAGETOGGLE:
-                SetPosToggle( *(sal_Bool*)rVal.getValue());
+                SetPosToggle( *static_cast<sal_Bool const *>(rVal.getValue()));
             break;
         default:
             OSL_ENSURE( false, "unknown MemberId" );
@@ -1895,7 +1895,7 @@ bool SwFmtURL::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         }
         break;
         case MID_URL_SERVERMAP:
-            bIsServerMap = *(sal_Bool*)rVal.getValue();
+            bIsServerMap = *static_cast<sal_Bool const *>(rVal.getValue());
             break;
         default:
             OSL_ENSURE( false, "unknown MemberId" );
@@ -1991,7 +1991,7 @@ bool SwFmtFtnEndAtTxtEnd::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     {
         case MID_COLLECT     :
         {
-            bool bVal = *(sal_Bool*)rVal.getValue();
+            bool bVal = *static_cast<sal_Bool const *>(rVal.getValue());
             if(!bVal && GetValue() >= FTNEND_ATTXTEND)
                 SetValue(FTNEND_ATPGORDOCEND);
             else if(bVal && GetValue() < FTNEND_ATTXTEND)
@@ -2000,7 +2000,7 @@ bool SwFmtFtnEndAtTxtEnd::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         break;
         case MID_RESTART_NUM :
         {
-            bool bVal = *(sal_Bool*)rVal.getValue();
+            bool bVal = *static_cast<sal_Bool const *>(rVal.getValue());
             if(!bVal && GetValue() >= FTNEND_ATTXTEND_OWNNUMSEQ)
                 SetValue(FTNEND_ATTXTEND);
             else if(bVal && GetValue() < FTNEND_ATTXTEND_OWNNUMSEQ)
@@ -2019,7 +2019,7 @@ bool SwFmtFtnEndAtTxtEnd::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         break;
         case MID_OWN_NUM     :
         {
-            bool bVal = *(sal_Bool*)rVal.getValue();
+            bool bVal = *static_cast<sal_Bool const *>(rVal.getValue());
             if(!bVal && GetValue() >= FTNEND_ATTXTEND_OWNNUMANDFMT)
                 SetValue(FTNEND_ATTXTEND_OWNNUMSEQ);
             else if(bVal && GetValue() < FTNEND_ATTXTEND_OWNNUMANDFMT)
@@ -2191,7 +2191,7 @@ bool SwFmtLineNumber::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     switch ( nMemberId )
     {
         case MID_LINENUMBER_COUNT:
-            SetCountLines( *(sal_Bool*)rVal.getValue() );
+            SetCountLines( *static_cast<sal_Bool const *>(rVal.getValue()) );
             break;
         case MID_LINENUMBER_STARTVALUE:
         {
@@ -2353,13 +2353,13 @@ bool SwTextGridItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         }
         break;
         case MID_GRID_RUBY_BELOW:
-            SetRubyTextBelow( *(sal_Bool*)rVal.getValue() );
+            SetRubyTextBelow( *static_cast<sal_Bool const *>(rVal.getValue()) );
             break;
         case MID_GRID_PRINT:
-            SetPrintGrid( *(sal_Bool*)rVal.getValue() );
+            SetPrintGrid( *static_cast<sal_Bool const *>(rVal.getValue()) );
             break;
         case MID_GRID_DISPLAY:
-            SetDisplayGrid( *(sal_Bool*)rVal.getValue() );
+            SetDisplayGrid( *static_cast<sal_Bool const *>(rVal.getValue()) );
             break;
         case MID_GRID_BASEHEIGHT:
         case MID_GRID_BASEWIDTH:
@@ -2418,11 +2418,11 @@ bool SwTextGridItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             break;
         }
         case MID_GRID_SNAPTOCHARS:
-            SetSnapToChars( *(sal_Bool*)rVal.getValue() );
+            SetSnapToChars( *static_cast<sal_Bool const *>(rVal.getValue()) );
             break;
         case MID_GRID_STANDARD_MODE:
         {
-            bool bStandard = *(sal_Bool*)rVal.getValue();
+            bool bStandard = *static_cast<sal_Bool const *>(rVal.getValue());
                SetSquaredMode( !bStandard );
             break;
         }

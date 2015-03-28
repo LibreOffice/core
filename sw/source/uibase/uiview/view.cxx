@@ -466,7 +466,7 @@ extern "C"
 {
     static int lcl_CmpIds( const void *pFirst, const void *pSecond)
     {
-        return (*(sal_uInt16*)pFirst) - (*(sal_uInt16*)pSecond);
+        return *static_cast<sal_uInt16 const *>(pFirst) - *static_cast<sal_uInt16 const *>(pSecond);
     }
 }
 
@@ -1318,7 +1318,7 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
             }
             else if ( pValue->Name == "ViewLayoutBookMode" )
             {
-               bViewLayoutBookMode = * (sal_Bool *) pValue->Value.getValue();
+               bViewLayoutBookMode = * static_cast<sal_Bool const *>(pValue->Value.getValue());
                bGotViewLayoutBookMode = true;
             }
             else if ( pValue->Name == "IsSelectedFrame" )

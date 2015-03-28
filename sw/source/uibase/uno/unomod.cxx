@@ -287,79 +287,79 @@ void SwXPrintSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, 
     bool bVal;
     if ( rInfo.mnHandle != HANDLE_PRINTSET_ANNOTATION_MODE &&
          rInfo.mnHandle != HANDLE_PRINTSET_FAX_NAME )
-        bVal = *(sal_Bool*)rValue.getValue();
+        bVal = *static_cast<sal_Bool const *>(rValue.getValue());
 
     switch( rInfo.mnHandle )
     {
         case HANDLE_PRINTSET_LEFT_PAGES:
         {
-            bVal = *(sal_Bool*)rValue.getValue();
+            bVal = *static_cast<sal_Bool const *>(rValue.getValue());
             mpPrtOpt->SetPrintLeftPage(bVal);
         }
         break;
         case HANDLE_PRINTSET_RIGHT_PAGES:
         {
-            bVal = *(sal_Bool*)rValue.getValue();
+            bVal = *static_cast<sal_Bool const *>(rValue.getValue());
             mpPrtOpt->SetPrintRightPage(bVal);
         }
         break;
         case HANDLE_PRINTSET_REVERSED:
         {
-            bVal = *(sal_Bool*)rValue.getValue();
+            bVal = *static_cast<sal_Bool const *>(rValue.getValue());
             mpPrtOpt->SetPrintReverse(bVal);
         }
         break;
         case HANDLE_PRINTSET_PROSPECT:
         {
-            bVal = *(sal_Bool*)rValue.getValue();
+            bVal = *static_cast<sal_Bool const *>(rValue.getValue());
             mpPrtOpt->SetPrintProspect(bVal);
         }
         break;
         case HANDLE_PRINTSET_GRAPHICS:
         {
-            bVal = *(sal_Bool*)rValue.getValue();
+            bVal = *static_cast<sal_Bool const *>(rValue.getValue());
             mpPrtOpt->SetPrintGraphic(bVal);
         }
         break;
         case HANDLE_PRINTSET_TABLES:
         {
-            bVal = *(sal_Bool*)rValue.getValue();
+            bVal = *static_cast<sal_Bool const *>(rValue.getValue());
             mpPrtOpt->SetPrintTable(bVal);
         }
         break;
         case HANDLE_PRINTSET_DRAWINGS:
         {
-            bVal = *(sal_Bool*)rValue.getValue();
+            bVal = *static_cast<sal_Bool const *>(rValue.getValue());
             mpPrtOpt->SetPrintDraw(bVal);
         }
         break;
         case HANDLE_PRINTSET_CONTROLS:
         {
-            bVal = *(sal_Bool*)rValue.getValue();
+            bVal = *static_cast<sal_Bool const *>(rValue.getValue());
             mpPrtOpt->SetPrintControl(bVal);
         }
         break;
         case HANDLE_PRINTSET_PAGE_BACKGROUND:
         {
-            bVal = *(sal_Bool*)rValue.getValue();
+            bVal = *static_cast<sal_Bool const *>(rValue.getValue());
             mpPrtOpt->SetPrintPageBackground(bVal);
         }
         break;
         case HANDLE_PRINTSET_BLACK_FONTS:
         {
-            bVal = *(sal_Bool*)rValue.getValue();
+            bVal = *static_cast<sal_Bool const *>(rValue.getValue());
             mpPrtOpt->SetPrintBlackFont(bVal);
         }
         break;
         case HANDLE_PRINTSET_SINGLE_JOBS:
         {
-            bVal = *(sal_Bool*)rValue.getValue();
+            bVal = *static_cast<sal_Bool const *>(rValue.getValue());
             mpPrtOpt->SetPrintSingleJobs(bVal);
         }
         break;
         case HANDLE_PRINTSET_PAPER_FROM_SETUP:
         {
-            bVal = *(sal_Bool*)rValue.getValue();
+            bVal = *static_cast<sal_Bool const *>(rValue.getValue());
             mpPrtOpt->SetPaperFromSetup(bVal);
         }
         break;
@@ -375,7 +375,7 @@ void SwXPrintSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, 
         break;
         case HANDLE_PRINTSET_EMPTY_PAGES:
         {
-            bVal = *(sal_Bool*)rValue.getValue();
+            bVal = *static_cast<sal_Bool const *>(rValue.getValue());
             mpPrtOpt->SetPrintEmptyPages(bVal);
         }
         break;
@@ -390,19 +390,19 @@ void SwXPrintSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, 
         break;
         case HANDLE_PRINTSET_PROSPECT_RTL:
         {
-            bVal = *(sal_Bool*)rValue.getValue();
+            bVal = *static_cast<sal_Bool const *>(rValue.getValue());
             mpPrtOpt->SetPrintProspect_RTL(bVal);
         }
         break;
         case HANDLE_PRINTSET_PLACEHOLDER:
         {
-            bVal = *(sal_Bool*)rValue.getValue();
+            bVal = *static_cast<sal_Bool const *>(rValue.getValue());
             mpPrtOpt->SetPrintTextPlaceholder(bVal);
         }
         break;
         case HANDLE_PRINTSET_HIDDEN_TEXT:
         {
-            bVal = *(sal_Bool*)rValue.getValue();
+            bVal = *static_cast<sal_Bool const *>(rValue.getValue());
             mpPrtOpt->SetPrintHiddenText(bVal);
         }
         break;
@@ -591,7 +591,7 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
            IllegalArgumentException, WrappedTargetException,
            RuntimeException, std::exception)
 {
-    bool bVal = HANDLE_VIEWSET_ZOOM != rInfo.mnHandle && *(sal_Bool*)rValue.getValue();
+    bool bVal = HANDLE_VIEWSET_ZOOM != rInfo.mnHandle && *static_cast<sal_Bool const *>(rValue.getValue());
     // the API flag should not be set to the application's view settings
     switch( rInfo.mnHandle )
     {

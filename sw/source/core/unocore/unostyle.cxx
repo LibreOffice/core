@@ -345,7 +345,7 @@ void SwXStyleFamilies::loadStylesFromURL(const OUString& rURL,
             if( pVal->getValueType() == ::getBooleanCppuType() )
             {
                 const OUString sName = pArray[i].Name;
-                bool bVal = *(sal_Bool*)pVal->getValue();
+                bool bVal = *static_cast<sal_Bool const *>(pVal->getValue());
                 if( sName == UNO_NAME_OVERWRITE_STYLES )
                     bLoadStyleOverwrite = bVal;
                 else if( sName == UNO_NAME_LOAD_NUMBERING_STYLES )
@@ -833,8 +833,8 @@ void SwXStyleFamily::insertByName(const OUString& rName, const uno::Any& rElemen
             if(rElement.getValueType().getTypeClass() ==
                                             uno::TypeClass_INTERFACE)
             {
-                uno::Reference< uno::XInterface > * pxRef =
-                    (uno::Reference< uno::XInterface > *)rElement.getValue();
+                uno::Reference< uno::XInterface > const * pxRef =
+                    static_cast<uno::Reference< uno::XInterface > const *>(rElement.getValue());
 
                 uno::Reference<lang::XUnoTunnel> xStyleTunnel( *pxRef, uno::UNO_QUERY);
 
@@ -1836,8 +1836,8 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
         {
             if(aValue.getValueType() == cppu::UnoType<container::XIndexReplace>::get())
             {
-                uno::Reference< container::XIndexReplace > * pxRulesRef =
-                        (uno::Reference< container::XIndexReplace > *)aValue.getValue();
+                uno::Reference< container::XIndexReplace > const * pxRulesRef =
+                        static_cast<uno::Reference< container::XIndexReplace > const *>(aValue.getValue());
 
                 uno::Reference<lang::XUnoTunnel> xNumberTunnel( *pxRulesRef, uno::UNO_QUERY);
 
@@ -1991,7 +1991,7 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
         }
         case FN_UNO_IS_AUTO_UPDATE:
         {
-            bool bAuto = *(sal_Bool*)aValue.getValue();
+            bool bAuto = *static_cast<sal_Bool const *>(aValue.getValue());
             if(SFX_STYLE_FAMILY_PARA == eFamily)
                 rBase.getNewBase()->GetCollection()->SetAutoUpdateFmt(bAuto);
             else if(SFX_STYLE_FAMILY_FRAME == eFamily)
@@ -3458,7 +3458,7 @@ void SAL_CALL SwXPageStyle::SetPropertyValues_Impl(
                         }
                         else if(pEntry->nWID == SID_ATTR_PAGE_ON)
                         {
-                            bool bVal = *(sal_Bool*)pValues[nProp].getValue();
+                            bool bVal = *static_cast<sal_Bool const *>(pValues[nProp].getValue());
 
                             if(bVal)
                             {

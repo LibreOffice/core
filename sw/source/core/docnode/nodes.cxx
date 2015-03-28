@@ -1415,7 +1415,7 @@ struct HighLevel
 
 static bool lcl_HighestLevel( const SwNodePtr& rpNode, void * pPara )
 {
-    HighLevel * pHL = (HighLevel*)pPara;
+    HighLevel * pHL = static_cast<HighLevel*>(pPara);
     if( rpNode->GetStartNode() )
         pHL->nLevel++;
     else if( rpNode->GetEndNode() )

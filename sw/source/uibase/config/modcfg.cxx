@@ -807,7 +807,7 @@ static void lcl_ReadOpt(InsCaptionOpt& rOpt, const Any* pValues, sal_Int32 nProp
     switch(nOffset)
     {
         case 0:
-            rOpt.UseCaption() = *(sal_Bool*)pValues[nProp].getValue();
+            rOpt.UseCaption() = *static_cast<sal_Bool const *>(pValues[nProp].getValue());
         break;//Enable
         case 1:
         {
@@ -904,7 +904,7 @@ void SwInsertConfig::Load()
         {
             if(pValues[nProp].hasValue())
             {
-                bool bBool = nProp < INS_PROP_CAP_OBJECT_TABLE_ENABLE && *(sal_Bool*)pValues[nProp].getValue();
+                bool bBool = nProp < INS_PROP_CAP_OBJECT_TABLE_ENABLE && *static_cast<sal_Bool const *>(pValues[nProp].getValue());
                 switch(nProp)
                 {
                     case INS_PROP_TABLE_HEADER:
@@ -1177,9 +1177,9 @@ void SwTableConfig::Load()
                     case 2 : pValues[nProp] >>= nTemp; nTblHInsert = (sal_uInt16)convertMm100ToTwip(nTemp); break;   //"Insert/Row",
                     case 3 : pValues[nProp] >>= nTemp; nTblVInsert = (sal_uInt16)convertMm100ToTwip(nTemp); break;   //"Insert/Column",
                     case 4 : pValues[nProp] >>= nTemp; eTblChgMode = (TblChgMode)nTemp; break;   //"Change/Effect",
-                    case 5 : bInsTblFormatNum = *(sal_Bool*)pValues[nProp].getValue();  break;  //"Input/NumberRecognition",
-                    case 6 : bInsTblChangeNumFormat = *(sal_Bool*)pValues[nProp].getValue(); break;  //"Input/NumberFormatRecognition",
-                    case 7 : bInsTblAlignNum = *(sal_Bool*)pValues[nProp].getValue(); break;  //"Input/Alignment"
+                    case 5 : bInsTblFormatNum = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;  //"Input/NumberRecognition",
+                    case 6 : bInsTblChangeNumFormat = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break;  //"Input/NumberFormatRecognition",
+                    case 7 : bInsTblAlignNum = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break;  //"Input/Alignment"
                 }
             }
         }
@@ -1284,16 +1284,16 @@ void SwMiscConfig::Load()
                     case 0 : pValues[nProp] >>= sTmp;
                         sWordDelimiter = SwModuleOptions::ConvertWordDelimiter(sTmp, true);
                     break;
-                    case 1 : bDefaultFontsInCurrDocOnly = *(sal_Bool*)pValues[nProp].getValue(); break;
-                    case 2 : bShowIndexPreview = *(sal_Bool*)pValues[nProp].getValue(); break;
-                    case 3 : bGrfToGalleryAsLnk = *(sal_Bool*)pValues[nProp].getValue(); break;
-                    case 4 : bNumAlignSize = *(sal_Bool*)pValues[nProp].getValue(); break;
-                    case 5 : bSinglePrintJob = *(sal_Bool*)pValues[nProp].getValue(); break;
+                    case 1 : bDefaultFontsInCurrDocOnly = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break;
+                    case 2 : bShowIndexPreview = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break;
+                    case 3 : bGrfToGalleryAsLnk = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break;
+                    case 4 : bNumAlignSize = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break;
+                    case 5 : bSinglePrintJob = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break;
                     case 6 : pValues[nProp] >>= nMailingFormats;              ; break;
                     case 7 : pValues[nProp] >>= sTmp; sNameFromColumn = sTmp; break;
                     case 8 : pValues[nProp] >>= sTmp; sMailingPath = sTmp;  break;
                     case 9 : pValues[nProp] >>= sTmp; sMailName = sTmp;     break;
-                    case 10: bIsNameFromColumn = *(sal_Bool*)pValues[nProp].getValue(); break;
+                    case 10: bIsNameFromColumn = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break;
                     case 11: pValues[nProp] >>= bAskForMailMergeInPrint; break;
                 }
             }
@@ -1373,10 +1373,10 @@ void SwCompareConfig::Load()
                 switch(nProp)
                 {
                     case 0 : eCmpMode = (SvxCompareMode) nVal; break;;
-                    case 1 : bUseRsid = *(sal_Bool*)pValues[nProp].getValue(); break;
-                    case 2 : bIgnorePieces = *(sal_Bool*)pValues[nProp].getValue(); break;
+                    case 1 : bUseRsid = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break;
+                    case 2 : bIgnorePieces = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break;
                     case 3 : nPieceLen = nVal; break;
-                    case 4 : m_bStoreRsid = *(sal_Bool*)pValues[nProp].getValue(); break;
+                    case 4 : m_bStoreRsid = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break;
                 }
             }
         }

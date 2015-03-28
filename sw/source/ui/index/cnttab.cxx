@@ -1067,7 +1067,7 @@ void SwTOXSelectTabPage::ApplyTOXDescription()
     LanguageHdl(0);
     for( sal_Int32 nCnt = 0; nCnt < m_pSortAlgorithmLB->GetEntryCount(); ++nCnt )
     {
-        const OUString* pEntryData = (const OUString*)m_pSortAlgorithmLB->GetEntryData( nCnt );
+        const OUString* pEntryData = static_cast<const OUString*>(m_pSortAlgorithmLB->GetEntryData( nCnt ));
         OSL_ENSURE(pEntryData, "no entry data available");
         if( pEntryData && *pEntryData == rDesc.GetSortAlgorithm())
         {
@@ -1184,7 +1184,7 @@ void SwTOXSelectTabPage::FillTOXDescription()
         rDesc.SetStyleNames(aStyleArr[i], i);
 
     rDesc.SetLanguage(m_pLanguageLB->GetSelectLanguage());
-    const OUString* pEntryData = (const OUString*)m_pSortAlgorithmLB->GetSelectEntryData();
+    const OUString* pEntryData = static_cast<const OUString*>(m_pSortAlgorithmLB->GetSelectEntryData());
     OSL_ENSURE(pEntryData, "no entry data available");
     if(pEntryData)
         rDesc.SetSortAlgorithm(*pEntryData);
@@ -1379,13 +1379,13 @@ IMPL_LINK(SwTOXSelectTabPage, LanguageHdl, ListBox*, pBox)
     OUString sOldString;
     void* pUserData;
     if( 0 != (pUserData = m_pSortAlgorithmLB->GetSelectEntryData()) )
-        sOldString = *(OUString*)pUserData;
+        sOldString = *static_cast<OUString*>(pUserData);
     sal_Int32 nEnd = m_pSortAlgorithmLB->GetEntryCount();
     for( sal_Int32 n = 0; n < nEnd; ++n )
     {
         void* pDel = m_pSortAlgorithmLB->GetEntryData( n );
         if( 0 != pDel )
-            delete (OUString*)pDel;
+            delete static_cast<OUString*>(pDel);
     }
     m_pSortAlgorithmLB->Clear();
 

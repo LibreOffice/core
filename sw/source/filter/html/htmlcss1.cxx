@@ -1715,7 +1715,7 @@ bool SwHTMLParser::FileDownload( const OUString& rURL,
         aStream.WriteStream( *pStream );
 
         aStream.Seek( STREAM_SEEK_TO_END );
-        rStr = OUString((const sal_Char *)aStream.GetData(), aStream.Tell(),
+        rStr = OUString(static_cast<const sal_Char *>(aStream.GetData()), aStream.Tell(),
             GetSrcEncoding());
     }
 

@@ -188,7 +188,7 @@ bool SwTblField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         }
         break;
     case FIELD_PROP_BOOL1:
-        if(*(sal_Bool*)rAny.getValue())
+        if(*static_cast<sal_Bool const *>(rAny.getValue()))
             nSubType = nsSwGetSetExpType::GSE_FORMULA|nsSwExtendedSubType::SUB_CMD;
         else
             nSubType = nsSwGetSetExpType::GSE_FORMULA;

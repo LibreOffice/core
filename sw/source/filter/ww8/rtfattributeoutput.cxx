@@ -3639,7 +3639,7 @@ void RtfAttributeOutput::FlyFrameOLEReplacement(const SwFlyFrmFmt* pFlyFrmFmt, S
         SAL_WARN("sw.rtf", "failed to export the graphic");
     aStream.Seek(STREAM_SEEK_TO_END);
     sal_uInt32 nSize = aStream.Tell();
-    pGraphicAry = (sal_uInt8*)aStream.GetData();
+    pGraphicAry = static_cast<sal_uInt8 const *>(aStream.GetData());
     m_aRunText->append(ExportPICT(pFlyFrmFmt, aSize, aRendered, aMapped, rCr, pBLIPType, pGraphicAry, nSize, m_rExport));
     m_aRunText->append("}"); // shppict
     m_aRunText->append("{" OOO_STRING_SVTOOLS_RTF_NONSHPPICT);
@@ -3649,7 +3649,7 @@ void RtfAttributeOutput::FlyFrameOLEReplacement(const SwFlyFrmFmt* pFlyFrmFmt, S
         SAL_WARN("sw.rtf", "failed to export the graphic");
     aWmfStream.Seek(STREAM_SEEK_TO_END);
     nSize = aWmfStream.Tell();
-    pGraphicAry = (sal_uInt8*)aWmfStream.GetData();
+    pGraphicAry = static_cast<sal_uInt8 const *>(aWmfStream.GetData());
     m_aRunText->append(ExportPICT(pFlyFrmFmt, aSize, aRendered, aMapped, rCr, pBLIPType, pGraphicAry, nSize, m_rExport));
     m_aRunText->append("}"); // nonshppict
 }
@@ -3753,7 +3753,7 @@ void RtfAttributeOutput::FlyFrameGraphic(const SwFlyFrmFmt* pFlyFrmFmt, const Sw
                         OOO_STRING_SVTOOLS_RTF_PNGBLIP : OOO_STRING_SVTOOLS_RTF_WMETAFILE;
             aStream.Seek(STREAM_SEEK_TO_END);
             nSize = aStream.Tell();
-            pGraphicAry = (sal_uInt8*)aStream.GetData();
+            pGraphicAry = static_cast<sal_uInt8 const *>(aStream.GetData());
         }
     }
 
@@ -3851,7 +3851,7 @@ void RtfAttributeOutput::FlyFrameGraphic(const SwFlyFrmFmt* pFlyFrmFmt, const Sw
         pBLIPType = OOO_STRING_SVTOOLS_RTF_WMETAFILE;
         aStream.Seek(STREAM_SEEK_TO_END);
         nSize = aStream.Tell();
-        pGraphicAry = (sal_uInt8*)aStream.GetData();
+        pGraphicAry = static_cast<sal_uInt8 const *>(aStream.GetData());
 
         ExportPICT(pFlyFrmFmt, aSize, aRendered, aMapped, rCr, pBLIPType, pGraphicAry, nSize, m_rExport, &m_rExport.Strm(), bWritePicProp);
     }
@@ -3868,7 +3868,7 @@ void RtfAttributeOutput::FlyFrameGraphic(const SwFlyFrmFmt* pFlyFrmFmt, const Sw
             pBLIPType = OOO_STRING_SVTOOLS_RTF_WMETAFILE;
             aStream.Seek(STREAM_SEEK_TO_END);
             nSize = aStream.Tell();
-            pGraphicAry = (sal_uInt8*)aStream.GetData();
+            pGraphicAry = static_cast<sal_uInt8 const *>(aStream.GetData());
 
             ExportPICT(pFlyFrmFmt, aSize, aRendered, aMapped, rCr, pBLIPType, pGraphicAry, nSize, m_rExport, &m_rExport.Strm());
 
@@ -3898,7 +3898,7 @@ void RtfAttributeOutput::BulletDefinition(int /*nId*/, const Graphic& rGraphic, 
         SAL_WARN("sw.rtf", "failed to export the numbering picture bullet");
     aStream.Seek(STREAM_SEEK_TO_END);
     sal_uInt32 nSize = aStream.Tell();
-    pGraphicAry = (sal_uInt8*)aStream.GetData();
+    pGraphicAry = static_cast<sal_uInt8 const *>(aStream.GetData());
     RtfAttributeOutput::WriteHex(pGraphicAry, nSize, &m_rExport.Strm());
     m_rExport.Strm().WriteCharPtr("}}");   // pict, shppict
 }

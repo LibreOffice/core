@@ -31,10 +31,10 @@ SwFontCache *pSwFontCache = NULL;
 
 SwFontObj::SwFontObj( const void *pOwn, SwViewShell *pSh ) :
     SwCacheObj( (void*)pOwn ),
-    aSwFont( &((SwTxtFmtColl *)pOwn)->GetAttrSet(), pSh ? pSh->getIDocumentSettingAccess() : 0 )
+    aSwFont( &static_cast<SwTxtFmtColl const *>(pOwn)->GetAttrSet(), pSh ? pSh->getIDocumentSettingAccess() : 0 )
 {
     aSwFont.GoMagic( pSh, aSwFont.GetActual() );
-    const SwAttrSet& rAttrSet = ((SwTxtFmtColl *)pOwn)->GetAttrSet();
+    const SwAttrSet& rAttrSet = static_cast<SwTxtFmtColl const *>(pOwn)->GetAttrSet();
     for (sal_uInt16 i = RES_CHRATR_BEGIN; i < RES_CHRATR_END; i++)
         pDefaultArray[ StackPos[ i ] ] = &rAttrSet.Get( i, true );
 }

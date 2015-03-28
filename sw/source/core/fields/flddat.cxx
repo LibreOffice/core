@@ -193,14 +193,14 @@ bool SwDateTimeField::PutValue( const uno::Any& rVal, sal_uInt16 nWhichId )
     switch( nWhichId )
     {
     case FIELD_PROP_BOOL1:
-        if(*(sal_Bool*)rVal.getValue())
+        if(*static_cast<sal_Bool const *>(rVal.getValue()))
             nSubType |= FIXEDFLD;
         else
             nSubType &= ~FIXEDFLD;
         break;
     case FIELD_PROP_BOOL2:
         nSubType &=  ~(DATEFLD|TIMEFLD);
-        nSubType |= *(sal_Bool*)rVal.getValue() ? DATEFLD : TIMEFLD;
+        nSubType |= *static_cast<sal_Bool const *>(rVal.getValue()) ? DATEFLD : TIMEFLD;
         break;
     case FIELD_PROP_FORMAT:
         rVal >>= nTmp;

@@ -265,7 +265,7 @@ void SwFmt::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue )
         {
             // If the dying object is the parent format of this format so
             // attach this to the parent of the parent
-            SwFmt* pFmt = (SwFmt*) static_cast<const SwPtrMsgPoolItem*>(pNewValue)->pObject;
+            SwFmt* pFmt = static_cast<SwFmt*>(static_cast<const SwPtrMsgPoolItem*>(pNewValue)->pObject);
 
             // do not move if this is the topmost format
             if( GetRegisteredIn() && GetRegisteredIn() == pFmt )

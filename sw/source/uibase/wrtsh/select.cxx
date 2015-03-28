@@ -707,7 +707,7 @@ void SwWrtShell::LeaveSelFrmMode()
 
 IMPL_LINK( SwWrtShell, ExecFlyMac, void *, pFlyFmt )
 {
-    const SwFrmFmt *pFmt = pFlyFmt ? (SwFrmFmt*)pFlyFmt : GetFlyFrmFmt();
+    const SwFrmFmt *pFmt = pFlyFmt ? static_cast<SwFrmFmt*>(pFlyFmt) : GetFlyFrmFmt();
     OSL_ENSURE(pFmt, "no frame format");
     const SvxMacroItem &rFmtMac = pFmt->GetMacro();
 

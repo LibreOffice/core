@@ -812,8 +812,8 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >
                                                         xRef( pClipCntnr );
 
-                        pClipCntnr->CopyAnyData( SotClipboardFormatId::RTF, (sal_Char*)
-                                    pStrm->GetData(), pStrm->GetEndOfData() );
+                        pClipCntnr->CopyAnyData( SotClipboardFormatId::RTF, static_cast<sal_Char const *>(
+                                    pStrm->GetData()), pStrm->GetEndOfData() );
                         pClipCntnr->CopyToClipboard(
                             GetView()? &GetView()->GetEditWin() : 0 );
                         delete pStrm;

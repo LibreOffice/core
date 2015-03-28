@@ -188,7 +188,7 @@ bool SwFmtDrop::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         {
             if(rVal.getValueType()  == ::cppu::UnoType<style::DropCapFormat>::get())
             {
-                const style::DropCapFormat* pDrop = (const style::DropCapFormat*)rVal.getValue();
+                const style::DropCapFormat* pDrop = static_cast<const style::DropCapFormat*>(rVal.getValue());
                 nLines      = pDrop->Lines;
                 nChars      = pDrop->Count;
                 nDistance   = convertMm100ToTwip(pDrop->Distance);
@@ -198,7 +198,7 @@ bool SwFmtDrop::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         }
         break;
         case MID_DROPCAP_WHOLE_WORD:
-            bWholeWord = *(sal_Bool*)rVal.getValue();
+            bWholeWord = *static_cast<sal_Bool const *>(rVal.getValue());
         break;
         case MID_DROPCAP_CHAR_STYLE_NAME :
             OSL_FAIL("char format cannot be set in PutValue()!");

@@ -127,13 +127,13 @@ bool SwUserField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     switch( nWhichId )
     {
     case FIELD_PROP_BOOL1:
-        if(*(sal_Bool*) rAny.getValue())
+        if(*static_cast<sal_Bool const *>(rAny.getValue()))
             nSubType &= (~nsSwExtendedSubType::SUB_INVISIBLE);
         else
             nSubType |= nsSwExtendedSubType::SUB_INVISIBLE;
         break;
     case FIELD_PROP_BOOL2:
-        if(*(sal_Bool*) rAny.getValue())
+        if(*static_cast<sal_Bool const *>(rAny.getValue()))
             nSubType |= nsSwExtendedSubType::SUB_CMD;
         else
             nSubType &= (~nsSwExtendedSubType::SUB_CMD);
@@ -312,7 +312,7 @@ bool SwUserFieldType::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         rAny >>= aContent;
         break;
     case FIELD_PROP_BOOL1:
-        if(*(sal_Bool*)rAny.getValue())
+        if(*static_cast<sal_Bool const *>(rAny.getValue()))
         {
             nType |= nsSwGetSetExpType::GSE_EXPR;
             nType &= ~nsSwGetSetExpType::GSE_STRING;
