@@ -595,13 +595,10 @@ static SwXCell* lcl_CreateXCell(SwFrmFmt* pFmt, sal_Int32 nColumn, sal_Int32 nRo
 
 static void lcl_InspectLines(SwTableLines& rLines, std::vector<OUString*>& rAllNames)
 {
-    for( size_t i = 0; i < rLines.size(); ++i )
+    for(auto pLine : rLines)
     {
-        SwTableLine* pLine = rLines[i];
-        SwTableBoxes& rBoxes = pLine->GetTabBoxes();
-        for(size_t j = 0; j < rBoxes.size(); ++j)
+        for(auto pBox : pLine->GetTabBoxes())
         {
-            SwTableBox* pBox = rBoxes[j];
             if(!pBox->GetName().isEmpty() && pBox->getRowSpan() > 0 )
                 rAllNames.push_back( new OUString(pBox->GetName()) );
             SwTableLines& rBoxLines = pBox->GetTabLines();
