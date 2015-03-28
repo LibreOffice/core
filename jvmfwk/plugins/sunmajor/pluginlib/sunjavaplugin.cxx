@@ -145,7 +145,7 @@ OString getPluginJarPath(
 
 JavaInfo* createJavaInfo(const rtl::Reference<VendorBase> & info)
 {
-    JavaInfo* pInfo = (JavaInfo*) rtl_allocateMemory(sizeof(JavaInfo));
+    JavaInfo* pInfo = static_cast<JavaInfo*>(rtl_allocateMemory(sizeof(JavaInfo)));
     if (pInfo == NULL)
         return NULL;
     OUString sVendor = info->getVendor();
@@ -351,7 +351,7 @@ javaPluginError jfw_plugin_getAllJavaInfos(
     }
     //Now vecVerifiedInfos contains all those JREs which meet the version requirements
     //Transfer them into the array that is passed out.
-    arInfo = (JavaInfo**) rtl_allocateMemory(vecVerifiedInfos.size() * sizeof (JavaInfo*));
+    arInfo = static_cast<JavaInfo**>(rtl_allocateMemory(vecVerifiedInfos.size() * sizeof (JavaInfo*)));
     int j = 0;
     typedef vector<rtl::Reference<VendorBase> >::const_iterator cit;
     for (cit ii = vecVerifiedInfos.begin(); ii != vecVerifiedInfos.end(); ++ii, ++j)

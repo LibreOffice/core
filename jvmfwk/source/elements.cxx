@@ -979,7 +979,7 @@ JavaInfo * CNodeJavaInfo::makeJavaInfo() const
 {
     if (bNil == true || m_bEmptyNode == true)
         return NULL;
-    JavaInfo * pInfo = (JavaInfo*) rtl_allocateMemory(sizeof(JavaInfo));
+    JavaInfo * pInfo = static_cast<JavaInfo*>(rtl_allocateMemory(sizeof(JavaInfo)));
     if (pInfo == NULL)
         return NULL;
     memset(pInfo, 0, sizeof(JavaInfo));
@@ -1075,8 +1075,8 @@ void MergedSettings::getVmParametersArray(
     osl::MutexGuard guard(FwkMutex::get());
     OSL_ASSERT(parParams != NULL && size != NULL);
 
-    *parParams = (rtl_uString **)
-        rtl_allocateMemory(sizeof(rtl_uString*) * m_vmParams.size());
+    *parParams = static_cast<rtl_uString **>(
+        rtl_allocateMemory(sizeof(rtl_uString*) * m_vmParams.size()));
     if (*parParams == NULL)
         return;
 
@@ -1097,8 +1097,8 @@ void MergedSettings::getJRELocations(
     osl::MutexGuard guard(FwkMutex::get());
     assert(parLocations != NULL && size != NULL);
 
-    *parLocations = (rtl_uString **)
-        rtl_allocateMemory(sizeof(rtl_uString*) * m_JRELocations.size());
+    *parLocations = static_cast<rtl_uString **>(
+        rtl_allocateMemory(sizeof(rtl_uString*) * m_JRELocations.size()));
     if (*parLocations == NULL)
         return;
 

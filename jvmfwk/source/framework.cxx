@@ -171,8 +171,8 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
         }
         //create an fill the array of JavaInfo*
         sal_Int32 nSize = vecInfo.size() + vecInfoManual2.size();
-        *pparInfo = (JavaInfo**) rtl_allocateMemory(
-            nSize * sizeof(JavaInfo*));
+        *pparInfo = static_cast<JavaInfo**>(rtl_allocateMemory(
+            nSize * sizeof(JavaInfo*)));
         if (*pparInfo == NULL)
             return JFW_E_ERROR;
 
@@ -1111,7 +1111,7 @@ JavaInfo * CJavaInfo::copyJavaInfo(const JavaInfo * pInfo)
     if (pInfo == NULL)
         return NULL;
     JavaInfo* newInfo =
-          (JavaInfo*) rtl_allocateMemory(sizeof(JavaInfo));
+          static_cast<JavaInfo*>(rtl_allocateMemory(sizeof(JavaInfo)));
     if (newInfo)
     {
         memcpy(newInfo, pInfo, sizeof(JavaInfo));
