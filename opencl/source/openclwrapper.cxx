@@ -830,7 +830,7 @@ bool switchOpenCLDevice(const OUString* pDevice, bool bAutoSelect, bool bForceEv
     // initialisation below.) Because otherwise the code crashes in
     // initOpenCLRunEnv(). Confused? You should be.
 
-    gpuEnv.mpArryDevsID = (cl_device_id*) malloc( sizeof(cl_device_id) );
+    gpuEnv.mpArryDevsID = static_cast<cl_device_id*>(malloc( sizeof(cl_device_id) ));
     gpuEnv.mpArryDevsID[0] = pDeviceId;
 
     return !initOpenCLRunEnv(0);

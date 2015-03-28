@@ -101,7 +101,7 @@ inline ds_status initDSProfile(ds_profile** p, const char* version)
 
     if (p == NULL) return DS_INVALID_PROFILE;
 
-    profile = (ds_profile*)malloc(sizeof(ds_profile));
+    profile = static_cast<ds_profile*>(malloc(sizeof(ds_profile)));
     if (profile == NULL) return DS_MEMORY_ERROR;
 
     memset(profile, 0, sizeof(ds_profile));
@@ -109,7 +109,7 @@ inline ds_status initDSProfile(ds_profile** p, const char* version)
     clGetPlatformIDs(0, NULL, &numPlatforms);
     if (numPlatforms != 0)
     {
-        platforms = (cl_platform_id*)malloc(numPlatforms * sizeof(cl_platform_id));
+        platforms = static_cast<cl_platform_id*>(malloc(numPlatforms * sizeof(cl_platform_id)));
         if (platforms == NULL)
         {
             status = DS_MEMORY_ERROR;
@@ -136,7 +136,7 @@ inline ds_status initDSProfile(ds_profile** p, const char* version)
     }
     if (numDevices != 0)
     {
-        devices = (cl_device_id*)malloc(numDevices * sizeof(cl_device_id));
+        devices = static_cast<cl_device_id*>(malloc(numDevices * sizeof(cl_device_id)));
         if (devices == NULL)
         {
             status = DS_MEMORY_ERROR;
@@ -145,7 +145,7 @@ inline ds_status initDSProfile(ds_profile** p, const char* version)
     }
 
     profile->numDevices = numDevices + 1;     // +1 to numDevices to include the native CPU
-    profile->devices = (ds_device*)malloc(profile->numDevices * sizeof(ds_device));
+    profile->devices = static_cast<ds_device*>(malloc(profile->numDevices * sizeof(ds_device)));
     if (profile->devices == NULL)
     {
         profile->numDevices = 0;
@@ -185,13 +185,13 @@ inline ds_status initDSProfile(ds_profile** p, const char* version)
             clGetDeviceInfo(profile->devices[next].oclDeviceID, CL_DEVICE_NAME
                             , DS_DEVICE_NAME_LENGTH, &buffer, NULL);
             length = strlen(buffer);
-            profile->devices[next].oclDeviceName = (char*)malloc(length + 1);
+            profile->devices[next].oclDeviceName = static_cast<char*>(malloc(length + 1));
             memcpy(profile->devices[next].oclDeviceName, buffer, length + 1);
 
             clGetDeviceInfo(profile->devices[next].oclDeviceID, CL_DRIVER_VERSION
                             , DS_DEVICE_NAME_LENGTH, &buffer, NULL);
             length = strlen(buffer);
-            profile->devices[next].oclDriverVersion = (char*)malloc(length + 1);
+            profile->devices[next].oclDriverVersion = static_cast<char*>(malloc(length + 1));
             memcpy(profile->devices[next].oclDriverVersion, buffer, length + 1);
         }
     }
@@ -390,7 +390,7 @@ inline ds_status readProFile(const char* fileName, char** content, size_t* conte
 
     size = pos;
     rewind(input);
-    binary = (char*)malloc(size);
+    binary = static_cast<char*>(malloc(size));
     if (binary == NULL)
     {
         fclose(input);
