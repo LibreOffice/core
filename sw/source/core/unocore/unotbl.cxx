@@ -1014,31 +1014,23 @@ uno::Reference<text::XTextCursor> SwXCell::createTextCursor(void) throw( uno::Ru
     return static_cast<text::XWordCursor*>(pXCursor);
 }
 
-uno::Reference< text::XTextCursor >  SwXCell::createTextCursorByRange(const uno::Reference< text::XTextRange > & xTextPosition)
-                                                        throw( uno::RuntimeException, std::exception )
+uno::Reference<text::XTextCursor> SwXCell::createTextCursorByRange(const uno::Reference< text::XTextRange > & xTextPosition)
+    throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    uno::Reference< text::XTextCursor >  aRef;
     SwUnoInternalPaM aPam(*GetDoc());
-    if ((pStartNode || IsValid())
-        && ::sw::XTextRangeToSwPaM(aPam, xTextPosition))
-    {
-        const SwStartNode* pSttNd = pStartNode ? pStartNode : pBox->GetSttNd();
-        // skip sections
-        SwStartNode* p1 = aPam.GetNode().StartOfSectionNode();
-        while(p1->IsSectionNode())
-            p1 = p1->StartOfSectionNode();
-
-        if( p1 == pSttNd )
-        {
-            aRef = static_cast<text::XWordCursor*>(
-                    new SwXTextCursor(*GetDoc(), this, CURSOR_TBLTEXT,
-                        *aPam.GetPoint(), aPam.GetMark()));
-        }
-    }
-    else
+    if((!pStartNode && !IsValid()) || !::sw::XTextRangeToSwPaM(aPam, xTextPosition))
         throw uno::RuntimeException();
-    return aRef;
+    const SwStartNode* pSttNd = pStartNode ? pStartNode : pBox->GetSttNd();
+    // skip sections
+    SwStartNode* p1 = aPam.GetNode().StartOfSectionNode();
+    while(p1->IsSectionNode())
+        p1 = p1->StartOfSectionNode();
+    if( p1 != pSttNd )
+        return nullptr;
+    return static_cast<text::XWordCursor*>(
+        new SwXTextCursor(*GetDoc(), this, CURSOR_TBLTEXT,
+        *aPam.GetPoint(), aPam.GetMark()));
 }
 
 uno::Reference< beans::XPropertySetInfo >  SwXCell::getPropertySetInfo(void) throw( uno::RuntimeException, std::exception )
