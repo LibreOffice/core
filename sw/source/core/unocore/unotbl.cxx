@@ -1523,37 +1523,28 @@ OUString SwXTextTableCursor::getRangeName()
     throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    OUString aRet;
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     SwUnoTableCrsr* pTblCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
     //!! see also SwChartDataSequence::getSourceRangeRepresentation
-    if (pTblCrsr)
+    if(!pTblCrsr)
+        return OUString();
+    pTblCrsr->MakeBoxSels();
+    const SwStartNode* pNode = pTblCrsr->GetPoint()->nNode.GetNode().FindTableBoxStartNode();
+    const SwTable* pTable = SwTable::FindTable(GetFrmFmt());
+    const SwTableBox* pEndBox = pTable->GetTblBox(pNode->GetIndex());
+    if(pTblCrsr->HasMark())
     {
-        pTblCrsr->MakeBoxSels();
-        const SwStartNode* pNode = pTblCrsr->GetPoint()->nNode.GetNode().FindTableBoxStartNode();
-        const SwTable* pTable = SwTable::FindTable( GetFrmFmt() );
-        const SwTableBox* pEndBox = pTable->GetTblBox( pNode->GetIndex());
-        aRet = pEndBox->GetName();
-
-        if(pTblCrsr->HasMark())
+        pNode = pTblCrsr->GetMark()->nNode.GetNode().FindTableBoxStartNode();
+        const SwTableBox* pStartBox = pTable->GetTblBox(pNode->GetIndex());
+        if(pEndBox != pStartBox)
         {
-            pNode = pTblCrsr->GetMark()->nNode.GetNode().FindTableBoxStartNode();
-            const SwTableBox* pStartBox = pTable->GetTblBox( pNode->GetIndex());
-            if(pEndBox != pStartBox)
-            {
-                // need to switch start and end?
-                if (*pTblCrsr->GetPoint() < *pTblCrsr->GetMark())
-                {
-                    const SwTableBox* pTmpBox = pStartBox;
-                    pStartBox = pEndBox;
-                    pEndBox = pTmpBox;
-                }
-
-                aRet = pStartBox->GetName() + ":" + pEndBox->GetName();
-            }
+            // need to switch start and end?
+            if(*pTblCrsr->GetPoint() < *pTblCrsr->GetMark())
+                std::swap(pStartBox, pEndBox);
+            return pStartBox->GetName() + ":" + pEndBox->GetName();
         }
     }
-    return aRet;
+    return pEndBox->GetName();
 }
 
 sal_Bool SwXTextTableCursor::gotoCellByName(const OUString& sCellName, sal_Bool Expand)
