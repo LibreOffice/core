@@ -105,9 +105,9 @@ SvxOpenCLTabPage::SvxOpenCLTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
 SvxOpenCLTabPage::~SvxOpenCLTabPage()
 {
     for ( sal_uInt16 i = 0; i < mpBlackList->GetEntryCount(); ++i )
-        delete (OpenCLConfig::ImplMatcher*)mpBlackList->GetEntry(i)->GetUserData();
+        delete static_cast<OpenCLConfig::ImplMatcher*>(mpBlackList->GetEntry(i)->GetUserData());
     for ( sal_uInt16 i = 0; i < mpWhiteList->GetEntryCount(); ++i )
-        delete (OpenCLConfig::ImplMatcher*)mpWhiteList->GetEntry(i)->GetUserData();
+        delete static_cast<OpenCLConfig::ImplMatcher*>(mpWhiteList->GetEntry(i)->GetUserData());
     delete mpBlackList;
     delete mpWhiteList;
 }
@@ -153,7 +153,7 @@ void fillListBox(SvSimpleTable* pListBox, const OpenCLConfig::ImplMatcherSet& rS
     pListBox->SetUpdateMode(false);
 // kill added UserData to treeitem
     for ( sal_uInt16 i = 0; i < pListBox->GetEntryCount(); ++i )
-        delete (OpenCLConfig::ImplMatcher*)pListBox->GetEntry(i)->GetUserData();
+        delete static_cast<OpenCLConfig::ImplMatcher*>(pListBox->GetEntry(i)->GetUserData());
 
     pListBox->Clear();
     for (auto i = rSet.cbegin(); i != rSet.cend(); ++i)
@@ -278,7 +278,7 @@ const OpenCLConfig::ImplMatcher& findCurrentEntry(OpenCLConfig::ImplMatcherSet& 
 {
     SvTreeListEntry* pEntry = pListBox->FirstSelected() ;
 
-    const OpenCLConfig::ImplMatcher* pSet = (OpenCLConfig::ImplMatcher*)pEntry->GetUserData();
+    const OpenCLConfig::ImplMatcher* pSet = static_cast<OpenCLConfig::ImplMatcher*>(pEntry->GetUserData());
 
     for (auto i = rSet.cbegin(); i != rSet.cend(); ++i)
     {

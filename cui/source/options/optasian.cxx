@@ -249,7 +249,7 @@ void SvxAsianLayoutPage::Reset( const SfxItemSet* )
         if(pImpl->xPrSetInfo->hasPropertyByName(sPunct))
         {
             Any aVal = pImpl->xPrSet->getPropertyValue(sPunct);
-            bKernWesternText = !*(sal_Bool*)aVal.getValue();
+            bKernWesternText = !*static_cast<sal_Bool const *>(aVal.getValue());
         }
     }
     else

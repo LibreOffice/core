@@ -108,7 +108,7 @@ void SFTreeListBox::delUserData( SvTreeListEntry* pEntry )
 {
     if ( pEntry )
     {
-        SFEntry* pUserData = (SFEntry*)pEntry->GetUserData();
+        SFEntry* pUserData = static_cast<SFEntry*>(pEntry->GetUserData());
         if ( pUserData )
         {
             delete pUserData;
@@ -392,7 +392,7 @@ void SFTreeListBox::RequestingChildren( SvTreeListEntry* pEntry )
     {
         return;
     }
-    userData = (SFEntry*)pEntry->GetUserData();
+    userData = static_cast<SFEntry*>(pEntry->GetUserData());
 
     Reference< browse::XBrowseNode > node;
     Reference< XModel > model;
@@ -610,7 +610,7 @@ IMPL_LINK( SvxScriptOrgDialog, ScriptSelectHdl, SvTreeListBox *, pBox )
     {
         return 0;
     }
-    userData = (SFEntry*)pEntry->GetUserData();
+    userData = static_cast<SFEntry*>(pEntry->GetUserData());
 
     Reference< browse::XBrowseNode > node;
     if ( userData )
@@ -644,7 +644,7 @@ IMPL_LINK( SvxScriptOrgDialog, ButtonHdl, Button *, pButton )
             {
                 return 0;
             }
-            userData = (SFEntry*)pEntry->GetUserData();
+            userData = static_cast<SFEntry*>(pEntry->GetUserData());
             if ( userData )
             {
                 Reference< browse::XBrowseNode > node;
@@ -687,7 +687,7 @@ IMPL_LINK( SvxScriptOrgDialog, ButtonHdl, Button *, pButton )
                     SvTreeListEntry* pParent = m_pScriptsBox->GetParent( pEntry );
                     while ( pParent && !mspNode.is() )
                     {
-                        SFEntry* mspUserData = (SFEntry*)pParent->GetUserData();
+                        SFEntry* mspUserData = static_cast<SFEntry*>(pParent->GetUserData());
                         mspNode.set( mspUserData->GetNode() , UNO_QUERY );
                         pParent = m_pScriptsBox->GetParent( pParent );
                     }
@@ -776,7 +776,7 @@ Reference< browse::XBrowseNode > SvxScriptOrgDialog::getBrowseNode( SvTreeListEn
     Reference< browse::XBrowseNode > node;
     if ( pEntry )
     {
-        SFEntry* userData = (SFEntry*)pEntry->GetUserData();
+        SFEntry* userData = static_cast<SFEntry*>(pEntry->GetUserData());
         if ( userData )
         {
             node = userData->GetNode();
@@ -791,7 +791,7 @@ Reference< XModel > SvxScriptOrgDialog::getModel( SvTreeListEntry* pEntry )
     Reference< XModel > model;
     if ( pEntry )
     {
-        SFEntry* userData = (SFEntry*)pEntry->GetUserData();
+        SFEntry* userData = static_cast<SFEntry*>(pEntry->GetUserData());
         if ( userData )
         {
             model = userData->GetModel();
@@ -960,7 +960,7 @@ void SvxScriptOrgDialog::createEntry( SvTreeListEntry* pEntry )
             // loaded, this will prevent RequestingChildren ( called
             // from vcl via RequestingChildren ) from
             // creating new ( duplicate ) children
-            SFEntry* userData = (SFEntry*)pEntry->GetUserData();
+            SFEntry* userData = static_cast<SFEntry*>(pEntry->GetUserData());
             if ( userData &&  !userData->isLoaded() )
             {
                 userData->setLoaded();

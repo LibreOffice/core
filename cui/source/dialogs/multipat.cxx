@@ -133,7 +133,7 @@ IMPL_LINK_NOARG(SvxPathSelectDialog, AddHdl_Impl)
 IMPL_LINK_NOARG(SvxMultiPathDialog, DelHdl_Impl)
 {
     SvTreeListEntry* pEntry = m_pRadioLB->FirstSelected();
-    delete (OUString*)pEntry->GetUserData();
+    delete static_cast<OUString*>(pEntry->GetUserData());
     bool bChecked = m_pRadioLB->GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED;
     sal_uLong nPos = m_pRadioLB->GetEntryPos( pEntry );
     m_pRadioLB->RemoveEntry( pEntry );
@@ -228,7 +228,7 @@ SvxMultiPathDialog::~SvxMultiPathDialog()
     while ( nPos-- )
     {
         SvTreeListEntry* pEntry = m_pRadioLB->GetEntry( nPos );
-        delete (OUString*)pEntry->GetUserData();
+        delete static_cast<OUString*>(pEntry->GetUserData());
     }
 
     delete m_pRadioLB;
@@ -238,7 +238,7 @@ SvxPathSelectDialog::~SvxPathSelectDialog()
 {
     sal_uInt16 nPos = m_pPathLB->GetEntryCount();
     while ( nPos-- )
-        delete (OUString*)m_pPathLB->GetEntryData(nPos);
+        delete static_cast<OUString*>(m_pPathLB->GetEntryData(nPos));
 }
 
 OUString SvxMultiPathDialog::GetPath() const
@@ -251,12 +251,12 @@ OUString SvxMultiPathDialog::GetPath() const
     {
         SvTreeListEntry* pEntry = m_pRadioLB->GetEntry(i);
         if ( m_pRadioLB->GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED )
-            sWritable = *(OUString*)pEntry->GetUserData();
+            sWritable = *static_cast<OUString*>(pEntry->GetUserData());
         else
         {
             if ( !sNewPath.isEmpty() )
                 sNewPath += OUString(cDelim);
-            sNewPath += *(OUString*)pEntry->GetUserData();
+            sNewPath += *static_cast<OUString*>(pEntry->GetUserData());
         }
     }
     if ( !sNewPath.isEmpty() )
@@ -275,7 +275,7 @@ OUString SvxPathSelectDialog::GetPath() const
     {
         if ( !sNewPath.isEmpty() )
             sNewPath += OUString(cDelim);
-        sNewPath += *(OUString*)m_pPathLB->GetEntryData(i);
+        sNewPath += *static_cast<OUString*>(m_pPathLB->GetEntryData(i));
     }
 
     return sNewPath;

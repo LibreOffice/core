@@ -240,7 +240,7 @@ IconChoiceDialog ::~IconChoiceDialog ()
     for ( sal_uLong i=0; i < m_pIconCtrl->GetEntryCount(); i++)
     {
         SvxIconChoiceCtrlEntry* pEntry = m_pIconCtrl->GetEntry ( i );
-        sal_uInt16* pUserData = (sal_uInt16*) pEntry->GetUserData();
+        sal_uInt16* pUserData = static_cast<sal_uInt16*>(pEntry->GetUserData());
         delete pUserData;
     }
 
@@ -341,7 +341,7 @@ IMPL_LINK_NOARG(IconChoiceDialog , ChosePageHdl_Impl)
     if ( !pEntry )
         pEntry = m_pIconCtrl->GetCursor( );
 
-    sal_uInt16 *pId = (sal_uInt16*)pEntry->GetUserData ();
+    sal_uInt16 *pId = static_cast<sal_uInt16*>(pEntry->GetUserData ());
 
     if( *pId != mnCurrentPageId )
     {
@@ -821,7 +821,7 @@ void IconChoiceDialog::FocusOnIcon( sal_uInt16 nId )
     for ( sal_uInt16 i=0; i<m_pIconCtrl->GetEntryCount(); i++)
     {
         SvxIconChoiceCtrlEntry* pEntry = m_pIconCtrl->GetEntry ( i );
-        sal_uInt16* pUserData = (sal_uInt16*) pEntry->GetUserData();
+        sal_uInt16* pUserData = static_cast<sal_uInt16*>(pEntry->GetUserData());
 
         if ( pUserData && *pUserData == nId )
         {

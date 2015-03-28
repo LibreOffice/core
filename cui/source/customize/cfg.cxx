@@ -1831,7 +1831,7 @@ bool SvxConfigPage::FillItemSet( SfxItemSet* )
     for ( sal_uInt16 i = 0 ; i < m_pSaveInListBox->GetEntryCount(); ++i )
     {
         SaveInData* pData =
-            (SaveInData*) m_pSaveInListBox->GetEntryData( i );
+            static_cast<SaveInData*>(m_pSaveInListBox->GetEntryData( i ));
 
         result = pData->Apply();
     }
@@ -1842,8 +1842,8 @@ IMPL_LINK( SvxConfigPage, SelectSaveInLocation, ListBox *, pBox )
 {
     (void)pBox;
 
-    pCurrentSaveInData = (SaveInData*) m_pSaveInListBox->GetEntryData(
-            m_pSaveInListBox->GetSelectEntryPos());
+    pCurrentSaveInData = static_cast<SaveInData*>(m_pSaveInListBox->GetEntryData(
+            m_pSaveInListBox->GetSelectEntryPos()));
 
     Init();
     return 1;
@@ -2003,7 +2003,7 @@ SvTreeListEntry* SvxConfigPage::InsertEntry(
     else
     {
         SvxConfigEntry* pEntryData =
-            (SvxConfigEntry*) pCurEntry->GetUserData();
+            static_cast<SvxConfigEntry*>(pCurEntry->GetUserData());
 
         SvxEntries::iterator iter = pEntries->begin();
         SvxEntries::const_iterator end = pEntries->end();
@@ -2144,10 +2144,10 @@ bool SvxConfigPage::MoveEntryData(
     SvxEntries* pEntries = GetTopLevelSelection()->GetEntries();
 
     SvxConfigEntry* pSourceData =
-        (SvxConfigEntry*) pSourceEntry->GetUserData();
+        static_cast<SvxConfigEntry*>(pSourceEntry->GetUserData());
 
     SvxConfigEntry* pTargetData =
-        (SvxConfigEntry*) pTargetEntry->GetUserData();
+        static_cast<SvxConfigEntry*>(pTargetEntry->GetUserData());
 
     if ( pSourceData != NULL && pTargetData != NULL )
     {
@@ -2229,7 +2229,7 @@ SvxMenuConfigPage::~SvxMenuConfigPage()
     for ( sal_uInt16 i = 0 ; i < m_pSaveInListBox->GetEntryCount(); ++i )
     {
         MenuSaveInData* pData =
-            (MenuSaveInData*) m_pSaveInListBox->GetEntryData( i );
+            static_cast<MenuSaveInData*>(m_pSaveInListBox->GetEntryData( i ));
 
         delete pData;
     }
@@ -2275,7 +2275,7 @@ void SvxMenuConfigPage::UpdateButtonStates()
     m_pMoveDownButton->Enable( selection != last );
 
     SvxConfigEntry* pEntryData =
-        (SvxConfigEntry*) selection->GetUserData();
+        static_cast<SvxConfigEntry*>(selection->GetUserData());
 
     if ( pEntryData->IsSeparator() )
     {
@@ -2318,7 +2318,7 @@ bool SvxMenuConfigPage::DeleteSelectedContent()
     {
         // get currently selected menu entry
         SvxConfigEntry* pMenuEntry =
-            (SvxConfigEntry*) pActEntry->GetUserData();
+            static_cast<SvxConfigEntry*>(pActEntry->GetUserData());
 
         // get currently selected menu
         SvxConfigEntry* pMenu = GetTopLevelSelection();
@@ -2479,7 +2479,7 @@ IMPL_LINK( SvxMenuConfigPage, EntrySelectHdl, MenuButton *, pButton )
     {
         SvTreeListEntry* pActEntry = m_pContentsListBox->GetCurEntry();
         SvxConfigEntry* pEntry =
-            (SvxConfigEntry*) pActEntry->GetUserData();
+            static_cast<SvxConfigEntry*>(pActEntry->GetUserData());
 
         OUString aNewName( stripHotKey( pEntry->GetName() ) );
         OUString aDesc = CUI_RESSTR( RID_SVXSTR_LABEL_NEW_NAME );
@@ -2666,7 +2666,7 @@ IMPL_LINK(SvxMainMenuOrganizerDialog, ModifyHdl, Edit*, pEdit)
     }
 
     SvxConfigEntry* pNewEntryData =
-        (SvxConfigEntry*) pNewMenuEntry->GetUserData();
+        static_cast<SvxConfigEntry*>(pNewMenuEntry->GetUserData());
 
     pNewEntryData->SetName(m_pMenuNameEdit->GetText());
 
@@ -2721,9 +2721,9 @@ IMPL_LINK( SvxMainMenuOrganizerDialog, MoveHdl, Button *, pButton )
     if ( pSourceEntry != NULL && pTargetEntry != NULL )
     {
         SvxConfigEntry* pSourceData =
-            (SvxConfigEntry*) pSourceEntry->GetUserData();
+            static_cast<SvxConfigEntry*>(pSourceEntry->GetUserData());
         SvxConfigEntry* pTargetData =
-            (SvxConfigEntry*) pTargetEntry->GetUserData();
+            static_cast<SvxConfigEntry*>(pTargetEntry->GetUserData());
 
         SvxEntries::iterator iter1 = GetEntries()->begin();
         SvxEntries::iterator iter2 = GetEntries()->begin();
@@ -2755,7 +2755,7 @@ IMPL_LINK( SvxMainMenuOrganizerDialog, MoveHdl, Button *, pButton )
 
 SvxConfigEntry* SvxMainMenuOrganizerDialog::GetSelectedEntry()
 {
-    return (SvxConfigEntry*)m_pMenuListBox->FirstSelected()->GetUserData();
+    return static_cast<SvxConfigEntry*>(m_pMenuListBox->FirstSelected()->GetUserData());
 }
 
 const OUString&
@@ -2919,7 +2919,7 @@ SvxToolbarConfigPage::~SvxToolbarConfigPage()
     for ( sal_uInt16 i = 0 ; i < m_pSaveInListBox->GetEntryCount(); ++i )
     {
         ToolbarSaveInData* pData =
-            (ToolbarSaveInData*) m_pSaveInListBox->GetEntryData( i );
+            static_cast<ToolbarSaveInData*>(m_pSaveInListBox->GetEntryData( i ));
 
         delete pData;
     }
@@ -2971,7 +2971,7 @@ bool SvxToolbarConfigPage::DeleteSelectedContent()
     {
         // get currently selected entry
         SvxConfigEntry* pEntry =
-            (SvxConfigEntry*) pActEntry->GetUserData();
+            static_cast<SvxConfigEntry*>(pActEntry->GetUserData());
 
         SvxConfigEntry* pToolbar = GetTopLevelSelection();
 
@@ -3034,7 +3034,7 @@ IMPL_LINK( SvxToolbarConfigPage, ToolbarSelectHdl, MenuButton *, pButton )
     sal_uInt16 nSelectionPos = m_pTopLevelListBox->GetSelectEntryPos();
 
     SvxConfigEntry* pToolbar =
-        (SvxConfigEntry*)m_pTopLevelListBox->GetEntryData( nSelectionPos );
+        static_cast<SvxConfigEntry*>(m_pTopLevelListBox->GetEntryData( nSelectionPos ));
 
     ToolbarSaveInData* pSaveInData = static_cast<ToolbarSaveInData*>( GetSaveInData() );
 
@@ -3132,7 +3132,7 @@ IMPL_LINK( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton )
         {
             SvTreeListEntry* pActEntry = m_pContentsListBox->GetCurEntry();
             SvxConfigEntry* pEntry =
-                (SvxConfigEntry*) pActEntry->GetUserData();
+                static_cast<SvxConfigEntry*>(pActEntry->GetUserData());
 
             OUString aNewName( stripHotKey( pEntry->GetName() ) );
             OUString aDesc = CUI_RESSTR( RID_SVXSTR_LABEL_NEW_NAME );
@@ -3155,7 +3155,7 @@ IMPL_LINK( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton )
         {
             SvTreeListEntry* pActEntry = m_pContentsListBox->GetCurEntry();
             SvxConfigEntry* pEntry =
-                (SvxConfigEntry*) pActEntry->GetUserData();
+                static_cast<SvxConfigEntry*>(pActEntry->GetUserData());
 
             sal_uInt16 nSelectionPos = 0;
 
@@ -3253,7 +3253,7 @@ IMPL_LINK( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton )
         {
             SvTreeListEntry* pActEntry = m_pContentsListBox->GetCurEntry();
             SvxConfigEntry* pEntry =
-                (SvxConfigEntry*) pActEntry->GetUserData();
+                static_cast<SvxConfigEntry*>(pActEntry->GetUserData());
 
             sal_uInt16 nSelectionPos = 0;
 
@@ -3331,7 +3331,7 @@ IMPL_LINK( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton )
         {
             SvTreeListEntry* pActEntry = m_pContentsListBox->GetCurEntry();
             SvxConfigEntry* pEntry =
-                (SvxConfigEntry*) pActEntry->GetUserData();
+                static_cast<SvxConfigEntry*>(pActEntry->GetUserData());
 
             sal_uInt16 nSelectionPos = 0;
 
@@ -3411,7 +3411,7 @@ void SvxToolbarConfigPage::Init()
         for ( sal_uInt16 i = 0 ; i < m_pTopLevelListBox->GetEntryCount(); ++i )
         {
             SvxConfigEntry* pData =
-                (SvxConfigEntry*) m_pTopLevelListBox->GetEntryData( i );
+                static_cast<SvxConfigEntry*>(m_pTopLevelListBox->GetEntryData( i ));
 
             if ( pData->GetCommand().equals( m_aURLToSelect ) )
             {
@@ -4272,7 +4272,7 @@ void SvxToolbarConfigPage::UpdateButtonStates()
         return;
     }
 
-    SvxConfigEntry* pEntryData = (SvxConfigEntry*) selection->GetUserData();
+    SvxConfigEntry* pEntryData = static_cast<SvxConfigEntry*>(selection->GetUserData());
     if ( pEntryData->IsSeparator() )
         pPopup->EnableItem( ID_DELETE, true );
     else
@@ -4401,7 +4401,7 @@ IMPL_LINK( SvxToolbarConfigPage, NewToolbarHdl, Button *, pButton )
     for ( sal_uInt16 i = 0 ; i < m_pSaveInListBox->GetEntryCount(); ++i )
     {
         SaveInData* pData =
-            (SaveInData*) m_pSaveInListBox->GetEntryData( i );
+            static_cast<SaveInData*>(m_pSaveInListBox->GetEntryData( i ));
 
         nInsertPos = pNameDialog->m_pSaveInListBox->InsertEntry(
             m_pSaveInListBox->GetEntry( i ) );
@@ -4418,8 +4418,8 @@ IMPL_LINK( SvxToolbarConfigPage, NewToolbarHdl, Button *, pButton )
 
         nInsertPos = pNameDialog->m_pSaveInListBox->GetSelectEntryPos();
 
-        ToolbarSaveInData* pData = (ToolbarSaveInData*)
-            pNameDialog->m_pSaveInListBox->GetEntryData( nInsertPos );
+        ToolbarSaveInData* pData = static_cast<ToolbarSaveInData*>(
+            pNameDialog->m_pSaveInListBox->GetEntryData( nInsertPos ));
 
         if ( GetSaveInData() != pData )
         {
@@ -4486,7 +4486,7 @@ SvTreeListEntry* SvxToolbarConfigPage::AddFunction(
     SvTreeListEntry* pNewLBEntry =
         SvxConfigPage::AddFunction( pTarget, bFront, bAllowDuplicates );
 
-    SvxConfigEntry* pEntry = (SvxConfigEntry*) pNewLBEntry->GetUserData();
+    SvxConfigEntry* pEntry = static_cast<SvxConfigEntry*>(pNewLBEntry->GetUserData());
 
     if ( pEntry->IsBinding() )
     {
@@ -4600,7 +4600,7 @@ void SvxToolbarEntriesListBox::ChangeVisibility( SvTreeListEntry* pEntry )
     if ( pEntry != NULL )
     {
         SvxConfigEntry* pEntryData =
-            (SvxConfigEntry*) pEntry->GetUserData();
+            static_cast<SvxConfigEntry*>(pEntry->GetUserData());
 
         if ( pEntryData->IsBinding() )
         {

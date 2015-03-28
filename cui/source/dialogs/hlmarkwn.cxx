@@ -487,7 +487,7 @@ void SvxHlinkDlgMarkWnd::ClearTree()
 
     while ( pEntry )
     {
-        TargetData* pUserData = ( TargetData * ) pEntry->GetUserData();
+        TargetData* pUserData = static_cast<TargetData *>(pEntry->GetUserData());
         delete pUserData;
 
         pEntry = mpLbTree->Next( pEntry );
@@ -509,7 +509,7 @@ SvTreeListEntry* SvxHlinkDlgMarkWnd::FindEntry (const OUString& aStrName)
 
     while ( pEntry && !bFound )
     {
-        TargetData* pUserData = ( TargetData * ) pEntry->GetUserData ();
+        TargetData* pUserData = static_cast<TargetData *>(pEntry->GetUserData ());
         if (aStrName == pUserData->aUStrLinkname)
             bFound = true;
         else
@@ -547,7 +547,7 @@ IMPL_LINK_NOARG(SvxHlinkDlgMarkWnd, ClickApplyHdl_Impl)
 
     if ( pEntry )
     {
-        TargetData *pData = ( TargetData * )pEntry->GetUserData();
+        TargetData *pData = static_cast<TargetData *>(pEntry->GetUserData());
 
         if ( pData->bIsTarget )
         {
@@ -569,7 +569,7 @@ IMPL_LINK_NOARG(SvxHlinkDlgMarkWnd, ClickCloseHdl_Impl)
     SvTreeListEntry* pEntry = mpLbTree->GetCurEntry();
     if ( pEntry )
     {
-        TargetData* pUserData = (TargetData *) pEntry->GetUserData();
+        TargetData* pUserData = static_cast<TargetData *>(pEntry->GetUserData());
         OUString sLastSelectedMark = pUserData->aUStrLinkname;
 
         std::deque<OUString> aLastSelectedPath;

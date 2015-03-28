@@ -148,7 +148,7 @@ void SvxConfigFunctionListBox::ClearAll()
 OUString SvxConfigFunctionListBox::GetHelpText( SvTreeListEntry *pEntry )
 {
     SvxGroupInfo_Impl *pInfo =
-        pEntry ? (SvxGroupInfo_Impl*) pEntry->GetUserData(): 0;
+        pEntry ? static_cast<SvxGroupInfo_Impl*>(pEntry->GetUserData()): 0;
 
     if ( pInfo )
     {
@@ -622,7 +622,7 @@ SvxConfigGroupListBox::getDocumentModel(
 void SvxConfigGroupListBox::GroupSelected()
 {
     SvTreeListEntry *pEntry = FirstSelected();
-    SvxGroupInfo_Impl *pInfo = (SvxGroupInfo_Impl*) pEntry->GetUserData();
+    SvxGroupInfo_Impl *pInfo = static_cast<SvxGroupInfo_Impl*>(pEntry->GetUserData());
     pFunctionListBox->SetUpdateMode(false);
     pFunctionListBox->ClearAll();
     if ( pInfo->nKind != SVX_CFGGROUP_FUNCTION &&
@@ -640,7 +640,7 @@ void SvxConfigGroupListBox::GroupSelected()
             if ( _pEntry != NULL )
             {
                 SvxGroupInfo_Impl *_pInfo =
-                    (SvxGroupInfo_Impl*) _pEntry->GetUserData();
+                    static_cast<SvxGroupInfo_Impl*>(_pEntry->GetUserData());
 
                 Reference< frame::XDispatchInformationProvider > xDIP(
                     m_xFrame, UNO_QUERY );
@@ -830,7 +830,7 @@ bool SvxConfigGroupListBox::Expand( SvTreeListEntry* pParent )
 
 void SvxConfigGroupListBox::RequestingChildren( SvTreeListEntry *pEntry )
 {
-    SvxGroupInfo_Impl *pInfo = (SvxGroupInfo_Impl*) pEntry->GetUserData();
+    SvxGroupInfo_Impl *pInfo = static_cast<SvxGroupInfo_Impl*>(pEntry->GetUserData());
     pInfo->bWasOpened = true;
     switch ( pInfo->nKind )
     {
@@ -1014,7 +1014,7 @@ SvxScriptSelectorDialog::GetScriptURL() const
     SvTreeListEntry *pEntry = const_cast< SvxScriptSelectorDialog* >( this )->m_pCommands->GetLastSelectedEntry();
     if ( pEntry )
     {
-        SvxGroupInfo_Impl *pData = (SvxGroupInfo_Impl*) pEntry->GetUserData();
+        SvxGroupInfo_Impl *pData = static_cast<SvxGroupInfo_Impl*>(pEntry->GetUserData());
         if  (   ( pData->nKind == SVX_CFGFUNCTION_SLOT )
             ||  ( pData->nKind == SVX_CFGFUNCTION_SCRIPT )
             )

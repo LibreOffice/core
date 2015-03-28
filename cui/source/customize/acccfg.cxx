@@ -650,7 +650,7 @@ void SfxAccCfgLBoxString_Impl::Paint(
     if (!pEntry)
         return;
 
-    TAccInfo* pUserData = (TAccInfo*)pEntry->GetUserData();
+    TAccInfo* pUserData = static_cast<TAccInfo*>(pEntry->GetUserData());
     if (!pUserData)
         return;
 
@@ -705,7 +705,7 @@ void SfxAccCfgTabListBox_Impl::KeyInput(const KeyEvent& aKey)
         SvTreeListEntry* pEntry = First();
         while (pEntry)
         {
-            TAccInfo* pUserData = (TAccInfo*)pEntry->GetUserData();
+            TAccInfo* pUserData = static_cast<TAccInfo*>(pEntry->GetUserData());
             if (pUserData)
             {
                 sal_uInt16 nCode2 = pUserData->m_aKey.GetCode();
@@ -818,7 +818,7 @@ SfxAcceleratorConfigPage::~SfxAcceleratorConfigPage()
     SvTreeListEntry* pEntry = m_pEntriesBox->First();
     while (pEntry)
     {
-        TAccInfo* pUserData = (TAccInfo*)pEntry->GetUserData();
+        TAccInfo* pUserData = static_cast<TAccInfo*>(pEntry->GetUserData());
         if (pUserData)
             delete pUserData;
         pEntry = m_pEntriesBox->Next(pEntry);
@@ -827,7 +827,7 @@ SfxAcceleratorConfigPage::~SfxAcceleratorConfigPage()
     pEntry = m_pKeyBox->First();
     while (pEntry)
     {
-        TAccInfo* pUserData = (TAccInfo*)pEntry->GetUserData();
+        TAccInfo* pUserData = static_cast<TAccInfo*>(pEntry->GetUserData());
         if (pUserData)
             delete pUserData;
         pEntry = m_pKeyBox->Next(pEntry);
@@ -959,7 +959,7 @@ void SfxAcceleratorConfigPage::Init(const css::uno::Reference< css::ui::XAcceler
         m_pEntriesBox->SetEntryText(sLabel, nPos, nCol);
 
         SvTreeListEntry* pLBEntry = m_pEntriesBox->GetEntry(0, nPos);
-        TAccInfo*    pEntry   = (TAccInfo*)pLBEntry->GetUserData();
+        TAccInfo*    pEntry   = static_cast<TAccInfo*>(pLBEntry->GetUserData());
 
         pEntry->m_bIsConfigurable = true;
         pEntry->m_sCommand        = sCommand;
@@ -979,7 +979,7 @@ void SfxAcceleratorConfigPage::Init(const css::uno::Reference< css::ui::XAcceler
 
         // Hardcoded function mapped so no ID possible and mark entry as not changeable
         SvTreeListEntry* pLBEntry = m_pEntriesBox->GetEntry(0, nPos);
-        TAccInfo*    pEntry   = (TAccInfo*)pLBEntry->GetUserData();
+        TAccInfo*    pEntry   = static_cast<TAccInfo*>(pLBEntry->GetUserData());
 
         pEntry->m_bIsConfigurable = false;
         CreateCustomItems(pLBEntry, m_pEntriesBox->GetEntryText(pLBEntry, 0), OUString());
@@ -998,7 +998,7 @@ void SfxAcceleratorConfigPage::Apply(const css::uno::Reference< css::ui::XAccele
     SvTreeListEntry* pEntry = m_pEntriesBox->First();
     while (pEntry)
     {
-        TAccInfo*          pUserData = (TAccInfo*)pEntry->GetUserData();
+        TAccInfo*          pUserData = static_cast<TAccInfo*>(pEntry->GetUserData());
         OUString    sCommand  ;
         css::awt::KeyEvent aAWTKey   ;
 
@@ -1066,7 +1066,7 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, Default)
 IMPL_LINK_NOARG(SfxAcceleratorConfigPage, ChangeHdl)
 {
     sal_uLong    nPos        = m_pEntriesBox->GetModel()->GetRelPos( m_pEntriesBox->FirstSelected() );
-    TAccInfo* pEntry      = (TAccInfo*)m_pEntriesBox->GetEntry(0, nPos)->GetUserData();
+    TAccInfo* pEntry      = static_cast<TAccInfo*>(m_pEntriesBox->GetEntry(0, nPos)->GetUserData());
     OUString    sNewCommand = m_pFunctionBox->GetCurCommand();
     OUString    sLabel      = m_pFunctionBox->GetCurLabel();
     if (sLabel.isEmpty())
@@ -1085,7 +1085,7 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, RemoveHdl)
 {
     // get selected entry
     sal_uLong    nPos   = m_pEntriesBox->GetModel()->GetRelPos( m_pEntriesBox->FirstSelected() );
-    TAccInfo* pEntry = (TAccInfo*)m_pEntriesBox->GetEntry(0, nPos)->GetUserData();
+    TAccInfo* pEntry = static_cast<TAccInfo*>(m_pEntriesBox->GetEntry(0, nPos)->GetUserData());
 
     // remove function name from selected entry
     sal_uInt16 nCol = m_pEntriesBox->TabCount() - 1;
@@ -1104,7 +1104,7 @@ IMPL_LINK( SfxAcceleratorConfigPage, SelectHdl, Control*, pListBox )
     if (pListBox == m_pEntriesBox)
     {
         sal_uLong          nPos                = m_pEntriesBox->GetModel()->GetRelPos( m_pEntriesBox->FirstSelected() );
-        TAccInfo*       pEntry              = (TAccInfo*)m_pEntriesBox->GetEntry(0, nPos)->GetUserData();
+        TAccInfo*       pEntry              = static_cast<TAccInfo*>(m_pEntriesBox->GetEntry(0, nPos)->GetUserData());
         OUString sPossibleNewCommand = m_pFunctionBox->GetCurCommand();
 
         m_pRemoveButton->Enable( false );
@@ -1133,7 +1133,7 @@ IMPL_LINK( SfxAcceleratorConfigPage, SelectHdl, Control*, pListBox )
         if ( pLBEntry != 0 )
         {
             sal_uLong          nPos                = m_pEntriesBox->GetModel()->GetRelPos( pLBEntry );
-            TAccInfo*       pEntry              = (TAccInfo*)m_pEntriesBox->GetEntry(0, nPos)->GetUserData();
+            TAccInfo*       pEntry              = static_cast<TAccInfo*>(m_pEntriesBox->GetEntry(0, nPos)->GetUserData());
             OUString sPossibleNewCommand = m_pFunctionBox->GetCurCommand();
 
             if (pEntry->m_bIsConfigurable)
@@ -1148,7 +1148,7 @@ IMPL_LINK( SfxAcceleratorConfigPage, SelectHdl, Control*, pListBox )
             SvTreeListEntry* pIt = m_pEntriesBox->First();
             while ( pIt )
             {
-                TAccInfo* pUserData = (TAccInfo*)pIt->GetUserData();
+                TAccInfo* pUserData = static_cast<TAccInfo*>(pIt->GetUserData());
                 if ( pUserData && pUserData->m_sCommand == sPossibleNewCommand )
                 {
                     TAccInfo*    pU1 = new TAccInfo(-1, -1, pUserData->m_aKey);
@@ -1170,7 +1170,7 @@ IMPL_LINK( SfxAcceleratorConfigPage, SelectHdl, Control*, pListBox )
 
         pE2 = m_pKeyBox->FirstSelected();
         if (pE2)
-            pU2 = (TAccInfo*)pE2->GetUserData();
+            pU2 = static_cast<TAccInfo*>(pE2->GetUserData());
         if (pU2)
             nP2 = MapKeyCodeToPos(pU2->m_aKey);
         if (nP2 != TREELIST_ENTRY_NOTFOUND)
@@ -1491,7 +1491,7 @@ sal_uLong SfxAcceleratorConfigPage::MapKeyCodeToPos(const vcl::KeyCode& aKey) co
 
     while (pEntry)
     {
-        TAccInfo* pUserData = (TAccInfo*)pEntry->GetUserData();
+        TAccInfo* pUserData = static_cast<TAccInfo*>(pEntry->GetUserData());
         if (pUserData)
         {
             sal_uInt16 nCode2 = pUserData->m_aKey.GetCode()+pUserData->m_aKey.GetModifier();

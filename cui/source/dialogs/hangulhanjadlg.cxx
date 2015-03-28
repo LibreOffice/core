@@ -1128,7 +1128,7 @@ namespace svx
         SvTreeListEntry*    pEntry = m_pDictsLB->First();
         while( pEntry )
         {
-            OUString* pDel = ( OUString* ) pEntry->GetUserData();
+            OUString const * pDel = static_cast<OUString const *>(pEntry->GetUserData());
             if( pDel )
                 delete pDel;
             pEntry = m_pDictsLB->Next( pEntry );

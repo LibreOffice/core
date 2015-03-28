@@ -1154,8 +1154,8 @@ IMPL_LINK( SvxCharNamePage, FontModifyHdl_Impl, void*, pNameBox )
 
     if ( m_pWestFontNameLB == pNameBox || m_pEastFontNameLB == pNameBox || m_pCTLFontNameLB == pNameBox )
     {
-        FillStyleBox_Impl( (FontNameBox*)pNameBox );
-        FillSizeBox_Impl( (FontNameBox*)pNameBox );
+        FillStyleBox_Impl( static_cast<FontNameBox*>(pNameBox) );
+        FillSizeBox_Impl( static_cast<FontNameBox*>(pNameBox) );
     }
     return 0;
 }

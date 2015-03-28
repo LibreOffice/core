@@ -320,7 +320,7 @@ void OfaImpBrwString::Paint(
     rDev.DrawText( rPos, GetText() );
     if(pEntry->GetUserData())
     {
-        ImpUserData* pUserData = (ImpUserData* )pEntry->GetUserData();
+        ImpUserData* pUserData = static_cast<ImpUserData*>(pEntry->GetUserData());
         Point aNewPos(rPos);
         aNewPos.X() += rDev.GetTextWidth(GetText());
         vcl::Font aOldFont( rDev.GetFont());
@@ -469,9 +469,9 @@ SvTreeListEntry* OfaSwAutoFmtOptionsPage::CreateEntry(OUString& rTxt, sal_uInt16
 
 OfaSwAutoFmtOptionsPage::~OfaSwAutoFmtOptionsPage()
 {
-    delete (ImpUserData*) m_pCheckLB->GetUserData( REPLACE_BULLETS );
-    delete (ImpUserData*) m_pCheckLB->GetUserData( APPLY_NUMBERING );
-    delete (ImpUserData*) m_pCheckLB->GetUserData( MERGE_SINGLE_LINE_PARA );
+    delete static_cast<ImpUserData*>(m_pCheckLB->GetUserData( REPLACE_BULLETS ));
+    delete static_cast<ImpUserData*>(m_pCheckLB->GetUserData( APPLY_NUMBERING ));
+    delete static_cast<ImpUserData*>(m_pCheckLB->GetUserData( MERGE_SINGLE_LINE_PARA ));
     delete pCheckButtonData;
     delete m_pCheckLB;
 }
@@ -695,7 +695,7 @@ IMPL_LINK_NOARG(OfaSwAutoFmtOptionsPage, EditHdl)
         nSelEntryPos == APPLY_NUMBERING)
     {
         boost::scoped_ptr<SvxCharacterMap> pMapDlg(new SvxCharacterMap(this));
-        ImpUserData* pUserData = (ImpUserData*)m_pCheckLB->FirstSelected()->GetUserData();
+        ImpUserData* pUserData = static_cast<ImpUserData*>(m_pCheckLB->FirstSelected()->GetUserData());
         pMapDlg->SetCharFont(*pUserData->pFont);
         pMapDlg->SetChar( (*pUserData->pString)[0] );
         if(RET_OK == pMapDlg->Execute())
@@ -849,7 +849,7 @@ OfaAutocorrReplacePage::OfaAutocorrReplacePage( vcl::Window* pParent,
     get(m_pReplaceTLB, "tabview");
     m_pReplaceTLB->set_height_request(16 * GetTextHeight());
 
-    SfxModule *pMod = *(SfxModule**)GetAppData(SHL_WRITER);
+    SfxModule *pMod = *reinterpret_cast<SfxModule**>(GetAppData(SHL_WRITER));
     bSWriter = pMod == SfxModule::GetActiveModule();
 
     LanguageTag aLanguageTag( eLastDialogLanguage );

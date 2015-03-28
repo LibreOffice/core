@@ -307,7 +307,7 @@ void SfxConfigFunctionListBox::ClearAll()
 
         if ( pData->nKind == SFX_CFGFUNCTION_SCRIPT )
         {
-            OUString* pScriptURI = (OUString*)pData->pObject;
+            OUString* pScriptURI = static_cast<OUString*>(pData->pObject);
             delete pScriptURI;
         }
 
@@ -330,9 +330,9 @@ OUString SfxConfigFunctionListBox::GetSelectedScriptURI()
     SvTreeListEntry *pEntry = FirstSelected();
     if ( pEntry )
     {
-        SfxGroupInfo_Impl *pData = (SfxGroupInfo_Impl*) pEntry->GetUserData();
+        SfxGroupInfo_Impl *pData = static_cast<SfxGroupInfo_Impl*>(pEntry->GetUserData());
         if ( pData && ( pData->nKind == SFX_CFGFUNCTION_SCRIPT ) )
-            return *(OUString*)pData->pObject;
+            return *static_cast<OUString*>(pData->pObject);
     }
     return OUString();
 }
@@ -342,7 +342,7 @@ OUString SfxConfigFunctionListBox::GetCurCommand()
     SvTreeListEntry *pEntry = FirstSelected();
     if (!pEntry)
         return OUString();
-    SfxGroupInfo_Impl *pData = (SfxGroupInfo_Impl*) pEntry->GetUserData();
+    SfxGroupInfo_Impl *pData = static_cast<SfxGroupInfo_Impl*>(pEntry->GetUserData());
     if (!pData)
         return OUString();
     return pData->sCommand;
@@ -353,7 +353,7 @@ OUString SfxConfigFunctionListBox::GetCurLabel()
     SvTreeListEntry *pEntry = FirstSelected();
     if (!pEntry)
         return OUString();
-    SfxGroupInfo_Impl *pData = (SfxGroupInfo_Impl*) pEntry->GetUserData();
+    SfxGroupInfo_Impl *pData = static_cast<SfxGroupInfo_Impl*>(pEntry->GetUserData());
     if (!pData)
         return OUString();
     if (!pData->sLabel.isEmpty())
@@ -838,7 +838,7 @@ void SfxConfigGroupListBox::GroupSelected()
 */
 {
     SvTreeListEntry *pEntry = FirstSelected();
-    SfxGroupInfo_Impl *pInfo = (SfxGroupInfo_Impl*) pEntry->GetUserData();
+    SfxGroupInfo_Impl *pInfo = static_cast<SfxGroupInfo_Impl*>(pEntry->GetUserData());
     pFunctionListBox->SetUpdateMode(false);
     pFunctionListBox->ClearAll();
     if ( pInfo->nKind != SFX_CFGGROUP_FUNCTION &&
@@ -930,7 +930,7 @@ void SfxConfigGroupListBox::GroupSelected()
 
         case SFX_CFGGROUP_STYLES :
         {
-            SfxStyleInfo_Impl* pFamily = (SfxStyleInfo_Impl*)(pInfo->pObject);
+            SfxStyleInfo_Impl* pFamily = static_cast<SfxStyleInfo_Impl*>(pInfo->pObject);
             if (pFamily)
             {
                 const ::std::vector< SfxStyleInfo_Impl > lStyles = pStylesInfo->getStyles(pFamily->sFamily);
@@ -997,7 +997,7 @@ void SfxConfigGroupListBox::RequestingChildren( SvTreeListEntry *pEntry )
     A basic or a library is opened.
 */
 {
-    SfxGroupInfo_Impl *pInfo = (SfxGroupInfo_Impl*) pEntry->GetUserData();
+    SfxGroupInfo_Impl *pInfo = static_cast<SfxGroupInfo_Impl*>(pEntry->GetUserData());
     pInfo->bWasOpened = true;
     switch ( pInfo->nKind )
     {

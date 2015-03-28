@@ -1281,7 +1281,7 @@ IMPL_LINK( SvxSwPosSizeTabPage, PosHdl, ListBox *, pLB )
     {
 
         if (pRelLB->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND)
-            nRel = ((RelationMap *)pRelLB->GetSelectEntryData())->nRelation;
+            nRel = static_cast<RelationMap *>(pRelLB->GetSelectEntryData())->nRelation;
 
         FillRelLB(pMap, nMapPos, nAlign, nRel, *pRelLB, *pRelFT);
     }
@@ -1388,7 +1388,7 @@ short SvxSwPosSizeTabPage::GetRelation(FrmMap *, ListBox &rRelationLB)
 
     if (nPos != LISTBOX_ENTRY_NOTFOUND)
     {
-        RelationMap *pEntry = (RelationMap *)rRelationLB.GetEntryData(nPos);
+        RelationMap *pEntry = static_cast<RelationMap *>(rRelationLB.GetEntryData(nPos));
         nRel = pEntry->nRelation;
     }
 
@@ -1406,7 +1406,7 @@ short SvxSwPosSizeTabPage::GetAlignment(FrmMap *pMap, sal_uInt16 nMapPos, ListBo
     {
         if (rRelationLB.GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND)
         {
-            sal_uLong  nRel = ((RelationMap *)rRelationLB.GetSelectEntryData())->nLBRelation;
+            sal_uLong  nRel = static_cast<RelationMap *>(rRelationLB.GetSelectEntryData())->nLBRelation;
             std::size_t nMapCount = ::lcl_GetFrmMapCount(pMap);
             SvxSwFramePosString::StringId eStrId = pMap[nMapPos].eStrId;
 
@@ -1476,7 +1476,7 @@ void SvxSwPosSizeTabPage::InitPos(short nAnchor,
         m_nOldV    = m_pVMap[nPos].nAlign;
         nPos = m_pVertToLB->GetSelectEntryPos();
         if (nPos != LISTBOX_ENTRY_NOTFOUND)
-            m_nOldVRel = ((RelationMap *)m_pVertToLB->GetEntryData(nPos))->nRelation;
+            m_nOldVRel = static_cast<RelationMap *>(m_pVertToLB->GetEntryData(nPos))->nRelation;
     }
 
     nPos = m_pHoriLB->GetSelectEntryPos();
@@ -1486,7 +1486,7 @@ void SvxSwPosSizeTabPage::InitPos(short nAnchor,
 
         nPos = m_pHoriToLB->GetSelectEntryPos();
         if (nPos != LISTBOX_ENTRY_NOTFOUND)
-            m_nOldHRel = ((RelationMap *)m_pHoriToLB->GetEntryData(nPos))->nRelation;
+            m_nOldHRel = static_cast<RelationMap *>(m_pHoriToLB->GetEntryData(nPos))->nRelation;
     }
 
     bool bEnable = true;
@@ -1694,7 +1694,7 @@ sal_uLong SvxSwPosSizeTabPage::FillRelLB(FrmMap *pMap, sal_uInt16 nMapPos, sal_u
                 {
                     for (sal_Int32 i = 0; i < rLB.GetEntryCount(); i++)
                     {
-                        RelationMap *pEntry = (RelationMap *)rLB.GetEntryData(i);
+                        RelationMap *pEntry = static_cast<RelationMap *>(rLB.GetEntryData(i));
                         if (pEntry->nLBRelation == LB_REL_CHAR) // Default
                         {
                             rLB.SelectEntryPos(i);
@@ -1761,7 +1761,7 @@ sal_uLong SvxSwPosSizeTabPage::FillRelLB(FrmMap *pMap, sal_uInt16 nMapPos, sal_u
                     default:
                         if (rLB.GetEntryCount())
                         {
-                            RelationMap *pEntry = (RelationMap *)rLB.GetEntryData(rLB.GetEntryCount() - 1);
+                            RelationMap *pEntry = static_cast<RelationMap *>(rLB.GetEntryData(rLB.GetEntryCount() - 1));
                             nRel = pEntry->nRelation;
                         }
                         break;
@@ -1769,7 +1769,7 @@ sal_uLong SvxSwPosSizeTabPage::FillRelLB(FrmMap *pMap, sal_uInt16 nMapPos, sal_u
 
                 for (sal_Int32 i = 0; i < rLB.GetEntryCount(); i++)
                 {
-                    RelationMap *pEntry = (RelationMap *)rLB.GetEntryData(i);
+                    RelationMap *pEntry = static_cast<RelationMap *>(rLB.GetEntryData(i));
                     if (pEntry->nRelation == nRel)
                     {
                         rLB.SelectEntryPos(i);

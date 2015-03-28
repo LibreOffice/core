@@ -666,7 +666,7 @@ bool SvxJavaOptionsPage::FillItemSet( SfxItemSet* /*rCoreSet*/ )
     {
         Sequence< OUString > aParamList = m_pParamDlg->GetParameters();
         sal_Int32 i, nSize = aParamList.getLength();
-        rtl_uString** pParamArr = (rtl_uString**)rtl_allocateMemory( sizeof(rtl_uString*) * nSize );
+        rtl_uString** pParamArr = static_cast<rtl_uString**>(rtl_allocateMemory( sizeof(rtl_uString*) * nSize ));
         rtl_uString** pParamArrIter = pParamArr;
         const OUString* pList = aParamList.getConstArray();
         for ( i = 0; i < nSize; ++i )

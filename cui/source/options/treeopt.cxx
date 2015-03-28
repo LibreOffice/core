@@ -560,7 +560,7 @@ OfaTreeOptionsDialog::~OfaTreeOptionsDialog()
         // if Child (has parent), then OptionsPageInfo
         if(pTreeLB->GetParent(pEntry))
         {
-            OptionsPageInfo *pPageInfo = (OptionsPageInfo *)pEntry->GetUserData();
+            OptionsPageInfo *pPageInfo = static_cast<OptionsPageInfo *>(pEntry->GetUserData());
             if(pPageInfo->m_pPage)
             {
                 pPageInfo->m_pPage->FillUserData();
@@ -596,7 +596,7 @@ OfaTreeOptionsDialog::~OfaTreeOptionsDialog()
     {
         if(!pTreeLB->GetParent(pEntry))
         {
-            OptionsGroupInfo* pGroupInfo = (OptionsGroupInfo*)pEntry->GetUserData();
+            OptionsGroupInfo* pGroupInfo = static_cast<OptionsGroupInfo*>(pEntry->GetUserData());
             if ( pGroupInfo && pGroupInfo->m_pExtPage )
                 delete pGroupInfo->m_pExtPage;
             delete pGroupInfo;
@@ -649,11 +649,11 @@ IMPL_LINK_NOARG(OfaTreeOptionsDialog, BackHdl_Impl)
 {
     if ( pCurrentPageEntry && pTreeLB->GetParent( pCurrentPageEntry ) )
     {
-        OptionsPageInfo* pPageInfo = (OptionsPageInfo*)pCurrentPageEntry->GetUserData();
+        OptionsPageInfo* pPageInfo = static_cast<OptionsPageInfo*>(pCurrentPageEntry->GetUserData());
         if ( pPageInfo->m_pPage )
         {
             OptionsGroupInfo* pGroupInfo =
-                (OptionsGroupInfo*)pTreeLB->GetParent( pCurrentPageEntry )->GetUserData();
+                static_cast<OptionsGroupInfo*>(pTreeLB->GetParent( pCurrentPageEntry )->GetUserData());
             if ( RID_SVXPAGE_COLOR == pPageInfo->m_nPageId )
                 pPageInfo->m_pPage->Reset( pColorPageItemSet );
             else
@@ -670,11 +670,11 @@ IMPL_LINK_NOARG(OfaTreeOptionsDialog, OKHdl_Impl)
     pTreeLB->EndSelection();
     if ( pCurrentPageEntry && pTreeLB->GetParent( pCurrentPageEntry ) )
     {
-        OptionsPageInfo* pPageInfo = (OptionsPageInfo *)pCurrentPageEntry->GetUserData();
+        OptionsPageInfo* pPageInfo = static_cast<OptionsPageInfo *>(pCurrentPageEntry->GetUserData());
         if ( pPageInfo->m_pPage )
         {
             OptionsGroupInfo* pGroupInfo =
-                (OptionsGroupInfo *)pTreeLB->GetParent(pCurrentPageEntry)->GetUserData();
+                static_cast<OptionsGroupInfo *>(pTreeLB->GetParent(pCurrentPageEntry)->GetUserData());
             if ( RID_SVXPAGE_COLOR != pPageInfo->m_nPageId
                 && pPageInfo->m_pPage->HasExchangeSupport() )
             {
@@ -695,11 +695,11 @@ IMPL_LINK_NOARG(OfaTreeOptionsDialog, OKHdl_Impl)
     {
         if ( pTreeLB->GetParent( pEntry ) )
         {
-            OptionsPageInfo* pPageInfo = (OptionsPageInfo *)pEntry->GetUserData();
+            OptionsPageInfo* pPageInfo = static_cast<OptionsPageInfo *>(pEntry->GetUserData());
             if ( pPageInfo->m_pPage && !pPageInfo->m_pPage->HasExchangeSupport() )
             {
                 OptionsGroupInfo* pGroupInfo =
-                    (OptionsGroupInfo*)pTreeLB->GetParent(pEntry)->GetUserData();
+                    static_cast<OptionsGroupInfo*>(pTreeLB->GetParent(pEntry)->GetUserData());
                 pPageInfo->m_pPage->FillItemSet(pGroupInfo->m_pOutItemSet);
             }
 
@@ -757,7 +757,7 @@ void OfaTreeOptionsDialog::ApplyItemSets()
     {
         if(!pTreeLB->GetParent(pEntry))
         {
-            OptionsGroupInfo* pGroupInfo = (OptionsGroupInfo *)pEntry->GetUserData();
+            OptionsGroupInfo* pGroupInfo = static_cast<OptionsGroupInfo *>(pEntry->GetUserData());
             if(pGroupInfo->m_pOutItemSet)
             {
                 if(pGroupInfo->m_pShell)
@@ -838,7 +838,7 @@ void OfaTreeOptionsDialog::ActivateLastSelection()
             // restore only selection of a leaf
             if ( pTreeLB->GetParent( pTemp ) && pTemp->GetUserData() )
             {
-                OptionsPageInfo* pPageInfo = (OptionsPageInfo*)pTemp->GetUserData();
+                OptionsPageInfo* pPageInfo = static_cast<OptionsPageInfo*>(pTemp->GetUserData());
                 OUString sPageURL = pPageInfo->m_sPageURL;
                 if ( bMustExpand )
                 {
@@ -939,12 +939,12 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
     TabPage* pOldPage = NULL;
     TabPage* pNewPage = NULL;
     OptionsPageInfo* pOptPageInfo = ( pCurrentPageEntry && pTreeLB->GetParent( pCurrentPageEntry ) )
-        ? (OptionsPageInfo*)pCurrentPageEntry->GetUserData() : NULL;
+        ? static_cast<OptionsPageInfo*>(pCurrentPageEntry->GetUserData()) : NULL;
 
     if ( pOptPageInfo && pOptPageInfo->m_pPage && pOptPageInfo->m_pPage->IsVisible() )
     {
         pOldPage = pOptPageInfo->m_pPage;
-        OptionsGroupInfo* pGroupInfo = (OptionsGroupInfo*)pTreeLB->GetParent(pCurrentPageEntry)->GetUserData();
+        OptionsGroupInfo* pGroupInfo = static_cast<OptionsGroupInfo*>(pTreeLB->GetParent(pCurrentPageEntry)->GetUserData());
         int nLeave = SfxTabPage::LEAVE_PAGE;
         if ( RID_SVXPAGE_COLOR != pOptPageInfo->m_nPageId && pOptPageInfo->m_pPage->HasExchangeSupport() )
            nLeave = pOptPageInfo->m_pPage->DeactivatePage( pGroupInfo->m_pOutItemSet );
@@ -965,7 +965,7 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
     }
     else if ( pCurrentPageEntry && !pTreeLB->GetParent( pCurrentPageEntry ) )
     {
-        OptionsGroupInfo* pGroupInfo = (OptionsGroupInfo*)pCurrentPageEntry->GetUserData();
+        OptionsGroupInfo* pGroupInfo = static_cast<OptionsGroupInfo*>(pCurrentPageEntry->GetUserData());
         if ( pGroupInfo && pGroupInfo->m_pExtPage )
         {
             pGroupInfo->m_pExtPage->Hide();
@@ -973,8 +973,8 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
         }
     }
 
-    OptionsPageInfo *pPageInfo = (OptionsPageInfo *)pEntry->GetUserData();
-    OptionsGroupInfo* pGroupInfo = (OptionsGroupInfo *)pParent->GetUserData();
+    OptionsPageInfo *pPageInfo = static_cast<OptionsPageInfo *>(pEntry->GetUserData());
+    OptionsGroupInfo* pGroupInfo = static_cast<OptionsGroupInfo *>(pParent->GetUserData());
     if(!pPageInfo->m_pPage && pPageInfo->m_nPageId > 0)
     {
         if(pGroupInfo->m_bLoadError)
@@ -1014,7 +1014,7 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
                 {
                     if(!pTreeLB->GetParent(pTemp) && pTemp != pEntry)
                     {
-                        OptionsGroupInfo* pTGInfo = (OptionsGroupInfo *)pTemp->GetUserData();
+                        OptionsGroupInfo* pTGInfo = static_cast<OptionsGroupInfo *>(pTemp->GetUserData());
                         if(pTGInfo->m_pModule == pOldModule)
                         {
                             pTGInfo->m_pModule = pGroupInfo->m_pModule;
@@ -1572,7 +1572,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
             || aFactory == "com.sun.star.text.WebDocument"
             || aFactory == "com.sun.star.text.GlobalDocument" )
         {
-            SfxModule* pSwMod = (*(SfxModule**) GetAppData(SHL_WRITER));
+            SfxModule* pSwMod = *reinterpret_cast<SfxModule**>(GetAppData(SHL_WRITER));
             if ( !lcl_isOptionHidden( SID_SW_EDITOPTIONS, aOptionsDlgOpt ) )
             {
                 if ( aFactory == "com.sun.star.text.WebDocument" )
@@ -1621,7 +1621,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
             if ( !lcl_isOptionHidden( SID_SC_EDITOPTIONS, aOptionsDlgOpt ) )
             {
                 ResStringArray& rCalcArray = aDlgResource.GetCalcArray();
-                SfxModule* pScMod = ( *( SfxModule** ) GetAppData( SHL_CALC ) );
+                SfxModule* pScMod = *reinterpret_cast<SfxModule**>(GetAppData( SHL_CALC ));
                 setGroupName( "Calc", rCalcArray.GetString(0) );
                 nGroup = AddGroup( rCalcArray.GetString( 0 ), pScMod, pScMod, SID_SC_EDITOPTIONS );
                 const sal_uInt16 nCount = static_cast< const sal_uInt16 >( rCalcArray.Count() );
@@ -1638,7 +1638,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
     }
 
     // Impress options
-    SfxModule* pSdMod = ( *( SfxModule** ) GetAppData( SHL_DRAW ) );
+    SfxModule* pSdMod = *reinterpret_cast<SfxModule**>(GetAppData( SHL_DRAW ));
     if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SIMPRESS ) )
     {
         if ( aFactory == "com.sun.star.presentation.PresentationDocument" )
@@ -1692,7 +1692,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
             if ( !lcl_isOptionHidden( SID_SM_EDITOPTIONS, aOptionsDlgOpt ) )
             {
                 ResStringArray& rStarMathArray = aDlgResource.GetStarMathArray();
-                SfxModule* pSmMod = (*(SfxModule**) GetAppData(SHL_SM));
+                SfxModule* pSmMod = *reinterpret_cast<SfxModule**>(GetAppData(SHL_SM));
                 setGroupName( "Math", rStarMathArray.GetString(0) );
                 nGroup = AddGroup(rStarMathArray.GetString(0), pSmMod, pSmMod, SID_SM_EDITOPTIONS );
                 for ( i = 1; i < rStarMathArray.Count(); ++i )

@@ -599,7 +599,7 @@ long _SvxMacroTabPage::GenericHandler_Impl( _SvxMacroTabPage* pThis, PushButton*
 
     const bool bAssEnabled = pBtn != pImpl->pDeletePB && pImpl->pAssignPB->IsEnabled();
 
-    OUString* pEventName = (OUString*)pE->GetUserData();
+    OUString* pEventName = static_cast<OUString*>(pE->GetUserData());
 
     OUString sEventURL;
     OUString sEventType;

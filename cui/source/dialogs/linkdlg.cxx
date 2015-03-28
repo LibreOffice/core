@@ -160,7 +160,7 @@ IMPL_LINK( SvBaseLinksDlg, LinksSelectHdl, SvTabListBox *, pSvTabListBox )
         SvTreeListEntry* pEntry = 0;
         SvBaseLink* pLink = 0;
         pEntry = pSvTabListBox->GetHdlEntry();
-        pLink = (SvBaseLink*)pEntry->GetUserData();
+        pLink = static_cast<SvBaseLink*>(pEntry->GetUserData());
         sal_uInt16 nObjectType = pLink->GetObjType();
         if((OBJECT_CLIENT_FILE & nObjectType) != OBJECT_CLIENT_FILE)
         {
@@ -177,7 +177,7 @@ IMPL_LINK( SvBaseLinksDlg, LinksSelectHdl, SvTabListBox *, pSvTabListBox )
                 DBG_ASSERT(pEntry, "Wo ist der Entry?");
                 if (!pEntry)
                     continue;
-                pLink = (SvBaseLink*)pEntry->GetUserData();
+                pLink = static_cast<SvBaseLink*>(pEntry->GetUserData());
                 DBG_ASSERT(pLink, "Wo ist der Link?");
                 if (!pLink)
                     continue;
@@ -358,7 +358,7 @@ IMPL_LINK( SvBaseLinksDlg, ChangeSourceClickHdl, PushButton *, pPushButton )
             OUString sType, sFile, sLinkName;
             OUString sFilter;
             SvTreeListEntry* pEntry = m_pTbLinks->FirstSelected();
-            SvBaseLink* pLink = (SvBaseLink*)pEntry->GetUserData();
+            SvBaseLink* pLink = static_cast<SvBaseLink*>(pEntry->GetUserData());
             pLinkMgr->GetDisplayNames( pLink, &sType, &sFile, 0, 0 );
             INetURLObject aUrl(sFile);
             if(aUrl.GetProtocol() == INET_PROT_FILE)
@@ -380,7 +380,7 @@ IMPL_LINK( SvBaseLinksDlg, ChangeSourceClickHdl, PushButton *, pPushButton )
                     DBG_ASSERT(pEntry,"Where is the entry?");
                     if (!pEntry)
                         continue;
-                    pLink = (SvBaseLink*)pEntry->GetUserData();
+                    pLink = static_cast<SvBaseLink*>(pEntry->GetUserData());
                     DBG_ASSERT(pLink,"Where is the link?");
                     if (!pLink)
                         continue;
@@ -470,7 +470,7 @@ IMPL_LINK( SvBaseLinksDlg, BreakLinkClickHdl, PushButton *, pPushButton )
             {
                 void * pUD = pEntry->GetUserData();
                 if( pUD )
-                    aLinkList.push_back( (SvBaseLink*)pUD );
+                    aLinkList.push_back( static_cast<SvBaseLink*>(pUD) );
                 pEntry = m_pTbLinks->NextSelected(pEntry);
             }
             m_pTbLinks->RemoveSelection();
@@ -515,7 +515,7 @@ IMPL_LINK( SvBaseLinksDlg, UpdateWaitingHdl, Timer*, pTimer )
     for( sal_uLong nPos = m_pTbLinks->GetEntryCount(); nPos; )
     {
         SvTreeListEntry* pBox = m_pTbLinks->GetEntry( --nPos );
-        SvBaseLinkRef xLink( (SvBaseLink*)pBox->GetUserData() );
+        SvBaseLinkRef xLink( static_cast<SvBaseLink*>(pBox->GetUserData()) );
         if( xLink.Is() )
         {
             OUString sCur( ImplGetStateStr( *xLink ) ),
@@ -677,7 +677,7 @@ SvBaseLink* SvBaseLinksDlg::GetSelEntry( sal_uLong* pPos )
 
         if( pPos )
             *pPos = nPos;
-        return (SvBaseLink*)pE->GetUserData();
+        return static_cast<SvBaseLink*>(pE->GetUserData());
     }
     return 0;
 }

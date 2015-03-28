@@ -84,7 +84,7 @@ bool SvxHyperlinkNewDocTp::ImplGetURLObject( const OUString& rPath, const OUStri
         {
             sal_Int32 nPos = m_pLbDocTypes->GetSelectEntryPos();
             if ( nPos != LISTBOX_ENTRY_NOTFOUND )
-                aURLObject.SetExtension( ((DocumentTypeData*)m_pLbDocTypes->GetEntryData( nPos ))->aStrExt );
+                aURLObject.SetExtension( static_cast<DocumentTypeData*>(m_pLbDocTypes->GetEntryData( nPos ))->aStrExt );
         }
 
     }
@@ -131,8 +131,8 @@ SvxHyperlinkNewDocTp::~SvxHyperlinkNewDocTp ()
 {
     for ( sal_uInt16 n=0; n<m_pLbDocTypes->GetEntryCount(); n++ )
     {
-        DocumentTypeData* pTypeData = (DocumentTypeData*)
-                                      m_pLbDocTypes->GetEntryData ( n );
+        DocumentTypeData* pTypeData = static_cast<DocumentTypeData*>(
+                                      m_pLbDocTypes->GetEntryData ( n ));
         delete pTypeData;
     }
 }
@@ -326,8 +326,8 @@ void SvxHyperlinkNewDocTp::DoApply ()
                     sal_Int32 nPos = m_pLbDocTypes->GetSelectEntryPos();
                     if( nPos == LISTBOX_ENTRY_NOTFOUND )
                         nPos=0;
-                    OUString aStrDocName ( ( ( DocumentTypeData* )
-                                         m_pLbDocTypes->GetEntryData( nPos ) )->aStrURL );
+                    OUString aStrDocName ( static_cast<DocumentTypeData*>(
+                                         m_pLbDocTypes->GetEntryData( nPos ))->aStrURL );
 
                     // create items
                     SfxStringItem aName( SID_FILE_NAME, aStrDocName );
@@ -439,7 +439,7 @@ IMPL_LINK_NOARG(SvxHyperlinkNewDocTp, ClickNewHdl_Impl)
         {
             // get private-url
             sal_uInt16 nPos = m_pLbDocTypes->GetSelectEntryPos();
-            aNewURL.setExtension( ( ( DocumentTypeData* ) m_pLbDocTypes->GetEntryData( nPos ) )->aStrExt );
+            aNewURL.setExtension( static_cast<DocumentTypeData*>(m_pLbDocTypes->GetEntryData( nPos ))->aStrExt );
         }
 
         if( aNewURL.GetProtocol() == INET_PROT_FILE )

@@ -248,7 +248,7 @@ SvxPathTabPage::SvxPathTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
 SvxPathTabPage::~SvxPathTabPage()
 {
     for ( sal_uInt16 i = 0; i < pPathBox->GetEntryCount(); ++i )
-        delete (PathUserData_Impl*)pPathBox->GetEntry(i)->GetUserData();
+        delete static_cast<PathUserData_Impl*>(pPathBox->GetEntry(i)->GetUserData());
     delete pPathBox;
     delete pImpl;
 }
@@ -267,7 +267,7 @@ bool SvxPathTabPage::FillItemSet( SfxItemSet* )
 {
     for ( sal_uInt16 i = 0; i < pPathBox->GetEntryCount(); ++i )
     {
-        PathUserData_Impl* pPathImpl = (PathUserData_Impl*)pPathBox->GetEntry(i)->GetUserData();
+        PathUserData_Impl* pPathImpl = static_cast<PathUserData_Impl*>(pPathBox->GetEntry(i)->GetUserData());
         sal_uInt16 nRealId = pPathImpl->nRealId;
         if ( pPathImpl->eState == SfxItemState::SET )
             SetPathList( nRealId, pPathImpl->sUserPath, pPathImpl->sWritablePath );
@@ -412,7 +412,7 @@ IMPL_LINK_NOARG(SvxPathTabPage, StandardHdl_Impl)
     SvTreeListEntry* pEntry = pPathBox->FirstSelected();
     while ( pEntry )
     {
-        PathUserData_Impl* pPathImpl = (PathUserData_Impl*)pEntry->GetUserData();
+        PathUserData_Impl* pPathImpl = static_cast<PathUserData_Impl*>(pEntry->GetUserData());
         OUString aOldPath = pImpl->m_aDefOpt.GetDefaultPath( pPathImpl->nRealId );
 
         if ( !aOldPath.isEmpty() )
@@ -473,7 +473,7 @@ void SvxPathTabPage::ChangeCurrentEntry( const OUString& _rFolder )
     }
 
     OUString sInternal, sUser, sWritable;
-    PathUserData_Impl* pPathImpl = (PathUserData_Impl*)pEntry->GetUserData();
+    PathUserData_Impl* pPathImpl = static_cast<PathUserData_Impl*>(pEntry->GetUserData());
     bool bReadOnly = false;
     GetPathList( pPathImpl->nRealId, sInternal, sUser, sWritable, bReadOnly );
     sUser = pPathImpl->sUserPath;
@@ -502,7 +502,7 @@ void SvxPathTabPage::ChangeCurrentEntry( const OUString& _rFolder )
     {
         pPathBox->SetEntryText( Convert_Impl( sNewPathStr ), pEntry, 1 );
         nPos = (sal_uInt16)pPathBox->GetModel()->GetAbsPos( pEntry );
-        pPathImpl = (PathUserData_Impl*)pPathBox->GetEntry(nPos)->GetUserData();
+        pPathImpl = static_cast<PathUserData_Impl*>(pPathBox->GetEntry(nPos)->GetUserData());
         pPathImpl->eState = SfxItemState::SET;
         pPathImpl->sWritablePath = sNewPathStr;
         if ( SvtPathOptions::PATH_WORK == pPathImpl->nRealId )
@@ -531,11 +531,11 @@ void SvxPathTabPage::ChangeCurrentEntry( const OUString& _rFolder )
 IMPL_LINK_NOARG(SvxPathTabPage, PathHdl_Impl)
 {
     SvTreeListEntry* pEntry = pPathBox->GetCurEntry();
-    sal_uInt16 nPos = ( pEntry != NULL ) ? ( (PathUserData_Impl*)pEntry->GetUserData() )->nRealId : 0;
+    sal_uInt16 nPos = ( pEntry != NULL ) ? static_cast<PathUserData_Impl*>(pEntry->GetUserData())->nRealId : 0;
     OUString sInternal, sUser, sWritable;
     if ( pEntry )
     {
-        PathUserData_Impl* pPathImpl = (PathUserData_Impl*)pEntry->GetUserData();
+        PathUserData_Impl* pPathImpl = static_cast<PathUserData_Impl*>(pEntry->GetUserData());
         bool bReadOnly = false;
         GetPathList( pPathImpl->nRealId, sInternal, sUser, sWritable, bReadOnly );
         sUser = pPathImpl->sUserPath;
@@ -593,7 +593,7 @@ IMPL_LINK_NOARG(SvxPathTabPage, PathHdl_Impl)
 
                 pPathBox->SetEntryText( Convert_Impl( sFullPath ), pEntry, 1 );
                 // save modified flag
-                PathUserData_Impl* pPathImpl = (PathUserData_Impl*)pEntry->GetUserData();
+                PathUserData_Impl* pPathImpl = static_cast<PathUserData_Impl*>(pEntry->GetUserData());
                 pPathImpl->eState = SfxItemState::SET;
                 pPathImpl->sUserPath = sUser;
                 pPathImpl->sWritablePath = sWritable;

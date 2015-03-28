@@ -108,7 +108,7 @@ SvxEventConfigPage::~SvxEventConfigPage()
     SvTreeListEntry* pE = rListBox.GetEntry( 0 );
     while( pE )
     {
-        OUString* pEventName = (OUString*)pE->GetUserData();
+        OUString const * pEventName = static_cast<OUString const *>(pE->GetUserData());
         delete pEventName;
         pE->SetUserData((void*)0);
         pE = rListBox.NextSibling( pE );
@@ -165,8 +165,8 @@ IMPL_LINK( SvxEventConfigPage, SelectHdl_Impl, ListBox *, pBox )
 {
     (void)pBox;
 
-    bool* bApp = (bool*) m_pSaveInListBox->GetEntryData(
-            m_pSaveInListBox->GetSelectEntryPos());
+    bool* bApp = static_cast<bool*>(m_pSaveInListBox->GetEntryData(
+            m_pSaveInListBox->GetSelectEntryPos()));
 
     mpImpl->pEventLB->SetUpdateMode( false );
     bAppConfig = *bApp;
