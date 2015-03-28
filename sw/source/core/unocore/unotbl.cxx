@@ -209,8 +209,7 @@ static void lcl_SetSpecialProperty(SwFrmFmt* pFmt,
             }
             else if(FN_TABLE_IS_RELATIVE_WIDTH == pEntry->nWID)
             {
-                bool bPercent = *static_cast<sal_Bool const *>(aValue.getValue());
-                if(!bPercent)
+                if(!aValue.get<bool>())
                     aSz.SetWidthPercent(0);
                 else
                 {
