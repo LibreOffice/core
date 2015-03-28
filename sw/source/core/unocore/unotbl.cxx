@@ -1754,14 +1754,16 @@ void SwXTextTableCursor::setPropertyValue(const OUString& rPropertyName, const u
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if(!pUnoCrsr)
         return;
-    auto pSttNode = pUnoCrsr->GetNode().StartOfSectionNode();
-    const SwTableNode* pTblNode = pSttNode->FindTableNode();
-    lcl_FormatTable(pTblNode->GetTable().GetFrmFmt());
     auto pEntry(m_pPropSet->getPropertyMap().getByName(rPropertyName));
     if(!pEntry)
         throw beans::UnknownPropertyException("Unknown property: " + rPropertyName, static_cast<cppu::OWeakObject*>(this));
     if(pEntry->nFlags & beans::PropertyAttribute::READONLY)
         throw beans::PropertyVetoException("Property is read-only: " + rPropertyName, static_cast<cppu::OWeakObject*>(this));
+    {
+        auto pSttNode = pUnoCrsr->GetNode().StartOfSectionNode();
+        const SwTableNode* pTblNode = pSttNode->FindTableNode();
+        lcl_FormatTable(pTblNode->GetTable().GetFrmFmt());
+    }
     auto& rTblCrsr = dynamic_cast<SwUnoTableCrsr&>(*pUnoCrsr);
     rTblCrsr.MakeBoxSels();
     SwDoc* pDoc = pUnoCrsr->GetDoc();
