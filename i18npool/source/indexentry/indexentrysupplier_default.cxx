@@ -93,7 +93,7 @@ void IndexTable::init(sal_Unicode start_, sal_Unicode end_, IndexKey *keys, sal_
 {
     start=start_;
     end=end_;
-    table = (sal_uInt8*) malloc((end-start+1)*sizeof(sal_uInt8));
+    table = static_cast<sal_uInt8*>(malloc((end-start+1)*sizeof(sal_uInt8)));
     for (sal_Unicode i = start; i <= end; i++) {
         sal_Int16 j;
         for (j = 0; j < key_count; j++) {

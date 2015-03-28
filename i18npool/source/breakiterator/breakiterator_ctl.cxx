@@ -37,8 +37,8 @@ BreakIterator_CTL::BreakIterator_CTL() :
 {
     cBreakIterator = "com.sun.star.i18n.BreakIterator_CTL";
     // to improve performance, alloc big enough memory in construct.
-    nextCellIndex = (sal_Int32*) calloc(cellIndexSize, sizeof(sal_Int32));
-    previousCellIndex = (sal_Int32*) calloc(cellIndexSize, sizeof(sal_Int32));
+    nextCellIndex = static_cast<sal_Int32*>(calloc(cellIndexSize, sizeof(sal_Int32)));
+    previousCellIndex = static_cast<sal_Int32*>(calloc(cellIndexSize, sizeof(sal_Int32)));
 }
 
 /**

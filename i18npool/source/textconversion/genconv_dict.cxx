@@ -332,7 +332,7 @@ typedef struct {
 extern "C" {
 int Index_comp(const void* s1, const void* s2)
 {
-    Index *p1 = (Index*)s1, *p2 = (Index*)s2;
+    Index const *p1 = static_cast<Index const *>(s1), *p2 = static_cast<Index const *>(s2);
     int result = p1->len - p2->len;
     for (int i = 0; result == 0 && i < p1->len; i++)
         result = *(p1->data+i) - *(p2->data+i);
