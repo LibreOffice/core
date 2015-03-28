@@ -57,7 +57,7 @@ void HIODev::init()
 
 int HIODev::read1b(void *ptr, int nmemb)
 {
-    uchar *p = (uchar *) ptr;
+    uchar *p = static_cast<uchar *>(ptr);
     int ii;
 
     if (state())
@@ -74,7 +74,7 @@ int HIODev::read1b(void *ptr, int nmemb)
 
 int HIODev::read2b(void *ptr, int nmemb)
 {
-    ushort *p = (ushort *) ptr;
+    ushort *p = static_cast<ushort *>(ptr);
     int ii;
 
     if (state())
@@ -91,7 +91,7 @@ int HIODev::read2b(void *ptr, int nmemb)
 
 int HIODev::read4b(void *ptr, int nmemb)
 {
-    uint *p = (uint *) ptr;
+    uint *p = static_cast<uint *>(ptr);
     int ii;
 
     if (state())
@@ -233,7 +233,7 @@ bool HStreamIODev::read4b(int &out)
 int HStreamIODev::readBlock(void *ptr, int size)
 {
     int count =
-        (compressed) ? GZREAD(ptr, size) : _stream->readBytes((byte *) ptr,
+        (compressed) ? GZREAD(ptr, size) : _stream->readBytes(static_cast<byte *>(ptr),
 
         size);
 

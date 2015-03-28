@@ -28,7 +28,7 @@
 enum
 { MAXSTYLENAME = 20 };
 
-#define DATA ((StyleData *)style)
+#define DATA static_cast<StyleData *>(style)
 
 struct StyleData
 {

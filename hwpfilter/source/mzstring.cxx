@@ -266,7 +266,7 @@ bool MzString::allocate(int len)
         else
         {
             int   n = get_alloc_size(len);
-            char *p = (char *)realloc(Data, n);
+            char *p = static_cast<char *>(realloc(Data, n));
             if (p)
             {
                 Data      = p;
@@ -279,7 +279,7 @@ bool MzString::allocate(int len)
     {
 // In case we want to add a null.
         int n = get_alloc_size(len);
-        Data  = (char *)malloc(n);
+        Data  = static_cast<char *>(malloc(n));
         if (Data)
         {
             Allocated = n;

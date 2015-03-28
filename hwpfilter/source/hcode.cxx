@@ -1399,7 +1399,7 @@ char* base64_encode_string( const uchar *buf, unsigned int len )
     int c1, c2;
     unsigned int i;
 
-    out=(char *)malloc( (len*4/3)+8 );
+    out=static_cast<char *>(malloc( (len*4/3)+8 ));
 
 /* Get three characters at a time and encode them. */
     for (i=0; i < len/3; ++i)

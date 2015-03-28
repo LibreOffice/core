@@ -615,10 +615,10 @@ yynewstate:
 #ifndef YYSTACK_USE_ALLOCA
       yyfree_stacks = 1;
 #endif
-      yyss = (short *) YYSTACK_ALLOC (yystacksize * sizeof (*yyssp));
+      yyss = static_cast<short *>(YYSTACK_ALLOC (yystacksize * sizeof (*yyssp)));
       memcpy (yyss, yyss1,
            size * (unsigned int) sizeof (*yyssp));
-      yyvs = (YYSTYPE *) YYSTACK_ALLOC (yystacksize * sizeof (*yyvsp));
+      yyvs = static_cast<YYSTYPE *>(YYSTACK_ALLOC (yystacksize * sizeof (*yyvsp)));
       memcpy (yyvs, yyvs1,
            size * (unsigned int) sizeof (*yyvsp));
 #ifdef YYLSP_NEEDED

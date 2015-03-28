@@ -36,7 +36,7 @@ HStream::~HStream()
 
 void HStream::addData( const byte *buf, int aToAdd)
 {
-    seq = (byte *)realloc( seq, size + aToAdd );
+    seq = static_cast<byte *>(realloc( seq, size + aToAdd ));
     memcpy( seq + size, buf, aToAdd );
     size += aToAdd;
 }

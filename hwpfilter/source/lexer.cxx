@@ -1588,10 +1588,10 @@ static int yy_get_next_buffer()
                 else
                     b->yy_buf_size *= 2;
 
-                b->yy_ch_buf = (char *)
+                b->yy_ch_buf = static_cast<char *>(
                     /* Include room in for 2 EOB chars. */
                     yy_flex_realloc( (void *) b->yy_ch_buf,
-                             b->yy_buf_size + 2 );
+                             b->yy_buf_size + 2 ));
                 }
             else
                 /* Can't grow it, we don't own it. */
@@ -1779,7 +1779,7 @@ int size;
     {
     YY_BUFFER_STATE b;
 
-    b = (YY_BUFFER_STATE) yy_flex_alloc( sizeof( struct yy_buffer_state ) );
+    b = static_cast<YY_BUFFER_STATE>(yy_flex_alloc( sizeof( struct yy_buffer_state ) ));
     if ( ! b )
         YY_FATAL_ERROR( "out of dynamic memory in yy_create_buffer()" );
 
@@ -1788,7 +1788,7 @@ int size;
     /* yy_ch_buf has to be 2 characters longer than the size given because
      * we need to put in 2 end-of-buffer characters.
      */
-    b->yy_ch_buf = (char *) yy_flex_alloc( b->yy_buf_size + 2 );
+    b->yy_ch_buf = static_cast<char *>(yy_flex_alloc( b->yy_buf_size + 2 ));
     if ( ! b->yy_ch_buf )
         YY_FATAL_ERROR( "out of dynamic memory in yy_create_buffer()" );
 
@@ -1900,7 +1900,7 @@ yy_size_t size;
         /* They forgot to leave room for the EOB's. */
         return 0;
 
-    b = (YY_BUFFER_STATE) yy_flex_alloc( sizeof( struct yy_buffer_state ) );
+    b = static_cast<YY_BUFFER_STATE>(yy_flex_alloc( sizeof( struct yy_buffer_state ) ));
     if ( ! b )
         YY_FATAL_ERROR( "out of dynamic memory in yy_scan_buffer()" );
 
@@ -1954,7 +1954,7 @@ int len;
 
     /* Get memory for full buffer, including space for trailing EOB's. */
     n = len + 2;
-    buf = (char *) yy_flex_alloc( n );
+    buf = static_cast<char *>(yy_flex_alloc( n ));
     if ( ! buf )
         YY_FATAL_ERROR( "out of dynamic memory in yy_scan_bytes()" );
 
@@ -2106,7 +2106,7 @@ yy_size_t size;
      * any pointer type to void*, and deal with argument conversions
      * as though doing an assignment.
      */
-    return (void *) realloc( (char *) ptr, size );
+    return (void *) realloc( ptr, size );
     }
 
 #ifdef YY_USE_PROTOS

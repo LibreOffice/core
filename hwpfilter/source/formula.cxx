@@ -585,7 +585,7 @@ int Formula::parse()
                      break;
           }
 
-          char *buf = (char *)malloc(a.length()+1);
+          char *buf = static_cast<char *>(malloc(a.length()+1));
           bool bStart = false;
           int i, j;
           for( i = 0, j=0 ; i < a.length() ; i++){ // rtrim and ltrim 32 10 13
@@ -634,7 +634,7 @@ int Formula::parse()
 void Formula::trim()
 {
      int len = strlen(eq);
-     char *buf = (char *)malloc(len+1);
+     char *buf = static_cast<char *>(malloc(len+1));
      bool bStart = false;
      int i, j;
      for( i = 0, j=0 ; i < len ; i++){ // rtrim and ltrim 32 10 13

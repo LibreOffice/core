@@ -692,7 +692,7 @@ void HwpReader::makeStyles()
     {
         if( hwpfile.getFBoxStyle(i)->boxtype == 'D' )
         {
-            makeDrawMiscStyle((HWPDrawingObject *)hwpfile.getFBoxStyle(i)->cell );
+            makeDrawMiscStyle(static_cast<HWPDrawingObject *>(hwpfile.getFBoxStyle(i)->cell) );
         }
     }
 
@@ -823,7 +823,7 @@ void HwpReader::makeAutoStyles()
     for (i = 0; i < hwpfile.getFBoxStyleCount(); i++)
     {
         if( hwpfile.getFBoxStyle(i)->boxtype == 'D' )
-            makeDrawStyle((HWPDrawingObject *)hwpfile.getFBoxStyle(i)->cell, hwpfile.getFBoxStyle(i));
+            makeDrawStyle(static_cast<HWPDrawingObject *>(hwpfile.getFBoxStyle(i)->cell), hwpfile.getFBoxStyle(i));
         else
             makeFStyle(hwpfile.getFBoxStyle(i));
     }
@@ -2299,7 +2299,7 @@ void HwpReader::makeCaptionStyle(FBoxStyle * fstyle)
     padd("style:horizontal-rel", sXML_CDATA, "paragraph");
     if( fstyle->boxtype == 'G' )
     {
-        char *cell = (char *)fstyle->cell;
+        char *cell = static_cast<char *>(fstyle->cell);
         padd("draw:luminance", sXML_CDATA,
             ascii(Int2Str(cell[0], "%d%%", buf)));
         padd("draw:contrast", sXML_CDATA,
@@ -2313,7 +2313,7 @@ void HwpReader::makeCaptionStyle(FBoxStyle * fstyle)
     }
     else
     {
-        Cell *cell = (Cell *)fstyle->cell;
+        Cell *cell = static_cast<Cell *>(fstyle->cell);
         if(cell->linetype[0] == cell->linetype[1] &&
             cell->linetype[0] == cell->linetype[2] &&
             cell->linetype[0] == cell->linetype[3])
@@ -2524,7 +2524,7 @@ void HwpReader::makeFStyle(FBoxStyle * fstyle)
     }
     if( fstyle->boxtype == 'X' || fstyle->boxtype == 'B' )
     {
-        Cell *cell = (Cell *)fstyle->cell;
+        Cell *cell = static_cast<Cell *>(fstyle->cell);
         if(cell->linetype[0] == cell->linetype[1] &&
             cell->linetype[0] == cell->linetype[2] &&
             cell->linetype[0] == cell->linetype[3])
@@ -2648,7 +2648,7 @@ void HwpReader::makeFStyle(FBoxStyle * fstyle)
              padd("style:mirror", sXML_CDATA, "none");
              padd("fo:clip", sXML_CDATA, clip);
          }
-        char *cell = (char *)fstyle->cell;
+        char *cell = static_cast<char *>(fstyle->cell);
         padd("draw:luminance", sXML_CDATA,
             ascii(Int2Str(cell[0], "%d%%", buf)));
         padd("draw:contrast", sXML_CDATA,
@@ -3947,7 +3947,7 @@ void HwpReader::makePicture(Picture * hbox)
               if( hbox->picinfo.picdraw.zorder > 0 )
                  padd("draw:z-index", sXML_CDATA,
                       ascii(Int2Str( hbox->picinfo.picdraw.zorder + 10000, "%d", buf)));
-            makePictureDRAW( (HWPDrawingObject *) hbox->picinfo.picdraw.hdo, hbox);
+            makePictureDRAW( static_cast<HWPDrawingObject *>(hbox->picinfo.picdraw.hdo), hbox);
             break;
         case PICTYPE_UNKNOWN:
             break;

@@ -58,7 +58,7 @@ gz_stream *gz_open(HStream & _stream)
     //char *m = fmode;
     gz_stream *s;
 
-    s = (gz_stream *) ALLOC(sizeof(gz_stream));
+    s = static_cast<gz_stream *>(ALLOC(sizeof(gz_stream)));
     if (!s)
         return Z_NULL;
     s->stream.zalloc = (alloc_func) 0;
@@ -78,7 +78,7 @@ gz_stream *gz_open(HStream & _stream)
 
 //realking
     err = inflateInit2(&(s->stream), -MAX_WBITS);
-    s->stream.next_in = s->inbuf = (Byte *) ALLOC(Z_BUFSIZE);
+    s->stream.next_in = s->inbuf = static_cast<Byte *>(ALLOC(Z_BUFSIZE));
 
     if (err != Z_OK || s->inbuf == Z_NULL)
     {
@@ -157,7 +157,7 @@ int gz_read(gz_stream * file, voidp buf, unsigned len)
 {
 //printf("@@ gz_read : len : %d\t",len);
     gz_stream *s = (gz_stream *) file;
-    Bytef *start = (Bytef *) buf;                 /* starting point for crc computation */
+    Bytef *start = static_cast<Bytef *>(buf);                 /* starting point for crc computation */
     Byte *next_out;                               /* == stream.next_out but not forced far (for MSDOS) */
     if (s == NULL)
         return Z_STREAM_ERROR;
@@ -167,7 +167,7 @@ int gz_read(gz_stream * file, voidp buf, unsigned len)
     if (s->z_err == Z_STREAM_END)
         return 0;                                 /* EOF */
 
-    s->stream.next_out = next_out = (Bytef *) buf;
+    s->stream.next_out = next_out = static_cast<Bytef *>(buf);
     s->stream.avail_out = len;
 
     while (s->stream.avail_out != 0)

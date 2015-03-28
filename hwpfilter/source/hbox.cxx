@@ -405,7 +405,7 @@ Picture::~Picture(void)
 {
     delete[]follow;
     if( pictype == PICTYPE_DRAW && picinfo.picdraw.hdo )
-        delete (HWPDrawingObject *) picinfo.picdraw.hdo;
+        delete static_cast<HWPDrawingObject *>(picinfo.picdraw.hdo);
 
     std::list < HWPPara* >::iterator it = caption.begin();
     for (; it != caption.end(); ++it)
