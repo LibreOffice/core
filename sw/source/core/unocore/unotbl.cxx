@@ -98,6 +98,7 @@
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/string.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <comphelper/sequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <swtable.hxx>
 
@@ -593,19 +594,17 @@ static SwXCell* lcl_CreateXCell(SwFrmFmt* pFmt, sal_Int32 nColumn, sal_Int32 nRo
     return pXCell;
 }
 
-static void lcl_InspectLines(SwTableLines& rLines, std::vector<OUString*>& rAllNames)
+static void lcl_InspectLines(SwTableLines& rLines, std::vector<OUString>& rAllNames)
 {
     for(auto pLine : rLines)
     {
         for(auto pBox : pLine->GetTabBoxes())
         {
-            if(!pBox->GetName().isEmpty() && pBox->getRowSpan() > 0 )
-                rAllNames.push_back( new OUString(pBox->GetName()) );
+            if(!pBox->GetName().isEmpty() && pBox->getRowSpan() > 0)
+                rAllNames.push_back(pBox->GetName());
             SwTableLines& rBoxLines = pBox->GetTabLines();
             if(!rBoxLines.empty())
-            {
                 lcl_InspectLines(rBoxLines, rAllNames);
-            }
         }
     }
 }
@@ -2128,27 +2127,18 @@ uno::Reference<table::XCell> SwXTextTable::getCellByName(const OUString& sCellNa
     return SwXCell::CreateXCell(pFmt, pBox);
 }
 
-uno::Sequence< OUString > SwXTextTable::getCellNames(void) throw( uno::RuntimeException, std::exception )
+uno::Sequence<OUString> SwXTextTable::getCellNames(void) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    SwFrmFmt* pFmt = GetFrmFmt();
-    if(pFmt)
-    {
-        SwTable* pTable = SwTable::FindTable( pFmt );
-        // exists at the table and at all boxes
-        SwTableLines& rTblLines = pTable->GetTabLines();
-        std::vector<OUString*> aAllNames;
-        lcl_InspectLines(rTblLines, aAllNames);
-        uno::Sequence< OUString > aRet( static_cast<sal_Int32>(aAllNames.size()) );
-        OUString* pArray = aRet.getArray();
-        for( size_t i = 0; i < aAllNames.size(); ++i)
-        {
-            pArray[i] = *aAllNames[i];
-            delete aAllNames[i];
-        }
-        return aRet;
-    }
-    return uno::Sequence< OUString >();
+    SwFrmFmt* pFmt(GetFrmFmt());
+    if(!pFmt)
+        return {};
+    SwTable* pTable = SwTable::FindTable(pFmt);
+    // exists at the table and at all boxes
+    SwTableLines& rTblLines = pTable->GetTabLines();
+    std::vector<OUString> aAllNames;
+    lcl_InspectLines(rTblLines, aAllNames);
+    return comphelper::containerToSequence<OUString>(aAllNames);
 }
 
 uno::Reference< text::XTextTableCursor > SwXTextTable::createCursorByCellName(const OUString& sCellName)
