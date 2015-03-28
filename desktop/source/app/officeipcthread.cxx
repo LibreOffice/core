@@ -456,106 +456,126 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
 
     rtl::Reference< OfficeIPCThread > pThread(new OfficeIPCThread);
 
-    // The name of the named pipe is created with the hashcode of the user installation directory (without /user). We have to retrieve
-    // this information from a unotools implementation.
-    ::utl::Bootstrap::PathStatus aLocateResult = ::utl::Bootstrap::locateUserInstallation( aUserInstallPath );
-    if ( aLocateResult == ::utl::Bootstrap::PATH_EXISTS || aLocateResult == ::utl::Bootstrap::PATH_VALID)
-        aDummy = aUserInstallPath;
-    else
-    {
-        return IPC_STATUS_BOOTSTRAP_ERROR;
-    }
-
-    // Try to  determine if we are the first office or not! This should prevent multiple
-    // access to the user directory !
-    // First we try to create our pipe if this fails we try to connect. We have to do this
-    // in a loop because the other office can crash or shutdown between createPipe
-    // and connectPipe!!
-
-    OUString            aIniName;
-
-    osl_getExecutableFile( &aIniName.pData );
-
-    sal_uInt32     lastIndex = aIniName.lastIndexOf('/');
-    if ( lastIndex > 0 )
-    {
-        aIniName    = aIniName.copy( 0, lastIndex+1 );
-        aIniName    += "perftune";
-#if defined(WNT)
-        aIniName    += ".ini";
-#else
-        aIniName    += "rc";
-#endif
-    }
-
-    ::rtl::Bootstrap aPerfTuneIniFile( aIniName );
-
-    OUString aDefault( "0" );
-    OUString aPreloadData;
-
-    aPerfTuneIniFile.getFrom( OUString( "FastPipeCommunication" ), aPreloadData, aDefault );
-
-
-    OUString aUserInstallPathHashCode;
-
-    if ( aPreloadData == "1" )
-    {
-        sal_Char    szBuffer[32];
-        sprintf( szBuffer, "%d", LIBO_VERSION_MAJOR * 10000 + LIBO_VERSION_MINOR * 100 + LIBO_VERSION_MICRO * 1 );
-        aUserInstallPathHashCode = OUString( szBuffer, strlen(szBuffer), osl_getThreadTextEncoding() );
-    }
-    else
-        aUserInstallPathHashCode = CreateMD5FromString( aDummy );
-
-
-    // Check result to create a hash code from the user install path
-    if ( aUserInstallPathHashCode.isEmpty() )
-        return IPC_STATUS_BOOTSTRAP_ERROR; // Something completely broken, we cannot create a valid hash code!
-
-    OUString aPipeIdent( "SingleOfficeIPC_" + aUserInstallPathHashCode );
-
     PipeMode nPipeMode = PIPEMODE_DONTKNOW;
-    do
-    {
-        osl::Security &rSecurity = Security::get();
 
-        // Try to create pipe
-        if ( pThread->maPipe.create( aPipeIdent.getStr(), osl_Pipe_CREATE, rSecurity ))
+#ifndef ANDROID // On Android it might be that we still for some reason need the pipe?
+
+    // When console-only (which includes in LibreOfficeKit-based programs) we want to be totally
+    // independent from any other LibreOffice instance or LOKit-using program. Certainly no need for
+    // any IPC pipes by definition, as we don't have any reason to do any IPC. Why we even call this
+    // EnableOfficeIPCThread function from LibreOfficeKit's lo_initialize() I am not completely
+    // sure, but that code, and this, is such horrible crack that I don't want to change it too much.
+
+    if (Application::IsConsoleOnly())
+    {
+        // Setting nPipeMode to PIPEMODE_CREATED causes the trivial path to be taken below, starting
+        // the listeing thread. (Which will immediately finish, see the execute() function, but what
+        // the heck...)
+        nPipeMode = PIPEMODE_CREATED;
+    }
+    else
+#endif
+    {
+        // The name of the named pipe is created with the hashcode of the user installation directory (without /user). We have to retrieve
+        // this information from a unotools implementation.
+        ::utl::Bootstrap::PathStatus aLocateResult = ::utl::Bootstrap::locateUserInstallation( aUserInstallPath );
+        if ( aLocateResult == ::utl::Bootstrap::PATH_EXISTS || aLocateResult == ::utl::Bootstrap::PATH_VALID)
+            aDummy = aUserInstallPath;
+        else
         {
-            // Pipe created
-            nPipeMode = PIPEMODE_CREATED;
+            return IPC_STATUS_BOOTSTRAP_ERROR;
         }
-        else if( pThread->maPipe.create( aPipeIdent.getStr(), osl_Pipe_OPEN, rSecurity )) // Creation not successful, now we try to connect
+
+        // Try to  determine if we are the first office or not! This should prevent multiple
+        // access to the user directory !
+        // First we try to create our pipe if this fails we try to connect. We have to do this
+        // in a loop because the other office can crash or shutdown between createPipe
+        // and connectPipe!!
+
+        OUString            aIniName;
+
+        osl_getExecutableFile( &aIniName.pData );
+
+        sal_uInt32     lastIndex = aIniName.lastIndexOf('/');
+        if ( lastIndex > 0 )
         {
-            osl::StreamPipe aStreamPipe(pThread->maPipe.getHandle());
-            if (readStringFromPipe(aStreamPipe) == SEND_ARGUMENTS)
+            aIniName    = aIniName.copy( 0, lastIndex+1 );
+            aIniName    += "perftune";
+    #if defined(WNT)
+            aIniName    += ".ini";
+    #else
+            aIniName    += "rc";
+    #endif
+        }
+
+        ::rtl::Bootstrap aPerfTuneIniFile( aIniName );
+
+        OUString aDefault( "0" );
+        OUString aPreloadData;
+
+        aPerfTuneIniFile.getFrom( OUString( "FastPipeCommunication" ), aPreloadData, aDefault );
+
+
+        OUString aUserInstallPathHashCode;
+
+        if ( aPreloadData == "1" )
+        {
+            sal_Char    szBuffer[32];
+            sprintf( szBuffer, "%d", LIBO_VERSION_MAJOR * 10000 + LIBO_VERSION_MINOR * 100 + LIBO_VERSION_MICRO * 1 );
+            aUserInstallPathHashCode = OUString( szBuffer, strlen(szBuffer), osl_getThreadTextEncoding() );
+        }
+        else
+            aUserInstallPathHashCode = CreateMD5FromString( aDummy );
+
+
+        // Check result to create a hash code from the user install path
+        if ( aUserInstallPathHashCode.isEmpty() )
+            return IPC_STATUS_BOOTSTRAP_ERROR; // Something completely broken, we cannot create a valid hash code!
+
+        OUString aPipeIdent( "SingleOfficeIPC_" + aUserInstallPathHashCode );
+
+        do
+        {
+            osl::Security &rSecurity = Security::get();
+
+            // Try to create pipe
+            if ( pThread->maPipe.create( aPipeIdent.getStr(), osl_Pipe_CREATE, rSecurity ))
             {
-                // Pipe connected to first office
-                nPipeMode = PIPEMODE_CONNECTED;
+                // Pipe created
+                nPipeMode = PIPEMODE_CREATED;
+            }
+            else if( pThread->maPipe.create( aPipeIdent.getStr(), osl_Pipe_OPEN, rSecurity )) // Creation not successful, now we try to connect
+            {
+                osl::StreamPipe aStreamPipe(pThread->maPipe.getHandle());
+                if (readStringFromPipe(aStreamPipe) == SEND_ARGUMENTS)
+                {
+                    // Pipe connected to first office
+                    nPipeMode = PIPEMODE_CONNECTED;
+                }
+                else
+                {
+                    // Pipe connection failed (other office exited or crashed)
+                    TimeValue tval;
+                    tval.Seconds = 0;
+                    tval.Nanosec = 500000000;
+                    salhelper::Thread::wait( tval );
+                }
             }
             else
             {
-                // Pipe connection failed (other office exited or crashed)
-                TimeValue tval;
-                tval.Seconds = 0;
-                tval.Nanosec = 500000000;
-                salhelper::Thread::wait( tval );
+                oslPipeError eReason = pThread->maPipe.getError();
+                if ((eReason == osl_Pipe_E_ConnectionRefused) || (eReason == osl_Pipe_E_invalidError))
+                    return IPC_STATUS_PIPE_ERROR;
+
+                // Wait for second office to be ready
+                TimeValue aTimeValue;
+                aTimeValue.Seconds = 0;
+                aTimeValue.Nanosec = 10000000; // 10ms
+                salhelper::Thread::wait( aTimeValue );
             }
-        }
-        else
-        {
-            oslPipeError eReason = pThread->maPipe.getError();
-            if ((eReason == osl_Pipe_E_ConnectionRefused) || (eReason == osl_Pipe_E_invalidError))
-                return IPC_STATUS_PIPE_ERROR;
 
-            // Wait for second office to be ready
-            TimeValue aTimeValue;
-            aTimeValue.Seconds = 0;
-            aTimeValue.Nanosec = 10000000; // 10ms
-            salhelper::Thread::wait( aTimeValue );
-        }
-
-    } while ( nPipeMode == PIPEMODE_DONTKNOW );
+        } while ( nPipeMode == PIPEMODE_DONTKNOW );
+    }
 
     if ( nPipeMode == PIPEMODE_CREATED )
     {
@@ -684,6 +704,12 @@ bool OfficeIPCThread::IsEnabled()
 void OfficeIPCThread::execute()
 {
 #if HAVE_FEATURE_DESKTOP || defined(ANDROID)
+
+#ifndef ANDROID
+    if (Application::IsConsoleOnly())
+        return;
+#endif
+
     do
     {
         osl::StreamPipe aStreamPipe;
