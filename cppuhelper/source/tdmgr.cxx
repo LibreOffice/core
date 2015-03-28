@@ -88,8 +88,8 @@ inline static typelib_TypeDescription * createCTD(
 
         OUString aTypeName( xType->getName() );
 
-        typelib_CompoundMember_Init * pMemberInits = (typelib_CompoundMember_Init *)alloca(
-            sizeof(typelib_CompoundMember_Init) * nMembers );
+        typelib_CompoundMember_Init * pMemberInits = static_cast<typelib_CompoundMember_Init *>(alloca(
+            sizeof(typelib_CompoundMember_Init) * nMembers ));
 
         sal_Int32 nPos;
         for ( nPos = nMembers; nPos--; )
@@ -146,8 +146,8 @@ inline static typelib_TypeDescription * createCTD(
 
         OUString aTypeName( xType->getName() );
 
-        typelib_StructMember_Init * pMemberInits = (typelib_StructMember_Init *)alloca(
-            sizeof(typelib_StructMember_Init) * nMembers );
+        typelib_StructMember_Init * pMemberInits = static_cast<typelib_StructMember_Init *>(alloca(
+            sizeof(typelib_StructMember_Init) * nMembers ));
 
         Sequence< Reference< XTypeDescription > > templateMemberTypes;
         sal_Int32 i = aTypeName.indexOf('<');
@@ -249,8 +249,8 @@ static typelib_TypeDescription * createCTD(
         const Reference< XMethodParameter > * pParams            = rParams.getConstArray();
         sal_Int32 nParams = rParams.getLength();
 
-        typelib_Parameter_Init * pParamInit = (typelib_Parameter_Init *)alloca(
-            sizeof(typelib_Parameter_Init) * nParams );
+        typelib_Parameter_Init * pParamInit = static_cast<typelib_Parameter_Init *>(alloca(
+            sizeof(typelib_Parameter_Init) * nParams ));
 
         sal_Int32 nPos;
         for ( nPos = nParams; nPos--; )
@@ -272,8 +272,8 @@ static typelib_TypeDescription * createCTD(
         const Sequence<Reference< XTypeDescription > > & rExceptions = xMethod->getExceptions();
         const Reference< XTypeDescription > * pExceptions = rExceptions.getConstArray();
         sal_Int32 nExceptions = rExceptions.getLength();
-        rtl_uString ** ppExceptionNames = (rtl_uString **)alloca(
-            sizeof(rtl_uString *) * nExceptions );
+        rtl_uString ** ppExceptionNames = static_cast<rtl_uString **>(alloca(
+            sizeof(rtl_uString *) * nExceptions ));
 
         for ( nPos = nExceptions; nPos--; )
         {
@@ -335,8 +335,8 @@ inline static typelib_TypeDescription * createCTD(
         const Sequence<Reference< XInterfaceMemberTypeDescription > > & rMembers = xType->getMembers();
         sal_Int32 nMembers = rMembers.getLength();
 
-        typelib_TypeDescriptionReference ** ppMemberRefs = (typelib_TypeDescriptionReference **)alloca(
-            sizeof(typelib_TypeDescriptionReference *) * nMembers );
+        typelib_TypeDescriptionReference ** ppMemberRefs = static_cast<typelib_TypeDescriptionReference **>(alloca(
+            sizeof(typelib_TypeDescriptionReference *) * nMembers ));
 
         const Reference< XInterfaceMemberTypeDescription > * pMembers = rMembers.getConstArray();
 

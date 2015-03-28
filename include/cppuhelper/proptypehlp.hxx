@@ -63,7 +63,7 @@ inline void SAL_CALL convertPropertyValue( sal_Bool & b   , const ::com::sun::st
         b = i32 != 0;
     }
     else if ( ::com::sun::star::uno::TypeClass_CHAR  == tc ) {
-        sal_Unicode c = *(sal_Unicode*) a.getValue();
+        sal_Unicode c = *static_cast<sal_Unicode const *>(a.getValue());
         b = c != 0;
     }
     else if ( ::com::sun::star::uno::TypeClass_SHORT == tc ) {
@@ -72,7 +72,7 @@ inline void SAL_CALL convertPropertyValue( sal_Bool & b   , const ::com::sun::st
         b = i16 != 0;
     }
     else if ( ::com::sun::star::uno::TypeClass_BOOLEAN == tc ) {
-        b = *((sal_Bool*)a.getValue());
+        b = *static_cast<sal_Bool const *>(a.getValue());
     }
     else if ( ::com::sun::star::uno::TypeClass_BYTE == tc ) {
         sal_Int8 i8 = 0;
@@ -113,7 +113,7 @@ inline void SAL_CALL convertPropertyValue( sal_Int64 & i  , const ::com::sun::st
     }
     else if ( ::com::sun::star::uno::TypeClass_CHAR  == tc ) {
         sal_Unicode c;
-        c = *(sal_Unicode *)a.getValue();
+        c = *static_cast<sal_Unicode const *>(a.getValue());
         i = ( sal_Int64 ) c;
     }
     else if ( ::com::sun::star::uno::TypeClass_SHORT == tc ) {
@@ -123,7 +123,7 @@ inline void SAL_CALL convertPropertyValue( sal_Int64 & i  , const ::com::sun::st
     }
     else if ( ::com::sun::star::uno::TypeClass_BOOLEAN == tc ) {
         bool b;
-        b =  *((sal_Bool * )a.getValue());
+        b =  *static_cast<sal_Bool const *>(a.getValue());
         i = ( sal_Int64 ) b;
     }
     else if ( ::com::sun::star::uno::TypeClass_BYTE == tc ) {
@@ -166,7 +166,7 @@ inline void SAL_CALL convertPropertyValue( sal_uInt64 & i  , const ::com::sun::s
     }
     else if ( ::com::sun::star::uno::TypeClass_CHAR  == tc ) {
         sal_Unicode c;
-        c = *( sal_Unicode * ) a.getValue() ;
+        c = *static_cast<sal_Unicode const *>(a.getValue());
         i = ( sal_uInt64 ) c;
     }
     else if ( ::com::sun::star::uno::TypeClass_SHORT == tc ) {
@@ -176,7 +176,7 @@ inline void SAL_CALL convertPropertyValue( sal_uInt64 & i  , const ::com::sun::s
     }
     else if ( ::com::sun::star::uno::TypeClass_BOOLEAN == tc ) {
         bool b;
-        b =  *((sal_Bool * )a.getValue());
+        b =  *static_cast<sal_Bool const *>(a.getValue());
         i = ( sal_uInt64 ) b;
     }
     else if ( ::com::sun::star::uno::TypeClass_BYTE == tc ) {
@@ -210,7 +210,7 @@ inline void SAL_CALL convertPropertyValue( sal_Int32 & i  , const ::com::sun::st
     }
     else if ( ::com::sun::star::uno::TypeClass_CHAR  == tc ) {
         sal_Unicode c;
-        c = *(sal_Unicode*) a.getValue();
+        c = *static_cast<sal_Unicode const *>(a.getValue());
         i = ( sal_Int32 ) c;
     }
     else if ( ::com::sun::star::uno::TypeClass_SHORT == tc ) {
@@ -220,7 +220,7 @@ inline void SAL_CALL convertPropertyValue( sal_Int32 & i  , const ::com::sun::st
     }
     else if ( ::com::sun::star::uno::TypeClass_BOOLEAN == tc ) {
         bool b;
-        b =  *((sal_Bool * )a.getValue());
+        b =  *static_cast<sal_Bool const *>(a.getValue());
         i = ( sal_Int32 ) b;
     }
     else if ( ::com::sun::star::uno::TypeClass_BYTE == tc ) {
@@ -257,7 +257,7 @@ inline void SAL_CALL convertPropertyValue( sal_uInt32 & i  , const ::com::sun::s
     }
     else if ( ::com::sun::star::uno::TypeClass_CHAR  == tc ) {
         sal_Unicode c;
-        c = *(sal_Unicode*) a.getValue();
+        c = *static_cast<sal_Unicode const *>(a.getValue());
         i = ( sal_uInt32 ) c;
     }
     else if ( ::com::sun::star::uno::TypeClass_SHORT == tc ) {
@@ -267,7 +267,7 @@ inline void SAL_CALL convertPropertyValue( sal_uInt32 & i  , const ::com::sun::s
     }
     else if ( ::com::sun::star::uno::TypeClass_BOOLEAN == tc ) {
         bool b;
-        b =  *((sal_Bool * )a.getValue());
+        b =  *static_cast<sal_Bool const *>(a.getValue());
         i = ( sal_uInt32 ) b;
     }
     else if ( ::com::sun::star::uno::TypeClass_BYTE == tc ) {
@@ -295,12 +295,12 @@ inline void SAL_CALL convertPropertyValue( sal_Int16 & i  , const ::com::sun::st
     }
     else if ( ::com::sun::star::uno::TypeClass_CHAR  == tc ) {
         sal_Unicode c;
-        c = *(sal_Unicode*) a.getValue();
+        c = *static_cast<sal_Unicode const *>(a.getValue());
         i = ( sal_Int16 ) c;
     }
     else if ( ::com::sun::star::uno::TypeClass_BOOLEAN == tc ) {
         bool b;
-        b =  *((sal_Bool * )a.getValue());
+        b =  *static_cast<sal_Bool const *>(a.getValue());
         i = ( sal_Int16 ) b;
     }
     else if ( ::com::sun::star::uno::TypeClass_BYTE == tc ) {
@@ -327,12 +327,12 @@ inline void SAL_CALL convertPropertyValue( sal_uInt16 & i  , const ::com::sun::s
     }
     else if ( ::com::sun::star::uno::TypeClass_CHAR  == tc ) {
         sal_Unicode c;
-        c = *(sal_Unicode *) a.getValue();
+        c = *static_cast<sal_Unicode const *>(a.getValue());
         i = ( sal_Int16 ) c;
     }
     else if ( ::com::sun::star::uno::TypeClass_BOOLEAN == tc ) {
         bool b;
-        b =  *((sal_Bool * )a.getValue());
+        b =  *static_cast<sal_Bool const *>(a.getValue());
         i = ( sal_Int16 ) b;
     }
     else if ( ::com::sun::star::uno::TypeClass_BYTE == tc ) {
@@ -359,7 +359,7 @@ inline void SAL_CALL convertPropertyValue( sal_Int8 & i  , const ::com::sun::sta
     }
     else if ( ::com::sun::star::uno::TypeClass_BOOLEAN == tc ) {
         bool b;
-        b =  *((sal_Bool * )a.getValue());
+        b =  *static_cast<sal_Bool const *>(a.getValue());
         i = ( sal_Int8 ) b;
     }
     else {
@@ -397,7 +397,7 @@ inline void SAL_CALL convertPropertyValue( float &f , const ::com::sun::star::un
     }
     else if ( ::com::sun::star::uno::TypeClass_CHAR  == tc ) {
         sal_Unicode c;
-        c = *(sal_Unicode*) a.getValue();
+        c = *static_cast<sal_Unicode const *>(a.getValue());
         f = ( float ) c;
     }
     else if ( ::com::sun::star::uno::TypeClass_SHORT == tc ) {
@@ -407,7 +407,7 @@ inline void SAL_CALL convertPropertyValue( float &f , const ::com::sun::star::un
     }
     else if ( ::com::sun::star::uno::TypeClass_BOOLEAN == tc ) {
         bool b;
-        b =  *((sal_Bool * )a.getValue());
+        b =  *static_cast<sal_Bool const *>(a.getValue());
         f = ( float ) b;
     }
     else if ( ::com::sun::star::uno::TypeClass_BYTE == tc ) {
@@ -463,7 +463,7 @@ inline void SAL_CALL convertPropertyValue( double &d , const ::com::sun::star::u
     }
     else if ( ::com::sun::star::uno::TypeClass_CHAR  == tc ) {
         sal_Unicode c;
-        c = *(sal_Unicode*) a.getValue();
+        c = *static_cast<sal_Unicode const *>(a.getValue());
         d = (double) c;
     }
     else if ( ::com::sun::star::uno::TypeClass_SHORT == tc ) {
@@ -473,7 +473,7 @@ inline void SAL_CALL convertPropertyValue( double &d , const ::com::sun::star::u
     }
     else if ( ::com::sun::star::uno::TypeClass_BOOLEAN == tc ) {
         bool b;
-        b =  *((sal_Bool * )a.getValue());
+        b =  *static_cast<sal_Bool const *>(a.getValue());
         d = (double) b;
     }
     else if ( ::com::sun::star::uno::TypeClass_BYTE == tc ) {

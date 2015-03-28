@@ -68,7 +68,7 @@ Bootstrap const & get_unorc()
             s_bstrap = bstrap;
         }
     }
-    return *(Bootstrap const *)&s_bstrap;
+    return *reinterpret_cast<Bootstrap const *>(&s_bstrap);
 }
 
 }

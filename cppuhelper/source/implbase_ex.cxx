@@ -71,7 +71,7 @@ static inline bool isXInterface( rtl_uString * pStr )
 
 static inline void * makeInterface( sal_IntPtr nOffset, void * that )
 {
-    return (((char *)that) + nOffset);
+    return (static_cast<char *>(that) + nOffset);
 }
 
 static inline bool __td_equals(
