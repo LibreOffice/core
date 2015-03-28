@@ -1658,25 +1658,23 @@ sal_Bool SwXTextTableCursor::splitRange(sal_Int16 Count, sal_Bool Horizontal)
 {
     SolarMutexGuard aGuard;
     if (Count <= 0)
-        throw uno::RuntimeException("Illegal first argument: needs to be > 0", static_cast < cppu::OWeakObject * > ( this ) );
-    bool bRet = false;
+        throw uno::RuntimeException("Illegal first argument: needs to be > 0", static_cast<cppu::OWeakObject*>(this));
     SwUnoCrsr* pUnoCrsr = GetCrsr();
-    if(pUnoCrsr)
+    if(!pUnoCrsr)
+        return false;
     {
-        {
-            // here, all actions need to be revoked
-            UnoActionRemoveContext aRemoveContext(pUnoCrsr->GetDoc());
-        }
-        SwUnoTableCrsr& rTblCrsr = dynamic_cast<SwUnoTableCrsr&>(*pUnoCrsr);
-        rTblCrsr.MakeBoxSels();
-        {
-            UnoActionContext aContext(pUnoCrsr->GetDoc());
-            bRet = rTblCrsr.GetDoc()->SplitTbl(
-                    rTblCrsr.GetSelectedBoxes(), !Horizontal, Count);
-        }
-        rTblCrsr.MakeBoxSels();
+        // here, all actions need to be revoked
+        UnoActionRemoveContext aRemoveContext(pUnoCrsr->GetDoc());
     }
-    return bRet;
+    SwUnoTableCrsr& rTblCrsr = dynamic_cast<SwUnoTableCrsr&>(*pUnoCrsr);
+    rTblCrsr.MakeBoxSels();
+    bool bResult;
+    {
+        UnoActionContext aContext(pUnoCrsr->GetDoc());
+        bResult = rTblCrsr.GetDoc()->SplitTbl(rTblCrsr.GetSelectedBoxes(), !Horizontal, Count);
+    }
+    rTblCrsr.MakeBoxSels();
+    return bResult;
 }
 
 uno::Reference< beans::XPropertySetInfo >  SwXTextTableCursor::getPropertySetInfo(void) throw( uno::RuntimeException, std::exception )
