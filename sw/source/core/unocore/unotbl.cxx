@@ -1167,28 +1167,19 @@ void SwXCell::addVetoableChangeListener(const OUString& /*rPropertyName*/, const
 void SwXCell::removeVetoableChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*xListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
     { throw uno::RuntimeException("not implemented", static_cast<cppu::OWeakObject*>(this)); };
 
-uno::Reference< container::XEnumeration >  SwXCell::createEnumeration(void) throw( uno::RuntimeException, std::exception )
+uno::Reference<container::XEnumeration> SwXCell::createEnumeration(void) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    uno::Reference< container::XEnumeration >  aRef;
-    if(IsValid())
-    {
-        const SwStartNode* pSttNd = pBox->GetSttNd();
-        SwPosition aPos(*pSttNd);
-        ::std::unique_ptr<SwUnoCrsr> pUnoCursor(
-            GetDoc()->CreateUnoCrsr(aPos, false));
-        pUnoCursor->Move(fnMoveForward, fnGoNode);
-
-        // remember table and start node for later travelling
-        // (used in export of tables in tables)
-        SwTable const*const pTable( & pSttNd->FindTableNode()->GetTable() );
-        SwXParagraphEnumeration *const pEnum =
-            new SwXParagraphEnumeration(this, std::move(pUnoCursor), CURSOR_TBLTEXT,
-                    pSttNd, pTable);
-
-        aRef = pEnum;
-    }
-    return aRef;
+    if(!IsValid())
+        return uno::Reference<container::XEnumeration>();
+    const SwStartNode* pSttNd = pBox->GetSttNd();
+    SwPosition aPos(*pSttNd);
+    ::std::unique_ptr<SwUnoCrsr> pUnoCursor(GetDoc()->CreateUnoCrsr(aPos, false));
+    pUnoCursor->Move(fnMoveForward, fnGoNode);
+    // remember table and start node for later travelling
+    // (used in export of tables in tables)
+    SwTable const*const pTable(&pSttNd->FindTableNode()->GetTable());
+    return new SwXParagraphEnumeration(this, std::move(pUnoCursor), CURSOR_TBLTEXT, pSttNd, pTable);
 }
 
 uno::Type SAL_CALL SwXCell::getElementType(void) throw( uno::RuntimeException, std::exception )
