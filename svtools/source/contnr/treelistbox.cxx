@@ -1246,6 +1246,7 @@ sal_Int8 SvTreeListBox::ExecuteDrop( const ExecuteDropEvent& rEvt, SvTreeListBox
     pDDTarget = this;
 
     SvLBoxDDInfo aDDInfo;
+    memset( &aDDInfo, 0, sizeof(SvLBoxDDInfo) );
 
     TransferableDataHelper aData( rEvt.maDropEvent.Transferable );
     if( aData.HasFormat( SotClipboardFormatId::TREELISTBOX ))
@@ -1264,7 +1265,6 @@ sal_Int8 SvTreeListBox::ExecuteDrop( const ExecuteDropEvent& rEvt, SvTreeListBox
 
         SvTreeListEntry* pTarget = pTargetEntry; // may be 0!
 
-        memset( &aDDInfo, 0, sizeof(SvLBoxDDInfo) );
 
         if( DND_ACTION_COPY == rEvt.mnAction )
         {
