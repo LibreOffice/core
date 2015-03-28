@@ -320,7 +320,7 @@ sal_Int32 compileFile(const OString * pathname)
 
     const int nCmdArgs = lCppArgs.size();
     rtl_uString** pCmdArgs = 0;
-    pCmdArgs = (rtl_uString**)rtl_allocateZeroMemory(nCmdArgs * sizeof(rtl_uString*));
+    pCmdArgs = static_cast<rtl_uString**>(rtl_allocateZeroMemory(nCmdArgs * sizeof(rtl_uString*)));
 
     ::std::vector< OUString >::iterator iter = lCppArgs.begin();
     ::std::vector< OUString >::iterator end = lCppArgs.end();

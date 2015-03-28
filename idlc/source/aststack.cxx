@@ -24,7 +24,7 @@
 #define STACKSIZE_INCREMENT 64
 
 AstStack::AstStack()
-    : m_stack((AstScope**)rtl_allocateZeroMemory(sizeof(AstScope*) * STACKSIZE_INCREMENT))
+    : m_stack(static_cast<AstScope**>(rtl_allocateZeroMemory(sizeof(AstScope*) * STACKSIZE_INCREMENT)))
     , m_size(STACKSIZE_INCREMENT)
     , m_top(0)
 {
@@ -92,7 +92,7 @@ AstStack* AstStack::push(AstScope* pScope)
     {
         newSize = m_size;
         newSize += STACKSIZE_INCREMENT;
-        tmp = (AstScope**)rtl_allocateZeroMemory(sizeof(AstScope*) * newSize);
+        tmp = static_cast<AstScope**>(rtl_allocateZeroMemory(sizeof(AstScope*) * newSize));
 
         for(i=0; i < m_size; i++)
             tmp[i] = m_stack[i];
