@@ -2349,12 +2349,12 @@ uno::Reference<table::XCellRange>  SwXTextTable::getCellRangeByPosition(sal_Int3
     throw lang::IndexOutOfBoundsException();
 }
 
-uno::Reference< table::XCellRange >  SwXTextTable::getCellRangeByName(const OUString& sRange)
+uno::Reference<table::XCellRange> SwXTextTable::getCellRangeByName(const OUString& sRange)
     throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     uno::Reference< table::XCellRange >  aRef;
-    SwFrmFmt* pFmt = GetFrmFmt();
+    SwFrmFmt* pFmt(GetFrmFmt());
     if(pFmt)
     {
         SwTable* pTable = SwTable::FindTable( pFmt );
@@ -2375,13 +2375,10 @@ uno::Reference< table::XCellRange >  SwXTextTable::getCellRangeByName(const OUSt
             // elsewhere when the cursor in the implementation does not
             // point to the top-left and bottom-right cells
             aDesc.Normalize();
-
-            aRef = GetRangeByName(pFmt, pTable, sTLName, sBRName, aDesc);
+            return GetRangeByName(pFmt, pTable, sTLName, sBRName, aDesc);
         }
     }
-    if(!aRef.is())
-        throw uno::RuntimeException();
-    return aRef;
+    throw uno::RuntimeException();
 }
 
 uno::Sequence< uno::Sequence< uno::Any > > SAL_CALL SwXTextTable::getDataArray()
