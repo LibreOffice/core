@@ -706,7 +706,7 @@ IMPL_LINK( ObjectPage, ButtonHdl, Button *, pButton )
             SvTreeListEntry* pParentEntry = m_pBasicBox->GetParent( pCurEntry );
             if ( pParentEntry )
             {
-                DocumentEntry* pDocumentEntry = (DocumentEntry*)pParentEntry->GetUserData();
+                DocumentEntry* pDocumentEntry = static_cast<DocumentEntry*>(pParentEntry->GetUserData());
                 if (pDocumentEntry)
                     aDocument = pDocumentEntry->GetDocument();
             }

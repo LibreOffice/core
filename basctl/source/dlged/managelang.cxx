@@ -128,7 +128,7 @@ void ManageLanguageDialog::ClearLanguageBox()
     sal_uInt16 i, nCount = m_pLanguageLB->GetEntryCount();
     for ( i = 0; i < nCount; ++i )
     {
-        LanguageEntry* pEntry = (LanguageEntry*)( m_pLanguageLB->GetEntryData(i) );
+        LanguageEntry* pEntry = static_cast<LanguageEntry*>(m_pLanguageLB->GetEntryData(i));
         delete pEntry;
     }
     m_pLanguageLB->Clear();
@@ -164,7 +164,7 @@ IMPL_LINK_NOARG(ManageLanguageDialog, DeleteHdl)
         for ( i = 0; i < nCount; ++i )
         {
             sal_uInt16 nSelPos = m_pLanguageLB->GetSelectEntryPos(i);
-            LanguageEntry* pEntry = (LanguageEntry*)( m_pLanguageLB->GetEntryData( nSelPos ) );
+            LanguageEntry* pEntry = static_cast<LanguageEntry*>(m_pLanguageLB->GetEntryData( nSelPos ));
             if ( pEntry )
                 aLocaleSeq[i] = pEntry->m_aLocale;
         }
@@ -185,7 +185,7 @@ IMPL_LINK_NOARG(ManageLanguageDialog, DeleteHdl)
 IMPL_LINK_NOARG(ManageLanguageDialog, MakeDefHdl)
 {
     sal_uInt16 nPos = m_pLanguageLB->GetSelectEntryPos();
-    LanguageEntry* pSelectEntry = (LanguageEntry*)( m_pLanguageLB->GetEntryData( nPos ) );
+    LanguageEntry* pSelectEntry = static_cast<LanguageEntry*>(m_pLanguageLB->GetEntryData( nPos ));
     if ( pSelectEntry && !pSelectEntry->m_bIsDefault )
     {
         // set new default entry

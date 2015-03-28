@@ -479,7 +479,7 @@ LibPage::~LibPage()
     sal_uInt16 nCount = m_pBasicsBox->GetEntryCount();
     for ( sal_uInt16 i = 0; i < nCount; ++i )
     {
-        DocumentEntry* pEntry = (DocumentEntry*)m_pBasicsBox->GetEntryData( i );
+        DocumentEntry* pEntry = static_cast<DocumentEntry*>(m_pBasicsBox->GetEntryData( i ));
         delete pEntry;
     }
 }
@@ -1350,7 +1350,7 @@ void LibPage::InsertListBoxEntry( const ScriptDocument& rDocument, LibraryLocati
 void LibPage::SetCurLib()
 {
     sal_uInt16 nSelPos = m_pBasicsBox->GetSelectEntryPos();
-    DocumentEntry* pEntry = (DocumentEntry*)m_pBasicsBox->GetEntryData( nSelPos );
+    DocumentEntry* pEntry = static_cast<DocumentEntry*>(m_pBasicsBox->GetEntryData( nSelPos ));
     if ( pEntry )
     {
         ScriptDocument aDocument( pEntry->GetDocument() );

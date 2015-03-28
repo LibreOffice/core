@@ -444,7 +444,7 @@ void LanguageBox::ClearBox()
     sal_Int32 nCount = GetEntryCount();
     for ( sal_Int32 i = 0; i < nCount; ++i )
     {
-        LanguageEntry* pEntry = (LanguageEntry*)GetEntryData(i);
+        LanguageEntry* pEntry = static_cast<LanguageEntry*>(GetEntryData(i));
         delete pEntry;
     }
     ListBox::Clear();
@@ -452,7 +452,7 @@ void LanguageBox::ClearBox()
 
 void LanguageBox::SetLanguage()
 {
-    LanguageEntry* pEntry = (LanguageEntry*)GetSelectEntryData();
+    LanguageEntry* pEntry = static_cast<LanguageEntry*>(GetSelectEntryData());
     if ( pEntry )
         GetShell()->GetCurLocalizationMgr()->handleSetCurrentLocale( pEntry->m_aLocale );
 }
