@@ -1049,7 +1049,7 @@ void SwXCell::setPropertyValue(const OUString& rPropertyName, const uno::Any& aV
     if(rPropertyName == "FRMDirection")
     {
         SvxFrameDirection eDir = FRMDIR_ENVIRONMENT;
-        sal_Int16 nNum = aValue.get<sal_Int16>(nNum);
+        sal_Int32 nNum = aValue.get<sal_Int32>();
         SAL_INFO("sw.uno", "FRMDirection val " << nNum);
         switch (nNum)
         {
@@ -1074,16 +1074,15 @@ void SwXCell::setPropertyValue(const OUString& rPropertyName, const uno::Any& aV
         uno::Sequence<beans::PropertyValue> tableCellProperties;
         tableCellProperties = aValue.get< uno::Sequence< beans::PropertyValue > >();
         comphelper::SequenceAsHashMap aPropMap(tableCellProperties);
-        uno::Any sRedlineTypeValue = aPropMap.getUnpackedValueOrDefault("RedlineType", makeAny());
-        if(!sRedlineTypeValue.has(OUString))
-            throw beans::UnknownPropertyException("No redline type property: ", static_cast < cppu::OWeakObject * > ( this ) );
+        uno::Any sRedlineTypeValue = aPropMap.getUnpackedValueOrDefault("RedlineType", uno::Any());
+        if(!sRedlineTypeValue.has<OUString>())
+            throw beans::UnknownPropertyException("No redline type property: ", static_cast<cppu::OWeakObject*>(this));
         // Create a 'Table Cell Redline' object
-        SwUnoCursorHelper::makeTableCellRedline(*pBox, sRedlineTypeValue.get<OUString(), tableCellProperties);
+        SwUnoCursorHelper::makeTableCellRedline(*pBox, sRedlineTypeValue.get<OUString>(), tableCellProperties);
     }
     else
     {
-        const SfxItemPropertySimpleEntry* pEntry =
-            m_pPropSet->getPropertyMap().getByName(rPropertyName);
+        auto pEntry(m_pPropSet->getPropertyMap().getByName(rPropertyName));
         if(!pEntry)
         {
             beans::UnknownPropertyException aEx;
@@ -1110,56 +1109,50 @@ uno::Any SwXCell::getPropertyValue(const OUString& rPropertyName)
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    uno::Any aRet;
-    if(IsValid())
+    if(!IsValid())
+        return uno::Any();
+    auto pEntry(m_pPropSet->getPropertyMap().getByName(rPropertyName));
+    if(!pEntry)
     {
-        const SfxItemPropertySimpleEntry* pEntry =
-                                    m_pPropSet->getPropertyMap().getByName(rPropertyName);
-        if( !pEntry )
+        beans::UnknownPropertyException aEx;
+        aEx.Message = rPropertyName;
+        throw(aEx);
+    }
+    switch(pEntry->nWID)
+    {
+        case FN_UNO_CELL_ROW_SPAN:
+            return uno::makeAny(pBox->getRowSpan());
+        break;
+        case FN_UNO_TEXT_SECTION:
         {
-            beans::UnknownPropertyException aEx;
-            aEx.Message = rPropertyName;
-            throw( aEx );
+            SwFrmFmt* pTblFmt = GetFrmFmt();
+            SwTable* pTable = SwTable::FindTable(pTblFmt);
+            SwTableNode* pTblNode = pTable->GetTableNode();
+            SwSectionNode* pSectionNode = pTblNode->FindSectionNode();
+            if(!pSectionNode)
+                return uno::Any();
+            SwSection& rSect = pSectionNode->GetSection();
+            return uno::makeAny(SwXTextSections::GetObject(*rSect.GetFmt()));
         }
-        switch( pEntry->nWID )
+        break;
+        case FN_UNO_CELL_NAME:
+            return uno::makeAny(pBox->GetName());
+        break;
+        case FN_UNO_REDLINE_NODE_START:
+        case FN_UNO_REDLINE_NODE_END:
         {
-            case FN_UNO_CELL_ROW_SPAN:
-                aRet <<= pBox->getRowSpan();
-            break;
-            case FN_UNO_TEXT_SECTION:
-            {
-                SwFrmFmt* pTblFmt = GetFrmFmt();
-                SwTable* pTable = SwTable::FindTable( pTblFmt );
-                SwTableNode* pTblNode = pTable->GetTableNode();
-                SwSectionNode* pSectionNode =  pTblNode->FindSectionNode();
-                if(pSectionNode)
-                {
-                    SwSection& rSect = pSectionNode->GetSection();
-                    uno::Reference< text::XTextSection >  xSect =
-                                    SwXTextSections::GetObject( *rSect.GetFmt() );
-                    aRet <<= xSect;
-                }
-            }
-            break;
-            case FN_UNO_CELL_NAME:
-                aRet <<= pBox->GetName();
-            break;
-            case FN_UNO_REDLINE_NODE_START:
-            case FN_UNO_REDLINE_NODE_END:
-            {
-                //redline can only be returned if it's a living object
-                aRet = SwXText::getPropertyValue(rPropertyName);
-            }
-            break;
-            default:
-            {
-                const SwFrmFmt* pBoxFmt = pBox->GetFrmFmt();
-                const SwAttrSet& rSet = pBoxFmt->GetAttrSet();
-                m_pPropSet->getPropertyValue(rPropertyName, rSet, aRet);
-            }
+            //redline can only be returned if it's a living object
+            return makeAny(SwXText::getPropertyValue(rPropertyName));
+        }
+        break;
+        default:
+        {
+            const SwAttrSet& rSet = pBox->GetFrmFmt()->GetAttrSet();
+            uno::Any aResult;
+            m_pPropSet->getPropertyValue(rPropertyName, rSet, aResult);
+            return aResult;
         }
     }
-    return aRet;
 }
 
 void SwXCell::addPropertyChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XPropertyChangeListener > & /*xListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
