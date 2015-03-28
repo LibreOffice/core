@@ -1834,29 +1834,23 @@ public:
     SwTableProperties_Impl();
     ~SwTableProperties_Impl();
 
-    void        SetProperty(sal_uInt16 nWhichId, sal_uInt16 nMemberId, const uno::Any& aVal);
-    bool    GetProperty(sal_uInt16 nWhichId, sal_uInt16 nMemberId, const uno::Any*& rpAny);
+    void SetProperty(sal_uInt16 nWhichId, sal_uInt16 nMemberId, const uno::Any& aVal);
+    bool GetProperty(sal_uInt16 nWhichId, sal_uInt16 nMemberId, const uno::Any*& rpAny);
 
-    void        ApplyTblAttr(const SwTable& rTbl, SwDoc& rDoc);
+    void ApplyTblAttr(const SwTable& rTbl, SwDoc& rDoc);
 };
 
 SwTableProperties_Impl::SwTableProperties_Impl()
-{
-}
+    { }
 
 SwTableProperties_Impl::~SwTableProperties_Impl()
-{
-}
+    { }
 
 void SwTableProperties_Impl::SetProperty(sal_uInt16 nWhichId, sal_uInt16 nMemberId, const uno::Any& rVal)
-{
-    aAnyMap.SetValue( nWhichId, nMemberId, rVal );
-}
+    { aAnyMap.SetValue( nWhichId, nMemberId, rVal ); }
 
 bool SwTableProperties_Impl::GetProperty(sal_uInt16 nWhichId, sal_uInt16 nMemberId, const uno::Any*& rpAny )
-{
-    return aAnyMap.FillValue( nWhichId, nMemberId, rpAny );
-}
+    { return aAnyMap.FillValue( nWhichId, nMemberId, rpAny ); }
 
 void SwTableProperties_Impl::ApplyTblAttr(const SwTable& rTbl, SwDoc& rDoc)
 {
