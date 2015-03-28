@@ -2291,39 +2291,35 @@ uno::Reference<table::XCell>  SwXTextTable::getCellByPosition(sal_Int32 nColumn,
     throw lang::IndexOutOfBoundsException();
 }
 
-uno::Reference< table::XCellRange >  SwXTextTable::GetRangeByName(SwFrmFmt* pFmt, SwTable* pTable,
-                    const OUString& rTLName, const OUString& rBRName,
-                    SwRangeDescriptor& rDesc)
+uno::Reference<table::XCellRange>  SwXTextTable::GetRangeByName(SwFrmFmt* pFmt, SwTable* pTable,
+        const OUString& rTLName, const OUString& rBRName,
+        SwRangeDescriptor& rDesc)
 {
     SolarMutexGuard aGuard;
-    uno::Reference< table::XCellRange >  aRef;
-    const SwTableBox* pTLBox = pTable->GetTblBox( rTLName );
-    if(pTLBox)
+    const SwTableBox* pTLBox = pTable->GetTblBox(rTLName);
+    if(!pTLBox)
+        return nullptr;
+    // invalidate all actions
+    UnoActionRemoveContext aRemoveContext(pFmt->GetDoc());
+    const SwStartNode* pSttNd = pTLBox->GetSttNd();
+    SwPosition aPos(*pSttNd);
+    // set cursor to the upper-left cell of the range
+    SwUnoCrsr* pUnoCrsr = pFmt->GetDoc()->CreateUnoCrsr(aPos, true);
+    pUnoCrsr->Move(fnMoveForward, fnGoNode);
+    pUnoCrsr->SetRemainInSection(false);
+    const SwTableBox* pBRBox(pTable->GetTblBox(rBRName));
+    if(!pBRBox)
     {
-        // invalidate all actions
-        UnoActionRemoveContext aRemoveContext(pFmt->GetDoc());
-        const SwStartNode* pSttNd = pTLBox->GetSttNd();
-        SwPosition aPos(*pSttNd);
-        // set cursor to the upper-left cell of the range
-        SwUnoCrsr* pUnoCrsr = pFmt->GetDoc()->CreateUnoCrsr(aPos, true);
-        pUnoCrsr->Move( fnMoveForward, fnGoNode );
-        pUnoCrsr->SetRemainInSection( false );
-        const SwTableBox* pBRBox = pTable->GetTblBox( rBRName );
-        if(pBRBox)
-        {
-            pUnoCrsr->SetMark();
-            pUnoCrsr->GetPoint()->nNode = *pBRBox->GetSttNd();
-            pUnoCrsr->Move( fnMoveForward, fnGoNode );
-            SwUnoTableCrsr* pCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
-            pCrsr->MakeBoxSels();
-            // pUnoCrsr will be provided and will not be deleted
-            SwXCellRange* pCellRange = new SwXCellRange(pUnoCrsr, *pFmt, rDesc);
-            aRef = pCellRange;
-        }
-        else
-            delete pUnoCrsr;
+        delete pUnoCrsr;
+        return nullptr;
     }
-    return aRef;
+    pUnoCrsr->SetMark();
+    pUnoCrsr->GetPoint()->nNode = *pBRBox->GetSttNd();
+    pUnoCrsr->Move( fnMoveForward, fnGoNode );
+    SwUnoTableCrsr* pCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
+    pCrsr->MakeBoxSels();
+    // pUnoCrsr will be provided and will not be deleted
+    return new SwXCellRange(pUnoCrsr, *pFmt, rDesc);
 }
 
 uno::Reference< table::XCellRange >  SwXTextTable::getCellRangeByPosition(sal_Int32 nLeft, sal_Int32 nTop,
