@@ -2065,26 +2065,19 @@ SwXTextTable::SwXTextTable(SwFrmFmt& rFrmFmt)
 SwXTextTable::~SwXTextTable()
     { delete pTableProps; }
 
-uno::Reference<text::XTextTable>
-SwXTextTable::CreateXTextTable(SwFrmFmt *const pFrmFmt)
+uno::Reference<text::XTextTable> SwXTextTable::CreateXTextTable(SwFrmFmt* const pFrmFmt)
 {
     uno::Reference<text::XTextTable> xTable;
-    if (pFrmFmt)
-    {
+    if(pFrmFmt)
         xTable.set(pFrmFmt->GetXObject(), uno::UNO_QUERY); // cached?
-    }
-    if (!xTable.is())
-    {
-        SwXTextTable *const pNew(
-            (pFrmFmt) ? new SwXTextTable(*pFrmFmt) : new SwXTextTable());
-        xTable.set(pNew);
-        if (pFrmFmt)
-        {
-            pFrmFmt->SetXObject(xTable);
-        }
-        // need a permanent Reference to initialize m_wThis
-        pNew->m_pImpl->m_wThis = xTable;
-    }
+    if(xTable.is())
+        return xTable;
+    SwXTextTable* const pNew( (pFrmFmt) ? new SwXTextTable(*pFrmFmt) : new SwXTextTable());
+    xTable.set(pNew);
+    if(pFrmFmt)
+        pFrmFmt->SetXObject(xTable);
+    // need a permanent Reference to initialize m_wThis
+    pNew->m_pImpl->m_wThis = xTable;
     return xTable;
 }
 
@@ -2092,11 +2085,8 @@ void SwXTextTable::initialize(sal_Int32 nR, sal_Int32 nC) throw( uno::RuntimeExc
 {
     if(!bIsDescriptor || nR <= 0 || nC <= 0 || nR >= USHRT_MAX || nC >= USHRT_MAX )
         throw uno::RuntimeException();
-    else
-    {
-        nRows = (sal_uInt16)nR;
-        nColumns = (sal_uInt16)nC;
-    }
+    nRows = static_cast<sal_uInt16>(nR);
+    nColumns = static_cast<sal_uInt16>(nC);
 }
 
 uno::Reference< table::XTableRows >  SwXTextTable::getRows(void) throw( uno::RuntimeException, std::exception )
