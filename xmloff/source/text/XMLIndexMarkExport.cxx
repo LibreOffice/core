@@ -92,7 +92,7 @@ void XMLIndexMarkExport::ExportIndexMark(
 
         // collapsed/alternative text entry?
         aAny = rPropSet->getPropertyValue(sIsCollapsed);
-        if (*(sal_Bool *)aAny.getValue())
+        if (*static_cast<sal_Bool const *>(aAny.getValue()))
         {
             // collapsed entry: needs alternative text
             nElementNo = 0;
@@ -108,7 +108,7 @@ void XMLIndexMarkExport::ExportIndexMark(
         {
             // start and end entries: has ID
             aAny = rPropSet->getPropertyValue(sIsStart);
-            nElementNo = *(sal_Bool *)aAny.getValue() ? 1 : 2;
+            nElementNo = *static_cast<sal_Bool const *>(aAny.getValue()) ? 1 : 2;
 
             // generate ID
             OUStringBuffer sBuf;

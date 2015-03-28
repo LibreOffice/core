@@ -1191,7 +1191,7 @@ void SvxXMLListStyleContext::CreateAndInsertLate( bool bOverwrite )
         if( !bNew && xPropSetInfo->hasPropertyByName( sIsPhysical ) )
         {
             Any aAny = xPropSet->getPropertyValue( sIsPhysical );
-            bNew = !*(sal_Bool *)aAny.getValue();
+            bNew = !*static_cast<sal_Bool const *>(aAny.getValue());
         }
 
         if ( xPropSetInfo->hasPropertyByName( "Hidden" ) )

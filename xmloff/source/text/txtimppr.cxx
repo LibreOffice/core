@@ -656,7 +656,7 @@ void XMLTextImportPropertyMapper::finished(
     // #i5775# don't overwrite %transparency with binary transparency
     if( ( pBackTransparency != NULL ) && ( pBackTransparent != NULL ) )
     {
-        if( ! *(sal_Bool*)(pBackTransparent->maValue.getValue()) )
+        if( ! *static_cast<sal_Bool const *>(pBackTransparent->maValue.getValue()) )
             pBackTransparent->mnIndex = -1;
     }
 

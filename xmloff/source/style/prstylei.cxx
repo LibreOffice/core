@@ -367,7 +367,7 @@ void XMLPropStyleContext::CreateAndInsert( bool bOverwrite )
         if( !bNew && xPropSetInfo->hasPropertyByName( msIsPhysical ) )
         {
             Any aAny = xPropSet->getPropertyValue( msIsPhysical );
-            bNew = !*(sal_Bool *)aAny.getValue();
+            bNew = !*static_cast<sal_Bool const *>(aAny.getValue());
         }
         SetNew( bNew );
         if( rName != GetName() )

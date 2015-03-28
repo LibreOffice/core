@@ -680,7 +680,7 @@ void SvxXMLNumRuleExport::exportNumberingRule(
         xPropSetInfo->hasPropertyByName( sIsContinuousNumbering ) )
     {
         Any aAny( xPropSet->getPropertyValue( sIsContinuousNumbering ) );
-        bContNumbering = *(sal_Bool *)aAny.getValue();
+        bContNumbering = *static_cast<sal_Bool const *>(aAny.getValue());
     }
     if( bContNumbering )
         GetExport().AddAttribute( XML_NAMESPACE_TEXT,
@@ -708,7 +708,7 @@ bool SvxXMLNumRuleExport::exportStyle( const Reference< XStyle >& rStyle )
     if( xPropSetInfo->hasPropertyByName( sIsPhysical ) )
     {
         aAny = xPropSet->getPropertyValue( sIsPhysical );
-        if( !*(sal_Bool *)aAny.getValue() )
+        if( !*static_cast<sal_Bool const *>(aAny.getValue()) )
             return false;
     }
 

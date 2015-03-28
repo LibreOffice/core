@@ -213,8 +213,8 @@ void XMLRedlineExport::ExportChangesListElements()
         Reference<XPropertySet> aDocPropertySet( rExport.GetModel(),
                                                  uno::UNO_QUERY );
         // redlining enabled?
-        bool bEnabled = *(sal_Bool*)aDocPropertySet->getPropertyValue(
-                                                sRecordChanges ).getValue();
+        bool bEnabled = *static_cast<sal_Bool const *>(aDocPropertySet->getPropertyValue(
+                                                sRecordChanges ).getValue());
 
         // only export if we have redlines or attributes
         if ( aEnumAccess->hasElements() || bEnabled )
@@ -248,7 +248,7 @@ void XMLRedlineExport::ExportChangesListElements()
                     // export only if not in header or footer
                     // (those must be exported with their XText)
                     aAny = xPropSet->getPropertyValue(sIsInHeaderFooter);
-                    if (! *(sal_Bool*)aAny.getValue())
+                    if (! *static_cast<sal_Bool const *>(aAny.getValue()))
                     {
                         // and finally, export change
                         ExportChangedRegion(xPropSet);
@@ -272,8 +272,8 @@ void XMLRedlineExport::ExportChangeAutoStyle(
         Any aIsStart = rPropSet->getPropertyValue(sIsStart);
         Any aIsCollapsed = rPropSet->getPropertyValue(sIsCollapsed);
 
-        if ( *(sal_Bool*)aIsStart.getValue() ||
-             *(sal_Bool*)aIsCollapsed.getValue() )
+        if ( *static_cast<sal_Bool const *>(aIsStart.getValue()) ||
+             *static_cast<sal_Bool const *>(aIsCollapsed.getValue()) )
             pCurrentChangesList->push_back(rPropSet);
     }
 
@@ -315,7 +315,7 @@ void XMLRedlineExport::ExportChangesListAutoStyles()
                     // export only if not in header or footer
                     // (those must be exported with their XText)
                     aAny = xPropSet->getPropertyValue(sIsInHeaderFooter);
-                    if (! *(sal_Bool*)aAny.getValue())
+                    if (! *static_cast<sal_Bool const *>(aAny.getValue()))
                     {
                         ExportChangeAutoStyle(xPropSet);
                     }
@@ -331,7 +331,7 @@ void XMLRedlineExport::ExportChangeInline(
     // determine element name (depending on collapsed, start/end)
     enum XMLTokenEnum eElement = XML_TOKEN_INVALID;
     Any aAny = rPropSet->getPropertyValue(sIsCollapsed);
-    bool bCollapsed = *(sal_Bool *)aAny.getValue();
+    bool bCollapsed = *static_cast<sal_Bool const *>(aAny.getValue());
     if (bCollapsed)
     {
         eElement = XML_CHANGE;
@@ -339,7 +339,7 @@ void XMLRedlineExport::ExportChangeInline(
     else
     {
         aAny = rPropSet->getPropertyValue(sIsStart);
-        const bool bStart = *(sal_Bool *)aAny.getValue();
+        const bool bStart = *static_cast<sal_Bool const *>(aAny.getValue());
         eElement = bStart ? XML_CHANGE_START : XML_CHANGE_END;
     }
 
@@ -364,7 +364,7 @@ void XMLRedlineExport::ExportChangedRegion(
 
     // merge-last-paragraph
     Any aAny = rPropSet->getPropertyValue(sMergeLastPara);
-    if( ! *(sal_Bool*)aAny.getValue() )
+    if( ! *static_cast<sal_Bool const *>(aAny.getValue()) )
         rExport.AddAttribute(XML_NAMESPACE_TEXT, XML_MERGE_LAST_PARAGRAPH,
                              XML_FALSE);
 
@@ -581,11 +581,11 @@ void XMLRedlineExport::ExportStartOrEndRedline(
         }
         else if (sIsCollapsed.equals(pValues[i].Name))
         {
-            bIsCollapsed = *(sal_Bool*)pValues[i].Value.getValue();
+            bIsCollapsed = *static_cast<sal_Bool const *>(pValues[i].Value.getValue());
         }
         else if (sIsStart.equals(pValues[i].Name))
         {
-            bIsStart = *(sal_Bool*)pValues[i].Value.getValue();
+            bIsStart = *static_cast<sal_Bool const *>(pValues[i].Value.getValue());
         }
     }
 

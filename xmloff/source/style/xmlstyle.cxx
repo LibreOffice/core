@@ -701,7 +701,7 @@ Reference < XAutoStyleFamily > SvXMLStylesContext::GetAutoStyles( sal_uInt16 nFa
             if (xAutoStyleFamilies->hasByName(sName))
             {
                 Any aAny = xAutoStyleFamilies->getByName( sName );
-                xAutoStyles = *(Reference<XAutoStyleFamily>*)aAny.getValue();
+                xAutoStyles = *static_cast<Reference<XAutoStyleFamily> const *>(aAny.getValue());
                 if( bPara )
                     const_cast<SvXMLStylesContext *>(this)->mxParaAutoStyles = xAutoStyles;
                 else

@@ -351,7 +351,7 @@ bool XMLOpaquePropHdl_Impl::exportXML(
         const Any& rValue,
         const SvXMLUnitConverter& ) const
 {
-    if( *(sal_Bool *)rValue.getValue() )
+    if( *static_cast<sal_Bool const *>(rValue.getValue()) )
            rStrExpValue = GetXMLToken( XML_FOREGROUND );
     else
            rStrExpValue = GetXMLToken( XML_BACKGROUND );
@@ -401,7 +401,7 @@ bool XMLContourModePropHdl_Impl::exportXML(
         const Any& rValue,
         const SvXMLUnitConverter& ) const
 {
-    if( *(sal_Bool *)rValue.getValue() )
+    if( *static_cast<sal_Bool const *>(rValue.getValue()) )
            rStrExpValue = GetXMLToken( XML_OUTSIDE );
     else
            rStrExpValue = GetXMLToken( XML_FULL );
@@ -454,7 +454,7 @@ bool XMLParagraphOnlyPropHdl_Impl::exportXML(
         const Any& rValue,
         const SvXMLUnitConverter& ) const
 {
-    if( *(sal_Bool *)rValue.getValue() )
+    if( *static_cast<sal_Bool const *>(rValue.getValue()) )
            rStrExpValue = GetXMLToken( XML_1 );
     else
            rStrExpValue = GetXMLToken( XML_NO_LIMIT );
@@ -580,7 +580,7 @@ bool XMLFrameProtectPropHdl_Impl::exportXML(
         const Any& rValue,
         const SvXMLUnitConverter& ) const
 {
-    if( *(sal_Bool *)rValue.getValue() )
+    if( *static_cast<sal_Bool const *>(rValue.getValue()) )
     {
         if( rStrExpValue.isEmpty() ||
             IsXMLToken( rStrExpValue, XML_NONE ) )
@@ -823,7 +823,7 @@ bool XMLGrfMirrorPropHdl_Impl::exportXML(
         const Any& rValue,
         const SvXMLUnitConverter& ) const
 {
-    if( *(sal_Bool *)rValue.getValue() )
+    if( *static_cast<sal_Bool const *>(rValue.getValue()) )
     {
         if( rStrExpValue.isEmpty() ||
             IsXMLToken( rStrExpValue, XML_NONE ) )
@@ -1099,7 +1099,7 @@ bool XMLTextSyncWidthHeightPropHdl_Impl::exportXML(
         const SvXMLUnitConverter& ) const
 {
     bool bRet = false;
-    if( *(sal_Bool *)rValue.getValue() )
+    if( *static_cast<sal_Bool const *>(rValue.getValue()) )
     {
         rStrExpValue = sValue;
         bRet = true;

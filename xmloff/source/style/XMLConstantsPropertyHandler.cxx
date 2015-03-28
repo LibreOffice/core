@@ -67,7 +67,7 @@ bool XMLConstantsPropertyHandler::exportXML(
 
     if( rValue.hasValue() && (rValue.getValueTypeClass() == TypeClass_ENUM))
     {
-        nEnum = *((sal_Int32*)rValue.getValue());
+        nEnum = *static_cast<sal_Int32 const *>(rValue.getValue());
         bRet = true;
     }
     else

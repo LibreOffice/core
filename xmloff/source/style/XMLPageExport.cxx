@@ -92,7 +92,7 @@ bool XMLPageExport::exportStyle(
     if( xPropSetInfo->hasPropertyByName( sIsPhysical ) )
     {
         Any aAny = xPropSet->getPropertyValue( sIsPhysical );
-        if( !*(sal_Bool *)aAny.getValue() )
+        if( !*static_cast<sal_Bool const *>(aAny.getValue()) )
             return false;
     }
 

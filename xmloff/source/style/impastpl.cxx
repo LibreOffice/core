@@ -86,7 +86,7 @@ struct2string(void *data,
             result.append(":");
         result.append(compoundType->ppMemberNames[i]);
         result.append("=");
-        result.append(data2string(((char *)data)+compoundType->pMemberOffsets[i],
+        result.append(data2string(static_cast<char *>(data)+compoundType->pMemberOffsets[i],
                                   compoundType->ppTypeRefs[i]));
     }
 

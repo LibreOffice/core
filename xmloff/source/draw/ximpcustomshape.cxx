@@ -1290,27 +1290,27 @@ void XMLEnhancedCustomShapeContext::EndElement()
                 case EAS_Coordinates :
                 case EAS_GluePoints :
                 {
-                    uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeParameterPair >& rSeq =
-                        *((uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeParameterPair >*)
+                    uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeParameterPair > const & rSeq =
+                        *static_cast<uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeParameterPair > const *>(
                             aPathIter->Value.getValue());
                     for ( i = 0; i < rSeq.getLength(); i++ )
                     {
-                        CheckAndResolveEquationParameter( rSeq[ i ].First, pH );
-                        CheckAndResolveEquationParameter( rSeq[ i ].Second, pH );
+                        CheckAndResolveEquationParameter( const_cast<css::drawing::EnhancedCustomShapeParameter &>(rSeq[ i ].First), pH );
+                        CheckAndResolveEquationParameter( const_cast<css::drawing::EnhancedCustomShapeParameter &>(rSeq[ i ].Second), pH );
                     }
                 }
                 break;
                 case EAS_TextFrames :
                 {
-                    uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeTextFrame >& rSeq =
-                        *((uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeTextFrame >*)
+                    uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeTextFrame > const & rSeq =
+                        *static_cast<uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeTextFrame > const *>(
                             aPathIter->Value.getValue());
                     for ( i = 0; i < rSeq.getLength(); i++ )
                     {
-                        CheckAndResolveEquationParameter( rSeq[ i ].TopLeft.First, pH );
-                        CheckAndResolveEquationParameter( rSeq[ i ].TopLeft.Second, pH );
-                        CheckAndResolveEquationParameter( rSeq[ i ].BottomRight.First, pH );
-                        CheckAndResolveEquationParameter( rSeq[ i ].BottomRight.Second, pH );
+                        CheckAndResolveEquationParameter( const_cast<css::drawing::EnhancedCustomShapeParameter &>(rSeq[ i ].TopLeft.First), pH );
+                        CheckAndResolveEquationParameter( const_cast<css::drawing::EnhancedCustomShapeParameter &>(rSeq[ i ].TopLeft.Second), pH );
+                        CheckAndResolveEquationParameter( const_cast<css::drawing::EnhancedCustomShapeParameter &>(rSeq[ i ].BottomRight.First), pH );
+                        CheckAndResolveEquationParameter( const_cast<css::drawing::EnhancedCustomShapeParameter &>(rSeq[ i ].BottomRight.Second), pH );
                     }
                 }
                 break;
@@ -1335,18 +1335,18 @@ void XMLEnhancedCustomShapeContext::EndElement()
                     case EAS_RadiusRangeMinimum :
                     case EAS_RadiusRangeMaximum :
                     {
-                        CheckAndResolveEquationParameter( *((com::sun::star::drawing::EnhancedCustomShapeParameter*)
-                            pValues->Value.getValue()), pH );
+                        CheckAndResolveEquationParameter( *const_cast<css::drawing::EnhancedCustomShapeParameter *>(static_cast<com::sun::star::drawing::EnhancedCustomShapeParameter const *>(
+                            pValues->Value.getValue())), pH );
                     }
                     break;
 
                     case EAS_Position :
                     case EAS_Polar :
                     {
-                        CheckAndResolveEquationParameter( (*((com::sun::star::drawing::EnhancedCustomShapeParameterPair*)
-                            pValues->Value.getValue())).First, pH );
-                        CheckAndResolveEquationParameter( (*((com::sun::star::drawing::EnhancedCustomShapeParameterPair*)
-                            pValues->Value.getValue())).Second, pH );
+                        CheckAndResolveEquationParameter( const_cast<css::drawing::EnhancedCustomShapeParameter &>((*static_cast<com::sun::star::drawing::EnhancedCustomShapeParameterPair const *>(
+                            pValues->Value.getValue())).First), pH );
+                        CheckAndResolveEquationParameter( const_cast<css::drawing::EnhancedCustomShapeParameter &>((*static_cast<com::sun::star::drawing::EnhancedCustomShapeParameterPair const *>(
+                            pValues->Value.getValue())).Second), pH );
                     }
                     break;
                     default:

@@ -140,7 +140,7 @@ void XMLTextExportPropertySetMapper::handleSpecialItem(
     {
     case CTF_DROPCAPWHOLEWORD:
         DBG_ASSERT( !bDropWholeWord, "drop whole word is set already!" );
-        pThis->bDropWholeWord = *(sal_Bool *)rProperty.maValue.getValue();
+        pThis->bDropWholeWord = *static_cast<sal_Bool const *>(rProperty.maValue.getValue());
         break;
     case CTF_DROPCAPCHARSTYLE:
         DBG_ASSERT( sDropCharStyle.isEmpty(), "drop char style is set already!" );
@@ -994,7 +994,7 @@ void XMLTextExportPropertySetMapper::ContextFilter(
         }
         if( pWrapContourModeState  &&
             (!pWrapContourState ||
-             !*(sal_Bool *)pWrapContourState ->maValue.getValue() ) )
+             !*static_cast<sal_Bool const *>(pWrapContourState ->maValue.getValue()) ) )
             pWrapContourModeState->mnIndex = -1;
     }
 
@@ -1012,7 +1012,7 @@ void XMLTextExportPropertySetMapper::ContextFilter(
         if( pHoriOrientState && pHoriOrientMirroredState )
         {
             if( pHoriOrientMirrorState &&
-                *(sal_Bool *)pHoriOrientMirrorState->maValue.getValue() )
+                *static_cast<sal_Bool const *>(pHoriOrientMirrorState->maValue.getValue()) )
                 pHoriOrientState->mnIndex = -1;
             else
                 pHoriOrientMirroredState->mnIndex = -1;
@@ -1088,7 +1088,7 @@ void XMLTextExportPropertySetMapper::ContextFilter(
         if( pShapeHoriOrientState && pShapeHoriOrientMirroredState )
         {
             if( pShapeHoriOrientMirrorState &&
-                *(sal_Bool *)pShapeHoriOrientMirrorState->maValue.getValue() )
+                *static_cast<sal_Bool const *>(pShapeHoriOrientMirrorState->maValue.getValue()) )
                 pShapeHoriOrientState->mnIndex = -1;
             else
                 pShapeHoriOrientMirroredState->mnIndex = -1;

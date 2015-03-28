@@ -317,7 +317,7 @@ void XMLTextParagraphExport::exportTextFootnoteConfigurationHelper(
         aAny = rFootnoteConfig->getPropertyValue(
             sPositionEndOfDoc);
         GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_FOOTNOTES_POSITION,
-                                 ( (*(sal_Bool *)aAny.getValue()) ?
+                                 ( (*static_cast<sal_Bool const *>(aAny.getValue())) ?
                                         XML_DOCUMENT : XML_PAGE ) );
 
         aAny = rFootnoteConfig->getPropertyValue(sFootnoteCounting);

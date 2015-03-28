@@ -1986,11 +1986,11 @@ void XMLShapeExport::ImpExportLineShape(
 
         // get the two points
         uno::Any aAny(xPropSet->getPropertyValue("Geometry"));
-        drawing::PointSequenceSequence* pSourcePolyPolygon = (drawing::PointSequenceSequence*)aAny.getValue();
+        drawing::PointSequenceSequence const * pSourcePolyPolygon = static_cast<drawing::PointSequenceSequence const *>(aAny.getValue());
 
         if(pSourcePolyPolygon)
         {
-            drawing::PointSequence* pOuterSequence = pSourcePolyPolygon->getArray();
+            drawing::PointSequence* pOuterSequence = const_cast<css::drawing::PointSequenceSequence *>(pSourcePolyPolygon)->getArray();
             if(pOuterSequence)
             {
                 drawing::PointSequence* pInnerSequence = pOuterSequence++;
@@ -2164,7 +2164,7 @@ void XMLShapeExport::ImpExportPolygonShape(
             // get PolygonBezier
             uno::Any aAny( xPropSet->getPropertyValue("Geometry") );
             const basegfx::B2DPolyPolygon aPolyPolygon(
-                basegfx::tools::UnoPolyPolygonBezierCoordsToB2DPolyPolygon(*(drawing::PolyPolygonBezierCoords*)aAny.getValue()));
+                basegfx::tools::UnoPolyPolygonBezierCoordsToB2DPolyPolygon(*static_cast<drawing::PolyPolygonBezierCoords const *>(aAny.getValue())));
 
             if(aPolyPolygon.count())
             {
@@ -2185,7 +2185,7 @@ void XMLShapeExport::ImpExportPolygonShape(
             // get non-bezier polygon
             uno::Any aAny( xPropSet->getPropertyValue("Geometry") );
             const basegfx::B2DPolyPolygon aPolyPolygon(
-                basegfx::tools::UnoPointSequenceSequenceToB2DPolyPolygon(*(drawing::PointSequenceSequence*)aAny.getValue()));
+                basegfx::tools::UnoPointSequenceSequenceToB2DPolyPolygon(*static_cast<drawing::PointSequenceSequence const *>(aAny.getValue())));
 
             if(!aPolyPolygon.areControlPointsUsed() && 1 == aPolyPolygon.count())
             {
@@ -2579,7 +2579,7 @@ void XMLShapeExport::ImpExportConnectorShape(
     if( xProps->getPropertyValue("PolyPolygonBezier") >>= aAny )
     {
         // get PolygonBezier
-        drawing::PolyPolygonBezierCoords* pSourcePolyPolygon = (drawing::PolyPolygonBezierCoords*)aAny.getValue();
+        drawing::PolyPolygonBezierCoords const * pSourcePolyPolygon = static_cast<drawing::PolyPolygonBezierCoords const *>(aAny.getValue());
 
         if(pSourcePolyPolygon && pSourcePolyPolygon->Coordinates.getLength())
         {

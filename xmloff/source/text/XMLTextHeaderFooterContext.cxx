@@ -61,7 +61,7 @@ XMLTextHeaderFooterContext::XMLTextHeaderFooterContext( SvXMLImport& rImport, sa
         Any aAny;
 
         aAny = xPropSet->getPropertyValue( sOn );
-        bool bOn = *(sal_Bool *)aAny.getValue();
+        bool bOn = *static_cast<sal_Bool const *>(aAny.getValue());
 
         if( bOn )
         {
@@ -131,7 +131,7 @@ SvXMLImportContext *XMLTextHeaderFooterContext::CreateChildContext(
             else
             {
                 aAny = xPropSet->getPropertyValue( sOn );
-                sal_Bool bOn = *(sal_Bool *)aAny.getValue();
+                sal_Bool bOn = *static_cast<sal_Bool const *>(aAny.getValue());
 
                 if( !bOn )
                 {
@@ -147,7 +147,7 @@ SvXMLImportContext *XMLTextHeaderFooterContext::CreateChildContext(
 
                 // If a header or footer is not shared, share it now.
                 aAny = xPropSet->getPropertyValue( sShareContent );
-                sal_Bool bShared = *(sal_Bool *)aAny.getValue();
+                sal_Bool bShared = *static_cast<sal_Bool const *>(aAny.getValue());
                 if( !bShared )
                 {
                     bShared = sal_True;

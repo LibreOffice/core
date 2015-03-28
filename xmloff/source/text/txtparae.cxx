@@ -511,13 +511,13 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
                             xNumPropSet->getPropertySetInfo()
                                        ->hasPropertyByName( "IsAutomatic" ) )
                         {
-                            bAdd = *(sal_Bool *)xNumPropSet->getPropertyValue( "IsAutomatic" ).getValue();
+                            bAdd = *static_cast<sal_Bool const *>(xNumPropSet->getPropertyValue( "IsAutomatic" ).getValue());
                             // Check on outline style (#i73361#)
                             if ( bAdd &&
                                  xNumPropSet->getPropertySetInfo()
                                            ->hasPropertyByName( "NumberingIsOutline" ) )
                             {
-                                bAdd = !(*(sal_Bool *)xNumPropSet->getPropertyValue( "NumberingIsOutline" ).getValue());
+                                bAdd = !(*static_cast<sal_Bool const *>(xNumPropSet->getPropertyValue( "NumberingIsOutline" ).getValue()));
                             }
                         }
                         else
@@ -626,13 +626,13 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
                     xNumPropSet->getPropertySetInfo()
                                ->hasPropertyByName( "IsAutomatic" ) )
                 {
-                    bAdd = *(sal_Bool *)xNumPropSet->getPropertyValue( "IsAutomatic" ).getValue();
+                    bAdd = *static_cast<sal_Bool const *>(xNumPropSet->getPropertyValue( "IsAutomatic" ).getValue());
                     // Check on outline style (#i73361#)
                     if ( bAdd &&
                          xNumPropSet->getPropertySetInfo()
                                    ->hasPropertyByName( "NumberingIsOutline" ) )
                     {
-                        bAdd = !(*(sal_Bool *)xNumPropSet->getPropertyValue( "NumberingIsOutline" ).getValue());
+                        bAdd = !(*static_cast<sal_Bool const *>(xNumPropSet->getPropertyValue( "NumberingIsOutline" ).getValue()));
                     }
                 }
                 else
@@ -1475,13 +1475,13 @@ bool XMLTextParagraphExport::collectTextAutoStylesOptimized( bool bIsProgress )
             }
 
             Any aAny = xAutoStyleFamilies->getByName( sName );
-            Reference< XAutoStyleFamily > xAutoStyles = *(Reference<XAutoStyleFamily>*)aAny.getValue();
+            Reference< XAutoStyleFamily > xAutoStyles = *static_cast<Reference<XAutoStyleFamily> const *>(aAny.getValue());
             Reference < XEnumeration > xAutoStylesEnum( xAutoStyles->createEnumeration() );
 
             while ( xAutoStylesEnum->hasMoreElements() )
             {
                 aAny = xAutoStylesEnum->nextElement();
-                Reference< XAutoStyle > xAutoStyle = *(Reference<XAutoStyle>*)aAny.getValue();
+                Reference< XAutoStyle > xAutoStyle = *static_cast<Reference<XAutoStyle> const *>(aAny.getValue());
                 Reference < XPropertySet > xPSet( xAutoStyle, uno::UNO_QUERY );
                 Add( nFamily, xPSet, 0, true );
             }
@@ -1498,7 +1498,7 @@ bool XMLTextParagraphExport::collectTextAutoStylesOptimized( bool bIsProgress )
         while ( xTextFieldsEnum->hasMoreElements() )
         {
             Any aAny = xTextFieldsEnum->nextElement();
-            Reference< XTextField > xTextField = *(Reference<XTextField>*)aAny.getValue();
+            Reference< XTextField > xTextField = *static_cast<Reference<XTextField> const *>(aAny.getValue());
             exportTextField( xTextField, bAutoStyles, bIsProgress,
                 !xAutoStylesSupp.is() );
             try
@@ -1576,7 +1576,7 @@ bool XMLTextParagraphExport::collectTextAutoStylesOptimized( bool bIsProgress )
             for( sal_Int32 i = 0; i < nCount; ++i )
             {
                 Any aAny = xSections->getByIndex( i );
-                Reference< XTextSection > xSection = *(Reference<XTextSection>*)aAny.getValue();
+                Reference< XTextSection > xSection = *static_cast<Reference<XTextSection> const *>(aAny.getValue());
                 Reference < XPropertySet > xPSet( xSection, uno::UNO_QUERY );
                 Add( XML_STYLE_FAMILY_TEXT_SECTION, xPSet );
             }
@@ -1594,7 +1594,7 @@ bool XMLTextParagraphExport::collectTextAutoStylesOptimized( bool bIsProgress )
             for( sal_Int32 i = 0; i < nCount; ++i )
             {
                 Any aAny = xTables->getByIndex( i );
-                Reference< XTextTable > xTable = *(Reference<XTextTable>*)aAny.getValue();
+                Reference< XTextTable > xTable = *static_cast<Reference<XTextTable> const *>(aAny.getValue());
                 exportTable( xTable, true, true );
             }
         }
@@ -1624,13 +1624,13 @@ bool XMLTextParagraphExport::collectTextAutoStylesOptimized( bool bIsProgress )
                         xNumPropSet->getPropertySetInfo()
                                    ->hasPropertyByName( "IsAutomatic" ) )
                     {
-                        bAdd = *(sal_Bool *)xNumPropSet->getPropertyValue( "IsAutomatic" ).getValue();
+                        bAdd = *static_cast<sal_Bool const *>(xNumPropSet->getPropertyValue( "IsAutomatic" ).getValue());
                         // Check on outline style (#i73361#)
                         if ( bAdd &&
                              xNumPropSet->getPropertySetInfo()
                                        ->hasPropertyByName( "NumberingIsOutline" ) )
                         {
-                            bAdd = !(*(sal_Bool *)xNumPropSet->getPropertyValue( "NumberingIsOutline" ).getValue());
+                            bAdd = !(*static_cast<sal_Bool const *>(xNumPropSet->getPropertyValue( "NumberingIsOutline" ).getValue()));
                         }
                     }
                     else
@@ -2517,13 +2517,13 @@ void XMLTextParagraphExport::exportTextMark(
 
         // start, end, or point-reference?
         sal_Int8 nElement;
-        if( *(sal_Bool *)rPropSet->getPropertyValue(sIsCollapsed).getValue() )
+        if( *static_cast<sal_Bool const *>(rPropSet->getPropertyValue(sIsCollapsed).getValue()) )
         {
             nElement = 0;
         }
         else
         {
-            nElement = *(sal_Bool *)rPropSet->getPropertyValue(sIsStart).getValue() ? 1 : 2;
+            nElement = *static_cast<sal_Bool const *>(rPropSet->getPropertyValue(sIsStart).getValue()) ? 1 : 2;
         }
 
         // bookmark, bookmark-start: xml:id and RDFa for RDF metadata
@@ -2684,7 +2684,7 @@ XMLShapeExportFlags XMLTextParagraphExport::addTextFrameAttributes(
     bool bSyncWidth = false;
     if( xPropSetInfo->hasPropertyByName( sIsSyncWidthToHeight ) )
     {
-        bSyncWidth = *(sal_Bool *)rPropSet->getPropertyValue( sIsSyncWidthToHeight ).getValue();
+        bSyncWidth = *static_cast<sal_Bool const *>(rPropSet->getPropertyValue( sIsSyncWidthToHeight ).getValue());
         if( bSyncWidth )
             GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_REL_WIDTH,
                                       XML_SCALE );
@@ -2712,7 +2712,7 @@ XMLShapeExportFlags XMLTextParagraphExport::addTextFrameAttributes(
     bool bSyncHeight = false;
     if( xPropSetInfo->hasPropertyByName( sIsSyncHeightToWidth ) )
     {
-        bSyncHeight = *(sal_Bool *)rPropSet->getPropertyValue( sIsSyncHeightToWidth ).getValue();
+        bSyncHeight = *static_cast<sal_Bool const *>(rPropSet->getPropertyValue( sIsSyncHeightToWidth ).getValue());
     }
     sal_Int16 nRelHeight =  0;
     if( !bSyncHeight && xPropSetInfo->hasPropertyByName( sRelativeHeight ) )
@@ -2979,7 +2979,7 @@ void XMLTextParagraphExport::exportContour(
 
     if( rPropSetInfo->hasPropertyByName( sIsPixelContour ) )
     {
-        bPixel = *(sal_Bool *)rPropSet->getPropertyValue( sIsPixelContour ).getValue();
+        bPixel = *static_cast<sal_Bool const *>(rPropSet->getPropertyValue( sIsPixelContour ).getValue());
     }
 
     // svg: width
@@ -3041,8 +3041,8 @@ void XMLTextParagraphExport::exportContour(
 
     if( rPropSetInfo->hasPropertyByName( sIsAutomaticContour ) )
     {
-        bool bTmp = *(sal_Bool *)rPropSet->getPropertyValue(
-                                            sIsAutomaticContour ).getValue();
+        bool bTmp = *static_cast<sal_Bool const *>(rPropSet->getPropertyValue(
+                                            sIsAutomaticContour ).getValue());
         GetExport().AddAttribute( XML_NAMESPACE_DRAW,
                       XML_RECREATE_ON_EDIT, bTmp ? XML_TRUE : XML_FALSE );
     }
@@ -3263,7 +3263,7 @@ bool XMLTextParagraphExport::addHyperlinkAttributes(
          && ( !rPropState.is()
               || PropertyState_DIRECT_VALUE == rPropState->getPropertyState( sServerMap ) ) )
     {
-        bServerMap = *(sal_Bool *) rPropSet->getPropertyValue( sServerMap ).getValue();
+        bServerMap = *static_cast<sal_Bool const *>(rPropSet->getPropertyValue( sServerMap ).getValue());
         if ( bServerMap )
             bExport = true;
     }
@@ -3640,11 +3640,11 @@ void XMLTextParagraphExport::exportRuby(
     bool bAutoStyles )
 {
     // early out: a collapsed ruby makes no sense
-    if (*(sal_Bool*)rPropSet->getPropertyValue(sIsCollapsed).getValue())
+    if (*static_cast<sal_Bool const *>(rPropSet->getPropertyValue(sIsCollapsed).getValue()))
         return;
 
     // start value ?
-    bool bStart = (*(sal_Bool*)rPropSet->getPropertyValue(sIsStart).getValue());
+    bool bStart = *static_cast<sal_Bool const *>(rPropSet->getPropertyValue(sIsStart).getValue());
 
     if (bAutoStyles)
     {

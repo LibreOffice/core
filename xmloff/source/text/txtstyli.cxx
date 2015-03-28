@@ -499,7 +499,7 @@ void XMLTextStyleContext::FillPropertySet(
         if ( nIndex != -1 )
         {
             Any& rAny = GetProperties()[nIndex].maValue;
-            bool bVal = *(sal_Bool*)rAny.getValue();
+            bool bVal = *static_cast<sal_Bool const *>(rAny.getValue());
             bHasCombinedCharactersLetter = bVal;
         }
 

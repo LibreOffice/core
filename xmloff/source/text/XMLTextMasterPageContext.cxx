@@ -150,7 +150,7 @@ XMLTextMasterPageContext::XMLTextMasterPageContext( SvXMLImport& rImport,
     if( !bNew && xPropSetInfo->hasPropertyByName( sIsPhysical ) )
     {
         aAny = xPropSet->getPropertyValue( sIsPhysical );
-        bNew = !*(sal_Bool *)aAny.getValue();
+        bNew = !*static_cast<sal_Bool const *>(aAny.getValue());
     }
     SetNew( bNew );
 

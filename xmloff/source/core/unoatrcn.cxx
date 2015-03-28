@@ -165,7 +165,7 @@ void SAL_CALL SvUnoAttributeContainer::replaceByName(const OUString& aName, cons
         if( nAttr == USHRT_MAX )
             throw container::NoSuchElementException();
 
-        xml::AttributeData* pData = (xml::AttributeData*)aElement.getValue();
+        xml::AttributeData const * pData = static_cast<xml::AttributeData const *>(aElement.getValue());
 
         sal_Int32 nPos = aName.indexOf( ':' );
         if( nPos != -1L )
@@ -208,7 +208,7 @@ throw( lang::IllegalArgumentException, container::ElementExistException, lang::W
     if( nAttr != USHRT_MAX )
         throw container::ElementExistException();
 
-    xml::AttributeData* pData = (xml::AttributeData*)aElement.getValue();
+    xml::AttributeData const * pData = static_cast<xml::AttributeData const *>(aElement.getValue());
 
     sal_Int32 nPos = aName.indexOf( ':' );
     if( nPos != -1L )

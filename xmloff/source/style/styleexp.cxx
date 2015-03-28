@@ -96,7 +96,7 @@ bool XMLStyleExport::exportStyle(
     if( xPropSetInfo->hasPropertyByName( sIsPhysical ) )
     {
         aAny = xPropSet->getPropertyValue( sIsPhysical );
-        if( !*(sal_Bool *)aAny.getValue() )
+        if( !*static_cast<sal_Bool const *>(aAny.getValue()) )
             return false;
     }
 
@@ -164,7 +164,7 @@ bool XMLStyleExport::exportStyle(
     if( xPropSetInfo->hasPropertyByName( sIsAutoUpdate ) )
     {
         aAny = xPropSet->getPropertyValue( sIsAutoUpdate );
-        if( *(sal_Bool *)aAny.getValue() )
+        if( *static_cast<sal_Bool const *>(aAny.getValue()) )
             GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_AUTO_UPDATE,
                                       XML_TRUE );
     }
@@ -472,7 +472,7 @@ void XMLStyleExport::exportStyleFamily(
                 if( xPropSetInfo->hasPropertyByName( sIsPhysical ) )
                 {
                     Any aAny( xPropSet->getPropertyValue( sIsPhysical ) );
-                    if( !*(sal_Bool *)aAny.getValue() )
+                    if( !*static_cast<sal_Bool const *>(aAny.getValue()) )
                         continue;
                 }
 

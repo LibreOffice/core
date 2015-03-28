@@ -2988,7 +2988,7 @@ enum XMLTokenEnum XMLTextFieldExport::MapPageNumberName(
     enum XMLTokenEnum eName = XML_TOKEN_INVALID;
     PageNumberType ePage;
     Any aAny = xPropSet->getPropertyValue(sPropertySubType);
-    ePage = *(PageNumberType*)aAny.getValue();
+    ePage = *static_cast<PageNumberType const *>(aAny.getValue());
 
     switch (ePage)
     {
@@ -3531,7 +3531,7 @@ inline bool GetBoolProperty(
     const Reference<XPropertySet> & xPropSet)
 {
     Any aAny = xPropSet->getPropertyValue(sPropName);
-    bool bBool = *(sal_Bool *)aAny.getValue();
+    bool bBool = *static_cast<sal_Bool const *>(aAny.getValue());
     return bBool;
 }
 
