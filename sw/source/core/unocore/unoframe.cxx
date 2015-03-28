@@ -3497,10 +3497,10 @@ uno::Reference<container::XNameReplace> SAL_CALL
     return new SwFrameEventDescriptor( *this );
 }
 
-SwXTextEmbeddedObject::SwXTextEmbeddedObject( SwDoc *pDoc ) :
-    SwXFrame(FLYCNTTYPE_OLE, aSwMapProvider.GetPropertySet(PROPERTY_MAP_EMBEDDED_OBJECT), pDoc)
-{
-}
+SwXTextEmbeddedObject::SwXTextEmbeddedObject( SwDoc *pDoc )
+    : SwXFrame(FLYCNTTYPE_OLE, aSwMapProvider.GetPropertySet(PROPERTY_MAP_EMBEDDED_OBJECT), pDoc)
+    , m_xOLEListener(nullptr)
+{ }
 
 SwXTextEmbeddedObject::SwXTextEmbeddedObject(SwFrmFmt& rFmt) :
     SwXFrame(rFmt, FLYCNTTYPE_OLE, aSwMapProvider.GetPropertySet(PROPERTY_MAP_EMBEDDED_OBJECT))
@@ -3621,15 +3621,10 @@ uno::Reference< embed::XEmbeddedObject > SAL_CALL SwXTextEmbeddedObject::getExte
             uno::Reference < lang::XComponent > xComp( xResult->getComponent(), uno::UNO_QUERY );
             uno::Reference< util::XModifyBroadcaster >  xBrdcst( xComp, uno::UNO_QUERY);
             uno::Reference< frame::XModel > xModel( xComp, uno::UNO_QUERY);
-            if( xBrdcst.is() && xModel.is() )
+            if(xBrdcst.is() && xModel.is() && !m_xOLEListener.is())
             {
-                SwXOLEListener* pListener = SwIterator<SwXOLEListener,SwFmt>( *pFmt ).First();
-                //create a new one if the OLE object doesn't have one already
-                if( !pListener )
-                {
-                    uno::Reference< util::XModifyListener > xOLEListener = new SwXOLEListener(*pFmt, xModel);
-                    xBrdcst->addModifyListener( xOLEListener );
-                }
+                m_xOLEListener = new SwXOLEListener(*pFmt, xModel);
+                xBrdcst->addModifyListener( m_xOLEListener );
             }
         }
     }

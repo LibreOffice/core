@@ -302,6 +302,7 @@ typedef cppu::WeakImplHelper3
 class SwXTextEmbeddedObject : public SwXTextEmbeddedObjectBaseClass,
                                 public SwXFrame
 {
+    css::uno::Reference<css::util::XModifyListener> m_xOLEListener;
 protected:
     friend class SwXFrame; // just for CreateXFrame
 
