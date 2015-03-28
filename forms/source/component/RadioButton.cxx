@@ -155,7 +155,7 @@ void ORadioButtonModel::SetSiblingPropsTo(const OUString& rPropName, const Any& 
         sal_Int32 nNumSiblings = xIndexAccess->getCount();
         for (sal_Int32 i=0; i<nNumSiblings; ++i)
         {
-            Reference<XPropertySet> xSiblingProperties(*(InterfaceRef*)xIndexAccess->getByIndex(i).getValue(), UNO_QUERY);
+            Reference<XPropertySet> xSiblingProperties(*static_cast<InterfaceRef const *>(xIndexAccess->getByIndex(i).getValue()), UNO_QUERY);
             if (!xSiblingProperties.is())
                 continue;
             if (xMyProps == xSiblingProperties)
@@ -230,7 +230,7 @@ void ORadioButtonModel::setControlSource()
         query_interface(static_cast<XWeak*>(this), xMyProps);
         for (sal_Int32 i=0; i<xIndexAccess->getCount(); ++i)
         {
-            Reference<XPropertySet> xSiblingProperties(*(InterfaceRef*)xIndexAccess->getByIndex(i).getValue(), UNO_QUERY);
+            Reference<XPropertySet> xSiblingProperties(*static_cast<InterfaceRef const *>(xIndexAccess->getByIndex(i).getValue()), UNO_QUERY);
             if (!xSiblingProperties.is())
                 continue;
 

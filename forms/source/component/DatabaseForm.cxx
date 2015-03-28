@@ -573,7 +573,7 @@ Sequence<sal_Int8> ODatabaseForm::GetDataMultiPartEncoded(const Reference<XContr
     sal_Int32 nLen = aMemStream.Seek(STREAM_SEEK_TO_END);
 
     rContentType = aParent.GetContentType();
-    return Sequence<sal_Int8>((sal_Int8*)pData, nLen);
+    return Sequence<sal_Int8>(static_cast<sal_Int8*>(pData), nLen);
 }
 
 

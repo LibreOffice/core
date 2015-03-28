@@ -692,7 +692,7 @@ void OFormattedModel::write(const Reference<XObjectOutputStream>& _rxOutStream) 
             DBG_ASSERT(isA(aLocale, static_cast<Locale*>(NULL)), "OFormattedModel::write : invalid language property !");
             if (isA(aLocale, static_cast<Locale*>(NULL)))
             {
-                Locale* pLocale = (Locale*)aLocale.getValue();
+                Locale const * pLocale = static_cast<Locale const *>(aLocale.getValue());
                 eFormatLanguage = LanguageTag::convertToLanguageType( *pLocale, false);
             }
         }

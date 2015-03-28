@@ -1883,8 +1883,8 @@ namespace frm
                     bool bModified(false);
                     Any aValue = xSet->getPropertyValue(PROPERTY_SELECT_SEQ);
 
-                    Sequence<sal_Int16>& rSelection = *(Sequence<sal_Int16> *)aValue.getValue();
-                    Sequence<sal_Int16>& rOldSelection = *(Sequence<sal_Int16> *)m_aCurrentSelection.getValue();
+                    Sequence<sal_Int16> const & rSelection = *static_cast<Sequence<sal_Int16> const *>(aValue.getValue());
+                    Sequence<sal_Int16> const & rOldSelection = *static_cast<Sequence<sal_Int16> const *>(m_aCurrentSelection.getValue());
                     sal_Int32 nLen = rSelection.getLength();
                     if (nLen != rOldSelection.getLength())
                         bModified = true;

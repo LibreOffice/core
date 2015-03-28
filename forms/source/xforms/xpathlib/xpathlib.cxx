@@ -379,7 +379,7 @@ static bool parseDuration(const xmlChar* aString, bool& bNegative, sal_Int32& nY
 {
     bool bTime = false; // in part after T
     sal_Int32 nLength = strlen(reinterpret_cast<char const *>(aString))+1;
-    char *pString = (char*)rtl_allocateMemory(nLength);
+    char *pString = static_cast<char*>(rtl_allocateMemory(nLength));
     char *pString0 = pString;
     strncpy(pString, reinterpret_cast<char const *>(aString), nLength);
 
@@ -506,7 +506,7 @@ void xforms_instanceFuction(xmlXPathParserContextPtr ctxt, int nargs)
     if (xmlXPathCheckError(ctxt)) XP_ERROR(XPATH_INVALID_TYPE);
     OUString aString(reinterpret_cast<char*>(pString), strlen(reinterpret_cast<char*>(pString)), RTL_TEXTENCODING_UTF8);
 
-    Reference< XModel > aModel = ((CLibxml2XFormsExtension*)ctxt->context->funcLookupData)->getModel();
+    Reference< XModel > aModel = static_cast<CLibxml2XFormsExtension*>(ctxt->context->funcLookupData)->getModel();
     if (aModel.is())
     {
         Reference< XDocument > aInstance = aModel->getInstanceDocument(aString);
@@ -536,7 +536,7 @@ void xforms_currentFunction(xmlXPathParserContextPtr ctxt, int nargs)
 {
     if (nargs != 0) XP_ERROR(XPATH_INVALID_ARITY);
 
-    Reference< XNode > aNode = ((CLibxml2XFormsExtension*)ctxt->context->funcLookupData)->getContextNode();
+    Reference< XNode > aNode = static_cast<CLibxml2XFormsExtension*>(ctxt->context->funcLookupData)->getContextNode();
 
     if (aNode.is())
     {
