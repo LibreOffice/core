@@ -140,9 +140,9 @@ void SfxMiscCfg::Load()
             {
                 switch(nProp)
                 {
-                    case  0: bPaperSize        = *(sal_Bool*)pValues[nProp].getValue(); break;      //"Print/Warning/PaperSize",
-                    case  1: bPaperOrientation = *(sal_Bool*)pValues[nProp].getValue();  break;     //"Print/Warning/PaperOrientation",
-                    case  2: bNotFound         = *(sal_Bool*)pValues[nProp].getValue();  break;   //"Print/Warning/NotFound",
+                    case  0: bPaperSize        = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break;      //"Print/Warning/PaperSize",
+                    case  1: bPaperOrientation = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;     //"Print/Warning/PaperOrientation",
+                    case  2: bNotFound         = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;   //"Print/Warning/NotFound",
                     case  3: pValues[nProp] >>= nYear2000;break;                                    //"DateFormat/TwoDigitYear",
                 }
             }

@@ -1402,7 +1402,7 @@ ErrCode UcbLockBytes::WriteAt(sal_uInt64 const nPos, const void *pBuffer,
         return ERRCODE_IO_CANTSEEK;
     }
 
-    sal_Int8* pData = (sal_Int8*) pBuffer;
+    sal_Int8 const * pData = static_cast<sal_Int8 const *>(pBuffer);
     Sequence<sal_Int8> aData( pData, nCount );
     try
     {

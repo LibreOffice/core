@@ -124,9 +124,9 @@ void    SvtAppFilterOptions_Impl::Load()
     const Any* pValues = aValues.getConstArray();
 
     if(pValues[0].hasValue())
-        bLoadVBA = *(sal_Bool*)pValues[0].getValue();
+        bLoadVBA = *static_cast<sal_Bool const *>(pValues[0].getValue());
     if(pValues[1].hasValue())
-        bSaveVBA = *(sal_Bool*)pValues[1].getValue();
+        bSaveVBA = *static_cast<sal_Bool const *>(pValues[1].getValue());
 }
 
 class SvtWriterFilterOptions_Impl : public SvtAppFilterOptions_Impl
@@ -174,7 +174,7 @@ void SvtWriterFilterOptions_Impl::Load()
     Sequence<Any> aValues = GetProperties(aNames);
     const Any* pValues = aValues.getConstArray();
     if(pValues[0].hasValue())
-        bLoadExecutable = *(sal_Bool*)pValues[0].getValue();
+        bLoadExecutable = *static_cast<sal_Bool const *>(pValues[0].getValue());
 }
 
 class SvtCalcFilterOptions_Impl : public SvtAppFilterOptions_Impl
@@ -222,7 +222,7 @@ void SvtCalcFilterOptions_Impl::Load()
     Sequence<Any> aValues = GetProperties(aNames);
     const Any* pValues = aValues.getConstArray();
     if(pValues[0].hasValue())
-        bLoadExecutable = *(sal_Bool*)pValues[0].getValue();
+        bLoadExecutable = *static_cast<sal_Bool const *>(pValues[0].getValue());
 }
 
 struct SvtFilterOptions_Impl
@@ -410,7 +410,7 @@ void SvtFilterOptions::Load()
         {
             if(pValues[nProp].hasValue())
             {
-                bool bVal = *(sal_Bool*)pValues[nProp].getValue();
+                bool bVal = *static_cast<sal_Bool const *>(pValues[nProp].getValue());
                 sal_uLong nFlag = lcl_GetFlag(nProp);
                 pImp->SetFlag( nFlag, bVal);
             }

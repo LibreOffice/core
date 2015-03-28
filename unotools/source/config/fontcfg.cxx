@@ -879,7 +879,7 @@ void FontSubstConfiguration::fillSubstVector( const com::sun::star::uno::Referen
         Any aAny = rFont->getByName( rType );
         if( aAny.getValueTypeClass() == TypeClass_STRING )
         {
-            const OUString* pLine = (const OUString*)aAny.getValue();
+            const OUString* pLine = static_cast<const OUString*>(aAny.getValue());
             sal_Int32 nLength = pLine->getLength();
             if( nLength )
             {
@@ -928,7 +928,7 @@ FontWeight FontSubstConfiguration::getSubstWeight( const com::sun::star::uno::Re
         Any aAny = rFont->getByName( rType );
         if( aAny.getValueTypeClass() == TypeClass_STRING )
         {
-            const OUString* pLine = (const OUString*)aAny.getValue();
+            const OUString* pLine = static_cast<const OUString*>(aAny.getValue());
             if( !pLine->isEmpty() )
             {
                 for( weight=SAL_N_ELEMENTS(pWeightNames)-1; weight >= 0; weight-- )
@@ -960,7 +960,7 @@ FontWidth FontSubstConfiguration::getSubstWidth( const com::sun::star::uno::Refe
         Any aAny = rFont->getByName( rType );
         if( aAny.getValueTypeClass() == TypeClass_STRING )
         {
-            const OUString* pLine = (const OUString*)aAny.getValue();
+            const OUString* pLine = static_cast<const OUString*>(aAny.getValue());
             if( !pLine->isEmpty() )
             {
                 for( width=SAL_N_ELEMENTS(pWidthNames)-1; width >= 0; width-- )
@@ -992,7 +992,7 @@ unsigned long FontSubstConfiguration::getSubstType( const com::sun::star::uno::R
         Any aAny = rFont->getByName( rType );
         if( aAny.getValueTypeClass() == TypeClass_STRING )
         {
-            const OUString* pLine = (const OUString*)aAny.getValue();
+            const OUString* pLine = static_cast<const OUString*>(aAny.getValue());
             if( !pLine->isEmpty() )
             {
                 sal_Int32 nIndex = 0;

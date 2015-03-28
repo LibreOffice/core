@@ -1490,7 +1490,7 @@ sal_Unicode ConvertFontToSubsFontChar(
     FontToSubsFontConverter hConverter, sal_Unicode cChar )
 {
     if ( hConverter )
-        return ((ConvertChar*)hConverter)->RecodeChar( cChar );
+        return static_cast<ConvertChar*>(hConverter)->RecodeChar( cChar );
     else
         return cChar;
 }
@@ -1500,7 +1500,7 @@ OUString GetFontToSubsFontName( FontToSubsFontConverter hConverter )
     if ( !hConverter )
         return OUString();
 
-    const char* pName = ((ConvertChar*)hConverter)->mpSubsFontName;
+    const char* pName = static_cast<ConvertChar*>(hConverter)->mpSubsFontName;
     return OUString::createFromAscii( pName );
 }
 

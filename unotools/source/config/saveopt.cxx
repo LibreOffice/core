@@ -779,7 +779,7 @@ SvtLoadOptions_Impl::SvtLoadOptions_Impl()
     const Any* pValues = aValues.getConstArray();
     DBG_ASSERT( aValues.getLength() == aNames.getLength(), "GetProperties failed" );
     if (pValues[0].getValueTypeClass() == ::com::sun::star::uno::TypeClass_BOOLEAN)
-         bLoadUserDefinedSettings = *(sal_Bool *)pValues[0].getValue();
+         bLoadUserDefinedSettings = *static_cast<sal_Bool const *>(pValues[0].getValue());
 }
 
 SvtLoadOptions_Impl::~SvtLoadOptions_Impl()
