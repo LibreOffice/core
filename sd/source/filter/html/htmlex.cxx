@@ -2846,8 +2846,8 @@ OUString HtmlExport::StringToHTMLString( const OUString& rString )
     SvMemoryStream aMemStm;
     HTMLOutFuncs::Out_String( aMemStm, rString, RTL_TEXTENCODING_UTF8 );
     aMemStm.WriteChar( (char) 0 );
-    sal_Int32 nLength = strlen((char*)aMemStm.GetData());
-    return OUString( (char*)aMemStm.GetData(), nLength, RTL_TEXTENCODING_UTF8 );
+    sal_Int32 nLength = strlen(static_cast<char const *>(aMemStm.GetData()));
+    return OUString( static_cast<char const *>(aMemStm.GetData()), nLength, RTL_TEXTENCODING_UTF8 );
 }
 
 // creates a url for a specific page

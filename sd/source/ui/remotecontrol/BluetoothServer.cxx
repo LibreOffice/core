@@ -930,7 +930,7 @@ DBusHandlerResult ProfileMessageFunction
 
                     int nDescriptor;
                     dbus_message_iter_get_basic(&it, &nDescriptor);
-                    std::vector<Communicator*>* pCommunicators = (std::vector<Communicator*>*) user_data;
+                    std::vector<Communicator*>* pCommunicators = static_cast<std::vector<Communicator*>*>(user_data);
 
                     // Bluez gives us non-blocking sockets, but our code relies
                     // on blocking behaviour.

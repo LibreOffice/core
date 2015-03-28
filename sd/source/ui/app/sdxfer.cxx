@@ -584,7 +584,7 @@ bool SdTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pObject, So
             try
             {
                 static const bool bDontBurnInStyleSheet = ( getenv( "AVOID_BURN_IN_FOR_GALLERY_THEME" ) != NULL );
-                SdDrawDocument* pDoc = (SdDrawDocument*) pObject;
+                SdDrawDocument* pDoc = static_cast<SdDrawDocument*>(pObject);
                 if ( !bDontBurnInStyleSheet )
                     pDoc->BurnInStyleSheetAttributes();
                 rxOStm->SetBufferSize( 16348 );
@@ -611,7 +611,7 @@ bool SdTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pObject, So
 
         case( SDTRANSFER_OBJECTTYPE_DRAWOLE ):
         {
-            SfxObjectShell*   pEmbObj = (SfxObjectShell*) pObject;
+            SfxObjectShell*   pEmbObj = static_cast<SfxObjectShell*>(pObject);
             ::utl::TempFile     aTempFile;
             aTempFile.EnableKillingFile();
 

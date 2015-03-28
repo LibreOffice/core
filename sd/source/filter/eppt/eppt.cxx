@@ -193,7 +193,7 @@ void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_
         aAny >>= bVisible;
     if ( GetPropertyValue( aAny, mXPagePropSet, OUString( "Change" ) ) )
     {
-        switch ( *(sal_Int32*)aAny.getValue() )
+        switch ( *static_cast<sal_Int32 const *>(aAny.getValue()) )
         {
             case 1 :        // automatic
                 mnDiaMode++;
@@ -270,7 +270,7 @@ void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_
             nBuildFlags |= 256;
 
         if ( GetPropertyValue( aAny, mXPagePropSet, OUString( "Duration" ) ) )// duration of this slide
-            nSlideTime = *(sal_Int32*)aAny.getValue() << 10;        // in ticks
+            nSlideTime = *static_cast<sal_Int32 const *>(aAny.getValue()) << 10;        // in ticks
 
         mpPptEscherEx->AddAtom( 16, EPP_SSSlideInfoAtom );
         mpStrm->WriteInt32( nSlideTime )       // standtime in ticks
@@ -619,7 +619,7 @@ void PPTWriter::ImplCreateHeaderFooters( ::com::sun::star::uno::Reference< ::com
         }
         if ( PropValue::GetPropertyValue( aAny, rXPagePropSet, OUString( "DateTimeFormat" ), true ) )
         {
-            sal_Int32 nFormat = *(sal_Int32*)aAny.getValue();
+            sal_Int32 nFormat = *static_cast<sal_Int32 const *>(aAny.getValue());
             SvxDateFormat eDateFormat = (SvxDateFormat)( nFormat & 0xf );
             SvxTimeFormat eTimeFormat = (SvxTimeFormat)( ( nFormat >> 4 ) & 0xf );
             switch( eDateFormat )
@@ -783,7 +783,7 @@ bool PPTWriter::ImplCreateDocument()
 
                 if ( ImplGetPropertyValue( OUString( "CustomShow" ) ) )
                 {
-                    aCustomShow = ( *(OUString*)mAny.getValue() );
+                    aCustomShow = *static_cast<OUString const *>(mAny.getValue());
                     if ( !aCustomShow.isEmpty() )
                     {
                         nFlags |= 8;
@@ -793,7 +793,7 @@ bool PPTWriter::ImplCreateDocument()
                 {
                     if ( ImplGetPropertyValue( OUString( "FirstPage" ) ) )
                     {
-                        OUString aSlideName( *(OUString*)mAny.getValue() );
+                        OUString aSlideName( *static_cast<OUString const *>(mAny.getValue()) );
 
                         std::vector<OUString>::const_iterator pIter = std::find(
                                     maSlideNameList.begin(),maSlideNameList.end(),aSlideName);
@@ -1221,7 +1221,7 @@ void PPTWriter::ImplWriteBackground( ::com::sun::star::uno::Reference< ::com::su
         {
             if ( ImplGetPropertyValue( rXPropSet, OUString( "FillColor" ) ) )
             {
-                nFillColor = mpPptEscherEx->GetColor( *((sal_uInt32*)mAny.getValue()) );
+                nFillColor = mpPptEscherEx->GetColor( *static_cast<sal_uInt32 const *>(mAny.getValue()) );
                 nFillBackColor = nFillColor ^ 0xffffff;
             }
         }   // PASSTHROUGH INTENDED
@@ -1252,7 +1252,7 @@ void PPTWriter::ImplWriteVBA()
             nLen -= 8;
             mnVBAOleOfs = mpStrm->Tell();
             mpPptEscherEx->BeginAtom();
-            mpStrm->Write( (sal_Int8*)mpVBA->GetData() + 8, nLen );
+            mpStrm->Write( static_cast<sal_Int8 const *>(mpVBA->GetData()) + 8, nLen );
             mpPptEscherEx->EndAtom( EPP_ExOleObjStg, 0, 1 );
         }
     }

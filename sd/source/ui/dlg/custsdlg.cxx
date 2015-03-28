@@ -441,7 +441,7 @@ void SdDefineCustomShowDlg::CheckCustomShow()
              pEntry != NULL;
              pEntry = m_pLbCustomPages->Next( pEntry ) )
         {
-            SdPage* pPage = (SdPage*) pEntry->GetUserData();
+            SdPage* pPage = static_cast<SdPage*>(pEntry->GetUserData());
             rpCustomShow->PagesVector().push_back( pPage );
         }
         bModified = true;

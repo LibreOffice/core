@@ -494,7 +494,7 @@ sal_uInt32 PPTWriterBase::GetMasterIndex( PageType ePageType )
             if ( aXPropertySet.is() )
             {
                 if ( ImplGetPropertyValue( aXPropertySet, OUString( "Number" ) ) )
-                    nRetValue |= *(sal_Int16*)mAny.getValue();
+                    nRetValue |= *static_cast<sal_Int16 const *>(mAny.getValue());
                 if ( nRetValue & 0xffff )           // avoid overflow
                     nRetValue--;
             }
@@ -537,7 +537,7 @@ bool PPTWriterBase::GetStyleSheets()
             aXPropSet( mXModel, UNO_QUERY );
 
         sal_uInt16 nDefaultTab = ( aXPropSet.is() && ImplGetPropertyValue( aXPropSet, OUString( "TabStop" ) ) )
-            ? (sal_uInt16)( *(sal_Int32*)mAny.getValue() / 4.40972 )
+            ? (sal_uInt16)( *static_cast<sal_Int32 const *>(mAny.getValue()) / 4.40972 )
             : 1250;
 
         maStyleSheetList.push_back( new PPTExStyleSheet( nDefaultTab, dynamic_cast<PPTExBulletProvider*>(this) ) );
@@ -754,7 +754,7 @@ bool PPTWriterBase::GetShapeByIndex( sal_uInt32 nIndex, bool bGroup )
 
         mnAngle = ( PropValue::GetPropertyValue( aAny,
             mXPropSet, OUString( "RotateAngle" ), true ) )
-                ? *((sal_Int32*)aAny.getValue() )
+                ? *static_cast<sal_Int32 const *>(aAny.getValue())
                 : 0;
 
         return true;

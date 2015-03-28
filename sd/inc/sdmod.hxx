@@ -193,7 +193,7 @@ private:
 
 };
 
-#define SD_MOD() ( *(SdModule**) GetAppData(SHL_DRAW) )
+#define SD_MOD() ( *reinterpret_cast<SdModule**>(GetAppData(SHL_DRAW)) )
 
 #endif // INCLUDED_SD_INC_SDMOD_HXX
 

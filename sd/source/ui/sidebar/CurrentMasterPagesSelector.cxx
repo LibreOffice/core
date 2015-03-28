@@ -277,7 +277,7 @@ IMPL_LINK(CurrentMasterPagesSelector,EventMultiplexerListener,
             case sd::tools::EventMultiplexerEvent::EID_SHAPE_CHANGED:
             case sd::tools::EventMultiplexerEvent::EID_SHAPE_INSERTED:
             case sd::tools::EventMultiplexerEvent::EID_SHAPE_REMOVED:
-                InvalidatePreview((const SdPage*)pEvent->mpUserData);
+                InvalidatePreview(static_cast<const SdPage*>(pEvent->mpUserData));
                 break;
         }
     }

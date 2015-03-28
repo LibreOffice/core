@@ -107,7 +107,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl)
             OUString sUrl;
             for( sal_Int16 i = 0; i < pImagesLst->GetEntryCount(); ++i )
             {
-                OUString* pData = (OUString*) pImagesLst->GetEntryData(i);
+                OUString const * pData = static_cast<OUString const *>(pImagesLst->GetEntryData(i));
                 sUrl = *pData;
 
                 Reference< drawing::XDrawPage > xSlide = appendNewSlide(AUTOLAYOUT_NONE, xDrawPages);
@@ -163,7 +163,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl)
 
             for( sal_Int32 i = 0; i < pImagesLst->GetEntryCount(); i+=2 )
             {
-                OUString* pData = NULL;
+                OUString const * pData = NULL;
 
                 // create the slide
                 Reference< drawing::XDrawPage > xSlide = appendNewSlide(AUTOLAYOUT_NONE, xDrawPages);
@@ -178,11 +178,11 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl)
 
                 // grab the left one
                 void* pD1 = pImagesLst->GetEntryData(i);
-                pData = (OUString*) pD1;
+                pData = static_cast<OUString const *>(pD1);
                 sUrl1 = pData ? OUString(*pData) : "";
                 // grab the right one
                 void* pD2 = pImagesLst->GetEntryData(i+1);
-                pData = (OUString*) pD2;
+                pData = static_cast<OUString const *>(pD2);
                 sUrl2 = pData ? OUString(*pData) : "";
 
                 if( !sUrl1.isEmpty() )
@@ -283,22 +283,22 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl)
 
                 // grab the upper left one
                 void* pD1 = pImagesLst->GetEntryData(i);
-                pData = (OUString*) pD1;
+                pData = static_cast<OUString*>(pD1);
                 sUrl1 = pData ? OUString(*pData) : "";
 
                 // grab the upper right one
                 void* pD2 = pImagesLst->GetEntryData(i+1);
-                pData = (OUString*) pD2;
+                pData = static_cast<OUString *>(pD2);
                 sUrl2 = pData ? OUString(*pData) : "";
 
                 // grab the lower left one
                 void* pD3 = pImagesLst->GetEntryData(i+2);
-                pData = (OUString*) pD3;
+                pData = static_cast<OUString*>(pD3);
                 sUrl3 = pData ? OUString(*pData) : "";
 
                 // grab the lower right one
                 void* pD4 = pImagesLst->GetEntryData(i+3);
-                pData = (OUString*) pD4;
+                pData = static_cast<OUString*>(pD4);
                 sUrl4 = pData ? OUString(*pData) : "";
 
                 if( !sUrl1.isEmpty() )
@@ -504,12 +504,12 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, UpHdl)
         sal_uInt16 nActPos = pImagesLst->GetSelectEntryPos();
         OUString sActEntry( pImagesLst->GetEntry(nActPos) );
         // actual data
-        OUString* pActData = (OUString*) pImagesLst->GetEntryData(nActPos);
+        OUString* pActData = static_cast<OUString*>(pImagesLst->GetEntryData(nActPos));
         OUString sAct(*pActData);
 
         OUString sUpperEntry( pImagesLst->GetEntry(nActPos - 1) );
         // upper data
-        OUString* pUpperData = (OUString*) pImagesLst->GetEntryData(nActPos - 1);
+        OUString* pUpperData = static_cast<OUString*>(pImagesLst->GetEntryData(nActPos - 1));
         OUString sUpper(*pUpperData);
 
         pImagesLst->RemoveEntry( sActEntry );
@@ -534,11 +534,11 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, DownHdl)
     if (!pImagesLst->GetEntry(nActPos + 1).isEmpty())
     {
         OUString sActEntry( pImagesLst->GetSelectEntry() );
-        OUString* pActData = (OUString*) pImagesLst->GetSelectEntryData();
+        OUString* pActData = static_cast<OUString*>(pImagesLst->GetSelectEntryData());
         OUString sAct(*pActData);
 
         OUString sDownEntry( pImagesLst->GetEntry(nActPos + 1) );
-        OUString* pDownData = (OUString*) pImagesLst->GetEntryData(nActPos + 1);
+        OUString* pDownData = static_cast<OUString*>(pImagesLst->GetEntryData(nActPos + 1));
         OUString sDown(*pDownData);
 
         pImagesLst->RemoveEntry( sActEntry );
@@ -568,7 +568,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, RemoveHdl)
 
 IMPL_LINK_NOARG(SdPhotoAlbumDialog, SelectHdl)
 {
-    OUString* pData = (OUString*) pImagesLst->GetSelectEntryData();
+    OUString* pData = static_cast<OUString*>(pImagesLst->GetSelectEntryData());
     OUString sImgUrl = pData ? OUString(*pData) : "";
 
     if (sImgUrl != SD_RESSTR(STR_PHOTO_ALBUM_TEXTBOX))

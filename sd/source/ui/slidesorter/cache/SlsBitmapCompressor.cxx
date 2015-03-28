@@ -153,7 +153,7 @@ public:
     {}
     virtual ~PngReplacement (void)
     {
-        delete [] (char*)mpData;
+        delete [] static_cast<char*>(mpData);
     }
     virtual sal_Int32 GetMemorySize (void) const SAL_OVERRIDE
     {

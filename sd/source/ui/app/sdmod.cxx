@@ -114,7 +114,7 @@ SdModule::~SdModule()
     mpResourceContainer.reset();
 
     // Mark the module in the global AppData structure as deleted.
-    SdModule** ppShellPointer = (SdModule**)GetAppData(SHL_DRAW);
+    SdModule** ppShellPointer = reinterpret_cast<SdModule**>(GetAppData(SHL_DRAW));
     if (ppShellPointer != NULL)
         (*ppShellPointer) = NULL;
 

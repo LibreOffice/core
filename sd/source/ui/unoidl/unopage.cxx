@@ -1122,7 +1122,7 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
 
                         SvMemoryStream aDestStrm( 65535, 65535 );
                         ConvertGDIMetaFileToWMF( *xMetaFile, aDestStrm, NULL, false );
-                        Sequence<sal_Int8> aSeq( (sal_Int8*)aDestStrm.GetData(), aDestStrm.Tell() );
+                        Sequence<sal_Int8> aSeq( static_cast<sal_Int8 const *>(aDestStrm.GetData()), aDestStrm.Tell() );
                         aAny <<= aSeq;
                     }
                 }
@@ -1152,7 +1152,7 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
                     {
                         SvMemoryStream aMemStream;
                         WriteDIB(aBitmap.GetBitmap(), aMemStream, false, false);
-                        uno::Sequence<sal_Int8> aSeq( (sal_Int8*)aMemStream.GetData(), aMemStream.Tell() );
+                        uno::Sequence<sal_Int8> aSeq( static_cast<sal_Int8 const *>(aMemStream.GetData()), aMemStream.Tell() );
                         aAny <<= aSeq;
                     }
                 }

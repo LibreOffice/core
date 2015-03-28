@@ -235,13 +235,13 @@ void SdOptionsLayout::GetPropNameArray( const char**& ppNames, sal_uLong& rCount
 
 bool SdOptionsLayout::ReadData( const Any* pValues )
 {
-    if( pValues[0].hasValue() ) SetRulerVisible( *(sal_Bool*) pValues[ 0 ].getValue() );
-    if( pValues[1].hasValue() ) SetHandlesBezier( *(sal_Bool*) pValues[ 1 ].getValue() );
-    if( pValues[2].hasValue() ) SetMoveOutline( *(sal_Bool*) pValues[ 2 ].getValue() );
-    if( pValues[3].hasValue() ) SetDragStripes( *(sal_Bool*) pValues[ 3 ].getValue() );
-    if( pValues[4].hasValue() ) SetHelplines( *(sal_Bool*) pValues[ 4 ].getValue() );
-    if( pValues[5].hasValue() ) SetMetric( (sal_uInt16) *(sal_Int32*) pValues[ 5 ].getValue() );
-    if( pValues[6].hasValue() ) SetDefTab( (sal_uInt16) *(sal_Int32*) pValues[ 6 ].getValue() );
+    if( pValues[0].hasValue() ) SetRulerVisible( *static_cast<sal_Bool const *>(pValues[ 0 ].getValue()) );
+    if( pValues[1].hasValue() ) SetHandlesBezier( *static_cast<sal_Bool const *>(pValues[ 1 ].getValue()) );
+    if( pValues[2].hasValue() ) SetMoveOutline( *static_cast<sal_Bool const *>(pValues[ 2 ].getValue()) );
+    if( pValues[3].hasValue() ) SetDragStripes( *static_cast<sal_Bool const *>(pValues[ 3 ].getValue()) );
+    if( pValues[4].hasValue() ) SetHelplines( *static_cast<sal_Bool const *>(pValues[ 4 ].getValue()) );
+    if( pValues[5].hasValue() ) SetMetric( (sal_uInt16) *static_cast<sal_Int32 const *>(pValues[ 5 ].getValue()) );
+    if( pValues[6].hasValue() ) SetDefTab( (sal_uInt16) *static_cast<sal_Int32 const *>(pValues[ 6 ].getValue()) );
 
     return true;
 }
@@ -522,46 +522,46 @@ void SdOptionsMisc::GetPropNameArray( const char**& ppNames, sal_uLong& rCount )
 
 bool SdOptionsMisc::ReadData( const Any* pValues )
 {
-    if( pValues[0].hasValue() ) SetMarkedHitMovesAlways( *(sal_Bool*) pValues[ 0 ].getValue() );
-    if( pValues[1].hasValue() ) SetCrookNoContortion( *(sal_Bool*) pValues[ 1 ].getValue() );
-    if( pValues[2].hasValue() ) SetQuickEdit( *(sal_Bool*)pValues[ 2 ].getValue() );
-    if( pValues[3].hasValue() ) SetMasterPagePaintCaching( *(sal_Bool*) pValues[ 3 ].getValue() );
-    if( pValues[4].hasValue() ) SetDragWithCopy( *(sal_Bool*) pValues[ 4 ].getValue() );
-    if( pValues[5].hasValue() ) SetPickThrough( *(sal_Bool*) pValues[ 5 ].getValue() );
-    if( pValues[6].hasValue() ) SetDoubleClickTextEdit( *(sal_Bool*) pValues[ 6 ].getValue() );
-    if( pValues[7].hasValue() ) SetClickChangeRotation( *(sal_Bool*) pValues[ 7 ].getValue() );
-    if( pValues[9].hasValue() ) SetSolidDragging( *(sal_Bool*) pValues[ 9 ].getValue() );
-    if( pValues[10].hasValue() ) SetDefaultObjectSizeWidth( *(sal_uInt32*) pValues[ 10 ].getValue() );
-    if( pValues[11].hasValue() ) SetDefaultObjectSizeHeight( *(sal_uInt32*) pValues[ 11 ].getValue() );
-    if( pValues[12].hasValue() ) SetPrinterIndependentLayout( *(sal_uInt16*) pValues[ 12 ].getValue() );
+    if( pValues[0].hasValue() ) SetMarkedHitMovesAlways( *static_cast<sal_Bool const *>(pValues[ 0 ].getValue()) );
+    if( pValues[1].hasValue() ) SetCrookNoContortion( *static_cast<sal_Bool const *>(pValues[ 1 ].getValue()) );
+    if( pValues[2].hasValue() ) SetQuickEdit( *static_cast<sal_Bool const *>(pValues[ 2 ].getValue()) );
+    if( pValues[3].hasValue() ) SetMasterPagePaintCaching( *static_cast<sal_Bool const *>(pValues[ 3 ].getValue()) );
+    if( pValues[4].hasValue() ) SetDragWithCopy( *static_cast<sal_Bool const *>(pValues[ 4 ].getValue()) );
+    if( pValues[5].hasValue() ) SetPickThrough( *static_cast<sal_Bool const *>(pValues[ 5 ].getValue()) );
+    if( pValues[6].hasValue() ) SetDoubleClickTextEdit( *static_cast<sal_Bool const *>(pValues[ 6 ].getValue()) );
+    if( pValues[7].hasValue() ) SetClickChangeRotation( *static_cast<sal_Bool const *>(pValues[ 7 ].getValue()) );
+    if( pValues[9].hasValue() ) SetSolidDragging( *static_cast<sal_Bool const *>(pValues[ 9 ].getValue()) );
+    if( pValues[10].hasValue() ) SetDefaultObjectSizeWidth( *static_cast<sal_uInt32 const *>(pValues[ 10 ].getValue()) );
+    if( pValues[11].hasValue() ) SetDefaultObjectSizeHeight( *static_cast<sal_uInt32 const *>(pValues[ 11 ].getValue()) );
+    if( pValues[12].hasValue() ) SetPrinterIndependentLayout( *static_cast<sal_uInt16 const *>(pValues[ 12 ].getValue()) );
 
     if( pValues[13].hasValue() )
-        SetShowComments(  *(sal_Bool*) pValues[ 13 ].getValue() );
+        SetShowComments(  *static_cast<sal_Bool const *>(pValues[ 13 ].getValue()) );
 
     // just for Impress
     if( GetConfigId() == SDCFG_IMPRESS )
     {
         if( pValues[14].hasValue() )
-            SetStartWithTemplate( *(sal_Bool*) pValues[ 14 ].getValue() );
+            SetStartWithTemplate( *static_cast<sal_Bool const *>(pValues[ 14 ].getValue()) );
         if( pValues[15].hasValue() )
-            SetSummationOfParagraphs( *(sal_Bool*) pValues[ 15 ].getValue() );
+            SetSummationOfParagraphs( *static_cast<sal_Bool const *>(pValues[ 15 ].getValue()) );
         if( pValues[16].hasValue() )
-            SetShowUndoDeleteWarning( *(sal_Bool*) pValues[ 16 ].getValue() );
+            SetShowUndoDeleteWarning( *static_cast<sal_Bool const *>(pValues[ 16 ].getValue()) );
 
         if( pValues[17].hasValue() )
-            SetSlideshowRespectZOrder(*(sal_Bool*) pValues[ 17 ].getValue());
+            SetSlideshowRespectZOrder(*static_cast<sal_Bool const *>(pValues[ 17 ].getValue()));
 
         if( pValues[18].hasValue() )
-            SetPreviewNewEffects(*(sal_Bool*) pValues[ 18 ].getValue());
+            SetPreviewNewEffects(*static_cast<sal_Bool const *>(pValues[ 18 ].getValue()));
 
         if( pValues[19].hasValue() )
-            SetPreviewChangedEffects(*(sal_Bool*) pValues[ 19 ].getValue());
+            SetPreviewChangedEffects(*static_cast<sal_Bool const *>(pValues[ 19 ].getValue()));
 
         if( pValues[20].hasValue() )
-            SetPreviewTransitions(*(sal_Bool*) pValues[ 20 ].getValue());
+            SetPreviewTransitions(*static_cast<sal_Bool const *>(pValues[ 20 ].getValue()));
 
         if( pValues[21].hasValue() )
-            SetDisplay(*(sal_Int32*) pValues[ 21 ].getValue());
+            SetDisplay(*static_cast<sal_Int32 const *>(pValues[ 21 ].getValue()));
 
         if( pValues[22].hasValue() )
             SetPresentationPenColor( getSafeValue< sal_Int32 >( pValues[ 22 ] ) );
@@ -570,10 +570,10 @@ bool SdOptionsMisc::ReadData( const Any* pValues )
             SetPresentationPenWidth( getSafeValue< double >( pValues[ 23 ] ) );
 
         if( pValues[24].hasValue() )
-            SetEnableSdremote( *(sal_Bool*) pValues[ 24 ].getValue() );
+            SetEnableSdremote( *static_cast<sal_Bool const *>(pValues[ 24 ].getValue()) );
 
         if( pValues[25].hasValue() )
-            SetEnablePresenterScreen( *(sal_Bool*) pValues[ 25 ].getValue() );
+            SetEnablePresenterScreen( *static_cast<sal_Bool const *>(pValues[ 25 ].getValue()) );
     }
 
     return true;
@@ -799,16 +799,16 @@ void SdOptionsSnap::GetPropNameArray( const char**& ppNames, sal_uLong& rCount )
 
 bool SdOptionsSnap::ReadData( const Any* pValues )
 {
-    if( pValues[0].hasValue() ) SetSnapHelplines( *(sal_Bool*) pValues[ 0 ].getValue() );
-    if( pValues[1].hasValue() ) SetSnapBorder( *(sal_Bool*)pValues[ 1 ].getValue() );
-    if( pValues[2].hasValue() ) SetSnapFrame( *(sal_Bool*) pValues[ 2 ].getValue() );
-    if( pValues[3].hasValue() ) SetSnapPoints( *(sal_Bool*) pValues[ 3 ].getValue() );
-    if( pValues[4].hasValue() ) SetOrtho( *(sal_Bool*) pValues[ 4 ].getValue() );
-    if( pValues[5].hasValue() ) SetBigOrtho( *(sal_Bool*) pValues[ 5 ].getValue() );
-    if( pValues[6].hasValue() ) SetRotate( *(sal_Bool*) pValues[ 6 ].getValue() );
-    if( pValues[7].hasValue() ) SetSnapArea( (sal_Int16) *(sal_Int32*) pValues[ 7 ].getValue() );
-    if( pValues[8].hasValue() ) SetAngle( (sal_Int16) *(sal_Int32*) pValues[ 8 ].getValue() );
-    if( pValues[9].hasValue() ) SetEliminatePolyPointLimitAngle( (sal_Int16) *(sal_Int32*) pValues[ 9 ].getValue() );
+    if( pValues[0].hasValue() ) SetSnapHelplines( *static_cast<sal_Bool const *>(pValues[ 0 ].getValue()) );
+    if( pValues[1].hasValue() ) SetSnapBorder( *static_cast<sal_Bool const *>(pValues[ 1 ].getValue()) );
+    if( pValues[2].hasValue() ) SetSnapFrame( *static_cast<sal_Bool const *>(pValues[ 2 ].getValue()) );
+    if( pValues[3].hasValue() ) SetSnapPoints( *static_cast<sal_Bool const *>(pValues[ 3 ].getValue()) );
+    if( pValues[4].hasValue() ) SetOrtho( *static_cast<sal_Bool const *>(pValues[ 4 ].getValue()) );
+    if( pValues[5].hasValue() ) SetBigOrtho( *static_cast<sal_Bool const *>(pValues[ 5 ].getValue()) );
+    if( pValues[6].hasValue() ) SetRotate( *static_cast<sal_Bool const *>(pValues[ 6 ].getValue()) );
+    if( pValues[7].hasValue() ) SetSnapArea( (sal_Int16) *static_cast<sal_Int32 const *>(pValues[ 7 ].getValue()) );
+    if( pValues[8].hasValue() ) SetAngle( (sal_Int16) *static_cast<sal_Int32 const *>(pValues[ 8 ].getValue()) );
+    if( pValues[9].hasValue() ) SetEliminatePolyPointLimitAngle( (sal_Int16) *static_cast<sal_Int32 const *>(pValues[ 9 ].getValue()) );
 
     return true;
 }
@@ -946,8 +946,8 @@ bool SdOptionsZoom::ReadData( const Any* pValues )
 {
     sal_Int32 x = 1, y = 1;
 
-    if( pValues[0].hasValue() ) x = ( *(sal_Int32*) pValues[ 0 ].getValue() );
-    if( pValues[1].hasValue() ) y = ( *(sal_Int32*) pValues[ 1 ].getValue() );
+    if( pValues[0].hasValue() ) x = ( *static_cast<sal_Int32 const *>(pValues[ 0 ].getValue()) );
+    if( pValues[1].hasValue() ) y = ( *static_cast<sal_Int32 const *>(pValues[ 1 ].getValue()) );
 
     SetScale( x, y );
 
@@ -1060,27 +1060,27 @@ void SdOptionsGrid::GetPropNameArray( const char**& ppNames, sal_uLong& rCount )
 
 bool SdOptionsGrid::ReadData( const Any* pValues )
 {
-    if( pValues[0].hasValue() ) SetFldDrawX( *(sal_Int32*) pValues[ 0 ].getValue() );
-    if( pValues[1].hasValue() ) SetFldDrawY( *(sal_Int32*) pValues[ 1 ].getValue() );
+    if( pValues[0].hasValue() ) SetFldDrawX( *static_cast<sal_Int32 const *>(pValues[ 0 ].getValue()) );
+    if( pValues[1].hasValue() ) SetFldDrawY( *static_cast<sal_Int32 const *>(pValues[ 1 ].getValue()) );
 
     if( pValues[2].hasValue() )
     {
-        const sal_uInt32 nDivX = FRound( *(double*) pValues[ 2 ].getValue() );
+        const sal_uInt32 nDivX = FRound( *static_cast<double const *>(pValues[ 2 ].getValue()) );
         SetFldDivisionX( SvxOptionsGrid::GetFldDrawX() / ( nDivX + 1 ) );
     }
 
     if( pValues[3].hasValue() )
     {
-        const sal_uInt32 nDivY = FRound( *(double*) pValues[ 3 ].getValue() );
+        const sal_uInt32 nDivY = FRound( *static_cast<double const *>(pValues[ 3 ].getValue()) );
         SetFldDivisionY( SvxOptionsGrid::GetFldDrawY() / ( nDivY + 1 ) );
     }
 
-    if( pValues[4].hasValue() ) SetFldSnapX( *(sal_Int32*) pValues[ 4 ].getValue() );
-    if( pValues[5].hasValue() ) SetFldSnapY( *(sal_Int32*) pValues[ 5 ].getValue() );
-    if( pValues[6].hasValue() ) SetUseGridSnap( *(sal_Bool*) pValues[ 6 ].getValue() );
-    if( pValues[7].hasValue() ) SetSynchronize( *(sal_Bool*) pValues[ 7 ].getValue() );
-    if( pValues[8].hasValue() ) SetGridVisible( *(sal_Bool*) pValues[ 8 ].getValue() );
-    if( pValues[9].hasValue() ) SetEqualGrid( *(sal_Bool*) pValues[ 9 ].getValue() );
+    if( pValues[4].hasValue() ) SetFldSnapX( *static_cast<sal_Int32 const *>(pValues[ 4 ].getValue()) );
+    if( pValues[5].hasValue() ) SetFldSnapY( *static_cast<sal_Int32 const *>(pValues[ 5 ].getValue()) );
+    if( pValues[6].hasValue() ) SetUseGridSnap( *static_cast<sal_Bool const *>(pValues[ 6 ].getValue()) );
+    if( pValues[7].hasValue() ) SetSynchronize( *static_cast<sal_Bool const *>(pValues[ 7 ].getValue()) );
+    if( pValues[8].hasValue() ) SetGridVisible( *static_cast<sal_Bool const *>(pValues[ 8 ].getValue()) );
+    if( pValues[9].hasValue() ) SetEqualGrid( *static_cast<sal_Bool const *>(pValues[ 9 ].getValue()) );
 
     return true;
 }
@@ -1272,27 +1272,27 @@ void SdOptionsPrint::GetPropNameArray( const char**& ppNames, sal_uLong& rCount 
 
 bool SdOptionsPrint::ReadData( const Any* pValues )
 {
-    if( pValues[0].hasValue() ) SetDate( *(sal_Bool*) pValues[ 0 ].getValue() );
-    if( pValues[1].hasValue() ) SetTime( *(sal_Bool*) pValues[ 1 ].getValue() );
-    if( pValues[2].hasValue() ) SetPagename( *(sal_Bool*) pValues[ 2 ].getValue() );
-    if( pValues[3].hasValue() ) SetHiddenPages( *(sal_Bool*) pValues[ 3 ].getValue() );
-    if( pValues[4].hasValue() ) SetPagesize( *(sal_Bool*) pValues[ 4 ].getValue() );
-    if( pValues[5].hasValue() ) SetPagetile( *(sal_Bool*) pValues[ 5 ].getValue() );
-    if( pValues[6].hasValue() ) SetBooklet( *(sal_Bool*) pValues[ 6 ].getValue() );
-    if( pValues[7].hasValue() ) SetFrontPage( *(sal_Bool*) pValues[ 7 ].getValue() );
-    if( pValues[8].hasValue() ) SetBackPage( *(sal_Bool*) pValues[ 8 ].getValue() );
-    if( pValues[9].hasValue() ) SetPaperbin( *(sal_Bool*) pValues[ 9 ].getValue() );
-    if( pValues[10].hasValue() ) SetOutputQuality( (sal_uInt16) *(sal_Int32*) pValues[ 10 ].getValue() );
-    if( pValues[11].hasValue() ) SetDraw( *(sal_Bool*) pValues[ 11 ].getValue() );
+    if( pValues[0].hasValue() ) SetDate( *static_cast<sal_Bool const *>(pValues[ 0 ].getValue()) );
+    if( pValues[1].hasValue() ) SetTime( *static_cast<sal_Bool const *>(pValues[ 1 ].getValue()) );
+    if( pValues[2].hasValue() ) SetPagename( *static_cast<sal_Bool const *>(pValues[ 2 ].getValue()) );
+    if( pValues[3].hasValue() ) SetHiddenPages( *static_cast<sal_Bool const *>(pValues[ 3 ].getValue()) );
+    if( pValues[4].hasValue() ) SetPagesize( *static_cast<sal_Bool const *>(pValues[ 4 ].getValue()) );
+    if( pValues[5].hasValue() ) SetPagetile( *static_cast<sal_Bool const *>(pValues[ 5 ].getValue()) );
+    if( pValues[6].hasValue() ) SetBooklet( *static_cast<sal_Bool const *>(pValues[ 6 ].getValue()) );
+    if( pValues[7].hasValue() ) SetFrontPage( *static_cast<sal_Bool const *>(pValues[ 7 ].getValue()) );
+    if( pValues[8].hasValue() ) SetBackPage( *static_cast<sal_Bool const *>(pValues[ 8 ].getValue()) );
+    if( pValues[9].hasValue() ) SetPaperbin( *static_cast<sal_Bool const *>(pValues[ 9 ].getValue()) );
+    if( pValues[10].hasValue() ) SetOutputQuality( (sal_uInt16) *static_cast<sal_Int32 const *>(pValues[ 10 ].getValue()) );
+    if( pValues[11].hasValue() ) SetDraw( *static_cast<sal_Bool const *>(pValues[ 11 ].getValue()) );
 
     // just for impress
     if( GetConfigId() == SDCFG_IMPRESS )
     {
-        if( pValues[12].hasValue() ) SetNotes( *(sal_Bool*) pValues[ 12 ].getValue() );
-        if( pValues[13].hasValue() ) SetHandout( *(sal_Bool*) pValues[ 13 ].getValue() );
-        if( pValues[14].hasValue() ) SetOutline( *(sal_Bool*) pValues[ 14 ].getValue() );
-        if( pValues[15].hasValue() ) SetHandoutHorizontal( *(sal_Bool*) pValues[15].getValue() );
-        if( pValues[16].hasValue() ) SetHandoutPages( (sal_uInt16)*(sal_Int32*) pValues[16].getValue() );
+        if( pValues[12].hasValue() ) SetNotes( *static_cast<sal_Bool const *>(pValues[ 12 ].getValue()) );
+        if( pValues[13].hasValue() ) SetHandout( *static_cast<sal_Bool const *>(pValues[ 13 ].getValue()) );
+        if( pValues[14].hasValue() ) SetOutline( *static_cast<sal_Bool const *>(pValues[ 14 ].getValue()) );
+        if( pValues[15].hasValue() ) SetHandoutHorizontal( *static_cast<sal_Bool const *>(pValues[15].getValue()) );
+        if( pValues[16].hasValue() ) SetHandoutPages( (sal_uInt16)*static_cast<sal_Int32 const *>(pValues[16].getValue()) );
     }
 
     return true;

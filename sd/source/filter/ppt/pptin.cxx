@@ -2516,7 +2516,7 @@ SdrObject* ImplSdPPTImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
         // further setup placeholder objects
         if( pObj->ISA(SdrPageObj) && pData )
         {
-            const ProcessData* pProcessData=(const ProcessData*)pData;
+            const ProcessData* pProcessData=static_cast<const ProcessData*>(pData);
             if( pProcessData->pPage.page )
                 static_cast<SdPage *>(pProcessData->pPage.page)->InsertPresObj(
                     pObj, PRESOBJ_PAGE );

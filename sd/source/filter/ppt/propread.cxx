@@ -57,7 +57,7 @@ PropEntry& PropEntry::operator=(const PropEntry& rPropEntry)
 void PropItem::Clear()
 {
     Seek( STREAM_SEEK_TO_BEGIN );
-    delete[] (sal_uInt8*)SwitchBuffer();
+    delete[] static_cast<sal_uInt8*>(SwitchBuffer());
 }
 
 static sal_Int32 lcl_getMaxSafeStrLen(sal_uInt32 nSize)
@@ -175,7 +175,7 @@ PropItem& PropItem::operator=( PropItem& rPropItem )
     if ( this != &rPropItem )
     {
         Seek( STREAM_SEEK_TO_BEGIN );
-        delete[] (sal_uInt8*)SwitchBuffer();
+        delete[] static_cast<sal_uInt8*>(SwitchBuffer());
 
         mnTextEnc = rPropItem.mnTextEnc;
         sal_uInt32 nItemPos = rPropItem.Tell();

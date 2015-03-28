@@ -287,7 +287,7 @@ void SdDLL::Init()
         pDrawFact = &::sd::GraphicDocShell::Factory();
 
     // the SdModule must be created
-     SdModule** ppShlPtr = (SdModule**) GetAppData(SHL_DRAW);
+     SdModule** ppShlPtr = reinterpret_cast<SdModule**>(GetAppData(SHL_DRAW));
 
      // #i46427#
      // The SfxModule::SfxModule stops when the first given factory

@@ -234,7 +234,7 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, bool bGe
     meFontName = ePropState;
     if ( bOk )
     {
-        FontCollectionEntry aFontDesc( *(OUString*)mAny.getValue() );
+        FontCollectionEntry aFontDesc( *static_cast<OUString const *>(mAny.getValue()) );
         sal_uInt32  nCount = rFontCollection.GetCount();
         mnFont = (sal_uInt16)rFontCollection.GetId( aFontDesc );
         if ( mnFont == nCount )
@@ -261,7 +261,7 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, bool bGe
         meAsianOrComplexFont = ePropState;
         if ( bOk )
         {
-            FontCollectionEntry aFontDesc( *(OUString*)mAny.getValue() );
+            FontCollectionEntry aFontDesc( *static_cast<OUString const *>(mAny.getValue()) );
             sal_uInt32  nCount = rFontCollection.GetCount();
             mnAsianOrComplexFont = (sal_uInt16)rFontCollection.GetId( aFontDesc );
             if ( mnAsianOrComplexFont == nCount )
@@ -282,7 +282,7 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, bool bGe
         meAsianOrComplexFont = ePropState;
         if ( bOk )
         {
-            FontCollectionEntry aFontDesc( *(OUString*)mAny.getValue() );
+            FontCollectionEntry aFontDesc( *static_cast<OUString const *>(mAny.getValue()) );
             sal_uInt32  nCount = rFontCollection.GetCount();
             mnAsianOrComplexFont = (sal_uInt16)rFontCollection.GetId( aFontDesc );
             if ( mnAsianOrComplexFont == nCount )
@@ -410,7 +410,7 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, bool bGe
 
     if ( ImplGetPropertyValue( OUString( "CharColor" ), bGetPropStateValue ) )
     {
-        sal_uInt32 nSOColor = *( (sal_uInt32*)mAny.getValue() );
+        sal_uInt32 nSOColor = *( static_cast<sal_uInt32 const *>(mAny.getValue()) );
         mnCharColor = nSOColor & 0xff00ff00;                            // green and hibyte
         mnCharColor |= (sal_uInt8)( nSOColor ) << 16;                   // red and blue is switched
         mnCharColor |= (sal_uInt8)( nSOColor >> 16 );
@@ -498,7 +498,7 @@ sal_uInt32 PortionObj::ImplGetTextField( ::com::sun::star::uno::Reference< ::com
     ::com::sun::star::uno::Any aAny;
     if ( GetPropertyValue( aAny, rXPropSet, OUString( "TextPortionType" ), true ) )
     {
-        OUString  aTextFieldType( *(OUString*)aAny.getValue() );
+        OUString  aTextFieldType( *static_cast<OUString const *>(aAny.getValue()) );
         if ( aTextFieldType == "TextField" )
         {
             if ( GetPropertyValue( aAny, rXPropSet, aTextFieldType, true ) )
@@ -523,7 +523,7 @@ sal_uInt32 PortionObj::ImplGetTextField( ::com::sun::star::uno::Reference< ::com
                                     {
                                         if ( GetPropertyValue( aAny, xFieldPropSet, OUString( "Format" ), true ) )
                                         {
-                                            nFormat = *(sal_Int32*)aAny.getValue();
+                                            nFormat = *static_cast<sal_Int32 const *>(aAny.getValue());
                                             switch ( nFormat )
                                             {
                                                 default:
@@ -544,7 +544,7 @@ sal_uInt32 PortionObj::ImplGetTextField( ::com::sun::star::uno::Reference< ::com
                             else if ( aFieldKind == "URL" )
                             {
                                 if ( GetPropertyValue( aAny, xFieldPropSet, OUString( "URL" ), true ) )
-                                    rURL = *(OUString*)aAny.getValue();
+                                    rURL = *static_cast<OUString const *>(aAny.getValue());
                                 nRetValue = 4 << 28;
                             }
                             else if ( aFieldKind == "Page" )
@@ -565,7 +565,7 @@ sal_uInt32 PortionObj::ImplGetTextField( ::com::sun::star::uno::Reference< ::com
                                     {
                                         if ( GetPropertyValue( aAny, xFieldPropSet, OUString( "IsFix" ), true ) )
                                         {
-                                            nFormat = *(sal_Int32*)aAny.getValue();
+                                            nFormat = *static_cast<sal_Int32 const *>(aAny.getValue());
                                             nRetValue |= ( ( ( 2 << 4 ) | nFormat ) << 24 ) | 0x800000;
                                         }
                                     }
@@ -589,7 +589,7 @@ sal_uInt32 PortionObj::ImplGetTextField( ::com::sun::star::uno::Reference< ::com
                                     {
                                         if ( GetPropertyValue( aAny, xFieldPropSet, OUString( "Format" ), true ) )
                                         {
-                                            nFormat = *(sal_Int32*)aAny.getValue();
+                                            nFormat = *static_cast<sal_Int32 const *>(aAny.getValue());
                                             switch ( nFormat )
                                             {
                                                 default:
@@ -814,7 +814,7 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider* pBuProv, sal_Int1
         {
             mAny <<= aXIndexReplace->getByIndex( nNumberingDepth );
             ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>
-                aPropertySequence( *( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>*)mAny.getValue() );
+                aPropertySequence( *static_cast<css::uno::Sequence< ::com::sun::star::beans::PropertyValue> const *>(mAny.getValue()) );
 
             const ::com::sun::star::beans::PropertyValue* pPropValue = aPropertySequence.getArray();
 
@@ -833,18 +833,18 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider* pBuProv, sal_Int1
                     {
                         OUString aPropName( pPropValue[ i ].Name );
                         if ( aPropName == "NumberingType" )
-                            nNumberingType = *( (sal_Int16*)pValue );
+                            nNumberingType = *( static_cast<sal_Int16 const *>(pValue) );
                         else if ( aPropName == "Adjust" )
-                            nHorzAdjust = *( (sal_Int16*)pValue );
+                            nHorzAdjust = *( static_cast<sal_Int16 const *>(pValue) );
                         else if ( aPropName == "BulletChar" )
                         {
-                            OUString aString( *( (OUString*)pValue ) );
+                            OUString aString( *( static_cast<OUString const *>(pValue) ) );
                             if ( !aString.isEmpty() )
                                 cBulletId = aString[ 0 ];
                         }
                         else if ( aPropName == "BulletFont" )
                         {
-                            aFontDesc = *( (::com::sun::star::awt::FontDescriptor*)pValue );
+                            aFontDesc = *static_cast<css::awt::FontDescriptor const *>(pValue);
 
                             // Our numbullet dialog has set the wrong textencoding for our "StarSymbol" font,
                             // instead of a Unicode encoding the encoding RTL_TEXTENCODING_SYMBOL was used.
@@ -855,7 +855,7 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider* pBuProv, sal_Int1
 
                         }
                         else if ( aPropName == "GraphicURL" )
-                            aGraphicURL = ( *(OUString*)pValue );
+                            aGraphicURL = *static_cast<OUString const *>(pValue);
                         else if ( aPropName == "GraphicSize" )
                         {
                             if ( pPropValue[ i ].Value.getValueType() == cppu::UnoType<com::sun::star::awt::Size>::get())
@@ -868,28 +868,28 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider* pBuProv, sal_Int1
                             }
                         }
                         else if ( aPropName == "StartWith" )
-                            nStartWith = *( (sal_Int16*)pValue );
+                            nStartWith = *static_cast<sal_Int16 const *>(pValue);
                         else if ( aPropName == "LeftMargin" )
-                            nTextOfs = nTextOfs + static_cast< sal_Int16 >( *( (sal_Int32*)pValue ) / ( 2540.0 / 576 ) );
+                            nTextOfs = nTextOfs + static_cast< sal_Int16 >( *static_cast<sal_Int32 const *>(pValue) / ( 2540.0 / 576 ) );
                         else if ( aPropName == "FirstLineOffset" )
-                            nBulletOfs += (sal_Int16)( *( (sal_Int32*)pValue ) / ( 2540.0 / 576 ) );
+                            nBulletOfs += (sal_Int16)( *static_cast<sal_Int32 const *>(pValue) / ( 2540.0 / 576 ) );
                         else if ( aPropName == "BulletColor" )
                         {
-                            sal_uInt32 nSOColor = *( (sal_uInt32*)pValue );
+                            sal_uInt32 nSOColor = *static_cast<sal_uInt32 const *>(pValue);
                             nBulletColor = nSOColor & 0xff00ff00;                       // green and hibyte
                             nBulletColor |= (sal_uInt8)( nSOColor ) << 16;              // red
                             nBulletColor |= (sal_uInt8)( nSOColor >> 16 ) | 0xfe000000; // blue
                         }
                         else if ( aPropName == "BulletRelSize" )
                         {
-                            nBulletRealSize = *( (sal_Int16*)pValue );
+                            nBulletRealSize = *static_cast<sal_Int16 const *>(pValue);
                             nParaFlags |= 0x40;
                             nBulletFlags |= 8;
                         }
                         else if ( aPropName == "Prefix" )
-                            sPrefix = ( *(OUString*)pValue );
+                            sPrefix = *static_cast<OUString const *>(pValue);
                         else if ( aPropName == "Suffix" )
-                            sSuffix = ( *(OUString*)pValue );
+                            sSuffix = *static_cast<OUString const *>(pValue);
 #ifdef DBG_UTIL
                         else if ( ! (
                                 ( aPropName == "SymbolTextDistance" )
@@ -1110,7 +1110,7 @@ void ParagraphObj::ImplGetParagraphValues( PPTExBulletProvider* pBuProv, bool bG
     {
         if ( bGetPropStateValue )
             meBullet = GetPropertyState( mXPropSet, "NumberingLevel" );
-        nDepth = *( (sal_Int16*)aAny.getValue() );
+        nDepth = *static_cast<sal_Int16 const *>(aAny.getValue());
 
         if ( nDepth < 0 )
         {
@@ -1132,7 +1132,7 @@ void ParagraphObj::ImplGetParagraphValues( PPTExBulletProvider* pBuProv, bool bG
     ImplGetNumberingLevel( pBuProv, nDepth, mbIsBullet, bGetPropStateValue );
 
     if ( ImplGetPropertyValue( OUString( "ParaTabStops" ), bGetPropStateValue ) )
-        maTabStop = *( ::com::sun::star::uno::Sequence< ::com::sun::star::style::TabStop>*)mAny.getValue();
+        maTabStop = *static_cast<css::uno::Sequence< ::com::sun::star::style::TabStop> const *>(mAny.getValue());
     sal_Int16 eTextAdjust( ::com::sun::star::style::ParagraphAdjust_LEFT );
     if ( GetPropertyValue( aAny, mXPropSet, OUString( "ParaAdjust" ), bGetPropStateValue ) )
         aAny >>= eTextAdjust;
@@ -1157,7 +1157,7 @@ void ParagraphObj::ImplGetParagraphValues( PPTExBulletProvider* pBuProv, bool bG
     if ( ImplGetPropertyValue( OUString( "ParaLineSpacing" ), bGetPropStateValue ) )
     {
         ::com::sun::star::style::LineSpacing aLineSpacing
-            = *( (::com::sun::star::style::LineSpacing*)mAny.getValue() );
+            = *static_cast<css::style::LineSpacing const *>(mAny.getValue());
         switch ( aLineSpacing.Mode )
         {
             case ::com::sun::star::style::LineSpacingMode::FIX :
@@ -1180,14 +1180,14 @@ void ParagraphObj::ImplGetParagraphValues( PPTExBulletProvider* pBuProv, bool bG
 
     if ( ImplGetPropertyValue( OUString( "ParaBottomMargin" ), bGetPropStateValue ) )
     {
-        double fSpacing = *( (sal_uInt32*)mAny.getValue() ) + ( 2540.0 / 576.0 ) - 1;
+        double fSpacing = *static_cast<sal_uInt32 const *>(mAny.getValue()) + ( 2540.0 / 576.0 ) - 1;
         mnLineSpacingBottom = (sal_Int16)(-( fSpacing * 576.0 / 2540.0 ) );
     }
     meLineSpacingBottom = ePropState;
 
     if ( ImplGetPropertyValue( OUString( "ParaTopMargin" ), bGetPropStateValue ) )
     {
-        double fSpacing = *( (sal_uInt32*)mAny.getValue() ) + ( 2540.0 / 576.0 ) - 1;
+        double fSpacing = *static_cast<sal_uInt32 const *>(mAny.getValue()) + ( 2540.0 / 576.0 ) - 1;
         mnLineSpacingTop = (sal_Int16)(-( fSpacing * 576.0 / 2540.0 ) );
     }
     meLineSpacingTop = ePropState;
