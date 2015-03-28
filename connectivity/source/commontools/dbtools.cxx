@@ -1169,14 +1169,14 @@ try
         {
             Any aDate( xOldProps->getPropertyValue(sPropDefaultDate) );
             if (aDate.hasValue())
-                aNewDefault <<= DBTypeConversion::toDouble(*(Date*)aDate.getValue());
+                aNewDefault <<= DBTypeConversion::toDouble(*static_cast<Date const *>(aDate.getValue()));
         }
 
         if (hasProperty(sPropDefaultTime, xOldProps))
         {
             Any aTime( xOldProps->getPropertyValue(sPropDefaultTime) );
             if (aTime.hasValue())
-                aNewDefault <<= DBTypeConversion::toDouble(*(Time*)aTime.getValue());
+                aNewDefault <<= DBTypeConversion::toDouble(*static_cast<Time const *>(aTime.getValue()));
         }
 
         // double or OUString will be copied directly
@@ -1463,29 +1463,29 @@ bool implUpdateObject(const Reference< XRowUpdate >& _rxUpdatedObject,
             break;
 
         case TypeClass_STRING:
-            _rxUpdatedObject->updateString(_nColumnIndex, *(OUString*)_rValue.getValue());
+            _rxUpdatedObject->updateString(_nColumnIndex, *static_cast<OUString const *>(_rValue.getValue()));
             break;
 
         case TypeClass_BOOLEAN:
-            _rxUpdatedObject->updateBoolean(_nColumnIndex, *(sal_Bool *)_rValue.getValue());
+            _rxUpdatedObject->updateBoolean(_nColumnIndex, *static_cast<sal_Bool const *>(_rValue.getValue()));
             break;
 
         case TypeClass_BYTE:
-            _rxUpdatedObject->updateByte(_nColumnIndex, *(sal_Int8 *)_rValue.getValue());
+            _rxUpdatedObject->updateByte(_nColumnIndex, *static_cast<sal_Int8 const *>(_rValue.getValue()));
             break;
 
         case TypeClass_UNSIGNED_SHORT:
         case TypeClass_SHORT:
-            _rxUpdatedObject->updateShort(_nColumnIndex, *(sal_Int16*)_rValue.getValue());
+            _rxUpdatedObject->updateShort(_nColumnIndex, *static_cast<sal_Int16 const *>(_rValue.getValue()));
             break;
 
         case TypeClass_CHAR:
-            _rxUpdatedObject->updateString(_nColumnIndex,OUString((sal_Unicode *)_rValue.getValue(),1));
+            _rxUpdatedObject->updateString(_nColumnIndex,OUString(static_cast<sal_Unicode const *>(_rValue.getValue()),1));
             break;
 
         case TypeClass_UNSIGNED_LONG:
         case TypeClass_LONG:
-            _rxUpdatedObject->updateInt(_nColumnIndex, *(sal_Int32*)_rValue.getValue());
+            _rxUpdatedObject->updateInt(_nColumnIndex, *static_cast<sal_Int32 const *>(_rValue.getValue()));
             break;
 
         case TypeClass_HYPER:
@@ -1497,26 +1497,26 @@ bool implUpdateObject(const Reference< XRowUpdate >& _rxUpdatedObject,
         break;
 
         case TypeClass_FLOAT:
-            _rxUpdatedObject->updateFloat(_nColumnIndex, *(float*)_rValue.getValue());
+            _rxUpdatedObject->updateFloat(_nColumnIndex, *static_cast<float const *>(_rValue.getValue()));
             break;
 
         case TypeClass_DOUBLE:
-            _rxUpdatedObject->updateDouble(_nColumnIndex, *(double*)_rValue.getValue());
+            _rxUpdatedObject->updateDouble(_nColumnIndex, *static_cast<double const *>(_rValue.getValue()));
             break;
 
         case TypeClass_SEQUENCE:
             if (_rValue.getValueType() == cppu::UnoType< Sequence< sal_Int8 > >::get())
-                _rxUpdatedObject->updateBytes(_nColumnIndex, *(Sequence<sal_Int8>*)_rValue.getValue());
+                _rxUpdatedObject->updateBytes(_nColumnIndex, *static_cast<Sequence<sal_Int8> const *>(_rValue.getValue()));
             else
                 bSuccessfullyReRouted = false;
             break;
         case TypeClass_STRUCT:
             if (_rValue.getValueType() == cppu::UnoType<DateTime>::get())
-                _rxUpdatedObject->updateTimestamp(_nColumnIndex, *(DateTime*)_rValue.getValue());
+                _rxUpdatedObject->updateTimestamp(_nColumnIndex, *static_cast<DateTime const *>(_rValue.getValue()));
             else if (_rValue.getValueType() == cppu::UnoType<Date>::get())
-                _rxUpdatedObject->updateDate(_nColumnIndex, *(Date*)_rValue.getValue());
+                _rxUpdatedObject->updateDate(_nColumnIndex, *static_cast<Date const *>(_rValue.getValue()));
             else if (_rValue.getValueType() == cppu::UnoType<Time>::get())
-                _rxUpdatedObject->updateTime(_nColumnIndex, *(Time*)_rValue.getValue());
+                _rxUpdatedObject->updateTime(_nColumnIndex, *static_cast<Time const *>(_rValue.getValue()));
             else
                 bSuccessfullyReRouted = false;
             break;
@@ -1573,23 +1573,23 @@ bool implSetObject( const Reference< XParameters >& _rxParameters,
             break;
 
         case TypeClass_STRING:
-            _rxParameters->setString(_nColumnIndex, *(OUString*)_rValue.getValue());
+            _rxParameters->setString(_nColumnIndex, *static_cast<OUString const *>(_rValue.getValue()));
             break;
 
         case TypeClass_BOOLEAN:
-            _rxParameters->setBoolean(_nColumnIndex, *(sal_Bool *)_rValue.getValue());
+            _rxParameters->setBoolean(_nColumnIndex, *static_cast<sal_Bool const *>(_rValue.getValue()));
             break;
 
         case TypeClass_BYTE:
-            _rxParameters->setByte(_nColumnIndex, *(sal_Int8 *)_rValue.getValue());
+            _rxParameters->setByte(_nColumnIndex, *static_cast<sal_Int8 const *>(_rValue.getValue()));
             break;
 
         case TypeClass_SHORT:
-            _rxParameters->setShort(_nColumnIndex, *(sal_Int16*)_rValue.getValue());
+            _rxParameters->setShort(_nColumnIndex, *static_cast<sal_Int16 const *>(_rValue.getValue()));
             break;
 
         case TypeClass_CHAR:
-            _rxParameters->setString(_nColumnIndex, OUString((sal_Unicode *)_rValue.getValue(),1));
+            _rxParameters->setString(_nColumnIndex, OUString(static_cast<sal_Unicode const *>(_rValue.getValue()),1));
             break;
 
         case TypeClass_UNSIGNED_SHORT:
@@ -1602,28 +1602,28 @@ bool implSetObject( const Reference< XParameters >& _rxParameters,
         }
 
         case TypeClass_FLOAT:
-            _rxParameters->setFloat(_nColumnIndex, *(float*)_rValue.getValue());
+            _rxParameters->setFloat(_nColumnIndex, *static_cast<float const *>(_rValue.getValue()));
             break;
 
         case TypeClass_DOUBLE:
-            _rxParameters->setDouble(_nColumnIndex, *(double*)_rValue.getValue());
+            _rxParameters->setDouble(_nColumnIndex, *static_cast<double const *>(_rValue.getValue()));
             break;
 
         case TypeClass_SEQUENCE:
             if (_rValue.getValueType() == cppu::UnoType< Sequence< sal_Int8 > >::get())
             {
-                _rxParameters->setBytes(_nColumnIndex, *(Sequence<sal_Int8>*)_rValue.getValue());
+                _rxParameters->setBytes(_nColumnIndex, *static_cast<Sequence<sal_Int8> const *>(_rValue.getValue()));
             }
             else
                 bSuccessfullyReRouted = false;
             break;
         case TypeClass_STRUCT:
             if (_rValue.getValueType() == cppu::UnoType<DateTime>::get())
-                _rxParameters->setTimestamp(_nColumnIndex, *(DateTime*)_rValue.getValue());
+                _rxParameters->setTimestamp(_nColumnIndex, *static_cast<DateTime const *>(_rValue.getValue()));
             else if (_rValue.getValueType() == cppu::UnoType<Date>::get())
-                _rxParameters->setDate(_nColumnIndex, *(Date*)_rValue.getValue());
+                _rxParameters->setDate(_nColumnIndex, *static_cast<Date const *>(_rValue.getValue()));
             else if (_rValue.getValueType() == cppu::UnoType<Time>::get())
-                _rxParameters->setTime(_nColumnIndex, *(Time*)_rValue.getValue());
+                _rxParameters->setTime(_nColumnIndex, *static_cast<Time const *>(_rValue.getValue()));
             else
                 bSuccessfullyReRouted = false;
             break;

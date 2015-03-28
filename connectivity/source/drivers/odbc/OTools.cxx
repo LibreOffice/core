@@ -192,62 +192,62 @@ void OTools::bindValue( OConnection* _pConnection,
                 case SQL_CHAR:
                 case SQL_VARCHAR:
                 {
-                    OString aString(OUStringToOString(*(OUString*)_pValue,_nTextEncoding));
+                    OString aString(OUStringToOString(*static_cast<OUString const *>(_pValue),_nTextEncoding));
                     *pLen = SQL_NTS;
-                    *((OString*)_pData) = aString;
+                    *static_cast<OString*>(_pData) = aString;
                     _nMaxLen = (SQLSMALLINT)aString.getLength();
 
                     // Pointer on Char*
                     _pData = (void*)aString.getStr();
                 }   break;
                 case SQL_BIGINT:
-                    *((sal_Int64*)_pData) = *(sal_Int64*)_pValue;
+                    *static_cast<sal_Int64*>(_pData) = *static_cast<sal_Int64 const *>(_pValue);
                     *pLen = sizeof(sal_Int64);
                     break;
                 case SQL_DECIMAL:
                 case SQL_NUMERIC:
                 {
-                    OString aString = OString::number(*(double*)_pValue);
+                    OString aString = OString::number(*static_cast<double const *>(_pValue));
                     _nMaxLen = (SQLSMALLINT)aString.getLength();
                     *pLen = _nMaxLen;
-                    *((OString*)_pData) = aString;
+                    *static_cast<OString*>(_pData) = aString;
                     // Pointer on Char*
-                    _pData = (void*)((OString*)_pData)->getStr();
+                    _pData = (void*)static_cast<OString*>(_pData)->getStr();
                 }   break;
                 case SQL_BIT:
                 case SQL_TINYINT:
-                    *((sal_Int8*)_pData) = *(sal_Int8*)_pValue;
+                    *static_cast<sal_Int8*>(_pData) = *static_cast<sal_Int8 const *>(_pValue);
                     *pLen = sizeof(sal_Int8);
                     break;
 
                 case SQL_SMALLINT:
-                    *((sal_Int16*)_pData) = *(sal_Int16*)_pValue;
+                    *static_cast<sal_Int16*>(_pData) = *static_cast<sal_Int16 const *>(_pValue);
                     *pLen = sizeof(sal_Int16);
                     break;
                 case SQL_INTEGER:
-                    *((sal_Int32*)_pData) = *(sal_Int32*)_pValue;
+                    *static_cast<sal_Int32*>(_pData) = *static_cast<sal_Int32 const *>(_pValue);
                     *pLen = sizeof(sal_Int32);
                     break;
                 case SQL_FLOAT:
-                    *((float*)_pData) = *(float*)_pValue;
+                    *static_cast<float*>(_pData) = *static_cast<float const *>(_pValue);
                     *pLen = sizeof(float);
                     break;
                 case SQL_REAL:
                 case SQL_DOUBLE:
-                    *((double*)_pData) = *(double*)_pValue;
+                    *static_cast<double*>(_pData) = *static_cast<double const *>(_pValue);
                     *pLen = sizeof(double);
                     break;
                 case SQL_BINARY:
                 case SQL_VARBINARY:
                     {
-                        _pData = (void*)((const ::com::sun::star::uno::Sequence< sal_Int8 > *)_pValue)->getConstArray();
-                        *pLen = ((const ::com::sun::star::uno::Sequence< sal_Int8 > *)_pValue)->getLength();
+                        _pData = (void*)static_cast<const ::com::sun::star::uno::Sequence< sal_Int8 > *>(_pValue)->getConstArray();
+                        *pLen = static_cast<const ::com::sun::star::uno::Sequence< sal_Int8 > *>(_pValue)->getLength();
                     }   break;
                 case SQL_LONGVARBINARY:
                 {
                     _pData = reinterpret_cast<void*>(columnIndex);
                     sal_Int32 nLen = 0;
-                    nLen = ((const ::com::sun::star::uno::Sequence< sal_Int8 > *)_pValue)->getLength();
+                    nLen = static_cast<const ::com::sun::star::uno::Sequence< sal_Int8 > *>(_pValue)->getLength();
                     *pLen = (SQLLEN)SQL_LEN_DATA_AT_EXEC(nLen);
                 }
                     break;
@@ -255,20 +255,20 @@ void OTools::bindValue( OConnection* _pConnection,
                 {
                     _pData = reinterpret_cast<void*>(columnIndex);
                     sal_Int32 nLen = 0;
-                    nLen = ((OUString*)_pValue)->getLength();
+                    nLen = static_cast<OUString const *>(_pValue)->getLength();
                     *pLen = (SQLLEN)SQL_LEN_DATA_AT_EXEC(nLen);
                 }   break;
                 case SQL_DATE:
                     *pLen = sizeof(DATE_STRUCT);
-                    *((DATE_STRUCT*)_pData) = *(DATE_STRUCT*)_pValue;
+                    *static_cast<DATE_STRUCT*>(_pData) = *static_cast<DATE_STRUCT const *>(_pValue);
                     break;
                 case SQL_TIME:
                     *pLen = sizeof(TIME_STRUCT);
-                    *((TIME_STRUCT*)_pData) = *(TIME_STRUCT*)_pValue;
+                    *static_cast<TIME_STRUCT*>(_pData) = *static_cast<TIME_STRUCT const *>(_pValue);
                     break;
                 case SQL_TIMESTAMP:
                     *pLen = sizeof(TIMESTAMP_STRUCT);
-                    *((TIMESTAMP_STRUCT*)_pData) = *(TIMESTAMP_STRUCT*)_pValue;
+                    *static_cast<TIMESTAMP_STRUCT*>(_pData) = *static_cast<TIMESTAMP_STRUCT const *>(_pValue);
                     break;
             }
         }

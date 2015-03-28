@@ -286,31 +286,31 @@ void ORowSetValue::free()
                 m_aValue.m_pString = NULL;
                 break;
             case DataType::DATE:
-                delete (::com::sun::star::util::Date*)m_aValue.m_pValue;
+                delete static_cast<css::util::Date*>(m_aValue.m_pValue);
                 TRACE_FREE( Date )
                 m_aValue.m_pValue = NULL;
                 break;
             case DataType::TIME:
-                delete (::com::sun::star::util::Time*)m_aValue.m_pValue;
+                delete static_cast<css::util::Time*>(m_aValue.m_pValue);
                 TRACE_FREE( tools::Time )
                 m_aValue.m_pValue = NULL;
                 break;
             case DataType::TIMESTAMP:
-                delete (::com::sun::star::util::DateTime*)m_aValue.m_pValue;
+                delete static_cast<css::util::DateTime*>(m_aValue.m_pValue);
                 TRACE_FREE( DateTime )
                 m_aValue.m_pValue = NULL;
                 break;
             case DataType::BINARY:
             case DataType::VARBINARY:
             case DataType::LONGVARBINARY:
-                delete (Sequence<sal_Int8>*)m_aValue.m_pValue;
+                delete static_cast<Sequence<sal_Int8>*>(m_aValue.m_pValue);
                 TRACE_FREE( Sequence_sal_Int8 )
                 m_aValue.m_pValue = NULL;
                 break;
             case DataType::BLOB:
             case DataType::CLOB:
             case DataType::OBJECT:
-                delete (Any*)m_aValue.m_pValue;
+                delete static_cast<Any*>(m_aValue.m_pValue);
                 TRACE_FREE( Any )
                 m_aValue.m_pValue = NULL;
                 break;
@@ -327,7 +327,7 @@ void ORowSetValue::free()
             default:
                 if ( m_aValue.m_pValue )
                 {
-                    delete (Any*)m_aValue.m_pValue;
+                    delete static_cast<Any*>(m_aValue.m_pValue);
                     TRACE_FREE( Any )
                     m_aValue.m_pValue = NULL;
                 }
@@ -363,21 +363,21 @@ ORowSetValue& ORowSetValue::operator=(const ORowSetValue& _rRH)
                 m_aValue.m_pString = _rRH.m_aValue.m_pString;
                 break;
             case DataType::DATE:
-                m_aValue.m_pValue   = new Date(*(Date*)_rRH.m_aValue.m_pValue);
+                m_aValue.m_pValue   = new Date(*static_cast<Date*>(_rRH.m_aValue.m_pValue));
                 TRACE_ALLOC( Date )
                 break;
             case DataType::TIME:
-                m_aValue.m_pValue   = new Time(*(Time*)_rRH.m_aValue.m_pValue);
+                m_aValue.m_pValue   = new Time(*static_cast<Time*>(_rRH.m_aValue.m_pValue));
                 TRACE_ALLOC( tools::Time )
                 break;
             case DataType::TIMESTAMP:
-                m_aValue.m_pValue   = new DateTime(*(DateTime*)_rRH.m_aValue.m_pValue);
+                m_aValue.m_pValue   = new DateTime(*static_cast<DateTime*>(_rRH.m_aValue.m_pValue));
                 TRACE_ALLOC( DateTime )
                 break;
             case DataType::BINARY:
             case DataType::VARBINARY:
             case DataType::LONGVARBINARY:
-                m_aValue.m_pValue   = new Sequence<sal_Int8>(*(Sequence<sal_Int8>*)_rRH.m_aValue.m_pValue);
+                m_aValue.m_pValue   = new Sequence<sal_Int8>(*static_cast<Sequence<sal_Int8>*>(_rRH.m_aValue.m_pValue));
                 TRACE_ALLOC( Sequence_sal_Int8 )
                 break;
             case DataType::BIT:
@@ -416,7 +416,7 @@ ORowSetValue& ORowSetValue::operator=(const ORowSetValue& _rRH)
                 m_aValue.m_nDouble  = _rRH.m_aValue.m_nDouble;
                 break;
             default:
-                m_aValue.m_pValue   = new Any(*(Any*)_rRH.m_aValue.m_pValue);
+                m_aValue.m_pValue   = new Any(*static_cast<Any*>(_rRH.m_aValue.m_pValue));
                 TRACE_ALLOC( Any )
         }
     }
@@ -432,18 +432,18 @@ ORowSetValue& ORowSetValue::operator=(const ORowSetValue& _rRH)
                 (*this) = OUString(_rRH.m_aValue.m_pString);
                 break;
             case DataType::DATE:
-                (*this) = *(Date*)_rRH.m_aValue.m_pValue;
+                (*this) = *static_cast<Date*>(_rRH.m_aValue.m_pValue);
                 break;
             case DataType::TIME:
-                (*this) = *(Time*)_rRH.m_aValue.m_pValue;
+                (*this) = *static_cast<Time*>(_rRH.m_aValue.m_pValue);
                 break;
             case DataType::TIMESTAMP:
-                (*this) = *(DateTime*)_rRH.m_aValue.m_pValue;
+                (*this) = *static_cast<DateTime*>(_rRH.m_aValue.m_pValue);
                 break;
             case DataType::BINARY:
             case DataType::VARBINARY:
             case DataType::LONGVARBINARY:
-                (*this) = *(Sequence<sal_Int8>*)_rRH.m_aValue.m_pValue;
+                (*this) = *static_cast<Sequence<sal_Int8>*>(_rRH.m_aValue.m_pValue);
                 break;
             case DataType::BIT:
             case DataType::BOOLEAN:
@@ -481,7 +481,7 @@ ORowSetValue& ORowSetValue::operator=(const ORowSetValue& _rRH)
                 m_aValue.m_nDouble  = _rRH.m_aValue.m_nDouble;
                 break;
             default:
-                (*(Any*)m_aValue.m_pValue)  = (*(Any*)_rRH.m_aValue.m_pValue);
+                *static_cast<Any*>(m_aValue.m_pValue) = *static_cast<Any*>(_rRH.m_aValue.m_pValue);
         }
     }
 
@@ -506,7 +506,7 @@ ORowSetValue& ORowSetValue::operator=(const Date& _rRH)
         m_bNull = false;
     }
     else
-        *(Date*)m_aValue.m_pValue = _rRH;
+        *static_cast<Date*>(m_aValue.m_pValue) = _rRH;
 
     return *this;
 }
@@ -524,7 +524,7 @@ ORowSetValue& ORowSetValue::operator=(const css::util::Time& _rRH)
         m_bNull = false;
     }
     else
-        *(Time*)m_aValue.m_pValue = _rRH;
+        *static_cast<Time*>(m_aValue.m_pValue) = _rRH;
 
     return *this;
 }
@@ -541,7 +541,7 @@ ORowSetValue& ORowSetValue::operator=(const DateTime& _rRH)
         m_bNull = false;
     }
     else
-        *(DateTime*)m_aValue.m_pValue = _rRH;
+        *static_cast<DateTime*>(m_aValue.m_pValue) = _rRH;
 
     return *this;
 }
@@ -851,13 +851,13 @@ bool ORowSetValue::operator==(const ORowSetValue& _rRH) const
             bRet = m_aValue.m_bBool == _rRH.m_aValue.m_bBool;
             break;
         case DataType::DATE:
-            bRet = *(Date*)m_aValue.m_pValue == *(Date*)_rRH.m_aValue.m_pValue;
+            bRet = *static_cast<Date*>(m_aValue.m_pValue) == *static_cast<Date*>(_rRH.m_aValue.m_pValue);
             break;
         case DataType::TIME:
-            bRet = *(Time*)m_aValue.m_pValue == *(Time*)_rRH.m_aValue.m_pValue;
+            bRet = *static_cast<Time*>(m_aValue.m_pValue) == *static_cast<Time*>(_rRH.m_aValue.m_pValue);
             break;
         case DataType::TIMESTAMP:
-            bRet = *(DateTime*)m_aValue.m_pValue == *(DateTime*)_rRH.m_aValue.m_pValue;
+            bRet = *static_cast<DateTime*>(m_aValue.m_pValue) == *static_cast<DateTime*>(_rRH.m_aValue.m_pValue);
             break;
         case DataType::BINARY:
         case DataType::VARBINARY:
@@ -902,21 +902,21 @@ Any ORowSetValue::makeAny() const
                 break;
             case DataType::DATE:
                 OSL_ENSURE(m_aValue.m_pValue,"Value is null!");
-                rValue <<= *(Date*)m_aValue.m_pValue;
+                rValue <<= *static_cast<Date*>(m_aValue.m_pValue);
                 break;
             case DataType::TIME:
                 OSL_ENSURE(m_aValue.m_pValue,"Value is null!");
-                rValue <<= *(Time*)m_aValue.m_pValue;
+                rValue <<= *static_cast<Time*>(m_aValue.m_pValue);
                 break;
             case DataType::TIMESTAMP:
                 OSL_ENSURE(m_aValue.m_pValue,"Value is null!");
-                rValue <<= *(DateTime*)m_aValue.m_pValue;
+                rValue <<= *static_cast<DateTime*>(m_aValue.m_pValue);
                 break;
             case DataType::BINARY:
             case DataType::VARBINARY:
             case DataType::LONGVARBINARY:
                 OSL_ENSURE(m_aValue.m_pValue,"Value is null!");
-                rValue <<= *(Sequence<sal_Int8>*)m_aValue.m_pValue;
+                rValue <<= *static_cast<Sequence<sal_Int8>*>(m_aValue.m_pValue);
                 break;
             case DataType::BLOB:
             case DataType::CLOB:
@@ -1437,7 +1437,7 @@ sal_Int32 ORowSetValue::getInt32()  const
                 nRet = sal_Int32(m_aValue.m_nDouble);
                 break;
             case DataType::DATE:
-                nRet = dbtools::DBTypeConversion::toDays(*(::com::sun::star::util::Date*)m_aValue.m_pValue);
+                nRet = dbtools::DBTypeConversion::toDays(*static_cast<css::util::Date*>(m_aValue.m_pValue));
                 break;
             case DataType::TIME:
             case DataType::TIMESTAMP:
@@ -1510,7 +1510,7 @@ sal_uInt32 ORowSetValue::getUInt32()  const
                 nRet = sal_uInt32(m_aValue.m_nDouble);
                 break;
             case DataType::DATE:
-                nRet = dbtools::DBTypeConversion::toDays(*(::com::sun::star::util::Date*)m_aValue.m_pValue);
+                nRet = dbtools::DBTypeConversion::toDays(*static_cast<css::util::Date*>(m_aValue.m_pValue));
                 break;
             case DataType::TIME:
             case DataType::TIMESTAMP:
@@ -1583,7 +1583,7 @@ sal_Int64 ORowSetValue::getLong()   const
                 nRet = sal_Int64(m_aValue.m_nDouble);
                 break;
             case DataType::DATE:
-                nRet = dbtools::DBTypeConversion::toDays(*(::com::sun::star::util::Date*)m_aValue.m_pValue);
+                nRet = dbtools::DBTypeConversion::toDays(*static_cast<css::util::Date*>(m_aValue.m_pValue));
                 break;
             case DataType::TIME:
             case DataType::TIMESTAMP:
@@ -1656,7 +1656,7 @@ sal_uInt64 ORowSetValue::getULong()   const
                 nRet = sal_uInt64(m_aValue.m_nDouble);
                 break;
             case DataType::DATE:
-                nRet = dbtools::DBTypeConversion::toDays(*(::com::sun::star::util::Date*)m_aValue.m_pValue);
+                nRet = dbtools::DBTypeConversion::toDays(*static_cast<css::util::Date*>(m_aValue.m_pValue));
                 break;
             case DataType::TIME:
             case DataType::TIMESTAMP:
@@ -1729,13 +1729,13 @@ float ORowSetValue::getFloat()  const
                 nRet = (float)m_aValue.m_nDouble;
                 break;
             case DataType::DATE:
-                nRet = (float)dbtools::DBTypeConversion::toDouble(*(::com::sun::star::util::Date*)m_aValue.m_pValue);
+                nRet = (float)dbtools::DBTypeConversion::toDouble(*static_cast<css::util::Date*>(m_aValue.m_pValue));
                 break;
             case DataType::TIME:
-                nRet = (float)dbtools::DBTypeConversion::toDouble(*(::com::sun::star::util::Time*)m_aValue.m_pValue);
+                nRet = (float)dbtools::DBTypeConversion::toDouble(*static_cast<css::util::Time*>(m_aValue.m_pValue));
                 break;
             case DataType::TIMESTAMP:
-                nRet = (float)dbtools::DBTypeConversion::toDouble(*(::com::sun::star::util::DateTime*)m_aValue.m_pValue);
+                nRet = (float)dbtools::DBTypeConversion::toDouble(*static_cast<css::util::DateTime*>(m_aValue.m_pValue));
                 break;
             case DataType::BINARY:
             case DataType::VARBINARY:
@@ -1805,13 +1805,13 @@ double ORowSetValue::getDouble()    const
                 nRet = m_aValue.m_nDouble;
                 break;
             case DataType::DATE:
-                nRet = dbtools::DBTypeConversion::toDouble(*(::com::sun::star::util::Date*)m_aValue.m_pValue);
+                nRet = dbtools::DBTypeConversion::toDouble(*static_cast<css::util::Date*>(m_aValue.m_pValue));
                 break;
             case DataType::TIME:
-                nRet = dbtools::DBTypeConversion::toDouble(*(::com::sun::star::util::Time*)m_aValue.m_pValue);
+                nRet = dbtools::DBTypeConversion::toDouble(*static_cast<css::util::Time*>(m_aValue.m_pValue));
                 break;
             case DataType::TIMESTAMP:
-                nRet = dbtools::DBTypeConversion::toDouble(*(::com::sun::star::util::DateTime*)m_aValue.m_pValue);
+                nRet = dbtools::DBTypeConversion::toDouble(*static_cast<css::util::DateTime*>(m_aValue.m_pValue));
                 break;
             case DataType::BINARY:
             case DataType::VARBINARY:

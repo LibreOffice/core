@@ -1168,54 +1168,54 @@ bool implSetObject(	const Reference< XParameters >& _rxParameters,
             break;
 
         case typelib_TypeClass_STRING:
-            _rxParameters->setString(_nColumnIndex, *(OUString*)_rValue.getValue());
+            _rxParameters->setString(_nColumnIndex, *static_cast<OUString const *>(_rValue.getValue()));
             break;
 
         case typelib_TypeClass_BOOLEAN:
-            _rxParameters->setBoolean(_nColumnIndex, *(sal_Bool *)_rValue.getValue());
+            _rxParameters->setBoolean(_nColumnIndex, *static_cast<sal_Bool const *>(_rValue.getValue()));
             break;
 
         case typelib_TypeClass_BYTE:
-            _rxParameters->setByte(_nColumnIndex, *(sal_Int8 *)_rValue.getValue());
+            _rxParameters->setByte(_nColumnIndex, *static_cast<sal_Int8 const *>(_rValue.getValue()));
             break;
 
         case typelib_TypeClass_UNSIGNED_SHORT:
         case typelib_TypeClass_SHORT:
-            _rxParameters->setShort(_nColumnIndex, *(sal_Int16*)_rValue.getValue());
+            _rxParameters->setShort(_nColumnIndex, *static_cast<sal_Int16 const *>(_rValue.getValue()));
             break;
 
         case typelib_TypeClass_CHAR:
-            _rxParameters->setString(_nColumnIndex, OUString((sal_Unicode *)_rValue.getValue(),1));
+            _rxParameters->setString(_nColumnIndex, OUString(static_cast<sal_Unicode const *>(_rValue.getValue()),1));
             break;
 
         case typelib_TypeClass_UNSIGNED_LONG:
         case typelib_TypeClass_LONG:
-            _rxParameters->setInt(_nColumnIndex, *(sal_Int32*)_rValue.getValue());
+            _rxParameters->setInt(_nColumnIndex, *static_cast<sal_Int32 const *>(_rValue.getValue()));
             break;
 
         case typelib_TypeClass_FLOAT:
-            _rxParameters->setFloat(_nColumnIndex, *(float*)_rValue.getValue());
+            _rxParameters->setFloat(_nColumnIndex, *static_cast<float const *>(_rValue.getValue()));
             break;
 
         case typelib_TypeClass_DOUBLE:
-            _rxParameters->setDouble(_nColumnIndex, *(double*)_rValue.getValue());
+            _rxParameters->setDouble(_nColumnIndex, *static_cast<double const *>(_rValue.getValue()));
             break;
 
         case typelib_TypeClass_SEQUENCE:
             if (_rValue.getValueType() == ::getCppuType((const Sequence< sal_Int8 > *)0))
             {
-                _rxParameters->setBytes(_nColumnIndex, *(Sequence<sal_Int8>*)_rValue.getValue());
+                _rxParameters->setBytes(_nColumnIndex, *static_cast<Sequence<sal_Int8> const *>(_rValue.getValue()));
             }
             else
                 bSuccessfullyReRouted = false;
             break;
         case typelib_TypeClass_STRUCT:
             if (_rValue.getValueType() == cppu::UnoType<com::sun::star::util::DateTime>::get())
-                _rxParameters->setTimestamp(_nColumnIndex, *(com::sun::star::util::DateTime*)_rValue.getValue());
+                _rxParameters->setTimestamp(_nColumnIndex, *static_cast<com::sun::star::util::DateTime const *>(_rValue.getValue()));
             else if (_rValue.getValueType() == cppu::UnoType<com::sun::star::util::Date>::get())
-                _rxParameters->setDate(_nColumnIndex, *(com::sun::star::util::Date*)_rValue.getValue());
+                _rxParameters->setDate(_nColumnIndex, *static_cast<com::sun::star::util::Date const *>(_rValue.getValue()));
             else if (_rValue.getValueType() == cppu::UnoType<com::sun::star::util::Time>::get())
-                _rxParameters->setTime(_nColumnIndex, *(com::sun::star::util::Time*)_rValue.getValue());
+                _rxParameters->setTime(_nColumnIndex, *static_cast<com::sun::star::util::Time const *>(_rValue.getValue()));
             else
                 bSuccessfullyReRouted = false;
             break;

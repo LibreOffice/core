@@ -411,7 +411,7 @@ namespace connectivity
         ::com::sun::star::util::DateTime            getDateTime()   const;
         ::com::sun::star::uno::Sequence<sal_Int8>   getSequence()   const;
         // only use for anys
-        ::com::sun::star::uno::Any                  getAny()        const { return *(::com::sun::star::uno::Any*)m_aValue.m_pValue; }
+        ::com::sun::star::uno::Any                  getAny()        const { return *static_cast<css::uno::Any*>(m_aValue.m_pValue); }
         ::com::sun::star::uno::Any                  makeAny()       const;
 
         /**

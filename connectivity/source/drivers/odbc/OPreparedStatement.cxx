@@ -344,7 +344,7 @@ void OPreparedStatement::setParameter(const sal_Int32 parameterIndex, const sal_
         else
         {
             pData = allocBindBuf(parameterIndex, _sData.getLength() * 4);
-            sal_uInt32* pCursor = (sal_uInt32*)pData;
+            sal_uInt32* pCursor = static_cast<sal_uInt32*>(pData);
             nCharLen = 0;
             for (sal_Int32 i = 0; i != _sData.getLength();)
             {

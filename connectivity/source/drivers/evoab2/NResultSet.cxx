@@ -156,7 +156,7 @@ whichAddress(int value)
 static EContactAddress *
 getDefaultContactAddress( EContact *pContact,int *value )
 {
-    EContactAddress *ec = (EContactAddress *)e_contact_get(pContact,whichAddress(WORK_ADDR_LINE1));
+    EContactAddress *ec = static_cast<EContactAddress *>(e_contact_get(pContact,whichAddress(WORK_ADDR_LINE1)));
     if ( ec && (strlen(ec->street)>0) )
     {
         *value= *value +WORK_ADDR_LINE1 -1;
@@ -164,7 +164,7 @@ getDefaultContactAddress( EContact *pContact,int *value )
     }
     else
         {
-            ec = (EContactAddress *)e_contact_get(pContact,whichAddress(HOME_ADDR_LINE1));
+            ec = static_cast<EContactAddress *>(e_contact_get(pContact,whichAddress(HOME_ADDR_LINE1)));
             if ( ec && (strlen(ec->street)>0) )
             {
                 *value=*value+HOME_ADDR_LINE1-1;
@@ -173,7 +173,7 @@ getDefaultContactAddress( EContact *pContact,int *value )
         }
 
     *value=*value+OTHER_ADDR_LINE1-1;
-    return (EContactAddress *)e_contact_get(pContact,whichAddress(OTHER_ADDR_LINE1));
+    return static_cast<EContactAddress *>(e_contact_get(pContact,whichAddress(OTHER_ADDR_LINE1)));
 }
 
 static EContactAddress*
@@ -190,7 +190,7 @@ getContactAddress( EContact *pContact, int * address_enum )
         case DEFAULT_ZIP:
             ec = getDefaultContactAddress(pContact,address_enum);break;
            default:
-            ec = (EContactAddress *)e_contact_get(pContact,whichAddress(*address_enum));
+            ec = static_cast<EContactAddress *>(e_contact_get(pContact,whichAddress(*address_enum)));
     }
     return ec;
 }

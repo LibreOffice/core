@@ -205,43 +205,43 @@ void firebird::mallocSQLVAR(XSQLDA* pSqlda)
         int dtype = (pVar->sqltype & ~1); /* drop flag bit for now */
         switch(dtype) {
         case SQL_TEXT:
-            pVar->sqldata = (char *)malloc(sizeof(char)*pVar->sqllen);
+            pVar->sqldata = static_cast<char *>(malloc(sizeof(char)*pVar->sqllen));
             break;
         case SQL_VARYING:
-            pVar->sqldata = (char *)malloc(sizeof(char)*pVar->sqllen + 2);
+            pVar->sqldata = static_cast<char *>(malloc(sizeof(char)*pVar->sqllen + 2));
             break;
         case SQL_SHORT:
-            pVar->sqldata = (char*) malloc(sizeof(sal_Int16));
+            pVar->sqldata = static_cast<char*>(malloc(sizeof(sal_Int16)));
             break;
         case SQL_LONG:
-            pVar->sqldata = (char*) malloc(sizeof(sal_Int32));
+            pVar->sqldata = static_cast<char*>(malloc(sizeof(sal_Int32)));
             break;
         case SQL_FLOAT:
-            pVar->sqldata = (char *)malloc(sizeof(float));
+            pVar->sqldata = static_cast<char *>(malloc(sizeof(float)));
             break;
         case SQL_DOUBLE:
-            pVar->sqldata = (char *)malloc(sizeof(double));
+            pVar->sqldata = static_cast<char *>(malloc(sizeof(double)));
             break;
         case SQL_D_FLOAT:
-            pVar->sqldata = (char *)malloc(sizeof(double));
+            pVar->sqldata = static_cast<char *>(malloc(sizeof(double)));
             break;
         case SQL_TIMESTAMP:
-            pVar->sqldata = (char*) malloc(sizeof(ISC_TIMESTAMP));
+            pVar->sqldata = static_cast<char*>(malloc(sizeof(ISC_TIMESTAMP)));
             break;
         case SQL_BLOB:
-            pVar->sqldata = (char*) malloc(sizeof(ISC_QUAD));
+            pVar->sqldata = static_cast<char*>(malloc(sizeof(ISC_QUAD)));
             break;
         case SQL_ARRAY:
             assert(false); // TODO: implement
             break;
         case SQL_TYPE_TIME:
-            pVar->sqldata = (char*) malloc(sizeof(ISC_TIME));
+            pVar->sqldata = static_cast<char*>(malloc(sizeof(ISC_TIME)));
             break;
         case SQL_TYPE_DATE:
-            pVar->sqldata = (char*) malloc(sizeof(ISC_DATE));
+            pVar->sqldata = static_cast<char*>(malloc(sizeof(ISC_DATE)));
             break;
         case SQL_INT64:
-            pVar->sqldata = (char *)malloc(sizeof(sal_Int64));
+            pVar->sqldata = static_cast<char *>(malloc(sizeof(sal_Int64)));
             break;
         case SQL_NULL:
             assert(false); // TODO: implement
@@ -257,7 +257,7 @@ void firebird::mallocSQLVAR(XSQLDA* pSqlda)
         if (pVar->sqltype & 1)
         {
             /* allocate variable to hold NULL status */
-            pVar->sqlind = (short *)malloc(sizeof(short));
+            pVar->sqlind = static_cast<short *>(malloc(sizeof(short)));
         }
     }
 }

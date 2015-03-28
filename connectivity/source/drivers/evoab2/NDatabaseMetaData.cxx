@@ -105,7 +105,7 @@ namespace connectivity
                 GParamSpec **pProps;
                 nFields = 0;
                 pProps = g_object_class_list_properties
-                    ( (GObjectClass *) g_type_class_ref( E_TYPE_CONTACT ),
+                    ( static_cast<GObjectClass *>(g_type_class_ref( E_TYPE_CONTACT )),
                          &nProps );
                 pToBeFields = g_new0(ColumnProperty  *, (nProps + OTHER_ZIP)/* new column(s)*/ );
                 for ( guint i = 0; i < nProps; i++ )

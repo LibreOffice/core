@@ -131,7 +131,7 @@ void OStatementCommonBase::prepareAndDescribeStatement(const OUString& sql,
 
     if (!pOutSqlda)
     {
-        pOutSqlda = (XSQLDA*) calloc(1, XSQLDA_LENGTH(10));
+        pOutSqlda = static_cast<XSQLDA*>(calloc(1, XSQLDA_LENGTH(10)));
         pOutSqlda->version = SQLDA_VERSION1;
         pOutSqlda->sqln = 10;
     }
@@ -185,7 +185,7 @@ void OStatementCommonBase::prepareAndDescribeStatement(const OUString& sql,
                 {
                     int n = pOutSqlda->sqld;
                     free(pOutSqlda);
-                    pOutSqlda = (XSQLDA*) calloc(1, XSQLDA_LENGTH(n));
+                    pOutSqlda = static_cast<XSQLDA*>(calloc(1, XSQLDA_LENGTH(n)));
                     pOutSqlda->version = SQLDA_VERSION1;
                     pOutSqlda->sqln = n;
                     aErr = isc_dsql_describe(m_statusVector,
