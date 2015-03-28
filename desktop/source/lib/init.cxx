@@ -333,8 +333,8 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
 
     if (!xContext.is())
     {
-        pLib->maLastExceptionMsg = "ComponentContext is not available!";
-        SAL_INFO("lok", "ComponentContext is not available!");
+        pLib->maLastExceptionMsg = "ComponentContext is not available";
+        SAL_INFO("lok", "ComponentContext is not available");
         return NULL;
     }
 
@@ -342,8 +342,8 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
 
     if (!xComponentLoader.is())
     {
-        pLib->maLastExceptionMsg = "ComponentLoader is not available!";
-        SAL_INFO("lok", "ComponentLoader is not available!");
+        pLib->maLastExceptionMsg = "ComponentLoader is not available";
+        SAL_INFO("lok", "ComponentLoader is not available");
         return NULL;
     }
 
