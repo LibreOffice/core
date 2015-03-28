@@ -75,7 +75,7 @@ class MacroSnippet
                 {
                     if(size == size_read)
                     {
-                        OUString sCode((sal_Char*)buffer, size, RTL_TEXTENCODING_UTF8);
+                        OUString sCode(static_cast<sal_Char*>(buffer), size, RTL_TEXTENCODING_UTF8);
                         sSource = sCode;
                     }
                 }

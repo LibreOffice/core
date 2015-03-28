@@ -3741,7 +3741,7 @@ void SbiRuntime::SetupArgs( SbxVariable* p, sal_uInt32 nOp1 )
 
                         if( aAny.getValueType().getTypeClass() == TypeClass_INTERFACE )
                         {
-                            Reference< XInterface > x = *(Reference< XInterface >*)aAny.getValue();
+                            Reference< XInterface > x = *static_cast<Reference< XInterface > const *>(aAny.getValue());
                             Reference< XDefaultMethod > xDfltMethod( x, UNO_QUERY );
 
                             OUString sDefaultMethod;
@@ -3869,7 +3869,7 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
 
                     if( aAny.getValueType().getTypeClass() == TypeClass_INTERFACE )
                     {
-                        Reference< XInterface > x = *(Reference< XInterface >*)aAny.getValue();
+                        Reference< XInterface > x = *static_cast<Reference< XInterface > const *>(aAny.getValue());
                         Reference< XIndexAccess > xIndexAccess( x, UNO_QUERY );
                         if ( !bVBAEnabled )
                         {
@@ -3891,7 +3891,7 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
                                     TypeClass eType = aAny2.getValueType().getTypeClass();
                                     if( eType == TypeClass_INTERFACE )
                                     {
-                                        xRet = *(Reference< XInterface >*)aAny2.getValue();
+                                        xRet = *static_cast<Reference< XInterface > const *>(aAny2.getValue());
                                     }
                                 }
                                 catch (const IndexOutOfBoundsException&)
@@ -3939,7 +3939,7 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
                                         Any aUnoAny = pUnoObj->getUnoAny();
 
                                         if( aUnoAny.getValueType().getTypeClass() == TypeClass_INTERFACE )
-                                            x = *(Reference< XInterface >*)aUnoAny.getValue();
+                                            x = *static_cast<Reference< XInterface > const *>(aUnoAny.getValue());
                                         pElem = pDflt;
                                     }
                                 }

@@ -2041,7 +2041,7 @@ uno::Sequence< sal_Int8 > implGetDialogData( SbxObject* pDialog )
     sal_Size nLen = aMemStream.Tell();
     uno::Sequence< sal_Int8 > aData( nLen );
     sal_Int8* pDestData = aData.getArray();
-    const sal_Int8* pSrcData = (const sal_Int8*)aMemStream.GetData();
+    const sal_Int8* pSrcData = static_cast<const sal_Int8*>(aMemStream.GetData());
     memcpy( pDestData, pSrcData, nLen );
     return aData;
 }

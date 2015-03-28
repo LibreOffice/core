@@ -42,8 +42,8 @@ struct SbCompare_UString_PropertyValue_Impl
 
 extern "C" int SAL_CALL SbCompare_UString_Property_Impl( const void *arg1, const void *arg2 )
 {
-    const OUString *pArg1 = (OUString*) arg1;
-    const Property *pArg2 = (Property*) arg2;
+    const OUString *pArg1 = static_cast<OUString const *>(arg1);
+    const Property *pArg2 = static_cast<Property const *>(arg2);
     return pArg1->compareTo( pArg2->Name );
 }
 
@@ -197,10 +197,10 @@ PropertySetInfoImpl::PropertySetInfoImpl()
 sal_Int32 PropertySetInfoImpl::GetIndex_Impl( const OUString &rPropName ) const
 {
     Property *pP;
-    pP = (Property*)
+    pP = static_cast<Property*>(
             bsearch( &rPropName, _aProps.getConstArray(), _aProps.getLength(),
                       sizeof( Property ),
-                      SbCompare_UString_Property_Impl );
+                      SbCompare_UString_Property_Impl ));
     return pP ? sal::static_int_cast<sal_Int32>( pP - _aProps.getConstArray() ) : -1;
 }
 
@@ -287,8 +287,8 @@ void RTL_Impl_CreatePropertySet( StarBASIC* pBasic, SbxArray& rPar, bool bWrite 
         // Set PropertyValues
         Any aArgAsAny = sbxToUnoValue( rPar.Get(1),
                 getCppuType( (Sequence<PropertyValue>*)0 ) );
-        Sequence<PropertyValue> *pArg =
-                (Sequence<PropertyValue>*) aArgAsAny.getValue();
+        Sequence<PropertyValue> const *pArg =
+                static_cast<Sequence<PropertyValue> const *>(aArgAsAny.getValue());
         Reference< XPropertyAccess > xPropAcc = Reference< XPropertyAccess >::query( xInterface );
         xPropAcc->setPropertyValues( *pArg );
 

@@ -43,7 +43,7 @@ public:
     static void SetDebugMode( bool bDebugMode );
 };
 
-#define BASIC_DLL() (*(BasicDLL**)GetAppData( SHL_BASIC ) )
+#define BASIC_DLL() (*reinterpret_cast<BasicDLL**>(GetAppData( SHL_BASIC )) )
 
 #endif // INCLUDED_BASIC_BASRDLL_HXX
 

@@ -490,7 +490,7 @@ sal_Size UCBStream::PutData(const void* pData, sal_Size nSize)
         Reference< XOutputStream > xOSFromS;
         if( xS.is() && (xOSFromS = xS->getOutputStream()).is() )
         {
-            Sequence<sal_Int8> aData( (const sal_Int8 *)pData, nSize );
+            Sequence<sal_Int8> aData( static_cast<const sal_Int8 *>(pData), nSize );
             xOSFromS->writeBytes( aData );
             return nSize;
         }

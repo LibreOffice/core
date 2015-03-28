@@ -808,10 +808,10 @@ void unoToSbxValue( SbxVariable* pVar, const Any& aValue )
         break;
 
 
-        case TypeClass_BOOLEAN:         pVar->PutBool( *(sal_Bool*)aValue.getValue() ); break;
+        case TypeClass_BOOLEAN:         pVar->PutBool( *static_cast<sal_Bool const *>(aValue.getValue()) ); break;
         case TypeClass_CHAR:
         {
-            pVar->PutChar( *(sal_Unicode*)aValue.getValue() );
+            pVar->PutChar( *static_cast<sal_Unicode const *>(aValue.getValue()) );
             break;
         }
         case TypeClass_STRING:          { OUString val; aValue >>= val; pVar->PutString( val ); }  break;
@@ -1623,7 +1623,7 @@ OUString getDbgObjectNameImpl( SbUnoObject* pUnoObj )
             TypeClass eType = aToInspectObj.getValueType().getTypeClass();
             Reference< XInterface > xObj;
             if( eType == TypeClass_INTERFACE )
-                xObj = *(Reference< XInterface >*)aToInspectObj.getValue();
+                xObj = *static_cast<Reference< XInterface > const *>(aToInspectObj.getValue());
             if( xObj.is() )
             {
                 Reference< XServiceInfo > xServiceInfo( xObj, UNO_QUERY );
@@ -1675,7 +1675,7 @@ bool checkUnoObjectType( SbUnoObject* pUnoObj, const OUString& rClass )
     {
         return false;
     }
-    const Reference< XInterface > x = *(Reference< XInterface >*)aToInspectObj.getValue();
+    const Reference< XInterface > x = *static_cast<Reference< XInterface > const *>(aToInspectObj.getValue());
 
     // Return true for XInvocation based objects as interface type names don't count then
     Reference< XInvocation > xInvocation( x, UNO_QUERY );
@@ -1778,7 +1778,7 @@ OUString Impl_GetSupportedInterfaces( SbUnoObject* pUnoObj )
     else
     {
         // get the interface from the Any
-        const Reference< XInterface > x = *(Reference< XInterface >*)aToInspectObj.getValue();
+        const Reference< XInterface > x = *static_cast<Reference< XInterface > const *>(aToInspectObj.getValue());
 
         Reference< XTypeProvider > xTypeProvider( x, UNO_QUERY );
 
@@ -2348,7 +2348,7 @@ SbUnoObject::SbUnoObject( const OUString& aName_, const Any& aUnoObj_ )
     if( eType == TypeClass_INTERFACE )
     {
         // get the interface from the Any
-        x = *(Reference< XInterface >*)aUnoObj_.getValue();
+        x = *static_cast<Reference< XInterface > const *>(aUnoObj_.getValue());
         if( !x.is() )
             return;
     }
@@ -3144,7 +3144,7 @@ void RTL_Impl_HasInterfaces( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
         return;
     }
     // get the interface out of the Any
-    Reference< XInterface > x = *(Reference< XInterface >*)aAny.getValue();
+    Reference< XInterface > x = *static_cast<Reference< XInterface > const *>(aAny.getValue());
 
     // get CoreReflection
     Reference< XIdlReflection > xCoreReflection = getCoreReflection_Impl();
@@ -3471,7 +3471,7 @@ SbxVariable* SbUnoClass::Find( const OUString& rName, SbxClassType )
                         // Interface located? Then it is a class
                         if( eType == TypeClass_INTERFACE )
                         {
-                            Reference< XInterface > xIface = *(Reference< XInterface >*)aValue.getValue();
+                            Reference< XInterface > xIface = *static_cast<Reference< XInterface > const *>(aValue.getValue());
                             Reference< XIdlClass > xClass( xIface, UNO_QUERY );
                             if( xClass.is() )
                             {
@@ -4813,7 +4813,7 @@ OUString StructRefInfo::getTypeName() const
 
 void* StructRefInfo::getInst()
 {
-    return ((char*)maAny.getValue() + mnPos );
+    return const_cast<char *>(static_cast<char const *>(maAny.getValue()) + mnPos);
 }
 
 TypeClass StructRefInfo::getTypeClass() const
