@@ -1752,59 +1752,54 @@ void SwXTextTableCursor::setPropertyValue(const OUString& rPropertyName, const u
 {
     SolarMutexGuard aGuard;
     SwUnoCrsr* pUnoCrsr = GetCrsr();
-    if(pUnoCrsr)
+    if(!pUnoCrsr)
+        return;
+    auto pSttNode = pUnoCrsr->GetNode().StartOfSectionNode();
+    const SwTableNode* pTblNode = pSttNode->FindTableNode();
+    lcl_FormatTable(pTblNode->GetTable().GetFrmFmt());
+    auto pEntry(m_pPropSet->getPropertyMap().getByName(rPropertyName));
+    if(!pEntry)
+        throw beans::UnknownPropertyException("Unknown property: " + rPropertyName, static_cast<cppu::OWeakObject*>(this));
+    if(pEntry->nFlags & beans::PropertyAttribute::READONLY)
+        throw beans::PropertyVetoException("Property is read-only: " + rPropertyName, static_cast<cppu::OWeakObject*>(this));
+    auto& rTblCrsr = dynamic_cast<SwUnoTableCrsr&>(*pUnoCrsr);
+    rTblCrsr.MakeBoxSels();
+    SwDoc* pDoc = pUnoCrsr->GetDoc();
+    switch(pEntry->nWID)
     {
-        SwStartNode* pSttNode = pUnoCrsr->GetNode().StartOfSectionNode();
-        const SwTableNode* pTblNode = pSttNode->FindTableNode();
-        lcl_FormatTable((SwFrmFmt*)pTblNode->GetTable().GetFrmFmt());
-        SwUnoTableCrsr& rTblCrsr = dynamic_cast<SwUnoTableCrsr&>(*pUnoCrsr);
-        const SfxItemPropertySimpleEntry* pEntry =
-                                    m_pPropSet->getPropertyMap().getByName(rPropertyName);
-        if(pEntry)
+        case FN_UNO_TABLE_CELL_BACKGROUND:
         {
-            if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
-                throw beans::PropertyVetoException("Property is read-only: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
-            rTblCrsr.MakeBoxSels();
-            SwDoc* pDoc = pUnoCrsr->GetDoc();
-            switch(pEntry->nWID )
-            {
-                case FN_UNO_TABLE_CELL_BACKGROUND:
-                {
-                    SvxBrushItem aBrush( RES_BACKGROUND );
-                    pDoc->GetBoxAttr( *pUnoCrsr, aBrush );
-                    aBrush.PutValue(aValue, pEntry->nMemberId);
-                    pDoc->SetBoxAttr( *pUnoCrsr, aBrush );
+            SvxBrushItem aBrush(RES_BACKGROUND);
+            pDoc->GetBoxAttr(*pUnoCrsr, aBrush);
+            aBrush.PutValue(aValue, pEntry->nMemberId);
+            pDoc->SetBoxAttr(*pUnoCrsr, aBrush);
 
-                }
-                break;
-                case RES_BOXATR_FORMAT:
-                {
-                    SfxUInt32Item aNumberFormat(RES_BOXATR_FORMAT);
-                    aNumberFormat.PutValue(aValue, 0);
-                    pDoc->SetBoxAttr( *pUnoCrsr, aNumberFormat);
-                }
-                break;
-                case FN_UNO_PARA_STYLE:
-                    SwUnoCursorHelper::SetTxtFmtColl(aValue, *pUnoCrsr);
-                break;
-                default:
-                {
-                    SfxItemSet aItemSet( pDoc->GetAttrPool(), pEntry->nWID, pEntry->nWID );
-                    SwUnoCursorHelper::GetCrsrAttr(rTblCrsr.GetSelRing(),
-                            aItemSet);
-
-                    if (!SwUnoCursorHelper::SetCursorPropertyValue(
-                            *pEntry, aValue, rTblCrsr.GetSelRing(), aItemSet))
-                    {
-                        m_pPropSet->setPropertyValue(*pEntry, aValue, aItemSet);
-                    }
-                    SwUnoCursorHelper::SetCrsrAttr(rTblCrsr.GetSelRing(),
-                            aItemSet, SetAttrMode::DEFAULT, true);
-                }
-            }
         }
-        else
-            throw beans::UnknownPropertyException("Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+        break;
+        case RES_BOXATR_FORMAT:
+        {
+            SfxUInt32Item aNumberFormat(RES_BOXATR_FORMAT);
+            aNumberFormat.PutValue(aValue, 0);
+            pDoc->SetBoxAttr(*pUnoCrsr, aNumberFormat);
+        }
+        break;
+        case FN_UNO_PARA_STYLE:
+            SwUnoCursorHelper::SetTxtFmtColl(aValue, *pUnoCrsr);
+        break;
+        default:
+        {
+            SfxItemSet aItemSet(pDoc->GetAttrPool(), pEntry->nWID, pEntry->nWID);
+            SwUnoCursorHelper::GetCrsrAttr(rTblCrsr.GetSelRing(),
+                    aItemSet);
+
+            if (!SwUnoCursorHelper::SetCursorPropertyValue(
+                    *pEntry, aValue, rTblCrsr.GetSelRing(), aItemSet))
+            {
+                m_pPropSet->setPropertyValue(*pEntry, aValue, aItemSet);
+            }
+            SwUnoCursorHelper::SetCrsrAttr(rTblCrsr.GetSelRing(),
+                    aItemSet, SetAttrMode::DEFAULT, true);
+        }
     }
 }
 
