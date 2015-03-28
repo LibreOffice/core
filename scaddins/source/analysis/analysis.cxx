@@ -1139,7 +1139,7 @@ OUString SAL_CALL AnalysisAddIn::getComplex( double fR, double fI, const uno::An
             break;
         case uno::TypeClass_STRING:
             {
-            const OUString*   pSuff = ( const OUString* ) rSuff.getValue();
+            const OUString*   pSuff = static_cast<const OUString*>(rSuff.getValue());
             bi = *pSuff == "i" || pSuff->isEmpty();
             if( !bi && *pSuff != "j" )
                 throw lang::IllegalArgumentException();

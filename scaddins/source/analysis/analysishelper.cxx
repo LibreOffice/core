@@ -2153,10 +2153,10 @@ void ComplexList::Append( const uno::Sequence< uno::Any >& aMultPars, ComplListA
             case uno::TypeClass_VOID:       break;
             case uno::TypeClass_STRING:
                 {
-                const OUString*       pStr = ( const OUString* ) r.getValue();
+                const OUString*       pStr = static_cast<const OUString*>(r.getValue());
 
                 if( !pStr->isEmpty() )
-                    Append( new Complex( *( OUString* ) r.getValue() ) );
+                    Append( new Complex( *static_cast<OUString const *>(r.getValue()) ) );
                 else if( bEmpty0 )
                     Append( new Complex( 0.0 ) );
                 else if( bErrOnEmpty )
@@ -2164,7 +2164,7 @@ void ComplexList::Append( const uno::Sequence< uno::Any >& aMultPars, ComplListA
                 }
                 break;
             case uno::TypeClass_DOUBLE:
-                Append( new Complex( *( double* ) r.getValue(), 0.0 ) );
+                Append( new Complex( *static_cast<double const *>(r.getValue()), 0.0 ) );
                 break;
             case uno::TypeClass_SEQUENCE:
                 {
