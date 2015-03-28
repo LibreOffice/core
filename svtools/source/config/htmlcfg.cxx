@@ -129,11 +129,11 @@ void SvxHtmlOptions::Load( const Sequence< OUString >& aNames )
                 switch(nProp)
                 {
                     case  0:
-                        if(*(sal_Bool*)pValues[nProp].getValue())
+                        if(*static_cast<sal_Bool const *>(pValues[nProp].getValue()))
                             pImp->nFlags |= HTMLCFG_UNKNOWN_TAGS;
                     break;//"Import/UnknownTag",
                     case  1:
-                        if(*(sal_Bool*)pValues[nProp].getValue())
+                        if(*static_cast<sal_Bool const *>(pValues[nProp].getValue()))
                             pImp->nFlags |= HTMLCFG_IGNORE_FONT_FAMILY;
                     break;//"Import/FontSetting",
                     case  2: pValues[nProp] >>= pImp->aFontSizeArr[0]; break;//"Import/FontSize/Size_1",
@@ -159,19 +159,19 @@ void SvxHtmlOptions::Load( const Sequence< OUString >& aNames )
                         }
                         break;
                     case 10:
-                        if(*(sal_Bool*)pValues[nProp].getValue())
+                        if(*static_cast<sal_Bool const *>(pValues[nProp].getValue()))
                             pImp->nFlags |= HTMLCFG_STAR_BASIC;
                     break;//"Export/Basic",
                     case 11:
-                        if(*(sal_Bool*)pValues[nProp].getValue())
+                        if(*static_cast<sal_Bool const *>(pValues[nProp].getValue()))
                             pImp->nFlags |= HTMLCFG_PRINT_LAYOUT_EXTENSION;
                     break;//"Export/PrintLayout",
                     case 12:
-                        if(*(sal_Bool*)pValues[nProp].getValue())
+                        if(*static_cast<sal_Bool const *>(pValues[nProp].getValue()))
                             pImp->nFlags |= HTMLCFG_LOCAL_GRF;
                     break;//"Export/LocalGraphic",
                     case 13:
-                        if(*(sal_Bool*)pValues[nProp].getValue())
+                        if(*static_cast<sal_Bool const *>(pValues[nProp].getValue()))
                             pImp->nFlags |= HTMLCFG_IS_BASIC_WARNING;
                     break;//"Export/Warning"
 
@@ -180,7 +180,7 @@ void SvxHtmlOptions::Load( const Sequence< OUString >& aNames )
                     break;//"Export/Encoding"
 
                     case 15:
-                        if(*(sal_Bool*)pValues[nProp].getValue())
+                        if(*static_cast<sal_Bool const *>(pValues[nProp].getValue()))
                             pImp->nFlags |= HTMLCFG_NUMBERS_ENGLISH_US;
                     break;//"Import/NumbersEnglishUS"
                 }

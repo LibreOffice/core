@@ -703,13 +703,13 @@ sal_Handle FontList::GetFirstFontInfo(const OUString& rName) const
 
 sal_Handle FontList::GetNextFontInfo( sal_Handle hFontInfo ) const
 {
-    ImplFontListFontInfo* pInfo = (ImplFontListFontInfo*)(void*)hFontInfo;
+    ImplFontListFontInfo* pInfo = static_cast<ImplFontListFontInfo*>((void*)hFontInfo);
     return (sal_Handle)(pInfo->mpNext);
 }
 
 const vcl::FontInfo& FontList::GetFontInfo( sal_Handle hFontInfo ) const
 {
-    ImplFontListFontInfo* pInfo = (ImplFontListFontInfo*)(void*)hFontInfo;
+    ImplFontListFontInfo* pInfo = static_cast<ImplFontListFontInfo*>((void*)hFontInfo);
     return *pInfo;
 }
 

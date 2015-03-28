@@ -1179,25 +1179,25 @@ extern "C" {
 static int SAL_CALL RTFKeyCompare( const void *pFirst, const void *pSecond)
 {
     int nRet = 0;
-    if( -1 == ((RTF_TokenEntry*)pFirst)->nToken )
+    if( -1 == static_cast<RTF_TokenEntry const *>(pFirst)->nToken )
     {
-        if( -1 == ((RTF_TokenEntry*)pSecond)->nToken )
-            nRet = ((RTF_TokenEntry*)pFirst)->pUToken->compareTo(
-                            *((RTF_TokenEntry*)pSecond)->pUToken );
+        if( -1 == static_cast<RTF_TokenEntry const *>(pSecond)->nToken )
+            nRet = static_cast<RTF_TokenEntry const *>(pFirst)->pUToken->compareTo(
+                            *static_cast<RTF_TokenEntry const *>(pSecond)->pUToken );
         else
         {
-            nRet = ((RTF_TokenEntry*)pFirst)->pUToken->compareToIgnoreAsciiCaseAscii(
-                            ((RTF_TokenEntry*)pSecond)->sToken );
+            nRet = static_cast<RTF_TokenEntry const *>(pFirst)->pUToken->compareToIgnoreAsciiCaseAscii(
+                            static_cast<RTF_TokenEntry const *>(pSecond)->sToken );
         }
     }
     else
     {
-        if( -1 == ((RTF_TokenEntry*)pSecond)->nToken )
-            nRet = -1 * ((RTF_TokenEntry*)pSecond)->pUToken->compareToIgnoreAsciiCaseAscii(
-                            ((RTF_TokenEntry*)pFirst)->sToken );
+        if( -1 == static_cast<RTF_TokenEntry const *>(pSecond)->nToken )
+            nRet = -1 * static_cast<RTF_TokenEntry const *>(pSecond)->pUToken->compareToIgnoreAsciiCaseAscii(
+                            static_cast<RTF_TokenEntry const *>(pFirst)->sToken );
         else
-            nRet = strcmp( ((RTF_TokenEntry*)pFirst)->sToken,
-                            ((RTF_TokenEntry*)pSecond)->sToken );
+            nRet = strcmp( static_cast<RTF_TokenEntry const *>(pFirst)->sToken,
+                            static_cast<RTF_TokenEntry const *>(pSecond)->sToken );
     }
 
     return nRet;
@@ -1227,7 +1227,7 @@ int GetRTFToken( const OUString& rSearch )
                         sizeof( aRTFTokenTab ) / sizeof( RTF_TokenEntry ),
                         sizeof( RTF_TokenEntry ),
                         RTFKeyCompare )))
-        nRet = ((RTF_TokenEntry*)pFound)->nToken;
+        nRet = static_cast<RTF_TokenEntry*>(pFound)->nToken;
 
     return nRet;
 }

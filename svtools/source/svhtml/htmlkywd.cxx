@@ -164,8 +164,8 @@ extern "C"
 
 static int SAL_CALL HTMLKeyCompare( const void *pFirst, const void *pSecond)
 {
-    HTML_TokenEntry* pFirstEntry = (HTML_TokenEntry*)pFirst;
-    HTML_TokenEntry* pSecondEntry = (HTML_TokenEntry*)pSecond;
+    HTML_TokenEntry const * pFirstEntry = static_cast<HTML_TokenEntry const *>(pFirst);
+    HTML_TokenEntry const * pSecondEntry = static_cast<HTML_TokenEntry const *>(pSecond);
     int nRet = 0;
     if( -1 == pFirstEntry->nToken )
     {
@@ -214,7 +214,7 @@ int GetHTMLToken( const OUString& rName )
                       sizeof( HTML_TokenEntry ),
                       HTMLKeyCompare );
     if( 0 != pFound )
-        nRet = ((HTML_TokenEntry*)pFound)->nToken;
+        nRet = static_cast<HTML_TokenEntry*>(pFound)->nToken;
     return nRet;
 }
 
@@ -501,8 +501,8 @@ extern "C"
 
 static int SAL_CALL HTMLCharNameCompare( const void *pFirst, const void *pSecond)
 {
-    HTML_CharEntry* pFirstEntry = (HTML_CharEntry*)pFirst;
-    HTML_CharEntry* pSecondEntry = (HTML_CharEntry*)pSecond;
+    HTML_CharEntry const * pFirstEntry = static_cast<HTML_CharEntry const *>(pFirst);
+    HTML_CharEntry const * pSecondEntry = static_cast<HTML_CharEntry const *>(pSecond);
     int nRet = 0;
     if( USHRT_MAX == pFirstEntry->cChar )
     {
@@ -546,7 +546,7 @@ sal_Unicode GetHTMLCharName( const OUString& rName )
                         sizeof( aHTMLCharNameTab) / sizeof( HTML_CharEntry ),
                         sizeof( HTML_CharEntry ),
                         HTMLCharNameCompare )))
-        cRet = ((HTML_CharEntry*)pFound)->cChar;
+        cRet = static_cast<HTML_CharEntry*>(pFound)->cChar;
     return cRet;
 }
 
@@ -729,7 +729,7 @@ int GetHTMLOption( const OUString& rName )
                         sizeof( aHTMLOptionTab ) / sizeof( HTML_TokenEntry ),
                         sizeof( HTML_TokenEntry ),
                         HTMLKeyCompare )))
-        nRet = ((HTML_TokenEntry*)pFound)->nToken;
+        nRet = static_cast<HTML_TokenEntry*>(pFound)->nToken;
     return nRet;
 }
 
@@ -900,8 +900,8 @@ extern "C"
 
 static int SAL_CALL HTMLColorNameCompare( const void *pFirst, const void *pSecond)
 {
-    HTML_ColorEntry* pFirstEntry = (HTML_ColorEntry*)pFirst;
-    HTML_ColorEntry* pSecondEntry = (HTML_ColorEntry*)pSecond;
+    HTML_ColorEntry const * pFirstEntry = static_cast<HTML_ColorEntry const *>(pFirst);
+    HTML_ColorEntry const * pSecondEntry = static_cast<HTML_ColorEntry const *>(pSecond);
     int nRet = 0;
     if( HTML_NO_COLOR == pFirstEntry->nColor )
     {
@@ -947,7 +947,7 @@ sal_uInt32 GetHTMLColor( const OUString& rName )
                         sizeof( aHTMLColorNameTab) / sizeof( HTML_ColorEntry ),
                         sizeof( HTML_ColorEntry ),
                         HTMLColorNameCompare )))
-        nRet = ((HTML_ColorEntry*)pFound)->nColor;
+        nRet = static_cast<HTML_ColorEntry*>(pFound)->nColor;
 
     return nRet;
 }

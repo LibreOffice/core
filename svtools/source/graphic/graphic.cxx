@@ -205,7 +205,7 @@ uno::Sequence< ::sal_Int8 > SAL_CALL Graphic::getDIB(  ) throw (uno::RuntimeExce
         SvMemoryStream aMem;
 
         WriteDIB(mpGraphic->GetBitmapEx().GetBitmap(), aMem, false, true);
-        return ::com::sun::star::uno::Sequence<sal_Int8>( (sal_Int8*) aMem.GetData(), aMem.Tell() );
+        return ::com::sun::star::uno::Sequence<sal_Int8>( static_cast<sal_Int8 const *>(aMem.GetData()), aMem.Tell() );
     }
     else
     {
@@ -224,7 +224,7 @@ uno::Sequence< ::sal_Int8 > SAL_CALL Graphic::getMaskDIB(  ) throw (uno::Runtime
         SvMemoryStream aMem;
 
         WriteDIB(mpGraphic->GetBitmapEx().GetMask(), aMem, false, true);
-        return ::com::sun::star::uno::Sequence<sal_Int8>( (sal_Int8*) aMem.GetData(), aMem.Tell() );
+        return ::com::sun::star::uno::Sequence<sal_Int8>( static_cast<sal_Int8 const *>(aMem.GetData()), aMem.Tell() );
     }
     else
     {

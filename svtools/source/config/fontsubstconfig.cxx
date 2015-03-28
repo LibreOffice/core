@@ -57,7 +57,7 @@ SvtFontSubstConfig::SvtFontSubstConfig() :
     Sequence<Any> aValues = GetProperties(aNames);
     DBG_ASSERT(aValues.getConstArray()[0].hasValue(), "no value available");
     if(aValues.getConstArray()[0].hasValue())
-        bIsEnabled = *(sal_Bool*)aValues.getConstArray()[0].getValue();
+        bIsEnabled = *static_cast<sal_Bool const *>(aValues.getConstArray()[0].getValue());
 
     OUString sPropPrefix(cFontPairs);
     Sequence<OUString> aNodeNames = GetNodeNames(sPropPrefix, CONFIG_NAME_LOCAL_PATH);
@@ -83,8 +83,8 @@ SvtFontSubstConfig::SvtFontSubstConfig() :
         SubstitutionStruct* pInsert = new SubstitutionStruct;
         pNodeValues[nName++] >>= pInsert->sFont;
         pNodeValues[nName++] >>= pInsert->sReplaceBy;
-        pInsert->bReplaceAlways = *(sal_Bool*)pNodeValues[nName++].getValue();
-        pInsert->bReplaceOnScreenOnly = *(sal_Bool*)pNodeValues[nName++].getValue();
+        pInsert->bReplaceAlways = *static_cast<sal_Bool const *>(pNodeValues[nName++].getValue());
+        pInsert->bReplaceOnScreenOnly = *static_cast<sal_Bool const *>(pNodeValues[nName++].getValue());
         pImpl->aSubstArr.push_back(pInsert);
     }
 }

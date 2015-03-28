@@ -66,11 +66,11 @@ SvtTabAppearanceCfg::SvtTabAppearanceCfg()
                 {
                     case  0: *pValues >>= nScaleFactor; break; //"FontScaling",
                     case  1: *pValues >>= nDragMode; break;   //"Window/Drag",
-                    case  2: bMenuMouseFollow = *(sal_Bool*)pValues->getValue(); break; //"Menu/FollowMouse",
+                    case  2: bMenuMouseFollow = *static_cast<sal_Bool const *>(pValues->getValue()); break; //"Menu/FollowMouse",
                     case  3: *pValues >>= nSnapMode; break; //"Dialog/MousePositioning",
                     case  4: *pValues >>= nMiddleMouse; break; //"Dialog/MiddleMouseButton",
 #if defined( UNX )
-                    case  5: bFontAntialiasing = *(sal_Bool*)pValues->getValue(); break;    // "FontAntialising/Enabled",
+                    case  5: bFontAntialiasing = *static_cast<sal_Bool const *>(pValues->getValue()); break;    // "FontAntialising/Enabled",
                     case  6: *pValues >>= nAAMinPixelHeight; break;                         // "FontAntialising/MinPixelHeight",
 #endif
                 }

@@ -826,7 +826,7 @@ void ViewTabListBox_Impl::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEn
 void ViewTabListBox_Impl::ClearAll()
 {
     for ( sal_uInt16 i = 0; i < GetEntryCount(); ++i )
-        delete (SvtContentEntry*)GetEntry(i)->GetUserData();
+        delete static_cast<SvtContentEntry*>(GetEntry(i)->GetUserData());
     Clear();
 }
 
@@ -844,7 +844,7 @@ void ViewTabListBox_Impl::DeleteEntries()
         pEntry = NextSelected( pEntry );
 
         if ( pCurEntry->GetUserData() )
-            aURL = ( (SvtContentEntry*)pCurEntry->GetUserData() )->maURL;
+            aURL = static_cast<SvtContentEntry*>(pCurEntry->GetUserData())->maURL;
 
         if ( aURL.isEmpty() )
             continue;
@@ -889,7 +889,7 @@ void ViewTabListBox_Impl::DeleteEntries()
         {
             if ( Kill( aURL ) )
             {
-                delete (SvtContentEntry*)pCurEntry->GetUserData();
+                delete static_cast<SvtContentEntry*>(pCurEntry->GetUserData());
                 GetModel()->Remove( pCurEntry );
                 mpParent->EntryRemoved( aURL );
             }
@@ -904,7 +904,7 @@ bool ViewTabListBox_Impl::EditedEntry( SvTreeListEntry* pEntry,
     bool bRet = false;
 
     OUString aURL;
-    SvtContentEntry* pData = (SvtContentEntry*)pEntry->GetUserData();
+    SvtContentEntry* pData = static_cast<SvtContentEntry*>(pEntry->GetUserData());
 
     if ( pData )
         aURL = pData->maURL;
@@ -1021,7 +1021,7 @@ OUString ViewTabListBox_Impl::GetAccessibleObjectDescription( ::svt::AccessibleB
         SvTreeListEntry* pEntry = GetEntry( nRow );
         if ( pEntry )
         {
-            SvtContentEntry* pData = (SvtContentEntry*)pEntry->GetUserData();
+            SvtContentEntry* pData = static_cast<SvtContentEntry*>(pEntry->GetUserData());
             if ( pData )
             {
                 const OUString sVar1( "%1" );
@@ -1121,7 +1121,7 @@ OUString SvtFileView::GetURL( SvTreeListEntry* pEntry ) const
 {
     OUString aURL;
     if ( pEntry && pEntry->GetUserData() )
-        aURL = ( (SvtContentEntry*)pEntry->GetUserData() )->maURL;
+        aURL = static_cast<SvtContentEntry*>(pEntry->GetUserData())->maURL;
     return aURL;
 }
 
@@ -1132,7 +1132,7 @@ OUString SvtFileView::GetCurrentURL() const
     OUString aURL;
     SvTreeListEntry* pEntry = mpImp->mpView->FirstSelected();
     if ( pEntry && pEntry->GetUserData() )
-        aURL = ( (SvtContentEntry*)pEntry->GetUserData() )->maURL;
+        aURL = static_cast<SvtContentEntry*>(pEntry->GetUserData())->maURL;
     return aURL;
 }
 
@@ -2036,7 +2036,7 @@ void SvtFileView_Impl::Resort_Impl( sal_Int16 nColumn, bool bAscending )
     OUString aEntryURL;
     SvTreeListEntry* pEntry = mpView->GetCurEntry();
     if ( pEntry && pEntry->GetUserData() )
-        aEntryURL = ( (SvtContentEntry*)pEntry->GetUserData() )->maURL;
+        aEntryURL = static_cast<SvtContentEntry*>(pEntry->GetUserData())->maURL;
 
     mnSortColumn = nColumn;
     mbAscending = bAscending;

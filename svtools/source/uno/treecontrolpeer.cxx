@@ -483,7 +483,7 @@ void TreeControlPeer::ChangeNodesSelection( const Any& rSelection, bool bSelect,
             {
                 if( rSelection.getValueType() == ::getCppuType( (const Sequence< Reference< XTreeNode > > *) 0 ) )
                 {
-                    const Sequence< Reference< XTreeNode > >& rSeq( *(const Sequence< Reference< XTreeNode > > *)rSelection.getValue() );
+                    const Sequence< Reference< XTreeNode > >& rSeq( *static_cast<const Sequence< Reference< XTreeNode > > *>(rSelection.getValue()) );
                     nCount = rSeq.getLength();
                     if( nCount )
                         pNodes = rSeq.getConstArray();

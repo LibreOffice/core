@@ -511,7 +511,7 @@ void TransferDataContainer::CopyINetImage( const INetImage& rINtImg )
     SvMemoryStream aMemStm( 1024, 1024 );
     aMemStm.SetVersion( SOFFICE_FILEFORMAT_50 );
     rINtImg.Write( aMemStm, SotClipboardFormatId::INET_IMAGE );
-    CopyAnyData( SotClipboardFormatId::INET_IMAGE, (sal_Char*)aMemStm.GetData(),
+    CopyAnyData( SotClipboardFormatId::INET_IMAGE, static_cast<sal_Char const *>(aMemStm.GetData()),
                     aMemStm.Seek( STREAM_SEEK_TO_END ) );
 }
 
@@ -522,7 +522,7 @@ void TransferDataContainer::CopyImageMap( const ImageMap& rImgMap )
     SvMemoryStream aMemStm( 8192, 8192 );
     aMemStm.SetVersion( SOFFICE_FILEFORMAT_50 );
     rImgMap.Write( aMemStm, OUString() );
-    CopyAnyData( SotClipboardFormatId::SVIM, (sal_Char*)aMemStm.GetData(),
+    CopyAnyData( SotClipboardFormatId::SVIM, static_cast<sal_Char const *>(aMemStm.GetData()),
                     aMemStm.Seek( STREAM_SEEK_TO_END ) );
 }
 
