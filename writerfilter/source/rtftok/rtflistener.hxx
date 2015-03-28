@@ -55,8 +55,8 @@ public:
     virtual RTFError pushState() = 0;
     virtual RTFError popState() = 0;
 
-    virtual RTFDestinationState getDestinationState() = 0;
-    virtual void setDestinationState(RTFDestinationState nDestinationState) = 0;
+    virtual Destination getDestination() = 0;
+    virtual void setDestination(Destination eDestination) = 0;
     virtual RTFInternalState getInternalState() = 0;
     virtual void setInternalState(RTFInternalState nInternalState) = 0;
     virtual bool getSkipUnknown() = 0;
