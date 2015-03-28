@@ -69,7 +69,7 @@ Sequence< sal_Int8 > SAL_CALL ImageWrapper::getDIB() throw ( RuntimeException, s
 
     SvMemoryStream aMem;
     WriteDIB(m_aImage.GetBitmapEx().GetBitmap(), aMem, false, true);
-    return Sequence< sal_Int8 >( (sal_Int8*) aMem.GetData(), aMem.Tell() );
+    return Sequence< sal_Int8 >( static_cast<sal_Int8 const *>(aMem.GetData()), aMem.Tell() );
 }
 
 Sequence< sal_Int8 > SAL_CALL ImageWrapper::getMaskDIB() throw ( RuntimeException, std::exception )
@@ -81,13 +81,13 @@ Sequence< sal_Int8 > SAL_CALL ImageWrapper::getMaskDIB() throw ( RuntimeExceptio
     {
         SvMemoryStream aMem;
         WriteDIB(aBmpEx.GetAlpha().GetBitmap(), aMem, false, true);
-        return Sequence< sal_Int8 >( (sal_Int8*) aMem.GetData(), aMem.Tell() );
+        return Sequence< sal_Int8 >( static_cast<sal_Int8 const *>(aMem.GetData()), aMem.Tell() );
     }
     else if ( aBmpEx.IsTransparent() )
     {
         SvMemoryStream aMem;
         WriteDIB(aBmpEx.GetMask(), aMem, false, true);
-        return Sequence< sal_Int8 >( (sal_Int8*) aMem.GetData(), aMem.Tell() );
+        return Sequence< sal_Int8 >( static_cast<sal_Int8 const *>(aMem.GetData()), aMem.Tell() );
     }
 
     return Sequence< sal_Int8 >();

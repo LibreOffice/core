@@ -149,7 +149,7 @@ void SAL_CALL AddonsToolBarManager::dispose() throw( RuntimeException, std::exce
 
             if ( nId > 0 )
             {
-                AddonsParams* pRuntimeItemData = (AddonsParams*)m_pToolBar->GetItemData( nId );
+                AddonsParams* pRuntimeItemData = static_cast<AddonsParams*>(m_pToolBar->GetItemData( nId ));
                 if ( pRuntimeItemData )
                     delete pRuntimeItemData;
                 m_pToolBar->SetItemData( nId, NULL );
@@ -181,7 +181,7 @@ void AddonsToolBarManager::RefreshImages()
         {
             OUString aCommandURL = m_pToolBar->GetItemCommand( nId );
             OUString aImageId;
-            AddonsParams* pRuntimeItemData = (AddonsParams*)m_pToolBar->GetItemData( nId );
+            AddonsParams* pRuntimeItemData = static_cast<AddonsParams*>(m_pToolBar->GetItemData( nId ));
             if ( pRuntimeItemData )
                 aImageId  = pRuntimeItemData->aImageId;
 

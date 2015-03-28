@@ -97,7 +97,7 @@ IMPL_LINK(WindowCommandDispatch, impl_notifyCommand, void*, pParam)
     if ( ! pParam)
         return 0L;
 
-    const VclWindowEvent* pEvent = (VclWindowEvent*)pParam;
+    const VclWindowEvent* pEvent = static_cast<VclWindowEvent*>(pParam);
     if (pEvent->GetId() == VCLEVENT_OBJECT_DYING)
     {
         impl_stopListening();
@@ -106,7 +106,7 @@ IMPL_LINK(WindowCommandDispatch, impl_notifyCommand, void*, pParam)
     if (pEvent->GetId() != VCLEVENT_WINDOW_COMMAND)
         return 0L;
 
-    const CommandEvent* pCommand = (CommandEvent*)pEvent->GetData();
+    const CommandEvent* pCommand = static_cast<CommandEvent*>(pEvent->GetData());
     if (pCommand->GetCommand() != COMMAND_SHOWDIALOG)
         return 0L;
 

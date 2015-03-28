@@ -58,7 +58,7 @@ void flatten_struct_members(
     for ( sal_Int32 nPos = 0; nPos < pTD->nMembers; ++nPos )
     {
         vec->push_back(
-            Any( (char const *)data + pTD->pMemberOffsets[ nPos ], pTD->ppTypeRefs[ nPos ] ) );
+            Any( static_cast<char const *>(data) + pTD->pMemberOffsets[ nPos ], pTD->ppTypeRefs[ nPos ] ) );
     }
 }
 
@@ -254,7 +254,7 @@ void SAL_CALL DispatchRecorder::AppendToBuffer( css::uno::Any aValue, OUStringBu
     else if (aValue.getValueType() == getCppuCharType())
     {
         // character variables are recorded as strings, back conversion must be handled in client code
-        sal_Unicode nVal = *((sal_Unicode*)aValue.getValue());
+        sal_Unicode nVal = *static_cast<sal_Unicode const *>(aValue.getValue());
         aArgumentBuffer.appendAscii("\"");
         if ( (sal_Unicode(nVal) == '\"') )
             // encode \" to \"\"
@@ -416,9 +416,9 @@ void SAL_CALL DispatchRecorder::replaceByIndex(sal_Int32 idx, const com::sun::st
 
         }
 
-    com::sun::star::frame::DispatchStatement *pStatement;
+    com::sun::star::frame::DispatchStatement const *pStatement;
 
-    pStatement = (com::sun::star::frame::DispatchStatement *)element.getValue();
+    pStatement = static_cast<com::sun::star::frame::DispatchStatement const *>(element.getValue());
 
     com::sun::star::frame::DispatchStatement aStatement(
         pStatement->aCommand,

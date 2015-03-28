@@ -48,7 +48,7 @@ extern "C"
 {
 static int SAL_CALL compare_OUString_Property_Impl( const void *arg1, const void *arg2 )
 {
-   return ((OUString *)arg1)->compareTo( ((Property *)arg2)->Name );
+   return static_cast<OUString const *>(arg1)->compareTo( static_cast<Property const *>(arg2)->Name );
 }
 }
 
@@ -89,9 +89,9 @@ Sequence< Property > OPropertySetHelperInfo_Impl::getProperties(void) throw(::co
 Property OPropertySetHelperInfo_Impl::getPropertyByName( const OUString & PropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     Property * pR;
-    pR = (Property *)bsearch( &PropertyName, aInfos.getConstArray(), aInfos.getLength(),
+    pR = static_cast<Property *>(bsearch( &PropertyName, aInfos.getConstArray(), aInfos.getLength(),
                               sizeof( Property ),
-                              compare_OUString_Property_Impl );
+                              compare_OUString_Property_Impl ));
     if( !pR ) {
         throw UnknownPropertyException();
     }
@@ -105,9 +105,9 @@ Property OPropertySetHelperInfo_Impl::getPropertyByName( const OUString & Proper
 sal_Bool OPropertySetHelperInfo_Impl::hasPropertyByName( const OUString & PropertyName ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     Property * pR;
-    pR = (Property *)bsearch( &PropertyName, aInfos.getConstArray(), aInfos.getLength(),
+    pR = static_cast<Property *>(bsearch( &PropertyName, aInfos.getConstArray(), aInfos.getLength(),
                               sizeof( Property ),
-                              compare_OUString_Property_Impl );
+                              compare_OUString_Property_Impl ));
     return pR != NULL;
 }
 

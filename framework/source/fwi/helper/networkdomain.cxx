@@ -139,7 +139,7 @@ static rtl_uString *getDomainName()
     do
     {
         nBufSize += 256; /* Increase buffer size by steps of 256 bytes */
-        pBuffer = (char *)alloca( nBufSize );
+        pBuffer = static_cast<char *>(alloca( nBufSize ));
         result = getdomainname( pBuffer, nBufSize );
         /* If buffersize in not large enough -1 is returned and errno
         is set to EINVAL. This only applies to libc. With glibc the name
