@@ -159,7 +159,7 @@ Guess SimpleGuesser::GuessPrimaryLanguage(const char* text)
  */
 vector<Guess> SimpleGuesser::GetManagedLanguages(const char mask)
 {
-    textcat_t *tables = (textcat_t*)h;
+    textcat_t *tables = static_cast<textcat_t*>(h);
 
     vector<Guess> lang;
     if(!h){return lang;}
@@ -195,7 +195,7 @@ vector<Guess> SimpleGuesser::GetAllManagedLanguages()
 
 void SimpleGuesser::XableLanguage(const string& lang, char mask)
 {
-    textcat_t *tables = (textcat_t*)h;
+    textcat_t *tables = static_cast<textcat_t*>(h);
 
     if(!h){return;}
 
