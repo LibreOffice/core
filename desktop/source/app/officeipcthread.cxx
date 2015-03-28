@@ -965,20 +965,6 @@ void OfficeIPCThread::execute()
             salhelper::Thread::wait( tval );
         }
     } while( schedule() );
-#else
-
-#if 0 // Seems to work fine to let this thread just die?
-
-    // Not sure what to do, so wait forever. Note that on iOS (or
-    // Android, but in this case ANDROID is handled like DESKTOP, see
-    // above) an app never exits voluntarily, but is always killed by
-    // the system when its resources are needed.)
-    TimeValue tval;
-    tval.Seconds = 100000;
-    tval.Nanosec = 0;
-    salhelper::Thread::wait( tval );
-#endif
-
 #endif
 }
 
