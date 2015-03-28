@@ -106,7 +106,7 @@ void MemRingBuffer::resizeBuffer( sal_Int32 nMinSize ) throw( IRingBuffer_OutOfM
     }
 
     if( nNewLen != m_nBufferLen ) {
-        m_p = ( sal_Int8 * ) rtl_reallocateMemory( m_p , nNewLen );
+        m_p = static_cast<sal_Int8 *>(rtl_reallocateMemory( m_p , nNewLen ));
         if( !m_p ) {
             throw IRingBuffer_OutOfMemoryException();
         }

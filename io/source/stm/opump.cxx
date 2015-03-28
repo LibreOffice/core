@@ -242,8 +242,8 @@ void Pump::close()
 void Pump::static_run( void* pObject )
 {
     osl_setThreadName("io_stm::Pump::run()");
-    ((Pump*)pObject)->run();
-    ((Pump*)pObject)->release();
+    static_cast<Pump*>(pObject)->run();
+    static_cast<Pump*>(pObject)->release();
 }
 
 void Pump::run()
