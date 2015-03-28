@@ -2141,24 +2141,19 @@ uno::Sequence<OUString> SwXTextTable::getCellNames(void) throw( uno::RuntimeExce
     return comphelper::containerToSequence<OUString>(aAllNames);
 }
 
-uno::Reference< text::XTextTableCursor > SwXTextTable::createCursorByCellName(const OUString& sCellName)
+uno::Reference<text::XTextTableCursor> SwXTextTable::createCursorByCellName(const OUString& sCellName)
     throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    uno::Reference< text::XTextTableCursor >  xRet;
-    SwFrmFmt* pFmt = GetFrmFmt();
-    if(pFmt)
-    {
-        SwTable* pTable = SwTable::FindTable( pFmt );
-        SwTableBox* pBox = const_cast<SwTableBox*>(pTable->GetTblBox( sCellName ));
-        if(pBox && pBox->getRowSpan() > 0 )
-        {
-            xRet = new SwXTextTableCursor(pFmt, pBox);
-        }
-    }
-    if(!xRet.is())
+    SwFrmFmt* pFmt(GetFrmFmt());
+    if(!pFmt)
         throw uno::RuntimeException();
-    return xRet;
+    uno::Reference<text::XTextTableCursor> xRet;
+    SwTable* pTable = SwTable::FindTable(pFmt);
+    SwTableBox* pBox = const_cast<SwTableBox*>(pTable->GetTblBox(sCellName));
+    if(!pBox || pBox->getRowSpan() == 0)
+        throw uno::RuntimeException();
+    return new SwXTextTableCursor(pFmt, pBox);
 }
 
 void SwXTextTable::attachToRange(const uno::Reference< text::XTextRange > & xTextRange)
