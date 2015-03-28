@@ -51,10 +51,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::frame;
 
-
-const char  *OfficeIPCThread::sc_aShowSequence = "-tofront";
-const int OfficeIPCThread::sc_nShSeqLength = 5;
-
 namespace {
 
 #if HAVE_FEATURE_DESKTOP || defined(ANDROID)
@@ -922,7 +918,7 @@ void OfficeIPCThread::execute()
                     delete pRequest;
                     pRequest = NULL;
                 }
-                if (aArguments.equalsL(sc_aShowSequence, sc_nShSeqLength) ||
+                if (aArguments.equalsL(RTL_CONSTASCII_STRINGPARAM("-tofront")) ||
                     aCmdLineArgs->IsEmpty())
                 {
                     // no document was sent, just bring Office to front
