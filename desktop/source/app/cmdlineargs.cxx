@@ -42,7 +42,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::uri;
 using namespace com::sun::star::uno;
 
-
 namespace desktop
 {
 
@@ -127,8 +126,6 @@ CommandLineArgs::CommandLineArgs( Supplier& supplier )
     InitParamValues();
     ParseCommandLine_Impl( supplier );
 }
-
-
 
 void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
 {
@@ -630,39 +627,11 @@ void CommandLineArgs::InitParamValues()
     m_textcat = false;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 bool CommandLineArgs::HasModuleParam() const
 {
     return m_writer || m_calc || m_draw || m_impress || m_global || m_math
         || m_web || m_base;
 }
-
-
-
 
 std::vector< OUString > CommandLineArgs::GetOpenList() const
 {
@@ -699,9 +668,6 @@ std::vector< OUString > CommandLineArgs::GetPrintToList() const
     return translateExternalUris(m_printtolist);
 }
 
-
-
-
 std::vector< OUString > CommandLineArgs::GetConversionList() const
 {
     return translateExternalUris(m_conversionlist);
@@ -711,9 +677,6 @@ OUString CommandLineArgs::GetConversionOut() const
 {
     return translateExternalUris(m_conversionout);
 }
-
-
-
 
 } // namespace desktop
 
