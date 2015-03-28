@@ -1603,16 +1603,15 @@ sal_Bool SwXTextTableCursor::goDown(sal_Int16 Count, sal_Bool bExpand) throw( un
     return rTblCrsr.UpDown(false, Count, 0, 0);
 }
 
-void SwXTextTableCursor::gotoStart(sal_Bool Expand) throw( uno::RuntimeException, std::exception )
+void SwXTextTableCursor::gotoStart(sal_Bool bExpand) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     SwUnoCrsr* pUnoCrsr = GetCrsr();
-    if(pUnoCrsr)
-    {
-        SwUnoTableCrsr& rTblCrsr = dynamic_cast<SwUnoTableCrsr&>(*pUnoCrsr);
-        lcl_CrsrSelect(rTblCrsr, Expand);
-        rTblCrsr.MoveTable(fnTableCurr, fnTableStart);
-    }
+    if(!pUnoCrsr)
+        return;
+    SwUnoTableCrsr& rTblCrsr = dynamic_cast<SwUnoTableCrsr&>(*pUnoCrsr);
+    lcl_CrsrSelect(rTblCrsr, bExpand);
+    rTblCrsr.MoveTable(fnTableCurr, fnTableStart);
 }
 
 void SwXTextTableCursor::gotoEnd(sal_Bool Expand) throw( uno::RuntimeException, std::exception )
