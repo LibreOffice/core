@@ -52,7 +52,7 @@ inline OUString jstring_to_oustring( jstring jstr, JNIEnv * jni_env )
     OSL_ASSERT( sizeof (sal_Unicode) == sizeof (jchar) );
     jsize len = jni_env->GetStringLength( jstr );
     rtl_uString * ustr =
-        (rtl_uString *)rtl_allocateMemory( sizeof (rtl_uString) + (len * sizeof (sal_Unicode)) );
+        static_cast<rtl_uString *>(rtl_allocateMemory( sizeof (rtl_uString) + (len * sizeof (sal_Unicode)) ));
     jni_env->GetStringRegion( jstr, 0, len, ustr->buffer );
     OSL_ASSERT( JNI_FALSE == jni_env->ExceptionCheck() );
     ustr->refCount = 1;
@@ -139,7 +139,7 @@ jobject Java_com_sun_star_comp_helper_Bootstrap_cppuhelper_1bootstrap(
             throw RuntimeException("cannot get mapping C++ <-> Java!" );
         }
 
-        jobject jret = (jobject)mapping.mapInterface( xContext.get(), ::getCppuType( &xContext ) );
+        jobject jret = static_cast<jobject>(mapping.mapInterface( xContext.get(), ::getCppuType( &xContext ) ));
         jobject jlocal = jni_env->NewLocalRef( jret );
         jni_env->DeleteGlobalRef( jret );
 

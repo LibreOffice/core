@@ -221,8 +221,8 @@ jobject Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory(
 
                         if (pSSF)
                         {
-                            jobject jglobal = (jobject) dest2java.mapInterface(
-                                pSSF, cppu::UnoType<XInterface>::get());
+                            jobject jglobal = static_cast<jobject>(dest2java.mapInterface(
+                                pSSF, cppu::UnoType<XInterface>::get()));
                             joSLL_cpp = pJEnv->NewLocalRef( jglobal );
                             pJEnv->DeleteGlobalRef( jglobal );
                             if (env)
