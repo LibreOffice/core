@@ -155,8 +155,7 @@ static bool lcl_LineToSvxLine(const table::BorderLine& rLine, SvxBorderLine& rSv
                                 convertMm100ToTwip( rLine.InnerLineWidth ),
                                 convertMm100ToTwip( rLine.LineDistance ) );
 
-    bool bRet = rLine.InnerLineWidth > 0 || rLine.OuterLineWidth > 0;
-    return bRet;
+    return rLine.InnerLineWidth > 0 || rLine.OuterLineWidth > 0;
 }
 
 static void lcl_SetSpecialProperty(SwFrmFmt* pFmt,
