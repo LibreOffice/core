@@ -3373,6 +3373,41 @@ bool adjustSingleRefOnInsertedTab( ScSingleRefData& rRef, SCTAB nInsPos, SCTAB n
     return false;
 }
 
+bool adjustDoubleRefOnDeleteTab(ScComplexRefData& rRef, SCTAB nDelPos, SCTAB nSheets, const ScAddress& rOldPos, const ScAddress& rNewPos)
+{
+    ScSingleRefData& rRef1 = rRef.Ref1;
+    ScSingleRefData& rRef2 = rRef.Ref2;
+    ScAddress aStartPos = rRef1.toAbs(rOldPos);
+    ScAddress aEndPos = rRef2.toAbs(rOldPos);
+    bool bMoreThanOneTab = aStartPos.Tab() != aEndPos.Tab();
+    bool bModified = false;
+    if (bMoreThanOneTab && aStartPos.Tab() == nDelPos)
+    {
+        if (rRef1.IsTabRel())
+        {
+            aStartPos.IncTab(nSheets);
+            rRef1.SetAddress(aStartPos, rOldPos);
+        }
+        bModified = true;
+    }
+    else
+    {
+        bModified = adjustSingleRefOnDeletedTab(rRef1, nDelPos, nSheets, rOldPos, rNewPos);
+    }
+
+    if (bMoreThanOneTab && aEndPos.Tab() == nDelPos)
+    {
+        aEndPos.IncTab(-nSheets);
+        rRef2.SetAddress(aEndPos, rNewPos);
+        bModified = true;
+    }
+    else
+    {
+        bModified |= adjustSingleRefOnDeletedTab(rRef2, nDelPos, nSheets, rOldPos, rNewPos);
+    }
+    return bModified;
+}
+
 }
 
 sc::RefUpdateResult ScTokenArray::AdjustReferenceOnDeletedTab( sc::RefUpdateDeleteTabContext& rCxt, const ScAddress& rOldPos )
@@ -3400,10 +3435,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnDeletedTab( sc::RefUpdateDele
             {
                 formula::FormulaToken* pToken = *p;
                 ScComplexRefData& rRef = *pToken->GetDoubleRef();
-                if (adjustSingleRefOnDeletedTab(rRef.Ref1, rCxt.mnDeletePos, rCxt.mnSheets, rOldPos, aNewPos))
-                    aRes.mbReferenceModified = true;
-                if (adjustSingleRefOnDeletedTab(rRef.Ref2, rCxt.mnDeletePos, rCxt.mnSheets, rOldPos, aNewPos))
-                    aRes.mbReferenceModified = true;
+                aRes.mbReferenceModified |= adjustDoubleRefOnDeleteTab(rRef, rCxt.mnDeletePos, rCxt.mnSheets, rOldPos, aNewPos);
             }
             break;
             case svIndex:
