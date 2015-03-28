@@ -877,7 +877,6 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath)
         {
             return false;
         }
-        SAL_INFO("lok", "UNO successfully initalized");
         force_c_locale();
 
         // Force headless -- this is only for bitmap rendering.
