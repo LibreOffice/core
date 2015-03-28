@@ -41,10 +41,7 @@ System::String^ mapUnoPolymorphicName(System::String^ unoName);
 static inline ::System::String ^ to_cts_name(
     OUString const & uno_name )
 {
-    OUStringBuffer buf( 7 + uno_name.getLength() );
-    buf.append( "unoidl." );
-    buf.append( uno_name );
-    return ustring_to_String( buf.makeStringAndClear() );
+    return ustring_to_String("unoidl." + uno_name);
 }
 
 
