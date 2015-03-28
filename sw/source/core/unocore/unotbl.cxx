@@ -170,8 +170,8 @@ static void lcl_SetSpecialProperty(SwFrmFmt* pFmt,
         case  FN_TABLE_HEADLINE_REPEAT:
         case  FN_TABLE_HEADLINE_COUNT:
         {
-            SwTable* pTable = SwTable::FindTable( pFmt );
             {
+                SwTable* pTable = SwTable::FindTable( pFmt );
                 UnoActionContext aAction(pFmt->GetDoc());
                 if( pEntry->nWID == FN_TABLE_HEADLINE_REPEAT)
                 {
