@@ -1330,7 +1330,7 @@ bool XLineStartItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8
             if( rVal.getValueType() != cppu::UnoType<com::sun::star::drawing::PolyPolygonBezierCoords>::get())
                 return false;
 
-            com::sun::star::drawing::PolyPolygonBezierCoords* pCoords = (com::sun::star::drawing::PolyPolygonBezierCoords*)rVal.getValue();
+            com::sun::star::drawing::PolyPolygonBezierCoords const * pCoords = static_cast<com::sun::star::drawing::PolyPolygonBezierCoords const *>(rVal.getValue());
             if( pCoords->Coordinates.getLength() > 0 )
             {
                 maPolyPolygon = basegfx::unotools::polyPolygonBezierToB2DPolyPolygon( *pCoords );
@@ -1892,7 +1892,7 @@ bool XLineEndItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 n
             if( rVal.getValueType() != cppu::UnoType<com::sun::star::drawing::PolyPolygonBezierCoords>::get())
                 return false;
 
-            com::sun::star::drawing::PolyPolygonBezierCoords* pCoords = (com::sun::star::drawing::PolyPolygonBezierCoords*)rVal.getValue();
+            com::sun::star::drawing::PolyPolygonBezierCoords const * pCoords = static_cast<com::sun::star::drawing::PolyPolygonBezierCoords const *>(rVal.getValue());
             if( pCoords->Coordinates.getLength() > 0 )
             {
                 maPolyPolygon = basegfx::unotools::polyPolygonBezierToB2DPolyPolygon( *pCoords );
@@ -2052,7 +2052,7 @@ bool XLineStartCenterItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal
     if( !rVal.hasValue() || rVal.getValueType() != ::getCppuBooleanType() )
         return false;
 
-    SetValue( *(sal_Bool*)rVal.getValue() );
+    SetValue( *static_cast<sal_Bool const *>(rVal.getValue()) );
     return true;
 }
 
@@ -2103,7 +2103,7 @@ bool XLineEndCenterItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_u
     if( !rVal.hasValue() || rVal.getValueType() != ::getCppuBooleanType() )
         return false;
 
-    SetValue( *(sal_Bool*)rVal.getValue() );
+    SetValue( *static_cast<sal_Bool const *>(rVal.getValue()) );
     return true;
 }
 

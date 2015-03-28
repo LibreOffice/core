@@ -1062,7 +1062,7 @@ bool SvxShapePolyPolygon::setPropertyValueImpl( const OUString& rName, const Sfx
     {
         if( rValue.getValue() && (rValue.getValueType() == ::getCppuType(( const drawing::PointSequenceSequence*)0) ) )
         {
-            basegfx::B2DPolyPolygon aNewPolyPolygon(ImplSvxPointSequenceSequenceToB2DPolyPolygon( (drawing::PointSequenceSequence*)rValue.getValue()));
+            basegfx::B2DPolyPolygon aNewPolyPolygon(ImplSvxPointSequenceSequenceToB2DPolyPolygon( static_cast<drawing::PointSequenceSequence const *>(rValue.getValue())));
             SetPolygon(aNewPolyPolygon);
             return true;
         }
@@ -1078,7 +1078,7 @@ bool SvxShapePolyPolygon::setPropertyValueImpl( const OUString& rName, const Sfx
                 basegfx::B2DHomMatrix aNewHomogenMatrix;
 
                 mpObj->TRGetBaseGeometry(aNewHomogenMatrix, aNewPolyPolygon);
-                aNewPolyPolygon = ImplSvxPointSequenceSequenceToB2DPolyPolygon((drawing::PointSequenceSequence*)rValue.getValue());
+                aNewPolyPolygon = ImplSvxPointSequenceSequenceToB2DPolyPolygon(static_cast<drawing::PointSequenceSequence const *>(rValue.getValue()));
                 mpObj->TRSetBaseGeometry(aNewHomogenMatrix, aNewPolyPolygon);
             }
             return true;
@@ -1089,7 +1089,7 @@ bool SvxShapePolyPolygon::setPropertyValueImpl( const OUString& rName, const Sfx
     {
         if( rValue.getValue() && (rValue.getValueType() == ::getCppuType(( const drawing::PointSequenceSequence*)0) ))
         {
-            drawing::PointSequence* pSequence = (drawing::PointSequence*)rValue.getValue();
+            drawing::PointSequence const * pSequence = static_cast<drawing::PointSequence const *>(rValue.getValue());
 
             // prepare new polygon
             basegfx::B2DPolygon aNewPolygon;
@@ -1291,7 +1291,7 @@ bool SvxShapePolyPolygonBezier::setPropertyValueImpl( const OUString& rName, con
         {
             basegfx::B2DPolyPolygon aNewPolyPolygon(
                 basegfx::unotools::polyPolygonBezierToB2DPolyPolygon(
-                    *(drawing::PolyPolygonBezierCoords*)rValue.getValue()));
+                    *static_cast<drawing::PolyPolygonBezierCoords const *>(rValue.getValue())));
             SetPolygon(aNewPolyPolygon);
             return true;
         }
@@ -1308,7 +1308,7 @@ bool SvxShapePolyPolygonBezier::setPropertyValueImpl( const OUString& rName, con
 
                 mpObj->TRGetBaseGeometry(aNewHomogenMatrix, aNewPolyPolygon);
                 aNewPolyPolygon = basegfx::unotools::polyPolygonBezierToB2DPolyPolygon(
-                    *(drawing::PolyPolygonBezierCoords*)rValue.getValue());
+                    *static_cast<drawing::PolyPolygonBezierCoords const *>(rValue.getValue()));
                 mpObj->TRSetBaseGeometry(aNewHomogenMatrix, aNewPolyPolygon);
             }
             return true;
@@ -1424,11 +1424,11 @@ bool SvxGraphicObject::setPropertyValueImpl( const OUString& rName, const SfxIte
         {
             if( rValue.getValueType() == ::getCppuType(( const uno::Sequence< sal_Int8 >*)0) )
             {
-                uno::Sequence<sal_Int8>* pSeq( (uno::Sequence<sal_Int8>*)rValue.getValue() );
+                uno::Sequence<sal_Int8> const * pSeq( static_cast<uno::Sequence<sal_Int8> const *>(rValue.getValue()) );
                 SvMemoryStream  aMemStm;
                 Graphic         aGraphic;
 
-                aMemStm.SetBuffer( pSeq->getArray(), pSeq->getLength(), false, pSeq->getLength() );
+                aMemStm.SetBuffer( const_cast<css::uno::Sequence<sal_Int8> *>(pSeq)->getArray(), pSeq->getLength(), false, pSeq->getLength() );
 
                 if( GraphicConverter::Import( aMemStm, aGraphic ) == ERRCODE_NONE )
                 {

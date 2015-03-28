@@ -353,7 +353,7 @@ sal_uLong XOutBitmap::GraphicToBase64(const Graphic& rGraphic, OUString& rOUStri
         return nErr;
     }
     aOStm.Seek(STREAM_SEEK_TO_END);
-    css::uno::Sequence<sal_Int8> aOStmSeq( (sal_Int8*) aOStm.GetData(),aOStm.Tell() );
+    css::uno::Sequence<sal_Int8> aOStmSeq( static_cast<sal_Int8 const *>(aOStm.GetData()),aOStm.Tell() );
     OUStringBuffer aStrBuffer;
     ::sax::Converter::encodeBase64(aStrBuffer,aOStmSeq);
     rOUString = aMimeType + ";base64," + aStrBuffer.makeStringAndClear();

@@ -53,7 +53,7 @@ SvxRedlinEntry::SvxRedlinEntry()
 
 SvxRedlinEntry::~SvxRedlinEntry()
 {
-    RedlinData* pRedDat=(RedlinData*) GetUserData();
+    RedlinData* pRedDat=static_cast<RedlinData*>(GetUserData());
     delete pRedDat;
 }
 
@@ -130,8 +130,8 @@ sal_Int32 SvxRedlinTable::ColCompare(SvTreeListEntry* pLeft,SvTreeListEntry* pRi
     {
         if(nDatePos==GetSortedCol())
         {
-            RedlinData *pLeftData=(RedlinData *)(pLeft->GetUserData());
-            RedlinData *pRightData=(RedlinData *)(pRight->GetUserData());
+            RedlinData *pLeftData=static_cast<RedlinData *>(pLeft->GetUserData());
+            RedlinData *pRightData=static_cast<RedlinData *>(pRight->GetUserData());
 
             if(pLeftData!=NULL && pRightData!=NULL)
             {

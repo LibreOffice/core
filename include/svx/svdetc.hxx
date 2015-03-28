@@ -248,7 +248,7 @@ inline SdrGlobalData& GetSdrGlobalData()
     if (*ppAppData==NULL) {
         *ppAppData=new SdrGlobalData;
     }
-    return *((SdrGlobalData*)*ppAppData);
+    return *static_cast<SdrGlobalData*>(*ppAppData);
 }
 
 namespace sdr

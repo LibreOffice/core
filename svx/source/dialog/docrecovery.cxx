@@ -744,7 +744,7 @@ void RecovDocListEntry::Paint(
     const OUString*     pTxt  = 0;
           RecovDocList* pList = static_cast< RecovDocList* >(&aDevice);
 
-    TURLInfo* pInfo  = (TURLInfo*)pEntry->GetUserData();
+    TURLInfo* pInfo  = static_cast<TURLInfo*>(pEntry->GetUserData());
     switch(pInfo->RecoveryState)
     {
         case E_SUCCESSFULLY_RECOVERED :
@@ -1088,7 +1088,7 @@ void RecoveryDialog::updateItems()
         if ( !pEntry )
             continue;
 
-        TURLInfo* pInfo = (TURLInfo*)pEntry->GetUserData();
+        TURLInfo* pInfo = static_cast<TURLInfo*>(pEntry->GetUserData());
         if ( !pInfo )
             continue;
 
@@ -1112,7 +1112,7 @@ void RecoveryDialog::stepNext(TURLInfo* pItem)
         if (!pEntry)
             continue;
 
-        TURLInfo* pInfo = (TURLInfo*)pEntry->GetUserData();
+        TURLInfo* pInfo = static_cast<TURLInfo*>(pEntry->GetUserData());
         if (pInfo->ID != pItem->ID)
             continue;
 

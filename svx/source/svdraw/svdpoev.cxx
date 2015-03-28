@@ -655,9 +655,9 @@ void SdrPolyEditView::ImpTransformMarkedPoints(PPolyTrFunc pTrFunc, const void* 
 
 static void ImpMove(Point& rPt, Point* pC1, Point* pC2, const void* p1, const void* /*p2*/, const void* /*p3*/, const void* /*p4*/, const void* /*p5*/)
 {
-    MovePoint(rPt,*(const Size*)p1);
-    if (pC1!=NULL) MovePoint(*pC1,*(const Size*)p1);
-    if (pC2!=NULL) MovePoint(*pC2,*(const Size*)p1);
+    MovePoint(rPt,*static_cast<const Size*>(p1));
+    if (pC1!=NULL) MovePoint(*pC1,*static_cast<const Size*>(p1));
+    if (pC2!=NULL) MovePoint(*pC2,*static_cast<const Size*>(p1));
 }
 
 void SdrPolyEditView::MoveMarkedPoints(const Size& rSiz)
@@ -672,9 +672,9 @@ void SdrPolyEditView::MoveMarkedPoints(const Size& rSiz)
 
 static void ImpResize(Point& rPt, Point* pC1, Point* pC2, const void* p1, const void* p2, const void* p3, const void* /*p4*/, const void* /*p5*/)
 {
-    ResizePoint(rPt,*(const Point*)p1,*(const Fraction*)p2,*(const Fraction*)p3);
-    if (pC1!=NULL) ResizePoint(*pC1,*(const Point*)p1,*(const Fraction*)p2,*(const Fraction*)p3);
-    if (pC2!=NULL) ResizePoint(*pC2,*(const Point*)p1,*(const Fraction*)p2,*(const Fraction*)p3);
+    ResizePoint(rPt,*static_cast<const Point*>(p1),*static_cast<const Fraction*>(p2),*static_cast<const Fraction*>(p3));
+    if (pC1!=NULL) ResizePoint(*pC1,*static_cast<const Point*>(p1),*static_cast<const Fraction*>(p2),*static_cast<const Fraction*>(p3));
+    if (pC2!=NULL) ResizePoint(*pC2,*static_cast<const Point*>(p1),*static_cast<const Fraction*>(p2),*static_cast<const Fraction*>(p3));
 }
 
 void SdrPolyEditView::ResizeMarkedPoints(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
@@ -689,9 +689,9 @@ void SdrPolyEditView::ResizeMarkedPoints(const Point& rRef, const Fraction& xFac
 
 static void ImpRotate(Point& rPt, Point* pC1, Point* pC2, const void* p1, const void* /*p2*/, const void* p3, const void* p4, const void* /*p5*/)
 {
-    RotatePoint(rPt,*(const Point*)p1,*(const double*)p3,*(const double*)p4);
-    if (pC1!=NULL) RotatePoint(*pC1,*(const Point*)p1,*(const double*)p3,*(const double*)p4);
-    if (pC2!=NULL) RotatePoint(*pC2,*(const Point*)p1,*(const double*)p3,*(const double*)p4);
+    RotatePoint(rPt,*static_cast<const Point*>(p1),*static_cast<const double*>(p3),*static_cast<const double*>(p4));
+    if (pC1!=NULL) RotatePoint(*pC1,*static_cast<const Point*>(p1),*static_cast<const double*>(p3),*static_cast<const double*>(p4));
+    if (pC2!=NULL) RotatePoint(*pC2,*static_cast<const Point*>(p1),*static_cast<const double*>(p3),*static_cast<const double*>(p4));
 }
 
 void SdrPolyEditView::RotateMarkedPoints(const Point& rRef, long nAngle)

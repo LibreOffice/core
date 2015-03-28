@@ -40,7 +40,7 @@ namespace sdr
                 SdrObjListIter aIter(static_cast<const SdrObjGroup&>(rObj), IM_DEEPNOGROUPS);
                 mpData = new RectangleVector;
                 DBG_ASSERT(mpData, "ItemChangeBroadcaster: No memory (!)");
-                ((RectangleVector*)mpData)->reserve(aIter.Count());
+                static_cast<RectangleVector*>(mpData)->reserve(aIter.Count());
 
                 while(aIter.IsMore())
                 {
@@ -48,11 +48,11 @@ namespace sdr
 
                     if(pObj)
                     {
-                        ((RectangleVector*)mpData)->push_back(pObj->GetLastBoundRect());
+                        static_cast<RectangleVector*>(mpData)->push_back(pObj->GetLastBoundRect());
                     }
                 }
 
-                mnCount = ((RectangleVector*)mpData)->size();
+                mnCount = static_cast<RectangleVector*>(mpData)->size();
             }
             else
             {
@@ -65,11 +65,11 @@ namespace sdr
         {
             if(mnCount > 1)
             {
-                delete ((RectangleVector*)mpData);
+                delete static_cast<RectangleVector*>(mpData);
             }
             else
             {
-                delete ((Rectangle*)mpData);
+                delete static_cast<Rectangle*>(mpData);
             }
         }
 
@@ -78,11 +78,11 @@ namespace sdr
         {
             if(mnCount > 1)
             {
-                return (*((RectangleVector*)mpData))[nIndex];
+                return (*static_cast<RectangleVector*>(mpData))[nIndex];
             }
             else
             {
-                return *((Rectangle*)mpData);
+                return *static_cast<Rectangle*>(mpData);
             }
         }
     } // end of namespace properties

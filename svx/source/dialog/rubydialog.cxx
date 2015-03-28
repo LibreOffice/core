@@ -273,7 +273,7 @@ void SvxRubyDialog::ClearCharStyleList()
     for(sal_uInt16 i = 0; i < m_pCharStyleLB->GetEntryCount(); i++)
     {
         void* pData = m_pCharStyleLB->GetEntryData(i);
-        delete (OUString*)pData;
+        delete static_cast<OUString*>(pData);
     }
     m_pCharStyleLB->Clear();
 }
@@ -456,7 +456,7 @@ void SvxRubyDialog::Update()
             }
             if(nPosition > -2 && pProps[nProp].Name == cRubyIsAbove )
             {
-                bool bTmp = *(sal_Bool*)pProps[nProp].Value.getValue();
+                bool bTmp = *static_cast<sal_Bool const *>(pProps[nProp].Value.getValue());
                 if(!nRuby)
                     nPosition = bTmp ? 0 : 1;
                 else if( (!nPosition && !bTmp) || (nPosition == 1 && bTmp)  )
@@ -490,7 +490,7 @@ void SvxRubyDialog::Update()
     {
         for(sal_uInt16 i = 0; i < m_pCharStyleLB->GetEntryCount(); i++)
         {
-            const OUString* pCoreName = (const OUString*)m_pCharStyleLB->GetEntryData(i);
+            const OUString* pCoreName = static_cast<const OUString*>(m_pCharStyleLB->GetEntryData(i));
             if(pCoreName && sCharStyleName == *pCoreName)
             {
                 m_pCharStyleLB->SelectEntryPos(i);
@@ -621,7 +621,7 @@ IMPL_LINK_NOARG(SvxRubyDialog, CharStyleHdl_Impl)
     AssertOneEntry();
     OUString sStyleName;
     if(LISTBOX_ENTRY_NOTFOUND != m_pCharStyleLB->GetSelectEntryPos())
-        sStyleName = *(OUString*) m_pCharStyleLB->GetSelectEntryData();
+        sStyleName = *static_cast<OUString*>(m_pCharStyleLB->GetSelectEntryData());
     Sequence<PropertyValues>&  aRubyValues = pImpl->GetRubyValues();
     for(sal_Int32 nRuby = 0; nRuby < aRubyValues.getLength(); nRuby++)
     {

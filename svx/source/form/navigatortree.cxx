@@ -408,7 +408,7 @@ namespace svxform
                     {
                         aContextMenu.SetPopupMenu( SID_FM_CHANGECONTROLTYPE, FmXFormShell::GetConversionMenu() );
 #if OSL_DEBUG_LEVEL > 0
-                        FmControlData* pCurrent = (FmControlData*)(*m_arrCurrentSelection.begin())->GetUserData();
+                        FmControlData* pCurrent = static_cast<FmControlData*>((*m_arrCurrentSelection.begin())->GetUserData());
                         OSL_ENSURE( pFormShell->GetImpl()->isSolelySelected( pCurrent->GetFormComponent() ),
                             "NavigatorTree::Command: inconsistency between the navigator selection, and the selection as the shell knows it!" );
 #endif
@@ -477,7 +477,7 @@ namespace svxform
                             SvTreeListEntry* pSelectedForm = *m_arrCurrentSelection.begin();
                             DBG_ASSERT( IsFormEntry(pSelectedForm), "NavigatorTree::Command: This entry must be a FormEntry." );
 
-                            FmFormData* pFormData = (FmFormData*)pSelectedForm->GetUserData();
+                            FmFormData* pFormData = static_cast<FmFormData*>(pSelectedForm->GetUserData());
                             Reference< XForm >  xForm(  pFormData->GetFormIface());
 
                             Reference< XTabControllerModel >  xTabController(xForm, UNO_QUERY);
@@ -513,7 +513,7 @@ namespace svxform
                         default:
                             if (FmXFormShell::isControlConversionSlot(nSlotId))
                             {
-                                FmControlData* pCurrent = (FmControlData*)(*m_arrCurrentSelection.begin())->GetUserData();
+                                FmControlData* pCurrent = static_cast<FmControlData*>((*m_arrCurrentSelection.begin())->GetUserData());
                                 if ( pFormShell->GetImpl()->executeControlConversionSlot( pCurrent->GetFormComponent(), nSlotId ) )
                                     ShowSelectionProperties();
                             }
@@ -534,7 +534,7 @@ namespace svxform
         SvTreeListEntry* pCurEntry = First();
         while( pCurEntry )
         {
-            FmEntryData* pCurEntryData = (FmEntryData*)pCurEntry->GetUserData();
+            FmEntryData* pCurEntryData = static_cast<FmEntryData*>(pCurEntry->GetUserData());
             if( pCurEntryData && pCurEntryData->IsEqualWithoutChildren(pEntryData) )
                 return pCurEntry;
 
@@ -680,14 +680,14 @@ namespace svxform
 
     bool NavigatorTree::IsFormEntry( SvTreeListEntry* pEntry )
     {
-        FmEntryData* pEntryData = (FmEntryData*)pEntry->GetUserData();
+        FmEntryData* pEntryData = static_cast<FmEntryData*>(pEntry->GetUserData());
         return !pEntryData || pEntryData->ISA(FmFormData);
     }
 
 
     bool NavigatorTree::IsFormComponentEntry( SvTreeListEntry* pEntry )
     {
-        FmEntryData* pEntryData = (FmEntryData*)pEntry->GetUserData();
+        FmEntryData* pEntryData = static_cast<FmEntryData*>(pEntry->GetUserData());
         return pEntryData && pEntryData->ISA(FmControlData);
     }
 
@@ -1016,7 +1016,7 @@ namespace svxform
 
         // some data for the target
         bool bDropTargetIsForm = IsFormEntry(_pTargetEntry);
-        FmFormData* pTargetData = bDropTargetIsForm ? (FmFormData*)_pTargetEntry->GetUserData() : NULL;
+        FmFormData* pTargetData = bDropTargetIsForm ? static_cast<FmFormData*>(_pTargetEntry->GetUserData()) : NULL;
 
         DBG_ASSERT( DND_ACTION_COPY != _nAction, "NavigatorTree::implExecuteDataTransfer: somebody changed the logics!" );
 
@@ -1055,7 +1055,7 @@ namespace svxform
             DBG_ASSERT(GetParent(pCurrent) != NULL, "NavigatorTree::implExecuteDataTransfer: invalid entry");
                 // don't drag root
 
-            FmEntryData* pCurrentUserData = (FmEntryData*)pCurrent->GetUserData();
+            FmEntryData* pCurrentUserData = static_cast<FmEntryData*>(pCurrent->GetUserData());
 
             Reference< XChild >  xCurrentChild(pCurrentUserData->GetChildIFace(), UNO_QUERY);
             Reference< XIndexContainer >  xContainer(xCurrentChild->getParent(), UNO_QUERY);
@@ -1320,7 +1320,7 @@ namespace svxform
         if( !IsFormEntry(pParentEntry) )
             return;
 
-        FmFormData* pParentFormData = (FmFormData*)pParentEntry->GetUserData();
+        FmFormData* pParentFormData = static_cast<FmFormData*>(pParentEntry->GetUserData());
 
 
         // create new form
@@ -1384,7 +1384,7 @@ namespace svxform
         if (!IsFormEntry(pParentEntry))
             return NULL;
 
-        FmFormData* pParentFormData = (FmFormData*)pParentEntry->GetUserData();;
+        FmFormData* pParentFormData = static_cast<FmFormData*>(pParentEntry->GetUserData());
         Reference< XForm >  xParentForm( pParentFormData->GetFormIface());
 
 
@@ -1464,7 +1464,7 @@ namespace svxform
             return true;
 
         GrabFocus();
-        FmEntryData* pEntryData = (FmEntryData*)pEntry->GetUserData();
+        FmEntryData* pEntryData = static_cast<FmEntryData*>(pEntry->GetUserData());
         bool bRes = GetNavModel()->Rename( pEntryData, rNewText);
         if( !bRes )
         {
@@ -1607,12 +1607,12 @@ namespace svxform
             {
                 if (m_nFormsSelected > 0)
                 {   // exactly one form is selected
-                    FmFormData* pFormData = (FmFormData*)(*m_arrCurrentSelection.begin())->GetUserData();
+                    FmFormData* pFormData = static_cast<FmFormData*>((*m_arrCurrentSelection.begin())->GetUserData());
                     aSelection.insert( Reference< XInterface >( pFormData->GetFormIface(), UNO_QUERY ) );
                 }
                 else
                 {   // exactly one control is selected (whatever hidden or normal)
-                    FmEntryData* pEntryData = (FmEntryData*)(*m_arrCurrentSelection.begin())->GetUserData();
+                    FmEntryData* pEntryData = static_cast<FmEntryData*>((*m_arrCurrentSelection.begin())->GetUserData());
 
                     aSelection.insert( Reference< XInterface >( pEntryData->GetElement(), UNO_QUERY ) );
                 }
@@ -1625,7 +1625,7 @@ namespace svxform
                    SvLBoxEntrySortedArray::const_iterator it = m_arrCurrentSelection.begin();
                     for ( sal_Int32 i = 0; i < m_nFormsSelected; ++i )
                     {
-                        FmFormData* pFormData = (FmFormData*)(*it)->GetUserData();
+                        FmFormData* pFormData = static_cast<FmFormData*>((*it)->GetUserData());
                         aSelection.insert( pFormData->GetPropertySet().get() );
                         ++it;
                     }
@@ -1637,7 +1637,7 @@ namespace svxform
                         SvLBoxEntrySortedArray::const_iterator it = m_arrCurrentSelection.begin();
                         for ( sal_Int32 i = 0; i < m_nHiddenControls; ++i )
                         {
-                            FmEntryData* pEntryData = (FmEntryData*)(*it)->GetUserData();
+                            FmEntryData* pEntryData = static_cast<FmEntryData*>((*it)->GetUserData());
                             aSelection.insert( pEntryData->GetPropertySet().get() );
                             ++it;
                         }
@@ -1784,7 +1784,7 @@ namespace svxform
         for (SvLBoxEntrySortedArray::const_iterator it = m_arrCurrentSelection.begin();
              it != m_arrCurrentSelection.end(); ++it)
         {
-            FmEntryData* pCurrent = (FmEntryData*)((*it)->GetUserData());
+            FmEntryData* pCurrent = static_cast<FmEntryData*>((*it)->GetUserData());
 
             // if the entry still has children, we skipped deletion of one of those children.
             // This may for instance be because the shape is in a hidden layer, where we're unable
@@ -1829,7 +1829,7 @@ namespace svxform
                 else
                 {
                     ++m_nControlsSelected;
-                    if (IsHiddenControl((FmEntryData*)(pSelectionLoop->GetUserData())))
+                    if (IsHiddenControl(static_cast<FmEntryData*>(pSelectionLoop->GetUserData())))
                         ++m_nHiddenControls;
                 }
             }
@@ -1894,7 +1894,7 @@ namespace svxform
             SvTreeListEntry* pSelection = FirstSelected();
             while (pSelection)
             {
-                FmEntryData* pCurrent = (FmEntryData*)pSelection->GetUserData();
+                FmEntryData* pCurrent = static_cast<FmEntryData*>(pSelection->GetUserData());
                 if (pCurrent != NULL)
                 {
                     FmEntryDataArray::iterator it = arredToSelect.find(pCurrent);
@@ -1927,7 +1927,7 @@ namespace svxform
             SvTreeListEntry* pLoop = First();
             while( pLoop )
             {
-                FmEntryData* pCurEntryData = (FmEntryData*)pLoop->GetUserData();
+                FmEntryData* pCurEntryData = static_cast<FmEntryData*>(pLoop->GetUserData());
                 FmEntryDataArray::iterator it = arredToSelect.find(pCurEntryData);
                 if ( it != arredToSelect.end() )
                 {
@@ -1975,12 +1975,12 @@ namespace svxform
             SvTreeListEntry* pSelectionLoop = *it;
             // When form selection, mark all controls of form
             if (IsFormEntry(pSelectionLoop) && (pSelectionLoop != m_pRootEntry))
-                MarkViewObj((FmFormData*)pSelectionLoop->GetUserData(), true, false);
+                MarkViewObj(static_cast<FmFormData*>(pSelectionLoop->GetUserData()), true, false);
 
             // When control selection, mark Control-SdrObjects
             else if (IsFormComponentEntry(pSelectionLoop))
             {
-                FmControlData* pControlData = (FmControlData*)pSelectionLoop->GetUserData();
+                FmControlData* pControlData = static_cast<FmControlData*>(pSelectionLoop->GetUserData());
                 if (pControlData)
                 {
 

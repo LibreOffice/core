@@ -191,7 +191,7 @@ DictionaryEntry* DictionaryList::getEntryOnPos( sal_Int32 nPos ) const
     DictionaryEntry* pEntry=0;
     SvTreeListEntry* pLBEntry = GetEntryOnPos( nPos );
     if(pLBEntry)
-        pEntry = (DictionaryEntry*)pLBEntry->GetUserData();
+        pEntry = static_cast<DictionaryEntry*>(pLBEntry->GetUserData());
     return pEntry;
 }
 

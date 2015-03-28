@@ -1803,8 +1803,8 @@ struct ImplHdlAndIndex
 // single objects and re-sorting polygon handles intuitively
 extern "C" int SAL_CALL ImplSortHdlFunc( const void* pVoid1, const void* pVoid2 )
 {
-    const ImplHdlAndIndex* p1 = (ImplHdlAndIndex*)pVoid1;
-    const ImplHdlAndIndex* p2 = (ImplHdlAndIndex*)pVoid2;
+    const ImplHdlAndIndex* p1 = static_cast<ImplHdlAndIndex const *>(pVoid1);
+    const ImplHdlAndIndex* p2 = static_cast<ImplHdlAndIndex const *>(pVoid2);
 
     if(p1->mpHdl->GetObj() == p2->mpHdl->GetObj())
     {

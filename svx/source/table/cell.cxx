@@ -1051,7 +1051,7 @@ void SAL_CALL Cell::setPropertyValue( const OUString& rPropertyName, const Any& 
             if(rValue.getValueType() != cppu::UnoType<TableBorder>::get())
                 break;
 
-            const TableBorder* pBorder = (const TableBorder* )rValue.getValue();
+            const TableBorder* pBorder = static_cast<const TableBorder*>(rValue.getValue());
             if( pBorder == NULL )
                 break;
 

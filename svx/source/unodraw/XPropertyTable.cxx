@@ -346,7 +346,7 @@ XPropertyEntry* SvxUnoXLineEndTable::getEntry( const OUString& rName, const uno:
         return NULL;
 
     basegfx::B2DPolyPolygon aPolyPolygon;
-    drawing::PolyPolygonBezierCoords* pCoords = (drawing::PolyPolygonBezierCoords*)rAny.getValue();
+    drawing::PolyPolygonBezierCoords const * pCoords = static_cast<drawing::PolyPolygonBezierCoords const *>(rAny.getValue());
     if( pCoords->Coordinates.getLength() > 0 )
         aPolyPolygon = basegfx::unotools::polyPolygonBezierToB2DPolyPolygon( *pCoords );
 

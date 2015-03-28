@@ -3445,7 +3445,7 @@ void DbGridControl::BeginCursorAction()
 {
     if (m_pFieldListeners)
     {
-        ColumnFieldValueListeners* pListeners = (ColumnFieldValueListeners*)m_pFieldListeners;
+        ColumnFieldValueListeners* pListeners = static_cast<ColumnFieldValueListeners*>(m_pFieldListeners);
         ColumnFieldValueListeners::const_iterator aIter = pListeners->begin();
         while (aIter != pListeners->end())
         {
@@ -3464,7 +3464,7 @@ void DbGridControl::EndCursorAction()
 {
     if (m_pFieldListeners)
     {
-        ColumnFieldValueListeners* pListeners = (ColumnFieldValueListeners*)m_pFieldListeners;
+        ColumnFieldValueListeners* pListeners = static_cast<ColumnFieldValueListeners*>(m_pFieldListeners);
         ColumnFieldValueListeners::const_iterator aIter = pListeners->begin();
         while (aIter != pListeners->end())
         {
@@ -3481,7 +3481,7 @@ void DbGridControl::EndCursorAction()
 
 void DbGridControl::ConnectToFields()
 {
-    ColumnFieldValueListeners* pListeners = (ColumnFieldValueListeners*)m_pFieldListeners;
+    ColumnFieldValueListeners* pListeners = static_cast<ColumnFieldValueListeners*>(m_pFieldListeners);
     DBG_ASSERT(!pListeners || pListeners->empty(), "DbGridControl::ConnectToFields : please call DisconnectFromFields first !");
 
     if (!pListeners)
@@ -3513,7 +3513,7 @@ void DbGridControl::DisconnectFromFields()
     if (!m_pFieldListeners)
         return;
 
-    ColumnFieldValueListeners* pListeners = (ColumnFieldValueListeners*)m_pFieldListeners;
+    ColumnFieldValueListeners* pListeners = static_cast<ColumnFieldValueListeners*>(m_pFieldListeners);
     while (!pListeners->empty())
     {
 #ifdef DBG_UTIL
@@ -3558,7 +3558,7 @@ void DbGridControl::FieldValueChanged(sal_uInt16 _nId, const PropertyChangeEvent
 
 void DbGridControl::FieldListenerDisposing(sal_uInt16 _nId)
 {
-    ColumnFieldValueListeners* pListeners = (ColumnFieldValueListeners*)m_pFieldListeners;
+    ColumnFieldValueListeners* pListeners = static_cast<ColumnFieldValueListeners*>(m_pFieldListeners);
     if (!pListeners)
     {
         OSL_FAIL("DbGridControl::FieldListenerDisposing : invalid call (have no listener array) !");

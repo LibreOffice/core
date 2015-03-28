@@ -681,7 +681,7 @@ IMPL_LINK(FillControl,SelectFillTypeHdl,ListBox *,pBox)
         aArgsFillStyle[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FillStyle"));
         aXFillStyleItem.QueryValue(a);
         aArgsFillStyle[0].Value = a;
-        ((SvxFillToolBoxControl*)GetData())->Dispatch(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:FillStyle")), aArgsFillStyle);
+        static_cast<SvxFillToolBoxControl*>(GetData())->Dispatch(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:FillStyle")), aArgsFillStyle);
     }
 
     mpLbFillType->Selected();
@@ -840,14 +840,14 @@ IMPL_LINK(FillControl, SelectFillAttrHdl, ListBox *, pBox)
             aArgsFillStyle[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FillStyle"));
             aXFillStyleItem.QueryValue(a);
             aArgsFillStyle[0].Value = a;
-            ((SvxFillToolBoxControl*)GetData())->Dispatch(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:FillStyle")), aArgsFillStyle);
+            static_cast<SvxFillToolBoxControl*>(GetData())->Dispatch(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:FillStyle")), aArgsFillStyle);
             mbFillTypeChanged = false;
         }
 
         // second set fill attribute when a change was detected and prepared
         if(aFillAttrCommand.getLength())
         {
-            ((SvxFillToolBoxControl*)GetData())->Dispatch(aFillAttrCommand, aArgsFillAttr);
+            static_cast<SvxFillToolBoxControl*>(GetData())->Dispatch(aFillAttrCommand, aArgsFillAttr);
         }
 
         // release focus. Needed to get focus automatically back to EditView

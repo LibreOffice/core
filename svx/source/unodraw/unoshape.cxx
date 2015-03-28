@@ -2292,13 +2292,13 @@ bool SvxShape::setPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
                     {
                         // get polygpon data from PointSequenceSequence
                         aNewPolyPolygon = basegfx::tools::UnoPointSequenceSequenceToB2DPolyPolygon(
-                            *(const drawing::PointSequenceSequence*)rValue.getValue());
+                            *static_cast<const drawing::PointSequenceSequence*>(rValue.getValue()));
                     }
                     else if( rValue.getValueType() == cppu::UnoType<drawing::PolyPolygonBezierCoords>::get())
                     {
                         // get polygpon data from PolyPolygonBezierCoords
                         aNewPolyPolygon = basegfx::tools::UnoPolyPolygonBezierCoordsToB2DPolyPolygon(
-                            *(const drawing::PolyPolygonBezierCoords*)rValue.getValue());
+                            *static_cast<const drawing::PolyPolygonBezierCoords*>(rValue.getValue()));
                     }
 
                     if(aNewPolyPolygon.count())

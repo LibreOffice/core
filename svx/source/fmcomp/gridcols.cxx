@@ -49,7 +49,7 @@ const ::comphelper::StringSequence& getColumnTypes()
 // Vergleichen von PropertyInfo
 extern "C" int SAL_CALL NameCompare(const void* pFirst, const void* pSecond)
 {
-    return ((OUString*)pFirst)->compareTo(*(OUString*)pSecond);
+    return static_cast<OUString const *>(pFirst)->compareTo(*static_cast<OUString const *>(pSecond));
 }
 
 namespace
@@ -58,8 +58,8 @@ namespace
     sal_Int32 lcl_findPos(const OUString& aStr, const Sequence< OUString>& rList)
     {
         const OUString* pStrList = rList.getConstArray();
-        OUString* pResult = (OUString*) bsearch(&aStr, (void*)pStrList, rList.getLength(), sizeof(OUString),
-            &NameCompare);
+        OUString* pResult = static_cast<OUString*>(bsearch(&aStr, (void*)pStrList, rList.getLength(), sizeof(OUString),
+            &NameCompare));
 
         if (pResult)
             return (pResult - pStrList);
