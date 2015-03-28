@@ -2179,40 +2179,39 @@ void SwXTextTable::attachToRange(const uno::Reference< text::XTextRange > & xTex
     SwUnoInternalPaM aPam(*pDoc);
     // this now needs to return TRUE
     ::sw::XTextRangeToSwPaM(aPam, xTextRange);
-
     {
-        UnoActionContext aCont( pDoc );
+        UnoActionContext aCont(pDoc);
 
         pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, NULL);
-        const SwTable *pTable = 0;
+        const SwTable* pTable(nullptr);
         if( 0 != aPam.Start()->nContent.GetIndex() )
         {
-            pDoc->getIDocumentContentOperations().SplitNode(*aPam.Start(), false );
+            pDoc->getIDocumentContentOperations().SplitNode(*aPam.Start(), false);
         }
         //TODO: if it is the last paragraph than add another one!
-        if( aPam.HasMark() )
+        if(aPam.HasMark())
         {
             pDoc->getIDocumentContentOperations().DeleteAndJoin(aPam);
             aPam.DeleteMark();
         }
-        pTable = pDoc->InsertTable( SwInsertTableOptions( tabopts::HEADLINE | tabopts::DEFAULT_BORDER | tabopts::SPLIT_LAYOUT, 0 ),
-                                    *aPam.GetPoint(),
-                                    nRows,
-                                    nColumns,
-                                    text::HoriOrientation::FULL );
+        pTable = pDoc->InsertTable(SwInsertTableOptions( tabopts::HEADLINE | tabopts::DEFAULT_BORDER | tabopts::SPLIT_LAYOUT, 0 ),
+                *aPam.GetPoint(),
+                nRows,
+                nColumns,
+                text::HoriOrientation::FULL);
         if(pTable)
         {
             // here, the properties of the descriptor need to be analyzed
             pTableProps->ApplyTblAttr(*pTable, *pDoc);
-            SwFrmFmt* pTblFmt = pTable->GetFrmFmt();
-            lcl_FormatTable( pTblFmt );
+            SwFrmFmt* pTblFmt(pTable->GetFrmFmt());
+            lcl_FormatTable(pTblFmt);
 
             pTblFmt->Add(this);
             if(!m_sTableName.isEmpty())
             {
                 sal_uInt16 nIndex = 1;
                 OUString sTmpNameIndex(m_sTableName);
-                while(pDoc->FindTblFmtByName( sTmpNameIndex, true ) && nIndex < USHRT_MAX)
+                while(pDoc->FindTblFmtByName(sTmpNameIndex, true) && nIndex < USHRT_MAX)
                 {
                     sTmpNameIndex = m_sTableName + OUString::number(nIndex++);
                 }
@@ -2221,11 +2220,7 @@ void SwXTextTable::attachToRange(const uno::Reference< text::XTextRange > & xTex
 
             const::uno::Any* pName;
             if(pTableProps->GetProperty(FN_UNO_TABLE_NAME, 0, pName))
-            {
-                OUString sTmp;
-                (*pName) >>= sTmp;
-                setName(sTmp);
-            }
+                setName(pName->get<OUString>());
             bIsDescriptor = false;
             DELETEZ(pTableProps);
         }
@@ -2237,18 +2232,17 @@ void SwXTextTable::attach(const uno::Reference< text::XTextRange > & xTextRange)
         throw( lang::IllegalArgumentException, uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    attachToRange( xTextRange );
+    attachToRange(xTextRange);
 }
 
-uno::Reference< text::XTextRange >  SwXTextTable::getAnchor(void)
+uno::Reference<text::XTextRange>  SwXTextTable::getAnchor(void)
         throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    SwFrmFmt* pFmt = GetFrmFmt();
+    SwFrmFmt* pFmt(GetFrmFmt());
     if(!pFmt)
         throw uno::RuntimeException();
-    uno::Reference< text::XTextRange >  xRet = new SwXTextRange(*pFmt);
-    return xRet;
+    return new SwXTextRange(*pFmt);
 }
 
 void SwXTextTable::dispose(void) throw( uno::RuntimeException, std::exception )
