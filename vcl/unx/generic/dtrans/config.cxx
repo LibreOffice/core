@@ -81,7 +81,7 @@ DtransX11ConfigItem::DtransX11ConfigItem() :
     {
         if( pValue->getValueTypeClass() == TypeClass_STRING )
         {
-            const OUString* pLine = (const OUString*)pValue->getValue();
+            const OUString* pLine = static_cast<const OUString*>(pValue->getValue());
             if( !pLine->isEmpty() )
             {
                 m_nSelectionTimeout = pLine->toInt32();

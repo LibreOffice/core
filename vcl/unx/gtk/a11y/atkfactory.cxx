@@ -79,7 +79,7 @@ atk_noop_object_wrapper_new()
 {
   AtkObject *accessible;
 
-  accessible = (AtkObject *) g_object_new (atk_noop_object_wrapper_get_type(), NULL);
+  accessible = static_cast<AtkObject *>(g_object_new (atk_noop_object_wrapper_get_type(), NULL));
   g_return_val_if_fail (accessible != NULL, NULL);
 
   accessible->role = ATK_ROLE_INVALID;

@@ -68,7 +68,7 @@ HPBYTE GIFLZWDecompressor::DecompressBlock( HPBYTE pSrc, sal_uInt8 cBufSize,
 {
     sal_uLong   nTargetSize = 4096;
     sal_uLong   nCount = 0;
-    HPBYTE  pTarget = (HPBYTE) rtl_allocateMemory( nTargetSize );
+    HPBYTE  pTarget = static_cast<HPBYTE>(rtl_allocateMemory( nTargetSize ));
     HPBYTE  pTmpTarget = pTarget;
 
     nBlockBufSize = cBufSize;
@@ -83,7 +83,7 @@ HPBYTE GIFLZWDecompressor::DecompressBlock( HPBYTE pSrc, sal_uInt8 cBufSize,
         {
             sal_uLong   nNewSize = nTargetSize << 1;
             sal_uLong   nOffset = pTmpTarget - pTarget;
-            HPBYTE  pTmp = (HPBYTE) rtl_allocateMemory( nNewSize );
+            HPBYTE  pTmp = static_cast<HPBYTE>(rtl_allocateMemory( nNewSize ));
 
             memcpy( pTmp, pTarget, nTargetSize );
             rtl_freeMemory( pTarget );

@@ -258,7 +258,7 @@ IMPL_LINK( RTSPaperPage, SelectHdl, ListBox*, pBox )
     }
     if( pKey )
     {
-        PPDValue* pValue = (PPDValue*)pBox->GetSelectEntryData();
+        PPDValue* pValue = static_cast<PPDValue*>(pBox->GetSelectEntryData());
         m_pParent->m_aJobData.m_aContext.setValue( pKey, pValue );
         update();
     }
@@ -412,13 +412,13 @@ IMPL_LINK( RTSDevicePage, SelectHdl, ListBox*, pBox )
 {
     if( pBox == m_pPPDKeyBox )
     {
-        const PPDKey* pKey = (PPDKey*)m_pPPDKeyBox->GetSelectEntryData();
+        const PPDKey* pKey = static_cast<PPDKey*>(m_pPPDKeyBox->GetSelectEntryData());
         FillValueBox( pKey );
     }
     else if( pBox == m_pPPDValueBox )
     {
-        const PPDKey* pKey = (PPDKey*)m_pPPDKeyBox->GetSelectEntryData();
-        const PPDValue* pValue = (PPDValue*)m_pPPDValueBox->GetSelectEntryData();
+        const PPDKey* pKey = static_cast<PPDKey*>(m_pPPDKeyBox->GetSelectEntryData());
+        const PPDValue* pValue = static_cast<PPDValue*>(m_pPPDValueBox->GetSelectEntryData());
         if (pKey && pValue)
         {
             m_pParent->m_aJobData.m_aContext.setValue( pKey, pValue );

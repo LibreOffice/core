@@ -931,9 +931,9 @@ extern "C" int SAL_CALL ImplPopArtCmpFnc( const void* p1, const void* p2 )
 {
     int nRet;
 
-    if( ( (PopArtEntry*) p1 )->mnCount < ( (PopArtEntry*) p2 )->mnCount )
+    if( static_cast<PopArtEntry const *>(p1)->mnCount < static_cast<PopArtEntry const *>(p2)->mnCount )
         nRet = 1;
-    else if( ( (PopArtEntry*) p1 )->mnCount == ( (PopArtEntry*) p2 )->mnCount )
+    else if( static_cast<PopArtEntry const *>(p1)->mnCount == static_cast<PopArtEntry const *>(p2)->mnCount )
         nRet = 0;
     else
         nRet = -1;

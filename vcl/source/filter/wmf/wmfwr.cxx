@@ -518,7 +518,7 @@ bool WMFWriter::WMFRecord_Escape_Unicode( const Point& rPoint, const OUString& r
                     for ( i = 0; i < nDXCount; i++ )
                         aMemoryStream.WriteInt32( pDXAry[ i ] );
                     aMemoryStream.WriteUInt32( nSkipActions );
-                    WMFRecord_Escape( PRIVATE_ESCAPE_UNICODE, nStrmLen, (const sal_Int8*)aMemoryStream.GetData() );
+                    WMFRecord_Escape( PRIVATE_ESCAPE_UNICODE, nStrmLen, static_cast<const sal_Int8*>(aMemoryStream.GetData()) );
 
                     std::vector<tools::PolyPolygon>::iterator aIter( aPolyPolyVec.begin() );
                     while ( aIter != aPolyPolyVec.end() )

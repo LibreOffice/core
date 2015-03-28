@@ -290,7 +290,7 @@ bool WriteJPEG( JPEGWriter* pJPEGWriter, void* pOutputStream,
 
         if( pScanline )
         {
-            jpeg_write_scanlines( &cinfo, (JSAMPARRAY) &pScanline, 1 );
+            jpeg_write_scanlines( &cinfo, reinterpret_cast<JSAMPARRAY>(&pScanline), 1 );
         }
 
         if( status.is() )

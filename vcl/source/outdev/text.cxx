@@ -1352,7 +1352,7 @@ SalLayout* OutputDevice::ImplLayout(const OUString& rOrigStr,
         if(mbMap)
         {
             // convert from logical units to font units using a temporary array
-            pDXPixelArray = (DeviceCoordinate*)alloca( nLen * sizeof(DeviceCoordinate) );
+            pDXPixelArray = static_cast<DeviceCoordinate*>(alloca( nLen * sizeof(DeviceCoordinate) ));
             // using base position for better rounding a.k.a. "dancing characters"
             DeviceCoordinate nPixelXOfs = LogicWidthToDeviceCoordinate( rLogicalPos.X() );
             for( int i = 0; i < nLen; ++i )
@@ -1688,7 +1688,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& r
                         long        nMnemonicY;
                         DeviceCoordinate nMnemonicWidth;
 
-                        long* pCaretXArray = (long*) alloca( 2 * sizeof(long) * nLineLen );
+                        long* pCaretXArray = static_cast<long*>(alloca( 2 * sizeof(long) * nLineLen ));
                         /*sal_Bool bRet =*/ _rLayout.GetCaretPositions( aStr, pCaretXArray,
                                                 nIndex, nLineLen );
                         long lc_x1 = pCaretXArray[2*(nMnemonicPos - nIndex)];
@@ -1757,7 +1757,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& r
         DeviceCoordinate nMnemonicWidth = 0;
         if ( nMnemonicPos != -1 )
         {
-            long* pCaretXArray = (long*) alloca( 2 * sizeof(long) * aStr.getLength() );
+            long* pCaretXArray = static_cast<long*>(alloca( 2 * sizeof(long) * aStr.getLength() ));
             /*sal_Bool bRet =*/ _rLayout.GetCaretPositions( aStr, pCaretXArray, 0, aStr.getLength() );
             long lc_x1 = pCaretXArray[2*(nMnemonicPos)];
             long lc_x2 = pCaretXArray[2*(nMnemonicPos)+1];
@@ -2204,7 +2204,7 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const OUString& rStr,
                 nMnemonicPos = nLen-1;
             }
 
-            long* pCaretXArray = (long*)alloca( 2 * sizeof(long) * nLen );
+            long* pCaretXArray = static_cast<long*>(alloca( 2 * sizeof(long) * nLen ));
             /*sal_Bool bRet =*/ GetCaretPositions( aStr, pCaretXArray, nIndex, nLen );
             long lc_x1 = pCaretXArray[ 2*(nMnemonicPos - nIndex) ];
             long lc_x2 = pCaretXArray[ 2*(nMnemonicPos - nIndex)+1 ];

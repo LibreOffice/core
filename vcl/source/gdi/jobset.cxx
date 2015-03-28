@@ -78,7 +78,7 @@ ImplJobSetup::ImplJobSetup( const ImplJobSetup& rJobSetup ) :
     mnDriverDataLen     = rJobSetup.mnDriverDataLen;
     if ( rJobSetup.mpDriverData )
     {
-        mpDriverData = (sal_uInt8*)rtl_allocateMemory( mnDriverDataLen );
+        mpDriverData = static_cast<sal_uInt8*>(rtl_allocateMemory( mnDriverDataLen ));
         memcpy( mpDriverData, rJobSetup.mpDriverData, mnDriverDataLen );
     }
     else
@@ -272,7 +272,7 @@ SvStream& ReadJobSetup( SvStream& rIStream, JobSetup& rJobSetup )
                 if ( pJobData->mnDriverDataLen )
                 {
                     sal_uInt8* pDriverData = reinterpret_cast<sal_uInt8*>(pOldJobData) + nOldJobDataSize;
-                    pJobData->mpDriverData = (sal_uInt8*)rtl_allocateMemory( pJobData->mnDriverDataLen );
+                    pJobData->mpDriverData = static_cast<sal_uInt8*>(rtl_allocateMemory( pJobData->mnDriverDataLen ));
                     memcpy( pJobData->mpDriverData, pDriverData, pJobData->mnDriverDataLen );
                 }
                 if( nSystem == JOBSET_FILE605_SYSTEM )

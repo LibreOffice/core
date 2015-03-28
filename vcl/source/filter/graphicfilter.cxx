@@ -2095,7 +2095,7 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString
 
                                 xActiveDataSource->setOutputStream( css::uno::Reference< css::io::XOutputStream >(
                                     xStmIf, css::uno::UNO_QUERY ) );
-                                css::uno::Sequence< sal_Int8 > aMtfSeq( (sal_Int8*) aMemStm.GetData(), aMemStm.Tell() );
+                                css::uno::Sequence< sal_Int8 > aMtfSeq( static_cast<sal_Int8 const *>(aMemStm.GetData()), aMemStm.Tell() );
                                 xSVGWriter->write( xSaxWriter, aMtfSeq );
                             }
                         }

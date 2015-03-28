@@ -1248,7 +1248,7 @@ void GenPspGraphics::DoFreeEmbedFontData( const void* pData, long nLen )
 {
 #if defined( UNX )
     if( pData )
-        munmap( (char*)pData, nLen );
+        munmap( const_cast<void *>(pData), nLen );
 #else
     (void)nLen;
     rtl_freeMemory( (void *)pData );
@@ -1332,7 +1332,7 @@ const void* GenPspGraphics::DoGetEmbedFontData( psp::fontID aFont, const sal_Ucs
             rInfo.m_nFontType = FontSubsetInfo::SFNT_TTF;
             break;
         case psp::fonttype::Type1: {
-            const bool bPFA = ((*(unsigned char*)pFile) < 0x80);
+            const bool bPFA = *static_cast<unsigned char*>(pFile) < 0x80;
             rInfo.m_nFontType = bPFA ? FontSubsetInfo::TYPE1_PFA : FontSubsetInfo::TYPE1_PFB;
             }
             break;

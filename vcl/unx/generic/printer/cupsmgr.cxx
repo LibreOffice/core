@@ -112,7 +112,7 @@ extern "C" {
     static void getPPDWorker(void* pData)
     {
         osl_setThreadName("CUPSManager getPPDWorker");
-        GetPPDAttribs* pAttribs = (GetPPDAttribs*)pData;
+        GetPPDAttribs* pAttribs = static_cast<GetPPDAttribs*>(pData);
         pAttribs->executeCall();
     }
 }
@@ -200,12 +200,12 @@ CUPSManager::~CUPSManager()
     }
 
     if (m_nDests && m_pDests)
-        cupsFreeDests( m_nDests, (cups_dest_t*)m_pDests );
+        cupsFreeDests( m_nDests, static_cast<cups_dest_t*>(m_pDests) );
 }
 
 void CUPSManager::runDestThread( void* pThis )
 {
-    ((CUPSManager*)pThis)->runDests();
+    static_cast<CUPSManager*>(pThis)->runDests();
 }
 
 void CUPSManager::runDests()
@@ -267,7 +267,7 @@ void CUPSManager::initialize()
     // this is needed to check for %%IncludeFeature support
     // (#i65684#, #i65491#)
     bool bUsePDF = false;
-    cups_dest_t* pDest = ((cups_dest_t*)m_pDests);
+    cups_dest_t* pDest = static_cast<cups_dest_t*>(m_pDests);
     const char* pOpt = cupsGetOption( "printer-info",
                                                       pDest->num_options,
                                                       pDest->options );
@@ -295,7 +295,7 @@ void CUPSManager::initialize()
     // with the same name as a CUPS printer, overwrite it
     while( nPrinter-- )
     {
-        pDest = ((cups_dest_t*)m_pDests)+nPrinter;
+        pDest = static_cast<cups_dest_t*>(m_pDests)+nPrinter;
         OUString aPrinterName = OStringToOUString( pDest->name, aEncoding );
         if( pDest->instance && *pDest->instance )
         {
@@ -431,7 +431,7 @@ const PPDParser* CUPSManager::createCUPSParser( const OUString& rPrinter )
             m_aCUPSDestMap.find( aPrinter );
             if( dest_it != m_aCUPSDestMap.end() )
             {
-                cups_dest_t* pDest = ((cups_dest_t*)m_pDests) + dest_it->second;
+                cups_dest_t* pDest = static_cast<cups_dest_t*>(m_pDests) + dest_it->second;
                 OString aPPDFile = threadedCupsGetPPD( pDest->name );
                 SAL_INFO("vcl.unx.print",
                         "PPD for " << aPrinter << " is " << aPPDFile);
@@ -601,7 +601,7 @@ void CUPSManager::getOptionsFromDocumentSetup( const JobData& rJob, bool bBanner
             {
                 OString aKey = OUStringToOString( pKey->getKey(), RTL_TEXTENCODING_ASCII_US );
                 OString aValue = OUStringToOString( sPayLoad, RTL_TEXTENCODING_ASCII_US );
-                rNumOptions = cupsAddOption( aKey.getStr(), aValue.getStr(), rNumOptions, (cups_option_t**)rOptions );
+                rNumOptions = cupsAddOption( aKey.getStr(), aValue.getStr(), rNumOptions, reinterpret_cast<cups_option_t**>(rOptions) );
             }
         }
     }
@@ -609,13 +609,13 @@ void CUPSManager::getOptionsFromDocumentSetup( const JobData& rJob, bool bBanner
     if( rJob.m_nPDFDevice > 0 && rJob.m_nCopies > 1 )
     {
         OString aVal( OString::number( rJob.m_nCopies ) );
-        rNumOptions = cupsAddOption( "copies", aVal.getStr(), rNumOptions, (cups_option_t**)rOptions );
+        rNumOptions = cupsAddOption( "copies", aVal.getStr(), rNumOptions, reinterpret_cast<cups_option_t**>(rOptions) );
         aVal = OString::boolean(rJob.m_bCollate);
-        rNumOptions = cupsAddOption( "collate", aVal.getStr(), rNumOptions, (cups_option_t**)rOptions );
+        rNumOptions = cupsAddOption( "collate", aVal.getStr(), rNumOptions, reinterpret_cast<cups_option_t**>(rOptions) );
     }
     if( ! bBanner )
     {
-        rNumOptions = cupsAddOption( "job-sheets", "none", rNumOptions, (cups_option_t**)rOptions );
+        rNumOptions = cupsAddOption( "job-sheets", "none", rNumOptions, reinterpret_cast<cups_option_t**>(rOptions) );
     }
 }
 
@@ -722,7 +722,7 @@ bool CUPSManager::printJobs( const PendingJob& job, const std::vector< OString >
             sJobName = OUStringToOString(job.faxNumber, aEnc);
         }
 
-        cups_dest_t* pDest = ((cups_dest_t*)m_pDests) + dest_it->second;
+        cups_dest_t* pDest = static_cast<cups_dest_t*>(m_pDests) + dest_it->second;
 
         std::vector< const char* > fnames;
         for( std::vector< OString >::const_iterator it = files.begin();
@@ -790,7 +790,7 @@ bool CUPSManager::checkPrintersChanged( bool bWait )
             // there is no way to query CUPS whether the printer list has changed
             // so get the dest list anew
             if( m_nDests && m_pDests )
-                cupsFreeDests( m_nDests, (cups_dest_t*)m_pDests );
+                cupsFreeDests( m_nDests, static_cast<cups_dest_t*>(m_pDests) );
             m_nDests = 0;
             m_pDests = NULL;
             runDests();
@@ -841,11 +841,11 @@ bool CUPSManager::setDefaultPrinter( const OUString& rName )
         m_aCUPSDestMap.find( rName );
     if( nit != m_aCUPSDestMap.end() && m_aCUPSMutex.tryToAcquire() )
     {
-        cups_dest_t* pDests = (cups_dest_t*)m_pDests;
+        cups_dest_t* pDests = static_cast<cups_dest_t*>(m_pDests);
         for( int i = 0; i < m_nDests; i++ )
             pDests[i].is_default = 0;
         pDests[ nit->second ].is_default = 1;
-        cupsSetDests( m_nDests, (cups_dest_t*)m_pDests );
+        cupsSetDests( m_nDests, static_cast<cups_dest_t*>(m_pDests) );
         m_aDefaultPrinter = rName;
         m_aCUPSMutex.release();
         bSuccess = true;
@@ -875,7 +875,7 @@ bool CUPSManager::writePrinterConfig()
         if( m_aCUPSMutex.tryToAcquire() )
         {
             bDestModified = true;
-            cups_dest_t* pDest = ((cups_dest_t*)m_pDests) + nit->second;
+            cups_dest_t* pDest = static_cast<cups_dest_t*>(m_pDests) + nit->second;
             PrinterInfo& rInfo = prt->second.m_aInfo;
 
             // create new option list
@@ -902,7 +902,7 @@ bool CUPSManager::writePrinterConfig()
     }
     if( bDestModified && m_aCUPSMutex.tryToAcquire() )
     {
-        cupsSetDests( m_nDests, (cups_dest_t*)m_pDests );
+        cupsSetDests( m_nDests, static_cast<cups_dest_t*>(m_pDests) );
         m_aCUPSMutex.release();
     }
 

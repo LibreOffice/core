@@ -94,7 +94,7 @@ KDEXLib::~KDEXLib()
     // to the gtk plugin
     #if ! defined USE_RANDR || ! (defined LINUX && defined X86_64)
     // properly deinitialize KApplication
-    delete (VCLKDEApplication*)m_pApplication;
+    delete static_cast<VCLKDEApplication*>(m_pApplication);
     #endif
     // free the faked cmdline arguments no longer needed by KApplication
     for( int i = 0; i < m_nFakeCmdLineArgs; i++ )

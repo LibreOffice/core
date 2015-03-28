@@ -173,7 +173,7 @@ const SystemEnvData* GtkSalObject::GetSystemData() const
 
 gboolean GtkSalObject::signalButton( GtkWidget*, GdkEventButton* pEvent, gpointer object )
 {
-    GtkSalObject* pThis = (GtkSalObject*)object;
+    GtkSalObject* pThis = static_cast<GtkSalObject*>(object);
 
     if( pEvent->type == GDK_BUTTON_PRESS )
     {
@@ -185,7 +185,7 @@ gboolean GtkSalObject::signalButton( GtkWidget*, GdkEventButton* pEvent, gpointe
 
 gboolean GtkSalObject::signalFocus( GtkWidget*, GdkEventFocus* pEvent, gpointer object )
 {
-    GtkSalObject* pThis = (GtkSalObject*)object;
+    GtkSalObject* pThis = static_cast<GtkSalObject*>(object);
 
     pThis->CallCallback( pEvent->in ? SALOBJ_EVENT_GETFOCUS : SALOBJ_EVENT_LOSEFOCUS, NULL );
 
@@ -194,7 +194,7 @@ gboolean GtkSalObject::signalFocus( GtkWidget*, GdkEventFocus* pEvent, gpointer 
 
 void GtkSalObject::signalDestroy( GtkWidget* pObj, gpointer object )
 {
-    GtkSalObject* pThis = (GtkSalObject*)object;
+    GtkSalObject* pThis = static_cast<GtkSalObject*>(object);
     if( pObj == pThis->m_pSocket )
     {
         pThis->m_pSocket = NULL;

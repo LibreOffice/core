@@ -130,7 +130,7 @@ CairoFontsCache::~CairoFontsCache()
     {
         LRUFonts::iterator aEnd = maLRUFonts.end();
         for (LRUFonts::iterator aI = maLRUFonts.begin(); aI != aEnd; ++aI)
-            cairo_font_face_destroy((cairo_font_face_t*)aI->first);
+            cairo_font_face_destroy(static_cast<cairo_font_face_t*>(aI->first));
     }
 }
 
@@ -139,7 +139,7 @@ void CairoFontsCache::CacheFont(void *pFont, const CairoFontsCache::CacheId &rId
     maLRUFonts.push_front( std::pair<void*, CairoFontsCache::CacheId>(pFont, rId) );
     if (maLRUFonts.size() > 8)
     {
-        cairo_font_face_destroy((cairo_font_face_t*)maLRUFonts.back().first);
+        cairo_font_face_destroy(static_cast<cairo_font_face_t*>(maLRUFonts.back().first));
         maLRUFonts.pop_back();
     }
 }
@@ -252,7 +252,7 @@ void CairoTextRender::DrawServerFontLayout( const ServerFontLayout& rLayout )
         size_t nLen = std::distance(aI, aNext);
 
         aId.mbVerticalMetrics = nGlyphRotation != 0.0;
-        cairo_font_face_t* font_face = (cairo_font_face_t*)CairoFontsCache::FindCachedFont(aId);
+        cairo_font_face_t* font_face = static_cast<cairo_font_face_t*>(CairoFontsCache::FindCachedFont(aId));
         if (!font_face)
         {
             const ImplFontOptions *pOptions = rFont.GetFontOptions().get();

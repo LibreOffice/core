@@ -184,9 +184,9 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
         maClientData.eState                 = ePreeditStatusStartPending;
         maClientData.pFrame                 = pFrame;
         maClientData.aText.pUnicodeBuffer   =
-            (sal_Unicode*)malloc(PREEDIT_BUFSZ * sizeof(sal_Unicode));
+            static_cast<sal_Unicode*>(malloc(PREEDIT_BUFSZ * sizeof(sal_Unicode)));
         maClientData.aText.pCharStyle       =
-            (XIMFeedback*)malloc(PREEDIT_BUFSZ * sizeof(XIMFeedback));
+            static_cast<XIMFeedback*>(malloc(PREEDIT_BUFSZ * sizeof(XIMFeedback)));
         maClientData.aText.nSize            = PREEDIT_BUFSZ;
         maClientData.aText.nCursorPos       = 0;
         maClientData.aText.nLength          = 0;
@@ -313,7 +313,7 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
             if ( mpPreeditAttributes != NULL )
 #endif
                 mpAttributes = XVaAddToNestedList( mpAttributes,
-                                                   const_cast<char*>(XNPreeditAttributes), (XPointer)mpPreeditAttributes );
+                                                   const_cast<char*>(XNPreeditAttributes), static_cast<XPointer>(mpPreeditAttributes) );
         }
         if ( mnStatusStyle != XIMStatusNone )
         {
@@ -321,7 +321,7 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
             if ( mpStatusAttributes != NULL )
 #endif
                 mpAttributes = XVaAddToNestedList( mpAttributes,
-                                                   const_cast<char*>(XNStatusAttributes), (XPointer)mpStatusAttributes );
+                                                   const_cast<char*>(XNStatusAttributes), static_cast<XPointer>(mpStatusAttributes) );
         }
         maContext = XCreateIC( pInputMethod->GetMethod(),
                                XNVaNestedList, mpAttributes,

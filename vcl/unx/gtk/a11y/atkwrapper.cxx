@@ -524,7 +524,7 @@ wrapper_ref_relation_set( AtkObject *atk_obj )
             {
                 accessibility::AccessibleRelation aRelation = xRelationSet->getRelation( n );
                 sal_uInt32 nTargetCount = aRelation.TargetSet.getLength();
-                AtkObject **pTargets = (AtkObject **) alloca( nTargetCount * sizeof(AtkObject *) );
+                AtkObject **pTargets = static_cast<AtkObject **>(alloca( nTargetCount * sizeof(AtkObject *) ));
 
                 for( sal_uInt32 i = 0; i < nTargetCount; i++ )
                 {
@@ -622,7 +622,7 @@ atk_object_wrapper_class_init (AtkObjectWrapperClass *klass)
   GObjectClass *gobject_class = G_OBJECT_CLASS( klass );
   AtkObjectClass *atk_class = ATK_OBJECT_CLASS( klass );
 
-  parent_class = (GObjectClass *) g_type_class_peek_parent (klass);
+  parent_class = static_cast<GObjectClass *>(g_type_class_peek_parent (klass));
 
   // GObject methods
   gobject_class->finalize = atk_object_wrapper_finalize;

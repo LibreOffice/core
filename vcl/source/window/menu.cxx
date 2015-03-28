@@ -453,14 +453,14 @@ void Menu::InsertItem( const ResId& rResId, sal_uInt16 nPos )
     {
         if ( !bSep )
         {
-            Bitmap aBmp( ResId( (RSHEADER_TYPE*)GetClassRes(), *pMgr ) );
+            Bitmap aBmp( ResId( static_cast<RSHEADER_TYPE*>(GetClassRes()), *pMgr ) );
             Image const aImg(aBmp);
             if ( !aText.isEmpty() )
                 InsertItem( nItemId, aText, aImg, nStatus, OString(), nPos );
             else
                 InsertItem( nItemId, aImg, nStatus, OString(), nPos );
         }
-        IncrementRes( GetObjSizeRes( (RSHEADER_TYPE*)GetClassRes() ) );
+        IncrementRes( GetObjSizeRes( static_cast<RSHEADER_TYPE*>(GetClassRes()) ) );
     }
     else if ( !bSep )
         InsertItem(nItemId, aText, nStatus, OString(), nPos);
@@ -488,8 +488,8 @@ void Menu::InsertItem( const ResId& rResId, sal_uInt16 nPos )
     if ( nObjMask & RSC_MENUITEM_KEYCODE )
     {
         if ( !bSep )
-            SetAccelKey( nItemId, KeyCode( ResId( (RSHEADER_TYPE*)GetClassRes(), *pMgr ) ) );
-        IncrementRes( GetObjSizeRes( (RSHEADER_TYPE*)GetClassRes() ) );
+            SetAccelKey( nItemId, KeyCode( ResId( static_cast<RSHEADER_TYPE*>(GetClassRes()), *pMgr ) ) );
+        IncrementRes( GetObjSizeRes( static_cast<RSHEADER_TYPE*>(GetClassRes()) ) );
     }
     if( nObjMask & RSC_MENUITEM_CHECKED )
     {
@@ -514,14 +514,14 @@ void Menu::InsertItem( const ResId& rResId, sal_uInt16 nPos )
             MenuItemData* pData = GetItemList()->GetData( nItemId );
             if ( pData )
             {
-                PopupMenu* pSubMenu = new PopupMenu( ResId( (RSHEADER_TYPE*)GetClassRes(), *pMgr ) );
+                PopupMenu* pSubMenu = new PopupMenu( ResId( static_cast<RSHEADER_TYPE*>(GetClassRes()), *pMgr ) );
                 pData->pAutoSubMenu = pSubMenu;
                 // #111060# keep track of this pointer, may be it will be deleted from outside
                 pSubMenu->pRefAutoSubMenu = &pData->pAutoSubMenu;
                 SetPopupMenu( nItemId, pSubMenu );
             }
         }
-        IncrementRes( GetObjSizeRes( (RSHEADER_TYPE*)GetClassRes() ) );
+        IncrementRes( GetObjSizeRes( static_cast<RSHEADER_TYPE*>(GetClassRes()) ) );
     }
     delete mpLayoutData, mpLayoutData = NULL;
 }
@@ -2717,8 +2717,8 @@ PopupMenu::PopupMenu( const ResId& rResId )
         // insert menu items
         for( sal_uLong i = 0; i < nObjFollows; i++ )
         {
-            InsertItem( ResId( (RSHEADER_TYPE*)GetClassRes(), *pMgr ) );
-            IncrementRes( GetObjSizeRes( (RSHEADER_TYPE*)GetClassRes() ) );
+            InsertItem( ResId( static_cast<RSHEADER_TYPE*>(GetClassRes()), *pMgr ) );
+            IncrementRes( GetObjSizeRes( static_cast<RSHEADER_TYPE*>(GetClassRes()) ) );
         }
     }
 

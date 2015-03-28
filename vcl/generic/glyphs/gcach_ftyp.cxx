@@ -169,8 +169,8 @@ bool FtFontFile::Map()
             return false;
         }
         mnFileSize = aStat.st_size;
-        mpFileMap = (unsigned char*)
-            mmap( NULL, mnFileSize, PROT_READ, MAP_SHARED, nFile, 0 );
+        mpFileMap = static_cast<unsigned char*>(
+            mmap( NULL, mnFileSize, PROT_READ, MAP_SHARED, nFile, 0 ));
         if( mpFileMap == MAP_FAILED )
             mpFileMap = NULL;
         close( nFile );
@@ -548,7 +548,7 @@ ServerFont::ServerFont( const FontSelectPattern& rFSD, FtFontInfo* pFI )
         //static const int TT_CODEPAGE_RANGE_950  = (1L << 20); // Chinese: Traditional
         //static const int TT_CODEPAGE_RANGE_1361 = (1L << 21); // Korean Johab
         static const int TT_CODEPAGE_RANGES1_CJKT = 0x3F0000; // all of the above
-        const TT_OS2* pOs2 = (const TT_OS2*)FT_Get_Sfnt_Table( maFaceFT, ft_sfnt_os2 );
+        const TT_OS2* pOs2 = static_cast<const TT_OS2*>(FT_Get_Sfnt_Table( maFaceFT, ft_sfnt_os2 ));
         if ((pOs2) && (pOs2->ulCodePageRange1 & TT_CODEPAGE_RANGES1_CJKT )
         && rFSD.mnHeight < 20)
         mbUseGamma = true;
@@ -652,7 +652,7 @@ void ServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor ) const
 
     rFactor = 0x100;
 
-    const TT_OS2* pOS2 = (const TT_OS2*)FT_Get_Sfnt_Table( maFaceFT, ft_sfnt_os2 );
+    const TT_OS2* pOS2 = static_cast<const TT_OS2*>(FT_Get_Sfnt_Table( maFaceFT, ft_sfnt_os2 ));
     const double fScale = (double)GetFontSelData().mnHeight / maFaceFT->units_per_EM;
 
     rTo.mnAscent = 0;
@@ -676,7 +676,7 @@ void ServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor ) const
     }
     else
     {
-        const TT_HoriHeader* pHHea = (const TT_HoriHeader*)FT_Get_Sfnt_Table(maFaceFT, ft_sfnt_hhea);
+        const TT_HoriHeader* pHHea = static_cast<const TT_HoriHeader*>(FT_Get_Sfnt_Table(maFaceFT, ft_sfnt_hhea));
         if (pHHea)
         {
             rTo.mnAscent = pHHea->Ascender * fScale + 0.5;

@@ -243,7 +243,7 @@ PhysicalFontFamily* PhysicalFontCollection::GetGlyphFallbackFont( FontSelectPatt
             // there is a matching fallback in the cache
             // so update rMissingCodes with codepoints not yet resolved by this fallback
             int nRemainingLength = 0;
-            sal_UCS4* pRemainingCodes = (sal_UCS4*)alloca( rMissingCodes.getLength() * sizeof(sal_UCS4) );
+            sal_UCS4* pRemainingCodes = static_cast<sal_UCS4*>(alloca( rMissingCodes.getLength() * sizeof(sal_UCS4) ));
             OUString aFontName;
 
             while( nStrIndex < rMissingCodes.getLength() )

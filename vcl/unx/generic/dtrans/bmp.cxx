@@ -142,7 +142,7 @@ static sal_uInt8* X11_getPaletteBmpFromImage(
 
     // allocate buffer to hold header and scanlines, initialize to zero
     rOutSize = nHeaderSize + nScanlineSize*pImage->height;
-    pBuffer = (sal_uInt8*)rtl_allocateZeroMemory( rOutSize );
+    pBuffer = static_cast<sal_uInt8*>(rtl_allocateZeroMemory( rOutSize ));
     for( int y = 0; y < pImage->height; y++ )
     {
         sal_uInt8* pScanline = pBuffer + nHeaderSize + (pImage->height-1-y)*nScanlineSize;
@@ -265,7 +265,7 @@ static sal_uInt8* X11_getTCBmpFromImage(
 
     // allocate buffer to hold header and scanlines, initialize to zero
     rOutSize = nHeaderSize + nScanlineSize*pImage->height;
-    pBuffer = (sal_uInt8*)rtl_allocateZeroMemory( rOutSize );
+    pBuffer = static_cast<sal_uInt8*>(rtl_allocateZeroMemory( rOutSize ));
     for( int y = 0; y < pImage->height; y++ )
     {
         sal_uInt8* pScanline = pBuffer + nHeaderSize + (pImage->height-1-y)*nScanlineSize;
@@ -683,7 +683,7 @@ Pixmap PixmapHolder::setBitmapData( const sal_uInt8* pData )
         aImage.obdata           = NULL;
 
         XInitImage( &aImage );
-        aImage.data = (char*)rtl_allocateMemory( nHeight*aImage.bytes_per_line );
+        aImage.data = static_cast<char*>(rtl_allocateMemory( nHeight*aImage.bytes_per_line ));
 
         if( readLE32( pData+14 ) == 24 )
         {

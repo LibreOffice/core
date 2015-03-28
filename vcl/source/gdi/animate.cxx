@@ -383,7 +383,7 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl)
                     maViewList.push_back( pView );
                 }
                 else
-                    pView = (ImplAnimView*) pAInfo->pViewData;
+                    pView = static_cast<ImplAnimView*>(pAInfo->pViewData);
 
                 pView->pause( pAInfo->bPause );
                 pView->setMarked( true );

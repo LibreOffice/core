@@ -66,7 +66,7 @@ AppendPS (FILE* pDst, osl::File* pSrc, unsigned char* pBuffer,
     if (nBlockSize == 0)
         nBlockSize = nBLOCKSIZE;
     if (pBuffer == NULL)
-        pBuffer = (unsigned char*)alloca (nBlockSize);
+        pBuffer = static_cast<unsigned char*>(alloca (nBlockSize));
 
     sal_uInt64 nIn = 0;
     sal_uInt64 nOut = 0;

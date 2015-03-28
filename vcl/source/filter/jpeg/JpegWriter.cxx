@@ -43,8 +43,8 @@ extern "C" void init_destination (j_compress_ptr cinfo)
     DestinationManagerStruct * destination = reinterpret_cast<DestinationManagerStruct *>(cinfo->dest);
 
     /* Allocate the output buffer -- it will be released when done with image */
-    destination->buffer = (JOCTET *)
-        (*cinfo->mem->alloc_small) (reinterpret_cast<j_common_ptr>(cinfo), JPOOL_IMAGE, BUFFER_SIZE * sizeof(JOCTET));
+    destination->buffer = static_cast<JOCTET *>(
+        (*cinfo->mem->alloc_small) (reinterpret_cast<j_common_ptr>(cinfo), JPOOL_IMAGE, BUFFER_SIZE * sizeof(JOCTET)));
 
     destination->pub.next_output_byte = destination->buffer;
     destination->pub.free_in_buffer = BUFFER_SIZE;
@@ -82,7 +82,7 @@ extern "C" void term_destination (j_compress_ptr cinfo)
 
 void jpeg_svstream_dest (j_compress_ptr cinfo, void* output)
 {
-    SvStream* stream = (SvStream*) output;
+    SvStream* stream = static_cast<SvStream*>(output);
     DestinationManagerStruct * destination;
 
     /* The destination object is made permanent so that multiple JPEG images
@@ -93,8 +93,8 @@ void jpeg_svstream_dest (j_compress_ptr cinfo, void* output)
      */
     if (cinfo->dest == NULL)
     {    /* first time for this JPEG object? */
-        cinfo->dest = (jpeg_destination_mgr*)
-        (*cinfo->mem->alloc_small) (reinterpret_cast<j_common_ptr>(cinfo), JPOOL_PERMANENT, sizeof(DestinationManagerStruct));
+        cinfo->dest = static_cast<jpeg_destination_mgr*>(
+        (*cinfo->mem->alloc_small) (reinterpret_cast<j_common_ptr>(cinfo), JPOOL_PERMANENT, sizeof(DestinationManagerStruct)));
     }
 
     destination = reinterpret_cast<DestinationManagerStruct *>(cinfo->dest);

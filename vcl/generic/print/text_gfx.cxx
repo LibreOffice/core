@@ -197,9 +197,9 @@ void PrinterGfx::DrawGlyphs(
         // vertical glyphs can have an additional rotation ... sigh.
         // so break up text in chunks of normal glyphs and print out
         // specially rotated glyphs extra
-        sal_GlyphId* pTempGlyphIds = (sal_GlyphId*)alloca(sizeof(sal_Int32)*nLen);
-        sal_Int32* pTempDelta = (sal_Int32*)alloca(sizeof(sal_Int32)*nLen);
-        sal_Unicode* pTempUnicodes = (sal_Unicode*)alloca(sizeof(sal_Unicode)*nLen);
+        sal_GlyphId* pTempGlyphIds = static_cast<sal_GlyphId*>(alloca(sizeof(sal_Int32)*nLen));
+        sal_Int32* pTempDelta = static_cast<sal_Int32*>(alloca(sizeof(sal_Int32)*nLen));
+        sal_Unicode* pTempUnicodes = static_cast<sal_Unicode*>(alloca(sizeof(sal_Unicode)*nLen));
         sal_Int16 nTempLen = 0;
         sal_Int32 nTempFirstDelta = 0;
         Point aRotPoint;
@@ -314,7 +314,7 @@ PrinterGfx::DrawText (
     sal_Unicode *pEffectiveStr;
     if ( aFont.IsSymbolFont() )
     {
-        pEffectiveStr = (sal_Unicode*)alloca(nLen * sizeof(pStr[0]));
+        pEffectiveStr = static_cast<sal_Unicode*>(alloca(nLen * sizeof(pStr[0])));
         for (int i = 0; i < nLen; i++)
             pEffectiveStr[i] = pStr[i] < 256 ? pStr[i] + 0xF000 : pStr[i];
     }
@@ -323,8 +323,8 @@ PrinterGfx::DrawText (
         pEffectiveStr = const_cast<sal_Unicode*>(pStr);
     }
 
-    fontID    *pFontMap   = (fontID*)    alloca(nLen * sizeof(fontID));
-    sal_Int32 *pCharWidth = (sal_Int32*) alloca(nLen * sizeof(sal_Int32));
+    fontID    *pFontMap   = static_cast<fontID*>(alloca(nLen * sizeof(fontID)));
+    sal_Int32 *pCharWidth = static_cast<sal_Int32*>(alloca(nLen * sizeof(sal_Int32)));
 
     for( int n = 0; n < nLen; n++ )
     {
@@ -335,7 +335,7 @@ PrinterGfx::DrawText (
     }
 
     // setup a new delta array, use virtual resolution of 1000
-    sal_Int32* pNewDeltaArray = (sal_Int32*)alloca( sizeof( sal_Int32 )*nLen );
+    sal_Int32* pNewDeltaArray = static_cast<sal_Int32*>(alloca( sizeof( sal_Int32 )*nLen ));
     if ( pDeltaArray != 0)
     {
         for (int i = 0; i < nLen - 1; i++)
@@ -438,7 +438,7 @@ bool PrinterGfx::drawVerticalizedText(
     if (!rMgr.getFontInfo(mnFontID, aInfo))
         return false;
 
-    sal_Int32* pDelta = (sal_Int32*)alloca( nLen * sizeof(sal_Int32) );
+    sal_Int32* pDelta = static_cast<sal_Int32*>(alloca( nLen * sizeof(sal_Int32) ));
 
     int nTextScale   = maVirtualStatus.mnTextWidth ? maVirtualStatus.mnTextWidth : maVirtualStatus.mnTextHeight;
     int nNormalAngle = mnTextAngle;
@@ -447,7 +447,7 @@ bool PrinterGfx::drawVerticalizedText(
     double fSin = sin( -2.0*M_PI*nNormalAngle/3600 );
     double fCos = cos( -2.0*M_PI*nNormalAngle/3600 );
 
-    bool* pGsubFlags = (bool*)alloca( nLen * sizeof(bool) );
+    bool* pGsubFlags = static_cast<bool*>(alloca( nLen * sizeof(bool) ));
     rMgr.hasVerticalSubstitutions( mnFontID, pStr, nLen, pGsubFlags );
 
     Point aPoint( rPoint );
@@ -546,7 +546,7 @@ PrinterGfx::LicenseWarning(const Point& rPoint, const sal_Unicode* pStr,
     PSSetFont (aFontName, RTL_TEXTENCODING_ISO_8859_1);
 
     sal_Size  nSize    = 4 * nLen;
-    unsigned char* pBuffer = (unsigned char*)alloca (nSize* sizeof(unsigned char));
+    unsigned char* pBuffer = static_cast<unsigned char*>(alloca (nSize* sizeof(unsigned char)));
 
     ConverterFactory &rCvt = GetConverterFactory ();
     nSize = rCvt.Convert (pStr, nLen, pBuffer, nSize, RTL_TEXTENCODING_ISO_8859_1);

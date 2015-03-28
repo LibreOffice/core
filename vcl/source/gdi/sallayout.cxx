@@ -1032,7 +1032,7 @@ void GenericSalLayout::ApplyDXArray( ImplLayoutArgs& rArgs )
 
     // determine cluster boundaries and x base offset
     const int nCharCount = rArgs.mnEndCharPos - rArgs.mnMinCharPos;
-    int* pLogCluster = (int*)alloca( nCharCount * sizeof(int) );
+    int* pLogCluster = static_cast<int*>(alloca( nCharCount * sizeof(int) ));
     size_t i;
     int n,p;
     long nBasePointX = -1;
@@ -1067,7 +1067,7 @@ void GenericSalLayout::ApplyDXArray( ImplLayoutArgs& rArgs )
     }
 
     // calculate adjusted cluster widths
-    long* pNewGlyphWidths = (long*)alloca( m_GlyphItems.size() * sizeof(long) );
+    long* pNewGlyphWidths = static_cast<long*>(alloca( m_GlyphItems.size() * sizeof(long) ));
     for( i = 0; i < m_GlyphItems.size(); ++i )
         pNewGlyphWidths[ i ] = 0;
 
@@ -1330,7 +1330,7 @@ void GenericSalLayout::GetCaretPositions( int nMaxIndex, long* pCaretXArray ) co
 sal_Int32 GenericSalLayout::GetTextBreak( DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra, int nFactor ) const
 {
     int nCharCapacity = mnEndCharPos - mnMinCharPos;
-    DeviceCoordinate* pCharWidths = (DeviceCoordinate*)alloca( nCharCapacity * sizeof(DeviceCoordinate) );
+    DeviceCoordinate* pCharWidths = static_cast<DeviceCoordinate*>(alloca( nCharCapacity * sizeof(DeviceCoordinate) ));
     if( !GetCharWidths( pCharWidths ) )
         return -1;
 
@@ -1965,7 +1965,7 @@ sal_Int32 MultiSalLayout::GetTextBreak( DeviceCoordinate nMaxWidth, DeviceCoordi
         return mpLayouts[0]->GetTextBreak( nMaxWidth, nCharExtra, nFactor );
 
     int nCharCount = mnEndCharPos - mnMinCharPos;
-    DeviceCoordinate* pCharWidths = (DeviceCoordinate*)alloca( 2*nCharCount * sizeof(DeviceCoordinate) );
+    DeviceCoordinate* pCharWidths = static_cast<DeviceCoordinate*>(alloca( 2*nCharCount * sizeof(DeviceCoordinate) ));
     mpLayouts[0]->FillDXArray( pCharWidths );
 
     for( int n = 1; n < mnLevel; ++n )
@@ -2005,7 +2005,7 @@ DeviceCoordinate MultiSalLayout::FillDXArray( DeviceCoordinate* pCharWidths ) co
     {
         for( int i = 0; i < nCharCount; ++i )
             pCharWidths[i] = 0;
-        pTempWidths = (DeviceCoordinate*)alloca( nCharCount * sizeof(DeviceCoordinate) );
+        pTempWidths = static_cast<DeviceCoordinate*>(alloca( nCharCount * sizeof(DeviceCoordinate) ));
     }
 
     for( int n = mnLevel; --n >= 0; )
@@ -2047,7 +2047,7 @@ void MultiSalLayout::GetCaretPositions( int nMaxIndex, long* pCaretXArray ) cons
 
     if( mnLevel > 1 )
     {
-        long* pTempPos = (long*)alloca( nMaxIndex * sizeof(long) );
+        long* pTempPos = static_cast<long*>(alloca( nMaxIndex * sizeof(long) ));
         for( int n = 1; n < mnLevel; ++n )
         {
             mpLayouts[ n ]->GetCaretPositions( nMaxIndex, pTempPos );

@@ -218,14 +218,14 @@ static void BuildSmPropertyList()
         pSmProps[ 3 ].num_vals  = 1;
         pSmProps[ 3 ].vals      = new SmPropValue;
         pSmProps[ 3 ].vals->value   = strdup( aUser.getStr() );
-        pSmProps[ 3 ].vals->length  = rtl_str_getLength( (char *)pSmProps[ 3 ].vals->value )+1;
+        pSmProps[ 3 ].vals->length  = rtl_str_getLength( static_cast<char *>(pSmProps[ 3 ].vals->value) )+1;
 
         pSmProps[ 4 ].name      = const_cast<char*>(SmRestartStyleHint);
         pSmProps[ 4 ].type      = const_cast<char*>(SmCARD8);
         pSmProps[ 4 ].num_vals  = 1;
         pSmProps[ 4 ].vals      = new SmPropValue;
         pSmProps[ 4 ].vals->value   = malloc(1);
-        pSmRestartHint = (unsigned char *)pSmProps[ 4 ].vals->value;
+        pSmRestartHint = static_cast<unsigned char *>(pSmProps[ 4 ].vals->value);
         *pSmRestartHint = SmRestartIfRunning;
         pSmProps[ 4 ].vals->length  = 1;
 
@@ -630,7 +630,7 @@ void ICEConnectionWorker(void * data)
             osl::MutexGuard g(pThis->m_ICEMutex);
             nConnectionsBefore = pThis->m_nConnections;
             int nBytes = sizeof( struct pollfd )*(nConnectionsBefore+1);
-            pLocalFD = (struct pollfd*)rtl_allocateMemory( nBytes );
+            pLocalFD = static_cast<struct pollfd*>(rtl_allocateMemory( nBytes ));
             memcpy( pLocalFD, pThis->m_pFilehandles, nBytes );
         }
 
@@ -683,8 +683,8 @@ void ICEWatchProc(
     {
         int fd = IceConnectionNumber( ice_conn );
         pThis->m_nConnections++;
-        pThis->m_pConnections = (IceConn*)rtl_reallocateMemory( pThis->m_pConnections, sizeof( IceConn )*pThis->m_nConnections );
-        pThis->m_pFilehandles = (struct pollfd*)rtl_reallocateMemory( pThis->m_pFilehandles, sizeof( struct pollfd )*(pThis->m_nConnections+1) );
+        pThis->m_pConnections = static_cast<IceConn*>(rtl_reallocateMemory( pThis->m_pConnections, sizeof( IceConn )*pThis->m_nConnections ));
+        pThis->m_pFilehandles = static_cast<struct pollfd*>(rtl_reallocateMemory( pThis->m_pFilehandles, sizeof( struct pollfd )*(pThis->m_nConnections+1) ));
         pThis->m_pConnections[ pThis->m_nConnections-1 ]      = ice_conn;
         pThis->m_pFilehandles[ pThis->m_nConnections ].fd     = fd;
         pThis->m_pFilehandles[ pThis->m_nConnections ].events = POLLIN;
@@ -734,8 +734,8 @@ void ICEWatchProc(
                     memmove( pThis->m_pFilehandles+i+1, pThis->m_pFilehandles+i+2, sizeof( struct pollfd )*(pThis->m_nConnections-i-1) );
                 }
                 pThis->m_nConnections--;
-                pThis->m_pConnections = (IceConn*)rtl_reallocateMemory( pThis->m_pConnections, sizeof( IceConn )*pThis->m_nConnections );
-                pThis->m_pFilehandles = (struct pollfd*)rtl_reallocateMemory( pThis->m_pFilehandles, sizeof( struct pollfd )*(pThis->m_nConnections+1) );
+                pThis->m_pConnections = static_cast<IceConn*>(rtl_reallocateMemory( pThis->m_pConnections, sizeof( IceConn )*pThis->m_nConnections ));
+                pThis->m_pFilehandles = static_cast<struct pollfd*>(rtl_reallocateMemory( pThis->m_pFilehandles, sizeof( struct pollfd )*(pThis->m_nConnections+1) ));
                 break;
             }
         }

@@ -1219,7 +1219,7 @@ PrinterGfx::DrawEPS( const Rectangle& rBoundingBox, void* pPtr, sal_uInt32 nSize
         bSuccess = nOutLength == nSize;
 
         // corresponding EndDocument
-        if( ((char*)pPtr)[ nSize-1 ] != '\n' )
+        if( static_cast<char*>(pPtr)[ nSize-1 ] != '\n' )
             WritePS( mpPageBody, "\n" );
         WritePS( mpPageBody, "%%EndDocument\n" );
 

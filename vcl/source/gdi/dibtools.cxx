@@ -770,7 +770,7 @@ bool ImplReadDIBBody( SvStream& rIStm, Bitmap& rBmp, Bitmap* pBmpAlpha, sal_uLon
 
                 // read coding information
                 rIStm.ReadUInt32( nCodedSize ).ReadUInt32( nUncodedSize ).ReadUInt32( aHeader.nCompression );
-                pData = (sal_uInt8*) rtl_allocateMemory( nUncodedSize );
+                pData = static_cast<sal_uInt8*>(rtl_allocateMemory( nUncodedSize ));
 
                 // decode buffer
                 nCodedPos = rIStm.Tell();
@@ -1380,7 +1380,7 @@ bool ImplWriteDIBBody(const Bitmap& rBitmap, SvStream& rOStm, BitmapReadAccess& 
 
         // write compressed data
         aCodec.BeginCompression(3);
-        aCodec.Write(rOStm, (sal_uInt8*)aMemStm.GetData(), nUncodedSize);
+        aCodec.Write(rOStm, static_cast<sal_uInt8 const *>(aMemStm.GetData()), nUncodedSize);
         aCodec.EndCompression();
 
         // update compress info ( coded size, uncoded size, uncoded compression )

@@ -472,7 +472,7 @@ bool PrintFontManager::PrintFont::readAfmMetrics( MultiAtomProvider* pProvider, 
 
         // first transform the character codes to unicode
         // note: this only works with single byte encodings
-        sal_Unicode* pUnicodes = (sal_Unicode*)alloca( pInfo->numOfChars * sizeof(sal_Unicode));
+        sal_Unicode* pUnicodes = static_cast<sal_Unicode*>(alloca( pInfo->numOfChars * sizeof(sal_Unicode)));
         CharMetricInfo* pChar = pInfo->cmi;
         int i;
 
@@ -979,7 +979,7 @@ std::vector<fontID> PrintFontManager::findFontFileIDs( int nDirID, const OString
 
 OUString PrintFontManager::convertTrueTypeName( void* pRecord ) const
 {
-    NameRecord* pNameRecord = (NameRecord*)pRecord;
+    NameRecord* pNameRecord = static_cast<NameRecord*>(pRecord);
     OUString aValue;
     if(
        ( pNameRecord->platformID == 3 && ( pNameRecord->encodingID == 0 || pNameRecord->encodingID == 1 ) )  // MS, Unicode
@@ -1128,7 +1128,7 @@ void PrintFontManager::analyzeTrueTypeFamilyName( void* pTTFont, ::std::list< OU
     ::std::set< OUString > aSet;
 
     NameRecord* pNameRecords = NULL;
-    int nNameRecords = GetTTNameRecords( (TrueTypeFont*)pTTFont, &pNameRecords );
+    int nNameRecords = GetTTNameRecords( static_cast<TrueTypeFont*>(pTTFont), &pNameRecords );
     if( nNameRecords && pNameRecords )
     {
         LanguageTag aSystem("");

@@ -153,7 +153,7 @@ void XIMStatusWindow::layout()
 
     if (m_bAnchoredAtRight && IsVisible())
     {
-        SalFrame* pFrame = (SalFrame*)GetSystemData()->pSalFrame;
+        SalFrame* pFrame = static_cast<SalFrame*>(GetSystemData()->pSalFrame);
         long nDelta = pFrame->maGeometry.nWidth - m_aWindowSize.Width();
         pFrame->SetPosSize( pFrame->maGeometry.nX + nDelta,
                             pFrame->maGeometry.nY,
@@ -196,7 +196,7 @@ Point XIMStatusWindow::updatePosition()
         m_pLastParent->CallCallback( SALEVENT_EXTTEXTINPUTPOS, (void*)&aPosEvent );
         int x, y;
         ::Window aChild;
-        XTranslateCoordinates( (Display*)pParentEnvData->pDisplay,
+        XTranslateCoordinates( static_cast<Display*>(pParentEnvData->pDisplay),
                                (::Window)pParentEnvData->aShellWindow,
                                vcl_sal::getSalDisplay(GetGenericData())->GetRootWindow( vcl_sal::getSalDisplay(GetGenericData())->GetDefaultXScreen() ),
                                0, 0,
@@ -246,7 +246,7 @@ void XIMStatusWindow::setPosition( SalFrame* pParent )
         if( IsVisible() )
         {
             const SystemEnvData* pEnvData = GetSystemData();
-            SalFrame* pStatusFrame = (SalFrame*)pEnvData->pSalFrame;
+            SalFrame* pStatusFrame = static_cast<SalFrame*>(pEnvData->pSalFrame);
             Point aPoint = updatePosition();
             pStatusFrame->SetPosSize( aPoint.X(), aPoint.Y(), m_aWindowSize.Width(), m_aWindowSize.Height(), SAL_FRAME_POSSIZE_X | SAL_FRAME_POSSIZE_Y | SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT );
         }
@@ -257,7 +257,7 @@ IMPL_LINK_NOARG(XIMStatusWindow, DelayedShowHdl)
 {
     m_nDelayedEvent = 0;
     const SystemEnvData* pData = GetSystemData();
-    SalFrame* pStatusFrame = (SalFrame*)pData->pSalFrame;
+    SalFrame* pStatusFrame = static_cast<SalFrame*>(pData->pSalFrame);
     if( m_bDelayedShow )
     {
         Size aControlSize( m_aWindowSize.Width()-4, m_aWindowSize.Height()-4 );
@@ -268,7 +268,7 @@ IMPL_LINK_NOARG(XIMStatusWindow, DelayedShowHdl)
     Show( m_bDelayedShow && m_bOn, SHOW_NOACTIVATE );
     if( m_bDelayedShow )
     {
-        XRaiseWindow( (Display*)pData->pDisplay,
+        XRaiseWindow( static_cast<Display*>(pData->pDisplay),
                       (::Window)pData->aShellWindow );
     }
     return 0;
@@ -350,7 +350,7 @@ IIIMPStatusWindow::IIIMPStatusWindow( SalFrame* pParent, bool bOn ) :
         int nDistance = rGeom.nTopDecoration;
         if( nDistance < 20 )
             nDistance = 20;
-        XMoveWindow( (Display*)pEnvData->pDisplay,
+        XMoveWindow( static_cast<Display*>(pEnvData->pDisplay),
                      (::Window)pEnvData->aShellWindow,
                      rGeom.nX,
                      rGeom.nY + rGeom.nHeight + nDistance
@@ -440,12 +440,12 @@ void IIIMPStatusWindow::GetFocus()
         {
             const SystemEnvData* pParentEnvData = m_pResetFocus->GetSystemData();
             GetGenericData()->ErrorTrapPush();
-            XSetInputFocus( (Display*)pParentEnvData->pDisplay,
+            XSetInputFocus( static_cast<Display*>(pParentEnvData->pDisplay),
                             (::Window)pParentEnvData->aShellWindow,
                             RevertToNone,
                             CurrentTime
                             );
-            XSync( (Display*)pParentEnvData->pDisplay, False );
+            XSync( static_cast<Display*>(pParentEnvData->pDisplay), False );
             GetGenericData()->ErrorTrapPop();
         }
         m_pResetFocus = NULL;
@@ -470,12 +470,12 @@ IMPL_LINK( IIIMPStatusWindow, SelectHdl, MenuButton*, pBtn )
             {
                 const SystemEnvData* pEnv = pParent->GetSystemData();
                 GetGenericData()->ErrorTrapPush();
-                XSetInputFocus( (Display*)pEnv->pDisplay,
+                XSetInputFocus( static_cast<Display*>(pEnv->pDisplay),
                                 (::Window)pEnv->aShellWindow,
                                 RevertToNone,
                                 CurrentTime
                                 );
-                XSync( (Display*)pEnv->pDisplay, False );
+                XSync( static_cast<Display*>(pEnv->pDisplay), False );
                 GetGenericData()->ErrorTrapPop();
             }
         }
@@ -554,7 +554,7 @@ void I18NStatus::setStatusText( const OUString& rText )
          *  #93614# convert fullwidth ASCII forms to ascii
          */
         int nChars = rText.getLength();
-        sal_Unicode* pBuffer = (sal_Unicode*)alloca( nChars*sizeof( sal_Unicode ) );
+        sal_Unicode* pBuffer = static_cast<sal_Unicode*>(alloca( nChars*sizeof( sal_Unicode ) ));
         for( int i = 0; i < nChars; i++ )
         {
             if( rText[i] >=0xff00 && rText[i] <= 0xff5f )
@@ -592,7 +592,7 @@ SalFrame* I18NStatus::getStatusFrame() const
     if( m_pStatusWindow )
     {
         const SystemEnvData* pData = m_pStatusWindow->GetSystemData();
-        pRet = (SalFrame*)pData->pSalFrame;
+        pRet = static_cast<SalFrame*>(pData->pSalFrame);
     }
     return pRet;
 }

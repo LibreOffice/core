@@ -120,7 +120,7 @@ FileInputStream::FileInputStream(const char* pFilename)
         struct stat aStat;
         if (!fstat(fileno(fp), &aStat) && S_ISREG(aStat.st_mode) && aStat.st_size > 0)
         {
-            m_pMemory = (char*)rtl_allocateMemory( aStat.st_size );
+            m_pMemory = static_cast<char*>(rtl_allocateMemory( aStat.st_size ));
             m_nLen = (unsigned int)fread( m_pMemory, 1, aStat.st_size, fp );
         }
         fclose( fp );
@@ -666,7 +666,7 @@ reallocFontMetrics( void **pp_fontmetrics, int *p_oldcount, int n_newcount, unsi
     if (*p_oldcount == n_newcount)
         return ok;
 
-    p_tmpmetrics = (char*)realloc(*pp_fontmetrics, n_newcount * n_size);
+    p_tmpmetrics = static_cast<char*>(realloc(*pp_fontmetrics, n_newcount * n_size));
     if (p_tmpmetrics == NULL)
         return storageProblem;
 
@@ -816,7 +816,7 @@ static int parseCharMetrics( FileInputStream* fp, FontInfo* fi)
                     tail = &(node->next);
                 }
 
-                *tail = (Ligature *) calloc(1, sizeof(Ligature));
+                *tail = static_cast<Ligature *>(calloc(1, sizeof(Ligature)));
                 if ((keyword = token(fp,tokenlen)) != NULL)
                     (*tail)->succ = (char *)strdup(keyword);
                 if ((keyword = token(fp,tokenlen)) != NULL)
@@ -1169,8 +1169,8 @@ static int parseCompCharData( FileInputStream* fp, FontInfo* fi)
                         fi->ccd[pos].ccName = strdup( keyword );
                         if ((keyword = token(fp,tokenlen)) != NULL)
                             fi->ccd[pos].numOfPieces = atoi(keyword);
-                        fi->ccd[pos].pieces = (Pcc *)
-                            calloc(fi->ccd[pos].numOfPieces, sizeof(Pcc));
+                        fi->ccd[pos].pieces = static_cast<Pcc *>(
+                            calloc(fi->ccd[pos].numOfPieces, sizeof(Pcc)));
                         j = 0;
                         ccount++;
                     }
@@ -1252,12 +1252,12 @@ int parseFile( const char* pFilename, FontInfo** fi, FLAGS flags)
 
     char *keyword; /* used to store a token */
 
-    (*fi) = (FontInfo *) calloc(1, sizeof(FontInfo));
+    (*fi) = static_cast<FontInfo *>(calloc(1, sizeof(FontInfo)));
     if ((*fi) == NULL) { error = storageProblem; return error; }
 
     if (flags & P_G)
     {
-        (*fi)->gfi = (GlobalFontInfo *) calloc(1, sizeof(GlobalFontInfo));
+        (*fi)->gfi = static_cast<GlobalFontInfo *>(calloc(1, sizeof(GlobalFontInfo)));
         if ((*fi)->gfi == NULL) { error = storageProblem; return error; }
     }
 
@@ -1281,8 +1281,8 @@ int parseFile( const char* pFilename, FontInfo** fi, FLAGS flags)
             (*fi)->numOfChars = atoi(keyword);
         if (flags & (P_M ^ P_W))
         {
-            (*fi)->cmi = (CharMetricInfo *)
-                calloc((*fi)->numOfChars, sizeof(CharMetricInfo));
+            (*fi)->cmi = static_cast<CharMetricInfo *>(
+                calloc((*fi)->numOfChars, sizeof(CharMetricInfo)));
             if ((*fi)->cmi == NULL) { error = storageProblem; return error; }
             code = parseCharMetrics(&aFile, *fi);
         }
@@ -1290,7 +1290,7 @@ int parseFile( const char* pFilename, FontInfo** fi, FLAGS flags)
         {
             if (flags & P_W)
             {
-                (*fi)->cwi = (int *) calloc(256, sizeof(int));
+                (*fi)->cwi = static_cast<int *>(calloc(256, sizeof(int)));
                 if ((*fi)->cwi == NULL)
                 {
                     error = storageProblem;
@@ -1331,8 +1331,8 @@ int parseFile( const char* pFilename, FontInfo** fi, FLAGS flags)
                 if ((flags & P_T) && keyword)
                 {
                     (*fi)->numOfTracks = atoi(keyword);
-                    (*fi)->tkd = (TrackKernData *)
-                        calloc((*fi)->numOfTracks, sizeof(TrackKernData));
+                    (*fi)->tkd = static_cast<TrackKernData *>(
+                        calloc((*fi)->numOfTracks, sizeof(TrackKernData)));
                     if ((*fi)->tkd == NULL)
                     {
                         error = storageProblem;
@@ -1346,8 +1346,8 @@ int parseFile( const char* pFilename, FontInfo** fi, FLAGS flags)
                 if ((flags & P_P) && keyword)
                 {
                     (*fi)->numOfPairs = atoi(keyword);
-                    (*fi)->pkd = (PairKernData *)
-                        calloc((*fi)->numOfPairs, sizeof(PairKernData));
+                    (*fi)->pkd = static_cast<PairKernData *>(
+                        calloc((*fi)->numOfPairs, sizeof(PairKernData)));
                     if ((*fi)->pkd == NULL)
                     {
                         error = storageProblem;
@@ -1361,8 +1361,8 @@ int parseFile( const char* pFilename, FontInfo** fi, FLAGS flags)
                 if ((flags & P_C) && keyword)
                 {
                     (*fi)->numOfComps = atoi(keyword);
-                    (*fi)->ccd = (CompCharData *)
-                        calloc((*fi)->numOfComps, sizeof(CompCharData));
+                    (*fi)->ccd = static_cast<CompCharData *>(
+                        calloc((*fi)->numOfComps, sizeof(CompCharData)));
                     if ((*fi)->ccd == NULL)
                     {
                         error = storageProblem;

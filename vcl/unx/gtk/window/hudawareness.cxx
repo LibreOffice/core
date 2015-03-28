@@ -33,7 +33,7 @@ hud_awareness_method_call (GDBusConnection       * /* connection */,
                            GDBusMethodInvocation *invocation,
                            gpointer               user_data)
 {
-  HudAwarenessHandle *handle = (HudAwarenessHandle*) user_data;
+  HudAwarenessHandle *handle = static_cast<HudAwarenessHandle*>(user_data);
 
   if (g_str_equal (method_name, "HudActiveChanged"))
     {
@@ -82,7 +82,7 @@ hud_awareness_register (GDBusConnection       *connection,
       g_assert (iface != NULL);
     }
 
-  handle = (HudAwarenessHandle*) g_malloc (sizeof (HudAwarenessHandle));
+  handle = static_cast<HudAwarenessHandle*>(g_malloc (sizeof (HudAwarenessHandle)));
 
   object_id = g_dbus_connection_register_object (connection, object_path, iface, &vtable, handle, &g_free, error);
 
@@ -92,7 +92,7 @@ hud_awareness_register (GDBusConnection       *connection,
       return 0;
     }
 
-  handle->connection = (GDBusConnection*) g_object_ref (connection);
+  handle->connection = static_cast<GDBusConnection*>(g_object_ref (connection));
   handle->callback = callback;
   handle->user_data = user_data;
   handle->notify = notify;

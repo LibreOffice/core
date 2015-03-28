@@ -119,7 +119,7 @@ void SettingsConfigItem::getValues()
         {
             if( pValue->getValueTypeClass() == TypeClass_STRING )
             {
-                const OUString* pLine = (const OUString*)pValue->getValue();
+                const OUString* pLine = static_cast<const OUString*>(pValue->getValue());
                 if( !pLine->isEmpty() )
                     m_aSettings[ aKeyName ][ pFrom[i] ] = *pLine;
 #if OSL_DEBUG_LEVEL > 2

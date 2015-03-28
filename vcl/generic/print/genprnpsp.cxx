@@ -232,7 +232,7 @@ static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
     if( rData.getStreamBuffer( pBuffer, nBytes ) )
     {
         pJobSetup->mnDriverDataLen = nBytes;
-        pJobSetup->mpDriverData = (sal_uInt8*)pBuffer;
+        pJobSetup->mpDriverData = static_cast<sal_uInt8*>(pBuffer);
     }
     else
     {
@@ -563,7 +563,7 @@ bool PspSalInfoPrinter::Setup( SalFrame* pFrame, ImplJobSetup* pJobSetup )
         void* pBuffer = NULL;
         aInfo.getStreamBuffer( pBuffer, nBytes );
         pJobSetup->mnDriverDataLen  = nBytes;
-        pJobSetup->mpDriverData     = (sal_uInt8*)pBuffer;
+        pJobSetup->mpDriverData     = static_cast<sal_uInt8*>(pBuffer);
 
         // copy everything to job setup
         copyJobDataToJobSetup( pJobSetup, aInfo );

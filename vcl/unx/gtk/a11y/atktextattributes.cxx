@@ -1016,8 +1016,8 @@ DefaultTabStops2String( const uno::Any& rAny )
 extern "C" int
 attr_compare(const void *p1,const void *p2)
 {
-    const rtl_uString * pustr = (const rtl_uString *) p1;
-    const char * pc = *((const char **) p2);
+    const rtl_uString * pustr = static_cast<const rtl_uString *>(p1);
+    const char * pc = *static_cast<const char * const *>(p2);
 
     return rtl_ustr_ascii_compare_WithLength(pustr->buffer, pustr->length, pc);
 }
@@ -1028,9 +1028,9 @@ find_exported_attributes( sal_Int32 *pArray,
 {
     for( sal_Int32 i = 0; i < rAttributeList.getLength(); i++ )
     {
-        const char ** pAttr = (const char **) bsearch(rAttributeList[i].Name.pData,
+        const char ** pAttr = static_cast<const char **>(bsearch(rAttributeList[i].Name.pData,
             ExportedTextAttributes, TEXT_ATTRIBUTE_LAST, sizeof(const char *),
-            attr_compare);
+            attr_compare));
 
         if( pAttr )
         {
@@ -1049,7 +1049,7 @@ attribute_set_prepend( AtkAttributeSet* attribute_set,
 {
     if( value )
     {
-        AtkAttribute *at = (AtkAttribute *) g_malloc( sizeof (AtkAttribute) );
+        AtkAttribute *at = static_cast<AtkAttribute *>(g_malloc( sizeof (AtkAttribute) ));
         at->name  = g_strdup( atk_text_attribute_get_name( attribute ) );
         at->value = value;
 

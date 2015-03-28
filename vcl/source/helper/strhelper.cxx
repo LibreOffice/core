@@ -104,7 +104,7 @@ OUString GetCommandLineToken( int nToken, const OUString& rLine )
         return OUString();
 
     int nActualToken = 0;
-    sal_Unicode* pBuffer = (sal_Unicode*)alloca( sizeof(sal_Unicode)*( nLen + 1 ) );
+    sal_Unicode* pBuffer = static_cast<sal_Unicode*>(alloca( sizeof(sal_Unicode)*( nLen + 1 ) ));
     const sal_Unicode* pRun = rLine.getStr();
     sal_Unicode* pLeap = NULL;
 
@@ -154,7 +154,7 @@ OString GetCommandLineToken(int nToken, const OString& rLine)
         return rLine;
 
     int nActualToken = 0;
-    char* pBuffer = (char*)alloca( nLen + 1 );
+    char* pBuffer = static_cast<char*>(alloca( nLen + 1 ));
     const char* pRun = rLine.getStr();
     char* pLeap = NULL;
 
@@ -253,7 +253,7 @@ OUString WhitespaceToSpace( const OUString& rLine, bool bProtect )
     if( ! nLen )
         return OUString();
 
-    sal_Unicode *pBuffer = (sal_Unicode*)alloca( sizeof(sal_Unicode)*(nLen + 1) );
+    sal_Unicode *pBuffer = static_cast<sal_Unicode*>(alloca( sizeof(sal_Unicode)*(nLen + 1) ));
     const sal_Unicode *pRun = rLine.getStr();
     sal_Unicode *pLeap = pBuffer;
 
@@ -309,7 +309,7 @@ OString WhitespaceToSpace(const OString& rLine, bool bProtect)
     if (!nLen)
         return rLine;
 
-    char *pBuffer = (char*)alloca( nLen + 1 );
+    char *pBuffer = static_cast<char*>(alloca( nLen + 1 ));
     const char *pRun = rLine.getStr();
     char *pLeap = pBuffer;
 

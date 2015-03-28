@@ -210,7 +210,7 @@ bool SalDisplay::BestVisual( Display     *pDisplay,
                                            &aVI, &nVisuals );
     // pVInfos should contain at least one visual, otherwise
     // we're in trouble
-    int* pWeight = (int*)alloca( sizeof(int)*nVisuals );
+    int* pWeight = static_cast<int*>(alloca( sizeof(int)*nVisuals ));
     int i;
     for( i = 0; i < nVisuals; i++ )
     {

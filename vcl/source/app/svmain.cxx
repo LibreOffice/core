@@ -595,8 +595,8 @@ extern "C"
 {
 static void SAL_CALL MainWorkerFunction( void* pArgs )
 {
-    ((WorkerThreadData*)pArgs)->pWorker( ((WorkerThreadData*)pArgs)->pThreadData );
-    delete (WorkerThreadData*)pArgs;
+    static_cast<WorkerThreadData*>(pArgs)->pWorker( static_cast<WorkerThreadData*>(pArgs)->pThreadData );
+    delete static_cast<WorkerThreadData*>(pArgs);
     hThreadID = 0;
 }
 } // extern "C"

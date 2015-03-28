@@ -142,7 +142,7 @@ hyper_link_class_init (AtkHyperlinkClass *klass)
 
     gobject_class->finalize = hyper_link_finalize;
 
-    hyper_parent_class = (GObjectClass *)g_type_class_peek_parent (klass);
+    hyper_parent_class = static_cast<GObjectClass *>(g_type_class_peek_parent (klass));
 
     klass->get_uri = hyper_link_get_uri;
     klass->get_object = hyper_link_get_object;
@@ -218,7 +218,7 @@ hypertext_get_link( AtkHypertext *hypertext,
         accessibility::XAccessibleHypertext* pHypertext = getHypertext( hypertext );
         if( pHypertext )
         {
-            HyperLink *pLink = (HyperLink *)g_object_new( hyper_link_get_type(), NULL );
+            HyperLink *pLink = static_cast<HyperLink *>(g_object_new( hyper_link_get_type(), NULL ));
             pLink->xLink = pHypertext->getHyperLink( link_index );
             if( !pLink->xLink.is() ) {
                 g_object_unref( G_OBJECT( pLink ) );

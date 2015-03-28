@@ -293,7 +293,7 @@ bool JobData::constructFromStreamBuffer( void* pData, int bytes, JobData& rJobDa
                 {
                     rJobData.m_aContext.setParser( rJobData.m_pParser );
                     int nBytes = bytes - aStream.Tell();
-                    char* pRemain = (char*)alloca( bytes - aStream.Tell() );
+                    char* pRemain = static_cast<char*>(alloca( bytes - aStream.Tell() ));
                     aStream.Read( pRemain, nBytes );
                     rJobData.m_aContext.rebuildFromStreamBuffer( pRemain, nBytes );
                     bContext = true;

@@ -51,7 +51,7 @@ X11SalObject* X11SalObject::CreateObject( SalFrame* pParent, SystemWindowData* p
     X11SalObject*       pObject  = new X11SalObject();
     SystemEnvData*    pObjData = const_cast<SystemEnvData*>(pObject->GetSystemData());
 
-    if ( ! XShapeQueryExtension( (Display*)pObjData->pDisplay,
+    if ( ! XShapeQueryExtension( static_cast<Display*>(pObjData->pDisplay),
                                   &event_base, &error_base ) )
     {
         delete pObject;
@@ -70,7 +70,7 @@ X11SalObject* X11SalObject::CreateObject( SalFrame* pParent, SystemWindowData* p
     XGetWindowAttributes( pDisp, aObjectParent, &aParentAttr );
     SalX11Screen nXScreen( XScreenNumberOfScreen( aParentAttr.screen ) );
     Visual* pVisual = (pWindowData && pWindowData->pVisual) ?
-                      (Visual*)pWindowData->pVisual :
+                      static_cast<Visual*>(pWindowData->pVisual) :
                       pSalDisp->GetVisual( nXScreen ).GetVisual();
     // get visual info
     VisualID aVisID = XVisualIDFromVisual( pVisual );
@@ -251,12 +251,12 @@ X11SalObject::~X11SalObject()
 
     GetGenericData()->ErrorTrapPush();
     if ( maSecondary )
-        XDestroyWindow( (Display*)maSystemChildData.pDisplay, maSecondary );
+        XDestroyWindow( static_cast<Display*>(maSystemChildData.pDisplay), maSecondary );
     if ( maPrimary )
-        XDestroyWindow( (Display*)maSystemChildData.pDisplay, maPrimary );
+        XDestroyWindow( static_cast<Display*>(maSystemChildData.pDisplay), maPrimary );
     if ( maColormap )
-        XFreeColormap((Display*)maSystemChildData.pDisplay, maColormap);
-    XSync( (Display*)maSystemChildData.pDisplay, False );
+        XFreeColormap(static_cast<Display*>(maSystemChildData.pDisplay), maColormap);
+    XSync( static_cast<Display*>(maSystemChildData.pDisplay), False );
     GetGenericData()->ErrorTrapPop();
 }
 
@@ -274,7 +274,7 @@ X11SalObject::ResetClipRegion()
 
     ::Window aShapeWindow = maPrimary;
 
-    XGetWindowAttributes ( (Display*)maSystemChildData.pDisplay,
+    XGetWindowAttributes ( static_cast<Display*>(maSystemChildData.pDisplay),
                            aShapeWindow,
                            &win_attrib );
 
@@ -283,7 +283,7 @@ X11SalObject::ResetClipRegion()
     win_size.width  = win_attrib.width;
     win_size.height = win_attrib.height;
 
-    XShapeCombineRectangles ( (Display*)maSystemChildData.pDisplay,
+    XShapeCombineRectangles ( static_cast<Display*>(maSystemChildData.pDisplay),
                               aShapeWindow,
                               dest_kind,
                               0, 0,             // x_off, y_off
@@ -332,7 +332,7 @@ X11SalObject::EndSetClipRegion()
 
     ::Window aShapeWindow = maPrimary;
 
-    XShapeCombineRectangles ( (Display*)maSystemChildData.pDisplay,
+    XShapeCombineRectangles ( static_cast<Display*>(maSystemChildData.pDisplay),
                               aShapeWindow,
                               dest_kind,
                               0, 0, // x_off, y_off
@@ -352,10 +352,10 @@ X11SalObject::SetPosSize( long nX, long nY, long nWidth, long nHeight )
 {
     if ( maPrimary && maSecondary && nWidth && nHeight )
     {
-        XMoveResizeWindow( (Display*)maSystemChildData.pDisplay,
+        XMoveResizeWindow( static_cast<Display*>(maSystemChildData.pDisplay),
                            maPrimary,
                             nX, nY, nWidth, nHeight );
-        XMoveResizeWindow( (Display*)maSystemChildData.pDisplay,
+        XMoveResizeWindow( static_cast<Display*>(maSystemChildData.pDisplay),
                            maSecondary,
                             0, 0, nWidth, nHeight );
     }
@@ -368,14 +368,14 @@ X11SalObject::Show( bool bVisible )
         return;
 
     if ( bVisible ) {
-        XMapWindow( (Display*)maSystemChildData.pDisplay,
+        XMapWindow( static_cast<Display*>(maSystemChildData.pDisplay),
                     maSecondary );
-        XMapWindow( (Display*)maSystemChildData.pDisplay,
+        XMapWindow( static_cast<Display*>(maSystemChildData.pDisplay),
                     maPrimary );
     } else {
-        XUnmapWindow( (Display*)maSystemChildData.pDisplay,
+        XUnmapWindow( static_cast<Display*>(maSystemChildData.pDisplay),
                       maPrimary );
-        XUnmapWindow( (Display*)maSystemChildData.pDisplay,
+        XUnmapWindow( static_cast<Display*>(maSystemChildData.pDisplay),
                       maSecondary );
     }
     mbVisible = bVisible;
@@ -384,7 +384,7 @@ X11SalObject::Show( bool bVisible )
 void X11SalObject::GrabFocus()
 {
     if( mbVisible )
-         XSetInputFocus( (Display*)maSystemChildData.pDisplay,
+         XSetInputFocus( static_cast<Display*>(maSystemChildData.pDisplay),
                          maSystemChildData.aWindow,
                          RevertToNone,
                          CurrentTime );

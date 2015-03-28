@@ -52,7 +52,7 @@ using namespace ::com::sun::star;
 long ImplSysChildProc( void* pInst, SalObject* /* pObject */,
                        sal_uInt16 nEvent, const void* /* pEvent */ )
 {
-    SystemChildWindow* pWindow = (SystemChildWindow*)pInst;
+    SystemChildWindow* pWindow = static_cast<SystemChildWindow*>(pInst);
     long nRet = 0;
 
     ImplDelData aDogTag( pWindow );

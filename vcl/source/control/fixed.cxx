@@ -892,8 +892,8 @@ void FixedImage::ImplLoadRes( const ResId& rResId )
 
     if ( RSC_FIXEDIMAGE_IMAGE & nObjMask )
     {
-        maImage = Image( ResId( (RSHEADER_TYPE*)GetClassRes(), *rResId.GetResMgr() ) );
-        IncrementRes( GetObjSizeRes( (RSHEADER_TYPE*)GetClassRes() ) );
+        maImage = Image( ResId( static_cast<RSHEADER_TYPE*>(GetClassRes()), *rResId.GetResMgr() ) );
+        IncrementRes( GetObjSizeRes( static_cast<RSHEADER_TYPE*>(GetClassRes()) ) );
     }
 }
 

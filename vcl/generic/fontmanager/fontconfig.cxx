@@ -919,7 +919,7 @@ IMPL_LINK_NOARG(PrintFontManager, autoInstallFontLangSupport)
         return -1;
     }
 
-    gchar **fonts = (gchar**)g_malloc((m_aCurrentRequests.size() + 1) * sizeof(gchar*));
+    gchar **fonts = static_cast<gchar**>(g_malloc((m_aCurrentRequests.size() + 1) * sizeof(gchar*)));
     gchar **font = fonts;
     for (std::vector<OString>::const_iterator aI = m_aCurrentRequests.begin(); aI != m_aCurrentRequests.end(); ++aI)
         *font++ = const_cast<gchar*>(aI->getStr());
@@ -1088,7 +1088,7 @@ bool PrintFontManager::Substitute( FontSelectPattern &rPattern, OUString& rMissi
             // update rMissingCodes by removing resolved unicodes
             if( !rMissingCodes.isEmpty() )
             {
-                sal_uInt32* pRemainingCodes = (sal_uInt32*)alloca( rMissingCodes.getLength() * sizeof(sal_uInt32) );
+                sal_uInt32* pRemainingCodes = static_cast<sal_uInt32*>(alloca( rMissingCodes.getLength() * sizeof(sal_uInt32) ));
                 int nRemainingLen = 0;
                 FcCharSet* unicodes;
                 if (!FcPatternGetCharSet(pSet->fonts[0], FC_CHARSET, 0, &unicodes))

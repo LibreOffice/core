@@ -62,30 +62,30 @@ Image::Image( const ResId& rResId ) :
 
         if( nObjMask & RSC_IMAGE_IMAGEBITMAP )
         {
-            aBmpEx = BitmapEx( ResId( (RSHEADER_TYPE*)pResMgr->GetClass(), *pResMgr ) );
-            pResMgr->Increment( ResMgr::GetObjSize( (RSHEADER_TYPE*)pResMgr->GetClass() ) );
+            aBmpEx = BitmapEx( ResId( static_cast<RSHEADER_TYPE*>(pResMgr->GetClass()), *pResMgr ) );
+            pResMgr->Increment( ResMgr::GetObjSize( static_cast<RSHEADER_TYPE*>(pResMgr->GetClass()) ) );
         }
 
         if( nObjMask & RSC_IMAGE_MASKBITMAP )
         {
             if( !aBmpEx.IsEmpty() && aBmpEx.GetTransparentType() == TRANSPARENT_NONE )
             {
-                const Bitmap aMaskBitmap( ResId( (RSHEADER_TYPE*)pResMgr->GetClass(), *pResMgr ) );
+                const Bitmap aMaskBitmap( ResId( static_cast<RSHEADER_TYPE*>(pResMgr->GetClass()), *pResMgr ) );
                 aBmpEx = BitmapEx( aBmpEx.GetBitmap(), aMaskBitmap );
             }
 
-            pResMgr->Increment( ResMgr::GetObjSize( (RSHEADER_TYPE*)pResMgr->GetClass() ) );
+            pResMgr->Increment( ResMgr::GetObjSize( static_cast<RSHEADER_TYPE*>(pResMgr->GetClass()) ) );
         }
 
         if( nObjMask & RSC_IMAGE_MASKCOLOR )
         {
             if( !aBmpEx.IsEmpty() && aBmpEx.GetTransparentType() == TRANSPARENT_NONE )
             {
-                const Color aMaskColor( ResId( (RSHEADER_TYPE*)pResMgr->GetClass(), *pResMgr ) );
+                const Color aMaskColor( ResId( static_cast<RSHEADER_TYPE*>(pResMgr->GetClass()), *pResMgr ) );
                 aBmpEx = BitmapEx( aBmpEx.GetBitmap(), aMaskColor );
             }
 
-            pResMgr->Increment( ResMgr::GetObjSize( (RSHEADER_TYPE*)pResMgr->GetClass() ) );
+            pResMgr->Increment( ResMgr::GetObjSize( static_cast<RSHEADER_TYPE*>(pResMgr->GetClass()) ) );
         }
         if( ! aBmpEx.IsEmpty() )
             ImplInit( aBmpEx );
@@ -303,9 +303,9 @@ ImageList::ImageList( const ResId& rResId ) :
         std::unique_ptr< Color >        xMaskColor;
 
         if( nObjMask & RSC_IMAGE_MASKCOLOR )
-            xMaskColor.reset( new Color( ResId( (RSHEADER_TYPE*)pResMgr->GetClass(), *pResMgr ) ) );
+            xMaskColor.reset( new Color( ResId( static_cast<RSHEADER_TYPE*>(pResMgr->GetClass()), *pResMgr ) ) );
 
-        pResMgr->Increment( ResMgr::GetObjSize( (RSHEADER_TYPE*)pResMgr->GetClass() ) );
+        pResMgr->Increment( ResMgr::GetObjSize( static_cast<RSHEADER_TYPE*>(pResMgr->GetClass()) ) );
 
         if( nObjMask & RSC_IMAGELIST_IDLIST )
         {

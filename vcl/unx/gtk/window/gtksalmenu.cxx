@@ -209,7 +209,7 @@ void RemoveSpareSectionsFromNativeMenu( GLOMenu* pMenu, GList** pOldCommandList,
 
 gint CompareStr( gpointer str1, gpointer str2 )
 {
-    return g_strcmp0( (const gchar*) str1, (const gchar*) str2 );
+    return g_strcmp0( static_cast<const gchar*>(str1), static_cast<const gchar*>(str2) );
 }
 
 void RemoveUnusedCommands( GLOActionGroup* pActionGroup, GList* pOldCommandList, GList* pNewCommandList )
@@ -244,7 +244,7 @@ void RemoveUnusedCommands( GLOActionGroup* pActionGroup, GList* pOldCommandList,
         GList* pCommand = g_list_first( pOldCommandList );
         pOldCommandList = g_list_remove_link( pOldCommandList, pCommand );
 
-        gchar* aCommand = (gchar*) g_list_nth_data( pCommand, 0 );
+        gchar* aCommand = static_cast<gchar*>(g_list_nth_data( pCommand, 0 ));
 
         g_lo_action_group_remove( pActionGroup, aCommand );
 

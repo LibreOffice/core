@@ -33,10 +33,10 @@
 
 extern "C" int SAL_CALL HatchCmpFnc( const void* p1, const void* p2 )
 {
-    const long nX1 = ( (Point*) p1 )->X();
-    const long nX2 = ( (Point*) p2 )->X();
-    const long nY1 = ( (Point*) p1 )->Y();
-    const long nY2 = ( (Point*) p2 )->Y();
+    const long nX1 = static_cast<Point const *>(p1)->X();
+    const long nX2 = static_cast<Point const *>(p2)->X();
+    const long nY1 = static_cast<Point const *>(p1)->Y();
+    const long nY2 = static_cast<Point const *>(p2)->Y();
 
     return ( nX1 > nX2 ? 1 : nX1 == nX2 ? nY1 > nY2 ? 1: nY1 == nY2 ? 0 : -1 : -1 );
 }

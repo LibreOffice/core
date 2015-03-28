@@ -448,8 +448,8 @@ void GlyphSet::DrawGlyphs(
                           const sal_Int32* pDeltaArray,
                           const bool bUseGlyphs)
 {
-    unsigned char *pGlyphID    = (unsigned char*)alloca (nLen * sizeof(unsigned char));
-    sal_Int32 *pGlyphSetID = (sal_Int32*)alloca (nLen * sizeof(sal_Int32));
+    unsigned char *pGlyphID    = static_cast<unsigned char*>(alloca (nLen * sizeof(unsigned char)));
+    sal_Int32 *pGlyphSetID = static_cast<sal_Int32*>(alloca (nLen * sizeof(sal_Int32)));
     std::set< sal_Int32 > aGlyphSet;
 
     // convert unicode to font glyph id and font subset
@@ -464,8 +464,8 @@ void GlyphSet::DrawGlyphs(
 
     // loop over all glyph sets to detect substrings that can be xshown together
     // without changing the postscript font
-    sal_Int32 *pDeltaSubset = (sal_Int32*)alloca (nLen * sizeof(sal_Int32));
-    unsigned char *pGlyphSubset = (unsigned char*)alloca (nLen * sizeof(unsigned char));
+    sal_Int32 *pDeltaSubset = static_cast<sal_Int32*>(alloca (nLen * sizeof(sal_Int32)));
+    unsigned char *pGlyphSubset = static_cast<unsigned char*>(alloca (nLen * sizeof(unsigned char)));
 
     std::set< sal_Int32 >::iterator aSet;
     for (aSet = aGlyphSet.begin(); aSet != aGlyphSet.end(); ++aSet)
@@ -545,8 +545,8 @@ GlyphSet::ImplDrawText (PrinterGfx &rGfx, const Point& rPoint,
     }
 
     int nChar;
-    unsigned char *pGlyphID    = (unsigned char*)alloca (nLen * sizeof(unsigned char));
-    sal_Int32 *pGlyphSetID = (sal_Int32*)alloca (nLen * sizeof(sal_Int32));
+    unsigned char *pGlyphID    = static_cast<unsigned char*>(alloca (nLen * sizeof(unsigned char)));
+    sal_Int32 *pGlyphSetID = static_cast<sal_Int32*>(alloca (nLen * sizeof(sal_Int32)));
 
     // convert unicode to glyph id and char set (font subset)
     for (nChar = 0; nChar < nLen; nChar++)

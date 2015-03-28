@@ -238,7 +238,7 @@ ooo_window_wrapper_real_initialize(AtkObject *obj, gpointer data)
 static void
 ooo_window_wrapper_real_finalize (GObject *obj)
 {
-    ooo_wrapper_registry_remove( (XAccessible *) g_object_get_data( obj, "ooo:atk-wrapper-key" ));
+    ooo_wrapper_registry_remove( static_cast<XAccessible *>(g_object_get_data( obj, "ooo:atk-wrapper-key" )));
     window_real_finalize( obj );
 }
 

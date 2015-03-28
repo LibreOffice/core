@@ -90,8 +90,8 @@ struct ImplColorSet
 
 extern "C" int SAL_CALL ImplColorSetCmpFnc( const void* p1, const void* p2 )
 {
-    ImplColorSet*   pSet1 = (ImplColorSet*) p1;
-    ImplColorSet*   pSet2 = (ImplColorSet*) p2;
+    ImplColorSet const * pSet1 = static_cast<ImplColorSet const *>(p1);
+    ImplColorSet const * pSet2 = static_cast<ImplColorSet const *>(p2);
     int             nRet;
 
     if( pSet1->mbSet && pSet2->mbSet )
@@ -156,7 +156,7 @@ void ImplPointArray::ImplSetSize( sal_uLong nSize )
     if( mpArray )
         rtl_freeMemory( mpArray );
 
-    mpArray = (Point*) rtl_allocateMemory( nTotal );
+    mpArray = static_cast<Point*>(rtl_allocateMemory( nTotal ));
     memset( mpArray, 0, nTotal );
 }
 
@@ -209,10 +209,10 @@ ImplVectMap::ImplVectMap( long nWidth, long nHeight ) :
 {
     const long  nWidthAl = ( nWidth >> 2L ) + 1L;
     const long  nSize = nWidthAl * nHeight;
-    Scanline    pTmp = mpBuf = (Scanline) rtl_allocateMemory( nSize );
+    Scanline    pTmp = mpBuf = static_cast<Scanline>(rtl_allocateMemory( nSize ));
 
     memset( mpBuf, 0, nSize );
-    mpScan = (Scanline*) rtl_allocateMemory( nHeight * sizeof( Scanline ) );
+    mpScan = static_cast<Scanline*>(rtl_allocateMemory( nHeight * sizeof( Scanline ) ));
 
     for( long nY = 0L; nY < nHeight; pTmp += nWidthAl )
         mpScan[ nY++ ] = pTmp;

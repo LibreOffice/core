@@ -1822,15 +1822,15 @@ Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, Rectangle* pHai
 Color GDIMetaFile::ImplColAdjustFnc( const Color& rColor, const void* pColParam )
 {
     return Color( rColor.GetTransparency(),
-                  ( (const ImplColAdjustParam*) pColParam )->pMapR[ rColor.GetRed() ],
-                  ( (const ImplColAdjustParam*) pColParam )->pMapG[ rColor.GetGreen() ],
-                  ( (const ImplColAdjustParam*) pColParam )->pMapB[ rColor.GetBlue() ] );
+                  static_cast<const ImplColAdjustParam*>(pColParam)->pMapR[ rColor.GetRed() ],
+                  static_cast<const ImplColAdjustParam*>(pColParam)->pMapG[ rColor.GetGreen() ],
+                  static_cast<const ImplColAdjustParam*>(pColParam)->pMapB[ rColor.GetBlue() ] );
 
 }
 
 BitmapEx GDIMetaFile::ImplBmpAdjustFnc( const BitmapEx& rBmpEx, const void* pBmpParam )
 {
-    const ImplBmpAdjustParam*   p = (const ImplBmpAdjustParam*) pBmpParam;
+    const ImplBmpAdjustParam*   p = static_cast<const ImplBmpAdjustParam*>(pBmpParam);
     BitmapEx                    aRet( rBmpEx );
 
     aRet.Adjust( p->nLuminancePercent, p->nContrastPercent,
@@ -1844,7 +1844,7 @@ Color GDIMetaFile::ImplColConvertFnc( const Color& rColor, const void* pColParam
 {
     sal_uInt8 cLum = rColor.GetLuminance();
 
-    if( MTF_CONVERSION_1BIT_THRESHOLD == ( (const ImplColConvertParam*) pColParam )->eConversion )
+    if( MTF_CONVERSION_1BIT_THRESHOLD == static_cast<const ImplColConvertParam*>(pColParam)->eConversion )
         cLum = ( cLum < 128 ) ? 0 : 255;
 
     return Color( rColor.GetTransparency(), cLum, cLum, cLum );
@@ -1854,14 +1854,14 @@ BitmapEx GDIMetaFile::ImplBmpConvertFnc( const BitmapEx& rBmpEx, const void* pBm
 {
     BitmapEx aRet( rBmpEx );
 
-    aRet.Convert( ( (const ImplBmpConvertParam*) pBmpParam )->eConversion );
+    aRet.Convert( static_cast<const ImplBmpConvertParam*>(pBmpParam)->eConversion );
 
     return aRet;
 }
 
 Color GDIMetaFile::ImplColMonoFnc( const Color&, const void* pColParam )
 {
-    return ( (const ImplColMonoParam*) pColParam )->aColor;
+    return static_cast<const ImplColMonoParam*>(pColParam)->aColor;
 }
 
 BitmapEx GDIMetaFile::ImplBmpMonoFnc( const BitmapEx& rBmpEx, const void* pBmpParam )
@@ -1870,10 +1870,10 @@ BitmapEx GDIMetaFile::ImplBmpMonoFnc( const BitmapEx& rBmpEx, const void* pBmpPa
 
     aPal[ 0 ] = Color( COL_BLACK );
     aPal[ 1 ] = Color( COL_WHITE );
-    aPal[ 2 ] = ( (const ImplBmpMonoParam*) pBmpParam )->aColor;
+    aPal[ 2 ] = static_cast<const ImplBmpMonoParam*>(pBmpParam)->aColor;
 
     Bitmap aBmp( rBmpEx.GetSizePixel(), 4, &aPal );
-    aBmp.Erase( ( (const ImplBmpMonoParam*) pBmpParam )->aColor );
+    aBmp.Erase( static_cast<const ImplBmpMonoParam*>(pBmpParam)->aColor );
 
     if( rBmpEx.IsAlpha() )
         return BitmapEx( aBmp, rBmpEx.GetAlpha() );
@@ -1887,16 +1887,16 @@ Color GDIMetaFile::ImplColReplaceFnc( const Color& rColor, const void* pColParam
 {
     const sal_uLong nR = rColor.GetRed(), nG = rColor.GetGreen(), nB = rColor.GetBlue();
 
-    for( sal_uLong i = 0; i < ( (const ImplColReplaceParam*) pColParam )->nCount; i++ )
+    for( sal_uLong i = 0; i < static_cast<const ImplColReplaceParam*>(pColParam)->nCount; i++ )
     {
-        if( ( ( (const ImplColReplaceParam*) pColParam )->pMinR[ i ] <= nR ) &&
-            ( ( (const ImplColReplaceParam*) pColParam )->pMaxR[ i ] >= nR ) &&
-            ( ( (const ImplColReplaceParam*) pColParam )->pMinG[ i ] <= nG ) &&
-            ( ( (const ImplColReplaceParam*) pColParam )->pMaxG[ i ] >= nG ) &&
-            ( ( (const ImplColReplaceParam*) pColParam )->pMinB[ i ] <= nB ) &&
-            ( ( (const ImplColReplaceParam*) pColParam )->pMaxB[ i ] >= nB ) )
+        if( ( static_cast<const ImplColReplaceParam*>(pColParam)->pMinR[ i ] <= nR ) &&
+            ( static_cast<const ImplColReplaceParam*>(pColParam)->pMaxR[ i ] >= nR ) &&
+            ( static_cast<const ImplColReplaceParam*>(pColParam)->pMinG[ i ] <= nG ) &&
+            ( static_cast<const ImplColReplaceParam*>(pColParam)->pMaxG[ i ] >= nG ) &&
+            ( static_cast<const ImplColReplaceParam*>(pColParam)->pMinB[ i ] <= nB ) &&
+            ( static_cast<const ImplColReplaceParam*>(pColParam)->pMaxB[ i ] >= nB ) )
         {
-            return ( (const ImplColReplaceParam*) pColParam )->pDstCols[ i ];
+            return static_cast<const ImplColReplaceParam*>(pColParam)->pDstCols[ i ];
         }
     }
 
@@ -1905,7 +1905,7 @@ Color GDIMetaFile::ImplColReplaceFnc( const Color& rColor, const void* pColParam
 
 BitmapEx GDIMetaFile::ImplBmpReplaceFnc( const BitmapEx& rBmpEx, const void* pBmpParam )
 {
-    const ImplBmpReplaceParam*  p = (const ImplBmpReplaceParam*) pBmpParam;
+    const ImplBmpReplaceParam*  p = static_cast<const ImplBmpReplaceParam*>(pBmpParam);
     BitmapEx                    aRet( rBmpEx );
 
     aRet.Replace( p->pSrcCols, p->pDstCols, p->nCount, p->pTols );
@@ -2964,7 +2964,7 @@ MetaCommentAction* makePluggableRendererAction( const OUString& rRendererService
                                                 const void* _pData,
                                                 sal_uInt32 nDataSize )
 {
-    const sal_uInt8* pData=(sal_uInt8*)_pData;
+    const sal_uInt8* pData=static_cast<sal_uInt8 const *>(_pData);
 
     // FIXME: Data gets copied twice, unfortunately
     OString aRendererServiceName(

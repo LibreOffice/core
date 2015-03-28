@@ -93,7 +93,7 @@ bool X11OpenGLSalGraphicsImpl::FillPixmapFromScreen( X11Pixmap* pPixmap, int nX,
     glXWaitX();
 
     // TODO: lfrb: What if offscreen?
-    pData = (char*) malloc( pPixmap->GetWidth() * pPixmap->GetHeight() * 4 );
+    pData = static_cast<char*>(malloc( pPixmap->GetWidth() * pPixmap->GetHeight() * 4 ));
     glPixelStorei( GL_PACK_ALIGNMENT, 1 );
     glReadPixels( nX, GetHeight() - nY, pPixmap->GetWidth(), pPixmap->GetHeight(),
                   GL_RGBA, GL_UNSIGNED_BYTE, pData );

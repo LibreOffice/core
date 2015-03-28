@@ -298,10 +298,10 @@ void InverseColorMap::ImplCreateBuffers( const sal_uLong nMax )
     const sal_uLong nCount = nMax * nMax * nMax;
     const sal_uLong nSize = nCount * sizeof( sal_uLong );
 
-    pMap = (sal_uInt8*) rtl_allocateMemory( nCount );
+    pMap = static_cast<sal_uInt8*>(rtl_allocateMemory( nCount ));
     memset( pMap, 0x00, nCount );
 
-    pBuffer = (sal_uInt8*) rtl_allocateMemory( nSize );
+    pBuffer = static_cast<sal_uInt8*>(rtl_allocateMemory( nSize ));
     memset( pBuffer, 0xff, nSize );
 }
 

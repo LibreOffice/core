@@ -126,7 +126,7 @@ static hb_blob_t *getFontTable(hb_face_t* /*face*/, hb_tag_t nTableTag, void* pU
     pTagName[3] = (char)(nTableTag);
     pTagName[4] = 0;
 
-    ServerFont* pFont = (ServerFont*) pUserData;
+    ServerFont* pFont = static_cast<ServerFont*>(pUserData);
 
     SAL_INFO("vcl.harfbuzz", "getFontTable(" << pFont << ", " << pTagName << ")");
 
@@ -145,7 +145,7 @@ static hb_bool_t getFontGlyph(hb_font_t* /*font*/, void* pFontData,
         hb_codepoint_t* nGlyphIndex,
         void* /*pUserData*/)
 {
-    ServerFont* pFont = (ServerFont*) pFontData;
+    ServerFont* pFont = static_cast<ServerFont*>(pFontData);
     *nGlyphIndex = pFont->GetRawGlyphIndex(ch, vs);
 
     return *nGlyphIndex != 0;
@@ -155,7 +155,7 @@ static hb_position_t getGlyphAdvanceH(hb_font_t* /*font*/, void* pFontData,
         hb_codepoint_t nGlyphIndex,
         void* /*pUserData*/)
 {
-    ServerFont* pFont = (ServerFont*) pFontData;
+    ServerFont* pFont = static_cast<ServerFont*>(pFontData);
     const GlyphMetric& rGM = pFont->GetGlyphMetric(nGlyphIndex);
     return rGM.GetCharWidth() << 6;
 }
@@ -192,7 +192,7 @@ static hb_position_t getGlyphKerningH(hb_font_t* /*font*/, void* pFontData,
 {
     // This callback is for old style 'kern' table, GPOS kerning is handled by HarfBuzz directly
 
-    ServerFont* pFont = (ServerFont*) pFontData;
+    ServerFont* pFont = static_cast<ServerFont*>(pFontData);
     FT_Face aFace = pFont->GetFtFace();
 
     SAL_INFO("vcl.harfbuzz", "getGlyphKerningH(" << pFont << ", " << nGlyphIndex1 << ", " << nGlyphIndex2 << ")");
@@ -223,7 +223,7 @@ static hb_bool_t getGlyphExtents(hb_font_t* /*font*/, void* pFontData,
         hb_glyph_extents_t* pExtents,
         void* /*pUserData*/)
 {
-    ServerFont* pFont = (ServerFont*) pFontData;
+    ServerFont* pFont = static_cast<ServerFont*>(pFontData);
     FT_Face aFace = pFont->GetFtFace();
 
     SAL_INFO("vcl.harfbuzz", "getGlyphExtents(" << pFont << ", " << nGlyphIndex << ")");
@@ -247,7 +247,7 @@ static hb_bool_t getGlyphContourPoint(hb_font_t* /*font*/, void* pFontData,
         void* /*pUserData*/)
 {
     bool ret = false;
-    ServerFont* pFont = (ServerFont*) pFontData;
+    ServerFont* pFont = static_cast<ServerFont*>(pFontData);
     FT_Face aFace = pFont->GetFtFace();
 
     SAL_INFO("vcl.harfbuzz", "getGlyphContourPoint(" << pFont << ", " << nGlyphIndex << ", " << nPointIndex << ")");

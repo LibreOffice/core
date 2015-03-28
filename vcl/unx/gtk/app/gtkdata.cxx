@@ -56,7 +56,7 @@ GdkFilterReturn call_filterGdkEvent( GdkXEvent* sys_event,
                                      GdkEvent* event,
                                      gpointer data )
 {
-    GtkSalDisplay *pDisplay = (GtkSalDisplay *)data;
+    GtkSalDisplay *pDisplay = static_cast<GtkSalDisplay *>(data);
     return pDisplay->filterGdkEvent( sys_event, event );
 }
 }
@@ -110,13 +110,13 @@ extern "C" {
 
 void signalScreenSizeChanged( GdkScreen* pScreen, gpointer data )
 {
-    GtkSalDisplay* pDisp = (GtkSalDisplay*)data;
+    GtkSalDisplay* pDisp = static_cast<GtkSalDisplay*>(data);
     pDisp->screenSizeChanged( pScreen );
 }
 
 void signalMonitorsChanged( GdkScreen* pScreen, gpointer data )
 {
-    GtkSalDisplay* pDisp = (GtkSalDisplay*)data;
+    GtkSalDisplay* pDisp = static_cast<GtkSalDisplay*>(data);
     pDisp->monitorsChanged( pScreen );
 }
 
@@ -127,7 +127,7 @@ GdkFilterReturn GtkSalDisplay::filterGdkEvent( GdkXEvent* sys_event,
 {
 #if !GTK_CHECK_VERSION(3,0,0)
     GdkFilterReturn aFilterReturn = GDK_FILTER_CONTINUE;
-    XEvent *pEvent = (XEvent *)sys_event;
+    XEvent *pEvent = static_cast<XEvent *>(sys_event);
 
     // dispatch all XEvents to event callback
     if( GetSalData()->m_pInstance->
@@ -919,7 +919,7 @@ void GtkSalTimer::Stop()
 gboolean GtkData::userEventFn( gpointer data )
 {
     gboolean bContinue = FALSE;
-    GtkData *pThis = (GtkData *) data;
+    GtkData *pThis = static_cast<GtkData *>(data);
     SalGenericData *pData = GetGenericData();
     osl::Guard< comphelper::SolarMutex > aGuard( pData->m_pInstance->GetYieldMutex() );
     const SalGenericDisplay *pDisplay = pData->GetDisplay();

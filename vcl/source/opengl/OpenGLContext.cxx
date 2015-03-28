@@ -1161,7 +1161,7 @@ bool OpenGLContext::initWindow()
     m_aGLWin.win = pChildSysData->aWindow;
     m_aGLWin.screen = pChildSysData->nScreen;
 
-    Visual* pVisual = (Visual*)pChildSysData->pVisual;
+    Visual* pVisual = static_cast<Visual*>(pChildSysData->pVisual);
     initGLWindow(pVisual);
 
     return true;

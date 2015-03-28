@@ -593,16 +593,16 @@ void WinMtfOutput::SelectObject( sal_Int32 nIndex )
         switch( pGDIObj->eType )
         {
             case GDI_PEN :
-                maLineStyle = (WinMtfLineStyle*)pGDIObj->pStyle;
+                maLineStyle = static_cast<WinMtfLineStyle*>(pGDIObj->pStyle);
             break;
             case GDI_BRUSH :
             {
-                maFillStyle = (WinMtfFillStyle*)pGDIObj->pStyle;
+                maFillStyle = static_cast<WinMtfFillStyle*>(pGDIObj->pStyle);
                 mbFillStyleSelected = true;
             }
             break;
             case GDI_FONT :
-                maFont = ((WinMtfFontStyle*)pGDIObj->pStyle)->aFont;
+                maFont = static_cast<WinMtfFontStyle*>(pGDIObj->pStyle)->aFont;
             break;
             default:
             break;  //  -Wall many options not handled.
@@ -678,14 +678,14 @@ void WinMtfOutput::CreateObject( GDIObjectType eType, void* pStyle )
     {
         if ( eType == GDI_FONT )
         {
-            WinMtfFontStyle* pFontStyle = (WinMtfFontStyle*) pStyle;
+            WinMtfFontStyle* pFontStyle = static_cast<WinMtfFontStyle*>(pStyle);
             if (pFontStyle->aFont.GetHeight() == 0)
                 pFontStyle->aFont.SetHeight(423);
             ImplMap(pFontStyle->aFont); // defaulting to 12pt
         }
         else if ( eType == GDI_PEN )
         {
-            WinMtfLineStyle* pLineStyle = (WinMtfLineStyle*) pStyle;
+            WinMtfLineStyle* pLineStyle = static_cast<WinMtfLineStyle*>(pStyle);
             Size aSize(pLineStyle->aLineInfo.GetWidth(), 0);
             aSize = ImplMap(aSize);
             pLineStyle->aLineInfo.SetWidth(aSize.Width());
@@ -712,14 +712,14 @@ void WinMtfOutput::CreateObject( sal_Int32 nIndex, GDIObjectType eType, void* pS
         {
             if ( eType == GDI_FONT )
             {
-                WinMtfFontStyle* pFontStyle = (WinMtfFontStyle*) pStyle;
+                WinMtfFontStyle* pFontStyle = static_cast<WinMtfFontStyle*>(pStyle);
                 if (pFontStyle->aFont.GetHeight() == 0)
                     pFontStyle->aFont.SetHeight(423);
                 ImplMap(pFontStyle->aFont);
             }
             else if ( eType == GDI_PEN )
             {
-                WinMtfLineStyle* pLineStyle = (WinMtfLineStyle*) pStyle;
+                WinMtfLineStyle* pLineStyle = static_cast<WinMtfLineStyle*>(pStyle);
                 Size aSize(pLineStyle->aLineInfo.GetWidth(), 0);
                 aSize = ImplMap(aSize);
                 pLineStyle->aLineInfo.SetWidth(aSize.Width());
@@ -738,13 +738,13 @@ void WinMtfOutput::CreateObject( sal_Int32 nIndex, GDIObjectType eType, void* pS
         switch ( eType )
         {
             case GDI_PEN :
-                delete (WinMtfLineStyle*)pStyle;
+                delete static_cast<WinMtfLineStyle*>(pStyle);
             break;
             case GDI_BRUSH :
-                delete (WinMtfFillStyle*)pStyle;
+                delete static_cast<WinMtfFillStyle*>(pStyle);
             break;
             case GDI_FONT :
-                delete (WinMtfFontStyle*)pStyle;
+                delete static_cast<WinMtfFontStyle*>(pStyle);
             break;
 
             default:
@@ -2116,7 +2116,7 @@ void WinMtfOutput::PassEMFPlusHeaderInfo()
     // on windows where the function parameters are probably resolved in reverse order
     mem.Flush();
 
-    mpGDIMetaFile->AddAction( new MetaCommentAction( "EMF_PLUS_HEADER_INFO", 0, (const sal_uInt8*) mem.GetData(), mem.GetEndOfData() ) );
+    mpGDIMetaFile->AddAction( new MetaCommentAction( "EMF_PLUS_HEADER_INFO", 0, static_cast<const sal_uInt8*>(mem.GetData()), mem.GetEndOfData() ) );
     mpGDIMetaFile->UseCanvas( true );
 }
 

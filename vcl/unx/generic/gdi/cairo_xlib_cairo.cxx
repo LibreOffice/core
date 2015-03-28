@@ -91,7 +91,7 @@ namespace cairo
     X11Pixmap::~X11Pixmap()
     {
         if( mpDisplay && mhDrawable )
-            XFreePixmap( (Display*)mpDisplay, mhDrawable );
+            XFreePixmap( static_cast<Display*>(mpDisplay), mhDrawable );
     }
 
     /**
@@ -148,9 +148,9 @@ namespace cairo
         maSysData(rSysData),
         mpPixmap(),
         mpSurface(
-            cairo_xlib_surface_create( (Display*)rSysData.pDisplay,
+            cairo_xlib_surface_create( static_cast<Display*>(rSysData.pDisplay),
                                        rSysData.hDrawable,
-                                       (Visual*)rSysData.pVisual,
+                                       static_cast<Visual*>(rSysData.pVisual),
                                        width + x, height + y ),
             &cairo_surface_destroy)
     {
@@ -173,9 +173,9 @@ namespace cairo
         maSysData( rSysData ),
         mpPixmap(),
         mpSurface(
-            cairo_xlib_surface_create( (Display*)rSysData.pDisplay,
+            cairo_xlib_surface_create( static_cast<Display*>(rSysData.pDisplay),
                                        reinterpret_cast<Drawable>(rData.aPixmap),
-                                       (Visual*) rSysData.pVisual,
+                                       static_cast<Visual*>(rSysData.pVisual),
                                        rData.mnWidth, rData.mnHeight ),
             &cairo_surface_destroy)
     {
@@ -228,8 +228,8 @@ namespace cairo
                     break;
             }
 
-            pFormat = XRenderFindStandardFormat( (Display*)maSysData.pDisplay, nFormat );
-            hPixmap = limitXCreatePixmap( (Display*)maSysData.pDisplay, maSysData.hDrawable,
+            pFormat = XRenderFindStandardFormat( static_cast<Display*>(maSysData.pDisplay), nFormat );
+            hPixmap = limitXCreatePixmap( static_cast<Display*>(maSysData.pDisplay), maSysData.hDrawable,
                                      width > 0 ? width : 1, height > 0 ? height : 1,
                                      pFormat->depth );
 
@@ -241,9 +241,9 @@ namespace cairo
                                     new X11Pixmap(hPixmap, maSysData.pDisplay)),
                                 CairoSurfaceSharedPtr(
                                     cairo_xlib_surface_create_with_xrender_format(
-                                        (Display*)maSysData.pDisplay,
+                                        static_cast<Display*>(maSysData.pDisplay),
                                         hPixmap,
-                                        ScreenOfDisplay((Display *)maSysData.pDisplay, maSysData.nScreen),
+                                        ScreenOfDisplay(static_cast<Display *>(maSysData.pDisplay), maSysData.nScreen),
                                         pFormat, width, height ),
                                     &cairo_surface_destroy) ));
         }
@@ -291,7 +291,7 @@ namespace cairo
 
     void X11Surface::flush() const
     {
-        XSync( (Display*)maSysData.pDisplay, false );
+        XSync( static_cast<Display*>(maSysData.pDisplay), false );
     }
 
     /**
@@ -302,7 +302,7 @@ namespace cairo
     int X11Surface::getDepth() const
     {
         if( maSysData.pRenderFormat )
-            return ((XRenderPictFormat*) maSysData.pRenderFormat)->depth;
+            return static_cast<XRenderPictFormat*>(maSysData.pRenderFormat)->depth;
 
         return -1;
     }

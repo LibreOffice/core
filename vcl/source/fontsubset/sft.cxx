@@ -314,7 +314,7 @@ static const char HexChars[] = "0123456789ABCDEF";
 
 static HexFmt *HexFmtNew(FILE *outf)
 {
-    HexFmt* res = (HexFmt*)smalloc(sizeof(HexFmt));
+    HexFmt* res = static_cast<HexFmt*>(smalloc(sizeof(HexFmt)));
     res->bufpos = res->total = 0;
     res->o = outf;
     return res;
@@ -360,7 +360,7 @@ static void HexFmtBlockWrite(HexFmt *_this, const void *ptr, sal_uInt32 size)
         HexFmtOpenString(_this);
     }
     for (i=0; i<size; i++) {
-        Ch = ((sal_uInt8 *) ptr)[i];
+        Ch = static_cast<sal_uInt8 const *>(ptr)[i];
         _this->buffer[_this->bufpos++] = HexChars[Ch >> 4];
         _this->buffer[_this->bufpos++] = HexChars[Ch & 0xF];
         if (_this->bufpos == HFORMAT_LINELEN) {
@@ -463,7 +463,7 @@ static int GetSimpleTTOutline(TrueTypeFont *ttf, sal_uInt32 glyphID, ControlPoin
         return 0;
     }
 
-    ControlPoint* pa = (ControlPoint*)calloc(palen, sizeof(ControlPoint));
+    ControlPoint* pa = static_cast<ControlPoint*>(calloc(palen, sizeof(ControlPoint)));
 
     i = 0;
     while (i <= lastPoint) {
@@ -670,7 +670,7 @@ static int GetCompoundTTOutline(TrueTypeFont *ttf, sal_uInt32 glyphID, ControlPo
 
     np = myPoints.size();
 
-    pa = (ControlPoint*)calloc(np, sizeof(ControlPoint));
+    pa = static_cast<ControlPoint*>(calloc(np, sizeof(ControlPoint)));
     assert(pa != 0);
 
     if (np > 0)
@@ -846,7 +846,7 @@ static int BSplineToPSPath(ControlPoint *srcA, int srcCount, PSPathElement **pat
 
     if( (nPathCount = (int)aPathList.size()) > 0)
     {
-        *path = (PSPathElement*)calloc(nPathCount, sizeof(PSPathElement));
+        *path = static_cast<PSPathElement*>(calloc(nPathCount, sizeof(PSPathElement)));
         assert(*path != 0);
         memcpy( *path, &aPathList[0], nPathCount * sizeof(PSPathElement) );
     }
@@ -877,20 +877,20 @@ static char *nameExtract( const sal_uInt8* name, int nTableSize, int n, int dbFl
     if( ucs2result )
         *ucs2result = NULL;
     if (dbFlag) {
-        res = (char*)malloc(1 + len/2);
+        res = static_cast<char*>(malloc(1 + len/2));
         assert(res != 0);
         for (int i = 0; i < len/2; i++)
             res[i] = *(ptr + i * 2 + 1);
         res[len/2] = 0;
         if( ucs2result )
         {
-            *ucs2result = (sal_uInt16*)malloc( len+2 );
+            *ucs2result = static_cast<sal_uInt16*>(malloc( len+2 ));
             for (int i = 0; i < len/2; i++ )
                 (*ucs2result)[i] = GetUInt16( ptr, 2*i, 1 );
             (*ucs2result)[len/2] = 0;
         }
     } else {
-        res = (char*)malloc(1 + len);
+        res = static_cast<char*>(malloc(1 + len));
         assert(res != 0);
         memcpy(res, ptr, len);
         res[len] = 0;
@@ -1395,7 +1395,7 @@ static void GetKern(TrueTypeFont *ttf)
             ttf->nkern = nMaxRecords;
         }
 
-        ttf->kerntables = (const sal_uInt8**)calloc(ttf->nkern, sizeof(sal_uInt8 *));
+        ttf->kerntables = static_cast<const sal_uInt8**>(calloc(ttf->nkern, sizeof(sal_uInt8 *)));
         assert(ttf->kerntables != 0);
 
         for( unsigned i = 0; i < ttf->nkern; ++i) {
@@ -1427,7 +1427,7 @@ static void GetKern(TrueTypeFont *ttf)
             ttf->nkern = nMaxRecords;
         }
 
-        ttf->kerntables = (const sal_uInt8**)calloc(ttf->nkern, sizeof(sal_uInt8 *));
+        ttf->kerntables = static_cast<const sal_uInt8**>(calloc(ttf->nkern, sizeof(sal_uInt8 *)));
         assert(ttf->kerntables != 0);
 
         for( unsigned i = 0; i < ttf->nkern; ++i) {
@@ -1469,7 +1469,7 @@ int CountTTCFonts(const char* fname)
 
 static void allocTrueTypeFont( TrueTypeFont** ttf )
 {
-    *ttf = (TrueTypeFont*)calloc(1,sizeof(TrueTypeFont));
+    *ttf = static_cast<TrueTypeFont*>(calloc(1,sizeof(TrueTypeFont)));
     if( *ttf != NULL )
     {
         (*ttf)->tag = 0;
@@ -1526,7 +1526,7 @@ int OpenTTFontFile( const char* fname, sal_uInt32 facenum, TrueTypeFont** ttf )
         goto cleanup;
     }
 
-    if (((*ttf)->ptr = (sal_uInt8 *) mmap(0, (*ttf)->fsize, PROT_READ, MAP_SHARED, fd, 0)) == MAP_FAILED) {
+    if (((*ttf)->ptr = static_cast<sal_uInt8 *>(mmap(0, (*ttf)->fsize, PROT_READ, MAP_SHARED, fd, 0))) == MAP_FAILED) {
         ret = SF_MEMORY;
         goto cleanup;
     }
@@ -1552,7 +1552,7 @@ int OpenTTFontBuffer(const void* pBuffer, sal_uInt32 nLen, sal_uInt32 facenum, T
 
     (*ttf)->fname = NULL;
     (*ttf)->fsize = nLen;
-    (*ttf)->ptr   = (sal_uInt8*)pBuffer;
+    (*ttf)->ptr   = const_cast<sal_uInt8 *>(static_cast<sal_uInt8 const *>(pBuffer));
 
     return doOpenTTFont( facenum, *ttf );
 }
@@ -1593,9 +1593,9 @@ static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
     if( t->ntables >= 128 )
         return SF_TTFORMAT;
 
-    t->tables = (const sal_uInt8**)calloc(NUM_TAGS, sizeof(sal_uInt8 *));
+    t->tables = static_cast<const sal_uInt8**>(calloc(NUM_TAGS, sizeof(sal_uInt8 *)));
     assert(t->tables != 0);
-    t->tlens = (sal_uInt32*)calloc(NUM_TAGS, sizeof(sal_uInt32));
+    t->tlens = static_cast<sal_uInt32*>(calloc(NUM_TAGS, sizeof(sal_uInt32)));
     assert(t->tlens != 0);
 
     /* parse the tables */
@@ -1715,13 +1715,13 @@ static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
             t->nglyphs = k;
 
         table = getTable(t, O_loca);
-        t->goffsets = (sal_uInt32 *) calloc(1+t->nglyphs, sizeof(sal_uInt32));
+        t->goffsets = static_cast<sal_uInt32 *>(calloc(1+t->nglyphs, sizeof(sal_uInt32)));
         assert(t->goffsets != 0);
 
         for( i = 0; i <= (int)t->nglyphs; ++i )
             t->goffsets[i] = indexfmt ? GetUInt32(table, i << 2, 1) : (sal_uInt32)GetUInt16(table, i << 1, 1) << 1;
     } else if( getTable(t, O_CFF) ) {           /* PS-OpenType */
-        t->goffsets = (sal_uInt32 *) calloc(1+t->nglyphs, sizeof(sal_uInt32));
+        t->goffsets = static_cast<sal_uInt32 *>(calloc(1+t->nglyphs, sizeof(sal_uInt32)));
         /* TODO: implement to get subsetting */
         assert(t->goffsets != 0);
     } else {
@@ -2051,7 +2051,7 @@ int  CreateTTFromTTGlyphs(TrueTypeFont  *ttf,
     /**                       glyf                          **/
 
     glyf = TrueTypeTableNew_glyf();
-    sal_uInt32* gID = (sal_uInt32*)scalloc(nGlyphs, sizeof(sal_uInt32));
+    sal_uInt32* gID = static_cast<sal_uInt32*>(scalloc(nGlyphs, sizeof(sal_uInt32)));
 
     for (i = 0; i < nGlyphs; i++) {
         gID[i] = glyfAdd(glyf, GetTTRawGlyphData(ttf, glyphArray[i]), ttf);
@@ -2117,7 +2117,7 @@ int  CreateTTFromTTGlyphs(TrueTypeFont  *ttf,
 #ifndef NO_TYPE42
 static GlyphOffsets *GlyphOffsetsNew(sal_uInt8 *sfntP, sal_uInt32 sfntLen)
 {
-    GlyphOffsets* res = (GlyphOffsets*)smalloc(sizeof(GlyphOffsets));
+    GlyphOffsets* res = static_cast<GlyphOffsets*>(smalloc(sizeof(GlyphOffsets)));
     sal_uInt8 *loca = NULL;
     sal_uInt16 i, numTables = GetUInt16(sfntP, 4, 1);
     sal_uInt32 locaLen = 0;
@@ -2155,7 +2155,7 @@ static GlyphOffsets *GlyphOffsetsNew(sal_uInt8 *sfntP, sal_uInt32 sfntLen)
 
     res->nGlyphs = locaLen / ((indexToLocFormat == 1) ? 4 : 2);
     assert(res->nGlyphs != 0);
-    res->offs = (sal_uInt32*)scalloc(res->nGlyphs, sizeof(sal_uInt32));
+    res->offs = static_cast<sal_uInt32*>(scalloc(res->nGlyphs, sizeof(sal_uInt32)));
 
     for (i = 0; i < res->nGlyphs; i++) {
         if (indexToLocFormat == 1) {
@@ -2202,7 +2202,7 @@ static void DumpSfnts(FILE *outf, sal_uInt8 *sfntP, sal_uInt32 sfntLen)
 
     assert(numTables <= 9);                                 /* Type42 has 9 required tables */
 
-    sal_uInt32* offs = (sal_uInt32*)scalloc(numTables, sizeof(sal_uInt32));
+    sal_uInt32* offs = static_cast<sal_uInt32*>(scalloc(numTables, sizeof(sal_uInt32)));
 
     fputs("/sfnts [", outf);
     HexFmtOpenString(h);
@@ -2321,7 +2321,7 @@ int  CreateT42FromTTGlyphs(TrueTypeFont  *ttf,
 
     /**                       glyf                          **/
     glyf = TrueTypeTableNew_glyf();
-    sal_uInt16* gID = (sal_uInt16*)scalloc(nGlyphs, sizeof(sal_uInt32));
+    sal_uInt16* gID = static_cast<sal_uInt16*>(scalloc(nGlyphs, sizeof(sal_uInt32)));
 
     for (i = 0; i < nGlyphs; i++) {
         gID[i] = (sal_uInt16)glyfAdd(glyf, GetTTRawGlyphData(ttf, glyphArray[i]), ttf);
@@ -2497,7 +2497,7 @@ TTSimpleGlyphMetrics *GetTTSimpleGlyphMetrics(TrueTypeFont *ttf, sal_uInt16 *gly
     if (!nGlyphs || !glyphArray) return 0;        /* invalid parameters */
     if (!n || !pTable) return 0;                  /* the font does not contain the requested metrics */
 
-    TTSimpleGlyphMetrics* res = (TTSimpleGlyphMetrics*)calloc(nGlyphs, sizeof(TTSimpleGlyphMetrics));
+    TTSimpleGlyphMetrics* res = static_cast<TTSimpleGlyphMetrics*>(calloc(nGlyphs, sizeof(TTSimpleGlyphMetrics)));
     assert(res != 0);
 
     const int UPEm = ttf->unitsPerEm;
@@ -2538,7 +2538,7 @@ TTSimpleGlyphMetrics *GetTTSimpleCharMetrics(TrueTypeFont * ttf, sal_uInt16 firs
     TTSimpleGlyphMetrics *res = 0;
     int i, n;
 
-    sal_uInt16* str = (sal_uInt16*)malloc(nChars * 2);
+    sal_uInt16* str = static_cast<sal_uInt16*>(malloc(nChars * 2));
     assert(str != 0);
 
     for (i=0; i<nChars; i++) str[i] = (sal_uInt16)(firstChar + i);
@@ -2641,11 +2641,11 @@ GlyphData *GetTTRawGlyphData(TrueTypeFont *ttf, sal_uInt32 glyphID)
 
     length = ttf->goffsets[glyphID+1] - ttf->goffsets[glyphID];
 
-    GlyphData* d = (GlyphData*)malloc(sizeof(GlyphData)); assert(d != 0);
+    GlyphData* d = static_cast<GlyphData*>(malloc(sizeof(GlyphData))); assert(d != 0);
 
     if (length > 0) {
         const sal_uInt8* srcptr = glyf + ttf->goffsets[glyphID];
-        d->ptr = (sal_uInt8*)malloc((length + 1) & ~1); assert(d->ptr != 0);
+        d->ptr = static_cast<sal_uInt8*>(malloc((length + 1) & ~1)); assert(d->ptr != 0);
         memcpy( d->ptr, srcptr, length );
         d->compflag = (GetInt16( srcptr, 0, 1 ) < 0);
     } else {
@@ -2718,7 +2718,7 @@ int GetTTNameRecords(TrueTypeFont *ttf, NameRecord **nr)
         n = nMaxRecords;
     }
 
-    NameRecord* rec = (NameRecord*)calloc(n, sizeof(NameRecord));
+    NameRecord* rec = static_cast<NameRecord*>(calloc(n, sizeof(NameRecord)));
 
     for (i = 0; i < n; i++) {
         int nLargestFixedOffsetPos = 6 + 10 + 12 * i;
@@ -2750,7 +2750,7 @@ int GetTTNameRecords(TrueTypeFont *ttf, NameRecord **nr)
             const size_t available_space = rec_string > end_table ? 0 : (end_table - rec_string);
             if (rec[i].slen <= available_space)
             {
-                rec[i].sptr = (sal_uInt8 *) malloc(rec[i].slen); assert(rec[i].sptr != 0);
+                rec[i].sptr = static_cast<sal_uInt8 *>(malloc(rec[i].slen)); assert(rec[i].sptr != 0);
                 memcpy(rec[i].sptr, rec_string, rec[i].slen);
             }
             else

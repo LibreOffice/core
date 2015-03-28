@@ -1139,7 +1139,7 @@ bool PDFWriterImpl::checkEncryptionBufferSize( register sal_Int32 newSize )
     {
         /* reallocate the buffer, the used function allocate as rtl_allocateMemory
         if the pointer parameter is NULL */
-        m_pEncryptionBuffer = (sal_uInt8*)rtl_reallocateMemory( m_pEncryptionBuffer, newSize );
+        m_pEncryptionBuffer = static_cast<sal_uInt8*>(rtl_reallocateMemory( m_pEncryptionBuffer, newSize ));
         if( m_pEncryptionBuffer )
             m_nEncryptionBufferSize = newSize;
         else
@@ -1963,7 +1963,7 @@ void PDFWriterImpl::writeG4Stream( BitmapReadAccess* i_pBitmap )
     BitStreamState aBitState;
 
     // the first reference line is virtual and completely empty
-    const Scanline pFirstRefLine = (Scanline)rtl_allocateZeroMemory( nW/8 + 1 );
+    const Scanline pFirstRefLine = static_cast<Scanline>(rtl_allocateZeroMemory( nW/8 + 1 ));
     Scanline pRefLine = pFirstRefLine;
     for( long nY = 0; nY < nH; nY++ )
     {

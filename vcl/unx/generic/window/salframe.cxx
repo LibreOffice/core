@@ -3176,7 +3176,7 @@ long X11SalFrame::HandleKeyEvent( XKeyEvent *pEvent )
     KeySym          nKeySym;
     KeySym          nUnmodifiedKeySym;
     int             nLen = 2048;
-    unsigned char   *pPrintable = (unsigned char*)alloca( nLen );
+    unsigned char   *pPrintable = static_cast<unsigned char*>(alloca( nLen ));
 
     // singlebyte code composed by input method, the new default
     if (mpInputContext != NULL && mpInputContext->UseContext())
@@ -3190,7 +3190,7 @@ long X11SalFrame::HandleKeyEvent( XKeyEvent *pEvent )
         if ( nStatus == XBufferOverflow )
         {
             nLen *= 2;
-            pPrintable = (unsigned char*)alloca( nLen );
+            pPrintable = static_cast<unsigned char*>(alloca( nLen ));
             nKeySym = pDisplay_->GetKeySym( pEvent, pPrintable, &nLen,
                                             &nUnmodifiedKeySym,
                                             &nStatus, mpInputContext->GetContext() );
@@ -3355,7 +3355,7 @@ long X11SalFrame::HandleKeyEvent( XKeyEvent *pEvent )
     sal_Unicode *pString;
     sal_Size     nBufferSize = nLen * 2;
     sal_Size     nSize;
-    pBuffer = (sal_Unicode*) malloc( nBufferSize + 2 );
+    pBuffer = static_cast<sal_Unicode*>(malloc( nBufferSize + 2 ));
     pBuffer[ 0 ] = 0;
 
     if (nKeyString != 0)

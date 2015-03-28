@@ -828,7 +828,7 @@ bool NumericField::set_property(const OString &rKey, const OString &rValue)
 void NumericField::ImplLoadRes( const ResId& rResId )
 {
     SpinField::ImplLoadRes( rResId );
-    NumericFormatter::ImplLoadRes( ResId( (RSHEADER_TYPE *)GetClassRes(), *rResId.GetResMgr() ) );
+    NumericFormatter::ImplLoadRes( ResId( static_cast<RSHEADER_TYPE *>(GetClassRes()), *rResId.GetResMgr() ) );
 
     sal_uLong      nMask = ReadLongRes();
 
@@ -1663,7 +1663,7 @@ bool MetricField::set_property(const OString &rKey, const OString &rValue)
 void MetricField::ImplLoadRes( const ResId& rResId )
 {
     SpinField::ImplLoadRes( rResId );
-    MetricFormatter::ImplLoadRes( ResId( (RSHEADER_TYPE *)GetClassRes(), *rResId.GetResMgr() ) );
+    MetricFormatter::ImplLoadRes( ResId( static_cast<RSHEADER_TYPE *>(GetClassRes()), *rResId.GetResMgr() ) );
 
     sal_uLong      nMask = ReadLongRes();
 

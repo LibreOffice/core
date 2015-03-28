@@ -36,10 +36,10 @@ DisplayConnection::DisplayConnection()
     switch( eType )
     {
         case SalInstance::AsciiCString:
-            m_aAny <<= OUString::createFromAscii( (sal_Char*)pBytes );
+            m_aAny <<= OUString::createFromAscii( static_cast<sal_Char*>(pBytes) );
             break;
         case SalInstance::Blob:
-            m_aAny <<= Sequence< sal_Int8 >( (sal_Int8*)pBytes, nBytes );
+            m_aAny <<= Sequence< sal_Int8 >( static_cast<sal_Int8*>(pBytes), nBytes );
             break;
     }
 }
@@ -110,7 +110,7 @@ bool DisplayConnection::dispatchEvent( void* pData, int nBytes )
 {
     SolarMutexReleaser aRel;
 
-    Sequence< sal_Int8 > aSeq( (sal_Int8*)pData, nBytes );
+    Sequence< sal_Int8 > aSeq( static_cast<sal_Int8*>(pData), nBytes );
     Any aEvent;
     aEvent <<= aSeq;
     ::std::list< css::uno::Reference< XEventHandler > > handlers;
@@ -128,7 +128,7 @@ bool DisplayConnection::dispatchErrorEvent( void* pData, int nBytes )
 {
     SolarMutexReleaser aRel;
 
-    Sequence< sal_Int8 > aSeq( (sal_Int8*)pData, nBytes );
+    Sequence< sal_Int8 > aSeq( static_cast<sal_Int8*>(pData), nBytes );
     Any aEvent;
     aEvent <<= aSeq;
     ::std::list< css::uno::Reference< XEventHandler > > handlers;

@@ -132,7 +132,7 @@ g_lo_action_group_list_actions (GActionGroup *group)
 
     g_hash_table_iter_init (&iter, loGroup->priv->table);
     while (g_hash_table_iter_next (&iter, &key, NULL))
-        keys[i++] = g_strdup ((gchar*) key);
+        keys[i++] = g_strdup (static_cast<gchar*>(key));
     g_assert_cmpint (i, ==, n);
     keys[n] = NULL;
 
@@ -428,7 +428,7 @@ g_lo_action_group_clear (GLOActionGroup  *group)
 
     for (GList* element = g_list_first (keys); element != NULL; element = g_list_next (element))
     {
-        g_lo_action_group_remove (group, (gchar*) element->data);
+        g_lo_action_group_remove (group, static_cast<gchar*>(element->data));
     }
 
     g_list_free (keys);

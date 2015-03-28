@@ -1604,7 +1604,7 @@ bool SelectionManager::handleSelectionRequest( XSelectionRequestEvent& rRequest 
                 getNativeTypeList( aFlavors, aConversions, rRequest.selection );
 
                 int i, nTypes = aConversions.size();
-                Atom* pTypes = (Atom*)alloca( nTypes * sizeof( Atom ) );
+                Atom* pTypes = static_cast<Atom*>(alloca( nTypes * sizeof( Atom ) ));
                 std::list< Atom >::const_iterator it;
                 for( i = 0, it = aConversions.begin(); i < nTypes; i++, ++it )
                     pTypes[i] = *it;
@@ -3291,7 +3291,7 @@ void SelectionManager::startDrag(
         getNativeTypeList( m_aDragFlavors, aConversions, m_nXdndSelection );
 
         int nTypes = aConversions.size();
-        Atom* pTypes = (Atom*)alloca( sizeof(Atom)*nTypes );
+        Atom* pTypes = static_cast<Atom*>(alloca( sizeof(Atom)*nTypes ));
         type_it = aConversions.begin();
         for( int n = 0; n < nTypes; n++, ++type_it )
             pTypes[n] = *type_it;
@@ -3375,7 +3375,7 @@ void SelectionManager::startDrag(
 
 void SelectionManager::runDragExecute( void* pThis )
 {
-    SelectionManager* This = (SelectionManager*)pThis;
+    SelectionManager* This = static_cast<SelectionManager*>(pThis);
     This->dragDoDispatch();
 }
 
@@ -3484,7 +3484,7 @@ void SelectionManager::transferablesFlavorsChanged()
     getNativeTypeList( m_aDragFlavors, aConversions, m_nXdndSelection );
 
     int nTypes = aConversions.size();
-    Atom* pTypes = (Atom*)alloca( sizeof(Atom)*aConversions.size() );
+    Atom* pTypes = static_cast<Atom*>(alloca( sizeof(Atom)*aConversions.size() ));
     for( i = 0, type_it = aConversions.begin(); type_it != aConversions.end(); ++type_it, i++ )
         pTypes[i] = *type_it;
     XChangeProperty( m_pDisplay, m_aWindow, m_nXdndTypeList, XA_ATOM, 32, PropModeReplace, reinterpret_cast<unsigned char*>(pTypes), nTypes );
@@ -3654,7 +3654,7 @@ void SelectionManager::run( void* pThis )
     osl::Thread::setName("SelectionManager");
     // dispatch until the cows come home
 
-    SelectionManager* This = (SelectionManager*)pThis;
+    SelectionManager* This = static_cast<SelectionManager*>(pThis);
 
     timeval aLast;
     gettimeofday( &aLast, 0 );

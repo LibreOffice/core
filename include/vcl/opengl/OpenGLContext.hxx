@@ -81,7 +81,7 @@ struct GLWindow
          return GL_FALSE;
       }
 
-      deleteThis=lookHere=(char*)malloc(strlen(reinterpret_cast<const char*>(extString))+1);
+      deleteThis=lookHere=static_cast<char*>(malloc(strlen(reinterpret_cast<const char*>(extString))+1));
       if (lookHere==NULL)
       {
          return GL_FALSE;

@@ -49,7 +49,7 @@ struct _list {
 
 static lnode *newNode(void *el)
 {
-    lnode *ptr = (lnode *)rtl_allocateMemory(sizeof(lnode));
+    lnode *ptr = static_cast<lnode *>(rtl_allocateMemory(sizeof(lnode)));
     assert(ptr != 0);
 
     ptr->value = el;
@@ -84,7 +84,7 @@ static lnode *appendPrim(list pThis, void *el)
 /*- public methods  */
 list listNewEmpty(void)                           /*- default ctor */
 {
-    list pThis = (list)rtl_allocateMemory(sizeof(struct _list));
+    list pThis = static_cast<list>(rtl_allocateMemory(sizeof(struct _list)));
     assert(pThis != 0);
 
     pThis->aCount = 0;

@@ -27,7 +27,7 @@ const char* ImplDbgCheckWindow( const void* pObj )
 {
     DBG_TESTSOLARMUTEX();
 
-    const vcl::Window* pWindow = (vcl::Window*)pObj;
+    const vcl::Window* pWindow = static_cast<vcl::Window const *>(pObj);
 
     if ( (pWindow->GetType() < WINDOW_FIRST) || (pWindow->GetType() > WINDOW_LAST) )
         return "Window data overwrite";

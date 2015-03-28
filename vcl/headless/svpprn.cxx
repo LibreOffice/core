@@ -144,7 +144,7 @@ static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
     if( rData.getStreamBuffer( pBuffer, nBytes ) )
     {
         pJobSetup->mnDriverDataLen = nBytes;
-        pJobSetup->mpDriverData = (sal_uInt8*)pBuffer;
+        pJobSetup->mpDriverData = static_cast<sal_uInt8*>(pBuffer);
     }
     else
     {

@@ -455,7 +455,7 @@ inline NotifyEvent::NotifyEvent( MouseNotifyEvent nEventType, vcl::Window* pWind
 inline const KeyEvent* NotifyEvent::GetKeyEvent() const
 {
     if ( (mnEventType == MouseNotifyEvent::KEYINPUT) || (mnEventType == MouseNotifyEvent::KEYUP) )
-        return (const KeyEvent*)mpData;
+        return static_cast<const KeyEvent*>(mpData);
     else
         return NULL;
 }
@@ -463,7 +463,7 @@ inline const KeyEvent* NotifyEvent::GetKeyEvent() const
 inline const MouseEvent* NotifyEvent::GetMouseEvent() const
 {
     if ( (mnEventType >= MouseNotifyEvent::MOUSEBUTTONDOWN) && (mnEventType <= MouseNotifyEvent::MOUSEMOVE) )
-        return (const MouseEvent*)mpData;
+        return static_cast<const MouseEvent*>(mpData);
     else
         return NULL;
 }
@@ -471,7 +471,7 @@ inline const MouseEvent* NotifyEvent::GetMouseEvent() const
 inline const CommandEvent* NotifyEvent::GetCommandEvent() const
 {
     if ( mnEventType == MouseNotifyEvent::COMMAND )
-        return (const CommandEvent*)mpData;
+        return static_cast<const CommandEvent*>(mpData);
     else
         return NULL;
 }
@@ -529,7 +529,7 @@ inline DataChangedEvent::DataChangedEvent( DataChangedEventType nType,
 inline const AllSettings* DataChangedEvent::GetOldSettings() const
 {
     if ( mnType == DataChangedEventType::SETTINGS )
-        return (const AllSettings*)mpData;
+        return static_cast<const AllSettings*>(mpData);
     else
         return NULL;
 }

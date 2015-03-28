@@ -2126,7 +2126,7 @@ bool PDFWriterImpl::compressStream( SvMemoryStream* pStream )
     ZCodec pCodec( 0x4000, 0x4000 );
     SvMemoryStream aStream;
     pCodec.BeginCompression();
-    pCodec.Write( aStream, (const sal_uInt8*)pStream->GetData(), nEndPos );
+    pCodec.Write( aStream, static_cast<const sal_uInt8*>(pStream->GetData()), nEndPos );
     pCodec.EndCompression();
     nEndPos = aStream.Tell();
     pStream->Seek( STREAM_SEEK_TO_BEGIN );
@@ -2195,7 +2195,7 @@ bool PDFWriterImpl::writeBuffer( const void* pBuffer, sal_uInt64 nBytes )
             /* implement the encryption part of the PDF spec encryption algorithm 3.1 */
             if( ( buffOK = checkEncryptionBufferSize( static_cast<sal_Int32>(nBytes) ) ) )
                 rtl_cipher_encodeARCFOUR( m_aCipher,
-                                          (sal_uInt8*)pBuffer, static_cast<sal_Size>(nBytes),
+                                          pBuffer, static_cast<sal_Size>(nBytes),
                                           m_pEncryptionBuffer, static_cast<sal_Size>(nBytes) );
         }
 
@@ -2989,7 +2989,7 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitSystemFont( const PhysicalFo
         sal_Int32 pEncWidths[256];
 
         //TODO: surely this is utterly broken because GetEmbedFontData loops over the uninitialized nEncodedCodes as input
-        pFontData = (const unsigned char*)pGraphics->GetEmbedFontData( pFont, nEncodedCodes, pEncWidths, 256, aInfo, &nFontLen );
+        pFontData = static_cast<const unsigned char*>(pGraphics->GetEmbedFontData( pFont, nEncodedCodes, pEncWidths, 256, aInfo, &nFontLen ));
 
         if( pFontData )
         {
@@ -3196,7 +3196,7 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( const Physical
     sal_Int32 nLength1, nLength2;
     try
     {
-        if( (pFontData = (const unsigned char*)pGraphics->GetEmbedFontData(pFont, nEncodedCodes, pWidths, 256, aInfo, &nFontLen)) != NULL )
+        if( (pFontData = static_cast<const unsigned char*>(pGraphics->GetEmbedFontData(pFont, nEncodedCodes, pWidths, 256, aInfo, &nFontLen))) != NULL )
         {
             if( (aInfo.m_nFontType & FontSubsetInfo::ANY_TYPE1) == 0 )
                 throw FontException();
@@ -6045,7 +6045,7 @@ namespace {
 
 char *PDFSigningPKCS7PasswordCallback(PK11SlotInfo * /*slot*/, PRBool /*retry*/, void *arg)
 {
-    return PL_strdup((char *)arg);
+    return PL_strdup(static_cast<char *>(arg));
 }
 
 class HashContextScope {
@@ -6579,16 +6579,16 @@ my_NSS_CMSArray_Add(PLArenaPool *poolp, void ***array, void *obj)
         return SECFailure;
 
     if (*array == NULL) {
-    dest = (void **)PORT_ArenaAlloc(poolp, 2 * sizeof(void *));
+    dest = static_cast<void **>(PORT_ArenaAlloc(poolp, 2 * sizeof(void *)));
     n = 0;
     } else {
     n = 0; p = *array;
     while (*p++)
         n++;
-    dest = (void **)PORT_ArenaGrow (poolp,
+    dest = static_cast<void **>(PORT_ArenaGrow (poolp,
                   *array,
                   (n + 1) * sizeof(void *),
-                  (n + 2) * sizeof(void *));
+                  (n + 2) * sizeof(void *)));
     }
 
     if (dest == NULL)

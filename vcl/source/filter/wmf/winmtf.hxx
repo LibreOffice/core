@@ -514,13 +514,13 @@ struct GDIObj
         switch (eType)
         {
             case GDI_PEN :
-                delete (WinMtfLineStyle*)pStyle;
+                delete static_cast<WinMtfLineStyle*>(pStyle);
             break;
             case GDI_BRUSH :
-                delete (WinMtfFillStyle*)pStyle;
+                delete static_cast<WinMtfFillStyle*>(pStyle);
             break;
             case GDI_FONT :
-                delete (WinMtfFontStyle*)pStyle;
+                delete static_cast<WinMtfFontStyle*>(pStyle);
             break;
 
             default:

@@ -489,15 +489,15 @@ void ToolBox::InsertItem( const ResId& rResId, sal_uInt16 nPos )
 
     if ( nObjMask & RSC_TOOLBOXITEM_BITMAP )
     {
-        Bitmap aBmp = Bitmap( ResId( (RSHEADER_TYPE*)GetClassRes(), *rResId.GetResMgr() ) );
-        IncrementRes( GetObjSizeRes( (RSHEADER_TYPE*)GetClassRes() ) );
+        Bitmap aBmp = Bitmap( ResId( static_cast<RSHEADER_TYPE*>(GetClassRes()), *rResId.GetResMgr() ) );
+        IncrementRes( GetObjSizeRes( static_cast<RSHEADER_TYPE*>(GetClassRes()) ) );
         aItem.maImage = Image( aBmp, IMAGE_STDBTN_COLOR );
         bImage = true;
     }
     if ( nObjMask & RSC_TOOLBOXITEM_IMAGE )
     {
-        aItem.maImage = Image( ResId( (RSHEADER_TYPE*)GetClassRes(), *rResId.GetResMgr() ) );
-        IncrementRes( GetObjSizeRes( (RSHEADER_TYPE*)GetClassRes() ) );
+        aItem.maImage = Image( ResId( static_cast<RSHEADER_TYPE*>(GetClassRes()), *rResId.GetResMgr() ) );
+        IncrementRes( GetObjSizeRes( static_cast<RSHEADER_TYPE*>(GetClassRes()) ) );
         bImage = true;
     }
     if ( nObjMask & RSC_TOOLBOXITEM_DISABLE )

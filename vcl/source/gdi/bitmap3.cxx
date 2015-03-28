@@ -2065,9 +2065,9 @@ extern "C" int SAL_CALL ImplPopularCmpFnc( const void* p1, const void* p2 )
 {
     int nRet;
 
-    if( ( (PopularColorCount*) p1 )->mnCount < ( (PopularColorCount*) p2 )->mnCount )
+    if( static_cast<PopularColorCount const *>(p1)->mnCount < static_cast<PopularColorCount const *>(p2)->mnCount )
         nRet = 1;
-    else if( ( (PopularColorCount*) p1 )->mnCount == ( (PopularColorCount*) p2 )->mnCount )
+    else if( static_cast<PopularColorCount const *>(p1)->mnCount == static_cast<PopularColorCount const *>(p2)->mnCount )
         nRet = 0;
     else
         nRet = -1;
@@ -2243,7 +2243,7 @@ bool Bitmap::ImplReduceMedian( sal_uInt16 nColCount )
         if( pWAcc )
         {
             const sal_uLong nSize = 32768UL * sizeof( sal_uLong );
-            sal_uLong* pColBuf = (sal_uLong*) rtl_allocateMemory( nSize );
+            sal_uLong* pColBuf = static_cast<sal_uLong*>(rtl_allocateMemory( nSize ));
             const long nWidth = pWAcc->Width();
             const long nHeight = pWAcc->Height();
             long nIndex = 0L;

@@ -474,7 +474,7 @@ void PNGWriterImpl::ImplWriteIDAT()
     {
         nBytes = nBytesToWrite <= mnMaxChunkSize ? nBytesToWrite : mnMaxChunkSize;
         ImplOpenChunk(PNGCHUNK_IDAT);
-        ImplWriteChunk((unsigned char*)aOStm.GetData() + (nIDATSize - nBytesToWrite), nBytes);
+        ImplWriteChunk(const_cast<unsigned char *>(static_cast<unsigned char const *>(aOStm.GetData())) + (nIDATSize - nBytesToWrite), nBytes);
         nBytesToWrite -= nBytes;
     }
 }

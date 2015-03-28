@@ -1524,8 +1524,8 @@ void ToolBox::ImplLoadRes( const ResId& rResId )
 
     if ( nObjMask & RSC_TOOLBOX_ITEMIMAGELIST )
     {
-        maImageList = ImageList( ResId( (RSHEADER_TYPE*)GetClassRes(), *pMgr ) );
-        IncrementRes( GetObjSizeRes( (RSHEADER_TYPE*)GetClassRes() ) );
+        maImageList = ImageList( ResId( static_cast<RSHEADER_TYPE*>(GetClassRes()), *pMgr ) );
+        IncrementRes( GetObjSizeRes( static_cast<RSHEADER_TYPE*>(GetClassRes()) ) );
     }
 
     if ( nObjMask & RSC_TOOLBOX_ITEMLIST )
@@ -1535,8 +1535,8 @@ void ToolBox::ImplLoadRes( const ResId& rResId )
         // insert item
         for ( sal_uLong i = 0; i < nEle; i++ )
         {
-            InsertItem( ResId( (RSHEADER_TYPE *)GetClassRes(), *pMgr ) );
-            IncrementRes( GetObjSizeRes( (RSHEADER_TYPE *)GetClassRes() ) );
+            InsertItem( ResId( static_cast<RSHEADER_TYPE *>(GetClassRes()), *pMgr ) );
+            IncrementRes( GetObjSizeRes( static_cast<RSHEADER_TYPE *>(GetClassRes()) ) );
         }
     }
 }

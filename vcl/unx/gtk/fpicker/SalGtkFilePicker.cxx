@@ -1765,7 +1765,7 @@ static gboolean
 case_insensitive_filter (const GtkFileFilterInfo *filter_info, gpointer data)
 {
     gboolean bRetval = false;
-    const char *pFilter = (const char *) data;
+    const char *pFilter = static_cast<const char *>(data);
 
     g_return_val_if_fail( data != NULL, false );
     g_return_val_if_fail( filter_info != NULL, false );

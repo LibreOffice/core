@@ -281,8 +281,8 @@ void Accelerator::ImplLoadRes( const ResId& rResId )
 
     for( sal_uLong i = 0; i < nObjFollows; i++ )
     {
-        InsertItem( ResId( (RSHEADER_TYPE *)GetClassRes(), *rResId.GetResMgr() ) );
-        IncrementRes( GetObjSizeRes( (RSHEADER_TYPE *)GetClassRes() ) );
+        InsertItem( ResId( static_cast<RSHEADER_TYPE *>(GetClassRes()), *rResId.GetResMgr() ) );
+        IncrementRes( GetObjSizeRes( static_cast<RSHEADER_TYPE *>(GetClassRes()) ) );
     }
 }
 
@@ -334,16 +334,16 @@ void Accelerator::InsertItem( const ResId& rResId )
     if ( nObjMask & ACCELITEM_KEY )
     {
         // new context was created
-        RSHEADER_TYPE * pKeyCodeRes = (RSHEADER_TYPE *)GetClassRes();
+        RSHEADER_TYPE * pKeyCodeRes = static_cast<RSHEADER_TYPE *>(GetClassRes());
         ResId aResId( pKeyCodeRes, *rResId.GetResMgr());
         aKeyCode = vcl::KeyCode( aResId );
-        IncrementRes( GetObjSizeRes( (RSHEADER_TYPE *)GetClassRes() ) );
+        IncrementRes( GetObjSizeRes( static_cast<RSHEADER_TYPE *>(GetClassRes()) ) );
     }
 
     if ( nObjMask & ACCELITEM_ACCEL )
     {
-        pAutoAccel = new Accelerator( ResId( (RSHEADER_TYPE *)GetClassRes(), *rResId.GetResMgr() ) );
-        IncrementRes( GetObjSizeRes( (RSHEADER_TYPE *)GetClassRes() ) );
+        pAutoAccel = new Accelerator( ResId( static_cast<RSHEADER_TYPE *>(GetClassRes()), *rResId.GetResMgr() ) );
+        IncrementRes( GetObjSizeRes( static_cast<RSHEADER_TYPE *>(GetClassRes()) ) );
     }
 
     ImplInsertAccel( nAccelKeyId, aKeyCode, !bDisable, pAutoAccel );

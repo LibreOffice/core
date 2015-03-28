@@ -176,7 +176,7 @@ static const WMAdaptorProtocol aAtomTab[] =
 extern "C" {
 static int compareProtocol( const void* pLeft, const void* pRight )
 {
-    return strcmp( ((const WMAdaptorProtocol*)pLeft)->pProtocol, ((const WMAdaptorProtocol*)pRight)->pProtocol );
+    return strcmp( static_cast<const WMAdaptorProtocol*>(pLeft)->pProtocol, static_cast<const WMAdaptorProtocol*>(pRight)->pProtocol );
 }
 }
 
@@ -385,7 +385,7 @@ NetWMAdaptor::NetWMAdaptor( SalDisplay* pSalDisplay ) :
             )
         {
             Atom* pAtoms = reinterpret_cast<Atom*>(pProperty);
-            char** pAtomNames = (char**)alloca( sizeof(char*)*nItems );
+            char** pAtomNames = static_cast<char**>(alloca( sizeof(char*)*nItems ));
             if( XGetAtomNames( m_pDisplay, pAtoms, nItems, pAtomNames ) )
             {
 #if OSL_DEBUG_LEVEL > 1
@@ -399,12 +399,12 @@ NetWMAdaptor::NetWMAdaptor( SalDisplay* pSalDisplay ) :
 
                     WMAdaptorProtocol aSearch;
                     aSearch.pProtocol = pAtomNames[i];
-                    WMAdaptorProtocol* pMatch = (WMAdaptorProtocol*)
+                    WMAdaptorProtocol* pMatch = static_cast<WMAdaptorProtocol*>(
                         bsearch( &aSearch,
                                  aProtocolTab,
                                  SAL_N_ELEMENTS( aProtocolTab ),
                                  sizeof( struct WMAdaptorProtocol ),
-                                 compareProtocol );
+                                 compareProtocol ));
                     if( pMatch )
                     {
                         m_aWMAtoms[ pMatch->nProtocol ] = pAtoms[ i ];
@@ -643,7 +643,7 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
             )
         {
             Atom* pAtoms = reinterpret_cast<Atom*>(pProperty);
-            char** pAtomNames = (char**)alloca( sizeof(char*)*nItems );
+            char** pAtomNames = static_cast<char**>(alloca( sizeof(char*)*nItems ));
             if( XGetAtomNames( m_pDisplay, pAtoms, nItems, pAtomNames ) )
             {
 #if OSL_DEBUG_LEVEL > 1
@@ -657,12 +657,12 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
 
                     WMAdaptorProtocol aSearch;
                     aSearch.pProtocol = pAtomNames[i];
-                    WMAdaptorProtocol* pMatch = (WMAdaptorProtocol*)
+                    WMAdaptorProtocol* pMatch = static_cast<WMAdaptorProtocol*>(
                         bsearch( &aSearch,
                                  aProtocolTab,
                                  SAL_N_ELEMENTS( aProtocolTab ),
                                  sizeof( struct WMAdaptorProtocol ),
-                                 compareProtocol );
+                                 compareProtocol ));
                     if( pMatch )
                     {
                         m_aWMAtoms[ pMatch->nProtocol ] = pAtoms[ i ];

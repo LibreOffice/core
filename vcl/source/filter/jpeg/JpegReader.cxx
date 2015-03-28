@@ -147,7 +147,7 @@ extern "C" void term_source (j_decompress_ptr)
 void jpeg_svstream_src (j_decompress_ptr cinfo, void* input)
 {
     SourceManagerStruct * source;
-    SvStream* stream = (SvStream*)input;
+    SvStream* stream = static_cast<SvStream*>(input);
 
     /* The source object and input buffer are made permanent so that a series
      * of JPEG images can be read from the same file by calling jpeg_stdio_src
@@ -159,11 +159,11 @@ void jpeg_svstream_src (j_decompress_ptr cinfo, void* input)
 
     if (cinfo->src == NULL)
     { /* first time for this JPEG object? */
-        cinfo->src = (jpeg_source_mgr *)
-            (*cinfo->mem->alloc_small) (reinterpret_cast<j_common_ptr>(cinfo), JPOOL_PERMANENT, sizeof(SourceManagerStruct));
+        cinfo->src = static_cast<jpeg_source_mgr *>(
+            (*cinfo->mem->alloc_small) (reinterpret_cast<j_common_ptr>(cinfo), JPOOL_PERMANENT, sizeof(SourceManagerStruct)));
         source = reinterpret_cast<SourceManagerStruct *>(cinfo->src);
-        source->buffer = (JOCTET *)
-            (*cinfo->mem->alloc_small) (reinterpret_cast<j_common_ptr>(cinfo), JPOOL_PERMANENT, BUFFER_SIZE * sizeof(JOCTET));
+        source->buffer = static_cast<JOCTET *>(
+            (*cinfo->mem->alloc_small) (reinterpret_cast<j_common_ptr>(cinfo), JPOOL_PERMANENT, BUFFER_SIZE * sizeof(JOCTET)));
     }
 
     source = reinterpret_cast<SourceManagerStruct *>(cinfo->src);

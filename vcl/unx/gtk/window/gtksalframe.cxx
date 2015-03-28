@@ -1253,7 +1253,7 @@ static void lcl_set_user_time( GtkWindow* i_pWindow, guint32 i_nTime )
 
 GtkSalFrame *GtkSalFrame::getFromWindow( GtkWindow *pWindow )
 {
-    return (GtkSalFrame *) g_object_get_data( G_OBJECT( pWindow ), "SalFrame" );
+    return static_cast<GtkSalFrame *>(g_object_get_data( G_OBJECT( pWindow ), "SalFrame" ));
 }
 
 void GtkSalFrame::Init( SalFrame* pParent, sal_uLong nStyle )
@@ -1588,7 +1588,7 @@ bitmapToPixbuf( SalBitmap *pSalBitmap, SalBitmap *pSalAlpha )
     g_return_val_if_fail( pSalAlpha->GetSize() == aSize, NULL );
 
     int nX, nY;
-    guchar *pPixbufData = (guchar *)g_malloc (4 * aSize.Width() * aSize.Height() );
+    guchar *pPixbufData = static_cast<guchar *>(g_malloc (4 * aSize.Width() * aSize.Height() ));
     guchar *pDestData = pPixbufData;
 
     for( nY = 0; nY < pBitmap->mnHeight; nY++ )
@@ -3217,7 +3217,7 @@ bool GtkSalFrame::Dispatch( const XEvent* pEvent )
 
 gboolean GtkSalFrame::signalButton( GtkWidget*, GdkEventButton* pEvent, gpointer frame )
 {
-    GtkSalFrame* pThis = (GtkSalFrame*)frame;
+    GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
 
     SalMouseEvent aEvent;
     sal_uInt16 nEventType = 0;
@@ -3308,7 +3308,7 @@ gboolean GtkSalFrame::signalButton( GtkWidget*, GdkEventButton* pEvent, gpointer
 
 gboolean GtkSalFrame::signalScroll( GtkWidget*, GdkEvent* pEvent, gpointer frame )
 {
-    GtkSalFrame* pThis = (GtkSalFrame*)frame;
+    GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
     GdkEventScroll* pSEvent = reinterpret_cast<GdkEventScroll*>(pEvent);
 
 #if GTK_CHECK_VERSION(3,0,0)
@@ -3349,7 +3349,7 @@ gboolean GtkSalFrame::signalScroll( GtkWidget*, GdkEvent* pEvent, gpointer frame
 #if GTK_CHECK_VERSION(3,14,0)
 void GtkSalFrame::gestureSwipe(GtkGestureSwipe* gesture, gdouble velocity_x, gdouble velocity_y, gpointer frame)
 {
-    GtkSalFrame* pThis = (GtkSalFrame*)frame;
+    GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
 
     SalSwipeEvent aEvent;
     aEvent.mnVelocityX = velocity_x;
@@ -3369,7 +3369,7 @@ void GtkSalFrame::gestureSwipe(GtkGestureSwipe* gesture, gdouble velocity_x, gdo
 
 void GtkSalFrame::gestureLongPress(GtkGestureLongPress* gesture, gpointer frame)
 {
-    GtkSalFrame* pThis = (GtkSalFrame*)frame;
+    GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
 
     SalLongPressEvent aEvent;
 
@@ -3386,7 +3386,7 @@ void GtkSalFrame::gestureLongPress(GtkGestureLongPress* gesture, gpointer frame)
 
 gboolean GtkSalFrame::signalMotion( GtkWidget*, GdkEventMotion* pEvent, gpointer frame )
 {
-    GtkSalFrame* pThis = (GtkSalFrame*)frame;
+    GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
 
     SalMouseEvent aEvent;
     aEvent.mnTime   = pEvent->time;
@@ -3428,7 +3428,7 @@ gboolean GtkSalFrame::signalMotion( GtkWidget*, GdkEventMotion* pEvent, gpointer
 
 gboolean GtkSalFrame::signalCrossing( GtkWidget*, GdkEventCrossing* pEvent, gpointer frame )
 {
-    GtkSalFrame* pThis = (GtkSalFrame*)frame;
+    GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
     SalMouseEvent aEvent;
     aEvent.mnTime   = pEvent->time;
     aEvent.mnX      = (long)pEvent->x_root - pThis->maGeometry.nX;
@@ -3493,7 +3493,7 @@ void GtkSalFrame::damaged (const basegfx::B2IBox& rDamageRect)
 // blit our backing basebmp buffer to the target cairo context cr
 gboolean GtkSalFrame::signalDraw( GtkWidget*, cairo_t *cr, gpointer frame )
 {
-    GtkSalFrame* pThis = (GtkSalFrame*)frame;
+    GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
 
     cairo_save(cr);
 
@@ -3515,7 +3515,7 @@ gboolean GtkSalFrame::signalDraw( GtkWidget*, cairo_t *cr, gpointer frame )
 #else
 gboolean GtkSalFrame::signalExpose( GtkWidget*, GdkEventExpose* pEvent, gpointer frame )
 {
-    GtkSalFrame* pThis = (GtkSalFrame*)frame;
+    GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
 
     struct SalPaintEvent aEvent( pEvent->area.x, pEvent->area.y, pEvent->area.width, pEvent->area.height );
 
@@ -3550,7 +3550,7 @@ void GtkSalFrame::TriggerPaintEvent()
 
 gboolean GtkSalFrame::signalFocus( GtkWidget*, GdkEventFocus* pEvent, gpointer frame )
 {
-    GtkSalFrame* pThis = (GtkSalFrame*)frame;
+    GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
 
     X11SalInstance *pSalInstance =
         static_cast< X11SalInstance* >(GetSalData()->m_pInstance);
@@ -3603,7 +3603,7 @@ static OString getDisplayString()
 
 gboolean GtkSalFrame::signalMap( GtkWidget *pWidget, GdkEvent*, gpointer frame )
 {
-    GtkSalFrame* pThis = (GtkSalFrame*)frame;
+    GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
 
 #if !GTK_CHECK_VERSION(3,8,0)
     //Spawn off a helper program that will attempt to set this fullscreen
@@ -3658,7 +3658,7 @@ gboolean GtkSalFrame::signalMap( GtkWidget *pWidget, GdkEvent*, gpointer frame )
 
 gboolean GtkSalFrame::signalUnmap( GtkWidget*, GdkEvent*, gpointer frame )
 {
-    GtkSalFrame* pThis = (GtkSalFrame*)frame;
+    GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
 
     pThis->CallCallback( SALEVENT_RESIZE, NULL );
 
@@ -3667,7 +3667,7 @@ gboolean GtkSalFrame::signalUnmap( GtkWidget*, GdkEvent*, gpointer frame )
 
 gboolean GtkSalFrame::signalConfigure( GtkWidget*, GdkEventConfigure* pEvent, gpointer frame )
 {
-    GtkSalFrame* pThis = (GtkSalFrame*)frame;
+    GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
 
     bool bMoved = false, bSized = false;
     int x = pEvent->x, y = pEvent->y;
@@ -3753,7 +3753,7 @@ gboolean GtkSalFrame::signalConfigure( GtkWidget*, GdkEventConfigure* pEvent, gp
 
 gboolean GtkSalFrame::signalKey( GtkWidget*, GdkEventKey* pEvent, gpointer frame )
 {
-    GtkSalFrame* pThis = (GtkSalFrame*)frame;
+    GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
 
     vcl::DeletionListener aDel( pThis );
 
@@ -3869,7 +3869,7 @@ gboolean GtkSalFrame::signalKey( GtkWidget*, GdkEventKey* pEvent, gpointer frame
 
 gboolean GtkSalFrame::signalDelete( GtkWidget*, GdkEvent*, gpointer frame )
 {
-    GtkSalFrame* pThis = (GtkSalFrame*)frame;
+    GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
 
     pThis->CallCallback( SALEVENT_CLOSE, NULL );
 
@@ -3878,7 +3878,7 @@ gboolean GtkSalFrame::signalDelete( GtkWidget*, GdkEvent*, gpointer frame )
 
 void GtkSalFrame::signalStyleSet( GtkWidget*, GtkStyle* pPrevious, gpointer frame )
 {
-    GtkSalFrame* pThis = (GtkSalFrame*)frame;
+    GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
 
     // every frame gets an initial style set on creation
     // do not post these as the whole application tends to
@@ -3919,7 +3919,7 @@ void GtkSalFrame::signalStyleSet( GtkWidget*, GtkStyle* pPrevious, gpointer fram
 
 gboolean GtkSalFrame::signalState( GtkWidget*, GdkEvent* pEvent, gpointer frame )
 {
-    GtkSalFrame* pThis = (GtkSalFrame*)frame;
+    GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
     if( (pThis->m_nState & GDK_WINDOW_STATE_ICONIFIED) != (pEvent->window_state.new_window_state & GDK_WINDOW_STATE_ICONIFIED ) )
     {
         pThis->getDisplay()->SendInternalEvent( pThis, NULL, SALEVENT_RESIZE );
@@ -3949,14 +3949,14 @@ gboolean GtkSalFrame::signalState( GtkWidget*, GdkEvent* pEvent, gpointer frame 
 
 gboolean GtkSalFrame::signalVisibility( GtkWidget*, GdkEventVisibility* pEvent, gpointer frame )
 {
-    GtkSalFrame* pThis = (GtkSalFrame*)frame;
+    GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
     pThis->m_nVisibility = pEvent->state;
     return true;
 }
 
 void GtkSalFrame::signalDestroy( GtkWidget* pObj, gpointer frame )
 {
-    GtkSalFrame* pThis = (GtkSalFrame*)frame;
+    GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
     if( pObj == pThis->m_pWindow )
     {
         pThis->m_pFixedContainer = NULL;
@@ -4232,7 +4232,7 @@ static bool checkSingleKeyCommitHack( guint keyval, sal_Unicode cCode )
 #endif
 void GtkSalFrame::IMHandler::signalIMCommit( GtkIMContext* CONTEXT_ARG, gchar* pText, gpointer im_handler )
 {
-    GtkSalFrame::IMHandler* pThis = (GtkSalFrame::IMHandler*)im_handler;
+    GtkSalFrame::IMHandler* pThis = static_cast<GtkSalFrame::IMHandler*>(im_handler);
 
     SolarMutexGuard aGuard;
     vcl::DeletionListener aDel( pThis->m_pFrame );
@@ -4302,7 +4302,7 @@ void GtkSalFrame::IMHandler::signalIMCommit( GtkIMContext* CONTEXT_ARG, gchar* p
 
 void GtkSalFrame::IMHandler::signalIMPreeditChanged( GtkIMContext*, gpointer im_handler )
 {
-    GtkSalFrame::IMHandler* pThis = (GtkSalFrame::IMHandler*)im_handler;
+    GtkSalFrame::IMHandler* pThis = static_cast<GtkSalFrame::IMHandler*>(im_handler);
 
     char*           pText           = NULL;
     PangoAttrList*  pAttrs          = NULL;
@@ -4356,7 +4356,7 @@ void GtkSalFrame::IMHandler::signalIMPreeditChanged( GtkIMContext*, gpointer im_
         tmp_list = attr_list = pango_attr_iterator_get_attrs (iter);
         while (tmp_list)
         {
-            PangoAttribute *pango_attr = (PangoAttribute *)(tmp_list->data);
+            PangoAttribute *pango_attr = static_cast<PangoAttribute *>(tmp_list->data);
 
             switch (pango_attr->klass->type)
             {
@@ -4414,7 +4414,7 @@ void GtkSalFrame::IMHandler::signalIMPreeditStart( GtkIMContext*, gpointer /*im_
 
 void GtkSalFrame::IMHandler::signalIMPreeditEnd( GtkIMContext*, gpointer im_handler )
 {
-    GtkSalFrame::IMHandler* pThis = (GtkSalFrame::IMHandler*)im_handler;
+    GtkSalFrame::IMHandler* pThis = static_cast<GtkSalFrame::IMHandler*>(im_handler);
 
     pThis->m_bPreeditJustChanged = true;
 

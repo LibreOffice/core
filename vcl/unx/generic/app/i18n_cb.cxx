@@ -127,10 +127,10 @@ enlarge_buffer ( preedit_text_t *ptext, int nnewlimit )
         nnewsize *= 2;
 
       ptext->nSize = nnewsize;
-      ptext->pUnicodeBuffer = (sal_Unicode*)realloc((void*)ptext->pUnicodeBuffer,
-            nnewsize * sizeof(sal_Unicode));
-      ptext->pCharStyle = (XIMFeedback*)realloc((void*)ptext->pCharStyle,
-            nnewsize * sizeof(XIMFeedback));
+      ptext->pUnicodeBuffer = static_cast<sal_Unicode*>(realloc((void*)ptext->pUnicodeBuffer,
+            nnewsize * sizeof(sal_Unicode)));
+      ptext->pCharStyle = static_cast<XIMFeedback*>(realloc((void*)ptext->pCharStyle,
+            nnewsize * sizeof(XIMFeedback)));
 }
 
 // Handle insertion of text in a preedit_draw_callback
@@ -152,7 +152,7 @@ Preedit_InsertText(preedit_text_t *pText, XIMText *pInsertText, int where)
     {
         wchar_t *pWCString = pInsertText->string.wide_char;
           size_t nBytes = wcstombs ( NULL, pWCString, 1024 /* dont care */);
-          pMBString = (char*)alloca( nBytes + 1 );
+          pMBString = static_cast<char*>(alloca( nBytes + 1 ));
           nMBLength = wcstombs ( pMBString, pWCString, nBytes + 1);
     }
     else
@@ -173,7 +173,7 @@ Preedit_InsertText(preedit_text_t *pText, XIMText *pInsertText, int where)
 
           sal_Size nBufferSize = nInsertTextLength * 2;
 
-          pInsertTextString = (sal_Unicode*)alloca(nBufferSize);
+          pInsertTextString = static_cast<sal_Unicode*>(alloca(nBufferSize));
 
           sal_uInt32  nConversionInfo;
           sal_Size    nConvertedChars;
@@ -492,7 +492,7 @@ StatusDrawCallback (XIC, XPointer, XIMStatusDrawCallbackStruct *call_data)
                 {
                     wchar_t* pWString = call_data->data.text->string.wide_char;
                     size_t nBytes = wcstombs( NULL, pWString, 1024 );
-                    pMBString = (sal_Char*)alloca( nBytes+1 );
+                    pMBString = static_cast<sal_Char*>(alloca( nBytes+1 ));
                     nLength = wcstombs( pMBString, pWString, nBytes+1 );
                 }
             }

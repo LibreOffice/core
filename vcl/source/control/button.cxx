@@ -3742,8 +3742,8 @@ ImageButton::ImageButton( vcl::Window* pParent, const ResId& rResId ) :
 
     if ( RSC_IMAGEBUTTON_IMAGE & nObjMask )
     {
-        SetModeImage( Image( ResId( (RSHEADER_TYPE*)GetClassRes(), *rResId.GetResMgr() ) ) );
-        IncrementRes( GetObjSizeRes( (RSHEADER_TYPE*)GetClassRes() ) );
+        SetModeImage( Image( ResId( static_cast<RSHEADER_TYPE*>(GetClassRes()), *rResId.GetResMgr() ) ) );
+        IncrementRes( GetObjSizeRes( static_cast<RSHEADER_TYPE*>(GetClassRes()) ) );
     }
 
     if ( RSC_IMAGEBUTTON_SYMBOL & nObjMask )

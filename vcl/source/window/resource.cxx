@@ -40,7 +40,7 @@ WinBits Window::ImplInitRes( const ResId& rResId )
 {
     GetRes( rResId );
 
-    char* pRes = (char*)GetClassRes();
+    char* pRes = static_cast<char*>(GetClassRes());
     pRes += 8;
     sal_uInt32 nStyle = (sal_uInt32)GetLongRes( (void*)pRes );
     rResId.SetWinBits( nStyle );
