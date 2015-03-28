@@ -890,6 +890,9 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath)
         Application::EnableHeadlessMode(true);
         Application::EnableConsoleOnly();
 
+        // This is horrible crack. I really would want to go back to simply just call
+        // InitVCL() here. The OfficeIPCThread thing is just horrible.
+
         // We could use InitVCL() here -- and used to before using soffice_main,
         // however that now deals with the initialisation for us (and it's not
         // possible to try to set up VCL twice.
