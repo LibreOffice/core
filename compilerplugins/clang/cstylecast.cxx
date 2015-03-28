@@ -114,14 +114,9 @@ bool CStyleCast::VisitCStyleCastExpr(const CStyleCastExpr * expr) {
     std::string incompFrom;
     std::string incompTo;
     if( expr->getCastKind() == CK_BitCast ) {
-        QualType t = resolvePointers(expr->getSubExprAsWritten()->getType());
-        // Ignore "safe" casts for now that involve casting from void* (and can
-        // thus not be interpreted as either a static_cast or a
-        // reinterpret_cast, with potentially different results):
-        if (t->isVoidType()) {
-            return true;
-        }
-        if (t->isIncompleteType()) {
+        if (resolvePointers(expr->getSubExprAsWritten()->getType())
+            ->isIncompleteType())
+        {
             incompFrom = "incomplete ";
         }
         if (resolvePointers(expr->getType())->isIncompleteType()) {
