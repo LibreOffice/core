@@ -1049,8 +1049,7 @@ void SwXCell::setPropertyValue(const OUString& rPropertyName, const uno::Any& aV
     if(rPropertyName == "FRMDirection")
     {
         SvxFrameDirection eDir = FRMDIR_ENVIRONMENT;
-        sal_Int16 nNum = 0;
-        aValue >>= nNum;
+        sal_Int16 nNum = aValue.get<sal_Int16>(nNum);
         SAL_INFO("sw.uno", "FRMDirection val " << nNum);
         switch (nNum)
         {
@@ -1075,18 +1074,11 @@ void SwXCell::setPropertyValue(const OUString& rPropertyName, const uno::Any& aV
         uno::Sequence<beans::PropertyValue> tableCellProperties;
         tableCellProperties = aValue.get< uno::Sequence< beans::PropertyValue > >();
         comphelper::SequenceAsHashMap aPropMap(tableCellProperties);
-        OUString sRedlineType;
-        uno::Any sRedlineTypeValue;
-        sRedlineTypeValue = aPropMap.getUnpackedValueOrDefault("RedlineType", sRedlineTypeValue);
-        if(sRedlineTypeValue >>= sRedlineType)
-        {
-            // Create a 'Table Cell Redline' object
-            SwUnoCursorHelper::makeTableCellRedline(*pBox, sRedlineType, tableCellProperties);
-        }
-        else
-        {
+        uno::Any sRedlineTypeValue = aPropMap.getUnpackedValueOrDefault("RedlineType", makeAny());
+        if(!sRedlineTypeValue.has(OUString))
             throw beans::UnknownPropertyException("No redline type property: ", static_cast < cppu::OWeakObject * > ( this ) );
-        }
+        // Create a 'Table Cell Redline' object
+        SwUnoCursorHelper::makeTableCellRedline(*pBox, sRedlineTypeValue.get<OUString(), tableCellProperties);
     }
     else
     {
