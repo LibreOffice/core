@@ -2322,20 +2322,16 @@ uno::Reference<table::XCellRange>  SwXTextTable::GetRangeByName(SwFrmFmt* pFmt, 
     return new SwXCellRange(pUnoCrsr, *pFmt, rDesc);
 }
 
-uno::Reference< table::XCellRange >  SwXTextTable::getCellRangeByPosition(sal_Int32 nLeft, sal_Int32 nTop,
-                sal_Int32 nRight, sal_Int32 nBottom)
-    throw (uno::RuntimeException,
-           lang::IndexOutOfBoundsException,
-           std::exception)
+uno::Reference<table::XCellRange>  SwXTextTable::getCellRangeByPosition(sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom)
+    throw(uno::RuntimeException, lang::IndexOutOfBoundsException, std::exception)
 {
     SolarMutexGuard aGuard;
-    uno::Reference< table::XCellRange >  aRef;
-    SwFrmFmt* pFmt = GetFrmFmt();
+    SwFrmFmt* pFmt(GetFrmFmt());
     if(pFmt && nRight < USHRT_MAX && nBottom < USHRT_MAX &&
-        nLeft <= nRight && nTop <= nBottom &&
+            nLeft <= nRight && nTop <= nBottom &&
             nLeft >= 0 && nRight >= 0 && nTop >= 0 && nBottom >= 0 )
     {
-        SwTable* pTable = SwTable::FindTable( pFmt );
+        SwTable* pTable = SwTable::FindTable(pFmt);
         if(!pTable->IsTblComplex())
         {
             SwRangeDescriptor aDesc;
@@ -2345,16 +2341,12 @@ uno::Reference< table::XCellRange >  SwXTextTable::getCellRangeByPosition(sal_In
             aDesc.nRight  = nRight;
             const OUString sTLName = sw_GetCellName(aDesc.nLeft, aDesc.nTop);
             const OUString sBRName = sw_GetCellName(aDesc.nRight, aDesc.nBottom);
-
             // please note that according to the 'if' statement at the begin
             // sTLName:sBRName already denotes the normalized range string
-
-            aRef = GetRangeByName(pFmt, pTable, sTLName, sBRName, aDesc);
+            return GetRangeByName(pFmt, pTable, sTLName, sBRName, aDesc);
         }
     }
-    if(!aRef.is())
-        throw lang::IndexOutOfBoundsException();
-    return aRef;
+    throw lang::IndexOutOfBoundsException();
 }
 
 uno::Reference< table::XCellRange >  SwXTextTable::getCellRangeByName(const OUString& sRange)
