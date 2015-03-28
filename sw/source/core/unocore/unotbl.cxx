@@ -2115,23 +2115,17 @@ uno::Reference< table::XTableColumns >  SwXTextTable::getColumns(void) throw( un
     return xResult;
 }
 
-uno::Reference< table::XCell > SwXTextTable::getCellByName(const OUString& sCellName) throw( uno::RuntimeException, std::exception )
+uno::Reference<table::XCell> SwXTextTable::getCellByName(const OUString& sCellName) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    uno::Reference< table::XCell >  xRet;
-    SwFrmFmt* pFmt = GetFrmFmt();
-    if(pFmt)
-    {
-        SwTable* pTable = SwTable::FindTable( pFmt );
-        SwTableBox* pBox = const_cast<SwTableBox*>(pTable->GetTblBox( sCellName ));
-        if(pBox)
-        {
-            xRet = SwXCell::CreateXCell(pFmt, pBox);
-        }
-    }
-    else
+    SwFrmFmt* pFmt(GetFrmFmt());
+    if(!pFmt)
         throw uno::RuntimeException();
-    return xRet;
+    SwTable* pTable = SwTable::FindTable(pFmt);
+    SwTableBox* pBox = const_cast<SwTableBox*>(pTable->GetTblBox(sCellName));
+    if(!pBox)
+        return nullptr;
+    return SwXCell::CreateXCell(pFmt, pBox);
 }
 
 uno::Sequence< OUString > SwXTextTable::getCellNames(void) throw( uno::RuntimeException, std::exception )
