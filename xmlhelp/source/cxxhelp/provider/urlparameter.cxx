@@ -783,7 +783,7 @@ helpOpen(const char * URI) {
 
 static int
 helpRead(void * context, char * buffer, int len) {
-    Reference< XInputStream > *pRef = (Reference< XInputStream >*)context;
+    Reference< XInputStream > *pRef = static_cast<Reference< XInputStream >*>(context);
 
     Sequence< sal_Int8 > aSeq;
     len = (*pRef)->readBytes( aSeq,len);
@@ -800,7 +800,7 @@ zipRead(void * context, char * buffer, int len) {
 static int
 fileRead(void * context, char * buffer, int len) {
     int nRead = 0;
-    osl::File *pFile = (osl::File*)context;
+    osl::File *pFile = static_cast<osl::File*>(context);
     if (pFile)
     {
         sal_uInt64 uRead = 0;
@@ -812,14 +812,14 @@ fileRead(void * context, char * buffer, int len) {
 
 static int
 uriClose(void * context) {
-    Reference< XInputStream > *pRef = (Reference< XInputStream >*)context;
+    Reference< XInputStream > *pRef = static_cast<Reference< XInputStream >*>(context);
     delete pRef;
     return 0;
 }
 
 static int
 fileClose(void * context) {
-    osl::File *pFile = (osl::File*)context;
+    osl::File *pFile = static_cast<osl::File*>(context);
     if (pFile)
     {
         pFile->close();
