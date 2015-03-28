@@ -140,7 +140,7 @@ public:
     virtual SfxTabPage*  CreateTabPage( sal_uInt16 nId, vcl::Window* pParent, const SfxItemSet& rSet ) SAL_OVERRIDE;
 };
 
-#define SM_MOD() ( *(SmModule**) GetAppData(SHL_SM) )
+#define SM_MOD() ( *reinterpret_cast<SmModule**>(GetAppData(SHL_SM)) )
 
 #endif // INCLUDED_STARMATH_INC_SMMOD_HXX
 

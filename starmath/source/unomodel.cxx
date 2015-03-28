@@ -392,9 +392,9 @@ static sal_Int16 lcl_AnyToINT16(const uno::Any& rAny)
 
     sal_Int16 nRet = 0;
     if( eType == uno::TypeClass_DOUBLE )
-        nRet = (sal_Int16)*(double*)rAny.getValue();
+        nRet = (sal_Int16)*static_cast<double const *>(rAny.getValue());
     else if( eType == uno::TypeClass_FLOAT )
-        nRet = (sal_Int16)*(float*)rAny.getValue();
+        nRet = (sal_Int16)*static_cast<float const *>(rAny.getValue());
     else
         rAny >>= nRet;
     return nRet;
@@ -478,7 +478,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
             {
                 if((*pValues).getValueType() != ::getBooleanCppuType())
                     throw IllegalArgumentException();
-                bool bVal = *(sal_Bool*)(*pValues).getValue();
+                bool bVal = *static_cast<sal_Bool const *>((*pValues).getValue());
                 vcl::Font aNewFont(aFormat.GetFont((*ppEntries)->mnMemberId));
                 aNewFont.SetItalic((bVal) ? ITALIC_NORMAL : ITALIC_NONE);
                 aFormat.SetFont((*ppEntries)->mnMemberId, aNewFont);
@@ -494,7 +494,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
             {
                 if((*pValues).getValueType() != ::getBooleanCppuType())
                     throw IllegalArgumentException();
-                bool bVal = *(sal_Bool*)(*pValues).getValue();
+                bool bVal = *static_cast<sal_Bool const *>((*pValues).getValue());
                 vcl::Font aNewFont(aFormat.GetFont((*ppEntries)->mnMemberId));
                 aNewFont.SetWeight((bVal) ? WEIGHT_BOLD : WEIGHT_NORMAL);
                 aFormat.SetFont((*ppEntries)->mnMemberId, aNewFont);
@@ -534,7 +534,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
 
             case HANDLE_IS_TEXT_MODE                       :
             {
-                aFormat.SetTextmode(*(sal_Bool*)(*pValues).getValue());
+                aFormat.SetTextmode(*static_cast<sal_Bool const *>((*pValues).getValue()));
             }
             break;
 
@@ -592,7 +592,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
             }
             break;
             case HANDLE_IS_SCALE_ALL_BRACKETS              :
-                aFormat.SetScaleNormalBrackets(*(sal_Bool*)(*pValues).getValue());
+                aFormat.SetScaleNormalBrackets(*static_cast<sal_Bool const *>((*pValues).getValue()));
             break;
             case HANDLE_PRINTER_NAME:
             {

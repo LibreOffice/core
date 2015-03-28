@@ -51,7 +51,7 @@ namespace
 
     SmDLL::SmDLL()
     {
-        SmModule** ppShlPtr = (SmModule**) GetAppData(SHL_SM);
+        SmModule** ppShlPtr = reinterpret_cast<SmModule**>(GetAppData(SHL_SM));
         if ( *ppShlPtr )
             return;
 
