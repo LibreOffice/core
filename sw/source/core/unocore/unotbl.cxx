@@ -2249,17 +2249,13 @@ void SwXTextTable::dispose(void) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     SwFrmFmt* pFmt = GetFrmFmt();
-    if(pFmt)
-    {
-        SwTable* pTable = SwTable::FindTable( pFmt );
-        SwTableSortBoxes& rBoxes = pTable->GetTabSortBoxes();
-        SwSelBoxes aSelBoxes;
-        for(SwTableSortBoxes::const_iterator it = rBoxes.begin(); it != rBoxes.end(); ++it )
-            aSelBoxes.insert( *it );
-        pFmt->GetDoc()->DeleteRowCol(aSelBoxes);
-    }
-    else
+    if(!pFmt)
         throw uno::RuntimeException();
+    SwTable* pTable = SwTable::FindTable(pFmt);
+    SwSelBoxes aSelBoxes;
+    for(auto& rBox : pTable->GetTabSortBoxes() )
+        aSelBoxes.insert(rBox);
+    pFmt->GetDoc()->DeleteRowCol(aSelBoxes);
 }
 
 void SAL_CALL SwXTextTable::addEventListener(
