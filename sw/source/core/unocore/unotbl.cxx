@@ -878,7 +878,7 @@ uno::Any SAL_CALL SwXCell::queryInterface( const uno::Type& aType )
 
 const SwStartNode *SwXCell::GetStartNode() const
 {
-    const SwStartNode *pSttNd = 0;
+    const SwStartNode* pSttNd = nullptr;
 
     if( pStartNode || IsValid() )
         pSttNd = pStartNode ? pStartNode : pBox->GetSttNd();
