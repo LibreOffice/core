@@ -4754,35 +4754,29 @@ uno::Any SwXTableRows::getByIndex(sal_Int32 nIndex)
     throw( lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    uno::Any aRet;
     SwFrmFmt* pFrmFmt = GetFrmFmt();
     if(!pFrmFmt || nIndex < 0 )
         throw lang::IndexOutOfBoundsException();
-    else
+    SwTable* pTable = SwTable::FindTable( pFrmFmt );
+    if(static_cast<size_t>(nIndex) >= pTable->GetTabLines().size())
+        throw lang::IndexOutOfBoundsException();
+    SwTableLine* pLine = pTable->GetTabLines()[nIndex];
+    SwIterator<SwXTextTableRow,SwFmt> aIter( *pFrmFmt );
+    SwXTextTableRow* pXRow = aIter.First();
+    while( pXRow )
     {
-        SwTable* pTable = SwTable::FindTable( pFrmFmt );
-        if( pTable->GetTabLines().size() > static_cast<size_t>(nIndex))
-        {
-            SwTableLine* pLine = pTable->GetTabLines()[nIndex];
-            SwIterator<SwXTextTableRow,SwFmt> aIter( *pFrmFmt );
-            SwXTextTableRow* pXRow = aIter.First();
-            while( pXRow )
-            {
-                // is there already a proper cell?
-                if(pXRow->GetTblRow() == pLine)
-                    break;
-                pXRow = aIter.Next();
-            }
-            // otherwise create it
-            if(!pXRow)
-                pXRow = new SwXTextTableRow(pFrmFmt, pLine);
-            uno::Reference< beans::XPropertySet >  xRet =
-                                    (beans::XPropertySet*)pXRow;
-            aRet.setValue(&xRet, cppu::UnoType<beans::XPropertySet>::get());
-        }
-        else
-            throw lang::IndexOutOfBoundsException();
+        // is there already a proper cell?
+        if(pXRow->GetTblRow() == pLine)
+            break;
+        pXRow = aIter.Next();
     }
+    // otherwise create it
+    if(!pXRow)
+        pXRow = new SwXTextTableRow(pFrmFmt, pLine);
+    uno::Reference< beans::XPropertySet >  xRet =
+                            (beans::XPropertySet*)pXRow;
+    uno::Any aRet;
+    aRet.setValue(&xRet, cppu::UnoType<beans::XPropertySet>::get());
     return aRet;
 }
 
