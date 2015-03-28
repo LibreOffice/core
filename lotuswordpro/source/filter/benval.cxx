@@ -77,7 +77,7 @@ CBenValue::ReadValueData(BenDataPtr pReadBuffer, unsigned long Offset,
     *pAmtRead = 0;
     pCBenValueSegment pCurrSeg = NULL;
     pLtcBenContainer pContainer = GetContainer();
-    BenByteDataPtr pBuffer = (BenByteDataPtr) pReadBuffer;
+    BenByteDataPtr pBuffer = static_cast<BenByteDataPtr>(pReadBuffer);
 
     /// pReadBuffer -- pointer to buffer of read result, allocated outside this function
     /// Offset          -- read buffer's start offset address, relative value in the whole value stream

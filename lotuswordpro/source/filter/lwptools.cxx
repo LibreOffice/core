@@ -266,7 +266,7 @@ XFDateStyle* LwpTools::GetSystemDateStyle(bool bLongFormat)
     {
         status = U_ZERO_ERROR;
         nLength = nLengthNeed +1;
-        pattern = (UChar*)malloc(sizeof(UChar)*nLength);
+        pattern = static_cast<UChar*>(malloc(sizeof(UChar)*nLength));
         udat_toPattern(reinterpret_cast<void **>(fmt),sal_False,pattern,nLength,&status);
     }
     if (pattern == NULL)
@@ -654,7 +654,7 @@ XFTimeStyle* LwpTools::GetSystemTimeStyle()
     {
         status = U_ZERO_ERROR;
         nLength = nLengthNeed +1;
-        pattern = (UChar*)malloc(sizeof(UChar)*nLength);
+        pattern = static_cast<UChar*>(malloc(sizeof(UChar)*nLength));
         udat_toPattern(reinterpret_cast<void **>(fmt),false,pattern,nLength,&status);
     }
 
