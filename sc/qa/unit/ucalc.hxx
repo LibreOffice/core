@@ -136,6 +136,7 @@ public:
     void testFormulaRefUpdate();
     void testFormulaRefUpdateRange();
     void testFormulaRefUpdateSheets();
+    void testFormulaRefUpdateSheetsDelete();
     void testFormulaRefUpdateInsertRows();
     void testFormulaRefUpdateInsertColumns();
     void testFormulaRefUpdateMove();
@@ -456,6 +457,7 @@ public:
     CPPUNIT_TEST(testFormulaRefUpdate);
     CPPUNIT_TEST(testFormulaRefUpdateRange);
     CPPUNIT_TEST(testFormulaRefUpdateSheets);
+    CPPUNIT_TEST(testFormulaRefUpdateSheetsDelete);
     CPPUNIT_TEST(testFormulaRefUpdateInsertRows);
     CPPUNIT_TEST(testFormulaRefUpdateInsertColumns);
     CPPUNIT_TEST(testFormulaRefUpdateMove);

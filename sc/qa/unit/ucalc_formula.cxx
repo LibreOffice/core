@@ -1609,6 +1609,65 @@ void Test::testFormulaRefUpdateInsertRows()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testFormulaRefUpdateSheetsDelete()
+{
+    m_pDoc->InsertTab(0, "Sheet1");
+    m_pDoc->InsertTab(1, "Sheet2");
+    m_pDoc->InsertTab(2, "Sheet3");
+    m_pDoc->InsertTab(3, "Sheet4");
+
+    m_pDoc->SetString(ScAddress(1,1,1), "=SUM(Sheet1.A2:Sheet3.A2");
+    m_pDoc->SetString(ScAddress(2,1,1), "=SUM(Sheet1.A1:Sheet2.A1");
+    m_pDoc->SetString(ScAddress(3,1,1), "=SUM(Sheet2.A3:Sheet4.A3");
+
+    m_pDoc->SetString(ScAddress(1,2,1), "=SUM($Sheet1.A2:$Sheet3.A2");
+    m_pDoc->SetString(ScAddress(2,2,1), "=SUM($Sheet1.A1:$Sheet2.A1");
+    m_pDoc->SetString(ScAddress(3,2,1), "=SUM($Sheet2.A3:$Sheet4.A3");
+
+    m_pDoc->DeleteTab(2);
+
+    if (!checkFormula(*m_pDoc, ScAddress(1,1,1), "SUM(Sheet1.A2:Sheet2.A2)"))
+        CPPUNIT_FAIL("Wrong Formula");
+
+    if (!checkFormula(*m_pDoc, ScAddress(2,1,1), "SUM(Sheet1.A1:Sheet2.A1)"))
+        CPPUNIT_FAIL("Wrong Formula");
+
+    if (!checkFormula(*m_pDoc, ScAddress(3,1,1), "SUM(Sheet2.A3:Sheet4.A3)"))
+        CPPUNIT_FAIL("Wrong Formula");
+
+    if (!checkFormula(*m_pDoc, ScAddress(1,2,1), "SUM($Sheet1.A2:$Sheet2.A2)"))
+        CPPUNIT_FAIL("Wrong Formula");
+
+    if (!checkFormula(*m_pDoc, ScAddress(2,2,1), "SUM($Sheet1.A1:$Sheet2.A1)"))
+        CPPUNIT_FAIL("Wrong Formula");
+
+    if (!checkFormula(*m_pDoc, ScAddress(3,2,1), "SUM($Sheet2.A3:$Sheet4.A3)"))
+        CPPUNIT_FAIL("Wrong Formula");
+
+    m_pDoc->DeleteTab(0);
+
+    if (!checkFormula(*m_pDoc, ScAddress(1,1,0), "SUM(Sheet2.A2:Sheet2.A2)"))
+        CPPUNIT_FAIL("Wrong Formula");
+
+    if (!checkFormula(*m_pDoc, ScAddress(2,1,0), "SUM(Sheet2.A1:Sheet2.A1)"))
+        CPPUNIT_FAIL("Wrong Formula");
+
+    if (!checkFormula(*m_pDoc, ScAddress(3,1,0), "SUM(Sheet2.A3:Sheet4.A3)"))
+        CPPUNIT_FAIL("Wrong Formula");
+
+    if (!checkFormula(*m_pDoc, ScAddress(1,2,0), "SUM($Sheet2.A2:$Sheet2.A2)"))
+        CPPUNIT_FAIL("Wrong Formula");
+
+    if (!checkFormula(*m_pDoc, ScAddress(2,2,0), "SUM($Sheet2.A1:$Sheet2.A1)"))
+        CPPUNIT_FAIL("Wrong Formula");
+
+    if (!checkFormula(*m_pDoc, ScAddress(3,2,0), "SUM($Sheet2.A3:$Sheet4.A3)"))
+        CPPUNIT_FAIL("Wrong Formula");
+
+    m_pDoc->DeleteTab(0);
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testFormulaRefUpdateInsertColumns()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
