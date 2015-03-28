@@ -84,10 +84,10 @@ OUString val2str( const void * pVal, typelib_TypeDescriptionReference * pTypeRef
     case typelib_TypeClass_INTERFACE:
     {
         buf.append( "0x" );
-        buf.append( reinterpret_cast< sal_IntPtr >(*(void **)pVal), 16 );
+        buf.append( reinterpret_cast< sal_IntPtr >(*static_cast<void * const *>(pVal)), 16 );
         if( VAL2STR_MODE_DEEP == mode )
         {
-            buf.append( "{" );        Reference< XInterface > r = *( Reference< XInterface > * ) pVal;
+            buf.append( "{" );        Reference< XInterface > r = *static_cast<Reference< XInterface > const *>(pVal);
             Reference< XServiceInfo > serviceInfo( r, UNO_QUERY);
             Reference< XTypeProvider > typeProvider(r,UNO_QUERY);
             if( serviceInfo.is() )
@@ -150,7 +150,7 @@ OUString val2str( const void * pVal, typelib_TypeDescriptionReference * pTypeRef
             buf.append( " = " );
             typelib_TypeDescription * pMemberType = 0;
             TYPELIB_DANGER_GET( &pMemberType, ppTypeRefs[nPos] );
-            buf.append( val2str( (char *)pVal + pMemberOffsets[nPos], pMemberType->pWeakRef, mode ) );
+            buf.append( val2str( static_cast<char const *>(pVal) + pMemberOffsets[nPos], pMemberType->pWeakRef, mode ) );
             TYPELIB_DANGER_RELEASE( pMemberType );
             if (nPos < (nDescr -1))
                 buf.append( ", " );
@@ -166,7 +166,7 @@ OUString val2str( const void * pVal, typelib_TypeDescriptionReference * pTypeRef
         typelib_TypeDescription * pTypeDescr = 0;
         TYPELIB_DANGER_GET( &pTypeDescr, pTypeRef );
 
-        uno_Sequence * pSequence = *(uno_Sequence **)pVal;
+        uno_Sequence * pSequence = *static_cast<uno_Sequence * const *>(pVal);
         typelib_TypeDescription * pElementTypeDescr = 0;
         TYPELIB_DANGER_GET( &pElementTypeDescr, reinterpret_cast<typelib_IndirectTypeDescription *>(pTypeDescr)->pType );
 
@@ -195,17 +195,17 @@ OUString val2str( const void * pVal, typelib_TypeDescriptionReference * pTypeRef
     }
     case typelib_TypeClass_ANY:
         buf.append( "{ " );
-        buf.append( val2str( ((uno_Any *)pVal)->pData,
-                             ((uno_Any *)pVal)->pType ,
+        buf.append( val2str( static_cast<uno_Any const *>(pVal)->pData,
+                             static_cast<uno_Any const *>(pVal)->pType ,
                              mode) );
         buf.append( " }" );
         break;
     case typelib_TypeClass_TYPE:
-        buf.append( (*(typelib_TypeDescriptionReference **)pVal)->pTypeName );
+        buf.append( (*static_cast<typelib_TypeDescriptionReference * const *>(pVal))->pTypeName );
         break;
     case typelib_TypeClass_STRING:
         buf.append( '\"' );
-        buf.append( *(rtl_uString **)pVal );
+        buf.append( *static_cast<rtl_uString * const *>(pVal) );
         buf.append( '\"' );
         break;
     case typelib_TypeClass_ENUM:
@@ -217,7 +217,7 @@ OUString val2str( const void * pVal, typelib_TypeDescriptionReference * pTypeRef
         sal_Int32 nPos = reinterpret_cast<typelib_EnumTypeDescription *>(pTypeDescr)->nEnumValues;
         while (nPos--)
         {
-            if (pValues[nPos] == *(int *)pVal)
+            if (pValues[nPos] == *static_cast<int const *>(pVal))
                 break;
         }
         if (nPos >= 0)
@@ -229,41 +229,41 @@ OUString val2str( const void * pVal, typelib_TypeDescriptionReference * pTypeRef
         break;
     }
     case typelib_TypeClass_BOOLEAN:
-        if (*(sal_Bool *)pVal)
+        if (*static_cast<sal_Bool const *>(pVal))
             buf.append( "true" );
         else
             buf.append( "false" );
         break;
     case typelib_TypeClass_CHAR:
         buf.append( '\'' );
-        buf.append( *(sal_Unicode *)pVal );
+        buf.append( *static_cast<sal_Unicode const *>(pVal) );
         buf.append( '\'' );
         break;
     case typelib_TypeClass_FLOAT:
-        buf.append( *(float *)pVal );
+        buf.append( *static_cast<float const *>(pVal) );
         break;
     case typelib_TypeClass_DOUBLE:
-        buf.append( *(double *)pVal );
+        buf.append( *static_cast<double const *>(pVal) );
         break;
     case typelib_TypeClass_BYTE:
         buf.append( "0x" );
-        buf.append( (sal_Int32)*(sal_Int8 *)pVal, 16 );
+        buf.append( (sal_Int32)*static_cast<sal_Int8 const *>(pVal), 16 );
         break;
     case typelib_TypeClass_SHORT:
         buf.append( "0x" );
-        buf.append( (sal_Int32)*(sal_Int16 *)pVal, 16 );
+        buf.append( (sal_Int32)*static_cast<sal_Int16 const *>(pVal), 16 );
         break;
     case typelib_TypeClass_UNSIGNED_SHORT:
         buf.append( "0x" );
-        buf.append( (sal_Int32)*(sal_uInt16 *)pVal, 16 );
+        buf.append( (sal_Int32)*static_cast<sal_uInt16 const *>(pVal), 16 );
         break;
     case typelib_TypeClass_LONG:
         buf.append( "0x" );
-        buf.append( *(sal_Int32 *)pVal, 16 );
+        buf.append( *static_cast<sal_Int32 const *>(pVal), 16 );
         break;
     case typelib_TypeClass_UNSIGNED_LONG:
         buf.append( "0x" );
-        buf.append( (sal_Int64)*(sal_uInt32 *)pVal, 16 );
+        buf.append( (sal_Int64)*static_cast<sal_uInt32 const *>(pVal), 16 );
         break;
     case typelib_TypeClass_HYPER:
     case typelib_TypeClass_UNSIGNED_HYPER:
@@ -278,7 +278,7 @@ OUString val2str( const void * pVal, typelib_TypeDescriptionReference * pTypeRef
             buf.append( aVal, 16 );
         }
 #else
-        buf.append( *(sal_Int64 *)pVal, 16 );
+        buf.append( *static_cast<sal_Int64 const *>(pVal), 16 );
 #endif
         break;
 

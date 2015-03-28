@@ -380,7 +380,7 @@ PyRef Runtime::any2PyObject (const Any &a ) const
     }
     case typelib_TypeClass_CHAR:
     {
-        sal_Unicode c = *(sal_Unicode*)a.getValue();
+        sal_Unicode c = *static_cast<sal_Unicode const *>(a.getValue());
         return PyRef( PyUNO_char_new( c , *this ), SAL_NO_ACQUIRE );
     }
     case typelib_TypeClass_BOOLEAN:
@@ -454,7 +454,7 @@ PyRef Runtime::any2PyObject (const Any &a ) const
     }
     case typelib_TypeClass_ENUM:
     {
-        sal_Int32 l = *(sal_Int32 *) a.getValue();
+        sal_Int32 l = *static_cast<sal_Int32 const *>(a.getValue());
         TypeDescription desc( a.getValueType() );
         if( desc.is() )
         {
@@ -500,7 +500,7 @@ PyRef Runtime::any2PyObject (const Any &a ) const
 
             // assuming that the Message is always the first member, wuuuu
             void *pData = (void*)a.getValue();
-            OUString message = *(OUString * )pData;
+            OUString message = *static_cast<OUString *>(pData);
             PyRef pymsg = ustring2PyString( message );
             PyTuple_SetItem( args.get(), 0 , pymsg.getAcquired() );
             // the exception base functions want to have an "args" tuple,
@@ -1024,7 +1024,7 @@ PyThreadAttach::~PyThreadAttach()
     PyObject *value =
         PyDict_GetItemString( PyThreadState_GetDict( ), g_NUMERICID );
     if( value )
-        setlocale( LC_NUMERIC, (const char * ) PyLong_AsVoidPtr( value ) );
+        setlocale( LC_NUMERIC, static_cast<const char *>(PyLong_AsVoidPtr( value )) );
     PyThreadState_Clear( tstate );
     PyEval_ReleaseThread( tstate );
     PyThreadState_Delete( tstate );
@@ -1037,7 +1037,7 @@ PyThreadDetach::PyThreadDetach() throw ( com::sun::star::uno::RuntimeException )
     PyObject *value =
         PyDict_GetItemString( PyThreadState_GetDict( ), g_NUMERICID );
     if( value )
-        setlocale( LC_NUMERIC, (const char * ) PyLong_AsVoidPtr( value ) );
+        setlocale( LC_NUMERIC, static_cast<const char *>(PyLong_AsVoidPtr( value )) );
     PyEval_ReleaseThread( tstate );
 }
 

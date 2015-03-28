@@ -222,13 +222,13 @@ Type PyType2Type( PyObject * o ) throw(RuntimeException )
         buf.appendAscii( "type " ).append(name).appendAscii( " is unknown" );
         throw RuntimeException( buf.makeStringAndClear() );
     }
-    if( desc.get()->eTypeClass != (typelib_TypeClass) *(sal_Int32*)enumValue.getValue() )
+    if( desc.get()->eTypeClass != (typelib_TypeClass) *static_cast<sal_Int32 const *>(enumValue.getValue()) )
     {
         OUStringBuffer buf;
         buf.appendAscii( "pyuno.checkType: " ).append(name).appendAscii( " is a " );
         buf.appendAscii( typeClassToString( (TypeClass) desc.get()->eTypeClass) );
         buf.appendAscii( ", but type got construct with typeclass " );
-        buf.appendAscii( typeClassToString( (TypeClass) *(sal_Int32*)enumValue.getValue() ) );
+        buf.appendAscii( typeClassToString( (TypeClass) *static_cast<sal_Int32 const *>(enumValue.getValue()) ) );
         throw RuntimeException( buf.makeStringAndClear() );
     }
     return desc.get()->pWeakRef;

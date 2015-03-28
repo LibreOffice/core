@@ -73,7 +73,7 @@ static void raiseRuntimeExceptionWhenNeeded() throw ( RuntimeException )
         OUStringBuffer buf;
         buf.appendAscii( "python-loader:" );
         if( a.hasValue() )
-            buf.append( ((com::sun::star::uno::Exception *)a.getValue())->Message );
+            buf.append( static_cast<com::sun::star::uno::Exception const *>(a.getValue())->Message );
         throw RuntimeException( buf.makeStringAndClear() );
     }
 }

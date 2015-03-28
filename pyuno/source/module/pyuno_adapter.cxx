@@ -86,7 +86,7 @@ void raiseInvocationTargetExceptionWhenNeeded( const Runtime &runtime )
         PyErr_Fetch(reinterpret_cast<PyObject **>(&excType), reinterpret_cast<PyObject**>(&excValue), reinterpret_cast<PyObject**>(&excTraceback));
         Any unoExc( runtime.extractUnoException( excType, excValue, excTraceback ) );
         throw InvocationTargetException(
-            ((com::sun::star::uno::Exception*)unoExc.getValue())->Message,
+            static_cast<com::sun::star::uno::Exception const *>(unoExc.getValue())->Message,
             Reference<XInterface>(), unoExc );
     }
 }
