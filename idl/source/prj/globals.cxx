@@ -25,11 +25,11 @@
 
 IdlDll * GetIdlApp()
 {
-    if( !(*(IdlDll**)GetAppData(SHL_IDL)) )
+    if( !(*reinterpret_cast<IdlDll**>(GetAppData(SHL_IDL))) )
     {
-        (*(IdlDll**)GetAppData(SHL_IDL)) = new IdlDll();
+        (*reinterpret_cast<IdlDll**>(GetAppData(SHL_IDL))) = new IdlDll();
     }
-    return (*(IdlDll**)GetAppData(SHL_IDL));
+    return (*reinterpret_cast<IdlDll**>(GetAppData(SHL_IDL)));
 }
 
 IdlDll::IdlDll()
