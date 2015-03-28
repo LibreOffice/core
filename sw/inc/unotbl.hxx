@@ -157,7 +157,7 @@ public:
     SwFrmFmt* GetFrmFmt() const { return const_cast<SwFrmFmt*>(static_cast<const SwFrmFmt*>(GetRegisteredIn())); }
 };
 
-class SwXTextTableRow : public cppu::WeakImplHelper2
+class SwXTextTableRow SAL_FINAL : public cppu::WeakImplHelper2
 <
     ::com::sun::star::beans::XPropertySet,
     ::com::sun::star::lang::XServiceInfo
@@ -172,7 +172,8 @@ class SwXTextTableRow : public cppu::WeakImplHelper2
 protected:
     virtual ~SwXTextTableRow();
     //SwClient
-   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
+    virtual void SwClientNotify(const SwModify&, const SfxHint&) SAL_OVERRIDE;
 
 public:
     SwXTextTableRow(SwFrmFmt* pFmt, SwTableLine* pLine);
@@ -549,7 +550,7 @@ public:
 
 };
 
-class SwXTableRows : public cppu::WeakImplHelper2
+class SwXTableRows SAL_FINAL : public cppu::WeakImplHelper2
 <
     ::com::sun::star::table::XTableRows,
     ::com::sun::star::lang::XServiceInfo
@@ -557,7 +558,8 @@ class SwXTableRows : public cppu::WeakImplHelper2
     public SwClient
 
 {
-    SwFrmFmt* GetFrmFmt() const { return const_cast<SwFrmFmt*>(static_cast<const SwFrmFmt*>(GetRegisteredIn())); }
+    SwFrmFmt* GetFrmFmt() { return static_cast<SwFrmFmt*>(GetRegisteredIn()); }
+    const SwFrmFmt* GetFrmFmt() const { return const_cast<SwXTableRows*>(this)->GetFrmFmt(); }
 protected:
     virtual ~SwXTableRows();
 public:
@@ -587,7 +589,7 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     //SwClient
-   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
 };
 
 class SwXTableColumns : public cppu::WeakImplHelper2

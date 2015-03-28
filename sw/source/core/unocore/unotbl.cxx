@@ -104,6 +104,24 @@
 using namespace ::com::sun::star;
 using ::editeng::SvxBorderLine;
 
+namespace
+{
+    struct FindXCellHint SAL_FINAL : SfxHint
+    {
+        FindXCellHint(SwTableBox* pTableBox) : m_pTableBox(pTableBox), m_pCell(nullptr) {};
+        void SetCell(SwXCell* pCell) const { m_pCell = pCell; };
+        const SwTableBox* const m_pTableBox;
+        mutable SwXCell* m_pCell;
+    };
+    struct FindXRowHint SAL_FINAL : SfxHint
+    {
+        FindXRowHint(SwTableLine* pTableLine) : m_pTableLine(pTableLine), m_pRow(nullptr) {};
+        void SetRow(SwXTextTableRow* pRow) const { m_pRow = pRow; };
+        const SwTableLine* const m_pTableLine;
+        mutable SwXTextTableRow* m_pRow;
+    };
+}
+
 #define UNO_TABLE_COLUMN_SUM    10000
 
 static void lcl_SendChartEvent(::cppu::OWeakObject & rSource,
@@ -1244,22 +1262,11 @@ void SwXCell::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
     ClientModify(this, pOld, pNew);
 }
 
-namespace sw
-{
-    struct FindXCellHint SAL_FINAL : SfxHint
-    {
-        FindXCellHint(SwTableBox* pTableBox) : m_pTableBox(pTableBox), m_pCell(nullptr) {};
-        void SetCell(SwXCell* pCell) const { m_pCell = pCell; };
-        const SwTableBox* const m_pTableBox;
-        mutable SwXCell* m_pCell;
-    };
-}
-
 void SwXCell::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
 {
-    if(typeid(sw::FindXCellHint) == typeid(rHint))
+    if(typeid(FindXCellHint) == typeid(rHint))
     {
-        auto* pFindHint(static_cast<const sw::FindXCellHint*>(&rHint));
+        auto* pFindHint(static_cast<const FindXCellHint*>(&rHint));
         if(!pFindHint->m_pCell && pFindHint->m_pTableBox == GetTblBox())
             pFindHint->m_pCell = this;
     }
@@ -1277,7 +1284,7 @@ SwXCell* SwXCell::CreateXCell(SwFrmFmt* pTblFmt, SwTableBox* pBox, SwTable *pTab
     if(it == pTable->GetTabSortBoxes().end())
         return nullptr;
     size_t const nPos = it - pTable->GetTabSortBoxes().begin();
-    sw::FindXCellHint aHint{pBox};
+    FindXCellHint aHint{pBox};
     pTblFmt->CallSwClientNotify(aHint);
     return aHint.m_pCell ? aHint.m_pCell : new SwXCell(pTblFmt, pBox, nPos);
 }
@@ -1523,6 +1530,18 @@ void SwXTextTableRow::removeVetoableChangeListener(const OUString& /*rPropertyNa
 void SwXTextTableRow::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
+}
+
+void SwXTextTableRow::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
+{
+    if(typeid(FindXRowHint) == typeid(rHint))
+    {
+        auto* pFindHint(static_cast<const FindXRowHint*>(&rHint));
+        if(!pFindHint->m_pRow && pFindHint->m_pTableLine == GetTblRow())
+            pFindHint->m_pRow = this;
+    }
+    else
+        SwClient::SwClientNotify(rModify, rHint);
 }
 
 SwTableLine* SwXTextTableRow::FindLine(SwTable* pTable, SwTableLine* pLine)
@@ -4761,20 +4780,11 @@ uno::Any SwXTableRows::getByIndex(sal_Int32 nIndex)
     if(static_cast<size_t>(nIndex) >= pTable->GetTabLines().size())
         throw lang::IndexOutOfBoundsException();
     SwTableLine* pLine = pTable->GetTabLines()[nIndex];
-    SwIterator<SwXTextTableRow,SwFmt> aIter( *pFrmFmt );
-    SwXTextTableRow* pXRow = aIter.First();
-    while( pXRow )
-    {
-        // is there already a proper cell?
-        if(pXRow->GetTblRow() == pLine)
-            break;
-        pXRow = aIter.Next();
-    }
-    // otherwise create it
-    if(!pXRow)
-        pXRow = new SwXTextTableRow(pFrmFmt, pLine);
-    uno::Reference< beans::XPropertySet >  xRet =
-                            (beans::XPropertySet*)pXRow;
+    FindXRowHint aHint{pLine};
+    pFrmFmt->CallSwClientNotify(aHint);
+    if(!aHint.m_pRow)
+        aHint.m_pRow = new SwXTextTableRow(pFrmFmt, pLine);
+    uno::Reference<beans::XPropertySet> xRet = (beans::XPropertySet*)aHint.m_pRow;
     return uno::makeAny(xRet);
 }
 
