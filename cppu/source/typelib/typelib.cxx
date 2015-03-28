@@ -384,7 +384,7 @@ static inline void typelib_typedescription_initTables(
 {
     typelib_InterfaceTypeDescription * pITD = reinterpret_cast<typelib_InterfaceTypeDescription *>(pTD);
 
-    sal_Bool * pReadWriteAttributes = (sal_Bool *)alloca( pITD->nAllMembers );
+    sal_Bool * pReadWriteAttributes = static_cast<sal_Bool *>(alloca( pITD->nAllMembers ));
     for ( sal_Int32 i = pITD->nAllMembers; i--; )
     {
         pReadWriteAttributes[i] = sal_False;

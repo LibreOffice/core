@@ -85,9 +85,9 @@ inline bool _equalStruct(
     while (nDescr--)
     {
         sal_Int32 nOffset = pMemberOffsets[nDescr];
-        if (! ::uno_type_equalData( (char *)pDest + nOffset,
+        if (! ::uno_type_equalData( static_cast<char *>(pDest) + nOffset,
                                     ppTypeRefs[nDescr],
-                                    (char *)pSource + nOffset,
+                                    static_cast<char *>(pSource) + nOffset,
                                     ppTypeRefs[nDescr],
                                     queryInterface, release ))
         {
@@ -126,8 +126,8 @@ inline bool _equalSequence(
     {
         for ( sal_Int32 nPos = nElements; nPos--; )
         {
-            if ((((sal_Bool *)pDestElements)[nPos] != sal_False) !=
-                (((sal_Bool *)pSourceElements)[nPos] != sal_False))
+            if ((static_cast<sal_Bool *>(pDestElements)[nPos] != sal_False) !=
+                (static_cast<sal_Bool *>(pSourceElements)[nPos] != sal_False))
             {
                 return false;
             }
@@ -149,7 +149,7 @@ inline bool _equalSequence(
     {
         for ( sal_Int32 nPos = nElements; nPos--; )
         {
-            if (((float *)pDestElements)[nPos] != ((float *)pSourceElements)[nPos])
+            if (static_cast<float *>(pDestElements)[nPos] != static_cast<float *>(pSourceElements)[nPos])
                 return false;
         }
         return true;
@@ -158,7 +158,7 @@ inline bool _equalSequence(
     {
         for ( sal_Int32 nPos = nElements; nPos--; )
         {
-            if (((double *)pDestElements)[nPos] != ((double *)pSourceElements)[nPos])
+            if (static_cast<double *>(pDestElements)[nPos] != static_cast<double *>(pSourceElements)[nPos])
                 return false;
         }
         return true;
@@ -167,7 +167,7 @@ inline bool _equalSequence(
     {
         for ( sal_Int32 nPos = nElements; nPos--; )
         {
-            if (! ((::rtl::OUString *)pDestElements +nPos)->equals( ((const ::rtl::OUString *)pSourceElements)[nPos] ))
+            if (! (static_cast<OUString *>(pDestElements) +nPos)->equals( static_cast<const ::rtl::OUString *>(pSourceElements)[nPos] ))
                 return false;
         }
         return true;
@@ -176,8 +176,8 @@ inline bool _equalSequence(
     {
         for ( sal_Int32 nPos = nElements; nPos--; )
         {
-            if (! _type_equals( ((typelib_TypeDescriptionReference **)pDestElements)[nPos],
-                                ((typelib_TypeDescriptionReference **)pSourceElements)[nPos] ))
+            if (! _type_equals( static_cast<typelib_TypeDescriptionReference **>(pDestElements)[nPos],
+                                static_cast<typelib_TypeDescriptionReference **>(pSourceElements)[nPos] ))
             {
                 return false;
             }
@@ -188,8 +188,8 @@ inline bool _equalSequence(
     {
         for ( sal_Int32 nPos = nElements; nPos--; )
         {
-            uno_Any * pDest2 = (uno_Any *)pDestElements + nPos;
-            uno_Any * pSource2 = (uno_Any *)pSourceElements + nPos;
+            uno_Any * pDest2 = static_cast<uno_Any *>(pDestElements) + nPos;
+            uno_Any * pSource2 = static_cast<uno_Any *>(pSourceElements) + nPos;
             if (! ::uno_type_equalData( pDest2->pData, pDest2->pType,
                                         pSource2->pData, pSource2->pType,
                                         queryInterface, release ))
@@ -209,8 +209,8 @@ inline bool _equalSequence(
         sal_Int32 nElementSize = pElementTypeDescr->nSize;
         for ( sal_Int32 nPos = nElements; nPos--; )
         {
-            if (! _equalStruct( (char *)pDestElements + (nPos * nElementSize),
-                                (char *)pSourceElements + (nPos * nElementSize),
+            if (! _equalStruct( static_cast<char *>(pDestElements) + (nPos * nElementSize),
+                                static_cast<char *>(pSourceElements) + (nPos * nElementSize),
                                 reinterpret_cast<typelib_CompoundTypeDescription *>(pElementTypeDescr),
                                 queryInterface, release ))
             {
@@ -229,8 +229,8 @@ inline bool _equalSequence(
             reinterpret_cast<typelib_IndirectTypeDescription *>(pElementTypeDescr)->pType;
         for ( sal_Int32 nPos = nElements; nPos--; )
         {
-            if (! equalSequence( ((uno_Sequence **)pDestElements)[nPos],
-                                 ((uno_Sequence **)pSourceElements)[nPos],
+            if (! equalSequence( static_cast<uno_Sequence **>(pDestElements)[nPos],
+                                 static_cast<uno_Sequence **>(pSourceElements)[nPos],
                                  pSeqElementType, queryInterface, release ))
             {
                 TYPELIB_DANGER_RELEASE( pElementTypeDescr );
@@ -244,7 +244,7 @@ inline bool _equalSequence(
     {
         for ( sal_Int32 nPos = nElements; nPos--; )
         {
-            if (! _equalObject( ((void **)pDestElements)[nPos], ((void **)pSourceElements)[nPos],
+            if (! _equalObject( static_cast<void **>(pDestElements)[nPos], static_cast<void **>(pSourceElements)[nPos],
                                 queryInterface, release ))
             {
                 return false;
@@ -269,13 +269,13 @@ inline bool _equalData(
     while (typelib_TypeClass_ANY == (eDestTypeClass = pDestType->eTypeClass))
     {
         pDestTypeDescr = 0;
-        pDestType = ((uno_Any *)pDest)->pType;
-        pDest = ((uno_Any *)pDest)->pData;
+        pDestType = static_cast<uno_Any *>(pDest)->pType;
+        pDest = static_cast<uno_Any *>(pDest)->pData;
     }
     while (typelib_TypeClass_ANY == (eSourceTypeClass = pSourceType->eTypeClass))
     {
-        pSourceType = ((uno_Any *)pSource)->pType;
-        pSource = ((uno_Any *)pSource)->pData;
+        pSourceType = static_cast<uno_Any *>(pSource)->pType;
+        pSource = static_cast<uno_Any *>(pSource)->pData;
     }
 
     switch (eDestTypeClass)
@@ -284,33 +284,33 @@ inline bool _equalData(
         return eSourceTypeClass == typelib_TypeClass_VOID;
     case typelib_TypeClass_CHAR:
         return eSourceTypeClass == typelib_TypeClass_CHAR
-            && *(sal_Unicode *)pDest == *(sal_Unicode *)pSource;
+            && *static_cast<sal_Unicode *>(pDest) == *static_cast<sal_Unicode *>(pSource);
     case typelib_TypeClass_BOOLEAN:
         return eSourceTypeClass == typelib_TypeClass_BOOLEAN
-            && ((*(sal_Bool *)pDest != sal_False)
-                == (*(sal_Bool *)pSource != sal_False));
+            && ((*static_cast<sal_Bool *>(pDest) != sal_False)
+                == (*static_cast<sal_Bool *>(pSource) != sal_False));
     case typelib_TypeClass_BYTE:
         switch (eSourceTypeClass)
         {
         case typelib_TypeClass_BYTE:
-            return (*(sal_Int8 *)pDest == *(sal_Int8 *)pSource);
+            return (*static_cast<sal_Int8 *>(pDest) == *static_cast<sal_Int8 *>(pSource));
         case typelib_TypeClass_SHORT:
-            return ((sal_Int16)*(sal_Int8 *)pDest == *(sal_Int16 *)pSource);
+            return ((sal_Int16)*static_cast<sal_Int8 *>(pDest) == *static_cast<sal_Int16 *>(pSource));
         case typelib_TypeClass_UNSIGNED_SHORT:
-            return ((sal_Int32)*(sal_Int8 *)pDest == (sal_Int32)*(sal_uInt16 *)pSource);
+            return ((sal_Int32)*static_cast<sal_Int8 *>(pDest) == (sal_Int32)*static_cast<sal_uInt16 *>(pSource));
         case typelib_TypeClass_LONG:
-            return ((sal_Int32)*(sal_Int8 *)pDest == *(sal_Int32 *)pSource);
+            return ((sal_Int32)*static_cast<sal_Int8 *>(pDest) == *static_cast<sal_Int32 *>(pSource));
         case typelib_TypeClass_UNSIGNED_LONG:
-            return ((sal_Int64)*(sal_Int8 *)pDest == (sal_Int64)*(sal_uInt32 *)pSource);
+            return ((sal_Int64)*static_cast<sal_Int8 *>(pDest) == (sal_Int64)*static_cast<sal_uInt32 *>(pSource));
         case typelib_TypeClass_HYPER:
-            return ((sal_Int64)*(sal_Int8 *)pDest == *(sal_Int64 *)pSource);
+            return ((sal_Int64)*static_cast<sal_Int8 *>(pDest) == *static_cast<sal_Int64 *>(pSource));
         case typelib_TypeClass_UNSIGNED_HYPER:
-            return (*(sal_Int8 *)pDest >= 0 &&
-                    (sal_Int64)*(sal_Int8 *)pDest == *(sal_Int64 *)pSource); // same size
+            return (*static_cast<sal_Int8 *>(pDest) >= 0 &&
+                    (sal_Int64)*static_cast<sal_Int8 *>(pDest) == *static_cast<sal_Int64 *>(pSource)); // same size
         case typelib_TypeClass_FLOAT:
-            return ((float)*(sal_Int8 *)pDest == *(float *)pSource);
+            return ((float)*static_cast<sal_Int8 *>(pDest) == *static_cast<float *>(pSource));
         case typelib_TypeClass_DOUBLE:
-            return ((double)*(sal_Int8 *)pDest == *(double *)pSource);
+            return ((double)*static_cast<sal_Int8 *>(pDest) == *static_cast<double *>(pSource));
         default:
             return false;
         }
@@ -318,24 +318,24 @@ inline bool _equalData(
         switch (eSourceTypeClass)
         {
         case typelib_TypeClass_BYTE:
-            return (*(sal_Int16 *)pDest == (sal_Int16)*(sal_Int8 *)pSource);
+            return (*static_cast<sal_Int16 *>(pDest) == (sal_Int16)*static_cast<sal_Int8 *>(pSource));
         case typelib_TypeClass_SHORT:
-            return (*(sal_Int16 *)pDest == *(sal_Int16 *)pSource);
+            return (*static_cast<sal_Int16 *>(pDest) == *static_cast<sal_Int16 *>(pSource));
         case typelib_TypeClass_UNSIGNED_SHORT:
-            return ((sal_Int32)*(sal_Int16 *)pDest == (sal_Int32)*(sal_uInt16 *)pSource);
+            return ((sal_Int32)*static_cast<sal_Int16 *>(pDest) == (sal_Int32)*static_cast<sal_uInt16 *>(pSource));
         case typelib_TypeClass_LONG:
-            return ((sal_Int32)*(sal_Int16 *)pDest == *(sal_Int32 *)pSource);
+            return ((sal_Int32)*static_cast<sal_Int16 *>(pDest) == *static_cast<sal_Int32 *>(pSource));
         case typelib_TypeClass_UNSIGNED_LONG:
-            return ((sal_Int64)*(sal_Int16 *)pDest == (sal_Int64)*(sal_uInt32 *)pSource);
+            return ((sal_Int64)*static_cast<sal_Int16 *>(pDest) == (sal_Int64)*static_cast<sal_uInt32 *>(pSource));
         case typelib_TypeClass_HYPER:
-            return ((sal_Int64)*(sal_Int16 *)pDest == *(sal_Int64 *)pSource);
+            return ((sal_Int64)*static_cast<sal_Int16 *>(pDest) == *static_cast<sal_Int64 *>(pSource));
         case typelib_TypeClass_UNSIGNED_HYPER:
-            return (*(sal_Int16 *)pDest >= 0 &&
-                    (sal_Int64)*(sal_Int16 *)pDest == *(sal_Int64 *)pSource); // same size
+            return (*static_cast<sal_Int16 *>(pDest) >= 0 &&
+                    (sal_Int64)*static_cast<sal_Int16 *>(pDest) == *static_cast<sal_Int64 *>(pSource)); // same size
         case typelib_TypeClass_FLOAT:
-            return ((float)*(sal_Int16 *)pDest == *(float *)pSource);
+            return ((float)*static_cast<sal_Int16 *>(pDest) == *static_cast<float *>(pSource));
         case typelib_TypeClass_DOUBLE:
-            return ((double)*(sal_Int16 *)pDest == *(double *)pSource);
+            return ((double)*static_cast<sal_Int16 *>(pDest) == *static_cast<double *>(pSource));
         default:
             return false;
         }
@@ -343,23 +343,23 @@ inline bool _equalData(
         switch (eSourceTypeClass)
         {
         case typelib_TypeClass_BYTE:
-            return ((sal_Int32)*(sal_uInt16 *)pDest == (sal_Int32)*(sal_Int8 *)pSource);
+            return ((sal_Int32)*static_cast<sal_uInt16 *>(pDest) == (sal_Int32)*static_cast<sal_Int8 *>(pSource));
         case typelib_TypeClass_SHORT:
-            return ((sal_Int32)*(sal_uInt16 *)pDest == (sal_Int32)*(sal_Int16 *)pSource);
+            return ((sal_Int32)*static_cast<sal_uInt16 *>(pDest) == (sal_Int32)*static_cast<sal_Int16 *>(pSource));
         case typelib_TypeClass_UNSIGNED_SHORT:
-            return (*(sal_uInt16 *)pDest == *(sal_uInt16 *)pSource);
+            return (*static_cast<sal_uInt16 *>(pDest) == *static_cast<sal_uInt16 *>(pSource));
         case typelib_TypeClass_LONG:
-            return ((sal_Int32)*(sal_uInt16 *)pDest == *(sal_Int32 *)pSource);
+            return ((sal_Int32)*static_cast<sal_uInt16 *>(pDest) == *static_cast<sal_Int32 *>(pSource));
         case typelib_TypeClass_UNSIGNED_LONG:
-            return ((sal_uInt32)*(sal_uInt16 *)pDest == *(sal_uInt32 *)pSource);
+            return ((sal_uInt32)*static_cast<sal_uInt16 *>(pDest) == *static_cast<sal_uInt32 *>(pSource));
         case typelib_TypeClass_HYPER:
-            return ((sal_Int64)*(sal_uInt16 *)pDest == *(sal_Int64 *)pSource);
+            return ((sal_Int64)*static_cast<sal_uInt16 *>(pDest) == *static_cast<sal_Int64 *>(pSource));
         case typelib_TypeClass_UNSIGNED_HYPER:
-            return ((sal_uInt64)*(sal_uInt16 *)pDest == *(sal_uInt64 *)pSource);
+            return ((sal_uInt64)*static_cast<sal_uInt16 *>(pDest) == *static_cast<sal_uInt64 *>(pSource));
         case typelib_TypeClass_FLOAT:
-            return ((float)*(sal_uInt16 *)pDest == *(float *)pSource);
+            return ((float)*static_cast<sal_uInt16 *>(pDest) == *static_cast<float *>(pSource));
         case typelib_TypeClass_DOUBLE:
-            return ((double)*(sal_uInt16 *)pDest == *(double *)pSource);
+            return ((double)*static_cast<sal_uInt16 *>(pDest) == *static_cast<double *>(pSource));
         default:
             return false;
         }
@@ -367,24 +367,24 @@ inline bool _equalData(
         switch (eSourceTypeClass)
         {
         case typelib_TypeClass_BYTE:
-            return (*(sal_Int32 *)pDest == (sal_Int32)*(sal_Int8 *)pSource);
+            return (*static_cast<sal_Int32 *>(pDest) == (sal_Int32)*static_cast<sal_Int8 *>(pSource));
         case typelib_TypeClass_SHORT:
-            return (*(sal_Int32 *)pDest == (sal_Int32)*(sal_Int16 *)pSource);
+            return (*static_cast<sal_Int32 *>(pDest) == (sal_Int32)*static_cast<sal_Int16 *>(pSource));
         case typelib_TypeClass_UNSIGNED_SHORT:
-            return (*(sal_Int32 *)pDest == (sal_Int32)*(sal_uInt16 *)pSource);
+            return (*static_cast<sal_Int32 *>(pDest) == (sal_Int32)*static_cast<sal_uInt16 *>(pSource));
         case typelib_TypeClass_LONG:
-            return (*(sal_Int32 *)pDest == *(sal_Int32 *)pSource);
+            return (*static_cast<sal_Int32 *>(pDest) == *static_cast<sal_Int32 *>(pSource));
         case typelib_TypeClass_UNSIGNED_LONG:
-            return ((sal_Int64)*(sal_Int32 *)pDest == (sal_Int64)*(sal_uInt32 *)pSource);
+            return ((sal_Int64)*static_cast<sal_Int32 *>(pDest) == (sal_Int64)*static_cast<sal_uInt32 *>(pSource));
         case typelib_TypeClass_HYPER:
-            return ((sal_Int64)*(sal_Int32 *)pDest == *(sal_Int64 *)pSource);
+            return ((sal_Int64)*static_cast<sal_Int32 *>(pDest) == *static_cast<sal_Int64 *>(pSource));
         case typelib_TypeClass_UNSIGNED_HYPER:
-            return (*(sal_Int32 *)pDest >= 0 &&
-                    (sal_Int64)*(sal_Int32 *)pDest == *(sal_Int64 *)pSource); // same size
+            return (*static_cast<sal_Int32 *>(pDest) >= 0 &&
+                    (sal_Int64)*static_cast<sal_Int32 *>(pDest) == *static_cast<sal_Int64 *>(pSource)); // same size
         case typelib_TypeClass_FLOAT:
-            return ((float)*(sal_Int32 *)pDest == *(float *)pSource);
+            return ((float)*static_cast<sal_Int32 *>(pDest) == *static_cast<float *>(pSource));
         case typelib_TypeClass_DOUBLE:
-            return ((double)*(sal_Int32 *)pDest == *(double *)pSource);
+            return ((double)*static_cast<sal_Int32 *>(pDest) == *static_cast<double *>(pSource));
         default:
             return false;
         }
@@ -392,23 +392,23 @@ inline bool _equalData(
         switch (eSourceTypeClass)
         {
         case typelib_TypeClass_BYTE:
-            return ((sal_Int64)*(sal_uInt32 *)pDest == (sal_Int64)*(sal_Int8 *)pSource);
+            return ((sal_Int64)*static_cast<sal_uInt32 *>(pDest) == (sal_Int64)*static_cast<sal_Int8 *>(pSource));
         case typelib_TypeClass_SHORT:
-            return ((sal_Int64)*(sal_uInt32 *)pDest == (sal_Int64)*(sal_Int16 *)pSource);
+            return ((sal_Int64)*static_cast<sal_uInt32 *>(pDest) == (sal_Int64)*static_cast<sal_Int16 *>(pSource));
         case typelib_TypeClass_UNSIGNED_SHORT:
-            return (*(sal_uInt32 *)pDest == (sal_uInt32)*(sal_uInt16 *)pSource);
+            return (*static_cast<sal_uInt32 *>(pDest) == (sal_uInt32)*static_cast<sal_uInt16 *>(pSource));
         case typelib_TypeClass_LONG:
-            return ((sal_Int64)*(sal_uInt32 *)pDest == (sal_Int64)*(sal_Int32 *)pSource);
+            return ((sal_Int64)*static_cast<sal_uInt32 *>(pDest) == (sal_Int64)*static_cast<sal_Int32 *>(pSource));
         case typelib_TypeClass_UNSIGNED_LONG:
-            return (*(sal_uInt32 *)pDest == *(sal_uInt32 *)pSource);
+            return (*static_cast<sal_uInt32 *>(pDest) == *static_cast<sal_uInt32 *>(pSource));
         case typelib_TypeClass_HYPER:
-            return ((sal_Int64)*(sal_uInt32 *)pDest == *(sal_Int64 *)pSource);
+            return ((sal_Int64)*static_cast<sal_uInt32 *>(pDest) == *static_cast<sal_Int64 *>(pSource));
         case typelib_TypeClass_UNSIGNED_HYPER:
-            return ((sal_uInt64)*(sal_uInt32 *)pDest == *(sal_uInt64 *)pSource);
+            return ((sal_uInt64)*static_cast<sal_uInt32 *>(pDest) == *static_cast<sal_uInt64 *>(pSource));
         case typelib_TypeClass_FLOAT:
-            return ((float)*(sal_uInt32 *)pDest == *(float *)pSource);
+            return ((float)*static_cast<sal_uInt32 *>(pDest) == *static_cast<float *>(pSource));
         case typelib_TypeClass_DOUBLE:
-            return ((double)*(sal_uInt32 *)pDest == *(double *)pSource);
+            return ((double)*static_cast<sal_uInt32 *>(pDest) == *static_cast<double *>(pSource));
         default:
             return false;
         }
@@ -416,24 +416,24 @@ inline bool _equalData(
         switch (eSourceTypeClass)
         {
         case typelib_TypeClass_BYTE:
-            return (*(sal_Int64 *)pDest == (sal_Int64)*(sal_Int8 *)pSource);
+            return (*static_cast<sal_Int64 *>(pDest) == (sal_Int64)*static_cast<sal_Int8 *>(pSource));
         case typelib_TypeClass_SHORT:
-            return (*(sal_Int64 *)pDest == (sal_Int64)*(sal_Int16 *)pSource);
+            return (*static_cast<sal_Int64 *>(pDest) == (sal_Int64)*static_cast<sal_Int16 *>(pSource));
         case typelib_TypeClass_UNSIGNED_SHORT:
-            return (*(sal_Int64 *)pDest == (sal_Int64)*(sal_uInt16 *)pSource);
+            return (*static_cast<sal_Int64 *>(pDest) == (sal_Int64)*static_cast<sal_uInt16 *>(pSource));
         case typelib_TypeClass_LONG:
-            return (*(sal_Int64 *)pDest == (sal_Int64)*(sal_Int32 *)pSource);
+            return (*static_cast<sal_Int64 *>(pDest) == (sal_Int64)*static_cast<sal_Int32 *>(pSource));
         case typelib_TypeClass_UNSIGNED_LONG:
-            return (*(sal_Int64 *)pDest == (sal_Int64)*(sal_uInt32 *)pSource);
+            return (*static_cast<sal_Int64 *>(pDest) == (sal_Int64)*static_cast<sal_uInt32 *>(pSource));
         case typelib_TypeClass_HYPER:
-            return (*(sal_Int64 *)pDest == *(sal_Int64 *)pSource);
+            return (*static_cast<sal_Int64 *>(pDest) == *static_cast<sal_Int64 *>(pSource));
         case typelib_TypeClass_UNSIGNED_HYPER:
-            return (*(sal_Int64 *)pDest >= 0 &&
-                    *(sal_Int64 *)pDest == *(sal_Int64 *)pSource); // same size
+            return (*static_cast<sal_Int64 *>(pDest) >= 0 &&
+                    *static_cast<sal_Int64 *>(pDest) == *static_cast<sal_Int64 *>(pSource)); // same size
         case typelib_TypeClass_FLOAT:
-            return ((float)*(sal_Int64 *)pDest == *(float *)pSource);
+            return ((float)*static_cast<sal_Int64 *>(pDest) == *static_cast<float *>(pSource));
         case typelib_TypeClass_DOUBLE:
-            return ((double)*(sal_Int64 *)pDest == *(double *)pSource);
+            return ((double)*static_cast<sal_Int64 *>(pDest) == *static_cast<double *>(pSource));
         default:
             return false;
         }
@@ -441,31 +441,31 @@ inline bool _equalData(
         switch (eSourceTypeClass)
         {
         case typelib_TypeClass_BYTE:
-            return (*(sal_Int8 *)pSource >= 0 &&
-                    *(sal_uInt64 *)pDest == (sal_uInt64)*(sal_Int8 *)pSource);
+            return (*static_cast<sal_Int8 *>(pSource) >= 0 &&
+                    *static_cast<sal_uInt64 *>(pDest) == (sal_uInt64)*static_cast<sal_Int8 *>(pSource));
         case typelib_TypeClass_SHORT:
-            return (*(sal_Int16 *)pSource >= 0 &&
-                    *(sal_uInt64 *)pDest == (sal_uInt64)*(sal_Int16 *)pSource);
+            return (*static_cast<sal_Int16 *>(pSource) >= 0 &&
+                    *static_cast<sal_uInt64 *>(pDest) == (sal_uInt64)*static_cast<sal_Int16 *>(pSource));
         case typelib_TypeClass_UNSIGNED_SHORT:
-            return (*(sal_uInt64 *)pDest == (sal_uInt64)*(sal_uInt16 *)pSource);
+            return (*static_cast<sal_uInt64 *>(pDest) == (sal_uInt64)*static_cast<sal_uInt16 *>(pSource));
         case typelib_TypeClass_LONG:
-            return (*(sal_Int32 *)pSource >= 0 &&
-                    *(sal_uInt64 *)pDest == (sal_uInt64)*(sal_Int32 *)pSource);
+            return (*static_cast<sal_Int32 *>(pSource) >= 0 &&
+                    *static_cast<sal_uInt64 *>(pDest) == (sal_uInt64)*static_cast<sal_Int32 *>(pSource));
         case typelib_TypeClass_UNSIGNED_LONG:
-            return (*(sal_uInt64 *)pDest == (sal_uInt64)*(sal_uInt32 *)pSource);
+            return (*static_cast<sal_uInt64 *>(pDest) == (sal_uInt64)*static_cast<sal_uInt32 *>(pSource));
         case typelib_TypeClass_HYPER:
-            return (*(sal_Int64 *)pSource >= 0 &&
-                    *(sal_uInt64 *)pDest == (sal_uInt64)*(sal_Int64 *)pSource);
+            return (*static_cast<sal_Int64 *>(pSource) >= 0 &&
+                    *static_cast<sal_uInt64 *>(pDest) == (sal_uInt64)*static_cast<sal_Int64 *>(pSource));
         case typelib_TypeClass_UNSIGNED_HYPER:
-            return (*(sal_uInt64 *)pDest == *(sal_uInt64 *)pSource);
+            return (*static_cast<sal_uInt64 *>(pDest) == *static_cast<sal_uInt64 *>(pSource));
         case typelib_TypeClass_FLOAT:
-            if (::floor( *(float *)pSource ) != *(float *)pSource || *(float *)pSource < 0)
+            if (::floor( *static_cast<float *>(pSource) ) != *static_cast<float *>(pSource) || *static_cast<float *>(pSource) < 0)
                 return false;
-            return (*(sal_uInt64 *)pDest == (sal_uInt64)*(float *)pSource);
+            return (*static_cast<sal_uInt64 *>(pDest) == (sal_uInt64)*static_cast<float *>(pSource));
         case typelib_TypeClass_DOUBLE:
-            if (::floor( *(double *)pSource ) != *(double *)pSource || *(double *)pSource < 0)
+            if (::floor( *static_cast<double *>(pSource) ) != *static_cast<double *>(pSource) || *static_cast<double *>(pSource) < 0)
                 return false;
-            return (*(sal_uInt64 *)pDest == (sal_uInt64)*(double *)pSource);
+            return (*static_cast<sal_uInt64 *>(pDest) == (sal_uInt64)*static_cast<double *>(pSource));
         default:
             return false;
         }
@@ -473,25 +473,25 @@ inline bool _equalData(
         switch (eSourceTypeClass)
         {
         case typelib_TypeClass_BYTE:
-            return (*(float *)pDest == (float)*(sal_Int8 *)pSource);
+            return (*static_cast<float *>(pDest) == (float)*static_cast<sal_Int8 *>(pSource));
         case typelib_TypeClass_SHORT:
-            return (*(float *)pDest == (float)*(sal_Int16 *)pSource);
+            return (*static_cast<float *>(pDest) == (float)*static_cast<sal_Int16 *>(pSource));
         case typelib_TypeClass_UNSIGNED_SHORT:
-            return (*(float *)pDest == (float)*(sal_uInt16 *)pSource);
+            return (*static_cast<float *>(pDest) == (float)*static_cast<sal_uInt16 *>(pSource));
         case typelib_TypeClass_LONG:
-            return (*(float *)pDest == (float)*(sal_Int32 *)pSource);
+            return (*static_cast<float *>(pDest) == (float)*static_cast<sal_Int32 *>(pSource));
         case typelib_TypeClass_UNSIGNED_LONG:
-            return (*(float *)pDest == (float)*(sal_uInt32 *)pSource);
+            return (*static_cast<float *>(pDest) == (float)*static_cast<sal_uInt32 *>(pSource));
         case typelib_TypeClass_HYPER:
-            return (*(float *)pDest == (float)*(sal_Int64 *)pSource);
+            return (*static_cast<float *>(pDest) == (float)*static_cast<sal_Int64 *>(pSource));
         case typelib_TypeClass_UNSIGNED_HYPER:
-            if (::floor( *(float *)pDest ) != *(float *)pDest || *(float *)pDest < 0)
+            if (::floor( *static_cast<float *>(pDest) ) != *static_cast<float *>(pDest) || *static_cast<float *>(pDest) < 0)
                 return false;
-            return ((sal_uInt64)*(float *)pDest == *(sal_uInt64 *)pSource);
+            return ((sal_uInt64)*static_cast<float *>(pDest) == *static_cast<sal_uInt64 *>(pSource));
         case typelib_TypeClass_FLOAT:
-            return (*(float *)pDest == *(float *)pSource);
+            return (*static_cast<float *>(pDest) == *static_cast<float *>(pSource));
         case typelib_TypeClass_DOUBLE:
-            return ((double)*(float *)pDest == *(double *)pSource);
+            return ((double)*static_cast<float *>(pDest) == *static_cast<double *>(pSource));
         default:
             return false;
         }
@@ -499,40 +499,40 @@ inline bool _equalData(
         switch (eSourceTypeClass)
         {
         case typelib_TypeClass_BYTE:
-            return (*(double *)pDest == (double)*(sal_Int8 *)pSource);
+            return (*static_cast<double *>(pDest) == (double)*static_cast<sal_Int8 *>(pSource));
         case typelib_TypeClass_SHORT:
-            return (*(double *)pDest == (double)*(sal_Int16 *)pSource);
+            return (*static_cast<double *>(pDest) == (double)*static_cast<sal_Int16 *>(pSource));
         case typelib_TypeClass_UNSIGNED_SHORT:
-            return (*(double *)pDest == (double)*(sal_uInt16 *)pSource);
+            return (*static_cast<double *>(pDest) == (double)*static_cast<sal_uInt16 *>(pSource));
         case typelib_TypeClass_LONG:
-            return (*(double *)pDest == (double)*(sal_Int32 *)pSource);
+            return (*static_cast<double *>(pDest) == (double)*static_cast<sal_Int32 *>(pSource));
         case typelib_TypeClass_UNSIGNED_LONG:
-            return (*(double *)pDest == (double)*(sal_uInt32 *)pSource);
+            return (*static_cast<double *>(pDest) == (double)*static_cast<sal_uInt32 *>(pSource));
         case typelib_TypeClass_HYPER:
-            return (*(double *)pDest == (double)*(sal_Int64 *)pSource);
+            return (*static_cast<double *>(pDest) == (double)*static_cast<sal_Int64 *>(pSource));
         case typelib_TypeClass_UNSIGNED_HYPER:
-            if (::floor( *(double *)pDest ) != *(double *)pDest || *(double *)pDest < 0)
+            if (::floor( *static_cast<double *>(pDest) ) != *static_cast<double *>(pDest) || *static_cast<double *>(pDest) < 0)
                 return false;
-            return ((sal_uInt64)*(double *)pDest == *(sal_uInt64 *)pSource);
+            return ((sal_uInt64)*static_cast<double *>(pDest) == *static_cast<sal_uInt64 *>(pSource));
         case typelib_TypeClass_FLOAT:
-            return (*(double *)pDest == (double)*(float *)pSource);
+            return (*static_cast<double *>(pDest) == (double)*static_cast<float *>(pSource));
         case typelib_TypeClass_DOUBLE:
-            return (*(double *)pDest == *(double *)pSource);
+            return (*static_cast<double *>(pDest) == *static_cast<double *>(pSource));
         default:
             return false;
         }
     case typelib_TypeClass_STRING:
         return eSourceTypeClass == typelib_TypeClass_STRING
-            && ((::rtl::OUString *)pDest)->equals(
-                *(::rtl::OUString const *)pSource );
+            && (static_cast<OUString *>(pDest))->equals(
+                *static_cast<OUString const *>(pSource) );
     case typelib_TypeClass_TYPE:
         return eSourceTypeClass == typelib_TypeClass_TYPE
             && _type_equals(
-                *(typelib_TypeDescriptionReference **)pDest,
-                *(typelib_TypeDescriptionReference **)pSource );
+                *static_cast<typelib_TypeDescriptionReference **>(pDest),
+                *static_cast<typelib_TypeDescriptionReference **>(pSource) );
     case typelib_TypeClass_ENUM:
         return (_type_equals( pDestType, pSourceType ) &&
-                *(sal_Int32 *)pDest == *(sal_Int32 *)pSource);
+                *static_cast<sal_Int32 *>(pDest) == *static_cast<sal_Int32 *>(pSource));
     case typelib_TypeClass_STRUCT:
     case typelib_TypeClass_EXCEPTION:
         if (! _type_equals( pDestType, pSourceType ))
@@ -560,7 +560,7 @@ inline bool _equalData(
             if (pDestTypeDescr)
             {
                 return _equalSequence(
-                    *(uno_Sequence **)pDest, *(uno_Sequence **)pSource,
+                    *static_cast<uno_Sequence **>(pDest), *static_cast<uno_Sequence **>(pSource),
                     reinterpret_cast<typelib_IndirectTypeDescription *>(pDestTypeDescr)->pType,
                     queryInterface, release );
             }
@@ -568,7 +568,7 @@ inline bool _equalData(
             {
                 TYPELIB_DANGER_GET( &pDestTypeDescr, pDestType );
                 bool bRet = _equalSequence(
-                    *(uno_Sequence **)pDest, *(uno_Sequence **)pSource,
+                    *static_cast<uno_Sequence **>(pDest), *static_cast<uno_Sequence **>(pSource),
                     reinterpret_cast<typelib_IndirectTypeDescription *>(pDestTypeDescr)->pType,
                     queryInterface, release );
                 TYPELIB_DANGER_RELEASE( pDestTypeDescr );
@@ -578,7 +578,7 @@ inline bool _equalData(
         return false;
     case typelib_TypeClass_INTERFACE:
         if (typelib_TypeClass_INTERFACE == eSourceTypeClass)
-            return _equalObject( *(void **)pDest, *(void **)pSource, queryInterface, release );
+            return _equalObject( *static_cast<void **>(pDest), *static_cast<void **>(pSource), queryInterface, release );
         break;
     default:
         OSL_ASSERT(false);

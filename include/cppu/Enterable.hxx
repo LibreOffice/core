@@ -63,14 +63,14 @@ private:
     Enterable & operator = (Enterable const &) SAL_DELETED_FUNCTION;
 };
 
-extern "C" inline void Enterable_call_enter (void * context) { ((Enterable *)context)->v_enter(); }
-extern "C" inline void Enterable_call_leave (void * context) { ((Enterable *)context)->v_leave(); }
+extern "C" inline void Enterable_call_enter (void * context) { static_cast<Enterable *>(context)->v_enter(); }
+extern "C" inline void Enterable_call_leave (void * context) { static_cast<Enterable *>(context)->v_leave(); }
 extern "C" inline void Enterable_call_callInto_v(void * context, uno_EnvCallee * pCallee, va_list * pParam)
-    { ((Enterable *)context)->v_callInto_v(pCallee, pParam); }
+    { static_cast<Enterable *>(context)->v_callInto_v(pCallee, pParam); }
 extern "C" inline void Enterable_call_callOut_v (void * context, uno_EnvCallee * pCallee, va_list * pParam)
-    { ((Enterable *)context)->v_callOut_v(pCallee, pParam); }
+    { static_cast<Enterable *>(context)->v_callOut_v(pCallee, pParam); }
 extern "C" inline int  Enterable_call_isValid   (void * context, rtl_uString ** pReason)
-    {return ((Enterable *)context)->v_isValid(reinterpret_cast<rtl::OUString *>(pReason));}
+    {return static_cast<Enterable *>(context)->v_isValid(reinterpret_cast<rtl::OUString *>(pReason));}
 
 
 Enterable::Enterable(void)

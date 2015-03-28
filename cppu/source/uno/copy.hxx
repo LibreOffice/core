@@ -39,7 +39,7 @@ inline uno_Sequence * allocSeq(
     sal_uInt32 nSize = calcSeqMemSize( nElementSize, nElements );
     if (nSize > 0)
     {
-        pSeq = (uno_Sequence *) rtl_allocateMemory( nSize );
+        pSeq = static_cast<uno_Sequence *>(rtl_allocateMemory( nSize ));
         if (pSeq != 0)
         {
             // header init
@@ -77,8 +77,8 @@ inline void _copyConstructStruct(
         while (nDescr--)
         {
             ::uno_type_copyAndConvertData(
-                (char *)pDest + pMemberOffsets[nDescr],
-                (char *)pSource + pMemberOffsets[nDescr],
+                static_cast<char *>(pDest) + pMemberOffsets[nDescr],
+                static_cast<char *>(pSource) + pMemberOffsets[nDescr],
                 ppTypeRefs[nDescr], mapping );
         }
     }
@@ -87,8 +87,8 @@ inline void _copyConstructStruct(
         while (nDescr--)
         {
             ::uno_type_copyData(
-                (char *)pDest + pMemberOffsets[nDescr],
-                (char *)pSource + pMemberOffsets[nDescr],
+                static_cast<char *>(pDest) + pMemberOffsets[nDescr],
+                static_cast<char *>(pSource) + pMemberOffsets[nDescr],
                 ppTypeRefs[nDescr], acquire );
         }
     }
@@ -113,25 +113,25 @@ inline void _copyConstructAnyFromData(
     {
     case typelib_TypeClass_CHAR:
         pDestAny->pData = &pDestAny->pReserved;
-        *(sal_Unicode *)pDestAny->pData = *(sal_Unicode *)pSource;
+        *static_cast<sal_Unicode *>(pDestAny->pData) = *static_cast<sal_Unicode *>(pSource);
         break;
     case typelib_TypeClass_BOOLEAN:
         pDestAny->pData = &pDestAny->pReserved;
-        *(sal_Bool *)pDestAny->pData = (*(sal_Bool *)pSource != sal_False);
+        *static_cast<sal_Bool *>(pDestAny->pData) = (*static_cast<sal_Bool *>(pSource) != sal_False);
         break;
     case typelib_TypeClass_BYTE:
         pDestAny->pData = &pDestAny->pReserved;
-        *(sal_Int8 *)pDestAny->pData = *(sal_Int8 *)pSource;
+        *static_cast<sal_Int8 *>(pDestAny->pData) = *static_cast<sal_Int8 *>(pSource);
         break;
     case typelib_TypeClass_SHORT:
     case typelib_TypeClass_UNSIGNED_SHORT:
         pDestAny->pData = &pDestAny->pReserved;
-        *(sal_Int16 *)pDestAny->pData = *(sal_Int16 *)pSource;
+        *static_cast<sal_Int16 *>(pDestAny->pData) = *static_cast<sal_Int16 *>(pSource);
         break;
     case typelib_TypeClass_LONG:
     case typelib_TypeClass_UNSIGNED_LONG:
         pDestAny->pData = &pDestAny->pReserved;
-        *(sal_Int32 *)pDestAny->pData = *(sal_Int32 *)pSource;
+        *static_cast<sal_Int32 *>(pDestAny->pData) = *static_cast<sal_Int32 *>(pSource);
         break;
     case typelib_TypeClass_HYPER:
     case typelib_TypeClass_UNSIGNED_HYPER:
@@ -139,31 +139,31 @@ inline void _copyConstructAnyFromData(
             pDestAny->pData = &pDestAny->pReserved;
         else
             pDestAny->pData = ::rtl_allocateMemory( sizeof(sal_Int64) );
-        *(sal_Int64 *)pDestAny->pData = *(sal_Int64 *)pSource;
+        *static_cast<sal_Int64 *>(pDestAny->pData) = *static_cast<sal_Int64 *>(pSource);
         break;
     case typelib_TypeClass_FLOAT:
         if (sizeof(void *) >= sizeof(float))
             pDestAny->pData = &pDestAny->pReserved;
         else
             pDestAny->pData = ::rtl_allocateMemory( sizeof(float) );
-        *(float *)pDestAny->pData = *(float *)pSource;
+        *static_cast<float *>(pDestAny->pData) = *static_cast<float *>(pSource);
         break;
     case typelib_TypeClass_DOUBLE:
         if (sizeof(void *) >= sizeof(double))
             pDestAny->pData = &pDestAny->pReserved;
         else
             pDestAny->pData = ::rtl_allocateMemory( sizeof(double) );
-        *(double *)pDestAny->pData = *(double *)pSource;
+        *static_cast<double *>(pDestAny->pData) = *static_cast<double *>(pSource);
         break;
     case typelib_TypeClass_STRING:
-        ::rtl_uString_acquire( *(rtl_uString **)pSource );
+        ::rtl_uString_acquire( *static_cast<rtl_uString **>(pSource) );
         pDestAny->pData = &pDestAny->pReserved;
-        *(rtl_uString **)pDestAny->pData = *(rtl_uString **)pSource;
+        *static_cast<rtl_uString **>(pDestAny->pData) = *static_cast<rtl_uString **>(pSource);
         break;
     case typelib_TypeClass_TYPE:
-        TYPE_ACQUIRE( *(typelib_TypeDescriptionReference **)pSource );
+        TYPE_ACQUIRE( *static_cast<typelib_TypeDescriptionReference **>(pSource) );
         pDestAny->pData = &pDestAny->pReserved;
-        *(typelib_TypeDescriptionReference **)pDestAny->pData = *(typelib_TypeDescriptionReference **)pSource;
+        *static_cast<typelib_TypeDescriptionReference **>(pDestAny->pData) = *static_cast<typelib_TypeDescriptionReference **>(pSource);
         break;
     case typelib_TypeClass_ANY:
         OSL_FAIL( "### unexpected nested any!" );
@@ -171,7 +171,7 @@ inline void _copyConstructAnyFromData(
     case typelib_TypeClass_ENUM:
         pDestAny->pData = &pDestAny->pReserved;
         // enum is forced to 32bit long
-        *(sal_Int32 *)pDestAny->pData = *(sal_Int32 *)pSource;
+        *static_cast<sal_Int32 *>(pDestAny->pData) = *static_cast<sal_Int32 *>(pSource);
         break;
     case typelib_TypeClass_STRUCT:
     case typelib_TypeClass_EXCEPTION:
@@ -198,16 +198,16 @@ inline void _copyConstructAnyFromData(
         pDestAny->pData = &pDestAny->pReserved;
         if (pTypeDescr)
         {
-            *(uno_Sequence **)pDestAny->pData = copyConstructSequence(
-                *(uno_Sequence **)pSource,
+            *static_cast<uno_Sequence **>(pDestAny->pData) = copyConstructSequence(
+                *static_cast<uno_Sequence **>(pSource),
                 reinterpret_cast<typelib_IndirectTypeDescription *>(pTypeDescr)->pType,
                 acquire, mapping );
         }
         else
         {
             TYPELIB_DANGER_GET( &pTypeDescr, pType );
-            *(uno_Sequence **)pDestAny->pData = copyConstructSequence(
-                *(uno_Sequence **)pSource,
+            *static_cast<uno_Sequence **>(pDestAny->pData) = copyConstructSequence(
+                *static_cast<uno_Sequence **>(pSource),
                 reinterpret_cast<typelib_IndirectTypeDescription *>(pTypeDescr)->pType,
                 acquire, mapping );
             TYPELIB_DANGER_RELEASE( pTypeDescr );
@@ -217,11 +217,11 @@ inline void _copyConstructAnyFromData(
         pDestAny->pData = &pDestAny->pReserved;
         if (mapping)
         {
-            pDestAny->pReserved = _map( *(void **)pSource, pType, pTypeDescr, mapping );
+            pDestAny->pReserved = _map( *static_cast<void **>(pSource), pType, pTypeDescr, mapping );
         }
         else
         {
-            _acquire( pDestAny->pReserved = *(void **)pSource, acquire );
+            _acquire( pDestAny->pReserved = *static_cast<void **>(pSource), acquire );
         }
         break;
     default:
@@ -245,14 +245,14 @@ inline void _copyConstructAny(
         {
             if (pSource)
             {
-                pType = ((uno_Any *)pSource)->pType;
+                pType = static_cast<uno_Any *>(pSource)->pType;
                 if (typelib_TypeClass_VOID == pType->eTypeClass)
                 {
                     CONSTRUCT_EMPTY_ANY( pDestAny );
                     return;
                 }
                 pTypeDescr = 0;
-                pSource = ((uno_Any *)pSource)->pData;
+                pSource = static_cast<uno_Any *>(pSource)->pData;
             }
             else
             {
@@ -272,25 +272,25 @@ inline void _copyConstructAny(
             {
             case typelib_TypeClass_CHAR:
                 pDestAny->pData = &pDestAny->pReserved;
-                *(sal_Unicode *)pDestAny->pData = '\0';
+                *static_cast<sal_Unicode *>(pDestAny->pData) = '\0';
                 break;
             case typelib_TypeClass_BOOLEAN:
                 pDestAny->pData = &pDestAny->pReserved;
-                *(sal_Bool *)pDestAny->pData = sal_False;
+                *static_cast<sal_Bool *>(pDestAny->pData) = sal_False;
                 break;
             case typelib_TypeClass_BYTE:
                 pDestAny->pData = &pDestAny->pReserved;
-                *(sal_Int8 *)pDestAny->pData = 0;
+                *static_cast<sal_Int8 *>(pDestAny->pData) = 0;
                 break;
             case typelib_TypeClass_SHORT:
             case typelib_TypeClass_UNSIGNED_SHORT:
                 pDestAny->pData = &pDestAny->pReserved;
-                *(sal_Int16 *)pDestAny->pData = 0;
+                *static_cast<sal_Int16 *>(pDestAny->pData) = 0;
                 break;
             case typelib_TypeClass_LONG:
             case typelib_TypeClass_UNSIGNED_LONG:
                 pDestAny->pData = &pDestAny->pReserved;
-                *(sal_Int32 *)pDestAny->pData = 0;
+                *static_cast<sal_Int32 *>(pDestAny->pData) = 0;
                 break;
             case typelib_TypeClass_HYPER:
             case typelib_TypeClass_UNSIGNED_HYPER:
@@ -298,41 +298,41 @@ inline void _copyConstructAny(
                     pDestAny->pData = &pDestAny->pReserved;
                 else
                     pDestAny->pData = ::rtl_allocateMemory( sizeof(sal_Int64) );
-                *(sal_Int64 *)pDestAny->pData = 0;
+                *static_cast<sal_Int64 *>(pDestAny->pData) = 0;
                 break;
             case typelib_TypeClass_FLOAT:
                 if (sizeof(void *) >= sizeof(float))
                     pDestAny->pData = &pDestAny->pReserved;
                 else
                     pDestAny->pData = ::rtl_allocateMemory( sizeof(float) );
-                *(float *)pDestAny->pData = 0.0;
+                *static_cast<float *>(pDestAny->pData) = 0.0;
                 break;
             case typelib_TypeClass_DOUBLE:
                 if (sizeof(void *) >= sizeof(double))
                     pDestAny->pData = &pDestAny->pReserved;
                 else
                     pDestAny->pData = ::rtl_allocateMemory( sizeof(double) );
-                *(double *)pDestAny->pData = 0.0;
+                *static_cast<double *>(pDestAny->pData) = 0.0;
                 break;
             case typelib_TypeClass_STRING:
                 pDestAny->pData = &pDestAny->pReserved;
-                *(rtl_uString **)pDestAny->pData = 0;
-                ::rtl_uString_new( (rtl_uString **)pDestAny->pData );
+                *static_cast<rtl_uString **>(pDestAny->pData) = 0;
+                ::rtl_uString_new( static_cast<rtl_uString **>(pDestAny->pData) );
                 break;
             case typelib_TypeClass_TYPE:
                 pDestAny->pData = &pDestAny->pReserved;
-                *(typelib_TypeDescriptionReference **)pDestAny->pData = _getVoidType();
+                *static_cast<typelib_TypeDescriptionReference **>(pDestAny->pData) = _getVoidType();
                 break;
             case typelib_TypeClass_ENUM:
                 pDestAny->pData = &pDestAny->pReserved;
                 if (pTypeDescr)
                 {
-                    *(sal_Int32 *)pDestAny->pData = reinterpret_cast<typelib_EnumTypeDescription *>(pTypeDescr)->nDefaultEnumValue;
+                    *static_cast<sal_Int32 *>(pDestAny->pData) = reinterpret_cast<typelib_EnumTypeDescription *>(pTypeDescr)->nDefaultEnumValue;
                 }
                 else
                 {
                     TYPELIB_DANGER_GET( &pTypeDescr, pType );
-                    *(sal_Int32 *)pDestAny->pData = reinterpret_cast<typelib_EnumTypeDescription *>(pTypeDescr)->nDefaultEnumValue;
+                    *static_cast<sal_Int32 *>(pDestAny->pData) = reinterpret_cast<typelib_EnumTypeDescription *>(pTypeDescr)->nDefaultEnumValue;
                     TYPELIB_DANGER_RELEASE( pTypeDescr );
                 }
                 break;
@@ -355,7 +355,7 @@ inline void _copyConstructAny(
                 break;
             case typelib_TypeClass_SEQUENCE:
                 pDestAny->pData = &pDestAny->pReserved;
-                *(uno_Sequence **)pDestAny->pData = createEmptySequence();
+                *static_cast<uno_Sequence **>(pDestAny->pData) = createEmptySequence();
                 break;
             case typelib_TypeClass_INTERFACE:
                 pDestAny->pData = &pDestAny->pReserved;
@@ -522,48 +522,48 @@ inline void _copyConstructData(
     switch (pType->eTypeClass)
     {
     case typelib_TypeClass_CHAR:
-        *(sal_Unicode *)pDest = *(sal_Unicode *)pSource;
+        *static_cast<sal_Unicode *>(pDest) = *static_cast<sal_Unicode *>(pSource);
         break;
     case typelib_TypeClass_BOOLEAN:
-        *(sal_Bool *)pDest = (*(sal_Bool *)pSource != sal_False);
+        *static_cast<sal_Bool *>(pDest) = (*static_cast<sal_Bool *>(pSource) != sal_False);
         break;
     case typelib_TypeClass_BYTE:
-        *(sal_Int8 *)pDest = *(sal_Int8 *)pSource;
+        *static_cast<sal_Int8 *>(pDest) = *static_cast<sal_Int8 *>(pSource);
         break;
     case typelib_TypeClass_SHORT:
     case typelib_TypeClass_UNSIGNED_SHORT:
-        *(sal_Int16 *)pDest = *(sal_Int16 *)pSource;
+        *static_cast<sal_Int16 *>(pDest) = *static_cast<sal_Int16 *>(pSource);
         break;
     case typelib_TypeClass_LONG:
     case typelib_TypeClass_UNSIGNED_LONG:
-        *(sal_Int32 *)pDest = *(sal_Int32 *)pSource;
+        *static_cast<sal_Int32 *>(pDest) = *static_cast<sal_Int32 *>(pSource);
         break;
     case typelib_TypeClass_HYPER:
     case typelib_TypeClass_UNSIGNED_HYPER:
-        *(sal_Int64 *)pDest = *(sal_Int64 *)pSource;
+        *static_cast<sal_Int64 *>(pDest) = *static_cast<sal_Int64 *>(pSource);
         break;
     case typelib_TypeClass_FLOAT:
-        *(float *)pDest = *(float *)pSource;
+        *static_cast<float *>(pDest) = *static_cast<float *>(pSource);
         break;
     case typelib_TypeClass_DOUBLE:
-        *(double *)pDest = *(double *)pSource;
+        *static_cast<double *>(pDest) = *static_cast<double *>(pSource);
         break;
     case typelib_TypeClass_STRING:
-        ::rtl_uString_acquire( *(rtl_uString **)pSource );
-        *(rtl_uString **)pDest = *(rtl_uString **)pSource;
+        ::rtl_uString_acquire( *static_cast<rtl_uString **>(pSource) );
+        *static_cast<rtl_uString **>(pDest) = *static_cast<rtl_uString **>(pSource);
         break;
     case typelib_TypeClass_TYPE:
-        TYPE_ACQUIRE( *(typelib_TypeDescriptionReference **)pSource );
-        *(typelib_TypeDescriptionReference **)pDest = *(typelib_TypeDescriptionReference **)pSource;
+        TYPE_ACQUIRE( *static_cast<typelib_TypeDescriptionReference **>(pSource) );
+        *static_cast<typelib_TypeDescriptionReference **>(pDest) = *static_cast<typelib_TypeDescriptionReference **>(pSource);
         break;
     case typelib_TypeClass_ANY:
         _copyConstructAny(
-            (uno_Any *)pDest, ((uno_Any *)pSource)->pData,
-            ((uno_Any *)pSource)->pType, 0,
+            static_cast<uno_Any *>(pDest), static_cast<uno_Any *>(pSource)->pData,
+            static_cast<uno_Any *>(pSource)->pType, 0,
             acquire, mapping );
         break;
     case typelib_TypeClass_ENUM:
-        *(sal_Int32 *)pDest = *(sal_Int32 *)pSource;
+        *static_cast<sal_Int32 *>(pDest) = *static_cast<sal_Int32 *>(pSource);
         break;
     case typelib_TypeClass_STRUCT:
     case typelib_TypeClass_EXCEPTION:
@@ -589,16 +589,16 @@ inline void _copyConstructData(
         {
             if (pTypeDescr)
             {
-                *(uno_Sequence **)pDest = icopyConstructSequence(
-                    *(uno_Sequence **)pSource,
+                *static_cast<uno_Sequence **>(pDest) = icopyConstructSequence(
+                    *static_cast<uno_Sequence **>(pSource),
                     reinterpret_cast<typelib_IndirectTypeDescription *>(pTypeDescr)->pType,
                     acquire, mapping );
             }
             else
             {
                 TYPELIB_DANGER_GET( &pTypeDescr, pType );
-                *(uno_Sequence **)pDest = icopyConstructSequence(
-                    *(uno_Sequence **)pSource,
+                *static_cast<uno_Sequence **>(pDest) = icopyConstructSequence(
+                    *static_cast<uno_Sequence **>(pSource),
                     reinterpret_cast<typelib_IndirectTypeDescription *>(pTypeDescr)->pType,
                     acquire, mapping );
                 TYPELIB_DANGER_RELEASE( pTypeDescr );
@@ -606,15 +606,15 @@ inline void _copyConstructData(
         }
         else
         {
-            osl_atomic_increment( &(*(uno_Sequence **)pSource)->nRefCount );
-            *(uno_Sequence **)pDest = *(uno_Sequence **)pSource;
+            osl_atomic_increment( &(*static_cast<uno_Sequence **>(pSource))->nRefCount );
+            *static_cast<uno_Sequence **>(pDest) = *static_cast<uno_Sequence **>(pSource);
         }
         break;
     case typelib_TypeClass_INTERFACE:
         if (mapping)
-            *(void **)pDest = _map( *(void **)pSource, pType, pTypeDescr, mapping );
+            *static_cast<void **>(pDest) = _map( *static_cast<void **>(pSource), pType, pTypeDescr, mapping );
         else
-            _acquire( *(void **)pDest = *(void **)pSource, acquire );
+            _acquire( *static_cast<void **>(pDest) = *static_cast<void **>(pSource), acquire );
         break;
     default:
         break;

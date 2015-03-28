@@ -49,7 +49,7 @@ inline void _defaultConstructStruct(
 
     while (nDescr--)
     {
-        ::uno_type_constructData( (char *)pMem + pMemberOffsets[nDescr], ppTypeRefs[nDescr] );
+        ::uno_type_constructData( static_cast<char *>(pMem) + pMemberOffsets[nDescr], ppTypeRefs[nDescr] );
     }
 }
 
@@ -62,51 +62,51 @@ inline void _defaultConstructData(
     switch (pType->eTypeClass)
     {
     case typelib_TypeClass_CHAR:
-        *(sal_Unicode *)pMem = '\0';
+        *static_cast<sal_Unicode *>(pMem) = '\0';
         break;
     case typelib_TypeClass_BOOLEAN:
-        *(sal_Bool *)pMem = sal_False;
+        *static_cast<sal_Bool *>(pMem) = sal_False;
         break;
     case typelib_TypeClass_BYTE:
-        *(sal_Int8 *)pMem = 0;
+        *static_cast<sal_Int8 *>(pMem) = 0;
         break;
     case typelib_TypeClass_SHORT:
     case typelib_TypeClass_UNSIGNED_SHORT:
-        *(sal_Int16 *)pMem = 0;
+        *static_cast<sal_Int16 *>(pMem) = 0;
         break;
     case typelib_TypeClass_LONG:
     case typelib_TypeClass_UNSIGNED_LONG:
-        *(sal_Int32 *)pMem = 0;
+        *static_cast<sal_Int32 *>(pMem) = 0;
         break;
     case typelib_TypeClass_HYPER:
     case typelib_TypeClass_UNSIGNED_HYPER:
-        *(sal_Int64 *)pMem = 0;
+        *static_cast<sal_Int64 *>(pMem) = 0;
         break;
     case typelib_TypeClass_FLOAT:
-        *(float *)pMem = 0.0;
+        *static_cast<float *>(pMem) = 0.0;
         break;
     case typelib_TypeClass_DOUBLE:
-        *(double *)pMem = 0.0;
+        *static_cast<double *>(pMem) = 0.0;
         break;
     case typelib_TypeClass_STRING:
-        *(rtl_uString **)pMem = 0;
-        ::rtl_uString_new( (rtl_uString **)pMem );
+        *static_cast<rtl_uString **>(pMem) = 0;
+        ::rtl_uString_new( static_cast<rtl_uString **>(pMem) );
         break;
     case typelib_TypeClass_TYPE:
-        *(typelib_TypeDescriptionReference **)pMem = _getVoidType();
+        *static_cast<typelib_TypeDescriptionReference **>(pMem) = _getVoidType();
         break;
     case typelib_TypeClass_ANY:
-        CONSTRUCT_EMPTY_ANY( (uno_Any *)pMem );
+        CONSTRUCT_EMPTY_ANY( static_cast<uno_Any *>(pMem) );
         break;
     case typelib_TypeClass_ENUM:
         if (pTypeDescr)
         {
-            *(sal_Int32 *)pMem = reinterpret_cast<typelib_EnumTypeDescription *>(pTypeDescr)->nDefaultEnumValue;
+            *static_cast<sal_Int32 *>(pMem) = reinterpret_cast<typelib_EnumTypeDescription *>(pTypeDescr)->nDefaultEnumValue;
         }
         else
         {
             TYPELIB_DANGER_GET( &pTypeDescr, pType );
-            *(sal_Int32 *)pMem = reinterpret_cast<typelib_EnumTypeDescription *>(pTypeDescr)->nDefaultEnumValue;
+            *static_cast<sal_Int32 *>(pMem) = reinterpret_cast<typelib_EnumTypeDescription *>(pTypeDescr)->nDefaultEnumValue;
             TYPELIB_DANGER_RELEASE( pTypeDescr );
         }
         break;
@@ -124,10 +124,10 @@ inline void _defaultConstructData(
         }
         break;
     case typelib_TypeClass_SEQUENCE:
-        *(uno_Sequence **)pMem = createEmptySequence();
+        *static_cast<uno_Sequence **>(pMem) = createEmptySequence();
         break;
     case typelib_TypeClass_INTERFACE:
-        *(void **)pMem = 0; // either cpp or c-uno interface
+        *static_cast<void **>(pMem) = 0; // either cpp or c-uno interface
         break;
     default:
         OSL_ASSERT(false);

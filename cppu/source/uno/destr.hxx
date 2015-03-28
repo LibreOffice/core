@@ -55,7 +55,7 @@ inline void _destructStruct(
     while (nDescr--)
     {
         ::uno_type_destructData(
-            (char *)pValue + pMemberOffsets[nDescr],
+            static_cast<char *>(pValue) + pMemberOffsets[nDescr],
             ppTypeRefs[nDescr], release );
     }
 }
@@ -96,15 +96,15 @@ inline void _destructAny(
         }
         break;
     case typelib_TypeClass_STRING:
-        ::rtl_uString_release( (rtl_uString *)pAny->pReserved );
+        ::rtl_uString_release( static_cast<rtl_uString *>(pAny->pReserved) );
         break;
     case typelib_TypeClass_TYPE:
         ::typelib_typedescriptionreference_release(
-            (typelib_TypeDescriptionReference *)pAny->pReserved );
+            static_cast<typelib_TypeDescriptionReference *>(pAny->pReserved) );
         break;
     case typelib_TypeClass_ANY:
         OSL_FAIL( "### unexpected nested any!" );
-        ::uno_any_destruct( (uno_Any *)pAny->pData, release );
+        ::uno_any_destruct( static_cast<uno_Any *>(pAny->pData), release );
         ::rtl_freeMemory( pAny->pData );
         break;
     case typelib_TypeClass_TYPEDEF:
@@ -168,7 +168,7 @@ inline sal_Int32 idestructElements(
 
     case typelib_TypeClass_STRING:
     {
-        rtl_uString ** pDest = (rtl_uString **)pElements;
+        rtl_uString ** pDest = static_cast<rtl_uString **>(pElements);
         for ( sal_Int32 nPos = nStartIndex; nPos < nStopIndex; ++nPos )
         {
             ::rtl_uString_release( pDest[nPos] );
@@ -177,7 +177,7 @@ inline sal_Int32 idestructElements(
     }
     case typelib_TypeClass_TYPE:
     {
-        typelib_TypeDescriptionReference ** pDest = (typelib_TypeDescriptionReference **)pElements;
+        typelib_TypeDescriptionReference ** pDest = static_cast<typelib_TypeDescriptionReference **>(pElements);
         for ( sal_Int32 nPos = nStartIndex; nPos < nStopIndex; ++nPos )
         {
             ::typelib_typedescriptionreference_release( pDest[nPos] );
@@ -186,7 +186,7 @@ inline sal_Int32 idestructElements(
     }
     case typelib_TypeClass_ANY:
     {
-        uno_Any * pDest = (uno_Any *)pElements;
+        uno_Any * pDest = static_cast<uno_Any *>(pElements);
         for ( sal_Int32 nPos = nStartIndex; nPos < nStopIndex; ++nPos )
         {
             _destructAny( &pDest[nPos], release );
@@ -204,7 +204,7 @@ inline sal_Int32 idestructElements(
         for ( sal_Int32 nPos = nStartIndex; nPos < nStopIndex; ++nPos )
         {
             _destructStruct(
-                (char *)pElements + (nElementSize * nPos),
+                static_cast<char *>(pElements) + (nElementSize * nPos),
                 reinterpret_cast<typelib_CompoundTypeDescription *>(pElementTypeDescr),
                 release );
         }
@@ -216,7 +216,7 @@ inline sal_Int32 idestructElements(
     {
         typelib_TypeDescription * pElementTypeDescr = 0;
         TYPELIB_DANGER_GET( &pElementTypeDescr, pElementType );
-        uno_Sequence ** pDest = (uno_Sequence **)pElements;
+        uno_Sequence ** pDest = static_cast<uno_Sequence **>(pElements);
         for ( sal_Int32 nPos = nStartIndex; nPos < nStopIndex; ++nPos )
         {
             destructSequence(
@@ -233,7 +233,7 @@ inline sal_Int32 idestructElements(
         {
             for ( sal_Int32 nPos = nStartIndex; nPos < nStopIndex; ++nPos )
             {
-                void * p = ((void **)pElements)[nPos];
+                void * p = static_cast<void **>(pElements)[nPos];
                 if (p)
                 {
                     (*release)( p );
@@ -244,7 +244,7 @@ inline sal_Int32 idestructElements(
         {
             for ( sal_Int32 nPos = nStartIndex; nPos < nStopIndex; ++nPos )
             {
-                uno_Interface * p = ((uno_Interface **)pElements)[nPos];
+                uno_Interface * p = static_cast<uno_Interface **>(pElements)[nPos];
                 if (p)
                 {
                     (*p->release)( p );
@@ -310,13 +310,13 @@ inline void _destructData(
     switch (pType->eTypeClass)
     {
     case typelib_TypeClass_STRING:
-        ::rtl_uString_release( *(rtl_uString **)pValue );
+        ::rtl_uString_release( *static_cast<rtl_uString **>(pValue) );
         break;
     case typelib_TypeClass_TYPE:
-        ::typelib_typedescriptionreference_release( *(typelib_TypeDescriptionReference **)pValue );
+        ::typelib_typedescriptionreference_release( *static_cast<typelib_TypeDescriptionReference **>(pValue) );
         break;
     case typelib_TypeClass_ANY:
-        _destructAny( (uno_Any *)pValue, release );
+        _destructAny( static_cast<uno_Any *>(pValue), release );
         break;
     case typelib_TypeClass_TYPEDEF:
         OSL_FAIL( "### unexpected typedef!" );
@@ -337,11 +337,11 @@ inline void _destructData(
     case typelib_TypeClass_SEQUENCE:
     {
         idestructSequence(
-            *(uno_Sequence **)pValue, pType, pTypeDescr, release );
+            *static_cast<uno_Sequence **>(pValue), pType, pTypeDescr, release );
         break;
     }
     case typelib_TypeClass_INTERFACE:
-        _release( *(void **)pValue, release );
+        _release( *static_cast<void **>(pValue), release );
         break;
     default:
         break;

@@ -404,7 +404,7 @@ void Proxy::dispatch(typelib_TypeDescriptionReference * pReturnTypeRef,
                    pArgs,
                    ppException);
 
-    void ** args = (void **) alloca( sizeof (void *) * nParams );
+    void ** args = static_cast<void **>(alloca( sizeof (void *) * nParams ));
 
     typelib_TypeDescription * return_td = 0;
     void * ret = pReturn;

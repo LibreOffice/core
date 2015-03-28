@@ -419,7 +419,7 @@ static Mapping loadExternalMapping(
         {
             OUString aSymbolName( UNO_EXT_GETMAPPING );
             uno_ext_getMappingFunc fpGetMapFunc =
-                (uno_ext_getMappingFunc)aModule.getSymbol( aSymbolName );
+                reinterpret_cast<uno_ext_getMappingFunc>(aModule.getSymbol( aSymbolName ));
 
             if (fpGetMapFunc)
             {

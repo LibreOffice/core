@@ -80,7 +80,7 @@ inline void _acquire( void * p, uno_AcquireFunc acquire )
         }
         else
         {
-            (*((uno_Interface *)p)->acquire)( (uno_Interface *)p );
+            (*static_cast<uno_Interface *>(p)->acquire)( static_cast<uno_Interface *>(p) );
         }
     }
 }
@@ -95,7 +95,7 @@ inline void _release( void * p, uno_ReleaseFunc release )
         }
         else
         {
-            (*((uno_Interface *)p)->release)( (uno_Interface *)p );
+            (*static_cast<uno_Interface *>(p)->release)( static_cast<uno_Interface *>(p) );
         }
     }
 }

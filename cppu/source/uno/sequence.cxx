@@ -51,11 +51,11 @@ static inline uno_Sequence * reallocSeq(
     {
         if (pReallocate == 0)
         {
-            pNew = (uno_Sequence *) rtl_allocateMemory( nSize );
+            pNew = static_cast<uno_Sequence *>(rtl_allocateMemory( nSize ));
         }
         else
         {
-            pNew = (uno_Sequence *) rtl_reallocateMemory( pReallocate, nSize );
+            pNew = static_cast<uno_Sequence *>(rtl_reallocateMemory( pReallocate, nSize ));
         }
         if (pNew != 0)
         {
@@ -330,7 +330,7 @@ static inline bool icopyConstructFromElements(
         {
             memcpy(
                 pSeq->elements + (sizeof(sal_Unicode) * nStartIndex),
-                (char *)pSourceElements + (sizeof(sal_Unicode) * nStartIndex),
+                static_cast<char *>(pSourceElements) + (sizeof(sal_Unicode) * nStartIndex),
                 sizeof(sal_Unicode) * (nStopIndex - nStartIndex) );
         }
         break;
@@ -341,7 +341,7 @@ static inline bool icopyConstructFromElements(
         {
             memcpy(
                 pSeq->elements + (sizeof(sal_Bool) * nStartIndex),
-                (char *)pSourceElements + (sizeof(sal_Bool) * nStartIndex),
+                static_cast<char *>(pSourceElements) + (sizeof(sal_Bool) * nStartIndex),
                 sizeof(sal_Bool) * (nStopIndex - nStartIndex) );
         }
         break;
@@ -352,7 +352,7 @@ static inline bool icopyConstructFromElements(
         {
             memcpy(
                 pSeq->elements + (sizeof(sal_Int8) * nStartIndex),
-                (char *)pSourceElements + (sizeof(sal_Int8) * nStartIndex),
+                static_cast<char *>(pSourceElements) + (sizeof(sal_Int8) * nStartIndex),
                 sizeof(sal_Int8) * (nStopIndex - nStartIndex) );
         }
         break;
@@ -364,7 +364,7 @@ static inline bool icopyConstructFromElements(
         {
             memcpy(
                 pSeq->elements + (sizeof(sal_Int16) * nStartIndex),
-                (char *)pSourceElements + (sizeof(sal_Int16) * nStartIndex),
+                static_cast<char *>(pSourceElements) + (sizeof(sal_Int16) * nStartIndex),
                 sizeof(sal_Int16) * (nStopIndex - nStartIndex) );
         }
         break;
@@ -376,7 +376,7 @@ static inline bool icopyConstructFromElements(
         {
             memcpy(
                 pSeq->elements + (sizeof(sal_Int32) * nStartIndex),
-                (char *)pSourceElements + (sizeof(sal_Int32) * nStartIndex),
+                static_cast<char *>(pSourceElements) + (sizeof(sal_Int32) * nStartIndex),
                 sizeof(sal_Int32) * (nStopIndex - nStartIndex) );
         }
         break;
@@ -388,7 +388,7 @@ static inline bool icopyConstructFromElements(
         {
             memcpy(
                 pSeq->elements + (sizeof(sal_Int64) * nStartIndex),
-                (char *)pSourceElements + (sizeof(sal_Int64) * nStartIndex),
+                static_cast<char *>(pSourceElements) + (sizeof(sal_Int64) * nStartIndex),
                 sizeof(sal_Int64) * (nStopIndex - nStartIndex) );
         }
         break;
@@ -399,7 +399,7 @@ static inline bool icopyConstructFromElements(
         {
             memcpy(
                 pSeq->elements + (sizeof(float) * nStartIndex),
-                (char *)pSourceElements + (sizeof(float) * nStartIndex),
+                static_cast<char *>(pSourceElements) + (sizeof(float) * nStartIndex),
                 sizeof(float) * (nStopIndex - nStartIndex) );
         }
         break;
@@ -410,7 +410,7 @@ static inline bool icopyConstructFromElements(
         {
             memcpy(
                 pSeq->elements + (sizeof(double) * nStartIndex),
-                (char *)pSourceElements + (sizeof(double) * nStartIndex),
+                static_cast<char *>(pSourceElements) + (sizeof(double) * nStartIndex),
                 sizeof(double) * (nStopIndex - nStartIndex) );
         }
         break;
@@ -421,7 +421,7 @@ static inline bool icopyConstructFromElements(
         {
             memcpy(
                 pSeq->elements + (sizeof(sal_Int32) * nStartIndex),
-                (char *)pSourceElements + (sizeof(sal_Int32) * nStartIndex),
+                static_cast<char *>(pSourceElements) + (sizeof(sal_Int32) * nStartIndex),
                 sizeof(sal_Int32) * (nStopIndex - nStartIndex) );
         }
         break;
@@ -437,8 +437,8 @@ static inline bool icopyConstructFromElements(
                 // This code tends to trigger coverity's overrun-buffer-arg warning
                 // coverity[index_parm_via_loop_bound] - https://communities.coverity.com/thread/2993
                 ::rtl_uString_acquire(
-                    ((rtl_uString **)pSourceElements)[nPos] );
-                pDestElements[nPos] = ((rtl_uString **)pSourceElements)[nPos];
+                    static_cast<rtl_uString **>(pSourceElements)[nPos] );
+                pDestElements[nPos] = static_cast<rtl_uString **>(pSourceElements)[nPos];
             }
         }
         break;
@@ -457,10 +457,10 @@ static inline bool icopyConstructFromElements(
             for ( sal_Int32 nPos = nStartIndex; nPos < nStopIndex; ++nPos )
             {
                 TYPE_ACQUIRE(
-                    ((typelib_TypeDescriptionReference **)
+                    static_cast<typelib_TypeDescriptionReference **>(
                      pSourceElements)[nPos] );
                 pDestElements[nPos] =
-                    ((typelib_TypeDescriptionReference **)
+                    static_cast<typelib_TypeDescriptionReference **>(
                      pSourceElements)[nPos];
             }
         }
@@ -475,7 +475,7 @@ static inline bool icopyConstructFromElements(
             uno_Any * pDestElements = reinterpret_cast<uno_Any *>(pSeq->elements);
             for ( sal_Int32 nPos = nStartIndex; nPos < nStopIndex; ++nPos )
             {
-                uno_Any * pSource = (uno_Any *)pSourceElements + nPos;
+                uno_Any * pSource = static_cast<uno_Any *>(pSourceElements) + nPos;
                 _copyConstructAny(
                     &pDestElements[nPos],
                     pSource->pData,
@@ -505,7 +505,7 @@ static inline bool icopyConstructFromElements(
                 char * pDest =
                     pDestElements + (nElementSize * nPos);
                 char * pSource =
-                    (char *)pSourceElements + (nElementSize * nPos);
+                    static_cast<char *>(pSourceElements) + (nElementSize * nPos);
 
                 if (pTypeDescr->pBaseTypeDescription)
                 {
@@ -551,7 +551,7 @@ static inline bool icopyConstructFromElements(
             for ( sal_Int32 nPos = nStartIndex; nPos < nStopIndex; ++nPos )
             {
                 uno_Sequence * pNew = icopyConstructSequence(
-                    ((uno_Sequence **) pSourceElements)[nPos],
+                    static_cast<uno_Sequence **>(pSourceElements)[nPos],
                     pSeqElementType, acquire, 0 );
                 OSL_ASSERT( pNew != 0 );
                 // ought never be a memory allocation problem,
@@ -572,7 +572,7 @@ static inline bool icopyConstructFromElements(
             for ( sal_Int32 nPos = nStartIndex; nPos < nStopIndex; ++nPos )
             {
                 _acquire( pDestElements[nPos] =
-                          ((void **)pSourceElements)[nPos], acquire );
+                          static_cast<void **>(pSourceElements)[nPos], acquire );
             }
         }
         break;

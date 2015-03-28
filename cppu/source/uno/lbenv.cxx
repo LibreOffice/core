@@ -502,7 +502,7 @@ static void SAL_CALL defenv_getRegisteredInterfaces(
 
     sal_Int32 nLen = that->aPtr2ObjectMap.size();
     sal_Int32 nPos = 0;
-    void ** ppInterfaces = (void **) (*memAlloc)( nLen * sizeof (void *) );
+    void ** ppInterfaces = static_cast<void **>((*memAlloc)( nLen * sizeof (void *) ));
 
     Ptr2ObjectMap::const_iterator iPos( that->aPtr2ObjectMap.begin() );
     Ptr2ObjectMap::const_iterator const iEnd( that->aPtr2ObjectMap.end() );
@@ -656,7 +656,7 @@ static void writeLine(
                 {
                     if (stream)
                     {
-                        fprintf( (FILE *) stream, "%s\n", pLine );
+                        fprintf( static_cast<FILE *>(stream), "%s\n", pLine );
                     }
                     else
                     {
@@ -671,7 +671,7 @@ static void writeLine(
     {
         if (stream)
         {
-            fprintf( (FILE *) stream, "%s\n", pLine );
+            fprintf( static_cast<FILE *>(stream), "%s\n", pLine );
         }
         else
         {
@@ -854,10 +854,10 @@ static void SAL_CALL unoenv_computeObjectIdentifier(
         *ppOId = 0;
     }
 
-    uno_Interface * pUnoI = (uno_Interface *)
+    uno_Interface * pUnoI = static_cast<uno_Interface *>(
         ::cppu::binuno_queryInterface(
             pInterface, *typelib_static_type_getByTypeClass(
-                typelib_TypeClass_INTERFACE ) );
+                typelib_TypeClass_INTERFACE ) ));
     if (0 != pUnoI)
     {
         (*pUnoI->release)( pUnoI );
@@ -993,8 +993,8 @@ inline void EnvironmentsData::getRegisteredEnvironments(
     assert(pppEnvs && pnLen && memAlloc && "### null ptr!");
 
     // max size
-    uno_Environment ** ppFound = (uno_Environment **)alloca(
-        sizeof(uno_Environment *) * aName2EnvMap.size() );
+    uno_Environment ** ppFound = static_cast<uno_Environment **>(alloca(
+        sizeof(uno_Environment *) * aName2EnvMap.size() ));
     sal_Int32 nSize = 0;
 
     // find matching environment
@@ -1015,8 +1015,8 @@ inline void EnvironmentsData::getRegisteredEnvironments(
     *pnLen = nSize;
     if (nSize)
     {
-        *pppEnvs = (uno_Environment **) (*memAlloc)(
-            sizeof (uno_Environment *) * nSize );
+        *pppEnvs = static_cast<uno_Environment **>((*memAlloc)(
+            sizeof (uno_Environment *) * nSize ));
         OSL_ASSERT( *pppEnvs );
         while (nSize--)
         {
@@ -1058,7 +1058,7 @@ static bool loadEnv(OUString const  & cLibStem,
         return false;
 
     OUString aSymbolName(UNO_INIT_ENVIRONMENT);
-    uno_initEnvironmentFunc fpInit = (uno_initEnvironmentFunc)aMod.getSymbol(aSymbolName);
+    uno_initEnvironmentFunc fpInit = reinterpret_cast<uno_initEnvironmentFunc>(aMod.getSymbol(aSymbolName));
 
     if (!fpInit)
         return false;

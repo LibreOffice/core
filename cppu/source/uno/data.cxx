@@ -66,8 +66,8 @@ void * binuno_queryInterface( void * pUnoI, typelib_TypeDescriptionReference * p
     uno_Any * pExc = &aExc;
     void * aArgs[ 1 ];
     aArgs[ 0 ] = &pDestType;
-    (*((uno_Interface *) pUnoI)->pDispatcher)(
-        (uno_Interface *) pUnoI, g_pQITD, &aRet, aArgs, &pExc );
+    (*static_cast<uno_Interface *>(pUnoI)->pDispatcher)(
+        static_cast<uno_Interface *>(pUnoI), g_pQITD, &aRet, aArgs, &pExc );
 
     uno_Interface * ret = 0;
     if (0 == pExc)
@@ -81,7 +81,7 @@ void * binuno_queryInterface( void * pUnoI, typelib_TypeDescriptionReference * p
         case typelib_TypeClass_INTERFACE:
             // tweaky... avoiding acquire/ release pair
             typelib_typedescriptionreference_release( ret_type );
-            ret = (uno_Interface *) aRet.pReserved; // serving acquired interface
+            ret = static_cast<uno_Interface *>(aRet.pReserved); // serving acquired interface
             break;
         default:
             _destructAny( &aRet, 0 );
@@ -307,7 +307,7 @@ sal_Bool SAL_CALL uno_type_isAssignableFromData(
     // query
     if (0 == pFrom)
         return sal_False;
-    void * pInterface = *(void **)pFrom;
+    void * pInterface = *static_cast<void **>(pFrom);
     if (0 == pInterface)
         return sal_False;
 
