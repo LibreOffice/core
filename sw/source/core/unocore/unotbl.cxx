@@ -1424,29 +1424,19 @@ uno::Any SwXTextTableRow::getPropertyValue(const OUString& rPropertyName) throw(
 }
 
 void SwXTextTableRow::addPropertyChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XPropertyChangeListener > & /*xListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
-{
-    OSL_FAIL("not implemented");
-}
+    { throw uno::RuntimeException("not implemented", static_cast<cppu::OWeakObject*>(this)); };
 
 void SwXTextTableRow::removePropertyChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XPropertyChangeListener > & /*xListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
-{
-    OSL_FAIL("not implemented");
-}
+    { throw uno::RuntimeException("not implemented", static_cast<cppu::OWeakObject*>(this)); };
 
 void SwXTextTableRow::addVetoableChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*xListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
-{
-    OSL_FAIL("not implemented");
-}
+    { throw uno::RuntimeException("not implemented", static_cast<cppu::OWeakObject*>(this)); };
 
 void SwXTextTableRow::removeVetoableChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*xListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
-{
-    OSL_FAIL("not implemented");
-}
+    { throw uno::RuntimeException("not implemented", static_cast<cppu::OWeakObject*>(this)); };
 
 void SwXTextTableRow::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
-{
-    ClientModify(this, pOld, pNew);
-}
+    { ClientModify(this, pOld, pNew); }
 
 void SwXTextTableRow::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
 {
