@@ -4716,25 +4716,9 @@ uno::Any SwXTableColumns::getByIndex(sal_Int32 nIndex)
     throw( lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    uno::Reference< uno::XInterface >  xRet;
-    SwFrmFmt* pFrmFmt = GetFrmFmt();
-    if(!pFrmFmt)
-        throw uno::RuntimeException();
-    else
-    {
-        size_t nCount = 0;
-        SwTable* pTable = SwTable::FindTable( pFrmFmt );
-        if(!pTable->IsTblComplex())
-        {
-            SwTableLines& rLines = pTable->GetTabLines();
-            SwTableLine* pLine = rLines.front();
-            nCount = pLine->GetTabBoxes().size();
-        }
-        if(nIndex < 0 || nCount <= static_cast<size_t>(nIndex))
-            throw lang::IndexOutOfBoundsException();
-        xRet = uno::Reference<uno::XInterface>();   //!! writer tables do not have columns !!
-    }
-    return uno::Any(&xRet, cppu::UnoType<uno::XInterface>::get());
+    if(nIndex < 0 || getCount() <= static_cast<size_t>(nIndex))
+        throw lang::IndexOutOfBoundsException();
+    return uno::makeAny(uno::Reference<uno::XInterface()); // i#21699 not supported
 }
 
 uno::Type SAL_CALL SwXTableColumns::getElementType(void) throw( uno::RuntimeException, std::exception )
