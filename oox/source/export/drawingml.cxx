@@ -904,7 +904,7 @@ OUString DrawingML::WriteImage( const Graphic& rGraphic , bool bRelPathToMedia )
                                                                       .appendAscii( pExtension )
                                                                       .makeStringAndClear(),
                                                                       sMediaType );
-    xOutStream->writeBytes( Sequence< sal_Int8 >( (const sal_Int8*) aData, nDataSize ) );
+    xOutStream->writeBytes( Sequence< sal_Int8 >( static_cast<const sal_Int8*>(aData), nDataSize ) );
     xOutStream->closeOutput();
 
     OString sRelPathToMedia = "media/image";
@@ -1184,16 +1184,16 @@ void DrawingML::WriteRunProperties( Reference< XPropertySet > rRun, bool bIsFiel
     sal_Int32 nCharEscapement = 0;
 
     if( GETA( CharHeight ) )
-        nSize = (sal_Int32) (100*(*((float*) mAny.getValue())));
+        nSize = (sal_Int32) (100*(*static_cast<float const *>(mAny.getValue())));
 
     if ( ( bComplex && GETA( CharWeightComplex ) ) || GETA( CharWeight ) )
     {
-        if ( *((float*) mAny.getValue()) >= awt::FontWeight::SEMIBOLD )
+        if ( *static_cast<float const *>(mAny.getValue()) >= awt::FontWeight::SEMIBOLD )
             bold = "1";
     }
 
     if ( ( bComplex && GETA( CharPostureComplex ) ) || GETA( CharPosture ) )
-        switch ( *((awt::FontSlant*) mAny.getValue()) )
+        switch ( *static_cast<awt::FontSlant const *>(mAny.getValue()) )
         {
             case awt::FontSlant_OBLIQUE :
             case awt::FontSlant_ITALIC :
@@ -1205,7 +1205,7 @@ void DrawingML::WriteRunProperties( Reference< XPropertySet > rRun, bool bIsFiel
 
     if ( GETAD( CharUnderline ) )
     {
-        switch ( *((sal_Int16*) mAny.getValue()) )
+        switch ( *static_cast<sal_Int16 const *>(mAny.getValue()) )
         {
             case awt::FontUnderline::SINGLE :
                 underline = "sng";
@@ -1260,7 +1260,7 @@ void DrawingML::WriteRunProperties( Reference< XPropertySet > rRun, bool bIsFiel
 
     if ( GETAD( CharStrikeout ) )
     {
-        switch ( *((sal_Int16*) mAny.getValue()) )
+        switch ( *static_cast<sal_Int16 const *>(mAny.getValue()) )
         {
             case awt::FontStrikeout::NONE :
                strikeout = "noStrike";
@@ -1307,7 +1307,7 @@ void DrawingML::WriteRunProperties( Reference< XPropertySet > rRun, bool bIsFiel
 
     if( GETA( CharCaseMap ) )
     {
-        switch ( *((sal_Int16*) mAny.getValue()) )
+        switch ( *static_cast<sal_Int16 const *>(mAny.getValue()) )
         {
             case CaseMap::UPPERCASE :
                 cap = "all";
@@ -1332,7 +1332,7 @@ void DrawingML::WriteRunProperties( Reference< XPropertySet > rRun, bool bIsFiel
     // mso doesn't like text color to be placed after typeface
     if( GETAD( CharColor ) )
     {
-        sal_uInt32 color = *((sal_uInt32*) mAny.getValue());
+        sal_uInt32 color = *static_cast<sal_uInt32 const *>(mAny.getValue());
         DBG(fprintf(stderr, "run color: %x auto: %x\n", static_cast<unsigned int>( color ), static_cast<unsigned int>( COL_AUTO )));
 
         if( color == COL_AUTO )  // nCharColor depends to the background color
@@ -1416,7 +1416,7 @@ const char* DrawingML::GetFieldType( ::com::sun::star::uno::Reference< ::com::su
 
     if( GETA( TextPortionType ) )
     {
-        aFieldType = OUString( *(OUString*)mAny.getValue() );
+        aFieldType = OUString( *static_cast<OUString const *>(mAny.getValue()) );
         DBG(fprintf (stderr, "field type: %s\n", USS(aFieldType) ));
     }
 
@@ -1621,27 +1621,27 @@ void DrawingML::WriteParagraphNumbering( Reference< XPropertySet > rXPropSet, sa
             DBG(fprintf (stderr, "pro name: %s\n", OUStringToOString( aPropName, RTL_TEXTENCODING_UTF8 ).getStr()));
             if ( aPropName == "NumberingType" )
             {
-                nNumberingType = *( (sal_Int16*)pValue );
+                nNumberingType = *( static_cast<sal_Int16 const *>(pValue) );
             }
             else if ( aPropName == "Prefix" )
             {
-                if( *(OUString*)pValue == ")")
+                if( *static_cast<OUString const *>(pValue) == ")")
                     bPBoth = true;
             }
             else if ( aPropName == "Suffix" )
             {
-                if( *(OUString*)pValue == ".")
+                if( *static_cast<OUString const *>(pValue) == ".")
                     bSDot = true;
-                else if( *(OUString*)pValue == ")")
+                else if( *static_cast<OUString const *>(pValue) == ")")
                     bPBehind = true;
             }
             else if ( aPropName == "BulletChar" )
             {
-                aBulletChar = OUString ( *( (OUString*)pValue ) )[ 0 ];
+                aBulletChar = OUString ( *( static_cast<OUString const *>(pValue) ) )[ 0 ];
             }
             else if ( aPropName == "BulletFont" )
             {
-                aFontDesc = *( (awt::FontDescriptor*)pValue );
+                aFontDesc = *static_cast<awt::FontDescriptor const *>(pValue);
                 bHasFontDesc = true;
 
                 // Our numbullet dialog has set the wrong textencoding for our "StarSymbol" font,
@@ -1654,11 +1654,11 @@ void DrawingML::WriteParagraphNumbering( Reference< XPropertySet > rXPropSet, sa
             }
             else if ( aPropName == "BulletRelSize" )
             {
-                nBulletRelSize = *( (sal_Int16*)pValue );
+                nBulletRelSize = *static_cast<sal_Int16 const *>(pValue);
             }
             else if ( aPropName == "GraphicURL" )
             {
-                aGraphicURL = ( *(OUString*)pValue );
+                aGraphicURL = *static_cast<OUString const *>(pValue);
                 DBG(fprintf (stderr, "graphic url: %s\n", OUStringToOString( aGraphicURL, RTL_TEXTENCODING_UTF8 ).getStr()));
             }
             else if ( aPropName == "GraphicSize" )

@@ -772,7 +772,7 @@ writeCustomProperties( XmlFilterBase& rSelf, Reference< XDocumentProperties > xP
                 case TypeClass_BOOLEAN:
                 {
                     bool val ;
-                    val = *( sal_Bool * )( aprop[n].Value ).getValue();
+                    val = *static_cast<sal_Bool const *>(( aprop[n].Value ).getValue());
                     writeElement( pAppProps, FSNS( XML_vt, XML_bool ), val ? 1 : 0);
                 }
                 break;
