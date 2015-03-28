@@ -176,7 +176,7 @@ static void ooo_mount_operation_ask_password (GMountOperation *op,
 
 GMountOperation *ooo_mount_operation_new(const uno::Reference< ucb::XCommandEnvironment >& rEnv)
 {
-    OOoMountOperation *pRet = (OOoMountOperation*)g_object_new (OOO_TYPE_MOUNT_OPERATION, NULL);
+    OOoMountOperation *pRet = static_cast<OOoMountOperation*>(g_object_new (OOO_TYPE_MOUNT_OPERATION, NULL));
     pRet->pEnv = &rEnv;
     return &pRet->parent_instance;
 }

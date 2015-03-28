@@ -451,7 +451,7 @@ std::vector<FTPDirentry> FTPURL::list(
     // now evaluate the error messages
 
     sal_uInt32 len = data.m_nWritePos;
-    char* fwd = (char*) data.m_pBuffer;
+    char* fwd = static_cast<char*>(data.m_pBuffer);
     char *p1, *p2;
     p1 = p2 = fwd;
 
@@ -542,7 +542,7 @@ OUString FTPURL::net_title() const
         err = curl_easy_perform(curl);
 
         if(err == CURLE_OK) {       // get the title from the server
-            char* fwd = (char*) control.m_pBuffer;
+            char* fwd = static_cast<char*>(control.m_pBuffer);
             sal_uInt32 len = (sal_uInt32) control.m_nWritePos;
 
             aNetTitle = OUString(fwd,len,RTL_TEXTENCODING_UTF8);
@@ -632,7 +632,7 @@ extern "C" {
         sal_Int32 nRequested = sal_Int32(size*nmemb);
         CurlInput *curlInput = static_cast<CurlInput*>(stream);
         if(curlInput)
-            return size_t(curlInput->read(((sal_Int8*)ptr),nRequested));
+            return size_t(curlInput->read(static_cast<sal_Int8*>(ptr),nRequested));
         else
             return 0;
     }

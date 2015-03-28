@@ -1707,7 +1707,7 @@ void SortedResultSet::ResortModified( EventList* pList )
     try {
         for ( i=0; i<maModList.Count(); i++ )
         {
-            pData = (SortListData*) maModList.GetObject( i );
+            pData = static_cast<SortListData*>(maModList.GetObject( i ));
             nCompare = CompareImpl( mxOther, mxOriginal,
                                     pData->mnOldPos, pData->mnCurPos );
             pData->mbModified = false;
@@ -1774,7 +1774,7 @@ void SortedResultSet::ResortNew( EventList* pList )
     try {
         for ( i = mnLastSort; i<(sal_IntPtr)maS2O.Count(); i++ )
         {
-            SortListData *pData = (SortListData*) maModList.GetObject( i );
+            SortListData *pData = static_cast<SortListData*>(maModList.GetObject( i ));
             nNewPos = FindPos( pData, 1, mnLastSort );
             if ( nNewPos != i )
             {

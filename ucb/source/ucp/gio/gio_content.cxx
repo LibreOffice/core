@@ -344,7 +344,7 @@ MountOperation::MountOperation(const uno::Reference< ucb::XCommandEnvironment >&
 
 void MountOperation::Completed(GObject *source, GAsyncResult *res, gpointer user_data)
 {
-    MountOperation *pThis = (MountOperation*)user_data;
+    MountOperation *pThis = static_cast<MountOperation*>(user_data);
     g_file_mount_enclosing_volume_finish(G_FILE(source), res, &(pThis->mpError));
     g_main_loop_quit(pThis->mpLoop);
 }
