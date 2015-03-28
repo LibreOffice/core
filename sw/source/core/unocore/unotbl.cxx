@@ -2022,18 +2022,15 @@ namespace
 }
 
 const uno::Sequence< sal_Int8 > & SwXTextTable::getUnoTunnelId()
-{
-    return theSwXTextTableUnoTunnelId::get().getSeq();
-}
+    { return theSwXTextTableUnoTunnelId::get().getSeq(); }
 
 sal_Int64 SAL_CALL SwXTextTable::getSomething( const uno::Sequence< sal_Int8 >& rId )
     throw(uno::RuntimeException, std::exception)
 {
-    if( rId.getLength() == 16
-        && 0 == memcmp( getUnoTunnelId().getConstArray(),
-                                        rId.getConstArray(), 16 ) )
+    if(rId.getLength() == 16
+            && 0 == memcmp(getUnoTunnelId().getConstArray(), rId.getConstArray(), 16))
     {
-        return sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >(this) );
+        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
     }
     return 0;
 }
@@ -2050,8 +2047,7 @@ SwXTextTable::SwXTextTable()
     nColumns(2),
     bFirstRowAsLabel(false),
     bFirstColumnAsLabel(false)
-{
-}
+{ }
 
 SwXTextTable::SwXTextTable(SwFrmFmt& rFrmFmt)
     : SwClient( &rFrmFmt )
@@ -2064,13 +2060,10 @@ SwXTextTable::SwXTextTable(SwFrmFmt& rFrmFmt)
     nColumns(0),
     bFirstRowAsLabel(false),
     bFirstColumnAsLabel(false)
-{
-}
+{ }
 
 SwXTextTable::~SwXTextTable()
-{
-    delete pTableProps;
-}
+    { delete pTableProps; }
 
 uno::Reference<text::XTextTable>
 SwXTextTable::CreateXTextTable(SwFrmFmt *const pFrmFmt)
