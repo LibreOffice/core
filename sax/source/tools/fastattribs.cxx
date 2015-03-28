@@ -59,7 +59,7 @@ FastAttributeList::FastAttributeList( const ::com::sun::star::uno::Reference< ::
 {
     // random initial size of buffer to store attribute values
     mnChunkLength = 58;
-    mpChunk = (sal_Char *) malloc( mnChunkLength );
+    mpChunk = static_cast<sal_Char *>(malloc( mnChunkLength ));
     maAttributeValues.push_back( 0 );
 }
 
@@ -85,7 +85,7 @@ void FastAttributeList::add( sal_Int32 nToken, const sal_Char* pValue, size_t nV
     if (maAttributeValues.back() > mnChunkLength)
     {
         mnChunkLength = maAttributeValues.back();
-        mpChunk = (sal_Char *) realloc( mpChunk, mnChunkLength );
+        mpChunk = static_cast<sal_Char *>(realloc( mpChunk, mnChunkLength ));
     }
     strncpy(mpChunk + nWritePosition, pValue, nValueLength);
     mpChunk[nWritePosition + nValueLength] = '\0';

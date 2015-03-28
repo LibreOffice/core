@@ -770,7 +770,7 @@ void SaxExpatParser_Impl::callbackStartElement( void *pvThis ,
                                                 const XML_Char *pwName ,
                                                 const XML_Char **awAttributes )
 {
-    SaxExpatParser_Impl *pImpl = ((SaxExpatParser_Impl*)pvThis);
+    SaxExpatParser_Impl *pImpl = static_cast<SaxExpatParser_Impl*>(pvThis);
 
     if( pImpl->rDocumentHandler.is() ) {
 
@@ -795,7 +795,7 @@ void SaxExpatParser_Impl::callbackStartElement( void *pvThis ,
 
 void SaxExpatParser_Impl::callbackEndElement( void *pvThis , const XML_Char *pwName  )
 {
-    SaxExpatParser_Impl  *pImpl = ((SaxExpatParser_Impl*)pvThis);
+    SaxExpatParser_Impl  *pImpl = static_cast<SaxExpatParser_Impl*>(pvThis);
 
     if( pImpl->rDocumentHandler.is() ) {
         CALL_ELEMENT_HANDLER_AND_CARE_FOR_EXCEPTIONS( pImpl,
@@ -806,7 +806,7 @@ void SaxExpatParser_Impl::callbackEndElement( void *pvThis , const XML_Char *pwN
 
 void SaxExpatParser_Impl::callbackCharacters( void *pvThis , const XML_Char *s , int nLen )
 {
-    SaxExpatParser_Impl *pImpl = ((SaxExpatParser_Impl*)pvThis);
+    SaxExpatParser_Impl *pImpl = static_cast<SaxExpatParser_Impl*>(pvThis);
 
     if( pImpl->rDocumentHandler.is() ) {
         CALL_ELEMENT_HANDLER_AND_CARE_FOR_EXCEPTIONS( pImpl ,
@@ -818,7 +818,7 @@ void SaxExpatParser_Impl::callbackProcessingInstruction(    void *pvThis,
                                                     const XML_Char *sTarget ,
                                                     const XML_Char *sData )
 {
-    SaxExpatParser_Impl *pImpl = ((SaxExpatParser_Impl*)pvThis);
+    SaxExpatParser_Impl *pImpl = static_cast<SaxExpatParser_Impl*>(pvThis);
     if( pImpl->rDocumentHandler.is() ) {
         CALL_ELEMENT_HANDLER_AND_CARE_FOR_EXCEPTIONS(
                     pImpl ,
@@ -835,7 +835,7 @@ void SaxExpatParser_Impl::callbackEntityDecl(
     SAL_UNUSED_PARAMETER const XML_Char * /*base*/, const XML_Char *systemId,
     const XML_Char *publicId, const XML_Char *notationName)
 {
-    SaxExpatParser_Impl *pImpl = ((SaxExpatParser_Impl*)pvThis);
+    SaxExpatParser_Impl *pImpl = static_cast<SaxExpatParser_Impl*>(pvThis);
     if (value) { // value != 0 means internal entity
         SAL_INFO("sax","SaxExpatParser: internal entity declaration, stopping");
         XML_StopParser(pImpl->getEntity().pParser, XML_FALSE);
@@ -865,7 +865,7 @@ void SaxExpatParser_Impl::callbackNotationDecl(
     SAL_UNUSED_PARAMETER const XML_Char * /*base*/, const XML_Char *systemId,
     const XML_Char *publicId)
 {
-    SaxExpatParser_Impl *pImpl = ((SaxExpatParser_Impl*)pvThis);
+    SaxExpatParser_Impl *pImpl = static_cast<SaxExpatParser_Impl*>(pvThis);
     if( pImpl->rDTDHandler.is() ) {
         CALL_ELEMENT_HANDLER_AND_CARE_FOR_EXCEPTIONS( pImpl,
                 rDTDHandler->notationDecl(  XML_CHAR_TO_OUSTRING( notationName ) ,
@@ -884,7 +884,7 @@ bool SaxExpatParser_Impl::callbackExternalEntityRef(
 {
     bool bOK = true;
     InputSource source;
-    SaxExpatParser_Impl *pImpl = ((SaxExpatParser_Impl*)XML_GetUserData( parser ));
+    SaxExpatParser_Impl *pImpl = static_cast<SaxExpatParser_Impl*>(XML_GetUserData( parser ));
 
     struct Entity entity;
 
@@ -959,7 +959,7 @@ int SaxExpatParser_Impl::callbackUnknownEncoding(
 
 void SaxExpatParser_Impl::callbackDefault( void *pvThis,  const XML_Char *s,  int len)
 {
-    SaxExpatParser_Impl *pImpl = ((SaxExpatParser_Impl*)pvThis);
+    SaxExpatParser_Impl *pImpl = static_cast<SaxExpatParser_Impl*>(pvThis);
 
     CALL_ELEMENT_HANDLER_AND_CARE_FOR_EXCEPTIONS(  pImpl,
                 rExtendedDocumentHandler->unknown( XML_CHAR_N_TO_USTRING( s ,len) ) );
@@ -967,14 +967,14 @@ void SaxExpatParser_Impl::callbackDefault( void *pvThis,  const XML_Char *s,  in
 
 void SaxExpatParser_Impl::callbackComment( void *pvThis , const XML_Char *s )
 {
-    SaxExpatParser_Impl *pImpl = ((SaxExpatParser_Impl*)pvThis);
+    SaxExpatParser_Impl *pImpl = static_cast<SaxExpatParser_Impl*>(pvThis);
     CALL_ELEMENT_HANDLER_AND_CARE_FOR_EXCEPTIONS( pImpl,
                 rExtendedDocumentHandler->comment( XML_CHAR_TO_OUSTRING( s ) ) );
 }
 
 void SaxExpatParser_Impl::callbackStartCDATA( void *pvThis )
 {
-    SaxExpatParser_Impl *pImpl = ((SaxExpatParser_Impl*)pvThis);
+    SaxExpatParser_Impl *pImpl = static_cast<SaxExpatParser_Impl*>(pvThis);
 
     CALL_ELEMENT_HANDLER_AND_CARE_FOR_EXCEPTIONS( pImpl, rExtendedDocumentHandler->startCDATA() );
 }
@@ -1015,7 +1015,7 @@ void SaxExpatParser_Impl::callErrorHandler( SaxExpatParser_Impl *pImpl ,
 
 void SaxExpatParser_Impl::callbackEndCDATA( void *pvThis )
 {
-    SaxExpatParser_Impl *pImpl = ((SaxExpatParser_Impl*)pvThis);
+    SaxExpatParser_Impl *pImpl = static_cast<SaxExpatParser_Impl*>(pvThis);
 
     CALL_ELEMENT_HANDLER_AND_CARE_FOR_EXCEPTIONS(pImpl,rExtendedDocumentHandler->endCDATA() );
 }
