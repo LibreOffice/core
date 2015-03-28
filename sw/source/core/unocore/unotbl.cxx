@@ -959,10 +959,8 @@ void SwXCell::setFormula(const OUString& rFormula) throw( uno::RuntimeException,
 double SwXCell::getValue(void) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-
-    double const fRet = sw_getValue( *this );
     // #i112652# a table cell may contain NaN as a value, do not filter that
-    return fRet;
+    return sw_getValue( *this );
 }
 
 void SwXCell::setValue(double rValue) throw( uno::RuntimeException, std::exception )
