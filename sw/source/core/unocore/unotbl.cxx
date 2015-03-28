@@ -4463,32 +4463,22 @@ void SwXCellRange::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
 //  SwXTableRows
 
 OUString SwXTableRows::getImplementationName(void) throw( uno::RuntimeException, std::exception )
-{
-    return OUString("SwXTableRows");
-}
+    { return OUString("SwXTableRows"); }
 
 sal_Bool SwXTableRows::supportsService(const OUString& rServiceName) throw( uno::RuntimeException, std::exception )
-{
-    return cppu::supportsService(this, rServiceName);
-}
+    { return cppu::supportsService(this, rServiceName); }
 
 uno::Sequence< OUString > SwXTableRows::getSupportedServiceNames(void) throw( uno::RuntimeException, std::exception )
-{
-    uno::Sequence< OUString > aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.text.TableRows";
-    return aRet;
-}
+    { return { "com.sun.star.text.TableRows" }; }
+
 TYPEINIT1(SwXTableRows, SwClient);
 
 SwXTableRows::SwXTableRows(SwFrmFmt& rFrmFmt) :
     SwClient(&rFrmFmt)
-{
-}
+{ }
 
 SwXTableRows::~SwXTableRows()
-{
-}
+{ }
 
 sal_Int32 SwXTableRows::getCount(void) throw( uno::RuntimeException, std::exception )
 {
