@@ -518,7 +518,7 @@ void ElementDescriptor::readHexLongAttr( OUString const & rPropName, OUString co
         Any a( _xProps->getPropertyValue( rPropName ) );
         if (a.getValueTypeClass() == TypeClass_LONG)
         {
-            addAttribute( rAttrName, "0x" + OUString::number((sal_Int64)(sal_uInt64)*(sal_uInt32 *)a.getValue(),16)  );
+            addAttribute( rAttrName, "0x" + OUString::number((sal_Int64)(sal_uInt64)*static_cast<sal_uInt32 const *>(a.getValue()),16)  );
         }
     }
 }
@@ -530,7 +530,7 @@ void ElementDescriptor::readDateFormatAttr( OUString const & rPropName, OUString
         Any a( _xProps->getPropertyValue( rPropName ) );
         if (a.getValueTypeClass() == TypeClass_SHORT)
         {
-            switch (*(sal_Int16 const *)a.getValue())
+            switch (*static_cast<sal_Int16 const *>(a.getValue()))
             {
             case 0:
                 addAttribute( rAttrName, "system_short" );
@@ -627,7 +627,7 @@ void ElementDescriptor::readTimeFormatAttr( OUString const & rPropName, OUString
         Any a( _xProps->getPropertyValue( rPropName ) );
         if (a.getValueTypeClass() == TypeClass_SHORT)
         {
-            switch (*(sal_Int16 const *)a.getValue())
+            switch (*static_cast<sal_Int16 const *>(a.getValue()))
             {
             case 0:
                 addAttribute( rAttrName, "24h_short" );
@@ -664,7 +664,7 @@ void ElementDescriptor::readAlignAttr( OUString const & rPropName, OUString cons
         Any a( _xProps->getPropertyValue( rPropName ) );
         if (a.getValueTypeClass() == TypeClass_SHORT)
         {
-            switch (*(sal_Int16 const *)a.getValue())
+            switch (*static_cast<sal_Int16 const *>(a.getValue()))
             {
             case 0:
                 addAttribute( rAttrName, "left" );
@@ -745,7 +745,7 @@ void ElementDescriptor::readImageAlignAttr( OUString const & rPropName, OUString
         Any a( _xProps->getPropertyValue( rPropName ) );
         if (a.getValueTypeClass() == TypeClass_SHORT)
         {
-            switch (*(sal_Int16 const *)a.getValue())
+            switch (*static_cast<sal_Int16 const *>(a.getValue()))
             {
             case 0:
                 addAttribute( rAttrName, "left" );
@@ -776,7 +776,7 @@ void ElementDescriptor::readImagePositionAttr( OUString const & rPropName, OUStr
         Any a( _xProps->getPropertyValue( rPropName ) );
         if (a.getValueTypeClass() == TypeClass_SHORT)
         {
-            switch (*(sal_Int16 const *)a.getValue())
+            switch (*static_cast<sal_Int16 const *>(a.getValue()))
             {
             case awt::ImagePosition::LeftTop:
                 addAttribute( rAttrName, "left-top" );
@@ -832,7 +832,7 @@ void ElementDescriptor::readButtonTypeAttr( OUString const & rPropName, OUString
         Any a( _xProps->getPropertyValue( rPropName ) );
         if (a.getValueTypeClass() == TypeClass_SHORT)
         {
-            switch (*(sal_Int16 const *)a.getValue())
+            switch (*static_cast<sal_Int16 const *>(a.getValue()))
             {
             case awt::PushButtonType_STANDARD:
                 addAttribute( rAttrName, "standard" );
@@ -861,7 +861,7 @@ void ElementDescriptor::readOrientationAttr( OUString const & rPropName, OUStrin
         Any a( _xProps->getPropertyValue( rPropName ) );
         if (a.getValueTypeClass() == TypeClass_LONG)
         {
-            switch (*(sal_Int32 const *)a.getValue())
+            switch (*static_cast<sal_Int32 const *>(a.getValue()))
             {
             case 0:
                 addAttribute( rAttrName, "horizontal" );
@@ -884,7 +884,7 @@ void ElementDescriptor::readLineEndFormatAttr( OUString const & rPropName, OUStr
         Any a( _xProps->getPropertyValue( rPropName ) );
         if (a.getValueTypeClass() == TypeClass_SHORT)
         {
-            switch (*(sal_Int16 const *)a.getValue())
+            switch (*static_cast<sal_Int16 const *>(a.getValue()))
             {
             case awt::LineEndFormat::CARRIAGE_RETURN:
                 addAttribute( rAttrName, "carriage-return" );
@@ -1103,22 +1103,22 @@ void ElementDescriptor::readDefaults( bool supportPrintable, bool supportVisible
     a = _xProps->getPropertyValue( "PositionX" );
     if (a.getValueTypeClass() == TypeClass_LONG)
     {
-        addAttribute( XMLNS_DIALOGS_PREFIX ":left", OUString::number( *(sal_Int32 const *)a.getValue() ) );
+        addAttribute( XMLNS_DIALOGS_PREFIX ":left", OUString::number( *static_cast<sal_Int32 const *>(a.getValue()) ) );
     }
     a = _xProps->getPropertyValue( "PositionY" );
     if (a.getValueTypeClass() == TypeClass_LONG)
     {
-        addAttribute( XMLNS_DIALOGS_PREFIX ":top", OUString::number( *(sal_Int32 const *)a.getValue() ) );
+        addAttribute( XMLNS_DIALOGS_PREFIX ":top", OUString::number( *static_cast<sal_Int32 const *>(a.getValue()) ) );
     }
     a = _xProps->getPropertyValue( "Width" );
     if (a.getValueTypeClass() == TypeClass_LONG)
     {
-        addAttribute( XMLNS_DIALOGS_PREFIX ":width", OUString::number( *(sal_Int32 const *)a.getValue() ) );
+        addAttribute( XMLNS_DIALOGS_PREFIX ":width", OUString::number( *static_cast<sal_Int32 const *>(a.getValue()) ) );
     }
     a = _xProps->getPropertyValue( "Height" );
     if (a.getValueTypeClass() == TypeClass_LONG)
     {
-        addAttribute( XMLNS_DIALOGS_PREFIX ":height", OUString::number( *(sal_Int32 const *)a.getValue() ) );
+        addAttribute( XMLNS_DIALOGS_PREFIX ":height", OUString::number( *static_cast<sal_Int32 const *>(a.getValue()) ) );
     }
 
     if (supportPrintable)
