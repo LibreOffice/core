@@ -166,7 +166,7 @@ static writerfilter::Reference<Properties>::Pointer_t lcl_getBookmarkProperties(
         aAttributes.set(NS_ooxml::LN_CT_Bookmark_name, pString);
     }
     aAttributes.set(NS_ooxml::LN_CT_MarkupRangeBookmark_id, pPos);
-    return writerfilter::Reference<Properties>::Pointer_t(new RTFReferenceProperties(aAttributes));
+    return std::make_shared<RTFReferenceProperties>(aAttributes);
 }
 
 static const char* lcl_RtfToString(RTFKeyword nKeyword)
@@ -369,10 +369,10 @@ void RTFDocumentImpl::checkFirstRun()
     if (m_bFirstRun)
     {
         // output settings table
-        writerfilter::Reference<Properties>::Pointer_t const pProp(new RTFReferenceProperties(m_aSettingsTableAttributes, m_aSettingsTableSprms));
+        writerfilter::Reference<Properties>::Pointer_t pProp = std::make_shared<RTFReferenceProperties>(m_aSettingsTableAttributes, m_aSettingsTableSprms);
         RTFReferenceTable::Entries_t aSettingsTableEntries;
         aSettingsTableEntries.insert(std::make_pair(0, pProp));
-        writerfilter::Reference<Table>::Pointer_t const pTable(new RTFReferenceTable(aSettingsTableEntries));
+        writerfilter::Reference<Table>::Pointer_t pTable = std::make_shared<RTFReferenceTable>(aSettingsTableEntries);
         Mapper().table(NS_ooxml::LN_settings_settings, pTable);
         // start initial paragraph
         m_bFirstRun = false;
@@ -460,9 +460,9 @@ writerfilter::Reference<Properties>::Pointer_t RTFDocumentImpl::getProperties(RT
         // Get rid of direct formatting what is already in the style.
         RTFSprms const sprms(rSprms.cloneAndDeduplicate(aStyleSprms));
         RTFSprms const attributes(rAttributes.cloneAndDeduplicate(aStyleAttributes));
-        return writerfilter::Reference<Properties>::Pointer_t(new RTFReferenceProperties(attributes, sprms));
+        return std::make_shared<RTFReferenceProperties>(attributes, sprms);
     }
-    writerfilter::Reference<Properties>::Pointer_t pRet(new RTFReferenceProperties(rAttributes, rSprms));
+    writerfilter::Reference<Properties>::Pointer_t pRet = std::make_shared<RTFReferenceProperties>(rAttributes, rSprms);
     return pRet;
 }
 
@@ -600,7 +600,7 @@ void RTFDocumentImpl::sectBreak(bool bFinal = false)
     RTFSprms aAttributes;
     RTFSprms aSprms;
     aSprms.set(NS_ooxml::LN_CT_PPr_sectPr, pValue);
-    writerfilter::Reference<Properties>::Pointer_t const pProperties(new RTFReferenceProperties(aAttributes, aSprms));
+    writerfilter::Reference<Properties>::Pointer_t pProperties = std::make_shared<RTFReferenceProperties>(aAttributes, aSprms);
 
     if (bFinal && !m_pSuperstream)
         // This is the end of the document, not just the end of e.g. a header.
@@ -982,7 +982,7 @@ RTFError RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing
         auto pValue = std::make_shared<RTFValue>(aAnchorAttributes, aAnchorSprms);
         aSprms.set(NS_ooxml::LN_anchor_anchor, pValue);
     }
-    writerfilter::Reference<Properties>::Pointer_t const pProperties(new RTFReferenceProperties(aAttributes, aSprms));
+    writerfilter::Reference<Properties>::Pointer_t pProperties = std::make_shared<RTFReferenceProperties>(aAttributes, aSprms);
     checkFirstRun();
 
     if (!m_aStates.top().pCurrentBuffer)
@@ -1350,7 +1350,7 @@ void RTFDocumentImpl::prepareProperties(
 
     if (rState.aFrame.hasProperties())
     {
-        o_rpFrameProperties.reset(new RTFReferenceProperties(RTFSprms(), rState.aFrame.getSprms()));
+        o_rpFrameProperties = std::make_shared<RTFReferenceProperties>(RTFSprms(), rState.aFrame.getSprms());
     }
 
     // Table width.
@@ -1374,7 +1374,7 @@ void RTFDocumentImpl::prepareProperties(
         lcl_putNestedSprm(rState.aTableRowSprms, NS_ooxml::LN_CT_TblPrBase_tblCellMar, NS_ooxml::LN_CT_TblCellMar_right, std::make_shared<RTFValue>(aAttributes));
     }
 
-    o_rpTableRowProperties.reset(new RTFReferenceProperties(rState.aTableRowAttributes, rState.aTableRowSprms));
+    o_rpTableRowProperties = std::make_shared<RTFReferenceProperties>(rState.aTableRowAttributes, rState.aTableRowSprms);
 }
 
 void RTFDocumentImpl::sendProperties(
@@ -1758,7 +1758,7 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                         auto pValue = std::make_shared<RTFValue>(m_aAuthorInitials);
                         aAttributes.set(NS_ooxml::LN_CT_Comment_initials, pValue);
                     }
-                    writerfilter::Reference<Properties>::Pointer_t const pProperties(new RTFReferenceProperties(aAttributes));
+                    writerfilter::Reference<Properties>::Pointer_t pProperties = std::make_shared<RTFReferenceProperties>(aAttributes);
                     Mapper().props(pProperties);
                 }
             }
@@ -5044,7 +5044,7 @@ RTFError RTFDocumentImpl::popState()
     case DESTINATION_LISTOVERRIDETABLE:
     {
         RTFSprms aListTableAttributes;
-        writerfilter::Reference<Properties>::Pointer_t const pProp(new RTFReferenceProperties(aListTableAttributes, m_aListTableSprms));
+        writerfilter::Reference<Properties>::Pointer_t pProp = std::make_shared<RTFReferenceProperties>(aListTableAttributes, m_aListTableSprms);
         RTFReferenceTable::Entries_t aListTableEntries;
         aListTableEntries.insert(std::make_pair(0, pProp));
         writerfilter::Reference<Table>::Pointer_t const pTable(new RTFReferenceTable(aListTableEntries));
@@ -5063,7 +5063,7 @@ RTFError RTFDocumentImpl::popState()
         aFFSprms.set(NS_ooxml::LN_ffdata, pValue);
         if (!m_aStates.top().pCurrentBuffer)
         {
-            writerfilter::Reference<Properties>::Pointer_t const pProperties(new RTFReferenceProperties(aFFAttributes, aFFSprms));
+            writerfilter::Reference<Properties>::Pointer_t pProperties = std::make_shared<RTFReferenceProperties>(aFFAttributes, aFFSprms);
             Mapper().props(pProperties);
         }
         else
@@ -5410,7 +5410,7 @@ RTFError RTFDocumentImpl::popState()
         RTFSprms aObjSprms;
         auto pValue = std::make_shared<RTFValue>(m_aObjectAttributes, m_aObjectSprms);
         aObjSprms.set(NS_ooxml::LN_object, pValue);
-        writerfilter::Reference<Properties>::Pointer_t const pProperties(new RTFReferenceProperties(aObjAttributes, aObjSprms));
+        writerfilter::Reference<Properties>::Pointer_t pProperties = std::make_shared<RTFReferenceProperties>(aObjAttributes, aObjSprms);
         uno::Reference<drawing::XShape> xShape;
         RTFValue::Pointer_t pShape = m_aObjectAttributes.find(NS_ooxml::LN_shape);
         OSL_ASSERT(pShape.get());
@@ -5433,7 +5433,7 @@ RTFError RTFDocumentImpl::popState()
         auto pValue = std::make_shared<RTFValue>(aStr);
         RTFSprms aAnnAttributes;
         aAnnAttributes.set(NS_ooxml::LN_CT_TrackChange_date, pValue);
-        writerfilter::Reference<Properties>::Pointer_t const pProperties(new RTFReferenceProperties(aAnnAttributes));
+        writerfilter::Reference<Properties>::Pointer_t pProperties = std::make_shared<RTFReferenceProperties>(aAnnAttributes);
         Mapper().props(pProperties);
     }
     break;
@@ -5459,7 +5459,7 @@ RTFError RTFDocumentImpl::popState()
             aAttributes.set(NS_ooxml::LN_EG_RangeMarkupElements_commentRangeStart, pValue);
         else
             aAttributes.set(NS_ooxml::LN_EG_RangeMarkupElements_commentRangeEnd, pValue);
-        writerfilter::Reference<Properties>::Pointer_t pProperties(new RTFReferenceProperties(aAttributes));
+        writerfilter::Reference<Properties>::Pointer_t pProperties = std::make_shared<RTFReferenceProperties>(aAttributes);
         Mapper().props(pProperties);
     }
     break;
@@ -5470,7 +5470,7 @@ RTFError RTFDocumentImpl::popState()
         OUString aStr = m_aStates.top().pDestinationText->makeStringAndClear();
         RTFSprms aAnnAttributes;
         aAnnAttributes.set(NS_ooxml::LN_CT_Markup_id, std::make_shared<RTFValue>(aStr.toInt32()));
-        Mapper().props(writerfilter::Reference<Properties>::Pointer_t(new RTFReferenceProperties(aAnnAttributes)));
+        Mapper().props(std::make_shared<RTFReferenceProperties>(aAnnAttributes));
     }
     break;
     case DESTINATION_FALT:
@@ -5561,7 +5561,7 @@ RTFError RTFDocumentImpl::popState()
         auto pValue = std::make_shared<RTFValue>(xObject);
         RTFSprms aMathAttributes;
         aMathAttributes.set(NS_ooxml::LN_starmath, pValue);
-        writerfilter::Reference<Properties>::Pointer_t const pProperties(new RTFReferenceProperties(aMathAttributes));
+        writerfilter::Reference<Properties>::Pointer_t pProperties = std::make_shared<RTFReferenceProperties>(aMathAttributes);
         Mapper().props(pProperties);
         m_aMathBuffer = oox::formulaimport::XmlStreamBuilder();
     }
@@ -5778,10 +5778,7 @@ RTFError RTFDocumentImpl::popState()
         auto pValue = std::make_shared<RTFValue>(0);
         aTCSprms.set(NS_ooxml::LN_endtrackchange, pValue);
         if (!m_aStates.top().pCurrentBuffer)
-        {
-            writerfilter::Reference<Properties>::Pointer_t const pProperties(new RTFReferenceProperties(RTFSprms(), aTCSprms));
-            Mapper().props(pProperties);
-        }
+            Mapper().props(std::make_shared<RTFReferenceProperties>(RTFSprms(), aTCSprms));
         else
             m_aStates.top().pCurrentBuffer->push_back(Buf_t(BUFFER_PROPS, std::make_shared<RTFValue>(RTFSprms(), aTCSprms)));
     }
@@ -5868,7 +5865,7 @@ RTFError RTFDocumentImpl::popState()
 
             // Table
             RTFSprms aListTableAttributes;
-            writerfilter::Reference<Properties>::Pointer_t const pProp(new RTFReferenceProperties(aListTableAttributes, aListTableSprms));
+            writerfilter::Reference<Properties>::Pointer_t pProp = std::make_shared<RTFReferenceProperties>(aListTableAttributes, aListTableSprms);
 
             RTFReferenceTable::Entries_t aListTableEntries;
             aListTableEntries.insert(std::make_pair(0, pProp));

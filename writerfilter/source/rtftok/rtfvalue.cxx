@@ -199,8 +199,7 @@ RTFShape& RTFValue::getShape() const
 
 writerfilter::Reference<Properties>::Pointer_t RTFValue::getProperties()
 {
-    writerfilter::Reference<Properties>::Pointer_t pProperties(new RTFReferenceProperties(*m_pAttributes, *m_pSprms));
-    return pProperties;
+    return std::make_shared<RTFReferenceProperties>(*m_pAttributes, *m_pSprms);
 }
 
 writerfilter::Reference<Stream>::Pointer_t RTFValue::getStream()
