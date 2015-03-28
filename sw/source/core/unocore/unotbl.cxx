@@ -4775,9 +4775,7 @@ uno::Any SwXTableRows::getByIndex(sal_Int32 nIndex)
         pXRow = new SwXTextTableRow(pFrmFmt, pLine);
     uno::Reference< beans::XPropertySet >  xRet =
                             (beans::XPropertySet*)pXRow;
-    uno::Any aRet;
-    aRet.setValue(&xRet, cppu::UnoType<beans::XPropertySet>::get());
-    return aRet;
+    return uno::makeAny(xRet);
 }
 
 uno::Type SAL_CALL SwXTableRows::getElementType(void) throw( uno::RuntimeException, std::exception )
