@@ -291,15 +291,15 @@ public:
 IMPL_STATIC_LINK_NOINSTANCE( ProcessEventsClass_Impl, CallEvent, void*, pEvent )
 {
     // Application events are processed by the Desktop::HandleAppEvent implementation.
-    Desktop::HandleAppEvent( *((ApplicationEvent*)pEvent) );
-    delete (ApplicationEvent*)pEvent;
+    Desktop::HandleAppEvent( *static_cast<ApplicationEvent*>(pEvent) );
+    delete static_cast<ApplicationEvent*>(pEvent);
     return 0;
 }
 
 IMPL_STATIC_LINK_NOINSTANCE( ProcessEventsClass_Impl, ProcessDocumentsEvent, void*, pEvent )
 {
     // Documents requests are processed by the OfficeIPCThread implementation
-    ProcessDocumentsRequest* pDocsRequest = (ProcessDocumentsRequest*)pEvent;
+    ProcessDocumentsRequest* pDocsRequest = static_cast<ProcessDocumentsRequest*>(pEvent);
 
     if ( pDocsRequest )
     {

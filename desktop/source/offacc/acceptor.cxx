@@ -40,7 +40,7 @@ extern "C" void offacc_workerfunc (void * acc)
 {
     osl_setThreadName("URP Acceptor");
 
-    ((Acceptor*)acc)->run();
+    static_cast<Acceptor*>(acc)->run();
 }
 
 Acceptor::Acceptor( const Reference< XComponentContext >& rxContext )

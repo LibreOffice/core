@@ -540,7 +540,7 @@ static char* doc_getPartName(LibreOfficeKitDocument* pThis, int nPart)
 
     OUString sName = pDoc->getPartName( nPart );
     OString aString = OUStringToOString(sName, RTL_TEXTENCODING_UTF8);
-    char* pMemory = (char*) malloc(aString.getLength() + 1);
+    char* pMemory = static_cast<char*>(malloc(aString.getLength() + 1));
     strcpy(pMemory, aString.getStr());
     return pMemory;
 
@@ -768,7 +768,7 @@ static char* lo_getError (LibreOfficeKit *pThis)
 {
     LibLibreOffice_Impl* pLib = static_cast<LibLibreOffice_Impl*>(pThis);
     OString aString = OUStringToOString(pLib->maLastExceptionMsg, RTL_TEXTENCODING_UTF8);
-    char* pMemory = (char*) malloc(aString.getLength() + 1);
+    char* pMemory = static_cast<char*>(malloc(aString.getLength() + 1));
     strcpy(pMemory, aString.getStr());
     return pMemory;
 }
