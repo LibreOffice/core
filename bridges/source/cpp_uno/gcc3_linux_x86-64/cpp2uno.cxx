@@ -95,12 +95,12 @@ static typelib_TypeClass cpp2uno_call(
 
     // stack space
     // parameters
-    void ** pUnoArgs = (void **)alloca( 4 * sizeof(void *) * nParams );
+    void ** pUnoArgs = static_cast<void **>(alloca( 4 * sizeof(void *) * nParams ));
     void ** pCppArgs = pUnoArgs + nParams;
     // indices of values this have to be converted (interface conversion cpp<=>uno)
-    sal_Int32 * pTempIndices = (sal_Int32 *)(pUnoArgs + (2 * nParams));
+    sal_Int32 * pTempIndices = reinterpret_cast<sal_Int32 *>(pUnoArgs + (2 * nParams));
     // type descriptions for reconversions
-    typelib_TypeDescription ** ppTempParamTypeDescr = (typelib_TypeDescription **)(pUnoArgs + (3 * nParams));
+    typelib_TypeDescription ** ppTempParamTypeDescr = reinterpret_cast<typelib_TypeDescription **>(pUnoArgs + (3 * nParams));
 
     sal_Int32 nTempIndices = 0;
 

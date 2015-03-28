@@ -153,7 +153,7 @@ void Bridge::call_java(
 #ifdef BROKEN_ALLOCA
     jvalue * java_args = (jvalue *) malloc( sizeof (jvalue) * nParams );
 #else
-    jvalue * java_args = (jvalue *) alloca( sizeof (jvalue) * nParams );
+    jvalue * java_args = static_cast<jvalue *>(alloca( sizeof (jvalue) * nParams ));
 #endif
 
     sal_Int32 nPos;
@@ -248,38 +248,38 @@ void Bridge::call_java(
         jni->CallVoidMethodA( javaI, method_id, java_args );
         break;
     case typelib_TypeClass_CHAR:
-        *(sal_Unicode *)uno_ret =
+        *static_cast<sal_Unicode *>(uno_ret) =
             jni->CallCharMethodA( javaI, method_id, java_args );
         break;
     case typelib_TypeClass_BOOLEAN:
-        *(sal_Bool *)uno_ret =
+        *static_cast<sal_Bool *>(uno_ret) =
             jni->CallBooleanMethodA( javaI, method_id, java_args );
         break;
     case typelib_TypeClass_BYTE:
-        *(sal_Int8 *)uno_ret =
+        *static_cast<sal_Int8 *>(uno_ret) =
             jni->CallByteMethodA( javaI, method_id, java_args );
         break;
     case typelib_TypeClass_SHORT:
     case typelib_TypeClass_UNSIGNED_SHORT:
-        *(sal_Int16 *)uno_ret =
+        *static_cast<sal_Int16 *>(uno_ret) =
             jni->CallShortMethodA( javaI, method_id, java_args );
         break;
     case typelib_TypeClass_LONG:
     case typelib_TypeClass_UNSIGNED_LONG:
-        *(sal_Int32 *)uno_ret =
+        *static_cast<sal_Int32 *>(uno_ret) =
             jni->CallIntMethodA( javaI, method_id, java_args );
         break;
     case typelib_TypeClass_HYPER:
     case typelib_TypeClass_UNSIGNED_HYPER:
-        *(sal_Int64 *)uno_ret =
+        *static_cast<sal_Int64 *>(uno_ret) =
             jni->CallLongMethodA( javaI, method_id, java_args );
         break;
     case typelib_TypeClass_FLOAT:
-        *(float *)uno_ret =
+        *static_cast<float *>(uno_ret) =
             jni->CallFloatMethodA( javaI, method_id, java_args );
         break;
     case typelib_TypeClass_DOUBLE:
-        *(double *)uno_ret =
+        *static_cast<double *>(uno_ret) =
             jni->CallDoubleMethodA( javaI, method_id, java_args );
         break;
     default:
@@ -726,7 +726,7 @@ void SAL_CALL UNO_proxy_dispatch(
                                       info->m_td.get() ) );
 
                             uno_any_construct(
-                                (uno_Any *)uno_ret, &pUnoI2,
+                                static_cast<uno_Any *>(uno_ret), &pUnoI2,
                                 demanded_td.get(), 0 );
                             (*pUnoI2->release)( pUnoI2 );
                         }

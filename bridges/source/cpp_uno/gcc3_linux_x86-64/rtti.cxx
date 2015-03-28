@@ -97,7 +97,7 @@ std::type_info * RTTI::getRTTI(typelib_TypeDescription const & pTypeDescr)
 #if defined(FREEBSD) && __FreeBSD_version < 702104 /* #i22253# */
         rtti = (std::type_info *)dlsym( RTLD_DEFAULT, symName.getStr() );
 #else
-        rtti = (std::type_info *)dlsym( m_hApp, symName.getStr() );
+        rtti = static_cast<std::type_info *>(dlsym( m_hApp, symName.getStr() ));
 #endif
 
         if (rtti)

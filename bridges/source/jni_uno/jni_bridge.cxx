@@ -60,8 +60,8 @@ void SAL_CALL Mapping_map_to_uno(
     void * pIn, typelib_InterfaceTypeDescription * td )
     SAL_THROW_EXTERN_C()
 {
-    uno_Interface ** ppUnoI = (uno_Interface **)ppOut;
-    jobject javaI = (jobject) pIn;
+    uno_Interface ** ppUnoI = reinterpret_cast<uno_Interface **>(ppOut);
+    jobject javaI = static_cast<jobject>(pIn);
 
     static_assert(sizeof (void *) == sizeof (jobject), "must be the same size");
     assert(ppUnoI != 0);
@@ -119,8 +119,8 @@ void SAL_CALL Mapping_map_to_java(
     void * pIn, typelib_InterfaceTypeDescription * td )
     SAL_THROW_EXTERN_C()
 {
-    jobject * ppJavaI = (jobject *) ppOut;
-    uno_Interface * pUnoI = (uno_Interface *)pIn;
+    jobject * ppJavaI = reinterpret_cast<jobject *>(ppOut);
+    uno_Interface * pUnoI = static_cast<uno_Interface *>(pIn);
 
     static_assert(sizeof (void *) == sizeof (jobject), "must be the same size");
     assert(ppJavaI != 0);

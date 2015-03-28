@@ -180,12 +180,12 @@ jobject Bridge::call_uno(
     }
 
 #ifdef BROKEN_ALLOCA
-    char * mem = (char *) malloc(
+    char * mem = static_cast<char *>(malloc(
 #else
-    char * mem = (char *) alloca(
+    char * mem = static_cast<char *>(alloca(
 #endif
         (nParams * sizeof (void *)) +
-        return_size + (nParams * sizeof (largest)) );
+        return_size + (nParams * sizeof (largest)) ));
     void ** uno_args = reinterpret_cast<void **>(mem);
     void * uno_ret = return_size == 0 ? 0 : (mem + (nParams * sizeof (void *)));
     largest * uno_args_mem = reinterpret_cast<largest *>
@@ -452,7 +452,7 @@ JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_dispatch_1call(
                 if (typelib_TypeClass_INTERFACE == uno_ret.pType->eTypeClass)
                 {
                     uno_Interface * pUnoRet =
-                        (uno_Interface *) uno_ret.pReserved;
+                        static_cast<uno_Interface *>(uno_ret.pReserved);
                     if (0 != pUnoRet)
                     {
                         try

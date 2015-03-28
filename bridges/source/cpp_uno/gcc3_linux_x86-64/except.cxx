@@ -81,7 +81,7 @@ static OUString toUNOname( char const * p )
 extern "C" {
 static void _GLIBCXX_CDTOR_CALLABI deleteException( void * pExc )
 {
-    __cxa_exception const * header = ((__cxa_exception const *)pExc - 1);
+    __cxa_exception const * header = (static_cast<__cxa_exception const *>(pExc) - 1);
     typelib_TypeDescription * pTD = 0;
     OUString unoName( toUNOname( header->exceptionType->name() ) );
     ::typelib_typedescription_getByName( &pTD, unoName.pData );

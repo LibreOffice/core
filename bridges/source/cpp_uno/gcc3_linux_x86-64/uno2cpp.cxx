@@ -100,7 +100,7 @@ static void cpp_call(
 {
     // Maxium space for [complex ret ptr], values | ptr ...
     // (but will be used less - some of the values will be in pGPR and pFPR)
-      sal_uInt64 *pStack = (sal_uInt64 *)__builtin_alloca( (nParams + 3) * sizeof(sal_uInt64) );
+      sal_uInt64 *pStack = static_cast<sal_uInt64 *>(__builtin_alloca( (nParams + 3) * sizeof(sal_uInt64) ));
       sal_uInt64 *pStackStart = pStack;
 
     sal_uInt64 pGPR[x86_64::MAX_GPR_REGS];
@@ -138,11 +138,11 @@ static void cpp_call(
     INSERT_INT64( &pAdjustedThisPtr, nGPR, pGPR, pStack );
 
     // Args
-    void ** pCppArgs = (void **)alloca( 3 * sizeof(void *) * nParams );
+    void ** pCppArgs = static_cast<void **>(alloca( 3 * sizeof(void *) * nParams ));
     // Indices of values this have to be converted (interface conversion cpp<=>uno)
-    sal_Int32 * pTempIndices = (sal_Int32 *)(pCppArgs + nParams);
+    sal_Int32 * pTempIndices = reinterpret_cast<sal_Int32 *>(pCppArgs + nParams);
     // Type descriptions for reconversions
-    typelib_TypeDescription ** ppTempParamTypeDescr = (typelib_TypeDescription **)(pCppArgs + (2 * nParams));
+    typelib_TypeDescription ** ppTempParamTypeDescr = reinterpret_cast<typelib_TypeDescription **>(pCppArgs + (2 * nParams));
 
     sal_Int32 nTempIndices = 0;
 

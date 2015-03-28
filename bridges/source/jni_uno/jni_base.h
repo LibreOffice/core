@@ -228,7 +228,7 @@ inline rtl_mem * rtl_mem::allocate( ::std::size_t bytes )
     void * p = rtl_allocateMemory( bytes );
     if (0 == p)
         throw BridgeRuntimeError( "out of memory!" );
-    return (rtl_mem *)p;
+    return static_cast<rtl_mem *>(p);
 }
 
 
