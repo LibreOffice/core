@@ -106,19 +106,13 @@ using ::editeng::SvxBorderLine;
 
 namespace
 {
-    struct FindXCellHint SAL_FINAL : SfxHint
+    template<typename Tcoretype, typename Tunotype>
+    struct FindUnoInstanceHint SAL_FINAL : SfxHint
     {
-        FindXCellHint(SwTableBox* pTableBox) : m_pTableBox(pTableBox), m_pCell(nullptr) {};
-        void SetCell(SwXCell* pCell) const { m_pCell = pCell; };
-        const SwTableBox* const m_pTableBox;
-        mutable SwXCell* m_pCell;
-    };
-    struct FindXRowHint SAL_FINAL : SfxHint
-    {
-        FindXRowHint(SwTableLine* pTableLine) : m_pTableLine(pTableLine), m_pRow(nullptr) {};
-        void SetRow(SwXTextTableRow* pRow) const { m_pRow = pRow; };
-        const SwTableLine* const m_pTableLine;
-        mutable SwXTextTableRow* m_pRow;
+        FindUnoInstanceHint(Tcoretype* pCore) : m_pCore(pCore), m_pResult(nullptr) {};
+        void SetResult(Tunotype* pResult) const { m_pResult = pResult; };
+        const Tcoretype* const m_pCore;
+        mutable Tunotype* m_pResult;
     };
 }
 
@@ -1264,11 +1258,11 @@ void SwXCell::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
 
 void SwXCell::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
 {
-    if(typeid(FindXCellHint) == typeid(rHint))
+    if(typeid(FindUnoInstanceHint<SwTableBox, SwXCell>) == typeid(rHint))
     {
-        auto* pFindHint(static_cast<const FindXCellHint*>(&rHint));
-        if(!pFindHint->m_pCell && pFindHint->m_pTableBox == GetTblBox())
-            pFindHint->m_pCell = this;
+        auto* pFindHint(static_cast<const FindUnoInstanceHint<SwTableBox, SwXCell>* >(&rHint));
+        if(!pFindHint->m_pCore && pFindHint->m_pCore == GetTblBox())
+            pFindHint->m_pResult = this;
     }
     else
         SwClient::SwClientNotify(rModify, rHint);
@@ -1284,9 +1278,9 @@ SwXCell* SwXCell::CreateXCell(SwFrmFmt* pTblFmt, SwTableBox* pBox, SwTable *pTab
     if(it == pTable->GetTabSortBoxes().end())
         return nullptr;
     size_t const nPos = it - pTable->GetTabSortBoxes().begin();
-    FindXCellHint aHint{pBox};
+    FindUnoInstanceHint<SwTableBox, SwXCell> aHint{pBox};
     pTblFmt->CallSwClientNotify(aHint);
-    return aHint.m_pCell ? aHint.m_pCell : new SwXCell(pTblFmt, pBox, nPos);
+    return aHint.m_pResult ? aHint.m_pResult : new SwXCell(pTblFmt, pBox, nPos);
 }
 
 /** search if a box exists in a table
@@ -1534,11 +1528,11 @@ void SwXTextTableRow::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
 
 void SwXTextTableRow::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
 {
-    if(typeid(FindXRowHint) == typeid(rHint))
+    if(typeid(FindUnoInstanceHint<SwTableLine, SwXTextTableRow>) == typeid(rHint))
     {
-        auto* pFindHint(static_cast<const FindXRowHint*>(&rHint));
-        if(!pFindHint->m_pRow && pFindHint->m_pTableLine == GetTblRow())
-            pFindHint->m_pRow = this;
+        auto* pFindHint(static_cast<const FindUnoInstanceHint<SwTableLine,SwXTextTableRow>* >(&rHint));
+        if(!pFindHint->m_pCore && pFindHint->m_pCore == GetTblRow())
+            pFindHint->m_pResult = this;
     }
     else
         SwClient::SwClientNotify(rModify, rHint);
@@ -4780,11 +4774,11 @@ uno::Any SwXTableRows::getByIndex(sal_Int32 nIndex)
     if(static_cast<size_t>(nIndex) >= pTable->GetTabLines().size())
         throw lang::IndexOutOfBoundsException();
     SwTableLine* pLine = pTable->GetTabLines()[nIndex];
-    FindXRowHint aHint{pLine};
+    FindUnoInstanceHint<SwTableLine,SwXTextTableRow> aHint{pLine};
     pFrmFmt->CallSwClientNotify(aHint);
-    if(!aHint.m_pRow)
-        aHint.m_pRow = new SwXTextTableRow(pFrmFmt, pLine);
-    uno::Reference<beans::XPropertySet> xRet = (beans::XPropertySet*)aHint.m_pRow;
+    if(!aHint.m_pResult)
+        aHint.m_pResult = new SwXTextTableRow(pFrmFmt, pLine);
+    uno::Reference<beans::XPropertySet> xRet = (beans::XPropertySet*)aHint.m_pResult;
     return uno::makeAny(xRet);
 }
 
