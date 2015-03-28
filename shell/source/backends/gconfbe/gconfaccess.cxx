@@ -261,7 +261,7 @@ uno::Any translateToOOo( const ConfigurationValue &rValue, GConfValue *pGconfVal
                 GSList * list = gconf_value_get_list(pGconfValue);
                 for(; list; list = g_slist_next(list))
                 {
-                    aBuffer.append(gconf_value_get_string((GConfValue *) list->data) + OString(";"));
+                    aBuffer.append(gconf_value_get_string(static_cast<GConfValue *>(list->data)) + OString(";"));
                 }
                 // Remove trailing ";"
                 aBuffer.setLength(aBuffer.getLength()-1);
