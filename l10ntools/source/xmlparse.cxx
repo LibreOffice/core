@@ -839,31 +839,31 @@ SimpleXMLParser::~SimpleXMLParser()
 void SimpleXMLParser::StartElementHandler(
     void *userData, const XML_Char *name, const XML_Char **atts )
 {
-    (( SimpleXMLParser * ) userData )->StartElement( name, atts );
+    static_cast<SimpleXMLParser *>(userData)->StartElement( name, atts );
 }
 
 void SimpleXMLParser::EndElementHandler(
     void *userData, const XML_Char *name )
 {
-    (( SimpleXMLParser * ) userData )->EndElement( name );
+    static_cast<SimpleXMLParser *>(userData)->EndElement( name );
 }
 
 void SimpleXMLParser::CharacterDataHandler(
     void *userData, const XML_Char *s, int len )
 {
-    (( SimpleXMLParser * ) userData )->CharacterData( s, len );
+    static_cast<SimpleXMLParser *>(userData)->CharacterData( s, len );
 }
 
 void SimpleXMLParser::CommentHandler(
     void *userData, const XML_Char *data )
 {
-    (( SimpleXMLParser * ) userData )->Comment( data );
+    static_cast<SimpleXMLParser *>(userData)->Comment( data );
 }
 
 void SimpleXMLParser::DefaultHandler(
     void *userData, const XML_Char *s, int len )
 {
-    (( SimpleXMLParser * ) userData )->Default( s, len );
+    static_cast<SimpleXMLParser *>(userData)->Default( s, len );
 }
 
 void SimpleXMLParser::StartElement(
