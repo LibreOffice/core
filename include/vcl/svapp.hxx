@@ -96,7 +96,7 @@ namespace o3tl
 
 typedef long (*VCLEventHookProc)( NotifyEvent& rEvt, void* pData );
 
-    /** An application can be notified of a number of different events:
+/** An application can be notified of a number of different events:
     - TYPE_ACCEPT       - listen for connection to the application (a connection
                           string is passed via the event)
     - TYPE_UNACCEPT     - stops listening for a connection to the app (determined by
@@ -112,6 +112,7 @@ typedef long (*VCLEventHookProc)( NotifyEvent& rEvt, void* pData );
                           as an array of strings
     - TYPE_PRIVATE_DOSHUTDOWN - shutdown the app
 */
+
 class VCL_DLLPUBLIC ApplicationEvent
 {
 public:
@@ -136,7 +137,8 @@ public:
         a data string with the event. No other events should use this
         constructor!
     */
-    explicit ApplicationEvent(Type type): aEvent(type) {
+    explicit ApplicationEvent(Type type): aEvent(type)
+    {
         assert(
             type == TYPE_APPEAR || type == TYPE_VERSION
             || type == TYPE_PRIVATE_DOSHUTDOWN || type == TYPE_QUICKSTART);
@@ -149,7 +151,8 @@ public:
         and TYPE_UNACCEPT are the \em only events that accept a single
         string as event data. No other events should use this constructor!
     */
-    ApplicationEvent(Type type, OUString const & data): aEvent(type) {
+    ApplicationEvent(Type type, OUString const & data): aEvent(type)
+    {
         assert(
             type == TYPE_ACCEPT || type == TYPE_HELP || type == TYPE_OPENHELPURL
             || type == TYPE_SHOWDIALOG || type == TYPE_UNACCEPT);
@@ -165,13 +168,18 @@ public:
     */
     ApplicationEvent(Type type, std::vector<OUString> const & data):
         aEvent(type), aData(data)
-    { assert(type == TYPE_OPEN || type == TYPE_PRINT); }
+    {
+        assert(type == TYPE_OPEN || type == TYPE_PRINT);
+    }
 
     /** Get the type of event.
 
      @returns The type of event.
     */
-    Type GetEvent() const { return aEvent; }
+    Type GetEvent() const
+    {
+        return aEvent;
+    }
 
     /** Gets the application event's data string.
 
@@ -180,7 +188,8 @@ public:
 
      @returns The event's data string.
     */
-    OUString GetStringData() const {
+    OUString GetStringData() const
+    {
         assert(
             aEvent == TYPE_ACCEPT || aEvent == TYPE_HELP
             || aEvent == TYPE_OPENHELPURL || aEvent == TYPE_SHOWDIALOG
@@ -194,7 +203,8 @@ public:
      @attention The \em only events that need an array of strings
         are TYPE_OPEN and TYPE_PRINT.
     */
-    std::vector<OUString> const & GetStringsData() const {
+    std::vector<OUString> const & GetStringsData() const
+    {
         assert(aEvent == TYPE_OPEN || aEvent == TYPE_PRINT);
         return aData;
     }
@@ -1495,7 +1505,10 @@ public:
 
      @returns true
     */
-    static bool                 IsEnableAccessInterface() { return true; }
+    static bool                 IsEnableAccessInterface()
+    {
+        return true;
+    }
 
     ///@}
 
@@ -1512,16 +1525,15 @@ private:
 
 class VCL_DLLPUBLIC SolarMutexGuard
 {
-    private:
-        SolarMutexGuard( const SolarMutexGuard& ) SAL_DELETED_FUNCTION;
-        const SolarMutexGuard& operator = ( const SolarMutexGuard& ) SAL_DELETED_FUNCTION;
-        comphelper::SolarMutex& m_solarMutex;
+private:
+    SolarMutexGuard( const SolarMutexGuard& ) SAL_DELETED_FUNCTION;
+    const SolarMutexGuard& operator = ( const SolarMutexGuard& ) SAL_DELETED_FUNCTION;
+    comphelper::SolarMutex& m_solarMutex;
 
-    public:
-
-        /** Acquires the object specified as parameter.
-         */
-        SolarMutexGuard() :
+public:
+    /** Acquires the object specified as parameter.
+     */
+    SolarMutexGuard() :
         m_solarMutex(Application::GetSolarMutex())
     {
         m_solarMutex.acquire();
@@ -1545,28 +1557,29 @@ public:
     SolarMutexClearableGuard()
         : m_bCleared(false)
         , m_solarMutex( Application::GetSolarMutex() )
-        {
-            m_solarMutex.acquire();
-        }
+    {
+        m_solarMutex.acquire();
+    }
 
     /** Releases mutex. */
     ~SolarMutexClearableGuard()
+    {
+        if( !m_bCleared )
         {
-            if( !m_bCleared )
-            {
-                m_solarMutex.release();
-            }
+            m_solarMutex.release();
         }
+    }
 
     /** Releases mutex. */
     void SAL_CALL clear()
+    {
+        if( !m_bCleared )
         {
-            if( !m_bCleared )
-            {
-                m_solarMutex.release();
-                m_bCleared = true;
-            }
+            m_solarMutex.release();
+            m_bCleared = true;
         }
+    }
+
 protected:
     comphelper::SolarMutex& m_solarMutex;
 };
@@ -1582,37 +1595,39 @@ public:
     SolarMutexResettableGuard()
         : m_bCleared(false)
         , m_solarMutex( Application::GetSolarMutex() )
-        {
-            m_solarMutex.acquire();
-        }
+    {
+        m_solarMutex.acquire();
+    }
 
     /** Releases mutex. */
     ~SolarMutexResettableGuard()
+    {
+        if( !m_bCleared )
         {
-            if( !m_bCleared )
-            {
-                m_solarMutex.release();
-            }
+            m_solarMutex.release();
         }
+    }
 
     /** Releases mutex. */
     void SAL_CALL clear()
+    {
+        if( !m_bCleared)
         {
-            if( !m_bCleared)
-            {
-                m_solarMutex.release();
-                m_bCleared = true;
-            }
+            m_solarMutex.release();
+            m_bCleared = true;
         }
+    }
+
     /** Releases mutex. */
     void SAL_CALL reset()
+    {
+        if( m_bCleared)
         {
-            if( m_bCleared)
-            {
-                m_solarMutex.acquire();
-                m_bCleared = false;
-            }
+            m_solarMutex.acquire();
+            m_bCleared = false;
         }
+    }
+
 protected:
     comphelper::SolarMutex& m_solarMutex;
 };
@@ -1624,17 +1639,17 @@ namespace vcl
  */
 class SolarMutexTryAndBuyGuard
 {
-    private:
-        bool m_isAcquired;
+private:
+    bool m_isAcquired;
 #ifdef DBG_UTIL
-        bool m_isChecked;
+    bool m_isChecked;
 #endif
-        comphelper::SolarMutex& m_rSolarMutex;
+    comphelper::SolarMutex& m_rSolarMutex;
 
-        SolarMutexTryAndBuyGuard(const SolarMutexTryAndBuyGuard&) SAL_DELETED_FUNCTION;
-        SolarMutexTryAndBuyGuard& operator=(const SolarMutexTryAndBuyGuard&) SAL_DELETED_FUNCTION;
+    SolarMutexTryAndBuyGuard(const SolarMutexTryAndBuyGuard&) SAL_DELETED_FUNCTION;
+    SolarMutexTryAndBuyGuard& operator=(const SolarMutexTryAndBuyGuard&) SAL_DELETED_FUNCTION;
 
-    public:
+public:
 
     SolarMutexTryAndBuyGuard()
         : m_isAcquired(false)
