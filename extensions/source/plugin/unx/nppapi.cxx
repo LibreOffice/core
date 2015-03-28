@@ -118,7 +118,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
                 NPP instance        = m_aInstances[ nInstance ]->instance;
                 char* pUrl          = pMessage->GetString();
                 char* pWindow       = pMessage->GetString();
-                void** pNotifyData  = (void**)pMessage->GetBytes();
+                void** pNotifyData  = static_cast<void**>(pMessage->GetBytes());
                 NPError aRet = NPN_GetURLNotify( instance, pUrl, pWindow,
                                                  *pNotifyData );
                 Respond( pMessage->m_nID,
@@ -134,7 +134,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
                 NPP instance        = m_aInstances[ nInstance ]->instance;
                 sal_uInt32 nFileID      = pMessage->GetUINT32();
                 char* pUrl          = pMessage->GetString();
-                NPError* pReason    = (NPError*)pMessage->GetBytes();
+                NPError* pReason    = static_cast<NPError*>(pMessage->GetBytes());
                 NPError aRet = NPERR_FILE_NOT_FOUND;
                 if( nFileID < static_cast<sal_uInt32>(m_aNPWrapStreams.size()) )
                 {
@@ -209,9 +209,9 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
                 char* pUrl      = pMessage->GetString();
                 char* pTarget   = pMessage->GetString();
                 sal_uInt32 nLen     = pMessage->GetUINT32();
-                char* pBuf      = (char*)pMessage->GetBytes();
-                NPBool* pFile   = (NPBool*)pMessage->GetBytes();
-                void** pNData   = (void**)pMessage->GetBytes();
+                char* pBuf      = static_cast<char*>(pMessage->GetBytes());
+                NPBool* pFile   = static_cast<NPBool*>(pMessage->GetBytes());
+                void** pNData   = static_cast<void**>(pMessage->GetBytes());
                 NPError aRet =
                     NPN_PostURLNotify( instance, pUrl, pTarget, nLen, pBuf, *pFile, *pNData );
                 Respond( pMessage->m_nID, reinterpret_cast<char*>(&aRet), sizeof( aRet ), NULL );
@@ -229,8 +229,8 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
                 char* pUrl      = pMessage->GetString();
                 char* pWindow   = pMessage->GetString();
                 sal_uInt32 nLen     = pMessage->GetUINT32();
-                char* pBuf      = (char*)pMessage->GetBytes();
-                NPBool* pFile   = (NPBool*)pMessage->GetBytes();
+                char* pBuf      = static_cast<char*>(pMessage->GetBytes());
+                NPBool* pFile   = static_cast<NPBool*>(pMessage->GetBytes());
                 NPError aRet =
                     NPN_PostURL( instance, pUrl, pWindow, nLen, pBuf, *pFile );
                 Respond( pMessage->m_nID, reinterpret_cast<char*>(&aRet), sizeof( aRet ), NULL );
@@ -245,7 +245,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
                 sal_uInt32 nFileID      = pMessage->GetUINT32();
                 NPStream* pStream   = m_aNPWrapStreams[ nFileID ];
                 sal_uInt32 nRanges      = pMessage->GetUINT32();
-                sal_uInt32* pArray      = (sal_uInt32*)pMessage->GetBytes();
+                sal_uInt32* pArray      = static_cast<sal_uInt32*>(pMessage->GetBytes());
                 // build ranges table
                 NPByteRange* pFirst = new NPByteRange;
                 NPByteRange* pRun   = pFirst;
@@ -300,7 +300,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
                 Respond( pMessage->m_nID,
                          reinterpret_cast<char*>(&nRet), sizeof( nRet ),
                          NULL );
-                delete [] (char*)pBuffer;
+                delete [] static_cast<char*>(pBuffer);
                 delete instance;
             }
             break;
@@ -358,7 +358,7 @@ NPError UnxPluginComm::NPP_Destroy( NPP instance, NPSavedData** save )
     aRet = GetNPError( pMes );
     sal_uLong nSaveBytes;
     void* pSaveData = pMes->GetBytes( nSaveBytes );
-    if( nSaveBytes == 4 && *(sal_uInt32*)pSaveData == 0 )
+    if( nSaveBytes == 4 && *static_cast<sal_uInt32*>(pSaveData) == 0 )
         *save = NULL;
     else
     {
@@ -418,7 +418,7 @@ NPError UnxPluginComm::NPP_New( NPMIMEType pluginType, NPP instance, uint16_t mo
     m_aInstances.push_back(
         new ConnectorInstance( instance, pluginType, 0,
                                NULL, 0, NULL, 0,
-                               saved ? (char*)saved->buf : NULL,
+                               saved ? static_cast<char*>(saved->buf) : NULL,
                                saved ? saved->len : 0 ) );
 
     char *pArgnBuf, *pArgvBuf;
@@ -494,7 +494,7 @@ NPError UnxPluginComm::NPP_NewStream( NPP instance, NPMIMEType type, NPStream* s
         return NPERR_GENERIC_ERROR;
 
     aRet = GetNPError( pMes );
-    uint16_t* pSType = (uint16_t*)pMes->GetBytes();
+    uint16_t* pSType = static_cast<uint16_t*>(pMes->GetBytes());
     *stype = *pSType;
 
     delete [] pSType;

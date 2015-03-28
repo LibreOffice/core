@@ -133,7 +133,7 @@ Reference< XConnection >    getConnection(const Reference< XInterface > & xRowSe
         if (!xFormProps.is())
             return xConn;
 
-        xConn = Reference< XConnection > (*(Reference< XInterface > *)xFormProps->getPropertyValue("ActiveConnection").getValue(), UNO_QUERY);
+        xConn = Reference< XConnection > (*static_cast<Reference< XInterface > const *>(xFormProps->getPropertyValue("ActiveConnection").getValue()), UNO_QUERY);
         if (!xConn.is())
         {
             DBG_WARNING("no active connection");
@@ -165,14 +165,14 @@ Reference< XNameAccess >  getColumns(const Reference< XForm > & _rxForm)
         {
             try
             {
-                DBG_ASSERT((*(sal_Int32*)xFormProps->getPropertyValue("CommandType").getValue()) == CommandType::TABLE,
+                DBG_ASSERT((*static_cast<sal_Int32 const *>(xFormProps->getPropertyValue("CommandType").getValue())) == CommandType::TABLE,
                     "::getColumns : invalid form (has no table as data source) !");
                 OUString sTable;
                 xFormProps->getPropertyValue("Command") >>= sTable;
                 Reference< XNameAccess >  xTables = xSupplyTables->getTables();
                 if (xTables.is() && xTables->hasByName(sTable))
                     xSupplyCols = Reference< XColumnsSupplier > (
-                        *(Reference< XInterface > *)xTables->getByName(sTable).getValue(), UNO_QUERY);
+                        *static_cast<Reference< XInterface > const *>(xTables->getByName(sTable).getValue()), UNO_QUERY);
                 if (xSupplyCols.is())
                     xReturn = xSupplyCols->getColumns();
             }
@@ -1328,7 +1328,7 @@ void BibDataManager::propertyChange(const beans::PropertyChangeEvent& evt) throw
             if( evt.NewValue.getValueType() == cppu::UnoType<io::XInputStream>::get())
             {
                 Reference< io::XDataInputStream >  xStream(
-                    *(const Reference< io::XInputStream > *)evt.NewValue.getValue(), UNO_QUERY );
+                    *static_cast<const Reference< io::XInputStream > *>(evt.NewValue.getValue()), UNO_QUERY );
                 aUID <<= xStream->readUTF();
             }
             else
@@ -1376,7 +1376,7 @@ void BibDataManager::SetMeAsUidListener()
             Any aElement;
 
             aElement = xFields->getByName(theFieldName);
-            xPropSet = *(Reference< XPropertySet > *)aElement.getValue();
+            xPropSet = *static_cast<Reference< XPropertySet > const *>(aElement.getValue());
 
             xPropSet->addPropertyChangeListener(FM_PROP_VALUE, this);
         }
@@ -1420,7 +1420,7 @@ void BibDataManager::RemoveMeAsUidListener()
             Any aElement;
 
             aElement = xFields->getByName(theFieldName);
-            xPropSet = *(Reference< XPropertySet > *)aElement.getValue();
+            xPropSet = *static_cast<Reference< XPropertySet > const *>(aElement.getValue());
 
             xPropSet->removePropertyChangeListener(FM_PROP_VALUE, this);
         }

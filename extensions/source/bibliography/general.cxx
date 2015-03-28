@@ -129,7 +129,7 @@ void BibPosListener::cursorMoved(const lang::EventObject& /*aEvent*/) throw( uno
             if(xValueAcc.is() && xValueAcc->hasByName(uTypeMapping))
             {
                 uno::Any aVal = xValueAcc->getByName(uTypeMapping);
-                uno::Reference< uno::XInterface >  xInt = *(uno::Reference< uno::XInterface > *)aVal.getValue();
+                uno::Reference< uno::XInterface >  xInt = *static_cast<uno::Reference< uno::XInterface > const *>(aVal.getValue());
                 uno::Reference< sdb::XColumn >  xCol(xInt, UNO_QUERY);
                 DBG_ASSERT(xCol.is(), "BibPosListener::cursorMoved : invalid column (no sdb::XColumn) !");
                 if (xCol.is())

@@ -151,7 +151,7 @@ namespace pcr
         {
             void* pData = pLoop->GetUserData();
             if (pData)
-                delete (Reference< XPropertySet > *)pData;
+                delete static_cast<Reference< XPropertySet > *>(pData);
             pLoop = m_pControlTree->Next(pLoop);
         }
 
@@ -240,7 +240,7 @@ namespace pcr
         void* pData = pSelected ? pSelected->GetUserData() : NULL;
 
         if (pData)
-            m_xSelectedControl = Reference< XPropertySet > (*(Reference< XPropertySet > *)pData);
+            m_xSelectedControl = Reference< XPropertySet > (*static_cast<Reference< XPropertySet > *>(pData));
 
         m_pNoAssignment->SetClickHdl(Link());
         m_pNoAssignment->Check(pData == NULL);

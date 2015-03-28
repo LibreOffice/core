@@ -66,7 +66,7 @@ void BibToolBarListener::statusChanged(const ::com::sun::star::frame::FeatureSta
         ::com::sun::star::uno::Any aState=rEvt.State;
         if(aState.getValueType()==::getBooleanCppuType())
         {
-            bool bChecked= *(sal_Bool*)aState.getValue();
+            bool bChecked= *static_cast<sal_Bool const *>(aState.getValue());
             pToolBar->CheckItem(nIndex, bChecked);
         }
 
@@ -96,7 +96,7 @@ void BibTBListBoxListener::statusChanged(const ::com::sun::star::frame::FeatureS
             pToolBar->UpdateSourceList(false);
             pToolBar->ClearSourceList();
 
-            Sequence<OUString>* pStringSeq = (Sequence<OUString>*)aState.getValue();
+            Sequence<OUString> const * pStringSeq = static_cast<Sequence<OUString> const *>(aState.getValue());
             const OUString* pStringArray = (const OUString*)pStringSeq->getConstArray();
 
             sal_uInt32 nCount = pStringSeq->getLength();
@@ -134,7 +134,7 @@ void BibTBQueryMenuListener::statusChanged(const frame::FeatureStateEvent& rEvt)
         {
             pToolBar->ClearFilterMenu();
 
-            Sequence<OUString>* pStringSeq = (Sequence<OUString>*) aState.getValue();
+            Sequence<OUString> const * pStringSeq = static_cast<Sequence<OUString> const *>(aState.getValue());
             const OUString* pStringArray = (const OUString*)pStringSeq->getConstArray();
 
             sal_uInt32 nCount = pStringSeq->getLength();
@@ -169,7 +169,7 @@ void BibTBEditListener::statusChanged(const frame::FeatureStateEvent& rEvt)throw
         uno::Any aState=rEvt.State;
         if(aState.getValueType()== ::cppu::UnoType<OUString>::get())
         {
-            OUString aStr = *(OUString*) aState.getValue();
+            OUString aStr = *static_cast<OUString const *>(aState.getValue());
             pToolBar->SetQueryString(aStr);
         }
     }

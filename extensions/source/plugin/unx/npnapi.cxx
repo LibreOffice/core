@@ -64,7 +64,7 @@ static void* l_NPN_MemAlloc( uint32_t nBytes )
 
 static void l_NPN_MemFree( void* pMem )
 {
-    delete [] (char*)pMem;
+    delete [] static_cast<char*>(pMem);
 }
 
 static uint32_t l_NPN_MemFlush( uint32_t /*nSize*/ )
@@ -382,36 +382,36 @@ static NPError l_NPN_GetValue( NPP, NPNVariable variable, void* value )
     switch( (int)variable )
     {
         case NPNVxDisplay:
-            *((Display**)value) = pXtAppDisplay;
+            *static_cast<Display**>(value) = pXtAppDisplay;
             SAL_INFO("extensions.plugin", "Display requested");
             break;
         case NPNVxtAppContext:
-            *((XtAppContext*)value) = app_context;
+            *static_cast<XtAppContext*>(value) = app_context;
             SAL_INFO("extensions.plugin", "AppContext requested");
             break;
         case NPNVjavascriptEnabledBool:
             // no javascript
-            *(NPBool*)value = false;
+            *static_cast<NPBool*>(value) = false;
             SAL_INFO("extensions.plugin", "javascript enabled requested");
             break;
         case NPNVasdEnabledBool:
             // no SmartUpdate
-            *(NPBool*)value = false;
+            *static_cast<NPBool*>(value) = false;
             SAL_INFO("extensions.plugin", "smart update enabled requested");
             break;
         case NPNVisOfflineBool:
             // no offline browsing
-            *(NPBool*)value = false;
+            *static_cast<NPBool*>(value) = false;
             SAL_INFO("extensions.plugin", "offline browsing requested");
             break;
         case NPNVSupportsXEmbedBool:
             // asking xembed
-            *(int*)value = int(true);
+            *static_cast<int*>(value) = int(true);
             SAL_INFO("extensions.plugin", "xembed requested");
             break;
         case NPNVToolkit:
 #           if ENABLE_GTK
-            *(int*)value = NPNVGtk2;
+            *static_cast<int*>(value) = NPNVGtk2;
 #           else
             *(int*)value = 0;
 #           endif
@@ -557,7 +557,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
                 // to first destroy the widget and then destroy
                 // the instance, so mimic that behaviour here
                 if( pInst->pShell )
-                    XtDestroyWidget( (Widget)pInst->pShell );
+                    XtDestroyWidget( static_cast<Widget>(pInst->pShell) );
 
                 pInst->pWidget = pInst->pShell = NULL;
 
@@ -581,7 +581,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
                              reinterpret_cast<char*>(&aRet), sizeof( aRet ),
                              pSave->buf, pSave->len,
                              NULL );
-                    delete [] (char*)pSave->buf;
+                    delete [] static_cast<char*>(pSave->buf);
                 }
                 else
                     Respond( pMessage->m_nID,
@@ -614,7 +614,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
                 pStream->end            = pMessage->GetUINT32();
                 pStream->lastmodified   = pMessage->GetUINT32();
                 pStream->pdata = pStream->ndata = pStream->notifyData = NULL;
-                NPBool* pSeekable       = (NPBool*)pMessage->GetBytes();
+                NPBool* pSeekable       = static_cast<NPBool*>(pMessage->GetBytes());
                 m_aNPWrapStreams.push_back( pStream );
                 uint16_t nStype = NP_ASFILE;
                 NPError aRet = aPluginFuncs.newstream( instance, pType, pStream,
@@ -641,15 +641,15 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
             case eNPP_New:
             {
                 char* pType     = pMessage->GetString();
-                uint16_t* pMode   = (uint16_t*)pMessage->GetBytes();
-                int16_t*  pArgc   = (int16_t*)pMessage->GetBytes();
+                uint16_t* pMode   = static_cast<uint16_t*>(pMessage->GetBytes());
+                int16_t*  pArgc   = static_cast<int16_t*>(pMessage->GetBytes());
                 NPP instance    = new NPP_t;
                 instance->pdata = instance->ndata = NULL;
                 sal_uLong nArgnBytes, nArgvBytes;
-                char* pArgn = (char*)pMessage->GetBytes( nArgnBytes );
-                char* pArgv = (char*)pMessage->GetBytes( nArgvBytes );
+                char* pArgn = static_cast<char*>(pMessage->GetBytes( nArgnBytes ));
+                char* pArgv = static_cast<char*>(pMessage->GetBytes( nArgvBytes ));
                 sal_uLong nSaveBytes;
-                char* pSavedData = (char*)pMessage->GetBytes( nSaveBytes );
+                char* pSavedData = static_cast<char*>(pMessage->GetBytes( nSaveBytes ));
                 ConnectorInstance* pInst =
                     new ConnectorInstance( instance, pType,
                                            *pArgc,
@@ -705,7 +705,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
             {
                 sal_uInt32 nInstance        = pMessage->GetUINT32();
                 ConnectorInstance* pInst= m_aInstances[ nInstance ];
-                NPWindow* pWindow       = (NPWindow*)pMessage->GetBytes();
+                NPWindow* pWindow       = static_cast<NPWindow*>(pMessage->GetBytes());
 
                 if( pWindow->width < 1 )
                     pWindow->width = 1;
@@ -768,7 +768,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
                     }
 
                     // fill in NPWindow and NPCallbackStruct
-                    pInst->window.window            = reinterpret_cast<void*>(XtWindow( (Widget)pInst->pWidget ));
+                    pInst->window.window            = reinterpret_cast<void*>(XtWindow( static_cast<Widget>(pInst->pWidget) ));
                     pInst->window.x                 = 0;
                     pInst->window.y                 = 0;
                     pInst->window.width             = pWindow->width;
@@ -780,16 +780,16 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
                     pInst->window.ws_info           = &pInst->ws_info;
                     pInst->window.type              = NPWindowTypeWindow;
                     pInst->ws_info.type             = NP_SETWINDOW;
-                    pInst->ws_info.display          = XtDisplay( (Widget)pInst->pWidget );
-                    pInst->ws_info.visual           = DefaultVisualOfScreen( XtScreen( (Widget)pInst->pWidget ) );
-                    pInst->ws_info.colormap         = DefaultColormapOfScreen( XtScreen( (Widget)pInst->pWidget ) );
-                    pInst->ws_info.depth            = DefaultDepthOfScreen( XtScreen( (Widget)pInst->pWidget ) );
+                    pInst->ws_info.display          = XtDisplay( static_cast<Widget>(pInst->pWidget) );
+                    pInst->ws_info.visual           = DefaultVisualOfScreen( XtScreen( static_cast<Widget>(pInst->pWidget) ) );
+                    pInst->ws_info.colormap         = DefaultColormapOfScreen( XtScreen( static_cast<Widget>(pInst->pWidget) ) );
+                    pInst->ws_info.depth            = DefaultDepthOfScreen( XtScreen( static_cast<Widget>(pInst->pWidget) ) );
 
-                    XtResizeWidget( (Widget)pInst->pShell,
+                    XtResizeWidget( static_cast<Widget>(pInst->pShell),
                                     pInst->window.width,
                                     pInst->window.height,
                                     0 );
-                    XtResizeWidget( (Widget)pInst->pWidget,
+                    XtResizeWidget( static_cast<Widget>(pInst->pWidget),
                                     pInst->window.width,
                                     pInst->window.height,
                                     0 );
@@ -824,8 +824,8 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
                 sal_uInt32 nInstance        = pMessage->GetUINT32();
                 NPP instance            = m_aInstances[ nInstance ]->instance;
                 char* url               = pMessage->GetString();
-                NPReason* pReason       = (NPReason*)pMessage->GetBytes();
-                void** notifyData       = (void**)pMessage->GetBytes();
+                NPReason* pReason       = static_cast<NPReason*>(pMessage->GetBytes());
+                void** notifyData       = static_cast<void**>(pMessage->GetBytes());
                 aPluginFuncs.urlnotify( instance, url, *pReason, *notifyData );
                 delete [] url;
                 delete [] pReason;
@@ -859,7 +859,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
                 NPStream* pStream       = m_aNPWrapStreams[ nFileID ];
                 int32_t offset            = pMessage->GetUINT32();
                 sal_uLong len;
-                char* buffer            = (char*)pMessage->GetBytes( len );
+                char* buffer            = static_cast<char*>(pMessage->GetBytes( len ));
                 int32_t nRet = aPluginFuncs.write( instance, pStream, offset, len, buffer );
 
                 SAL_INFO(

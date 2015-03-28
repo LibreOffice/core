@@ -533,7 +533,7 @@ int32_t SAL_CALL NP_LOADDS  NPN_Write( NPP instance, NPStream* stream, int32_t l
         return 0;
 
     pImpl->enterPluginCallback();
-    ::com::sun::star::uno::Sequence<sal_Int8> Bytes( (sal_Int8*)buffer, len );
+    ::com::sun::star::uno::Sequence<sal_Int8> Bytes( static_cast<sal_Int8*>(buffer), len );
     static_cast<PluginOutputStream*>(pStream)->getOutputStream()->writeBytes( Bytes );
     pImpl->leavePluginCallback();
 
@@ -570,15 +570,15 @@ NPError SAL_CALL NP_LOADDS  NPN_GetValue( NPP instance, NPNVariable variable, vo
         #endif
         case NPNVjavascriptEnabledBool:
             // no javascript
-            *(NPBool*)value = false;
+            *static_cast<NPBool*>(value) = false;
             break;
         case NPNVasdEnabledBool:
             // no SmartUpdate
-            *(NPBool*)value = false;
+            *static_cast<NPBool*>(value) = false;
             break;
         case NPNVisOfflineBool:
             // no offline browsing
-            *(NPBool*)value = false;
+            *static_cast<NPBool*>(value) = false;
             break;
     }
 

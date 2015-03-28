@@ -116,7 +116,7 @@ BibConfig::BibConfig()
                     case  5: pValues[nProp] >>= sQueryText ;  break;
                     case  6: pValues[nProp] >>= sQueryField;  break;
                     case  7:
-                        bShowColumnAssignmentWarning = *(sal_Bool*)pValues[nProp].getValue();
+                        bShowColumnAssignmentWarning = *static_cast<sal_Bool const *>(pValues[nProp].getValue());
                     break;
                 }
             }

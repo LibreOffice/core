@@ -519,7 +519,7 @@ void XPlugin_Impl::loadPlugin()
 #if defined( UNX ) && !(defined(MACOSX))
     if (pEnvData->pDisplay) // headless?
     {
-        XSync( (Display*)pEnvData->pDisplay, False );
+        XSync( static_cast<Display*>(pEnvData->pDisplay), False );
     }
 #endif
     if( ! getPluginComm() )
@@ -573,7 +573,7 @@ void XPlugin_Impl::loadPlugin()
 #elif defined( UNX )
     if (pEnvData->pDisplay) // headless?
     {
-        XSync( (Display*)pEnvData->pDisplay, False );
+        XSync( static_cast<Display*>(pEnvData->pDisplay), False );
         m_aNPWindow.window  = reinterpret_cast<void*>(pEnvData->aWindow);
     }
     else

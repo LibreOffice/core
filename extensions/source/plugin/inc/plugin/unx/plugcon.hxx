@@ -157,7 +157,7 @@ public:
 
     NPError GetNPError( MediatorMessage* pMes )
     {
-        NPError* pErr = (NPError*)pMes->GetBytes();
+        NPError* pErr = static_cast<NPError*>(pMes->GetBytes());
         NPError aErr = *pErr;
         delete [] pErr;
         return aErr;

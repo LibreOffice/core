@@ -364,7 +364,7 @@ namespace pcr
         if ( !_pPointerToOUString )
             return;
 
-        const OUString& rText( *(const OUString*)_pPointerToOUString );
+        const OUString& rText( *static_cast<const OUString*>(_pPointerToOUString) );
         _rPage.getListBox().SetHelpText( rText );
     }
 

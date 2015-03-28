@@ -700,7 +700,7 @@ IMPL_LINK( UpdateCheckUI, WindowEventHdl, VclWindowEvent*, pEvent )
     else if ( VCLEVENT_WINDOW_MENUBARREMOVED == nEventID )
     {
         SolarMutexGuard aGuard;
-        MenuBar *pMBar = (MenuBar*) pEvent->GetData();
+        MenuBar *pMBar = static_cast<MenuBar*>(pEvent->GetData());
         if ( pMBar && ( pMBar == mpIconMBar ) )
             RemoveBubbleWindow( true );
     }

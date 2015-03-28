@@ -238,7 +238,7 @@ ConnectorInstance::~ConnectorInstance()
     delete [] argv;
     delete [] pArgnBuf;
     delete [] pArgvBuf;
-    delete [] (char*)aData.buf;
+    delete [] static_cast<char*>(aData.buf);
 }
 
 const char* GetCommandName( CommandAtoms eCommand )
